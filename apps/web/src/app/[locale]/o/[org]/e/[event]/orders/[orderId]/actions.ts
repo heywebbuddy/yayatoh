@@ -1,9 +1,10 @@
 'use server';
 
-import { executeCommand, executeQuery, isDomainError, moneyFromDecimal } from '@yayatoh/kernel';
+import { DomainError, executeCommand, executeQuery, isDomainError, moneyFromDecimal } from '@yayatoh/kernel';
 import {
   addOrderNoteCommand,
   declineRefundRequestCommand,
+  issueCreditNoteCommand,
   orderDetailQuery,
   REFUND_REASONS,
   type RefundOutcome,
@@ -11,10 +12,14 @@ import {
   refundOrder,
   refundRequestsQuery,
   reissueManageLinkCommand,
+  runSupportMacroCommand,
   startPolicyOverrideRefundCommand,
   startRefundCommand,
+  supportMacrosQuery,
 } from '@yayatoh/orders';
+import { cancelTransferCommand, startTransferCommand } from '@yayatoh/ticketing';
 import { revalidatePath } from 'next/cache';
+import type { SupportState } from '@/components/support-tools.tsx';
 import type { FormState } from '@/lib/form-state.ts';
 import { loadEvent } from '@/server/console.ts';
 import { failure, success } from '@/server/form.ts';
@@ -202,4 +207,149 @@ export async function addNoteAction(
   }
   revalidatePath(`/o/${org}/e/${event}/orders/${orderId}`);
   return success();
+}
+
+// ——— M3.10c support tools ———
+
+/** The claim link path in the viewer's language (shown once; the recipient is emailed it too). */
+const claimPath = (locale: string, token: string) => `${locale === 'en' ? '' : `/${locale}`}/claim/${token}`;
+
+async function orderOfEvent(org: string, event: string, orderId: string) {
+  const { data, event: ev } = await loadEvent(org, event, 'ticketsOrders');
+  const order = await executeQuery(orderDetailQuery, { orderId }, data.ctx, ports);
+  if (order.eventId !== ev.id) throw new DomainError('not_found');
+  return { data, ev, order };
+}
+
+/** Organizer: transfer one of the order's tickets to someone else (a claim link is emailed). */
+export async function transferTicketAction(
+  org: string,
+  event: string,
+  orderId: string,
+  locale: string,
+  _prev: SupportState,
+  form: FormData,
+): Promise<SupportState> {
+  try {
+    const { data } = await orderOfEvent(org, event, orderId);
+    const toName = String(form.get('toName') ?? '');
+    const r = await executeCommand(
+      startTransferCommand,
+      {
+        orderId,
+        ticketId: String(form.get('ticketId') ?? ''),
+        toName,
+        toEmail: String(form.get('toEmail') ?? ''),
+      },
+      data.ctx,
+      ports,
+    );
+    revalidatePath(`/o/${org}/e/${event}/orders/${orderId}`);
+    return { ...success(), link: claimPath(locale, r.token), name: toName.trim() };
+  } catch (err) {
+    return failure(err);
+  }
+}
+
+/** Organizer: cancel a pending transfer before it is claimed. */
+export async function cancelTransferAction(
+  org: string,
+  event: string,
+  orderId: string,
+  transferId: string,
+  _prev: SupportState,
+  _form: FormData,
+): Promise<SupportState> {
+  try {
+    const { data } = await orderOfEvent(org, event, orderId);
+    await executeCommand(cancelTransferCommand, { transferId }, data.ctx, ports);
+  } catch (err) {
+    return failure(err);
+  }
+  revalidatePath(`/o/${org}/e/${event}/orders/${orderId}`);
+  return success();
+}
+
+/** Finance: issue a credit note (full or partial; store credit or recorded refund), idempotent per form. */
+export async function issueCreditNoteAction(
+  org: string,
+  event: string,
+  orderId: string,
+  _prev: SupportState,
+  form: FormData,
+): Promise<SupportState> {
+  try {
+    const { data, ev } = await orderOfEvent(org, event, orderId);
+    const kind = form.get('kind') === 'full' ? 'full' : 'partial';
+    let amountMinor: number | undefined;
+    if (kind === 'partial') {
+      const raw = String(form.get('amount') ?? '')
+        .trim()
+        .replace(',', '.');
+      if (!/^\d+(\.\d{1,3})?$/.test(raw))
+        return { ok: false, code: 'validation_failed', fields: ['amountMinor'], reason: 'amount_required' };
+      amountMinor = moneyFromDecimal(raw, ev.currency).amount;
+    }
+    const key = String(form.get('key') ?? '');
+    const r = await executeCommand(
+      issueCreditNoteCommand,
+      {
+        orderId,
+        kind,
+        ...(amountMinor ? { amountMinor } : {}),
+        disposition: form.get('disposition') === 'refunded' ? 'refunded' : 'store_credit',
+        reason: String(form.get('reason') ?? ''),
+      },
+      { ...data.ctx, idempotencyKey: key ? `credit-note:${key}` : null },
+      ports,
+    );
+    revalidatePath(`/o/${org}/e/${event}/orders/${orderId}`);
+    return { ...success(), label: r.label, code2: r.code };
+  } catch (err) {
+    return failure(err);
+  }
+}
+
+/** Run a support macro on the order (its actions in one step), idempotent per form. */
+export async function runMacroAction(
+  org: string,
+  event: string,
+  orderId: string,
+  locale: string,
+  _prev: SupportState,
+  form: FormData,
+): Promise<SupportState> {
+  try {
+    const { data } = await orderOfEvent(org, event, orderId);
+    const toName = String(form.get('toName') ?? '').trim();
+    const toEmail = String(form.get('toEmail') ?? '').trim();
+    const ticketId = String(form.get('ticketId') ?? '');
+    const key = String(form.get('key') ?? '');
+    const macroId = String(form.get('macroId') ?? '');
+    const macros = await executeQuery(supportMacrosQuery, {}, data.ctx, ports);
+    const macro = macros.find((m) => m.id === macroId);
+    if (!macro) return { ok: false, code: 'not_found' };
+    const r = await executeCommand(
+      runSupportMacroCommand,
+      {
+        orderId,
+        macroId,
+        ...(macro.actions.includes('transfer_ticket') && (toName || toEmail)
+          ? { transfer: { ticketId, toName, toEmail } }
+          : {}),
+      },
+      { ...data.ctx, idempotencyKey: key ? `macro:${key}` : null },
+      ports,
+    );
+    revalidatePath(`/o/${org}/e/${event}/orders/${orderId}`);
+    return {
+      ...success(),
+      name: macro.name,
+      ...(r.transfer ? { link: claimPath(locale, r.transfer.token) } : {}),
+    };
+  } catch (err) {
+    const s = failure(err);
+    // A transfer macro's recipient fields are nested: point at the transfer fieldset.
+    return s.fields?.some((f) => f === 'transfer') ? { ...s, fields: ['transfer'] } : s;
+  }
 }

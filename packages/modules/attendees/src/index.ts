@@ -2,6 +2,7 @@ export {
   AttendeeFilter,
   AttendeeHitDto,
   AttendeeListDto,
+  addAttendeeLabelsTx,
   attendeeLabelsQuery,
   attendeesByIdsTx,
   attendeesByTicketIdsTx,

@@ -2,9 +2,10 @@ import { type FeeSchedule, feeScheduleTx, priceBreakdown } from '@yayatoh/billin
 import type { TenantTx } from '@yayatoh/db';
 import { DomainError, money } from '@yayatoh/kernel';
 import { and, eq, inArray, isNull, sql } from 'drizzle-orm';
+import { allocateCredit } from './domain/credit.ts';
 import { validForOccurrence } from './occurrences.ts';
 import { type PromoRow, promoDiscountMinor } from './promo.ts';
-import { ticketTypes } from './schema.ts';
+import { type TicketTypeManager, ticketTypes } from './schema.ts';
 
 export interface LineRequest {
   readonly ticketTypeId: string;
@@ -28,7 +29,7 @@ export interface QuotedLine {
   readonly quantity: number;
   /** List price per ticket. */
   readonly unitFaceMinor: number;
-  /** Promo discount per ticket, off the face price before fees. */
+  /** Promo discount (and M3.10c store credit) per ticket, off the face price before fees. */
   readonly unitDiscountMinor: number;
   readonly unitFeeMinor: number;
   readonly unitAllInMinor: number;
@@ -40,7 +41,10 @@ export interface Quote {
   readonly lines: readonly QuotedLine[];
   /** Face prices after discounts. */
   readonly subtotalMinor: number;
+  /** Promo discount and store credit taken off (reporting). */
   readonly discountMinor: number;
+  /** M3.10c: the store credit part of `discountMinor`. */
+  readonly creditMinor: number;
   readonly feeMinor: number;
   readonly totalMinor: number;
   readonly promoCodeId: string | null;
@@ -63,6 +67,13 @@ export async function quoteTx(
     promo?: PromoRow | null;
     /** Multi-date events: the chosen date; each ticket type must sell for it (M1.4b). */
     occurrenceId?: string | null;
+    /** M3.10c store credit to take off the tickets (after any promo; donations excluded). */
+    creditBudgetMinor?: number;
+    /**
+     * M5.1a (ADR 0021): the module selling its own managed ticket types. A managed type is
+     * refused (as not found) to every other caller, whatever else unlocks it.
+     */
+    manager?: TicketTypeManager;
   },
 ): Promise<Quote> {
   const merged = new Map<string, number>();
@@ -95,10 +106,16 @@ export async function quoteTx(
   const currency = rows[0]?.currency as string;
   const schedule = await feeScheduleTx(tx, currency);
   const lines: QuotedLine[] = [];
+  const drafts: { r: (typeof rows)[number]; quantity: number; face: number; discount: number }[] = [];
   for (const r of rows) {
     const quantity = merged.get(r.id) as number;
+    // A managed pass (M5.1a) is sold only by its manager, which may sell it although it is hidden.
+    if (r.managedBy !== null && r.managedBy !== opts.manager)
+      throw new DomainError('not_found', 'Ticket type not found');
     const hiddenOk =
-      opts.includeHidden === true || (opts.includeHidden !== false && opts.includeHidden.has(r.id));
+      r.managedBy !== null ||
+      opts.includeHidden === true ||
+      (opts.includeHidden !== false && opts.includeHidden.has(r.id));
     if (!hiddenOk && r.visibility !== 'public') throw new DomainError('not_found', 'Ticket type not found');
     if (opts.occurrenceId && !validForOccurrence(r, opts.occurrenceId))
       throw new DomainError('invalid_state', 'This ticket is not for the chosen date', {
@@ -139,6 +156,19 @@ export async function quoteTx(
     }
     // Promo codes don't apply to donations.
     const discount = opts.promo && !r.isDonation ? promoDiscountMinor(opts.promo, r.id, face, r.currency) : 0;
+    drafts.push({ r, quantity, face, discount });
+  }
+  // M3.10c: store credit comes off after the promo, the same amount off each ticket of a line.
+  const credit = allocateCredit(
+    drafts.map((d) => ({
+      unitNetMinor: d.face - d.discount,
+      quantity: d.quantity,
+      eligible: !d.r.isDonation,
+    })),
+    opts.creditBudgetMinor ?? 0,
+  );
+  for (const [i, { r, quantity, face, discount: promoDiscount }] of drafts.entries()) {
+    const discount = promoDiscount + (credit[i] ?? 0);
     const p = priceBreakdown(money(face - discount, r.currency), schedule, r.feeMode as 'pass_on' | 'absorb');
     lines.push({
       ticketTypeId: r.id,
@@ -151,11 +181,12 @@ export async function quoteTx(
       unitOrganizerNetMinor: p.organizerNet.amount,
     });
   }
+  const creditMinor = credit.reduce((a, c, i) => a + c * (drafts[i]?.quantity ?? 0), 0);
   const totalMinor = lines.reduce((a, l) => a + l.unitAllInMinor * l.quantity, 0);
   const feeMinor = lines.reduce((a, l) => a + l.unitFeeMinor * l.quantity, 0);
   const discountMinor = lines.reduce((a, l) => a + l.unitDiscountMinor * l.quantity, 0);
   // A code that takes nothing off this cart is not applied (and not counted as used).
-  if (opts.promo && discountMinor === 0)
+  if (opts.promo && discountMinor - creditMinor === 0)
     throw new DomainError('validation_failed', 'Promo code not valid', { reason: 'promo_invalid' });
   return {
     currency,
@@ -166,6 +197,7 @@ export async function quoteTx(
     totalMinor,
     feeSchedule: schedule,
     promoCodeId: opts.promo?.id ?? null,
+    creditMinor,
   };
 }
 
@@ -256,6 +288,7 @@ export async function ticketTypeStockTx(tx: TenantTx, ticketTypeId: string, forU
       archivedAt: ticketTypes.archivedAt,
       isDonation: ticketTypes.isDonation,
       occurrenceIds: ticketTypes.occurrenceIds,
+      managedBy: ticketTypes.managedBy,
     })
     .from(ticketTypes)
     .where(eq(ticketTypes.id, ticketTypeId));

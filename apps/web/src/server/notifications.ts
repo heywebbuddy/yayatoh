@@ -2,6 +2,7 @@ import 'server-only';
 import { alertEvaluator, evaluateOrgNow } from '@yayatoh/alerts';
 import { attendeeMessageMailer } from '@yayatoh/attendees';
 import { getUsersByIds } from '@yayatoh/auth';
+import { journeySubscribers, runDueActions } from '@yayatoh/automations';
 import {
   chatReportSignals,
   checkoutRiskSignals,
@@ -11,6 +12,7 @@ import {
 } from '@yayatoh/checkin';
 import { withTenant } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
+import { registrationResumeMailer } from '@yayatoh/forms';
 import { createCtx } from '@yayatoh/kernel';
 import { announcementMailer, contactWroteNotifier, threadReplyMailer } from '@yayatoh/messaging';
 import {
@@ -25,20 +27,30 @@ import {
   withWebPush,
 } from '@yayatoh/notifications';
 import {
+  creditNoteMailer,
   orderLinkMailer,
   postponementMailer,
   refundDeclineMailer,
   refundMailer,
   refundRequestNotifier,
   reminderRescheduler,
+  supportReplyMailer,
   ticketMailer,
   waitlistMailer,
 } from '@yayatoh/orders';
 import { payoutDestinationMailer } from '@yayatoh/payments';
 import { consumeEvent, recentEventsTx, type Subscriber, subscribes } from '@yayatoh/platform';
+import { registrationCapacity } from '@yayatoh/registration';
 import { surveyMailer } from '@yayatoh/surveys';
 import { impersonationNotice, invitationMailer, orgStatusNotice } from '@yayatoh/tenancy';
-import { claimLinkMailer, holderLinkMailer } from '@yayatoh/ticketing';
+import {
+  claimLinkMailer,
+  fakeWalletPassProvider,
+  holderLinkMailer,
+  ticketResendMailer,
+  transferMailer,
+  walletPassSync,
+} from '@yayatoh/ticketing';
 import { webhookAdapter } from './delivery-webhooks.ts';
 // The composition root registers the key vault (message params and manage links are encrypted).
 import { ports } from './ports.ts';
@@ -46,6 +58,9 @@ import { staffAlertSource, staffPushSender } from './scan-staff.ts';
 import { webPushConfig } from './web-push.ts';
 
 export const notifier = createNotifier();
+
+/** The fake wallet pass provider in dev and CI (M3.10c): what it was told stays in memory. */
+export const devWalletPasses = fakeWalletPassProvider();
 
 export const userEmails: NonNullable<DispatchDeps['userEmails']> = async (ids) =>
   new Map([...(await getUsersByIds(ids))].map(([id, u]) => [id, u.email]));
@@ -68,6 +83,14 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     reminderRescheduler(),
     claimLinkMailer({ notifier, appOrigin }),
     holderLinkMailer({ notifier, appOrigin }),
+    // M3.10c support tools (as in the worker).
+    ticketResendMailer({ notifier, appOrigin }),
+    transferMailer({ notifier, appOrigin }),
+    walletPassSync({ provider: devWalletPasses }),
+    creditNoteMailer({ notifier, appOrigin }),
+    supportReplyMailer({ notifier, appOrigin }),
+    // Dispute evidence deadlines reach finance through the alert engine (batch 3e: the
+    // `disputeDeadline` rule), not a second notification.
     attendeeMessageMailer({ notifier, event: findEventTx }),
     announcementMailer({ notifier, appOrigin }),
     threadReplyMailer({ notifier, appOrigin }),
@@ -81,8 +104,17 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     // M3.4a: staff alerts for the Scan PWA (web push per device).
     staffAlertsSubscriber(staffAlertSource),
     surveyMailer({ notifier, appOrigin }),
+    registrationResumeMailer({
+      notifier,
+      appOrigin,
+      eventName: async (tx, id) => (await findEventTx(tx, id))?.name ?? null,
+    }),
     waitlistMailer({ notifier, appOrigin }),
     alertEvaluator({ notifier }),
+    // M3.7a: journeys enroll, follow date changes and cancellations (their steps run below).
+    ...journeySubscribers(),
+    // M5.1a: its offers (waitlist.offered) are mailed in the same drain.
+    registrationCapacity(),
   ];
 }
 
@@ -106,14 +138,19 @@ export async function drainOrgMessages(
   let consumed = 0;
   // Subscribers may emit events other subscribers consume (fraud signals → alerts, M1.9e): run
   // until a pass consumes nothing new (bounded).
-  for (let pass = 0; pass < 3; pass++) {
+  let journeySteps = 0;
+  for (let pass = 0; pass < 4; pass++) {
     const events = await withTenant(ctx, (tx) => recentEventsTx(tx, orgId, types, 6 * 3600_000));
     let fresh = 0;
     for (const event of events) {
       for (const s of subs) if (subscribes(s, event) && (await consumeEvent(s, event))) fresh += 1;
     }
     consumed += fresh;
-    if (fresh === 0) break;
+    // Journey steps due now (M3.7a; the worker's `automations.run-due` job): they queue messages
+    // and may emit events (a survey step's `survey.sent`), so the next pass picks those up.
+    const steps = await runDueActions(orgId, { notifier }, ports);
+    journeySteps += steps.done + steps.skipped + steps.failed;
+    if (fresh === 0 && steps.done === 0) break;
   }
   // The alert engine's scheduled pass (M3.2b), as the worker's sweep would run it now: only when
   // asked (`sweep`). The alerts evaluator above already re-evaluates what the drained events
@@ -161,5 +198,5 @@ export async function drainOrgMessages(
       );
       reports += out.result?.recorded ?? 0;
     }
-  return { consumed, sent, reports };
+  return { consumed, journeySteps, sent, reports };
 }

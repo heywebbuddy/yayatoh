@@ -16,13 +16,16 @@ import {
 
 export const crmSchema = pgSchema('crm');
 
-export const CONTACT_SOURCES = ['checkout', 'ticket', 'import', 'manual', 'legacy'] as const;
+/** `registration`: someone who submitted a registration form (M5.1b). */
+export const CONTACT_SOURCES = ['checkout', 'ticket', 'import', 'manual', 'legacy', 'registration'] as const;
 export const CONSENT_CHANNELS = ['email', 'sms', 'whatsapp'] as const;
 /**
  * `marketing`: promotional messages (express written consent for texts). `informational`:
  * reminders and event updates by text (M3.5a); marketing consent also covers them.
+ * `exhibitor_sharing`: exhibitors who scan the person's badge may receive their email (P5-8,
+ * asked at registration, M5.1b; used by lead retrieval, M5.6b). Never implies marketing.
  */
-export const CONSENT_PURPOSES = ['marketing', 'informational'] as const;
+export const CONSENT_PURPOSES = ['marketing', 'informational', 'exhibitor_sharing'] as const;
 export const CONSENT_STATUSES = ['granted', 'withdrawn', 'unknown_legacy'] as const;
 
 /** Org-scoped people (roadmap §4.1): there is never a global attendee record. */
@@ -42,7 +45,10 @@ export const contacts = tenantTable(
     uniqueIndex('contacts_org_email_norm_key').on(t.orgId, t.emailNorm),
     check('contacts_email_norm_check', sql`email_norm = lower(btrim(email_norm)) and email_norm like '%@%'`),
     check('contacts_phone_check', sql`phone_e164 is null or phone_e164 ~ '^\\+[1-9][0-9]{6,14}$'`),
-    check('contacts_source_check', sql`source in ('checkout', 'ticket', 'import', 'manual', 'legacy')`),
+    check(
+      'contacts_source_check',
+      sql`source in ('checkout', 'ticket', 'import', 'manual', 'legacy', 'registration')`,
+    ),
   ],
 );
 
@@ -60,6 +66,11 @@ export const consents = tenantTable(
     status: text('status').notNull(),
     evidence: text('evidence').notNull(),
     capturedAt: timestamp('captured_at', { withTimezone: true, mode: 'date' }).notNull(),
+    /**
+     * The version of the wording the person agreed to (`CONSENT_TERMS`, M5.1b). Null for consents
+     * captured before terms were versioned (checkout checkbox, preference center, legacy).
+     */
+    version: integer('version'),
   },
   (t) => [
     index('consents_org_contact_idx').on(t.orgId, t.contactId, t.channel, t.purpose, t.capturedAt),
@@ -69,7 +80,8 @@ export const consents = tenantTable(
       foreignColumns: [contacts.orgId, contacts.id],
     }).onDelete('cascade'),
     check('consents_channel_check', sql`channel in ('email', 'sms', 'whatsapp')`),
-    check('consents_purpose_check', sql`purpose in ('marketing', 'informational')`),
+    check('consents_purpose_check', sql`purpose in ('marketing', 'informational', 'exhibitor_sharing')`),
+    check('consents_version_check', sql`version is null or version >= 1`),
     check('consents_status_check', sql`status in ('granted', 'withdrawn', 'unknown_legacy')`),
   ],
 );

@@ -5,6 +5,7 @@ import { columnPrivacy, internal } from '@yayatoh/db';
  * @yayatoh/db). Every text, jsonb and text[] column of a tenant table is listed.
  */
 export const privateColumns = columnPrivacy('billing', {
+  event_addons: { addon_key: 'vocab', source: 'vocab', currency: 'vocab' },
   entitlement_overrides: { module_key: 'vocab', effect: 'vocab', reason: internal() },
   org_fee_overrides: { currency: 'vocab', reason: internal() },
   org_plans: { plan_key: 'vocab' },

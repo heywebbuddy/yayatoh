@@ -7,7 +7,8 @@
     "tier": 3
   },
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./sheet": "./src/sheet.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"
@@ -15,10 +16,12 @@
   "dependencies": {
     "@yayatoh/attendees": "workspace:*",
     "@yayatoh/contracts": "workspace:*",
+    "@yayatoh/csv": "workspace:*",
     "@yayatoh/db": "workspace:*",
     "@yayatoh/events": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
     "@yayatoh/platform": "workspace:*",
+    "@yayatoh/venues": "workspace:*",
     "drizzle-orm": "catalog:",
     "zod": "catalog:"
   },

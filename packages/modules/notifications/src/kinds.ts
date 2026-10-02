@@ -57,6 +57,46 @@ export const KINDS = {
     urgent: true,
     params: ['url', 'name', 'eventName', 'reason'],
   },
+  // M3.10c support tools: a credit note (store credit code or recorded refund), a support macro's
+  // reply, an approaching dispute evidence deadline (finance), and ticket transfers (the claim link
+  // to the recipient, then the outcome to both sides).
+  'orders.credit-note': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: false,
+    params: ['url', 'name', 'eventName', 'number', 'amountMinor', 'currency', 'storeCredit', 'code'],
+  },
+  'orders.support-reply': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['url', 'name', 'eventName', 'subject', 'body'],
+  },
+  'payments.dispute-deadline': {
+    category: 'sales',
+    channels: ['in_app', 'email'],
+    urgent: true,
+    audience: ['owner', 'admin', 'finance'],
+    params: ['eventName', 'amountMinor', 'currency', 'hours'],
+  },
+  'ticketing.transfer-offered': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['url', 'name', 'fromName', 'eventName'],
+  },
+  'ticketing.transfer-completed': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['name', 'toName', 'eventName'],
+  },
+  'ticketing.transfer-received': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['url', 'name', 'fromName', 'eventName'],
+  },
   'events.postponed': {
     category: 'transactional',
     channels: ['email'],
@@ -150,6 +190,13 @@ export const KINDS = {
     urgent: false,
     params: ['url', 'name', 'eventName', 'passName'],
   },
+  // Registration form save and resume (M5.1b): the person asked for their link.
+  'forms.resume': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['url', 'name', 'eventName', 'days'],
+  },
   'orders.order-link': {
     category: 'transactional',
     channels: ['email'],
@@ -189,6 +236,15 @@ export const KINDS = {
     channels: ['email'],
     urgent: false,
     params: ['url', 'name', 'eventName', 'title'],
+  },
+  // Journeys (M3.7a): a step's message, written by the organizer (subject and body), sent on the
+  // step's own channel (email, SMS, WhatsApp or push) to one person about one event. Reminders:
+  // the person can switch them off, texts need informational consent, quiet hours apply.
+  'automations.message': {
+    category: 'reminders',
+    channels: ['email'],
+    urgent: false,
+    params: ['subject', 'body', 'name', 'eventName'],
   },
   'sales.order_paid': {
     category: 'sales',
@@ -248,6 +304,15 @@ export const KINDS = {
     urgent: false,
     whatsapp: 'marketing',
     params: ['subject', 'body', 'name'],
+  },
+  // A campaign test send (M3.6b) to up to five addresses the sender typed: clearly marked, never
+  // counted in the campaign's results, sent at once (the sender is waiting for it). The body is
+  // the campaign's stored content; transactional so the consent gate (marketing) doesn't apply.
+  'campaigns.test': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['subject'],
   },
   // The org's complaint rate went over the limit and optional messaging paused itself (M3.5a).
   'messaging.auto_paused': {

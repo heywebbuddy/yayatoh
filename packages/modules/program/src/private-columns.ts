@@ -1,4 +1,4 @@
-import { columnPrivacy } from '@yayatoh/db';
+import { columnPrivacy, internal, personal } from '@yayatoh/db';
 
 /**
  * Column privacy of the `program` schema (roadmap §9 canary leak test; see `columnPrivacy` in
@@ -13,4 +13,18 @@ export const privateColumns = columnPrivacy('program', {
   sponsor_tiers: { name: 'public' },
   sponsors: { name: 'public', description: 'public', website_url: 'public' },
   tracks: { name: 'public' },
+  // M5.2a: agenda model v2.
+  session_types: { name: 'public' },
+  session_groups: { name: 'public' },
+  session_details: {
+    admission: 'vocab',
+    import_key: internal(),
+  },
+  agenda_publications: {
+    state: 'vocab',
+    snapshot: 'public',
+    snapshot_hash: internal(),
+    published_by: internal(),
+  },
+  speaker_contacts: { email: personal('email') },
 });

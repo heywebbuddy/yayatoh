@@ -1,14 +1,14 @@
 import { feeScheduleTx, priceBreakdown } from '@yayatoh/billing';
 import type { TenantTx } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
-import { DomainError, money, requireOrg } from '@yayatoh/kernel';
+import { type Ctx, DomainError, type DomainEvent, money, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { and, asc, eq, gt, isNull, or } from 'drizzle-orm';
 import { z } from 'zod';
 import { CreateTicketTypeInput, pricingProblem, TicketTypeDto, UpdateTicketTypeInput } from '../dto.ts';
 import { currentFaceMinor } from '../inventory.ts';
 import { assertOccurrenceIdsTx } from '../occurrences.ts';
-import { ticketTypes } from '../schema.ts';
+import { type TicketTypeManager, ticketTypes } from '../schema.ts';
 
 type Row = typeof ticketTypes.$inferSelect;
 
@@ -38,34 +38,52 @@ async function findTicketType(tx: TenantTx, id: string) {
   return row;
 }
 
+type Emit = (e: DomainEvent) => void;
+
+/**
+ * Create a ticket type inside the caller's transaction. `managedBy` (M5.1a, ADR 0021) marks a
+ * type another module sells for itself; it is never set from organizer input.
+ */
+export async function createTicketTypeTx(
+  tx: TenantTx,
+  ctx: Ctx,
+  emit: Emit,
+  input: CreateTicketTypeInput,
+  opts: { managedBy?: TicketTypeManager } = {},
+) {
+  const event = await findEventTx(tx, input.eventId);
+  if (!event) throw new DomainError('not_found', 'Event not found');
+  if (['cancelled', 'completed', 'archived'].includes(event.status)) {
+    throw new DomainError('invalid_state', 'Tickets cannot be added to a finished event');
+  }
+  await assertOccurrenceIdsTx(tx, input.eventId, input.occurrenceIds);
+  const [row] = await tx
+    .insert(ticketTypes)
+    .values({ ...input, orgId: requireOrg(ctx), currency: event.currency, managedBy: opts.managedBy ?? null })
+    .returning();
+  if (!row) throw new DomainError('internal');
+  emit({
+    type: 'ticket_type.created',
+    version: 1,
+    aggregateType: 'ticket_type',
+    aggregateId: row.id,
+    payload: { orgId: row.orgId, eventId: row.eventId, ticketTypeId: row.id },
+  });
+  const [presented] = await present(tx, [row], ctx.now);
+  return presented as NonNullable<typeof presented>;
+}
+
+/** Managed ticket types (M5.1a) change only through their module. */
+const managedElsewhere = () =>
+  new DomainError('invalid_state', 'This pass is managed on the Registration page', { reason: 'managed' });
+
 export const createTicketTypeCommand = tenantCommand({
   name: 'ticketing.createTicketType',
   input: CreateTicketTypeInput,
   output: TicketTypeDto,
   entitlement: 'ticketing',
   permission: 'events:write',
-  handler: async ({ input, ctx, tx, emit }) => {
-    const event = await findEventTx(tx, input.eventId);
-    if (!event) throw new DomainError('not_found', 'Event not found');
-    if (['cancelled', 'completed', 'archived'].includes(event.status)) {
-      throw new DomainError('invalid_state', 'Tickets cannot be added to a finished event');
-    }
-    await assertOccurrenceIdsTx(tx, input.eventId, input.occurrenceIds);
-    const [row] = await tx
-      .insert(ticketTypes)
-      .values({ ...input, orgId: requireOrg(ctx), currency: event.currency })
-      .returning();
-    if (!row) throw new DomainError('internal');
-    emit({
-      type: 'ticket_type.created',
-      version: 1,
-      aggregateType: 'ticket_type',
-      aggregateId: row.id,
-      payload: { orgId: row.orgId, eventId: row.eventId, ticketTypeId: row.id },
-    });
-    const [presented] = await present(tx, [row], ctx.now);
-    return presented;
-  },
+  handler: ({ input, ctx, tx, emit }) => createTicketTypeTx(tx, ctx, emit, input),
   audit: (input, row) => ({
     action: 'ticket_type.create',
     targetType: 'ticket_type',
@@ -74,44 +92,57 @@ export const createTicketTypeCommand = tenantCommand({
   }),
 });
 
+/**
+ * Update a ticket type inside the caller's transaction. `manager` is the module calling for its
+ * own managed type (M5.1a); a managed type refuses every other caller.
+ */
+export async function updateTicketTypeTx(
+  tx: TenantTx,
+  ctx: Ctx,
+  emit: Emit,
+  input: UpdateTicketTypeInput,
+  manager: TicketTypeManager | null = null,
+) {
+  const { ticketTypeId, ...fields } = input;
+  const current = await findTicketType(tx, ticketTypeId);
+  if (current.managedBy !== manager) throw managedElsewhere();
+  if (
+    fields.quantityTotal !== undefined &&
+    fields.quantityTotal < current.quantitySold + current.quantityHeld
+  ) {
+    throw new DomainError('invalid_state', 'Quantity cannot go below tickets already sold or held', {
+      field: 'quantityTotal',
+      minimum: current.quantitySold + current.quantityHeld,
+    });
+  }
+  if (fields.occurrenceIds) await assertOccurrenceIdsTx(tx, current.eventId, fields.occurrenceIds);
+  const problem = pricingProblem({ ...current, ...fields });
+  if (problem) throw new DomainError('validation_failed', problem.message, { field: problem.field });
+  // Price changes after sales are allowed (audited below); existing orders keep their fee snapshot.
+  const [row] = await tx
+    .update(ticketTypes)
+    .set({ ...fields, updatedAt: ctx.now })
+    .where(eq(ticketTypes.id, ticketTypeId))
+    .returning();
+  if (!row) throw new DomainError('not_found');
+  emit({
+    type: 'ticket_type.updated',
+    version: 1,
+    aggregateType: 'ticket_type',
+    aggregateId: row.id,
+    payload: { orgId: row.orgId, eventId: row.eventId, ticketTypeId: row.id, fields: Object.keys(fields) },
+  });
+  const [presented] = await present(tx, [row], ctx.now);
+  return presented as NonNullable<typeof presented>;
+}
+
 export const updateTicketTypeCommand = tenantCommand({
   name: 'ticketing.updateTicketType',
   input: UpdateTicketTypeInput,
   output: TicketTypeDto,
   entitlement: 'ticketing',
   permission: 'events:write',
-  handler: async ({ input, ctx, tx, emit }) => {
-    const { ticketTypeId, ...fields } = input;
-    const current = await findTicketType(tx, ticketTypeId);
-    if (
-      fields.quantityTotal !== undefined &&
-      fields.quantityTotal < current.quantitySold + current.quantityHeld
-    ) {
-      throw new DomainError('invalid_state', 'Quantity cannot go below tickets already sold or held', {
-        field: 'quantityTotal',
-        minimum: current.quantitySold + current.quantityHeld,
-      });
-    }
-    if (fields.occurrenceIds) await assertOccurrenceIdsTx(tx, current.eventId, fields.occurrenceIds);
-    const problem = pricingProblem({ ...current, ...fields });
-    if (problem) throw new DomainError('validation_failed', problem.message, { field: problem.field });
-    // Price changes after sales are allowed (audited below); existing orders keep their fee snapshot.
-    const [row] = await tx
-      .update(ticketTypes)
-      .set({ ...fields, updatedAt: ctx.now })
-      .where(eq(ticketTypes.id, ticketTypeId))
-      .returning();
-    if (!row) throw new DomainError('not_found');
-    emit({
-      type: 'ticket_type.updated',
-      version: 1,
-      aggregateType: 'ticket_type',
-      aggregateId: row.id,
-      payload: { orgId: row.orgId, eventId: row.eventId, ticketTypeId: row.id, fields: Object.keys(fields) },
-    });
-    const [presented] = await present(tx, [row], ctx.now);
-    return presented;
-  },
+  handler: ({ input, ctx, tx, emit }) => updateTicketTypeTx(tx, ctx, emit, input),
   audit: (input) => ({
     action: 'ticket_type.update',
     targetType: 'ticket_type',
@@ -126,29 +157,40 @@ export const archiveTicketTypeCommand = tenantCommand({
   output: TicketTypeDto,
   entitlement: 'ticketing',
   permission: 'events:write',
-  handler: async ({ input, ctx, tx, emit }) => {
-    const [row] = await tx
-      .update(ticketTypes)
-      .set({ archivedAt: ctx.now, updatedAt: ctx.now })
-      .where(and(eq(ticketTypes.id, input.ticketTypeId), isNull(ticketTypes.archivedAt)))
-      .returning();
-    if (!row) throw new DomainError('not_found');
-    emit({
-      type: 'ticket_type.archived',
-      version: 1,
-      aggregateType: 'ticket_type',
-      aggregateId: row.id,
-      payload: { orgId: row.orgId, eventId: row.eventId, ticketTypeId: row.id },
-    });
-    const [presented] = await present(tx, [row], ctx.now);
-    return presented;
-  },
+  handler: ({ input, ctx, tx, emit }) => archiveTicketTypeTx(tx, ctx, emit, input.ticketTypeId),
   audit: (input) => ({
     action: 'ticket_type.archive',
     targetType: 'ticket_type',
     targetId: input.ticketTypeId,
   }),
 });
+
+/** Archive a ticket type inside the caller's transaction (`manager`: see updateTicketTypeTx). */
+export async function archiveTicketTypeTx(
+  tx: TenantTx,
+  ctx: Ctx,
+  emit: Emit,
+  ticketTypeId: string,
+  manager: TicketTypeManager | null = null,
+) {
+  const current = await findTicketType(tx, ticketTypeId);
+  if (current.managedBy !== manager) throw managedElsewhere();
+  const [row] = await tx
+    .update(ticketTypes)
+    .set({ archivedAt: ctx.now, updatedAt: ctx.now })
+    .where(and(eq(ticketTypes.id, ticketTypeId), isNull(ticketTypes.archivedAt)))
+    .returning();
+  if (!row) throw new DomainError('not_found');
+  emit({
+    type: 'ticket_type.archived',
+    version: 1,
+    aggregateType: 'ticket_type',
+    aggregateId: row.id,
+    payload: { orgId: row.orgId, eventId: row.eventId, ticketTypeId: row.id },
+  });
+  const [presented] = await present(tx, [row], ctx.now);
+  return presented as NonNullable<typeof presented>;
+}
 
 /** Whether the org sells anything (a paid or donation ticket type): payouts then matter. */
 export const sellsPaidTicketsQuery = tenantQuery({

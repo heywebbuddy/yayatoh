@@ -116,6 +116,10 @@
       "intro": "You haven't answered yet: {org} would still like to hear how {eventName} went for you.",
       "cta": "Answer the survey"
     },
+    "automations.message": {
+      "subject": "{subject}",
+      "intro": "About {eventName}:"
+    },
     "guest.checkout-code": {
       "subject": "{code} is your code to confirm your email",
       "intro": "Enter {code} to confirm your email and finish your order with {org}. The code works once and expires in {minutes, plural, one {# minute} other {# minutes}}. If you didn't ask for it, you can ignore this email."
@@ -177,13 +181,50 @@
       "cta": "View my order"
     },
     "alerts.alert": {
-      "subject": "{rule, select, unseated {{count, plural, one {{countWords} attendee does not have a seat} other {{countWords} attendees do not have seats}}} undistributed {{count, plural, one {{countWords} purchased ticket has not been distributed} other {{countWords} purchased tickets have not been distributed}}} paymentsFailed {{count, plural, one {{countWords} payment failed} other {{countWords} payments failed}}} paymentsStuck {{count, plural, one {{countWords} payment is stuck} other {{countWords} payments are stuck}}} refundSurge {{count, plural, one {{countWords} refund in the last hour} other {{countWords} refunds in the last hour}}} devicesOffline {{count, plural, one {{countWords} check-in device is offline} other {{countWords} check-in devices are offline}}} devicesLowBattery {{count, plural, one {{countWords} check-in device is low on battery} other {{countWords} check-in devices are low on battery}}} devicesBacklog {{count, plural, one {{countWords} check-in device has scans waiting to sync} other {{countWords} check-in devices have scans waiting to sync}}} capacityNear {The venue is {count}% full} capacityFull {The venue is at capacity ({count}% full)} sellOut {{count}% of tickets are sold} salesPace {Ticket sales are at {count}% of the target pace} readiness {{count, plural, one {{countWords} setup step is blocking this event} other {{countWords} setup steps are blocking this event}}} domain {{count, plural, one {{countWords} custom domain has a problem} other {{countWords} custom domains have a problem}}} payoutsPastDue {{count, plural, one {{countWords} payout account requirement is past due} other {{countWords} payout account requirements are past due}}} deliverability {Email deliverability needs attention} automationFailed {{count, plural, one {{countWords} message or bulk action failed today} other {{countWords} messages or bulk actions failed today}}} other {Alert}}",
+      "subject": "{rule, select, unseated {{count, plural, one {{countWords} attendee does not have a seat} other {{countWords} attendees do not have seats}}} undistributed {{count, plural, one {{countWords} purchased ticket has not been distributed} other {{countWords} purchased tickets have not been distributed}}} paymentsFailed {{count, plural, one {{countWords} payment failed} other {{countWords} payments failed}}} paymentsStuck {{count, plural, one {{countWords} payment is stuck} other {{countWords} payments are stuck}}} refundSurge {{count, plural, one {{countWords} refund in the last hour} other {{countWords} refunds in the last hour}}} devicesOffline {{count, plural, one {{countWords} check-in device is offline} other {{countWords} check-in devices are offline}}} devicesLowBattery {{count, plural, one {{countWords} check-in device is low on battery} other {{countWords} check-in devices are low on battery}}} devicesBacklog {{count, plural, one {{countWords} check-in device has scans waiting to sync} other {{countWords} check-in devices have scans waiting to sync}}} capacityNear {The venue is {count}% full} capacityFull {The venue is at capacity ({count}% full)} sellOut {{count}% of tickets are sold} salesPace {Ticket sales are at {count}% of the target pace} readiness {{count, plural, one {{countWords} setup step is blocking this event} other {{countWords} setup steps are blocking this event}}} domain {{count, plural, one {{countWords} custom domain has a problem} other {{countWords} custom domains have a problem}}} payoutsPastDue {{count, plural, one {{countWords} payout account requirement is past due} other {{countWords} payout account requirements are past due}}} deliverability {Email deliverability needs attention} automationFailed {{count, plural, one {{countWords} message or bulk action failed today} other {{countWords} messages or bulk actions failed today}}} campaignFailed {{count, plural, one {{countWords} campaign send failed today} other {{countWords} campaign sends failed today}}} disputeDeadline {{count, plural, one {{countWords} dispute needs evidence soon} other {{countWords} disputes need evidence soon}}} other {Alert}}",
       "intro": "{eventName, select, none {This needs attention at {org}.} other {This needs attention at {eventName}.}} The button opens the page that fixes it.",
       "cta": "Fix it"
     },
     "alerts.alert-text": {
-      "subject": "{rule, select, unseated {{count, plural, one {{countWords} attendee does not have a seat} other {{countWords} attendees do not have seats}}} undistributed {{count, plural, one {{countWords} purchased ticket has not been distributed} other {{countWords} purchased tickets have not been distributed}}} paymentsFailed {{count, plural, one {{countWords} payment failed} other {{countWords} payments failed}}} paymentsStuck {{count, plural, one {{countWords} payment is stuck} other {{countWords} payments are stuck}}} refundSurge {{count, plural, one {{countWords} refund in the last hour} other {{countWords} refunds in the last hour}}} devicesOffline {{count, plural, one {{countWords} check-in device is offline} other {{countWords} check-in devices are offline}}} devicesLowBattery {{count, plural, one {{countWords} check-in device is low on battery} other {{countWords} check-in devices are low on battery}}} devicesBacklog {{count, plural, one {{countWords} check-in device has scans waiting to sync} other {{countWords} check-in devices have scans waiting to sync}}} capacityNear {The venue is {count}% full} capacityFull {The venue is at capacity ({count}% full)} sellOut {{count}% of tickets are sold} salesPace {Ticket sales are at {count}% of the target pace} readiness {{count, plural, one {{countWords} setup step is blocking this event} other {{countWords} setup steps are blocking this event}}} domain {{count, plural, one {{countWords} custom domain has a problem} other {{countWords} custom domains have a problem}}} payoutsPastDue {{count, plural, one {{countWords} payout account requirement is past due} other {{countWords} payout account requirements are past due}}} deliverability {Email deliverability needs attention} automationFailed {{count, plural, one {{countWords} message or bulk action failed today} other {{countWords} messages or bulk actions failed today}}} other {Alert}}",
+      "subject": "{rule, select, unseated {{count, plural, one {{countWords} attendee does not have a seat} other {{countWords} attendees do not have seats}}} undistributed {{count, plural, one {{countWords} purchased ticket has not been distributed} other {{countWords} purchased tickets have not been distributed}}} paymentsFailed {{count, plural, one {{countWords} payment failed} other {{countWords} payments failed}}} paymentsStuck {{count, plural, one {{countWords} payment is stuck} other {{countWords} payments are stuck}}} refundSurge {{count, plural, one {{countWords} refund in the last hour} other {{countWords} refunds in the last hour}}} devicesOffline {{count, plural, one {{countWords} check-in device is offline} other {{countWords} check-in devices are offline}}} devicesLowBattery {{count, plural, one {{countWords} check-in device is low on battery} other {{countWords} check-in devices are low on battery}}} devicesBacklog {{count, plural, one {{countWords} check-in device has scans waiting to sync} other {{countWords} check-in devices have scans waiting to sync}}} capacityNear {The venue is {count}% full} capacityFull {The venue is at capacity ({count}% full)} sellOut {{count}% of tickets are sold} salesPace {Ticket sales are at {count}% of the target pace} readiness {{count, plural, one {{countWords} setup step is blocking this event} other {{countWords} setup steps are blocking this event}}} domain {{count, plural, one {{countWords} custom domain has a problem} other {{countWords} custom domains have a problem}}} payoutsPastDue {{count, plural, one {{countWords} payout account requirement is past due} other {{countWords} payout account requirements are past due}}} deliverability {Email deliverability needs attention} automationFailed {{count, plural, one {{countWords} message or bulk action failed today} other {{countWords} messages or bulk actions failed today}}} campaignFailed {{count, plural, one {{countWords} campaign send failed today} other {{countWords} campaign sends failed today}}} disputeDeadline {{count, plural, one {{countWords} dispute needs evidence soon} other {{countWords} disputes need evidence soon}}} other {Alert}}",
       "intro": "{eventName, select, none {This needs attention at {org}.} other {This needs attention at {eventName}.}} The button opens the page that fixes it."
+    },
+    "campaigns.test": {
+      "subject": "[Test] {subject}",
+      "intro": "A test send of your campaign."
+    },
+    "orders.credit-note": {
+      "subject": "Credit note {number} for {eventName}",
+      "intro": "{org} issued credit note {number} for {amount} on your order for {eventName}. {storeCredit, select, yes {Use the code {code} at checkout to spend it on a future order with {org}.} other {This amount was refunded to you.}}",
+      "cta": "View my order"
+    },
+    "orders.support-reply": {
+      "subject": "{subject}",
+      "intro": "A message from {org} about your order for {eventName}:",
+      "cta": "View my order"
+    },
+    "payments.dispute-deadline": {
+      "subject": "Dispute evidence due soon: {eventName}",
+      "intro": "The evidence for a {amount} dispute on an order for {eventName} is due in {hours, plural, =0 {less than an hour} one {# hour} other {# hours}}. Review it and submit it before the deadline."
+    },
+    "ticketing.transfer-offered": {
+      "subject": "{fromName} sent you a ticket for {eventName}",
+      "intro": "{fromName} is transferring a ticket for {eventName} to you. Claim it with this email address to get your own QR code.",
+      "cta": "Claim my ticket"
+    },
+    "ticketing.transfer-completed": {
+      "subject": "Your ticket for {eventName} was transferred",
+      "intro": "{toName} claimed the ticket you transferred for {eventName}. Your old QR code no longer works."
+    },
+    "ticketing.transfer-received": {
+      "subject": "Your ticket for {eventName}",
+      "intro": "You claimed the ticket {fromName} sent you for {eventName}. Your own QR code is ready.",
+      "cta": "View my ticket"
+    },
+    "forms.resume": {
+      "subject": "Continue your registration for {eventName}",
+      "intro": "Here is your link to pick up your registration for {eventName} where you left off. It works for {days, plural, one {# day} other {# days}} after your last save and only for you, so please don't forward it. If you didn't ask for it, you can ignore this email.",
+      "cta": "Continue my registration"
     }
   },
   "roles": {
@@ -253,5 +294,10 @@
         "intro": "We moved Yayatoh back to the previous version while we fix a problem. Tickets you bought since {start} stay valid. If we had to refund one of your orders, you'll get a separate email with the amount. Sign in as before."
       }
     }
+  },
+  "campaigns": {
+    "testBanner": "Test email: only your team received this. Merge fields show their fallbacks.",
+    "eventCta": "View the event",
+    "testSubject": "[Test] {subject}"
   }
 }

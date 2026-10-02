@@ -2,6 +2,7 @@ import { billingEntitlements } from '@yayatoh/billing';
 import { withPlatformReader } from '@yayatoh/db/platform';
 import { createCtx, executeCommand } from '@yayatoh/kernel';
 import { expireOrdersCommand, sweepWaitlistsCommand } from '@yayatoh/orders';
+import { alertDisputeDeadlinesCommand } from '@yayatoh/payments';
 import { createCommandPorts, localKeyVault, setKeyVault } from '@yayatoh/platform';
 import { orgAuthorizer, orgStatusGate } from '@yayatoh/tenancy';
 import { sql } from 'drizzle-orm';
@@ -51,6 +52,32 @@ export async function sweepWaitlists(): Promise<{ expired: number; offered: numb
     } catch (err) {
       // One org's failure (a lock timeout, a deadlock) never stops the others; the next tick retries.
       console.error('waitlist sweeper', org_id, err);
+    }
+  }
+  return total;
+}
+
+/**
+ * Dispute evidence deadline alerts (M3.10c), hourly: orgs with an open dispute due within three
+ * days (platform_reader, audited), then each org's alerts under its RLS (each level raised once).
+ */
+export async function alertDisputeDeadlines(): Promise<number> {
+  const orgs = await withPlatformReader(
+    { actor: 'system:dispute-alerts', reason: 'find orgs with dispute evidence due soon' },
+    (tx) =>
+      tx.execute<{ org_id: string }>(sql`
+        select distinct org_id from payments.disputes
+        where status = 'open' and evidence_due_by is not null and deadline_alert_level < 2
+          and evidence_due_by <= now() + interval '72 hours'
+        limit 500`),
+  );
+  let total = 0;
+  for (const { org_id } of orgs) {
+    const ctx = createCtx({ orgId: org_id, actor: { type: 'system', name: 'payments.dispute-alerts' } });
+    try {
+      total += (await executeCommand(alertDisputeDeadlinesCommand, {}, ctx, ports)).alerted;
+    } catch (err) {
+      console.error('dispute alerts', org_id, err);
     }
   }
   return total;

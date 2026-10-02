@@ -229,6 +229,16 @@ export const font = {
   mono: "ui-monospace, 'SFMono-Regular', 'JetBrains Mono', Menlo, monospace",
 } as const;
 
+/**
+ * Email-safe font stacks for campaign emails (M3.6b brand kit): email clients can't load web
+ * fonts reliably, so each choice falls back through system fonts and the Noto scripts.
+ */
+export const emailFont = {
+  sans: "'Helvetica Neue',Arial,'Noto Sans Arabic','Noto Sans Devanagari','Noto Sans SC','Noto Sans TC','Noto Sans JP',sans-serif",
+  serif: "Georgia,'Times New Roman','Noto Serif','Noto Naskh Arabic',serif",
+  rounded: "'Trebuchet MS','Segoe UI',Verdana,'Noto Sans Arabic','Noto Sans JP',sans-serif",
+} as const;
+
 /** Type scale (px / line-height / weight / tracking). Headings are 800 with tight tracking. */
 export const type = {
   display: { size: 56, lineHeight: 1.0, weight: 800, tracking: '-0.045em' },
@@ -296,6 +306,8 @@ export const email = {
   headerInk: '#FFFFFF',
   button: '#6A3BFF',
   buttonInk: '#FFFFFF',
+  /** Notice band (test sends). */
+  notice: '#FFF0D4',
 } as const;
 
 /** Minimum interactive target size (WCAG 2.2 AA, CLAUDE.md); 44 px on touch screens. */

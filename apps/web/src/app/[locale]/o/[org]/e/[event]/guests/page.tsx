@@ -10,7 +10,7 @@ import {
 import { executeQuery } from '@yayatoh/kernel';
 import { isProfileKey, navIncludes, navLabelKey, PROFILES } from '@yayatoh/platform';
 import { Avatar, AvatarStack, buttonClass, Card, EmptyState, PageHeader, Pagination, Tag } from '@yayatoh/ui';
-import { Plus, Search as SearchIcon } from 'lucide-react';
+import { Download, Plus, Search as SearchIcon } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import type { ReactNode } from 'react';
@@ -335,13 +335,25 @@ export default async function GuestsPage({
         description={tp('subtitle')}
         actions={
           canWrite ? (
-            <a href="#new-party" className={buttonClass('primary')}>
-              <Plus aria-hidden="true" strokeWidth={2.4} />
-              {tp('addParty')}
-            </a>
+            <>
+              <Link href={`/o/${org}/e/${event}/guests/import`} className={buttonClass('secondary')}>
+                <Download aria-hidden="true" strokeWidth={2} />
+                {t('guestImport.importLink')}
+              </Link>
+              <a href="#new-party" className={buttonClass('primary')}>
+                <Plus aria-hidden="true" strokeWidth={2.4} />
+                {tp('addParty')}
+              </a>
+            </>
           ) : undefined
         }
       />
+      <Link
+        href={`/o/${org}/e/${event}/guests/sub-events`}
+        className="inline-flex min-h-8 items-center self-start rounded-[10px] text-body font-bold text-primary-ink underline-offset-2 hover:underline"
+      >
+        {t('subEvents.link')}
+      </Link>
       {canWrite ? null : <p className="text-body text-ink-2">{tp('viewerNotice')}</p>}
 
       <section aria-labelledby="guest-counts-heading" className="flex flex-col gap-3">
@@ -554,7 +566,12 @@ export default async function GuestsPage({
                                       </span>
                                     ) : null}
                                   </span>
-                                  {g.meal || g.dietary || g.accessibility || g.address ? (
+                                  {g.meal ||
+                                  g.dietary ||
+                                  g.accessibility ||
+                                  g.address ||
+                                  g.email ||
+                                  g.phone ? (
                                     <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 text-caption text-ink-2">
                                       {(
                                         [
@@ -562,6 +579,8 @@ export default async function GuestsPage({
                                           ['dietary', g.dietary],
                                           ['accessibility', g.accessibility],
                                           ['address', g.address],
+                                          ['email', g.email],
+                                          ['phone', g.phone],
                                         ] as const
                                       ).map(([k, v]) =>
                                         v ? (

@@ -9,6 +9,7 @@ import { ticketsForOrderTx } from '@yayatoh/ticketing';
 import { and, desc, eq, inArray, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { hashManageToken, loadOrderTx } from './commands/checkout.ts';
+import { buyerCreditNotesTx } from './commands/credit-notes.ts';
 import { orderRefundPolicyTx } from './commands/refund-policy.ts';
 import { buyerRefundPanelTx } from './commands/refund-requests.ts';
 import { OrderDto, type PublicOrderDto, publicOrderSerializer, RefundPolicyDto } from './dto.ts';
@@ -167,6 +168,7 @@ export async function orderByManageToken(token: string): Promise<PublicOrderDto 
         messages: await buyerOrderMessagesTx(tx, ref.order_id, o.buyerEmail),
         refundPolicy: await orderRefundPolicyTx(tx, o),
         refundRequest: await buyerRefundPanelTx(tx, ctx, o),
+        creditNotes: await buyerCreditNotesTx(tx, o.id),
       };
     });
     return publicOrderSerializer.serialize(order);
@@ -304,4 +306,55 @@ export async function orderHoldingTx(
     buyerName: o.buyerName,
     liveTicketEnds,
   };
+}
+
+/** Buyer and event of some orders (M3.10c dispute queue): ids in, headline fields out. */
+export async function orderHeadlinesTx(tx: TenantTx, orderIds: readonly string[]) {
+  if (orderIds.length === 0)
+    return new Map<string, { buyerName: string; buyerEmail: string; eventId: string }>();
+  const rows = await tx
+    .select({
+      id: orders.id,
+      buyerName: orders.buyerName,
+      buyerEmail: orders.buyerEmail,
+      eventId: orders.eventId,
+    })
+    .from(orders)
+    .where(inArray(orders.id, [...orderIds]));
+  return new Map(rows.map((r) => [r.id, r]));
+}
+
+/** The refund terms shown when the order was bought (M3.10b snapshot; null before M3.10b). */
+export async function orderPolicySnapshotTx(tx: TenantTx, orderId: string) {
+  const [r] = await tx.select({ s: orders.refundPolicySnapshot }).from(orders).where(eq(orders.id, orderId));
+  return r?.s ?? null;
+}
+
+/**
+ * What an order holds or has sold, per ticket type, for a module keeping its own counters
+ * (M5.1a per-type capacity): while it holds stock, its items; once paid (or partly refunded),
+ * its active tickets; otherwise nothing. Null when the order does not exist.
+ */
+export async function orderStockTx(
+  tx: TenantTx,
+  orderId: string,
+): Promise<{ eventId: string; held: Map<string, number>; sold: Map<string, number> } | null> {
+  const [o] = await tx
+    .select({ id: orders.id, eventId: orders.eventId, status: orders.status })
+    .from(orders)
+    .where(eq(orders.id, orderId));
+  if (!o) return null;
+  const held = new Map<string, number>();
+  const sold = new Map<string, number>();
+  if (['reserved', 'awaiting_payment', 'payment_failed'].includes(o.status)) {
+    for (const i of await tx
+      .select({ ticketTypeId: orderItems.ticketTypeId, quantity: orderItems.quantity })
+      .from(orderItems)
+      .where(eq(orderItems.orderId, o.id)))
+      held.set(i.ticketTypeId, (held.get(i.ticketTypeId) ?? 0) + i.quantity);
+  } else if (['paid', 'partially_refunded'].includes(o.status)) {
+    for (const t of await ticketsForOrderTx(tx, o.id))
+      if (t.status === 'active') sold.set(t.ticketTypeId, (sold.get(t.ticketTypeId) ?? 0) + 1);
+  }
+  return { eventId: o.eventId, held, sold };
 }

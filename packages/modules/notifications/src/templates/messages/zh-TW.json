@@ -116,6 +116,10 @@
       "intro": "你還沒有填寫：{org} 仍希望了解你對 {eventName} 的感受。",
       "cta": "填寫問卷"
     },
+    "automations.message": {
+      "subject": "{subject}",
+      "intro": "關於 {eventName}："
+    },
     "guest.checkout-code": {
       "subject": "{code} 是您的電子郵件確認碼",
       "intro": "輸入 {code} 以確認您的電子郵件並完成在 {org} 的訂單。驗證碼僅能使用一次，{minutes} 分鐘後失效。如果這不是您本人的要求，請忽略此郵件。"
@@ -177,13 +181,50 @@
       "cta": "查看我的訂單"
     },
     "alerts.alert": {
-      "subject": "{rule, select, unseated {{count, plural, other {{countWords} 位參加者沒有座位}}} undistributed {{count, plural, other {{countWords} 張已購票券尚未分發}}} paymentsFailed {{count, plural, other {{countWords} 筆付款失敗}}} paymentsStuck {{count, plural, other {{countWords} 筆付款卡住了}}} refundSurge {{count, plural, other {過去一小時內有 {countWords} 筆退款}}} devicesOffline {{count, plural, other {{countWords} 台報到裝置離線}}} devicesLowBattery {{count, plural, other {{countWords} 台報到裝置電量不足}}} devicesBacklog {{count, plural, other {{countWords} 台報到裝置有待同步的掃描}}} capacityNear {場地已滿 {count}%} capacityFull {場地已額滿（{count}%）} sellOut {已售出 {count}% 的票券} salesPace {票券銷售達到目標進度的 {count}%} readiness {{count, plural, other {{countWords} 個設定步驟阻礙了此活動}}} domain {{count, plural, other {{countWords} 個自訂網域有問題}}} payoutsPastDue {{count, plural, other {收款帳戶有 {countWords} 項要求已逾期}}} deliverability {電子郵件送達率需要注意} automationFailed {{count, plural, other {今天有 {countWords} 則訊息或批次操作失敗}}} other {警示}}",
+      "subject": "{rule, select, unseated {{count, plural, other {{countWords} 位參加者沒有座位}}} undistributed {{count, plural, other {{countWords} 張已購票券尚未分發}}} paymentsFailed {{count, plural, other {{countWords} 筆付款失敗}}} paymentsStuck {{count, plural, other {{countWords} 筆付款卡住了}}} refundSurge {{count, plural, other {過去一小時內有 {countWords} 筆退款}}} devicesOffline {{count, plural, other {{countWords} 台報到裝置離線}}} devicesLowBattery {{count, plural, other {{countWords} 台報到裝置電量不足}}} devicesBacklog {{count, plural, other {{countWords} 台報到裝置有待同步的掃描}}} capacityNear {場地已滿 {count}%} capacityFull {場地已額滿（{count}%）} sellOut {已售出 {count}% 的票券} salesPace {票券銷售達到目標進度的 {count}%} readiness {{count, plural, other {{countWords} 個設定步驟阻礙了此活動}}} domain {{count, plural, other {{countWords} 個自訂網域有問題}}} payoutsPastDue {{count, plural, other {收款帳戶有 {countWords} 項要求已逾期}}} deliverability {電子郵件送達率需要注意} automationFailed {{count, plural, other {今天有 {countWords} 則訊息或批次操作失敗}}} campaignFailed {{count, plural, other {今天有 {countWords} 次行銷活動傳送失敗}}} disputeDeadline {{count, plural, other {有 {countWords} 起爭議需要盡快提交證據}}} other {警示}}",
       "intro": "{eventName, select, none {{org} 有需要注意的事項。} other {{eventName} 有需要注意的事項。}}點按鈕開啟處理頁面。",
       "cta": "前往處理"
     },
     "alerts.alert-text": {
-      "subject": "{rule, select, unseated {{count, plural, other {{countWords} 位參加者沒有座位}}} undistributed {{count, plural, other {{countWords} 張已購票券尚未分發}}} paymentsFailed {{count, plural, other {{countWords} 筆付款失敗}}} paymentsStuck {{count, plural, other {{countWords} 筆付款卡住了}}} refundSurge {{count, plural, other {過去一小時內有 {countWords} 筆退款}}} devicesOffline {{count, plural, other {{countWords} 台報到裝置離線}}} devicesLowBattery {{count, plural, other {{countWords} 台報到裝置電量不足}}} devicesBacklog {{count, plural, other {{countWords} 台報到裝置有待同步的掃描}}} capacityNear {場地已滿 {count}%} capacityFull {場地已額滿（{count}%）} sellOut {已售出 {count}% 的票券} salesPace {票券銷售達到目標進度的 {count}%} readiness {{count, plural, other {{countWords} 個設定步驟阻礙了此活動}}} domain {{count, plural, other {{countWords} 個自訂網域有問題}}} payoutsPastDue {{count, plural, other {收款帳戶有 {countWords} 項要求已逾期}}} deliverability {電子郵件送達率需要注意} automationFailed {{count, plural, other {今天有 {countWords} 則訊息或批次操作失敗}}} other {警示}}",
+      "subject": "{rule, select, unseated {{count, plural, other {{countWords} 位參加者沒有座位}}} undistributed {{count, plural, other {{countWords} 張已購票券尚未分發}}} paymentsFailed {{count, plural, other {{countWords} 筆付款失敗}}} paymentsStuck {{count, plural, other {{countWords} 筆付款卡住了}}} refundSurge {{count, plural, other {過去一小時內有 {countWords} 筆退款}}} devicesOffline {{count, plural, other {{countWords} 台報到裝置離線}}} devicesLowBattery {{count, plural, other {{countWords} 台報到裝置電量不足}}} devicesBacklog {{count, plural, other {{countWords} 台報到裝置有待同步的掃描}}} capacityNear {場地已滿 {count}%} capacityFull {場地已額滿（{count}%）} sellOut {已售出 {count}% 的票券} salesPace {票券銷售達到目標進度的 {count}%} readiness {{count, plural, other {{countWords} 個設定步驟阻礙了此活動}}} domain {{count, plural, other {{countWords} 個自訂網域有問題}}} payoutsPastDue {{count, plural, other {收款帳戶有 {countWords} 項要求已逾期}}} deliverability {電子郵件送達率需要注意} automationFailed {{count, plural, other {今天有 {countWords} 則訊息或批次操作失敗}}} campaignFailed {{count, plural, other {今天有 {countWords} 次行銷活動傳送失敗}}} disputeDeadline {{count, plural, other {有 {countWords} 起爭議需要盡快提交證據}}} other {警示}}",
       "intro": "{eventName, select, none {{org} 有需要注意的事項。} other {{eventName} 有需要注意的事項。}}點按鈕開啟處理頁面。"
+    },
+    "campaigns.test": {
+      "subject": "[測試] {subject}",
+      "intro": "你的行銷活動的測試寄送。"
+    },
+    "orders.credit-note": {
+      "subject": "{eventName} 的折讓單 {number}",
+      "intro": "{org} 已為你在 {eventName} 的訂單開立金額 {amount} 的折讓單 {number}。{storeCredit, select, yes {在 {org} 的下一筆訂單結帳時輸入代碼 {code} 即可使用。} other {此金額已退還給你。}}",
+      "cta": "查看我的訂單"
+    },
+    "orders.support-reply": {
+      "subject": "{subject}",
+      "intro": "{org} 關於你在 {eventName} 訂單的訊息:",
+      "cta": "查看我的訂單"
+    },
+    "payments.dispute-deadline": {
+      "subject": "爭議證據即將到期:{eventName}",
+      "intro": "{eventName} 一筆訂單上金額 {amount} 的爭議證據將在 {hours, plural, =0 {不到一小時} other {# 小時}}後到期。請在截止前審核並提交。"
+    },
+    "ticketing.transfer-offered": {
+      "subject": "{fromName} 傳送了 {eventName} 的票券給你",
+      "intro": "{fromName} 正在將 {eventName} 的一張票券轉讓給你。請使用此電子郵件地址領取,即可取得你自己的 QR 碼。",
+      "cta": "領取我的票券"
+    },
+    "ticketing.transfer-completed": {
+      "subject": "你的 {eventName} 票券已轉讓",
+      "intro": "{toName} 已領取你轉讓的 {eventName} 票券。你原本的 QR 碼已失效。"
+    },
+    "ticketing.transfer-received": {
+      "subject": "你的 {eventName} 票券",
+      "intro": "你已領取 {fromName} 傳送給你的 {eventName} 票券。你自己的 QR 碼已準備好。",
+      "cta": "查看我的票券"
+    },
+    "forms.resume": {
+      "subject": "繼續您的 {eventName} 報名",
+      "intro": "這是您的連結，可從上次中斷的地方繼續 {eventName} 的報名。它在您最後一次儲存後 {days, plural, other {# 天}} 內有效，且僅供您本人使用，請勿轉寄。如果您沒有要求此郵件，可以忽略。",
+      "cta": "繼續我的報名"
     }
   },
   "roles": {
@@ -253,5 +294,10 @@
         "intro": "在修復問題期間，我們已將 Yayatoh 恢復到先前的版本。你自 {start} 起購買的票券仍然有效。如果我們需要為你的某筆訂單退款，你會另外收到一封註明金額的電子郵件。請照常登入。"
       }
     }
+  },
+  "campaigns": {
+    "testBanner": "測試郵件：只有你的團隊收到。合併欄位會顯示其備用值。",
+    "eventCta": "查看活動",
+    "testSubject": "[測試] {subject}"
   }
 }

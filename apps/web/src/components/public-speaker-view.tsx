@@ -42,6 +42,7 @@ export async function PublicSpeakerView({
   // M1.4h: speaker photos (this speaker's, and co-speakers' avatars in the session list).
   const images = Object.fromEntries(await publicProgramMedia(target.orgId, target.eventId, { privateOk }));
   const t = await getTranslations('publicEvent');
+  const ta = await getTranslations('agenda');
   const time = new Intl.DateTimeFormat(locale, {
     timeZone: pub.timezone,
     hour: 'numeric',
@@ -119,6 +120,7 @@ export async function PublicSpeakerView({
                 time={time}
                 day={day.format(s.startsAt)}
                 images={images}
+                optionalLabel={ta('optional')}
               />
             ))}
           </ol>

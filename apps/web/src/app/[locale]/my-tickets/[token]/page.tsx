@@ -1,14 +1,15 @@
-import { executeQuery, isDomainError } from '@yayatoh/kernel';
+import { executeQuery, formatMoney, isDomainError, money } from '@yayatoh/kernel';
 import { holderContext, holderTicketsQuery } from '@yayatoh/ticketing';
 import { Card, EmptyState, Label, PageHeader } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { ClaimLinkForm } from '@/components/claim-link-form.tsx';
 import { HolderContent } from '@/components/holder-content.tsx';
+import { ConfirmButton, HolderTransferForm } from '@/components/support-tools.tsx';
 import { TicketQr } from '@/components/ticket-qr.tsx';
 import { formatEventDateRange } from '@/lib/format.ts';
 import { ports } from '@/server/ports.ts';
-import { giveTicketAction } from './actions.ts';
+import { cancelHolderTransferAction, giveTicketAction, holderTransferAction } from './actions.ts';
 
 /** Ticket holder self-service (magic link): my tickets for one event, and passing one on. */
 export default async function MyTicketsPage({
@@ -33,6 +34,11 @@ export default async function MyTicketsPage({
       </main>
     );
   }
+  const deadline = new Intl.DateTimeFormat(locale, {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+    timeZone: data.event.timezone,
+  });
   const when = formatEventDateRange(data.event.startsAt.toISOString(), data.event.endsAt.toISOString(), {
     locale,
     currency: 'USD',
@@ -65,6 +71,48 @@ export default async function MyTicketsPage({
                     <p className="font-mono text-[18px] tracking-[0.2em]">{tk.shortCode}</p>
                   </div>
                 </div>
+                <section
+                  aria-labelledby={`transfer-${tk.id}`}
+                  className="flex flex-col gap-2 border-t border-line pt-3"
+                >
+                  <h2 id={`transfer-${tk.id}`} className="text-caption text-ink-2">
+                    {t('supportTools.holder.title')}
+                  </h2>
+                  {tk.transfer?.pendingTransferId ? (
+                    <>
+                      <p className="text-body">
+                        {t('supportTools.holder.pending', { name: tk.transfer.pendingTransferTo ?? '' })}
+                      </p>
+                      <ConfirmButton
+                        action={cancelHolderTransferAction.bind(null, token, tk.transfer.pendingTransferId)}
+                        label={t('supportTools.holder.cancel')}
+                        done={t('supportTools.holder.cancelled')}
+                      />
+                    </>
+                  ) : tk.transfer?.allowed ? (
+                    <>
+                      <p className="text-caption text-ink-2">
+                        {t('supportTools.holder.until', { date: deadline.format(tk.transfer.deadline) })}
+                        {tk.transfer.feeMinor > 0
+                          ? ` · ${t('supportTools.holder.fee', { fee: formatMoney(money(tk.transfer.feeMinor, tk.transfer.currency), locale) })}`
+                          : ''}
+                      </p>
+                      <HolderTransferForm
+                        action={holderTransferAction.bind(null, token, tk.id)}
+                        idPrefix={`transfer-${tk.id}`}
+                        fee={
+                          tk.transfer.feeMinor > 0
+                            ? formatMoney(money(tk.transfer.feeMinor, tk.transfer.currency), locale)
+                            : null
+                        }
+                      />
+                    </>
+                  ) : (
+                    <p className="text-caption text-ink-2">
+                      {t(`supportTools.holder.refused.${tk.transfer?.reason ?? 'not_allowed'}`)}
+                    </p>
+                  )}
+                </section>
                 <section
                   aria-labelledby={`give-${tk.id}`}
                   className="flex flex-col gap-2 border-t border-line pt-3"

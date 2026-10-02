@@ -13,6 +13,7 @@ import {
   startCheckoutCommand,
   waitlistRef,
 } from '@yayatoh/orders';
+import { registrationCellOf, startRegistrationCommand } from '@yayatoh/registration';
 import { headers } from 'next/headers';
 import { redirect as nextRedirect } from 'next/navigation';
 import { getLocale } from 'next-intl/server';
@@ -116,24 +117,43 @@ export async function offerCheckoutAction(
     locale,
   });
   let result: CheckoutResultDto;
+  // M5.1a: an offer on a registration type's line is bought through registration checkout (the
+  // pass is managed by registration; its capacity counter takes the offered place).
+  const cell = await registrationCellOf(view.orgId, view.offer.ticketTypeId);
   try {
-    result = await executeCommand(
-      startCheckoutCommand,
-      {
-        eventId: view.eventId,
-        items: [
-          { ticketTypeId: view.offer.ticketTypeId, quantity: Number.isInteger(quantity) ? quantity : 1 },
-        ],
-        ...(view.date ? { occurrenceId: view.date.id } : {}),
-        buyer: { email: view.email, name },
-        waitlistToken: token,
-        answers,
-        locale,
-        riskReview: risk.action === 'review' ? [...risk.rules] : [],
-      },
-      ctx,
-      ports,
-    );
+    result = cell
+      ? await executeCommand(
+          startRegistrationCommand,
+          {
+            eventId: view.eventId,
+            registrationTypeId: cell.registrationTypeId,
+            itemIds: [cell.admissionItemId],
+            buyer: { email: view.email, name },
+            waitlistToken: token,
+            answers,
+            locale,
+            riskReview: risk.action === 'review' ? [...risk.rules] : [],
+          },
+          ctx,
+          ports,
+        )
+      : await executeCommand(
+          startCheckoutCommand,
+          {
+            eventId: view.eventId,
+            items: [
+              { ticketTypeId: view.offer.ticketTypeId, quantity: Number.isInteger(quantity) ? quantity : 1 },
+            ],
+            ...(view.date ? { occurrenceId: view.date.id } : {}),
+            buyer: { email: view.email, name },
+            waitlistToken: token,
+            answers,
+            locale,
+            riskReview: risk.action === 'review' ? [...risk.rules] : [],
+          },
+          ctx,
+          ports,
+        );
   } catch (err) {
     if (!isDomainError(err)) throw err;
     return {

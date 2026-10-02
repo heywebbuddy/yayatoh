@@ -41,7 +41,8 @@ export default async function AccessPage({
       ? executeQuery(listTicketTypesQuery, { eventId: ev.id }, data.ctx, ports)
       : [],
   ]);
-  const hidden = types.filter((p) => p.visibility === 'hidden' && !p.archivedAt);
+  // M5.1a: a registration pass is never unlocked by an access code (registration types have their own).
+  const hidden = types.filter((p) => p.visibility === 'hidden' && !p.archivedAt && p.managedBy === null);
   const passName = new Map(types.map((p) => [p.id, p.name]));
   const when = new Intl.DateTimeFormat(locale, {
     dateStyle: 'medium',

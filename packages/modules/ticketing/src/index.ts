@@ -11,11 +11,14 @@ export {
 } from './bulk.ts';
 export {
   archiveTicketTypeCommand,
+  archiveTicketTypeTx,
   createTicketTypeCommand,
+  createTicketTypeTx,
   eventPriceRangeTx,
   listTicketTypesQuery,
   sellsPaidTicketsQuery,
   updateTicketTypeCommand,
+  updateTicketTypeTx,
 } from './commands/ticket-types.ts';
 export { instantiateTicketTypesTx, TicketTypesSnapshot, ticketTypesSnapshotTx } from './copy.ts';
 export {
@@ -37,6 +40,14 @@ export {
   revokeClaimLinkCommand,
   TicketClaimDto,
 } from './distribution.ts';
+export { allocateCredit } from './domain/credit.ts';
+export {
+  decideTransfer,
+  type TransferDecision,
+  type TransferRefusal,
+  type TransferRules,
+  transferDeadline,
+} from './domain/transfer-rules.ts';
 export {
   eraseTicketsDsarTx,
   purgeHolderLinksTx,
@@ -101,7 +112,14 @@ export {
   setPromoCodeActiveCommand,
 } from './promo.ts';
 export { publicTicketTypes } from './public.ts';
-export { FEE_MODES, PROMO_KINDS, TICKET_STATUSES, TICKET_TYPE_VISIBILITIES } from './schema.ts';
+export {
+  FEE_MODES,
+  PROMO_KINDS,
+  TICKET_STATUSES,
+  TICKET_TYPE_MANAGERS,
+  TICKET_TYPE_VISIBILITIES,
+  type TicketTypeManager,
+} from './schema.ts';
 export {
   orderIdsByShortCodeTx,
   type TicketTypeStats,
@@ -110,4 +128,26 @@ export {
   undistributedTicketIdsSql,
   undistributedTicketsTx,
 } from './stats.ts';
-export { claimLinkMailer, holderLinkMailer } from './subscribers.ts';
+export { claimLinkMailer, holderLinkMailer, transferMailer } from './subscribers.ts';
+export {
+  cancelHolderTransferCommand,
+  cancelTransferCommand,
+  orderTransfersQuery,
+  StartedTransferDto,
+  startHolderTransferCommand,
+  startTransferCommand,
+  startTransferTx,
+  TRANSFER_CLAIM_DAYS,
+  TRANSFER_STATES,
+  TransferDto,
+  transfersForOrderTx,
+} from './transfers.ts';
+export {
+  type FakeWalletPush,
+  fakeWalletPassProvider,
+  orderWalletPassesQuery,
+  WalletPassDto,
+  type WalletPassProvider,
+  walletPassSync,
+  walletSerial,
+} from './wallet.ts';

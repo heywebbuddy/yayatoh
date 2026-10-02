@@ -607,8 +607,78 @@
     {
       "idx": 86,
       "version": "7",
-      "when": 1790952946225,
-      "tag": "0086_melted_mariko_yashida",
+      "when": 1790947307204,
+      "tag": "0086_flimsy_kinsey_walden",
+      "breakpoints": true
+    },
+    {
+      "idx": 87,
+      "version": "7",
+      "when": 1790947917926,
+      "tag": "0087_violet_shotgun",
+      "breakpoints": true
+    },
+    {
+      "idx": 88,
+      "version": "7",
+      "when": 1790948483802,
+      "tag": "0088_harsh_charles_xavier",
+      "breakpoints": true
+    },
+    {
+      "idx": 89,
+      "version": "7",
+      "when": 1790949307679,
+      "tag": "0089_left_doomsday",
+      "breakpoints": true
+    },
+    {
+      "idx": 90,
+      "version": "7",
+      "when": 1790949983196,
+      "tag": "0090_light_speed_demon",
+      "breakpoints": true
+    },
+    {
+      "idx": 91,
+      "version": "7",
+      "when": 1790950692944,
+      "tag": "0091_shallow_midnight",
+      "breakpoints": true
+    },
+    {
+      "idx": 92,
+      "version": "7",
+      "when": 1790951322243,
+      "tag": "0092_legal_tag",
+      "breakpoints": true
+    },
+    {
+      "idx": 93,
+      "version": "7",
+      "when": 1790951996648,
+      "tag": "0093_far_jean_grey",
+      "breakpoints": true
+    },
+    {
+      "idx": 94,
+      "version": "7",
+      "when": 1790952000383,
+      "tag": "0094_wonderful_vision",
+      "breakpoints": true
+    },
+    {
+      "idx": 95,
+      "version": "7",
+      "when": 1790954632770,
+      "tag": "0095_alert_signals",
+      "breakpoints": true
+    },
+    {
+      "idx": 96,
+      "version": "7",
+      "when": 1790956651975,
+      "tag": "0096_bright_red_shift",
       "breakpoints": true
     }
   ]

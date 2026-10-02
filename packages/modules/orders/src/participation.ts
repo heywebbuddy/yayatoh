@@ -5,10 +5,19 @@ import { orders, refunds } from './schema.ts';
 /** Paid order states (a refund keeps the order counted as sold; spend is net of refunds). */
 const SOLD = sql`('paid', 'partially_refunded', 'refunded')`;
 
-/** An order's event and buyer contact (the audiences projector, M3.6). */
+/**
+ * An order's event and buyer contact (the audiences projector, M3.6), its date, status and the
+ * buyer's language (journeys, M3.7a). Ids and vocabulary only.
+ */
 export async function orderRefTx(tx: TenantTx, orderId: string) {
   const [row] = await tx
-    .select({ eventId: orders.eventId, buyerContactId: orders.buyerContactId })
+    .select({
+      eventId: orders.eventId,
+      buyerContactId: orders.buyerContactId,
+      occurrenceId: orders.occurrenceId,
+      status: orders.status,
+      locale: orders.locale,
+    })
     .from(orders)
     .where(eq(orders.id, orderId));
   return row ?? null;

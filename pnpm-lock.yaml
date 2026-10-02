@@ -453,9 +453,15 @@ importers:
       '@yayatoh/auth':
         specifier: workspace:*
         version: link:../../packages/auth
+      '@yayatoh/automations':
+        specifier: workspace:*
+        version: link:../../packages/modules/automations
       '@yayatoh/billing':
         specifier: workspace:*
         version: link:../../packages/modules/billing
+      '@yayatoh/campaigns':
+        specifier: workspace:*
+        version: link:../../packages/modules/campaigns
       '@yayatoh/checkin':
         specifier: workspace:*
         version: link:../../packages/modules/checkin
@@ -471,6 +477,9 @@ importers:
       '@yayatoh/contracts':
         specifier: workspace:*
         version: link:../../packages/contracts
+      '@yayatoh/crm':
+        specifier: workspace:*
+        version: link:../../packages/modules/crm
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../../packages/db
@@ -522,6 +531,9 @@ importers:
       '@yayatoh/program':
         specifier: workspace:*
         version: link:../../packages/modules/program
+      '@yayatoh/registration':
+        specifier: workspace:*
+        version: link:../../packages/modules/registration
       '@yayatoh/reports':
         specifier: workspace:*
         version: link:../../packages/modules/reports
@@ -634,9 +646,15 @@ importers:
       '@yayatoh/auth':
         specifier: workspace:*
         version: link:../../packages/auth
+      '@yayatoh/automations':
+        specifier: workspace:*
+        version: link:../../packages/modules/automations
       '@yayatoh/billing':
         specifier: workspace:*
         version: link:../../packages/modules/billing
+      '@yayatoh/campaigns':
+        specifier: workspace:*
+        version: link:../../packages/modules/campaigns
       '@yayatoh/checkin':
         specifier: workspace:*
         version: link:../../packages/modules/checkin
@@ -649,6 +667,12 @@ importers:
       '@yayatoh/events':
         specifier: workspace:*
         version: link:../../packages/modules/events
+      '@yayatoh/forms':
+        specifier: workspace:*
+        version: link:../../packages/modules/forms
+      '@yayatoh/guests':
+        specifier: workspace:*
+        version: link:../../packages/modules/guests
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../packages/kernel
@@ -679,6 +703,9 @@ importers:
       '@yayatoh/privacy':
         specifier: workspace:*
         version: link:../../packages/modules/privacy
+      '@yayatoh/registration':
+        specifier: workspace:*
+        version: link:../../packages/modules/registration
       '@yayatoh/reports':
         specifier: workspace:*
         version: link:../../packages/modules/reports
@@ -886,6 +913,10 @@ importers:
         version: 6.0.3
 
   packages/csv:
+    dependencies:
+      fflate:
+        specifier: 0.8.3
+        version: 0.8.3
     devDependencies:
       '@types/node':
         specifier: 'catalog:'
@@ -1144,6 +1175,61 @@ importers:
         specifier: 'catalog:'
         version: 6.0.3
 
+  packages/modules/automations:
+    dependencies:
+      '@yayatoh/attendees':
+        specifier: workspace:*
+        version: link:../attendees
+      '@yayatoh/checkin':
+        specifier: workspace:*
+        version: link:../checkin
+      '@yayatoh/contracts':
+        specifier: workspace:*
+        version: link:../../contracts
+      '@yayatoh/crm':
+        specifier: workspace:*
+        version: link:../crm
+      '@yayatoh/db':
+        specifier: workspace:*
+        version: link:../../db
+      '@yayatoh/events':
+        specifier: workspace:*
+        version: link:../events
+      '@yayatoh/kernel':
+        specifier: workspace:*
+        version: link:../../kernel
+      '@yayatoh/notifications':
+        specifier: workspace:*
+        version: link:../notifications
+      '@yayatoh/orders':
+        specifier: workspace:*
+        version: link:../orders
+      '@yayatoh/platform':
+        specifier: workspace:*
+        version: link:../../platform
+      '@yayatoh/seating':
+        specifier: workspace:*
+        version: link:../seating
+      '@yayatoh/surveys':
+        specifier: workspace:*
+        version: link:../surveys
+      drizzle-orm:
+        specifier: 'catalog:'
+        version: 0.45.3(@opentelemetry/api@1.9.0)(kysely@0.29.6)(pg@8.23.0)(postgres@3.4.9)
+      zod:
+        specifier: 'catalog:'
+        version: 4.6.5
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.19.0
+      '@yayatoh/config':
+        specifier: workspace:*
+        version: link:../../config
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
   packages/modules/billing:
     dependencies:
       '@yayatoh/contracts':
@@ -1158,6 +1244,61 @@ importers:
       '@yayatoh/platform':
         specifier: workspace:*
         version: link:../../platform
+      drizzle-orm:
+        specifier: 'catalog:'
+        version: 0.45.3(@opentelemetry/api@1.9.0)(kysely@0.29.6)(pg@8.23.0)(postgres@3.4.9)
+      zod:
+        specifier: 'catalog:'
+        version: 4.6.5
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.19.0
+      '@yayatoh/config':
+        specifier: workspace:*
+        version: link:../../config
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  packages/modules/campaigns:
+    dependencies:
+      '@yayatoh/audiences':
+        specifier: workspace:*
+        version: link:../audiences
+      '@yayatoh/contracts':
+        specifier: workspace:*
+        version: link:../../contracts
+      '@yayatoh/crm':
+        specifier: workspace:*
+        version: link:../crm
+      '@yayatoh/db':
+        specifier: workspace:*
+        version: link:../../db
+      '@yayatoh/events':
+        specifier: workspace:*
+        version: link:../events
+      '@yayatoh/kernel':
+        specifier: workspace:*
+        version: link:../../kernel
+      '@yayatoh/marketing':
+        specifier: workspace:*
+        version: link:../marketing
+      '@yayatoh/notifications':
+        specifier: workspace:*
+        version: link:../notifications
+      '@yayatoh/pdf':
+        specifier: workspace:*
+        version: link:../../pdf
+      '@yayatoh/platform':
+        specifier: workspace:*
+        version: link:../../platform
+      '@yayatoh/tenancy':
+        specifier: workspace:*
+        version: link:../tenancy
+      '@yayatoh/ui':
+        specifier: workspace:*
+        version: link:../../ui
       drizzle-orm:
         specifier: 'catalog:'
         version: 0.45.3(@opentelemetry/api@1.9.0)(kysely@0.29.6)(pg@8.23.0)(postgres@3.4.9)
@@ -1420,6 +1561,9 @@ importers:
       '@yayatoh/contracts':
         specifier: workspace:*
         version: link:../../contracts
+      '@yayatoh/csv':
+        specifier: workspace:*
+        version: link:../../csv
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../../db
@@ -1432,6 +1576,9 @@ importers:
       '@yayatoh/platform':
         specifier: workspace:*
         version: link:../../platform
+      '@yayatoh/venues':
+        specifier: workspace:*
+        version: link:../venues
       drizzle-orm:
         specifier: 'catalog:'
         version: 0.45.3(@opentelemetry/api@1.9.0)(kysely@0.29.6)(pg@8.23.0)(postgres@3.4.9)
@@ -1837,6 +1984,9 @@ importers:
       '@yayatoh/contracts':
         specifier: workspace:*
         version: link:../../contracts
+      '@yayatoh/csv':
+        specifier: workspace:*
+        version: link:../../csv
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../../db
@@ -1849,6 +1999,49 @@ importers:
       '@yayatoh/platform':
         specifier: workspace:*
         version: link:../../platform
+      drizzle-orm:
+        specifier: 'catalog:'
+        version: 0.45.3(@opentelemetry/api@1.9.0)(kysely@0.29.6)(pg@8.23.0)(postgres@3.4.9)
+      zod:
+        specifier: 'catalog:'
+        version: 4.6.5
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.19.0
+      '@yayatoh/config':
+        specifier: workspace:*
+        version: link:../../config
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  packages/modules/registration:
+    dependencies:
+      '@yayatoh/billing':
+        specifier: workspace:*
+        version: link:../billing
+      '@yayatoh/contracts':
+        specifier: workspace:*
+        version: link:../../contracts
+      '@yayatoh/db':
+        specifier: workspace:*
+        version: link:../../db
+      '@yayatoh/events':
+        specifier: workspace:*
+        version: link:../events
+      '@yayatoh/kernel':
+        specifier: workspace:*
+        version: link:../../kernel
+      '@yayatoh/orders':
+        specifier: workspace:*
+        version: link:../orders
+      '@yayatoh/platform':
+        specifier: workspace:*
+        version: link:../../platform
+      '@yayatoh/ticketing':
+        specifier: workspace:*
+        version: link:../ticketing
       drizzle-orm:
         specifier: 'catalog:'
         version: 0.45.3(@opentelemetry/api@1.9.0)(kysely@0.29.6)(pg@8.23.0)(postgres@3.4.9)
@@ -2305,9 +2498,15 @@ importers:
       '@yayatoh/auth':
         specifier: workspace:*
         version: link:../auth
+      '@yayatoh/automations':
+        specifier: workspace:*
+        version: link:../modules/automations
       '@yayatoh/billing':
         specifier: workspace:*
         version: link:../modules/billing
+      '@yayatoh/campaigns':
+        specifier: workspace:*
+        version: link:../modules/campaigns
       '@yayatoh/checkin':
         specifier: workspace:*
         version: link:../modules/checkin
@@ -2377,6 +2576,9 @@ importers:
       '@yayatoh/program':
         specifier: workspace:*
         version: link:../modules/program
+      '@yayatoh/registration':
+        specifier: workspace:*
+        version: link:../modules/registration
       '@yayatoh/reports':
         specifier: workspace:*
         version: link:../modules/reports
@@ -5278,6 +5480,9 @@ packages:
     peerDependenciesMeta:
       picomatch:
         optional: true
+
+  fflate@0.8.3:
+    resolution: {integrity: sha512-tbZNuJrLwGUp3zshBtdy4W+ORxZuIh8a5ilyIEQDC5rY1f3U20JMry0Ll3WBzU58EZKsEuJFXhb5gwv8CsPvgA==}
 
   fill-range@7.1.1:
     resolution: {integrity: sha512-YsGpe3WHLK8ZYi4tWDg2Jy3ebRz2rXowDxnld4bkQB00cc/1Zw9AWnC0i9ztDJitivtQvaI9KaLyKrc+hBW0yg==}
@@ -9700,6 +9905,8 @@ snapshots:
   fdir@6.5.0(picomatch@4.0.7):
     optionalDependencies:
       picomatch: 4.0.7
+
+  fflate@0.8.3: {}
 
   fill-range@7.1.1:
     dependencies:

@@ -1,4 +1,5 @@
 import { executeQuery, formatMoney, money } from '@yayatoh/kernel';
+import { creditNotesQuery, creditNoteTotalsQuery } from '@yayatoh/orders';
 import { reconciliationItemsQuery, reconciliationRunsQuery } from '@yayatoh/payments';
 import { roleCan } from '@yayatoh/tenancy';
 import { Card, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
@@ -25,6 +26,14 @@ export default async function FinancePage({ params }: { params: Promise<{ locale
     executeQuery(reconciliationRunsQuery, {}, data.ctx, ports),
     executeQuery(reconciliationItemsQuery, {}, data.ctx, ports),
   ]);
+  // M3.10c: credit notes (issued, as store credit, recorded refunded, spent, left) and the latest.
+  const ts = await getTranslations('supportTools.credit');
+  const creditTotals = data.modules.has('ticketing')
+    ? await executeQuery(creditNoteTotalsQuery, {}, data.ctx, ports)
+    : [];
+  const recentCredits = creditTotals.length
+    ? await executeQuery(creditNotesQuery, { limit: 20 }, data.ctx, ports)
+    : [];
   const open = items.filter((i) => i.status === 'open');
   const resolved = items.filter((i) => i.status === 'resolved');
   const fmt = (minor: number, currency: string) => formatMoney(money(minor, currency), locale);
@@ -36,6 +45,91 @@ export default async function FinancePage({ params }: { params: Promise<{ locale
   return (
     <>
       <PageHeader title={t('title')} description={t('description')} />
+      <section aria-labelledby="credit-notes-heading" className="flex flex-col gap-3">
+        <h2 id="credit-notes-heading" className="text-section">
+          {ts('financeTitle')}
+        </h2>
+        {creditTotals.length === 0 ? (
+          <p className="text-body text-ink-2">{ts('financeEmpty')}</p>
+        ) : (
+          <>
+            <Table
+              caption={ts('financeTotals')}
+              rowKey={(r) => r.currency}
+              rows={creditTotals}
+              columns={[
+                { key: 'currency', header: ts('currency'), cell: (r) => r.currency, mono: true },
+                { key: 'count', header: ts('count'), cell: (r) => r.count, mono: true, align: 'end' },
+                {
+                  key: 'issued',
+                  header: ts('issuedTotal'),
+                  cell: (r) => fmt(r.issuedMinor, r.currency),
+                  mono: true,
+                  align: 'end',
+                },
+                {
+                  key: 'store',
+                  header: ts('disposition.store_credit'),
+                  cell: (r) => fmt(r.storeCreditMinor, r.currency),
+                  mono: true,
+                  align: 'end',
+                },
+                {
+                  key: 'refunded',
+                  header: ts('disposition.refunded'),
+                  cell: (r) => fmt(r.refundedMinor, r.currency),
+                  mono: true,
+                  align: 'end',
+                },
+                {
+                  key: 'applied',
+                  header: ts('applied'),
+                  cell: (r) => fmt(r.appliedMinor, r.currency),
+                  mono: true,
+                  align: 'end',
+                },
+                {
+                  key: 'outstanding',
+                  header: ts('outstanding'),
+                  cell: (r) => fmt(r.outstandingMinor, r.currency),
+                  mono: true,
+                  align: 'end',
+                },
+              ]}
+            />
+            <Table
+              caption={ts('financeRecent')}
+              rowKey={(c) => c.id}
+              rows={recentCredits}
+              columns={[
+                { key: 'number', header: ts('number'), cell: (c) => c.label, mono: true },
+                {
+                  key: 'when',
+                  header: ts('issuedOn'),
+                  cell: (c) =>
+                    new Intl.DateTimeFormat(locale, {
+                      dateStyle: 'medium',
+                      timeZone: data.org.timezone,
+                    }).format(c.createdAt),
+                },
+                { key: 'buyer', header: ts('buyer'), cell: (c) => c.buyerName },
+                {
+                  key: 'disposition',
+                  header: ts('dispositionCol'),
+                  cell: (c) => ts(`disposition.${c.disposition}`),
+                },
+                {
+                  key: 'amount',
+                  header: ts('amountCol'),
+                  cell: (c) => fmt(c.amountMinor, c.currency),
+                  mono: true,
+                  align: 'end',
+                },
+              ]}
+            />
+          </>
+        )}
+      </section>
       <section aria-labelledby="runs-heading" className="flex flex-col gap-3">
         <h2 id="runs-heading" className="text-section">
           {t('runsTitle')}

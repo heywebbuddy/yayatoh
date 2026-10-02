@@ -18,6 +18,7 @@ export function SessionRow({
   time,
   day,
   images = {},
+  optionalLabel,
 }: {
   s: PublicSessionDto;
   slug: string;
@@ -25,7 +26,10 @@ export function SessionRow({
   /** Shown before the times when the list mixes days (the speaker page). */
   day?: string;
   images?: ProgramImages;
+  /** M5.2a: shown for optional sessions ("Optional"); the session type's name is shown as is. */
+  optionalLabel?: string;
 }) {
+  const kind = [s.type, s.admission === 'optional' ? optionalLabel : undefined].filter(Boolean);
   return (
     <li className="flex flex-col gap-1 px-5 py-4 sm:flex-row sm:gap-6">
       <span className="w-32 shrink-0 text-body font-extrabold text-ink tabular-nums">
@@ -34,6 +38,7 @@ export function SessionRow({
       </span>
       <span className="flex min-w-0 flex-1 flex-col gap-1">
         <span className="font-medium">{s.title}</span>
+        {kind.length > 0 ? <span className="text-label uppercase text-ink-2">{kind.join(' · ')}</span> : null}
         {s.speakers.length > 0 ? (
           <span className="flex flex-wrap gap-x-2 text-caption">
             {s.speakers.map((p) => (
@@ -85,6 +90,7 @@ export async function ProgramSections({
   images?: ProgramImages;
 }) {
   const t = await getTranslations('publicEvent');
+  const ta = await getTranslations('agenda');
   const time = new Intl.DateTimeFormat(locale, { timeZone, hour: 'numeric', minute: '2-digit' });
   const dayLabel = new Intl.DateTimeFormat(locale, {
     timeZone: 'UTC',
@@ -114,7 +120,14 @@ export async function ProgramSections({
               </h3>
               <ol className="list-none divide-y divide-line rounded-card border border-line p-0">
                 {d.items.map((s) => (
-                  <SessionRow key={s.id} s={s} slug={slug} time={time} images={images} />
+                  <SessionRow
+                    key={s.id}
+                    s={s}
+                    slug={slug}
+                    time={time}
+                    images={images}
+                    optionalLabel={ta('optional')}
+                  />
                 ))}
               </ol>
             </section>

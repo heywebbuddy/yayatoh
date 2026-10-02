@@ -67,6 +67,16 @@ export const privateColumns = columnPrivacy('notifications', {
     label: internal(),
     time_zone: 'vocab',
   },
+  // Campaign content (M3.6b): the organizer's own marketing copy, written to be sent to its
+  // audience; merge fields are placeholders (recipient values are filled only at send time).
+  stored_contents: {
+    subject: 'public',
+    preheader: 'public',
+    html: 'public',
+    text_body: 'public',
+    sms_body: 'public',
+    locale: 'vocab',
+  },
   suppressions: { email_norm: personal('email'), category: 'vocab', source: 'vocab' },
   // Messaging policy (M3.5a): usage meters, staff-set quotas, frequency caps and auto-pauses.
   usage_counters: { period: 'vocab', channel: 'vocab' },

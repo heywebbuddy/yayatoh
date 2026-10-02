@@ -1,15 +1,25 @@
+import { randomUUID } from 'node:crypto';
 import { getUsersByIds } from '@yayatoh/auth';
 import { orderSignalsQuery } from '@yayatoh/checkin';
 import { eventRolesOf } from '@yayatoh/events';
 import { executeQuery, formatMoney, isDomainError, money } from '@yayatoh/kernel';
 import { orderAttributionQuery } from '@yayatoh/marketing';
 import { orderMessagesQuery } from '@yayatoh/notifications';
-import { orderDetailQuery, orderRefundsQuery, refundRequestsQuery } from '@yayatoh/orders';
+import {
+  creditableMinor,
+  creditNotesQuery,
+  orderDetailQuery,
+  orderRefundsQuery,
+  previewSupportMacroQuery,
+  refundRequestsQuery,
+  supportMacrosQuery,
+} from '@yayatoh/orders';
 import { disputesQuery } from '@yayatoh/payments';
 import { disputeTimelineItems, orderTimelineQuery, sortTimeline } from '@yayatoh/reports';
 import { ticketSeatLabelsQuery } from '@yayatoh/seating';
 import { eventRoleCan, roleCan } from '@yayatoh/tenancy';
-import { Card, PageHeader, StatusDot, Table } from '@yayatoh/ui';
+import { orderTransfersQuery, orderWalletPassesQuery } from '@yayatoh/ticketing';
+import { Card, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { z } from 'zod';
@@ -18,6 +28,13 @@ import { RefundForm } from '@/components/refund-form.tsx';
 import { OrderNoteForm, RefundRequestPanel } from '@/components/refund-request-panel.tsx';
 import { ReissueLinkForm } from '@/components/reissue-link-form.tsx';
 import { SignalItem } from '@/components/signal-item.tsx';
+import {
+  ConfirmButton,
+  CreditNoteForm,
+  type MacroOption,
+  RunMacroForm,
+  TransferTicketForm,
+} from '@/components/support-tools.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { refundPolicyLines } from '@/lib/refund-policy-text.ts';
 import { loadEvent } from '@/server/console.ts';
@@ -26,9 +43,13 @@ import { resolveSignalAction } from '../../onsite/signals/actions.ts';
 import {
   addNoteAction,
   approveRequestAction,
+  cancelTransferAction,
   declineRequestAction,
+  issueCreditNoteAction,
   refundAction,
   reissueLinkAction,
+  runMacroAction,
+  transferTicketAction,
 } from './actions.ts';
 
 /**
@@ -87,8 +108,36 @@ export default async function OrderPage({
     items: sortTimeline([...timeline.items, ...disputeTimelineItems(disputes)]),
   };
   const authors = timeline.items.flatMap((i) =>
-    i.kind === 'note' && i.who?.startsWith('user:') ? [i.who.slice(5)] : [],
+    (i.kind === 'note' || i.kind === 'macro_run') && i.who?.startsWith('user:') ? [i.who.slice(5)] : [],
   );
+  // M3.10c support tools: transfers (and the wallet pass of each ticket), credit notes, macros.
+  const ts = await getTranslations('supportTools');
+  const canSupport = roleCan(data.role, 'orders:support');
+  const transfers = await executeQuery(orderTransfersQuery, { orderId }, data.ctx, ports);
+  const passes = await executeQuery(orderWalletPassesQuery, { orderId }, data.ctx, ports);
+  const livePass = new Map(passes.filter((p) => p.status === 'active').map((p) => [p.ticketId, p]));
+  const credits = await executeQuery(creditNotesQuery, { orderId }, data.ctx, ports);
+  const creditable = creditableMinor({
+    totalMinor: order.totalMinor,
+    refundedMinor: refunds
+      .filter((r) => r.status === 'pending' || r.status === 'succeeded')
+      .reduce((n, r) => n + r.amountMinor, 0),
+    creditedMinor: credits.reduce((n, c) => n + c.amountMinor, 0),
+  });
+  const canCredit =
+    roleCan(data.role, 'orders:refund') &&
+    ['paid', 'partially_refunded'].includes(order.status) &&
+    creditable > 0;
+  const macros: MacroOption[] = canSupport
+    ? await Promise.all(
+        (await executeQuery(supportMacrosQuery, {}, data.ctx, ports)).map(async (m) => ({
+          id: m.id,
+          name: m.name,
+          actions: m.actions,
+          ...(await executeQuery(previewSupportMacroQuery, { orderId, macroId: m.id }, data.ctx, ports)),
+        })),
+      )
+    : [];
   const people = authors.length ? await getUsersByIds([...new Set(authors)]) : new Map();
   const memberNames = new Map([...people].map(([id, u]) => [`user:${id}`, u.name] as const));
   const eventWhen = new Intl.DateTimeFormat(locale, {
@@ -254,8 +303,103 @@ export default async function OrderPage({
                 />
               ),
             },
+            {
+              key: 'wallet',
+              header: ts('transfers.wallet'),
+              cell: (tk) => {
+                const p = livePass.get(tk.id);
+                return p ? (p.pushed ? ts('transfers.walletLive') : ts('transfers.walletPending')) : '—';
+              },
+            },
           ]}
         />
+      </section>
+
+      <section aria-labelledby="transfers-heading" className="flex flex-col gap-3">
+        <h2 id="transfers-heading" className="text-section">
+          {ts('transfers.title')}
+        </h2>
+        <p className="text-body text-ink-2">{ts('transfers.description')}</p>
+        {transfers.length === 0 ? (
+          <p className="text-body text-ink-2">{ts('transfers.empty')}</p>
+        ) : (
+          <Table
+            caption={ts('transfers.title')}
+            rowKey={(x) => x.id}
+            rows={transfers}
+            columns={[
+              { key: 'serial', header: '#', cell: (x) => x.ticketSerial, mono: true },
+              {
+                key: 'from',
+                header: ts('transfers.from'),
+                cell: (x) => (
+                  <span className="flex flex-col">
+                    <span>{x.fromName}</span>
+                    <span className="text-caption text-ink-2">{x.fromEmail}</span>
+                  </span>
+                ),
+              },
+              {
+                key: 'to',
+                header: ts('transfers.to'),
+                cell: (x) => (
+                  <span className="flex flex-col">
+                    <span>{x.toName}</span>
+                    <span className="text-caption text-ink-2">{x.toEmail}</span>
+                  </span>
+                ),
+              },
+              {
+                key: 'by',
+                header: ts('transfers.by'),
+                cell: (x) =>
+                  `${ts(`transfers.initiatedBy.${x.initiatedBy}`)}${x.feeMinor > 0 ? ` · ${ts('transfers.fee', { amount: formatMoney(money(x.feeMinor, x.currency), locale) })}` : ''}`,
+              },
+              {
+                key: 'state',
+                header: t('orders.status'),
+                cell: (x) => (
+                  <span className="flex flex-col gap-1">
+                    <StatusDot
+                      status={x.state === 'claimed' ? 'success' : x.state === 'pending' ? 'info' : 'neutral'}
+                      label={ts(`transfers.state.${x.state}`)}
+                    />
+                    <span className="text-caption text-ink-2">
+                      {x.state === 'claimed' && x.claimedAt
+                        ? eventWhen.format(x.claimedAt)
+                        : x.state === 'pending'
+                          ? ts('transfers.until', { date: eventWhen.format(x.expiresAt) })
+                          : eventWhen.format(x.cancelledAt ?? x.expiresAt)}
+                    </span>
+                  </span>
+                ),
+              },
+              {
+                key: 'actions',
+                header: ts('transfers.actions'),
+                cell: (x) =>
+                  x.state === 'pending' && canSupport ? (
+                    <ConfirmButton
+                      action={cancelTransferAction.bind(null, org, event, orderId, x.id)}
+                      label={ts('transfers.cancel')}
+                      done={ts('transfers.cancelled')}
+                    />
+                  ) : null,
+              },
+            ]}
+          />
+        )}
+        {canSupport && active.length > 0 ? (
+          <Card>
+            <TransferTicketForm
+              action={transferTicketAction.bind(null, org, event, orderId, locale)}
+              tickets={active.map((tk) => ({
+                id: tk.id,
+                label: `#${tk.serial} · ${tk.itemName} · ${tk.holderName}`,
+              }))}
+            />
+          </Card>
+        ) : null}
       </section>
 
       <section aria-labelledby="signals-heading" className="flex flex-col gap-3">
@@ -395,6 +539,76 @@ export default async function OrderPage({
         </section>
       ) : null}
 
+      <section aria-labelledby="credit-heading" className="flex flex-col gap-3">
+        <h2 id="credit-heading" className="text-section">
+          {ts('credit.title')}
+        </h2>
+        {credits.length === 0 ? (
+          <p className="text-body text-ink-2">{ts('credit.empty')}</p>
+        ) : (
+          <Table
+            caption={ts('credit.title')}
+            rowKey={(c) => c.id}
+            rows={credits}
+            columns={[
+              { key: 'number', header: ts('credit.number'), cell: (c) => c.label, mono: true },
+              { key: 'when', header: t('refunds.when'), cell: (c) => when.format(c.createdAt) },
+              {
+                key: 'disposition',
+                header: ts('credit.dispositionCol'),
+                cell: (c) => (
+                  <span className="flex flex-col">
+                    <span>{ts(`credit.disposition.${c.disposition}`)}</span>
+                    {c.codeLast4 ? (
+                      <span className="text-caption text-ink-2">
+                        {ts('credit.codeEnding', { last4: c.codeLast4 })}
+                      </span>
+                    ) : null}
+                  </span>
+                ),
+              },
+              { key: 'reason', header: t('refunds.reason'), cell: (c) => c.reason },
+              {
+                key: 'amount',
+                header: t('refunds.amountCol'),
+                cell: (c) => fmt(c.amountMinor),
+                mono: true,
+                align: 'end',
+              },
+              {
+                key: 'balance',
+                header: ts('credit.balance'),
+                cell: (c) => (c.disposition === 'store_credit' ? fmt(c.balanceMinor) : '—'),
+                mono: true,
+                align: 'end',
+              },
+              {
+                key: 'pdf',
+                header: ts('credit.document'),
+                cell: (c) => (
+                  <a
+                    href={`/o/${org}/e/${event}/orders/${orderId}/credit-notes/${c.id}/pdf?locale=${locale}`}
+                    className="inline-flex min-h-6 items-center underline underline-offset-2"
+                  >
+                    {ts('credit.pdf', { label: c.label })}
+                  </a>
+                ),
+              },
+            ]}
+          />
+        )}
+        {canCredit ? (
+          <Card>
+            <CreditNoteForm
+              action={issueCreditNoteAction.bind(null, org, event, orderId)}
+              currency={order.currency}
+              creditable={fmt(creditable)}
+              requestKey={randomUUID()}
+            />
+          </Card>
+        ) : null}
+      </section>
+
       {disputes.length > 0 ? (
         <section aria-labelledby="disputes-heading" className="flex flex-col gap-3">
           <h2 id="disputes-heading" className="text-section">
@@ -504,6 +718,36 @@ export default async function OrderPage({
           />
         )}
       </section>
+
+      {canSupport ? (
+        <section aria-labelledby="macros-heading" className="flex flex-col gap-3">
+          <h2 id="macros-heading" className="text-section">
+            {ts('macros.runTitle')}
+          </h2>
+          {macros.length === 0 ? (
+            <EmptyState
+              title={ts('macros.noneTitle')}
+              action={
+                <Link href={`/o/${org}/macros`} className="underline underline-offset-2">
+                  {ts('macros.manage')}
+                </Link>
+              }
+            />
+          ) : (
+            <Card>
+              <RunMacroForm
+                action={runMacroAction.bind(null, org, event, orderId, locale)}
+                macros={macros}
+                tickets={active.map((tk) => ({
+                  id: tk.id,
+                  label: `#${tk.serial} · ${tk.itemName} · ${tk.holderName}`,
+                }))}
+                requestKey={randomUUID()}
+              />
+            </Card>
+          )}
+        </section>
+      ) : null}
 
       <section aria-labelledby="timeline-heading" className="flex flex-col gap-3">
         <h2 id="timeline-heading" className="text-section">
