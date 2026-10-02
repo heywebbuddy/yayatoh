@@ -86,3 +86,40 @@ export const getEntitlementsQuery = tenantQuery({
   permission: 'org:read',
   handler: async ({ tx }) => ({ modules: [...(await effectiveModulesTx(tx))].sort() }),
 });
+
+/**
+ * `api_access` quotas (M6.3a, P6-13): per-minute request budgets the /v1 rate limiter enforces.
+ * Placeholders seeded on every plan until the owner prices plans (D22); a plan without its own
+ * values falls back to these.
+ */
+export const DEFAULT_API_ACCESS_QUOTAS = {
+  /** Per live key. */
+  requestsPerMinute: 600,
+  /** Every key of the org together. */
+  orgRequestsPerMinute: 1200,
+  /** Per test key (`yy_test_…`). */
+  testKeyRequestsPerMinute: 120,
+  /** Per key of a sandbox org. */
+  sandboxRequestsPerMinute: 300,
+} as const;
+export type ApiAccessQuotas = { readonly [K in keyof typeof DEFAULT_API_ACCESS_QUOTAS]: number };
+
+/**
+ * The org's `api_access` quotas from its plan, or null when the org lacks the module (its keys
+ * are then refused with `module_not_enabled`). Read fresh; callers cache briefly.
+ */
+export async function apiAccessQuotas(ctx: Ctx): Promise<ApiAccessQuotas | null> {
+  return withTenant(ctx, async (tx) => {
+    if (!(await effectiveModulesTx(tx)).has('api_access')) return null;
+    const [row] = await tx.execute<{ quotas: Record<string, unknown> | null }>(sql`
+      select p.quotas -> 'api_access' as quotas from billing.plans p
+      where p.key = coalesce((select plan_key from billing.org_plans limit 1), ${DEFAULT_PLAN})`);
+    const q = row?.quotas ?? {};
+    const out = { ...DEFAULT_API_ACCESS_QUOTAS } as Record<keyof ApiAccessQuotas, number>;
+    for (const k of Object.keys(out) as (keyof ApiAccessQuotas)[]) {
+      const v = q[k];
+      if (typeof v === 'number' && Number.isInteger(v) && v > 0) out[k] = v;
+    }
+    return out;
+  });
+}

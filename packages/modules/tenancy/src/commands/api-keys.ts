@@ -2,7 +2,7 @@ import { createHash, randomBytes } from 'node:crypto';
 import { type TenantTx, withoutTenant, withTenant } from '@yayatoh/db';
 import { type Ctx, createCtx, DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
-import { and, desc, eq, isNull, lt, or, sql } from 'drizzle-orm';
+import { and, desc, eq, gt, isNull, lt, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { type OrgRole, roleCan } from '../domain/permissions.ts';
 import { API_KEY_SCOPES, type ApiKeyScope, apiKeys, memberships, TEST_KEY_SCOPES } from '../schema.ts';
@@ -28,6 +28,12 @@ export const ApiKeyDto = z.object({
   createdAt: z.date(),
   lastUsedAt: z.date().nullable(),
   revokedAt: z.date().nullable(),
+  /** M6.3a: the key stops working at this instant (null: never). */
+  expiresAt: z.date().nullable(),
+  /** M6.3a: the key that replaced this one when it was rotated. */
+  replacedById: z.uuid().nullable(),
+  /** The member who created the key (null for keys made by the platform). */
+  createdBy: z.uuid().nullable(),
 });
 export type ApiKeyDto = z.infer<typeof ApiKeyDto>;
 
@@ -40,7 +46,32 @@ export const CreateApiKeyInput = z.object({
     .transform((s) => [...new Set(s)]),
   /** `test` makes a `yy_test_` key limited to `TEST_KEY_SCOPES`. */
   mode: z.enum(API_KEY_MODES).default('live'),
+  /** M6.3a: how long the key lives (days), or null for a key that never expires. */
+  expiresInDays: z.coerce
+    .number()
+    .int()
+    .refine((d) => (API_KEY_LIFETIMES as readonly number[]).includes(d), 'unsupported lifetime')
+    .nullable()
+    .default(null),
 });
+
+/** M6.3a: the lifetimes a key can be given (days). */
+export const API_KEY_LIFETIMES = [30, 90, 365] as const;
+/** M6.3a: how long the old key keeps working after a rotation (hours; 0 = stop at once). */
+export const API_KEY_ROTATION_OVERLAPS = [0, 1, 24, 168] as const;
+const DAY_MS = 86_400_000;
+
+/** A key is live when it is neither revoked nor past its expiry. */
+export const isApiKeyLive = (k: { revokedAt: Date | null; expiresAt: Date | null }, now: Date) =>
+  !k.revokedAt && (!k.expiresAt || k.expiresAt > now);
+
+const toDto = (r: typeof apiKeys.$inferSelect): ApiKeyDto => ({ ...r, scopes: r.scopes as ApiKeyScope[] });
+
+/** A new secret for a key of this mode, and the row values it is stored as. */
+function mintKey(mode: ApiKeyMode) {
+  const key = `yy_${mode}_${randomBytes(32).toString('base64url')}`;
+  return { key, prefix: key.slice(0, PREFIX_LENGTH), keyHash: hashApiKey(key) };
+}
 
 async function roleInTx(tx: TenantTx, ctx: Ctx): Promise<OrgRole | null> {
   if (ctx.actor.type !== 'user') return null;
@@ -56,7 +87,7 @@ export const createApiKeyCommand = tenantCommand({
   input: CreateApiKeyInput,
   // The key is returned exactly once; only its hash is stored.
   output: ApiKeyDto.extend({ key: z.string() }),
-  entitlement: 'core',
+  entitlement: 'api_access',
   permission: 'api_keys:manage',
   // Step-up (roadmap §10): a key is standing access to the org's data.
   stepUp: true,
@@ -79,27 +110,97 @@ export const createApiKeyCommand = tenantCommand({
         scopes: notForTest,
       });
     }
-    const key = `yy_${input.mode}_${randomBytes(32).toString('base64url')}`;
+    const { key, prefix, keyHash } = mintKey(input.mode);
     const [row] = await tx
       .insert(apiKeys)
       .values({
         orgId: requireOrg(ctx),
         name: input.name,
-        prefix: key.slice(0, PREFIX_LENGTH),
-        keyHash: hashApiKey(key),
+        prefix,
+        keyHash,
         scopes: input.scopes,
         sandbox,
         createdBy: ctx.actor.type === 'user' ? ctx.actor.userId : null,
+        expiresAt: input.expiresInDays ? new Date(ctx.now.getTime() + input.expiresInDays * DAY_MS) : null,
       })
       .returning();
     if (!row) throw new DomainError('internal');
-    return { ...row, scopes: row.scopes as ApiKeyScope[], key };
+    return { ...toDto(row), key };
   },
   audit: (input, r) => ({
     action: 'apiKey.create',
     targetType: 'api_key',
     targetId: r.id,
-    data: { name: input.name, scopes: input.scopes, mode: input.mode },
+    data: { name: input.name, scopes: input.scopes, mode: input.mode, expiresInDays: input.expiresInDays },
+  }),
+});
+
+export const RotateApiKeyInput = z.object({
+  apiKeyId: z.uuid(),
+  /** How long the old key keeps working (hours), so deployments can switch without downtime. */
+  overlapHours: z.coerce
+    .number()
+    .int()
+    .refine((h) => (API_KEY_ROTATION_OVERLAPS as readonly number[]).includes(h), 'unsupported overlap')
+    .default(24),
+});
+
+/**
+ * Rotate a key (M6.3a): a new secret with the same name, scopes, type and lifetime, shown once.
+ * The old key keeps working for the overlap window (or stops at once with 0 hours), then fails
+ * like a revoked one. Step-up, and never more than the rotating member's role holds.
+ */
+export const rotateApiKeyCommand = tenantCommand({
+  name: 'tenancy.rotateApiKey',
+  input: RotateApiKeyInput,
+  output: ApiKeyDto.extend({ key: z.string(), previousExpiresAt: z.date() }),
+  entitlement: 'api_access',
+  permission: 'api_keys:manage',
+  stepUp: true,
+  handler: async ({ input, ctx, tx }) => {
+    const [current] = await tx.select().from(apiKeys).where(eq(apiKeys.id, input.apiKeyId)).for('update');
+    if (!current) throw new DomainError('not_found', 'API key not found');
+    if (!isApiKeyLive(current, ctx.now) || current.replacedById)
+      throw new DomainError('invalid_state', 'Only a live key that was not rotated yet can be rotated', {
+        reason: 'api_key_not_live',
+      });
+    const role = await roleInTx(tx, ctx);
+    const beyond = current.scopes.filter((s) => !role || !roleCan(role, s));
+    if (beyond.length > 0)
+      throw new DomainError('forbidden', 'A key cannot have scopes beyond your role', {
+        reason: 'scope_exceeds_role',
+        scopes: beyond,
+      });
+    const lifetime = current.expiresAt ? current.expiresAt.getTime() - current.createdAt.getTime() : null;
+    const { key, prefix, keyHash } = mintKey(current.sandbox ? 'test' : 'live');
+    const [row] = await tx
+      .insert(apiKeys)
+      .values({
+        orgId: requireOrg(ctx),
+        name: current.name,
+        prefix,
+        keyHash,
+        scopes: current.scopes,
+        sandbox: current.sandbox,
+        createdBy: ctx.actor.type === 'user' ? ctx.actor.userId : null,
+        expiresAt: lifetime ? new Date(ctx.now.getTime() + lifetime) : null,
+      })
+      .returning();
+    if (!row) throw new DomainError('internal');
+    const overlapEnd = new Date(ctx.now.getTime() + input.overlapHours * 3_600_000);
+    const previousExpiresAt =
+      current.expiresAt && current.expiresAt < overlapEnd ? current.expiresAt : overlapEnd;
+    await tx
+      .update(apiKeys)
+      .set({ expiresAt: previousExpiresAt, replacedById: row.id, updatedAt: ctx.now })
+      .where(eq(apiKeys.id, current.id));
+    return { ...toDto(row), key, previousExpiresAt };
+  },
+  audit: (input, r) => ({
+    action: 'apiKey.rotate',
+    targetType: 'api_key',
+    targetId: input.apiKeyId,
+    data: { replacedBy: r.id, overlapHours: input.overlapHours },
   }),
 });
 
@@ -114,7 +215,7 @@ export const revokeApiKeyCommand = tenantCommand({
   handler: async ({ input, ctx, tx }) => {
     const [current] = await tx.select().from(apiKeys).where(eq(apiKeys.id, input.apiKeyId));
     if (!current) throw new DomainError('not_found', 'API key not found');
-    if (current.revokedAt) return { ...current, scopes: current.scopes as ApiKeyScope[] };
+    if (current.revokedAt) return toDto(current);
     const [row] = await tx
       .update(apiKeys)
       .set({
@@ -125,7 +226,7 @@ export const revokeApiKeyCommand = tenantCommand({
       .where(eq(apiKeys.id, current.id))
       .returning();
     if (!row) throw new DomainError('internal');
-    return { ...row, scopes: row.scopes as ApiKeyScope[] };
+    return toDto(row);
   },
   audit: (input) => ({ action: 'apiKey.revoke', targetType: 'api_key', targetId: input.apiKeyId }),
 });
@@ -139,7 +240,7 @@ export const listApiKeysQuery = tenantQuery({
   handler: async ({ tx }) =>
     (
       await tx.select().from(apiKeys).orderBy(sql`${apiKeys.revokedAt} is not null`, desc(apiKeys.createdAt))
-    ).map((r) => ({ ...r, scopes: r.scopes as ApiKeyScope[] })),
+    ).map(toDto),
 });
 
 const isTestKeyScope = (s: string) => (TEST_KEY_SCOPES as readonly string[]).includes(s);
@@ -150,6 +251,10 @@ export interface ApiKeyIdentity {
   readonly scopes: readonly ApiKeyScope[];
   /** A test key (`yy_test_…`). */
   readonly sandbox: boolean;
+  /** M6.3a: when the key stops working (null: never). */
+  readonly expiresAt: Date | null;
+  /** M6.3a: the key belongs to a sandbox org (fake payments, its own rate limit). */
+  readonly orgSandbox: boolean;
 }
 
 /**
@@ -159,8 +264,14 @@ export interface ApiKeyIdentity {
 export async function apiKeyIdentity(key: string): Promise<ApiKeyIdentity | null> {
   if (!API_KEY_PATTERN.test(key)) return null;
   const rows = await withoutTenant((tx) =>
-    tx.execute<{ org_id: string; key_id: string; scopes: string[] }>(
-      sql`select org_id, key_id, scopes from tenancy.api_key_by_hash(${hashApiKey(key)})`,
+    tx.execute<{
+      org_id: string;
+      key_id: string;
+      scopes: string[];
+      expires_at: Date | string | null;
+      org_sandbox: boolean;
+    }>(
+      sql`select org_id, key_id, scopes, expires_at, org_sandbox from tenancy.api_key_by_hash(${hashApiKey(key)})`,
     ),
   );
   const r = rows[0];
@@ -179,11 +290,18 @@ export async function apiKeyIdentity(key: string): Promise<ApiKeyIdentity | null
   );
   const sandbox = key.startsWith('yy_test_');
   const scopes = (r.scopes as ApiKeyScope[]).filter((s) => !sandbox || isTestKeyScope(s));
-  return { orgId: r.org_id, keyId: r.key_id, scopes, sandbox };
+  return {
+    orgId: r.org_id,
+    keyId: r.key_id,
+    scopes,
+    sandbox,
+    expiresAt: r.expires_at ? new Date(r.expires_at) : null,
+    orgSandbox: r.org_sandbox === true,
+  };
 }
 
 /**
- * The live scopes of a key in the context org (revoked keys have none). A test key never gets
+ * The live scopes of a key in the context org (revoked and expired keys have none). A test key never gets
  * more than `TEST_KEY_SCOPES`, whatever its row says (the table CHECK says the same).
  */
 export async function apiKeyScopes(ctx: Ctx, keyId: string): Promise<readonly string[]> {
@@ -191,7 +309,13 @@ export async function apiKeyScopes(ctx: Ctx, keyId: string): Promise<readonly st
     tx
       .select({ scopes: apiKeys.scopes, sandbox: apiKeys.sandbox })
       .from(apiKeys)
-      .where(and(eq(apiKeys.id, keyId), isNull(apiKeys.revokedAt))),
+      .where(
+        and(
+          eq(apiKeys.id, keyId),
+          isNull(apiKeys.revokedAt),
+          or(isNull(apiKeys.expiresAt), gt(apiKeys.expiresAt, ctx.now)),
+        ),
+      ),
   );
   if (!row) return [];
   return row.sandbox ? row.scopes.filter(isTestKeyScope) : row.scopes;

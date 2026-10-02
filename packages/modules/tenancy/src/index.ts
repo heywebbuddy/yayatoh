@@ -11,6 +11,36 @@ export {
   listApiKeysQuery,
   revokeApiKeyCommand,
 } from './commands/api-keys.ts';
+// M6.3a: key lifetimes and rotation, daily usage, sandbox orgs.
+export {
+  API_KEY_LIFETIMES,
+  API_KEY_ROTATION_OVERLAPS,
+  isApiKeyLive,
+  RotateApiKeyInput,
+  rotateApiKeyCommand,
+} from './commands/api-keys.ts';
+export {
+  ApiUsageDto,
+  apiUsageQuery,
+  recordApiKeyUsage,
+  summarizeApiKeyUsageCommand,
+  unsummarizedApiKeyUsage,
+} from './commands/api-key-usage.ts';
+export {
+  CreateSandboxInput,
+  createSandboxCommand,
+  createSandboxOrg,
+  deleteSandboxCommand,
+  deleteSandboxOrg,
+  isSandboxOrg,
+  isSandboxOrgTx,
+  listSandboxesQuery,
+  MAX_SANDBOX_ORGS,
+  provisionSandboxOrgCommand,
+  retireSandboxOrgCommand,
+  SandboxDto,
+  sandboxSlug,
+} from './commands/sandbox.ts';
 export {
   addDomainCommand,
   DomainDto,

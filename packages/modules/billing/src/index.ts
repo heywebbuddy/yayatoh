@@ -14,6 +14,11 @@ export {
   setEntitlementOverrideCommand,
 } from './entitlements.ts';
 export {
+  type ApiAccessQuotas,
+  apiAccessQuotas,
+  DEFAULT_API_ACCESS_QUOTAS,
+} from './entitlements.ts';
+export {
   type FeeMode,
   type FeeSchedule,
   feeScheduleQuery,
