@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Input } from '@yayatoh/ui';
+import { Button, cx, Input, Tabs, tabClass } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { KioskScreen } from '@/components/scan-kiosk.tsx';
@@ -39,10 +39,10 @@ const TONE: Record<string, string> = {
   admitted: 'border-success bg-success-soft text-success',
   granted: 'border-success bg-success-soft text-success',
   provisional: 'border-primary bg-primary-soft text-primary-ink',
-  duplicate: 'border-primary bg-primary-soft text-primary-ink',
-  not_today: 'border-primary bg-primary-soft text-primary-ink',
-  wrong_date: 'border-primary bg-primary-soft text-primary-ink',
-  outside_window: 'border-primary bg-primary-soft text-primary-ink',
+  duplicate: 'border-warning bg-warning-soft text-warning',
+  not_today: 'border-warning bg-warning-soft text-warning',
+  wrong_date: 'border-warning bg-warning-soft text-warning',
+  outside_window: 'border-warning bg-warning-soft text-warning',
 };
 const tone = (key: string) => TONE[key] ?? 'border-danger bg-danger-soft text-danger';
 
@@ -284,10 +284,17 @@ export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
       >
         <h1 className="text-title">{t('scan.setupTitle')}</h1>
         <p className="text-body text-ink-2">{t('scan.setupHint')}</p>
-        <Input name="eventId" required label={t('scan.eventId')} autoComplete="off" />
-        <Input name="token" required label={t('scan.deviceKey')} autoComplete="off" spellCheck={false} />
-        {error ? <p className="text-body text-danger">{error}</p> : null}
-        <Button type="submit" className="self-start">
+        <Input name="eventId" required label={t('scan.eventId')} autoComplete="off" fieldSize="lg" />
+        <Input
+          name="token"
+          required
+          label={t('scan.deviceKey')}
+          autoComplete="off"
+          spellCheck={false}
+          fieldSize="lg"
+        />
+        {error ? <p className="text-body font-semibold text-danger">{error}</p> : null}
+        <Button type="submit" size="lg" className="w-full sm:w-auto sm:self-start">
           {t('scan.start')}
         </Button>
       </form>
@@ -332,19 +339,19 @@ export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
           </p>
         ) : null}
       </header>
-      <nav aria-label={t('scanStaff.modes')} className="flex flex-wrap gap-2">
+      <Tabs label={t('scanStaff.modes')}>
         {views.map((v) => (
-          <Button
+          <button
             key={v.key}
             type="button"
-            variant={view === v.key ? 'primary' : 'secondary'}
             aria-pressed={view === v.key}
             onClick={() => setView(v.key)}
+            className={cx(tabClass(view === v.key), 'min-h-12 grow justify-center text-[15px]')}
           >
             {v.label}
-          </Button>
+          </button>
         ))}
-      </nav>
+      </Tabs>
       {client && view === 'staff' ? (
         <StaffPanel
           client={client}
@@ -410,19 +417,14 @@ export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
                 autoComplete="off"
                 autoCapitalize="characters"
                 spellCheck={false}
-                className="min-h-14 w-full rounded-pill border border-line-strong bg-surface px-5 font-mono text-[18px] tracking-[0.08em]"
+                className="field field-lg w-full font-mono tracking-[0.08em]"
               />
             </div>
-            <Button type="submit" className="min-h-14">
+            <Button type="submit" size="lg">
               {t('checkin.check')}
             </Button>
             {hasCamera ? (
-              <Button
-                type="button"
-                variant="secondary"
-                className="min-h-14"
-                onClick={() => setCamera((v) => !v)}
-              >
+              <Button type="button" variant="secondary" size="lg" onClick={() => setCamera((v) => !v)}>
                 {camera ? t('scan.stopCamera') : t('scan.camera')}
               </Button>
             ) : null}
@@ -440,9 +442,9 @@ export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
             {last && resultKey ? (
               <div
                 data-result={resultKey}
-                className={`flex flex-col gap-1 rounded-panel border-2 px-6 py-5 ${tone(resultKey)}`}
+                className={`flex flex-col gap-1.5 rounded-panel border-2 px-6 py-6 elevation-card ${tone(resultKey)}`}
               >
-                <p className="text-[28px] leading-tight font-medium tracking-[-0.02em]">
+                <p className="text-[32px] leading-tight font-extrabold tracking-[-0.03em]">
                   {t(`checkin.result.${resultKey}`)}
                 </p>
                 {resultKey === 'wrong_checkpoint' && client ? (

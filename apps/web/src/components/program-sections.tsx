@@ -28,7 +28,7 @@ export function SessionRow({
 }) {
   return (
     <li className="flex flex-col gap-1 px-5 py-4 sm:flex-row sm:gap-6">
-      <span className="w-32 shrink-0 font-mono text-caption text-ink-2">
+      <span className="w-32 shrink-0 text-body font-extrabold text-ink tabular-nums">
         {day ? <span className="block font-sans">{day}</span> : null}
         {time.format(s.startsAt)}–{time.format(s.endsAt)}
       </span>

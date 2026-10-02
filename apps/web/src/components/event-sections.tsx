@@ -31,7 +31,7 @@ export async function EventSections({ sections }: { sections: readonly PublicSec
             <ol className="list-none divide-y divide-line rounded-card border border-line p-0">
               {s.content.items.map((item) => (
                 <li key={`${item.time}-${item.title}`} className="flex flex-wrap gap-x-6 gap-y-1 px-5 py-4">
-                  <time className="w-14 font-mono text-caption text-ink-2">{item.time}</time>
+                  <time className="w-16 text-body font-extrabold text-ink tabular-nums">{item.time}</time>
                   <span className="flex-1">{item.title}</span>
                   {item.detail ? <span className="text-caption text-ink-2">{item.detail}</span> : null}
                 </li>

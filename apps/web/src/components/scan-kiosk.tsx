@@ -131,7 +131,7 @@ export function KioskScreen({
               tone === 'ok'
                 ? 'border-success bg-success-soft text-success'
                 : tone === 'again'
-                  ? 'border-primary bg-primary-soft text-primary-ink'
+                  ? 'border-warning bg-warning-soft text-warning'
                   : 'border-danger bg-danger-soft text-danger'
             }`}
           >

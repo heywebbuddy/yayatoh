@@ -9,10 +9,10 @@ import { SignalBanner } from './signal-banner.tsx';
 
 const TONE = {
   admitted: 'border-success bg-success-soft text-success',
-  duplicate: 'border-primary bg-primary-soft text-primary-ink',
-  not_today: 'border-primary bg-primary-soft text-primary-ink',
-  wrong_date: 'border-primary bg-primary-soft text-primary-ink',
-  outside_window: 'border-primary bg-primary-soft text-primary-ink',
+  duplicate: 'border-warning bg-warning-soft text-warning',
+  not_today: 'border-warning bg-warning-soft text-warning',
+  wrong_date: 'border-warning bg-warning-soft text-warning',
+  outside_window: 'border-warning bg-warning-soft text-warning',
   invalid: 'border-danger bg-danger-soft text-danger',
   void: 'border-danger bg-danger-soft text-danger',
   wrong_event: 'border-danger bg-danger-soft text-danger',

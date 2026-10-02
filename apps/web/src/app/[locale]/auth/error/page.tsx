@@ -1,6 +1,7 @@
 import { buttonClass, Card, Label, PageHeader } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { AuthBar } from '@/components/auth-bar.tsx';
 import { Link } from '@/i18n/navigation.ts';
 
 export async function generateMetadata({
@@ -22,19 +23,25 @@ export default async function AuthErrorPage({ params }: { params: Promise<{ loca
   setRequestLocale(locale);
   const t = await getTranslations('authError');
   return (
-    <main id="main" className="mx-auto flex min-h-dvh max-w-md flex-col justify-center gap-6 px-6 py-16">
-      <PageHeader eyebrow={<Label>{t('eyebrow')}</Label>} title={t('title')} />
-      <Card size="panel" className="flex flex-col gap-4">
-        <p className="text-body text-ink-2">{t('description')}</p>
-        <div className="flex flex-wrap gap-2">
-          <Link href="/sign-in" className={buttonClass('primary')}>
-            {t('signInAgain')}
-          </Link>
-          <Link href="/" className={buttonClass('secondary')}>
-            {t('home')}
-          </Link>
-        </div>
-      </Card>
-    </main>
+    <>
+      <AuthBar />
+      <main
+        id="main"
+        className="mx-auto flex min-h-[calc(100dvh-5rem)] max-w-md flex-col justify-center gap-6 px-6 py-16"
+      >
+        <PageHeader eyebrow={<Label>{t('eyebrow')}</Label>} title={t('title')} />
+        <Card size="panel" className="flex flex-col gap-4">
+          <p className="text-body text-ink-2">{t('description')}</p>
+          <div className="flex flex-wrap gap-2">
+            <Link href="/sign-in" className={buttonClass('primary')}>
+              {t('signInAgain')}
+            </Link>
+            <Link href="/" className={buttonClass('secondary')}>
+              {t('home')}
+            </Link>
+          </div>
+        </Card>
+      </main>
+    </>
   );
 }

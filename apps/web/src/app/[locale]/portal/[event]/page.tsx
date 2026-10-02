@@ -70,7 +70,7 @@ export default async function AttendeePortal({
           <ul className="list-none divide-y divide-line rounded-card border border-line bg-surface p-0">
             {ev.agenda.map((s) => (
               <li key={s.time} className="flex gap-4 px-4 py-3.5">
-                <span className="w-12 font-mono text-caption text-ink-2">{s.time}</span>
+                <span className="w-14 text-body font-extrabold text-ink tabular-nums">{s.time}</span>
                 <span className="flex flex-1 flex-col">
                   <span>{s.title}</span>
                   <span className="text-caption text-ink-2">{s.room}</span>
