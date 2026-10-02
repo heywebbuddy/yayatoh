@@ -1,6 +1,6 @@
+import { isSandboxOrg } from '@yayatoh/tenancy';
 import { fakePaymentProvider, processFakeBalanceStore } from './fake.ts';
 import type { PaymentProvider } from './port.ts';
-import { isSandboxOrg } from '@yayatoh/tenancy';
 import { type SandboxCheck, sandboxSafeProvider } from './sandbox.ts';
 import { stripePaymentProvider } from './stripe.ts';
 
@@ -31,7 +31,9 @@ export function paymentProviderFromEnv(
     const fakeSecret = env.FAKE_PAYMENTS_SECRET;
     return sandboxSafeProvider({
       live: stripePaymentProvider({ secretKey, webhookSecrets }),
-      fake: fakeSecret ? fakePaymentProvider({ secret: fakeSecret, appOrigin, store: processFakeBalanceStore() }) : null,
+      fake: fakeSecret
+        ? fakePaymentProvider({ secret: fakeSecret, appOrigin, store: processFakeBalanceStore() })
+        : null,
       isSandboxOrg: opts.isSandboxOrg ?? isSandboxOrg,
     });
   }

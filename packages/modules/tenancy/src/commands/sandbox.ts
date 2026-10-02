@@ -322,7 +322,10 @@ export const retireSandboxOrgCommand = tenantCommand({
       .where(isNull(apiKeys.revokedAt))
       .returning({ id: apiKeys.id });
     if (org.status !== 'terminated') {
-      await tx.update(organizations).set({ status: 'terminated', updatedAt: ctx.now }).where(eq(organizations.id, id));
+      await tx
+        .update(organizations)
+        .set({ status: 'terminated', updatedAt: ctx.now })
+        .where(eq(organizations.id, id));
       const [change] = await tx
         .insert(orgStatusChanges)
         .values({
@@ -383,7 +386,11 @@ export async function deleteSandboxOrg(
     await executeCommand(
       retireSandboxOrgCommand,
       { parentOrgId: parentId },
-      createCtx({ orgId: link.sandboxOrgId, actor: { type: 'system', name: 'sandbox' }, requestId: ctx.requestId }),
+      createCtx({
+        orgId: link.sandboxOrgId,
+        actor: { type: 'system', name: 'sandbox' },
+        requestId: ctx.requestId,
+      }),
       ports,
     );
   } catch (err) {

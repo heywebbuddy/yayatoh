@@ -15,7 +15,6 @@ export {
   setPayoutHoldCommand,
 } from './accounts.ts';
 export { paymentProviderFromEnv } from './config.ts';
-export { type SandboxCheck, sandboxSafeProvider } from './sandbox.ts';
 export { claimProviderEventTx } from './dedupe.ts';
 export {
   alertDisputeDeadlinesCommand,
@@ -103,6 +102,7 @@ export {
   RISK_WINDOW_MINUTES,
   rulesRiskProvider,
 } from './risk.ts';
+export { type SandboxCheck, sandboxSafeProvider } from './sandbox.ts';
 export {
   DISPUTE_STATUSES,
   LEDGER_ACCOUNTS,

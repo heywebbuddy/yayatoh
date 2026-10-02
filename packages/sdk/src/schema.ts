@@ -263,6 +263,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/orgs/{org}/api-key": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The calling API key: scopes, expiry and rate limits (any scope)
+         * @description Who am I, for an org API key (M6.3a): its name, prefix, scopes, expiry (rotation sets one) and the per-minute quotas of the org’s plan. Never the secret. A user session gets `403`.
+         */
+        get: operations["getCurrentApiKey"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/orgs/{org}/attendees/search": {
         parameters: {
             query?: never;
@@ -1244,6 +1264,36 @@ export interface components {
             data: components["schemas"]["Announcement"][];
             nextCursor: string | null;
         };
+        ApiKeyInfo: {
+            /** Format: date-time */
+            createdAt: string;
+            /**
+             * Format: date-time
+             * @description When the key stops working (null: never). Set when the key was rotated.
+             */
+            expiresAt: string | null;
+            /** Format: uuid */
+            id: string;
+            name: string;
+            /** @description The first characters of the key, e.g. `yy_live_AbC1`. */
+            prefix: string;
+            /** @description The plan’s `api_access` quotas that apply to this key. */
+            rateLimit: {
+                /** @description Requests per minute for this key. */
+                keyPerMinute: number;
+                /** @description Requests per minute for every key of the org together. */
+                orgPerMinute: number;
+            };
+            /** @description A newer key replaced this one; switch before `expiresAt`. */
+            rotated: boolean;
+            /** @description The key belongs to a sandbox org: seeded data, fake payments only. */
+            sandboxOrg: boolean;
+            scopes: components["schemas"]["ApiKeyScope"][];
+            /** @description A test key (`yy_test_…`): read-only, no personal data. */
+            test: boolean;
+        };
+        /** @enum {string} */
+        ApiKeyScope: "org:read" | "events:read" | "events:write" | "orders:read" | "orders:refund" | "attendees:read" | "attendees:write" | "checkin:scan";
         /** @enum {string} */
         AttendanceMode: "in_person" | "online" | "hybrid";
         Attendee: {
@@ -3055,6 +3105,74 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Organization"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    getCurrentApiKey: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Organization id or slug */
+                org: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The calling key */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiKeyInfo"];
                 };
             };
             /** @description Validation failed (`validation_failed`) */

@@ -6,17 +6,15 @@ export {
   eventAddonTx,
 } from './addons.ts';
 export {
+  type ApiAccessQuotas,
+  apiAccessQuotas,
   billingEntitlements,
+  DEFAULT_API_ACCESS_QUOTAS,
   DEFAULT_PLAN,
   effectiveModules,
   effectiveModulesTx,
   getEntitlementsQuery,
   setEntitlementOverrideCommand,
-} from './entitlements.ts';
-export {
-  type ApiAccessQuotas,
-  apiAccessQuotas,
-  DEFAULT_API_ACCESS_QUOTAS,
 } from './entitlements.ts';
 export {
   type FeeMode,

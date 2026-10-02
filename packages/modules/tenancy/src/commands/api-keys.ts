@@ -320,3 +320,33 @@ export async function apiKeyScopes(ctx: Ctx, keyId: string): Promise<readonly st
   if (!row) return [];
   return row.sandbox ? row.scopes.filter(isTestKeyScope) : row.scopes;
 }
+
+/** M6.3a: what the calling key may know about itself (`GET /v1/orgs/{org}/api-key`). */
+export interface ApiKeySelf {
+  readonly id: string;
+  readonly name: string;
+  readonly prefix: string;
+  readonly scopes: readonly ApiKeyScope[];
+  readonly sandbox: boolean;
+  readonly createdAt: Date;
+  readonly expiresAt: Date | null;
+  readonly replacedById: string | null;
+}
+
+/** The context key's own row (its org's RLS), or null when it is no longer live. */
+export async function apiKeySelf(ctx: Ctx): Promise<ApiKeySelf | null> {
+  if (ctx.actor.type !== 'api_key') return null;
+  const keyId = ctx.actor.keyId;
+  const [row] = await withTenant(ctx, (tx) => tx.select().from(apiKeys).where(eq(apiKeys.id, keyId)));
+  if (!row || !isApiKeyLive(row, ctx.now)) return null;
+  return {
+    id: row.id,
+    name: row.name,
+    prefix: row.prefix,
+    scopes: (row.sandbox ? row.scopes.filter(isTestKeyScope) : row.scopes) as ApiKeyScope[],
+    sandbox: row.sandbox,
+    createdAt: row.createdAt,
+    expiresAt: row.expiresAt,
+    replacedById: row.replacedById,
+  };
+}

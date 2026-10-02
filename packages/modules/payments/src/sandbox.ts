@@ -37,7 +37,8 @@ export function sandboxSafeProvider(opts: {
       return { ...(await p.createPayment(i)), provider: p.name };
     },
     async verifyWebhook(rawBody, headers) {
-      if (live.name === 'fake' || !headers.has('x-fake-signature')) return live.verifyWebhook(rawBody, headers);
+      if (live.name === 'fake' || !headers.has('x-fake-signature'))
+        return live.verifyWebhook(rawBody, headers);
       const event: WebhookEvent = await fakeOr().verifyWebhook(rawBody, headers);
       if (event.type !== 'ignored' && !(await isSandboxOrg(event.orgId)))
         throw new Error('A fake payment notification is accepted for sandbox orgs only');
