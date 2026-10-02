@@ -161,6 +161,10 @@
       },
       "program": {
         "task-reminder": "任務提醒"
+      },
+      "donations": {
+        "receipt": "捐款收據",
+        "year-end-statement": "年度捐款明細"
       }
     },
     "status": {
@@ -1437,7 +1441,8 @@
       "ownerOnly": "需要擁有者或管理員接受。"
     },
     "activityLink": "活動紀錄",
-    "privacyLink": "隱私請求"
+    "privacyLink": "隱私請求",
+    "charityLink": "慈善機構資料"
   },
   "legal": {
     "platform": "Yayatoh",
@@ -7991,7 +7996,10 @@
         "amountTaken": "此募款活動已有相同金額的級距。",
         "tooMany": "已達此募款活動或活動的上限。",
         "description": "說明太長。"
-      }
+      },
+      "receiptsTitle": "抵稅收據",
+      "receiptsBody": "每筆付款後，捐款人都會透過電子郵件收到一張收據。為晚宴門票設定公平市場價值，並查看所有收據。",
+      "receiptsLink": "開啟抵稅收據"
     },
     "give": {
       "metaTitle": "捐款",
@@ -8068,6 +8076,69 @@
       "failed": "付款未完成，沒有產生任何扣款。",
       "tryAgain": "再試一次",
       "backToEvent": "返回活動"
+    },
+    "receipts": {
+      "title": "抵稅收據",
+      "subtitle": "每筆付款一張收據，附 PDF 透過電子郵件寄給捐款人。",
+      "back": "返回捐款",
+      "noAccessTitle": "您無法查看收據",
+      "noAccessDescription": "請向擁有者或管理員申請訂單存取權限。",
+      "charityTitle": "慈善機構資料",
+      "charity": {
+        "none": "沒有慈善機構資料",
+        "pending": "等待核實",
+        "verified": "501(c)(3) 已核實",
+        "rejected": "未核實"
+      },
+      "charityBody": {
+        "none": "在您的慈善機構資料核實之前，收據上會註明「此筆付款不可抵稅」。",
+        "pending": "在 Yayatoh 核實您的慈善機構資料之前，收據上會註明「此筆付款不可抵稅」。",
+        "verified": "收據會顯示每筆付款的可抵稅金額。",
+        "rejected": "收據上註明「此筆付款不可抵稅」。請修改慈善機構資料並重新送出審核。"
+      },
+      "charityLink": "查看慈善機構資料",
+      "charityStart": "新增慈善機構資料",
+      "fmvTitle": "公平市場價值",
+      "fmvIntro": "購票者所獲得物品（例如晚宴）的善意估計價值。收據會從價格中扣除該值，超過 75 美元的門票頁面會顯示可抵稅的金額。未設定價值的門票不開立收據。",
+      "noTypesTitle": "尚無門票",
+      "noTypesDescription": "請先為此活動新增門票類型，然後在這裡設定它們的公平市場價值。",
+      "priceFrom": "{price} 起",
+      "noValue": "未設定公平市場價值：購買者不會收到收據。",
+      "valueLine": "公平市場價值 {fmv} · {goods}",
+      "goodsUnnamed": "商品或服務",
+      "noticePreview": "門票頁面提示：{notice}",
+      "setValueFor": "設定 {name} 的公平市場價值",
+      "fmv": "公平市場價值（{currency}）",
+      "fmvHint": "以每張門票計。如果購買者未獲得任何有價值的東西，請填 0。",
+      "goods": "購買者獲得的內容（選填）",
+      "goodsHint": "例如：晚宴和娛樂節目。",
+      "save": "儲存價值",
+      "saved": "已儲存。",
+      "clear": "移除 {name} 的價值",
+      "cleared": "已移除。",
+      "errors": {
+        "amount": "請輸入金額，例如 150 或 150.50。",
+        "description": "請少於 200 個字元。"
+      },
+      "viewerNotice": "您可以查看收據。如需修改公平市場價值，請聯絡擁有者或管理員。",
+      "receiptsTitle": "已開立的收據",
+      "receiptsCaption": "此活動已開立的收據，由新到舊",
+      "noReceipts": "尚無收據。當捐款或設有公平市場價值的門票付款完成後，捐款人會透過電子郵件收到收據。",
+      "columns": {
+        "number": "編號",
+        "date": "付款日期",
+        "donor": "捐款人",
+        "kind": "用途",
+        "amount": "金額",
+        "deductible": "可抵稅",
+        "pdf": "PDF"
+      },
+      "kind": {
+        "gift": "捐款",
+        "ticket": "門票"
+      },
+      "notDeductible": "不可抵稅",
+      "pdf": "下載 {number}"
     }
   },
   "speakerPortal": {
@@ -8653,5 +8724,49 @@
       "questionNotAllowed": "此問題無法列印在名牌上。"
     },
     "elements": "此面的元素"
+  },
+  "charity": {
+    "title": "慈善機構資料",
+    "description": "列印在您的抵稅收據上的資訊。Yayatoh 會將其與美國國稅局（IRS）免稅組織名單核對。",
+    "unavailableTitle": "您的方案不包含慈善機構資料",
+    "unavailableDescription": "請聯絡 Yayatoh 支援團隊為您的組織開通捐款功能。",
+    "legalName": "法定名稱",
+    "legalNameHint": "與 IRS 登記完全一致。",
+    "ein": "EIN",
+    "einHint": "您的 9 位雇主識別號碼，例如 12-3456789。",
+    "exemptKind": "免稅身分",
+    "exempt501c3": "我們自己的 501(c)(3) 身分",
+    "exemptSponsor": "透過財務贊助方",
+    "sponsorName": "財務贊助方的法定名稱",
+    "sponsorHint": "僅適用於有財務贊助方的情況：其名稱和 EIN 會列印在收據上。",
+    "sponsorEin": "財務贊助方的 EIN",
+    "address": "郵寄地址（選填）",
+    "addressHint": "列印在收據上。",
+    "errors": {
+      "legalName": "請輸入法定名稱（最多 200 個字元）。",
+      "ein": "請輸入有效的 9 位 EIN，例如 12-3456789。",
+      "sponsorName": "請輸入財務贊助方的法定名稱。",
+      "sponsorEin": "請輸入財務贊助方的 9 位 EIN。",
+      "address": "地址請少於 300 個字元。"
+    },
+    "statusTitle": "審核",
+    "emptyTitle": "尚無慈善機構資料",
+    "emptyDescription": "請在下方填寫法定名稱和 EIN。Yayatoh 核實後，您的收據即可用於抵稅。",
+    "emptyViewer": "擁有者或管理員可以新增慈善機構資訊。",
+    "status": {
+      "pending": "等待 Yayatoh 核實",
+      "verified": "501(c)(3) 已核實",
+      "rejected": "未核實"
+    },
+    "pendingBody": "已於 {at} 送出審核。核實前，收據上會註明「此筆付款不可抵稅」。",
+    "verifiedBody": "已於 {at} 透過 IRS 名單核實。捐款和設有公平市場價值的門票收據均可抵稅。",
+    "rejectedBody": "Yayatoh 無法核實這些資訊。請修改後儲存，再次送出審核。",
+    "reviewNote": "Yayatoh 的備註",
+    "receiptsNote": "修改任何資訊都會使資料重新進入審核。",
+    "detailsTitle": "資訊",
+    "submit": "送出核實",
+    "saveAndReview": "儲存並送出審核",
+    "saved": "已儲存。Yayatoh 將進行審核。",
+    "viewerNotice": "只有擁有者和管理員可以修改慈善機構資料。"
   }
 }

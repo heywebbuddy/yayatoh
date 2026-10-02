@@ -161,6 +161,10 @@
       },
       "program": {
         "task-reminder": "Recordatorio de tarea"
+      },
+      "donations": {
+        "receipt": "Recibo de donación",
+        "year-end-statement": "Resumen anual de donaciones"
       }
     },
     "status": {
@@ -1437,7 +1441,8 @@
       "ownerOnly": "Un propietario o administrador debe aceptarlo."
     },
     "activityLink": "Registro de actividad",
-    "privacyLink": "Solicitudes de privacidad"
+    "privacyLink": "Solicitudes de privacidad",
+    "charityLink": "Perfil benéfico"
   },
   "legal": {
     "platform": "Yayatoh",
@@ -7991,7 +7996,10 @@
         "amountTaken": "Esta campaña ya tiene un nivel con ese importe.",
         "tooMany": "Es el máximo que admite esta campaña o este evento.",
         "description": "La descripción es demasiado larga."
-      }
+      },
+      "receiptsTitle": "Recibos fiscales",
+      "receiptsBody": "Los donantes reciben un recibo por correo por cada pago. Fija valores justos de mercado para las entradas de la gala y consulta todos los recibos.",
+      "receiptsLink": "Abrir recibos fiscales"
     },
     "give": {
       "metaTitle": "Donar",
@@ -8068,6 +8076,69 @@
       "failed": "El pago no se completó y no se cobró nada.",
       "tryAgain": "Intentar de nuevo",
       "backToEvent": "Volver al evento"
+    },
+    "receipts": {
+      "title": "Recibos fiscales",
+      "subtitle": "Un recibo por pago, enviado al donante por correo con un PDF.",
+      "back": "Volver a Donaciones",
+      "noAccessTitle": "No puedes ver los recibos",
+      "noAccessDescription": "Pide acceso a los pedidos a un propietario o administrador.",
+      "charityTitle": "Perfil benéfico",
+      "charity": {
+        "none": "Sin perfil benéfico",
+        "pending": "Pendiente de verificación",
+        "verified": "501(c)(3) verificada",
+        "rejected": "No verificada"
+      },
+      "charityBody": {
+        "none": "Los recibos dicen «Este pago no es deducible de impuestos» hasta que se verifique tu perfil benéfico.",
+        "pending": "Los recibos dicen «Este pago no es deducible de impuestos» hasta que Yayatoh verifique tu perfil benéfico.",
+        "verified": "Los recibos muestran el importe deducible de impuestos de cada pago.",
+        "rejected": "Los recibos dicen «Este pago no es deducible de impuestos». Corrige tu perfil benéfico para enviarlo de nuevo a revisión."
+      },
+      "charityLink": "Ver el perfil benéfico",
+      "charityStart": "Añadir un perfil benéfico",
+      "fmvTitle": "Valores justos de mercado",
+      "fmvIntro": "El valor de buena fe de lo que recibe quien compra una entrada, como una cena. Los recibos lo restan del precio, y las páginas de entradas de más de 75 $ muestran cuánto es deducible. Las entradas sin valor no generan recibo.",
+      "noTypesTitle": "Aún no hay entradas",
+      "noTypesDescription": "Añade tipos de entrada a este evento y luego fija aquí sus valores justos de mercado.",
+      "priceFrom": "Desde {price}",
+      "noValue": "Sin valor justo de mercado: los compradores no reciben recibo.",
+      "valueLine": "Valor justo de mercado {fmv} · {goods}",
+      "goodsUnnamed": "bienes o servicios",
+      "noticePreview": "Aviso en la página de entradas: {notice}",
+      "setValueFor": "Fijar el valor justo de mercado de {name}",
+      "fmv": "Valor justo de mercado ({currency})",
+      "fmvHint": "Por entrada. Escribe 0 si no se recibe nada de valor.",
+      "goods": "Lo que reciben los compradores (opcional)",
+      "goodsHint": "Por ejemplo: Cena y espectáculo.",
+      "save": "Guardar valor",
+      "saved": "Guardado.",
+      "clear": "Quitar el valor de {name}",
+      "cleared": "Quitado.",
+      "errors": {
+        "amount": "Escribe un importe, por ejemplo 150 o 150.50.",
+        "description": "Debe tener menos de 200 caracteres."
+      },
+      "viewerNotice": "Puedes ver los recibos. Pide a un propietario o administrador que cambie los valores justos de mercado.",
+      "receiptsTitle": "Recibos emitidos",
+      "receiptsCaption": "Recibos emitidos para este evento, del más reciente al más antiguo",
+      "noReceipts": "Aún no hay recibos. Los donantes reciben uno por correo cuando se paga una donación o una entrada con valor justo de mercado.",
+      "columns": {
+        "number": "N.º",
+        "date": "Pagado",
+        "donor": "Donante",
+        "kind": "Por",
+        "amount": "Importe",
+        "deductible": "Deducible",
+        "pdf": "PDF"
+      },
+      "kind": {
+        "gift": "Donación",
+        "ticket": "Entradas"
+      },
+      "notDeductible": "No deducible",
+      "pdf": "Descargar {number}"
     }
   },
   "speakerPortal": {
@@ -8653,5 +8724,49 @@
       "questionNotAllowed": "Esa pregunta no se puede imprimir en las credenciales."
     },
     "elements": "Elementos de este lado"
+  },
+  "charity": {
+    "title": "Perfil benéfico",
+    "description": "Los datos que aparecen en tus recibos fiscales. Yayatoh los comprueba con la lista del IRS de organizaciones exentas de impuestos.",
+    "unavailableTitle": "Los perfiles benéficos no están en tu plan",
+    "unavailableDescription": "Pide al soporte de Yayatoh que active las donaciones para tu organización.",
+    "legalName": "Nombre legal",
+    "legalNameHint": "Exactamente como figura en el IRS.",
+    "ein": "EIN",
+    "einHint": "Tu número de identificación de empleador de 9 dígitos, por ejemplo 12-3456789.",
+    "exemptKind": "Exención fiscal",
+    "exempt501c3": "Nuestra propia exención 501(c)(3)",
+    "exemptSponsor": "A través de un patrocinador fiscal",
+    "sponsorName": "Nombre legal del patrocinador fiscal",
+    "sponsorHint": "Solo con un patrocinador fiscal: su nombre y EIN aparecen en tus recibos.",
+    "sponsorEin": "EIN del patrocinador fiscal",
+    "address": "Dirección postal (opcional)",
+    "addressHint": "Aparece en los recibos.",
+    "errors": {
+      "legalName": "Escribe el nombre legal (hasta 200 caracteres).",
+      "ein": "Escribe un EIN válido de 9 dígitos, por ejemplo 12-3456789.",
+      "sponsorName": "Escribe el nombre legal del patrocinador fiscal.",
+      "sponsorEin": "Escribe el EIN de 9 dígitos del patrocinador fiscal.",
+      "address": "La dirección debe tener menos de 300 caracteres."
+    },
+    "statusTitle": "Verificación",
+    "emptyTitle": "Aún no hay perfil benéfico",
+    "emptyDescription": "Añade abajo tu nombre legal y tu EIN. Cuando Yayatoh los verifique, tus recibos serán deducibles de impuestos.",
+    "emptyViewer": "Un propietario o administrador puede añadir los datos benéficos.",
+    "status": {
+      "pending": "Pendiente de verificación por Yayatoh",
+      "verified": "501(c)(3) verificada",
+      "rejected": "No verificada"
+    },
+    "pendingBody": "Enviado a revisión el {at}. Hasta que se verifique, los recibos dicen «Este pago no es deducible de impuestos».",
+    "verifiedBody": "Verificado con la lista del IRS el {at}. Los recibos de donaciones y de entradas con valor justo de mercado son deducibles de impuestos.",
+    "rejectedBody": "Yayatoh no pudo verificar estos datos. Corrígelos y guarda para enviarlos de nuevo a revisión.",
+    "reviewNote": "Nota de Yayatoh",
+    "receiptsNote": "Cambiar cualquier dato envía el perfil de nuevo a revisión.",
+    "detailsTitle": "Datos",
+    "submit": "Enviar para verificación",
+    "saveAndReview": "Guardar y enviar a revisión",
+    "saved": "Guardado. Yayatoh lo revisará.",
+    "viewerNotice": "Solo los propietarios y administradores pueden cambiar el perfil benéfico."
   }
 }

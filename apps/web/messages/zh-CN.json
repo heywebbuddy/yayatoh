@@ -161,6 +161,10 @@
       },
       "program": {
         "task-reminder": "任务提醒"
+      },
+      "donations": {
+        "receipt": "捐赠收据",
+        "year-end-statement": "年度捐赠明细"
       }
     },
     "status": {
@@ -1437,7 +1441,8 @@
       "ownerOnly": "需要所有者或管理员接受。"
     },
     "activityLink": "活动日志",
-    "privacyLink": "隐私请求"
+    "privacyLink": "隐私请求",
+    "charityLink": "慈善机构资料"
   },
   "legal": {
     "platform": "Yayatoh",
@@ -7991,7 +7996,10 @@
         "amountTaken": "此筹款活动已有相同金额的档位。",
         "tooMany": "已达到此筹款活动或活动的上限。",
         "description": "说明太长。"
-      }
+      },
+      "receiptsTitle": "抵税收据",
+      "receiptsBody": "每笔付款后，捐赠者都会通过电子邮件收到一张收据。为晚宴门票设置公允市场价值，并查看所有收据。",
+      "receiptsLink": "打开抵税收据"
     },
     "give": {
       "metaTitle": "捐款",
@@ -8068,6 +8076,69 @@
       "failed": "付款未完成，未产生任何扣款。",
       "tryAgain": "重试",
       "backToEvent": "返回活动"
+    },
+    "receipts": {
+      "title": "抵税收据",
+      "subtitle": "每笔付款一张收据，附 PDF 通过电子邮件发送给捐赠者。",
+      "back": "返回捐赠",
+      "noAccessTitle": "您无法查看收据",
+      "noAccessDescription": "请向所有者或管理员申请订单访问权限。",
+      "charityTitle": "慈善机构资料",
+      "charity": {
+        "none": "没有慈善机构资料",
+        "pending": "等待核实",
+        "verified": "501(c)(3) 已核实",
+        "rejected": "未核实"
+      },
+      "charityBody": {
+        "none": "在您的慈善机构资料核实之前，收据上会注明“此笔付款不可抵税”。",
+        "pending": "在 Yayatoh 核实您的慈善机构资料之前，收据上会注明“此笔付款不可抵税”。",
+        "verified": "收据会显示每笔付款的可抵税金额。",
+        "rejected": "收据上注明“此笔付款不可抵税”。请修改慈善机构资料并重新提交审核。"
+      },
+      "charityLink": "查看慈善机构资料",
+      "charityStart": "添加慈善机构资料",
+      "fmvTitle": "公允市场价值",
+      "fmvIntro": "购票者所获得物品（例如晚宴）的善意估计价值。收据会从价格中扣除该值，超过 75 美元的门票页面会显示可抵税的金额。未设置价值的门票不开具收据。",
+      "noTypesTitle": "还没有门票",
+      "noTypesDescription": "请先为此活动添加门票类型，然后在这里设置它们的公允市场价值。",
+      "priceFrom": "{price} 起",
+      "noValue": "未设置公允市场价值：购买者不会收到收据。",
+      "valueLine": "公允市场价值 {fmv} · {goods}",
+      "goodsUnnamed": "商品或服务",
+      "noticePreview": "门票页面提示：{notice}",
+      "setValueFor": "设置 {name} 的公允市场价值",
+      "fmv": "公允市场价值（{currency}）",
+      "fmvHint": "按每张门票计。如果购买者未获得任何有价值的东西，请填 0。",
+      "goods": "购买者获得的内容（可选）",
+      "goodsHint": "例如：晚宴和娱乐节目。",
+      "save": "保存价值",
+      "saved": "已保存。",
+      "clear": "移除 {name} 的价值",
+      "cleared": "已移除。",
+      "errors": {
+        "amount": "请输入金额，例如 150 或 150.50。",
+        "description": "请少于 200 个字符。"
+      },
+      "viewerNotice": "您可以查看收据。如需修改公允市场价值，请联系所有者或管理员。",
+      "receiptsTitle": "已开具的收据",
+      "receiptsCaption": "此活动已开具的收据，按时间从新到旧",
+      "noReceipts": "还没有收据。当捐款或设有公允市场价值的门票付款完成后，捐赠者会通过电子邮件收到收据。",
+      "columns": {
+        "number": "编号",
+        "date": "付款日期",
+        "donor": "捐赠者",
+        "kind": "用途",
+        "amount": "金额",
+        "deductible": "可抵税",
+        "pdf": "PDF"
+      },
+      "kind": {
+        "gift": "捐款",
+        "ticket": "门票"
+      },
+      "notDeductible": "不可抵税",
+      "pdf": "下载 {number}"
     }
   },
   "speakerPortal": {
@@ -8653,5 +8724,49 @@
       "questionNotAllowed": "该问题不能打印在胸卡上。"
     },
     "elements": "此面的元素"
+  },
+  "charity": {
+    "title": "慈善机构资料",
+    "description": "打印在您的抵税收据上的信息。Yayatoh 会将其与美国国税局（IRS）免税组织名单核对。",
+    "unavailableTitle": "您的方案不包含慈善机构资料",
+    "unavailableDescription": "请联系 Yayatoh 支持团队为您的组织开通捐赠功能。",
+    "legalName": "法定名称",
+    "legalNameHint": "与 IRS 登记完全一致。",
+    "ein": "EIN",
+    "einHint": "您的 9 位雇主识别号，例如 12-3456789。",
+    "exemptKind": "免税身份",
+    "exempt501c3": "我们自己的 501(c)(3) 身份",
+    "exemptSponsor": "通过财务赞助方",
+    "sponsorName": "财务赞助方的法定名称",
+    "sponsorHint": "仅适用于有财务赞助方的情况：其名称和 EIN 会打印在收据上。",
+    "sponsorEin": "财务赞助方的 EIN",
+    "address": "邮寄地址（可选）",
+    "addressHint": "打印在收据上。",
+    "errors": {
+      "legalName": "请输入法定名称（最多 200 个字符）。",
+      "ein": "请输入有效的 9 位 EIN，例如 12-3456789。",
+      "sponsorName": "请输入财务赞助方的法定名称。",
+      "sponsorEin": "请输入财务赞助方的 9 位 EIN。",
+      "address": "地址请少于 300 个字符。"
+    },
+    "statusTitle": "审核",
+    "emptyTitle": "还没有慈善机构资料",
+    "emptyDescription": "请在下方填写法定名称和 EIN。Yayatoh 核实后，您的收据即可用于抵税。",
+    "emptyViewer": "所有者或管理员可以添加慈善机构信息。",
+    "status": {
+      "pending": "等待 Yayatoh 核实",
+      "verified": "501(c)(3) 已核实",
+      "rejected": "未核实"
+    },
+    "pendingBody": "已于 {at} 提交审核。核实前，收据上会注明“此笔付款不可抵税”。",
+    "verifiedBody": "已于 {at} 通过 IRS 名单核实。捐款和设有公允市场价值的门票收据均可抵税。",
+    "rejectedBody": "Yayatoh 无法核实这些信息。请修改后保存，再次提交审核。",
+    "reviewNote": "Yayatoh 的备注",
+    "receiptsNote": "修改任何信息都会使资料重新进入审核。",
+    "detailsTitle": "信息",
+    "submit": "提交核实",
+    "saveAndReview": "保存并提交审核",
+    "saved": "已保存。Yayatoh 将进行审核。",
+    "viewerNotice": "只有所有者和管理员可以修改慈善机构资料。"
   }
 }

@@ -11,6 +11,7 @@ import {
   staffAlertsSubscriber,
 } from '@yayatoh/checkin';
 import { withTenant } from '@yayatoh/db';
+import { receiptIssuer, statementMailer } from '@yayatoh/donations';
 import { findEventTx, portalInviteMailer } from '@yayatoh/events';
 import { registrationResumeMailer } from '@yayatoh/forms';
 import { createCtx } from '@yayatoh/kernel';
@@ -119,6 +120,9 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     // M5.3a speaker portal: invitations and task reminders.
     portalInviteMailer({ notifier, appOrigin }),
     taskReminderMailer({ notifier, appOrigin }),
+    // M4.8b: receipts per paid gift or charity-ticket order, and year-end statements (as in the worker).
+    receiptIssuer({ notifier, appOrigin }),
+    statementMailer({ notifier, appOrigin }),
   ];
 }
 

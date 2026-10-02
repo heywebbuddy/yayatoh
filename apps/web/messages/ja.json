@@ -161,6 +161,10 @@
       },
       "program": {
         "task-reminder": "タスクのリマインダー"
+      },
+      "donations": {
+        "receipt": "寄付の領収書",
+        "year-end-statement": "年間寄付明細書"
       }
     },
     "status": {
@@ -1437,7 +1441,8 @@
       "ownerOnly": "オーナーまたは管理者の同意が必要です。"
     },
     "activityLink": "アクティビティログ",
-    "privacyLink": "プライバシー請求"
+    "privacyLink": "プライバシー請求",
+    "charityLink": "慈善団体プロフィール"
   },
   "legal": {
     "platform": "Yayatoh",
@@ -7991,7 +7996,10 @@
         "amountTaken": "このキャンペーンには同じ金額のレベルがあります。",
         "tooMany": "このキャンペーンまたはイベントの上限に達しています。",
         "description": "説明が長すぎます。"
-      }
+      },
+      "receiptsTitle": "税控除の領収書",
+      "receiptsBody": "寄付者にはお支払いごとに領収書がメールで届きます。ガラのチケットの公正市場価格を設定し、すべての領収書を確認できます。",
+      "receiptsLink": "税控除の領収書を開く"
     },
     "give": {
       "metaTitle": "寄付する",
@@ -8068,6 +8076,69 @@
       "failed": "支払いは完了せず、請求も発生していません。",
       "tryAgain": "もう一度試す",
       "backToEvent": "イベントに戻る"
+    },
+    "receipts": {
+      "title": "税控除の領収書",
+      "subtitle": "お支払いごとに1通、PDF付きで寄付者にメール送信されます。",
+      "back": "寄付に戻る",
+      "noAccessTitle": "領収書を表示できません",
+      "noAccessDescription": "注文へのアクセスをオーナーまたは管理者に依頼してください。",
+      "charityTitle": "慈善団体プロフィール",
+      "charity": {
+        "none": "慈善団体プロフィールなし",
+        "pending": "確認待ち",
+        "verified": "501(c)(3) 確認済み",
+        "rejected": "未確認"
+      },
+      "charityBody": {
+        "none": "慈善団体プロフィールが確認されるまで、領収書には「このお支払いは税控除の対象外です」と記載されます。",
+        "pending": "Yayatohが慈善団体プロフィールを確認するまで、領収書には「このお支払いは税控除の対象外です」と記載されます。",
+        "verified": "領収書には各お支払いの税控除対象額が表示されます。",
+        "rejected": "領収書には「このお支払いは税控除の対象外です」と記載されます。慈善団体プロフィールを修正して再確認を依頼してください。"
+      },
+      "charityLink": "慈善団体プロフィールを見る",
+      "charityStart": "慈善団体プロフィールを追加",
+      "fmvTitle": "公正市場価格",
+      "fmvIntro": "ディナーなど、チケット購入者が受け取るものの誠実な見積価格です。領収書では価格から差し引かれ、75ドルを超えるチケットのページには税控除対象額が表示されます。価格が設定されていないチケットには領収書は発行されません。",
+      "noTypesTitle": "チケットはまだありません",
+      "noTypesDescription": "このイベントにチケットの種類を追加してから、ここで公正市場価格を設定してください。",
+      "priceFrom": "{price}から",
+      "noValue": "公正市場価格なし：購入者に領収書は発行されません。",
+      "valueLine": "公正市場価格 {fmv} · {goods}",
+      "goodsUnnamed": "物品またはサービス",
+      "noticePreview": "チケットページの表示：{notice}",
+      "setValueFor": "{name}の公正市場価格を設定",
+      "fmv": "公正市場価格（{currency}）",
+      "fmvHint": "チケット1枚あたり。価値のあるものを受け取らない場合は0を入力してください。",
+      "goods": "購入者が受け取るもの（任意）",
+      "goodsHint": "例：ディナーとエンターテインメント。",
+      "save": "価格を保存",
+      "saved": "保存しました。",
+      "clear": "{name}の価格を削除",
+      "cleared": "削除しました。",
+      "errors": {
+        "amount": "金額を入力してください（例：150 または 150.50）。",
+        "description": "200文字未満にしてください。"
+      },
+      "viewerNotice": "領収書を表示できます。公正市場価格の変更はオーナーまたは管理者に依頼してください。",
+      "receiptsTitle": "発行済みの領収書",
+      "receiptsCaption": "このイベントで発行された領収書（新しい順）",
+      "noReceipts": "領収書はまだありません。寄付または公正市場価格のあるチケットの支払いが完了すると、寄付者にメールで届きます。",
+      "columns": {
+        "number": "番号",
+        "date": "支払日",
+        "donor": "寄付者",
+        "kind": "対象",
+        "amount": "金額",
+        "deductible": "税控除対象",
+        "pdf": "PDF"
+      },
+      "kind": {
+        "gift": "寄付",
+        "ticket": "チケット"
+      },
+      "notDeductible": "控除対象外",
+      "pdf": "{number}をダウンロード"
     }
   },
   "speakerPortal": {
@@ -8653,5 +8724,49 @@
       "questionNotAllowed": "この質問はバッジに印刷できません。"
     },
     "elements": "この面の要素"
+  },
+  "charity": {
+    "title": "慈善団体プロフィール",
+    "description": "税控除の領収書に印字される情報です。Yayatohが米国IRSの免税団体リストと照合します。",
+    "unavailableTitle": "慈善団体プロフィールはご利用のプランに含まれていません",
+    "unavailableDescription": "団体の寄付機能を有効にするよう、Yayatohサポートにご依頼ください。",
+    "legalName": "正式名称",
+    "legalNameHint": "IRSの登録どおりに入力してください。",
+    "ein": "EIN",
+    "einHint": "9桁の雇用者識別番号（例：12-3456789）。",
+    "exemptKind": "免税ステータス",
+    "exempt501c3": "自団体の501(c)(3)ステータス",
+    "exemptSponsor": "財政支援団体を通じて",
+    "sponsorName": "財政支援団体の正式名称",
+    "sponsorHint": "財政支援団体がある場合のみ：その名称とEINが領収書に印字されます。",
+    "sponsorEin": "財政支援団体のEIN",
+    "address": "郵送先住所（任意）",
+    "addressHint": "領収書に印字されます。",
+    "errors": {
+      "legalName": "正式名称を入力してください（200文字以内）。",
+      "ein": "有効な9桁のEINを入力してください（例：12-3456789）。",
+      "sponsorName": "財政支援団体の正式名称を入力してください。",
+      "sponsorEin": "財政支援団体の9桁のEINを入力してください。",
+      "address": "住所は300文字未満にしてください。"
+    },
+    "statusTitle": "確認",
+    "emptyTitle": "慈善団体プロフィールはまだありません",
+    "emptyDescription": "下に正式名称とEINを入力してください。Yayatohが確認すると、領収書が税控除の対象になります。",
+    "emptyViewer": "オーナーまたは管理者が慈善団体の情報を追加できます。",
+    "status": {
+      "pending": "Yayatohの確認待ち",
+      "verified": "501(c)(3) 確認済み",
+      "rejected": "未確認"
+    },
+    "pendingBody": "{at}に確認を依頼しました。確認されるまで、領収書には「このお支払いは税控除の対象外です」と記載されます。",
+    "verifiedBody": "{at}にIRSリストで確認済みです。寄付と公正市場価格のあるチケットの領収書は税控除の対象です。",
+    "rejectedBody": "Yayatohはこの情報を確認できませんでした。修正して保存し、もう一度確認を依頼してください。",
+    "reviewNote": "Yayatohからのメモ",
+    "receiptsNote": "情報を変更すると、プロフィールは再確認に回ります。",
+    "detailsTitle": "詳細",
+    "submit": "確認を依頼",
+    "saveAndReview": "保存して確認を依頼",
+    "saved": "保存しました。Yayatohが確認します。",
+    "viewerNotice": "慈善団体プロフィールを変更できるのはオーナーと管理者のみです。"
   }
 }

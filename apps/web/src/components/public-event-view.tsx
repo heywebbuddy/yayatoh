@@ -1,3 +1,4 @@
+import { publicTaxNotices, taxNoticeText } from '@yayatoh/donations';
 import {
   accessTarget,
   checkoutTarget,
@@ -146,6 +147,13 @@ export async function PublicEventView({
   const orgProfile = target ? await publicOrgProfile(target.orgId) : null;
   // The event's refund policy (M1.6e), in the buyer's words, before they buy.
   const refundPolicy = target ? await publicRefundPolicy(target.orgId, target.eventId) : null;
+  // M4.8b: a verified charity's passes over $75 with a fair-market value show the quid-pro-quo
+  // notice before purchase (the wording is the donations module's legal-copy template).
+  const taxNotices = target ? await publicTaxNotices(target.orgId, target.eventId) : new Map();
+  const taxLines = real.flatMap((p) => {
+    const n = taxNotices.get(p.id);
+    return n ? [{ id: p.id, name: p.name, ...taxNoticeText(n, locale) }] : [];
+  });
   // Per-date charts (M1.7g): the chosen date's own chart when it has one, else the event plan.
   const seatMap = target
     ? await publicSeatMap(target.orgId, target.eventId, { occurrenceId: chosen?.id ?? null })
@@ -237,6 +245,23 @@ export async function PublicEventView({
         <p className="text-[15px] leading-[22px] text-zinc-500">
           {t('publicEvent.allIn', { org: ev.organizerName })}
         </p>
+        {taxLines.length > 0 ? (
+          <section
+            aria-labelledby="tax-notice-heading"
+            className="flex flex-col gap-2 rounded-card border border-zinc-200 p-4"
+          >
+            <h3 id="tax-notice-heading" className="text-body font-medium">
+              {taxLines[0]?.title}
+            </h3>
+            <ul className="flex list-none flex-col gap-2 p-0">
+              {taxLines.map((n) => (
+                <li key={n.id} className="text-caption text-zinc-700">
+                  <span className="font-medium">{n.name}:</span> {n.text}
+                </li>
+              ))}
+            </ul>
+          </section>
+        ) : null}
         {registrationOpen ? (
           <Link href={`/events/${slug}/register`} className={buttonClass('primary', 'md', 'self-start')}>
             {t('publicEvent.register')}

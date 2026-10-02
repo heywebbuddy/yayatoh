@@ -72,6 +72,10 @@ export default async function SettingsPage({
                 {t('settings.privacyLink')}
               </Link>
             ) : null}
+            {/* M4.8b: the charity profile behind tax-deductible receipts. */}
+            <Link href={`/o/${org}/charity`} className={buttonClass('secondary', 'sm')}>
+              {t('settings.charityLink')}
+            </Link>
           </>
         }
       />
