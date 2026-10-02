@@ -223,7 +223,7 @@ export async function ConsoleShell({
         <MaintenanceBanner orgId={data.org.id} locale={data.ctx.locale} timeZone={data.org.timezone} />
         <OrgStatusBanner status={data.org.status} />
         <IncidentBanner variant="console" />
-        <header className="flex flex-wrap items-center gap-2.5">
+        <header className="relative z-30 flex flex-wrap items-center gap-2.5">
           <MobileNav openLabel={t('menu')} closeLabel={t('closeMenu')}>
             <nav
               aria-label={t('navigation')}

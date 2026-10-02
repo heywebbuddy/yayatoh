@@ -45,23 +45,11 @@ export function FieldMessage({ id, error, hint }: { id: string; error?: ReactNod
 const describedBy = (id: string, error?: ReactNode, hint?: ReactNode) =>
   error ? `${id}-error` : hint ? `${id}-hint` : undefined;
 
-function FieldLabel({
-  htmlFor,
-  children,
-  required,
-}: {
-  htmlFor: string;
-  children: ReactNode;
-  required?: boolean;
-}) {
+/** The field's label. `required` is announced by the control itself (no asterisk in the name). */
+function FieldLabel({ htmlFor, children }: { htmlFor: string; children: ReactNode; required?: boolean }) {
   return (
     <label htmlFor={htmlFor} className="text-[13px] font-bold text-ink">
       {children}
-      {required ? (
-        <span aria-hidden="true" className="ms-0.5 text-danger">
-          *
-        </span>
-      ) : null}
     </label>
   );
 }

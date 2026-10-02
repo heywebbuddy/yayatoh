@@ -335,7 +335,7 @@ export default async function GuestsPage({
         description={tp('subtitle')}
         actions={
           canWrite ? (
-            <a href="#add-party-heading" className={buttonClass('primary')}>
+            <a href="#new-party" className={buttonClass('primary')}>
               <Plus aria-hidden="true" strokeWidth={2.4} />
               {tp('addParty')}
             </a>
@@ -720,7 +720,11 @@ export default async function GuestsPage({
           ) : null}
         </section>
         {canWrite ? (
-          <section aria-labelledby="add-party-heading" className="xl:sticky xl:top-4">
+          <section
+            id="new-party"
+            aria-labelledby="add-party-heading"
+            className="scroll-mt-4 xl:sticky xl:top-4"
+          >
             <Card size="panel" className="flex scroll-mt-4 flex-col gap-3">
               <h2 id="add-party-heading" className="m-0 text-card">
                 {tp('addParty')}

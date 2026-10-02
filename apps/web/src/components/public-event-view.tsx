@@ -414,7 +414,7 @@ export async function PublicEventView({
         />
       ) : null}
       <div className="mx-auto flex max-w-[1240px] flex-col gap-6 px-3 pt-3 pb-12 sm:px-5 sm:pt-5">
-        <header className="flex flex-wrap items-center gap-x-4 gap-y-2 rounded-[22px] border border-line bg-surface p-2.5 ps-4 elevation-card glass">
+        <header className="relative z-20 flex flex-wrap items-center gap-x-4 gap-y-2 rounded-[22px] border border-line bg-surface p-2.5 ps-4 elevation-card glass">
           <span className="flex min-w-0 items-center gap-2.5 text-ink">
             <span
               aria-hidden="true"

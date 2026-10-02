@@ -152,6 +152,25 @@ export async function expectAccessible(page: Page) {
   ).toEqual([]);
 }
 
+/**
+ * axe in light AND dark mode (ADR 0022): checks the page as served, then switches <html> to the
+ * dark theme in place (exactly what the theme switch does) and checks again, then restores it.
+ */
+export async function expectAccessibleBothModes(page: Page) {
+  const html = page.locator('html');
+  const before = (await html.getAttribute('data-theme')) ?? 'light';
+  for (const mode of ['light', 'dark'] as const) {
+    await page.evaluate((m) => {
+      document.documentElement.dataset.theme = m;
+    }, mode);
+    await expect(html).toHaveAttribute('data-theme', mode);
+    await expectAccessible(page);
+  }
+  await page.evaluate((m) => {
+    document.documentElement.dataset.theme = m;
+  }, before);
+}
+
 /** axe on a standalone HTML document (e.g. an email), loaded into a fresh page of the context. */
 export async function expectHtmlAccessible(page: Page, html: string) {
   const doc = await page.context().newPage();

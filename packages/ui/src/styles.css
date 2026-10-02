@@ -314,6 +314,11 @@
   }
 }
 
+/* A themed subtree (the style guide, printed posters) takes its own text colour. */
+[data-theme] {
+  color: var(--color-ink);
+}
+
 /* `dark:` targets dark mode, whether chosen or followed from the system. */
 @custom-variant dark {
   &:where([data-theme="dark"], [data-theme="dark"] *) {

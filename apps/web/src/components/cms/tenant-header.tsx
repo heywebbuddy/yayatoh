@@ -28,7 +28,7 @@ export async function TenantHeader({ org, current }: { org: PublicOrganizer; cur
   ];
   return (
     <div className="mx-auto w-full max-w-6xl px-3 pt-3 sm:px-5 sm:pt-5">
-      <header className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 rounded-[22px] border border-line bg-surface p-2.5 ps-4 elevation-card glass">
+      <header className="relative z-20 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 rounded-[22px] border border-line bg-surface p-2.5 ps-4 elevation-card glass">
         <Link
           href="/"
           className="inline-flex min-h-10 items-center gap-2.5 rounded-control text-[17px] font-extrabold tracking-[-0.02em] text-ink"
