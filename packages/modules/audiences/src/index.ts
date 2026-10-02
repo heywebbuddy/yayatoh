@@ -29,3 +29,4 @@ export {
 } from './segments.ts';
 // M6.1a: contact merges move this module's references (ADR 0022).
 export { participationContactOwner } from './contact-merge.ts';
+export { PersonTimelineDto, personTimelineQuery } from './people.ts';

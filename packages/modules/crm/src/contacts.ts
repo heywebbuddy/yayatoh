@@ -111,13 +111,18 @@ export async function currentConsentTx(
   return (row?.status as ConsentInput['status'] | undefined) ?? null;
 }
 
-/** The org's contact for an email, if there is one (no merge-following yet). */
+/**
+ * The org's contact for an email, if there is one. An address of a merged-away record resolves to
+ * the record it was merged into (M6.1a).
+ */
 export async function contactIdByEmailTx(tx: TenantTx, email: string): Promise<string | null> {
   const [row] = await tx
-    .select({ id: contacts.id })
+    .select({ id: contacts.id, mergedInto: contacts.mergedInto })
     .from(contacts)
     .where(eq(contacts.emailNorm, normalizeEmail(email)));
-  return row?.id ?? null;
+  if (!row) return null;
+  if (row.mergedInto === null) return row.id;
+  return (await activeContactIdsTx(tx, [row.id])).get(row.id) ?? row.id;
 }
 
 /** Signed-in accounts linked to contacts (push notifications need a user). */

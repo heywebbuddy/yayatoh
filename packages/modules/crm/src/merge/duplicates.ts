@@ -53,7 +53,7 @@ export async function scanDuplicatesTx(
   let ids: string[] | null = null;
   if (!full) {
     const changed = await tx.execute<{ id: string }>(
-      sql`select id from crm.contacts where updated_at >= ${state?.cursorAt as Date} and ${LIVE}`,
+      sql`select id from crm.contacts where updated_at >= ${(state?.cursorAt as Date).toISOString()}::timestamptz and ${LIVE}`,
     );
     ids = changed.map((r) => r.id);
   }
