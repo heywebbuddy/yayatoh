@@ -38,7 +38,7 @@ import {
   ticketMailer,
   waitlistMailer,
 } from '@yayatoh/orders';
-import { disputeDeadlineNotifier, payoutDestinationMailer } from '@yayatoh/payments';
+import { payoutDestinationMailer } from '@yayatoh/payments';
 import { consumeEvent, recentEventsTx, type Subscriber, subscribes } from '@yayatoh/platform';
 import { decisionMailer, registrantLifecycle, registrationCapacity } from '@yayatoh/registration';
 import { surveyMailer } from '@yayatoh/surveys';
@@ -89,7 +89,8 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     walletPassSync({ provider: devWalletPasses }),
     creditNoteMailer({ notifier, appOrigin }),
     supportReplyMailer({ notifier, appOrigin }),
-    disputeDeadlineNotifier({ notifier }),
+    // Dispute evidence deadlines reach finance through the alert engine (batch 3e: the
+    // `disputeDeadline` rule), not a second notification.
     attendeeMessageMailer({ notifier, event: findEventTx }),
     announcementMailer({ notifier, appOrigin }),
     threadReplyMailer({ notifier, appOrigin }),

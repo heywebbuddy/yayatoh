@@ -241,7 +241,7 @@ orgs (`createOrgFixture` sends a campaign to the org's email subscribers), priva
 (`private-columns.ts`; content of `stored_contents` is the organizer's outbound copy → public;
 campaign names/drafts internal).
 
-**Migration:** `packages/db/drizzle/0076_flimsy_kinsey_walden.sql` (new schema and tables; additive).
+**Migration:** `packages/db/drizzle/0086_flimsy_kinsey_walden.sql` (0076 on the branch, renumbered at merge; new schema and tables; additive).
 Hand-written between the markers:
 1. `campaign_recipients_contact_fk` → `crm.contacts(org_id, id)` ON DELETE CASCADE.
 2. `campaign_links_link_fk` → `marketing.tracking_links(org_id, id)` ON DELETE CASCADE.

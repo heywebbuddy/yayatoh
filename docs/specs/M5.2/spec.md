@@ -22,7 +22,7 @@ claimed through functions M5.2b will call.
 - **Legacy evidence:** none (Eventmie Pro has no agenda).
 
 ### 3. Scope (built)
-**Model** (module `program`, tier 3, schema `program`; migration `0076_shallow_midnight.sql`, renumbered at merge):
+**Model** (module `program`, tier 3, schema `program`; migration `0091_shallow_midnight.sql`, 0076 on the branch, renumbered at merge):
 - `session_types`: per event, org-editable names (unique per event, case-insensitive), ordered. "Add the standard types" creates keynote, talk, workshop, panel and break **in the organizer's language** and skips names that exist. Deleting a type keeps its sessions.
 - `session_details`: one row per session, created by the trigger `program.sync_session_details` on insert (and kept in step on `capacity` updates; existing sessions backfilled). Columns: type, `admission` (`included` default | `optional`, P5-9), pick-one group, `enrollment_open`, the CSV `import_key` (unique per event) and the **capacity counter** (`capacity` mirrors `sessions.capacity`, `enrolled` with `CHECK (enrolled >= 0 and (capacity is null or enrolled <= capacity))`, ticketing's inventory pattern). A CHECK keeps grouped sessions optional.
 - `session_groups` ("pick one"): a group of optional sessions in overlapping slots of which a registrant may hold at most one.

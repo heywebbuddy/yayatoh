@@ -1,6 +1,6 @@
 {
-  "id": "3c43235e-4d62-42ac-a44c-0ce5c2d2ae9b",
-  "prevId": "2f7fb42a-2a10-4839-b6ce-f2616f9de1b2",
+  "id": "3f1f74c8-768c-47bc-9e75-6ffdf08ecb50",
+  "prevId": "3c43235e-4d62-42ac-a44c-0ce5c2d2ae9b",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -31959,8 +31959,8 @@
           "method": "btree",
           "with": {}
         },
-        "capacity_claims_org_order_key": {
-          "name": "capacity_claims_org_order_key",
+        "capacity_claims_org_order_type_key": {
+          "name": "capacity_claims_org_order_type_key",
           "columns": [
             {
               "expression": "org_id",
@@ -31970,6 +31970,12 @@
             },
             {
               "expression": "order_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "registration_type_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -32047,6 +32053,593 @@
         "capacity_claims_quantity_check": {
           "name": "capacity_claims_quantity_check",
           "value": "quantity_held >= 0 and quantity_sold >= 0"
+        }
+      },
+      "isRLSEnabled": true
+    },
+    "registration.reason_templates": {
+      "name": "reason_templates",
+      "schema": "registration",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "uuidv7()"
+        },
+        "org_id": {
+          "name": "org_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "event_id": {
+          "name": "event_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "decision": {
+          "name": "decision",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "label": {
+          "name": "label",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "body": {
+          "name": "body",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "reason_templates_org_id_idx": {
+          "name": "reason_templates_org_id_idx",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "reason_templates_org_event_idx": {
+          "name": "reason_templates_org_event_idx",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "event_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "decision",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "reason_templates_org_id_id_key": {
+          "name": "reason_templates_org_id_id_key",
+          "nullsNotDistinct": false,
+          "columns": [
+            "org_id",
+            "id"
+          ]
+        }
+      },
+      "policies": {
+        "reason_templates_tenant_isolation": {
+          "name": "reason_templates_tenant_isolation",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "app_user"
+          ],
+          "using": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)",
+          "withCheck": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)"
+        }
+      },
+      "checkConstraints": {
+        "reason_templates_decision_check": {
+          "name": "reason_templates_decision_check",
+          "value": "decision in ('approve', 'deny')"
+        },
+        "reason_templates_text_check": {
+          "name": "reason_templates_text_check",
+          "value": "length(btrim(label)) between 1 and 80 and length(btrim(body)) between 1 and 1000"
+        }
+      },
+      "isRLSEnabled": true
+    },
+    "registration.registrants": {
+      "name": "registrants",
+      "schema": "registration",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "uuidv7()"
+        },
+        "org_id": {
+          "name": "org_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "event_id": {
+          "name": "event_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "registration_type_id": {
+          "name": "registration_type_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "admission_item_id": {
+          "name": "admission_item_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "add_on_item_ids": {
+          "name": "add_on_item_ids",
+          "type": "uuid[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::uuid[]"
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "company": {
+          "name": "company",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "job_title": {
+          "name": "job_title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "message": {
+          "name": "message",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "locale": {
+          "name": "locale",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'en'"
+        },
+        "decision_source": {
+          "name": "decision_source",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "decision_reason": {
+          "name": "decision_reason",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "decided_at": {
+          "name": "decided_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "decided_by": {
+          "name": "decided_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "order_id": {
+          "name": "order_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ticket_id": {
+          "name": "ticket_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "host_registrant_id": {
+          "name": "host_registrant_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "substitutions": {
+          "name": "substitutions",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "confirmed_at": {
+          "name": "confirmed_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "registrants_org_id_idx": {
+          "name": "registrants_org_id_idx",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "registrants_org_event_status_idx": {
+          "name": "registrants_org_event_status_idx",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "event_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "status",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "registrants_org_order_idx": {
+          "name": "registrants_org_order_idx",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "order_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "registrants_org_type_idx": {
+          "name": "registrants_org_type_idx",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "registration_type_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "status",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "registrants_org_event_email_idx": {
+          "name": "registrants_org_event_email_idx",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "event_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "email",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "registrants_org_host_idx": {
+          "name": "registrants_org_host_idx",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "host_registrant_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "registrants_org_ticket_key": {
+          "name": "registrants_org_ticket_key",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "ticket_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "registrants_org_open_application_key": {
+          "name": "registrants_org_open_application_key",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "registration_type_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "email",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "where": "status in ('pending', 'approved')",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "registrants_type_fk": {
+          "name": "registrants_type_fk",
+          "tableFrom": "registrants",
+          "tableTo": "registration_types",
+          "schemaTo": "registration",
+          "columnsFrom": [
+            "org_id",
+            "registration_type_id"
+          ],
+          "columnsTo": [
+            "org_id",
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "registrants_item_fk": {
+          "name": "registrants_item_fk",
+          "tableFrom": "registrants",
+          "tableTo": "admission_items",
+          "schemaTo": "registration",
+          "columnsFrom": [
+            "org_id",
+            "admission_item_id"
+          ],
+          "columnsTo": [
+            "org_id",
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "registrants_host_fk": {
+          "name": "registrants_host_fk",
+          "tableFrom": "registrants",
+          "tableTo": "registrants",
+          "schemaTo": "registration",
+          "columnsFrom": [
+            "org_id",
+            "host_registrant_id"
+          ],
+          "columnsTo": [
+            "org_id",
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "registrants_org_id_id_key": {
+          "name": "registrants_org_id_id_key",
+          "nullsNotDistinct": false,
+          "columns": [
+            "org_id",
+            "id"
+          ]
+        }
+      },
+      "policies": {
+        "registrants_tenant_isolation": {
+          "name": "registrants_tenant_isolation",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "app_user"
+          ],
+          "using": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)",
+          "withCheck": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)"
+        }
+      },
+      "checkConstraints": {
+        "registrants_status_check": {
+          "name": "registrants_status_check",
+          "value": "status in ('pending', 'approved', 'reserved', 'confirmed', 'denied', 'cancelled')"
+        },
+        "registrants_decision_source_check": {
+          "name": "registrants_decision_source_check",
+          "value": "decision_source is null or decision_source in ('open', 'auto_domain', 'auto_member', 'manual')"
+        },
+        "registrants_name_check": {
+          "name": "registrants_name_check",
+          "value": "length(btrim(name)) between 1 and 120"
+        },
+        "registrants_email_check": {
+          "name": "registrants_email_check",
+          "value": "email = lower(email) and length(email) between 3 and 254"
+        },
+        "registrants_answers_check": {
+          "name": "registrants_answers_check",
+          "value": "coalesce(length(company), 0) <= 120 and coalesce(length(job_title), 0) <= 120 and coalesce(length(message), 0) <= 2000 and coalesce(length(decision_reason), 0) <= 1000"
+        },
+        "registrants_confirmed_check": {
+          "name": "registrants_confirmed_check",
+          "value": "status <> 'confirmed' or order_id is not null"
         }
       },
       "isRLSEnabled": true
@@ -32158,6 +32751,41 @@
           "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": false
+        },
+        "approval": {
+          "name": "approval",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'none'"
+        },
+        "auto_approve_domains": {
+          "name": "auto_approve_domains",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::text[]"
+        },
+        "kind": {
+          "name": "kind",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'standard'"
+        },
+        "guests_per_host": {
+          "name": "guests_per_host",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 1
+        },
+        "substitution_cutoff_hours": {
+          "name": "substitution_cutoff_hours",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 24
         }
       },
       "indexes": {
@@ -32279,6 +32907,14 @@
         "registration_types_domains_check": {
           "name": "registration_types_domains_check",
           "value": "(eligibility = 'email_domain') = (cardinality(email_domains) > 0) and cardinality(email_domains) <= 20"
+        },
+        "registration_types_approval_check": {
+          "name": "registration_types_approval_check",
+          "value": "approval in ('none', 'manual') and cardinality(auto_approve_domains) <= 20 and (approval = 'manual' or cardinality(auto_approve_domains) = 0)"
+        },
+        "registration_types_guest_check": {
+          "name": "registration_types_guest_check",
+          "value": "kind in ('standard', 'guest') and guests_per_host between 1 and 10 and substitution_cutoff_hours between 0 and 720"
         }
       },
       "isRLSEnabled": true
@@ -32490,6 +33126,181 @@
         }
       },
       "checkConstraints": {},
+      "isRLSEnabled": true
+    },
+    "registration.type_members": {
+      "name": "type_members",
+      "schema": "registration",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "uuidv7()"
+        },
+        "org_id": {
+          "name": "org_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "event_id": {
+          "name": "event_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "registration_type_id": {
+          "name": "registration_type_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "source": {
+          "name": "source",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'csv'"
+        }
+      },
+      "indexes": {
+        "type_members_org_id_idx": {
+          "name": "type_members_org_id_idx",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "type_members_org_type_email_key": {
+          "name": "type_members_org_type_email_key",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "registration_type_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "email",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "type_members_org_event_idx": {
+          "name": "type_members_org_event_idx",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "event_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "type_members_type_fk": {
+          "name": "type_members_type_fk",
+          "tableFrom": "type_members",
+          "tableTo": "registration_types",
+          "schemaTo": "registration",
+          "columnsFrom": [
+            "org_id",
+            "registration_type_id"
+          ],
+          "columnsTo": [
+            "org_id",
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "type_members_org_id_id_key": {
+          "name": "type_members_org_id_id_key",
+          "nullsNotDistinct": false,
+          "columns": [
+            "org_id",
+            "id"
+          ]
+        }
+      },
+      "policies": {
+        "type_members_tenant_isolation": {
+          "name": "type_members_tenant_isolation",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "app_user"
+          ],
+          "using": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)",
+          "withCheck": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)"
+        }
+      },
+      "checkConstraints": {
+        "type_members_source_check": {
+          "name": "type_members_source_check",
+          "value": "source in ('csv', 'audience')"
+        },
+        "type_members_email_check": {
+          "name": "type_members_email_check",
+          "value": "email = lower(email) and length(email) between 3 and 254"
+        }
+      },
       "isRLSEnabled": true
     },
     "reports.analytics_events": {
