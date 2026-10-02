@@ -701,6 +701,13 @@
       "when": 1790960316071,
       "tag": "0099_yummy_young_avengers",
       "breakpoints": true
+    },
+    {
+      "idx": 100,
+      "version": "7",
+      "when": 1790966898143,
+      "tag": "0100_lush_vertigo",
+      "breakpoints": true
     }
   ]
 }
