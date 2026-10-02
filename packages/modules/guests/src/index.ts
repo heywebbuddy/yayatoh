@@ -128,6 +128,7 @@ export {
   resetRsvpLinkCommand,
   resetRsvpPinCommand,
   rsvpLinkRef,
+  rsvpLinksQuery,
   rsvpLinkToken,
   rsvpLookupTarget,
   rsvpOverviewQuery,

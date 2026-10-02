@@ -462,6 +462,26 @@ export const partyRsvpQuery = tenantQuery({
   },
 });
 
+/**
+ * The link tokens of some parties (those that have one), for the host's "copy link" menu.
+ * Credentials, so `guests:write`.
+ */
+export const rsvpLinksQuery = tenantQuery({
+  name: 'guests.rsvpLinks',
+  input: z.object({ eventId: z.uuid(), partyIds: z.array(z.uuid()).max(1000) }),
+  output: z.array(z.object({ partyId: z.uuid(), token: z.string() })),
+  entitlement: 'guests',
+  permission: 'guests:write',
+  handler: async ({ input, tx }) => {
+    if (input.partyIds.length === 0) return [];
+    const rows = await tx
+      .select({ partyId: partyRsvp.partyId, linkId: partyRsvp.linkId })
+      .from(partyRsvp)
+      .where(and(eq(partyRsvp.eventId, input.eventId), inArray(partyRsvp.partyId, input.partyIds)));
+    return rows.map((r) => ({ partyId: r.partyId, token: rsvpLinkToken(r.linkId) }));
+  },
+});
+
 /* --------------------------------------------------------------------------------- public ---- */
 
 const NO_PARTY = '00000000-0000-0000-0000-000000000000';
