@@ -12,6 +12,15 @@ Owner decision 2026-10-02 (`docs/decisions.md`); brief `docs/agent-briefs/design
 - **Gate:** `check-modules design-tokens` now covers `apps/admin` and rejects `rgb()`/`hsl()` literals and default-palette classes (canary `raw-colour`).
 - **Style guide:** `/dev/design` (development only).
 
+## Batches 3f and 3g on v2 (second pass)
+- **Portals (speaker, exhibitor):** `PortalFrame` (glass top bar: event mark and name, the sections as dark-tag links with `aria-current`, theme switch, sign out) and `PortalAuthFrame` for the signed-out pages (invitation, sign-in, magic link) in the sign-in frame. StatusPill for tasks and staff, Avatar person rows, SectionHeader.
+- **Command Center live mode:** the TV mode button beside "Open scanner" in the PageHeader actions; live widgets with v2 fields, in-widget table rhythm (uppercase label headers, row hover), ProgressBar capacity gauges by level, person rows for staff on duty, guest-assistance mini stats. TV board: always dark (`data-theme="dark"` subtree, room-sized type, glass tiles); TV links page with breadcrumb, status pills.
+- **Assistance queue:** StatCard summary (open, urgent, waiting, unassigned), segmented tabs, priority and state as StatusPill.
+- **Marketing analytics:** StatCard figure tiles (delivery and conversion bars), segmented view tabs, numbers tabular (not mono), breadcrumbs on the drill-downs.
+- **Event sub-pages** (speaker changes and tasks, exhibitor portal admin, booths, badges, badge designer): breadcrumbs instead of back links; viewer notices as info alerts.
+- **Print and paper:** `print` tokens (paper, ink, ribbon colours) for badges, always white stock; the badge designer preview and booth floor plans render in a light subtree in both modes.
+- **Org home events list:** 24 cards a page (on now and next first, then past), a count line, Previous/Next that keep the filters, and a name search (`searchEventsQuery.q`). Fixes the axe time-out on orgs with hundreds of events.
+
 ## Later / not yet
 - The artboard's event-level tab row (org menu in the sidebar, event sections as tabs): not adopted, pending owner (owner inbox).
 - CJK self-hosting (per-locale font CSS).
@@ -34,3 +43,5 @@ Owner decision 2026-10-02 (`docs/decisions.md`); brief `docs/agent-briefs/design
 | axe in light and dark on the shells and the three reference screens, no horizontal scroll | `apps/web/e2e/theme.spec.ts` (`expectAccessibleBothModes`) |
 | Arabic RTL render of the new shell | `apps/web/e2e/theme.spec.ts` |
 | Existing journeys keep working | whole web suite (3 projects) and admin suite |
+| 3f/3g screens on v2 (portals, live Command Center, TV, assistance, analytics, badges, booths) | `live-mode`, `assistance`, `speaker-portal`, `exhibitor-portal`, `badges`, `marketing-analytics` specs |
+| Org home pages 24 events, upcoming first, keeps filters, searches by name; RTL; axe | `apps/web/e2e/org-home.spec.ts`, `a11y.spec.ts`; `packages/testing/tests/venues.int.test.ts` (q) |
