@@ -420,15 +420,27 @@ describe('permissions and isolation', () => {
   });
 
   it('another org sees none of it (queries, tiles, RLS)', async () => {
-    // B's own fixture link shows; nothing of A's campaign, link, sends or orders does.
+    // B's own fixture link shows; nothing of A's campaign, link, sends or orders does. Since batch
+    // 3e, B's fixture sends its own M3.6b campaign (one email to the opted-in buyer): those sends
+    // are B's, counted as the report counts them (sent in the last 30 days).
     const other = await report({ dimension: 'link' }, b.ctx());
     expect(other.rows.map((r) => r.link?.id)).not.toContain(s.campaignLinkId);
-    expect(other.totals).toMatchObject({ sends: null, lastTouch: { orders: 1 } });
+    const [own] = await withTenant(createCtx({ orgId: b.org.id }), (tx) =>
+      tx.execute<{ n: number }>(
+        sql`select count(*)::int as n from notifications.messages where dedupe_key like 'campaign:%'
+          and status = 'sent' and sent_at >= now() - interval '30 days' and sent_at <= now()`,
+      ),
+    );
+    expect(other.totals).toMatchObject({ sends: own?.n ? own.n : null, lastTouch: { orders: 1 } });
+    expect(other.totals.sends ?? 0).toBeLessThan(F.orgSent);
     expect((await report({}, b.ctx())).rows.map((r) => r.key)).not.toContain(`c.${s.campaignId}`);
     await expect(
       executeQuery(campaignDetailQuery, { key: `c.${s.campaignId}` }, b.ctx(), ports),
     ).rejects.toMatchObject({ code: 'not_found' });
-    expect((await executeQuery(deliverabilityReportQuery, {}, b.ctx(), ports)).campaigns).toEqual([]);
+    // B's deliverability lists B's own fixture campaign (batch 3e), never A's.
+    expect(
+      (await executeQuery(deliverabilityReportQuery, {}, b.ctx(), ports)).campaigns.map((c) => c.campaignId),
+    ).not.toContain(s.campaignId);
     await expect(
       executeQuery(campaignsWidget(null).loader, { eventId: s.eventId }, b.ctx(), ports),
     ).rejects.toMatchObject({ code: 'not_found' });
