@@ -30,7 +30,13 @@ import {
   runBadgeBatch,
   startBatchCommand,
 } from '@yayatoh/badges';
-import { setEntitlementOverrideCommand, setFeeOverrideCommand } from '@yayatoh/billing';
+import {
+  applyBillingEventCommand,
+  linkBillingCustomerCommand,
+  setEntitlementOverrideCommand,
+  setFeeOverrideCommand,
+  setLegacyFeesCommand,
+} from '@yayatoh/billing';
 import {
   createCampaignCommand,
   runOrgCampaigns,
@@ -177,6 +183,7 @@ import {
   catchUpSubscriber,
   consumeEvent,
   defineSubscriber,
+  MODULE_KEYS,
   publishRealtimeTx,
   recentEventsTx,
 } from '@yayatoh/platform';
@@ -2140,6 +2147,56 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   await withTenant(systemCtx(org.id), (tx) =>
     tx.execute(sql`insert into alerts.signals (org_id, kind, source_event_id, occurred_at)
       values (${org.id}, 'journey_step_failed', ${uuidv7()}, now() - interval '2 days')`),
+  );
+  // M6.6a billing (isolation coverage of org_billing, subscriptions, org_entitlements and
+  // provider_events): legacy fees grandfathered, a fake billing customer, and a Pro subscription
+  // whose synced entitlements are every module key (so the org's modules match launch_standard
+  // even in a test that switches billing on).
+  await executeCommand(
+    setLegacyFeesCommand,
+    { grandfathered: true, note: 'fixture' },
+    systemCtx(org.id),
+    ports,
+  );
+  const billingCustomer = `fakecus_fixture_${org.id.slice(-12)}`;
+  await executeCommand(
+    linkBillingCustomerCommand,
+    { provider: 'fake', customerId: billingCustomer },
+    systemCtx(org.id),
+    ports,
+  );
+  const billedAt = new Date(Date.now() - 60_000);
+  await executeCommand(
+    applyBillingEventCommand,
+    {
+      kind: 'subscription',
+      provider: 'fake',
+      id: `fakeevt_fixture_sub_${org.id}`,
+      type: 'customer.subscription.created',
+      createdAt: billedAt,
+      customerId: billingCustomer,
+      subscriptionId: `fakesub_fixture_${org.id.slice(-12)}`,
+      status: 'active',
+      priceLookupKey: 'tier_pro_month_usd',
+      currentPeriodEnd: new Date(billedAt.getTime() + 30 * 86_400_000),
+      cancelAtPeriodEnd: false,
+    },
+    systemCtx(org.id),
+    ports,
+  );
+  await executeCommand(
+    applyBillingEventCommand,
+    {
+      kind: 'entitlements',
+      provider: 'fake',
+      id: `fakeevt_fixture_ent_${org.id}`,
+      type: 'entitlements.active_entitlement_summary.updated',
+      createdAt: billedAt,
+      customerId: billingCustomer,
+      features: [...MODULE_KEYS],
+    },
+    systemCtx(org.id),
+    ports,
   );
   return {
     org,
