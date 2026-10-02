@@ -268,6 +268,37 @@ Start the slow reviews early. Everything is built against fakes meanwhile; each 
   - **Email and phone** columns are imported sealed with the dietary, accessibility and address answers (shown on the Guests page to the same roles). They create no CRM contacts, consents or audience members (P4-3); M4.1f will use them for invitations.
   - **XLSX parser:** a small cell-values-only reader in `@yayatoh/csv` on top of **fflate 0.8.3** (MIT, maintained, no known advisories); no formulas are evaluated (the cached value is read), macros and other parts are never opened. Old binary `.xls` files are refused with a "save as .xlsx or CSV" message.
   - **Google Sheet links (P4-7):** only `https://docs.google.com/spreadsheets/d/<id>` links, read once as CSV through the SSRF guard (10 s, 5 MB), redirects only to Google's content hosts; the link is not stored. A sheet that isn't shared as "anyone with the link" gets a clear message.
+## Enterprise readiness (M5.11, P5-6)
+Claude Code built the evidence automation (M5.11a): `compliance/controls.yaml`, the policy drafts in
+`compliance/policies/`, the weekly **Evidence** workflow and its bundle, and the VPAT draft. These
+steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
+- [ ] **Vanta** (D26): sign the contract at or after launch (roadmap estimate ~$800–2,000/month,
+  UNVERIFIED), connect GitHub and the hosting accounts, and upload the weekly evidence bundle
+  (download the `evidence-<run>` artifact from Actions → Evidence; verify `sha256sum -c SHA256SUMS`).
+  Nothing in the repo calls Vanta.
+- [ ] **Auditor** for SOC 2 Type I, 6–9 months after launch (D26). Share `compliance/controls.yaml`;
+  the auditor and Vanta may re-map criteria. Tell Claude Code what they change so the file follows.
+- [ ] **Pen test** ($5–15k, roadmap §3.6) **after Phase 5 Waves 1–3 merge**, so the portals, lead
+  retrieval and chat are in scope. Findings come back as issues for Claude Code to fix.
+- [ ] **VPAT sign-off**: each weekly bundle has `vpat/vpat.md`, a draft generated from the e2e axe,
+  keyboard and Arabic RTL suites. Criteria marked "Not Evaluated" need a person (NVDA and
+  VoiceOver passes, 200% zoom, 320 px reflow); "Not Applicable" rows need your confirmation.
+  Sign only after those reviews.
+- [ ] **Data Privacy Framework** self-certification (EU-U.S., UK extension, Swiss-U.S.) with the
+  Department of Commerce, once counsel has reviewed the privacy notice.
+- [ ] **Approve the seven policy drafts** in `compliance/policies/` (information security, access
+  control, change management, incident response, vendor management, data retention per D11,
+  business continuity): edit, then sign each approval row. Confirm the vendor inventory.
+- [ ] **Quarterly access review** of GitHub, Doppler, Vercel, Neon, Fly, AWS, Cloudflare, Stripe and
+  the staff list, and the admin-only GitHub exports (collaborators, branch protection) the
+  read-only workflow can't read. Runbook steps 2–3.
+- [ ] **Branch protection on `main`**: the change-management export flags merged PRs without an
+  independent approval. If build sessions open PRs under your account, add a second reviewer (the
+  contracted backup) or accept and document the exception in `docs/decisions.md`.
+- [ ] **Evidence workflow defaults, pending owner** (M5.11a, label: `infra`): runs Mondays 06:17 UTC and
+  on demand; 90-day audit window; artifacts kept 90 days. Optionally add a fine-grained token with
+  admin *read* on the repository as a secret so the workflow can export collaborators and branch
+  protection itself (today it records them as unavailable and runbook step 2 covers them).
 
 ## Security, privacy and ops readiness (M1.14)
 - [ ] **Confirm the rate limits** (pending owner; `packages/platform/src/security/rate-limit.ts`): sign-in 10 per device / 20 per email / 300 per IP per 10–15 min; emailed codes 5 per device and per email; checkout starts 20 per device, 600 per IP per 10 min; holder links 10 per device; forged webhooks 30 per IP. Shared IPs (venues) only meet the generous per-IP ceilings.
