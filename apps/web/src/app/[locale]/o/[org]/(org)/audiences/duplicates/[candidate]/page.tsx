@@ -85,6 +85,7 @@ export default async function ComparePage({
           <Card key={r.id} className="flex flex-col gap-3">
             <h2 className="text-section">
               {label(i + 1)}
+              {r.id === pair.defaultTargetId ? ' ' : null}
               {r.id === pair.defaultTargetId ? (
                 <span className="ms-2 text-caption text-zinc-600">{t('compare.older')}</span>
               ) : null}
