@@ -132,7 +132,7 @@ export default async function CollectorPage({
               fields={[]}
               idPrefix="collector-toggle"
               submitLabel={settings.enabled ? t('turnOff') : t('turnOn')}
-              successLabel={settings.enabled ? t('turnedOff') : t('turnedOn')}
+              successLabel={settings.enabled ? t('turnedOn') : t('turnedOff')}
               errors={{}}
             />
           ) : null}

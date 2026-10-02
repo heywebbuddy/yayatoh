@@ -8823,10 +8823,7 @@
     "daysLabel": "截止前的天數",
     "daysHint": "例如 14, 3",
     "remindersSave": "保存提醒",
-    "remindersEnable": "開啟提醒",
     "remindersSaved": "提醒已保存。",
-    "remindersDisable": "關閉提醒",
-    "remindersDisabled": "提醒已關閉。",
     "partiesTitle": "{count, plural, other {組（#）}}",
     "states": {
       "invited": "未傳送",
@@ -8881,6 +8878,11 @@
       "cancelled": "已停止",
       "responded": "已停止：已回覆"
     },
-    "allInvitations": "所有邀請"
+    "allInvitations": "所有邀請",
+    "remindersSwitch": "提醒",
+    "remindersSwitchOn": "開啟",
+    "remindersSwitchOff": "關閉",
+    "sentResult": "{count, plural, =0 {未傳送任何邀請：沒有組在這些方式上有地址。} other {已向 # 個組傳送邀請。}}",
+    "skippedResult": "{count, plural, other {# 個組在這些方式上沒有地址，已跳過。}}"
   }
 }

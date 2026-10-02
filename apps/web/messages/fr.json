@@ -8823,10 +8823,7 @@
     "daysLabel": "Jours avant la date limite",
     "daysHint": "Par exemple 14, 3",
     "remindersSave": "Enregistrer les rappels",
-    "remindersEnable": "Activer les rappels",
     "remindersSaved": "Rappels enregistrés.",
-    "remindersDisable": "Désactiver les rappels",
-    "remindersDisabled": "Les rappels sont désactivés.",
     "partiesTitle": "{count, plural, one {Groupe (#)} many {Groupes (#)} other {Groupes (#)}}",
     "states": {
       "invited": "Non envoyée",
@@ -8881,6 +8878,11 @@
       "cancelled": "Arrêté",
       "responded": "Arrêté : a répondu"
     },
-    "allInvitations": "Toutes les invitations"
+    "allInvitations": "Toutes les invitations",
+    "remindersSwitch": "Rappels",
+    "remindersSwitchOn": "Activés",
+    "remindersSwitchOff": "Désactivés",
+    "sentResult": "{count, plural, =0 {Aucune invitation envoyée : aucun groupe n'avait d'adresse sur ces canaux.} one {Invitation envoyée à # groupe.} many {Invitations envoyées à # groupes.} other {Invitations envoyées à # groupes.}}",
+    "skippedResult": "{count, plural, one {# groupe n'a pas d'adresse sur ces canaux et a été ignoré.} many {# groupes n'ont pas d'adresse sur ces canaux et ont été ignorés.} other {# groupes n'ont pas d'adresse sur ces canaux et ont été ignorés.}}"
   }
 }

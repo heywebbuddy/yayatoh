@@ -13,7 +13,7 @@ import {
 } from '@yayatoh/guests';
 import { executeQuery } from '@yayatoh/kernel';
 import { isProfileKey, navIncludes, PROFILES } from '@yayatoh/platform';
-import { Button, Card, EmptyState, PageHeader } from '@yayatoh/ui';
+import { Alert, Button, Card, EmptyState, PageHeader } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { ProgramForm } from '@/components/program-form.tsx';
@@ -44,10 +44,12 @@ export default async function InvitationsPage({
   searchParams,
 }: {
   params: Promise<{ locale: string; org: string; event: string }>;
-  searchParams: Promise<{ lang?: string }>;
+  searchParams: Promise<{ lang?: string; sent?: string; skipped?: string }>;
 }) {
   const { locale, org, event } = await params;
-  const { lang } = await searchParams;
+  const { lang, sent: sentRaw, skipped: skippedRaw } = await searchParams;
+  const sentCount = sentRaw && /^\d{1,4}$/.test(sentRaw) ? Number(sentRaw) : null;
+  const skippedCount = skippedRaw && /^\d{1,4}$/.test(skippedRaw) ? Number(skippedRaw) : 0;
   setRequestLocale(locale);
   const { data, event: ev, can } = await loadEvent(org, event, 'guests');
   const profile = isProfileKey(ev.profile) ? ev.profile : 'other';
@@ -117,6 +119,13 @@ export default async function InvitationsPage({
           />
         ) : (
           <Card size="panel" className="flex flex-col gap-3">
+            {sentCount !== null ? (
+              <div data-testid="invite-sent-result">
+                <Alert tone="info" title={t('sentResult', { count: sentCount })}>
+                  {skippedCount > 0 ? t('skippedResult', { count: skippedCount }) : null}
+                </Alert>
+              </div>
+            ) : null}
             <p className="text-body" data-testid="invite-not-sent">
               {t('notSent', { count: notSent.length })}
             </p>
@@ -313,9 +322,18 @@ export default async function InvitationsPage({
           )}
           {canWrite && reminders.hasDeadline ? (
             <ProgramForm
-              key={`rem-${reminders.enabled}-${reminders.days.join('-')}-${reminders.channels.join('-')}`}
-              action={setRemindersAction.bind(null, org, event, true)}
+              action={setRemindersAction.bind(null, org, event)}
               fields={[
+                {
+                  kind: 'select',
+                  name: 'enabled',
+                  label: t('remindersSwitch'),
+                  options: [
+                    { value: '1', label: t('remindersSwitchOn') },
+                    { value: '0', label: t('remindersSwitchOff') },
+                  ],
+                  defaultValue: reminders.enabled ? '1' : '0',
+                },
                 {
                   kind: 'text',
                   name: 'days',
@@ -333,23 +351,13 @@ export default async function InvitationsPage({
                 },
               ]}
               idPrefix="reminders"
-              submitLabel={reminders.enabled ? t('remindersSave') : t('remindersEnable')}
+              submitLabel={t('remindersSave')}
               successLabel={t('remindersSaved')}
               errors={{
                 days: t('errors.days'),
                 channels: t('errors.channels'),
                 no_deadline: t('noDeadline'),
               }}
-            />
-          ) : null}
-          {canWrite && reminders.enabled ? (
-            <ProgramForm
-              action={setRemindersAction.bind(null, org, event, false)}
-              fields={[]}
-              idPrefix="reminders-off"
-              submitLabel={t('remindersDisable')}
-              successLabel={t('remindersDisabled')}
-              errors={{}}
             />
           ) : null}
         </Card>

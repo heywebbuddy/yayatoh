@@ -14,7 +14,9 @@ import {
 } from '@yayatoh/guests';
 import { DomainError, executeCommand } from '@yayatoh/kernel';
 import { revalidatePath } from 'next/cache';
+import { getLocale } from 'next-intl/server';
 import type { ProgramFormState } from '@/components/program-form.tsx';
+import { redirect } from '@/i18n/navigation.ts';
 import { loadEvent } from '@/server/console.ts';
 import { failure, success } from '@/server/form.ts';
 import { ports } from '@/server/ports.ts';
@@ -52,7 +54,10 @@ const localeOf = (raw: string): InviteLocale => {
   return raw as InviteLocale;
 };
 
-/** Every party not sent yet (or one party, again). */
+/**
+ * Every party not sent yet (the page then says how many went and how many had no address), or
+ * one party, again.
+ */
 export async function sendInvitationsAction(
   org: string,
   event: string,
@@ -60,20 +65,31 @@ export async function sendInvitationsAction(
   _p: State,
   form: FormData,
 ) {
-  return run(org, event, (eventId, ctx) => {
+  const { data, event: ev } = await loadEvent(org, event, 'guests');
+  let result: { sent: number; noAddress: number };
+  try {
     const channels = channelsOf(form);
     if (channels.length === 0)
       throw new DomainError('validation_failed', 'Choose a channel', {
         field: 'channels',
         reason: 'required',
       });
-    return executeCommand(
+    result = await executeCommand(
       sendInvitationsCommand,
-      { eventId, channels, ...(partyId ? { partyIds: [partyId], resend: true } : {}) },
-      ctx,
+      { eventId: ev.id, channels, ...(partyId ? { partyIds: [partyId], resend: true } : {}) },
+      data.ctx,
       ports,
     );
+  } catch (err) {
+    return failure(err);
+  }
+  revalidatePath(`/o/${org}/e/${event}/guests`, 'layout');
+  if (partyId) return success();
+  redirect({
+    href: `/o/${org}/e/${event}/guests/invitations?sent=${result.sent}&skipped=${result.noAddress}`,
+    locale: await getLocale(),
   });
+  return success();
 }
 
 export async function saveTemplateAction(
@@ -118,13 +134,8 @@ export async function testSendAction(org: string, event: string, locale: string,
 }
 
 /** Days are typed as a list ("14, 3"); each 1–90. */
-export async function setRemindersAction(
-  org: string,
-  event: string,
-  enabled: boolean,
-  _p: State,
-  form: FormData,
-) {
+export async function setRemindersAction(org: string, event: string, _p: State, form: FormData) {
+  const enabled = form.get('enabled') === '1';
   return run(org, event, (eventId, ctx) => {
     if (!enabled) return executeCommand(setRsvpRemindersCommand, { eventId, enabled: false }, ctx, ports);
     const raw = String(form.get('days') ?? '').trim();

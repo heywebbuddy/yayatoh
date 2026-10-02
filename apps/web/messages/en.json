@@ -8823,10 +8823,7 @@
     "daysLabel": "Days before the deadline",
     "daysHint": "For example 14, 3",
     "remindersSave": "Save reminders",
-    "remindersEnable": "Turn on reminders",
     "remindersSaved": "Reminders saved.",
-    "remindersDisable": "Turn off reminders",
-    "remindersDisabled": "Reminders are off.",
     "partiesTitle": "{count, plural, one {Party (#)} other {Parties (#)}}",
     "states": {
       "invited": "Not sent",
@@ -8881,6 +8878,11 @@
       "cancelled": "Stopped",
       "responded": "Stopped: answered"
     },
-    "allInvitations": "All invitations"
+    "allInvitations": "All invitations",
+    "remindersSwitch": "Reminders",
+    "remindersSwitchOn": "On",
+    "remindersSwitchOff": "Off",
+    "sentResult": "{count, plural, =0 {No invitation was sent: no party had an address on these channels.} one {Invitation sent to # party.} other {Invitations sent to # parties.}}",
+    "skippedResult": "{count, plural, one {# party has no address on these channels and was skipped.} other {# parties have no address on these channels and were skipped.}}"
   }
 }

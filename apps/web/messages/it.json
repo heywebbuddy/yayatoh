@@ -8823,10 +8823,7 @@
     "daysLabel": "Giorni prima della scadenza",
     "daysHint": "Per esempio 14, 3",
     "remindersSave": "Salva i promemoria",
-    "remindersEnable": "Attiva i promemoria",
     "remindersSaved": "Promemoria salvati.",
-    "remindersDisable": "Disattiva i promemoria",
-    "remindersDisabled": "I promemoria sono disattivati.",
     "partiesTitle": "{count, plural, one {Gruppo (#)} other {Gruppi (#)}}",
     "states": {
       "invited": "Non inviato",
@@ -8881,6 +8878,11 @@
       "cancelled": "Fermato",
       "responded": "Fermato: ha risposto"
     },
-    "allInvitations": "Tutti gli inviti"
+    "allInvitations": "Tutti gli inviti",
+    "remindersSwitch": "Promemoria",
+    "remindersSwitchOn": "Attivi",
+    "remindersSwitchOff": "Disattivati",
+    "sentResult": "{count, plural, =0 {Nessun invito inviato: nessun gruppo aveva un indirizzo su questi canali.} one {Invito inviato a # gruppo.} other {Inviti inviati a # gruppi.}}",
+    "skippedResult": "{count, plural, one {# gruppo non ha un indirizzo su questi canali ed è stato saltato.} other {# gruppi non hanno un indirizzo su questi canali e sono stati saltati.}}"
   }
 }

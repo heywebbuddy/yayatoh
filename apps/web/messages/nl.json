@@ -8823,10 +8823,7 @@
     "daysLabel": "Dagen voor de deadline",
     "daysHint": "Bijvoorbeeld 14, 3",
     "remindersSave": "Herinneringen opslaan",
-    "remindersEnable": "Herinneringen aanzetten",
     "remindersSaved": "Herinneringen opgeslagen.",
-    "remindersDisable": "Herinneringen uitzetten",
-    "remindersDisabled": "Herinneringen staan uit.",
     "partiesTitle": "{count, plural, one {Groep (#)} other {Groepen (#)}}",
     "states": {
       "invited": "Niet verstuurd",
@@ -8881,6 +8878,11 @@
       "cancelled": "Gestopt",
       "responded": "Gestopt: gereageerd"
     },
-    "allInvitations": "Alle uitnodigingen"
+    "allInvitations": "Alle uitnodigingen",
+    "remindersSwitch": "Herinneringen",
+    "remindersSwitchOn": "Aan",
+    "remindersSwitchOff": "Uit",
+    "sentResult": "{count, plural, =0 {Geen uitnodiging verstuurd: geen groep had een adres op deze kanalen.} one {Uitnodiging verstuurd naar # groep.} other {Uitnodigingen verstuurd naar # groepen.}}",
+    "skippedResult": "{count, plural, one {# groep heeft geen adres op deze kanalen en is overgeslagen.} other {# groepen hebben geen adres op deze kanalen en zijn overgeslagen.}}"
   }
 }

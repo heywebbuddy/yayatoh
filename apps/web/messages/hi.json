@@ -8823,10 +8823,7 @@
     "daysLabel": "समय-सीमा से पहले के दिन",
     "daysHint": "जैसे 14, 3",
     "remindersSave": "अनुस्मारक सहेजें",
-    "remindersEnable": "अनुस्मारक चालू करें",
     "remindersSaved": "अनुस्मारक सहेजे गए।",
-    "remindersDisable": "अनुस्मारक बंद करें",
-    "remindersDisabled": "अनुस्मारक बंद हैं।",
     "partiesTitle": "{count, plural, one {समूह (#)} other {समूह (#)}}",
     "states": {
       "invited": "नहीं भेजा गया",
@@ -8881,6 +8878,11 @@
       "cancelled": "रोका गया",
       "responded": "रोका गया: जवाब मिला"
     },
-    "allInvitations": "सभी निमंत्रण"
+    "allInvitations": "सभी निमंत्रण",
+    "remindersSwitch": "अनुस्मारक",
+    "remindersSwitchOn": "चालू",
+    "remindersSwitchOff": "बंद",
+    "sentResult": "{count, plural, =0 {कोई निमंत्रण नहीं भेजा गया: इन चैनलों पर किसी समूह का पता नहीं था।} one {# समूह को निमंत्रण भेजा गया।} other {# समूहों को निमंत्रण भेजे गए।}}",
+    "skippedResult": "{count, plural, one {# समूह का इन चैनलों पर पता नहीं है, उसे छोड़ दिया गया।} other {# समूहों का इन चैनलों पर पता नहीं है, उन्हें छोड़ दिया गया।}}"
   }
 }

@@ -8823,10 +8823,7 @@
     "daysLabel": "Tage vor der Frist",
     "daysHint": "Zum Beispiel 14, 3",
     "remindersSave": "Erinnerungen speichern",
-    "remindersEnable": "Erinnerungen einschalten",
     "remindersSaved": "Erinnerungen gespeichert.",
-    "remindersDisable": "Erinnerungen ausschalten",
-    "remindersDisabled": "Erinnerungen sind aus.",
     "partiesTitle": "{count, plural, one {Gruppe (#)} other {Gruppen (#)}}",
     "states": {
       "invited": "Nicht gesendet",
@@ -8881,6 +8878,11 @@
       "cancelled": "Gestoppt",
       "responded": "Gestoppt: hat geantwortet"
     },
-    "allInvitations": "Alle Einladungen"
+    "allInvitations": "Alle Einladungen",
+    "remindersSwitch": "Erinnerungen",
+    "remindersSwitchOn": "An",
+    "remindersSwitchOff": "Aus",
+    "sentResult": "{count, plural, =0 {Keine Einladung gesendet: Keine Gruppe hatte eine Adresse auf diesen Kanälen.} one {Einladung an # Gruppe gesendet.} other {Einladungen an # Gruppen gesendet.}}",
+    "skippedResult": "{count, plural, one {# Gruppe hat keine Adresse auf diesen Kanälen und wurde übersprungen.} other {# Gruppen haben keine Adresse auf diesen Kanälen und wurden übersprungen.}}"
   }
 }

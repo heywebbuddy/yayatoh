@@ -8823,10 +8823,7 @@
     "daysLabel": "締め切りの何日前",
     "daysHint": "例：14, 3",
     "remindersSave": "リマインダーを保存",
-    "remindersEnable": "リマインダーをオンにする",
     "remindersSaved": "リマインダーを保存しました。",
-    "remindersDisable": "リマインダーをオフにする",
-    "remindersDisabled": "リマインダーはオフです。",
     "partiesTitle": "{count, plural, other {グループ（#）}}",
     "states": {
       "invited": "未送信",
@@ -8881,6 +8878,11 @@
       "cancelled": "停止",
       "responded": "停止：回答済み"
     },
-    "allInvitations": "すべての招待状"
+    "allInvitations": "すべての招待状",
+    "remindersSwitch": "リマインダー",
+    "remindersSwitchOn": "オン",
+    "remindersSwitchOff": "オフ",
+    "sentResult": "{count, plural, =0 {招待状は送信されませんでした。これらの方法の宛先があるグループがありません。} other {# グループに招待状を送信しました。}}",
+    "skippedResult": "{count, plural, other {# グループはこれらの方法の宛先がないためスキップしました。}}"
   }
 }
