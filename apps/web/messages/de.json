@@ -2631,7 +2631,9 @@
     "clear": "Filter zurücksetzen",
     "noneTitle": "Keine Events passen zu diesen Filtern",
     "noneDescription": "Versuche eine andere Kategorie oder einen anderen Tag oder setze die Filter zurück.",
-    "tags": "Tags"
+    "tags": "Tags",
+    "search": "Nach Namen suchen",
+    "showing": "{from}–{to} von {total, plural, one {# Veranstaltung} other {# Veranstaltungen}}"
   },
   "venues": {
     "title": "Veranstaltungsorte",

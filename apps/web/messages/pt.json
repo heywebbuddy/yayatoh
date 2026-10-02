@@ -2631,7 +2631,9 @@
     "clear": "Limpar filtros",
     "noneTitle": "Nenhum evento corresponde a estes filtros",
     "noneDescription": "Tente outra categoria ou tag, ou limpe os filtros.",
-    "tags": "Tags"
+    "tags": "Tags",
+    "search": "Pesquisar por nome",
+    "showing": "{from}–{to} de {total, plural, one {# evento} other {# eventos}}"
   },
   "venues": {
     "title": "Locais",

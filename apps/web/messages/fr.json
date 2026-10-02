@@ -2631,7 +2631,9 @@
     "clear": "Effacer les filtres",
     "noneTitle": "Aucun événement ne correspond à ces filtres",
     "noneDescription": "Essayez une autre catégorie ou un autre mot-clé, ou effacez les filtres.",
-    "tags": "Mots-clés"
+    "tags": "Mots-clés",
+    "search": "Rechercher par nom",
+    "showing": "{from}–{to} sur {total, plural, one {# événement} other {# événements}}"
   },
   "venues": {
     "title": "Lieux",

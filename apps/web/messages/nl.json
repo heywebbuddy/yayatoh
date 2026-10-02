@@ -2631,7 +2631,9 @@
     "clear": "Filters wissen",
     "noneTitle": "Geen evenementen gevonden met deze filters",
     "noneDescription": "Probeer een andere categorie of tag, of wis de filters.",
-    "tags": "Tags"
+    "tags": "Tags",
+    "search": "Zoeken op naam",
+    "showing": "{from}–{to} van {total, plural, one {# evenement} other {# evenementen}}"
   },
   "venues": {
     "title": "Locaties",

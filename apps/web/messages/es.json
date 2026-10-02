@@ -2631,7 +2631,9 @@
     "clear": "Quitar filtros",
     "noneTitle": "Ningún evento coincide con estos filtros",
     "noneDescription": "Prueba otra categoría o etiqueta, o quita los filtros.",
-    "tags": "Etiquetas"
+    "tags": "Etiquetas",
+    "search": "Buscar por nombre",
+    "showing": "{from}–{to} de {total, plural, one {# evento} other {# eventos}}"
   },
   "venues": {
     "title": "Recintos",

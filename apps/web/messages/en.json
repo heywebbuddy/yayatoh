@@ -2631,7 +2631,9 @@
     "clear": "Clear filters",
     "noneTitle": "No events match these filters",
     "noneDescription": "Try another category or tag, or clear the filters.",
-    "tags": "Tags"
+    "tags": "Tags",
+    "search": "Search by name",
+    "showing": "{from}–{to} of {total, plural, one {# event} other {# events}}"
   },
   "venues": {
     "title": "Venues",

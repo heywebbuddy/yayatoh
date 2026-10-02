@@ -2631,7 +2631,9 @@
     "clear": "清除筛选",
     "noneTitle": "没有符合筛选条件的活动",
     "noneDescription": "试试其他类别或标签，或清除筛选条件。",
-    "tags": "标签"
+    "tags": "标签",
+    "search": "按名称搜索",
+    "showing": "共 {total, plural, other {# 个活动}}，第 {from}–{to} 个"
   },
   "venues": {
     "title": "场地",

@@ -2631,7 +2631,9 @@
     "clear": "絞り込みを解除",
     "noneTitle": "条件に一致するイベントはありません",
     "noneDescription": "別のカテゴリーやタグを試すか、絞り込みを解除してください。",
-    "tags": "タグ"
+    "tags": "タグ",
+    "search": "名前で検索",
+    "showing": "{total, plural, other {#件のイベント}}中 {from}–{to}件"
   },
   "venues": {
     "title": "会場",

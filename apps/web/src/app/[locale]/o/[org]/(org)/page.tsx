@@ -25,6 +25,7 @@ import {
   EmptyState,
   Label,
   PageHeader,
+  Pagination,
   Skeleton,
   StatusDot,
 } from '@yayatoh/ui';
@@ -61,6 +62,9 @@ export default async function OrgHome({
     series?: string;
     category?: string;
     tag?: string;
+    /** Design v2: the events list's name search and page. */
+    q?: string;
+    page?: string;
     /** M3.11a: the outcome of "Finish setup". */
     onboarding?: string;
   }>;
@@ -122,7 +126,10 @@ export default async function OrgHome({
                 ? (sp.category as EventCategory)
                 : undefined,
               tag: sp.tag?.trim().slice(0, 40) || undefined,
+              q: sp.q?.trim().slice(0, 80) || undefined,
             }}
+            page={Math.max(1, Math.floor(Number(sp.page)) || 1)}
+            keep={{ period: sp.period, from: sp.from, to: sp.to }}
           />
         </Suspense>
       </section>
@@ -141,30 +148,62 @@ function EventsSkeleton({ label }: { label: string }) {
   );
 }
 
+/** Events cards per page on the org home (design v2: the page stays light with hundreds of events). */
+const EVENTS_PER_PAGE = 24;
+
 async function EventList({
   org,
   locale,
   create,
   seriesSlug,
   filters,
+  page,
+  keep,
 }: {
   org: string;
   locale: string;
   create: ReactNode;
   /** M1.4b: show only this series' events. */
   seriesSlug: string | null;
-  filters: { category?: EventCategory; tag?: string };
+  filters: { category?: EventCategory; tag?: string; q?: string };
+  page: number;
+  /** Other parameters of the page (the sales period) that the list's links keep. */
+  keep: Record<string, string | undefined>;
 }) {
   const data = await loadConsole(org);
   const t = await getTranslations();
-  const filtered = Boolean(filters.category || filters.tag);
+  const filtered = Boolean(filters.category || filters.tag || filters.q);
   const [all, series, tags] = await Promise.all([
     executeQuery(searchEventsQuery, filters, data.ctx, ports),
     executeQuery(listSeriesQuery, {}, data.ctx, ports),
     executeQuery(orgTagsQuery, {}, data.ctx, ports),
   ]);
   const active = series.find((s) => s.slug === seriesSlug) ?? null;
-  const events = all.filter((e) => e.status !== 'archived' && (!active || active.eventIds.includes(e.id)));
+  const listed = all.filter((e) => e.status !== 'archived' && (!active || active.eventIds.includes(e.id)));
+  // Design v2: what is on now and next first (soonest start), then past events (latest first),
+  // a page at a time: an org with hundreds of events renders 24 cards, not all of them.
+  const now = Date.now();
+  const current = listed.filter((e) => e.endsAt.getTime() >= now);
+  const past = listed.filter((e) => e.endsAt.getTime() < now).reverse();
+  const ordered = [...current, ...past];
+  const pageCount = Math.max(1, Math.ceil(ordered.length / EVENTS_PER_PAGE));
+  const at = Math.min(page, pageCount);
+  const events = ordered.slice((at - 1) * EVENTS_PER_PAGE, at * EVENTS_PER_PAGE);
+  const tp = await getTranslations('market.pagination');
+  const pageHref = (p: number) => {
+    const q = new URLSearchParams();
+    const params = {
+      ...keep,
+      series: active?.slug,
+      category: filters.category,
+      tag: filters.tag,
+      q: filters.q,
+    };
+    for (const [k, v] of Object.entries(params)) if (v) q.set(k, v);
+    if (p > 1) q.set('page', String(p));
+    const qs = q.toString();
+    return qs ? `/o/${org}?${qs}` : `/o/${org}`;
+  };
   const chip = (current: boolean) =>
     `inline-flex min-h-8 items-center rounded-pill border px-3 text-caption ${current ? 'border-ink bg-tag text-white' : 'border-line bg-surface text-ink-2'}`;
   const selectClass = 'field';
@@ -195,6 +234,19 @@ async function EventList({
       <search aria-label={t('eventFilters.label')}>
         <form method="get" className="flex flex-wrap items-end gap-3">
           {active ? <input type="hidden" name="series" value={active.slug} /> : null}
+          <div className="flex min-w-0 grow flex-col gap-1.5 sm:max-w-80">
+            <label htmlFor="filter-q" className="text-[13px] font-bold text-ink">
+              {t('eventFilters.search')}
+            </label>
+            <input
+              id="filter-q"
+              name="q"
+              type="search"
+              maxLength={80}
+              defaultValue={filters.q ?? ''}
+              className={selectClass}
+            />
+          </div>
           <div className="flex flex-col gap-1.5">
             <label htmlFor="filter-category" className="text-[13px] font-bold text-ink">
               {t('eventFilters.category')}
@@ -258,52 +310,73 @@ async function EventList({
           action={create}
         />
       ) : (
-        <ul className="grid list-none grid-cols-1 gap-3.5 p-0 md:grid-cols-2 xl:grid-cols-3">
-          {events.map((e) => {
-            const phase = eventPhase(e.startsAt.toISOString(), e.endsAt.toISOString());
-            return (
-              <li key={e.id}>
-                <Card className="flex h-full flex-col gap-3">
-                  <Label>
-                    {t(`profiles.${e.profile}`)}
-                    {e.category ? ` · ${t(`categories.${e.category as EventCategory}`)}` : ''}
-                  </Label>
-                  <h3 className="text-[22px] leading-tight font-extrabold tracking-[-0.03em]">{e.name}</h3>
-                  <p className="text-body text-ink-2">
-                    {formatEventDateRange(e.startsAt.toISOString(), e.endsAt.toISOString(), {
-                      locale,
-                      currency: e.currency,
-                      timeZone: e.timezone,
-                    })}
-                    {e.venueName ? ` · ${e.venueName}` : ''}
-                  </p>
-                  {e.tags.length > 0 ? (
-                    <ul aria-label={t('eventFilters.tags')} className="flex list-none flex-wrap gap-1.5 p-0">
-                      {e.tags.map((tag) => (
-                        <li
-                          key={tag}
-                          className="rounded-pill bg-surface-3 px-2.5 py-0.5 text-caption text-ink-2"
-                        >
-                          {tag}
-                        </li>
-                      ))}
-                    </ul>
-                  ) : null}
-                  <StatusDot
-                    status={STATUS_DOT[e.status]}
-                    label={`${t(`eventStatus.${e.status}`)} · ${t(`phase.${phase.phase}`, { days: phase.days })}`}
-                  />
-                  <Link
-                    href={`/o/${org}/e/${e.slug}`}
-                    className={buttonClass('secondary', 'md', 'mt-auto self-start')}
-                  >
-                    {t('orgHome.open')}
-                  </Link>
-                </Card>
-              </li>
-            );
-          })}
-        </ul>
+        <>
+          <p className="m-0 text-caption text-ink-2 tabular-nums" data-testid="org-events-count">
+            {t('eventFilters.showing', {
+              from: (at - 1) * EVENTS_PER_PAGE + 1,
+              to: (at - 1) * EVENTS_PER_PAGE + events.length,
+              total: ordered.length,
+            })}
+          </p>
+          <ul className="grid list-none grid-cols-1 gap-3.5 p-0 md:grid-cols-2 xl:grid-cols-3">
+            {events.map((e) => {
+              const phase = eventPhase(e.startsAt.toISOString(), e.endsAt.toISOString());
+              return (
+                <li key={e.id}>
+                  <Card className="flex h-full flex-col gap-3">
+                    <Label>
+                      {t(`profiles.${e.profile}`)}
+                      {e.category ? ` · ${t(`categories.${e.category as EventCategory}`)}` : ''}
+                    </Label>
+                    <h3 className="text-[22px] leading-tight font-extrabold tracking-[-0.03em]">{e.name}</h3>
+                    <p className="text-body text-ink-2">
+                      {formatEventDateRange(e.startsAt.toISOString(), e.endsAt.toISOString(), {
+                        locale,
+                        currency: e.currency,
+                        timeZone: e.timezone,
+                      })}
+                      {e.venueName ? ` · ${e.venueName}` : ''}
+                    </p>
+                    {e.tags.length > 0 ? (
+                      <ul
+                        aria-label={t('eventFilters.tags')}
+                        className="flex list-none flex-wrap gap-1.5 p-0"
+                      >
+                        {e.tags.map((tag) => (
+                          <li
+                            key={tag}
+                            className="rounded-pill bg-surface-3 px-2.5 py-0.5 text-caption text-ink-2"
+                          >
+                            {tag}
+                          </li>
+                        ))}
+                      </ul>
+                    ) : null}
+                    <StatusDot
+                      status={STATUS_DOT[e.status]}
+                      label={`${t(`eventStatus.${e.status}`)} · ${t(`phase.${phase.phase}`, { days: phase.days })}`}
+                    />
+                    <Link
+                      href={`/o/${org}/e/${e.slug}`}
+                      className={buttonClass('secondary', 'md', 'mt-auto self-start')}
+                    >
+                      {t('orgHome.open')}
+                    </Link>
+                  </Card>
+                </li>
+              );
+            })}
+          </ul>
+          {pageCount > 1 ? (
+            <Pagination
+              label={tp('label')}
+              link={Link}
+              previous={{ href: at > 1 ? pageHref(at - 1) : null, label: tp('previous') }}
+              next={{ href: at < pageCount ? pageHref(at + 1) : null, label: tp('next') }}
+              status={tp('status', { page: at, count: pageCount })}
+            />
+          ) : null}
+        </>
       )}
     </>
   );
