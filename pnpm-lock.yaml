@@ -670,6 +670,9 @@ importers:
       '@yayatoh/command-center':
         specifier: workspace:*
         version: link:../../packages/modules/command-center
+      '@yayatoh/crm':
+        specifier: workspace:*
+        version: link:../../packages/modules/crm
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../../packages/db
@@ -1431,12 +1434,18 @@ importers:
       '@hono/zod-openapi':
         specifier: 'catalog:'
         version: 1.6.3(hono@4.13.9)(zod@4.6.5)
+      '@yayatoh/attendees':
+        specifier: workspace:*
+        version: link:../attendees
       '@yayatoh/checkin-engine':
         specifier: workspace:*
         version: link:../../checkin-engine
       '@yayatoh/contracts':
         specifier: workspace:*
         version: link:../../contracts
+      '@yayatoh/crm':
+        specifier: workspace:*
+        version: link:../crm
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../../db
@@ -1677,6 +1686,9 @@ importers:
       '@yayatoh/contracts':
         specifier: workspace:*
         version: link:../../contracts
+      '@yayatoh/crm':
+        specifier: workspace:*
+        version: link:../crm
       '@yayatoh/csv':
         specifier: workspace:*
         version: link:../../csv
@@ -2333,6 +2345,9 @@ importers:
       '@yayatoh/checkin':
         specifier: workspace:*
         version: link:../checkin
+      '@yayatoh/crm':
+        specifier: workspace:*
+        version: link:../crm
       '@yayatoh/csv':
         specifier: workspace:*
         version: link:../../csv

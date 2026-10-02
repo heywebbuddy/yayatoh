@@ -2,8 +2,10 @@ import { alertEvaluator } from '@yayatoh/alerts';
 import { attendeeMessageMailer } from '@yayatoh/attendees';
 import { participationProjector } from '@yayatoh/audiences';
 import { journeySubscribers } from '@yayatoh/automations';
+import { campaignsTimeline } from '@yayatoh/campaigns';
 import {
   chatReportSignals,
+  checkinTimeline,
   checkoutRiskSignals,
   derivedStaffAlerts,
   fraudSignalAlerts,
@@ -14,11 +16,17 @@ import { findEventTx, portalInviteMailer } from '@yayatoh/events';
 import { registrationResumeMailer } from '@yayatoh/forms';
 import { listingsProjector } from '@yayatoh/marketplace';
 import { programMediaCleaner, speakerPhotoApprover, subjectErasedMediaCleaner } from '@yayatoh/media';
-import { announcementMailer, contactWroteNotifier, threadReplyMailer } from '@yayatoh/messaging';
+import {
+  announcementMailer,
+  contactWroteNotifier,
+  messagingTimeline,
+  threadReplyMailer,
+} from '@yayatoh/messaging';
 import { createNotifier } from '@yayatoh/notifications';
 import {
   creditNoteMailer,
   orderLinkMailer,
+  ordersTimeline,
   postponementMailer,
   refundDeclineMailer,
   refundMailer,
@@ -35,7 +43,7 @@ import { portalSpeakerCleanup, taskReminderMailer } from '@yayatoh/program';
 import { registrationCapacity } from '@yayatoh/registration';
 import { analyticsForwarder, metricsProjector, postgresAnalyticsSink } from '@yayatoh/reports';
 import { finderCodeMailer, releaseCancelledSeats } from '@yayatoh/seating';
-import { surveyMailer } from '@yayatoh/surveys';
+import { surveyMailer, surveysTimeline } from '@yayatoh/surveys';
 import { impersonationNotice, invitationMailer, orgStatusNotice } from '@yayatoh/tenancy';
 import {
   claimLinkMailer,
@@ -47,6 +55,7 @@ import {
   walletPassSync,
 } from '@yayatoh/ticketing';
 import { z } from 'zod';
+import { duplicateScanJob } from './duplicates.ts';
 import { defineJob } from './jobs.ts';
 import { journeyJob } from './journeys.ts';
 
@@ -58,7 +67,7 @@ export const heartbeat = defineJob({
 });
 
 /** Composition root for jobs and event subscribers. Modules register theirs here as they land. */
-export const JOBS = [heartbeat, journeyJob()] as const;
+export const JOBS = [heartbeat, journeyJob(), duplicateScanJob()] as const;
 export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] {
   const secret = env.APP_TOKEN_SECRET;
   const appOrigin = env.NEXT_PUBLIC_APP_ORIGIN;
@@ -125,6 +134,8 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     registrationCapacity(),
     // M3.6a: contact × event participation and contact profiles for audiences.
     participationProjector(),
+    // M6.1a: the person timeline (crm projection), fed by each owning module.
+    ...timelineSubscribers(),
     listingsProjector({ onChange: (orgId) => revalidatePublicCache(appOrigin, orgId, secret) }),
     // M3.1: metric snapshots and time series, and the analytics sink (Postgres until M6.2).
     // M3.2: each projected change pings the event's Command Center (no figures on the channel).
@@ -139,6 +150,11 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     // M3.2b: the alert engine re-evaluates what each outbox event touched (sends through notifications).
     alertEvaluator({ notifier }),
   ];
+}
+
+/** M6.1a: the modules that write the person timeline (the web's dev drain runs the same list). */
+export function timelineSubscribers(): Subscriber[] {
+  return [ordersTimeline(), checkinTimeline(), messagingTimeline(), surveysTimeline(), campaignsTimeline()];
 }
 
 /**

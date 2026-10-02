@@ -5281,7 +5281,9 @@
         "unknown_legacy": "Unbekannt (importiert)",
         "none": "Nicht erteilt"
       }
-    }
+    },
+    "peopleLink": "Personen",
+    "duplicatesLink": "Mögliche Duplikate"
   },
   "refundOps": {
     "timeline": {
@@ -9203,6 +9205,195 @@
       "locked": "Zu viele falsche Codes. Fordern Sie einen neuen Code an.",
       "expired": "Der Code ist abgelaufen oder wurde bereits verwendet. Fordern Sie einen neuen Code an.",
       "generic": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
+    }
+  },
+  "people": {
+    "title": "Personen",
+    "audiences": "Zielgruppen",
+    "description": "Alle Personen, zu denen Ihre Organisation einen Datensatz hat, die neuesten zuerst. Öffnen Sie eine Person, um ihren gesamten Verlauf zu sehen.",
+    "duplicatesLink": "Mögliche Duplikate",
+    "search": {
+      "label": "Nach Name, E-Mail oder Firma suchen",
+      "submit": "Suchen",
+      "noneTitle": "Keine Treffer",
+      "noneDescription": "Kein Name, keine E-Mail und keine Firma enthält „{q}“. Versuchen Sie eine kürzere Suche."
+    },
+    "emptyTitle": "Noch keine Personen",
+    "emptyDescription": "Personen erscheinen hier, wenn sie Tickets kaufen, sich anmelden oder auf eine Gästeliste gesetzt werden.",
+    "caption": "Personen",
+    "columns": {
+      "name": "Name",
+      "email": "E-Mail",
+      "company": "Firma",
+      "added": "Hinzugefügt"
+    },
+    "next": "Nächste Seite",
+    "person": {
+      "title": "Person",
+      "details": "Angaben",
+      "mergedHere": "Dieser Datensatz wurde mit diesem hier zusammengeführt."
+    },
+    "fields": {
+      "name": "Name",
+      "email": "E-Mail",
+      "phone": "Telefon",
+      "company": "Firma",
+      "added": "Hinzugefügt",
+      "emailConsent": "Marketing-E-Mails",
+      "smsConsent": "Marketing-SMS",
+      "history": "Verlauf",
+      "empty": "Nicht angegeben"
+    },
+    "merges": {
+      "title": "Zusammengeführte Datensätze",
+      "line": "{who} am {when} zusammengeführt.",
+      "moved": "{moved, plural, =0 {Nichts verschoben.} one {# Eintrag verschoben.} other {# Einträge verschoben.}}",
+      "undoneOn": "Rückgängig gemacht am {when}.",
+      "undoUntil": "Kann bis {when} rückgängig gemacht werden.",
+      "erased": "ein gelöschter Datensatz"
+    },
+    "undo": {
+      "submit": "Zusammenführung rückgängig machen",
+      "submitFor": "Zusammenführung von {who} rückgängig machen",
+      "done": "Zusammenführung rückgängig gemacht. Beide Datensätze sind wieder getrennt, genau wie vorher.",
+      "openOther": "Den anderen Datensatz öffnen",
+      "errors": {
+        "expired": "Diese Zusammenführung ist älter als 30 Tage und kann nicht mehr rückgängig gemacht werden.",
+        "blocked": "Dieser Datensatz wurde inzwischen mit einem anderen zusammengeführt. Machen Sie zuerst diese Zusammenführung rückgängig.",
+        "erased": "Einer dieser Datensätze wurde gelöscht, daher kann die Zusammenführung nicht mehr rückgängig gemacht werden.",
+        "undone": "Diese Zusammenführung wurde bereits rückgängig gemacht."
+      }
+    },
+    "errors": {
+      "forbidden": "Ihre Rolle darf keine Personen zusammenführen. Fragen Sie eine Inhaberin, einen Admin oder eine Managerin."
+    },
+    "timeline": {
+      "title": "Verlauf",
+      "kind": "Was",
+      "allKinds": "Alles",
+      "event": "Veranstaltung",
+      "allEvents": "Alle Veranstaltungen",
+      "filter": "Filtern",
+      "noMatchTitle": "Nichts passt zu diesen Filtern",
+      "noMatchDescription": "Wählen Sie „Alles“ oder „Alle Veranstaltungen“, um mehr zu sehen.",
+      "emptyTitle": "Noch nichts hier",
+      "emptyDescription": "Bestellungen, Check-ins, Kampagnen, Nachrichten und Umfragen erscheinen hier, sobald sie geschehen.",
+      "listLabel": "Verlauf von {name}",
+      "older": "Ältere"
+    },
+    "kinds": {
+      "order_paid": "Bestellung bezahlt",
+      "order_refunded": "Erstattung",
+      "checked_in": "Eingecheckt",
+      "session_attended": "Session besucht",
+      "campaign_sent": "Kampagne gesendet",
+      "campaign_opened": "Kampagne geöffnet",
+      "campaign_clicked": "Kampagne angeklickt",
+      "message_in": "Hat Ihnen geschrieben",
+      "message_out": "Sie haben geantwortet",
+      "donation": "Spende",
+      "rsvp": "Rückmeldung",
+      "survey_sent": "Umfrage gesendet",
+      "survey_responded": "Umfrage beantwortet"
+    },
+    "merge": {
+      "done": "Datensätze zusammengeführt. Sie können dies 30 Tage lang auf dieser Seite rückgängig machen.",
+      "submit": "Datensätze zusammenführen",
+      "hint": "Bestellungen, Tickets, Check-ins, Nachrichten und der Verlauf gehen auf den bleibenden Datensatz über. Eine Zusammenführung lässt sich 30 Tage lang rückgängig machen.",
+      "errors": {
+        "alreadyMerged": "Einer dieser Datensätze wurde seit dem Öffnen dieser Seite zusammengeführt oder geändert. Gehen Sie zurück zur Liste.",
+        "erased": "Einer dieser Datensätze wurde gelöscht und kann nicht zusammengeführt werden.",
+        "unavailable": "Zusammenführen ist gerade nicht möglich. Versuchen Sie es später erneut.",
+        "keep": "Wählen Sie, welcher Datensatz bleibt."
+      }
+    },
+    "duplicates": {
+      "title": "Mögliche Duplikate",
+      "description": "Personen, die vielleicht doppelt erfasst sind: gleiche E-Mail, gleiche Telefonnummer oder ähnlicher Name bei derselben Firma.",
+      "scan": "Nach Duplikaten suchen",
+      "lastScan": "Zuletzt geprüft {when}. Neue Kontakte werden alle paar Minuten automatisch geprüft.",
+      "neverScanned": "Noch nicht geprüft.",
+      "scanned": "{count, plural, =0 {Keine möglichen Duplikate gefunden.} one {# mögliches Duplikat gefunden.} other {# mögliche Duplikate gefunden.}}",
+      "dismissedDone": "Als nicht dieselbe Person markiert. Dieses Paar wird nicht mehr vorgeschlagen.",
+      "bulkDone": "{count, plural, =0 {Nichts wurde zusammengeführt.} one {# Paar zusammengeführt. Jede Zusammenführung lässt sich 30 Tage lang rückgängig machen.} other {# Paare zusammengeführt. Jede Zusammenführung lässt sich 30 Tage lang rückgängig machen.}}",
+      "statusNav": "Nach Status filtern",
+      "status": {
+        "open": "Offen ({count})",
+        "dismissed": "Keine Duplikate",
+        "merged": "Zusammengeführt"
+      },
+      "caption": {
+        "open": "Zu prüfende mögliche Duplikate",
+        "dismissed": "Als nicht dieselbe Person markierte Paare",
+        "merged": "Zusammengeführte Paare"
+      },
+      "empty": {
+        "open": {
+          "title": "Keine möglichen Duplikate",
+          "description": "Wählen Sie „Nach Duplikaten suchen“, um jetzt alle zu prüfen. Neue Kontakte werden automatisch geprüft."
+        },
+        "dismissed": {
+          "title": "Nichts verworfen",
+          "description": "Paare, die Sie als nicht dieselbe Person markieren, stehen hier."
+        },
+        "merged": {
+          "title": "Noch keine Zusammenführungen",
+          "description": "Paare, die Sie zusammenführen, stehen hier. Rückgängig machen können Sie es auf der Seite der Person."
+        }
+      },
+      "select": "Auswählen",
+      "selectPair": "{pair} auswählen",
+      "pair": "{a} und {b}",
+      "columns": {
+        "people": "Personen",
+        "confidence": "Sicherheit",
+        "reasons": "Warum",
+        "review": "Prüfen"
+      },
+      "score": "{score} %",
+      "review": "Prüfen",
+      "reviewPair": "{pair} prüfen",
+      "mergeSelected": "Auswahl zusammenführen",
+      "mergeSelectedHint": "Behält jeweils den älteren Datensatz und die neuesten Angaben. Sie werden gebeten, Ihre Identität zu bestätigen.",
+      "errors": {
+        "noneSelected": "Wählen Sie mindestens ein Paar zum Zusammenführen.",
+        "tooMany": "Wählen Sie höchstens 50 Paare auf einmal."
+      }
+    },
+    "reasons": {
+      "email": "Gleiche E-Mail-Adresse",
+      "phone": "Gleiche Telefonnummer",
+      "name_company": "Ähnlicher Name bei derselben Firma"
+    },
+    "compare": {
+      "title": "Mögliches Duplikat prüfen",
+      "description": "{score} % Sicherheit: {reasons}.",
+      "resolved": "Dieses Paar wurde bereits erledigt.",
+      "record": "Datensatz {n}",
+      "older": "(älter)",
+      "entries": "{count, plural, =0 {Keine Einträge} one {# Eintrag} other {# Einträge}}",
+      "openTimeline": "Verlauf von {record} öffnen",
+      "consentTitle": "Einwilligung nach dem Zusammenführen",
+      "consentEmail": "Marketing-E-Mails: {status}",
+      "consentSms": "Marketing-SMS: {status}",
+      "consentRule": "Die strengste Wahl gilt: Hat ein Datensatz widersprochen, gilt der Widerspruch für den zusammengeführten Datensatz.",
+      "keepLegend": "Welcher Datensatz bleibt",
+      "keepHint": "Der andere Datensatz wird mit ihm zusammengeführt. Seine E-Mail-Adresse führt weiterhin zu dieser Person.",
+      "keepOption": "{record} ({email})",
+      "fieldLegend": {
+        "name": "Name",
+        "email": "E-Mail",
+        "phone": "Telefon",
+        "company": "Firma"
+      },
+      "fieldOption": "{record}: {value}",
+      "dismiss": "Nicht dieselbe Person"
+    },
+    "consent": {
+      "granted": "Eingewilligt",
+      "withdrawn": "Widersprochen",
+      "unknown_legacy": "Unbekannt (importiert)",
+      "none": "Keine Einwilligung"
     }
   }
 }

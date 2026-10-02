@@ -1,6 +1,7 @@
 import type { TenantTx } from '@yayatoh/db';
 import { ERASED_EMAIL } from '@yayatoh/platform';
 import { and, asc, desc, eq, inArray, or } from 'drizzle-orm';
+import { scrubMergeSnapshotsTx } from './merge/engine.ts';
 import { consents, contactStats, contacts, eventParticipation } from './schema.ts';
 
 /** A person's org contact and consent history, allowlisted (M1.14c data-subject access). */
@@ -98,6 +99,12 @@ export async function eraseContactDsarTx(
       })
       .where(eq(contacts.id, r.id));
   }
+  // M6.1a: merge snapshots holding the old fields are scrubbed (such merges can't be undone).
+  await scrubMergeSnapshotsTx(
+    tx,
+    rows.map((r) => r.id),
+    now,
+  );
   const kept = rows.length
     ? (
         await tx

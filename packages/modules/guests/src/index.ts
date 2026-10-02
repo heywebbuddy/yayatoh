@@ -1,3 +1,5 @@
+// M6.1a: contact merges move this module's references (ADR 0022).
+export { guestsContactOwner } from './contact-merge.ts';
 export { guestsDataSubjects } from './data-subject.ts';
 export {
   changedFields,

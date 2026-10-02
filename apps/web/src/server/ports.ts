@@ -1,11 +1,21 @@
+import { attendeesContactOwner } from '@yayatoh/attendees';
+import { participationContactOwner } from '@yayatoh/audiences';
+import { automationsContactOwner } from '@yayatoh/automations';
 import { billingEntitlements } from '@yayatoh/billing';
+import { campaignsContactOwner } from '@yayatoh/campaigns';
+import { checkinContactOwner } from '@yayatoh/checkin';
+import { registerContactReferenceOwners } from '@yayatoh/crm';
 import { eventRolesOf } from '@yayatoh/events';
+import { guestsContactOwner } from '@yayatoh/guests';
+import { notificationsContactOwner } from '@yayatoh/notifications';
+import { ordersContactOwner } from '@yayatoh/orders';
 import {
   createCommandPorts,
   localKeyVault,
   registerDataSubjectContributors,
   setKeyVault,
 } from '@yayatoh/platform';
+import { surveysContactOwner } from '@yayatoh/surveys';
 import { createOrgAuthorizer, orgStatusGate } from '@yayatoh/tenancy';
 import { DATA_SUBJECT_CONTRIBUTORS } from './data-subjects.ts';
 
@@ -23,3 +33,17 @@ if (localKms) setKeyVault(localKeyVault(localKms));
 
 // M6.1c: data-subject requests run every module's contributor (find, export, erase).
 registerDataSubjectContributors(DATA_SUBJECT_CONTRIBUTORS);
+
+// M6.1a contact merges: every module holding contact references moves its own rows inside the
+// merge's transaction (ADR 0022). The merge refuses while any contact column has no owner.
+registerContactReferenceOwners([
+  attendeesContactOwner,
+  notificationsContactOwner,
+  guestsContactOwner,
+  ordersContactOwner,
+  checkinContactOwner,
+  surveysContactOwner,
+  campaignsContactOwner,
+  automationsContactOwner,
+  participationContactOwner,
+]);

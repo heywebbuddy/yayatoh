@@ -5281,7 +5281,9 @@
         "unknown_legacy": "Onbekend (geïmporteerd)",
         "none": "Niet gegeven"
       }
-    }
+    },
+    "peopleLink": "Personen",
+    "duplicatesLink": "Mogelijke dubbelen"
   },
   "refundOps": {
     "timeline": {
@@ -9203,6 +9205,195 @@
       "locked": "Te veel foute codes. Vraag een nieuwe code aan.",
       "expired": "Die code is verlopen of al gebruikt. Vraag een nieuwe code aan.",
       "generic": "Er ging iets mis. Probeer het opnieuw."
+    }
+  },
+  "people": {
+    "title": "Personen",
+    "audiences": "Doelgroepen",
+    "description": "Iedereen van wie je organisatie een record heeft, nieuwste eerst. Open iemand om de volledige geschiedenis te zien.",
+    "duplicatesLink": "Mogelijke dubbelen",
+    "search": {
+      "label": "Zoeken op naam, e-mail of bedrijf",
+      "submit": "Zoeken",
+      "noneTitle": "Niemand gevonden",
+      "noneDescription": "Geen naam, e-mail of bedrijf bevat ‘{q}’. Probeer een kortere zoekopdracht."
+    },
+    "emptyTitle": "Nog geen personen",
+    "emptyDescription": "Personen verschijnen hier zodra ze tickets kopen, zich registreren of op een gastenlijst worden gezet.",
+    "caption": "Personen",
+    "columns": {
+      "name": "Naam",
+      "email": "E-mail",
+      "company": "Bedrijf",
+      "added": "Toegevoegd"
+    },
+    "next": "Volgende pagina",
+    "person": {
+      "title": "Persoon",
+      "details": "Gegevens",
+      "mergedHere": "Dat record is samengevoegd met dit record."
+    },
+    "fields": {
+      "name": "Naam",
+      "email": "E-mail",
+      "phone": "Telefoon",
+      "company": "Bedrijf",
+      "added": "Toegevoegd",
+      "emailConsent": "Marketingmail",
+      "smsConsent": "Marketing-sms",
+      "history": "Geschiedenis",
+      "empty": "Niet opgegeven"
+    },
+    "merges": {
+      "title": "Samengevoegde records",
+      "line": "{who} samengevoegd op {when}.",
+      "moved": "{moved, plural, =0 {Niets verplaatst.} one {# item verplaatst.} other {# items verplaatst.}}",
+      "undoneOn": "Ongedaan gemaakt op {when}.",
+      "undoUntil": "Kan ongedaan worden gemaakt tot {when}.",
+      "erased": "een gewist record"
+    },
+    "undo": {
+      "submit": "Samenvoegen ongedaan maken",
+      "submitFor": "Samenvoegen van {who} ongedaan maken",
+      "done": "Samenvoegen ongedaan gemaakt. Beide records zijn weer gescheiden, precies zoals eerst.",
+      "openOther": "Het andere record openen",
+      "errors": {
+        "expired": "Deze samenvoeging is ouder dan 30 dagen en kan niet meer ongedaan worden gemaakt.",
+        "blocked": "Dit record is sindsdien met een ander samengevoegd. Maak eerst die samenvoeging ongedaan.",
+        "erased": "Een van deze records is gewist, dus de samenvoeging kan niet meer ongedaan worden gemaakt.",
+        "undone": "Deze samenvoeging is al ongedaan gemaakt."
+      }
+    },
+    "errors": {
+      "forbidden": "Je rol mag geen personen samenvoegen. Vraag het aan een eigenaar, beheerder of manager."
+    },
+    "timeline": {
+      "title": "Tijdlijn",
+      "kind": "Wat",
+      "allKinds": "Alles",
+      "event": "Evenement",
+      "allEvents": "Alle evenementen",
+      "filter": "Filteren",
+      "noMatchTitle": "Niets past bij deze filters",
+      "noMatchDescription": "Kies ‘Alles’ of ‘Alle evenementen’ om meer te zien.",
+      "emptyTitle": "Nog niets",
+      "emptyDescription": "Bestellingen, check-ins, campagnes, berichten en enquêtes verschijnen hier zodra ze gebeuren.",
+      "listLabel": "Tijdlijn van {name}",
+      "older": "Ouder"
+    },
+    "kinds": {
+      "order_paid": "Bestelling betaald",
+      "order_refunded": "Terugbetaling",
+      "checked_in": "Ingecheckt",
+      "session_attended": "Sessie bijgewoond",
+      "campaign_sent": "Campagne verstuurd",
+      "campaign_opened": "Campagne geopend",
+      "campaign_clicked": "Op campagne geklikt",
+      "message_in": "Schreef je",
+      "message_out": "Jij antwoordde",
+      "donation": "Donatie",
+      "rsvp": "Antwoord op uitnodiging",
+      "survey_sent": "Enquête verstuurd",
+      "survey_responded": "Enquête beantwoord"
+    },
+    "merge": {
+      "done": "Records samengevoegd. Je kunt dit 30 dagen lang ongedaan maken op deze pagina.",
+      "submit": "Records samenvoegen",
+      "hint": "Bestellingen, tickets, check-ins, berichten en geschiedenis gaan naar het record dat blijft. Je kunt een samenvoeging 30 dagen lang ongedaan maken.",
+      "errors": {
+        "alreadyMerged": "Een van deze records is samengevoegd of gewijzigd sinds je deze pagina opende. Ga terug naar de lijst.",
+        "erased": "Een van deze records is gewist en kan niet worden samengevoegd.",
+        "unavailable": "Samenvoegen is nu niet mogelijk. Probeer het later opnieuw.",
+        "keep": "Kies welk record blijft."
+      }
+    },
+    "duplicates": {
+      "title": "Mogelijke dubbelen",
+      "description": "Personen die misschien twee keer bekend zijn: hetzelfde e-mailadres, hetzelfde telefoonnummer of een vergelijkbare naam bij hetzelfde bedrijf.",
+      "scan": "Zoeken naar dubbelen",
+      "lastScan": "Laatst gecontroleerd {when}. Nieuwe contacten worden om de paar minuten automatisch gecontroleerd.",
+      "neverScanned": "Nog niet gecontroleerd.",
+      "scanned": "{count, plural, =0 {Geen mogelijke dubbelen gevonden.} one {# mogelijke dubbele gevonden.} other {# mogelijke dubbelen gevonden.}}",
+      "dismissedDone": "Gemarkeerd als niet dezelfde persoon. Dit paar wordt niet meer voorgesteld.",
+      "bulkDone": "{count, plural, =0 {Niets samengevoegd.} one {# paar samengevoegd. Elke samenvoeging kan 30 dagen lang ongedaan worden gemaakt.} other {# paren samengevoegd. Elke samenvoeging kan 30 dagen lang ongedaan worden gemaakt.}}",
+      "statusNav": "Filteren op status",
+      "status": {
+        "open": "Open ({count})",
+        "dismissed": "Geen dubbelen",
+        "merged": "Samengevoegd"
+      },
+      "caption": {
+        "open": "Te controleren mogelijke dubbelen",
+        "dismissed": "Paren gemarkeerd als niet dezelfde persoon",
+        "merged": "Samengevoegde paren"
+      },
+      "empty": {
+        "open": {
+          "title": "Geen mogelijke dubbelen",
+          "description": "Kies ‘Zoeken naar dubbelen’ om nu iedereen te controleren. Nieuwe contacten worden automatisch gecontroleerd."
+        },
+        "dismissed": {
+          "title": "Niets afgewezen",
+          "description": "Paren die je als niet dezelfde persoon markeert, staan hier."
+        },
+        "merged": {
+          "title": "Nog geen samenvoegingen",
+          "description": "Paren die je samenvoegt, staan hier. Maak een samenvoeging ongedaan op de pagina van de persoon."
+        }
+      },
+      "select": "Selecteren",
+      "selectPair": "{pair} selecteren",
+      "pair": "{a} en {b}",
+      "columns": {
+        "people": "Personen",
+        "confidence": "Zekerheid",
+        "reasons": "Waarom",
+        "review": "Bekijken"
+      },
+      "score": "{score}%",
+      "review": "Bekijken",
+      "reviewPair": "{pair} bekijken",
+      "mergeSelected": "Selectie samenvoegen",
+      "mergeSelectedHint": "Houdt per paar het oudste record en de nieuwste gegevens. Je wordt gevraagd te bevestigen dat jij het bent.",
+      "errors": {
+        "noneSelected": "Selecteer minstens één paar om samen te voegen.",
+        "tooMany": "Selecteer hoogstens 50 paren tegelijk."
+      }
+    },
+    "reasons": {
+      "email": "Zelfde e-mailadres",
+      "phone": "Zelfde telefoonnummer",
+      "name_company": "Vergelijkbare naam bij hetzelfde bedrijf"
+    },
+    "compare": {
+      "title": "Mogelijke dubbele bekijken",
+      "description": "{score}% zekerheid: {reasons}.",
+      "resolved": "Dit paar is al afgehandeld.",
+      "record": "Record {n}",
+      "older": "(ouder)",
+      "entries": "{count, plural, =0 {Geen items} one {# item} other {# items}}",
+      "openTimeline": "Tijdlijn van {record} openen",
+      "consentTitle": "Toestemming na samenvoegen",
+      "consentEmail": "Marketingmail: {status}",
+      "consentSms": "Marketing-sms: {status}",
+      "consentRule": "De strengste keuze wint: heeft een van de records zich afgemeld, dan is het samengevoegde record afgemeld.",
+      "keepLegend": "Welk record blijft",
+      "keepHint": "Het andere record wordt hiermee samengevoegd. Het e-mailadres ervan leidt nog steeds naar deze persoon.",
+      "keepOption": "{record} ({email})",
+      "fieldLegend": {
+        "name": "Naam",
+        "email": "E-mail",
+        "phone": "Telefoon",
+        "company": "Bedrijf"
+      },
+      "fieldOption": "{record}: {value}",
+      "dismiss": "Niet dezelfde persoon"
+    },
+    "consent": {
+      "granted": "Aangemeld",
+      "withdrawn": "Afgemeld",
+      "unknown_legacy": "Onbekend (geïmporteerd)",
+      "none": "Geen toestemming"
     }
   }
 }

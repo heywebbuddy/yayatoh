@@ -68,6 +68,7 @@ import {
   saveWidgetLayoutCommand,
   setModeOverrideCommand,
 } from '@yayatoh/command-center';
+import { mergeContactsCommand, recordTimelineTx, scanDuplicatesCommand, upsertContactTx } from '@yayatoh/crm';
 import { withTenant } from '@yayatoh/db';
 import {
   addRecurringOccurrencesCommand,
@@ -262,6 +263,7 @@ import {
 } from '@yayatoh/ticketing';
 import { createVenueCommand, submitQuoteRequestCommand } from '@yayatoh/venues';
 import { sql } from 'drizzle-orm';
+import { catchUpTimeline } from './merge.ts';
 import { ports, runBulk, submitRegistrationForm } from './ports.ts';
 
 export interface OrgFixture {
@@ -2144,6 +2146,33 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   await withTenant(systemCtx(org.id), (tx) =>
     tx.execute(sql`insert into alerts.signals (org_id, kind, source_event_id, occurred_at)
       values (${org.id}, 'journey_step_failed', ${uuidv7()}, now() - interval '2 days')`),
+  );
+  // M6.1a CRM merge and timeline: the person timeline catches up on the outbox above; two records
+  // of one mailbox are found by the duplicate scan and merged (isolation coverage of every table).
+  await catchUpTimeline(org.id);
+  const twins = await withTenant(systemCtx(org.id), async (tx) => {
+    const sys = systemCtx(org.id);
+    const one = await upsertContactTx(tx, sys, {
+      email: `twin.${slug}@example.test`,
+      name: 'Twin Fixture',
+      source: 'manual',
+    });
+    const two = await upsertContactTx(tx, sys, {
+      email: `twin.${slug}+b@example.test`,
+      name: 'Twin Fixture',
+      source: 'manual',
+    });
+    await recordTimelineTx(tx, sys, [
+      { contactId: two.id, kind: 'message_in', occurredAt: new Date(), sourceRef: uuidv7() },
+    ]);
+    return { one: one.id, two: two.id };
+  });
+  await executeCommand(scanDuplicatesCommand, { full: true }, ctx(), ports);
+  await executeCommand(
+    mergeContactsCommand,
+    { sourceContactId: twins.two, targetContactId: twins.one },
+    ctx(),
+    ports,
   );
   return {
     org,

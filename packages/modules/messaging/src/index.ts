@@ -37,3 +37,5 @@ export {
   threadsQuery,
   threadToken,
 } from './threads.ts';
+// M6.1a: the person timeline's facts from this module (crm projection).
+export { messagingTimeline } from './timeline.ts';

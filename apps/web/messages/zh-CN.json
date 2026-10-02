@@ -5281,7 +5281,9 @@
         "unknown_legacy": "未知（导入）",
         "none": "未同意"
       }
-    }
+    },
+    "peopleLink": "人员",
+    "duplicatesLink": "可能的重复"
   },
   "refundOps": {
     "timeline": {
@@ -9203,6 +9205,195 @@
       "locked": "错误次数过多。请重新获取验证码。",
       "expired": "验证码已过期或已被使用。请重新获取验证码。",
       "generic": "出了点问题。请重试。"
+    }
+  },
+  "people": {
+    "title": "人员",
+    "audiences": "受众",
+    "description": "贵组织有记录的所有人，最新的在前。打开某人即可查看其完整历史。",
+    "duplicatesLink": "可能的重复",
+    "search": {
+      "label": "按姓名、邮箱或公司搜索",
+      "submit": "搜索",
+      "noneTitle": "没有匹配的人",
+      "noneDescription": "没有任何姓名、邮箱或公司包含“{q}”。请尝试更短的关键词。"
+    },
+    "emptyTitle": "还没有人员",
+    "emptyDescription": "有人购票、报名或被加入宾客名单后，会出现在这里。",
+    "caption": "人员",
+    "columns": {
+      "name": "姓名",
+      "email": "邮箱",
+      "company": "公司",
+      "added": "添加时间"
+    },
+    "next": "下一页",
+    "person": {
+      "title": "人员",
+      "details": "详情",
+      "mergedHere": "那条记录已合并到这条记录。"
+    },
+    "fields": {
+      "name": "姓名",
+      "email": "邮箱",
+      "phone": "电话",
+      "company": "公司",
+      "added": "添加时间",
+      "emailConsent": "营销邮件",
+      "smsConsent": "营销短信",
+      "history": "历史",
+      "empty": "未填写"
+    },
+    "merges": {
+      "title": "已合并的记录",
+      "line": "已于 {when} 合并 {who}。",
+      "moved": "{moved, plural, =0 {未移动任何内容。} other {已移动 # 项。}}",
+      "undoneOn": "已于 {when} 撤销。",
+      "undoUntil": "可在 {when} 前撤销。",
+      "erased": "一条已删除的记录"
+    },
+    "undo": {
+      "submit": "撤销合并",
+      "submitFor": "撤销对 {who} 的合并",
+      "done": "已撤销合并。两条记录已恢复为分开状态，与之前完全一致。",
+      "openOther": "打开另一条记录",
+      "errors": {
+        "expired": "此合并已超过 30 天，无法再撤销。",
+        "blocked": "此记录之后又被合并到另一条记录。请先撤销那次合并。",
+        "erased": "其中一条记录已被删除，因此无法再撤销合并。",
+        "undone": "此合并已被撤销。"
+      }
+    },
+    "errors": {
+      "forbidden": "你的角色无法合并人员。请联系所有者、管理员或经理。"
+    },
+    "timeline": {
+      "title": "时间线",
+      "kind": "类型",
+      "allKinds": "全部",
+      "event": "活动",
+      "allEvents": "全部活动",
+      "filter": "筛选",
+      "noMatchTitle": "没有符合这些筛选条件的内容",
+      "noMatchDescription": "选择“全部”或“全部活动”以查看更多。",
+      "emptyTitle": "这里还没有内容",
+      "emptyDescription": "订单、签到、营销活动、消息和问卷发生后会出现在这里。",
+      "listLabel": "{name} 的时间线",
+      "older": "更早"
+    },
+    "kinds": {
+      "order_paid": "订单已付款",
+      "order_refunded": "退款",
+      "checked_in": "已签到",
+      "session_attended": "参加了一场分会",
+      "campaign_sent": "营销活动已发送",
+      "campaign_opened": "打开了营销活动",
+      "campaign_clicked": "点击了营销活动",
+      "message_in": "给你发了消息",
+      "message_out": "你回复了",
+      "donation": "捐款",
+      "rsvp": "回复邀请",
+      "survey_sent": "问卷已发送",
+      "survey_responded": "回答了问卷"
+    },
+    "merge": {
+      "done": "记录已合并。你可以在 30 天内在此页面撤销。",
+      "submit": "合并记录",
+      "hint": "订单、门票、签到、消息和历史将转到保留的记录。合并可在 30 天内撤销。",
+      "errors": {
+        "alreadyMerged": "自你打开此页面后，其中一条记录已被合并或更改。请返回列表。",
+        "erased": "其中一条记录已被删除，无法合并。",
+        "unavailable": "现在无法合并，请稍后再试。",
+        "keep": "请选择保留哪条记录。"
+      }
+    },
+    "duplicates": {
+      "title": "可能的重复",
+      "description": "可能被记录了两次的人：相同邮箱、相同电话，或同一公司的相似姓名。",
+      "scan": "查找重复",
+      "lastScan": "上次检查：{when}。新联系人每隔几分钟会自动检查。",
+      "neverScanned": "尚未检查。",
+      "scanned": "{count, plural, =0 {未发现可能的重复。} other {发现 # 个可能的重复。}}",
+      "dismissedDone": "已标记为不是同一人。此组合不会再被推荐。",
+      "bulkDone": "{count, plural, =0 {未合并任何内容。} other {已合并 # 组。每次合并均可在 30 天内撤销。}}",
+      "statusNav": "按状态筛选",
+      "status": {
+        "open": "待处理（{count}）",
+        "dismissed": "非重复",
+        "merged": "已合并"
+      },
+      "caption": {
+        "open": "待审核的可能重复",
+        "dismissed": "标记为不是同一人的组合",
+        "merged": "已合并的组合"
+      },
+      "empty": {
+        "open": {
+          "title": "没有可能的重复",
+          "description": "选择“查找重复”立即检查所有人。新联系人会自动检查。"
+        },
+        "dismissed": {
+          "title": "没有已排除的",
+          "description": "你标记为不是同一人的组合会显示在这里。"
+        },
+        "merged": {
+          "title": "还没有合并",
+          "description": "你合并的组合会显示在这里。可在该人员页面撤销合并。"
+        }
+      },
+      "select": "选择",
+      "selectPair": "选择 {pair}",
+      "pair": "{a} 和 {b}",
+      "columns": {
+        "people": "人员",
+        "confidence": "可信度",
+        "reasons": "原因",
+        "review": "审核"
+      },
+      "score": "{score}%",
+      "review": "审核",
+      "reviewPair": "审核 {pair}",
+      "mergeSelected": "合并所选",
+      "mergeSelectedHint": "保留每组中较早的记录和最新的信息。系统会要求你确认身份。",
+      "errors": {
+        "noneSelected": "请至少选择一组进行合并。",
+        "tooMany": "每次最多选择 50 组。"
+      }
+    },
+    "reasons": {
+      "email": "相同邮箱地址",
+      "phone": "相同电话号码",
+      "name_company": "同一公司的相似姓名"
+    },
+    "compare": {
+      "title": "审核可能的重复",
+      "description": "可信度 {score}%：{reasons}。",
+      "resolved": "此组合已处理。",
+      "record": "记录 {n}",
+      "older": "（较早）",
+      "entries": "{count, plural, =0 {无条目} other {# 条}}",
+      "openTimeline": "打开{record}的时间线",
+      "consentTitle": "合并后的同意状态",
+      "consentEmail": "营销邮件：{status}",
+      "consentSms": "营销短信：{status}",
+      "consentRule": "以最严格的选择为准：只要任一记录已退订，合并后的记录即为退订。",
+      "keepLegend": "保留哪条记录",
+      "keepHint": "另一条记录会合并到这里。其邮箱地址仍能找到此人。",
+      "keepOption": "{record}（{email}）",
+      "fieldLegend": {
+        "name": "姓名",
+        "email": "邮箱",
+        "phone": "电话",
+        "company": "公司"
+      },
+      "fieldOption": "{record}：{value}",
+      "dismiss": "不是同一人"
+    },
+    "consent": {
+      "granted": "已订阅",
+      "withdrawn": "已退订",
+      "unknown_legacy": "未知（导入）",
+      "none": "无同意"
     }
   }
 }

@@ -252,6 +252,12 @@ Start the slow reviews early. Everything is built against fakes meanwhile; each 
 - [ ] Accounts: Svix, Nango, Mux, Meilisearch Cloud, Tinybird (only when volume needs it), Anthropic API key for production AI.
 - [ ] Prices: subscription tiers (D22, with launch data), agency commission defaults (P6-8), streaming markup (D24).
 - [ ] Legal (`legal-copy`): API terms, DPA and subprocessor list, integration privacy disclosures, agency agreement terms, CE certificate wording.
+- [ ] **M6.1a CRM merge defaults, pending owner** (labels: `db-migration`, `tenancy`). Built with these defaults; say if any should change:
+  - Who merges: the new permission `contacts:merge` goes to owners, admins and managers. Marketing members (and anyone with `contacts:read`) see People, timelines and the duplicates queue but can't merge.
+  - Entitlement: People, duplicates and merging sit under the `marketing` module key (the Audiences area). P6-13 named no CRM key; a separate key (e.g. `crm_pro`) can be added later with no code change elsewhere.
+  - Consent on a merge: an opt-out on either record wins; otherwise a grant on either record carries over (a legacy "unknown" only if neither granted). The person's own choice is never invented.
+  - Duplicate score: same mailbox (plus-tags and Gmail dots ignored) 90, same phone 80, similar name at the same company 65–85, combined as independent evidence and capped at 99. Pairs are only suggested; a person always decides.
+  - Undo window: 30 days. Erasing either record ends it (the snapshot is scrubbed).
 
 ## Phase 4 (weddings and galas)
 - [ ] **M4.1a guest list: defaults pending owner** (labels: `db-migration`, `tenancy`). Built with these defaults; say if any should change:
