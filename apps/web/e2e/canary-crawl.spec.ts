@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { expect, type Page, test } from '@playwright/test';
 import { LOCALES } from '@yayatoh/contracts';
+import { signDisplayToken } from '@yayatoh/engagement';
 import type { CanaryOrg } from '@yayatoh/testing';
 import {
   canaryToken,
@@ -165,6 +166,54 @@ test.describe('canary leak crawl (roadmap §9)', () => {
     expect([...seen]).toEqual(
       expect.arrayContaining(['orders.orders.buyer_email', 'attendees.attendees.email']),
     );
+    expect(formatLeaks(leaks)).toBe('no canary leaks');
+  });
+
+  test('live polls and Q&A: the participant page, the big screen and the public stream carry no canary', async ({
+    page,
+  }) => {
+    // M5.7a: the canary org's keynote has a pending question whose body is a canary; only
+    // approved questions may ever reach a public payload.
+    const c = canary();
+    await page.goto(`${MARKET}/events/${c.event.slug}`);
+    const href = await page.locator(`a[href*="/events/${c.event.slug}/live/"]`).first().getAttribute('href');
+    const sessionId = /\/live\/([0-9a-f-]{36})/.exec(href ?? '')?.[1] ?? '';
+    expect(sessionId).not.toBe('');
+    const secret = process.env.APP_TOKEN_SECRET ?? '';
+    const token = signDisplayToken({ orgId: c.orgId, sessionId, version: 1 }, secret);
+    const leaks: Leak[] = [];
+    for (const url of [
+      `${MARKET}/events/${c.event.slug}/live/${sessionId}`,
+      `${MARKET}/ar/events/${c.event.slug}/live/${sessionId}`,
+      `${MARKET}/display/${token}`,
+    ]) {
+      const res = await browserFetch(page, url);
+      expect(res?.status, url).toBe(200);
+      leaks.push(...leaksIn(url, `${res?.body ?? ''}\n${res?.extra ?? ''}`, { kind: 'public' }));
+    }
+    // The audience's realtime snapshot and the big screen's stream.
+    const channel = `org:${c.orgId}:event:${c.event.id}:session:${sessionId}:live`;
+    for (const url of [`/api/realtime/${encodeURIComponent(channel)}`, `/api/engagement/display/${token}`]) {
+      const text = await page.evaluate(async (u) => {
+        const ctrl = new AbortController();
+        const res = await fetch(u, { signal: ctrl.signal });
+        let out = `${res.status}\n`;
+        if (res.ok && res.body) {
+          const reader = res.body.getReader();
+          const deadline = Date.now() + 5_000;
+          while (!out.includes('event: snapshot') && Date.now() < deadline) {
+            const { value, done } = await reader.read();
+            if (done) break;
+            out += new TextDecoder().decode(value);
+          }
+        }
+        ctrl.abort();
+        return out;
+      }, url);
+      expect(text, url).toContain('event: snapshot');
+      expect(text, url).toContain('How do fixtures stay isolated?');
+      leaks.push(...leaksIn(url, text, { kind: 'public' }));
+    }
     expect(formatLeaks(leaks)).toBe('no canary leaks');
   });
 
