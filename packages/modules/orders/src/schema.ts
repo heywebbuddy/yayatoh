@@ -771,3 +771,35 @@ export const supportMacroRuns = tenantTable(
     }),
   ],
 );
+
+/**
+ * M4.8a: the donation item of a gift order (P4-9). A gift is an order with no ticket lines and
+ * one donation item: the gift and the processing fee the donor chose to cover (P4-10), both going
+ * to the charity. `gift_id` is the `donations` module's gift (a higher tier: no foreign key).
+ * Paid as a direct charge on the organizer's connected account with application fee 0.
+ */
+export const donationItems = tenantTable(
+  ordersSchema,
+  'donation_items',
+  {
+    orderId: uuid('order_id').notNull(),
+    giftId: uuid('gift_id').notNull(),
+    /** What the donor gives to (the campaign's name when the gift was made). */
+    name: text('name').notNull(),
+    amountMinor: minor('amount_minor').notNull(),
+    feeCoverMinor: minor('fee_cover_minor').notNull().default(0),
+    currency: text('currency').notNull(),
+  },
+  (t) => [
+    uniqueIndex('donation_items_org_order_key').on(t.orgId, t.orderId),
+    uniqueIndex('donation_items_org_gift_key').on(t.orgId, t.giftId),
+    foreignKey({
+      name: 'donation_items_order_fk',
+      columns: [t.orgId, t.orderId],
+      foreignColumns: [orders.orgId, orders.id],
+    }).onDelete('cascade'),
+    check('donation_items_amount_check', sql`amount_minor > 0 and fee_cover_minor >= 0`),
+    check('donation_items_currency_check', sql`currency ~ '^[A-Z]{3}$'`),
+    check('donation_items_name_length', sql`length(name) between 1 and 120`),
+  ],
+);

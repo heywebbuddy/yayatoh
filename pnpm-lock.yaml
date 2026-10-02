@@ -471,6 +471,9 @@ importers:
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@yayatoh/donations':
+        specifier: workspace:*
+        version: link:../../packages/modules/donations
       '@yayatoh/events':
         specifier: workspace:*
         version: link:../../packages/modules/events
@@ -652,6 +655,9 @@ importers:
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@yayatoh/donations':
+        specifier: workspace:*
+        version: link:../../packages/modules/donations
       '@yayatoh/events':
         specifier: workspace:*
         version: link:../../packages/modules/events
@@ -1453,6 +1459,46 @@ importers:
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../kernel
+      '@yayatoh/platform':
+        specifier: workspace:*
+        version: link:../../platform
+      drizzle-orm:
+        specifier: 'catalog:'
+        version: 0.45.3(@opentelemetry/api@1.9.0)(kysely@0.29.6)(pg@8.23.0)(postgres@3.4.9)
+      zod:
+        specifier: 'catalog:'
+        version: 4.6.5
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.19.0
+      '@yayatoh/config':
+        specifier: workspace:*
+        version: link:../../config
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  packages/modules/donations:
+    dependencies:
+      '@yayatoh/contracts':
+        specifier: workspace:*
+        version: link:../../contracts
+      '@yayatoh/csv':
+        specifier: workspace:*
+        version: link:../../csv
+      '@yayatoh/db':
+        specifier: workspace:*
+        version: link:../../db
+      '@yayatoh/events':
+        specifier: workspace:*
+        version: link:../events
+      '@yayatoh/kernel':
+        specifier: workspace:*
+        version: link:../../kernel
+      '@yayatoh/orders':
+        specifier: workspace:*
+        version: link:../orders
       '@yayatoh/platform':
         specifier: workspace:*
         version: link:../../platform
@@ -2516,6 +2562,9 @@ importers:
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../db
+      '@yayatoh/donations':
+        specifier: workspace:*
+        version: link:../modules/donations
       '@yayatoh/events':
         specifier: workspace:*
         version: link:../modules/events

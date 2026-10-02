@@ -10,6 +10,7 @@ import {
   staffAlertsSubscriber,
 } from '@yayatoh/checkin';
 import { deviceBoardPublisher, publishMetricsChangedTx } from '@yayatoh/command-center';
+import { giftOutcomesSubscriber } from '@yayatoh/donations';
 import { findEventTx } from '@yayatoh/events';
 import { registrationResumeMailer } from '@yayatoh/forms';
 import { listingsProjector } from '@yayatoh/marketplace';
@@ -127,6 +128,8 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     deviceBoardPublisher(),
     // M3.2b: the alert engine re-evaluates what each outbox event touched (sends through notifications).
     alertEvaluator({ notifier }),
+    // M4.8a: gift orders' outcomes (paid, failed, lapsed) move their gifts.
+    giftOutcomesSubscriber,
   ];
 }
 

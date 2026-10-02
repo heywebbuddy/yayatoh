@@ -144,6 +144,13 @@ export {
   sortQueue,
 } from './domain/waitlist.ts';
 export {
+  type DonationOrderInput,
+  donationItemTx,
+  onlineGivingTx,
+  payDonationOrderTx,
+  startDonationOrderTx,
+} from './donation-orders.ts';
+export {
   buyerOrdersDsarTx,
   buyerOrgs,
   eraseOrdersDsarTx,

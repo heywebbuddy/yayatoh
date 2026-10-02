@@ -39,6 +39,7 @@ import { z } from 'zod';
 import { formatCreditNoteNumber, parseCreditCode } from '../domain/credit-notes.ts';
 import { HOLD_MINUTES, orderLifecycle, PAYMENT_EXTENSION_MINUTES } from '../domain/lifecycle.ts';
 import { policySnapshot } from '../domain/refund-policy.ts';
+import { donationItemTx, payDonationOrderTx } from '../donation-orders.ts';
 import { CheckoutResultDto, OrderDto, StartCheckoutInput } from '../dto.ts';
 import { claimOccurrenceTx } from '../occurrence.ts';
 import { orderItems, orders } from '../schema.ts';
@@ -476,6 +477,12 @@ export const applyProviderEventCommand = tenantCommand({
       return { outcome: 'applied' as const, status: row.status };
     }
     if (order.status === 'paid') return { outcome: 'ignored' as const, status: order.status };
+    // M4.8a: a gift order has no tickets and holds no stock; it is paid as a gift.
+    const gift = await donationItemTx(tx, order.id);
+    if (gift) {
+      const row = await payDonationOrderTx(tx, ctx, order, gift.giftId, e.provider, emit);
+      return { outcome: 'applied' as const, status: row.status };
+    }
     if (order.status === 'expired') {
       // Paid after the hold lapsed: re-hold if stock is still there, otherwise flag for refund.
       let stockHeld = false;
