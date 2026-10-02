@@ -40,7 +40,7 @@ export async function ApprovalRules({
       <h2 id="rules-heading" className="text-section">
         {t('title')}
       </h2>
-      <p className="text-body text-zinc-600">{t('hint')}</p>
+      <p className="text-body text-ink-2">{t('hint')}</p>
       <Link
         href={`/o/${org}/e/${event}/registration/applications`}
         className="self-start text-body underline underline-offset-2"
@@ -56,7 +56,7 @@ export async function ApprovalRules({
               <Card className="flex flex-col gap-2">
                 {/* Not a heading: the types list above already heads each type by its name. */}
                 <p className="text-body font-medium">{x.name}</p>
-                <p className="text-caption text-zinc-600">
+                <p className="text-caption text-ink-2">
                   {r.kind === 'guest'
                     ? t('summaryGuest', { count: r.guestsPerHost })
                     : r.approval === 'manual'
@@ -70,7 +70,7 @@ export async function ApprovalRules({
                 </p>
                 {canWrite ? (
                   <details>
-                    <summary className="min-h-6 cursor-pointer text-caption text-zinc-600">
+                    <summary className="min-h-6 cursor-pointer text-caption text-ink-2">
                       {t('editNamed', { name: x.name })}
                     </summary>
                     <div className="flex flex-col gap-4 pt-3">

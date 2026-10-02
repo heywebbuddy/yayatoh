@@ -47,13 +47,13 @@ export default async function GroupRegisterPage({ params, searchParams }: Params
       ) : (
         <>
           <nav aria-label={t('countLabel')} className="flex flex-wrap items-center gap-2">
-            <span className="text-body text-zinc-600">{t('howMany')}</span>
+            <span className="text-body text-ink-2">{t('howMany')}</span>
             {[2, 3, 4, 5, 6, 8, 10].map((k) => (
               <Link
                 key={k}
                 href={`/events/${slug}/register/group?people=${k}`}
                 aria-current={k === count ? 'page' : undefined}
-                className={`inline-flex min-h-11 min-w-11 items-center justify-center rounded-pill border px-3 text-body ${k === count ? 'border-zinc-900 bg-zinc-900 text-white' : 'border-zinc-200 bg-white'}`}
+                className={`inline-flex min-h-11 min-w-11 items-center justify-center rounded-pill border px-3 text-body ${k === count ? 'border-ink bg-tag text-white' : 'border-line bg-surface'}`}
               >
                 {t('peopleCount', { count: k })}
               </Link>

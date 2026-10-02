@@ -205,7 +205,7 @@ export function RegistrationForm({ find, register }: { find: Action; register: A
                   />
                   {type.apply ? (
                     <>
-                      <p className="text-body text-zinc-600">{t('applyHint')}</p>
+                      <p className="text-body text-ink-2">{t('applyHint')}</p>
                       <Input
                         name="company"
                         autoComplete="organization"
@@ -219,7 +219,7 @@ export function RegistrationForm({ find, register }: { find: Action; register: A
                         label={t('jobTitle')}
                       />
                       <div className="flex flex-col gap-1.5">
-                        <label htmlFor="registration-message" className="text-caption text-zinc-600">
+                        <label htmlFor="registration-message" className="text-caption text-ink-2">
                           {t('message')}
                         </label>
                         <textarea
@@ -227,7 +227,7 @@ export function RegistrationForm({ find, register }: { find: Action; register: A
                           name="message"
                           rows={3}
                           maxLength={2000}
-                          className="rounded-card border border-zinc-200 bg-white px-4 py-2 text-body"
+                          className="rounded-card border border-line bg-surface px-4 py-2 text-body"
                         />
                       </div>
                     </>

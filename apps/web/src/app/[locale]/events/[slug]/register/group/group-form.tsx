@@ -48,7 +48,7 @@ export function GroupForm({
           : tr(errorMessageKey(state.code))
       : null;
   const selectClass = (name: string) =>
-    `min-h-11 rounded-pill border bg-white px-4 text-body ${bad.has(name) ? 'border-pink-700' : 'border-zinc-200'}`;
+    `min-h-11 rounded-pill border bg-surface px-4 text-body ${bad.has(name) ? 'border-danger' : 'border-line'}`;
   return (
     <form
       ref={ref}
@@ -91,7 +91,7 @@ export function GroupForm({
               error={fieldError(`email-${i}`)}
             />
             <div className="flex flex-col gap-1.5">
-              <label htmlFor={`pass-${i}`} className="text-caption text-zinc-600">
+              <label htmlFor={`pass-${i}`} className="text-caption text-ink-2">
                 {t('pass')}
               </label>
               <select
@@ -112,7 +112,7 @@ export function GroupForm({
                 ))}
               </select>
               {bad.has(`pass-${i}`) ? (
-                <p id={`pass-${i}-error`} className="text-caption text-pink-700">
+                <p id={`pass-${i}-error`} className="text-caption text-danger">
                   {fieldError(`pass-${i}`)}
                 </p>
               ) : null}

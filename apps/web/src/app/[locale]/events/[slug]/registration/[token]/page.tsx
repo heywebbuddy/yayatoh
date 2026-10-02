@@ -63,7 +63,7 @@ export default async function RegistrantPage({ params }: Params) {
         <p className="text-body">
           {r.name} · {r.typeName} · {r.itemName}
         </p>
-        <p className="text-caption text-zinc-600">{t('statusLine', { status: t(`status.${r.status}`) })}</p>
+        <p className="text-caption text-ink-2">{t('statusLine', { status: t(`status.${r.status}`) })}</p>
         {r.reason ? (
           <Alert tone="info" title={t('reasonTitle')}>
             {r.reason}
@@ -76,7 +76,7 @@ export default async function RegistrantPage({ params }: Params) {
             <h2 id="pay-heading" className="text-section">
               {t('payTitle')}
             </h2>
-            <p className="text-body text-zinc-600">{r.paying ? t('payingHint') : t('payHint')}</p>
+            <p className="text-body text-ink-2">{r.paying ? t('payingHint') : t('payHint')}</p>
             <ProgramForm
               action={payApprovedAction.bind(null, slug, token)}
               fields={[]}
@@ -105,7 +105,7 @@ export default async function RegistrantPage({ params }: Params) {
             ) : null}
             {r.guestsLeft > 0 && passes.length > 0 ? (
               <>
-                <p className="text-body text-zinc-600">{t('guestHint', { count: r.guestsLeft })}</p>
+                <p className="text-body text-ink-2">{t('guestHint', { count: r.guestsLeft })}</p>
                 <ProgramForm
                   action={addGuestAction.bind(null, slug, token)}
                   fields={[
@@ -121,7 +121,7 @@ export default async function RegistrantPage({ params }: Params) {
                 />
               </>
             ) : (
-              <p className="text-body text-zinc-600">{t('noGuestsLeft')}</p>
+              <p className="text-body text-ink-2">{t('noGuestsLeft')}</p>
             )}
           </Card>
         </section>

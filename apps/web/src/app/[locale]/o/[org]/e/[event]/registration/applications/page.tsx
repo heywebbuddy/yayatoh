@@ -126,7 +126,7 @@ export default async function ApplicationsPage({
   const failures = [...failureCounts];
   const pages = Math.ceil(queue.total / 50);
   const chip = (current: boolean) =>
-    `inline-flex min-h-8 items-center rounded-pill border px-3 text-caption ${current ? 'border-zinc-900 bg-zinc-900 text-white' : 'border-zinc-200 bg-white text-zinc-700'}`;
+    `inline-flex min-h-8 items-center rounded-pill border px-3 text-caption ${current ? 'border-ink bg-tag text-white' : 'border-line bg-surface text-ink-2'}`;
   const decidable = detail && !detail.hostName && ['pending', 'approved', 'denied'].includes(detail.status);
   return (
     <>
@@ -137,12 +137,12 @@ export default async function ApplicationsPage({
       >
         {t('backToSetup')}
       </Link>
-      {canWrite ? null : <p className="text-body text-zinc-500">{t('viewerNotice')}</p>}
+      {canWrite ? null : <p className="text-body text-ink-2">{t('viewerNotice')}</p>}
 
       {op ? (
         <section
           aria-labelledby="bulk-status-heading"
-          className="flex flex-col gap-2 rounded-panel border border-zinc-200 bg-white px-5 py-4"
+          className="flex flex-col gap-2 rounded-panel border border-line bg-surface px-5 py-4"
         >
           {opActive ? <AutoRefresh seconds={2} /> : null}
           <h2 id="bulk-status-heading" className="text-section">
@@ -165,7 +165,7 @@ export default async function ApplicationsPage({
                 : t('bulkRunning', { processed: op.processed, total: op.total })}
           </p>
           {failures.length ? (
-            <ul className="flex list-none flex-col gap-1 p-0 text-caption text-pink-700">
+            <ul className="flex list-none flex-col gap-1 p-0 text-caption text-danger">
               {failures.map(([code, count]) => (
                 <li key={code}>
                   {t('bulkFailure', {
@@ -179,7 +179,7 @@ export default async function ApplicationsPage({
         </section>
       ) : null}
       {sp.bulkError ? (
-        <p role="alert" className="text-body text-pink-700">
+        <p role="alert" className="text-body text-danger">
           {t.has(`bulkError.${sp.bulkError}`) ? t(`bulkError.${sp.bulkError}`) : t('bulkError.other')}
         </p>
       ) : null}
@@ -209,14 +209,14 @@ export default async function ApplicationsPage({
       >
         <input type="hidden" name="status" value={status} />
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="queue-type" className="text-caption text-zinc-600">
+          <label htmlFor="queue-type" className="text-caption text-ink-2">
             {t('type')}
           </label>
           <select
             id="queue-type"
             name="type"
             defaultValue={typeId ?? ''}
-            className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
+            className="min-h-10 rounded-pill border border-line bg-surface px-4 text-body"
           >
             <option value="">{t('allTypes')}</option>
             {setup.types.map((x) => (
@@ -227,7 +227,7 @@ export default async function ApplicationsPage({
           </select>
         </div>
         <div className="flex flex-1 flex-col gap-1.5">
-          <label htmlFor="queue-q" className="text-caption text-zinc-600">
+          <label htmlFor="queue-q" className="text-caption text-ink-2">
             {t('search')}
           </label>
           <input
@@ -235,7 +235,7 @@ export default async function ApplicationsPage({
             name="q"
             type="search"
             defaultValue={search}
-            className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
+            className="min-h-10 rounded-pill border border-line bg-surface px-4 text-body"
           />
         </div>
         <Button type="submit" variant="secondary" className="self-start md:self-end">
@@ -246,7 +246,7 @@ export default async function ApplicationsPage({
       {detail ? (
         <aside
           aria-labelledby="detail-heading"
-          className="flex flex-col gap-3 rounded-panel border border-zinc-200 bg-white px-5 py-4"
+          className="flex flex-col gap-3 rounded-panel border border-line bg-surface px-5 py-4"
         >
           <div className="flex flex-wrap items-start justify-between gap-2">
             <h2 id="detail-heading" className="text-section">
@@ -257,59 +257,59 @@ export default async function ApplicationsPage({
             </Link>
           </div>
           <dl className="grid grid-cols-1 gap-x-4 gap-y-1 text-body sm:grid-cols-[max-content_1fr]">
-            <dt className="text-zinc-600">{t('field.email')}</dt>
+            <dt className="text-ink-2">{t('field.email')}</dt>
             <dd>{detail.email}</dd>
-            <dt className="text-zinc-600">{t('field.registration')}</dt>
+            <dt className="text-ink-2">{t('field.registration')}</dt>
             <dd>
               {detail.typeName} · {detail.itemName}
               {detail.addOns.length ? ` + ${detail.addOns.join(', ')}` : ''}
             </dd>
-            <dt className="text-zinc-600">{t('field.status')}</dt>
+            <dt className="text-ink-2">{t('field.status')}</dt>
             <dd>
               {t(`status.${detail.status}`)}
               {detail.decisionSource ? ` · ${t(`source.${detail.decisionSource}`)}` : ''}
             </dd>
-            <dt className="text-zinc-600">{t('field.applied')}</dt>
+            <dt className="text-ink-2">{t('field.applied')}</dt>
             <dd>{format.dateTime(detail.createdAt, { dateStyle: 'medium', timeStyle: 'short' })}</dd>
             {detail.company ? (
               <>
-                <dt className="text-zinc-600">{t('field.company')}</dt>
+                <dt className="text-ink-2">{t('field.company')}</dt>
                 <dd>{detail.company}</dd>
               </>
             ) : null}
             {detail.jobTitle ? (
               <>
-                <dt className="text-zinc-600">{t('field.jobTitle')}</dt>
+                <dt className="text-ink-2">{t('field.jobTitle')}</dt>
                 <dd>{detail.jobTitle}</dd>
               </>
             ) : null}
             {detail.message ? (
               <>
-                <dt className="text-zinc-600">{t('field.message')}</dt>
+                <dt className="text-ink-2">{t('field.message')}</dt>
                 <dd className="whitespace-pre-line">{detail.message}</dd>
               </>
             ) : null}
             {detail.decisionReason ? (
               <>
-                <dt className="text-zinc-600">{t('field.reason')}</dt>
+                <dt className="text-ink-2">{t('field.reason')}</dt>
                 <dd className="whitespace-pre-line">{detail.decisionReason}</dd>
               </>
             ) : null}
             {detail.hostName ? (
               <>
-                <dt className="text-zinc-600">{t('field.host')}</dt>
+                <dt className="text-ink-2">{t('field.host')}</dt>
                 <dd>{detail.hostName}</dd>
               </>
             ) : null}
             {detail.ticketShortCode ? (
               <>
-                <dt className="text-zinc-600">{t('field.ticket')}</dt>
+                <dt className="text-ink-2">{t('field.ticket')}</dt>
                 <dd className="font-mono">{detail.ticketShortCode}</dd>
               </>
             ) : null}
             {detail.substitutions > 0 ? (
               <>
-                <dt className="text-zinc-600">{t('field.substitutions')}</dt>
+                <dt className="text-ink-2">{t('field.substitutions')}</dt>
                 <dd>{detail.substitutions}</dd>
               </>
             ) : null}
@@ -390,7 +390,7 @@ export default async function ApplicationsPage({
                 {t('substituteTitle')}
               </summary>
               <div className="flex flex-col gap-2 pt-3">
-                <p className="text-caption text-zinc-600">
+                <p className="text-caption text-ink-2">
                   {t('substituteHint', {
                     until: format.dateTime(detail.substitutionClosesAt, {
                       dateStyle: 'medium',
@@ -431,7 +431,7 @@ export default async function ApplicationsPage({
         >
           <input type="hidden" name="f_status" value={status} />
           <input type="hidden" name="f_type" value={typeId ?? ''} />
-          <p className="text-caption text-zinc-600" role="status">
+          <p className="text-caption text-ink-2" role="status">
             {t('showing', { count: queue.total })}
           </p>
           <ul className="flex list-none flex-col gap-2 p-0" aria-label={t('listLabel')}>
@@ -454,8 +454,8 @@ export default async function ApplicationsPage({
                     >
                       {r.name}
                     </Link>
-                    <span className="break-all text-caption text-zinc-600">{r.email}</span>
-                    <span className="text-caption text-zinc-600">
+                    <span className="break-all text-caption text-ink-2">{r.email}</span>
+                    <span className="text-caption text-ink-2">
                       {r.typeName} · {r.itemName} · {t(`status.${r.status}`)}
                       {r.hostName ? ` · ${t('guestOf', { name: r.hostName })}` : ''}
                     </span>
@@ -471,7 +471,7 @@ export default async function ApplicationsPage({
                   {t('previous')}
                 </Link>
               ) : null}
-              <span className="text-caption text-zinc-600">{t('pageOf', { page: page + 1, pages })}</span>
+              <span className="text-caption text-ink-2">{t('pageOf', { page: page + 1, pages })}</span>
               {page + 1 < pages ? (
                 <Link href={query({ page: String(page + 1) })} className="underline underline-offset-2">
                   {t('next')}
@@ -483,7 +483,7 @@ export default async function ApplicationsPage({
             <Card size="panel" className="flex flex-col gap-3">
               <h2 className="text-section">{t('bulkHeading')}</h2>
               <fieldset className="flex flex-col gap-1">
-                <legend className="pb-1 text-caption text-zinc-600">{t('scope')}</legend>
+                <legend className="pb-1 text-caption text-ink-2">{t('scope')}</legend>
                 <label className="flex min-h-6 items-center gap-2 text-body">
                   <input type="radio" name="scope" value="selected" defaultChecked className="size-5" />
                   {t('scopeSelected')}
@@ -496,26 +496,26 @@ export default async function ApplicationsPage({
                 ) : null}
               </fieldset>
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="bulk-decision" className="text-caption text-zinc-600">
+                <label htmlFor="bulk-decision" className="text-caption text-ink-2">
                   {t('decisionLabel')}
                 </label>
                 <select
                   id="bulk-decision"
                   name="decision"
-                  className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
+                  className="min-h-10 rounded-pill border border-line bg-surface px-4 text-body"
                 >
                   <option value="approve">{t('decision.approve')}</option>
                   <option value="deny">{t('decision.deny')}</option>
                 </select>
               </div>
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="bulk-template" className="text-caption text-zinc-600">
+                <label htmlFor="bulk-template" className="text-caption text-ink-2">
                   {t('template')}
                 </label>
                 <select
                   id="bulk-template"
                   name="templateId"
-                  className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
+                  className="min-h-10 rounded-pill border border-line bg-surface px-4 text-body"
                 >
                   {allTemplates.map((o) => (
                     <option key={o.value} value={o.value}>
@@ -525,7 +525,7 @@ export default async function ApplicationsPage({
                 </select>
               </div>
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="bulk-reason" className="text-caption text-zinc-600">
+                <label htmlFor="bulk-reason" className="text-caption text-ink-2">
                   {t('reason')}
                 </label>
                 <textarea
@@ -533,7 +533,7 @@ export default async function ApplicationsPage({
                   name="reason"
                   rows={2}
                   maxLength={1000}
-                  className="rounded-card border border-zinc-200 bg-white px-4 py-2 text-body"
+                  className="rounded-card border border-line bg-surface px-4 py-2 text-body"
                 />
               </div>
               <Button type="submit" className="self-start">
@@ -548,9 +548,9 @@ export default async function ApplicationsPage({
         <h2 id="templates-heading" className="text-section">
           {t('templatesTitle')}
         </h2>
-        <p className="text-body text-zinc-600">{t('templatesHint')}</p>
+        <p className="text-body text-ink-2">{t('templatesHint')}</p>
         {approval.templates.length === 0 ? (
-          <p className="text-body text-zinc-500">{t('noTemplates')}</p>
+          <p className="text-body text-ink-2">{t('noTemplates')}</p>
         ) : (
           <ul className="flex list-none flex-col gap-2 p-0">
             {approval.templates.map((x) => (
@@ -559,7 +559,7 @@ export default async function ApplicationsPage({
                   <h3 className="text-body font-medium">
                     {t(`decision.${x.decision}`)} · {x.label}
                   </h3>
-                  <p className="whitespace-pre-line text-caption text-zinc-600">{x.body}</p>
+                  <p className="whitespace-pre-line text-caption text-ink-2">{x.body}</p>
                   {canWrite ? (
                     <ProgramForm
                       action={removeTemplateAction.bind(null, org, event, x.id)}

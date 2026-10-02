@@ -61,7 +61,7 @@ export default async function GroupPage({ params }: Params) {
           <li key={m.id}>
             <Card className="flex flex-col gap-2">
               <h2 className="text-section">{m.name}</h2>
-              <p className="text-body text-zinc-600">
+              <p className="text-body text-ink-2">
                 {m.email} · {m.typeName} · {ta(`status.${m.status}`)}
               </p>
               {m.canSubstitute ? (
@@ -70,7 +70,7 @@ export default async function GroupPage({ params }: Params) {
                     {t('replaceNamed', { name: m.name })}
                   </summary>
                   <div className="flex flex-col gap-3 pt-3">
-                    <p className="text-caption text-zinc-600">
+                    <p className="text-caption text-ink-2">
                       {t('replaceHint', {
                         until: format.dateTime(m.substitutionClosesAt, {
                           dateStyle: 'medium',
@@ -93,7 +93,7 @@ export default async function GroupPage({ params }: Params) {
                   </div>
                 </details>
               ) : m.status === 'confirmed' ? (
-                <p className="text-caption text-zinc-600">{t('closed')}</p>
+                <p className="text-caption text-ink-2">{t('closed')}</p>
               ) : null}
             </Card>
           </li>

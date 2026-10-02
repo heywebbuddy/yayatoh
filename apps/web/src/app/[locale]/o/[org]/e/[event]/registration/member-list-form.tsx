@@ -30,7 +30,7 @@ export function MemberListForm({
       aria-label={t('membersFor', { name: typeName })}
     >
       <div className="flex flex-col gap-1.5">
-        <label htmlFor={`${idPrefix}-file`} className="text-caption text-zinc-600">
+        <label htmlFor={`${idPrefix}-file`} className="text-caption text-ink-2">
           {t('membersFile')}
         </label>
         <input
@@ -42,7 +42,7 @@ export function MemberListForm({
         />
       </div>
       <div className="flex flex-col gap-1.5">
-        <label htmlFor={`${idPrefix}-members`} className="text-caption text-zinc-600">
+        <label htmlFor={`${idPrefix}-members`} className="text-caption text-ink-2">
           {t('membersPaste')}
         </label>
         <textarea
@@ -51,9 +51,9 @@ export function MemberListForm({
           rows={4}
           aria-invalid={bad ? true : undefined}
           aria-describedby={`${idPrefix}-members-hint`}
-          className={`rounded-card border bg-white px-4 py-2 text-body ${bad ? 'border-pink-700' : 'border-zinc-200'}`}
+          className={`rounded-card border bg-surface px-4 py-2 text-body ${bad ? 'border-danger' : 'border-line'}`}
         />
-        <p id={`${idPrefix}-members-hint`} className="text-caption text-zinc-500">
+        <p id={`${idPrefix}-members-hint`} className="text-caption text-ink-2">
           {t('membersHint')}
         </p>
       </div>
