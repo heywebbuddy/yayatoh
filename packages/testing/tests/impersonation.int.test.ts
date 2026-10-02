@@ -173,7 +173,8 @@ describe('impersonation: the pipeline refuses money, export and delete (M1.2e)',
     expect(exportStarts).toEqual(
       expect.arrayContaining([
         'platform.startAuditCsv',
-        'privacy.startDsarExport',
+        // The data-subject archive (M6.1c).
+        'privacy.exportSubject',
         'reports.startAttendeesCsv',
         'reports.startBookingsCsv',
         // Survey responses CSV (M3.9a).
@@ -186,7 +187,8 @@ describe('impersonation: the pipeline refuses money, export and delete (M1.2e)',
     expect(files).toEqual(
       expect.arrayContaining([
         'platform.auditCsvFile',
-        'privacy.dsarExportFile',
+        'privacy.archiveFile',
+        'privacy.selfArchiveFile',
         'reports.attendeesCsvFile',
         'reports.bookingsCsvFile',
         'attendees.importFailures',

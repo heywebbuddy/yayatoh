@@ -4,6 +4,7 @@ export {
   sendAccountNotice,
   userPreferencesTx,
 } from './account-data.ts';
+export { notificationsDataSubjects } from './data-subject.ts';
 export {
   CAMPAIGN_DEDUPE_PREFIX,
   campaignDedupeKey,

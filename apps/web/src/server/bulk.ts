@@ -4,7 +4,6 @@ import { audienceExportAction } from '@yayatoh/audiences';
 import { guestImportAction } from '@yayatoh/guests';
 import { ticketCancelAction, waitlistExportAction } from '@yayatoh/orders';
 import { auditExportAction, bulkStepCommand, runBulkOperation } from '@yayatoh/platform';
-import { dsarExportAction } from '@yayatoh/privacy';
 import { attendeeExportAction, bookingsExportAction } from '@yayatoh/reports';
 import { seatAssignAction } from '@yayatoh/seating';
 import { surveyExportAction } from '@yayatoh/surveys';
@@ -19,7 +18,6 @@ export const BULK_ACTIONS = [
   attendeeExportAction,
   bookingsExportAction,
   auditExportAction,
-  dsarExportAction,
   seatAssignAction,
   ticketResendAction,
   ticketCancelAction,

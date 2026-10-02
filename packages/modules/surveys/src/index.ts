@@ -1,3 +1,4 @@
+export { surveysDataSubjects } from './data-subject.ts';
 export {
   answerCell,
   type NpsSummary,

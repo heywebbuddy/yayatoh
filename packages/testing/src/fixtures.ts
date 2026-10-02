@@ -180,7 +180,7 @@ import {
   publishRealtimeTx,
   recentEventsTx,
 } from '@yayatoh/platform';
-import { dsarExportBulk } from '@yayatoh/privacy';
+import { exportSubjectCommand, openRequestCommand } from '@yayatoh/privacy';
 import {
   assignBoothCommand,
   claimSessionPlaceTx,
@@ -1400,17 +1400,21 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
       createCtx({ orgId: org.id }),
       ports,
     );
-  // A data-subject access request for the imported guest (M1.14c, isolation coverage).
+  // Data-subject requests (M1.14c, M6.1c; isolation coverage): the imported guest's access request,
+  // fulfilled (a signed archive in the media store), and an open erasure request (sealed address).
   const dsar = await executeCommand(
-    dsarExportBulk.start,
-    {
-      selection: { filter: { email: `imported-${slug}@example.test` } },
-      params: { email: `imported-${slug}@example.test`, orgName: name },
-    },
+    openRequestCommand,
+    { email: `imported-${slug}@example.test`, kind: 'access' },
     ctx(),
     ports,
   );
-  await runBulk(org.id, dsar.operationId);
+  await executeCommand(exportSubjectCommand, { requestId: dsar.requestId }, ctx(), ports);
+  await executeCommand(
+    openRequestCommand,
+    { email: `forget-me-${slug}@example.test`, kind: 'erasure' },
+    ctx(),
+    ports,
+  );
   // Legacy migration (M2.2b): a host_affiliate child org (its own owner) and one legacy statement.
   const affiliate = await createOrganization(
     userCtx(uuidv7()),

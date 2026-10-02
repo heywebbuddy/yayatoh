@@ -11,6 +11,7 @@ export {
   setAudienceCommand,
 } from './campaigns.ts';
 export * from './client.ts';
+export { campaignsDataSubjects } from './data-subject.ts';
 export { type CampaignBrand, renderCampaign } from './domain/render.ts';
 export {
   type Allocation,

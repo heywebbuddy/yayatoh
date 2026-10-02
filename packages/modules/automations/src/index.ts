@@ -1,3 +1,4 @@
+export { automationsDataSubjects } from './data-subject.ts';
 export * from './domain/conditions.ts';
 export * from './domain/journey.ts';
 export * from './domain/templates.ts';

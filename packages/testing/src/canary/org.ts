@@ -9,7 +9,7 @@ import { updateSiteSettingsCommand } from '@yayatoh/marketplace';
 import { announcementMailer, sendAnnouncementCommand } from '@yayatoh/messaging';
 import { createNotifier, dispatchDue, memoryTransports } from '@yayatoh/notifications';
 import { auditExportBulk, consumeEvent, keyVault, recentEventsTx } from '@yayatoh/platform';
-import { dsarExportBulk } from '@yayatoh/privacy';
+import { archiveFileQuery, exportSubjectCommand, openRequestCommand, unzip } from '@yayatoh/privacy';
 import { attendeeExportBulk, BOOKING_EXPORT_COLUMNS, bookingsExportBulk } from '@yayatoh/reports';
 import { hideReviewCommand } from '@yayatoh/reviews';
 import {
@@ -362,17 +362,17 @@ async function generateExports(
     tx.execute<{ email: string }>(sql`select email from attendees.attendees order by created_at limit 1`),
   );
   const email = guest?.email ?? `nobody@${slug}.test`;
-  await run(
-    'dsar',
-    () =>
-      executeCommand(
-        dsarExportBulk.start,
-        { selection: { filter: { email } }, params: { email, orgName: 'Canary Leak Check' } },
-        ctx(),
-        ports,
-      ),
-    (operationId) => executeQuery(dsarExportBulk.file, { operationId }, ctx(), ports),
-  );
+  // M6.1c: the access archive (a signed ZIP) for that guest; its JSON files are what is checked.
+  {
+    const { requestId } = await executeCommand(openRequestCommand, { email, kind: 'access' }, ctx(), ports);
+    await executeCommand(exportSubjectCommand, { requestId }, ctx(), ports);
+    const file = await executeQuery(archiveFileQuery, { requestId }, ctx(), ports);
+    const text = [...unzip(file.bytes)]
+      .filter(([path]) => path.endsWith('.json'))
+      .map(([, bytes]) => new TextDecoder().decode(bytes))
+      .join('\n');
+    out.push({ kind: 'dsar', name: file.name, content: text });
+  }
   await run(
     'audit',
     () =>

@@ -1,3 +1,4 @@
+export { guestsDataSubjects } from './data-subject.ts';
 export {
   changedFields,
   countGuests,

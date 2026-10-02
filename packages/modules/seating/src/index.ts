@@ -13,6 +13,7 @@ export {
 export { BulkAssignTarget, seatAssignAction, seatAssignBulk } from './bulk-assign.ts';
 export { type ChartKey, publicDoc } from './chart.ts';
 export { instantiateSeatingTx, SeatingSnapshot, seatingSnapshotTx } from './copy.ts';
+export { seatingDataSubjects } from './data-subject.ts';
 export {
   ASSIGN_SEAT_STATES,
   type AssignSeatState,

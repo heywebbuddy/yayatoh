@@ -15,6 +15,7 @@ export {
   setPayoutHoldCommand,
 } from './accounts.ts';
 export { paymentProviderFromEnv } from './config.ts';
+export { paymentsDataSubjects } from './data-subject.ts';
 export { claimProviderEventTx } from './dedupe.ts';
 export {
   alertDisputeDeadlinesCommand,

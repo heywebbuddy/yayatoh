@@ -38,7 +38,7 @@ export function finderCodeFor(codeId: string): string {
   return String(mac('seat-finder-code', codeId).readUInt32BE(0) % 1_000_000).padStart(6, '0');
 }
 const codeHash = (codeId: string, code: string) => mac('seat-finder-code-hash', `${codeId}:${code}`);
-const emailHash = (eventId: string, email: string) =>
+export const emailHash = (eventId: string, email: string) =>
   mac('seat-finder-email', `${eventId}:${email}`).toString('hex');
 const normalizeEmail = (email: string) => email.trim().toLowerCase();
 

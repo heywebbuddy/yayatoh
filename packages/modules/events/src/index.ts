@@ -40,6 +40,7 @@ export {
   shortLinksQuery,
 } from './commands/short-links.ts';
 export { EventSettingsSnapshot, eventSettingsTx, insertEventCopyTx } from './copy.ts';
+export { eventsDataSubjects } from './data-subject.ts';
 export {
   ACCESS_ATTEMPT_WINDOW_MS,
   ACCESS_ATTEMPTS_PER_WINDOW,

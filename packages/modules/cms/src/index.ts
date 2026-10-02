@@ -16,6 +16,7 @@ export {
   sitemapEntries,
   updateEntryCommand,
 } from './cms.ts';
+export { cmsDataSubjects } from './data-subject.ts';
 export {
   CONTACT_TOPICS,
   ctaHrefProblem,

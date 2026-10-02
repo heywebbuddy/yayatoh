@@ -12,6 +12,7 @@ export {
   setCheckpointArchivedCommand,
   TWO_ENTRANCES_WINDOW_MS,
 } from './checkpoints.ts';
+export { checkinDataSubjects } from './data-subject.ts';
 export {
   DEVICE_ONLINE_WINDOW_MS,
   DeviceDto,

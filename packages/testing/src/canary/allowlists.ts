@@ -1,4 +1,4 @@
-import type { ColumnId } from './registry.ts';
+import { type ColumnId, privateColumnList } from './registry.ts';
 
 /**
  * What each org-scoped or door-scoped response may show of the org's own private data
@@ -52,8 +52,16 @@ export const DOOR_ALLOW: readonly ColumnId[] = [
 export const EXPORT_ALLOW = {
   attendees: [...ATTENDEE, 'ticketing.tickets.short_code'],
   bookings: ORDER,
-  // The access request is the person's own data (their guest record and organizer labels).
-  dsar: ATTENDEE,
+  // The access archive (M6.1c) is the person's own data from every module: their personal and holder
+  // values, plus the organizer's labels about them. Never a secret or another internal column.
+  dsar: [
+    ...privateColumnList()
+      .filter((c) => c.rule.class === 'personal' || c.rule.class === 'holder')
+      .map((c) => c.id),
+    'attendees.attendees.labels',
+    'crm.event_participation.labels',
+    'crm.contact_profile.labels',
+  ],
   // The activity log for owners and admins: who did it and to what.
   audit: ['platform.audit_events.actor', 'platform.audit_events.target_id'],
   // An audience (M3.6a): the contact's name and email; counts, dates and consent codes only.

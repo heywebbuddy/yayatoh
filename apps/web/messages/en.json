@@ -1462,7 +1462,8 @@
   "legal": {
     "platform": "Yayatoh",
     "updated": "Last updated {date}",
-    "organizerPages": "{org} policies"
+    "organizerPages": "{org} policies",
+    "privacyRequest": "Ask for a copy of your data, or for it to be erased"
   },
   "setup": {
     "title": "Get ready to sell · {done} of {total} done",
@@ -2459,70 +2460,197 @@
   },
   "privacy": {
     "title": "Privacy requests",
-    "description": "Answer people who ask what you hold about them, or ask to be forgotten. Every request is recorded.",
+    "description": "Answer people who ask for a copy of what you hold about them, or ask to be forgotten. Each request is due within 30 days and recorded.",
     "noticeLink": "Yayatoh privacy notice",
     "noAccessTitle": "Only owners and admins can handle privacy requests",
     "noAccessDescription": "Ask an owner or admin of this organization to help with a request about someone’s data.",
     "find": {
       "title": "Find a person",
-      "hint": "Search by email across contacts, orders, tickets, guest lists, answers and check-ins.",
+      "hint": "Search by email across everything this organization holds: contacts, orders, tickets, guest lists, forms, messages, speakers and more.",
       "email": "Email address",
       "submit": "Find"
     },
     "result": {
       "title": "What this organization holds about {email}",
       "noneTitle": "Nothing found for this email",
-      "noneDescription": "No contact, order, ticket or guest record uses this address in this organization."
+      "noneDescription": "No record in this organization uses this address. You can still open a request to answer the person formally."
     },
-    "categories": {
-      "contacts": "Contact records",
-      "consents": "Consent records",
-      "orders": "Orders",
-      "paidOrders": "Paid orders (kept for accounting)",
-      "tickets": "Tickets",
-      "activeTickets": "Valid tickets",
-      "claims": "Ticket transfer links",
-      "holderLinks": "Ticket access links",
+    "modules": {
+      "crm": "Contacts and consent",
+      "orders": "Orders and waitlists",
+      "ticketing": "Tickets",
       "attendees": "Guest list entries",
-      "answers": "Checkout answers",
-      "admissions": "Check-ins",
-      "invitations": "Team invitations"
+      "forms": "Form answers",
+      "checkin": "Check-ins",
+      "tenancy": "Team invitations",
+      "notifications": "Messages sent",
+      "seating": "Seat finder",
+      "alerts": "Alert settings",
+      "guests": "Wedding and party guests",
+      "messaging": "Conversations",
+      "assistance": "Help requests",
+      "program": "Speaker details",
+      "events": "Portal accounts",
+      "media": "Uploaded files",
+      "cms": "Contact form messages",
+      "venues": "Venue quote requests",
+      "reviews": "Reviews",
+      "payments": "Payment disputes",
+      "surveys": "Survey answers",
+      "registration": "Registrations",
+      "badges": "Badges",
+      "automations": "Journeys",
+      "campaigns": "Campaign sends",
+      "audiences": "Audiences",
+      "marketing": "Marketing attribution",
+      "reports": "Analytics events",
+      "privacy": "Privacy requests",
+      "platform": "Exports and system records"
     },
-    "export": {
-      "title": "Export their data",
-      "hint": "A JSON file with everything above, for you to send to the person. It is deleted after 7 days.",
-      "submit": "Export data (JSON)",
-      "download": "Download the file",
-      "running": "Preparing the file… reload the page in a moment."
-    },
-    "erase": {
-      "title": "Erase this person",
-      "what": "Their name, email, phone, answers and links are removed from contacts, orders, tickets and guest lists, and export files that mention them are deleted.",
-      "holds": "{paid, plural, =0 {No paid orders need to be kept.} one {# paid order is kept for tax and accounting, without their name or email.} other {# paid orders are kept for tax and accounting, without their name or email.}}",
-      "tickets": "{active, plural, =0 {They have no valid tickets.} one {# valid ticket stays valid, without a name.} other {# valid tickets stay valid, without a name.}}",
-      "final": "This can’t be undone.",
-      "confirm": "Type {email} to confirm",
-      "submit": "Erase personal data",
-      "done": "Erased. {records, plural, one {# record was} other {# records were}} redacted or deleted; {kept, plural, =0 {no paid orders were kept} one {# paid order was kept without personal data} other {# paid orders were kept without personal data}}."
+    "open": {
+      "title": "Open a request",
+      "hint": "You confirmed who is asking. The request is due in 30 days; you fulfil it on its own page.",
+      "kind": "What does the person ask for?",
+      "access": "A copy of their data (access)",
+      "accessHint": "A signed ZIP with everything held about them.",
+      "erasure": "Erase their data (erasure)",
+      "erasureHint": "Removes them everywhere, except records the law requires you to keep.",
+      "submit": "Open the request",
+      "existing": "A request is already open for this person.",
+      "review": "Review the open request"
     },
     "errors": {
       "invalidEmail": "Enter a valid email address.",
       "confirmMismatch": "That doesn’t match. Type the same email address to confirm.",
-      "nothingHeld": "Nothing is held about this email any more."
+      "kindRequired": "Choose what the person asks for.",
+      "reasonRequired": "Give a reason of at least 3 characters.",
+      "closed": "This request is already closed."
     },
-    "history": {
-      "title": "Past requests",
-      "caption": "Privacy requests, newest first",
-      "empty": "No requests yet.",
-      "when": "When",
+    "queue": {
+      "title": "Open requests",
+      "caption": "Open privacy requests, the soonest due first",
+      "emptyTitle": "No open requests",
+      "empty": "When someone asks about their data, find them above and open a request. People can also ask from your privacy notice.",
+      "person": "Person",
       "kind": "Request",
-      "subject": "Person",
-      "by": "Handled by",
+      "source": "From",
+      "opened": "Opened",
+      "due": "Due",
+      "overdue": "Overdue",
+      "action": "Action",
+      "review": "Review"
+    },
+    "closed": {
+      "title": "Closed requests",
+      "caption": "Fulfilled and withdrawn requests, newest first",
+      "empty": "No closed requests yet.",
+      "when": "Closed",
+      "status": "Status",
       "records": "Records"
     },
     "kinds": {
-      "access": "Access (export)",
+      "access": "Access (copy)",
       "erasure": "Erasure"
+    },
+    "statuses": {
+      "open": "Open",
+      "completed": "Done",
+      "cancelled": "Withdrawn"
+    },
+    "sources": {
+      "staff": "Staff, for the person",
+      "self": "The person (email confirmed)"
+    },
+    "request": {
+      "titleAccess": "Access request",
+      "titleErasure": "Erasure request",
+      "openedNotice": "Request opened. It is due by {date}.",
+      "cancelledNotice": "Request withdrawn.",
+      "fields": {
+        "kind": "Request",
+        "source": "From",
+        "opened": "Opened",
+        "due": "Due by",
+        "verified": "Email confirmed",
+        "completed": "Fulfilled",
+        "cancelled": "Withdrawn",
+        "reason": "Reason"
+      },
+      "holdings": {
+        "title": "What this organization holds",
+        "empty": "Nothing is held about this person",
+        "emptyHint": "You can still fulfil the request: the person gets a formal answer that nothing is held."
+      },
+      "export": {
+        "title": "Send them a copy",
+        "hint": "One ZIP with a JSON file per part of Yayatoh and their files, signed so anyone can check it was not changed. It can be downloaded for 7 days.",
+        "submit": "Create the archive",
+        "done": "The archive is ready.",
+        "notified": "We emailed the person a download link.",
+        "until": "Available until {date}.",
+        "download": "Download the archive (ZIP)",
+        "expired": "The archive expired and was deleted. Open a new request if the person needs another copy."
+      },
+      "erase": {
+        "title": "Erase this person",
+        "what": "Their name, email, phone, answers, messages and links are removed from every part of Yayatoh, and export files that mention them are deleted.",
+        "holds": "Paid orders, credit notes, payment disputes and consent history are kept where the law requires, without their name or email, and listed in the receipt.",
+        "files": "Their uploads and earlier archives are deleted from storage.",
+        "final": "This can’t be undone.",
+        "confirm": "Type {email} to confirm",
+        "submit": "Erase personal data",
+        "done": "Erased. The signed receipt below lists what was erased and what was kept, and why."
+      },
+      "cancel": {
+        "title": "Withdraw the request",
+        "hint": "If the person withdrew it, or it was not genuine. The reason is recorded with the request.",
+        "reason": "Reason",
+        "submit": "Withdraw request"
+      },
+      "receipt": {
+        "title": "Erasure receipt",
+        "erased": "Erased",
+        "held": "Kept under a legal hold",
+        "noneErased": "Nothing needed erasing.",
+        "noneHeld": "Nothing had to be kept.",
+        "table": "Data",
+        "action": "What happened",
+        "rows": "Records",
+        "ref": "Record",
+        "basis": "Why it is kept",
+        "until": "Kept until",
+        "files": "{count, plural, =0 {No stored files were deleted.} one {# stored file was deleted.} other {# stored files were deleted.}}",
+        "suppressed": "The address is on the platform-wide erased list: no organization can send it marketing again unless the person opts in.",
+        "connectors": "{count, plural, =0 {No connected services needed to be told.} other {Connected services told to erase the person too: {names}.}}",
+        "signature": "Signed with Ed25519 key {key}.",
+        "download": "Download the receipt (PDF)",
+        "notified": "We emailed the person a link to this receipt.",
+        "actions": {
+          "delete": "Deleted",
+          "redact": "Personal data removed",
+          "hold": "Kept, personal data removed"
+        },
+        "bases": {
+          "tax_accounting": "Tax and accounting records (7 years)",
+          "payment_dispute": "Evidence for a payment dispute",
+          "accountability": "Proof the request was handled"
+        }
+      }
+    },
+    "pdf": {
+      "title": "Erasure receipt",
+      "request": "Request",
+      "person": "Person",
+      "source": "Asked by",
+      "requested": "Requested",
+      "due": "Due by",
+      "completed": "Erased",
+      "signatureTitle": "Signature",
+      "algorithm": "Algorithm",
+      "keyId": "Key id",
+      "digest": "Receipt SHA-256",
+      "signature": "Signature (base64)",
+      "footer": "Issued by Yayatoh for {org}. The signature covers the receipt’s data; check it with the public key below."
     }
   },
   "privacyNotice": {
@@ -9038,6 +9166,38 @@
       "tooManyTemplates": "This event has the most templates it can have.",
       "stale": "Someone else saved this template meanwhile. Reload the page to see their version.",
       "questionNotAllowed": "That question can't be printed on badges."
+    }
+  },
+  "privacyRequest": {
+    "title": "Ask about your personal data",
+    "description": "Ask {org} for a copy of the personal data it holds about you, or to erase it. They answer within 30 days. First we email you a code to check the address is yours.",
+    "notice": "Read the {org} privacy notice",
+    "kindLegend": "What would you like?",
+    "access": "A copy of my data",
+    "accessHint": "You get a link to a ZIP file with everything held about you.",
+    "erasure": "Erase my data",
+    "erasureHint": "{org} removes you from its records, except what the law requires it to keep (such as paid orders for tax).",
+    "email": "Your email address",
+    "emailHint": "The address you used with this organizer.",
+    "submit": "Email me a code",
+    "sent": "We emailed a 6-digit code to {email}. Enter it to confirm your request. It works for 10 minutes.",
+    "resent": "We sent a new code to {email}.",
+    "codeLabel": "Confirmation code",
+    "confirm": "Confirm my request",
+    "resend": "Send a new code",
+    "changeEmail": "Use another address",
+    "doneTitle": "Request received",
+    "doneBody": "{org} will answer by {date}. Your reference is {reference}. You will get an email when it is done.",
+    "existingBody": "You already have an open request with {org}. It is due by {date}; your reference is {reference}.",
+    "errors": {
+      "invalidEmail": "Enter a valid email address.",
+      "kindRequired": "Choose a copy of your data or erasure.",
+      "rateLimited": "{minutes, plural, one {Too many attempts. Try again in # minute.} other {Too many attempts. Try again in # minutes.}}",
+      "codeFormat": "Enter the 6 digits from the email.",
+      "wrong": "{count, plural, =0 {That code isn’t right. Ask for a new code.} one {That code isn’t right. # try left.} other {That code isn’t right. # tries left.}}",
+      "locked": "Too many wrong codes. Ask for a new code.",
+      "expired": "That code has expired or was already used. Ask for a new code.",
+      "generic": "Something went wrong. Please try again."
     }
   }
 }
