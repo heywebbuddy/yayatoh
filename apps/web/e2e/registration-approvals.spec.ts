@@ -48,7 +48,7 @@ const rulesCard = (page: Page, name: string) =>
   page
     .getByRole('region', { name: 'Applications, guests and name changes' })
     .getByRole('listitem')
-    .filter({ has: page.getByRole('heading', { name, exact: true }) });
+    .filter({ has: page.getByText(name, { exact: true }) });
 
 /** Set a matrix cell's price by keyboard. */
 async function price(page: Page, cell: string, amount: string) {

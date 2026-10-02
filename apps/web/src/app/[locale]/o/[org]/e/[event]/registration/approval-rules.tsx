@@ -54,7 +54,8 @@ export async function ApprovalRules({
           return (
             <li key={x.id}>
               <Card className="flex flex-col gap-2">
-                <h3 className="text-body font-medium">{x.name}</h3>
+                {/* Not a heading: the types list above already heads each type by its name. */}
+                <p className="text-body font-medium">{x.name}</p>
                 <p className="text-caption text-zinc-600">
                   {r.kind === 'guest'
                     ? t('summaryGuest', { count: r.guestsPerHost })
