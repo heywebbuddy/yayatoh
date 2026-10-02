@@ -46,4 +46,15 @@ export const privateColumns = columnPrivacy('guests', {
     cells_ciphertext: personal('sealed-json'),
     error_code: 'vocab',
   },
+  // M4.1c: sub-events and invitations.
+  sub_events: {
+    // "Ceremony", "Reception": the host's program, shown to invited guests (M4.5a), never public.
+    name: internal(),
+    kind: 'vocab',
+    place: internal(),
+  },
+  sub_event_responses: {
+    status: 'vocab',
+    source: 'vocab',
+  },
 });

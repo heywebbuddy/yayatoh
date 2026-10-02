@@ -322,6 +322,12 @@ export default async function GuestsPage({
           ) : null
         }
       />
+      <Link
+        href={`/o/${org}/e/${event}/guests/sub-events`}
+        className="min-h-6 self-start py-1 text-caption underline"
+      >
+        {t('subEvents.link')}
+      </Link>
       {canWrite ? null : <p className="text-body text-zinc-500">{tp('viewerNotice')}</p>}
 
       <section aria-labelledby="guest-counts-heading" className="flex flex-col gap-3">

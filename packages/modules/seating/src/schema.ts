@@ -266,3 +266,29 @@ export const seatingRules = tenantTable(
     check('seating_rules_params_check', sql`jsonb_typeof(params) = 'object'`),
   ],
 );
+
+/**
+ * A sub-event's own chart (M4.1c): a wedding's ceremony in rows and its reception at tables, on
+ * the same day, need different drawings. A sub-event without one uses the chart of its date
+ * (M1.7g), then the event plan (`resolveSubEventChartTx`). A drawing only for now: guests are
+ * seated on it with M4.3a; nothing is ever sold on it. `(org_id, event_id, sub_event_id)`
+ * references `guests.sub_events` through a hand-written foreign key (same event; the chart goes
+ * with its sub-event), so this module never imports guests' schema.
+ */
+export const subEventCharts = tenantTable(
+  seatingSchema,
+  'sub_event_charts',
+  {
+    eventId: uuid('event_id').notNull(),
+    subEventId: uuid('sub_event_id').notNull(),
+    /** The library layout it was copied from, when it was (else a copy of the fallback chart). */
+    sourceLayoutId: uuid('source_layout_id'),
+    doc: jsonb('doc').notNull(),
+    checksum: text('checksum').notNull(),
+    seatCount: integer('seat_count').notNull(),
+  },
+  (t) => [
+    uniqueIndex('sub_event_charts_org_sub_event_key').on(t.orgId, t.subEventId),
+    index('sub_event_charts_org_event_idx').on(t.orgId, t.eventId),
+  ],
+);
