@@ -240,6 +240,16 @@
       "subject": "Rappel : {title} pour {eventName}",
       "intro": "{org} attend toujours « {title} » pour {eventName}. Échéance : {until}.",
       "cta": "Ouvrir mes tâches"
+    },
+    "registration.approved": {
+      "subject": "Votre demande pour {eventName} est acceptée",
+      "intro": "Bonne nouvelle, {name} : votre demande de participation à {eventName} en tant que {typeName} a été acceptée. Utilisez le bouton ci-dessous pour voir votre inscription et, si votre pass est payant, payer et confirmer votre place.",
+      "cta": "Voir mon inscription"
+    },
+    "registration.denied": {
+      "subject": "Votre demande pour {eventName}",
+      "intro": "Merci d’avoir demandé à participer à {eventName} en tant que {typeName}, {name}. L’organisateur n’a pas pu accepter votre demande cette fois-ci. Aucun montant ne vous a été facturé.",
+      "cta": "Voir ma demande"
     }
   },
   "roles": {

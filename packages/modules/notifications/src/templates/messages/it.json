@@ -240,6 +240,16 @@
       "subject": "Promemoria: {title} per {eventName}",
       "intro": "{org} attende ancora «{title}» per {eventName}. Scadenza: {until}.",
       "cta": "Apri le mie attività"
+    },
+    "registration.approved": {
+      "subject": "La tua richiesta per {eventName} è stata approvata",
+      "intro": "Buone notizie, {name}: la tua richiesta di partecipare a {eventName} come {typeName} è stata approvata. Usa il pulsante qui sotto per vedere la tua iscrizione e, se il tuo pass è a pagamento, pagare e confermare il tuo posto.",
+      "cta": "Vedi la mia iscrizione"
+    },
+    "registration.denied": {
+      "subject": "La tua richiesta per {eventName}",
+      "intro": "Grazie per aver chiesto di partecipare a {eventName} come {typeName}, {name}. Questa volta l’organizzatore non ha potuto approvare la tua richiesta. Non ti è stato addebitato nulla.",
+      "cta": "Vedi la mia richiesta"
     }
   },
   "roles": {

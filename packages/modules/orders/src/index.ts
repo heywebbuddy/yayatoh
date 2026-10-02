@@ -235,6 +235,7 @@ export {
   resendAt,
 } from './guest/otp.ts';
 export { buyerFactsTx, orderRefTx } from './participation.ts';
+export { orderPaymentStateTx } from './payment-state.ts';
 export { privateColumns } from './private-columns.ts';
 export {
   listOrdersQuery,

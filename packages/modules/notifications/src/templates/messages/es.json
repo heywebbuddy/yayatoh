@@ -240,6 +240,16 @@
       "subject": "Recordatorio: {title} para {eventName}",
       "intro": "{org} sigue esperando «{title}» para {eventName}. Vence: {until}.",
       "cta": "Abrir mis tareas"
+    },
+    "registration.approved": {
+      "subject": "Tu solicitud para {eventName} ha sido aprobada",
+      "intro": "Buenas noticias, {name}: tu solicitud para asistir a {eventName} como {typeName} ha sido aprobada. Usa el botón de abajo para ver tu inscripción y, si tu pase tiene precio, pagar y confirmar tu plaza.",
+      "cta": "Ver mi inscripción"
+    },
+    "registration.denied": {
+      "subject": "Tu solicitud para {eventName}",
+      "intro": "Gracias por solicitar asistir a {eventName} como {typeName}, {name}. El organizador no ha podido aprobar tu solicitud esta vez. No se te ha cobrado nada.",
+      "cta": "Ver mi solicitud"
     }
   },
   "roles": {

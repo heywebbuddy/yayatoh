@@ -240,6 +240,16 @@
       "subject": "Herinnering: {title} voor {eventName}",
       "intro": "{org} wacht nog op ‘{title}’ voor {eventName}. Uiterlijk: {until}.",
       "cta": "Mijn taken openen"
+    },
+    "registration.approved": {
+      "subject": "Je aanvraag voor {eventName} is goedgekeurd",
+      "intro": "Goed nieuws, {name}: je aanvraag om {eventName} bij te wonen als {typeName} is goedgekeurd. Gebruik de knop hieronder om je registratie te bekijken en, als je pas iets kost, te betalen en je plek te bevestigen.",
+      "cta": "Mijn registratie bekijken"
+    },
+    "registration.denied": {
+      "subject": "Je aanvraag voor {eventName}",
+      "intro": "Bedankt voor je aanvraag om {eventName} bij te wonen als {typeName}, {name}. De organisator kon je aanvraag deze keer niet goedkeuren. Er is niets in rekening gebracht.",
+      "cta": "Mijn aanvraag bekijken"
     }
   },
   "roles": {

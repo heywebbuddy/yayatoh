@@ -1,12 +1,14 @@
 # registration (tier 5)
 
 Registration types and admission items (M5.1a; layout in ADR 0021). Owns Postgres schema `registration`:
-`registration_types`, `admission_items`, `type_items` (the matrix cells) and `capacity_claims`. Later increments
+`registration_types`, `admission_items`, `type_items` (the matrix cells), `capacity_claims` and (M5.1c)
+`registrants`, `type_members` (auto-approve member lists) and `reason_templates`. Later increments
 add registrations, approvals, groups, invoices (M5.1c/d) and session enrollments (M5.2b) here.
 
 **Invariants**
 - **One inventory.** A registration type × admission item cell is exactly one ticket type, created by
-  `registration.setCell` with `managed_by = 'registration'` (hidden, one per order). Orders, tickets, refunds,
+  `registration.setCell` with `managed_by = 'registration'` (hidden; up to 20 per order since M5.1c, one per
+  named registrant of a group, each registrant still picking each item once). Orders, tickets, refunds,
   check-in, badges and reports see ordinary tickets. Ticketing refuses to quote, edit or archive a managed pass for
   anyone but registration, so the public checkout, the box office, access codes and `/v1` can't sell or change it.
   Disabling a cell archives its pass and the cell; enabling it again makes a new cell (old tickets still count).
@@ -40,3 +42,32 @@ add registrations, approvals, groups, invoices (M5.1c/d) and session enrollments
 - **Events:** `registration.type.{created,updated,archived}@1`, `registration.item.{created,updated,archived}@1`,
   `registration.cell.{enabled,disabled}@1` (ids and keys only), `registration.type.over_capacity@1`.
 - **`RegistrationTypeRef`** (id, key, name) is the stable reference for other modules (M5.1b form paths, badges).
+
+**M5.1c: approval, groups and +1**
+- **Registrants** are one named person each: `pending` (applied) → `approved` → `confirmed`, or `denied`; a public,
+  group or +1 checkout makes `reserved` registrants of its order, `confirmed` when it is paid (each with one of the
+  order's admission tickets, named for them; `registration.registrants` subscriber) or `cancelled` when it lapses.
+  An approved applicant whose order lapses stays approved (order cleared) and may pay again.
+- **Apply-to-attend** (`approval = 'manual'` on the type): `registration.apply` makes a pending application with no
+  order: **nobody is charged before approval**. The public checkout, groups and the waitlist refuse approval types
+  (`approval_required`). Auto-approval on applying: an address at an auto-approve domain (subdomains match), else on
+  the type's member list (CSV or an audience snapshot taken by the app). A free selection is confirmed on approval;
+  a paid one is paid from the applicant's signed link (`registration.payApproved`, which returns the open order of
+  an earlier attempt instead of a second one).
+- **Capacity on approval:** approved places count against the type's room like open waitlist offers
+  (`typeDemandTx().approved`; public room, offer room and the capacity floor subtract them). Approval locks the
+  registrant, then the type row, so concurrent approvals never pass the capacity. Every path locks registrant →
+  type, and multi-type checkouts lock types in id order.
+- **Decisions** (`registration.decide`, bulk `registration.decide` action = `registration.startDecide`): deciding
+  what is already decided changes nothing (no second email); bulk runs 50 per chunk, each registrant in its own
+  savepoint (a full type fails alone with its code); a crash replays only the uncommitted chunk. Approval and denial
+  emails (`registration.approved` / `registration.denied`, dedupe per decision time) carry the reason (typed or a
+  reason template).
+- **Groups:** one payer, up to 20 named registrants each with a type and pass, one order; capacity claimed per type
+  (`capacity_claims` unique per order and type). **Substitution** until the type's cut-off
+  (`substitution_cutoff_hours` before the start) by the payer (group link) or the organizer: the ticket is reissued
+  (new signed code and short code, the old ones stop), so exactly one credential stays valid; the attendee moves.
+  A domain rule binds the new person. Audited (`registration.substitute`).
+- **+1:** a type of `kind = 'guest'` is never sold directly or listed publicly; a confirmed host adds guests from
+  their own link (up to `guests_per_host`), paid by the host in its own order, linked by `host_registrant_id`.
+- **Events:** `registration.registrant.{applied,approved,denied,confirmed,substituted}@1` (ids only).

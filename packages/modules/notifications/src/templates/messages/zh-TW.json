@@ -240,6 +240,16 @@
       "subject": "提醒：{eventName}的{title}",
       "intro": "{org}仍在等待您提交{eventName}的「{title}」。截止時間：{until}。",
       "cta": "開啟我的任務"
+    },
+    "registration.approved": {
+      "subject": "您參加 {eventName} 的申請已獲核准",
+      "intro": "{name}，好消息：您以 {typeName} 身分參加 {eventName} 的申請已獲核准。請點選下方按鈕查看您的報名；如果您的通行證需要付費，請完成付款以確認名額。",
+      "cta": "查看我的報名"
+    },
+    "registration.denied": {
+      "subject": "您參加 {eventName} 的申請",
+      "intro": "{name}，感謝您申請以 {typeName} 身分參加 {eventName}。主辦單位這次未能核准您的申請。您沒有被收取任何費用。",
+      "cta": "查看我的申請"
     }
   },
   "roles": {

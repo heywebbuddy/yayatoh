@@ -199,6 +199,9 @@ export const PLATFORM_PREFIXES: readonly string[] = [
  */
 export const PLATFORM_PATTERNS: readonly RegExp[] = [
   /^\/events\/[^/]+\/(register|registration-form|waitlist|exhibitors)$/,
+  // M5.1c: group registration, an applicant's or registrant's own page, the payer's group page.
+  /^\/events\/[^/]+\/register\/group$/,
+  /^\/events\/[^/]+\/(registration|group)\/[^/]+$/,
 ];
 export const PLATFORM_FILES: ReadonlySet<string> = new Set([
   '/widget.js',

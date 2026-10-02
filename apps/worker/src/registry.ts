@@ -31,7 +31,7 @@ import {
 import { payoutDestinationMailer } from '@yayatoh/payments';
 import { type Subscriber, signLinkToken } from '@yayatoh/platform';
 import { portalSpeakerCleanup, taskReminderMailer } from '@yayatoh/program';
-import { registrationCapacity } from '@yayatoh/registration';
+import { decisionMailer, registrantLifecycle, registrationCapacity } from '@yayatoh/registration';
 import { analyticsForwarder, metricsProjector, postgresAnalyticsSink } from '@yayatoh/reports';
 import { finderCodeMailer, releaseCancelledSeats } from '@yayatoh/seating';
 import { surveyMailer } from '@yayatoh/surveys';
@@ -119,6 +119,9 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     ...journeySubscribers(),
     // M5.1a: per-type capacity follows orders (paid, expired, refunded, cancelled) and offers freed places.
     registrationCapacity(),
+    // M5.1c: registrants follow their orders; approval and denial emails.
+    registrantLifecycle(),
+    decisionMailer({ notifier, appOrigin }),
     // M3.6a: contact × event participation and contact profiles for audiences.
     participationProjector(),
     listingsProjector({ onChange: (orgId) => revalidatePublicCache(appOrigin, orgId, secret) }),

@@ -150,7 +150,7 @@ export function RegistrationForm({ find, register }: { find: Action; register: A
                     <span className="flex flex-col">
                       <span>
                         {x.name} · {x.priceLabel}
-                        {x.full ? ` · ${t('full')}` : ''}
+                        {x.apply ? ` · ${t('byApplication')}` : x.full ? ` · ${t('full')}` : ''}
                       </span>
                       {x.description ? (
                         <span className="text-caption text-zinc-600">{x.description}</span>
@@ -198,13 +198,52 @@ export function RegistrationForm({ find, register }: { find: Action; register: A
                     label={t('name')}
                     error={state.field === 'name' ? t('errors.field.name') : undefined}
                   />
-                  {type.full ? (
+                  {type.apply ? (
+                    <>
+                      <p className="text-body text-zinc-600">{t('applyHint')}</p>
+                      <Input
+                        name="company"
+                        autoComplete="organization"
+                        maxLength={120}
+                        label={t('company')}
+                      />
+                      <Input
+                        name="jobTitle"
+                        autoComplete="organization-title"
+                        maxLength={120}
+                        label={t('jobTitle')}
+                      />
+                      <div className="flex flex-col gap-1.5">
+                        <label htmlFor="registration-message" className="text-caption text-zinc-600">
+                          {t('message')}
+                        </label>
+                        <textarea
+                          id="registration-message"
+                          name="message"
+                          rows={3}
+                          maxLength={2000}
+                          className="rounded-card border border-zinc-200 bg-white px-4 py-2 text-body"
+                        />
+                      </div>
+                    </>
+                  ) : null}
+                  {type.full && !type.apply ? (
                     <Alert tone="info" title={t('fullTitle', { type: type.name })}>
                       {t('fullHint')}
                     </Alert>
                   ) : null}
                   <div className={verify ? 'hidden' : 'contents'}>
-                    {type.full ? (
+                    {type.apply ? (
+                      <Button
+                        type="submit"
+                        name="intent"
+                        value="apply"
+                        disabled={pending}
+                        className="self-start"
+                      >
+                        {t('apply')}
+                      </Button>
+                    ) : type.full ? (
                       <Button
                         type="submit"
                         name="intent"
@@ -238,7 +277,11 @@ export function RegistrationForm({ find, register }: { find: Action; register: A
                 <h2 id="registration-verify-title" className="text-section">
                   {tr('guestVerify.title')}
                 </h2>
-                <input type="hidden" name="intent" value={type?.full ? 'waitlist' : 'register'} />
+                <input
+                  type="hidden"
+                  name="intent"
+                  value={type?.apply ? 'apply' : type?.full ? 'waitlist' : 'register'}
+                />
                 {verify.token ? <input type="hidden" name="verifyToken" value={verify.token} /> : null}
                 <GuestCodeFields
                   email={verify.email}

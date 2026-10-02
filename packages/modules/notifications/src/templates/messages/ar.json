@@ -240,6 +240,16 @@
       "subject": "تذكير: {title} لـ {eventName}",
       "intro": "ما زالت {org} بانتظار «{title}» لـ {eventName}. الموعد النهائي: {until}.",
       "cta": "فتح مهامي"
+    },
+    "registration.approved": {
+      "subject": "تمت الموافقة على طلبك لحضور {eventName}",
+      "intro": "أخبار سارة يا {name}: تمت الموافقة على طلبك لحضور {eventName} بصفة {typeName}. استخدم الزر أدناه لعرض تسجيلك، وإذا كان لتذكرتك سعر، للدفع وتأكيد مكانك.",
+      "cta": "عرض تسجيلي"
+    },
+    "registration.denied": {
+      "subject": "طلبك لحضور {eventName}",
+      "intro": "شكرًا لتقديمك طلب حضور {eventName} بصفة {typeName} يا {name}. لم يتمكن المنظم من الموافقة على طلبك هذه المرة. لم يتم خصم أي مبلغ منك.",
+      "cta": "عرض طلبي"
     }
   },
   "roles": {

@@ -240,6 +240,16 @@
       "subject": "Reminder: {title} for {eventName}",
       "intro": "{org} is still waiting for “{title}” for {eventName}. Due: {until}.",
       "cta": "Open my tasks"
+    },
+    "registration.approved": {
+      "subject": "You're approved for {eventName}",
+      "intro": "Good news, {name}: your application to attend {eventName} as {typeName} was approved. Use the button below to see your registration and, if your pass has a price, to pay and confirm your place.",
+      "cta": "View my registration"
+    },
+    "registration.denied": {
+      "subject": "Your application for {eventName}",
+      "intro": "Thank you for applying to attend {eventName} as {typeName}, {name}. The organizer could not approve your application this time. You have not been charged.",
+      "cta": "View my application"
     }
   },
   "roles": {

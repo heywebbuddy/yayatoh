@@ -16,6 +16,7 @@ import {
   setKeyVault,
 } from '@yayatoh/platform';
 import { dsarExportAction } from '@yayatoh/privacy';
+import { registrationDecideAction } from '@yayatoh/registration';
 import { attendeeExportAction, bookingsExportAction } from '@yayatoh/reports';
 import { seatAssignAction } from '@yayatoh/seating';
 import { surveyExportAction } from '@yayatoh/surveys';
@@ -50,6 +51,7 @@ export const BULK_ACTIONS = [
   audienceExportAction,
   waitlistExportAction,
   guestImportAction,
+  registrationDecideAction,
 ] as const;
 export const bulkStep = bulkStepCommand(BULK_ACTIONS);
 export const runBulk = (orgId: string, operationId: string, budgetMs?: number) =>

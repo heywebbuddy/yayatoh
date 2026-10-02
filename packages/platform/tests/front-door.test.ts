@@ -205,6 +205,10 @@ describe('who serves a request', () => {
       '/event-portal/sign-in/site',
       '/fr/event-portal',
       '/events/summit/exhibitors',
+      // M5.1c: group registration, the applicant's page, the payer's group page.
+      '/events/summit/register/group',
+      '/events/summit/registration/abc~sig',
+      '/events/summit/group/abc~sig',
     ]) {
       expect(isPlatformPath(new URL(p, 'https://x').pathname) || decide(p).owner === 'next').toBe(true);
       expect(decide(p, flags(), { legacy: true })).toEqual({
@@ -218,6 +222,7 @@ describe('who serves a request', () => {
     // The event page itself and its other sub-paths stay with the route table.
     expect(isPlatformPath('/events/summit')).toBe(false);
     expect(isPlatformPath('/events/summit/attendee')).toBe(false);
+    expect(isPlatformPath('/events/summit/group')).toBe(false);
   });
 });
 
