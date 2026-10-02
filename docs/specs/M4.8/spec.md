@@ -1,7 +1,8 @@
 # Spec: M4.8 — Gala donations
 
 - **Milestone:** M4.8 (Phase 4 plan `docs/plans/phase-4.md` §6, decisions P4-9 to P4-17, approved 2026-09-28; Wave B)
-- **Status:** M4.8a built (2026-10-02); M4.8b–g to follow
+- **Status:** M4.8a and M4.8b built (2026-10-02); M4.8c–g to follow
+- **Risk tags (M4.8b):** `db-migration`, `payments`, `tenancy`, `legal-copy`
 - **Risk tags:** `db-migration`, `payments`, `tenancy`
 - **Related ADRs:** 0005 (hybrid funds flow and ledger), 0014 (public output allowlists), 0018 (tokens only), 0021 (module layout)
 
@@ -124,3 +125,123 @@ Behind the `donations` entitlement and the gala/community profiles. Live money w
 
 ### 16. Owner tasks
 `docs/owner-inbox.md` → Phase 4 donations: the processing-fee rate donors may cover (standard 2.9 % + 30¢ vs a nonprofit rate), the default own-amount limits, and whether "how my name appears" should default to a choice.
+
+## M4.8b — charity profile and receipts (done)
+
+### 1. Goal and users
+A charity's donors and gala guests get a proper receipt for every payment, by email and as a PDF in their language, showing what is tax-deductible. The org enters its charity details once (legal name, EIN, 501(c)(3) status or a fiscal sponsor); Yayatoh staff check them against the IRS exempt-organization list. Gala ticket types carry a fair-market value, and their ticket pages tell buyers how much of the price is deductible before they buy. Donors get a year-end statement of the year's deductible payments.
+
+### 2. References
+- **Plan:** `docs/plans/phase-4.md` §6, row M4.8b; P4-11 (tax receipts, `legal-copy`), P4-13 (donor privacy).
+- **Decisions:** `docs/decisions.md` 2026-09-28 rows "Tax receipts for verified charities only", "Donations: organizer_mor direct charges only" (no tax-deductibility wording on `platform_mor`), "Donor privacy".
+- **IRS:** the Exempt Organizations Business Master File extract (`eo1.csv`–`eo4.csv`, public bulk download); IRC §170(f)(8) (written acknowledgment), §6115 (quid-pro-quo disclosure over $75).
+
+### 3. Scope
+**In:**
+- **Charity profile** per org (`/o/{org}/charity`, linked from Settings and from the event's Tax receipts page): legal name, EIN (normalized `12-3456789`, impossible prefixes refused), exempt status (own 501(c)(3) or fiscal sponsor, whose name and EIN then print on receipts), optional mailing address. Any change sends it to review again (new version); saving the same details changes nothing. Members read it; owners and admins (`org:update`) change it.
+- **Staff verification** in the admin app (`/charities`, staff action `charities`: admins and support): the waiting list (platform_reader, access-logged), the review page beside the IRS record for the EIN (the sponsor's for a sponsored project), name match hint, eligibility (subsection 03, deductibility 1, status 01–03), verify (optional note), reject or withdraw a verification (note the org sees). Verdicts are audited platform commands (`donations.verifyCharity`, `donations.rejectCharity`, `platform:charity.verify`) for the version reviewed (a profile changed meanwhile is refused as `stale`). The IRS record is looked up again on the server, never taken from the form.
+- **`ExemptOrgLookup` port:** `recordedExemptOrgLookup` (a recorded fixture in the EO BMF layout, invented organizations) in dev/CI; `bulkFileExemptOrgLookup` streams the downloaded files (`IRS_EO_BMF_DIR`); none otherwise (staff see the list isn't loaded and cannot verify). The download is an owner-run job (`pnpm --filter @yayatoh/worker irs-exempt-list`); no test calls the IRS.
+- **Fair-market value per ticket type** (`donations.ticket_fair_values`, set on the event's Tax receipts page: value per ticket and what buyers receive; `events:write`). A ticket type with a value turns receipts on for its orders.
+- **Quid-pro-quo notice** on the public ticket page (and the widget) for ticket types over $75 with a value, when the org is verified and sells to its own connected account: "Of your $500.00 payment, $350.00 is tax-deductible. The estimated fair-market value of the goods and services you receive is $150.00." The host's page previews it.
+- **Receipts**, one per payment (`donations.receipts`, numbered R-00001 per org, gap-free): every paid gift order, and every paid ticket order with at least one ticket type with a value. Deductible = paid − fair-market value (never below 0; a line without a value counts at its full price; the platform's booking fee is not part of the payment to the charity). A gift: "No goods or services were provided in exchange for this contribution." Tax-deductible only for a verified charity on `organizer_mor` in USD; otherwise a plain "Payment receipt … This payment is not tax-deductible." Issued by the `donations.receipt-issuer` subscriber (`order.paid@1`, `order.donation_paid@1`), mailed to the donor only (`donations.receipt`, body = the legal text) with a signed PDF link `/receipts/{orgId}/{token}`; the host's list and PDF on the Tax receipts page. Snapshots of the charity details and the wording version make each receipt immutable.
+- **Year-end statements** (`donations.year_end_statements`): the worker's daily pass (`runYearEndStatements`, leader only) runs `donations.yearEndStatements` per org with deductible receipts for the previous calendar year in the org's timezone; one statement per donor email and currency, totalling that year's deductible receipts exactly; reruns issue nothing. Mailed by `donations.statement-mailer` (`donations.year-end-statement`) with a signed PDF link `/statements/{orgId}/{token}`.
+- **Legal copy:** every receipt, statement and notice string is in one file, `packages/modules/donations/src/legal/receipt-copy.ts` (`RECEIPT_COPY_VERSION`), marked `LEGAL-COPY` for counsel; English is the source, 12 courtesy translations.
+- **PDFs** (Gotenberg, A4, RTL for Arabic) for receipts and statements; golden HTML and PDFs (English and Arabic).
+
+**Later / not yet:**
+- Refunds: a refunded payment keeps its receipt; a corrected or voided receipt (and a corrected statement) waits for the gift refund flow (M4.8e/g) and counsel.
+- Data-subject requests for gifts and receipts (export, erasure): a receipt is a tax record that must outlive an erasure request; needs counsel (owner inbox).
+- Receipt retention period (7 years is common); no purge yet.
+- Choose-your-amount (donation) ticket types get receipts like any ticket type with a value, but no quid-pro-quo notice (the price is the buyer's).
+- Non-US charities and other currencies (US/USD first, P4-11); per-org receipt signature/logo; a "resend receipt" button; statements on demand from the console.
+- Pledges, paddle raise and offline payments (M4.8c/e) will issue receipts through the same `issueReceiptTx` once they are paid.
+
+### 4. `touches:`
+```yaml
+touches:
+  - packages/modules/donations/**                      # charity.ts, fair-value.ts, receipts.ts, receipt-document.ts, exempt-orgs/**, legal/receipt-copy.ts, domain/receipts.ts; schema/index/private-columns appended
+  - packages/modules/orders/src/{receipt-facts,index}.ts      # receiptOrderFactsTx (new file + one export)
+  - packages/modules/ticketing/src/{fair-value-facts,index}.ts # ticketTypePricesTx (new file + one export)
+  - packages/modules/notifications/src/{kinds.ts,templates/samples.ts,templates/messages/*.json}  # two kinds, 13 locales
+  - packages/db/drizzle/0100_lush_vertigo.sql          # + meta (renumbered at merge)
+  - packages/testing/src/fixtures.ts                   # receiptRows
+  - packages/testing/tests/receipts.int.test.ts, apps/worker/tests/charity-review.int.test.ts
+  - apps/web/src/app/[locale]/o/[org]/(org)/{charity/**,settings/page.tsx}
+  - apps/web/src/app/[locale]/o/[org]/e/[event]/donations/{page.tsx,receipts/**}
+  - apps/web/src/app/[locale]/{receipts,statements}/[org]/[token]/route.ts
+  - apps/web/src/app/api/dev/charity/route.ts           # dev only
+  - apps/web/src/components/public-event-view.tsx       # the notice
+  - apps/web/src/server/{notifications,receipt-pdf}.ts, apps/web/messages/*.json
+  - apps/web/e2e/receipts.spec.ts
+  - apps/admin/src/{app/charities/**,server/charities.ts,server/staff-roles.ts,components/shell.tsx}, apps/admin/messages/en.json
+  - apps/admin/e2e/charities.spec.ts, apps/admin/tests/staff-roles.test.ts, apps/admin/package.json
+  - apps/worker/{src/registry.ts,src/main.ts,src/year-end.ts,scripts/irs-exempt-list.ts,package.json}
+```
+
+### 5. Data model
+| Table | Change | Notes |
+|---|---|---|
+| `donations.charity_profiles` | new | one per org: legal name, EIN, `exempt_kind` (`501c3`/`fiscal_sponsor`), sponsor name/EIN, address, status pending/verified/rejected, version, submitted/reviewed at, reviewed by, review note, `irs_*` (what the list said at verification) |
+| `donations.ticket_fair_values` | new | ticket type (unique per org), event, `fmv_minor`, currency, description |
+| `donations.receipt_sequences` | new | per-org counter (row lock) |
+| `donations.receipts` | new | order (unique), event, gift, number (unique per org), kind gift/ticket, `deductible`, donor name/email, locale, currency, amount/FMV/deductible minor, goods, charity name/EIN, sponsor name/EIN, address, `paid_at`, `tax_year` (org timezone), `copy_version` |
+| `donations.year_end_statements` | new | tax year, donor email, currency (unique together per org), donor name, locale, receipt count, totals, charity snapshot, `copy_version` |
+
+**RLS notes:**
+- [x] All five tables use `tenantTable()` (ENABLE + FORCE RLS, NULLIF policy, org-leading indexes, org-scoped uniques).
+- [x] Fixture rows for both orgs (`createOrgFixture` → `receiptRows`: a verified profile, a value on the fixture's ticket type, the receipt of its paid order, a statement).
+- [x] Text columns declared in `private-columns.ts`: donor name/email `personal`; the charity's legal name, EIN, address and sponsor are public record (they print on receipts); staff review data `internal`.
+
+**Migration:** `0100_lush_vertigo.sql` (to be renumbered), additive only. Hand-written block: `ticket_fair_values_ticket_type_fk` (→ `ticketing.ticket_types`, cascade), `ticket_fair_values_event_fk` (→ `events.events`, cascade), `receipts_order_fk` (→ `orders.orders`), `receipts_event_fk` (→ `events.events`), `receipts_gift_fk` (→ `donations.gifts`) (no action: tax records).
+
+### 6. API diff
+None (`/v1` unchanged).
+
+### 7. Events
+- New: `donations.charity_submitted@1`, `donations.charity_verified@1`, `donations.charity_rejected@1` `{orgId, profileId, version}`; `donations.statement_issued@1` `{orgId, statementId, year}`.
+- Consumed: `donations.receipt-issuer` ← `order.paid@1`, `order.donation_paid@1`; `donations.statement-mailer` ← `donations.statement_issued@1`.
+
+### 8. Entitlements and flags
+Entitlement `donations` (profile and values); staff verdicts and the yearly pass are platform commands (no entitlement). `IRS_EO_BMF_DIR` (the downloaded list).
+
+### 9. ELT impact
+None.
+
+### 10. Acceptance criteria
+| ID | Given / When / Then | Test |
+|---|---|---|
+| AC-M4.8b-01 | A $500 ticket with a $150 FMV gives a receipt with $350 deductible | unit `packages/modules/donations/tests/receipts.test.ts`; int `packages/testing/tests/receipts.int.test.ts` ("a $500 ticket…"); e2e `apps/web/e2e/receipts.spec.ts` ("a $500 ticket with a $150 fair-market value…", mailbox) |
+| AC-M4.8b-02 | A $100 gift with nothing in return says "No goods or services were provided" | unit golden (`golden.test.ts`); int ("a $100 gift…"); e2e ("a donor gives and receives the receipt in the dev mailbox…") |
+| AC-M4.8b-03 | An unverified org issues only "not tax-deductible" receipts (and no notice) | unit (`isDeductibleReceipt`); int ("an unverified org…", notices); e2e ("an unverified org issues only…", "set a fair-market value…" before verification) |
+| AC-M4.8b-04 | Golden PDFs in English and Arabic | `packages/modules/donations/tests/golden.test.ts` (HTML) and `golden.int.test.ts` (Gotenberg render, text per page; receipts and statement in en/ar) |
+| AC-M4.8b-05 | A year-end statement totals exactly (org timezone; once per donor; not before the year ends) | unit (`statementTotals`, `taxYearOf`, `statementYearDue`); int ("one statement per donor…") |
+| AC-M4.8b-06 | Isolation: every new table covered; another org cannot read a receipt, its PDF link or its statement | `isolation.int.test.ts` + `canary.int.test.ts` (fixture rows); int "isolation: one org never reads…", token checks |
+| AC-M4.8b-07 | Impersonation and freeze: staff acting as a member cannot verify or write statements; the freeze refuses profile, value, review and statement writes while receipts of completed payments still issue | int "impersonation and the read-only freeze"; `freeze.int.test.ts` and `impersonation.int.test.ts` sweeps (every exported command) |
+| AC-M4.8b-08 | Create the profile with every validation message; persisted after reload; waits for review | e2e "the owner creates the charity profile…" |
+| AC-M4.8b-09 | Staff verify against the IRS list (fixture), audited; reject with a note the org sees; ineligible records cannot be verified; stale versions refused; finance refused | admin e2e `apps/admin/e2e/charities.spec.ts`; int `apps/worker/tests/charity-review.int.test.ts` (access log, audit actor), receipts int (only staff, stale, mismatch, ineligible) |
+| AC-M4.8b-10 | Set FMV (validation, success, persistence); the verified charity's ticket page shows the notice; removing the value removes it | e2e "set a fair-market value; …notice" |
+| AC-M4.8b-11 | Give and receive the receipt in the dev mailbox, with a working PDF link; only the donor gets it; the host sees it with its PDF | e2e "a donor gives and receives the receipt…"; int (one message per receipt, replays) |
+| AC-M4.8b-12 | Viewers read the profile and receipts but see no write controls; unknown receipt PDFs are 404 | e2e "a viewer reads…"; int (viewer refused) |
+| AC-M4.8b-13 | Keyboard only, axe on every new screen and state, Arabic RTL (profile, receipts page, ticket notice) | e2e "keyboard only…", "Arabic…", `expectAccessible` throughout; admin e2e keyboard |
+| AC-M4.8b-14 | Every locale has every legal string with the same placeholders | unit "the legal-copy template" |
+
+### 11. Security and privacy
+- Receipts go only to the payer's email (P4-13); the PDF links are HMAC-signed per receipt and per org (the org id is in the path, never a header), `no-store`, `noindex`, no referrer. The host sees who gave (receipts need it).
+- The public notice carries prices and values only. Audit rows of the yearly pass carry the year and a count, never donor data; staff verdicts carry the EIN and the IRS name.
+- Staff list profiles through platform_reader (access-logged); verdicts are platform commands in the org (audited with the staff actor).
+
+### 12. Performance budget
+Issuing a receipt is a handful of indexed reads per paid order (most ticket orders stop at "no value"). The receipts page lists the latest 500. The yearly pass reads one year's deductible receipts per org.
+
+### 13. Rollout
+Behind the `donations` entitlement. Tax-deductible receipts need a verified profile, which needs the owner-run IRS download in production (`IRS_EO_BMF_DIR`) and counsel's review of the legal copy.
+
+### 15. Demo checklist
+- [ ] As a new owner (`/api/dev/user` with `org=new&twoFactor=1&event=published&profile=gala&payouts=active`), open Settings → **Charity profile**; save "Harbor Arts Alliance", EIN 234567891.
+- [ ] In the admin app (staff `omar@yayatoh.test`), **Charities** → open the org → the IRS record (fixture) matches → Verify.
+- [ ] On the event's **Tickets & orders**, add "Gala dinner" at 500; on **Donations → Open tax receipts**, set its value to 150 "Dinner and entertainment".
+- [ ] Open the public event page: "Of your $500.00 payment, $350.00 is tax-deductible…".
+- [ ] Buy one Gala dinner and give $100 on the giving page; drain messages (`/api/dev/outbox/drain`) and open `/dev/mailbox`: two receipts ($350.00 deductible; "No goods or services were provided"); open the PDFs.
+
+### 16. Owner tasks
+`docs/owner-inbox.md` → M4.8b: counsel reviews `receipt-copy.ts` (and the translations), run the IRS download job monthly, the staff role for verification, receipts after refunds, donor data requests and receipt retention.
