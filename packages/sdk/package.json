@@ -1,6 +1,6 @@
 {
   "name": "@yayatoh/sdk",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "TypeScript client for the Yayatoh /v1 API, typed from its OpenAPI document.",
   "license": "UNLICENSED",
   "type": "module",

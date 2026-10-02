@@ -122,12 +122,8 @@ export const EVENT_STATUSES = [
   'archived',
 ] as const;
 
-const statusChange = () =>
-  z.object({
-    eventId: id(),
-    from: z.enum(EVENT_STATUSES).openapi('WebhookEventStatus'),
-    to: z.enum(EVENT_STATUSES).openapi('WebhookEventStatus'),
-  });
+const EventStatus = z.enum(EVENT_STATUSES).openapi('WebhookEventStatus');
+const statusChange = () => z.object({ eventId: id(), from: EventStatus, to: EventStatus });
 
 /** The event lifecycle transitions (`event.published`, `event.cancelled`, …), one entry each. */
 const LIFECYCLE = [

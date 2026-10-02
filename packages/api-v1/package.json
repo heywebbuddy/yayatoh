@@ -29,6 +29,7 @@
     "@yayatoh/tenancy": "workspace:*",
     "@yayatoh/ticketing": "workspace:*",
     "@yayatoh/venues": "workspace:*",
+    "@yayatoh/webhooks": "workspace:*",
     "hono": "catalog:",
     "zod": "catalog:"
   },

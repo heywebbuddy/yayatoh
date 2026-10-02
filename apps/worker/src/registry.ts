@@ -30,6 +30,7 @@ import {
 } from '@yayatoh/orders';
 import { payoutDestinationMailer } from '@yayatoh/payments';
 import { type Subscriber, signLinkToken } from '@yayatoh/platform';
+import { defaultResolver } from '@yayatoh/platform/ssrf';
 import { portalSpeakerCleanup, taskReminderMailer } from '@yayatoh/program';
 import { registrationCapacity } from '@yayatoh/registration';
 import { analyticsForwarder, metricsProjector, postgresAnalyticsSink } from '@yayatoh/reports';
@@ -45,6 +46,7 @@ import {
   transferMailer,
   walletPassSync,
 } from '@yayatoh/ticketing';
+import { configureWebhooks, webhookPublisherFromEnv, webhookPublisherSubscriber } from '@yayatoh/webhooks';
 import { z } from 'zod';
 import { defineJob } from './jobs.ts';
 import { journeyJob } from './journeys.ts';
@@ -65,6 +67,9 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     throw new Error('APP_TOKEN_SECRET and NEXT_PUBLIC_APP_ORIGIN are required by the worker');
   // Subscribers queue messages; the notifications dispatcher sends them (main.ts).
   const notifier = createNotifier();
+  // M6.3b: outbound webhooks (Svix, or the fake outside production until the owner's account).
+  const webhooks = webhookPublisherFromEnv(env, appOrigin);
+  configureWebhooks({ publisher: webhooks, resolver: defaultResolver });
   return [
     invitationMailer({ notifier, appOrigin, secret }),
     ticketMailer({ notifier, appOrigin }),
@@ -134,6 +139,8 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     deviceBoardPublisher(),
     // M3.2b: the alert engine re-evaluates what each outbox event touched (sends through notifications).
     alertEvaluator({ notifier }),
+    // M6.3b: public outbox events to the org's webhook endpoints (thin payloads, catalog only).
+    webhookPublisherSubscriber({ publisher: () => webhooks }),
   ];
 }
 

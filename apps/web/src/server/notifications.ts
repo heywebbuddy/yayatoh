@@ -58,6 +58,7 @@ import {
   transferMailer,
   walletPassSync,
 } from '@yayatoh/ticketing';
+import { webhookPublisherSubscriber, webhooksRuntime } from '@yayatoh/webhooks';
 import { webhookAdapter } from './delivery-webhooks.ts';
 // The composition root registers the key vault (message params and manage links are encrypted).
 import { ports } from './ports.ts';
@@ -125,6 +126,8 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     // M5.3a speaker portal: invitations and task reminders.
     portalInviteMailer({ notifier, appOrigin }),
     taskReminderMailer({ notifier, appOrigin }),
+    // M6.3b: public events to the org's webhook endpoints (the fake records them).
+    webhookPublisherSubscriber({ publisher: () => webhooksRuntime().publisher }),
   ];
 }
 
