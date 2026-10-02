@@ -3,6 +3,7 @@ import * as alerts from '@yayatoh/alerts';
 import * as attendees from '@yayatoh/attendees';
 import * as audiences from '@yayatoh/audiences';
 import * as automations from '@yayatoh/automations';
+import * as badges from '@yayatoh/badges';
 import * as billing from '@yayatoh/billing';
 import * as campaigns from '@yayatoh/campaigns';
 import * as checkin from '@yayatoh/checkin';
@@ -79,6 +80,8 @@ const MODULES = {
   alerts,
   audiences,
   automations,
+  // Batch 3f merge: M5.5a badges (M5.3a and M5.4a grew events, program and media).
+  badges,
   campaigns,
   commandCenter,
   guests,

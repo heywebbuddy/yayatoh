@@ -102,7 +102,7 @@ contrast and reduced motion modes.
   needs nothing personal beyond an optional typed name).
 
 ### 5. Migration
-`0098_free_blindfold.sql` (renumbered at merge): new schema and six new tenant tables only, no
+`0099_glossy_tyger_tiger.sql` (renumbered at merge): new schema and six new tenant tables only, no
 locks on existing tables. Hand-written block (between `-- hand-written: begin/end`): composite FKs
 `session_settings`, `polls`, `questions` → `events.events` and `program.sessions` (cascade on
 delete), and the SECURITY DEFINER function `engagement.display_target(org, session)` with its

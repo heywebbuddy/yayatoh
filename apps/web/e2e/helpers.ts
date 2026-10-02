@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import AxeBuilder from '@axe-core/playwright';
-import { type BrowserContext, expect, type Page } from '@playwright/test';
+import { type BrowserContext, expect, type Page, test } from '@playwright/test';
 import { base32Decode, devPersonaTotpSecret, secretKey, totp } from '@yayatoh/auth/totp';
 
 export const OWNER = 'pani@lakeside.test';
@@ -142,6 +142,7 @@ export async function expectAccessible(page: Page) {
     // hang waiting; their documents are checked on their own with expectHtmlAccessible.
     .exclude('iframe[sandbox=""]')
     .analyze();
+  await attachAxeSummary(results);
   const bad = results.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical');
   expect(
     bad.map((v) => ({
@@ -150,6 +151,28 @@ export async function expectAccessible(page: Page) {
       nodes: v.nodes.slice(0, 3).map((n) => n.target.join(' ')),
     })),
   ).toEqual([]);
+}
+
+type AxeRun = Awaited<ReturnType<AxeBuilder['analyze']>>;
+
+/**
+ * M5.11a: every axe run is attached to the test as `axe-summary` (rule ids, WCAG tags, impact
+ * and node counts only: no selectors, URLs or page text), so the evidence workflow can build the
+ * VPAT draft from the e2e shards' JSON reports.
+ */
+async function attachAxeSummary(r: AxeRun) {
+  const rule = (x: AxeRun['violations'][number]) => ({
+    id: x.id,
+    tags: x.tags,
+    impact: x.impact ?? null,
+    nodes: x.nodes.length,
+  });
+  const body = JSON.stringify({
+    passes: r.passes.map((x) => ({ id: x.id, tags: x.tags, nodes: x.nodes.length })),
+    violations: r.violations.map(rule),
+    incomplete: r.incomplete.map(rule),
+  });
+  await test.info().attach('axe-summary', { body, contentType: 'application/json' });
 }
 
 /** axe on a standalone HTML document (e.g. an email), loaded into a fresh page of the context. */
