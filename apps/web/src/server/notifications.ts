@@ -39,7 +39,13 @@ import {
   waitlistMailer,
 } from '@yayatoh/orders';
 import { payoutDestinationMailer } from '@yayatoh/payments';
-import { consumeEvent, recentEventsTx, type Subscriber, subscribes } from '@yayatoh/platform';
+import {
+  consumeEvent,
+  processedPairsTx,
+  recentEventsTx,
+  type Subscriber,
+  subscribes,
+} from '@yayatoh/platform';
 import { taskReminderMailer } from '@yayatoh/program';
 import { registrationCapacity } from '@yayatoh/registration';
 import { surveyMailer } from '@yayatoh/surveys';
@@ -145,9 +151,20 @@ export async function drainOrgMessages(
   let journeySteps = 0;
   for (let pass = 0; pass < 4; pass++) {
     const events = await withTenant(ctx, (tx) => recentEventsTx(tx, orgId, types, 6 * 3600_000));
+    // What each subscriber already handled, in one read (batch 3g merge: one transaction per
+    // event and subscriber made drains of the shared e2e org slow); consumeEvent still guards.
+    const done = await withTenant(ctx, (tx) =>
+      processedPairsTx(
+        tx,
+        subs.map((s) => s.name),
+        events.map((e) => e.id),
+      ),
+    );
     let fresh = 0;
     for (const event of events) {
-      for (const s of subs) if (subscribes(s, event) && (await consumeEvent(s, event))) fresh += 1;
+      for (const s of subs)
+        if (subscribes(s, event) && !done.has(`${s.name}|${event.id}`) && (await consumeEvent(s, event)))
+          fresh += 1;
     }
     consumed += fresh;
     // Journey steps due now (M3.7a; the worker's `automations.run-due` job): they queue messages
