@@ -30,3 +30,16 @@ export const attendeesContactOwner: ContactReferenceOwner = {
     return rows.map((r) => ({ table: TABLE, id: r.id }));
   },
 };
+
+/** The attendee records holding these tickets, with their contacts (timeline subjects, M6.1a). */
+export async function attendeesByTicketTx(
+  tx: Parameters<ContactReferenceOwner['move']>[0],
+  ticketIds: readonly string[],
+): Promise<{ id: string; contactId: string; ticketId: string }[]> {
+  if (ticketIds.length === 0) return [];
+  const rows = await tx
+    .select({ id: attendees.id, contactId: attendees.contactId, ticketId: attendees.ticketId })
+    .from(attendees)
+    .where(inArray(attendees.ticketId, [...ticketIds]));
+  return rows.flatMap((r) => (r.ticketId ? [{ id: r.id, contactId: r.contactId, ticketId: r.ticketId }] : []));
+}

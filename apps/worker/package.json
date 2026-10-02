@@ -29,6 +29,7 @@
     "@yayatoh/campaigns": "workspace:*",
     "@yayatoh/checkin": "workspace:*",
     "@yayatoh/command-center": "workspace:*",
+    "@yayatoh/crm": "workspace:*",
     "@yayatoh/db": "workspace:*",
     "@yayatoh/events": "workspace:*",
     "@yayatoh/forms": "workspace:*",

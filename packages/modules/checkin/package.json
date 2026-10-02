@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@hono/zod-openapi": "catalog:",
+    "@yayatoh/attendees": "workspace:*",
     "@yayatoh/checkin-engine": "workspace:*",
     "@yayatoh/contracts": "workspace:*",
     "@yayatoh/crm": "workspace:*",

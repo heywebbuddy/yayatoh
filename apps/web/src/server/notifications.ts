@@ -1,10 +1,12 @@
 import 'server-only';
 import { alertEvaluator, evaluateOrgNow, watchQuietDevices } from '@yayatoh/alerts';
 import { attendeeMessageMailer } from '@yayatoh/attendees';
+import { campaignsTimeline } from '@yayatoh/campaigns';
 import { getUsersByIds } from '@yayatoh/auth';
 import { journeySubscribers, runDueActions } from '@yayatoh/automations';
 import {
   chatReportSignals,
+  checkinTimeline,
   checkoutRiskSignals,
   fraudSignalAlerts,
   sendStaffAlertPushes,
@@ -14,7 +16,12 @@ import { withTenant } from '@yayatoh/db';
 import { findEventTx, portalInviteMailer } from '@yayatoh/events';
 import { registrationResumeMailer } from '@yayatoh/forms';
 import { createCtx } from '@yayatoh/kernel';
-import { announcementMailer, contactWroteNotifier, threadReplyMailer } from '@yayatoh/messaging';
+import {
+  announcementMailer,
+  contactWroteNotifier,
+  messagingTimeline,
+  threadReplyMailer,
+} from '@yayatoh/messaging';
 import {
   createNotifier,
   type DispatchDeps,
@@ -29,6 +36,7 @@ import {
 import {
   creditNoteMailer,
   orderLinkMailer,
+  ordersTimeline,
   postponementMailer,
   refundDeclineMailer,
   refundMailer,
@@ -42,7 +50,7 @@ import { payoutDestinationMailer } from '@yayatoh/payments';
 import { consumeEvent, recentEventsTx, type Subscriber, subscribes } from '@yayatoh/platform';
 import { taskReminderMailer } from '@yayatoh/program';
 import { registrationCapacity } from '@yayatoh/registration';
-import { surveyMailer } from '@yayatoh/surveys';
+import { surveyMailer, surveysTimeline } from '@yayatoh/surveys';
 import { impersonationNotice, invitationMailer, orgStatusNotice } from '@yayatoh/tenancy';
 import {
   claimLinkMailer,
@@ -119,6 +127,12 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     // M5.3a speaker portal: invitations and task reminders.
     portalInviteMailer({ notifier, appOrigin }),
     taskReminderMailer({ notifier, appOrigin }),
+    // M6.1a: the person timeline (crm projection), as in the worker.
+    ordersTimeline(),
+    checkinTimeline(),
+    messagingTimeline(),
+    surveysTimeline(),
+    campaignsTimeline(),
   ];
 }
 

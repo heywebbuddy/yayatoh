@@ -47,3 +47,5 @@ export {
 } from './surveys.ts';
 // M6.1a: contact merges move this module's references (ADR 0022).
 export { surveysContactOwner } from './contact-merge.ts';
+// M6.1a: the person timeline's facts from this module (crm projection).
+export { surveysTimeline } from './timeline.ts';
