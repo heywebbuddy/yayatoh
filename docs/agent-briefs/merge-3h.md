@@ -26,6 +26,8 @@ Each branch's last commit message is its report (migrations, hand edits, owner i
 
 **Local dev fix (owner hit it on 2026-10-02):** `pnpm dev` runs turbo in strict env mode, so the worker and API get none of the shell's variables (`JOBS_DATABASE_URL is not set`); only the Next apps work because they read `.env.local`. Make the root `dev` script `turbo run dev --env-mode=loose` (dev only; builds stay strict) and note it in `docs/local-development.md`, which must also list every variable the worker and API need to start (`NEXT_PUBLIC_APP_ORIGIN`, `APP_TOKEN_SECRET`, `JOBS_DATABASE_URL`, `API_PUBLIC_URL`).
 
+**Dev sign-in labels (owner hit it on 2026-10-02):** `/dev/login` shows Nia Newcomer and Omar Ops as "Owner · " with an empty org, so they look like broken owners and land on "You're not in an organization yet". Label them by what they are (Nia: "New account, no organization: sign-up and onboarding"; Omar: "Yayatoh staff: use the admin console on :3001") and send Omar's button to the admin console sign-in, with an e2e for both cards.
+
 ## Merge procedure
 Follow the "Merge procedure (house rules)" section of `docs/agent-briefs/merge-3e.md` exactly:
 - renumber migrations on the chain so that `db:generate` shows no changes
