@@ -29,3 +29,7 @@ payments, notifications, platform); it reads them through their exported counts 
   (`member_settings`, their own setting only) as `alerts.alert-text`, which waits out quiet hours.
 - **Acknowledge and snooze** need `alerts:manage` (not viewers or scanners); both are audited.
 - Every alert links to the console page that fixes it (`RULES[rule].fix`).
+- **Same-tier sources only through the outbox** (batch 3e): journeys (`automations.journey_step_failed@1`)
+  and campaigns (`campaigns.send_failed@1`) are recorded once per outbox event as `signals` (kept 7
+  days) and counted by the org rules; this module never imports them, and they never import it.
+  Dispute deadlines (`payments`, a lower tier) are read as counts (`disputeDeadlineFactsTx`).
