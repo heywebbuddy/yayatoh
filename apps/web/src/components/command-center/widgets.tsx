@@ -546,12 +546,15 @@ function AssistanceBody({ d, c }: { d: Assistance; c: Ctx }) {
   const t = useTranslations('assistance');
   return (
     <div className="flex flex-col gap-3" data-testid="cc-assistance">
-      <dl className="grid grid-cols-2 gap-x-4 gap-y-1 text-body sm:grid-cols-4">
+      <dl className="m-0 grid grid-cols-2 gap-2 sm:grid-cols-4">
         {(['waiting', 'assigned', 'inProgress', 'overdue'] as const).map((k) => (
-          <div key={k} className="flex flex-col">
-            <dt className="text-caption text-ink-2">{t(`widget.${k}`)}</dt>
+          <div key={k} className="flex flex-col gap-1 rounded-tile bg-surface-2 px-3.5 py-3">
+            <dt className="text-caption font-semibold text-ink-2">{t(`widget.${k}`)}</dt>
             <dd
-              className={`tabular-nums ${k === 'overdue' && d.overdue > 0 ? 'font-medium text-danger' : ''}`}
+              className={cx(
+                'm-0 text-[24px] leading-none font-extrabold tracking-[-0.03em] tabular-nums',
+                k === 'overdue' && d.overdue > 0 ? 'text-danger' : 'text-ink',
+              )}
             >
               {num(d[k], c.locale)}
             </dd>
@@ -559,12 +562,12 @@ function AssistanceBody({ d, c }: { d: Assistance; c: Ctx }) {
         ))}
       </dl>
       {d.top.length === 0 ? (
-        <p className="text-body text-ink-2">{t('widget.none')}</p>
+        <p className="m-0 text-body text-ink-2">{t('widget.none')}</p>
       ) : (
-        <ul className="flex list-none flex-col gap-1 p-0">
+        <ul className="m-0 flex list-none flex-col divide-y divide-line p-0">
           {d.top.map((r) => (
-            <li key={r.id} className="flex flex-wrap items-baseline gap-x-2 text-body">
-              <span className="font-medium">{t('number', { number: r.number })}</span>
+            <li key={r.id} className="flex flex-wrap items-baseline gap-x-2 py-2 text-body">
+              <span className="font-extrabold text-ink">{t('number', { number: r.number })}</span>
               <span>{t(`reason.${r.reason}`)}</span>
               <span className="text-caption text-ink-2">
                 {[t(`priority.${r.priority}`), t(`state.${r.state}`), r.overdue ? t('overdue') : null]
@@ -575,7 +578,10 @@ function AssistanceBody({ d, c }: { d: Assistance; c: Ctx }) {
           ))}
         </ul>
       )}
-      <Link href={`${c.base}/assistance`} className="self-start text-body underline underline-offset-2">
+      <Link
+        href={`${c.base}/assistance`}
+        className="self-start text-body font-bold text-primary-ink underline underline-offset-2"
+      >
         {t('widget.open')}
       </Link>
     </div>
