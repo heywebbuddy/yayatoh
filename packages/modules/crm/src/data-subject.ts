@@ -10,9 +10,20 @@ import {
   type SubjectErasure,
   type SubjectRefs,
 } from '@yayatoh/platform';
-import { eq, inArray, or } from 'drizzle-orm';
+import { and, asc, eq, inArray, isNotNull, or } from 'drizzle-orm';
 import { contactDsarTx, eraseContactDsarTx } from './dsar.ts';
-import { consents, contactProfile, contactStats, contacts, eventParticipation } from './schema.ts';
+import {
+  consents,
+  contactMerges,
+  contactProfile,
+  contactScores,
+  contactSignals,
+  contactStats,
+  contacts,
+  duplicateCandidates,
+  eventParticipation,
+  timelineEntries,
+} from './schema.ts';
 
 /** The person's contacts: by address, and any contact another module linked to them. */
 async function contactIdsTx(tx: TenantTx, s: DataSubject): Promise<string[]> {
@@ -39,6 +50,13 @@ export const crmDataSubjects = defineDataSubjectContributor({
     'crm.event_participation': DELETE,
     'crm.contact_profile': DELETE,
     'crm.contact_stats': DELETE,
+    // M6.1a: merge snapshots are scrubbed (those merges can no longer be undone); duplicate pairs and
+    // the person timeline (a projection) go. M6.1b: scores and the signals behind them go.
+    'crm.contact_merges': REDACT,
+    'crm.duplicate_candidates': DELETE,
+    'crm.timeline_entries': DELETE,
+    'crm.contact_scores': DELETE,
+    'crm.contact_signals': DELETE,
   },
   async resolve(tx, s): Promise<SubjectRefs> {
     const ids = await contactIdsTx(tx, s);
@@ -62,6 +80,24 @@ export const crmDataSubjects = defineDataSubjectContributor({
         consents: d.consents,
         participation: d.participation,
         stats: d.stats,
+        scores: d.scores,
+        signals: d.signals,
+        timeline: ids.length
+          ? (
+              await tx
+                .select()
+                .from(timelineEntries)
+                .where(inArray(timelineEntries.contactId, ids))
+                .orderBy(asc(timelineEntries.occurredAt))
+            ).map((e) => ({
+              kind: e.kind,
+              occurredAt: e.occurredAt,
+              eventId: e.eventId,
+              amountMinor: e.amountMinor,
+              currency: e.currency,
+              label: e.label,
+            }))
+          : [],
       },
     };
   },
@@ -80,6 +116,31 @@ export const crmDataSubjects = defineDataSubjectContributor({
       .delete(contactStats)
       .where(inArray(contactStats.contactId, ids))
       .returning({ id: contactStats.id });
+    const timeline = await tx
+      .delete(timelineEntries)
+      .where(inArray(timelineEntries.contactId, ids))
+      .returning({ id: timelineEntries.id });
+    const scores = await tx
+      .delete(contactScores)
+      .where(inArray(contactScores.contactId, ids))
+      .returning({ id: contactScores.id });
+    const signals = await tx
+      .delete(contactSignals)
+      .where(inArray(contactSignals.contactId, ids))
+      .returning({ id: contactSignals.id });
+    const pairs = await tx
+      .delete(duplicateCandidates)
+      .where(or(inArray(duplicateCandidates.contactAId, ids), inArray(duplicateCandidates.contactBId, ids)))
+      .returning({ id: duplicateCandidates.id });
+    const merges = await tx
+      .select({ id: contactMerges.id })
+      .from(contactMerges)
+      .where(
+        and(
+          or(inArray(contactMerges.sourceContactId, ids), inArray(contactMerges.targetContactId, ids)),
+          isNotNull(contactMerges.snapshot),
+        ),
+      );
     const kept = await tx
       .update(consents)
       .set({ evidence: ERASED_NAME, updatedAt: ctx.now })
@@ -92,6 +153,12 @@ export const crmDataSubjects = defineDataSubjectContributor({
         'crm.event_participation': participation.length,
         'crm.contact_profile': profile.length,
         'crm.contact_stats': stats.length,
+        'crm.timeline_entries': timeline.length,
+        'crm.contact_scores': scores.length,
+        'crm.contact_signals': signals.length,
+        'crm.duplicate_candidates': pairs.length,
+        // Scrubbed by eraseContactDsarTx (M6.1a's scrubMergeSnapshotsTx).
+        'crm.contact_merges': merges.length,
       },
       held: kept.map((c) => ({
         table: 'crm.consents',

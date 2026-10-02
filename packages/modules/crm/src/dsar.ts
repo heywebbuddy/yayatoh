@@ -54,6 +54,7 @@ export async function contactDsarTx(tx: TenantTx, emailNorm: string, linked: rea
       email: r.email,
       name: r.name,
       phone: r.phoneE164,
+      company: r.company,
       source: r.source,
       createdAt: r.createdAt,
     })),
@@ -128,6 +129,7 @@ export async function eraseContactDsarTx(
         emailNorm: placeholder,
         name: null,
         phoneE164: null,
+        company: null,
         userId: null,
         updatedAt: now,
       })
