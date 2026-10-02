@@ -7353,6 +7353,7 @@
     "publicLink": "填写地址：",
     "publicLinkText": "公开报名表",
     "openBuilder": "编辑报名表",
+    "openReadOnly": "查看注册表单",
     "pagesTitle": "页面",
     "emptyTitle": "还没有页面",
     "emptyDescription": "先添加第一个页面，再添加问题。页面可以限定于某些报名类型，或只在特定回答后显示。",

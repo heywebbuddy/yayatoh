@@ -7353,6 +7353,7 @@
     "publicLink": "On le remplit sur",
     "publicLinkText": "le formulaire d’inscription public",
     "openBuilder": "Modifier le formulaire d’inscription",
+    "openReadOnly": "Voir le formulaire d’inscription",
     "pagesTitle": "Pages",
     "emptyTitle": "Aucune page pour l’instant",
     "emptyDescription": "Ajoutez une première page, puis ses questions. Les pages peuvent être limitées à des types d’inscription ou n’apparaître qu’après certaines réponses.",
