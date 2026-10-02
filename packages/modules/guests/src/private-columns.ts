@@ -68,7 +68,8 @@ export const privateColumns = columnPrivacy('guests', {
   },
   collector_submissions: {
     status: 'vocab',
-    payload_ciphertext: personal('sealed-json'),
+    // Cleared once the host decides (the CHECK allows a payload on pending rows only).
+    payload_ciphertext: personal('sealed-json', { where: "status = 'pending'" }),
     locale: 'vocab',
   },
   invitation_templates: {

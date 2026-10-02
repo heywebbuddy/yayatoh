@@ -2561,6 +2561,500 @@ exports[`renderMessage: every kind in all 13 locales > guest.waitlist-code · zh
 }
 `;
 
+exports[`renderMessage: every kind in all 13 locales > guests.invitation · ar 1`] = `
+{
+  "subject": "You're invited: Lopez Chen Wedding",
+  "text": "You're invited: Lopez Chen Wedding
+
+مرحبًا،
+
+Dear The Garcia family,
+
+We would love to celebrate Lopez Chen Wedding with you. Please let us know who of your household can come.
+
+الرد على الدعوة: https://app.yayatoh.test/rsvp/sample-token
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.invitation · de 1`] = `
+{
+  "subject": "You're invited: Lopez Chen Wedding",
+  "text": "You're invited: Lopez Chen Wedding
+
+Hallo,
+
+Dear The Garcia family,
+
+We would love to celebrate Lopez Chen Wedding with you. Please let us know who of your household can come.
+
+Auf die Einladung antworten: https://app.yayatoh.test/rsvp/sample-token
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.invitation · en 1`] = `
+{
+  "subject": "You're invited: Lopez Chen Wedding",
+  "text": "You're invited: Lopez Chen Wedding
+
+Hello,
+
+Dear The Garcia family,
+
+We would love to celebrate Lopez Chen Wedding with you. Please let us know who of your household can come.
+
+Reply to the invitation: https://app.yayatoh.test/rsvp/sample-token
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.invitation · es 1`] = `
+{
+  "subject": "You're invited: Lopez Chen Wedding",
+  "text": "You're invited: Lopez Chen Wedding
+
+Hola:
+
+Dear The Garcia family,
+
+We would love to celebrate Lopez Chen Wedding with you. Please let us know who of your household can come.
+
+Responder a la invitación: https://app.yayatoh.test/rsvp/sample-token
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.invitation · fr 1`] = `
+{
+  "subject": "You're invited: Lopez Chen Wedding",
+  "text": "You're invited: Lopez Chen Wedding
+
+Bonjour,
+
+Dear The Garcia family,
+
+We would love to celebrate Lopez Chen Wedding with you. Please let us know who of your household can come.
+
+Répondre à l'invitation: https://app.yayatoh.test/rsvp/sample-token
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.invitation · hi 1`] = `
+{
+  "subject": "You're invited: Lopez Chen Wedding",
+  "text": "You're invited: Lopez Chen Wedding
+
+नमस्ते,
+
+Dear The Garcia family,
+
+We would love to celebrate Lopez Chen Wedding with you. Please let us know who of your household can come.
+
+निमंत्रण का उत्तर दें: https://app.yayatoh.test/rsvp/sample-token
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.invitation · it 1`] = `
+{
+  "subject": "You're invited: Lopez Chen Wedding",
+  "text": "You're invited: Lopez Chen Wedding
+
+Ciao,
+
+Dear The Garcia family,
+
+We would love to celebrate Lopez Chen Wedding with you. Please let us know who of your household can come.
+
+Rispondi all'invito: https://app.yayatoh.test/rsvp/sample-token
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.invitation · ja 1`] = `
+{
+  "subject": "You're invited: Lopez Chen Wedding",
+  "text": "You're invited: Lopez Chen Wedding
+
+こんにちは。
+
+Dear The Garcia family,
+
+We would love to celebrate Lopez Chen Wedding with you. Please let us know who of your household can come.
+
+招待状に返信する: https://app.yayatoh.test/rsvp/sample-token
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.invitation · nl 1`] = `
+{
+  "subject": "You're invited: Lopez Chen Wedding",
+  "text": "You're invited: Lopez Chen Wedding
+
+Hallo,
+
+Dear The Garcia family,
+
+We would love to celebrate Lopez Chen Wedding with you. Please let us know who of your household can come.
+
+Reageer op de uitnodiging: https://app.yayatoh.test/rsvp/sample-token
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.invitation · pt 1`] = `
+{
+  "subject": "You're invited: Lopez Chen Wedding",
+  "text": "You're invited: Lopez Chen Wedding
+
+Olá!
+
+Dear The Garcia family,
+
+We would love to celebrate Lopez Chen Wedding with you. Please let us know who of your household can come.
+
+Responder ao convite: https://app.yayatoh.test/rsvp/sample-token
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.invitation · ru 1`] = `
+{
+  "subject": "You're invited: Lopez Chen Wedding",
+  "text": "You're invited: Lopez Chen Wedding
+
+Здравствуйте!
+
+Dear The Garcia family,
+
+We would love to celebrate Lopez Chen Wedding with you. Please let us know who of your household can come.
+
+Ответить на приглашение: https://app.yayatoh.test/rsvp/sample-token
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.invitation · zh-CN 1`] = `
+{
+  "subject": "You're invited: Lopez Chen Wedding",
+  "text": "You're invited: Lopez Chen Wedding
+
+您好：
+
+Dear The Garcia family,
+
+We would love to celebrate Lopez Chen Wedding with you. Please let us know who of your household can come.
+
+回复邀请: https://app.yayatoh.test/rsvp/sample-token
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.invitation · zh-TW 1`] = `
+{
+  "subject": "You're invited: Lopez Chen Wedding",
+  "text": "You're invited: Lopez Chen Wedding
+
+您好：
+
+Dear The Garcia family,
+
+We would love to celebrate Lopez Chen Wedding with you. Please let us know who of your household can come.
+
+回覆邀請: https://app.yayatoh.test/rsvp/sample-token
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.rsvp-reminder · ar 1`] = `
+{
+  "subject": "تذكير: يُرجى الرد بخصوص Lopez Chen Wedding",
+  "text": "تذكير: يُرجى الرد بخصوص Lopez Chen Wedding
+
+مرحبًا The Garcia family،
+
+The Garcia family، لم يصلنا ردكم بعد. يُرجى إخبارنا بمن سيحضر Lopez Chen Wedding قبل May 1, 2027.
+
+الرد الآن: https://app.yayatoh.test/rsvp/sample-token
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.rsvp-reminder · de 1`] = `
+{
+  "subject": "Erinnerung: Bitte antworten Sie für Lopez Chen Wedding",
+  "text": "Erinnerung: Bitte antworten Sie für Lopez Chen Wedding
+
+Hallo The Garcia family,
+
+The Garcia family, wir haben noch keine Antwort von Ihnen. Bitte sagen Sie uns bis May 1, 2027, wer zu Lopez Chen Wedding kommt.
+
+Jetzt antworten: https://app.yayatoh.test/rsvp/sample-token
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.rsvp-reminder · en 1`] = `
+{
+  "subject": "Reminder: please reply for Lopez Chen Wedding",
+  "text": "Reminder: please reply for Lopez Chen Wedding
+
+Hi The Garcia family,
+
+The Garcia family, we haven't heard from you yet. Please let us know who can come to Lopez Chen Wedding by May 1, 2027.
+
+Reply now: https://app.yayatoh.test/rsvp/sample-token
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.rsvp-reminder · es 1`] = `
+{
+  "subject": "Recordatorio: confirma tu asistencia a Lopez Chen Wedding",
+  "text": "Recordatorio: confirma tu asistencia a Lopez Chen Wedding
+
+Hola, The Garcia family:
+
+The Garcia family, aún no hemos recibido su respuesta. Indíquennos quiénes vendrán a Lopez Chen Wedding antes del May 1, 2027.
+
+Responder ahora: https://app.yayatoh.test/rsvp/sample-token
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.rsvp-reminder · fr 1`] = `
+{
+  "subject": "Rappel : merci de répondre pour Lopez Chen Wedding",
+  "text": "Rappel : merci de répondre pour Lopez Chen Wedding
+
+Bonjour The Garcia family,
+
+The Garcia family, nous n'avons pas encore reçu votre réponse. Dites-nous qui viendra à Lopez Chen Wedding avant le May 1, 2027.
+
+Répondre maintenant: https://app.yayatoh.test/rsvp/sample-token
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.rsvp-reminder · hi 1`] = `
+{
+  "subject": "अनुस्मारक: कृपया Lopez Chen Wedding के लिए उत्तर दें",
+  "text": "अनुस्मारक: कृपया Lopez Chen Wedding के लिए उत्तर दें
+
+नमस्ते The Garcia family,
+
+The Garcia family, हमें अभी तक आपका उत्तर नहीं मिला है। कृपया May 1, 2027 तक बताएँ कि Lopez Chen Wedding में कौन आएगा।
+
+अभी उत्तर दें: https://app.yayatoh.test/rsvp/sample-token
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.rsvp-reminder · it 1`] = `
+{
+  "subject": "Promemoria: rispondi per Lopez Chen Wedding",
+  "text": "Promemoria: rispondi per Lopez Chen Wedding
+
+Ciao The Garcia family,
+
+The Garcia family, non abbiamo ancora ricevuto la vostra risposta. Fateci sapere chi verrà a Lopez Chen Wedding entro il May 1, 2027.
+
+Rispondi ora: https://app.yayatoh.test/rsvp/sample-token
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.rsvp-reminder · ja 1`] = `
+{
+  "subject": "リマインダー：Lopez Chen Wedding のご返信のお願い",
+  "text": "リマインダー：Lopez Chen Wedding のご返信のお願い
+
+The Garcia family 様
+
+The Garcia family 様、まだご返信をいただいておりません。May 1, 2027 までに Lopez Chen Wedding へのご出席者をお知らせください。
+
+今すぐ返信する: https://app.yayatoh.test/rsvp/sample-token
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.rsvp-reminder · nl 1`] = `
+{
+  "subject": "Herinnering: laat het ons weten voor Lopez Chen Wedding",
+  "text": "Herinnering: laat het ons weten voor Lopez Chen Wedding
+
+Hoi The Garcia family,
+
+The Garcia family, we hebben nog niets van jullie gehoord. Laat ons vóór May 1, 2027 weten wie naar Lopez Chen Wedding komt.
+
+Nu reageren: https://app.yayatoh.test/rsvp/sample-token
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.rsvp-reminder · pt 1`] = `
+{
+  "subject": "Lembrete: responda sobre Lopez Chen Wedding",
+  "text": "Lembrete: responda sobre Lopez Chen Wedding
+
+Olá, The Garcia family!
+
+The Garcia family, ainda não recebemos a sua resposta. Digam-nos quem virá a Lopez Chen Wedding até May 1, 2027.
+
+Responder agora: https://app.yayatoh.test/rsvp/sample-token
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.rsvp-reminder · ru 1`] = `
+{
+  "subject": "Напоминание: ответьте на приглашение на Lopez Chen Wedding",
+  "text": "Напоминание: ответьте на приглашение на Lopez Chen Wedding
+
+Здравствуйте, The Garcia family!
+
+The Garcia family, мы ещё не получили ваш ответ. Сообщите, пожалуйста, до May 1, 2027, кто придёт на Lopez Chen Wedding.
+
+Ответить: https://app.yayatoh.test/rsvp/sample-token
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.rsvp-reminder · zh-CN 1`] = `
+{
+  "subject": "提醒：请回复Lopez Chen Wedding的邀请",
+  "text": "提醒：请回复Lopez Chen Wedding的邀请
+
+The Garcia family，您好：
+
+The Garcia family，我们尚未收到您的回复。请在May 1, 2027前告诉我们哪几位会出席Lopez Chen Wedding。
+
+立即回复: https://app.yayatoh.test/rsvp/sample-token
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.rsvp-reminder · zh-TW 1`] = `
+{
+  "subject": "提醒：請回覆Lopez Chen Wedding的邀請",
+  "text": "提醒：請回覆Lopez Chen Wedding的邀請
+
+The Garcia family，您好：
+
+The Garcia family，我們尚未收到您的回覆。請在May 1, 2027前告訴我們哪幾位會出席Lopez Chen Wedding。
+
+立即回覆: https://app.yayatoh.test/rsvp/sample-token
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
 exports[`renderMessage: every kind in all 13 locales > marketing.message · ar 1`] = `
 {
   "subject": "Early-bird tickets are back",

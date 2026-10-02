@@ -52,7 +52,6 @@ import {
 } from '@yayatoh/notifications';
 import { memoryTransports } from '@yayatoh/notifications/testing';
 import { consumeEvent, recentEventsTx, subscribes } from '@yayatoh/platform';
-import { sql } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { type OrgFixture, ports, systemCtx, twoOrgs, userCtx } from '../src/index.ts';
 

@@ -10,6 +10,7 @@ import { ProgramForm } from '@/components/program-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
+import { PartyInvite } from '../../invitations/party-invite.tsx';
 import {
   createRsvpLinksAction,
   markRsvpSentAction,
@@ -140,6 +141,18 @@ export default async function PartyRsvpPage({
           )}
         </Card>
       </section>
+
+      <PartyInvite
+        org={org}
+        event={event}
+        eventId={ev.id}
+        partyId={party}
+        partyName={name}
+        timeZone={ev.timezone}
+        locale={locale}
+        canWrite={canWrite}
+        ctx={data.ctx}
+      />
 
       {detail && !detail.token ? (
         <Card size="panel" className="flex flex-col gap-3 print:hidden">

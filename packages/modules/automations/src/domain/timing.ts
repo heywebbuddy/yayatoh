@@ -1,5 +1,5 @@
 import { utcToZonedInput, zonedTimeToUtc } from '@yayatoh/kernel';
-import type { WaitAnchor } from './journey.ts';
+import type { AnyAnchor } from './journey.ts';
 
 /**
  * When a journey step is due (M3.7a). Pure: no I/O, Intl only.
@@ -12,7 +12,7 @@ import type { WaitAnchor } from './journey.ts';
  */
 
 export interface StepWait {
-  readonly anchor: WaitAnchor;
+  readonly anchor: AnyAnchor;
   readonly offsetDays: number;
   readonly offsetMinutes: number;
   readonly atTime: string | null;
@@ -41,7 +41,7 @@ const validZone = (tz: string) => {
 };
 
 /** The anchor's instant (an `rsvp_deadline` step of an event without a deadline: the event's start). */
-export function anchorTime(anchor: WaitAnchor, anchors: Anchors): Date {
+export function anchorTime(anchor: AnyAnchor, anchors: Anchors): Date {
   return anchor === 'trigger'
     ? anchors.trigger
     : anchor === 'event_start'

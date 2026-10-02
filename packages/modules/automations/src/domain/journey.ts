@@ -31,7 +31,9 @@ export const WAIT_ANCHORS = ['trigger', 'event_start', 'event_end'] as const;
 /** M4.1f: the event's RSVP deadline (system RSVP reminder journeys only). */
 export const SYSTEM_ANCHORS = ['rsvp_deadline'] as const;
 export const ALL_ANCHORS = [...WAIT_ANCHORS, ...SYSTEM_ANCHORS] as const;
-export type WaitAnchor = (typeof ALL_ANCHORS)[number];
+export type WaitAnchor = (typeof WAIT_ANCHORS)[number];
+/** Any anchor a stored step may have (the builder's, and the system journeys'). */
+export type AnyAnchor = (typeof ALL_ANCHORS)[number];
 
 /** What a step does: send a message on one channel, add a label, or invite to the survey. */
 export const STEP_ACTIONS = ['email', 'sms', 'whatsapp', 'push', 'label', 'survey'] as const;

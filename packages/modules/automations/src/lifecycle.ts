@@ -2,7 +2,7 @@ import type { TenantTx } from '@yayatoh/db';
 import { findEventTx, findOccurrenceTx, seriesOfEventTx } from '@yayatoh/events';
 import { rsvpDeadlineTx } from '@yayatoh/guests';
 import { and, eq, inArray, or, type SQL, sql } from 'drizzle-orm';
-import type { AnyTrigger, WaitAnchor } from './domain/journey.ts';
+import type { AnyAnchor, AnyTrigger } from './domain/journey.ts';
 import { type Anchors, planStep } from './domain/timing.ts';
 import { journeyRuns, journeySteps, journeys, scheduledActions } from './schema.ts';
 
@@ -121,7 +121,7 @@ export async function enrollTx(
   let pending = 0;
   for (const s of steps) {
     const wait = {
-      anchor: s.anchor as WaitAnchor,
+      anchor: s.anchor as AnyAnchor,
       offsetDays: s.offsetDays,
       offsetMinutes: s.offsetMinutes,
       atTime: s.atTime,
@@ -290,7 +290,7 @@ export async function rescheduleEventTx(tx: TenantTx, eventId: string, now: Date
     }
     const plan = planStep(
       {
-        anchor: step.anchor as WaitAnchor,
+        anchor: step.anchor as AnyAnchor,
         offsetDays: step.offsetDays,
         offsetMinutes: step.offsetMinutes,
         atTime: step.atTime,

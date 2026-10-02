@@ -2,6 +2,7 @@ import { type Ctx, DomainError, requireOrg, uuidv7 } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { and, asc, eq, inArray } from 'drizzle-orm';
 import { z } from 'zod';
+import { isE164, normalizeEmail, normalizePhone } from './domain/collector.ts';
 import {
   DEFAULT_INVITE_COPY,
   fillInvite,
@@ -10,7 +11,6 @@ import {
   SMS_MAX,
   SUBJECT_MAX,
 } from './domain/invite-copy.ts';
-import { isE164, normalizeEmail, normalizePhone } from './domain/collector.ts';
 import { recordHistoryTx, seal, unseal } from './guests.ts';
 import {
   DELIVERY_STATES,
@@ -24,10 +24,10 @@ import {
 import { partyLocalesTx, setPartyLocaleTx } from './invites-state.ts';
 import { ensurePartyRsvpTx, ensureSettingsTx, eventOfTx, partyOfTx } from './rsvp-state.ts';
 import {
+  guests,
   INVITE_CHANNELS,
   INVITE_MESSAGE_KINDS,
   type InviteChannel,
-  guests,
   invitationTemplates,
   parties,
   partyRsvp,
