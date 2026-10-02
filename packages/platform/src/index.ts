@@ -84,6 +84,7 @@ export {
   emitEvents,
   eventKey,
   type PublishedEvent,
+  processedPairsTx,
   recentEventsTx,
   type Subscriber,
   subscribes,
