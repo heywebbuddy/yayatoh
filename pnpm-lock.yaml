@@ -441,6 +441,9 @@ importers:
       '@yayatoh/alerts':
         specifier: workspace:*
         version: link:../../packages/modules/alerts
+      '@yayatoh/analytics':
+        specifier: workspace:*
+        version: link:../../packages/modules/analytics
       '@yayatoh/api-v1':
         specifier: workspace:*
         version: link:../../packages/api-v1

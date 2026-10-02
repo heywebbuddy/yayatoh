@@ -24,6 +24,8 @@ const ORG_NAV: readonly NavItem[] = [
     module: 'marketing',
     icon: 'chart',
   },
+  // M6.2a: cross-event dashboards from the analytics warehouse.
+  { key: 'orgAnalytics', path: 'analytics', group: 'overview', module: 'analytics_pro', icon: 'chart' },
   { key: 'refundRequests', path: 'refund-requests', group: 'overview', module: 'ticketing', icon: 'undo' },
   { key: 'disputes', path: 'disputes', group: 'overview', module: 'ticketing', icon: 'shield-alert' },
   { key: 'supportMacros', path: 'macros', group: 'overview', module: 'ticketing', icon: 'zap' },
@@ -60,6 +62,7 @@ const NEEDS: Readonly<Record<string, string>> = {
   campaigns: 'marketing:read',
   journeys: 'marketing:read',
   marketingAnalytics: 'marketing:read',
+  orgAnalytics: 'orders:read',
   refundRequests: 'orders:read',
   disputes: 'finance:read',
   supportMacros: 'orders:support',

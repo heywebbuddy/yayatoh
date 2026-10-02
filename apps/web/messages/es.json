@@ -325,7 +325,8 @@
     "supportMacros": "Macros de soporte",
     "assistance": "Solicitudes de ayuda",
     "marketingAnalytics": "Analítica de marketing",
-    "badges": "Credenciales"
+    "badges": "Credenciales",
+    "orgAnalytics": "Analítica"
   },
   "vocab": {
     "attendee": "Asistente",
@@ -9039,5 +9040,76 @@
       "questionNotAllowed": "Esa pregunta no se puede imprimir en las credenciales."
     },
     "elements": "Elementos de este lado"
+  },
+  "warehouse": {
+    "title": "Analítica",
+    "description": "Todos tus eventos juntos: registros, entradas, check-ins y ausencias a lo largo del tiempo, y tus mejores eventos.",
+    "filters": "Filtros",
+    "from": "Desde",
+    "to": "Hasta",
+    "event": "Evento",
+    "allEvents": "Todos los eventos",
+    "apply": "Aplicar",
+    "timeZoneNote": "Los días son días naturales en {timeZone}, la zona horaria de tu organización.",
+    "rangeErrors": {
+      "invalid_date": "Introduce las fechas como año, mes y día.",
+      "from_after_to": "La fecha de fin es anterior a la de inicio.",
+      "range_too_long": "Elige un periodo de dos años como máximo."
+    },
+    "periodLabel": "Mostrar por",
+    "view": {
+      "day": "Día",
+      "week": "Semana",
+      "month": "Mes"
+    },
+    "emptyTitle": "Todavía no hay nada en este periodo",
+    "emptyBody": "No hay registros, entradas ni check-ins entre estas fechas. Prueba con un periodo más largo u otro evento; los pedidos nuevos aparecen aquí en segundos.",
+    "emptyAction": "Mostrar los últimos 12 meses",
+    "figures": {
+      "label": "Totales del periodo",
+      "registrations": "Registros",
+      "ticketsIssued": "Entradas de pago emitidas",
+      "tickets": "Entradas vendidas",
+      "compTickets": "Entradas gratuitas",
+      "checkins": "Check-ins",
+      "noShows": "Ausencias"
+    },
+    "revenue": {
+      "title": "Ingresos",
+      "net": "Ventas netas ({currency})",
+      "grossRefunds": "{gross} pagado, {refunds} reembolsado",
+      "byPeriod": "Ingresos por periodo",
+      "noRevenue": "No hay ventas ni reembolsos en este periodo.",
+      "period": "Periodo",
+      "currency": "Moneda",
+      "gross": "Pagado",
+      "refunds": "Reembolsado",
+      "netColumn": "Neto",
+      "topEvents": "Eventos con más ingresos",
+      "eventColumn": "Evento",
+      "weekOf": "Semana del {day}"
+    },
+    "trend": "A lo largo del tiempo",
+    "chartTitle": "Registros, entradas de pago y check-ins a lo largo del tiempo",
+    "byPeriod": "Cifras por periodo",
+    "period": "Periodo",
+    "topEvents": "Mejores eventos",
+    "noTopEvents": "Ningún evento tuvo registros en este periodo.",
+    "definitions": "Las entradas vendidas son las de pago menos las reembolsadas. Un check-in cuenta cada entrada una vez, el día de su primer acceso. Las ausencias son entradas válidas sin check-in, contadas el día en que terminó el evento.",
+    "definitionsFinance": "Las entradas vendidas son las de pago menos las reembolsadas. Un check-in cuenta cada entrada una vez, el día de su primer acceso. Las ausencias son entradas válidas sin check-in, contadas el día en que terminó el evento. Los ingresos son lo que pagaron los compradores menos los reembolsos, por moneda y antes de las comisiones de la plataforma (consulta Finanzas).",
+    "rebuildTitle": "Reconstruir la analítica",
+    "rebuildBody": "Vuelve a calcular todas las cifras de esta página a partir de tus pedidos y check-ins, unos pocos eventos cada vez. Úsalo después de cambiar la zona horaria de tu organización.",
+    "rebuild": "Reconstruir",
+    "rebuilding": "Iniciando…",
+    "rebuildStarted": "Reconstrucción iniciada",
+    "rebuildStartedBody": "Las cifras se recalculan en segundo plano; mientras tanto puedes seguir usando esta página.",
+    "rebuildRunning": "Ya hay una reconstrucción en curso.",
+    "runStatus": {
+      "running": "En curso",
+      "done": "Terminada",
+      "failed": "Fallida",
+      "cancelled": "Cancelada"
+    },
+    "runProgress": "{events, plural, one {# evento revisado} many {# eventos revisados} other {# eventos revisados}}, {written, plural, one {# actualizado} many {# actualizados} other {# actualizados}}"
   }
 }

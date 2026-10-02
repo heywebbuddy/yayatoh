@@ -325,7 +325,8 @@
     "supportMacros": "サポートマクロ",
     "assistance": "ヘルプ依頼",
     "marketingAnalytics": "マーケティング分析",
-    "badges": "バッジ"
+    "badges": "バッジ",
+    "orgAnalytics": "アナリティクス"
   },
   "vocab": {
     "attendee": "参加者",
@@ -9039,5 +9040,76 @@
       "questionNotAllowed": "この質問はバッジに印刷できません。"
     },
     "elements": "この面の要素"
+  },
+  "warehouse": {
+    "title": "アナリティクス",
+    "description": "すべてのイベントをまとめて：登録、チケット、チェックイン、無断欠席の推移と、上位のイベント。",
+    "filters": "フィルター",
+    "from": "開始日",
+    "to": "終了日",
+    "event": "イベント",
+    "allEvents": "すべてのイベント",
+    "apply": "適用",
+    "timeZoneNote": "日付は組織のタイムゾーン {timeZone} の暦日です。",
+    "rangeErrors": {
+      "invalid_date": "日付は年・月・日で入力してください。",
+      "from_after_to": "終了日が開始日より前になっています。",
+      "range_too_long": "2 年以内の期間を選んでください。"
+    },
+    "periodLabel": "表示単位",
+    "view": {
+      "day": "日",
+      "week": "週",
+      "month": "月"
+    },
+    "emptyTitle": "この期間にはまだデータがありません",
+    "emptyBody": "この期間には登録、チケット、チェックインがありません。期間を広げるか別のイベントを選んでください。新しい注文は数秒でここに表示されます。",
+    "emptyAction": "過去 12 か月を表示",
+    "figures": {
+      "label": "期間の合計",
+      "registrations": "登録",
+      "ticketsIssued": "発行された有料チケット",
+      "tickets": "販売チケット",
+      "compTickets": "無料チケット",
+      "checkins": "チェックイン",
+      "noShows": "無断欠席"
+    },
+    "revenue": {
+      "title": "売上",
+      "net": "純売上（{currency}）",
+      "grossRefunds": "支払い {gross}、返金 {refunds}",
+      "byPeriod": "期間別の売上",
+      "noRevenue": "この期間に販売や返金はありません。",
+      "period": "期間",
+      "currency": "通貨",
+      "gross": "支払い",
+      "refunds": "返金",
+      "netColumn": "純額",
+      "topEvents": "売上上位のイベント",
+      "eventColumn": "イベント",
+      "weekOf": "{day} の週"
+    },
+    "trend": "推移",
+    "chartTitle": "登録、有料チケット、チェックインの推移",
+    "byPeriod": "期間別の数値",
+    "period": "期間",
+    "topEvents": "上位のイベント",
+    "noTopEvents": "この期間に登録があったイベントはありません。",
+    "definitions": "販売チケットは有料チケットから返金分を引いた数です。チェックインは各チケットを最初の入場日に 1 回だけ数えます。無断欠席はチェックインされなかった有効なチケットで、イベント終了日に数えます。",
+    "definitionsFinance": "販売チケットは有料チケットから返金分を引いた数です。チェックインは各チケットを最初の入場日に 1 回だけ数えます。無断欠席はチェックインされなかった有効なチケットで、イベント終了日に数えます。売上は購入者の支払額から返金を引いた額で、通貨ごと、プラットフォーム手数料の差し引き前です（財務を参照）。",
+    "rebuildTitle": "アナリティクスを再構築",
+    "rebuildBody": "このページのすべての数値を、注文とチェックインから数件のイベントずつ再計算します。組織のタイムゾーンを変更した後に使ってください。",
+    "rebuild": "再構築",
+    "rebuilding": "開始中…",
+    "rebuildStarted": "再構築を開始しました",
+    "rebuildStartedBody": "数値はバックグラウンドで再計算されます。その間もこのページは使えます。",
+    "rebuildRunning": "再構築はすでに実行中です。",
+    "runStatus": {
+      "running": "実行中",
+      "done": "完了",
+      "failed": "失敗",
+      "cancelled": "キャンセル"
+    },
+    "runProgress": "{events, plural, other {# 件のイベントを確認}}、{written, plural, other {# 件を更新}}"
   }
 }

@@ -325,7 +325,8 @@
     "supportMacros": "Support macros",
     "assistance": "Help requests",
     "marketingAnalytics": "Marketing analytics",
-    "badges": "Badges"
+    "badges": "Badges",
+    "orgAnalytics": "Analytics"
   },
   "vocab": {
     "attendee": "Attendee",
@@ -9039,5 +9040,76 @@
       "stale": "Someone else saved this template meanwhile. Reload the page to see their version.",
       "questionNotAllowed": "That question can't be printed on badges."
     }
+  },
+  "warehouse": {
+    "title": "Analytics",
+    "description": "All your events together: registrations, tickets, check-ins and no-shows over time, and your best events.",
+    "filters": "Filters",
+    "from": "From",
+    "to": "To",
+    "event": "Event",
+    "allEvents": "All events",
+    "apply": "Apply",
+    "timeZoneNote": "Days are calendar days in {timeZone}, your organization’s time zone.",
+    "rangeErrors": {
+      "invalid_date": "Enter dates as year, month and day.",
+      "from_after_to": "The end date is before the start date.",
+      "range_too_long": "Choose a period of two years or less."
+    },
+    "periodLabel": "Show by",
+    "view": {
+      "day": "Day",
+      "week": "Week",
+      "month": "Month"
+    },
+    "emptyTitle": "Nothing in this period yet",
+    "emptyBody": "No registrations, tickets or check-ins between these dates. Try a longer period or another event; new orders show up here within seconds.",
+    "emptyAction": "Show the last 12 months",
+    "figures": {
+      "label": "Totals for the period",
+      "registrations": "Registrations",
+      "ticketsIssued": "Paid tickets issued",
+      "tickets": "Tickets sold",
+      "compTickets": "Free tickets",
+      "checkins": "Check-ins",
+      "noShows": "No-shows"
+    },
+    "revenue": {
+      "title": "Revenue",
+      "net": "Net sales ({currency})",
+      "grossRefunds": "{gross} paid, {refunds} refunded",
+      "byPeriod": "Revenue by period",
+      "noRevenue": "No sales or refunds in this period.",
+      "period": "Period",
+      "currency": "Currency",
+      "gross": "Paid",
+      "refunds": "Refunded",
+      "netColumn": "Net",
+      "topEvents": "Top events by revenue",
+      "eventColumn": "Event",
+      "weekOf": "Week of {day}"
+    },
+    "trend": "Over time",
+    "chartTitle": "Registrations, paid tickets and check-ins over time",
+    "byPeriod": "Figures by period",
+    "period": "Period",
+    "topEvents": "Top events",
+    "noTopEvents": "No event had registrations in this period.",
+    "definitions": "Tickets sold are paid tickets minus refunded ones. A check-in counts each ticket once, on the day of its first entry. No-shows are valid tickets never checked in, counted on the day an event ended.",
+    "definitionsFinance": "Tickets sold are paid tickets minus refunded ones. A check-in counts each ticket once, on the day of its first entry. No-shows are valid tickets never checked in, counted on the day an event ended. Revenue is what buyers paid minus refunds, per currency and before platform fees (see Finance).",
+    "rebuildTitle": "Rebuild analytics",
+    "rebuildBody": "Recomputes every figure on this page from your orders and check-ins, a few events at a time. Use it after changing your organization’s time zone.",
+    "rebuild": "Rebuild",
+    "rebuilding": "Starting…",
+    "rebuildStarted": "Rebuild started",
+    "rebuildStartedBody": "Figures are recomputed in the background; this page stays usable meanwhile.",
+    "rebuildRunning": "A rebuild is already running.",
+    "runStatus": {
+      "running": "Running",
+      "done": "Done",
+      "failed": "Failed",
+      "cancelled": "Cancelled"
+    },
+    "runProgress": "{events, plural, one {# event checked} other {# events checked}}, {written, plural, one {# updated} other {# updated}}"
   }
 }
