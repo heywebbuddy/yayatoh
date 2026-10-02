@@ -39,6 +39,14 @@ export type SandboxDto = z.infer<typeof SandboxDto>;
 
 export const CreateSandboxInput = z.object({ name: z.string().trim().min(1).max(60) });
 
+/**
+ * The sandbox org's name: the parent's, then the sandbox's (`Lakeside Events – Staging`), so the
+ * org switcher groups it under its parent and lists the parent first.
+ */
+export function sandboxOrgName(parentName: string, name: string): string {
+  return `${parentName.slice(0, 57).trimEnd()} – ${name}`;
+}
+
 /** `lakeside-events-sandbox-3f9a1c`: the parent's address (shortened) and a random tail. */
 export function sandboxSlug(parentSlug: string, tail = randomBytes(3).toString('hex')): string {
   return `${parentSlug.slice(0, 40).replace(/-+$/, '')}-sandbox-${tail}`;
@@ -103,7 +111,7 @@ export const createSandboxCommand = tenantCommand({
 
 const ProvisionSandboxInput = z.object({
   parentOrgId: z.uuid(),
-  name: z.string().min(1).max(60),
+  name: z.string().min(1).max(120),
   slug: z.string().min(3).max(63),
   ownerUserId: z.uuid(),
   timezone: z.string(),
@@ -209,6 +217,7 @@ export async function createSandboxOrg(
   const [parent] = await withTenant(ctx, (tx) =>
     tx
       .select({
+        name: organizations.name,
         timezone: organizations.timezone,
         country: organizations.country,
         currency: organizations.currency,
@@ -222,14 +231,15 @@ export async function createSandboxOrg(
     createCtx({ orgId, actor: { type: 'system', name: 'sandbox' }, requestId: ctx.requestId });
   try {
     if (!parent || ctx.actor.type !== 'user') throw new DomainError('internal');
+    const { name: parentName, ...settings } = parent;
     await executeCommand(
       provisionSandboxOrgCommand,
       {
         parentOrgId: parentId,
-        name: link.name,
+        name: sandboxOrgName(parentName, link.name),
         slug: link.slug,
         ownerUserId: ctx.actor.userId,
-        ...parent,
+        ...settings,
       },
       system(link.sandboxOrgId),
       ports,
