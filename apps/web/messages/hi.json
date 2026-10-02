@@ -84,7 +84,8 @@
         "waitlist-offer": "प्रतीक्षा सूची ऑफ़र",
         "waitlist-expired": "प्रतीक्षा सूची ऑफ़र की अवधि समाप्त",
         "credit-note": "क्रेडिट नोट",
-        "support-reply": "सपोर्ट जवाब"
+        "support-reply": "सपोर्ट जवाब",
+        "table-naming": "टेबल के नाम देने का लिंक"
       },
       "events": {
         "reminder": "इवेंट रिमाइंडर",

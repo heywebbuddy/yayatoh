@@ -84,7 +84,8 @@
         "waitlist-offer": "Angebot von der Warteliste",
         "waitlist-expired": "Angebot von der Warteliste abgelaufen",
         "credit-note": "Gutschrift",
-        "support-reply": "Support-Antwort"
+        "support-reply": "Support-Antwort",
+        "table-naming": "Link zum Benennen des Tisches"
       },
       "events": {
         "reminder": "Veranstaltungserinnerung",

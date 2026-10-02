@@ -84,7 +84,8 @@
         "waitlist-offer": "Aanbod van de wachtlijst",
         "waitlist-expired": "Aanbod van de wachtlijst verlopen",
         "credit-note": "Creditnota",
-        "support-reply": "Antwoord van support"
+        "support-reply": "Antwoord van support",
+        "table-naming": "Link om de tafel in te vullen"
       },
       "events": {
         "reminder": "Herinnering evenement",

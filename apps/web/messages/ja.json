@@ -84,7 +84,8 @@
         "waitlist-offer": "キャンセル待ちの購入案内",
         "waitlist-expired": "キャンセル待ちの購入案内の期限切れ",
         "credit-note": "クレジットノート",
-        "support-reply": "サポートからの返信"
+        "support-reply": "サポートからの返信",
+        "table-naming": "テーブルのゲスト名入力リンク"
       },
       "events": {
         "reminder": "イベントのリマインダー",

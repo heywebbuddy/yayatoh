@@ -5473,6 +5473,240 @@ See you at the show!
 }
 `;
 
+exports[`renderMessage: every kind in all 13 locales > orders.table-naming · ar 1`] = `
+{
+  "subject": "أدخل أسماء ضيوفك في Harbor Autumn Gala",
+  "text": "أدخل أسماء ضيوفك في Harbor Autumn Gala
+
+مرحبًا Amina Diallo،
+
+تتسع Table of 10 الخاصة بك لـ 10 ضيوف. ما زالت 4 مقاعد بلا أسماء. استخدم الزر أدناه لتخبرنا بمن يجلس على طاولتك.
+
+إدخال أسماء ضيوفي: https://app.yayatoh.test/tables/sample
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.table-naming · de 1`] = `
+{
+  "subject": "Nennen Sie Ihre Gäste für Harbor Autumn Gala",
+  "text": "Nennen Sie Ihre Gäste für Harbor Autumn Gala
+
+Hallo Amina Diallo,
+
+Ihr Table of 10 hat 10 Plätze. 4 Plätze brauchen noch einen Namen. Sagen Sie uns über die Schaltfläche unten, wer an Ihrem Tisch sitzt.
+
+Meine Gäste nennen: https://app.yayatoh.test/tables/sample
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.table-naming · en 1`] = `
+{
+  "subject": "Name your guests for Harbor Autumn Gala",
+  "text": "Name your guests for Harbor Autumn Gala
+
+Hi Amina Diallo,
+
+Your Table of 10 seats 10 guests. 4 seats still need a name. Use the button below to tell us who sits at your table.
+
+Name my guests: https://app.yayatoh.test/tables/sample
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.table-naming · es 1`] = `
+{
+  "subject": "Indica tus invitados para Harbor Autumn Gala",
+  "text": "Indica tus invitados para Harbor Autumn Gala
+
+Hola, Amina Diallo:
+
+Tu Table of 10 tiene 10 asientos. Aún faltan los nombres de 4 asientos. Usa el botón de abajo para decirnos quién se sienta en tu mesa.
+
+Indicar mis invitados: https://app.yayatoh.test/tables/sample
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.table-naming · fr 1`] = `
+{
+  "subject": "Nommez vos invités pour Harbor Autumn Gala",
+  "text": "Nommez vos invités pour Harbor Autumn Gala
+
+Bonjour Amina Diallo,
+
+Votre Table of 10 compte 10 places. 4 places attendent encore un nom. Utilisez le bouton ci-dessous pour nous dire qui est assis à votre table.
+
+Nommer mes invités: https://app.yayatoh.test/tables/sample
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.table-naming · hi 1`] = `
+{
+  "subject": "Harbor Autumn Gala के लिए अपने मेहमानों के नाम बताएँ",
+  "text": "Harbor Autumn Gala के लिए अपने मेहमानों के नाम बताएँ
+
+नमस्ते Amina Diallo,
+
+आपकी Table of 10 में 10 सीटें हैं। 4 सीटों के नाम अभी बाकी हैं। नीचे दिए बटन से बताएँ कि आपकी टेबल पर कौन बैठेगा।
+
+मेहमानों के नाम दें: https://app.yayatoh.test/tables/sample
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.table-naming · it 1`] = `
+{
+  "subject": "Indica i tuoi ospiti per Harbor Autumn Gala",
+  "text": "Indica i tuoi ospiti per Harbor Autumn Gala
+
+Ciao Amina Diallo,
+
+Il tuo Table of 10 ha 10 posti. Mancano ancora i nomi per 4 posti. Usa il pulsante qui sotto per dirci chi siede al tuo tavolo.
+
+Indica i miei ospiti: https://app.yayatoh.test/tables/sample
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.table-naming · ja 1`] = `
+{
+  "subject": "Harbor Autumn Gala のゲスト名を入力してください",
+  "text": "Harbor Autumn Gala のゲスト名を入力してください
+
+Amina Diallo 様
+
+Table of 10 の席数は 10 席 です。あと 4 席の名前が未入力です。下のボタンから、テーブルに座る方をお知らせください。
+
+ゲスト名を入力する: https://app.yayatoh.test/tables/sample
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.table-naming · nl 1`] = `
+{
+  "subject": "Geef de namen van uw gasten door voor Harbor Autumn Gala",
+  "text": "Geef de namen van uw gasten door voor Harbor Autumn Gala
+
+Hoi Amina Diallo,
+
+Uw Table of 10 heeft 10 plaatsen. Er missen nog 4 namen. Laat ons met de knop hieronder weten wie er aan uw tafel zit.
+
+Mijn gasten doorgeven: https://app.yayatoh.test/tables/sample
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.table-naming · pt 1`] = `
+{
+  "subject": "Indique os seus convidados para Harbor Autumn Gala",
+  "text": "Indique os seus convidados para Harbor Autumn Gala
+
+Olá, Amina Diallo!
+
+A sua Table of 10 tem 10 lugares. Ainda faltam os nomes de 4 lugares. Use o botão abaixo para nos dizer quem se senta à sua mesa.
+
+Indicar os meus convidados: https://app.yayatoh.test/tables/sample
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.table-naming · ru 1`] = `
+{
+  "subject": "Укажите гостей на Harbor Autumn Gala",
+  "text": "Укажите гостей на Harbor Autumn Gala
+
+Здравствуйте, Amina Diallo!
+
+За вашим столом «Table of 10» 10 мест. Ещё 4 местам нужны имена. Нажмите кнопку ниже и укажите, кто сидит за вашим столом.
+
+Указать гостей: https://app.yayatoh.test/tables/sample
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.table-naming · zh-CN 1`] = `
+{
+  "subject": "请填写 Harbor Autumn Gala 的宾客姓名",
+  "text": "请填写 Harbor Autumn Gala 的宾客姓名
+
+Amina Diallo，您好：
+
+您的Table of 10共有 10 个座位。还有 4 个座位未填写姓名。请使用下方按钮告诉我们谁坐在您的桌位。
+
+填写宾客姓名: https://app.yayatoh.test/tables/sample
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.table-naming · zh-TW 1`] = `
+{
+  "subject": "請填寫 Harbor Autumn Gala 的賓客姓名",
+  "text": "請填寫 Harbor Autumn Gala 的賓客姓名
+
+Amina Diallo，您好：
+
+您的Table of 10共有 10 個座位。還有 4 個座位未填寫姓名。請使用下方按鈕告訴我們誰坐在您的桌位。
+
+填寫賓客姓名: https://app.yayatoh.test/tables/sample
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
 exports[`renderMessage: every kind in all 13 locales > orders.tickets · ar 1`] = `
 {
   "subject": "تذاكرك لفعالية Lakeside Jazz Night",

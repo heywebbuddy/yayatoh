@@ -84,7 +84,8 @@
         "waitlist-offer": "Oferta de la lista de espera",
         "waitlist-expired": "Oferta de la lista de espera vencida",
         "credit-note": "Nota de crédito",
-        "support-reply": "Respuesta de soporte"
+        "support-reply": "Respuesta de soporte",
+        "table-naming": "Enlace para nombrar la mesa"
       },
       "events": {
         "reminder": "Recordatorio del evento",
