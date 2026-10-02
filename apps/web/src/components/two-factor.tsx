@@ -48,7 +48,7 @@ function CopyButton({ text, label }: { text: string; label: string }) {
       >
         {label}
       </Button>
-      <span aria-live="polite" className="text-caption text-zinc-500">
+      <span aria-live="polite" className="text-caption text-ink-2">
         {copied ? t('copied') : ''}
       </span>
     </>
@@ -65,10 +65,10 @@ export function BackupCodes({ codes, onDone }: { codes: readonly string[]; onDon
       <h3 id={headingId} className="text-section">
         {t('codesTitle')}
       </h3>
-      <p className="text-body text-zinc-600">{t('codesExplain')}</p>
+      <p className="text-body text-ink-2">{t('codesExplain')}</p>
       <ol
         aria-label={t('codesTitle')}
-        className="grid list-none grid-cols-1 gap-2 rounded-card border border-zinc-200 bg-zinc-50 p-4 font-mono text-body sm:grid-cols-2"
+        className="grid list-none grid-cols-1 gap-2 rounded-card border border-line bg-surface-2 p-4 font-mono text-body sm:grid-cols-2"
       >
         {codes.map((c) => (
           <li key={c} dir="ltr" className="text-start">
@@ -151,19 +151,19 @@ export function TwoFactorSetup({ required }: { required: boolean }) {
             aria-describedby={keyId}
             viewBox={`0 0 ${start.qr.size} ${start.qr.size}`}
             shapeRendering="crispEdges"
-            className="size-44 rounded-card border border-zinc-200 text-zinc-900"
+            className="size-44 rounded-card border border-line text-ink"
           >
             <rect width={start.qr.size} height={start.qr.size} fill="white" />
             <path d={start.qr.d} fill="currentColor" />
           </svg>
           <div className="flex flex-col gap-1.5">
-            <p className="text-caption text-zinc-600">{t('manualKeyLabel')}</p>
+            <p className="text-caption text-ink-2">{t('manualKeyLabel')}</p>
             <p className="flex flex-wrap items-center gap-2">
               <code
                 id={keyId}
                 data-testid="setup-key"
                 dir="ltr"
-                className="rounded-md bg-zinc-100 px-2 py-1 font-mono text-body tracking-wide select-all"
+                className="rounded-tag bg-surface-3 px-2 py-1 font-mono text-body tracking-wide select-all"
               >
                 {start.setupKey}
               </code>
@@ -222,7 +222,7 @@ export function TwoFactorOff() {
     );
   return (
     <form action={formAction} className="flex flex-col gap-3" noValidate>
-      <p className="text-body text-zinc-600">{t('turnOffExplain')}</p>
+      <p className="text-body text-ink-2">{t('turnOffExplain')}</p>
       <div id={errorId} aria-live="polite">
         {state.code ? <Alert title={message(state.code) ?? ''} /> : null}
       </div>
@@ -273,7 +273,7 @@ export function RegenerateCodes({ left }: { left: number }) {
     );
   return (
     <form ref={formRef} action={formAction} className="flex flex-col gap-3">
-      <p className="text-body text-zinc-600">{t('codesLeft', { count: left })}</p>
+      <p className="text-body text-ink-2">{t('codesLeft', { count: left })}</p>
       <div aria-live="polite">{state.code ? <Alert title={message(state.code) ?? ''} /> : null}</div>
       {confirming ? (
         <>

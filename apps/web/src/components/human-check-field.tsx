@@ -90,7 +90,7 @@ export function HumanCheckField({
     return (
       <div className="flex flex-col gap-2">
         <div ref={box} />
-        <p role="status" className="text-caption text-zinc-600">
+        <p role="status" className="text-caption text-ink-2">
           {broken ? th('unavailable') : ''}
         </p>
       </div>
@@ -125,12 +125,9 @@ export function HumanCheckGroup({
   const t = useTranslations('humanCheck');
   const descId = useId();
   return (
-    <fieldset
-      aria-describedby={descId}
-      className="flex flex-col gap-2 rounded-card border border-zinc-200 p-4"
-    >
-      <legend className="px-1 text-caption text-zinc-600">{t('legend')}</legend>
-      <p id={descId} className="text-caption text-zinc-600">
+    <fieldset aria-describedby={descId} className="flex flex-col gap-2 rounded-card border border-line p-4">
+      <legend className="px-1 text-[13px] font-bold text-ink">{t('legend')}</legend>
+      <p id={descId} className="text-caption text-ink-2">
         {t('explain')}
       </p>
       <HumanCheckField widget={widget} label={t('fakeLabel')} onToken={onToken} locale={locale} />

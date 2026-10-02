@@ -27,7 +27,14 @@
     "yourOrganizations": "مؤسساتك",
     "organization": "المؤسسة",
     "signOut": "تسجيل الخروج",
-    "security": "أمان الحساب"
+    "security": "أمان الحساب",
+    "menuSection": "القائمة",
+    "accountSection": "الحساب",
+    "newEvent": "فعالية جديدة",
+    "breadcrumb": "مسار التنقل",
+    "closeMenu": "إغلاق القائمة",
+    "eventSections": "أقسام الفعالية",
+    "allEvents": "الفعاليات"
   },
   "notifications": {
     "open": "الإشعارات",
@@ -572,7 +579,10 @@
   },
   "common": {
     "comingSoon": "قادم في مرحلة لاحقة",
-    "loading": "جارٍ التحميل…"
+    "loading": "جارٍ التحميل…",
+    "close": "إغلاق",
+    "retry": "حاول مرة أخرى",
+    "select": "تحديد"
   },
   "section": {
     "comingTitle": "هذا القسم قيد الإنشاء",
@@ -641,6 +651,7 @@
     "speakerPageTitle": "متحدث",
     "gallery": "المعرض",
     "register": "تسجيل",
+    "hostedBy": "يستضيفها",
     "exhibitorMap": "خريطة العارضين"
   },
   "portal": {
@@ -1418,7 +1429,8 @@
       "placeholder": "#rrggbb",
       "preview": "احصل على التذاكر",
       "ratio": "تباين النص {ratio}:1.",
-      "tooLight": "هذا اللون فاتح على صفحة بيضاء ({ratio}:1)؛ وقد يصعب رؤية الأزرار. جرّب درجة أغمق."
+      "tooLight": "هذا اللون فاتح على صفحة بيضاء ({ratio}:1)؛ وقد يصعب رؤية الأزرار. جرّب درجة أغمق.",
+      "tooDark": "في السمة الداكنة يبدو هذا اللون داكنًا مقابل الصفحة ({ratio}:1)؛ قد يصعب رؤية الأزرار. جرّب درجة أفتح."
     },
     "legal": {
       "title": "صفحاتك القانونية",
@@ -2619,7 +2631,9 @@
     "clear": "مسح عوامل التصفية",
     "noneTitle": "لا توجد فعاليات تطابق عوامل التصفية هذه",
     "noneDescription": "جرّب فئة أو وسمًا آخر، أو امسح عوامل التصفية.",
-    "tags": "الوسوم"
+    "tags": "الوسوم",
+    "search": "البحث بالاسم",
+    "showing": "{from}–{to} من {total, plural, zero {# فعالية} one {فعالية واحدة} two {فعاليتين} few {# فعاليات} many {# فعالية} other {# فعالية}}"
   },
   "venues": {
     "title": "الأماكن",
@@ -6294,6 +6308,7 @@
         "open": "افتح قابلية تسليم البريد"
       }
     },
+    "openScanner": "فتح الماسح",
     "tv": {
       "open": "وضع الشاشة",
       "title": "وضع الشاشة",
@@ -6313,7 +6328,10 @@
       "createdAt": "أُنشئ {time}",
       "revokedAt": "أُوقف {time}",
       "revoke": "إيقاف",
-      "revokeLabel": "إيقاف {label}"
+      "revokeLabel": "إيقاف {label}",
+      "readOnly": "للقراءة فقط",
+      "statusOn": "مفعّل",
+      "statusOff": "متوقف"
     }
   },
   "alerts": {
@@ -6403,9 +6421,9 @@
       "payoutsPastDue": "حدّث حساب الدفعات",
       "deliverability": "افتح قائمة الحظر",
       "automationFailed": "افتح حالة المراسلة",
-      "assistanceOverdue": "افتح طلبات المساعدة",
       "campaignFailed": "افتح الحملات",
-      "disputeDeadline": "افتح النزاعات"
+      "disputeDeadline": "افتح النزاعات",
+      "assistanceOverdue": "افتح طلبات المساعدة"
     },
     "rules": {
       "unseated": "{count, plural, zero {لا يوجد حاضرون بلا مقاعد} one {حاضر واحد ليس لديه مقعد} two {حاضران ليس لديهما مقعد} few {{countWords} حاضرين ليس لديهم مقاعد} many {{countWords} حاضرًا ليس لديهم مقاعد} other {{countWords} حاضر ليس لديهم مقاعد}}",
@@ -6425,9 +6443,9 @@
       "payoutsPastDue": "{count, plural, zero {لا متطلبات متأخرة} one {متطلب واحد لحساب الدفعات متأخر} two {متطلبان لحساب الدفعات متأخران} few {{countWords} متطلبات لحساب الدفعات متأخرة} many {{countWords} متطلبًا لحساب الدفعات متأخرًا} other {{countWords} متطلب لحساب الدفعات متأخر}}",
       "deliverability": "قابلية تسليم البريد الإلكتروني تحتاج إلى اهتمام",
       "automationFailed": "{count, plural, zero {لا إخفاقات اليوم} one {فشلت رسالة أو إجراء جماعي واحد اليوم} two {فشلت رسالتان أو إجراءان جماعيان اليوم} few {فشلت {countWords} رسائل أو إجراءات جماعية اليوم} many {فشلت {countWords} رسالة أو إجراءً جماعيًا اليوم} other {فشلت {countWords} رسالة أو إجراء جماعي اليوم}}",
-      "assistanceOverdue": "{count, plural, zero {لا توجد طلبات مساعدة متأخرة} one {طلب مساعدة واحد انتظر طويلًا} two {طلبا مساعدة انتظرا طويلًا} few {{countWords} طلبات مساعدة انتظرت طويلًا} many {{countWords} طلبًا للمساعدة انتظر طويلًا} other {{countWords} طلب مساعدة انتظر طويلًا}}",
       "campaignFailed": "{count, plural, zero {لا إخفاقات في الحملات اليوم} one {فشل إرسال حملة واحدة اليوم} two {فشل إرسال حملتين اليوم} few {فشل إرسال {countWords} حملات اليوم} many {فشل إرسال {countWords} حملة اليوم} other {فشل إرسال {countWords} حملة اليوم}}",
-      "disputeDeadline": "{count, plural, zero {لا نزاعات تحتاج إلى أدلة} one {نزاع واحد يحتاج إلى أدلة قريبًا} two {نزاعان يحتاجان إلى أدلة قريبًا} few {{countWords} نزاعات تحتاج إلى أدلة قريبًا} many {{countWords} نزاعًا يحتاج إلى أدلة قريبًا} other {{countWords} نزاع يحتاج إلى أدلة قريبًا}}"
+      "disputeDeadline": "{count, plural, zero {لا نزاعات تحتاج إلى أدلة} one {نزاع واحد يحتاج إلى أدلة قريبًا} two {نزاعان يحتاجان إلى أدلة قريبًا} few {{countWords} نزاعات تحتاج إلى أدلة قريبًا} many {{countWords} نزاعًا يحتاج إلى أدلة قريبًا} other {{countWords} نزاع يحتاج إلى أدلة قريبًا}}",
+      "assistanceOverdue": "{count, plural, zero {لا توجد طلبات مساعدة متأخرة} one {طلب مساعدة واحد انتظر طويلًا} two {طلبا مساعدة انتظرا طويلًا} few {{countWords} طلبات مساعدة انتظرت طويلًا} many {{countWords} طلبًا للمساعدة انتظر طويلًا} other {{countWords} طلب مساعدة انتظر طويلًا}}"
     },
     "widget": {
       "title": "التنبيهات",
@@ -7525,6 +7543,7 @@
     "publicLink": "يُعبأ النموذج عبر",
     "publicLinkText": "نموذج التسجيل العام",
     "openBuilder": "تعديل نموذج التسجيل",
+    "openReadOnly": "عرض نموذج التسجيل",
     "pagesTitle": "الصفحات",
     "emptyTitle": "لا صفحات بعد",
     "emptyDescription": "أضف صفحة أولى ثم أسئلتها. يمكن قصر الصفحات على أنواع تسجيل معينة أو إظهارها فقط بعد إجابات معينة.",
@@ -7676,8 +7695,7 @@
     "submittedTitle": "شكرًا، تم تسجيلك",
     "submittedDescription": "شكرًا يا {name}. أُرسلت إجاباتك إلى المنظم.",
     "expiredTitle": "انتهت صلاحية هذا الرابط",
-    "expiredDescription": "تعمل روابط متابعة التسجيل لمدة 14 يومًا بعد آخر حفظ. ابدأ من جديد من صفحة الفعالية.",
-    "openReadOnly": "عرض نموذج التسجيل"
+    "expiredDescription": "تعمل روابط متابعة التسجيل لمدة 14 يومًا بعد آخر حفظ. ابدأ من جديد من صفحة الفعالية."
   },
   "agenda": {
     "publishing": {
@@ -8070,6 +8088,12 @@
       "sub_event_has_chart": "لديها مخطط خاص بالفعل.",
       "no_chart": "لا يوجد مخطط لنسخه بعد. أنشئ مخطط الفعالية في صفحة المقاعد، أو اختر مخططًا محفوظًا."
     }
+  },
+  "theme": {
+    "label": "سمة الألوان",
+    "light": "فاتح",
+    "dark": "داكن",
+    "system": "النظام"
   },
   "speakerPortal": {
     "title": "بوابة المتحدثين",
@@ -8711,7 +8735,13 @@
       "offline": "أنت غير متصل. حاول مرة أخرى عندما يعود الجهاز للاتصال.",
       "invalid": "اختر ما تحتاجه."
     },
-    "guestLine": "{name} · التذكرة {ticket}"
+    "guestLine": "{name} · التذكرة {ticket}",
+    "stats": {
+      "open": "الطلبات المفتوحة",
+      "urgent": "عاجل",
+      "waiting": "بانتظار أحد",
+      "unassigned": "غير مُسنَدة"
+    }
   },
   "marketingAnalytics": {
     "title": "تحليلات التسويق",
@@ -8736,7 +8766,8 @@
       "lastRevenue": "الإيرادات (آخر تفاعل)",
       "firstOrders": "الطلبات (أول تفاعل)",
       "firstRevenue": "الإيرادات (أول تفاعل)",
-      "conversion": "التحويل"
+      "conversion": "التحويل",
+      "deliveredShare": "المُسلَّمة من المُرسَلة"
     },
     "otherCurrency": "{count, plural, zero {لا طلبات بعملات أخرى.} one {طلب واحد بعملة أخرى: محسوب، لكنه خارج الإيرادات.} two {طلبان بعملات أخرى: محسوبان، لكنهما خارج الإيرادات.} few {# طلبات بعملات أخرى: محسوبة، لكنها خارج الإيرادات.} many {# طلبًا بعملات أخرى: محسوبة، لكنها خارج الإيرادات.} other {# طلب بعملات أخرى: محسوبة، لكنها خارج الإيرادات.}}",
     "viewLabel": "تجميع النتائج حسب",

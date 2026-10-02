@@ -46,7 +46,7 @@ export async function PublicExhibitorMapView({ slug }: { slug: string }) {
       <h1 className="text-[32px] leading-tight font-light tracking-[-0.03em]">
         {t('title', { name: pub.name })}
       </h1>
-      <p className="text-body text-zinc-600">{t('intro')}</p>
+      <p className="text-body text-ink-2">{t('intro')}</p>
       <BoothMap
         booths={map.booths.map((b) => ({ ...b, taken: b.exhibitorIds.length > 0 }))}
         label={t('mapLabel', { count: map.booths.length })}
@@ -58,7 +58,7 @@ export async function PublicExhibitorMapView({ slug }: { slug: string }) {
         </h2>
         <ul className="grid list-none grid-cols-1 gap-3 p-0 sm:grid-cols-2">
           {map.exhibitors.map((x) => (
-            <li key={x.id} className="flex flex-col gap-1 rounded-card border border-zinc-200 p-4">
+            <li key={x.id} className="flex flex-col gap-1 rounded-card border border-line p-4">
               {images[x.id] ? (
                 <MediaPicture
                   image={images[x.id] as PublicMediaDto}
@@ -67,16 +67,16 @@ export async function PublicExhibitorMapView({ slug }: { slug: string }) {
                 />
               ) : null}
               <h3 className="font-medium">{x.name}</h3>
-              <span className="text-caption text-zinc-600">
+              <span className="text-caption text-ink-2">
                 {x.boothNumbers.length
                   ? t('booths', { count: x.boothNumbers.length, numbers: x.boothNumbers.join(', ') })
                   : t('noBooth')}
               </span>
               {x.categories.length ? (
-                <span className="text-caption text-zinc-600">{x.categories.join(' · ')}</span>
+                <span className="text-caption text-ink-2">{x.categories.join(' · ')}</span>
               ) : null}
               {x.description ? (
-                <Markdown source={x.description} className="flex flex-col gap-2 text-caption text-zinc-600" />
+                <Markdown source={x.description} className="flex flex-col gap-2 text-caption text-ink-2" />
               ) : null}
             </li>
           ))}
@@ -92,7 +92,7 @@ export async function PublicExhibitorMapView({ slug }: { slug: string }) {
           <table className="w-full text-start text-body">
             <caption className="sr-only">{t('boothsCaption')}</caption>
             <thead>
-              <tr className="border-b border-zinc-200">
+              <tr className="border-b border-line">
                 <th scope="col" className="py-2 pe-4 text-start font-medium">
                   {t('booth')}
                 </th>
@@ -106,7 +106,7 @@ export async function PublicExhibitorMapView({ slug }: { slug: string }) {
             </thead>
             <tbody>
               {map.booths.map((b) => (
-                <tr key={b.id} className="border-b border-zinc-100">
+                <tr key={b.id} className="border-b border-line">
                   <th scope="row" className="py-2 pe-4 text-start font-normal">
                     {b.number}
                   </th>

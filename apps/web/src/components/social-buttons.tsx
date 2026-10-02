@@ -37,10 +37,10 @@ export async function SocialButtons({
           </a>
         );
       })}
-      <p className="flex items-center gap-3 text-caption text-zinc-500">
-        <span aria-hidden="true" className="h-px flex-1 bg-zinc-200" />
+      <p className="flex items-center gap-3 text-caption text-ink-2">
+        <span aria-hidden="true" className="h-px flex-1 bg-line" />
         {t('or')}
-        <span aria-hidden="true" className="h-px flex-1 bg-zinc-200" />
+        <span aria-hidden="true" className="h-px flex-1 bg-line" />
       </p>
     </div>
   );

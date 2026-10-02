@@ -94,7 +94,7 @@ export function RequestActions({
             ? t('changed')
             : te(errorMessageKey(result.code));
   return (
-    <div className="flex flex-col gap-3 border-t border-zinc-100 pt-3">
+    <div className="flex flex-col gap-3 border-t border-line pt-3">
       <div className="flex flex-wrap items-end gap-2">
         {!mine ? button('take', t('take'), t('takeLabel', { title }), 'primary') : null}
         {state !== 'in_progress' ? button('start', t('start'), t('startLabel', { title })) : null}
@@ -105,15 +105,10 @@ export function RequestActions({
         <form action={formAction} className="flex flex-wrap items-end gap-2">
           <input type="hidden" name="op" value="assign" />
           <div className="flex flex-col gap-1">
-            <label htmlFor={`assign-${requestId}`} className="text-caption text-zinc-600">
+            <label htmlFor={`assign-${requestId}`} className="text-[13px] font-bold text-ink">
               {t('assignLabel', { title })}
             </label>
-            <select
-              id={`assign-${requestId}`}
-              name="assignee"
-              defaultValue=""
-              className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
-            >
+            <select id={`assign-${requestId}`} name="assignee" defaultValue="" className="field">
               <option value="">{t('choosePerson')}</option>
               {staff.map((s) => (
                 <option key={s.id} value={s.id}>
@@ -129,7 +124,7 @@ export function RequestActions({
       ) : null}
       <form action={formAction} className="flex flex-col gap-2">
         <input type="hidden" name="op" value="note" />
-        <label htmlFor={`note-${requestId}`} className="text-caption text-zinc-600">
+        <label htmlFor={`note-${requestId}`} className="text-[13px] font-bold text-ink">
           {t('noteLabel', { title })}
         </label>
         <textarea
@@ -138,7 +133,7 @@ export function RequestActions({
           name="body"
           rows={2}
           maxLength={500}
-          className="rounded-card border border-zinc-200 bg-white px-4 py-2 text-body"
+          className="field w-full py-3 leading-relaxed"
         />
         <Button type="submit" size="sm" variant="secondary" disabled={pending} className="self-start">
           {t('addNote')}

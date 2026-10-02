@@ -27,7 +27,14 @@
     "yourOrganizations": "Le tue organizzazioni",
     "organization": "Organizzazione",
     "signOut": "Esci",
-    "security": "Sicurezza dell’account"
+    "security": "Sicurezza dell’account",
+    "menuSection": "Menu",
+    "accountSection": "Account",
+    "newEvent": "Nuovo evento",
+    "breadcrumb": "Percorso",
+    "closeMenu": "Chiudi menu",
+    "eventSections": "Sezioni dell’evento",
+    "allEvents": "Eventi"
   },
   "notifications": {
     "open": "Notifiche",
@@ -572,7 +579,10 @@
   },
   "common": {
     "comingSoon": "In arrivo in una fase successiva",
-    "loading": "Caricamento…"
+    "loading": "Caricamento…",
+    "close": "Chiudi",
+    "retry": "Riprova",
+    "select": "Seleziona"
   },
   "section": {
     "comingTitle": "Quest’area è in costruzione",
@@ -641,6 +651,7 @@
     "speakerPageTitle": "Relatore",
     "gallery": "Galleria",
     "register": "Iscriviti",
+    "hostedBy": "Organizzato da",
     "exhibitorMap": "Mappa degli espositori"
   },
   "portal": {
@@ -1418,7 +1429,8 @@
       "placeholder": "#rrggbb",
       "preview": "Acquista biglietti",
       "ratio": "Contrasto del testo {ratio}:1.",
-      "tooLight": "Questo colore è chiaro su una pagina bianca ({ratio}:1); i pulsanti potrebbero essere poco visibili. Prova una tonalità più scura."
+      "tooLight": "Questo colore è chiaro su una pagina bianca ({ratio}:1); i pulsanti potrebbero essere poco visibili. Prova una tonalità più scura.",
+      "tooDark": "Nel tema scuro questo colore è scuro rispetto alla pagina ({ratio}:1); i pulsanti potrebbero vedersi poco. Prova una tonalità più chiara."
     },
     "legal": {
       "title": "Le tue pagine legali",
@@ -2619,7 +2631,9 @@
     "clear": "Rimuovi i filtri",
     "noneTitle": "Nessun evento corrisponde a questi filtri",
     "noneDescription": "Prova un’altra categoria o un altro tag, oppure rimuovi i filtri.",
-    "tags": "Tag"
+    "tags": "Tag",
+    "search": "Cerca per nome",
+    "showing": "{from}–{to} di {total, plural, one {# evento} other {# eventi}}"
   },
   "venues": {
     "title": "Location",
@@ -6294,6 +6308,7 @@
         "open": "Apri la recapitabilità delle email"
       }
     },
+    "openScanner": "Apri scanner",
     "tv": {
       "open": "Modalità TV",
       "title": "Modalità TV",
@@ -6313,7 +6328,10 @@
       "createdAt": "Creato {time}",
       "revokedAt": "Disattivato {time}",
       "revoke": "Disattiva",
-      "revokeLabel": "Disattiva {label}"
+      "revokeLabel": "Disattiva {label}",
+      "readOnly": "Sola lettura",
+      "statusOn": "Attivo",
+      "statusOff": "Disattivato"
     }
   },
   "alerts": {
@@ -6403,9 +6421,9 @@
       "payoutsPastDue": "Aggiorna l’account di pagamento",
       "deliverability": "Apri la lista di soppressione",
       "automationFailed": "Apri lo stato dei messaggi",
-      "assistanceOverdue": "Apri le richieste di aiuto",
       "campaignFailed": "Apri le campagne",
-      "disputeDeadline": "Apri le contestazioni"
+      "disputeDeadline": "Apri le contestazioni",
+      "assistanceOverdue": "Apri le richieste di aiuto"
     },
     "rules": {
       "unseated": "{count, plural, one {Un partecipante non ha un posto} other {{countWords} partecipanti non hanno un posto}}",
@@ -6425,9 +6443,9 @@
       "payoutsPastDue": "{count, plural, one {Un requisito dell’account di pagamento è scaduto} other {{countWords} requisiti dell’account di pagamento sono scaduti}}",
       "deliverability": "Il recapito delle email richiede attenzione",
       "automationFailed": "{count, plural, one {Un messaggio o un’azione di massa non è riuscito oggi} other {{countWords} messaggi o azioni di massa non sono riusciti oggi}}",
-      "assistanceOverdue": "{count, plural, one {{countWords} richiesta di aiuto aspetta da troppo} other {{countWords} richieste di aiuto aspettano da troppo}}",
       "campaignFailed": "{count, plural, one {Un invio di campagna non è riuscito oggi} other {{countWords} invii di campagna non sono riusciti oggi}}",
-      "disputeDeadline": "{count, plural, one {Una contestazione richiede presto delle prove} other {{countWords} contestazioni richiedono presto delle prove}}"
+      "disputeDeadline": "{count, plural, one {Una contestazione richiede presto delle prove} other {{countWords} contestazioni richiedono presto delle prove}}",
+      "assistanceOverdue": "{count, plural, one {{countWords} richiesta di aiuto aspetta da troppo} other {{countWords} richieste di aiuto aspettano da troppo}}"
     },
     "widget": {
       "title": "Avvisi",
@@ -7525,6 +7543,7 @@
     "publicLink": "Si compila su",
     "publicLinkText": "il modulo di registrazione pubblico",
     "openBuilder": "Modifica il modulo di registrazione",
+    "openReadOnly": "Vedi il modulo di registrazione",
     "pagesTitle": "Pagine",
     "emptyTitle": "Ancora nessuna pagina",
     "emptyDescription": "Aggiungi una prima pagina, poi le sue domande. Le pagine possono essere limitate a tipi di registrazione o mostrate solo dopo certe risposte.",
@@ -7676,8 +7695,7 @@
     "submittedTitle": "Grazie, sei registrato",
     "submittedDescription": "Grazie, {name}. Le tue risposte sono state inviate all’organizzatore.",
     "expiredTitle": "Questo link è scaduto",
-    "expiredDescription": "I link per continuare una registrazione funzionano per 14 giorni dall’ultimo salvataggio. Ricomincia dalla pagina dell’evento.",
-    "openReadOnly": "Vedi il modulo di registrazione"
+    "expiredDescription": "I link per continuare una registrazione funzionano per 14 giorni dall’ultimo salvataggio. Ricomincia dalla pagina dell’evento."
   },
   "agenda": {
     "publishing": {
@@ -8070,6 +8088,12 @@
       "sub_event_has_chart": "Ha già la sua piantina.",
       "no_chart": "Non c'è ancora una piantina da copiare. Crea la piantina dell'evento nella pagina Posti o scegli una piantina salvata."
     }
+  },
+  "theme": {
+    "label": "Tema colori",
+    "light": "Chiaro",
+    "dark": "Scuro",
+    "system": "Sistema"
   },
   "speakerPortal": {
     "title": "Portale relatori",
@@ -8711,7 +8735,13 @@
       "offline": "Sei offline. Riprova quando il dispositivo torna online.",
       "invalid": "Scegli di cosa hai bisogno."
     },
-    "guestLine": "{name} · biglietto {ticket}"
+    "guestLine": "{name} · biglietto {ticket}",
+    "stats": {
+      "open": "Richieste aperte",
+      "urgent": "Urgenti",
+      "waiting": "In attesa di qualcuno",
+      "unassigned": "Non assegnate"
+    }
   },
   "marketingAnalytics": {
     "title": "Analisi di marketing",
@@ -8736,7 +8766,8 @@
       "lastRevenue": "Ricavi (ultimo contatto)",
       "firstOrders": "Ordini (primo contatto)",
       "firstRevenue": "Ricavi (primo contatto)",
-      "conversion": "Conversione"
+      "conversion": "Conversione",
+      "deliveredShare": "Consegnati, sugli invii"
     },
     "otherCurrency": "{count, plural, one {# ordine era in un’altra valuta: contato, ma non nei ricavi.} many {# ordini erano in altre valute: contati, ma non nei ricavi.} other {# ordini erano in altre valute: contati, ma non nei ricavi.}}",
     "viewLabel": "Raggruppa i risultati per",

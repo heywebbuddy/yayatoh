@@ -27,7 +27,14 @@
     "yourOrganizations": "Deine Organisationen",
     "organization": "Organisation",
     "signOut": "Abmelden",
-    "security": "Kontosicherheit"
+    "security": "Kontosicherheit",
+    "menuSection": "Menü",
+    "accountSection": "Konto",
+    "newEvent": "Neue Veranstaltung",
+    "breadcrumb": "Brotkrümelnavigation",
+    "closeMenu": "Menü schließen",
+    "eventSections": "Bereiche der Veranstaltung",
+    "allEvents": "Veranstaltungen"
   },
   "notifications": {
     "open": "Benachrichtigungen",
@@ -572,7 +579,10 @@
   },
   "common": {
     "comingSoon": "Kommt in einem späteren Meilenstein",
-    "loading": "Wird geladen…"
+    "loading": "Wird geladen…",
+    "close": "Schließen",
+    "retry": "Erneut versuchen",
+    "select": "Auswählen"
   },
   "section": {
     "comingTitle": "Dieser Bereich wird gerade gebaut",
@@ -641,6 +651,7 @@
     "speakerPageTitle": "Speaker",
     "gallery": "Galerie",
     "register": "Anmelden",
+    "hostedBy": "Veranstaltet von",
     "exhibitorMap": "Ausstellerkarte"
   },
   "portal": {
@@ -1418,7 +1429,8 @@
       "placeholder": "#rrggbb",
       "preview": "Tickets kaufen",
       "ratio": "Textkontrast {ratio}:1.",
-      "tooLight": "Diese Farbe ist auf einer weißen Seite sehr hell ({ratio}:1); Buttons sind eventuell schwer zu erkennen. Probiere einen dunkleren Farbton."
+      "tooLight": "Diese Farbe ist auf einer weißen Seite sehr hell ({ratio}:1); Buttons sind eventuell schwer zu erkennen. Probiere einen dunkleren Farbton.",
+      "tooDark": "Im dunklen Design ist diese Farbe zu dunkel für die Seite ({ratio}:1); Schaltflächen sind dort schwer zu erkennen. Versuchen Sie einen helleren Ton."
     },
     "legal": {
       "title": "Deine Rechtstexte",
@@ -2619,7 +2631,9 @@
     "clear": "Filter zurücksetzen",
     "noneTitle": "Keine Events passen zu diesen Filtern",
     "noneDescription": "Versuche eine andere Kategorie oder einen anderen Tag oder setze die Filter zurück.",
-    "tags": "Tags"
+    "tags": "Tags",
+    "search": "Nach Namen suchen",
+    "showing": "{from}–{to} von {total, plural, one {# Veranstaltung} other {# Veranstaltungen}}"
   },
   "venues": {
     "title": "Veranstaltungsorte",
@@ -6294,6 +6308,7 @@
         "open": "E-Mail-Zustellbarkeit öffnen"
       }
     },
+    "openScanner": "Scanner öffnen",
     "tv": {
       "open": "TV-Modus",
       "title": "TV-Modus",
@@ -6313,7 +6328,10 @@
       "createdAt": "Erstellt {time}",
       "revokedAt": "Ausgeschaltet {time}",
       "revoke": "Ausschalten",
-      "revokeLabel": "{label} ausschalten"
+      "revokeLabel": "{label} ausschalten",
+      "readOnly": "Nur lesen",
+      "statusOn": "Aktiv",
+      "statusOff": "Aus"
     }
   },
   "alerts": {
@@ -6403,9 +6421,9 @@
       "payoutsPastDue": "Auszahlungskonto aktualisieren",
       "deliverability": "Sperrliste öffnen",
       "automationFailed": "Nachrichtenstatus öffnen",
-      "assistanceOverdue": "Hilfeanfragen öffnen",
       "campaignFailed": "Kampagnen öffnen",
-      "disputeDeadline": "Rückbuchungen öffnen"
+      "disputeDeadline": "Rückbuchungen öffnen",
+      "assistanceOverdue": "Hilfeanfragen öffnen"
     },
     "rules": {
       "unseated": "{count, plural, one {Ein Teilnehmer hat keinen Sitzplatz} other {{countWords} Teilnehmende haben keinen Sitzplatz}}",
@@ -6425,9 +6443,9 @@
       "payoutsPastDue": "{count, plural, one {Eine Anforderung des Auszahlungskontos ist überfällig} other {{countWords} Anforderungen des Auszahlungskontos sind überfällig}}",
       "deliverability": "Die E-Mail-Zustellbarkeit braucht Aufmerksamkeit",
       "automationFailed": "{count, plural, one {Eine Nachricht oder Sammelaktion ist heute fehlgeschlagen} other {{countWords} Nachrichten oder Sammelaktionen sind heute fehlgeschlagen}}",
-      "assistanceOverdue": "{count, plural, one {Eine Hilfeanfrage wartet zu lange} other {{countWords} Hilfeanfragen warten zu lange}}",
       "campaignFailed": "{count, plural, one {Ein Kampagnenversand ist heute fehlgeschlagen} other {{countWords} Kampagnenversände sind heute fehlgeschlagen}}",
-      "disputeDeadline": "{count, plural, one {Eine Rückbuchung braucht bald Nachweise} other {{countWords} Rückbuchungen brauchen bald Nachweise}}"
+      "disputeDeadline": "{count, plural, one {Eine Rückbuchung braucht bald Nachweise} other {{countWords} Rückbuchungen brauchen bald Nachweise}}",
+      "assistanceOverdue": "{count, plural, one {Eine Hilfeanfrage wartet zu lange} other {{countWords} Hilfeanfragen warten zu lange}}"
     },
     "widget": {
       "title": "Warnungen",
@@ -7525,6 +7543,7 @@
     "publicLink": "Ausgefüllt wird es unter",
     "publicLinkText": "dem öffentlichen Anmeldeformular",
     "openBuilder": "Anmeldeformular bearbeiten",
+    "openReadOnly": "Anmeldeformular ansehen",
     "pagesTitle": "Seiten",
     "emptyTitle": "Noch keine Seiten",
     "emptyDescription": "Fügen Sie eine erste Seite hinzu, dann ihre Fragen. Seiten lassen sich auf Anmeldetypen beschränken oder erst nach bestimmten Antworten zeigen.",
@@ -7676,8 +7695,7 @@
     "submittedTitle": "Danke, Sie sind angemeldet",
     "submittedDescription": "Danke, {name}. Ihre Antworten wurden an den Veranstalter gesendet.",
     "expiredTitle": "Dieser Link ist abgelaufen",
-    "expiredDescription": "Links zum Fortsetzen einer Anmeldung gelten 14 Tage nach dem letzten Speichern. Beginnen Sie auf der Veranstaltungsseite neu.",
-    "openReadOnly": "Anmeldeformular ansehen"
+    "expiredDescription": "Links zum Fortsetzen einer Anmeldung gelten 14 Tage nach dem letzten Speichern. Beginnen Sie auf der Veranstaltungsseite neu."
   },
   "agenda": {
     "publishing": {
@@ -8070,6 +8088,12 @@
       "sub_event_has_chart": "Er hat bereits einen eigenen Plan.",
       "no_chart": "Es gibt noch keinen Plan zum Kopieren. Erstellen Sie den Plan der Veranstaltung auf der Seite Sitzplätze oder wählen Sie einen gespeicherten Plan."
     }
+  },
+  "theme": {
+    "label": "Farbschema",
+    "light": "Hell",
+    "dark": "Dunkel",
+    "system": "System"
   },
   "speakerPortal": {
     "title": "Speaker-Portal",
@@ -8711,7 +8735,13 @@
       "offline": "Du bist offline. Versuche es erneut, wenn das Gerät wieder online ist.",
       "invalid": "Wähle, was du brauchst."
     },
-    "guestLine": "{name} · Ticket {ticket}"
+    "guestLine": "{name} · Ticket {ticket}",
+    "stats": {
+      "open": "Offene Anfragen",
+      "urgent": "Dringend",
+      "waiting": "Warten auf jemanden",
+      "unassigned": "Nicht zugewiesen"
+    }
   },
   "marketingAnalytics": {
     "title": "Marketing-Analysen",
@@ -8736,7 +8766,8 @@
       "lastRevenue": "Umsatz (letzter Kontakt)",
       "firstOrders": "Bestellungen (erster Kontakt)",
       "firstRevenue": "Umsatz (erster Kontakt)",
-      "conversion": "Konversion"
+      "conversion": "Konversion",
+      "deliveredShare": "Zugestellt, von den Sendungen"
     },
     "otherCurrency": "{count, plural, one {# Bestellung war in einer anderen Währung: gezählt, aber nicht im Umsatz.} other {# Bestellungen waren in anderen Währungen: gezählt, aber nicht im Umsatz.}}",
     "viewLabel": "Ergebnisse gruppieren nach",

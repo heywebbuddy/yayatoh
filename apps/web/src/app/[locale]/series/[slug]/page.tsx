@@ -38,8 +38,8 @@ export default async function PublicSeriesPage({
               <li key={e.slug}>
                 <Card className="flex flex-wrap items-center justify-between gap-3">
                   <div className="flex flex-col gap-1">
-                    <h3 className="text-[20px] font-light tracking-[-0.02em]">{e.name}</h3>
-                    <p className="text-body text-zinc-600">
+                    <h3 className="text-[20px] font-extrabold tracking-[-0.02em]">{e.name}</h3>
+                    <p className="text-body text-ink-2">
                       {[
                         formatEventDateRange(e.startsAt.toISOString(), e.endsAt.toISOString(), {
                           locale,

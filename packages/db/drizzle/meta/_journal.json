@@ -715,6 +715,13 @@
       "when": 1790959768350,
       "tag": "0101_naive_scorpion",
       "breakpoints": true
+    },
+    {
+      "idx": 102,
+      "version": "7",
+      "when": 1790972472722,
+      "tag": "0102_bright_red_shift",
+      "breakpoints": true
     }
   ]
 }

@@ -18,7 +18,7 @@ const ERRORS = new Set([
   'step_up_rate_limited',
   'step_up_method',
 ]);
-const field = 'min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body';
+const field = 'field';
 
 function Section({ id, title, children }: { id: string; title: string; children: ReactNode }) {
   return (
@@ -34,7 +34,7 @@ function Section({ id, title, children }: { id: string; title: string; children:
 function Labelled({ id, label, children }: { id: string; label: string; children: ReactNode }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor={id} className="text-caption text-zinc-600">
+      <label htmlFor={id} className="text-[13px] font-bold text-ink">
         {label}
       </label>
       {children}
@@ -60,7 +60,7 @@ export default async function MaintenancePage({
   const f = view.freeze;
   const proof =
     method === 'email' ? (
-      <p className="text-caption text-zinc-600">{t('errors.step_up_method')}</p>
+      <p className="text-caption text-ink-2">{t('errors.step_up_method')}</p>
     ) : (
       <Labelled id="freeze-proof" label={method === 'totp' ? t('code') : t('password')}>
         {method === 'totp' ? (
@@ -107,7 +107,7 @@ export default async function MaintenancePage({
             }
           />
           {f ? (
-            <span className="text-caption text-zinc-600">
+            <span className="text-caption text-ink-2">
               {t('freeze.since', { when: when.format(f.since), by: f.by })}
               {f.expectedEndAt ? ` · ${t('freeze.until', { when: when.format(f.expectedEndAt) })}` : ''}
             </span>
@@ -117,17 +117,17 @@ export default async function MaintenancePage({
           <ul aria-label={t('freeze.frozenOrgs')} className="flex flex-col gap-1 text-body">
             {f.orgs.map((o) => (
               <li key={o.id}>
-                {o.name} <span className="font-mono text-caption text-zinc-600">{o.slug}</span>
+                {o.name} <span className="font-mono text-caption text-ink-2">{o.slug}</span>
               </li>
             ))}
           </ul>
         ) : null}
         {f ? <p className="text-body">{t('freeze.reason', { reason: f.reason })}</p> : null}
-        <p className="text-caption text-zinc-600">{t('freeze.effect')}</p>
+        <p className="text-caption text-ink-2">{t('freeze.effect')}</p>
 
         <form action={startFreezeAction} className="flex flex-col gap-3" aria-label={t('start.form')}>
           <fieldset className="flex flex-col gap-2">
-            <legend className="text-caption text-zinc-600">{t('start.scope')}</legend>
+            <legend className="text-[13px] font-bold text-ink">{t('start.scope')}</legend>
             <label className="flex min-h-6 items-center gap-2 text-body">
               <input type="radio" name="scope" value="orgs" defaultChecked className="size-5" />
               {t('start.scopeOrgs')}
@@ -178,7 +178,7 @@ export default async function MaintenancePage({
         {f ? (
           <form
             action={endFreezeAction}
-            className="flex flex-col gap-3 border-t border-zinc-100 pt-4"
+            className="flex flex-col gap-3 border-t border-line pt-4"
             aria-label={t('end.form')}
           >
             <Labelled id="end-reason" label={t('reason')}>
@@ -213,16 +213,16 @@ export default async function MaintenancePage({
       </Section>
 
       <Section id="routes" title={t('routes.title')}>
-        <p className="text-caption text-zinc-600">{t('routes.description')}</p>
+        <p className="text-caption text-ink-2">{t('routes.description')}</p>
         {view.routes.length === 0 ? (
-          <p className="text-body text-zinc-600">{t('routes.empty')}</p>
+          <p className="text-body text-ink-2">{t('routes.empty')}</p>
         ) : (
           <ul className="flex flex-col gap-1 text-body">
             {view.routes.map((r) => (
               <li key={r.host}>
                 <span className="font-mono">{r.host}</span> →{' '}
                 {r.target === 'next' ? t('routes.next') : t('routes.legacy')}{' '}
-                <span className="text-caption text-zinc-600">
+                <span className="text-caption text-ink-2">
                   {t('routes.by', { by: r.by, when: when.format(r.at) })}
                 </span>
               </li>
@@ -233,7 +233,7 @@ export default async function MaintenancePage({
 
       <Section id="history" title={t('history.title')}>
         {view.changes.length === 0 ? (
-          <p className="text-body text-zinc-600">{t('history.empty')}</p>
+          <p className="text-body text-ink-2">{t('history.empty')}</p>
         ) : (
           <ol aria-label={t('history.title')} className="flex flex-col gap-2 text-body">
             {view.changes.map((c) => (
@@ -248,7 +248,7 @@ export default async function MaintenancePage({
                         summary: c.summary || 'off',
                       })}
                 </span>
-                <span className="text-caption text-zinc-600">
+                <span className="text-caption text-ink-2">
                   {t('history.meta', { who: c.actor, when: when.format(c.at), reason: c.reason })}
                 </span>
               </li>

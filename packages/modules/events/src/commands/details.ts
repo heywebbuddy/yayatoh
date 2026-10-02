@@ -2,7 +2,7 @@ import type { TenantTx } from '@yayatoh/db';
 import { DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { findVenueTx } from '@yayatoh/venues';
-import { and, asc, eq, exists, inArray, sql } from 'drizzle-orm';
+import { and, asc, eq, exists, ilike, inArray, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { EVENT_CATEGORIES, parseTags, TagError, tagKey } from '../domain/categories.ts';
 import { EventDto } from '../dto.ts';
@@ -139,12 +139,19 @@ export const orgTagsQuery = tenantQuery({
   },
 });
 
-/** Console events list with filters (M1.4c): category and/or a tag (case-insensitive). */
+/** `%` and `_` match literally in a name search (LIKE wildcards escaped). */
+const likeEscape = (s: string) => s.replace(/[\\%_]/g, (c) => `\\${c}`);
+
+/**
+ * Console events list with filters (M1.4c): category and/or a tag (case-insensitive), and a name
+ * search (`q`, case-insensitive substring; design v2 org home).
+ */
 export const searchEventsQuery = tenantQuery({
   name: 'events.searchEvents',
   input: z.object({
     category: z.enum(EVENT_CATEGORIES).optional(),
     tag: z.string().trim().max(40).optional(),
+    q: z.string().trim().max(80).optional(),
   }),
   output: z.array(EventDto.extend({ category: z.string().nullable(), tags: z.array(z.string()) })),
   entitlement: 'core',
@@ -160,6 +167,7 @@ export const searchEventsQuery = tenantQuery({
               .where(and(eq(eventTags.eventId, events.id), eq(eventTags.tagKey, tagKey(input.tag)))),
           )
         : undefined,
+      input.q ? ilike(events.name, `%${likeEscape(input.q)}%`) : undefined,
     ].filter(Boolean);
     const rows = await tx
       .select()

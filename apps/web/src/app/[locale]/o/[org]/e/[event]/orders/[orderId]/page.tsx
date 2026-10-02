@@ -190,7 +190,7 @@ export default async function OrderPage({
             label={t(`order.status.${order.status}`)}
           />
           <span className="font-mono tabular-nums">{fmt(order.totalMinor)}</span>
-          <span className="text-caption text-zinc-600">
+          <span className="text-caption text-ink-2">
             {order.collectedBy === 'organizer'
               ? [
                   t('boxOffice.collected'),
@@ -202,13 +202,13 @@ export default async function OrderPage({
               : t(`refunds.soldBy.${order.fundsFlow}`)}
           </span>
         </div>
-        <p className="text-caption text-zinc-600">
+        <p className="text-caption text-ink-2">
           {order.items.map((i) => `${i.quantity} × ${i.name}`).join(', ')}
         </p>
         {order.riskReview.length > 0 ? (
           <p className="flex flex-wrap items-center gap-2 text-caption">
             <StatusDot status="warning" label={t('risk.flagged')} />
-            <span className="text-zinc-600">
+            <span className="text-ink-2">
               {order.riskReview.map((r) => (t.has(`risk.rules.${r}`) ? t(`risk.rules.${r}`) : r)).join(' · ')}
             </span>
           </p>
@@ -220,7 +220,7 @@ export default async function OrderPage({
           <h2 id="order-link-heading" className="text-section">
             {t('orderLinks.organizerTitle')}
           </h2>
-          <p className="text-body text-zinc-600">{t('orderLinks.organizerDescription')}</p>
+          <p className="text-body text-ink-2">{t('orderLinks.organizerDescription')}</p>
           <ReissueLinkForm
             action={reissueLinkAction.bind(null, org, event, orderId)}
             email={order.buyerEmail}
@@ -239,15 +239,15 @@ export default async function OrderPage({
                 const touch = attribution[k];
                 return (
                   <div key={k} className="flex flex-col gap-1" data-testid={`attribution-${k}`}>
-                    <dt className="text-caption text-zinc-600">{t(`trackedLinks.${k}`)}</dt>
+                    <dt className="text-caption text-ink-2">{t(`trackedLinks.${k}`)}</dt>
                     <dd className="m-0 text-body">
                       {[touch.source, touch.medium, touch.campaign].filter(Boolean).join(' / ')}
                       {touch.code ? (
-                        <span dir="ltr" className="ms-2 font-mono text-caption text-zinc-500">
+                        <span dir="ltr" className="ms-2 font-mono text-caption text-ink-2">
                           /r/{touch.code}
                         </span>
                       ) : null}
-                      <span className="block text-caption text-zinc-500">
+                      <span className="block text-caption text-ink-2">
                         {attribution.model === 'click'
                           ? t('trackedLinks.viaClick')
                           : t('trackedLinks.viaUtm')}{' '}
@@ -288,7 +288,7 @@ export default async function OrderPage({
               cell: (tk) => (
                 <span className="flex flex-col">
                   <span>{tk.holderName}</span>
-                  <span className="text-caption text-zinc-500">{tk.holderEmail}</span>
+                  <span className="text-caption text-ink-2">{tk.holderEmail}</span>
                 </span>
               ),
             },
@@ -319,9 +319,9 @@ export default async function OrderPage({
         <h2 id="transfers-heading" className="text-section">
           {ts('transfers.title')}
         </h2>
-        <p className="text-body text-zinc-600">{ts('transfers.description')}</p>
+        <p className="text-body text-ink-2">{ts('transfers.description')}</p>
         {transfers.length === 0 ? (
-          <p className="text-body text-zinc-600">{ts('transfers.empty')}</p>
+          <p className="text-body text-ink-2">{ts('transfers.empty')}</p>
         ) : (
           <Table
             caption={ts('transfers.title')}
@@ -335,7 +335,7 @@ export default async function OrderPage({
                 cell: (x) => (
                   <span className="flex flex-col">
                     <span>{x.fromName}</span>
-                    <span className="text-caption text-zinc-500">{x.fromEmail}</span>
+                    <span className="text-caption text-ink-2">{x.fromEmail}</span>
                   </span>
                 ),
               },
@@ -345,7 +345,7 @@ export default async function OrderPage({
                 cell: (x) => (
                   <span className="flex flex-col">
                     <span>{x.toName}</span>
-                    <span className="text-caption text-zinc-500">{x.toEmail}</span>
+                    <span className="text-caption text-ink-2">{x.toEmail}</span>
                   </span>
                 ),
               },
@@ -364,7 +364,7 @@ export default async function OrderPage({
                       status={x.state === 'claimed' ? 'success' : x.state === 'pending' ? 'info' : 'neutral'}
                       label={ts(`transfers.state.${x.state}`)}
                     />
-                    <span className="text-caption text-zinc-500">
+                    <span className="text-caption text-ink-2">
                       {x.state === 'claimed' && x.claimedAt
                         ? eventWhen.format(x.claimedAt)
                         : x.state === 'pending'
@@ -407,7 +407,7 @@ export default async function OrderPage({
           {t('fraudSignals.timeline.title')}
         </h2>
         {signals.length === 0 ? (
-          <p className="text-body text-zinc-600">{t('fraudSignals.timeline.empty')}</p>
+          <p className="text-body text-ink-2">{t('fraudSignals.timeline.empty')}</p>
         ) : (
           <ol aria-labelledby="signals-heading" className="flex list-none flex-col gap-3 p-0">
             {signals.map((s) => (
@@ -436,15 +436,15 @@ export default async function OrderPage({
                 label={openRequest.overdue ? tr('request.overdue') : tr('request.onTime')}
               />
               <span className="text-body">{tr('request.tickets', { count: openRequest.tickets })}</span>
-              <span className="text-caption text-zinc-600">
+              <span className="text-caption text-ink-2">
                 {tr('request.asked', { date: eventWhen.format(openRequest.createdAt) })}
               </span>
-              <span className="text-caption text-zinc-600">
+              <span className="text-caption text-ink-2">
                 {tr('request.due', { date: eventWhen.format(openRequest.dueAt) })}
               </span>
             </div>
             <div className="flex flex-col gap-1">
-              <p className="text-caption text-zinc-600">{tr('request.message')}</p>
+              <p className="text-caption text-ink-2">{tr('request.message')}</p>
               <p className="whitespace-pre-line break-words text-body">
                 {openRequest.message ?? tr('request.noMessage')}
               </p>
@@ -456,7 +456,7 @@ export default async function OrderPage({
                 currency={order.currency}
               />
             ) : (
-              <p className="text-caption text-zinc-600">{tr('request.readOnly')}</p>
+              <p className="text-caption text-ink-2">{tr('request.readOnly')}</p>
             )}
           </Card>
         </section>
@@ -517,7 +517,7 @@ export default async function OrderPage({
                   <span className="flex flex-col items-end">
                     <span>{fmt(r.retainedMinor)}</span>
                     {r.policyOverride ? (
-                      <span className="font-sans text-caption text-zinc-500">{t('refunds.overridden')}</span>
+                      <span className="font-sans text-caption text-ink-2">{t('refunds.overridden')}</span>
                     ) : null}
                   </span>
                 ),
@@ -544,7 +544,7 @@ export default async function OrderPage({
           {ts('credit.title')}
         </h2>
         {credits.length === 0 ? (
-          <p className="text-body text-zinc-600">{ts('credit.empty')}</p>
+          <p className="text-body text-ink-2">{ts('credit.empty')}</p>
         ) : (
           <Table
             caption={ts('credit.title')}
@@ -560,7 +560,7 @@ export default async function OrderPage({
                   <span className="flex flex-col">
                     <span>{ts(`credit.disposition.${c.disposition}`)}</span>
                     {c.codeLast4 ? (
-                      <span className="text-caption text-zinc-500">
+                      <span className="text-caption text-ink-2">
                         {ts('credit.codeEnding', { last4: c.codeLast4 })}
                       </span>
                     ) : null}
@@ -614,7 +614,7 @@ export default async function OrderPage({
           <h2 id="disputes-heading" className="text-section">
             {t('disputes.title')}
           </h2>
-          <p className="text-body text-zinc-600">{t(`disputes.explain.${order.fundsFlow}`)}</p>
+          <p className="text-body text-ink-2">{t(`disputes.explain.${order.fundsFlow}`)}</p>
           <ul className="flex list-none flex-col gap-2 p-0">
             {disputes.map((d) => (
               <li key={d.id}>
@@ -624,9 +624,9 @@ export default async function OrderPage({
                     label={t(`disputes.status.${d.status}`)}
                   />
                   <span className="font-mono tabular-nums">{fmt(d.amountMinor)}</span>
-                  <span className="text-caption text-zinc-600">{d.reason}</span>
+                  <span className="text-caption text-ink-2">{d.reason}</span>
                   {d.evidenceDueBy ? (
-                    <span className="text-caption text-zinc-600">
+                    <span className="text-caption text-ink-2">
                       {t('disputes.dueBy', { date: when.format(d.evidenceDueBy) })}
                     </span>
                   ) : null}
@@ -644,7 +644,7 @@ export default async function OrderPage({
                       {t('disputes.respond')}
                     </Link>
                   ) : d.status === 'evidence_submitted' ? (
-                    <span className="text-caption text-zinc-600">{t('disputes.submitted')}</span>
+                    <span className="text-caption text-ink-2">{t('disputes.submitted')}</span>
                   ) : null}
                 </Card>
               </li>
@@ -658,7 +658,7 @@ export default async function OrderPage({
           {t('notifications.log.title')}
         </h2>
         {messages.length === 0 ? (
-          <p className="text-body text-zinc-600">{t('notifications.log.empty')}</p>
+          <p className="text-body text-ink-2">{t('notifications.log.empty')}</p>
         ) : (
           <Table
             caption={t('notifications.log.title')}
@@ -672,7 +672,7 @@ export default async function OrderPage({
                 cell: (m) => (
                   <span className="flex flex-col">
                     <span>{t(`notifications.kinds.${m.kind}`)}</span>
-                    {m.subject ? <span className="text-caption text-zinc-500">{m.subject}</span> : null}
+                    {m.subject ? <span className="text-caption text-ink-2">{m.subject}</span> : null}
                   </span>
                 ),
               },
@@ -700,14 +700,14 @@ export default async function OrderPage({
                       label={t(`notifications.status.${m.status}`)}
                     />
                     {m.reason && m.status !== 'sent' ? (
-                      <span className="text-caption text-zinc-500">
+                      <span className="text-caption text-ink-2">
                         {t.has(`notifications.reasons.${m.reason}`)
                           ? t(`notifications.reasons.${m.reason}`)
                           : m.reason}
                       </span>
                     ) : null}
                     {m.status === 'sent' && m.delivery ? (
-                      <span className="text-caption text-zinc-500">
+                      <span className="text-caption text-ink-2">
                         {t(`notifications.delivery.${m.delivery}`)}
                       </span>
                     ) : null}
@@ -768,7 +768,7 @@ export default async function OrderPage({
           </h2>
           <Card className="flex flex-col gap-4">
             <div className="flex flex-col gap-1">
-              <p className="text-caption text-zinc-600">{tr('policy.orderTitle')}</p>
+              <p className="text-caption text-ink-2">{tr('policy.orderTitle')}</p>
               {policy ? (
                 <ul className="flex list-none flex-col gap-0.5 p-0 text-caption">
                   {refundPolicyLines(tp, policy, locale).map((line) => (

@@ -1,10 +1,11 @@
 import { executeQuery, formatMoney, isDomainError, money } from '@yayatoh/kernel';
 import { type CampaignDetailDto, campaignDetailQuery } from '@yayatoh/marketing';
 import { roleCan } from '@yayatoh/tenancy';
-import { Card, PageHeader, StatusDot, Table } from '@yayatoh/ui';
+import { buttonClass, Card, PageHeader, SectionHeader, StatusDot, Table, Tag } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { Crumbs } from '@/components/crumbs.tsx';
 import { AnalyticsRows, FigureTiles, RangeForm, ratePct } from '@/components/marketing-analytics.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { campaignNames } from '@/server/campaign-names.ts';
@@ -72,13 +73,19 @@ export default async function CampaignAnalyticsPage({
   const rangeQs = new URLSearchParams({ from: d.fromDay, to: d.toDay }).toString();
   return (
     <>
-      <PageHeader eyebrow={t(`kind.${d.kind}`)} title={name} />
-      <Link
-        href={`${base}?${rangeQs}`}
-        className="inline-flex min-h-6 items-center self-start text-body underline"
-      >
-        {t('detail.back')}
-      </Link>
+      <PageHeader
+        breadcrumb={
+          <Crumbs
+            items={[
+              { label: data.org.name, href: `/o/${org}` },
+              { label: t('title'), href: `${base}?${rangeQs}` },
+              { label: name },
+            ]}
+          />
+        }
+        title={name}
+        tag={<Tag>{t(`kind.${d.kind}`)}</Tag>}
+      />
       <RangeForm
         action={`${prefix}${base}/campaign`}
         from={error ? (sp.from ?? d.fromDay) : d.fromDay}
@@ -97,9 +104,7 @@ export default async function CampaignAnalyticsPage({
 
       {d.delivery ? (
         <section aria-labelledby="delivery-heading" className="flex flex-col gap-3">
-          <h2 id="delivery-heading" className="text-section">
-            {t('detail.deliveryTitle')}
-          </h2>
+          <SectionHeader id="delivery-heading" title={t('detail.deliveryTitle')} />
           <Card className="flex flex-col gap-3">
             <dl className="grid grid-cols-2 gap-3 sm:grid-cols-3" data-testid="campaign-delivery">
               {(
@@ -112,17 +117,16 @@ export default async function CampaignAnalyticsPage({
                   ['complaintRate', ratePct(d.delivery.complaintBps, locale)],
                 ] as const
               ).map(([k, v]) => (
-                <div key={k} className="flex flex-col gap-0.5">
-                  <dt className="text-caption text-zinc-600">{t(`detail.${k}`)}</dt>
-                  <dd className="text-body tabular-nums">{v}</dd>
+                <div key={k} className="flex flex-col gap-1 rounded-tile bg-surface-2 px-4 py-3">
+                  <dt className="text-body font-semibold text-ink-2">{t(`detail.${k}`)}</dt>
+                  <dd className="m-0 text-[24px] leading-none font-extrabold tracking-[-0.03em] text-ink tabular-nums">
+                    {v}
+                  </dd>
                 </div>
               ))}
             </dl>
             {roleCan(data.role, 'messages:read') ? (
-              <Link
-                href={`${base}/deliverability`}
-                className="inline-flex min-h-6 items-center self-start underline"
-              >
+              <Link href={`${base}/deliverability`} className={buttonClass('secondary', 'sm', 'self-start')}>
                 {t('openDeliverability')}
               </Link>
             ) : null}
@@ -131,16 +135,12 @@ export default async function CampaignAnalyticsPage({
       ) : null}
 
       <section aria-labelledby="links-heading" className="flex flex-col gap-3">
-        <h2 id="links-heading" className="text-section">
-          {t('detail.linksTitle')}
-        </h2>
+        <SectionHeader id="links-heading" title={t('detail.linksTitle')} />
         <AnalyticsRows view="link" rows={d.links} currency={d.currency} locale={locale} href={() => null} />
       </section>
 
       <section aria-labelledby="orders-heading" className="flex flex-col gap-3">
-        <h2 id="orders-heading" className="text-section">
-          {t('detail.ordersTitle')}
-        </h2>
+        <SectionHeader id="orders-heading" title={t('detail.ordersTitle')} />
         <Table
           caption={t('detail.ordersTitle')}
           rowKey={(o) => o.orderId}
@@ -154,7 +154,7 @@ export default async function CampaignAnalyticsPage({
                 canOrders && o.eventSlug ? (
                   <Link
                     href={`/o/${org}/e/${o.eventSlug}/orders/${o.orderId}`}
-                    className="inline-flex min-h-6 items-center font-mono underline"
+                    className="inline-flex min-h-6 items-center font-mono font-bold text-primary-ink underline"
                   >
                     {o.orderId.slice(-8).toUpperCase()}
                   </Link>
@@ -177,7 +177,6 @@ export default async function CampaignAnalyticsPage({
               key: 'total',
               header: t('detail.total'),
               cell: (o) => formatMoney(money(o.totalMinor, o.currency), locale),
-              mono: true,
               align: 'end',
             },
             { key: 'placed', header: t('detail.placed'), cell: (o) => when.format(o.orderedAt) },
