@@ -188,8 +188,17 @@ export function AllotForm({
   const te = useTranslations();
   const id = useId();
   const [state, formAction, pending] = useActionState(action, { ok: false, code: null });
+  // Allotted: the next allotment starts from a clear choice (the channel stays chosen).
+  const form = useRef<HTMLFormElement>(null);
+  useEffect(() => {
+    if (!state.ok || !form.current) return;
+    for (const el of form.current.querySelectorAll<HTMLInputElement>('input[name="itemId"]'))
+      el.checked = false;
+    const numbers = form.current.querySelector<HTMLInputElement>('input[name="seatNumbers"]');
+    if (numbers) numbers.value = '';
+  }, [state]);
   return (
-    <form onSubmit={useSubmit(formAction)} noValidate className="flex flex-col gap-4">
+    <form ref={form} onSubmit={useSubmit(formAction)} noValidate className="flex flex-col gap-4">
       <div className="flex flex-col gap-1.5">
         <label htmlFor={`${id}-channel`} className="text-caption text-zinc-600">
           {t('allotTo')}
