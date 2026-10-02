@@ -104,12 +104,12 @@ export function contactSignalOf(event: {
 }
 
 /**
- * `audiences.contact_signals` (M6.1b): records a session attended or a campaign opened once per
+ * `audiences.contact-signals` (M6.1b): records a session attended or a campaign opened once per
  * (contact, session or campaign) and refreshes that contact's stats. Takes replayed history too.
  */
 export function contactSignalsSubscriber(): Subscriber {
   return defineSubscriber({
-    name: 'audiences.contact_signals',
+    name: 'audiences.contact-signals',
     events: CONTACT_SIGNAL_EVENTS,
     acceptsReplayed: true,
     handle: async (tx, event) => {
@@ -117,7 +117,7 @@ export function contactSignalsSubscriber(): Subscriber {
       if (!signal) return;
       const ctx = createCtx({
         orgId: event.orgId,
-        actor: { type: 'system', name: 'audiences.contact_signals' },
+        actor: { type: 'system', name: 'audiences.contact-signals' },
       });
       if (await recordContactSignalTx(tx, ctx, signal))
         await refreshContactStatsTx(tx, ctx, [signal.contactId]);
