@@ -4264,6 +4264,240 @@ Lakeside Events 已為你在 Lakeside Jazz Night 的訂單開立金額 US$25.00 
 }
 `;
 
+exports[`renderMessage: every kind in all 13 locales > orders.invoice · ar 1`] = `
+{
+  "subject": "الفاتورة INV-00012 لـ Midwest Leadership Summit",
+  "text": "الفاتورة INV-00012 لـ Midwest Leadership Summit
+
+مرحبًا Amina Diallo،
+
+تم تسجيلك في Midwest Leadership Summit. أصدرت Lakeside Events الفاتورة INV-00012 بمبلغ ‏1,200.00 US$، وتاريخ استحقاقها 12 أبريل 2027. استخدم الزر أدناه لعرضها أو تنزيل ملف PDF أو دفعها كاملة أو جزءًا منها.
+
+عرض الفاتورة ودفعها: https://app.yayatoh.test/events/sample/invoice/sample
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.invoice · de 1`] = `
+{
+  "subject": "Rechnung INV-00012 für Midwest Leadership Summit",
+  "text": "Rechnung INV-00012 für Midwest Leadership Summit
+
+Hallo Amina Diallo,
+
+Sie sind für Midwest Leadership Summit angemeldet. Lakeside Events hat die Rechnung INV-00012 über 1.200,00 $ ausgestellt, fällig am 12. April 2027. Über die Schaltfläche unten können Sie sie ansehen, als PDF herunterladen oder ganz oder teilweise bezahlen.
+
+Rechnung ansehen und bezahlen: https://app.yayatoh.test/events/sample/invoice/sample
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.invoice · en 1`] = `
+{
+  "subject": "Invoice INV-00012 for Midwest Leadership Summit",
+  "text": "Invoice INV-00012 for Midwest Leadership Summit
+
+Hi Amina Diallo,
+
+You're registered for Midwest Leadership Summit. Lakeside Events has issued invoice INV-00012 for $1,200.00, due on April 12, 2027. Use the button below to view it, download the PDF, or pay all or part of it.
+
+View and pay the invoice: https://app.yayatoh.test/events/sample/invoice/sample
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.invoice · es 1`] = `
+{
+  "subject": "Factura INV-00012 para Midwest Leadership Summit",
+  "text": "Factura INV-00012 para Midwest Leadership Summit
+
+Hola, Amina Diallo:
+
+Tu inscripción en Midwest Leadership Summit está registrada. Lakeside Events ha emitido la factura INV-00012 por 1200,00 US$, con vencimiento el 12 de abril de 2027. Usa el botón de abajo para verla, descargar el PDF o pagarla total o parcialmente.
+
+Ver y pagar la factura: https://app.yayatoh.test/events/sample/invoice/sample
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.invoice · fr 1`] = `
+{
+  "subject": "Facture INV-00012 pour Midwest Leadership Summit",
+  "text": "Facture INV-00012 pour Midwest Leadership Summit
+
+Bonjour Amina Diallo,
+
+Votre inscription à Midwest Leadership Summit est enregistrée. Lakeside Events a émis la facture INV-00012 d’un montant de 1 200,00 $US, à régler au plus tard le 12 avril 2027. Utilisez le bouton ci-dessous pour la consulter, télécharger le PDF ou la payer en totalité ou en partie.
+
+Voir et payer la facture: https://app.yayatoh.test/events/sample/invoice/sample
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.invoice · hi 1`] = `
+{
+  "subject": "Midwest Leadership Summit के लिए इनवॉइस INV-00012",
+  "text": "Midwest Leadership Summit के लिए इनवॉइस INV-00012
+
+नमस्ते Amina Diallo,
+
+आप Midwest Leadership Summit के लिए पंजीकृत हैं। Lakeside Events ने $1,200.00 का इनवॉइस INV-00012 जारी किया है, जिसकी नियत तिथि 12 अप्रैल 2027 है। इसे देखने, PDF डाउनलोड करने या पूरा या आंशिक भुगतान करने के लिए नीचे दिए गए बटन का उपयोग करें।
+
+इनवॉइस देखें और भुगतान करें: https://app.yayatoh.test/events/sample/invoice/sample
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.invoice · it 1`] = `
+{
+  "subject": "Fattura INV-00012 per Midwest Leadership Summit",
+  "text": "Fattura INV-00012 per Midwest Leadership Summit
+
+Ciao Amina Diallo,
+
+La tua iscrizione a Midwest Leadership Summit è registrata. Lakeside Events ha emesso la fattura INV-00012 di 1200,00 USD, con scadenza il 12 aprile 2027. Usa il pulsante qui sotto per vederla, scaricare il PDF o pagarla in tutto o in parte.
+
+Vedi e paga la fattura: https://app.yayatoh.test/events/sample/invoice/sample
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.invoice · ja 1`] = `
+{
+  "subject": "Midwest Leadership Summitの請求書 INV-00012",
+  "text": "Midwest Leadership Summitの請求書 INV-00012
+
+Amina Diallo 様
+
+Midwest Leadership Summitへの登録が完了しました。Lakeside Eventsが請求書 INV-00012（$1,200.00、支払期限 2027年4月12日）を発行しました。下のボタンから請求書の確認、PDFのダウンロード、全額または一部のお支払いができます。
+
+請求書を確認して支払う: https://app.yayatoh.test/events/sample/invoice/sample
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.invoice · nl 1`] = `
+{
+  "subject": "Factuur INV-00012 voor Midwest Leadership Summit",
+  "text": "Factuur INV-00012 voor Midwest Leadership Summit
+
+Hoi Amina Diallo,
+
+Je bent ingeschreven voor Midwest Leadership Summit. Lakeside Events heeft factuur INV-00012 van US$ 1.200,00 uitgegeven, te betalen uiterlijk op 12 april 2027. Gebruik de knop hieronder om de factuur te bekijken, de pdf te downloaden of geheel of gedeeltelijk te betalen.
+
+Factuur bekijken en betalen: https://app.yayatoh.test/events/sample/invoice/sample
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.invoice · pt 1`] = `
+{
+  "subject": "Fatura INV-00012 para Midwest Leadership Summit",
+  "text": "Fatura INV-00012 para Midwest Leadership Summit
+
+Olá, Amina Diallo!
+
+A sua inscrição em Midwest Leadership Summit está registada. Lakeside Events emitiu a fatura INV-00012 no valor de US$ 1.200,00, com vencimento em 12 de abril de 2027. Use o botão abaixo para a ver, descarregar o PDF ou pagá-la total ou parcialmente.
+
+Ver e pagar a fatura: https://app.yayatoh.test/events/sample/invoice/sample
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.invoice · ru 1`] = `
+{
+  "subject": "Счёт INV-00012 за Midwest Leadership Summit",
+  "text": "Счёт INV-00012 за Midwest Leadership Summit
+
+Здравствуйте, Amina Diallo!
+
+Вы зарегистрированы на Midwest Leadership Summit. Lakeside Events выставила счёт INV-00012 на сумму 1 200,00 $ со сроком оплаты 12 апреля 2027 г.. Нажмите кнопку ниже, чтобы открыть его, скачать PDF или оплатить полностью или частично.
+
+Открыть и оплатить счёт: https://app.yayatoh.test/events/sample/invoice/sample
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.invoice · zh-CN 1`] = `
+{
+  "subject": "Midwest Leadership Summit 的发票 INV-00012",
+  "text": "Midwest Leadership Summit 的发票 INV-00012
+
+Amina Diallo，您好：
+
+您已报名参加 Midwest Leadership Summit。Lakeside Events 已开具发票 INV-00012，金额 US$1,200.00，付款截止日期为 2027年4月12日。请使用下方按钮查看发票、下载 PDF，或支付全部或部分款项。
+
+查看并支付发票: https://app.yayatoh.test/events/sample/invoice/sample
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.invoice · zh-TW 1`] = `
+{
+  "subject": "Midwest Leadership Summit 的發票 INV-00012",
+  "text": "Midwest Leadership Summit 的發票 INV-00012
+
+Amina Diallo，您好：
+
+您已報名參加 Midwest Leadership Summit。Lakeside Events 已開立發票 INV-00012，金額 US$1,200.00，付款期限為 2027年4月12日。請使用下方按鈕查看發票、下載 PDF，或支付全部或部分款項。
+
+查看並支付發票: https://app.yayatoh.test/events/sample/invoice/sample
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
 exports[`renderMessage: every kind in all 13 locales > orders.order-link · ar 1`] = `
 {
   "subject": "رابطك إلى طلبك لـ Lakeside Jazz Night",

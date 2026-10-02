@@ -84,7 +84,8 @@
         "waitlist-offer": "候补名单购票邀请",
         "waitlist-expired": "候补名单购票邀请已过期",
         "credit-note": "贷记单",
-        "support-reply": "客服回复"
+        "support-reply": "客服回复",
+        "invoice": "发票"
       },
       "events": {
         "reminder": "活动提醒",

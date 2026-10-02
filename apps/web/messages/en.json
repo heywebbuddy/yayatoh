@@ -84,7 +84,8 @@
         "waitlist-offer": "Waitlist offer",
         "waitlist-expired": "Waitlist offer expired",
         "credit-note": "Credit note",
-        "support-reply": "Support reply"
+        "support-reply": "Support reply",
+        "invoice": "Invoice"
       },
       "events": {
         "reminder": "Event reminder",

@@ -84,7 +84,8 @@
         "waitlist-offer": "Offre de la liste d’attente",
         "waitlist-expired": "Offre de la liste d’attente expirée",
         "credit-note": "Avoir",
-        "support-reply": "Réponse de l’assistance"
+        "support-reply": "Réponse de l’assistance",
+        "invoice": "Facture"
       },
       "events": {
         "reminder": "Rappel d’événement",

@@ -84,7 +84,8 @@
         "waitlist-offer": "عرض من قائمة الانتظار",
         "waitlist-expired": "انتهاء عرض قائمة الانتظار",
         "credit-note": "إشعار دائن",
-        "support-reply": "رد الدعم"
+        "support-reply": "رد الدعم",
+        "invoice": "فاتورة"
       },
       "events": {
         "reminder": "تذكير بالفعالية",

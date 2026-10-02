@@ -84,7 +84,8 @@
         "waitlist-offer": "候補名單購票邀請",
         "waitlist-expired": "候補名單購票邀請已逾期",
         "credit-note": "折讓單",
-        "support-reply": "客服回覆"
+        "support-reply": "客服回覆",
+        "invoice": "發票"
       },
       "events": {
         "reminder": "活動提醒",
