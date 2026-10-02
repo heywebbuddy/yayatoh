@@ -226,6 +226,16 @@
       "intro": "Hier is je link om je registratie voor {eventName} te hervatten waar je gebleven was. Hij werkt {days, plural, one {# dag} other {# dagen}} na je laatste opslag en alleen voor jou, dus stuur hem niet door. Heb je hier niet om gevraagd, dan kun je deze e-mail negeren.",
       "cta": "Verder met mijn registratie"
     },
+    "registration.approved": {
+      "subject": "Je aanvraag voor {eventName} is goedgekeurd",
+      "intro": "Goed nieuws, {name}: je aanvraag om {eventName} bij te wonen als {typeName} is goedgekeurd. Gebruik de knop hieronder om je registratie te bekijken en, als je pas iets kost, te betalen en je plek te bevestigen.",
+      "cta": "Mijn registratie bekijken"
+    },
+    "registration.denied": {
+      "subject": "Je aanvraag voor {eventName}",
+      "intro": "Bedankt voor je aanvraag om {eventName} bij te wonen als {typeName}, {name}. De organisator kon je aanvraag deze keer niet goedkeuren. Er is niets in rekening gebracht.",
+      "cta": "Mijn aanvraag bekijken"
+    },
     "portal.invite": {
       "subject": "Uitnodiging voor het portaal van {eventName}",
       "intro": "{org} heeft je als {role} uitgenodigd voor het portaal van {eventName}. Daar zie je je sessies, werk je je profiel bij en rond je je taken af. De knop vraagt om een inlogcode die naar dit adres wordt gestuurd.",

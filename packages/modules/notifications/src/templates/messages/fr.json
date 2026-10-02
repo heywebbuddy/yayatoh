@@ -226,6 +226,16 @@
       "intro": "Voici votre lien pour reprendre votre inscription à {eventName} là où vous l'avez laissée. Il fonctionne pendant {days, plural, one {# jour} other {# jours}} après votre dernier enregistrement et uniquement pour vous : ne le transférez pas. Si vous ne l'avez pas demandé, vous pouvez ignorer cet e-mail.",
       "cta": "Poursuivre mon inscription"
     },
+    "registration.approved": {
+      "subject": "Votre demande pour {eventName} est acceptée",
+      "intro": "Bonne nouvelle, {name} : votre demande de participation à {eventName} en tant que {typeName} a été acceptée. Utilisez le bouton ci-dessous pour voir votre inscription et, si votre pass est payant, payer et confirmer votre place.",
+      "cta": "Voir mon inscription"
+    },
+    "registration.denied": {
+      "subject": "Votre demande pour {eventName}",
+      "intro": "Merci d’avoir demandé à participer à {eventName} en tant que {typeName}, {name}. L’organisateur n’a pas pu accepter votre demande cette fois-ci. Aucun montant ne vous a été facturé.",
+      "cta": "Voir ma demande"
+    },
     "portal.invite": {
       "subject": "Invitation au portail de {eventName}",
       "intro": "{org} vous a invité au portail de {eventName} en tant que {role}. Vous pourrez y voir vos sessions, mettre à jour votre profil et accomplir vos tâches. Le bouton demande un code de connexion envoyé à cette adresse.",

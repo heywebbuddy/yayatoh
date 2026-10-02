@@ -226,6 +226,16 @@
       "intro": "Hier ist Ihr Link, um Ihre Anmeldung für {eventName} dort fortzusetzen, wo Sie aufgehört haben. Er gilt {days, plural, one {# Tag} other {# Tage}} nach dem letzten Speichern und nur für Sie; bitte leiten Sie ihn nicht weiter. Wenn Sie ihn nicht angefordert haben, können Sie diese E-Mail ignorieren.",
       "cta": "Anmeldung fortsetzen"
     },
+    "registration.approved": {
+      "subject": "Ihre Anmeldung für {eventName} wurde bestätigt",
+      "intro": "Gute Nachrichten, {name}: Ihre Bewerbung zur Teilnahme an {eventName} als {typeName} wurde angenommen. Über die Schaltfläche unten sehen Sie Ihre Anmeldung und können, falls Ihr Pass etwas kostet, bezahlen und Ihren Platz bestätigen.",
+      "cta": "Meine Anmeldung ansehen"
+    },
+    "registration.denied": {
+      "subject": "Ihre Bewerbung für {eventName}",
+      "intro": "Danke für Ihre Bewerbung zur Teilnahme an {eventName} als {typeName}, {name}. Der Veranstalter konnte Ihre Bewerbung diesmal nicht annehmen. Ihnen wurde nichts berechnet.",
+      "cta": "Meine Bewerbung ansehen"
+    },
     "portal.invite": {
       "subject": "Einladung zum Portal von {eventName}",
       "intro": "{org} hat Sie als {role} zum Portal von {eventName} eingeladen. Dort sehen Sie Ihre Sessions, aktualisieren Ihr Profil und erledigen Ihre Aufgaben. Die Schaltfläche fragt nach einem Anmeldecode, der an diese Adresse gesendet wird.",

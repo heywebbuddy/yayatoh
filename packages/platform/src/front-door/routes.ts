@@ -199,10 +199,14 @@ export const PLATFORM_PREFIXES: readonly string[] = [
  * merge: the registration pages of M5.1a and M5.1b, and the M3.10a waitlist join page. Batch 3f
  * merge: the M5.4a public exhibitor map. Batch 3g merge: the seat finder and M3.3b's guest help
  * pages under it (`seat-finder/help`, and a request's status page `seat-finder/help/{token}`).
+ * Batch 3h merge: M5.1c's group registration, applicant and group pages.
  */
 export const PLATFORM_PATTERNS: readonly RegExp[] = [
   /^\/events\/[^/]+\/(register|registration-form|waitlist|exhibitors)$/,
   /^\/events\/[^/]+\/seat-finder(\/help(\/[^/]+)?)?$/,
+  // M5.1c: group registration, an applicant's or registrant's own page, the payer's group page.
+  /^\/events\/[^/]+\/register\/group$/,
+  /^\/events\/[^/]+\/(registration|group)\/[^/]+$/,
 ];
 export const PLATFORM_FILES: ReadonlySet<string> = new Set([
   '/widget.js',

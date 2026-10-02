@@ -226,6 +226,16 @@
       "intro": "Aqui está o seu link para retomar sua inscrição em {eventName} de onde parou. Ele funciona por {days, plural, one {# dia} other {# dias}} após o último salvamento e só para você, então não o encaminhe. Se você não pediu este e-mail, pode ignorá-lo.",
       "cta": "Continuar minha inscrição"
     },
+    "registration.approved": {
+      "subject": "Sua solicitação para {eventName} foi aprovada",
+      "intro": "Boas notícias, {name}: sua solicitação para participar de {eventName} como {typeName} foi aprovada. Use o botão abaixo para ver sua inscrição e, se o seu passe tiver preço, pagar e confirmar sua vaga.",
+      "cta": "Ver minha inscrição"
+    },
+    "registration.denied": {
+      "subject": "Sua solicitação para {eventName}",
+      "intro": "Obrigado por solicitar participar de {eventName} como {typeName}, {name}. O organizador não pôde aprovar sua solicitação desta vez. Nada foi cobrado.",
+      "cta": "Ver minha solicitação"
+    },
     "portal.invite": {
       "subject": "Convite para o portal de {eventName}",
       "intro": "{org} convidou você para o portal de {eventName} como {role}. Lá você vê suas sessões, atualiza seu perfil e conclui suas tarefas. O botão pede um código de acesso enviado para este endereço.",

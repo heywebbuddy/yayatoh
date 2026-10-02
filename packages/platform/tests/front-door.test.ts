@@ -216,6 +216,10 @@ describe('who serves a request', () => {
       '/api/scan/assistance',
       '/api/tv/abc~sig',
       '/api/command-center/org/event/presence',
+      // M5.1c: group registration, the applicant's page, the payer's group page.
+      '/events/summit/register/group',
+      '/events/summit/registration/abc~sig',
+      '/events/summit/group/abc~sig',
     ]) {
       expect(isPlatformPath(new URL(p, 'https://x').pathname) || decide(p).owner === 'next').toBe(true);
       expect(decide(p, flags(), { legacy: true })).toEqual({
@@ -231,6 +235,7 @@ describe('who serves a request', () => {
     expect(isPlatformPath('/events/summit/attendee')).toBe(false);
     expect(isPlatformPath('/events/summit/seat-finder/help/a/b')).toBe(false);
     expect(isPlatformPath('/tvguide')).toBe(false);
+    expect(isPlatformPath('/events/summit/group')).toBe(false);
   });
 });
 

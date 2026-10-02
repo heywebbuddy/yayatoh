@@ -6,6 +6,7 @@ import { guestImportAction } from '@yayatoh/guests';
 import { ticketCancelAction, waitlistExportAction } from '@yayatoh/orders';
 import { auditExportAction, bulkStepCommand, createCommandPorts, runBulkOperation } from '@yayatoh/platform';
 import { dsarExportAction } from '@yayatoh/privacy';
+import { registrationDecideAction } from '@yayatoh/registration';
 import { attendeeExportAction, bookingsExportAction } from '@yayatoh/reports';
 import { seatAssignAction } from '@yayatoh/seating';
 import { surveyExportAction } from '@yayatoh/surveys';
@@ -29,6 +30,7 @@ export const BULK_ACTIONS = [
   audienceExportAction,
   waitlistExportAction,
   guestImportAction,
+  registrationDecideAction,
 ] as const;
 const step = bulkStepCommand(BULK_ACTIONS);
 // The org gate (M1.3f) lets system actors through; wired for parity with the apps.

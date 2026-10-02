@@ -47,7 +47,7 @@ import {
   subscribes,
 } from '@yayatoh/platform';
 import { taskReminderMailer } from '@yayatoh/program';
-import { registrationCapacity } from '@yayatoh/registration';
+import { decisionMailer, registrantLifecycle, registrationCapacity } from '@yayatoh/registration';
 import { surveyMailer } from '@yayatoh/surveys';
 import { impersonationNotice, invitationMailer, orgStatusNotice } from '@yayatoh/tenancy';
 import {
@@ -125,6 +125,9 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     // M5.3a speaker portal: invitations and task reminders.
     portalInviteMailer({ notifier, appOrigin }),
     taskReminderMailer({ notifier, appOrigin }),
+    // M5.1c: registrants follow their orders; approval and denial emails.
+    registrantLifecycle(),
+    decisionMailer({ notifier, appOrigin }),
   ];
 }
 

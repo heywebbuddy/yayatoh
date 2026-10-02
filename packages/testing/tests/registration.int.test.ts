@@ -222,7 +222,8 @@ describe('registration setup', () => {
       name: 'Member · Full pass',
       visibility: 'hidden',
       managedBy: 'registration',
-      maxPerOrder: 1,
+      // M5.1c: one per named registrant of a group order (each registrant picks it once).
+      maxPerOrder: 20,
     });
     // Changing a cell's price changes its pass; a rename renames the passes.
     await executeCommand(
@@ -557,7 +558,8 @@ describe('eligibility in the command', () => {
     expect(staff.types.map((t) => t.id)).toEqual(expect.arrayContaining([codeType, domainType]));
     const member = anyone.types.find((t) => t.id === c.typeId);
     expect(Object.keys(member ?? {}).sort()).toEqual(
-      ['currency', 'description', 'full', 'id', 'maxAllInMinor', 'minAllInMinor', 'name'].sort(),
+      // M5.1c adds `apply` (the type is applied for).
+      ['apply', 'currency', 'description', 'full', 'id', 'maxAllInMinor', 'minAllInMinor', 'name'].sort(),
     );
     expect(JSON.stringify(staff)).not.toMatch(/PRESS-2027|acme\.org/);
     // Seeded types with no cells are not offered.
