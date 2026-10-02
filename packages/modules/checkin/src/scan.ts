@@ -20,6 +20,7 @@ import {
   scanCheckpointTx,
   TWO_ENTRANCES_WINDOW_MS,
 } from './checkpoints.ts';
+import { scanningDeviceOf } from './live.ts';
 import { withOccurrenceTx } from './occurrence.ts';
 import { admissions, checkpoints, SCAN_RESULTS, type ScanResult, scans } from './schema.ts';
 import { checkVelocityTx, FraudSignalDto, fraudSignalsTx, openHighSignalCountTx } from './signals.ts';
@@ -92,6 +93,8 @@ export const scanTicketCommand = tenantCommand({
     const checkpoint = await scanCheckpointTx(tx, event.id, input.checkpointId);
     const { kind, ticket } = await resolveCode(tx, input.code);
     const scannedBy = ctx.actor.type === 'user' ? ctx.actor.userId : null;
+    // M3.3a: a scan a device sends online is its scan (speed per device, the feed, "last scan").
+    const deviceId = scanningDeviceOf(ctx);
 
     if (input.clientScanId) {
       const [prior] = await tx.select().from(scans).where(eq(scans.clientScanId, input.clientScanId));
@@ -132,6 +135,7 @@ export const scanTicketCommand = tenantCommand({
           day,
           admittedAt: ctx.now,
           admittedBy: scannedBy,
+          deviceId,
           checkpointId: checkpoint?.id ?? null,
         })
         .onConflictDoNothing()
@@ -205,15 +209,28 @@ export const scanTicketCommand = tenantCommand({
       clientScanId: input.clientScanId ?? null,
       scannedAt: ctx.now,
       scannedBy,
+      deviceId,
       checkpointId: checkpoint?.id ?? null,
     });
+    // The live feed (M3.3a) follows scans nobody was let in by too: the outcome group only.
+    if (!['admitted', 'granted', 'provisional'].includes(result))
+      await publishRealtimeTx(tx, orgId, CHECKINS_CHANNEL, {
+        eventId: event.id,
+        event: 'scan',
+        data: {
+          outcome: result === 'duplicate' ? 'duplicate' : 'refused',
+          checkpointId: checkpoint?.id ?? null,
+          count: 1,
+          at: ctx.now.toISOString(),
+        },
+      });
     if (result === 'invalid')
       await checkInvalidBurstTx(tx, emit, {
         orgId,
         eventId: event.id,
         at: ctx.now,
         userId: scannedBy,
-        deviceId: null,
+        deviceId,
       });
     await checkVelocityTx(tx, emit, {
       orgId,

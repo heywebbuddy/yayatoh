@@ -14,6 +14,7 @@ export const PRIVATE_PATHS = [
   '/my-tickets/',
   '/claim/',
   '/portal/',
+  '/event-portal',
   '/scan',
   '/dev/',
   '/sign-in',
@@ -26,6 +27,8 @@ export const PRIVATE_PATHS = [
   '/reset-password',
   '/auth/',
   '/tickets',
+  // M3.3a: TV display links.
+  '/tv/',
 ];
 
 /**

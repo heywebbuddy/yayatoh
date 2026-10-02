@@ -11,6 +11,24 @@ export const privateColumns = columnPrivacy('program', {
   sessions: { title: 'public', description: 'public' },
   speakers: { name: 'public', title: 'public', company: 'public', bio: 'public', links: 'public' },
   sponsor_tiers: { name: 'public' },
+  // M5.3a speaker portal: proposals are unpublished until approved (then they land in the public
+  // columns above); task answers and notes are between the organizer and the speaker.
+  speaker_changes: {
+    status: 'vocab',
+    proposed: personal(),
+    base: internal(),
+    decided_by: internal(),
+    note: internal(),
+  },
+  portal_tasks: {
+    subject_kind: 'vocab',
+    kind: 'vocab',
+    title: internal(),
+    instructions: internal(),
+    agreement_text: internal(),
+    created_by: internal(),
+  },
+  portal_task_assignees: { status: 'vocab', file_name: personal() },
   sponsors: { name: 'public', description: 'public', website_url: 'public' },
   tracks: { name: 'public' },
   // M5.2a: agenda model v2.
@@ -27,4 +45,9 @@ export const privateColumns = columnPrivacy('program', {
     published_by: internal(),
   },
   speaker_contacts: { email: personal('email') },
+  // M5.4a: the exhibitor portal and booths. Listings are public (the map's allowlist); a proposed
+  // profile is internal until the organizer approves. People are portal accounts (events).
+  exhibitor_profiles: { links: 'public', categories: 'public' },
+  exhibitor_profile_changes: { proposed: internal('json'), status: 'vocab', reason: internal() },
+  booths: { number: 'public', category: 'public' },
 });

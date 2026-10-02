@@ -184,6 +184,8 @@ export const PROFILES: Readonly<Record<ProfileKey, Profile>> = {
       item('exhibitors', 'build', 'exhibitors', 'store'),
       item('sponsors', 'build', 'sponsors', 'award'),
       marketing,
+      // M5.5a: badge templates and batch PDFs, before the door.
+      item('badges', 'run', 'badges', 'id-card'),
       onsite,
       libraries,
     ]),
@@ -274,6 +276,8 @@ export const PROFILE_INDEPENDENT_SECTIONS = [
   'team',
   // M3.2a: the Command Center (its widgets follow the profile themselves).
   'commandCenter',
+  // M3.3b: the help queue (guest assistance at the door, every profile with check-in).
+  'assistance',
 ] as const;
 
 /**

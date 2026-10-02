@@ -222,6 +222,11 @@ describe('command center roles', () => {
 });
 
 describe('widget registry and layouts', () => {
+  const scopeOf = (
+    role: WidgetScope['role'],
+    profile: WidgetScope['profile'] = 'concert',
+    modules = ALL_MODULES,
+  ): WidgetScope => scope(role, profile, modules);
   const scope = (
     role: WidgetScope['role'],
     profile: WidgetScope['profile'] = 'concert',
@@ -246,6 +251,33 @@ describe('widget registry and layouts', () => {
     // Even if a registration listed the door role, the revenue flag still refuses it.
     expect(widgetAllowed({ ...WIDGET_META.sales, roles: ['door'] }, scope('door'))).toBe(false);
     for (const layout of Object.values(DEFAULT_LAYOUTS.door)) expect(layout).not.toContain('sales');
+  });
+
+  it('M3.8b marketing tiles: campaign revenue is money (never the door); both on the marketing layout', () => {
+    const withMarketing = new Set([...ALL_MODULES, 'marketing']);
+    const scope = (
+      role: WidgetScope['role'],
+      profile: WidgetScope['profile'] = 'concert',
+      modules = withMarketing,
+    ) => scopeOf(role, profile, modules);
+    expect(WIDGET_META.campaigns.revenue).toBe(true);
+    expect(widgetAllowed(WIDGET_META.campaigns, scope('marketing'))).toBe(true);
+    expect(widgetAllowed(WIDGET_META.campaigns, scope('door'))).toBe(false);
+    expect(widgetAllowed({ ...WIDGET_META.campaigns, roles: ['door'] }, scope('door'))).toBe(false);
+    expect(widgetAllowed(WIDGET_META.campaigns, scope('ops'))).toBe(false);
+    expect(widgetAllowed(WIDGET_META.deliverability, scope('door'))).toBe(false);
+    expect(widgetAllowed(WIDGET_META.campaigns, scope('marketing', 'concert', new Set(['core'])))).toBe(
+      false,
+    );
+    for (const layout of Object.values(DEFAULT_LAYOUTS.door)) {
+      expect(layout).not.toContain('campaigns');
+      expect(layout).not.toContain('deliverability');
+    }
+    const shown = resolveLayout(WIDGET_META, scope('marketing', 'concert'), 'planning', null)
+      .filter((s) => !s.hidden)
+      .map((s) => s.key);
+    expect(shown.slice(0, 1)).toEqual(['campaigns']);
+    expect(shown).toContain('deliverability');
   });
 
   it('filters by role, profile, module and mode', () => {
@@ -282,10 +314,19 @@ describe('widget registry and layouts', () => {
         .filter((s) => !s.hidden)
         .map((s) => s.key);
     expect(keys('planning')).toEqual(['readiness', 'sales', 'tickets', 'alerts', 'timeline']);
+    // M3.3a live mode: the feed, speed, capacity, the duplicate/invalid monitor, the device board,
+    // staff presence and the guest-assistance slot join the owner's live layout.
     expect(keys('live')).toEqual([
       'checkins',
       'alerts',
+      'liveFeed',
+      'checkinSpeed',
+      'capacity',
+      'scanIssues',
       'devices',
+      'deviceBoard',
+      'staffPresence',
+      'assistance',
       'seatFill',
       'sales',
       'tickets',
@@ -304,19 +345,32 @@ describe('widget registry and layouts', () => {
       'sales',
       'checkins',
       'alerts',
+      'liveFeed',
+      'checkinSpeed',
+      'capacity',
+      'scanIssues',
       'devices',
+      'deviceBoard',
+      'staffPresence',
+      'assistance',
       'seatFill',
       'tickets',
-      // Batch 3d merge: M3.4a's staff views are offered to owners (hidden until shown).
+      // Batch 3d merge: M3.4a's counts per entrance are offered to owners (hidden until shown).
       'entrances',
-      'deviceBoard',
     ]);
+    // M3.3b's help queue: M3.3a's live layout places it for owners (batch 3g merge).
+    expect(r.find((s) => s.key === 'assistance')?.hidden).toBe(false);
     expect(r.find((s) => s.key === 'sales')?.hidden).toBe(true);
-    expect(r.find((s) => s.key === 'deviceBoard')?.hidden).toBe(true);
+    expect(r.find((s) => s.key === 'entrances')?.hidden).toBe(true);
     expect(r.find((s) => s.key === 'checkins')?.hidden).toBe(false);
     // Available in the mode but not in the role's default list: offered hidden.
     const door = resolveLayout(WIDGET_META, scope('door', 'gala'), 'wrap', null);
-    expect(door.filter((s) => s.hidden).map((s) => s.key)).toEqual(['seatFill', 'alerts', 'entrances']);
+    expect(door.filter((s) => s.hidden).map((s) => s.key)).toEqual([
+      'seatFill',
+      'alerts',
+      'entrances',
+      'scanIssues',
+    ]);
   });
 
   it('moves widgets up and down (the keyboard alternative to dragging)', () => {

@@ -198,6 +198,24 @@ describe('who serves a request', () => {
       '/events/summit/register',
       '/events/summit/registration-form',
       '/ar/events/summit/register',
+      // Batch 3f merge: the portal and the public exhibitor map.
+      '/event-portal',
+      '/event-portal/invite/token',
+      '/event-portal/verify/token',
+      '/event-portal/sign-in/site',
+      '/fr/event-portal',
+      '/events/summit/exhibitors',
+      // Batch 3g merge: TV display links, the seat finder and its guest help pages, the Scan PWA's
+      // help requests and the Command Center's presence ping.
+      '/tv/abc~sig',
+      '/ar/tv/abc~sig',
+      '/events/summit/seat-finder',
+      '/events/summit/seat-finder/help',
+      '/events/summit/seat-finder/help/abc~sig',
+      '/ar/events/summit/seat-finder/help',
+      '/api/scan/assistance',
+      '/api/tv/abc~sig',
+      '/api/command-center/org/event/presence',
     ]) {
       expect(isPlatformPath(new URL(p, 'https://x').pathname) || decide(p).owner === 'next').toBe(true);
       expect(decide(p, flags(), { legacy: true })).toEqual({
@@ -211,6 +229,8 @@ describe('who serves a request', () => {
     // The event page itself and its other sub-paths stay with the route table.
     expect(isPlatformPath('/events/summit')).toBe(false);
     expect(isPlatformPath('/events/summit/attendee')).toBe(false);
+    expect(isPlatformPath('/events/summit/seat-finder/help/a/b')).toBe(false);
+    expect(isPlatformPath('/tvguide')).toBe(false);
   });
 });
 
