@@ -368,7 +368,9 @@ test('group checkout with three names, then the payer replaces one', async ({ br
   await ben.getByLabel("New person's full name").fill('Dee Group');
   await ben.getByLabel("New person's email").fill(`dee-${s}@example.test`);
   await ben.getByRole('button', { name: 'Replace', exact: true }).click();
-  await expect(ben.getByText("Replaced. The new person's ticket is ready.")).toBeVisible();
+  // The card now carries the new person's name (its heading changed), with the confirmation.
+  const dee = page.getByRole('listitem').filter({ has: page.getByRole('heading', { name: 'Dee Group' }) });
+  await expect(dee.getByText("Replaced. The new person's ticket is ready.")).toBeVisible();
   await page.reload();
   await expect(page.getByRole('heading', { name: 'Dee Group' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Ben Group' })).toHaveCount(0);
@@ -412,17 +414,17 @@ test('Arabic: the queue, the applicant page and the group form render right-to-l
   await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
   await expectAccessible(page);
+  // An applicant's page: apply in English first (the locale sticks once Arabic is visited).
   const visitor = await guest(browser);
-  await visitor.goto(`/ar/events/${slug}/register/group`);
-  await expect(visitor.locator('html')).toHaveAttribute('dir', 'rtl');
-  await expect(visitor.locator('select[name="pass-1"]')).toBeVisible();
-  await expectAccessible(visitor);
-  // An applicant's page (from the queue's newest pending applicant's email is not needed: apply).
   await apply(visitor, `rtl-${s}@example.test`, 'Rtl Applicant');
   const path = new URL(visitor.url()).pathname;
   await visitor.goto(`/ar${path}`);
   await expect(visitor.locator('html')).toHaveAttribute('dir', 'rtl');
   await expect(visitor.getByRole('heading', { level: 1 })).toBeVisible();
+  await expectAccessible(visitor);
+  await visitor.goto(`/ar/events/${slug}/register/group`);
+  await expect(visitor.locator('html')).toHaveAttribute('dir', 'rtl');
+  await expect(visitor.locator('select[name="pass-1"]')).toBeVisible();
   await expectAccessible(visitor);
   await visitor.close();
 });

@@ -354,7 +354,7 @@ export default async function ApplicationsPage({
                 {t('decideTitle')}
               </h3>
               <ProgramForm
-                key={`decide-${detail.id}-${detail.status}`}
+                key={`decide-${detail.id}`}
                 action={decideAction.bind(null, org, event, detail.id)}
                 fields={[
                   {
