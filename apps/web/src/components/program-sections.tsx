@@ -19,6 +19,7 @@ export function SessionRow({
   day,
   images = {},
   optionalLabel,
+  live = null,
 }: {
   s: PublicSessionDto;
   slug: string;
@@ -28,6 +29,8 @@ export function SessionRow({
   images?: ProgramImages;
   /** M5.2a: shown for optional sessions ("Optional"); the session type's name is shown as is. */
   optionalLabel?: string;
+  /** M5.7a: the link to the session's live polls and Q&A, when it has them. */
+  live?: { href: string; label: string } | null;
 }) {
   const kind = [s.type, s.admission === 'optional' ? optionalLabel : undefined].filter(Boolean);
   return (
@@ -66,6 +69,14 @@ export function SessionRow({
         {s.description ? (
           <Markdown source={s.description} className="flex flex-col gap-2 text-caption text-zinc-600" />
         ) : null}
+        {live ? (
+          <Link
+            href={live.href}
+            className="inline-flex min-h-11 items-center self-start font-medium underline underline-offset-2"
+          >
+            {live.label}
+          </Link>
+        ) : null}
       </span>
       {s.room || s.track ? (
         <span className="text-caption text-zinc-500">{[s.room, s.track].filter(Boolean).join(' · ')}</span>
@@ -84,14 +95,18 @@ export async function ProgramSections({
   locale,
   timeZone,
   images = {},
+  liveSessions = [],
 }: {
   program: PublicProgramDto;
   slug: string;
   locale: string;
   timeZone: string;
   images?: ProgramImages;
+  /** M5.7a: sessions with live polls and Q&A. */
+  liveSessions?: readonly string[];
 }) {
   const t = await getTranslations('publicEvent');
+  const tl = await getTranslations('engagement.participant');
   const ta = await getTranslations('agenda');
   const time = new Intl.DateTimeFormat(locale, { timeZone, hour: 'numeric', minute: '2-digit' });
   const dayLabel = new Intl.DateTimeFormat(locale, {
@@ -129,6 +144,11 @@ export async function ProgramSections({
                     time={time}
                     images={images}
                     optionalLabel={ta('optional')}
+                    live={
+                      liveSessions.includes(s.id)
+                        ? { href: `/events/${slug}/live/${s.id}`, label: tl('join') }
+                        : null
+                    }
                   />
                 ))}
               </ol>

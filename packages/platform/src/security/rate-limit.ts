@@ -337,6 +337,14 @@ export const RATE_LIMIT_POLICIES = {
     identity: { limit: 3, windowMs: 24 * 60 * MIN },
     ipCeiling: { limit: 20, windowMs: 60 * MIN },
   },
+  /** Live polls and Q&A (M5.7a): votes, questions and upvotes from one device or network (the
+   * engagement module also caps questions per participant and keeps one vote per poll). A room
+   * full of phones shares one venue IP, hence the high anonymous and ceiling limits. */
+  engagement: {
+    device: { limit: 60, windowMs: MIN },
+    anonymousIp: { limit: 600, windowMs: MIN },
+    ipCeiling: { limit: 6000, windowMs: 10 * MIN },
+  },
   /** CSP violation reports. */
   cspReport: {
     device: { limit: 60, windowMs: MIN },

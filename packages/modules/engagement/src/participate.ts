@@ -29,6 +29,7 @@ import {
   publishPollTx,
   publishQuestionTx,
   type SettingsRow,
+  sessionOf,
   settingsTx,
   toSettings,
 } from './state.ts';
@@ -280,6 +281,9 @@ const EMPTY_STAGE = { livePollId: null, pinnedQuestionId: null, qaOpen: false, a
 const readCtx = (orgId: string) => createCtx({ orgId, actor: { type: 'system', name: 'engagement.public' } });
 
 export interface LiveSessionView {
+  readonly eventName: string;
+  readonly eventSlug: string;
+  readonly sessionTitle: string;
   readonly settings: SettingsDto;
   readonly state: PublicLiveStateDto;
 }
@@ -298,11 +302,17 @@ export async function publicLiveSession(
   return withTenant(readCtx(orgId), async (tx) => {
     const s = await settingsTx(tx, sessionId);
     if (!s || s.eventId !== eventId) return null;
-    if (opts.requirePublicEvent !== false) {
-      const ev = await eventOf(tx, eventId).catch(() => null);
-      if (!ev || !eventIsLive(ev)) return null;
-    }
-    return { settings: toSettings(s), state: await publicLiveStateTx(tx, s) };
+    const ev = await eventOf(tx, eventId).catch(() => null);
+    if (!ev || (opts.requirePublicEvent !== false && !eventIsLive(ev))) return null;
+    const session = await sessionOf(tx, eventId, sessionId).catch(() => null);
+    if (!session) return null;
+    return {
+      eventName: ev.name,
+      eventSlug: ev.slug,
+      sessionTitle: session.title,
+      settings: toSettings(s),
+      state: await publicLiveStateTx(tx, s),
+    };
   });
 }
 

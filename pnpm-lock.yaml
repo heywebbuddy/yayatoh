@@ -471,6 +471,9 @@ importers:
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@yayatoh/engagement':
+        specifier: workspace:*
+        version: link:../../packages/modules/engagement
       '@yayatoh/events':
         specifier: workspace:*
         version: link:../../packages/modules/events

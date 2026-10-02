@@ -11,6 +11,7 @@ export type {
   ModPollDto,
   ModQuestionDto,
   ModStateDto,
+  ParticipantStateDto,
   PollResultsDto,
   PublicLiveStateDto,
   PublicPollDto,

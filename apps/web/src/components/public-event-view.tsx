@@ -1,3 +1,4 @@
+import { liveSessionIds } from '@yayatoh/engagement';
 import {
   accessTarget,
   checkoutTarget,
@@ -124,6 +125,12 @@ export async function PublicEventView({
         await publicProgramMedia(contentTarget.orgId, contentTarget.eventId, { privateOk: unlockedPrivate }),
       )
     : {};
+  // M5.7a: sessions with live polls and Q&A link to their participant page (public events only).
+  const publicTarget = await checkoutTarget(slug);
+  const liveSessions =
+    publicTarget && fullProgram.sessions.length > 0
+      ? await liveSessionIds(publicTarget.orgId, publicTarget.eventId)
+      : [];
   const program: PublicProgramDto = chosen
     ? {
         ...fullProgram,
@@ -573,6 +580,7 @@ export async function PublicEventView({
         locale={locale}
         timeZone={ev.timezone}
         images={programImages}
+        liveSessions={liveSessions}
       />
 
       {reviews ? <EventReviews slug={slug} summary={reviews} locale={locale} timeZone={ev.timezone} /> : null}
