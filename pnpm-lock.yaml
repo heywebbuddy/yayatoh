@@ -697,6 +697,9 @@ importers:
       '@yayatoh/privacy':
         specifier: workspace:*
         version: link:../../packages/modules/privacy
+      '@yayatoh/program':
+        specifier: workspace:*
+        version: link:../../packages/modules/program
       '@yayatoh/registration':
         specifier: workspace:*
         version: link:../../packages/modules/registration
@@ -2030,6 +2033,9 @@ importers:
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../kernel
+      '@yayatoh/notifications':
+        specifier: workspace:*
+        version: link:../notifications
       '@yayatoh/platform':
         specifier: workspace:*
         version: link:../../platform

@@ -13,6 +13,7 @@ import { enqueueDueMassRefunds, massRefundJob } from './mass-refunds.ts';
 import {
   dispatchNotifications,
   dispatchStaffPushes,
+  sweepOverdueTasks,
   userEmails,
   userLocales,
   workerTransports,
@@ -98,6 +99,12 @@ setInterval(() => {
 setInterval(() => {
   if (!release || stopping) return;
   endExpiredImpersonations().catch((err) => console.error('impersonations', err));
+}, 60_000).unref();
+
+// Overdue portal tasks (M5.3a): once a minute, one event per overdue assignee (leader only).
+setInterval(() => {
+  if (!release || stopping) return;
+  sweepOverdueTasks().catch((err) => console.error('overdue tasks', err));
 }, 60_000).unref();
 
 // Bulk actions and exports (M1.8b): keep unfinished operations moving (leader only).

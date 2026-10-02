@@ -46,6 +46,20 @@ export {
   readAgendaRow,
 } from './domain/agenda.ts';
 export {
+  changeDiff,
+  changedValues,
+  type FieldChange,
+  isOverdue,
+  missingRecipients,
+  PRE_DUE_MS,
+  PROFILE_FIELDS,
+  preDueKey,
+  preDueReminderAt,
+  type ReminderPlan as TaskReminderPlan,
+  SESSION_FIELDS,
+  staleFields,
+} from './domain/portal.ts';
+export {
   groupByDay,
   localDay,
   overlaps,
@@ -75,8 +89,50 @@ export {
   updateSpeakerCommand,
   updateSponsorCommand,
 } from './people.ts';
+export * from './portal-dto.ts';
+export {
+  decideSpeakerChangeCommand,
+  inviteSpeakerCommand,
+  ProfileProposalInput,
+  proposeProfileChangeCommand,
+  proposeSessionChangeCommand,
+  proposeSpeakerPhotoTx,
+  revokeSpeakerAccessCommand,
+  SessionProposalInput,
+  speakerAccessQuery,
+  speakerChangeDecided,
+  speakerChangesQuery,
+  speakerPrincipalTx,
+} from './portal-speakers.ts';
+export {
+  assignNewSpeakersCommand,
+  CreatePortalTaskInput,
+  completePortalTaskCommand,
+  completeTaskWithFileTx,
+  createPortalTaskCommand,
+  deletePortalTaskCommand,
+  emitOverdueTasks,
+  MAX_TASKS_PER_EVENT,
+  portalSpeakerCleanup,
+  portalTaskBoardQuery,
+  remindMissingCommand,
+  speakerPortalQuery,
+  speakerTaskCompleted,
+  speakerTaskOverdue,
+  taskFileOwnerTx,
+  taskFileTargetTx,
+  taskReminderMailer,
+} from './portal-tasks.ts';
 export { privateColumns } from './private-columns.ts';
 export { publicProgram, publicSpeaker } from './public.ts';
+export {
+  ASSIGNEE_STATUSES,
+  CHANGE_STATUSES,
+  TASK_KINDS,
+  TASK_SUBJECT_KINDS,
+  type TaskKind,
+  type TaskSubjectKind,
+} from './schema-portal.ts';
 export {
   CreateSessionInput,
   createRoomCommand,
