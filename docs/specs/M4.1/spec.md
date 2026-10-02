@@ -369,7 +369,7 @@ QR code with the PIN, reset PINs and links, and reopen a party after the deadlin
 
 **Later / not yet:**
 - RSVP questions and meal choices (M4.1e); sending invitations by email and text and the contact collector (M4.1f, which will set `sent` itself).
-- Design system v2 components: `origin/agent/design-v2` conflicted outside this branch's files (ui tokens, messages, journal), so the merge was aborted for the merge session; the new screens use today's `@yayatoh/ui` primitives only (a local `CopyLink` in the RSVP folder; no new shared component).
+- Design system v2 components: `origin/agent/design-v2` conflicted outside this branch's files (on 2026-10-02: the exhibitors and speakers pages, `public-event-view.tsx`, `e2e/helpers.ts`, the 13 message files and the drizzle journal/snapshot), so the merge was aborted for the merge session; the new screens use today's `@yayatoh/ui` primitives only (a local `CopyLink` in the RSVP folder; no new shared component).
 - A guest site (M4.5a) linking to the RSVP page; tablemates for guests signed in through their party link (M4.4a).
 - An "undo" of a party's answers by the host (they can record answers on the sub-events page or reopen the party).
 
@@ -384,7 +384,7 @@ touches:
   - packages/modules/crm/src/{schema.ts,projection.ts,private-columns.ts}   # event_participation.rsvp
   - packages/modules/audiences/{package.json,MODULE.md,src/projector.ts}  # guests.rsvp_responded@1
   - packages/platform/src/security/rate-limit.ts    # `rsvpLookup` policy
-  - packages/db/drizzle/0096_melodic_naoko.sql (+ meta)
+  - packages/db/drizzle/0099_harsh_grey_gargoyle.sql (+ meta)
   - packages/testing/src/{fixtures.ts,rsvp.ts,index.ts}, packages/testing/tests/rsvp.int.test.ts
   - apps/web/src/app/[locale]/rsvp/**                          # public page and paper fallback
   - apps/web/src/app/[locale]/o/[org]/e/[event]/guests/{page.tsx,party-rsvp.tsx,rsvp/**}
@@ -406,7 +406,7 @@ touches:
 - [x] Rows for both orgs in `createOrgFixture` (settings with a deadline, links for every party, the fixture party sent and viewed)
 - [x] Every new text column declared (`rsvp_settings.lookup_code` internal, canary seed `code`; `event_participation.rsvp` vocab)
 
-**Migration:** `0096_melodic_naoko.sql` (expand only; journal order after batch 3e's `0095_alert_signals` and batch 3f's `0095_long_luminals`, renumber at merge). Hand edits: the two CHECKs on existing tables as `NOT VALID` + `VALIDATE CONSTRAINT`; a hand-written block with the two event foreign keys and the SECURITY DEFINER functions `guests.rsvp_link_org(uuid)` and `guests.rsvp_lookup_target(text)` (live orgs only, ids only; `REVOKE ALL FROM PUBLIC`, `GRANT EXECUTE TO app_user`).
+**Migration:** `0099_harsh_grey_gargoyle.sql` (expand only; last in the journal after batches 3e and 3f; renumber at merge). Hand edits: the two CHECKs on existing tables as `NOT VALID` + `VALIDATE CONSTRAINT`; a hand-written block with the two event foreign keys and the SECURITY DEFINER functions `guests.rsvp_link_org(uuid)` and `guests.rsvp_lookup_target(text)` (live orgs only, ids only; `REVOKE ALL FROM PUBLIC`, `GRANT EXECUTE TO app_user`).
 
 ### 6. API diff
 - **`/v1`:** none. **`/api/v2`:** none.
