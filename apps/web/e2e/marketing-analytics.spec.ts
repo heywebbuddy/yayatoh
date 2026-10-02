@@ -148,7 +148,9 @@ test.describe('marketing analytics (M3.8b)', () => {
     await page.getByLabel('To', { exact: true }).fill('2026-03-01');
     await page.getByRole('button', { name: 'Apply' }).focus();
     await page.keyboard.press('Enter');
-    await expect(page.locator('#range-error')).toHaveText('The start date must be on or before the end date.');
+    await expect(page.locator('#range-error')).toHaveText(
+      'The start date must be on or before the end date.',
+    );
     await expect(page.locator('#range-error')).toHaveAttribute('role', 'alert');
     await expect(page.getByLabel('From', { exact: true })).toHaveValue('2026-03-02');
     await expect(page.getByLabel('From', { exact: true })).toHaveAttribute('aria-invalid', 'true');
