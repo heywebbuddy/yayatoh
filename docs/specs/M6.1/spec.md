@@ -111,3 +111,15 @@ worker job, not the migration.
 - Confirm that lifetime-value audiences need finance access (the marketing role can't target
   LTV), and whether the older per-scope `spend` condition should be gated the same way.
 - Decide on campaign open tracking.
+
+### 8. Gate results (M6.1b, 2026-10-02)
+- `pnpm verify` steps, run separately for memory (typecheck with `--concurrency=2`): lint ok,
+  check:modules ok, typecheck 57/57, unit 2373/2373 (186 files), integration 1351/1351 (152 files).
+- New tests: unit 11 (`crm/tests/contact-stats.test.ts`); integration 10
+  (`testing/tests/contact-stats.int.test.ts`) plus the isolation suite's new fixture rows; e2e
+  7 tests × 3 viewports = 21 (`apps/web/e2e/contact-stats.spec.ts`), all passing.
+- Existing e2e for the pages and modules touched (audiences, attendees, guests, privacy,
+  account-privacy, campaigns) with the new spec: 105/105 passed on 375/768/1280.
+- After the final merge of `origin/merge/next-3g` and `origin/m0.5-foundation-ey5gqp` (outbox
+  dev-drain change, brief), re-ran lint, check:modules, typecheck of platform and web, and the
+  contact-stats, outbox-processed and audiences integration files: green.
