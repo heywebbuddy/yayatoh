@@ -37,6 +37,7 @@ import { deviceScanScopeTx, scopeAllowsCheckpoint } from './staff.ts';
 const hashToken = (token: string) => createHash('sha256').update(token).digest('hex');
 
 import { deviceIdOf } from './device-actor.ts';
+import { devicePresenceTx, deviceStateEventTx, heartbeatTransitionsTx } from './live.ts';
 import { recordDevicePresenceTx } from './staff-mode.ts';
 
 export { deviceIdOf };
@@ -172,6 +173,7 @@ export const setDeviceStateCommand = tenantCommand({
       .where(eq(devices.id, input.deviceId))
       .returning({ id: devices.id });
     if (rows.length === 0) throw new DomainError('not_found');
+    await deviceStateEventTx(tx, ctx, input.deviceId, input.action === 'revoke' ? 'revoked' : 'wiped');
     emit(deviceEvent('device.state_changed', requireOrg(ctx), input.deviceId));
     return { ok: true };
   },
@@ -189,6 +191,11 @@ export const heartbeatCommand = tenantCommand({
     /** M3.4a: the event the device works and where it scans (the device board). */
     eventId: z.uuid().optional(),
     checkpointId: z.uuid().nullable().optional(),
+    /** M3.3a: the app's build, for the device board (letters, digits and `.+-_`, ≤ 64). */
+    appVersion: z
+      .string()
+      .regex(/^[A-Za-z0-9._+-]{1,64}$/)
+      .optional(),
   }),
   output: z.object({
     serverTime: z.date(),
@@ -208,13 +215,22 @@ export const heartbeatCommand = tenantCommand({
   entitlement: 'checkin',
   permission: 'checkin:device',
   handler: async ({ input, ctx, tx, emit }) => {
-    const { eventId, checkpointId, ...health } = input;
+    const { eventId, checkpointId, appVersion, ...health } = input;
+    const [before] = await tx
+      .select({ id: devices.id, lastSeenAt: devices.lastSeenAt, batteryPct: devices.batteryPct })
+      .from(devices)
+      .where(eq(devices.id, deviceIdOf(ctx)));
     const [d] = await tx
       .update(devices)
-      .set({ ...health, lastSeenAt: ctx.now, updatedAt: ctx.now })
+      .set({
+        ...health,
+        ...(appVersion ? { appVersion } : {}),
+        lastSeenAt: ctx.now,
+        updatedAt: ctx.now,
+      })
       .where(and(eq(devices.id, deviceIdOf(ctx)), isNull(devices.revokedAt)))
       .returning({ wipe: devices.wipeRequestedAt });
-    if (!d) throw new DomainError('forbidden', 'Device revoked');
+    if (!d || !before) throw new DomainError('forbidden', 'Device revoked');
     const directives = await recordDevicePresenceTx(
       tx,
       ctx,
@@ -222,6 +238,26 @@ export const heartbeatCommand = tenantCommand({
       { eventId, checkpointId },
       { batteryPct: input.batteryPct, queueDepth: input.queueDepth },
     );
+    // M3.3a live mode: the feed's device transitions, and the member the device is handed to.
+    const [now] = await tx
+      .select({
+        id: devices.id,
+        eventId: devices.eventId,
+        checkpointId: devices.checkpointId,
+        assignedUserId: devices.assignedUserId,
+      })
+      .from(devices)
+      .where(eq(devices.id, deviceIdOf(ctx)));
+    if (now) {
+      await heartbeatTransitionsTx(
+        tx,
+        ctx,
+        before,
+        { eventId: now.eventId, batteryPct: input.batteryPct },
+        DEVICE_ONLINE_WINDOW_MS,
+      );
+      await devicePresenceTx(tx, ctx, now);
+    }
     // Devices-online and the device board (M3.1/M3.3) follow heartbeats through the outbox.
     emit(deviceEvent('device.heartbeat', requireOrg(ctx), deviceIdOf(ctx)));
     return { serverTime: ctx.now, commands: d.wipe ? (['wipe'] as const).slice() : [], ...directives };
@@ -703,6 +739,16 @@ export const syncScansCommand = tenantCommand({
         to: corrected(last),
         deviceId,
         ticketIds: okTickets,
+      });
+    // The live feed (M3.3a): one ping per synced batch that stored scans nobody was let in by.
+    const refused = results.filter(
+      (r) => r.stored && !['admitted', 'granted', 'provisional'].includes(r.result),
+    ).length;
+    if (refused > 0)
+      await publishRealtimeTx(tx, orgId, CHECKINS_CHANNEL, {
+        eventId: event.id,
+        event: 'scan',
+        data: { outcome: 'refused', checkpointId: null, count: refused, at: ctx.now.toISOString() },
       });
     // Door screens follow along (M3.1b): one message per synced batch that admitted anyone.
     if (newAdmissions > 0)

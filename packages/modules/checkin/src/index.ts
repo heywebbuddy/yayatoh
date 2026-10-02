@@ -1,5 +1,10 @@
 export { EARLY_ENTRY_MS, eventDay, LATE_ENTRY_MS, ruleResult } from '@yayatoh/checkin-engine';
 export {
+  checkpointNamesTx,
+  deviceLabelsTx,
+  queueStaffPushTx,
+} from './assistance-support.ts';
+export {
   CheckpointDto,
   createCheckpointCommand,
   INVALID_BURST,
@@ -37,6 +42,31 @@ export {
   signalSubject,
 } from './fraud-rules.ts';
 export { chatReportSignals, checkoutRiskSignals, fraudSignalAlerts } from './fraud-sources.ts';
+export {
+  admittedTodayByCheckpointTx,
+  capacityFactsTx,
+  DEVICE_IN_USE_MS,
+  deviceAppVersionsTx,
+  FEED_KINDS,
+  type FeedFilter,
+  type FeedItem,
+  type FeedKind,
+  feedKindOf,
+  lastScanByDeviceTx,
+  liveFeedTx,
+  liveLabelsTx,
+  markQuietDevicesTx,
+  onDutyStaffTx,
+  PRESENCE_PING_MS,
+  PRESENCE_TTL_MS,
+  type PresenceRow,
+  presenceActive,
+  reportPresenceCommand,
+  type ScanIssue,
+  scanIssuesTx,
+  scanWindowTx,
+  staffPresenceTx,
+} from './live.ts';
 export { privateColumns } from './private-columns.ts';
 export {
   admissionsForTicketsTx,
@@ -52,6 +82,8 @@ export {
 export {
   CHECKPOINT_KINDS,
   type CheckpointKind,
+  DEVICE_EVENT_KINDS,
+  type DeviceEventKind,
   FRAUD_NOTE_MAX,
   FRAUD_SEVERITIES,
   FRAUD_SEVERITY,
@@ -65,7 +97,9 @@ export {
   SCAN_RESULTS,
   type ScanResult,
   STAFF_ALERT_KINDS,
+  STAFF_PUSH_KINDS,
   type StaffAlertKind,
+  type StaffPushKind,
 } from './schema.ts';
 export {
   DetectionSettingsDto,

@@ -1,3 +1,4 @@
+import { onDutyStaffTx } from '@yayatoh/checkin';
 import type { TenantTx } from '@yayatoh/db';
 import type { EventDto } from '@yayatoh/events';
 import { type Ctx, requireOrg } from '@yayatoh/kernel';
@@ -41,6 +42,11 @@ type AlertRow = typeof alerts.$inferSelect;
 /** Message kinds (notifications registry): in-app, email and push now; texts wait out quiet hours. */
 export const ALERT_KIND = 'alerts.alert';
 export const ALERT_TEXT_KIND = 'alerts.alert-text';
+/** M3.3a: a live-critical alert's text to on-duty staff, sent at once (no quiet hours). */
+export const ALERT_URGENT_TEXT_KIND = 'alerts.alert-urgent-text';
+
+/** The groups on-duty door staff (viewer or scanner org role) are escalated for: the door only. */
+const DOOR_ONLY_CATEGORIES: ReadonlySet<AlertCategory> = new Set(['door']);
 
 const EVENT_RULES = RULE_KEYS.filter((k) => RULES[k].scope === 'event');
 const ORG_RULES = RULE_KEYS.filter((k) => RULES[k].scope === 'org');
@@ -100,9 +106,18 @@ async function notifyTx(
   row: AlertRow,
   event: EventDto | null,
   deps: AlertDeps,
+  escalate: { liveCritical: boolean; now: Date },
 ): Promise<number> {
   const rule = RULES[row.rule as RuleKey];
   const saved = await savedRoutingTx(tx);
+  // Live-critical escalation (M3.3a): members on duty at the event's doors right now (staff
+  // presence) get it in-app and by push whatever their routing says, and their text goes out at
+  // once instead of waiting out quiet hours. Door-only staff are escalated for door alerts only.
+  const onDuty = new Map(
+    escalate.liveCritical && row.eventId
+      ? (await onDutyStaffTx(tx, row.eventId, escalate.now)).map((p) => [p.userId, p.doorOnly] as const)
+      : [],
+  );
   const phones = new Map(
     (await tx.select().from(memberSettings)).map((s) => [s.userId, s.smsPhone] as const),
   );
@@ -116,7 +131,11 @@ async function notifyTx(
   let queued = 0;
   for (const m of await memberUserIdsTx(tx, ORG_ROLES)) {
     if (!roleCan(m.role as (typeof ORG_ROLES)[number], rule.permission)) continue;
-    const channels = routeFor(saved, m.role, rule.category as AlertCategory);
+    const routed = routeFor(saved, m.role, rule.category as AlertCategory);
+    const doorOnly = onDuty.get(m.userId);
+    const escalated =
+      doorOnly !== undefined && (!doorOnly || DOOR_ONLY_CATEGORIES.has(rule.category as AlertCategory));
+    const channels = escalated ? [...new Set([...routed, 'in_app', 'push', 'sms'] as const)] : routed;
     const now = channels.filter((c) => c !== 'sms');
     const key = `alert:${row.id}:${row.notifyCount}:${m.userId}`;
     if (now.length)
@@ -135,7 +154,7 @@ async function notifyTx(
     if (channels.includes('sms') && phone)
       queued += (
         await deps.notifier.enqueue(tx, {
-          kind: ALERT_TEXT_KIND,
+          kind: escalated ? ALERT_URGENT_TEXT_KIND : ALERT_TEXT_KIND,
           to: { userId: m.userId, phone },
           channels: ['sms'],
           params: { ...params, _href: href },
@@ -241,7 +260,7 @@ async function reconcileTx(
     } else continue;
     let notified = false;
     if (planNotifies(plan)) {
-      await notifyTx(tx, row, scope.event, deps);
+      await notifyTx(tx, row, scope.event, deps, { liveCritical: f?.liveCritical ?? false, now });
       const [after] = await tx
         .update(alerts)
         .set({ lastNotifiedAt: now, notifyCount: row.notifyCount + 1 })

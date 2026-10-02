@@ -2628,6 +2628,8 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": {
+                    /** @description The scanner app build, shown on the device board. */
+                    appVersion?: string;
                     batteryPct?: number | null;
                     /**
                      * Format: uuid
