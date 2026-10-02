@@ -16,7 +16,9 @@
     "typecheck": "tsc --noEmit",
     "generate": "node scripts/generate.ts write",
     "generate:check": "node scripts/generate.ts check",
-    "generate:mobile": "bash scripts/generate-mobile.sh"
+    "generate:mobile": "bash scripts/generate-mobile.sh",
+    "build:npm": "node scripts/build-npm.ts",
+    "publish:dry-run": "node scripts/build-npm.ts && cd dist && npm publish --dry-run --access public --provenance=false"
   },
   "dependencies": {
     "openapi-fetch": "0.17.0"

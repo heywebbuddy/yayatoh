@@ -105,3 +105,111 @@ Hand-written: `tenancy.api_key_by_hash` recreated (excludes expired keys; return
 | Isolation (new tables have rows for both fixture orgs; other orgs can't list or delete a sandbox, read usage) | isolation suite via `createOrgFixture`, `api-keys-sandbox.int.test.ts` |
 | E2E: create, use (request), rotate, revoke a key; create, open, use and delete a sandbox; keyboard only; axe; Arabic RTL; viewer can't create keys or see usage/sandboxes; empty states | `apps/web/e2e/api-keys-sandboxes.spec.ts`, `apps/web/e2e/api-keys.spec.ts` |
 | `/v1` additive; Spectral clean; SDK regenerated | `pnpm contracts:check` |
+
+## M6.3b — Webhooks GA and developer docs (built)
+
+- **Milestone:** M6.3b (roadmap Phase 6, §6.3; `docs/plans/phase-6.md` row M6.3B, decisions P6-1, P6-3, P6-13; D21)
+- **Status:** Built behind the provider port: Svix when `SVIX_API_KEY` is set (owner inbox), the fake publisher everywhere else outside production; no publisher in production until then
+- **Risk tags:** db-migration, tenancy, infra (CI jobs)
+
+### 1. Goal and users
+Owners and admins send their org's events to their own systems: they add https endpoints, choose
+the events, check delivery with a test send, see each delivery, replay what failed, and verify
+signatures with documented, tested code. Developers find everything on a public docs site: guides,
+the API reference generated from OpenAPI, and the event catalog. The TypeScript SDK is built for npm
+(dry run) with typed webhook messages; Swift and Kotlin clients are generated as CI artifacts.
+
+### 2. What was built
+**Event catalog** (`@yayatoh/webhooks`, tier 6, `src/catalog.ts`)
+- 31 public types: orders (`order.paid`, `order.refunded`, `order.expired`, `order.payment_failed`,
+  `order.disputed`, `order.dispute_closed`), tickets (`tickets.cancelled`, `ticket.transferred`,
+  `ticket.claimed`), check-in (`ticket.admitted`, `ticket.admission_undone`), events (`event.created`,
+  `event.published` … `event.archived`, `event.updated`, `event.occurrence_cancelled`,
+  `ticket_type.created|updated|archived`), registration (`form.registration_submitted`,
+  `waitlist.joined`, `waitlist.offered`), engagement (`survey.responded`, `review.submitted`,
+  `program.agenda_published`) and `webhook.test`. Each has a versioned Zod schema (`v1`), a summary,
+  a description and an example; renamed fields map explicitly (`formVersion`, `agendaVersion`).
+- Every other outbox event is in `INTERNAL_EVENTS` with a reason (personal, security, workflow,
+  platform, content, later). A test scans all source for emitted (`type:`/`version:`) and named
+  (`'x.y@N'`) outbox keys and fails on any event that is in neither list, in both, or stale.
+- **Thin payloads (D21):** field names come from `THIN_FIELDS`; every string is a uuid, date,
+  date-time, enum, constant or short bounded pattern (checked on the JSON Schema). Serialization is
+  the allowlist: `toPublicData` parses the internal payload through the schema, so extra keys
+  (contact ids, emails, answers) are dropped, and a payload that does not fit throws instead of
+  being sent.
+- Envelope: `{ id, type, version, apiVersion: 'v1', occurredAt, orgId, data }`; `id` is the outbox
+  event id (Svix dedupes on it; receivers dedupe on `webhook-id`).
+- The catalog is in the OpenAPI document's top-level `webhooks` (31 operations, `<Schema>Message`
+  components, tag `webhooks`), additive (paths and existing components unchanged; Spectral clean).
+
+**Provider port** (`WebhookPublisher`): application = org, endpoint uid = our row id, message
+eventId = outbox id, so every call is retry-safe.
+- `svixPublisher`: Svix REST over fetch (apps, event types with JSON Schema and example, endpoints,
+  secrets and rotation, messages with idempotency key, send-example, attempts, resend, recover, app
+  portal access). Errors map to `not_found` / `invalid` / `unavailable`, never Svix's text.
+- `fakePublisher`: in-process store; signs every delivery exactly like Svix (Standard Webhooks,
+  checked against the spec's test vector) and records it instead of sending (no network, no SSRF in
+  CI). A URL path segment `fail` answers 503 to exercise retries (Svix's schedule: 5 s, 5 min,
+  30 min, 2 h, 5 h, 10 h, 10 h), resend and recovery. Secrets derive from a seed; rotation keeps
+  the old one signing 24 h. Portal links are HMAC-signed, ten minutes, one app.
+
+**Endpoints** (`webhooks.endpoints`, tenant table, RLS forced): the mirror of Svix's endpoints
+(url, description, event types, active/paused, creator). Commands (all `webhooks:manage`, owners
+and admins; module `api_access`): create, update (URL, description, types, pause), delete, reveal
+secret (audited), rotate secret (step-up), test send (`webhook.test` or any type's example, one
+endpoint only), resend a message, recover failures since a time (≤ 14 days). Queries: list, get,
+attempts, portal link. URLs: https on 443, no credentials, public names and addresses only
+(`@yayatoh/platform/ssrf` at registration; Svix re-checks at send). At most 20 endpoints per org.
+Audit entries name the host, never the URL's path (it can hold the receiver's token).
+
+**Publishing:** subscriber `webhooks.publish` (worker registry) sends each catalog event to the org's
+endpoints, skipping orgs without an active endpoint or without `api_access`, and replayed history.
+Dev/CI: `POST /api/dev/webhooks/drain` runs it for one org (separate from the message drain, so the
+shared e2e org's message events keep their window) and the fake's due retries.
+
+**Console** (`/o/{org}/webhooks`, linked from API keys): endpoint list with status and event count,
+add form (URL, description, all or chosen events by group); endpoint page with test send, signing
+secret (show, copy, hide, rotate with "Confirm it's you"), recent deliveries (time, event, status,
+response, trigger, next retry, Resend), recover failed messages, settings (pause), delete. The
+embedded portal (`/o/{org}/webhooks/portal`) frames Svix's App Portal (its origin is added to that
+page's `frame-src` only when Svix is configured; dev and CI headers are unchanged) or the fake
+same-origin portal (`/webhook-portal/{token}`, 404 wherever the fake is off). The console pages are
+the keyboard and screen-reader path. 13 locales, Arabic RTL.
+
+**Developer docs** (`/developers`, public): overview with search (instant results as you type,
+server-rendered results without JavaScript at `/developers?q=`), guides (API keys, pagination,
+idempotency, webhooks and signature verification, sandbox orgs), the API reference generated from
+the `/v1` OpenAPI document (every operation by tag: method, path, summary, parameters, body,
+responses; links to the interactive Scalar reference and `openapi.json`), and the event catalog
+(fields, types and an example message per event). The shell is translated in every locale; guide
+and reference content stays English (`lang="en"`, left to right).
+
+**Signature verification:** the docs' Node example (`examples.ts`) is executed by a unit test
+against the spec's test vector and against deliveries the fake signed (tampering, stale timestamps
+and missing headers refused). The SDK has `verifyWebhook` (Web Crypto) and `WebhookMessage<T>`.
+
+**SDK pipeline:** `build:npm` (ES2022 + declarations + publish-ready manifest, no workspace deps),
+`publish:dry-run`; CI jobs `sdk-npm` (dry-run publish, `dist` artifact) and `sdk-mobile`
+(openapi-generator Swift 6 and Kotlin, artifacts only). SDK 0.4.0.
+
+### 3. Later / not yet
+- A "full payload" mode per endpoint for non-personal events; more public events (the `later` ones).
+- `/v1` webhook endpoint management for integrations (Zapier REST hooks, M6.4) and a
+  `webhooks:manage` API scope.
+- Endpoint health alerts in the Command Center (`integration.connection_error`), auto-disable on
+  410 surfaced in the console (Svix does it; we do not mirror it yet).
+- The real npm publish and the mobile SDK publish (owner token; mobile build).
+- The legacy `/api/v2` facade is untouched.
+
+### 4. Acceptance
+| Criterion | Test |
+|---|---|
+| Every public event has a documented, versioned schema; the catalog covers every public outbox event | `packages/modules/webhooks/tests/catalog.test.ts` (scan, classification, docs, examples); `apps/web/tests/developer-docs.test.ts` (OpenAPI `webhooks` = catalog); `apps/web/e2e/developers.spec.ts` (catalog page) |
+| A payload never carries PII beyond D21's thin set (leak canary) | `catalog.test.ts` (thin fields, bounded strings, canary payloads, refusal); `packages/testing/tests/webhooks.int.test.ts` (whole fixture history + planted PII published thin) |
+| Signature verification documented and tested with the example code | `packages/modules/webhooks/tests/signing.test.ts` (docs example vs spec vector and fake deliveries); `packages/sdk/tests/webhooks.test.ts`; `developers.spec.ts` (guide shows the code) |
+| Isolation | `webhooks.int.test.ts` (another org: list, get, attempts, update, reveal, rotate, test, delete; RLS rows); `fake.test.ts` (apps apart); `isolation.int.test.ts` (fixture rows for both orgs) |
+| Svix port with fake in CI: portal, retries, replay, secret per endpoint, test send | `fake.test.ts`, `svix.test.ts`, `webhooks.int.test.ts`; `apps/web/e2e/webhooks.spec.ts` |
+| E2E: add an endpoint, test-send, see the delivery (fake) | `webhooks.spec.ts` (happy path, real outbox event via the drain, failing receiver with resend/recover, secret, pause, validation, keyboard, portal, viewer denial, Arabic, axe) |
+| Docs pages render with a working search; keyboard only, axe, RTL | `developers.spec.ts` (search with and without JS, keyboard and skip link, guides, reference, catalog, Arabic, axe) |
+| SDK publish pipeline (dry run); Swift/Kotlin generated | `packages/sdk/tests/npm-package.test.ts` (manifest, plain-JS import, NodeNext consumer type-check); CI `sdk-npm`, `sdk-mobile` |
+| `/v1` additive, contracts clean | `pnpm contracts:check`; semantic diff: paths and existing components unchanged |
