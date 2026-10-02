@@ -87,6 +87,23 @@ export function verifyPortalInvite(
   return { orgId: m[1] as string, accountId: m[2] as string, version: Number(m[3]) };
 }
 
+/**
+ * A shareable per-event portal sign-in page (M5.4a, kept in the one sign-in flow at merge): the
+ * token `{orgId}~{eventId}~{mac}` names the event (the org comes from it, never a header). It
+ * grants nothing: it only lets someone ask for their own invitation link to be emailed again.
+ */
+export function signPortalSite(secret: string, s: { orgId: string; eventId: string }): string {
+  const body = `${s.orgId}~${s.eventId}`;
+  return `${body}~${mac(secret, 'site', body, 'base64url')}`;
+}
+
+export function verifyPortalSite(secret: string, token: string): { orgId: string; eventId: string } | null {
+  const m = new RegExp(`^(${UUID})~(${UUID})~([A-Za-z0-9_-]{43})$`).exec(token);
+  if (!m) return null;
+  if (!sameText(m[3] as string, mac(secret, 'site', `${m[1]}~${m[2]}`, 'base64url'))) return null;
+  return { orgId: m[1] as string, eventId: m[2] as string };
+}
+
 export interface PortalAccountState {
   readonly inviteVersion: number;
   readonly revokedAt: Date | null;

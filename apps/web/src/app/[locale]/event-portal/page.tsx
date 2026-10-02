@@ -5,7 +5,8 @@ import { PortalChangeStatus } from '@/components/portal-change-status.tsx';
 import { PortalShell, PortalSignedOut } from '@/components/portal-shell.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatMoment, formatSessionTime } from '@/lib/portal-format.ts';
-import { loadSpeakerPortal } from '@/server/portal.ts';
+import { currentPortalPrincipal, loadSpeakerPortal } from '@/server/portal.ts';
+import { ExhibitorPortal } from './exhibitor-portal.tsx';
 
 export async function generateMetadata({
   params,
@@ -13,20 +14,28 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: 'speakerPortal' });
+  const exhibitor = (await currentPortalPrincipal())?.subjectKind === 'exhibitor';
+  const t = await getTranslations({ locale, namespace: exhibitor ? 'exhibitorPortal' : 'speakerPortal' });
   return { title: t('title'), robots: { index: false, follow: false } };
 }
 
-/** The speaker portal's overview (M5.3a): their sessions (event time zone) and open tasks. */
+/**
+ * The portal's home (one sign-in for every portal role, M5.3a): the speaker portal's overview
+ * (their sessions in the event time zone and open tasks), or for an exhibitor admin or staff
+ * member the exhibitor portal (M5.4a).
+ */
 export default async function SpeakerPortalPage({
   params,
   searchParams,
 }: {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ signedOut?: string }>;
+  searchParams: Promise<{ signedOut?: string; logo?: string }>;
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const principal = await currentPortalPrincipal();
+  if (principal?.subjectKind === 'exhibitor')
+    return <ExhibitorPortal principal={principal} locale={locale} logoParam={(await searchParams).logo} />;
   const portal = await loadSpeakerPortal();
   if (!portal) return <PortalSignedOut signedOut={Boolean((await searchParams).signedOut)} />;
   const { data } = portal;

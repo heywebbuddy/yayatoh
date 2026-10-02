@@ -176,7 +176,7 @@ function guestTransports(): Transports | null {
 export async function sendGuestEmail(input: {
   readonly kind: Extract<
     MessageKind,
-    'guest.checkout-code' | 'guest.sign-in' | 'guest.waitlist-code' | 'portal.sign-in'
+    'guest.checkout-code' | 'guest.sign-in' | 'guest.waitlist-code' | 'portal.sign-in' | 'portal.invite'
   >;
   readonly to: string;
   readonly locale: string;

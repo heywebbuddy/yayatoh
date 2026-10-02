@@ -16,7 +16,7 @@ import { LOCALES } from '@yayatoh/contracts';
  * table is ignored (its paths fall back to legacy). Bump `ROUTE_TABLE_VERSION` whenever a route
  * is added, removed or changes what it matches; flag changes record the version they were made on.
  */
-export const ROUTE_TABLE_VERSION = 2;
+export const ROUTE_TABLE_VERSION = 3;
 
 /** The two legacy instances (roadmap §7.4): yayatoh.com and abc.yayatoh.com. */
 export const FRONT_DOOR_INSTANCES = ['yay', 'abc'] as const;
@@ -48,7 +48,8 @@ const isSearch = (q: URLSearchParams) => SEARCH_PARAMS.some((k) => (q.get(k) ?? 
 /**
  * Version 1: read surfaces first (A1 content, A2 public reads). Version 2 (batch 3c merge): the
  * new public pages of M3.11a/b (pricing, help center, features, contact, status) on the
- * marketplace instance; like every route they stay on legacy until staff move them. Order
+ * marketplace instance; like every route they stay on legacy until staff move them. Version 3
+ * (batch 3f merge): the public exhibitor map of M5.4a (`/events/{slug}/exhibitors`). Order
  * matters: first match wins.
  */
 export const FRONT_DOOR_ROUTES: readonly FrontDoorRoute[] = [
@@ -74,6 +75,14 @@ export const FRONT_DOOR_ROUTES: readonly FrontDoorRoute[] = [
     instances: ['yay', 'abc'],
     shapes: ['/events/{slug}'],
     matches: re(/^\/events\/[^/]+$/),
+  },
+  {
+    // M5.4a: the public exhibitor map (hall plan and exhibitor list) of an event.
+    key: 'events.exhibitors',
+    stage: 'A2',
+    instances: ['yay', 'abc'],
+    shapes: ['/events/{slug}/exhibitors'],
+    matches: re(/^\/events\/[^/]+\/exhibitors$/),
   },
   {
     key: 'organizers.page',
@@ -180,6 +189,9 @@ export const PLATFORM_PREFIXES: readonly string[] = [
   '/invite',
   '/survey',
   '/sub-processors',
+  // Batch 3f: the portal (M5.3a/M5.4a: invitations, sign-in codes and magic links, the event's
+  // sign-in page, the speaker and exhibitor portals).
+  '/event-portal',
 ];
 export const PLATFORM_FILES: ReadonlySet<string> = new Set([
   '/widget.js',

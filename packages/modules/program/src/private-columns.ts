@@ -45,4 +45,9 @@ export const privateColumns = columnPrivacy('program', {
     published_by: internal(),
   },
   speaker_contacts: { email: personal('email') },
+  // M5.4a: the exhibitor portal and booths. Listings are public (the map's allowlist); a proposed
+  // profile is internal until the organizer approves. People are portal accounts (events).
+  exhibitor_profiles: { links: 'public', categories: 'public' },
+  exhibitor_profile_changes: { proposed: internal('json'), status: 'vocab', reason: internal() },
+  booths: { number: 'public', category: 'public' },
 });

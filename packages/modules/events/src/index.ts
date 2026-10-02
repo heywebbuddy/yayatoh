@@ -90,7 +90,9 @@ export {
   portalSessionExpiry,
   SUBJECT_OF_ROLE,
   signPortalInvite,
+  signPortalSite,
   verifyPortalInvite,
+  verifyPortalSite,
 } from './domain/portal-auth.ts';
 export {
   type ExpandedDate,
@@ -149,6 +151,7 @@ export {
   type PortalLimits,
   type PortalLinkResult,
   type PortalPrincipal,
+  type PortalResendResult,
   type PortalVerifyResult,
   portalAccountInvited,
   portalAccountLinkTx,
@@ -160,7 +163,10 @@ export {
   portalInviteUrl,
   portalPrincipalBySession,
   portalPrincipalTx,
+  portalSiteByToken,
+  portalSiteToken,
   requestPortalChallenge,
+  resendPortalInvitations,
   revokePortalAccountTx,
   verifyPortalChallenge,
 } from './portal.ts';
@@ -179,6 +185,7 @@ export {
   type EventRoleGrant,
   eventIdsEndedBeforeTx,
   eventIdsTx,
+  eventRoleAssignmentIdTx,
   eventRoleGrantsTx,
   eventRolesOf,
   eventStaffTx,

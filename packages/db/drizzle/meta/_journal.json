@@ -673,6 +673,13 @@
       "when": 1790954251606,
       "tag": "0095_long_luminals",
       "breakpoints": true
+    },
+    {
+      "idx": 96,
+      "version": "7",
+      "when": 1790956380735,
+      "tag": "0096_curly_triathlon",
+      "breakpoints": true
     }
   ]
 }
