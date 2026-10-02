@@ -22,3 +22,8 @@ The lightweight event program (M1.4f): tracks, rooms, sessions, speakers, exhibi
 - **CSV import** on `@yayatoh/csv` (`agendaImportPreviewQuery` = dry run, `importAgendaCommand` = apply): times are wall-clock in the event's zone; speakers by email (`speaker_contacts`); matching by `key`, else title + start; idempotent; formula-like cells refused.
 - Entitlement `sessions` for every write; `events:write` (the dry run too); reads `events:read`.
 
+
+**Enrollment reads (M5.2b)** — `src/enrollment.ts`: `enrollableSessionsTx` / `enrollableSessionsByIdTx` (a session's
+times, room, admission, group and counter) and `lockEnrollableSessionTx` (the counter row lock every enrollment decision
+takes) for registration's enrollment, which never touches the `program` schema. `updateSession` refuses a capacity below
+the places held (`invalid_state`, reason `capacity_below_enrolled`).

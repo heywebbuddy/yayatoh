@@ -397,3 +397,9 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
 ## M5.1a — registration types (2026-09-29, pending owner)
 - [ ] Conference pack quotas per event: 30 registration types, 20 admission items, 5,000 registrants (defaults in `billing.addons`; free in beta, price with D22). Change them by data, no code change.
 - [ ] Registration always asks buyers for the emailed code (M1.5f), even when an org turned the checkout email check off, so "email domain" eligibility means a proved address. Confirm or relax.
+
+## M5.2b — session enrollment and waitlists (2026-10-02, pending owner)
+- [ ] Offer window default when an event chooses "offer the place" instead of auto-enrol: 4 hours (15 minutes to 48 hours allowed; offers always end at the 24 h close). Auto-enrol stays the default (P5-9).
+- [ ] After the 24 h close, a place that frees up goes to whoever enrols first from their schedule and the waitlist takes nobody new (until M5.6's door line). Confirm, or keep the line open without promotion.
+- [ ] "Keep both" for overlapping sessions is offered only when neither session has a capacity (P5-9 as written). Confirm.
+- [ ] A registrant is their admission ticket; in a group order (M5.1c) the order's add-ons give their sessions to every registrant of that order. Confirm or ask for per-person add-ons.
