@@ -43,6 +43,32 @@ export {
   normalizeAddress,
 } from './erased-addresses.ts';
 export {
+  DELETE,
+  type DataSubject,
+  type DataSubjectContributor,
+  dataSubjectContributors,
+  defineDataSubjectContributor,
+  type ErasureConnectorHook,
+  erasureConnectorHooks,
+  type HeldRecord,
+  hold,
+  LEGAL_HOLD_BASES,
+  type LegalHoldBasis,
+  notSubject,
+  REDACT,
+  refsOf,
+  registerDataSubjectContributors,
+  registerErasureConnectorHooks,
+  type SubjectCoverageProblem,
+  type SubjectErasure,
+  type SubjectExport,
+  type SubjectFile,
+  type SubjectRefs,
+  type SubjectTableAction,
+  subjectCoverage,
+} from './data-subject.ts';
+export { platformDataSubjects, subjectNeedles } from './data-subject-platform.ts';
+export {
   FREEZE_DEFAULT_RETRY_SECONDS,
   type FreezeState,
   FreezeValue,
