@@ -8193,7 +8193,8 @@
       "already_invited": "此地址已受邀。",
       "allowance_reached": "{allowance, plural, other {全部 # 個工作人員名額}}皆已佔用。請撤銷一個邀請以釋出名額，或向主辦單位申請更多名額。",
       "event_over": "此活動已結束，無法再邀請其他人。"
-    }
+    },
+    "email": "電子郵件"
   },
   "exhibitorAdmin": {
     "subnav": "參展商頁面",

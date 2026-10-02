@@ -8193,7 +8193,8 @@
       "already_invited": "Questo indirizzo è già stato invitato.",
       "allowance_reached": "{allowance, plural, one {L'unico posto staff è occupato} many {Tutti i # posti staff sono occupati} other {Tutti i # posti staff sono occupati}}. Revoca un invito per liberare un posto o chiedine altri all'organizzatore.",
       "event_over": "L'evento è terminato, quindi non è possibile invitare altre persone."
-    }
+    },
+    "email": "Email"
   },
   "exhibitorAdmin": {
     "subnav": "Pagine espositori",
