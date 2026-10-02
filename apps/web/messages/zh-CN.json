@@ -7998,6 +7998,7 @@
       "email": "请输入有效的邮箱，或留空。",
       "company": "请输入名称。",
       "sponsorName": "请输入赞助商名称。"
-    }
+    },
+    "tableLabel": "{label} 号桌"
   }
 }

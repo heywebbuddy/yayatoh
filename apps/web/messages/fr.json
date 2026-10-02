@@ -7998,6 +7998,7 @@
       "email": "Saisissez une adresse e-mail valide, ou laissez vide.",
       "company": "Saisissez un nom.",
       "sponsorName": "Saisissez le nom du sponsor."
-    }
+    },
+    "tableLabel": "Table {label}"
   }
 }

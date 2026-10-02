@@ -7998,6 +7998,7 @@
       "email": "Escribe un correo válido o déjalo vacío.",
       "company": "Escribe un nombre.",
       "sponsorName": "Escribe el nombre del patrocinador."
-    }
+    },
+    "tableLabel": "Mesa {label}"
   }
 }

@@ -7998,6 +7998,7 @@
       "email": "Vul een geldig e-mailadres in of laat het leeg.",
       "company": "Vul een naam in.",
       "sponsorName": "Vul de naam van de sponsor in."
-    }
+    },
+    "tableLabel": "Tafel {label}"
   }
 }

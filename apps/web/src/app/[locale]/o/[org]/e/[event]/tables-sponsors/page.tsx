@@ -196,36 +196,39 @@ export default async function TablesSponsorsPage({
           />
         ) : (
           <ul className="flex list-none flex-col gap-3 p-0">
-            {planTables.map((p) => (
-              <li key={p.itemId}>
-                <Card className="flex flex-col gap-3" data-plan-table={p.label}>
-                  <h3 className="text-body font-medium">
-                    {t('console.planTable', { table: p.label, seats: p.seats })}
-                  </h3>
-                  {p.sponsor ? (
-                    <p className="flex flex-wrap items-center gap-3 text-body">
-                      <span>{t('console.sponsoredBy', { sponsor: p.sponsor.sponsorName })}</span>
-                      <StatusDot
-                        status={p.sponsor.published ? 'success' : 'neutral'}
-                        label={p.sponsor.published ? t('console.shown') : t('console.hidden')}
+            {planTables.map((p) => {
+              const label = t('tableLabel', { label: p.label });
+              return (
+                <li key={p.itemId}>
+                  <Card className="flex flex-col gap-3" data-plan-table={label}>
+                    <h3 className="text-body font-medium">
+                      {t('console.planTable', { table: label, seats: p.seats })}
+                    </h3>
+                    {p.sponsor ? (
+                      <p className="flex flex-wrap items-center gap-3 text-body">
+                        <span>{t('console.sponsoredBy', { sponsor: p.sponsor.sponsorName })}</span>
+                        <StatusDot
+                          status={p.sponsor.published ? 'success' : 'neutral'}
+                          label={p.sponsor.published ? t('console.shown') : t('console.hidden')}
+                        />
+                      </p>
+                    ) : (
+                      <p className="text-body text-zinc-500">{t('console.noSponsor')}</p>
+                    )}
+                    {canSponsor ? (
+                      <SponsorForm
+                        action={setSponsorAction.bind(null, org, event, p.itemId)}
+                        removeAction={p.sponsor ? removeSponsorAction.bind(null, org, event, p.itemId) : null}
+                        idPrefix={`sponsor-${p.itemId}`}
+                        table={label}
+                        sponsor={p.sponsor}
+                        logos={logos}
                       />
-                    </p>
-                  ) : (
-                    <p className="text-body text-zinc-500">{t('console.noSponsor')}</p>
-                  )}
-                  {canSponsor ? (
-                    <SponsorForm
-                      action={setSponsorAction.bind(null, org, event, p.itemId)}
-                      removeAction={p.sponsor ? removeSponsorAction.bind(null, org, event, p.itemId) : null}
-                      idPrefix={`sponsor-${p.itemId}`}
-                      table={p.label}
-                      sponsor={p.sponsor}
-                      logos={logos}
-                    />
-                  ) : null}
-                </Card>
-              </li>
-            ))}
+                    ) : null}
+                  </Card>
+                </li>
+              );
+            })}
           </ul>
         )}
       </section>

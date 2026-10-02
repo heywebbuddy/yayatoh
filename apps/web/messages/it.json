@@ -7998,6 +7998,7 @@
       "email": "Inserisci un indirizzo email valido o lascia vuoto.",
       "company": "Inserisci un nome.",
       "sponsorName": "Inserisci il nome dello sponsor."
-    }
+    },
+    "tableLabel": "Tavolo {label}"
   }
 }
