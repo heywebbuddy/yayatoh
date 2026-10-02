@@ -7,7 +7,7 @@ import { type FormEvent, startTransition, useActionState } from 'react';
 import type { RulesState } from '@/app/[locale]/o/[org]/e/[event]/seating/actions.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
 
-const field = 'min-h-10 w-24 rounded-pill border border-zinc-200 bg-white px-4 text-body';
+const field = 'field w-24';
 
 /**
  * The event's seating rules (M1.7f): accessible seats kept back until some days before the
@@ -34,7 +34,7 @@ export function SeatingRulesForm({
   };
   const severity = (name: string, current: 'warn' | 'enforce' | undefined) => (
     <fieldset className="flex flex-col gap-1.5">
-      <legend className="mb-1 text-caption text-zinc-600">{t('severity')}</legend>
+      <legend className="mb-1 text-caption text-ink-2">{t('severity')}</legend>
       {(['warn', 'enforce'] as const).map((s) => (
         <div key={s} className="flex flex-col gap-0.5">
           <label className="flex min-h-6 items-center gap-2 text-body">
@@ -48,7 +48,7 @@ export function SeatingRulesForm({
             />
             {t(`severityOption.${s}`)}
           </label>
-          <p id={`${name}-${s}-hint`} className="ps-7 text-caption text-zinc-600">
+          <p id={`${name}-${s}-hint`} className="ps-7 text-caption text-ink-2">
             {t(`severityHint.${s}`)}
           </p>
         </div>
@@ -65,7 +65,7 @@ export function SeatingRulesForm({
           {t('ada.on')}
         </label>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="rules-ada-days" className="text-caption text-zinc-600">
+          <label htmlFor="rules-ada-days" className="text-caption text-ink-2">
             {t('ada.days')}
           </label>
           <input
@@ -81,11 +81,11 @@ export function SeatingRulesForm({
             className={field}
           />
           {invalid('adaDays') ? (
-            <p id="rules-ada-days-error" className="text-caption font-medium text-pink-700">
+            <p id="rules-ada-days-error" className="text-caption font-medium text-danger">
               {t('ada.daysError')}
             </p>
           ) : (
-            <p id="rules-ada-days-hint" className="text-caption text-zinc-600">
+            <p id="rules-ada-days-hint" className="text-caption text-ink-2">
               {t('ada.daysHint')}
             </p>
           )}
@@ -100,7 +100,7 @@ export function SeatingRulesForm({
           {t('cap.on')}
         </label>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="rules-cap-max" className="text-caption text-zinc-600">
+          <label htmlFor="rules-cap-max" className="text-caption text-ink-2">
             {t('cap.max')}
           </label>
           <input
@@ -116,7 +116,7 @@ export function SeatingRulesForm({
             className={field}
           />
           {invalid('capMax') ? (
-            <p id="rules-cap-max-error" className="text-caption font-medium text-pink-700">
+            <p id="rules-cap-max-error" className="text-caption font-medium text-danger">
               {t('cap.maxError')}
             </p>
           ) : null}

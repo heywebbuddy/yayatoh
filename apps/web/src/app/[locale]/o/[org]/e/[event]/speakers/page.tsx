@@ -82,7 +82,7 @@ export default async function SpeakersPage({
   return (
     <>
       <PageHeader title={t('nav.speakers')} description={tp('speakersSubtitle')} />
-      {canWrite ? null : <p className="text-body text-zinc-500">{tp('viewerNotice')}</p>}
+      {canWrite ? null : <p className="text-body text-ink-2">{tp('viewerNotice')}</p>}
       <section aria-labelledby="speakers-heading" className="flex flex-col gap-3">
         <h2 id="speakers-heading" className="text-section">
           {tp('speakerList', { count: program.speakers.length })}
@@ -98,15 +98,15 @@ export default async function SpeakersPage({
                     <ProgramThumb item={photos.get(p.id)?.items[0]} round />
                     <h3 className="text-body font-medium">{p.name}</h3>
                   </div>
-                  <p className="text-caption text-zinc-600">
+                  <p className="text-caption text-ink-2">
                     {[p.title, p.company].filter(Boolean).join(' · ')}
                     {[p.title, p.company].some(Boolean) ? ' · ' : ''}
                     {tp('sessionCount', { count: sessionsOf(p.id) })}
                   </p>
                   {p.bio ? <Markdown source={p.bio} /> : null}
                   {canWrite ? (
-                    <details className="border-t border-zinc-100 pt-2">
-                      <summary className="min-h-6 cursor-pointer text-caption text-zinc-600">
+                    <details className="border-t border-line pt-2">
+                      <summary className="min-h-6 cursor-pointer text-caption text-ink-2">
                         {tp('editNamed', { name: p.name })}
                       </summary>
                       <div className="flex flex-col gap-3 pt-3">
@@ -158,7 +158,7 @@ export default async function SpeakersPage({
                 errors={errors}
                 reset
               />
-              <p className="text-caption text-zinc-500">{tp('photoAfterSave')}</p>
+              <p className="text-caption text-ink-2">{tp('photoAfterSave')}</p>
             </Card>
           </section>
         ) : null}

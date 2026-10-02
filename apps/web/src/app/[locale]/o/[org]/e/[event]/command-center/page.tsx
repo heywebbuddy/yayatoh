@@ -62,7 +62,7 @@ export default async function CommandCenterPage({
       data-role={view.role}
     >
       <PageHeader
-        eyebrow={<span className="text-caption text-zinc-500">{t(`role.${view.role}`)}</span>}
+        eyebrow={<span className="text-caption text-ink-2">{t(`role.${view.role}`)}</span>}
         title={t('title')}
         description={ev.name}
       />

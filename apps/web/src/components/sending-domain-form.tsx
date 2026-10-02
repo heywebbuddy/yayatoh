@@ -22,7 +22,7 @@ export function SendingDomainForm({
       className="flex flex-wrap items-end gap-3"
     >
       <div className="flex min-w-60 flex-1 flex-col gap-1.5">
-        <label htmlFor="sending-domain" className="text-caption text-zinc-600">
+        <label htmlFor="sending-domain" className="text-caption text-ink-2">
           {t('domainLabel')}
         </label>
         <input
@@ -35,13 +35,13 @@ export function SendingDomainForm({
           dir="ltr"
           aria-invalid={message ? true : undefined}
           aria-describedby={`sending-domain-hint${message ? ' sending-domain-error' : ''}`}
-          className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 font-mono text-body"
+          className="field font-mono"
         />
-        <p id="sending-domain-hint" className="text-caption text-zinc-500">
+        <p id="sending-domain-hint" className="text-caption text-ink-2">
           {t('domainHint')}
         </p>
         {message ? (
-          <p id="sending-domain-error" role="alert" className="text-caption text-pink-700">
+          <p id="sending-domain-error" role="alert" className="text-caption text-danger">
             {message}
           </p>
         ) : null}

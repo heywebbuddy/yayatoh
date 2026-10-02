@@ -71,7 +71,7 @@ export default async function ImportPage({
       {errorText ? (
         <p
           role="alert"
-          className="rounded-card border border-pink-700 bg-pink-50 px-4 py-3 text-body text-pink-700"
+          className="rounded-card border border-danger bg-danger-soft px-4 py-3 text-body text-danger"
         >
           {errorText}
         </p>
@@ -79,10 +79,10 @@ export default async function ImportPage({
       {!s ? (
         <Card className="flex flex-col gap-4">
           <h2 className="text-section">{t('import.step1')}</h2>
-          <p className="text-body text-zinc-600">{t('import.fileHint')}</p>
+          <p className="text-body text-ink-2">{t('import.fileHint')}</p>
           <form action={uploadImportAction.bind(null, org, event)} className="flex flex-wrap items-end gap-3">
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="import-file" className="text-caption text-zinc-600">
+              <label htmlFor="import-file" className="text-caption text-ink-2">
                 {t('import.file')}
               </label>
               <input
@@ -91,7 +91,7 @@ export default async function ImportPage({
                 type="file"
                 required
                 accept=".csv,text/csv"
-                className="min-h-10 text-body file:me-3 file:min-h-10 file:rounded-pill file:border file:border-zinc-200 file:bg-white file:px-4"
+                className="min-h-10 text-body file:me-3 file:min-h-10 file:rounded-pill file:border file:border-line file:bg-surface file:px-4"
               />
             </div>
             <Button type="submit">{t('import.upload')}</Button>
@@ -101,7 +101,7 @@ export default async function ImportPage({
         <>
           <Card className="flex flex-col gap-4">
             <h2 className="text-section">{t('import.step2', { file: s.fileName })}</h2>
-            <p className="text-body text-zinc-600">
+            <p className="text-body text-ink-2">
               {t('import.rows', { count: s.rowCount, formatted: formatNumber(s.rowCount, locale) })}
             </p>
             <form
@@ -110,7 +110,7 @@ export default async function ImportPage({
             >
               {FIELDS.map((f) => (
                 <div key={f} className="flex flex-col gap-1.5">
-                  <label htmlFor={`map-${f}`} className="text-caption text-zinc-600">
+                  <label htmlFor={`map-${f}`} className="text-caption text-ink-2">
                     {t(`import.field.${f}`)}
                   </label>
                   <select
@@ -118,7 +118,7 @@ export default async function ImportPage({
                     name={f}
                     required={f === 'email'}
                     defaultValue={s.mapping[f] ?? ''}
-                    className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
+                    className="field"
                   >
                     <option value="">
                       {f === 'email' ? t('import.chooseColumn') : t('import.notInFile')}
@@ -132,7 +132,7 @@ export default async function ImportPage({
                 </div>
               ))}
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="extra-label" className="text-caption text-zinc-600">
+                <label htmlFor="extra-label" className="text-caption text-ink-2">
                   {t('import.extraLabel')}
                 </label>
                 <input
@@ -140,7 +140,7 @@ export default async function ImportPage({
                   name="extraLabel"
                   maxLength={40}
                   defaultValue={s.extraLabels[0] ?? ''}
-                  className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
+                  className="field"
                 />
               </div>
               <div className="md:col-span-4">
@@ -162,7 +162,7 @@ export default async function ImportPage({
                 })}
               </p>
               {invalid > 0 ? (
-                <ul className="flex list-none flex-col gap-1 p-0 text-caption text-pink-700">
+                <ul className="flex list-none flex-col gap-1 p-0 text-caption text-danger">
                   {IMPORT_ERROR_CODES.filter((c) => s.invalidByCode[c]).map((c) => (
                     <li key={c}>
                       {t(`import.reason.${c}`)} · {formatNumber(s.invalidByCode[c] ?? 0, locale)}

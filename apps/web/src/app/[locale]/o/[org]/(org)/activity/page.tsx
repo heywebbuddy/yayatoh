@@ -15,7 +15,7 @@ import { exportActivityAction } from './actions.ts';
 import { resolveActivityFilter } from './filters.ts';
 
 const PAGE = 25;
-const field = 'min-h-10 w-full rounded-pill border border-zinc-200 bg-white px-4 text-body';
+const field = 'field w-full';
 
 /**
  * Settings → Activity (M1.14b): the org's audit log for owners and admins. Who did what, when
@@ -105,7 +105,7 @@ export default async function ActivityPage({
         {log.chain.verified ? (
           <p className="flex flex-wrap items-center gap-2" data-testid="audit-integrity">
             <StatusDot status="success" label={t('activity.verified')} />
-            <span className="text-caption text-zinc-600">
+            <span className="text-caption text-ink-2">
               {t('activity.verifiedDetail', { count: log.chain.entries })}
             </span>
           </p>
@@ -113,7 +113,7 @@ export default async function ActivityPage({
           <p
             role="alert"
             data-testid="audit-integrity"
-            className="rounded-card border border-pink-700 bg-pink-50 px-4 py-3 text-body text-pink-700"
+            className="rounded-card border border-danger bg-danger-soft px-4 py-3 text-body text-danger"
           >
             {t('activity.broken', { seq: log.chain.brokenAt ?? 0 })}
           </p>
@@ -122,7 +122,7 @@ export default async function ActivityPage({
 
       <form method="get" className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5 lg:items-end">
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="activity-actor" className="text-caption text-zinc-600">
+          <label htmlFor="activity-actor" className="text-caption text-ink-2">
             {t('activity.filters.actor')}
           </label>
           <select id="activity-actor" name="actor" defaultValue={values.actor} className={field}>
@@ -135,7 +135,7 @@ export default async function ActivityPage({
           </select>
         </div>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="activity-action" className="text-caption text-zinc-600">
+          <label htmlFor="activity-action" className="text-caption text-ink-2">
             {t('activity.filters.action')}
           </label>
           <select id="activity-action" name="action" defaultValue={values.action} className={field}>
@@ -148,13 +148,13 @@ export default async function ActivityPage({
           </select>
         </div>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="activity-from" className="text-caption text-zinc-600">
+          <label htmlFor="activity-from" className="text-caption text-ink-2">
             {t('activity.filters.from')}
           </label>
           <input id="activity-from" name="from" type="date" defaultValue={values.from} className={field} />
         </div>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="activity-to" className="text-caption text-zinc-600">
+          <label htmlFor="activity-to" className="text-caption text-ink-2">
             {t('activity.filters.to')}
           </label>
           <input id="activity-to" name="to" type="date" defaultValue={values.to} className={field} />
@@ -171,14 +171,14 @@ export default async function ActivityPage({
       {error ? (
         <p
           role="alert"
-          className="rounded-card border border-pink-700 bg-pink-50 px-4 py-3 text-body text-pink-700"
+          className="rounded-card border border-danger bg-danger-soft px-4 py-3 text-body text-danger"
         >
           {t(`activity.errors.${error}`)}
         </p>
       ) : null}
 
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <p role="status" className="text-body text-zinc-600">
+        <p role="status" className="text-body text-ink-2">
           {t('activity.showing', { count: log.entries.length })}
         </p>
         {log.entries.length > 0 ? (
@@ -195,7 +195,7 @@ export default async function ActivityPage({
       {sp.exportError ? (
         <p
           role="alert"
-          className="rounded-card border border-pink-700 bg-pink-50 px-4 py-3 text-body text-pink-700"
+          className="rounded-card border border-danger bg-danger-soft px-4 py-3 text-body text-danger"
         >
           {t('activity.exportError', { reason: t(errorMessageKey(sp.exportError)) })}
         </p>
@@ -203,7 +203,7 @@ export default async function ActivityPage({
       {op ? (
         <section
           aria-labelledby="export-heading"
-          className="flex flex-col gap-2 rounded-panel border border-zinc-200 bg-white px-5 py-4"
+          className="flex flex-col gap-2 rounded-panel border border-line bg-surface px-5 py-4"
         >
           {opActive ? <AutoRefresh seconds={2} /> : null}
           <h2 id="export-heading" className="text-section">
@@ -262,7 +262,7 @@ export default async function ActivityPage({
                 <span className="flex flex-col">
                   <span>{e.targetType}</span>
                   {e.targetId ? (
-                    <span className="font-mono text-caption text-zinc-500">{e.targetId.slice(0, 13)}</span>
+                    <span className="font-mono text-caption text-ink-2">{e.targetId.slice(0, 13)}</span>
                   ) : null}
                 </span>
               ),
@@ -271,7 +271,7 @@ export default async function ActivityPage({
               key: 'details',
               header: t('activity.columns.details'),
               cell: (e) => (
-                <span className="font-mono text-caption text-zinc-600">
+                <span className="font-mono text-caption text-ink-2">
                   {Object.entries(e.details)
                     .map(([k, v]) => `${k}: ${v}`)
                     .join(' · ')}

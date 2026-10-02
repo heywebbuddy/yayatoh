@@ -29,12 +29,12 @@ export async function HelpShell({
 }) {
   const t = await getTranslations('help');
   return (
-    <div className="min-h-dvh bg-white">
+    <div className="min-h-dvh bg-surface">
       <SiteHeader />
       <main id="main" className="mx-auto flex w-full max-w-4xl flex-col gap-8 px-4 py-8 md:px-6">
         {crumbs.length > 0 ? (
           <nav aria-label={t('breadcrumbs')}>
-            <ol className="flex list-none flex-wrap items-center gap-x-2 gap-y-1 p-0 text-caption text-zinc-600">
+            <ol className="flex list-none flex-wrap items-center gap-x-2 gap-y-1 p-0 text-caption text-ink-2">
               {crumbs.map((c, i) => (
                 <li key={c.label} className="flex min-w-0 items-center gap-2">
                   {i > 0 ? <span aria-hidden="true">/</span> : null}
@@ -71,7 +71,7 @@ export async function HelpSearchForm({ locale, query }: { locale: string; query?
         className="flex flex-col gap-2 sm:flex-row sm:items-end"
       >
         <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-          <label htmlFor="help-q" className="text-caption text-zinc-600">
+          <label htmlFor="help-q" className="text-caption text-ink-2">
             {t('search.field')}
           </label>
           <input
@@ -81,7 +81,7 @@ export async function HelpSearchForm({ locale, query }: { locale: string; query?
             maxLength={120}
             defaultValue={query}
             placeholder={t('search.placeholder')}
-            className="min-h-10 w-full rounded-pill border border-zinc-200 bg-white px-4 text-body outline-none focus-visible:border-zinc-900"
+            className="field w-full"
           />
         </div>
         <button type="submit" className={buttonClass('primary')}>
@@ -115,7 +115,7 @@ export function ArticleList({
           >
             {a.title}
           </Link>
-          {a.summary ? <p className="text-body break-words text-zinc-600">{a.summary}</p> : null}
+          {a.summary ? <p className="text-body break-words text-ink-2">{a.summary}</p> : null}
         </li>
       ))}
     </ul>
@@ -139,15 +139,15 @@ export async function CategoryGrid({
         <li
           key={c.slug}
           lang={c.locale === locale ? undefined : c.locale}
-          className="flex flex-col gap-2 rounded-card border border-zinc-200 p-4"
+          className="flex flex-col gap-2 rounded-card border border-line p-4"
         >
-          <h3 className="text-[19px] font-normal tracking-[-0.02em] break-words">
+          <h3 className="text-[19px] font-extrabold tracking-[-0.02em] break-words">
             <Link href={helpCategoryPath(c.slug)} className="underline-offset-4 hover:underline">
               {c.title}
             </Link>
           </h3>
-          {c.description ? <p className="text-body break-words text-zinc-600">{c.description}</p> : null}
-          <p className="text-caption text-zinc-500">{t('articleCount', { count: c.articleCount })}</p>
+          {c.description ? <p className="text-body break-words text-ink-2">{c.description}</p> : null}
+          <p className="text-caption text-ink-2">{t('articleCount', { count: c.articleCount })}</p>
         </li>
       ))}
     </ul>

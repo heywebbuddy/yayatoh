@@ -61,7 +61,7 @@ export default async function ExhibitorsPage({
   return (
     <>
       <PageHeader title={t('nav.exhibitors')} description={tp('exhibitorsSubtitle')} />
-      {canWrite ? null : <p className="text-body text-zinc-500">{tp('viewerNotice')}</p>}
+      {canWrite ? null : <p className="text-body text-ink-2">{tp('viewerNotice')}</p>}
       <section aria-labelledby="exhibitors-heading" className="flex flex-col gap-3">
         <h2 id="exhibitors-heading" className="text-section">
           {tp('exhibitorList', { count: program.exhibitors.length })}
@@ -77,15 +77,15 @@ export default async function ExhibitorsPage({
                     <ProgramThumb item={logos.get(x.id)?.items[0]} />
                     <h3 className="text-body font-medium">{x.name}</h3>
                   </div>
-                  <p className="text-caption text-zinc-600">
+                  <p className="text-caption text-ink-2">
                     {[x.boothLabel ? tp('boothNamed', { booth: x.boothLabel }) : null, x.websiteUrl]
                       .filter(Boolean)
                       .join(' · ')}
                   </p>
                   {x.description ? <Markdown source={x.description} /> : null}
                   {canWrite ? (
-                    <details className="border-t border-zinc-100 pt-2">
-                      <summary className="min-h-6 cursor-pointer text-caption text-zinc-600">
+                    <details className="border-t border-line pt-2">
+                      <summary className="min-h-6 cursor-pointer text-caption text-ink-2">
                         {tp('editNamed', { name: x.name })}
                       </summary>
                       <div className="flex flex-col gap-3 pt-3">
@@ -135,7 +135,7 @@ export default async function ExhibitorsPage({
                 errors={errors}
                 reset
               />
-              <p className="text-caption text-zinc-500">{tp('logoAfterSave')}</p>
+              <p className="text-caption text-ink-2">{tp('logoAfterSave')}</p>
             </Card>
           </section>
         ) : null}

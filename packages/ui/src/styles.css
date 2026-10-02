@@ -1,81 +1,498 @@
-/* Design tokens — ADR 0018. Keep in sync with tokens.ts (tests/tokens.test.ts). */
+/*
+ * Design tokens — ADR 0022 (design system v2). Keep in sync with tokens.ts (tests/tokens.test.ts).
+ * Light is the default; `data-theme="dark"` on <html> (or any subtree) switches to dark, and
+ * `data-theme="system"` follows prefers-color-scheme. Utilities use the role names only: the
+ * Tailwind default palette is switched off so a raw palette class cannot creep back in.
+ */
 @theme {
-  --color-zinc-50: #fafafa;
-  --color-zinc-100: #f4f4f5;
-  --color-zinc-200: #e4e4e7;
-  --color-zinc-300: #d4d4d8;
-  --color-zinc-400: #a1a1aa;
-  --color-zinc-500: #71717a;
-  --color-zinc-600: #52525b;
-  --color-zinc-700: #3f3f46;
-  --color-zinc-800: #27272a;
-  --color-zinc-900: #18181b;
-  --color-ink: #111111;
-  --color-black: #000000;
+  --color-*: initial;
+  --radius-*: initial;
+  --font-*: initial;
+  --shadow-*: initial;
+
+  --color-canvas: #f2f1f6;
+  --color-surface: #ffffff;
+  --color-surface-solid: #ffffff;
+  --color-surface-2: #f6f5fa;
+  --color-surface-3: #eeeaf5;
+  --color-line: #e7e4ee;
+  --color-line-strong: #8f899c;
+  --color-ink: #16131d;
+  --color-ink-2: #5e596a;
+  --color-ink-3: #8f899c;
+  --color-primary: #6a3bff;
+  --color-primary-hover: #5a2ee6;
+  --color-primary-pressed: #4f25d6;
+  --color-on-primary: #ffffff;
+  --color-primary-ink: #5528e8;
+  --color-primary-soft: #eee8ff;
+  --color-brand: #ff3d86;
+  --color-brand-strong: #d61f66;
+  --color-brand-ink: #c41c5e;
+  --color-brand-soft: #fde3ee;
+  --color-success: #0b7a50;
+  --color-success-soft: #ddf6ea;
+  --color-success-dot: #16c784;
+  --color-warning: #8a4f00;
+  --color-warning-soft: #fff0d4;
+  --color-warning-dot: #ffb020;
+  --color-danger: #b81f35;
+  --color-danger-soft: #fde3e7;
+  --color-danger-dot: #e5364f;
+  --color-tag: #2a2230;
+  --color-tag-ink: #ffffff;
+  --color-hero-ink: #16131d;
+  --color-side: #17121b;
+  --color-side-line: rgba(255, 255, 255, 0.06);
+  --color-side-ink: #b9b3c4;
+  --color-side-label: #8e889a;
+  --color-side-strong: #ffffff;
+  --color-side-tile: #251e2a;
+  --color-side-hover: rgba(255, 255, 255, 0.06);
+  --color-side-tile-on: #ffffff;
+  --color-side-tile-on-ink: #17121b;
+  --color-lavender: #e3d9ff;
+  --color-blush: #fcdde9;
+  --color-sky: #d8e8ff;
+  --color-sand: #fbe8cf;
+  --color-mint: #d5f5e6;
+  --color-avatar-ink: #16131d;
+  --color-focus: #6a3bff;
+  --color-scrim: rgba(22, 19, 29, 0.45);
   --color-white: #ffffff;
-  --color-accent-900: #fc5f2b;
-  --color-accent-700: #f7861e;
-  --color-accent-500: #fdba74;
-  --color-accent-300: #fed7aa;
-  --color-accent-100: #ffedd5;
-  --color-accent-50: #fff6ea;
-  --color-accent-text: #c2410c;
-  --color-green-500: #11c182;
-  --color-green-700: #26936b;
-  --color-green-50: #e9f9f3;
-  --color-pink-500: #ff68de;
-  --color-pink-700: #b90090;
-  --color-pink-50: #fbf2f9;
-  --color-yellow-500: #d7db0e;
-  --color-yellow-700: #938700;
-  --color-glass: rgba(255, 255, 255, 0.12);
-  --color-nav-glass: rgba(63, 63, 70, 0.55);
+  --color-black: #000000;
 
-  /* Tenant theming overrides only --accent (ADR 0018 consequences). */
-  --color-accent: var(--accent, #fc5f2b);
-
+  --radius-tag: 8px;
+  --radius-control: 14px;
+  --radius-tile: 18px;
+  --radius-card: 24px;
+  --radius-panel: 28px;
   --radius-pill: 9999px;
-  --radius-card: 20px;
-  --radius-panel: 24px;
 
   --font-sans:
-    var(--font-geist-sans), "Noto Sans Arabic", "Noto Sans Devanagari", "Noto Sans SC", "Noto Sans TC",
-    "Noto Sans JP", system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", monospace;
+    var(--font-manrope, "Manrope"), var(--font-manrope-ext, "Manrope"), var(
+      --font-manrope-cyrillic,
+      "Manrope"
+    ),
+    var(--font-arabic, "IBM Plex Sans Arabic"), var(--font-devanagari, "Noto Sans Devanagari"), "Noto Sans JP",
+    "Noto Sans SC", "Noto Sans TC", "Hiragino Sans", "Yu Gothic UI", "PingFang SC", "Microsoft YaHei", "PingFang TC",
+    "Microsoft JhengHei", system-ui, sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", "JetBrains Mono", Menlo, monospace;
 
-  --text-display: 60px;
+  --text-display: 56px;
   --text-display--line-height: 1;
   --text-display--letter-spacing: -0.045em;
-  --text-title: 42px;
-  --text-title--line-height: 1.1;
-  --text-title--letter-spacing: -0.04em;
-  --text-section: 18px;
-  --text-section--line-height: 1.3;
-  --text-section--letter-spacing: -0.03em;
+  --text-display--font-weight: 800;
+  --text-title: 40px;
+  --text-title--line-height: 1.05;
+  --text-title--letter-spacing: -0.035em;
+  --text-title--font-weight: 800;
+  --text-section: 22px;
+  --text-section--line-height: 1.25;
+  --text-section--letter-spacing: -0.02em;
+  --text-section--font-weight: 800;
+  --text-card: 20px;
+  --text-card--line-height: 1.3;
+  --text-card--letter-spacing: -0.02em;
+  --text-card--font-weight: 800;
+  --text-stat: 38px;
+  --text-stat--line-height: 1;
+  --text-stat--letter-spacing: -0.04em;
+  --text-stat--font-weight: 800;
+  --text-prose: 15px;
+  --text-prose--line-height: 1.7;
   --text-body: 14px;
-  --text-body--line-height: 1.45;
+  --text-body--line-height: 1.5;
   --text-caption: 12px;
-  --text-caption--line-height: 1.4;
+  --text-caption--line-height: 1.45;
   --text-label: 11px;
   --text-label--line-height: 1.2;
-  --text-label--letter-spacing: 0.06em;
+  --text-label--letter-spacing: 0.1em;
+  --text-label--font-weight: 800;
+
+  --ease-out: cubic-bezier(0.2, 0, 0, 1);
+  --default-transition-duration: 150ms;
+  --default-transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* Light (default, and any subtree marked light). */
+:root,
+[data-theme="light"] {
+  --color-canvas: #f2f1f6;
+  --color-surface: #ffffff;
+  --color-surface-solid: #ffffff;
+  --color-surface-2: #f6f5fa;
+  --color-surface-3: #eeeaf5;
+  --color-line: #e7e4ee;
+  --color-line-strong: #8f899c;
+  --color-ink: #16131d;
+  --color-ink-2: #5e596a;
+  --color-ink-3: #8f899c;
+  --color-primary: #6a3bff;
+  --color-primary-hover: #5a2ee6;
+  --color-primary-pressed: #4f25d6;
+  --color-on-primary: #ffffff;
+  --color-primary-ink: #5528e8;
+  --color-primary-soft: #eee8ff;
+  --color-brand: #ff3d86;
+  --color-brand-strong: #d61f66;
+  --color-brand-ink: #c41c5e;
+  --color-brand-soft: #fde3ee;
+  --color-success: #0b7a50;
+  --color-success-soft: #ddf6ea;
+  --color-success-dot: #16c784;
+  --color-warning: #8a4f00;
+  --color-warning-soft: #fff0d4;
+  --color-warning-dot: #ffb020;
+  --color-danger: #b81f35;
+  --color-danger-soft: #fde3e7;
+  --color-danger-dot: #e5364f;
+  --color-tag: #2a2230;
+  --color-tag-ink: #ffffff;
+  --color-hero-ink: #16131d;
+  --color-side: #17121b;
+  --color-side-line: rgba(255, 255, 255, 0.06);
+  --color-side-ink: #b9b3c4;
+  --color-side-label: #8e889a;
+  --color-side-strong: #ffffff;
+  --color-side-tile: #251e2a;
+  --color-side-hover: rgba(255, 255, 255, 0.06);
+  --color-side-tile-on: #ffffff;
+  --color-side-tile-on-ink: #17121b;
+  --color-lavender: #e3d9ff;
+  --color-blush: #fcdde9;
+  --color-sky: #d8e8ff;
+  --color-sand: #fbe8cf;
+  --color-mint: #d5f5e6;
+  --color-avatar-ink: #16131d;
+  --color-focus: #6a3bff;
+  --color-scrim: rgba(22, 19, 29, 0.45);
+  --gradient-page: #f2f1f6;
+  --gradient-highlight: linear-gradient(135deg, #ffe0ec 0%, #fad3ec 45%, #e3d8ff 100%);
+  --gradient-hero: radial-gradient(90% 120% at 90% 10%, #b49cff 0%, #6a3bff 38%, #2b1673 100%);
+  --gradient-promo: linear-gradient(150deg, #6a3bff 0%, #3b1fa8 100%);
+  --gradient-side-row: linear-gradient(0deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1));
+  --gradient-tab-on: linear-gradient(0deg, #17121b, #17121b);
+  --gradient-feature: linear-gradient(135deg, #ffffff 0%, #f4eeff 100%);
+  --elevation-card: 0 1px 2px rgba(22, 19, 29, 0.04), 0 10px 30px rgba(22, 19, 29, 0.06);
+  --elevation-pop: 0 2px 6px rgba(22, 19, 29, 0.06), 0 24px 48px rgba(22, 19, 29, 0.14);
+  --elevation-primary: 0 8px 20px rgba(106, 59, 255, 0.28);
+  color-scheme: light;
+}
+
+/* Dark, chosen explicitly. */
+[data-theme="dark"] {
+  --color-canvas: #0a0812;
+  --color-surface: rgba(26, 20, 46, 0.72);
+  --color-surface-solid: #1c1631;
+  --color-surface-2: rgba(255, 255, 255, 0.04);
+  --color-surface-3: rgba(255, 255, 255, 0.08);
+  --color-line: rgba(170, 150, 255, 0.16);
+  --color-line-strong: #7e76a3;
+  --color-ink: #f4f1ff;
+  --color-ink-2: #aba4c6;
+  --color-ink-3: #7e76a3;
+  --color-primary: #6c4cf2;
+  --color-primary-hover: #6243e8;
+  --color-primary-pressed: #5734e0;
+  --color-on-primary: #ffffff;
+  --color-primary-ink: #bba9ff;
+  --color-primary-soft: rgba(123, 92, 255, 0.2);
+  --color-brand: #ff5c9a;
+  --color-brand-strong: #d61f66;
+  --color-brand-ink: #ff7eaf;
+  --color-brand-soft: rgba(255, 92, 154, 0.16);
+  --color-success: #4be9ac;
+  --color-success-soft: rgba(59, 230, 164, 0.14);
+  --color-success-dot: #3be6a4;
+  --color-warning: #ffc56e;
+  --color-warning-soft: rgba(255, 197, 110, 0.14);
+  --color-warning-dot: #ffb84d;
+  --color-danger: #ff8798;
+  --color-danger-soft: rgba(255, 122, 140, 0.15);
+  --color-danger-dot: #ff6b81;
+  --color-tag: rgba(255, 255, 255, 0.08);
+  --color-tag-ink: #ece7ff;
+  --color-hero-ink: #ffffff;
+  --color-side: rgba(15, 11, 28, 0.86);
+  --color-side-line: rgba(170, 150, 255, 0.16);
+  --color-side-ink: #a9a3c4;
+  --color-side-label: #8d86a8;
+  --color-side-strong: #ffffff;
+  --color-side-tile: rgba(255, 255, 255, 0.05);
+  --color-side-hover: rgba(255, 255, 255, 0.06);
+  --color-side-tile-on: #7b5cff;
+  --color-side-tile-on-ink: #ffffff;
+  --color-lavender: rgba(123, 92, 255, 0.34);
+  --color-blush: rgba(255, 92, 154, 0.28);
+  --color-sky: rgba(90, 160, 255, 0.28);
+  --color-sand: rgba(255, 197, 110, 0.26);
+  --color-mint: rgba(59, 230, 164, 0.24);
+  --color-avatar-ink: #f4f1ff;
+  --color-focus: #a48cff;
+  --color-scrim: rgba(0, 0, 0, 0.6);
+  --gradient-page:
+    radial-gradient(55% 40% at 72% -6%, rgba(123, 92, 255, 0.45), rgba(123, 92, 255, 0) 70%),
+    radial-gradient(40% 32% at 0% 100%, rgba(255, 92, 154, 0.13), rgba(255, 92, 154, 0) 70%), #0a0812;
+  --gradient-highlight: radial-gradient(120% 140% at 85% 0%, #8d6fff 0%, #4b2fb0 34%, #1a1233 74%);
+  --gradient-hero: radial-gradient(90% 120% at 90% 0%, #8d6fff 0%, #4b2fb0 34%, #120c26 78%);
+  --gradient-promo: radial-gradient(120% 120% at 100% 0%, #8d6fff 0%, #4b2fb0 45%, #1a1233 100%);
+  --gradient-side-row: linear-gradient(135deg, rgba(123, 92, 255, 0.55), rgba(123, 92, 255, 0.16));
+  --gradient-tab-on: linear-gradient(135deg, #7b5cff, #5a3be0);
+  --gradient-feature: linear-gradient(160deg, #120d22 0%, #0b0816 100%);
+  --elevation-card: 0 0 0 1px rgba(170, 150, 255, 0.05), 0 24px 48px rgba(0, 0, 0, 0.4);
+  --elevation-pop: 0 0 0 1px rgba(170, 150, 255, 0.12), 0 24px 64px rgba(0, 0, 0, 0.6);
+  --elevation-primary: 0 0 0 1px rgba(160, 135, 255, 0.4), 0 10px 30px rgba(123, 92, 255, 0.45);
+  color-scheme: dark;
+}
+
+/* "System" follows the operating system. */
+@media (prefers-color-scheme: dark) {
+  [data-theme="system"] {
+    --color-canvas: #0a0812;
+    --color-surface: rgba(26, 20, 46, 0.72);
+    --color-surface-solid: #1c1631;
+    --color-surface-2: rgba(255, 255, 255, 0.04);
+    --color-surface-3: rgba(255, 255, 255, 0.08);
+    --color-line: rgba(170, 150, 255, 0.16);
+    --color-line-strong: #7e76a3;
+    --color-ink: #f4f1ff;
+    --color-ink-2: #aba4c6;
+    --color-ink-3: #7e76a3;
+    --color-primary: #6c4cf2;
+    --color-primary-hover: #6243e8;
+    --color-primary-pressed: #5734e0;
+    --color-on-primary: #ffffff;
+    --color-primary-ink: #bba9ff;
+    --color-primary-soft: rgba(123, 92, 255, 0.2);
+    --color-brand: #ff5c9a;
+    --color-brand-strong: #d61f66;
+    --color-brand-ink: #ff7eaf;
+    --color-brand-soft: rgba(255, 92, 154, 0.16);
+    --color-success: #4be9ac;
+    --color-success-soft: rgba(59, 230, 164, 0.14);
+    --color-success-dot: #3be6a4;
+    --color-warning: #ffc56e;
+    --color-warning-soft: rgba(255, 197, 110, 0.14);
+    --color-warning-dot: #ffb84d;
+    --color-danger: #ff8798;
+    --color-danger-soft: rgba(255, 122, 140, 0.15);
+    --color-danger-dot: #ff6b81;
+    --color-tag: rgba(255, 255, 255, 0.08);
+    --color-tag-ink: #ece7ff;
+    --color-hero-ink: #ffffff;
+    --color-side: rgba(15, 11, 28, 0.86);
+    --color-side-line: rgba(170, 150, 255, 0.16);
+    --color-side-ink: #a9a3c4;
+    --color-side-label: #8d86a8;
+    --color-side-strong: #ffffff;
+    --color-side-tile: rgba(255, 255, 255, 0.05);
+    --color-side-hover: rgba(255, 255, 255, 0.06);
+    --color-side-tile-on: #7b5cff;
+    --color-side-tile-on-ink: #ffffff;
+    --color-lavender: rgba(123, 92, 255, 0.34);
+    --color-blush: rgba(255, 92, 154, 0.28);
+    --color-sky: rgba(90, 160, 255, 0.28);
+    --color-sand: rgba(255, 197, 110, 0.26);
+    --color-mint: rgba(59, 230, 164, 0.24);
+    --color-avatar-ink: #f4f1ff;
+    --color-focus: #a48cff;
+    --color-scrim: rgba(0, 0, 0, 0.6);
+    --gradient-page:
+      radial-gradient(55% 40% at 72% -6%, rgba(123, 92, 255, 0.45), rgba(123, 92, 255, 0) 70%),
+      radial-gradient(40% 32% at 0% 100%, rgba(255, 92, 154, 0.13), rgba(255, 92, 154, 0) 70%), #0a0812;
+    --gradient-highlight: radial-gradient(120% 140% at 85% 0%, #8d6fff 0%, #4b2fb0 34%, #1a1233 74%);
+    --gradient-hero: radial-gradient(90% 120% at 90% 0%, #8d6fff 0%, #4b2fb0 34%, #120c26 78%);
+    --gradient-promo: radial-gradient(120% 120% at 100% 0%, #8d6fff 0%, #4b2fb0 45%, #1a1233 100%);
+    --gradient-side-row: linear-gradient(135deg, rgba(123, 92, 255, 0.55), rgba(123, 92, 255, 0.16));
+    --gradient-tab-on: linear-gradient(135deg, #7b5cff, #5a3be0);
+    --gradient-feature: linear-gradient(160deg, #120d22 0%, #0b0816 100%);
+    --elevation-card: 0 0 0 1px rgba(170, 150, 255, 0.05), 0 24px 48px rgba(0, 0, 0, 0.4);
+    --elevation-pop: 0 0 0 1px rgba(170, 150, 255, 0.12), 0 24px 64px rgba(0, 0, 0, 0.6);
+    --elevation-primary: 0 0 0 1px rgba(160, 135, 255, 0.4), 0 10px 30px rgba(123, 92, 255, 0.45);
+    color-scheme: dark;
+  }
+}
+
+/* `dark:` targets dark mode, whether chosen or followed from the system. */
+@custom-variant dark {
+  &:where([data-theme="dark"], [data-theme="dark"] *) {
+    @slot;
+  }
+  @media (prefers-color-scheme: dark) {
+    &:where([data-theme="system"], [data-theme="system"] *) {
+      @slot;
+    }
+  }
+}
+
+/* Backgrounds that are gradients in one mode or the other. */
+@utility bg-page {
+  background-color: var(--color-canvas);
+  background-image: var(--gradient-page);
+  background-repeat: no-repeat;
+}
+@utility bg-highlight {
+  background-image: var(--gradient-highlight);
+}
+@utility bg-hero {
+  background-image: var(--gradient-hero);
+}
+@utility bg-promo {
+  background-image: var(--gradient-promo);
+}
+@utility bg-side-row {
+  background-image: var(--gradient-side-row);
+}
+@utility bg-tab-on {
+  background-image: var(--gradient-tab-on);
+}
+@utility bg-feature {
+  background-image: var(--gradient-feature);
+}
+
+/* Elevation by role. */
+@utility elevation-card {
+  box-shadow: var(--elevation-card);
+}
+@utility elevation-pop {
+  box-shadow: var(--elevation-pop);
+}
+@utility elevation-primary {
+  box-shadow: var(--elevation-primary);
+}
+
+/* Glass: translucent surfaces blur what is behind them in dark mode. */
+@utility glass {
+  @variant dark {
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+  }
+}
+
+/* Form fields (input, select, textarea): one look for every form in the product. */
+@utility field {
+  min-height: var(--field-h, 44px);
+  border-radius: var(--field-r, var(--radius-control));
+  border: 1px solid var(--color-line-strong);
+  background-color: var(--color-surface-solid);
+  color: var(--color-ink);
+  padding-inline: var(--field-px, 14px);
+  font-size: var(--field-fs, var(--text-body));
+  font-weight: 500;
+  transition-property: border-color, box-shadow, background-color;
+  transition-duration: 150ms;
+  transition-timing-function: var(--ease-out);
+  &::placeholder {
+    color: var(--color-ink-3);
+  }
+  &:hover:not(:disabled) {
+    border-color: var(--color-ink-2);
+  }
+  &:focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 1px;
+    border-color: var(--color-primary);
+  }
+  &[aria-invalid="true"] {
+    border-color: var(--color-danger);
+  }
+  &:disabled,
+  &:read-only:not(select) {
+    background-color: var(--color-surface-2);
+  }
+  &:disabled {
+    color: var(--color-ink-3);
+    cursor: not-allowed;
+  }
+}
+
+/* Compact field for dense tables and inline editors (32 px, still above the 24 px minimum). */
+@utility field-sm {
+  --field-h: 32px;
+  --field-px: 10px;
+  --field-fs: var(--text-caption);
+  --field-r: 10px;
+}
+/* Large field for the scanner and kiosk (56 px, glove- and sunlight-friendly). */
+@utility field-lg {
+  --field-h: 56px;
+  --field-px: 18px;
+  --field-fs: 18px;
+  --field-r: var(--radius-tile);
 }
 
 @layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-line);
+  }
   html {
     font-family: var(--font-sans);
-    color: var(--color-zinc-900);
-    background: var(--color-zinc-50);
+    color: var(--color-ink);
+    background-color: var(--color-canvas);
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    font-size: var(--text-body);
+    line-height: 1.5;
   }
   h1,
   h2,
-  h3 {
-    font-weight: 300;
-    letter-spacing: -0.03em;
+  h3,
+  h4 {
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  table,
+  time,
+  data,
+  kbd {
+    font-variant-numeric: tabular-nums;
+  }
+  a,
+  button,
+  summary,
+  [role="button"],
+  [role="tab"],
+  input,
+  select,
+  textarea {
+    transition-property: color, background-color, border-color, box-shadow, opacity;
+    transition-duration: 150ms;
+    transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
   }
   :focus-visible {
-    outline: 2px solid var(--color-ink);
+    outline: 2px solid var(--color-focus);
     outline-offset: 2px;
   }
+  ::selection {
+    background-color: var(--color-primary-soft);
+  }
+  input[type="checkbox"],
+  input[type="radio"],
+  progress {
+    accent-color: var(--color-primary);
+  }
+  /* biome-ignore-start lint/complexity/noImportantStyles: reduced motion must beat every utility's transition */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::after,
+    ::before {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+  /* biome-ignore-end lint/complexity/noImportantStyles: reduced motion must beat every utility's transition */
 }

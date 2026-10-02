@@ -57,7 +57,7 @@ export default async function AccessPage({
         <h2 id="private-info-heading" className="text-section">
           {t('privateInfo.heading')}
         </h2>
-        <p className="text-body text-zinc-500">{tp('privateInfo.explainer')}</p>
+        <p className="text-body text-ink-2">{tp('privateInfo.explainer')}</p>
         <Card size="panel">
           <PrivateInfoForm
             action={savePrivateInfoAction.bind(null, org, event)}
@@ -71,7 +71,7 @@ export default async function AccessPage({
           <h2 id="access-codes-heading" className="text-section">
             {t('accessCodes.heading')}
           </h2>
-          <p className="text-body text-zinc-500">{t('accessCodes.explainer')}</p>
+          <p className="text-body text-ink-2">{t('accessCodes.explainer')}</p>
           {ev.visibility === 'private' ? (
             <p className="text-body break-all" data-testid="unlock-link">
               {t('accessCodes.unlockLink', { url: `${origin}/events/${ev.slug}/unlock` })}

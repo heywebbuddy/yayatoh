@@ -29,7 +29,7 @@ export function MessageForm({ action, label, submit }: { action: Action; label: 
   );
   return (
     <form ref={ref} action={formAction} className="flex flex-col gap-2" noValidate>
-      <label htmlFor="conversation-body" className="text-caption text-zinc-600">
+      <label htmlFor="conversation-body" className="text-caption text-ink-2">
         {label}
       </label>
       <textarea
@@ -38,7 +38,7 @@ export function MessageForm({ action, label, submit }: { action: Action; label: 
         rows={4}
         maxLength={2000}
         aria-invalid={state.code === 'required' ? true : undefined}
-        className="rounded-card border border-zinc-200 bg-white px-4 py-3 text-body"
+        className="rounded-card border border-line bg-surface px-4 py-3 text-body"
       />
       <div role="status" aria-live="polite">
         {state.done ? <p className="text-body font-medium">{t('sent')}</p> : null}
@@ -87,21 +87,17 @@ export function ReportForm({ action, done }: { action: Action; done?: boolean })
   return (
     <form action={formAction} className="flex flex-col gap-2">
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="report-reason" className="text-caption text-zinc-600">
+        <label htmlFor="report-reason" className="text-caption text-ink-2">
           {t('reportReason')}
         </label>
-        <select
-          id="report-reason"
-          name="reason"
-          className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
-        >
+        <select id="report-reason" name="reason" className="field">
           <option value="spam">{t('reasons.spam')}</option>
           <option value="abuse">{t('reasons.abuse')}</option>
           <option value="other">{t('reasons.other')}</option>
         </select>
       </div>
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="report-note" className="text-caption text-zinc-600">
+        <label htmlFor="report-note" className="text-caption text-ink-2">
           {t('reportNote')}
         </label>
         <textarea
@@ -109,7 +105,7 @@ export function ReportForm({ action, done }: { action: Action; done?: boolean })
           name="note"
           rows={2}
           maxLength={1000}
-          className="rounded-card border border-zinc-200 bg-white px-4 py-3 text-body"
+          className="rounded-card border border-line bg-surface px-4 py-3 text-body"
         />
       </div>
       <div role="status" aria-live="polite">

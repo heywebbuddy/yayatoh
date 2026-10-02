@@ -38,7 +38,7 @@ type Search = { q?: string; side?: string; tag?: string; vip?: string; page?: st
 function Disclosure({ summary, children }: { summary: string; children: ReactNode }) {
   return (
     <details className="group">
-      <summary className="min-h-6 cursor-pointer py-0.5 text-caption text-zinc-600 underline-offset-2 hover:underline">
+      <summary className="min-h-6 cursor-pointer py-0.5 text-caption text-ink-2 underline-offset-2 hover:underline">
         {summary}
       </summary>
       <section aria-label={summary} className="flex flex-col gap-3 pt-3">
@@ -312,7 +312,7 @@ export default async function GuestsPage({
   return (
     <>
       <PageHeader title={t(navLabelKey(profile, nav))} description={tp('subtitle')} />
-      {canWrite ? null : <p className="text-body text-zinc-500">{tp('viewerNotice')}</p>}
+      {canWrite ? null : <p className="text-body text-ink-2">{tp('viewerNotice')}</p>}
 
       <section aria-labelledby="guest-counts-heading" className="flex flex-col gap-3">
         <h2 id="guest-counts-heading" className="text-section">
@@ -321,13 +321,13 @@ export default async function GuestsPage({
         <dl className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
           {counts.map(([label, value]) => (
             <Card key={label} className="flex flex-col gap-1">
-              <dt className="text-caption text-zinc-600">{label}</dt>
+              <dt className="text-caption text-ink-2">{label}</dt>
               <dd className="text-section tabular-nums">{n(value)}</dd>
             </Card>
           ))}
         </dl>
         {list.counts.vipParties ? (
-          <p className="text-caption text-zinc-600">{tp('vipCount', { count: list.counts.vipParties })}</p>
+          <p className="text-caption text-ink-2">{tp('vipCount', { count: list.counts.vipParties })}</p>
         ) : null}
       </section>
 
@@ -337,7 +337,7 @@ export default async function GuestsPage({
             <h2 id="add-party-heading" className="text-section">
               {tp('addParty')}
             </h2>
-            <p className="text-caption text-zinc-600">{tp('addPartyHint')}</p>
+            <p className="text-caption text-ink-2">{tp('addPartyHint')}</p>
             <ProgramForm
               action={createPartyAction.bind(null, org, event)}
               fields={partyFields()}
@@ -364,7 +364,7 @@ export default async function GuestsPage({
               className="flex flex-wrap items-end gap-3"
             >
               <div className="flex min-w-48 flex-1 flex-col gap-1.5">
-                <label htmlFor="guest-search" className="text-caption text-zinc-600">
+                <label htmlFor="guest-search" className="text-caption text-ink-2">
                   {tp('search')}
                 </label>
                 <input
@@ -373,19 +373,14 @@ export default async function GuestsPage({
                   type="search"
                   defaultValue={q}
                   maxLength={100}
-                  className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
+                  className="field"
                 />
               </div>
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="guest-side" className="text-caption text-zinc-600">
+                <label htmlFor="guest-side" className="text-caption text-ink-2">
                   {tp('side')}
                 </label>
-                <select
-                  id="guest-side"
-                  name="side"
-                  defaultValue={side}
-                  className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
-                >
+                <select id="guest-side" name="side" defaultValue={side} className="field">
                   <option value="">{tp('anySide')}</option>
                   {list.sides.map((s) => (
                     <option key={s} value={s}>
@@ -395,15 +390,10 @@ export default async function GuestsPage({
                 </select>
               </div>
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="guest-tag" className="text-caption text-zinc-600">
+                <label htmlFor="guest-tag" className="text-caption text-ink-2">
                   {tp('tag')}
                 </label>
-                <select
-                  id="guest-tag"
-                  name="tag"
-                  defaultValue={tag}
-                  className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
-                >
+                <select id="guest-tag" name="tag" defaultValue={tag} className="field">
                   <option value="">{tp('anyTag')}</option>
                   {list.tags.map((s) => (
                     <option key={s} value={s}>
@@ -413,14 +403,14 @@ export default async function GuestsPage({
                 </select>
               </div>
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="guest-vip" className="text-caption text-zinc-600">
+                <label htmlFor="guest-vip" className="text-caption text-ink-2">
                   {tp('vip')}
                 </label>
                 <select
                   id="guest-vip"
                   name="vip"
                   defaultValue={sp.vip === 'yes' || sp.vip === 'no' ? sp.vip : ''}
-                  className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
+                  className="field"
                 >
                   <option value="">{tp('vipAny')}</option>
                   <option value="yes">{tp('vipOnly')}</option>
@@ -439,7 +429,7 @@ export default async function GuestsPage({
           </search>
         ) : null}
         {list.counts.parties > 0 ? (
-          <p role="status" className="text-caption text-zinc-600">
+          <p role="status" className="text-caption text-ink-2">
             {filtered ? tp('matching', { count: list.total }) : tp('showing', { count: list.total })}
           </p>
         ) : null}
@@ -464,36 +454,36 @@ export default async function GuestsPage({
                           {p.name}
                         </h3>
                         {p.vip ? (
-                          <span className={`${pill} bg-accent-50 text-accent-text`}>{tp('vip')}</span>
+                          <span className={`${pill} bg-primary-soft text-primary-ink`}>{tp('vip')}</span>
                         ) : null}
                         {p.side ? (
-                          <span className={`${pill} bg-zinc-100 text-zinc-700`}>
+                          <span className={`${pill} bg-surface-3 text-ink-2`}>
                             {tp('sideValue', { side: p.side })}
                           </span>
                         ) : null}
-                        <span className="text-caption text-zinc-600">
+                        <span className="text-caption text-ink-2">
                           {tp('guestCount', { count: p.guests.length })}
                         </span>
                       </div>
                       {p.envelopeName ? (
-                        <p className="text-caption text-zinc-600">
+                        <p className="text-caption text-ink-2">
                           {tp('envelopeValue', { name: p.envelopeName })}
                         </p>
                       ) : null}
                       {p.tags.length ? (
                         <ul aria-label={tp('tags')} className="flex list-none flex-wrap gap-1.5 p-0">
                           {p.tags.map((x) => (
-                            <li key={x} className={`${pill} bg-zinc-100 text-zinc-700`}>
+                            <li key={x} className={`${pill} bg-surface-3 text-ink-2`}>
                               {x}
                             </li>
                           ))}
                         </ul>
                       ) : null}
                       {p.notes ? (
-                        <p className="text-caption whitespace-pre-line text-zinc-600">{p.notes}</p>
+                        <p className="text-caption whitespace-pre-line text-ink-2">{p.notes}</p>
                       ) : null}
                       {p.guests.length === 0 ? (
-                        <p className="text-caption text-zinc-600">{tp('noGuestsInParty')}</p>
+                        <p className="text-caption text-ink-2">{tp('noGuestsInParty')}</p>
                       ) : (
                         <ul
                           aria-label={tp('guestsOf', { party: p.name })}
@@ -506,29 +496,27 @@ export default async function GuestsPage({
                             return (
                               <li
                                 key={g.id}
-                                className="flex flex-col gap-1 border-t border-zinc-100 pt-2 ps-0 data-[plus=true]:ps-6"
+                                className="flex flex-col gap-1 border-t border-line pt-2 ps-0 data-[plus=true]:ps-6"
                                 data-plus={g.kind === 'plus_one'}
                               >
                                 <span className="flex flex-wrap items-center gap-2">
                                   <span className="text-body">{name}</span>
                                   {g.isPrimary ? (
-                                    <span className={`${pill} bg-zinc-100 text-zinc-700`}>
-                                      {tp('primary')}
-                                    </span>
+                                    <span className={`${pill} bg-surface-3 text-ink-2`}>{tp('primary')}</span>
                                   ) : null}
                                   {g.ageClass !== 'adult' ? (
-                                    <span className={`${pill} bg-zinc-100 text-zinc-700`}>
+                                    <span className={`${pill} bg-surface-3 text-ink-2`}>
                                       {tp(`ages.${g.ageClass}`)}
                                     </span>
                                   ) : null}
                                   {g.kind === 'plus_one' ? (
-                                    <span className={`${pill} bg-accent-50 text-accent-text`}>
+                                    <span className={`${pill} bg-primary-soft text-primary-ink`}>
                                       {unnamed ? tp('plusOnePending') : tp('plusOne')}
                                     </span>
                                   ) : null}
                                 </span>
                                 {g.meal || g.dietary || g.accessibility || g.address ? (
-                                  <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 text-caption text-zinc-600">
+                                  <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 text-caption text-ink-2">
                                     {(
                                       [
                                         ['meal', g.meal],
@@ -540,7 +528,7 @@ export default async function GuestsPage({
                                       v ? (
                                         <div key={k} className="contents">
                                           <dt>{tp(k)}</dt>
-                                          <dd className="whitespace-pre-line text-zinc-800">{v}</dd>
+                                          <dd className="whitespace-pre-line text-ink">{v}</dd>
                                         </div>
                                       ) : null,
                                     )}
@@ -641,14 +629,14 @@ export default async function GuestsPage({
                       ) : null}
                       {historyFor === p.id ? (
                         <section aria-labelledby={`history-${p.id}`} className="flex flex-col gap-2">
-                          <h4 id={`history-${p.id}`} className="text-caption font-medium text-zinc-700">
+                          <h4 id={`history-${p.id}`} className="text-caption font-medium text-ink-2">
                             {tp('historyOf', { party: p.name })}
                           </h4>
                           <ol className="flex list-none flex-col gap-1 p-0">
                             {history.map((h) => {
                               const g = h.guestId ? everyGuest.get(h.guestId) : undefined;
                               return (
-                                <li key={h.id} className="text-caption text-zinc-600">
+                                <li key={h.id} className="text-caption text-ink-2">
                                   {tp(`actions.${h.action}`)}
                                   {g ? ` · ${nameOf(g)}` : ''} · {tp(`sources.${h.source}`)} ·{' '}
                                   {actorLabel(h.actor)} ·{' '}
@@ -689,7 +677,7 @@ export default async function GuestsPage({
                 {tp('previous')}
               </Link>
             ) : null}
-            <span className="text-caption text-zinc-600">{tp('pageOf', { page, pages })}</span>
+            <span className="text-caption text-ink-2">{tp('pageOf', { page, pages })}</span>
             {page < pages ? (
               <Link
                 href={filterHref({ page: String(page + 1) })}

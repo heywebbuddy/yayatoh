@@ -9,7 +9,7 @@ import { sponsorLogoClass } from '@/lib/program-media.ts';
 /** M1.4h: speaker photos and exhibitor/sponsor logos by row id (allowlisted `PublicMediaDto`). */
 export type ProgramImages = Readonly<Record<string, PublicMediaDto>>;
 
-const h2 = 'text-[28px] font-normal tracking-[-0.03em]';
+const h2 = 'text-[28px] font-extrabold tracking-[-0.03em]';
 
 /** One session row of the public agenda (times in the event's timezone). */
 export function SessionRow({
@@ -28,7 +28,7 @@ export function SessionRow({
 }) {
   return (
     <li className="flex flex-col gap-1 px-5 py-4 sm:flex-row sm:gap-6">
-      <span className="w-32 shrink-0 font-mono text-caption text-zinc-600">
+      <span className="w-32 shrink-0 font-mono text-caption text-ink-2">
         {day ? <span className="block font-sans">{day}</span> : null}
         {time.format(s.startsAt)}–{time.format(s.endsAt)}
       </span>
@@ -40,7 +40,7 @@ export function SessionRow({
               <Link
                 key={p.id}
                 href={`/events/${slug}/speakers/${p.id}`}
-                className="inline-flex min-h-6 items-center gap-1.5 text-zinc-700 underline underline-offset-2"
+                className="inline-flex min-h-6 items-center gap-1.5 text-ink-2 underline underline-offset-2"
               >
                 {images[p.id] ? (
                   // The name follows, so the avatar adds nothing for screen readers.
@@ -57,11 +57,11 @@ export function SessionRow({
           </span>
         ) : null}
         {s.description ? (
-          <Markdown source={s.description} className="flex flex-col gap-2 text-caption text-zinc-600" />
+          <Markdown source={s.description} className="flex flex-col gap-2 text-caption text-ink-2" />
         ) : null}
       </span>
       {s.room || s.track ? (
-        <span className="text-caption text-zinc-500">{[s.room, s.track].filter(Boolean).join(' · ')}</span>
+        <span className="text-caption text-ink-2">{[s.room, s.track].filter(Boolean).join(' · ')}</span>
       ) : null}
     </li>
   );
@@ -104,7 +104,7 @@ export async function ProgramSections({
           <h2 id="agenda-heading" className={h2}>
             {t('agenda')}
           </h2>
-          <p className="text-caption text-zinc-500">
+          <p className="text-caption text-ink-2">
             {t('datesTimezone', { timezone: timeZone.replace(/_/g, ' ') })}
           </p>
           {days.map((d) => (
@@ -112,7 +112,7 @@ export async function ProgramSections({
               <h3 id={`agenda-${d.day}`} className="text-section">
                 {dayLabel.format(new Date(`${d.day}T00:00:00Z`))}
               </h3>
-              <ol className="list-none divide-y divide-zinc-100 rounded-card border border-zinc-200 p-0">
+              <ol className="list-none divide-y divide-line rounded-card border border-line p-0">
                 {d.items.map((s) => (
                   <SessionRow key={s.id} s={s} slug={slug} time={time} images={images} />
                 ))}
@@ -134,7 +134,7 @@ export async function ProgramSections({
             {program.speakers.map((p) => {
               const photo = images[p.id];
               return (
-                <li key={p.id} className="flex items-center gap-3 rounded-card border border-zinc-200 p-4">
+                <li key={p.id} className="flex items-center gap-3 rounded-card border border-line p-4">
                   {photo ? (
                     <MediaPicture
                       image={photo}
@@ -150,7 +150,7 @@ export async function ProgramSections({
                       {p.name}
                     </Link>
                     {p.title || p.company ? (
-                      <span className="text-caption text-zinc-600">
+                      <span className="text-caption text-ink-2">
                         {[p.title, p.company].filter(Boolean).join(' · ')}
                       </span>
                     ) : null}
@@ -172,7 +172,7 @@ export async function ProgramSections({
           </h2>
           <ul className="grid list-none grid-cols-1 gap-3 p-0 sm:grid-cols-2 xl:grid-cols-3">
             {program.exhibitors.map((x) => (
-              <li key={x.id} className="flex flex-col gap-1 rounded-card border border-zinc-200 p-4">
+              <li key={x.id} className="flex flex-col gap-1 rounded-card border border-line p-4">
                 {images[x.id] ? (
                   <MediaPicture
                     image={images[x.id] as PublicMediaDto}
@@ -182,13 +182,10 @@ export async function ProgramSections({
                 ) : null}
                 <span className="font-medium">{x.name}</span>
                 {x.boothLabel ? (
-                  <span className="text-caption text-zinc-600">{t('booth', { booth: x.boothLabel })}</span>
+                  <span className="text-caption text-ink-2">{t('booth', { booth: x.boothLabel })}</span>
                 ) : null}
                 {x.description ? (
-                  <Markdown
-                    source={x.description}
-                    className="flex flex-col gap-2 text-caption text-zinc-600"
-                  />
+                  <Markdown source={x.description} className="flex flex-col gap-2 text-caption text-ink-2" />
                 ) : null}
                 {x.websiteUrl ? (
                   <a
@@ -215,13 +212,10 @@ export async function ProgramSections({
           </h2>
           {program.sponsorTiers.map((tier, rank) => (
             <section key={tier.name} aria-label={tier.name} className="flex flex-col gap-2">
-              <h3 className="font-mono text-label uppercase text-zinc-600">{tier.name}</h3>
+              <h3 className="text-label uppercase text-ink-2">{tier.name}</h3>
               <ul className="flex list-none flex-wrap gap-3 p-0">
                 {tier.sponsors.map((s) => (
-                  <li
-                    key={s.id}
-                    className="flex flex-col gap-1 rounded-card border border-zinc-200 px-4 py-3"
-                  >
+                  <li key={s.id} className="flex flex-col gap-1 rounded-card border border-line px-4 py-3">
                     {images[s.id] ? (
                       // Logos are sized by tier: the first tier's are the largest.
                       <MediaPicture
@@ -244,7 +238,7 @@ export async function ProgramSections({
                     {s.description ? (
                       <Markdown
                         source={s.description}
-                        className="flex flex-col gap-2 text-caption text-zinc-600"
+                        className="flex flex-col gap-2 text-caption text-ink-2"
                       />
                     ) : null}
                   </li>

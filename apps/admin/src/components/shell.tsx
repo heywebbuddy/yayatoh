@@ -15,7 +15,7 @@ export async function Shell({ staff, children }: { staff: Staff; children: React
       <a href="#main" className="sr-only focus:not-sr-only">
         {t('skip')}
       </a>
-      <header className="flex flex-wrap items-center gap-x-6 gap-y-2 border-b border-zinc-200 bg-white px-6 py-3">
+      <header className="flex flex-wrap items-center gap-x-6 gap-y-2 border-b border-line bg-surface px-6 py-3">
         <span className="text-[17px] font-semibold tracking-[-0.03em]">{t('product')}</span>
         <nav aria-label={t('nav')} className="flex flex-wrap gap-x-4 gap-y-1 text-body">
           <Link href="/" className="underline-offset-2 hover:underline">
@@ -79,7 +79,7 @@ export async function Shell({ staff, children }: { staff: Staff; children: React
             {t('passkeys')}
           </Link>
         </nav>
-        <span className="ms-auto text-caption text-zinc-600">
+        <span className="ms-auto text-caption text-ink-2">
           {t('signedInAs', { name: staff.name, role: t(`roles.${staff.role}`) })}
         </span>
         <SignOutButton label={t('signOut')} />

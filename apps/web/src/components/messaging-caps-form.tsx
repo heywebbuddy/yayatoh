@@ -6,7 +6,7 @@ import { useActionState } from 'react';
 import type { CapsState } from '@/app/[locale]/o/[org]/(org)/messaging/actions.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
 
-const field = 'min-h-10 w-28 rounded-pill border bg-white px-4 text-body';
+const field = 'field w-28';
 
 /**
  * The org's frequency caps (M3.5a): one row per scope, two whole numbers each. Errors sit next to
@@ -51,7 +51,7 @@ export function MessagingCapsForm({
           <fieldset key={c.scope} className="flex flex-wrap items-end gap-3">
             <legend className="mb-1 text-body font-medium">{scope}</legend>
             <div className="flex flex-col gap-1.5">
-              <label htmlFor={`cap-${maxKey}`} className="text-caption text-zinc-600">
+              <label htmlFor={`cap-${maxKey}`} className="text-caption text-ink-2">
                 {t('maxMessages', { scope })}
               </label>
               <input
@@ -61,16 +61,16 @@ export function MessagingCapsForm({
                 defaultValue={state.values[maxKey]}
                 aria-invalid={maxErr ? true : undefined}
                 aria-describedby={maxErr ? `cap-${maxKey}-error` : undefined}
-                className={`${field} ${maxErr ? 'border-pink-700' : 'border-zinc-200'}`}
+                className={`${field} ${maxErr ? 'border-danger' : 'border-line'}`}
               />
               {maxErr ? (
-                <p id={`cap-${maxKey}-error`} className="text-caption text-pink-700">
+                <p id={`cap-${maxKey}-error`} className="text-caption text-danger">
                   {t('maxInvalid')}
                 </p>
               ) : null}
             </div>
             <div className="flex flex-col gap-1.5">
-              <label htmlFor={`cap-${hoursKey}`} className="text-caption text-zinc-600">
+              <label htmlFor={`cap-${hoursKey}`} className="text-caption text-ink-2">
                 {t('windowHours', { scope })}
               </label>
               <input
@@ -80,10 +80,10 @@ export function MessagingCapsForm({
                 defaultValue={state.values[hoursKey]}
                 aria-invalid={hoursErr ? true : undefined}
                 aria-describedby={hoursErr ? `cap-${hoursKey}-error` : undefined}
-                className={`${field} ${hoursErr ? 'border-pink-700' : 'border-zinc-200'}`}
+                className={`${field} ${hoursErr ? 'border-danger' : 'border-line'}`}
               />
               {hoursErr ? (
-                <p id={`cap-${hoursKey}-error`} className="text-caption text-pink-700">
+                <p id={`cap-${hoursKey}-error`} className="text-caption text-danger">
                   {t('windowInvalid')}
                 </p>
               ) : null}

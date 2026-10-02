@@ -16,7 +16,7 @@ import { ports } from '@/server/ports.ts';
 import { requireStaff } from '@/server/staff.ts';
 import { liftAutoPauseAction, quotaAction, smsSenderAction, whatsappSenderAction } from './actions.ts';
 
-const field = 'min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body';
+const field = 'field';
 
 export async function generateMetadata() {
   const t = await getTranslations('messagingPolicy');
@@ -90,7 +90,7 @@ export default async function TenantMessagingPage({
               {staff.can('messaging') ? (
                 <form action={liftAutoPauseAction.bind(null, id)} className="flex flex-wrap items-end gap-3">
                   <div className="flex min-w-60 flex-1 flex-col gap-1.5">
-                    <label htmlFor="lift-note" className="text-caption text-zinc-600">
+                    <label htmlFor="lift-note" className="text-caption text-ink-2">
                       {t('liftNote')}
                     </label>
                     <input
@@ -121,7 +121,7 @@ export default async function TenantMessagingPage({
         <h2 id="senders-heading" className="text-section">
           {t('sendersTitle')}
         </h2>
-        <p className="text-body text-zinc-600">{t('sendersDescription')}</p>
+        <p className="text-body text-ink-2">{t('sendersDescription')}</p>
         <Card className="flex flex-col gap-4">
           <p className="text-body">
             {setup.sms.dedicated
@@ -138,7 +138,7 @@ export default async function TenantMessagingPage({
               className="flex flex-wrap items-end gap-3"
             >
               <div className="flex min-w-60 flex-1 flex-col gap-1.5">
-                <label htmlFor="sms-sid" className="text-caption text-zinc-600">
+                <label htmlFor="sms-sid" className="text-caption text-ink-2">
                   {t('smsSid')}
                 </label>
                 <input
@@ -150,7 +150,7 @@ export default async function TenantMessagingPage({
                 />
               </div>
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="sms-number" className="text-caption text-zinc-600">
+                <label htmlFor="sms-number" className="text-caption text-ink-2">
                   {t('displayNumber')}
                 </label>
                 <input id="sms-number" name="number" inputMode="tel" className={`${field} w-48 font-mono`} />
@@ -181,7 +181,7 @@ export default async function TenantMessagingPage({
               className="flex flex-wrap items-end gap-3"
             >
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="wa-route" className="text-caption text-zinc-600">
+                <label htmlFor="wa-route" className="text-caption text-ink-2">
                   {t('waRoute')}
                 </label>
                 <select id="wa-route" name="route" className={field}>
@@ -190,7 +190,7 @@ export default async function TenantMessagingPage({
                 </select>
               </div>
               <div className="flex min-w-60 flex-1 flex-col gap-1.5">
-                <label htmlFor="wa-ref" className="text-caption text-zinc-600">
+                <label htmlFor="wa-ref" className="text-caption text-ink-2">
                   {t('waRef')}
                 </label>
                 <input
@@ -202,7 +202,7 @@ export default async function TenantMessagingPage({
                 />
               </div>
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="wa-number" className="text-caption text-zinc-600">
+                <label htmlFor="wa-number" className="text-caption text-ink-2">
                   {t('displayNumber')}
                 </label>
                 <input id="wa-number" name="number" inputMode="tel" className={`${field} w-48 font-mono`} />
@@ -259,7 +259,7 @@ export default async function TenantMessagingPage({
                 className="flex flex-wrap items-end gap-3"
               >
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor={`limit-${c.channel}`} className="text-caption text-zinc-600">
+                  <label htmlFor={`limit-${c.channel}`} className="text-caption text-ink-2">
                     {t('limitLabel', {
                       channel: t(`channels.${c.channel}`),
                       fallback: num.format(DEFAULT_MONTHLY_QUOTAS[c.channel]),
@@ -274,7 +274,7 @@ export default async function TenantMessagingPage({
                   />
                 </div>
                 <div className="flex min-w-60 flex-1 flex-col gap-1.5">
-                  <label htmlFor={`reason-${c.channel}`} className="text-caption text-zinc-600">
+                  <label htmlFor={`reason-${c.channel}`} className="text-caption text-ink-2">
                     {t('reasonLabel', { channel: t(`channels.${c.channel}`) })}
                   </label>
                   <input

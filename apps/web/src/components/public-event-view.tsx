@@ -222,10 +222,10 @@ export async function PublicEventView({
       className="flex flex-col gap-8 px-6 py-10 md:px-16 xl:flex-row"
     >
       <div className="flex max-w-[330px] shrink-0 flex-col gap-3">
-        <h2 id="passes-heading" className="text-[38px] leading-[44px] font-normal tracking-[-0.03em]">
+        <h2 id="passes-heading" className="text-[38px] leading-[44px] font-extrabold tracking-[-0.03em]">
           {t('publicEvent.choosePass')}
         </h2>
-        <p className="text-[15px] leading-[22px] text-zinc-500">
+        <p className="text-[15px] leading-[22px] text-ink-2">
           {t('publicEvent.allIn', { org: ev.organizerName })}
         </p>
         {chosen ? (
@@ -308,19 +308,19 @@ export async function PublicEventView({
     const listing = await listingBySlug(slug);
     const eventUrl = `${eventOrigin(req, listing?.canonicalHost ?? null)}${localizedPath(locale, `/events/${slug}`)}#passes`;
     return (
-      <main id="main" className="flex flex-col gap-4 bg-white p-4">
+      <main id="main" className="flex flex-col gap-4 bg-surface p-4">
         <div className="flex flex-col gap-1">
-          <h1 className="text-[22px] leading-7 font-normal tracking-[-0.02em]">{ev.name}</h1>
-          <p className="text-caption text-zinc-600">{[range, ev.city].filter(Boolean).join(' · ')}</p>
+          <h1 className="text-[22px] leading-7 font-extrabold tracking-[-0.02em]">{ev.name}</h1>
+          <p className="text-caption text-ink-2">{[range, ev.city].filter(Boolean).join(' · ')}</p>
         </div>
         {orgProfile?.checkoutPaused ? (
-          <p className="text-body text-zinc-600">{t('publicEvent.salesPausedTitle')}</p>
+          <p className="text-body text-ink-2">{t('publicEvent.salesPausedTitle')}</p>
         ) : ev.passes.length === 0 ? (
-          <p className="text-body text-zinc-600">{t('publicEvent.noTicketsTitle')}</p>
+          <p className="text-body text-ink-2">{t('publicEvent.noTicketsTitle')}</p>
         ) : (
           <ul
             aria-label={t('widget.passes')}
-            className="flex list-none flex-col divide-y divide-zinc-100 rounded-card border border-zinc-200 p-0"
+            className="flex list-none flex-col divide-y divide-line rounded-card border border-line p-0"
           >
             {ev.passes.map((p) => (
               <li
@@ -330,7 +330,7 @@ export async function PublicEventView({
                 <span className="text-body">{p.name}</span>
                 <span className="flex items-center gap-3 text-body">
                   {p.availability === 'available' ? null : (
-                    <span className="text-caption text-zinc-500">
+                    <span className="text-caption text-ink-2">
                       {t(`publicEvent.availability.${p.availability}`)}
                     </span>
                   )}
@@ -350,9 +350,7 @@ export async function PublicEventView({
           {t('widget.getTickets')}
           <span className="sr-only"> {t('widget.newTab')}</span>
         </BrandLink>
-        {ev.poweredByVisible ? (
-          <p className="text-caption text-zinc-500">{t('publicEvent.poweredBy')}</p>
-        ) : null}
+        {ev.poweredByVisible ? <p className="text-caption text-ink-2">{t('publicEvent.poweredBy')}</p> : null}
       </main>
     );
   }
@@ -393,7 +391,7 @@ export async function PublicEventView({
   });
   const ld = rating ? { ...baseLd, aggregateRating: rating } : baseLd;
   return (
-    <div className="min-h-dvh bg-white">
+    <div className="min-h-dvh bg-surface">
       {ev.visibility === 'public' ? (
         <script
           type="application/ld+json"
@@ -418,7 +416,7 @@ export async function PublicEventView({
           aria-hidden="true"
           className="pointer-events-none absolute -end-24 -top-10 size-[560px] rounded-full bg-[radial-gradient(circle,var(--color-accent-900)_0%,var(--color-accent-700)_38%,transparent_70%)] opacity-50 md:end-[120px]"
         />
-        <header className="absolute start-1/2 top-[18px] flex -translate-x-1/2 items-center gap-5 rounded-pill bg-nav-glass py-[7px] ps-[22px] pe-[7px] text-[13px] backdrop-blur-md rtl:translate-x-1/2">
+        <header className="absolute start-1/2 top-[18px] flex -translate-x-1/2 items-center gap-5 rounded-pill bg-tag py-[7px] ps-[22px] pe-[7px] text-[13px] backdrop-blur-md rtl:translate-x-1/2">
           <nav aria-label={t('publicEvent.nav')} className="hidden gap-[18px] md:flex">
             <a href="#passes" className="text-white">
               {t('publicEvent.passes')}
@@ -430,16 +428,16 @@ export async function PublicEventView({
             ) : null}
           </nav>
           <span className="text-[19px] font-semibold tracking-[-0.04em] md:px-10">{t('brand.wordmark')}</span>
-          <a href="#passes" className={buttonClass('on-dark', 'sm')}>
+          <a href="#passes" className={buttonClass('inverse', 'sm')}>
             {t('publicEvent.getTickets')}
           </a>
         </header>
         <div className="relative flex max-w-[620px] flex-col gap-[18px]">
           <p className="inline-flex items-center gap-2 text-[13px]">
-            <Check aria-hidden="true" className="size-3.5" strokeWidth={1.75} />
+            <Check aria-hidden="true" className="size-3.5" strokeWidth={2} />
             {[range, ev.city].filter(Boolean).join(' · ')}
           </p>
-          <h1 className="text-[44px] leading-none font-normal tracking-[-0.03em] md:text-[64px]">
+          <h1 className="text-[44px] leading-none font-extrabold tracking-[-0.03em] md:text-[64px]">
             {ev.name}
           </h1>
           {ev.tagline ? <p className="text-[16px] leading-6 text-white/80">{ev.tagline}</p> : null}
@@ -449,10 +447,10 @@ export async function PublicEventView({
               className="flex list-none flex-wrap gap-2 p-0 text-caption"
             >
               {ev.category ? (
-                <li className="rounded-pill bg-glass px-3 py-1">{t(`categories.${ev.category}`)}</li>
+                <li className="rounded-pill bg-white/10 px-3 py-1">{t(`categories.${ev.category}`)}</li>
               ) : null}
               {ev.attendanceMode !== 'in_person' ? (
-                <li className="rounded-pill bg-glass px-3 py-1">
+                <li className="rounded-pill bg-white/10 px-3 py-1">
                   {t(`publicEvent.mode.${ev.attendanceMode}`)}
                 </li>
               ) : null}
@@ -460,7 +458,7 @@ export async function PublicEventView({
                 <li>
                   <Link
                     href={`/venues/${ev.venueSlug}`}
-                    className="inline-flex min-h-6 items-center rounded-pill bg-glass px-3 py-1 text-white underline underline-offset-2"
+                    className="inline-flex min-h-6 items-center rounded-pill bg-white/10 px-3 py-1 text-white underline underline-offset-2"
                   >
                     {ev.venueName}
                   </Link>
@@ -469,16 +467,16 @@ export async function PublicEventView({
             </ul>
           ) : null}
           {ev.status !== 'published' ? (
-            <p className="inline-flex self-start rounded-pill bg-glass px-3 py-1 text-caption">
+            <p className="inline-flex self-start rounded-pill bg-white/10 px-3 py-1 text-caption">
               {t(`eventStatus.${ev.status}`)}
             </p>
           ) : null}
           <div className="flex flex-wrap gap-2.5 pt-2">
-            <a href="#passes" className={buttonClass('on-dark')}>
+            <a href="#passes" className={buttonClass('inverse')}>
               {t('publicEvent.getTickets')}
             </a>
             {program.sessions.length > 0 || ev.agenda.length > 0 ? (
-              <a href="#agenda" className={buttonClass('glass')}>
+              <a href="#agenda" className={buttonClass('inverse')}>
                 {t('publicEvent.seeAgenda')}
               </a>
             ) : null}
@@ -488,10 +486,8 @@ export async function PublicEventView({
           <dl className="relative mt-16 flex flex-wrap gap-x-14 gap-y-6">
             {ev.stats.map((s) => (
               <div key={s.key} className="flex flex-col-reverse gap-1">
-                <dt className="font-mono text-label uppercase text-white/75">
-                  {t(`publicEvent.stats.${s.key}`)}
-                </dt>
-                <dd className="m-0 text-[32px] font-light tracking-[-0.04em]">
+                <dt className="text-label uppercase text-white/75">{t(`publicEvent.stats.${s.key}`)}</dt>
+                <dd className="m-0 text-[32px] font-extrabold tracking-[-0.04em]">
                   {formatNumber(s.value, locale)}
                 </dd>
               </div>
@@ -502,7 +498,7 @@ export async function PublicEventView({
 
       {content.announcements.length > 0 ? (
         <section aria-labelledby="announcements-heading" className="flex flex-col gap-4 px-6 pt-10 md:px-16">
-          <h2 id="announcements-heading" className="text-[28px] font-normal tracking-[-0.03em]">
+          <h2 id="announcements-heading" className="text-[28px] font-extrabold tracking-[-0.03em]">
             {t('publicEvent.announcements')}
           </h2>
           <Announcements items={content.announcements} locale={locale} timeZone={ev.timezone} />
@@ -532,7 +528,7 @@ export async function PublicEventView({
           {unlockedPasses || unlockedPrivate ? (
             <Alert tone="info" title={t('accessEntry.active')} />
           ) : (
-            <p className="text-body text-zinc-500">{t('accessEntry.hint')}</p>
+            <p className="text-body text-ink-2">{t('accessEntry.hint')}</p>
           )}
           <AccessCodeEntry action={redeemAccessCodeAction.bind(null, slug)} />
         </section>
@@ -542,7 +538,7 @@ export async function PublicEventView({
 
       {gallery.length > 0 ? (
         <section aria-labelledby="gallery-heading" className="flex flex-col gap-4 px-6 pb-10 md:px-16">
-          <h2 id="gallery-heading" className="text-[28px] font-normal tracking-[-0.03em]">
+          <h2 id="gallery-heading" className="text-[28px] font-extrabold tracking-[-0.03em]">
             {t('publicEvent.gallery')}
           </h2>
           <ul className="grid list-none grid-cols-1 gap-3 p-0 sm:grid-cols-2 lg:grid-cols-3">
@@ -551,7 +547,7 @@ export async function PublicEventView({
                 <MediaPicture
                   image={g}
                   sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                  className="aspect-[4/3] w-full rounded-card bg-zinc-50 object-cover"
+                  className="aspect-[4/3] w-full rounded-card bg-surface-2 object-cover"
                 />
               </li>
             ))}
@@ -577,10 +573,10 @@ export async function PublicEventView({
         >
           <div className="flex flex-wrap items-end justify-between gap-3">
             <div className="flex flex-col gap-1">
-              <h2 id="venue-heading" className="text-[28px] font-normal tracking-[-0.03em]">
+              <h2 id="venue-heading" className="text-[28px] font-extrabold tracking-[-0.03em]">
                 {t('venueMap.title')}
               </h2>
-              <p className="text-body text-zinc-600">{t('venueMap.description')}</p>
+              <p className="text-body text-ink-2">{t('venueMap.description')}</p>
             </div>
             <Link href={`/events/${slug}/seat-finder`} className={buttonClass('primary')}>
               {t('venueMap.findSeat')}
@@ -606,15 +602,15 @@ export async function PublicEventView({
       >
         {ev.agenda.length > 0 ? (
           <>
-            <h2 id="agenda-heading" className="text-[28px] font-normal tracking-[-0.03em]">
+            <h2 id="agenda-heading" className="text-[28px] font-extrabold tracking-[-0.03em]">
               {t('publicEvent.agenda')}
             </h2>
-            <ul className="list-none divide-y divide-zinc-100 rounded-card border border-zinc-200 p-0">
+            <ul className="list-none divide-y divide-line rounded-card border border-line p-0">
               {ev.agenda.map((s) => (
                 <li key={s.time} className="flex gap-6 px-5 py-4">
-                  <span className="w-14 font-mono text-caption text-zinc-500">{s.time}</span>
+                  <span className="w-14 font-mono text-caption text-ink-2">{s.time}</span>
                   <span className="flex-1">{s.title}</span>
-                  <span className="text-caption text-zinc-500">{s.room}</span>
+                  <span className="text-caption text-ink-2">{s.room}</span>
                 </li>
               ))}
             </ul>
@@ -625,7 +621,7 @@ export async function PublicEventView({
             <h2 id="refund-policy-heading" className="text-section">
               {t('refundPolicy.buyerTitle')}
             </h2>
-            <ul className="flex list-none flex-col gap-1 p-0 text-body text-zinc-600">
+            <ul className="flex list-none flex-col gap-1 p-0 text-body text-ink-2">
               {refundPolicyLines((k, v) => t(`refundPolicy.${k}`, v), refundPolicy, locale).map((line) => (
                 <li key={line}>{line}</li>
               ))}
@@ -637,7 +633,7 @@ export async function PublicEventView({
             <ul className="flex list-none flex-wrap gap-x-4 gap-y-1 p-0 text-caption">
               {orgProfile.legalPages.map((k) => (
                 <li key={k}>
-                  <Link href={`/legal/${orgProfile.slug}/${k}`} className="text-zinc-600 underline">
+                  <Link href={`/legal/${orgProfile.slug}/${k}`} className="text-ink-2 underline">
                     {t(`settings.legal.kind.${k}`)}
                   </Link>
                 </li>
@@ -646,7 +642,7 @@ export async function PublicEventView({
           </nav>
         ) : null}
         {ev.poweredByVisible ? (
-          <Link href="/" className="self-start text-caption text-zinc-500 underline">
+          <Link href="/" className="self-start text-caption text-ink-2 underline">
             {t('publicEvent.poweredBy')}
           </Link>
         ) : null}

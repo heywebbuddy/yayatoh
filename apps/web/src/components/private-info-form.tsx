@@ -25,7 +25,7 @@ export function PrivateInfoForm({
   return (
     <form action={formAction} onSubmit={keepValues(formAction)} className="flex flex-col gap-4">
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="private-body" className="text-caption text-zinc-600">
+        <label htmlFor="private-body" className="text-caption text-ink-2">
           {t('body')}
         </label>
         <textarea
@@ -34,9 +34,9 @@ export function PrivateInfoForm({
           rows={8}
           defaultValue={info.body}
           aria-describedby="private-body-hint"
-          className="rounded-card border border-zinc-200 bg-white px-4 py-2 font-mono text-body"
+          className="rounded-card border border-line bg-surface px-4 py-2 font-mono text-body"
         />
-        <p id="private-body-hint" className="text-caption text-zinc-500">
+        <p id="private-body-hint" className="text-caption text-ink-2">
           {t('bodyHint')}
         </p>
       </div>

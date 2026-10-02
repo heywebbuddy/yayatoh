@@ -49,13 +49,13 @@ export default async function SignupPage({
             <h2 id="coming-soon" className="text-section">
               {t('signup.comingSoon')}
             </h2>
-            <p className="text-body text-zinc-600">{t('signup.comingSoonBody')}</p>
+            <p className="text-body text-ink-2">{t('signup.comingSoonBody')}</p>
             {waitlist ? (
               <a href={waitlist} className={buttonClass('primary', 'md', 'self-start')}>
                 {t('signup.joinWaitlist')}
               </a>
             ) : null}
-            <p className="text-body text-zinc-600">{t('signup.needCode')}</p>
+            <p className="text-body text-ink-2">{t('signup.needCode')}</p>
             <form method="get" className="flex flex-wrap items-end gap-3">
               <Input
                 name="code"
@@ -75,10 +75,10 @@ export default async function SignupPage({
             </Link>
           </section>
         ) : code && !valid ? (
-          <p className="text-body text-zinc-600">{t('signup.invalidCode')}</p>
+          <p className="text-body text-ink-2">{t('signup.invalidCode')}</p>
         ) : !session ? (
           <>
-            <p className="text-body text-zinc-600">{t('signup.verifyFirst')}</p>
+            <p className="text-body text-ink-2">{t('signup.verifyFirst')}</p>
             <Link
               href={`/sign-in?next=${encodeURIComponent(here)}`}
               className={buttonClass('primary', 'md', 'self-start')}
@@ -88,11 +88,9 @@ export default async function SignupPage({
           </>
         ) : (
           <>
-            <p className="text-caption text-zinc-600">
-              {t('signup.signedInAs', { email: session.user.email })}
-            </p>
+            <p className="text-caption text-ink-2">{t('signup.signedInAs', { email: session.user.email })}</p>
             {selfServe ? (
-              <p className="text-body text-zinc-600">
+              <p className="text-body text-ink-2">
                 {t.rich('signup.openNote', {
                   pricing: (chunks) => (
                     <Link href="/pricing" className="underline underline-offset-2">

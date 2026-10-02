@@ -9,7 +9,7 @@ import { errorMessageKey } from '@/lib/errors.ts';
 import { type FormState, INITIAL_FORM_STATE } from '@/lib/form-state.ts';
 import { keepValues } from '@/lib/keep-values.ts';
 
-const area = 'rounded-card border bg-white px-4 py-2 text-body';
+const area = 'rounded-card border bg-surface px-4 py-2 text-body';
 
 /**
  * The contact / sales form (M3.11b). Field errors sit next to their fields; the human check
@@ -36,10 +36,10 @@ export function ContactForm({
         ref={done}
         tabIndex={-1}
         role="status"
-        className="flex flex-col gap-2 rounded-card border border-zinc-200 p-5"
+        className="flex flex-col gap-2 rounded-card border border-line p-5"
       >
         <p className="text-body font-medium">{t('sentTitle')}</p>
-        <p className="text-body text-zinc-600">{t('sentBody')}</p>
+        <p className="text-body text-ink-2">{t('sentBody')}</p>
       </div>
     );
   const bad = new Set(state.fields ?? []);
@@ -47,7 +47,7 @@ export function ContactForm({
   return (
     <form action={formAction} onSubmit={keepValues(formAction)} noValidate className="flex flex-col gap-4">
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="contact-topic" className="text-caption text-zinc-600">
+        <label htmlFor="contact-topic" className="text-caption text-ink-2">
           {t('fields.topic')}
         </label>
         <select
@@ -55,7 +55,7 @@ export function ContactForm({
           name="topic"
           defaultValue="sales"
           aria-invalid={bad.has('topic') || undefined}
-          className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
+          className="field"
         >
           {CONTACT_TOPICS.map((k) => (
             <option key={k} value={k}>
@@ -94,7 +94,7 @@ export function ContactForm({
         error={err('company', 'company')}
       />
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="contact-message" className="text-caption text-zinc-600">
+        <label htmlFor="contact-message" className="text-caption text-ink-2">
           {t('fields.message')}
         </label>
         <textarea
@@ -105,14 +105,14 @@ export function ContactForm({
           maxLength={4000}
           aria-invalid={bad.has('message') || undefined}
           aria-describedby={bad.has('message') ? 'contact-message-error' : 'contact-message-hint'}
-          className={`${area} ${bad.has('message') ? 'border-pink-700' : 'border-zinc-200'}`}
+          className={`${area} ${bad.has('message') ? 'border-danger' : 'border-line'}`}
         />
         {bad.has('message') ? (
-          <p id="contact-message-error" className="text-caption text-pink-700">
+          <p id="contact-message-error" className="text-caption text-danger">
             {t('errors.message')}
           </p>
         ) : (
-          <p id="contact-message-hint" className="text-caption text-zinc-500">
+          <p id="contact-message-hint" className="text-caption text-ink-2">
             {t('messageHint')}
           </p>
         )}
@@ -120,10 +120,10 @@ export function ContactForm({
       {humanCheck ? (
         <div className="flex flex-col gap-1.5">
           <HumanCheckField widget={humanCheck} />
-          {bad.has('human') ? <p className="text-caption text-pink-700">{t('errors.human')}</p> : null}
+          {bad.has('human') ? <p className="text-caption text-danger">{t('errors.human')}</p> : null}
         </div>
       ) : null}
-      <p className="text-caption text-zinc-500">{t('privacy')}</p>
+      <p className="text-caption text-ink-2">{t('privacy')}</p>
       <div aria-live="polite">
         {state.code === 'rate_limited' ? (
           <Alert title={t('rateLimited', { minutes: Number(state.reason ?? 1) })} />

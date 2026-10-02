@@ -127,19 +127,19 @@ export function CheckoutForm({
           <li key={p.id ?? p.name}>
             <Card tone={p.featured ? 'ink' : 'default'} size="panel" className="flex flex-col gap-2.5">
               <Label tone={p.featured ? 'inverse' : 'default'}>{p.name}</Label>
-              <p className="text-[40px] leading-[44px] font-light tracking-[-0.04em]">
+              <p className="text-[40px] leading-[44px] font-extrabold tracking-[-0.04em]">
                 {p.isDonation ? (
                   <span className="text-[15px] tracking-normal">{t('publicEvent.donationFrom')} </span>
                 ) : null}
                 {p.priceLabel}
                 <span
-                  className={`ms-1 text-[15px] tracking-normal ${p.featured ? 'text-white/65' : 'text-zinc-500'}`}
+                  className={`ms-1 text-[15px] tracking-normal ${p.featured ? 'text-white/65' : 'text-ink-2'}`}
                 >
                   {t('publicEvent.allInSuffix')}
                 </span>
               </p>
               {p.regularPriceLabel && p.earlyUntil ? (
-                <p className={`text-caption ${p.featured ? 'text-white/75' : 'text-zinc-600'}`}>
+                <p className={`text-caption ${p.featured ? 'text-white/75' : 'text-ink-2'}`}>
                   {t('publicEvent.earlyBird', { date: p.earlyUntil, regular: p.regularPriceLabel })}
                 </p>
               ) : null}
@@ -151,7 +151,7 @@ export function CheckoutForm({
                   {p.accessDates.map((d) => (
                     <li
                       key={d.key}
-                      className={`rounded-pill border px-2.5 py-0.5 text-caption ${p.featured ? 'border-white/30 text-white/80' : 'border-zinc-200 text-zinc-600'}`}
+                      className={`rounded-pill border px-2.5 py-0.5 text-caption ${p.featured ? 'border-white/30 text-white/80' : 'border-line text-ink-2'}`}
                     >
                       {d.label}
                     </li>
@@ -159,12 +159,10 @@ export function CheckoutForm({
                 </ul>
               ) : null}
               {p.description ? (
-                <p className={`text-body ${p.featured ? 'text-white/65' : 'text-zinc-500'}`}>
-                  {p.description}
-                </p>
+                <p className={`text-body ${p.featured ? 'text-white/65' : 'text-ink-2'}`}>{p.description}</p>
               ) : null}
               {p.availability !== 'available' || p.fewLeft ? (
-                <p className={`text-caption ${p.featured ? 'text-white/75' : 'text-accent-text'}`}>
+                <p className={`text-caption ${p.featured ? 'text-white/75' : 'text-primary-ink'}`}>
                   {t(
                     `publicEvent.availability.${p.fewLeft && p.availability === 'available' ? 'fewLeft' : p.availability}`,
                   )}
@@ -173,30 +171,25 @@ export function CheckoutForm({
               {p.waitlistHref ? (
                 <Link
                   href={p.waitlistHref}
-                  className={buttonClass(p.featured ? 'on-dark' : 'secondary', 'md', 'self-start')}
+                  className={buttonClass(p.featured ? 'primary' : 'secondary', 'md', 'self-start')}
                 >
                   {t('waitlist.joinLink')}
                   <span className="sr-only"> — {p.name}</span>
                 </Link>
               ) : p.id && p.availability === 'available' && seatedTypes.has(p.id) ? (
-                <p className={`text-caption ${p.featured ? 'text-white/75' : 'text-zinc-600'}`}>
+                <p className={`text-caption ${p.featured ? 'text-white/75' : 'text-ink-2'}`}>
                   {t('checkout.chooseSeatsBelow')}
                 </p>
               ) : p.id && p.availability === 'available' ? (
                 <div className="flex flex-wrap items-center gap-2">
                   <label
                     htmlFor={`qty-${p.id}`}
-                    className={`text-caption ${p.featured ? 'text-white/75' : 'text-zinc-600'}`}
+                    className={`text-caption ${p.featured ? 'text-white/75' : 'text-ink-2'}`}
                   >
                     {t('checkout.quantity')}
                     <span className="sr-only"> — {p.name}</span>
                   </label>
-                  <select
-                    id={`qty-${p.id}`}
-                    name={`qty:${p.id}`}
-                    defaultValue="0"
-                    className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body text-zinc-900"
-                  >
+                  <select id={`qty-${p.id}`} name={`qty:${p.id}`} defaultValue="0" className="field">
                     {Array.from({ length: p.maxPerOrder + 1 }, (_, n) => (
                       <option key={n} value={n}>
                         {n}
@@ -207,7 +200,7 @@ export function CheckoutForm({
                     <>
                       <label
                         htmlFor={`amount-${p.id}`}
-                        className={`text-caption ${p.featured ? 'text-white/75' : 'text-zinc-600'}`}
+                        className={`text-caption ${p.featured ? 'text-white/75' : 'text-ink-2'}`}
                       >
                         {t('checkout.donationAmount')}
                         <span className="sr-only">
@@ -220,7 +213,7 @@ export function CheckoutForm({
                         name={`amount:${p.id}`}
                         inputMode="decimal"
                         pattern="[0-9]+([.,][0-9]{1,3})?"
-                        className="min-h-10 w-28 rounded-pill border border-zinc-200 bg-white px-4 text-body text-zinc-900"
+                        className="field w-28"
                       />
                     </>
                   ) : null}
@@ -230,7 +223,7 @@ export function CheckoutForm({
                 <button
                   type="button"
                   disabled
-                  className={buttonClass(p.featured ? 'on-dark' : 'secondary', 'md', 'self-start')}
+                  className={buttonClass(p.featured ? 'primary' : 'secondary', 'md', 'self-start')}
                 >
                   {t('publicEvent.select')}
                 </button>
@@ -283,12 +276,12 @@ export function CheckoutForm({
             </div>
           </div>
           {/* Unticked by default: buying is never consent to marketing. */}
-          <label className="flex min-h-6 items-start gap-2.5 text-caption text-zinc-600">
+          <label className="flex min-h-6 items-start gap-2.5 text-caption text-ink-2">
             <input
               type="checkbox"
               name="marketingOptIn"
               value="1"
-              className="mt-0.5 size-5 shrink-0 accent-ink"
+              className="mt-0.5 size-5 shrink-0 accent-primary"
             />
             <span>{t('checkout.marketingOptIn', { org: organizer })}</span>
           </label>
@@ -310,7 +303,7 @@ export function CheckoutForm({
               pending={pending}
               idPrefix="checkout-verify"
             />
-            <p className="text-caption text-zinc-600">{t('guestVerify.changeEmail')}</p>
+            <p className="text-caption text-ink-2">{t('guestVerify.changeEmail')}</p>
           </section>
         </Card>
       ) : null}

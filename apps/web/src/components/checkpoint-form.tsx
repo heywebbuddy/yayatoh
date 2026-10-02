@@ -35,7 +35,7 @@ export function CheckpointForm({
         hint={t('checkpoints.nameHint')}
       />
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="checkpoint-kind" className="text-caption text-zinc-600">
+        <label htmlFor="checkpoint-kind" className="text-caption text-ink-2">
           {t('checkpoints.kind')}
         </label>
         <select
@@ -43,7 +43,7 @@ export function CheckpointForm({
           name="kind"
           value={kind}
           onChange={(e) => setKind(e.target.value === 'zone' ? 'zone' : 'entrance')}
-          className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
+          className="field"
         >
           <option value="entrance">{t('checkpoints.entrance')}</option>
           <option value="zone">{t('checkpoints.zone')}</option>
@@ -51,12 +51,12 @@ export function CheckpointForm({
       </div>
       {kind === 'zone' ? (
         <fieldset className="flex flex-col gap-2 md:col-span-2">
-          <legend className="text-caption text-zinc-600">{t('checkpoints.types')}</legend>
-          <p className="text-caption text-zinc-500">{t('checkpoints.typesHint')}</p>
+          <legend className="text-caption text-ink-2">{t('checkpoints.types')}</legend>
+          <p className="text-caption text-ink-2">{t('checkpoints.typesHint')}</p>
           <div className="flex flex-wrap gap-x-5 gap-y-2">
             {ticketTypes.map((tt) => (
               <label key={tt.id} className="flex min-h-6 items-center gap-2 text-body">
-                <input type="checkbox" name="ticketTypeIds" value={tt.id} className="size-5 accent-ink" />
+                <input type="checkbox" name="ticketTypeIds" value={tt.id} className="size-5 accent-primary" />
                 {tt.name}
               </label>
             ))}
@@ -64,8 +64,8 @@ export function CheckpointForm({
         </fieldset>
       ) : null}
       <fieldset className="grid grid-cols-1 gap-4 md:col-span-2 md:grid-cols-2">
-        <legend className="text-caption text-zinc-600">{t('checkpoints.location')}</legend>
-        <p className="text-caption text-zinc-500 md:col-span-2">{t('checkpoints.locationHint')}</p>
+        <legend className="text-caption text-ink-2">{t('checkpoints.location')}</legend>
+        <p className="text-caption text-ink-2 md:col-span-2">{t('checkpoints.locationHint')}</p>
         <Input name="latitude" inputMode="decimal" label={t('checkpoints.latitude')} error={locationError} />
         <Input
           name="longitude"

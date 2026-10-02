@@ -46,22 +46,22 @@ export function ApiKeyForm({
           aria-describedby={invalid('scopes') ? 'scopes-error' : 'scopes-hint'}
           aria-invalid={invalid('scopes') ? true : undefined}
         >
-          <legend className="text-caption text-zinc-600">{t('apiKeys.scopes')}</legend>
-          <p id="scopes-hint" className="text-caption text-zinc-600">
+          <legend className="text-caption text-ink-2">{t('apiKeys.scopes')}</legend>
+          <p id="scopes-hint" className="text-caption text-ink-2">
             {t('apiKeys.scopesHint')}
           </p>
           <div className="grid gap-1 sm:grid-cols-2">
             {scopes.map((s) => (
               <label key={s} className="flex min-h-10 items-center gap-2.5 text-body">
-                <input type="checkbox" name="scope" value={s} className="size-4 accent-zinc-900" />
+                <input type="checkbox" name="scope" value={s} className="size-4 accent-primary" />
                 <span>
-                  {t(scopeKey(s))} <code className="font-mono text-caption text-zinc-600">{s}</code>
+                  {t(scopeKey(s))} <code className="font-mono text-caption text-ink-2">{s}</code>
                 </span>
               </label>
             ))}
           </div>
           {invalid('scopes') ? (
-            <p id="scopes-error" className="text-caption text-pink-700">
+            <p id="scopes-error" className="text-caption text-danger">
               {state.kind === 'error' && state.reason === 'test_key_scope'
                 ? t('apiKeys.testScopesInvalid')
                 : t('apiKeys.scopesRequired')}
@@ -70,7 +70,7 @@ export function ApiKeyForm({
         </fieldset>
         {/* M1.13d: a test key (`yy_test_…`) is read-only and never sees personal data. */}
         <fieldset className="flex flex-col gap-2">
-          <legend className="text-caption text-zinc-600">{t('apiKeys.mode')}</legend>
+          <legend className="text-caption text-ink-2">{t('apiKeys.mode')}</legend>
           {(['live', 'test'] as const).map((m) => (
             <label key={m} className="flex min-h-10 items-start gap-2.5 text-body">
               <input
@@ -79,11 +79,11 @@ export function ApiKeyForm({
                 value={m}
                 defaultChecked={m === 'live'}
                 aria-describedby={`mode-${m}-hint`}
-                className="mt-1 size-4 accent-zinc-900"
+                className="mt-1 size-4 accent-primary"
               />
               <span className="flex flex-col">
                 <span>{t(m === 'live' ? 'apiKeys.modeLive' : 'apiKeys.modeTest')}</span>
-                <span id={`mode-${m}-hint`} className="text-caption text-zinc-600">
+                <span id={`mode-${m}-hint`} className="text-caption text-ink-2">
                   {t(m === 'live' ? 'apiKeys.modeLiveHint' : 'apiKeys.modeTestHint')}
                 </span>
               </span>
@@ -98,13 +98,13 @@ export function ApiKeyForm({
       </form>
       <div aria-live="polite" className="flex flex-col gap-2">
         {state.kind === 'created' ? (
-          <div className="flex flex-col gap-2 rounded-card border border-zinc-200 bg-zinc-50 p-4">
+          <div className="flex flex-col gap-2 rounded-card border border-line bg-surface-2 p-4">
             <p className="text-body font-medium">{t('apiKeys.created', { name: state.name })}</p>
             <p className="text-body">{t('apiKeys.shownOnce')}</p>
             {state.sandbox ? <p className="text-body">{t('apiKeys.createdTest')}</p> : null}
             <code
               data-testid="new-api-key"
-              className="break-all rounded-card bg-white px-3 py-2 font-mono text-caption"
+              className="break-all rounded-card bg-surface px-3 py-2 font-mono text-caption"
             >
               {state.key}
             </code>
@@ -112,7 +112,7 @@ export function ApiKeyForm({
               <Button variant="secondary" size="sm" onClick={() => copy(state.key)}>
                 {t('apiKeys.copy')}
               </Button>
-              <span role="status" className="text-caption text-zinc-600">
+              <span role="status" className="text-caption text-ink-2">
                 {copied === state.key ? t('apiKeys.copied') : ''}
               </span>
             </div>

@@ -69,7 +69,10 @@ const pct = (part: number, whole: number, locale: string) =>
 
 function Big({ children, testId }: { children: ReactNode; testId?: string }) {
   return (
-    <p className="text-[32px] leading-none font-light tracking-[-0.045em] tabular-nums" data-testid={testId}>
+    <p
+      className="text-[32px] leading-none font-extrabold tracking-[-0.045em] tabular-nums"
+      data-testid={testId}
+    >
       {children}
     </p>
   );
@@ -107,7 +110,7 @@ function ReadinessBody({ d, c }: { d: Readiness; c: Ctx }) {
         {d.blocking.length === 0 && d.todo.length === 0 ? <p className="text-body">{t('allDone')}</p> : null}
         {d.blocking.length > 0 ? (
           <div className="flex flex-col gap-1">
-            <h3 className="text-caption font-medium text-pink-700">{t('blocking')}</h3>
+            <h3 className="text-caption font-medium text-danger">{t('blocking')}</h3>
             <ul className="flex list-none flex-col gap-1 p-0" data-testid="cc-blocking">
               {d.blocking.map(item)}
             </ul>
@@ -115,7 +118,7 @@ function ReadinessBody({ d, c }: { d: Readiness; c: Ctx }) {
         ) : null}
         {d.todo.length > 0 ? (
           <div className="flex flex-col gap-1">
-            <h3 className="text-caption text-zinc-600">{t('todo')}</h3>
+            <h3 className="text-caption text-ink-2">{t('todo')}</h3>
             <ul className="flex list-none flex-col gap-1 p-0">{d.todo.map(item)}</ul>
           </div>
         ) : null}
@@ -132,13 +135,13 @@ function SalesBody({ d, c }: { d: Sales; c: Ctx }) {
       {d.lines.map((l) => (
         <div key={l.currency} className="flex flex-col gap-1" data-currency={l.currency}>
           <Big testId="cc-sales-total">{m(l.total, l.currency)}</Big>
-          <p className="text-caption text-zinc-600">
+          <p className="text-caption text-ink-2">
             {t('today', { amount: m(l.today, l.currency) })} ·{' '}
             {t('refunds', { amount: m(l.refunds, l.currency) })}
           </p>
         </div>
       ))}
-      <p className="text-caption text-zinc-600">{t('orders', { count: d.orders })}</p>
+      <p className="text-caption text-ink-2">{t('orders', { count: d.orders })}</p>
     </div>
   );
 }
@@ -149,7 +152,7 @@ function TicketsBody({ d, c }: { d: Tickets; c: Ctx }) {
   return (
     <div className="flex flex-col gap-2">
       <Big testId="cc-tickets-sold">{num(d.sold, c.locale)}</Big>
-      <p className="text-caption text-zinc-600">
+      <p className="text-caption text-ink-2">
         {d.capacity > 0 ? t('ofCapacity', { capacity: num(d.capacity, c.locale) }) : t('noCapacity')}
         {d.comp > 0 ? ` · ${t('comps', { count: d.comp })}` : ''}
       </p>
@@ -163,8 +166,8 @@ function CheckinsBody({ d, c }: { d: Checkins; c: Ctx }) {
   return (
     <div className="flex flex-col gap-2">
       <Big testId="cc-checkins-today">{num(d.today, c.locale)}</Big>
-      <p className="text-caption text-zinc-600">{t('today')}</p>
-      <p className="text-caption text-zinc-600" data-testid="cc-checkins-total">
+      <p className="text-caption text-ink-2">{t('today')}</p>
+      <p className="text-caption text-ink-2" data-testid="cc-checkins-total">
         {t('total', { total: num(d.total, c.locale), valid: num(d.valid, c.locale) })}
       </p>
     </div>
@@ -174,11 +177,11 @@ function CheckinsBody({ d, c }: { d: Checkins; c: Ctx }) {
 function SeatFillBody({ d, c }: { d: SeatFill; c: Ctx }) {
   const t = useTranslations('commandCenter.widget.seatFill');
   const tm = useTranslations('commandCenter');
-  if (d.total === 0) return <p className="text-body text-zinc-600">{t('noSeats')}</p>;
+  if (d.total === 0) return <p className="text-body text-ink-2">{t('noSeats')}</p>;
   return (
     <div className="flex flex-col gap-2">
       <Big>{pct(d.occupied, d.total, c.locale)}</Big>
-      <p className="text-caption text-zinc-600">
+      <p className="text-caption text-ink-2">
         {t('ofSeats', { occupied: num(d.occupied, c.locale), total: num(d.total, c.locale) })}
       </p>
       <Meter value={d.occupied} max={d.total} label={tm('meter', { value: d.occupied, max: d.total })} />
@@ -188,13 +191,13 @@ function SeatFillBody({ d, c }: { d: SeatFill; c: Ctx }) {
 
 function DevicesBody({ d, c }: { d: Devices; c: Ctx }) {
   const t = useTranslations('commandCenter.widget.devices');
-  if (d.enrolled === 0) return <p className="text-body text-zinc-600">{t('none')}</p>;
+  if (d.enrolled === 0) return <p className="text-body text-ink-2">{t('none')}</p>;
   return (
     <div className="flex flex-col gap-2">
       <Big testId="cc-devices-online">{num(d.online, c.locale)}</Big>
-      <p className="text-caption text-zinc-600">{t('ofEnrolled', { count: d.enrolled })}</p>
+      <p className="text-caption text-ink-2">{t('ofEnrolled', { count: d.enrolled })}</p>
       {d.lowBattery > 0 ? (
-        <p className="text-caption text-pink-700">{t('lowBattery', { count: d.lowBattery })}</p>
+        <p className="text-caption text-danger">{t('lowBattery', { count: d.lowBattery })}</p>
       ) : null}
     </div>
   );
@@ -207,12 +210,12 @@ function TimelineBody({ d, c }: { d: Timeline; c: Ctx }) {
     dateStyle: 'medium',
     timeStyle: 'short',
   });
-  if (d.items.length === 0) return <p className="text-body text-zinc-600">{t('empty')}</p>;
+  if (d.items.length === 0) return <p className="text-body text-ink-2">{t('empty')}</p>;
   return (
     <ol className="flex list-none flex-col gap-2 p-0">
       {d.items.map((i) => (
         <li key={`${i.kind}-${i.at}-${i.title ?? ''}`} className="flex flex-wrap items-baseline gap-x-3">
-          <time dateTime={i.at} className="min-w-36 text-caption text-zinc-600 tabular-nums">
+          <time dateTime={i.at} className="min-w-36 text-caption text-ink-2 tabular-nums">
             {fmt.format(new Date(i.at))}
           </time>
           <span className="text-body">{t(`kind.${i.kind}`, { title: i.title ?? '' })}</span>
@@ -233,7 +236,7 @@ function EntrancesBody({ d, c }: { d: Entrances; c: Ctx }) {
       </p>
       {d.byEntrance.length > 0 ? (
         <div className="flex flex-col gap-1">
-          <h3 className="text-caption text-zinc-600">{t('byEntrance')}</h3>
+          <h3 className="text-caption text-ink-2">{t('byEntrance')}</h3>
           <ul className="flex list-none flex-col gap-1 p-0">
             {d.byEntrance.map((e) => (
               <li key={e.name} className="flex justify-between gap-3 text-body">
@@ -246,7 +249,7 @@ function EntrancesBody({ d, c }: { d: Entrances; c: Ctx }) {
       ) : null}
       {d.byDate.length > 1 ? (
         <div className="flex flex-col gap-1">
-          <h3 className="text-caption text-zinc-600">{t('byDate')}</h3>
+          <h3 className="text-caption text-ink-2">{t('byDate')}</h3>
           <ul className="flex list-none flex-col gap-1 p-0">
             {d.byDate.map((r) => (
               <li key={r.day} className="flex justify-between gap-3 text-body">
@@ -265,20 +268,20 @@ function EntrancesBody({ d, c }: { d: Entrances; c: Ctx }) {
 function DeviceBoardBody({ d, c }: { d: DeviceBoard; c: Ctx }) {
   const t = useTranslations('scanStaff');
   const time = new Intl.DateTimeFormat(c.locale, { timeStyle: 'short', timeZone: c.timeZone });
-  if (d.devices.length === 0) return <p className="text-body text-zinc-600">{t('noDevices')}</p>;
+  if (d.devices.length === 0) return <p className="text-body text-ink-2">{t('noDevices')}</p>;
   return (
     <ul className="flex list-none flex-col gap-2 p-0" data-testid="cc-device-board">
       {d.devices.map((v) => (
         <li key={v.id} className="flex flex-col gap-0.5">
           <span className="flex flex-wrap items-center gap-2 text-body">
             <span className="font-medium">{v.label}</span>
-            {v.kiosk ? <span className="text-caption text-zinc-600">{t('kiosk')}</span> : null}
+            {v.kiosk ? <span className="text-caption text-ink-2">{t('kiosk')}</span> : null}
             <StatusDot
               status={v.online ? 'success' : 'danger'}
               label={v.online ? t('online') : t('offline')}
             />
           </span>
-          <span className="text-caption text-zinc-600">
+          <span className="text-caption text-ink-2">
             {[
               v.checkpoint ?? t('wholeEvent'),
               v.lastSeenAt ? t('lastSeen', { time: time.format(new Date(v.lastSeenAt)) }) : t('neverSeen'),
@@ -297,8 +300,8 @@ function DeviceBoardBody({ d, c }: { d: DeviceBoard; c: Ctx }) {
 function AlertsBody({ d, c }: { d: Alerts; c: Ctx }) {
   const t = useTranslations('commandCenter.widget.alerts');
   const ta = useTranslations('alerts');
-  if (d.engine === 'pending') return <p className="text-body text-zinc-600">{t('pending')}</p>;
-  if (d.alerts.length === 0) return <p className="text-body text-zinc-600">{t('none')}</p>;
+  if (d.engine === 'pending') return <p className="text-body text-ink-2">{t('pending')}</p>;
+  if (d.alerts.length === 0) return <p className="text-body text-ink-2">{t('none')}</p>;
   // Alert fix paths are org-relative (M3.2b); the board's base is the event's.
   const orgBase = c.base.replace(/\/e\/[^/]+$/, '');
   return (

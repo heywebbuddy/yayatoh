@@ -26,7 +26,7 @@ export function EventDetailsForm({
   const t = useTranslations('details');
   const te = useTranslations();
   const [state, formAction, pending] = useActionState(action, INITIAL_FORM_STATE);
-  const selectClass = 'min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body';
+  const selectClass = 'field';
   const tagError =
     state.fields?.includes('tags') && state.reason
       ? t(`tagErrors.${state.reason}` as 'tagErrors.too_many_tags')
@@ -36,7 +36,7 @@ export function EventDetailsForm({
       <fieldset disabled={disabled} className="grid grid-cols-1 gap-5 md:grid-cols-2">
         <legend className="sr-only">{t('legend')}</legend>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="details-venue" className="text-caption text-zinc-600">
+          <label htmlFor="details-venue" className="text-caption text-ink-2">
             {t('venue')}
           </label>
           <select
@@ -53,14 +53,14 @@ export function EventDetailsForm({
               </option>
             ))}
           </select>
-          <p id="details-venue-hint" className="text-caption text-zinc-500">
+          <p id="details-venue-hint" className="text-caption text-ink-2">
             {details.venueName && !details.venueId
               ? t('freeTextVenue', { venue: details.venueName })
               : t('venueHint')}
           </p>
         </div>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="details-category" className="text-caption text-zinc-600">
+          <label htmlFor="details-category" className="text-caption text-ink-2">
             {t('category')}
           </label>
           <select
@@ -78,7 +78,7 @@ export function EventDetailsForm({
           </select>
         </div>
         <fieldset className="flex flex-col gap-2 md:col-span-2">
-          <legend className="text-caption text-zinc-600">{t('visibility')}</legend>
+          <legend className="text-caption text-ink-2">{t('visibility')}</legend>
           <div className="flex flex-wrap gap-x-6 gap-y-2">
             {(['public', 'unlisted', 'private'] as const).map((v) => (
               <label key={v} className="flex min-h-6 items-center gap-2 text-body">
@@ -93,10 +93,10 @@ export function EventDetailsForm({
               </label>
             ))}
           </div>
-          <p className="text-caption text-zinc-500">{t('visibilityHint')}</p>
+          <p className="text-caption text-ink-2">{t('visibilityHint')}</p>
         </fieldset>
         <fieldset className="flex flex-col gap-2 md:col-span-2">
-          <legend className="text-caption text-zinc-600">{t('attendanceMode')}</legend>
+          <legend className="text-caption text-ink-2">{t('attendanceMode')}</legend>
           <div className="flex flex-wrap gap-x-6 gap-y-2">
             {ATTENDANCE_MODES.map((m) => (
               <label key={m} className="flex min-h-6 items-center gap-2 text-body">
@@ -111,7 +111,7 @@ export function EventDetailsForm({
               </label>
             ))}
           </div>
-          <p className="text-caption text-zinc-500">{t('attendanceHint')}</p>
+          <p className="text-caption text-ink-2">{t('attendanceHint')}</p>
         </fieldset>
         <div className="md:col-span-2">
           <Input

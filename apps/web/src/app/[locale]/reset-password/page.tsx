@@ -35,7 +35,7 @@ export default async function ResetPasswordPage({
           <ResetPasswordForm token={token} />
         ) : (
           <div className="flex flex-col gap-4">
-            <p className="text-body text-zinc-600">{t('errors.invalid_token')}</p>
+            <p className="text-body text-ink-2">{t('errors.invalid_token')}</p>
             <Link href="/forgot-password" className="self-start text-body underline underline-offset-4">
               {t('askAgain')}
             </Link>

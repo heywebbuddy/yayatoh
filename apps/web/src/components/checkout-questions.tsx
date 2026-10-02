@@ -62,7 +62,7 @@ export function CheckoutQuestions({
                   value="1"
                   required={q.required}
                   onChange={(e) => set(q.key, e.target.checked)}
-                  className="mt-0.5 size-5 shrink-0 accent-ink"
+                  className="mt-0.5 size-5 shrink-0 accent-primary"
                 />
                 <span>{label(q)}</span>
               </label>
@@ -71,7 +71,7 @@ export function CheckoutQuestions({
           if (q.type === 'select') {
             return (
               <div key={q.key} className="flex flex-col gap-1.5">
-                <label htmlFor={id} className="text-caption text-zinc-600">
+                <label htmlFor={id} className="text-caption text-ink-2">
                   {label(q)}
                 </label>
                 <select
@@ -81,7 +81,7 @@ export function CheckoutQuestions({
                   defaultValue=""
                   aria-invalid={error(q.key) ? true : undefined}
                   onChange={(e) => set(q.key, e.target.value || undefined)}
-                  className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body text-zinc-900"
+                  className="field"
                 >
                   <option value="">{t('checkout.choose')}</option>
                   {q.options.map((o) => (
@@ -96,10 +96,10 @@ export function CheckoutQuestions({
           if (q.type === 'multi_select') {
             return (
               <fieldset key={q.key} className="flex flex-col gap-1.5 border-0 p-0">
-                <legend className="text-caption text-zinc-600">{label(q)}</legend>
+                <legend className="text-caption text-ink-2">{label(q)}</legend>
                 {q.options.map((o) => (
                   <label key={o.value} className="flex min-h-6 items-center gap-2.5 text-body">
-                    <input type="checkbox" name={name} value={o.value} className="size-5 accent-ink" />
+                    <input type="checkbox" name={name} value={o.value} className="size-5 accent-primary" />
                     {o.label}
                   </label>
                 ))}
@@ -109,7 +109,7 @@ export function CheckoutQuestions({
           if (q.type === 'long_text') {
             return (
               <div key={q.key} className="flex flex-col gap-1.5">
-                <label htmlFor={id} className="text-caption text-zinc-600">
+                <label htmlFor={id} className="text-caption text-ink-2">
                   {label(q)}
                 </label>
                 <textarea
@@ -118,7 +118,7 @@ export function CheckoutQuestions({
                   required={q.required}
                   maxLength={2000}
                   rows={3}
-                  className="rounded-card border border-zinc-200 bg-white px-4 py-2.5 text-body text-zinc-900"
+                  className="rounded-card border border-line bg-surface px-4 py-2.5 text-body text-ink"
                 />
               </div>
             );

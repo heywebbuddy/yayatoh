@@ -26,7 +26,7 @@ export async function EventReviews({
       aria-labelledby="reviews-heading"
       className="flex flex-col gap-4 px-6 pb-10 md:px-16"
     >
-      <h2 id="reviews-heading" className="text-[28px] font-normal tracking-[-0.03em]">
+      <h2 id="reviews-heading" className="text-[28px] font-extrabold tracking-[-0.03em]">
         {t('public.title')}
       </h2>
       <p className="flex flex-wrap items-center gap-3 text-body">
@@ -37,10 +37,10 @@ export async function EventReviews({
       </p>
       <ul aria-label={t('public.recent')} className="flex list-none flex-col gap-3 p-0">
         {summary.recent.map((r) => (
-          <li key={r.id} className="flex flex-col gap-2 rounded-card border border-zinc-200 p-4">
+          <li key={r.id} className="flex flex-col gap-2 rounded-card border border-line p-4">
             <Stars rating={r.rating} label={t('ratingLabel', { rating: r.rating })} />
             {r.body ? <p className="whitespace-pre-line text-body">{r.body}</p> : null}
-            <p className="text-caption text-zinc-500">
+            <p className="text-caption text-ink-2">
               {r.author ?? t('anonymous')} · {day.format(r.createdAt)}
             </p>
             <ReportForm

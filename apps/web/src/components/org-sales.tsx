@@ -45,7 +45,7 @@ export async function OrgSales({
           <h2 id="sales-heading" className="text-section">
             {t('reports.org.title')}
           </h2>
-          <p className="text-caption text-zinc-600">
+          <p className="text-caption text-ink-2">
             {r.from && r.to
               ? t('reports.org.range', { from: day(r.from), to: day(r.to) })
               : t('reports.org.periods.all')}
@@ -55,14 +55,14 @@ export async function OrgSales({
       </div>
       <form method="get" className="flex flex-wrap items-start gap-3">
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="report-period" className="text-caption text-zinc-600">
+          <label htmlFor="report-period" className="text-caption text-ink-2">
             {t('reports.org.period')}
           </label>
           <select
             id="report-period"
             name="period"
             defaultValue={period.error ? 'custom' : period.period}
-            className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
+            className="field"
           >
             {PERIODS.map((p) => (
               <option key={p} value={p}>

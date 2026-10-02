@@ -25,7 +25,7 @@ export default async function AuthErrorPage({ params }: { params: Promise<{ loca
     <main id="main" className="mx-auto flex min-h-dvh max-w-md flex-col justify-center gap-6 px-6 py-16">
       <PageHeader eyebrow={<Label>{t('eyebrow')}</Label>} title={t('title')} />
       <Card size="panel" className="flex flex-col gap-4">
-        <p className="text-body text-zinc-600">{t('description')}</p>
+        <p className="text-body text-ink-2">{t('description')}</p>
         <div className="flex flex-wrap gap-2">
           <Link href="/sign-in" className={buttonClass('primary')}>
             {t('signInAgain')}

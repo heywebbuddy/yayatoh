@@ -16,7 +16,7 @@ export function BrandColorField({ initial, fallback }: { initial: string | null;
     <div className="flex flex-col gap-3">
       <div className="flex flex-wrap items-end gap-3">
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="brand-color" className="text-caption text-zinc-600">
+          <label htmlFor="brand-color" className="text-caption text-ink-2">
             {t('color')}
           </label>
           <input
@@ -27,7 +27,7 @@ export function BrandColorField({ initial, fallback }: { initial: string | null;
             placeholder={t('placeholder')}
             pattern="#[0-9a-fA-F]{6}"
             aria-describedby="brand-color-hint"
-            className="min-h-10 w-40 rounded-pill border border-zinc-200 bg-white px-4 font-mono text-body"
+            className="field w-40 font-mono"
           />
         </div>
         <input
@@ -35,7 +35,7 @@ export function BrandColorField({ initial, fallback }: { initial: string | null;
           aria-label={t('picker')}
           value={valid ? value.toLowerCase() : fallback}
           onChange={(e) => setValue(e.target.value)}
-          className="size-10 cursor-pointer rounded-pill border border-zinc-200 bg-white"
+          className="size-10 cursor-pointer rounded-pill border border-line bg-surface"
         />
         <span
           ref={preview}
@@ -45,7 +45,7 @@ export function BrandColorField({ initial, fallback }: { initial: string | null;
           {t('preview')}
         </span>
       </div>
-      <p id="brand-color-hint" className="text-caption text-zinc-500" aria-live="polite">
+      <p id="brand-color-hint" className="text-caption text-ink-2" aria-live="polite">
         {t('ratio', { ratio: p.textRatio.toFixed(1) })}
         {p.uiOk ? '' : ` ${t('tooLight', { ratio: p.onPage.toFixed(1) })}`}
       </p>

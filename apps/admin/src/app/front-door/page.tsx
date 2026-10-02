@@ -11,7 +11,7 @@ import { setFrontDoorFlagAction } from './actions.ts';
 
 const ERRORS = ['invalid', 'reason', 'step_up', 'rate_limited', 'method'] as const;
 const DOT = { legacy: 'neutral', canary: 'warning', next: 'success' } as const;
-const field = 'min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body';
+const field = 'field';
 
 function Scroll({ label, children }: { label: string; children: ReactNode }) {
   return (
@@ -59,7 +59,7 @@ export default async function FrontDoorPage({
         {done === 'changed' ? <Alert tone="info" title={t('done')} /> : null}
         {errorCode ? <Alert tone="danger" title={t(`errors.${errorCode}`)} /> : null}
       </div>
-      <p className="text-body text-zinc-600">{t('summary', { version: data.version, days: data.days })}</p>
+      <p className="text-body text-ink-2">{t('summary', { version: data.version, days: data.days })}</p>
 
       <Card>
         <h2 className="text-section">{t('hosts.title')}</h2>
@@ -67,7 +67,7 @@ export default async function FrontDoorPage({
           {hosts.map((h) => (
             <li key={h.host} className="flex flex-wrap items-center gap-x-3">
               <span className="font-mono">{h.host}</span>
-              <span className="text-caption text-zinc-600">{t(`instance.${h.instance}`)}</span>
+              <span className="text-caption text-ink-2">{t(`instance.${h.instance}`)}</span>
               <StatusDot
                 status={h.configured ? 'success' : 'neutral'}
                 label={h.configured ? t('hosts.configured') : t('hosts.off')}
@@ -79,11 +79,11 @@ export default async function FrontDoorPage({
 
       <Card className="p-0" id="routes">
         <h2 className="px-4 pt-4 text-section">{t('routes.title')}</h2>
-        <p className="px-4 text-caption text-zinc-600">{t('routes.description')}</p>
+        <p className="px-4 text-caption text-ink-2">{t('routes.description')}</p>
         <Scroll label={t('routes.title')}>
           <table className="w-full text-start text-caption">
             <caption className="sr-only">{t('routes.title')}</caption>
-            <thead className="text-zinc-500">
+            <thead className="text-ink-2">
               <tr>
                 {(
                   [
@@ -106,11 +106,11 @@ export default async function FrontDoorPage({
             </thead>
             <tbody>
               {data.routes.map((r) => (
-                <tr key={`${r.host}|${r.route}`} className="border-t border-zinc-100 align-top">
+                <tr key={`${r.host}|${r.route}`} className="border-t border-line align-top">
                   <td className="px-4 py-2 font-mono">{r.host}</td>
                   <td className="px-4 py-2">
                     <span className="font-mono">{r.route}</span>
-                    <span className="block text-zinc-500">{r.shapes.join(', ')}</span>
+                    <span className="block text-ink-2">{r.shapes.join(', ')}</span>
                   </td>
                   <td className="px-4 py-2">{r.stage}</td>
                   <td className="px-4 py-2 whitespace-nowrap">
@@ -137,17 +137,17 @@ export default async function FrontDoorPage({
       <Card id="change">
         <h2 className="text-section">{t('change.title')}</h2>
         {!canChange ? (
-          <p className="mt-2 text-caption text-zinc-600">{t('change.adminsOnly')}</p>
+          <p className="mt-2 text-caption text-ink-2">{t('change.adminsOnly')}</p>
         ) : (
           <form
             aria-label={t('change.title')}
             action={setFrontDoorFlagAction}
             className="mt-2 flex flex-col gap-3"
           >
-            <p className="text-caption text-zinc-600">{t('change.description')}</p>
+            <p className="text-caption text-ink-2">{t('change.description')}</p>
             <div className="flex flex-wrap gap-3">
               <div className="flex min-w-0 max-w-full flex-col gap-1.5">
-                <label htmlFor="fd-host" className="text-caption text-zinc-600">
+                <label htmlFor="fd-host" className="text-caption text-ink-2">
                   {t('change.host')}
                 </label>
                 <select id="fd-host" name="host" required className={`${field} w-full max-w-full`}>
@@ -159,7 +159,7 @@ export default async function FrontDoorPage({
                 </select>
               </div>
               <div className="flex min-w-0 max-w-full flex-col gap-1.5">
-                <label htmlFor="fd-route" className="text-caption text-zinc-600">
+                <label htmlFor="fd-route" className="text-caption text-ink-2">
                   {t('change.route')}
                 </label>
                 <select id="fd-route" name="route" required className={`${field} w-full max-w-full`}>
@@ -176,7 +176,7 @@ export default async function FrontDoorPage({
               </div>
             </div>
             <fieldset className="flex flex-col gap-1.5">
-              <legend className="text-caption text-zinc-600">{t('change.state')}</legend>
+              <legend className="text-caption text-ink-2">{t('change.state')}</legend>
               <div className="flex flex-wrap gap-x-4 gap-y-1">
                 {ROUTE_STATES.map((s) => (
                   <label key={s} className="flex min-h-6 items-center gap-2 text-body">
@@ -185,10 +185,10 @@ export default async function FrontDoorPage({
                   </label>
                 ))}
               </div>
-              <p className="text-caption text-zinc-500">{t('change.stateHelp')}</p>
+              <p className="text-caption text-ink-2">{t('change.stateHelp')}</p>
             </fieldset>
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="fd-reason" className="text-caption text-zinc-600">
+              <label htmlFor="fd-reason" className="text-caption text-ink-2">
                 {t('change.reason')}
               </label>
               <textarea
@@ -198,14 +198,14 @@ export default async function FrontDoorPage({
                 minLength={3}
                 maxLength={500}
                 rows={2}
-                className="rounded-card border border-zinc-200 bg-white px-4 py-2 text-body"
+                className="rounded-card border border-line bg-surface px-4 py-2 text-body"
               />
             </div>
             {method === 'email' ? (
-              <p className="text-caption text-zinc-600">{t('errors.method')}</p>
+              <p className="text-caption text-ink-2">{t('errors.method')}</p>
             ) : (
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="fd-proof" className="text-caption text-zinc-600">
+                <label htmlFor="fd-proof" className="text-caption text-ink-2">
                   {method === 'totp' ? t('change.code') : t('change.password')}
                 </label>
                 {method === 'totp' ? (
@@ -238,14 +238,14 @@ export default async function FrontDoorPage({
 
       <Card className="p-0">
         <h2 className="px-4 pt-4 text-section">{t('other.title')}</h2>
-        <p className="px-4 text-caption text-zinc-600">{t('other.description')}</p>
+        <p className="px-4 text-caption text-ink-2">{t('other.description')}</p>
         {data.other.length === 0 ? (
-          <p className="p-4 text-body text-zinc-600">{t('other.empty')}</p>
+          <p className="p-4 text-body text-ink-2">{t('other.empty')}</p>
         ) : (
           <Scroll label={t('other.title')}>
             <table className="w-full text-start text-caption">
               <caption className="sr-only">{t('other.title')}</caption>
-              <thead className="text-zinc-500">
+              <thead className="text-ink-2">
                 <tr>
                   {(
                     [
@@ -267,7 +267,7 @@ export default async function FrontDoorPage({
               </thead>
               <tbody>
                 {data.other.map((r) => (
-                  <tr key={`${r.host}|${r.route}|${r.servedBy}`} className="border-t border-zinc-100">
+                  <tr key={`${r.host}|${r.route}|${r.servedBy}`} className="border-t border-line">
                     <td className="px-4 py-2 font-mono">{r.host}</td>
                     <td className="px-4 py-2">
                       {t(`bucket.${r.route === 'platform' ? 'platform' : 'legacy'}`)}
@@ -290,14 +290,14 @@ export default async function FrontDoorPage({
 
       <Card className="p-0">
         <h2 className="px-4 pt-4 text-section">{t('notFound.title')}</h2>
-        <p className="px-4 text-caption text-zinc-600">{t('notFound.description', { days: data.days })}</p>
+        <p className="px-4 text-caption text-ink-2">{t('notFound.description', { days: data.days })}</p>
         {data.notFound.length === 0 ? (
-          <p className="p-4 text-body text-zinc-600">{t('notFound.empty')}</p>
+          <p className="p-4 text-body text-ink-2">{t('notFound.empty')}</p>
         ) : (
           <Scroll label={t('notFound.title')}>
             <table className="w-full text-start text-caption">
               <caption className="sr-only">{t('notFound.title')}</caption>
-              <thead className="text-zinc-500">
+              <thead className="text-ink-2">
                 <tr>
                   {(['host', 'path', 'servedBy', 'count'] as const).map((k) => (
                     <th key={k} scope="col" className="px-4 py-2 text-start font-normal">
@@ -308,7 +308,7 @@ export default async function FrontDoorPage({
               </thead>
               <tbody>
                 {data.notFound.map((r) => (
-                  <tr key={`${r.host}|${r.path}|${r.servedBy}`} className="border-t border-zinc-100">
+                  <tr key={`${r.host}|${r.path}|${r.servedBy}`} className="border-t border-line">
                     <td className="px-4 py-2 font-mono">{r.host}</td>
                     <td className="px-4 py-2 font-mono break-all">{r.path}</td>
                     <td className="px-4 py-2">{t(`servedBy.${r.servedBy}`)}</td>
@@ -324,18 +324,18 @@ export default async function FrontDoorPage({
       <Card>
         <h2 className="text-section">{t('changes.title')}</h2>
         {data.changes.length === 0 ? (
-          <p className="mt-2 text-body text-zinc-600">{t('changes.empty')}</p>
+          <p className="mt-2 text-body text-ink-2">{t('changes.empty')}</p>
         ) : (
           <ul aria-label={t('changes.title')} className="mt-2 flex flex-col gap-2 text-body">
             {data.changes.map((c) => (
-              <li key={c.id} className="border-t border-zinc-100 pt-2">
+              <li key={c.id} className="border-t border-line pt-2">
                 {t('changes.item', {
                   host: c.host,
                   route: c.route,
                   from: t(`state.${c.fromState as 'legacy'}`),
                   to: t(`state.${c.toState as 'legacy'}`),
                 })}
-                <span className="block text-caption text-zinc-600">
+                <span className="block text-caption text-ink-2">
                   {t('changes.meta', { who: who(c.actor), date: date.format(c.at), reason: c.reason })}
                 </span>
               </li>

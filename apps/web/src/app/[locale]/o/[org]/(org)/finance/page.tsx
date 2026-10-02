@@ -41,7 +41,7 @@ export default async function FinancePage({ params }: { params: Promise<{ locale
           {t('runsTitle')}
         </h2>
         {runs.length === 0 ? (
-          <p className="text-body text-zinc-600">{t('noRuns')}</p>
+          <p className="text-body text-ink-2">{t('noRuns')}</p>
         ) : (
           <Table
             caption={t('runsTitle')}
@@ -91,20 +91,20 @@ export default async function FinancePage({ params }: { params: Promise<{ locale
                 <Card className="flex flex-col gap-3">
                   <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
                     <StatusDot status="warning" label={t(`kind.${i.kind}`)} />
-                    <span className="text-caption text-zinc-600">{day(i.day)}</span>
+                    <span className="text-caption text-ink-2">{day(i.day)}</span>
                     <span className="break-all font-mono text-caption">{i.reference}</span>
                   </div>
                   <dl className="grid grid-cols-1 gap-2 sm:grid-cols-3">
                     <div>
-                      <dt className="text-caption text-zinc-600">{t('ledger')}</dt>
+                      <dt className="text-caption text-ink-2">{t('ledger')}</dt>
                       <dd className="font-mono tabular-nums">{fmt(i.ledgerMinor, i.currency)}</dd>
                     </div>
                     <div>
-                      <dt className="text-caption text-zinc-600">{t('provider')}</dt>
+                      <dt className="text-caption text-ink-2">{t('provider')}</dt>
                       <dd className="font-mono tabular-nums">{fmt(i.providerMinor, i.currency)}</dd>
                     </div>
                     <div>
-                      <dt className="text-caption text-zinc-600">{t('difference')}</dt>
+                      <dt className="text-caption text-ink-2">{t('difference')}</dt>
                       <dd className="font-mono tabular-nums">{fmt(i.differenceMinor, i.currency)}</dd>
                     </div>
                   </dl>
@@ -114,7 +114,7 @@ export default async function FinancePage({ params }: { params: Promise<{ locale
                       reference={i.reference}
                     />
                   ) : (
-                    <p className="text-caption text-zinc-600">{t('noResolveAccess')}</p>
+                    <p className="text-caption text-ink-2">{t('noResolveAccess')}</p>
                   )}
                 </Card>
               </li>

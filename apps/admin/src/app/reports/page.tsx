@@ -28,7 +28,7 @@ export default async function ReportsPage({
     <Link
       href={s === 'open' ? '/reports' : '/reports?status=closed'}
       aria-current={status === s ? 'page' : undefined}
-      className="inline-flex min-h-10 items-center rounded-pill border border-zinc-200 px-4 text-body aria-[current=page]:border-ink aria-[current=page]:font-medium"
+      className="inline-flex min-h-10 items-center rounded-pill border border-line px-4 text-body aria-[current=page]:border-ink aria-[current=page]:font-medium"
     >
       {t(`tabs.${s}`)}
     </Link>
@@ -65,7 +65,7 @@ export default async function ReportsPage({
                   <h2 id={`report-${r.id}`} className="text-section">
                     {t('heading', { org: r.orgName, reason: t(`reasons.${r.reason}`) })}
                   </h2>
-                  <p className="text-caption text-zinc-600">
+                  <p className="text-caption text-ink-2">
                     {t('meta', { reporter: t(`reporter.${r.reporter}`), at: when.format(r.createdAt) })}{' '}
                     <Link href={`/tenants/${r.orgId}`} className="underline">
                       {t('tenantLink', { slug: r.orgSlug })}
@@ -73,21 +73,21 @@ export default async function ReportsPage({
                   </p>
                   {r.note ? (
                     <p className="text-body">
-                      <span className="text-zinc-600">{t('note')}</span> {r.note}
+                      <span className="text-ink-2">{t('note')}</span> {r.note}
                     </p>
                   ) : null}
                   <section aria-label={t('excerpt')} className="flex flex-col gap-2">
-                    <h3 className="text-caption text-zinc-600">{t('excerpt')}</h3>
+                    <h3 className="text-caption text-ink-2">{t('excerpt')}</h3>
                     {r.excerpt.length === 0 ? (
-                      <p className="text-caption text-zinc-500">{t('noMessages')}</p>
+                      <p className="text-caption text-ink-2">{t('noMessages')}</p>
                     ) : (
                       <ol className="flex list-none flex-col gap-2 p-0">
                         {r.excerpt.map((m) => (
                           <li
                             key={`${m.at.toISOString()}-${m.from}`}
-                            className="rounded-card border border-zinc-100 bg-zinc-50 px-3 py-2"
+                            className="rounded-card border border-line bg-surface-2 px-3 py-2"
                           >
-                            <p className="text-caption text-zinc-600">
+                            <p className="text-caption text-ink-2">
                               {t(`from.${m.from}`)} · {when.format(m.at)}
                               {m.announcement ? ` · ${t('announcement')}` : ''}
                             </p>
@@ -103,7 +103,7 @@ export default async function ReportsPage({
                       className="flex flex-col gap-2"
                       aria-label={t('reviewLabel')}
                     >
-                      <label htmlFor={`note-${r.id}`} className="text-caption text-zinc-600">
+                      <label htmlFor={`note-${r.id}`} className="text-caption text-ink-2">
                         {t('reviewNote')}
                       </label>
                       <textarea
@@ -113,10 +113,10 @@ export default async function ReportsPage({
                         maxLength={1000}
                         aria-invalid={noteError(r.id) ? true : undefined}
                         aria-describedby={noteError(r.id) ? `note-${r.id}-error` : undefined}
-                        className="rounded-card border border-zinc-200 bg-white px-3 py-2 text-body"
+                        className="rounded-card border border-line bg-surface px-3 py-2 text-body"
                       />
                       {noteError(r.id) ? (
-                        <p id={`note-${r.id}-error`} className="text-caption text-pink-700">
+                        <p id={`note-${r.id}-error`} className="text-caption text-danger">
                           {t(`errors.${sp.error}`)}
                         </p>
                       ) : null}

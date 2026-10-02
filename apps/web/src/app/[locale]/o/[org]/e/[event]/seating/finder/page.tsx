@@ -60,7 +60,7 @@ export default async function SeatFinderSettingsPage({
             </span>
           </Card>
           {ev.status !== 'published' || ev.visibility === 'private' ? (
-            <p className="text-caption text-zinc-600">{t('finder.notPublic')}</p>
+            <p className="text-caption text-ink-2">{t('finder.notPublic')}</p>
           ) : null}
 
           <section aria-labelledby="finder-settings" className="flex flex-col gap-3">
@@ -85,12 +85,12 @@ export default async function SeatFinderSettingsPage({
                       />
                       {t('finder.publicMap')}
                     </label>
-                    <p id="public-map-hint" className="ps-7 text-caption text-zinc-600">
+                    <p id="public-map-hint" className="ps-7 text-caption text-ink-2">
                       {t('finder.publicMapHint')}
                     </p>
                   </div>
                   <fieldset className="flex flex-col gap-2">
-                    <legend className="mb-1 text-caption text-zinc-600">{t('finder.mode')}</legend>
+                    <legend className="mb-1 text-caption text-ink-2">{t('finder.mode')}</legend>
                     {(['code', 'name'] as const).map((m) => (
                       <div key={m} className="flex flex-col gap-0.5">
                         <label className="flex min-h-6 items-center gap-2 text-body">
@@ -104,7 +104,7 @@ export default async function SeatFinderSettingsPage({
                           />
                           {t(`finder.modeOption.${m}`)}
                         </label>
-                        <p id={`mode-${m}-hint`} className="ps-7 text-caption text-zinc-600">
+                        <p id={`mode-${m}-hint`} className="ps-7 text-caption text-ink-2">
                           {t(`finder.modeHint.${m}`)}
                         </p>
                       </div>
@@ -113,7 +113,7 @@ export default async function SeatFinderSettingsPage({
                 </SettingsForm>
               </Card>
             ) : (
-              <p className="text-body text-zinc-600">{t('finder.readOnly')}</p>
+              <p className="text-body text-ink-2">{t('finder.readOnly')}</p>
             )}
           </section>
 
@@ -123,7 +123,7 @@ export default async function SeatFinderSettingsPage({
             </h2>
             <Card className="flex flex-col gap-3">
               <div className="flex flex-col gap-1">
-                <span className="text-caption text-zinc-600">{t('finder.address')}</span>
+                <span className="text-caption text-ink-2">{t('finder.address')}</span>
                 <span data-testid="finder-url" className="font-mono text-body break-all">
                   {`${origin}${publicPath}`}
                 </span>
@@ -142,7 +142,7 @@ export default async function SeatFinderSettingsPage({
                 ) : null}
               </div>
               {settings.publicMap ? null : (
-                <p className="text-caption text-zinc-600">{t('finder.closedNote')}</p>
+                <p className="text-caption text-ink-2">{t('finder.closedNote')}</p>
               )}
             </Card>
           </section>

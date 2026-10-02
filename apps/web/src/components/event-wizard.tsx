@@ -154,7 +154,7 @@ export function EventWizard({
   const zones = ZONES.includes(defaults.timezone as (typeof ZONES)[number])
     ? ZONES
     : [defaults.timezone, ...ZONES];
-  const selectClass = 'min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body';
+  const selectClass = 'field';
   const venue = venues.find((x) => x.id === v.venueId);
   const rules = readinessRules({
     name: v.name,
@@ -187,7 +187,7 @@ export function EventWizard({
                 disabled={i > reached || pending}
                 aria-current={i === step ? 'step' : undefined}
                 className={`inline-flex min-h-10 items-center gap-2 rounded-pill border px-4 text-caption ${
-                  i === step ? 'border-zinc-900 bg-zinc-900 text-white' : 'border-zinc-200 text-zinc-700'
+                  i === step ? 'border-ink bg-tag text-white' : 'border-line text-ink-2'
                 } disabled:opacity-60`}
               >
                 <span aria-hidden="true" className="font-mono">
@@ -260,7 +260,7 @@ export function EventWizard({
               error={err('tagline')}
             />
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="wizard-profile" className="text-caption text-zinc-600">
+              <label htmlFor="wizard-profile" className="text-caption text-ink-2">
                 {t('profile')}
               </label>
               <select
@@ -283,7 +283,7 @@ export function EventWizard({
         {step === 1 ? (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="flex flex-col gap-1.5 sm:col-span-2">
-              <label htmlFor="wizard-timezone" className="text-caption text-zinc-600">
+              <label htmlFor="wizard-timezone" className="text-caption text-ink-2">
                 {t('timezone')}
               </label>
               <select
@@ -322,7 +322,7 @@ export function EventWizard({
               error={err('endsAt')}
             />
             <fieldset className="flex flex-col gap-1.5 sm:col-span-2">
-              <legend className="pb-1.5 text-caption text-zinc-600">{t('attendanceMode')}</legend>
+              <legend className="pb-1.5 text-caption text-ink-2">{t('attendanceMode')}</legend>
               <div className="flex flex-wrap gap-x-5 gap-y-1">
                 {MODES.map((m) => (
                   <label key={m} className="flex min-h-6 items-center gap-2 text-body">
@@ -341,7 +341,7 @@ export function EventWizard({
             </fieldset>
             {venues.length > 0 ? (
               <div className="flex flex-col gap-1.5 sm:col-span-2">
-                <label htmlFor="wizard-venue" className="text-caption text-zinc-600">
+                <label htmlFor="wizard-venue" className="text-caption text-ink-2">
                   {t('savedVenue')}
                 </label>
                 <select
@@ -390,7 +390,7 @@ export function EventWizard({
             {ticketing ? (
               <fieldset className="flex flex-col gap-3">
                 <legend className="pb-1 text-body font-medium">{t('firstPass')}</legend>
-                <p className="text-caption text-zinc-500">{t('firstPassHint')}</p>
+                <p className="text-caption text-ink-2">{t('firstPassHint')}</p>
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                   <Input
                     id="wizard-ticket-name"
@@ -428,14 +428,14 @@ export function EventWizard({
                 {t('summary')}
               </h3>
               <dl className="grid grid-cols-1 gap-x-4 gap-y-1 text-body sm:grid-cols-[max-content_1fr]">
-                <dt className="text-caption text-zinc-600">{t('name')}</dt>
+                <dt className="text-caption text-ink-2">{t('name')}</dt>
                 <dd className="m-0">{v.name}</dd>
-                <dt className="text-caption text-zinc-600">{t('when')}</dt>
+                <dt className="text-caption text-ink-2">{t('when')}</dt>
                 <dd className="m-0">
                   {v.startsAt.replace('T', ' ')} – {v.endsAt.replace('T', ' ')} (
                   {v.timezone.replace(/_/g, ' ')})
                 </dd>
-                <dt className="text-caption text-zinc-600">{t('where')}</dt>
+                <dt className="text-caption text-ink-2">{t('where')}</dt>
                 <dd className="m-0">
                   {[venue?.name ?? v.venueName, venue ? venue.city : v.city].filter(Boolean).join(', ') ||
                     tn(`publicEvent.mode.${v.attendanceMode as (typeof MODES)[number]}`)}
@@ -446,7 +446,7 @@ export function EventWizard({
               <h3 id="wizard-checklist" className="text-body font-medium">
                 {t('checklist')}
               </h3>
-              <p className="text-caption text-zinc-500">{t('checklistHint')}</p>
+              <p className="text-caption text-ink-2">{t('checklistHint')}</p>
               <ul className="flex list-none flex-col gap-1 p-0">
                 {rules
                   .filter((r) => r.key !== 'datesUpcoming')
@@ -454,7 +454,7 @@ export function EventWizard({
                     <li key={r.key} className="flex items-center gap-2.5 text-body">
                       <span
                         aria-hidden="true"
-                        className={`flex size-[18px] items-center justify-center rounded-full ${r.done ? 'bg-green-500 text-white' : 'border border-zinc-300'}`}
+                        className={`flex size-[18px] items-center justify-center rounded-full ${r.done ? 'bg-success-dot text-white' : 'border border-line-strong'}`}
                       >
                         {r.done ? <Check className="size-3" strokeWidth={2.5} /> : null}
                       </span>

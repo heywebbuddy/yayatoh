@@ -32,7 +32,7 @@ export default async function InvitePage({ params }: { params: Promise<{ locale:
           <Alert title={t(`invite.status.${inv?.status ?? 'invalid'}`)} />
         ) : !session ? (
           <>
-            <p className="text-body text-zinc-600">{t('invite.signInFirst', { email: inv.email })}</p>
+            <p className="text-body text-ink-2">{t('invite.signInFirst', { email: inv.email })}</p>
             <Link href={`/sign-in?next=${encodeURIComponent(next)}`} className={buttonClass('primary')}>
               {t('invite.signIn')}
             </Link>
@@ -44,7 +44,7 @@ export default async function InvitePage({ params }: { params: Promise<{ locale:
             action={acceptInviteAction.bind(null, decodeURIComponent(token))}
             className="flex flex-col gap-3"
           >
-            <p className="text-body text-zinc-600">
+            <p className="text-body text-ink-2">
               {ev
                 ? t('invite.joinEvent', {
                     role: t(`eventRoles.${ev.eventRole}`),

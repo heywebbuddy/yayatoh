@@ -28,7 +28,7 @@ export default async function CommissionPage({
       <form className="flex flex-wrap items-end gap-3">
         {(['from', 'to'] as const).map((k) => (
           <div key={k} className="flex flex-col gap-1.5">
-            <label htmlFor={`period-${k}`} className="text-caption text-zinc-600">
+            <label htmlFor={`period-${k}`} className="text-caption text-ink-2">
               {t(k)}
             </label>
             <input
@@ -38,7 +38,7 @@ export default async function CommissionPage({
               defaultValue={period[k]}
               aria-invalid={k === 'to' && period.error ? true : undefined}
               aria-describedby={k === 'to' && period.error ? 'period-error' : undefined}
-              className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
+              className="field"
             />
           </div>
         ))}
@@ -47,20 +47,20 @@ export default async function CommissionPage({
         </button>
       </form>
       {period.error ? (
-        <p id="period-error" role="alert" className="text-body text-pink-700">
+        <p id="period-error" role="alert" className="text-body text-danger">
           {t(period.error)}
         </p>
       ) : null}
-      <p className="text-caption text-zinc-600">{t('range', { from: period.from, to: period.to })}</p>
+      <p className="text-caption text-ink-2">{t('range', { from: period.from, to: period.to })}</p>
       {totals.size ? (
         <ul aria-label={t('totals')} className="flex list-none flex-wrap gap-3 p-0">
           {[...totals].map(([c, v]) => (
             <li key={c}>
               <Card className="flex flex-col gap-1">
-                <span className="font-mono text-label uppercase text-zinc-500">
-                  {t('totalIn', { currency: c })}
+                <span className="text-label uppercase text-ink-2">{t('totalIn', { currency: c })}</span>
+                <span className="text-[28px] font-extrabold tracking-[-0.04em] tabular-nums">
+                  {fmt(v, c)}
                 </span>
-                <span className="text-[28px] font-light tracking-[-0.04em] tabular-nums">{fmt(v, c)}</span>
               </Card>
             </li>
           ))}
@@ -71,7 +71,7 @@ export default async function CommissionPage({
         <section className="overflow-x-auto" tabIndex={0} aria-label={t('title')}>
           <table className="w-full text-start text-body">
             <caption className="sr-only">{t('title')}</caption>
-            <thead className="text-caption text-zinc-500">
+            <thead className="text-caption text-ink-2">
               <tr>
                 {(['org', 'currency', 'sales', 'charged', 'refunded', 'net'] as const).map((c) => (
                   <th
@@ -86,12 +86,12 @@ export default async function CommissionPage({
             </thead>
             <tbody>
               {rows.map((r) => (
-                <tr key={`${r.orgId}-${r.currency}`} className="border-t border-zinc-100">
+                <tr key={`${r.orgId}-${r.currency}`} className="border-t border-line">
                   <td className="px-4 py-2">
                     <Link href={`/tenants/${r.orgId}`} className="underline underline-offset-2">
                       {r.name}
                     </Link>
-                    <span className="block font-mono text-caption text-zinc-500">{r.slug}</span>
+                    <span className="block font-mono text-caption text-ink-2">{r.slug}</span>
                   </td>
                   <td className="px-4 py-2 font-mono">{r.currency}</td>
                   <td className="px-4 py-2 text-end tabular-nums">{r.sales}</td>
@@ -105,7 +105,7 @@ export default async function CommissionPage({
             </tbody>
           </table>
         </section>
-        {rows.length === 0 ? <p className="px-4 py-6 text-body text-zinc-600">{t('empty')}</p> : null}
+        {rows.length === 0 ? <p className="px-4 py-6 text-body text-ink-2">{t('empty')}</p> : null}
       </Card>
     </Shell>
   );

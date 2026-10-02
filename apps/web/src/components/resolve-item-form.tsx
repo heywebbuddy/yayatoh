@@ -6,7 +6,7 @@ import { useActionState, useId } from 'react';
 import { errorMessageKey } from '@/lib/errors.ts';
 import { type FormState, INITIAL_FORM_STATE } from '@/lib/form-state.ts';
 
-const field = 'min-h-10 w-full rounded-card border border-zinc-200 bg-white px-4 py-2 text-body';
+const field = 'min-h-10 w-full rounded-card border border-line bg-surface px-4 py-2 text-body';
 
 /** Resolve one reconciliation difference with a note saying why (M1.6e). */
 export function ResolveItemForm({
@@ -23,7 +23,7 @@ export function ResolveItemForm({
   const invalid = state.fields?.includes('note') ?? false;
   return (
     <form action={formAction} className="flex flex-col gap-2">
-      <label htmlFor={`${id}-note`} className="text-caption text-zinc-600">
+      <label htmlFor={`${id}-note`} className="text-caption text-ink-2">
         {t('resolveNote', { reference })}
       </label>
       <textarea

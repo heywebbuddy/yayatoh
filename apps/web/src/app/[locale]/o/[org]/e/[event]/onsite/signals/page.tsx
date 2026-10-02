@@ -71,7 +71,7 @@ export default async function SignalsPage({
   const people = await getUsersByIds([...new Set(signals.flatMap((s) => (s.userId ? [s.userId] : [])))]);
   const open = signals.filter((s) => s.status === 'open').length;
   const base = `/o/${org}/e/${event}`;
-  const select = 'min-h-10 rounded-pill border border-zinc-300 bg-white px-4 text-body';
+  const select = 'field';
   return (
     <>
       <PageHeader
@@ -91,7 +91,7 @@ export default async function SignalsPage({
         className="flex flex-wrap items-end gap-3"
       >
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="signal-kind" className="text-caption text-zinc-600">
+          <label htmlFor="signal-kind" className="text-caption text-ink-2">
             {t('fraudSignals.filter.kind')}
           </label>
           <select id="signal-kind" name="kind" defaultValue={kind ?? ''} className={select}>
@@ -104,7 +104,7 @@ export default async function SignalsPage({
           </select>
         </div>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="signal-severity" className="text-caption text-zinc-600">
+          <label htmlFor="signal-severity" className="text-caption text-ink-2">
             {t('fraudSignals.filter.severity')}
           </label>
           <select id="signal-severity" name="severity" defaultValue={severity ?? ''} className={select}>
@@ -117,7 +117,7 @@ export default async function SignalsPage({
           </select>
         </div>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="signal-status" className="text-caption text-zinc-600">
+          <label htmlFor="signal-status" className="text-caption text-ink-2">
             {t('fraudSignals.filter.status')}
           </label>
           <select id="signal-status" name="status" defaultValue={status} className={select}>
@@ -177,7 +177,7 @@ export default async function SignalsPage({
         <h2 id="detection-heading" className="text-section">
           {t('signals.settings.title')}
         </h2>
-        <p className="text-caption text-zinc-500">{t('signals.settings.description')}</p>
+        <p className="text-caption text-ink-2">{t('signals.settings.description')}</p>
         {canTriage ? (
           <Card>
             <DetectionForm

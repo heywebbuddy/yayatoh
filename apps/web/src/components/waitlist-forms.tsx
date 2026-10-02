@@ -88,12 +88,7 @@ export function WaitlistOfferForm({
           <label htmlFor="offer-quantity" className="text-body font-medium">
             {t('quantity')}
           </label>
-          <select
-            id="offer-quantity"
-            name="quantity"
-            defaultValue={String(quantity)}
-            className="min-h-10 w-28 rounded-pill border border-zinc-200 bg-white px-4 text-body text-zinc-900"
-          >
+          <select id="offer-quantity" name="quantity" defaultValue={String(quantity)} className="field w-28">
             {Array.from({ length: quantity - min + 1 }, (_, i) => min + i).map((n) => (
               <option key={n} value={n}>
                 {n}
@@ -109,7 +104,7 @@ export function WaitlistOfferForm({
           label={t('name')}
           error={state.field === 'name' ? t('errors.field.name') : undefined}
         />
-        <p className="text-body text-zinc-700">{t('offerEmail', { email })}</p>
+        <p className="text-body text-ink-2">{t('offerEmail', { email })}</p>
       </Card>
       {questions.length > 0 ? (
         <Card>

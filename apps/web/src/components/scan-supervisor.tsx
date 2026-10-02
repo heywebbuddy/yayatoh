@@ -55,15 +55,15 @@ function SupervisorInner({
     void refresh();
   }, [refresh, refreshKey]);
 
-  if (!load) return <p className="text-body text-zinc-600">{t('loading')}</p>;
-  if (load.state === 'offline') return <p className="text-body text-zinc-600">{t('supervisorOffline')}</p>;
+  if (!load) return <p className="text-body text-ink-2">{t('loading')}</p>;
+  if (load.state === 'offline') return <p className="text-body text-ink-2">{t('supervisorOffline')}</p>;
   if (load.state === 'signed_out')
     return (
       <div className="flex flex-col gap-3">
         <p className="text-body">{t('supervisorSignIn')}</p>
         <Link
           href={`/sign-in?next=${encodeURIComponent('/scan')}`}
-          className="inline-flex min-h-11 items-center self-start rounded-pill bg-accent-700 px-5 text-body font-medium text-white"
+          className="inline-flex min-h-11 items-center self-start rounded-pill bg-primary px-5 text-body font-medium text-white"
         >
           {t('signIn')}
         </Link>
@@ -83,7 +83,7 @@ function SupervisorInner({
   const self = view.devices.find((d) => d.id === selfId) ?? null;
   return (
     <div className="flex flex-col gap-6">
-      <p className="text-body text-zinc-600">
+      <p className="text-body text-ink-2">
         {load.canSupervise ? t('supervisorHint') : t('kioskOperatorHint')}
       </p>
       <div
@@ -153,7 +153,7 @@ function ClaimAlerts({
       <h2 id="supervisor-claim" className="text-section">
         {t('claimTitle')}
       </h2>
-      <p className="text-body text-zinc-600">{t('claimHint')}</p>
+      <p className="text-body text-ink-2">{t('claimHint')}</p>
       <div className="flex flex-wrap gap-2">
         <Button type="button" onClick={() => void run(true)}>
           {t('claimOn')}
@@ -227,15 +227,15 @@ function DeviceCard({
         ? t('elsewhere')
         : t('unused');
   return (
-    <li className="flex flex-col gap-3 rounded-card border border-zinc-200 px-4 py-3" data-device={d.label}>
+    <li className="flex flex-col gap-3 rounded-card border border-line px-4 py-3" data-device={d.label}>
       <div className="flex flex-col gap-0.5">
         <h3 className="text-body font-medium">
           {d.label}
           {isSelf ? ` · ${t('thisDevice')}` : ''}
           {d.mode === 'kiosk' ? ` · ${t('kiosk')}` : ''}
         </h3>
-        <p className="flex flex-wrap gap-x-3 text-caption text-zinc-600">
-          <span className={d.online ? 'text-green-900' : 'text-pink-700'}>
+        <p className="flex flex-wrap gap-x-3 text-caption text-ink-2">
+          <span className={d.online ? 'text-success' : 'text-danger'}>
             {d.online ? t('online') : t('offline')}
           </span>
           <span>{where}</span>
@@ -275,14 +275,14 @@ function DeviceCard({
               }}
             >
               <div className="flex flex-col gap-1.5">
-                <label htmlFor={`${id}-move`} className="text-caption text-zinc-600">
+                <label htmlFor={`${id}-move`} className="text-caption text-ink-2">
                   {t('moveTo', { label: d.label })}
                 </label>
                 <select
                   id={`${id}-move`}
                   name="checkpointId"
                   defaultValue={d.checkpointId ?? ''}
-                  className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
+                  className="field"
                 >
                   <option value="">{t('wholeEvent')}</option>
                   {checkpoints.map((c) => (
@@ -298,7 +298,7 @@ function DeviceCard({
             </form>
           ) : null}
           {confirmRevoke ? (
-            <div className="flex basis-full flex-col gap-2 rounded-card border-2 border-pink-700 px-4 py-3">
+            <div className="flex basis-full flex-col gap-2 rounded-card border-2 border-danger px-4 py-3">
               <p className="text-body">{t('revokeConfirm', { label: d.label })}</p>
               <div className="flex flex-wrap gap-2">
                 <Button
@@ -367,14 +367,10 @@ function DeviceCard({
           >
             {entrances.length > 0 ? (
               <div className="flex flex-col gap-1.5">
-                <label htmlFor={`${id}-kiosk`} className="text-caption text-zinc-600">
+                <label htmlFor={`${id}-kiosk`} className="text-caption text-ink-2">
                   {t('kioskEntrance', { label: d.label })}
                 </label>
-                <select
-                  id={`${id}-kiosk`}
-                  name="kioskCheckpointId"
-                  className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
-                >
+                <select id={`${id}-kiosk`} name="kioskCheckpointId" className="field">
                   {entrances.map((c) => (
                     <option key={c.id} value={c.id}>
                       {c.name}

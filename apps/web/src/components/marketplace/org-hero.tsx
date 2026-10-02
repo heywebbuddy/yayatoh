@@ -32,13 +32,16 @@ export async function OrgHero({
       {logo ? (
         <div
           data-testid="org-logo"
-          className="flex size-20 items-center justify-center rounded-card bg-white p-2"
+          className="flex size-20 items-center justify-center rounded-card bg-surface p-2"
         >
           <MediaPicture image={logo} sizes="80px" eager className="max-h-16 w-auto object-contain" />
         </div>
       ) : null}
-      <p className="font-mono text-label uppercase opacity-80">{eyebrow}</p>
-      <h1 id="org-heading" className="text-[40px] leading-none font-light tracking-[-0.04em] md:text-[56px]">
+      <p className="text-label uppercase opacity-80">{eyebrow}</p>
+      <h1
+        id="org-heading"
+        className="text-[40px] leading-none font-extrabold tracking-[-0.04em] md:text-[56px]"
+      >
         {name}
       </h1>
       {children}

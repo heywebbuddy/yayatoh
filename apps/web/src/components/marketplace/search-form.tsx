@@ -4,7 +4,7 @@ import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/navigation.ts';
 import { localizedPath } from '@/lib/seo/urls.ts';
 
-const field = 'min-h-10 w-full rounded-pill border border-zinc-200 bg-white px-4 text-body';
+const field = 'field w-full';
 
 /**
  * Search and filters as a plain GET form: works without JavaScript, shareable URLs, and every
@@ -28,7 +28,7 @@ export async function SearchForm({
   );
   const labelled = (id: string, label: string, control: React.ReactNode) => (
     <div className="flex min-w-0 flex-col gap-1.5">
-      <label htmlFor={id} className="text-caption text-zinc-600">
+      <label htmlFor={id} className="text-caption text-ink-2">
         {label}
       </label>
       {control}
@@ -39,7 +39,7 @@ export async function SearchForm({
       <form
         action={localizedPath(locale, action)}
         method="get"
-        className="grid grid-cols-1 gap-3 rounded-card border border-zinc-200 bg-white p-4 md:grid-cols-6"
+        className="grid grid-cols-1 gap-3 rounded-card border border-line bg-surface p-4 md:grid-cols-6"
       >
         <div className="md:col-span-6">
           {labelled(

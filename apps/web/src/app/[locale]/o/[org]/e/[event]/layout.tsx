@@ -80,7 +80,7 @@ export default async function EventLayout({
           <Label>
             {t(`eventStatus.${ev.status}`)} · {t(`phase.${phase.phase}`, { days: phase.days })}
           </Label>
-          <span aria-hidden="true" className="size-1.5 rounded-full bg-accent-900" />
+          <span aria-hidden="true" className="size-1.5 rounded-full bg-primary" />
         </>
       }
     >

@@ -59,7 +59,7 @@ export default async function RefundRequestsPage({
             href={s === 'open' ? `/o/${org}/refund-requests` : `/o/${org}/refund-requests?status=${s}`}
             aria-current={s === status ? 'page' : undefined}
             className={`inline-flex min-h-10 items-center rounded-pill border px-4 text-body ${
-              s === status ? 'border-zinc-900 bg-zinc-900 text-white' : 'border-zinc-200 bg-white'
+              s === status ? 'border-ink bg-tag text-white' : 'border-line bg-surface'
             }`}
           >
             {t(`request.status.${s}`)}
@@ -85,7 +85,7 @@ export default async function RefundRequestsPage({
                   >
                     {r.buyerName}
                   </Link>
-                  <span className="text-caption text-zinc-500">{r.buyerEmail}</span>
+                  <span className="text-caption text-ink-2">{r.buyerEmail}</span>
                 </span>
               ),
             },

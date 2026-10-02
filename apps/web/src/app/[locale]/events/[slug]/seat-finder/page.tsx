@@ -99,7 +99,7 @@ export default async function SeatFinderPage({
       {header}
       {dates.length > 1 ? (
         <nav aria-label={t('seatingDates.finderLabel')} className="flex flex-col gap-1.5">
-          <p className="text-caption text-zinc-600">{t('seatingDates.finderIntro')}</p>
+          <p className="text-caption text-ink-2">{t('seatingDates.finderIntro')}</p>
           <ul className="flex list-none flex-wrap gap-1.5">
             {dates.map((d) => {
               const on = date?.id === d.id;
@@ -108,7 +108,7 @@ export default async function SeatFinderPage({
                   <Link
                     href={`/events/${slug}/seat-finder?date=${d.id}`}
                     aria-current={on ? 'page' : undefined}
-                    className={`inline-flex min-h-9 items-center rounded-pill border px-3.5 text-[13px] ${on ? 'border-ink bg-ink text-white' : 'border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50'}`}
+                    className={`inline-flex min-h-9 items-center rounded-pill border px-3.5 text-[13px] ${on ? 'border-ink bg-tag text-white' : 'border-line bg-surface text-ink-2 hover:bg-surface-2'}`}
                   >
                     {day.format(d.startsAt)}
                   </Link>
@@ -129,7 +129,7 @@ export default async function SeatFinderPage({
         byName={findByNameAction.bind(null, slug, date?.id ?? null)}
         reset={resetFinderAction.bind(null, slug)}
       />
-      <Link href={`/events/${slug}`} className="self-start text-caption text-zinc-600 underline">
+      <Link href={`/events/${slug}`} className="self-start text-caption text-ink-2 underline">
         {t('seatFinder.toEvent')}
       </Link>
     </main>

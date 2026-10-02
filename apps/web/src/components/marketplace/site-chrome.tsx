@@ -69,32 +69,32 @@ export async function SiteFooter({ children }: { children?: ReactNode }) {
   const t = await getTranslations('market');
   const home = await getTranslations('home');
   return (
-    <footer className="mx-auto mt-16 flex w-full max-w-6xl flex-col gap-4 border-t border-zinc-200 px-4 py-8 md:px-6">
+    <footer className="mx-auto mt-16 flex w-full max-w-6xl flex-col gap-4 border-t border-line px-4 py-8 md:px-6">
       {children}
       {/* The privacy notice and sub-processors (M1.14c) are linked from every public page. */}
       <ul className="flex list-none flex-wrap gap-x-4 gap-y-1 p-0 text-caption">
         <li>
-          <Link href="/privacy" className="inline-flex min-h-6 items-center text-zinc-600 underline">
+          <Link href="/privacy" className="inline-flex min-h-6 items-center text-ink-2 underline">
             {home('privacyLink')}
           </Link>
         </li>
         <li>
-          <Link href="/sub-processors" className="inline-flex min-h-6 items-center text-zinc-600 underline">
+          <Link href="/sub-processors" className="inline-flex min-h-6 items-center text-ink-2 underline">
             {home('subProcessorsLink')}
           </Link>
         </li>
         <li>
-          <Link href="/help" className="inline-flex min-h-6 items-center text-zinc-600 underline">
+          <Link href="/help" className="inline-flex min-h-6 items-center text-ink-2 underline">
             {t('helpCenter')}
           </Link>
         </li>
         <li>
-          <Link href="/contact" className="inline-flex min-h-6 items-center text-zinc-600 underline">
+          <Link href="/contact" className="inline-flex min-h-6 items-center text-ink-2 underline">
             {t('contact')}
           </Link>
         </li>
         <li>
-          <Link href="/status" className="inline-flex min-h-6 items-center text-zinc-600 underline">
+          <Link href="/status" className="inline-flex min-h-6 items-center text-ink-2 underline">
             {t('status')}
           </Link>
         </li>
@@ -107,7 +107,7 @@ export async function SiteFooter({ children }: { children?: ReactNode }) {
                 href={`/lang/${l}`}
                 hrefLang={l}
                 lang={l}
-                className="inline-flex min-h-6 items-center text-zinc-600 underline"
+                className="inline-flex min-h-6 items-center text-ink-2 underline"
               >
                 {new Intl.DisplayNames([l], { type: 'language' }).of(l) ?? l}
               </a>

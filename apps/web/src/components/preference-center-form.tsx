@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useActionState } from 'react';
 import type { PreferenceChoices, PreferenceState } from '@/app/[locale]/preferences/[org]/[token]/actions.ts';
 
-const box = 'size-5 accent-zinc-900';
+const box = 'size-5 accent-primary';
 const row = 'flex min-h-6 items-center gap-2 text-body';
 
 /**
@@ -57,7 +57,7 @@ export function PreferenceCenterForm({
         ))}
       </fieldset>
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="pc-phone" className="text-caption text-zinc-600">
+        <label htmlFor="pc-phone" className="text-caption text-ink-2">
           {t('phoneLabel')}
         </label>
         <input
@@ -70,13 +70,13 @@ export function PreferenceCenterForm({
           maxLength={32}
           aria-invalid={phoneError ? true : undefined}
           aria-describedby={described}
-          className={`min-h-10 rounded-pill border bg-white px-4 text-body ${phoneError ? 'border-pink-700' : 'border-zinc-200'}`}
+          className={`field ${phoneError ? 'border-danger' : 'border-line'}`}
         />
-        <p id="pc-phone-hint" className="text-caption text-zinc-500">
+        <p id="pc-phone-hint" className="text-caption text-ink-2">
           {phone ? t('phoneCurrent', { phone }) : t('phoneHint')}
         </p>
         {phoneError ? (
-          <p id="pc-phone-error" role="alert" className="text-caption text-pink-700">
+          <p id="pc-phone-error" role="alert" className="text-caption text-danger">
             {t(`errors.${state.error}`)}
           </p>
         ) : null}
@@ -104,7 +104,7 @@ export function PreferenceCenterForm({
           </label>
         </fieldset>
       ))}
-      <p id="pc-disclosure" className="text-caption text-zinc-600">
+      <p id="pc-disclosure" className="text-caption text-ink-2">
         {t('disclosure', { org })}
       </p>
       <Button type="submit" disabled={pending} className="self-start">

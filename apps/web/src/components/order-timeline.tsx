@@ -69,24 +69,22 @@ export async function OrderTimeline({
   };
   return (
     <div className="flex flex-col gap-2">
-      <p className="text-caption text-zinc-500">
-        {t('refundOps.timeline.zone', { zone: timeline.timezone })}
-      </p>
-      <ol className="flex list-none flex-col gap-0 border-s border-zinc-200 p-0">
+      <p className="text-caption text-ink-2">{t('refundOps.timeline.zone', { zone: timeline.timezone })}</p>
+      <ol className="flex list-none flex-col gap-0 border-s border-line p-0">
         {timeline.items.map((i, n) => (
           <li
             // Items have no id of their own; their position in this server-rendered list is stable.
             key={`${i.kind}-${i.at.getTime()}-${n}`}
-            className="relative flex flex-col gap-0.5 ps-5 pb-4 before:absolute before:start-[-5px] before:top-1.5 before:size-2.5 before:rounded-full before:bg-zinc-300"
+            className="relative flex flex-col gap-0.5 ps-5 pb-4 before:absolute before:start-[-5px] before:top-1.5 before:size-2.5 before:rounded-full before:bg-ink-3"
           >
-            <span className="text-caption text-zinc-500">
+            <span className="text-caption text-ink-2">
               <time dateTime={i.at.toISOString()}>{when.format(i.at)}</time>
             </span>
             <span className="text-body">
               {t(`refundOps.timeline.kinds.${i.kind}`, { serial: i.ticketSerial ?? 0 })}
             </span>
             {details(i).length ? (
-              <span className="whitespace-pre-line break-words text-caption text-zinc-600">
+              <span className="whitespace-pre-line break-words text-caption text-ink-2">
                 {details(i).join(' · ')}
               </span>
             ) : null}

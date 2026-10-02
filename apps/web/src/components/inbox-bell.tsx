@@ -51,14 +51,14 @@ export function InboxBell({ org, initial }: { org: string; initial: InboxView })
         type="button"
         popoverTarget="notification-center"
         aria-label={t('openWithCount', { count: view.unread })}
-        className="relative flex size-10 items-center justify-center rounded-pill border border-zinc-200 bg-white hover:bg-zinc-50"
+        className="relative flex size-10 items-center justify-center rounded-pill border border-line bg-surface hover:bg-surface-2"
       >
-        <Bell aria-hidden="true" className="size-4" strokeWidth={1.6} />
+        <Bell aria-hidden="true" className="size-4" strokeWidth={2} />
         {view.unread > 0 ? (
           <span
             aria-hidden="true"
             data-testid="inbox-badge"
-            className="absolute -end-1 -top-1 flex min-w-5 items-center justify-center rounded-pill bg-zinc-900 px-1 font-mono text-[11px] text-white"
+            className="absolute -end-1 -top-1 flex min-w-5 items-center justify-center rounded-pill bg-tag px-1 font-mono text-[11px] text-white"
           >
             {view.unread > 99 ? '99+' : view.unread}
           </span>
@@ -72,7 +72,7 @@ export function InboxBell({ org, initial }: { org: string; initial: InboxView })
         popover="auto"
         role="dialog"
         aria-label={t('title')}
-        className="m-0 w-[min(380px,calc(100vw-2rem))] rounded-panel border border-zinc-200 bg-white p-4 shadow-xl [inset:auto] [inset-block-start:72px] [inset-inline-end:16px]"
+        className="m-0 w-[min(380px,calc(100vw-2rem))] rounded-panel border border-line bg-surface p-4 elevation-pop [inset:auto] [inset-block-start:72px] [inset-inline-end:16px]"
       >
         <div className="mb-3 flex items-center justify-between gap-2">
           <p className="text-section">{t('title')}</p>
@@ -93,13 +93,16 @@ export function InboxBell({ org, initial }: { org: string; initial: InboxView })
             {view.items.map((i) => (
               <li
                 key={i.id}
-                className={cx('flex items-start gap-2 rounded-[14px] px-2.5 py-2', !i.read && 'bg-zinc-50')}
+                className={cx(
+                  'flex items-start gap-2 rounded-control px-2.5 py-2',
+                  !i.read && 'bg-surface-2',
+                )}
               >
                 <span
                   aria-hidden="true"
                   className={cx(
                     'mt-1.5 size-2 shrink-0 rounded-pill',
-                    i.read ? 'bg-transparent' : 'bg-accent-900',
+                    i.read ? 'bg-transparent' : 'bg-primary',
                   )}
                 />
                 <div className="flex min-w-0 flex-1 flex-col gap-0.5">
@@ -110,7 +113,7 @@ export function InboxBell({ org, initial }: { org: string; initial: InboxView })
                   ) : (
                     <span className="text-body">{i.title}</span>
                   )}
-                  <span className="text-caption text-zinc-500">
+                  <span className="text-caption text-ink-2">
                     {i.read ? i.when : `${t('unread')} · ${i.when}`}
                   </span>
                 </div>
@@ -120,16 +123,16 @@ export function InboxBell({ org, initial }: { org: string; initial: InboxView })
                     aria-label={t('markReadItem', { title: i.title })}
                     disabled={pending}
                     onClick={() => mark([i.id])}
-                    className="flex size-8 shrink-0 items-center justify-center rounded-pill border border-zinc-200 bg-white hover:bg-zinc-50"
+                    className="flex size-8 shrink-0 items-center justify-center rounded-pill border border-line bg-surface hover:bg-surface-2"
                   >
-                    <Check aria-hidden="true" className="size-4" strokeWidth={1.6} />
+                    <Check aria-hidden="true" className="size-4" strokeWidth={2} />
                   </button>
                 )}
               </li>
             ))}
           </ul>
         )}
-        <div className="mt-3 flex flex-wrap justify-between gap-2 border-t border-zinc-200 pt-3 text-caption">
+        <div className="mt-3 flex flex-wrap justify-between gap-2 border-t border-line pt-3 text-caption">
           <Link href={`/o/${org}/notifications`} className="underline underline-offset-2">
             {t('viewAll')}
           </Link>

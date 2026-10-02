@@ -46,7 +46,7 @@ export function DoorStaffForm({
         <input type="hidden" name="userId" value={member.id} />
       ) : (
         <div className="flex flex-col gap-1.5 self-start">
-          <label htmlFor={`${id}-member`} className="text-caption text-zinc-600">
+          <label htmlFor={`${id}-member`} className="text-caption text-ink-2">
             {t('doorStaff.member')}
           </label>
           <select
@@ -54,7 +54,7 @@ export function DoorStaffForm({
             name="userId"
             defaultValue=""
             aria-invalid={state.kind === 'error' && state.field === 'userId' ? true : undefined}
-            className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
+            className="field"
           >
             <option value="">{t('doorStaff.chooseMember')}</option>
             {(members ?? []).map((m) => (
@@ -66,12 +66,12 @@ export function DoorStaffForm({
         </div>
       )}
       <fieldset className="flex flex-col gap-2">
-        <legend className="text-caption text-zinc-600">
+        <legend className="text-caption text-ink-2">
           {member ? t('doorStaff.whereFor', { name: member.name }) : t('doorStaff.where')}
         </legend>
-        <p className="text-caption text-zinc-500">{t('doorStaff.whereHint')}</p>
+        <p className="text-caption text-ink-2">{t('doorStaff.whereHint')}</p>
         {checkpoints.length === 0 ? (
-          <p className="text-body text-zinc-600">{t('doorStaff.noCheckpoints')}</p>
+          <p className="text-body text-ink-2">{t('doorStaff.noCheckpoints')}</p>
         ) : (
           <div className="flex flex-wrap gap-x-5 gap-y-2">
             {checkpoints.map((c) => (
@@ -81,10 +81,10 @@ export function DoorStaffForm({
                   name="checkpointIds"
                   value={c.id}
                   defaultChecked={selected.includes(c.id)}
-                  className="size-5 accent-ink"
+                  className="size-5 accent-primary"
                 />
                 {c.name}
-                <span className="text-caption text-zinc-500">
+                <span className="text-caption text-ink-2">
                   ({c.kind === 'entrance' ? t('checkpoints.entrance') : t('checkpoints.zone')})
                 </span>
               </label>

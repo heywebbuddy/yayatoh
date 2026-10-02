@@ -10,7 +10,7 @@ import type {
 } from '@/app/[locale]/o/[org]/(org)/emails/actions.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
 
-const field = 'min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body read-only:bg-zinc-50';
+const field = 'field';
 
 /**
  * The org's copy for one email kind and language: subject and opening paragraph, with a live
@@ -74,7 +74,7 @@ export function TemplateEditor({
     [errors[f] ? `template-${f}-error` : null, `template-${f}-default`].filter(Boolean).join(' ');
   const input = (f: TemplateField, label: string) => (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor={`template-${f}`} className="text-caption text-zinc-600">
+      <label htmlFor={`template-${f}`} className="text-caption text-ink-2">
         {label}
       </label>
       {f === 'subject' ? (
@@ -100,15 +100,15 @@ export function TemplateEditor({
           maxLength={2000}
           aria-invalid={errors.intro ? true : undefined}
           aria-describedby={describe('intro')}
-          className="rounded-card border border-zinc-200 bg-white px-4 py-3 text-body read-only:bg-zinc-50"
+          className="rounded-card border border-line bg-surface px-4 py-3 text-body read-only:bg-surface-2"
         />
       )}
       {errors[f] ? (
-        <p id={`template-${f}-error`} className="text-caption text-pink-700">
+        <p id={`template-${f}-error`} className="text-caption text-danger">
           {t(`errors.${errors[f]}`)}
         </p>
       ) : null}
-      <p id={`template-${f}-default`} className="text-caption text-zinc-500">
+      <p id={`template-${f}-default`} className="text-caption text-ink-2">
         {t('defaultIs', { copy: defaults[f] })}
       </p>
     </div>
@@ -121,15 +121,15 @@ export function TemplateEditor({
         {input('subject', t('subject'))}
         {input('intro', t('intro'))}
         <div className="flex flex-col gap-1">
-          <p className="text-caption text-zinc-600">{t('placeholdersTitle')}</p>
+          <p className="text-caption text-ink-2">{t('placeholdersTitle')}</p>
           <ul className="flex list-none flex-wrap gap-2 p-0">
             {placeholders.map((p) => (
               <li key={p}>
-                <code className="rounded-pill bg-zinc-100 px-2 py-0.5 text-caption">{`{${p}}`}</code>
+                <code className="rounded-pill bg-surface-3 px-2 py-0.5 text-caption">{`{${p}}`}</code>
               </li>
             ))}
           </ul>
-          <p className="text-caption text-zinc-500">{t('emptyMeansDefault')}</p>
+          <p className="text-caption text-ink-2">{t('emptyMeansDefault')}</p>
         </div>
         <div role="status" aria-live="polite">
           {state.saved === 'saved' ? <p className="text-body font-medium">{t('saved')}</p> : null}
@@ -153,7 +153,7 @@ export function TemplateEditor({
         <h2 id="template-preview-heading" className="text-section">
           {t('previewTitle')}
         </h2>
-        <p className="text-caption text-zinc-600" aria-live="polite">
+        <p className="text-caption text-ink-2" aria-live="polite">
           {previewing
             ? t('previewUpdating')
             : shown.subject
@@ -167,7 +167,7 @@ export function TemplateEditor({
             title={t('previewFrame', { subject: shown.subject ?? '' })}
             src={shown.src}
             sandbox=""
-            className="h-[520px] w-full rounded-card border border-zinc-200"
+            className="h-[520px] w-full rounded-card border border-line"
           />
         ) : null}
       </section>

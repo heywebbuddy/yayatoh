@@ -29,7 +29,7 @@ export function VenueForm({
   const [state, formAction, pending] = useActionState(action, INITIAL_FORM_STATE);
   const bad = new Set(state.fields ?? []);
   const err = (f: (typeof FIELD_ERRORS)[number]) => (bad.has(f) ? t(`errors.${f}`) : undefined);
-  const selectClass = 'min-h-10 rounded-pill border bg-white px-4 text-body';
+  const selectClass = 'field';
   return (
     <form action={formAction} onSubmit={keepValues(formAction)} className="flex flex-col gap-4" noValidate>
       <fieldset disabled={disabled} className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -99,7 +99,7 @@ export function VenueForm({
           error={err('country')}
         />
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="venue-timezone" className="text-caption text-zinc-600">
+          <label htmlFor="venue-timezone" className="text-caption text-ink-2">
             {t('timezone')}
           </label>
           <select
@@ -108,7 +108,7 @@ export function VenueForm({
             defaultValue={venue?.timezone ?? defaultTimezone}
             aria-invalid={bad.has('timezone') || undefined}
             aria-describedby={bad.has('timezone') ? 'venue-timezone-error' : undefined}
-            className={`${selectClass} ${bad.has('timezone') ? 'border-pink-700' : 'border-zinc-200'}`}
+            className={`${selectClass} ${bad.has('timezone') ? 'border-danger' : 'border-line'}`}
           >
             {zones.map((z) => (
               <option key={z} value={z}>
@@ -117,7 +117,7 @@ export function VenueForm({
             ))}
           </select>
           {bad.has('timezone') ? (
-            <p id="venue-timezone-error" className="text-caption text-pink-700">
+            <p id="venue-timezone-error" className="text-caption text-danger">
               {t('errors.timezone')}
             </p>
           ) : null}
@@ -147,7 +147,7 @@ export function VenueForm({
           error={err('longitude')}
         />
         <div className="flex flex-col gap-1.5 md:col-span-2">
-          <label htmlFor="accessibilityNotes" className="text-caption text-zinc-600">
+          <label htmlFor="accessibilityNotes" className="text-caption text-ink-2">
             {t('accessibilityNotes')}
           </label>
           <textarea
@@ -156,7 +156,7 @@ export function VenueForm({
             rows={3}
             maxLength={2000}
             defaultValue={venue?.accessibilityNotes ?? ''}
-            className="rounded-card border border-zinc-200 bg-white px-4 py-2 text-body"
+            className="rounded-card border border-line bg-surface px-4 py-2 text-body"
           />
         </div>
         <label className="flex min-h-6 items-center gap-2 text-body md:col-span-2">

@@ -91,7 +91,7 @@ export default async function AlertsPage({
               href={tab(s)}
               aria-current={s === status ? 'page' : undefined}
               className={`inline-flex min-h-10 items-center rounded-pill border px-4 text-body ${
-                s === status ? 'border-zinc-900 bg-zinc-900 text-white' : 'border-zinc-200 bg-white'
+                s === status ? 'border-ink bg-tag text-white' : 'border-line bg-surface'
               }`}
             >
               {t(s)}
@@ -101,15 +101,10 @@ export default async function AlertsPage({
         <form method="get" action={base} className="flex flex-wrap items-end gap-2">
           {status === 'resolved' ? <input type="hidden" name="status" value="resolved" /> : null}
           <div className="flex flex-col gap-1">
-            <label htmlFor="alerts-event" className="text-caption text-zinc-600">
+            <label htmlFor="alerts-event" className="text-caption text-ink-2">
               {t('eventLabel')}
             </label>
-            <select
-              id="alerts-event"
-              name="event"
-              defaultValue={eventId ?? ''}
-              className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
-            >
+            <select id="alerts-event" name="event" defaultValue={eventId ?? ''} className="field">
               <option value="">{t('allEvents')}</option>
               {events.map((e) => (
                 <option key={e.id} value={e.id}>
@@ -143,20 +138,20 @@ export default async function AlertsPage({
                 >
                   <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
                     <StatusDot status={SEVERITY_DOT[a.severity]} label={t(`severity.${a.severity}`)} />
-                    <span className="text-caption text-zinc-600" data-testid="alert-state">
+                    <span className="text-caption text-ink-2" data-testid="alert-state">
                       {stateLabel(a)}
                     </span>
                     {a.reopenCount > 0 && a.state !== 'resolved' ? (
-                      <span className="text-caption text-zinc-600">{t('reopened')}</span>
+                      <span className="text-caption text-ink-2">{t('reopened')}</span>
                     ) : null}
-                    <span className="text-caption text-zinc-600">
+                    <span className="text-caption text-ink-2">
                       {t('since', { when: when.format(a.openedAt) })}
                     </span>
                   </div>
                   <h2 id={`alert-${a.id}`} className="text-section">
                     {title}
                   </h2>
-                  <p className="text-caption text-zinc-600">
+                  <p className="text-caption text-ink-2">
                     {a.eventName && a.eventSlug ? (
                       <Link
                         href={`/o/${org}/e/${a.eventSlug}`}
@@ -188,14 +183,14 @@ export default async function AlertsPage({
                   ) : null}
                   {history.length ? (
                     <details className="text-caption">
-                      <summary className="inline-flex min-h-6 cursor-pointer items-center text-zinc-700 underline">
+                      <summary className="inline-flex min-h-6 cursor-pointer items-center text-ink-2 underline">
                         {t('history.title')}
                       </summary>
                       <ol className="mt-2 flex list-none flex-col gap-1 p-0">
                         {history.map((h, i) => (
                           <li
                             key={`${h.at.toISOString()}-${i}`}
-                            className="flex flex-wrap gap-x-2 text-zinc-600"
+                            className="flex flex-wrap gap-x-2 text-ink-2"
                           >
                             <span>{when.format(h.at)}</span>
                             <span>

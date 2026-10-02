@@ -111,7 +111,7 @@ export function WaitlistJoinForm({
                   value={p.id}
                   checked={pass === p.id}
                   onChange={() => setPass(p.id)}
-                  className="size-5 accent-ink"
+                  className="size-5 accent-primary"
                 />
                 <span>
                   {p.name} · {t('priceEach', { price: p.priceLabel })}
@@ -138,7 +138,7 @@ export function WaitlistJoinForm({
             key={chosen?.id}
             defaultValue={String(min)}
             aria-invalid={state.field === 'quantity' ? true : undefined}
-            className="min-h-10 w-28 rounded-pill border border-zinc-200 bg-white px-4 text-body text-zinc-900"
+            className="field w-28"
           >
             {Array.from({ length: max - min + 1 }, (_, i) => min + i).map((n) => (
               <option key={n} value={n}>
@@ -169,7 +169,7 @@ export function WaitlistJoinForm({
             />
           </div>
         </div>
-        <p className="text-caption text-zinc-600">{t('transactionalOnly')}</p>
+        <p className="text-caption text-ink-2">{t('transactionalOnly')}</p>
         <div className={verify ? 'hidden' : 'contents'}>
           <Button type="submit" disabled={pending} className="self-start">
             {t('join')}
@@ -192,7 +192,7 @@ export function WaitlistJoinForm({
               pending={pending}
               idPrefix="waitlist-verify"
             />
-            <p className="text-caption text-zinc-600">{tr('guestVerify.changeEmail')}</p>
+            <p className="text-caption text-ink-2">{tr('guestVerify.changeEmail')}</p>
           </section>
         </Card>
       ) : null}

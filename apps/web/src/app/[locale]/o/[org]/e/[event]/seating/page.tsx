@@ -26,7 +26,7 @@ import {
   useLayoutAction,
 } from './actions.ts';
 
-const field = 'min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body';
+const field = 'field';
 const STATUS_DOT = { draft: 'neutral', published: 'success', locked: 'info' } as const;
 
 /** Seating (M1.7b): set up the event's floor plan, edit it, price it and put it on sale. */
@@ -55,7 +55,7 @@ export default async function SeatingPage({
   ]);
   const labelled = (id: string, label: string, control: React.ReactNode) => (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor={id} className="text-caption text-zinc-600">
+      <label htmlFor={id} className="text-caption text-ink-2">
         {label}
       </label>
       {control}
@@ -166,7 +166,7 @@ export default async function SeatingPage({
             ) : null}
           </>
         ) : (
-          <p className="text-body text-zinc-600">{t('none')}</p>
+          <p className="text-body text-ink-2">{t('none')}</p>
         )}
       </>
     );
@@ -191,7 +191,7 @@ export default async function SeatingPage({
       {date ? (
         <Card className="flex flex-col gap-3">
           <h2 className="text-section">{tc('dateTitle', { date: when.format(date.startsAt) })}</h2>
-          <p className="text-body text-zinc-700" aria-live="polite" data-testid="date-chart-state">
+          <p className="text-body text-ink-2" aria-live="polite" data-testid="date-chart-state">
             {seating.chart ? tc('ownChartBody') : tc('usesPlanBody')}
           </p>
           {canWrite && !date.cancelled ? (
@@ -203,7 +203,7 @@ export default async function SeatingPage({
           ) : null}
         </Card>
       ) : dates.length ? (
-        <p className="text-caption text-zinc-600">{tc('planBody')}</p>
+        <p className="text-caption text-ink-2">{tc('planBody')}</p>
       ) : null}
       {/* Live (M1.7f): counts and seat colours follow sales, holds and guests as they happen. */}
       <SeatStatesProvider
@@ -214,7 +214,7 @@ export default async function SeatingPage({
         <Card className="flex flex-wrap items-center gap-x-6 gap-y-2">
           <StatusDot status={STATUS_DOT[seating.status]} label={t(`status.${seating.status}`)} />
           <LiveSeatCounts />
-          <span className="text-caption text-zinc-600">
+          <span className="text-caption text-ink-2">
             {t('priced', { priced, total: seating.seats.length })}
           </span>
           {seating.status === 'draft' && canWrite ? (
@@ -225,7 +225,7 @@ export default async function SeatingPage({
             </form>
           ) : null}
         </Card>
-        {seating.status === 'locked' ? <p className="text-caption text-zinc-600">{t('lockedNote')}</p> : null}
+        {seating.status === 'locked' ? <p className="text-caption text-ink-2">{t('lockedNote')}</p> : null}
 
         <section aria-labelledby="editor-heading" className="flex flex-col gap-3">
           <h2 id="editor-heading" className="text-section">
@@ -246,7 +246,7 @@ export default async function SeatingPage({
           <h2 id="prices-heading" className="text-section">
             {t('prices.title')}
           </h2>
-          <p className="text-body text-zinc-600">{t('prices.description')}</p>
+          <p className="text-body text-ink-2">{t('prices.description')}</p>
           <Card>
             <SettingsForm
               action={categoryAction.bind(null, org, event, dateId)}
@@ -254,7 +254,7 @@ export default async function SeatingPage({
               savedLabel={t('prices.done')}
             >
               <fieldset className="flex flex-wrap gap-x-4 gap-y-1.5">
-                <legend className="mb-1.5 text-caption text-zinc-600">{t('prices.which')}</legend>
+                <legend className="mb-1.5 text-caption text-ink-2">{t('prices.which')}</legend>
                 {items.map((i) => (
                   <label key={i.id} className="flex min-h-6 items-center gap-2 text-body">
                     <input type="checkbox" name="itemId" value={i.id} className="size-5" />

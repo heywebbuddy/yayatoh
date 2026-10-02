@@ -56,24 +56,24 @@ export default async function MyTicketsPage({
                   <TicketQr
                     code={tk.code}
                     label={t('order.qrLabel', { serial: tk.serial })}
-                    className="size-40 shrink-0 text-ink"
+                    className="size-40 shrink-0 rounded-tag text-black"
                   />
                   <div className="flex flex-col gap-1">
                     <p className="text-section">{tk.typeName}</p>
                     <p className="text-body">{tk.holderName}</p>
-                    <p className="text-caption text-zinc-500">{t('order.serial', { serial: tk.serial })}</p>
+                    <p className="text-caption text-ink-2">{t('order.serial', { serial: tk.serial })}</p>
                     <p className="font-mono text-[18px] tracking-[0.2em]">{tk.shortCode}</p>
                   </div>
                 </div>
                 <section
                   aria-labelledby={`give-${tk.id}`}
-                  className="flex flex-col gap-2 border-t border-zinc-200 pt-3"
+                  className="flex flex-col gap-2 border-t border-line pt-3"
                 >
-                  <h2 id={`give-${tk.id}`} className="text-caption text-zinc-600">
+                  <h2 id={`give-${tk.id}`} className="text-caption text-ink-2">
                     {t('myTickets.giveTitle')}
                   </h2>
                   {tk.pendingTransfer ? (
-                    <p className="text-caption text-zinc-500">{t('myTickets.pending')}</p>
+                    <p className="text-caption text-ink-2">{t('myTickets.pending')}</p>
                   ) : null}
                   <ClaimLinkForm
                     action={giveTicketAction.bind(null, token, tk.id)}

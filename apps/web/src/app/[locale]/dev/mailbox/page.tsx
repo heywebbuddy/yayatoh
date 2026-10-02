@@ -32,21 +32,12 @@ export default async function DevMailboxPage({
       <PageHeader eyebrow={<Label>{t('eyebrow')}</Label>} title={t('title')} description={t('description')} />
       <form className="flex flex-wrap items-end gap-2" method="get">
         <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-          <label htmlFor="mailbox-to" className="text-caption text-zinc-600">
+          <label htmlFor="mailbox-to" className="text-caption text-ink-2">
             {t('filter')}
           </label>
-          <input
-            id="mailbox-to"
-            name="to"
-            type="email"
-            defaultValue={to ?? ''}
-            className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
-          />
+          <input id="mailbox-to" name="to" type="email" defaultValue={to ?? ''} className="field" />
         </div>
-        <button
-          type="submit"
-          className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
-        >
+        <button type="submit" className="field">
           {t('apply')}
         </button>
       </form>
@@ -57,7 +48,7 @@ export default async function DevMailboxPage({
           {entries.map((m) => (
             <li key={m.id}>
               <Card className="flex flex-col gap-2">
-                <p className="text-caption text-zinc-500">
+                <p className="text-caption text-ink-2">
                   {t('meta', { channel: m.channel, to: m.to, at: m.at })}
                 </p>
                 <p className="text-section">{m.subject}</p>
@@ -71,7 +62,7 @@ export default async function DevMailboxPage({
                     <pre
                       // biome-ignore lint/a11y/noNoninteractiveTabindex: a scroll container must be focusable (axe scrollable-region-focusable)
                       tabIndex={0}
-                      className="mt-2 overflow-x-auto whitespace-pre-wrap text-caption text-zinc-500"
+                      className="mt-2 overflow-x-auto whitespace-pre-wrap text-caption text-ink-2"
                     >
                       {Object.entries(m.headers)
                         .map(([k, v]) => `${k}: ${v}`)
@@ -83,7 +74,7 @@ export default async function DevMailboxPage({
                       title={t('preview', { subject: m.subject })}
                       src={`/api/dev/mailbox/${m.id}`}
                       sandbox=""
-                      className="mt-2 h-[480px] w-full rounded-card border border-zinc-200"
+                      className="mt-2 h-[480px] w-full rounded-card border border-line"
                     />
                   ) : null}
                 </details>

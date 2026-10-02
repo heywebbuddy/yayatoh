@@ -51,7 +51,7 @@ export function BulkFields({
   const [nothing, setNothing] = useState(false);
   const box = useRef<HTMLDivElement>(null);
   const dialog = useRef<HTMLDialogElement>(null);
-  const cls = 'min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body';
+  const cls = 'field';
 
   function reviewCancel() {
     const form = box.current?.closest('form');
@@ -66,7 +66,7 @@ export function BulkFields({
   return (
     <div ref={box} className="contents">
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="bulk-what" className="text-caption text-zinc-600">
+        <label htmlFor="bulk-what" className="text-caption text-ink-2">
           {t('action')}
         </label>
         <select
@@ -90,7 +90,7 @@ export function BulkFields({
       </div>
       {what === 'addLabel' || what === 'removeLabel' ? (
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="bulk-label" className="text-caption text-zinc-600">
+          <label htmlFor="bulk-label" className="text-caption text-ink-2">
             {t('label')}
           </label>
           <input
@@ -112,13 +112,13 @@ export function BulkFields({
       {what === 'email' ? (
         <div className="flex w-full flex-col gap-3">
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="bulk-subject" className="text-caption text-zinc-600">
+            <label htmlFor="bulk-subject" className="text-caption text-ink-2">
               {t('subject')}
             </label>
             <input id="bulk-subject" name="subject" required maxLength={150} className={cls} />
           </div>
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="bulk-message" className="text-caption text-zinc-600">
+            <label htmlFor="bulk-message" className="text-caption text-ink-2">
               {t('message')}
             </label>
             <textarea
@@ -128,9 +128,9 @@ export function BulkFields({
               maxLength={5000}
               rows={5}
               aria-describedby="bulk-message-hint"
-              className="rounded-card border border-zinc-200 bg-white px-4 py-3 text-body"
+              className="rounded-card border border-line bg-surface px-4 py-3 text-body"
             />
-            <span id="bulk-message-hint" className="text-caption text-zinc-500">
+            <span id="bulk-message-hint" className="text-caption text-ink-2">
               {t('messageHint')}
             </span>
           </div>
@@ -140,7 +140,7 @@ export function BulkFields({
         <>
           {seatDates.length ? (
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="bulk-date" className="text-caption text-zinc-600">
+              <label htmlFor="bulk-date" className="text-caption text-ink-2">
                 {t('seatDate')}
               </label>
               <select id="bulk-date" name="bulkDate" defaultValue="" className={cls}>
@@ -154,7 +154,7 @@ export function BulkFields({
             </div>
           ) : null}
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="bulk-target" className="text-caption text-zinc-600">
+            <label htmlFor="bulk-target" className="text-caption text-ink-2">
               {t('target')}
             </label>
             <select
@@ -174,19 +174,19 @@ export function BulkFields({
           </div>
           {adaEnforced ? (
             <label className="flex min-h-6 items-center gap-2 self-center text-body">
-              <input type="checkbox" name="overrideRules" className="size-5 accent-ink" />
+              <input type="checkbox" name="overrideRules" className="size-5 accent-primary" />
               {t('overrideRules')}
             </label>
           ) : null}
-          <p id="bulk-target-hint" className="w-full text-caption text-zinc-500">
+          <p id="bulk-target-hint" className="w-full text-caption text-ink-2">
             {t('assignHint')}
           </p>
         </>
       ) : null}
-      {what === 'resend' ? <p className="w-full text-caption text-zinc-500">{t('resendHint')}</p> : null}
+      {what === 'resend' ? <p className="w-full text-caption text-ink-2">{t('resendHint')}</p> : null}
       {what === 'cancelTickets' ? (
         <>
-          <p id="bulk-cancel-hint" className="w-full text-caption text-zinc-500">
+          <p id="bulk-cancel-hint" className="w-full text-caption text-ink-2">
             {t('cancelHint')}
           </p>
           <Button
@@ -198,7 +198,7 @@ export function BulkFields({
             {t('cancelReview')}
           </Button>
           {nothing ? (
-            <p role="alert" className="w-full text-caption text-pink-700">
+            <p role="alert" className="w-full text-caption text-danger">
               {t('confirmCancel.none')}
             </p>
           ) : null}
@@ -206,13 +206,13 @@ export function BulkFields({
             ref={dialog}
             aria-labelledby="bulk-cancel-title"
             aria-describedby="bulk-cancel-body"
-            className="m-auto w-[min(440px,calc(100vw-2rem))] rounded-panel border border-zinc-200 bg-white p-6 text-zinc-900 shadow-xl backdrop:bg-zinc-900/40"
+            className="m-auto w-[min(440px,calc(100vw-2rem))] rounded-panel border border-line bg-surface p-6 text-ink elevation-pop backdrop:bg-scrim"
           >
             <div className="flex flex-col gap-4">
               <h2 id="bulk-cancel-title" className="text-section">
                 {t('confirmCancel.title', { count })}
               </h2>
-              <p id="bulk-cancel-body" className="text-body text-zinc-600">
+              <p id="bulk-cancel-body" className="text-body text-ink-2">
                 {t('confirmCancel.body', { count })}
               </p>
               <input type="hidden" name="confirmCount" value={count} />

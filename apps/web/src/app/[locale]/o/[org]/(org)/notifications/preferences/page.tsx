@@ -49,7 +49,7 @@ export default async function PreferencesPage({
             savedLabel={t('language.saved')}
           >
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="email-language" className="text-caption text-zinc-600">
+              <label htmlFor="email-language" className="text-caption text-ink-2">
                 {t('language.label')}
               </label>
               <select
@@ -57,7 +57,7 @@ export default async function PreferencesPage({
                 name="locale"
                 defaultValue={emailLocale}
                 aria-describedby="email-language-hint"
-                className="min-h-10 max-w-sm rounded-pill border border-zinc-200 bg-white px-4 text-body"
+                className="field max-w-sm"
               >
                 {USER_LOCALES.map((l) => (
                   <option key={l} value={l} lang={l}>
@@ -65,7 +65,7 @@ export default async function PreferencesPage({
                   </option>
                 ))}
               </select>
-              <p id="email-language-hint" className="text-caption text-zinc-500">
+              <p id="email-language-hint" className="text-caption text-ink-2">
                 {t('language.hint')}
               </p>
             </div>

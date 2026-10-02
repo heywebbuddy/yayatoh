@@ -17,7 +17,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { type FormEvent, useId, useRef, useState } from 'react';
 import { looksLikeImage, UPLOAD_ACCEPT, UPLOAD_MAX_BYTES } from '@/lib/media-limits.ts';
 
-const field = 'min-h-10 w-24 rounded-pill border border-zinc-200 bg-white px-3 text-body';
+const field = 'field w-24 px-3';
 type Point = { x: string; y: string };
 /** Upload refusals with their own message (anything else is `generic`). */
 const UPLOAD_REASONS = new Set([
@@ -157,7 +157,7 @@ export function UnderlayPanel({
   const pointField = (which: 'a' | 'b', axis: 'x' | 'y') => {
     const key = `${which}${axis}`;
     return (
-      <label className="flex flex-col gap-1 text-caption text-zinc-600">
+      <label className="flex flex-col gap-1 text-caption text-ink-2">
         {t(`point.${key}`)}
         <input
           id={`${id}-${key}`}
@@ -181,19 +181,19 @@ export function UnderlayPanel({
     <section
       aria-labelledby={`${id}-h`}
       data-underlay={u?.url}
-      className="flex flex-col gap-3 rounded-card border border-zinc-200 p-4"
+      className="flex flex-col gap-3 rounded-card border border-line p-4"
     >
       <h3 id={`${id}-h`} className="text-body font-medium">
         {t('title')}
       </h3>
-      <p className="text-caption text-zinc-600">{t('description')}</p>
-      <p role="status" className="text-caption text-zinc-600">
+      <p className="text-caption text-ink-2">{t('description')}</p>
+      <p role="status" className="text-caption text-ink-2">
         {status}
       </p>
 
       {!readOnly ? (
         <form onSubmit={upload} className="flex flex-wrap items-end gap-3" noValidate>
-          <label className="flex flex-col gap-1 text-caption text-zinc-600">
+          <label className="flex flex-col gap-1 text-caption text-ink-2">
             {u ? t('replace') : t('file')}
             <input
               ref={fileRef}
@@ -207,7 +207,7 @@ export function UnderlayPanel({
           <Button type="submit" size="sm" variant="secondary">
             {t('upload')}
           </Button>
-          <p id={`${id}-up-hint`} className="w-full text-caption text-zinc-500">
+          <p id={`${id}-up-hint`} className="w-full text-caption text-ink-2">
             {t('fileHint')}
           </p>
           {error ? (
@@ -237,10 +237,10 @@ export function UnderlayPanel({
               noValidate
               aria-labelledby={`${id}-cal`}
             >
-              <h4 id={`${id}-cal`} className="text-caption font-medium text-zinc-700">
+              <h4 id={`${id}-cal`} className="text-caption font-medium text-ink-2">
                 {t('calibrate')}
               </h4>
-              <p className="text-caption text-zinc-600">{t('calibrateHint')}</p>
+              <p className="text-caption text-ink-2">{t('calibrateHint')}</p>
               <div className="flex flex-wrap gap-3">
                 {pointField('a', 'x')}
                 {pointField('a', 'y')}
@@ -277,7 +277,7 @@ export function UnderlayPanel({
                 </p>
               ) : null}
               <div className="flex flex-wrap items-end gap-3">
-                <label className="flex flex-col gap-1 text-caption text-zinc-600">
+                <label className="flex flex-col gap-1 text-caption text-ink-2">
                   {t('metres')}
                   <input
                     id={`${id}-metres`}
@@ -306,7 +306,7 @@ export function UnderlayPanel({
 
           <div className="flex flex-wrap items-end gap-3">
             {(['x', 'y'] as const).map((k) => (
-              <label key={k} className="flex flex-col gap-1 text-caption text-zinc-600">
+              <label key={k} className="flex flex-col gap-1 text-caption text-ink-2">
                 {t(`position.${k}`)}
                 <input
                   key={`${k}:${u[k]}`}
@@ -325,7 +325,7 @@ export function UnderlayPanel({
                 />
               </label>
             ))}
-            <label className="flex flex-col gap-1 text-caption text-zinc-600">
+            <label className="flex flex-col gap-1 text-caption text-ink-2">
               {t('opacity', { percent: Math.round(u.opacity * 100) })}
               <input
                 type="range"
@@ -362,7 +362,7 @@ export function UnderlayPanel({
             />
             {t('showOnMap')}
           </label>
-          <p id={`${id}-map-hint`} className="text-caption text-zinc-500">
+          <p id={`${id}-map-hint`} className="text-caption text-ink-2">
             {t('showOnMapHint')}
           </p>
           {!readOnly ? (
@@ -382,7 +382,7 @@ export function UnderlayPanel({
           ) : null}
         </>
       ) : readOnly ? (
-        <p className="text-caption text-zinc-600">{t('none')}</p>
+        <p className="text-caption text-ink-2">{t('none')}</p>
       ) : null}
     </section>
   );

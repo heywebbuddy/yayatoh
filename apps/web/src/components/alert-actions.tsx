@@ -61,15 +61,10 @@ export function AlertActions({
             <form action={formAction} className="flex flex-wrap items-end gap-2">
               <input type="hidden" name="op" value="snooze" />
               <div className="flex flex-col gap-1">
-                <label htmlFor={`snooze-${alertId}`} className="text-caption text-zinc-600">
+                <label htmlFor={`snooze-${alertId}`} className="text-caption text-ink-2">
                   {t('snoozeLabel')}
                 </label>
-                <select
-                  id={`snooze-${alertId}`}
-                  name="minutes"
-                  defaultValue="60"
-                  className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
-                >
+                <select id={`snooze-${alertId}`} name="minutes" defaultValue="60" className="field">
                   {SNOOZE.map((m) => (
                     <option key={m} value={m}>
                       {t(`snoozeFor.m${m}`)}

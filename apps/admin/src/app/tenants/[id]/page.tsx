@@ -68,12 +68,12 @@ const IMPERSONATE_ERRORS = new Set([
   'not_found',
 ]);
 
-const field = 'min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body';
+const field = 'field';
 
 function Reason({ id, label }: { id: string; label: string }) {
   return (
     <div className="flex min-w-60 flex-1 flex-col gap-1.5">
-      <label htmlFor={id} className="text-caption text-zinc-600">
+      <label htmlFor={id} className="text-caption text-ink-2">
         {label}
       </label>
       <input id={id} name="reason" required minLength={3} maxLength={500} className={field} />
@@ -176,7 +176,7 @@ export default async function TenantPage({
           ] as const
         ).map(([k, v]) => (
           <div key={k} className="flex flex-col">
-            <dt className="text-caption text-zinc-500">{t(`field.${k}`)}</dt>
+            <dt className="text-caption text-ink-2">{t(`field.${k}`)}</dt>
             <dd className="m-0">{v}</dd>
           </div>
         ))}
@@ -187,19 +187,19 @@ export default async function TenantPage({
           status={STATUS_DOT[org.status]}
           label={t('status.current', { status: t(`status.value.${org.status}`) })}
         />
-        <p className="text-caption text-zinc-600">{t(`status.explain.${org.status}`)}</p>
+        <p className="text-caption text-ink-2">{t(`status.explain.${org.status}`)}</p>
         {staff.can('status') ? (
           orgStatusActions(org.status).map((action) => (
             <form
               key={action}
               aria-label={t(`status.form.${action}`)}
               action={orgStatusAction.bind(null, id, action)}
-              className="flex flex-col gap-3 border-t border-zinc-100 pt-4"
+              className="flex flex-col gap-3 border-t border-line pt-4"
             >
               <h3 className="text-body font-medium">{t(`status.form.${action}`)}</h3>
-              <p className="text-caption text-zinc-600">{t(`status.effect.${action}`)}</p>
+              <p className="text-caption text-ink-2">{t(`status.effect.${action}`)}</p>
               <div className="flex flex-col gap-1.5">
-                <label htmlFor={`status-${action}-reason`} className="text-caption text-zinc-600">
+                <label htmlFor={`status-${action}-reason`} className="text-caption text-ink-2">
                   {t('reason')}
                 </label>
                 <textarea
@@ -208,12 +208,12 @@ export default async function TenantPage({
                   required
                   maxLength={500}
                   rows={2}
-                  className="rounded-card border border-zinc-200 bg-white px-4 py-2 text-body"
+                  className="rounded-card border border-line bg-surface px-4 py-2 text-body"
                 />
               </div>
               {action === 'terminate' ? (
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor="status-terminate-slug" className="text-caption text-zinc-600">
+                  <label htmlFor="status-terminate-slug" className="text-caption text-ink-2">
                     {t('status.typeSlug', { slug: org.slug })}
                   </label>
                   <input
@@ -240,14 +240,12 @@ export default async function TenantPage({
             </form>
           ))
         ) : (
-          <p className="text-caption text-zinc-600">{t('status.adminsOnly')}</p>
+          <p className="text-caption text-ink-2">{t('status.adminsOnly')}</p>
         )}
-        {org.status === 'terminated' ? (
-          <p className="text-caption text-zinc-600">{t('status.final')}</p>
-        ) : null}
+        {org.status === 'terminated' ? <p className="text-caption text-ink-2">{t('status.final')}</p> : null}
         <h3 className="text-body font-medium">{t('status.history')}</h3>
         {statusHistory.length === 0 ? (
-          <p className="text-caption text-zinc-600">{t('status.empty')}</p>
+          <p className="text-caption text-ink-2">{t('status.empty')}</p>
         ) : (
           <ul aria-label={t('status.history')} className="flex list-none flex-col gap-1 p-0 text-caption">
             {statusHistory.map((h) => (
@@ -267,21 +265,21 @@ export default async function TenantPage({
       {org.status === 'terminated' ? (
         <Section id="restore" title={t('restore.title')}>
           {!staff.can('status') ? (
-            <p className="text-caption text-zinc-600">{t('restore.adminsOnly')}</p>
+            <p className="text-caption text-ink-2">{t('restore.adminsOnly')}</p>
           ) : !restoreTo ? (
-            <p className="text-caption text-zinc-600">{t('restore.noRecord')}</p>
+            <p className="text-caption text-ink-2">{t('restore.noRecord')}</p>
           ) : (
             <form
               aria-label={t('restore.form')}
               action={restoreOrgAction.bind(null, id)}
               className="flex flex-col gap-3"
             >
-              <p className="text-caption text-zinc-600">{t('restore.description')}</p>
-              <p className="text-caption text-zinc-600">
+              <p className="text-caption text-ink-2">{t('restore.description')}</p>
+              <p className="text-caption text-ink-2">
                 {t('restore.effect', { status: t(`status.value.${restoreTo}`) })}
               </p>
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="restore-reason" className="text-caption text-zinc-600">
+                <label htmlFor="restore-reason" className="text-caption text-ink-2">
                   {t('reason')}
                 </label>
                 <textarea
@@ -290,11 +288,11 @@ export default async function TenantPage({
                   required
                   maxLength={500}
                   rows={2}
-                  className="rounded-card border border-zinc-200 bg-white px-4 py-2 text-body"
+                  className="rounded-card border border-line bg-surface px-4 py-2 text-body"
                 />
               </div>
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="restore-slug" className="text-caption text-zinc-600">
+                <label htmlFor="restore-slug" className="text-caption text-ink-2">
                   {t('status.typeSlug', { slug: org.slug })}
                 </label>
                 <input
@@ -306,10 +304,10 @@ export default async function TenantPage({
                 />
               </div>
               {stepUpMethod === 'email' ? (
-                <p className="text-caption text-zinc-600">{t('status.errors.restore_method')}</p>
+                <p className="text-caption text-ink-2">{t('status.errors.restore_method')}</p>
               ) : (
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor="restore-proof" className="text-caption text-zinc-600">
+                  <label htmlFor="restore-proof" className="text-caption text-ink-2">
                     {stepUpMethod === 'totp' ? t('restore.code') : t('restore.password')}
                   </label>
                   {stepUpMethod === 'totp' ? (
@@ -340,14 +338,14 @@ export default async function TenantPage({
       ) : null}
 
       <Section id="switches" title={t('switches.title')}>
-        <p className="text-caption text-zinc-600">{t('switches.description')}</p>
+        <p className="text-caption text-ink-2">{t('switches.description')}</p>
         {SUSPENSION_KINDS.map((kind) => {
           const on = active.has(kind);
           return (
             <form
               key={kind}
               action={suspensionAction.bind(null, id, kind, !on)}
-              className="flex flex-wrap items-end gap-3 border-t border-zinc-100 pt-4 first-of-type:border-0 first-of-type:pt-0"
+              className="flex flex-wrap items-end gap-3 border-t border-line pt-4 first-of-type:border-0 first-of-type:pt-0"
             >
               <div className="flex min-w-48 flex-col gap-1">
                 <span className="text-body">{t(`switches.kind.${kind}`)}</span>
@@ -371,7 +369,7 @@ export default async function TenantPage({
         })}
         {pauses.length > 0 ? (
           <details>
-            <summary className="cursor-pointer text-caption text-zinc-600">{t('switches.history')}</summary>
+            <summary className="cursor-pointer text-caption text-ink-2">{t('switches.history')}</summary>
             <ul className="mt-2 flex list-none flex-col gap-1 p-0 text-caption">
               {pauses.map((p) => (
                 <li key={`${p.kind}-${p.since.toISOString()}`}>
@@ -391,7 +389,7 @@ export default async function TenantPage({
           }
           label={t(`payouts.state.${payout.state}`)}
         />
-        <p className="text-caption text-zinc-600">
+        <p className="text-caption text-ink-2">
           {t(`payouts.flow.${payout.fundsFlow}`)}
           {payout.requirementsDue.length
             ? ` · ${t('payouts.due', { keys: payout.requirementsDue.join(', ') })}`
@@ -420,13 +418,13 @@ export default async function TenantPage({
 
       <Section id="disputes" title={t('disputes.title')}>
         {disputes.length === 0 ? (
-          <p className="text-body text-zinc-600">{t('disputes.empty')}</p>
+          <p className="text-body text-ink-2">{t('disputes.empty')}</p>
         ) : (
           <ul className="flex list-none flex-col gap-4 p-0">
             {disputes.map((d) => (
               <li
                 key={d.id}
-                className="flex flex-col gap-2 border-t border-zinc-100 pt-3 first:border-0 first:pt-0"
+                className="flex flex-col gap-2 border-t border-line pt-3 first:border-0 first:pt-0"
               >
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-body">
                   <StatusDot
@@ -436,10 +434,10 @@ export default async function TenantPage({
                   <span className="font-mono">
                     {d.currency} {d.amountMinor}
                   </span>
-                  <span className="text-caption text-zinc-600">{d.reason}</span>
-                  <span className="text-caption text-zinc-600">{d.fundsFlow}</span>
+                  <span className="text-caption text-ink-2">{d.reason}</span>
+                  <span className="text-caption text-ink-2">{d.fundsFlow}</span>
                   {d.evidenceDueBy ? (
-                    <span className="text-caption text-zinc-600">
+                    <span className="text-caption text-ink-2">
                       {t('disputes.due', { date: when.format(d.evidenceDueBy) })}
                     </span>
                   ) : null}
@@ -452,7 +450,7 @@ export default async function TenantPage({
                     action={submitEvidenceAction.bind(null, id, d.id, d.providerDisputeId)}
                     className="flex flex-col gap-2"
                   >
-                    <label htmlFor={`summary-${d.id}`} className="text-caption text-zinc-600">
+                    <label htmlFor={`summary-${d.id}`} className="text-caption text-ink-2">
                       {t('disputes.summary')}
                     </label>
                     <textarea
@@ -463,7 +461,7 @@ export default async function TenantPage({
                       minLength={20}
                       maxLength={5000}
                       rows={3}
-                      className="rounded-card border border-zinc-200 bg-white px-4 py-2 text-body"
+                      className="rounded-card border border-line bg-surface px-4 py-2 text-body"
                     />
                     <label className="flex min-h-6 items-center gap-2 text-body">
                       <input type="checkbox" name="reviewed" value="yes" required className="size-5" />
@@ -481,19 +479,19 @@ export default async function TenantPage({
       </Section>
 
       <Section id="reconciliation" title={t('reconciliation.title')}>
-        <p className="text-caption text-zinc-600">{t('reconciliation.description')}</p>
+        <p className="text-caption text-ink-2">{t('reconciliation.description')}</p>
         {recon.length === 0 ? (
-          <p className="text-body text-zinc-600">{t('reconciliation.empty')}</p>
+          <p className="text-body text-ink-2">{t('reconciliation.empty')}</p>
         ) : (
           <ul className="flex list-none flex-col gap-4 p-0">
             {recon.map((r) => (
               <li
                 key={r.id}
-                className="flex flex-col gap-2 border-t border-zinc-100 pt-4 first:border-0 first:pt-0"
+                className="flex flex-col gap-2 border-t border-line pt-4 first:border-0 first:pt-0"
               >
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
                   <StatusDot status="warning" label={t(`reconciliation.kind.${r.kind}`)} />
-                  <span className="text-caption text-zinc-600">{r.day}</span>
+                  <span className="text-caption text-ink-2">{r.day}</span>
                   <span className="break-all font-mono text-caption">{r.reference}</span>
                   <span className="font-mono tabular-nums">
                     {t('reconciliation.amounts', {
@@ -508,7 +506,7 @@ export default async function TenantPage({
                     className="flex flex-wrap items-end gap-3"
                   >
                     <div className="flex min-w-60 flex-1 flex-col gap-1.5">
-                      <label htmlFor={`recon-${r.id}`} className="text-caption text-zinc-600">
+                      <label htmlFor={`recon-${r.id}`} className="text-caption text-ink-2">
                         {t('reconciliation.note')}
                       </label>
                       <input
@@ -533,11 +531,11 @@ export default async function TenantPage({
 
       <Section id="ledger" title={t('ledger.title')}>
         {ledger.length === 0 ? (
-          <p className="text-body text-zinc-600">{t('ledger.empty')}</p>
+          <p className="text-body text-ink-2">{t('ledger.empty')}</p>
         ) : (
           <table className="w-full text-start text-body">
             <caption className="sr-only">{t('ledger.title')}</caption>
-            <thead className="text-caption text-zinc-500">
+            <thead className="text-caption text-ink-2">
               <tr>
                 <th scope="col" className="py-1 pe-4 text-start font-normal">
                   {t('ledger.account')}
@@ -549,7 +547,7 @@ export default async function TenantPage({
             </thead>
             <tbody>
               {ledger.map((l) => (
-                <tr key={`${l.account}:${l.currency}`} className="border-t border-zinc-100">
+                <tr key={`${l.account}:${l.currency}`} className="border-t border-line">
                   <td className="py-1.5 pe-4 font-mono text-caption">{l.account}</td>
                   <td className="py-1.5 text-end font-mono tabular-nums">
                     {l.currency} {l.balanceMinor}
@@ -559,7 +557,7 @@ export default async function TenantPage({
             </tbody>
           </table>
         )}
-        <p className="text-caption text-zinc-500">{t('ledger.note')}</p>
+        <p className="text-caption text-ink-2">{t('ledger.note')}</p>
       </Section>
 
       <Section id="fees" title={t('fees.title')}>
@@ -569,14 +567,14 @@ export default async function TenantPage({
             percent: (fee.percentBps / 100).toFixed(2),
             fixed: fee.fixedMinor,
           })}{' '}
-          <span className="text-caption text-zinc-500">
+          <span className="text-caption text-ink-2">
             {fee.override ? t('fees.override') : t('fees.plan')}
           </span>
         </p>
         {staff.can('fees') ? (
           <form action={feeOverrideAction.bind(null, id)} className="flex flex-wrap items-end gap-3">
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="fee-currency" className="text-caption text-zinc-600">
+              <label htmlFor="fee-currency" className="text-caption text-ink-2">
                 {t('fees.currency')}
               </label>
               <input
@@ -589,7 +587,7 @@ export default async function TenantPage({
               />
             </div>
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="fee-bps" className="text-caption text-zinc-600">
+              <label htmlFor="fee-bps" className="text-caption text-ink-2">
                 {t('fees.bps')}
               </label>
               <input
@@ -604,7 +602,7 @@ export default async function TenantPage({
               />
             </div>
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="fee-fixed" className="text-caption text-zinc-600">
+              <label htmlFor="fee-fixed" className="text-caption text-ink-2">
                 {t('fees.fixed')}
               </label>
               <input
@@ -631,7 +629,7 @@ export default async function TenantPage({
         {staff.can('entitlements') ? (
           <form action={entitlementAction.bind(null, id)} className="flex flex-wrap items-end gap-3">
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="ent-module" className="text-caption text-zinc-600">
+              <label htmlFor="ent-module" className="text-caption text-ink-2">
                 {t('entitlements.module')}
               </label>
               <select id="ent-module" name="moduleKey" className={field}>
@@ -643,7 +641,7 @@ export default async function TenantPage({
               </select>
             </div>
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="ent-effect" className="text-caption text-zinc-600">
+              <label htmlFor="ent-effect" className="text-caption text-ink-2">
                 {t('entitlements.effect')}
               </label>
               <select id="ent-effect" name="effect" className={field}>
@@ -658,11 +656,11 @@ export default async function TenantPage({
       </Section>
 
       <Section id="impersonate" title={t('impersonate.title')}>
-        <p className="text-caption text-zinc-600">{t('impersonate.description')}</p>
+        <p className="text-caption text-ink-2">{t('impersonate.description')}</p>
         {staff.can('impersonate') ? (
           <form action={startImpersonationAction.bind(null, id)} className="flex flex-col gap-3">
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="imp-member" className="text-caption text-zinc-600">
+              <label htmlFor="imp-member" className="text-caption text-ink-2">
                 {t('impersonate.member')}
               </label>
               <select id="imp-member" name="userId" required defaultValue="" className={field}>
@@ -681,7 +679,7 @@ export default async function TenantPage({
               </select>
             </div>
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="imp-reason" className="text-caption text-zinc-600">
+              <label htmlFor="imp-reason" className="text-caption text-ink-2">
                 {t('impersonate.reason')}
               </label>
               <textarea
@@ -691,9 +689,9 @@ export default async function TenantPage({
                 maxLength={500}
                 rows={2}
                 aria-describedby="imp-reason-hint"
-                className="rounded-card border border-zinc-200 bg-white px-4 py-2 text-body"
+                className="rounded-card border border-line bg-surface px-4 py-2 text-body"
               />
-              <p id="imp-reason-hint" className="text-caption text-zinc-500">
+              <p id="imp-reason-hint" className="text-caption text-ink-2">
                 {t('impersonate.reasonHint')}
               </p>
             </div>
@@ -702,15 +700,15 @@ export default async function TenantPage({
             </Button>
           </form>
         ) : (
-          <p className="text-caption text-zinc-600">{t('impersonate.adminsOnly')}</p>
+          <p className="text-caption text-ink-2">{t('impersonate.adminsOnly')}</p>
         )}
         <h3 className="text-body font-medium">{t('impersonate.history')}</h3>
         {impersonations.length === 0 ? (
-          <p className="text-caption text-zinc-600">{t('impersonate.empty')}</p>
+          <p className="text-caption text-ink-2">{t('impersonate.empty')}</p>
         ) : (
           <ul
             aria-label={t('impersonate.history')}
-            className="flex list-none flex-col divide-y divide-zinc-100 p-0"
+            className="flex list-none flex-col divide-y divide-line p-0"
           >
             {impersonations.map((i) => {
               const open = isImpersonationActive(i, now);
@@ -719,7 +717,7 @@ export default async function TenantPage({
                   <span className="min-w-0 flex-1">
                     {t('impersonate.entry', { staff: i.staffName, member: i.memberName, reason: i.reason })}
                   </span>
-                  <span className="text-caption text-zinc-600">
+                  <span className="text-caption text-ink-2">
                     {when.format(i.startedAt)} ·{' '}
                     {open
                       ? t('impersonate.until', { at: when.format(i.expiresAt) })
@@ -757,7 +755,7 @@ export default async function TenantPage({
           {domains.map((d) => (
             <li key={d.id} className="flex flex-wrap items-center gap-3">
               <span className="font-mono">{d.hostname}</span>
-              <span className="text-caption text-zinc-600">
+              <span className="text-caption text-ink-2">
                 {d.status}
                 {d.isPrimary ? ` · ${t('domains.primary')}` : ''}
                 {d.walletsReady ? ` · ${t('domains.wallets')}` : ''}

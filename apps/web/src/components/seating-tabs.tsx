@@ -36,7 +36,7 @@ export function SeatingTabs({
               <Link
                 href={tab.href}
                 aria-current={on ? 'page' : undefined}
-                className={`inline-flex min-h-9 items-center rounded-pill border px-3.5 text-[13px] whitespace-nowrap ${on ? 'border-ink bg-ink text-white' : 'border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50'}`}
+                className={`inline-flex min-h-9 items-center rounded-pill border px-3.5 text-[13px] whitespace-nowrap ${on ? 'border-ink bg-tag text-white' : 'border-line bg-surface text-ink-2 hover:bg-surface-2'}`}
               >
                 {t(tab.key)}
               </Link>

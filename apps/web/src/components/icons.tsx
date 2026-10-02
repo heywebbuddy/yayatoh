@@ -92,5 +92,5 @@ const ICONS: Record<string, LucideIcon> = {
 
 export function Icon({ name, className = 'size-4' }: { name: string; className?: string }) {
   const C = ICONS[name] ?? House;
-  return <C aria-hidden="true" className={className} strokeWidth={1.6} />;
+  return <C aria-hidden="true" className={className} strokeWidth={2} />;
 }

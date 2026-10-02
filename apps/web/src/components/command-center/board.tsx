@@ -291,14 +291,14 @@ export function CommandCenterBoard({
       <p
         role="status"
         aria-live="polite"
-        className={cx('text-caption', failed ? 'text-pink-700' : 'text-zinc-600')}
+        className={cx('text-caption', failed ? 'text-danger' : 'text-ink-2')}
       >
         {message}
       </p>
       {visible.length === 0 ? (
         <Card className="text-center">
           <p className="text-section">{t('empty.title')}</p>
-          <p className="text-body text-zinc-600">{t('empty.description')}</p>
+          <p className="text-body text-ink-2">{t('empty.description')}</p>
         </Card>
       ) : (
         <ol
@@ -324,7 +324,7 @@ export function CommandCenterBoard({
                         draggable
                         onDragStart={() => setDragging(k)}
                         onDragEnd={() => setDragging(null)}
-                        className="inline-flex size-7 cursor-grab items-center justify-center rounded-pill text-zinc-500"
+                        className="inline-flex size-7 cursor-grab items-center justify-center rounded-pill text-ink-2"
                         title={t('drag', { widget: title(k) })}
                         aria-hidden="true"
                       >
@@ -363,9 +363,9 @@ export function CommandCenterBoard({
                   ) : null}
                 </div>
                 {data[k] === undefined ? (
-                  <p className="text-caption text-zinc-500">{t('loading')}</p>
+                  <p className="text-caption text-ink-2">{t('loading')}</p>
                 ) : data[k] === null ? (
-                  <p className="text-caption text-zinc-600">{t('unavailable')}</p>
+                  <p className="text-caption text-ink-2">{t('unavailable')}</p>
                 ) : (
                   <WidgetBody widget={k} data={data[k]} ctx={ctx} />
                 )}
@@ -393,7 +393,7 @@ export function CommandCenterBoard({
                 ))}
             </ul>
           ) : (
-            <p className="text-caption text-zinc-600">{t('hiddenNone')}</p>
+            <p className="text-caption text-ink-2">{t('hiddenNone')}</p>
           )}
         </section>
       ) : null}

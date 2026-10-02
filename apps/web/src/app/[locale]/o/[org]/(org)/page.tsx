@@ -90,7 +90,7 @@ export default async function OrgHome({
       {paused.length > 0 ? (
         <div
           role="status"
-          className="flex flex-col gap-1 rounded-card border border-accent-700 bg-accent-50 px-4 py-3 text-body text-accent-text"
+          className="flex flex-col gap-1 rounded-card border border-primary bg-primary-soft px-4 py-3 text-body text-primary-ink"
         >
           {paused.map((p) => (
             <p key={p.kind}>{t(`suspensions.${p.kind}`)}</p>
@@ -166,8 +166,8 @@ async function EventList({
   const active = series.find((s) => s.slug === seriesSlug) ?? null;
   const events = all.filter((e) => e.status !== 'archived' && (!active || active.eventIds.includes(e.id)));
   const chip = (current: boolean) =>
-    `inline-flex min-h-8 items-center rounded-pill border px-3 text-caption ${current ? 'border-zinc-900 bg-zinc-900 text-white' : 'border-zinc-200 bg-white text-zinc-700'}`;
-  const selectClass = 'min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body';
+    `inline-flex min-h-8 items-center rounded-pill border px-3 text-caption ${current ? 'border-ink bg-tag text-white' : 'border-line bg-surface text-ink-2'}`;
+  const selectClass = 'field';
   return (
     <>
       {series.length > 0 ? (
@@ -196,7 +196,7 @@ async function EventList({
         <form method="get" className="flex flex-wrap items-end gap-3">
           {active ? <input type="hidden" name="series" value={active.slug} /> : null}
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="filter-category" className="text-caption text-zinc-600">
+            <label htmlFor="filter-category" className="text-caption text-ink-2">
               {t('eventFilters.category')}
             </label>
             <select
@@ -214,7 +214,7 @@ async function EventList({
             </select>
           </div>
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="filter-tag" className="text-caption text-zinc-600">
+            <label htmlFor="filter-tag" className="text-caption text-ink-2">
               {t('eventFilters.tag')}
             </label>
             <select
@@ -268,8 +268,8 @@ async function EventList({
                     {t(`profiles.${e.profile}`)}
                     {e.category ? ` · ${t(`categories.${e.category as EventCategory}`)}` : ''}
                   </Label>
-                  <h3 className="text-[22px] leading-tight font-light tracking-[-0.03em]">{e.name}</h3>
-                  <p className="text-body text-zinc-500">
+                  <h3 className="text-[22px] leading-tight font-extrabold tracking-[-0.03em]">{e.name}</h3>
+                  <p className="text-body text-ink-2">
                     {formatEventDateRange(e.startsAt.toISOString(), e.endsAt.toISOString(), {
                       locale,
                       currency: e.currency,
@@ -282,7 +282,7 @@ async function EventList({
                       {e.tags.map((tag) => (
                         <li
                           key={tag}
-                          className="rounded-pill bg-zinc-100 px-2.5 py-0.5 text-caption text-zinc-700"
+                          className="rounded-pill bg-surface-3 px-2.5 py-0.5 text-caption text-ink-2"
                         >
                           {tag}
                         </li>
@@ -383,7 +383,7 @@ async function SetupChecklist({ org, outcome }: { org: string; outcome: string |
       {setupMode ? (
         <Card className="flex flex-col gap-3">
           <h3 className="text-body font-semibold">{t('setupMode')}</h3>
-          <p className="text-body text-zinc-600">{t('setupModeBody')}</p>
+          <p className="text-body text-ink-2">{t('setupModeBody')}</p>
           <ul aria-label={t('requiredList')} className="flex list-none flex-col gap-1 p-0">
             {onboarding.required.map((k) => {
               const done = !onboarding.missing.includes(k);
@@ -391,7 +391,7 @@ async function SetupChecklist({ org, outcome }: { org: string; outcome: string |
                 <li key={k} className="flex min-h-11 items-center gap-3">
                   <StatusDot status={done ? 'success' : 'neutral'} label={done ? t('done') : t('todo')} />
                   {done ? (
-                    <span className="text-zinc-500 line-through">{t(`required.${k}`)}</span>
+                    <span className="text-ink-2 line-through">{t(`required.${k}`)}</span>
                   ) : (
                     <Link href={requiredHref[k] ?? settings} className="underline underline-offset-2">
                       {t(`required.${k}`)}
@@ -406,17 +406,17 @@ async function SetupChecklist({ org, outcome }: { org: string; outcome: string |
               <Button type="submit">{t('finish')}</Button>
             </form>
           ) : (
-            <p className="text-caption text-zinc-600">{t('finishLater')}</p>
+            <p className="text-caption text-ink-2">{t('finishLater')}</p>
           )}
         </Card>
       ) : null}
       <Card className="flex flex-col">
-        <ul className="flex list-none flex-col divide-y divide-zinc-100 p-0">
+        <ul className="flex list-none flex-col divide-y divide-line p-0">
           {items.map((i) => (
             <li key={i.key} className="flex min-h-11 items-center gap-3 py-2">
               <StatusDot status={i.done ? 'success' : 'neutral'} label={i.done ? t('done') : t('todo')} />
               {i.done ? (
-                <span className="text-zinc-500 line-through">{t(`item.${i.key}`)}</span>
+                <span className="text-ink-2 line-through">{t(`item.${i.key}`)}</span>
               ) : (
                 <Link href={i.href} className="underline underline-offset-2">
                   {t(`item.${i.key}`)}

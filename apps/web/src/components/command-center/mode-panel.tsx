@@ -63,21 +63,16 @@ export function ModePanel({
         <p className="flex items-center gap-2 text-section" data-testid="cc-mode">
           <StatusDot status={DOT[mode.mode]} label={t(`mode.${mode.mode}`)} live={mode.mode === 'live'} />
         </p>
-        {next ? <p className="text-caption text-zinc-600">{next}</p> : null}
-        <p className="text-caption text-zinc-500">{t('override.autoNote', { timeZone })}</p>
+        {next ? <p className="text-caption text-ink-2">{next}</p> : null}
+        <p className="text-caption text-ink-2">{t('override.autoNote', { timeZone })}</p>
       </div>
       {canOverride ? (
         <form action={submit} className="flex flex-wrap items-end gap-2">
           <div className="flex flex-col gap-1">
-            <label htmlFor={id} className="text-caption text-zinc-700">
+            <label htmlFor={id} className="text-caption text-ink-2">
               {t('override.label')}
             </label>
-            <select
-              id={id}
-              name="mode"
-              defaultValue={mode.override ?? 'auto'}
-              className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
-            >
+            <select id={id} name="mode" defaultValue={mode.override ?? 'auto'} className="field">
               <option value="auto">{t('override.automatic', { mode: t(`mode.${mode.computed}`) })}</option>
               {EVENT_MODES.map((m) => (
                 <option key={m} value={m}>
@@ -89,11 +84,11 @@ export function ModePanel({
           <Button type="submit" variant="secondary" disabled={pending}>
             {t('override.submit')}
           </Button>
-          <p role="status" className="basis-full text-caption text-zinc-600">
+          <p role="status" className="basis-full text-caption text-ink-2">
             {state.ok ? t('override.saved') : null}
           </p>
           {state.code ? (
-            <p role="alert" className="basis-full text-caption text-pink-700">
+            <p role="alert" className="basis-full text-caption text-danger">
               {te(errorMessageKey(state.code))}
             </p>
           ) : null}

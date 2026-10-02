@@ -44,7 +44,7 @@ export default async function PublicThreadPage({
         }))}
       />
       {view.blocked ? (
-        <p role="status" className="text-body text-zinc-600">
+        <p role="status" className="text-body text-ink-2">
           {t('notAccepting', { org: view.orgName })}
         </p>
       ) : view.contactBlocked ? null : (

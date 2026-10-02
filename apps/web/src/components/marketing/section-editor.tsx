@@ -21,8 +21,8 @@ export interface SectionValues {
   readonly position: number;
 }
 
-const area = 'rounded-card border bg-white px-4 py-2 text-body';
-const select = 'min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body';
+const area = 'rounded-card border bg-surface px-4 py-2 text-body';
+const select = 'field';
 
 /**
  * Create or edit a marketing section (M3.11b). The page and language are chosen once; a
@@ -53,7 +53,7 @@ export function SectionEditor({
       {locales ? (
         <>
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="section-placement" className="text-caption text-zinc-600">
+            <label htmlFor="section-placement" className="text-caption text-ink-2">
               {t('fields.placement')}
             </label>
             <select
@@ -70,7 +70,7 @@ export function SectionEditor({
             </select>
           </div>
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="section-locale" className="text-caption text-zinc-600">
+            <label htmlFor="section-locale" className="text-caption text-ink-2">
               {t('fields.locale')}
             </label>
             <select
@@ -124,7 +124,7 @@ export function SectionEditor({
       />
       <div className="flex flex-col gap-1.5">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <label htmlFor="section-body" className="text-caption text-zinc-600">
+          <label htmlFor="section-body" className="text-caption text-ink-2">
             {t('fields.body')}
           </label>
           <Button
@@ -146,26 +146,26 @@ export function SectionEditor({
           onChange={(e) => setBody(e.target.value)}
           aria-invalid={bad.has('body') || undefined}
           aria-describedby="section-body-hint"
-          className={`${area} font-mono ${bad.has('body') ? 'border-pink-700' : 'border-zinc-200'}`}
+          className={`${area} font-mono ${bad.has('body') ? 'border-danger' : 'border-line'}`}
         />
-        <p id="section-body-hint" className="text-caption text-zinc-500">
+        <p id="section-body-hint" className="text-caption text-ink-2">
           {tc('bodyHint')}
         </p>
         <section
           id={previewId}
           aria-label={tc('previewLabel')}
           hidden={!preview}
-          className="rounded-card border border-dashed border-zinc-300 bg-white p-4"
+          className="rounded-card border border-dashed border-line-strong bg-surface p-4"
         >
           {body.trim() ? (
             <Markdown source={body} />
           ) : (
-            <p className="text-body text-zinc-500">{tc('previewEmpty')}</p>
+            <p className="text-body text-ink-2">{tc('previewEmpty')}</p>
           )}
         </section>
       </div>
-      <fieldset className="flex flex-col gap-4 rounded-card border border-zinc-200 p-4">
-        <legend className="px-1 text-caption text-zinc-600">{t('ctaLegend')}</legend>
+      <fieldset className="flex flex-col gap-4 rounded-card border border-line p-4">
+        <legend className="px-1 text-caption text-ink-2">{t('ctaLegend')}</legend>
         <Input
           id="section-cta-label"
           name="ctaLabel"

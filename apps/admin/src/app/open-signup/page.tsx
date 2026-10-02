@@ -39,14 +39,14 @@ export default async function OpenSignupPage({
           status={state.enabled ? 'success' : 'neutral'}
           label={state.enabled ? t('state.on') : t('state.off')}
         />
-        <p className="text-body text-zinc-600">{state.enabled ? t('explain.on') : t('explain.off')}</p>
+        <p className="text-body text-ink-2">{state.enabled ? t('explain.on') : t('explain.off')}</p>
         {state.updatedAt ? (
-          <p className="text-caption text-zinc-500">{t('since', { date: date.format(state.updatedAt) })}</p>
+          <p className="text-caption text-ink-2">{t('since', { date: date.format(state.updatedAt) })}</p>
         ) : null}
         <form action={setOpenSignupAction} className="flex flex-col gap-3">
           {target ? <input type="hidden" name="enabled" value="on" /> : null}
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="open-signup-reason" className="text-caption text-zinc-600">
+            <label htmlFor="open-signup-reason" className="text-caption text-ink-2">
               {t('reason')}
             </label>
             <textarea
@@ -58,9 +58,9 @@ export default async function OpenSignupPage({
               rows={3}
               aria-invalid={error === 'reason' ? true : undefined}
               aria-describedby="open-signup-reason-hint"
-              className="rounded-card border border-zinc-200 bg-white px-4 py-2 text-body"
+              className="rounded-card border border-line bg-surface px-4 py-2 text-body"
             />
-            <p id="open-signup-reason-hint" className="text-caption text-zinc-500">
+            <p id="open-signup-reason-hint" className="text-caption text-ink-2">
               {t('reasonHint')}
             </p>
           </div>
@@ -71,7 +71,7 @@ export default async function OpenSignupPage({
                 name="confirm"
                 value="yes"
                 aria-invalid={error === 'confirm' ? true : undefined}
-                className="mt-0.5 size-5 shrink-0 accent-ink"
+                className="mt-0.5 size-5 shrink-0 accent-primary"
               />
               <span>{t('confirm')}</span>
             </label>
@@ -83,13 +83,13 @@ export default async function OpenSignupPage({
       </Card>
       <Card className="p-0">
         {state.history.length === 0 ? (
-          <p className="p-4 text-body text-zinc-600">{t('noHistory')}</p>
+          <p className="p-4 text-body text-ink-2">{t('noHistory')}</p>
         ) : (
           // biome-ignore lint/a11y/noNoninteractiveTabindex: a scroll container must be focusable (axe scrollable-region-focusable)
           <section className="overflow-x-auto" tabIndex={0} aria-label={t('history')}>
             <table className="w-full text-start text-body">
               <caption className="sr-only">{t('history')}</caption>
-              <thead className="text-caption text-zinc-500">
+              <thead className="text-caption text-ink-2">
                 <tr>
                   {(['when', 'change', 'who', 'reason'] as const).map((c) => (
                     <th key={c} scope="col" className="px-4 py-2 text-start font-normal">
@@ -100,7 +100,7 @@ export default async function OpenSignupPage({
               </thead>
               <tbody>
                 {state.history.map((h) => (
-                  <tr key={h.id} className="border-t border-zinc-100">
+                  <tr key={h.id} className="border-t border-line">
                     <td className="px-4 py-2 whitespace-nowrap">{date.format(h.at)}</td>
                     <td className="px-4 py-2">{h.enabled ? t('change.on') : t('change.off')}</td>
                     <td className="px-4 py-2">{h.changedBy}</td>
