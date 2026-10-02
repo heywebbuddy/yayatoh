@@ -150,7 +150,7 @@ sponsor's name, which guests see in the seat finder once the host shows it.
 - Renaming or removing a named slot (re-claim to another person) from the link or the console; a host-side company rename.
 - Sponsor logos uploaded for the sponsor itself (today: one of the event's images); sponsor names drawn on the public venue map (the data is there; the map shows table labels).
 - `/v1` resources for tables and sponsors.
-- **Not merged:** `origin/merge/next-3f` (its `0095_long_luminals` collides with batch 3e's `0095_alert_signals` in the migration journal, outside M4.2b's files); `origin/agent/design-v2` is not ahead of the base yet.
+- **Not merged:** `origin/agent/design-v2` (ahead of the base; its merge conflicts outside M4.2b's files: `apps/web/e2e/helpers.ts`, the speakers and exhibitors pages, the migration journal and `0096_snapshot.json`, plus `checkout-form`, `public-event-view`, `seat-finder` and the message files). The merge session takes it; the new screens use `@yayatoh/ui` components only, so they restyle by inheritance.
 
 ### 4. `touches:`
 ```yaml
@@ -228,3 +228,9 @@ Both new tables are tenant tables (FORCE RLS, NULLIF policy, org-leading indexes
 
 ### 16. Owner tasks
 - [ ] Confirm the M4.2b defaults (docs/owner-inbox.md, Phase 4).
+
+### Gate (2026-10-02)
+- Merged `origin/merge/next-3e`, `origin/merge/next-3f` and `origin/m0.5-foundation-ey5gqp`; the M4.2b migration was regenerated as `0099_bitter_odin` after batch 3f's 0096–0098 (same SQL).
+- `pnpm lint`, `pnpm check:modules`, typecheck (56/56, `--concurrency=2`), unit 2326/2326.
+- Integration 1312/1313: `apps/worker/tests/badges.int.test.ts` › "the leader tick queues the batch until its PDF is done" (M5.5a, batch 3f) timed out at its 60 s deadline under the full parallel run; alone it passes in 7.5 s. M4.2b does not touch the badge job, PDF renderer or worker job code.
+- E2E on 375/768/1280 (`--workers=2`): `gala-tables`, `social-workspace` 33 passed; `seating`, `seat-finder`, `seated-checkout`, `noindex` 29 passed (10 skipped by design); `checkout`, `tickets`, `seat-assignment`, `refunds` 39 passed; `seo`, `command-center`, `security` 144 passed.
