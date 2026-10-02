@@ -1,11 +1,11 @@
 You are the merge session for **Yayatoh 2.0** (repo heywebbuddy/yayatoh), batch 3h: the Phase 4 Wave B and Phase 5 Wave 2 builders, merged on top of **design system v2**. Nobody is watching live: work autonomously to completion and never wait for input. The orchestrator lands your result on the build branch after reading your report.
 
 ## Branch and git
-You start on the build branch `m0.5-foundation-ey5gqp`. By the time you run, it carries batches 3c–3g **and design v2** (`agent/design-v2`, landed by the orchestrator).
-- If `git merge-base --is-ancestor origin/agent/design-v2 origin/m0.5-foundation-ey5gqp` fails, stop and report: design v2 must land first.
+The build branch `m0.5-foundation-ey5gqp` will carry batches 3c–3g **and design v2** (`agent/design-v2`). To save time you may start before 3f, 3g and design v2 have landed on it:
 - `git fetch origin && git checkout -B merge/next-3h origin/m0.5-foundation-ey5gqp`
+- If `origin/agent/design-v2` is not yet an ancestor of the build branch: `git merge --no-edit origin/merge/next-3g`, then `git merge --no-edit origin/agent/design-v2` (design v2 already contains 3f and 3g as of its last merge).
+- Every couple of hours, and **before your final gate**, `git fetch origin` and merge `origin/m0.5-foundation-ey5gqp` again; run the final gate only once design v2 is an ancestor of the build branch (if it still is not, merge the newest `origin/merge/next-3f`, `origin/merge/next-3g` and `origin/agent/design-v2` and say so in the report).
 - Publish with a normal push: `git push -u origin merge/next-3h`. Never push to any other branch. Never force-push. Never open PRs.
-- Before your final gate, fetch and merge the latest `origin/m0.5-foundation-ey5gqp` again.
 
 ## Merge these branches, one at a time, in this order, with merge commits
 The orchestrator lists the final set in your launch prompt (only builders that reported). The expected order:
