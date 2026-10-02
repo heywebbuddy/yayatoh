@@ -1,0 +1,18 @@
+# M6.2a — daily rollups per org, event, day (org time zone), metric and currency.
+# Fed by the Events API from the `analytics.warehouse` subscriber; every write of an event appends
+# all its rows under one new `version` plus a `__snapshot` marker row. Pipes read the newest
+# version of each event only. Every row carries `org_id`.
+
+SCHEMA >
+    `org_id` String `json:$.org_id`,
+    `event_id` String `json:$.event_id`,
+    `version` UInt64 `json:$.version`,
+    `day` Date `json:$.day`,
+    `metric` LowCardinality(String) `json:$.metric`,
+    `currency` LowCardinality(String) `json:$.currency`,
+    `value` Int64 `json:$.value`
+
+ENGINE "ReplacingMergeTree"
+ENGINE_PARTITION_KEY "toYYYYMM(day)"
+ENGINE_SORTING_KEY "org_id, event_id, day, metric, currency, version"
+ENGINE_VER "version"
