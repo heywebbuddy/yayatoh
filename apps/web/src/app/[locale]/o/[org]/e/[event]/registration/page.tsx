@@ -170,12 +170,12 @@ export default async function RegistrationPage({
   return (
     <>
       <PageHeader title={tv('registration')} description={t('subtitle')} />
-      {/* M5.1b: the multi-page registration form for this event's types. */}
+      {/* M5.1b: the multi-page registration form for this event's types (read-only for viewers). */}
       <Link
         href={`/o/${org}/e/${event}/registration-form`}
         className="self-start text-body underline underline-offset-2"
       >
-        {canWrite ? tf('openBuilder') : tf('openReadOnly')}
+        {canWrite ? tf('openBuilder') : tf('viewBuilder')}
       </Link>
       {canWrite ? null : <p className="text-body text-zinc-500">{t('viewerNotice')}</p>}
       <p className="text-caption text-zinc-600">

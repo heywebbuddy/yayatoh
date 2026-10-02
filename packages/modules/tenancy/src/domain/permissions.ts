@@ -67,6 +67,10 @@ export const PERMISSIONS = [
   'guests:write',
   /** Acknowledge and snooze Command Center alerts (M3.2b). Viewers and scanners only see them. */
   'alerts:manage',
+  /** See an event's help requests (M3.3b guest assistance queue): guests' notes are staff-only. */
+  'assistance:read',
+  /** Take, assign, start, resolve and cancel help requests, and add notes (M3.3b). */
+  'assistance:manage',
 ] as const;
 export type Permission = (typeof PERMISSIONS)[number];
 
@@ -99,6 +103,8 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'messages:read',
     'messages:send',
     'alerts:manage',
+    'assistance:read',
+    'assistance:manage',
   ],
   finance: [
     'org:read',
@@ -138,8 +144,10 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'checkin:kiosk',
     'messages:read',
     'alerts:manage',
+    'assistance:read',
+    'assistance:manage',
   ],
-  scanner: ['org:read', 'checkin:scan'],
+  scanner: ['org:read', 'checkin:scan', 'assistance:read', 'assistance:manage'],
   viewer: [
     'org:read',
     'members:read',
@@ -149,6 +157,7 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'guests:read',
     'marketing:read',
     'event_team:read',
+    'assistance:read',
   ],
   /**
    * M4.2a: someone who works on specific events only (a co-host or planner invited to one event).
@@ -227,8 +236,10 @@ export const EVENT_ROLE_PERMISSIONS: Readonly<Record<string, readonly string[]>>
     'checkin:kiosk',
     'messages:read',
     'messages:send',
+    'assistance:read',
+    'assistance:manage',
   ],
-  door_staff: ['events:read', 'checkin:scan'],
+  door_staff: ['events:read', 'checkin:scan', 'assistance:read', 'assistance:manage'],
   session_scanner: ['checkin:scan'],
   /**
    * M4.2a (P4-8), the couple or the gala chair: everything about their event, including tickets,
@@ -256,6 +267,7 @@ export const EVENT_ROLE_PERMISSIONS: Readonly<Record<string, readonly string[]>>
     'dayof:*',
     'tickets:*',
     'tables:*',
+    'assistance:*',
   ],
   /**
    * M4.2a (P4-8): guests, RSVP, seating, website, gallery, messages and day-of for that event.
@@ -274,6 +286,7 @@ export const EVENT_ROLE_PERMISSIONS: Readonly<Record<string, readonly string[]>>
     'website:*',
     'gallery:*',
     'dayof:*',
+    'assistance:*',
   ],
   /** Starts and stops kiosk mode on the event's devices (M3.4a); scans nothing themselves. */
   kiosk_operator: ['checkin:kiosk'],
