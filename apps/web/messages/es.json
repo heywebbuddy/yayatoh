@@ -1890,7 +1890,8 @@
       },
       "accessibleCol": "Asientos accesibles",
       "accessibleOf": "Asientos accesibles de {item}",
-      "accessibleHint": "Asientos accesibles: escribe sus números, p. ej. «1, 2». Se resaltan en el plano y las reglas de asientos pueden reservarlos."
+      "accessibleHint": "Asientos accesibles: escribe sus números, p. ej. «1, 2». Se resaltan en el plano y las reglas de asientos pueden reservarlos.",
+      "sponsoredBy": "Patrocinador: {sponsor}"
     },
     "prices": {
       "title": "Precios",
@@ -2206,7 +2207,8 @@
       "closed": "El buscador de asientos no está abierto para este evento.",
       "internal": "Algo ha fallado por nuestra parte.",
       "rateLimited": "Se pidieron demasiados códigos. Inténtalo de nuevo en {minutes, plural, one {# minuto} other {# minutos}}."
-    }
+    },
+    "hostedBy": "Patrocinada por {sponsor}"
   },
   "seatFinderPoster": {
     "pageTitle": "Cartel del buscador de asientos",
@@ -7879,6 +7881,118 @@
       "not_invited": "Este invitado no está invitado a ese subevento.",
       "sub_event_has_chart": "Ya tiene su propio plano.",
       "no_chart": "Aún no hay un plano que copiar. Crea el plano del evento en la página Asientos o elige un plano guardado."
+    }
+  },
+  "galaTables": {
+    "tableSize": "Asientos por mesa",
+    "tableSizeHint": "Para una entrada de mesa: una compra sienta a este número de invitados (2–20), que nombra el comprador. Déjalo vacío para una entrada individual.",
+    "tableOf": "Mesa de {size}",
+    "publicPass": "Para {size} invitados. Tras pagar, los nombras con el enlace de tu mesa.",
+    "tableName": "{table} #{n} · {who}",
+    "progress": "{named} de {size} asientos con nombre",
+    "missing": "{count, plural, one {Falta # nombre} many {Faltan # nombres} other {Faltan # nombres}}",
+    "seat": "Asiento {n}",
+    "unnamed": "Sin nombre aún",
+    "firstName": "Nombre",
+    "lastName": "Apellido (opcional)",
+    "email": "Correo para su entrada (opcional)",
+    "emailHint": "Su propia entrada irá ahí. Déjalo vacío para quedarte tú con la entrada.",
+    "named": "{name} tiene un asiento en la mesa.",
+    "company": "Nombre de la empresa o patrocinador",
+    "companyHint": "El grupo al que pertenecen tus invitados, tal como lo ve el anfitrión.",
+    "companySave": "Guardar nombre",
+    "companySaved": "Nombre guardado.",
+    "imageN": "Imagen {n}",
+    "sponsorName": "Nombre del patrocinador",
+    "logo": "Logotipo (opcional)",
+    "noLogo": "Sin logotipo",
+    "logoHint": "Elige una de las imágenes del evento (añádelas en Medios).",
+    "published": "Mostrar el patrocinador a los invitados",
+    "publishedHint": "Los invitados lo ven en el buscador de asientos cuando el plano está a la venta.",
+    "sponsorSave": "Guardar patrocinador",
+    "sponsorSaved": "Patrocinador guardado para {table}.",
+    "sponsorRemove": "Quitar el patrocinador de {table}",
+    "sponsorRemoved": "Patrocinador quitado de {table}.",
+    "sponsorFormOf": "Patrocinador de {table}",
+    "reminders": {
+      "title": "Recordatorios de nombres",
+      "send": "Enviar recordatorios de nombres",
+      "hint": "Envía un correo al comprador de cada mesa a la que aún le faltan nombres (como máximo una vez por hora y mesa).",
+      "done": "{sent, plural, =0 {No se envió ningún recordatorio.} one {Recordatorio enviado a # comprador.} many {Recordatorios enviados a # compradores.} other {Recordatorios enviados a # compradores.}} {skipped, plural, =0 {} one {# mesa omitida (completa, cerrada o recordada hace poco).} many {# mesas omitidas (completas, cerradas o recordadas hace poco).} other {# mesas omitidas (completas, cerradas o recordadas hace poco).}}"
+    },
+    "console": {
+      "description": "Las mesas que compraron los invitados, los nombres que faltan y los patrocinadores de tu plano.",
+      "soldTitle": "Mesas compradas",
+      "caption": "Mesas compradas",
+      "table": "Mesa",
+      "party": "Empresa o patrocinador",
+      "buyer": "Comprador",
+      "size": "Asientos",
+      "named": "Con nombre",
+      "missing": "Nombres",
+      "complete": "Todos con nombre",
+      "noParty": "Sin definir",
+      "emptyTitle": "Aún no se ha vendido ninguna mesa",
+      "emptyOnSale": "Tus entradas de mesa están a la venta. Las mesas aparecen aquí en cuanto alguien compra una.",
+      "emptyNoType": "Añade una entrada de mesa (por ejemplo, una mesa de 10) para vender mesas completas.",
+      "addTableTicket": "Añadir una entrada de mesa en Entradas y pedidos",
+      "reminded": "{count, plural, one {recordada una vez} many {recordada # veces} other {recordada # veces}}",
+      "seatsOf": "Asientos de {table}",
+      "ticket": "Entrada {code}",
+      "nameGuest": "Nombrar a un invitado en {table}",
+      "nameSubmit": "Nombrar invitado",
+      "sponsorsTitle": "Mesas patrocinadas",
+      "sponsorsIntro": "Asigna un patrocinador a las mesas de tu plano. El nombre aparece en la mesa en el editor de asientos y, cuando se muestra a los invitados, en el buscador de asientos.",
+      "noPlanTitle": "Aún no hay plano",
+      "noPlanHint": "Crea el plano en Asientos; sus mesas aparecerán aquí.",
+      "openSeating": "Abrir Asientos",
+      "planTable": "{table} · {seats, plural, one {# asiento} many {# asientos} other {# asientos}}",
+      "sponsoredBy": "Patrocinada por {sponsor}",
+      "shown": "Visible para los invitados",
+      "hidden": "Oculto a los invitados",
+      "noSponsor": "Aún sin patrocinador"
+    },
+    "public": {
+      "metaTitle": "Nombra a tus invitados",
+      "eyebrow": "Tu mesa",
+      "title": "Nombra a tus invitados",
+      "tableOf": "{table} #{n}",
+      "full": "Todos los asientos tienen invitado",
+      "closed": {
+        "not_paid": "Esta mesa no está pagada, así que no se puede nombrar.",
+        "event_over": "El evento ha terminado; ya no se pueden nombrar invitados en esta mesa."
+      },
+      "companyTitle": "Tu empresa o patrocinador",
+      "nameTitle": "Añadir un invitado",
+      "nameIntro": "Cada invitado recibe un asiento y su entrada.",
+      "submit": "Añadir invitado",
+      "seatsTitle": "Asientos",
+      "noSeats": "No quedan asientos en esta mesa",
+      "noSeatsHint": "La mesa fue reembolsada.",
+      "resendTitle": "¿Necesitas el enlace otra vez?",
+      "resendIntro": "Enviaremos este enlace al correo con el que compraste la mesa.",
+      "resend": "Enviarme este enlace",
+      "resent": "Te enviamos el enlace por correo.",
+      "resendWait": "Acabamos de enviarlo. Inténtalo de nuevo en un minuto."
+    },
+    "order": {
+      "title": "Tus mesas",
+      "intro": "Dinos quién se sienta en tu mesa: cada invitado recibe un asiento y una entrada.",
+      "cta": "Nombrar invitados en {table} #{n}"
+    },
+    "errors": {
+      "table_full": "Todos los asientos de esta mesa tienen invitado.",
+      "slot_named": "Este asiento ya tiene invitado.",
+      "event_over": "El evento ha terminado; ya no se pueden nombrar invitados en esta mesa.",
+      "not_paid": "Esta mesa no está pagada.",
+      "party_full": "Este grupo está completo.",
+      "not_a_table": "Elige una mesa del plano.",
+      "foreign_logo": "Elige una de las imágenes del evento.",
+      "no_plan": "Crea primero un plano.",
+      "firstName": "Escribe el nombre del invitado.",
+      "email": "Escribe un correo válido o déjalo vacío.",
+      "company": "Escribe un nombre.",
+      "sponsorName": "Escribe el nombre del patrocinador."
     }
   }
 }

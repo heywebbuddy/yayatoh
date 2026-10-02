@@ -1,5 +1,10 @@
 import { formatMoney, money } from '@yayatoh/kernel';
-import { orderByManageToken, orderHolderTarget, orderPushDevices } from '@yayatoh/orders';
+import {
+  orderByManageToken,
+  orderHolderTarget,
+  orderPushDevices,
+  orderTablesByManageToken,
+} from '@yayatoh/orders';
 import { buttonClass, Card, Label, PageHeader, StatusDot } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
@@ -8,6 +13,7 @@ import { HolderContent } from '@/components/holder-content.tsx';
 import { OrderReview } from '@/components/reviews/order-review.tsx';
 import { TicketQr } from '@/components/ticket-qr.tsx';
 import { WebPushControl } from '@/components/web-push-control.tsx';
+import { Link } from '@/i18n/navigation.ts';
 import { refundPolicyLines } from '@/lib/refund-policy-text.ts';
 import { getPdfRenderer } from '@/server/pdf.ts';
 import { webPushPublicKey } from '@/server/web-push.ts';
@@ -58,6 +64,8 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
   const holderTarget = await orderHolderTarget(token);
   // M1.10e: this browser can get the organizer's updates (announcements) as push notifications.
   const devices = (await orderPushDevices(token)) ?? [];
+  // M4.2b: tables bought in this order, each with its claim link for naming the guests.
+  const tables = await orderTablesByManageToken(token);
   const sinceFmt = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeZone: order.event.timezone });
   return (
     <main id="main" className="mx-auto flex min-h-dvh max-w-xl flex-col gap-6 px-6 py-16">
@@ -94,6 +102,31 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
           </p>
         ) : null}
       </Card>
+      {tables.length > 0 ? (
+        <section aria-labelledby="tables-heading" className="flex flex-col gap-3">
+          <h2 id="tables-heading" className="text-section">
+            {t('galaTables.order.title')}
+          </h2>
+          <p className="text-body text-zinc-600">{t('galaTables.order.intro')}</p>
+          <ul className="flex list-none flex-col gap-3 p-0">
+            {tables.map((x) => (
+              <li key={x.id}>
+                <Card className="flex flex-col gap-2">
+                  <p className="text-body font-medium">
+                    {t('galaTables.public.tableOf', { table: x.typeName, n: x.unitNo })}
+                  </p>
+                  <p className="text-caption text-zinc-600">
+                    {t('galaTables.progress', { named: x.named, size: x.named + x.missing })}
+                  </p>
+                  <Link href={x.path} className={buttonClass('primary', 'lg', 'self-start')}>
+                    {t('galaTables.order.cta', { table: x.typeName, n: x.unitNo })}
+                  </Link>
+                </Card>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
       {order.transferred > 0 ? (
         <p className="text-body text-zinc-600">{t('order.transferred', { count: order.transferred })}</p>
       ) : null}

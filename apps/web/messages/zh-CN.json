@@ -1890,7 +1890,8 @@
       },
       "accessibleCol": "无障碍座位",
       "accessibleOf": "{item} 的无障碍座位",
-      "accessibleHint": "无障碍座位：输入座位号，例如“1, 2”。它们在座位图上带轮廓显示，座位规则可以为其保留。"
+      "accessibleHint": "无障碍座位：输入座位号，例如“1, 2”。它们在座位图上带轮廓显示，座位规则可以为其保留。",
+      "sponsoredBy": "赞助商：{sponsor}"
     },
     "prices": {
       "title": "价格",
@@ -2206,7 +2207,8 @@
       "closed": "此活动的座位查询未开放。",
       "internal": "我们这边出了点问题。",
       "rateLimited": "请求验证码次数过多。请在 {minutes, plural, other {# 分钟}}后重试。"
-    }
+    },
+    "hostedBy": "赞助商：{sponsor}"
   },
   "seatFinderPoster": {
     "pageTitle": "座位查询海报",
@@ -7879,6 +7881,118 @@
       "not_invited": "该宾客未受邀参加此分场活动。",
       "sub_event_has_chart": "它已有专用座位图。",
       "no_chart": "暂无可复制的座位图。请在座位页面创建活动座位图，或选择已保存的平面图。"
+    }
+  },
+  "galaTables": {
+    "tableSize": "每桌座位数",
+    "tableSizeHint": "用于整桌票：一次购买可坐这么多位宾客（2–20），由购买者填写姓名。单人票请留空。",
+    "tableOf": "{size} 人桌",
+    "publicPass": "可坐 {size} 位宾客。付款后通过您的餐桌链接填写他们的姓名。",
+    "tableName": "{table} #{n} · {who}",
+    "progress": "{size} 个座位中已填写 {named} 个姓名",
+    "missing": "{count, plural, other {还缺 # 个姓名}}",
+    "seat": "座位 {n}",
+    "unnamed": "尚未填写姓名",
+    "firstName": "名",
+    "lastName": "姓（可选）",
+    "email": "接收门票的邮箱（可选）",
+    "emailHint": "宾客本人的门票会发到这里。留空则门票仍由您保管。",
+    "named": "{name} 已在餐桌就座。",
+    "company": "公司或赞助商名称",
+    "companyHint": "您的宾客所属的团体，主办方会看到这个名称。",
+    "companySave": "保存名称",
+    "companySaved": "名称已保存。",
+    "imageN": "图片 {n}",
+    "sponsorName": "赞助商名称",
+    "logo": "标志（可选）",
+    "noLogo": "无标志",
+    "logoHint": "从活动图片中选择一张（可在“媒体”中添加）。",
+    "published": "向宾客显示赞助商",
+    "publishedHint": "座位图开售后，宾客可在查座中看到赞助商。",
+    "sponsorSave": "保存赞助商",
+    "sponsorSaved": "已为 {table} 保存赞助商。",
+    "sponsorRemove": "移除 {table} 的赞助商",
+    "sponsorRemoved": "已移除 {table} 的赞助商。",
+    "sponsorFormOf": "{table} 的赞助商",
+    "reminders": {
+      "title": "填写姓名提醒",
+      "send": "发送填写姓名提醒",
+      "hint": "给仍缺少姓名的每张餐桌的购买者发送邮件（每张餐桌每小时最多一次）。",
+      "done": "{sent, plural, =0 {未发送提醒。} other {已向 # 位购买者发送提醒。}} {skipped, plural, =0 {} other {已跳过 # 张餐桌（已填满、已关闭或刚提醒过）。}}"
+    },
+    "console": {
+      "description": "宾客购买的餐桌、仍缺少的姓名，以及座位图上的赞助商。",
+      "soldTitle": "已购餐桌",
+      "caption": "已购餐桌",
+      "table": "餐桌",
+      "party": "公司或赞助商",
+      "buyer": "购买者",
+      "size": "座位",
+      "named": "已填写",
+      "missing": "姓名",
+      "complete": "已全部填写",
+      "noParty": "未设置",
+      "emptyTitle": "尚未售出餐桌",
+      "emptyOnSale": "您的整桌票正在销售。一旦有人购买，餐桌就会显示在这里。",
+      "emptyNoType": "添加整桌票（例如 10 人桌）即可按整桌销售。",
+      "addTableTicket": "在“门票和订单”中添加整桌票",
+      "reminded": "{count, plural, other {已提醒 # 次}}",
+      "seatsOf": "{table} 的座位",
+      "ticket": "门票 {code}",
+      "nameGuest": "为 {table} 填写宾客",
+      "nameSubmit": "填写宾客",
+      "sponsorsTitle": "赞助餐桌",
+      "sponsorsIntro": "为座位图上的餐桌设置赞助商。名称会显示在座位编辑器的餐桌上，向宾客公开后也会显示在查座中。",
+      "noPlanTitle": "还没有座位图",
+      "noPlanHint": "在“座位”中创建座位图，其中的餐桌会显示在这里。",
+      "openSeating": "打开座位",
+      "planTable": "{table} · {seats, plural, other {# 个座位}}",
+      "sponsoredBy": "赞助商：{sponsor}",
+      "shown": "对宾客可见",
+      "hidden": "对宾客隐藏",
+      "noSponsor": "尚无赞助商"
+    },
+    "public": {
+      "metaTitle": "填写宾客姓名",
+      "eyebrow": "您的餐桌",
+      "title": "填写宾客姓名",
+      "tableOf": "{table} #{n}",
+      "full": "每个座位都有宾客",
+      "closed": {
+        "not_paid": "这张餐桌尚未付款，无法填写姓名。",
+        "event_over": "活动已结束，无法再为这张餐桌填写姓名。"
+      },
+      "companyTitle": "您的公司或赞助商",
+      "nameTitle": "添加宾客",
+      "nameIntro": "每位宾客获得一个座位及其门票。",
+      "submit": "添加宾客",
+      "seatsTitle": "座位",
+      "noSeats": "这张餐桌已没有座位",
+      "noSeatsHint": "这张餐桌已退款。",
+      "resendTitle": "需要再次获取链接？",
+      "resendIntro": "我们会把这个链接发送到您购买餐桌时使用的邮箱。",
+      "resend": "把此链接发到我的邮箱",
+      "resent": "链接已发送到您的邮箱。",
+      "resendWait": "刚刚已发送，请一分钟后再试。"
+    },
+    "order": {
+      "title": "您的餐桌",
+      "intro": "告诉我们谁坐在您的餐桌：每位宾客获得一个座位和一张门票。",
+      "cta": "为 {table} #{n} 填写宾客"
+    },
+    "errors": {
+      "table_full": "这张餐桌的每个座位都有宾客。",
+      "slot_named": "这个座位已有宾客。",
+      "event_over": "活动已结束，无法再为这张餐桌填写姓名。",
+      "not_paid": "这张餐桌尚未付款。",
+      "party_full": "该团体已满。",
+      "not_a_table": "请选择座位图上的餐桌。",
+      "foreign_logo": "请从活动图片中选择。",
+      "no_plan": "请先创建座位图。",
+      "firstName": "请输入宾客的名。",
+      "email": "请输入有效的邮箱，或留空。",
+      "company": "请输入名称。",
+      "sponsorName": "请输入赞助商名称。"
     }
   }
 }

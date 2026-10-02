@@ -26,6 +26,8 @@ export interface PassView {
   /** Choose-your-amount pass: `priceLabel` is the minimum. */
   readonly isDonation?: boolean;
   readonly accessDates?: readonly { readonly key: string; readonly label: string }[];
+  /** M4.2b: a table ticket: one seats this many guests (the buyer names them after paying). */
+  readonly tableSize?: number | null;
   /** M3.10a: sold out, with a waitlist to join (the join page's path). */
   readonly waitlistHref?: string | null;
 }
@@ -145,6 +147,11 @@ export function CheckoutForm({
               {p.regularPriceLabel && p.earlyUntil ? (
                 <p className={`text-caption ${p.featured ? 'text-white/75' : 'text-zinc-600'}`}>
                   {t('publicEvent.earlyBird', { date: p.earlyUntil, regular: p.regularPriceLabel })}
+                </p>
+              ) : null}
+              {p.tableSize ? (
+                <p className={`text-caption ${p.featured ? 'text-white/75' : 'text-zinc-600'}`}>
+                  {t('galaTables.publicPass', { size: p.tableSize })}
                 </p>
               ) : null}
               {p.accessDates && p.accessDates.length > 0 ? (

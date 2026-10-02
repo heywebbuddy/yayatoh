@@ -56,6 +56,7 @@ export default function SeatingCanvas({
   label,
   onPoint,
   marks = [],
+  sponsors = {},
 }: {
   doc: FloorplanDoc;
   seatStatus: Readonly<Record<string, SeatStatus>>;
@@ -71,6 +72,8 @@ export default function SeatingCanvas({
   onPoint?: ((p: { x: number; y: number }) => void) | undefined;
   /** Points to mark on the plan (calibration points A and B), in room centimetres. */
   marks?: readonly { x: number; y: number; label: string }[];
+  /** M4.2b hosted tables: sponsor names by table item id, written under the table's label. */
+  sponsors?: Readonly<Record<string, string>>;
 }) {
   const [box, width] = useBoxWidth(800, 280);
   const view = usePanZoom(doc, width, 720);
@@ -137,6 +140,7 @@ export default function SeatingCanvas({
                 scale={view.scale}
                 onSelect={onSelect}
                 onMove={onMove}
+                sponsor={sponsors[item.id]}
               />
             ))}
           </Layer>
@@ -157,6 +161,7 @@ const PlanItem = memo(
     scale,
     onSelect,
     onMove,
+    sponsor,
   }: {
     item: Item;
     selected: boolean;
@@ -166,6 +171,7 @@ const PlanItem = memo(
     scale: number;
     onSelect: (id: string | null, additive: boolean) => void;
     onMove: (id: string, x: number, y: number) => void;
+    sponsor?: string | undefined;
   }) {
     const outline = isSelected ? color.accent[900] : color.zinc[400];
     const common = {
@@ -255,6 +261,20 @@ const PlanItem = memo(
           fill={color.ink}
           listening={false}
         />
+        {sponsor && item.kind === 'table' ? (
+          <Text
+            text={sponsor}
+            x={-item.width / 2 + 8}
+            y={22}
+            width={item.width - 16}
+            align="center"
+            fontSize={26}
+            fill={color.zinc[700]}
+            listening={false}
+            wrap="none"
+            ellipsis
+          />
+        ) : null}
         <SeatDots
           dots={item.seats}
           radius={SEAT_R}
@@ -272,5 +292,6 @@ const PlanItem = memo(
     a.seatKey === b.seatKey &&
     a.scale === b.scale &&
     a.onSelect === b.onSelect &&
-    a.onMove === b.onMove,
+    a.onMove === b.onMove &&
+    a.sponsor === b.sponsor,
 );

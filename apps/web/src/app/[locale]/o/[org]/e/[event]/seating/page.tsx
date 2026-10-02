@@ -1,6 +1,6 @@
 import { executeQuery } from '@yayatoh/kernel';
 import { composeNav, isProfileKey } from '@yayatoh/platform';
-import { eventSeatingQuery, listLayoutsQuery } from '@yayatoh/seating';
+import { eventSeatingQuery, listLayoutsQuery, planTablesQuery } from '@yayatoh/seating';
 import { listTicketTypesQuery } from '@yayatoh/ticketing';
 import { Button, Card, PageHeader, StatusDot } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
@@ -181,6 +181,12 @@ export default async function SeatingPage({
   const tc = await getTranslations('seatingDates');
   const underlayTicket = canWrite ? (await mediaPanel(data, 'event', ev.id, 'floorplan')).ticket : null;
   const seatStatus = Object.fromEntries(seating.seats.map((s) => [s.seatUuid, s.state]));
+  // M4.2b hosted tables: sponsors written on their tables (the event plan's table ids).
+  const sponsors = Object.fromEntries(
+    (await executeQuery(planTablesQuery, { eventId: ev.id }, data.ctx, ports)).flatMap((p) =>
+      p.sponsor ? [[p.itemId, p.sponsor.sponsorName] as const] : [],
+    ),
+  );
   const priced = seating.seats.filter((s) => s.ticketTypeId).length;
   const items = seating.doc.items.filter((i) => i.kind !== 'object');
   return (
@@ -237,6 +243,7 @@ export default async function SeatingPage({
             locked={locked}
             saveDoc={saveDocAction.bind(null, org, event, dateId)}
             underlayTicket={underlayTicket}
+            sponsors={sponsors}
           />
         </section>
       </SeatStatesProvider>

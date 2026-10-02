@@ -1890,7 +1890,8 @@
       },
       "accessibleCol": "Places accessibles",
       "accessibleOf": "Places accessibles de {item}",
-      "accessibleHint": "Places accessibles : saisissez leurs numéros, par ex. « 1, 2 ». Elles sont entourées sur le plan, et les règles de placement peuvent les réserver."
+      "accessibleHint": "Places accessibles : saisissez leurs numéros, par ex. « 1, 2 ». Elles sont entourées sur le plan, et les règles de placement peuvent les réserver.",
+      "sponsoredBy": "Sponsor : {sponsor}"
     },
     "prices": {
       "title": "Prix",
@@ -2206,7 +2207,8 @@
       "closed": "La recherche de place n'est pas ouverte pour cet événement.",
       "internal": "Un problème est survenu de notre côté.",
       "rateLimited": "Trop de codes demandés. Réessayez dans {minutes, plural, one {# minute} other {# minutes}}."
-    }
+    },
+    "hostedBy": "Table offerte par {sponsor}"
   },
   "seatFinderPoster": {
     "pageTitle": "Affiche « Trouver sa place »",
@@ -7879,6 +7881,118 @@
       "not_invited": "Cet invité n’est pas invité à ce sous-événement.",
       "sub_event_has_chart": "Il a déjà son propre plan.",
       "no_chart": "Aucun plan à copier pour l’instant. Créez le plan de l’événement sur la page Placement, ou choisissez un plan enregistré."
+    }
+  },
+  "galaTables": {
+    "tableSize": "Places par table",
+    "tableSizeHint": "Pour un billet de table : un achat place ce nombre d’invités (2 à 20), nommés par l’acheteur. Laissez vide pour un billet individuel.",
+    "tableOf": "Table de {size}",
+    "publicPass": "Pour {size} invités. Après le paiement, vous les nommez avec le lien de votre table.",
+    "tableName": "{table} n° {n} · {who}",
+    "progress": "{named} places nommées sur {size}",
+    "missing": "{count, plural, one {# nom manquant} many {# noms manquants} other {# noms manquants}}",
+    "seat": "Place {n}",
+    "unnamed": "Pas encore nommé",
+    "firstName": "Prénom",
+    "lastName": "Nom (facultatif)",
+    "email": "E-mail pour son billet (facultatif)",
+    "emailHint": "Son propre billet y sera envoyé. Laissez vide pour garder le billet.",
+    "named": "{name} a une place à la table.",
+    "company": "Nom de l’entreprise ou du sponsor",
+    "companyHint": "Le groupe de vos invités, tel que l’organisateur le voit.",
+    "companySave": "Enregistrer le nom",
+    "companySaved": "Nom enregistré.",
+    "imageN": "Image {n}",
+    "sponsorName": "Nom du sponsor",
+    "logo": "Logo (facultatif)",
+    "noLogo": "Aucun logo",
+    "logoHint": "Choisissez une des images de l’événement (ajoutez-les dans Médias).",
+    "published": "Montrer le sponsor aux invités",
+    "publishedHint": "Les invités le voient dans la recherche de place une fois le plan en vente.",
+    "sponsorSave": "Enregistrer le sponsor",
+    "sponsorSaved": "Sponsor enregistré pour {table}.",
+    "sponsorRemove": "Retirer le sponsor de {table}",
+    "sponsorRemoved": "Sponsor retiré de {table}.",
+    "sponsorFormOf": "Sponsor de {table}",
+    "reminders": {
+      "title": "Rappels de noms",
+      "send": "Envoyer des rappels de noms",
+      "hint": "Envoie un e-mail à l’acheteur de chaque table à laquelle il manque des noms (au plus une fois par heure et par table).",
+      "done": "{sent, plural, =0 {Aucun rappel envoyé.} one {Rappel envoyé à # acheteur.} many {Rappels envoyés à # acheteurs.} other {Rappels envoyés à # acheteurs.}} {skipped, plural, =0 {} one {# table ignorée (complète, fermée ou rappelée récemment).} many {# tables ignorées (complètes, fermées ou rappelées récemment).} other {# tables ignorées (complètes, fermées ou rappelées récemment).}}"
+    },
+    "console": {
+      "description": "Les tables achetées par les invités, les noms qui manquent et les sponsors de votre plan.",
+      "soldTitle": "Tables achetées",
+      "caption": "Tables achetées",
+      "table": "Table",
+      "party": "Entreprise ou sponsor",
+      "buyer": "Acheteur",
+      "size": "Places",
+      "named": "Nommées",
+      "missing": "Noms",
+      "complete": "Toutes nommées",
+      "noParty": "Non défini",
+      "emptyTitle": "Aucune table vendue pour l’instant",
+      "emptyOnSale": "Vos billets de table sont en vente. Les tables apparaissent ici dès qu’une est achetée.",
+      "emptyNoType": "Ajoutez un billet de table (par exemple une table de 10) pour vendre des tables entières.",
+      "addTableTicket": "Ajouter un billet de table dans Billets et commandes",
+      "reminded": "{count, plural, one {rappel envoyé une fois} many {rappel envoyé # fois} other {rappel envoyé # fois}}",
+      "seatsOf": "Places de {table}",
+      "ticket": "Billet {code}",
+      "nameGuest": "Nommer un invité à {table}",
+      "nameSubmit": "Nommer l’invité",
+      "sponsorsTitle": "Tables sponsorisées",
+      "sponsorsIntro": "Attribuez un sponsor aux tables de votre plan. Le nom apparaît sur la table dans l’éditeur de placement et, une fois montré aux invités, dans la recherche de place.",
+      "noPlanTitle": "Pas encore de plan",
+      "noPlanHint": "Créez le plan dans Placement ; ses tables apparaîtront ici.",
+      "openSeating": "Ouvrir Placement",
+      "planTable": "{table} · {seats, plural, one {# place} many {# places} other {# places}}",
+      "sponsoredBy": "Sponsorisée par {sponsor}",
+      "shown": "Visible par les invités",
+      "hidden": "Masqué aux invités",
+      "noSponsor": "Pas encore de sponsor"
+    },
+    "public": {
+      "metaTitle": "Nommez vos invités",
+      "eyebrow": "Votre table",
+      "title": "Nommez vos invités",
+      "tableOf": "{table} n° {n}",
+      "full": "Chaque place a un invité",
+      "closed": {
+        "not_paid": "Cette table n’est pas payée, elle ne peut donc pas être nommée.",
+        "event_over": "L’événement est terminé ; cette table ne peut plus être nommée."
+      },
+      "companyTitle": "Votre entreprise ou sponsor",
+      "nameTitle": "Ajouter un invité",
+      "nameIntro": "Chaque invité reçoit une place et son billet.",
+      "submit": "Ajouter l’invité",
+      "seatsTitle": "Places",
+      "noSeats": "Plus aucune place à cette table",
+      "noSeatsHint": "La table a été remboursée.",
+      "resendTitle": "Besoin du lien à nouveau ?",
+      "resendIntro": "Nous enverrons ce lien à l’adresse utilisée pour acheter la table.",
+      "resend": "M’envoyer ce lien",
+      "resent": "Nous vous avons envoyé le lien par e-mail.",
+      "resendWait": "Nous venons de l’envoyer. Réessayez dans une minute."
+    },
+    "order": {
+      "title": "Vos tables",
+      "intro": "Dites-nous qui s’assoit à votre table : chaque invité reçoit une place et un billet.",
+      "cta": "Nommer les invités de {table} n° {n}"
+    },
+    "errors": {
+      "table_full": "Chaque place de cette table a un invité.",
+      "slot_named": "Cette place a déjà un invité.",
+      "event_over": "L’événement est terminé ; cette table ne peut plus être nommée.",
+      "not_paid": "Cette table n’est pas payée.",
+      "party_full": "Ce groupe est complet.",
+      "not_a_table": "Choisissez une table du plan.",
+      "foreign_logo": "Choisissez une des images de l’événement.",
+      "no_plan": "Créez d’abord un plan.",
+      "firstName": "Saisissez le prénom de l’invité.",
+      "email": "Saisissez une adresse e-mail valide, ou laissez vide.",
+      "company": "Saisissez un nom.",
+      "sponsorName": "Saisissez le nom du sponsor."
     }
   }
 }

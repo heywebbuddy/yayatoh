@@ -19,6 +19,9 @@ export interface FinderResult {
     readonly itemKind: 'row' | 'table';
     readonly itemLabel: string;
     readonly seatLabel: string;
+    /** M4.2b: the hosted table's sponsor (published by the host). */
+    readonly sponsor?: string | null;
+    readonly sponsorLogoUrl?: string | null;
   }[];
   readonly unseated: number;
 }
@@ -165,6 +168,14 @@ function FinderBody({
                       <span className="text-[22px] font-light tracking-[-0.03em]">
                         {t(`seatAt.${s.itemKind}`, { item: s.itemLabel, seat: s.seatLabel })}
                       </span>
+                      {s.sponsor ? (
+                        <span className="flex items-center gap-2 text-body" data-sponsor>
+                          {s.sponsorLogoUrl ? (
+                            <img src={s.sponsorLogoUrl} alt="" className="h-8 w-auto" />
+                          ) : null}
+                          {t('hostedBy', { sponsor: s.sponsor })}
+                        </span>
+                      ) : null}
                       {w ? <span className="text-caption text-zinc-600">{w.area}</span> : null}
                       {w?.entrance ? (
                         <span className="text-caption text-zinc-600">

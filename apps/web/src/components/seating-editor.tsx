@@ -38,6 +38,7 @@ export function SeatingEditor({
   locked,
   saveDoc,
   underlayTicket = null,
+  sponsors = {},
 }: {
   initialDoc: FloorplanDoc;
   seatStatus: Readonly<Record<string, SeatStatus>>;
@@ -45,6 +46,8 @@ export function SeatingEditor({
   saveDoc: (doc: FloorplanDoc) => Promise<SeatingState>;
   /** Upload ticket for floor plan images (M1.7g); null for people who can't change the plan. */
   underlayTicket?: string | null;
+  /** M4.2b hosted tables: sponsor names by table item id, shown on the plan and in the list. */
+  sponsors?: Readonly<Record<string, string>>;
 }) {
   const t = useTranslations('seating.editor');
   // Live seat states (M1.7f) when the page follows the seat stream; else the server's.
@@ -322,6 +325,7 @@ export function SeatingEditor({
           onMove={onMove}
           onPoint={marking ? onPoint : undefined}
           marks={planMarks(doc.underlay, points)}
+          sponsors={sponsors}
         />
       </div>
       <SeatLegend />
@@ -405,6 +409,11 @@ export function SeatingEditor({
                       if (v && v !== item.label) update(item.id, (i) => ({ ...i, label: v }));
                     }}
                   />
+                  {sponsors[item.id] ? (
+                    <span className="block text-caption text-zinc-600" data-sponsor>
+                      {t('sponsoredBy', { sponsor: sponsors[item.id] ?? '' })}
+                    </span>
+                  ) : null}
                 </td>
                 <td className="py-1 pe-3 tabular-nums">{item.kind === 'object' ? '—' : item.seats.length}</td>
                 <td className="py-1 pe-3">

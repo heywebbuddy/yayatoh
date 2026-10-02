@@ -50,6 +50,8 @@ const SECTION_OF: Record<string, string> = {
   cancel: 'home',
   // Batch 3d merge: M3.2a's Command Center (every profile).
   'command-center': 'commandCenter',
+  // M4.2b: the gala's Tables & Sponsors (no longer a placeholder).
+  'tables-sponsors': 'tablesSponsors',
 };
 
 describe('event console route sweep (M4.2a)', () => {

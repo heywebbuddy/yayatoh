@@ -1890,7 +1890,8 @@
       },
       "accessibleCol": "アクセシブル席",
       "accessibleOf": "{item}のアクセシブル席",
-      "accessibleHint": "アクセシブル席：番号を入力します（例「1, 2」）。座席表では枠付きで表示され、座席ルールで確保できます。"
+      "accessibleHint": "アクセシブル席：番号を入力します（例「1, 2」）。座席表では枠付きで表示され、座席ルールで確保できます。",
+      "sponsoredBy": "スポンサー：{sponsor}"
     },
     "prices": {
       "title": "価格",
@@ -2206,7 +2207,8 @@
       "closed": "このイベントの座席検索は公開されていません。",
       "internal": "システム側で問題が発生しました。",
       "rateLimited": "コードの請求が多すぎます。{minutes, plural, other {#分}}後にもう一度お試しください。"
-    }
+    },
+    "hostedBy": "スポンサー：{sponsor}"
   },
   "seatFinderPoster": {
     "pageTitle": "座席検索ポスター",
@@ -7879,6 +7881,118 @@
       "not_invited": "このゲストはそのプログラムに招待されていません。",
       "sub_event_has_chart": "すでに専用の座席表があります。",
       "no_chart": "コピーできる座席表がまだありません。座席ページでイベントの座席表を作成するか、保存済みのフロアプランを選んでください。"
+    }
+  },
+  "galaTables": {
+    "tableSize": "1テーブルの席数",
+    "tableSizeHint": "テーブルチケットの場合：1回の購入でこの人数（2〜20名）が着席し、購入者が名前を入力します。通常のチケットなら空欄のままにします。",
+    "tableOf": "{size}名テーブル",
+    "publicPass": "{size}名が着席できます。お支払い後、テーブルのリンクからゲスト名を入力します。",
+    "tableName": "{table} #{n} · {who}",
+    "progress": "{size}席中{named}席に名前あり",
+    "missing": "{count, plural, other {あと#名分の名前が未入力}}",
+    "seat": "席 {n}",
+    "unnamed": "名前未入力",
+    "firstName": "名",
+    "lastName": "姓（任意）",
+    "email": "チケット送付先メール（任意）",
+    "emailHint": "ゲスト本人のチケットがここに届きます。空欄なら、チケットはあなたの手元に残ります。",
+    "named": "{name}さんの席を確保しました。",
+    "company": "会社名またはスポンサー名",
+    "companyHint": "主催者に表示される、ゲストのグループ名です。",
+    "companySave": "名前を保存",
+    "companySaved": "名前を保存しました。",
+    "imageN": "画像 {n}",
+    "sponsorName": "スポンサー名",
+    "logo": "ロゴ（任意）",
+    "noLogo": "ロゴなし",
+    "logoHint": "イベントの画像から選びます（メディアで追加できます）。",
+    "published": "スポンサーをゲストに表示する",
+    "publishedHint": "座席表が販売中になると、ゲストは座席検索でスポンサーを確認できます。",
+    "sponsorSave": "スポンサーを保存",
+    "sponsorSaved": "{table}のスポンサーを保存しました。",
+    "sponsorRemove": "{table}のスポンサーを削除",
+    "sponsorRemoved": "{table}のスポンサーを削除しました。",
+    "sponsorFormOf": "{table}のスポンサー",
+    "reminders": {
+      "title": "名前入力のリマインダー",
+      "send": "名前入力のリマインダーを送信",
+      "hint": "名前が未入力のテーブルの購入者にメールします（各テーブル1時間に1回まで）。",
+      "done": "{sent, plural, =0 {リマインダーは送信されませんでした。} other {#名の購入者にリマインダーを送信しました。}} {skipped, plural, =0 {} other {#件のテーブルをスキップしました（入力済み、締め切り、または直前に送信済み）。}}"
+    },
+    "console": {
+      "description": "ゲストが購入したテーブル、未入力の名前、座席表のスポンサーです。",
+      "soldTitle": "購入されたテーブル",
+      "caption": "購入されたテーブル",
+      "table": "テーブル",
+      "party": "会社またはスポンサー",
+      "buyer": "購入者",
+      "size": "席数",
+      "named": "入力済み",
+      "missing": "名前",
+      "complete": "すべて入力済み",
+      "noParty": "未設定",
+      "emptyTitle": "まだテーブルは売れていません",
+      "emptyOnSale": "テーブルチケットは販売中です。購入されるとここに表示されます。",
+      "emptyNoType": "テーブル単位で販売するには、テーブルチケット（例：10名テーブル）を追加します。",
+      "addTableTicket": "チケットと注文でテーブルチケットを追加",
+      "reminded": "{count, plural, other {#回リマインド済み}}",
+      "seatsOf": "{table}の席",
+      "ticket": "チケット {code}",
+      "nameGuest": "{table}のゲスト名を入力",
+      "nameSubmit": "ゲスト名を入力",
+      "sponsorsTitle": "スポンサーテーブル",
+      "sponsorsIntro": "座席表のテーブルにスポンサーを設定します。名前は座席エディターのテーブル上に表示され、ゲストに公開すると座席検索にも表示されます。",
+      "noPlanTitle": "座席表はまだありません",
+      "noPlanHint": "座席で座席表を作成すると、テーブルがここに表示されます。",
+      "openSeating": "座席を開く",
+      "planTable": "{table} · {seats, plural, other {#席}}",
+      "sponsoredBy": "スポンサー：{sponsor}",
+      "shown": "ゲストに表示",
+      "hidden": "ゲストには非表示",
+      "noSponsor": "スポンサー未設定"
+    },
+    "public": {
+      "metaTitle": "ゲスト名の入力",
+      "eyebrow": "あなたのテーブル",
+      "title": "ゲスト名を入力してください",
+      "tableOf": "{table} #{n}",
+      "full": "すべての席にゲストがいます",
+      "closed": {
+        "not_paid": "このテーブルは未払いのため、名前を入力できません。",
+        "event_over": "イベントは終了しました。このテーブルの名前は入力できません。"
+      },
+      "companyTitle": "会社またはスポンサー",
+      "nameTitle": "ゲストを追加",
+      "nameIntro": "ゲストごとに1席とそのチケットが割り当てられます。",
+      "submit": "ゲストを追加",
+      "seatsTitle": "席",
+      "noSeats": "このテーブルに残っている席はありません",
+      "noSeatsHint": "このテーブルは返金されました。",
+      "resendTitle": "リンクをもう一度受け取りますか？",
+      "resendIntro": "テーブルを購入したメールアドレスにこのリンクを送ります。",
+      "resend": "このリンクをメールで受け取る",
+      "resent": "リンクをメールで送りました。",
+      "resendWait": "送信したばかりです。1分後にもう一度お試しください。"
+    },
+    "order": {
+      "title": "あなたのテーブル",
+      "intro": "テーブルに座る方を教えてください。ゲストごとに席とチケットが割り当てられます。",
+      "cta": "{table} #{n}のゲスト名を入力"
+    },
+    "errors": {
+      "table_full": "このテーブルのすべての席にゲストがいます。",
+      "slot_named": "この席にはすでにゲストがいます。",
+      "event_over": "イベントは終了しました。このテーブルの名前は入力できません。",
+      "not_paid": "このテーブルは未払いです。",
+      "party_full": "このグループは満員です。",
+      "not_a_table": "座席表のテーブルを選んでください。",
+      "foreign_logo": "イベントの画像から選んでください。",
+      "no_plan": "先に座席表を作成してください。",
+      "firstName": "ゲストの名を入力してください。",
+      "email": "有効なメールアドレスを入力するか、空欄にしてください。",
+      "company": "名前を入力してください。",
+      "sponsorName": "スポンサー名を入力してください。"
     }
   }
 }

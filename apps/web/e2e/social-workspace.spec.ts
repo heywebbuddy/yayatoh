@@ -131,10 +131,11 @@ test.describe('starter templates (M4.2a)', () => {
     await page.goto(`${wedding}/setup-guide`);
     await expect(page.locator('[data-rule="floorPlanChosen"]')).toContainText('Done');
 
-    // A gala keeps tickets, and asks for tables & sponsors (coming soon).
+    // A gala keeps tickets, and asks for tables & sponsors (M4.2b: built, no longer coming soon).
     const gala = await fromStarter(page, 'gala', `Spring Gala ${stamp()}`);
     await expect(page.locator('[data-rule="ticketsCreated"]')).toBeVisible();
-    await expect(page.locator('[data-rule="tablesSponsors"]').getByText('Coming soon')).toBeVisible();
+    await expect(page.locator('[data-rule="tablesSponsors"]')).toBeVisible();
+    await expect(page.locator('[data-rule="tablesSponsors"]').getByText('Coming soon')).toHaveCount(0);
     expect(await navLabels(page)).toEqual(
       expect.arrayContaining(['Tickets & Orders', 'Guests', 'Tables & Sponsors']),
     );
