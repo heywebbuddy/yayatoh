@@ -122,5 +122,8 @@ Behind the `donations` entitlement and the gala/community profiles. Live money w
 - [ ] Back on the tab: $1,025.00 raised · 2 gifts; "Anonymous" and the first name; export the CSV (step-up).
 - [ ] An org without payouts: the tab asks to connect Stripe; the giving page says giving isn't open.
 
-### 16. Owner tasks
+### 16. Gate (2026-10-02, on merge/next-3e + next-3f + m0.5-foundation)
+`pnpm verify` green (typecheck with `--concurrency=2`): 2318 unit, 1314 integration. E2E on all three projects: `donations`, `canary-crawl`, `checkout`, `payouts`, `step-up`, `command-center`, `social-workspace`, `bulk-actions`, `seat-assignment`, `alerts`, `staff-mode`, `tenant-account-corner`, `maintenance`, `journeys`, `campaigns`, `audiences`: all passed (the canary crawl runs on desktop only, by design). `agent/design-v2` is not merged: it conflicts with batch 3f's files (helpers, messages, portal pages, migration journal), left to the batch 3h merge.
+
+### 17. Owner tasks
 `docs/owner-inbox.md` → Phase 4 donations: the processing-fee rate donors may cover (standard 2.9 % + 30¢ vs a nonprofit rate), the default own-amount limits, and whether "how my name appears" should default to a choice.
