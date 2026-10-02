@@ -46,3 +46,5 @@ export {
   finalizableCampaignsTx,
   runOrgCampaigns,
 } from './tick.ts';
+// M6.1a: contact merges move this module's references (ADR 0022).
+export { campaignsContactOwner } from './contact-merge.ts';

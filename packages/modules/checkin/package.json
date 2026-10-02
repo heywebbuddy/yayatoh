@@ -18,6 +18,7 @@
     "@hono/zod-openapi": "catalog:",
     "@yayatoh/checkin-engine": "workspace:*",
     "@yayatoh/contracts": "workspace:*",
+    "@yayatoh/crm": "workspace:*",
     "@yayatoh/db": "workspace:*",
     "@yayatoh/events": "workspace:*",
     "@yayatoh/kernel": "workspace:*",

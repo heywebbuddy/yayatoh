@@ -315,3 +315,5 @@ export {
   waitlistRef,
   waitlistToken,
 } from './waitlist.ts';
+// M6.1a: contact merges move this module's references (ADR 0022).
+export { ordersContactOwner } from './contact-merge.ts';

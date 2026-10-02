@@ -162,3 +162,5 @@ export {
   verifyKioskPin,
 } from './staff-mode.ts';
 export { type CheckinScope, type CheckinSeriesFact, checkinFactsTx, checkinSeriesTx } from './stats.ts';
+// M6.1a: contact merges move this module's references (ADR 0022).
+export { checkinContactOwner } from './contact-merge.ts';

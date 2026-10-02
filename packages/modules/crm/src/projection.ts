@@ -124,3 +124,13 @@ export async function refreshContactProfilesTx(
   );
   return Number(row?.n ?? 0);
 }
+
+/** The events these contacts have participation rows for (M6.1a: what a merge recomputes). */
+export async function participationEventIdsTx(tx: TenantTx, contactIds: readonly string[]): Promise<string[]> {
+  if (contactIds.length === 0) return [];
+  const rows = await tx
+    .selectDistinct({ eventId: eventParticipation.eventId })
+    .from(eventParticipation)
+    .where(inArray(eventParticipation.contactId, [...contactIds]));
+  return rows.map((r) => r.eventId);
+}

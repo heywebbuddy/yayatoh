@@ -54,3 +54,5 @@ export {
 export { attendeeContactIdsTx, emitAttendeesChangedTx, participationAttendeesTx } from './participation.ts';
 export { privateColumns } from './private-columns.ts';
 export { ATTENDEE_SOURCES, ATTENDEE_STATUSES, IMPORT_FIELDS, type ImportField } from './schema.ts';
+// M6.1a: contact merges move this module's references (ADR 0022).
+export { attendeesContactOwner } from './contact-merge.ts';

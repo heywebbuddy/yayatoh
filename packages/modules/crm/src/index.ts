@@ -24,6 +24,7 @@ export { privateColumns } from './private-columns.ts';
 export {
   type ParticipationFacts,
   participantContactIdsTx,
+  participationEventIdsTx,
   refreshContactProfilesTx,
   replaceParticipationTx,
 } from './projection.ts';

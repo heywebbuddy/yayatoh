@@ -491,3 +491,5 @@ export {
   ingestInboundKeywords,
   type WebhookOutcome,
 } from './webhooks.ts';
+// M6.1a: contact merges move this module's references (ADR 0022).
+export { notificationsContactOwner } from './contact-merge.ts';

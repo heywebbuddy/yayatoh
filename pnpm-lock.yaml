@@ -1425,6 +1425,9 @@ importers:
       '@yayatoh/contracts':
         specifier: workspace:*
         version: link:../../contracts
+      '@yayatoh/crm':
+        specifier: workspace:*
+        version: link:../crm
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../../db
@@ -1665,6 +1668,9 @@ importers:
       '@yayatoh/contracts':
         specifier: workspace:*
         version: link:../../contracts
+      '@yayatoh/crm':
+        specifier: workspace:*
+        version: link:../crm
       '@yayatoh/csv':
         specifier: workspace:*
         version: link:../../csv
@@ -2318,6 +2324,9 @@ importers:
       '@yayatoh/checkin':
         specifier: workspace:*
         version: link:../checkin
+      '@yayatoh/crm':
+        specifier: workspace:*
+        version: link:../crm
       '@yayatoh/csv':
         specifier: workspace:*
         version: link:../../csv
