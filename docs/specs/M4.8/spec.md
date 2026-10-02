@@ -236,6 +236,10 @@ Issuing a receipt is a handful of indexed reads per paid order (most ticket orde
 ### 13. Rollout
 Behind the `donations` entitlement. Tax-deductible receipts need a verified profile, which needs the owner-run IRS download in production (`IRS_EO_BMF_DIR`) and counsel's review of the legal copy.
 
+### 14. Build notes (2026-10-02)
+- Gate: lint, check:modules, typecheck (57/57), unit 2,373 passed, integration 1,339 of 1,340 (the one failure is `apps/worker/tests/retention.int.test.ts` timing out at 30 s in the full run, where the daily pass sweeps every org the suite created; it passes alone). e2e: `receipts.spec.ts` 24/24 (3 projects), `donations`, `checkout`, `canary-crawl`, `email-kind-labels`, `privacy`, `security` 162/162; admin `charities.spec.ts` + `admin.spec.ts` 32/32.
+- Not merged: `origin/agent/design-v2` (conflicts outside this increment's files: migration meta, the exhibitors and speakers pages, `e2e/helpers.ts`, the shells and message catalogs). The new screens use only existing `@yayatoh/ui` components (PageHeader, Card, EmptyState, StatusDot, Table, Alert, Button) and `ProgramForm`, so the batch 3h merge restyles them by inheritance.
+
 ### 15. Demo checklist
 - [ ] As a new owner (`/api/dev/user` with `org=new&twoFactor=1&event=published&profile=gala&payouts=active`), open Settings → **Charity profile**; save "Harbor Arts Alliance", EIN 234567891.
 - [ ] In the admin app (staff `omar@yayatoh.test`), **Charities** → open the org → the IRS record (fixture) matches → Verify.
