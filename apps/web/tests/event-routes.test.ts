@@ -55,6 +55,8 @@ const SECTION_OF: Record<string, string> = {
   'registration-form': 'registration',
   // Batch 3f merge: M5.5a's Badges pages (they load through `loadBadgesPage`, checked below).
   badges: 'badges',
+  // M4.8a: the Donations tab (gala and community profiles) replaces its placeholder.
+  donations: 'donations',
 };
 
 describe('event console route sweep (M4.2a)', () => {
