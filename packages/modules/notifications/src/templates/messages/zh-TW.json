@@ -225,6 +225,11 @@
       "subject": "繼續您的 {eventName} 報名",
       "intro": "這是您的連結，可從上次中斷的地方繼續 {eventName} 的報名。它在您最後一次儲存後 {days, plural, other {# 天}} 內有效，且僅供您本人使用，請勿轉寄。如果您沒有要求此郵件，可以忽略。",
       "cta": "繼續我的報名"
+    },
+    "orders.table-naming": {
+      "subject": "{reminder, plural, =1 {提醒：請填寫 {eventName} 的賓客姓名} other {請填寫 {eventName} 的賓客姓名}}",
+      "intro": "您的{tableName}共有 {size, plural, other {# 個座位}}。{missing, plural, =0 {每個座位都已填寫姓名，您可隨時查看。} other {還有 # 個座位未填寫姓名。}}請使用下方按鈕告訴我們誰坐在您的桌位。",
+      "cta": "填寫賓客姓名"
     }
   },
   "roles": {

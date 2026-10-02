@@ -130,6 +130,16 @@ export {
   refundDeadline,
   refundsFee,
 } from './domain/refund-policy.ts';
+// M4.2b gala tables: naming a purchased table's guest slots.
+export {
+  mayResend,
+  NAMING_ORDER_STATES,
+  namingRefusal,
+  pickSlot,
+  REMINDER_GAP_MS,
+  RESEND_GAP_MS,
+  tableProgress,
+} from './domain/tables.ts';
 export {
   ACTIVE_STATUSES as WAITLIST_ACTIVE_STATUSES,
   canRejoin,
@@ -283,6 +293,22 @@ export {
   supportReplyMailer,
   ticketMailer,
 } from './subscribers.ts';
+export {
+  HostedTableDto,
+  HostedTableSlotDto,
+  hostedTablesQuery,
+  hostNameTableSlotCommand,
+  nameTableSlotCommand,
+  orderTablesByManageToken,
+  PublicTableDto,
+  publicTableQuery,
+  resendTableLinkCommand,
+  sendTableRemindersCommand,
+  setTableCompanyCommand,
+  tableLinkContext,
+  tableNamingMailer,
+  tableNamingPath,
+} from './tables.ts';
 export {
   declineWaitlistOfferCommand,
   eraseWaitlistDsarTx,

@@ -1918,6 +1918,18 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   );
   await executeCommand(setMyAlertPhoneCommand, { smsPhone: '+15550100199' }, ctx(), ports);
   await executeCommand(setSalesTargetCommand, { eventId: event.id, tickets: 150 }, ctx(), ports);
+  // M4.2b gala tables (isolation coverage): the fixture order's first ticket item recorded as a
+  // purchased table, and a sponsor on a table of the event plan. Rows only: no second order and no
+  // new tickets, so tests that count the fixture's orders and tickets are unchanged.
+  await withTenant(systemCtx(org.id), async (tx) => {
+    await tx.execute(sql`
+      insert into ticketing.table_units (org_id, event_id, order_id, order_item_id, ticket_type_id, unit_no, size)
+      select org_id, event_id, order_id, order_item_id, ticket_type_id, 1, 2
+      from ticketing.tickets where order_id = ${checkout.order.id} order by serial limit 1`);
+    await tx.execute(sql`
+      insert into seating.table_sponsors (org_id, event_id, item_id, sponsor_name, published)
+      values (${org.id}, ${event.id}, ${uuidv7()}, ${`${name} Sponsor`}, true)`);
+  });
   return { org, ownerId, viewerId, event, apiKey, testKey, ctx };
 }
 

@@ -67,6 +67,10 @@ export const PERMISSIONS = [
   'guests:write',
   /** Acknowledge and snooze Command Center alerts (M3.2b). Viewers and scanners only see them. */
   'alerts:manage',
+  /** See a gala's purchased tables, their buyers and named guests (M4.2b Tables & Sponsors). */
+  'tables:read',
+  /** Name a purchased table's guests by hand and send naming reminders (M4.2b). */
+  'tables:write',
 ] as const;
 export type Permission = (typeof PERMISSIONS)[number];
 
@@ -99,6 +103,8 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'messages:read',
     'messages:send',
     'alerts:manage',
+    'tables:read',
+    'tables:write',
   ],
   finance: [
     'org:read',
@@ -138,6 +144,8 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'checkin:kiosk',
     'messages:read',
     'alerts:manage',
+    'tables:read',
+    'tables:write',
   ],
   scanner: ['org:read', 'checkin:scan'],
   viewer: [
@@ -149,6 +157,7 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'guests:read',
     'marketing:read',
     'event_team:read',
+    'tables:read',
   ],
   /**
    * M4.2a: someone who works on specific events only (a co-host or planner invited to one event).
@@ -227,6 +236,8 @@ export const EVENT_ROLE_PERMISSIONS: Readonly<Record<string, readonly string[]>>
     'checkin:kiosk',
     'messages:read',
     'messages:send',
+    'tables:read',
+    'tables:write',
   ],
   door_staff: ['events:read', 'checkin:scan'],
   session_scanner: ['checkin:scan'],

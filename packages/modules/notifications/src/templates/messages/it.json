@@ -225,6 +225,11 @@
       "subject": "Continua la tua registrazione a {eventName}",
       "intro": "Ecco il tuo link per riprendere la registrazione a {eventName} da dove l'avevi lasciata. Funziona per {days, plural, one {# giorno} other {# giorni}} dall'ultimo salvataggio e solo per te, quindi non inoltrarlo. Se non l'hai richiesto, puoi ignorare questa email.",
       "cta": "Continua la registrazione"
+    },
+    "orders.table-naming": {
+      "subject": "{reminder, plural, =1 {Promemoria: indica i tuoi ospiti per {eventName}} other {Indica i tuoi ospiti per {eventName}}}",
+      "intro": "Il tuo {tableName} ha {size, plural, one {# posto} other {# posti}}. {missing, plural, =0 {Ogni posto ha un nome; puoi controllarli quando vuoi.} one {Manca ancora il nome per # posto.} other {Mancano ancora i nomi per # posti.}} Usa il pulsante qui sotto per dirci chi siede al tuo tavolo.",
+      "cta": "Indica i miei ospiti"
     }
   },
   "roles": {

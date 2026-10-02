@@ -225,6 +225,11 @@
       "subject": "Continúa tu inscripción a {eventName}",
       "intro": "Este es tu enlace para retomar tu inscripción a {eventName} donde la dejaste. Funciona durante {days, plural, one {# día} other {# días}} después de tu último guardado y solo para ti, así que no lo reenvíes. Si no lo pediste, puedes ignorar este correo.",
       "cta": "Continuar mi inscripción"
+    },
+    "orders.table-naming": {
+      "subject": "{reminder, plural, =1 {Recordatorio: indica tus invitados para {eventName}} other {Indica tus invitados para {eventName}}}",
+      "intro": "Tu {tableName} tiene {size, plural, one {# asiento} other {# asientos}}. {missing, plural, =0 {Todos los asientos tienen nombre; puedes revisarlos cuando quieras.} one {Aún falta el nombre de # asiento.} other {Aún faltan los nombres de # asientos.}} Usa el botón de abajo para decirnos quién se sienta en tu mesa.",
+      "cta": "Indicar mis invitados"
     }
   },
   "roles": {

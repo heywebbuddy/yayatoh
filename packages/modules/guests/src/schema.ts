@@ -87,7 +87,9 @@ export const parties = tenantTable(
   },
   (t) => [
     index('parties_org_event_idx').on(t.orgId, t.eventId, t.name),
-    uniqueIndex('parties_org_table_unit_key').on(t.orgId, t.tableUnitId).where(sql`table_unit_id is not null`),
+    uniqueIndex('parties_org_table_unit_key')
+      .on(t.orgId, t.tableUnitId)
+      .where(sql`table_unit_id is not null`),
     check('parties_name_length', sql`length(name) between 1 and 120`),
     check('parties_envelope_length', sql`envelope_name is null or length(envelope_name) between 1 and 200`),
     check('parties_side_length', sql`side is null or length(side) between 1 and 40`),

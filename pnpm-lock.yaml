@@ -1828,6 +1828,9 @@ importers:
       '@yayatoh/forms':
         specifier: workspace:*
         version: link:../forms
+      '@yayatoh/guests':
+        specifier: workspace:*
+        version: link:../guests
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../kernel

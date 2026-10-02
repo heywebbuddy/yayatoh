@@ -16,14 +16,7 @@ import {
 import { and, desc, eq, inArray, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { returnSoldTx } from './inventory.ts';
-import {
-  signingKeys,
-  TICKET_STATUSES,
-  tableUnits,
-  ticketBarcodes,
-  tickets,
-  ticketTypes,
-} from './schema.ts';
+import { signingKeys, TICKET_STATUSES, tableUnits, ticketBarcodes, tickets, ticketTypes } from './schema.ts';
 
 export interface IssueRequest {
   readonly orderId: string;
@@ -122,24 +115,30 @@ export async function issueTicketsTx(tx: TenantTx, ctx: Ctx, req: IssueRequest):
     ).map((r) => [r.id, r.tableSize]),
   );
   const tableRows: (typeof tableUnits.$inferInsert)[] = [];
-  const units = req.items.flatMap((item) => {
-    const size = sizes.get(item.ticketTypeId) ?? null;
-    if (!size) return Array.from({ length: item.quantity }, () => ({ ...item, id: uuidv7() }));
-    return Array.from({ length: item.quantity }, (_, n) => {
-      const tableUnitId = uuidv7();
-      tableRows.push({
-        id: tableUnitId,
-        orgId,
-        eventId: req.eventId,
-        orderId: req.orderId,
-        orderItemId: item.orderItemId,
-        ticketTypeId: item.ticketTypeId,
-        unitNo: n + 1,
-        size,
-      });
-      return Array.from({ length: size }, () => ({ ...item, id: uuidv7(), tableUnitId }));
-    }).flat();
-  });
+  const units: { orderItemId: string; ticketTypeId: string; id: string; tableUnitId: string | null }[] =
+    req.items.flatMap((item) => {
+      const size = sizes.get(item.ticketTypeId) ?? null;
+      if (!size)
+        return Array.from({ length: item.quantity }, () => ({
+          ...item,
+          id: uuidv7(),
+          tableUnitId: null as string | null,
+        }));
+      return Array.from({ length: item.quantity }, (_, n) => {
+        const tableUnitId = uuidv7();
+        tableRows.push({
+          id: tableUnitId,
+          orgId,
+          eventId: req.eventId,
+          orderId: req.orderId,
+          orderItemId: item.orderItemId,
+          ticketTypeId: item.ticketTypeId,
+          unitNo: n + 1,
+          size,
+        });
+        return Array.from({ length: size }, () => ({ ...item, id: uuidv7(), tableUnitId }));
+      }).flat();
+    });
   if (tableRows.length) await tx.insert(tableUnits).values(tableRows);
   const attendeeRows = await createAttendeesTx(
     tx,
@@ -170,7 +169,7 @@ export async function issueTicketsTx(tx: TenantTx, ctx: Ctx, req: IssueRequest):
       holderEmail: req.holder.email,
       attendeeId: attendeeFor.get(unit.id) ?? null,
       occurrenceId: req.occurrenceId ?? null,
-      tableUnitId: 'tableUnitId' in unit ? unit.tableUnitId : null,
+      tableUnitId: unit.tableUnitId,
     });
     const code = await signTicketCode({ kid: key.kid, ticketId: t.id, rev: t.rev }, key.privateKey);
     await tx
@@ -202,6 +201,8 @@ export async function ticketsForOrderTx(tx: TenantTx, orderId: string) {
       status: tickets.status,
       holderName: tickets.holderName,
       holderEmail: tickets.holderEmail,
+      /** M4.2b: the purchased table this ticket is a seat of. */
+      tableUnitId: tickets.tableUnitId,
       code: ticketBarcodes.payload,
     })
     .from(tickets)
@@ -527,14 +528,35 @@ export async function voidTicketsTx(
       ticketTypeId: tickets.ticketTypeId,
       orderItemId: tickets.orderItemId,
       attendeeId: tickets.attendeeId,
+      tableUnitId: tickets.tableUnitId,
     });
   await cancelAttendeesTx(
     tx,
     ctx,
     rows.flatMap((r) => (r.attendeeId ? [r.attendeeId] : [])),
   );
+  // M4.2b: a table ticket type sells tables, so a table goes back on sale only once none of its
+  // seats is left active; a voided seat of a table that still has guests returns nothing.
+  const units = [...new Set(rows.flatMap((r) => (r.tableUnitId ? [r.tableUnitId] : [])))];
+  const stillLive = new Set(
+    units.length
+      ? (
+          await tx
+            .selectDistinct({ id: tickets.tableUnitId })
+            .from(tickets)
+            .where(and(inArray(tickets.tableUnitId, units), eq(tickets.status, 'active')))
+        ).map((r) => r.id)
+      : [],
+  );
   const perType = new Map<string, number>();
-  for (const r of rows) perType.set(r.ticketTypeId, (perType.get(r.ticketTypeId) ?? 0) + 1);
+  const counted = new Set<string>();
+  for (const r of rows) {
+    if (r.tableUnitId) {
+      if (stillLive.has(r.tableUnitId) || counted.has(r.tableUnitId)) continue;
+      counted.add(r.tableUnitId);
+    }
+    perType.set(r.ticketTypeId, (perType.get(r.ticketTypeId) ?? 0) + 1);
+  }
   await returnSoldTx(
     tx,
     [...perType].map(([ticketTypeId, quantity]) => ({ ticketTypeId, quantity })),
@@ -572,7 +594,8 @@ export async function liveTicketsByOrderItemTx(
     .select({
       orderId: tickets.orderId,
       orderItemId: tickets.orderItemId,
-      count: sql<number>`count(*)::int`,
+      // M4.2b: a table counts once (it was sold as one unit), while any of its seats is live.
+      count: sql<number>`count(distinct coalesce(${tickets.tableUnitId}, ${tickets.id}))::int`,
     })
     .from(tickets)
     .where(and(eq(tickets.eventId, eventId), eq(tickets.status, 'active')))

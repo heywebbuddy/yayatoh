@@ -225,6 +225,11 @@
       "subject": "Continue your registration for {eventName}",
       "intro": "Here is your link to pick up your registration for {eventName} where you left off. It works for {days, plural, one {# day} other {# days}} after your last save and only for you, so please don't forward it. If you didn't ask for it, you can ignore this email.",
       "cta": "Continue my registration"
+    },
+    "orders.table-naming": {
+      "subject": "{reminder, plural, =1 {Reminder: name your guests for {eventName}} other {Name your guests for {eventName}}}",
+      "intro": "Your {tableName} seats {size, plural, one {# guest} other {# guests}}. {missing, plural, =0 {Every seat has a name; you can check them anytime.} one {# seat still needs a name.} other {# seats still need a name.}} Use the button below to tell us who sits at your table.",
+      "cta": "Name my guests"
     }
   },
   "roles": {

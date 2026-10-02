@@ -225,6 +225,11 @@
       "subject": "Setzen Sie Ihre Anmeldung für {eventName} fort",
       "intro": "Hier ist Ihr Link, um Ihre Anmeldung für {eventName} dort fortzusetzen, wo Sie aufgehört haben. Er gilt {days, plural, one {# Tag} other {# Tage}} nach dem letzten Speichern und nur für Sie; bitte leiten Sie ihn nicht weiter. Wenn Sie ihn nicht angefordert haben, können Sie diese E-Mail ignorieren.",
       "cta": "Anmeldung fortsetzen"
+    },
+    "orders.table-naming": {
+      "subject": "{reminder, plural, =1 {Erinnerung: Nennen Sie Ihre Gäste für {eventName}} other {Nennen Sie Ihre Gäste für {eventName}}}",
+      "intro": "Ihr {tableName} hat {size, plural, one {# Platz} other {# Plätze}}. {missing, plural, =0 {Jeder Platz hat einen Namen; Sie können sie jederzeit prüfen.} one {# Platz braucht noch einen Namen.} other {# Plätze brauchen noch einen Namen.}} Sagen Sie uns über die Schaltfläche unten, wer an Ihrem Tisch sitzt.",
+      "cta": "Meine Gäste nennen"
     }
   },
   "roles": {
