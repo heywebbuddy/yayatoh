@@ -3,15 +3,15 @@ import type { TenantTx } from '@yayatoh/db';
 import { type EventDto, findEventTx } from '@yayatoh/events';
 import { deliverabilityFactsTx } from '@yayatoh/notifications';
 import { paymentAlertFactsTx } from '@yayatoh/orders';
-import { payoutRequirementsPastDueTx } from '@yayatoh/payments';
+import { disputeDeadlineFactsTx, payoutRequirementsPastDueTx } from '@yayatoh/payments';
 import { failedBulkOperationsTx } from '@yayatoh/platform';
 import { unseatedAttendeesTx } from '@yayatoh/seating';
 import { domainProblemsTx } from '@yayatoh/tenancy';
 import { ticketTypeStatsTx, undistributedTicketsTx } from '@yayatoh/ticketing';
-import { eq } from 'drizzle-orm';
+import { and, eq, gte, sql } from 'drizzle-orm';
 import { eventMode, THRESHOLDS } from './domain/config.ts';
 import type { EventFacts, OrgFacts } from './domain/rules.ts';
-import { salesTargets } from './schema.ts';
+import { type SignalKind, salesTargets, signals } from './schema.ts';
 
 /**
  * Gather one event's facts from the modules that own them (counts only, under the tenant's RLS).
@@ -73,12 +73,18 @@ export async function eventFactsTx(
 /** Gather the org-level facts (domains, payout account, email deliverability, failures). */
 export async function orgFactsTx(tx: TenantTx, now: Date): Promise<OrgFacts> {
   const since = new Date(now.getTime() - THRESHOLDS.automationWindowMs);
-  const [domains, due, mail, lastDay, bulk] = await Promise.all([
+  const [domains, due, mail, lastDay, bulk, journeys, campaigns, disputes] = await Promise.all([
     domainProblemsTx(tx, now, THRESHOLDS.sslGraceMs),
     payoutRequirementsPastDueTx(tx),
     deliverabilityFactsTx(tx, now, THRESHOLDS.deliverabilityWindowMs),
     deliverabilityFactsTx(tx, now, THRESHOLDS.automationWindowMs),
     failedBulkOperationsTx(tx, since),
+    signalCountTx(tx, 'journey_step_failed', since),
+    signalCountTx(tx, 'campaign_send_failed', since),
+    disputeDeadlineFactsTx(tx, now, {
+      soonMs: THRESHOLDS.disputeSoonMs,
+      criticalMs: THRESHOLDS.disputeCriticalMs,
+    }),
   ]);
   return {
     domainsFailed: domains.failed,
@@ -91,5 +97,18 @@ export async function orgFactsTx(tx: TenantTx, now: Date): Promise<OrgFacts> {
     messagingAutoPaused: mail.autoPaused,
     failedMessages: lastDay.failed,
     failedBulkActions: bulk,
+    failedJourneySteps: journeys,
+    failedCampaignSends: campaigns,
+    disputesDueSoon: disputes.soon,
+    disputesDueCritical: disputes.critical,
   };
+}
+
+/** Signals of one kind reported since `since` (batch 3e: journey steps, campaign sends). */
+async function signalCountTx(tx: TenantTx, kind: SignalKind, since: Date): Promise<number> {
+  const [r] = await tx
+    .select({ n: sql<number>`count(*)::int` })
+    .from(signals)
+    .where(and(eq(signals.kind, kind), gte(signals.occurredAt, since)));
+  return Number(r?.n ?? 0);
 }

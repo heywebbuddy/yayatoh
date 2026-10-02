@@ -1,6 +1,6 @@
 {
-  "id": "3c43235e-4d62-42ac-a44c-0ce5c2d2ae9b",
-  "prevId": "2f7fb42a-2a10-4839-b6ce-f2616f9de1b2",
+  "id": "330d1f85-cd7b-4026-ae66-64301aaf0dbf",
+  "prevId": "3c43235e-4d62-42ac-a44c-0ce5c2d2ae9b",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -13108,6 +13108,12 @@
           "primaryKey": false,
           "notNull": true,
           "default": "'{}'::text[]"
+        },
+        "rsvp": {
+          "name": "rsvp",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {
@@ -13236,6 +13242,10 @@
         "event_participation_source_check": {
           "name": "event_participation_source_check",
           "value": "source in ('legacy', 'live')"
+        },
+        "event_participation_rsvp_check": {
+          "name": "event_participation_rsvp_check",
+          "value": "rsvp is null or rsvp in ('attending', 'declined', 'awaiting')"
         }
       },
       "isRLSEnabled": true
@@ -16344,6 +16354,217 @@
       },
       "isRLSEnabled": true
     },
+    "guests.party_rsvp": {
+      "name": "party_rsvp",
+      "schema": "guests",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "uuidv7()"
+        },
+        "org_id": {
+          "name": "org_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "event_id": {
+          "name": "event_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "party_id": {
+          "name": "party_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "link_id": {
+          "name": "link_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "link_expires_at": {
+          "name": "link_expires_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "pin_version": {
+          "name": "pin_version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 1
+        },
+        "sent_at": {
+          "name": "sent_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "viewed_at": {
+          "name": "viewed_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "responded_at": {
+          "name": "responded_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "reopened": {
+          "name": "reopened",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        }
+      },
+      "indexes": {
+        "party_rsvp_org_id_idx": {
+          "name": "party_rsvp_org_id_idx",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "party_rsvp_org_party_key": {
+          "name": "party_rsvp_org_party_key",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "party_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "party_rsvp_org_event_idx": {
+          "name": "party_rsvp_org_event_idx",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "event_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "party_rsvp_link_key": {
+          "name": "party_rsvp_link_key",
+          "columns": [
+            {
+              "expression": "link_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "party_rsvp_party_fk": {
+          "name": "party_rsvp_party_fk",
+          "tableFrom": "party_rsvp",
+          "tableTo": "parties",
+          "schemaTo": "guests",
+          "columnsFrom": [
+            "org_id",
+            "party_id"
+          ],
+          "columnsTo": [
+            "org_id",
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "party_rsvp_org_id_id_key": {
+          "name": "party_rsvp_org_id_id_key",
+          "nullsNotDistinct": false,
+          "columns": [
+            "org_id",
+            "id"
+          ]
+        }
+      },
+      "policies": {
+        "party_rsvp_tenant_isolation": {
+          "name": "party_rsvp_tenant_isolation",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "app_user"
+          ],
+          "using": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)",
+          "withCheck": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)"
+        }
+      },
+      "checkConstraints": {
+        "party_rsvp_pin_version_check": {
+          "name": "party_rsvp_pin_version_check",
+          "value": "pin_version >= 1"
+        }
+      },
+      "isRLSEnabled": true
+    },
     "guests.rsvp_history": {
       "name": "rsvp_history",
       "schema": "guests",
@@ -16558,7 +16779,7 @@
       "checkConstraints": {
         "rsvp_history_action_check": {
           "name": "rsvp_history_action_check",
-          "value": "action in ('party_created', 'party_updated', 'party_removed', 'guest_added', 'guest_updated', 'guest_removed', 'guest_moved', 'plus_one_added', 'plus_one_named', 'sub_event_created', 'sub_event_updated', 'sub_event_moved', 'sub_event_removed', 'invitation_added', 'invitation_removed', 'response_recorded', 'response_cleared')"
+          "value": "action in ('party_created', 'party_updated', 'party_removed', 'guest_added', 'guest_updated', 'guest_removed', 'guest_moved', 'plus_one_added', 'plus_one_named', 'sub_event_created', 'sub_event_updated', 'sub_event_moved', 'sub_event_removed', 'invitation_added', 'invitation_removed', 'response_recorded', 'response_cleared', 'rsvp_link_created', 'rsvp_link_reset', 'rsvp_pin_reset', 'rsvp_sent', 'rsvp_viewed', 'rsvp_submitted', 'rsvp_reopened')"
         },
         "rsvp_history_party_check": {
           "name": "rsvp_history_party_check",
@@ -16567,6 +16788,148 @@
         "rsvp_history_source_check": {
           "name": "rsvp_history_source_check",
           "value": "source in ('manual', 'paper', 'import', 'collector', 'rsvp')"
+        }
+      },
+      "isRLSEnabled": true
+    },
+    "guests.rsvp_settings": {
+      "name": "rsvp_settings",
+      "schema": "guests",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "uuidv7()"
+        },
+        "org_id": {
+          "name": "org_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "event_id": {
+          "name": "event_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "deadline": {
+          "name": "deadline",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "name_lookup": {
+          "name": "name_lookup",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "lookup_code": {
+          "name": "lookup_code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "rsvp_settings_org_id_idx": {
+          "name": "rsvp_settings_org_id_idx",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "rsvp_settings_org_event_key": {
+          "name": "rsvp_settings_org_event_key",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "event_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "rsvp_settings_lookup_code_key": {
+          "name": "rsvp_settings_lookup_code_key",
+          "columns": [
+            {
+              "expression": "lookup_code",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "rsvp_settings_org_id_id_key": {
+          "name": "rsvp_settings_org_id_id_key",
+          "nullsNotDistinct": false,
+          "columns": [
+            "org_id",
+            "id"
+          ]
+        }
+      },
+      "policies": {
+        "rsvp_settings_tenant_isolation": {
+          "name": "rsvp_settings_tenant_isolation",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "app_user"
+          ],
+          "using": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)",
+          "withCheck": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)"
+        }
+      },
+      "checkConstraints": {
+        "rsvp_settings_lookup_code_check": {
+          "name": "rsvp_settings_lookup_code_check",
+          "value": "lookup_code ~ '^[0-9A-Z]{8}$'"
         }
       },
       "isRLSEnabled": true

@@ -176,7 +176,7 @@ touches:
   - packages/modules/guests/src/{schema.ts,private-columns.ts,index.ts}                         # appended
   - packages/modules/guests/src/{guests.ts,dto.ts}   # `seal` exported; email/phone kept in the sealed JSON and in GuestDto
   - packages/modules/guests/tests/import.test.ts
-  - packages/db/drizzle/0082_legal_tag.sql (+ meta)
+  - packages/db/drizzle/0092_legal_tag.sql (+ meta; 0082 on the branch)
   - packages/testing/{src/fixtures.ts,src/ports.ts,fixtures/guest-import/*,tests/guest-import.int.test.ts}
   - apps/worker/{package.json,src/bulk.ts,src/retention.ts}
   - apps/web/src/server/bulk.ts
@@ -287,7 +287,7 @@ touches:
   - packages/modules/guests/{package.json,MODULE.md,tests/invitations.test.ts}
   - packages/modules/seating/src/{schema.ts,index.ts,private-columns.ts}   # appended
   - packages/modules/seating/src/sub-event-charts.ts, packages/modules/seating/MODULE.md
-  - packages/db/drizzle/0082_far_jean_grey.sql, 0083_wonderful_vision.sql (+ meta)
+  - packages/db/drizzle/0093_far_jean_grey.sql, 0094_wonderful_vision.sql (+ meta; 0082/0083 on the branch)
   - packages/testing/src/fixtures.ts, packages/testing/tests/sub-events.int.test.ts
   - apps/web/src/app/[locale]/o/[org]/e/[event]/guests/page.tsx   # one link
   - apps/web/src/app/[locale]/o/[org]/e/[event]/guests/sub-events/**

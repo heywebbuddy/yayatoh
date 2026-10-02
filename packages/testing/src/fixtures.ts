@@ -1923,6 +1923,12 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   );
   await executeCommand(setMyAlertPhoneCommand, { smsPhone: '+15550100199' }, ctx(), ports);
   await executeCommand(setSalesTargetCommand, { eventId: event.id, tickets: 150 }, ctx(), ports);
+  // Batch 3e: a journey step failure reported two days ago (outside the rules' 24-hour window, so
+  // it raises nothing), as the alerts subscriber records it (isolation coverage of alerts.signals).
+  await withTenant(systemCtx(org.id), (tx) =>
+    tx.execute(sql`insert into alerts.signals (org_id, kind, source_event_id, occurred_at)
+      values (${org.id}, 'journey_step_failed', ${uuidv7()}, now() - interval '2 days')`),
+  );
   // M4.1d: RSVP settings (deadline, name lookup), links for every party, the fixture party sent
   // and opened through its link (isolation coverage of `rsvp_settings` and `party_rsvp`).
   await executeCommand(
