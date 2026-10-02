@@ -1,3 +1,5 @@
+// M6.1a: contact merges move this module's references (ADR 0022).
+export { guestsContactOwner } from './contact-merge.ts';
 export {
   changedFields,
   countGuests,
@@ -121,5 +123,3 @@ export {
   subEventsQuery,
   updateSubEventCommand,
 } from './sub-events.ts';
-// M6.1a: contact merges move this module's references (ADR 0022).
-export { guestsContactOwner } from './contact-merge.ts';

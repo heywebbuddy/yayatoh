@@ -42,10 +42,7 @@ export const automationsContactOwner: ContactReferenceOwner = {
     }
     const count = async (t: typeof journeyRuns | typeof scheduledActions) =>
       (
-        await tx
-          .select({ n: sql<number>`count(*)::int` })
-          .from(t)
-          .where(eq(t.contactId, step.fromContactId))
+        await tx.select({ n: sql<number>`count(*)::int` }).from(t).where(eq(t.contactId, step.fromContactId))
       )[0]?.n ?? 0;
     return { moved, kept: { [RUNS]: await count(journeyRuns), [ACTIONS]: await count(scheduledActions) } };
   },

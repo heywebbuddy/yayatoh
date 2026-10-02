@@ -4,9 +4,9 @@ import {
   contactIdByEmailTx,
   currentConsentTx,
   dismissDuplicateCommand,
-  eraseContactDsarTx,
   duplicatePairQuery,
   duplicateQueueQuery,
+  eraseContactDsarTx,
   mergeContactsCommand,
   mergeDuplicatesBulkCommand,
   peopleQuery,
@@ -211,7 +211,10 @@ describe('M6.1a merge and undo', () => {
       const was = rows as { id: string; contact: string }[];
       const now = after[k] as { id: string; contact: string }[];
       // Same rows; each of the duplicate's rows moved, or was kept on a unique clash (counted).
-      expect(now.map((x) => x.id), k).toEqual(was.map((x) => x.id));
+      expect(
+        now.map((x) => x.id),
+        k,
+      ).toEqual(was.map((x) => x.id));
       expect(r.moved[table] ?? 0, k).toBe(onDup(was) - onDup(now));
       expect(onDup(now), k).toBe(r.kept[table] ?? 0);
       if (onDup(was) - onDup(now) > 0) movedModules.add(k.split('.')[0] as string);
@@ -235,7 +238,11 @@ describe('M6.1a merge and undo', () => {
       company: string | null;
       name: string;
     };
-    expect(keepRow).toMatchObject({ email: sa.keep.email, company: 'Lakeside Partners', name: 'Taylor Reed' });
+    expect(keepRow).toMatchObject({
+      email: sa.keep.email,
+      company: 'Lakeside Partners',
+      name: 'Taylor Reed',
+    });
     expect(keepRow.phone_e164).toMatch(/^\+1312555\d{4}$/);
     await withTenant(systemCtx(a.org.id), async (tx) => {
       expect(await contactIdByEmailTx(tx, sa.dup.email)).toBe(sa.keep.contactId);
@@ -256,7 +263,12 @@ describe('M6.1a merge and undo', () => {
     ]);
 
     // The merged timeline: one feed (orders of both, the check-in, the campaign send).
-    const tl = await executeQuery(personTimelineQuery, { contactId: sa.keep.contactId, limit: 100 }, a.ctx(), ports);
+    const tl = await executeQuery(
+      personTimelineQuery,
+      { contactId: sa.keep.contactId, limit: 100 },
+      a.ctx(),
+      ports,
+    );
     const kinds = tl.rows.map((x) => x.kind);
     expect(kinds.filter((k) => k === 'order_paid')).toHaveLength(3);
     expect(kinds).toContain('checked_in');
@@ -301,12 +313,25 @@ describe('M6.1a merge and undo', () => {
       ports,
     );
     // Default choices: the duplicate's (more recent) email moved onto the kept record.
-    const [row] = await admin<{ email: string }[]>`select email from crm.contacts where id = ${sa.keep.contactId}`;
+    const [row] = await admin<
+      { email: string }[]
+    >`select email from crm.contacts where id = ${sa.keep.contactId}`;
     expect(row?.email).toBe(sa.dup.email);
     // Replaying every timeline event: exactly once (processed_events and the unique key).
-    const [n0] = await admin<{ n: number }[]>`select count(*)::int as n from crm.timeline_entries where org_id = ${a.org.id}`;
+    const [n0] = await admin<
+      { n: number }[]
+    >`select count(*)::int as n from crm.timeline_entries where org_id = ${a.org.id}`;
     const events = await admin<
-      { id: string; org_id: string; type: string; version: number; aggregate_type: string; aggregate_id: string; payload: unknown; created_at: Date }[]
+      {
+        id: string;
+        org_id: string;
+        type: string;
+        version: number;
+        aggregate_type: string;
+        aggregate_id: string;
+        payload: unknown;
+        created_at: Date;
+      }[]
     >`select id, org_id, type, version, aggregate_type, aggregate_id, payload, created_at from platform.domain_events where org_id = ${a.org.id}`;
     for (const s of TIMELINE_SUBSCRIBERS())
       for (const e of events)
@@ -322,7 +347,9 @@ describe('M6.1a merge and undo', () => {
             logSeq: 0,
           });
     expect(await catchUpTimeline(a.org.id)).toBe(0);
-    const [n1] = await admin<{ n: number }[]>`select count(*)::int as n from crm.timeline_entries where org_id = ${a.org.id}`;
+    const [n1] = await admin<
+      { n: number }[]
+    >`select count(*)::int as n from crm.timeline_entries where org_id = ${a.org.id}`;
     expect(n1?.n).toBe(n0?.n);
     // A fact recorded while merged about a row that goes back on undo goes back with it.
     const [order] = await admin<{ id: string }[]>`
@@ -338,7 +365,9 @@ describe('M6.1a merge and undo', () => {
     const [back] = await admin<{ contact_id: string }[]>`
       select contact_id from crm.timeline_entries where source_ref = ${order?.id as string} and kind = 'order_paid'`;
     expect(back?.contact_id).toBe(sa.dup.contactId);
-    const [email] = await admin<{ email: string }[]>`select email from crm.contacts where id = ${sa.keep.contactId}`;
+    const [email] = await admin<
+      { email: string }[]
+    >`select email from crm.contacts where id = ${sa.keep.contactId}`;
     expect(email?.email).toBe(sa.keep.email);
   });
 
@@ -388,12 +417,16 @@ describe('M6.1a permissions, step-up and isolation', () => {
     const marketer = crypto.randomUUID();
     await executeCommand(addMemberCommand, { userId: marketer, role: 'marketing' }, a.ctx(), ports);
     const m = userCtx(marketer, a.org.id);
-    expect(await refusal(executeQuery(personTimelineQuery, { contactId: sa.keep.contactId }, m, ports))).toBe('ok');
-    expect(await refusal(executeCommand(scanDuplicatesCommand, { full: false }, m, ports))).toBe('forbidden:');
-    const c = await pairOf(a, sa.keep.contactId, sa.dup.contactId);
-    expect(await refusal(executeCommand(dismissDuplicateCommand, { candidateId: c?.id as string }, m, ports))).toBe(
+    expect(await refusal(executeQuery(personTimelineQuery, { contactId: sa.keep.contactId }, m, ports))).toBe(
+      'ok',
+    );
+    expect(await refusal(executeCommand(scanDuplicatesCommand, { full: false }, m, ports))).toBe(
       'forbidden:',
     );
+    const c = await pairOf(a, sa.keep.contactId, sa.dup.contactId);
+    expect(
+      await refusal(executeCommand(dismissDuplicateCommand, { candidateId: c?.id as string }, m, ports)),
+    ).toBe('forbidden:');
   });
 
   it('bulk merges need step-up and merge each open pair with the defaults', async () => {
@@ -402,19 +435,38 @@ describe('M6.1a permissions, step-up and isolation', () => {
     expect(c).toBeDefined();
     expect(
       await refusal(
-        executeCommand(mergeDuplicatesBulkCommand, { candidateIds: [c?.id as string] }, staleCtx(b.ctx()), ports),
+        executeCommand(
+          mergeDuplicatesBulkCommand,
+          { candidateIds: [c?.id as string] },
+          staleCtx(b.ctx()),
+          ports,
+        ),
       ),
     ).toBe('step_up_required:');
-    const r = await executeCommand(mergeDuplicatesBulkCommand, { candidateIds: [c?.id as string] }, b.ctx(), ports);
+    const r = await executeCommand(
+      mergeDuplicatesBulkCommand,
+      { candidateIds: [c?.id as string] },
+      b.ctx(),
+      ports,
+    );
     expect(r).toMatchObject({ merged: 1, skipped: 0 });
     const [m] = await admin<{ source_contact_id: string; target_contact_id: string; bulk_id: string }[]>`
       select source_contact_id, target_contact_id, bulk_id from crm.contact_merges where id = ${r.mergeIds[0] as string}`;
-    expect(m).toMatchObject({ source_contact_id: sb.dup.contactId, target_contact_id: sb.keep.contactId, bulk_id: r.bulkId });
+    expect(m).toMatchObject({
+      source_contact_id: sb.dup.contactId,
+      target_contact_id: sb.keep.contactId,
+      bulk_id: r.bulkId,
+    });
     const [audit] = await admin<{ n: number }[]>`
       select count(*)::int as n from platform.audit_events where org_id = ${b.org.id} and action = 'crm.mergeDuplicatesBulk'`;
     expect(audit?.n).toBe(1);
     // Already merged: skipped, not an error.
-    const again = await executeCommand(mergeDuplicatesBulkCommand, { candidateIds: [c?.id as string] }, b.ctx(), ports);
+    const again = await executeCommand(
+      mergeDuplicatesBulkCommand,
+      { candidateIds: [c?.id as string] },
+      b.ctx(),
+      ports,
+    );
     expect(again).toMatchObject({ merged: 0, skipped: 1 });
   });
 
@@ -423,7 +475,12 @@ describe('M6.1a permissions, step-up and isolation', () => {
     expect(await refusal(executeQuery(personQuery, { contactId: sb.keep.contactId }, a.ctx(), ports))).toBe(
       'not_found:',
     );
-    const tl = await executeQuery(personTimelineQuery, { contactId: sb.keep.contactId, limit: 100 }, a.ctx(), ports);
+    const tl = await executeQuery(
+      personTimelineQuery,
+      { contactId: sb.keep.contactId, limit: 100 },
+      a.ctx(),
+      ports,
+    );
     expect(tl.rows).toEqual([]);
     expect(tl.events).toEqual([]);
     const q = await executeQuery(duplicateQueueQuery, { limit: 100, status: 'merged' }, a.ctx(), ports);
@@ -452,11 +509,13 @@ describe('M6.1a permissions, step-up and isolation', () => {
       select id from crm.contact_merges where org_id = ${b.org.id} and source_contact_id = ${sb.dup.contactId}
         and status = 'applied'`;
     await withTenant(systemCtx(b.org.id), (tx) => eraseContactDsarTx(tx, sb.dup.email, new Date()));
-    const [row] = await admin<{ snapshot: unknown }[]>`select snapshot from crm.contact_merges where id = ${m?.id as string}`;
+    const [row] = await admin<
+      { snapshot: unknown }[]
+    >`select snapshot from crm.contact_merges where id = ${m?.id as string}`;
     expect(row?.snapshot).toBeNull();
-    expect(await refusal(executeCommand(undoMergeCommand, { mergeId: m?.id as string }, b.ctx(), ports))).toBe(
-      'invalid_state:erased',
-    );
+    expect(
+      await refusal(executeCommand(undoMergeCommand, { mergeId: m?.id as string }, b.ctx(), ports)),
+    ).toBe('invalid_state:erased');
     const person = await executeQuery(personQuery, { contactId: sb.keep.contactId }, b.ctx(), ports);
     expect(person.merges[0]).toMatchObject({ canUndo: false, source: null });
   });

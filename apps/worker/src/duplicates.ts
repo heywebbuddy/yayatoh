@@ -35,7 +35,8 @@ export function duplicateScanJob() {
         const r = await executeCommand(scanDuplicatesCommand, { full: false }, ctx, ports);
         if (r.found) console.info(JSON.stringify({ job: DUPLICATE_SCAN_JOB, orgId, ...r }));
       } catch (err) {
-        if (isDomainError(err) && (err.code === 'module_not_enabled' || err.code === 'read_only_freeze')) return;
+        if (isDomainError(err) && (err.code === 'module_not_enabled' || err.code === 'read_only_freeze'))
+          return;
         throw err;
       }
     },
@@ -45,7 +46,10 @@ export function duplicateScanJob() {
 /** Orgs with contacts changed since their last scan (platform_reader, audited). */
 export async function orgsNeedingDuplicateScan(limit = 100): Promise<string[]> {
   const rows = await withPlatformReader(
-    { actor: 'system:crm.duplicates', reason: 'find orgs with new or changed contacts to scan for duplicates' },
+    {
+      actor: 'system:crm.duplicates',
+      reason: 'find orgs with new or changed contacts to scan for duplicates',
+    },
     (tx) => tx.execute<{ org_id: string }>(sql`select org_id from crm.orgs_needing_duplicate_scan(${limit})`),
   );
   return rows.map((r) => r.org_id);

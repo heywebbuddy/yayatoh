@@ -126,7 +126,10 @@ export async function refreshContactProfilesTx(
 }
 
 /** The events these contacts have participation rows for (M6.1a: what a merge recomputes). */
-export async function participationEventIdsTx(tx: TenantTx, contactIds: readonly string[]): Promise<string[]> {
+export async function participationEventIdsTx(
+  tx: TenantTx,
+  contactIds: readonly string[],
+): Promise<string[]> {
   if (contactIds.length === 0) return [];
   const rows = await tx
     .selectDistinct({ eventId: eventParticipation.eventId })

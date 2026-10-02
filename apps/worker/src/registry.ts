@@ -2,6 +2,7 @@ import { alertEvaluator } from '@yayatoh/alerts';
 import { attendeeMessageMailer } from '@yayatoh/attendees';
 import { participationProjector } from '@yayatoh/audiences';
 import { journeySubscribers } from '@yayatoh/automations';
+import { campaignsTimeline } from '@yayatoh/campaigns';
 import {
   chatReportSignals,
   checkinTimeline,
@@ -10,13 +11,17 @@ import {
   fraudSignalAlerts,
   staffAlertsSubscriber,
 } from '@yayatoh/checkin';
-import { campaignsTimeline } from '@yayatoh/campaigns';
 import { deviceBoardPublisher, publishMetricsChangedTx } from '@yayatoh/command-center';
 import { findEventTx, portalInviteMailer } from '@yayatoh/events';
 import { registrationResumeMailer } from '@yayatoh/forms';
 import { listingsProjector } from '@yayatoh/marketplace';
 import { programMediaCleaner, speakerPhotoApprover } from '@yayatoh/media';
-import { announcementMailer, contactWroteNotifier, messagingTimeline, threadReplyMailer } from '@yayatoh/messaging';
+import {
+  announcementMailer,
+  contactWroteNotifier,
+  messagingTimeline,
+  threadReplyMailer,
+} from '@yayatoh/messaging';
 import { createNotifier } from '@yayatoh/notifications';
 import {
   creditNoteMailer,

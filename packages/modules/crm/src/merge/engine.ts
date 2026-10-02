@@ -1,5 +1,5 @@
 import type { TenantTx } from '@yayatoh/db';
-import { actorId, type Ctx, type DomainEvent, DomainError, requireOrg, uuidv7 } from '@yayatoh/kernel';
+import { actorId, type Ctx, DomainError, type DomainEvent, requireOrg, uuidv7 } from '@yayatoh/kernel';
 import { and, eq, inArray, or, sql } from 'drizzle-orm';
 import { consentSummaryTx } from '../contacts.ts';
 import { refreshContactProfilesTx } from '../projection.ts';
@@ -87,7 +87,9 @@ async function recordMovesTx(
   for (let i = 0; i < rows.length; i += 1_000) {
     await tx
       .insert(contactMergeMoves)
-      .values(rows.slice(i, i + 1_000).map((r) => ({ orgId, mergeId, module, refTable: r.table, rowId: r.id })))
+      .values(
+        rows.slice(i, i + 1_000).map((r) => ({ orgId, mergeId, module, refTable: r.table, rowId: r.id })),
+      )
       .onConflictDoNothing();
   }
 }
@@ -202,7 +204,9 @@ export async function mergeContactsTx(
       const [version] = await tx
         .select({ version: consents.version })
         .from(consents)
-        .where(and(eq(consents.contactId, sourceId), eq(consents.channel, channel), eq(consents.purpose, purpose)))
+        .where(
+          and(eq(consents.contactId, sourceId), eq(consents.channel, channel), eq(consents.purpose, purpose)),
+        )
         .orderBy(sql`${consents.capturedAt} desc, ${consents.id} desc`)
         .limit(1);
       const [row] = await tx
@@ -286,11 +290,13 @@ export async function undoMergeTx(
   const orgId = requireOrg(ctx);
   const [merge] = await tx.select().from(contactMerges).where(eq(contactMerges.id, mergeId)).for('update');
   if (!merge) throw new DomainError('not_found');
-  if (merge.status !== 'applied') throw new DomainError('invalid_state', 'Already undone', { reason: 'undone' });
+  if (merge.status !== 'applied')
+    throw new DomainError('invalid_state', 'Already undone', { reason: 'undone' });
   if (ctx.now > merge.undoUntil)
     throw new DomainError('invalid_state', 'The undo window has passed', { reason: 'undo_expired' });
   const snapshot = merge.snapshot as Snapshot | null;
-  if (!snapshot) throw new DomainError('invalid_state', 'An erased record cannot be restored', { reason: 'erased' });
+  if (!snapshot)
+    throw new DomainError('invalid_state', 'An erased record cannot be restored', { reason: 'erased' });
   const sourceId = merge.sourceContactId;
   const targetId = merge.targetContactId;
   const locked = await lockContactsTx(tx, [sourceId, targetId]);
@@ -303,7 +309,11 @@ export async function undoMergeTx(
     throw new DomainError('invalid_state', 'An erased record cannot be restored', { reason: 'erased' });
 
   const moves = await tx
-    .select({ module: contactMergeMoves.module, table: contactMergeMoves.refTable, id: contactMergeMoves.rowId })
+    .select({
+      module: contactMergeMoves.module,
+      table: contactMergeMoves.refTable,
+      id: contactMergeMoves.rowId,
+    })
     .from(contactMergeMoves)
     .where(eq(contactMergeMoves.mergeId, mergeId));
   const step = { mergeId, fromContactId: sourceId, toContactId: targetId };
@@ -326,7 +336,9 @@ export async function undoMergeTx(
       .set({ contactId: sourceId, updatedAt: ctx.now })
       .where(and(eq(timelineEntries.contactId, targetId), or(...conds)));
   if (merge.consentRowIds.length)
-    await tx.delete(consents).where(and(eq(consents.contactId, targetId), inArray(consents.id, merge.consentRowIds)));
+    await tx
+      .delete(consents)
+      .where(and(eq(consents.contactId, targetId), inArray(consents.id, merge.consentRowIds)));
 
   // Both records' fields back (through a placeholder: the emails may have been swapped).
   const p = swapPlaceholder(sourceId);
@@ -377,7 +389,11 @@ export async function undoMergeTx(
  * Erasure (DSAR) of a contact also scrubs the merge snapshots that hold its old fields: such a
  * merge can no longer be undone.
  */
-export async function scrubMergeSnapshotsTx(tx: TenantTx, contactIds: readonly string[], now: Date): Promise<number> {
+export async function scrubMergeSnapshotsTx(
+  tx: TenantTx,
+  contactIds: readonly string[],
+  now: Date,
+): Promise<number> {
   if (contactIds.length === 0) return 0;
   const rows = await tx
     .update(contactMerges)

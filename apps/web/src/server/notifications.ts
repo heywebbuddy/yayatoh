@@ -1,9 +1,9 @@
 import 'server-only';
 import { alertEvaluator, evaluateOrgNow, watchQuietDevices } from '@yayatoh/alerts';
 import { attendeeMessageMailer } from '@yayatoh/attendees';
-import { campaignsTimeline } from '@yayatoh/campaigns';
 import { getUsersByIds } from '@yayatoh/auth';
 import { journeySubscribers, runDueActions } from '@yayatoh/automations';
+import { campaignsTimeline } from '@yayatoh/campaigns';
 import {
   chatReportSignals,
   checkinTimeline,

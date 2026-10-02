@@ -25,14 +25,6 @@ export {
   seedEmails,
 } from './marketing.ts';
 export {
-  BULK_ACTIONS,
-  bulkStep,
-  CONTACT_REFERENCE_OWNERS,
-  ports,
-  runBulk,
-  submitRegistrationForm,
-} from './ports.ts';
-export {
   catchUpTimeline,
   MERGE_EDITIONS,
   type MergePerson,
@@ -40,3 +32,11 @@ export {
   mergeScenario,
   TIMELINE_SUBSCRIBERS,
 } from './merge.ts';
+export {
+  BULK_ACTIONS,
+  bulkStep,
+  CONTACT_REFERENCE_OWNERS,
+  ports,
+  runBulk,
+  submitRegistrationForm,
+} from './ports.ts';

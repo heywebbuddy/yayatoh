@@ -52,7 +52,11 @@ export async function activeContactIdsTx(
  * `(kind, sourceRef)`: a replayed event changes nothing. A fact about a merged contact lands on
  * the record it was merged into. Returns how many rows were new.
  */
-export async function recordTimelineTx(tx: TenantTx, ctx: Ctx, facts: readonly TimelineFact[]): Promise<number> {
+export async function recordTimelineTx(
+  tx: TenantTx,
+  ctx: Ctx,
+  facts: readonly TimelineFact[],
+): Promise<number> {
   if (facts.length === 0) return 0;
   const orgId = requireOrg(ctx);
   const active = await activeContactIdsTx(
@@ -144,7 +148,10 @@ export async function timelinePageTx(
     .limit(input.limit + 1);
   const page = rows.slice(0, input.limit) as TimelineRow[];
   const last = page.at(-1);
-  return { rows: page, next: rows.length > input.limit && last ? { at: last.occurredAt, id: last.id } : null };
+  return {
+    rows: page,
+    next: rows.length > input.limit && last ? { at: last.occurredAt, id: last.id } : null,
+  };
 }
 
 /** The events a person's timeline mentions (the event filter), most recent first. */

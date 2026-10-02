@@ -29,6 +29,8 @@ export {
   attendeesForExportTx,
   resolveAttendeeIdsTx,
 } from './bulk.ts';
+// M6.1a: contact merges move this module's references (ADR 0022).
+export { attendeesByTicketTx, attendeesContactOwner } from './contact-merge.ts';
 export { attendeesDsarTx, eraseAttendeesDsarTx, redactAttendeesForEventsTx } from './dsar.ts';
 export * from './dto.ts';
 export {
@@ -54,5 +56,3 @@ export {
 export { attendeeContactIdsTx, emitAttendeesChangedTx, participationAttendeesTx } from './participation.ts';
 export { privateColumns } from './private-columns.ts';
 export { ATTENDEE_SOURCES, ATTENDEE_STATUSES, IMPORT_FIELDS, type ImportField } from './schema.ts';
-// M6.1a: contact merges move this module's references (ADR 0022).
-export { attendeesByTicketTx, attendeesContactOwner } from './contact-merge.ts';

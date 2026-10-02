@@ -44,7 +44,11 @@ export async function catchUpTimeline(orgId: string): Promise<number> {
 }
 
 export const MERGE_EDITIONS = {
-  summit: { startsAt: '2027-05-01T15:00:00Z', endsAt: '2027-05-01T23:00:00Z', during: '2027-05-01T16:00:00Z' },
+  summit: {
+    startsAt: '2027-05-01T15:00:00Z',
+    endsAt: '2027-05-01T23:00:00Z',
+    during: '2027-05-01T16:00:00Z',
+  },
   gala: { startsAt: '2027-09-10T23:00:00Z', endsAt: '2027-09-11T03:00:00Z' },
 } as const;
 
@@ -99,8 +103,14 @@ export async function mergeScenario(
   const summit = await event(summitName, E.summit);
   const gala = await event(galaName, E.gala);
   const pass = async (eventId: string) =>
-    (await executeCommand(createTicketTypeCommand, { eventId, name: 'Pass', priceMinor: 0, quantityTotal: 50 }, ctx, ports))
-      .id;
+    (
+      await executeCommand(
+        createTicketTypeCommand,
+        { eventId, name: 'Pass', priceMinor: 0, quantityTotal: 50 },
+        ctx,
+        ports,
+      )
+    ).id;
   const summitPass = await pass(summit);
   const galaPass = await pass(gala);
   for (const id of [summit, gala])
@@ -159,7 +169,9 @@ export async function mergeScenario(
   const now = { ...ctx, now: new Date() };
   await withTenant(now, async (tx) => {
     await setContactPhoneTx(tx, now, dupId, phone);
-    await tx.execute(sql`update crm.contacts set company = 'Lakeside Partners', updated_at = now() where id = ${dupId}`);
+    await tx.execute(
+      sql`update crm.contacts set company = 'Lakeside Partners', updated_at = now() where id = ${dupId}`,
+    );
     await recordConsentTx(tx, ctx, {
       contactId: keepId,
       channel: 'email',
@@ -223,7 +235,12 @@ export async function mergeScenario(
       ctx,
       ports,
     );
-    await executeCommand(sendNowCommand, { campaignId: c.id }, { ...ctx, idempotencyKey: `merge-${c.id}` }, ports);
+    await executeCommand(
+      sendNowCommand,
+      { campaignId: c.id },
+      { ...ctx, idempotencyKey: `merge-${c.id}` },
+      ports,
+    );
     return c.id;
   };
   const summitCampaign = await campaign(`Summit news ${tag}`, [

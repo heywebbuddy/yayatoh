@@ -45,19 +45,26 @@ export async function scanDuplicatesTx(
 ): Promise<{ scanned: number; found: number }> {
   const orgId = requireOrg(ctx);
   const [state] = await tx.select().from(duplicateScans).for('update');
-  const full = opts.full === true || !state?.cursorAt;
+  const cursor = opts.full === true ? null : (state?.cursorAt ?? null);
+  const full = cursor === null;
   const [mark] = await tx.execute<{ max: string | Date | null }>(
     sql`select max(updated_at) as max from crm.contacts`,
   );
   const high = mark?.max ? new Date(mark.max) : null;
   let ids: string[] | null = null;
-  if (!full) {
+  if (cursor !== null) {
     const changed = await tx.execute<{ id: string }>(
-      sql`select id from crm.contacts where updated_at >= ${(state?.cursorAt as Date).toISOString()}::timestamptz and ${LIVE}`,
+      sql`select id from crm.contacts where updated_at >= ${cursor.toISOString()}::timestamptz and ${LIVE}`,
     );
     ids = changed.map((r) => r.id);
   }
-  const scanned = ids === null ? Number((await tx.execute<{ n: number }>(sql`select count(*)::int as n from crm.contacts where ${LIVE}`))[0]?.n ?? 0) : ids.length;
+  const scanned =
+    ids === null
+      ? Number(
+          (await tx.execute<{ n: number }>(sql`select count(*)::int as n from crm.contacts where ${LIVE}`))[0]
+            ?.n ?? 0,
+        )
+      : ids.length;
 
   const pairs = new Map<string, Pair>();
   const pair = (x: string, y: string): Pair => {
@@ -147,7 +154,8 @@ export const scanDuplicatesCommand = tenantCommand({
   output: ScanResultDto,
   entitlement: 'marketing',
   permission: 'contacts:merge',
-  handler: async ({ input, ctx, tx }) => scanResultSerializer.serialize(await scanDuplicatesTx(tx, ctx, input)),
+  handler: async ({ input, ctx, tx }) =>
+    scanResultSerializer.serialize(await scanDuplicatesTx(tx, ctx, input)),
   audit: (input, r) => ({
     action: 'crm.scanDuplicates',
     targetType: 'org',
@@ -172,5 +180,9 @@ export const dismissDuplicateCommand = tenantCommand({
     if (rows.length === 0) throw new DomainError('not_found');
     return { ok: true as const };
   },
-  audit: (input) => ({ action: 'crm.dismissDuplicate', targetType: 'duplicate_candidate', targetId: input.candidateId }),
+  audit: (input) => ({
+    action: 'crm.dismissDuplicate',
+    targetType: 'duplicate_candidate',
+    targetId: input.candidateId,
+  }),
 });

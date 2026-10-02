@@ -2,7 +2,6 @@ import type { TenantTx } from '@yayatoh/db';
 import { type Ctx, DomainError, requireOrg } from '@yayatoh/kernel';
 import { and, desc, eq, inArray, sql } from 'drizzle-orm';
 import { refreshContactProfilesTx } from './projection.ts';
-import { activeContactIdsTx } from './timeline.ts';
 import {
   type CONSENT_CHANNELS,
   type CONSENT_PURPOSES,
@@ -11,6 +10,7 @@ import {
   consents,
   contacts,
 } from './schema.ts';
+import { activeContactIdsTx } from './timeline.ts';
 
 /** The org-unique key for a contact: trimmed, lower-cased email. */
 export const normalizeEmail = (email: string) => email.trim().toLowerCase();
@@ -52,7 +52,12 @@ export async function upsertContactsTx(
     .returning({ id: contacts.id, emailNorm: contacts.emailNorm, mergedInto: contacts.mergedInto });
   // M6.1a: an address of a merged-away record resolves to the record it was merged into.
   const merged = rows.filter((r) => r.mergedInto !== null);
-  const active = merged.length ? await activeContactIdsTx(tx, merged.map((r) => r.id)) : new Map<string, string>();
+  const active = merged.length
+    ? await activeContactIdsTx(
+        tx,
+        merged.map((r) => r.id),
+      )
+    : new Map<string, string>();
   return new Map(rows.map((r) => [r.emailNorm, active.get(r.id) ?? r.id]));
 }
 

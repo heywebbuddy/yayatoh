@@ -9,7 +9,10 @@ import { mergeContactsTx, undoMergeTx } from './engine.ts';
 
 const Side = z.enum(['source', 'target']);
 export const MergeChoicesInput = z.object(
-  Object.fromEntries(MERGE_FIELDS.map((f) => [f, Side])) as Record<(typeof MERGE_FIELDS)[number], typeof Side>,
+  Object.fromEntries(MERGE_FIELDS.map((f) => [f, Side])) as Record<
+    (typeof MERGE_FIELDS)[number],
+    typeof Side
+  >,
 );
 
 const Counts = z.record(z.string(), z.int());
@@ -97,7 +100,11 @@ export const mergeDuplicatesBulkCommand = tenantCommand({
         );
         mergeIds.push(r.mergeId);
       } catch (err) {
-        if (err instanceof DomainError && err.code === 'invalid_state' && err.details?.reason !== 'owners_missing') {
+        if (
+          err instanceof DomainError &&
+          err.code === 'invalid_state' &&
+          err.details?.reason !== 'owners_missing'
+        ) {
           skipped += 1;
           continue;
         }
@@ -110,7 +117,12 @@ export const mergeDuplicatesBulkCommand = tenantCommand({
     action: 'crm.mergeDuplicatesBulk',
     targetType: 'contact_merge_bulk',
     targetId: r.bulkId,
-    data: { candidates: input.candidateIds.length, merged: r.merged, skipped: r.skipped, mergeIds: r.mergeIds },
+    data: {
+      candidates: input.candidateIds.length,
+      merged: r.merged,
+      skipped: r.skipped,
+      mergeIds: r.mergeIds,
+    },
   }),
 });
 

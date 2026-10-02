@@ -10,8 +10,8 @@ import { runDueBulkOperations } from './bulk.ts';
 import { bossRelease, campaignReleaseJob, campaignTick } from './campaigns.ts';
 import { DEVICE_WATCHDOG_MS, runDeviceWatchdog } from './device-watchdog.ts';
 import { domainRecheckJob } from './domains.ts';
-import { endExpiredImpersonations } from './impersonations.ts';
 import { enqueueDuplicateScans } from './duplicates.ts';
+import { endExpiredImpersonations } from './impersonations.ts';
 import { enqueueJourneyWork } from './journeys.ts';
 import { enqueueDueMassRefunds, massRefundJob } from './mass-refunds.ts';
 import {

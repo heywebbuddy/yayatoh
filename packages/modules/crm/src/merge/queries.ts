@@ -1,4 +1,5 @@
 import { defineSerializer } from '@yayatoh/contracts';
+import type { TenantTx } from '@yayatoh/db';
 import { DomainError } from '@yayatoh/kernel';
 import { tenantQuery } from '@yayatoh/platform';
 import { and, desc, eq, inArray, lt, or, sql } from 'drizzle-orm';
@@ -14,9 +15,8 @@ import {
   MERGE_STATUSES,
   timelineEntries,
 } from '../schema.ts';
-import type { TenantTx } from '@yayatoh/db';
-import { defaultChoices, defaultSurvivor } from './domain.ts';
 import { MergeChoicesInput } from './commands.ts';
+import { defaultChoices, defaultSurvivor } from './domain.ts';
 
 /** What the console shows of a contact (org members with `contacts:read`): an allowlist. */
 export const ContactCardDto = z.object({
@@ -42,7 +42,10 @@ const cardColumns = {
 
 async function cardsTx(tx: TenantTx, ids: readonly string[]): Promise<Map<string, ContactCardDto>> {
   if (ids.length === 0) return new Map();
-  const rows = await tx.select(cardColumns).from(contacts).where(inArray(contacts.id, [...new Set(ids)]));
+  const rows = await tx
+    .select(cardColumns)
+    .from(contacts)
+    .where(inArray(contacts.id, [...new Set(ids)]));
   return new Map(rows.map((r) => [r.id, r]));
 }
 
@@ -81,7 +84,10 @@ export const duplicateQueueQuery = tenantQuery({
     const d = duplicateCandidates;
     const where = [eq(d.status, input.status)];
     if (input.after) {
-      const c = or(lt(d.score, input.after.score), and(eq(d.score, input.after.score), lt(d.id, input.after.id)));
+      const c = or(
+        lt(d.score, input.after.score),
+        and(eq(d.score, input.after.score), lt(d.id, input.after.id)),
+      );
       if (c) where.push(c);
     }
     const rows = await tx
@@ -95,10 +101,7 @@ export const duplicateQueueQuery = tenantQuery({
       tx,
       page.flatMap((r) => [r.contactAId, r.contactBId]),
     );
-    const [open] = await tx
-      .select({ n: sql<number>`count(*)::int` })
-      .from(d)
-      .where(eq(d.status, 'open'));
+    const [open] = await tx.select({ n: sql<number>`count(*)::int` }).from(d).where(eq(d.status, 'open'));
     const [scan] = await tx.select({ at: duplicateScans.lastRunAt }).from(duplicateScans);
     const last = page.at(-1);
     return duplicateQueueSerializer.serialize({
@@ -146,7 +149,10 @@ export const duplicatePairQuery = tenantQuery({
   entitlement: 'marketing',
   permission: 'contacts:read',
   handler: async ({ input, tx }) => {
-    const [c] = await tx.select().from(duplicateCandidates).where(eq(duplicateCandidates.id, input.candidateId));
+    const [c] = await tx
+      .select()
+      .from(duplicateCandidates)
+      .where(eq(duplicateCandidates.id, input.candidateId));
     if (!c) throw new DomainError('not_found');
     const rows = await tx
       .select({ ...cardColumns, mergedInto: contacts.mergedInto, emailNorm: contacts.emailNorm })
@@ -204,7 +210,10 @@ export const peopleQuery = tenantQuery({
   entitlement: 'marketing',
   permission: 'contacts:read',
   handler: async ({ input, tx }) => {
-    const where = [sql`${contacts.mergedInto} is null`, sql`${contacts.emailNorm} not like '%@erased.invalid'`];
+    const where = [
+      sql`${contacts.mergedInto} is null`,
+      sql`${contacts.emailNorm} not like '%@erased.invalid'`,
+    ];
     const q = input.q?.toLowerCase();
     if (q)
       where.push(
@@ -256,7 +265,9 @@ export const PersonDto = z.object({
 export const personSerializer = defineSerializer('crm.person', PersonDto);
 
 const sum = (v: unknown) =>
-  v && typeof v === 'object' ? Object.values(v as Record<string, number>).reduce((a, b) => a + Number(b), 0) : 0;
+  v && typeof v === 'object'
+    ? Object.values(v as Record<string, number>).reduce((a, b) => a + Number(b), 0)
+    : 0;
 
 /** One person (M6.1a): their record and the merges into it (newest first, undo state). */
 export const personQuery = tenantQuery({
@@ -291,7 +302,9 @@ export const personQuery = tenantQuery({
           undoUntil: m.undoUntil,
           undoneAt: m.undoneAt,
           canUndo: m.status === 'applied' && ctx.now <= m.undoUntil && snap !== null && c.mergedInto === null,
-          source: snap?.source ? { id: m.sourceContactId, name: snap.source.name, email: snap.source.email } : null,
+          source: snap?.source
+            ? { id: m.sourceContactId, name: snap.source.name, email: snap.source.email }
+            : null,
           moved: sum(s.moved),
           kept: sum(s.kept),
         };

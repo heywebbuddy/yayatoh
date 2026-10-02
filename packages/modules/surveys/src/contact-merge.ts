@@ -41,12 +41,12 @@ export const surveysContactOwner: ContactReferenceOwner = {
     }
     const count = async (t: typeof surveyInvitations | typeof surveyResponses) =>
       (
-        await tx
-          .select({ n: sql<number>`count(*)::int` })
-          .from(t)
-          .where(eq(t.contactId, step.fromContactId))
+        await tx.select({ n: sql<number>`count(*)::int` }).from(t).where(eq(t.contactId, step.fromContactId))
       )[0]?.n ?? 0;
-    return { moved, kept: { [INVITATIONS]: await count(surveyInvitations), [RESPONSES]: await count(surveyResponses) } };
+    return {
+      moved,
+      kept: { [INVITATIONS]: await count(surveyInvitations), [RESPONSES]: await count(surveyResponses) },
+    };
   },
   restore: async (tx, _ctx, step) => {
     const out: MovedRow[] = [];

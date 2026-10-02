@@ -144,7 +144,9 @@ export function strictestConsent(
   if (target === null && source === null) return { status: null, from: null };
   if (source === null) return { status: target, from: 'target' };
   if (target === null) return { status: source, from: 'source' };
-  return RANK[source] > RANK[target] ? { status: source, from: 'source' } : { status: target, from: 'target' };
+  return RANK[source] > RANK[target]
+    ? { status: source, from: 'source' }
+    : { status: target, from: 'target' };
 }
 
 /** Merges can be undone for this long (M6.1a: 30 days). */

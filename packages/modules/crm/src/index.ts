@@ -20,39 +20,6 @@ export {
   upsertContactTx,
 } from './contacts.ts';
 export { consentRegivenSinceTx, contactDsarTx, eraseContactDsarTx, unlinkContactUserTx } from './dsar.ts';
-export { privateColumns } from './private-columns.ts';
-export {
-  type ParticipationFacts,
-  participantContactIdsTx,
-  participationEventIdsTx,
-  refreshContactProfilesTx,
-  replaceParticipationTx,
-} from './projection.ts';
-export {
-  CONSENT_CHANNELS,
-  CONSENT_PURPOSES,
-  CONSENT_STATUSES,
-  CONSENT_SUMMARIES,
-  CONTACT_SOURCES,
-} from './schema.ts';
-export {
-  type CompileOptions,
-  compileSegment,
-  countSegmentTx,
-  type ResolvedScopes,
-  segmentContactIdsTx,
-  segmentExportRowsTx,
-  segmentPageTx,
-} from './segments/compile.ts';
-export * from './segments/dsl.ts';
-export {
-  CONSENT_TERM_KEYS,
-  CONSENT_TERMS,
-  type ConsentTerm,
-  currentTermVersion,
-  isConsentTerm,
-  recordTermConsentTx,
-} from './terms.ts';
 // M6.1a: duplicates, merge with undo, the person timeline.
 export {
   BulkMergeDto,
@@ -93,7 +60,44 @@ export {
   peopleQuery,
   personQuery,
 } from './merge/queries.ts';
-export { DUPLICATE_REASONS, DUPLICATE_STATUSES, MERGE_FIELDS, MERGE_STATUSES, TIMELINE_KINDS } from './schema.ts';
+export { privateColumns } from './private-columns.ts';
+export {
+  type ParticipationFacts,
+  participantContactIdsTx,
+  participationEventIdsTx,
+  refreshContactProfilesTx,
+  replaceParticipationTx,
+} from './projection.ts';
+export {
+  CONSENT_CHANNELS,
+  CONSENT_PURPOSES,
+  CONSENT_STATUSES,
+  CONSENT_SUMMARIES,
+  CONTACT_SOURCES,
+  DUPLICATE_REASONS,
+  DUPLICATE_STATUSES,
+  MERGE_FIELDS,
+  MERGE_STATUSES,
+  TIMELINE_KINDS,
+} from './schema.ts';
+export {
+  type CompileOptions,
+  compileSegment,
+  countSegmentTx,
+  type ResolvedScopes,
+  segmentContactIdsTx,
+  segmentExportRowsTx,
+  segmentPageTx,
+} from './segments/compile.ts';
+export * from './segments/dsl.ts';
+export {
+  CONSENT_TERM_KEYS,
+  CONSENT_TERMS,
+  type ConsentTerm,
+  currentTermVersion,
+  isConsentTerm,
+  recordTermConsentTx,
+} from './terms.ts';
 export {
   activeContactIdsTx,
   recordTimelineTx,

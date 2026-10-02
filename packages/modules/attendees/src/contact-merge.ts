@@ -41,5 +41,7 @@ export async function attendeesByTicketTx(
     .select({ id: attendees.id, contactId: attendees.contactId, ticketId: attendees.ticketId })
     .from(attendees)
     .where(inArray(attendees.ticketId, [...ticketIds]));
-  return rows.flatMap((r) => (r.ticketId ? [{ id: r.id, contactId: r.contactId, ticketId: r.ticketId }] : []));
+  return rows.flatMap((r) =>
+    r.ticketId ? [{ id: r.id, contactId: r.contactId, ticketId: r.ticketId }] : [],
+  );
 }

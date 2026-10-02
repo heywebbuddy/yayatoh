@@ -5,7 +5,12 @@ import { z } from 'zod';
 import { orderRefTx } from './participation.ts';
 
 const Paid = z.object({ orderId: z.uuid(), eventId: z.uuid(), totalMinor: z.int(), currency: z.string() });
-const Refunded = z.object({ orderId: z.uuid(), refundId: z.uuid(), amountMinor: z.int(), currency: z.string() });
+const Refunded = z.object({
+  orderId: z.uuid(),
+  refundId: z.uuid(),
+  amountMinor: z.int(),
+  currency: z.string(),
+});
 
 /**
  * The person timeline's orders and refunds (M6.1a): the buyer's paid orders and their refunds,

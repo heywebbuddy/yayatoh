@@ -19,7 +19,11 @@ export function messagingTimeline(): Subscriber {
     handle: async (tx, event) => {
       const p = Ref.parse(event.payload);
       const [row] = await tx
-        .select({ email: threads.contactEmail, at: threadMessages.createdAt, eventId: threadMessages.eventId })
+        .select({
+          email: threads.contactEmail,
+          at: threadMessages.createdAt,
+          eventId: threadMessages.eventId,
+        })
         .from(threadMessages)
         .innerJoin(threads, eq(threads.id, threadMessages.threadId))
         .where(eq(threadMessages.id, p.messageId));
