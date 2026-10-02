@@ -409,3 +409,9 @@ Start the slow reviews early. Everything is built against fakes meanwhile; each 
 ## M5.1a — registration types (2026-09-29, pending owner)
 - [ ] Conference pack quotas per event: 30 registration types, 20 admission items, 5,000 registrants (defaults in `billing.addons`; free in beta, price with D22). Change them by data, no code change.
 - [ ] Registration always asks buyers for the emailed code (M1.5f), even when an org turned the checkout email check off, so "email domain" eligibility means a proved address. Confirm or relax.
+
+## Design system v2 (2026-10-02, pending owner)
+- [ ] **Event workspace navigation.** The approved Guests artboard puts the org menu in the sidebar and the event's sections in a top tab row. The build keeps the event's sections in the sidebar (conferences have ~20 sections; one list beats two navigations with the same names for keyboard and screen-reader users) and uses segmented tabs inside sections. Confirm, or ask for the artboard's tab IA (ADR 0022 "Shells").
+- [ ] **Dark primary fill.** `#7B5CFF` gives white button text 4.36:1; buttons use `#6C4CF2` (5.3:1) and `#7B5CFF` stays for glows, rings and the active sidebar tile. Confirm.
+- [ ] **CJK fonts** are not self-hosted (5–9 MB per face); Chinese and Japanese use Noto Sans JP/SC/TC when installed, then the platform face. Confirm, or approve per-locale font CSS.
+- [ ] **Required-field marker.** No asterisk on required labels (the browser announces "required"; errors say what is missing). Confirm or ask for "(optional)" markers on optional fields instead.

@@ -1412,7 +1412,8 @@
       "placeholder": "#rrggbb",
       "preview": "Get tickets",
       "ratio": "Text contrast {ratio}:1.",
-      "tooLight": "This colour is light against a white page ({ratio}:1); buttons may be hard to see. Try a darker shade."
+      "tooLight": "This colour is light against a white page ({ratio}:1); buttons may be hard to see. Try a darker shade.",
+      "tooDark": "On the dark theme this colour is dark against the page ({ratio}:1); buttons may be hard to see there. Try a lighter shade."
     },
     "legal": {
       "title": "Your legal pages",

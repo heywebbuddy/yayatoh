@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button } from '@yayatoh/ui';
+import { Alert, Button, SkeletonCard } from '@yayatoh/ui';
 import { useFormatter, useLocale, useTranslations } from 'next-intl';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { ScanClient, StaffView } from '@/scan/client.ts';
@@ -77,7 +77,7 @@ export function StaffPanel({
     return () => window.clearInterval(id);
   }, [load]);
 
-  if (loading) return <p className="text-body text-ink-2">{t('loading')}</p>;
+  if (loading) return <SkeletonCard label={t('loading')} />;
   if (!data)
     return (
       <p className="text-body text-ink-2" data-testid="staff-empty">

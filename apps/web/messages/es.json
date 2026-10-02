@@ -1412,7 +1412,8 @@
       "placeholder": "#rrggbb",
       "preview": "Comprar entradas",
       "ratio": "Contraste del texto {ratio}:1.",
-      "tooLight": "Este color es claro sobre una página blanca ({ratio}:1); los botones pueden verse mal. Prueba un tono más oscuro."
+      "tooLight": "Este color es claro sobre una página blanca ({ratio}:1); los botones pueden verse mal. Prueba un tono más oscuro.",
+      "tooDark": "En el tema oscuro este color es oscuro frente a la página ({ratio}:1); los botones pueden verse mal. Prueba un tono más claro."
     },
     "legal": {
       "title": "Tus páginas legales",

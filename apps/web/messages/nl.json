@@ -1412,7 +1412,8 @@
       "placeholder": "#rrggbb",
       "preview": "Tickets kopen",
       "ratio": "Tekstcontrast {ratio}:1.",
-      "tooLight": "Deze kleur is licht op een witte pagina ({ratio}:1); knoppen zijn mogelijk slecht zichtbaar. Probeer een donkerdere tint."
+      "tooLight": "Deze kleur is licht op een witte pagina ({ratio}:1); knoppen zijn mogelijk slecht zichtbaar. Probeer een donkerdere tint.",
+      "tooDark": "In het donkere thema is deze kleur donker tegen de pagina ({ratio}:1); knoppen kunnen daar slecht zichtbaar zijn. Probeer een lichtere tint."
     },
     "legal": {
       "title": "Je juridische pagina’s",

@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, Input } from '@yayatoh/ui';
+import { Alert, Button, Input, SkeletonCard } from '@yayatoh/ui';
 import { useFormatter, useTranslations } from 'next-intl';
 import { useCallback, useEffect, useId, useState } from 'react';
 import { StepUpProvider, useStepUp } from '@/components/step-up.tsx';
@@ -55,7 +55,7 @@ function SupervisorInner({
     void refresh();
   }, [refresh, refreshKey]);
 
-  if (!load) return <p className="text-body text-ink-2">{t('loading')}</p>;
+  if (!load) return <SkeletonCard label={t('loading')} />;
   if (load.state === 'offline') return <p className="text-body text-ink-2">{t('supervisorOffline')}</p>;
   if (load.state === 'signed_out')
     return (

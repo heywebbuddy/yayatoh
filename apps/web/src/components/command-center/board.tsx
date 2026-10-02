@@ -1,7 +1,7 @@
 'use client';
 
 import { moveWidget, type WidgetChannel, type WidgetKey } from '@yayatoh/command-center/client';
-import { Button, Card, cx, StatusDot } from '@yayatoh/ui';
+import { Button, Card, cx, Skeleton, SkeletonText, StatusDot } from '@yayatoh/ui';
 import { ArrowDown, ArrowUp, Eye, EyeOff, GripVertical } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -361,7 +361,11 @@ export function CommandCenterBoard({
                   ) : null}
                 </div>
                 {data[k] === undefined ? (
-                  <p className="text-caption text-ink-2">{t('loading')}</p>
+                  <div role="status" className="flex flex-col gap-3">
+                    <span className="sr-only">{t('loading')}</span>
+                    <Skeleton className="h-9 w-1/2" />
+                    <SkeletonText lines={2} />
+                  </div>
                 ) : data[k] === null ? (
                   <p className="text-caption text-ink-2">{t('unavailable')}</p>
                 ) : (

@@ -1412,7 +1412,8 @@
       "placeholder": "#rrggbb",
       "preview": "Tickets kaufen",
       "ratio": "Textkontrast {ratio}:1.",
-      "tooLight": "Diese Farbe ist auf einer weißen Seite sehr hell ({ratio}:1); Buttons sind eventuell schwer zu erkennen. Probiere einen dunkleren Farbton."
+      "tooLight": "Diese Farbe ist auf einer weißen Seite sehr hell ({ratio}:1); Buttons sind eventuell schwer zu erkennen. Probiere einen dunkleren Farbton.",
+      "tooDark": "Im dunklen Design ist diese Farbe zu dunkel für die Seite ({ratio}:1); Schaltflächen sind dort schwer zu erkennen. Versuchen Sie einen helleren Ton."
     },
     "legal": {
       "title": "Deine Rechtstexte",

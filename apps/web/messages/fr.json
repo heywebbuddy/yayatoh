@@ -1412,7 +1412,8 @@
       "placeholder": "#rrggbb",
       "preview": "Obtenir des billets",
       "ratio": "Contraste du texte {ratio}:1.",
-      "tooLight": "Cette couleur est claire sur une page blanche ({ratio}:1) ; les boutons risquent d’être peu visibles. Essayez une teinte plus foncée."
+      "tooLight": "Cette couleur est claire sur une page blanche ({ratio}:1) ; les boutons risquent d’être peu visibles. Essayez une teinte plus foncée.",
+      "tooDark": "En thème sombre, cette couleur est sombre par rapport à la page ({ratio}:1) ; les boutons peuvent être peu visibles. Essayez une teinte plus claire."
     },
     "legal": {
       "title": "Vos pages juridiques",

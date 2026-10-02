@@ -1412,7 +1412,8 @@
       "placeholder": "#rrggbb",
       "preview": "Acquista biglietti",
       "ratio": "Contrasto del testo {ratio}:1.",
-      "tooLight": "Questo colore è chiaro su una pagina bianca ({ratio}:1); i pulsanti potrebbero essere poco visibili. Prova una tonalità più scura."
+      "tooLight": "Questo colore è chiaro su una pagina bianca ({ratio}:1); i pulsanti potrebbero essere poco visibili. Prova una tonalità più scura.",
+      "tooDark": "Nel tema scuro questo colore è scuro rispetto alla pagina ({ratio}:1); i pulsanti potrebbero vedersi poco. Prova una tonalità più chiara."
     },
     "legal": {
       "title": "Le tue pagine legali",
