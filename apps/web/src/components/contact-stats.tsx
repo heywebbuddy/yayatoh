@@ -69,11 +69,11 @@ export async function ContactStatsPanel({
         </div>
         <dl className="grid grid-cols-1 gap-x-6 gap-y-1 text-body sm:grid-cols-2">
           <div className="flex gap-2">
-            <dt className="text-zinc-500">{t('firstSeen')}</dt>
+            <dt className="text-ink-2">{t('firstSeen')}</dt>
             <dd data-testid="stat-first-seen">{s.firstSeenAt ? df.format(s.firstSeenAt) : t('never')}</dd>
           </div>
           <div className="flex gap-2">
-            <dt className="text-zinc-500">{t('lastSeen')}</dt>
+            <dt className="text-ink-2">{t('lastSeen')}</dt>
             <dd data-testid="stat-last-seen">{s.lastSeenAt ? df.format(s.lastSeenAt) : t('never')}</dd>
           </div>
         </dl>
@@ -85,7 +85,7 @@ export async function ContactStatsPanel({
             {t('lifetimeValue')}
           </h2>
           {value.lifetime.length === 0 ? (
-            <p className="text-body text-zinc-500">{t('noSpend')}</p>
+            <p className="text-body text-ink-2">{t('noSpend')}</p>
           ) : (
             <ul className="flex list-none flex-col gap-1 p-0" data-testid="stat-ltv">
               {value.lifetime.map((v) => (
@@ -93,7 +93,7 @@ export async function ContactStatsPanel({
                   <span className="text-[28px] font-light tracking-[-0.03em]">
                     {formatMoney(money(v.amountMinor, v.currency), locale)}
                   </span>
-                  <span className="text-caption text-zinc-500">
+                  <span className="text-caption text-ink-2">
                     {t('lifetimeOrders', { count: v.orders })}
                   </span>
                 </li>
@@ -114,7 +114,7 @@ export async function ContactStatsPanel({
               <p className="text-[28px] font-light tracking-[-0.03em]" data-testid="stat-engagement">
                 {t('engagementValue', { score: s.engagementScore })}
               </p>
-              <p className="text-caption text-zinc-600">
+              <p className="text-caption text-ink-2">
                 {t('engagementHow', {
                   wAttended: ENGAGEMENT_WEIGHTS.eventsAttended,
                   attended: s.eventsAttended,
@@ -135,7 +135,7 @@ export async function ContactStatsPanel({
               <p className="text-[28px] font-light tracking-[-0.03em]" data-testid="stat-no-show">
                 {formatBps(s.noShowBps, locale)}
               </p>
-              <p className="text-caption text-zinc-600">
+              <p className="text-caption text-ink-2">
                 {t('noShowHow', {
                   noShows: s.noShows,
                   priorNoShows: NO_SHOW_PRIOR.noShows,
@@ -153,16 +153,16 @@ export async function ContactStatsPanel({
             {s.rfm ? (
               <dl className="flex flex-wrap gap-x-8 gap-y-2" data-testid="stat-rfm">
                 <div className="flex flex-col">
-                  <dt className="text-caption text-zinc-500">{t('recency')}</dt>
+                  <dt className="text-caption text-ink-2">{t('recency')}</dt>
                   <dd className="text-body font-medium">{t('quintileValue', { q: s.rfm.recency })}</dd>
                 </div>
                 <div className="flex flex-col">
-                  <dt className="text-caption text-zinc-500">{t('frequency')}</dt>
+                  <dt className="text-caption text-ink-2">{t('frequency')}</dt>
                   <dd className="text-body font-medium">{t('quintileValue', { q: s.rfm.frequency })}</dd>
                 </div>
                 {value?.monetaryQuintile ? (
                   <div className="flex flex-col">
-                    <dt className="text-caption text-zinc-500">{t('monetary')}</dt>
+                    <dt className="text-caption text-ink-2">{t('monetary')}</dt>
                     <dd className="text-body font-medium">
                       {t('quintileValue', { q: value.monetaryQuintile })}
                     </dd>
@@ -170,13 +170,13 @@ export async function ContactStatsPanel({
                 ) : null}
               </dl>
             ) : (
-              <p className="text-body text-zinc-500">{t('rfmNone')}</p>
+              <p className="text-body text-ink-2">{t('rfmNone')}</p>
             )}
-            <p className="text-caption text-zinc-600">{t('rfmHow')}</p>
+            <p className="text-caption text-ink-2">{t('rfmHow')}</p>
           </div>
         </Card>
         {s.computedAt ? (
-          <p className="text-caption text-zinc-500">{t('updated', { date: df.format(s.computedAt) })}</p>
+          <p className="text-caption text-ink-2">{t('updated', { date: df.format(s.computedAt) })}</p>
         ) : null}
       </section>
     </>
@@ -201,7 +201,7 @@ export async function ContactStatsHeader({
   const t = await getTranslations('contactStats');
   return (
     <div className="flex flex-col gap-1 text-caption" data-testid="timeline-stats">
-      <p className="text-zinc-900">
+      <p className="text-ink">
         {t('headerSummary', { score: s.engagementScore, pct: formatBps(s.noShowBps, locale) })}
         {value && value.lifetime.length > 0
           ? ` · ${t('headerValue', {
