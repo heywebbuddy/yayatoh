@@ -8180,7 +8180,8 @@
       "already_invited": "Dat adres is al uitgenodigd.",
       "allowance_reached": "{allowance, plural, one {De # medewerkersplaats is bezet} other {Alle # medewerkersplaatsen zijn bezet}}. Trek een uitnodiging in om een plaats vrij te maken, of vraag de organisator om meer.",
       "event_over": "Dit evenement is voorbij, dus er kan niemand meer worden uitgenodigd."
-    }
+    },
+    "email": "E-mail"
   },
   "exhibitorAdmin": {
     "subnav": "Exposantenpagina's",

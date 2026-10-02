@@ -8180,7 +8180,8 @@
       "already_invited": "このアドレスはすでに招待されています。",
       "allowance_reached": "スタッフ枠 {allowance, plural, other {# 件}} はすべて使用中です。招待を取り消して枠を空けるか、主催者に追加を依頼してください。",
       "event_over": "このイベントは終了したため、これ以上招待できません。"
-    }
+    },
+    "email": "メールアドレス"
   },
   "exhibitorAdmin": {
     "subnav": "出展者ページ",
