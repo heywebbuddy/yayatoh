@@ -493,3 +493,9 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **Engagement score weights** (placeholder until M5.7b): 10 per event attended, 5 per session, 2 per campaign opened (3 per poll/Q&A answer, 3 per feedback, 2 per enrollment once those exist), score = 100 × points ÷ (points + 25). Confirm, or wait for M5.7b's org-adjustable weights.
 - [ ] **Money in audiences**: lifetime value and the RFM monetary quintile need `finance:read` to preview, save or export an audience, so the marketing role cannot target big spenders. Confirm, or allow `messages:send` roles to filter (without seeing amounts). The older M3.6 `spend` condition (per scope) is not gated: decide whether to gate it the same way.
 - [ ] **Campaign open tracking** (feeds "campaigns opened"): needs a tracking pixel in campaign emails. Decide whether to add it (privacy notice; Apple Mail Privacy Protection inflates opens). The stats consume `campaign.opened@1` already.
+
+## M6.1c — DSAR propagation (2026-10-02, pending owner)
+- [ ] **Receipt and archive signing key:** dev/CI derive an Ed25519 key from `APP_TOKEN_SECRET`; production needs an asymmetric signing key in AWS KMS (with your AWS account) and its public key published (`setDsarSigner`).
+- [ ] **Phone opt-outs after erasure:** org SMS/WhatsApp STOP rows are deleted with the person (a re-entered number needs fresh consent). Approve, or ask for a hashed platform-wide phone suppression list like the email one.
+- [ ] **Legal hold periods:** paid orders and credit notes are held 7 years (D11); payment disputes are held without an end date. Confirm, or give the dispute period.
+- [ ] **Receipt wording** (`privacy.request.receipt.*`, `privacy.pdf.*`) and the self-service page copy for legal review (`legal-copy`).
