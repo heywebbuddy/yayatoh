@@ -943,7 +943,11 @@
       "off": "«Mejor disponible» ya no se ofrece para este evento. Elige tus asientos.",
       "findFirst": "Primero busca tus asientos: elige cuántos y pulsa «Buscar asientos».",
       "expired": "Tus asientos estuvieron reservados 10 minutos y se han liberado. Vuelve a buscarlos."
-    }
+    },
+    "seatChannel": "Algunos de esos asientos están reservados para otro canal de venta. Elige otros asientos.",
+    "channelInvalid": "Este código de venta no es válido para este evento. Vuelve a abrir la página del evento sin él, o pregunta a quien te dio el enlace.",
+    "channelNotice": "Estás comprando a través de {name}: los asientos reservados para {name} también están abiertos para ti.",
+    "channelLinkInvalid": "Este enlace de venta no es válido para este evento. Aún puedes elegir entre los asientos abiertos a todos."
   },
   "fakePay": {
     "eyebrow": "Pago de prueba",
@@ -1868,7 +1872,8 @@
     "chooseDate": "Elige una fecha.",
     "dateSoldOut": "No quedan suficientes entradas para esta fecha.",
     "wrongDate": "Una de estas entradas no se vende para esta fecha.",
-    "dateUnavailable": "Esta fecha ya no está a la venta."
+    "dateUnavailable": "Esta fecha ya no está a la venta.",
+    "seatChannel": "Algunos de esos asientos están reservados para otro canal de venta (un patrocinador, un promotor o la venta en línea). Elige otros asientos."
   },
   "seating": {
     "title": "Asientos",
@@ -1964,7 +1969,9 @@
       "title": "Guardar como plano reutilizable",
       "name": "Nombre",
       "submit": "Guardar plano",
-      "done": "Guardado. Puedes usarlo en otros eventos."
+      "done": "Guardado. Puedes usarlo en otros eventos.",
+      "description": "Los planos guardados van a tu biblioteca de planos, desde donde puedes crear nuevos eventos.",
+      "library": "Abrir la biblioteca de planos"
     },
     "tabs": {
       "label": "Vistas de asientos",
@@ -1972,7 +1979,9 @@
       "assign": "Asignar invitados",
       "finder": "Buscador de asientos",
       "rules": "Reglas",
-      "selection": "Mejor disponible"
+      "selection": "Mejor disponible",
+      "channels": "Canales",
+      "revisions": "Revisiones"
     },
     "assign": {
       "title": "Asignar invitados",
@@ -2215,6 +2224,136 @@
       "companionError": "Un asiento de acompañante debe estar en una fila o mesa con un asiento accesible y no puede ser un asiento accesible.",
       "companionList": "Asientos de acompañante ({count}): {seats}",
       "companionNone": "Aún no hay asientos de acompañante."
+    },
+    "fromLibrary": "Este evento parte de tu plano guardado. Pon precio a sus asientos y luego ponlos a la venta.",
+    "channels": {
+      "title": "Canales de venta",
+      "description": "Reserva bloques de asientos para la taquilla, patrocinadores o promotores. Un asiento de un canal nunca se vende por otro hasta que el canal lo libere.",
+      "noPlan": "Este evento aún no tiene plano de asientos. Crea uno primero y luego asigna sus asientos a los canales aquí.",
+      "readOnly": "Puedes ver los canales pero no cambiarlos.",
+      "saved": "Canal guardado.",
+      "deleted": "Canal eliminado. Sus asientos vuelven a estar abiertos a todos los canales.",
+      "listTitle": "Canales",
+      "empty": "Aún no hay canales de venta",
+      "emptyHint": "Añade un canal abajo y asígnale asientos. Los asientos sin canal se venden por todos los canales.",
+      "col": {
+        "channel": "Canal",
+        "code": "Código y enlace",
+        "release": "Liberación",
+        "seats": "Asientos",
+        "sold": "Vendido por él",
+        "actions": "Acciones"
+      },
+      "kind": {
+        "public": "En línea (sin código)",
+        "box_office": "Taquilla",
+        "sponsor": "Patrocinador",
+        "promoter": "Promotor"
+      },
+      "linkFor": "Enlace de {name}",
+      "released": "Liberado el {when}",
+      "neverReleased": "Reservado hasta que lo cambies",
+      "soldCount": "{orders, plural, =0 {Aún sin pedidos} one {# pedido} other {# pedidos}} · {seats, plural, one {# asiento} other {# asientos}}",
+      "edit": "Editar",
+      "editNamed": "Editar {name}",
+      "delete": "Eliminar",
+      "deleteNamed": "Eliminar {name}",
+      "addTitle": "Añadir un canal",
+      "editTitle": "Editar {name}",
+      "kindLabel": "Tipo",
+      "kindHint": "En línea y taquilla: como máximo uno de cada por evento. Los patrocinadores y promotores venden con su propio código.",
+      "nameLabel": "Nombre",
+      "nameHint": "Se muestra a quienes compran con el enlace del canal y en tus informes.",
+      "codeLabel": "Código",
+      "codeHint": "Solo patrocinadores y promotores: de 3 a 32 letras, dígitos, guiones o guiones bajos. Los compradores lo usan con el enlace del canal.",
+      "releaseLabel": "Liberar los asientos no vendidos el (opcional)",
+      "releaseHint": "Los asientos no vendidos vuelven a todos los canales en ese momento ({timeZone}). Déjalo vacío para conservarlos.",
+      "add": "Añadir canal",
+      "save": "Guardar canal",
+      "cancel": "Cancelar",
+      "added": "Canal añadido.",
+      "fixErrors": "Corrige el campo marcado.",
+      "errors": {
+        "kind": "Elige un tipo de canal.",
+        "kind_taken": "Este evento ya tiene un canal de ese tipo.",
+        "name": "Ponle un nombre al canal (hasta 80 caracteres).",
+        "code_required": "Los patrocinadores y promotores necesitan un código.",
+        "code_not_allowed": "Solo los patrocinadores y promotores tienen código. Déjalo vacío.",
+        "code_format": "Usa de 3 a 32 letras, dígitos, guiones o guiones bajos.",
+        "code_taken": "Otro canal de este evento ya tiene ese código.",
+        "releaseAt": "Introduce una fecha y una hora, o déjalo vacío.",
+        "seats": "Elige al menos una fila o mesa, y números de asiento que existan en ella."
+      },
+      "allotTitle": "Asignar asientos",
+      "allotDescription": "Elige filas y mesas y, si quieres, solo algunos de sus asientos. Todas las fechas del evento lo siguen. Los asientos que ya están en un canal pasan al que elijas.",
+      "noSeats": "El plano aún no tiene filas ni mesas.",
+      "allotTo": "Canal",
+      "everyChannel": "Ningún canal (abierto a todos los canales)",
+      "which": "Filas y mesas",
+      "item": {
+        "row": "Fila {label} ({seats, plural, one {# asiento} other {# asientos}})",
+        "table": "Mesa {label} ({seats, plural, one {# asiento} other {# asientos}})"
+      },
+      "itemAllotted": "{count, plural, one {# asiento} other {# asientos}} en {name}",
+      "seatNumbers": "Solo estos asientos (opcional)",
+      "seatNumbersHint": "Números de asiento de las filas y mesas elegidas, p. ej. 1-4, 9. Déjalo vacío para todos sus asientos.",
+      "allot": "Asignar asientos",
+      "allotted": "{count, plural, =0 {No cambió ningún asiento.} one {# asiento asignado.} other {# asientos asignados.}}",
+      "freed": "{count, plural, =0 {Ningún asiento estaba en un canal.} one {# asiento vuelve a estar abierto a todos los canales.} other {# asientos vuelven a estar abiertos a todos los canales.}}"
+    },
+    "revisions": {
+      "title": "Revisiones del plano",
+      "description": "Cada vez que se guarda el plano se crea una revisión. Mira qué cambió cada una y recupera un plano anterior. Los asientos retenidos y vendidos siempre se quedan como están.",
+      "noPlan": "Este evento aún no tiene plano de asientos. Crea uno primero; cada vez que lo guardes aparecerá aquí.",
+      "none": "Aún no hay revisiones",
+      "noneHint": "El próximo guardado del plano será la primera revisión.",
+      "readOnly": "Puedes ver las revisiones pero no restaurarlas.",
+      "listTitle": "Todas las revisiones",
+      "col": {
+        "revision": "Revisión",
+        "when": "Guardada",
+        "what": "Qué",
+        "changes": "Asientos cambiados"
+      },
+      "revision": "Revisión {number}",
+      "currentBadge": "El plano actual",
+      "kindSave": "Guardada",
+      "kindRestore": "Revisión {number} restaurada",
+      "seats": "{count, plural, one {# asiento} other {# asientos}}",
+      "first": "La primera revisión conservada.",
+      "noSeatChanges": "No se añadieron, quitaron ni renumeraron asientos.",
+      "added": "{count, plural, one {# asiento añadido} other {# asientos añadidos}}",
+      "removed": "{count, plural, one {# asiento quitado} other {# asientos quitados}}",
+      "renumbered": "{count, plural, one {# asiento renumerado} other {# asientos renumerados}}",
+      "moved": "{count, plural, one {# asiento movido} other {# asientos movidos}}",
+      "detailTitle": "Revisión {number}",
+      "changedTitle": "Qué cambió",
+      "restoreWouldTitle": "Restaurarla cambiaría",
+      "addedTitle": "Asientos añadidos",
+      "removedTitle": "Asientos quitados",
+      "renumberedTitle": "Asientos renumerados",
+      "renumberedSeat": "{from} → {to}",
+      "listOf": "{title} ({count})",
+      "more": "{count, plural, one {y # más} other {y # más}}",
+      "inUseTitle": "Asientos retenidos y vendidos",
+      "inUseNone": "No hay asientos retenidos ni vendidos: nada lo impide.",
+      "inUseKept": "{count, plural, =0 {Ningún asiento retenido o vendido se queda donde está.} one {# asiento retenido o vendido se queda exactamente como está.} other {# asientos retenidos o vendidos se quedan exactamente como están.}}",
+      "inUseRemapped": "{count, plural, one {# asiento retenido o vendido pasa al asiento con su etiqueta en esta revisión (mismo número, misma entrada):} other {# asientos retenidos o vendidos pasan a los asientos con sus etiquetas en esta revisión (mismos números, mismas entradas):}}",
+      "conflictsTitle": "{count, plural, one {Esta revisión no se puede restaurar: se perdería # asiento retenido o vendido.} other {Esta revisión no se puede restaurar: se perderían # asientos retenidos o vendidos.}}",
+      "conflict": {
+        "removed": {
+          "sold": "{label} está vendido y esta revisión no tiene ningún asiento con esa etiqueta.",
+          "held": "{label} está retenido por un comprador y esta revisión no tiene ningún asiento con esa etiqueta."
+        },
+        "renumbered": {
+          "sold": "{label} está vendido y pasaría a ser {to}: la entrada del comprador indicaría otro asiento.",
+          "held": "{label} está retenido por un comprador y pasaría a ser {to}."
+        }
+      },
+      "conflictsRefused": "Hay asientos retenidos o vendidos que ya no están en esa revisión. No se cambió nada.",
+      "isCurrent": "Este es el plano tal como está ahora.",
+      "restore": "Restaurar la revisión {number}",
+      "restoredNotice": "Revisión {number} restaurada. El plano actual es la revisión {now}."
     }
   },
   "venueMap": {
@@ -2772,7 +2911,8 @@
       "guests": "Invitados",
       "markHandled": "Marcar como atendida",
       "markNew": "Marcar como nueva"
-    }
+    },
+    "layoutLibrary": "Biblioteca de planos"
   },
   "details": {
     "title": "Detalles del evento",
@@ -4771,8 +4911,13 @@
       "slot_full": "Este evento ya tiene 20 imágenes de plano.",
       "forbidden": "No puedes cambiar este plano.",
       "network": "La subida falló. Comprueba tu conexión e inténtalo de nuevo.",
-      "generic": "La subida falló. Inténtalo de nuevo."
-    }
+      "generic": "La subida falló. Inténtalo de nuevo.",
+      "pdf_page": "Esa página no existe: el PDF tiene {pages, plural, one {# página} other {# páginas}}.",
+      "pdf_unreadable": "No se puede leer este PDF. Exporta el plano como imagen u otro PDF e inténtalo de nuevo."
+    },
+    "pdfPage": "Página (PDF)",
+    "pdfHint": "También sirve un plano en PDF: elige la página del plano. Se convierte en imagen en tu navegador y se sube como tal.",
+    "pdfDrawing": "Dibujando la página {page} del PDF…"
   },
   "humanCheck": {
     "legend": "Verificación de seguridad",
@@ -9091,5 +9236,48 @@
       "questionNotAllowed": "Esa pregunta no se puede imprimir en las credenciales."
     },
     "elements": "Elementos de este lado"
+  },
+  "seatingLibrary": {
+    "title": "Biblioteca de planos",
+    "description": "Los planos de asientos que guardaste desde tus eventos. Crea un evento nuevo a partir de uno; cada evento conserva su propia copia.",
+    "deleted": "Plano quitado de la biblioteca. Los eventos que lo usaban conservan su copia.",
+    "emptyTitle": "Tu biblioteca de planos está vacía",
+    "emptyHint": "Abre el plano de asientos de un evento y elige «Guardar plano» para conservarlo aquí.",
+    "emptyViewer": "Aquí aparecerán los planos guardados desde los eventos.",
+    "toEvents": "Ir a los eventos",
+    "startTitle": "Crear un evento a partir de un plano",
+    "startDescription": "El nuevo evento recibe su propia copia del plano. Luego pones precio a sus asientos y los pones a la venta.",
+    "layout": "Plano",
+    "layoutOption": "{name} ({seats, plural, one {# asiento} other {# asientos}})",
+    "eventName": "Nombre del evento",
+    "profile": "Tipo de evento",
+    "timezone": "Zona horaria",
+    "startsAt": "Empieza",
+    "endsAt": "Termina",
+    "start": "Crear el evento",
+    "fixErrors": "Corrige el campo marcado.",
+    "errors": {
+      "layoutId": "Elige un plano.",
+      "name": "Ponle un nombre al evento (de 2 a 160 caracteres).",
+      "slug": "Ya existe un evento con ese nombre. Elige otro.",
+      "profile": "Elige un tipo de evento con asientos.",
+      "startsAt": "Indica cuándo empieza el evento.",
+      "endsAt": "Indica cuándo termina el evento, después de que empiece.",
+      "layoutName": "Ponle un nombre al plano (hasta 120 caracteres)."
+    },
+    "listTitle": "Planos guardados",
+    "seats": "{count, plural, one {# asiento} other {# asientos}}",
+    "rows": "{count, plural, one {# fila} other {# filas}}",
+    "tables": "{count, plural, one {# mesa} other {# mesas}}",
+    "withImage": "con una imagen del plano",
+    "usedBy": "{count, plural, =0 {Aún no lo usa ningún evento} one {Lo usa # evento} other {Lo usan # eventos}}",
+    "updated": "actualizado el {date}",
+    "renameLabel": "Nombre de {name}",
+    "rename": "Cambiar nombre",
+    "renamed": "Nombre cambiado.",
+    "startFrom": "Crear un evento con él",
+    "startFromNamed": "Crear un evento con {name}",
+    "delete": "Eliminar",
+    "deleteNamed": "Eliminar {name}"
   }
 }

@@ -943,7 +943,11 @@
       "off": "このイベントではおまかせ座席の提供が終了しました。座席を選んでください。",
       "findFirst": "先に座席を探してください：席数を選んで「座席を探す」を押してください。",
       "expired": "座席は10分間確保された後、解放されました。もう一度お探しください。"
-    }
+    },
+    "seatChannel": "選んだ席の一部は別の販売チャネル用に確保されています。ほかの席を選んでください。",
+    "channelInvalid": "この販売コードはこのイベントでは使えません。コードなしでイベントページを開き直すか、リンクをくれた人に確認してください。",
+    "channelNotice": "{name} 経由で購入しています。{name} 用に確保された席も選べます。",
+    "channelLinkInvalid": "この販売リンクはこのイベントでは使えません。どなたでも選べる席からは引き続き選べます。"
   },
   "fakePay": {
     "eyebrow": "テスト決済",
@@ -1868,7 +1872,8 @@
     "chooseDate": "日程を選んでください。",
     "dateSoldOut": "この日程のチケットが足りません。",
     "wrongDate": "この日程では販売していないチケットが含まれています。",
-    "dateUnavailable": "この日程は販売を終了しました。"
+    "dateUnavailable": "この日程は販売を終了しました。",
+    "seatChannel": "選んだ席の一部は別の販売チャネル（スポンサー、プロモーター、オンライン販売）用に確保されています。ほかの席を選んでください。"
   },
   "seating": {
     "title": "座席",
@@ -1964,7 +1969,9 @@
       "title": "再利用できる座席表として保存",
       "name": "名前",
       "submit": "座席表を保存",
-      "done": "保存しました。ほかのイベントでも使用できます。"
+      "done": "保存しました。ほかのイベントでも使用できます。",
+      "description": "保存した座席表は座席表ライブラリに入り、そこから新しいイベントを作成できます。",
+      "library": "座席表ライブラリを開く"
     },
     "tabs": {
       "label": "座席の表示",
@@ -1972,7 +1979,9 @@
       "assign": "ゲストの割り当て",
       "finder": "座席検索",
       "rules": "ルール",
-      "selection": "おまかせ座席"
+      "selection": "おまかせ座席",
+      "channels": "チャネル",
+      "revisions": "履歴"
     },
     "assign": {
       "title": "ゲストの割り当て",
@@ -2215,6 +2224,136 @@
       "companionError": "同伴者席は、バリアフリー席のある列またはテーブルにある必要があり、それ自体をバリアフリー席にはできません。",
       "companionList": "同伴者席（{count}席）：{seats}",
       "companionNone": "同伴者席はまだありません。"
+    },
+    "fromLibrary": "このイベントは保存済みの座席表から作成されました。席の価格を設定してから販売を開始してください。",
+    "channels": {
+      "title": "販売チャネル",
+      "description": "当日窓口、スポンサー、プロモーター用に席のブロックを確保します。あるチャネルの席は、そのチャネルが解放するまでほかのチャネルでは販売されません。",
+      "noPlan": "このイベントにはまだ座席表がありません。先に作成してから、ここで席をチャネルに割り当ててください。",
+      "readOnly": "チャネルを閲覧できますが、変更はできません。",
+      "saved": "チャネルを保存しました。",
+      "deleted": "チャネルを削除しました。その席は再びすべてのチャネルで販売されます。",
+      "listTitle": "チャネル",
+      "empty": "販売チャネルはまだありません",
+      "emptyHint": "下でチャネルを追加し、席を割り当ててください。チャネルのない席はすべてのチャネルで販売されます。",
+      "col": {
+        "channel": "チャネル",
+        "code": "コードとリンク",
+        "release": "解放",
+        "seats": "席",
+        "sold": "このチャネルの販売",
+        "actions": "操作"
+      },
+      "kind": {
+        "public": "オンライン（コードなし）",
+        "box_office": "当日窓口",
+        "sponsor": "スポンサー",
+        "promoter": "プロモーター"
+      },
+      "linkFor": "{name} のリンク",
+      "released": "{when} に解放済み",
+      "neverReleased": "変更するまで確保",
+      "soldCount": "{orders, plural, =0 {注文はまだありません} other {注文 # 件}} · {seats, plural, other {# 席}}",
+      "edit": "編集",
+      "editNamed": "{name} を編集",
+      "delete": "削除",
+      "deleteNamed": "{name} を削除",
+      "addTitle": "チャネルを追加",
+      "editTitle": "{name} を編集",
+      "kindLabel": "種類",
+      "kindHint": "オンラインと当日窓口はイベントごとに 1 つまで。スポンサーとプロモーターは専用のコードで販売します。",
+      "nameLabel": "名前",
+      "nameHint": "チャネルのリンクを使う購入者と、レポートに表示されます。",
+      "codeLabel": "コード",
+      "codeHint": "スポンサーとプロモーターのみ：英字・数字・ハイフン・アンダースコアで 3〜32 文字。購入者はチャネルのリンクから使います。",
+      "releaseLabel": "売れ残った席を解放する日時（任意）",
+      "releaseHint": "売れ残った席はこの日時（{timeZone}）にすべてのチャネルに戻ります。確保し続けるなら空欄のままにしてください。",
+      "add": "チャネルを追加",
+      "save": "チャネルを保存",
+      "cancel": "キャンセル",
+      "added": "チャネルを追加しました。",
+      "fixErrors": "強調表示された項目を修正してください。",
+      "errors": {
+        "kind": "チャネルの種類を選んでください。",
+        "kind_taken": "このイベントにはすでにその種類のチャネルがあります。",
+        "name": "チャネル名を入力してください（80 文字まで）。",
+        "code_required": "スポンサーとプロモーターにはコードが必要です。",
+        "code_not_allowed": "コードがあるのはスポンサーとプロモーターだけです。空欄にしてください。",
+        "code_format": "英字・数字・ハイフン・アンダースコアで 3〜32 文字にしてください。",
+        "code_taken": "このイベントの別のチャネルがすでにそのコードを使っています。",
+        "releaseAt": "日時を入力するか、空欄にしてください。",
+        "seats": "列またはテーブルを 1 つ以上選び、そこにある席番号を指定してください。"
+      },
+      "allotTitle": "席を割り当てる",
+      "allotDescription": "列とテーブルを選び、必要ならその一部の席だけを指定します。イベントのすべての日程に反映されます。すでにチャネルにある席は、選んだチャネルに移ります。",
+      "noSeats": "座席表にはまだ列もテーブルもありません。",
+      "allotTo": "チャネル",
+      "everyChannel": "チャネルなし（すべてのチャネルで販売）",
+      "which": "列とテーブル",
+      "item": {
+        "row": "{label} 列（{seats, plural, other {# 席}}）",
+        "table": "テーブル {label}（{seats, plural, other {# 席}}）"
+      },
+      "itemAllotted": "{name} に {count, plural, other {# 席}}",
+      "seatNumbers": "この席だけ（任意）",
+      "seatNumbersHint": "選んだ列やテーブルの席番号。例：1-4, 9。空欄ならすべての席が対象です。",
+      "allot": "席を割り当てる",
+      "allotted": "{count, plural, =0 {変更された席はありません。} other {# 席を割り当てました。}}",
+      "freed": "{count, plural, =0 {チャネルにある席はありませんでした。} other {# 席が再びすべてのチャネルで販売されます。}}"
+    },
+    "revisions": {
+      "title": "座席表の履歴",
+      "description": "座席表を保存するたびに履歴が残ります。それぞれの変更内容を確認し、以前の座席表に戻せます。確保中・販売済みの席は常にそのまま残ります。",
+      "noPlan": "このイベントにはまだ座席表がありません。先に作成すると、保存のたびにここに表示されます。",
+      "none": "履歴はまだありません",
+      "noneHint": "次に座席表を保存すると、最初の履歴になります。",
+      "readOnly": "履歴を閲覧できますが、復元はできません。",
+      "listTitle": "すべての履歴",
+      "col": {
+        "revision": "版",
+        "when": "保存日時",
+        "what": "内容",
+        "changes": "変更された席"
+      },
+      "revision": "第 {number} 版",
+      "currentBadge": "現在の座席表",
+      "kindSave": "保存",
+      "kindRestore": "第 {number} 版を復元",
+      "seats": "{count, plural, other {# 席}}",
+      "first": "保存されている最初の版です。",
+      "noSeatChanges": "席の追加・削除・番号変更はありません。",
+      "added": "{count, plural, other {# 席を追加}}",
+      "removed": "{count, plural, other {# 席を削除}}",
+      "renumbered": "{count, plural, other {# 席の番号を変更}}",
+      "moved": "{count, plural, other {# 席を移動}}",
+      "detailTitle": "第 {number} 版",
+      "changedTitle": "この版での変更",
+      "restoreWouldTitle": "復元すると変わる内容",
+      "addedTitle": "追加された席",
+      "removedTitle": "削除された席",
+      "renumberedTitle": "番号が変わった席",
+      "renumberedSeat": "{from} → {to}",
+      "listOf": "{title}（{count}）",
+      "more": "{count, plural, other {ほか # 席}}",
+      "inUseTitle": "確保中・販売済みの席",
+      "inUseNone": "確保中・販売済みの席はありません。妨げるものはありません。",
+      "inUseKept": "{count, plural, =0 {そのまま残る確保中・販売済みの席はありません。} other {確保中・販売済みの # 席はそのまま残ります。}}",
+      "inUseRemapped": "{count, plural, other {確保中・販売済みの # 席は、この版で同じラベルの席に移ります（席番号もチケットも同じ）：}}",
+      "conflictsTitle": "{count, plural, other {この版は復元できません：確保中・販売済みの # 席が失われます。}}",
+      "conflict": {
+        "removed": {
+          "sold": "{label} は販売済みで、この版にはそのラベルの席がありません。",
+          "held": "{label} は購入者が確保中で、この版にはそのラベルの席がありません。"
+        },
+        "renumbered": {
+          "sold": "{label} は販売済みで、{to} に変わってしまいます。購入者のチケットが別の席を指すことになります。",
+          "held": "{label} は購入者が確保中で、{to} に変わってしまいます。"
+        }
+      },
+      "conflictsRefused": "確保中・販売済みの席がその版にもうありません。何も変更していません。",
+      "isCurrent": "これが現在の座席表です。",
+      "restore": "第 {number} 版を復元",
+      "restoredNotice": "第 {number} 版を復元しました。現在の座席表は第 {now} 版です。"
     }
   },
   "venueMap": {
@@ -2772,7 +2911,8 @@
       "guests": "ゲスト数",
       "markHandled": "対応済みにする",
       "markNew": "新規に戻す"
-    }
+    },
+    "layoutLibrary": "座席表ライブラリ"
   },
   "details": {
     "title": "イベントの詳細",
@@ -4771,8 +4911,13 @@
       "slot_full": "このイベントにはすでに 20 枚のフロアプラン画像があります。",
       "forbidden": "この座席表は変更できません。",
       "network": "アップロードに失敗しました。接続を確認してもう一度お試しください。",
-      "generic": "アップロードに失敗しました。もう一度お試しください。"
-    }
+      "generic": "アップロードに失敗しました。もう一度お試しください。",
+      "pdf_page": "そのページはありません。この PDF は {pages, plural, other {# ページ}}です。",
+      "pdf_unreadable": "この PDF を読み込めません。図を画像か別の PDF として書き出してから、もう一度お試しください。"
+    },
+    "pdfPage": "ページ（PDF）",
+    "pdfHint": "PDF のフロア図も使えます。図のあるページを選んでください。ブラウザー内で画像に変換してから、画像としてアップロードします。",
+    "pdfDrawing": "PDF の {page} ページ目を描画しています…"
   },
   "humanCheck": {
     "legend": "セキュリティチェック",
@@ -9091,5 +9236,48 @@
       "questionNotAllowed": "この質問はバッジに印刷できません。"
     },
     "elements": "この面の要素"
+  },
+  "seatingLibrary": {
+    "title": "座席表ライブラリ",
+    "description": "イベントから保存した座席表です。ここから新しいイベントを作成でき、各イベントは自分専用のコピーを持ちます。",
+    "deleted": "座席表をライブラリから削除しました。使っていたイベントのコピーはそのまま残ります。",
+    "emptyTitle": "座席表ライブラリは空です",
+    "emptyHint": "イベントの座席表を開き、「座席表を保存」を選ぶとここに保管されます。",
+    "emptyViewer": "イベントから保存された座席表がここに表示されます。",
+    "toEvents": "イベントへ",
+    "startTitle": "座席表から新しいイベントを作成",
+    "startDescription": "新しいイベントには座席表のコピーが入ります。その後、席の価格を設定して販売を開始します。",
+    "layout": "座席表",
+    "layoutOption": "{name}（{seats, plural, other {# 席}}）",
+    "eventName": "イベント名",
+    "profile": "イベントの種類",
+    "timezone": "タイムゾーン",
+    "startsAt": "開始",
+    "endsAt": "終了",
+    "start": "イベントを作成",
+    "fixErrors": "強調表示された項目を修正してください。",
+    "errors": {
+      "layoutId": "座席表を選んでください。",
+      "name": "イベント名を入力してください（2〜160 文字）。",
+      "slug": "その名前のイベントはすでにあります。別の名前にしてください。",
+      "profile": "座席のあるイベントの種類を選んでください。",
+      "startsAt": "イベントの開始日時を入力してください。",
+      "endsAt": "開始より後の終了日時を入力してください。",
+      "layoutName": "座席表の名前を入力してください（120 文字まで）。"
+    },
+    "listTitle": "保存した座席表",
+    "seats": "{count, plural, other {# 席}}",
+    "rows": "{count, plural, other {# 列}}",
+    "tables": "{count, plural, other {テーブル # 台}}",
+    "withImage": "フロア図の画像付き",
+    "usedBy": "{count, plural, =0 {まだイベントで使われていません} other {# 件のイベントで使用}}",
+    "updated": "{date} に更新",
+    "renameLabel": "{name} の名前",
+    "rename": "名前を変更",
+    "renamed": "名前を変更しました。",
+    "startFrom": "これでイベントを作成",
+    "startFromNamed": "{name} でイベントを作成",
+    "delete": "削除",
+    "deleteNamed": "{name} を削除"
   }
 }

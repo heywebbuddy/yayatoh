@@ -943,7 +943,11 @@
       "off": "«Migliori disponibili» non è più offerto per questo evento. Scegli tu i posti.",
       "findFirst": "Prima trova i tuoi posti: scegli quanti, poi premi «Trova posti».",
       "expired": "I tuoi posti erano tenuti per 10 minuti e sono stati rilasciati. Cerca di nuovo."
-    }
+    },
+    "seatChannel": "Alcuni di quei posti sono riservati a un altro canale di vendita. Scegli altri posti.",
+    "channelInvalid": "Questo codice di vendita non è valido per questo evento. Riapri la pagina dell’evento senza codice, o chiedi a chi ti ha dato il link.",
+    "channelNotice": "Stai acquistando tramite {name}: anche i posti riservati a {name} sono disponibili per te.",
+    "channelLinkInvalid": "Questo link di vendita non è valido per questo evento. Puoi comunque scegliere tra i posti aperti a tutti."
   },
   "fakePay": {
     "eyebrow": "Pagamento di prova",
@@ -1868,7 +1872,8 @@
     "chooseDate": "Scegli una data.",
     "dateSoldOut": "Non ci sono abbastanza biglietti per questa data.",
     "wrongDate": "Uno di questi biglietti non è in vendita per questa data.",
-    "dateUnavailable": "Questa data non è più in vendita."
+    "dateUnavailable": "Questa data non è più in vendita.",
+    "seatChannel": "Alcuni di quei posti sono riservati a un altro canale di vendita (uno sponsor, un promoter o la vendita online). Scegli altri posti."
   },
   "seating": {
     "title": "Posti a sedere",
@@ -1964,7 +1969,9 @@
       "title": "Salva come piantina riutilizzabile",
       "name": "Nome",
       "submit": "Salva piantina",
-      "done": "Salvata. Puoi usarla per altri eventi."
+      "done": "Salvata. Puoi usarla per altri eventi.",
+      "description": "Le piantine salvate finiscono nella tua libreria, da cui puoi creare nuovi eventi.",
+      "library": "Apri la libreria di piantine"
     },
     "tabs": {
       "label": "Viste dei posti",
@@ -1972,7 +1979,9 @@
       "assign": "Assegna ospiti",
       "finder": "Trova posto",
       "rules": "Regole",
-      "selection": "Migliori disponibili"
+      "selection": "Migliori disponibili",
+      "channels": "Canali",
+      "revisions": "Revisioni"
     },
     "assign": {
       "title": "Assegna ospiti",
@@ -2215,6 +2224,136 @@
       "companionError": "Un posto accompagnatore deve trovarsi in una fila o a un tavolo con un posto accessibile e non può essere esso stesso accessibile.",
       "companionList": "Posti accompagnatore ({count}): {seats}",
       "companionNone": "Ancora nessun posto accompagnatore."
+    },
+    "fromLibrary": "Questo evento parte dalla tua piantina salvata. Dai un prezzo ai posti, poi mettili in vendita.",
+    "channels": {
+      "title": "Canali di vendita",
+      "description": "Riserva blocchi di posti per la biglietteria, gli sponsor o i promoter. Un posto di un canale non viene mai venduto da un altro finché il canale non lo libera.",
+      "noPlan": "Questo evento non ha ancora una piantina. Creane una, poi assegna qui i suoi posti ai canali.",
+      "readOnly": "Puoi vedere i canali ma non modificarli.",
+      "saved": "Canale salvato.",
+      "deleted": "Canale rimosso. I suoi posti sono di nuovo aperti a tutti i canali.",
+      "listTitle": "Canali",
+      "empty": "Ancora nessun canale di vendita",
+      "emptyHint": "Aggiungi un canale qui sotto, poi assegnagli dei posti. I posti senza canale si vendono da tutti i canali.",
+      "col": {
+        "channel": "Canale",
+        "code": "Codice e link",
+        "release": "Rilascio",
+        "seats": "Posti",
+        "sold": "Venduto tramite esso",
+        "actions": "Azioni"
+      },
+      "kind": {
+        "public": "Online (senza codice)",
+        "box_office": "Biglietteria",
+        "sponsor": "Sponsor",
+        "promoter": "Promoter"
+      },
+      "linkFor": "Link per {name}",
+      "released": "Rilasciato il {when}",
+      "neverReleased": "Riservato finché non lo cambi",
+      "soldCount": "{orders, plural, =0 {Ancora nessun ordine} one {# ordine} other {# ordini}} · {seats, plural, one {# posto} other {# posti}}",
+      "edit": "Modifica",
+      "editNamed": "Modifica {name}",
+      "delete": "Rimuovi",
+      "deleteNamed": "Rimuovi {name}",
+      "addTitle": "Aggiungi un canale",
+      "editTitle": "Modifica {name}",
+      "kindLabel": "Tipo",
+      "kindHint": "Online e biglietteria: al massimo uno di ciascuno per evento. Sponsor e promoter vendono con il proprio codice.",
+      "nameLabel": "Nome",
+      "nameHint": "Mostrato a chi acquista con il link del canale e nei tuoi report.",
+      "codeLabel": "Codice",
+      "codeHint": "Solo sponsor e promoter: da 3 a 32 lettere, cifre, trattini o trattini bassi. Gli acquirenti lo usano tramite il link del canale.",
+      "releaseLabel": "Rilascia i posti invenduti il (facoltativo)",
+      "releaseHint": "I posti invenduti tornano a tutti i canali in questo momento ({timeZone}). Lascia vuoto per tenerli.",
+      "add": "Aggiungi canale",
+      "save": "Salva canale",
+      "cancel": "Annulla",
+      "added": "Canale aggiunto.",
+      "fixErrors": "Correggi il campo evidenziato.",
+      "errors": {
+        "kind": "Scegli un tipo di canale.",
+        "kind_taken": "Questo evento ha già un canale di quel tipo.",
+        "name": "Dai un nome al canale (fino a 80 caratteri).",
+        "code_required": "Sponsor e promoter hanno bisogno di un codice.",
+        "code_not_allowed": "Solo sponsor e promoter hanno un codice. Lascia vuoto.",
+        "code_format": "Usa da 3 a 32 lettere, cifre, trattini o trattini bassi.",
+        "code_taken": "Un altro canale di questo evento ha già quel codice.",
+        "releaseAt": "Inserisci data e ora, o lascia vuoto.",
+        "seats": "Scegli almeno una fila o un tavolo, e numeri di posto che vi esistono."
+      },
+      "allotTitle": "Assegna posti",
+      "allotDescription": "Scegli file e tavoli e, se vuoi, solo alcuni dei loro posti. Tutte le date dell’evento si adeguano. I posti già in un canale passano a quello che scegli.",
+      "noSeats": "La piantina non ha ancora file né tavoli.",
+      "allotTo": "Canale",
+      "everyChannel": "Nessun canale (aperto a tutti i canali)",
+      "which": "File e tavoli",
+      "item": {
+        "row": "Fila {label} ({seats, plural, one {# posto} other {# posti}})",
+        "table": "Tavolo {label} ({seats, plural, one {# posto} other {# posti}})"
+      },
+      "itemAllotted": "{count, plural, one {# posto} other {# posti}} in {name}",
+      "seatNumbers": "Solo questi posti (facoltativo)",
+      "seatNumbersHint": "Numeri di posto nelle file e nei tavoli scelti, es. 1-4, 9. Lascia vuoto per tutti i loro posti.",
+      "allot": "Assegna posti",
+      "allotted": "{count, plural, =0 {Nessun posto modificato.} one {# posto assegnato.} other {# posti assegnati.}}",
+      "freed": "{count, plural, =0 {Nessun posto era in un canale.} one {# posto è di nuovo aperto a tutti i canali.} other {# posti sono di nuovo aperti a tutti i canali.}}"
+    },
+    "revisions": {
+      "title": "Revisioni della piantina",
+      "description": "Ogni salvataggio della piantina è una revisione. Guarda cosa ha cambiato ciascuna e ripristina una piantina precedente. I posti trattenuti e venduti restano sempre come sono.",
+      "noPlan": "Questo evento non ha ancora una piantina. Creane una; ogni salvataggio apparirà poi qui.",
+      "none": "Ancora nessuna revisione",
+      "noneHint": "Il prossimo salvataggio della piantina sarà la prima revisione.",
+      "readOnly": "Puoi vedere le revisioni ma non ripristinarle.",
+      "listTitle": "Tutte le revisioni",
+      "col": {
+        "revision": "Revisione",
+        "when": "Salvata",
+        "what": "Cosa",
+        "changes": "Posti cambiati"
+      },
+      "revision": "Revisione {number}",
+      "currentBadge": "La piantina attuale",
+      "kindSave": "Salvata",
+      "kindRestore": "Revisione {number} ripristinata",
+      "seats": "{count, plural, one {# posto} other {# posti}}",
+      "first": "La prima revisione conservata.",
+      "noSeatChanges": "Nessun posto aggiunto, rimosso o rinumerato.",
+      "added": "{count, plural, one {# posto aggiunto} other {# posti aggiunti}}",
+      "removed": "{count, plural, one {# posto rimosso} other {# posti rimossi}}",
+      "renumbered": "{count, plural, one {# posto rinumerato} other {# posti rinumerati}}",
+      "moved": "{count, plural, one {# posto spostato} other {# posti spostati}}",
+      "detailTitle": "Revisione {number}",
+      "changedTitle": "Cosa ha cambiato",
+      "restoreWouldTitle": "Ripristinarla cambierebbe",
+      "addedTitle": "Posti aggiunti",
+      "removedTitle": "Posti rimossi",
+      "renumberedTitle": "Posti rinumerati",
+      "renumberedSeat": "{from} → {to}",
+      "listOf": "{title} ({count})",
+      "more": "{count, plural, one {e # altro} other {e altri #}}",
+      "inUseTitle": "Posti trattenuti e venduti",
+      "inUseNone": "Nessun posto è trattenuto o venduto: nulla lo impedisce.",
+      "inUseKept": "{count, plural, =0 {Nessun posto trattenuto o venduto resta dov’è.} one {# posto trattenuto o venduto resta esattamente com’è.} other {# posti trattenuti o venduti restano esattamente come sono.}}",
+      "inUseRemapped": "{count, plural, one {# posto trattenuto o venduto passa al posto con la sua etichetta in questa revisione (stesso numero, stesso biglietto):} other {# posti trattenuti o venduti passano ai posti con le loro etichette in questa revisione (stessi numeri, stessi biglietti):}}",
+      "conflictsTitle": "{count, plural, one {Questa revisione non si può ripristinare: si perderebbe # posto trattenuto o venduto.} other {Questa revisione non si può ripristinare: si perderebbero # posti trattenuti o venduti.}}",
+      "conflict": {
+        "removed": {
+          "sold": "{label} è venduto e questa revisione non ha un posto con quell’etichetta.",
+          "held": "{label} è trattenuto da un acquirente e questa revisione non ha un posto con quell’etichetta."
+        },
+        "renumbered": {
+          "sold": "{label} è venduto e diventerebbe {to}: il biglietto dell’acquirente indicherebbe un altro posto.",
+          "held": "{label} è trattenuto da un acquirente e diventerebbe {to}."
+        }
+      },
+      "conflictsRefused": "Alcuni posti trattenuti o venduti non sono più in quella revisione. Non è cambiato nulla.",
+      "isCurrent": "Questa è la piantina com’è adesso.",
+      "restore": "Ripristina la revisione {number}",
+      "restoredNotice": "Revisione {number} ripristinata. La piantina attuale è la revisione {now}."
     }
   },
   "venueMap": {
@@ -2772,7 +2911,8 @@
       "guests": "Ospiti",
       "markHandled": "Segna come gestita",
       "markNew": "Segna come nuova"
-    }
+    },
+    "layoutLibrary": "Libreria di piantine"
   },
   "details": {
     "title": "Dettagli dell’evento",
@@ -4771,8 +4911,13 @@
       "slot_full": "Questo evento ha già 20 immagini di planimetria.",
       "forbidden": "Non puoi modificare questa piantina.",
       "network": "Caricamento non riuscito. Controlla la connessione e riprova.",
-      "generic": "Caricamento non riuscito. Riprova."
-    }
+      "generic": "Caricamento non riuscito. Riprova.",
+      "pdf_page": "Quella pagina non esiste: il PDF ha {pages, plural, one {# pagina} other {# pagine}}.",
+      "pdf_unreadable": "Impossibile leggere questo PDF. Esporta la piantina come immagine o in un altro PDF e riprova."
+    },
+    "pdfPage": "Pagina (PDF)",
+    "pdfHint": "Va bene anche una piantina in PDF: scegli la pagina con la piantina. Viene trasformata in immagine nel tuo browser e caricata come tale.",
+    "pdfDrawing": "Disegno della pagina {page} del PDF…"
   },
   "humanCheck": {
     "legend": "Controllo di sicurezza",
@@ -9091,5 +9236,48 @@
       "questionNotAllowed": "Quella domanda non può essere stampata sui badge."
     },
     "elements": "Elementi su questo lato"
+  },
+  "seatingLibrary": {
+    "title": "Libreria di piantine",
+    "description": "Le piantine che hai salvato dai tuoi eventi. Crea un nuovo evento da una di esse; ogni evento ne conserva una copia propria.",
+    "deleted": "Piantina rimossa dalla libreria. Gli eventi che la usavano ne conservano la copia.",
+    "emptyTitle": "La tua libreria di piantine è vuota",
+    "emptyHint": "Apri la piantina di un evento e scegli «Salva piantina» per conservarla qui.",
+    "emptyViewer": "Qui compariranno le piantine salvate dagli eventi.",
+    "toEvents": "Vai agli eventi",
+    "startTitle": "Crea un evento da una piantina",
+    "startDescription": "Il nuovo evento riceve una propria copia della piantina. Poi dai un prezzo ai posti e li metti in vendita.",
+    "layout": "Piantina",
+    "layoutOption": "{name} ({seats, plural, one {# posto} other {# posti}})",
+    "eventName": "Nome dell’evento",
+    "profile": "Tipo di evento",
+    "timezone": "Fuso orario",
+    "startsAt": "Inizio",
+    "endsAt": "Fine",
+    "start": "Crea l’evento",
+    "fixErrors": "Correggi il campo evidenziato.",
+    "errors": {
+      "layoutId": "Scegli una piantina.",
+      "name": "Dai un nome all’evento (da 2 a 160 caratteri).",
+      "slug": "Esiste già un evento con questo nome. Scegline un altro.",
+      "profile": "Scegli un tipo di evento con posti a sedere.",
+      "startsAt": "Indica quando inizia l’evento.",
+      "endsAt": "Indica quando finisce l’evento, dopo l’inizio.",
+      "layoutName": "Dai un nome alla piantina (fino a 120 caratteri)."
+    },
+    "listTitle": "Piantine salvate",
+    "seats": "{count, plural, one {# posto} other {# posti}}",
+    "rows": "{count, plural, one {# fila} other {# file}}",
+    "tables": "{count, plural, one {# tavolo} other {# tavoli}}",
+    "withImage": "con un’immagine della piantina",
+    "usedBy": "{count, plural, =0 {Non ancora usata da un evento} one {Usata da # evento} other {Usata da # eventi}}",
+    "updated": "aggiornata il {date}",
+    "renameLabel": "Nome di {name}",
+    "rename": "Rinomina",
+    "renamed": "Rinominata.",
+    "startFrom": "Crea un evento da questa",
+    "startFromNamed": "Crea un evento da {name}",
+    "delete": "Rimuovi",
+    "deleteNamed": "Rimuovi {name}"
   }
 }

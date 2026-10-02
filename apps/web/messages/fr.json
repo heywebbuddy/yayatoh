@@ -943,7 +943,11 @@
       "off": "« Meilleures places » n’est plus proposé pour cet événement. Choisissez vos places.",
       "findFirst": "Trouvez d’abord vos places : choisissez combien, puis appuyez sur « Trouver des places ».",
       "expired": "Vos places étaient réservées 10 minutes et ont été libérées. Veuillez chercher à nouveau."
-    }
+    },
+    "seatChannel": "Certaines de ces places sont réservées à un autre canal de vente. Choisissez d’autres places.",
+    "channelInvalid": "Ce code de vente n’est pas valable pour cet événement. Rouvrez la page de l’événement sans ce code, ou demandez à la personne qui vous a donné le lien.",
+    "channelNotice": "Vous achetez via {name} : les places réservées à {name} vous sont aussi ouvertes.",
+    "channelLinkInvalid": "Ce lien de vente n’est pas valable pour cet événement. Vous pouvez toujours choisir parmi les places ouvertes à tous."
   },
   "fakePay": {
     "eyebrow": "Paiement test",
@@ -1868,7 +1872,8 @@
     "chooseDate": "Choisissez une date.",
     "dateSoldOut": "Il ne reste pas assez de billets pour cette date.",
     "wrongDate": "L’un de ces billets n’est pas vendu pour cette date.",
-    "dateUnavailable": "Cette date n’est plus en vente."
+    "dateUnavailable": "Cette date n’est plus en vente.",
+    "seatChannel": "Certaines de ces places sont réservées à un autre canal de vente (un sponsor, un promoteur ou la vente en ligne). Choisissez d’autres places."
   },
   "seating": {
     "title": "Placement",
@@ -1964,7 +1969,9 @@
       "title": "Enregistrer comme plan réutilisable",
       "name": "Nom",
       "submit": "Enregistrer le plan",
-      "done": "Enregistré. Vous pouvez l’utiliser pour d’autres événements."
+      "done": "Enregistré. Vous pouvez l’utiliser pour d’autres événements.",
+      "description": "Les plans enregistrés vont dans votre bibliothèque de plans, d’où vous pouvez créer de nouveaux événements.",
+      "library": "Ouvrir la bibliothèque de plans"
     },
     "tabs": {
       "label": "Vues du placement",
@@ -1972,7 +1979,9 @@
       "assign": "Placer les invités",
       "finder": "Trouver sa place",
       "rules": "Règles",
-      "selection": "Meilleures places"
+      "selection": "Meilleures places",
+      "channels": "Canaux",
+      "revisions": "Révisions"
     },
     "assign": {
       "title": "Placer les invités",
@@ -2215,6 +2224,136 @@
       "companionError": "Une place d’accompagnateur doit se trouver dans un rang ou à une table avec une place accessible, et ne peut pas être elle-même accessible.",
       "companionList": "Places d’accompagnateur ({count}) : {seats}",
       "companionNone": "Aucune place d’accompagnateur pour l’instant."
+    },
+    "fromLibrary": "Cet événement part de votre plan enregistré. Tarifez ses places, puis mettez-les en vente.",
+    "channels": {
+      "title": "Canaux de vente",
+      "description": "Réservez des blocs de places pour la billetterie sur place, des sponsors ou des promoteurs. Une place d’un canal n’est jamais vendue par un autre tant que le canal ne la libère pas.",
+      "noPlan": "Cet événement n’a pas encore de plan de salle. Créez-en un d’abord, puis attribuez ses places aux canaux ici.",
+      "readOnly": "Vous pouvez voir les canaux mais pas les modifier.",
+      "saved": "Canal enregistré.",
+      "deleted": "Canal supprimé. Ses places sont de nouveau ouvertes à tous les canaux.",
+      "listTitle": "Canaux",
+      "empty": "Aucun canal de vente pour l’instant",
+      "emptyHint": "Ajoutez un canal ci-dessous, puis attribuez-lui des places. Les places sans canal sont vendues par tous les canaux.",
+      "col": {
+        "channel": "Canal",
+        "code": "Code et lien",
+        "release": "Libération",
+        "seats": "Places",
+        "sold": "Vendu par ce canal",
+        "actions": "Actions"
+      },
+      "kind": {
+        "public": "En ligne (sans code)",
+        "box_office": "Billetterie sur place",
+        "sponsor": "Sponsor",
+        "promoter": "Promoteur"
+      },
+      "linkFor": "Lien pour {name}",
+      "released": "Libéré le {when}",
+      "neverReleased": "Gardé jusqu’à ce que vous le changiez",
+      "soldCount": "{orders, plural, =0 {Aucune commande} one {# commande} other {# commandes}} · {seats, plural, one {# place} other {# places}}",
+      "edit": "Modifier",
+      "editNamed": "Modifier {name}",
+      "delete": "Supprimer",
+      "deleteNamed": "Supprimer {name}",
+      "addTitle": "Ajouter un canal",
+      "editTitle": "Modifier {name}",
+      "kindLabel": "Type",
+      "kindHint": "En ligne et billetterie sur place : un seul de chaque par événement. Les sponsors et promoteurs vendent avec leur propre code.",
+      "nameLabel": "Nom",
+      "nameHint": "Affiché aux acheteurs qui utilisent le lien du canal, et dans vos rapports.",
+      "codeLabel": "Code",
+      "codeHint": "Sponsors et promoteurs uniquement : 3 à 32 lettres, chiffres, tirets ou traits de soulignement. Les acheteurs l’utilisent via le lien du canal.",
+      "releaseLabel": "Libérer les places invendues le (facultatif)",
+      "releaseHint": "Les places invendues reviennent à tous les canaux à ce moment ({timeZone}). Laissez vide pour les garder.",
+      "add": "Ajouter le canal",
+      "save": "Enregistrer le canal",
+      "cancel": "Annuler",
+      "added": "Canal ajouté.",
+      "fixErrors": "Veuillez corriger le champ signalé.",
+      "errors": {
+        "kind": "Choisissez un type de canal.",
+        "kind_taken": "Cet événement a déjà un canal de ce type.",
+        "name": "Donnez un nom au canal (80 caractères au plus).",
+        "code_required": "Les sponsors et les promoteurs ont besoin d’un code.",
+        "code_not_allowed": "Seuls les sponsors et les promoteurs ont un code. Laissez ce champ vide.",
+        "code_format": "Utilisez 3 à 32 lettres, chiffres, tirets ou traits de soulignement.",
+        "code_taken": "Un autre canal de cet événement a déjà ce code.",
+        "releaseAt": "Saisissez une date et une heure, ou laissez vide.",
+        "seats": "Choisissez au moins une rangée ou une table, et des numéros de place qui y existent."
+      },
+      "allotTitle": "Attribuer des places",
+      "allotDescription": "Choisissez des rangées et des tables, et éventuellement seulement certaines de leurs places. Toutes les dates de l’événement suivent. Les places déjà dans un canal passent dans celui que vous choisissez.",
+      "noSeats": "Le plan n’a pas encore de rangées ni de tables.",
+      "allotTo": "Canal",
+      "everyChannel": "Aucun canal (ouvert à tous les canaux)",
+      "which": "Rangées et tables",
+      "item": {
+        "row": "Rangée {label} ({seats, plural, one {# place} other {# places}})",
+        "table": "Table {label} ({seats, plural, one {# place} other {# places}})"
+      },
+      "itemAllotted": "{count, plural, one {# place} other {# places}} dans {name}",
+      "seatNumbers": "Seulement ces places (facultatif)",
+      "seatNumbersHint": "Numéros de place dans les rangées et tables choisies, par ex. 1-4, 9. Laissez vide pour toutes leurs places.",
+      "allot": "Attribuer les places",
+      "allotted": "{count, plural, =0 {Aucune place modifiée.} one {# place attribuée.} other {# places attribuées.}}",
+      "freed": "{count, plural, =0 {Aucune place n’était dans un canal.} one {# place est de nouveau ouverte à tous les canaux.} other {# places sont de nouveau ouvertes à tous les canaux.}}"
+    },
+    "revisions": {
+      "title": "Révisions du plan",
+      "description": "Chaque enregistrement du plan est une révision. Voyez ce que chacune a changé et revenez à un plan antérieur. Les places réservées et vendues restent toujours telles quelles.",
+      "noPlan": "Cet événement n’a pas encore de plan de salle. Créez-en un d’abord ; chaque enregistrement apparaîtra ensuite ici.",
+      "none": "Aucune révision pour l’instant",
+      "noneHint": "Le prochain enregistrement du plan sera la première révision.",
+      "readOnly": "Vous pouvez voir les révisions mais pas les restaurer.",
+      "listTitle": "Toutes les révisions",
+      "col": {
+        "revision": "Révision",
+        "when": "Enregistrée",
+        "what": "Quoi",
+        "changes": "Places modifiées"
+      },
+      "revision": "Révision {number}",
+      "currentBadge": "Le plan actuel",
+      "kindSave": "Enregistrée",
+      "kindRestore": "Révision {number} restaurée",
+      "seats": "{count, plural, one {# place} other {# places}}",
+      "first": "La première révision conservée.",
+      "noSeatChanges": "Aucune place ajoutée, supprimée ni renumérotée.",
+      "added": "{count, plural, one {# place ajoutée} other {# places ajoutées}}",
+      "removed": "{count, plural, one {# place supprimée} other {# places supprimées}}",
+      "renumbered": "{count, plural, one {# place renumérotée} other {# places renumérotées}}",
+      "moved": "{count, plural, one {# place déplacée} other {# places déplacées}}",
+      "detailTitle": "Révision {number}",
+      "changedTitle": "Ce qu’elle a changé",
+      "restoreWouldTitle": "La restaurer changerait",
+      "addedTitle": "Places ajoutées",
+      "removedTitle": "Places supprimées",
+      "renumberedTitle": "Places renumérotées",
+      "renumberedSeat": "{from} → {to}",
+      "listOf": "{title} ({count})",
+      "more": "{count, plural, one {et # autre} other {et # autres}}",
+      "inUseTitle": "Places réservées et vendues",
+      "inUseNone": "Aucune place n’est réservée ni vendue : rien ne s’y oppose.",
+      "inUseKept": "{count, plural, =0 {Aucune place réservée ou vendue ne reste à sa place.} one {# place réservée ou vendue reste exactement telle quelle.} other {# places réservées ou vendues restent exactement telles quelles.}}",
+      "inUseRemapped": "{count, plural, one {# place réservée ou vendue passe sur la place portant son libellé dans cette révision (même numéro, même billet) :} other {# places réservées ou vendues passent sur les places portant leur libellé dans cette révision (mêmes numéros, mêmes billets) :}}",
+      "conflictsTitle": "{count, plural, one {Cette révision ne peut pas être restaurée : # place réservée ou vendue serait perdue.} other {Cette révision ne peut pas être restaurée : # places réservées ou vendues seraient perdues.}}",
+      "conflict": {
+        "removed": {
+          "sold": "{label} est vendue et cette révision n’a aucune place avec ce libellé.",
+          "held": "{label} est réservée par un acheteur et cette révision n’a aucune place avec ce libellé."
+        },
+        "renumbered": {
+          "sold": "{label} est vendue et deviendrait {to} : le billet de l’acheteur indiquerait une autre place.",
+          "held": "{label} est réservée par un acheteur et deviendrait {to}."
+        }
+      },
+      "conflictsRefused": "Des places réservées ou vendues ne figurent plus dans cette révision. Rien n’a été modifié.",
+      "isCurrent": "C’est le plan tel qu’il est maintenant.",
+      "restore": "Restaurer la révision {number}",
+      "restoredNotice": "Révision {number} restaurée. Le plan actuel est la révision {now}."
     }
   },
   "venueMap": {
@@ -2772,7 +2911,8 @@
       "guests": "Invités",
       "markHandled": "Marquer comme traitée",
       "markNew": "Marquer comme nouvelle"
-    }
+    },
+    "layoutLibrary": "Bibliothèque de plans"
   },
   "details": {
     "title": "Détails de l’événement",
@@ -4771,8 +4911,13 @@
       "slot_full": "Cet événement a déjà 20 images de plan.",
       "forbidden": "Vous ne pouvez pas modifier ce plan.",
       "network": "L'import a échoué. Vérifiez votre connexion et réessayez.",
-      "generic": "L'import a échoué. Réessayez."
-    }
+      "generic": "L'import a échoué. Réessayez.",
+      "pdf_page": "Cette page n’existe pas : le PDF compte {pages, plural, one {# page} other {# pages}}.",
+      "pdf_unreadable": "Ce PDF est illisible. Exportez le plan en image ou dans un autre PDF et réessayez."
+    },
+    "pdfPage": "Page (PDF)",
+    "pdfHint": "Un plan en PDF convient aussi : choisissez la page du plan. Elle est convertie en image dans votre navigateur, puis envoyée comme une image.",
+    "pdfDrawing": "Dessin de la page {page} du PDF…"
   },
   "humanCheck": {
     "legend": "Vérification de sécurité",
@@ -9091,5 +9236,48 @@
       "questionNotAllowed": "Cette question ne peut pas être imprimée sur les badges."
     },
     "elements": "Éléments de cette face"
+  },
+  "seatingLibrary": {
+    "title": "Bibliothèque de plans",
+    "description": "Les plans de salle que vous avez enregistrés depuis vos événements. Créez un nouvel événement à partir de l’un d’eux ; chaque événement garde sa propre copie.",
+    "deleted": "Plan retiré de la bibliothèque. Les événements qui l’utilisaient gardent leur copie.",
+    "emptyTitle": "Votre bibliothèque de plans est vide",
+    "emptyHint": "Ouvrez le plan de salle d’un événement et choisissez « Enregistrer le plan » pour le garder ici.",
+    "emptyViewer": "Les plans enregistrés depuis les événements apparaîtront ici.",
+    "toEvents": "Aller aux événements",
+    "startTitle": "Créer un événement à partir d’un plan",
+    "startDescription": "Le nouvel événement reçoit sa propre copie du plan. Vous tarifez ensuite ses places et les mettez en vente.",
+    "layout": "Plan",
+    "layoutOption": "{name} ({seats, plural, one {# place} other {# places}})",
+    "eventName": "Nom de l’événement",
+    "profile": "Type d’événement",
+    "timezone": "Fuseau horaire",
+    "startsAt": "Début",
+    "endsAt": "Fin",
+    "start": "Créer l’événement",
+    "fixErrors": "Veuillez corriger le champ signalé.",
+    "errors": {
+      "layoutId": "Choisissez un plan.",
+      "name": "Donnez un nom à l’événement (2 à 160 caractères).",
+      "slug": "Un événement porte déjà ce nom. Choisissez-en un autre.",
+      "profile": "Choisissez un type d’événement avec placement.",
+      "startsAt": "Indiquez quand l’événement commence.",
+      "endsAt": "Indiquez quand l’événement se termine, après son début.",
+      "layoutName": "Donnez un nom au plan (120 caractères au plus)."
+    },
+    "listTitle": "Plans enregistrés",
+    "seats": "{count, plural, one {# place} other {# places}}",
+    "rows": "{count, plural, one {# rangée} other {# rangées}}",
+    "tables": "{count, plural, one {# table} other {# tables}}",
+    "withImage": "avec une image du plan",
+    "usedBy": "{count, plural, =0 {Pas encore utilisé par un événement} one {Utilisé par # événement} other {Utilisé par # événements}}",
+    "updated": "mis à jour le {date}",
+    "renameLabel": "Nom de {name}",
+    "rename": "Renommer",
+    "renamed": "Renommé.",
+    "startFrom": "Créer un événement avec ce plan",
+    "startFromNamed": "Créer un événement avec {name}",
+    "delete": "Supprimer",
+    "deleteNamed": "Supprimer {name}"
   }
 }
