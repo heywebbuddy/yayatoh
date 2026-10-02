@@ -470,10 +470,15 @@ export const assistanceWidget = defineWidget(
 /** How far back the event's campaign tile looks (the attribution window's maximum). */
 export const CAMPAIGNS_WIDGET_DAYS = 90;
 
-export const campaignsWidget = defineWidget(
-  WIDGET_META.campaigns,
-  CampaignsWidgetDto,
-  async ({ tx, ctx, scope }) => {
+/**
+ * Messaging campaigns' names by id (batch 3g merge): M3.6b's campaigns module is this module's
+ * tier, so the app passes its reader in (`campaignNamesTx`); without one, a campaign is named by
+ * its tracked links' label (M3.6b labels them with the campaign's name at the time).
+ */
+export type CampaignNames = (tx: TenantTx, ids: readonly string[]) => Promise<ReadonlyMap<string, string>>;
+
+export const campaignsWidget = (names: CampaignNames | null) =>
+  defineWidget(WIDGET_META.campaigns, CampaignsWidgetDto, async ({ tx, ctx, scope }) => {
     const from = new Date(ctx.now.getTime() - (CAMPAIGNS_WIDGET_DAYS - 1) * 86_400_000);
     const day = (d: Date) => utcToZonedInput(d, scope.event.timezone).slice(0, 10);
     const r = await analyticsReportTx(tx, ctx, {
@@ -485,6 +490,13 @@ export const campaignsWidget = defineWidget(
     const campaigns = r.rows.filter(
       (x): x is typeof x & { kind: 'campaign' | 'utm' } => x.kind === 'campaign' || x.kind === 'utm',
     );
+    const shown = campaigns.slice(0, 5);
+    const named = names
+      ? await names(
+          tx,
+          shown.filter((c) => c.kind === 'campaign').map((c) => c.key.slice(2)),
+        )
+      : new Map<string, string>();
     return {
       currency: r.currency,
       fromDay: r.fromDay,
@@ -499,10 +511,10 @@ export const campaignsWidget = defineWidget(
         firstTouchRevenueMinor: r.totals.firstTouch.revenueMinor,
         conversionBps: r.totals.conversionBps,
       },
-      campaigns: campaigns.slice(0, 5).map((c) => ({
+      campaigns: shown.map((c) => ({
         key: c.key,
         kind: c.kind,
-        name: c.name,
+        name: (c.kind === 'campaign' ? named.get(c.key.slice(2)) : undefined) ?? c.name,
         sends: c.sends,
         clicks: c.clicks,
         orders: c.lastTouch.orders,
@@ -513,8 +525,7 @@ export const campaignsWidget = defineWidget(
       })),
       more: Math.max(0, campaigns.length - 5),
     };
-  },
-);
+  });
 
 export const deliverabilityWidget = defineWidget(
   WIDGET_META.deliverability,

@@ -12,6 +12,7 @@ import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { AnalyticsRows, FigureTiles, RangeForm } from '@/components/marketing-analytics.tsx';
 import { Link } from '@/i18n/navigation.ts';
+import { nameCampaignRows } from '@/server/campaign-names.ts';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 
@@ -59,6 +60,8 @@ export default async function MarketingAnalyticsPage({
     error = reason;
     report = await executeQuery(analyticsReportQuery, { dimension: view }, data.ctx, ports);
   }
+  // Batch 3g merge: messaging campaigns by their M3.6b name.
+  report = { ...report, rows: await nameCampaignRows(data.ctx, report.rows) };
   const base = `/o/${org}/marketing-analytics`;
   const prefix = locale === 'en' ? '' : `/${locale}`;
   const range = error

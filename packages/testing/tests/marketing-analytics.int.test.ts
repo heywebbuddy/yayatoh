@@ -347,7 +347,8 @@ describe('deliverability', () => {
 });
 
 describe('Command Center tiles', () => {
-  const tile = (ctx = m.ctx()) => executeQuery(campaignsWidget.loader, { eventId: s.eventId }, ctx, ports);
+  const tile = (ctx = m.ctx()) =>
+    executeQuery(campaignsWidget(null).loader, { eventId: s.eventId }, ctx, ports);
   const mail = (ctx = m.ctx()) =>
     executeQuery(deliverabilityWidget.loader, { eventId: s.eventId }, ctx, ports);
 
@@ -429,7 +430,7 @@ describe('permissions and isolation', () => {
     ).rejects.toMatchObject({ code: 'not_found' });
     expect((await executeQuery(deliverabilityReportQuery, {}, b.ctx(), ports)).campaigns).toEqual([]);
     await expect(
-      executeQuery(campaignsWidget.loader, { eventId: s.eventId }, b.ctx(), ports),
+      executeQuery(campaignsWidget(null).loader, { eventId: s.eventId }, b.ctx(), ports),
     ).rejects.toMatchObject({ code: 'not_found' });
     // A's owner acting in B's org is not a member there.
     await expect(report({}, userCtx(m.ownerId, b.org.id))).rejects.toMatchObject({ code: 'forbidden' });

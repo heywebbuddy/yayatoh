@@ -7,6 +7,7 @@ import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { AnalyticsRows, FigureTiles, RangeForm, ratePct } from '@/components/marketing-analytics.tsx';
 import { Link } from '@/i18n/navigation.ts';
+import { campaignNames } from '@/server/campaign-names.ts';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 
@@ -64,7 +65,10 @@ export default async function CampaignAnalyticsPage({
     timeZone: d.timeZone,
   });
   const canOrders = roleCan(data.role, 'orders:read');
-  const name = d.name ?? t('unnamed');
+  // Batch 3g merge: a messaging campaign by its M3.6b name.
+  const named =
+    d.kind === 'campaign' ? (await campaignNames(data.ctx, [key.slice(2)])).get(key.slice(2)) : undefined;
+  const name = named ?? d.name ?? t('unnamed');
   const rangeQs = new URLSearchParams({ from: d.fromDay, to: d.toDay }).toString();
   return (
     <>

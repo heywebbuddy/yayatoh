@@ -49,6 +49,7 @@ export {
   AssistanceWidgetDto,
   alertsSlotWidget,
   assistanceWidget,
+  type CampaignNames,
   CampaignsWidgetDto,
   CheckinsWidgetDto,
   campaignsWidget,

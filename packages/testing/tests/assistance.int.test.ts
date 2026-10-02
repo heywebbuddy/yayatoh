@@ -1,5 +1,11 @@
 import { createECDH, randomBytes } from 'node:crypto';
-import { evaluateEventAlertsTx, listAlertsQuery } from '@yayatoh/alerts';
+import {
+  catchUpAlerts,
+  evaluateEventAlertsTx,
+  evaluateOrgNow,
+  listAlertsQuery,
+  setMyAlertPhoneCommand,
+} from '@yayatoh/alerts';
 import {
   addNoteCommand,
   assignCommand,
@@ -16,6 +22,7 @@ import {
   deviceContext,
   enrollDeviceCommand,
   heartbeatCommand,
+  reportPresenceCommand,
   subscribeStaffPushCommand,
 } from '@yayatoh/checkin';
 import { assistanceWidget } from '@yayatoh/command-center';
@@ -679,4 +686,107 @@ describe('Command Center widget and isolation', () => {
     );
     expect(seen?.n).toBe(0);
   });
+});
+
+describe('through the outbox (batch 3g wiring)', () => {
+  it('a live request past its SLA raises exactly one assistanceOverdue alert through the evaluator, sent urgently to on-duty staff', async () => {
+    // The outbox evaluator works at the real clock: an event live now, a medical request (urgent,
+    // 2-minute SLA) asked three minutes ago, a manager at the doors with an alert phone.
+    const now = Date.now();
+    const e = await executeCommand(
+      createEventCommand,
+      {
+        name: 'Outbox help night',
+        timezone: 'America/Chicago',
+        startsAt: new Date(now - 3_600_000).toISOString(),
+        endsAt: new Date(now + 3 * 3_600_000).toISOString(),
+      },
+      a.ctx(),
+      ports,
+    );
+    const tt = await executeCommand(
+      createTicketTypeCommand,
+      { eventId: e.id, name: 'GA', priceMinor: 0, quantityTotal: 2, maxPerOrder: 2 },
+      a.ctx(),
+      ports,
+    );
+    await executeCommand(transitionEventCommand, { eventId: e.id, transition: 'publish' }, a.ctx(), ports);
+    const order = await executeCommand(
+      startCheckoutCommand,
+      {
+        eventId: e.id,
+        items: [{ ticketTypeId: tt.id, quantity: 1 }],
+        buyer: { email: `outbox-${uuidv7().slice(-6)}@example.test`, name: 'Hana Guest' },
+      },
+      createCtx({ orgId: a.org.id }),
+      ports,
+    );
+    const ticket = (await orderByManageToken(order.manageToken))?.tickets[0]?.id as string;
+    const onDuty = await member('manager');
+    await executeCommand(
+      setMyAlertPhoneCommand,
+      { smsPhone: '+1 555 010 0377' },
+      userCtx(onDuty, a.org.id),
+      ports,
+    );
+    await executeCommand(
+      reportPresenceCommand,
+      { eventId: e.id, checkpointId: null },
+      userCtx(onDuty, a.org.id),
+      ports,
+    );
+    const r = await executeCommand(
+      guestRequestCommand,
+      {
+        eventId: e.id,
+        ticketToken: assistanceTicketToken(ticket),
+        reason: 'medical',
+        note: '',
+        location: '',
+      },
+      guestCtx(a.org.id, new Date(now - 3 * 60_000)),
+      ports,
+    );
+    const deps = { notifier: createNotifier() };
+    const overdue = async (status: 'active' | 'resolved' = 'active') =>
+      (await executeQuery(listAlertsQuery, { eventId: e.id, status }, a.ctx(), ports)).filter(
+        (x) => x.rule === 'assistanceOverdue',
+      );
+    expect(await overdue()).toEqual([]);
+    // `assistance.requested@1` reaches the alert engine's outbox subscriber.
+    await catchUpAlerts(a.org.id, deps);
+    const raised = await overdue();
+    expect(raised).toHaveLength(1);
+    expect(raised[0]).toMatchObject({ severity: 'critical', state: 'open', count: 1 });
+    // Live-critical (M3.3a): the manager at the doors gets the urgent text, whatever the hour.
+    const texts = await sqlRows<{ kind: string; user_id: string }>(
+      a.org.id,
+      sql`select kind, recipient_user_id as user_id from notifications.messages
+        where channel = 'sms' and dedupe_key like ${`alert:${raised[0]?.id}:%`}`,
+    );
+    expect(texts.filter((t) => t.user_id === onDuty).map((t) => t.kind)).toEqual([
+      'alerts.alert-urgent-text',
+    ]);
+    // Again, and the scheduled pass: still exactly one alert, one urgent text.
+    await catchUpAlerts(a.org.id, deps);
+    await evaluateOrgNow(a.org.id, deps, { full: false });
+    expect(await overdue()).toHaveLength(1);
+    const again = await sqlRows<{ n: number }>(
+      a.org.id,
+      sql`select count(*)::int as n from notifications.messages
+        where channel = 'sms' and kind = 'alerts.alert-urgent-text'
+          and dedupe_key like ${`alert:${raised[0]?.id}:%`}`,
+    );
+    expect(again[0]?.n).toBe(1);
+    // Taken: `assistance.updated@1` resolves it through the same subscriber.
+    await executeCommand(
+      assignCommand,
+      { eventId: e.id, requestId: r.requestId, assignee: 'me' },
+      a.ctx(),
+      ports,
+    );
+    await catchUpAlerts(a.org.id, deps);
+    expect(await overdue()).toEqual([]);
+    expect((await overdue('resolved')).map((x) => x.id)).toEqual([raised[0]?.id]);
+  }, 120_000);
 });

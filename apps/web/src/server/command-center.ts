@@ -2,10 +2,12 @@ import 'server-only';
 import { listAlertsQuery, RULES } from '@yayatoh/alerts';
 import { ASSISTANCE_CHANNEL } from '@yayatoh/assistance';
 import { getUsersByIds } from '@yayatoh/auth';
+import { campaignNamesTx } from '@yayatoh/campaigns';
 import { reportPresenceCommand } from '@yayatoh/checkin';
 import {
   AlertsWidgetDto,
   COMMAND_CENTER_WIDGETS,
+  campaignsWidget,
   defineWidget,
   type FeedAlert,
   isWidgetKey,
@@ -52,6 +54,8 @@ export const WIDGETS: WidgetRegistry = [
   // M3.3a: the live feed's alert entries come from the alert engine; presence names from auth.
   liveFeedWidget(feedAlerts),
   staffPresenceWidget(memberNames),
+  // Batch 3g merge: M3.8b's campaigns tile names messaging campaigns from M3.6b (same tier).
+  campaignsWidget(campaignNamesTx),
 ].reduce(withWidget, COMMAND_CENTER_WIDGETS);
 
 /**

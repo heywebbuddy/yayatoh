@@ -8,6 +8,7 @@ import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { ratePct } from '@/components/marketing-analytics.tsx';
 import { Link } from '@/i18n/navigation.ts';
+import { campaignNames } from '@/server/campaign-names.ts';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 
@@ -39,6 +40,12 @@ export default async function DeliverabilityPage({
       ? executeQuery(listAlertsQuery, { status: 'active' }, data.ctx, ports)
       : Promise.resolve([]),
   ]);
+  // Batch 3g merge: campaigns by their M3.6b name (readers without `marketing:read` keep the label).
+  const names = await campaignNames(
+    data.ctx,
+    d.campaigns.map((c) => c.campaignId),
+  );
+  const campaignRows = d.campaigns.map((c) => ({ ...c, name: names.get(c.campaignId) ?? c.name }));
   const alert = alerts.find((a) => a.rule === 'deliverability') ?? null;
   const suppressions = data.modules.has('messaging') ? `/o/${org}/messaging#suppressions` : null;
   const n = new Intl.NumberFormat(locale);
@@ -186,7 +193,7 @@ export default async function DeliverabilityPage({
         <Table
           caption={t('campaignsTitle')}
           rowKey={(r) => r.campaignId}
-          rows={d.campaigns}
+          rows={campaignRows}
           empty={t('noCampaigns', { days: d.thresholds.windowDays })}
           columns={[
             {

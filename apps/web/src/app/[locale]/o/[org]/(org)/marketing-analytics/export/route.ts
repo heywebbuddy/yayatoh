@@ -9,6 +9,7 @@ import {
 } from '@yayatoh/marketing';
 import { roleCan } from '@yayatoh/tenancy';
 import { getTranslations } from 'next-intl/server';
+import { nameCampaignRows } from '@/server/campaign-names.ts';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 
@@ -30,12 +31,14 @@ export async function GET(req: Request, { params }: { params: Promise<{ locale: 
     return x && x.length <= 10 ? x : undefined;
   };
   try {
-    const report = await executeQuery(
+    const read = await executeQuery(
       analyticsReportQuery,
       { dimension: view, from: day('from'), to: day('to') },
       data.ctx,
       ports,
     );
+    // Batch 3g merge: messaging campaigns by their M3.6b name, like the page.
+    const report = { ...read, rows: await nameCampaignRows(data.ctx, read.rows) };
     const t = await getTranslations({ locale, namespace: 'marketingAnalytics' });
     const headers = Object.fromEntries(ANALYTICS_CSV_COLUMNS.map((c) => [c, t(`csv.${c}`)])) as Record<
       AnalyticsCsvColumn,
