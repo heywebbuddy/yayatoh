@@ -93,4 +93,7 @@ export const privateColumns = columnPrivacy('orders', {
     failure_code: internal(),
     requested_by: internal(),
   },
+  // M4.8a: a gift order's donation item. The name is the campaign's (the host's text); amounts
+  // are numbers, never in a public payload (the giving page shows campaign totals only, P4-13).
+  donation_items: { name: internal(), currency: 'vocab' },
 });

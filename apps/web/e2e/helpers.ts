@@ -56,6 +56,8 @@ export function wrongCode(right: (at: number) => string): string {
 export interface TestUser {
   readonly email: string;
   readonly orgSlug: string | null;
+  /** With `event: 'published'`: the event's slug. */
+  readonly eventSlug?: string | null;
   readonly setupKey: string | null;
   readonly backupCodes: readonly string[];
 }
@@ -77,6 +79,10 @@ export async function newUser(
     name?: string;
     /** With `org`: terms accepted and one published event (see /api/dev/user `event=published`). */
     event?: 'published';
+    /** With `event`: the event's profile (e.g. `gala`, M4.8a). */
+    profile?: string;
+    /** With `org`: a fake connected account that finished onboarding (M4.8a). */
+    payouts?: 'active';
   } = {},
 ): Promise<TestUser> {
   const form = new URLSearchParams();
@@ -87,6 +93,8 @@ export async function newUser(
   if (opts.signIn === false) form.set('signIn', '0');
   if (opts.name) form.set('name', opts.name);
   if (opts.event) form.set('event', opts.event);
+  if (opts.profile) form.set('profile', opts.profile);
+  if (opts.payouts) form.set('payouts', opts.payouts);
   const res = await page.request.post('/api/dev/user', {
     headers: { 'content-type': 'application/x-www-form-urlencoded' },
     data: form.toString(),

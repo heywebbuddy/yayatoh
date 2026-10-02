@@ -59,7 +59,6 @@ export const PLACEHOLDER_SECTIONS = [
   'day-of',
   'tables-sponsors',
   'branding',
-  'donations',
   'communications',
   'libraries',
 ] as const;
