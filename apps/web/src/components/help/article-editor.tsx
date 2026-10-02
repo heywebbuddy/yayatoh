@@ -28,8 +28,8 @@ export interface CategoryOption {
   readonly audienceLabel: string;
 }
 
-const area = 'rounded-card border bg-white px-4 py-2 text-body';
-const select = 'min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body';
+const area = 'rounded-card border bg-surface px-4 py-2 text-body';
+const select = 'field';
 
 /**
  * Create or edit a help article (M3.11b). A translation is the same address in another language;
@@ -68,7 +68,7 @@ export function ArticleEditor({
   return (
     <form action={formAction} onSubmit={keepValues(formAction)} className="flex flex-col gap-4" noValidate>
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="article-category" className="text-caption text-zinc-600">
+        <label htmlFor="article-category" className="text-[13px] font-bold text-ink">
           {t('fields.category')}
         </label>
         <select
@@ -87,7 +87,7 @@ export function ArticleEditor({
       </div>
       {locales ? (
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="article-locale" className="text-caption text-zinc-600">
+          <label htmlFor="article-locale" className="text-[13px] font-bold text-ink">
             {t('fields.locale')}
           </label>
           <select id="article-locale" name="locale" defaultValue={values?.locale ?? 'en'} className={select}>
@@ -120,7 +120,7 @@ export function ArticleEditor({
         error={slugError}
       />
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="article-summary" className="text-caption text-zinc-600">
+        <label htmlFor="article-summary" className="text-[13px] font-bold text-ink">
           {t('fields.summary')}
         </label>
         <textarea
@@ -130,12 +130,12 @@ export function ArticleEditor({
           maxLength={300}
           defaultValue={values?.summary}
           aria-invalid={bad.has('summary') || undefined}
-          className={`${area} ${bad.has('summary') ? 'border-pink-700' : 'border-zinc-200'}`}
+          className={`${area} ${bad.has('summary') ? 'field-invalid' : ''}`}
         />
       </div>
       <div className="flex flex-col gap-1.5">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <label htmlFor="article-body" className="text-caption text-zinc-600">
+          <label htmlFor="article-body" className="text-[13px] font-bold text-ink">
             {t('fields.body')}
           </label>
           <Button
@@ -157,21 +157,21 @@ export function ArticleEditor({
           onChange={(e) => setBody(e.target.value)}
           aria-invalid={bad.has('body') || undefined}
           aria-describedby="article-body-hint"
-          className={`${area} font-mono ${bad.has('body') ? 'border-pink-700' : 'border-zinc-200'}`}
+          className={`${area} font-mono ${bad.has('body') ? 'field-invalid' : ''}`}
         />
-        <p id="article-body-hint" className="text-caption text-zinc-500">
+        <p id="article-body-hint" className="text-caption text-ink-2">
           {tc('bodyHint')}
         </p>
         <section
           id={previewId}
           aria-label={tc('previewLabel')}
           hidden={!preview}
-          className="rounded-card border border-dashed border-zinc-300 bg-white p-4"
+          className="rounded-card border border-dashed border-line-strong bg-surface p-4"
         >
           {body.trim() ? (
             <Markdown source={body} />
           ) : (
-            <p className="text-body text-zinc-500">{tc('previewEmpty')}</p>
+            <p className="text-body text-ink-2">{tc('previewEmpty')}</p>
           )}
         </section>
       </div>
@@ -196,8 +196,8 @@ export function ArticleEditor({
         defaultValue={values?.position ?? 0}
         error={bad.has('position') ? t('positionError') : undefined}
       />
-      <fieldset className="flex flex-col gap-4 rounded-card border border-zinc-200 p-4">
-        <legend className="px-1 text-caption text-zinc-600">{tc('seoLegend')}</legend>
+      <fieldset className="flex flex-col gap-4 rounded-card border border-line p-4">
+        <legend className="px-1 text-[13px] font-bold text-ink">{tc('seoLegend')}</legend>
         <Input
           id="article-seo-title"
           name="seoTitle"

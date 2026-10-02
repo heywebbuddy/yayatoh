@@ -81,11 +81,11 @@ export function StaffHelp({ client, refreshKey }: { client: ScanClient; refreshK
           {t('scan.queueTitle')}
         </h2>
         {!loaded ? (
-          <p className="text-body text-zinc-600">{t('scan.loading')}</p>
+          <p className="text-body text-ink-2">{t('scan.loading')}</p>
         ) : requests === null ? (
-          <p className="text-body text-zinc-600">{t('scan.unavailable')}</p>
+          <p className="text-body text-ink-2">{t('scan.unavailable')}</p>
         ) : requests.length === 0 ? (
-          <p className="text-body text-zinc-600" data-testid="staff-help-empty">
+          <p className="text-body text-ink-2" data-testid="staff-help-empty">
             {t('scan.none')}
           </p>
         ) : (
@@ -96,19 +96,19 @@ export function StaffHelp({ client, refreshKey }: { client: ScanClient; refreshK
                 <li
                   key={r.id}
                   data-request={r.number}
-                  className={`flex flex-col gap-1 rounded-card border-2 px-4 py-3 ${r.priority === 'urgent' ? 'border-pink-700' : 'border-zinc-200'}`}
+                  className={`flex flex-col gap-1 rounded-card border-2 px-4 py-3 ${r.priority === 'urgent' ? 'border-danger' : 'border-line'}`}
                 >
                   <span className="flex flex-wrap items-baseline gap-x-2 text-body">
                     <span className="font-medium">{title}</span>
-                    <span className="text-caption text-zinc-600">
+                    <span className="text-caption text-ink-2">
                       {t(`priority.${r.priority}`)} · {r.mine ? t('mineState') : t(`state.${r.state}`)}
                     </span>
                     <SlaTimer dueAt={r.dueAt} running={r.state === 'new'} />
                   </span>
                   {r.guest ? (
-                    <span className="text-caption text-zinc-700">{t('guestLine', r.guest)}</span>
+                    <span className="text-caption text-ink-2">{t('guestLine', r.guest)}</span>
                   ) : null}
-                  {where(r) ? <span className="text-caption text-zinc-700">{where(r)}</span> : null}
+                  {where(r) ? <span className="text-caption text-ink-2">{where(r)}</span> : null}
                   {r.note ? <span className="text-body">{r.note}</span> : null}
                   <span className="flex flex-wrap gap-2 pt-1">
                     {r.state === 'new' || (!r.mine && r.state !== 'in_progress') ? (
@@ -158,17 +158,17 @@ export function StaffHelp({ client, refreshKey }: { client: ScanClient; refreshK
         <h2 id="staff-ask" className="text-section">
           {t('scan.askTitle')}
         </h2>
-        <p className="text-body text-zinc-600">{t('scan.askHint')}</p>
+        <p className="text-body text-ink-2">{t('scan.askHint')}</p>
         <form onSubmit={ask} className="flex flex-col gap-3">
           <div className="flex flex-col gap-1">
-            <label htmlFor="staff-ask-reason" className="text-caption text-zinc-600">
+            <label htmlFor="staff-ask-reason" className="text-[13px] font-bold text-ink">
               {t('scan.reasonLabel')}
             </label>
             <select
               id="staff-ask-reason"
               value={reason}
               onChange={(e) => setReason(e.target.value)}
-              className="min-h-11 rounded-pill border border-zinc-200 bg-white px-4 text-body"
+              className="field"
             >
               {STAFF_REASONS.map((r) => (
                 <option key={r} value={r}>
@@ -178,7 +178,7 @@ export function StaffHelp({ client, refreshKey }: { client: ScanClient; refreshK
             </select>
           </div>
           <div className="flex flex-col gap-1">
-            <label htmlFor="staff-ask-note" className="text-caption text-zinc-600">
+            <label htmlFor="staff-ask-note" className="text-[13px] font-bold text-ink">
               {t('scan.noteLabel')}
             </label>
             <textarea
@@ -187,7 +187,7 @@ export function StaffHelp({ client, refreshKey }: { client: ScanClient; refreshK
               maxLength={500}
               rows={2}
               onChange={(e) => setNote(e.target.value)}
-              className="rounded-card border border-zinc-200 bg-white px-4 py-2 text-body"
+              className="field w-full py-3 leading-relaxed"
             />
           </div>
           <Button type="submit" disabled={sending} className="self-start">

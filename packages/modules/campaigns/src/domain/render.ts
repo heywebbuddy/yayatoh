@@ -1,7 +1,7 @@
 import { RTL_LOCALES } from '@yayatoh/contracts';
 import { EMAIL_MESSAGES, emailLocale, textOn } from '@yayatoh/notifications';
 import { html, SafeHtml } from '@yayatoh/pdf';
-import { color, emailFont, radius } from '@yayatoh/ui/tokens';
+import { email, emailFont, radius } from '@yayatoh/ui/tokens';
 import type { Block, CampaignContent } from './blocks.ts';
 
 export interface CampaignBrand {
@@ -59,7 +59,7 @@ export function renderCampaign(input: RenderCampaignInput): RenderedCampaign {
   const dir = RTL_LOCALES.has(lang) ? 'rtl' : 'ltr';
   const cat = EMAIL_MESSAGES[lang];
   const org = input.brand;
-  const brand = org.brandColor ?? color.ink;
+  const brand = org.brandColor ?? email.button;
   const onBrand = textOn(brand);
   const font = emailFont[input.content.font];
   const subject = input.test
@@ -77,7 +77,7 @@ export function renderCampaign(input: RenderCampaignInput): RenderedCampaign {
       .split(/\n{2,}/)
       .map(
         (para) =>
-          html`<p style="margin:0 0 16px;font-size:15px;line-height:1.55;color:${color.zinc[800]};">${para
+          html`<p style="margin:0 0 16px;font-size:15px;line-height:1.55;color:${email.body};">${para
             .split('\n')
             .map((line, i) => (i === 0 ? html`${line}` : html`<br>${line}`))}</p>`,
       );
@@ -89,7 +89,7 @@ export function renderCampaign(input: RenderCampaignInput): RenderedCampaign {
     switch (b.type) {
       case 'heading':
         text.push(b.text, '');
-        return html`<h2 style="margin:0 0 16px;font-size:22px;line-height:1.25;font-weight:400;color:${color.ink};">${b.text}</h2>`;
+        return html`<h2 style="margin:0 0 16px;font-size:22px;line-height:1.25;font-weight:800;letter-spacing:-0.02em;color:${email.ink};">${b.text}</h2>`;
       case 'text':
         text.push(b.text, '');
         return html`${paragraphs(b.text)}`;
@@ -105,17 +105,17 @@ export function renderCampaign(input: RenderCampaignInput): RenderedCampaign {
         if (!e) return html``;
         const href = input.links.get(b.id) ?? '#';
         text.push(e.name, when(e), ...(e.venue ? [e.venue] : []), `${cat.campaigns.eventCta}: ${href}`, '');
-        return html`<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 20px;border:1px solid ${color.zinc[200]};border-radius:16px;">
+        return html`<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 20px;border:1px solid ${email.line};border-radius:16px;">
 <tr><td style="padding:18px 20px;">
-<p style="margin:0 0 4px;font-size:17px;line-height:1.3;color:${color.ink};">${e.name}</p>
-<p style="margin:0 0 4px;font-size:14px;line-height:1.4;color:${color.zinc[700]};">${when(e)}</p>
-${e.venue ? html`<p style="margin:0 0 12px;font-size:14px;line-height:1.4;color:${color.zinc[700]};">${e.venue}</p>` : ''}
+<p style="margin:0 0 4px;font-size:17px;line-height:1.3;color:${email.ink};">${e.name}</p>
+<p style="margin:0 0 4px;font-size:14px;line-height:1.4;color:${email.muted};">${when(e)}</p>
+${e.venue ? html`<p style="margin:0 0 12px;font-size:14px;line-height:1.4;color:${email.muted};">${e.venue}</p>` : ''}
 <a href="${href}" style="display:inline-block;background:${brand};color:${onBrand};text-decoration:none;padding:10px 18px;border-radius:${radius.pill};font-size:14px;">${cat.campaigns.eventCta}</a>
 </td></tr></table>`;
       }
       case 'divider':
         text.push('---', '');
-        return html`<hr style="border:0;border-top:1px solid ${color.zinc[200]};margin:8px 0 24px;">`;
+        return html`<hr style="border:0;border-top:1px solid ${email.line};margin:8px 0 24px;">`;
       case 'footer':
         return html``;
     }
@@ -133,25 +133,25 @@ ${e.venue ? html`<p style="margin:0 0 12px;font-size:14px;line-height:1.4;color:
 <meta name="color-scheme" content="light">
 <title>${subject}</title>
 </head>
-<body style="margin:0;padding:0;background:${color.zinc[100]};font-family:${font};">
+<body style="margin:0;padding:0;background:${email.page};font-family:${font};">
 <div style="display:none;max-height:0;overflow:hidden;">${input.content.preheader}</div>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${color.zinc[100]};">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${email.page};">
 <tr><td align="center" style="padding:24px 12px;">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" dir="${dir}" style="max-width:560px;background:${color.white};border-radius:${radius.card};overflow:hidden;text-align:start;font-family:${font};">
-${input.test ? html`<tr><td style="background:${color.accent[100]};color:${color.zinc[900]};padding:10px 28px;font-size:13px;line-height:1.4;" data-test-banner="1"><strong>${cat.campaigns.testBanner}</strong></td></tr>` : ''}
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" dir="${dir}" style="max-width:560px;background:${email.card};border-radius:${radius.card};overflow:hidden;text-align:start;font-family:${font};">
+${input.test ? html`<tr><td style="background:${email.notice};color:${email.ink};padding:10px 28px;font-size:13px;line-height:1.4;" data-test-banner="1"><strong>${cat.campaigns.testBanner}</strong></td></tr>` : ''}
 <tr><td style="background:${brand};color:${onBrand};padding:18px 28px;font-size:16px;font-weight:600;">${
     org.logoUrl && (/^https?:\/\//.test(org.logoUrl) || org.logoUrl.startsWith(`${ORIGIN_TOKEN}/`))
-      ? html`<img src="${org.logoUrl}" alt="${org.logoAlt ?? org.name}" height="40" style="display:block;height:40px;width:auto;max-width:200px;border:0;margin:0 0 8px;background:${color.white};border-radius:6px;padding:4px;">`
+      ? html`<img src="${org.logoUrl}" alt="${org.logoAlt ?? org.name}" height="40" style="display:block;height:40px;width:auto;max-width:200px;border:0;margin:0 0 8px;background:${email.card};border-radius:6px;padding:4px;">`
       : ''
   }${org.name}</td></tr>
 <tr><td style="padding:28px 28px 8px;">
 ${body}
 </td></tr>
-<tr><td style="padding:16px 28px 24px;border-top:1px solid ${color.zinc[200]};font-size:12px;line-height:1.5;color:${color.zinc[600]};">
+<tr><td style="padding:16px 28px 24px;border-top:1px solid ${email.line};font-size:12px;line-height:1.5;color:${email.muted};">
 ${note ? html`<p style="margin:0 0 6px;">${note}</p>` : ''}
 <p style="margin:0 0 6px;">${why}</p>
 <p style="margin:0 0 6px;">${org.name} · ${address}</p>
-<p style="margin:0 0 6px;"><a href="${new SafeHtml(UNSUBSCRIBE_TOKEN)}" style="color:${color.zinc[700]};">${cat.common.unsubscribe}</a></p>
+<p style="margin:0 0 6px;"><a href="${new SafeHtml(UNSUBSCRIBE_TOKEN)}" style="color:${email.muted};">${cat.common.unsubscribe}</a></p>
 ${org.poweredByVisible ? html`<p style="margin:0;">${poweredBy}</p>` : ''}
 </td></tr>
 </table>

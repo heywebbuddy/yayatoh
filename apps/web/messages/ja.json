@@ -27,7 +27,14 @@
     "yourOrganizations": "所属する組織",
     "organization": "組織",
     "signOut": "サインアウト",
-    "security": "アカウントのセキュリティ"
+    "security": "アカウントのセキュリティ",
+    "menuSection": "メニュー",
+    "accountSection": "アカウント",
+    "newEvent": "新しいイベント",
+    "breadcrumb": "パンくずリスト",
+    "closeMenu": "メニューを閉じる",
+    "eventSections": "イベントのセクション",
+    "allEvents": "イベント"
   },
   "notifications": {
     "open": "通知",
@@ -572,7 +579,10 @@
   },
   "common": {
     "comingSoon": "今後のマイルストーンで提供予定",
-    "loading": "読み込み中…"
+    "loading": "読み込み中…",
+    "close": "閉じる",
+    "retry": "もう一度試す",
+    "select": "選択"
   },
   "section": {
     "comingTitle": "このエリアは準備中です",
@@ -641,6 +651,7 @@
     "speakerPageTitle": "登壇者",
     "gallery": "ギャラリー",
     "register": "申し込む",
+    "hostedBy": "主催",
     "exhibitorMap": "出展者マップ"
   },
   "portal": {
@@ -1418,7 +1429,8 @@
       "placeholder": "#rrggbb",
       "preview": "チケットを入手",
       "ratio": "文字のコントラスト {ratio}:1",
-      "tooLight": "この色は白いページに対して明るすぎます（{ratio}:1）。ボタンが見えにくくなる可能性があります。より濃い色をお試しください。"
+      "tooLight": "この色は白いページに対して明るすぎます（{ratio}:1）。ボタンが見えにくくなる可能性があります。より濃い色をお試しください。",
+      "tooDark": "ダークテーマではこの色はページに対して暗すぎます（{ratio}:1）。ボタンが見えにくくなる場合があります。明るい色を試してください。"
     },
     "legal": {
       "title": "法的ページ",
@@ -2619,7 +2631,9 @@
     "clear": "絞り込みを解除",
     "noneTitle": "条件に一致するイベントはありません",
     "noneDescription": "別のカテゴリーやタグを試すか、絞り込みを解除してください。",
-    "tags": "タグ"
+    "tags": "タグ",
+    "search": "名前で検索",
+    "showing": "{total, plural, other {#件のイベント}}中 {from}–{to}件"
   },
   "venues": {
     "title": "会場",
@@ -6294,6 +6308,7 @@
         "open": "メール到達率を開く"
       }
     },
+    "openScanner": "スキャナーを開く",
     "tv": {
       "open": "TVモード",
       "title": "TVモード",
@@ -6313,7 +6328,10 @@
       "createdAt": "{time} に作成",
       "revokedAt": "{time} に無効化",
       "revoke": "無効にする",
-      "revokeLabel": "{label} を無効にする"
+      "revokeLabel": "{label} を無効にする",
+      "readOnly": "閲覧のみ",
+      "statusOn": "有効",
+      "statusOff": "停止"
     }
   },
   "alerts": {
@@ -6403,9 +6421,9 @@
       "payoutsPastDue": "受取アカウントを更新",
       "deliverability": "配信停止リストを開く",
       "automationFailed": "メッセージ状況を開く",
-      "assistanceOverdue": "ヘルプ依頼を開く",
       "campaignFailed": "キャンペーンを開く",
-      "disputeDeadline": "異議申し立てを開く"
+      "disputeDeadline": "異議申し立てを開く",
+      "assistanceOverdue": "ヘルプ依頼を開く"
     },
     "rules": {
       "unseated": "{count, plural, other {{countWords}人の参加者に座席がありません}}",
@@ -6425,9 +6443,9 @@
       "payoutsPastDue": "{count, plural, other {受取アカウントの要件{countWords}件が期限切れです}}",
       "deliverability": "メールの到達率に注意が必要です",
       "automationFailed": "{count, plural, other {本日{countWords}件のメッセージまたは一括操作が失敗しました}}",
-      "assistanceOverdue": "{count, plural, other {{countWords}件のヘルプ依頼が長く待たされています}}",
       "campaignFailed": "{count, plural, other {本日{countWords}件のキャンペーン配信が失敗しました}}",
-      "disputeDeadline": "{count, plural, other {{countWords}件の異議申し立てに間もなく証拠の提出が必要です}}"
+      "disputeDeadline": "{count, plural, other {{countWords}件の異議申し立てに間もなく証拠の提出が必要です}}",
+      "assistanceOverdue": "{count, plural, other {{countWords}件のヘルプ依頼が長く待たされています}}"
     },
     "widget": {
       "title": "アラート",
@@ -7525,6 +7543,7 @@
     "publicLink": "回答はこちら:",
     "publicLinkText": "公開の登録フォーム",
     "openBuilder": "登録フォームを編集",
+    "openReadOnly": "登録フォームを見る",
     "pagesTitle": "ページ",
     "emptyTitle": "まだページがありません",
     "emptyDescription": "最初のページを追加し、続けて質問を追加します。ページは登録種別に限定したり、特定の回答の後にだけ表示したりできます。",
@@ -7676,8 +7695,7 @@
     "submittedTitle": "ありがとうございます。登録が完了しました",
     "submittedDescription": "{name} さん、ありがとうございます。回答は主催者に送信されました。",
     "expiredTitle": "このリンクは有効期限が切れています",
-    "expiredDescription": "登録を続けるためのリンクは、最後の保存から 14 日間有効です。イベントページからもう一度始めてください。",
-    "openReadOnly": "登録フォームを見る"
+    "expiredDescription": "登録を続けるためのリンクは、最後の保存から 14 日間有効です。イベントページからもう一度始めてください。"
   },
   "agenda": {
     "publishing": {
@@ -8070,6 +8088,12 @@
       "sub_event_has_chart": "すでに専用の座席表があります。",
       "no_chart": "コピーできる座席表がまだありません。座席ページでイベントの座席表を作成するか、保存済みのフロアプランを選んでください。"
     }
+  },
+  "theme": {
+    "label": "カラーテーマ",
+    "light": "ライト",
+    "dark": "ダーク",
+    "system": "システム"
   },
   "speakerPortal": {
     "title": "登壇者ポータル",
@@ -8711,7 +8735,13 @@
       "offline": "オフラインです。端末がオンラインに戻ったらもう一度お試しください。",
       "invalid": "必要なものを選んでください。"
     },
-    "guestLine": "{name} · チケット {ticket}"
+    "guestLine": "{name} · チケット {ticket}",
+    "stats": {
+      "open": "対応中のリクエスト",
+      "urgent": "緊急",
+      "waiting": "担当者待ち",
+      "unassigned": "未割り当て"
+    }
   },
   "marketingAnalytics": {
     "title": "マーケティング分析",
@@ -8736,7 +8766,8 @@
       "lastRevenue": "売上（ラストタッチ）",
       "firstOrders": "注文（ファーストタッチ）",
       "firstRevenue": "売上（ファーストタッチ）",
-      "conversion": "コンバージョン率"
+      "conversion": "コンバージョン率",
+      "deliveredShare": "送信のうち配信済み"
     },
     "otherCurrency": "{count, plural, other {# 件の注文は他の通貨でした（件数には含み、売上には含みません）。}}",
     "viewLabel": "結果のグループ化",

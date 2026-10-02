@@ -27,7 +27,14 @@
     "yourOrganizations": "Your organizations",
     "organization": "Organization",
     "signOut": "Sign out",
-    "security": "Account security"
+    "security": "Account security",
+    "menuSection": "Menu",
+    "accountSection": "Account",
+    "newEvent": "New event",
+    "breadcrumb": "Breadcrumb",
+    "closeMenu": "Close menu",
+    "eventSections": "Event sections",
+    "allEvents": "Events"
   },
   "notifications": {
     "open": "Notifications",
@@ -572,7 +579,10 @@
   },
   "common": {
     "comingSoon": "Coming in a later milestone",
-    "loading": "Loading…"
+    "loading": "Loading…",
+    "close": "Close",
+    "retry": "Try again",
+    "select": "Select"
   },
   "section": {
     "comingTitle": "This area is being built",
@@ -641,6 +651,7 @@
     "speakerPageTitle": "Speaker",
     "gallery": "Gallery",
     "register": "Register",
+    "hostedBy": "Hosted by",
     "exhibitorMap": "Exhibitor map"
   },
   "portal": {
@@ -1418,7 +1429,8 @@
       "placeholder": "#rrggbb",
       "preview": "Get tickets",
       "ratio": "Text contrast {ratio}:1.",
-      "tooLight": "This colour is light against a white page ({ratio}:1); buttons may be hard to see. Try a darker shade."
+      "tooLight": "This colour is light against a white page ({ratio}:1); buttons may be hard to see. Try a darker shade.",
+      "tooDark": "On the dark theme this colour is dark against the page ({ratio}:1); buttons may be hard to see there. Try a lighter shade."
     },
     "legal": {
       "title": "Your legal pages",
@@ -2619,7 +2631,9 @@
     "clear": "Clear filters",
     "noneTitle": "No events match these filters",
     "noneDescription": "Try another category or tag, or clear the filters.",
-    "tags": "Tags"
+    "tags": "Tags",
+    "search": "Search by name",
+    "showing": "{from}–{to} of {total, plural, one {# event} other {# events}}"
   },
   "venues": {
     "title": "Venues",
@@ -6294,6 +6308,7 @@
         "open": "Open email deliverability"
       }
     },
+    "openScanner": "Open scanner",
     "tv": {
       "open": "TV mode",
       "title": "TV mode",
@@ -6313,7 +6328,10 @@
       "createdAt": "Created {time}",
       "revokedAt": "Turned off {time}",
       "revoke": "Turn off",
-      "revokeLabel": "Turn off {label}"
+      "revokeLabel": "Turn off {label}",
+      "readOnly": "Read-only",
+      "statusOn": "On",
+      "statusOff": "Off"
     }
   },
   "alerts": {
@@ -6403,9 +6421,9 @@
       "payoutsPastDue": "Update the payout account",
       "deliverability": "Open the suppression list",
       "automationFailed": "Open messaging health",
-      "assistanceOverdue": "Open the help queue",
       "campaignFailed": "Open campaigns",
-      "disputeDeadline": "Open the dispute queue"
+      "disputeDeadline": "Open the dispute queue",
+      "assistanceOverdue": "Open the help queue"
     },
     "rules": {
       "unseated": "{count, plural, one {{countWords} attendee does not have a seat} other {{countWords} attendees do not have seats}}",
@@ -6425,9 +6443,9 @@
       "payoutsPastDue": "{count, plural, one {{countWords} payout account requirement is past due} other {{countWords} payout account requirements are past due}}",
       "deliverability": "Email deliverability needs attention",
       "automationFailed": "{count, plural, one {{countWords} message or bulk action failed today} other {{countWords} messages or bulk actions failed today}}",
-      "assistanceOverdue": "{count, plural, one {{countWords} help request has waited too long} other {{countWords} help requests have waited too long}}",
       "campaignFailed": "{count, plural, one {{countWords} campaign send failed today} other {{countWords} campaign sends failed today}}",
-      "disputeDeadline": "{count, plural, one {{countWords} dispute needs evidence soon} other {{countWords} disputes need evidence soon}}"
+      "disputeDeadline": "{count, plural, one {{countWords} dispute needs evidence soon} other {{countWords} disputes need evidence soon}}",
+      "assistanceOverdue": "{count, plural, one {{countWords} help request has waited too long} other {{countWords} help requests have waited too long}}"
     },
     "widget": {
       "title": "Alerts",
@@ -7525,6 +7543,7 @@
     "publicLink": "People fill it in at",
     "publicLinkText": "the public registration form",
     "openBuilder": "Edit the registration form",
+    "openReadOnly": "See the registration form",
     "pagesTitle": "Pages",
     "emptyTitle": "No pages yet",
     "emptyDescription": "Add a first page, then its questions. Pages can be limited to registration types or shown only after certain answers.",
@@ -7676,8 +7695,7 @@
     "submittedTitle": "Thank you, you're registered",
     "submittedDescription": "Thanks, {name}. Your answers were sent to the organizer.",
     "expiredTitle": "This link has expired",
-    "expiredDescription": "Links to continue a registration work for 14 days after the last save. Start again from the event page.",
-    "openReadOnly": "See the registration form"
+    "expiredDescription": "Links to continue a registration work for 14 days after the last save. Start again from the event page."
   },
   "agenda": {
     "publishing": {
@@ -8070,6 +8088,12 @@
       "sub_event_has_chart": "It already has its own chart.",
       "no_chart": "There's no chart to copy yet. Create the event's plan on the Seating page, or choose a saved floor plan."
     }
+  },
+  "theme": {
+    "label": "Colour theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
   },
   "speakerPortal": {
     "title": "Speaker portal",
@@ -8711,7 +8735,13 @@
       "offline": "You're offline. Try again when the device is back online.",
       "invalid": "Choose what you need."
     },
-    "guestLine": "{name} · ticket {ticket}"
+    "guestLine": "{name} · ticket {ticket}",
+    "stats": {
+      "open": "Open requests",
+      "urgent": "Urgent",
+      "waiting": "Waiting for someone",
+      "unassigned": "Unassigned"
+    }
   },
   "marketingAnalytics": {
     "title": "Marketing analytics",
@@ -8736,7 +8766,8 @@
       "lastRevenue": "Revenue (last touch)",
       "firstOrders": "Orders (first touch)",
       "firstRevenue": "Revenue (first touch)",
-      "conversion": "Conversion"
+      "conversion": "Conversion",
+      "deliveredShare": "Delivered, of sends"
     },
     "otherCurrency": "{count, plural, one {# order was in another currency: counted, but not in the revenue.} other {# orders were in other currencies: counted, but not in the revenue.}}",
     "viewLabel": "Group results by",

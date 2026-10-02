@@ -1,11 +1,12 @@
 'use client';
 
 import { countWords } from '@yayatoh/notifications/numbers';
-import { BarChart, Button, ChartTable, cx, StatusDot } from '@yayatoh/ui';
+import { Avatar, BarChart, Button, ChartTable, cx, fieldClass, ProgressBar, StatusDot } from '@yayatoh/ui';
 import { Pause, Play } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useId } from 'react';
 import { Link } from '@/i18n/navigation.ts';
+import { initialsOf } from '@/lib/initials.ts';
 import { SEVERITY_DOT } from '../alerts-list.tsx';
 import type { WidgetControls } from './widgets.tsx';
 
@@ -19,7 +20,13 @@ interface Ctx {
 const num = (n: number, locale: string) => new Intl.NumberFormat(locale).format(n);
 const dec = (n: number, locale: string) =>
   new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(n);
-const SELECT = 'min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body';
+const SELECT = fieldClass('md', 'min-w-40');
+const FIELD_LABEL = 'text-[13px] font-bold text-ink';
+/** In-widget tables (ADR 0022 table rhythm, without a second card frame). */
+const TH = 'px-3 py-2 text-label tracking-[0.06em] text-ink-2 uppercase';
+const TD = 'px-3 py-2.5 tabular-nums';
+const TR = 'border-b border-line transition-colors duration-150 last:border-0 hover:bg-surface-2';
+const CAPTION = 'pb-2 text-start text-[13px] font-bold text-ink';
 
 // --- Live feed -----------------------------------------------------------------------------------
 
@@ -98,8 +105,8 @@ export function LiveFeedBody({ d, c, controls }: { d: LiveFeed; c: Ctx; controls
     <div className="flex flex-col gap-3">
       <fieldset className="m-0 flex flex-wrap items-end gap-3 border-0 p-0">
         <legend className="sr-only">{t('filters')}</legend>
-        <div className="flex flex-col gap-1">
-          <label htmlFor={`${id}-cp`} className="text-caption text-zinc-600">
+        <div className="flex flex-col gap-1.5">
+          <label htmlFor={`${id}-cp`} className={FIELD_LABEL}>
             {t('entrance')}
           </label>
           <select
@@ -116,8 +123,8 @@ export function LiveFeedBody({ d, c, controls }: { d: LiveFeed; c: Ctx; controls
             ))}
           </select>
         </div>
-        <div className="flex flex-col gap-1">
-          <label htmlFor={`${id}-dev`} className="text-caption text-zinc-600">
+        <div className="flex flex-col gap-1.5">
+          <label htmlFor={`${id}-dev`} className={FIELD_LABEL}>
             {t('device')}
           </label>
           <select
@@ -134,8 +141,8 @@ export function LiveFeedBody({ d, c, controls }: { d: LiveFeed; c: Ctx; controls
             ))}
           </select>
         </div>
-        <div className="flex flex-col gap-1">
-          <label htmlFor={`${id}-kind`} className="text-caption text-zinc-600">
+        <div className="flex flex-col gap-1.5">
+          <label htmlFor={`${id}-kind`} className={FIELD_LABEL}>
             {t('outcome')}
           </label>
           <select
@@ -167,20 +174,26 @@ export function LiveFeedBody({ d, c, controls }: { d: LiveFeed; c: Ctx; controls
           {controls.paused ? t('resume') : t('pause')}
         </Button>
       </fieldset>
-      <p role="status" aria-live="polite" className="text-caption text-zinc-600" data-testid="cc-feed-state">
+      <p role="status" aria-live="polite" className="text-caption text-ink-2" data-testid="cc-feed-state">
         {controls.paused ? (controls.waiting ? t('pausedNews') : t('paused')) : ''}
       </p>
       {d.items.length === 0 ? (
-        <p className="text-body text-zinc-600">{filtered ? t('noneFiltered') : t('none')}</p>
+        <p className="rounded-tile border border-dashed border-line-strong/50 px-4 py-6 text-center text-body text-ink-2">
+          {filtered ? t('noneFiltered') : t('none')}
+        </p>
       ) : (
-        <ol className="flex list-none flex-col gap-1.5 p-0" aria-label={t('listLabel')} data-testid="cc-feed">
+        <ol
+          className="m-0 flex list-none flex-col divide-y divide-line rounded-tile border border-line bg-surface-2 p-0"
+          aria-label={t('listLabel')}
+          data-testid="cc-feed"
+        >
           {d.items.map((i) => (
             <li
               key={`${i.kind}-${i.id}-${i.at}`}
-              className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5"
+              className="flex flex-wrap items-center gap-x-3 gap-y-0.5 px-3.5 py-2.5"
               data-kind={i.kind}
             >
-              <time dateTime={i.at} className="min-w-20 text-caption text-zinc-600 tabular-nums">
+              <time dateTime={i.at} className="min-w-20 text-caption font-bold text-ink tabular-nums">
                 {time.format(new Date(i.at))}
               </time>
               <StatusDot
@@ -188,7 +201,7 @@ export function LiveFeedBody({ d, c, controls }: { d: LiveFeed; c: Ctx; controls
                 label={what(i)}
               />
               {i.checkpoint || i.device || i.offline ? (
-                <span className="text-caption text-zinc-600">
+                <span className="ms-auto text-caption text-ink-2">
                   {[i.checkpoint, i.kind === 'device' ? null : i.device, i.offline ? t('offline') : null]
                     .filter(Boolean)
                     .join(' · ')}
@@ -240,18 +253,11 @@ function SpeedTable({
     // biome-ignore lint/a11y/noNoninteractiveTabindex: a scrollable region must be keyboard-focusable (WCAG 2.1.1)
     <section className="overflow-x-auto" aria-label={caption} tabIndex={0}>
       <table className="w-full border-collapse text-body" data-testid={testId}>
-        <caption className="text-start text-caption font-medium text-zinc-700">{caption}</caption>
+        <caption className={CAPTION}>{caption}</caption>
         <thead>
-          <tr className="border-b border-zinc-200">
+          <tr className="border-b border-line">
             {[first, t('perMinute'), t('medianGap'), t('queue')].map((h, i) => (
-              <th
-                key={h}
-                scope="col"
-                className={cx(
-                  'px-2 py-1.5 text-caption font-normal text-zinc-600',
-                  i ? 'text-end' : 'text-start',
-                )}
-              >
+              <th key={h} scope="col" className={cx(TH, i ? 'text-end' : 'text-start')}>
                 {h}
               </th>
             ))}
@@ -259,15 +265,15 @@ function SpeedTable({
         </thead>
         <tbody>
           {rows.map((r) => (
-            <tr key={r.id ?? 'none'} className="border-b border-zinc-100">
-              <th scope="row" className="px-2 py-1.5 text-start font-normal">
+            <tr key={r.id ?? 'none'} className={TR}>
+              <th scope="row" className="px-3 py-2.5 text-start font-bold text-ink">
                 {r.name ?? (testId === 'cc-speed-devices' ? t('noDevice') : t('noEntrance'))}
               </th>
-              <td className="px-2 py-1.5 text-end tabular-nums">{dec(r.scansPerMin, c.locale)}</td>
-              <td className="px-2 py-1.5 text-end tabular-nums">
+              <td className={cx(TD, 'text-end')}>{dec(r.scansPerMin, c.locale)}</td>
+              <td className={cx(TD, 'text-end')}>
                 {r.medianGapS === null ? '—' : t('seconds', { value: dec(r.medianGapS, c.locale) })}
               </td>
-              <td className="px-2 py-1.5 text-end tabular-nums">
+              <td className={cx(TD, 'text-end')}>
                 {r.queueMin === null ? t('notMoving') : t('minutes', { count: r.queueMin })}
               </td>
             </tr>
@@ -285,15 +291,12 @@ export function CheckinSpeedBody({ d, c }: { d: CheckinSpeed; c: Ctx }) {
   return (
     <div className="flex flex-col gap-3">
       <div className="flex flex-wrap items-baseline gap-x-6 gap-y-1">
-        <p
-          className="text-[32px] leading-none font-light tracking-[-0.045em] tabular-nums"
-          data-testid="cc-speed-rate"
-        >
+        <p className="m-0 text-stat text-ink tabular-nums" data-testid="cc-speed-rate">
           {dec(d.scansPerMin, c.locale)}
         </p>
-        <p className="text-caption text-zinc-600">{t('rateLabel', { minutes: d.windowMin })}</p>
+        <p className="text-caption text-ink-2">{t('rateLabel', { minutes: d.windowMin })}</p>
       </div>
-      <p className="text-caption text-zinc-600" data-testid="cc-speed-summary">
+      <p className="text-caption text-ink-2" data-testid="cc-speed-summary">
         {[
           d.medianGapS === null ? null : t('medianGapValue', { value: dec(d.medianGapS, c.locale) }),
           t('remaining', { count: d.remaining }),
@@ -353,40 +356,43 @@ export function ScanIssuesBody({ d, c }: { d: ScanIssues; c: Ctx }) {
   const reason = (r: string) => t(`reason.${SCAN_REASONS.has(r) ? r : 'other'}`);
   return (
     <div className="flex flex-col gap-3">
-      <p className="text-body" data-testid="cc-issues-summary">
+      <p className="m-0 text-body font-bold text-ink" data-testid="cc-issues-summary">
         {t('summary', { duplicates: d.duplicates, refused: d.refused })}
       </p>
       {d.counts.length > 0 ? (
-        <ul className="flex list-none flex-col gap-1 p-0" aria-label={t('byReason')}>
+        <ul
+          className="m-0 flex list-none flex-col divide-y divide-line rounded-tile border border-line bg-surface-2 p-0"
+          aria-label={t('byReason')}
+        >
           {d.counts.map((r) => (
-            <li key={r.result} className="flex justify-between gap-3 text-body">
+            <li key={r.result} className="flex justify-between gap-3 px-3.5 py-2.5 text-body">
               <span>{reason(r.result)}</span>
-              <span className="tabular-nums">{num(r.count, c.locale)}</span>
+              <span className="font-extrabold text-ink tabular-nums">{num(r.count, c.locale)}</span>
             </li>
           ))}
         </ul>
       ) : (
-        <p className="text-body text-zinc-600">{t('none')}</p>
+        <p className="text-body text-ink-2">{t('none')}</p>
       )}
       {d.recent.length > 0 ? (
         <div className="flex flex-col gap-1">
-          <h4 className="text-caption text-zinc-600">{t('recent')}</h4>
+          <h4 className="m-0 text-label tracking-[0.06em] text-ink-2 uppercase">{t('recent')}</h4>
           <ol className="flex list-none flex-col gap-1.5 p-0" data-testid="cc-issues-recent">
             {d.recent.map((i) => (
               <li key={i.id} className="flex flex-wrap items-baseline gap-x-3 text-body">
-                <time dateTime={i.at} className="text-caption text-zinc-600 tabular-nums">
+                <time dateTime={i.at} className="text-caption text-ink-2 tabular-nums">
                   {time.format(new Date(i.at))}
                 </time>
                 <span>{reason(i.result)}</span>
                 {i.checkpoint || i.device ? (
-                  <span className="text-caption text-zinc-600">
+                  <span className="text-caption text-ink-2">
                     {[i.checkpoint, i.device].filter(Boolean).join(' · ')}
                   </span>
                 ) : null}
                 {i.orderId ? (
                   <Link
                     href={`${c.base}/orders/${i.orderId}`}
-                    className="inline-flex min-h-6 items-center text-caption underline underline-offset-2"
+                    className="inline-flex min-h-6 items-center text-caption font-bold text-primary-ink underline underline-offset-2"
                   >
                     {t('openOrder')}
                   </Link>
@@ -417,19 +423,17 @@ export type Capacity = {
 };
 
 const LEVEL_DOT = { none: 'neutral', ok: 'success', near: 'warning', over: 'danger' } as const;
+const LEVEL_BAR = { none: 'primary', ok: 'success', near: 'warning', over: 'danger' } as const;
 
 function GaugeMeter({ g, label }: { g: Gauge; label: string }) {
   if (!g.capacity) return null;
   return (
-    <meter
-      className="h-2 w-full overflow-hidden rounded-full"
-      min={0}
-      max={g.capacity}
-      low={Math.floor((g.capacity * 95) / 100)}
-      high={g.capacity}
-      optimum={0}
+    <ProgressBar
       value={Math.min(g.inside, g.capacity)}
-      aria-label={label}
+      max={g.capacity}
+      label={label}
+      tone={LEVEL_BAR[g.level]}
+      className="h-2"
     />
   );
 }
@@ -441,13 +445,13 @@ export function CapacityBody({ d, c }: { d: Capacity; c: Ctx }) {
   return (
     <div className="flex flex-col gap-3">
       <div className="flex flex-col gap-1.5" data-testid="cc-capacity-venue" data-level={v.level}>
-        <p className="text-body">
+        <p className="m-0 text-card text-ink tabular-nums">
           {v.capacity
             ? t('venue', { inside: num(v.inside, c.locale), capacity: num(v.capacity, c.locale) })
             : t('venueNoCap', { inside: num(v.inside, c.locale) })}
         </p>
         <GaugeMeter g={v} label={t('meter', { name: t('event') })} />
-        <p className="flex flex-wrap items-center gap-x-3 text-caption text-zinc-600">
+        <p className="flex flex-wrap items-center gap-x-3 text-caption text-ink-2">
           <StatusDot status={LEVEL_DOT[v.level]} label={level(v)} />
           <span>{t('out', { count: v.out })}</span>
           {v.remaining !== null ? <span>{t('left', { count: v.remaining })}</span> : null}
@@ -457,18 +461,11 @@ export function CapacityBody({ d, c }: { d: Capacity; c: Ctx }) {
         // biome-ignore lint/a11y/noNoninteractiveTabindex: a scrollable region must be keyboard-focusable (WCAG 2.1.1)
         <section className="overflow-x-auto" aria-label={t('areas')} tabIndex={0}>
           <table className="w-full border-collapse text-body" data-testid="cc-capacity-areas">
-            <caption className="text-start text-caption font-medium text-zinc-700">{t('areas')}</caption>
+            <caption className={CAPTION}>{t('areas')}</caption>
             <thead>
-              <tr className="border-b border-zinc-200">
+              <tr className="border-b border-line">
                 {[t('area'), t('in'), t('capacity'), t('leftHeader'), t('status')].map((h, i) => (
-                  <th
-                    key={h}
-                    scope="col"
-                    className={cx(
-                      'px-2 py-1.5 text-caption font-normal text-zinc-600',
-                      i ? 'text-end' : 'text-start',
-                    )}
-                  >
+                  <th key={h} scope="col" className={cx(TH, i ? 'text-end' : 'text-start')}>
                     {h}
                   </th>
                 ))}
@@ -476,18 +473,20 @@ export function CapacityBody({ d, c }: { d: Capacity; c: Ctx }) {
             </thead>
             <tbody>
               {d.areas.map((a) => (
-                <tr key={a.name} className="border-b border-zinc-100" data-level={a.level}>
-                  <th scope="row" className="px-2 py-1.5 text-start font-normal">
+                <tr key={a.name} className={TR} data-level={a.level}>
+                  <th scope="row" className="px-3 py-2.5 text-start font-bold text-ink">
                     {a.name}
                   </th>
-                  <td className="px-2 py-1.5 text-end tabular-nums">{num(a.inside, c.locale)}</td>
-                  <td className="px-2 py-1.5 text-end tabular-nums">
+                  <td className={cx(TD, 'text-end')}>{num(a.inside, c.locale)}</td>
+                  <td className={cx(TD, 'text-end')}>
                     {a.capacity === null ? '—' : num(a.capacity, c.locale)}
                   </td>
-                  <td className="px-2 py-1.5 text-end tabular-nums">
+                  <td className={cx(TD, 'text-end')}>
                     {a.remaining === null ? '—' : num(a.remaining, c.locale)}
                   </td>
-                  <td className="px-2 py-1.5 text-end">{level(a)}</td>
+                  <td className={cx(TD, 'text-end')}>
+                    <StatusDot status={LEVEL_DOT[a.level]} label={level(a)} />
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -515,18 +514,24 @@ export type StaffPresence = {
 export function StaffPresenceBody({ d, c }: { d: StaffPresence; c: Ctx }) {
   const t = useTranslations('commandCenter.widget.staffPresence');
   const time = new Intl.DateTimeFormat(c.locale, { timeStyle: 'short', timeZone: c.timeZone });
-  if (d.people.length === 0) return <p className="text-body text-zinc-600">{t('none')}</p>;
+  if (d.people.length === 0) return <p className="m-0 text-body text-ink-2">{t('none')}</p>;
   return (
-    <ul className="flex list-none flex-col gap-2 p-0" data-testid="cc-presence">
+    <ul className="m-0 flex list-none flex-col gap-2 p-0" data-testid="cc-presence">
       {d.people.map((p) => (
-        <li key={p.userId} className="flex flex-col gap-0.5">
-          <span className="text-body font-medium">{p.name || t('unknown')}</span>
-          <span className="text-caption text-zinc-600">
-            {[
-              p.source === 'device' ? t('onDevice', { device: p.device ?? '' }) : t('onDoorScreen'),
-              p.checkpoint ?? t('wholeEvent'),
-              t('since', { time: time.format(new Date(p.since)) }),
-            ].join(' · ')}
+        <li
+          key={p.userId}
+          className="flex items-center gap-3 rounded-tile border border-line bg-surface-2 px-3 py-2.5"
+        >
+          <Avatar initials={initialsOf(p.name || t('unknown'))} label={p.name || t('unknown')} decorative />
+          <span className="flex min-w-0 flex-col gap-0.5">
+            <span className="truncate text-body font-bold text-ink">{p.name || t('unknown')}</span>
+            <span className="text-caption text-ink-2">
+              {[
+                p.source === 'device' ? t('onDevice', { device: p.device ?? '' }) : t('onDoorScreen'),
+                p.checkpoint ?? t('wholeEvent'),
+                t('since', { time: time.format(new Date(p.since)) }),
+              ].join(' · ')}
+            </span>
           </span>
         </li>
       ))}

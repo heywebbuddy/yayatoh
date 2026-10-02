@@ -4,6 +4,7 @@ import { executeQuery } from '@yayatoh/kernel';
 import { Alert, Button, buttonClass, Card, Chip, EmptyState, PageHeader } from '@yayatoh/ui';
 import { getFormatter, getTranslations, setRequestLocale } from 'next-intl/server';
 import { AutoRefresh } from '@/components/auto-refresh.tsx';
+import { Crumbs } from '@/components/crumbs.tsx';
 import { ProgramForm } from '@/components/program-form.tsx';
 import { StepUpForm } from '@/components/step-up.tsx';
 import { Link } from '@/i18n/navigation.ts';
@@ -70,8 +71,20 @@ export default async function BadgesPage({
 
   return (
     <>
-      <PageHeader title={t('nav.badges')} description={tb('subtitle')} />
-      {canWrite ? null : <p className="text-body text-zinc-500">{tb('viewerNotice')}</p>}
+      <PageHeader
+        breadcrumb={
+          <Crumbs
+            items={[
+              { label: data.org.name, href: `/o/${org}` },
+              { label: ev.name, href: `/o/${org}/e/${event}` },
+              { label: t('nav.badges') },
+            ]}
+          />
+        }
+        title={t('nav.badges')}
+        description={tb('subtitle')}
+      />
+      {canWrite ? null : <Alert tone="info" title={tb('viewerNotice')} />}
 
       <section aria-labelledby="templates-heading" className="flex flex-col gap-3">
         <h2 id="templates-heading" className="text-section">
@@ -88,7 +101,7 @@ export default async function BadgesPage({
                     <h3 className="text-body font-medium">{x.name}</h3>
                     {x.isDefault ? <Chip>{tb('default')}</Chip> : null}
                   </div>
-                  <p className="text-caption text-zinc-600">
+                  <p className="text-caption text-ink-2">
                     {tb(`sizes.${x.size}`)} · {tb('version', { version: x.version })}
                   </p>
                   <div className="flex flex-wrap items-center gap-2">
@@ -175,9 +188,9 @@ export default async function BadgesPage({
         <h2 id="assign-heading" className="text-section">
           {tb('byTicketType')}
         </h2>
-        <p className="max-w-prose text-caption text-zinc-500">{tb('byTicketTypeHint')}</p>
+        <p className="max-w-prose text-caption text-ink-2">{tb('byTicketTypeHint')}</p>
         {setup.ticketTypes.length === 0 ? (
-          <p className="text-body text-zinc-500">{tb('noTicketTypes')}</p>
+          <p className="text-body text-ink-2">{tb('noTicketTypes')}</p>
         ) : setup.templates.length === 0 ? null : (
           <ul className="flex list-none flex-col gap-3 p-0">
             {setup.ticketTypes.map((tt) => {
@@ -225,14 +238,14 @@ export default async function BadgesPage({
         <h2 id="batch-heading" className="text-section">
           {tb('batch')}
         </h2>
-        <p className="max-w-prose text-caption text-zinc-500">{tb('printHint')}</p>
+        <p className="max-w-prose text-caption text-ink-2">{tb('printHint')}</p>
         {batchError ? <Alert title={tb(`batchErrors.${batchError}`)} /> : null}
         {canExport && setup.templates.length > 0 ? (
           <Card size="panel">
             <StepUpForm action={startBatchAction.bind(null, org, event)} className="flex flex-col gap-4">
               <input type="hidden" name="requestKey" value={randomUUID()} />
               <fieldset className="flex flex-col gap-1.5">
-                <legend className="pb-1.5 text-caption text-zinc-600">{tb('order')}</legend>
+                <legend className="pb-1.5 text-caption text-ink-2">{tb('order')}</legend>
                 <div className="flex flex-wrap gap-x-4 gap-y-1">
                   {(['last_name', 'company'] as const).map((s) => (
                     <label key={s} className="flex min-h-6 items-center gap-2 text-body">
@@ -250,8 +263,8 @@ export default async function BadgesPage({
               </fieldset>
               {setup.ticketTypes.length > 1 ? (
                 <fieldset className="flex flex-col gap-1.5" aria-describedby="batch-types-hint">
-                  <legend className="pb-1.5 text-caption text-zinc-600">{tb('onlySomeTypes')}</legend>
-                  <p id="batch-types-hint" className="text-caption text-zinc-500">
+                  <legend className="pb-1.5 text-caption text-ink-2">{tb('onlySomeTypes')}</legend>
+                  <p id="batch-types-hint" className="text-caption text-ink-2">
                     {tb('onlySomeTypesHint')}
                   </p>
                   <div className="flex flex-wrap gap-x-4 gap-y-1">
@@ -272,7 +285,7 @@ export default async function BadgesPage({
         ) : null}
         {busy ? <AutoRefresh seconds={2} /> : null}
         {batches.length === 0 ? (
-          <p className="text-body text-zinc-500">{tb('noBatches')}</p>
+          <p className="text-body text-ink-2">{tb('noBatches')}</p>
         ) : (
           <ol className="flex list-none flex-col gap-3 p-0" aria-label={tb('recentBatches')}>
             {batches.map((b) => (
@@ -281,28 +294,26 @@ export default async function BadgesPage({
                   <p className="text-body font-medium">
                     {tb(`status.${b.expired && b.status === 'done' ? 'expired' : b.status}`)}
                   </p>
-                  <p className="text-caption text-zinc-600">{batchLine(b)}</p>
+                  <p className="text-caption text-ink-2">{batchLine(b)}</p>
                   {b.status === 'queued' || b.status === 'running' ? (
                     <>
                       <progress
                         max={b.total}
                         value={b.processed}
                         aria-label={tb('progressLabel')}
-                        className="h-2 w-full max-w-md accent-accent-900"
+                        className="h-2 w-full max-w-md accent-primary"
                       />
-                      <p className="text-caption text-zinc-600">
+                      <p className="text-caption text-ink-2">
                         {tb('progress', { processed: b.processed, total: b.total })}
                       </p>
                     </>
                   ) : (
-                    <p className="text-caption text-zinc-600">{tb('badgeCount', { count: b.total })}</p>
+                    <p className="text-caption text-ink-2">{tb('badgeCount', { count: b.total })}</p>
                   )}
                   {b.skipped ? (
-                    <p className="text-caption text-zinc-600">{tb('skipped', { count: b.skipped })}</p>
+                    <p className="text-caption text-ink-2">{tb('skipped', { count: b.skipped })}</p>
                   ) : null}
-                  {b.status === 'failed' ? (
-                    <p className="text-caption text-pink-700">{tb('failed')}</p>
-                  ) : null}
+                  {b.status === 'failed' ? <p className="text-caption text-danger">{tb('failed')}</p> : null}
                   {canExport ? (
                     <div className="flex flex-wrap gap-2">
                       {b.status === 'done' && !b.expired ? (
@@ -334,20 +345,13 @@ export default async function BadgesPage({
           <h2 id="one-heading" className="text-section">
             {tb('oneBadge')}
           </h2>
-          <p className="max-w-prose text-caption text-zinc-500">{tb('oneBadgeHint')}</p>
+          <p className="max-w-prose text-caption text-ink-2">{tb('oneBadgeHint')}</p>
           <form method="get" className="flex flex-wrap items-end gap-3" action={`${raw}#one-heading`}>
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="badge-q" className="text-caption text-zinc-600">
+              <label htmlFor="badge-q" className="text-[13px] font-bold text-ink">
                 {tb('findHolder')}
               </label>
-              <input
-                id="badge-q"
-                name="q"
-                type="search"
-                defaultValue={q}
-                maxLength={80}
-                className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
-              />
+              <input id="badge-q" name="q" type="search" defaultValue={q} maxLength={80} className="field" />
             </div>
             <Button type="submit" variant="secondary">
               {tb('find')}
@@ -355,7 +359,7 @@ export default async function BadgesPage({
           </form>
           {q ? (
             found.length === 0 ? (
-              <p className="text-body text-zinc-500">{tb('noneFound')}</p>
+              <p className="text-body text-ink-2">{tb('noneFound')}</p>
             ) : (
               <ul className="flex list-none flex-col gap-2 p-0">
                 {found.map((f) => (
