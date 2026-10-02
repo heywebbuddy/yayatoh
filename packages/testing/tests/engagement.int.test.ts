@@ -1,3 +1,4 @@
+import { setEntitlementOverrideCommand } from '@yayatoh/billing';
 import { withTenant } from '@yayatoh/db';
 import { closePools } from '@yayatoh/db/testing';
 import {
@@ -551,6 +552,51 @@ describe('engagement: access, isolation and the big screen (M5.7a)', () => {
     // A channel naming org B with org A's event and session is not open.
     expect(await sessionChannelOpen(a.org.id, eventId, sessionId)).toBe(true);
     expect(await sessionChannelOpen(b.org.id, eventId, sessionId)).toBe(false);
+  });
+
+  it('a revoked sessions module refuses organizers and the audience alike', async () => {
+    const p = await executeCommand(
+      createPollCommand,
+      { eventId, sessionId, kind: 'single', question: 'Module', options: ['A', 'B'] },
+      a.ctx(),
+      ports,
+    );
+    await executeCommand(openPollCommand, { eventId, pollId: p.id }, a.ctx(), ports);
+    const override = (effect: 'revoke' | 'grant') =>
+      executeCommand(
+        setEntitlementOverrideCommand,
+        { moduleKey: 'sessions', effect, reason: 'test' },
+        systemCtx(a.org.id),
+        ports,
+      );
+    await override('revoke');
+    try {
+      expect(
+        await codeOf(
+          executeCommand(
+            createPollCommand,
+            { eventId, sessionId, kind: 'rating', question: 'x' },
+            a.ctx(),
+            ports,
+          ),
+        ),
+      ).toBe('module_not_enabled');
+      expect(
+        await codeOf(
+          executeCommand(
+            voteCommand,
+            { eventId, pollId: p.id, participantKey: visitor('m'), optionIds: ['o1'] },
+            pub(),
+            ports,
+          ),
+        ),
+      ).toBe('module_not_enabled');
+      expect(await codeOf(executeQuery(moderationQuery, { eventId, sessionId }, a.ctx(), ports))).toBe(
+        'module_not_enabled',
+      );
+    } finally {
+      await override('grant');
+    }
   });
 
   it('the public takes part only in published, public events', async () => {

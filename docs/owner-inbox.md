@@ -397,3 +397,9 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
 ## M5.1a — registration types (2026-09-29, pending owner)
 - [ ] Conference pack quotas per event: 30 registration types, 20 admission items, 5,000 registrants (defaults in `billing.addons`; free in beta, price with D22). Change them by data, no code change.
 - [ ] Registration always asks buyers for the emailed code (M1.5f), even when an org turned the checkout email check off, so "email domain" eligibility means a proved address. Confirm or relax.
+
+## M5.7a — live polls and Q&A (2026-10-02, pending owner)
+- [ ] **Who may take part:** anyone with the link, on **published events that are not private**, without an account (one vote per browser or account). Private events and "ticket holders only" are not supported yet. Confirm, or ask for holder-only participation.
+- [ ] **Anonymous questions:** allowed by default; the name behind an anonymous question is **not kept** by default ("Nobody sees them"); organizers can switch a session to "Moderators can see them" (askers are told). Confirm the defaults.
+- [ ] **Limits:** 5 questions per person per session per 10 minutes, 300 characters a question, 50 polls and 2,000 questions per session, word clouds keep 300 distinct words. Big-screen links never expire on their own (organizers replace them to revoke). Confirm or adjust.
+- [ ] **Questions and tallies are kept with the event** (no separate retention yet; only an optional typed name is personal). Decide a retention period if wanted.
