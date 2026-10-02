@@ -1,6 +1,6 @@
 {
-  "id": "3c43235e-4d62-42ac-a44c-0ce5c2d2ae9b",
-  "prevId": "2f7fb42a-2a10-4839-b6ce-f2616f9de1b2",
+  "id": "45cf0b6a-497b-49a1-a5a0-a483cb651acf",
+  "prevId": "3c43235e-4d62-42ac-a44c-0ce5c2d2ae9b",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -13240,6 +13240,744 @@
       },
       "isRLSEnabled": true
     },
+    "donations.campaigns": {
+      "name": "campaigns",
+      "schema": "donations",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "uuidv7()"
+        },
+        "org_id": {
+          "name": "org_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "event_id": {
+          "name": "event_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "goal_minor": {
+          "name": "goal_minor",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "currency": {
+          "name": "currency",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "min_gift_minor": {
+          "name": "min_gift_minor",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "max_gift_minor": {
+          "name": "max_gift_minor",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'open'"
+        },
+        "position": {
+          "name": "position",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        }
+      },
+      "indexes": {
+        "campaigns_org_id_idx": {
+          "name": "campaigns_org_id_idx",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "campaigns_org_event_idx": {
+          "name": "campaigns_org_event_idx",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "event_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "position",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "campaigns_org_event_name_key": {
+          "name": "campaigns_org_event_name_key",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "event_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "name",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "campaigns_org_id_id_key": {
+          "name": "campaigns_org_id_id_key",
+          "nullsNotDistinct": false,
+          "columns": [
+            "org_id",
+            "id"
+          ]
+        }
+      },
+      "policies": {
+        "campaigns_tenant_isolation": {
+          "name": "campaigns_tenant_isolation",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "app_user"
+          ],
+          "using": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)",
+          "withCheck": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)"
+        }
+      },
+      "checkConstraints": {
+        "campaigns_name_length": {
+          "name": "campaigns_name_length",
+          "value": "length(name) between 1 and 120"
+        },
+        "campaigns_description_length": {
+          "name": "campaigns_description_length",
+          "value": "description is null or length(description) <= 2000"
+        },
+        "campaigns_goal_check": {
+          "name": "campaigns_goal_check",
+          "value": "goal_minor > 0"
+        },
+        "campaigns_currency_check": {
+          "name": "campaigns_currency_check",
+          "value": "currency ~ '^[A-Z]{3}$'"
+        },
+        "campaigns_limits_check": {
+          "name": "campaigns_limits_check",
+          "value": "min_gift_minor > 0 and max_gift_minor >= min_gift_minor"
+        },
+        "campaigns_status_check": {
+          "name": "campaigns_status_check",
+          "value": "status in ('open', 'closed')"
+        }
+      },
+      "isRLSEnabled": true
+    },
+    "donations.gifts": {
+      "name": "gifts",
+      "schema": "donations",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "uuidv7()"
+        },
+        "org_id": {
+          "name": "org_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "event_id": {
+          "name": "event_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "campaign_id": {
+          "name": "campaign_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "level_id": {
+          "name": "level_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "order_id": {
+          "name": "order_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'pending'"
+        },
+        "source": {
+          "name": "source",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'online'"
+        },
+        "amount_minor": {
+          "name": "amount_minor",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fee_cover_minor": {
+          "name": "fee_cover_minor",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "currency": {
+          "name": "currency",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "donor_name": {
+          "name": "donor_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "donor_email": {
+          "name": "donor_email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "display_as": {
+          "name": "display_as",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "employer": {
+          "name": "employer",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tribute_kind": {
+          "name": "tribute_kind",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tribute_name": {
+          "name": "tribute_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tribute_recipient": {
+          "name": "tribute_recipient",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tribute_note": {
+          "name": "tribute_note",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "locale": {
+          "name": "locale",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'en'"
+        },
+        "paid_at": {
+          "name": "paid_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "gifts_org_id_idx": {
+          "name": "gifts_org_id_idx",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "gifts_org_campaign_status_idx": {
+          "name": "gifts_org_campaign_status_idx",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "campaign_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "status",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "gifts_org_event_created_idx": {
+          "name": "gifts_org_event_created_idx",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "event_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "gifts_org_order_key": {
+          "name": "gifts_org_order_key",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "order_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "gifts_campaign_fk": {
+          "name": "gifts_campaign_fk",
+          "tableFrom": "gifts",
+          "tableTo": "campaigns",
+          "schemaTo": "donations",
+          "columnsFrom": [
+            "org_id",
+            "campaign_id"
+          ],
+          "columnsTo": [
+            "org_id",
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "gifts_org_id_id_key": {
+          "name": "gifts_org_id_id_key",
+          "nullsNotDistinct": false,
+          "columns": [
+            "org_id",
+            "id"
+          ]
+        }
+      },
+      "policies": {
+        "gifts_tenant_isolation": {
+          "name": "gifts_tenant_isolation",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "app_user"
+          ],
+          "using": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)",
+          "withCheck": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)"
+        }
+      },
+      "checkConstraints": {
+        "gifts_status_check": {
+          "name": "gifts_status_check",
+          "value": "status in ('pending', 'paid', 'failed', 'expired')"
+        },
+        "gifts_source_check": {
+          "name": "gifts_source_check",
+          "value": "source in ('online')"
+        },
+        "gifts_display_as_check": {
+          "name": "gifts_display_as_check",
+          "value": "display_as in ('full_name', 'first_name', 'anonymous')"
+        },
+        "gifts_amount_check": {
+          "name": "gifts_amount_check",
+          "value": "amount_minor > 0 and fee_cover_minor >= 0"
+        },
+        "gifts_currency_check": {
+          "name": "gifts_currency_check",
+          "value": "currency ~ '^[A-Z]{3}$'"
+        },
+        "gifts_paid_check": {
+          "name": "gifts_paid_check",
+          "value": "(status = 'paid') = (paid_at is not null)"
+        },
+        "gifts_donor_name_length": {
+          "name": "gifts_donor_name_length",
+          "value": "length(donor_name) between 1 and 120"
+        },
+        "gifts_donor_email_check": {
+          "name": "gifts_donor_email_check",
+          "value": "donor_email = lower(donor_email) and length(donor_email) <= 254"
+        },
+        "gifts_employer_length": {
+          "name": "gifts_employer_length",
+          "value": "employer is null or length(employer) between 1 and 120"
+        },
+        "gifts_tribute_check": {
+          "name": "gifts_tribute_check",
+          "value": "(tribute_kind is null and tribute_name is null and tribute_recipient is null and tribute_note is null) or (tribute_kind is not null and tribute_name is not null)"
+        },
+        "gifts_tribute_kind_check": {
+          "name": "gifts_tribute_kind_check",
+          "value": "tribute_kind is null or tribute_kind in ('honor', 'memory')"
+        },
+        "gifts_tribute_name_length": {
+          "name": "gifts_tribute_name_length",
+          "value": "tribute_name is null or length(tribute_name) between 1 and 120"
+        },
+        "gifts_tribute_recipient_length": {
+          "name": "gifts_tribute_recipient_length",
+          "value": "tribute_recipient is null or length(tribute_recipient) between 1 and 120"
+        },
+        "gifts_tribute_note_length": {
+          "name": "gifts_tribute_note_length",
+          "value": "tribute_note is null or length(tribute_note) between 1 and 500"
+        }
+      },
+      "isRLSEnabled": true
+    },
+    "donations.levels": {
+      "name": "levels",
+      "schema": "donations",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "uuidv7()"
+        },
+        "org_id": {
+          "name": "org_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "campaign_id": {
+          "name": "campaign_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "amount_minor": {
+          "name": "amount_minor",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "levels_org_id_idx": {
+          "name": "levels_org_id_idx",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "levels_org_campaign_idx": {
+          "name": "levels_org_campaign_idx",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "campaign_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "amount_minor",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "levels_org_campaign_amount_key": {
+          "name": "levels_org_campaign_amount_key",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "campaign_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "amount_minor",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "levels_campaign_fk": {
+          "name": "levels_campaign_fk",
+          "tableFrom": "levels",
+          "tableTo": "campaigns",
+          "schemaTo": "donations",
+          "columnsFrom": [
+            "org_id",
+            "campaign_id"
+          ],
+          "columnsTo": [
+            "org_id",
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "levels_org_id_id_key": {
+          "name": "levels_org_id_id_key",
+          "nullsNotDistinct": false,
+          "columns": [
+            "org_id",
+            "id"
+          ]
+        }
+      },
+      "policies": {
+        "levels_tenant_isolation": {
+          "name": "levels_tenant_isolation",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "app_user"
+          ],
+          "using": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)",
+          "withCheck": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)"
+        }
+      },
+      "checkConstraints": {
+        "levels_name_length": {
+          "name": "levels_name_length",
+          "value": "length(name) between 1 and 80"
+        },
+        "levels_description_length": {
+          "name": "levels_description_length",
+          "value": "description is null or length(description) <= 200"
+        },
+        "levels_amount_check": {
+          "name": "levels_amount_check",
+          "value": "amount_minor > 0"
+        }
+      },
+      "isRLSEnabled": true
+    },
     "events.event_role_assignments": {
       "name": "event_role_assignments",
       "schema": "events",
@@ -24069,6 +24807,191 @@
         "credit_notes_currency_check": {
           "name": "credit_notes_currency_check",
           "value": "currency ~ '^[A-Z]{3}$'"
+        }
+      },
+      "isRLSEnabled": true
+    },
+    "orders.donation_items": {
+      "name": "donation_items",
+      "schema": "orders",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "uuidv7()"
+        },
+        "org_id": {
+          "name": "org_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "order_id": {
+          "name": "order_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gift_id": {
+          "name": "gift_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "amount_minor": {
+          "name": "amount_minor",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fee_cover_minor": {
+          "name": "fee_cover_minor",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "currency": {
+          "name": "currency",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "donation_items_org_id_idx": {
+          "name": "donation_items_org_id_idx",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "donation_items_org_order_key": {
+          "name": "donation_items_org_order_key",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "order_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "donation_items_org_gift_key": {
+          "name": "donation_items_org_gift_key",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "gift_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "donation_items_order_fk": {
+          "name": "donation_items_order_fk",
+          "tableFrom": "donation_items",
+          "tableTo": "orders",
+          "schemaTo": "orders",
+          "columnsFrom": [
+            "org_id",
+            "order_id"
+          ],
+          "columnsTo": [
+            "org_id",
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "donation_items_org_id_id_key": {
+          "name": "donation_items_org_id_id_key",
+          "nullsNotDistinct": false,
+          "columns": [
+            "org_id",
+            "id"
+          ]
+        }
+      },
+      "policies": {
+        "donation_items_tenant_isolation": {
+          "name": "donation_items_tenant_isolation",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "app_user"
+          ],
+          "using": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)",
+          "withCheck": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)"
+        }
+      },
+      "checkConstraints": {
+        "donation_items_amount_check": {
+          "name": "donation_items_amount_check",
+          "value": "amount_minor > 0 and fee_cover_minor >= 0"
+        },
+        "donation_items_currency_check": {
+          "name": "donation_items_currency_check",
+          "value": "currency ~ '^[A-Z]{3}$'"
+        },
+        "donation_items_name_length": {
+          "name": "donation_items_name_length",
+          "value": "length(name) between 1 and 120"
         }
       },
       "isRLSEnabled": true
@@ -41420,6 +42343,7 @@
     "cms": "cms",
     "command_center": "command_center",
     "crm": "crm",
+    "donations": "donations",
     "events": "events",
     "forms": "forms",
     "guests": "guests",

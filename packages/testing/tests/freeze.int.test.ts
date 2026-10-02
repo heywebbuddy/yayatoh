@@ -2,7 +2,9 @@ import * as ai from '@yayatoh/ai';
 import * as alerts from '@yayatoh/alerts';
 import * as attendees from '@yayatoh/attendees';
 import * as audiences from '@yayatoh/audiences';
+import * as automations from '@yayatoh/automations';
 import * as billing from '@yayatoh/billing';
+import * as campaigns from '@yayatoh/campaigns';
 import * as checkin from '@yayatoh/checkin';
 import * as cms from '@yayatoh/cms';
 import * as commandCenter from '@yayatoh/command-center';
@@ -34,6 +36,7 @@ import { freezeCovers, hostRoute, readOnlyFreeze } from '@yayatoh/platform';
 import { problemFor, problemResponse } from '@yayatoh/platform/http';
 import * as privacy from '@yayatoh/privacy';
 import * as program from '@yayatoh/program';
+import * as registration from '@yayatoh/registration';
 import * as reports from '@yayatoh/reports';
 import * as reviews from '@yayatoh/reviews';
 import * as seating from '@yayatoh/seating';
@@ -59,7 +62,11 @@ const MODULES = {
   attendees,
   // Batch 3c merge: the modules of batch 3b (audiences, marketing) and 3c (guests; cms grew).
   audiences,
+  // Batch 3e merge: M3.7a journeys, M3.6b campaigns and M5.1a registration (M3.10c, M5.1b,
+  // M5.2a, M4.1b and M4.1c grew modules already listed).
+  automations,
   billing,
+  campaigns,
   checkin,
   cms,
   commandCenter,
@@ -79,6 +86,7 @@ const MODULES = {
   platform,
   privacy,
   program,
+  registration,
   reports,
   reviews,
   seating,
