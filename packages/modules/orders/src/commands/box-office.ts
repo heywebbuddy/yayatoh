@@ -4,7 +4,13 @@ import { findEventTx } from '@yayatoh/events';
 import { DomainError, requireOrg, uuidv7 } from '@yayatoh/kernel';
 import { postOrganizerCollectedSaleTx } from '@yayatoh/payments';
 import { keyVault, tenantCommand } from '@yayatoh/platform';
-import { checkSeatRulesTx, holdSeatsTx, RuleHitDto, seatedTicketTypesTx } from '@yayatoh/seating';
+import {
+  adoptSeatHoldTx,
+  checkSeatRulesTx,
+  holdSeatsTx,
+  RuleHitDto,
+  seatedTicketTypesTx,
+} from '@yayatoh/seating';
 import { assertNotPausedTx } from '@yayatoh/tenancy';
 import { holdInventoryTx, quoteTx, sellHeldTx } from '@yayatoh/ticketing';
 import { z } from 'zod';
@@ -38,6 +44,13 @@ export const recordBoxOfficeSaleCommand = tenantCommand({
       .default([]),
     /** Seated events: the chosen seats (their ticket types and prices come from the seat map). */
     seats: z.array(z.uuid()).max(50).default([]),
+    /** M6.11a: the seats best available is holding for this sale (its token), instead of `seats`. */
+    seatHold: z
+      .string()
+      .regex(/^[A-Za-z0-9_-]{32}$/)
+      .optional(),
+    /** M6.11a: the buyer needs a wheelchair-accessible seat (staff say so for them). */
+    accessibleNeed: z.boolean().default(false),
     /** Staff chose to sell despite an enforced seating rule (audited). */
     overrideRules: z.boolean().default(false),
     buyer: z.object({
@@ -66,21 +79,37 @@ export const recordBoxOfficeSaleCommand = tenantCommand({
       throw new DomainError('validation_failed', 'Seated tickets are sold with a seat', {
         reason: 'choose_seats',
       });
-    if (input.items.length === 0 && input.seats.length === 0)
+    if (input.items.length === 0 && input.seats.length === 0 && !input.seatHold)
       throw new DomainError('validation_failed', 'Choose at least one ticket or seat', { reason: 'empty' });
+    if (input.seatHold && input.seats.length)
+      throw new DomainError('validation_failed', 'Choose seats or best available, not both', {
+        reason: 'choose_seats',
+      });
     // The chosen seats are held under the order's id and sold to its tickets below, in this
     // transaction: a seat someone else holds or bought makes the whole sale fail.
     const orderId = uuidv7(ctx.now.getTime());
     const seatItems = new Map<string, number>();
     let warnings: Awaited<ReturnType<typeof checkSeatRulesTx>> = [];
-    if (input.seats.length) {
-      const held = await holdSeatsTx(tx, ctx, {
-        eventId: event.id,
-        occurrenceId: input.occurrenceId ?? null,
-        seatUuids: input.seats,
-        holdId: orderId,
-        expiresAt: new Date(ctx.now.getTime() + HOLD_MINUTES * 60_000),
-      });
+    let seatIds: readonly string[] = input.seats;
+    if (input.seats.length || input.seatHold) {
+      const expiresAt = new Date(ctx.now.getTime() + HOLD_MINUTES * 60_000);
+      // M6.11a: seats best available holds for this sale move to the order's hold.
+      const held = input.seatHold
+        ? await adoptSeatHoldTx(tx, ctx, {
+            eventId: event.id,
+            occurrenceId: input.occurrenceId ?? null,
+            token: input.seatHold,
+            holdId: orderId,
+            expiresAt,
+          })
+        : await holdSeatsTx(tx, ctx, {
+            eventId: event.id,
+            occurrenceId: input.occurrenceId ?? null,
+            seatUuids: input.seats,
+            holdId: orderId,
+            expiresAt,
+          });
+      seatIds = held.map((s) => s.seatUuid);
       for (const s of held) {
         if (!s.ticketTypeId)
           throw new DomainError('validation_failed', 'That seat is not on sale', {
@@ -91,9 +120,10 @@ export const recordBoxOfficeSaleCommand = tenantCommand({
       warnings = await checkSeatRulesTx(tx, ctx, {
         eventId: event.id,
         occurrenceId: input.occurrenceId ?? null,
-        seatUuids: input.seats,
+        seatUuids: seatIds,
         context: 'box_office',
         override: input.overrideRules,
+        accessibleNeed: input.accessibleNeed,
       });
     }
     const wanted = [
@@ -124,7 +154,7 @@ export const recordBoxOfficeSaleCommand = tenantCommand({
         orgId,
         eventId: event.id,
         occurrenceId,
-        seatUuids: [...new Set(input.seats)],
+        seatUuids: [...new Set(seatIds)],
         status: 'paid',
         buyerEmail: input.buyer.email,
         buyerName: input.buyer.name,
@@ -185,7 +215,9 @@ export const recordBoxOfficeSaleCommand = tenantCommand({
       eventId: input.eventId,
       method: input.method,
       totalMinor: r?.order.totalMinor,
-      ...(input.seats.length ? { seats: input.seats.length } : {}),
+      ...(r?.order.seatUuids.length ? { seats: r.order.seatUuids.length } : {}),
+      ...(input.seatHold ? { bestAvailable: true } : {}),
+      ...(input.accessibleNeed ? { accessibleNeed: true } : {}),
       ...(input.overrideRules ? { overrideRules: true } : {}),
     },
   }),
