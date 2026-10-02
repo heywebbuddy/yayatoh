@@ -23,11 +23,15 @@ const PREFIXES: readonly [string, PageType][] = [
   ['/signup', 'console'],
   ['/connect', 'console'],
   ['/portal', 'console'],
+  // M5.3a: speaker (and later exhibitor) portal accounts: invitation, sign-in and the portal.
+  ['/event-portal', 'console'],
   ['/checkout', 'checkout'],
   ['/my-tickets', 'token'],
   ['/orders', 'token'],
   ['/claim', 'token'],
   ['/invite', 'token'],
+  // M3.3a TV mode: a display link's token in the path.
+  ['/tv', 'token'],
   ['/scan', 'scan'],
 ];
 

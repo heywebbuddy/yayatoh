@@ -204,6 +204,16 @@ export const CHECKINS_CHANNEL = defineRealtimeChannel({
       count: z.int().min(1).max(10_000),
       at: isoTime,
     }),
+    /**
+     * M3.3a live feed: scans nobody was let in by (a duplicate, or refused), grouped only. The
+     * Command Center re-reads its feed; no ticket, code or holder travels.
+     */
+    scan: z.object({
+      outcome: z.enum(['duplicate', 'refused']),
+      checkpointId: z.uuid().nullable(),
+      count: z.int().min(1).max(10_000),
+      at: isoTime,
+    }),
   },
 });
 

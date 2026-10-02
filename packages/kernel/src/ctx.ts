@@ -4,6 +4,11 @@ export type Actor =
   | { readonly type: 'user'; readonly userId: string }
   | { readonly type: 'api_key'; readonly keyId: string }
   | { readonly type: 'system'; readonly name: string }
+  /**
+   * M5.3a (P5-7): a portal account — a speaker, exhibitor admin or staff, or sponsor contact of one
+   * event. Not an org member: it may run only `portal:{role}` commands, which re-check the account.
+   */
+  | { readonly type: 'portal'; readonly accountId: string; readonly role: string }
   | { readonly type: 'anonymous' };
 
 /**
@@ -90,6 +95,8 @@ export function actorId(actor: Actor): string {
       return `api_key:${actor.keyId}`;
     case 'system':
       return `system:${actor.name}`;
+    case 'portal':
+      return `portal:${actor.accountId}`;
     case 'anonymous':
       return 'anonymous';
   }

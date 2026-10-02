@@ -1,4 +1,4 @@
-import { widgetResponse } from '@/server/command-center.ts';
+import { widgetParams, widgetResponse } from '@/server/command-center.ts';
 
 export const dynamic = 'force-dynamic';
 
@@ -8,10 +8,10 @@ export const dynamic = 'force-dynamic';
  * a widget directly is refused exactly like the layout hides it (the door role gets 403 for sales).
  */
 export async function GET(
-  _req: Request,
+  req: Request,
   { params }: { params: Promise<{ org: string; event: string; widget: string }> },
 ) {
   const { org, event, widget } = await params;
-  const r = await widgetResponse(org, event, widget);
+  const r = await widgetResponse(org, event, widget, widgetParams(new URL(req.url).searchParams));
   return Response.json(r.body, { status: r.status, headers: { 'cache-control': 'no-store' } });
 }

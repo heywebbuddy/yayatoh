@@ -1,13 +1,17 @@
+import { assistanceSummaryTx, PRIORITIES, REQUEST_STATES } from '@yayatoh/assistance';
 import {
   checkinFactsTx,
+  deviceAppVersionsTx,
   devicesOnlineTx,
   LOW_BATTERY_PCT,
+  lastScanByDeviceTx,
   listDevicesQuery,
   staffBoardTx,
 } from '@yayatoh/checkin';
 import type { TenantTx } from '@yayatoh/db';
 import { listOccurrencesQuery } from '@yayatoh/events';
 import { type Ctx, DomainError, type Query, utcToZonedInput, zonedTimeToUtc } from '@yayatoh/kernel';
+import { analyticsReportTx, deliverabilityReportTx } from '@yayatoh/marketing';
 import { navIncludes, tenantQuery } from '@yayatoh/platform';
 import { programQuery } from '@yayatoh/program';
 import { eventMetricsQuery, eventTimeseriesQuery, type ProjectedKey } from '@yayatoh/reports';
@@ -28,16 +32,21 @@ import { readinessRulesTx } from './readiness.ts';
  * layout: the door role asking for revenue gets `forbidden`.
  */
 export interface WidgetDef<O = unknown> extends WidgetMeta {
-  readonly loader: Query<{ eventId: string }, O, O, TenantTx>;
+  readonly loader: Query<{ eventId: string; params?: Record<string, string> | undefined }, O, O, TenantTx>;
 }
 
 export interface WidgetLoadArgs {
   readonly tx: TenantTx;
   readonly ctx: Ctx;
   readonly scope: CallerScope;
+  /** Widget options from the board (the live feed's filters); validated by the widget. */
+  readonly params: Readonly<Record<string, string>>;
 }
 
-const WidgetInput = z.object({ eventId: z.uuid() });
+const WidgetInput = z.object({
+  eventId: z.uuid(),
+  params: z.record(z.string().max(32), z.string().max(64)).optional(),
+});
 
 /** Pair a widget's metadata with its loader (a tenant query that checks the registry's rule). */
 export function defineWidget<O>(
@@ -55,7 +64,7 @@ export function defineWidget<O>(
       const scope = await callerScopeTx(tx, ctx, input.eventId);
       if (!widgetAllowed(meta, scope))
         throw new DomainError('forbidden', 'This widget is not available to your role');
-      return load({ tx, ctx, scope });
+      return load({ tx, ctx, scope, params: input.params ?? {} });
     },
   });
   return { ...meta, loader };
@@ -155,6 +164,31 @@ export const DeviceBoardWidgetDto = z.object({
       /** The checkpoint it scans at, or null for the whole event. */
       checkpoint: z.string().nullable(),
       kiosk: z.boolean(),
+      /** M3.3a: the scanner app's build and the device's last scan at this event. */
+      appVersion: z.string().nullable(),
+      lastScanAt: iso.nullable(),
+    }),
+  ),
+  asOf: iso,
+});
+
+/** M3.3b: the help queue in numbers and its most urgent open requests (no guest details). */
+export const AssistanceWidgetDto = z.object({
+  waiting: Count,
+  assigned: Count,
+  inProgress: Count,
+  overdue: Count,
+  top: z.array(
+    z.object({
+      id: z.uuid(),
+      number: z.int(),
+      source: z.enum(['guest', 'staff']),
+      /** `assistance.reason.<reason>` in the web messages. */
+      reason: z.string(),
+      priority: z.enum(PRIORITIES),
+      state: z.enum(REQUEST_STATES),
+      dueAt: iso,
+      overdue: z.boolean(),
     }),
   ),
   asOf: iso,
@@ -181,6 +215,53 @@ export const AlertsWidgetDto = z.object({
   ),
 });
 
+/** M3.8b: this event's marketing results (org currency, integer minor units). Money. */
+export const CampaignsWidgetDto = z.object({
+  currency: z.string(),
+  fromDay: z.string(),
+  toDay: z.string(),
+  totals: z.object({
+    sends: Count.nullable(),
+    clicks: Count,
+    uniqueClickers: Count,
+    orders: Count,
+    revenueMinor: z.int(),
+    firstTouchOrders: Count,
+    firstTouchRevenueMinor: z.int(),
+    conversionBps: Count,
+  }),
+  /** The top campaigns (by last-touch revenue), five at most. */
+  campaigns: z.array(
+    z.object({
+      key: z.string(),
+      kind: z.enum(['campaign', 'utm']),
+      name: z.string().nullable(),
+      sends: Count.nullable(),
+      clicks: Count,
+      orders: Count,
+      revenueMinor: z.int(),
+      firstTouchOrders: Count,
+      firstTouchRevenueMinor: z.int(),
+      conversionBps: Count,
+    }),
+  ),
+  more: Count,
+});
+
+/** M3.8b: the org's email deliverability over the alert window, and the auto-pause. */
+export const DeliverabilityWidgetDto = z.object({
+  sent: Count,
+  bounceBps: Count,
+  complaintBps: Count,
+  bounceOver: z.boolean(),
+  complaintOver: z.boolean(),
+  /** Sending domains and campaigns over a threshold. */
+  domainsOver: Count,
+  campaignsOver: Count,
+  paused: z.boolean(),
+  windowDays: Count,
+});
+
 // --- Loaders ---------------------------------------------------------------------------------
 
 async function metricsTx(tx: TenantTx, ctx: Ctx, eventId: string, keys: ProjectedKey[]) {
@@ -191,7 +272,7 @@ async function metricsTx(tx: TenantTx, ctx: Ctx, eventId: string, keys: Projecte
 }
 
 /** Midnight today in the event's time zone (at most 24 hours back, for minute buckets). */
-function localMidnight(now: Date, timeZone: string): Date {
+export function localMidnight(now: Date, timeZone: string): Date {
   const midnight = zonedTimeToUtc(`${utcToZonedInput(now, timeZone).slice(0, 10)}T00:00`, timeZone);
   return new Date(Math.max(midnight.getTime(), now.getTime() - 24 * 3_600_000 + 60_000));
 }
@@ -350,6 +431,11 @@ export const deviceBoardWidget = defineWidget(
   DeviceBoardWidgetDto,
   async ({ tx, ctx, scope }) => {
     const b = await staffBoardTx(tx, scope.event.id, ctx.now);
+    const lastScan = await lastScanByDeviceTx(tx, scope.event.id);
+    const versions = await deviceAppVersionsTx(
+      tx,
+      b.devices.map((d) => d.id),
+    );
     return {
       devices: b.devices.map((d) => ({
         id: d.id,
@@ -360,8 +446,103 @@ export const deviceBoardWidget = defineWidget(
         queueDepth: d.queueDepth,
         checkpoint: b.checkpointName(d.checkpointId),
         kiosk: d.mode === 'kiosk',
+        appVersion: versions.get(d.id) ?? null,
+        lastScanAt: lastScan.get(d.id)?.toISOString() ?? null,
       })),
       asOf: ctx.now.toISOString(),
+    };
+  },
+);
+
+export const assistanceWidget = defineWidget(
+  WIDGET_META.assistance,
+  AssistanceWidgetDto,
+  async ({ tx, ctx, scope }) => {
+    const s = await assistanceSummaryTx(tx, scope.event.id, ctx.now);
+    return {
+      ...s,
+      top: s.top.map((r) => ({ ...r, dueAt: r.dueAt.toISOString() })),
+      asOf: ctx.now.toISOString(),
+    };
+  },
+);
+
+/** How far back the event's campaign tile looks (the attribution window's maximum). */
+export const CAMPAIGNS_WIDGET_DAYS = 90;
+
+/**
+ * Messaging campaigns' names by id (batch 3g merge): M3.6b's campaigns module is this module's
+ * tier, so the app passes its reader in (`campaignNamesTx`); without one, a campaign is named by
+ * its tracked links' label (M3.6b labels them with the campaign's name at the time).
+ */
+export type CampaignNames = (tx: TenantTx, ids: readonly string[]) => Promise<ReadonlyMap<string, string>>;
+
+export const campaignsWidget = (names: CampaignNames | null) =>
+  defineWidget(WIDGET_META.campaigns, CampaignsWidgetDto, async ({ tx, ctx, scope }) => {
+    const from = new Date(ctx.now.getTime() - (CAMPAIGNS_WIDGET_DAYS - 1) * 86_400_000);
+    const day = (d: Date) => utcToZonedInput(d, scope.event.timezone).slice(0, 10);
+    const r = await analyticsReportTx(tx, ctx, {
+      dimension: 'campaign',
+      eventId: scope.event.id,
+      from: day(from),
+      to: day(ctx.now),
+    });
+    const campaigns = r.rows.filter(
+      (x): x is typeof x & { kind: 'campaign' | 'utm' } => x.kind === 'campaign' || x.kind === 'utm',
+    );
+    const shown = campaigns.slice(0, 5);
+    const named = names
+      ? await names(
+          tx,
+          shown.filter((c) => c.kind === 'campaign').map((c) => c.key.slice(2)),
+        )
+      : new Map<string, string>();
+    return {
+      currency: r.currency,
+      fromDay: r.fromDay,
+      toDay: r.toDay,
+      totals: {
+        sends: r.totals.sends,
+        clicks: r.totals.clicks,
+        uniqueClickers: r.totals.uniqueClickers,
+        orders: r.totals.lastTouch.orders,
+        revenueMinor: r.totals.lastTouch.revenueMinor,
+        firstTouchOrders: r.totals.firstTouch.orders,
+        firstTouchRevenueMinor: r.totals.firstTouch.revenueMinor,
+        conversionBps: r.totals.conversionBps,
+      },
+      campaigns: shown.map((c) => ({
+        key: c.key,
+        kind: c.kind,
+        name: (c.kind === 'campaign' ? named.get(c.key.slice(2)) : undefined) ?? c.name,
+        sends: c.sends,
+        clicks: c.clicks,
+        orders: c.lastTouch.orders,
+        revenueMinor: c.lastTouch.revenueMinor,
+        firstTouchOrders: c.firstTouch.orders,
+        firstTouchRevenueMinor: c.firstTouch.revenueMinor,
+        conversionBps: c.conversionBps,
+      })),
+      more: Math.max(0, campaigns.length - 5),
+    };
+  });
+
+export const deliverabilityWidget = defineWidget(
+  WIDGET_META.deliverability,
+  DeliverabilityWidgetDto,
+  async ({ tx, ctx }) => {
+    const d = await deliverabilityReportTx(tx, ctx);
+    const over = (x: { bounceOver: boolean; complaintOver: boolean }) => x.bounceOver || x.complaintOver;
+    return {
+      sent: d.org.sent,
+      bounceBps: d.org.bounceBps,
+      complaintBps: d.org.complaintBps,
+      bounceOver: d.org.bounceOver,
+      complaintOver: d.org.complaintOver,
+      domainsOver: d.domains.filter(over).length,
+      campaignsOver: d.campaigns.filter(over).length,
+      paused: d.autoPause?.active ?? false,
+      windowDays: d.thresholds.windowDays,
     };
   },
 );
@@ -371,16 +552,3 @@ export const alertsSlotWidget = defineWidget(WIDGET_META.alerts, AlertsWidgetDto
   engine: 'pending' as const,
   alerts: [],
 }));
-
-export const COMMAND_CENTER_WIDGETS: WidgetRegistry = createWidgetRegistry([
-  readinessWidget,
-  salesWidget,
-  ticketsWidget,
-  checkinsWidget,
-  seatFillWidget,
-  devicesWidget,
-  timelineWidget,
-  alertsSlotWidget,
-  entrancesWidget,
-  deviceBoardWidget,
-]);
