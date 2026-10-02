@@ -64,6 +64,9 @@ export interface ContactStatsScenario {
   readonly tag: string;
   readonly events: { readonly a: string; readonly b: string; readonly c: string };
   readonly eventNames: { readonly a: string; readonly b: string; readonly c: string };
+  readonly eventSlugs: { readonly a: string; readonly b: string; readonly c: string };
+  /** John's attendee record at B (the attendee page's timeline). */
+  readonly johnAttendeeAtB: string;
   readonly sessionIds: readonly string[];
   readonly campaignIds: readonly string[];
   readonly people: {
@@ -98,6 +101,7 @@ export async function contactStatsScenario(
     ports,
   );
 
+  const slugs: Record<'a' | 'b' | 'c', string> = { a: '', b: '', c: '' };
   const event = async (key: 'a' | 'b' | 'c', name: string) => {
     const when = E[key];
     const c = before(when.startsAt);
@@ -107,6 +111,7 @@ export async function contactStatsScenario(
       c,
       ports,
     );
+    slugs[key] = e.slug;
     return e.id;
   };
   const ticketType = async (eventId: string, name: string, priceMinor: number, when: string) =>
@@ -196,6 +201,11 @@ export async function contactStatsScenario(
     if (!row) throw new Error(`no contact for ${who}`);
     return { id: row.id, name: who, email: row.email };
   };
+  const [johnAtB] = await withTenant(ctx, (tx) =>
+    tx.execute<{ id: string }>(
+      sql`select id from attendees.attendees where event_id = ${b} and contact_id = (select id from crm.contacts where email = ${email('John Doe')})`,
+    ),
+  );
   const people = {
     john: person('John Doe'),
     mia: person('Mia Lane'),
@@ -239,6 +249,8 @@ export async function contactStatsScenario(
     tag,
     events: { a, b, c },
     eventNames,
+    eventSlugs: slugs,
+    johnAttendeeAtB: johnAtB?.id ?? '',
     sessionIds,
     campaignIds,
     people,
