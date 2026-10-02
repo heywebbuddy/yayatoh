@@ -1687,7 +1687,7 @@ export interface components {
             nextCursor: string | null;
         };
         /** @enum {string} */
-        OrderStatus: "reserved" | "awaiting_payment" | "payment_failed" | "paid" | "expired" | "cancelled" | "partially_refunded" | "refunded";
+        OrderStatus: "reserved" | "awaiting_payment" | "payment_failed" | "paid" | "expired" | "cancelled" | "partially_refunded" | "refunded" | "awaiting_invoice" | "void";
         Organization: {
             country: string;
             currency: string;
@@ -1940,7 +1940,7 @@ export interface components {
             code: string;
         };
         /** @enum {string} */
-        ScanResult: "admitted" | "duplicate" | "invalid" | "void" | "wrong_event" | "not_today" | "outside_window" | "wrong_date" | "duplicate_offline" | "superseded" | "provisional" | "granted" | "no_access" | "wrong_checkpoint";
+        ScanResult: "admitted" | "duplicate" | "invalid" | "void" | "wrong_event" | "not_today" | "outside_window" | "wrong_date" | "duplicate_offline" | "superseded" | "provisional" | "granted" | "no_access" | "wrong_checkpoint" | "balance_due";
         ScanVerdict: {
             /** Format: uuid */
             admissionId: string | null;
