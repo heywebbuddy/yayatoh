@@ -40,7 +40,7 @@ export const NO_SHOW_PRIOR_BPS = noShowPropensityBps(0, 0);
  *          + 2 × session enrollments
  *   score  = round(100 × points / (points + 25))
  *
- * The curve saturates: 25 points is a score of 50, and nobody reaches 100.
+ * The curve saturates: 25 points is a score of 50, 225 points is 90, and it approaches 100.
  */
 export const ENGAGEMENT_WEIGHTS = {
   eventsAttended: 10,
