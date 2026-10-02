@@ -5134,7 +5134,9 @@
         "unknown_legacy": "Unknown (imported)",
         "none": "Not given"
       }
-    }
+    },
+    "peopleLink": "People",
+    "duplicatesLink": "Possible duplicates"
   },
   "refundOps": {
     "timeline": {
@@ -9006,6 +9008,195 @@
       "tooManyTemplates": "This event has the most templates it can have.",
       "stale": "Someone else saved this template meanwhile. Reload the page to see their version.",
       "questionNotAllowed": "That question can't be printed on badges."
+    }
+  },
+  "people": {
+    "title": "People",
+    "audiences": "Audiences",
+    "description": "Everyone your organization has a record for, newest first. Open someone to see their whole history.",
+    "duplicatesLink": "Possible duplicates",
+    "search": {
+      "label": "Search by name, email or company",
+      "submit": "Search",
+      "noneTitle": "No one matches",
+      "noneDescription": "Nobody's name, email or company contains “{q}”. Try a shorter search."
+    },
+    "emptyTitle": "No people yet",
+    "emptyDescription": "People appear here when they buy tickets, register or are added to a guest list.",
+    "caption": "People",
+    "columns": {
+      "name": "Name",
+      "email": "Email",
+      "company": "Company",
+      "added": "Added"
+    },
+    "next": "Next page",
+    "person": {
+      "title": "Person",
+      "details": "Details",
+      "mergedHere": "That record was merged into this one."
+    },
+    "fields": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "company": "Company",
+      "added": "Added",
+      "emailConsent": "Marketing email",
+      "smsConsent": "Marketing texts",
+      "history": "History",
+      "empty": "Not given"
+    },
+    "merges": {
+      "title": "Merged records",
+      "line": "Merged {who} on {when}.",
+      "moved": "{moved, plural, =0 {Nothing moved.} one {# item moved.} other {# items moved.}}",
+      "undoneOn": "Undone on {when}.",
+      "undoUntil": "Can be undone until {when}.",
+      "erased": "an erased record"
+    },
+    "undo": {
+      "submit": "Undo merge",
+      "submitFor": "Undo the merge of {who}",
+      "done": "Merge undone. Both records are separate again, exactly as before.",
+      "openOther": "Open the other record",
+      "errors": {
+        "expired": "This merge is more than 30 days old and can no longer be undone.",
+        "blocked": "This record was merged into another one since. Undo that merge first.",
+        "erased": "One of these records was erased, so the merge can no longer be undone.",
+        "undone": "This merge was already undone."
+      }
+    },
+    "errors": {
+      "forbidden": "Your role can't merge people. Ask an owner, admin or manager."
+    },
+    "timeline": {
+      "title": "Timeline",
+      "kind": "What",
+      "allKinds": "Everything",
+      "event": "Event",
+      "allEvents": "All events",
+      "filter": "Filter",
+      "noMatchTitle": "Nothing matches these filters",
+      "noMatchDescription": "Choose “Everything” or “All events” to see more.",
+      "emptyTitle": "Nothing here yet",
+      "emptyDescription": "Orders, check-ins, campaigns, messages and surveys appear here as they happen.",
+      "listLabel": "Timeline of {name}",
+      "older": "Older"
+    },
+    "kinds": {
+      "order_paid": "Order paid",
+      "order_refunded": "Refund",
+      "checked_in": "Checked in",
+      "session_attended": "Attended a session",
+      "campaign_sent": "Campaign sent",
+      "campaign_opened": "Opened a campaign",
+      "campaign_clicked": "Clicked a campaign",
+      "message_in": "Wrote to you",
+      "message_out": "You replied",
+      "donation": "Donation",
+      "rsvp": "RSVP",
+      "survey_sent": "Survey sent",
+      "survey_responded": "Answered a survey"
+    },
+    "merge": {
+      "done": "Records merged. You can undo this for 30 days from this page.",
+      "submit": "Merge records",
+      "hint": "Orders, tickets, check-ins, messages and history move to the record that stays. You can undo a merge for 30 days.",
+      "errors": {
+        "alreadyMerged": "One of these records was merged or changed since you opened this page. Go back to the list.",
+        "erased": "One of these records was erased and can't be merged.",
+        "unavailable": "Merging isn't available right now. Try again later.",
+        "keep": "Choose which record stays."
+      }
+    },
+    "duplicates": {
+      "title": "Possible duplicates",
+      "description": "People who may be on file twice: the same email, the same phone, or a similar name at the same company.",
+      "scan": "Look for duplicates",
+      "lastScan": "Last checked {when}. New contacts are checked automatically every few minutes.",
+      "neverScanned": "Not checked yet.",
+      "scanned": "{count, plural, =0 {No possible duplicates found.} one {Found # possible duplicate.} other {Found # possible duplicates.}}",
+      "dismissedDone": "Marked as not the same person. This pair won't be suggested again.",
+      "bulkDone": "{count, plural, =0 {Nothing was merged.} one {Merged # pair. Each merge can be undone for 30 days.} other {Merged # pairs. Each merge can be undone for 30 days.}}",
+      "statusNav": "Filter by status",
+      "status": {
+        "open": "Open ({count})",
+        "dismissed": "Not duplicates",
+        "merged": "Merged"
+      },
+      "caption": {
+        "open": "Possible duplicates to review",
+        "dismissed": "Pairs marked as not the same person",
+        "merged": "Merged pairs"
+      },
+      "empty": {
+        "open": {
+          "title": "No possible duplicates",
+          "description": "Choose “Look for duplicates” to check everyone now. New contacts are checked automatically."
+        },
+        "dismissed": {
+          "title": "Nothing dismissed",
+          "description": "Pairs you mark as not the same person are listed here."
+        },
+        "merged": {
+          "title": "No merges yet",
+          "description": "Pairs you merge are listed here. Undo a merge from the person's page."
+        }
+      },
+      "select": "Select",
+      "selectPair": "Select {pair}",
+      "pair": "{a} and {b}",
+      "columns": {
+        "people": "People",
+        "confidence": "Confidence",
+        "reasons": "Why",
+        "review": "Review"
+      },
+      "score": "{score}%",
+      "review": "Review",
+      "reviewPair": "Review {pair}",
+      "mergeSelected": "Merge selected",
+      "mergeSelectedHint": "Keeps the older record of each pair and the most recent details. You'll be asked to confirm it's you.",
+      "errors": {
+        "noneSelected": "Select at least one pair to merge.",
+        "tooMany": "Select at most 50 pairs at a time."
+      }
+    },
+    "reasons": {
+      "email": "Same email address",
+      "phone": "Same phone number",
+      "name_company": "Similar name at the same company"
+    },
+    "compare": {
+      "title": "Review possible duplicate",
+      "description": "{score}% confidence: {reasons}.",
+      "resolved": "This pair was already resolved.",
+      "record": "Record {n}",
+      "older": "(older)",
+      "entries": "{count, plural, =0 {No entries} one {# entry} other {# entries}}",
+      "openTimeline": "Open the timeline of {record}",
+      "consentTitle": "Consent after merging",
+      "consentEmail": "Marketing email: {status}",
+      "consentSms": "Marketing texts: {status}",
+      "consentRule": "The strictest choice wins: if either record opted out, the merged record is opted out.",
+      "keepLegend": "Which record stays",
+      "keepHint": "The other record is merged into it. Its email address still finds this person.",
+      "keepOption": "{record} ({email})",
+      "fieldLegend": {
+        "name": "Name",
+        "email": "Email",
+        "phone": "Phone",
+        "company": "Company"
+      },
+      "fieldOption": "{record}: {value}",
+      "dismiss": "Not the same person"
+    },
+    "consent": {
+      "granted": "Opted in",
+      "withdrawn": "Opted out",
+      "unknown_legacy": "Unknown (imported)",
+      "none": "No consent"
     }
   }
 }

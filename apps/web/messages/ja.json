@@ -5134,7 +5134,9 @@
         "unknown_legacy": "不明（インポート）",
         "none": "なし"
       }
-    }
+    },
+    "peopleLink": "人物",
+    "duplicatesLink": "重複の可能性"
   },
   "refundOps": {
     "timeline": {
@@ -9007,5 +9009,194 @@
       "questionNotAllowed": "この質問はバッジに印刷できません。"
     },
     "elements": "この面の要素"
+  },
+  "people": {
+    "title": "人物",
+    "audiences": "オーディエンス",
+    "description": "組織に記録があるすべての人を新しい順に表示します。開くと全履歴を確認できます。",
+    "duplicatesLink": "重複の可能性",
+    "search": {
+      "label": "名前・メール・会社で検索",
+      "submit": "検索",
+      "noneTitle": "該当する人がいません",
+      "noneDescription": "「{q}」を含む名前・メール・会社はありません。短い語で試してください。"
+    },
+    "emptyTitle": "まだ誰もいません",
+    "emptyDescription": "チケット購入、登録、ゲストリストへの追加でここに表示されます。",
+    "caption": "人物",
+    "columns": {
+      "name": "名前",
+      "email": "メール",
+      "company": "会社",
+      "added": "追加日"
+    },
+    "next": "次のページ",
+    "person": {
+      "title": "人物",
+      "details": "詳細",
+      "mergedHere": "そのレコードはこのレコードに統合されました。"
+    },
+    "fields": {
+      "name": "名前",
+      "email": "メール",
+      "phone": "電話",
+      "company": "会社",
+      "added": "追加日",
+      "emailConsent": "マーケティングメール",
+      "smsConsent": "マーケティングSMS",
+      "history": "履歴",
+      "empty": "未入力"
+    },
+    "merges": {
+      "title": "統合したレコード",
+      "line": "{when}に{who}を統合しました。",
+      "moved": "{moved, plural, =0 {移動した項目はありません。} other {#件の項目を移動しました。}}",
+      "undoneOn": "{when}に取り消しました。",
+      "undoUntil": "{when}まで取り消せます。",
+      "erased": "削除済みのレコード"
+    },
+    "undo": {
+      "submit": "統合を取り消す",
+      "submitFor": "{who}の統合を取り消す",
+      "done": "統合を取り消しました。2つのレコードは以前とまったく同じように分かれています。",
+      "openOther": "もう一方のレコードを開く",
+      "errors": {
+        "expired": "この統合から30日以上経過しているため、取り消せません。",
+        "blocked": "このレコードはその後、別のレコードに統合されています。先にその統合を取り消してください。",
+        "erased": "どちらかのレコードが削除されたため、統合を取り消せません。",
+        "undone": "この統合はすでに取り消されています。"
+      }
+    },
+    "errors": {
+      "forbidden": "あなたのロールでは統合できません。オーナー、管理者、マネージャーに依頼してください。"
+    },
+    "timeline": {
+      "title": "タイムライン",
+      "kind": "種類",
+      "allKinds": "すべて",
+      "event": "イベント",
+      "allEvents": "すべてのイベント",
+      "filter": "絞り込む",
+      "noMatchTitle": "条件に一致する項目がありません",
+      "noMatchDescription": "「すべて」または「すべてのイベント」を選ぶと表示が増えます。",
+      "emptyTitle": "まだ何もありません",
+      "emptyDescription": "注文、チェックイン、キャンペーン、メッセージ、アンケートが発生するとここに表示されます。",
+      "listLabel": "{name}のタイムライン",
+      "older": "さらに前"
+    },
+    "kinds": {
+      "order_paid": "注文の支払い",
+      "order_refunded": "返金",
+      "checked_in": "チェックイン",
+      "session_attended": "セッションに参加",
+      "campaign_sent": "キャンペーン送信",
+      "campaign_opened": "キャンペーンを開封",
+      "campaign_clicked": "キャンペーンをクリック",
+      "message_in": "あなたへのメッセージ",
+      "message_out": "あなたの返信",
+      "donation": "寄付",
+      "rsvp": "招待への返信",
+      "survey_sent": "アンケート送信",
+      "survey_responded": "アンケートに回答"
+    },
+    "merge": {
+      "done": "レコードを統合しました。このページから30日間取り消せます。",
+      "submit": "レコードを統合",
+      "hint": "注文、チケット、チェックイン、メッセージ、履歴は残すレコードに移ります。統合は30日間取り消せます。",
+      "errors": {
+        "alreadyMerged": "このページを開いた後に、どちらかのレコードが統合または変更されました。一覧に戻ってください。",
+        "erased": "どちらかのレコードが削除されているため統合できません。",
+        "unavailable": "現在統合できません。後でもう一度お試しください。",
+        "keep": "残すレコードを選んでください。"
+      }
+    },
+    "duplicates": {
+      "title": "重複の可能性",
+      "description": "二重に登録されている可能性がある人：同じメール、同じ電話番号、または同じ会社の似た名前。",
+      "scan": "重複を探す",
+      "lastScan": "最終確認：{when}。新しい連絡先は数分ごとに自動で確認されます。",
+      "neverScanned": "まだ確認していません。",
+      "scanned": "{count, plural, =0 {重複の可能性は見つかりませんでした。} other {重複の可能性が#件見つかりました。}}",
+      "dismissedDone": "別人としてマークしました。このペアは今後提案されません。",
+      "bulkDone": "{count, plural, =0 {統合したものはありません。} other {#組を統合しました。各統合は30日間取り消せます。}}",
+      "statusNav": "ステータスで絞り込む",
+      "status": {
+        "open": "未対応（{count}）",
+        "dismissed": "重複ではない",
+        "merged": "統合済み"
+      },
+      "caption": {
+        "open": "確認待ちの重複の可能性",
+        "dismissed": "別人としてマークしたペア",
+        "merged": "統合済みのペア"
+      },
+      "empty": {
+        "open": {
+          "title": "重複の可能性はありません",
+          "description": "「重複を探す」を選ぶと今すぐ全員を確認します。新しい連絡先は自動で確認されます。"
+        },
+        "dismissed": {
+          "title": "除外したものはありません",
+          "description": "別人としてマークしたペアがここに表示されます。"
+        },
+        "merged": {
+          "title": "まだ統合はありません",
+          "description": "統合したペアがここに表示されます。統合の取り消しはその人のページから行えます。"
+        }
+      },
+      "select": "選択",
+      "selectPair": "{pair}を選択",
+      "pair": "{a}と{b}",
+      "columns": {
+        "people": "人物",
+        "confidence": "確度",
+        "reasons": "理由",
+        "review": "確認"
+      },
+      "score": "{score}%",
+      "review": "確認",
+      "reviewPair": "{pair}を確認",
+      "mergeSelected": "選択したものを統合",
+      "mergeSelectedHint": "各ペアの古いレコードと最新の情報を残します。本人確認を求められます。",
+      "errors": {
+        "noneSelected": "統合するペアを1つ以上選んでください。",
+        "tooMany": "一度に選べるのは50組までです。"
+      }
+    },
+    "reasons": {
+      "email": "同じメールアドレス",
+      "phone": "同じ電話番号",
+      "name_company": "同じ会社の似た名前"
+    },
+    "compare": {
+      "title": "重複の可能性を確認",
+      "description": "確度{score}%：{reasons}。",
+      "resolved": "このペアは対応済みです。",
+      "record": "レコード{n}",
+      "older": "（古い方）",
+      "entries": "{count, plural, =0 {項目なし} other {#件}}",
+      "openTimeline": "{record}のタイムラインを開く",
+      "consentTitle": "統合後の同意",
+      "consentEmail": "マーケティングメール：{status}",
+      "consentSms": "マーケティングSMS：{status}",
+      "consentRule": "最も厳しい選択が優先されます。どちらかが配信停止していれば、統合後も配信停止です。",
+      "keepLegend": "残すレコード",
+      "keepHint": "もう一方のレコードはこれに統合されます。そのメールアドレスでも引き続きこの人が見つかります。",
+      "keepOption": "{record}（{email}）",
+      "fieldLegend": {
+        "name": "名前",
+        "email": "メール",
+        "phone": "電話",
+        "company": "会社"
+      },
+      "fieldOption": "{record}：{value}",
+      "dismiss": "同一人物ではない"
+    },
+    "consent": {
+      "granted": "同意あり",
+      "withdrawn": "配信停止",
+      "unknown_legacy": "不明（インポート）",
+      "none": "同意なし"
+    }
   }
 }

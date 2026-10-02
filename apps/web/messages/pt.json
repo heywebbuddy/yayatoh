@@ -5134,7 +5134,9 @@
         "unknown_legacy": "Desconhecido (importado)",
         "none": "Não dado"
       }
-    }
+    },
+    "peopleLink": "Pessoas",
+    "duplicatesLink": "Possíveis duplicados"
   },
   "refundOps": {
     "timeline": {
@@ -9007,5 +9009,194 @@
       "questionNotAllowed": "Essa pergunta não pode ser impressa nos crachás."
     },
     "elements": "Elementos deste lado"
+  },
+  "people": {
+    "title": "Pessoas",
+    "audiences": "Públicos",
+    "description": "Todas as pessoas de quem sua organização tem um registro, as mais recentes primeiro. Abra alguém para ver todo o histórico.",
+    "duplicatesLink": "Possíveis duplicados",
+    "search": {
+      "label": "Buscar por nome, e-mail ou empresa",
+      "submit": "Buscar",
+      "noneTitle": "Ninguém encontrado",
+      "noneDescription": "Nenhum nome, e-mail ou empresa contém “{q}”. Tente uma busca mais curta."
+    },
+    "emptyTitle": "Ainda não há pessoas",
+    "emptyDescription": "As pessoas aparecem aqui quando compram ingressos, se inscrevem ou são adicionadas a uma lista de convidados.",
+    "caption": "Pessoas",
+    "columns": {
+      "name": "Nome",
+      "email": "E-mail",
+      "company": "Empresa",
+      "added": "Adicionada em"
+    },
+    "next": "Próxima página",
+    "person": {
+      "title": "Pessoa",
+      "details": "Dados",
+      "mergedHere": "Aquele registro foi mesclado a este."
+    },
+    "fields": {
+      "name": "Nome",
+      "email": "E-mail",
+      "phone": "Telefone",
+      "company": "Empresa",
+      "added": "Adicionada em",
+      "emailConsent": "E-mail de marketing",
+      "smsConsent": "SMS de marketing",
+      "history": "Histórico",
+      "empty": "Não informado"
+    },
+    "merges": {
+      "title": "Registros mesclados",
+      "line": "{who} mesclado em {when}.",
+      "moved": "{moved, plural, =0 {Nada foi movido.} one {# item movido.} other {# itens movidos.}}",
+      "undoneOn": "Desfeito em {when}.",
+      "undoUntil": "Pode ser desfeito até {when}.",
+      "erased": "um registro apagado"
+    },
+    "undo": {
+      "submit": "Desfazer mesclagem",
+      "submitFor": "Desfazer a mesclagem de {who}",
+      "done": "Mesclagem desfeita. Os dois registros estão separados de novo, exatamente como antes.",
+      "openOther": "Abrir o outro registro",
+      "errors": {
+        "expired": "Esta mesclagem tem mais de 30 dias e não pode mais ser desfeita.",
+        "blocked": "Este registro foi mesclado a outro depois. Desfaça essa mesclagem primeiro.",
+        "erased": "Um destes registros foi apagado, então a mesclagem não pode mais ser desfeita.",
+        "undone": "Esta mesclagem já foi desfeita."
+      }
+    },
+    "errors": {
+      "forbidden": "Sua função não pode mesclar pessoas. Peça a um proprietário, administrador ou gerente."
+    },
+    "timeline": {
+      "title": "Linha do tempo",
+      "kind": "O quê",
+      "allKinds": "Tudo",
+      "event": "Evento",
+      "allEvents": "Todos os eventos",
+      "filter": "Filtrar",
+      "noMatchTitle": "Nada corresponde a esses filtros",
+      "noMatchDescription": "Escolha “Tudo” ou “Todos os eventos” para ver mais.",
+      "emptyTitle": "Ainda não há nada",
+      "emptyDescription": "Pedidos, check-ins, campanhas, mensagens e pesquisas aparecem aqui conforme acontecem.",
+      "listLabel": "Linha do tempo de {name}",
+      "older": "Anteriores"
+    },
+    "kinds": {
+      "order_paid": "Pedido pago",
+      "order_refunded": "Reembolso",
+      "checked_in": "Check-in feito",
+      "session_attended": "Participou de uma sessão",
+      "campaign_sent": "Campanha enviada",
+      "campaign_opened": "Abriu uma campanha",
+      "campaign_clicked": "Clicou em uma campanha",
+      "message_in": "Escreveu para você",
+      "message_out": "Você respondeu",
+      "donation": "Doação",
+      "rsvp": "Resposta ao convite",
+      "survey_sent": "Pesquisa enviada",
+      "survey_responded": "Respondeu a uma pesquisa"
+    },
+    "merge": {
+      "done": "Registros mesclados. Você pode desfazer por 30 dias nesta página.",
+      "submit": "Mesclar registros",
+      "hint": "Pedidos, ingressos, check-ins, mensagens e histórico passam para o registro que fica. Você pode desfazer uma mesclagem por 30 dias.",
+      "errors": {
+        "alreadyMerged": "Um destes registros foi mesclado ou alterado desde que você abriu esta página. Volte à lista.",
+        "erased": "Um destes registros foi apagado e não pode ser mesclado.",
+        "unavailable": "Não é possível mesclar agora. Tente mais tarde.",
+        "keep": "Escolha qual registro fica."
+      }
+    },
+    "duplicates": {
+      "title": "Possíveis duplicados",
+      "description": "Pessoas que talvez estejam cadastradas duas vezes: o mesmo e-mail, o mesmo telefone ou um nome parecido na mesma empresa.",
+      "scan": "Procurar duplicados",
+      "lastScan": "Última verificação: {when}. Contatos novos são verificados automaticamente a cada poucos minutos.",
+      "neverScanned": "Ainda não verificado.",
+      "scanned": "{count, plural, =0 {Nenhum possível duplicado encontrado.} one {# possível duplicado encontrado.} other {# possíveis duplicados encontrados.}}",
+      "dismissedDone": "Marcado como pessoas diferentes. Este par não será sugerido de novo.",
+      "bulkDone": "{count, plural, =0 {Nada foi mesclado.} one {# par mesclado. Cada mesclagem pode ser desfeita por 30 dias.} other {# pares mesclados. Cada mesclagem pode ser desfeita por 30 dias.}}",
+      "statusNav": "Filtrar por status",
+      "status": {
+        "open": "Em aberto ({count})",
+        "dismissed": "Não duplicados",
+        "merged": "Mesclados"
+      },
+      "caption": {
+        "open": "Possíveis duplicados para revisar",
+        "dismissed": "Pares marcados como pessoas diferentes",
+        "merged": "Pares mesclados"
+      },
+      "empty": {
+        "open": {
+          "title": "Nenhum possível duplicado",
+          "description": "Escolha “Procurar duplicados” para verificar todos agora. Contatos novos são verificados automaticamente."
+        },
+        "dismissed": {
+          "title": "Nada descartado",
+          "description": "Os pares que você marcar como pessoas diferentes aparecem aqui."
+        },
+        "merged": {
+          "title": "Ainda não há mesclagens",
+          "description": "Os pares que você mesclar aparecem aqui. Desfaça uma mesclagem na página da pessoa."
+        }
+      },
+      "select": "Selecionar",
+      "selectPair": "Selecionar {pair}",
+      "pair": "{a} e {b}",
+      "columns": {
+        "people": "Pessoas",
+        "confidence": "Confiança",
+        "reasons": "Por quê",
+        "review": "Revisar"
+      },
+      "score": "{score}%",
+      "review": "Revisar",
+      "reviewPair": "Revisar {pair}",
+      "mergeSelected": "Mesclar selecionados",
+      "mergeSelectedHint": "Mantém o registro mais antigo de cada par e os dados mais recentes. Você precisará confirmar que é você.",
+      "errors": {
+        "noneSelected": "Selecione pelo menos um par para mesclar.",
+        "tooMany": "Selecione no máximo 50 pares por vez."
+      }
+    },
+    "reasons": {
+      "email": "Mesmo endereço de e-mail",
+      "phone": "Mesmo telefone",
+      "name_company": "Nome parecido na mesma empresa"
+    },
+    "compare": {
+      "title": "Revisar possível duplicado",
+      "description": "{score}% de confiança: {reasons}.",
+      "resolved": "Este par já foi resolvido.",
+      "record": "Registro {n}",
+      "older": "(mais antigo)",
+      "entries": "{count, plural, =0 {Nenhum item} one {# item} other {# itens}}",
+      "openTimeline": "Abrir a linha do tempo do {record}",
+      "consentTitle": "Consentimento após mesclar",
+      "consentEmail": "E-mail de marketing: {status}",
+      "consentSms": "SMS de marketing: {status}",
+      "consentRule": "Vale a escolha mais restritiva: se qualquer registro cancelou a inscrição, o registro mesclado fica sem inscrição.",
+      "keepLegend": "Qual registro fica",
+      "keepHint": "O outro registro é mesclado a ele. O e-mail dele continua levando a esta pessoa.",
+      "keepOption": "{record} ({email})",
+      "fieldLegend": {
+        "name": "Nome",
+        "email": "E-mail",
+        "phone": "Telefone",
+        "company": "Empresa"
+      },
+      "fieldOption": "{record}: {value}",
+      "dismiss": "Não é a mesma pessoa"
+    },
+    "consent": {
+      "granted": "Inscrito",
+      "withdrawn": "Inscrição cancelada",
+      "unknown_legacy": "Desconhecido (importado)",
+      "none": "Sem consentimento"
+    }
   }
 }
