@@ -420,12 +420,12 @@ export const PublicSeatMapDto = z.object({
       ticketTypeId: z.uuid(),
       available: z.boolean(),
       accessible: z.boolean(),
-      /** A companion seat (M6.11a): kept for people coming with a wheelchair user. */
-      companion: z.boolean().default(false),
+      /** A companion seat (M6.11a, with advanced seating): kept for people coming with a wheelchair user. */
+      companion: z.boolean().optional(),
     }),
   ),
-  /** M6.11a: buyers may ask for the best available seats instead of choosing. */
-  bestAvailable: z.boolean().default(false),
+  /** M6.11a (with advanced seating): buyers may ask for the best available seats instead. */
+  bestAvailable: z.boolean().optional(),
 });
 
 /**
@@ -489,9 +489,9 @@ export async function publicSeatMap(
         ticketTypeId: s.ticketTypeId,
         available: available.get(s.seatUuid) ?? false,
         accessible: s.accessible,
-        companion: companions.has(s.seatUuid),
+        ...(advanced ? { companion: companions.has(s.seatUuid) } : {}),
       })),
-      bestAvailable: advanced && (await selectionSettingsTx(tx, eventId)).bestAvailable,
+      ...(advanced ? { bestAvailable: (await selectionSettingsTx(tx, eventId)).bestAvailable } : {}),
     });
   });
 }

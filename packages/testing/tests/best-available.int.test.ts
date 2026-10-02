@@ -207,7 +207,13 @@ describe('best available (M6.11a)', () => {
     expect(map?.bestAvailable).toBe(true);
     expect(JSON.stringify(map)).not.toContain('sectionScores');
     expect(JSON.stringify(map)).not.toContain('score');
-    expect((await publicSeatMap(a.org.id, ev.id))?.bestAvailable).toBe(false);
+    // Without advanced seating the map is what it always was.
+    expect(Object.keys((await publicSeatMap(a.org.id, ev.id)) ?? {}).sort()).toEqual([
+      'doc',
+      'rules',
+      'seats',
+      'startsAt',
+    ]);
     // The organizer's score wins over distance to the stage: the back section first.
     const held = await best(ev, 2);
     expect(held.pieces).toBe(1);
