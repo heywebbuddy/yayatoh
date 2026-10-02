@@ -130,3 +130,8 @@ Module granted in beta; per-event switch off by default. Rollback: turn best ava
 
 ### 15. Owner tasks
 See `docs/owner-inbox.md` (M6.11a): defaults pending owner confirmation.
+
+### 16. Gate results (2026-10-02)
+- `pnpm lint`, `pnpm check:modules`, typecheck (57/57), unit (186 files, 2,381 tests), integration (152 files, 1,353 tests): pass.
+- E2E (3 viewports): `best-available.spec.ts` 15/15; `box-office-seats`, `seat-rules`, `seated-checkout`, `registration` pass. The wider seating/checkout set (`checkout`, `box-office`, `seat-live`, `seating`, `date-charts`, `seat-assignment`) passed before the last two fixes, which touched only the rules form order and the public map's optional fields.
+- Not merged here: `origin/agent/design-v2` (conflicts outside this milestone's files: e2e helpers, command center, speakers, exhibitors, seat finder, drizzle meta, web package.json, and the shared seat picker, checkout and box office forms). The merge session takes it; the new screens use only `@yayatoh/ui` components and tokens.
