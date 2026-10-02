@@ -23,3 +23,6 @@ Wedding and gala guest data (Phase 4, M4.1a): parties (households), the guests i
 - Removing a sub-event with recorded responses is refused (`has_responses`) unless confirmed; its history stays.
 - A sub-event's **seating chart** lives in `seating.sub_event_charts` (seating's schema; a hand-written FK to `(org_id, event_id, id)` here cascades). This module never touches it: the web page composes the two modules.
 - Nothing here creates contacts, consents, audience members or domain events (P4-3).
+
+**Gala tables (M4.2b)**
+- A purchased table (`ticketing.table_units`, same tier: a reference only) has at most one party (`parties.table_unit_id`, partial unique): the buyer's company or the sponsor. Each named seat is a guest of that party holding the seat's ticket (`guests.ticket_id`, one guest per ticket) and its attendee; history source `table_link` (the buyer's claim link) or `manual` (the host). `tablePartyTx`, `addTableGuestTx`, `guestsByTicketTx` and `tablePartiesTx` run in the caller's transaction (orders, which locks the table and reissues the ticket); this module never reads tickets. The guest's email is sealed with the private answers.

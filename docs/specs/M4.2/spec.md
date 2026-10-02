@@ -1,7 +1,7 @@
 # Spec: M4.2 — Social profiles and workspace
 
 - **Milestone:** M4.2 (roadmap §10 Phase 4, "M4.2 Social profiles and workspace (M)"; Phase 4 plan `docs/plans/phase-4.md`, Wave A)
-- **Status:** M4.2a built (2026-09-29); M4.2b (gala tables & sponsors, tickets tab) is Wave B
+- **Status:** M4.2a built (2026-09-29); M4.2b built (2026-10-02: gala tables & sponsors, table tickets)
 - **Risk tags:** `auth`, `tenancy`, `db-migration`
 - **Related decisions:** P4-3 (guest privacy), P4-8 (co-host and planner roles), D19 (wedding tabs)
 
@@ -116,3 +116,115 @@ No new tables (the isolation suite already covers both tables for both orgs). `e
 
 ### Gate (2026-09-29)
 `pnpm verify` green (lint, check:modules, typecheck, 1298 unit, 801 integration); `pnpm contracts:check` green; the whole web e2e suite at 375/768/1280: 1228 passed, 32 skipped (existing skips), 0 failed. New tests: `event-team.int.test.ts` (15), `social-workspace.spec.ts` (7 × 3 viewports), unit additions in `permissions.test.ts`, `profiles.test.ts`, `readiness.test.ts`, `event-routes.test.ts`.
+
+## M4.2b — gala tables and sponsors (built 2026-10-02)
+
+### 1. Goal and users
+A gala sells whole tables. A company buys "a table of 10", pays once and then tells the host who
+sits at it, through one link, without an account. The host sees every purchased table, which names
+are still missing, can name guests by hand and nudge buyers. Tables on the floor plan carry their
+sponsor's name, which guests see in the seat finder once the host shows it.
+
+### 2. References
+- **Plan:** `docs/plans/phase-4.md` Wave B (M4.2b), the gala profile; P4-8 (co-host `tables:*`; planners get no tables).
+- **Reused flows:** ticket issue (`issueTicketsTx`), the claim/transfer reissue (`reissueTicketTx`: new code and short code, the attendee follows), signed link tokens (`signLinkToken`), the guests module's parties, guests and history, seating's plan documents, seat finder and assignments.
+- **Legacy evidence:** none (Eventmie Pro has no table tickets).
+
+### 3. Scope
+**In (built):**
+- **Tabs.** The gala's **Tables & Sponsors** (`tables-sponsors`, nav item from the profile registry) replaces its placeholder; it leaves `PLACEHOLDER_SECTIONS`, and the gala checklist item `tablesSponsors` is done once the event has a table ticket. The gala's **Tickets** tab is the existing **Tickets & Orders** (M4.2a kept it for galas); it gains table tickets.
+- **Table ticket type** (`ticket_types.table_size`, 2–20, never a donation pass; fixed once created): price, inventory and per-order limits count tables. The form has "Seats per table"; the list shows "Table of N"; the public pass card says "Seats N guests…" (`ticketing.public_ticket_type_tables`, SECURITY DEFINER, same filter as the other public pass functions).
+- **Guest slots.** Paying for a table issues, in the order's transaction, one `ticketing.table_units` row per table and `size` tickets pointing at it (`tickets.table_unit_id`), each with its attendee: a table of 10 has exactly 10 slots by construction. Slots are the table's live tickets.
+- **Claim link** (`/tables/<id>~hmac`, purpose `table-naming`, one per table): the buyer names the table's party (company or sponsor) and its guests, one seat at a time (first name required, last name and email optional), sees every seat, and can email the link to themselves again (once a minute, plus the device rate limit). Naming reissues the seat's ticket to the guest (to their email, or the buyer's when none is given) and adds a guest to the table's party in the guests module, linked to that ticket and its attendee (`guests.ticket_id`, `parties.table_unit_id`), history source `table_link`. The link closes when the event ends or the order is no longer paid. The buyer's order page lists their tables with "Name guests at …".
+- **Concurrency:** naming locks the table row (`FOR UPDATE`), so concurrent claims serialize; a slot is named once (unique guest per ticket); a full table answers `table_full`.
+- **Emails** (`orders.table-naming`, 13 locales): the claim link after payment (outbox `order.paid@1`), on the buyer's request and as the host's reminder (`table.naming_link_requested@1`); the token is derived in the mailer, never carried by events.
+- **Host view** (Tables & Sponsors): purchased tables (table, company or sponsor, buyer, seats, named, names missing); each table's seats with their ticket's short code and guest (a ticket shows its guest); "Name a guest at …" (manual naming, history source `manual`); "Send naming reminders" (tables with names missing, at most once an hour each). Empty states say what to do next (add a table ticket; create the floor plan).
+- **Hosted tables** (`seating.table_sponsors`): a table of the event plan carries a sponsor name, an optional logo (one of the event's own images, `/media/{org}/…` of the same org only) and "Show the sponsor to guests". The seating editor writes it on the table (canvas) and in the list beside it; guests see it in the seat finder result ("Hosted by …") and the venue map data only when shown and the plan is on sale (published or locked), through allowlisted DTOs (`PublicTableSponsorDto`).
+- **Refunds:** a table is refunded whole (every live seat chosen; `table_partial` otherwise) and paid back once at the table price; its seats are voided, so its unnamed slots disappear; the table returns to inventory when none of its seats is left (`voidTicketsTx`); the cancellation preview counts a table once (`liveTicketsByOrderItemTx`). Named guests stay on the guest list with their void ticket.
+- **Check-in** is unchanged: every seat is an ordinary ticket with its own code.
+- **Permissions:** `tables:read` (owners, admins, managers, box office, viewers, event managers), `tables:write` (owners, admins, managers, box office, event managers; co-hosts through `tables:*`). Sponsors need `seating:write`. Planners don't open Tables & Sponsors.
+
+**Later / not yet:**
+- Seating named guests automatically at a plan table linked to the purchase (the host seats them like any guest today).
+- Refunding single seats of a table (pro-rata), and changing a table's size after sales.
+- Renaming or removing a named slot (re-claim to another person) from the link or the console; a host-side company rename.
+- Sponsor logos uploaded for the sponsor itself (today: one of the event's images); sponsor names drawn on the public venue map (the data is there; the map shows table labels).
+- `/v1` resources for tables and sponsors.
+- **Not merged:** `origin/merge/next-3f` (its `0095_long_luminals` collides with batch 3e's `0095_alert_signals` in the migration journal, outside M4.2b's files); `origin/agent/design-v2` is not ahead of the base yet.
+
+### 4. `touches:`
+```yaml
+touches:
+  - packages/modules/ticketing/src/{schema,dto,issue,public,tables,index}.ts
+  - packages/modules/guests/src/{schema,tables,index}.ts
+  - packages/modules/seating/src/{schema,table-sponsors,seat-finder,private-columns,index}.ts
+  - packages/modules/orders/src/{tables,domain/tables,commands/refunds,index}.ts, package.json (guests)
+  - packages/modules/tenancy/src/domain/permissions.ts (tables:read, tables:write)
+  - packages/modules/notifications/src/{kinds.ts,templates/samples.ts,templates/messages/*.json}
+  - packages/modules/command-center/src/{readiness.ts,domain/readiness.ts}
+  - packages/db/drizzle/0096_skinny_quentin_quire.sql
+  - packages/testing/src/fixtures.ts
+  - apps/web/src/app/[locale]/o/[org]/e/[event]/tables-sponsors/**, tables/[token]/**, orders/[token]/page.tsx
+  - apps/web/src/components/{gala-tables,ticket-type-form,checkout-form,public-event-view,seating-editor,seating-canvas,seat-finder}.tsx
+  - apps/web/messages/*.json, apps/web/src/server/{notifications,readiness}.ts, apps/worker/src/registry.ts
+```
+
+### 5. Data model
+| Table | Change | Notes |
+|---|---|---|
+| `ticketing.ticket_types` | add `table_size int` | CHECK 2–20 and not a donation (NOT VALID + VALIDATE) |
+| `ticketing.table_units` | new | one purchased table: event, order, order item, ticket type, unit no, size, link sends and reminders; FKs to ticket types and (hand-written) events |
+| `ticketing.tickets` | add `table_unit_id uuid` | partial index; hand-written FK to `table_units` (NOT VALID + VALIDATE) |
+| `guests.parties` | add `table_unit_id uuid` | one party per table (partial unique); hand-written FK, `ON DELETE SET NULL (table_unit_id)` |
+| `guests.guests` | add `ticket_id uuid` | one guest per ticket (partial unique); hand-written FK, `ON DELETE SET NULL (ticket_id)` |
+| `guests.parties`, `rsvp_history`, `sub_event_responses` | source CHECK widened with `table_link` | NOT VALID + VALIDATE |
+| `seating.table_sponsors` | new | event, table item id, sponsor name, logo path, published; unique per event and table; hand-written event FK |
+| `ticketing.table_unit_org(uuid)`, `ticketing.public_ticket_type_tables(text, uuid[], boolean)` | new SECURITY DEFINER functions | allowlisted columns only |
+
+Both new tables are tenant tables (FORCE RLS, NULLIF policy, org-leading indexes) with fixture rows for both orgs; `table_sponsors` text columns are declared `public` (guests see them once shown).
+
+### 6. API diff
+- **`/v1`:** none.
+- **Commands/queries:** `orders.nameTableSlot` (public, claim link), `orders.setTableCompany` (public), `orders.resendTableLink` (public), `orders.hostNameTableSlot` (`tables:write`), `orders.sendTableReminders` (`tables:write`), `orders.hostedTables` (`tables:read`), `orders.publicTable` (public); `seating.planTables` (`events:read`), `seating.setTableSponsor` / `seating.removeTableSponsor` (`seating:write`). `ticketing.createTicketType` takes `tableSize`; `TicketTypeDto` and `PublicTicketTypeDto` gain `tableSize`; `SeatFinderResultDto` seats gain `sponsor`, `sponsorLogoUrl`; `PublicVenueMapDto` gains `sponsors`.
+- **`/api/v2`:** none.
+
+### 7. Events
+| Event | Version | Producer | Consumers | Public webhook? |
+|---|---|---|---|---|
+| `table.slot_named` | 1 | orders | none yet | no |
+| `table.naming_link_requested` | 1 | orders (resend, reminder) | `orders.table-naming-mailer` | no |
+| `order.paid` | 1 (unchanged) | orders | + `orders.table-naming-mailer` | — |
+
+### 8. Entitlements and flags
+- Module keys: `ticketing` (tables commands), `seating` (sponsors), `seat_finder` (public sponsors); profile `gala` (Tables & Sponsors, strict routes).
+
+### 10. Acceptance criteria
+| ID | Given / When / Then | Test |
+|---|---|---|
+| AC-M4.2b-01 | Buying a table of 10 gives exactly 10 guest slots; the table counts once in inventory | `packages/testing/tests/gala-tables.int.test.ts` |
+| AC-M4.2b-02 | 15 concurrent claims on a table of 10: exactly 10 guests, the rest `table_full` | `gala-tables.int.test.ts` |
+| AC-M4.2b-03 | The claim link names only its table's slots; a forged token resolves to nothing | `gala-tables.int.test.ts`, `apps/web/e2e/gala-tables.spec.ts` |
+| AC-M4.2b-04 | Naming reissues the ticket to the guest and makes them a guest of the table's party linked to the ticket and attendee; history records source and field names only | `gala-tables.int.test.ts` |
+| AC-M4.2b-05 | A refund is whole-table, once, at the table price; it removes the unnamed slots and returns the table to sale; part of a table is refused | `gala-tables.int.test.ts`, `packages/modules/orders/tests/gala-tables.test.ts` |
+| AC-M4.2b-06 | The sponsor shows on the table in the editor and in the seat finder; never while hidden or while the plan is a draft | `gala-tables.int.test.ts`, `gala-tables.spec.ts` |
+| AC-M4.2b-07 | Emails: the link after payment, on request (once a minute) and as reminders (once an hour per table) | `gala-tables.int.test.ts` |
+| AC-M4.2b-08 | Isolation: another org never sees or names a table; commands run through `tenantCommand` | `gala-tables.int.test.ts`, `isolation.int.test.ts` (fixture rows) |
+| AC-M4.2b-09 | E2E: buy a table (fake provider), name guests via the link (validation, success, persistence, keyboard), see them on Guests, in seating and on Tables & Sponsors (host naming, reminders) | `apps/web/e2e/gala-tables.spec.ts` |
+| AC-M4.2b-10 | A viewer reads Tables & Sponsors without controls; viewers are refused host naming, reminders and sponsors; a wedding has no such page | `gala-tables.spec.ts`, `gala-tables.int.test.ts` |
+| AC-M4.2b-11 | Arabic RTL render, axe on every new screen | `gala-tables.spec.ts` |
+| AC-M4.2b-12 | The gala checklist's Tables & Sponsors item is live (done with a table ticket) | `apps/web/tests/readiness.test.ts`, `social-workspace.spec.ts` |
+
+### 11. Security and privacy
+- The claim link token is the only authority on the public page (HMAC of the table id; the org comes from a SECURITY DEFINER lookup); nothing from headers; private link, `noindex`, disallowed in robots.
+- The public table DTO carries names of the table's own guests (the buyer named them) and never an email; sponsors reach guests only through `PublicTableSponsorDto`.
+- A guest's email is sealed with the private answers (P4-3); history and audit hold field names and counts only.
+
+### 15. Demo checklist
+- [ ] Gala → Tickets & Orders: add "Table of 10" ($1,000, 10 seats per table).
+- [ ] In another browser: buy one table (Pay now (test)); on the order page choose "Name guests at …".
+- [ ] Set the company, name two guests (one with an email); reload: both are there.
+- [ ] Console → Guests: both names; Tables & Sponsors: 2 named, 8 names missing; name one by hand; Send naming reminders.
+- [ ] Seating: create a plan; Tables & Sponsors: Table 1 sponsored by "Acme Corp", shown to guests; the editor shows it; seat a guest at Table 1, put seats on sale, open the seat finder by name: "Hosted by Acme Corp".
+
+### 16. Owner tasks
+- [ ] Confirm the M4.2b defaults (docs/owner-inbox.md, Phase 4).
