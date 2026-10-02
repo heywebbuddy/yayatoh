@@ -12,6 +12,7 @@ import {
   assignSeatsCommand,
   FINDER_CODES_PER_HOUR,
   FINDER_RATE_LIMIT,
+  FINDER_RATE_WINDOW_MS,
   finderCodeMailer,
   finderResultQuery,
   finderSettingsQuery,
@@ -67,8 +68,16 @@ const verify = (codeId: string, code: string, opts: { dev?: string; ctx?: Ctx; e
   );
 const result = (codeId: string, ctx = anon()) =>
   executeQuery(finderResultQuery, { eventId, codeId }, ctx, ports);
-const byName = (name: string, dev = device()) =>
-  executeCommand(findSeatByNameCommand, { eventId, name, device: dev }, anon(), ports);
+const byName = (name: string, dev = device(), ctx = anon()) =>
+  executeCommand(findSeatByNameCommand, { eventId, name, device: dev }, ctx, ports);
+/**
+ * One instant inside the current rate-limit window. The limiter counts in fixed windows, so a
+ * budget test whose calls run on the wall clock can straddle a window boundary when the suite is
+ * slow (the next window starts a fresh budget and the over-limit call passes). Pinning the clock
+ * keeps every call of such a test in one window.
+ */
+const inOneWindow = () =>
+  new Date(Math.floor(Date.now() / FINDER_RATE_WINDOW_MS) * FINDER_RATE_WINDOW_MS + 1_000);
 
 const codeRow = async (id: string) =>
   (
@@ -438,17 +447,21 @@ describe('one-time codes', () => {
 describe('abuse limits', () => {
   it(`allows ${FINDER_RATE_LIMIT} lookups a minute per device and event, then asks for a challenge`, async () => {
     const dev = device();
+    const at = inOneWindow();
     for (let i = 0; i < FINDER_RATE_LIMIT; i++)
-      expect((await request(`flood.${i}.${uuidv7()}@finder.test`, dev)).status).toBe('sent');
+      expect((await request(`flood.${i}.${uuidv7()}@finder.test`, dev, anon(at))).status).toBe('sent');
     const before = await codeRows();
-    expect(await request(email('Known 4'), dev)).toEqual({ status: 'challenge', codeId: null });
-    expect(await verify(uuidv7(), '123456', { dev })).toEqual({ status: 'challenge', attemptsLeft: null });
+    expect(await request(email('Known 4'), dev, anon(at))).toEqual({ status: 'challenge', codeId: null });
+    expect(await verify(uuidv7(), '123456', { dev, ctx: anon(at) })).toEqual({
+      status: 'challenge',
+      attemptsLeft: null,
+    });
     expect(await codeRows()).toBe(before);
     // A passed challenge lets the request through; another device has its own budget.
-    expect((await request(email('Known 4'), dev, anon(), true)).status).toBe('sent');
-    expect((await request(email('Known 4'), device())).status).toBe('sent');
+    expect((await request(email('Known 4'), dev, anon(at), true)).status).toBe('sent');
+    expect((await request(email('Known 4'), device(), anon(at))).status).toBe('sent');
     // The next minute starts a new window.
-    const next = new Date(Date.now() + 61_000);
+    const next = new Date(at.getTime() + 61_000);
     expect((await request(email('Known 4'), dev, anon(next))).status).toBe('sent');
   });
 
@@ -491,8 +504,9 @@ describe('instant name lookup (organizer opt-in)', () => {
     expect(audit?.data).toEqual({ status: 'ok', found: true });
     // Rate-limited like codes.
     const dev = device();
-    for (let i = 0; i < FINDER_RATE_LIMIT; i++) await byName(`Nobody ${i}`, dev);
-    expect(await byName('Ann Finder', dev)).toEqual({ status: 'challenge', result: null });
+    const at = inOneWindow();
+    for (let i = 0; i < FINDER_RATE_LIMIT; i++) await byName(`Nobody ${i}`, dev, anon(at));
+    expect(await byName('Ann Finder', dev, anon(at))).toEqual({ status: 'challenge', result: null });
     // Closing the finder closes the map too.
     await settings(false, 'name');
     expect(await executeQuery(publicVenueMapQuery, { eventId }, anon(), ports)).toBeNull();

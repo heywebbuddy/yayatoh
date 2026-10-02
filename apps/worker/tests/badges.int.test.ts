@@ -15,7 +15,7 @@ import { type OrgFixture, ports, twoOrgs } from '@yayatoh/testing';
 import { createTicketTypeCommand } from '@yayatoh/ticketing';
 import type { PgBoss } from 'pg-boss';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { BADGE_BATCH_JOB, badgeBatchJob, enqueueDueBadgeBatches } from '../src/badges.ts';
+import { BADGE_BATCH_JOB, badgeBatchJob, dueBadgeBatches, enqueueDueBadgeBatches } from '../src/badges.ts';
 import { startWorker } from '../src/worker.ts';
 
 /**
@@ -123,6 +123,9 @@ describe('badge batch job (M5.5a, pg-boss)', { timeout: 120_000 }, () => {
   });
 
   it('the leader tick queues the batch until its PDF is done', async () => {
+    // Other orgs' older unfinished batches (every org fixture leaves one running) never crowd it
+    // out of the tick's page: the org filter is part of the query.
+    expect((await dueBadgeBatches(2, new Set([a.org.id]))).map((d) => d.batchId)).toContain(batchId);
     await until(async () => {
       await enqueueDueBadgeBatches(boss, new Set([a.org.id]));
       return (await batch())?.status === 'done';

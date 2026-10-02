@@ -7527,7 +7527,6 @@
     "publicLink": "回答はこちら:",
     "publicLinkText": "公開の登録フォーム",
     "openBuilder": "登録フォームを編集",
-    "viewBuilder": "登録フォームを表示",
     "pagesTitle": "ページ",
     "emptyTitle": "まだページがありません",
     "emptyDescription": "最初のページを追加し、続けて質問を追加します。ページは登録種別に限定したり、特定の回答の後にだけ表示したりできます。",
@@ -7679,7 +7678,8 @@
     "submittedTitle": "ありがとうございます。登録が完了しました",
     "submittedDescription": "{name} さん、ありがとうございます。回答は主催者に送信されました。",
     "expiredTitle": "このリンクは有効期限が切れています",
-    "expiredDescription": "登録を続けるためのリンクは、最後の保存から 14 日間有効です。イベントページからもう一度始めてください。"
+    "expiredDescription": "登録を続けるためのリンクは、最後の保存から 14 日間有効です。イベントページからもう一度始めてください。",
+    "openReadOnly": "登録フォームを見る"
   },
   "agenda": {
     "publishing": {
@@ -8359,7 +8359,8 @@
       "already_invited": "このアドレスはすでに招待されています。",
       "allowance_reached": "スタッフ枠 {allowance, plural, other {# 件}} はすべて使用中です。招待を取り消して枠を空けるか、主催者に追加を依頼してください。",
       "event_over": "このイベントは終了したため、これ以上招待できません。"
-    }
+    },
+    "email": "メールアドレス"
   },
   "exhibitorAdmin": {
     "subnav": "出展者ページ",
