@@ -496,6 +496,8 @@ export const PublicRsvpDto = z.object({
   /** The envelope name, else the party's name. Empty for an expired link. */
   partyName: z.string(),
   respondedAt: z.date().nullable(),
+  /** Whether the party opened its page before (the page records the first open only). */
+  viewed: z.boolean(),
   /** The party's own guests (never anyone else's), plus-ones after their host. */
   guests: z.array(
     z.object({
@@ -557,6 +559,7 @@ export const publicRsvpQuery = tenantQuery({
       timezone: ev.timezone,
       deadline: settings?.deadline ?? null,
       respondedAt: row.respondedAt,
+      viewed: row.viewedAt !== null,
     };
     if (row.linkExpiresAt.getTime() <= ctx.now.getTime())
       return { ...base, state: 'expired' as const, partyName: '', guests: [], subEvents: [], responses: [] };

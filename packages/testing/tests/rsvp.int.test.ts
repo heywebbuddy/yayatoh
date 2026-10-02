@@ -170,6 +170,7 @@ describe('RSVP by party link (M4.1d)', () => {
 
     const view = await executeQuery(publicRsvpQuery, { token }, guestCtx(a.org.id), ports);
     expect(view.state).toBe('open');
+    expect(view.viewed).toBe(false);
     expect(view.partyName).toBe('The Garcias');
     // Only the party's own guests, plus-one after the host; only invited sub-events.
     expect(view.guests.map((g) => g.firstName)).toEqual(['Luis', null, 'Ana']);
@@ -209,6 +210,7 @@ describe('RSVP by party link (M4.1d)', () => {
     expect(again.guests[1]).toMatchObject({ firstName: 'Sam', lastName: 'Lee' });
     expect(again.responses).toHaveLength(5);
     expect(again.respondedAt).toBeInstanceOf(Date);
+    expect(again.viewed).toBe(true);
 
     const history = await executeQuery(
       partyHistoryQuery,

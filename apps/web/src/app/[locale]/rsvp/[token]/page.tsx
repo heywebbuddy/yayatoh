@@ -39,9 +39,10 @@ export default async function RsvpPage({
   });
   if (!view) notFound();
   // `viewed` on the first open; a read-only freeze (or any refusal) never stops the page.
-  await executeCommand(markRsvpViewedCommand, { token }, ctx, ports).catch((err) => {
-    if (!isDomainError(err)) throw err;
-  });
+  if (!view.viewed && view.state !== 'expired')
+    await executeCommand(markRsvpViewedCommand, { token }, ctx, ports).catch((err) => {
+      if (!isDomainError(err)) throw err;
+    });
   const { thanks } = await searchParams;
   const t = await getTranslations('rsvp');
 

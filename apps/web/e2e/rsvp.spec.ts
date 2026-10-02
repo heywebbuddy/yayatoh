@@ -302,7 +302,9 @@ test.describe('RSVP (M4.1d)', () => {
     const menu = await open(page, 'RSVP options for Garcia');
     await menu.getByRole('button', { name: 'Reopen RSVP for Garcia' }).click();
     // The party's badge says so (the reopen button goes once it is used).
-    await expect(page.getByRole('region', { name: 'Garcia', exact: true }).getByText('Reopened')).toBeVisible();
+    await expect(
+      page.getByRole('region', { name: 'Garcia', exact: true }).getByText('Reopened'),
+    ).toBeVisible();
     await expect(page.getByRole('button', { name: 'Reopen RSVP for Garcia' })).toHaveCount(0);
     await page.reload();
     await expect(
