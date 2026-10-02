@@ -1,5 +1,5 @@
 {
-  "id": "d634a43a-95c5-42ba-9cc2-227316745971",
+  "id": "1cdf0bba-779c-4782-bfcd-d9d076375a10",
   "prevId": "3c43235e-4d62-42ac-a44c-0ce5c2d2ae9b",
   "version": "7",
   "dialect": "postgresql",
@@ -5151,7 +5151,7 @@
       "checkConstraints": {
         "alerts_rule_check": {
           "name": "alerts_rule_check",
-          "value": "rule in ('unseated', 'undistributed', 'paymentsFailed', 'paymentsStuck', 'refundSurge', 'devicesOffline', 'devicesLowBattery', 'devicesBacklog', 'capacityNear', 'capacityFull', 'sellOut', 'salesPace', 'readiness', 'domain', 'payoutsPastDue', 'deliverability', 'automationFailed')"
+          "value": "rule in ('unseated', 'undistributed', 'paymentsFailed', 'paymentsStuck', 'refundSurge', 'devicesOffline', 'devicesLowBattery', 'devicesBacklog', 'capacityNear', 'capacityFull', 'sellOut', 'salesPace', 'readiness', 'domain', 'payoutsPastDue', 'deliverability', 'automationFailed', 'campaignFailed', 'disputeDeadline')"
         },
         "alerts_category_check": {
           "name": "alerts_category_check",
@@ -5555,6 +5555,153 @@
         "sales_targets_tickets_check": {
           "name": "sales_targets_tickets_check",
           "value": "tickets between 1 and 10000000"
+        }
+      },
+      "isRLSEnabled": true
+    },
+    "alerts.signals": {
+      "name": "signals",
+      "schema": "alerts",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "uuidv7()"
+        },
+        "org_id": {
+          "name": "org_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "kind": {
+          "name": "kind",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "source_event_id": {
+          "name": "source_event_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "occurred_at": {
+          "name": "occurred_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "signals_org_id_idx": {
+          "name": "signals_org_id_idx",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "signals_org_source_event_key": {
+          "name": "signals_org_source_event_key",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "source_event_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "signals_org_kind_occurred_idx": {
+          "name": "signals_org_kind_occurred_idx",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "kind",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "occurred_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "signals_org_id_id_key": {
+          "name": "signals_org_id_id_key",
+          "nullsNotDistinct": false,
+          "columns": [
+            "org_id",
+            "id"
+          ]
+        }
+      },
+      "policies": {
+        "signals_tenant_isolation": {
+          "name": "signals_tenant_isolation",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "app_user"
+          ],
+          "using": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)",
+          "withCheck": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)"
+        }
+      },
+      "checkConstraints": {
+        "signals_kind_check": {
+          "name": "signals_kind_check",
+          "value": "kind in ('journey_step_failed', 'campaign_send_failed')"
         }
       },
       "isRLSEnabled": true
