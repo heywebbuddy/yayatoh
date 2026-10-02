@@ -7948,6 +7948,7 @@
       "yourName": "お名前",
       "anonymous": "匿名で質問する",
       "anonymousHint": "お名前は参加者には表示されません。",
+      "anonymousHintModerators": "参加者には名前は表示されませんが、モデレーターには表示されます。",
       "sent": "ありがとうございます。モデレーターの承認後に質問が表示されます。",
       "send": "質問を送る",
       "upvote": "いいね ({count})",

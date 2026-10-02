@@ -7948,6 +7948,7 @@
       "yourName": "Votre nom",
       "anonymous": "Poser anonymement",
       "anonymousHint": "Votre nom ne sera pas montré au public.",
+      "anonymousHintModerators": "Le public ne verra pas votre nom ; les modérateurs, si.",
       "sent": "Merci ! Votre question apparaîtra dès qu’un modérateur l’aura approuvée.",
       "send": "Envoyer la question",
       "upvote": "Soutenir ({count})",

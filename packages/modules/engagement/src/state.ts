@@ -56,6 +56,7 @@ export const toStage = (s: SettingsRow): StageDto => ({
   pinnedQuestionId: s.pinnedQuestionId,
   qaOpen: s.qaOpen,
   allowAnonymous: s.allowAnonymous,
+  namesToModerators: s.anonymousIdentity === 'moderators',
 });
 
 export const toSettings = (s: SettingsRow): SettingsDto => ({

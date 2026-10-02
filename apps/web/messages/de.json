@@ -7948,6 +7948,7 @@
       "yourName": "Dein Name",
       "anonymous": "Anonym fragen",
       "anonymousHint": "Dein Name wird dem Publikum nicht angezeigt.",
+      "anonymousHintModerators": "Das Publikum sieht deinen Namen nicht, die Moderation schon.",
       "sent": "Danke! Deine Frage erscheint, sobald die Moderation sie freigibt.",
       "send": "Frage senden",
       "upvote": "Hochstimmen ({count})",

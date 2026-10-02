@@ -7948,6 +7948,7 @@
       "yourName": "Your name",
       "anonymous": "Ask anonymously",
       "anonymousHint": "Your name won't be shown to the audience.",
+      "anonymousHintModerators": "The audience won't see your name; the moderators will.",
       "sent": "Thanks! Your question will appear once a moderator approves it.",
       "send": "Send question",
       "upvote": "Upvote ({count})",

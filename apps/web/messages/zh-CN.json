@@ -7948,6 +7948,7 @@
       "yourName": "你的名字",
       "anonymous": "匿名提问",
       "anonymousHint": "观众不会看到你的名字。",
+      "anonymousHintModerators": "观众看不到你的名字，但审核者可以看到。",
       "sent": "谢谢！问题通过审核后就会显示。",
       "send": "发送问题",
       "upvote": "点赞 ({count})",

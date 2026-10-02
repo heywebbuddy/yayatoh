@@ -74,6 +74,8 @@ export const StageDto = z.object({
   pinnedQuestionId: z.uuid().nullable(),
   qaOpen: z.boolean(),
   allowAnonymous: z.boolean(),
+  /** Whether moderators see the name behind an anonymous question (askers are told). */
+  namesToModerators: z.boolean(),
 });
 export type StageDto = z.infer<typeof StageDto>;
 

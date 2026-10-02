@@ -7948,6 +7948,7 @@
       "yourName": "Seu nome",
       "anonymous": "Perguntar anonimamente",
       "anonymousHint": "Seu nome não será mostrado ao público.",
+      "anonymousHintModerators": "O público não verá seu nome; a moderação, sim.",
       "sent": "Obrigado! Sua pergunta aparecerá assim que a moderação aprovar.",
       "send": "Enviar pergunta",
       "upvote": "Apoiar ({count})",

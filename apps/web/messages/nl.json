@@ -7948,6 +7948,7 @@
       "yourName": "Je naam",
       "anonymous": "Anoniem vragen",
       "anonymousHint": "Je naam wordt niet aan het publiek getoond.",
+      "anonymousHintModerators": "Het publiek ziet je naam niet; de moderators wel.",
       "sent": "Bedankt! Je vraag verschijnt zodra een moderator hem goedkeurt.",
       "send": "Vraag versturen",
       "upvote": "Upvote ({count})",

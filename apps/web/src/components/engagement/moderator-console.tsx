@@ -9,6 +9,7 @@ import { CopySnippet } from '@/components/copy-snippet.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
 import { type FormState, INITIAL_FORM_STATE } from '@/lib/form-state.ts';
+import { keepValues } from '@/lib/keep-values.ts';
 import { useLiveState } from './live-state.ts';
 import { PollResultsView } from './poll-results.tsx';
 import { StreamBadge } from './stream-badge.tsx';
@@ -70,12 +71,12 @@ export function ModeratorConsole({
   const dismissed = state.questions.filter((q) => q.state === 'dismissed');
   const pinned = state.stage.pinnedQuestionId;
   return (
-    <div className="flex flex-col gap-6" data-moderator>
+    <div className="flex flex-col gap-6" data-moderator data-stream={streamUrl}>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <StreamBadge state={stream} />
         <p
           role="status"
-          className={status?.ok === false ? 'text-body text-pink-700' : 'text-body text-green-700'}
+          className={status?.ok === false ? 'text-body text-pink-700' : 'text-body text-zinc-900'}
         >
           {status?.text ?? ''}
         </p>
@@ -333,6 +334,7 @@ function PollItem({
           <Chip tone={poll.state === 'open' ? 'accent' : 'neutral'}>{t(`pollState.${poll.state}`)}</Chip>
           <Label>{t(`kinds.${poll.kind}`)}</Label>
           {live ? <Chip>{t('onStage')}</Chip> : null}
+          <span className="text-caption text-zinc-600">{t('votes', { count: poll.ballots })}</span>
           <span className="text-caption text-zinc-600">
             {poll.showResults ? t('moderator.resultsShown') : t('moderator.resultsHidden')}
           </span>
@@ -450,7 +452,7 @@ function CreatePollForm({ action }: { action: FormAction }) {
         <h3 id="new-poll-heading" className="text-body font-medium">
           {t('moderator.newPoll')}
         </h3>
-        <form ref={ref} action={formAction} noValidate className="flex flex-col gap-3">
+        <form ref={ref} action={formAction} onSubmit={keepValues(formAction)} noValidate className="flex flex-col gap-3">
           <div className="flex flex-col gap-1.5">
             <label htmlFor="poll-kind" className="text-caption text-zinc-600">
               {t('moderator.kind')}
@@ -549,7 +551,7 @@ function CreatePollForm({ action }: { action: FormAction }) {
           ) : null}
           {general ? <Alert title={general} /> : null}
           {state.ok ? (
-            <p role="status" className="text-body text-green-700">
+            <p role="status" className="rounded-card border border-accent-300 bg-accent-50 px-4 py-3 text-body text-accent-text">
               {t('moderator.pollAdded')}
             </p>
           ) : null}
@@ -580,7 +582,7 @@ function SettingsForm({
         <h2 id="settings-heading" className="text-section">
           {t('moderator.settings')}
         </h2>
-        <form action={formAction} className="flex flex-col gap-3">
+        <form action={formAction} onSubmit={keepValues(formAction)} className="flex flex-col gap-3">
           <fieldset disabled={!canWrite} className="flex flex-col gap-3">
             <legend className="sr-only">{t('moderator.settings')}</legend>
             <label className="flex min-h-10 items-center gap-3">
@@ -617,7 +619,7 @@ function SettingsForm({
           </fieldset>
           {!state.ok && state.code ? <Alert title={te(errorMessageKey(state.code))} /> : null}
           {state.ok ? (
-            <p role="status" className="text-body text-green-700">
+            <p role="status" className="rounded-card border border-accent-300 bg-accent-50 px-4 py-3 text-body text-accent-text">
               {t('moderator.settingsSaved')}
             </p>
           ) : null}

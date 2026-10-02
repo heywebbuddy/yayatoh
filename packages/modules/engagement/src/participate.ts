@@ -276,7 +276,13 @@ export const upvoteQuestionCommand = tenantCommand({
 
 /* -------------------------------------------------------------------------- public reads ---- */
 
-const EMPTY_STAGE = { livePollId: null, pinnedQuestionId: null, qaOpen: false, allowAnonymous: false };
+const EMPTY_STAGE = {
+  livePollId: null,
+  pinnedQuestionId: null,
+  qaOpen: false,
+  allowAnonymous: false,
+  namesToModerators: false,
+};
 
 const readCtx = (orgId: string) => createCtx({ orgId, actor: { type: 'system', name: 'engagement.public' } });
 

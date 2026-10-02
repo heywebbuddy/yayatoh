@@ -15,6 +15,7 @@ import { useTranslations } from 'next-intl';
 import { useActionState, useEffect, useId, useRef, useState, useTransition } from 'react';
 import type { LiveActionState } from '@/app/[locale]/events/[slug]/live/[session]/actions.ts';
 import { Link } from '@/i18n/navigation.ts';
+import { keepValues } from '@/lib/keep-values.ts';
 import { useLiveState } from './live-state.ts';
 import { PollResultsView } from './poll-results.tsx';
 import { StreamBadge } from './stream-badge.tsx';
@@ -91,7 +92,7 @@ export function ParticipantView({
               poll={p}
               hasVoted={voted.has(p.id)}
               vote={vote.bind(null, p.id)}
-              onVoted={() => setVoted((s) => new Set(s).add(p.id))}
+              onVoted={() => setVoted((s) => (s.has(p.id) ? s : new Set(s).add(p.id)))}
             />
           ))
         )}
@@ -104,6 +105,7 @@ export function ParticipantView({
           <AskForm
             ask={ask}
             allowAnonymous={state.stage.allowAnonymous}
+            namesToModerators={state.stage.namesToModerators}
             defaultName={defaultName}
             pending={me.pendingQuestions}
           />
@@ -121,7 +123,7 @@ export function ParticipantView({
                 pinned={q.id === state.stage.pinnedQuestionId}
                 upvoted={upvoted.has(q.id)}
                 upvote={upvote}
-                onUpvoted={() => setUpvoted((s) => new Set(s).add(q.id))}
+                onUpvoted={() => setUpvoted((s) => (s.has(q.id) ? s : new Set(s).add(q.id)))}
               />
             ))}
           </ol>
@@ -208,6 +210,7 @@ function PollCard({
           noValidate
           className="flex flex-col gap-3"
           onSubmit={(e) => {
+            e.preventDefault();
             const f = new FormData(e.currentTarget);
             const empty =
               poll.kind === 'word_cloud'
@@ -224,7 +227,7 @@ function PollCard({
                 ? message('too_many')
                 : null;
             setClientError(problem);
-            if (problem) e.preventDefault();
+            if (!problem) keepValues(action)(e);
           }}
         >
           {poll.kind === 'word_cloud' ? (
@@ -291,7 +294,7 @@ function PollCard({
         </form>
       ) : null}
       {done ? (
-        <p role="status" className="text-body text-green-700">
+        <p role="status" className="rounded-card border border-accent-300 bg-accent-50 px-4 py-3 text-body text-accent-text">
           {t('participant.voted')}
         </p>
       ) : null}
@@ -307,11 +310,13 @@ function PollCard({
 function AskForm({
   ask,
   allowAnonymous,
+  namesToModerators,
   defaultName,
   pending: waiting,
 }: {
   ask: Ask;
   allowAnonymous: boolean;
+  namesToModerators: boolean;
   defaultName: string;
   pending: number;
 }) {
@@ -347,6 +352,7 @@ function AskForm({
       aria-labelledby="ask-heading"
       className="flex flex-col gap-3 rounded-card border border-zinc-200 p-4 sm:p-5"
       onSubmit={(e) => {
+        e.preventDefault();
         const f = new FormData(e.currentTarget);
         const problem = !String(f.get('body') ?? '').trim()
           ? { field: 'body', message: t('errors.required') }
@@ -354,7 +360,7 @@ function AskForm({
             ? { field: 'name', message: t('errors.name') }
             : null;
         setClientError(problem);
-        if (problem) e.preventDefault();
+        if (!problem) keepValues(action)(e);
       }}
     >
       <h3 id="ask-heading" className="text-body font-medium">
@@ -383,7 +389,7 @@ function AskForm({
           </p>
         ) : null}
       </div>
-      {anonymous ? null : (
+      {anonymous && !namesToModerators ? null : (
         <div className="flex flex-col gap-1.5">
           <label htmlFor="ask-name" className="text-caption text-zinc-600">
             {t('participant.yourName')}
@@ -417,10 +423,14 @@ function AskForm({
           <span>{t('participant.anonymous')}</span>
         </label>
       ) : null}
-      {anonymous ? <p className="text-caption text-zinc-600">{t('participant.anonymousHint')}</p> : null}
+      {anonymous ? (
+        <p className="text-caption text-zinc-600">
+          {namesToModerators ? t('participant.anonymousHintModerators') : t('participant.anonymousHint')}
+        </p>
+      ) : null}
       {formError ? <Alert title={formError} /> : null}
       {state.ok || waiting > 0 ? (
-        <p role="status" className="text-body text-green-700">
+        <p role="status" className="rounded-card border border-accent-300 bg-accent-50 px-4 py-3 text-body text-accent-text">
           {t('participant.sent')}
         </p>
       ) : null}
