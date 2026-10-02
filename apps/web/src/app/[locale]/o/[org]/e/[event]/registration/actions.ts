@@ -45,7 +45,7 @@ const itemFields = (form: FormData) => ({
 });
 
 async function run(org: string, event: string, fn: (eventId: string, ctx: never) => Promise<unknown>) {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'registration');
   try {
     await fn(ev.id, data.ctx as never);
   } catch (err) {
@@ -139,7 +139,7 @@ export async function setCellAction(
   _prev: FormState,
   form: FormData,
 ): Promise<FormState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'registration');
   const setup = await executeQuery(registrationSetupQuery, { eventId: ev.id }, data.ctx, ports);
   let priceMinor: number;
   try {

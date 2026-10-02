@@ -43,7 +43,7 @@ export default async function RegistrationPage({
 }) {
   const { locale, org, event } = await params;
   setRequestLocale(locale);
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'registration');
   const profile = isProfileKey(ev.profile) ? ev.profile : 'other';
   if (!navIncludes(profile, data.modules, 'registration')) notFound();
   const setup = await executeQuery(registrationSetupQuery, { eventId: ev.id }, data.ctx, ports);
