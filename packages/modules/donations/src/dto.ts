@@ -117,10 +117,7 @@ export const PublicGivingDto = z.object({
 });
 export type PublicGivingDto = z.infer<typeof PublicGivingDto>;
 
-const Email = z
-  .email()
-  .max(254)
-  .transform((e) => e.trim().toLowerCase());
+const Email = z.string().trim().toLowerCase().max(254).pipe(z.email());
 
 export const StartGiftInput = z
   .object({

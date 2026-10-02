@@ -50,6 +50,10 @@ import {
 import { saveWidgetLayoutCommand, setModeOverrideCommand } from '@yayatoh/command-center';
 import { withTenant } from '@yayatoh/db';
 import {
+  createCampaignCommand as createGivingCampaignCommand,
+  createLevelCommand as createGivingLevelCommand,
+} from '@yayatoh/donations';
+import {
   addRecurringOccurrencesCommand,
   addSectionCommand,
   assignEventRoleCommand,
@@ -1918,7 +1922,53 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   );
   await executeCommand(setMyAlertPhoneCommand, { smsPhone: '+15550100199' }, ctx(), ports);
   await executeCommand(setSalesTargetCommand, { eventId: event.id, tickets: 150 }, ctx(), ports);
+  await donationRows(org.id, event.id, slug, ctx);
   return { org, ownerId, viewerId, event, apiKey, testKey, ctx };
+}
+
+/**
+ * M4.8a donations (isolation coverage of every donations table and `orders.donation_items`): a
+ * campaign with a level, and a gift whose order lapsed unpaid. The fixture's payout account is
+ * still onboarding (gifts need a connected account), so the lapsed gift and its order are written
+ * as the gift flow leaves them, without a provider; an expired order touches no total or report.
+ */
+async function donationRows(orgId: string, eventId: string, slug: string, ctx: (o?: Partial<Ctx>) => Ctx) {
+  const campaign = await executeCommand(
+    createGivingCampaignCommand,
+    { eventId, name: 'Fixture Fund', description: 'Every gift helps.', goalMinor: 1_000_000 },
+    ctx(),
+    ports,
+  );
+  const level = await executeCommand(
+    createGivingLevelCommand,
+    {
+      eventId,
+      campaignId: campaign.id,
+      name: 'Classroom',
+      amountMinor: 100_000,
+      description: 'Funds a classroom',
+    },
+    ctx(),
+    ports,
+  );
+  const orderId = uuidv7();
+  const giftId = uuidv7();
+  await withTenant(systemCtx(orgId), async (tx) => {
+    await tx.execute(sql`insert into orders.orders (id, org_id, event_id, status, buyer_email, buyer_name,
+      currency, subtotal_minor, fee_minor, total_minor, funds_flow, connected_account_id, fee_schedule,
+      manage_token_hash, created_via)
+      values (${orderId}, ${orgId}, ${eventId}, 'expired', ${`donor+${slug}@example.test`}, 'Fixture Donor',
+      'USD', 102000, 0, 102000, 'organizer_mor', ${`fakeacct_${slug}`}, '{"kind":"donation"}'::jsonb,
+      ${`fixture-gift-${orgId}`}, 'donation')`);
+    await tx.execute(sql`insert into orders.donation_items (org_id, order_id, gift_id, name, amount_minor,
+      fee_cover_minor, currency) values (${orgId}, ${orderId}, ${giftId}, 'Fixture Fund', 100000, 2000, 'USD')`);
+    await tx.execute(sql`insert into donations.gifts (id, org_id, event_id, campaign_id, level_id, order_id,
+      status, amount_minor, fee_cover_minor, currency, donor_name, donor_email, display_as, employer,
+      tribute_kind, tribute_name, tribute_recipient, tribute_note)
+      values (${giftId}, ${orgId}, ${eventId}, ${campaign.id}, ${level.id}, ${orderId}, 'expired', 100000,
+      2000, 'USD', 'Fixture Donor', ${`donor+${slug}@example.test`}, 'anonymous', 'Fixture Corp',
+      'memory', 'Grandma Ada', 'The Ada family', 'In loving memory.')`);
+  });
 }
 
 /** English headers for attendee exports (the console passes its own locale's). */

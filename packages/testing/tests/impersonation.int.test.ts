@@ -6,6 +6,7 @@ import * as cms from '@yayatoh/cms';
 import * as crm from '@yayatoh/crm';
 import { withTenant } from '@yayatoh/db';
 import { closePools } from '@yayatoh/db/testing';
+import * as donations from '@yayatoh/donations';
 import * as events from '@yayatoh/events';
 import * as forms from '@yayatoh/forms';
 import {
@@ -70,6 +71,8 @@ const MODULES = {
   checkin,
   cms,
   crm,
+  // M4.8a: gifts, campaigns and the gift CSV.
+  donations,
   events,
   forms,
   marketplace,
@@ -156,6 +159,8 @@ describe('impersonation: the pipeline refuses money, export and delete (M1.2e)',
         'surveys.startResponsesCsv',
         // Waitlist CSV (M3.10a).
         'orders.startWaitlistCsv',
+        // Gift CSV (M4.8a).
+        'donations.startGiftsCsv',
       ]),
     );
     const files = [...queries.values()].filter((q) => q.category === 'export').map((q) => q.name);
@@ -169,6 +174,7 @@ describe('impersonation: the pipeline refuses money, export and delete (M1.2e)',
         'reports.disputeEvidencePacket',
         'surveys.responsesCsvFile',
         'orders.waitlistCsvFile',
+        'donations.giftsCsvFile',
       ]),
     );
     const money = flagged.filter((c) => c.category === 'money').map((c) => c.name);
@@ -209,6 +215,8 @@ describe('impersonation: the pipeline refuses money, export and delete (M1.2e)',
         'orders.removePush',
         // A date's own seating chart goes, with the guests seated on it (M1.7g).
         'seating.removeDateChart',
+        // A giving level (M4.8a; its gifts stay).
+        'donations.deleteLevel',
       ]),
     );
   });
