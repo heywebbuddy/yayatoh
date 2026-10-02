@@ -7906,7 +7906,6 @@
     "closesAt": "Wachtlijst schuift door tot {when}",
     "closed": "Wachtlijst gesloten (minder dan 24 uur te gaan)",
     "promoteNow": "Nu doorschuiven: {title}",
-    "promoted": "Wachtlijst doorgeschoven.",
     "settings": "Als er een plek vrijkomt",
     "promotion": "Doorschuiven van de wachtlijst",
     "promotionAuto": "De volgende persoon automatisch inschrijven",
@@ -7929,7 +7928,8 @@
       "promotion": "Kies hoe de wachtlijst doorschuift.",
       "sessionIds": "Kies sessies van dit evenement.",
       "promotion_closed": "De wachtlijst is gesloten: ze stopt 24 uur voor het begin van de sessie."
-    }
+    },
+    "promotedCount": "{count, plural, =0 {Niemand kon doorschuiven.} one {# persoon doorgeschoven vanaf de wachtlijst.} other {# personen doorgeschoven vanaf de wachtlijst.}}"
   },
   "mySchedule": {
     "open": "Mijn programma",

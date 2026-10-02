@@ -7906,7 +7906,6 @@
     "closesAt": "{when}まで繰り上げ",
     "closed": "キャンセル待ち終了（開始まで24時間未満）",
     "promoteNow": "今すぐ繰り上げ：{title}",
-    "promoted": "キャンセル待ちを繰り上げました。",
     "settings": "空席が出たとき",
     "promotion": "キャンセル待ちの繰り上げ",
     "promotionAuto": "次の人を自動で登録する",
@@ -7929,7 +7928,8 @@
       "promotion": "キャンセル待ちの繰り上げ方法を選んでください。",
       "sessionIds": "このイベントのセッションを選んでください。",
       "promotion_closed": "キャンセル待ちは終了しました。セッション開始の24時間前に止まります。"
-    }
+    },
+    "promotedCount": "{count, plural, =0 {繰り上げられる人はいませんでした。} other {キャンセル待ちから#人を繰り上げました。}}"
   },
   "mySchedule": {
     "open": "マイスケジュール",

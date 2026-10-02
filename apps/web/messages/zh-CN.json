@@ -7906,7 +7906,6 @@
     "closesAt": "候补递补截至 {when}",
     "closed": "候补已关闭（距开始不足 24 小时）",
     "promoteNow": "立即递补：{title}",
-    "promoted": "候补已递补。",
     "settings": "有名额空出时",
     "promotion": "候补递补方式",
     "promotionAuto": "自动为下一位报名",
@@ -7929,7 +7928,8 @@
       "promotion": "请选择候补递补方式。",
       "sessionIds": "请选择本活动的场次。",
       "promotion_closed": "候补已关闭：场次开始前 24 小时停止递补。"
-    }
+    },
+    "promotedCount": "{count, plural, =0 {没有可递补的人。} other {已从候补名单递补 # 人。}}"
   },
   "mySchedule": {
     "open": "我的日程",

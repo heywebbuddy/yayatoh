@@ -7906,7 +7906,6 @@
     "closesAt": "Waitlist promotes until {when}",
     "closed": "Waitlist closed (less than 24 hours to go)",
     "promoteNow": "Promote now: {title}",
-    "promoted": "Waitlist promoted.",
     "settings": "When a place frees up",
     "promotion": "Waitlist promotion",
     "promotionAuto": "Enrol the next person automatically",
@@ -7929,7 +7928,8 @@
       "promotion": "Choose how the waitlist promotes.",
       "sessionIds": "Choose sessions of this event.",
       "promotion_closed": "The waitlist has closed: it stops 24 hours before the session starts."
-    }
+    },
+    "promotedCount": "{count, plural, =0 {Nobody could be promoted.} one {# person promoted from the waitlist.} other {# people promoted from the waitlist.}}"
   },
   "mySchedule": {
     "open": "My schedule",

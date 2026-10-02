@@ -169,8 +169,9 @@ test.describe('session enrollment and waitlists (M5.2b)', () => {
 
     // Promote now (the capacity was raised while someone waited).
     await press(page.getByRole('button', { name: 'Promote now: Bonus lab' }));
-    await expect(lab.getByText('Waitlist promoted.')).toBeVisible();
+    await expect(lab.getByText('1 person promoted from the waitlist.')).toBeVisible();
     await expect(lab).toContainText('2 of 2 places taken');
+    await expect(lab).toContainText('Nobody on the waitlist');
     await expect(lab.getByRole('button', { name: 'Promote now: Bonus lab' })).toHaveCount(0);
 
     // The waitlist setting: a bad window is refused with its message; a good one is saved.

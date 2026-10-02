@@ -7906,7 +7906,6 @@
     "closesAt": "Warteliste rückt nach bis {when}",
     "closed": "Warteliste geschlossen (weniger als 24 Stunden)",
     "promoteNow": "Jetzt nachrücken: {title}",
-    "promoted": "Warteliste nachgerückt.",
     "settings": "Wenn ein Platz frei wird",
     "promotion": "Nachrücken von der Warteliste",
     "promotionAuto": "Die nächste Person automatisch anmelden",
@@ -7929,7 +7928,8 @@
       "promotion": "Wähle, wie die Warteliste nachrückt.",
       "sessionIds": "Wähle Sessions dieser Veranstaltung.",
       "promotion_closed": "Die Warteliste ist geschlossen: Sie endet 24 Stunden vor Beginn der Session."
-    }
+    },
+    "promotedCount": "{count, plural, =0 {Niemand konnte nachrücken.} one {# Person ist von der Warteliste nachgerückt.} other {# Personen sind von der Warteliste nachgerückt.}}"
   },
   "mySchedule": {
     "open": "Mein Plan",

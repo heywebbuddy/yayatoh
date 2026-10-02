@@ -7906,7 +7906,6 @@
     "closesAt": "候補遞補至 {when}",
     "closed": "候補已關閉（距開始不到 24 小時）",
     "promoteNow": "立即遞補：{title}",
-    "promoted": "候補已遞補。",
     "settings": "有名額空出時",
     "promotion": "候補遞補方式",
     "promotionAuto": "自動為下一位報名",
@@ -7929,7 +7928,8 @@
       "promotion": "請選擇候補遞補方式。",
       "sessionIds": "請選擇本活動的場次。",
       "promotion_closed": "候補已關閉：場次開始前 24 小時停止遞補。"
-    }
+    },
+    "promotedCount": "{count, plural, =0 {沒有可遞補的人。} other {已從候補名單遞補 # 人。}}"
   },
   "mySchedule": {
     "open": "我的行程",

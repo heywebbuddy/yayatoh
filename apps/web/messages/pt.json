@@ -7906,7 +7906,6 @@
     "closesAt": "A lista de espera avança até {when}",
     "closed": "Lista de espera encerrada (faltam menos de 24 horas)",
     "promoteNow": "Avançar agora: {title}",
-    "promoted": "A lista de espera avançou.",
     "settings": "Quando uma vaga é liberada",
     "promotion": "Avanço da lista de espera",
     "promotionAuto": "Inscrever automaticamente a próxima pessoa",
@@ -7929,7 +7928,8 @@
       "promotion": "Escolha como a lista de espera avança.",
       "sessionIds": "Escolha sessões deste evento.",
       "promotion_closed": "A lista de espera fechou: ela para 24 horas antes do início da sessão."
-    }
+    },
+    "promotedCount": "{count, plural, =0 {Ninguém pôde avançar.} one {# pessoa avançou da lista de espera.} other {# pessoas avançaram da lista de espera.}}"
   },
   "mySchedule": {
     "open": "Minha agenda",

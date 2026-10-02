@@ -57,13 +57,19 @@ export async function saveItemSessionsAction(
   );
 }
 
+/** "Promote now": the result says how many people moved off the line. */
 export async function promoteNowAction(
   org: string,
   event: string,
   sessionId: string,
-  _prev: FormState,
-): Promise<FormState> {
-  return run(org, event, (eventId, ctx) =>
-    executeCommand(promoteSessionNowCommand, { eventId, sessionId }, ctx, ports),
-  );
+  _prev: FormState & { promoted?: number },
+): Promise<FormState & { promoted?: number }> {
+  const { data, event: ev } = await loadEvent(org, event, 'registration');
+  try {
+    const r = await executeCommand(promoteSessionNowCommand, { eventId: ev.id, sessionId }, data.ctx, ports);
+    revalidatePath(`/o/${org}/e/${event}/registration/enrollment`);
+    return { ...success(), promoted: r.promoted };
+  } catch (err) {
+    return failure(err);
+  }
 }

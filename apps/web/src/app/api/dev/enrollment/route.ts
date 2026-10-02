@@ -120,7 +120,7 @@ export async function POST(req: NextRequest) {
   }
   // "Bonus lab": the first two registrants hold its place and wait; then its capacity is raised,
   // so one place is free with someone waiting (what "Promote now" is for).
-  for (const p of out.slice(0, 2)) {
+  for (const p of out.length >= 2 ? out.slice(0, 2) : []) {
     const anon = createCtx({ orgId: org.orgId });
     const mine = await executeQuery(myScheduleQuery, { token: p.token, registrantId: null }, anon, ports);
     if (mine.registrantId)

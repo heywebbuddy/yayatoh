@@ -6,6 +6,7 @@ import { Card, EmptyState, PageHeader, StatusDot } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { type FieldSpec, ProgramForm } from '@/components/program-form.tsx';
+import { PromoteNow } from '@/components/promote-now.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
@@ -99,7 +100,7 @@ export default async function EnrollmentPage({
           <ul className="flex list-none flex-col gap-3 p-0">
             {optional.map((s) => (
               <li key={s.sessionId}>
-                <Card className="flex flex-col gap-2" data-session={s.title}>
+                <Card className="flex flex-col gap-2">
                   <h3 className="text-body font-medium">{s.title}</h3>
                   <p className="text-caption text-zinc-600">
                     {when.format(s.startsAt)}
@@ -127,14 +128,11 @@ export default async function EnrollmentPage({
                       <StatusDot status="warning" label={t('closed')} />
                     )}
                   </div>
-                  {canWrite && s.waiting > 0 && s.promotionOpen ? (
-                    <ProgramForm
+                  {canWrite && s.promotionOpen ? (
+                    <PromoteNow
                       action={promoteNowAction.bind(null, org, event, s.sessionId)}
-                      fields={[]}
-                      idPrefix={`promote-${s.sessionId}`}
-                      submitLabel={t('promoteNow', { title: s.title })}
-                      successLabel={t('promoted')}
-                      errors={errors}
+                      title={s.title}
+                      waiting={s.waiting}
                     />
                   ) : null}
                 </Card>
