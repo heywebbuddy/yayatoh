@@ -75,6 +75,9 @@ export default async function ApiKeysPage({ params }: { params: Promise<{ locale
         <Link href={`/o/${org}/sandboxes`} className="underline underline-offset-2">
           {t('apiKeys.sandboxesLink')}
         </Link>
+        <Link href={`/o/${org}/webhooks`} className="underline underline-offset-2">
+          {t('apiKeys.webhooksLink')}
+        </Link>
       </nav>
       {quotas ? (
         <p className="text-body text-zinc-600" data-testid="rate-limit-note">
