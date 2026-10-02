@@ -226,6 +226,21 @@
       "intro": "Hier ist Ihr Link, um Ihre Anmeldung für {eventName} dort fortzusetzen, wo Sie aufgehört haben. Er gilt {days, plural, one {# Tag} other {# Tage}} nach dem letzten Speichern und nur für Sie; bitte leiten Sie ihn nicht weiter. Wenn Sie ihn nicht angefordert haben, können Sie diese E-Mail ignorieren.",
       "cta": "Anmeldung fortsetzen"
     },
+    "portal.invite": {
+      "subject": "Einladung zum Portal von {eventName}",
+      "intro": "{org} hat Sie als {role} zum Portal von {eventName} eingeladen. Dort sehen Sie Ihre Sessions, aktualisieren Ihr Profil und erledigen Ihre Aufgaben. Die Schaltfläche fragt nach einem Anmeldecode, der an diese Adresse gesendet wird.",
+      "cta": "Portal öffnen"
+    },
+    "portal.sign-in": {
+      "subject": "{code} ist Ihr Anmeldecode für {eventName}",
+      "intro": "Geben Sie {code} ein, um sich im Portal von {eventName} anzumelden, oder nutzen Sie die Schaltfläche unten im selben Browser. Code gültig: {minutes} Min. Schaltfläche gültig: {linkMinutes} Min. Beide funktionieren einmal. Wenn Sie ihn nicht angefordert haben, ignorieren Sie diese E-Mail.",
+      "cta": "Im Portal anmelden"
+    },
+    "program.task-reminder": {
+      "subject": "Erinnerung: {title} für {eventName}",
+      "intro": "{org} wartet noch auf „{title}“ für {eventName}. Fällig: {until}.",
+      "cta": "Meine Aufgaben öffnen"
+    },
     "registration.session-enrolled": {
       "subject": "Ein Platz ist frei: Du bist in {sessionTitle} dabei",
       "intro": "In {sessionTitle} bei {eventName} ({when}) ist ein Platz frei geworden, und du warst als Nächstes auf der Warteliste. Du bist jetzt angemeldet. Wenn du nicht kannst, entferne die Session aus deinem Plan, damit die nächste Person den Platz bekommt.",
@@ -248,7 +263,11 @@
     "viewer": "Leser",
     "co_host": "Co-Gastgeber",
     "planner": "Planer",
-    "collaborator": "Veranstaltungsmitarbeiter"
+    "collaborator": "Veranstaltungsmitarbeiter",
+    "speaker": "Speaker",
+    "exhibitor_admin": "Aussteller-Admin",
+    "exhibitor_staff": "Aussteller-Team",
+    "sponsor_contact": "Sponsor-Kontakt"
   },
   "account": {
     "deleted": {

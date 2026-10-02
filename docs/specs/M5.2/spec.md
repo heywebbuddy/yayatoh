@@ -95,7 +95,7 @@ promote a line by hand. Viewers read; nobody else sees anything.
 - **Legacy evidence:** none (Eventmie Pro has no session enrollment).
 
 ### 3. Scope (built)
-**Model** (module `registration`, tier 5; migration `0096_spotty_goliath.sql`, renumbered at merge):
+**Model** (module `registration`, tier 5; migration `0099_regular_landau.sql`, renumbered at merge):
 - `item_sessions` (event, admission item, session): which sessions an item gives. An `admission` item listing nothing gives every session; an `add_on` gives only what it lists.
 - `enrollment_settings` (one per event; no row = `auto`, 240-minute offers): `promotion` `auto | offer`, `offer_minutes` 15–2,880.
 - `session_enrollments` (event, session, registrant = admission ticket, order): `status` `enrolled | waiting | offered | dropped | left | expired | declined | skipped | cancelled`, the line position, offer window and count, who promoted, the skip reason, whether a group pick is held. One live row per registrant and session (partial unique). CHECKs keep offers and skips consistent.

@@ -677,8 +677,29 @@
     {
       "idx": 96,
       "version": "7",
-      "when": 1790959492078,
-      "tag": "0096_spotty_goliath",
+      "when": 1790957678956,
+      "tag": "0096_long_luminals",
+      "breakpoints": true
+    },
+    {
+      "idx": 97,
+      "version": "7",
+      "when": 1790957688815,
+      "tag": "0097_curly_triathlon",
+      "breakpoints": true
+    },
+    {
+      "idx": 98,
+      "version": "7",
+      "when": 1790958346804,
+      "tag": "0098_true_thunderbolt",
+      "breakpoints": true
+    },
+    {
+      "idx": 99,
+      "version": "7",
+      "when": 1790959551156,
+      "tag": "0099_regular_landau",
       "breakpoints": true
     }
   ]
