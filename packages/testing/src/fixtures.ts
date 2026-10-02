@@ -50,6 +50,18 @@ import {
 import { saveWidgetLayoutCommand, setModeOverrideCommand } from '@yayatoh/command-center';
 import { withTenant } from '@yayatoh/db';
 import {
+  askQuestionCommand,
+  createPollCommand,
+  enableLiveCommand,
+  moderateQuestionCommand,
+  openPollCommand,
+  participantKey,
+  pinQuestionCommand,
+  updateSettingsCommand,
+  upvoteQuestionCommand,
+  voteCommand,
+} from '@yayatoh/engagement';
+import {
   addRecurringOccurrencesCommand,
   addSectionCommand,
   assignEventRoleCommand,
@@ -169,6 +181,7 @@ import {
   createSponsorCommand,
   createSponsorTierCommand,
   createTrackCommand,
+  sessionsOf as programSessionsOf,
   publishAgendaCommand,
   recordGroupPickTx,
   setSessionAgendaCommand,
@@ -1918,7 +1931,83 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   );
   await executeCommand(setMyAlertPhoneCommand, { smsPhone: '+15550100199' }, ctx(), ports);
   await executeCommand(setSalesTargetCommand, { eventId: event.id, tickets: 150 }, ctx(), ports);
+  await liveEngagementFixture(org.id, event.id, ctx);
   return { org, ownerId, viewerId, event, apiKey, testKey, ctx };
+}
+
+/**
+ * M5.7a live engagement on the fixture event's keynote: polls and Q&A on (names behind anonymous
+ * questions visible to moderators), an open single-choice poll with one vote, an open word cloud
+ * with one word, an approved, upvoted and pinned question, and a pending anonymous one.
+ */
+async function liveEngagementFixture(orgId: string, eventId: string, ctx: (o?: Partial<Ctx>) => Ctx) {
+  const [keynote] = await withTenant(systemCtx(orgId), (tx) => programSessionsOf(tx, eventId));
+  if (!keynote) throw new Error('fixture: the fixture event has no session');
+  const at = { eventId, sessionId: keynote.id };
+  const visitor = (n: number) => participantKey('fixture-secret', keynote.id, `device-${n}`);
+  const public_ = createCtx({ orgId });
+  await executeCommand(enableLiveCommand, at, ctx(), ports);
+  await executeCommand(
+    updateSettingsCommand,
+    { ...at, qaOpen: true, allowAnonymous: true, anonymousIdentity: 'moderators' },
+    ctx(),
+    ports,
+  );
+  const choice = await executeCommand(
+    createPollCommand,
+    { ...at, kind: 'single', question: 'Which track next?', options: ['Design', 'Data'] },
+    ctx(),
+    ports,
+  );
+  await executeCommand(openPollCommand, { eventId, pollId: choice.id }, ctx(), ports);
+  await executeCommand(
+    voteCommand,
+    { eventId, pollId: choice.id, participantKey: visitor(1), optionIds: ['o1'] },
+    public_,
+    ports,
+  );
+  const cloud = await executeCommand(
+    createPollCommand,
+    { ...at, kind: 'word_cloud', question: 'One word for today?' },
+    ctx(),
+    ports,
+  );
+  await executeCommand(openPollCommand, { eventId, pollId: cloud.id }, ctx(), ports);
+  await executeCommand(
+    voteCommand,
+    { eventId, pollId: cloud.id, participantKey: visitor(1), word: 'Inspiring' },
+    public_,
+    ports,
+  );
+  const askedBy = async (n: number, body: string, anonymous: boolean) => {
+    await executeCommand(
+      askQuestionCommand,
+      { ...at, participantKey: visitor(n), body, name: `Visitor ${n}`, anonymous },
+      public_,
+      ports,
+    );
+    const rows = await withTenant(systemCtx(orgId), (tx) =>
+      tx.execute<{ id: string }>(
+        sql`select id from engagement.questions where session_id = ${keynote.id} and body = ${body} limit 1`,
+      ),
+    );
+    return rows[0]?.id ?? '';
+  };
+  const approved = await askedBy(1, 'How do fixtures stay isolated?', false);
+  await executeCommand(
+    moderateQuestionCommand,
+    { eventId, questionId: approved, action: 'approve' },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    upvoteQuestionCommand,
+    { eventId, questionId: approved, participantKey: visitor(2) },
+    public_,
+    ports,
+  );
+  await executeCommand(pinQuestionCommand, { ...at, questionId: approved }, ctx(), ports);
+  await askedBy(2, 'A question still waiting for a moderator', true);
 }
 
 /** English headers for attendee exports (the console passes its own locale's). */
