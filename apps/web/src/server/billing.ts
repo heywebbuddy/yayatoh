@@ -50,6 +50,6 @@ export async function handleBillingWebhook(req: Request, expected: string): Prom
 export function testBillingSecret(): string | null {
   if (!billingEnabled() || process.env.VERCEL_ENV === 'production' || process.env.YAYATOH_DEV_AUTH !== '1')
     return null;
-  if (getBillingProvider().name !== 'fake') return null;
+  if (process.env.BILLING_PROVIDER && process.env.BILLING_PROVIDER !== 'fake') return null;
   return process.env.FAKE_PAYMENTS_SECRET ?? null;
 }
