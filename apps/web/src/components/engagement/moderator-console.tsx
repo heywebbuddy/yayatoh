@@ -195,6 +195,7 @@ export function ModeratorConsole({
               <QuestionList
                 id="dismissed"
                 title={null}
+                label={t('moderator.dismissed', { count: dismissed.length })}
                 empty=""
                 list={dismissed}
                 render={(q) =>
@@ -263,10 +264,13 @@ function QuestionList({
   empty,
   list,
   pinned = null,
+  label,
   render,
 }: {
   id: string;
   title: string | null;
+  /** The list's name when it has no visible heading. */
+  label?: string;
   empty: string;
   list: readonly ModQuestionDto[];
   pinned?: string | null;
@@ -276,7 +280,7 @@ function QuestionList({
   return (
     <section
       aria-labelledby={title ? `${id}-heading` : undefined}
-      aria-label={title ? undefined : id}
+      aria-label={title ? undefined : label}
       className="flex flex-col gap-2"
     >
       {title ? (
@@ -452,7 +456,13 @@ function CreatePollForm({ action }: { action: FormAction }) {
         <h3 id="new-poll-heading" className="text-body font-medium">
           {t('moderator.newPoll')}
         </h3>
-        <form ref={ref} action={formAction} onSubmit={keepValues(formAction)} noValidate className="flex flex-col gap-3">
+        <form
+          ref={ref}
+          action={formAction}
+          onSubmit={keepValues(formAction)}
+          noValidate
+          className="flex flex-col gap-3"
+        >
           <div className="flex flex-col gap-1.5">
             <label htmlFor="poll-kind" className="text-caption text-zinc-600">
               {t('moderator.kind')}
@@ -551,7 +561,10 @@ function CreatePollForm({ action }: { action: FormAction }) {
           ) : null}
           {general ? <Alert title={general} /> : null}
           {state.ok ? (
-            <p role="status" className="rounded-card border border-accent-300 bg-accent-50 px-4 py-3 text-body text-accent-text">
+            <p
+              role="status"
+              className="rounded-card border border-accent-300 bg-accent-50 px-4 py-3 text-body text-accent-text"
+            >
               {t('moderator.pollAdded')}
             </p>
           ) : null}
@@ -619,7 +632,10 @@ function SettingsForm({
           </fieldset>
           {!state.ok && state.code ? <Alert title={te(errorMessageKey(state.code))} /> : null}
           {state.ok ? (
-            <p role="status" className="rounded-card border border-accent-300 bg-accent-50 px-4 py-3 text-body text-accent-text">
+            <p
+              role="status"
+              className="rounded-card border border-accent-300 bg-accent-50 px-4 py-3 text-body text-accent-text"
+            >
               {t('moderator.settingsSaved')}
             </p>
           ) : null}

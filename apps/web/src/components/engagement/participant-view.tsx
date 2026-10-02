@@ -294,7 +294,10 @@ function PollCard({
         </form>
       ) : null}
       {done ? (
-        <p role="status" className="rounded-card border border-accent-300 bg-accent-50 px-4 py-3 text-body text-accent-text">
+        <p
+          role="status"
+          className="rounded-card border border-accent-300 bg-accent-50 px-4 py-3 text-body text-accent-text"
+        >
           {t('participant.voted')}
         </p>
       ) : null}
@@ -430,7 +433,10 @@ function AskForm({
       ) : null}
       {formError ? <Alert title={formError} /> : null}
       {state.ok || waiting > 0 ? (
-        <p role="status" className="rounded-card border border-accent-300 bg-accent-50 px-4 py-3 text-body text-accent-text">
+        <p
+          role="status"
+          className="rounded-card border border-accent-300 bg-accent-50 px-4 py-3 text-body text-accent-text"
+        >
           {t('participant.sent')}
         </p>
       ) : null}

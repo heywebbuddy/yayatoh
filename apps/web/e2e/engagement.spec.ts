@@ -61,7 +61,13 @@ async function liveSession(page: Page, label: string, opts: { enable?: boolean }
     await expect(page.getByRole('heading', { name: 'Questions', exact: true })).toBeVisible();
   }
   const sessionId = live.split('/').at(-2) ?? '';
-  return { base, slug: base.split('/').pop() ?? '', title, live, participant: `/events/${base.split('/').pop()}/live/${sessionId}` };
+  return {
+    base,
+    slug: base.split('/').pop() ?? '',
+    title,
+    live,
+    participant: `/events/${base.split('/').pop()}/live/${sessionId}`,
+  };
 }
 
 async function guest(browser: Browser): Promise<Page> {
@@ -78,7 +84,8 @@ async function addPoll(page: Page, kind: string, question: string, options: stri
 }
 
 const modPoll = (page: Page, q: string) => page.locator(`li[data-poll="${q}"]`);
-const status = (page: Page, text: string) => page.locator('[data-moderator] > div > p[role="status"]').filter({ hasText: text });
+const status = (page: Page, text: string) =>
+  page.locator('[data-moderator] > div > p[role="status"]').filter({ hasText: text });
 
 async function ask(p: Page, body: string, opts: { name?: string; anonymous?: boolean } = {}) {
   await p.getByLabel('Your question').fill(body);
@@ -139,7 +146,9 @@ test.describe('live polls and Q&A (M5.7a)', () => {
     await expect(card1.getByText('Thanks, your vote is in.')).toBeVisible();
     await expect(card1.getByText('Results appear here when the host shows them.')).toBeVisible();
     // The moderator's results move live.
-    await expect(poll.locator('[data-result="Data"]')).toHaveAttribute('data-count', '1', { timeout: 10_000 });
+    await expect(poll.locator('[data-result="Data"]')).toHaveAttribute('data-count', '1', {
+      timeout: 10_000,
+    });
 
     // A second phone (found from the public agenda), after the host shows the results.
     await poll.getByRole('button', { name: 'Show results' }).click();
@@ -153,7 +162,9 @@ test.describe('live polls and Q&A (M5.7a)', () => {
     await card2.getByRole('button', { name: 'Vote' }).click();
     await expect(card2.getByText('Thanks, your vote is in.')).toBeVisible();
     // Phone 1 sees the shown results update live: 1 Design, 1 Data.
-    await expect(card1.locator('[data-result="Design"]')).toHaveAttribute('data-count', '1', { timeout: 10_000 });
+    await expect(card1.locator('[data-result="Design"]')).toHaveAttribute('data-count', '1', {
+      timeout: 10_000,
+    });
     await expect(card1.locator('[data-result="Data"]')).toHaveAttribute('data-count', '1');
     await expect(poll.getByText('2 votes')).toBeVisible();
     // One vote per person: after a reload the phone still has voted, no form.
@@ -205,10 +216,14 @@ test.describe('live polls and Q&A (M5.7a)', () => {
     await pending.getByRole('button', { name: 'Approve' }).click();
     await expect(status(page, 'Question approved.')).toBeVisible();
     // Approved: on the phone and the big screen's list, live.
-    await expect(phone.locator('[data-question="Will the slides be shared?"]').getByText('Robin')).toBeVisible({
+    await expect(
+      phone.locator('[data-question="Will the slides be shared?"]').getByText('Robin'),
+    ).toBeVisible({
       timeout: 10_000,
     });
-    await expect(screen.locator('[data-stage-next="Will the slides be shared?"]')).toBeVisible({ timeout: 10_000 });
+    await expect(screen.locator('[data-stage-next="Will the slides be shared?"]')).toBeVisible({
+      timeout: 10_000,
+    });
     // Upvote once.
     const upvote = phone.getByRole('button', { name: 'Upvote (0)' });
     await upvote.click();
@@ -219,7 +234,9 @@ test.describe('live polls and Q&A (M5.7a)', () => {
     // On stage: the big screen's current question.
     await approved.getByRole('button', { name: 'Put on stage' }).click();
     await expect(status(page, 'Question on stage.')).toBeVisible();
-    await expect(screen.locator('[data-stage-question="Will the slides be shared?"]')).toBeVisible({ timeout: 10_000 });
+    await expect(screen.locator('[data-stage-question="Will the slides be shared?"]')).toBeVisible({
+      timeout: 10_000,
+    });
 
     // A dropped connection: the screen goes offline, the server drops every stream, and a
     // question is approved meanwhile. Back online, the screen catches up with nothing missed.
@@ -233,7 +250,9 @@ test.describe('live polls and Q&A (M5.7a)', () => {
     await expect(status(page, 'Question approved.')).toBeVisible();
     await screenContext.setOffline(false);
     await expect(screen.locator('[data-stream-state="live"]')).toBeVisible({ timeout: 45_000 });
-    await expect(screen.locator('[data-stage-next="Is there a recording?"]')).toBeVisible({ timeout: 15_000 });
+    await expect(screen.locator('[data-stage-next="Is there a recording?"]')).toBeVisible({
+      timeout: 15_000,
+    });
     await expect(screen.locator('[data-stage-question="Will the slides be shared?"]')).toBeVisible();
 
     // High contrast and reduced motion, by keyboard, and still accessible.
@@ -274,7 +293,9 @@ test.describe('live polls and Q&A (M5.7a)', () => {
     // (The default policy keeps no name behind an anonymous question, so none is asked for.)
     await expect(phone.getByText("Your name won't be shown to the audience.")).toBeVisible();
     await phone.getByRole('button', { name: 'Send question' }).click();
-    await expect(phone.getByText('Thanks! Your question will appear once a moderator approves it.')).toBeVisible();
+    await expect(
+      phone.getByText('Thanks! Your question will appear once a moderator approves it.'),
+    ).toBeVisible();
     const q = page.locator('[data-queue="pending"] [data-question="Is the budget final?"]');
     await expect(q).toBeVisible({ timeout: 10_000 });
     await expect(q.getByText('Anonymous to the audience')).toBeVisible();
@@ -285,7 +306,9 @@ test.describe('live polls and Q&A (M5.7a)', () => {
 
     // Policy "moderators can see them": the moderator sees the name, the audience still doesn't.
     const settings = page.getByRole('region', { name: 'Settings' });
-    await settings.getByLabel('Names behind anonymous questions').selectOption({ label: 'Moderators can see them' });
+    await settings
+      .getByLabel('Names behind anonymous questions')
+      .selectOption({ label: 'Moderators can see them' });
     await settings.getByRole('button', { name: 'Save settings' }).click();
     await expect(settings.getByText('Settings saved.')).toBeVisible();
     await phone.reload();
@@ -295,7 +318,9 @@ test.describe('live polls and Q&A (M5.7a)', () => {
     await expect(phone.getByText("The audience won't see your name; the moderators will.")).toBeVisible();
     await phone.getByLabel('Your name').fill('Quinn Private');
     await phone.getByRole('button', { name: 'Send question' }).click();
-    await expect(phone.getByText('Thanks! Your question will appear once a moderator approves it.')).toBeVisible();
+    await expect(
+      phone.getByText('Thanks! Your question will appear once a moderator approves it.'),
+    ).toBeVisible();
     const named = page.locator('[data-queue="pending"] [data-question="Who chose the venue?"]');
     await expect(named.getByText(/Quinn Private/)).toBeVisible({ timeout: 10_000 });
     await named.getByRole('button', { name: 'Approve' }).click();
@@ -305,11 +330,16 @@ test.describe('live polls and Q&A (M5.7a)', () => {
     await settings.getByRole('checkbox', { name: 'Allow anonymous questions' }).uncheck();
     await settings.getByRole('button', { name: 'Save settings' }).click();
     await expect(settings.getByText('Settings saved.')).toBeVisible();
-    await expect(phone.getByRole('checkbox', { name: 'Ask anonymously' })).toHaveCount(0, { timeout: 10_000 });
+    await expect(phone.getByRole('checkbox', { name: 'Ask anonymously' })).toHaveCount(0, {
+      timeout: 10_000,
+    });
     await phone.context().close();
   });
 
-  test('keyboard only: a rating poll, a question, moderation; axe and Arabic RTL', async ({ page, browser }) => {
+  test('keyboard only: a rating poll, a question, moderation; axe and Arabic RTL', async ({
+    page,
+    browser,
+  }) => {
     await signIn(page);
     const s = await liveSession(page, 'Live Keys');
     await addPoll(page, 'Rating', 'How useful was this?');
@@ -338,7 +368,9 @@ test.describe('live polls and Q&A (M5.7a)', () => {
     await phone.keyboard.type('Kai');
     await phone.getByRole('button', { name: 'Send question' }).focus();
     await phone.keyboard.press('Enter');
-    await expect(phone.getByText('Thanks! Your question will appear once a moderator approves it.')).toBeVisible();
+    await expect(
+      phone.getByText('Thanks! Your question will appear once a moderator approves it.'),
+    ).toBeVisible();
     const q = page.locator('[data-queue="pending"] [data-question="Keyboard question?"]');
     await expect(q).toBeVisible({ timeout: 10_000 });
     await q.getByRole('button', { name: 'Approve' }).focus();
@@ -353,7 +385,9 @@ test.describe('live polls and Q&A (M5.7a)', () => {
     });
     // The presenter view: the poll on stage with its results (hidden from the audience).
     await page.getByRole('link', { name: 'Presenter view' }).click();
-    await expect(page.locator('[data-stage="presenter"] [data-stage-poll="How useful was this?"]')).toBeVisible();
+    await expect(
+      page.locator('[data-stage="presenter"] [data-stage-poll="How useful was this?"]'),
+    ).toBeVisible();
     await expect(page.getByText('Results are hidden from the audience.')).toBeVisible();
     await expectAccessible(page);
 
@@ -441,6 +475,11 @@ test.describe('live polls and Q&A (M5.7a)', () => {
     const forged = `${s.participant.split('/').at(-1)}~x`;
     expect((await anon.goto(`/display/${forged}`))?.status()).toBe(404);
     expect((await peek(anon, `/api/engagement/display/${forged}`)).status).toBe(404);
-    await Promise.all([viewerContext.close(), otherContext.close(), anon.context().close(), phone.context().close()]);
+    await Promise.all([
+      viewerContext.close(),
+      otherContext.close(),
+      anon.context().close(),
+      phone.context().close(),
+    ]);
   });
 });
