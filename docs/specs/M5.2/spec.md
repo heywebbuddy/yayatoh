@@ -142,3 +142,8 @@ promote a line by hand. Viewers read; nobody else sees anything.
 | AC-M5.2b-12 | Gated by the `registration` module | `enrollment.int.test.ts` ("a revoked registration module…") |
 | AC-M5.2b-13 | E2E on 375/768/1280: enrol, conflict refused, group pick, waitlist and promotion, keyboard only, axe on every new screen and state, Arabic RTL, empty state, persistence after reload | `apps/web/e2e/enrollment.spec.ts` |
 | AC-M5.2b-14 | Messages and emails in 13 locales with identical keys | `apps/web/tests/messages.test.ts`; notifications render snapshots |
+
+### 6. Gate (2026-10-02, after merging `merge/next-3e`, `merge/next-3f` and the build branch)
+- lint, check:modules, typecheck (56 packages, turbo `--concurrency=2`: the default concurrency ran out of memory on this 16 GB box), 2,344 unit tests: green.
+- Integration: 1,313 of 1,314 passed. `apps/worker/tests/badges.int.test.ts` ("the leader tick queues the batch until its PDF is done", M5.5a) timed out at 60 s under the full-suite load and passes alone (2/2).
+- E2E (375/768/1280): `enrollment.spec.ts` 21/21; `agenda`, `program`, `email-kind-labels`, `checkout`, `canary-crawl` green. `registration.spec.ts` "the viewer sees the page read-only…" fails on all three viewports before and after this increment: `getByText(/^Edit /)` also matches M5.1b's "Edit the registration form" link (merged in batch 3e).
