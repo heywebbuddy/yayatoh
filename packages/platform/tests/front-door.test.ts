@@ -205,6 +205,11 @@ describe('who serves a request', () => {
       '/event-portal/sign-in/site',
       '/fr/event-portal',
       '/events/summit/exhibitors',
+      // M4.1d/M4.1f: RSVP pages and the contact collector.
+      '/rsvp/abc~sig',
+      '/rsvp/find/ABCD2345',
+      '/collect/ABCD2345',
+      '/es/collect/ABCD2345',
     ]) {
       expect(isPlatformPath(new URL(p, 'https://x').pathname) || decide(p).owner === 'next').toBe(true);
       expect(decide(p, flags(), { legacy: true })).toEqual({

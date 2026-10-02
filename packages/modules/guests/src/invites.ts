@@ -1,6 +1,6 @@
 import { type Ctx, DomainError, requireOrg, uuidv7 } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
-import { and, eq, inArray } from 'drizzle-orm';
+import { and, asc, eq, inArray } from 'drizzle-orm';
 import { z } from 'zod';
 import {
   DEFAULT_INVITE_COPY,
@@ -10,7 +10,8 @@ import {
   SMS_MAX,
   SUBJECT_MAX,
 } from './domain/invite-copy.ts';
-import { recordHistoryTx } from './guests.ts';
+import { isE164, normalizeEmail, normalizePhone } from './domain/collector.ts';
+import { recordHistoryTx, seal, unseal } from './guests.ts';
 import {
   DELIVERY_STATES,
   INVITATION_QUEUED_EVENT,
@@ -26,6 +27,7 @@ import {
   INVITE_CHANNELS,
   INVITE_MESSAGE_KINDS,
   type InviteChannel,
+  guests,
   invitationTemplates,
   parties,
   partyRsvp,
@@ -182,6 +184,101 @@ export const setPartyLocaleCommand = tenantCommand({
     targetType: 'party',
     targetId: input.partyId,
     data: { eventId: input.eventId, locale: input.locale },
+  }),
+});
+
+/* ------------------------------------------------------------------- contact details ---- */
+
+const invalid = (field: string, reason: string) =>
+  new DomainError('validation_failed', `Invalid ${field}`, { field, reason });
+
+export const PartyContactDto = z.object({
+  /** The guest who holds the party's contact details (its primary contact), if any. */
+  guestId: z.uuid().nullable(),
+  email: z.string().nullable(),
+  phone: z.string().nullable(),
+});
+export type PartyContactDto = z.infer<typeof PartyContactDto>;
+
+/** The party's email and phone (sealed on its primary guest), for the host. */
+export const partyContactQuery = tenantQuery({
+  name: 'guests.partyContact',
+  input: z.object({ eventId: z.uuid(), partyId: z.uuid() }),
+  output: PartyContactDto,
+  entitlement: 'guests',
+  permission: 'guests:read',
+  handler: async ({ input, ctx, tx }) => {
+    await partyOfTx(tx, input.eventId, input.partyId);
+    const list = await tx
+      .select()
+      .from(guests)
+      .where(eq(guests.partyId, input.partyId))
+      .orderBy(asc(guests.createdAt), asc(guests.id));
+    const primary = list.find((g) => g.isPrimary) ?? list.find((g) => g.kind === 'guest') ?? null;
+    if (!primary) return { guestId: null, email: null, phone: null };
+    const s = await unseal(requireOrg(ctx), primary.privateCiphertext);
+    return { guestId: primary.id, email: s.email ?? null, phone: s.phone ?? null };
+  },
+});
+
+/**
+ * The party's email and phone for invitations (sealed on its primary guest, P4-3). Empty clears.
+ * A text needs an international number (`+` and the country code).
+ */
+export const setPartyContactCommand = tenantCommand({
+  name: 'guests.setPartyContact',
+  input: z.object({
+    eventId: z.uuid(),
+    partyId: z.uuid(),
+    email: z.string().trim().max(254).default(''),
+    phone: z.string().trim().max(40).default(''),
+  }),
+  output: PartyContactDto,
+  entitlement: 'guests',
+  permission: 'guests:write',
+  handler: async ({ input, ctx, tx }) => {
+    const orgId = requireOrg(ctx);
+    await partyOfTx(tx, input.eventId, input.partyId);
+    const email = input.email ? normalizeEmail(input.email) : null;
+    if (input.email && !email) throw invalid('email', 'invalid_email');
+    const phone = input.phone ? normalizePhone(input.phone) : null;
+    if (input.phone && !isE164(phone)) throw invalid('phone', 'invalid_phone');
+    const list = await tx
+      .select()
+      .from(guests)
+      .where(eq(guests.partyId, input.partyId))
+      .orderBy(asc(guests.createdAt), asc(guests.id));
+    const primary = list.find((g) => g.isPrimary) ?? list.find((g) => g.kind === 'guest') ?? null;
+    if (!primary) throw new DomainError('invalid_state', 'The party has no guests', { reason: 'no_guests' });
+    const before = await unseal(orgId, primary.privateCiphertext);
+    const fields = [
+      ...((before.email ?? null) !== email ? ['email'] : []),
+      ...((before.phone ?? null) !== phone ? ['phone'] : []),
+    ];
+    if (fields.length) {
+      await tx
+        .update(guests)
+        .set({ privateCiphertext: await seal(orgId, { ...before, email, phone }), updatedAt: ctx.now })
+        .where(eq(guests.id, primary.id));
+      await recordHistoryTx(tx, ctx, [
+        {
+          eventId: input.eventId,
+          partyId: input.partyId,
+          guestId: primary.id,
+          action: 'guest_updated',
+          source: 'manual',
+          fields,
+        },
+      ]);
+    }
+    return { guestId: primary.id, email, phone };
+  },
+  // Field names only: the addresses never reach the audit log.
+  audit: (input) => ({
+    action: 'guests.party_contact.set',
+    targetType: 'party',
+    targetId: input.partyId,
+    data: { eventId: input.eventId },
   }),
 });
 

@@ -354,6 +354,17 @@ export const RATE_LIMIT_POLICIES = {
     identity: { limit: 100, windowMs: 15 * MIN },
     ipCeiling: { limit: 200, windowMs: 10 * MIN },
   },
+  /**
+   * M4.1f: the public contact collector (guests send their address and contact details). Each
+   * submission lands in the host's queue, so past the device budget the page asks for the human
+   * check; identity = the collector's code, across devices.
+   */
+  contactCollector: {
+    device: { limit: 5, windowMs: 60 * MIN },
+    anonymousIp: { limit: 10, windowMs: 60 * MIN },
+    identity: { limit: 300, windowMs: 60 * MIN },
+    ipCeiling: { limit: 200, windowMs: 60 * MIN },
+  },
 } as const satisfies Record<string, RateLimitPolicy>;
 
 export type RateLimitPolicyName = keyof typeof RATE_LIMIT_POLICIES;

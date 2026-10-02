@@ -190,6 +190,11 @@ export const PLATFORM_PREFIXES: readonly string[] = [
   // Batch 3f: the portal (M5.3a/M5.4a: invitations, sign-in codes and magic links, the event's
   // sign-in page, the speaker and exhibitor portals).
   '/event-portal',
+  // M4.1d/M4.1f: a wedding party's RSVP page and its paper fallback (`/rsvp/{token}`,
+  // `/rsvp/find/{code}`), and an event's public contact collector (`/collect/{code}`). Only the
+  // new app has them.
+  '/rsvp',
+  '/collect',
 ];
 
 /**

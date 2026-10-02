@@ -173,13 +173,16 @@ export {
   InviteMessageDto,
   invitationPreviewQuery,
   invitationTemplatesQuery,
+  PartyContactDto,
   PartyInviteDto,
+  partyContactQuery,
   partyInviteMessagesQuery,
   partyInvitesQuery,
   resetInvitationTemplateCommand,
   sendInvitationsCommand,
   sendTestInvitationCommand,
   setInvitationTemplateCommand,
+  setPartyContactCommand,
   setPartyLocaleCommand,
 } from './invites.ts';
 export { privateColumns } from './private-columns.ts';
