@@ -112,3 +112,61 @@ describe('seating rules (M1.7f, D18: warn by default)', () => {
     ).toEqual([]);
   });
 });
+
+describe('companion seats and the accessible-seat statement (M6.11a)', () => {
+  const companion = (severity: 'warn' | 'enforce', maxPerAccessible = 1): SeatingRule => ({
+    kind: 'ada_companion',
+    severity,
+    params: { maxPerAccessible },
+  });
+  const pick = (spec: string) =>
+    [...spec].map((c, i) => ({ seatUuid: `s${i}`, accessible: c === 'A', companion: c === 'C' }));
+  const evaluate = (rules: SeatingRule[], spec: string, more: { now?: Date; accessibleNeed?: boolean } = {}) =>
+    evaluateSeatRules(rules, {
+      context: 'checkout',
+      seats: pick(spec),
+      startsAt,
+      now: more.now ?? early,
+      ...(more.accessibleNeed ? { accessibleNeed: true } : {}),
+    });
+
+  it('a companion seat needs an accessible seat in the same order', () => {
+    expect(evaluate([companion('enforce')], 'C.')).toEqual([
+      { rule: 'ada_companion', severity: 'enforce', seats: ['s0'], maxPerAccessible: 1, accessible: 0 },
+    ]);
+    expect(evaluate([companion('enforce')], 'AC')).toEqual([]);
+    // Two companions for one accessible seat: the second is over.
+    expect(evaluate([companion('warn')], 'ACC')).toEqual([
+      { rule: 'ada_companion', severity: 'warn', seats: ['s2'], maxPerAccessible: 1, accessible: 1 },
+    ]);
+    expect(evaluate([companion('warn', 2)], 'ACC')).toEqual([]);
+    // Ordinary seats are never counted.
+    expect(evaluate([companion('enforce')], '...')).toEqual([]);
+  });
+
+  it('ends with the accessible-seat release, when there is one; otherwise always applies', () => {
+    expect(evaluate([companion('enforce'), ada('warn', 7)], 'C', { now: late })).toEqual([]);
+    expect(evaluate([companion('enforce'), ada('warn', 7)], 'C', { now: early })).toHaveLength(1);
+    expect(evaluate([companion('enforce')], 'C', { now: late })).toHaveLength(1);
+  });
+
+  it('never applies when the organizer seats guests', () => {
+    expect(
+      evaluateSeatRules([companion('enforce')], { context: 'assign', seats: pick('CC'), startsAt, now: early }),
+    ).toEqual([]);
+  });
+
+  it('a buyer who needs an accessible seat may take a kept-back one (the companion rule still counts)', () => {
+    expect(evaluate([ada('enforce')], 'A')).toHaveLength(1);
+    expect(evaluate([ada('enforce')], 'A', { accessibleNeed: true })).toEqual([]);
+    expect(evaluate([ada('enforce'), companion('enforce')], 'ACC', { accessibleNeed: true })).toEqual([
+      { rule: 'ada_companion', severity: 'enforce', seats: ['s2'], maxPerAccessible: 1, accessible: 1 },
+    ]);
+  });
+
+  it('enforced companion hits block online; staff may override at the box office', () => {
+    const hits = evaluate([companion('enforce')], 'C');
+    expect(blockingHits(hits, { context: 'checkout', override: true })).toHaveLength(1);
+    expect(blockingHits(hits, { context: 'box_office', override: true })).toEqual([]);
+  });
+});
