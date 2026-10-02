@@ -53,6 +53,8 @@ const SECTION_OF: Record<string, string> = {
   // Batch 3e merge: M5.1a's Registration page and M5.1b's form builder (the Registration item).
   registration: 'registration',
   'registration-form': 'registration',
+  // Batch 3f merge: M5.5a's Badges pages (they load through `loadBadgesPage`, checked below).
+  badges: 'badges',
 };
 
 describe('event console route sweep (M4.2a)', () => {
@@ -85,11 +87,18 @@ describe('event console route sweep (M4.2a)', () => {
     expect(src).not.toMatch(/loadEventBase\(/);
     const calls = [...src.matchAll(/loadEvent\(([^)]*)\)/g)].map((m) => m[1] ?? '');
     if (calls.length === 0) {
-      // Helpers that load for a page (the program pages) take the section themselves.
-      expect(src).toMatch(/loadProgramPage\(org, event, '(sessions|speakers|exhibitors|sponsors)'\)/);
+      // Helpers that load for a page (the program pages) take the section themselves; the
+      // Badges helper loads its own section (asserted in the next test).
+      if (section === 'badges') expect(src).toMatch(/loadBadgesPage\(org, event\)/);
+      else expect(src).toMatch(/loadProgramPage\(org, event, '(sessions|speakers|exhibitors|sponsors)'\)/);
       return;
     }
     for (const args of calls) expect(args).toBe(`org, event, '${section}'`);
+  });
+
+  it('the Badges page helper loads the badges section', () => {
+    const src = readFileSync(join(__dirname, '../src/server/badges.ts'), 'utf8');
+    expect([...src.matchAll(/loadEvent\(([^)]*)\)/g)].map((m) => m[1])).toEqual(["org, event, 'badges'"]);
   });
 
   it('the placeholder page resolves only nav items, gated by who may open them', () => {

@@ -93,8 +93,13 @@ jobs:
         ports: ["5432:5432"]
         options: >-
           --health-cmd "pg_isready -U postgres" --health-interval 2s --health-retries 30
+      gotenberg:
+        # Badge batch PDFs (M5.5a: golden PDFs and the 1,000-badge job); same pinned image.
+        image: gotenberg/gotenberg:8.37.0
+        ports: ["3300:3000"]
     env:
       ADMIN_DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
+      GOTENBERG_URL: http://localhost:3300
     steps:
       - uses: actions/checkout@v5
       - uses: pnpm/action-setup@v4

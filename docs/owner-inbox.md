@@ -75,6 +75,13 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
   - Steps are edited only while a journey is **off**; switching it off cancels every waiting step. People are never enrolled retroactively when a journey is switched on. A step whose time has already passed when someone joins is skipped ("too late"), except steps that run when they join.
   - A failed step is retried after 1, 5, 15 and 60 minutes and marked failed after 5 attempts; the failure goes out as `automations.journey_step_failed@1` for the M3.2b alert engine's "automation failures" rule (wiring the rule is the alert engine's side).
   - Reads need `marketing:read` (viewers and finance can look), building needs `marketing:write` (owners, admins, managers, marketing).
+- [ ] **Badges defaults, pending owner** (M5.5a, labels: `db-migration`, `tenancy`). Built with these defaults; say if any should change:
+  - **Company and job title** come from a checkout question the organizer maps on each template (short-text, non-sensitive questions only). Registration types (M5.1a/b) will add proper profile fields in Wave 2.
+  - **First and last name** are split from the ticket holder's full name: "Last, First" with a comma, otherwise the first word is the first name and the rest the last name. Sorting by last name ignores particles (van, de, al-, ال…).
+  - **Who may do what:** designing and assigning templates needs `events:write`; batch PDFs need `attendees:export` and a recent sign-in (names leave the platform in bulk, like every export); one-badge PDFs at the desk need `attendees:write` (owners, admins, managers, box office); everyone who can see the event can preview templates with sample people.
+  - **Files:** batch PDFs are kept 7 days (like other exports); a download link works for 15 minutes. Badge PDFs are stored in the media store and are not counted against the org's media quota yet.
+  - **Brother QL presets:** 62 mm continuous tape cut at 100 mm, and 102 × 152 mm (4 in) die-cut labels. Say if your customers use other Brother stock.
+  - **Gotenberg in production:** the worker needs `GOTENBERG_URL` for badge batch PDFs (the web app already uses it for ticket PDFs); without it batches stay queued.
 - [ ] (Optional) License NB International Pro + NB International Mono Pro (Neubau) for the exact Superpower typeface. Until then the app uses Geist / Geist Mono (ADR 0018).
 - [ ] **Reports: confirm two defaults** (M1.12, label: `payments`):
   - Net revenue is shown to owners, admins and finance members only (`finance:read`); managers and viewers see gross sales and counts. Bookings CSV export needs `attendees:export` (buyer contact data). Change either if you want other roles to see them.
