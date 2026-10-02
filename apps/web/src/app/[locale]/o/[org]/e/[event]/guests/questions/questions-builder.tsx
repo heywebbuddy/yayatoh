@@ -421,6 +421,10 @@ function QuestionEditor({
   const [d, setD] = useState<Draft>(initial);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const root = useRef<HTMLFieldSetElement>(null);
+  // Opening the editor puts the cursor in the question (keyboard users start typing at once).
+  useEffect(() => {
+    root.current?.querySelector<HTMLElement>('[data-field="label"]')?.focus();
+  }, []);
   const set = <K extends keyof Draft>(k: K, v: Draft[K]) => setD((x) => ({ ...x, [k]: v }));
   const setRule = (r: Partial<RsvpRule>) => setD((x) => ({ ...x, rule: { ...x.rule, ...r } }));
   const testable = earlier.filter((q) => TESTABLE.has(q.type));

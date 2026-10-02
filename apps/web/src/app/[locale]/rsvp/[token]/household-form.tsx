@@ -131,15 +131,21 @@ export function HouseholdForm({
       ref.current?.querySelector<HTMLElement>('[data-rsvp-error]');
     el?.focus();
   }, [state]);
-  const nameOf = new Map(
-    guests.map((g) => {
-      const typed = names[g.id]?.trim();
-      return [g.id, typed && plusOnes.some((p) => p.guestId === g.id) ? typed : g.label];
-    }),
-  );
+  const nameOf = new Map(guests.map((g) => [g.id, g.label]));
+  // The questions call a plus-one by the name typed on this page.
+  const askedName = (id: string) => {
+    const typed = names[id]?.trim();
+    return typed && plusOnes.some((p) => p.guestId === id) ? typed : (nameOf.get(id) ?? '');
+  };
   const message = state.code
     ? t.has(`errors.${state.code}`)
-      ? t(`errors.${state.code}`, { name: (state.guestId && nameOf.get(state.guestId)) || '' })
+      ? t(`errors.${state.code}`, {
+          name: state.guestId
+            ? state.question
+              ? askedName(state.guestId)
+              : (nameOf.get(state.guestId) ?? '')
+            : '',
+        })
       : tr(errorMessageKey(state.code))
     : null;
   const menu = questions?.menu ?? [];
@@ -173,7 +179,7 @@ export function HouseholdForm({
   const questionError = (guestId: string, key: string) =>
     state.guestId === guestId && state.question === key && state.code
       ? t.has(`errors.${state.code}`)
-        ? t(`errors.${state.code}`, { name: nameOf.get(guestId) ?? '' })
+        ? t(`errors.${state.code}`, { name: askedName(guestId) })
         : tr(errorMessageKey(state.code))
       : undefined;
   /** Track the choices as they change, so the questions below follow them. */
@@ -313,7 +319,7 @@ export function HouseholdForm({
               className="flex flex-col gap-4 rounded-card border border-zinc-200 bg-white p-4 sm:p-6"
             >
               <legend className="float-start w-full text-section">
-                {t('questionsFor', { name: nameOf.get(g.guestId) ?? '' })}
+                {t('questionsFor', { name: askedName(g.guestId) })}
               </legend>
               {shown.map((q) => (
                 <RsvpQuestionField
