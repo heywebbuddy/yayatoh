@@ -57,4 +57,8 @@ export const privateColumns = columnPrivacy('guests', {
     status: 'vocab',
     source: 'vocab',
   },
+  // M4.1d: RSVP. The lookup code is printed on paper invitations; it names no one.
+  rsvp_settings: {
+    lookup_code: internal(),
+  },
 });
