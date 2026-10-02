@@ -2663,6 +2663,9 @@ importers:
       '@yayatoh/alerts':
         specifier: workspace:*
         version: link:../modules/alerts
+      '@yayatoh/analytics':
+        specifier: workspace:*
+        version: link:../modules/analytics
       '@yayatoh/assistance':
         specifier: workspace:*
         version: link:../modules/assistance
