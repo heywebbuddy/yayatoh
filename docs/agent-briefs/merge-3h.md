@@ -17,8 +17,14 @@ The orchestrator lists the final set in your launch prompt (only builders that r
 6. `origin/agent/m4.1f`: invitations and contact collector (guests, messaging, journeys)
 7. `origin/agent/m4.2b`: gala tables and sponsors (guests, ticketing, seating)
 8. `origin/agent/m4.8a`: donations and giving page (donations, orders, payments)
+9. `origin/agent/m4.8b`: charity profile and tax receipts (donations, admin verification, worker year-end pass); it already merged m4.8a
+10. `origin/agent/m5.1d`: invoice, PO and pay later (orders, payments, registration)
+
+**Known issue to root-cause, never skip:** in M4.8b's full integration run, `apps/worker/tests/retention.int.test.ts` ("runs every org as a system actor, audits the daily pass") failed once and passes alone. The daily pass sweeps every org the suite created, so it depends on what other test files left behind. Make the assertion scoped to the orgs the test owns, or make the pass deterministic, and prove it with the full suite twice.
 
 Each branch's last commit message is its report (migrations, hand edits, owner items): read it before merging. A branch without a report is not in your list.
+
+**Local dev fix (owner hit it on 2026-10-02):** `pnpm dev` runs turbo in strict env mode, so the worker and API get none of the shell's variables (`JOBS_DATABASE_URL is not set`); only the Next apps work because they read `.env.local`. Make the root `dev` script `turbo run dev --env-mode=loose` (dev only; builds stay strict) and note it in `docs/local-development.md`, which must also list every variable the worker and API need to start (`NEXT_PUBLIC_APP_ORIGIN`, `APP_TOKEN_SECRET`, `JOBS_DATABASE_URL`, `API_PUBLIC_URL`).
 
 ## Merge procedure
 Follow the "Merge procedure (house rules)" section of `docs/agent-briefs/merge-3e.md` exactly:
@@ -27,7 +33,7 @@ Follow the "Merge procedure (house rules)" section of `docs/agent-briefs/merge-3
 - NOT VALID + VALIDATE
 - three-way message union in all 13 locales
 - impersonation, canary, fixture and freeze-mode wiring
-- route ownership for every new public route (RSVP page and links, the contact collector, the giving page, the claim links, the poll and Q&A participant and big-screen views, group registration pages)
+- route ownership for every new public route (RSVP page and links, the contact collector, the giving page, the claim links, the invoice pay links, the poll and Q&A participant and big-screen views, group registration pages)
 - `/v1` additive; Spectral clean; SDK regenerated
 - the lockfile regenerated with pnpm only
 
@@ -35,7 +41,9 @@ Shared modules (the builders appended in parallel; keep one coherent version and
 - `guests`: M4.1d, M4.1e, M4.1f, M4.2b
 - `registration`: M5.1c, M5.2b
 - `program`: M5.2b, M5.7a
-- `ticketing` and `orders`: M4.2b, M4.8a
+- `ticketing` and `orders`: M4.2b, M4.8a, M5.1d
+- `donations`: M4.8a, M4.8b
+- `payments`: M4.8a, M5.1d
 - `forms`: M4.1e
 
 ## Design v2 (the main extra job of this batch)
