@@ -715,6 +715,13 @@
       "when": 1790959768350,
       "tag": "0101_naive_scorpion",
       "breakpoints": true
+    },
+    {
+      "idx": 102,
+      "version": "7",
+      "when": 1790970464614,
+      "tag": "0102_fast_tinkerer",
+      "breakpoints": true
     }
   ]
 }

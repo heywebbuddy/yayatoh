@@ -30,6 +30,8 @@ export const MODULE_KEYS = [
   'badges',
   'gallery',
   'website',
+  /** Phase 6 (P6-13): the public API (self-serve keys, sandbox orgs); free within quotas in beta. */
+  'api_access',
 ] as const;
 export type ModuleKey = (typeof MODULE_KEYS)[number];
 
