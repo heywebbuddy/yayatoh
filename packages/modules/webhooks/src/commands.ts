@@ -9,8 +9,8 @@ import { type EndpointSpec, WebhookProviderError, type WebhookPublisher } from '
 import { ENDPOINT_STATUSES, endpoints } from './schema.ts';
 import { assertEndpointUrl, MAX_URL_LENGTH } from './url.ts';
 
-/** Endpoints per org (Svix has no limit; this keeps a misbehaving integration in check). */
-export const MAX_ENDPOINTS = 10;
+/** Endpoints per org (Svix has no limit; this keeps a misbehaving integration in check; pending owner). */
+export const MAX_ENDPOINTS = 20;
 /** How far back "recover failed messages" can reach (Svix keeps 30 days on Basic). */
 export const RECOVER_MAX_DAYS = 14;
 

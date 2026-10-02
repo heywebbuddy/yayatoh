@@ -134,9 +134,9 @@ describe('fake publisher', () => {
     expect(verifyFakePortalToken(SEED, token, new Date('2030-01-01T00:05:00Z'))).toBe('org-a');
     expect(verifyFakePortalToken(SEED, token, new Date('2030-01-01T00:11:00Z'))).toBeNull();
     expect(verifyFakePortalToken('x'.repeat(40), token, new Date('2030-01-01T00:05:00Z'))).toBeNull();
-    const [body, mac] = token.split('.');
+    const [body, mac] = token.split('~');
     const forged = Buffer.from(JSON.stringify({ a: 'org-b', e: 9e15 })).toString('base64url');
-    expect(verifyFakePortalToken(SEED, `${forged}.${mac}`)).toBeNull();
+    expect(verifyFakePortalToken(SEED, `${forged}~${mac}`)).toBeNull();
     expect(body).toBeTruthy();
   });
 

@@ -71,7 +71,7 @@ export function searchIndex(): readonly SearchEntry[] {
     entries.push({
       kind: 'guide',
       title: g.title,
-      detail: g.summary,
+      detail: g.summary.replaceAll('`', ''),
       href: `/developers/guides/${g.slug}`,
       text: [g.title, g.summary, ...g.blocks.map((b) => (b.kind === 'md' ? b.text : b.title))]
         .join(' ')

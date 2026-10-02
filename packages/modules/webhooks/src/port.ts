@@ -52,11 +52,10 @@ export interface WebhookEventTypeSpec {
 }
 
 export class WebhookProviderError extends Error {
-  constructor(
-    message: string,
-    readonly kind: 'not_found' | 'invalid' | 'unavailable',
-  ) {
+  readonly kind: 'not_found' | 'invalid' | 'unavailable';
+  constructor(message: string, kind: 'not_found' | 'invalid' | 'unavailable') {
     super(message);
+    this.kind = kind;
   }
 }
 

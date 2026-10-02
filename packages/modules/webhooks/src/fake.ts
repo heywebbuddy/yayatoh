@@ -245,7 +245,8 @@ export function fakePublisher(opts: {
     async sendTest(appId, id, input) {
       const ep = endpoint(appId, id);
       const m = message(appId, input);
-      deliver(appId, ep, m, 'manual');
+      // Like Svix's send-example: a real message to this endpoint, retried on the usual schedule.
+      deliver(appId, ep, m, 'scheduled');
       return { messageId: m.id };
     },
     async listAttempts(appId, id, limit) {
@@ -278,7 +279,8 @@ export function fakePublisher(opts: {
       const body = Buffer.from(JSON.stringify({ a: appId, e: now().getTime() + PORTAL_TTL_MS })).toString(
         'base64url',
       );
-      return { url: `${opts.appOrigin}/webhook-portal/${body}.${sign(body)}`, origin: opts.appOrigin };
+      // `~` separates (a `.` would make the path look like a file to the web app's proxy matcher).
+      return { url: `${opts.appOrigin}/webhook-portal/${body}~${sign(body)}`, origin: opts.appOrigin };
     },
     recorded(appId) {
       return app(appId).recorded;
@@ -304,7 +306,7 @@ export function fakePublisher(opts: {
 
 /** The app (org) a fake portal link opens, or null when forged or expired. */
 export function verifyFakePortalToken(seed: string, token: string, now = new Date()): string | null {
-  const [body, mac] = token.split('.');
+  const [body, mac] = token.split('~');
   if (!body || !mac) return null;
   const expected = createHmac('sha256', seed).update(`portal|${body}`).digest('base64url');
   const a = Buffer.from(mac);
