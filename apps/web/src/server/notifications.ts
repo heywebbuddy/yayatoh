@@ -26,20 +26,29 @@ import {
   withWebPush,
 } from '@yayatoh/notifications';
 import {
+  creditNoteMailer,
   orderLinkMailer,
   postponementMailer,
   refundDeclineMailer,
   refundMailer,
   refundRequestNotifier,
   reminderRescheduler,
+  supportReplyMailer,
   ticketMailer,
   waitlistMailer,
 } from '@yayatoh/orders';
-import { payoutDestinationMailer } from '@yayatoh/payments';
+import { disputeDeadlineNotifier, payoutDestinationMailer } from '@yayatoh/payments';
 import { consumeEvent, recentEventsTx, type Subscriber, subscribes } from '@yayatoh/platform';
 import { surveyMailer } from '@yayatoh/surveys';
 import { impersonationNotice, invitationMailer, orgStatusNotice } from '@yayatoh/tenancy';
-import { claimLinkMailer, holderLinkMailer } from '@yayatoh/ticketing';
+import {
+  claimLinkMailer,
+  fakeWalletPassProvider,
+  holderLinkMailer,
+  ticketResendMailer,
+  transferMailer,
+  walletPassSync,
+} from '@yayatoh/ticketing';
 import { webhookAdapter } from './delivery-webhooks.ts';
 // The composition root registers the key vault (message params and manage links are encrypted).
 import { ports } from './ports.ts';
@@ -47,6 +56,9 @@ import { staffAlertSource, staffPushSender } from './scan-staff.ts';
 import { webPushConfig } from './web-push.ts';
 
 export const notifier = createNotifier();
+
+/** The fake wallet pass provider in dev and CI (M3.10c): what it was told stays in memory. */
+export const devWalletPasses = fakeWalletPassProvider();
 
 export const userEmails: NonNullable<DispatchDeps['userEmails']> = async (ids) =>
   new Map([...(await getUsersByIds(ids))].map(([id, u]) => [id, u.email]));
@@ -69,6 +81,13 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     reminderRescheduler(),
     claimLinkMailer({ notifier, appOrigin }),
     holderLinkMailer({ notifier, appOrigin }),
+    // M3.10c support tools (as in the worker).
+    ticketResendMailer({ notifier, appOrigin }),
+    transferMailer({ notifier, appOrigin }),
+    walletPassSync({ provider: devWalletPasses }),
+    creditNoteMailer({ notifier, appOrigin }),
+    supportReplyMailer({ notifier, appOrigin }),
+    disputeDeadlineNotifier({ notifier }),
     attendeeMessageMailer({ notifier, event: findEventTx }),
     announcementMailer({ notifier, appOrigin }),
     threadReplyMailer({ notifier, appOrigin }),

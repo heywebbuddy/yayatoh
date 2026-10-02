@@ -615,3 +615,159 @@ export const massRefundItems = tenantTable(
     }),
   ],
 );
+
+/** The per-org credit note counter (M3.10c): numbers are gap-free per org, taken under this row's lock. */
+export const creditNoteSequences = tenantTable(
+  ordersSchema,
+  'credit_note_sequences',
+  { lastNumber: integer('last_number').notNull().default(0) },
+  (t) => [
+    uniqueIndex('credit_note_sequences_org_key').on(t.orgId),
+    check('credit_note_sequences_last_check', sql`last_number >= 0`),
+  ],
+);
+
+export const CREDIT_NOTE_KINDS = ['full', 'partial'] as const;
+export const CREDIT_NOTE_DISPOSITIONS = ['store_credit', 'refunded'] as const;
+
+/**
+ * Credit notes (M3.10c): a document reducing what an order cost, numbered per org (CN-00001…),
+ * full (what is left of the order) or partial, with a reason. `store_credit`: the amount becomes
+ * credit the buyer spends with `code` on a later order of the same org (`balance_minor` is what
+ * is left); `refunded`: the amount was paid back outside the provider (recorded, nothing moves).
+ */
+export const creditNotes = tenantTable(
+  ordersSchema,
+  'credit_notes',
+  {
+    orderId: uuid('order_id').notNull(),
+    eventId: uuid('event_id').notNull(),
+    number: integer('number').notNull(),
+    kind: text('kind').notNull(),
+    disposition: text('disposition').notNull(),
+    reason: text('reason').notNull(),
+    amountMinor: minor('amount_minor').notNull(),
+    balanceMinor: minor('balance_minor').notNull(),
+    currency: text('currency').notNull(),
+    /** Store credit only: what the buyer types at checkout (`CR-XXXX-XXXX`). */
+    code: text('code'),
+    /** Snapshots for the document. */
+    buyerName: text('buyer_name').notNull(),
+    buyerEmail: text('buyer_email').notNull(),
+    issuedBy: text('issued_by').notNull(),
+  },
+  (t) => [
+    uniqueIndex('credit_notes_org_number_key').on(t.orgId, t.number),
+    uniqueIndex('credit_notes_org_code_key').on(t.orgId, t.code).where(sql`code is not null`),
+    index('credit_notes_org_order_idx').on(t.orgId, t.orderId, t.createdAt),
+    index('credit_notes_org_created_idx').on(t.orgId, t.createdAt),
+    foreignKey({
+      name: 'credit_notes_order_fk',
+      columns: [t.orgId, t.orderId],
+      foreignColumns: [orders.orgId, orders.id],
+    }),
+    check('credit_notes_number_check', sql`number >= 1`),
+    check('credit_notes_kind_check', sql`kind in ('full', 'partial')`),
+    check('credit_notes_disposition_check', sql`disposition in ('store_credit', 'refunded')`),
+    check('credit_notes_reason_check', sql`length(reason) between 3 and 500`),
+    check('credit_notes_amount_check', sql`amount_minor > 0 and balance_minor between 0 and amount_minor`),
+    check(
+      'credit_notes_store_credit_check',
+      sql`(disposition = 'store_credit') = (code is not null) and (disposition = 'store_credit' or balance_minor = 0)`,
+    ),
+    check('credit_notes_currency_check', sql`currency ~ '^[A-Z]{3}$'`),
+  ],
+);
+
+/**
+ * Store credit spent on an order (M3.10c): taken from the note's balance at checkout (a discount
+ * on the order's tickets) and given back if the order lapses unpaid (`released_at`).
+ */
+export const creditNoteApplications = tenantTable(
+  ordersSchema,
+  'credit_note_applications',
+  {
+    creditNoteId: uuid('credit_note_id').notNull(),
+    orderId: uuid('order_id').notNull(),
+    amountMinor: minor('amount_minor').notNull(),
+    releasedAt: ts('released_at'),
+  },
+  (t) => [
+    index('credit_note_applications_org_note_idx').on(t.orgId, t.creditNoteId),
+    uniqueIndex('credit_note_applications_org_order_key').on(t.orgId, t.orderId),
+    foreignKey({
+      name: 'credit_note_applications_note_fk',
+      columns: [t.orgId, t.creditNoteId],
+      foreignColumns: [creditNotes.orgId, creditNotes.id],
+    }),
+    foreignKey({
+      name: 'credit_note_applications_order_fk',
+      columns: [t.orgId, t.orderId],
+      foreignColumns: [orders.orgId, orders.id],
+    }),
+    check('credit_note_applications_amount_check', sql`amount_minor > 0`),
+  ],
+);
+
+export const MACRO_ACTIONS = ['email_buyer', 'add_note', 'resend_tickets', 'transfer_ticket'] as const;
+
+/**
+ * Support macros (M3.10c): a saved reply and the actions that go with it, run from an order.
+ * `subject` and `body` may use merge fields (`{{buyer_name}}`…); archived macros are kept for the
+ * run history.
+ */
+export const supportMacros = tenantTable(
+  ordersSchema,
+  'support_macros',
+  {
+    name: text('name').notNull(),
+    subject: text('subject').notNull(),
+    body: text('body').notNull(),
+    actions: text('actions').array().notNull(),
+    updatedBy: text('updated_by').notNull(),
+    archivedAt: ts('archived_at'),
+  },
+  (t) => [
+    uniqueIndex('support_macros_org_name_key')
+      .on(t.orgId, sql`lower(${t.name})`)
+      .where(sql`archived_at is null`),
+    check('support_macros_name_check', sql`length(name) between 2 and 80`),
+    check('support_macros_subject_check', sql`length(subject) between 1 and 200`),
+    check('support_macros_body_check', sql`length(body) between 1 and 5000`),
+    check(
+      'support_macros_actions_check',
+      sql.raw(
+        `cardinality(actions) between 1 and 4 and actions <@ array[${MACRO_ACTIONS.map((a) => `'${a}'`).join(', ')}]::text[]`,
+      ),
+    ),
+  ],
+);
+
+/** One run of a macro on an order (M3.10c): what it did, for the order timeline and audit. */
+export const supportMacroRuns = tenantTable(
+  ordersSchema,
+  'support_macro_runs',
+  {
+    macroId: uuid('macro_id').notNull(),
+    orderId: uuid('order_id').notNull(),
+    macroName: text('macro_name').notNull(),
+    actions: text('actions').array().notNull(),
+    /** The reply as it was sent (merge fields filled). */
+    replySubject: text('reply_subject').notNull(),
+    replyBody: text('reply_body').notNull(),
+    ranBy: text('ran_by').notNull(),
+  },
+  (t) => [
+    index('support_macro_runs_org_order_idx').on(t.orgId, t.orderId, t.createdAt),
+    foreignKey({
+      name: 'support_macro_runs_macro_fk',
+      columns: [t.orgId, t.macroId],
+      foreignColumns: [supportMacros.orgId, supportMacros.id],
+    }),
+    foreignKey({
+      name: 'support_macro_runs_order_fk',
+      columns: [t.orgId, t.orderId],
+      foreignColumns: [orders.orgId, orders.id],
+    }),
+  ],
+);

@@ -16,16 +16,18 @@ import { programMediaCleaner } from '@yayatoh/media';
 import { announcementMailer, contactWroteNotifier, threadReplyMailer } from '@yayatoh/messaging';
 import { createNotifier } from '@yayatoh/notifications';
 import {
+  creditNoteMailer,
   orderLinkMailer,
   postponementMailer,
   refundDeclineMailer,
   refundMailer,
   refundRequestNotifier,
   reminderRescheduler,
+  supportReplyMailer,
   ticketMailer,
   waitlistMailer,
 } from '@yayatoh/orders';
-import { payoutDestinationMailer } from '@yayatoh/payments';
+import { disputeDeadlineNotifier, payoutDestinationMailer } from '@yayatoh/payments';
 import { type Subscriber, signLinkToken } from '@yayatoh/platform';
 import { analyticsForwarder, metricsProjector, postgresAnalyticsSink } from '@yayatoh/reports';
 import { finderCodeMailer, releaseCancelledSeats } from '@yayatoh/seating';
@@ -33,9 +35,12 @@ import { surveyMailer } from '@yayatoh/surveys';
 import { impersonationNotice, invitationMailer, orgStatusNotice } from '@yayatoh/tenancy';
 import {
   claimLinkMailer,
+  fakeWalletPassProvider,
   holderLinkMailer,
   ticketCancelledMailer,
   ticketResendMailer,
+  transferMailer,
+  walletPassSync,
 } from '@yayatoh/ticketing';
 import { z } from 'zod';
 import { defineJob } from './jobs.ts';
@@ -70,6 +75,13 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     holderLinkMailer({ notifier, appOrigin }),
     ticketResendMailer({ notifier, appOrigin }),
     ticketCancelledMailer({ notifier }),
+    // M3.10c support tools: transfers (claim link, then both sides), wallet passes (fake provider
+    // until the owner's Apple/Google accounts), credit notes, macro replies, dispute deadlines.
+    transferMailer({ notifier, appOrigin }),
+    walletPassSync({ provider: fakeWalletPassProvider() }),
+    creditNoteMailer({ notifier, appOrigin }),
+    supportReplyMailer({ notifier, appOrigin }),
+    disputeDeadlineNotifier({ notifier }),
     attendeeMessageMailer({ notifier, event: findEventTx }),
     announcementMailer({ notifier, appOrigin }),
     threadReplyMailer({ notifier, appOrigin }),

@@ -119,9 +119,12 @@ import {
   attachPaymentCommand,
   completeRefundCommand,
   declineRefundRequestCommand,
+  issueCreditNoteCommand,
   refundRequestsQuery,
   registerOrderPushCommand,
   requestRefundCommand,
+  runSupportMacroCommand,
+  saveSupportMacroCommand,
   setCheckoutSettingsCommand,
   setRefundPolicyCommand,
   startCheckoutCommand,
@@ -710,6 +713,60 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
       ports,
     );
   }
+  // M3.10c support tools (isolation coverage): a store credit note on the paid order with a little
+  // of it spent, a macro run on the order (a team note), and a cancelled transfer of the first
+  // ticket with the recipient's wallet pass, voided (inserted directly so holders stay as they are).
+  const note = await executeCommand(
+    issueCreditNoteCommand,
+    {
+      orderId: checkout.order.id,
+      kind: 'partial',
+      amountMinor: 100,
+      disposition: 'store_credit',
+      reason: 'Goodwill for the late doors.',
+    },
+    ctx({ idempotencyKey: `fixture-credit-${slug}` }),
+    ports,
+  );
+  await withTenant(systemCtx(org.id), async (tx) => {
+    await tx.execute(sql`
+      update orders.credit_notes set balance_minor = balance_minor - 1 where id = ${note.id}`);
+    await tx.execute(sql`
+      insert into orders.credit_note_applications (org_id, credit_note_id, order_id, amount_minor)
+      values (${org.id}, ${note.id}, ${checkout.order.id}, 1)`);
+  });
+  const macro = await executeCommand(
+    saveSupportMacroCommand,
+    {
+      name: 'Called the buyer',
+      subject: 'About your order {{order_ref}}',
+      body: 'Spoke with {{buyer_name}} about {{event_name}}.',
+      actions: ['add_note'],
+    },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    runSupportMacroCommand,
+    { orderId: checkout.order.id, macroId: macro.id },
+    ctx({ idempotencyKey: `fixture-macro-${slug}` }),
+    ports,
+  );
+  if (held)
+    await withTenant(systemCtx(org.id), async (tx) => {
+      const [claim] = await tx.execute<{ id: string }>(sql`
+        insert into ticketing.ticket_claims (org_id, ticket_id, recipient_email, expires_at, revoked_at, created_by)
+        values (${org.id}, ${held.id}, ${`friend@${slug}.test`}, now() + interval '7 days', now(), 'fixture')
+        returning id`);
+      await tx.execute(sql`
+        insert into ticketing.ticket_transfers (org_id, ticket_id, event_id, order_id, claim_id, status,
+          initiated_by, from_name, from_email, to_name, to_email, currency, created_by, from_rev, cancelled_at)
+        values (${org.id}, ${held.id}, ${event.id}, ${checkout.order.id}, ${claim?.id}, 'cancelled', 'holder',
+          'Fixture Buyer', ${held.holder_email}, 'Fixture Friend', ${`friend@${slug}.test`}, 'USD', 'fixture', 0, now())`);
+      await tx.execute(sql`
+        insert into ticketing.wallet_passes (org_id, ticket_id, rev, serial, holder_name, status, voided_at)
+        values (${org.id}, ${held.id}, 999, ${`yy-${held.id}-999`}, 'Fixture Friend', 'voided', now())`);
+    });
   // A guest-list import (staged rows + a batch), a finished bulk label (undo data) and an export
   // (a file with parts), for isolation coverage.
   const staged = await executeCommand(

@@ -192,6 +192,34 @@
     "campaigns.test": {
       "subject": "[Prova] {subject}",
       "intro": "Un invio di prova della tua campagna."
+    },
+    "orders.credit-note": {
+      "subject": "Nota di credito {number} per {eventName}",
+      "intro": "{org} ha emesso la nota di credito {number} di {amount} sul tuo ordine per {eventName}. {storeCredit, select, yes {Usa il codice {code} al pagamento per spenderla in un prossimo ordine con {org}.} other {Questo importo ti è stato rimborsato.}}",
+      "cta": "Vedi il mio ordine"
+    },
+    "orders.support-reply": {
+      "subject": "{subject}",
+      "intro": "Un messaggio da {org} sul tuo ordine per {eventName}:",
+      "cta": "Vedi il mio ordine"
+    },
+    "payments.dispute-deadline": {
+      "subject": "Prove della contestazione in scadenza: {eventName}",
+      "intro": "Le prove per una contestazione di {amount} su un ordine per {eventName} scadono tra {hours, plural, =0 {meno di un’ora} one {# ora} other {# ore}}. Controllale e inviale prima della scadenza."
+    },
+    "ticketing.transfer-offered": {
+      "subject": "{fromName} ti ha inviato un biglietto per {eventName}",
+      "intro": "{fromName} ti sta trasferendo un biglietto per {eventName}. Riscattalo con questo indirizzo email per ottenere il tuo codice QR.",
+      "cta": "Riscatta il mio biglietto"
+    },
+    "ticketing.transfer-completed": {
+      "subject": "Il tuo biglietto per {eventName} è stato trasferito",
+      "intro": "{toName} ha riscattato il biglietto che hai trasferito per {eventName}. Il tuo vecchio codice QR non funziona più."
+    },
+    "ticketing.transfer-received": {
+      "subject": "Il tuo biglietto per {eventName}",
+      "intro": "Hai riscattato il biglietto che {fromName} ti ha inviato per {eventName}. Il tuo codice QR è pronto.",
+      "cta": "Vedi il mio biglietto"
     }
   },
   "roles": {

@@ -82,7 +82,9 @@
         "refund-declined": "Terugbetalingsverzoek afgewezen",
         "waitlist-joined": "Bevestiging wachtlijst",
         "waitlist-offer": "Aanbod van de wachtlijst",
-        "waitlist-expired": "Aanbod van de wachtlijst verlopen"
+        "waitlist-expired": "Aanbod van de wachtlijst verlopen",
+        "credit-note": "Creditnota",
+        "support-reply": "Antwoord van support"
       },
       "events": {
         "reminder": "Herinnering evenement",
@@ -98,7 +100,10 @@
         "claim-link": "Link om ticket te claimen",
         "holder-link": "Link naar tickets",
         "tickets-resent": "Tickets opnieuw verzonden",
-        "ticket-cancelled": "Ticket geannuleerd"
+        "ticket-cancelled": "Ticket geannuleerd",
+        "transfer-offered": "Ticketoverdracht",
+        "transfer-completed": "Ticket overgedragen",
+        "transfer-received": "Overgedragen ticket"
       },
       "attendees": {
         "message": "Bericht van de organisator"
@@ -119,7 +124,8 @@
         "finder-code": "Code voor de stoelzoeker"
       },
       "payments": {
-        "destination-changed": "Wijziging van de uitbetaalrekening"
+        "destination-changed": "Wijziging van de uitbetaalrekening",
+        "dispute-deadline": "Melding deadline geschil"
       },
       "surveys": {
         "invite": "Uitnodiging voor enquête",
@@ -295,7 +301,9 @@
     "alerts": "Meldingen",
     "sendingSetup": "Verzendinstellingen",
     "campaigns": "Campagnes",
-    "journeys": "Journeys"
+    "journeys": "Journeys",
+    "disputes": "Geschillen",
+    "supportMacros": "Supportmacro's"
   },
   "vocab": {
     "attendee": "Deelnemer",
@@ -878,7 +886,9 @@
     "dateSoldOut": "Deze datum is net uitverkocht. Kies een andere.",
     "dateUnavailable": "Deze datum is niet meer beschikbaar. Kies een andere.",
     "orgUnavailable": "Deze organisator verkoopt op dit moment geen tickets. Al gekochte tickets blijven geldig.",
-    "riskBlocked": "We kunnen deze bestelling niet aannemen. Neem contact op met de organisator."
+    "riskBlocked": "We kunnen deze bestelling niet aannemen. Neem contact op met de organisator.",
+    "creditInvalid": "Die tegoedcode is niet geldig of al gebruikt.",
+    "creditNotApplicable": "Dat tegoed kan niet voor deze tickets worden gebruikt."
   },
   "fakePay": {
     "eyebrow": "Testbetaling",
@@ -1753,7 +1763,18 @@
     "noMessages": "Er zijn geen berichten over deze bestelling naar de koper gestuurd.",
     "message": "Bericht",
     "channel": "Kanaal",
-    "trimmed": "{n, plural, one {# extra rij weggelaten} other {# extra rijen weggelaten}} om binnen de paginalimiet van de kaartnetwerken te blijven."
+    "trimmed": "{n, plural, one {# extra rij weggelaten} other {# extra rijen weggelaten}} om binnen de paginalimiet van de kaartnetwerken te blijven.",
+    "termsAtPurchase": "Terugbetalingsvoorwaarden bij aankoop",
+    "termsUnset": "Er werd geen terugbetalingsbeleid getoond",
+    "termsNone": "Geen terugbetalingen",
+    "termsUntil": "Terugbetalingen tot {days} dagen voor het evenement",
+    "termsAlways": "Terugbetalingen op elk moment voor het evenement",
+    "termsKept": "Ingehouden per ticket",
+    "transfers": "Ticketoverdrachten",
+    "transferFrom": "Van",
+    "transferTo": "Aan",
+    "transferState": "Status",
+    "transferClaimed": "Geclaimd"
   },
   "boxOffice": {
     "title": "Kassa",
@@ -5126,7 +5147,11 @@
         "dispute_evidence_submitted": "Bewijs voor de terugboeking ingediend",
         "dispute_won": "Terugboeking gewonnen",
         "dispute_lost": "Terugboeking verloren",
-        "note": "Notitie"
+        "note": "Notitie",
+        "credit_note_issued": "Creditnota uitgegeven",
+        "credit_applied": "Tegoed gebruikt",
+        "credit_released": "Tegoed teruggegeven",
+        "macro_run": "Supportmacro uitgevoerd"
       }
     },
     "notes": {
@@ -6917,6 +6942,239 @@
       "event_missing": "Evenement niet gevonden",
       "error": "Mislukt na meerdere pogingen",
       "other": "Overig"
+    }
+  },
+  "supportTools": {
+    "reasons": {
+      "same_holder": "Deze persoon heeft het ticket al.",
+      "fee_not_accepted": "Vink het vakje aan om akkoord te gaan met de overdrachtskosten.",
+      "fee_required": "Voor dit ticket gelden overdrachtskosten: draag het op naam over.",
+      "not_allowed": "Dit tickettype kan niet worden overgedragen.",
+      "deadline_passed": "Overdrachten voor dit ticket zijn gesloten.",
+      "event_ended": "Het evenement is afgelopen.",
+      "ticket_void": "Dit ticket is niet meer geldig.",
+      "amount_required": "Vul een bedrag van minstens 0,01 in.",
+      "amount_too_large": "Dat is meer dan er nog op deze bestelling gecrediteerd kan worden.",
+      "nothing_to_credit": "Er valt niets meer te crediteren op deze bestelling.",
+      "order_not_paid": "Alleen betaalde bestellingen kunnen worden gecrediteerd.",
+      "unknown_merge_field": "Het antwoord gebruikt een samenvoegveld dat niet bestaat. Gebruik alleen de genoemde velden.",
+      "name_taken": "Je hebt al een macro met deze naam.",
+      "transfer_required": "Deze macro draagt een ticket over: kies het ticket en voor wie het is.",
+      "no_live_tickets": "Deze bestelling heeft geen geldige tickets om opnieuw te sturen."
+    },
+    "transfers": {
+      "title": "Overdrachten",
+      "description": "Geef een ticket aan iemand anders. Die persoon krijgt een link om het met zijn e-mailadres te claimen; daarna werken de oude QR-code, de korte code en de Wallet-pas niet meer en wordt het ticket op zijn naam opnieuw uitgegeven.",
+      "empty": "Er zijn geen tickets van deze bestelling overgedragen.",
+      "wallet": "Wallet-pas",
+      "walletLive": "Bijgewerkt",
+      "walletPending": "Wordt bijgewerkt",
+      "from": "Van",
+      "to": "Aan",
+      "by": "Gestart door",
+      "initiatedBy": {
+        "organizer": "Je team",
+        "holder": "De houder"
+      },
+      "fee": "kosten {amount}",
+      "state": {
+        "pending": "Wacht op claim",
+        "claimed": "Geclaimd",
+        "cancelled": "Geannuleerd",
+        "expired": "Link verlopen"
+      },
+      "until": "Link open tot {date}",
+      "actions": "Acties",
+      "cancel": "Overdracht annuleren",
+      "cancelled": "Overdracht geannuleerd.",
+      "ticket": "Ticket",
+      "toName": "Naam van de nieuwe houder",
+      "toEmail": "E-mail van de nieuwe houder",
+      "toEmailHint": "Het ticket wordt met dit adres geclaimd.",
+      "toNameInvalid": "Vul de naam van de nieuwe houder in.",
+      "toEmailInvalid": "Vul een geldig e-mailadres in.",
+      "started": "Overdracht gestart. {name} heeft per e-mail een link gekregen om het ticket te claimen.",
+      "link": "Claimlink (wordt één keer getoond)",
+      "submit": "Ticket overdragen"
+    },
+    "credit": {
+      "title": "Creditnota's",
+      "empty": "Geen creditnota's op deze bestelling.",
+      "number": "Nummer",
+      "dispositionCol": "Verrekend als",
+      "disposition": {
+        "store_credit": "Tegoed",
+        "refunded": "Terugbetaald"
+      },
+      "codeEnding": "Code eindigt op {last4}",
+      "balance": "Resterend tegoed",
+      "document": "Document",
+      "pdf": "{label} (pdf)",
+      "creditable": "Op deze bestelling kan nog tot {amount} worden gecrediteerd.",
+      "kindLegend": "Hoeveel",
+      "kind": {
+        "partial": "Een deel van de bestelling",
+        "full": "Alles wat er van de bestelling over is"
+      },
+      "amount": "Bedrag ({currency})",
+      "dispositionLegend": "Verrekenen als",
+      "reason": "Reden",
+      "reasonHint": "Staat op de creditnota en wordt aan de koper getoond (3–500 tekens).",
+      "issued": "Creditnota {label} uitgegeven. De koper heeft hem per e-mail ontvangen.",
+      "codeOnce": "Tegoedcode (wordt één keer getoond; de koper heeft hem per e-mail ontvangen)",
+      "reasonInvalid": "Schrijf een reden van 3 tot 500 tekens.",
+      "amountInvalid": "Vul een bedrag van minstens 0,01 in.",
+      "submit": "Creditnota uitgeven",
+      "financeTitle": "Creditnota's",
+      "financeEmpty": "Nog geen creditnota's.",
+      "financeTotals": "Creditnota's per valuta",
+      "financeRecent": "Nieuwste creditnota's",
+      "currency": "Valuta",
+      "count": "Nota's",
+      "issuedTotal": "Uitgegeven",
+      "applied": "Besteed",
+      "outstanding": "Nog te besteden",
+      "issuedOn": "Uitgegeven op",
+      "buyer": "Koper",
+      "amountCol": "Bedrag"
+    },
+    "macros": {
+      "title": "Supportmacro's",
+      "description": "Opgeslagen antwoorden en de acties die erbij horen, in één stap vanuit een bestelling uitgevoerd. Samenvoegvelden vullen de gegevens van de bestelling in.",
+      "newTitle": "Nieuwe macro",
+      "listTitle": "Je macro's",
+      "noneTitle": "Nog geen macro's",
+      "noneDescription": "Maak er hierboven een: bijvoorbeeld 'Tickets opnieuw sturen', die de koper mailt, een notitie toevoegt en de tickets opnieuw stuurt.",
+      "manage": "Macro maken",
+      "runTitle": "Macro uitvoeren",
+      "choose": "Macro",
+      "preview": "Wat deze macro doet",
+      "does": "Doet: {actions}",
+      "action": {
+        "email_buyer": "De koper mailen",
+        "add_note": "Teamnotitie toevoegen",
+        "resend_tickets": "Tickets opnieuw sturen",
+        "transfer_ticket": "Een ticket overdragen"
+      },
+      "transferLegend": "Overdracht",
+      "ticket": "Ticket",
+      "toName": "Naam van de nieuwe houder",
+      "toEmail": "E-mail van de nieuwe houder",
+      "ran": "Macro '{name}' uitgevoerd.",
+      "link": "Claimlink (wordt één keer getoond)",
+      "transferRequired": "Kies het ticket en voor wie het is.",
+      "run": "Macro uitvoeren",
+      "name": "Naam",
+      "subject": "Onderwerp van de e-mail",
+      "body": "Antwoord",
+      "fieldsHint": "Samenvoegvelden:",
+      "actionsLegend": "Acties",
+      "saved": "Macro opgeslagen.",
+      "nameInvalid": "Geef de macro een naam van 2 tot 80 tekens.",
+      "actionsInvalid": "Kies minstens één actie.",
+      "subjectInvalid": "Schrijf een onderwerp.",
+      "bodyInvalid": "Schrijf het antwoord.",
+      "update": "Wijzigingen opslaan",
+      "create": "Macro maken",
+      "archive": "{name} archiveren",
+      "archived": "Macro gearchiveerd."
+    },
+    "holder": {
+      "title": "Dit ticket overdragen",
+      "pending": "Wacht tot {name} het claimt.",
+      "cancel": "Overdracht annuleren",
+      "cancelled": "Overdracht geannuleerd.",
+      "until": "Overdrachten sluiten op {date}",
+      "fee": "overdrachtskosten {fee}",
+      "refused": {
+        "not_allowed": "Dit ticket kan niet worden overgedragen.",
+        "deadline_passed": "Overdrachten voor dit ticket zijn gesloten.",
+        "event_ended": "Het evenement is afgelopen.",
+        "ticket_void": "Dit ticket is niet meer geldig."
+      },
+      "toName": "Naam",
+      "toEmail": "E-mail",
+      "acceptFee": "Ik ga akkoord met de overdrachtskosten van {fee}.",
+      "sent": "Verstuurd. {name} heeft per e-mail een link gekregen om het ticket te claimen.",
+      "toNameInvalid": "Vul de naam in.",
+      "toEmailInvalid": "Vul een geldig e-mailadres in.",
+      "submit": "Overdracht versturen"
+    },
+    "rules": {
+      "title": "Overdrachtsregels",
+      "description": "Of tickethouders tickets van elk type zelf mogen overdragen, tot hoelang voor het evenement en tegen welke kosten. Je team kan altijd overdragen vanuit een bestelling.",
+      "column": "Overdrachten",
+      "summaryAllowed": "Toegestaan",
+      "summaryCutoff": "tot {hours} u vooraf",
+      "summaryFee": "kosten {fee}",
+      "summaryOff": "Niet toegestaan",
+      "formLabel": "Overdrachtsregels voor {name}",
+      "allowed": "Houders mogen overdragen",
+      "cutoff": "Sluiten (uur vooraf)",
+      "cutoffHint": "Leeg: tot het einde van het evenement.",
+      "fee": "Kosten ({currency})",
+      "feeHint": "Leeg: gratis.",
+      "save": "Regels opslaan",
+      "saved": "Regels opgeslagen.",
+      "cutoffInvalid": "Vul hele uren in (0–8760).",
+      "feeInvalid": "Vul een bedrag in of laat het leeg."
+    },
+    "disputes": {
+      "title": "Geschillen",
+      "description": "Terugboekingen op je bestellingen met hun deadlines voor bewijs. Stel het bewijs samen vanuit de bestelling en dien het in vóór de deadline.",
+      "summary": "{open, plural, =0 {Geen open geschillen} one {# open geschil} other {# open geschillen}} · {soon, plural, =0 {geen binnen 3 dagen} one {# binnen 3 dagen} other {# binnen 3 dagen}}",
+      "tabsLabel": "Status van het geschil",
+      "tabs": {
+        "open": "Open ({count})",
+        "closed": "Gesloten ({count})"
+      },
+      "empty": {
+        "open": "Geen open geschillen.",
+        "closed": "Geen gesloten geschillen."
+      },
+      "caption": {
+        "open": "Open geschillen, eerstvolgende deadline eerst",
+        "closed": "Gesloten geschillen, nieuwste eerst"
+      },
+      "buyer": "Koper",
+      "amount": "Bedrag",
+      "reason": "Reden",
+      "status": "Status",
+      "deadline": "Bewijs vóór",
+      "action": "Actie",
+      "respond": "Bewijs samenstellen en indienen",
+      "submitted": "Bewijs ingediend",
+      "noDeadline": "Geen deadline",
+      "overdue": "Deadline verstreken",
+      "hoursLeft": "{hours, plural, =0 {Minder dan een uur over} one {# uur over} other {# uur over}}",
+      "daysLeft": "{days, plural, one {# dag over} other {# dagen over}}"
+    },
+    "claim": {
+      "intro": "{from} draagt dit ticket over aan {to}. Claim het met het e-mailadres waarnaar het is gestuurd: je krijgt je eigen QR-code en de oude werkt niet meer.",
+      "emailHint": "Het adres waarnaar deze overdracht is gestuurd.",
+      "emailMismatch": "Gebruik het e-mailadres waarnaar dit ticket is gestuurd."
+    },
+    "buyer": {
+      "title": "Creditnota's",
+      "storeCredit": "Resterend tegoed: {balance}. Gebruik deze code bij het afrekenen van een volgende bestelling:",
+      "refunded": "Dit bedrag is aan je terugbetaald."
+    },
+    "pdf": {
+      "title": "Creditnota {label}",
+      "number": "Creditnotanummer",
+      "issued": "Uitgegeven",
+      "billedTo": "Klant",
+      "event": "Evenement",
+      "order": "Bestelling",
+      "orderTotal": "Totaal van de bestelling",
+      "kind": "Omvat",
+      "settlement": "Verrekend als",
+      "balance": "Resterend tegoed",
+      "reason": "Reden",
+      "amount": "Gecrediteerd bedrag",
+      "storeCreditNote": "Dit tegoed kan worden besteed aan een volgende bestelling bij dezelfde organisator met de tegoedcode die naar de klant is gestuurd.",
+      "refundedNote": "Dit bedrag is aan de klant terugbetaald.",
+      "footer": "Uitgegeven door {seller} via Yayatoh."
     }
   }
 }

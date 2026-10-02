@@ -192,6 +192,34 @@
     "campaigns.test": {
       "subject": "[测试] {subject}",
       "intro": "你的营销活动的测试发送。"
+    },
+    "orders.credit-note": {
+      "subject": "{eventName} 的贷记单 {number}",
+      "intro": "{org} 已为你在 {eventName} 的订单开具金额为 {amount} 的贷记单 {number}。{storeCredit, select, yes {在 {org} 的下一笔订单结账时输入代码 {code} 即可使用。} other {此金额已退还给你。}}",
+      "cta": "查看我的订单"
+    },
+    "orders.support-reply": {
+      "subject": "{subject}",
+      "intro": "{org} 关于你在 {eventName} 订单的消息:",
+      "cta": "查看我的订单"
+    },
+    "payments.dispute-deadline": {
+      "subject": "争议证据即将到期:{eventName}",
+      "intro": "{eventName} 一笔订单上金额为 {amount} 的争议证据将在 {hours, plural, =0 {不到一小时} other {# 小时}}后到期。请在截止前审核并提交。"
+    },
+    "ticketing.transfer-offered": {
+      "subject": "{fromName} 给你发送了 {eventName} 的门票",
+      "intro": "{fromName} 正在把 {eventName} 的一张门票转让给你。请使用此邮箱领取,即可获得你自己的二维码。",
+      "cta": "领取我的门票"
+    },
+    "ticketing.transfer-completed": {
+      "subject": "你的 {eventName} 门票已转让",
+      "intro": "{toName} 已领取你转让的 {eventName} 门票。你原来的二维码已失效。"
+    },
+    "ticketing.transfer-received": {
+      "subject": "你的 {eventName} 门票",
+      "intro": "你已领取 {fromName} 发送给你的 {eventName} 门票。你自己的二维码已准备好。",
+      "cta": "查看我的门票"
     }
   },
   "roles": {

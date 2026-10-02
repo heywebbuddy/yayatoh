@@ -36,6 +36,7 @@ import {
   Search,
   Send,
   Settings,
+  ShieldAlert,
   ShieldCheck,
   Star,
   Store,
@@ -43,6 +44,7 @@ import {
   Undo2,
   Users,
   Workflow,
+  Zap,
 } from 'lucide-react';
 
 /** Icon names used by the profiles registry (packages/platform/src/profiles). */
@@ -90,6 +92,8 @@ const ICONS: Record<string, LucideIcon> = {
   link: Link2,
   star: Star,
   undo: Undo2,
+  'shield-alert': ShieldAlert,
+  zap: Zap,
 };
 
 export function Icon({ name, className = 'size-4' }: { name: string; className?: string }) {

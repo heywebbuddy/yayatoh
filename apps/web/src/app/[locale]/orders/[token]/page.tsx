@@ -97,6 +97,40 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
       {order.transferred > 0 ? (
         <p className="text-body text-zinc-600">{t('order.transferred', { count: order.transferred })}</p>
       ) : null}
+      {order.creditNotes.length > 0 ? (
+        <section aria-labelledby="credit-notes-heading" className="flex flex-col gap-3">
+          <h2 id="credit-notes-heading" className="text-section">
+            {t('supportTools.buyer.title')}
+          </h2>
+          <ul className="flex list-none flex-col gap-3 p-0">
+            {order.creditNotes.map((c) => (
+              <li key={c.label}>
+                <Card className="flex flex-col gap-1">
+                  <p className="flex flex-wrap justify-between gap-2 text-body">
+                    <span className="font-medium">{c.label}</span>
+                    <span className="font-mono tabular-nums">
+                      {formatMoney(money(c.amountMinor, c.currency), locale)}
+                    </span>
+                  </p>
+                  <p className="text-caption text-zinc-600">{c.reason}</p>
+                  {c.disposition === 'store_credit' && c.code ? (
+                    <p className="text-body">
+                      {t('supportTools.buyer.storeCredit', {
+                        balance: formatMoney(money(c.balanceMinor, c.currency), locale),
+                      })}{' '}
+                      <span dir="ltr" className="font-mono">
+                        {c.code}
+                      </span>
+                    </p>
+                  ) : (
+                    <p className="text-caption text-zinc-600">{t('supportTools.buyer.refunded')}</p>
+                  )}
+                </Card>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
       {order.tickets.length > 0 ? (
         <section aria-labelledby="tickets-heading" className="flex flex-col gap-4">
           <h2 id="tickets-heading" className="text-section">

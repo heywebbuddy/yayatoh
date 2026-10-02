@@ -82,7 +82,9 @@
         "refund-declined": "Demande de remboursement refusée",
         "waitlist-joined": "Confirmation de la liste d’attente",
         "waitlist-offer": "Offre de la liste d’attente",
-        "waitlist-expired": "Offre de la liste d’attente expirée"
+        "waitlist-expired": "Offre de la liste d’attente expirée",
+        "credit-note": "Avoir",
+        "support-reply": "Réponse de l’assistance"
       },
       "events": {
         "reminder": "Rappel d’événement",
@@ -98,7 +100,10 @@
         "claim-link": "Lien de réclamation de billet",
         "holder-link": "Lien vers les billets",
         "tickets-resent": "Billets renvoyés",
-        "ticket-cancelled": "Billet annulé"
+        "ticket-cancelled": "Billet annulé",
+        "transfer-offered": "Transfert de billet",
+        "transfer-completed": "Billet transféré",
+        "transfer-received": "Billet reçu par transfert"
       },
       "attendees": {
         "message": "Message de l’organisateur"
@@ -119,7 +124,8 @@
         "finder-code": "Code de recherche de place"
       },
       "payments": {
-        "destination-changed": "Changement de compte de versement"
+        "destination-changed": "Changement de compte de versement",
+        "dispute-deadline": "Alerte d’échéance de litige"
       },
       "surveys": {
         "invite": "Invitation à une enquête",
@@ -295,7 +301,9 @@
     "alerts": "Alertes",
     "sendingSetup": "Configuration d'envoi",
     "campaigns": "Campagnes",
-    "journeys": "Parcours"
+    "journeys": "Parcours",
+    "disputes": "Litiges",
+    "supportMacros": "Macros d’assistance"
   },
   "vocab": {
     "attendee": "Participant",
@@ -878,7 +886,9 @@
     "dateSoldOut": "Cette date vient d’être complète. Choisissez-en une autre.",
     "dateUnavailable": "Cette date n’est plus disponible. Choisissez-en une autre.",
     "orgUnavailable": "Cet organisateur ne vend pas de billets pour le moment. Les billets déjà achetés restent valables.",
-    "riskBlocked": "Nous ne pouvons pas accepter cette commande. Contactez l’organisateur."
+    "riskBlocked": "Nous ne pouvons pas accepter cette commande. Contactez l’organisateur.",
+    "creditInvalid": "Ce code de crédit boutique n’est pas valide ou a déjà été utilisé.",
+    "creditNotApplicable": "Ce crédit boutique ne peut pas être utilisé pour ces billets."
   },
   "fakePay": {
     "eyebrow": "Paiement test",
@@ -1753,7 +1763,18 @@
     "noMessages": "Aucun message n’a été envoyé à l’acheteur au sujet de cette commande.",
     "message": "Message",
     "channel": "Canal",
-    "trimmed": "{n, plural, one {# ligne supplémentaire omise} other {# lignes supplémentaires omises}} pour respecter la limite de pages des réseaux de cartes."
+    "trimmed": "{n, plural, one {# ligne supplémentaire omise} other {# lignes supplémentaires omises}} pour respecter la limite de pages des réseaux de cartes.",
+    "termsAtPurchase": "Conditions de remboursement à l’achat",
+    "termsUnset": "Aucune politique de remboursement n’était affichée",
+    "termsNone": "Aucun remboursement",
+    "termsUntil": "Remboursements jusqu’à {days} jours avant l’événement",
+    "termsAlways": "Remboursements à tout moment avant l’événement",
+    "termsKept": "Retenu par billet",
+    "transfers": "Transferts de billets",
+    "transferFrom": "De",
+    "transferTo": "À",
+    "transferState": "État",
+    "transferClaimed": "Récupéré"
   },
   "boxOffice": {
     "title": "Billetterie sur place",
@@ -5126,7 +5147,11 @@
         "dispute_evidence_submitted": "Preuves de la rétrofacturation envoyées",
         "dispute_won": "Rétrofacturation gagnée",
         "dispute_lost": "Rétrofacturation perdue",
-        "note": "Note"
+        "note": "Note",
+        "credit_note_issued": "Avoir émis",
+        "credit_applied": "Crédit boutique utilisé",
+        "credit_released": "Crédit boutique rendu",
+        "macro_run": "Macro d’assistance exécutée"
       }
     },
     "notes": {
@@ -6917,6 +6942,239 @@
       "event_missing": "Événement introuvable",
       "error": "Échec après plusieurs essais",
       "other": "Autre"
+    }
+  },
+  "supportTools": {
+    "reasons": {
+      "same_holder": "Cette personne détient déjà le billet.",
+      "fee_not_accepted": "Cochez la case pour accepter les frais de transfert.",
+      "fee_required": "Ce billet a des frais de transfert : transférez-le plutôt par nom.",
+      "not_allowed": "Ce type de billet ne peut pas être transféré.",
+      "deadline_passed": "Les transferts de ce billet sont fermés.",
+      "event_ended": "L’événement est terminé.",
+      "ticket_void": "Ce billet n’est plus valide.",
+      "amount_required": "Saisissez un montant d’au moins 0,01.",
+      "amount_too_large": "C’est plus que ce qui peut encore être crédité sur cette commande.",
+      "nothing_to_credit": "Il ne reste rien à créditer sur cette commande.",
+      "order_not_paid": "Seules les commandes payées peuvent être créditées.",
+      "unknown_merge_field": "La réponse utilise un champ de fusion qui n’existe pas. N’utilisez que les champs indiqués.",
+      "name_taken": "Vous avez déjà une macro portant ce nom.",
+      "transfer_required": "Cette macro transfère un billet : choisissez le billet et son destinataire.",
+      "no_live_tickets": "Cette commande n’a aucun billet valide à renvoyer."
+    },
+    "transfers": {
+      "title": "Transferts",
+      "description": "Donnez un billet à quelqu’un d’autre. La personne reçoit un lien pour le récupérer avec son adresse e-mail ; ensuite, l’ancien code QR, le code court et le pass Wallet ne fonctionnent plus et le billet est réémis à son nom.",
+      "empty": "Aucun billet de cette commande n’a été transféré.",
+      "wallet": "Pass Wallet",
+      "walletLive": "Mis à jour",
+      "walletPending": "Mise à jour en cours",
+      "from": "De",
+      "to": "À",
+      "by": "Lancé par",
+      "initiatedBy": {
+        "organizer": "Votre équipe",
+        "holder": "Le détenteur"
+      },
+      "fee": "frais {amount}",
+      "state": {
+        "pending": "En attente de récupération",
+        "claimed": "Récupéré",
+        "cancelled": "Annulé",
+        "expired": "Lien expiré"
+      },
+      "until": "Lien ouvert jusqu’au {date}",
+      "actions": "Actions",
+      "cancel": "Annuler le transfert",
+      "cancelled": "Transfert annulé.",
+      "ticket": "Billet",
+      "toName": "Nom du nouveau détenteur",
+      "toEmail": "E-mail du nouveau détenteur",
+      "toEmailHint": "Le billet se récupère avec cette adresse.",
+      "toNameInvalid": "Saisissez le nom du nouveau détenteur.",
+      "toEmailInvalid": "Saisissez une adresse e-mail valide.",
+      "started": "Transfert lancé. {name} a reçu par e-mail un lien pour récupérer le billet.",
+      "link": "Lien de récupération (affiché une seule fois)",
+      "submit": "Transférer le billet"
+    },
+    "credit": {
+      "title": "Avoirs",
+      "empty": "Aucun avoir sur cette commande.",
+      "number": "Numéro",
+      "dispositionCol": "Réglé en",
+      "disposition": {
+        "store_credit": "Crédit boutique",
+        "refunded": "Remboursé"
+      },
+      "codeEnding": "Code se terminant par {last4}",
+      "balance": "Crédit restant",
+      "document": "Document",
+      "pdf": "{label} (PDF)",
+      "creditable": "Jusqu’à {amount} peuvent encore être crédités sur cette commande.",
+      "kindLegend": "Combien",
+      "kind": {
+        "partial": "Une partie de la commande",
+        "full": "Tout ce qui reste sur la commande"
+      },
+      "amount": "Montant ({currency})",
+      "dispositionLegend": "Régler en",
+      "reason": "Motif",
+      "reasonHint": "Affiché sur l’avoir et à l’acheteur (3 à 500 caractères).",
+      "issued": "Avoir {label} émis. L’acheteur l’a reçu par e-mail.",
+      "codeOnce": "Code de crédit boutique (affiché une seule fois ; l’acheteur l’a reçu par e-mail)",
+      "reasonInvalid": "Saisissez un motif de 3 à 500 caractères.",
+      "amountInvalid": "Saisissez un montant d’au moins 0,01.",
+      "submit": "Émettre l’avoir",
+      "financeTitle": "Avoirs",
+      "financeEmpty": "Aucun avoir pour l’instant.",
+      "financeTotals": "Avoirs par devise",
+      "financeRecent": "Derniers avoirs",
+      "currency": "Devise",
+      "count": "Avoirs",
+      "issuedTotal": "Émis",
+      "applied": "Utilisé",
+      "outstanding": "Reste à utiliser",
+      "issuedOn": "Émis le",
+      "buyer": "Acheteur",
+      "amountCol": "Montant"
+    },
+    "macros": {
+      "title": "Macros d’assistance",
+      "description": "Des réponses enregistrées et les actions qui vont avec, exécutées depuis une commande en une seule étape. Les champs de fusion reprennent les détails de la commande.",
+      "newTitle": "Nouvelle macro",
+      "listTitle": "Vos macros",
+      "noneTitle": "Aucune macro pour l’instant",
+      "noneDescription": "Créez-en une ci-dessus : par exemple « Renvoyer les billets », qui écrit à l’acheteur, ajoute une note et renvoie ses billets.",
+      "manage": "Créer une macro",
+      "runTitle": "Exécuter une macro",
+      "choose": "Macro",
+      "preview": "Ce que fait cette macro",
+      "does": "Fait : {actions}",
+      "action": {
+        "email_buyer": "Écrire à l’acheteur",
+        "add_note": "Ajouter une note d’équipe",
+        "resend_tickets": "Renvoyer les billets",
+        "transfer_ticket": "Transférer un billet"
+      },
+      "transferLegend": "Transfert",
+      "ticket": "Billet",
+      "toName": "Nom du nouveau détenteur",
+      "toEmail": "E-mail du nouveau détenteur",
+      "ran": "Macro « {name} » exécutée.",
+      "link": "Lien de récupération (affiché une seule fois)",
+      "transferRequired": "Choisissez le billet et son destinataire.",
+      "run": "Exécuter la macro",
+      "name": "Nom",
+      "subject": "Objet de l’e-mail",
+      "body": "Réponse",
+      "fieldsHint": "Champs de fusion :",
+      "actionsLegend": "Actions",
+      "saved": "Macro enregistrée.",
+      "nameInvalid": "Donnez à la macro un nom de 2 à 80 caractères.",
+      "actionsInvalid": "Choisissez au moins une action.",
+      "subjectInvalid": "Saisissez un objet.",
+      "bodyInvalid": "Rédigez la réponse.",
+      "update": "Enregistrer les modifications",
+      "create": "Créer la macro",
+      "archive": "Archiver {name}",
+      "archived": "Macro archivée."
+    },
+    "holder": {
+      "title": "Transférer ce billet",
+      "pending": "En attente de récupération par {name}.",
+      "cancel": "Annuler le transfert",
+      "cancelled": "Transfert annulé.",
+      "until": "Les transferts ferment le {date}",
+      "fee": "frais de transfert {fee}",
+      "refused": {
+        "not_allowed": "Ce billet ne peut pas être transféré.",
+        "deadline_passed": "Les transferts de ce billet sont fermés.",
+        "event_ended": "L’événement est terminé.",
+        "ticket_void": "Ce billet n’est plus valide."
+      },
+      "toName": "Son nom",
+      "toEmail": "Son e-mail",
+      "acceptFee": "J’accepte de payer les frais de transfert de {fee}.",
+      "sent": "Envoyé. {name} a reçu par e-mail un lien pour récupérer le billet.",
+      "toNameInvalid": "Saisissez son nom.",
+      "toEmailInvalid": "Saisissez une adresse e-mail valide.",
+      "submit": "Envoyer le transfert"
+    },
+    "rules": {
+      "title": "Règles de transfert",
+      "description": "Si les détenteurs peuvent transférer eux-mêmes les billets de chaque type, jusqu’à combien de temps avant l’événement et pour quels frais. Votre équipe peut toujours transférer depuis une commande.",
+      "column": "Transferts",
+      "summaryAllowed": "Autorisés",
+      "summaryCutoff": "jusqu’à {hours} h avant",
+      "summaryFee": "frais {fee}",
+      "summaryOff": "Non autorisés",
+      "formLabel": "Règles de transfert pour {name}",
+      "allowed": "Les détenteurs peuvent transférer",
+      "cutoff": "Fermeture (heures avant)",
+      "cutoffHint": "Vide : jusqu’à la fin de l’événement.",
+      "fee": "Frais ({currency})",
+      "feeHint": "Vide : gratuit.",
+      "save": "Enregistrer les règles",
+      "saved": "Règles enregistrées.",
+      "cutoffInvalid": "Saisissez un nombre d’heures entier (0–8760).",
+      "feeInvalid": "Saisissez un montant ou laissez vide."
+    },
+    "disputes": {
+      "title": "Litiges",
+      "description": "Les rétrofacturations sur vos commandes avec leurs échéances de preuves. Constituez les preuves à partir de la commande et envoyez-les avant l’échéance.",
+      "summary": "{open, plural, =0 {Aucun litige ouvert} one {# litige ouvert} other {# litiges ouverts}} · {soon, plural, =0 {aucun dû sous 3 jours} one {# dû sous 3 jours} other {# dus sous 3 jours}}",
+      "tabsLabel": "Statut du litige",
+      "tabs": {
+        "open": "Ouverts ({count})",
+        "closed": "Clos ({count})"
+      },
+      "empty": {
+        "open": "Aucun litige ouvert.",
+        "closed": "Aucun litige clos."
+      },
+      "caption": {
+        "open": "Litiges ouverts, échéance la plus proche en premier",
+        "closed": "Litiges clos, les plus récents en premier"
+      },
+      "buyer": "Acheteur",
+      "amount": "Montant",
+      "reason": "Motif",
+      "status": "Statut",
+      "deadline": "Preuves dues le",
+      "action": "Action",
+      "respond": "Constituer et envoyer les preuves",
+      "submitted": "Preuves envoyées",
+      "noDeadline": "Pas d’échéance",
+      "overdue": "Échéance dépassée",
+      "hoursLeft": "{hours, plural, =0 {Moins d’une heure restante} one {# heure restante} other {# heures restantes}}",
+      "daysLeft": "{days, plural, one {# jour restant} other {# jours restants}}"
+    },
+    "claim": {
+      "intro": "{from} transfère ce billet à {to}. Récupérez-le avec l’adresse e-mail à laquelle il a été envoyé : vous obtenez votre propre code QR et l’ancien ne fonctionne plus.",
+      "emailHint": "L’adresse à laquelle ce transfert a été envoyé.",
+      "emailMismatch": "Utilisez l’adresse e-mail à laquelle ce billet a été envoyé."
+    },
+    "buyer": {
+      "title": "Avoirs",
+      "storeCredit": "Crédit boutique restant : {balance}. Utilisez ce code au paiement d’une prochaine commande :",
+      "refunded": "Ce montant vous a été remboursé."
+    },
+    "pdf": {
+      "title": "Avoir {label}",
+      "number": "Numéro d’avoir",
+      "issued": "Émis le",
+      "billedTo": "Client",
+      "event": "Événement",
+      "order": "Commande",
+      "orderTotal": "Total de la commande",
+      "kind": "Couvre",
+      "settlement": "Réglé en",
+      "balance": "Crédit restant",
+      "reason": "Motif",
+      "amount": "Montant de l’avoir",
+      "storeCreditNote": "Ce crédit peut être utilisé sur une prochaine commande auprès du même organisateur grâce au code de crédit boutique envoyé au client.",
+      "refundedNote": "Ce montant a été remboursé au client.",
+      "footer": "Émis par {seller} via Yayatoh."
     }
   }
 }

@@ -192,6 +192,34 @@
     "campaigns.test": {
       "subject": "[Teste] {subject}",
       "intro": "Um envio de teste da sua campanha."
+    },
+    "orders.credit-note": {
+      "subject": "Nota de crédito {number} para {eventName}",
+      "intro": "{org} emitiu a nota de crédito {number} de {amount} no seu pedido para {eventName}. {storeCredit, select, yes {Use o código {code} no pagamento para usá-la num próximo pedido com {org}.} other {Este valor foi reembolsado a você.}}",
+      "cta": "Ver meu pedido"
+    },
+    "orders.support-reply": {
+      "subject": "{subject}",
+      "intro": "Uma mensagem de {org} sobre o seu pedido para {eventName}:",
+      "cta": "Ver meu pedido"
+    },
+    "payments.dispute-deadline": {
+      "subject": "Provas da contestação a vencer: {eventName}",
+      "intro": "As provas de uma contestação de {amount} num pedido para {eventName} vencem em {hours, plural, =0 {menos de uma hora} one {# hora} other {# horas}}. Revise-as e envie-as antes do prazo."
+    },
+    "ticketing.transfer-offered": {
+      "subject": "{fromName} enviou um ingresso para {eventName}",
+      "intro": "{fromName} está transferindo um ingresso para {eventName} para você. Resgate-o com este e-mail para receber o seu próprio código QR.",
+      "cta": "Resgatar meu ingresso"
+    },
+    "ticketing.transfer-completed": {
+      "subject": "Seu ingresso para {eventName} foi transferido",
+      "intro": "{toName} resgatou o ingresso que você transferiu para {eventName}. Seu código QR antigo não funciona mais."
+    },
+    "ticketing.transfer-received": {
+      "subject": "Seu ingresso para {eventName}",
+      "intro": "Você resgatou o ingresso que {fromName} enviou para {eventName}. Seu próprio código QR está pronto.",
+      "cta": "Ver meu ingresso"
     }
   },
   "roles": {

@@ -82,7 +82,9 @@
         "refund-declined": "Richiesta di rimborso rifiutata",
         "waitlist-joined": "Conferma della lista d’attesa",
         "waitlist-offer": "Offerta dalla lista d’attesa",
-        "waitlist-expired": "Offerta dalla lista d’attesa scaduta"
+        "waitlist-expired": "Offerta dalla lista d’attesa scaduta",
+        "credit-note": "Nota di credito",
+        "support-reply": "Risposta dell’assistenza"
       },
       "events": {
         "reminder": "Promemoria evento",
@@ -98,7 +100,10 @@
         "claim-link": "Link per riscattare il biglietto",
         "holder-link": "Link ai biglietti",
         "tickets-resent": "Biglietti inviati di nuovo",
-        "ticket-cancelled": "Biglietto annullato"
+        "ticket-cancelled": "Biglietto annullato",
+        "transfer-offered": "Trasferimento biglietto",
+        "transfer-completed": "Biglietto trasferito",
+        "transfer-received": "Biglietto ricevuto"
       },
       "attendees": {
         "message": "Messaggio dell’organizzatore"
@@ -119,7 +124,8 @@
         "finder-code": "Codice trova-posto"
       },
       "payments": {
-        "destination-changed": "Modifica del conto per i pagamenti"
+        "destination-changed": "Modifica del conto per i pagamenti",
+        "dispute-deadline": "Avviso di scadenza contestazione"
       },
       "surveys": {
         "invite": "Invito al sondaggio",
@@ -295,7 +301,9 @@
     "alerts": "Avvisi",
     "sendingSetup": "Impostazioni di invio",
     "campaigns": "Campagne",
-    "journeys": "Percorsi"
+    "journeys": "Percorsi",
+    "disputes": "Contestazioni",
+    "supportMacros": "Macro di assistenza"
   },
   "vocab": {
     "attendee": "Partecipante",
@@ -878,7 +886,9 @@
     "dateSoldOut": "Questa data è appena esaurita. Scegline un’altra.",
     "dateUnavailable": "Questa data non è più disponibile. Scegline un’altra.",
     "orgUnavailable": "Questo organizzatore non sta vendendo biglietti in questo momento. I biglietti già acquistati restano validi.",
-    "riskBlocked": "Non possiamo accettare questo ordine. Contatta l’organizzatore."
+    "riskBlocked": "Non possiamo accettare questo ordine. Contatta l’organizzatore.",
+    "creditInvalid": "Questo codice credito negozio non è valido o è già stato usato.",
+    "creditNotApplicable": "Questo credito negozio non può essere usato per questi biglietti."
   },
   "fakePay": {
     "eyebrow": "Pagamento di prova",
@@ -1753,7 +1763,18 @@
     "noMessages": "Nessun messaggio inviato all’acquirente per questo ordine.",
     "message": "Messaggio",
     "channel": "Canale",
-    "trimmed": "{n, plural, one {# altra riga omessa} other {# altre righe omesse}} per rispettare il limite di pagine dei circuiti."
+    "trimmed": "{n, plural, one {# altra riga omessa} other {# altre righe omesse}} per rispettare il limite di pagine dei circuiti.",
+    "termsAtPurchase": "Condizioni di rimborso all’acquisto",
+    "termsUnset": "Non era mostrata alcuna politica di rimborso",
+    "termsNone": "Nessun rimborso",
+    "termsUntil": "Rimborsi fino a {days} giorni prima dell’evento",
+    "termsAlways": "Rimborsi in qualsiasi momento prima dell’evento",
+    "termsKept": "Trattenuto per biglietto",
+    "transfers": "Trasferimenti di biglietti",
+    "transferFrom": "Da",
+    "transferTo": "A",
+    "transferState": "Stato",
+    "transferClaimed": "Riscattato"
   },
   "boxOffice": {
     "title": "Botteghino",
@@ -5126,7 +5147,11 @@
         "dispute_evidence_submitted": "Prove del chargeback inviate",
         "dispute_won": "Chargeback vinto",
         "dispute_lost": "Chargeback perso",
-        "note": "Nota"
+        "note": "Nota",
+        "credit_note_issued": "Nota di credito emessa",
+        "credit_applied": "Credito negozio usato",
+        "credit_released": "Credito negozio restituito",
+        "macro_run": "Macro di assistenza eseguita"
       }
     },
     "notes": {
@@ -6917,6 +6942,239 @@
       "event_missing": "Evento non trovato",
       "error": "Non riuscito dopo diversi tentativi",
       "other": "Altro"
+    }
+  },
+  "supportTools": {
+    "reasons": {
+      "same_holder": "Questa persona ha già il biglietto.",
+      "fee_not_accepted": "Spunta la casella per accettare la commissione di trasferimento.",
+      "fee_required": "Questo biglietto ha una commissione di trasferimento: trasferiscilo per nome.",
+      "not_allowed": "Questo tipo di biglietto non può essere trasferito.",
+      "deadline_passed": "I trasferimenti per questo biglietto sono chiusi.",
+      "event_ended": "L’evento è terminato.",
+      "ticket_void": "Questo biglietto non è più valido.",
+      "amount_required": "Inserisci un importo di almeno 0,01.",
+      "amount_too_large": "È più di quanto si può ancora accreditare su questo ordine.",
+      "nothing_to_credit": "Non resta nulla da accreditare su questo ordine.",
+      "order_not_paid": "Solo gli ordini pagati possono essere accreditati.",
+      "unknown_merge_field": "La risposta usa un campo di unione che non esiste. Usa solo i campi elencati.",
+      "name_taken": "Hai già una macro con questo nome.",
+      "transfer_required": "Questa macro trasferisce un biglietto: scegli il biglietto e il destinatario.",
+      "no_live_tickets": "Questo ordine non ha biglietti validi da reinviare."
+    },
+    "transfers": {
+      "title": "Trasferimenti",
+      "description": "Passa un biglietto a qualcun altro. Riceve un link per riscattarlo con il suo indirizzo email; a quel punto il vecchio codice QR, il codice breve e il pass Wallet smettono di funzionare e il biglietto viene riemesso a suo nome.",
+      "empty": "Nessun biglietto di questo ordine è stato trasferito.",
+      "wallet": "Pass Wallet",
+      "walletLive": "Aggiornato",
+      "walletPending": "In aggiornamento",
+      "from": "Da",
+      "to": "A",
+      "by": "Avviato da",
+      "initiatedBy": {
+        "organizer": "Il tuo team",
+        "holder": "Il titolare"
+      },
+      "fee": "commissione {amount}",
+      "state": {
+        "pending": "In attesa di riscatto",
+        "claimed": "Riscattato",
+        "cancelled": "Annullato",
+        "expired": "Link scaduto"
+      },
+      "until": "Link aperto fino al {date}",
+      "actions": "Azioni",
+      "cancel": "Annulla trasferimento",
+      "cancelled": "Trasferimento annullato.",
+      "ticket": "Biglietto",
+      "toName": "Nome del nuovo titolare",
+      "toEmail": "Email del nuovo titolare",
+      "toEmailHint": "Riscatta il biglietto con questo indirizzo.",
+      "toNameInvalid": "Inserisci il nome del nuovo titolare.",
+      "toEmailInvalid": "Inserisci un indirizzo email valido.",
+      "started": "Trasferimento avviato. {name} ha ricevuto via email un link per riscattare il biglietto.",
+      "link": "Link di riscatto (mostrato una volta)",
+      "submit": "Trasferisci biglietto"
+    },
+    "credit": {
+      "title": "Note di credito",
+      "empty": "Nessuna nota di credito su questo ordine.",
+      "number": "Numero",
+      "dispositionCol": "Saldata come",
+      "disposition": {
+        "store_credit": "Credito negozio",
+        "refunded": "Rimborsata"
+      },
+      "codeEnding": "Codice che termina con {last4}",
+      "balance": "Credito residuo",
+      "document": "Documento",
+      "pdf": "{label} (PDF)",
+      "creditable": "Su questo ordine si possono ancora accreditare fino a {amount}.",
+      "kindLegend": "Quanto",
+      "kind": {
+        "partial": "Parte dell’ordine",
+        "full": "Tutto ciò che resta dell’ordine"
+      },
+      "amount": "Importo ({currency})",
+      "dispositionLegend": "Salda come",
+      "reason": "Motivo",
+      "reasonHint": "Compare sulla nota di credito e lo vede l’acquirente (3–500 caratteri).",
+      "issued": "Nota di credito {label} emessa. L’acquirente l’ha ricevuta via email.",
+      "codeOnce": "Codice credito negozio (mostrato una volta; l’acquirente l’ha ricevuto via email)",
+      "reasonInvalid": "Scrivi un motivo da 3 a 500 caratteri.",
+      "amountInvalid": "Inserisci un importo di almeno 0,01.",
+      "submit": "Emetti nota di credito",
+      "financeTitle": "Note di credito",
+      "financeEmpty": "Ancora nessuna nota di credito.",
+      "financeTotals": "Note di credito per valuta",
+      "financeRecent": "Ultime note di credito",
+      "currency": "Valuta",
+      "count": "Note",
+      "issuedTotal": "Emesso",
+      "applied": "Usato",
+      "outstanding": "Da usare",
+      "issuedOn": "Emessa il",
+      "buyer": "Acquirente",
+      "amountCol": "Importo"
+    },
+    "macros": {
+      "title": "Macro di assistenza",
+      "description": "Risposte salvate e le azioni che le accompagnano, eseguite da un ordine in un solo passaggio. I campi di unione inseriscono i dettagli dell’ordine.",
+      "newTitle": "Nuova macro",
+      "listTitle": "Le tue macro",
+      "noneTitle": "Ancora nessuna macro",
+      "noneDescription": "Creane una qui sopra: ad esempio «Reinvia biglietti», che scrive all’acquirente, aggiunge una nota e reinvia i biglietti.",
+      "manage": "Crea una macro",
+      "runTitle": "Esegui una macro",
+      "choose": "Macro",
+      "preview": "Cosa fa questa macro",
+      "does": "Fa: {actions}",
+      "action": {
+        "email_buyer": "Scrivere all’acquirente",
+        "add_note": "Aggiungere una nota del team",
+        "resend_tickets": "Reinviare i biglietti",
+        "transfer_ticket": "Trasferire un biglietto"
+      },
+      "transferLegend": "Trasferimento",
+      "ticket": "Biglietto",
+      "toName": "Nome del nuovo titolare",
+      "toEmail": "Email del nuovo titolare",
+      "ran": "Macro «{name}» eseguita.",
+      "link": "Link di riscatto (mostrato una volta)",
+      "transferRequired": "Scegli il biglietto e il destinatario.",
+      "run": "Esegui macro",
+      "name": "Nome",
+      "subject": "Oggetto dell’email",
+      "body": "Risposta",
+      "fieldsHint": "Campi di unione:",
+      "actionsLegend": "Azioni",
+      "saved": "Macro salvata.",
+      "nameInvalid": "Dai alla macro un nome da 2 a 80 caratteri.",
+      "actionsInvalid": "Scegli almeno un’azione.",
+      "subjectInvalid": "Scrivi un oggetto.",
+      "bodyInvalid": "Scrivi la risposta.",
+      "update": "Salva modifiche",
+      "create": "Crea macro",
+      "archive": "Archivia {name}",
+      "archived": "Macro archiviata."
+    },
+    "holder": {
+      "title": "Trasferisci questo biglietto",
+      "pending": "In attesa che {name} lo riscatti.",
+      "cancel": "Annulla trasferimento",
+      "cancelled": "Trasferimento annullato.",
+      "until": "I trasferimenti chiudono il {date}",
+      "fee": "commissione di trasferimento {fee}",
+      "refused": {
+        "not_allowed": "Questo biglietto non può essere trasferito.",
+        "deadline_passed": "I trasferimenti per questo biglietto sono chiusi.",
+        "event_ended": "L’evento è terminato.",
+        "ticket_void": "Questo biglietto non è più valido."
+      },
+      "toName": "Il suo nome",
+      "toEmail": "La sua email",
+      "acceptFee": "Accetto di pagare la commissione di trasferimento di {fee}.",
+      "sent": "Inviato. {name} ha ricevuto via email un link per riscattare il biglietto.",
+      "toNameInvalid": "Inserisci il nome.",
+      "toEmailInvalid": "Inserisci un indirizzo email valido.",
+      "submit": "Invia trasferimento"
+    },
+    "rules": {
+      "title": "Regole di trasferimento",
+      "description": "Se i titolari possono trasferire da soli i biglietti di ogni tipo, fino a quanto prima dell’evento e con quale commissione. Il tuo team può sempre trasferire da un ordine.",
+      "column": "Trasferimenti",
+      "summaryAllowed": "Consentiti",
+      "summaryCutoff": "fino a {hours} h prima",
+      "summaryFee": "commissione {fee}",
+      "summaryOff": "Non consentiti",
+      "formLabel": "Regole di trasferimento per {name}",
+      "allowed": "I titolari possono trasferire",
+      "cutoff": "Chiusura (ore prima)",
+      "cutoffHint": "Vuoto: fino alla fine dell’evento.",
+      "fee": "Commissione ({currency})",
+      "feeHint": "Vuoto: gratis.",
+      "save": "Salva regole",
+      "saved": "Regole salvate.",
+      "cutoffInvalid": "Inserisci ore intere (0–8760).",
+      "feeInvalid": "Inserisci un importo o lascia vuoto."
+    },
+    "disputes": {
+      "title": "Contestazioni",
+      "description": "Gli storni sui tuoi ordini con le scadenze delle prove. Prepara le prove dall’ordine e inviale prima della scadenza.",
+      "summary": "{open, plural, =0 {Nessuna contestazione aperta} one {# contestazione aperta} other {# contestazioni aperte}} · {soon, plural, =0 {nessuna in scadenza entro 3 giorni} one {# in scadenza entro 3 giorni} other {# in scadenza entro 3 giorni}}",
+      "tabsLabel": "Stato della contestazione",
+      "tabs": {
+        "open": "Aperte ({count})",
+        "closed": "Chiuse ({count})"
+      },
+      "empty": {
+        "open": "Nessuna contestazione aperta.",
+        "closed": "Nessuna contestazione chiusa."
+      },
+      "caption": {
+        "open": "Contestazioni aperte, scadenza più vicina per prima",
+        "closed": "Contestazioni chiuse, più recenti per prime"
+      },
+      "buyer": "Acquirente",
+      "amount": "Importo",
+      "reason": "Motivo",
+      "status": "Stato",
+      "deadline": "Prove entro",
+      "action": "Azione",
+      "respond": "Prepara e invia le prove",
+      "submitted": "Prove inviate",
+      "noDeadline": "Nessuna scadenza",
+      "overdue": "Scadenza superata",
+      "hoursLeft": "{hours, plural, =0 {Meno di un’ora rimasta} one {# ora rimasta} other {# ore rimaste}}",
+      "daysLeft": "{days, plural, one {# giorno rimasto} other {# giorni rimasti}}"
+    },
+    "claim": {
+      "intro": "{from} sta trasferendo questo biglietto a {to}. Riscattalo con l’indirizzo email a cui è stato inviato: ottieni il tuo codice QR e quello vecchio smette di funzionare.",
+      "emailHint": "L’indirizzo a cui è stato inviato questo trasferimento.",
+      "emailMismatch": "Usa l’indirizzo email a cui è stato inviato questo biglietto."
+    },
+    "buyer": {
+      "title": "Note di credito",
+      "storeCredit": "Credito negozio residuo: {balance}. Usa questo codice al pagamento di un prossimo ordine:",
+      "refunded": "Questo importo ti è stato rimborsato."
+    },
+    "pdf": {
+      "title": "Nota di credito {label}",
+      "number": "Numero nota di credito",
+      "issued": "Emessa",
+      "billedTo": "Cliente",
+      "event": "Evento",
+      "order": "Ordine",
+      "orderTotal": "Totale ordine",
+      "kind": "Copre",
+      "settlement": "Saldata come",
+      "balance": "Credito residuo",
+      "reason": "Motivo",
+      "amount": "Importo accreditato",
+      "storeCreditNote": "Questo credito può essere usato per un prossimo ordine con lo stesso organizzatore tramite il codice credito negozio inviato al cliente.",
+      "refundedNote": "Questo importo è stato rimborsato al cliente.",
+      "footer": "Emessa da {seller} tramite Yayatoh."
     }
   }
 }

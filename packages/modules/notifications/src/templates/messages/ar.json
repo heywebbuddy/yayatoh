@@ -192,6 +192,34 @@
     "campaigns.test": {
       "subject": "[تجربة] {subject}",
       "intro": "إرسال تجريبي لحملتك."
+    },
+    "orders.credit-note": {
+      "subject": "إشعار دائن {number} لفعالية {eventName}",
+      "intro": "أصدر {org} إشعارًا دائنًا {number} بقيمة {amount} على طلبك لفعالية {eventName}. {storeCredit, select, yes {استخدم الرمز {code} عند الدفع لاستعماله في طلب قادم لدى {org}.} other {تمت إعادة هذا المبلغ إليك.}}",
+      "cta": "عرض طلبي"
+    },
+    "orders.support-reply": {
+      "subject": "{subject}",
+      "intro": "رسالة من {org} بشأن طلبك لفعالية {eventName}:",
+      "cta": "عرض طلبي"
+    },
+    "payments.dispute-deadline": {
+      "subject": "موعد أدلة النزاع يقترب: {eventName}",
+      "intro": "يحين موعد أدلة نزاع بقيمة {amount} على طلب لفعالية {eventName} خلال {hours, plural, zero {أقل من ساعة} one {ساعة واحدة} two {ساعتين} few {# ساعات} many {# ساعة} other {# ساعة}}. راجعها وأرسلها قبل الموعد النهائي."
+    },
+    "ticketing.transfer-offered": {
+      "subject": "أرسل لك {fromName} تذكرة لفعالية {eventName}",
+      "intro": "ينقل إليك {fromName} تذكرة لفعالية {eventName}. استلمها بعنوان البريد الإلكتروني هذا لتحصل على رمز QR خاص بك.",
+      "cta": "استلام تذكرتي"
+    },
+    "ticketing.transfer-completed": {
+      "subject": "تم نقل تذكرتك لفعالية {eventName}",
+      "intro": "استلم {toName} التذكرة التي نقلتها لفعالية {eventName}. لم يعد رمز QR القديم صالحًا."
+    },
+    "ticketing.transfer-received": {
+      "subject": "تذكرتك لفعالية {eventName}",
+      "intro": "استلمت التذكرة التي أرسلها لك {fromName} لفعالية {eventName}. رمز QR الخاص بك جاهز.",
+      "cta": "عرض تذكرتي"
     }
   },
   "roles": {

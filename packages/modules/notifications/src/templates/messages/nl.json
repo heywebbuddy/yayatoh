@@ -192,6 +192,34 @@
     "campaigns.test": {
       "subject": "[Test] {subject}",
       "intro": "Een testverzending van je campagne."
+    },
+    "orders.credit-note": {
+      "subject": "Creditnota {number} voor {eventName}",
+      "intro": "{org} heeft creditnota {number} van {amount} uitgegeven op je bestelling voor {eventName}. {storeCredit, select, yes {Gebruik de code {code} bij het afrekenen om hem te besteden aan een volgende bestelling bij {org}.} other {Dit bedrag is aan je terugbetaald.}}",
+      "cta": "Mijn bestelling bekijken"
+    },
+    "orders.support-reply": {
+      "subject": "{subject}",
+      "intro": "Een bericht van {org} over je bestelling voor {eventName}:",
+      "cta": "Mijn bestelling bekijken"
+    },
+    "payments.dispute-deadline": {
+      "subject": "Bewijs voor terugboeking bijna verschuldigd: {eventName}",
+      "intro": "Het bewijs voor een terugboeking van {amount} op een bestelling voor {eventName} moet binnen {hours, plural, =0 {minder dan een uur} one {# uur} other {# uur}} binnen zijn. Controleer het en dien het in vóór de deadline."
+    },
+    "ticketing.transfer-offered": {
+      "subject": "{fromName} heeft je een ticket voor {eventName} gestuurd",
+      "intro": "{fromName} draagt een ticket voor {eventName} aan je over. Claim het met dit e-mailadres om je eigen QR-code te krijgen.",
+      "cta": "Mijn ticket claimen"
+    },
+    "ticketing.transfer-completed": {
+      "subject": "Je ticket voor {eventName} is overgedragen",
+      "intro": "{toName} heeft het ticket geclaimd dat je voor {eventName} hebt overgedragen. Je oude QR-code werkt niet meer."
+    },
+    "ticketing.transfer-received": {
+      "subject": "Je ticket voor {eventName}",
+      "intro": "Je hebt het ticket geclaimd dat {fromName} je voor {eventName} stuurde. Je eigen QR-code staat klaar.",
+      "cta": "Mijn ticket bekijken"
     }
   },
   "roles": {

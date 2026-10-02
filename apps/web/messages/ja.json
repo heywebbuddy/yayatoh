@@ -82,7 +82,9 @@
         "refund-declined": "返金リクエストのお断り",
         "waitlist-joined": "キャンセル待ち登録の確認",
         "waitlist-offer": "キャンセル待ちの購入案内",
-        "waitlist-expired": "キャンセル待ちの購入案内の期限切れ"
+        "waitlist-expired": "キャンセル待ちの購入案内の期限切れ",
+        "credit-note": "クレジットノート",
+        "support-reply": "サポートからの返信"
       },
       "events": {
         "reminder": "イベントのリマインダー",
@@ -98,7 +100,10 @@
         "claim-link": "チケット受け取りリンク",
         "holder-link": "チケットへのリンク",
         "tickets-resent": "チケットの再送",
-        "ticket-cancelled": "チケットのキャンセル"
+        "ticket-cancelled": "チケットのキャンセル",
+        "transfer-offered": "チケット譲渡",
+        "transfer-completed": "チケット譲渡完了",
+        "transfer-received": "譲渡されたチケット"
       },
       "attendees": {
         "message": "主催者からのメッセージ"
@@ -119,7 +124,8 @@
         "finder-code": "座席検索コード"
       },
       "payments": {
-        "destination-changed": "支払い口座の変更"
+        "destination-changed": "支払い口座の変更",
+        "dispute-deadline": "異議申し立て期限の通知"
       },
       "surveys": {
         "invite": "アンケートのご案内",
@@ -295,7 +301,9 @@
     "alerts": "アラート",
     "sendingSetup": "送信設定",
     "campaigns": "キャンペーン",
-    "journeys": "ジャーニー"
+    "journeys": "ジャーニー",
+    "disputes": "異議申し立て",
+    "supportMacros": "サポートマクロ"
   },
   "vocab": {
     "attendee": "参加者",
@@ -878,7 +886,9 @@
     "dateSoldOut": "この日程は完売しました。別の日程を選んでください。",
     "dateUnavailable": "この日程は利用できなくなりました。別の日程を選んでください。",
     "orgUnavailable": "この主催者は現在チケットを販売していません。購入済みのチケットは引き続き有効です。",
-    "riskBlocked": "このご注文はお受けできませんでした。主催者にお問い合わせください。"
+    "riskBlocked": "このご注文はお受けできませんでした。主催者にお問い合わせください。",
+    "creditInvalid": "このストアクレジットコードは無効か、使用済みです。",
+    "creditNotApplicable": "このストアクレジットはこれらのチケットには使えません。"
   },
   "fakePay": {
     "eyebrow": "テスト決済",
@@ -1753,7 +1763,18 @@
     "noMessages": "この注文について購入者にメッセージは送信されていません。",
     "message": "メッセージ",
     "channel": "チャネル",
-    "trimmed": "カードネットワークのページ上限に収めるため、{n, plural, other {さらに # 行を省略しました}}。"
+    "trimmed": "カードネットワークのページ上限に収めるため、{n, plural, other {さらに # 行を省略しました}}。",
+    "termsAtPurchase": "購入時の返金条件",
+    "termsUnset": "返金ポリシーは表示されていませんでした",
+    "termsNone": "返金不可",
+    "termsUntil": "イベントの {days} 日前まで返金可",
+    "termsAlways": "イベント前ならいつでも返金可",
+    "termsKept": "チケットごとの差引額",
+    "transfers": "チケットの譲渡",
+    "transferFrom": "譲渡元",
+    "transferTo": "譲渡先",
+    "transferState": "状態",
+    "transferClaimed": "受け取り日時"
   },
   "boxOffice": {
     "title": "窓口販売",
@@ -5126,7 +5147,11 @@
         "dispute_evidence_submitted": "チャージバックの証拠を提出",
         "dispute_won": "チャージバック勝訴",
         "dispute_lost": "チャージバック敗訴",
-        "note": "メモ"
+        "note": "メモ",
+        "credit_note_issued": "クレジットノート発行",
+        "credit_applied": "ストアクレジット使用",
+        "credit_released": "ストアクレジット返却",
+        "macro_run": "サポートマクロ実行"
       }
     },
     "notes": {
@@ -6917,6 +6942,239 @@
       "event_missing": "イベントが見つかりません",
       "error": "何度か試しましたが失敗しました",
       "other": "その他"
+    }
+  },
+  "supportTools": {
+    "reasons": {
+      "same_holder": "この方はすでにチケットをお持ちです。",
+      "fee_not_accepted": "譲渡手数料に同意するにはチェックを入れてください。",
+      "fee_required": "このチケットには譲渡手数料があります。名前を指定して譲渡してください。",
+      "not_allowed": "この券種は譲渡できません。",
+      "deadline_passed": "このチケットの譲渡受付は終了しました。",
+      "event_ended": "イベントは終了しました。",
+      "ticket_void": "このチケットは無効になっています。",
+      "amount_required": "0.01 以上の金額を入力してください。",
+      "amount_too_large": "この注文でまだクレジットできる金額を超えています。",
+      "nothing_to_credit": "この注文でクレジットできる金額は残っていません。",
+      "order_not_paid": "クレジットノートは支払い済みの注文にのみ発行できます。",
+      "unknown_merge_field": "返信に存在しない差し込みフィールドが含まれています。一覧のフィールドのみ使用してください。",
+      "name_taken": "同じ名前のマクロがすでにあります。",
+      "transfer_required": "このマクロはチケットを譲渡します。チケットと譲渡先を選んでください。",
+      "no_live_tickets": "この注文には再送できる有効なチケットがありません。"
+    },
+    "transfers": {
+      "title": "譲渡",
+      "description": "チケットを別の人に譲ります。相手には自分のメールアドレスで受け取るためのリンクが届き、受け取ると以前の QR コード、ショートコード、ウォレットパスは使えなくなり、チケットは相手の名前で再発行されます。",
+      "empty": "この注文のチケットは譲渡されていません。",
+      "wallet": "ウォレットパス",
+      "walletLive": "更新済み",
+      "walletPending": "更新中",
+      "from": "譲渡元",
+      "to": "譲渡先",
+      "by": "開始者",
+      "initiatedBy": {
+        "organizer": "チーム",
+        "holder": "チケット保有者"
+      },
+      "fee": "手数料 {amount}",
+      "state": {
+        "pending": "受け取り待ち",
+        "claimed": "受け取り済み",
+        "cancelled": "キャンセル",
+        "expired": "リンク期限切れ"
+      },
+      "until": "リンクの有効期限 {date}",
+      "actions": "操作",
+      "cancel": "譲渡をキャンセル",
+      "cancelled": "譲渡をキャンセルしました。",
+      "ticket": "チケット",
+      "toName": "新しい保有者の名前",
+      "toEmail": "新しい保有者のメール",
+      "toEmailHint": "このアドレスでチケットを受け取ります。",
+      "toNameInvalid": "新しい保有者の名前を入力してください。",
+      "toEmailInvalid": "有効なメールアドレスを入力してください。",
+      "started": "譲渡を開始しました。{name} さんにチケット受け取り用のリンクをメールしました。",
+      "link": "受け取りリンク(表示は一度だけ)",
+      "submit": "チケットを譲渡"
+    },
+    "credit": {
+      "title": "クレジットノート",
+      "empty": "この注文にクレジットノートはありません。",
+      "number": "番号",
+      "dispositionCol": "精算方法",
+      "disposition": {
+        "store_credit": "ストアクレジット",
+        "refunded": "返金済み"
+      },
+      "codeEnding": "末尾 {last4} のコード",
+      "balance": "残高",
+      "document": "書類",
+      "pdf": "{label}(PDF)",
+      "creditable": "この注文ではあと {amount} までクレジットできます。",
+      "kindLegend": "金額",
+      "kind": {
+        "partial": "注文の一部",
+        "full": "注文の残り全額"
+      },
+      "amount": "金額({currency})",
+      "dispositionLegend": "精算方法",
+      "reason": "理由",
+      "reasonHint": "クレジットノートに記載され、購入者にも表示されます(3〜500 文字)。",
+      "issued": "クレジットノート {label} を発行しました。購入者にメールで送りました。",
+      "codeOnce": "ストアクレジットコード(表示は一度だけ。購入者にもメールしました)",
+      "reasonInvalid": "3〜500 文字で理由を入力してください。",
+      "amountInvalid": "0.01 以上の金額を入力してください。",
+      "submit": "クレジットノートを発行",
+      "financeTitle": "クレジットノート",
+      "financeEmpty": "クレジットノートはまだありません。",
+      "financeTotals": "通貨別のクレジットノート",
+      "financeRecent": "最新のクレジットノート",
+      "currency": "通貨",
+      "count": "件数",
+      "issuedTotal": "発行額",
+      "applied": "使用額",
+      "outstanding": "未使用額",
+      "issuedOn": "発行日",
+      "buyer": "購入者",
+      "amountCol": "金額"
+    },
+    "macros": {
+      "title": "サポートマクロ",
+      "description": "保存した返信と関連する操作を、注文から一度に実行します。差し込みフィールドには注文の情報が入ります。",
+      "newTitle": "新しいマクロ",
+      "listTitle": "マクロ一覧",
+      "noneTitle": "マクロはまだありません",
+      "noneDescription": "上で作成してください。例:「チケット再送」— 購入者にメールし、メモを追加して、チケットを再送します。",
+      "manage": "マクロを作成",
+      "runTitle": "マクロを実行",
+      "choose": "マクロ",
+      "preview": "このマクロの内容",
+      "does": "実行内容: {actions}",
+      "action": {
+        "email_buyer": "購入者にメール",
+        "add_note": "チームメモを追加",
+        "resend_tickets": "チケットを再送",
+        "transfer_ticket": "チケットを譲渡"
+      },
+      "transferLegend": "譲渡",
+      "ticket": "チケット",
+      "toName": "新しい保有者の名前",
+      "toEmail": "新しい保有者のメール",
+      "ran": "マクロ「{name}」を実行しました。",
+      "link": "受け取りリンク(表示は一度だけ)",
+      "transferRequired": "チケットと譲渡先を選んでください。",
+      "run": "マクロを実行",
+      "name": "名前",
+      "subject": "メールの件名",
+      "body": "返信",
+      "fieldsHint": "差し込みフィールド:",
+      "actionsLegend": "操作",
+      "saved": "マクロを保存しました。",
+      "nameInvalid": "マクロ名は 2〜80 文字で入力してください。",
+      "actionsInvalid": "操作を 1 つ以上選んでください。",
+      "subjectInvalid": "件名を入力してください。",
+      "bodyInvalid": "返信を入力してください。",
+      "update": "変更を保存",
+      "create": "マクロを作成",
+      "archive": "{name} をアーカイブ",
+      "archived": "マクロをアーカイブしました。"
+    },
+    "holder": {
+      "title": "このチケットを譲渡",
+      "pending": "{name} さんの受け取りを待っています。",
+      "cancel": "譲渡をキャンセル",
+      "cancelled": "譲渡をキャンセルしました。",
+      "until": "譲渡の受付は {date} まで",
+      "fee": "譲渡手数料 {fee}",
+      "refused": {
+        "not_allowed": "このチケットは譲渡できません。",
+        "deadline_passed": "このチケットの譲渡受付は終了しました。",
+        "event_ended": "イベントは終了しました。",
+        "ticket_void": "このチケットは無効になっています。"
+      },
+      "toName": "相手の名前",
+      "toEmail": "相手のメール",
+      "acceptFee": "{fee} の譲渡手数料を支払うことに同意します。",
+      "sent": "送信しました。{name} さんにチケット受け取り用のリンクをメールしました。",
+      "toNameInvalid": "名前を入力してください。",
+      "toEmailInvalid": "有効なメールアドレスを入力してください。",
+      "submit": "譲渡を送信"
+    },
+    "rules": {
+      "title": "譲渡ルール",
+      "description": "券種ごとに、保有者が自分で譲渡できるか、イベントの何時間前まで可能か、手数料はいくらかを設定します。チームはいつでも注文から譲渡できます。",
+      "column": "譲渡",
+      "summaryAllowed": "可",
+      "summaryCutoff": "{hours} 時間前まで",
+      "summaryFee": "手数料 {fee}",
+      "summaryOff": "不可",
+      "formLabel": "{name} の譲渡ルール",
+      "allowed": "保有者による譲渡を許可",
+      "cutoff": "締め切り(何時間前)",
+      "cutoffHint": "空欄: イベント終了まで。",
+      "fee": "手数料({currency})",
+      "feeHint": "空欄: 無料。",
+      "save": "ルールを保存",
+      "saved": "ルールを保存しました。",
+      "cutoffInvalid": "整数の時間を入力してください(0〜8760)。",
+      "feeInvalid": "金額を入力するか空欄にしてください。"
+    },
+    "disputes": {
+      "title": "異議申し立て",
+      "description": "注文へのチャージバックと証拠提出期限です。注文から証拠をまとめ、期限までに提出してください。",
+      "summary": "{open, plural, =0 {未解決の異議申し立てはありません} other {未解決 # 件}} · {soon, plural, =0 {3 日以内の期限なし} other {3 日以内に期限 # 件}}",
+      "tabsLabel": "異議申し立ての状態",
+      "tabs": {
+        "open": "未解決({count})",
+        "closed": "終了({count})"
+      },
+      "empty": {
+        "open": "未解決の異議申し立てはありません。",
+        "closed": "終了した異議申し立てはありません。"
+      },
+      "caption": {
+        "open": "未解決の異議申し立て(期限の近い順)",
+        "closed": "終了した異議申し立て(新しい順)"
+      },
+      "buyer": "購入者",
+      "amount": "金額",
+      "reason": "理由",
+      "status": "状態",
+      "deadline": "証拠提出期限",
+      "action": "操作",
+      "respond": "証拠をまとめて提出",
+      "submitted": "証拠提出済み",
+      "noDeadline": "期限なし",
+      "overdue": "期限切れ",
+      "hoursLeft": "{hours, plural, =0 {残り 1 時間未満} other {残り # 時間}}",
+      "daysLeft": "{days, plural, other {残り # 日}}"
+    },
+    "claim": {
+      "intro": "{from} さんがこのチケットを {to} さんに譲渡しようとしています。送られてきたメールアドレスで受け取ると、あなた専用の QR コードが発行され、以前のものは使えなくなります。",
+      "emailHint": "この譲渡が送られたアドレス。",
+      "emailMismatch": "このチケットが送られたメールアドレスを使ってください。"
+    },
+    "buyer": {
+      "title": "クレジットノート",
+      "storeCredit": "ストアクレジット残高: {balance}。次回のご注文のお支払い時にこのコードを入力してください:",
+      "refunded": "この金額は返金されました。"
+    },
+    "pdf": {
+      "title": "クレジットノート {label}",
+      "number": "クレジットノート番号",
+      "issued": "発行日",
+      "billedTo": "お客様",
+      "event": "イベント",
+      "order": "注文",
+      "orderTotal": "注文合計",
+      "kind": "対象",
+      "settlement": "精算方法",
+      "balance": "残高",
+      "reason": "理由",
+      "amount": "クレジット金額",
+      "storeCreditNote": "このクレジットは、お客様に送付したストアクレジットコードで、同じ主催者での次回のご注文に利用できます。",
+      "refundedNote": "この金額はお客様に返金されました。",
+      "footer": "{seller} が Yayatoh を通じて発行。"
     }
   }
 }

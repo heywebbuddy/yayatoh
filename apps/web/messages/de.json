@@ -82,7 +82,9 @@
         "refund-declined": "Erstattungsanfrage abgelehnt",
         "waitlist-joined": "Bestätigung der Warteliste",
         "waitlist-offer": "Angebot von der Warteliste",
-        "waitlist-expired": "Angebot von der Warteliste abgelaufen"
+        "waitlist-expired": "Angebot von der Warteliste abgelaufen",
+        "credit-note": "Gutschrift",
+        "support-reply": "Support-Antwort"
       },
       "events": {
         "reminder": "Veranstaltungserinnerung",
@@ -98,7 +100,10 @@
         "claim-link": "Link zum Abholen eines Tickets",
         "holder-link": "Link zu den Tickets",
         "tickets-resent": "Tickets erneut gesendet",
-        "ticket-cancelled": "Ticket storniert"
+        "ticket-cancelled": "Ticket storniert",
+        "transfer-offered": "Ticketübertragung",
+        "transfer-completed": "Ticket übertragen",
+        "transfer-received": "Übertragenes Ticket"
       },
       "attendees": {
         "message": "Nachricht vom Veranstalter"
@@ -119,7 +124,8 @@
         "finder-code": "Sitzplatzfinder-Code"
       },
       "payments": {
-        "destination-changed": "Änderung des Auszahlungskontos"
+        "destination-changed": "Änderung des Auszahlungskontos",
+        "dispute-deadline": "Hinweis auf Frist bei Rückbuchung"
       },
       "surveys": {
         "invite": "Umfrage-Einladung",
@@ -295,7 +301,9 @@
     "alerts": "Warnungen",
     "sendingSetup": "Versand-Einrichtung",
     "campaigns": "Kampagnen",
-    "journeys": "Journeys"
+    "journeys": "Journeys",
+    "disputes": "Rückbuchungen",
+    "supportMacros": "Support-Makros"
   },
   "vocab": {
     "attendee": "Teilnehmer",
@@ -878,7 +886,9 @@
     "dateSoldOut": "Dieser Termin ist gerade ausverkauft. Wähle einen anderen.",
     "dateUnavailable": "Dieser Termin ist nicht mehr verfügbar. Wähle einen anderen.",
     "orgUnavailable": "Dieser Veranstalter verkauft gerade keine Tickets. Bereits gekaufte Tickets bleiben gültig.",
-    "riskBlocked": "Diese Bestellung können wir nicht annehmen. Bitte wende dich an den Veranstalter."
+    "riskBlocked": "Diese Bestellung können wir nicht annehmen. Bitte wende dich an den Veranstalter.",
+    "creditInvalid": "Dieser Guthabencode ist ungültig oder wurde bereits eingelöst.",
+    "creditNotApplicable": "Dieses Guthaben kann für diese Tickets nicht verwendet werden."
   },
   "fakePay": {
     "eyebrow": "Testzahlung",
@@ -1753,7 +1763,18 @@
     "noMessages": "Zu dieser Bestellung wurden dem Käufer keine Nachrichten gesendet.",
     "message": "Nachricht",
     "channel": "Kanal",
-    "trimmed": "{n, plural, one {# weitere Zeile weggelassen} other {# weitere Zeilen weggelassen}}, um das Seitenlimit der Kartennetzwerke einzuhalten."
+    "trimmed": "{n, plural, one {# weitere Zeile weggelassen} other {# weitere Zeilen weggelassen}}, um das Seitenlimit der Kartennetzwerke einzuhalten.",
+    "termsAtPurchase": "Erstattungsbedingungen beim Kauf",
+    "termsUnset": "Es wurde keine Erstattungsrichtlinie angezeigt",
+    "termsNone": "Keine Erstattungen",
+    "termsUntil": "Erstattungen bis {days} Tage vor der Veranstaltung",
+    "termsAlways": "Erstattungen jederzeit vor der Veranstaltung",
+    "termsKept": "Einbehalten pro Ticket",
+    "transfers": "Ticketübertragungen",
+    "transferFrom": "Von",
+    "transferTo": "An",
+    "transferState": "Status",
+    "transferClaimed": "Angenommen"
   },
   "boxOffice": {
     "title": "Abendkasse",
@@ -5126,7 +5147,11 @@
         "dispute_evidence_submitted": "Nachweise zur Rückbuchung eingereicht",
         "dispute_won": "Rückbuchung gewonnen",
         "dispute_lost": "Rückbuchung verloren",
-        "note": "Notiz"
+        "note": "Notiz",
+        "credit_note_issued": "Gutschrift ausgestellt",
+        "credit_applied": "Guthaben eingelöst",
+        "credit_released": "Guthaben zurückgebucht",
+        "macro_run": "Support-Makro ausgeführt"
       }
     },
     "notes": {
@@ -6917,6 +6942,239 @@
       "event_missing": "Veranstaltung nicht gefunden",
       "error": "Nach mehreren Versuchen fehlgeschlagen",
       "other": "Sonstiges"
+    }
+  },
+  "supportTools": {
+    "reasons": {
+      "same_holder": "Diese Person hat das Ticket bereits.",
+      "fee_not_accepted": "Setze das Häkchen, um der Übertragungsgebühr zuzustimmen.",
+      "fee_required": "Für dieses Ticket gilt eine Übertragungsgebühr: Übertrage es stattdessen per Name.",
+      "not_allowed": "Diese Ticketart kann nicht übertragen werden.",
+      "deadline_passed": "Übertragungen für dieses Ticket sind geschlossen.",
+      "event_ended": "Die Veranstaltung ist vorbei.",
+      "ticket_void": "Dieses Ticket ist nicht mehr gültig.",
+      "amount_required": "Gib einen Betrag von mindestens 0,01 ein.",
+      "amount_too_large": "Das ist mehr, als auf dieser Bestellung noch gutgeschrieben werden kann.",
+      "nothing_to_credit": "Auf dieser Bestellung kann nichts mehr gutgeschrieben werden.",
+      "order_not_paid": "Nur bezahlte Bestellungen können gutgeschrieben werden.",
+      "unknown_merge_field": "Die Antwort verwendet ein Platzhalterfeld, das es nicht gibt. Verwende nur die aufgeführten Felder.",
+      "name_taken": "Du hast bereits ein Makro mit diesem Namen.",
+      "transfer_required": "Dieses Makro überträgt ein Ticket: Wähle das Ticket und den neuen Inhaber.",
+      "no_live_tickets": "Diese Bestellung hat keine gültigen Tickets zum erneuten Senden."
+    },
+    "transfers": {
+      "title": "Übertragungen",
+      "description": "Gib ein Ticket an jemand anderen weiter. Die Person erhält einen Link, um es mit ihrer E-Mail-Adresse anzunehmen; danach funktionieren der alte QR-Code, der Kurzcode und der Wallet-Pass nicht mehr und das Ticket wird neu auf sie ausgestellt.",
+      "empty": "Aus dieser Bestellung wurden keine Tickets übertragen.",
+      "wallet": "Wallet-Pass",
+      "walletLive": "Aktualisiert",
+      "walletPending": "Wird aktualisiert",
+      "from": "Von",
+      "to": "An",
+      "by": "Gestartet von",
+      "initiatedBy": {
+        "organizer": "Deinem Team",
+        "holder": "Dem Inhaber"
+      },
+      "fee": "Gebühr {amount}",
+      "state": {
+        "pending": "Wartet auf Annahme",
+        "claimed": "Angenommen",
+        "cancelled": "Abgebrochen",
+        "expired": "Link abgelaufen"
+      },
+      "until": "Link gültig bis {date}",
+      "actions": "Aktionen",
+      "cancel": "Übertragung abbrechen",
+      "cancelled": "Übertragung abgebrochen.",
+      "ticket": "Ticket",
+      "toName": "Name des neuen Inhabers",
+      "toEmail": "E-Mail des neuen Inhabers",
+      "toEmailHint": "Mit dieser Adresse wird das Ticket angenommen.",
+      "toNameInvalid": "Gib den Namen des neuen Inhabers ein.",
+      "toEmailInvalid": "Gib eine gültige E-Mail-Adresse ein.",
+      "started": "Übertragung gestartet. {name} hat einen Link zum Annehmen des Tickets per E-Mail erhalten.",
+      "link": "Annahme-Link (wird nur einmal angezeigt)",
+      "submit": "Ticket übertragen"
+    },
+    "credit": {
+      "title": "Gutschriften",
+      "empty": "Keine Gutschriften zu dieser Bestellung.",
+      "number": "Nummer",
+      "dispositionCol": "Beglichen als",
+      "disposition": {
+        "store_credit": "Guthaben",
+        "refunded": "Erstattet"
+      },
+      "codeEnding": "Code endet auf {last4}",
+      "balance": "Restguthaben",
+      "document": "Dokument",
+      "pdf": "{label} (PDF)",
+      "creditable": "Auf dieser Bestellung können noch bis zu {amount} gutgeschrieben werden.",
+      "kindLegend": "Wie viel",
+      "kind": {
+        "partial": "Ein Teil der Bestellung",
+        "full": "Alles, was von der Bestellung übrig ist"
+      },
+      "amount": "Betrag ({currency})",
+      "dispositionLegend": "Begleichen als",
+      "reason": "Grund",
+      "reasonHint": "Steht auf der Gutschrift und wird dem Käufer angezeigt (3–500 Zeichen).",
+      "issued": "Gutschrift {label} ausgestellt. Der Käufer hat sie per E-Mail erhalten.",
+      "codeOnce": "Guthabencode (wird nur einmal angezeigt; der Käufer hat ihn per E-Mail erhalten)",
+      "reasonInvalid": "Schreibe einen Grund mit 3 bis 500 Zeichen.",
+      "amountInvalid": "Gib einen Betrag von mindestens 0,01 ein.",
+      "submit": "Gutschrift ausstellen",
+      "financeTitle": "Gutschriften",
+      "financeEmpty": "Noch keine Gutschriften.",
+      "financeTotals": "Gutschriften nach Währung",
+      "financeRecent": "Neueste Gutschriften",
+      "currency": "Währung",
+      "count": "Gutschriften",
+      "issuedTotal": "Ausgestellt",
+      "applied": "Eingelöst",
+      "outstanding": "Noch einlösbar",
+      "issuedOn": "Ausgestellt am",
+      "buyer": "Käufer",
+      "amountCol": "Betrag"
+    },
+    "macros": {
+      "title": "Support-Makros",
+      "description": "Gespeicherte Antworten und die zugehörigen Aktionen, in einem Schritt von einer Bestellung aus ausgeführt. Platzhalterfelder werden mit den Details der Bestellung gefüllt.",
+      "newTitle": "Neues Makro",
+      "listTitle": "Deine Makros",
+      "noneTitle": "Noch keine Makros",
+      "noneDescription": "Lege oben eines an: zum Beispiel „Tickets erneut senden“, das dem Käufer schreibt, eine Notiz hinzufügt und die Tickets erneut sendet.",
+      "manage": "Makro anlegen",
+      "runTitle": "Makro ausführen",
+      "choose": "Makro",
+      "preview": "Was dieses Makro tut",
+      "does": "Macht: {actions}",
+      "action": {
+        "email_buyer": "Dem Käufer schreiben",
+        "add_note": "Team-Notiz hinzufügen",
+        "resend_tickets": "Tickets erneut senden",
+        "transfer_ticket": "Ticket übertragen"
+      },
+      "transferLegend": "Übertragung",
+      "ticket": "Ticket",
+      "toName": "Name des neuen Inhabers",
+      "toEmail": "E-Mail des neuen Inhabers",
+      "ran": "Makro „{name}“ ausgeführt.",
+      "link": "Annahme-Link (wird nur einmal angezeigt)",
+      "transferRequired": "Wähle das Ticket und den neuen Inhaber.",
+      "run": "Makro ausführen",
+      "name": "Name",
+      "subject": "E-Mail-Betreff",
+      "body": "Antwort",
+      "fieldsHint": "Platzhalterfelder:",
+      "actionsLegend": "Aktionen",
+      "saved": "Makro gespeichert.",
+      "nameInvalid": "Gib dem Makro einen Namen mit 2 bis 80 Zeichen.",
+      "actionsInvalid": "Wähle mindestens eine Aktion.",
+      "subjectInvalid": "Schreibe einen Betreff.",
+      "bodyInvalid": "Schreibe die Antwort.",
+      "update": "Änderungen speichern",
+      "create": "Makro anlegen",
+      "archive": "{name} archivieren",
+      "archived": "Makro archiviert."
+    },
+    "holder": {
+      "title": "Dieses Ticket übertragen",
+      "pending": "Wartet darauf, dass {name} es annimmt.",
+      "cancel": "Übertragung abbrechen",
+      "cancelled": "Übertragung abgebrochen.",
+      "until": "Übertragungen schließen am {date}",
+      "fee": "Übertragungsgebühr {fee}",
+      "refused": {
+        "not_allowed": "Dieses Ticket kann nicht übertragen werden.",
+        "deadline_passed": "Übertragungen für dieses Ticket sind geschlossen.",
+        "event_ended": "Die Veranstaltung ist vorbei.",
+        "ticket_void": "Dieses Ticket ist nicht mehr gültig."
+      },
+      "toName": "Name",
+      "toEmail": "E-Mail",
+      "acceptFee": "Ich stimme zu, die Übertragungsgebühr von {fee} zu zahlen.",
+      "sent": "Gesendet. {name} hat einen Link zum Annehmen des Tickets per E-Mail erhalten.",
+      "toNameInvalid": "Gib den Namen ein.",
+      "toEmailInvalid": "Gib eine gültige E-Mail-Adresse ein.",
+      "submit": "Übertragung senden"
+    },
+    "rules": {
+      "title": "Übertragungsregeln",
+      "description": "Ob Ticketinhaber Tickets jeder Art selbst übertragen dürfen, bis wie lange vor der Veranstaltung und gegen welche Gebühr. Dein Team kann jederzeit von einer Bestellung aus übertragen.",
+      "column": "Übertragungen",
+      "summaryAllowed": "Erlaubt",
+      "summaryCutoff": "bis {hours} Std. vorher",
+      "summaryFee": "Gebühr {fee}",
+      "summaryOff": "Nicht erlaubt",
+      "formLabel": "Übertragungsregeln für {name}",
+      "allowed": "Inhaber dürfen übertragen",
+      "cutoff": "Schluss (Stunden vorher)",
+      "cutoffHint": "Leer: bis zum Ende der Veranstaltung.",
+      "fee": "Gebühr ({currency})",
+      "feeHint": "Leer: kostenlos.",
+      "save": "Regeln speichern",
+      "saved": "Regeln gespeichert.",
+      "cutoffInvalid": "Gib ganze Stunden ein (0–8760).",
+      "feeInvalid": "Gib einen Betrag ein oder lass das Feld leer."
+    },
+    "disputes": {
+      "title": "Rückbuchungen",
+      "description": "Rückbuchungen zu deinen Bestellungen mit ihren Fristen für Nachweise. Stelle die Nachweise aus der Bestellung zusammen und reiche sie vor Fristende ein.",
+      "summary": "{open, plural, =0 {Keine offenen Rückbuchungen} one {# offene Rückbuchung} other {# offene Rückbuchungen}} · {soon, plural, =0 {keine innerhalb von 3 Tagen fällig} one {# innerhalb von 3 Tagen fällig} other {# innerhalb von 3 Tagen fällig}}",
+      "tabsLabel": "Status der Rückbuchung",
+      "tabs": {
+        "open": "Offen ({count})",
+        "closed": "Abgeschlossen ({count})"
+      },
+      "empty": {
+        "open": "Keine offenen Rückbuchungen.",
+        "closed": "Keine abgeschlossenen Rückbuchungen."
+      },
+      "caption": {
+        "open": "Offene Rückbuchungen, nächste Frist zuerst",
+        "closed": "Abgeschlossene Rückbuchungen, neueste zuerst"
+      },
+      "buyer": "Käufer",
+      "amount": "Betrag",
+      "reason": "Grund",
+      "status": "Status",
+      "deadline": "Nachweise fällig",
+      "action": "Aktion",
+      "respond": "Nachweise zusammenstellen und einreichen",
+      "submitted": "Nachweise eingereicht",
+      "noDeadline": "Keine Frist",
+      "overdue": "Frist abgelaufen",
+      "hoursLeft": "{hours, plural, =0 {Weniger als eine Stunde übrig} one {# Stunde übrig} other {# Stunden übrig}}",
+      "daysLeft": "{days, plural, one {# Tag übrig} other {# Tage übrig}}"
+    },
+    "claim": {
+      "intro": "{from} überträgt dieses Ticket an {to}. Nimm es mit der E-Mail-Adresse an, an die es geschickt wurde: Du erhältst deinen eigenen QR-Code und der alte funktioniert nicht mehr.",
+      "emailHint": "Die Adresse, an die diese Übertragung geschickt wurde.",
+      "emailMismatch": "Verwende die E-Mail-Adresse, an die dieses Ticket geschickt wurde."
+    },
+    "buyer": {
+      "title": "Gutschriften",
+      "storeCredit": "Restguthaben: {balance}. Löse diesen Code bei einer künftigen Bestellung an der Kasse ein:",
+      "refunded": "Dieser Betrag wurde dir erstattet."
+    },
+    "pdf": {
+      "title": "Gutschrift {label}",
+      "number": "Gutschriftnummer",
+      "issued": "Ausgestellt",
+      "billedTo": "Kunde",
+      "event": "Veranstaltung",
+      "order": "Bestellung",
+      "orderTotal": "Bestellsumme",
+      "kind": "Umfang",
+      "settlement": "Beglichen als",
+      "balance": "Restguthaben",
+      "reason": "Grund",
+      "amount": "Gutschriftbetrag",
+      "storeCreditNote": "Dieses Guthaben kann mit dem an den Kunden gesendeten Guthabencode für eine künftige Bestellung beim selben Veranstalter eingelöst werden.",
+      "refundedNote": "Dieser Betrag wurde dem Kunden erstattet.",
+      "footer": "Ausgestellt von {seller} über Yayatoh."
     }
   }
 }

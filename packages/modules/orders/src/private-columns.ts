@@ -44,6 +44,33 @@ export const privateColumns = columnPrivacy('orders', {
   order_notes: { body: internal(), author_id: internal() },
   mass_refunds: { reason: 'vocab', status: 'vocab', currency: 'vocab', requested_by: internal() },
   mass_refund_items: { status: 'vocab', code: 'vocab' },
+  // M3.10c credit notes: the reason, amounts and code go to the buyer (document, order page,
+  // email); the buyer snapshots are theirs.
+  credit_notes: {
+    kind: 'vocab',
+    disposition: 'vocab',
+    reason: holder(),
+    currency: 'vocab',
+    code: holder(undefined, { where: "disposition = 'store_credit'" }),
+    buyer_name: personal(),
+    buyer_email: personal('email'),
+    issued_by: internal(),
+  },
+  // M3.10c support macros: the reply is sent to buyers (holder data); who changed it is internal.
+  support_macros: {
+    name: internal(),
+    subject: holder(),
+    body: holder(),
+    actions: 'vocab',
+    updated_by: internal(),
+  },
+  support_macro_runs: {
+    macro_name: internal(),
+    actions: 'vocab',
+    reply_subject: holder(),
+    reply_body: holder(),
+    ran_by: internal(),
+  },
   refund_policies: { kind: 'vocab', updated_by: internal() },
   // Guest email verification per event (M1.5f): who last changed it (a user id or actor type).
   checkout_settings: { updated_by: internal() },

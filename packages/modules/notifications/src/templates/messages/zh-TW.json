@@ -192,6 +192,34 @@
     "campaigns.test": {
       "subject": "[測試] {subject}",
       "intro": "你的行銷活動的測試寄送。"
+    },
+    "orders.credit-note": {
+      "subject": "{eventName} 的折讓單 {number}",
+      "intro": "{org} 已為你在 {eventName} 的訂單開立金額 {amount} 的折讓單 {number}。{storeCredit, select, yes {在 {org} 的下一筆訂單結帳時輸入代碼 {code} 即可使用。} other {此金額已退還給你。}}",
+      "cta": "查看我的訂單"
+    },
+    "orders.support-reply": {
+      "subject": "{subject}",
+      "intro": "{org} 關於你在 {eventName} 訂單的訊息:",
+      "cta": "查看我的訂單"
+    },
+    "payments.dispute-deadline": {
+      "subject": "爭議證據即將到期:{eventName}",
+      "intro": "{eventName} 一筆訂單上金額 {amount} 的爭議證據將在 {hours, plural, =0 {不到一小時} other {# 小時}}後到期。請在截止前審核並提交。"
+    },
+    "ticketing.transfer-offered": {
+      "subject": "{fromName} 傳送了 {eventName} 的票券給你",
+      "intro": "{fromName} 正在將 {eventName} 的一張票券轉讓給你。請使用此電子郵件地址領取,即可取得你自己的 QR 碼。",
+      "cta": "領取我的票券"
+    },
+    "ticketing.transfer-completed": {
+      "subject": "你的 {eventName} 票券已轉讓",
+      "intro": "{toName} 已領取你轉讓的 {eventName} 票券。你原本的 QR 碼已失效。"
+    },
+    "ticketing.transfer-received": {
+      "subject": "你的 {eventName} 票券",
+      "intro": "你已領取 {fromName} 傳送給你的 {eventName} 票券。你自己的 QR 碼已準備好。",
+      "cta": "查看我的票券"
     }
   },
   "roles": {
