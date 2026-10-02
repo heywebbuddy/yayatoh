@@ -155,7 +155,9 @@ describe('the IRS exempt-organization list (recorded fixture)', () => {
     expect(exemptProblem(await irs.lookup('45-6789123'))).toBe('not_501c3');
     expect(exemptProblem(await irs.lookup('56-7891234'))).toBe('not_deductible');
     expect(exemptProblem(await irs.lookup('99-9999999'))).toBe('not_listed');
-    expect(exemptProblem({ ...(await irs.lookup('23-4567891'))!, status: '20' })).toBe('not_in_force');
+    const listed = await irs.lookup('23-4567891');
+    if (!listed) throw new Error('fixture');
+    expect(exemptProblem({ ...listed, status: '20' })).toBe('not_in_force');
   });
 });
 

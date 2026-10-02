@@ -1,6 +1,6 @@
 import { LOCALES, type Locale, RTL_LOCALES } from '@yayatoh/contracts';
 import { formatMoney, money } from '@yayatoh/kernel';
-import { html } from '@yayatoh/pdf';
+import { html, SafeHtml } from '@yayatoh/pdf';
 import { color } from '@yayatoh/ui/tokens';
 import { IntlMessageFormat } from 'intl-messageformat';
 import { formatReceiptNumber } from './domain/receipts.ts';
@@ -137,7 +137,8 @@ export function receiptEmailBody(d: ReceiptDocInput, locale: string): string {
   return [t.rows.map(([k, v]) => `${k}: ${v}`).join('\n'), ...t.statements].join('\n\n');
 }
 
-const CSS = `
+// Our own constant stylesheet (token colours): trusted, so not escaped.
+const CSS = new SafeHtml(`
   @page { size: A4; margin: 18mm 16mm; }
   body { margin: 0; color: ${color.ink}; font: 10pt/1.5 'Noto Sans', 'Noto Sans Arabic', 'Noto Sans Devanagari', 'Noto Sans SC', 'Noto Sans TC', 'Noto Sans JP', sans-serif; }
   h1 { margin: 0; font-size: 18pt; font-weight: 600; }
@@ -151,7 +152,7 @@ const CSS = `
   td.num, th.num { text-align: end; font-variant-numeric: tabular-nums; }
   tfoot td { font-weight: 600; border-block-start: 0.4mm solid ${color.ink}; }
   footer { margin-block-start: 12mm; color: ${color.zinc[500]}; font-size: 8pt; }
-`;
+`);
 
 /** A receipt as a self-contained A4 HTML document for the PDF renderer. */
 export function receiptHtml(d: ReceiptDocInput, locale: string): string {
