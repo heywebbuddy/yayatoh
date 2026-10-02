@@ -90,6 +90,28 @@ export function ApiKeyForm({
             </label>
           ))}
         </fieldset>
+        {/* M6.3a: how long the key lives; 90 days unless the creator picks otherwise. */}
+        <div className="flex flex-col gap-1.5">
+          <label htmlFor="api-key-expiry" className="text-caption text-zinc-600">
+            {t('apiKeys.expiry')}
+          </label>
+          <select
+            id="api-key-expiry"
+            name="expiresInDays"
+            defaultValue="90"
+            aria-describedby="api-key-expiry-hint"
+            className="min-h-10 self-start rounded-pill border border-zinc-200 bg-white px-4 text-body"
+          >
+            {(['30', '90', '365', 'never'] as const).map((v) => (
+              <option key={v} value={v}>
+                {t(`apiKeys.expiryIn.${v}`)}
+              </option>
+            ))}
+          </select>
+          <p id="api-key-expiry-hint" className="text-caption text-zinc-600">
+            {t('apiKeys.expiryHint')}
+          </p>
+        </div>
         <div>
           <Button type="submit" disabled={pending}>
             {t('apiKeys.create')}

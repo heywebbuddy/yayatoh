@@ -4,7 +4,12 @@ import { createCtx, executeCommand } from '@yayatoh/kernel';
 import { expireOrdersCommand, sweepWaitlistsCommand } from '@yayatoh/orders';
 import { alertDisputeDeadlinesCommand } from '@yayatoh/payments';
 import { createCommandPorts, localKeyVault, setKeyVault } from '@yayatoh/platform';
-import { orgAuthorizer, orgStatusGate } from '@yayatoh/tenancy';
+import {
+  orgAuthorizer,
+  orgStatusGate,
+  summarizeApiKeyUsageCommand,
+  unsummarizedApiKeyUsage,
+} from '@yayatoh/tenancy';
 import { sql } from 'drizzle-orm';
 
 if (process.env.LOCAL_KMS_KEY) setKeyVault(localKeyVault(process.env.LOCAL_KMS_KEY));
@@ -78,6 +83,36 @@ export async function alertDisputeDeadlines(): Promise<number> {
       total += (await executeCommand(alertDisputeDeadlinesCommand, {}, ctx, ports)).alerted;
     } catch (err) {
       console.error('dispute alerts', org_id, err);
+    }
+  }
+  return total;
+}
+
+/**
+ * API key usage summaries (M6.3a), hourly: orgs with finished days of key usage not yet in their
+ * audit log (platform_reader, audited), then one `apiKey.dailyUsage` entry per key and day under
+ * each org's RLS. Each day is summarized once.
+ */
+export async function summarizeApiKeyUsage(): Promise<number> {
+  const orgs = await withPlatformReader(
+    { actor: 'system:api-key-usage', reason: 'find orgs with API key usage to summarize in the audit log' },
+    (tx) =>
+      tx.execute<{ org_id: string }>(sql`
+        select distinct u.org_id from tenancy.api_key_usage_daily u
+        join tenancy.organizations o on o.id = u.org_id
+        where u.audited_at is null and u.day < (now() at time zone o.timezone)::date
+        limit 500`),
+  );
+  let total = 0;
+  for (const { org_id } of orgs) {
+    const ctx = createCtx({ orgId: org_id, actor: { type: 'system', name: 'tenancy.api-key-usage' } });
+    try {
+      for (const row of await unsummarizedApiKeyUsage(org_id)) {
+        await executeCommand(summarizeApiKeyUsageCommand, row, ctx, ports);
+        total += 1;
+      }
+    } catch (err) {
+      console.error('api key usage summaries', org_id, err);
     }
   }
   return total;

@@ -6,7 +6,10 @@ export {
   eventAddonTx,
 } from './addons.ts';
 export {
+  type ApiAccessQuotas,
+  apiAccessQuotas,
   billingEntitlements,
+  DEFAULT_API_ACCESS_QUOTAS,
   DEFAULT_PLAN,
   effectiveModules,
   effectiveModulesTx,

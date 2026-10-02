@@ -758,6 +758,9 @@ importers:
       '@yayatoh/auth':
         specifier: workspace:*
         version: link:../auth
+      '@yayatoh/billing':
+        specifier: workspace:*
+        version: link:../modules/billing
       '@yayatoh/checkin':
         specifier: workspace:*
         version: link:../modules/checkin
@@ -810,9 +813,6 @@ importers:
       '@types/node':
         specifier: 'catalog:'
         version: 24.19.0
-      '@yayatoh/billing':
-        specifier: workspace:*
-        version: link:../modules/billing
       '@yayatoh/config':
         specifier: workspace:*
         version: link:../config

@@ -259,7 +259,11 @@ async function pay(
   });
   await executeCommand(
     attachPaymentCommand,
-    { orderId: order.id, provider: getPaymentProvider().name, providerPaymentId: payment.providerPaymentId },
+    {
+      orderId: order.id,
+      provider: payment.provider ?? getPaymentProvider().name,
+      providerPaymentId: payment.providerPaymentId,
+    },
     ctx,
     ports,
   );
