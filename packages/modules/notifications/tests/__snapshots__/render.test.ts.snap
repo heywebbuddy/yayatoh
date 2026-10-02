@@ -7540,6 +7540,682 @@ exports[`renderMessage: every kind in all 13 locales > portal.sign-in · zh-TW 1
 }
 `;
 
+exports[`renderMessage: every kind in all 13 locales > privacy.archive-ready · ar 1`] = `
+{
+  "subject": "بياناتك الشخصية لدى Lakeside Events جاهزة",
+  "text": "بياناتك الشخصية لدى Lakeside Events جاهزة
+
+مرحبًا،
+
+ردّت Lakeside Events على طلبك: نسخة من البيانات الشخصية التي تحتفظ بها عنك جاهزة كملف ZIP. يعمل الرابط لمدة 7 أيام. الأرشيف موقّع، لتتمكن من التحقق من أنه لم يُعدَّل.
+
+تنزيل بياناتي: https://app.yayatoh.test/privacy-request/sample/archive/sample
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > privacy.archive-ready · de 1`] = `
+{
+  "subject": "Ihre personenbezogenen Daten von Lakeside Events sind bereit",
+  "text": "Ihre personenbezogenen Daten von Lakeside Events sind bereit
+
+Hallo,
+
+Lakeside Events hat Ihre Anfrage beantwortet: Eine Kopie der Daten, die über Sie gespeichert sind, liegt als ZIP-Datei bereit. Der Link gilt 7 Tage. Das Archiv ist signiert, damit Sie prüfen können, dass es nicht verändert wurde.
+
+Meine Daten herunterladen: https://app.yayatoh.test/privacy-request/sample/archive/sample
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > privacy.archive-ready · en 1`] = `
+{
+  "subject": "Your personal data from Lakeside Events is ready",
+  "text": "Your personal data from Lakeside Events is ready
+
+Hello,
+
+Lakeside Events answered your request: a copy of the personal data it holds about you is ready as a ZIP file. The link works for 7 days. The archive is signed, so you can check it was not changed.
+
+Download my data: https://app.yayatoh.test/privacy-request/sample/archive/sample
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > privacy.archive-ready · es 1`] = `
+{
+  "subject": "Tus datos personales de Lakeside Events están listos",
+  "text": "Tus datos personales de Lakeside Events están listos
+
+Hola:
+
+Lakeside Events respondió a tu solicitud: una copia de los datos personales que guarda sobre ti está lista en un archivo ZIP. El enlace funciona durante 7 días. El archivo está firmado, así puedes comprobar que no se modificó.
+
+Descargar mis datos: https://app.yayatoh.test/privacy-request/sample/archive/sample
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > privacy.archive-ready · fr 1`] = `
+{
+  "subject": "Vos données personnelles chez Lakeside Events sont prêtes",
+  "text": "Vos données personnelles chez Lakeside Events sont prêtes
+
+Bonjour,
+
+Lakeside Events a répondu à votre demande : une copie des données personnelles qu’elle détient sur vous est prête sous forme de fichier ZIP. Le lien fonctionne pendant 7 jours. L’archive est signée : vous pouvez vérifier qu’elle n’a pas été modifiée.
+
+Télécharger mes données: https://app.yayatoh.test/privacy-request/sample/archive/sample
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > privacy.archive-ready · hi 1`] = `
+{
+  "subject": "Lakeside Events से आपका निजी डेटा तैयार है",
+  "text": "Lakeside Events से आपका निजी डेटा तैयार है
+
+नमस्ते,
+
+Lakeside Events ने आपके अनुरोध का उत्तर दिया: आपके बारे में रखे गए निजी डेटा की एक प्रति ZIP फ़ाइल के रूप में तैयार है। लिंक 7 दिन तक काम करेगा। संग्रह पर हस्ताक्षर है, ताकि आप जाँच सकें कि इसमें बदलाव नहीं हुआ।
+
+मेरा डेटा डाउनलोड करें: https://app.yayatoh.test/privacy-request/sample/archive/sample
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > privacy.archive-ready · it 1`] = `
+{
+  "subject": "I tuoi dati personali di Lakeside Events sono pronti",
+  "text": "I tuoi dati personali di Lakeside Events sono pronti
+
+Ciao,
+
+Lakeside Events ha risposto alla tua richiesta: una copia dei dati personali che conserva su di te è pronta in un file ZIP. Il link funziona per 7 giorni. L’archivio è firmato, così puoi verificare che non sia stato modificato.
+
+Scarica i miei dati: https://app.yayatoh.test/privacy-request/sample/archive/sample
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > privacy.archive-ready · ja 1`] = `
+{
+  "subject": "Lakeside Eventsの個人データの準備ができました",
+  "text": "Lakeside Eventsの個人データの準備ができました
+
+こんにちは。
+
+Lakeside Eventsがリクエストに回答しました。保有しているあなたの個人データのコピーをZIPファイルで用意しました。リンクの有効期間は7日です。アーカイブには署名があり、改ざんされていないことを確認できます。
+
+データをダウンロード: https://app.yayatoh.test/privacy-request/sample/archive/sample
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > privacy.archive-ready · nl 1`] = `
+{
+  "subject": "Je persoonsgegevens van Lakeside Events staan klaar",
+  "text": "Je persoonsgegevens van Lakeside Events staan klaar
+
+Hallo,
+
+Lakeside Events heeft je verzoek beantwoord: een kopie van de persoonsgegevens die over je zijn opgeslagen staat klaar als zip-bestand. De link werkt 7 dagen. Het archief is ondertekend, zodat je kunt controleren dat het niet is gewijzigd.
+
+Mijn gegevens downloaden: https://app.yayatoh.test/privacy-request/sample/archive/sample
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > privacy.archive-ready · pt 1`] = `
+{
+  "subject": "Os seus dados pessoais de Lakeside Events estão prontos",
+  "text": "Os seus dados pessoais de Lakeside Events estão prontos
+
+Olá!
+
+Lakeside Events respondeu ao seu pedido: uma cópia dos dados pessoais que guarda sobre si está pronta num ficheiro ZIP. O link funciona durante 7 dias. O arquivo está assinado, para que possa verificar que não foi alterado.
+
+Descarregar os meus dados: https://app.yayatoh.test/privacy-request/sample/archive/sample
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > privacy.archive-ready · ru 1`] = `
+{
+  "subject": "Ваши персональные данные из Lakeside Events готовы",
+  "text": "Ваши персональные данные из Lakeside Events готовы
+
+Здравствуйте!
+
+Lakeside Events ответила на ваш запрос: копия персональных данных о вас готова в ZIP-файле. Ссылка действует 7 дней. Архив подписан, поэтому можно проверить, что его не изменяли.
+
+Скачать мои данные: https://app.yayatoh.test/privacy-request/sample/archive/sample
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > privacy.archive-ready · zh-CN 1`] = `
+{
+  "subject": "您在 Lakeside Events 的个人数据已准备好",
+  "text": "您在 Lakeside Events 的个人数据已准备好
+
+您好：
+
+Lakeside Events 已答复您的请求：其保存的您的个人数据副本已整理为 ZIP 文件。链接 7 天内有效。存档带有签名，您可以核实其未被篡改。
+
+下载我的数据: https://app.yayatoh.test/privacy-request/sample/archive/sample
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > privacy.archive-ready · zh-TW 1`] = `
+{
+  "subject": "您在 Lakeside Events 的個人資料已準備好",
+  "text": "您在 Lakeside Events 的個人資料已準備好
+
+您好：
+
+Lakeside Events 已回覆您的請求：其保存的您的個人資料副本已整理為 ZIP 檔案。連結 7 天內有效。封存檔附有簽章，您可以確認其未被竄改。
+
+下載我的資料: https://app.yayatoh.test/privacy-request/sample/archive/sample
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > privacy.erasure-done · ar 1`] = `
+{
+  "subject": "محت Lakeside Events بياناتك الشخصية",
+  "text": "محت Lakeside Events بياناتك الشخصية
+
+مرحبًا،
+
+محت Lakeside Events بياناتك الشخصية كما طلبت. يجب الاحتفاظ ببعض السجلات بحكم القانون (مثل الطلبات المدفوعة لأغراض الضرائب) بعد إزالة اسمك وبريدك الإلكتروني؛ ويذكرها الإيصال مع السبب. هذه آخر رسالة بهذا الشأن.
+
+عرض الإيصال: https://app.yayatoh.test/privacy-request/sample/receipt/sample
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > privacy.erasure-done · de 1`] = `
+{
+  "subject": "Lakeside Events hat Ihre personenbezogenen Daten gelöscht",
+  "text": "Lakeside Events hat Ihre personenbezogenen Daten gelöscht
+
+Hallo,
+
+Lakeside Events hat Ihre personenbezogenen Daten wie gewünscht gelöscht. Einige Unterlagen müssen gesetzlich aufbewahrt werden (zum Beispiel bezahlte Bestellungen für die Steuer), ohne Ihren Namen und Ihre E-Mail; die Bestätigung listet sie mit Grund auf. Dies ist die letzte E-Mail dazu.
+
+Bestätigung ansehen: https://app.yayatoh.test/privacy-request/sample/receipt/sample
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > privacy.erasure-done · en 1`] = `
+{
+  "subject": "Lakeside Events erased your personal data",
+  "text": "Lakeside Events erased your personal data
+
+Hello,
+
+Lakeside Events erased your personal data as you asked. Some records must be kept by law (for example paid orders for tax), with your name and email removed; the receipt lists them and why. This is the last email you will get about it.
+
+View the receipt: https://app.yayatoh.test/privacy-request/sample/receipt/sample
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > privacy.erasure-done · es 1`] = `
+{
+  "subject": "Lakeside Events borró tus datos personales",
+  "text": "Lakeside Events borró tus datos personales
+
+Hola:
+
+Lakeside Events borró tus datos personales como pediste. Algunos registros deben conservarse por ley (por ejemplo, pedidos pagados por impuestos), sin tu nombre ni tu correo; el recibo los enumera con el motivo. Este es el último correo sobre el tema.
+
+Ver el recibo: https://app.yayatoh.test/privacy-request/sample/receipt/sample
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > privacy.erasure-done · fr 1`] = `
+{
+  "subject": "Lakeside Events a effacé vos données personnelles",
+  "text": "Lakeside Events a effacé vos données personnelles
+
+Bonjour,
+
+Lakeside Events a effacé vos données personnelles comme demandé. Certains documents doivent être conservés par la loi (par exemple les commandes payées, pour les impôts), sans votre nom ni votre e-mail ; le reçu les liste avec la raison. C’est le dernier e-mail à ce sujet.
+
+Voir le reçu: https://app.yayatoh.test/privacy-request/sample/receipt/sample
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > privacy.erasure-done · hi 1`] = `
+{
+  "subject": "Lakeside Events ने आपका निजी डेटा मिटा दिया",
+  "text": "Lakeside Events ने आपका निजी डेटा मिटा दिया
+
+नमस्ते,
+
+Lakeside Events ने आपके कहे अनुसार आपका निजी डेटा मिटा दिया। कुछ रिकॉर्ड कानूनन रखने होते हैं (जैसे कर के लिए भुगतान किए गए ऑर्डर), आपके नाम और ईमेल के बिना; रसीद उन्हें कारण सहित बताती है। इस बारे में यह आखिरी ईमेल है।
+
+रसीद देखें: https://app.yayatoh.test/privacy-request/sample/receipt/sample
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > privacy.erasure-done · it 1`] = `
+{
+  "subject": "Lakeside Events ha cancellato i tuoi dati personali",
+  "text": "Lakeside Events ha cancellato i tuoi dati personali
+
+Ciao,
+
+Lakeside Events ha cancellato i tuoi dati personali come richiesto. Alcuni documenti vanno conservati per legge (per esempio gli ordini pagati, ai fini fiscali), senza il tuo nome né la tua email; la ricevuta li elenca con il motivo. Questa è l’ultima email al riguardo.
+
+Vedi la ricevuta: https://app.yayatoh.test/privacy-request/sample/receipt/sample
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > privacy.erasure-done · ja 1`] = `
+{
+  "subject": "Lakeside Eventsがあなたの個人データを消去しました",
+  "text": "Lakeside Eventsがあなたの個人データを消去しました
+
+こんにちは。
+
+Lakeside Eventsはご依頼どおり個人データを消去しました。一部の記録は法律により保存が必要です（税務上の支払済み注文など）が、氏名とメールアドレスは削除されています。受領書にその一覧と理由を記載しています。この件のご連絡はこれが最後です。
+
+受領書を見る: https://app.yayatoh.test/privacy-request/sample/receipt/sample
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > privacy.erasure-done · nl 1`] = `
+{
+  "subject": "Lakeside Events heeft je persoonsgegevens gewist",
+  "text": "Lakeside Events heeft je persoonsgegevens gewist
+
+Hallo,
+
+Lakeside Events heeft je persoonsgegevens gewist zoals gevraagd. Sommige gegevens moeten wettelijk bewaard blijven (bijvoorbeeld betaalde bestellingen voor de belasting), zonder je naam en e-mail; het ontvangstbewijs noemt ze met de reden. Dit is de laatste e-mail hierover.
+
+Ontvangstbewijs bekijken: https://app.yayatoh.test/privacy-request/sample/receipt/sample
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > privacy.erasure-done · pt 1`] = `
+{
+  "subject": "Lakeside Events apagou os seus dados pessoais",
+  "text": "Lakeside Events apagou os seus dados pessoais
+
+Olá!
+
+Lakeside Events apagou os seus dados pessoais como pediu. Alguns registos têm de ser guardados por lei (por exemplo, pedidos pagos para efeitos fiscais), sem o seu nome nem e-mail; o recibo indica-os com o motivo. Este é o último e-mail sobre o assunto.
+
+Ver o recibo: https://app.yayatoh.test/privacy-request/sample/receipt/sample
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > privacy.erasure-done · ru 1`] = `
+{
+  "subject": "Lakeside Events удалила ваши персональные данные",
+  "text": "Lakeside Events удалила ваши персональные данные
+
+Здравствуйте!
+
+Lakeside Events удалила ваши персональные данные по вашему запросу. Некоторые записи по закону нужно хранить (например, оплаченные заказы для налогов) — без вашего имени и email; в квитанции они перечислены с причиной. Это последнее письмо по этому вопросу.
+
+Посмотреть квитанцию: https://app.yayatoh.test/privacy-request/sample/receipt/sample
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > privacy.erasure-done · zh-CN 1`] = `
+{
+  "subject": "Lakeside Events 已删除您的个人数据",
+  "text": "Lakeside Events 已删除您的个人数据
+
+您好：
+
+Lakeside Events 已按您的要求删除您的个人数据。部分记录依法必须保留（例如用于税务的已付款订单），但已去除您的姓名和电子邮件；收据中列出了这些记录及原因。这是关于此事的最后一封邮件。
+
+查看收据: https://app.yayatoh.test/privacy-request/sample/receipt/sample
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > privacy.erasure-done · zh-TW 1`] = `
+{
+  "subject": "Lakeside Events 已刪除您的個人資料",
+  "text": "Lakeside Events 已刪除您的個人資料
+
+您好：
+
+Lakeside Events 已依您的要求刪除您的個人資料。部分紀錄依法必須保留（例如供稅務使用的已付款訂單），但已移除您的姓名與電子郵件；收據列出這些紀錄及原因。這是關於此事的最後一封郵件。
+
+查看收據: https://app.yayatoh.test/privacy-request/sample/receipt/sample
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > privacy.request-code · ar 1`] = `
+{
+  "subject": "305117 هو رمزك لتأكيد طلب الخصوصية",
+  "text": "305117 هو رمزك لتأكيد طلب الخصوصية
+
+مرحبًا،
+
+أدخل 305117 لتأكيد طلبك إلى Lakeside Events: محو بياناتك الشخصية. يعمل الرمز مرة واحدة وتنتهي صلاحيته خلال 10 دقائق. إذا لم تطلبه، يمكنك تجاهل هذه الرسالة: لن يحدث شيء دون الرمز.
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > privacy.request-code · de 1`] = `
+{
+  "subject": "305117 ist Ihr Code zur Bestätigung Ihrer Datenschutzanfrage",
+  "text": "305117 ist Ihr Code zur Bestätigung Ihrer Datenschutzanfrage
+
+Hallo,
+
+Geben Sie 305117 ein, um Ihre Anfrage an Lakeside Events zu bestätigen: Löschung Ihrer personenbezogenen Daten. Der Code gilt einmal und läuft in 10 Minuten ab. Wenn Sie ihn nicht angefordert haben, können Sie diese E-Mail ignorieren: Ohne den Code passiert nichts.
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > privacy.request-code · en 1`] = `
+{
+  "subject": "305117 is your code to confirm your privacy request",
+  "text": "305117 is your code to confirm your privacy request
+
+Hello,
+
+Enter 305117 to confirm your request to Lakeside Events for erasing your personal data. The code works once and expires in 10 minutes. If you didn't ask for it, you can ignore this email: nothing happens without the code.
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > privacy.request-code · es 1`] = `
+{
+  "subject": "305117 es tu código para confirmar tu solicitud de privacidad",
+  "text": "305117 es tu código para confirmar tu solicitud de privacidad
+
+Hola:
+
+Introduce 305117 para confirmar tu solicitud a Lakeside Events: borrar tus datos personales. El código sirve una vez y caduca en 10 minutos. Si no lo pediste, puedes ignorar este correo: sin el código no pasa nada.
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > privacy.request-code · fr 1`] = `
+{
+  "subject": "305117 est votre code pour confirmer votre demande de confidentialité",
+  "text": "305117 est votre code pour confirmer votre demande de confidentialité
+
+Bonjour,
+
+Saisissez 305117 pour confirmer votre demande à Lakeside Events : effacer vos données personnelles. Le code fonctionne une fois et expire dans 10 minutes. Si vous ne l’avez pas demandé, ignorez cet e-mail : rien ne se passe sans le code.
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > privacy.request-code · hi 1`] = `
+{
+  "subject": "305117 आपके गोपनीयता अनुरोध की पुष्टि का कोड है",
+  "text": "305117 आपके गोपनीयता अनुरोध की पुष्टि का कोड है
+
+नमस्ते,
+
+Lakeside Events को अपने अनुरोध की पुष्टि के लिए 305117 दर्ज करें: आपका निजी डेटा मिटाना। कोड एक बार काम करता है और 10 मिनट में समाप्त हो जाता है। अगर आपने यह नहीं माँगा, तो इस ईमेल को अनदेखा करें: कोड के बिना कुछ नहीं होगा।
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > privacy.request-code · it 1`] = `
+{
+  "subject": "305117 è il tuo codice per confermare la richiesta sulla privacy",
+  "text": "305117 è il tuo codice per confermare la richiesta sulla privacy
+
+Ciao,
+
+Inserisci 305117 per confermare la tua richiesta a Lakeside Events: cancellare i tuoi dati personali. Il codice vale una volta e scade tra 10 minuti. Se non l’hai richiesto, ignora questa email: senza il codice non succede nulla.
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > privacy.request-code · ja 1`] = `
+{
+  "subject": "プライバシーリクエスト確認コードは305117です",
+  "text": "プライバシーリクエスト確認コードは305117です
+
+こんにちは。
+
+305117を入力して、Lakeside Eventsへの個人データの消去のリクエストを確認してください。コードは1回限り有効で、10分後に失効します。心当たりがない場合は、このメールを無視してください。コードがなければ何も起こりません。
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > privacy.request-code · nl 1`] = `
+{
+  "subject": "305117 is je code om je privacyverzoek te bevestigen",
+  "text": "305117 is je code om je privacyverzoek te bevestigen
+
+Hallo,
+
+Voer 305117 in om je verzoek aan Lakeside Events te bevestigen: je persoonsgegevens wissen. De code werkt één keer en verloopt over 10 minuten. Heb je dit niet gevraagd, negeer dan deze e-mail: zonder de code gebeurt er niets.
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > privacy.request-code · pt 1`] = `
+{
+  "subject": "305117 é o seu código para confirmar o pedido de privacidade",
+  "text": "305117 é o seu código para confirmar o pedido de privacidade
+
+Olá!
+
+Digite 305117 para confirmar o seu pedido a Lakeside Events: apagar os seus dados pessoais. O código funciona uma vez e expira em 10 minutos. Se não pediu, ignore este e-mail: nada acontece sem o código.
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > privacy.request-code · ru 1`] = `
+{
+  "subject": "305117 — ваш код для подтверждения запроса о персональных данных",
+  "text": "305117 — ваш код для подтверждения запроса о персональных данных
+
+Здравствуйте!
+
+Введите 305117, чтобы подтвердить запрос к Lakeside Events: удаление ваших персональных данных. Код действует один раз и истекает через 10 минут. Если вы его не запрашивали, проигнорируйте это письмо: без кода ничего не произойдёт.
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > privacy.request-code · zh-CN 1`] = `
+{
+  "subject": "305117 是您确认隐私请求的验证码",
+  "text": "305117 是您确认隐私请求的验证码
+
+您好：
+
+输入 305117 以确认您向 Lakeside Events 提出的请求：删除您的个人数据。验证码仅可使用一次，10 分钟后失效。如果这不是您的请求，请忽略此邮件：没有验证码不会发生任何操作。
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > privacy.request-code · zh-TW 1`] = `
+{
+  "subject": "305117 是您確認隱私請求的驗證碼",
+  "text": "305117 是您確認隱私請求的驗證碼
+
+您好：
+
+輸入 305117 以確認您向 Lakeside Events 提出的請求：刪除您的個人資料。驗證碼僅能使用一次，10 分鐘後失效。如果這不是您的請求，請忽略此郵件：沒有驗證碼不會發生任何事。
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
 exports[`renderMessage: every kind in all 13 locales > program.task-reminder · ar 1`] = `
 {
   "subject": "تذكير: Upload your slides لـ Midwest Leadership Summit",

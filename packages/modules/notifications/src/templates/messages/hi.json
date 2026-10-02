@@ -244,6 +244,20 @@
     "alerts.alert-urgent-text": {
       "subject": "{rule, select, unseated {{count, plural, one {{countWords} उपस्थित व्यक्ति के पास सीट नहीं है} other {{countWords} उपस्थित लोगों के पास सीट नहीं है}}} undistributed {{count, plural, one {{countWords} खरीदा गया टिकट वितरित नहीं हुआ है} other {{countWords} खरीदे गए टिकट वितरित नहीं हुए हैं}}} paymentsFailed {{count, plural, one {{countWords} भुगतान विफल रहा} other {{countWords} भुगतान विफल रहे}}} paymentsStuck {{count, plural, one {{countWords} भुगतान अटका हुआ है} other {{countWords} भुगतान अटके हुए हैं}}} refundSurge {{count, plural, one {{countWords} रिफ़ंड पिछले घंटे में} other {{countWords} रिफ़ंड पिछले घंटे में}}} devicesOffline {{count, plural, one {{countWords} चेक-इन डिवाइस ऑफ़लाइन है} other {{countWords} चेक-इन डिवाइस ऑफ़लाइन हैं}}} devicesLowBattery {{count, plural, one {{countWords} चेक-इन डिवाइस की बैटरी कम है} other {{countWords} चेक-इन डिवाइसों की बैटरी कम है}}} devicesBacklog {{count, plural, one {{countWords} चेक-इन डिवाइस पर स्कैन सिंक होने की प्रतीक्षा में हैं} other {{countWords} चेक-इन डिवाइसों पर स्कैन सिंक होने की प्रतीक्षा में हैं}}} capacityNear {स्थल {count}% भर चुका है} capacityFull {स्थल पूरी तरह भर गया है ({count}%)} sellOut {{count}% टिकट बिक चुके हैं} salesPace {टिकट बिक्री लक्ष्य गति के {count}% पर है} readiness {{count, plural, one {{countWords} सेटअप चरण इस इवेंट को रोक रहा है} other {{countWords} सेटअप चरण इस इवेंट को रोक रहे हैं}}} domain {{count, plural, one {{countWords} कस्टम डोमेन में समस्या है} other {{countWords} कस्टम डोमेन में समस्या है}}} payoutsPastDue {{count, plural, one {{countWords} भुगतान खाता आवश्यकता की समय-सीमा निकल चुकी है} other {{countWords} भुगतान खाता आवश्यकताओं की समय-सीमा निकल चुकी है}}} deliverability {ईमेल डिलीवरी पर ध्यान देने की ज़रूरत है} automationFailed {{count, plural, one {{countWords} संदेश या बल्क कार्रवाई आज विफल रही} other {{countWords} संदेश या बल्क कार्रवाइयाँ आज विफल रहीं}}} assistanceOverdue {{count, plural, one {{countWords} सहायता अनुरोध बहुत देर से प्रतीक्षा में है} other {{countWords} सहायता अनुरोध बहुत देर से प्रतीक्षा में हैं}}} campaignFailed {{count, plural, one {{countWords} अभियान भेजना आज विफल रहा} other {{countWords} अभियान भेजना आज विफल रहे}}} disputeDeadline {{count, plural, one {{countWords} विवाद के लिए जल्द ही सबूत चाहिए} other {{countWords} विवादों के लिए जल्द ही सबूत चाहिए}}} other {अलर्ट}}",
       "intro": "{eventName, select, none {{org} में किसी चीज़ पर ध्यान देने की ज़रूरत है।} other {{eventName} में किसी चीज़ पर ध्यान देने की ज़रूरत है।}} बटन वह पेज खोलता है जो इसे ठीक करता है।"
+    },
+    "privacy.request-code": {
+      "subject": "{code} आपके गोपनीयता अनुरोध की पुष्टि का कोड है",
+      "intro": "{org} को अपने अनुरोध की पुष्टि के लिए {code} दर्ज करें: {kind, select, erasure {आपका निजी डेटा मिटाना} other {आपके निजी डेटा की एक प्रति}}। कोड एक बार काम करता है और {minutes, plural, one {# मिनट} other {# मिनट}} में समाप्त हो जाता है। अगर आपने यह नहीं माँगा, तो इस ईमेल को अनदेखा करें: कोड के बिना कुछ नहीं होगा।"
+    },
+    "privacy.archive-ready": {
+      "subject": "{org} से आपका निजी डेटा तैयार है",
+      "intro": "{org} ने आपके अनुरोध का उत्तर दिया: आपके बारे में रखे गए निजी डेटा की एक प्रति ZIP फ़ाइल के रूप में तैयार है। लिंक {days, plural, one {# दिन} other {# दिन}} तक काम करेगा। संग्रह पर हस्ताक्षर है, ताकि आप जाँच सकें कि इसमें बदलाव नहीं हुआ।",
+      "cta": "मेरा डेटा डाउनलोड करें"
+    },
+    "privacy.erasure-done": {
+      "subject": "{org} ने आपका निजी डेटा मिटा दिया",
+      "intro": "{org} ने आपके कहे अनुसार आपका निजी डेटा मिटा दिया। कुछ रिकॉर्ड कानूनन रखने होते हैं (जैसे कर के लिए भुगतान किए गए ऑर्डर), आपके नाम और ईमेल के बिना; रसीद उन्हें कारण सहित बताती है। इस बारे में यह आखिरी ईमेल है।",
+      "cta": "रसीद देखें"
     }
   },
   "roles": {
