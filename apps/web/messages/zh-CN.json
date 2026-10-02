@@ -7525,7 +7525,6 @@
     "publicLink": "填写地址：",
     "publicLinkText": "公开报名表",
     "openBuilder": "编辑报名表",
-    "viewBuilder": "查看报名表",
     "pagesTitle": "页面",
     "emptyTitle": "还没有页面",
     "emptyDescription": "先添加第一个页面，再添加问题。页面可以限定于某些报名类型，或只在特定回答后显示。",
@@ -7677,7 +7676,8 @@
     "submittedTitle": "谢谢，你已完成报名",
     "submittedDescription": "谢谢，{name}。你的回答已发送给主办方。",
     "expiredTitle": "此链接已过期",
-    "expiredDescription": "继续报名的链接在最后一次保存后 14 天内有效。请从活动页面重新开始。"
+    "expiredDescription": "继续报名的链接在最后一次保存后 14 天内有效。请从活动页面重新开始。",
+    "openReadOnly": "查看注册表单"
   },
   "agenda": {
     "publishing": {

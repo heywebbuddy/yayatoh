@@ -7525,7 +7525,6 @@
     "publicLink": "Se rellena en",
     "publicLinkText": "el formulario de inscripción público",
     "openBuilder": "Editar el formulario de inscripción",
-    "viewBuilder": "Ver el formulario de inscripción",
     "pagesTitle": "Páginas",
     "emptyTitle": "Aún no hay páginas",
     "emptyDescription": "Añade una primera página y luego sus preguntas. Las páginas pueden limitarse a tipos de inscripción o mostrarse solo tras ciertas respuestas.",
@@ -7677,7 +7676,8 @@
     "submittedTitle": "Gracias, ya estás inscrito",
     "submittedDescription": "Gracias, {name}. Tus respuestas se enviaron al organizador.",
     "expiredTitle": "Este enlace ha caducado",
-    "expiredDescription": "Los enlaces para continuar una inscripción funcionan 14 días después del último guardado. Vuelve a empezar desde la página del evento."
+    "expiredDescription": "Los enlaces para continuar una inscripción funcionan 14 días después del último guardado. Vuelve a empezar desde la página del evento.",
+    "openReadOnly": "Ver el formulario de inscripción"
   },
   "agenda": {
     "publishing": {

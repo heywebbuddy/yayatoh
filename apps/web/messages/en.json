@@ -7525,7 +7525,6 @@
     "publicLink": "People fill it in at",
     "publicLinkText": "the public registration form",
     "openBuilder": "Edit the registration form",
-    "viewBuilder": "View the registration form",
     "pagesTitle": "Pages",
     "emptyTitle": "No pages yet",
     "emptyDescription": "Add a first page, then its questions. Pages can be limited to registration types or shown only after certain answers.",
@@ -7677,7 +7676,8 @@
     "submittedTitle": "Thank you, you're registered",
     "submittedDescription": "Thanks, {name}. Your answers were sent to the organizer.",
     "expiredTitle": "This link has expired",
-    "expiredDescription": "Links to continue a registration work for 14 days after the last save. Start again from the event page."
+    "expiredDescription": "Links to continue a registration work for 14 days after the last save. Start again from the event page.",
+    "openReadOnly": "See the registration form"
   },
   "agenda": {
     "publishing": {

@@ -236,8 +236,8 @@ test.describe('registration types and admission items (M5.1a)', () => {
     await expect(viewer.getByRole('button', { name: /^Add / })).toHaveCount(0);
     await expect(viewer.getByRole('button', { name: /^(Offer|Save price|Stop offering) / })).toHaveCount(0);
     await expect(viewer.getByText(/^Edit /)).toHaveCount(0);
-    // Batch 3g merge: M5.1b's form link reads "View" for a viewer (the builder is read-only).
-    await expect(viewer.getByRole('link', { name: 'View the registration form' })).toBeVisible();
+    // M5.1b's form link reads "See" for a viewer (the builder is read-only for them).
+    await expect(viewer.getByRole('link', { name: 'See the registration form' })).toBeVisible();
     await expect(viewer.getByRole('cell', { name: '10.00 USD' })).toBeVisible();
     await expectAccessible(viewer);
     await viewer.close();

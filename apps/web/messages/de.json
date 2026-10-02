@@ -7525,7 +7525,6 @@
     "publicLink": "Ausgefüllt wird es unter",
     "publicLinkText": "dem öffentlichen Anmeldeformular",
     "openBuilder": "Anmeldeformular bearbeiten",
-    "viewBuilder": "Anmeldeformular ansehen",
     "pagesTitle": "Seiten",
     "emptyTitle": "Noch keine Seiten",
     "emptyDescription": "Fügen Sie eine erste Seite hinzu, dann ihre Fragen. Seiten lassen sich auf Anmeldetypen beschränken oder erst nach bestimmten Antworten zeigen.",
@@ -7677,7 +7676,8 @@
     "submittedTitle": "Danke, Sie sind angemeldet",
     "submittedDescription": "Danke, {name}. Ihre Antworten wurden an den Veranstalter gesendet.",
     "expiredTitle": "Dieser Link ist abgelaufen",
-    "expiredDescription": "Links zum Fortsetzen einer Anmeldung gelten 14 Tage nach dem letzten Speichern. Beginnen Sie auf der Veranstaltungsseite neu."
+    "expiredDescription": "Links zum Fortsetzen einer Anmeldung gelten 14 Tage nach dem letzten Speichern. Beginnen Sie auf der Veranstaltungsseite neu.",
+    "openReadOnly": "Anmeldeformular ansehen"
   },
   "agenda": {
     "publishing": {
