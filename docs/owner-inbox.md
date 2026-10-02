@@ -223,6 +223,17 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
   - **Who sees it:** new `marketing:read` permission for owners, admins, managers, marketing, finance and viewers (viewers see revenue per link, as they already see orders). Creating links and the window: `marketing:write`. Door staff and scanners see nothing.
   - **Bots and floods** (link-preview fetchers, crawlers, HTTP tools, over 30 clicks per device per 10 minutes) are redirected but not counted.
 
+## Phase 6 (expansion; plan approved 2026-10-02)
+Start the slow reviews early. Everything is built against fakes meanwhile; each connector goes live per org once its account or review is done.
+- [ ] **Zoom Marketplace** app review (weeks; blocks live M6.9b/M6.10a).
+- [ ] **Google OAuth verification** for Sheets and Calendar scopes (weeks; may need a security assessment; blocks live M6.4b/M6.5c).
+- [ ] **Zapier** partner app review (blocks the public Zapier app, M6.4c).
+- [ ] **Intuit (QuickBooks Online)** production review and **Xero** app registration (M6.5d).
+- [ ] App registrations: HubSpot, Mailchimp, Klaviyo, Salesforce Connected App, Slack (M6.4d, M6.5b, M6.4c).
+- [ ] Accounts: Svix, Nango, Mux, Meilisearch Cloud, Tinybird (only when volume needs it), Anthropic API key for production AI.
+- [ ] Prices: subscription tiers (D22, with launch data), agency commission defaults (P6-8), streaming markup (D24).
+- [ ] Legal (`legal-copy`): API terms, DPA and subprocessor list, integration privacy disclosures, agency agreement terms, CE certificate wording.
+
 ## Phase 4 (weddings and galas)
 - [ ] **M4.1a guest list: defaults pending owner** (labels: `db-migration`, `tenancy`). Built with these defaults; say if any should change:
   - **Who sees the private answers.** Dietary and accessibility answers and home addresses are stored encrypted (P4-3) and shown on the Guests page to every organizer role that can read attendees today (`attendees:read`: owners, admins, managers, box office, viewers, and the event manager role). Editing needs `attendees:write`. **Batch 3c merge:** the Guests page and commands now use their own `guests:read` / `guests:write`, given to exactly the org roles that hold `attendees:read` / `attendees:write` (so nobody's access changed), and to co-hosts (everything) and planners (guests, RSVP, seating, day-of; never payouts, refunds or finance) on their own events through M4.2a's `guests:*`. Say if viewers or box office should not see the private answers: dropping `guests:read` from a role is now a one-line change, no migration.
