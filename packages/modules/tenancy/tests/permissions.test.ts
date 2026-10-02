@@ -64,6 +64,7 @@ describe('event roles: co-host and planner (M4.2a, P4-8)', () => {
     'attendees:read': { co_host: true, planner: true },
     'attendees:write': { co_host: true, planner: true },
     'attendees:export': { co_host: true, planner: false },
+    'attendees:export_private': { co_host: true, planner: false },
     'checkin:scan': { co_host: true, planner: true },
     'messages:read': { co_host: true, planner: true },
     'messages:send': { co_host: true, planner: true },

@@ -121,6 +121,7 @@ export {
   PublicRsvpDto,
   partyRsvpQuery,
   publicRsvpQuery,
+  publicRsvpQuestionsQuery,
   RSVP_LINK_PURPOSE,
   RsvpOverviewDto,
   RsvpSettingsDto,
@@ -138,6 +139,27 @@ export {
   setRsvpSettingsCommand,
   submitRsvpCommand,
 } from './rsvp.ts';
+// M4.1e: RSVP questions (menu, questions on the forms engine, write-back, meal counts, export).
+export {
+  MAX_MENU_OPTIONS,
+  MealCountsDto,
+  MenuOptionDto,
+  mealCountsQuery,
+  menuQuery,
+  PublicRsvpQuestionsDto,
+  publicRsvpQuestionsTx,
+  publishRsvpQuestionsCommand,
+  QuestionAnswersInput,
+  RsvpQuestionsDto,
+  removeMenuOptionCommand,
+  rsvpAnswerSummaryQuery,
+  rsvpAnswersExportAction,
+  rsvpAnswersExportBulk,
+  rsvpAnswersPrivateExportAction,
+  rsvpAnswersPrivateExportBulk,
+  rsvpQuestionsQuery,
+  saveMenuOptionCommand,
+} from './rsvp-questions.ts';
 export { RSVP_LINK_TTL_MS, rsvpByContactTx } from './rsvp-state.ts';
 export {
   AGE_CLASSES,

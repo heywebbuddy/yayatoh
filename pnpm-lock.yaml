@@ -1622,6 +1622,9 @@ importers:
       '@yayatoh/events':
         specifier: workspace:*
         version: link:../events
+      '@yayatoh/forms':
+        specifier: workspace:*
+        version: link:../forms
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../kernel

@@ -24,6 +24,11 @@ export const PERMISSIONS = [
   'attendees:write',
   /** Download attendee lists (CSV). Contact data leaving the platform: narrower than read. */
   'attendees:export',
+  /**
+   * Include private answers (dietary, accessibility, private RSVP questions; P4-3) in a guest
+   * answers export (M4.1e). Owners and admins; co-hosts on their event (`attendees:*`).
+   */
+  'attendees:export_private',
   'contacts:read',
   'finance:read',
   /** Resolve reconciliation differences (M1.6e). */

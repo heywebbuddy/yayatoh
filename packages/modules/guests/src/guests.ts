@@ -1,6 +1,7 @@
 import { attendeesByIdsTx } from '@yayatoh/attendees';
 import { isUniqueViolation, type TenantTx } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
+import { deleteRsvpResponsesTx } from '@yayatoh/forms';
 import { actorId, type Ctx, DomainError, requireOrg } from '@yayatoh/kernel';
 import { keyVault, tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { and, asc, desc, eq, ilike, inArray, isNotNull, ne, or, type SQL, sql } from 'drizzle-orm';
@@ -89,7 +90,7 @@ const invalid = (field: string, reason: string) =>
  * The sealed part of a guest (P4-3): never stored or logged in plaintext. Email and phone arrive
  * with an import (M4.1b) and are kept when the host edits the other answers.
  */
-interface Sealed {
+export interface Sealed {
   dietary: string | null;
   accessibility: string | null;
   address: string | null;
@@ -104,7 +105,7 @@ export async function seal(orgId: string, s: Sealed): Promise<string | null> {
   return keyVault().encrypt(orgId, new TextEncoder().encode(JSON.stringify(present)));
 }
 
-async function unseal(orgId: string, ciphertext: string | null): Promise<Sealed> {
+export async function unseal(orgId: string, ciphertext: string | null): Promise<Sealed> {
   const out: Sealed = { dietary: null, accessibility: null, address: null, email: null, phone: null };
   if (!ciphertext) return out;
   const raw = JSON.parse(new TextDecoder().decode(await keyVault().decrypt(orgId, ciphertext))) as Record<
@@ -354,6 +355,12 @@ export const removePartyCommand = tenantCommand({
       .where(eq(guests.partyId, input.partyId))
       .returning({ id: guests.id });
     await tx.delete(parties).where(eq(parties.id, input.partyId));
+    // M4.1e: their RSVP answers leave with them.
+    await deleteRsvpResponsesTx(
+      tx,
+      input.eventId,
+      gone.map((g) => g.id),
+    );
     await recordHistoryTx(tx, ctx, [
       ...gone.map((g) => ({
         eventId: input.eventId,
@@ -601,6 +608,12 @@ export const removePartyGuestCommand = tenantCommand({
       .delete(guests)
       .where(or(eq(guests.id, g.id), eq(guests.hostGuestId, g.id)))
       .returning({ id: guests.id });
+    // M4.1e: their RSVP answers leave with them.
+    await deleteRsvpResponsesTx(
+      tx,
+      input.eventId,
+      gone.map((r) => r.id),
+    );
     await recordHistoryTx(
       tx,
       ctx,
