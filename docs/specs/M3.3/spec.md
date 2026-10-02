@@ -261,7 +261,6 @@ untaken past its SLA becomes an alert, and urgent ones reach on-duty staff phone
   devices with staff alerts on at the event).
 - Members' own web push for new urgent requests (they hear when it escalates, through alert
   routing).
-- Placing the widget in live layouts (M3.3a live mode).
 
 ### 7. Acceptance
 | ID | Criterion | Test |
@@ -278,3 +277,14 @@ untaken past its SLA becomes an alert, and urgent ones reach on-duty staff phone
 | AC10 | E2E: guest asks from the seat finder (validation, medical guidance first, keyboard), staff see it live, assign/start/note/resolve by keyboard, persisted, guest sees resolved; axe; Arabic RTL | `apps/web/e2e/assistance.spec.ts` |
 | AC11 | E2E: invalid ticket links refused (another event's, forged, unknown status link 404), Arabic RTL | `assistance.spec.ts` |
 | AC12 | E2E: scanner staff request, device takes and resolves, console follows live; viewer has no controls; axe; Arabic RTL | `assistance.spec.ts` |
+
+### Batch 3g merge (M3.3a + M3.3b + M3.8b)
+- **One widget registry:** M3.3b's `assistance` widget replaced M3.3a's placeholder slot in `COMMAND_CENTER_WIDGETS`; M3.3a's live layouts place it for owner, ops and door (pre-show and live; `assistance:read`).
+- **Alerts through the outbox:** `assistance.requested@1` / `assistance.updated@1` reach the M3.2b evaluator (`alerts.evaluator`); a live event's overdue request is live-critical (M3.3a escalation: the urgent text to on-duty staff). `alerts.alert-urgent-text` carries the `assistanceOverdue` arm in 13 locales.
+- **Front door (M2.4a):** `/tv/{token}` and the seat finder's help pages are new-app paths, never forwarded.
+
+| ID | Criterion | Test |
+|---|---|---|
+| AC-3g-1 | Through the outbox subscriber: exactly one `assistanceOverdue` alert for a live overdue request, the urgent text to the on-duty manager once, still one after a re-run and the scheduled pass, resolved when taken | int `assistance.int.test.ts` ("through the outbox") |
+| AC-3g-2 | The live layout shows M3.3b's queue in the assistance slot | int `live-mode.int.test.ts`; unit `command-center/tests/domain.test.ts`; e2e `live-mode.spec.ts` |
+| AC-3g-3 | TV links and guest help pages are platform paths | unit `packages/platform/tests/front-door.test.ts` |
