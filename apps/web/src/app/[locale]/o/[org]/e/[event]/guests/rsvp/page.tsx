@@ -31,6 +31,8 @@ export default async function RsvpHostPage({
   const nav = PROFILES[profile].nav.find((i) => i.key === 'guests');
   if (!nav || !navIncludes(profile, data.modules, 'guests') || !can('guests:read')) notFound();
   const t = await getTranslations('rsvpHost');
+  const tq = await getTranslations('rsvpQuestions');
+  const ta = await getTranslations('rsvpAnswers');
   const canWrite = can('guests:write');
   const [ov, list] = await Promise.all([
     executeQuery(rsvpOverviewQuery, { eventId: ev.id }, data.ctx, ports),
@@ -52,9 +54,17 @@ export default async function RsvpHostPage({
   return (
     <>
       <PageHeader title={t('title')} description={t('subtitle')} />
-      <Link href={base} className="min-h-6 self-start py-1 text-caption underline">
-        {t('back')}
-      </Link>
+      <nav aria-label={tq('linksLabel')} className="flex flex-wrap gap-x-4">
+        <Link href={base} className="min-h-6 py-1 text-caption underline">
+          {t('back')}
+        </Link>
+        <Link href={`${base}/questions`} className="min-h-6 py-1 text-caption underline">
+          {tq('link')}
+        </Link>
+        <Link href={`${base}/answers`} className="min-h-6 py-1 text-caption underline">
+          {ta('link')}
+        </Link>
+      </nav>
       {canWrite ? null : <p className="text-body text-zinc-500">{t('viewerNotice')}</p>}
 
       <section aria-labelledby="rsvp-states-heading" className="flex flex-col gap-3">
