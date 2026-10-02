@@ -154,6 +154,10 @@
       },
       "forms": {
         "resume": "Link para continuar a inscrição"
+      },
+      "registration": {
+        "session-enrolled": "Vaga em sessão (inscrito pela lista de espera)",
+        "session-offer": "Oferta de vaga em sessão"
       }
     },
     "status": {
@@ -3646,7 +3650,8 @@
       "website": "Informe um endereço web que comece com https:// ou http://.",
       "position": "Informe uma ordem de 1 a 99.",
       "tier": "Escolha uma cota.",
-      "tierInUse": "Mova ou exclua primeiro os patrocinadores desta cota."
+      "tierInUse": "Mova ou exclua primeiro os patrocinadores desta cota.",
+      "capacityBelowEnrolled": "Há mais pessoas com vaga. Remova inscrições primeiro ou mantenha uma capacidade maior."
     },
     "warnings": {
       "room_overlap": "{room} também está reservada para “{other}” neste horário.",
@@ -7327,7 +7332,8 @@
         "offer_closed": "Esta oferta não está mais disponível.",
         "offer_items": "Somente o passe oferecido pode ser comprado."
       }
-    }
+    },
+    "openEnrollment": "Inscrição em sessões e listas de espera"
   },
   "registrationForm": {
     "title": "Formulário de inscrição",
@@ -7879,6 +7885,111 @@
       "not_invited": "Este convidado não está convidado para esse subevento.",
       "sub_event_has_chart": "Ele já tem um mapa próprio.",
       "no_chart": "Ainda não há mapa para copiar. Crie o mapa do evento na página Assentos ou escolha um mapa salvo."
+    }
+  },
+  "enrollment": {
+    "title": "Inscrição em sessões",
+    "subtitle": "Vagas e listas de espera das sessões opcionais, como a lista avança e quais sessões cada acesso inclui.",
+    "backToRegistration": "Voltar à inscrição",
+    "viewerNotice": "Você pode ver as inscrições. Só quem pode editar o evento pode alterá-las.",
+    "sessions": "Sessões opcionais",
+    "closeRule": "As listas de espera avançam até 24 horas antes do início de cada sessão. Depois disso, uma vaga livre vai para quem se inscrever primeiro.",
+    "emptyTitle": "Ainda não há sessões opcionais",
+    "emptyDescription": "Torne uma sessão opcional na página Sessões e defina uma capacidade. Os participantes se inscrevem pela agenda deles.",
+    "openSessions": "Ir para Sessões",
+    "group": "Escolha uma: {name}",
+    "places": "{enrolled} de {capacity} vagas ocupadas",
+    "placesUnlimited": "{enrolled} inscritos · sem limite",
+    "waitlist": "Lista de espera: {waiting} aguardando, {offered} com oferta",
+    "noWaitlist": "Ninguém na lista de espera",
+    "enrollmentClosed": "Inscrição encerrada",
+    "closesAt": "A lista de espera avança até {when}",
+    "closed": "Lista de espera encerrada (faltam menos de 24 horas)",
+    "promoteNow": "Avançar agora: {title}",
+    "promoted": "A lista de espera avançou.",
+    "settings": "Quando uma vaga é liberada",
+    "promotion": "Avanço da lista de espera",
+    "promotionAuto": "Inscrever automaticamente a próxima pessoa",
+    "promotionOffer": "Oferecer a vaga à próxima pessoa por tempo limitado",
+    "offerMinutes": "Prazo da oferta (minutos)",
+    "offerMinutesHint": "De 15 a 2.880 minutos. As ofertas sempre terminam quando a lista de espera fecha.",
+    "offerSummary": "A vaga é oferecida à próxima pessoa por {minutes, plural, one {# minuto} other {# minutos}}.",
+    "saveSettings": "Salvar ajuste da lista de espera",
+    "saved": "Salvo.",
+    "items": "Sessões que cada acesso inclui",
+    "itemsHint": "Um passe sem sessões marcadas inclui todas as sessões. Um adicional inclui só as sessões marcadas.",
+    "allSessions": "Inclui todas as sessões",
+    "noSessions": "Não inclui sessões",
+    "someSessions": "{count, plural, one {Inclui # sessão} other {Inclui # sessões}}",
+    "chooseSessions": "Escolher sessões para {name}",
+    "itemSessions": "Sessões que {name} inclui",
+    "saveItem": "Salvar sessões de {name}",
+    "errors": {
+      "offerMinutes": "Informe um número de minutos de 15 a 2.880.",
+      "promotion": "Escolha como a lista de espera avança.",
+      "sessionIds": "Escolha sessões deste evento.",
+      "promotion_closed": "A lista de espera fechou: ela para 24 horas antes do início da sessão."
+    }
+  },
+  "mySchedule": {
+    "open": "Minha agenda",
+    "eyebrow": "Minha agenda",
+    "for": "Agenda de {name}",
+    "backToOrder": "Voltar ao meu pedido",
+    "whose": "Agenda de quem",
+    "noRegistrantTitle": "Nenhuma inscrição neste pedido",
+    "noRegistrantDescription": "As sessões fazem parte de uma inscrição. Abra o pedido com que você se inscreveu para ver sua agenda.",
+    "emptyTitle": "Ainda não há sessões",
+    "emptyDescription": "O organizador ainda não adicionou sessões que você possa assistir. Volte mais perto do evento.",
+    "summary": "{included, plural, one {# sessão incluída} other {# sessões incluídas}} · {enrolled, plural, one {# inscrição} other {# inscrições}} · {waiting, plural, one {# lista de espera} other {# listas de espera}}",
+    "pickOne": "escolha uma: {group}",
+    "state": {
+      "included": "Incluída na sua inscrição",
+      "enrolled": "Você está inscrito",
+      "offered": "Uma vaga é sua até {until}",
+      "waiting": "Lista de espera: posição {position}",
+      "open": "Vagas disponíveis",
+      "full": "Lotada: você pode entrar na lista de espera",
+      "waitlist_closed": "Lotada. A lista de espera fechou 24 horas antes da sessão.",
+      "closed": "Inscrição encerrada",
+      "started": "Já começou"
+    },
+    "enrol": "Inscrever-me",
+    "enrolNamed": "Inscrever-me em {title}",
+    "join": "Entrar na lista de espera",
+    "joinNamed": "Entrar na lista de espera de {title}",
+    "drop": "Cancelar inscrição",
+    "dropNamed": "Cancelar inscrição em {title}",
+    "leave": "Sair da lista de espera",
+    "leaveNamed": "Sair da lista de espera de {title}",
+    "accept": "Aceitar a vaga",
+    "acceptNamed": "Aceitar a vaga em {title}",
+    "decline": "Recusar",
+    "declineNamed": "Recusar a vaga em {title}",
+    "replace": "Substituir {other}",
+    "keepBoth": "Manter as duas",
+    "conflict": {
+      "overlap": "{title} coincide com {other}, em que você está inscrito. Substitua ou escolha outra sessão.",
+      "group": "Você já escolheu {other} em “{group}”, onde só é possível escolher uma sessão. Trocar por {title}?"
+    },
+    "done": {
+      "enrolled": "Você está inscrito em {title}.",
+      "waiting": "Você está na lista de espera de {title}: posição {position}. Se abrir uma vaga, enviaremos um e-mail.",
+      "offered": "Uma vaga em {title} é sua: aceite antes que a oferta termine.",
+      "dropped": "Você cancelou a inscrição em {title}.",
+      "left": "Você saiu da lista de espera de {title}.",
+      "declined": "Você recusou a vaga em {title}.",
+      "accepted": "A vaga em {title} é sua."
+    },
+    "refused": {
+      "not_available": "Sua inscrição não inclui {title}.",
+      "closed": "A inscrição em {title} está encerrada.",
+      "started": "{title} já começou.",
+      "included": "{title} está incluída: não é preciso se inscrever.",
+      "keep_both_capped": "As duas sessões têm vagas limitadas, então não dá para manter as duas. Substitua {other} ou escolha outra sessão.",
+      "waitlist_closed": "{title} está lotada e a lista de espera fechou 24 horas antes da sessão.",
+      "offer_ended": "A oferta para {title} terminou.",
+      "full": "{title} acabou de lotar. Tente de novo para entrar na lista de espera."
     }
   }
 }

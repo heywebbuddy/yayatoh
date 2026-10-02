@@ -62,7 +62,8 @@ export async function scheduleAction(
   const choice = (CONFLICT_CHOICES as readonly string[]).includes(raw) ? (raw as ConflictChoice) : 'refuse';
   return run(token, async (ctx) => {
     const input = { token, registrantId, sessionId };
-    if (intent === 'drop') return { done: (await executeCommand(dropSessionCommand, input, ctx, ports)).status };
+    if (intent === 'drop')
+      return { done: (await executeCommand(dropSessionCommand, input, ctx, ports)).status };
     if (intent === 'accept') {
       await executeCommand(acceptSessionOfferCommand, input, ctx, ports);
       return { done: 'accepted' };

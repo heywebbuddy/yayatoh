@@ -154,6 +154,10 @@
       },
       "forms": {
         "resume": "登録再開用リンク"
+      },
+      "registration": {
+        "session-enrolled": "セッションの席（キャンセル待ちから登録）",
+        "session-offer": "セッションの席のご案内"
       }
     },
     "status": {
@@ -3646,7 +3650,8 @@
       "website": "https:// または http:// で始まるウェブアドレスを入力してください。",
       "position": "1〜99の表示順を入力してください。",
       "tier": "ランクを選んでください。",
-      "tierInUse": "先にこのランクのスポンサーを移動または削除してください。"
+      "tierInUse": "先にこのランクのスポンサーを移動または削除してください。",
+      "capacityBelowEnrolled": "すでにそれ以上の人が席を確保しています。先に登録を取り消すか、定員を高いままにしてください。"
     },
     "warnings": {
       "room_overlap": "{room}はこの時間「{other}」にも使われています。",
@@ -7327,7 +7332,8 @@
         "offer_closed": "この案内は終了しました。",
         "offer_items": "購入できるのは案内されたパスのみです。"
       }
-    }
+    },
+    "openEnrollment": "セッション登録とキャンセル待ち"
   },
   "registrationForm": {
     "title": "登録フォーム",
@@ -7879,6 +7885,111 @@
       "not_invited": "このゲストはそのプログラムに招待されていません。",
       "sub_event_has_chart": "すでに専用の座席表があります。",
       "no_chart": "コピーできる座席表がまだありません。座席ページでイベントの座席表を作成するか、保存済みのフロアプランを選んでください。"
+    }
+  },
+  "enrollment": {
+    "title": "セッション登録",
+    "subtitle": "任意セッションの席とキャンセル待ち、キャンセル待ちの繰り上げ方法、各入場アイテムで参加できるセッション。",
+    "backToRegistration": "登録に戻る",
+    "viewerNotice": "登録状況は閲覧できます。変更できるのはイベントを編集できる人だけです。",
+    "sessions": "任意セッション",
+    "closeRule": "キャンセル待ちは各セッション開始の24時間前まで繰り上がります。それ以降の空席は先に登録した人のものになります。",
+    "emptyTitle": "任意セッションはまだありません",
+    "emptyDescription": "セッションページでセッションを任意にし、定員を設定してください。参加者は自分のスケジュールから登録します。",
+    "openSessions": "セッションへ",
+    "group": "1つ選択：{name}",
+    "places": "{capacity}席中{enrolled}席が埋まっています",
+    "placesUnlimited": "{enrolled}人登録 · 上限なし",
+    "waitlist": "キャンセル待ち：待機{waiting}人、案内中{offered}人",
+    "noWaitlist": "キャンセル待ちはいません",
+    "enrollmentClosed": "登録受付終了",
+    "closesAt": "{when}まで繰り上げ",
+    "closed": "キャンセル待ち終了（開始まで24時間未満）",
+    "promoteNow": "今すぐ繰り上げ：{title}",
+    "promoted": "キャンセル待ちを繰り上げました。",
+    "settings": "空席が出たとき",
+    "promotion": "キャンセル待ちの繰り上げ",
+    "promotionAuto": "次の人を自動で登録する",
+    "promotionOffer": "次の人に期限付きで席を案内する",
+    "offerMinutes": "案内の有効時間（分）",
+    "offerMinutesHint": "15〜2,880分。案内はキャンセル待ちの終了時に必ず終わります。",
+    "offerSummary": "次の人に{minutes, plural, other {#分間}}席を案内します。",
+    "saveSettings": "キャンセル待ちの設定を保存",
+    "saved": "保存しました。",
+    "items": "各入場アイテムで参加できるセッション",
+    "itemsHint": "セッションにチェックのないパスはすべてのセッションに参加できます。追加オプションはチェックしたセッションのみです。",
+    "allSessions": "すべてのセッション",
+    "noSessions": "セッションなし",
+    "someSessions": "{count, plural, other {#件のセッション}}",
+    "chooseSessions": "{name}のセッションを選ぶ",
+    "itemSessions": "{name}で参加できるセッション",
+    "saveItem": "{name}のセッションを保存",
+    "errors": {
+      "offerMinutes": "15〜2,880の分数を入力してください。",
+      "promotion": "キャンセル待ちの繰り上げ方法を選んでください。",
+      "sessionIds": "このイベントのセッションを選んでください。",
+      "promotion_closed": "キャンセル待ちは終了しました。セッション開始の24時間前に止まります。"
+    }
+  },
+  "mySchedule": {
+    "open": "マイスケジュール",
+    "eyebrow": "マイスケジュール",
+    "for": "{name}さんのスケジュール",
+    "backToOrder": "注文に戻る",
+    "whose": "誰のスケジュール",
+    "noRegistrantTitle": "この注文には登録がありません",
+    "noRegistrantDescription": "セッションは登録に紐づきます。登録時の注文を開いてスケジュールをご覧ください。",
+    "emptyTitle": "セッションはまだありません",
+    "emptyDescription": "参加できるセッションはまだ追加されていません。イベントが近づいたら再度ご確認ください。",
+    "summary": "含まれるセッション{included, plural, other {#件}} · 登録{enrolled, plural, other {#件}} · キャンセル待ち{waiting, plural, other {#件}}",
+    "pickOne": "1つ選択：{group}",
+    "state": {
+      "included": "登録に含まれています",
+      "enrolled": "登録済み",
+      "offered": "{until}まで席を確保しています",
+      "waiting": "キャンセル待ち：{position}番目",
+      "open": "空席あり",
+      "full": "満席：キャンセル待ちに登録できます",
+      "waitlist_closed": "満席。キャンセル待ちはセッションの24時間前に終了しました。",
+      "closed": "登録受付終了",
+      "started": "開始済み"
+    },
+    "enrol": "登録する",
+    "enrolNamed": "{title}に登録する",
+    "join": "キャンセル待ちに登録",
+    "joinNamed": "{title}のキャンセル待ちに登録",
+    "drop": "登録を取り消す",
+    "dropNamed": "{title}の登録を取り消す",
+    "leave": "キャンセル待ちをやめる",
+    "leaveNamed": "{title}のキャンセル待ちをやめる",
+    "accept": "席を受け取る",
+    "acceptNamed": "{title}の席を受け取る",
+    "decline": "辞退する",
+    "declineNamed": "{title}の席を辞退する",
+    "replace": "{other}と入れ替える",
+    "keepBoth": "両方残す",
+    "conflict": {
+      "overlap": "{title}は登録済みの{other}と時間が重なっています。入れ替えるか、別のセッションを選んでください。",
+      "group": "「{group}」ではすでに{other}を選んでいます。ここでは1つだけ選べます。{title}に変更しますか？"
+    },
+    "done": {
+      "enrolled": "{title}に登録しました。",
+      "waiting": "{title}のキャンセル待ちに登録しました：{position}番目です。空席が出たらメールでお知らせします。",
+      "offered": "{title}の席を確保しています。案内の期限までに受け取ってください。",
+      "dropped": "{title}の登録を取り消しました。",
+      "left": "{title}のキャンセル待ちをやめました。",
+      "declined": "{title}の席を辞退しました。",
+      "accepted": "{title}の席を受け取りました。"
+    },
+    "refused": {
+      "not_available": "ご登録には{title}が含まれていません。",
+      "closed": "{title}の登録受付は終了しました。",
+      "started": "{title}はすでに始まっています。",
+      "included": "{title}は含まれています。登録は不要です。",
+      "keep_both_capped": "どちらのセッションも席数に限りがあるため、両方は残せません。{other}と入れ替えるか、別のセッションを選んでください。",
+      "waitlist_closed": "{title}は満席で、キャンセル待ちはセッションの24時間前に終了しました。",
+      "offer_ended": "{title}の案内は期限切れです。",
+      "full": "{title}はちょうど満席になりました。もう一度お試しいただくとキャンセル待ちに登録できます。"
     }
   }
 }

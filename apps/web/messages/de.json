@@ -154,6 +154,10 @@
       },
       "forms": {
         "resume": "Link zum Fortsetzen der Anmeldung"
+      },
+      "registration": {
+        "session-enrolled": "Session-Platz (von der Warteliste angemeldet)",
+        "session-offer": "Angebot für einen Session-Platz"
       }
     },
     "status": {
@@ -3646,7 +3650,8 @@
       "website": "Gib eine Webadresse ein, die mit https:// oder http:// beginnt.",
       "position": "Gib eine Reihenfolge von 1 bis 99 ein.",
       "tier": "Wähle eine Stufe.",
-      "tierInUse": "Verschiebe oder lösche zuerst die Sponsoren dieser Stufe."
+      "tierInUse": "Verschiebe oder lösche zuerst die Sponsoren dieser Stufe.",
+      "capacityBelowEnrolled": "Es haben mehr Personen einen Platz. Entferne zuerst Anmeldungen oder behalte eine höhere Kapazität."
     },
     "warnings": {
       "room_overlap": "{room} ist zu dieser Zeit auch für „{other}“ gebucht.",
@@ -7327,7 +7332,8 @@
         "offer_closed": "Dieses Angebot ist nicht mehr verfügbar.",
         "offer_items": "Nur der angebotene Pass kann gekauft werden."
       }
-    }
+    },
+    "openEnrollment": "Session-Anmeldung und Wartelisten"
   },
   "registrationForm": {
     "title": "Anmeldeformular",
@@ -7879,6 +7885,111 @@
       "not_invited": "Dieser Gast ist zu diesem Programmpunkt nicht eingeladen.",
       "sub_event_has_chart": "Er hat bereits einen eigenen Plan.",
       "no_chart": "Es gibt noch keinen Plan zum Kopieren. Erstellen Sie den Plan der Veranstaltung auf der Seite Sitzplätze oder wählen Sie einen gespeicherten Plan."
+    }
+  },
+  "enrollment": {
+    "title": "Session-Anmeldung",
+    "subtitle": "Plätze und Wartelisten optionaler Sessions, wie die Warteliste nachrückt und welche Sessions jede Zugangsleistung umfasst.",
+    "backToRegistration": "Zurück zur Registrierung",
+    "viewerNotice": "Du kannst die Anmeldungen ansehen. Ändern können sie nur Personen, die die Veranstaltung bearbeiten dürfen.",
+    "sessions": "Optionale Sessions",
+    "closeRule": "Wartelisten rücken bis 24 Stunden vor Beginn jeder Session nach. Danach bekommt ein freier Platz, wer sich zuerst anmeldet.",
+    "emptyTitle": "Noch keine optionalen Sessions",
+    "emptyDescription": "Mache eine Session auf der Seite „Sessions“ optional und gib ihr eine Kapazität. Teilnehmende melden sich dann über ihren Plan an.",
+    "openSessions": "Zu den Sessions",
+    "group": "Eine wählen: {name}",
+    "places": "{enrolled} von {capacity} Plätzen belegt",
+    "placesUnlimited": "{enrolled} angemeldet · keine Begrenzung",
+    "waitlist": "Warteliste: {waiting} wartend, {offered} angeboten",
+    "noWaitlist": "Niemand auf der Warteliste",
+    "enrollmentClosed": "Anmeldung geschlossen",
+    "closesAt": "Warteliste rückt nach bis {when}",
+    "closed": "Warteliste geschlossen (weniger als 24 Stunden)",
+    "promoteNow": "Jetzt nachrücken: {title}",
+    "promoted": "Warteliste nachgerückt.",
+    "settings": "Wenn ein Platz frei wird",
+    "promotion": "Nachrücken von der Warteliste",
+    "promotionAuto": "Die nächste Person automatisch anmelden",
+    "promotionOffer": "Der nächsten Person den Platz für begrenzte Zeit anbieten",
+    "offerMinutes": "Angebotsfrist (Minuten)",
+    "offerMinutesHint": "15 bis 2.880 Minuten. Angebote enden immer, wenn die Warteliste schließt.",
+    "offerSummary": "Der nächsten Person wird der Platz für {minutes, plural, one {# Minute} other {# Minuten}} angeboten.",
+    "saveSettings": "Wartelisten-Einstellung speichern",
+    "saved": "Gespeichert.",
+    "items": "Sessions je Zugangsleistung",
+    "itemsHint": "Ein Pass ohne angehakte Session umfasst alle Sessions. Ein Zusatz umfasst nur die angehakten Sessions.",
+    "allSessions": "Umfasst alle Sessions",
+    "noSessions": "Umfasst keine Sessions",
+    "someSessions": "{count, plural, one {Umfasst # Session} other {Umfasst # Sessions}}",
+    "chooseSessions": "Sessions für {name} wählen",
+    "itemSessions": "Sessions, die {name} umfasst",
+    "saveItem": "Sessions für {name} speichern",
+    "errors": {
+      "offerMinutes": "Gib eine Minutenzahl von 15 bis 2.880 ein.",
+      "promotion": "Wähle, wie die Warteliste nachrückt.",
+      "sessionIds": "Wähle Sessions dieser Veranstaltung.",
+      "promotion_closed": "Die Warteliste ist geschlossen: Sie endet 24 Stunden vor Beginn der Session."
+    }
+  },
+  "mySchedule": {
+    "open": "Mein Plan",
+    "eyebrow": "Mein Plan",
+    "for": "Plan für {name}",
+    "backToOrder": "Zurück zu meiner Bestellung",
+    "whose": "Wessen Plan",
+    "noRegistrantTitle": "Keine Registrierung in dieser Bestellung",
+    "noRegistrantDescription": "Sessions gehören zu einer Registrierung. Öffne die Bestellung, mit der du dich registriert hast.",
+    "emptyTitle": "Noch keine Sessions",
+    "emptyDescription": "Die Veranstalter haben noch keine Sessions für dich hinzugefügt. Schau näher an der Veranstaltung wieder vorbei.",
+    "summary": "{included, plural, one {# enthaltene Session} other {# enthaltene Sessions}} · {enrolled, plural, one {# angemeldet} other {# angemeldet}} · {waiting, plural, one {# Warteliste} other {# Wartelisten}}",
+    "pickOne": "eine wählen: {group}",
+    "state": {
+      "included": "In deiner Registrierung enthalten",
+      "enrolled": "Du bist angemeldet",
+      "offered": "Ein Platz ist bis {until} für dich reserviert",
+      "waiting": "Warteliste: Platz {position}",
+      "open": "Plätze frei",
+      "full": "Ausgebucht: Du kannst auf die Warteliste",
+      "waitlist_closed": "Ausgebucht. Die Warteliste wurde 24 Stunden vor der Session geschlossen.",
+      "closed": "Anmeldung geschlossen",
+      "started": "Bereits begonnen"
+    },
+    "enrol": "Anmelden",
+    "enrolNamed": "Anmelden für {title}",
+    "join": "Auf die Warteliste",
+    "joinNamed": "Auf die Warteliste für {title}",
+    "drop": "Abmelden",
+    "dropNamed": "Abmelden von {title}",
+    "leave": "Warteliste verlassen",
+    "leaveNamed": "Warteliste verlassen für {title}",
+    "accept": "Platz annehmen",
+    "acceptNamed": "Platz annehmen in {title}",
+    "decline": "Ablehnen",
+    "declineNamed": "Platz ablehnen in {title}",
+    "replace": "{other} ersetzen",
+    "keepBoth": "Beide behalten",
+    "conflict": {
+      "overlap": "{title} überschneidet sich mit {other}, wofür du angemeldet bist. Ersetze die Session oder wähle eine andere.",
+      "group": "Du hast in „{group}“ schon {other} gewählt, und dort ist nur eine Session möglich. Zu {title} wechseln?"
+    },
+    "done": {
+      "enrolled": "Du bist für {title} angemeldet.",
+      "waiting": "Du stehst auf der Warteliste für {title}: Platz {position}. Wird ein Platz frei, schreiben wir dir.",
+      "offered": "Ein Platz in {title} ist für dich reserviert: Nimm ihn an, bevor das Angebot endet.",
+      "dropped": "Du hast dich von {title} abgemeldet.",
+      "left": "Du hast die Warteliste für {title} verlassen.",
+      "declined": "Du hast den Platz in {title} abgelehnt.",
+      "accepted": "Der Platz in {title} gehört dir."
+    },
+    "refused": {
+      "not_available": "Deine Registrierung umfasst {title} nicht.",
+      "closed": "Die Anmeldung für {title} ist geschlossen.",
+      "started": "{title} hat bereits begonnen.",
+      "included": "{title} ist enthalten: Keine Anmeldung nötig.",
+      "keep_both_capped": "Beide Sessions haben begrenzte Plätze, daher kannst du nicht beide behalten. Ersetze {other} oder wähle eine andere Session.",
+      "waitlist_closed": "{title} ist ausgebucht und die Warteliste wurde 24 Stunden vor der Session geschlossen.",
+      "offer_ended": "Das Angebot für {title} ist abgelaufen.",
+      "full": "{title} ist gerade voll geworden. Versuche es erneut, um auf die Warteliste zu kommen."
     }
   }
 }

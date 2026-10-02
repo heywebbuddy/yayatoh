@@ -154,6 +154,10 @@
       },
       "forms": {
         "resume": "繼續報名連結"
+      },
+      "registration": {
+        "session-enrolled": "場次名額（從候補名單報名）",
+        "session-offer": "場次名額邀請"
       }
     },
     "status": {
@@ -3646,7 +3650,8 @@
       "website": "請輸入以 https:// 或 http:// 開头的網址。",
       "position": "請輸入 1 到 99 的順序。",
       "tier": "請選擇級別。",
-      "tierInUse": "請先移動或刪除此級別的贊助商。"
+      "tierInUse": "請先移動或刪除此級別的贊助商。",
+      "capacityBelowEnrolled": "已有更多人佔用名額。請先移除報名，或維持更高的容量。"
     },
     "warnings": {
       "room_overlap": "{room} 在此時間也被「{other}」佔用。",
@@ -7327,7 +7332,8 @@
         "offer_closed": "此邀請已失效。",
         "offer_items": "只能購買所邀請的通行證。"
       }
-    }
+    },
+    "openEnrollment": "場次報名與候補名單"
   },
   "registrationForm": {
     "title": "報名表",
@@ -7879,6 +7885,111 @@
       "not_invited": "此賓客未受邀參加該分場活動。",
       "sub_event_has_chart": "它已有專用座位圖。",
       "no_chart": "尚無可複製的座位圖。請在座位頁面建立活動座位圖，或選擇已儲存的平面圖。"
+    }
+  },
+  "enrollment": {
+    "title": "場次報名",
+    "subtitle": "選修場次的名額與候補名單、候補遞補方式，以及每個入場項目包含的場次。",
+    "backToRegistration": "返回報名設定",
+    "viewerNotice": "你可以檢視報名情況。只有能編輯活動的人可以修改。",
+    "sessions": "選修場次",
+    "closeRule": "候補名單會遞補到每個場次開始前 24 小時。之後空出的名額歸最先報名的人。",
+    "emptyTitle": "還沒有選修場次",
+    "emptyDescription": "在「場次」頁面將場次設為選修並設定容量，參加者即可在自己的行程中報名。",
+    "openSessions": "前往場次",
+    "group": "擇一：{name}",
+    "places": "已佔用 {enrolled}/{capacity} 個名額",
+    "placesUnlimited": "已報名 {enrolled} 人 · 不限人數",
+    "waitlist": "候補：{waiting} 人等待，{offered} 人已獲邀請",
+    "noWaitlist": "候補名單是空的",
+    "enrollmentClosed": "報名已關閉",
+    "closesAt": "候補遞補至 {when}",
+    "closed": "候補已關閉（距開始不到 24 小時）",
+    "promoteNow": "立即遞補：{title}",
+    "promoted": "候補已遞補。",
+    "settings": "有名額空出時",
+    "promotion": "候補遞補方式",
+    "promotionAuto": "自動為下一位報名",
+    "promotionOffer": "限時提供名額給下一位",
+    "offerMinutes": "邀請時限（分鐘）",
+    "offerMinutesHint": "15 至 2,880 分鐘。候補關閉時邀請一律結束。",
+    "offerSummary": "提供名額給下一位 {minutes, plural, other {# 分鐘}}。",
+    "saveSettings": "儲存候補設定",
+    "saved": "已儲存。",
+    "items": "每個入場項目包含的場次",
+    "itemsHint": "未勾選場次的通行證包含全部場次。加購項目只包含勾選的場次。",
+    "allSessions": "包含全部場次",
+    "noSessions": "不包含場次",
+    "someSessions": "{count, plural, other {包含 # 個場次}}",
+    "chooseSessions": "為 {name} 選擇場次",
+    "itemSessions": "{name} 包含的場次",
+    "saveItem": "儲存 {name} 的場次",
+    "errors": {
+      "offerMinutes": "請輸入 15 至 2,880 之間的分鐘數。",
+      "promotion": "請選擇候補遞補方式。",
+      "sessionIds": "請選擇本活動的場次。",
+      "promotion_closed": "候補已關閉：場次開始前 24 小時停止遞補。"
+    }
+  },
+  "mySchedule": {
+    "open": "我的行程",
+    "eyebrow": "我的行程",
+    "for": "{name} 的行程",
+    "backToOrder": "返回我的訂單",
+    "whose": "誰的行程",
+    "noRegistrantTitle": "此訂單沒有報名",
+    "noRegistrantDescription": "場次屬於報名。請開啟你報名時的訂單查看行程。",
+    "emptyTitle": "還沒有場次",
+    "emptyDescription": "主辦單位還沒有新增你可以參加的場次。請在活動接近時再來查看。",
+    "summary": "包含場次 {included, plural, other {# 個}} · 已報名 {enrolled, plural, other {# 個}} · 候補 {waiting, plural, other {# 個}}",
+    "pickOne": "擇一：{group}",
+    "state": {
+      "included": "已包含在你的報名中",
+      "enrolled": "已報名",
+      "offered": "名額為你保留至 {until}",
+      "waiting": "候補：第 {position} 位",
+      "open": "尚有名額",
+      "full": "已滿：可加入候補名單",
+      "waitlist_closed": "已滿。候補名單已在場次開始前 24 小時關閉。",
+      "closed": "報名已關閉",
+      "started": "已開始"
+    },
+    "enrol": "報名",
+    "enrolNamed": "報名 {title}",
+    "join": "加入候補",
+    "joinNamed": "加入 {title} 的候補",
+    "drop": "取消報名",
+    "dropNamed": "取消報名 {title}",
+    "leave": "退出候補",
+    "leaveNamed": "退出 {title} 的候補",
+    "accept": "接受名額",
+    "acceptNamed": "接受 {title} 的名額",
+    "decline": "放棄",
+    "declineNamed": "放棄 {title} 的名額",
+    "replace": "替換 {other}",
+    "keepBoth": "兩個都保留",
+    "conflict": {
+      "overlap": "{title} 與你已報名的 {other} 時間重疊。請替換它或選擇其他場次。",
+      "group": "你已在「{group}」中選擇了 {other}，該組只能選一個場次。要改為 {title} 嗎？"
+    },
+    "done": {
+      "enrolled": "你已報名 {title}。",
+      "waiting": "你已加入 {title} 的候補：第 {position} 位。有名額空出時我們會寄信通知你。",
+      "offered": "{title} 的名額為你保留：請在邀請結束前接受。",
+      "dropped": "你已取消報名 {title}。",
+      "left": "你已退出 {title} 的候補。",
+      "declined": "你已放棄 {title} 的名額。",
+      "accepted": "{title} 的名額歸你了。"
+    },
+    "refused": {
+      "not_available": "你的報名不包含 {title}。",
+      "closed": "{title} 的報名已關閉。",
+      "started": "{title} 已經開始。",
+      "included": "{title} 已包含在內，無需報名。",
+      "keep_both_capped": "兩個場次名額都有限，不能同時保留。請替換 {other} 或選擇其他場次。",
+      "waitlist_closed": "{title} 已滿，候補名單已在場次開始前 24 小時關閉。",
+      "offer_ended": "{title} 的邀請已結束。",
+      "full": "{title} 剛剛額滿。再試一次即可加入候補名單。"
     }
   }
 }

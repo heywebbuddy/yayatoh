@@ -154,6 +154,10 @@
       },
       "forms": {
         "resume": "Registration resume link"
+      },
+      "registration": {
+        "session-enrolled": "Session place (enrolled from the waitlist)",
+        "session-offer": "Session place offer"
       }
     },
     "status": {
@@ -3646,7 +3650,8 @@
       "website": "Enter a web address that starts with https:// or http://.",
       "position": "Enter an order from 1 to 99.",
       "tier": "Pick a tier.",
-      "tierInUse": "Move or delete this tier's sponsors first."
+      "tierInUse": "Move or delete this tier's sponsors first.",
+      "capacityBelowEnrolled": "People hold more places than that. Drop enrollments first or keep a higher capacity."
     },
     "warnings": {
       "room_overlap": "{room} is also booked for “{other}” at this time.",
@@ -7327,7 +7332,8 @@
         "offer_closed": "This offer is no longer open.",
         "offer_items": "Only the offered pass can be bought."
       }
-    }
+    },
+    "openEnrollment": "Session enrollment and waitlists"
   },
   "registrationForm": {
     "title": "Registration form",
@@ -7879,6 +7885,111 @@
       "not_invited": "This guest isn't invited to that sub-event.",
       "sub_event_has_chart": "It already has its own chart.",
       "no_chart": "There's no chart to copy yet. Create the event's plan on the Seating page, or choose a saved floor plan."
+    }
+  },
+  "enrollment": {
+    "title": "Session enrollment",
+    "subtitle": "Places and waitlists for optional sessions, how the waitlist promotes, and which sessions each admission item gives.",
+    "backToRegistration": "Back to registration",
+    "viewerNotice": "You can view enrollment. Only people who can edit the event can change it.",
+    "sessions": "Optional sessions",
+    "closeRule": "Waitlists promote until 24 hours before each session starts. After that, a free place goes to whoever enrols first.",
+    "emptyTitle": "No optional sessions yet",
+    "emptyDescription": "Make a session optional on the Sessions page and give it a capacity. Attendees then enrol from their schedule.",
+    "openSessions": "Go to Sessions",
+    "group": "Pick one: {name}",
+    "places": "{enrolled} of {capacity} places taken",
+    "placesUnlimited": "{enrolled} enrolled · no limit",
+    "waitlist": "Waitlist: {waiting} waiting, {offered} offered",
+    "noWaitlist": "Nobody on the waitlist",
+    "enrollmentClosed": "Enrollment closed",
+    "closesAt": "Waitlist promotes until {when}",
+    "closed": "Waitlist closed (less than 24 hours to go)",
+    "promoteNow": "Promote now: {title}",
+    "promoted": "Waitlist promoted.",
+    "settings": "When a place frees up",
+    "promotion": "Waitlist promotion",
+    "promotionAuto": "Enrol the next person automatically",
+    "promotionOffer": "Offer the place to the next person for a limited time",
+    "offerMinutes": "Offer window (minutes)",
+    "offerMinutesHint": "From 15 to 2,880 minutes. Offers always end when the waitlist closes.",
+    "offerSummary": "The next person is offered the place for {minutes, plural, one {# minute} other {# minutes}}.",
+    "saveSettings": "Save waitlist setting",
+    "saved": "Saved.",
+    "items": "Sessions each admission item gives",
+    "itemsHint": "A pass with no session ticked gives every session. An add-on gives only the sessions ticked.",
+    "allSessions": "Gives every session",
+    "noSessions": "Gives no sessions",
+    "someSessions": "{count, plural, one {Gives # session} other {Gives # sessions}}",
+    "chooseSessions": "Choose sessions for {name}",
+    "itemSessions": "Sessions {name} gives",
+    "saveItem": "Save sessions for {name}",
+    "errors": {
+      "offerMinutes": "Enter a number of minutes from 15 to 2,880.",
+      "promotion": "Choose how the waitlist promotes.",
+      "sessionIds": "Choose sessions of this event.",
+      "promotion_closed": "The waitlist has closed: it stops 24 hours before the session starts."
+    }
+  },
+  "mySchedule": {
+    "open": "My schedule",
+    "eyebrow": "My schedule",
+    "for": "Schedule for {name}",
+    "backToOrder": "Back to my order",
+    "whose": "Whose schedule",
+    "noRegistrantTitle": "No registration on this order",
+    "noRegistrantDescription": "Sessions belong to a registration. Open the order you registered with to see your schedule.",
+    "emptyTitle": "No sessions yet",
+    "emptyDescription": "The organizer hasn't added sessions you can attend. Check back closer to the event.",
+    "summary": "{included, plural, one {# included session} other {# included sessions}} · {enrolled, plural, one {# enrolled} other {# enrolled}} · {waiting, plural, one {# waitlist} other {# waitlists}}",
+    "pickOne": "pick one: {group}",
+    "state": {
+      "included": "Included in your registration",
+      "enrolled": "You're enrolled",
+      "offered": "A place is yours until {until}",
+      "waiting": "Waitlist: number {position} in line",
+      "open": "Places available",
+      "full": "Full: you can join the waitlist",
+      "waitlist_closed": "Full. The waitlist closed 24 hours before the session.",
+      "closed": "Enrollment closed",
+      "started": "Already started"
+    },
+    "enrol": "Enrol",
+    "enrolNamed": "Enrol in {title}",
+    "join": "Join the waitlist",
+    "joinNamed": "Join the waitlist for {title}",
+    "drop": "Drop",
+    "dropNamed": "Drop {title}",
+    "leave": "Leave the waitlist",
+    "leaveNamed": "Leave the waitlist for {title}",
+    "accept": "Accept the place",
+    "acceptNamed": "Accept the place in {title}",
+    "decline": "Decline",
+    "declineNamed": "Decline the place in {title}",
+    "replace": "Replace {other}",
+    "keepBoth": "Keep both",
+    "conflict": {
+      "overlap": "{title} overlaps {other}, which you're enrolled in. Replace it, or choose another session.",
+      "group": "You already picked {other} in “{group}”, and you can pick one session there. Switch to {title}?"
+    },
+    "done": {
+      "enrolled": "You're enrolled in {title}.",
+      "waiting": "You're on the waitlist for {title}: number {position} in line. If a place opens, we'll email you.",
+      "offered": "A place in {title} is yours: accept it before the offer ends.",
+      "dropped": "You dropped {title}.",
+      "left": "You left the waitlist for {title}.",
+      "declined": "You declined the place in {title}.",
+      "accepted": "The place in {title} is yours."
+    },
+    "refused": {
+      "not_available": "Your registration doesn't include {title}.",
+      "closed": "Enrollment for {title} is closed.",
+      "started": "{title} has already started.",
+      "included": "{title} is included: no enrollment needed.",
+      "keep_both_capped": "Both sessions have limited places, so you can't keep both. Replace {other} or choose another session.",
+      "waitlist_closed": "{title} is full and its waitlist closed 24 hours before the session.",
+      "offer_ended": "The offer for {title} has ended.",
+      "full": "{title} just filled up. Try again to join the waitlist."
     }
   }
 }

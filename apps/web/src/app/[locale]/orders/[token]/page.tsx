@@ -8,8 +8,10 @@ import { HolderContent } from '@/components/holder-content.tsx';
 import { OrderReview } from '@/components/reviews/order-review.tsx';
 import { TicketQr } from '@/components/ticket-qr.tsx';
 import { WebPushControl } from '@/components/web-push-control.tsx';
+import { Link } from '@/i18n/navigation.ts';
 import { refundPolicyLines } from '@/lib/refund-policy-text.ts';
 import { getPdfRenderer } from '@/server/pdf.ts';
+import { scheduleSummary } from '@/server/schedule.ts';
 import { webPushPublicKey } from '@/server/web-push.ts';
 import {
   removeOrderDeviceAction,
@@ -58,6 +60,8 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
   const holderTarget = await orderHolderTarget(token);
   // M1.10e: this browser can get the organizer's updates (announcements) as push notifications.
   const devices = (await orderPushDevices(token)) ?? [];
+  // M5.2b: a registration with sessions links to the attendee's schedule.
+  const schedule = await scheduleSummary(token);
   const sinceFmt = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeZone: order.event.timezone });
   return (
     <main id="main" className="mx-auto flex min-h-dvh max-w-xl flex-col gap-6 px-6 py-16">
@@ -130,6 +134,11 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
             ))}
           </ul>
         </section>
+      ) : null}
+      {schedule ? (
+        <Link href={`/orders/${token}/schedule`} className={buttonClass('secondary', 'lg', 'self-start')}>
+          {t('mySchedule.open')}
+        </Link>
       ) : null}
       {order.tickets.length > 0 ? (
         <section aria-labelledby="tickets-heading" className="flex flex-col gap-4">

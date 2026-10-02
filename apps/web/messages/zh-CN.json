@@ -154,6 +154,10 @@
       },
       "forms": {
         "resume": "继续报名链接"
+      },
+      "registration": {
+        "session-enrolled": "场次名额（从候补名单报名）",
+        "session-offer": "场次名额邀请"
       }
     },
     "status": {
@@ -3646,7 +3650,8 @@
       "website": "请输入以 https:// 或 http:// 开头的网址。",
       "position": "请输入 1 到 99 的顺序。",
       "tier": "请选择级别。",
-      "tierInUse": "请先移动或删除此级别的赞助商。"
+      "tierInUse": "请先移动或删除此级别的赞助商。",
+      "capacityBelowEnrolled": "已有更多人占用名额。请先移除报名，或保持更高的容量。"
     },
     "warnings": {
       "room_overlap": "{room} 在此时间也被“{other}”占用。",
@@ -7327,7 +7332,8 @@
         "offer_closed": "此邀请已失效。",
         "offer_items": "只能购买所邀请的通行证。"
       }
-    }
+    },
+    "openEnrollment": "场次报名与候补名单"
   },
   "registrationForm": {
     "title": "报名表",
@@ -7879,6 +7885,111 @@
       "not_invited": "该宾客未受邀参加此分场活动。",
       "sub_event_has_chart": "它已有专用座位图。",
       "no_chart": "暂无可复制的座位图。请在座位页面创建活动座位图，或选择已保存的平面图。"
+    }
+  },
+  "enrollment": {
+    "title": "场次报名",
+    "subtitle": "可选场次的名额与候补名单、候补递补方式，以及每个入场项目包含的场次。",
+    "backToRegistration": "返回报名设置",
+    "viewerNotice": "你可以查看报名情况。只有能编辑活动的人可以修改。",
+    "sessions": "可选场次",
+    "closeRule": "候补名单会递补到每个场次开始前 24 小时。之后空出的名额归最先报名的人。",
+    "emptyTitle": "还没有可选场次",
+    "emptyDescription": "在“场次”页面将场次设为可选并设置容量，参会者即可在自己的日程中报名。",
+    "openSessions": "前往场次",
+    "group": "选一个：{name}",
+    "places": "已占用 {enrolled}/{capacity} 个名额",
+    "placesUnlimited": "已报名 {enrolled} 人 · 不限人数",
+    "waitlist": "候补：{waiting} 人等待，{offered} 人已获邀请",
+    "noWaitlist": "候补名单为空",
+    "enrollmentClosed": "报名已关闭",
+    "closesAt": "候补递补截至 {when}",
+    "closed": "候补已关闭（距开始不足 24 小时）",
+    "promoteNow": "立即递补：{title}",
+    "promoted": "候补已递补。",
+    "settings": "有名额空出时",
+    "promotion": "候补递补方式",
+    "promotionAuto": "自动为下一位报名",
+    "promotionOffer": "限时向下一位提供名额",
+    "offerMinutes": "邀请时限（分钟）",
+    "offerMinutesHint": "15 至 2,880 分钟。候补关闭时邀请一律结束。",
+    "offerSummary": "向下一位提供名额 {minutes, plural, other {# 分钟}}。",
+    "saveSettings": "保存候补设置",
+    "saved": "已保存。",
+    "items": "每个入场项目包含的场次",
+    "itemsHint": "未勾选场次的通票包含全部场次。附加项只包含勾选的场次。",
+    "allSessions": "包含全部场次",
+    "noSessions": "不包含场次",
+    "someSessions": "{count, plural, other {包含 # 个场次}}",
+    "chooseSessions": "为 {name} 选择场次",
+    "itemSessions": "{name} 包含的场次",
+    "saveItem": "保存 {name} 的场次",
+    "errors": {
+      "offerMinutes": "请输入 15 至 2,880 之间的分钟数。",
+      "promotion": "请选择候补递补方式。",
+      "sessionIds": "请选择本活动的场次。",
+      "promotion_closed": "候补已关闭：场次开始前 24 小时停止递补。"
+    }
+  },
+  "mySchedule": {
+    "open": "我的日程",
+    "eyebrow": "我的日程",
+    "for": "{name} 的日程",
+    "backToOrder": "返回我的订单",
+    "whose": "谁的日程",
+    "noRegistrantTitle": "此订单没有报名",
+    "noRegistrantDescription": "场次属于报名。请打开你报名时的订单查看日程。",
+    "emptyTitle": "还没有场次",
+    "emptyDescription": "主办方还没有添加你可以参加的场次。请在活动临近时再来查看。",
+    "summary": "包含场次 {included, plural, other {# 个}} · 已报名 {enrolled, plural, other {# 个}} · 候补 {waiting, plural, other {# 个}}",
+    "pickOne": "选一个：{group}",
+    "state": {
+      "included": "已包含在你的报名中",
+      "enrolled": "已报名",
+      "offered": "名额为你保留至 {until}",
+      "waiting": "候补：第 {position} 位",
+      "open": "尚有名额",
+      "full": "已满：可加入候补名单",
+      "waitlist_closed": "已满。候补名单已在场次开始前 24 小时关闭。",
+      "closed": "报名已关闭",
+      "started": "已开始"
+    },
+    "enrol": "报名",
+    "enrolNamed": "报名 {title}",
+    "join": "加入候补",
+    "joinNamed": "加入 {title} 的候补",
+    "drop": "取消报名",
+    "dropNamed": "取消报名 {title}",
+    "leave": "退出候补",
+    "leaveNamed": "退出 {title} 的候补",
+    "accept": "接受名额",
+    "acceptNamed": "接受 {title} 的名额",
+    "decline": "放弃",
+    "declineNamed": "放弃 {title} 的名额",
+    "replace": "替换 {other}",
+    "keepBoth": "两个都保留",
+    "conflict": {
+      "overlap": "{title} 与你已报名的 {other} 时间重叠。请替换它或选择其他场次。",
+      "group": "你已在“{group}”中选择了 {other}，该组只能选一个场次。要改为 {title} 吗？"
+    },
+    "done": {
+      "enrolled": "你已报名 {title}。",
+      "waiting": "你已加入 {title} 的候补：第 {position} 位。有名额空出时我们会发邮件通知你。",
+      "offered": "{title} 的名额为你保留：请在邀请结束前接受。",
+      "dropped": "你已取消报名 {title}。",
+      "left": "你已退出 {title} 的候补。",
+      "declined": "你已放弃 {title} 的名额。",
+      "accepted": "{title} 的名额归你了。"
+    },
+    "refused": {
+      "not_available": "你的报名不包含 {title}。",
+      "closed": "{title} 的报名已关闭。",
+      "started": "{title} 已经开始。",
+      "included": "{title} 已包含在内，无需报名。",
+      "keep_both_capped": "两个场次名额都有限，不能同时保留。请替换 {other} 或选择其他场次。",
+      "waitlist_closed": "{title} 已满，候补名单已在场次开始前 24 小时关闭。",
+      "offer_ended": "{title} 的邀请已结束。",
+      "full": "{title} 刚刚满员。再试一次即可加入候补名单。"
     }
   }
 }
