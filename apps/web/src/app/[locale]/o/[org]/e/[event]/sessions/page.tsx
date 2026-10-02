@@ -248,9 +248,10 @@ export default async function SessionsPage({
                         </p>
                         <Link
                           href={`/o/${org}/e/${event}/sessions/${s.id}/live`}
+                          aria-label={tl('openFor', { title: s.title })}
                           className="inline-flex min-h-6 items-center self-start text-caption underline underline-offset-2"
                         >
-                          {tl('openFor', { title: s.title })}
+                          {tl('title')}
                         </Link>
                         <SessionAgendaLine
                           details={agenda.sessions.find((d) => d.sessionId === s.id)}
