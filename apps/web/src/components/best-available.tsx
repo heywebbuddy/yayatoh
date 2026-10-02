@@ -2,7 +2,7 @@
 
 import { Alert, Button } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
-import { useEffect, useId, useRef, useState, useTransition } from 'react';
+import { useEffect, useId, useState, useTransition } from 'react';
 import { errorMessageKey } from '@/lib/errors.ts';
 
 const field = 'min-h-11 rounded-pill border border-zinc-200 bg-white px-4 text-body text-zinc-900';
@@ -52,6 +52,7 @@ export function BestAvailablePanel({
   accessible,
   actions,
   occurrenceId = () => null,
+  onHold,
 }: {
   /** The prices sold by seat: ticket type id and "Name · $50" label. */
   levels: readonly { readonly id: string; readonly label: string }[];
@@ -61,6 +62,8 @@ export function BestAvailablePanel({
   actions: BestSeatsActions;
   /** The date being bought, read when the buyer asks (multi-date events). */
   occurrenceId?: () => string | null;
+  /** The token of the hold shown now (null when none). */
+  onHold?: (token: string | null) => void;
 }) {
   const t = useTranslations('checkout.best');
   const te = useTranslations();
@@ -70,17 +73,8 @@ export function BestAvailablePanel({
   const [hold, setHold] = useState<BestSeatsHold | null>(null);
   const [error, setError] = useState<BestSeatsState | null>(null);
   const [pending, start] = useTransition();
-  // A hold left behind (the buyer switched to choosing seats, or left) is given back.
-  const token = useRef<string | null>(null);
-  token.current = hold?.token ?? null;
-  const release = useRef(actions.release);
-  release.current = actions.release;
-  useEffect(
-    () => () => {
-      if (token.current) void release.current(token.current);
-    },
-    [],
-  );
+  // The page that switches to choosing seats gives a hold left behind back (`onHold`).
+  useEffect(() => onHold?.(hold?.token ?? null), [hold, onHold]);
 
   const find = () =>
     start(async () => {

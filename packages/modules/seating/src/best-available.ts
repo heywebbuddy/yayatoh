@@ -466,8 +466,10 @@ export async function holdBestAvailableTx(
 }
 
 class ClaimMissed extends Error {
-  constructor(readonly got: string[]) {
+  readonly got: string[];
+  constructor(got: string[]) {
     super('claim missed');
+    this.got = got;
   }
 }
 

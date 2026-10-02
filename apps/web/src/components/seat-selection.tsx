@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { useId, useState } from 'react';
+import { useCallback, useId, useRef, useState } from 'react';
 import { BestAvailablePanel, type BestSeatsActions } from '@/components/best-available.tsx';
 import {
   type SeatChoice,
@@ -50,10 +50,19 @@ export function SeatSelection({
   const [mode, setMode] = useState<'best' | 'pick'>(offered ? 'best' : 'pick');
   const [need, setNeed] = useState(false);
   const hasAccessible = ada && map.seats.some((s) => s.accessible);
+  // The hold best available shows: given back when the buyer switches to choosing seats.
+  const held = useRef<string | null>(null);
+  const onHold = useCallback((token: string | null) => {
+    held.current = token;
+  }, []);
   const choose = (m: 'best' | 'pick') => {
     setMode(m);
     // Best available chooses no seats from the list.
     if (m === 'best') onChoice?.({ seats: [], hits: [] });
+    else if (held.current && best) {
+      void best.release(held.current);
+      held.current = null;
+    }
   };
   return (
     <div className="flex flex-col gap-4">
@@ -102,6 +111,7 @@ export function SeatSelection({
             max={Math.min(max, 20)}
             accessible={need}
             actions={best}
+            onHold={onHold}
             {...(occurrenceId ? { occurrenceId } : {})}
           />
         </section>
