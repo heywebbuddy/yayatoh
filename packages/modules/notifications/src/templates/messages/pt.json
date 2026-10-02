@@ -225,6 +225,21 @@
       "subject": "Continue sua inscrição em {eventName}",
       "intro": "Aqui está o seu link para retomar sua inscrição em {eventName} de onde parou. Ele funciona por {days, plural, one {# dia} other {# dias}} após o último salvamento e só para você, então não o encaminhe. Se você não pediu este e-mail, pode ignorá-lo.",
       "cta": "Continuar minha inscrição"
+    },
+    "portal.invite": {
+      "subject": "Convite para o portal de {eventName}",
+      "intro": "{org} convidou você para o portal de {eventName} como {role}. Lá você vê suas sessões, atualiza seu perfil e conclui suas tarefas. O botão pede um código de acesso enviado para este endereço.",
+      "cta": "Abrir o portal"
+    },
+    "portal.sign-in": {
+      "subject": "{code} é seu código de acesso para {eventName}",
+      "intro": "Digite {code} para entrar no portal de {eventName} ou use o botão abaixo no mesmo navegador. Código válido: {minutes} min. Botão válido: {linkMinutes} min. Cada um funciona uma vez. Se você não pediu, ignore este e-mail.",
+      "cta": "Entrar no portal"
+    },
+    "program.task-reminder": {
+      "subject": "Lembrete: {title} para {eventName}",
+      "intro": "{org} ainda aguarda “{title}” para {eventName}. Prazo: {until}.",
+      "cta": "Abrir minhas tarefas"
     }
   },
   "roles": {
@@ -238,7 +253,11 @@
     "viewer": "visualizador",
     "co_host": "coanfitrião",
     "planner": "planejador",
-    "collaborator": "colaborador do evento"
+    "collaborator": "colaborador do evento",
+    "speaker": "palestrante",
+    "exhibitor_admin": "administrador do expositor",
+    "exhibitor_staff": "equipe do expositor",
+    "sponsor_contact": "contato do patrocinador"
   },
   "account": {
     "deleted": {

@@ -26,6 +26,11 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
   - **Publishing snapshots the sessions only** (times, rooms, tracks, types, included/optional, speaker names). Speaker profiles, exhibitors and sponsors stay live.
   - **CSV import creates missing rooms, tracks, session types, groups and speakers by name**; a speaker's email is kept (new `program.speaker_contacts`) so the next import matches them. Rows with problems are skipped and listed; the rest are applied. Limits: 1 MB, 500 rows.
   - **A room smaller than a session's capacity is a warning**, as are grouped sessions that overlap none of their group; neither blocks a save.
+- [ ] **Speaker portal defaults and the speaker release, pending owner** (M5.3a; labels: `auth`, `tenancy`, `db-migration`, `legal-copy`). Built with these defaults; say if any should change:
+  - **Speaker release wording (`legal-copy`):** the "Accept an agreement" task is prefilled with placeholder text ("[Placeholder — pending legal review] I allow the organizer to record my session and to use my name, photo, bio and the recording…") in all 13 locales. Counsel provides the release; organizers can edit the text per task.
+  - **Invitation lifetime:** a portal invitation link keeps working until the event ends + 90 days (P5-7); the organizer ends one sooner by re-inviting (reissue) or removing access. Sessions last 7 days.
+  - **Reminders:** a scheduled reminder 48 hours before a task is due, plus the organizer's "remind whoever is missing it" (transactional email). Overdue tasks emit an event every minute's sweep (for future alert rules).
+  - **Files:** PDF, PowerPoint (.pptx), Word (.docx), JPEG, PNG or WebP, up to 25 MB; proposed photos up to 4 MB. Not counted toward the org's image quota yet.
 - [ ] **Metrics pipeline defaults, pending owner** (M3.1a; labels: `db-migration`). Built with these defaults; say if any should change:
   - **Devices online** counts a check-in device whose last heartbeat is within **90 seconds** (the roadmap's "offline alert within 90 s"). Until M3.3 adds a sweep, the value is as of the last device event (each value carries its `asOf`).
   - **Tickets distributed** counts active tickets claimed through a claim link. M3.2b's "undistributed tickets" alert may widen this (e.g. holder ≠ buyer).

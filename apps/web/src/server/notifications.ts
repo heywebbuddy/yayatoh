@@ -11,7 +11,7 @@ import {
   staffAlertsSubscriber,
 } from '@yayatoh/checkin';
 import { withTenant } from '@yayatoh/db';
-import { findEventTx } from '@yayatoh/events';
+import { findEventTx, portalInviteMailer } from '@yayatoh/events';
 import { registrationResumeMailer } from '@yayatoh/forms';
 import { createCtx } from '@yayatoh/kernel';
 import { announcementMailer, contactWroteNotifier, threadReplyMailer } from '@yayatoh/messaging';
@@ -40,6 +40,7 @@ import {
 } from '@yayatoh/orders';
 import { disputeDeadlineNotifier, payoutDestinationMailer } from '@yayatoh/payments';
 import { consumeEvent, recentEventsTx, type Subscriber, subscribes } from '@yayatoh/platform';
+import { taskReminderMailer } from '@yayatoh/program';
 import { registrationCapacity } from '@yayatoh/registration';
 import { surveyMailer } from '@yayatoh/surveys';
 import { impersonationNotice, invitationMailer, orgStatusNotice } from '@yayatoh/tenancy';
@@ -114,6 +115,9 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     ...journeySubscribers(),
     // M5.1a: its offers (waitlist.offered) are mailed in the same drain.
     registrationCapacity(),
+    // M5.3a speaker portal: invitations and task reminders.
+    portalInviteMailer({ notifier, appOrigin }),
+    taskReminderMailer({ notifier, appOrigin }),
   ];
 }
 

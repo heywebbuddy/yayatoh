@@ -1,4 +1,4 @@
-import { columnPrivacy, holder, internal } from '@yayatoh/db';
+import { columnPrivacy, holder, internal, personal, secret } from '@yayatoh/db';
 
 /**
  * Column privacy of the `events` schema (roadmap §9 canary leak test; see `columnPrivacy` in
@@ -33,6 +33,10 @@ export const privateColumns = columnPrivacy('events', {
     attendance_mode: 'vocab',
   },
   occurrences: { status: 'vocab' },
+  // M5.3a portal accounts (P5-7): the invitee's address; codes, links and sessions as HMACs only.
+  portal_accounts: { role: 'vocab', subject_kind: 'vocab', email: personal('email') },
+  portal_challenges: { code_hash: secret(), link_hash: secret(), browser_hash: secret() },
+  portal_sessions: { token_hash: secret(), host: internal() },
   series: { slug: 'public', name: 'public', description: 'public' },
   // Short links are public URLs (`/e/{code}`).
   short_links: { code: 'public', kind: 'vocab' },
