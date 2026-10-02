@@ -343,6 +343,17 @@ export const RATE_LIMIT_POLICIES = {
     anonymousIp: { limit: 60, windowMs: MIN },
     ipCeiling: { limit: 300, windowMs: MIN },
   },
+  /**
+   * M4.1d: the RSVP paper fallback (exact full name + the party's PIN). Past the device budget
+   * the page asks for the human check before each further try; identity = the event's lookup
+   * code, across devices.
+   */
+  rsvpLookup: {
+    device: { limit: 5, windowMs: 10 * MIN },
+    anonymousIp: { limit: 15, windowMs: 10 * MIN },
+    identity: { limit: 100, windowMs: 15 * MIN },
+    ipCeiling: { limit: 200, windowMs: 10 * MIN },
+  },
 } as const satisfies Record<string, RateLimitPolicy>;
 
 export type RateLimitPolicyName = keyof typeof RATE_LIMIT_POLICIES;

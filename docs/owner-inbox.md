@@ -268,6 +268,17 @@ Start the slow reviews early. Everything is built against fakes meanwhile; each 
   - **Email and phone** columns are imported sealed with the dietary, accessibility and address answers (shown on the Guests page to the same roles). They create no CRM contacts, consents or audience members (P4-3); M4.1f will use them for invitations.
   - **XLSX parser:** a small cell-values-only reader in `@yayatoh/csv` on top of **fflate 0.8.3** (MIT, maintained, no known advisories); no formulas are evaluated (the cached value is read), macros and other parts are never opened. Old binary `.xls` files are refused with a "save as .xlsx or CSV" message.
   - **Google Sheet links (P4-7):** only `https://docs.google.com/spreadsheets/d/<id>` links, read once as CSV through the SSRF guard (10 s, 5 MB), redirects only to Google's content hosts; the link is not stored. A sheet that isn't shared as "anyone with the link" gets a clear message.
+- [ ] **M4.1d RSVP flow: defaults pending owner** (labels: `db-migration`, `auth`). Built with these defaults; say if any should change:
+  - **A PIN per party, not one per event.** P4-2 says "the event PIN"; the paper fallback uses a six-digit PIN printed on each party's invitation instead, so a guest who knows one PIN can't open another household by typing its names. Hosts reset a party's PIN from the Guests page.
+  - **Strict name matching:** case, extra spaces and Unicode forms don't matter; accents, letters, word order and partial names do ("Ana Lopez" is not "Ana López"). Any guest of the party (named plus-ones too) may use their own full name with the party's PIN. Hosts can turn name lookup off (the address then answers "not found").
+  - **Rate limit (`rsvpLookup`):** 5 tries per device per 10 minutes, then the human check before each further try (or a "wait N minutes" message where no check is configured); 100 tries per event per 15 minutes across devices; the usual IP ceiling. Wrong names, partial names and wrong PINs get the same answer.
+  - **Links last until 60 days after the event ends.** A guest who proves the PIN after that gets the same link renewed. "Reset the link" makes every earlier link and QR code stop at once.
+  - **Deadline and reopen:** after the deadline the page shows the party's answers read-only with "contact the hosts". "Reopen" lets one party answer once more; its next answer closes it again.
+  - **States:** `sent` is set by the host ("Mark as sent") until M4.1f sends invitations; `viewed` on the first open of the link; `responded` when the party answers, or when the host has recorded an answer (paper/typed) for every invitation of the party.
+  - **Plus-ones:** a placeholder plus-one who attends anything must be named; one who declines everything can stay unnamed.
+  - **Participation (M3.6a):** the RSVP sets `event_participation.rsvp` (attending / declined / awaiting) on rows that already exist for a guest linked to a guest-list entry. It never creates a contact, consent or participation row, and segments and campaigns don't read it (P4-3).
+  - **Paper address:** printed as `https://<app>/rsvp/find/<CODE>` (8 characters without look-alikes). The code names no one.
+
 ## Enterprise readiness (M5.11, P5-6)
 Claude Code built the evidence automation (M5.11a): `compliance/controls.yaml`, the policy drafts in
 `compliance/policies/`, the weekly **Evidence** workflow and its bundle, and the VPAT draft. These
