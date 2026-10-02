@@ -1,3 +1,4 @@
+import { DEVICE_ONLINE_WINDOW_MS, markQuietDevicesTx } from '@yayatoh/checkin';
 import { type TenantTx, withTenant } from '@yayatoh/db';
 import { findEventTx, upcomingEventIdsTx } from '@yayatoh/events';
 import { type Ctx, createCtx } from '@yayatoh/kernel';
@@ -166,4 +167,24 @@ export async function evaluateOrgNow(
   }
   if (full) changes.push(...(await withTenant(ctx, (tx) => evaluateOrgAlertsTx(tx, ctx, deps, now))));
   return changes;
+}
+
+/**
+ * The live device watchdog's step for one org (M3.3a; the worker runs it every second for orgs
+ * with a device crossing the offline line). Devices silent for longer than the offline window get
+ * their "offline" transition (the live feed, the device board over `event.devices`), and the
+ * org's live and pre-show events are evaluated at once, so "devices offline" is raised the moment
+ * a device goes quiet instead of at the next 30 s sweep.
+ */
+export async function watchQuietDevices(
+  orgId: string,
+  deps: AlertDeps,
+  /** `evaluate: false` when the caller evaluates the org right after anyway (the dev drain). */
+  opts: { now?: Date; evaluate?: boolean } = {},
+): Promise<{ quiet: number; changes: AlertChange[] }> {
+  const base: Ctx = createCtx({ orgId, actor: { type: 'system', name: 'alerts.device-watchdog' } });
+  const ctx: Ctx = opts.now ? { ...base, now: opts.now } : base;
+  const quiet = await withTenant(ctx, (tx) => markQuietDevicesTx(tx, ctx, DEVICE_ONLINE_WINDOW_MS));
+  if (quiet.length === 0 || opts.evaluate === false) return { quiet: quiet.length, changes: [] };
+  return { quiet: quiet.length, changes: await evaluateOrgNow(orgId, deps, { now: ctx.now, full: false }) };
 }

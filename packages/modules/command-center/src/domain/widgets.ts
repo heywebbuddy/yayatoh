@@ -20,6 +20,14 @@ export const WIDGET_KEYS = [
   // Batch 3d merge: M3.4a's staff views (the Scan PWA's staff mode) on the Command Center.
   'entrances',
   'deviceBoard',
+  // M3.3a live mode.
+  'liveFeed',
+  'checkinSpeed',
+  'scanIssues',
+  'capacity',
+  'staffPresence',
+  // The slot for M3.3b's guest assistance queue (built on agent/m3.3b; fills it with `withWidget`).
+  'assistance',
 ] as const;
 export type WidgetKey = (typeof WIDGET_KEYS)[number];
 
@@ -28,6 +36,11 @@ export type WidgetSize = (typeof WIDGET_SIZES)[number];
 
 /** Realtime channels (M3.1b registry keys) a widget follows. */
 export type WidgetChannel = 'event.checkins' | 'event.devices' | 'event.metrics' | 'org.alerts';
+
+/** Every channel a widget follows (its own, then the extra ones). */
+export function followedChannels(meta: Pick<WidgetMeta, 'channel' | 'alsoFollows'>): WidgetChannel[] {
+  return [...(meta.channel ? [meta.channel] : []), ...(meta.alsoFollows ?? [])];
+}
 
 export function isWidgetKey(v: unknown): v is WidgetKey {
   return typeof v === 'string' && (WIDGET_KEYS as readonly string[]).includes(v);
@@ -45,6 +58,8 @@ export interface WidgetMeta {
   readonly modes: readonly EventMode[];
   readonly size: WidgetSize;
   readonly channel: WidgetChannel | null;
+  /** More channels that also change it (the live feed follows devices and alerts too). */
+  readonly alsoFollows?: readonly WidgetChannel[];
   /** Revenue: never on the door layout (roadmap M3.2 acceptance). */
   readonly revenue?: boolean;
 }
@@ -146,6 +161,69 @@ export const WIDGET_META: Readonly<Record<WidgetKey, WidgetMeta>> = {
     size: 'lg',
     channel: 'event.devices',
   },
+  // M3.3a live mode: the door at work. Door work, never revenue.
+  liveFeed: {
+    key: 'liveFeed',
+    module: 'checkin',
+    permission: 'events:read',
+    roles: ['owner', 'ops', 'door'],
+    profiles: 'all',
+    modes: ['pre_show', 'live'],
+    size: 'lg',
+    channel: 'event.checkins',
+    alsoFollows: ['event.devices', 'org.alerts'],
+  },
+  checkinSpeed: {
+    key: 'checkinSpeed',
+    module: 'checkin',
+    permission: 'events:read',
+    roles: ['owner', 'ops', 'door'],
+    profiles: 'all',
+    modes: ['live'],
+    size: 'lg',
+    channel: 'event.checkins',
+  },
+  scanIssues: {
+    key: 'scanIssues',
+    module: 'checkin',
+    permission: 'events:read',
+    roles: ['owner', 'ops', 'door'],
+    profiles: 'all',
+    modes: ['live', 'wrap'],
+    size: 'md',
+    channel: 'event.checkins',
+  },
+  capacity: {
+    key: 'capacity',
+    module: 'checkin',
+    permission: 'events:read',
+    roles: ['owner', 'ops', 'door'],
+    profiles: 'all',
+    modes: ['pre_show', 'live'],
+    size: 'md',
+    channel: 'event.checkins',
+  },
+  staffPresence: {
+    key: 'staffPresence',
+    module: 'checkin',
+    permission: 'events:read',
+    roles: ['owner', 'ops', 'door'],
+    profiles: 'all',
+    modes: ['pre_show', 'live'],
+    size: 'md',
+    channel: null,
+  },
+  // M3.3b's guest assistance queue fills this slot (a placeholder until it registers).
+  assistance: {
+    key: 'assistance',
+    module: 'core',
+    permission: 'events:read',
+    roles: ['owner', 'ops', 'door'],
+    profiles: 'all',
+    modes: ['live'],
+    size: 'md',
+    channel: null,
+  },
   // The slot for the M3.2b alert engine: its loader is a placeholder until the engine registers.
   alerts: {
     key: 'alerts',
@@ -167,13 +245,43 @@ export const DEFAULT_LAYOUTS: Readonly<Record<CcRole, Readonly<Record<EventMode,
   owner: {
     planning: ['readiness', 'sales', 'tickets', 'alerts', 'timeline'],
     pre_show: ['readiness', 'alerts', 'sales', 'tickets', 'devices', 'seatFill', 'timeline'],
-    live: ['checkins', 'alerts', 'devices', 'seatFill', 'sales', 'tickets', 'timeline'],
+    live: [
+      'checkins',
+      'alerts',
+      'liveFeed',
+      'checkinSpeed',
+      'capacity',
+      'scanIssues',
+      'devices',
+      'deviceBoard',
+      'staffPresence',
+      'assistance',
+      'seatFill',
+      'sales',
+      'tickets',
+      'timeline',
+    ],
     wrap: ['sales', 'tickets', 'checkins', 'alerts', 'timeline'],
   },
   ops: {
     planning: ['readiness', 'tickets', 'sales', 'alerts', 'timeline'],
     pre_show: ['readiness', 'alerts', 'devices', 'tickets', 'seatFill', 'deviceBoard', 'timeline'],
-    live: ['checkins', 'devices', 'alerts', 'seatFill', 'tickets', 'entrances', 'deviceBoard', 'timeline'],
+    live: [
+      'checkins',
+      'devices',
+      'alerts',
+      'liveFeed',
+      'checkinSpeed',
+      'capacity',
+      'scanIssues',
+      'seatFill',
+      'tickets',
+      'entrances',
+      'deviceBoard',
+      'staffPresence',
+      'assistance',
+      'timeline',
+    ],
     wrap: ['checkins', 'tickets', 'sales', 'alerts', 'timeline'],
   },
   finance: {
@@ -185,7 +293,21 @@ export const DEFAULT_LAYOUTS: Readonly<Record<CcRole, Readonly<Record<EventMode,
   door: {
     planning: ['timeline', 'alerts'],
     pre_show: ['devices', 'checkins', 'seatFill', 'alerts', 'deviceBoard', 'timeline'],
-    live: ['checkins', 'devices', 'seatFill', 'alerts', 'entrances', 'deviceBoard', 'timeline'],
+    live: [
+      'checkins',
+      'devices',
+      'seatFill',
+      'alerts',
+      'liveFeed',
+      'checkinSpeed',
+      'capacity',
+      'scanIssues',
+      'entrances',
+      'deviceBoard',
+      'staffPresence',
+      'assistance',
+      'timeline',
+    ],
     wrap: ['checkins', 'timeline'],
   },
   marketing: {

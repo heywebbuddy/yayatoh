@@ -1,17 +1,23 @@
 import 'server-only';
 import { listAlertsQuery, RULES } from '@yayatoh/alerts';
+import { getUsersByIds } from '@yayatoh/auth';
+import { reportPresenceCommand } from '@yayatoh/checkin';
 import {
   AlertsWidgetDto,
   COMMAND_CENTER_WIDGETS,
   defineWidget,
+  type FeedAlert,
   isWidgetKey,
+  liveFeedWidget,
+  staffPresenceWidget,
   WIDGET_META,
   type WidgetKey,
+  type WidgetLoadArgs,
   type WidgetRegistry,
   withWidget,
 } from '@yayatoh/command-center';
 import { eventRolesOf, getEventBySlugQuery } from '@yayatoh/events';
-import { type Ctx, createCtx, executeQuery, isDomainError } from '@yayatoh/kernel';
+import { type Ctx, createCtx, executeCommand, executeQuery, isDomainError } from '@yayatoh/kernel';
 import {
   ALERTS_CHANNEL,
   CHECKINS_CHANNEL,
@@ -39,7 +45,39 @@ import { getSession } from './session.ts';
  * engine replaces the `alerts` slot with `withWidget`), the dev clock, and the realtime channels a
  * member may follow.
  */
-export const WIDGETS: WidgetRegistry = withWidget(COMMAND_CENTER_WIDGETS, alertsEngineWidget());
+export const WIDGETS: WidgetRegistry = [
+  alertsEngineWidget(),
+  // M3.3a: the live feed's alert entries come from the alert engine; presence names from auth.
+  liveFeedWidget(feedAlerts),
+  staffPresenceWidget(memberNames),
+].reduce(withWidget, COMMAND_CENTER_WIDGETS);
+
+/**
+ * The live feed's alert entries (M3.3a): the event's alerts the member may see, as "opened" at
+ * their opening and "resolved" at their resolution; for the door, door alerts only (no payments).
+ */
+async function feedAlerts({ tx, ctx, scope }: WidgetLoadArgs): Promise<FeedAlert[]> {
+  const read = (status: 'active' | 'resolved') =>
+    listAlertsQuery.handler({ input: { status, eventId: scope.event.id, limit: 20 }, ctx, tx });
+  const out: FeedAlert[] = [];
+  for (const a of [...(await read('active')), ...(await read('resolved'))]) {
+    if (scope.role === 'door' && RULES[a.rule].category !== 'door') continue;
+    out.push({
+      id: a.id,
+      rule: a.rule,
+      severity: a.severity,
+      state: a.state,
+      count: a.count,
+      at: a.state === 'resolved' && a.resolvedAt ? a.resolvedAt : a.openedAt,
+    });
+  }
+  return out;
+}
+
+async function memberNames(ids: readonly string[]): Promise<ReadonlyMap<string, string>> {
+  const people = await getUsersByIds([...new Set(ids)]);
+  return new Map([...people].map(([id, u]) => [id, u.name]));
+}
 
 /**
  * The Alerts widget filled by the M3.2b alert engine (batch 3d merge): the event's active alerts
@@ -93,13 +131,34 @@ export async function commandCenterCtx(ctx: Ctx): Promise<Ctx> {
 }
 
 /** Widgets whose numbers come from the metric projection: apply unpublished events first. */
-const PROJECTED: ReadonlySet<WidgetKey> = new Set(['sales', 'tickets', 'checkins', 'seatFill']);
+const PROJECTED: ReadonlySet<WidgetKey> = new Set([
+  'sales',
+  'tickets',
+  'checkins',
+  'seatFill',
+  'checkinSpeed',
+]);
 
-export async function loadWidget(key: WidgetKey, eventId: string, ctx: Ctx): Promise<unknown> {
+export async function loadWidget(
+  key: WidgetKey,
+  eventId: string,
+  ctx: Ctx,
+  params: Record<string, string> = {},
+): Promise<unknown> {
   const def = WIDGETS[key];
   if (!def) return null;
   if (PROJECTED.has(key) && ctx.orgId) await applyUnpublishedMetricEvents(ctx.orgId);
-  return executeQuery(def.loader, { eventId }, ctx, ports);
+  return executeQuery(def.loader, { eventId, params }, ctx, ports);
+}
+
+/** Widget options from the query string (the live feed's filters): short plain values only. */
+export function widgetParams(search: URLSearchParams): Record<string, string> {
+  const out: Record<string, string> = {};
+  for (const k of ['checkpoint', 'device', 'kind']) {
+    const v = search.get(k);
+    if (v && /^[A-Za-z0-9_-]{1,64}$/.test(v)) out[k] = v;
+  }
+  return out;
 }
 
 /**
@@ -141,10 +200,42 @@ export async function widgetResponse(
   orgSlug: string,
   eventSlug: string,
   widget: string,
+  params: Record<string, string> = {},
+): Promise<WidgetResponse> {
+  if (!isWidgetKey(widget) || !WIDGETS[widget]) {
+    if (!(await getSession())) return { status: 401, body: { error: 'unauthenticated' } };
+    return { status: 404, body: { error: 'not_found' } };
+  }
+  return asMember(orgSlug, eventSlug, async (ctx, eventId) => ({
+    status: 200,
+    body: { widget, data: await loadWidget(widget, eventId, ctx, params) },
+  }));
+}
+
+/**
+ * `POST /api/command-center/{org}/{event}/presence`: the door screen reports its member at the
+ * doors (M3.3a staff presence). A plain request, not a server action, so a ping never queues
+ * behind or in front of the scan form's action.
+ */
+export async function presenceResponse(
+  orgSlug: string,
+  eventSlug: string,
+  checkpointId: string | null,
+): Promise<WidgetResponse> {
+  return asMember(orgSlug, eventSlug, async (ctx, eventId) => {
+    await executeCommand(reportPresenceCommand, { eventId, checkpointId }, ctx, ports);
+    return { status: 200, body: { ok: true } };
+  });
+}
+
+/** Run `fn` as the signed-in member of the org in the path, for one of its events. */
+async function asMember(
+  orgSlug: string,
+  eventSlug: string,
+  fn: (ctx: Ctx, eventId: string) => Promise<WidgetResponse>,
 ): Promise<WidgetResponse> {
   const session = await getSession();
   if (!session) return { status: 401, body: { error: 'unauthenticated' } };
-  if (!isWidgetKey(widget) || !WIDGETS[widget]) return { status: 404, body: { error: 'not_found' } };
   const resolved = await resolveOrgSlug(orgSlug);
   const imp = session.impersonation;
   if (!resolved || (imp && imp.orgId !== resolved.orgId))
@@ -162,7 +253,7 @@ export async function widgetResponse(
   const ctx = await commandCenterCtx(base);
   try {
     const ev = await executeQuery(getEventBySlugQuery, { slug: eventSlug }, ctx, ports);
-    return { status: 200, body: { widget, data: await loadWidget(widget, ev.id, ctx) } };
+    return await fn(ctx, ev.id);
   } catch (err) {
     if (!isDomainError(err)) throw err;
     if (err.code === 'forbidden') return { status: 403, body: { error: 'forbidden' } };

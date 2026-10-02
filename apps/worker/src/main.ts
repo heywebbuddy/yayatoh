@@ -6,6 +6,7 @@ import { fakeDomainProvider } from '@yayatoh/tenancy';
 import { sweepAlerts } from './alerts.ts';
 import { runDueBulkOperations } from './bulk.ts';
 import { bossRelease, campaignReleaseJob, campaignTick } from './campaigns.ts';
+import { DEVICE_WATCHDOG_MS, runDeviceWatchdog } from './device-watchdog.ts';
 import { domainRecheckJob } from './domains.ts';
 import { endExpiredImpersonations } from './impersonations.ts';
 import { enqueueJourneyWork } from './journeys.ts';
@@ -274,6 +275,26 @@ setInterval(() => {
       sweepingAlerts = false;
     });
 }, 30_000).unref();
+
+// Live device watchdog (M3.3a): every second, devices that just crossed the 90 s offline line
+// get their transition and raise "devices offline" at once (leader only). The first look covers
+// the last minute, so a restart doesn't miss a device that went quiet meanwhile.
+let watching = false;
+let watchedUntil = new Date(Date.now() - 60_000);
+setInterval(() => {
+  if (!release || stopping || watching) return;
+  watching = true;
+  const to = new Date();
+  runDeviceWatchdog(alertDeps, { from: watchedUntil, to })
+    .then((r) => {
+      watchedUntil = to;
+      if (r.quiet) console.info(JSON.stringify({ job: 'devices.watchdog', ...r }));
+    })
+    .catch((err) => console.error('device watchdog', err))
+    .finally(() => {
+      watching = false;
+    });
+}, DEVICE_WATCHDOG_MS).unref();
 
 // Realtime message log (M3.1b): keep an hour for resumptions; prune every 5 minutes (leader only).
 setInterval(() => {

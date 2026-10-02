@@ -29,3 +29,4 @@ payments, notifications, platform); it reads them through their exported counts 
   (`member_settings`, their own setting only) as `alerts.alert-text`, which waits out quiet hours.
 - **Acknowledge and snooze** need `alerts:manage` (not viewers or scanners); both are audited.
 - Every alert links to the console page that fixes it (`RULES[rule].fix`).
+- **Live-critical escalation (M3.3a):** a live-critical alert (devices offline or capacity while live, failed payments at the critical level while live) goes to members on duty at the event (check-in's `onDutyStaffTx`: staff presence) in-app and by push whatever their routing, and their text as `alerts.alert-urgent-text` (urgent: no quiet hours); door-only staff (viewer/scanner) only for door alerts. It re-sends when an acknowledgement times out (10 min). `watchQuietDevices` (the worker's per-second live watchdog) records devices going quiet and evaluates the org's live and pre-show events at once.

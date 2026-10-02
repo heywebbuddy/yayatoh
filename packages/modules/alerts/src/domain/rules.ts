@@ -79,11 +79,11 @@ export function evaluateEventRules(
   )
     out.undistributed = fire('warning', f.undistributed, { pct: pct(f.undistributed, f.activeTickets) });
 
-  if (f.failedPayments >= t.failedMin)
-    out.paymentsFailed = fire(
-      f.failedPayments >= t.failedCritical ? 'critical' : 'warning',
-      f.failedPayments,
-    );
+  if (f.failedPayments >= t.failedMin) {
+    const critical = f.failedPayments >= t.failedCritical;
+    // A payment outage (M3.3a): critical failures while the doors are open are live-critical.
+    out.paymentsFailed = fire(critical ? 'critical' : 'warning', f.failedPayments, {}, critical && live);
+  }
   if (f.stuckPayments >= t.stuckMin) out.paymentsStuck = fire('warning', f.stuckPayments);
   if (f.recentRefunds >= t.refundSurgeMin) out.refundSurge = fire('critical', f.recentRefunds);
 

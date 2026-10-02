@@ -1,5 +1,5 @@
 import 'server-only';
-import { alertEvaluator, evaluateOrgNow } from '@yayatoh/alerts';
+import { alertEvaluator, evaluateOrgNow, watchQuietDevices } from '@yayatoh/alerts';
 import { attendeeMessageMailer } from '@yayatoh/attendees';
 import { getUsersByIds } from '@yayatoh/auth';
 import { journeySubscribers, runDueActions } from '@yayatoh/automations';
@@ -155,6 +155,9 @@ export async function drainOrgMessages(
     journeySteps += steps.done + steps.skipped + steps.failed;
     if (fresh === 0 && steps.done === 0) break;
   }
+  // The live device watchdog (M3.3a), as the worker would run it now: it evaluates what it marks
+  // quiet unless the org-wide pass follows anyway.
+  await watchQuietDevices(orgId, { notifier }, { evaluate: !opts.sweep });
   // The alert engine's scheduled pass (M3.2b), as the worker's sweep would run it now: only when
   // asked (`sweep`). The alerts evaluator above already re-evaluates what the drained events
   // touched; the org-wide pass re-checks every upcoming event and re-notifies unacknowledged

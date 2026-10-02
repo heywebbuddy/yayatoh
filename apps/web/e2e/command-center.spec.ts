@@ -206,8 +206,16 @@ test.describe('Command Center (M3.2a)', () => {
       'devices',
       'seatFill',
       'alerts',
+      // M3.3a live mode: the feed, speed, capacity, the duplicate/invalid monitor.
+      'liveFeed',
+      'checkinSpeed',
+      'capacity',
+      'scanIssues',
       'entrances',
       'deviceBoard',
+      // M3.3a: staff presence and the guest-assistance slot (M3.3b).
+      'staffPresence',
+      'assistance',
       'timeline',
     ]);
     // Batch 3d merge: M3.4a's staff views (live counts per entrance, the device board) for the door.
@@ -265,9 +273,14 @@ test.describe('Command Center (M3.2a)', () => {
       'Devices online',
       'Seat fill',
       'Alerts',
-      // Batch 3d merge: M3.4a's staff views on the door layout.
+      'Live feed',
+      'Check-in speed',
+      'Capacity',
+      'Duplicates and refused scans',
       'Entrances',
       'Device board',
+      'Staff at the doors',
+      'Guest assistance',
       'Coming up',
     ]) {
       await door.getByRole('button', { name: `Hide ${title}` }).click();

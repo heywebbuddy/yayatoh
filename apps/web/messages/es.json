@@ -70,7 +70,8 @@
       },
       "alerts": {
         "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {Un asistente no tiene asiento} other {{countWords} asistentes no tienen asiento}}} undistributed {{count, plural, one {Una entrada comprada no se ha distribuido} other {{countWords} entradas compradas no se han distribuido}}} paymentsFailed {{count, plural, one {Un pago falló} other {{countWords} pagos fallaron}}} paymentsStuck {{count, plural, one {Un pago está atascado} other {{countWords} pagos están atascados}}} refundSurge {{count, plural, one {Un reembolso en la última hora} other {{countWords} reembolsos en la última hora}}} devicesOffline {{count, plural, one {Un dispositivo de control de acceso está sin conexión} other {{countWords} dispositivos de control de acceso están sin conexión}}} devicesLowBattery {{count, plural, one {Un dispositivo de control de acceso tiene poca batería} other {{countWords} dispositivos de control de acceso tienen poca batería}}} devicesBacklog {{count, plural, one {Un dispositivo de control de acceso tiene escaneos pendientes de sincronizar} other {{countWords} dispositivos de control de acceso tienen escaneos pendientes de sincronizar}}} capacityNear {El recinto está al {count} % de su capacidad} capacityFull {El recinto está lleno ({count} %)} sellOut {El {count} % de las entradas está vendido} salesPace {La venta de entradas va al {count} % del ritmo objetivo} readiness {{count, plural, one {Un paso de configuración bloquea este evento} other {{countWords} pasos de configuración bloquean este evento}}} domain {{count, plural, one {Un dominio personalizado tiene un problema} other {{countWords} dominios personalizados tienen un problema}}} payoutsPastDue {{count, plural, one {Un requisito de la cuenta de pagos está vencido} other {{countWords} requisitos de la cuenta de pagos están vencidos}}} deliverability {La entregabilidad del correo necesita atención} automationFailed {{count, plural, one {Un mensaje o acción masiva falló hoy} other {{countWords} mensajes o acciones masivas fallaron hoy}}} other {Alerta}}",
-        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {Un asistente no tiene asiento} other {{countWords} asistentes no tienen asiento}}} undistributed {{count, plural, one {Una entrada comprada no se ha distribuido} other {{countWords} entradas compradas no se han distribuido}}} paymentsFailed {{count, plural, one {Un pago falló} other {{countWords} pagos fallaron}}} paymentsStuck {{count, plural, one {Un pago está atascado} other {{countWords} pagos están atascados}}} refundSurge {{count, plural, one {Un reembolso en la última hora} other {{countWords} reembolsos en la última hora}}} devicesOffline {{count, plural, one {Un dispositivo de control de acceso está sin conexión} other {{countWords} dispositivos de control de acceso están sin conexión}}} devicesLowBattery {{count, plural, one {Un dispositivo de control de acceso tiene poca batería} other {{countWords} dispositivos de control de acceso tienen poca batería}}} devicesBacklog {{count, plural, one {Un dispositivo de control de acceso tiene escaneos pendientes de sincronizar} other {{countWords} dispositivos de control de acceso tienen escaneos pendientes de sincronizar}}} capacityNear {El recinto está al {count} % de su capacidad} capacityFull {El recinto está lleno ({count} %)} sellOut {El {count} % de las entradas está vendido} salesPace {La venta de entradas va al {count} % del ritmo objetivo} readiness {{count, plural, one {Un paso de configuración bloquea este evento} other {{countWords} pasos de configuración bloquean este evento}}} domain {{count, plural, one {Un dominio personalizado tiene un problema} other {{countWords} dominios personalizados tienen un problema}}} payoutsPastDue {{count, plural, one {Un requisito de la cuenta de pagos está vencido} other {{countWords} requisitos de la cuenta de pagos están vencidos}}} deliverability {La entregabilidad del correo necesita atención} automationFailed {{count, plural, one {Un mensaje o acción masiva falló hoy} other {{countWords} mensajes o acciones masivas fallaron hoy}}} other {Alerta}}"
+        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {Un asistente no tiene asiento} other {{countWords} asistentes no tienen asiento}}} undistributed {{count, plural, one {Una entrada comprada no se ha distribuido} other {{countWords} entradas compradas no se han distribuido}}} paymentsFailed {{count, plural, one {Un pago falló} other {{countWords} pagos fallaron}}} paymentsStuck {{count, plural, one {Un pago está atascado} other {{countWords} pagos están atascados}}} refundSurge {{count, plural, one {Un reembolso en la última hora} other {{countWords} reembolsos en la última hora}}} devicesOffline {{count, plural, one {Un dispositivo de control de acceso está sin conexión} other {{countWords} dispositivos de control de acceso están sin conexión}}} devicesLowBattery {{count, plural, one {Un dispositivo de control de acceso tiene poca batería} other {{countWords} dispositivos de control de acceso tienen poca batería}}} devicesBacklog {{count, plural, one {Un dispositivo de control de acceso tiene escaneos pendientes de sincronizar} other {{countWords} dispositivos de control de acceso tienen escaneos pendientes de sincronizar}}} capacityNear {El recinto está al {count} % de su capacidad} capacityFull {El recinto está lleno ({count} %)} sellOut {El {count} % de las entradas está vendido} salesPace {La venta de entradas va al {count} % del ritmo objetivo} readiness {{count, plural, one {Un paso de configuración bloquea este evento} other {{countWords} pasos de configuración bloquean este evento}}} domain {{count, plural, one {Un dominio personalizado tiene un problema} other {{countWords} dominios personalizados tienen un problema}}} payoutsPastDue {{count, plural, one {Un requisito de la cuenta de pagos está vencido} other {{countWords} requisitos de la cuenta de pagos están vencidos}}} deliverability {La entregabilidad del correo necesita atención} automationFailed {{count, plural, one {Un mensaje o acción masiva falló hoy} other {{countWords} mensajes o acciones masivas fallaron hoy}}} other {Alerta}}",
+        "alert-urgent-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {Un asistente no tiene asiento} other {{countWords} asistentes no tienen asiento}}} undistributed {{count, plural, one {Una entrada comprada no se ha distribuido} other {{countWords} entradas compradas no se han distribuido}}} paymentsFailed {{count, plural, one {Un pago falló} other {{countWords} pagos fallaron}}} paymentsStuck {{count, plural, one {Un pago está atascado} other {{countWords} pagos están atascados}}} refundSurge {{count, plural, one {Un reembolso en la última hora} other {{countWords} reembolsos en la última hora}}} devicesOffline {{count, plural, one {Un dispositivo de control de acceso está sin conexión} other {{countWords} dispositivos de control de acceso están sin conexión}}} devicesLowBattery {{count, plural, one {Un dispositivo de control de acceso tiene poca batería} other {{countWords} dispositivos de control de acceso tienen poca batería}}} devicesBacklog {{count, plural, one {Un dispositivo de control de acceso tiene escaneos pendientes de sincronizar} other {{countWords} dispositivos de control de acceso tienen escaneos pendientes de sincronizar}}} capacityNear {El recinto está al {count} % de su capacidad} capacityFull {El recinto está lleno ({count} %)} sellOut {El {count} % de las entradas está vendido} salesPace {La venta de entradas va al {count} % del ritmo objetivo} readiness {{count, plural, one {Un paso de configuración bloquea este evento} other {{countWords} pasos de configuración bloquean este evento}}} domain {{count, plural, one {Un dominio personalizado tiene un problema} other {{countWords} dominios personalizados tienen un problema}}} payoutsPastDue {{count, plural, one {Un requisito de la cuenta de pagos está vencido} other {{countWords} requisitos de la cuenta de pagos están vencidos}}} deliverability {La entregabilidad del correo necesita atención} automationFailed {{count, plural, one {Un mensaje o acción masiva falló hoy} other {{countWords} mensajes o acciones masivas fallaron hoy}}} other {Alerta}}"
       }
     },
     "kinds": {
@@ -144,7 +145,8 @@
       },
       "alerts": {
         "alert": "Alerta",
-        "alert-text": "SMS de alerta"
+        "alert-text": "SMS de alerta",
+        "alert-urgent-text": "SMS de alerta urgente"
       },
       "campaigns": {
         "test": "Prueba de campaña"
@@ -1159,7 +1161,11 @@
     "latitude": "Latitud",
     "longitude": "Longitud",
     "locationError": "Introduce latitud (−90 a 90) y longitud (−180 a 180) como números, o deja ambos vacíos.",
-    "located": "en {lat}, {lng}"
+    "located": "en {lat}, {lng}",
+    "capacity": "Aforo (opcional)",
+    "capacityHint": "Cuántas personas caben en la zona, para los indicadores de aforo.",
+    "capacityError": "Escribe un número entero entre 1 y 1.000.000, o déjalo vacío.",
+    "holds": "{count, plural, one {caben #} other {caben #}}"
   },
   "search": {
     "title": "Buscar",
@@ -6139,8 +6145,150 @@
         "title": "Accesos"
       },
       "deviceBoard": {
-        "title": "Panel de dispositivos"
+        "title": "Panel de dispositivos",
+        "lastScan": "último escaneo {time}",
+        "appVersion": "app {version}"
+      },
+      "liveFeed": {
+        "title": "Actividad en directo",
+        "filters": "Filtrar la actividad",
+        "entrance": "Entrada",
+        "allEntrances": "Todas las entradas",
+        "device": "Dispositivo",
+        "allDevices": "Todos los dispositivos",
+        "outcome": "Resultado",
+        "allOutcomes": "Todo",
+        "filter": {
+          "checkin": "Registros",
+          "reentry": "Reingresos",
+          "duplicate": "Duplicados",
+          "invalid": "Escaneos rechazados",
+          "device": "Eventos de dispositivos",
+          "alert": "Alertas"
+        },
+        "pause": "Pausar",
+        "resume": "Reanudar",
+        "paused": "En pausa. La actividad no se actualiza.",
+        "pausedNews": "En pausa. Hay actividad nueva: reanuda para verla.",
+        "none": "Aún nada. Los escaneos, dispositivos y alertas aparecen aquí a medida que ocurren.",
+        "noneFiltered": "Aún no hay nada que coincida con estos filtros.",
+        "listLabel": "Actividad reciente, lo más nuevo primero",
+        "offline": "escaneado sin conexión",
+        "unknownDevice": "Un dispositivo",
+        "alert": "Alerta {state, select, resolved {resuelta} other {abierta}}: {title}",
+        "deviceEvent": "{device} {change, select, online {volvió a conectarse} offline {se desconectó} low_battery {tiene poca batería} revoked {fue revocado} wiped {fue borrado} other {cambió}}",
+        "kind": {
+          "checkin": "{reason, select, granted {Entró a la zona} provisional {Entró (por confirmar)} other {Registrado}}",
+          "reentry": "Reingreso",
+          "duplicate": "{reason, select, duplicate_offline {Duplicado (escaneado sin conexión)} other {Duplicado: ya registrado}}",
+          "invalid": "Rechazado: {reason, select, invalid {código no válido} void {entrada cancelada} wrong_event {entrada de otro evento} not_today {no válida hoy} outside_window {fuera del horario del evento} wrong_date {para otra fecha} superseded {código sustituido} no_access {sin acceso a esta zona} wrong_checkpoint {entrada equivocada} other {rechazado}}"
+        }
+      },
+      "checkinSpeed": {
+        "title": "Velocidad de acceso",
+        "rateLabel": "escaneos por minuto (últimos {minutes} minutos)",
+        "medianGapValue": "{value} s entre escaneos (mediana)",
+        "remaining": "{count, plural, one {# invitado aún por llegar} other {# invitados aún por llegar}}",
+        "queueValue": "{count, plural, =0 {ya han entrado todos los esperados} one {unos # minuto para que entren todos} other {unos # minutos para que entren todos}}",
+        "queueStopped": "sin escaneos en los últimos 5 minutos",
+        "chartTitle": "Registros por minuto, últimos 15 minutos",
+        "showTable": "Ver como tabla",
+        "minute": "Minuto",
+        "checkedIn": "Registrados",
+        "byEntrance": "Por entrada",
+        "byDevice": "Por dispositivo",
+        "entrance": "Entrada",
+        "device": "Dispositivo",
+        "perMinute": "Escaneos por minuto",
+        "medianGap": "Tiempo entre escaneos",
+        "queue": "Tiempo para vaciar la fila",
+        "seconds": "{value} s",
+        "minutes": "{count, plural, one {# min} other {# min}}",
+        "notMoving": "Detenido",
+        "noEntrance": "Sin entrada elegida",
+        "noDevice": "Pantalla de acceso"
+      },
+      "scanIssues": {
+        "title": "Duplicados y escaneos rechazados",
+        "summary": "Hoy: {duplicates, plural, one {# duplicado} other {# duplicados}}, {refused, plural, one {# escaneo rechazado} other {# escaneos rechazados}}",
+        "byReason": "Por motivo",
+        "none": "Hoy no hay duplicados ni escaneos rechazados.",
+        "recent": "Más recientes",
+        "openOrder": "Abrir el pedido",
+        "reason": {
+          "admitted": "Registrado",
+          "granted": "Entró a la zona",
+          "provisional": "Entró (por confirmar)",
+          "duplicate": "Ya registrado",
+          "duplicate_offline": "Duplicado (escaneado sin conexión)",
+          "invalid": "Código no válido",
+          "void": "Entrada cancelada",
+          "wrong_event": "Entrada de otro evento",
+          "not_today": "No válida hoy",
+          "outside_window": "Fuera del horario del evento",
+          "wrong_date": "Para otra fecha",
+          "superseded": "Código sustituido",
+          "no_access": "Sin acceso a esta zona",
+          "wrong_checkpoint": "Entrada equivocada",
+          "other": "Otro"
+        }
+      },
+      "capacity": {
+        "title": "Aforo",
+        "venue": "{inside} dentro, de {capacity}",
+        "venueNoCap": "{inside} dentro (sin aforo definido)",
+        "meter": "{name}: aforo ocupado",
+        "event": "Evento",
+        "out": "{count, plural, one {# salida registrada} other {# salidas registradas}}",
+        "left": "{count, plural, one {queda # plaza} other {quedan # plazas}}",
+        "areas": "Por zona",
+        "area": "Zona",
+        "in": "Dentro",
+        "capacity": "Aforo",
+        "leftHeader": "Libres",
+        "status": "Estado",
+        "level": {
+          "none": "Sin aforo definido",
+          "ok": "Por debajo del {near} %",
+          "near": "Casi lleno ({near} % o más)",
+          "over": "Aforo completo o superado"
+        }
+      },
+      "staffPresence": {
+        "title": "Personal en los accesos",
+        "none": "Ahora mismo no hay nadie conectado en los accesos.",
+        "unknown": "Miembro del equipo",
+        "onDevice": "En {device}",
+        "onDoorScreen": "En la pantalla de acceso",
+        "wholeEvent": "Todo el evento",
+        "since": "desde {time}"
+      },
+      "assistance": {
+        "title": "Asistencia a invitados",
+        "pending": "Aquí aparecerán las solicitudes de ayuda de invitados y del personal de acceso.",
+        "open": "{count, plural, one {# solicitud abierta} other {# solicitudes abiertas}}"
       }
+    },
+    "tv": {
+      "open": "Modo TV",
+      "title": "Modo TV",
+      "back": "Volver al centro de mando",
+      "description": "Paneles de solo lectura para pantallas en {event}. Quien tenga un enlace ve el panel sin iniciar sesión, así que nunca muestra dinero ni nombres de invitados.",
+      "noAccessTitle": "Sin modo TV para tu rol",
+      "noAccess": "Pide acceso a un propietario o administrador.",
+      "newTitle": "Nuevo enlace de pantalla",
+      "label": "Nombre de la pantalla",
+      "labelHint": "Por ejemplo, Pantalla del vestíbulo o Monitor de la puerta B.",
+      "labelError": "Ponle un nombre a la pantalla (hasta 60 caracteres).",
+      "create": "Crear enlace",
+      "createdOnce": "Enlace para {label}. Ábrelo ahora en la pantalla: solo se muestra una vez.",
+      "listTitle": "Enlaces de pantalla",
+      "emptyTitle": "Aún no hay enlaces de pantalla",
+      "emptyDescription": "Crea uno para mostrar el panel en directo en una pantalla del recinto.",
+      "createdAt": "Creado {time}",
+      "revokedAt": "Desactivado {time}",
+      "revoke": "Desactivar",
+      "revokeLabel": "Desactivar {label}"
     }
   },
   "alerts": {
@@ -8309,5 +8457,41 @@
     "exhibitor": "Expositor",
     "category": "Categoría",
     "available": "Disponible"
+  },
+  "tv": {
+    "offTitle": "Este enlace de pantalla está desactivado",
+    "offDescription": "Pide un enlace nuevo al equipo del evento.",
+    "eyebrow": "En directo en los accesos",
+    "updated": "Actualizado {time}",
+    "stale": "Sin conexión, última actualización {time}",
+    "fullScreen": "Pantalla completa",
+    "checkedIn": "Registrados hoy",
+    "ofValid": "{total} de {valid} entradas registradas",
+    "capacity": "Aforo",
+    "inside": "{inside} dentro, de {capacity}",
+    "insideNoCap": "{inside} dentro",
+    "level": {
+      "none": "Sin aforo definido",
+      "ok": "Hay espacio",
+      "near": "Casi lleno",
+      "over": "Aforo completo"
+    },
+    "speed": "Escaneos por minuto",
+    "perMinute": "{minutes, plural, =0 {Ya han entrado todos los esperados} one {Unos # minuto para que entren todos} other {Unos # minutos para que entren todos}}",
+    "perMinuteStopped": "Sin escaneos en los últimos 5 minutos",
+    "devices": "Dispositivos conectados",
+    "devicesValue": "{online} de {total}",
+    "issues": "Hoy en los accesos",
+    "issuesValue": "{duplicates, plural, one {# duplicado} other {# duplicados}}, {refused, plural, one {# escaneo rechazado} other {# escaneos rechazados}}",
+    "entrances": "Por entrada",
+    "entrance": "Entrada",
+    "entrancePerMinute": "Por minuto",
+    "entranceQueue": "Para vaciar",
+    "noEntrance": "Sin entrada elegida",
+    "minutes": "{count, plural, one {# min} other {# min}}",
+    "chartTitle": "Registros por minuto, últimos 15 minutos",
+    "showTable": "Ver como tabla",
+    "minute": "Minuto",
+    "checkedInColumn": "Registrados"
   }
 }

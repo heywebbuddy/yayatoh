@@ -70,7 +70,8 @@
       },
       "alerts": {
         "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords} 位參加者沒有座位}}} undistributed {{count, plural, other {{countWords} 張已購票券尚未分發}}} paymentsFailed {{count, plural, other {{countWords} 筆付款失敗}}} paymentsStuck {{count, plural, other {{countWords} 筆付款卡住了}}} refundSurge {{count, plural, other {過去一小時內有 {countWords} 筆退款}}} devicesOffline {{count, plural, other {{countWords} 台報到裝置離線}}} devicesLowBattery {{count, plural, other {{countWords} 台報到裝置電量不足}}} devicesBacklog {{count, plural, other {{countWords} 台報到裝置有待同步的掃描}}} capacityNear {場地已滿 {count}%} capacityFull {場地已額滿（{count}%）} sellOut {已售出 {count}% 的票券} salesPace {票券銷售達到目標進度的 {count}%} readiness {{count, plural, other {{countWords} 個設定步驟阻礙了此活動}}} domain {{count, plural, other {{countWords} 個自訂網域有問題}}} payoutsPastDue {{count, plural, other {收款帳戶有 {countWords} 項要求已逾期}}} deliverability {電子郵件送達率需要注意} automationFailed {{count, plural, other {今天有 {countWords} 則訊息或批次操作失敗}}} other {警示}}",
-        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords} 位參加者沒有座位}}} undistributed {{count, plural, other {{countWords} 張已購票券尚未分發}}} paymentsFailed {{count, plural, other {{countWords} 筆付款失敗}}} paymentsStuck {{count, plural, other {{countWords} 筆付款卡住了}}} refundSurge {{count, plural, other {過去一小時內有 {countWords} 筆退款}}} devicesOffline {{count, plural, other {{countWords} 台報到裝置離線}}} devicesLowBattery {{count, plural, other {{countWords} 台報到裝置電量不足}}} devicesBacklog {{count, plural, other {{countWords} 台報到裝置有待同步的掃描}}} capacityNear {場地已滿 {count}%} capacityFull {場地已額滿（{count}%）} sellOut {已售出 {count}% 的票券} salesPace {票券銷售達到目標進度的 {count}%} readiness {{count, plural, other {{countWords} 個設定步驟阻礙了此活動}}} domain {{count, plural, other {{countWords} 個自訂網域有問題}}} payoutsPastDue {{count, plural, other {收款帳戶有 {countWords} 項要求已逾期}}} deliverability {電子郵件送達率需要注意} automationFailed {{count, plural, other {今天有 {countWords} 則訊息或批次操作失敗}}} other {警示}}"
+        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords} 位參加者沒有座位}}} undistributed {{count, plural, other {{countWords} 張已購票券尚未分發}}} paymentsFailed {{count, plural, other {{countWords} 筆付款失敗}}} paymentsStuck {{count, plural, other {{countWords} 筆付款卡住了}}} refundSurge {{count, plural, other {過去一小時內有 {countWords} 筆退款}}} devicesOffline {{count, plural, other {{countWords} 台報到裝置離線}}} devicesLowBattery {{count, plural, other {{countWords} 台報到裝置電量不足}}} devicesBacklog {{count, plural, other {{countWords} 台報到裝置有待同步的掃描}}} capacityNear {場地已滿 {count}%} capacityFull {場地已額滿（{count}%）} sellOut {已售出 {count}% 的票券} salesPace {票券銷售達到目標進度的 {count}%} readiness {{count, plural, other {{countWords} 個設定步驟阻礙了此活動}}} domain {{count, plural, other {{countWords} 個自訂網域有問題}}} payoutsPastDue {{count, plural, other {收款帳戶有 {countWords} 項要求已逾期}}} deliverability {電子郵件送達率需要注意} automationFailed {{count, plural, other {今天有 {countWords} 則訊息或批次操作失敗}}} other {警示}}",
+        "alert-urgent-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords} 位參加者沒有座位}}} undistributed {{count, plural, other {{countWords} 張已購票券尚未分發}}} paymentsFailed {{count, plural, other {{countWords} 筆付款失敗}}} paymentsStuck {{count, plural, other {{countWords} 筆付款卡住了}}} refundSurge {{count, plural, other {過去一小時內有 {countWords} 筆退款}}} devicesOffline {{count, plural, other {{countWords} 台報到裝置離線}}} devicesLowBattery {{count, plural, other {{countWords} 台報到裝置電量不足}}} devicesBacklog {{count, plural, other {{countWords} 台報到裝置有待同步的掃描}}} capacityNear {場地已滿 {count}%} capacityFull {場地已額滿（{count}%）} sellOut {已售出 {count}% 的票券} salesPace {票券銷售達到目標進度的 {count}%} readiness {{count, plural, other {{countWords} 個設定步驟阻礙了此活動}}} domain {{count, plural, other {{countWords} 個自訂網域有問題}}} payoutsPastDue {{count, plural, other {收款帳戶有 {countWords} 項要求已逾期}}} deliverability {電子郵件送達率需要注意} automationFailed {{count, plural, other {今天有 {countWords} 則訊息或批次操作失敗}}} other {警示}}"
       }
     },
     "kinds": {
@@ -144,7 +145,8 @@
       },
       "alerts": {
         "alert": "警示",
-        "alert-text": "警示簡訊"
+        "alert-text": "警示簡訊",
+        "alert-urgent-text": "緊急警示簡訊"
       },
       "campaigns": {
         "test": "行銷活動測試"
@@ -1159,7 +1161,11 @@
     "latitude": "緯度",
     "longitude": "經度",
     "locationError": "請同時以數字填寫緯度(−90 到 90)和經度(−180 到 180),或都留空。",
-    "located": "位於 {lat}, {lng}"
+    "located": "位於 {lat}, {lng}",
+    "capacity": "容量（選填）",
+    "capacityHint": "該區域可容納的人數，用於容量儀表。",
+    "capacityError": "請輸入 1 到 1,000,000 之間的整數，或留空。",
+    "holds": "{count, plural, other {可容納 # 人}}"
   },
   "search": {
     "title": "搜尋",
@@ -6139,8 +6145,150 @@
         "title": "入口"
       },
       "deviceBoard": {
-        "title": "裝置面板"
+        "title": "裝置面板",
+        "lastScan": "上次掃描 {time}",
+        "appVersion": "應用程式 {version}"
+      },
+      "liveFeed": {
+        "title": "即時動態",
+        "filters": "篩選動態",
+        "entrance": "入口",
+        "allEntrances": "所有入口",
+        "device": "裝置",
+        "allDevices": "所有裝置",
+        "outcome": "結果",
+        "allOutcomes": "全部",
+        "filter": {
+          "checkin": "報到",
+          "reentry": "再次入場",
+          "duplicate": "重複",
+          "invalid": "被拒掃描",
+          "device": "裝置事件",
+          "alert": "警示"
+        },
+        "pause": "暫停",
+        "resume": "繼續",
+        "paused": "已暫停。動態不會更新。",
+        "pausedNews": "已暫停。有新動態：繼續即可查看。",
+        "none": "目前沒有內容。掃描、裝置和警示發生時會顯示在這裡。",
+        "noneFiltered": "目前沒有符合這些篩選條件的內容。",
+        "listLabel": "最新動態，最新的在前",
+        "offline": "離線掃描",
+        "unknownDevice": "一台裝置",
+        "alert": "警示{state, select, resolved {已解除} other {已觸發}}：{title}",
+        "deviceEvent": "{device}{change, select, online {重新上線} offline {已離線} low_battery {電量低} revoked {已被撤銷} wiped {已被清除} other {有變化}}",
+        "kind": {
+          "checkin": "{reason, select, granted {已進入區域} provisional {已放行（待確認）} other {已報到}}",
+          "reentry": "再次入場",
+          "duplicate": "{reason, select, duplicate_offline {重複（離線掃描）} other {重複：已報到}}",
+          "invalid": "已拒絕：{reason, select, invalid {無效的代碼} void {票券已取消} wrong_event {其他活動的票券} not_today {今天無效} outside_window {不在活動時間內} wrong_date {其他日期的票券} superseded {已被取代的代碼} no_access {無權進入此區域} wrong_checkpoint {入口不對} other {已拒絕}}"
+        }
+      },
+      "checkinSpeed": {
+        "title": "報到速度",
+        "rateLabel": "每分鐘掃描次數（最近 {minutes} 分鐘）",
+        "medianGapValue": "掃描間隔 {value} 秒（中位數）",
+        "remaining": "{count, plural, other {還有 # 位來賓未到}}",
+        "queueValue": "{count, plural, =0 {預期來賓已全部入場} other {約 # 分鐘可讓所有人入場}}",
+        "queueStopped": "最近 5 分鐘沒有掃描",
+        "chartTitle": "每分鐘報到人數（最近 15 分鐘）",
+        "showTable": "以表格顯示",
+        "minute": "時間",
+        "checkedIn": "報到人數",
+        "byEntrance": "依入口",
+        "byDevice": "依裝置",
+        "entrance": "入口",
+        "device": "裝置",
+        "perMinute": "每分鐘掃描",
+        "medianGap": "掃描間隔",
+        "queue": "排隊清空所需時間",
+        "seconds": "{value} 秒",
+        "minutes": "{count, plural, other {# 分鐘}}",
+        "notMoving": "停滯",
+        "noEntrance": "未選擇入口",
+        "noDevice": "入口螢幕"
+      },
+      "scanIssues": {
+        "title": "重複和被拒掃描",
+        "summary": "今天：重複 {duplicates, plural, other {# 次}}，被拒 {refused, plural, other {# 次}}",
+        "byReason": "依原因",
+        "none": "今天沒有重複或被拒的掃描。",
+        "recent": "最近",
+        "openOrder": "開啟訂單",
+        "reason": {
+          "admitted": "已報到",
+          "granted": "已進入區域",
+          "provisional": "已放行（待確認）",
+          "duplicate": "已報到過",
+          "duplicate_offline": "重複（離線掃描）",
+          "invalid": "無效的代碼",
+          "void": "票券已取消",
+          "wrong_event": "其他活動的票券",
+          "not_today": "今天無效",
+          "outside_window": "不在活動時間內",
+          "wrong_date": "其他日期的票券",
+          "superseded": "已被取代的代碼",
+          "no_access": "無權進入此區域",
+          "wrong_checkpoint": "入口不對",
+          "other": "其他"
+        }
+      },
+      "capacity": {
+        "title": "容量",
+        "venue": "已入場 {inside} / {capacity}",
+        "venueNoCap": "已入場 {inside}（未設定容量）",
+        "meter": "{name}：已用容量",
+        "event": "活動",
+        "out": "{count, plural, other {已簽退 # 人}}",
+        "left": "{count, plural, other {剩餘 # 個名額}}",
+        "areas": "依區域",
+        "area": "區域",
+        "in": "已入場",
+        "capacity": "容量",
+        "leftHeader": "剩餘",
+        "status": "狀態",
+        "level": {
+          "none": "未設定容量",
+          "ok": "低於 {near}%",
+          "near": "接近客滿（{near}% 或以上）",
+          "over": "已客滿或超額"
+        }
+      },
+      "staffPresence": {
+        "title": "入口工作人員",
+        "none": "目前入口沒有人登入。",
+        "unknown": "團隊成員",
+        "onDevice": "使用 {device}",
+        "onDoorScreen": "使用入口螢幕",
+        "wholeEvent": "整個活動",
+        "since": "自 {time} 起"
+      },
+      "assistance": {
+        "title": "來賓協助",
+        "pending": "來賓和入口工作人員的求助請求會顯示在這裡。",
+        "open": "{count, plural, other {# 個待處理請求}}"
       }
+    },
+    "tv": {
+      "open": "電視模式",
+      "title": "電視模式",
+      "back": "返回指揮中心",
+      "description": "{event} 場地螢幕使用的唯讀看板。任何拿到連結的人無需登入即可查看，因此看板從不顯示金額或來賓姓名。",
+      "noAccessTitle": "你的角色無法使用電視模式",
+      "noAccess": "請向擁有者或管理員申請存取權限。",
+      "newTitle": "新的螢幕連結",
+      "label": "螢幕名稱",
+      "labelHint": "例如：大廳螢幕、B 門顯示器。",
+      "labelError": "請為螢幕命名（最多 60 個字元）。",
+      "create": "建立連結",
+      "createdOnce": "{label} 的連結。請現在在螢幕上開啟：它只會顯示一次。",
+      "listTitle": "螢幕連結",
+      "emptyTitle": "還沒有螢幕連結",
+      "emptyDescription": "建立一個連結，在場地螢幕上顯示即時看板。",
+      "createdAt": "建立於 {time}",
+      "revokedAt": "停用於 {time}",
+      "revoke": "停用",
+      "revokeLabel": "停用 {label}"
     }
   },
   "alerts": {
@@ -8309,5 +8457,41 @@
     "exhibitor": "參展商",
     "category": "類別",
     "available": "可租用"
+  },
+  "tv": {
+    "offTitle": "此螢幕連結已停用",
+    "offDescription": "請向活動團隊索取新連結。",
+    "eyebrow": "入口即時狀況",
+    "updated": "更新於 {time}",
+    "stale": "離線，最後更新於 {time}",
+    "fullScreen": "全螢幕",
+    "checkedIn": "今日報到",
+    "ofValid": "{valid} 張票券中已報到 {total} 張",
+    "capacity": "容量",
+    "inside": "已入場 {inside} / {capacity}",
+    "insideNoCap": "已入場 {inside}",
+    "level": {
+      "none": "未設定容量",
+      "ok": "尚有空位",
+      "near": "接近客滿",
+      "over": "已客滿"
+    },
+    "speed": "每分鐘掃描",
+    "perMinute": "{minutes, plural, =0 {預期來賓已全部入場} other {約 # 分鐘可讓所有人入場}}",
+    "perMinuteStopped": "最近 5 分鐘沒有掃描",
+    "devices": "在線裝置",
+    "devicesValue": "{online} / {total}",
+    "issues": "今日入口狀況",
+    "issuesValue": "重複 {duplicates, plural, other {# 次}}，被拒 {refused, plural, other {# 次}}",
+    "entrances": "依入口",
+    "entrance": "入口",
+    "entrancePerMinute": "每分鐘",
+    "entranceQueue": "清空所需",
+    "noEntrance": "未選擇入口",
+    "minutes": "{count, plural, other {# 分鐘}}",
+    "chartTitle": "每分鐘報到人數（最近 15 分鐘）",
+    "showTable": "以表格顯示",
+    "minute": "時間",
+    "checkedInColumn": "報到人數"
   }
 }

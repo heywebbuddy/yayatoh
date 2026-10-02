@@ -30,6 +30,8 @@ import {
   createCheckpointCommand,
   enrollDeviceCommand,
   heartbeatCommand,
+  markQuietDevicesTx,
+  reportPresenceCommand,
   scanTicketCommand,
   setDetectionSettingsCommand,
   stageStaffAlertPushesTx,
@@ -47,7 +49,11 @@ import {
   submitContactRequestCommand,
   submitHelpFeedbackCommand,
 } from '@yayatoh/cms';
-import { saveWidgetLayoutCommand, setModeOverrideCommand } from '@yayatoh/command-center';
+import {
+  createDisplayLinkCommand,
+  saveWidgetLayoutCommand,
+  setModeOverrideCommand,
+} from '@yayatoh/command-center';
 import { withTenant } from '@yayatoh/db';
 import {
   addRecurringOccurrencesCommand,
@@ -2020,6 +2026,17 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ports,
   );
   await runOrgCampaigns(org.id, ports);
+  // M3.3a live mode: the owner at the main gate (staff presence), a TV display link, and the door
+  // device's transitions (its first heartbeat above recorded "online"; it went quiet since).
+  await executeCommand(
+    reportPresenceCommand,
+    { eventId: event.id, checkpointId: mainGate },
+    ctx({ now: new Date('2027-10-14T15:02:00Z') }),
+    ports,
+  );
+  await executeCommand(createDisplayLinkCommand, { eventId: event.id, label: 'Lobby screen' }, ctx(), ports);
+  const quietCtx = { ...systemCtx(org.id), now: new Date('2027-10-14T15:30:00Z') };
+  await withTenant(quietCtx, (tx) => markQuietDevicesTx(tx, quietCtx, 90_000));
   // M3.1a: the metrics projector (snapshots, sharded counter, time series, lag samples) and the
   // analytics sink over this org's outbox, as the worker would.
   await catchUpMetrics(org.id);
