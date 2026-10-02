@@ -20,6 +20,7 @@ import {
   resetRsvpLinkCommand,
   resetRsvpPinCommand,
   rsvpLinkRef,
+  rsvpLinksQuery,
   rsvpLookupTarget,
   rsvpOverviewQuery,
   rsvpSettingsQuery,
@@ -566,6 +567,7 @@ describe('RSVP: isolation, permissions, impersonation, freeze', () => {
     const ref = { eventId: w.ev.id, partyId: w.garcia.id };
     for (const run of [
       () => executeQuery(partyRsvpQuery, ref, viewer, ports),
+      () => executeQuery(rsvpLinksQuery, { eventId: w.ev.id, partyIds: [w.garcia.id] }, viewer, ports),
       () => executeCommand(resetRsvpPinCommand, ref, viewer, ports),
       () => executeCommand(resetRsvpLinkCommand, ref, viewer, ports),
       () => executeCommand(reopenRsvpCommand, ref, viewer, ports),

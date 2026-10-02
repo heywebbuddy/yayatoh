@@ -81,7 +81,7 @@ export function RsvpLookupForm({
         <fieldset className="flex flex-col gap-2 rounded-card border border-zinc-200 p-4">
           <legend className="px-1 text-body font-medium">{t('challengeTitle')}</legend>
           <p className="text-caption text-zinc-600">{t('challengeHint')}</p>
-          <HumanCheckField widget={challenge} label={t('challengeLabel')} />
+          <HumanCheckField widget={challenge} />
         </fieldset>
       ) : null}
       <div aria-live="polite">

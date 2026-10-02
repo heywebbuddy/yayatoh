@@ -8163,7 +8163,6 @@
     "submit": "Encontrar meu convite",
     "challengeTitle": "Só mais um passo",
     "challengeHint": "Você tentou várias vezes. Confirme que é uma pessoa e tente de novo.",
-    "challengeLabel": "Sou uma pessoa",
     "errors": {
       "noMatch": "Não encontramos nenhum convite com esse nome e esse PIN. Confira como seu nome completo está escrito no convite e o PIN.",
       "invalidName": "Digite seu nome completo.",

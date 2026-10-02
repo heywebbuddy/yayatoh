@@ -28,7 +28,7 @@ CREATE TABLE "guests"."rsvp_settings" (
 	"name_lookup" boolean DEFAULT true NOT NULL,
 	"lookup_code" text NOT NULL,
 	CONSTRAINT "rsvp_settings_org_id_id_key" UNIQUE("org_id","id"),
-	CONSTRAINT "rsvp_settings_lookup_code_check" CHECK (lookup_code ~ '^[0-9A-Z]{8}$')
+	CONSTRAINT "rsvp_settings_lookup_code_check" CHECK (lookup_code ~ '^[0-9A-Z_]{8,40}$')
 );
 --> statement-breakpoint
 ALTER TABLE "guests"."rsvp_settings" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint

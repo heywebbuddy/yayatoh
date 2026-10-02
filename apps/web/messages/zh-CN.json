@@ -8163,7 +8163,6 @@
     "submit": "查找我的请柬",
     "challengeTitle": "还差一步",
     "challengeHint": "您已尝试多次。请确认您是真人，然后再试一次。",
-    "challengeLabel": "我是真人",
     "errors": {
       "noMatch": "未找到与该姓名和 PIN 码匹配的请柬。请核对请柬上的全名写法和 PIN 码。",
       "invalidName": "请输入您的全名。",

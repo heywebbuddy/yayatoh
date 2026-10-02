@@ -8163,7 +8163,6 @@
     "submit": "招待状を探す",
     "challengeTitle": "もう一歩",
     "challengeHint": "何度か試行されました。人間であることを確認してから、もう一度お試しください。",
-    "challengeLabel": "私は人間です",
     "errors": {
       "noMatch": "このお名前と PIN の招待状は見つかりませんでした。招待状に記載のフルネームの表記と PIN をご確認ください。",
       "invalidName": "フルネームを入力してください。",

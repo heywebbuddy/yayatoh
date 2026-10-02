@@ -16929,7 +16929,7 @@
       "checkConstraints": {
         "rsvp_settings_lookup_code_check": {
           "name": "rsvp_settings_lookup_code_check",
-          "value": "lookup_code ~ '^[0-9A-Z]{8}$'"
+          "value": "lookup_code ~ '^[0-9A-Z_]{8,40}$'"
         }
       },
       "isRLSEnabled": true

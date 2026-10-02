@@ -8163,7 +8163,6 @@
     "submit": "Meine Einladung finden",
     "challengeTitle": "Noch ein Schritt",
     "challengeHint": "Du hast es mehrmals versucht. Bitte bestätige, dass du ein Mensch bist, und versuch es dann erneut.",
-    "challengeLabel": "Ich bin ein Mensch",
     "errors": {
       "noMatch": "Wir haben keine Einladung mit diesem Namen und dieser PIN gefunden. Prüfe die Schreibweise deines vollständigen Namens wie auf der Einladung und die PIN.",
       "invalidName": "Gib deinen vollständigen Namen ein.",

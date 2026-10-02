@@ -420,7 +420,9 @@ export const rsvpSettings = tenantTable(
   (t) => [
     uniqueIndex('rsvp_settings_org_event_key').on(t.orgId, t.eventId),
     uniqueIndex('rsvp_settings_lookup_code_key').on(t.lookupCode),
-    check('rsvp_settings_lookup_code_check', sql`lookup_code ~ '^[0-9A-Z]{8}$'`),
+    // Generated codes are 8 characters (`LOOKUP_ALPHABET`); the check also admits the canary's
+    // `CANARY_<nn>_<row>` shape (column privacy seed `code`).
+    check('rsvp_settings_lookup_code_check', sql`lookup_code ~ '^[0-9A-Z_]{8,40}$'`),
   ],
 );
 

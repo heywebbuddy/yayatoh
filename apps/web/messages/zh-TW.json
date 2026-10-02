@@ -8163,7 +8163,6 @@
     "submit": "查詢我的喜帖",
     "challengeTitle": "還差一步",
     "challengeHint": "您已嘗試多次。請確認您是真人，然後再試一次。",
-    "challengeLabel": "我是真人",
     "errors": {
       "noMatch": "找不到與此姓名和 PIN 碼相符的喜帖。請核對喜帖上的全名寫法和 PIN 碼。",
       "invalidName": "請輸入您的全名。",

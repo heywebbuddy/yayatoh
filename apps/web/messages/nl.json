@@ -8163,7 +8163,6 @@
     "submit": "Mijn uitnodiging vinden",
     "challengeTitle": "Nog één stap",
     "challengeHint": "Je hebt het een paar keer geprobeerd. Bevestig dat je een mens bent en probeer het opnieuw.",
-    "challengeLabel": "Ik ben een mens",
     "errors": {
       "noMatch": "We hebben geen uitnodiging gevonden met deze naam en pincode. Controleer de spelling van je volledige naam zoals op de uitnodiging, en de pincode.",
       "invalidName": "Vul je volledige naam in.",

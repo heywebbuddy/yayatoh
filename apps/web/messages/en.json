@@ -8163,7 +8163,6 @@
     "submit": "Find my invitation",
     "challengeTitle": "One more step",
     "challengeHint": "You've tried several times. Please confirm you're a person, then try again.",
-    "challengeLabel": "I'm a person",
     "errors": {
       "noMatch": "We couldn't find an invitation with that name and PIN. Check the spelling of your full name as it appears on the invitation, and the PIN.",
       "invalidName": "Enter your full name.",
