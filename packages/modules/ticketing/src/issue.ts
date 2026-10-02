@@ -16,7 +16,14 @@ import {
 import { and, desc, eq, inArray, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { returnSoldTx } from './inventory.ts';
-import { signingKeys, TICKET_STATUSES, ticketBarcodes, tickets, ticketTypes } from './schema.ts';
+import {
+  signingKeys,
+  TICKET_STATUSES,
+  tableUnits,
+  ticketBarcodes,
+  tickets,
+  ticketTypes,
+} from './schema.ts';
 
 export interface IssueRequest {
   readonly orderId: string;
@@ -37,6 +44,8 @@ export interface IssuedTicket {
   readonly serial: number;
   readonly shortCode: string;
   readonly code: string;
+  /** M4.2b: the purchased table this ticket is a guest slot of (table ticket types only). */
+  readonly tableUnitId?: string;
 }
 
 /** The org's active signing key, creating the first one on demand. */
@@ -101,9 +110,37 @@ export async function issueTicketsTx(tx: TenantTx, ctx: Ctx, req: IssueRequest):
     name: req.holder.name,
     source: 'ticket',
   });
-  const units = req.items.flatMap((item) =>
-    Array.from({ length: item.quantity }, () => ({ ...item, id: uuidv7() })),
+  // M4.2b: a table ticket type sells tables; each table issues `table_size` tickets (its guest
+  // slots), grouped under one `table_units` row.
+  const typeIds = [...new Set(req.items.map((i) => i.ticketTypeId))];
+  const sizes = new Map(
+    (
+      await tx
+        .select({ id: ticketTypes.id, tableSize: ticketTypes.tableSize })
+        .from(ticketTypes)
+        .where(inArray(ticketTypes.id, typeIds))
+    ).map((r) => [r.id, r.tableSize]),
   );
+  const tableRows: (typeof tableUnits.$inferInsert)[] = [];
+  const units = req.items.flatMap((item) => {
+    const size = sizes.get(item.ticketTypeId) ?? null;
+    if (!size) return Array.from({ length: item.quantity }, () => ({ ...item, id: uuidv7() }));
+    return Array.from({ length: item.quantity }, (_, n) => {
+      const tableUnitId = uuidv7();
+      tableRows.push({
+        id: tableUnitId,
+        orgId,
+        eventId: req.eventId,
+        orderId: req.orderId,
+        orderItemId: item.orderItemId,
+        ticketTypeId: item.ticketTypeId,
+        unitNo: n + 1,
+        size,
+      });
+      return Array.from({ length: size }, () => ({ ...item, id: uuidv7(), tableUnitId }));
+    }).flat();
+  });
+  if (tableRows.length) await tx.insert(tableUnits).values(tableRows);
   const attendeeRows = await createAttendeesTx(
     tx,
     ctx,
@@ -133,12 +170,20 @@ export async function issueTicketsTx(tx: TenantTx, ctx: Ctx, req: IssueRequest):
       holderEmail: req.holder.email,
       attendeeId: attendeeFor.get(unit.id) ?? null,
       occurrenceId: req.occurrenceId ?? null,
+      tableUnitId: 'tableUnitId' in unit ? unit.tableUnitId : null,
     });
     const code = await signTicketCode({ kid: key.kid, ticketId: t.id, rev: t.rev }, key.privateKey);
     await tx
       .insert(ticketBarcodes)
       .values({ orgId, ticketId: t.id, format: 'yy1', payload: code, rev: t.rev });
-    out.push({ id: t.id, ticketTypeId: t.ticketTypeId, serial, shortCode: t.shortCode, code });
+    out.push({
+      id: t.id,
+      ticketTypeId: t.ticketTypeId,
+      serial,
+      shortCode: t.shortCode,
+      code,
+      ...(t.tableUnitId ? { tableUnitId: t.tableUnitId } : {}),
+    });
   }
   return out;
 }
