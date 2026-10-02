@@ -39,7 +39,7 @@ export async function startRegistrationFormAction(
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return { code: 'validation_failed', field: 'email' };
   const target = await checkoutTarget(slug);
   if (!target) return { code: 'not_found' };
-  if (!(await publicRegistrationTypes(slug)).some((t) => t.id === type))
+  if (!(await publicRegistrationTypes(slug, email)).some((t) => t.id === type))
     return { code: 'validation_failed', field: 'type' };
   const limit = await limitAction('registrationForm', { identity: email.toLowerCase(), scope: 'start' });
   if (!limit.allowed) return { code: 'rate_limited', retryMinutes: retryAfterMinutes(limit) };

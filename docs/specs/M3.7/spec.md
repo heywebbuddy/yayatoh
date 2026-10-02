@@ -50,7 +50,7 @@ touches:
   - packages/modules/crm/src/{contacts,index}.ts               # contactsByIdsTx, contactIdsMatchingTx
   - packages/modules/orders/src/participation.ts               # orderRefTx: occurrence, status, locale
   - packages/modules/surveys/src/{surveys,index}.ts            # answeredEventSurveyTx
-  - packages/db/drizzle/0076_violet_shotgun.sql (+ meta)
+  - packages/db/drizzle/0087_violet_shotgun.sql (+ meta; 0076 on the branch)
   - packages/testing/{package.json,src/fixtures.ts,src/canary/registry.ts,tests/journeys.int.test.ts}
   - apps/worker/{package.json,src/journeys.ts,src/main.ts,src/registry.ts,tests/journeys.int.test.ts}
   - apps/web/src/app/[locale]/o/[org]/(org)/{layout.tsx,journeys/**}
@@ -75,7 +75,7 @@ touches:
 - [x] Column privacy declared (`src/private-columns.ts`, registered in the canary registry)
 - [x] Cross-tenant: only `automations.orgs_with_journey_work(int)` (SECURITY DEFINER, org ids only, `platform_reader`)
 
-**Migration `0076_violet_shotgun.sql`** (renumbered at merge): generated schema, tables, indexes, RLS and policies, plus one hand-written block:
+**Migration `0087_violet_shotgun.sql`** (0076 on the branch, renumbered at merge): generated schema, tables, indexes, RLS and policies, plus one hand-written block:
 1. `journeys_event_fk` (org_id, event_id) → `events.events` ON DELETE CASCADE
 2. `journeys_series_fk` (org_id, series_id) → `events.series` ON DELETE CASCADE
 3. `journey_runs_event_fk` (org_id, event_id) → `events.events` ON DELETE CASCADE

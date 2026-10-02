@@ -69,9 +69,12 @@ import {
   createAccessCodeCommand,
   createAnnouncementCommand,
   createEventCommand,
+  createPortalSession,
   createSeriesCommand,
   type EventDto,
   listOccurrencesQuery,
+  portalCtx,
+  portalPrincipalBySession,
   redeemAccessCodeCommand,
   setEventDetailsCommand,
   setEventSeriesCommand,
@@ -109,7 +112,7 @@ import {
   setAttributionWindowCommand,
 } from '@yayatoh/marketing';
 import { addLegacyRedirectCommand, catchUpListings, updateSiteSettingsCommand } from '@yayatoh/marketplace';
-import { uploadLogo, uploadMedia, uploadProgramImage } from '@yayatoh/media';
+import { uploadLogo, uploadMedia, uploadProgramImage, uploadSpeakerPortalFile } from '@yayatoh/media';
 import {
   announcementMailer,
   contactMessageCommand,
@@ -171,8 +174,10 @@ import {
 } from '@yayatoh/platform';
 import { dsarExportBulk } from '@yayatoh/privacy';
 import {
+  assignBoothCommand,
   claimSessionPlaceTx,
   createExhibitorCommand,
+  createPortalTaskCommand,
   createRoomCommand,
   createSessionCommand,
   createSessionGroupCommand,
@@ -182,9 +187,18 @@ import {
   createSponsorTierCommand,
   createTrackCommand,
   sessionsOf as programSessionsOf,
+  inviteExhibitorMemberCommand,
+  inviteSpeakerCommand,
+  portalInviteStaffCommand,
+  portalSaveProfileCommand,
+  proposeProfileChangeCommand,
   publishAgendaCommand,
   recordGroupPickTx,
+  saveBoothCommand,
+  saveExhibitorListingCommand,
+  saveExhibitorSettingsCommand,
   setSessionAgendaCommand,
+  speakerPortalQuery,
 } from '@yayatoh/program';
 import {
   createRegistrationTypeCommand,
@@ -254,6 +268,9 @@ export interface OrgFixture {
   readonly testKey: string;
   /** Context of the owner inside this org. */
   readonly ctx: (overrides?: Partial<Ctx>) => Ctx;
+  /** M5.3a: the fixture speaker and their portal account (session cookie value on `fixture.test`). */
+  readonly speakerId: string;
+  readonly portal: { readonly accountId: string; readonly token: string };
 }
 
 /**
@@ -1443,9 +1460,64 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ctx(),
     ports,
   );
-  await executeCommand(
+  const exhibitor = await executeCommand(
     createExhibitorCommand,
     { eventId: event.id, name: `${name} Exhibitor`, boothLabel: 'B1' },
+    ctx(),
+    ports,
+  );
+  // M5.4a: the exhibitor portal (settings, listing, an admin signed in by link, a staff invite, a
+  // pending profile change) and a booth with the exhibitor at it.
+  await executeCommand(
+    saveExhibitorSettingsCommand,
+    { eventId: event.id, defaultStaffAllowance: 3, approvalRequired: true },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    saveExhibitorListingCommand,
+    {
+      eventId: event.id,
+      exhibitorId: exhibitor.id,
+      listed: true,
+      categories: ['Software'],
+      links: [{ label: 'Docs', url: 'https://example.com/docs' }],
+      staffAllowance: null,
+    },
+    ctx(),
+    ports,
+  );
+  // The exhibitor admin is a portal account (M5.3a), signed in like any portal person.
+  const exhibitorInvite = await executeCommand(
+    inviteExhibitorMemberCommand,
+    { eventId: event.id, exhibitorId: exhibitor.id, email: `admin@${slug}.example`, role: 'exhibitor_admin' },
+    ctx(),
+    ports,
+  );
+  const exhibitorSession = await createPortalSession({
+    orgId: org.id,
+    accountId: exhibitorInvite.member.id,
+    host: 'fixture.test',
+  });
+  const exhibitorPrincipal = await portalPrincipalBySession(exhibitorSession.token, 'fixture.test');
+  if (!exhibitorPrincipal) throw new Error('fixture: exhibitor portal session');
+  const exhibitorCtx = portalCtx(exhibitorPrincipal);
+  await executeCommand(portalInviteStaffCommand, { email: `staff@${slug}.example` }, exhibitorCtx, ports);
+  await executeCommand(
+    portalSaveProfileCommand,
+    { name: `${name} Exhibitor`, description: 'Proposed *copy*.' },
+    exhibitorCtx,
+    ports,
+  );
+  const hall = await executeCommand(
+    saveBoothCommand,
+    { eventId: event.id, number: 'A1', category: 'Software', x: 100, y: 100, width: 300, height: 300 },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    assignBoothCommand,
+    { eventId: event.id, boothId: hall.booths[0]?.id ?? '', exhibitorId: exhibitor.id },
     ctx(),
     ports,
   );
@@ -1518,6 +1590,58 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     );
   });
   await executeCommand(publishAgendaCommand, { eventId: weekly.id }, ctx(), ports);
+  // M5.3a speaker portal: the speaker's portal account (and its event-role assignment), a sign-in
+  // code and a session, a proposed profile change, and an upload task answered with a file.
+  const invited = await executeCommand(
+    inviteSpeakerCommand,
+    { eventId: event.id, speakerId: speaker.id, email: `speaker-${slug}@example.test` },
+    ctx(),
+    ports,
+  );
+  const portalSession = await createPortalSession({
+    orgId: org.id,
+    accountId: invited.accountId,
+    host: 'fixture.test',
+  });
+  await withTenant(systemCtx(org.id), (tx) =>
+    tx.execute(sql`
+      insert into events.portal_challenges
+        (org_id, account_id, code_hash, expires_at, link_hash, browser_hash, link_expires_at)
+      values (${org.id}, ${invited.accountId}, ${'0'.repeat(64)}, now(), ${'1'.repeat(64)}, ${'2'.repeat(64)}, now())`),
+  );
+  const principal = await portalPrincipalBySession(portalSession.token, 'fixture.test');
+  if (!principal) throw new Error('fixture: portal session');
+  const speakerCtx = portalCtx(principal);
+  await executeCommand(
+    proposeProfileChangeCommand,
+    { name: `${name} Speaker`, company: name, bio: 'Talks about *portals*.' },
+    speakerCtx,
+    ports,
+  );
+  await executeCommand(
+    createPortalTaskCommand,
+    {
+      eventId: event.id,
+      kind: 'upload',
+      title: 'Upload your slides',
+      dueAt: new Date(event.startsAt.getTime() - 86_400_000),
+    },
+    ctx(),
+    ports,
+  );
+  const speakerView = await executeQuery(speakerPortalQuery, {}, speakerCtx, ports);
+  const slidesTask = speakerView.tasks[0];
+  if (!slidesTask) throw new Error('fixture: speaker task');
+  await uploadSpeakerPortalFile(
+    speakerCtx,
+    {
+      purpose: 'task_answer',
+      assigneeId: slidesTask.assigneeId,
+      file: new TextEncoder().encode('%PDF-1.4\n% fixture slides\n%%EOF\n'),
+      fileName: 'slides.pdf',
+    },
+    ports,
+  );
   await draftEventCopy(ctx(), ports, fakeDrafter, { eventId: event.id, kind: 'tagline' });
   // M5.1a registration: the default types and items (activating the conference pack), a code-only
   // and a domain-only type, one cell per type, and a capacity claim.
@@ -1932,7 +2056,23 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   await executeCommand(setMyAlertPhoneCommand, { smsPhone: '+15550100199' }, ctx(), ports);
   await executeCommand(setSalesTargetCommand, { eventId: event.id, tickets: 150 }, ctx(), ports);
   await liveEngagementFixture(org.id, event.id, ctx);
-  return { org, ownerId, viewerId, event, apiKey, testKey, ctx };
+  // Batch 3e: a journey step failure reported two days ago (outside the rules' 24-hour window, so
+  // it raises nothing), as the alerts subscriber records it (isolation coverage of alerts.signals).
+  await withTenant(systemCtx(org.id), (tx) =>
+    tx.execute(sql`insert into alerts.signals (org_id, kind, source_event_id, occurred_at)
+      values (${org.id}, 'journey_step_failed', ${uuidv7()}, now() - interval '2 days')`),
+  );
+  return {
+    org,
+    ownerId,
+    viewerId,
+    event,
+    apiKey,
+    testKey,
+    ctx,
+    speakerId: speaker.id,
+    portal: { accountId: invited.accountId, token: portalSession.token },
+  };
 }
 
 /**

@@ -10,10 +10,10 @@ import {
   staffAlertsSubscriber,
 } from '@yayatoh/checkin';
 import { deviceBoardPublisher, publishMetricsChangedTx } from '@yayatoh/command-center';
-import { findEventTx } from '@yayatoh/events';
+import { findEventTx, portalInviteMailer } from '@yayatoh/events';
 import { registrationResumeMailer } from '@yayatoh/forms';
 import { listingsProjector } from '@yayatoh/marketplace';
-import { programMediaCleaner } from '@yayatoh/media';
+import { programMediaCleaner, speakerPhotoApprover } from '@yayatoh/media';
 import { announcementMailer, contactWroteNotifier, threadReplyMailer } from '@yayatoh/messaging';
 import { createNotifier } from '@yayatoh/notifications';
 import {
@@ -28,8 +28,9 @@ import {
   ticketMailer,
   waitlistMailer,
 } from '@yayatoh/orders';
-import { disputeDeadlineNotifier, payoutDestinationMailer } from '@yayatoh/payments';
+import { payoutDestinationMailer } from '@yayatoh/payments';
 import { type Subscriber, signLinkToken } from '@yayatoh/platform';
+import { portalSpeakerCleanup, taskReminderMailer } from '@yayatoh/program';
 import { registrationCapacity } from '@yayatoh/registration';
 import { analyticsForwarder, metricsProjector, postgresAnalyticsSink } from '@yayatoh/reports';
 import { finderCodeMailer, releaseCancelledSeats } from '@yayatoh/seating';
@@ -83,7 +84,8 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     walletPassSync({ provider: fakeWalletPassProvider() }),
     creditNoteMailer({ notifier, appOrigin }),
     supportReplyMailer({ notifier, appOrigin }),
-    disputeDeadlineNotifier({ notifier }),
+    // Dispute evidence deadlines reach finance through the alert engine (batch 3e: the
+    // `disputeDeadline` rule), not a second notification.
     attendeeMessageMailer({ notifier, event: findEventTx }),
     announcementMailer({ notifier, appOrigin }),
     threadReplyMailer({ notifier, appOrigin }),
@@ -101,6 +103,11 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     // (M3.2b) replaces `derivedStaffAlerts` here and in apps/web/src/server/scan-staff.ts.
     staffAlertsSubscriber(derivedStaffAlerts),
     programMediaCleaner(),
+    // M5.3a speaker portal: invitations, task reminders, approved photos.
+    portalInviteMailer({ notifier, appOrigin }),
+    taskReminderMailer({ notifier, appOrigin }),
+    speakerPhotoApprover(),
+    portalSpeakerCleanup(),
     surveyMailer({ notifier, appOrigin }),
     registrationResumeMailer({
       notifier,

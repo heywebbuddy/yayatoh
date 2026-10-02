@@ -1,3 +1,4 @@
+import type { TenantTx } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
 import { DomainError, requireOrg } from '@yayatoh/kernel';
 import { defineSubscriber, type Notifier, tenantCommand } from '@yayatoh/platform';
@@ -90,6 +91,29 @@ export const alertDisputeDeadlinesCommand = tenantCommand({
     data: { alerted: r.alerted },
   }),
 });
+
+/**
+ * Counts for the M3.2b alert engine (batch 3e): open disputes whose evidence is due within
+ * `soonMs`, and within `criticalMs` (overdue ones count in both). Counts only.
+ */
+export async function disputeDeadlineFactsTx(
+  tx: TenantTx,
+  now: Date,
+  opts: { soonMs: number; criticalMs: number },
+): Promise<{ soon: number; critical: number }> {
+  const rows = await tx
+    .select({ dueBy: disputes.evidenceDueBy })
+    .from(disputes)
+    .where(
+      and(
+        eq(disputes.status, 'open'),
+        isNotNull(disputes.evidenceDueBy),
+        lte(disputes.evidenceDueBy, new Date(now.getTime() + opts.soonMs)),
+      ),
+    );
+  const critical = rows.filter((r) => r.dueBy && r.dueBy.getTime() <= now.getTime() + opts.criticalMs);
+  return { soon: rows.length, critical: critical.length };
+}
 
 const DeadlinePayload = z.object({
   orgId: z.uuid(),

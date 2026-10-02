@@ -181,12 +181,12 @@
       "cta": "注文を見る"
     },
     "alerts.alert": {
-      "subject": "{rule, select, unseated {{count, plural, other {{countWords}人の参加者に座席がありません}}} undistributed {{count, plural, other {購入済みチケット{countWords}枚が配布されていません}}} paymentsFailed {{count, plural, other {{countWords}件の支払いが失敗しました}}} paymentsStuck {{count, plural, other {{countWords}件の支払いが止まっています}}} refundSurge {{count, plural, other {直近1時間で{countWords}件の返金}}} devicesOffline {{count, plural, other {{countWords}台のチェックイン端末がオフラインです}}} devicesLowBattery {{count, plural, other {{countWords}台のチェックイン端末のバッテリー残量が少なくなっています}}} devicesBacklog {{count, plural, other {{countWords}台のチェックイン端末に同期待ちのスキャンがあります}}} capacityNear {会場は{count}%埋まっています} capacityFull {会場は満員です（{count}%）} sellOut {チケットの{count}%が売れました} salesPace {チケット販売は目標ペースの{count}%です} readiness {{count, plural, other {{countWords}件の設定手順がこのイベントを妨げています}}} domain {{count, plural, other {{countWords}件のカスタムドメインに問題があります}}} payoutsPastDue {{count, plural, other {受取アカウントの要件{countWords}件が期限切れです}}} deliverability {メールの到達率に注意が必要です} automationFailed {{count, plural, other {本日{countWords}件のメッセージまたは一括操作が失敗しました}}} other {アラート}}",
+      "subject": "{rule, select, unseated {{count, plural, other {{countWords}人の参加者に座席がありません}}} undistributed {{count, plural, other {購入済みチケット{countWords}枚が配布されていません}}} paymentsFailed {{count, plural, other {{countWords}件の支払いが失敗しました}}} paymentsStuck {{count, plural, other {{countWords}件の支払いが止まっています}}} refundSurge {{count, plural, other {直近1時間で{countWords}件の返金}}} devicesOffline {{count, plural, other {{countWords}台のチェックイン端末がオフラインです}}} devicesLowBattery {{count, plural, other {{countWords}台のチェックイン端末のバッテリー残量が少なくなっています}}} devicesBacklog {{count, plural, other {{countWords}台のチェックイン端末に同期待ちのスキャンがあります}}} capacityNear {会場は{count}%埋まっています} capacityFull {会場は満員です（{count}%）} sellOut {チケットの{count}%が売れました} salesPace {チケット販売は目標ペースの{count}%です} readiness {{count, plural, other {{countWords}件の設定手順がこのイベントを妨げています}}} domain {{count, plural, other {{countWords}件のカスタムドメインに問題があります}}} payoutsPastDue {{count, plural, other {受取アカウントの要件{countWords}件が期限切れです}}} deliverability {メールの到達率に注意が必要です} automationFailed {{count, plural, other {本日{countWords}件のメッセージまたは一括操作が失敗しました}}} campaignFailed {{count, plural, other {本日{countWords}件のキャンペーン配信が失敗しました}}} disputeDeadline {{count, plural, other {{countWords}件の異議申し立てに間もなく証拠の提出が必要です}}} other {アラート}}",
       "intro": "{eventName, select, none {{org}で対応が必要なことがあります。} other {{eventName}で対応が必要なことがあります。}}ボタンから解決するページを開けます。",
       "cta": "解決する"
     },
     "alerts.alert-text": {
-      "subject": "{rule, select, unseated {{count, plural, other {{countWords}人の参加者に座席がありません}}} undistributed {{count, plural, other {購入済みチケット{countWords}枚が配布されていません}}} paymentsFailed {{count, plural, other {{countWords}件の支払いが失敗しました}}} paymentsStuck {{count, plural, other {{countWords}件の支払いが止まっています}}} refundSurge {{count, plural, other {直近1時間で{countWords}件の返金}}} devicesOffline {{count, plural, other {{countWords}台のチェックイン端末がオフラインです}}} devicesLowBattery {{count, plural, other {{countWords}台のチェックイン端末のバッテリー残量が少なくなっています}}} devicesBacklog {{count, plural, other {{countWords}台のチェックイン端末に同期待ちのスキャンがあります}}} capacityNear {会場は{count}%埋まっています} capacityFull {会場は満員です（{count}%）} sellOut {チケットの{count}%が売れました} salesPace {チケット販売は目標ペースの{count}%です} readiness {{count, plural, other {{countWords}件の設定手順がこのイベントを妨げています}}} domain {{count, plural, other {{countWords}件のカスタムドメインに問題があります}}} payoutsPastDue {{count, plural, other {受取アカウントの要件{countWords}件が期限切れです}}} deliverability {メールの到達率に注意が必要です} automationFailed {{count, plural, other {本日{countWords}件のメッセージまたは一括操作が失敗しました}}} other {アラート}}",
+      "subject": "{rule, select, unseated {{count, plural, other {{countWords}人の参加者に座席がありません}}} undistributed {{count, plural, other {購入済みチケット{countWords}枚が配布されていません}}} paymentsFailed {{count, plural, other {{countWords}件の支払いが失敗しました}}} paymentsStuck {{count, plural, other {{countWords}件の支払いが止まっています}}} refundSurge {{count, plural, other {直近1時間で{countWords}件の返金}}} devicesOffline {{count, plural, other {{countWords}台のチェックイン端末がオフラインです}}} devicesLowBattery {{count, plural, other {{countWords}台のチェックイン端末のバッテリー残量が少なくなっています}}} devicesBacklog {{count, plural, other {{countWords}台のチェックイン端末に同期待ちのスキャンがあります}}} capacityNear {会場は{count}%埋まっています} capacityFull {会場は満員です（{count}%）} sellOut {チケットの{count}%が売れました} salesPace {チケット販売は目標ペースの{count}%です} readiness {{count, plural, other {{countWords}件の設定手順がこのイベントを妨げています}}} domain {{count, plural, other {{countWords}件のカスタムドメインに問題があります}}} payoutsPastDue {{count, plural, other {受取アカウントの要件{countWords}件が期限切れです}}} deliverability {メールの到達率に注意が必要です} automationFailed {{count, plural, other {本日{countWords}件のメッセージまたは一括操作が失敗しました}}} campaignFailed {{count, plural, other {本日{countWords}件のキャンペーン配信が失敗しました}}} disputeDeadline {{count, plural, other {{countWords}件の異議申し立てに間もなく証拠の提出が必要です}}} other {アラート}}",
       "intro": "{eventName, select, none {{org}で対応が必要なことがあります。} other {{eventName}で対応が必要なことがあります。}}ボタンから解決するページを開けます。"
     },
     "campaigns.test": {
@@ -225,6 +225,21 @@
       "subject": "{eventName}の登録を続ける",
       "intro": "{eventName}の登録を中断したところから再開するためのリンクです。最後に保存してから{days, plural, other {# 日間}}、ご本人のみ使用できますので転送しないでください。心当たりがない場合は、このメールを無視してください。",
       "cta": "登録を続ける"
+    },
+    "portal.invite": {
+      "subject": "{eventName}のポータルへの招待",
+      "intro": "{org}から{eventName}のポータルに{role}として招待されました。セッションの確認、プロフィールの更新、タスクの完了ができます。ボタンを押すと、このアドレスに送られるサインインコードの入力を求められます。",
+      "cta": "ポータルを開く"
+    },
+    "portal.sign-in": {
+      "subject": "{eventName}のサインインコードは{code}です",
+      "intro": "{code}を入力して{eventName}のポータルにサインインするか、同じブラウザーで下のボタンを使ってください。コードの有効時間：{minutes}分。ボタンの有効時間：{linkMinutes}分。それぞれ1回限り有効です。心当たりがない場合は、このメールを無視してください。",
+      "cta": "ポータルにサインイン"
+    },
+    "program.task-reminder": {
+      "subject": "リマインダー：{eventName}の{title}",
+      "intro": "{org}は{eventName}の「{title}」をまだお待ちしています。期限：{until}。",
+      "cta": "タスクを開く"
     }
   },
   "roles": {
@@ -238,7 +253,11 @@
     "viewer": "閲覧者",
     "co_host": "共同ホスト",
     "planner": "プランナー",
-    "collaborator": "イベント協力者"
+    "collaborator": "イベント協力者",
+    "speaker": "登壇者",
+    "exhibitor_admin": "出展者管理者",
+    "exhibitor_staff": "出展者スタッフ",
+    "sponsor_contact": "スポンサー担当者"
   },
   "account": {
     "deleted": {

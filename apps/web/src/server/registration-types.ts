@@ -1,6 +1,7 @@
 import 'server-only';
+import { checkoutTarget } from '@yayatoh/events';
 import { executeQuery } from '@yayatoh/kernel';
-import { listTicketTypesQuery, publicTicketTypes } from '@yayatoh/ticketing';
+import { publicRegistration, registrationTypeRefsQuery } from '@yayatoh/registration';
 import type { loadEvent } from './console.ts';
 import { ports } from './ports.ts';
 
@@ -11,20 +12,29 @@ export interface RegistrationTypeOption {
 }
 
 /**
- * **Stand-in until M5.1a** (registration types, Wave 1 in parallel): the event's ticket types play
- * the registration types. The forms engine only sees opaque ids supplied here, so the Wave 2
- * wiring swaps these two functions for the registration module's types with no forms change.
+ * The event's registration types (M5.1a, `RegistrationTypeRef`) for the form builder: every live
+ * type, so pages and questions can be limited to any of them. The forms engine only sees their
+ * ids (batch 3e wiring; the ticket-type stand-in is gone).
  */
 export async function consoleRegistrationTypes(
   data: Awaited<ReturnType<typeof loadEvent>>['data'],
   eventId: string,
 ): Promise<RegistrationTypeOption[]> {
-  const types = await executeQuery(listTicketTypesQuery, { eventId }, data.ctx, ports);
-  return types.filter((t) => t.archivedAt === null).map((t) => ({ id: t.id, name: t.name }));
+  const refs = await executeQuery(registrationTypeRefsQuery, { eventId }, data.ctx, ports);
+  return refs.map((t) => ({ id: t.id, name: t.name }));
 }
 
-/** The types a member of the public may pick on a published event (stand-in, see above). */
-export async function publicRegistrationTypes(slug: string): Promise<RegistrationTypeOption[]> {
-  const types = await publicTicketTypes(slug, new Date());
-  return types.filter((t) => !t.isDonation).map((t) => ({ id: t.id, name: t.name }));
+/**
+ * The types a member of the public may start the form as: the event's live types this person is
+ * eligible for (M5.1a eligibility: open types, or a type of their email's domain once the email
+ * is known) that offer a pass. Code-only types are picked on the registration page, not here.
+ */
+export async function publicRegistrationTypes(
+  slug: string,
+  email: string | null = null,
+): Promise<RegistrationTypeOption[]> {
+  const target = await checkoutTarget(slug);
+  if (!target) return [];
+  const offer = await publicRegistration(target.orgId, target.eventId, { email });
+  return offer.types.map((t) => ({ id: t.id, name: t.name }));
 }

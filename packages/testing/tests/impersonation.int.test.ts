@@ -1,14 +1,20 @@
 import * as ai from '@yayatoh/ai';
+import * as alerts from '@yayatoh/alerts';
 import * as attendees from '@yayatoh/attendees';
+import * as audiences from '@yayatoh/audiences';
+import * as automations from '@yayatoh/automations';
 import * as billing from '@yayatoh/billing';
+import * as campaigns from '@yayatoh/campaigns';
 import * as checkin from '@yayatoh/checkin';
 import * as cms from '@yayatoh/cms';
+import * as commandCenter from '@yayatoh/command-center';
 import * as crm from '@yayatoh/crm';
 import { withTenant } from '@yayatoh/db';
 import { closePools } from '@yayatoh/db/testing';
 import * as engagement from '@yayatoh/engagement';
 import * as events from '@yayatoh/events';
 import * as forms from '@yayatoh/forms';
+import * as guests from '@yayatoh/guests';
 import {
   COMMAND_CATEGORIES,
   type Command,
@@ -19,6 +25,7 @@ import {
   type Query,
   uuidv7,
 } from '@yayatoh/kernel';
+import * as marketing from '@yayatoh/marketing';
 import * as marketplace from '@yayatoh/marketplace';
 import * as media from '@yayatoh/media';
 import * as messaging from '@yayatoh/messaging';
@@ -29,6 +36,7 @@ import * as platform from '@yayatoh/platform';
 import { auditLogQuery, consumeEvent, memoryNotifier } from '@yayatoh/platform';
 import * as privacy from '@yayatoh/privacy';
 import * as program from '@yayatoh/program';
+import * as registration from '@yayatoh/registration';
 import * as reports from '@yayatoh/reports';
 import * as reviews from '@yayatoh/reviews';
 import * as seating from '@yayatoh/seating';
@@ -66,6 +74,16 @@ const acting = (o: OrgFixture = a) => o.ctx({ impersonatedBy: impersonatedBy() }
 
 const MODULES = {
   ai,
+  // Batch 3e merge: the modules of batches 3b–3e (alerts, audiences, Command Center, guests,
+  // marketing; campaigns, journeys and registration), so their commands carry categories too.
+  alerts,
+  audiences,
+  automations,
+  campaigns,
+  commandCenter,
+  guests,
+  marketing,
+  registration,
   attendees,
   billing,
   checkin,
