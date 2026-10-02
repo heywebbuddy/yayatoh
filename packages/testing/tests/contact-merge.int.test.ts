@@ -232,12 +232,8 @@ describe('M6.1a merge and undo', () => {
     expect(ledger?.n).toBe(Object.values(r.moved).reduce((x, y) => x + y, 0));
 
     // Fields: the choices; the duplicate's address still resolves to the person.
-    const keepRow = (after.contacts as { id: string }[]).find((x) => x.id === sa.keep.contactId) as {
-      email: string;
-      phone_e164: string | null;
-      company: string | null;
-      name: string;
-    };
+    type Row = { id: string; email: string; phone_e164: string | null; company: string | null; name: string };
+    const keepRow = (after.contacts as Row[]).find((x) => x.id === sa.keep.contactId) as Row;
     expect(keepRow).toMatchObject({
       email: sa.keep.email,
       company: 'Lakeside Partners',
