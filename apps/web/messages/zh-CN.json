@@ -154,6 +154,10 @@
       },
       "forms": {
         "resume": "继续报名链接"
+      },
+      "registration": {
+        "approved": "报名已批准",
+        "denied": "报名申请未获批准"
       }
     },
     "status": {

@@ -154,6 +154,10 @@
       },
       "forms": {
         "resume": "登録再開用リンク"
+      },
+      "registration": {
+        "approved": "参加申請の承認",
+        "denied": "参加申請の不承認"
       }
     },
     "status": {

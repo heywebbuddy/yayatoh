@@ -154,6 +154,10 @@
       },
       "forms": {
         "resume": "Link zum Fortsetzen der Anmeldung"
+      },
+      "registration": {
+        "approved": "Anmeldung angenommen",
+        "denied": "Anmeldebewerbung abgelehnt"
       }
     },
     "status": {

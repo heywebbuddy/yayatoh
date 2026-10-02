@@ -154,6 +154,10 @@
       },
       "forms": {
         "resume": "Registration resume link"
+      },
+      "registration": {
+        "approved": "Registration approved",
+        "denied": "Registration application denied"
       }
     },
     "status": {

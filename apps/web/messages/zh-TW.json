@@ -154,6 +154,10 @@
       },
       "forms": {
         "resume": "繼續報名連結"
+      },
+      "registration": {
+        "approved": "報名已核准",
+        "denied": "報名申請未獲核准"
       }
     },
     "status": {

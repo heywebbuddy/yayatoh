@@ -83,7 +83,6 @@ const MODULES = {
   platform,
   privacy,
   program,
-  // M5.1c: registration's commands (apply, decide, groups, +1, substitution) are swept too.
   registration,
   reports,
   reviews,

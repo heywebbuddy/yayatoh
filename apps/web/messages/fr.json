@@ -154,6 +154,10 @@
       },
       "forms": {
         "resume": "Lien pour reprendre l’inscription"
+      },
+      "registration": {
+        "approved": "Inscription acceptée",
+        "denied": "Demande d’inscription refusée"
       }
     },
     "status": {

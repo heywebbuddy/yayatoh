@@ -154,6 +154,10 @@
       },
       "forms": {
         "resume": "Enlace para continuar la inscripción"
+      },
+      "registration": {
+        "approved": "Inscripción aprobada",
+        "denied": "Solicitud de inscripción rechazada"
       }
     },
     "status": {

@@ -154,6 +154,10 @@
       },
       "forms": {
         "resume": "Link om registratie te hervatten"
+      },
+      "registration": {
+        "approved": "Registratie goedgekeurd",
+        "denied": "Registratieaanvraag afgewezen"
       }
     },
     "status": {
