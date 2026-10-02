@@ -52,6 +52,9 @@ const SECTION_OF: Record<string, string> = {
   'command-center': 'commandCenter',
   // M4.2b: the gala's Tables & Sponsors (no longer a placeholder).
   'tables-sponsors': 'tablesSponsors',
+  // Batch 3e merge: M5.1a's Registration page and M5.1b's form builder (the Registration item).
+  registration: 'registration',
+  'registration-form': 'registration',
 };
 
 describe('event console route sweep (M4.2a)', () => {

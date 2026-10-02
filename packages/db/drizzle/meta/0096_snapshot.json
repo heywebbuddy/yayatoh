@@ -1,6 +1,6 @@
 {
-  "id": "3c43235e-4d62-42ac-a44c-0ce5c2d2ae9b",
-  "prevId": "2f7fb42a-2a10-4839-b6ce-f2616f9de1b2",
+  "id": "8ee8f0bb-be9a-4ea0-8253-f4551e7c1280",
+  "prevId": "3c43235e-4d62-42ac-a44c-0ce5c2d2ae9b",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -15269,6 +15269,12 @@
           "primaryKey": false,
           "notNull": true,
           "default": false
+        },
+        "ticket_id": {
+          "name": "ticket_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {
@@ -15419,6 +15425,28 @@
           ],
           "isUnique": false,
           "where": "contact_id is not null",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "guests_org_ticket_key": {
+          "name": "guests_org_ticket_key",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "ticket_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "where": "ticket_id is not null",
           "concurrently": false,
           "method": "btree",
           "with": {}
@@ -16246,6 +16274,12 @@
           "primaryKey": false,
           "notNull": true,
           "default": "'manual'"
+        },
+        "table_unit_id": {
+          "name": "table_unit_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {
@@ -16287,6 +16321,28 @@
             }
           ],
           "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "parties_org_table_unit_key": {
+          "name": "parties_org_table_unit_key",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "table_unit_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "where": "table_unit_id is not null",
           "concurrently": false,
           "method": "btree",
           "with": {}
@@ -16339,7 +16395,7 @@
         },
         "parties_source_check": {
           "name": "parties_source_check",
-          "value": "source in ('manual', 'paper', 'import', 'collector', 'rsvp')"
+          "value": "source in ('manual', 'paper', 'import', 'collector', 'rsvp', 'table_link')"
         }
       },
       "isRLSEnabled": true
@@ -16566,7 +16622,7 @@
         },
         "rsvp_history_source_check": {
           "name": "rsvp_history_source_check",
-          "value": "source in ('manual', 'paper', 'import', 'collector', 'rsvp')"
+          "value": "source in ('manual', 'paper', 'import', 'collector', 'rsvp', 'table_link')"
         }
       },
       "isRLSEnabled": true
@@ -16783,7 +16839,7 @@
         },
         "sub_event_responses_source_check": {
           "name": "sub_event_responses_source_check",
-          "value": "source in ('manual', 'paper', 'import', 'collector', 'rsvp')"
+          "value": "source in ('manual', 'paper', 'import', 'collector', 'rsvp', 'table_link')"
         }
       },
       "isRLSEnabled": true
@@ -34999,6 +35055,149 @@
       "checkConstraints": {},
       "isRLSEnabled": true
     },
+    "seating.table_sponsors": {
+      "name": "table_sponsors",
+      "schema": "seating",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "uuidv7()"
+        },
+        "org_id": {
+          "name": "org_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "event_id": {
+          "name": "event_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "item_id": {
+          "name": "item_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "sponsor_name": {
+          "name": "sponsor_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "logo_url": {
+          "name": "logo_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "published": {
+          "name": "published",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        }
+      },
+      "indexes": {
+        "table_sponsors_org_id_idx": {
+          "name": "table_sponsors_org_id_idx",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "table_sponsors_org_event_item_key": {
+          "name": "table_sponsors_org_event_item_key",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "event_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "item_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "table_sponsors_org_id_id_key": {
+          "name": "table_sponsors_org_id_id_key",
+          "nullsNotDistinct": false,
+          "columns": [
+            "org_id",
+            "id"
+          ]
+        }
+      },
+      "policies": {
+        "table_sponsors_tenant_isolation": {
+          "name": "table_sponsors_tenant_isolation",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "app_user"
+          ],
+          "using": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)",
+          "withCheck": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)"
+        }
+      },
+      "checkConstraints": {
+        "table_sponsors_name_length": {
+          "name": "table_sponsors_name_length",
+          "value": "length(sponsor_name) between 1 and 80"
+        },
+        "table_sponsors_logo_check": {
+          "name": "table_sponsors_logo_check",
+          "value": "logo_url is null or (length(logo_url) <= 300 and logo_url ~ '^/media/[0-9a-f-]{36}/[0-9a-f-]{36}/[A-Za-z0-9._-]+$')"
+        }
+      },
+      "isRLSEnabled": true
+    },
     "surveys.invitations": {
       "name": "invitations",
       "schema": "surveys",
@@ -38309,6 +38508,245 @@
       },
       "isRLSEnabled": true
     },
+    "ticketing.table_units": {
+      "name": "table_units",
+      "schema": "ticketing",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "uuidv7()"
+        },
+        "org_id": {
+          "name": "org_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "event_id": {
+          "name": "event_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "order_id": {
+          "name": "order_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "order_item_id": {
+          "name": "order_item_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ticket_type_id": {
+          "name": "ticket_type_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "unit_no": {
+          "name": "unit_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "size": {
+          "name": "size",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "link_sends": {
+          "name": "link_sends",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "last_link_sent_at": {
+          "name": "last_link_sent_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "reminders": {
+          "name": "reminders",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "last_reminded_at": {
+          "name": "last_reminded_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "table_units_org_id_idx": {
+          "name": "table_units_org_id_idx",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "table_units_org_item_unit_key": {
+          "name": "table_units_org_item_unit_key",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "order_item_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "unit_no",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "table_units_org_event_idx": {
+          "name": "table_units_org_event_idx",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "event_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "table_units_org_order_idx": {
+          "name": "table_units_org_order_idx",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "order_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "table_units_ticket_type_fk": {
+          "name": "table_units_ticket_type_fk",
+          "tableFrom": "table_units",
+          "tableTo": "ticket_types",
+          "schemaTo": "ticketing",
+          "columnsFrom": [
+            "org_id",
+            "ticket_type_id"
+          ],
+          "columnsTo": [
+            "org_id",
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "table_units_org_id_id_key": {
+          "name": "table_units_org_id_id_key",
+          "nullsNotDistinct": false,
+          "columns": [
+            "org_id",
+            "id"
+          ]
+        }
+      },
+      "policies": {
+        "table_units_tenant_isolation": {
+          "name": "table_units_tenant_isolation",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "app_user"
+          ],
+          "using": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)",
+          "withCheck": "org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)"
+        }
+      },
+      "checkConstraints": {
+        "table_units_size_check": {
+          "name": "table_units_size_check",
+          "value": "size between 2 and 20 and unit_no >= 1"
+        },
+        "table_units_counts_check": {
+          "name": "table_units_counts_check",
+          "value": "link_sends >= 0 and reminders >= 0"
+        }
+      },
+      "isRLSEnabled": true
+    },
     "ticketing.ticket_barcodes": {
       "name": "ticket_barcodes",
       "schema": "ticketing",
@@ -39170,6 +39608,12 @@
           "type": "text",
           "primaryKey": false,
           "notNull": false
+        },
+        "table_size": {
+          "name": "table_size",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {
@@ -39288,6 +39732,10 @@
         "ticket_types_managed_by_check": {
           "name": "ticket_types_managed_by_check",
           "value": "managed_by is null or managed_by in ('registration')"
+        },
+        "ticket_types_table_size_check": {
+          "name": "ticket_types_table_size_check",
+          "value": "table_size is null or (table_size between 2 and 20 and not is_donation)"
         }
       },
       "isRLSEnabled": true
@@ -39405,6 +39853,12 @@
         },
         "occurrence_id": {
           "name": "occurrence_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "table_unit_id": {
+          "name": "table_unit_id",
           "type": "uuid",
           "primaryKey": false,
           "notNull": false
@@ -39546,6 +40000,28 @@
           ],
           "isUnique": false,
           "where": "occurrence_id is not null",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "tickets_org_table_unit_idx": {
+          "name": "tickets_org_table_unit_idx",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "table_unit_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "where": "table_unit_id is not null",
           "concurrently": false,
           "method": "btree",
           "with": {}

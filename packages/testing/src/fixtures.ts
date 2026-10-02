@@ -1930,6 +1930,12 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
       insert into seating.table_sponsors (org_id, event_id, item_id, sponsor_name, published)
       values (${org.id}, ${event.id}, ${uuidv7()}, ${`${name} Sponsor`}, true)`);
   });
+  // Batch 3e: a journey step failure reported two days ago (outside the rules' 24-hour window, so
+  // it raises nothing), as the alerts subscriber records it (isolation coverage of alerts.signals).
+  await withTenant(systemCtx(org.id), (tx) =>
+    tx.execute(sql`insert into alerts.signals (org_id, kind, source_event_id, occurred_at)
+      values (${org.id}, 'journey_step_failed', ${uuidv7()}, now() - interval '2 days')`),
+  );
   return { org, ownerId, viewerId, event, apiKey, testKey, ctx };
 }
 
