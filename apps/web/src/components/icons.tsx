@@ -63,6 +63,7 @@ const ICONS: Record<string, LucideIcon> = {
   heart: Heart,
   message: MessageSquare,
   'mail-check': MailCheck,
+  send: Send,
   gauge: Gauge,
   search: Search,
   globe: Globe,

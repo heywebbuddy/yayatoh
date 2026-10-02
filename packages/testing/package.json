@@ -17,6 +17,7 @@
     "@yayatoh/audiences": "workspace:*",
     "@yayatoh/auth": "workspace:*",
     "@yayatoh/billing": "workspace:*",
+    "@yayatoh/campaigns": "workspace:*",
     "@yayatoh/checkin": "workspace:*",
     "@yayatoh/checkin-engine": "workspace:*",
     "@yayatoh/cms": "workspace:*",

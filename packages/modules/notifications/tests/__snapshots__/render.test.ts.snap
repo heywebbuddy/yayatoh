@@ -689,6 +689,214 @@ Please use Lot C on Harbor Street.
 }
 `;
 
+exports[`renderMessage: every kind in all 13 locales > campaigns.test · ar 1`] = `
+{
+  "subject": "[تجربة] Early-bird tickets are back",
+  "text": "[تجربة] Early-bird tickets are back
+
+مرحبًا،
+
+إرسال تجريبي لحملتك.
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > campaigns.test · de 1`] = `
+{
+  "subject": "[Test] Early-bird tickets are back",
+  "text": "[Test] Early-bird tickets are back
+
+Hallo,
+
+Ein Testversand deiner Kampagne.
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > campaigns.test · en 1`] = `
+{
+  "subject": "[Test] Early-bird tickets are back",
+  "text": "[Test] Early-bird tickets are back
+
+Hello,
+
+A test send of your campaign.
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > campaigns.test · es 1`] = `
+{
+  "subject": "[Prueba] Early-bird tickets are back",
+  "text": "[Prueba] Early-bird tickets are back
+
+Hola:
+
+Un envío de prueba de tu campaña.
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > campaigns.test · fr 1`] = `
+{
+  "subject": "[Test] Early-bird tickets are back",
+  "text": "[Test] Early-bird tickets are back
+
+Bonjour,
+
+Un envoi de test de votre campagne.
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > campaigns.test · hi 1`] = `
+{
+  "subject": "[परीक्षण] Early-bird tickets are back",
+  "text": "[परीक्षण] Early-bird tickets are back
+
+नमस्ते,
+
+आपके अभियान का परीक्षण भेजना।
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > campaigns.test · it 1`] = `
+{
+  "subject": "[Prova] Early-bird tickets are back",
+  "text": "[Prova] Early-bird tickets are back
+
+Ciao,
+
+Un invio di prova della tua campagna.
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > campaigns.test · ja 1`] = `
+{
+  "subject": "[テスト] Early-bird tickets are back",
+  "text": "[テスト] Early-bird tickets are back
+
+こんにちは。
+
+キャンペーンのテスト送信です。
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > campaigns.test · nl 1`] = `
+{
+  "subject": "[Test] Early-bird tickets are back",
+  "text": "[Test] Early-bird tickets are back
+
+Hallo,
+
+Een testverzending van je campagne.
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > campaigns.test · pt 1`] = `
+{
+  "subject": "[Teste] Early-bird tickets are back",
+  "text": "[Teste] Early-bird tickets are back
+
+Olá!
+
+Um envio de teste da sua campanha.
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > campaigns.test · ru 1`] = `
+{
+  "subject": "[Тест] Early-bird tickets are back",
+  "text": "[Тест] Early-bird tickets are back
+
+Здравствуйте!
+
+Тестовая отправка вашей кампании.
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > campaigns.test · zh-CN 1`] = `
+{
+  "subject": "[测试] Early-bird tickets are back",
+  "text": "[测试] Early-bird tickets are back
+
+您好：
+
+你的营销活动的测试发送。
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > campaigns.test · zh-TW 1`] = `
+{
+  "subject": "[測試] Early-bird tickets are back",
+  "text": "[測試] Early-bird tickets are back
+
+您好：
+
+你的行銷活動的測試寄送。
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
 exports[`renderMessage: every kind in all 13 locales > events.postponed · ar 1`] = `
 {
   "subject": "تأجيل Lakeside Jazz Night",

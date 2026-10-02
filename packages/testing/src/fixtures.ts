@@ -17,6 +17,13 @@ import {
 import { catchUpParticipation, saveSegmentCommand, templateDefinition } from '@yayatoh/audiences';
 import { setEntitlementOverrideCommand, setFeeOverrideCommand } from '@yayatoh/billing';
 import {
+  createCampaignCommand,
+  runOrgCampaigns,
+  saveCampaignCommand,
+  sendNowCommand,
+  setAudienceCommand,
+} from '@yayatoh/campaigns';
+import {
   chatReportSignals,
   claimStaffPushCommand,
   createCheckpointCommand,
@@ -1459,6 +1466,65 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ports,
   );
   await executeCommand(setModeOverrideCommand, { eventId: event.id, mode: 'pre_show' }, ctx(), ports);
+
+  // M3.6b campaigns: a sent campaign (recipient snapshot, tracked link, stored content) to the
+  // org's email subscribers (the fixture buyer opted in), released by the scheduler (isolation coverage).
+  const campaign = await executeCommand(
+    createCampaignCommand,
+    { name: `Fixture news ${slug}` },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    saveCampaignCommand,
+    {
+      campaignId: campaign.id,
+      name: campaign.name,
+      locale: 'en',
+      content: {
+        subject: 'News for {{first_name|you}}',
+        preheader: '',
+        font: 'sans',
+        smsBody: '',
+        blocks: [
+          { id: 'b1', type: 'heading', text: 'Hello {{first_name|there}}' },
+          { id: 'b2', type: 'button', label: 'See the event', eventId: event.id, path: null },
+          { id: 'b3', type: 'footer', postalAddress: `1 ${name} Way, Chicago IL`, note: '' },
+        ],
+      },
+    },
+    ctx(),
+    ports,
+  );
+  const subscribers = await executeCommand(
+    saveSegmentCommand,
+    {
+      name: 'Email subscribers',
+      definition: {
+        version: 1,
+        root: {
+          type: 'group',
+          op: 'and',
+          conditions: [{ type: 'consent', channel: 'email', granted: true }],
+        },
+      },
+    },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    setAudienceCommand,
+    { campaignId: campaign.id, audience: { kind: 'segment', segmentId: subscribers.id } },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    sendNowCommand,
+    { campaignId: campaign.id },
+    ctx({ idempotencyKey: `fixture-campaign-${slug}` }),
+    ports,
+  );
+  await runOrgCampaigns(org.id, ports);
   // M3.1a: the metrics projector (snapshots, sharded counter, time series, lag samples) and the
   // analytics sink over this org's outbox, as the worker would.
   await catchUpMetrics(org.id);

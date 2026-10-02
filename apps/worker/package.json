@@ -23,6 +23,7 @@
     "@yayatoh/audiences": "workspace:*",
     "@yayatoh/auth": "workspace:*",
     "@yayatoh/billing": "workspace:*",
+    "@yayatoh/campaigns": "workspace:*",
     "@yayatoh/checkin": "workspace:*",
     "@yayatoh/command-center": "workspace:*",
     "@yayatoh/db": "workspace:*",

@@ -184,6 +184,10 @@
     "alerts.alert-text": {
       "subject": "{rule, select, unseated {{count, plural, other {{countWords}人の参加者に座席がありません}}} undistributed {{count, plural, other {購入済みチケット{countWords}枚が配布されていません}}} paymentsFailed {{count, plural, other {{countWords}件の支払いが失敗しました}}} paymentsStuck {{count, plural, other {{countWords}件の支払いが止まっています}}} refundSurge {{count, plural, other {直近1時間で{countWords}件の返金}}} devicesOffline {{count, plural, other {{countWords}台のチェックイン端末がオフラインです}}} devicesLowBattery {{count, plural, other {{countWords}台のチェックイン端末のバッテリー残量が少なくなっています}}} devicesBacklog {{count, plural, other {{countWords}台のチェックイン端末に同期待ちのスキャンがあります}}} capacityNear {会場は{count}%埋まっています} capacityFull {会場は満員です（{count}%）} sellOut {チケットの{count}%が売れました} salesPace {チケット販売は目標ペースの{count}%です} readiness {{count, plural, other {{countWords}件の設定手順がこのイベントを妨げています}}} domain {{count, plural, other {{countWords}件のカスタムドメインに問題があります}}} payoutsPastDue {{count, plural, other {受取アカウントの要件{countWords}件が期限切れです}}} deliverability {メールの到達率に注意が必要です} automationFailed {{count, plural, other {本日{countWords}件のメッセージまたは一括操作が失敗しました}}} other {アラート}}",
       "intro": "{eventName, select, none {{org}で対応が必要なことがあります。} other {{eventName}で対応が必要なことがあります。}}ボタンから解決するページを開けます。"
+    },
+    "campaigns.test": {
+      "subject": "[テスト] {subject}",
+      "intro": "キャンペーンのテスト送信です。"
     }
   },
   "roles": {
@@ -253,5 +257,10 @@
         "intro": "問題を修正するまで、Yayatoh を以前のバージョンに戻しました。{start} 以降に購入したチケットは有効です。ご注文の返金が必要になった場合は、金額を記載した別のメールをお送りします。これまでどおりサインインしてください。"
       }
     }
+  },
+  "campaigns": {
+    "testBanner": "テストメール：あなたのチームだけに送信されました。差し込みフィールドには代替値が表示されます。",
+    "eventCta": "イベントを見る",
+    "testSubject": "[テスト] {subject}"
   }
 }

@@ -135,6 +135,7 @@ export {
   createGateState,
   type GateFacts,
   type GateState,
+  orgQuotaLimitsTx,
   POLICY_RULES,
   type PolicyPhase,
   type PolicyRule,
@@ -376,6 +377,16 @@ export {
   renderCutoverSet,
 } from './templates/cutover.ts';
 export { countWords } from './templates/numbers.ts';
+export {
+  cancelQueuedByPrefixTx,
+  marketingSuppressionsTx,
+  queuedSinceByPrefixTx,
+  renderStoredContent,
+  type StoredContent,
+  sendOutcomesTx,
+  storeContentTx,
+  storedContentTx,
+} from './stored-content.ts';
 export {
   EMAIL_MESSAGES,
   emailLocale,

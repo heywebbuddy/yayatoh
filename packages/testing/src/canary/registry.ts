@@ -3,6 +3,7 @@ import { privateColumns as alerts } from '@yayatoh/alerts';
 import { privateColumns as attendees } from '@yayatoh/attendees';
 import { privateColumns as audiences } from '@yayatoh/audiences';
 import { privateColumns as billing } from '@yayatoh/billing';
+import { privateColumns as campaigns } from '@yayatoh/campaigns';
 import { privateColumns as checkin } from '@yayatoh/checkin';
 import { privateColumns as cms } from '@yayatoh/cms';
 import { privateColumns as commandCenter } from '@yayatoh/command-center';
@@ -41,6 +42,7 @@ export const COLUMN_PRIVACY: readonly SchemaPrivacy[] = [
   attendees,
   audiences,
   billing,
+  campaigns,
   checkin,
   cms,
   commandCenter,
