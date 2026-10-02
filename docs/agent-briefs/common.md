@@ -49,6 +49,10 @@ For each user-visible feature write Playwright tests (`apps/web/e2e/*.spec.ts`, 
 2. `pnpm db:bootstrap`, rebuild web (+admin if touched), then run on all three projects: your new e2e specs, plus every existing spec that covers a page, route or module you changed (find them with grep). Run the WHOLE web suite (`cd apps/web && npx playwright test --reporter=line`) only if you changed shared infrastructure: the root/org layouts, navigation, auth/session, `proxy.ts`, the CSP, `helpers.ts`, seed data or fixtures used by other specs. The merge session and CI always run the whole suite, so that is where cross-feature breakage is caught. Run the admin suite if you touched admin. Fix real failures. If a failure is clearly pre-existing and unrelated, record the exact error in your report. (Owner asked for speed on 2026-09-29.)
 3. Add your milestone section to `docs/specs/<milestone>/spec.md` (what was built, "Later"/"Not yet", Acceptance table mapping each criterion to its test file).
 
+## Don't stall (added 2026-10-02)
+- **Never end your turn while a background job is running.** Nobody will wake you, and your session sits idle until the orchestrator relaunches it. Run long commands (verify, test:int, e2e) in the foreground with a long timeout, or start them in the background and keep polling until they finish.
+- **Memory is limited** (the container has been killed by the out-of-memory killer during typecheck and e2e). Use `pnpm turbo run typecheck --concurrency=2` and Playwright `--workers=2`. Don't run two heavy jobs at once.
+
 ## Push early
 Commit and push to `{BRANCH}` after every logical step (normal push), so a platform disconnect loses nothing.
 
