@@ -51,9 +51,11 @@ export {
 export { decisionDedupeKey, decisionMailer, registrantLifecycle } from './lifecycle.ts';
 export { privateColumns } from './private-columns.ts';
 export {
+  GroupOptionDto,
   PublicGroupDto,
   PublicRegistrantDto,
   publicGroup,
+  publicGroupOptions,
   publicRegistrant,
   QueueDto,
   QueueRowDto,

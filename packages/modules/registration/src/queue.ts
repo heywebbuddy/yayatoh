@@ -3,7 +3,7 @@ import { type TenantTx, withTenant } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
 import { createCtx, DomainError } from '@yayatoh/kernel';
 import { tenantQuery } from '@yayatoh/platform';
-import { ticketsForOrderTx } from '@yayatoh/ticketing';
+import { listTicketTypesQuery, ticketsForOrderTx } from '@yayatoh/ticketing';
 import { and, asc, desc, eq, ilike, inArray, isNull, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { substitutionClosesAt } from './domain/approval.ts';
@@ -379,5 +379,77 @@ export async function publicGroup(orgId: string, token: string, now = new Date()
         };
       }),
     });
+  });
+}
+
+export const GroupOptionDto = z.object({
+  registrationTypeId: z.uuid(),
+  typeName: z.string(),
+  admissionItemId: z.uuid(),
+  itemName: z.string(),
+  allInMinor: z.int(),
+  currency: z.string(),
+});
+export type GroupOptionDto = z.infer<typeof GroupOptionDto>;
+const groupOptionsSerializer = defineSerializer('registration.groupOptions', z.array(GroupOptionDto));
+
+/**
+ * What each person of a group may be registered as (public; allowlisted): the passes of the
+ * event's open and email-domain types (the server checks each person's own address against a
+ * domain rule; the domains never reach the page). Approval, +1 and code-only types are not sold
+ * as groups.
+ */
+export async function publicGroupOptions(orgId: string, eventId: string): Promise<GroupOptionDto[]> {
+  const ctx = createCtx({ orgId, actor: { type: 'system', name: 'registration.public' } });
+  return withTenant(ctx, async (tx) => {
+    const rows = await tx
+      .select({
+        registrationTypeId: registrationTypes.id,
+        typeName: registrationTypes.name,
+        admissionItemId: admissionItems.id,
+        itemName: admissionItems.name,
+        ticketTypeId: typeItems.ticketTypeId,
+      })
+      .from(typeItems)
+      .innerJoin(registrationTypes, eq(registrationTypes.id, typeItems.registrationTypeId))
+      .innerJoin(admissionItems, eq(admissionItems.id, typeItems.admissionItemId))
+      .where(
+        and(
+          eq(typeItems.eventId, eventId),
+          isNull(typeItems.archivedAt),
+          isNull(registrationTypes.archivedAt),
+          isNull(admissionItems.archivedAt),
+          eq(admissionItems.kind, 'admission'),
+          eq(registrationTypes.approval, 'none'),
+          eq(registrationTypes.kind, 'standard'),
+          inArray(registrationTypes.eligibility, ['open', 'email_domain']),
+        ),
+      )
+      .orderBy(
+        asc(registrationTypes.sortOrder),
+        asc(registrationTypes.createdAt),
+        asc(admissionItems.sortOrder),
+        asc(admissionItems.createdAt),
+      );
+    const tickets = new Map(
+      (await listTicketTypesQuery.handler({ input: { eventId }, ctx, tx })).map((t) => [t.id, t]),
+    );
+    return groupOptionsSerializer.serialize(
+      rows.flatMap((r) => {
+        const t = tickets.get(r.ticketTypeId);
+        return t
+          ? [
+              {
+                registrationTypeId: r.registrationTypeId,
+                typeName: r.typeName,
+                admissionItemId: r.admissionItemId,
+                itemName: r.itemName,
+                allInMinor: t.allInMinor,
+                currency: t.currency,
+              },
+            ]
+          : [];
+      }),
+    );
   });
 }

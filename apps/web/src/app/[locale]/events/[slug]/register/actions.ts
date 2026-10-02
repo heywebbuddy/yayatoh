@@ -4,6 +4,7 @@ import { checkoutTarget, publicEventBySlug } from '@yayatoh/events';
 import { createCtx, executeCommand, formatMoney, isDomainError, money } from '@yayatoh/kernel';
 import { attachPaymentCommand, checkoutRiskSignals, waitlistToken } from '@yayatoh/orders';
 import {
+  applyCommand,
   joinRegistrationWaitlistCommand,
   publicRegistration,
   startRegistrationCommand,
@@ -26,6 +27,8 @@ export interface RegistrationOptionView {
   readonly description: string | null;
   readonly priceLabel: string;
   readonly full: boolean;
+  /** M5.1c: applied for (approval before payment). */
+  readonly apply: boolean;
   readonly items: readonly {
     readonly id: string;
     readonly name: string;
@@ -83,6 +86,7 @@ async function lookup(slug: string, email: string, accessCode: string, locale: s
         ? fmt(t.minAllInMinor, t.currency)
         : `${fmt(t.minAllInMinor, t.currency)} – ${fmt(t.maxAllInMinor, t.currency)}`,
     full: t.full,
+    apply: t.apply,
     items: (pub.items[t.id] ?? []).map((i) => ({ ...i, priceLabel: fmt(i.allInMinor, t.currency) })),
   }));
   return { target, event, types };
@@ -134,7 +138,8 @@ export async function registerAction(
     .getAll('addOn')
     .map(String)
     .filter((id) => UUID.test(id));
-  const intent = form.get('intent') === 'waitlist' ? 'waitlist' : 'register';
+  const raw = form.get('intent');
+  const intent = raw === 'waitlist' ? 'waitlist' : raw === 'apply' ? 'apply' : 'register';
   const keep = { options: prev.options };
   if (!UUID.test(typeId)) return { ...keep, code: 'validation_failed', field: 'type' };
   if (!UUID.test(admission)) return { ...keep, code: 'validation_failed', field: 'admission' };
@@ -167,6 +172,34 @@ export async function registerAction(
     actor: session ? { type: 'user', userId: session.userId } : { type: 'anonymous' },
     locale,
   });
+  if (intent === 'apply') {
+    // M5.1c: an application (nobody is charged); the applicant's own page shows what happens next.
+    let token: string;
+    try {
+      const r = await executeCommand(
+        applyCommand,
+        {
+          eventId: target.eventId,
+          registrationTypeId: typeId,
+          admissionItemId: admission,
+          addOnItemIds: addOns,
+          name,
+          email,
+          company: String(form.get('company') ?? '').trim().slice(0, 120) || null,
+          jobTitle: String(form.get('jobTitle') ?? '').trim().slice(0, 120) || null,
+          message: String(form.get('message') ?? '').trim().slice(0, 2000) || null,
+          ...(accessCode ? { accessCode } : {}),
+          locale,
+        },
+        ctx,
+        ports,
+      );
+      token = r.token;
+    } catch (err) {
+      return { ...keep, ...fail(err) };
+    }
+    return redirect({ href: `/events/${slug}/registration/${token}`, locale });
+  }
   if (intent === 'waitlist') {
     try {
       const r = await executeCommand(
