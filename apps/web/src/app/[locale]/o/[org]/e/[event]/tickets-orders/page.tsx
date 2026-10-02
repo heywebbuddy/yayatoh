@@ -23,6 +23,8 @@ import {
   addGuestCountsAction,
   addQuestionAction,
   archiveTicketTypeAction,
+  boxOfficeBestSeatsAction,
+  boxOfficeReleaseSeatsAction,
   boxOfficeSaleAction,
   createPromoCodeAction,
   createTicketTypeAction,
@@ -89,10 +91,13 @@ export default async function TicketsPage({
       ? [saleDate]
       : saleDates.filter((d) => !ownCharts.has(d.id));
   // Seated events (M1.7f): the box office chooses seats from the same map as buyers, live.
+  // M6.11a: best available and companion seats come with advanced seating.
+  const advancedSeating = data.modules.has('advanced_seating');
   const seatMap = canSell
     ? await publicSeatMap(data.ctx.orgId ?? '', ev.id, {
         audience: 'staff',
         occurrenceId: saleDate?.id ?? null,
+        advancedSeating,
       })
     : null;
   const seatedTypes = new Set(seatMap?.seats.map((s) => s.ticketTypeId) ?? []);
@@ -352,6 +357,15 @@ export default async function TicketsPage({
               }
               prices={Object.fromEntries(types.map((tt) => [tt.id, fmt(tt.allInMinor)]))}
               timeZone={ev.timezone}
+              advancedSeating={advancedSeating}
+              bestSeats={
+                seatMap?.bestAvailable
+                  ? {
+                      find: boxOfficeBestSeatsAction.bind(null, org, event),
+                      release: boxOfficeReleaseSeatsAction.bind(null, org, event),
+                    }
+                  : null
+              }
             />
           </Card>
         </section>

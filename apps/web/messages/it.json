@@ -893,9 +893,15 @@
         "capReached": "È il massimo per un ordine: {max} posti.",
         "adaChosen": "{count, plural, one {{seats} è un posto accessibile} other {{seats} sono posti accessibili}}, riservat{count, plural, one {o} other {i}} a chi ne ha bisogno. Sceglil{count, plural, one {o} other {i}} solo se serve.",
         "overCap": "{count} posti scelti: l’organizzatore chiede al massimo {max} per ordine.",
-        "keptUntil": "Riservato fino al {date}"
+        "keptUntil": "Riservato fino al {date}",
+        "companionWarn": "I posti accompagnatore sono per chi arriva con una persona in sedia a rotelle: fino a {max} per posto accessibile.",
+        "companionEnforced": "I posti accompagnatore si vendono solo con un posto accessibile: fino a {max} per posto accessibile.",
+        "companionChosen": "Posti accompagnatore senza posto accessibile: {seats}. Sono per chi arriva con una persona in sedia a rotelle (fino a {max} per posto accessibile).",
+        "companionRefused": "Posti accompagnatore senza posto accessibile: {seats}. Si vendono solo con un posto accessibile (fino a {max} ciascuno): aggiungine uno o scegli altri posti.",
+        "adaEnforcedBest": "I posti accessibili sono riservati a chi ne ha bisogno fino al {date}. Se te ne serve uno, spunta «Qualcuno del mio gruppo usa una sedia a rotelle» e usa «Migliori disponibili»."
       },
-      "groupSummary": "{group} — {free} liberi su {total}{chosen, plural, =0 {} one { · # scelto} other { · # scelti}}"
+      "groupSummary": "{group} — {free} liberi su {total}{chosen, plural, =0 {} one { · # scelto} other { · # scelti}}",
+      "companion": "Posto accompagnatore"
     },
     "seatRuleCap": "Sono più posti di quanti un ordine ne possa avere. Scegline meno.",
     "seatRuleAda": "Per ora i posti accessibili sono riservati a chi ne ha bisogno. Scegli altri posti.",
@@ -905,7 +911,39 @@
     "orgUnavailable": "Questo organizzatore non sta vendendo biglietti in questo momento. I biglietti già acquistati restano validi.",
     "riskBlocked": "Non possiamo accettare questo ordine. Contatta l’organizzatore.",
     "creditInvalid": "Questo codice credito negozio non è valido o è già stato usato.",
-    "creditNotApplicable": "Questo credito negozio non può essere usato per questi biglietti."
+    "creditNotApplicable": "Questo credito negozio non può essere usato per questi biglietti.",
+    "seatRuleCompanion": "I posti accompagnatore si vendono solo con un posto accessibile. Scegli anche un posto accessibile, o altri posti.",
+    "best": {
+      "title": "Migliori disponibili",
+      "modeLegend": "Come vuoi scegliere i posti?",
+      "mode": {
+        "best": "Migliori disponibili: troviamo i posti migliori vicini",
+        "pick": "Scelgo i miei posti"
+      },
+      "need": "Qualcuno del mio gruppo usa una sedia a rotelle e ha bisogno di un posto accessibile",
+      "needStaff": "L’acquirente ha bisogno di un posto per sedia a rotelle",
+      "needHint": "I posti accessibili e i posti accompagnatore accanto sono riservati a chi ne ha bisogno.",
+      "price": "Prezzo",
+      "onePrice": "Prezzo: {price}",
+      "quantity": "Numero di posti",
+      "find": "Trova posti",
+      "findAgain": "Cerca di nuovo",
+      "accessibleHint": "Cercheremo un posto per sedia a rotelle con posti accompagnatore accanto.",
+      "together": "{count, plural, one {Il tuo posto:} other {# posti vicini:}}",
+      "split": "Non siamo riusciti a far sedere insieme il tuo gruppo di {count}: i tuoi posti sono in punti diversi (gruppi: {pieces}). Puoi anche scegliere tu i posti.",
+      "seatsLabel": "I tuoi posti",
+      "seatAccessible": "{seat} (per sedia a rotelle)",
+      "seatCompanion": "{seat} (posto accompagnatore)",
+      "heldFor": "Tenuti per te per {minutes} minuti mentre completi l’acquisto.",
+      "clear": "Rilascia questi posti",
+      "notEnough": "Non ci sono abbastanza posti liberi a questo prezzo per {count}. Prova con meno posti o un altro prezzo, oppure scegli i posti.",
+      "noAccessible": "Nessun posto per sedia a rotelle è libero a questo prezzo. Prova un altro prezzo o contatta l’organizzatore.",
+      "taken": "Quei posti sono appena stati presi. Riprova.",
+      "ruleRefused": "Le regole dei posti dell’organizzatore non consentono questa scelta.",
+      "off": "«Migliori disponibili» non è più offerto per questo evento. Scegli tu i posti.",
+      "findFirst": "Prima trova i tuoi posti: scegli quanti, poi premi «Trova posti».",
+      "expired": "I tuoi posti erano tenuti per 10 minuti e sono stati rilasciati. Cerca di nuovo."
+    }
   },
   "fakePay": {
     "eyebrow": "Pagamento di prova",
@@ -1933,7 +1971,8 @@
       "plan": "Piantina",
       "assign": "Assegna ospiti",
       "finder": "Trova posto",
-      "rules": "Regole"
+      "rules": "Regole",
+      "selection": "Migliori disponibili"
     },
     "assign": {
       "title": "Assegna ospiti",
@@ -2070,7 +2109,8 @@
       "none": "Nessuna regola: gli acquirenti possono scegliere qualsiasi posto libero.",
       "summary": {
         "ada": "Posti accessibili riservati a chi ne ha bisogno fino a {days, plural, =0 {l’inizio dell’evento} one {# giorno prima dell’evento} other {# giorni prima dell’evento}} ({date}) · {severity}",
-        "cap": "Al massimo {max, plural, one {# posto} other {# posti}} per ordine · {severity}"
+        "cap": "Al massimo {max, plural, one {# posto} other {# posti}} per ordine · {severity}",
+        "companion": "Posti accompagnatore venduti solo con un posto accessibile, fino a {max} ciascuno · {severity}"
       },
       "severityShort": {
         "warn": "avvisa",
@@ -2103,7 +2143,14 @@
       },
       "save": "Salva regole",
       "saved": "Regole dei posti salvate.",
-      "fixErrors": "Correggi il campo evidenziato."
+      "fixErrors": "Correggi il campo evidenziato.",
+      "companion": {
+        "title": "Posti accompagnatore",
+        "on": "Vendi i posti accompagnatore solo con un posto accessibile",
+        "max": "Posti accompagnatore per posto accessibile",
+        "maxHint": "Da 1 a 3. Vengono rilasciati insieme ai posti accessibili.",
+        "maxError": "Inserisci un numero intero da 1 a 3."
+      }
     },
     "groups": {
       "title": "Blocchi di gruppo",
@@ -2132,6 +2179,42 @@
         "forbidden": "Puoi vedere i gruppi ma non modificarli.",
         "noMembers": "Nessuno nella lista ha ancora l’etichetta {label}."
       }
+    },
+    "selection": {
+      "title": "Migliori disponibili e posti accompagnatore",
+      "description": "Permetti agli acquirenti e alla biglietteria di chiedere i posti migliori invece di sceglierli, e tieni posti accompagnatore accanto ai posti accessibili.",
+      "noPlan": "Questo evento non ha ancora una pianta dei posti. Creane una prima, poi configura qui «Migliori disponibili».",
+      "readOnly": "Puoi vedere queste impostazioni ma non modificarle.",
+      "bestTitle": "Migliori disponibili",
+      "bestOn": "Offri «Migliori disponibili» agli acquirenti e alla biglietteria",
+      "bestHint": "Gli acquirenti indicano quanti posti e a quale prezzo, e ricevono i migliori posti liberi vicini. Possono comunque scegliere i propri posti.",
+      "scoresTitle": "Punteggi dei settori",
+      "scoresHint": "Da 0 a 100: i punteggi più alti vengono offerti per primi. Lascia vuoto un settore per ordinarlo in base alla distanza dal palco.",
+      "scoreLabel": "Punteggio per {section}",
+      "scoreError": "Inserisci un numero intero da 0 a 100, oppure lascia vuoto.",
+      "noSections": "Questa pianta non ha settori: i posti sono ordinati per distanza dal palco, poi per fila e per quanto sono centrali.",
+      "saveBest": "Salva migliori disponibili",
+      "savedBest": "Impostazioni di «Migliori disponibili» salvate.",
+      "fixErrors": "Correggi il campo evidenziato.",
+      "bestOnSummary": "«Migliori disponibili» è offerto agli acquirenti e alla biglietteria.",
+      "bestOffSummary": "«Migliori disponibili» è disattivato: gli acquirenti scelgono i propri posti.",
+      "companionsTitle": "Posti accompagnatore",
+      "companionsDescription": "I posti accompagnatore sono accanto ai posti accessibili, per chi arriva con una persona in sedia a rotelle.",
+      "rulesLink": "Imposta la regola dei posti accompagnatore nella scheda Regole",
+      "noAccessible": "Questa pianta non ha ancora posti accessibili. Segnali sulla pianta, poi scegli qui i posti accompagnatore.",
+      "suggest": "Spunta i posti accanto ai posti accessibili",
+      "group": {
+        "row": "Fila {label}",
+        "table": "Tavolo {label}"
+      },
+      "seatAccessible": "Posto {seat} · accessibile",
+      "seatCompanion": "Posto {seat}",
+      "suggested": "accanto a un posto accessibile",
+      "saveCompanions": "Salva posti accompagnatore",
+      "savedCompanions": "Posti accompagnatore salvati: {count}.",
+      "companionError": "Un posto accompagnatore deve trovarsi in una fila o a un tavolo con un posto accessibile e non può essere esso stesso accessibile.",
+      "companionList": "Posti accompagnatore ({count}): {seats}",
+      "companionNone": "Ancora nessun posto accompagnatore."
     }
   },
   "venueMap": {

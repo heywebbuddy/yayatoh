@@ -1,24 +1,30 @@
 'use server';
 
 import { quickLayout } from '@yayatoh/floorplan';
-import { executeCommand, isDomainError } from '@yayatoh/kernel';
+import { executeCommand, executeQuery, isDomainError } from '@yayatoh/kernel';
 import {
   allocateGroupSeatsCommand,
   assignSeatCategoryCommand,
   assignSeatsCommand,
   giveDateOwnChartCommand,
+  MAX_COMPANION_SEATS,
+  MAX_COMPANIONS_PER_ACCESSIBLE,
   MAX_GROUP_SEATS,
   MAX_RELEASE_DAYS,
   MAX_SEATS_PER_ORDER,
+  MAX_SECTION_SCORE,
   publishEventLayoutCommand,
   releaseGroupSeatsCommand,
   removeDateChartCommand,
   type SeatingRuleDto,
   saveLayoutCommand,
   seatAssignBulk,
+  seatingRulesQuery,
+  setCompanionSeatsCommand,
   setEventLayoutCommand,
   setFinderSettingsCommand,
   setSeatingRulesCommand,
+  setSelectionSettingsCommand,
   unassignSeatsCommand,
 } from '@yayatoh/seating';
 import { revalidatePath } from 'next/cache';
@@ -344,7 +350,7 @@ export interface RulesState {
   readonly ok: boolean;
   readonly code: string | null;
   /** The field whose value was refused. */
-  readonly field?: 'adaDays' | 'capMax';
+  readonly field?: 'adaDays' | 'capMax' | 'companionMax';
 }
 
 /**
@@ -375,6 +381,24 @@ export async function seatingRulesAction(
     if (!(max >= 1 && max <= MAX_SEATS_PER_ORDER))
       return { ok: false, code: 'validation_failed', field: 'capMax' };
     rules.push({ kind: 'max_per_order_seats', severity: severity('capSeverity'), params: { max } });
+  }
+  if (form.get('companionShown') === '1') {
+    if (form.get('companion') === 'on') {
+      const maxPerAccessible = num('companionMax');
+      if (!(maxPerAccessible >= 1 && maxPerAccessible <= MAX_COMPANIONS_PER_ACCESSIBLE))
+        return { ok: false, code: 'validation_failed', field: 'companionMax' };
+      rules.push({
+        kind: 'ada_companion',
+        severity: severity('companionSeverity'),
+        params: { maxPerAccessible },
+      });
+    }
+  } else {
+    // M6.11a: without advanced seating the form has no companion fieldset; keep the rule as is.
+    const kept = (await executeQuery(seatingRulesQuery, { eventId: ev.id }, data.ctx, ports)).find(
+      (r) => r.kind === 'ada_companion',
+    );
+    if (kept) rules.push(kept);
   }
   try {
     await executeCommand(setSeatingRulesCommand, { eventId: ev.id, rules }, data.ctx, ports);
@@ -500,4 +524,80 @@ export async function seatGroupAction(
   const q = new URLSearchParams({ label, op: operationId, opk: 'seats' });
   if (dateOf(date)) q.set('date', date as string);
   return redirect({ href: `/o/${org}/e/${event}/attendees?${q}`, locale: await getLocale() });
+}
+
+/** Best available settings and companion seats (M6.11a). */
+export interface SelectionState {
+  readonly ok: boolean;
+  readonly code: string | null;
+  readonly reason?: string;
+  /** The field whose value was refused (`score:{sectionId}`). */
+  readonly field?: string;
+  /** Companion seats saved. */
+  readonly count?: number;
+}
+
+/**
+ * Offer best available and score sections (M6.11a). A blank score ranks the section by its
+ * distance to the stage.
+ */
+export async function selectionSettingsAction(
+  org: string,
+  event: string,
+  _prev: SelectionState,
+  form: FormData,
+): Promise<SelectionState> {
+  const { data, event: ev } = await loadEvent(org, event, 'seating');
+  const sectionScores: Record<string, number> = {};
+  for (const [key, value] of form.entries()) {
+    if (!key.startsWith('score:')) continue;
+    const raw = String(value).trim();
+    if (!raw) continue;
+    if (!/^\d{1,3}$/.test(raw) || Number(raw) > MAX_SECTION_SCORE)
+      return { ok: false, code: 'validation_failed', field: key };
+    sectionScores[key.slice('score:'.length)] = Number(raw);
+  }
+  try {
+    await executeCommand(
+      setSelectionSettingsCommand,
+      { eventId: ev.id, bestAvailable: form.get('bestAvailable') === 'on', sectionScores },
+      data.ctx,
+      ports,
+    );
+    revalidatePath(`/o/${org}/e/${event}/seating/best-available`);
+    return { ok: true, code: null };
+  } catch (err) {
+    return {
+      ok: false,
+      code: isDomainError(err) ? err.code : 'internal',
+      ...(isDomainError(err) && err.details?.reason ? { reason: String(err.details.reason) } : {}),
+    };
+  }
+}
+
+/** Mark the event's companion seats (M6.11a): every ticked seat, the rest stop being companions. */
+export async function companionSeatsAction(
+  org: string,
+  event: string,
+  _prev: SelectionState,
+  form: FormData,
+): Promise<SelectionState> {
+  const { data, event: ev } = await loadEvent(org, event, 'seating');
+  const seatUuids = [...new Set(form.getAll('companion').map(String))].slice(0, MAX_COMPANION_SEATS);
+  try {
+    const { count } = await executeCommand(
+      setCompanionSeatsCommand,
+      { eventId: ev.id, seatUuids },
+      data.ctx,
+      ports,
+    );
+    revalidatePath(`/o/${org}/e/${event}/seating/best-available`);
+    return { ok: true, code: null, count };
+  } catch (err) {
+    return {
+      ok: false,
+      code: isDomainError(err) ? err.code : 'internal',
+      ...(isDomainError(err) && err.details?.reason ? { reason: String(err.details.reason) } : {}),
+    };
+  }
 }

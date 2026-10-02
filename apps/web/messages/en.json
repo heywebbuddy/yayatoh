@@ -893,9 +893,15 @@
         "capReached": "That's the most one order can have: {max} seats.",
         "adaChosen": "{count, plural, one {{seats} is an accessible seat} other {{seats} are accessible seats}}, kept for guests who need them. Please choose {count, plural, one {it} other {them}} only if needed.",
         "overCap": "{count} seats chosen: the organizer asks for at most {max} per order.",
-        "keptUntil": "Kept back until {date}"
+        "keptUntil": "Kept back until {date}",
+        "companionWarn": "Companion seats are for guests who come with a wheelchair user: up to {max} per accessible seat.",
+        "companionEnforced": "Companion seats are sold only with an accessible seat: up to {max} per accessible seat.",
+        "companionChosen": "Companion seats without an accessible seat: {seats}. They are for guests who come with a wheelchair user (up to {max} per accessible seat).",
+        "companionRefused": "Companion seats without an accessible seat: {seats}. They are sold only with an accessible seat (up to {max} each): add one, or choose other seats.",
+        "adaEnforcedBest": "Accessible seats are kept for guests who need them until {date}. If you need one, tick “Someone in my party uses a wheelchair” and use Best available."
       },
-      "groupSummary": "{group} — {free} of {total} free{chosen, plural, =0 {} other { · # chosen}}"
+      "groupSummary": "{group} — {free} of {total} free{chosen, plural, =0 {} other { · # chosen}}",
+      "companion": "Companion seat"
     },
     "seatRuleCap": "That's more seats than one order may have. Please choose fewer.",
     "seatRuleAda": "Accessible seats are kept for guests who need them for now. Please choose other seats.",
@@ -905,7 +911,39 @@
     "orgUnavailable": "This organizer isn't selling tickets right now. Tickets already bought stay valid.",
     "riskBlocked": "We couldn’t take this order. Please contact the organizer.",
     "creditInvalid": "That store credit code isn't valid or has been spent.",
-    "creditNotApplicable": "That store credit can't be used on these tickets."
+    "creditNotApplicable": "That store credit can't be used on these tickets.",
+    "seatRuleCompanion": "Companion seats are sold only with an accessible seat. Choose an accessible seat too, or other seats.",
+    "best": {
+      "title": "Best available",
+      "modeLegend": "How would you like to choose seats?",
+      "mode": {
+        "best": "Best available: we find the best seats together",
+        "pick": "Choose my seats"
+      },
+      "need": "Someone in my party uses a wheelchair and needs an accessible seat",
+      "needStaff": "The buyer needs a wheelchair-accessible seat",
+      "needHint": "Accessible seats and the companion seats next to them are kept for guests who need them.",
+      "price": "Price",
+      "onePrice": "Price: {price}",
+      "quantity": "Number of seats",
+      "find": "Find seats",
+      "findAgain": "Find seats again",
+      "accessibleHint": "We'll look for a wheelchair-accessible seat with companion seats next to it.",
+      "together": "{count, plural, one {Your seat:} other {# seats together:}}",
+      "split": "We couldn't seat your party of {count} together, so your seats are in separate places (groups: {pieces}). You can choose your seats instead.",
+      "seatsLabel": "Your seats",
+      "seatAccessible": "{seat} (wheelchair-accessible)",
+      "seatCompanion": "{seat} (companion seat)",
+      "heldFor": "Held for you for {minutes} minutes while you check out.",
+      "clear": "Give these seats back",
+      "notEnough": "Not enough free seats at this price for {count}. Try fewer seats or another price, or choose your seats.",
+      "noAccessible": "No wheelchair-accessible seat is free at this price. Try another price, or contact the organizer.",
+      "taken": "Those seats were just taken. Please try again.",
+      "ruleRefused": "The organizer's seating rules don't allow that choice.",
+      "off": "Best available isn't offered for this event any more. Choose your seats instead.",
+      "findFirst": "Find your seats first: choose how many, then press Find seats.",
+      "expired": "Your seats were held for 10 minutes and have been released. Please find seats again."
+    }
   },
   "fakePay": {
     "eyebrow": "Test payment",
@@ -1933,7 +1971,8 @@
       "plan": "Plan",
       "assign": "Assign guests",
       "finder": "Seat finder",
-      "rules": "Rules"
+      "rules": "Rules",
+      "selection": "Best available"
     },
     "assign": {
       "title": "Assign guests",
@@ -2070,7 +2109,8 @@
       "none": "No rules: buyers can choose any free seat.",
       "summary": {
         "ada": "Accessible seats kept for guests who need them until {days, plural, =0 {the event starts} one {# day before the event} other {# days before the event}} ({date}) · {severity}",
-        "cap": "At most {max, plural, one {# seat} other {# seats}} per order · {severity}"
+        "cap": "At most {max, plural, one {# seat} other {# seats}} per order · {severity}",
+        "companion": "Companion seats sold only with an accessible seat, up to {max} each · {severity}"
       },
       "severityShort": {
         "warn": "warns",
@@ -2103,7 +2143,14 @@
       },
       "save": "Save rules",
       "saved": "Seating rules saved.",
-      "fixErrors": "Please fix the highlighted field."
+      "fixErrors": "Please fix the highlighted field.",
+      "companion": {
+        "title": "Companion seats",
+        "on": "Sell companion seats only with an accessible seat",
+        "max": "Companion seats per accessible seat",
+        "maxHint": "From 1 to 3. They are released together with the accessible seats.",
+        "maxError": "Enter a whole number from 1 to 3."
+      }
     },
     "groups": {
       "title": "Group blocks",
@@ -2132,6 +2179,42 @@
         "forbidden": "You can see the groups but not change them.",
         "noMembers": "No one on the list has the label {label} yet."
       }
+    },
+    "selection": {
+      "title": "Best available and companion seats",
+      "description": "Let buyers and the box office ask for the best seats instead of choosing them, and keep companion seats next to accessible seats.",
+      "noPlan": "This event has no seating plan yet. Create one first, then set up best available here.",
+      "readOnly": "You can see these settings but not change them.",
+      "bestTitle": "Best available",
+      "bestOn": "Offer “Best available” to buyers and the box office",
+      "bestHint": "Buyers say how many seats at which price and get the best free seats that sit together. They can still choose their own seats.",
+      "scoresTitle": "Section scores",
+      "scoresHint": "From 0 to 100: higher scores are offered first. Leave a section blank to rank it by its distance to the stage.",
+      "scoreLabel": "Score for {section}",
+      "scoreError": "Enter a whole number from 0 to 100, or leave it blank.",
+      "noSections": "This plan has no sections: seats are ranked by their distance to the stage, then by row and by how central they are.",
+      "saveBest": "Save best available",
+      "savedBest": "Best available settings saved.",
+      "fixErrors": "Please fix the highlighted field.",
+      "bestOnSummary": "Best available is offered to buyers and the box office.",
+      "bestOffSummary": "Best available is off: buyers choose their seats.",
+      "companionsTitle": "Companion seats",
+      "companionsDescription": "Companion seats sit next to accessible seats, for the people who come with a wheelchair user.",
+      "rulesLink": "Set the companion-seat rule on the Rules tab",
+      "noAccessible": "This plan has no accessible seats yet. Mark them on the plan, then choose companion seats here.",
+      "suggest": "Tick the seats next to accessible seats",
+      "group": {
+        "row": "Row {label}",
+        "table": "Table {label}"
+      },
+      "seatAccessible": "Seat {seat} · accessible",
+      "seatCompanion": "Seat {seat}",
+      "suggested": "next to an accessible seat",
+      "saveCompanions": "Save companion seats",
+      "savedCompanions": "Companion seats saved: {count}.",
+      "companionError": "A companion seat must sit in a row or at a table with an accessible seat, and can't be an accessible seat itself.",
+      "companionList": "Companion seats ({count}): {seats}",
+      "companionNone": "No companion seats yet."
     }
   },
   "venueMap": {
