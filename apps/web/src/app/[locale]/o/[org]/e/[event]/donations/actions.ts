@@ -8,7 +8,7 @@ import {
   TRIBUTE_KINDS,
   updateCampaignCommand,
 } from '@yayatoh/donations';
-import { DomainError, executeCommand, isDomainError, moneyFromDecimal } from '@yayatoh/kernel';
+import { executeCommand, isDomainError, moneyFromDecimal } from '@yayatoh/kernel';
 import { revalidatePath } from 'next/cache';
 import { getLocale, getTranslations } from 'next-intl/server';
 import type { ProgramFormState } from '@/components/program-form.tsx';
@@ -21,16 +21,17 @@ import { ports } from '@/server/ports.ts';
 const base = (org: string, event: string) => `/o/${org}/e/${event}/donations`;
 const done = (org: string, event: string) => revalidatePath(base(org, event));
 
-/** A money field in the event's currency (minor units); a field error when it is not an amount. */
+/**
+ * A money field in the event's currency (minor units): undefined when optional and empty, NaN when
+ * it is not an amount (the command's validation then names the field with every other problem).
+ */
 function amount(form: FormData, key: string, currency: string, required = true): number | undefined {
   const raw = String(form.get(key) ?? '').trim();
-  if (!raw && !required) return undefined;
+  if (!raw) return required ? Number.NaN : undefined;
   try {
-    const m = moneyFromDecimal(raw, currency).amount;
-    if (m <= 0) throw new DomainError('validation_failed', 'Enter an amount', { field: key });
-    return m;
+    return moneyFromDecimal(raw, currency).amount;
   } catch {
-    throw new DomainError('validation_failed', 'Enter an amount', { field: key });
+    return Number.NaN;
   }
 }
 
