@@ -240,6 +240,16 @@
       "subject": "リマインダー：{eventName}の{title}",
       "intro": "{org}は{eventName}の「{title}」をまだお待ちしています。期限：{until}。",
       "cta": "タスクを開く"
+    },
+    "guests.invitation": {
+      "subject": "{subject}",
+      "intro": "{message}",
+      "cta": "招待状に返信する"
+    },
+    "guests.rsvp-reminder": {
+      "subject": "リマインダー：{eventName} のご返信のお願い",
+      "intro": "{name} 様、まだご返信をいただいておりません。{deadline} までに {eventName} へのご出席者をお知らせください。",
+      "cta": "今すぐ返信する"
     }
   },
   "roles": {

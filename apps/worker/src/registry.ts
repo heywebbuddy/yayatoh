@@ -12,6 +12,7 @@ import {
 import { deviceBoardPublisher, publishMetricsChangedTx } from '@yayatoh/command-center';
 import { findEventTx, portalInviteMailer } from '@yayatoh/events';
 import { registrationResumeMailer } from '@yayatoh/forms';
+import { invitationMailer as guestInvitationMailer } from '@yayatoh/guests';
 import { listingsProjector } from '@yayatoh/marketplace';
 import { programMediaCleaner, speakerPhotoApprover } from '@yayatoh/media';
 import { announcementMailer, contactWroteNotifier, threadReplyMailer } from '@yayatoh/messaging';
@@ -109,6 +110,8 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     speakerPhotoApprover(),
     portalSpeakerCleanup(),
     surveyMailer({ notifier, appOrigin }),
+    // M4.1f: wedding invitations by email and text (the reminders run on the journey job).
+    guestInvitationMailer({ notifier, appOrigin }),
     registrationResumeMailer({
       notifier,
       appOrigin,

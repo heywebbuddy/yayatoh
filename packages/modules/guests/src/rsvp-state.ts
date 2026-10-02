@@ -203,6 +203,14 @@ export async function afterAnswersTx(
         updatedAt: ctx.now,
       })
       .where(eq(partyRsvp.id, row.id));
+    // M4.1f: the party answered, so its RSVP reminders stop (the journey cancels its run). Ids only.
+    emit({
+      type: 'guests.party_responded',
+      version: 1,
+      aggregateType: 'event',
+      aggregateId: eventId,
+      payload: { orgId: requireOrg(ctx), eventId, partyId },
+    });
   }
   let attending = 0;
   let declined = 0;

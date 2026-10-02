@@ -240,6 +240,16 @@
       "subject": "Promemoria: {title} per {eventName}",
       "intro": "{org} attende ancora «{title}» per {eventName}. Scadenza: {until}.",
       "cta": "Apri le mie attività"
+    },
+    "guests.invitation": {
+      "subject": "{subject}",
+      "intro": "{message}",
+      "cta": "Rispondi all'invito"
+    },
+    "guests.rsvp-reminder": {
+      "subject": "Promemoria: rispondi per {eventName}",
+      "intro": "{name}, non abbiamo ancora ricevuto la vostra risposta. Fateci sapere chi verrà a {eventName} entro il {deadline}.",
+      "cta": "Rispondi ora"
     }
   },
   "roles": {

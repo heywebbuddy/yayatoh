@@ -240,6 +240,16 @@
       "subject": "Lembrete: {title} para {eventName}",
       "intro": "{org} ainda aguarda “{title}” para {eventName}. Prazo: {until}.",
       "cta": "Abrir minhas tarefas"
+    },
+    "guests.invitation": {
+      "subject": "{subject}",
+      "intro": "{message}",
+      "cta": "Responder ao convite"
+    },
+    "guests.rsvp-reminder": {
+      "subject": "Lembrete: responda sobre {eventName}",
+      "intro": "{name}, ainda não recebemos a sua resposta. Digam-nos quem virá a {eventName} até {deadline}.",
+      "cta": "Responder agora"
     }
   },
   "roles": {

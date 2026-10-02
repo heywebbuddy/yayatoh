@@ -13,6 +13,7 @@ import {
 import { withTenant } from '@yayatoh/db';
 import { findEventTx, portalInviteMailer } from '@yayatoh/events';
 import { registrationResumeMailer } from '@yayatoh/forms';
+import { invitationMailer as guestInvitationMailer } from '@yayatoh/guests';
 import { createCtx } from '@yayatoh/kernel';
 import { announcementMailer, contactWroteNotifier, threadReplyMailer } from '@yayatoh/messaging';
 import {
@@ -105,6 +106,8 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     // M3.4a: staff alerts for the Scan PWA (web push per device).
     staffAlertsSubscriber(staffAlertSource),
     surveyMailer({ notifier, appOrigin }),
+    // M4.1f: wedding invitations by email and text (as in the worker).
+    guestInvitationMailer({ notifier, appOrigin }),
     registrationResumeMailer({
       notifier,
       appOrigin,
@@ -152,7 +155,7 @@ export async function drainOrgMessages(
     consumed += fresh;
     // Journey steps due now (M3.7a; the worker's `automations.run-due` job): they queue messages
     // and may emit events (a survey step's `survey.sent`), so the next pass picks those up.
-    const steps = await runDueActions(orgId, { notifier }, ports);
+    const steps = await runDueActions(orgId, { notifier, appOrigin }, ports);
     journeySteps += steps.done + steps.skipped + steps.failed;
     if (fresh === 0 && steps.done === 0) break;
   }

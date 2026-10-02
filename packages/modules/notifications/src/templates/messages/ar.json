@@ -240,6 +240,16 @@
       "subject": "تذكير: {title} لـ {eventName}",
       "intro": "ما زالت {org} بانتظار «{title}» لـ {eventName}. الموعد النهائي: {until}.",
       "cta": "فتح مهامي"
+    },
+    "guests.invitation": {
+      "subject": "{subject}",
+      "intro": "{message}",
+      "cta": "الرد على الدعوة"
+    },
+    "guests.rsvp-reminder": {
+      "subject": "تذكير: يُرجى الرد بخصوص {eventName}",
+      "intro": "{name}، لم يصلنا ردكم بعد. يُرجى إخبارنا بمن سيحضر {eventName} قبل {deadline}.",
+      "cta": "الرد الآن"
     }
   },
   "roles": {

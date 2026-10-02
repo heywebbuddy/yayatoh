@@ -240,6 +240,16 @@
       "subject": "Herinnering: {title} voor {eventName}",
       "intro": "{org} wacht nog op ‘{title}’ voor {eventName}. Uiterlijk: {until}.",
       "cta": "Mijn taken openen"
+    },
+    "guests.invitation": {
+      "subject": "{subject}",
+      "intro": "{message}",
+      "cta": "Reageer op de uitnodiging"
+    },
+    "guests.rsvp-reminder": {
+      "subject": "Herinnering: laat het ons weten voor {eventName}",
+      "intro": "{name}, we hebben nog niets van jullie gehoord. Laat ons vóór {deadline} weten wie naar {eventName} komt.",
+      "cta": "Nu reageren"
     }
   },
   "roles": {

@@ -240,6 +240,16 @@
       "subject": "Erinnerung: {title} für {eventName}",
       "intro": "{org} wartet noch auf „{title}“ für {eventName}. Fällig: {until}.",
       "cta": "Meine Aufgaben öffnen"
+    },
+    "guests.invitation": {
+      "subject": "{subject}",
+      "intro": "{message}",
+      "cta": "Auf die Einladung antworten"
+    },
+    "guests.rsvp-reminder": {
+      "subject": "Erinnerung: Bitte antworten Sie für {eventName}",
+      "intro": "{name}, wir haben noch keine Antwort von Ihnen. Bitte sagen Sie uns bis {deadline}, wer zu {eventName} kommt.",
+      "cta": "Jetzt antworten"
     }
   },
   "roles": {

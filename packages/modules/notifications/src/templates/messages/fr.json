@@ -240,6 +240,16 @@
       "subject": "Rappel : {title} pour {eventName}",
       "intro": "{org} attend toujours « {title} » pour {eventName}. Échéance : {until}.",
       "cta": "Ouvrir mes tâches"
+    },
+    "guests.invitation": {
+      "subject": "{subject}",
+      "intro": "{message}",
+      "cta": "Répondre à l'invitation"
+    },
+    "guests.rsvp-reminder": {
+      "subject": "Rappel : merci de répondre pour {eventName}",
+      "intro": "{name}, nous n'avons pas encore reçu votre réponse. Dites-nous qui viendra à {eventName} avant le {deadline}.",
+      "cta": "Répondre maintenant"
     }
   },
   "roles": {

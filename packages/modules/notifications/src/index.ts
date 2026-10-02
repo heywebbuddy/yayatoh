@@ -79,6 +79,7 @@ export {
   OPTIONAL_CATEGORIES,
   whatsappCategoryOf,
 } from './kinds.ts';
+export { type MessageState, messageStatesByPrefixTx, messageStatesTx } from './message-states.ts';
 export { addInboxItemTx, createNotifier } from './notifier.ts';
 export {
   allowedPlaceholders,

@@ -240,6 +240,16 @@
       "subject": "提醒：{eventName}的{title}",
       "intro": "{org}仍在等待您提交{eventName}的“{title}”。截止时间：{until}。",
       "cta": "打开我的任务"
+    },
+    "guests.invitation": {
+      "subject": "{subject}",
+      "intro": "{message}",
+      "cta": "回复邀请"
+    },
+    "guests.rsvp-reminder": {
+      "subject": "提醒：请回复{eventName}的邀请",
+      "intro": "{name}，我们尚未收到您的回复。请在{deadline}前告诉我们哪几位会出席{eventName}。",
+      "cta": "立即回复"
     }
   },
   "roles": {

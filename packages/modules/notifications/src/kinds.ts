@@ -261,6 +261,21 @@ export const KINDS = {
   // Journeys (M3.7a): a step's message, written by the organizer (subject and body), sent on the
   // step's own channel (email, SMS, WhatsApp or push) to one person about one event. Reminders:
   // the person can switch them off, texts need informational consent, quiet hours apply.
+  // M4.1f: a wedding party's invitation (the host's wording, the party's RSVP link) and the RSVP
+  // deadline reminders of its journey. Transactional (P4-3: guests are never marketing; no
+  // consent or contact needed), not urgent: quiet hours apply in the event's timezone.
+  'guests.invitation': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: false,
+    params: ['url', 'subject', 'message', 'eventName'],
+  },
+  'guests.rsvp-reminder': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: false,
+    params: ['url', 'name', 'eventName', 'deadline'],
+  },
   'automations.message': {
     category: 'reminders',
     channels: ['email'],

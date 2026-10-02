@@ -240,6 +240,16 @@
       "subject": "Recordatorio: {title} para {eventName}",
       "intro": "{org} sigue esperando «{title}» para {eventName}. Vence: {until}.",
       "cta": "Abrir mis tareas"
+    },
+    "guests.invitation": {
+      "subject": "{subject}",
+      "intro": "{message}",
+      "cta": "Responder a la invitación"
+    },
+    "guests.rsvp-reminder": {
+      "subject": "Recordatorio: confirma tu asistencia a {eventName}",
+      "intro": "{name}, aún no hemos recibido su respuesta. Indíquennos quiénes vendrán a {eventName} antes del {deadline}.",
+      "cta": "Responder ahora"
     }
   },
   "roles": {

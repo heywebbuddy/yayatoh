@@ -61,4 +61,29 @@ export const privateColumns = columnPrivacy('guests', {
   rsvp_settings: {
     lookup_code: internal('code'),
   },
+  // M4.1f: the contact collector (everything a guest typed is sealed until the host decides)
+  // and invitations (the host's wording; addresses stay sealed on the guest).
+  collector_settings: {
+    code: internal('code'),
+  },
+  collector_submissions: {
+    status: 'vocab',
+    payload_ciphertext: personal('sealed-json'),
+    locale: 'vocab',
+  },
+  invitation_templates: {
+    locale: 'vocab',
+    subject: internal(),
+    message: internal(),
+    sms_text: internal(),
+  },
+  party_invites: {
+    locale: 'vocab',
+  },
+  invite_messages: {
+    kind: 'vocab',
+    channel: 'vocab',
+    dedupe_key: internal(),
+    locale: 'vocab',
+  },
 });

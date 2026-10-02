@@ -11,6 +11,15 @@ import { z } from 'zod';
 export const JOURNEY_TRIGGERS = ['order_paid', 'checked_in', 'event_time'] as const;
 export type JourneyTrigger = (typeof JOURNEY_TRIGGERS)[number];
 /**
+ * System triggers (M4.1f): journeys the platform builds for a module, never shown in the journey
+ * builder or list. `rsvp_sent`: a wedding party's invitation was sent (its subject is the party,
+ * not a crm contact: guests never become contacts, P4-3); its steps wait from the RSVP deadline.
+ */
+export const SYSTEM_TRIGGERS = ['rsvp_sent'] as const;
+export type SystemTrigger = (typeof SYSTEM_TRIGGERS)[number];
+export const ALL_TRIGGERS = [...JOURNEY_TRIGGERS, ...SYSTEM_TRIGGERS] as const;
+export type AnyTrigger = JourneyTrigger | SystemTrigger;
+/**
  * Extension point: triggers that arrive later. Each one needs only a subscriber that calls
  * `enrollTx` with its trigger name and person (M4.1d adds `rsvp` from `rsvp.submitted@1`), plus the
  * value in the `journeys_trigger_check` constraint and this list moved into `JOURNEY_TRIGGERS`.
@@ -19,7 +28,10 @@ export const FUTURE_TRIGGERS = ['rsvp'] as const;
 
 /** What a step's wait is measured from. */
 export const WAIT_ANCHORS = ['trigger', 'event_start', 'event_end'] as const;
-export type WaitAnchor = (typeof WAIT_ANCHORS)[number];
+/** M4.1f: the event's RSVP deadline (system RSVP reminder journeys only). */
+export const SYSTEM_ANCHORS = ['rsvp_deadline'] as const;
+export const ALL_ANCHORS = [...WAIT_ANCHORS, ...SYSTEM_ANCHORS] as const;
+export type WaitAnchor = (typeof ALL_ANCHORS)[number];
 
 /** What a step does: send a message on one channel, add a label, or invite to the survey. */
 export const STEP_ACTIONS = ['email', 'sms', 'whatsapp', 'push', 'label', 'survey'] as const;

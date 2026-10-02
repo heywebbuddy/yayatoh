@@ -89,7 +89,7 @@ const invalid = (field: string, reason: string) =>
  * The sealed part of a guest (P4-3): never stored or logged in plaintext. Email and phone arrive
  * with an import (M4.1b) and are kept when the host edits the other answers.
  */
-interface Sealed {
+export interface Sealed {
   dietary: string | null;
   accessibility: string | null;
   address: string | null;
@@ -104,7 +104,7 @@ export async function seal(orgId: string, s: Sealed): Promise<string | null> {
   return keyVault().encrypt(orgId, new TextEncoder().encode(JSON.stringify(present)));
 }
 
-async function unseal(orgId: string, ciphertext: string | null): Promise<Sealed> {
+export async function unseal(orgId: string, ciphertext: string | null): Promise<Sealed> {
   const out: Sealed = { dietary: null, accessibility: null, address: null, email: null, phone: null };
   if (!ciphertext) return out;
   const raw = JSON.parse(new TextDecoder().decode(await keyVault().decrypt(orgId, ciphertext))) as Record<

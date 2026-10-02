@@ -240,6 +240,16 @@
       "subject": "Напоминание: {title} для «{eventName}»",
       "intro": "{org} всё ещё ждёт «{title}» для «{eventName}». Срок: {until}.",
       "cta": "Открыть мои задачи"
+    },
+    "guests.invitation": {
+      "subject": "{subject}",
+      "intro": "{message}",
+      "cta": "Ответить на приглашение"
+    },
+    "guests.rsvp-reminder": {
+      "subject": "Напоминание: ответьте на приглашение на {eventName}",
+      "intro": "{name}, мы ещё не получили ваш ответ. Сообщите, пожалуйста, до {deadline}, кто придёт на {eventName}.",
+      "cta": "Ответить"
     }
   },
   "roles": {
