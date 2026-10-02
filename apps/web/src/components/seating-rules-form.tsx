@@ -97,37 +97,6 @@ export function SeatingRulesForm({
         {severity('adaSeverity', ada?.severity)}
       </fieldset>
 
-      <fieldset className="flex flex-col gap-3">
-        <legend className="mb-1 text-body font-medium">{t('cap.title')}</legend>
-        <label className="flex min-h-6 items-center gap-2 text-body">
-          <input type="checkbox" name="cap" defaultChecked={Boolean(cap)} className="size-5" />
-          {t('cap.on')}
-        </label>
-        <div className="flex flex-col gap-1.5">
-          <label htmlFor="rules-cap-max" className="text-caption text-zinc-600">
-            {t('cap.max')}
-          </label>
-          <input
-            id="rules-cap-max"
-            name="capMax"
-            type="number"
-            inputMode="numeric"
-            min={1}
-            max={50}
-            defaultValue={cap?.kind === 'max_per_order_seats' ? cap.params.max : 10}
-            aria-invalid={invalid('capMax') || undefined}
-            aria-describedby={invalid('capMax') ? 'rules-cap-max-error' : undefined}
-            className={field}
-          />
-          {invalid('capMax') ? (
-            <p id="rules-cap-max-error" className="text-caption font-medium text-pink-700">
-              {t('cap.maxError')}
-            </p>
-          ) : null}
-        </div>
-        {severity('capSeverity', cap?.severity)}
-      </fieldset>
-
       {companions ? (
         <fieldset className="flex flex-col gap-3">
           <legend className="mb-1 text-body font-medium">{t('companion.title')}</legend>
@@ -167,6 +136,37 @@ export function SeatingRulesForm({
           {severity('companionSeverity', companion?.severity)}
         </fieldset>
       ) : null}
+
+      <fieldset className="flex flex-col gap-3">
+        <legend className="mb-1 text-body font-medium">{t('cap.title')}</legend>
+        <label className="flex min-h-6 items-center gap-2 text-body">
+          <input type="checkbox" name="cap" defaultChecked={Boolean(cap)} className="size-5" />
+          {t('cap.on')}
+        </label>
+        <div className="flex flex-col gap-1.5">
+          <label htmlFor="rules-cap-max" className="text-caption text-zinc-600">
+            {t('cap.max')}
+          </label>
+          <input
+            id="rules-cap-max"
+            name="capMax"
+            type="number"
+            inputMode="numeric"
+            min={1}
+            max={50}
+            defaultValue={cap?.kind === 'max_per_order_seats' ? cap.params.max : 10}
+            aria-invalid={invalid('capMax') || undefined}
+            aria-describedby={invalid('capMax') ? 'rules-cap-max-error' : undefined}
+            className={field}
+          />
+          {invalid('capMax') ? (
+            <p id="rules-cap-max-error" className="text-caption font-medium text-pink-700">
+              {t('cap.maxError')}
+            </p>
+          ) : null}
+        </div>
+        {severity('capSeverity', cap?.severity)}
+      </fieldset>
 
       <div aria-live="polite">
         {state.ok ? <Alert tone="info" title={t('saved')} /> : null}
