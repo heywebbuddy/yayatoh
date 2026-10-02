@@ -1,6 +1,6 @@
 import type { TenantTx } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
-import { type Ctx, DomainError, type DomainEvent } from '@yayatoh/kernel';
+import { type Ctx, DomainError, type DomainEvent, isDomainError } from '@yayatoh/kernel';
 import { CheckoutResultDto, StartCheckoutInput } from '@yayatoh/orders';
 import { tenantCommand } from '@yayatoh/platform';
 import { reissueTicketTx } from '@yayatoh/ticketing';
@@ -72,8 +72,22 @@ export const startGroupCommand = tenantCommand({
         riskReview: input.riskReview,
         people: input.people,
         typeCheck: (type, person) => {
-          refuseDirectRegistration(type);
-          assertEligible(type, { email: person.email, accessCode: input.accessCode });
+          // Name the person's row in the refusal (the form marks that row's field).
+          const n = input.people.indexOf(person as (typeof input.people)[number]) + 1;
+          try {
+            refuseDirectRegistration(type);
+          } catch (err) {
+            if (isDomainError(err))
+              throw new DomainError(err.code, err.message, { ...err.details, field: `pass-${n}` });
+            throw err;
+          }
+          try {
+            assertEligible(type, { email: person.email, accessCode: input.accessCode });
+          } catch (err) {
+            if (isDomainError(err))
+              throw new DomainError(err.code, err.message, { ...err.details, field: `email-${n}` });
+            throw err;
+          }
         },
       },
     );

@@ -35,13 +35,23 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export async function groupAction(slug: string, _prev: GroupState, form: FormData): Promise<GroupState> {
   const locale = await getLocale();
   const count = Math.min(MAX_GROUP, Math.max(1, Number(form.get('count') ?? 1) || 1));
-  const payerName = String(form.get('payerName') ?? '').trim().slice(0, 120);
-  const payerEmail = String(form.get('payerEmail') ?? '').trim().slice(0, 254);
+  const payerName = String(form.get('payerName') ?? '')
+    .trim()
+    .slice(0, 120);
+  const payerEmail = String(form.get('payerEmail') ?? '')
+    .trim()
+    .slice(0, 254);
   const people = Array.from({ length: count }, (_, i) => {
-    const [registrationTypeId = '', admissionItemId = ''] = String(form.get(`pass-${i + 1}`) ?? '').split(':');
+    const [registrationTypeId = '', admissionItemId = ''] = String(form.get(`pass-${i + 1}`) ?? '').split(
+      ':',
+    );
     return {
-      name: String(form.get(`name-${i + 1}`) ?? '').trim().slice(0, 120),
-      email: String(form.get(`email-${i + 1}`) ?? '').trim().slice(0, 254),
+      name: String(form.get(`name-${i + 1}`) ?? '')
+        .trim()
+        .slice(0, 120),
+      email: String(form.get(`email-${i + 1}`) ?? '')
+        .trim()
+        .slice(0, 254),
       registrationTypeId,
       admissionItemId,
     };

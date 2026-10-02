@@ -23,6 +23,16 @@ import {
 } from './schema.ts';
 
 export const QUEUE_PAGE = 50;
+/** The queue's status filters, in the order the console shows them. */
+export const QUEUE_STATUS_FILTERS = [
+  'pending',
+  'approved',
+  'confirmed',
+  'reserved',
+  'denied',
+  'cancelled',
+  'all',
+] as const;
 
 export const QueueRowDto = z.object({
   id: z.uuid(),

@@ -91,6 +91,7 @@ export {
   ticketsForOrderTx,
   voidTicketsTx,
 } from './issue.ts';
+export { nameTicketHolderTx } from './naming.ts';
 export {
   activeTicketsForOccurrenceTx,
   assertOccurrenceIdsTx,
@@ -151,4 +152,3 @@ export {
   walletPassSync,
   walletSerial,
 } from './wallet.ts';
-export { nameTicketHolderTx } from './naming.ts';

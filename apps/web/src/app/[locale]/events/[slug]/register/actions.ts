@@ -185,9 +185,18 @@ export async function registerAction(
           addOnItemIds: addOns,
           name,
           email,
-          company: String(form.get('company') ?? '').trim().slice(0, 120) || null,
-          jobTitle: String(form.get('jobTitle') ?? '').trim().slice(0, 120) || null,
-          message: String(form.get('message') ?? '').trim().slice(0, 2000) || null,
+          company:
+            String(form.get('company') ?? '')
+              .trim()
+              .slice(0, 120) || null,
+          jobTitle:
+            String(form.get('jobTitle') ?? '')
+              .trim()
+              .slice(0, 120) || null,
+          message:
+            String(form.get('message') ?? '')
+              .trim()
+              .slice(0, 2000) || null,
           ...(accessCode ? { accessCode } : {}),
           locale,
         },

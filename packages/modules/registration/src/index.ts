@@ -57,6 +57,7 @@ export {
   publicGroup,
   publicGroupOptions,
   publicRegistrant,
+  QUEUE_STATUS_FILTERS,
   QueueDto,
   QueueRowDto,
   RegistrantDetailDto,

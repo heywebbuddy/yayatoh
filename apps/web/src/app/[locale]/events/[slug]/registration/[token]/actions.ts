@@ -17,8 +17,7 @@ async function target(slug: string) {
   return t && event ? { ...t, eventName: event.name } : null;
 }
 
-const anon = (orgId: string, locale: string) =>
-  createCtx({ orgId, actor: { type: 'anonymous' }, locale });
+const anon = (orgId: string, locale: string) => createCtx({ orgId, actor: { type: 'anonymous' }, locale });
 
 /**
  * Pay for an approved application (M5.1c). The command returns the open order of an earlier
@@ -60,10 +59,7 @@ export async function addGuestAction(
   const [typeId = '', itemId = ''] = String(form.get('pass') ?? '').split(':');
   const name = String(form.get('name') ?? '').trim();
   const email = String(form.get('email') ?? '').trim();
-  const fields = [
-    ...(name ? [] : ['name']),
-    ...(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? [] : ['email']),
-  ];
+  const fields = [...(name ? [] : ['name']), ...(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? [] : ['email'])];
   if (fields.length) return { ok: false, code: 'validation_failed', fields };
   const limit = await limitAction('checkoutStart');
   if (!limit.allowed) return { ok: false, code: 'rate_limited' };

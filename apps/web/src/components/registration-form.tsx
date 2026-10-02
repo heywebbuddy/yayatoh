@@ -201,8 +201,18 @@ export function RegistrationForm({ find, register }: { find: Action; register: A
                   {type.apply ? (
                     <>
                       <p className="text-body text-zinc-600">{t('applyHint')}</p>
-                      <Input name="company" autoComplete="organization" maxLength={120} label={t('company')} />
-                      <Input name="jobTitle" autoComplete="organization-title" maxLength={120} label={t('jobTitle')} />
+                      <Input
+                        name="company"
+                        autoComplete="organization"
+                        maxLength={120}
+                        label={t('company')}
+                      />
+                      <Input
+                        name="jobTitle"
+                        autoComplete="organization-title"
+                        maxLength={120}
+                        label={t('jobTitle')}
+                      />
                       <div className="flex flex-col gap-1.5">
                         <label htmlFor="registration-message" className="text-caption text-zinc-600">
                           {t('message')}
@@ -224,7 +234,13 @@ export function RegistrationForm({ find, register }: { find: Action; register: A
                   ) : null}
                   <div className={verify ? 'hidden' : 'contents'}>
                     {type.apply ? (
-                      <Button type="submit" name="intent" value="apply" disabled={pending} className="self-start">
+                      <Button
+                        type="submit"
+                        name="intent"
+                        value="apply"
+                        disabled={pending}
+                        className="self-start"
+                      >
                         {t('apply')}
                       </Button>
                     ) : type.full ? (

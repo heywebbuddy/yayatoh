@@ -26,10 +26,7 @@ export async function substituteAction(
   if (!target) return { ok: false, code: 'not_found' };
   const name = String(form.get('name') ?? '').trim();
   const email = String(form.get('email') ?? '').trim();
-  const fields = [
-    ...(name ? [] : ['name']),
-    ...(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? [] : ['email']),
-  ];
+  const fields = [...(name ? [] : ['name']), ...(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? [] : ['email'])];
   if (fields.length) return { ok: false, code: 'validation_failed', fields };
   const limit = await limitAction('checkoutStart');
   if (!limit.allowed) return { ok: false, code: 'rate_limited' };

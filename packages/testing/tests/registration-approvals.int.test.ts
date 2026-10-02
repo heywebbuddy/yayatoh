@@ -7,8 +7,8 @@ import {
   bulkStepCommand,
   consumeEvent,
   memoryNotifier,
-  type Subscriber,
   recentEventsTx,
+  type Subscriber,
 } from '@yayatoh/platform';
 import {
   addGuestCommand,
@@ -188,7 +188,13 @@ const applyAs = (c: Conf, email: string, extra: Record<string, unknown> = {}) =>
     ports,
   );
 
-const decide = (c: Conf, registrantId: string, decision: 'approve' | 'deny', ctx = a.ctx(), reason?: string) =>
+const decide = (
+  c: Conf,
+  registrantId: string,
+  decision: 'approve' | 'deny',
+  ctx = a.ctx(),
+  reason?: string,
+) =>
   executeCommand(
     decideRegistrantCommand,
     { eventId: c.eventId, registrantId, decision, ...(reason ? { reason } : {}) },
@@ -284,9 +290,9 @@ describe('apply to attend (M5.1c)', () => {
       ),
     ).toBe('forbidden:approval_required');
     // The pay link refuses a pending application.
-    expect(
-      await code(executeCommand(payApprovedCommand, { token: r.token }, anon(), ports)),
-    ).toBe('forbidden:not_approved');
+    expect(await code(executeCommand(payApprovedCommand, { token: r.token }, anon(), ports))).toBe(
+      'forbidden:not_approved',
+    );
     expect(await ordersOf(email)).toBe(0);
     // The public list shows the type as one to apply for.
     const pub = await publicRegistration(a.org.id, c.eventId, { email });
@@ -320,7 +326,11 @@ describe('apply to attend (M5.1c)', () => {
       a.ctx(),
       ports,
     );
-    expect(detail).toMatchObject({ decisionSource: 'auto_member', company: 'Acme', message: 'I would like to attend.' });
+    expect(detail).toMatchObject({
+      decisionSource: 'auto_member',
+      company: 'Acme',
+      message: 'I would like to attend.',
+    });
   });
 
   it('a free approval type confirms at once on approval, with a ticket', async () => {
@@ -353,7 +363,9 @@ describe('apply to attend (M5.1c)', () => {
     expect(await code(executeCommand(payApprovedCommand, { token: `${r.token}x` }, anon(), ports))).toBe(
       'not_found',
     );
-    expect(await code(executeCommand(payApprovedCommand, { token: r.token }, anon(b), ports))).toBe('not_found');
+    expect(await code(executeCommand(payApprovedCommand, { token: r.token }, anon(b), ports))).toBe(
+      'not_found',
+    );
     await pay(first.orderId, first.totalMinor);
     const s = await status(r.registrantId);
     expect(s).toMatchObject({ status: 'confirmed', order_id: first.orderId });
@@ -418,16 +430,33 @@ describe('apply to attend (M5.1c)', () => {
       await code(
         executeCommand(
           decideRegistrantCommand,
-          { eventId: c.eventId, registrantId: (await applyAs(c, `t-${tag()}@example.test`)).registrantId, decision: 'approve', templateId: tpl.id },
+          {
+            eventId: c.eventId,
+            registrantId: (await applyAs(c, `t-${tag()}@example.test`)).registrantId,
+            decision: 'approve',
+            templateId: tpl.id,
+          },
           a.ctx(),
           ports,
         ),
       ),
     ).toBe('validation_failed');
     expect(
-      await code(executeCommand(removeReasonTemplateCommand, { eventId: c.eventId, templateId: tpl.id }, viewer(), ports)),
+      await code(
+        executeCommand(
+          removeReasonTemplateCommand,
+          { eventId: c.eventId, templateId: tpl.id },
+          viewer(),
+          ports,
+        ),
+      ),
     ).toBe('forbidden');
-    await executeCommand(removeReasonTemplateCommand, { eventId: c.eventId, templateId: tpl.id }, a.ctx(), ports);
+    await executeCommand(
+      removeReasonTemplateCommand,
+      { eventId: c.eventId, templateId: tpl.id },
+      a.ctx(),
+      ports,
+    );
   });
 
   it('capacity per type holds under concurrent approvals', async () => {
@@ -470,10 +499,18 @@ describe('apply to attend (M5.1c)', () => {
     expect(searched.rows[0]?.status).toBe('approved');
     // Org b sees nothing of org a's registrants.
     expect(
-      await code(executeQuery(registrantDetailQuery, { eventId: c.eventId, registrantId: p.registrantId }, b.ctx(), ports)),
+      await code(
+        executeQuery(
+          registrantDetailQuery,
+          { eventId: c.eventId, registrantId: p.registrantId },
+          b.ctx(),
+          ports,
+        ),
+      ),
     ).toBe('not_found');
     expect(
-      (await executeQuery(registrationQueueQuery, { eventId: c.eventId, status: 'all' }, b.ctx(), ports)).total,
+      (await executeQuery(registrationQueueQuery, { eventId: c.eventId, status: 'all' }, b.ctx(), ports))
+        .total,
     ).toBe(0);
     expect(await code(publicRegistrant(b.org.id, p.token))).toBe('not_found');
     expect(await code(decide(c, p.registrantId, 'approve', b.ctx()))).toBe('not_found');
@@ -495,7 +532,11 @@ describe('bulk approve/deny (M5.1c)', () => {
       await code(
         executeCommand(
           registrationDecideBulk.start,
-          { eventId: c.eventId, selection: { filter: { status: 'pending' } }, params: { decision: 'approve' } },
+          {
+            eventId: c.eventId,
+            selection: { filter: { status: 'pending' } },
+            params: { decision: 'approve' },
+          },
           viewer(),
           ports,
         ),
@@ -524,8 +565,15 @@ describe('bulk approve/deny (M5.1c)', () => {
         },
       },
     ]);
-    await expect(executeCommand(killer, { operationId: op.operationId }, sys(), ports)).rejects.toThrow('killed');
-    let s = await executeQuery(registrationDecideBulk.status, { operationId: op.operationId }, a.ctx(), ports);
+    await expect(executeCommand(killer, { operationId: op.operationId }, sys(), ports)).rejects.toThrow(
+      'killed',
+    );
+    let s = await executeQuery(
+      registrationDecideBulk.status,
+      { operationId: op.operationId },
+      a.ctx(),
+      ports,
+    );
     expect(s).toMatchObject({ status: 'running', processed: 50, succeeded: 50 });
     const approvedNow = await withTenant(sys(), async (tx) => {
       const [r] = await tx.execute<{ n: number }>(
@@ -576,12 +624,21 @@ describe('bulk approve/deny (M5.1c)', () => {
     const two = await applyAs(c, `b2-${tag()}@example.test`);
     const op = await executeCommand(
       registrationDecideBulk.start,
-      { eventId: c.eventId, selection: { ids: [one.registrantId, two.registrantId] }, params: { decision: 'approve' } },
+      {
+        eventId: c.eventId,
+        selection: { ids: [one.registrantId, two.registrantId] },
+        params: { decision: 'approve' },
+      },
       a.ctx(),
       ports,
     );
     await runBulk(a.org.id, op.operationId);
-    const s = await executeQuery(registrationDecideBulk.status, { operationId: op.operationId }, a.ctx(), ports);
+    const s = await executeQuery(
+      registrationDecideBulk.status,
+      { operationId: op.operationId },
+      a.ctx(),
+      ports,
+    );
     expect(s).toMatchObject({ status: 'done', succeeded: 1, failed: 1 });
     expect(s.failures[0]?.code).toBe('type_full');
     const deny = await executeCommand(
@@ -617,9 +674,25 @@ describe('group registration and substitution (M5.1c)', () => {
     const c = await conference();
     const t = tag();
     const people = [
-      { name: 'Ada One', email: `ada-${t}@example.test`, registrationTypeId: c.member, admissionItemId: c.fullPass, addOnItemIds: [c.dinner] },
-      { name: 'Bo Two', email: `bo-${t}@example.test`, registrationTypeId: c.member, admissionItemId: c.fullPass },
-      { name: 'Cy Three', email: `cy-${t}@uni.test`, registrationTypeId: c.student, admissionItemId: c.fullPass },
+      {
+        name: 'Ada One',
+        email: `ada-${t}@example.test`,
+        registrationTypeId: c.member,
+        admissionItemId: c.fullPass,
+        addOnItemIds: [c.dinner],
+      },
+      {
+        name: 'Bo Two',
+        email: `bo-${t}@example.test`,
+        registrationTypeId: c.member,
+        admissionItemId: c.fullPass,
+      },
+      {
+        name: 'Cy Three',
+        email: `cy-${t}@uni.test`,
+        registrationTypeId: c.student,
+        admissionItemId: c.fullPass,
+      },
     ];
     // A student type needs the student's own address at its domain.
     expect(
@@ -640,7 +713,11 @@ describe('group registration and substitution (M5.1c)', () => {
       await code(
         executeCommand(
           startGroupCommand,
-          { eventId: c.eventId, buyer: { name: 'Payer', email: `payer-${t}@example.test` }, people: [people[0], people[0]] },
+          {
+            eventId: c.eventId,
+            buyer: { name: 'Payer', email: `payer-${t}@example.test` },
+            people: [people[0], people[0]],
+          },
           anon(),
           ports,
         ),
@@ -781,8 +858,18 @@ describe('group registration and substitution (M5.1c)', () => {
         eventId: c.eventId,
         buyer: { name: 'Payer', email: `lapse-${t}@example.test` },
         people: [
-          { name: 'One', email: `one-${t}@example.test`, registrationTypeId: c.member, admissionItemId: c.fullPass },
-          { name: 'Two', email: `two-${t}@uni.test`, registrationTypeId: c.student, admissionItemId: c.fullPass },
+          {
+            name: 'One',
+            email: `one-${t}@example.test`,
+            registrationTypeId: c.member,
+            admissionItemId: c.fullPass,
+          },
+          {
+            name: 'Two',
+            email: `two-${t}@uni.test`,
+            registrationTypeId: c.student,
+            admissionItemId: c.fullPass,
+          },
         ],
       },
       anon(),
@@ -824,7 +911,13 @@ describe('+1 guest types (M5.1c)', () => {
     ).toBe('validation_failed:guest_no_approval');
     await executeCommand(
       setTypeRulesCommand,
-      { eventId: c.eventId, registrationTypeId: guestType.id, approval: 'none', kind: 'guest', guestsPerHost: 1 },
+      {
+        eventId: c.eventId,
+        registrationTypeId: guestType.id,
+        approval: 'none',
+        kind: 'guest',
+        guestsPerHost: 1,
+      },
       a.ctx(),
       ports,
     );
@@ -844,7 +937,9 @@ describe('+1 guest types (M5.1c)', () => {
         ),
       ),
     ).toBe('forbidden:guest_type');
-    expect((await publicRegistration(a.org.id, c.eventId)).types.some((x) => x.id === guestType.id)).toBe(false);
+    expect((await publicRegistration(a.org.id, c.eventId)).types.some((x) => x.id === guestType.id)).toBe(
+      false,
+    );
     // The host registers (free approval type → confirmed) and gets their own link.
     await executeCommand(
       setCellCommand,
@@ -862,7 +957,13 @@ describe('+1 guest types (M5.1c)', () => {
       await code(
         executeCommand(
           addGuestCommand,
-          { token: host.token, registrationTypeId: c.member, admissionItemId: c.fullPass, name: 'G', email: `g-${t}@example.test` },
+          {
+            token: host.token,
+            registrationTypeId: c.member,
+            admissionItemId: c.fullPass,
+            name: 'G',
+            email: `g-${t}@example.test`,
+          },
           anon(),
           ports,
         ),
@@ -870,7 +971,13 @@ describe('+1 guest types (M5.1c)', () => {
     ).toBe('forbidden:not_guest_type');
     const guest = await executeCommand(
       addGuestCommand,
-      { token: host.token, registrationTypeId: guestType.id, admissionItemId: c.fullPass, name: 'Plus One', email: `plus-${t}@example.test` },
+      {
+        token: host.token,
+        registrationTypeId: guestType.id,
+        admissionItemId: c.fullPass,
+        name: 'Plus One',
+        email: `plus-${t}@example.test`,
+      },
       anon(),
       ports,
     );
@@ -880,7 +987,13 @@ describe('+1 guest types (M5.1c)', () => {
       await code(
         executeCommand(
           addGuestCommand,
-          { token: host.token, registrationTypeId: guestType.id, admissionItemId: c.fullPass, name: 'Plus Two', email: `plus2-${t}@example.test` },
+          {
+            token: host.token,
+            registrationTypeId: guestType.id,
+            admissionItemId: c.fullPass,
+            name: 'Plus Two',
+            email: `plus2-${t}@example.test`,
+          },
           anon(),
           ports,
         ),
@@ -912,7 +1025,13 @@ describe('+1 guest types (M5.1c)', () => {
       await code(
         executeCommand(
           addGuestCommand,
-          { token: pending.token, registrationTypeId: guestType.id, admissionItemId: c.fullPass, name: 'G', email: `g2-${t}@example.test` },
+          {
+            token: pending.token,
+            registrationTypeId: guestType.id,
+            admissionItemId: c.fullPass,
+            name: 'G',
+            email: `g2-${t}@example.test`,
+          },
           anon(),
           ports,
         ),

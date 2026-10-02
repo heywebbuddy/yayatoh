@@ -38,8 +38,9 @@ export function GroupForm({
     return t(`errors.field.${kind}`);
   };
   const verify = state.code === 'verify_email' ? state.verify : undefined;
+  const known = (f: string) => /^(payerName|payerEmail|(name|email|pass)-\d+)$/.test(f);
   const general =
-    state.code && state.code !== 'verify_email' && !(state.fields ?? []).some((f) => bad.has(f))
+    state.code && state.code !== 'verify_email' && !(state.fields ?? []).some(known)
       ? state.code === 'rate_limited'
         ? tr('errors.rateLimitedRetry', { minutes: state.retryMinutes ?? 1 })
         : state.reason && t.has(`errors.${state.reason}`)

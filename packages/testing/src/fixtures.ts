@@ -1567,7 +1567,12 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     );
     await executeCommand(
       setCellCommand,
-      { eventId: event.id, registrationTypeId: applicants.id, admissionItemId: fullPass.id, priceMinor: 4000 },
+      {
+        eventId: event.id,
+        registrationTypeId: applicants.id,
+        admissionItemId: fullPass.id,
+        priceMinor: 4000,
+      },
       ctx(),
       ports,
     );
