@@ -134,7 +134,7 @@ const name = (tableUnitId: string, firstName: string, extra: Record<string, unkn
 
 beforeAll(async () => {
   ({ a, b } = await twoOrgs());
-  gala = await newGala(a, 'Harbor Gala');
+  gala = await newGala(a, 'Gala Tables Night');
   tableType = await tableTicket(a, gala.id, 10);
   payType = await tableTicket(a, gala.id, 4, 100_000);
   await executeCommand(transitionEventCommand, { eventId: gala.id, transition: 'publish' }, a.ctx(), ports);
