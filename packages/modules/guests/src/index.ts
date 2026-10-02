@@ -42,6 +42,26 @@ export {
   uninvitedWith,
   windowInputs,
 } from './domain/invitations.ts';
+// M4.1d: the RSVP flow (party link, QR, name + PIN, household answers, deadline, host tools).
+export {
+  checkHouseholdAnswers,
+  LOOKUP_ALPHABET,
+  LOOKUP_CODE_LENGTH,
+  lookupCodeFrom,
+  normalizeLookupCode,
+  normalizePin,
+  type PlusOneName,
+  participationRsvp,
+  partyRsvpState,
+  type RsvpAnswer,
+  type RsvpGuest,
+  type RsvpRefusal,
+  rsvpOpen,
+  type SubEventTally,
+  strictFullName,
+  strictName,
+  tally,
+} from './domain/rsvp.ts';
 export * from './dto.ts';
 export {
   addPartyGuestCommand,
@@ -91,57 +111,6 @@ export {
 } from './invitations.ts';
 export { privateColumns } from './private-columns.ts';
 export {
-  AGE_CLASSES,
-  type AgeClass,
-  ENTRY_SOURCES,
-  GUEST_KINDS,
-  GUEST_SOURCES,
-  type GuestKind,
-  type GuestSource,
-  HISTORY_ACTIONS,
-  type HistoryAction,
-  IMPORT_SOURCES,
-  IMPORT_STATUSES,
-  type ImportSource,
-  type ImportStatus,
-  RESPONSE_STATUSES,
-  type ResponseStatus,
-  SUB_EVENT_KINDS,
-  type SubEventKind,
-} from './schema.ts';
-export {
-  CreateSubEventInput,
-  createSubEventCommand,
-  MAX_SUB_EVENTS_PER_EVENT,
-  moveSubEventCommand,
-  removeSubEventCommand,
-  SubEventDto,
-  SubEventSummaryDto,
-  subEventsOfEventTx,
-  subEventsQuery,
-  updateSubEventCommand,
-} from './sub-events.ts';
-// M4.1d: the RSVP flow (party link, QR, name + PIN, household answers, deadline, host tools).
-export {
-  checkHouseholdAnswers,
-  LOOKUP_ALPHABET,
-  LOOKUP_CODE_LENGTH,
-  lookupCodeFrom,
-  normalizeLookupCode,
-  normalizePin,
-  type PlusOneName,
-  participationRsvp,
-  partyRsvpState,
-  type RsvpAnswer,
-  type RsvpGuest,
-  type RsvpRefusal,
-  rsvpOpen,
-  type SubEventTally,
-  strictFullName,
-  strictName,
-  tally,
-} from './domain/rsvp.ts';
-export {
   createRsvpLinksCommand,
   findRsvpByNameCommand,
   markRsvpSentCommand,
@@ -169,4 +138,36 @@ export {
   submitRsvpCommand,
 } from './rsvp.ts';
 export { RSVP_LINK_TTL_MS, rsvpByContactTx } from './rsvp-state.ts';
-export { PARTY_RSVP_STATES, type PartyRsvpState } from './schema.ts';
+export {
+  AGE_CLASSES,
+  type AgeClass,
+  ENTRY_SOURCES,
+  GUEST_KINDS,
+  GUEST_SOURCES,
+  type GuestKind,
+  type GuestSource,
+  HISTORY_ACTIONS,
+  type HistoryAction,
+  IMPORT_SOURCES,
+  IMPORT_STATUSES,
+  type ImportSource,
+  type ImportStatus,
+  PARTY_RSVP_STATES,
+  type PartyRsvpState,
+  RESPONSE_STATUSES,
+  type ResponseStatus,
+  SUB_EVENT_KINDS,
+  type SubEventKind,
+} from './schema.ts';
+export {
+  CreateSubEventInput,
+  createSubEventCommand,
+  MAX_SUB_EVENTS_PER_EVENT,
+  moveSubEventCommand,
+  removeSubEventCommand,
+  SubEventDto,
+  SubEventSummaryDto,
+  subEventsOfEventTx,
+  subEventsQuery,
+  updateSubEventCommand,
+} from './sub-events.ts';

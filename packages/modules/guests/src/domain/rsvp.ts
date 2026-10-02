@@ -6,11 +6,13 @@
 import type { PartyRsvpState, ResponseStatus } from '../schema.ts';
 
 /** `invited → sent → viewed → responded`: the furthest step the party has reached. */
-export function partyRsvpState(r: {
-  sentAt: Date | null;
-  viewedAt: Date | null;
-  respondedAt: Date | null;
-} | null): PartyRsvpState {
+export function partyRsvpState(
+  r: {
+    sentAt: Date | null;
+    viewedAt: Date | null;
+    respondedAt: Date | null;
+  } | null,
+): PartyRsvpState {
   if (!r) return 'invited';
   if (r.respondedAt) return 'responded';
   if (r.viewedAt) return 'viewed';

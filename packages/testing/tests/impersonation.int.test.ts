@@ -8,6 +8,7 @@ import { withTenant } from '@yayatoh/db';
 import { closePools } from '@yayatoh/db/testing';
 import * as events from '@yayatoh/events';
 import * as forms from '@yayatoh/forms';
+import * as guests from '@yayatoh/guests';
 import {
   COMMAND_CATEGORIES,
   type Command,
@@ -72,6 +73,8 @@ const MODULES = {
   crm,
   events,
   forms,
+  // M4.1d: the guests module (parties, sub-events, imports, RSVP).
+  guests,
   marketplace,
   media,
   messaging,

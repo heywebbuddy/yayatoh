@@ -23,6 +23,7 @@ import {
   PartyDto,
   partySerializer,
 } from './dto.ts';
+import { rsvpStateCondition } from './rsvp-filter.ts';
 import {
   AGE_CLASSES,
   ENTRY_SOURCES,
@@ -33,7 +34,6 @@ import {
   parties,
   rsvpHistory,
 } from './schema.ts';
-import { rsvpStateCondition } from './rsvp-filter.ts';
 
 export const MAX_PARTIES_PER_EVENT = 1000;
 export const MAX_GUESTS_PER_PARTY = 20;

@@ -1,7 +1,13 @@
 import { createHmac, timingSafeEqual } from 'node:crypto';
 import { type TenantTx, withoutTenant } from '@yayatoh/db';
 import { type Ctx, DomainError, requireOrg, uuidv7 } from '@yayatoh/kernel';
-import { appTokenSecret, signLinkToken, tenantCommand, tenantQuery, verifyLinkToken } from '@yayatoh/platform';
+import {
+  appTokenSecret,
+  signLinkToken,
+  tenantCommand,
+  tenantQuery,
+  verifyLinkToken,
+} from '@yayatoh/platform';
 import { and, eq, inArray, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import {
@@ -103,10 +109,14 @@ const refusalError = (r: RsvpRefusal) =>
         field: 'answers',
       })
     : r.reason === 'not_in_party'
-      ? new DomainError('not_found', 'Not a guest of this party', { reason: 'not_in_party', field: 'answers' })
+      ? new DomainError('not_found', 'Not a guest of this party', {
+          reason: 'not_in_party',
+          field: 'answers',
+        })
       : new DomainError('validation_failed', 'Some answers are missing or invalid', {
           reason: r.reason,
-          field: r.reason === 'plus_one_name_required' || r.reason === 'not_a_plus_one' ? 'plusOnes' : 'answers',
+          field:
+            r.reason === 'plus_one_name_required' || r.reason === 'not_a_plus_one' ? 'plusOnes' : 'answers',
           guestId: r.guestId,
         });
 
@@ -489,7 +499,9 @@ export const PublicRsvpDto = z.object({
       guestIds: z.array(z.uuid()),
     }),
   ),
-  responses: z.array(z.object({ guestId: z.uuid(), subEventId: z.uuid(), status: z.enum(RESPONSE_STATUSES) })),
+  responses: z.array(
+    z.object({ guestId: z.uuid(), subEventId: z.uuid(), status: z.enum(RESPONSE_STATUSES) }),
+  ),
 });
 export type PublicRsvpDto = z.infer<typeof PublicRsvpDto>;
 
@@ -538,7 +550,9 @@ export const publicRsvpQuery = tenantQuery({
     const invitedIds = new Set([...f.invited.values()].flatMap((s) => [...s]));
     return {
       ...base,
-      state: rsvpOpen(settings?.deadline ?? null, ctx.now, row.reopened) ? ('open' as const) : ('locked' as const),
+      state: rsvpOpen(settings?.deadline ?? null, ctx.now, row.reopened)
+        ? ('open' as const)
+        : ('locked' as const),
       partyName: party.envelopeName ?? party.name,
       guests: ordered
         .filter((g) => invitedIds.has(g.id))
@@ -586,7 +600,12 @@ export const markRsvpViewedCommand = tenantCommand({
     ]);
     return { first: true };
   },
-  audit: (_input, r) => ({ action: 'guests.rsvp.viewed', targetType: 'party_rsvp', targetId: null, data: { first: r?.first } }),
+  audit: (_input, r) => ({
+    action: 'guests.rsvp.viewed',
+    targetType: 'party_rsvp',
+    targetId: null,
+    data: { first: r?.first },
+  }),
 });
 
 const PlusOneInput = z.object({

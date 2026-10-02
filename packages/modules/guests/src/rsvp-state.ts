@@ -3,9 +3,9 @@ import type { TenantTx } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
 import { type Ctx, DomainError, type DomainEvent, requireOrg, uuidv7 } from '@yayatoh/kernel';
 import { and, asc, eq, inArray } from 'drizzle-orm';
-import { recordHistoryTx } from './guests.ts';
 import { type InviteGuest, invitedBySubEvent } from './domain/invitations.ts';
 import { lookupCodeFrom, participationRsvp, tally } from './domain/rsvp.ts';
+import { recordHistoryTx } from './guests.ts';
 import {
   guests,
   invitations,
@@ -28,7 +28,6 @@ import { subEventsOfEventTx } from './sub-events.ts';
 export const RSVP_LINK_TTL_MS = 60 * 86_400_000;
 
 export type Emit = (e: DomainEvent) => void;
-
 
 export type PartyRsvpRow = typeof partyRsvp.$inferSelect;
 
@@ -164,10 +163,7 @@ export async function rsvpFactsTx(tx: TenantTx, eventId: string, partyIds: reado
 }
 
 /** The facts of one party, from the event-wide facts. */
-export function partyFacts(
-  all: Awaited<ReturnType<typeof rsvpFactsTx>>,
-  partyId: string,
-): PartyRsvpFacts {
+export function partyFacts(all: Awaited<ReturnType<typeof rsvpFactsTx>>, partyId: string): PartyRsvpFacts {
   const mine = all.guestRows.filter((g) => g.partyId === partyId);
   const ids = new Set(mine.map((g) => g.id));
   const invited = new Map<string, Set<string>>();
@@ -259,4 +255,3 @@ export async function rsvpByContactTx(
   }
   return out;
 }
-
