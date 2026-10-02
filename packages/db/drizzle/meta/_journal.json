@@ -670,8 +670,15 @@
     {
       "idx": 95,
       "version": "7",
-      "when": 1790954679633,
-      "tag": "0095_salty_multiple_man",
+      "when": 1790954632770,
+      "tag": "0095_alert_signals",
+      "breakpoints": true
+    },
+    {
+      "idx": 96,
+      "version": "7",
+      "when": 1790959492078,
+      "tag": "0096_spotty_goliath",
       "breakpoints": true
     }
   ]

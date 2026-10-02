@@ -22,7 +22,7 @@ claimed through functions M5.2b will call.
 - **Legacy evidence:** none (Eventmie Pro has no agenda).
 
 ### 3. Scope (built)
-**Model** (module `program`, tier 3, schema `program`; migration `0076_shallow_midnight.sql`, renumbered at merge):
+**Model** (module `program`, tier 3, schema `program`; migration `0091_shallow_midnight.sql`, 0076 on the branch, renumbered at merge):
 - `session_types`: per event, org-editable names (unique per event, case-insensitive), ordered. "Add the standard types" creates keynote, talk, workshop, panel and break **in the organizer's language** and skips names that exist. Deleting a type keeps its sessions.
 - `session_details`: one row per session, created by the trigger `program.sync_session_details` on insert (and kept in step on `capacity` updates; existing sessions backfilled). Columns: type, `admission` (`included` default | `optional`, P5-9), pick-one group, `enrollment_open`, the CSV `import_key` (unique per event) and the **capacity counter** (`capacity` mirrors `sessions.capacity`, `enrolled` with `CHECK (enrolled >= 0 and (capacity is null or enrolled <= capacity))`, ticketing's inventory pattern). A CHECK keeps grouped sessions optional.
 - `session_groups` ("pick one"): a group of optional sessions in overlapping slots of which a registrant may hold at most one.
@@ -95,7 +95,7 @@ promote a line by hand. Viewers read; nobody else sees anything.
 - **Legacy evidence:** none (Eventmie Pro has no session enrollment).
 
 ### 3. Scope (built)
-**Model** (module `registration`, tier 5; migration `0095_salty_multiple_man.sql`, renumbered at merge):
+**Model** (module `registration`, tier 5; migration `0096_spotty_goliath.sql`, renumbered at merge):
 - `item_sessions` (event, admission item, session): which sessions an item gives. An `admission` item listing nothing gives every session; an `add_on` gives only what it lists.
 - `enrollment_settings` (one per event; no row = `auto`, 240-minute offers): `promotion` `auto | offer`, `offer_minutes` 15–2,880.
 - `session_enrollments` (event, session, registrant = admission ticket, order): `status` `enrolled | waiting | offered | dropped | left | expired | declined | skipped | cancelled`, the line position, offer window and count, who promoted, the skip reason, whether a group pick is held. One live row per registrant and session (partial unique). CHECKs keep offers and skips consistent.

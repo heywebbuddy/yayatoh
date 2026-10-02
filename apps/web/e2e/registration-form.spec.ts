@@ -6,7 +6,7 @@ import { expectAccessible, signIn } from './helpers.ts';
  * member-only page, a workshops page opened by a page-1 answer, a consent question) with buttons
  * and the keyboard; the preview per registration type; job titles; people fill it as two
  * different types, save, resume from the emailed link and submit; Arabic RTL; viewers cannot
- * edit. Until M5.1a, the event's ticket types stand in for registration types.
+ * edit. The registration types are M5.1a's (batch 3e wiring).
  */
 
 const ORG = 'lakeside-events';
@@ -20,7 +20,7 @@ let base = '';
 let slug = '';
 let eventName = '';
 
-/** A published conference next month with three free ticket types (the stand-in types). */
+/** A published conference next month with the standard registration types (M5.1a). */
 async function conference(page: Page, name: string) {
   await page.goto(`/o/${ORG}/events/new`);
   await page.getByLabel('Event name', { exact: true }).fill(name);
@@ -34,13 +34,16 @@ async function conference(page: Page, name: string) {
   const path = new URL(page.url()).pathname;
   await page.getByRole('button', { name: 'Publish' }).click();
   await expect(page.getByText('Published ·')).toBeVisible();
-  await page.goto(`${path}/tickets-orders`);
+  // Batch 3e: M5.1a's registration types (the standard ones), three of them with a free pass so
+  // the public can start the form as them.
+  await page.goto(`${path}/registration`);
+  await page.getByRole('button', { name: 'Add standard types and items' }).click();
+  await expect(page.getByRole('heading', { name: 'Exhibitor', exact: true })).toBeVisible();
   for (const type of ['Member', 'Student', 'Exhibitor']) {
-    await page.getByLabel('Name', { exact: true }).fill(type);
-    await page.getByLabel('Price (USD)').fill('0');
-    await page.getByLabel('Quantity available').fill('50');
-    await page.getByRole('button', { name: 'Add ticket type' }).click();
-    await expect(page.getByRole('row').filter({ hasText: type })).toBeVisible();
+    const field = page.getByLabel(`Price for ${type} · Full pass (USD)`);
+    await field.fill('0');
+    await field.press('Enter');
+    await expect(page.getByRole('button', { name: `Save price — ${type} · Full pass` })).toBeVisible();
   }
   return path;
 }
