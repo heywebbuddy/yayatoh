@@ -65,8 +65,8 @@ describe('refunding by tickets', () => {
   ];
 
   it('pays an ordinary ticket each, and a table once when all its live seats are chosen', () => {
-    expect(refundUnits([live[2], live[3]] as typeof live, live).map((t) => t.id)).toEqual(['g1', 'g2']);
-    expect(refundUnits([live[0], live[1], live[2]] as typeof live, live).map((t) => t.id)).toEqual([
+    expect(refundUnits([live[2], live[3]] as typeof live, live)?.map((t) => t.id)).toEqual(['g1', 'g2']);
+    expect(refundUnits([live[0], live[1], live[2]] as typeof live, live)?.map((t) => t.id)).toEqual([
       't1',
       'g1',
     ]);
@@ -75,6 +75,6 @@ describe('refunding by tickets', () => {
   it('refuses part of a table', () => {
     expect(refundUnits([live[0]] as typeof live, live)).toBeNull();
     // Seats already refunded are not live: the rest of the table is the whole of it.
-    expect(refundUnits([live[1]] as typeof live, live.slice(1)).map((t) => t.id)).toEqual(['t2']);
+    expect(refundUnits([live[1]] as typeof live, live.slice(1))?.map((t) => t.id)).toEqual(['t2']);
   });
 });
