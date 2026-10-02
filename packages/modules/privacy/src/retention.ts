@@ -1,7 +1,7 @@
 import { redactAttendeesForEventsTx } from '@yayatoh/attendees';
 import { purgeScansBeforeTx } from '@yayatoh/checkin';
 import { eventIdsEndedBeforeTx } from '@yayatoh/events';
-import { eraseResponsesDsarTx } from '@yayatoh/forms';
+import { eraseResponsesDsarTx, purgeExpiredDraftsTx } from '@yayatoh/forms';
 import { redactAbandonedOrdersTx } from '@yayatoh/orders';
 import {
   clearFinishedBulkParamsTx,
@@ -47,6 +47,8 @@ export const RetentionResult = z.object({
   scans: z.int(),
   attendees: z.int(),
   ticketHolders: z.int(),
+  /** Registration form drafts past their expiry, never submitted (M5.1b: 14 days after the last save). */
+  registrationDrafts: z.int(),
 });
 export type RetentionResult = z.infer<typeof RetentionResult>;
 
@@ -79,6 +81,7 @@ export const retentionCommand = tenantCommand({
       scans: await purgeScansBeforeTx(tx, ago(RETENTION.scanLogDays)),
       attendees: await redactAttendeesForEventsTx(tx, pastEvents, now),
       ticketHolders: await redactHoldersForEventsTx(tx, pastEvents, now),
+      registrationDrafts: await purgeExpiredDraftsTx(tx, now),
     };
   },
   audit: (_input, r) => ({

@@ -15,6 +15,7 @@ export const privateColumns = columnPrivacy('alerts', {
     params: internal(),
   },
   alert_history: { action: 'vocab', state: 'vocab' },
+  signals: { kind: 'vocab' },
   routing: { role: 'vocab', category: 'vocab', channels: 'vocab' },
   // A member's own mobile number for alert texts: never shown to anyone else or on public output.
   member_settings: { sms_phone: personal('phone') },

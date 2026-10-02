@@ -206,6 +206,11 @@ export const disputes = tenantTable(
     evidenceSummary: text('evidence_summary'),
     /** M1.6e: packet sections the reviewer left out (e.g. `messages`). */
     evidenceExcluded: text('evidence_excluded').array().notNull().default(sql`'{}'::text[]`),
+    /**
+     * M3.10c: the deadline alerts already raised (0 none, 1 three days before, 2 one day before),
+     * so each is raised once.
+     */
+    deadlineAlertLevel: integer('deadline_alert_level').notNull().default(0),
   },
   (t) => [
     uniqueIndex('disputes_org_provider_key').on(t.orgId, t.provider, t.providerDisputeId),
@@ -215,6 +220,7 @@ export const disputes = tenantTable(
       sql.raw(`status in (${DISPUTE_STATUSES.map((s) => `'${s}'`).join(', ')})`),
     ),
     check('disputes_amount_check', sql`amount_minor > 0`),
+    check('disputes_deadline_alert_check', sql`deadline_alert_level between 0 and 2`),
   ],
 );
 

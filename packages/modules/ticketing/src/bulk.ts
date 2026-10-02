@@ -151,6 +151,8 @@ export function ticketResendMailer(deps: { notifier: Notifier; appOrigin: string
             code: t.shortCode,
           },
           dedupeKey: `ticket-resend:${p.operationId}:${t.id}`,
+          // M3.10c: on the order's message log and timeline (support resends from an order).
+          orderId: t.orderId,
           eventId: p.eventId,
         });
       }

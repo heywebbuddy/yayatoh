@@ -1,3 +1,4 @@
+export { type CreditNotePdfInput, creditNoteHtml } from './credit-note.ts';
 export { disputeEvidenceHtml, type EvidencePdfInput, type EvidenceSection } from './evidence.ts';
 export { escapeHtml, html, SafeHtml } from './html.ts';
 export { qrPath } from './qr.ts';

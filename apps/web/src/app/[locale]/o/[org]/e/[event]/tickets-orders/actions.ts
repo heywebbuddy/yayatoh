@@ -18,9 +18,11 @@ import {
   createPromoCodeCommand,
   createTicketTypeCommand,
   setPromoCodeActiveCommand,
+  updateTicketTypeCommand,
 } from '@yayatoh/ticketing';
 import { refresh, revalidatePath } from 'next/cache';
 import { getTranslations } from 'next-intl/server';
+import type { SupportState } from '@/components/support-tools.tsx';
 import type { FormState } from '@/lib/form-state.ts';
 import { loadEvent } from '@/server/console.ts';
 import { failure, success } from '@/server/form.ts';
@@ -351,5 +353,41 @@ export async function setCheckoutVerificationAction(
     return failure(err);
   }
   revalidatePath(`/o/${org}/e/${event}`, 'layout');
+  return success();
+}
+
+/** M3.10c: a ticket type's transfer rules (allowed, hours before the start, fee). */
+export async function transferRulesAction(
+  org: string,
+  event: string,
+  ticketTypeId: string,
+  _prev: SupportState,
+  form: FormData,
+): Promise<SupportState> {
+  const { data, event: ev } = await loadEvent(org, event, 'ticketsOrders');
+  const cutoff = String(form.get('cutoffHours') ?? '').trim();
+  const fee = String(form.get('fee') ?? '')
+    .trim()
+    .replace(',', '.');
+  if (cutoff && !/^\d{1,4}$/.test(cutoff))
+    return { ok: false, code: 'validation_failed', fields: ['transferCutoffHours'] };
+  if (fee && !/^\d+(\.\d{1,3})?$/.test(fee))
+    return { ok: false, code: 'validation_failed', fields: ['transferFeeMinor'] };
+  try {
+    await executeCommand(
+      updateTicketTypeCommand,
+      {
+        ticketTypeId,
+        transfersAllowed: form.get('allowed') === 'yes',
+        transferCutoffHours: cutoff ? Number(cutoff) : null,
+        transferFeeMinor: fee ? moneyFromDecimal(fee, ev.currency).amount : 0,
+      },
+      data.ctx,
+      ports,
+    );
+  } catch (err) {
+    return failure(err);
+  }
+  revalidatePath(`/o/${org}/e/${event}/tickets-orders`);
   return success();
 }

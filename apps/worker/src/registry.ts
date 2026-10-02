@@ -1,6 +1,7 @@
 import { alertEvaluator } from '@yayatoh/alerts';
 import { attendeeMessageMailer } from '@yayatoh/attendees';
 import { participationProjector } from '@yayatoh/audiences';
+import { journeySubscribers } from '@yayatoh/automations';
 import {
   chatReportSignals,
   checkoutRiskSignals,
@@ -9,35 +10,44 @@ import {
   staffAlertsSubscriber,
 } from '@yayatoh/checkin';
 import { deviceBoardPublisher, publishMetricsChangedTx } from '@yayatoh/command-center';
-import { findEventTx } from '@yayatoh/events';
+import { findEventTx, portalInviteMailer } from '@yayatoh/events';
+import { registrationResumeMailer } from '@yayatoh/forms';
 import { listingsProjector } from '@yayatoh/marketplace';
-import { programMediaCleaner } from '@yayatoh/media';
+import { programMediaCleaner, speakerPhotoApprover } from '@yayatoh/media';
 import { announcementMailer, contactWroteNotifier, threadReplyMailer } from '@yayatoh/messaging';
 import { createNotifier } from '@yayatoh/notifications';
 import {
+  creditNoteMailer,
   orderLinkMailer,
   postponementMailer,
   refundDeclineMailer,
   refundMailer,
   refundRequestNotifier,
   reminderRescheduler,
+  supportReplyMailer,
   ticketMailer,
   waitlistMailer,
 } from '@yayatoh/orders';
 import { payoutDestinationMailer } from '@yayatoh/payments';
 import { type Subscriber, signLinkToken } from '@yayatoh/platform';
+import { portalSpeakerCleanup, taskReminderMailer } from '@yayatoh/program';
+import { registrationCapacity } from '@yayatoh/registration';
 import { analyticsForwarder, metricsProjector, postgresAnalyticsSink } from '@yayatoh/reports';
 import { finderCodeMailer, releaseCancelledSeats } from '@yayatoh/seating';
 import { surveyMailer } from '@yayatoh/surveys';
 import { impersonationNotice, invitationMailer, orgStatusNotice } from '@yayatoh/tenancy';
 import {
   claimLinkMailer,
+  fakeWalletPassProvider,
   holderLinkMailer,
   ticketCancelledMailer,
   ticketResendMailer,
+  transferMailer,
+  walletPassSync,
 } from '@yayatoh/ticketing';
 import { z } from 'zod';
 import { defineJob } from './jobs.ts';
+import { journeyJob } from './journeys.ts';
 
 export const heartbeat = defineJob({
   name: 'platform.heartbeat',
@@ -47,7 +57,7 @@ export const heartbeat = defineJob({
 });
 
 /** Composition root for jobs and event subscribers. Modules register theirs here as they land. */
-export const JOBS = [heartbeat] as const;
+export const JOBS = [heartbeat, journeyJob()] as const;
 export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] {
   const secret = env.APP_TOKEN_SECRET;
   const appOrigin = env.NEXT_PUBLIC_APP_ORIGIN;
@@ -68,6 +78,14 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     holderLinkMailer({ notifier, appOrigin }),
     ticketResendMailer({ notifier, appOrigin }),
     ticketCancelledMailer({ notifier }),
+    // M3.10c support tools: transfers (claim link, then both sides), wallet passes (fake provider
+    // until the owner's Apple/Google accounts), credit notes, macro replies, dispute deadlines.
+    transferMailer({ notifier, appOrigin }),
+    walletPassSync({ provider: fakeWalletPassProvider() }),
+    creditNoteMailer({ notifier, appOrigin }),
+    supportReplyMailer({ notifier, appOrigin }),
+    // Dispute evidence deadlines reach finance through the alert engine (batch 3e: the
+    // `disputeDeadline` rule), not a second notification.
     attendeeMessageMailer({ notifier, event: findEventTx }),
     announcementMailer({ notifier, appOrigin }),
     threadReplyMailer({ notifier, appOrigin }),
@@ -85,8 +103,22 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     // (M3.2b) replaces `derivedStaffAlerts` here and in apps/web/src/server/scan-staff.ts.
     staffAlertsSubscriber(derivedStaffAlerts),
     programMediaCleaner(),
+    // M5.3a speaker portal: invitations, task reminders, approved photos.
+    portalInviteMailer({ notifier, appOrigin }),
+    taskReminderMailer({ notifier, appOrigin }),
+    speakerPhotoApprover(),
+    portalSpeakerCleanup(),
     surveyMailer({ notifier, appOrigin }),
+    registrationResumeMailer({
+      notifier,
+      appOrigin,
+      eventName: async (tx, id) => (await findEventTx(tx, id))?.name ?? null,
+    }),
     waitlistMailer({ notifier, appOrigin }),
+    // M3.7a: journeys enroll on purchase and check-in, follow date changes and cancellations.
+    ...journeySubscribers(),
+    // M5.1a: per-type capacity follows orders (paid, expired, refunded, cancelled) and offers freed places.
+    registrationCapacity(),
     // M3.6a: contact × event participation and contact profiles for audiences.
     participationProjector(),
     listingsProjector({ onChange: (orgId) => revalidatePublicCache(appOrigin, orgId, secret) }),

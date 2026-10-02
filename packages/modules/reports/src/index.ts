@@ -40,6 +40,12 @@ export {
   packetWithinLimits,
 } from './dispute-evidence.ts';
 export {
+  DISPUTE_QUEUE_TABS,
+  DisputeQueueDto,
+  DisputeQueueItemDto,
+  disputeQueueQuery,
+} from './dispute-queue.ts';
+export {
   BUCKETS,
   type Bucket,
   bucketEnd,

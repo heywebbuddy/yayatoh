@@ -18,6 +18,7 @@ export function SessionRow({
   time,
   day,
   images = {},
+  optionalLabel,
 }: {
   s: PublicSessionDto;
   slug: string;
@@ -25,7 +26,10 @@ export function SessionRow({
   /** Shown before the times when the list mixes days (the speaker page). */
   day?: string;
   images?: ProgramImages;
+  /** M5.2a: shown for optional sessions ("Optional"); the session type's name is shown as is. */
+  optionalLabel?: string;
 }) {
+  const kind = [s.type, s.admission === 'optional' ? optionalLabel : undefined].filter(Boolean);
   return (
     <li className="flex flex-col gap-1 px-5 py-4 sm:flex-row sm:gap-6">
       <span className="w-32 shrink-0 font-mono text-caption text-zinc-600">
@@ -34,6 +38,9 @@ export function SessionRow({
       </span>
       <span className="flex min-w-0 flex-1 flex-col gap-1">
         <span className="font-medium">{s.title}</span>
+        {kind.length > 0 ? (
+          <span className="font-mono text-label uppercase text-zinc-500">{kind.join(' · ')}</span>
+        ) : null}
         {s.speakers.length > 0 ? (
           <span className="flex flex-wrap gap-x-2 text-caption">
             {s.speakers.map((p) => (
@@ -77,14 +84,18 @@ export async function ProgramSections({
   locale,
   timeZone,
   images = {},
+  exhibitorMap = false,
 }: {
   program: PublicProgramDto;
   slug: string;
   locale: string;
   timeZone: string;
   images?: ProgramImages;
+  /** M5.4a: the event has booths, so the exhibitor map page exists. */
+  exhibitorMap?: boolean;
 }) {
   const t = await getTranslations('publicEvent');
+  const ta = await getTranslations('agenda');
   const time = new Intl.DateTimeFormat(locale, { timeZone, hour: 'numeric', minute: '2-digit' });
   const dayLabel = new Intl.DateTimeFormat(locale, {
     timeZone: 'UTC',
@@ -114,7 +125,14 @@ export async function ProgramSections({
               </h3>
               <ol className="list-none divide-y divide-zinc-100 rounded-card border border-zinc-200 p-0">
                 {d.items.map((s) => (
-                  <SessionRow key={s.id} s={s} slug={slug} time={time} images={images} />
+                  <SessionRow
+                    key={s.id}
+                    s={s}
+                    slug={slug}
+                    time={time}
+                    images={images}
+                    optionalLabel={ta('optional')}
+                  />
                 ))}
               </ol>
             </section>
@@ -170,6 +188,14 @@ export async function ProgramSections({
           <h2 id="exhibitors-heading" className={h2}>
             {t('exhibitors')}
           </h2>
+          {exhibitorMap ? (
+            <Link
+              href={`/events/${slug}/exhibitors`}
+              className="inline-flex min-h-6 items-center self-start text-body underline underline-offset-2"
+            >
+              {t('exhibitorMap')}
+            </Link>
+          ) : null}
           <ul className="grid list-none grid-cols-1 gap-3 p-0 sm:grid-cols-2 xl:grid-cols-3">
             {program.exhibitors.map((x) => (
               <li key={x.id} className="flex flex-col gap-1 rounded-card border border-zinc-200 p-4">

@@ -83,22 +83,27 @@ const invalid = (field: string, reason: string) =>
 
 /* ------------------------------------------------------------------------------- sealing ---- */
 
-/** The sealed part of a guest (P4-3): never stored or logged in plaintext. */
+/**
+ * The sealed part of a guest (P4-3): never stored or logged in plaintext. Email and phone arrive
+ * with an import (M4.1b) and are kept when the host edits the other answers.
+ */
 interface Sealed {
   dietary: string | null;
   accessibility: string | null;
   address: string | null;
+  email?: string | null;
+  phone?: string | null;
 }
-const SEALED_KEYS = ['dietary', 'accessibility', 'address'] as const;
+const SEALED_KEYS = ['dietary', 'accessibility', 'address', 'email', 'phone'] as const;
 
-async function seal(orgId: string, s: Sealed): Promise<string | null> {
+export async function seal(orgId: string, s: Sealed): Promise<string | null> {
   const present = Object.fromEntries(SEALED_KEYS.filter((k) => s[k]).map((k) => [k, s[k]]));
   if (Object.keys(present).length === 0) return null;
   return keyVault().encrypt(orgId, new TextEncoder().encode(JSON.stringify(present)));
 }
 
 async function unseal(orgId: string, ciphertext: string | null): Promise<Sealed> {
-  const out: Sealed = { dietary: null, accessibility: null, address: null };
+  const out: Sealed = { dietary: null, accessibility: null, address: null, email: null, phone: null };
   if (!ciphertext) return out;
   const raw = JSON.parse(new TextDecoder().decode(await keyVault().decrypt(orgId, ciphertext))) as Record<
     string,
@@ -484,7 +489,7 @@ export const updatePartyGuestCommand = tenantCommand({
         ...link,
         isPrimary,
         ...(sealedChanged
-          ? { privateCiphertext: await seal(orgId, { dietary, accessibility, address }) }
+          ? { privateCiphertext: await seal(orgId, { ...sealedBefore, dietary, accessibility, address }) }
           : {}),
         updatedAt: ctx.now,
       })

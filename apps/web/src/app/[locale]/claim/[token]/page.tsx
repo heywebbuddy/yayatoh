@@ -37,8 +37,19 @@ export default async function ClaimPage({ params }: { params: Promise<{ locale: 
       />
       {details.state === 'open' ? (
         <Card size="panel" className="flex flex-col gap-4">
-          <p className="text-body">{t('claim.intro')}</p>
-          <ClaimForm action={claimAction.bind(null, decodeURIComponent(token))} />
+          <p className="text-body">
+            {details.transfer
+              ? t('supportTools.claim.intro', {
+                  from: details.transfer.fromName,
+                  to: details.transfer.toName,
+                })
+              : t('claim.intro')}
+          </p>
+          <ClaimForm
+            action={claimAction.bind(null, decodeURIComponent(token))}
+            defaultName={details.transfer?.toName}
+            transfer={Boolean(details.transfer)}
+          />
         </Card>
       ) : (
         <EmptyState title={t(`claim.state.${details.state}`)} description={t('claim.stateHint')} />

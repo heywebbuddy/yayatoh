@@ -2,7 +2,10 @@ import { privateColumns as ai } from '@yayatoh/ai';
 import { privateColumns as alerts } from '@yayatoh/alerts';
 import { privateColumns as attendees } from '@yayatoh/attendees';
 import { privateColumns as audiences } from '@yayatoh/audiences';
+import { privateColumns as automations } from '@yayatoh/automations';
+import { privateColumns as badges } from '@yayatoh/badges';
 import { privateColumns as billing } from '@yayatoh/billing';
+import { privateColumns as campaigns } from '@yayatoh/campaigns';
 import { privateColumns as checkin } from '@yayatoh/checkin';
 import { privateColumns as cms } from '@yayatoh/cms';
 import { privateColumns as commandCenter } from '@yayatoh/command-center';
@@ -21,6 +24,7 @@ import { privateColumns as payments } from '@yayatoh/payments';
 import { privateColumns as platform } from '@yayatoh/platform';
 import { privateColumns as privacy } from '@yayatoh/privacy';
 import { privateColumns as program } from '@yayatoh/program';
+import { privateColumns as registration } from '@yayatoh/registration';
 import { privateColumns as reports } from '@yayatoh/reports';
 import { privateColumns as reviews } from '@yayatoh/reviews';
 import { privateColumns as seating } from '@yayatoh/seating';
@@ -40,7 +44,10 @@ export const COLUMN_PRIVACY: readonly SchemaPrivacy[] = [
   alerts,
   attendees,
   audiences,
+  automations,
+  badges,
   billing,
+  campaigns,
   checkin,
   cms,
   commandCenter,
@@ -58,6 +65,7 @@ export const COLUMN_PRIVACY: readonly SchemaPrivacy[] = [
   platform,
   privacy,
   program,
+  registration,
   reports,
   reviews,
   seating,

@@ -1,6 +1,6 @@
 import { listOccurrencesQuery } from '@yayatoh/events';
 import { getFormQuery, listResponsesQuery } from '@yayatoh/forms';
-import { executeQuery, formatMoney, money } from '@yayatoh/kernel';
+import { currencyExponent, executeQuery, formatMoney, money } from '@yayatoh/kernel';
 import { checkoutSettingsQuery, listOrdersQuery, refundPolicyQuery } from '@yayatoh/orders';
 import { dateChartsQuery, publicSeatMap } from '@yayatoh/seating';
 import { listPromoCodesQuery, listTicketTypesQuery } from '@yayatoh/ticketing';
@@ -11,6 +11,7 @@ import { CheckoutVerificationForm } from '@/components/checkout-verification-for
 import { PromoCodeForm } from '@/components/promo-code-form.tsx';
 import { QuestionForm } from '@/components/question-form.tsx';
 import { RefundPolicyForm } from '@/components/refund-policy-form.tsx';
+import { TransferRulesForm } from '@/components/support-tools.tsx';
 import { TicketTypeForm } from '@/components/ticket-type-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatNumber } from '@/lib/format.ts';
@@ -30,6 +31,7 @@ import {
   setCheckoutVerificationAction,
   setPromoCodeActiveAction,
   setRefundPolicyAction,
+  transferRulesAction,
 } from './actions.ts';
 
 export default async function TicketsPage({
@@ -44,6 +46,7 @@ export default async function TicketsPage({
   setRequestLocale(locale);
   const { data, event: ev, can } = await loadEvent(org, event, 'ticketsOrders');
   const t = await getTranslations();
+  const tr = await getTranslations('supportTools');
   const types = await executeQuery(listTicketTypesQuery, { eventId: ev.id }, data.ctx, ports);
   // Multi-date events (M1.4b): ticket types may be limited to dates; the box office sells one date.
   const dates = await executeQuery(listOccurrencesQuery, { eventId: ev.id }, data.ctx, ports);
@@ -204,6 +207,24 @@ export default async function TicketsPage({
               align: 'end',
             },
             {
+              key: 'transfers',
+              header: tr('rules.column'),
+              cell: (r) =>
+                r.transfersAllowed
+                  ? [
+                      tr('rules.summaryAllowed'),
+                      r.transferCutoffHours
+                        ? tr('rules.summaryCutoff', { hours: r.transferCutoffHours })
+                        : null,
+                      r.transferFeeMinor > 0
+                        ? tr('rules.summaryFee', { fee: fmt(r.transferFeeMinor) })
+                        : null,
+                    ]
+                      .filter(Boolean)
+                      .join(' · ')
+                  : tr('rules.summaryOff'),
+            },
+            {
               key: 'status',
               header: t('tickets.status'),
               cell: (r) =>
@@ -237,6 +258,39 @@ export default async function TicketsPage({
           ]}
         />
       )}
+      {canWrite && types.length > 0 ? (
+        <section aria-labelledby="transfer-rules-heading" className="flex flex-col gap-3">
+          <h2 id="transfer-rules-heading" className="text-section">
+            {tr('rules.title')}
+          </h2>
+          <p className="text-body text-zinc-600">{tr('rules.description')}</p>
+          <ul className="flex list-none flex-col gap-3 p-0">
+            {types.map((r) => (
+              <li key={r.id}>
+                <Card className="flex flex-col gap-2">
+                  <p className="text-body font-medium">{r.name}</p>
+                  <TransferRulesForm
+                    action={transferRulesAction.bind(null, org, event, r.id)}
+                    idPrefix={`rules-${r.id}`}
+                    name={r.name}
+                    currency={ev.currency}
+                    rules={{
+                      allowed: r.transfersAllowed,
+                      cutoffHours: r.transferCutoffHours,
+                      fee:
+                        r.transferFeeMinor > 0
+                          ? (r.transferFeeMinor / 10 ** currencyExponent(ev.currency)).toFixed(
+                              currencyExponent(ev.currency),
+                            )
+                          : '',
+                    }}
+                  />
+                </Card>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
       {canSell ? (
         <section aria-labelledby="box-office-heading" className="flex flex-col gap-3">
           <h2 id="box-office-heading" className="text-section">
@@ -269,7 +323,13 @@ export default async function TicketsPage({
             <BoxOfficeForm
               action={boxOfficeSaleAction.bind(null, org, event)}
               passes={types
-                .filter((tt) => tt.quantitySold + tt.quantityHeld < tt.quantityTotal && !tt.isDonation)
+                // M5.1a: registration passes are sold only through registration.
+                .filter(
+                  (tt) =>
+                    tt.quantitySold + tt.quantityHeld < tt.quantityTotal &&
+                    !tt.isDonation &&
+                    tt.managedBy === null,
+                )
                 .map((tt) => ({
                   id: tt.id,
                   label: `${tt.name} · ${fmt(tt.allInMinor)}`,

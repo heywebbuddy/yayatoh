@@ -1,5 +1,6 @@
 import { billingEntitlements } from '@yayatoh/billing';
 import { withPlatformReader } from '@yayatoh/db/platform';
+import { purgeGuestImportsCommand } from '@yayatoh/guests';
 import { createCtx, executeCommand } from '@yayatoh/kernel';
 import { createCommandPorts, purgeRateLimits } from '@yayatoh/platform';
 import { type RetentionResult, retentionCommand } from '@yayatoh/privacy';
@@ -47,6 +48,8 @@ export async function runRetention(opts: { onlyOrgs?: readonly string[] } = {}):
       for (const [k, v] of Object.entries(r)) totals[k] = (totals[k] ?? 0) + v;
       // Metrics projector lag samples (M3.1): 7 days.
       await purgeProjectorLag(org_id, new Date(Date.now() - LAG_RETENTION_MS));
+      // Guest-list imports (M4.1b): sealed staged rows are purged 72 hours after staging.
+      await executeCommand(purgeGuestImportsCommand, {}, ctx, ports);
     } catch (err) {
       failed++;
       console.error(JSON.stringify({ job: 'retention', org: org_id, error: String(err) }));

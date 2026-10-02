@@ -31,4 +31,30 @@ export const privateColumns = columnPrivacy('guests', {
     fields: 'vocab',
     detail: internal(),
   },
+  // M4.1b: staged imports. Header and cells are sealed (they hold dietary, accessibility and
+  // address columns, P4-3); the file and sheet names are the host's.
+  import_batches: {
+    source: 'vocab',
+    file_name: internal(),
+    sheet: internal(),
+    sheets: internal(),
+    headers_ciphertext: personal('sealed-json'),
+    mapping: internal(),
+    status: 'vocab',
+  },
+  import_rows: {
+    cells_ciphertext: personal('sealed-json'),
+    error_code: 'vocab',
+  },
+  // M4.1c: sub-events and invitations.
+  sub_events: {
+    // "Ceremony", "Reception": the host's program, shown to invited guests (M4.5a), never public.
+    name: internal(),
+    kind: 'vocab',
+    place: internal(),
+  },
+  sub_event_responses: {
+    status: 'vocab',
+    source: 'vocab',
+  },
 });

@@ -689,6 +689,474 @@ Please use Lot C on Harbor Street.
 }
 `;
 
+exports[`renderMessage: every kind in all 13 locales > automations.message · ar 1`] = `
+{
+  "subject": "One week to go",
+  "text": "One week to go
+
+مرحبًا Amina Diallo،
+
+بخصوص Lakeside Jazz Night:
+
+Lakeside Jazz Night is next Friday. Doors open at 7 pm.
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+تصلك رسالة التذكير هذه لأن لديك تذاكر من Lakeside Events.
+إلغاء الاشتراك: https://app.yayatoh.test/unsubscribe/sample
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > automations.message · de 1`] = `
+{
+  "subject": "One week to go",
+  "text": "One week to go
+
+Hallo Amina Diallo,
+
+Zu Lakeside Jazz Night:
+
+Lakeside Jazz Night is next Friday. Doors open at 7 pm.
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Du erhältst diese Erinnerung, weil du Tickets von Lakeside Events hast.
+Abmelden: https://app.yayatoh.test/unsubscribe/sample
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > automations.message · en 1`] = `
+{
+  "subject": "One week to go",
+  "text": "One week to go
+
+Hi Amina Diallo,
+
+About Lakeside Jazz Night:
+
+Lakeside Jazz Night is next Friday. Doors open at 7 pm.
+
+--
+Sent by Lakeside Events with Yayatoh.
+You're getting this reminder because you have tickets from Lakeside Events.
+Unsubscribe: https://app.yayatoh.test/unsubscribe/sample
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > automations.message · es 1`] = `
+{
+  "subject": "One week to go",
+  "text": "One week to go
+
+Hola, Amina Diallo:
+
+Sobre Lakeside Jazz Night:
+
+Lakeside Jazz Night is next Friday. Doors open at 7 pm.
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Recibes este recordatorio porque tienes entradas de Lakeside Events.
+Cancelar suscripción: https://app.yayatoh.test/unsubscribe/sample
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > automations.message · fr 1`] = `
+{
+  "subject": "One week to go",
+  "text": "One week to go
+
+Bonjour Amina Diallo,
+
+À propos de Lakeside Jazz Night :
+
+Lakeside Jazz Night is next Friday. Doors open at 7 pm.
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Vous recevez ce rappel car vous avez des billets de Lakeside Events.
+Se désabonner: https://app.yayatoh.test/unsubscribe/sample
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > automations.message · hi 1`] = `
+{
+  "subject": "One week to go",
+  "text": "One week to go
+
+नमस्ते Amina Diallo,
+
+Lakeside Jazz Night के बारे में:
+
+Lakeside Jazz Night is next Friday. Doors open at 7 pm.
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+आपको यह रिमाइंडर इसलिए मिला क्योंकि आपके पास Lakeside Events के टिकट हैं।
+सदस्यता छोड़ें: https://app.yayatoh.test/unsubscribe/sample
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > automations.message · it 1`] = `
+{
+  "subject": "One week to go",
+  "text": "One week to go
+
+Ciao Amina Diallo,
+
+A proposito di Lakeside Jazz Night:
+
+Lakeside Jazz Night is next Friday. Doors open at 7 pm.
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Ricevi questo promemoria perché hai biglietti di Lakeside Events.
+Annulla iscrizione: https://app.yayatoh.test/unsubscribe/sample
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > automations.message · ja 1`] = `
+{
+  "subject": "One week to go",
+  "text": "One week to go
+
+Amina Diallo 様
+
+Lakeside Jazz Night について:
+
+Lakeside Jazz Night is next Friday. Doors open at 7 pm.
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Lakeside Events のチケットをお持ちのため、このリマインダーをお送りしています。
+配信停止: https://app.yayatoh.test/unsubscribe/sample
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > automations.message · nl 1`] = `
+{
+  "subject": "One week to go",
+  "text": "One week to go
+
+Hoi Amina Diallo,
+
+Over Lakeside Jazz Night:
+
+Lakeside Jazz Night is next Friday. Doors open at 7 pm.
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Je krijgt deze herinnering omdat je tickets van Lakeside Events hebt.
+Afmelden: https://app.yayatoh.test/unsubscribe/sample
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > automations.message · pt 1`] = `
+{
+  "subject": "One week to go",
+  "text": "One week to go
+
+Olá, Amina Diallo!
+
+Sobre Lakeside Jazz Night:
+
+Lakeside Jazz Night is next Friday. Doors open at 7 pm.
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Você recebe este lembrete porque tem ingressos de Lakeside Events.
+Cancelar inscrição: https://app.yayatoh.test/unsubscribe/sample
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > automations.message · ru 1`] = `
+{
+  "subject": "One week to go",
+  "text": "One week to go
+
+Здравствуйте, Amina Diallo!
+
+О событии Lakeside Jazz Night:
+
+Lakeside Jazz Night is next Friday. Doors open at 7 pm.
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Вы получили это напоминание, потому что у вас есть билеты от Lakeside Events.
+Отписаться: https://app.yayatoh.test/unsubscribe/sample
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > automations.message · zh-CN 1`] = `
+{
+  "subject": "One week to go",
+  "text": "One week to go
+
+Amina Diallo，您好：
+
+关于 Lakeside Jazz Night：
+
+Lakeside Jazz Night is next Friday. Doors open at 7 pm.
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+您收到此提醒，是因为您持有 Lakeside Events 的门票。
+退订: https://app.yayatoh.test/unsubscribe/sample
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > automations.message · zh-TW 1`] = `
+{
+  "subject": "One week to go",
+  "text": "One week to go
+
+Amina Diallo，您好：
+
+關於 Lakeside Jazz Night：
+
+Lakeside Jazz Night is next Friday. Doors open at 7 pm.
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+您收到此提醒，是因為您持有 Lakeside Events 的票券。
+取消訂閱: https://app.yayatoh.test/unsubscribe/sample
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > campaigns.test · ar 1`] = `
+{
+  "subject": "[تجربة] Early-bird tickets are back",
+  "text": "[تجربة] Early-bird tickets are back
+
+مرحبًا،
+
+إرسال تجريبي لحملتك.
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > campaigns.test · de 1`] = `
+{
+  "subject": "[Test] Early-bird tickets are back",
+  "text": "[Test] Early-bird tickets are back
+
+Hallo,
+
+Ein Testversand deiner Kampagne.
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > campaigns.test · en 1`] = `
+{
+  "subject": "[Test] Early-bird tickets are back",
+  "text": "[Test] Early-bird tickets are back
+
+Hello,
+
+A test send of your campaign.
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > campaigns.test · es 1`] = `
+{
+  "subject": "[Prueba] Early-bird tickets are back",
+  "text": "[Prueba] Early-bird tickets are back
+
+Hola:
+
+Un envío de prueba de tu campaña.
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > campaigns.test · fr 1`] = `
+{
+  "subject": "[Test] Early-bird tickets are back",
+  "text": "[Test] Early-bird tickets are back
+
+Bonjour,
+
+Un envoi de test de votre campagne.
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > campaigns.test · hi 1`] = `
+{
+  "subject": "[परीक्षण] Early-bird tickets are back",
+  "text": "[परीक्षण] Early-bird tickets are back
+
+नमस्ते,
+
+आपके अभियान का परीक्षण भेजना।
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > campaigns.test · it 1`] = `
+{
+  "subject": "[Prova] Early-bird tickets are back",
+  "text": "[Prova] Early-bird tickets are back
+
+Ciao,
+
+Un invio di prova della tua campagna.
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > campaigns.test · ja 1`] = `
+{
+  "subject": "[テスト] Early-bird tickets are back",
+  "text": "[テスト] Early-bird tickets are back
+
+こんにちは。
+
+キャンペーンのテスト送信です。
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > campaigns.test · nl 1`] = `
+{
+  "subject": "[Test] Early-bird tickets are back",
+  "text": "[Test] Early-bird tickets are back
+
+Hallo,
+
+Een testverzending van je campagne.
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > campaigns.test · pt 1`] = `
+{
+  "subject": "[Teste] Early-bird tickets are back",
+  "text": "[Teste] Early-bird tickets are back
+
+Olá!
+
+Um envio de teste da sua campanha.
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > campaigns.test · ru 1`] = `
+{
+  "subject": "[Тест] Early-bird tickets are back",
+  "text": "[Тест] Early-bird tickets are back
+
+Здравствуйте!
+
+Тестовая отправка вашей кампании.
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > campaigns.test · zh-CN 1`] = `
+{
+  "subject": "[测试] Early-bird tickets are back",
+  "text": "[测试] Early-bird tickets are back
+
+您好：
+
+你的营销活动的测试发送。
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > campaigns.test · zh-TW 1`] = `
+{
+  "subject": "[測試] Early-bird tickets are back",
+  "text": "[測試] Early-bird tickets are back
+
+您好：
+
+你的行銷活動的測試寄送。
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
 exports[`renderMessage: every kind in all 13 locales > events.postponed · ar 1`] = `
 {
   "subject": "تأجيل Lakeside Jazz Night",
@@ -1204,6 +1672,240 @@ Amina Diallo，您好：
 由 Lakeside Events 透過 Yayatoh 寄送。
 您收到此提醒，是因為您持有 Lakeside Events 的票券。
 取消訂閱: https://app.yayatoh.test/unsubscribe/sample
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > forms.resume · ar 1`] = `
+{
+  "subject": "أكمل تسجيلك في Midwest Leadership Summit",
+  "text": "أكمل تسجيلك في Midwest Leadership Summit
+
+مرحبًا Amina Diallo،
+
+إليك الرابط لمتابعة تسجيلك في Midwest Leadership Summit من حيث توقفت. يعمل الرابط لمدة 14 يومًا بعد آخر حفظ، ولك وحدك، لذا لا تعِد توجيهه. إذا لم تطلبه، يمكنك تجاهل هذه الرسالة.
+
+متابعة تسجيلي: https://app.yayatoh.test/registration-form/sample
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > forms.resume · de 1`] = `
+{
+  "subject": "Setzen Sie Ihre Anmeldung für Midwest Leadership Summit fort",
+  "text": "Setzen Sie Ihre Anmeldung für Midwest Leadership Summit fort
+
+Hallo Amina Diallo,
+
+Hier ist Ihr Link, um Ihre Anmeldung für Midwest Leadership Summit dort fortzusetzen, wo Sie aufgehört haben. Er gilt 14 Tage nach dem letzten Speichern und nur für Sie; bitte leiten Sie ihn nicht weiter. Wenn Sie ihn nicht angefordert haben, können Sie diese E-Mail ignorieren.
+
+Anmeldung fortsetzen: https://app.yayatoh.test/registration-form/sample
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > forms.resume · en 1`] = `
+{
+  "subject": "Continue your registration for Midwest Leadership Summit",
+  "text": "Continue your registration for Midwest Leadership Summit
+
+Hi Amina Diallo,
+
+Here is your link to pick up your registration for Midwest Leadership Summit where you left off. It works for 14 days after your last save and only for you, so please don't forward it. If you didn't ask for it, you can ignore this email.
+
+Continue my registration: https://app.yayatoh.test/registration-form/sample
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > forms.resume · es 1`] = `
+{
+  "subject": "Continúa tu inscripción a Midwest Leadership Summit",
+  "text": "Continúa tu inscripción a Midwest Leadership Summit
+
+Hola, Amina Diallo:
+
+Este es tu enlace para retomar tu inscripción a Midwest Leadership Summit donde la dejaste. Funciona durante 14 días después de tu último guardado y solo para ti, así que no lo reenvíes. Si no lo pediste, puedes ignorar este correo.
+
+Continuar mi inscripción: https://app.yayatoh.test/registration-form/sample
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > forms.resume · fr 1`] = `
+{
+  "subject": "Poursuivez votre inscription à Midwest Leadership Summit",
+  "text": "Poursuivez votre inscription à Midwest Leadership Summit
+
+Bonjour Amina Diallo,
+
+Voici votre lien pour reprendre votre inscription à Midwest Leadership Summit là où vous l'avez laissée. Il fonctionne pendant 14 jours après votre dernier enregistrement et uniquement pour vous : ne le transférez pas. Si vous ne l'avez pas demandé, vous pouvez ignorer cet e-mail.
+
+Poursuivre mon inscription: https://app.yayatoh.test/registration-form/sample
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > forms.resume · hi 1`] = `
+{
+  "subject": "Midwest Leadership Summit के लिए अपना पंजीकरण जारी रखें",
+  "text": "Midwest Leadership Summit के लिए अपना पंजीकरण जारी रखें
+
+नमस्ते Amina Diallo,
+
+Midwest Leadership Summit के लिए अपना पंजीकरण वहीं से जारी रखने का लिंक यह रहा जहाँ आपने छोड़ा था। यह आपके पिछली बार सहेजने के बाद 14 दिन तक और केवल आपके लिए काम करता है, इसलिए इसे आगे न भेजें। अगर आपने इसके लिए नहीं कहा था, तो इस ईमेल को अनदेखा करें।
+
+मेरा पंजीकरण जारी रखें: https://app.yayatoh.test/registration-form/sample
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > forms.resume · it 1`] = `
+{
+  "subject": "Continua la tua registrazione a Midwest Leadership Summit",
+  "text": "Continua la tua registrazione a Midwest Leadership Summit
+
+Ciao Amina Diallo,
+
+Ecco il tuo link per riprendere la registrazione a Midwest Leadership Summit da dove l'avevi lasciata. Funziona per 14 giorni dall'ultimo salvataggio e solo per te, quindi non inoltrarlo. Se non l'hai richiesto, puoi ignorare questa email.
+
+Continua la registrazione: https://app.yayatoh.test/registration-form/sample
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > forms.resume · ja 1`] = `
+{
+  "subject": "Midwest Leadership Summitの登録を続ける",
+  "text": "Midwest Leadership Summitの登録を続ける
+
+Amina Diallo 様
+
+Midwest Leadership Summitの登録を中断したところから再開するためのリンクです。最後に保存してから14 日間、ご本人のみ使用できますので転送しないでください。心当たりがない場合は、このメールを無視してください。
+
+登録を続ける: https://app.yayatoh.test/registration-form/sample
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > forms.resume · nl 1`] = `
+{
+  "subject": "Ga verder met je registratie voor Midwest Leadership Summit",
+  "text": "Ga verder met je registratie voor Midwest Leadership Summit
+
+Hoi Amina Diallo,
+
+Hier is je link om je registratie voor Midwest Leadership Summit te hervatten waar je gebleven was. Hij werkt 14 dagen na je laatste opslag en alleen voor jou, dus stuur hem niet door. Heb je hier niet om gevraagd, dan kun je deze e-mail negeren.
+
+Verder met mijn registratie: https://app.yayatoh.test/registration-form/sample
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > forms.resume · pt 1`] = `
+{
+  "subject": "Continue sua inscrição em Midwest Leadership Summit",
+  "text": "Continue sua inscrição em Midwest Leadership Summit
+
+Olá, Amina Diallo!
+
+Aqui está o seu link para retomar sua inscrição em Midwest Leadership Summit de onde parou. Ele funciona por 14 dias após o último salvamento e só para você, então não o encaminhe. Se você não pediu este e-mail, pode ignorá-lo.
+
+Continuar minha inscrição: https://app.yayatoh.test/registration-form/sample
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > forms.resume · ru 1`] = `
+{
+  "subject": "Продолжите регистрацию на Midwest Leadership Summit",
+  "text": "Продолжите регистрацию на Midwest Leadership Summit
+
+Здравствуйте, Amina Diallo!
+
+Вот ваша ссылка, чтобы продолжить регистрацию на Midwest Leadership Summit с того места, где вы остановились. Она действует 14 дней после последнего сохранения и только для вас, поэтому не пересылайте её. Если вы её не запрашивали, просто проигнорируйте это письмо.
+
+Продолжить регистрацию: https://app.yayatoh.test/registration-form/sample
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > forms.resume · zh-CN 1`] = `
+{
+  "subject": "继续您的 Midwest Leadership Summit 报名",
+  "text": "继续您的 Midwest Leadership Summit 报名
+
+Amina Diallo，您好：
+
+这是您的链接，可从上次中断的地方继续 Midwest Leadership Summit 的报名。它在您最后一次保存后 14 天 内有效，且仅供您本人使用，请勿转发。如果您没有请求此邮件，可以忽略。
+
+继续我的报名: https://app.yayatoh.test/registration-form/sample
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > forms.resume · zh-TW 1`] = `
+{
+  "subject": "繼續您的 Midwest Leadership Summit 報名",
+  "text": "繼續您的 Midwest Leadership Summit 報名
+
+Amina Diallo，您好：
+
+這是您的連結，可從上次中斷的地方繼續 Midwest Leadership Summit 的報名。它在您最後一次儲存後 14 天 內有效，且僅供您本人使用，請勿轉寄。如果您沒有要求此郵件，可以忽略。
+
+繼續我的報名: https://app.yayatoh.test/registration-form/sample
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
 由 Yayatoh 提供技術支援
 ",
 }
@@ -3328,6 +4030,240 @@ exports[`renderMessage: every kind in all 13 locales > notifications.test · zh-
 }
 `;
 
+exports[`renderMessage: every kind in all 13 locales > orders.credit-note · ar 1`] = `
+{
+  "subject": "إشعار دائن CN-00007 لفعالية Lakeside Jazz Night",
+  "text": "إشعار دائن CN-00007 لفعالية Lakeside Jazz Night
+
+مرحبًا Amina Diallo،
+
+أصدر Lakeside Events إشعارًا دائنًا CN-00007 بقيمة ‏25.00 US$ على طلبك لفعالية Lakeside Jazz Night. استخدم الرمز CR-7KQ4-MX2P عند الدفع لاستعماله في طلب قادم لدى Lakeside Events.
+
+عرض طلبي: https://app.yayatoh.test/orders/sample
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.credit-note · de 1`] = `
+{
+  "subject": "Gutschrift CN-00007 für Lakeside Jazz Night",
+  "text": "Gutschrift CN-00007 für Lakeside Jazz Night
+
+Hallo Amina Diallo,
+
+Lakeside Events hat die Gutschrift CN-00007 über 25,00 $ zu deiner Bestellung für Lakeside Jazz Night ausgestellt. Löse den Code CR-7KQ4-MX2P an der Kasse ein, um ihn bei einer künftigen Bestellung bei Lakeside Events zu nutzen.
+
+Meine Bestellung ansehen: https://app.yayatoh.test/orders/sample
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.credit-note · en 1`] = `
+{
+  "subject": "Credit note CN-00007 for Lakeside Jazz Night",
+  "text": "Credit note CN-00007 for Lakeside Jazz Night
+
+Hi Amina Diallo,
+
+Lakeside Events issued credit note CN-00007 for $25.00 on your order for Lakeside Jazz Night. Use the code CR-7KQ4-MX2P at checkout to spend it on a future order with Lakeside Events.
+
+View my order: https://app.yayatoh.test/orders/sample
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.credit-note · es 1`] = `
+{
+  "subject": "Nota de crédito CN-00007 para Lakeside Jazz Night",
+  "text": "Nota de crédito CN-00007 para Lakeside Jazz Night
+
+Hola, Amina Diallo:
+
+Lakeside Events emitió la nota de crédito CN-00007 por 25,00 US$ en tu pedido para Lakeside Jazz Night. Usa el código CR-7KQ4-MX2P al pagar para gastarla en un próximo pedido con Lakeside Events.
+
+Ver mi pedido: https://app.yayatoh.test/orders/sample
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.credit-note · fr 1`] = `
+{
+  "subject": "Avoir CN-00007 pour Lakeside Jazz Night",
+  "text": "Avoir CN-00007 pour Lakeside Jazz Night
+
+Bonjour Amina Diallo,
+
+Lakeside Events a émis l’avoir CN-00007 de 25,00 $US sur votre commande pour Lakeside Jazz Night. Utilisez le code CR-7KQ4-MX2P au paiement pour l’utiliser lors d’une prochaine commande chez Lakeside Events.
+
+Voir ma commande: https://app.yayatoh.test/orders/sample
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.credit-note · hi 1`] = `
+{
+  "subject": "Lakeside Jazz Night के लिए क्रेडिट नोट CN-00007",
+  "text": "Lakeside Jazz Night के लिए क्रेडिट नोट CN-00007
+
+नमस्ते Amina Diallo,
+
+Lakeside Events ने Lakeside Jazz Night के आपके ऑर्डर पर $25.00 का क्रेडिट नोट CN-00007 जारी किया है। Lakeside Events के साथ अगले ऑर्डर में इसका उपयोग करने के लिए चेकआउट पर कोड CR-7KQ4-MX2P डालें।
+
+मेरा ऑर्डर देखें: https://app.yayatoh.test/orders/sample
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.credit-note · it 1`] = `
+{
+  "subject": "Nota di credito CN-00007 per Lakeside Jazz Night",
+  "text": "Nota di credito CN-00007 per Lakeside Jazz Night
+
+Ciao Amina Diallo,
+
+Lakeside Events ha emesso la nota di credito CN-00007 di 25,00 USD sul tuo ordine per Lakeside Jazz Night. Usa il codice CR-7KQ4-MX2P al pagamento per spenderla in un prossimo ordine con Lakeside Events.
+
+Vedi il mio ordine: https://app.yayatoh.test/orders/sample
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.credit-note · ja 1`] = `
+{
+  "subject": "Lakeside Jazz Night のクレジットノート CN-00007",
+  "text": "Lakeside Jazz Night のクレジットノート CN-00007
+
+Amina Diallo 様
+
+Lakeside Events が Lakeside Jazz Night のご注文に対して $25.00 のクレジットノート CN-00007 を発行しました。Lakeside Events での今後のご注文で、お支払い時にコード CR-7KQ4-MX2P を入力してご利用ください。
+
+注文を見る: https://app.yayatoh.test/orders/sample
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.credit-note · nl 1`] = `
+{
+  "subject": "Creditnota CN-00007 voor Lakeside Jazz Night",
+  "text": "Creditnota CN-00007 voor Lakeside Jazz Night
+
+Hoi Amina Diallo,
+
+Lakeside Events heeft creditnota CN-00007 van US$ 25,00 uitgegeven op je bestelling voor Lakeside Jazz Night. Gebruik de code CR-7KQ4-MX2P bij het afrekenen om hem te besteden aan een volgende bestelling bij Lakeside Events.
+
+Mijn bestelling bekijken: https://app.yayatoh.test/orders/sample
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.credit-note · pt 1`] = `
+{
+  "subject": "Nota de crédito CN-00007 para Lakeside Jazz Night",
+  "text": "Nota de crédito CN-00007 para Lakeside Jazz Night
+
+Olá, Amina Diallo!
+
+Lakeside Events emitiu a nota de crédito CN-00007 de US$ 25,00 no seu pedido para Lakeside Jazz Night. Use o código CR-7KQ4-MX2P no pagamento para usá-la num próximo pedido com Lakeside Events.
+
+Ver meu pedido: https://app.yayatoh.test/orders/sample
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.credit-note · ru 1`] = `
+{
+  "subject": "Кредит-нота CN-00007 для Lakeside Jazz Night",
+  "text": "Кредит-нота CN-00007 для Lakeside Jazz Night
+
+Здравствуйте, Amina Diallo!
+
+Lakeside Events выставил кредит-ноту CN-00007 на 25,00 $ по вашему заказу на Lakeside Jazz Night. Введите код CR-7KQ4-MX2P при оплате, чтобы использовать её в следующем заказе у Lakeside Events.
+
+Посмотреть заказ: https://app.yayatoh.test/orders/sample
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.credit-note · zh-CN 1`] = `
+{
+  "subject": "Lakeside Jazz Night 的贷记单 CN-00007",
+  "text": "Lakeside Jazz Night 的贷记单 CN-00007
+
+Amina Diallo，您好：
+
+Lakeside Events 已为你在 Lakeside Jazz Night 的订单开具金额为 US$25.00 的贷记单 CN-00007。在 Lakeside Events 的下一笔订单结账时输入代码 CR-7KQ4-MX2P 即可使用。
+
+查看我的订单: https://app.yayatoh.test/orders/sample
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.credit-note · zh-TW 1`] = `
+{
+  "subject": "Lakeside Jazz Night 的折讓單 CN-00007",
+  "text": "Lakeside Jazz Night 的折讓單 CN-00007
+
+Amina Diallo，您好：
+
+Lakeside Events 已為你在 Lakeside Jazz Night 的訂單開立金額 US$25.00 的折讓單 CN-00007。在 Lakeside Events 的下一筆訂單結帳時輸入代碼 CR-7KQ4-MX2P 即可使用。
+
+查看我的訂單: https://app.yayatoh.test/orders/sample
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
 exports[`renderMessage: every kind in all 13 locales > orders.order-link · ar 1`] = `
 {
   "subject": "رابطك إلى طلبك لـ Lakeside Jazz Night",
@@ -4246,6 +5182,292 @@ Amina Diallo 申請退還 Lakeside Jazz Night 的2 張票券。請在 5 個工�
 --
 由 Lakeside Events 透過 Yayatoh 寄送。
 取消訂閱: https://app.yayatoh.test/unsubscribe/sample
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.support-reply · ar 1`] = `
+{
+  "subject": "Your tickets for Lakeside Jazz Night",
+  "text": "Your tickets for Lakeside Jazz Night
+
+مرحبًا Amina Diallo،
+
+رسالة من Lakeside Events بشأن طلبك لفعالية Lakeside Jazz Night:
+
+Hi Amina, we sent your tickets again.
+
+See you at the show!
+
+عرض طلبي: https://app.yayatoh.test/orders/sample
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.support-reply · de 1`] = `
+{
+  "subject": "Your tickets for Lakeside Jazz Night",
+  "text": "Your tickets for Lakeside Jazz Night
+
+Hallo Amina Diallo,
+
+Eine Nachricht von Lakeside Events zu deiner Bestellung für Lakeside Jazz Night:
+
+Hi Amina, we sent your tickets again.
+
+See you at the show!
+
+Meine Bestellung ansehen: https://app.yayatoh.test/orders/sample
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.support-reply · en 1`] = `
+{
+  "subject": "Your tickets for Lakeside Jazz Night",
+  "text": "Your tickets for Lakeside Jazz Night
+
+Hi Amina Diallo,
+
+A message from Lakeside Events about your order for Lakeside Jazz Night:
+
+Hi Amina, we sent your tickets again.
+
+See you at the show!
+
+View my order: https://app.yayatoh.test/orders/sample
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.support-reply · es 1`] = `
+{
+  "subject": "Your tickets for Lakeside Jazz Night",
+  "text": "Your tickets for Lakeside Jazz Night
+
+Hola, Amina Diallo:
+
+Un mensaje de Lakeside Events sobre tu pedido para Lakeside Jazz Night:
+
+Hi Amina, we sent your tickets again.
+
+See you at the show!
+
+Ver mi pedido: https://app.yayatoh.test/orders/sample
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.support-reply · fr 1`] = `
+{
+  "subject": "Your tickets for Lakeside Jazz Night",
+  "text": "Your tickets for Lakeside Jazz Night
+
+Bonjour Amina Diallo,
+
+Un message de Lakeside Events au sujet de votre commande pour Lakeside Jazz Night :
+
+Hi Amina, we sent your tickets again.
+
+See you at the show!
+
+Voir ma commande: https://app.yayatoh.test/orders/sample
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.support-reply · hi 1`] = `
+{
+  "subject": "Your tickets for Lakeside Jazz Night",
+  "text": "Your tickets for Lakeside Jazz Night
+
+नमस्ते Amina Diallo,
+
+Lakeside Jazz Night के आपके ऑर्डर के बारे में Lakeside Events का संदेश:
+
+Hi Amina, we sent your tickets again.
+
+See you at the show!
+
+मेरा ऑर्डर देखें: https://app.yayatoh.test/orders/sample
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.support-reply · it 1`] = `
+{
+  "subject": "Your tickets for Lakeside Jazz Night",
+  "text": "Your tickets for Lakeside Jazz Night
+
+Ciao Amina Diallo,
+
+Un messaggio da Lakeside Events sul tuo ordine per Lakeside Jazz Night:
+
+Hi Amina, we sent your tickets again.
+
+See you at the show!
+
+Vedi il mio ordine: https://app.yayatoh.test/orders/sample
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.support-reply · ja 1`] = `
+{
+  "subject": "Your tickets for Lakeside Jazz Night",
+  "text": "Your tickets for Lakeside Jazz Night
+
+Amina Diallo 様
+
+Lakeside Jazz Night のご注文について Lakeside Events からのメッセージ:
+
+Hi Amina, we sent your tickets again.
+
+See you at the show!
+
+注文を見る: https://app.yayatoh.test/orders/sample
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.support-reply · nl 1`] = `
+{
+  "subject": "Your tickets for Lakeside Jazz Night",
+  "text": "Your tickets for Lakeside Jazz Night
+
+Hoi Amina Diallo,
+
+Een bericht van Lakeside Events over je bestelling voor Lakeside Jazz Night:
+
+Hi Amina, we sent your tickets again.
+
+See you at the show!
+
+Mijn bestelling bekijken: https://app.yayatoh.test/orders/sample
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.support-reply · pt 1`] = `
+{
+  "subject": "Your tickets for Lakeside Jazz Night",
+  "text": "Your tickets for Lakeside Jazz Night
+
+Olá, Amina Diallo!
+
+Uma mensagem de Lakeside Events sobre o seu pedido para Lakeside Jazz Night:
+
+Hi Amina, we sent your tickets again.
+
+See you at the show!
+
+Ver meu pedido: https://app.yayatoh.test/orders/sample
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.support-reply · ru 1`] = `
+{
+  "subject": "Your tickets for Lakeside Jazz Night",
+  "text": "Your tickets for Lakeside Jazz Night
+
+Здравствуйте, Amina Diallo!
+
+Сообщение от Lakeside Events о вашем заказе на Lakeside Jazz Night:
+
+Hi Amina, we sent your tickets again.
+
+See you at the show!
+
+Посмотреть заказ: https://app.yayatoh.test/orders/sample
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.support-reply · zh-CN 1`] = `
+{
+  "subject": "Your tickets for Lakeside Jazz Night",
+  "text": "Your tickets for Lakeside Jazz Night
+
+Amina Diallo，您好：
+
+Lakeside Events 关于你在 Lakeside Jazz Night 订单的消息:
+
+Hi Amina, we sent your tickets again.
+
+See you at the show!
+
+查看我的订单: https://app.yayatoh.test/orders/sample
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.support-reply · zh-TW 1`] = `
+{
+  "subject": "Your tickets for Lakeside Jazz Night",
+  "text": "Your tickets for Lakeside Jazz Night
+
+Amina Diallo，您好：
+
+Lakeside Events 關於你在 Lakeside Jazz Night 訂單的訊息:
+
+Hi Amina, we sent your tickets again.
+
+See you at the show!
+
+查看我的訂單: https://app.yayatoh.test/orders/sample
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
 由 Yayatoh 提供技術支援
 ",
 }
@@ -5413,6 +6635,929 @@ exports[`renderMessage: every kind in all 13 locales > payments.destination-chan
 已為 Lakeside Events 連結收款帳戶。為了您的安全，在 2027年6月13日 上午10:00 之前不會轉帳至此帳戶。如果這不是您本人所做的變更，請立即聯絡 Yayatoh 支援。
 
 查看撥款: https://app.yayatoh.test/o/lakeside-events/payouts
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > payments.dispute-deadline · ar 1`] = `
+{
+  "subject": "موعد أدلة النزاع يقترب: Lakeside Jazz Night",
+  "text": "موعد أدلة النزاع يقترب: Lakeside Jazz Night
+
+مرحبًا،
+
+يحين موعد أدلة نزاع بقيمة ‏45.00 US$ على طلب لفعالية Lakeside Jazz Night خلال 20 ساعة. راجعها وأرسلها قبل الموعد النهائي.
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+إلغاء الاشتراك: https://app.yayatoh.test/unsubscribe/sample
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > payments.dispute-deadline · de 1`] = `
+{
+  "subject": "Nachweise für Rückbuchung bald fällig: Lakeside Jazz Night",
+  "text": "Nachweise für Rückbuchung bald fällig: Lakeside Jazz Night
+
+Hallo,
+
+Die Nachweise für eine Rückbuchung über 45,00 $ zu einer Bestellung für Lakeside Jazz Night sind in 20 Stunden fällig. Prüfe sie und reiche sie vor Fristende ein.
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Abmelden: https://app.yayatoh.test/unsubscribe/sample
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > payments.dispute-deadline · en 1`] = `
+{
+  "subject": "Dispute evidence due soon: Lakeside Jazz Night",
+  "text": "Dispute evidence due soon: Lakeside Jazz Night
+
+Hello,
+
+The evidence for a $45.00 dispute on an order for Lakeside Jazz Night is due in 20 hours. Review it and submit it before the deadline.
+
+--
+Sent by Lakeside Events with Yayatoh.
+Unsubscribe: https://app.yayatoh.test/unsubscribe/sample
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > payments.dispute-deadline · es 1`] = `
+{
+  "subject": "Pruebas de disputa por vencer: Lakeside Jazz Night",
+  "text": "Pruebas de disputa por vencer: Lakeside Jazz Night
+
+Hola:
+
+Las pruebas de una disputa de 45,00 US$ sobre un pedido para Lakeside Jazz Night vencen en 20 horas. Revísalas y envíalas antes del plazo.
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Cancelar suscripción: https://app.yayatoh.test/unsubscribe/sample
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > payments.dispute-deadline · fr 1`] = `
+{
+  "subject": "Preuves de litige bientôt dues : Lakeside Jazz Night",
+  "text": "Preuves de litige bientôt dues : Lakeside Jazz Night
+
+Bonjour,
+
+Les preuves d’un litige de 45,00 $US sur une commande pour Lakeside Jazz Night sont dues dans 20 heures. Vérifiez-les et envoyez-les avant l’échéance.
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Se désabonner: https://app.yayatoh.test/unsubscribe/sample
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > payments.dispute-deadline · hi 1`] = `
+{
+  "subject": "विवाद के साक्ष्य की समय-सीमा निकट: Lakeside Jazz Night",
+  "text": "विवाद के साक्ष्य की समय-सीमा निकट: Lakeside Jazz Night
+
+नमस्ते,
+
+Lakeside Jazz Night के एक ऑर्डर पर $45.00 के विवाद के साक्ष्य 20 घंटे में देय हैं। समय-सीमा से पहले इनकी समीक्षा करके जमा करें।
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+सदस्यता छोड़ें: https://app.yayatoh.test/unsubscribe/sample
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > payments.dispute-deadline · it 1`] = `
+{
+  "subject": "Prove della contestazione in scadenza: Lakeside Jazz Night",
+  "text": "Prove della contestazione in scadenza: Lakeside Jazz Night
+
+Ciao,
+
+Le prove per una contestazione di 45,00 USD su un ordine per Lakeside Jazz Night scadono tra 20 ore. Controllale e inviale prima della scadenza.
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Annulla iscrizione: https://app.yayatoh.test/unsubscribe/sample
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > payments.dispute-deadline · ja 1`] = `
+{
+  "subject": "異議申し立ての証拠期限が近づいています: Lakeside Jazz Night",
+  "text": "異議申し立ての証拠期限が近づいています: Lakeside Jazz Night
+
+こんにちは。
+
+Lakeside Jazz Night の注文に対する $45.00 の異議申し立ての証拠提出期限まで 20時間 です。期限までに確認して提出してください。
+
+--
+Lakeside Events が Yayatoh から送信しました。
+配信停止: https://app.yayatoh.test/unsubscribe/sample
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > payments.dispute-deadline · nl 1`] = `
+{
+  "subject": "Bewijs voor terugboeking bijna verschuldigd: Lakeside Jazz Night",
+  "text": "Bewijs voor terugboeking bijna verschuldigd: Lakeside Jazz Night
+
+Hallo,
+
+Het bewijs voor een terugboeking van US$ 45,00 op een bestelling voor Lakeside Jazz Night moet binnen 20 uur binnen zijn. Controleer het en dien het in vóór de deadline.
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Afmelden: https://app.yayatoh.test/unsubscribe/sample
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > payments.dispute-deadline · pt 1`] = `
+{
+  "subject": "Provas da contestação a vencer: Lakeside Jazz Night",
+  "text": "Provas da contestação a vencer: Lakeside Jazz Night
+
+Olá!
+
+As provas de uma contestação de US$ 45,00 num pedido para Lakeside Jazz Night vencem em 20 horas. Revise-as e envie-as antes do prazo.
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Cancelar inscrição: https://app.yayatoh.test/unsubscribe/sample
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > payments.dispute-deadline · ru 1`] = `
+{
+  "subject": "Скоро срок доказательств по спору: Lakeside Jazz Night",
+  "text": "Скоро срок доказательств по спору: Lakeside Jazz Night
+
+Здравствуйте!
+
+Доказательства по спору на 45,00 $ по заказу на Lakeside Jazz Night нужно отправить через 20 часов. Проверьте и отправьте их до срока.
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Отписаться: https://app.yayatoh.test/unsubscribe/sample
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > payments.dispute-deadline · zh-CN 1`] = `
+{
+  "subject": "争议证据即将到期:Lakeside Jazz Night",
+  "text": "争议证据即将到期:Lakeside Jazz Night
+
+您好：
+
+Lakeside Jazz Night 一笔订单上金额为 US$45.00 的争议证据将在 20 小时后到期。请在截止前审核并提交。
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+退订: https://app.yayatoh.test/unsubscribe/sample
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > payments.dispute-deadline · zh-TW 1`] = `
+{
+  "subject": "爭議證據即將到期:Lakeside Jazz Night",
+  "text": "爭議證據即將到期:Lakeside Jazz Night
+
+您好：
+
+Lakeside Jazz Night 一筆訂單上金額 US$45.00 的爭議證據將在 20 小時後到期。請在截止前審核並提交。
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+取消訂閱: https://app.yayatoh.test/unsubscribe/sample
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.invite · ar 1`] = `
+{
+  "subject": "دعوة إلى بوابة Midwest Leadership Summit",
+  "text": "دعوة إلى بوابة Midwest Leadership Summit
+
+مرحبًا،
+
+دعتك Lakeside Events إلى بوابة Midwest Leadership Summit بصفة متحدث. هناك يمكنك رؤية جلساتك وتحديث ملفك الشخصي وإنجاز مهامك. سيطلب الزر رمز دخول يُرسل إلى هذا العنوان.
+
+فتح البوابة: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.invite · de 1`] = `
+{
+  "subject": "Einladung zum Portal von Midwest Leadership Summit",
+  "text": "Einladung zum Portal von Midwest Leadership Summit
+
+Hallo,
+
+Lakeside Events hat Sie als Speaker zum Portal von Midwest Leadership Summit eingeladen. Dort sehen Sie Ihre Sessions, aktualisieren Ihr Profil und erledigen Ihre Aufgaben. Die Schaltfläche fragt nach einem Anmeldecode, der an diese Adresse gesendet wird.
+
+Portal öffnen: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.invite · en 1`] = `
+{
+  "subject": "You're invited to the Midwest Leadership Summit portal",
+  "text": "You're invited to the Midwest Leadership Summit portal
+
+Hello,
+
+Lakeside Events invited you to the portal for Midwest Leadership Summit as speaker. There you can see your sessions, update your profile and complete your tasks. The button asks for a sign-in code sent to this address.
+
+Open the portal: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.invite · es 1`] = `
+{
+  "subject": "Te invitan al portal de Midwest Leadership Summit",
+  "text": "Te invitan al portal de Midwest Leadership Summit
+
+Hola:
+
+Lakeside Events te invitó al portal de Midwest Leadership Summit como ponente. Allí puedes ver tus sesiones, actualizar tu perfil y completar tus tareas. El botón pide un código de acceso que se envía a esta dirección.
+
+Abrir el portal: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.invite · fr 1`] = `
+{
+  "subject": "Invitation au portail de Midwest Leadership Summit",
+  "text": "Invitation au portail de Midwest Leadership Summit
+
+Bonjour,
+
+Lakeside Events vous a invité au portail de Midwest Leadership Summit en tant que intervenant. Vous pourrez y voir vos sessions, mettre à jour votre profil et accomplir vos tâches. Le bouton demande un code de connexion envoyé à cette adresse.
+
+Ouvrir le portail: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.invite · hi 1`] = `
+{
+  "subject": "Midwest Leadership Summit पोर्टल के लिए आमंत्रण",
+  "text": "Midwest Leadership Summit पोर्टल के लिए आमंत्रण
+
+नमस्ते,
+
+Lakeside Events ने आपको Midwest Leadership Summit के पोर्टल में वक्ता के रूप में आमंत्रित किया है। वहाँ आप अपने सत्र देख सकते हैं, अपनी प्रोफ़ाइल अपडेट कर सकते हैं और अपने कार्य पूरे कर सकते हैं। बटन इस पते पर भेजा गया साइन-इन कोड माँगेगा।
+
+पोर्टल खोलें: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.invite · it 1`] = `
+{
+  "subject": "Sei invitato al portale di Midwest Leadership Summit",
+  "text": "Sei invitato al portale di Midwest Leadership Summit
+
+Ciao,
+
+Lakeside Events ti ha invitato al portale di Midwest Leadership Summit come relatore. Lì puoi vedere le tue sessioni, aggiornare il profilo e completare le attività. Il pulsante chiede un codice di accesso inviato a questo indirizzo.
+
+Apri il portale: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.invite · ja 1`] = `
+{
+  "subject": "Midwest Leadership Summitのポータルへの招待",
+  "text": "Midwest Leadership Summitのポータルへの招待
+
+こんにちは。
+
+Lakeside EventsからMidwest Leadership Summitのポータルに登壇者として招待されました。セッションの確認、プロフィールの更新、タスクの完了ができます。ボタンを押すと、このアドレスに送られるサインインコードの入力を求められます。
+
+ポータルを開く: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.invite · nl 1`] = `
+{
+  "subject": "Uitnodiging voor het portaal van Midwest Leadership Summit",
+  "text": "Uitnodiging voor het portaal van Midwest Leadership Summit
+
+Hallo,
+
+Lakeside Events heeft je als spreker uitgenodigd voor het portaal van Midwest Leadership Summit. Daar zie je je sessies, werk je je profiel bij en rond je je taken af. De knop vraagt om een inlogcode die naar dit adres wordt gestuurd.
+
+Portaal openen: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.invite · pt 1`] = `
+{
+  "subject": "Convite para o portal de Midwest Leadership Summit",
+  "text": "Convite para o portal de Midwest Leadership Summit
+
+Olá!
+
+Lakeside Events convidou você para o portal de Midwest Leadership Summit como palestrante. Lá você vê suas sessões, atualiza seu perfil e conclui suas tarefas. O botão pede um código de acesso enviado para este endereço.
+
+Abrir o portal: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.invite · ru 1`] = `
+{
+  "subject": "Приглашение в портал «Midwest Leadership Summit»",
+  "text": "Приглашение в портал «Midwest Leadership Summit»
+
+Здравствуйте!
+
+Lakeside Events приглашает вас в портал мероприятия «Midwest Leadership Summit» в роли: спикер. Там вы увидите свои сессии, обновите профиль и выполните задачи. Кнопка запросит код входа, который придёт на этот адрес.
+
+Открыть портал: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.invite · zh-CN 1`] = `
+{
+  "subject": "邀请您加入Midwest Leadership Summit门户",
+  "text": "邀请您加入Midwest Leadership Summit门户
+
+您好：
+
+Lakeside Events邀请您以演讲者身份加入Midwest Leadership Summit门户。您可以在那里查看自己的场次、更新个人资料并完成任务。点击按钮后需要输入发送到此邮箱的登录验证码。
+
+打开门户: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.invite · zh-TW 1`] = `
+{
+  "subject": "邀請您加入Midwest Leadership Summit入口網站",
+  "text": "邀請您加入Midwest Leadership Summit入口網站
+
+您好：
+
+Lakeside Events邀請您以講者身分加入Midwest Leadership Summit入口網站。您可以在那裡查看自己的場次、更新個人檔案並完成任務。點選按鈕後需要輸入寄到此信箱的登入驗證碼。
+
+開啟入口網站: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.sign-in · ar 1`] = `
+{
+  "subject": "305117 هو رمز الدخول إلى Midwest Leadership Summit",
+  "text": "305117 هو رمز الدخول إلى Midwest Leadership Summit
+
+مرحبًا،
+
+أدخل 305117 لتسجيل الدخول إلى بوابة Midwest Leadership Summit، أو استخدم الزر أدناه في المتصفح نفسه. صلاحية الرمز: 10 د. صلاحية الزر: 15 د. يعمل كل منهما مرة واحدة. إذا لم تطلبه، يمكنك تجاهل هذه الرسالة.
+
+الدخول إلى البوابة: https://app.yayatoh.test/event-portal/verify/sample
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.sign-in · de 1`] = `
+{
+  "subject": "305117 ist Ihr Anmeldecode für Midwest Leadership Summit",
+  "text": "305117 ist Ihr Anmeldecode für Midwest Leadership Summit
+
+Hallo,
+
+Geben Sie 305117 ein, um sich im Portal von Midwest Leadership Summit anzumelden, oder nutzen Sie die Schaltfläche unten im selben Browser. Code gültig: 10 Min. Schaltfläche gültig: 15 Min. Beide funktionieren einmal. Wenn Sie ihn nicht angefordert haben, ignorieren Sie diese E-Mail.
+
+Im Portal anmelden: https://app.yayatoh.test/event-portal/verify/sample
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.sign-in · en 1`] = `
+{
+  "subject": "305117 is your sign-in code for Midwest Leadership Summit",
+  "text": "305117 is your sign-in code for Midwest Leadership Summit
+
+Hello,
+
+Enter 305117 to sign in to the Midwest Leadership Summit portal, or use the button below in the same browser. Code valid for: 10 min. Button valid for: 15 min. Each works once. If you didn't ask for it, you can ignore this email.
+
+Sign in to the portal: https://app.yayatoh.test/event-portal/verify/sample
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.sign-in · es 1`] = `
+{
+  "subject": "305117 es tu código de acceso para Midwest Leadership Summit",
+  "text": "305117 es tu código de acceso para Midwest Leadership Summit
+
+Hola:
+
+Introduce 305117 para entrar en el portal de Midwest Leadership Summit o usa el botón de abajo en el mismo navegador. Código válido: 10 min. Botón válido: 15 min. Cada uno funciona una vez. Si no lo pediste, ignora este correo.
+
+Entrar al portal: https://app.yayatoh.test/event-portal/verify/sample
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.sign-in · fr 1`] = `
+{
+  "subject": "305117 est votre code de connexion pour Midwest Leadership Summit",
+  "text": "305117 est votre code de connexion pour Midwest Leadership Summit
+
+Bonjour,
+
+Saisissez 305117 pour vous connecter au portail de Midwest Leadership Summit, ou utilisez le bouton ci-dessous dans le même navigateur. Code valable : 10 min. Bouton valable : 15 min. Chacun ne fonctionne qu’une fois. Si vous ne l’avez pas demandé, ignorez cet e-mail.
+
+Se connecter au portail: https://app.yayatoh.test/event-portal/verify/sample
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.sign-in · hi 1`] = `
+{
+  "subject": "Midwest Leadership Summit के लिए आपका साइन-इन कोड 305117 है",
+  "text": "Midwest Leadership Summit के लिए आपका साइन-इन कोड 305117 है
+
+नमस्ते,
+
+Midwest Leadership Summit पोर्टल में साइन इन करने के लिए 305117 दर्ज करें, या इसी ब्राउज़र में नीचे दिया बटन इस्तेमाल करें। कोड की वैधता: 10 मिनट। बटन की वैधता: 15 मिनट। हर एक केवल एक बार काम करता है। अगर आपने यह नहीं माँगा, तो इस ईमेल को अनदेखा करें।
+
+पोर्टल में साइन इन करें: https://app.yayatoh.test/event-portal/verify/sample
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.sign-in · it 1`] = `
+{
+  "subject": "305117 è il tuo codice di accesso per Midwest Leadership Summit",
+  "text": "305117 è il tuo codice di accesso per Midwest Leadership Summit
+
+Ciao,
+
+Inserisci 305117 per accedere al portale di Midwest Leadership Summit, oppure usa il pulsante qui sotto nello stesso browser. Codice valido: 10 min. Pulsante valido: 15 min. Ciascuno funziona una volta. Se non l’hai richiesto, ignora questa email.
+
+Accedi al portale: https://app.yayatoh.test/event-portal/verify/sample
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.sign-in · ja 1`] = `
+{
+  "subject": "Midwest Leadership Summitのサインインコードは305117です",
+  "text": "Midwest Leadership Summitのサインインコードは305117です
+
+こんにちは。
+
+305117を入力してMidwest Leadership Summitのポータルにサインインするか、同じブラウザーで下のボタンを使ってください。コードの有効時間：10分。ボタンの有効時間：15分。それぞれ1回限り有効です。心当たりがない場合は、このメールを無視してください。
+
+ポータルにサインイン: https://app.yayatoh.test/event-portal/verify/sample
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.sign-in · nl 1`] = `
+{
+  "subject": "305117 is je inlogcode voor Midwest Leadership Summit",
+  "text": "305117 is je inlogcode voor Midwest Leadership Summit
+
+Hallo,
+
+Voer 305117 in om in te loggen op het portaal van Midwest Leadership Summit, of gebruik de knop hieronder in dezelfde browser. Code geldig: 10 min. Knop geldig: 15 min. Elk werkt één keer. Heb je dit niet aangevraagd, negeer deze e-mail dan.
+
+Inloggen op het portaal: https://app.yayatoh.test/event-portal/verify/sample
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.sign-in · pt 1`] = `
+{
+  "subject": "305117 é seu código de acesso para Midwest Leadership Summit",
+  "text": "305117 é seu código de acesso para Midwest Leadership Summit
+
+Olá!
+
+Digite 305117 para entrar no portal de Midwest Leadership Summit ou use o botão abaixo no mesmo navegador. Código válido: 10 min. Botão válido: 15 min. Cada um funciona uma vez. Se você não pediu, ignore este e-mail.
+
+Entrar no portal: https://app.yayatoh.test/event-portal/verify/sample
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.sign-in · ru 1`] = `
+{
+  "subject": "305117 — ваш код входа для «Midwest Leadership Summit»",
+  "text": "305117 — ваш код входа для «Midwest Leadership Summit»
+
+Здравствуйте!
+
+Введите 305117, чтобы войти в портал «Midwest Leadership Summit», или нажмите кнопку ниже в том же браузере. Код действует: 10 мин. Кнопка действует: 15 мин. Каждый срабатывает один раз. Если вы его не запрашивали, проигнорируйте это письмо.
+
+Войти в портал: https://app.yayatoh.test/event-portal/verify/sample
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.sign-in · zh-CN 1`] = `
+{
+  "subject": "305117 是您的Midwest Leadership Summit登录验证码",
+  "text": "305117 是您的Midwest Leadership Summit登录验证码
+
+您好：
+
+输入 305117 登录Midwest Leadership Summit门户，或在同一浏览器中使用下面的按钮。验证码有效期：10 分钟。按钮有效期：15 分钟。每个只能使用一次。如果不是您本人申请，请忽略此邮件。
+
+登录门户: https://app.yayatoh.test/event-portal/verify/sample
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > portal.sign-in · zh-TW 1`] = `
+{
+  "subject": "305117 是您的Midwest Leadership Summit登入驗證碼",
+  "text": "305117 是您的Midwest Leadership Summit登入驗證碼
+
+您好：
+
+輸入 305117 登入Midwest Leadership Summit入口網站，或在同一個瀏覽器中使用下方按鈕。驗證碼有效時間：10 分鐘。按鈕有效時間：15 分鐘。每個只能使用一次。如果不是您本人申請，請忽略此郵件。
+
+登入入口網站: https://app.yayatoh.test/event-portal/verify/sample
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.task-reminder · ar 1`] = `
+{
+  "subject": "تذكير: Upload your slides لـ Midwest Leadership Summit",
+  "text": "تذكير: Upload your slides لـ Midwest Leadership Summit
+
+مرحبًا،
+
+ما زالت Lakeside Events بانتظار «Upload your slides» لـ Midwest Leadership Summit. الموعد النهائي: 10‏/05‏/2027، 12:00 م.
+
+فتح مهامي: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.task-reminder · de 1`] = `
+{
+  "subject": "Erinnerung: Upload your slides für Midwest Leadership Summit",
+  "text": "Erinnerung: Upload your slides für Midwest Leadership Summit
+
+Hallo,
+
+Lakeside Events wartet noch auf „Upload your slides“ für Midwest Leadership Summit. Fällig: 10.05.2027, 12:00.
+
+Meine Aufgaben öffnen: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.task-reminder · en 1`] = `
+{
+  "subject": "Reminder: Upload your slides for Midwest Leadership Summit",
+  "text": "Reminder: Upload your slides for Midwest Leadership Summit
+
+Hello,
+
+Lakeside Events is still waiting for “Upload your slides” for Midwest Leadership Summit. Due: May 10, 2027, 12:00 PM.
+
+Open my tasks: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.task-reminder · es 1`] = `
+{
+  "subject": "Recordatorio: Upload your slides para Midwest Leadership Summit",
+  "text": "Recordatorio: Upload your slides para Midwest Leadership Summit
+
+Hola:
+
+Lakeside Events sigue esperando «Upload your slides» para Midwest Leadership Summit. Vence: 10 may 2027, 12:00.
+
+Abrir mis tareas: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.task-reminder · fr 1`] = `
+{
+  "subject": "Rappel : Upload your slides pour Midwest Leadership Summit",
+  "text": "Rappel : Upload your slides pour Midwest Leadership Summit
+
+Bonjour,
+
+Lakeside Events attend toujours « Upload your slides » pour Midwest Leadership Summit. Échéance : 10 mai 2027, 12:00.
+
+Ouvrir mes tâches: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.task-reminder · hi 1`] = `
+{
+  "subject": "याद दिलाना: Midwest Leadership Summit के लिए Upload your slides",
+  "text": "याद दिलाना: Midwest Leadership Summit के लिए Upload your slides
+
+नमस्ते,
+
+Lakeside Events को Midwest Leadership Summit के लिए अभी भी “Upload your slides” का इंतज़ार है। अंतिम तिथि: 10 मई 2027, 12:00 pm।
+
+मेरे कार्य खोलें: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.task-reminder · it 1`] = `
+{
+  "subject": "Promemoria: Upload your slides per Midwest Leadership Summit",
+  "text": "Promemoria: Upload your slides per Midwest Leadership Summit
+
+Ciao,
+
+Lakeside Events attende ancora «Upload your slides» per Midwest Leadership Summit. Scadenza: 10 mag 2027, 12:00.
+
+Apri le mie attività: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.task-reminder · ja 1`] = `
+{
+  "subject": "リマインダー：Midwest Leadership SummitのUpload your slides",
+  "text": "リマインダー：Midwest Leadership SummitのUpload your slides
+
+こんにちは。
+
+Lakeside EventsはMidwest Leadership Summitの「Upload your slides」をまだお待ちしています。期限：2027/05/10 12:00。
+
+タスクを開く: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.task-reminder · nl 1`] = `
+{
+  "subject": "Herinnering: Upload your slides voor Midwest Leadership Summit",
+  "text": "Herinnering: Upload your slides voor Midwest Leadership Summit
+
+Hallo,
+
+Lakeside Events wacht nog op ‘Upload your slides’ voor Midwest Leadership Summit. Uiterlijk: 10 mei 2027, 12:00.
+
+Mijn taken openen: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.task-reminder · pt 1`] = `
+{
+  "subject": "Lembrete: Upload your slides para Midwest Leadership Summit",
+  "text": "Lembrete: Upload your slides para Midwest Leadership Summit
+
+Olá!
+
+Lakeside Events ainda aguarda “Upload your slides” para Midwest Leadership Summit. Prazo: 10 de mai. de 2027, 12:00.
+
+Abrir minhas tarefas: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.task-reminder · ru 1`] = `
+{
+  "subject": "Напоминание: Upload your slides для «Midwest Leadership Summit»",
+  "text": "Напоминание: Upload your slides для «Midwest Leadership Summit»
+
+Здравствуйте!
+
+Lakeside Events всё ещё ждёт «Upload your slides» для «Midwest Leadership Summit». Срок: 10 мая 2027 г., 12:00.
+
+Открыть мои задачи: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.task-reminder · zh-CN 1`] = `
+{
+  "subject": "提醒：Midwest Leadership Summit的Upload your slides",
+  "text": "提醒：Midwest Leadership Summit的Upload your slides
+
+您好：
+
+Lakeside Events仍在等待您提交Midwest Leadership Summit的“Upload your slides”。截止时间：2027年5月10日 12:00。
+
+打开我的任务: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.task-reminder · zh-TW 1`] = `
+{
+  "subject": "提醒：Midwest Leadership Summit的Upload your slides",
+  "text": "提醒：Midwest Leadership Summit的Upload your slides
+
+您好：
+
+Lakeside Events仍在等待您提交Midwest Leadership Summit的「Upload your slides」。截止時間：2027年5月10日 中午12:00。
+
+開啟我的任務: https://app.yayatoh.test/event-portal/invite/sample
 
 --
 由 Lakeside Events 透過 Yayatoh 寄送。
@@ -8455,6 +10600,682 @@ Amina Diallo，您好：
 Lakeside Jazz Night 的主辦單位重新寄送了您的票券 K7M2Q9XW。點選下方按鈕即可隨時開啟您的票券。
 
 開啟我的票券: https://app.yayatoh.test/my-tickets/sample
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.transfer-completed · ar 1`] = `
+{
+  "subject": "تم نقل تذكرتك لفعالية Lakeside Jazz Night",
+  "text": "تم نقل تذكرتك لفعالية Lakeside Jazz Night
+
+مرحبًا Amina Diallo،
+
+استلم Noor Haddad التذكرة التي نقلتها لفعالية Lakeside Jazz Night. لم يعد رمز QR القديم صالحًا.
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.transfer-completed · de 1`] = `
+{
+  "subject": "Dein Ticket für Lakeside Jazz Night wurde übertragen",
+  "text": "Dein Ticket für Lakeside Jazz Night wurde übertragen
+
+Hallo Amina Diallo,
+
+Noor Haddad hat das Ticket angenommen, das du für Lakeside Jazz Night übertragen hast. Dein alter QR-Code gilt nicht mehr.
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.transfer-completed · en 1`] = `
+{
+  "subject": "Your ticket for Lakeside Jazz Night was transferred",
+  "text": "Your ticket for Lakeside Jazz Night was transferred
+
+Hi Amina Diallo,
+
+Noor Haddad claimed the ticket you transferred for Lakeside Jazz Night. Your old QR code no longer works.
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.transfer-completed · es 1`] = `
+{
+  "subject": "Tu entrada para Lakeside Jazz Night fue transferida",
+  "text": "Tu entrada para Lakeside Jazz Night fue transferida
+
+Hola, Amina Diallo:
+
+Noor Haddad reclamó la entrada que transferiste para Lakeside Jazz Night. Tu código QR anterior ya no funciona.
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.transfer-completed · fr 1`] = `
+{
+  "subject": "Votre billet pour Lakeside Jazz Night a été transféré",
+  "text": "Votre billet pour Lakeside Jazz Night a été transféré
+
+Bonjour Amina Diallo,
+
+Noor Haddad a récupéré le billet que vous avez transféré pour Lakeside Jazz Night. Votre ancien code QR ne fonctionne plus.
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.transfer-completed · hi 1`] = `
+{
+  "subject": "Lakeside Jazz Night का आपका टिकट ट्रांसफ़र हो गया",
+  "text": "Lakeside Jazz Night का आपका टिकट ट्रांसफ़र हो गया
+
+नमस्ते Amina Diallo,
+
+Noor Haddad ने Lakeside Jazz Night का वह टिकट क्लेम कर लिया जो आपने ट्रांसफ़र किया था। आपका पुराना QR कोड अब काम नहीं करता।
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.transfer-completed · it 1`] = `
+{
+  "subject": "Il tuo biglietto per Lakeside Jazz Night è stato trasferito",
+  "text": "Il tuo biglietto per Lakeside Jazz Night è stato trasferito
+
+Ciao Amina Diallo,
+
+Noor Haddad ha riscattato il biglietto che hai trasferito per Lakeside Jazz Night. Il tuo vecchio codice QR non funziona più.
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.transfer-completed · ja 1`] = `
+{
+  "subject": "Lakeside Jazz Night のチケットが譲渡されました",
+  "text": "Lakeside Jazz Night のチケットが譲渡されました
+
+Amina Diallo 様
+
+Noor Haddad さんが、あなたが譲渡した Lakeside Jazz Night のチケットを受け取りました。以前の QR コードは使えなくなりました。
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.transfer-completed · nl 1`] = `
+{
+  "subject": "Je ticket voor Lakeside Jazz Night is overgedragen",
+  "text": "Je ticket voor Lakeside Jazz Night is overgedragen
+
+Hoi Amina Diallo,
+
+Noor Haddad heeft het ticket geclaimd dat je voor Lakeside Jazz Night hebt overgedragen. Je oude QR-code werkt niet meer.
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.transfer-completed · pt 1`] = `
+{
+  "subject": "Seu ingresso para Lakeside Jazz Night foi transferido",
+  "text": "Seu ingresso para Lakeside Jazz Night foi transferido
+
+Olá, Amina Diallo!
+
+Noor Haddad resgatou o ingresso que você transferiu para Lakeside Jazz Night. Seu código QR antigo não funciona mais.
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.transfer-completed · ru 1`] = `
+{
+  "subject": "Ваш билет на Lakeside Jazz Night передан",
+  "text": "Ваш билет на Lakeside Jazz Night передан
+
+Здравствуйте, Amina Diallo!
+
+Noor Haddad получил(а) билет на Lakeside Jazz Night, который вы передали. Ваш старый QR-код больше не действует.
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.transfer-completed · zh-CN 1`] = `
+{
+  "subject": "你的 Lakeside Jazz Night 门票已转让",
+  "text": "你的 Lakeside Jazz Night 门票已转让
+
+Amina Diallo，您好：
+
+Noor Haddad 已领取你转让的 Lakeside Jazz Night 门票。你原来的二维码已失效。
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.transfer-completed · zh-TW 1`] = `
+{
+  "subject": "你的 Lakeside Jazz Night 票券已轉讓",
+  "text": "你的 Lakeside Jazz Night 票券已轉讓
+
+Amina Diallo，您好：
+
+Noor Haddad 已領取你轉讓的 Lakeside Jazz Night 票券。你原本的 QR 碼已失效。
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.transfer-offered · ar 1`] = `
+{
+  "subject": "أرسل لك Amina Diallo تذكرة لفعالية Lakeside Jazz Night",
+  "text": "أرسل لك Amina Diallo تذكرة لفعالية Lakeside Jazz Night
+
+مرحبًا Noor Haddad،
+
+ينقل إليك Amina Diallo تذكرة لفعالية Lakeside Jazz Night. استلمها بعنوان البريد الإلكتروني هذا لتحصل على رمز QR خاص بك.
+
+استلام تذكرتي: https://app.yayatoh.test/claim/sample
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.transfer-offered · de 1`] = `
+{
+  "subject": "Amina Diallo hat dir ein Ticket für Lakeside Jazz Night geschickt",
+  "text": "Amina Diallo hat dir ein Ticket für Lakeside Jazz Night geschickt
+
+Hallo Noor Haddad,
+
+Amina Diallo überträgt dir ein Ticket für Lakeside Jazz Night. Fordere es mit dieser E-Mail-Adresse an, um deinen eigenen QR-Code zu erhalten.
+
+Mein Ticket anfordern: https://app.yayatoh.test/claim/sample
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.transfer-offered · en 1`] = `
+{
+  "subject": "Amina Diallo sent you a ticket for Lakeside Jazz Night",
+  "text": "Amina Diallo sent you a ticket for Lakeside Jazz Night
+
+Hi Noor Haddad,
+
+Amina Diallo is transferring a ticket for Lakeside Jazz Night to you. Claim it with this email address to get your own QR code.
+
+Claim my ticket: https://app.yayatoh.test/claim/sample
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.transfer-offered · es 1`] = `
+{
+  "subject": "Amina Diallo te envió una entrada para Lakeside Jazz Night",
+  "text": "Amina Diallo te envió una entrada para Lakeside Jazz Night
+
+Hola, Noor Haddad:
+
+Amina Diallo te está transfiriendo una entrada para Lakeside Jazz Night. Reclámala con esta dirección de correo para obtener tu propio código QR.
+
+Reclamar mi entrada: https://app.yayatoh.test/claim/sample
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.transfer-offered · fr 1`] = `
+{
+  "subject": "Amina Diallo vous a envoyé un billet pour Lakeside Jazz Night",
+  "text": "Amina Diallo vous a envoyé un billet pour Lakeside Jazz Night
+
+Bonjour Noor Haddad,
+
+Amina Diallo vous transfère un billet pour Lakeside Jazz Night. Récupérez-le avec cette adresse e-mail pour obtenir votre propre code QR.
+
+Récupérer mon billet: https://app.yayatoh.test/claim/sample
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.transfer-offered · hi 1`] = `
+{
+  "subject": "Amina Diallo ने आपको Lakeside Jazz Night का टिकट भेजा है",
+  "text": "Amina Diallo ने आपको Lakeside Jazz Night का टिकट भेजा है
+
+नमस्ते Noor Haddad,
+
+Amina Diallo आपको Lakeside Jazz Night का एक टिकट ट्रांसफ़र कर रहे हैं। अपना QR कोड पाने के लिए इसी ईमेल पते से इसे क्लेम करें।
+
+मेरा टिकट क्लेम करें: https://app.yayatoh.test/claim/sample
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.transfer-offered · it 1`] = `
+{
+  "subject": "Amina Diallo ti ha inviato un biglietto per Lakeside Jazz Night",
+  "text": "Amina Diallo ti ha inviato un biglietto per Lakeside Jazz Night
+
+Ciao Noor Haddad,
+
+Amina Diallo ti sta trasferendo un biglietto per Lakeside Jazz Night. Riscattalo con questo indirizzo email per ottenere il tuo codice QR.
+
+Riscatta il mio biglietto: https://app.yayatoh.test/claim/sample
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.transfer-offered · ja 1`] = `
+{
+  "subject": "Amina Diallo さんから Lakeside Jazz Night のチケットが届きました",
+  "text": "Amina Diallo さんから Lakeside Jazz Night のチケットが届きました
+
+Noor Haddad 様
+
+Amina Diallo さんが Lakeside Jazz Night のチケットをあなたに譲渡しようとしています。このメールアドレスで受け取ると、あなた専用の QR コードが発行されます。
+
+チケットを受け取る: https://app.yayatoh.test/claim/sample
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.transfer-offered · nl 1`] = `
+{
+  "subject": "Amina Diallo heeft je een ticket voor Lakeside Jazz Night gestuurd",
+  "text": "Amina Diallo heeft je een ticket voor Lakeside Jazz Night gestuurd
+
+Hoi Noor Haddad,
+
+Amina Diallo draagt een ticket voor Lakeside Jazz Night aan je over. Claim het met dit e-mailadres om je eigen QR-code te krijgen.
+
+Mijn ticket claimen: https://app.yayatoh.test/claim/sample
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.transfer-offered · pt 1`] = `
+{
+  "subject": "Amina Diallo enviou um ingresso para Lakeside Jazz Night",
+  "text": "Amina Diallo enviou um ingresso para Lakeside Jazz Night
+
+Olá, Noor Haddad!
+
+Amina Diallo está transferindo um ingresso para Lakeside Jazz Night para você. Resgate-o com este e-mail para receber o seu próprio código QR.
+
+Resgatar meu ingresso: https://app.yayatoh.test/claim/sample
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.transfer-offered · ru 1`] = `
+{
+  "subject": "Amina Diallo отправил(а) вам билет на Lakeside Jazz Night",
+  "text": "Amina Diallo отправил(а) вам билет на Lakeside Jazz Night
+
+Здравствуйте, Noor Haddad!
+
+Amina Diallo передаёт вам билет на Lakeside Jazz Night. Получите его с этим адресом электронной почты, чтобы получить собственный QR-код.
+
+Получить билет: https://app.yayatoh.test/claim/sample
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.transfer-offered · zh-CN 1`] = `
+{
+  "subject": "Amina Diallo 给你发送了 Lakeside Jazz Night 的门票",
+  "text": "Amina Diallo 给你发送了 Lakeside Jazz Night 的门票
+
+Noor Haddad，您好：
+
+Amina Diallo 正在把 Lakeside Jazz Night 的一张门票转让给你。请使用此邮箱领取,即可获得你自己的二维码。
+
+领取我的门票: https://app.yayatoh.test/claim/sample
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.transfer-offered · zh-TW 1`] = `
+{
+  "subject": "Amina Diallo 傳送了 Lakeside Jazz Night 的票券給你",
+  "text": "Amina Diallo 傳送了 Lakeside Jazz Night 的票券給你
+
+Noor Haddad，您好：
+
+Amina Diallo 正在將 Lakeside Jazz Night 的一張票券轉讓給你。請使用此電子郵件地址領取,即可取得你自己的 QR 碼。
+
+領取我的票券: https://app.yayatoh.test/claim/sample
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.transfer-received · ar 1`] = `
+{
+  "subject": "تذكرتك لفعالية Lakeside Jazz Night",
+  "text": "تذكرتك لفعالية Lakeside Jazz Night
+
+مرحبًا Noor Haddad،
+
+استلمت التذكرة التي أرسلها لك Amina Diallo لفعالية Lakeside Jazz Night. رمز QR الخاص بك جاهز.
+
+عرض تذكرتي: https://app.yayatoh.test/my-tickets/sample
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.transfer-received · de 1`] = `
+{
+  "subject": "Dein Ticket für Lakeside Jazz Night",
+  "text": "Dein Ticket für Lakeside Jazz Night
+
+Hallo Noor Haddad,
+
+Du hast das Ticket angenommen, das dir Amina Diallo für Lakeside Jazz Night geschickt hat. Dein eigener QR-Code ist bereit.
+
+Mein Ticket ansehen: https://app.yayatoh.test/my-tickets/sample
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.transfer-received · en 1`] = `
+{
+  "subject": "Your ticket for Lakeside Jazz Night",
+  "text": "Your ticket for Lakeside Jazz Night
+
+Hi Noor Haddad,
+
+You claimed the ticket Amina Diallo sent you for Lakeside Jazz Night. Your own QR code is ready.
+
+View my ticket: https://app.yayatoh.test/my-tickets/sample
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.transfer-received · es 1`] = `
+{
+  "subject": "Tu entrada para Lakeside Jazz Night",
+  "text": "Tu entrada para Lakeside Jazz Night
+
+Hola, Noor Haddad:
+
+Reclamaste la entrada que Amina Diallo te envió para Lakeside Jazz Night. Tu propio código QR está listo.
+
+Ver mi entrada: https://app.yayatoh.test/my-tickets/sample
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.transfer-received · fr 1`] = `
+{
+  "subject": "Votre billet pour Lakeside Jazz Night",
+  "text": "Votre billet pour Lakeside Jazz Night
+
+Bonjour Noor Haddad,
+
+Vous avez récupéré le billet que Amina Diallo vous a envoyé pour Lakeside Jazz Night. Votre propre code QR est prêt.
+
+Voir mon billet: https://app.yayatoh.test/my-tickets/sample
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.transfer-received · hi 1`] = `
+{
+  "subject": "Lakeside Jazz Night का आपका टिकट",
+  "text": "Lakeside Jazz Night का आपका टिकट
+
+नमस्ते Noor Haddad,
+
+आपने Lakeside Jazz Night का वह टिकट क्लेम कर लिया जो Amina Diallo ने भेजा था। आपका अपना QR कोड तैयार है।
+
+मेरा टिकट देखें: https://app.yayatoh.test/my-tickets/sample
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.transfer-received · it 1`] = `
+{
+  "subject": "Il tuo biglietto per Lakeside Jazz Night",
+  "text": "Il tuo biglietto per Lakeside Jazz Night
+
+Ciao Noor Haddad,
+
+Hai riscattato il biglietto che Amina Diallo ti ha inviato per Lakeside Jazz Night. Il tuo codice QR è pronto.
+
+Vedi il mio biglietto: https://app.yayatoh.test/my-tickets/sample
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.transfer-received · ja 1`] = `
+{
+  "subject": "Lakeside Jazz Night のチケット",
+  "text": "Lakeside Jazz Night のチケット
+
+Noor Haddad 様
+
+Amina Diallo さんから届いた Lakeside Jazz Night のチケットを受け取りました。あなた専用の QR コードの準備ができています。
+
+チケットを見る: https://app.yayatoh.test/my-tickets/sample
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.transfer-received · nl 1`] = `
+{
+  "subject": "Je ticket voor Lakeside Jazz Night",
+  "text": "Je ticket voor Lakeside Jazz Night
+
+Hoi Noor Haddad,
+
+Je hebt het ticket geclaimd dat Amina Diallo je voor Lakeside Jazz Night stuurde. Je eigen QR-code staat klaar.
+
+Mijn ticket bekijken: https://app.yayatoh.test/my-tickets/sample
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.transfer-received · pt 1`] = `
+{
+  "subject": "Seu ingresso para Lakeside Jazz Night",
+  "text": "Seu ingresso para Lakeside Jazz Night
+
+Olá, Noor Haddad!
+
+Você resgatou o ingresso que Amina Diallo enviou para Lakeside Jazz Night. Seu próprio código QR está pronto.
+
+Ver meu ingresso: https://app.yayatoh.test/my-tickets/sample
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.transfer-received · ru 1`] = `
+{
+  "subject": "Ваш билет на Lakeside Jazz Night",
+  "text": "Ваш билет на Lakeside Jazz Night
+
+Здравствуйте, Noor Haddad!
+
+Вы получили билет на Lakeside Jazz Night, который отправил(а) Amina Diallo. Ваш собственный QR-код готов.
+
+Посмотреть билет: https://app.yayatoh.test/my-tickets/sample
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.transfer-received · zh-CN 1`] = `
+{
+  "subject": "你的 Lakeside Jazz Night 门票",
+  "text": "你的 Lakeside Jazz Night 门票
+
+Noor Haddad，您好：
+
+你已领取 Amina Diallo 发送给你的 Lakeside Jazz Night 门票。你自己的二维码已准备好。
+
+查看我的门票: https://app.yayatoh.test/my-tickets/sample
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ticketing.transfer-received · zh-TW 1`] = `
+{
+  "subject": "你的 Lakeside Jazz Night 票券",
+  "text": "你的 Lakeside Jazz Night 票券
+
+Noor Haddad，您好：
+
+你已領取 Amina Diallo 傳送給你的 Lakeside Jazz Night 票券。你自己的 QR 碼已準備好。
+
+查看我的票券: https://app.yayatoh.test/my-tickets/sample
 
 --
 由 Lakeside Events 透過 Yayatoh 寄送。
