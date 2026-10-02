@@ -21,6 +21,8 @@ export async function createSeededSandbox(ctx: Ctx, name: string): Promise<Sandb
     createEventCommand,
     {
       name: 'Sample conference',
+      // Event addresses are global: the sandbox's own address keeps this one unique.
+      slug: `${sandbox.slug}-sample`,
       tagline: 'Sandbox data: try the API, checkout and check-in. Payments are fake.',
       timezone: 'UTC',
       startsAt: start.toISOString(),
