@@ -8356,7 +8356,8 @@
       "already_invited": "该地址已被邀请。",
       "allowance_reached": "{allowance, plural, other {全部 # 个员工名额}}均已占用。请撤销一个邀请以释放名额，或向主办方申请更多名额。",
       "event_over": "此活动已结束，无法再邀请其他人。"
-    }
+    },
+    "email": "电子邮箱"
   },
   "exhibitorAdmin": {
     "subnav": "参展商页面",
