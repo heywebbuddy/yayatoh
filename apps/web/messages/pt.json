@@ -8357,7 +8357,8 @@
       "already_invited": "Esse endereço já foi convidado.",
       "allowance_reached": "{allowance, plural, one {A # vaga de equipe está ocupada} many {Todas as # vagas de equipe estão ocupadas} other {Todas as # vagas de equipe estão ocupadas}}. Revogue um convite para liberar uma vaga ou peça mais ao organizador.",
       "event_over": "Este evento já terminou, então não é possível convidar mais ninguém."
-    }
+    },
+    "email": "E-mail"
   },
   "exhibitorAdmin": {
     "subnav": "Páginas de expositores",

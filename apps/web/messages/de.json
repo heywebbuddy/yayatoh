@@ -8357,7 +8357,8 @@
       "already_invited": "Diese Adresse ist bereits eingeladen.",
       "allowance_reached": "{allowance, plural, one {Der # Personalplatz ist} other {Alle # Personalplätze sind}} belegt. Widerrufen Sie eine Einladung, um einen Platz freizugeben, oder bitten Sie den Veranstalter um weitere.",
       "event_over": "Diese Veranstaltung ist vorbei, daher kann niemand mehr eingeladen werden."
-    }
+    },
+    "email": "E-Mail"
   },
   "exhibitorAdmin": {
     "subnav": "Ausstellerseiten",

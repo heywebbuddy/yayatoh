@@ -8357,7 +8357,8 @@
       "already_invited": "That address is already invited.",
       "allowance_reached": "All {allowance, plural, one {# staff place is} other {# staff places are}} taken. Revoke an invitation to free a place, or ask the organizer for more.",
       "event_over": "This event is over, so no one else can be invited."
-    }
+    },
+    "email": "Email"
   },
   "exhibitorAdmin": {
     "subnav": "Exhibitor pages",
