@@ -220,6 +220,11 @@
       "subject": "Je ticket voor {eventName}",
       "intro": "Je hebt het ticket geclaimd dat {fromName} je voor {eventName} stuurde. Je eigen QR-code staat klaar.",
       "cta": "Mijn ticket bekijken"
+    },
+    "forms.resume": {
+      "subject": "Ga verder met je registratie voor {eventName}",
+      "intro": "Hier is je link om je registratie voor {eventName} te hervatten waar je gebleven was. Hij werkt {days, plural, one {# dag} other {# dagen}} na je laatste opslag en alleen voor jou, dus stuur hem niet door. Heb je hier niet om gevraagd, dan kun je deze e-mail negeren.",
+      "cta": "Verder met mijn registratie"
     }
   },
   "roles": {

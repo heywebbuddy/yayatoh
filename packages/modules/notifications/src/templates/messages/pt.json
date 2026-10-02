@@ -220,6 +220,11 @@
       "subject": "Seu ingresso para {eventName}",
       "intro": "Você resgatou o ingresso que {fromName} enviou para {eventName}. Seu próprio código QR está pronto.",
       "cta": "Ver meu ingresso"
+    },
+    "forms.resume": {
+      "subject": "Continue sua inscrição em {eventName}",
+      "intro": "Aqui está o seu link para retomar sua inscrição em {eventName} de onde parou. Ele funciona por {days, plural, one {# dia} other {# dias}} após o último salvamento e só para você, então não o encaminhe. Se você não pediu este e-mail, pode ignorá-lo.",
+      "cta": "Continuar minha inscrição"
     }
   },
   "roles": {

@@ -1677,6 +1677,240 @@ Amina Diallo，您好：
 }
 `;
 
+exports[`renderMessage: every kind in all 13 locales > forms.resume · ar 1`] = `
+{
+  "subject": "أكمل تسجيلك في Midwest Leadership Summit",
+  "text": "أكمل تسجيلك في Midwest Leadership Summit
+
+مرحبًا Amina Diallo،
+
+إليك الرابط لمتابعة تسجيلك في Midwest Leadership Summit من حيث توقفت. يعمل الرابط لمدة 14 يومًا بعد آخر حفظ، ولك وحدك، لذا لا تعِد توجيهه. إذا لم تطلبه، يمكنك تجاهل هذه الرسالة.
+
+متابعة تسجيلي: https://app.yayatoh.test/registration-form/sample
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > forms.resume · de 1`] = `
+{
+  "subject": "Setzen Sie Ihre Anmeldung für Midwest Leadership Summit fort",
+  "text": "Setzen Sie Ihre Anmeldung für Midwest Leadership Summit fort
+
+Hallo Amina Diallo,
+
+Hier ist Ihr Link, um Ihre Anmeldung für Midwest Leadership Summit dort fortzusetzen, wo Sie aufgehört haben. Er gilt 14 Tage nach dem letzten Speichern und nur für Sie; bitte leiten Sie ihn nicht weiter. Wenn Sie ihn nicht angefordert haben, können Sie diese E-Mail ignorieren.
+
+Anmeldung fortsetzen: https://app.yayatoh.test/registration-form/sample
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > forms.resume · en 1`] = `
+{
+  "subject": "Continue your registration for Midwest Leadership Summit",
+  "text": "Continue your registration for Midwest Leadership Summit
+
+Hi Amina Diallo,
+
+Here is your link to pick up your registration for Midwest Leadership Summit where you left off. It works for 14 days after your last save and only for you, so please don't forward it. If you didn't ask for it, you can ignore this email.
+
+Continue my registration: https://app.yayatoh.test/registration-form/sample
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > forms.resume · es 1`] = `
+{
+  "subject": "Continúa tu inscripción a Midwest Leadership Summit",
+  "text": "Continúa tu inscripción a Midwest Leadership Summit
+
+Hola, Amina Diallo:
+
+Este es tu enlace para retomar tu inscripción a Midwest Leadership Summit donde la dejaste. Funciona durante 14 días después de tu último guardado y solo para ti, así que no lo reenvíes. Si no lo pediste, puedes ignorar este correo.
+
+Continuar mi inscripción: https://app.yayatoh.test/registration-form/sample
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > forms.resume · fr 1`] = `
+{
+  "subject": "Poursuivez votre inscription à Midwest Leadership Summit",
+  "text": "Poursuivez votre inscription à Midwest Leadership Summit
+
+Bonjour Amina Diallo,
+
+Voici votre lien pour reprendre votre inscription à Midwest Leadership Summit là où vous l'avez laissée. Il fonctionne pendant 14 jours après votre dernier enregistrement et uniquement pour vous : ne le transférez pas. Si vous ne l'avez pas demandé, vous pouvez ignorer cet e-mail.
+
+Poursuivre mon inscription: https://app.yayatoh.test/registration-form/sample
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > forms.resume · hi 1`] = `
+{
+  "subject": "Midwest Leadership Summit के लिए अपना पंजीकरण जारी रखें",
+  "text": "Midwest Leadership Summit के लिए अपना पंजीकरण जारी रखें
+
+नमस्ते Amina Diallo,
+
+Midwest Leadership Summit के लिए अपना पंजीकरण वहीं से जारी रखने का लिंक यह रहा जहाँ आपने छोड़ा था। यह आपके पिछली बार सहेजने के बाद 14 दिन तक और केवल आपके लिए काम करता है, इसलिए इसे आगे न भेजें। अगर आपने इसके लिए नहीं कहा था, तो इस ईमेल को अनदेखा करें।
+
+मेरा पंजीकरण जारी रखें: https://app.yayatoh.test/registration-form/sample
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > forms.resume · it 1`] = `
+{
+  "subject": "Continua la tua registrazione a Midwest Leadership Summit",
+  "text": "Continua la tua registrazione a Midwest Leadership Summit
+
+Ciao Amina Diallo,
+
+Ecco il tuo link per riprendere la registrazione a Midwest Leadership Summit da dove l'avevi lasciata. Funziona per 14 giorni dall'ultimo salvataggio e solo per te, quindi non inoltrarlo. Se non l'hai richiesto, puoi ignorare questa email.
+
+Continua la registrazione: https://app.yayatoh.test/registration-form/sample
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > forms.resume · ja 1`] = `
+{
+  "subject": "Midwest Leadership Summitの登録を続ける",
+  "text": "Midwest Leadership Summitの登録を続ける
+
+Amina Diallo 様
+
+Midwest Leadership Summitの登録を中断したところから再開するためのリンクです。最後に保存してから14 日間、ご本人のみ使用できますので転送しないでください。心当たりがない場合は、このメールを無視してください。
+
+登録を続ける: https://app.yayatoh.test/registration-form/sample
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > forms.resume · nl 1`] = `
+{
+  "subject": "Ga verder met je registratie voor Midwest Leadership Summit",
+  "text": "Ga verder met je registratie voor Midwest Leadership Summit
+
+Hoi Amina Diallo,
+
+Hier is je link om je registratie voor Midwest Leadership Summit te hervatten waar je gebleven was. Hij werkt 14 dagen na je laatste opslag en alleen voor jou, dus stuur hem niet door. Heb je hier niet om gevraagd, dan kun je deze e-mail negeren.
+
+Verder met mijn registratie: https://app.yayatoh.test/registration-form/sample
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > forms.resume · pt 1`] = `
+{
+  "subject": "Continue sua inscrição em Midwest Leadership Summit",
+  "text": "Continue sua inscrição em Midwest Leadership Summit
+
+Olá, Amina Diallo!
+
+Aqui está o seu link para retomar sua inscrição em Midwest Leadership Summit de onde parou. Ele funciona por 14 dias após o último salvamento e só para você, então não o encaminhe. Se você não pediu este e-mail, pode ignorá-lo.
+
+Continuar minha inscrição: https://app.yayatoh.test/registration-form/sample
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > forms.resume · ru 1`] = `
+{
+  "subject": "Продолжите регистрацию на Midwest Leadership Summit",
+  "text": "Продолжите регистрацию на Midwest Leadership Summit
+
+Здравствуйте, Amina Diallo!
+
+Вот ваша ссылка, чтобы продолжить регистрацию на Midwest Leadership Summit с того места, где вы остановились. Она действует 14 дней после последнего сохранения и только для вас, поэтому не пересылайте её. Если вы её не запрашивали, просто проигнорируйте это письмо.
+
+Продолжить регистрацию: https://app.yayatoh.test/registration-form/sample
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > forms.resume · zh-CN 1`] = `
+{
+  "subject": "继续您的 Midwest Leadership Summit 报名",
+  "text": "继续您的 Midwest Leadership Summit 报名
+
+Amina Diallo，您好：
+
+这是您的链接，可从上次中断的地方继续 Midwest Leadership Summit 的报名。它在您最后一次保存后 14 天 内有效，且仅供您本人使用，请勿转发。如果您没有请求此邮件，可以忽略。
+
+继续我的报名: https://app.yayatoh.test/registration-form/sample
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > forms.resume · zh-TW 1`] = `
+{
+  "subject": "繼續您的 Midwest Leadership Summit 報名",
+  "text": "繼續您的 Midwest Leadership Summit 報名
+
+Amina Diallo，您好：
+
+這是您的連結，可從上次中斷的地方繼續 Midwest Leadership Summit 的報名。它在您最後一次儲存後 14 天 內有效，且僅供您本人使用，請勿轉寄。如果您沒有要求此郵件，可以忽略。
+
+繼續我的報名: https://app.yayatoh.test/registration-form/sample
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
 exports[`renderMessage: every kind in all 13 locales > guest.checkout-code · ar 1`] = `
 {
   "subject": "305117 هو رمز تأكيد بريدك الإلكتروني",

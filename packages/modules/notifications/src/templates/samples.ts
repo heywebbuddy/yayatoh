@@ -114,6 +114,12 @@ export const SAMPLE_PARAMS: Readonly<Record<MessageKind, Readonly<Record<string,
     site: 'Lakeside Events',
   },
   'guest.waitlist-code': { code: '305117', minutes: 10, eventName: 'Lakeside Jazz Night' },
+  'forms.resume': {
+    url: 'https://app.yayatoh.test/registration-form/sample',
+    name: 'Amina Diallo',
+    eventName: 'Midwest Leadership Summit',
+    days: 14,
+  },
   'orders.waitlist-joined': {
     url: 'https://app.yayatoh.test/waitlist/sample',
     name: 'Amina Diallo',

@@ -220,6 +220,11 @@
       "subject": "{eventName} のチケット",
       "intro": "{fromName} さんから届いた {eventName} のチケットを受け取りました。あなた専用の QR コードの準備ができています。",
       "cta": "チケットを見る"
+    },
+    "forms.resume": {
+      "subject": "{eventName}の登録を続ける",
+      "intro": "{eventName}の登録を中断したところから再開するためのリンクです。最後に保存してから{days, plural, other {# 日間}}、ご本人のみ使用できますので転送しないでください。心当たりがない場合は、このメールを無視してください。",
+      "cta": "登録を続ける"
     }
   },
   "roles": {

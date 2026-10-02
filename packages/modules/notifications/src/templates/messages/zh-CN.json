@@ -220,6 +220,11 @@
       "subject": "你的 {eventName} 门票",
       "intro": "你已领取 {fromName} 发送给你的 {eventName} 门票。你自己的二维码已准备好。",
       "cta": "查看我的门票"
+    },
+    "forms.resume": {
+      "subject": "继续您的 {eventName} 报名",
+      "intro": "这是您的链接，可从上次中断的地方继续 {eventName} 的报名。它在您最后一次保存后 {days, plural, other {# 天}} 内有效，且仅供您本人使用，请勿转发。如果您没有请求此邮件，可以忽略。",
+      "cta": "继续我的报名"
     }
   },
   "roles": {

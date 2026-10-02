@@ -220,6 +220,11 @@
       "subject": "Il tuo biglietto per {eventName}",
       "intro": "Hai riscattato il biglietto che {fromName} ti ha inviato per {eventName}. Il tuo codice QR è pronto.",
       "cta": "Vedi il mio biglietto"
+    },
+    "forms.resume": {
+      "subject": "Continua la tua registrazione a {eventName}",
+      "intro": "Ecco il tuo link per riprendere la registrazione a {eventName} da dove l'avevi lasciata. Funziona per {days, plural, one {# giorno} other {# giorni}} dall'ultimo salvataggio e solo per te, quindi non inoltrarlo. Se non l'hai richiesto, puoi ignorare questa email.",
+      "cta": "Continua la registrazione"
     }
   },
   "roles": {

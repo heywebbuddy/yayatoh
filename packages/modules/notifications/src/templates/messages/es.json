@@ -220,6 +220,11 @@
       "subject": "Tu entrada para {eventName}",
       "intro": "Reclamaste la entrada que {fromName} te envió para {eventName}. Tu propio código QR está listo.",
       "cta": "Ver mi entrada"
+    },
+    "forms.resume": {
+      "subject": "Continúa tu inscripción a {eventName}",
+      "intro": "Este es tu enlace para retomar tu inscripción a {eventName} donde la dejaste. Funciona durante {days, plural, one {# día} other {# días}} después de tu último guardado y solo para ti, así que no lo reenvíes. Si no lo pediste, puedes ignorar este correo.",
+      "cta": "Continuar mi inscripción"
     }
   },
   "roles": {

@@ -11,6 +11,7 @@ import {
 } from '@yayatoh/checkin';
 import { deviceBoardPublisher, publishMetricsChangedTx } from '@yayatoh/command-center';
 import { findEventTx } from '@yayatoh/events';
+import { registrationResumeMailer } from '@yayatoh/forms';
 import { listingsProjector } from '@yayatoh/marketplace';
 import { programMediaCleaner } from '@yayatoh/media';
 import { announcementMailer, contactWroteNotifier, threadReplyMailer } from '@yayatoh/messaging';
@@ -101,6 +102,11 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     staffAlertsSubscriber(derivedStaffAlerts),
     programMediaCleaner(),
     surveyMailer({ notifier, appOrigin }),
+    registrationResumeMailer({
+      notifier,
+      appOrigin,
+      eventName: async (tx, id) => (await findEventTx(tx, id))?.name ?? null,
+    }),
     waitlistMailer({ notifier, appOrigin }),
     // M3.7a: journeys enroll on purchase and check-in, follow date changes and cancellations.
     ...journeySubscribers(),

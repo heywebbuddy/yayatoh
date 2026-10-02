@@ -220,6 +220,11 @@
       "subject": "Dein Ticket für {eventName}",
       "intro": "Du hast das Ticket angenommen, das dir {fromName} für {eventName} geschickt hat. Dein eigener QR-Code ist bereit.",
       "cta": "Mein Ticket ansehen"
+    },
+    "forms.resume": {
+      "subject": "Setzen Sie Ihre Anmeldung für {eventName} fort",
+      "intro": "Hier ist Ihr Link, um Ihre Anmeldung für {eventName} dort fortzusetzen, wo Sie aufgehört haben. Er gilt {days, plural, one {# Tag} other {# Tage}} nach dem letzten Speichern und nur für Sie; bitte leiten Sie ihn nicht weiter. Wenn Sie ihn nicht angefordert haben, können Sie diese E-Mail ignorieren.",
+      "cta": "Anmeldung fortsetzen"
     }
   },
   "roles": {

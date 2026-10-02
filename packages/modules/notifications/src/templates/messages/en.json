@@ -220,6 +220,11 @@
       "subject": "Your ticket for {eventName}",
       "intro": "You claimed the ticket {fromName} sent you for {eventName}. Your own QR code is ready.",
       "cta": "View my ticket"
+    },
+    "forms.resume": {
+      "subject": "Continue your registration for {eventName}",
+      "intro": "Here is your link to pick up your registration for {eventName} where you left off. It works for {days, plural, one {# day} other {# days}} after your last save and only for you, so please don't forward it. If you didn't ask for it, you can ignore this email.",
+      "cta": "Continue my registration"
     }
   },
   "roles": {

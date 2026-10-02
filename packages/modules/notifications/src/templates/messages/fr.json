@@ -220,6 +220,11 @@
       "subject": "Votre billet pour {eventName}",
       "intro": "Vous avez récupéré le billet que {fromName} vous a envoyé pour {eventName}. Votre propre code QR est prêt.",
       "cta": "Voir mon billet"
+    },
+    "forms.resume": {
+      "subject": "Poursuivez votre inscription à {eventName}",
+      "intro": "Voici votre lien pour reprendre votre inscription à {eventName} là où vous l'avez laissée. Il fonctionne pendant {days, plural, one {# jour} other {# jours}} après votre dernier enregistrement et uniquement pour vous : ne le transférez pas. Si vous ne l'avez pas demandé, vous pouvez ignorer cet e-mail.",
+      "cta": "Poursuivre mon inscription"
     }
   },
   "roles": {

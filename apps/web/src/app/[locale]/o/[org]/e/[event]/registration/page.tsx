@@ -11,6 +11,7 @@ import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { type FieldSpec, ProgramForm } from '@/components/program-form.tsx';
 import { RegistrationCell } from '@/components/registration-cell.tsx';
+import { Link } from '@/i18n/navigation.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import {
@@ -50,6 +51,7 @@ export default async function RegistrationPage({
   const canWrite = roleCan(data.role, 'events:write');
   const t = await getTranslations('registration');
   const tv = await getTranslations('vocab');
+  const tf = await getTranslations('registrationForm');
   const errors: Record<string, string> = {
     name: t('errors.name'),
     'conflict.key': t('errors.keyTaken'),
@@ -168,6 +170,13 @@ export default async function RegistrationPage({
   return (
     <>
       <PageHeader title={tv('registration')} description={t('subtitle')} />
+      {/* M5.1b: the multi-page registration form for this event's types. */}
+      <Link
+        href={`/o/${org}/e/${event}/registration-form`}
+        className="self-start text-body underline underline-offset-2"
+      >
+        {tf('openBuilder')}
+      </Link>
       {canWrite ? null : <p className="text-body text-zinc-500">{t('viewerNotice')}</p>}
       <p className="text-caption text-zinc-600">
         {setup.pack.active

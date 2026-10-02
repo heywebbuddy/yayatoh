@@ -251,6 +251,16 @@ export const RATE_LIMIT_POLICIES = {
     anonymousIp: { limit: 60, windowMs: 10 * MIN },
     ipCeiling: { limit: 600, windowMs: 10 * MIN },
   },
+  /**
+   * Registration forms (M5.1b): starting one (creates a draft) and asking for the resume link
+   * (sends an email; also capped per respondent by the forms module).
+   */
+  registrationForm: {
+    device: { limit: 20, windowMs: 10 * MIN },
+    anonymousIp: { limit: 40, windowMs: 10 * MIN },
+    identity: { limit: 10, windowMs: 60 * MIN },
+    ipCeiling: { limit: 300, windowMs: 10 * MIN },
+  },
   /** Starting a checkout (creates holds on inventory). */
   checkoutStart: {
     device: { limit: 20, windowMs: 10 * MIN },

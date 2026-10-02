@@ -220,6 +220,11 @@
       "subject": "你的 {eventName} 票券",
       "intro": "你已領取 {fromName} 傳送給你的 {eventName} 票券。你自己的 QR 碼已準備好。",
       "cta": "查看我的票券"
+    },
+    "forms.resume": {
+      "subject": "繼續您的 {eventName} 報名",
+      "intro": "這是您的連結，可從上次中斷的地方繼續 {eventName} 的報名。它在您最後一次儲存後 {days, plural, other {# 天}} 內有效，且僅供您本人使用，請勿轉寄。如果您沒有要求此郵件，可以忽略。",
+      "cta": "繼續我的報名"
     }
   },
   "roles": {

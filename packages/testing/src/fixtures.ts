@@ -75,6 +75,13 @@ import {
   moveGuestCommand,
   updatePartyGuestCommand,
 } from '@yayatoh/guests';
+import {
+  publishFormCommand,
+  publishRegistrationFormCommand,
+  saveRegistrationPageCommand,
+  setJobTitlesCommand,
+  startRegistrationFormCommand,
+} from '@yayatoh/forms';
 import { type Ctx, createCtx, executeCommand, executeQuery, uuidv7 } from '@yayatoh/kernel';
 import {
   attributeOrderCommand,
@@ -207,7 +214,7 @@ import {
 } from '@yayatoh/ticketing';
 import { createVenueCommand, submitQuoteRequestCommand } from '@yayatoh/venues';
 import { sql } from 'drizzle-orm';
-import { ports, runBulk } from './ports.ts';
+import { ports, runBulk, submitRegistrationForm } from './ports.ts';
 
 export interface OrgFixture {
   readonly org: OrganizationDto;
@@ -370,6 +377,63 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ctx(),
     ports,
   );
+  // M5.1b: a registration form, the job title list, one submitted respondent (consent checked,
+  // company named) and one draft with a sensitive answer, so respondents, job titles and
+  // companies are covered.
+  await executeCommand(
+    publishRegistrationFormCommand,
+    {
+      eventId: event.id,
+      definition: {
+        pages: [
+          {
+            key: 'about',
+            title: 'About you',
+            fields: [
+              { key: 'company', type: 'company', label: 'Company' },
+              { key: 'job', type: 'job_title', label: 'Job title' },
+              { key: 'access', type: 'short_text', label: 'Access needs', sensitive: true },
+              {
+                key: 'share_email',
+                type: 'consent',
+                label: 'Exhibitors may receive my email',
+                consent: { term: 'exhibitor_email_sharing', version: 1 },
+              },
+            ],
+          },
+        ],
+      },
+    },
+    ctx(),
+    ports,
+  );
+  await executeCommand(setJobTitlesCommand, { titles: ['Engineer', 'Director'] }, ctx(), ports);
+  for (const [who, submit] of [
+    ['respondent', true],
+    ['drafter', false],
+  ] as const) {
+    const { token } = await executeCommand(
+      startRegistrationFormCommand,
+      {
+        eventId: event.id,
+        registrationTypeId: 'fixture-type',
+        name: `Fixture ${who}`,
+        email: `${who}@${slug}.test`,
+      },
+      ctx(),
+      ports,
+    );
+    const answers = { company: `${name} Partner`, job: 'Engineer', access: 'Step-free', share_email: true };
+    if (submit)
+      await executeCommand(submitRegistrationForm, { token, pageKey: 'about', answers }, ctx(), ports);
+    else
+      await executeCommand(
+        saveRegistrationPageCommand,
+        { token, pageKey: 'about', answers, intent: 'stay' },
+        ctx(),
+        ports,
+      );
+  }
   // One paid order (fake provider) so orders, order items and provider events are covered.
   await executeCommand(transitionEventCommand, { eventId: event.id, transition: 'publish' }, ctx(), ports);
   // M3.8a: a tracked link and one click on it from the buyer's device, before the order.

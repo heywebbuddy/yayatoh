@@ -12,6 +12,7 @@ import {
 } from '@yayatoh/checkin';
 import { withTenant } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
+import { registrationResumeMailer } from '@yayatoh/forms';
 import { createCtx } from '@yayatoh/kernel';
 import { announcementMailer, contactWroteNotifier, threadReplyMailer } from '@yayatoh/messaging';
 import {
@@ -102,6 +103,11 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     // M3.4a: staff alerts for the Scan PWA (web push per device).
     staffAlertsSubscriber(staffAlertSource),
     surveyMailer({ notifier, appOrigin }),
+    registrationResumeMailer({
+      notifier,
+      appOrigin,
+      eventName: async (tx, id) => (await findEventTx(tx, id))?.name ?? null,
+    }),
     waitlistMailer({ notifier, appOrigin }),
     alertEvaluator({ notifier }),
     // M3.7a: journeys enroll, follow date changes and cancellations (their steps run below).

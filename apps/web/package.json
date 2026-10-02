@@ -27,6 +27,7 @@
     "@yayatoh/cms": "workspace:*",
     "@yayatoh/command-center": "workspace:*",
     "@yayatoh/contracts": "workspace:*",
+    "@yayatoh/crm": "workspace:*",
     "@yayatoh/db": "workspace:*",
     "@yayatoh/events": "workspace:*",
     "@yayatoh/floorplan": "workspace:*",
