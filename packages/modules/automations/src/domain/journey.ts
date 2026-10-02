@@ -8,7 +8,13 @@ import { z } from 'zod';
  */
 
 /** What enrolls a person. `rsvp` (M4.1d) is reserved: see `FUTURE_TRIGGERS`. */
-export const JOURNEY_TRIGGERS = ['order_paid', 'checked_in', 'event_time'] as const;
+export const JOURNEY_TRIGGERS = [
+  'order_paid',
+  'checked_in',
+  'event_time',
+  /** M5.1d: a pay-later invoice was issued (the buyer); payment or a void ends the run. */
+  'invoice_issued',
+] as const;
 export type JourneyTrigger = (typeof JOURNEY_TRIGGERS)[number];
 /**
  * Extension point: triggers that arrive later. Each one needs only a subscriber that calls
@@ -18,7 +24,13 @@ export type JourneyTrigger = (typeof JOURNEY_TRIGGERS)[number];
 export const FUTURE_TRIGGERS = ['rsvp'] as const;
 
 /** What a step's wait is measured from. */
-export const WAIT_ANCHORS = ['trigger', 'event_start', 'event_end'] as const;
+export const WAIT_ANCHORS = [
+  'trigger',
+  'event_start',
+  'event_end',
+  /** M5.1d: the invoice's due date (start of the day, event timezone); `invoice_issued` only. */
+  'invoice_due',
+] as const;
 export type WaitAnchor = (typeof WAIT_ANCHORS)[number];
 
 /** What a step does: send a message on one channel, add a label, or invite to the survey. */
@@ -112,6 +124,8 @@ export function stepProblems(
   const out: { index: number; field: string }[] = [];
   steps.forEach((s, index) => {
     if (trigger === 'event_time' && s.anchor === 'trigger') out.push({ index, field: 'anchor' });
+    // Only an invoice has a due date to wait from.
+    if (trigger !== 'invoice_issued' && s.anchor === 'invoice_due') out.push({ index, field: 'anchor' });
   });
   return out;
 }
@@ -119,8 +133,23 @@ export function stepProblems(
 /** Placeholders a message may use; filled per person when the step runs. */
 export const PLACEHOLDERS = ['name', 'event', 'when'] as const;
 export type Placeholder = (typeof PLACEHOLDERS)[number];
+/**
+ * M5.1d: an `invoice_issued` journey's messages may also use the invoice's number, the balance
+ * still due, its due date and the buyer's link to view and pay it.
+ */
+export const INVOICE_PLACEHOLDERS = ['invoice', 'balance', 'due', 'link'] as const;
+export type InvoicePlaceholder = (typeof INVOICE_PLACEHOLDERS)[number];
 
-/** Replace `{name}`, `{event}` and `{when}`; anything else in braces stays as written. */
-export function fillPlaceholders(text: string, values: Readonly<Record<Placeholder, string>>): string {
-  return text.replace(/\{(name|event|when)\}/g, (_m, k: Placeholder) => values[k]);
+/**
+ * Replace `{name}`, `{event}` and `{when}` (and, when given, the invoice placeholders); anything
+ * else in braces stays as written.
+ */
+export function fillPlaceholders(
+  text: string,
+  values: Readonly<Record<Placeholder, string>> & Partial<Readonly<Record<InvoicePlaceholder, string>>>,
+): string {
+  return text.replace(/\{(name|event|when|invoice|balance|due|link)\}/g, (m, k: string) => {
+    const v = (values as Record<string, string | undefined>)[k];
+    return v === undefined ? m : v;
+  });
 }

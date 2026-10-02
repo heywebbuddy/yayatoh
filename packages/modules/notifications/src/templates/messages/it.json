@@ -198,6 +198,11 @@
       "intro": "{org} ha emesso la nota di credito {number} di {amount} sul tuo ordine per {eventName}. {storeCredit, select, yes {Usa il codice {code} al pagamento per spenderla in un prossimo ordine con {org}.} other {Questo importo ti è stato rimborsato.}}",
       "cta": "Vedi il mio ordine"
     },
+    "orders.invoice": {
+      "subject": "Fattura {number} per {eventName}",
+      "intro": "La tua iscrizione a {eventName} è registrata. {org} ha emesso la fattura {number} di {amount}, con scadenza il {due}. Usa il pulsante qui sotto per vederla, scaricare il PDF o pagarla in tutto o in parte.",
+      "cta": "Vedi e paga la fattura"
+    },
     "orders.support-reply": {
       "subject": "{subject}",
       "intro": "Un messaggio da {org} sul tuo ordine per {eventName}:",

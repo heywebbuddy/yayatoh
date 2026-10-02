@@ -2,6 +2,7 @@ export * from './domain/conditions.ts';
 export * from './domain/journey.ts';
 export * from './domain/templates.ts';
 export * from './domain/timing.ts';
+export { invoiceRunsOfOrder, journeyInvoiceHooks } from './invoice-hooks.ts';
 export {
   type ActionCounts,
   ActionDto,

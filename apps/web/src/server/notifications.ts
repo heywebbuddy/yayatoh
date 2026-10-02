@@ -28,6 +28,7 @@ import {
 } from '@yayatoh/notifications';
 import {
   creditNoteMailer,
+  invoiceMailer,
   orderLinkMailer,
   postponementMailer,
   refundDeclineMailer,
@@ -89,6 +90,8 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     transferMailer({ notifier, appOrigin }),
     walletPassSync({ provider: devWalletPasses }),
     creditNoteMailer({ notifier, appOrigin }),
+    // M5.1d: pay-later invoices.
+    invoiceMailer({ notifier, appOrigin }),
     supportReplyMailer({ notifier, appOrigin }),
     // Dispute evidence deadlines reach finance through the alert engine (batch 3e: the
     // `disputeDeadline` rule), not a second notification.
@@ -155,7 +158,7 @@ export async function drainOrgMessages(
     consumed += fresh;
     // Journey steps due now (M3.7a; the worker's `automations.run-due` job): they queue messages
     // and may emit events (a survey step's `survey.sent`), so the next pass picks those up.
-    const steps = await runDueActions(orgId, { notifier }, ports);
+    const steps = await runDueActions(orgId, { notifier, appOrigin }, ports);
     journeySteps += steps.done + steps.skipped + steps.failed;
     if (fresh === 0 && steps.done === 0) break;
   }

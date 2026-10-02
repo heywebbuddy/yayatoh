@@ -4,6 +4,7 @@ import { findEventTx } from '@yayatoh/events';
 import { createCtx, DomainError, requireOrg } from '@yayatoh/kernel';
 import {
   CheckoutResultDto,
+  invoiceToken,
   JoinWaitlistInput,
   JoinWaitlistResultDto,
   joinWaitlistTx,
@@ -20,6 +21,13 @@ import { publicRoom } from './domain/capacity.ts';
 import { type Eligibility, eligibilityRefusal } from './domain/eligibility.ts';
 import { type AdmissionKind, priceRange, selectionProblem } from './domain/matrix.ts';
 import { type PublicRegistrationDto, publicRegistrationSerializer } from './dto.ts';
+import {
+  assertPayLater,
+  invoiceRegistrationTx,
+  offersPayLater,
+  PayLaterInput,
+  type PoMode,
+} from './pay-later.ts';
 import { recordSingleRegistrantTx, refuseDirectRegistration } from './registrant-records.ts';
 import { admissionItems, registrationTypes, typeItems } from './schema.ts';
 
@@ -93,6 +101,8 @@ export const StartRegistrationInput = StartCheckoutInput.omit({ items: true, sea
   itemIds: z.array(z.uuid()).min(1).max(10),
   /** The type's access code, when it has one. */
   accessCode: z.string().max(64).optional(),
+  /** M5.1d: pay later by invoice (types that offer it), with the PO number and company. */
+  payLater: PayLaterInput.nullish(),
 });
 
 /**
@@ -105,7 +115,11 @@ export const StartRegistrationInput = StartCheckoutInput.omit({ items: true, sea
 export const startRegistrationCommand = tenantCommand({
   name: 'registration.startCheckout',
   input: StartRegistrationInput,
-  output: CheckoutResultDto.extend({ registrationTypeId: z.uuid() }),
+  output: CheckoutResultDto.extend({
+    registrationTypeId: z.uuid(),
+    /** M5.1d: the invoice's signed link token when the buyer chose pay later. */
+    invoiceToken: z.string().nullable().default(null),
+  }),
   entitlement: 'registration',
   permission: 'public:checkout',
   handler: async ({ input, ctx, tx, emit, requireStepUp }) => {
@@ -129,6 +143,8 @@ export const startRegistrationCommand = tenantCommand({
         field: 'items',
       });
     const admission = input.itemIds.find((id) => kinds.get(id) === 'admission') as string;
+    // M5.1d: pay later only where the type offers it, with the PO number it may require.
+    if (input.payLater) assertPayLater(type, input.payLater);
     if (input.waitlistToken) {
       if (!entry || entry.ticketTypeId !== offered.get(admission)?.ticketTypeId || input.itemIds.length !== 1)
         throw new DomainError('validation_failed', 'Only the offered pass can be bought', {
@@ -163,7 +179,12 @@ export const startRegistrationCommand = tenantCommand({
     );
     // The waitlist offer's place moved from "offered" to this order: nothing to keep back.
     await claimPlacesTx(tx, type, 1, 0);
-    const paid = checkout.order.status === 'paid';
+    // M5.1d: pay later: the order is invoiced now (place sold, tickets issued, balance due).
+    const invoice =
+      input.payLater && checkout.order.status === 'reserved'
+        ? await invoiceRegistrationTx(tx, ctx, emit, type, checkout.order.id, input.payLater)
+        : null;
+    const paid = checkout.order.status === 'paid' || invoice !== null;
     if (paid)
       await tx
         .update(registrationTypes)
@@ -192,7 +213,14 @@ export const startRegistrationCommand = tenantCommand({
       orderId: checkout.order.id,
       paid,
     });
-    return { ...checkout, registrationTypeId: type.id };
+    return {
+      ...checkout,
+      ...(invoice
+        ? { order: { ...checkout.order, status: 'awaiting_invoice' as const, expiresAt: null } }
+        : {}),
+      registrationTypeId: type.id,
+      invoiceToken: invoice ? invoiceToken(invoice.id) : null,
+    };
   },
   audit: (input, r) => ({
     action: 'registration.checkout',
@@ -202,6 +230,7 @@ export const startRegistrationCommand = tenantCommand({
       eventId: input.eventId,
       registrationTypeId: input.registrationTypeId,
       items: input.itemIds.length,
+      payLater: Boolean(r.invoiceToken),
     },
   }),
 });
@@ -344,6 +373,8 @@ export async function publicRegistration(
         maxAllInMinor: range.max,
         full: room !== null && room < 1,
         apply: t.approval === 'manual',
+        payLater: offersPayLater(t),
+        poNumber: offersPayLater(t) ? (t.poNumber as PoMode) : 'off',
       });
       out.items[t.id] = mine.map(({ currency: _c, ...i }) => i);
     }

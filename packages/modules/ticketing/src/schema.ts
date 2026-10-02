@@ -138,6 +138,11 @@ export const tickets = tenantTable(
     seatLabel: text('seat_label'),
     /** Multi-date events (M1.4b): the date this ticket admits (`events.occurrences`, hand-written FK). */
     occurrenceId: uuid('occurrence_id'),
+    /**
+     * M5.1d: sold on an invoice whose balance is still due. The door and the badge desk admit or
+     * print it only with an audited staff override; cleared when the invoice is paid.
+     */
+    paymentDue: boolean('payment_due').notNull().default(false),
   },
   (t) => [
     uniqueIndex('tickets_org_event_serial_key').on(t.orgId, t.eventId, t.serial),

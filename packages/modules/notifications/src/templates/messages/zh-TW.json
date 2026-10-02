@@ -198,6 +198,11 @@
       "intro": "{org} 已為你在 {eventName} 的訂單開立金額 {amount} 的折讓單 {number}。{storeCredit, select, yes {在 {org} 的下一筆訂單結帳時輸入代碼 {code} 即可使用。} other {此金額已退還給你。}}",
       "cta": "查看我的訂單"
     },
+    "orders.invoice": {
+      "subject": "{eventName} 的發票 {number}",
+      "intro": "您已報名參加 {eventName}。{org} 已開立發票 {number}，金額 {amount}，付款期限為 {due}。請使用下方按鈕查看發票、下載 PDF，或支付全部或部分款項。",
+      "cta": "查看並支付發票"
+    },
     "orders.support-reply": {
       "subject": "{subject}",
       "intro": "{org} 關於你在 {eventName} 訂單的訊息:",

@@ -66,6 +66,13 @@ export const KINDS = {
     urgent: false,
     params: ['url', 'name', 'eventName', 'number', 'amountMinor', 'currency', 'storeCredit', 'code'],
   },
+  // M5.1d: a pay-later invoice (number, amount, due date; the link views, downloads and pays it).
+  'orders.invoice': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['url', 'name', 'eventName', 'number', 'amountMinor', 'currency', 'dueOn'],
+  },
   'orders.support-reply': {
     category: 'transactional',
     channels: ['email'],

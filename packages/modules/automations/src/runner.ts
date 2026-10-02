@@ -2,7 +2,7 @@ import { addAttendeeLabelsTx, eventAttendeesTx, participationAttendeesTx } from 
 import { admittedTicketIdsTx } from '@yayatoh/checkin';
 import { contactByIdTx } from '@yayatoh/crm';
 import { type TenantTx, withTenant } from '@yayatoh/db';
-import { seriesEditionsTx } from '@yayatoh/events';
+import { findEventTx, seriesEditionsTx } from '@yayatoh/events';
 import {
   type CommandPorts,
   type Ctx,
@@ -10,10 +10,13 @@ import {
   DomainError,
   type DomainEvent,
   executeCommand,
+  formatMoney,
   isDomainError,
+  money,
   requireOrg,
 } from '@yayatoh/kernel';
 import { hasPushDeviceTx } from '@yayatoh/notifications';
+import { invoiceFactsTx, invoicePath } from '@yayatoh/orders';
 import { type Notifier, tenantCommand } from '@yayatoh/platform';
 import { attendeeSeatLabelsTx } from '@yayatoh/seating';
 import { answeredEventSurveyTx, sendSurveyStepTx } from '@yayatoh/surveys';
@@ -41,6 +44,8 @@ import { journeyRuns, journeySteps, journeys, scheduledActions } from './schema.
 
 export interface RunnerDeps {
   readonly notifier: Notifier;
+  /** M5.1d: where invoice reminders link to (the buyer's invoice page); none: no link. */
+  readonly appOrigin?: string;
 }
 
 /** The failure alert (outbox): subscribe to `automations.journey_step_failed@1`. */
@@ -98,6 +103,11 @@ async function doStepTx(
   run: typeof journeyRuns.$inferSelect,
   step: typeof journeySteps.$inferSelect,
 ): Promise<{ status: 'done' | 'skipped'; outcome: string }> {
+  // M5.1d: an invoice reminder only while the invoice is still open with something due.
+  const invoice =
+    run.trigger === 'invoice_issued' && run.orderId ? await invoiceFactsTx(tx, run.orderId) : null;
+  if (run.trigger === 'invoice_issued' && (invoice?.status !== 'open' || invoice.balanceMinor <= 0))
+    return { status: 'skipped', outcome: 'invoice_settled' };
   const condition = step.condition as StepCondition | null;
   if (condition) {
     const facts = await personFactsTx(tx, a.eventId, run.occurrenceId, a.contactId, factNeeded(condition));
@@ -143,7 +153,22 @@ async function doStepTx(
     timeStyle: 'short',
     timeZone: anchors.timeZone,
   }).format(anchors.eventStart);
-  const values = { name: person.name ?? '', event: anchors.eventName, when };
+  const ev = invoice ? await findEventTx(tx, a.eventId) : null;
+  const values = {
+    name: person.name ?? '',
+    event: anchors.eventName,
+    when,
+    ...(invoice
+      ? {
+          invoice: invoice.label,
+          balance: formatMoney(money(invoice.balanceMinor, invoice.currency), run.locale),
+          due: new Intl.DateTimeFormat(run.locale, { dateStyle: 'long', timeZone: 'UTC' }).format(
+            new Date(`${invoice.dueOn}T00:00:00Z`),
+          ),
+          link: deps.appOrigin && ev ? `${deps.appOrigin}${invoicePath(ev.slug, invoice.invoiceId)}` : '',
+        }
+      : {}),
+  };
   const r = await deps.notifier.enqueue(tx, {
     kind: 'automations.message',
     channels: [channel],

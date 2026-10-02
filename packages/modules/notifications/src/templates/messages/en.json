@@ -198,6 +198,11 @@
       "intro": "{org} issued credit note {number} for {amount} on your order for {eventName}. {storeCredit, select, yes {Use the code {code} at checkout to spend it on a future order with {org}.} other {This amount was refunded to you.}}",
       "cta": "View my order"
     },
+    "orders.invoice": {
+      "subject": "Invoice {number} for {eventName}",
+      "intro": "You're registered for {eventName}. {org} has issued invoice {number} for {amount}, due on {due}. Use the button below to view it, download the PDF, or pay all or part of it.",
+      "cta": "View and pay the invoice"
+    },
     "orders.support-reply": {
       "subject": "{subject}",
       "intro": "A message from {org} about your order for {eventName}:",

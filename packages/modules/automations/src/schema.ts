@@ -58,7 +58,7 @@ export const journeys = tenantTable(
     check('journeys_name_check', sql`length(btrim(name)) between 1 and 120`),
     check('journeys_scope_check', sql`(event_id is null) <> (series_id is null)`),
     check('journeys_trigger_check', inList('trigger', JOURNEY_TRIGGERS)),
-    check('journeys_template_check', sql`template is null or template in ('vision')`),
+    check('journeys_template_check', sql`template is null or template in ('vision', 'invoice_reminders')`),
     check('journeys_enabled_check', sql`not enabled or enabled_at is not null`),
   ],
 );
@@ -132,6 +132,8 @@ export const journeyRuns = tenantTable(
     /** Why a run was cancelled (order_refunded, ticket_cancelled, event_cancelled, journey_disabled). */
     reason: text('reason'),
     endedAt: tsz('ended_at'),
+    /** M5.1d: `invoice_issued` runs: when the invoice is due (the `invoice_due` anchor). */
+    dueAt: tsz('due_at'),
   },
   (t) => [
     uniqueIndex('journey_runs_org_journey_event_contact_key').on(

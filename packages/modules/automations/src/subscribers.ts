@@ -3,6 +3,7 @@ import type { TenantTx } from '@yayatoh/db';
 import { orderRefTx } from '@yayatoh/orders';
 import { defineSubscriber, type PublishedEvent } from '@yayatoh/platform';
 import { z } from 'zod';
+import { journeyInvoiceHooks } from './invoice-hooks.ts';
 import {
   cancelRunsTx,
   enrollTx,
@@ -172,4 +173,10 @@ export function journeyRescheduler() {
 }
 
 /** Every journey subscriber, for the worker's and the dev drain's composition roots. */
-export const journeySubscribers = () => [journeyTriggers(), journeyCancellations(), journeyRescheduler()];
+export const journeySubscribers = () => [
+  journeyTriggers(),
+  journeyCancellations(),
+  journeyRescheduler(),
+  // M5.1d: invoice reminders.
+  journeyInvoiceHooks(),
+];

@@ -18,6 +18,7 @@ import { announcementMailer, contactWroteNotifier, threadReplyMailer } from '@ya
 import { createNotifier } from '@yayatoh/notifications';
 import {
   creditNoteMailer,
+  invoiceMailer,
   orderLinkMailer,
   postponementMailer,
   refundDeclineMailer,
@@ -83,6 +84,8 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     transferMailer({ notifier, appOrigin }),
     walletPassSync({ provider: fakeWalletPassProvider() }),
     creditNoteMailer({ notifier, appOrigin }),
+    // M5.1d: pay-later invoices.
+    invoiceMailer({ notifier, appOrigin }),
     supportReplyMailer({ notifier, appOrigin }),
     // Dispute evidence deadlines reach finance through the alert engine (batch 3e: the
     // `disputeDeadline` rule), not a second notification.

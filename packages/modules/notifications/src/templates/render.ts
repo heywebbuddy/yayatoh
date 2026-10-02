@@ -121,6 +121,11 @@ function values(input: RenderInput, locale: Locale, cat: Catalog): Record<string
       timeZone: tz,
     }).format(new Date(until));
   }
+  // M5.1d: an invoice's due date (a calendar day, shown as written).
+  if (typeof p.dueOn === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(p.dueOn))
+    out.due = new Intl.DateTimeFormat(locale, { dateStyle: 'long', timeZone: 'UTC' }).format(
+      new Date(`${p.dueOn}T00:00:00Z`),
+    );
   // Alert copy (M3.2b): small counts spelled out per the locale's rule.
   if (typeof p.count === 'number') out.countWords = countWords(p.count, locale);
   if (typeof p.role === 'string') out.role = cat.roles[p.role as keyof Catalog['roles']] ?? p.role;

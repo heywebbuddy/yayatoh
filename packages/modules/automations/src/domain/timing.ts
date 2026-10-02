@@ -25,6 +25,8 @@ export interface Anchors {
   readonly eventEnd: Date;
   /** The event's IANA zone. */
   readonly timeZone: string;
+  /** M5.1d: an invoice run's due moment (start of the due day, event timezone). */
+  readonly invoiceDue?: Date | null;
 }
 
 const DAY_MS = 86_400_000;
@@ -43,7 +45,9 @@ export function anchorTime(anchor: WaitAnchor, anchors: Anchors): Date {
     ? anchors.trigger
     : anchor === 'event_start'
       ? anchors.eventStart
-      : anchors.eventEnd;
+      : anchor === 'invoice_due'
+        ? (anchors.invoiceDue ?? anchors.trigger)
+        : anchors.eventEnd;
 }
 
 /** The instant a step with this wait is due. */

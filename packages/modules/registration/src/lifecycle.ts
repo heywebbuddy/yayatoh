@@ -27,6 +27,8 @@ export function registrantLifecycle(): Subscriber {
       'order.payment_orphaned@1',
       'order.refunded@1',
       'tickets.cancelled@1',
+      // M5.1d: a voided invoice ends its registrants (their tickets were voided with it).
+      'order.voided@1',
     ],
     handle: async (tx, event) => {
       const ctx = createCtx({
@@ -39,7 +41,7 @@ export function registrantLifecycle(): Subscriber {
         await confirmRegistrantsForOrderTx(tx, ctx, (e) => void out.push(e), p.orderId);
       if ((event.type === 'order.expired' || event.type === 'order.payment_orphaned') && p.orderId)
         await releaseRegistrantsForOrderTx(tx, ctx, p.orderId);
-      if (event.type === 'order.refunded' && p.orderId)
+      if ((event.type === 'order.refunded' || event.type === 'order.voided') && p.orderId)
         await cancelRegistrantsWithoutTicketTx(tx, ctx, p.orderId);
       if (event.type === 'tickets.cancelled' && Array.isArray(p.ticketIds)) {
         const orderIds = new Set(

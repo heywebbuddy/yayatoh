@@ -198,6 +198,11 @@
       "intro": "أصدر {org} إشعارًا دائنًا {number} بقيمة {amount} على طلبك لفعالية {eventName}. {storeCredit, select, yes {استخدم الرمز {code} عند الدفع لاستعماله في طلب قادم لدى {org}.} other {تمت إعادة هذا المبلغ إليك.}}",
       "cta": "عرض طلبي"
     },
+    "orders.invoice": {
+      "subject": "الفاتورة {number} لـ {eventName}",
+      "intro": "تم تسجيلك في {eventName}. أصدرت {org} الفاتورة {number} بمبلغ {amount}، وتاريخ استحقاقها {due}. استخدم الزر أدناه لعرضها أو تنزيل ملف PDF أو دفعها كاملة أو جزءًا منها.",
+      "cta": "عرض الفاتورة ودفعها"
+    },
     "orders.support-reply": {
       "subject": "{subject}",
       "intro": "رسالة من {org} بشأن طلبك لفعالية {eventName}:",

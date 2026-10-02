@@ -352,7 +352,7 @@ export async function orderStockTx(
       .from(orderItems)
       .where(eq(orderItems.orderId, o.id)))
       held.set(i.ticketTypeId, (held.get(i.ticketTypeId) ?? 0) + i.quantity);
-  } else if (['paid', 'partially_refunded'].includes(o.status)) {
+  } else if (['paid', 'partially_refunded', 'awaiting_invoice'].includes(o.status)) {
     for (const t of await ticketsForOrderTx(tx, o.id))
       if (t.status === 'active') sold.set(t.ticketTypeId, (sold.get(t.ticketTypeId) ?? 0) + 1);
   }

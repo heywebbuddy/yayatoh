@@ -282,6 +282,8 @@ export interface ScannableTicket {
   readonly occurrenceId: string | null;
   /** The order it was sold in (fraud signals on the order reach the door, M1.9e). */
   readonly orderId: string;
+  /** M5.1d: sold on an invoice whose balance is still due (the door needs a staff override). */
+  readonly paymentDue: boolean;
 }
 
 /** A ticket for the check-in engine, by id (from a verified code) or by its short code. */
@@ -303,6 +305,7 @@ export async function ticketForScanTx(
       accessDates: ticketTypes.accessDates,
       occurrenceId: tickets.occurrenceId,
       orderId: tickets.orderId,
+      paymentDue: tickets.paymentDue,
     })
     .from(tickets)
     .innerJoin(ticketTypes, eq(ticketTypes.id, tickets.ticketTypeId))

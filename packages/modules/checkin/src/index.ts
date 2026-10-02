@@ -1,4 +1,6 @@
 export { EARLY_ENTRY_MS, eventDay, LATE_ENTRY_MS, ruleResult } from '@yayatoh/checkin-engine';
+// M5.1d: admit a ticket whose invoice still has a balance (audited staff override).
+export { admitBalanceDueCommand } from './balance-override.ts';
 export {
   CheckpointDto,
   createCheckpointCommand,

@@ -201,6 +201,7 @@ import {
   saveReasonTemplateCommand,
   seedRegistrationDefaultsCommand,
   setCellCommand,
+  setPayLaterCommand,
   setTypeRulesCommand,
 } from '@yayatoh/registration';
 import {
@@ -1771,6 +1772,42 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
       createCtx({ orgId: org.id, actor: { type: 'anonymous' } }),
       ports,
     );
+    // M5.1d: a pay-later type (PO required) and an invoice with a recorded check on the fixture's
+    // paid order (inserted directly: no second order, so order counts stay as they are), for the
+    // isolation suite: invoice, invoice payment and the org's invoice counter.
+    const billed = await executeCommand(
+      createRegistrationTypeCommand,
+      { eventId: event.id, name: 'Billed', capacity: 20 },
+      ctx(),
+      ports,
+    );
+    await executeCommand(
+      setPayLaterCommand,
+      { eventId: event.id, registrationTypeId: billed.id, payLater: true, poNumber: 'required' },
+      ctx(),
+      ports,
+    );
+    await withTenant(systemCtx(org.id), async (tx) => {
+      await tx.execute(sql`
+        insert into orders.invoice_sequences (org_id, last_number) values (${org.id}, 1)`);
+      const [inv] = await tx.execute<{ id: string }>(sql`
+        insert into orders.invoices (org_id, order_id, event_id, number, po_number, billing_company,
+          buyer_name, buyer_email, currency, total_minor, fee_minor, paid_minor, terms, issued_on,
+          due_on, due_at, issued_by)
+        select org_id, id, event_id, 1, ${`PO-${slug}`.slice(0, 60)}, 'Fixture Co', buyer_name,
+          buyer_email, currency, greatest(total_minor, 1000), least(fee_minor, greatest(total_minor, 1000)),
+          100, 'net30_event7', current_date, current_date + 30, now() + interval '30 days', 'fixture'
+        from orders.orders where id = ${checkout.order.id}
+        returning id`);
+      if (inv)
+        await tx.execute(sql`
+          insert into orders.invoice_payments (org_id, invoice_id, order_id, channel, method, status,
+            amount_minor, currency, idempotency_key, reference, note, received_on, recorded_by, completed_at)
+          select org_id, id, order_id, 'offline', 'check', 'succeeded', 100, currency,
+            ${`fixture-invoice-${slug}`}, 'CHK-1001', 'Fixture: first instalment.', current_date,
+            'fixture', now()
+          from orders.invoices where id = ${inv.id}`);
+    });
   }
   // M4.1a: a party with a named guest (sealed answers, linked to a guest-list entry), a child and
   // an unnamed plus-one; then an edit and a move, so every history action has rows.

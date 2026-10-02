@@ -49,6 +49,17 @@ export {
   substituteRegistrantCommand,
 } from './groups.ts';
 export { decisionDedupeKey, decisionMailer, registrantLifecycle } from './lifecycle.ts';
+// M5.1d: pay later by invoice per type (P5-5).
+export {
+  assertPayLater,
+  offersPayLater,
+  PayLaterInput,
+  PayLaterRulesDto,
+  PO_MODES,
+  type PoMode,
+  payLaterRulesQuery,
+  setPayLaterCommand,
+} from './pay-later.ts';
 export { privateColumns } from './private-columns.ts';
 export {
   GroupOptionDto,

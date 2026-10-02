@@ -198,6 +198,11 @@
       "intro": "{org} heeft creditnota {number} van {amount} uitgegeven op je bestelling voor {eventName}. {storeCredit, select, yes {Gebruik de code {code} bij het afrekenen om hem te besteden aan een volgende bestelling bij {org}.} other {Dit bedrag is aan je terugbetaald.}}",
       "cta": "Mijn bestelling bekijken"
     },
+    "orders.invoice": {
+      "subject": "Factuur {number} voor {eventName}",
+      "intro": "Je bent ingeschreven voor {eventName}. {org} heeft factuur {number} van {amount} uitgegeven, te betalen uiterlijk op {due}. Gebruik de knop hieronder om de factuur te bekijken, de pdf te downloaden of geheel of gedeeltelijk te betalen.",
+      "cta": "Factuur bekijken en betalen"
+    },
     "orders.support-reply": {
       "subject": "{subject}",
       "intro": "Een bericht van {org} over je bestelling voor {eventName}:",
