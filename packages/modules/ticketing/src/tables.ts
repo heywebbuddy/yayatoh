@@ -29,14 +29,14 @@ export async function tableUnitContext(token: string): Promise<{ id: string; ctx
 
 /** A purchased table with its ticket type's name (`forUpdate` serializes naming its slots). */
 export async function tableUnitTx(tx: TenantTx, id: string, forUpdate = false) {
-  const q = tx
-    .select({ unit: tableUnits, typeName: ticketTypes.name })
-    .from(tableUnits)
-    .innerJoin(ticketTypes, eq(ticketTypes.id, tableUnits.ticketTypeId))
-    .where(eq(tableUnits.id, id));
-  const [row] = forUpdate ? await q.for('update', { of: tableUnits }) : await q;
-  if (!row) throw new DomainError('not_found', 'Table not found');
-  return { ...row.unit, typeName: row.typeName };
+  const q = tx.select().from(tableUnits).where(eq(tableUnits.id, id));
+  const [unit] = forUpdate ? await q.for('update') : await q;
+  if (!unit) throw new DomainError('not_found', 'Table not found');
+  const [type] = await tx
+    .select({ name: ticketTypes.name })
+    .from(ticketTypes)
+    .where(eq(ticketTypes.id, unit.ticketTypeId));
+  return { ...unit, typeName: type?.name ?? '' };
 }
 
 /** An event's purchased tables (or one order's), oldest first, with their ticket type's name. */
