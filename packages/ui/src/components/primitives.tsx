@@ -36,7 +36,9 @@ export function PageHeader({
           </h1>
           {tag}
         </div>
-        {description ? <p className="m-0 max-w-[65ch] text-prose text-ink-2">{description}</p> : null}
+        {description ? (
+          <p className="m-0 max-w-[90ch] text-[15px] leading-[1.55] text-ink-2">{description}</p>
+        ) : null}
         {meta ? (
           <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5 text-body text-ink-2">{meta}</div>
         ) : null}

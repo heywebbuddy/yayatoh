@@ -1,3 +1,4 @@
+import { filterChipClass } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation.ts';
 
@@ -28,16 +29,12 @@ export function SeatingTabs({
   ] as const;
   return (
     <nav aria-label={t('label')}>
-      <ul className="flex list-none flex-wrap gap-1.5">
+      <ul className="m-0 flex list-none flex-wrap gap-1.5 p-0">
         {tabs.map((tab) => {
           const on = tab.key === active;
           return (
             <li key={tab.key}>
-              <Link
-                href={tab.href}
-                aria-current={on ? 'page' : undefined}
-                className={`inline-flex min-h-9 items-center rounded-pill border px-3.5 text-[13px] whitespace-nowrap ${on ? 'border-ink bg-tag text-white' : 'border-line bg-surface text-ink-2 hover:bg-surface-2'}`}
-              >
+              <Link href={tab.href} aria-current={on ? 'page' : undefined} className={filterChipClass(on)}>
                 {t(tab.key)}
               </Link>
             </li>

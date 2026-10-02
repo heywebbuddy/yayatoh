@@ -129,8 +129,11 @@ async function headingStyle(page: Page, frameTitle: RegExp | string) {
     return { color: s.color, fontSize: s.fontSize, fontWeight: s.fontWeight };
   });
 }
-/** The template's heading: ink (#111) at 22 px, regular weight; unstyled it would be black 32 px bold. */
-const STYLED = { color: 'rgb(17, 17, 17)', fontSize: '22px', fontWeight: '400' };
+/**
+ * The template's heading (ADR 0022 email tokens): ink #16131D at 22 px, weight 800; unstyled it
+ * would be black 32 px bold (700).
+ */
+const STYLED = { color: 'rgb(22, 19, 29)', fontSize: '22px', fontWeight: '800' };
 
 /** Collect CSP violations reported on the page (and its frames). */
 function cspViolations(page: Page) {

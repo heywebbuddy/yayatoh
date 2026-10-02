@@ -337,24 +337,26 @@ export function SeatAssignments({
 
   return (
     <div className="flex flex-col gap-6">
-      <p className="text-body text-ink-2">
-        {t('assign.summary', { seated: view.seatedCount, unseated: view.unseated.length })}
-      </p>
-      {canWrite ? null : <p className="text-caption text-ink-2">{t('assign.readOnly')}</p>}
-      {ada ? (
-        <p className="text-caption text-ink-2">
-          {t(ada.severity === 'enforce' ? 'assign.adaEnforcedNote' : 'assign.adaNote', {
-            date: when(ada.releaseAt),
-          })}
+      <div className="flex flex-col gap-2">
+        <p className="text-body text-ink-2">
+          {t('assign.summary', { seated: view.seatedCount, unseated: view.unseated.length })}
         </p>
-      ) : null}
-      <div aria-live="polite" aria-atomic="true">
-        {feedback ? <Alert tone={feedback.tone} title={feedback.text} /> : null}
+        {canWrite ? null : <p className="text-caption text-ink-2">{t('assign.readOnly')}</p>}
+        {ada ? (
+          <p className="text-caption text-ink-2">
+            {t(ada.severity === 'enforce' ? 'assign.adaEnforcedNote' : 'assign.adaNote', {
+              date: when(ada.releaseAt),
+            })}
+          </p>
+        ) : null}
+        <div aria-live="polite" aria-atomic="true">
+          {feedback ? <Alert tone={feedback.tone} title={feedback.text} /> : null}
+        </div>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,20rem)_minmax(0,1fr)]">
         <section aria-labelledby="queue-heading" className="flex min-w-0 flex-col gap-3">
-          <h2 id="queue-heading" className="text-section">
+          <h2 id="queue-heading" className="m-0 text-card">
             {t('assign.queue.title', { count: view.unseated.length })}
           </h2>
           <div className="flex flex-col gap-1.5">
@@ -504,7 +506,7 @@ export function SeatAssignments({
         </section>
 
         <section aria-labelledby="plan-heading" className="flex min-w-0 flex-col gap-3">
-          <h2 id="plan-heading" className="text-section">
+          <h2 id="plan-heading" className="m-0 text-card">
             {t('assign.canvas.title')}
           </h2>
           <p id="plan-hint" className="text-caption text-ink-2">
@@ -544,7 +546,7 @@ export function SeatAssignments({
       </div>
 
       <section aria-labelledby="tables-heading" className="flex flex-col gap-3">
-        <h2 id="tables-heading" className="text-section">
+        <h2 id="tables-heading" className="m-0 text-card">
           {t('assign.tables.title')}
         </h2>
         <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">

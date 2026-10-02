@@ -131,6 +131,8 @@ test.describe('theme (design system v2)', () => {
 });
 
 test.describe('shells and reference screens pass axe in light and dark', () => {
+  // axe runs twice per page (light, then dark) on the heaviest screens.
+  test.slow();
   const SCREENS = [
     { name: 'console home', path: '/o/lakeside-events', who: 'owner' },
     { name: 'Command Center', path: `${EVENT}/command-center`, who: 'owner' },
@@ -156,6 +158,7 @@ test.describe('shells and reference screens pass axe in light and dark', () => {
 });
 
 test.describe('the console shell in Arabic (RTL)', () => {
+  test.slow();
   test('mirrors: the sidebar on the right, the drawer from the right, axe in both modes', async ({
     page,
   }) => {

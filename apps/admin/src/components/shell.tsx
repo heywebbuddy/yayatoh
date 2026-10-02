@@ -80,7 +80,7 @@ export async function Shell({ staff, children }: { staff: Staff; children: React
         {t('skip')}
       </a>
       <aside className="m-3 flex flex-col gap-4 rounded-panel border border-side-line bg-side p-4 text-side-ink lg:sticky lg:top-4 lg:m-0 lg:h-[calc(100dvh-2rem)] lg:w-[256px] lg:shrink-0 lg:gap-5 lg:overflow-y-auto lg:px-4 lg:pt-6 dark:backdrop-blur-xl [&_:focus-visible]:outline-white">
-        <div className="flex items-center gap-2.5 px-2">
+        <header className="flex items-center gap-2.5 px-2">
           <svg aria-hidden="true" viewBox="0 0 32 32" className="size-[28px] shrink-0">
             <path d="M5 21C5 13.3 10.6 6 18.5 6c0 7.7-5.6 15-13.5 15z" className="fill-brand" />
             <path
@@ -92,7 +92,7 @@ export async function Shell({ staff, children }: { staff: Staff; children: React
           <span className="text-[18px] font-extrabold tracking-[-0.02em] text-side-strong">
             {t('product')}
           </span>
-        </div>
+        </header>
         <nav
           aria-label={t('nav')}
           className="-mx-1 flex gap-1 overflow-x-auto px-1 pb-1 [scrollbar-width:thin] lg:mx-0 lg:flex-col lg:overflow-visible lg:px-0"
@@ -110,7 +110,7 @@ export async function Shell({ staff, children }: { staff: Staff; children: React
             {t('signedInAs', { name: staff.name, role: t(`roles.${staff.role}`) })}
           </span>
           <ThemeSwitch initial={theme} />
-          <SignOutButton label={t('signOut')} />
+          <SignOutButton label={t('signOut')} onDark />
         </div>
       </aside>
       <main
