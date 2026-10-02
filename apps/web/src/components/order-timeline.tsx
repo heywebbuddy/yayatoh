@@ -59,12 +59,32 @@ export async function OrderTimeline({
       case 'dispute_opened':
         if (i.code) out.push(i.code);
         break;
+      // M3.10c: a credit note's disposition, a macro's actions (its name is the text).
+      case 'credit_note_issued':
+        if (i.code) out.push(word(`supportTools.credit.disposition.${i.code}`, i.code));
+        break;
+      case 'macro_run':
+        out.push(
+          ...(i.code ?? '')
+            .split(',')
+            .filter(Boolean)
+            .map((a) => word(`supportTools.macros.action.${a}`, a)),
+        );
+        break;
       default:
         break;
     }
-    if (i.kind === 'note' && i.who) out.push(memberNames.get(i.who) ?? t('refundOps.timeline.someone'));
+    if ((i.kind === 'note' || i.kind === 'macro_run') && i.who)
+      out.push(memberNames.get(i.who) ?? t('refundOps.timeline.someone'));
     else if (i.who) out.push(i.who);
-    if (i.text) out.push(i.kind === 'note' || i.kind === 'message' ? i.text : `“${i.text}”`);
+    if (i.text)
+      out.push(
+        ['note', 'message', 'credit_note_issued', 'credit_applied', 'credit_released', 'macro_run'].includes(
+          i.kind,
+        )
+          ? i.text
+          : `“${i.text}”`,
+      );
     return out;
   };
   return (

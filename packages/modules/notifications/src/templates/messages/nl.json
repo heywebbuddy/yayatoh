@@ -116,6 +116,10 @@
       "intro": "Je hebt nog niet geantwoord: {org} hoort nog steeds graag hoe je {eventName} vond.",
       "cta": "Vul de enquête in"
     },
+    "automations.message": {
+      "subject": "{subject}",
+      "intro": "Over {eventName}:"
+    },
     "guest.checkout-code": {
       "subject": "{code} is je code om je e-mail te bevestigen",
       "intro": "Voer {code} in om je e-mail te bevestigen en je bestelling bij {org} af te ronden. De code werkt één keer en verloopt over {minutes, plural, one {# minuut} other {# minuten}}. Heb je hier niet om gevraagd, dan kun je deze e-mail negeren."
@@ -177,13 +181,65 @@
       "cta": "Mijn bestelling bekijken"
     },
     "alerts.alert": {
-      "subject": "{rule, select, unseated {{count, plural, one {Eén deelnemer heeft geen plaats} other {{countWords} deelnemers hebben geen plaats}}} undistributed {{count, plural, one {Eén gekocht ticket is niet doorgegeven} other {{countWords} gekochte tickets zijn niet doorgegeven}}} paymentsFailed {{count, plural, one {Eén betaling is mislukt} other {{countWords} betalingen zijn mislukt}}} paymentsStuck {{count, plural, one {Eén betaling blijft hangen} other {{countWords} betalingen blijven hangen}}} refundSurge {{count, plural, one {Eén terugbetaling in het afgelopen uur} other {{countWords} terugbetalingen in het afgelopen uur}}} devicesOffline {{count, plural, one {Eén check-inapparaat is offline} other {{countWords} check-inapparaten zijn offline}}} devicesLowBattery {{count, plural, one {Eén check-inapparaat heeft een bijna lege batterij} other {{countWords} check-inapparaten hebben een bijna lege batterij}}} devicesBacklog {{count, plural, one {Eén check-inapparaat heeft scans die wachten op synchronisatie} other {{countWords} check-inapparaten hebben scans die wachten op synchronisatie}}} capacityNear {De locatie is voor {count}% vol} capacityFull {De locatie is vol ({count}%)} sellOut {{count}% van de tickets is verkocht} salesPace {De ticketverkoop ligt op {count}% van het beoogde tempo} readiness {{count, plural, one {Eén instellingsstap blokkeert dit evenement} other {{countWords} instellingsstappen blokkeren dit evenement}}} domain {{count, plural, one {Eén eigen domein heeft een probleem} other {{countWords} eigen domeinen hebben een probleem}}} payoutsPastDue {{count, plural, one {Eén vereiste voor het uitbetalingsaccount is achterstallig} other {{countWords} vereisten voor het uitbetalingsaccount zijn achterstallig}}} deliverability {De bezorgbaarheid van e-mail vraagt aandacht} automationFailed {{count, plural, one {Eén bericht of bulkactie is vandaag mislukt} other {{countWords} berichten of bulkacties zijn vandaag mislukt}}} other {Melding}}",
+      "subject": "{rule, select, unseated {{count, plural, one {Eén deelnemer heeft geen plaats} other {{countWords} deelnemers hebben geen plaats}}} undistributed {{count, plural, one {Eén gekocht ticket is niet doorgegeven} other {{countWords} gekochte tickets zijn niet doorgegeven}}} paymentsFailed {{count, plural, one {Eén betaling is mislukt} other {{countWords} betalingen zijn mislukt}}} paymentsStuck {{count, plural, one {Eén betaling blijft hangen} other {{countWords} betalingen blijven hangen}}} refundSurge {{count, plural, one {Eén terugbetaling in het afgelopen uur} other {{countWords} terugbetalingen in het afgelopen uur}}} devicesOffline {{count, plural, one {Eén check-inapparaat is offline} other {{countWords} check-inapparaten zijn offline}}} devicesLowBattery {{count, plural, one {Eén check-inapparaat heeft een bijna lege batterij} other {{countWords} check-inapparaten hebben een bijna lege batterij}}} devicesBacklog {{count, plural, one {Eén check-inapparaat heeft scans die wachten op synchronisatie} other {{countWords} check-inapparaten hebben scans die wachten op synchronisatie}}} capacityNear {De locatie is voor {count}% vol} capacityFull {De locatie is vol ({count}%)} sellOut {{count}% van de tickets is verkocht} salesPace {De ticketverkoop ligt op {count}% van het beoogde tempo} readiness {{count, plural, one {Eén instellingsstap blokkeert dit evenement} other {{countWords} instellingsstappen blokkeren dit evenement}}} domain {{count, plural, one {Eén eigen domein heeft een probleem} other {{countWords} eigen domeinen hebben een probleem}}} payoutsPastDue {{count, plural, one {Eén vereiste voor het uitbetalingsaccount is achterstallig} other {{countWords} vereisten voor het uitbetalingsaccount zijn achterstallig}}} deliverability {De bezorgbaarheid van e-mail vraagt aandacht} automationFailed {{count, plural, one {Eén bericht of bulkactie is vandaag mislukt} other {{countWords} berichten of bulkacties zijn vandaag mislukt}}} campaignFailed {{count, plural, one {Eén campagneverzending is vandaag mislukt} other {{countWords} campagneverzendingen zijn vandaag mislukt}}} disputeDeadline {{count, plural, one {Eén geschil heeft binnenkort bewijs nodig} other {{countWords} geschillen hebben binnenkort bewijs nodig}}} other {Melding}}",
       "intro": "{eventName, select, none {Er vraagt iets aandacht bij {org}.} other {Er vraagt iets aandacht bij {eventName}.}} De knop opent de pagina die het oplost.",
       "cta": "Oplossen"
     },
     "alerts.alert-text": {
-      "subject": "{rule, select, unseated {{count, plural, one {Eén deelnemer heeft geen plaats} other {{countWords} deelnemers hebben geen plaats}}} undistributed {{count, plural, one {Eén gekocht ticket is niet doorgegeven} other {{countWords} gekochte tickets zijn niet doorgegeven}}} paymentsFailed {{count, plural, one {Eén betaling is mislukt} other {{countWords} betalingen zijn mislukt}}} paymentsStuck {{count, plural, one {Eén betaling blijft hangen} other {{countWords} betalingen blijven hangen}}} refundSurge {{count, plural, one {Eén terugbetaling in het afgelopen uur} other {{countWords} terugbetalingen in het afgelopen uur}}} devicesOffline {{count, plural, one {Eén check-inapparaat is offline} other {{countWords} check-inapparaten zijn offline}}} devicesLowBattery {{count, plural, one {Eén check-inapparaat heeft een bijna lege batterij} other {{countWords} check-inapparaten hebben een bijna lege batterij}}} devicesBacklog {{count, plural, one {Eén check-inapparaat heeft scans die wachten op synchronisatie} other {{countWords} check-inapparaten hebben scans die wachten op synchronisatie}}} capacityNear {De locatie is voor {count}% vol} capacityFull {De locatie is vol ({count}%)} sellOut {{count}% van de tickets is verkocht} salesPace {De ticketverkoop ligt op {count}% van het beoogde tempo} readiness {{count, plural, one {Eén instellingsstap blokkeert dit evenement} other {{countWords} instellingsstappen blokkeren dit evenement}}} domain {{count, plural, one {Eén eigen domein heeft een probleem} other {{countWords} eigen domeinen hebben een probleem}}} payoutsPastDue {{count, plural, one {Eén vereiste voor het uitbetalingsaccount is achterstallig} other {{countWords} vereisten voor het uitbetalingsaccount zijn achterstallig}}} deliverability {De bezorgbaarheid van e-mail vraagt aandacht} automationFailed {{count, plural, one {Eén bericht of bulkactie is vandaag mislukt} other {{countWords} berichten of bulkacties zijn vandaag mislukt}}} other {Melding}}",
+      "subject": "{rule, select, unseated {{count, plural, one {Eén deelnemer heeft geen plaats} other {{countWords} deelnemers hebben geen plaats}}} undistributed {{count, plural, one {Eén gekocht ticket is niet doorgegeven} other {{countWords} gekochte tickets zijn niet doorgegeven}}} paymentsFailed {{count, plural, one {Eén betaling is mislukt} other {{countWords} betalingen zijn mislukt}}} paymentsStuck {{count, plural, one {Eén betaling blijft hangen} other {{countWords} betalingen blijven hangen}}} refundSurge {{count, plural, one {Eén terugbetaling in het afgelopen uur} other {{countWords} terugbetalingen in het afgelopen uur}}} devicesOffline {{count, plural, one {Eén check-inapparaat is offline} other {{countWords} check-inapparaten zijn offline}}} devicesLowBattery {{count, plural, one {Eén check-inapparaat heeft een bijna lege batterij} other {{countWords} check-inapparaten hebben een bijna lege batterij}}} devicesBacklog {{count, plural, one {Eén check-inapparaat heeft scans die wachten op synchronisatie} other {{countWords} check-inapparaten hebben scans die wachten op synchronisatie}}} capacityNear {De locatie is voor {count}% vol} capacityFull {De locatie is vol ({count}%)} sellOut {{count}% van de tickets is verkocht} salesPace {De ticketverkoop ligt op {count}% van het beoogde tempo} readiness {{count, plural, one {Eén instellingsstap blokkeert dit evenement} other {{countWords} instellingsstappen blokkeren dit evenement}}} domain {{count, plural, one {Eén eigen domein heeft een probleem} other {{countWords} eigen domeinen hebben een probleem}}} payoutsPastDue {{count, plural, one {Eén vereiste voor het uitbetalingsaccount is achterstallig} other {{countWords} vereisten voor het uitbetalingsaccount zijn achterstallig}}} deliverability {De bezorgbaarheid van e-mail vraagt aandacht} automationFailed {{count, plural, one {Eén bericht of bulkactie is vandaag mislukt} other {{countWords} berichten of bulkacties zijn vandaag mislukt}}} campaignFailed {{count, plural, one {Eén campagneverzending is vandaag mislukt} other {{countWords} campagneverzendingen zijn vandaag mislukt}}} disputeDeadline {{count, plural, one {Eén geschil heeft binnenkort bewijs nodig} other {{countWords} geschillen hebben binnenkort bewijs nodig}}} other {Melding}}",
       "intro": "{eventName, select, none {Er vraagt iets aandacht bij {org}.} other {Er vraagt iets aandacht bij {eventName}.}} De knop opent de pagina die het oplost."
+    },
+    "campaigns.test": {
+      "subject": "[Test] {subject}",
+      "intro": "Een testverzending van je campagne."
+    },
+    "orders.credit-note": {
+      "subject": "Creditnota {number} voor {eventName}",
+      "intro": "{org} heeft creditnota {number} van {amount} uitgegeven op je bestelling voor {eventName}. {storeCredit, select, yes {Gebruik de code {code} bij het afrekenen om hem te besteden aan een volgende bestelling bij {org}.} other {Dit bedrag is aan je terugbetaald.}}",
+      "cta": "Mijn bestelling bekijken"
+    },
+    "orders.support-reply": {
+      "subject": "{subject}",
+      "intro": "Een bericht van {org} over je bestelling voor {eventName}:",
+      "cta": "Mijn bestelling bekijken"
+    },
+    "payments.dispute-deadline": {
+      "subject": "Bewijs voor terugboeking bijna verschuldigd: {eventName}",
+      "intro": "Het bewijs voor een terugboeking van {amount} op een bestelling voor {eventName} moet binnen {hours, plural, =0 {minder dan een uur} one {# uur} other {# uur}} binnen zijn. Controleer het en dien het in vóór de deadline."
+    },
+    "ticketing.transfer-offered": {
+      "subject": "{fromName} heeft je een ticket voor {eventName} gestuurd",
+      "intro": "{fromName} draagt een ticket voor {eventName} aan je over. Claim het met dit e-mailadres om je eigen QR-code te krijgen.",
+      "cta": "Mijn ticket claimen"
+    },
+    "ticketing.transfer-completed": {
+      "subject": "Je ticket voor {eventName} is overgedragen",
+      "intro": "{toName} heeft het ticket geclaimd dat je voor {eventName} hebt overgedragen. Je oude QR-code werkt niet meer."
+    },
+    "ticketing.transfer-received": {
+      "subject": "Je ticket voor {eventName}",
+      "intro": "Je hebt het ticket geclaimd dat {fromName} je voor {eventName} stuurde. Je eigen QR-code staat klaar.",
+      "cta": "Mijn ticket bekijken"
+    },
+    "forms.resume": {
+      "subject": "Ga verder met je registratie voor {eventName}",
+      "intro": "Hier is je link om je registratie voor {eventName} te hervatten waar je gebleven was. Hij werkt {days, plural, one {# dag} other {# dagen}} na je laatste opslag en alleen voor jou, dus stuur hem niet door. Heb je hier niet om gevraagd, dan kun je deze e-mail negeren.",
+      "cta": "Verder met mijn registratie"
+    },
+    "portal.invite": {
+      "subject": "Uitnodiging voor het portaal van {eventName}",
+      "intro": "{org} heeft je als {role} uitgenodigd voor het portaal van {eventName}. Daar zie je je sessies, werk je je profiel bij en rond je je taken af. De knop vraagt om een inlogcode die naar dit adres wordt gestuurd.",
+      "cta": "Portaal openen"
+    },
+    "portal.sign-in": {
+      "subject": "{code} is je inlogcode voor {eventName}",
+      "intro": "Voer {code} in om in te loggen op het portaal van {eventName}, of gebruik de knop hieronder in dezelfde browser. Code geldig: {minutes} min. Knop geldig: {linkMinutes} min. Elk werkt één keer. Heb je dit niet aangevraagd, negeer deze e-mail dan.",
+      "cta": "Inloggen op het portaal"
+    },
+    "program.task-reminder": {
+      "subject": "Herinnering: {title} voor {eventName}",
+      "intro": "{org} wacht nog op ‘{title}’ voor {eventName}. Uiterlijk: {until}.",
+      "cta": "Mijn taken openen"
     }
   },
   "roles": {
@@ -197,7 +253,11 @@
     "viewer": "lezer",
     "co_host": "medegastheer",
     "planner": "planner",
-    "collaborator": "evenementmedewerker"
+    "collaborator": "evenementmedewerker",
+    "speaker": "spreker",
+    "exhibitor_admin": "exposantbeheerder",
+    "exhibitor_staff": "exposantmedewerker",
+    "sponsor_contact": "sponsorcontact"
   },
   "account": {
     "deleted": {
@@ -253,5 +313,10 @@
         "intro": "We hebben Yayatoh teruggezet naar de vorige versie terwijl we een probleem oplossen. Tickets die je sinds {start} hebt gekocht, blijven geldig. Als we een bestelling van je moesten terugbetalen, krijg je een aparte e-mail met het bedrag. Log in zoals voorheen."
       }
     }
+  },
+  "campaigns": {
+    "testBanner": "Testmail: alleen je team heeft deze ontvangen. Samenvoegvelden tonen hun standaardwaarde.",
+    "eventCta": "Bekijk het evenement",
+    "testSubject": "[Test] {subject}"
   }
 }

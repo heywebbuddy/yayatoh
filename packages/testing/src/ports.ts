@@ -2,7 +2,10 @@ import { randomBytes } from 'node:crypto';
 import { attendeeEmailAction, attendeeImportAction, attendeeLabelAction } from '@yayatoh/attendees';
 import { audienceExportAction } from '@yayatoh/audiences';
 import { billingEntitlements } from '@yayatoh/billing';
+import { recordTermConsentTx } from '@yayatoh/crm';
 import { eventRolesOf } from '@yayatoh/events';
+import { submitRegistrationFormCommand } from '@yayatoh/forms';
+import { guestImportAction } from '@yayatoh/guests';
 import { ticketCancelAction, waitlistExportAction } from '@yayatoh/orders';
 import {
   auditExportAction,
@@ -46,7 +49,11 @@ export const BULK_ACTIONS = [
   surveyExportAction,
   audienceExportAction,
   waitlistExportAction,
+  guestImportAction,
 ] as const;
 export const bulkStep = bulkStepCommand(BULK_ACTIONS);
 export const runBulk = (orgId: string, operationId: string, budgetMs?: number) =>
   runBulkOperation(bulkStep, ports, orgId, operationId, budgetMs);
+
+/** Registration form submit (M5.1b) with the crm consent ledger, composed like the web's. */
+export const submitRegistrationForm = submitRegistrationFormCommand({ recordConsent: recordTermConsentTx });

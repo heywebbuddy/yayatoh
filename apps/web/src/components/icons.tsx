@@ -15,6 +15,7 @@ import {
   Heart,
   History,
   House,
+  IdCard,
   Image,
   KeyRound,
   Landmark,
@@ -36,12 +37,15 @@ import {
   Search,
   Send,
   Settings,
+  ShieldAlert,
   ShieldCheck,
   Star,
   Store,
   Ticket,
   Undo2,
   Users,
+  Workflow,
+  Zap,
 } from 'lucide-react';
 
 /** Icon names used by the profiles registry (packages/platform/src/profiles). */
@@ -53,6 +57,8 @@ const ICONS: Record<string, LucideIcon> = {
   users: Users,
   ticket: Ticket,
   armchair: Armchair,
+  megaphone: Megaphone,
+  workflow: Workflow,
   scan: ScanLine,
   library: Library,
   clipboard: ClipboardList,
@@ -63,6 +69,7 @@ const ICONS: Record<string, LucideIcon> = {
   heart: Heart,
   message: MessageSquare,
   'mail-check': MailCheck,
+  send: Send,
   gauge: Gauge,
   search: Search,
   globe: Globe,
@@ -79,7 +86,6 @@ const ICONS: Record<string, LucideIcon> = {
   'map-pin': MapPin,
   'file-text': FileText,
   'life-buoy': LifeBuoy,
-  megaphone: Megaphone,
   lock: Lock,
   building: Building2,
   history: History,
@@ -87,7 +93,9 @@ const ICONS: Record<string, LucideIcon> = {
   link: Link2,
   star: Star,
   undo: Undo2,
-  send: Send,
+  'shield-alert': ShieldAlert,
+  zap: Zap,
+  'id-card': IdCard,
 };
 
 export function Icon({ name, className = 'size-4' }: { name: string; className?: string }) {

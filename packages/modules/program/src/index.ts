@@ -1,3 +1,88 @@
+// M5.2a: agenda model v2.
+export {
+  addStandardSessionTypesCommand,
+  agendaImportPreviewQuery,
+  agendaQuery,
+  CLAIM_REFUSALS,
+  claimSessionPlaceTx,
+  createSessionGroupCommand,
+  createSessionTypeCommand,
+  deleteSessionGroupCommand,
+  deleteSessionTypeCommand,
+  importAgendaCommand,
+  MAX_SESSION_GROUPS_PER_EVENT,
+  MAX_SESSION_TYPES_PER_EVENT,
+  publishAgendaCommand,
+  recordGroupPickTx,
+  releaseGroupPickTx,
+  releaseSessionPlaceTx,
+  SetSessionAgendaInput,
+  setSessionAgendaCommand,
+  unpublishAgendaCommand,
+} from './agenda.ts';
+export * from './agenda-dto.ts';
+// M5.4a: exhibitor portal (members, invitations, profile approval) and booths.
+export {
+  assignBoothCommand,
+  boothAssigned,
+  boothPlanQuery,
+  deleteBoothCommand,
+  MAX_BOOTHS_PER_EVENT,
+  publicExhibitorMap,
+  saveBoothCommand,
+  unassignBoothCommand,
+} from './booths.ts';
+export {
+  ADMISSIONS,
+  type Admission,
+  AGENDA_CSV_COLUMNS,
+  AGENDA_ROW_ERRORS,
+  AGENDA_STATES,
+  AGENDA_WARNING_KINDS,
+  type AgendaItem,
+  type AgendaPlanRow,
+  type AgendaRow,
+  type AgendaRowError,
+  type AgendaState,
+  type AgendaWarning,
+  agendaCsvTime,
+  agendaWarnings,
+  formulaSafe,
+  type GroupPickDecision,
+  groupPickDecision,
+  mapAgendaHeaders,
+  parseAgendaTime,
+  parseSpeakers,
+  planAgendaImport,
+  readAgendaRow,
+} from './domain/agenda.ts';
+export {
+  allowanceUse,
+  BOOTH_WARNING_KINDS,
+  type BoothWarningKind,
+  boothWarnings,
+  DEFAULT_STAFF_ALLOWANCE,
+  holdsPlace,
+  MEMBER_STATUSES,
+  type MemberStatus,
+  nextPrimary,
+  planAssignment,
+  staffAllowance,
+} from './domain/exhibitors.ts';
+export {
+  changeDiff,
+  changedValues,
+  type FieldChange,
+  isOverdue,
+  missingRecipients,
+  PRE_DUE_MS,
+  PROFILE_FIELDS,
+  preDueKey,
+  preDueReminderAt,
+  type ReminderPlan as TaskReminderPlan,
+  SESSION_FIELDS,
+  staleFields,
+} from './domain/portal.ts';
 export {
   groupByDay,
   localDay,
@@ -8,6 +93,23 @@ export {
   warningsFor,
 } from './domain/schedule.ts';
 export * from './dto.ts';
+export * from './exhibitor-dto.ts';
+export {
+  decideProfileChangeCommand,
+  exhibitorPortalAdminQuery,
+  exhibitorPortalQuery,
+  exhibitorPrincipalTx,
+  inviteExhibitorMemberCommand,
+  MAX_MEMBERS_PER_EXHIBITOR,
+  portalInviteStaffCommand,
+  portalRevokeStaffCommand,
+  portalSaveProfileCommand,
+  resendExhibitorInviteCommand,
+  revokeExhibitorMemberCommand,
+  saveExhibitorListingCommand,
+  saveExhibitorSettingsCommand,
+  staffInvited,
+} from './exhibitor-portal.ts';
 export {
   createExhibitorCommand,
   createSpeakerCommand,
@@ -28,8 +130,51 @@ export {
   updateSpeakerCommand,
   updateSponsorCommand,
 } from './people.ts';
+export * from './portal-dto.ts';
+export {
+  decideSpeakerChangeCommand,
+  inviteSpeakerCommand,
+  ProfileProposalInput,
+  proposeProfileChangeCommand,
+  proposeSessionChangeCommand,
+  proposeSpeakerPhotoTx,
+  revokeSpeakerAccessCommand,
+  SessionProposalInput,
+  speakerAccessQuery,
+  speakerChangeDecided,
+  speakerChangesQuery,
+  speakerPrincipalTx,
+} from './portal-speakers.ts';
+export {
+  assignNewSpeakersCommand,
+  CreatePortalTaskInput,
+  completePortalTaskCommand,
+  completeTaskWithFileTx,
+  createPortalTaskCommand,
+  deletePortalTaskCommand,
+  emitOverdueTasks,
+  MAX_TASKS_PER_EVENT,
+  portalSpeakerCleanup,
+  portalTaskBoardQuery,
+  remindMissingCommand,
+  speakerPortalQuery,
+  speakerTaskCompleted,
+  speakerTaskOverdue,
+  taskFileOwnerTx,
+  taskFileTargetTx,
+  taskReminderMailer,
+} from './portal-tasks.ts';
 export { privateColumns } from './private-columns.ts';
 export { publicProgram, publicSpeaker } from './public.ts';
+export { EXHIBITOR_MEMBER_ROLES } from './schema.ts';
+export {
+  ASSIGNEE_STATUSES,
+  CHANGE_STATUSES,
+  TASK_KINDS,
+  TASK_SUBJECT_KINDS,
+  type TaskKind,
+  type TaskSubjectKind,
+} from './schema-portal.ts';
 export {
   CreateSessionInput,
   createRoomCommand,

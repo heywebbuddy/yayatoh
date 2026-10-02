@@ -14,8 +14,11 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@yayatoh/config": "workspace:*",
     "@types/node": "catalog:",
+    "@yayatoh/config": "workspace:*",
     "typescript": "catalog:"
+  },
+  "dependencies": {
+    "fflate": "0.8.3"
   }
 }

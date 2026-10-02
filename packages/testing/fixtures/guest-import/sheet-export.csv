@@ -1,0 +1,7 @@
+Household,First name,Last name,Age,Meal,Side,VIP,Tags,Email,Phone,Dietary,Accessibility,Address,Plus one
+The Garcias,Luis,Garcia,,Beef,Bride,yes,Family; Out of town,luis@example.test,+1 555 010 2000,No nuts,,"1 Main St, Springfield",yes
+The Garcias,Sofía,García,child,Kids menu,,,,,,,,,
+,Ana,Kim,,Fish,Groom,,Work,ana@example.test,,,Step-free seat,,Jamie Lee
+Okafor family,Chidi,Okafor,,,Groom,,,,,Vegan,,,
+Okafor family,Guest of Chidi,,,,,,,,,,,,
+,=1+2,Row,teenager,,,,,,,,,,

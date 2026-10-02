@@ -102,6 +102,19 @@ export const BuyerRefundPanelDto = z.object({
 });
 export type BuyerRefundPanelDto = z.infer<typeof BuyerRefundPanelDto>;
 
+/** M3.10c: a credit note as the buyer sees it on their order page. */
+export const BuyerCreditNoteDto = z.object({
+  label: z.string(),
+  amountMinor: z.int(),
+  balanceMinor: z.int(),
+  currency: z.string(),
+  disposition: z.enum(['store_credit', 'refunded']),
+  reason: z.string(),
+  /** Store credit: the code to use at checkout. */
+  code: z.string().nullable(),
+  createdAt: z.date(),
+});
+
 export const PublicOrderDto = OrderDto.omit({ eventId: true }).extend({
   /** Who sold it (roadmap §4.4 seller disclosure): the organizer, or the platform on their behalf. */
   fundsFlow: z.enum(['organizer_mor', 'platform_mor']),
@@ -120,6 +133,8 @@ export const PublicOrderDto = OrderDto.omit({ eventId: true }).extend({
   refundPolicy: RefundPolicyDto.nullable(),
   /** M3.10b: the buyer's latest refund request and whether they may ask for one now. */
   refundRequest: BuyerRefundPanelDto,
+  /** M3.10c: credit notes on this order (store credit shows its code: the buyer's own). */
+  creditNotes: z.array(BuyerCreditNoteDto).default([]),
 });
 export type PublicOrderDto = z.infer<typeof PublicOrderDto>;
 export const publicOrderSerializer = defineSerializer('orders.publicOrder', PublicOrderDto);

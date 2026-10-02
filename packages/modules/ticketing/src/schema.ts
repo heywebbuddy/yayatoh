@@ -24,6 +24,9 @@ export interface AccessDate {
 
 export const TICKET_TYPE_VISIBILITIES = ['public', 'hidden'] as const;
 export const FEE_MODES = ['pass_on', 'absorb'] as const;
+/** Modules that may manage ticket types (M5.1a, ADR 0021). */
+export const TICKET_TYPE_MANAGERS = ['registration'] as const;
+export type TicketTypeManager = (typeof TICKET_TYPE_MANAGERS)[number];
 
 const ts = (name: string) => timestamp(name, { withTimezone: true, mode: 'date' });
 
@@ -56,6 +59,17 @@ export const ticketTypes = tenantTable(
     accessDates: jsonb('access_dates').$type<AccessDate[]>().notNull().default(sql`'[]'::jsonb`),
     /** Multi-date events (M1.4b): the occurrences this type sells for; empty = every date. */
     occurrenceIds: uuid('occurrence_ids').array().notNull().default(sql`'{}'::uuid[]`),
+    /** M3.10c transfer rules: may holders pass this ticket on (organizers always may). */
+    transfersAllowed: boolean('transfers_allowed').notNull().default(true),
+    /** M3.10c: holder transfers close this many hours before the event starts (null: at the start). */
+    transferCutoffHours: integer('transfer_cutoff_hours'),
+    /** M3.10c: what a holder transfer costs, in minor units of the ticket's currency (0: free). */
+    transferFeeMinor: bigint('transfer_fee_minor', { mode: 'number' }).notNull().default(0),
+    /**
+     * M5.1a (ADR 0021): a ticket type another module sells for itself (a registration type ×
+     * admission item cell). Only that module may quote, edit or archive it; null = ordinary pass.
+     */
+    managedBy: text('managed_by'),
   },
   (t) => [
     index('ticket_types_org_event_idx').on(t.orgId, t.eventId, t.sortOrder),
@@ -78,6 +92,11 @@ export const ticketTypes = tenantTable(
     ),
     check('ticket_types_donation_check', sql`not is_donation or early_price_minor is null`),
     check('ticket_types_access_dates_check', sql`jsonb_typeof(access_dates) = 'array'`),
+    check(
+      'ticket_types_transfer_rules_check',
+      sql`transfer_fee_minor >= 0 and (transfer_cutoff_hours is null or transfer_cutoff_hours between 0 and 8760)`,
+    ),
+    check('ticket_types_managed_by_check', sql`managed_by is null or managed_by in ('registration')`),
   ],
 );
 
@@ -243,4 +262,102 @@ export const holderLinks = tenantTable(
     expiresAt: timestamp('expires_at', { withTimezone: true, mode: 'date' }).notNull(),
   },
   (t) => [index('holder_links_org_email_idx').on(t.orgId, t.emailNorm, t.createdAt)],
+);
+
+export const TRANSFER_STATUSES = ['pending', 'claimed', 'cancelled'] as const;
+export const TRANSFER_INITIATORS = ['organizer', 'holder'] as const;
+
+/**
+ * Ticket transfers with a claim step (M3.10c): the holder or the organizer names the new holder;
+ * the ticket stays with the current holder until the recipient opens the claim link (signed,
+ * single use, expiring: `ticket_claims`) and confirms. Claiming voids the old code (QR, short code
+ * and wallet pass) and reissues the ticket to the recipient; cancelling before that revokes the
+ * link. At most one pending transfer per ticket. `fee_minor` is the ticket type's transfer fee at
+ * the time (holder transfers only; organizers transfer for free).
+ */
+export const ticketTransfers = tenantTable(
+  ticketingSchema,
+  'ticket_transfers',
+  {
+    ticketId: uuid('ticket_id').notNull(),
+    eventId: uuid('event_id').notNull(),
+    orderId: uuid('order_id').notNull(),
+    claimId: uuid('claim_id').notNull(),
+    status: text('status').notNull().default('pending'),
+    initiatedBy: text('initiated_by').notNull(),
+    fromName: text('from_name').notNull(),
+    fromEmail: text('from_email').notNull(),
+    toName: text('to_name').notNull(),
+    toEmail: text('to_email').notNull(),
+    feeMinor: bigint('fee_minor', { mode: 'number' }).notNull().default(0),
+    currency: text('currency').notNull(),
+    createdBy: text('created_by').notNull(),
+    /** The ticket's code revision before and after the claim. */
+    fromRev: integer('from_rev').notNull(),
+    toRev: integer('to_rev'),
+    claimedAt: ts('claimed_at'),
+    cancelledAt: ts('cancelled_at'),
+  },
+  (t) => [
+    index('ticket_transfers_org_order_idx').on(t.orgId, t.orderId, t.createdAt),
+    index('ticket_transfers_org_ticket_idx').on(t.orgId, t.ticketId, t.createdAt),
+    uniqueIndex('ticket_transfers_org_claim_key').on(t.orgId, t.claimId),
+    uniqueIndex('ticket_transfers_org_ticket_pending_key')
+      .on(t.orgId, t.ticketId)
+      .where(sql`status = 'pending'`),
+    foreignKey({
+      name: 'ticket_transfers_ticket_fk',
+      columns: [t.orgId, t.ticketId],
+      foreignColumns: [tickets.orgId, tickets.id],
+    }),
+    foreignKey({
+      name: 'ticket_transfers_claim_fk',
+      columns: [t.orgId, t.claimId],
+      foreignColumns: [ticketClaims.orgId, ticketClaims.id],
+    }),
+    check('ticket_transfers_status_check', sql`status in ('pending', 'claimed', 'cancelled')`),
+    check('ticket_transfers_initiated_by_check', sql`initiated_by in ('organizer', 'holder')`),
+    check('ticket_transfers_fee_check', sql`fee_minor >= 0`),
+    check('ticket_transfers_currency_check', sql`currency ~ '^[A-Z]{3}$'`),
+    check('ticket_transfers_email_lower_check', sql`to_email = lower(to_email)`),
+    check(
+      'ticket_transfers_state_check',
+      sql`(status = 'claimed') = (claimed_at is not null and to_rev is not null) and (status = 'cancelled') = (cancelled_at is not null)`,
+    ),
+  ],
+);
+
+export const WALLET_PASS_STATUSES = ['active', 'voided'] as const;
+
+/**
+ * Wallet passes (M3.10c) as the pass provider holds them (fake in dev and CI; Apple/Google wait
+ * for the owner's accounts): one per ticket code revision. A transfer voids the old holder's pass
+ * and issues one for the new holder; `pushed_at` is when the provider was told.
+ */
+export const walletPasses = tenantTable(
+  ticketingSchema,
+  'wallet_passes',
+  {
+    ticketId: uuid('ticket_id').notNull(),
+    rev: integer('rev').notNull(),
+    serial: text('serial').notNull(),
+    holderName: text('holder_name').notNull(),
+    status: text('status').notNull().default('active'),
+    provider: text('provider').notNull().default('fake'),
+    pushedAt: ts('pushed_at'),
+    voidedAt: ts('voided_at'),
+  },
+  (t) => [
+    uniqueIndex('wallet_passes_org_ticket_rev_key').on(t.orgId, t.ticketId, t.rev),
+    uniqueIndex('wallet_passes_org_serial_key').on(t.orgId, t.serial),
+    uniqueIndex('wallet_passes_org_ticket_active_key').on(t.orgId, t.ticketId).where(sql`status = 'active'`),
+    foreignKey({
+      name: 'wallet_passes_ticket_fk',
+      columns: [t.orgId, t.ticketId],
+      foreignColumns: [tickets.orgId, tickets.id],
+    }),
+    check('wallet_passes_status_check', sql`status in ('active', 'voided')`),
+    check('wallet_passes_provider_check', sql`provider in ('fake', 'apple', 'google')`),
+    check('wallet_passes_voided_check', sql`(status = 'voided') = (voided_at is not null)`),
+  ],
 );

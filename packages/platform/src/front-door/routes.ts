@@ -180,6 +180,25 @@ export const PLATFORM_PREFIXES: readonly string[] = [
   '/invite',
   '/survey',
   '/sub-processors',
+  // Batch 3e merge: links people get by email lead to pages only the new app has (the legacy app
+  // has none): unsubscribe, tracked links (M3.8a, campaign buttons M3.6b), waitlist places
+  // (M3.10a) and registration form resume links (M5.1b).
+  '/unsubscribe',
+  '/r',
+  '/waitlist',
+  '/registration-form',
+  // Batch 3f: the portal (M5.3a/M5.4a: invitations, sign-in codes and magic links, the event's
+  // sign-in page, the speaker and exhibitor portals).
+  '/event-portal',
+];
+
+/**
+ * New-app pages under paths legacy owns (`/events/{slug}/…`): never forwarded either. Batch 3e
+ * merge: the registration pages of M5.1a and M5.1b, and the M3.10a waitlist join page. Batch 3f
+ * merge: the M5.4a public exhibitor map.
+ */
+export const PLATFORM_PATTERNS: readonly RegExp[] = [
+  /^\/events\/[^/]+\/(register|registration-form|waitlist|exhibitors)$/,
 ];
 export const PLATFORM_FILES: ReadonlySet<string> = new Set([
   '/widget.js',
@@ -191,6 +210,7 @@ export const PLATFORM_FILES: ReadonlySet<string> = new Set([
 
 export function isPlatformPath(path: string): boolean {
   if (PLATFORM_FILES.has(path)) return true;
+  if (PLATFORM_PATTERNS.some((r) => r.test(path))) return true;
   return PLATFORM_PREFIXES.some((p) => path === p || path.startsWith(`${p}/`));
 }
 

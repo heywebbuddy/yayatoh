@@ -1,6 +1,6 @@
 import { defineSerializer, partialNoDefaults } from '@yayatoh/contracts';
 import { z } from 'zod';
-import { FEE_MODES, TICKET_TYPE_VISIBILITIES } from './schema.ts';
+import { FEE_MODES, TICKET_TYPE_MANAGERS, TICKET_TYPE_VISIBILITIES } from './schema.ts';
 
 /** Days a multi-day pass admits: unique ISO dates, sorted, each with a short name. */
 export const AccessDates = z
@@ -35,9 +35,15 @@ export const TicketTypeDto = z.object({
   accessDates: z.array(AccessDateDto),
   /** Multi-date events: the dates this type sells for; empty = every date. */
   occurrenceIds: z.array(z.uuid()),
+  /** M3.10c transfer rules: holders may transfer, until N hours before the start, for a fee. */
+  transfersAllowed: z.boolean(),
+  transferCutoffHours: z.int().nullable(),
+  transferFeeMinor: z.int(),
   /** Per-ticket price the buyer sees now (face + passed-on fees; early-bird while it runs). */
   allInMinor: z.int(),
   feeMinor: z.int(),
+  /** M5.1a: set when another module (registration) sells this pass; edit it there. */
+  managedBy: z.enum(TICKET_TYPE_MANAGERS).nullable(),
 });
 export type TicketTypeDto = z.infer<typeof TicketTypeDto>;
 
@@ -89,6 +95,10 @@ const Fields = z.object({
     .max(366)
     .default([])
     .transform((a) => [...new Set(a)]),
+  /** M3.10c transfer rules (organizers always transfer, for free). */
+  transfersAllowed: z.boolean().default(true),
+  transferCutoffHours: z.int().min(0).max(8760).nullable().default(null),
+  transferFeeMinor: z.int().min(0).max(100_000_000).default(0),
 });
 
 /** Early-bird and donation rules on the merged ticket type (create input, or current row + update). */
@@ -124,3 +134,6 @@ export const UpdateTicketTypeInput = partialNoDefaults(Fields)
   .extend({ ticketTypeId: z.uuid() })
   .refine(orderedWindow, { message: 'salesEndAt must be after salesStartAt', path: ['salesEndAt'] })
   .refine(orderedLimits, { message: 'maxPerOrder must be ≥ minPerOrder', path: ['maxPerOrder'] });
+
+export type CreateTicketTypeInput = z.infer<typeof CreateTicketTypeInput>;
+export type UpdateTicketTypeInput = z.infer<typeof UpdateTicketTypeInput>;

@@ -27,4 +27,4 @@ export {
   type TrackedLinkTarget,
 } from './links.ts';
 export { privateColumns } from './private-columns.ts';
-export { linkDetailQuery, linkReportQuery, utmOnlyReportQuery } from './reports.ts';
+export { campaignClicksTx, linkDetailQuery, linkReportQuery, utmOnlyReportQuery } from './reports.ts';

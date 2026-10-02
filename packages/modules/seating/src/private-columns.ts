@@ -16,4 +16,6 @@ export const privateColumns = columnPrivacy('seating', {
   layouts: { name: internal(), doc: internal(), checksum: 'vocab' },
   seat_assignments: { prior_block: 'vocab' },
   seating_rules: { kind: 'vocab', severity: 'vocab', params: internal() },
+  // A sub-event's own drawing (M4.1c): the host's, shown to nobody outside the console yet.
+  sub_event_charts: { doc: internal(), checksum: 'vocab' },
 });

@@ -17,6 +17,13 @@ export {
 export { paymentProviderFromEnv } from './config.ts';
 export { claimProviderEventTx } from './dedupe.ts';
 export {
+  alertDisputeDeadlinesCommand,
+  DISPUTE_ALERT_HOURS,
+  disputeAlertLevel,
+  disputeDeadlineFactsTx,
+  disputeDeadlineNotifier,
+} from './dispute-alerts.ts';
+export {
   closeDisputeTx,
   DisputeDto,
   disputesQuery,

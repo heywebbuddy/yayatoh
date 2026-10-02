@@ -14,6 +14,34 @@ export {
   parseTags,
   plusOneRefusal,
 } from './domain/guests.ts';
+export {
+  GUEST_IMPORT_FIELDS,
+  GUEST_IMPORT_REJECTIONS,
+  type GuestImportField,
+  type GuestImportRejection,
+  type GuestMapping,
+  guessGuestMapping,
+  parseSheetUrl,
+} from './domain/import.ts';
+// M4.1c: sub-events and invitations.
+export {
+  cellKey,
+  groupState,
+  type InviteGuest,
+  type InviteParty,
+  type InviteSubEvent,
+  type InviteTarget,
+  invitedBySubEvent,
+  inviteeOf,
+  isInvited,
+  moveInOrder,
+  partyMatches,
+  planInvitations,
+  subEventWindow,
+  targetGuests,
+  uninvitedWith,
+  windowInputs,
+} from './domain/invitations.ts';
 export * from './dto.ts';
 export {
   addPartyGuestCommand,
@@ -34,6 +62,33 @@ export {
   updatePartyCommand,
   updatePartyGuestCommand,
 } from './guests.ts';
+export {
+  GuestImportSummaryDto,
+  GuestMappingInput,
+  type GuestTable,
+  type GuestTableInput,
+  guestImportAction,
+  guestImportBulk,
+  guestImportRejectedQuery,
+  guestImportSummaryQuery,
+  IMPORT_TTL_MS,
+  MAX_IMPORT_BYTES,
+  MAX_IMPORT_ROWS,
+  purgeGuestImportsCommand,
+  readGuestTable,
+  stageGuestImportCommand,
+  validateGuestImportCommand,
+} from './imports.ts';
+export {
+  assertInvitedTx,
+  InvitationMatrixDto,
+  invitationMatrixQuery,
+  MatrixGuestDto,
+  recordSubEventResponseCommand,
+  SubEventHistoryEntryDto,
+  setInvitationsCommand,
+  subEventHistoryQuery,
+} from './invitations.ts';
 export { privateColumns } from './private-columns.ts';
 export {
   AGE_CLASSES,
@@ -45,4 +100,24 @@ export {
   type GuestSource,
   HISTORY_ACTIONS,
   type HistoryAction,
+  IMPORT_SOURCES,
+  IMPORT_STATUSES,
+  type ImportSource,
+  type ImportStatus,
+  RESPONSE_STATUSES,
+  type ResponseStatus,
+  SUB_EVENT_KINDS,
+  type SubEventKind,
 } from './schema.ts';
+export {
+  CreateSubEventInput,
+  createSubEventCommand,
+  MAX_SUB_EVENTS_PER_EVENT,
+  moveSubEventCommand,
+  removeSubEventCommand,
+  SubEventDto,
+  SubEventSummaryDto,
+  subEventsOfEventTx,
+  subEventsQuery,
+  updateSubEventCommand,
+} from './sub-events.ts';

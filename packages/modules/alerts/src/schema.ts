@@ -137,6 +137,31 @@ export const memberSettings = tenantTable(
   ],
 );
 
+/**
+ * Batch 3e merge: failures other modules of the same tier report through the outbox
+ * (`automations.journey_step_failed@1`, `campaigns.send_failed@1`), one row per outbox event, so
+ * the org rules can count them in their window like any other source. Written only by the
+ * `alerts.evaluator` subscriber (exactly once per event); kept 7 days.
+ */
+export const SIGNAL_KINDS = ['journey_step_failed', 'campaign_send_failed'] as const;
+export type SignalKind = (typeof SIGNAL_KINDS)[number];
+
+export const signals = tenantTable(
+  alertsSchema,
+  'signals',
+  {
+    kind: text('kind').notNull(),
+    /** The outbox event that reported it. */
+    sourceEventId: uuid('source_event_id').notNull(),
+    occurredAt: ts('occurred_at').notNull(),
+  },
+  (t) => [
+    uniqueIndex('signals_org_source_event_key').on(t.orgId, t.sourceEventId),
+    index('signals_org_kind_occurred_idx').on(t.orgId, t.kind, t.occurredAt),
+    check('signals_kind_check', inList('kind', SIGNAL_KINDS)),
+  ],
+);
+
 /** The organizer's ticket target for an event (the sales pace rule). */
 export const salesTargets = tenantTable(
   alertsSchema,

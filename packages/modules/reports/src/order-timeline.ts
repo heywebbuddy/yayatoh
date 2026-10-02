@@ -3,6 +3,8 @@ import { findEventTx } from '@yayatoh/events';
 import { DomainError } from '@yayatoh/kernel';
 import { orderMessagesQuery } from '@yayatoh/notifications';
 import {
+  creditTimelineTx,
+  macroRunsForOrderTx,
   orderDetailQuery,
   orderNotesQuery,
   orderRefundsQuery,
@@ -36,6 +38,10 @@ export const ORDER_TIMELINE_KINDS = [
   'dispute_won',
   'dispute_lost',
   'note',
+  'credit_note_issued',
+  'credit_applied',
+  'credit_released',
+  'macro_run',
 ] as const;
 export type OrderTimelineKind = (typeof ORDER_TIMELINE_KINDS)[number];
 
@@ -198,6 +204,22 @@ export const orderTimelineQuery = tenantQuery({
     }
     for (const n of await orderNotesQuery.handler({ input, ctx, tx }))
       items.push(item(n.createdAt, 'note', { text: n.body, who: n.authorId }));
+    // M3.10c: credit notes issued against the order (code: disposition, text: the number), store
+    // credit it was bought with (and given back if it lapsed), and support macros run on it.
+    const credit = await creditTimelineTx(tx, order.id);
+    for (const c of credit.issued)
+      items.push(
+        item(c.at, 'credit_note_issued', { amountMinor: c.amountMinor, code: c.disposition, text: c.label }),
+      );
+    for (const a of credit.applied) {
+      items.push(item(a.at, 'credit_applied', { amountMinor: a.amountMinor, text: a.label }));
+      if (a.releasedAt)
+        items.push(item(a.releasedAt, 'credit_released', { amountMinor: a.amountMinor, text: a.label }));
+    }
+    for (const r of await macroRunsForOrderTx(tx, order.id))
+      items.push(
+        item(r.createdAt, 'macro_run', { text: r.macroName, code: r.actions.join(','), who: r.ranBy }),
+      );
     return { timezone: event.timezone, currency: order.currency, items: sortTimeline(items) };
   },
 });

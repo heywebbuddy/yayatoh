@@ -135,6 +135,7 @@ export {
   createGateState,
   type GateFacts,
   type GateState,
+  orgQuotaLimitsTx,
   POLICY_RULES,
   type PolicyPhase,
   type PolicyRule,
@@ -366,6 +367,16 @@ export {
   sendingSetupTx,
   setChannelSenderCommand,
 } from './senders.ts';
+export {
+  cancelQueuedByPrefixTx,
+  marketingSuppressionsTx,
+  queuedSinceByPrefixTx,
+  renderStoredContent,
+  type StoredContent,
+  sendOutcomesTx,
+  storeContentTx,
+  storedContentTx,
+} from './stored-content.ts';
 export {
   CUTOVER_AUDIENCES,
   CUTOVER_MOMENTS,

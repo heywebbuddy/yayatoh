@@ -138,6 +138,7 @@ export {
   FINDER_CODES_PER_HOUR,
   FINDER_MAX_ATTEMPTS,
   FINDER_RATE_LIMIT,
+  FINDER_RATE_WINDOW_MS,
   FINDER_VERIFY_STATUSES,
   FINDER_VIEW_MS,
   FinderPosterDto,
@@ -161,3 +162,14 @@ export {
   seatLabelWithSection,
   ticketSeatLabelsQuery,
 } from './seat-labels.ts';
+// M4.1c: a wedding sub-event's own chart, falling back to its date's chart, then the event plan.
+export {
+  giveSubEventOwnChartCommand,
+  removeSubEventChartCommand,
+  resolveSubEventChartTx,
+  SUB_EVENT_CHART_SOURCES,
+  SubEventChartDto,
+  type SubEventChartSource,
+  type SubEventRef,
+  subEventChartsQuery,
+} from './sub-event-charts.ts';

@@ -190,6 +190,21 @@ describe('who serves a request', () => {
       '/auth/start',
       '/my-tickets',
       '/ar/sign-in',
+      // Batch 3e merge: emailed links and the new registration pages.
+      '/unsubscribe/abc~sig',
+      '/r/AbC123',
+      '/waitlist/abc~sig',
+      '/registration-form/abc~sig',
+      '/events/summit/register',
+      '/events/summit/registration-form',
+      '/ar/events/summit/register',
+      // Batch 3f merge: the portal and the public exhibitor map.
+      '/event-portal',
+      '/event-portal/invite/token',
+      '/event-portal/verify/token',
+      '/event-portal/sign-in/site',
+      '/fr/event-portal',
+      '/events/summit/exhibitors',
     ]) {
       expect(isPlatformPath(new URL(p, 'https://x').pathname) || decide(p).owner === 'next').toBe(true);
       expect(decide(p, flags(), { legacy: true })).toEqual({
@@ -200,6 +215,9 @@ describe('who serves a request', () => {
     }
     expect(isPlatformPath('/apiary')).toBe(false);
     expect(isPlatformPath('/sign-instructions')).toBe(false);
+    // The event page itself and its other sub-paths stay with the route table.
+    expect(isPlatformPath('/events/summit')).toBe(false);
+    expect(isPlatformPath('/events/summit/attendee')).toBe(false);
   });
 });
 

@@ -651,3 +651,28 @@ export const providerHealth = notificationsSchema.table(
     check('provider_health_last_error_length', sql`last_error is null or length(last_error) <= 100`),
   ],
 );
+
+/**
+ * Stored message content (M3.6b campaigns): one rendered email (and text-message body) shared by
+ * every message of a send, referenced from a message's params (`_content`). It keeps its merge
+ * fields (`{{first_name|there}}`), filled per recipient when the dispatcher sends, and the
+ * `{{@unsubscribe}}` / `{{@origin}}` tokens. Rows are immutable once written.
+ */
+export const storedContents = tenantTable(
+  notificationsSchema,
+  'stored_contents',
+  {
+    subject: text('subject').notNull(),
+    preheader: text('preheader').notNull().default(''),
+    html: text('html').notNull(),
+    textBody: text('text_body').notNull(),
+    smsBody: text('sms_body'),
+    locale: text('locale').notNull().default('en'),
+  },
+  (t) => [
+    index('stored_contents_org_created_idx').on(t.orgId, t.createdAt),
+    check('stored_contents_subject_check', sql`length(subject) between 1 and 300`),
+    check('stored_contents_html_check', sql`length(html) <= 500000`),
+    check('stored_contents_sms_check', sql`sms_body is null or length(sms_body) <= 2000`),
+  ],
+);
