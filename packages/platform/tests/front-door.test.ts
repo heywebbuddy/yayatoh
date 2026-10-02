@@ -209,6 +209,9 @@ describe('who serves a request', () => {
       '/events/summit/register/group',
       '/events/summit/registration/abc~sig',
       '/events/summit/group/abc~sig',
+      // M5.1d: the buyer's invoice and its PDF.
+      '/events/summit/invoice/abc~sig',
+      '/events/summit/invoice/abc~sig/pdf',
     ]) {
       expect(isPlatformPath(new URL(p, 'https://x').pathname) || decide(p).owner === 'next').toBe(true);
       expect(decide(p, flags(), { legacy: true })).toEqual({

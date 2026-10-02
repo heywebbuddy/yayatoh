@@ -8,7 +8,9 @@ import { orderMessagesQuery } from '@yayatoh/notifications';
 import {
   creditableMinor,
   creditNotesQuery,
+  localDay,
   orderDetailQuery,
+  orderInvoiceQuery,
   orderRefundsQuery,
   previewSupportMacroQuery,
   refundRequestsQuery,
@@ -23,6 +25,7 @@ import { Card, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { z } from 'zod';
+import { InvoicePanel } from '@/components/invoice-panel.tsx';
 import { OrderTimeline } from '@/components/order-timeline.tsx';
 import { RefundForm } from '@/components/refund-form.tsx';
 import { OrderNoteForm, RefundRequestPanel } from '@/components/refund-request-panel.tsx';
@@ -46,10 +49,12 @@ import {
   cancelTransferAction,
   declineRequestAction,
   issueCreditNoteAction,
+  recordInvoicePaymentAction,
   refundAction,
   reissueLinkAction,
   runMacroAction,
   transferTicketAction,
+  voidInvoiceAction,
 } from './actions.ts';
 
 /**
@@ -80,6 +85,8 @@ export default async function OrderPage({
   }
   if (order.eventId !== ev.id) notFound();
   const refunds = await executeQuery(orderRefundsQuery, { orderId }, data.ctx, ports);
+  // M5.1d: a pay-later order's invoice and its payments.
+  const invoice = await executeQuery(orderInvoiceQuery, { orderId }, data.ctx, ports);
   const messages = await executeQuery(orderMessagesQuery, { orderId }, data.ctx, ports);
   const disputes = roleCan(data.role, 'finance:read')
     ? await executeQuery(disputesQuery, { orderId }, data.ctx, ports)
@@ -152,9 +159,12 @@ export default async function OrderPage({
     timeZone: data.org.timezone,
   });
   // Organizer-collected money is refunded in person, not through the payment provider.
+  // M5.1d: an invoice's payments came by several ways (pay link, check, wire): a credit note
+  // (recorded refund) settles money paid back, not a provider refund.
   const canRefund =
     roleCan(data.role, 'orders:refund') &&
     order.collectedBy === 'platform' &&
+    !invoice &&
     ['paid', 'partially_refunded'].includes(order.status) &&
     order.totalMinor > 0;
   const active = order.tickets.filter((tk) => tk.status === 'active');
@@ -185,7 +195,11 @@ export default async function OrderPage({
         <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
           <StatusDot
             status={
-              order.status === 'paid' ? 'success' : order.status.includes('refunded') ? 'warning' : 'neutral'
+              order.status === 'paid'
+                ? 'success'
+                : order.status.includes('refunded') || order.status === 'awaiting_invoice'
+                  ? 'warning'
+                  : 'neutral'
             }
             label={t(`order.status.${order.status}`)}
           />
@@ -214,6 +228,18 @@ export default async function OrderPage({
           </p>
         ) : null}
       </Card>
+
+      {invoice ? (
+        <InvoicePanel
+          invoice={invoice}
+          locale={locale}
+          today={localDay(new Date(), ev.timezone)}
+          pdfHref={`/o/${org}/e/${event}/orders/${orderId}/invoice/pdf?locale=${locale}`}
+          canManage={roleCan(data.role, 'orders:refund')}
+          recordAction={recordInvoicePaymentAction.bind(null, org, event, orderId)}
+          voidAction={voidInvoiceAction.bind(null, org, event, orderId)}
+        />
+      ) : null}
 
       {roleCan(data.role, 'orders:support') ? (
         <section aria-labelledby="order-link-heading" className="flex flex-col gap-3">

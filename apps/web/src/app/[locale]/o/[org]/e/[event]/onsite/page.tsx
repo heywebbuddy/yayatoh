@@ -49,6 +49,7 @@ const DOT = {
   granted: 'success',
   no_access: 'danger',
   wrong_checkpoint: 'danger',
+  balance_due: 'warning',
 } as const;
 
 /** Door check-in: HID scanners and manual entry, entrances and zones, devices and alerts. */

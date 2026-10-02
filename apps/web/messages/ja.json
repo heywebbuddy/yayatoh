@@ -924,7 +924,9 @@
       "expired": "この注文は期限切れになりました",
       "cancelled": "この注文はキャンセルされました",
       "partially_refunded": "一部返金済み",
-      "refunded": "返金済み"
+      "refunded": "返金済み",
+      "awaiting_invoice": "{name} さん、登録が完了しました",
+      "void": "この注文は無効になりました"
     },
     "status": {
       "paid": "支払い済み",
@@ -934,7 +936,9 @@
       "expired": "期限切れ",
       "cancelled": "キャンセル済み",
       "partially_refunded": "一部返金済み",
-      "refunded": "返金済み"
+      "refunded": "返金済み",
+      "awaiting_invoice": "請求書の支払い待ち",
+      "void": "無効"
     },
     "sentTo": "確認メールを {email} に送信しました",
     "total": "合計",
@@ -960,7 +964,8 @@
     "emailsNone": "メールはまだありません。",
     "emailSentAt": "{when} に送信",
     "emailScheduled": "{when} に送信予定",
-    "emailQueued": "送信中"
+    "emailQueued": "送信中",
+    "viewInvoice": "請求書を表示・ダウンロード・支払う"
   },
   "orders": {
     "title": "最近の注文",
@@ -1063,12 +1068,19 @@
       "granted": "入場可",
       "no_access": "このパスではこのエリアに入れません",
       "wrong_checkpoint": "Niet jouw controlepunt",
-      "wrong_date": "別の日程のチケットです"
+      "wrong_date": "別の日程のチケットです",
+      "balance_due": "請求書に未払い残高があります"
     },
     "alertsTitle": "{count, plural, other {オフライン中に#枚のチケットで2回入場がありました}}",
     "alertsHint": "同期される前に、2台のスキャナーが同じチケットで入場を許可しました。入口でこれらのゲストを確認してください。",
     "wrongCheckpointHint": "Jij scant bij {places}. Kies het onder ‘Scannen bij’.",
-    "noCheckpointsHint": "Je bent hier aan geen controlepunt toegewezen. Vraag het de organisator."
+    "noCheckpointsHint": "Je bent hier aan geen controlepunt toegewezen. Vraag het de organisator.",
+    "balanceDueHint": "この登録の請求書はまだ支払われていません。支払いを依頼するか、理由を入力して入場させてください。",
+    "overrideLabel": "未払い残高のまま入場させる",
+    "overrideNote": "入場させる理由",
+    "overrideHint": "あなたの名前とともにアクティビティログに保存されます（例：「発注書承認済み、支払い手続き中」）。",
+    "overrideSubmit": "それでも入場させる",
+    "overrideNoteRequired": "未払い残高のまま入場させるには理由（3文字以上）を入力してください。"
   },
   "checkinLive": {
     "state": {
@@ -6766,7 +6778,8 @@
     "triggers": {
       "order_paid": "チケットを購入したとき",
       "checked_in": "チェックインしたとき",
-      "event_time": "イベントを基準にした時刻"
+      "event_time": "イベントを基準にした時刻",
+      "invoice_issued": "請求書が送られる（後払い）"
     },
     "newTitle": "新しいジャーニー",
     "newDescription": "イベント (またはシリーズ) と参加のきっかけを選びます。オンにする前にすべてのステップを編集できます。",
@@ -6787,7 +6800,9 @@
       "errors": {
         "name": "名前を入力してください (120 文字以内)。",
         "scope": "イベントまたはシリーズを選んでください。"
-      }
+      },
+      "invoice_reminders": "請求書のリマインダー",
+      "invoice_remindersHint": "後払いの登録向け：支払期日の7日前、期日当日、期日の7日後にメールを送ります。支払いがあると止まります。"
     },
     "vision": {
       "name": "ビジョンのジャーニー",
@@ -6837,7 +6852,8 @@
       "anchors": {
         "trigger": "参加した時点",
         "event_start": "イベントの開始",
-        "event_end": "イベントの終了"
+        "event_end": "イベントの終了",
+        "invoice_due": "請求書の支払期日"
       },
       "direction": "前か後か",
       "before": "前",
@@ -6886,7 +6902,8 @@
         "direction": "日と時間は同じ向きにしてください。",
         "offset": "日数を確認してください。",
         "step": "ステップ {n} を確認してください。"
-      }
+      },
+      "invoicePlaceholders": "請求書のリマインダーでは {invoice}、{balance}、{due}、{link} も使えます。"
     },
     "wait": {
       "atTrigger": "すぐに",
@@ -6900,7 +6917,11 @@
       "dayTrigger": "{dir, select, same {参加した日} other {参加の {days} 日後}} の {time}",
       "dayStart": "{dir, select, before {イベント当日の {days} 日前} after {イベント当日の {days} 日後} other {イベント当日}} の {time}",
       "dayEnd": "{dir, select, before {最終日の {days} 日前} after {イベント終了の {days} 日後} other {最終日}} の {time}",
-      "thenOffset": "{base}、その {offset}{dir, select, before {前} other {後}}"
+      "thenOffset": "{base}、その {offset}{dir, select, before {前} other {後}}",
+      "atDue": "支払期日に",
+      "beforeDue": "請求書の支払期日の {offset} 前",
+      "afterDue": "請求書の支払期日の {offset} 後",
+      "dayDue": "{dir, select, before {支払期日の {days} 日前} after {支払期日の {days} 日後} other {支払期日}} の {time}"
     },
     "duration": {
       "days": "{count, plural, other {# 日}}",
@@ -6972,7 +6993,24 @@
       "run_ended": "ジャーニーが終了しました",
       "event_missing": "イベントが見つかりません",
       "error": "何度か試しましたが失敗しました",
-      "other": "その他"
+      "other": "その他",
+      "invoice_paid": "請求書の支払い完了",
+      "invoice_void": "請求書が無効化された",
+      "invoice_settled": "請求書は精算済み"
+    },
+    "invoiceReminders": {
+      "before": {
+        "subject": "請求書 {invoice} の支払期日は {due} です",
+        "body": "{name} 様、{event} の請求書 {invoice} の支払期日は {due} です。残高：{balance}。こちらから確認・お支払いいただけます：{link}"
+      },
+      "due": {
+        "subject": "請求書 {invoice} の支払期日は本日です",
+        "body": "{name} 様、{event} の請求書 {invoice} の支払期日は本日です。残高：{balance}。こちらから確認・お支払いいただけます：{link}"
+      },
+      "overdue": {
+        "subject": "請求書 {invoice} の支払期日が過ぎています",
+        "body": "{name} 様、{event} の請求書 {invoice} は {due} が支払期日でしたが、{balance} が未払いです。ご登録はそのまま有効です。ご都合がつき次第お支払いください：{link}"
+      }
     }
   },
   "supportTools": {
@@ -7328,7 +7366,8 @@
           "name": "お名前を入力してください。",
           "type": "登録タイプを選択してください。",
           "admission": "パスを選択してください。",
-          "items": "パスを 1 つと、任意のオプションを選択してください。"
+          "items": "パスを 1 つと、任意のオプションを選択してください。",
+          "poNumber": "発注番号を入力してください。"
         },
         "type_full": "このタイプはたった今満席になりました。キャンセル待ちに登録できます。",
         "code_required": "この登録タイプにはコードが必要です。",
@@ -7345,7 +7384,9 @@
         "offer_items": "購入できるのは案内されたパスのみです。",
         "approval_required": "この登録タイプは申し込み制です。",
         "guest_type": "このタイプは登録者の同伴者用です。",
-        "no_approval": "このタイプは申し込み不要です。そのまま登録してください。"
+        "no_approval": "このタイプは申し込み不要です。そのまま登録してください。",
+        "pay_later_off": "この登録タイプは購入時にお支払いいただきます。「今すぐカードで支払う」を選んでください。",
+        "po_required": "発注番号を入力してください。"
       },
       "applyHint": "この登録タイプは申し込み制です。主催者が先に審査します。承認されるまで料金は請求されません。",
       "company": "会社名・団体名（任意）",
@@ -7353,7 +7394,16 @@
       "message": "主催者に伝えたいことはありますか？（任意）",
       "apply": "申し込む",
       "byApplication": "申し込み制",
-      "registerGroup": "複数人を登録しますか？グループで登録"
+      "registerGroup": "複数人を登録しますか？グループで登録",
+      "payTitle": "お支払い方法を選んでください",
+      "payNow": "今すぐカードで支払う",
+      "payLater": "後で請求書で支払う",
+      "payLaterHint": "お席は今すぐ確定します。請求書をメールでお送りします。支払期日は30日後か、イベントの7日前のいずれか早い方です。",
+      "poNumber": "発注番号（任意）",
+      "poNumberRequired": "発注番号",
+      "poNumberHint": "請求書に記載される発注書番号です。",
+      "billingCompany": "請求先の会社名（任意）",
+      "registerInvoice": "登録して請求書を受け取る"
     },
     "applicant": {
       "metaTitle": "あなたの登録",
@@ -7646,6 +7696,32 @@
         "segmentId": "オーディエンスを選んでください。",
         "event_finished": "このイベントは終了しました。",
         "tooManyMembers": "会員リストのアドレスは最大5,000件です。"
+      }
+    },
+    "payLater": {
+      "title": "請求書による後払い",
+      "hint": "このタイプの購入者が今すぐ登録し、請求書で支払えるようにします：請求日から30日、ただしイベントの7日前まで。未払いの登録が自動でキャンセルされることはありません。",
+      "openInvoices": "請求書を開く",
+      "summaryNotEligible": "別の方法で支払い（申込制または +1 ゲスト）。",
+      "summaryOn": "後払い：オン · 発注番号：{po}",
+      "summaryOff": "購入時の支払いのみ。",
+      "editNamed": "{name} の後払いを変更",
+      "payLater": "請求書による後払い",
+      "off": "オフ",
+      "on": "オン",
+      "poNumber": "発注番号",
+      "poNumberHint": "購入者に発注書番号を尋ねるか、必須にします。",
+      "po": {
+        "off": "尋ねない",
+        "optional": "任意",
+        "required": "必須"
+      },
+      "save": "保存",
+      "saved": "保存しました。",
+      "errors": {
+        "approval_type": "申込制のタイプは申込者のリンクから支払います。",
+        "guest_type": "+1 ゲストのタイプはホストが支払います。",
+        "event_finished": "このイベントは終了しています。"
       }
     }
   },
@@ -8784,6 +8860,147 @@
       "stale": "その間に別のユーザーがこのテンプレートを保存しました。ページを再読み込みして最新版を確認してください。",
       "questionNotAllowed": "この質問はバッジに印刷できません。"
     },
-    "elements": "この面の要素"
+    "elements": "この面の要素",
+    "balanceDue": "未払い残高あり",
+    "printAnywayNamed": "{name} のバッジをそれでも印刷する",
+    "overrideNote": "印刷する理由",
+    "overrideHint": "あなたの名前とともにアクティビティログに保存されます。",
+    "printAnyway": "それでも印刷する",
+    "overrideNoteRequired": "理由（3文字以上）を入力してください。"
+  },
+  "invoices": {
+    "status": {
+      "open": "未払い",
+      "paid": "支払済み",
+      "void": "無効"
+    },
+    "overdue": "期日超過",
+    "methods": {
+      "card": "カード（支払いリンク）",
+      "check": "小切手",
+      "wire": "銀行振込",
+      "cash": "現金",
+      "other": "その他"
+    },
+    "panel": {
+      "title": "請求書 {label}",
+      "number": "請求書",
+      "issued": "請求日",
+      "due": "支払期日",
+      "terms": "支払条件",
+      "termsValue": "30日以内、ただしイベントの7日前まで",
+      "po": "発注番号",
+      "company": "会社",
+      "total": "合計",
+      "paid": "支払済み",
+      "balance": "未払い残高",
+      "none": "—",
+      "pdf": "PDF をダウンロード",
+      "voided": "無効化：{reason}",
+      "paidAfterVoid": "無効化後に {amount} が支払われました。クレジットノートで返金してください。",
+      "payments": "支払い",
+      "noPayments": "まだ支払いはありません。",
+      "failed": "拒否"
+    },
+    "record": {
+      "title": "支払いを記録",
+      "label": "受け取った支払いを記録",
+      "balance": "未払い残高：{amount}",
+      "amount": "金額（{currency}）",
+      "method": "支払方法",
+      "methods": {
+        "check": "小切手",
+        "wire": "銀行振込",
+        "cash": "現金",
+        "other": "その他"
+      },
+      "receivedOn": "受領日",
+      "reference": "参照番号",
+      "referenceHint": "小切手番号または振込の参照番号。",
+      "note": "メモ（任意）",
+      "recorded": "支払いを記録しました。",
+      "submit": "支払いを記録"
+    },
+    "void": {
+      "title": "この請求書を無効にする",
+      "label": "請求書を無効にする",
+      "hint": "無効にすると登録とチケットが取り消され、席が空きます。まだ何も支払われていない場合のみ可能です。",
+      "reason": "理由",
+      "done": "請求書を無効にしました。",
+      "submit": "請求書を無効にする"
+    },
+    "errors": {
+      "amount_required": "600.00 のように金額を入力してください。",
+      "amount_too_large": "未払い残高を超えています。",
+      "amount_too_small": "0 より大きい金額を入力してください。",
+      "nothing_due": "この請求書に未払いはありません。",
+      "date_in_future": "未来の日付は指定できません。",
+      "date_required": "支払いを受け取った日を入力してください。",
+      "has_payments": "この請求書には支払いが記録されているため、無効にできません。",
+      "invoice_paid": "この請求書は支払済みです。",
+      "invoice_void": "この請求書は無効になっています。",
+      "field": {
+        "amount": "未払い残高までの金額を入力してください。",
+        "receivedOn": "支払いを受け取った日を入力してください。",
+        "reason": "理由（3〜500文字）を入力してください。"
+      }
+    },
+    "list": {
+      "title": "請求書",
+      "description": "後払いの登録：支払済みの額と未払いの額。",
+      "backToSetup": "登録に戻る",
+      "filterLabel": "請求書を絞り込む",
+      "filters": {
+        "all": "すべて",
+        "open": "未払い",
+        "overdue": "期日超過",
+        "paid": "支払済み",
+        "void": "無効"
+      },
+      "emptyTitle": "まだ請求書はありません",
+      "emptyDescription": "登録タイプで後払いをオンにすると、登録に応じてここに請求書が表示されます。",
+      "emptyFiltered": "この条件に合う請求書はありません。",
+      "caption": "請求書",
+      "billedTo": "請求先",
+      "po": "発注番号 {po}",
+      "noPo": "発注番号なし",
+      "status": "状態"
+    },
+    "public": {
+      "metaTitle": "請求書",
+      "title": "請求書 {label}",
+      "lead": {
+        "open": "{name} 様、ご登録ありがとうございます。この請求書の支払期日は {due} です。",
+        "paid": "{name} 様、この請求書はお支払い済みです。",
+        "void": "主催者がこの請求書を取り消しました。"
+      },
+      "thanks": "お支払いありがとうございます",
+      "thanksPaid": "請求書は全額お支払い済みになりました。",
+      "thanksPart": "残り {balance} が未払いです。",
+      "items": "ご登録内容",
+      "pdf": "PDF をダウンロード",
+      "payTitle": "今すぐ支払う",
+      "payHint": "未払いの {balance} を全額、または一部を今支払い、残りを後で支払えます。",
+      "payLabel": "この請求書を支払う",
+      "amount": "支払金額（{currency}）",
+      "amountHint": "未払い残高まで。",
+      "pay": "お支払いへ進む",
+      "backToEvent": "イベントに戻る"
+    },
+    "pdf": {
+      "title": "請求書 {label}",
+      "billedTo": "請求先",
+      "event": "イベント",
+      "status": "状態",
+      "item": "品目",
+      "quantity": "数量",
+      "unit": "単価",
+      "amount": "金額",
+      "payNote": "オンラインでのお支払い：{url}",
+      "payNoteNoLink": "購入者は請求書メールのリンクからオンラインで、または主催者へ小切手・振込で支払います。",
+      "paidNote": "全額お支払い済みです。ありがとうございました。",
+      "voidNote": "この請求書は無効になりました。",
+      "footer": "{seller} が Yayatoh を通じて発行。"
+    }
   }
 }

@@ -8,6 +8,7 @@ import { HolderContent } from '@/components/holder-content.tsx';
 import { OrderReview } from '@/components/reviews/order-review.tsx';
 import { TicketQr } from '@/components/ticket-qr.tsx';
 import { WebPushControl } from '@/components/web-push-control.tsx';
+import { Link } from '@/i18n/navigation.ts';
 import { refundPolicyLines } from '@/lib/refund-policy-text.ts';
 import { getPdfRenderer } from '@/server/pdf.ts';
 import { webPushPublicKey } from '@/server/web-push.ts';
@@ -27,6 +28,8 @@ const DOT = {
   cancelled: 'danger',
   partially_refunded: 'info',
   refunded: 'info',
+  awaiting_invoice: 'warning',
+  void: 'neutral',
 } as const;
 
 /** Guest order page, reached by the manage-token link (no account needed). */
@@ -68,6 +71,12 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
       />
       <Card size="panel" className="flex flex-col gap-4">
         <StatusDot status={DOT[order.status]} label={t(`order.status.${order.status}`)} />
+        {/* M5.1d: a pay-later order: its invoice (view, PDF, pay). */}
+        {order.invoicePath ? (
+          <Link href={order.invoicePath} className="self-start text-body underline underline-offset-2">
+            {t('order.viewInvoice')}
+          </Link>
+        ) : null}
         <ul className="flex list-none flex-col divide-y divide-zinc-100 p-0">
           {order.items.map((i) => (
             <li key={i.ticketTypeId} className="flex justify-between gap-4 py-2.5">

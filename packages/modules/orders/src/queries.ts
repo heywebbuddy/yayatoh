@@ -10,6 +10,7 @@ import { and, desc, eq, inArray, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { hashManageToken, loadOrderTx } from './commands/checkout.ts';
 import { buyerCreditNotesTx } from './commands/credit-notes.ts';
+import { invoiceOfOrderTx, invoicePath } from './commands/invoices.ts';
 import { orderRefundPolicyTx } from './commands/refund-policy.ts';
 import { buyerRefundPanelTx } from './commands/refund-requests.ts';
 import { OrderDto, type PublicOrderDto, publicOrderSerializer, RefundPolicyDto } from './dto.ts';
@@ -169,6 +170,7 @@ export async function orderByManageToken(token: string): Promise<PublicOrderDto 
         refundPolicy: await orderRefundPolicyTx(tx, o),
         refundRequest: await buyerRefundPanelTx(tx, ctx, o),
         creditNotes: await buyerCreditNotesTx(tx, o.id),
+        invoicePath: await invoicePathForOrderTx(tx, o.id, ev.slug),
       };
     });
     return publicOrderSerializer.serialize(order);
@@ -357,4 +359,10 @@ export async function orderStockTx(
       if (t.status === 'active') sold.set(t.ticketTypeId, (sold.get(t.ticketTypeId) ?? 0) + 1);
   }
   return { eventId: o.eventId, held, sold };
+}
+
+/** M5.1d: the buyer's invoice page for an order, if it was sold on an invoice. */
+async function invoicePathForOrderTx(tx: TenantTx, orderId: string, eventSlug: string) {
+  const inv = await invoiceOfOrderTx(tx, orderId);
+  return inv ? invoicePath(eventSlug, inv.id) : null;
 }

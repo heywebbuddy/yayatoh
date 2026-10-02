@@ -924,7 +924,9 @@
       "expired": "Deze bestelling is verlopen",
       "cancelled": "Deze bestelling is geannuleerd",
       "partially_refunded": "Gedeeltelijk terugbetaald",
-      "refunded": "Terugbetaald"
+      "refunded": "Terugbetaald",
+      "awaiting_invoice": "Je bent ingeschreven, {name}",
+      "void": "Deze bestelling is vervallen"
     },
     "status": {
       "paid": "Betaald",
@@ -934,7 +936,9 @@
       "expired": "Verlopen",
       "cancelled": "Geannuleerd",
       "partially_refunded": "Gedeeltelijk terugbetaald",
-      "refunded": "Terugbetaald"
+      "refunded": "Terugbetaald",
+      "awaiting_invoice": "Factuur nog te betalen",
+      "void": "Vervallen"
     },
     "sentTo": "Bevestiging verzonden naar {email}",
     "total": "Totaal",
@@ -960,7 +964,8 @@
     "emailsNone": "Nog geen e-mails.",
     "emailSentAt": "Verzonden {when}",
     "emailScheduled": "Gepland voor {when}",
-    "emailQueued": "Wordt verzonden"
+    "emailQueued": "Wordt verzonden",
+    "viewInvoice": "Je factuur bekijken, downloaden of betalen"
   },
   "orders": {
     "title": "Recente bestellingen",
@@ -1063,12 +1068,19 @@
       "granted": "Toegang verleend",
       "no_access": "Deze pas geeft geen toegang tot dit gebied",
       "wrong_checkpoint": "Não é o seu ponto de controle",
-      "wrong_date": "Dit ticket is voor een andere datum"
+      "wrong_date": "Dit ticket is voor een andere datum",
+      "balance_due": "Openstaand bedrag op de factuur"
     },
     "alertsTitle": "{count, plural, one {# ticket is offline twee keer binnengelaten} other {# tickets zijn offline twee keer binnengelaten}}",
     "alertsHint": "Twee scanners lieten hetzelfde ticket binnen voordat ze konden synchroniseren. Controleer deze gasten bij de deur.",
     "wrongCheckpointHint": "Você escaneia em {places}. Escolha em “Escaneando em”.",
-    "noCheckpointsHint": "Você não tem ponto de controle atribuído aqui. Fale com o organizador."
+    "noCheckpointsHint": "Você não tem ponto de controle atribuído aqui. Fale com o organizador.",
+    "balanceDueHint": "De factuur van deze inschrijving is nog niet betaald. Vraag om betaling, of laat iemand binnen met een reden.",
+    "overrideLabel": "Binnenlaten met openstaand bedrag",
+    "overrideNote": "Reden om binnen te laten",
+    "overrideHint": "Wordt met je naam in het activiteitenlog bewaard, bijv. ‘Inkooporder goedgekeurd, betaling onderweg’.",
+    "overrideSubmit": "Toch binnenlaten",
+    "overrideNoteRequired": "Geef een reden (minstens 3 tekens) om binnen te laten met een openstaand bedrag."
   },
   "checkinLive": {
     "state": {
@@ -6766,7 +6778,8 @@
     "triggers": {
       "order_paid": "Koopt een ticket",
       "checked_in": "Checkt in",
-      "event_time": "Tijd ten opzichte van het evenement"
+      "event_time": "Tijd ten opzichte van het evenement",
+      "invoice_issued": "Krijgt een factuur (later betalen)"
     },
     "newTitle": "Nieuwe journey",
     "newDescription": "Kies het evenement (of de reeks) en hoe mensen instromen. Je kunt elke stap bewerken voordat je de journey aanzet.",
@@ -6787,7 +6800,9 @@
       "errors": {
         "name": "Vul een naam in (maximaal 120 tekens).",
         "scope": "Kies een evenement of reeks."
-      }
+      },
+      "invoice_reminders": "Factuurherinneringen",
+      "invoice_remindersHint": "Voor inschrijvingen die later betalen: een e-mail 7 dagen voor de vervaldatum, op de vervaldatum en 7 dagen erna. Betalen stopt ze."
     },
     "vision": {
       "name": "Visie-journey",
@@ -6837,7 +6852,8 @@
       "anchors": {
         "trigger": "Het instromen",
         "event_start": "De start van het evenement",
-        "event_end": "Het einde van het evenement"
+        "event_end": "Het einde van het evenement",
+        "invoice_due": "De vervaldatum van de factuur"
       },
       "direction": "Ervoor of erna",
       "before": "Ervoor",
@@ -6886,7 +6902,8 @@
         "direction": "Dagen en uren moeten dezelfde kant op gaan.",
         "offset": "Controleer het aantal dagen.",
         "step": "Controleer stap {n}."
-      }
+      },
+      "invoicePlaceholders": "Factuurherinneringen kunnen ook {invoice}, {balance}, {due} en {link} gebruiken."
     },
     "wait": {
       "atTrigger": "Meteen",
@@ -6900,7 +6917,11 @@
       "dayTrigger": "{dir, select, same {Op de dag van instromen} other {{days, plural, one {# dag na het instromen} other {# dagen na het instromen}}}}, om {time}",
       "dayStart": "{dir, select, before {{days, plural, one {# dag voor de evenementdag} other {# dagen voor de evenementdag}}} after {{days, plural, one {# dag na de evenementdag} other {# dagen na de evenementdag}}} other {Op de evenementdag}}, om {time}",
       "dayEnd": "{dir, select, before {{days, plural, one {# dag voor de laatste dag} other {# dagen voor de laatste dag}}} after {{days, plural, one {# dag na het einde van het evenement} other {# dagen na het einde van het evenement}}} other {Op de laatste dag}}, om {time}",
-      "thenOffset": "{base}, {dir, select, before {{offset} eerder} other {{offset} later}}"
+      "thenOffset": "{base}, {dir, select, before {{offset} eerder} other {{offset} later}}",
+      "atDue": "Op de vervaldatum",
+      "beforeDue": "{offset} voor de vervaldatum van de factuur",
+      "afterDue": "{offset} na de vervaldatum van de factuur",
+      "dayDue": "{dir, select, before {{days, plural, one {# dag voor de vervaldatum} other {# dagen voor de vervaldatum}}} after {{days, plural, one {# dag na de vervaldatum} other {# dagen na de vervaldatum}}} other {Op de vervaldatum}}, om {time}"
     },
     "duration": {
       "days": "{count, plural, one {# dag} other {# dagen}}",
@@ -6972,7 +6993,24 @@
       "run_ended": "Journey beëindigd",
       "event_missing": "Evenement niet gevonden",
       "error": "Mislukt na meerdere pogingen",
-      "other": "Overig"
+      "other": "Overig",
+      "invoice_paid": "Factuur betaald",
+      "invoice_void": "Factuur vervallen",
+      "invoice_settled": "Factuur al voldaan"
+    },
+    "invoiceReminders": {
+      "before": {
+        "subject": "Factuur {invoice} vervalt op {due}",
+        "body": "Hoi {name}, een herinnering dat factuur {invoice} voor {event} op {due} vervalt. Openstaand: {balance}. Bekijk of betaal hem hier: {link}"
+      },
+      "due": {
+        "subject": "Factuur {invoice} vervalt vandaag",
+        "body": "Hoi {name}, factuur {invoice} voor {event} vervalt vandaag. Openstaand: {balance}. Bekijk of betaal hem hier: {link}"
+      },
+      "overdue": {
+        "subject": "Factuur {invoice} is te laat",
+        "body": "Hoi {name}, factuur {invoice} voor {event} verviel op {due} en {balance} staat nog open. Je inschrijving blijft staan; betaal wanneer je kunt: {link}"
+      }
     }
   },
   "supportTools": {
@@ -7328,7 +7366,8 @@
           "name": "Voer uw naam in.",
           "type": "Kies een registratietype.",
           "admission": "Kies een pas.",
-          "items": "Kies één pas en eventuele extra's."
+          "items": "Kies één pas en eventuele extra's.",
+          "poNumber": "Vul je inkoopordernummer in."
         },
         "type_full": "Dit type is zojuist volgeboekt. U kunt zich op de wachtlijst zetten.",
         "code_required": "Voor dit registratietype is een code nodig.",
@@ -7345,7 +7384,9 @@
         "offer_items": "Alleen de aangeboden pas kan worden gekocht.",
         "approval_required": "Voor dit registratietype moet je een aanvraag doen.",
         "guest_type": "Dit type is voor gasten van een deelnemer.",
-        "no_approval": "Voor dit type is geen aanvraag nodig: registreer je gewoon."
+        "no_approval": "Voor dit type is geen aanvraag nodig: registreer je gewoon.",
+        "pay_later_off": "Dit inschrijvingstype betaal je bij het afrekenen. Kies ‘Nu betalen met kaart’.",
+        "po_required": "Vul je inkoopordernummer in."
       },
       "applyHint": "Voor dit registratietype doe je een aanvraag: de organisator beoordeelt die eerst. Je betaalt pas als je bent goedgekeurd.",
       "company": "Bedrijf of organisatie (optioneel)",
@@ -7353,7 +7394,16 @@
       "message": "Iets wat de organisator moet weten? (optioneel)",
       "apply": "Aanvragen",
       "byApplication": "Op aanvraag",
-      "registerGroup": "Registreer je meerdere mensen? Registreer een groep"
+      "registerGroup": "Registreer je meerdere mensen? Registreer een groep",
+      "payTitle": "Hoe wil je betalen?",
+      "payNow": "Nu betalen met kaart",
+      "payLater": "Later betalen op factuur",
+      "payLaterHint": "Je plaats is nu bevestigd. We mailen je een factuur, te betalen binnen 30 dagen of 7 dagen voor het evenement als dat eerder is.",
+      "poNumber": "Inkoopordernummer (optioneel)",
+      "poNumberRequired": "Inkoopordernummer",
+      "poNumberHint": "Je inkoopordernummer, vermeld op de factuur.",
+      "billingCompany": "Bedrijf op de factuur (optioneel)",
+      "registerInvoice": "Inschrijven en factuur ontvangen"
     },
     "applicant": {
       "metaTitle": "Je registratie",
@@ -7646,6 +7696,32 @@
         "segmentId": "Kies een doelgroep.",
         "event_finished": "Dit evenement is afgelopen.",
         "tooManyMembers": "Een ledenlijst kan maximaal 5.000 adressen bevatten."
+      }
+    },
+    "payLater": {
+      "title": "Later betalen op factuur",
+      "hint": "Laat kopers van een type zich nu inschrijven en op factuur betalen: 30 dagen na de factuurdatum, maar uiterlijk 7 dagen voor het evenement. Onbetaalde inschrijvingen worden nooit automatisch geannuleerd.",
+      "openInvoices": "Facturen openen",
+      "summaryNotEligible": "Wordt anders betaald (aanmeldingen of +1-gasten).",
+      "summaryOn": "Later betalen staat aan · Inkoopordernummer: {po}",
+      "summaryOff": "Alleen betalen bij het afrekenen.",
+      "editNamed": "Later betalen wijzigen voor {name}",
+      "payLater": "Later betalen op factuur",
+      "off": "Uit",
+      "on": "Aan",
+      "poNumber": "Inkoopordernummer",
+      "poNumberHint": "Vraag om het inkoopordernummer, of maak het verplicht.",
+      "po": {
+        "off": "niet gevraagd",
+        "optional": "optioneel",
+        "required": "verplicht"
+      },
+      "save": "Opslaan",
+      "saved": "Opgeslagen.",
+      "errors": {
+        "approval_type": "Types met aanmelding worden betaald via de link van de aanmelder.",
+        "guest_type": "+1-gasttypes worden door hun gastheer betaald.",
+        "event_finished": "Dit evenement is voorbij."
       }
     }
   },
@@ -8784,6 +8860,147 @@
       "stale": "Iemand anders heeft dit sjabloon intussen opgeslagen. Laad de pagina opnieuw om die versie te zien.",
       "questionNotAllowed": "Die vraag kan niet op badges worden geprint."
     },
-    "elements": "Elementen aan deze kant"
+    "elements": "Elementen aan deze kant",
+    "balanceDue": "Openstaand bedrag",
+    "printAnywayNamed": "Badge van {name} toch afdrukken",
+    "overrideNote": "Reden om af te drukken",
+    "overrideHint": "Wordt met je naam in het activiteitenlog bewaard.",
+    "printAnyway": "Toch afdrukken",
+    "overrideNoteRequired": "Geef een reden (minstens 3 tekens)."
+  },
+  "invoices": {
+    "status": {
+      "open": "Open",
+      "paid": "Betaald",
+      "void": "Vervallen"
+    },
+    "overdue": "Te laat",
+    "methods": {
+      "card": "Kaart (betaallink)",
+      "check": "Cheque",
+      "wire": "Overboeking",
+      "cash": "Contant",
+      "other": "Anders"
+    },
+    "panel": {
+      "title": "Factuur {label}",
+      "number": "Factuur",
+      "issued": "Factuurdatum",
+      "due": "Vervaldatum",
+      "terms": "Voorwaarden",
+      "termsValue": "30 dagen netto, uiterlijk 7 dagen voor het evenement",
+      "po": "Inkoopordernummer",
+      "company": "Bedrijf",
+      "total": "Totaal",
+      "paid": "Betaald",
+      "balance": "Openstaand",
+      "none": "—",
+      "pdf": "De pdf downloaden",
+      "voided": "Vervallen: {reason}",
+      "paidAfterVoid": "{amount} is na het laten vervallen betaald: terugbetalen met een creditnota.",
+      "payments": "Betalingen",
+      "noPayments": "Nog geen betalingen.",
+      "failed": "geweigerd"
+    },
+    "record": {
+      "title": "Betaling vastleggen",
+      "label": "Ontvangen betaling vastleggen",
+      "balance": "Openstaand: {amount}",
+      "amount": "Bedrag ({currency})",
+      "method": "Betaalwijze",
+      "methods": {
+        "check": "Cheque",
+        "wire": "Overboeking",
+        "cash": "Contant",
+        "other": "Anders"
+      },
+      "receivedOn": "Ontvangen op",
+      "reference": "Referentie",
+      "referenceHint": "Chequenummer of referentie van de overboeking.",
+      "note": "Notitie (optioneel)",
+      "recorded": "Betaling vastgelegd.",
+      "submit": "Betaling vastleggen"
+    },
+    "void": {
+      "title": "Deze factuur laten vervallen",
+      "label": "De factuur laten vervallen",
+      "hint": "Laten vervallen annuleert de inschrijving en de tickets en geeft de plaats vrij. Alleen mogelijk zolang er niets betaald is.",
+      "reason": "Reden",
+      "done": "Factuur vervallen.",
+      "submit": "Factuur laten vervallen"
+    },
+    "errors": {
+      "amount_required": "Vul een bedrag in, bijvoorbeeld 600.00.",
+      "amount_too_large": "Dat is meer dan het openstaande bedrag.",
+      "amount_too_small": "Vul een bedrag boven nul in.",
+      "nothing_due": "Op deze factuur staat niets open.",
+      "date_in_future": "De datum kan niet in de toekomst liggen.",
+      "date_required": "Vul de dag in waarop de betaling binnenkwam.",
+      "has_payments": "Op deze factuur zijn betalingen vastgelegd, dus hij kan niet vervallen.",
+      "invoice_paid": "Deze factuur is al betaald.",
+      "invoice_void": "Deze factuur is vervallen.",
+      "field": {
+        "amount": "Vul een bedrag in tot het openstaande bedrag.",
+        "receivedOn": "Vul de dag in waarop de betaling binnenkwam.",
+        "reason": "Geef een reden (3 tot 500 tekens)."
+      }
+    },
+    "list": {
+      "title": "Facturen",
+      "description": "Inschrijvingen die later betalen: wat betaald is en wat nog openstaat.",
+      "backToSetup": "Terug naar inschrijving",
+      "filterLabel": "Facturen filteren",
+      "filters": {
+        "all": "Alle",
+        "open": "Open",
+        "overdue": "Te laat",
+        "paid": "Betaald",
+        "void": "Vervallen"
+      },
+      "emptyTitle": "Nog geen facturen",
+      "emptyDescription": "Zet later betalen aan voor een inschrijvingstype; facturen verschijnen hier zodra mensen zich inschrijven.",
+      "emptyFiltered": "Geen facturen voor dit filter.",
+      "caption": "Facturen",
+      "billedTo": "Gefactureerd aan",
+      "po": "IO {po}",
+      "noPo": "Geen inkoopordernummer",
+      "status": "Status"
+    },
+    "public": {
+      "metaTitle": "Je factuur",
+      "title": "Factuur {label}",
+      "lead": {
+        "open": "Bedankt, {name}: je bent ingeschreven. Deze factuur vervalt op {due}.",
+        "paid": "Bedankt, {name}: deze factuur is betaald.",
+        "void": "De organisator heeft deze factuur geannuleerd."
+      },
+      "thanks": "Bedankt voor je betaling",
+      "thanksPaid": "De factuur is nu volledig betaald.",
+      "thanksPart": "Er staat nog {balance} open.",
+      "items": "Je inschrijving",
+      "pdf": "De pdf downloaden",
+      "payTitle": "Nu betalen",
+      "payHint": "Betaal de volledige {balance}, of nu een deel en de rest later.",
+      "payLabel": "Deze factuur betalen",
+      "amount": "Te betalen bedrag ({currency})",
+      "amountHint": "Tot het openstaande bedrag.",
+      "pay": "Verder naar betalen",
+      "backToEvent": "Terug naar het evenement"
+    },
+    "pdf": {
+      "title": "Factuur {label}",
+      "billedTo": "Gefactureerd aan",
+      "event": "Evenement",
+      "status": "Status",
+      "item": "Omschrijving",
+      "quantity": "Aantal",
+      "unit": "Prijs per stuk",
+      "amount": "Bedrag",
+      "payNote": "Online betalen: {url}",
+      "payNoteNoLink": "De koper betaalt online via de link in de factuurmail, of per cheque of overboeking aan de organisator.",
+      "paidNote": "Volledig betaald. Bedankt.",
+      "voidNote": "Deze factuur is vervallen.",
+      "footer": "Uitgegeven door {seller} via Yayatoh."
+    }
   }
 }

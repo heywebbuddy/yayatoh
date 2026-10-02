@@ -924,7 +924,9 @@
       "expired": "此訂單已逾期",
       "cancelled": "此訂單已取消",
       "partially_refunded": "已部分退款",
-      "refunded": "已退款"
+      "refunded": "已退款",
+      "awaiting_invoice": "{name}，你已完成報名",
+      "void": "此訂單已作廢"
     },
     "status": {
       "paid": "已付款",
@@ -934,7 +936,9 @@
       "expired": "已逾期",
       "cancelled": "已取消",
       "partially_refunded": "已部分退款",
-      "refunded": "已退款"
+      "refunded": "已退款",
+      "awaiting_invoice": "待支付發票",
+      "void": "已作廢"
     },
     "sentTo": "確認信已寄至 {email}",
     "total": "總計",
@@ -960,7 +964,8 @@
     "emailsNone": "尚無郵件。",
     "emailSentAt": "已於 {when} 寄出",
     "emailScheduled": "預定於 {when} 寄出",
-    "emailQueued": "傳送中"
+    "emailQueued": "傳送中",
+    "viewInvoice": "查看、下載或支付你的發票"
   },
   "orders": {
     "title": "最近訂單",
@@ -1063,12 +1068,19 @@
       "granted": "准許進入",
       "no_access": "此通行證不包含該區域",
       "wrong_checkpoint": "不是你的檢查點",
-      "wrong_date": "此門票適用於其他場次"
+      "wrong_date": "此門票適用於其他場次",
+      "balance_due": "發票尚有餘額未付"
     },
     "alertsTitle": "{count, plural, other {離線期間有 # 張票被重複放行}}",
     "alertsHint": "兩台掃描裝置在同步前放行了同一張票。請在入口核查這些賓客。",
     "wrongCheckpointHint": "你負責 {places}。請在「掃描位置」中選擇。",
-    "noCheckpointsHint": "你在這裡沒有分配檢查點。請詢問主辦方。"
+    "noCheckpointsHint": "你在這裡沒有分配檢查點。請詢問主辦方。",
+    "balanceDueHint": "此報名的發票尚未支付。請對方付款，或填寫原因後放行。",
+    "overrideLabel": "餘額未付仍放行",
+    "overrideNote": "放行原因",
+    "overrideHint": "將與你的姓名一起儲存在活動紀錄中，例如「採購單已核准，款項處理中」。",
+    "overrideSubmit": "仍然放行",
+    "overrideNoteRequired": "請填寫原因（至少 3 個字元）才能在餘額未付時放行。"
   },
   "checkinLive": {
     "state": {
@@ -6766,7 +6778,8 @@
     "triggers": {
       "order_paid": "購買門票",
       "checked_in": "簽到入場",
-      "event_time": "相對活動的時間"
+      "event_time": "相對活動的時間",
+      "invoice_issued": "收到發票（稍後付款）"
     },
     "newTitle": "新建旅程",
     "newDescription": "選擇活動（或系列）以及加入方式。開啟前可以編輯每個步驟。",
@@ -6787,7 +6800,9 @@
       "errors": {
         "name": "請輸入名稱（最多 120 個字元）。",
         "scope": "請選擇活動或系列。"
-      }
+      },
+      "invoice_reminders": "發票提醒",
+      "invoice_remindersHint": "適用於稍後付款的報名：在發票到期前 7 天、到期日當天及到期後 7 天各寄送一封電子郵件。付款後即停止。"
     },
     "vision": {
       "name": "願景旅程",
@@ -6837,7 +6852,8 @@
       "anchors": {
         "trigger": "加入時",
         "event_start": "活動開始",
-        "event_end": "活動結束"
+        "event_end": "活動結束",
+        "invoice_due": "發票到期日"
       },
       "direction": "之前或之後",
       "before": "之前",
@@ -6886,7 +6902,8 @@
         "direction": "天數和小時必須同一方向。",
         "offset": "請檢查天數。",
         "step": "請檢查步驟 {n}。"
-      }
+      },
+      "invoicePlaceholders": "發票提醒也可以使用 {invoice}、{balance}、{due} 和 {link}。"
     },
     "wait": {
       "atTrigger": "立即",
@@ -6900,7 +6917,11 @@
       "dayTrigger": "{dir, select, same {加入當天} other {加入後第 {days} 天}} {time}",
       "dayStart": "{dir, select, before {活動日前 {days} 天} after {活動日後 {days} 天} other {活動當天}} {time}",
       "dayEnd": "{dir, select, before {最後一天前 {days} 天} after {活動結束後 {days} 天} other {最後一天}} {time}",
-      "thenOffset": "{base}，{dir, select, before {提前 {offset}} other {延後 {offset}}}"
+      "thenOffset": "{base}，{dir, select, before {提前 {offset}} other {延後 {offset}}}",
+      "atDue": "在到期日",
+      "beforeDue": "發票到期前 {offset}",
+      "afterDue": "發票到期後 {offset}",
+      "dayDue": "{dir, select, before {到期日前 {days} 天} after {到期日後 {days} 天} other {到期日當天}}，{time}"
     },
     "duration": {
       "days": "{count, plural, other {# 天}}",
@@ -6972,7 +6993,24 @@
       "run_ended": "旅程已結束",
       "event_missing": "找不到活動",
       "error": "多次尝試後失敗",
-      "other": "其他"
+      "other": "其他",
+      "invoice_paid": "發票已支付",
+      "invoice_void": "發票已作廢",
+      "invoice_settled": "發票已結清"
+    },
+    "invoiceReminders": {
+      "before": {
+        "subject": "發票 {invoice} 將於 {due} 到期",
+        "body": "{name}，你好！提醒你：{event} 的發票 {invoice} 將於 {due} 到期。餘額：{balance}。在此查看或付款：{link}"
+      },
+      "due": {
+        "subject": "發票 {invoice} 今天到期",
+        "body": "{name}，你好！{event} 的發票 {invoice} 今天到期。餘額：{balance}。在此查看或付款：{link}"
+      },
+      "overdue": {
+        "subject": "發票 {invoice} 已逾期",
+        "body": "{name}，你好！{event} 的發票 {invoice} 已於 {due} 到期，仍有 {balance} 未付。你的報名依然有效，方便時請付款：{link}"
+      }
     }
   },
   "supportTools": {
@@ -7328,7 +7366,8 @@
           "name": "請輸入您的姓名。",
           "type": "請選擇報名類型。",
           "admission": "請選擇通行證。",
-          "items": "請選擇一張通行證及任意加購項目。"
+          "items": "請選擇一張通行證及任意加購項目。",
+          "poNumber": "請輸入採購單號。"
         },
         "type_full": "此類型剛剛額滿。您可以加入其候補名單。",
         "code_required": "此報名類型需要報名碼。",
@@ -7345,7 +7384,9 @@
         "offer_items": "只能購買所邀請的通行證。",
         "approval_required": "此報名類型需要申請。",
         "guest_type": "此類型僅供報名者的來賓使用。",
-        "no_approval": "此類型不需申請：請直接報名。"
+        "no_approval": "此類型不需申請：請直接報名。",
+        "pay_later_off": "此報名類型需在結帳時付款。請選擇「現在以信用卡付款」。",
+        "po_required": "請輸入採購單號。"
       },
       "applyHint": "此報名類型需要申請：主辦單位會先審核。只有核准後才會收費。",
       "company": "公司或組織（選填）",
@@ -7353,7 +7394,16 @@
       "message": "有什麼需要讓主辦單位知道的嗎？（選填）",
       "apply": "申請",
       "byApplication": "需申請",
-      "registerGroup": "要幫多人報名嗎？改用團體報名"
+      "registerGroup": "要幫多人報名嗎？改用團體報名",
+      "payTitle": "你想如何付款？",
+      "payNow": "現在以信用卡付款",
+      "payLater": "稍後憑發票付款",
+      "payLaterHint": "你的名額現在即已確認。我們會以電子郵件寄送發票，於 30 天內或活動開始前 7 天到期，以較早者為準。",
+      "poNumber": "採購單號（選填）",
+      "poNumberRequired": "採購單號",
+      "poNumberHint": "你的採購單號，會印在發票上。",
+      "billingCompany": "開票公司（選填）",
+      "registerInvoice": "報名並取得發票"
     },
     "applicant": {
       "metaTitle": "你的報名",
@@ -7646,6 +7696,32 @@
         "segmentId": "請選擇受眾。",
         "event_finished": "此活動已結束。",
         "tooManyMembers": "會員名單最多可包含 5,000 個地址。"
+      }
+    },
+    "payLater": {
+      "title": "憑發票稍後付款",
+      "hint": "允許某類型的購買者現在報名、憑發票付款：自開票日起 30 天，但最遲在活動開始前 7 天。未付款的報名絕不會被自動取消。",
+      "openInvoices": "開啟發票",
+      "summaryNotEligible": "以其他方式付款（申請制或 +1 嘉賓）。",
+      "summaryOn": "稍後付款已開啟 · 採購單號：{po}",
+      "summaryOff": "僅在結帳時付款。",
+      "editNamed": "變更 {name} 的稍後付款設定",
+      "payLater": "憑發票稍後付款",
+      "off": "關閉",
+      "on": "開啟",
+      "poNumber": "採購單號",
+      "poNumberHint": "向購買者詢問採購單號，或設為必填。",
+      "po": {
+        "off": "不詢問",
+        "optional": "選填",
+        "required": "必填"
+      },
+      "save": "儲存",
+      "saved": "已儲存。",
+      "errors": {
+        "approval_type": "申請制類型透過申請人的連結付款。",
+        "guest_type": "+1 嘉賓類型由邀請人付款。",
+        "event_finished": "此活動已結束。"
       }
     }
   },
@@ -8784,6 +8860,147 @@
       "stale": "其他人在此期間儲存了此範本。請重新載入頁面以查看其版本。",
       "questionNotAllowed": "此問題無法列印在名牌上。"
     },
-    "elements": "此面的元素"
+    "elements": "此面的元素",
+    "balanceDue": "餘額未付",
+    "printAnywayNamed": "仍然列印 {name} 的名牌",
+    "overrideNote": "列印原因",
+    "overrideHint": "將與你的姓名一起儲存在活動紀錄中。",
+    "printAnyway": "仍然列印",
+    "overrideNoteRequired": "請填寫原因（至少 3 個字元）。"
+  },
+  "invoices": {
+    "status": {
+      "open": "未結清",
+      "paid": "已支付",
+      "void": "已作廢"
+    },
+    "overdue": "已逾期",
+    "methods": {
+      "card": "信用卡（付款連結）",
+      "check": "支票",
+      "wire": "電匯",
+      "cash": "現金",
+      "other": "其他"
+    },
+    "panel": {
+      "title": "發票 {label}",
+      "number": "發票",
+      "issued": "開票日期",
+      "due": "到期日",
+      "terms": "付款條件",
+      "termsValue": "30 天內付款，最遲在活動開始前 7 天",
+      "po": "採購單號",
+      "company": "公司",
+      "total": "合計",
+      "paid": "已付",
+      "balance": "應付餘額",
+      "none": "—",
+      "pdf": "下載 PDF",
+      "voided": "已作廢：{reason}",
+      "paidAfterVoid": "作廢後收到 {amount}：請以折讓單退款。",
+      "payments": "付款紀錄",
+      "noPayments": "尚無付款。",
+      "failed": "已拒絕"
+    },
+    "record": {
+      "title": "記錄付款",
+      "label": "記錄已收到的付款",
+      "balance": "應付餘額：{amount}",
+      "amount": "金額（{currency}）",
+      "method": "付款方式",
+      "methods": {
+        "check": "支票",
+        "wire": "電匯",
+        "cash": "現金",
+        "other": "其他"
+      },
+      "receivedOn": "收款日期",
+      "reference": "參考號碼",
+      "referenceHint": "支票號碼或電匯參考號碼。",
+      "note": "備註（選填）",
+      "recorded": "付款已記錄。",
+      "submit": "記錄付款"
+    },
+    "void": {
+      "title": "作廢此發票",
+      "label": "作廢發票",
+      "hint": "作廢會取消該報名及其票券並釋出名額。僅在尚未付款時可操作。",
+      "reason": "原因",
+      "done": "發票已作廢。",
+      "submit": "作廢發票"
+    },
+    "errors": {
+      "amount_required": "請輸入金額，例如 600.00。",
+      "amount_too_large": "超過了應付餘額。",
+      "amount_too_small": "請輸入大於零的金額。",
+      "nothing_due": "此發票沒有應付款項。",
+      "date_in_future": "日期不能晚於今天。",
+      "date_required": "請輸入收款日期。",
+      "has_payments": "此發票已有付款紀錄，無法作廢。",
+      "invoice_paid": "此發票已支付。",
+      "invoice_void": "此發票已作廢。",
+      "field": {
+        "amount": "請輸入不超過應付餘額的金額。",
+        "receivedOn": "請輸入收款日期。",
+        "reason": "請填寫原因（3 到 500 個字元）。"
+      }
+    },
+    "list": {
+      "title": "發票",
+      "description": "稍後付款的報名：已付多少、還欠多少。",
+      "backToSetup": "返回報名設定",
+      "filterLabel": "篩選發票",
+      "filters": {
+        "all": "全部",
+        "open": "未結清",
+        "overdue": "已逾期",
+        "paid": "已支付",
+        "void": "已作廢"
+      },
+      "emptyTitle": "尚無發票",
+      "emptyDescription": "為某個報名類型開啟稍後付款，有人報名後發票會顯示在這裡。",
+      "emptyFiltered": "沒有符合此篩選條件的發票。",
+      "caption": "發票",
+      "billedTo": "開票對象",
+      "po": "採購單 {po}",
+      "noPo": "無採購單號",
+      "status": "狀態"
+    },
+    "public": {
+      "metaTitle": "你的發票",
+      "title": "發票 {label}",
+      "lead": {
+        "open": "{name}，謝謝！你已完成報名。此發票將於 {due} 到期。",
+        "paid": "{name}，謝謝！此發票已支付。",
+        "void": "主辦單位已取消此發票。"
+      },
+      "thanks": "感謝你的付款",
+      "thanksPaid": "發票現已全部付清。",
+      "thanksPart": "仍有 {balance} 未付。",
+      "items": "你的報名",
+      "pdf": "下載 PDF",
+      "payTitle": "立即付款",
+      "payHint": "可一次付清 {balance}，也可先付一部分，其餘稍後再付。",
+      "payLabel": "支付此發票",
+      "amount": "付款金額（{currency}）",
+      "amountHint": "不超過應付餘額。",
+      "pay": "前往付款",
+      "backToEvent": "返回活動"
+    },
+    "pdf": {
+      "title": "發票 {label}",
+      "billedTo": "開票對象",
+      "event": "活動",
+      "status": "狀態",
+      "item": "項目",
+      "quantity": "數量",
+      "unit": "單價",
+      "amount": "金額",
+      "payNote": "線上付款：{url}",
+      "payNoteNoLink": "購買者可透過發票電子郵件中的連結線上付款，或以支票、電匯方式付給主辦單位。",
+      "paidNote": "已全部付清。謝謝。",
+      "voidNote": "此發票已作廢。",
+      "footer": "由 {seller} 透過 Yayatoh 開立。"
+    }
   }
 }

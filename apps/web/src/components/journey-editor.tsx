@@ -83,7 +83,7 @@ export function NewJourneyForm({
   const t = useTranslations('journeys');
   const te = useTranslations();
   const [state, formAction, pending] = useActionState(action, INITIAL);
-  const [template, setTemplate] = useState<'vision' | 'blank'>('vision');
+  const [template, setTemplate] = useState<'vision' | 'invoice_reminders' | 'blank'>('vision');
   // Controlled: a form action resets uncontrolled fields, and a refused submit must keep them.
   const [name, setName] = useState(() => t('vision.name'));
   const [scope, setScope] = useState(initialScope);
@@ -132,7 +132,7 @@ export function NewJourneyForm({
       </Select>
       <fieldset className="flex flex-col gap-2">
         <legend className="mb-1 text-caption text-zinc-600">{t('form.start')}</legend>
-        {(['vision', 'blank'] as const).map((k) => (
+        {(['vision', 'invoice_reminders', 'blank'] as const).map((k) => (
           <label key={k} className="flex min-h-10 items-start gap-3 rounded-card border border-zinc-200 p-3">
             <input
               type="radio"
@@ -389,7 +389,10 @@ export function StepsEditor({
                     onChange={(v) => set(d.key, { anchor: v as WaitAnchor })}
                     error={stepError(i, 'anchor')}
                   >
-                    {WAIT_ANCHORS.map((a) => (
+                    {WAIT_ANCHORS.filter(
+                      // M5.1d: only an invoice journey has a due date to wait from.
+                      (a) => a !== 'invoice_due' || trigger === 'invoice_issued' || d.anchor === a,
+                    ).map((a) => (
                       <option key={a} value={a}>
                         {t(`editor.anchors.${a}`)}
                       </option>
@@ -499,6 +502,14 @@ export function StepsEditor({
                       />
                       <p id={`${id('body')}-hint`} className="text-caption text-zinc-500">
                         {t('editor.placeholders', { name: '{name}', event: '{event}', when: '{when}' })}
+                        {trigger === 'invoice_issued'
+                          ? ` ${t('editor.invoicePlaceholders', {
+                              invoice: '{invoice}',
+                              balance: '{balance}',
+                              due: '{due}',
+                              link: '{link}',
+                            })}`
+                          : ''}
                       </p>
                       {stepError(i, 'body') ? (
                         <p id={`${id('body')}-error`} className="text-caption text-pink-700">

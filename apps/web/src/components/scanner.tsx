@@ -22,6 +22,7 @@ const TONE = {
   granted: 'border-green-600 bg-green-50 text-green-900',
   no_access: 'border-pink-700 bg-pink-50 text-pink-700',
   wrong_checkpoint: 'border-pink-700 bg-pink-50 text-pink-700',
+  balance_due: 'border-accent-700 bg-accent-50 text-accent-text',
 } as const;
 
 const newScanId = () => `web:${crypto.randomUUID()}`;
@@ -144,13 +145,53 @@ export function Scanner({
               </p>
             ) : null}
             <SignalBanner count={state.outcome.openSignals} />
+            {state.outcome.result === 'balance_due' ? (
+              <p className="text-body">{t('checkin.balanceDueHint')}</p>
+            ) : null}
           </div>
         ) : state.kind === 'error' ? (
           <div className={`rounded-panel border-2 px-6 py-5 ${TONE.invalid}`}>
-            <p className="text-body">{t(errorMessageKey(state.code))}</p>
+            <p className="text-body">
+              {state.code === 'override_note'
+                ? t('checkin.overrideNoteRequired')
+                : t(errorMessageKey(state.code))}
+            </p>
           </div>
         ) : null}
       </div>
+      {/* M5.1d: a balance is due on the invoice; staff may admit anyway, with a reason (audited). */}
+      {state.kind === 'outcome' && state.outcome.result === 'balance_due' && state.outcome.ticket ? (
+        <form
+          action={formAction}
+          aria-label={t('checkin.overrideLabel')}
+          className="flex flex-col gap-3 rounded-panel border border-zinc-200 p-4"
+        >
+          <input type="hidden" name="intent" value="override" />
+          <input type="hidden" name="code" value={state.outcome.ticket.shortCode} />
+          <input type="hidden" name="checkpointId" value={stand} />
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="scan-override-note" className="text-caption text-zinc-600">
+              {t('checkin.overrideNote')}
+            </label>
+            <input
+              id="scan-override-note"
+              name="note"
+              required
+              minLength={3}
+              maxLength={300}
+              autoComplete="off"
+              aria-describedby="scan-override-hint"
+              className="min-h-10 w-full rounded-pill border border-zinc-300 bg-white px-4 text-body"
+            />
+            <p id="scan-override-hint" className="text-caption text-zinc-500">
+              {t('checkin.overrideHint')}
+            </p>
+          </div>
+          <Button type="submit" variant="secondary" disabled={pending} className="self-start">
+            {t('checkin.overrideSubmit')}
+          </Button>
+        </form>
+      ) : null}
     </div>
   );
 }
