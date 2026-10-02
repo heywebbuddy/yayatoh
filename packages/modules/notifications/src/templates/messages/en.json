@@ -225,6 +225,16 @@
       "subject": "Continue your registration for {eventName}",
       "intro": "Here is your link to pick up your registration for {eventName} where you left off. It works for {days, plural, one {# day} other {# days}} after your last save and only for you, so please don't forward it. If you didn't ask for it, you can ignore this email.",
       "cta": "Continue my registration"
+    },
+    "registration.approved": {
+      "subject": "You're approved for {eventName}",
+      "intro": "Good news, {name}: your application to attend {eventName} as {typeName} was approved. Use the button below to see your registration and, if your pass has a price, to pay and confirm your place.",
+      "cta": "View my registration"
+    },
+    "registration.denied": {
+      "subject": "Your application for {eventName}",
+      "intro": "Thank you for applying to attend {eventName} as {typeName}, {name}. The organizer could not approve your application this time. You have not been charged.",
+      "cta": "View my application"
     }
   },
   "roles": {

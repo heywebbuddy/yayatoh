@@ -225,6 +225,16 @@
       "subject": "繼續您的 {eventName} 報名",
       "intro": "這是您的連結，可從上次中斷的地方繼續 {eventName} 的報名。它在您最後一次儲存後 {days, plural, other {# 天}} 內有效，且僅供您本人使用，請勿轉寄。如果您沒有要求此郵件，可以忽略。",
       "cta": "繼續我的報名"
+    },
+    "registration.approved": {
+      "subject": "您參加 {eventName} 的申請已獲核准",
+      "intro": "{name}，好消息：您以 {typeName} 身分參加 {eventName} 的申請已獲核准。請點選下方按鈕查看您的報名；如果您的通行證需要付費，請完成付款以確認名額。",
+      "cta": "查看我的報名"
+    },
+    "registration.denied": {
+      "subject": "您參加 {eventName} 的申請",
+      "intro": "{name}，感謝您申請以 {typeName} 身分參加 {eventName}。主辦單位這次未能核准您的申請。您沒有被收取任何費用。",
+      "cta": "查看我的申請"
     }
   },
   "roles": {

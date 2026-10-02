@@ -147,6 +147,9 @@ async function typeDtoTx(tx: TenantTx, t: TypeRow): Promise<RegistrationTypeDto>
     eligibility: t.eligibility as RegistrationTypeDto['eligibility'],
     waiting: d.waiting,
     offered: d.offered,
+    approved: d.approved,
+    approval: t.approval as RegistrationTypeDto['approval'],
+    kind: t.kind as RegistrationTypeDto['kind'],
   };
 }
 

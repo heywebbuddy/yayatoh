@@ -151,3 +151,4 @@ export {
   walletPassSync,
   walletSerial,
 } from './wallet.ts';
+export { nameTicketHolderTx } from './naming.ts';

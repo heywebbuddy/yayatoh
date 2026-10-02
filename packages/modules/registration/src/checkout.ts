@@ -20,6 +20,7 @@ import { publicRoom } from './domain/capacity.ts';
 import { type Eligibility, eligibilityRefusal } from './domain/eligibility.ts';
 import { type AdmissionKind, priceRange, selectionProblem } from './domain/matrix.ts';
 import { type PublicRegistrationDto, publicRegistrationSerializer } from './dto.ts';
+import { recordSingleRegistrantTx, refuseDirectRegistration } from './registrant-records.ts';
 import { admissionItems, registrationTypes, typeItems } from './schema.ts';
 
 type TypeRow = typeof registrationTypes.$inferSelect;
@@ -32,7 +33,7 @@ export const eligibilityOf = (t: TypeRow): Eligibility =>
       : { kind: 'open' };
 
 /** Refuse an ineligible buyer (whatever the client sent: the page only hides the type). */
-function assertEligible(t: TypeRow, buyer: { email: string; accessCode?: string | null | undefined }) {
+export function assertEligible(t: TypeRow, buyer: { email: string; accessCode?: string | null | undefined }) {
   const refusal = eligibilityRefusal(eligibilityOf(t), {
     email: buyer.email,
     accessCode: buyer.accessCode ?? null,
@@ -45,7 +46,7 @@ function assertEligible(t: TypeRow, buyer: { email: string; accessCode?: string 
 }
 
 /** The type's live cells: item id → its kind and ticket type. */
-async function offeredItemsTx(tx: TenantTx, typeId: string) {
+export async function offeredItemsTx(tx: TenantTx, typeId: string) {
   const rows = await tx
     .select({ itemId: admissionItems.id, kind: admissionItems.kind, ticketTypeId: typeItems.ticketTypeId })
     .from(typeItems)
@@ -62,7 +63,7 @@ async function offeredItemsTx(tx: TenantTx, typeId: string) {
   );
 }
 
-async function liveTypeForBuyerTx(tx: TenantTx, eventId: string, typeId: string) {
+export async function liveTypeForBuyerTx(tx: TenantTx, eventId: string, typeId: string) {
   const type = await lockTypeTx(tx, typeId);
   if (!type || type.eventId !== eventId || type.archivedAt)
     throw new DomainError('not_found', 'Registration type not found');
@@ -70,7 +71,7 @@ async function liveTypeForBuyerTx(tx: TenantTx, eventId: string, typeId: string)
 }
 
 /** P5-11: the event's registrants stay within the conference pack's quota. */
-async function assertRegistrantQuotaTx(tx: TenantTx, eventId: string) {
+export async function assertRegistrantQuotaTx(tx: TenantTx, eventId: string) {
   const pack = await eventAddonTx(tx, eventId, 'conference_pack');
   const limit = pack?.quotas.registrants;
   if (limit === undefined) return;
@@ -112,6 +113,8 @@ export const startRegistrationCommand = tenantCommand({
     const event = await findEventTx(tx, input.eventId);
     if (!event) throw new DomainError('not_found', 'Event not found');
     const type = await liveTypeForBuyerTx(tx, event.id, input.registrationTypeId);
+    // M5.1c: approval types are applied for (paid by the approval link); +1 types belong to a host.
+    refuseDirectRegistration(type);
     const offered = await offeredItemsTx(tx, type.id);
     // A waitlist offer was made to an eligible person (checked when they joined); orders checks
     // that the offer is open and bought by the address it was made to.
@@ -177,6 +180,18 @@ export const startRegistrationCommand = tenantCommand({
       held: paid ? 0 : 1,
       sold: paid ? 1 : 0,
     });
+    // M5.1c: the registrant (a group of one), confirmed with its ticket once the order is paid.
+    await recordSingleRegistrantTx(tx, ctx, emit, {
+      eventId: event.id,
+      registrationTypeId: type.id,
+      admissionItemId: admission,
+      addOnItemIds: input.itemIds.filter((id) => id !== admission),
+      name: input.buyer.name,
+      email: input.buyer.email,
+      locale: input.locale,
+      orderId: checkout.order.id,
+      paid,
+    });
     return { ...checkout, registrationTypeId: type.id };
   },
   audit: (input, r) => ({
@@ -215,6 +230,7 @@ export const joinRegistrationWaitlistCommand = tenantCommand({
     if (event?.status !== 'published' || event.visibility === 'private')
       throw new DomainError('not_found', 'Event not found');
     const type = await liveTypeForBuyerTx(tx, event.id, input.registrationTypeId);
+    refuseDirectRegistration(type);
     assertEligible(type, { email: input.email, accessCode: input.accessCode });
     const cell = (await offeredItemsTx(tx, type.id)).get(input.admissionItemId);
     if (cell?.kind !== 'admission') throw new DomainError('not_found', 'Item not found');

@@ -225,6 +225,16 @@
       "subject": "{eventName}の登録を続ける",
       "intro": "{eventName}の登録を中断したところから再開するためのリンクです。最後に保存してから{days, plural, other {# 日間}}、ご本人のみ使用できますので転送しないでください。心当たりがない場合は、このメールを無視してください。",
       "cta": "登録を続ける"
+    },
+    "registration.approved": {
+      "subject": "{eventName} への参加申請が承認されました",
+      "intro": "{name} 様、{typeName} として {eventName} に参加する申請が承認されました。下のボタンから登録内容を確認し、有料のパスの場合はお支払いを済ませて参加を確定してください。",
+      "cta": "登録内容を見る"
+    },
+    "registration.denied": {
+      "subject": "{eventName} への参加申請について",
+      "intro": "{name} 様、{typeName} として {eventName} への参加をお申し込みいただきありがとうございます。今回は主催者が申請を承認できませんでした。料金は請求されていません。",
+      "cta": "申請内容を見る"
     }
   },
   "roles": {

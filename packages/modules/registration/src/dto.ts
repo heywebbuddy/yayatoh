@@ -19,6 +19,10 @@ export const RegistrationTypeDto = z.object({
   /** The type's lines (M3.10a): places waited for and places open offers hold. */
   waiting: z.int(),
   offered: z.int(),
+  /** M5.1c: places approved applicants hold until they pay; how the type admits people. */
+  approved: z.int().default(0),
+  approval: z.enum(['none', 'manual']).default('none'),
+  kind: z.enum(['standard', 'guest']).default('standard'),
 });
 export type RegistrationTypeDto = z.infer<typeof RegistrationTypeDto>;
 

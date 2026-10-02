@@ -40,7 +40,7 @@ import {
 } from '@yayatoh/orders';
 import { disputeDeadlineNotifier, payoutDestinationMailer } from '@yayatoh/payments';
 import { consumeEvent, recentEventsTx, type Subscriber, subscribes } from '@yayatoh/platform';
-import { registrationCapacity } from '@yayatoh/registration';
+import { decisionMailer, registrantLifecycle, registrationCapacity } from '@yayatoh/registration';
 import { surveyMailer } from '@yayatoh/surveys';
 import { impersonationNotice, invitationMailer, orgStatusNotice } from '@yayatoh/tenancy';
 import {
@@ -114,6 +114,9 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     ...journeySubscribers(),
     // M5.1a: its offers (waitlist.offered) are mailed in the same drain.
     registrationCapacity(),
+    // M5.1c: registrants follow their orders; approval and denial emails.
+    registrantLifecycle(),
+    decisionMailer({ notifier, appOrigin }),
   ];
 }
 

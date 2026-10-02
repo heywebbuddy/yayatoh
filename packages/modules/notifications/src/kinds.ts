@@ -197,6 +197,19 @@ export const KINDS = {
     urgent: true,
     params: ['url', 'name', 'eventName', 'days'],
   },
+  // Apply-to-attend decisions (M5.1c): the applicant's link (pay step or confirmation), the reason.
+  'registration.approved': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['url', 'name', 'eventName', 'typeName', 'body'],
+  },
+  'registration.denied': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['url', 'name', 'eventName', 'typeName', 'body'],
+  },
   'orders.order-link': {
     category: 'transactional',
     channels: ['email'],

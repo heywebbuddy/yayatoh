@@ -6864,6 +6864,526 @@ Lakeside Jazz Night 一筆訂單上金額 US$45.00 的爭議證據將在 20 小�
 }
 `;
 
+exports[`renderMessage: every kind in all 13 locales > registration.approved · ar 1`] = `
+{
+  "subject": "تمت الموافقة على طلبك لحضور Midwest Leadership Summit",
+  "text": "تمت الموافقة على طلبك لحضور Midwest Leadership Summit
+
+مرحبًا Amina Diallo،
+
+أخبار سارة يا Amina Diallo: تمت الموافقة على طلبك لحضور Midwest Leadership Summit بصفة Member. استخدم الزر أدناه لعرض تسجيلك، وإذا كان لتذكرتك سعر، للدفع وتأكيد مكانك.
+
+We look forward to seeing you at the members’ breakfast.
+
+عرض تسجيلي: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.approved · de 1`] = `
+{
+  "subject": "Ihre Anmeldung für Midwest Leadership Summit wurde bestätigt",
+  "text": "Ihre Anmeldung für Midwest Leadership Summit wurde bestätigt
+
+Hallo Amina Diallo,
+
+Gute Nachrichten, Amina Diallo: Ihre Bewerbung zur Teilnahme an Midwest Leadership Summit als Member wurde angenommen. Über die Schaltfläche unten sehen Sie Ihre Anmeldung und können, falls Ihr Pass etwas kostet, bezahlen und Ihren Platz bestätigen.
+
+We look forward to seeing you at the members’ breakfast.
+
+Meine Anmeldung ansehen: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.approved · en 1`] = `
+{
+  "subject": "You're approved for Midwest Leadership Summit",
+  "text": "You're approved for Midwest Leadership Summit
+
+Hi Amina Diallo,
+
+Good news, Amina Diallo: your application to attend Midwest Leadership Summit as Member was approved. Use the button below to see your registration and, if your pass has a price, to pay and confirm your place.
+
+We look forward to seeing you at the members’ breakfast.
+
+View my registration: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.approved · es 1`] = `
+{
+  "subject": "Tu solicitud para Midwest Leadership Summit ha sido aprobada",
+  "text": "Tu solicitud para Midwest Leadership Summit ha sido aprobada
+
+Hola, Amina Diallo:
+
+Buenas noticias, Amina Diallo: tu solicitud para asistir a Midwest Leadership Summit como Member ha sido aprobada. Usa el botón de abajo para ver tu inscripción y, si tu pase tiene precio, pagar y confirmar tu plaza.
+
+We look forward to seeing you at the members’ breakfast.
+
+Ver mi inscripción: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.approved · fr 1`] = `
+{
+  "subject": "Votre demande pour Midwest Leadership Summit est acceptée",
+  "text": "Votre demande pour Midwest Leadership Summit est acceptée
+
+Bonjour Amina Diallo,
+
+Bonne nouvelle, Amina Diallo : votre demande de participation à Midwest Leadership Summit en tant que Member a été acceptée. Utilisez le bouton ci-dessous pour voir votre inscription et, si votre pass est payant, payer et confirmer votre place.
+
+We look forward to seeing you at the members’ breakfast.
+
+Voir mon inscription: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.approved · hi 1`] = `
+{
+  "subject": "Midwest Leadership Summit के लिए आपका आवेदन स्वीकृत हुआ",
+  "text": "Midwest Leadership Summit के लिए आपका आवेदन स्वीकृत हुआ
+
+नमस्ते Amina Diallo,
+
+अच्छी खबर, Amina Diallo: Member के रूप में Midwest Leadership Summit में भाग लेने का आपका आवेदन स्वीकृत हो गया है। अपना पंजीकरण देखने और, यदि आपके पास का शुल्क है, भुगतान करके अपनी जगह पक्की करने के लिए नीचे दिए बटन का उपयोग करें।
+
+We look forward to seeing you at the members’ breakfast.
+
+मेरा पंजीकरण देखें: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.approved · it 1`] = `
+{
+  "subject": "La tua richiesta per Midwest Leadership Summit è stata approvata",
+  "text": "La tua richiesta per Midwest Leadership Summit è stata approvata
+
+Ciao Amina Diallo,
+
+Buone notizie, Amina Diallo: la tua richiesta di partecipare a Midwest Leadership Summit come Member è stata approvata. Usa il pulsante qui sotto per vedere la tua iscrizione e, se il tuo pass è a pagamento, pagare e confermare il tuo posto.
+
+We look forward to seeing you at the members’ breakfast.
+
+Vedi la mia iscrizione: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.approved · ja 1`] = `
+{
+  "subject": "Midwest Leadership Summit への参加申請が承認されました",
+  "text": "Midwest Leadership Summit への参加申請が承認されました
+
+Amina Diallo 様
+
+Amina Diallo 様、Member として Midwest Leadership Summit に参加する申請が承認されました。下のボタンから登録内容を確認し、有料のパスの場合はお支払いを済ませて参加を確定してください。
+
+We look forward to seeing you at the members’ breakfast.
+
+登録内容を見る: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.approved · nl 1`] = `
+{
+  "subject": "Je aanvraag voor Midwest Leadership Summit is goedgekeurd",
+  "text": "Je aanvraag voor Midwest Leadership Summit is goedgekeurd
+
+Hoi Amina Diallo,
+
+Goed nieuws, Amina Diallo: je aanvraag om Midwest Leadership Summit bij te wonen als Member is goedgekeurd. Gebruik de knop hieronder om je registratie te bekijken en, als je pas iets kost, te betalen en je plek te bevestigen.
+
+We look forward to seeing you at the members’ breakfast.
+
+Mijn registratie bekijken: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.approved · pt 1`] = `
+{
+  "subject": "Sua solicitação para Midwest Leadership Summit foi aprovada",
+  "text": "Sua solicitação para Midwest Leadership Summit foi aprovada
+
+Olá, Amina Diallo!
+
+Boas notícias, Amina Diallo: sua solicitação para participar de Midwest Leadership Summit como Member foi aprovada. Use o botão abaixo para ver sua inscrição e, se o seu passe tiver preço, pagar e confirmar sua vaga.
+
+We look forward to seeing you at the members’ breakfast.
+
+Ver minha inscrição: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.approved · ru 1`] = `
+{
+  "subject": "Ваша заявка на Midwest Leadership Summit одобрена",
+  "text": "Ваша заявка на Midwest Leadership Summit одобрена
+
+Здравствуйте, Amina Diallo!
+
+Хорошие новости, Amina Diallo: ваша заявка на участие в Midwest Leadership Summit в категории «Member» одобрена. Нажмите кнопку ниже, чтобы открыть регистрацию и, если пропуск платный, оплатить его и подтвердить место.
+
+We look forward to seeing you at the members’ breakfast.
+
+Открыть мою регистрацию: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.approved · zh-CN 1`] = `
+{
+  "subject": "您参加 Midwest Leadership Summit 的申请已获批准",
+  "text": "您参加 Midwest Leadership Summit 的申请已获批准
+
+Amina Diallo，您好：
+
+Amina Diallo，好消息：您以 Member 身份参加 Midwest Leadership Summit 的申请已获批准。请点击下方按钮查看您的报名；如果您的通行证需要付费，请完成付款以确认名额。
+
+We look forward to seeing you at the members’ breakfast.
+
+查看我的报名: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.approved · zh-TW 1`] = `
+{
+  "subject": "您參加 Midwest Leadership Summit 的申請已獲核准",
+  "text": "您參加 Midwest Leadership Summit 的申請已獲核准
+
+Amina Diallo，您好：
+
+Amina Diallo，好消息：您以 Member 身分參加 Midwest Leadership Summit 的申請已獲核准。請點選下方按鈕查看您的報名；如果您的通行證需要付費，請完成付款以確認名額。
+
+We look forward to seeing you at the members’ breakfast.
+
+查看我的報名: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.denied · ar 1`] = `
+{
+  "subject": "طلبك لحضور Midwest Leadership Summit",
+  "text": "طلبك لحضور Midwest Leadership Summit
+
+مرحبًا Amina Diallo،
+
+شكرًا لتقديمك طلب حضور Midwest Leadership Summit بصفة Member يا Amina Diallo. لم يتمكن المنظم من الموافقة على طلبك هذه المرة. لم يتم خصم أي مبلغ منك.
+
+This rate is for current members; the non-member rate is still open.
+
+عرض طلبي: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.denied · de 1`] = `
+{
+  "subject": "Ihre Bewerbung für Midwest Leadership Summit",
+  "text": "Ihre Bewerbung für Midwest Leadership Summit
+
+Hallo Amina Diallo,
+
+Danke für Ihre Bewerbung zur Teilnahme an Midwest Leadership Summit als Member, Amina Diallo. Der Veranstalter konnte Ihre Bewerbung diesmal nicht annehmen. Ihnen wurde nichts berechnet.
+
+This rate is for current members; the non-member rate is still open.
+
+Meine Bewerbung ansehen: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.denied · en 1`] = `
+{
+  "subject": "Your application for Midwest Leadership Summit",
+  "text": "Your application for Midwest Leadership Summit
+
+Hi Amina Diallo,
+
+Thank you for applying to attend Midwest Leadership Summit as Member, Amina Diallo. The organizer could not approve your application this time. You have not been charged.
+
+This rate is for current members; the non-member rate is still open.
+
+View my application: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.denied · es 1`] = `
+{
+  "subject": "Tu solicitud para Midwest Leadership Summit",
+  "text": "Tu solicitud para Midwest Leadership Summit
+
+Hola, Amina Diallo:
+
+Gracias por solicitar asistir a Midwest Leadership Summit como Member, Amina Diallo. El organizador no ha podido aprobar tu solicitud esta vez. No se te ha cobrado nada.
+
+This rate is for current members; the non-member rate is still open.
+
+Ver mi solicitud: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.denied · fr 1`] = `
+{
+  "subject": "Votre demande pour Midwest Leadership Summit",
+  "text": "Votre demande pour Midwest Leadership Summit
+
+Bonjour Amina Diallo,
+
+Merci d’avoir demandé à participer à Midwest Leadership Summit en tant que Member, Amina Diallo. L’organisateur n’a pas pu accepter votre demande cette fois-ci. Aucun montant ne vous a été facturé.
+
+This rate is for current members; the non-member rate is still open.
+
+Voir ma demande: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.denied · hi 1`] = `
+{
+  "subject": "Midwest Leadership Summit के लिए आपका आवेदन",
+  "text": "Midwest Leadership Summit के लिए आपका आवेदन
+
+नमस्ते Amina Diallo,
+
+Member के रूप में Midwest Leadership Summit में भाग लेने के लिए आवेदन करने हेतु धन्यवाद, Amina Diallo। आयोजक इस बार आपका आवेदन स्वीकृत नहीं कर सके। आपसे कोई शुल्क नहीं लिया गया है।
+
+This rate is for current members; the non-member rate is still open.
+
+मेरा आवेदन देखें: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.denied · it 1`] = `
+{
+  "subject": "La tua richiesta per Midwest Leadership Summit",
+  "text": "La tua richiesta per Midwest Leadership Summit
+
+Ciao Amina Diallo,
+
+Grazie per aver chiesto di partecipare a Midwest Leadership Summit come Member, Amina Diallo. Questa volta l’organizzatore non ha potuto approvare la tua richiesta. Non ti è stato addebitato nulla.
+
+This rate is for current members; the non-member rate is still open.
+
+Vedi la mia richiesta: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.denied · ja 1`] = `
+{
+  "subject": "Midwest Leadership Summit への参加申請について",
+  "text": "Midwest Leadership Summit への参加申請について
+
+Amina Diallo 様
+
+Amina Diallo 様、Member として Midwest Leadership Summit への参加をお申し込みいただきありがとうございます。今回は主催者が申請を承認できませんでした。料金は請求されていません。
+
+This rate is for current members; the non-member rate is still open.
+
+申請内容を見る: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.denied · nl 1`] = `
+{
+  "subject": "Je aanvraag voor Midwest Leadership Summit",
+  "text": "Je aanvraag voor Midwest Leadership Summit
+
+Hoi Amina Diallo,
+
+Bedankt voor je aanvraag om Midwest Leadership Summit bij te wonen als Member, Amina Diallo. De organisator kon je aanvraag deze keer niet goedkeuren. Er is niets in rekening gebracht.
+
+This rate is for current members; the non-member rate is still open.
+
+Mijn aanvraag bekijken: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.denied · pt 1`] = `
+{
+  "subject": "Sua solicitação para Midwest Leadership Summit",
+  "text": "Sua solicitação para Midwest Leadership Summit
+
+Olá, Amina Diallo!
+
+Obrigado por solicitar participar de Midwest Leadership Summit como Member, Amina Diallo. O organizador não pôde aprovar sua solicitação desta vez. Nada foi cobrado.
+
+This rate is for current members; the non-member rate is still open.
+
+Ver minha solicitação: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.denied · ru 1`] = `
+{
+  "subject": "Ваша заявка на Midwest Leadership Summit",
+  "text": "Ваша заявка на Midwest Leadership Summit
+
+Здравствуйте, Amina Diallo!
+
+Спасибо за заявку на участие в Midwest Leadership Summit в категории «Member», Amina Diallo. В этот раз организатор не смог её одобрить. Деньги с вас не списывались.
+
+This rate is for current members; the non-member rate is still open.
+
+Открыть мою заявку: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.denied · zh-CN 1`] = `
+{
+  "subject": "您参加 Midwest Leadership Summit 的申请",
+  "text": "您参加 Midwest Leadership Summit 的申请
+
+Amina Diallo，您好：
+
+Amina Diallo，感谢您申请以 Member 身份参加 Midwest Leadership Summit。主办方这次未能批准您的申请。您没有被收取任何费用。
+
+This rate is for current members; the non-member rate is still open.
+
+查看我的申请: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.denied · zh-TW 1`] = `
+{
+  "subject": "您參加 Midwest Leadership Summit 的申請",
+  "text": "您參加 Midwest Leadership Summit 的申請
+
+Amina Diallo，您好：
+
+Amina Diallo，感謝您申請以 Member 身分參加 Midwest Leadership Summit。主辦單位這次未能核准您的申請。您沒有被收取任何費用。
+
+This rate is for current members; the non-member rate is still open.
+
+查看我的申請: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
 exports[`renderMessage: every kind in all 13 locales > sales.order_paid · ar 1`] = `
 {
   "subject": "طلب جديد: Amina Diallo",

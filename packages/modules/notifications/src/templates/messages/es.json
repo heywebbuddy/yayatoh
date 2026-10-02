@@ -225,6 +225,16 @@
       "subject": "Continúa tu inscripción a {eventName}",
       "intro": "Este es tu enlace para retomar tu inscripción a {eventName} donde la dejaste. Funciona durante {days, plural, one {# día} other {# días}} después de tu último guardado y solo para ti, así que no lo reenvíes. Si no lo pediste, puedes ignorar este correo.",
       "cta": "Continuar mi inscripción"
+    },
+    "registration.approved": {
+      "subject": "Tu solicitud para {eventName} ha sido aprobada",
+      "intro": "Buenas noticias, {name}: tu solicitud para asistir a {eventName} como {typeName} ha sido aprobada. Usa el botón de abajo para ver tu inscripción y, si tu pase tiene precio, pagar y confirmar tu plaza.",
+      "cta": "Ver mi inscripción"
+    },
+    "registration.denied": {
+      "subject": "Tu solicitud para {eventName}",
+      "intro": "Gracias por solicitar asistir a {eventName} como {typeName}, {name}. El organizador no ha podido aprobar tu solicitud esta vez. No se te ha cobrado nada.",
+      "cta": "Ver mi solicitud"
     }
   },
   "roles": {
