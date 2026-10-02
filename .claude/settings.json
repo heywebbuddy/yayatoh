@@ -13,5 +13,7 @@
       "Read(./.env.production.*)",
       "Read(./legacy/**/.env)"
     ]
-  }
+  },
+  "model": "claude-opus-5-5",
+  "effortLevel": "high"
 }
