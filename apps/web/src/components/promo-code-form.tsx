@@ -33,7 +33,7 @@ export function PromoCodeForm({
         hint={t('promo.codeHint')}
       />
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="promo-kind" className="text-caption text-ink-2">
+        <label htmlFor="promo-kind" className="text-[13px] font-bold text-ink">
           {t('promo.kind')}
         </label>
         <select id="promo-kind" name="kind" defaultValue="percent" className="field">

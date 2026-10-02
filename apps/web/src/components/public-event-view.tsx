@@ -17,8 +17,8 @@ import { MIN_REVIEWS_FOR_RATING } from '@yayatoh/reviews';
 import { publicSeatMap } from '@yayatoh/seating';
 import { publicOrgProfile } from '@yayatoh/tenancy';
 import { publicTicketTypes } from '@yayatoh/ticketing';
-import { Alert, brandPalette, buttonClass, EmptyState } from '@yayatoh/ui';
-import { Check } from 'lucide-react';
+import { Alert, brandPalette, buttonClass, cx, EmptyState } from '@yayatoh/ui';
+import { CalendarDays, MapPin } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import {
@@ -37,6 +37,7 @@ import { fallbackOf, MediaPicture } from '@/components/media-picture.tsx';
 import { ProgramSections } from '@/components/program-sections.tsx';
 import { EventReviews } from '@/components/reviews/event-reviews.tsx';
 import { TenantAccount } from '@/components/tenant-account.tsx';
+import { ThemeSwitch } from '@/components/theme-switch.tsx';
 import { VenueGuide } from '@/components/venue-guide.tsx';
 import { VenueMap } from '@/components/venue-map.tsx';
 import { Link } from '@/i18n/navigation.ts';
@@ -49,6 +50,7 @@ import { cachedReviews } from '@/server/public-data.ts';
 import { requestHost } from '@/server/request-origin.ts';
 import { openVenueMap } from '@/server/seat-finder.ts';
 import { apexOrigin, eventOrigin } from '@/server/seo.ts';
+import { currentTheme } from '@/server/theme.ts';
 import { currentAccess } from '@/server/visitor.ts';
 
 /**
@@ -219,17 +221,15 @@ export async function PublicEventView({
     <section
       id="passes"
       aria-labelledby="passes-heading"
-      className="flex flex-col gap-8 px-6 py-10 md:px-16 xl:flex-row"
+      className="flex scroll-mt-4 flex-col gap-4 rounded-panel border border-line bg-surface p-5 elevation-card glass md:p-6"
     >
-      <div className="flex max-w-[330px] shrink-0 flex-col gap-3">
-        <h2 id="passes-heading" className="text-[38px] leading-[44px] font-extrabold tracking-[-0.03em]">
+      <div className="flex flex-col gap-1.5">
+        <h2 id="passes-heading" className="m-0 text-section text-ink">
           {t('publicEvent.choosePass')}
         </h2>
-        <p className="text-[15px] leading-[22px] text-ink-2">
-          {t('publicEvent.allIn', { org: ev.organizerName })}
-        </p>
+        <p className="m-0 text-body text-ink-2">{t('publicEvent.allIn', { org: ev.organizerName })}</p>
         {chosen ? (
-          <p className="text-body font-medium">
+          <p className="m-0 text-body font-bold text-ink">
             {t('publicEvent.ticketsFor', {
               date: new Intl.DateTimeFormat(locale, {
                 timeZone: ev.timezone,
@@ -390,8 +390,22 @@ export async function PublicEventView({
     })),
   });
   const ld = rating ? { ...baseLd, aggregateRating: rating } : baseLd;
+  const theme = await currentTheme();
+  const hasAgenda = program.sessions.length > 0 || ev.agenda.length > 0;
+  // A seated checkout needs the full width for its seat map; otherwise the ticket box sits beside.
+  const wide = Boolean(seatMap);
+  const initials = ev.organizerName
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((w) => w[0]?.toUpperCase() ?? '')
+    .join('');
+  const navLink =
+    'inline-flex min-h-10 items-center rounded-[10px] px-3 text-body font-bold text-ink-2 hover:bg-surface-3 hover:text-ink';
+  const chip =
+    'inline-flex min-h-8 items-center gap-2 rounded-pill border border-white/30 bg-white/15 px-3 text-[13px] font-bold';
   return (
-    <div className="min-h-dvh bg-surface">
+    <div className="min-h-dvh">
       {ev.visibility === 'public' ? (
         <script
           type="application/ld+json"
@@ -399,254 +413,330 @@ export async function PublicEventView({
           dangerouslySetInnerHTML={{ __html: jsonLdScript(ld) }}
         />
       ) : null}
-      {orgId ? (
-        // M1.2f: the account corner on the org's own site (this host's session; no other org shown).
-        <div className="flex justify-end px-4 pt-3 md:px-6">
-          <TenantAccount locale={locale} path={`/events/${slug}`} orgId={orgId} />
-        </div>
-      ) : null}
-      <section className="relative m-2 overflow-hidden rounded-panel bg-black px-6 pt-28 pb-10 text-white md:px-16 md:pt-32">
-        {cover ? (
-          // Dimmed on the black hero so the white text keeps its contrast.
-          <div data-testid="event-cover" className="absolute inset-0">
-            <MediaPicture image={cover} sizes="100vw" eager className="size-full object-cover opacity-40" />
-          </div>
-        ) : null}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -end-24 -top-10 size-[560px] rounded-full bg-[radial-gradient(circle,var(--color-accent-900)_0%,var(--color-accent-700)_38%,transparent_70%)] opacity-50 md:end-[120px]"
-        />
-        <header className="absolute start-1/2 top-[18px] flex -translate-x-1/2 items-center gap-5 rounded-pill bg-tag py-[7px] ps-[22px] pe-[7px] text-[13px] backdrop-blur-md rtl:translate-x-1/2">
-          <nav aria-label={t('publicEvent.nav')} className="hidden gap-[18px] md:flex">
-            <a href="#passes" className="text-white">
+      <div className="mx-auto flex max-w-[1240px] flex-col gap-6 px-3 pt-3 pb-12 sm:px-5 sm:pt-5">
+        <header className="flex flex-wrap items-center gap-x-4 gap-y-2 rounded-[22px] border border-line bg-surface p-2.5 ps-4 elevation-card glass">
+          <span className="flex min-w-0 items-center gap-2.5 text-ink">
+            <span
+              aria-hidden="true"
+              className="flex size-[34px] shrink-0 items-center justify-center rounded-[11px] bg-brand-strong text-[13px] font-extrabold text-white"
+            >
+              {initials}
+            </span>
+            <span className="truncate text-[17px] font-extrabold tracking-[-0.02em]">{ev.organizerName}</span>
+          </span>
+          <nav aria-label={t('publicEvent.nav')} className="flex grow flex-wrap gap-1">
+            <a href="#passes" className={navLink}>
               {t('publicEvent.passes')}
             </a>
-            {program.sessions.length > 0 || ev.agenda.length > 0 ? (
-              <a href="#agenda" className="text-white">
+            {hasAgenda ? (
+              <a href="#agenda" className={navLink}>
                 {t('publicEvent.agenda')}
               </a>
             ) : null}
           </nav>
-          <span className="text-[19px] font-semibold tracking-[-0.04em] md:px-10">{t('brand.wordmark')}</span>
-          <a href="#passes" className={buttonClass('inverse', 'sm')}>
-            {t('publicEvent.getTickets')}
-          </a>
+          <div className="flex flex-wrap items-center gap-2">
+            {orgId ? (
+              // M1.2f: the account corner on the org's own site (this host's session; no other org shown).
+              <TenantAccount locale={locale} path={`/events/${slug}`} orgId={orgId} />
+            ) : null}
+            <ThemeSwitch initial={theme} />
+            <a href="#passes" className={buttonClass('dark')}>
+              {t('publicEvent.getTickets')}
+            </a>
+          </div>
         </header>
-        <div className="relative flex max-w-[620px] flex-col gap-[18px]">
-          <p className="inline-flex items-center gap-2 text-[13px]">
-            <Check aria-hidden="true" className="size-3.5" strokeWidth={2} />
-            {[range, ev.city].filter(Boolean).join(' · ')}
-          </p>
-          <h1 className="text-[44px] leading-none font-extrabold tracking-[-0.03em] md:text-[64px]">
-            {ev.name}
-          </h1>
-          {ev.tagline ? <p className="text-[16px] leading-6 text-white/80">{ev.tagline}</p> : null}
-          {ev.category || ev.attendanceMode !== 'in_person' || ev.venueSlug ? (
-            <ul
-              aria-label={t('publicEvent.facts')}
-              className="flex list-none flex-wrap gap-2 p-0 text-caption"
-            >
-              {ev.category ? (
-                <li className="rounded-pill bg-white/10 px-3 py-1">{t(`categories.${ev.category}`)}</li>
-              ) : null}
-              {ev.attendanceMode !== 'in_person' ? (
-                <li className="rounded-pill bg-white/10 px-3 py-1">
-                  {t(`publicEvent.mode.${ev.attendanceMode}`)}
-                </li>
-              ) : null}
+
+        <main id="main" className="flex flex-col gap-6">
+          <section className="relative isolate flex min-h-[380px] flex-col justify-end gap-4 overflow-hidden rounded-[32px] bg-hero px-6 pt-16 pb-8 text-white elevation-card md:px-10 md:pb-10">
+            {cover ? (
+              // Dimmed under a dark scrim so the white text keeps its contrast.
+              <div data-testid="event-cover" className="absolute inset-0 -z-10">
+                <MediaPicture image={cover} sizes="100vw" eager className="size-full object-cover" />
+                <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/55 to-black/25" />
+              </div>
+            ) : (
+              <>
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute end-[6%] -top-20 -z-10 h-[460px] w-[180px] rotate-[32deg] rounded-full bg-white/45 blur-[34px]"
+                />
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute -end-16 -bottom-16 -z-10 h-[300px] w-[420px] -rotate-[16deg] rounded-[64px] bg-linear-135 from-white/50 via-primary to-primary-pressed opacity-90"
+                />
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute end-40 bottom-28 -z-10 hidden h-[140px] w-[200px] -rotate-[16deg] rounded-[40px] border border-white/40 bg-white/15 backdrop-blur-sm md:block"
+                />
+              </>
+            )}
+            <ul aria-label={t('publicEvent.facts')} className="m-0 flex list-none flex-wrap gap-2 p-0">
+              <li className={chip}>
+                <CalendarDays aria-hidden="true" className="size-3.5" strokeWidth={2.2} />
+                {range}
+              </li>
               {ev.venueSlug && ev.venueName ? (
                 <li>
                   <Link
                     href={`/venues/${ev.venueSlug}`}
-                    className="inline-flex min-h-6 items-center rounded-pill bg-white/10 px-3 py-1 text-white underline underline-offset-2"
+                    className={cx(chip, 'underline-offset-2 hover:underline')}
                   >
+                    <MapPin aria-hidden="true" className="size-3.5" strokeWidth={2.2} />
                     {ev.venueName}
                   </Link>
                 </li>
+              ) : ev.city ? (
+                <li className={chip}>
+                  <MapPin aria-hidden="true" className="size-3.5" strokeWidth={2.2} />
+                  {ev.city}
+                </li>
+              ) : null}
+              {ev.category ? <li className={chip}>{t(`categories.${ev.category}`)}</li> : null}
+              {ev.attendanceMode !== 'in_person' ? (
+                <li className={chip}>{t(`publicEvent.mode.${ev.attendanceMode}`)}</li>
+              ) : null}
+              {ev.status !== 'published' ? (
+                <li className="inline-flex min-h-8 items-center rounded-pill bg-brand-strong px-3 text-[13px] font-extrabold">
+                  {t(`eventStatus.${ev.status}`)}
+                </li>
               ) : null}
             </ul>
-          ) : null}
-          {ev.status !== 'published' ? (
-            <p className="inline-flex self-start rounded-pill bg-white/10 px-3 py-1 text-caption">
-              {t(`eventStatus.${ev.status}`)}
-            </p>
-          ) : null}
-          <div className="flex flex-wrap gap-2.5 pt-2">
-            <a href="#passes" className={buttonClass('inverse')}>
-              {t('publicEvent.getTickets')}
-            </a>
-            {program.sessions.length > 0 || ev.agenda.length > 0 ? (
-              <a href="#agenda" className={buttonClass('inverse')}>
-                {t('publicEvent.seeAgenda')}
-              </a>
+            <h1 className="m-0 max-w-[680px] text-[40px] leading-[1.02] font-extrabold tracking-[-0.045em] md:text-display">
+              {ev.name}
+            </h1>
+            {ev.tagline ? (
+              <p className="m-0 max-w-[540px] text-[17px] leading-relaxed text-white/90">{ev.tagline}</p>
             ) : null}
-          </div>
-        </div>
-        {ev.stats.length > 0 ? (
-          <dl className="relative mt-16 flex flex-wrap gap-x-14 gap-y-6">
-            {ev.stats.map((s) => (
-              <div key={s.key} className="flex flex-col-reverse gap-1">
-                <dt className="text-label uppercase text-white/75">{t(`publicEvent.stats.${s.key}`)}</dt>
-                <dd className="m-0 text-[32px] font-extrabold tracking-[-0.04em]">
-                  {formatNumber(s.value, locale)}
-                </dd>
-              </div>
-            ))}
-          </dl>
-        ) : null}
-      </section>
-
-      {content.announcements.length > 0 ? (
-        <section aria-labelledby="announcements-heading" className="flex flex-col gap-4 px-6 pt-10 md:px-16">
-          <h2 id="announcements-heading" className="text-[28px] font-extrabold tracking-[-0.03em]">
-            {t('publicEvent.announcements')}
-          </h2>
-          <Announcements items={content.announcements} locale={locale} timeZone={ev.timezone} />
-        </section>
-      ) : null}
-
-      {dates.length > 0 ? (
-        <section className="px-6 pt-10 md:px-16">
-          <DatePicker
-            slug={slug}
-            dates={dates}
-            chosen={chosen?.id ?? null}
-            locale={locale}
-            timeZone={ev.timezone}
-            now={now}
-            waitlist={Boolean(target) && !unlockedPrivate && !embedded}
-          />
-        </section>
-      ) : null}
-      {passesSection}
-
-      {live ? (
-        <section aria-labelledby="access-code-heading" className="flex flex-col gap-3 px-6 pb-10 md:px-16">
-          <h2 id="access-code-heading" className="text-section">
-            {t('accessEntry.title')}
-          </h2>
-          {unlockedPasses || unlockedPrivate ? (
-            <Alert tone="info" title={t('accessEntry.active')} />
-          ) : (
-            <p className="text-body text-ink-2">{t('accessEntry.hint')}</p>
-          )}
-          <AccessCodeEntry action={redeemAccessCodeAction.bind(null, slug)} />
-        </section>
-      ) : null}
-
-      <EventSections sections={content.sections} />
-
-      {gallery.length > 0 ? (
-        <section aria-labelledby="gallery-heading" className="flex flex-col gap-4 px-6 pb-10 md:px-16">
-          <h2 id="gallery-heading" className="text-[28px] font-extrabold tracking-[-0.03em]">
-            {t('publicEvent.gallery')}
-          </h2>
-          <ul className="grid list-none grid-cols-1 gap-3 p-0 sm:grid-cols-2 lg:grid-cols-3">
-            {gallery.map((g) => (
-              <li key={g.id}>
-                <MediaPicture
-                  image={g}
-                  sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                  className="aspect-[4/3] w-full rounded-card bg-surface-2 object-cover"
-                />
-              </li>
-            ))}
-          </ul>
-        </section>
-      ) : null}
-
-      <ProgramSections
-        program={program}
-        slug={slug}
-        locale={locale}
-        timeZone={ev.timezone}
-        images={programImages}
-      />
-
-      {reviews ? <EventReviews slug={slug} summary={reviews} locale={locale} timeZone={ev.timezone} /> : null}
-
-      {venue ? (
-        <section
-          id="venue"
-          aria-labelledby="venue-heading"
-          className="flex flex-col gap-4 px-6 pb-10 md:px-16"
-        >
-          <div className="flex flex-wrap items-end justify-between gap-3">
-            <div className="flex flex-col gap-1">
-              <h2 id="venue-heading" className="text-[28px] font-extrabold tracking-[-0.03em]">
-                {t('venueMap.title')}
-              </h2>
-              <p className="text-body text-ink-2">{t('venueMap.description')}</p>
+            <div className="flex flex-wrap gap-2.5 pt-1">
+              <a href="#passes" className={buttonClass('inverse')}>
+                {t('publicEvent.getTickets')}
+              </a>
+              {hasAgenda ? (
+                <a href="#agenda" className={buttonClass('inverse')}>
+                  {t('publicEvent.seeAgenda')}
+                </a>
+              ) : null}
             </div>
-            <Link href={`/events/${slug}/seat-finder`} className={buttonClass('primary')}>
-              {t('venueMap.findSeat')}
-            </Link>
-          </div>
-          <VenueMap doc={venue.doc} />
-          <VenueGuide doc={venue.doc} />
-        </section>
-      ) : null}
-
-      {target ? (
-        <section aria-labelledby="have-tickets-heading" className="flex flex-col gap-3 px-6 pb-10 md:px-16">
-          <h2 id="have-tickets-heading" className="text-section">
-            {t('myTickets.requestTitle')}
-          </h2>
-          <HolderLinkForm action={requestHolderLinkAction.bind(null, slug)} />
-        </section>
-      ) : null}
-
-      <section
-        {...(ev.agenda.length > 0 ? { id: 'agenda', 'aria-label': t('publicEvent.agenda') } : {})}
-        className="flex flex-col gap-4 px-6 pb-16 md:px-16"
-      >
-        {ev.agenda.length > 0 ? (
-          <>
-            <h2 id="agenda-heading" className="text-[28px] font-extrabold tracking-[-0.03em]">
-              {t('publicEvent.agenda')}
-            </h2>
-            <ul className="list-none divide-y divide-line rounded-card border border-line p-0">
-              {ev.agenda.map((s) => (
-                <li key={s.time} className="flex gap-6 px-5 py-4">
-                  <span className="w-14 font-mono text-caption text-ink-2">{s.time}</span>
-                  <span className="flex-1">{s.title}</span>
-                  <span className="text-caption text-ink-2">{s.room}</span>
-                </li>
-              ))}
-            </ul>
-          </>
-        ) : null}
-        {refundPolicy ? (
-          <section aria-labelledby="refund-policy-heading" className="flex flex-col gap-2">
-            <h2 id="refund-policy-heading" className="text-section">
-              {t('refundPolicy.buyerTitle')}
-            </h2>
-            <ul className="flex list-none flex-col gap-1 p-0 text-body text-ink-2">
-              {refundPolicyLines((k, v) => t(`refundPolicy.${k}`, v), refundPolicy, locale).map((line) => (
-                <li key={line}>{line}</li>
-              ))}
-            </ul>
+            {ev.stats.length > 0 ? (
+              <dl className="m-0 mt-4 flex flex-wrap gap-x-12 gap-y-4">
+                {ev.stats.map((s) => (
+                  <div key={s.key} className="flex flex-col-reverse gap-1">
+                    <dt className="text-label text-white/85 uppercase">{t(`publicEvent.stats.${s.key}`)}</dt>
+                    <dd className="m-0 text-[32px] leading-none font-extrabold tracking-[-0.04em] tabular-nums">
+                      {formatNumber(s.value, locale)}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            ) : null}
           </section>
-        ) : null}
-        {orgProfile && orgProfile.legalPages.length > 0 ? (
-          <nav aria-label={t('legal.organizerPages', { org: ev.organizerName })}>
-            <ul className="flex list-none flex-wrap gap-x-4 gap-y-1 p-0 text-caption">
-              {orgProfile.legalPages.map((k) => (
-                <li key={k}>
-                  <Link href={`/legal/${orgProfile.slug}/${k}`} className="text-ink-2 underline">
-                    {t(`settings.legal.kind.${k}`)}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        ) : null}
-        {ev.poweredByVisible ? (
-          <Link href="/" className="self-start text-caption text-ink-2 underline">
-            {t('publicEvent.poweredBy')}
-          </Link>
-        ) : null}
-      </section>
+
+          <div className={cx('grid items-start gap-6', !wide && 'lg:grid-cols-[minmax(0,1fr)_400px]')}>
+            <div
+              className={cx(
+                'flex min-w-0 flex-col gap-4',
+                !wide && 'lg:sticky lg:top-4 lg:col-start-2 lg:row-start-1',
+              )}
+            >
+              {dates.length > 0 ? (
+                <section className="flex scroll-mt-4 flex-col gap-4 rounded-panel border border-line bg-surface p-5 elevation-card glass md:p-6">
+                  <DatePicker
+                    slug={slug}
+                    dates={dates}
+                    chosen={chosen?.id ?? null}
+                    locale={locale}
+                    timeZone={ev.timezone}
+                    now={now}
+                    waitlist={Boolean(target) && !unlockedPrivate && !embedded}
+                  />
+                </section>
+              ) : null}
+              {passesSection}
+              {live ? (
+                <section
+                  aria-labelledby="access-code-heading"
+                  className="flex scroll-mt-4 flex-col gap-4 rounded-panel border border-line bg-surface p-5 elevation-card glass md:p-6"
+                >
+                  <h2 id="access-code-heading" className="m-0 text-card">
+                    {t('accessEntry.title')}
+                  </h2>
+                  {unlockedPasses || unlockedPrivate ? (
+                    <Alert tone="info" title={t('accessEntry.active')} />
+                  ) : (
+                    <p className="m-0 text-body text-ink-2">{t('accessEntry.hint')}</p>
+                  )}
+                  <AccessCodeEntry action={redeemAccessCodeAction.bind(null, slug)} />
+                </section>
+              ) : null}
+            </div>
+
+            <div className="flex min-w-0 flex-col gap-5 lg:col-start-1 lg:row-start-1">
+              {content.announcements.length > 0 ? (
+                <section
+                  aria-labelledby="announcements-heading"
+                  className="flex scroll-mt-4 flex-col gap-4 rounded-panel border border-line bg-surface p-5 elevation-card glass md:p-6"
+                >
+                  <h2 id="announcements-heading" className="m-0 text-section">
+                    {t('publicEvent.announcements')}
+                  </h2>
+                  <Announcements items={content.announcements} locale={locale} timeZone={ev.timezone} />
+                </section>
+              ) : null}
+
+              <EventSections sections={content.sections} />
+
+              {gallery.length > 0 ? (
+                <section
+                  aria-labelledby="gallery-heading"
+                  className="flex scroll-mt-4 flex-col gap-4 rounded-panel border border-line bg-surface p-5 elevation-card glass md:p-6"
+                >
+                  <h2 id="gallery-heading" className="m-0 text-section">
+                    {t('publicEvent.gallery')}
+                  </h2>
+                  <ul className="m-0 grid list-none grid-cols-1 gap-3 p-0 sm:grid-cols-2 lg:grid-cols-3">
+                    {gallery.map((g) => (
+                      <li key={g.id}>
+                        <MediaPicture
+                          image={g}
+                          sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                          className="aspect-[4/3] w-full rounded-tile bg-surface-2 object-cover"
+                        />
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              ) : null}
+
+              <ProgramSections
+                program={program}
+                slug={slug}
+                locale={locale}
+                timeZone={ev.timezone}
+                images={programImages}
+              />
+
+              {ev.agenda.length > 0 ? (
+                <section
+                  id="agenda"
+                  aria-label={t('publicEvent.agenda')}
+                  className="flex scroll-mt-4 flex-col gap-4 rounded-panel border border-line bg-surface p-5 elevation-card glass md:p-6"
+                >
+                  <h2 id="agenda-heading" className="m-0 text-section">
+                    {t('publicEvent.agenda')}
+                  </h2>
+                  <ul className="m-0 flex list-none flex-col gap-2 p-0">
+                    {ev.agenda.map((s) => (
+                      <li
+                        key={s.time}
+                        className="flex items-center gap-4 rounded-tile border border-line bg-surface-2 px-3.5 py-3"
+                      >
+                        <span className="w-16 shrink-0 text-[16px] font-extrabold text-ink tabular-nums">
+                          {s.time}
+                        </span>
+                        <span className="grow text-[15px] font-bold text-ink">{s.title}</span>
+                        <span className="text-caption text-ink-2">{s.room}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              ) : null}
+
+              {reviews ? (
+                <EventReviews slug={slug} summary={reviews} locale={locale} timeZone={ev.timezone} />
+              ) : null}
+
+              {venue ? (
+                <section
+                  id="venue"
+                  aria-labelledby="venue-heading"
+                  className="flex scroll-mt-4 flex-col gap-4 rounded-panel border border-line bg-surface p-5 elevation-card glass md:p-6"
+                >
+                  <div className="flex flex-wrap items-end justify-between gap-3">
+                    <div className="flex flex-col gap-1">
+                      <h2 id="venue-heading" className="m-0 text-section">
+                        {t('venueMap.title')}
+                      </h2>
+                      <p className="m-0 text-body text-ink-2">{t('venueMap.description')}</p>
+                    </div>
+                    <Link href={`/events/${slug}/seat-finder`} className={buttonClass('primary')}>
+                      {t('venueMap.findSeat')}
+                    </Link>
+                  </div>
+                  <VenueMap doc={venue.doc} />
+                  <VenueGuide doc={venue.doc} />
+                </section>
+              ) : null}
+
+              <section
+                aria-labelledby="hosted-heading"
+                className="flex scroll-mt-4 flex-col gap-4 rounded-panel border border-line bg-surface p-5 elevation-card glass md:p-6 flex-row! flex-wrap items-center"
+              >
+                <span
+                  aria-hidden="true"
+                  className="flex size-[52px] shrink-0 items-center justify-center rounded-[16px] bg-brand-strong text-[16px] font-extrabold text-white"
+                >
+                  {initials}
+                </span>
+                <div className="flex min-w-0 grow flex-col gap-0.5">
+                  <h2 id="hosted-heading" className="m-0 text-[13px] font-bold tracking-normal text-ink-2">
+                    {t('publicEvent.hostedBy')}
+                  </h2>
+                  <p className="m-0 text-[17px] font-extrabold text-ink">{ev.organizerName}</p>
+                </div>
+              </section>
+
+              {target ? (
+                <section
+                  aria-labelledby="have-tickets-heading"
+                  className="flex scroll-mt-4 flex-col gap-4 rounded-panel border border-line bg-surface p-5 elevation-card glass md:p-6"
+                >
+                  <h2 id="have-tickets-heading" className="m-0 text-card">
+                    {t('myTickets.requestTitle')}
+                  </h2>
+                  <HolderLinkForm action={requestHolderLinkAction.bind(null, slug)} />
+                </section>
+              ) : null}
+
+              {refundPolicy || (orgProfile && orgProfile.legalPages.length > 0) || ev.poweredByVisible ? (
+                <footer className="flex flex-col gap-3 px-1">
+                  {refundPolicy ? (
+                    <section aria-labelledby="refund-policy-heading" className="flex flex-col gap-2">
+                      <h2 id="refund-policy-heading" className="m-0 text-card">
+                        {t('refundPolicy.buyerTitle')}
+                      </h2>
+                      <ul className="m-0 flex list-none flex-col gap-1 p-0 text-body text-ink-2">
+                        {refundPolicyLines((k, v) => t(`refundPolicy.${k}`, v), refundPolicy, locale).map(
+                          (line) => (
+                            <li key={line}>{line}</li>
+                          ),
+                        )}
+                      </ul>
+                    </section>
+                  ) : null}
+                  {orgProfile && orgProfile.legalPages.length > 0 ? (
+                    <nav aria-label={t('legal.organizerPages', { org: ev.organizerName })}>
+                      <ul className="m-0 flex list-none flex-wrap gap-x-4 gap-y-1 p-0 text-caption">
+                        {orgProfile.legalPages.map((k) => (
+                          <li key={k}>
+                            <Link href={`/legal/${orgProfile.slug}/${k}`} className="text-ink-2 underline">
+                              {t(`settings.legal.kind.${k}`)}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </nav>
+                  ) : null}
+                  {ev.poweredByVisible ? (
+                    <Link href="/" className="self-start text-caption text-ink-2 underline">
+                      {t('publicEvent.poweredBy')}
+                    </Link>
+                  ) : null}
+                </footer>
+              ) : null}
+            </div>
+          </div>
+        </main>
+      </div>
     </div>
   );
 }

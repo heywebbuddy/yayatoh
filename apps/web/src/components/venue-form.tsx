@@ -99,7 +99,7 @@ export function VenueForm({
           error={err('country')}
         />
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="venue-timezone" className="text-caption text-ink-2">
+          <label htmlFor="venue-timezone" className="text-[13px] font-bold text-ink">
             {t('timezone')}
           </label>
           <select
@@ -108,7 +108,7 @@ export function VenueForm({
             defaultValue={venue?.timezone ?? defaultTimezone}
             aria-invalid={bad.has('timezone') || undefined}
             aria-describedby={bad.has('timezone') ? 'venue-timezone-error' : undefined}
-            className={`${selectClass} ${bad.has('timezone') ? 'border-danger' : 'border-line'}`}
+            className={`${selectClass} ${bad.has('timezone') ? 'field-invalid' : ''}`}
           >
             {zones.map((z) => (
               <option key={z} value={z}>
@@ -147,7 +147,7 @@ export function VenueForm({
           error={err('longitude')}
         />
         <div className="flex flex-col gap-1.5 md:col-span-2">
-          <label htmlFor="accessibilityNotes" className="text-caption text-ink-2">
+          <label htmlFor="accessibilityNotes" className="text-[13px] font-bold text-ink">
             {t('accessibilityNotes')}
           </label>
           <textarea

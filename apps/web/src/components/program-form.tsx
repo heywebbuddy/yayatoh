@@ -93,7 +93,7 @@ export function ProgramForm({
         if (f.kind === 'textarea')
           return (
             <div key={f.name} className="flex flex-col gap-1.5">
-              <label htmlFor={id(f.name)} className="text-caption text-ink-2">
+              <label htmlFor={id(f.name)} className="text-[13px] font-bold text-ink">
                 {f.label}
               </label>
               <textarea
@@ -103,7 +103,7 @@ export function ProgramForm({
                 defaultValue={f.defaultValue ?? ''}
                 aria-invalid={error ? true : undefined}
                 aria-describedby={error ? `${id(f.name)}-error` : f.hint ? `${id(f.name)}-hint` : undefined}
-                className={`${area} ${error ? 'border-danger' : 'border-line'}`}
+                className={`${area} ${error ? 'field-invalid' : ''}`}
               />
               {error ? (
                 <p id={`${id(f.name)}-error`} className="text-caption text-danger">
@@ -119,7 +119,7 @@ export function ProgramForm({
         if (f.kind === 'select')
           return (
             <div key={f.name} className="flex flex-col gap-1.5">
-              <label htmlFor={id(f.name)} className="text-caption text-ink-2">
+              <label htmlFor={id(f.name)} className="text-[13px] font-bold text-ink">
                 {f.label}
               </label>
               <select
@@ -128,7 +128,7 @@ export function ProgramForm({
                 defaultValue={f.defaultValue ?? ''}
                 aria-invalid={error ? true : undefined}
                 aria-describedby={error ? `${id(f.name)}-error` : f.hint ? `${id(f.name)}-hint` : undefined}
-                className={`${control} ${error ? 'border-danger' : 'border-line'}`}
+                className={`${control} ${error ? 'field-invalid' : ''}`}
               >
                 {f.options.map((o) => (
                   <option key={o.value} value={o.value}>
@@ -154,7 +154,7 @@ export function ProgramForm({
               className="flex flex-col gap-1.5"
               aria-describedby={error ? `${id(f.name)}-error` : undefined}
             >
-              <legend className="pb-1.5 text-caption text-ink-2">{f.label}</legend>
+              <legend className="pb-1.5 text-[13px] font-bold text-ink">{f.label}</legend>
               <div className="flex flex-wrap gap-x-4 gap-y-1">
                 {f.options.map((o) => (
                   <label key={o.value} className="flex min-h-6 items-center gap-2 text-body">

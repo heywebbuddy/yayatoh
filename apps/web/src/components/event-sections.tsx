@@ -11,9 +11,9 @@ export async function EventSections({ sections }: { sections: readonly PublicSec
         <section
           key={s.id}
           aria-labelledby={`section-${s.id}`}
-          className="flex flex-col gap-4 px-6 pb-10 md:px-16"
+          className="flex scroll-mt-4 flex-col gap-4 rounded-panel border border-line bg-surface p-5 elevation-card glass md:p-6"
         >
-          <h2 id={`section-${s.id}`} className="text-[28px] font-extrabold tracking-[-0.03em]">
+          <h2 id={`section-${s.id}`} className="text-section">
             {s.title}
           </h2>
           {s.kind === 'text' ? <Markdown source={s.content.markdown} /> : null}

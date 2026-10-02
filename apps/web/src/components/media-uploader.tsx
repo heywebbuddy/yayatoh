@@ -248,7 +248,7 @@ export function MediaUploader({
               dragging ? 'border-ink bg-surface-2' : 'border-line-strong',
             )}
           >
-            <label htmlFor={`${id}-file`} className="text-caption text-ink-2">
+            <label htmlFor={`${id}-file`} className="text-[13px] font-bold text-ink">
               {t('file')}
             </label>
             <input
@@ -276,7 +276,7 @@ export function MediaUploader({
             ) : null}
           </fieldset>
           <div className="flex flex-col gap-1.5">
-            <label htmlFor={`${id}-alt`} className="text-caption text-ink-2">
+            <label htmlFor={`${id}-alt`} className="text-[13px] font-bold text-ink">
               {t('alt')}
             </label>
             <input
@@ -292,7 +292,7 @@ export function MediaUploader({
               }}
               aria-invalid={altError ? true : undefined}
               aria-describedby={altError ? `${id}-alt-error` : `${id}-alt-hint`}
-              className={cx('field w-full', altError ? 'border-danger' : 'border-line')}
+              className={cx('field w-full', altError ? 'field-invalid' : '')}
             />
             {altError ? (
               <p id={`${id}-alt-error`} className="text-caption text-danger">

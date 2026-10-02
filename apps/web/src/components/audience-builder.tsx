@@ -333,7 +333,7 @@ function Templates({
       </h2>
       <p className="text-caption text-ink-2">{t('templates.description')}</p>
       <fieldset className="flex flex-col gap-2">
-        <legend className="text-caption text-ink-2">{t('templates.pick')}</legend>
+        <legend className="text-[13px] font-bold text-ink">{t('templates.pick')}</legend>
         {TEMPLATE_KEYS.map((k) => (
           <label key={k} className="flex min-h-6 items-start gap-2 text-body">
             <input
@@ -352,7 +352,7 @@ function Templates({
         ))}
       </fieldset>
       <div className="flex flex-wrap items-end gap-3">
-        <label className="flex flex-col gap-1.5 text-caption text-ink-2">
+        <label className="flex flex-col gap-1.5 text-[13px] font-bold text-ink">
           {key === 'lastYearNotThisYear' ? t('templates.thisYearsEvent') : t('templates.event')}
           <select className={SELECT} value={eventId} onChange={(e) => setEventId(e.target.value)}>
             {events.length === 0 ? <option value="">{t('templates.noEvents')}</option> : null}
@@ -365,7 +365,7 @@ function Templates({
         </label>
         {needsTypes ? (
           <fieldset className="flex flex-col gap-1.5">
-            <legend className="text-caption text-ink-2">{t('templates.ticketTypes')}</legend>
+            <legend className="text-[13px] font-bold text-ink">{t('templates.ticketTypes')}</legend>
             {types.length === 0 ? (
               <p className="text-caption text-ink-2">{t('templates.noTicketTypes')}</p>
             ) : (
@@ -430,7 +430,7 @@ function GroupEditor({
       className="flex flex-col gap-3 rounded-panel border border-line bg-surface px-4 py-3"
       data-testid={`group-${path.join('-') || 'root'}`}
     >
-      <legend className="px-1 text-body font-medium">{title}</legend>
+      <legend className="px-1 text-[13px] font-bold text-ink">{title}</legend>
       <label className="flex flex-wrap items-center gap-2 text-caption text-ink-2">
         {t('match')}
         <select
@@ -470,7 +470,7 @@ function GroupEditor({
         })}
       </ol>
       <div className="flex flex-wrap items-end gap-2">
-        <label className="flex flex-col gap-1.5 text-caption text-ink-2" htmlFor={`${id}-type`}>
+        <label className="flex flex-col gap-1.5 text-[13px] font-bold text-ink" htmlFor={`${id}-type`}>
           {t('conditionType')}
         </label>
         <select
@@ -528,7 +528,7 @@ function ConditionEditor({ node, path, ...p }: EditorProps & { node: Draft; path
   const put = (patch: Record<string, unknown>) => p.set(path, (c) => ({ ...(c as Draft), ...patch }));
   const field = (label: string, control: ReactNode) => (
     // biome-ignore lint/a11y/noLabelWithoutControl: the control is passed in and rendered inside the label.
-    <label className="flex flex-col gap-1.5 text-caption text-ink-2">
+    <label className="flex flex-col gap-1.5 text-[13px] font-bold text-ink">
       {label}
       {control}
     </label>
@@ -564,7 +564,7 @@ function ConditionEditor({ node, path, ...p }: EditorProps & { node: Draft; path
       className="flex flex-col gap-3 rounded-card border border-line px-4 py-3"
       data-testid={`condition-${path.join('-')}`}
     >
-      <legend className="px-1 text-body font-medium">
+      <legend className="px-1 text-[13px] font-bold text-ink">
         {t('condition', { n, type: t(`types.${node.type as ConditionType}`) })}
       </legend>
       <div className="flex flex-wrap items-end gap-3">
@@ -623,7 +623,7 @@ function ConditionEditor({ node, path, ...p }: EditorProps & { node: Draft; path
             {date(t('registeredTo'), 'registeredTo')}
             {eventTypes.length > 0 ? (
               <fieldset className="flex flex-col gap-1.5">
-                <legend className="text-caption text-ink-2">{t('ticketTypes')}</legend>
+                <legend className="text-[13px] font-bold text-ink">{t('ticketTypes')}</legend>
                 <div className="flex flex-wrap gap-3">
                   {eventTypes.map((tt) => {
                     const ids = (node.ticketTypeIds as string[]) ?? [];
@@ -810,7 +810,7 @@ function ScopeEditor({
   const cls = SELECT;
   return (
     <>
-      <label className="flex flex-col gap-1.5 text-caption text-ink-2">
+      <label className="flex flex-col gap-1.5 text-[13px] font-bold text-ink">
         {t('builder.scope')}
         <select
           className={cls}
@@ -825,7 +825,7 @@ function ScopeEditor({
         </select>
       </label>
       {scope.kind === 'event' || scope.kind === 'previousEdition' ? (
-        <label className="flex flex-col gap-1.5 text-caption text-ink-2">
+        <label className="flex flex-col gap-1.5 text-[13px] font-bold text-ink">
           {scope.kind === 'event' ? t('builder.event') : t('builder.editionOf')}
           <select
             className={cls}
@@ -841,7 +841,7 @@ function ScopeEditor({
         </label>
       ) : null}
       {scope.kind === 'series' ? (
-        <label className="flex flex-col gap-1.5 text-caption text-ink-2">
+        <label className="flex flex-col gap-1.5 text-[13px] font-bold text-ink">
           {t('builder.series')}
           <select
             className={cls}
@@ -859,7 +859,7 @@ function ScopeEditor({
       ) : null}
       {scope.kind === 'eventsBetween' ? (
         <>
-          <label className="flex flex-col gap-1.5 text-caption text-ink-2">
+          <label className="flex flex-col gap-1.5 text-[13px] font-bold text-ink">
             {t('builder.from')}
             <input
               type="date"
@@ -868,7 +868,7 @@ function ScopeEditor({
               onChange={(e) => put({ ...scope, from: e.target.value })}
             />
           </label>
-          <label className="flex flex-col gap-1.5 text-caption text-ink-2">
+          <label className="flex flex-col gap-1.5 text-[13px] font-bold text-ink">
             {t('builder.to')}
             <input
               type="date"

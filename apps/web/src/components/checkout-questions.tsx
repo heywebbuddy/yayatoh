@@ -71,7 +71,7 @@ export function CheckoutQuestions({
           if (q.type === 'select') {
             return (
               <div key={q.key} className="flex flex-col gap-1.5">
-                <label htmlFor={id} className="text-caption text-ink-2">
+                <label htmlFor={id} className="text-[13px] font-bold text-ink">
                   {label(q)}
                 </label>
                 <select
@@ -96,7 +96,7 @@ export function CheckoutQuestions({
           if (q.type === 'multi_select') {
             return (
               <fieldset key={q.key} className="flex flex-col gap-1.5 border-0 p-0">
-                <legend className="text-caption text-ink-2">{label(q)}</legend>
+                <legend className="text-[13px] font-bold text-ink">{label(q)}</legend>
                 {q.options.map((o) => (
                   <label key={o.value} className="flex min-h-6 items-center gap-2.5 text-body">
                     <input type="checkbox" name={name} value={o.value} className="size-5 accent-primary" />
@@ -109,7 +109,7 @@ export function CheckoutQuestions({
           if (q.type === 'long_text') {
             return (
               <div key={q.key} className="flex flex-col gap-1.5">
-                <label htmlFor={id} className="text-caption text-ink-2">
+                <label htmlFor={id} className="text-[13px] font-bold text-ink">
                   {label(q)}
                 </label>
                 <textarea

@@ -48,7 +48,7 @@ export function SectionForm({
     const error = contentError && name !== 'directions' && name !== 'address' ? contentError : undefined;
     return (
       <div className="flex flex-col gap-1.5">
-        <label htmlFor={id} className="text-caption text-ink-2">
+        <label htmlFor={id} className="text-[13px] font-bold text-ink">
           {label}
         </label>
         <textarea
@@ -58,7 +58,7 @@ export function SectionForm({
           defaultValue={values?.fields[name] ?? ''}
           aria-invalid={error ? true : undefined}
           aria-describedby={error ? `${id}-error` : `${id}-hint`}
-          className={`${area} ${error ? 'border-danger' : 'border-line'}`}
+          className={`${area} ${error ? 'field-invalid' : ''}`}
         />
         {error ? (
           <p id={`${id}-error`} className="text-caption text-danger">
@@ -82,7 +82,7 @@ export function SectionForm({
     >
       {fixedKind ? null : (
         <div className="flex flex-col gap-1.5">
-          <label htmlFor={`${idPrefix}-kind`} className="text-caption text-ink-2">
+          <label htmlFor={`${idPrefix}-kind`} className="text-[13px] font-bold text-ink">
             {t('kind')}
           </label>
           <select

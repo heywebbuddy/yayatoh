@@ -24,9 +24,9 @@ export async function EventReviews({
     <section
       id="reviews"
       aria-labelledby="reviews-heading"
-      className="flex flex-col gap-4 px-6 pb-10 md:px-16"
+      className="flex scroll-mt-4 flex-col gap-4 rounded-panel border border-line bg-surface p-5 elevation-card glass md:p-6"
     >
-      <h2 id="reviews-heading" className="text-[28px] font-extrabold tracking-[-0.03em]">
+      <h2 id="reviews-heading" className="text-section">
         {t('public.title')}
       </h2>
       <p className="flex flex-wrap items-center gap-3 text-body">

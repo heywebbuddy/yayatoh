@@ -24,7 +24,7 @@ export function BuyerRefundRequestForm({
   return (
     <form action={formAction} className="flex flex-col gap-4">
       <fieldset className="flex flex-col gap-1.5" aria-describedby="refund-request-tickets-error">
-        <legend className="text-caption text-ink-2">{t('tickets')}</legend>
+        <legend className="text-[13px] font-bold text-ink">{t('tickets')}</legend>
         {tickets.map((tk) => (
           <label key={tk.id} className="flex min-h-6 items-center gap-2 text-body">
             <input type="checkbox" name="ticket" value={tk.id} defaultChecked className="size-5" />
@@ -33,7 +33,7 @@ export function BuyerRefundRequestForm({
         ))}
       </fieldset>
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="refund-request-message" className="text-caption text-ink-2">
+        <label htmlFor="refund-request-message" className="text-[13px] font-bold text-ink">
           {t('message')}
         </label>
         <textarea

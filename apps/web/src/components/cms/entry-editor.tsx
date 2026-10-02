@@ -77,7 +77,7 @@ export function EntryEditor({
         error={slugError}
       />
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="entry-excerpt" className="text-caption text-ink-2">
+        <label htmlFor="entry-excerpt" className="text-[13px] font-bold text-ink">
           {t('fields.excerpt')}
         </label>
         <textarea
@@ -88,7 +88,7 @@ export function EntryEditor({
           defaultValue={values?.excerpt}
           aria-invalid={bad.has('excerpt') || undefined}
           aria-describedby="entry-excerpt-hint"
-          className={`${area} ${bad.has('excerpt') ? 'border-danger' : 'border-line'}`}
+          className={`${area} ${bad.has('excerpt') ? 'field-invalid' : ''}`}
         />
         <p id="entry-excerpt-hint" className="text-caption text-ink-2">
           {t('excerptHint')}
@@ -96,7 +96,7 @@ export function EntryEditor({
       </div>
       <div className="flex flex-col gap-1.5">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <label htmlFor="entry-body" className="text-caption text-ink-2">
+          <label htmlFor="entry-body" className="text-[13px] font-bold text-ink">
             {t('fields.body')}
           </label>
           <Button
@@ -118,7 +118,7 @@ export function EntryEditor({
           onChange={(e) => setBody(e.target.value)}
           aria-invalid={bad.has('body') || undefined}
           aria-describedby="entry-body-hint"
-          className={`${area} font-mono ${bad.has('body') ? 'border-danger' : 'border-line'}`}
+          className={`${area} font-mono ${bad.has('body') ? 'field-invalid' : ''}`}
         />
         <p id="entry-body-hint" className="text-caption text-ink-2">
           {t('bodyHint')}
@@ -137,7 +137,7 @@ export function EntryEditor({
         </section>
       </div>
       <fieldset className="flex flex-col gap-4 rounded-card border border-line p-4">
-        <legend className="px-1 text-caption text-ink-2">{t('seoLegend')}</legend>
+        <legend className="px-1 text-[13px] font-bold text-ink">{t('seoLegend')}</legend>
         <Input
           id="entry-seo-title"
           name="seoTitle"

@@ -3,7 +3,7 @@
 import type { WidgetKey } from '@yayatoh/command-center/client';
 import { formatMoney, money } from '@yayatoh/kernel';
 import { countWords } from '@yayatoh/notifications/numbers';
-import { ProgressRing, StatusDot } from '@yayatoh/ui';
+import { cx, ProgressBar, ProgressRing, StatusDot, Timeline as TimelineList } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
 import { Link } from '@/i18n/navigation.ts';
@@ -69,25 +69,24 @@ const pct = (part: number, whole: number, locale: string) =>
 
 function Big({ children, testId }: { children: ReactNode; testId?: string }) {
   return (
-    <p
-      className="text-[32px] leading-none font-extrabold tracking-[-0.045em] tabular-nums"
-      data-testid={testId}
-    >
+    <p className="text-stat text-ink tabular-nums" data-testid={testId}>
       {children}
     </p>
   );
 }
 
-function Meter({ value, max, label }: { value: number; max: number; label: string }) {
-  return max > 0 ? (
-    <meter
-      className="h-2 w-full overflow-hidden rounded-full"
-      min={0}
-      max={max}
-      value={Math.min(value, max)}
-      aria-label={label}
-    />
-  ) : null;
+function Meter({
+  value,
+  max,
+  label,
+  tone = 'primary',
+}: {
+  value: number;
+  max: number;
+  label: string;
+  tone?: 'primary' | 'success' | 'brand';
+}) {
+  return max > 0 ? <ProgressBar value={Math.min(value, max)} max={max} label={label} tone={tone} /> : null;
 }
 
 function ReadinessBody({ d, c }: { d: Readiness; c: Ctx }) {
@@ -97,7 +96,7 @@ function ReadinessBody({ d, c }: { d: Readiness; c: Ctx }) {
     <li key={r.key}>
       <Link
         href={r.path ? `${c.base}/${r.path}` : c.base}
-        className="inline-flex min-h-6 items-center text-body underline underline-offset-2"
+        className="inline-flex min-h-7 items-center text-body font-semibold text-primary-ink underline-offset-2 hover:underline"
       >
         {tr(r.key)}
       </Link>
@@ -110,7 +109,7 @@ function ReadinessBody({ d, c }: { d: Readiness; c: Ctx }) {
         {d.blocking.length === 0 && d.todo.length === 0 ? <p className="text-body">{t('allDone')}</p> : null}
         {d.blocking.length > 0 ? (
           <div className="flex flex-col gap-1">
-            <h3 className="text-caption font-medium text-danger">{t('blocking')}</h3>
+            <h4 className="m-0 text-caption font-bold tracking-normal text-danger">{t('blocking')}</h4>
             <ul className="flex list-none flex-col gap-1 p-0" data-testid="cc-blocking">
               {d.blocking.map(item)}
             </ul>
@@ -118,7 +117,7 @@ function ReadinessBody({ d, c }: { d: Readiness; c: Ctx }) {
         ) : null}
         {d.todo.length > 0 ? (
           <div className="flex flex-col gap-1">
-            <h3 className="text-caption text-ink-2">{t('todo')}</h3>
+            <h4 className="m-0 text-caption font-bold tracking-normal text-ink-2">{t('todo')}</h4>
             <ul className="flex list-none flex-col gap-1 p-0">{d.todo.map(item)}</ul>
           </div>
         ) : null}
@@ -184,7 +183,12 @@ function SeatFillBody({ d, c }: { d: SeatFill; c: Ctx }) {
       <p className="text-caption text-ink-2">
         {t('ofSeats', { occupied: num(d.occupied, c.locale), total: num(d.total, c.locale) })}
       </p>
-      <Meter value={d.occupied} max={d.total} label={tm('meter', { value: d.occupied, max: d.total })} />
+      <Meter
+        value={d.occupied}
+        max={d.total}
+        label={tm('meter', { value: d.occupied, max: d.total })}
+        tone="brand"
+      />
     </div>
   );
 }
@@ -212,16 +216,15 @@ function TimelineBody({ d, c }: { d: Timeline; c: Ctx }) {
   });
   if (d.items.length === 0) return <p className="text-body text-ink-2">{t('empty')}</p>;
   return (
-    <ol className="flex list-none flex-col gap-2 p-0">
-      {d.items.map((i) => (
-        <li key={`${i.kind}-${i.at}-${i.title ?? ''}`} className="flex flex-wrap items-baseline gap-x-3">
-          <time dateTime={i.at} className="min-w-36 text-caption text-ink-2 tabular-nums">
-            {fmt.format(new Date(i.at))}
-          </time>
-          <span className="text-body">{t(`kind.${i.kind}`, { title: i.title ?? '' })}</span>
-        </li>
-      ))}
-    </ol>
+    <TimelineList
+      label={t('title')}
+      items={d.items.map((i, n) => ({
+        id: `${i.kind}-${i.at}-${n}`,
+        title: t(`kind.${i.kind}`, { title: i.title ?? '' }),
+        time: <time dateTime={i.at}>{fmt.format(new Date(i.at))}</time>,
+        tone: n === 0 ? 'primary' : 'neutral',
+      }))}
+    />
   );
 }
 
@@ -305,19 +308,35 @@ function AlertsBody({ d, c }: { d: Alerts; c: Ctx }) {
   // Alert fix paths are org-relative (M3.2b); the board's base is the event's.
   const orgBase = c.base.replace(/\/e\/[^/]+$/, '');
   return (
-    <ul className="flex list-none flex-col gap-1.5 p-0">
+    <ul className="flex list-none flex-col gap-2 p-0">
       {d.alerts.map((a) => {
         const title = ta(`rules.${a.rule}`, { count: a.count, countWords: countWords(a.count, c.locale) });
         return (
-          <li key={a.id} className="flex flex-wrap items-baseline gap-x-2 text-body">
-            <StatusDot status={SEVERITY_DOT[a.severity]} label={ta(`severity.${a.severity}`)} />
-            {a.href ? (
-              <Link href={`${orgBase}${a.href}`} className="underline underline-offset-2">
-                {title}
-              </Link>
-            ) : (
-              title
-            )}
+          <li key={a.id} className="flex gap-3 rounded-tile border border-line bg-surface-2 p-3">
+            <span
+              aria-hidden="true"
+              className={cx(
+                'flex size-9 shrink-0 items-center justify-center rounded-[12px] font-extrabold',
+                a.severity === 'critical' && 'bg-danger-soft text-danger',
+                a.severity === 'warning' && 'bg-warning-soft text-warning',
+                a.severity === 'info' && 'bg-primary-soft text-primary-ink',
+              )}
+            >
+              !
+            </span>
+            <div className="flex min-w-0 flex-col gap-1">
+              {a.href ? (
+                <Link
+                  href={`${orgBase}${a.href}`}
+                  className="text-body font-bold text-ink underline-offset-2 hover:underline"
+                >
+                  {title}
+                </Link>
+              ) : (
+                <span className="text-body font-bold text-ink">{title}</span>
+              )}
+              <StatusDot status={SEVERITY_DOT[a.severity]} label={ta(`severity.${a.severity}`)} />
+            </div>
           </li>
         );
       })}

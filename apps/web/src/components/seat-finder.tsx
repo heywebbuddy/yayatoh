@@ -120,7 +120,7 @@ function FinderBody({
   const challengeBox = (s: FinderState) =>
     s.challenge && challenge ? (
       <fieldset className="flex flex-col gap-2 rounded-card border border-line bg-surface p-4">
-        <legend className="px-1 text-body font-medium">{t('challengeTitle')}</legend>
+        <legend className="px-1 text-[13px] font-bold text-ink">{t('challengeTitle')}</legend>
         <p className="text-caption text-ink-2">{t('challengeHint')}</p>
         <HumanCheckField widget={challenge} />
       </fieldset>
@@ -192,7 +192,7 @@ function FinderBody({
           <p className="text-body text-ink-2">{t('nameIntro')}</p>
           <form onSubmit={onName} action={nameAction} noValidate className="flex flex-col gap-3">
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="finder-name" className="text-caption text-ink-2">
+              <label htmlFor="finder-name" className="text-[13px] font-bold text-ink">
                 {t('name')}
               </label>
               <input
@@ -228,7 +228,7 @@ function FinderBody({
           <form onSubmit={onCode} action={codeAction} noValidate className="flex flex-col gap-3">
             <input type="hidden" name="intent" value="verify" />
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="finder-code" className="text-caption text-ink-2">
+              <label htmlFor="finder-code" className="text-[13px] font-bold text-ink">
                 {t('code')}
               </label>
               <input
@@ -257,7 +257,7 @@ function FinderBody({
           <form onSubmit={onCode} action={codeAction} noValidate className="flex flex-col gap-3">
             <input type="hidden" name="intent" value="request" />
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="finder-email" className="text-caption text-ink-2">
+              <label htmlFor="finder-email" className="text-[13px] font-bold text-ink">
                 {t('email')}
               </label>
               <input

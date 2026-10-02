@@ -137,7 +137,7 @@ export function SeatGroups({
             {t('groups.form.title')}
           </h3>
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="group-label" className="text-caption text-ink-2">
+            <label htmlFor="group-label" className="text-[13px] font-bold text-ink">
               {t('groups.form.label')}
             </label>
             <input
@@ -160,7 +160,7 @@ export function SeatGroups({
             </datalist>
           </div>
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="group-item" className="text-caption text-ink-2">
+            <label htmlFor="group-item" className="text-[13px] font-bold text-ink">
               {t('groups.form.item')}
             </label>
             <select
@@ -179,7 +179,7 @@ export function SeatGroups({
             </select>
           </div>
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="group-count" className="text-caption text-ink-2">
+            <label htmlFor="group-count" className="text-[13px] font-bold text-ink">
               {t('groups.form.count')}
             </label>
             <input

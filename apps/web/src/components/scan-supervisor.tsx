@@ -275,7 +275,7 @@ function DeviceCard({
               }}
             >
               <div className="flex flex-col gap-1.5">
-                <label htmlFor={`${id}-move`} className="text-caption text-ink-2">
+                <label htmlFor={`${id}-move`} className="text-[13px] font-bold text-ink">
                   {t('moveTo', { label: d.label })}
                 </label>
                 <select
@@ -367,7 +367,7 @@ function DeviceCard({
           >
             {entrances.length > 0 ? (
               <div className="flex flex-col gap-1.5">
-                <label htmlFor={`${id}-kiosk`} className="text-caption text-ink-2">
+                <label htmlFor={`${id}-kiosk`} className="text-[13px] font-bold text-ink">
                   {t('kioskEntrance', { label: d.label })}
                 </label>
                 <select id={`${id}-kiosk`} name="kioskCheckpointId" className="field">

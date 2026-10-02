@@ -82,7 +82,7 @@ export default async function ImportPage({
           <p className="text-body text-ink-2">{t('import.fileHint')}</p>
           <form action={uploadImportAction.bind(null, org, event)} className="flex flex-wrap items-end gap-3">
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="import-file" className="text-caption text-ink-2">
+              <label htmlFor="import-file" className="text-[13px] font-bold text-ink">
                 {t('import.file')}
               </label>
               <input
@@ -110,7 +110,7 @@ export default async function ImportPage({
             >
               {FIELDS.map((f) => (
                 <div key={f} className="flex flex-col gap-1.5">
-                  <label htmlFor={`map-${f}`} className="text-caption text-ink-2">
+                  <label htmlFor={`map-${f}`} className="text-[13px] font-bold text-ink">
                     {t(`import.field.${f}`)}
                   </label>
                   <select
@@ -132,7 +132,7 @@ export default async function ImportPage({
                 </div>
               ))}
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="extra-label" className="text-caption text-ink-2">
+                <label htmlFor="extra-label" className="text-[13px] font-bold text-ink">
                   {t('import.extraLabel')}
                 </label>
                 <input

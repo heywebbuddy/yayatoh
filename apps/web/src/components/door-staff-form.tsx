@@ -46,7 +46,7 @@ export function DoorStaffForm({
         <input type="hidden" name="userId" value={member.id} />
       ) : (
         <div className="flex flex-col gap-1.5 self-start">
-          <label htmlFor={`${id}-member`} className="text-caption text-ink-2">
+          <label htmlFor={`${id}-member`} className="text-[13px] font-bold text-ink">
             {t('doorStaff.member')}
           </label>
           <select
@@ -66,7 +66,7 @@ export function DoorStaffForm({
         </div>
       )}
       <fieldset className="flex flex-col gap-2">
-        <legend className="text-caption text-ink-2">
+        <legend className="text-[13px] font-bold text-ink">
           {member ? t('doorStaff.whereFor', { name: member.name }) : t('doorStaff.where')}
         </legend>
         <p className="text-caption text-ink-2">{t('doorStaff.whereHint')}</p>

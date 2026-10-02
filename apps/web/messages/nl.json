@@ -616,7 +616,8 @@
     "speakerSessions": "Sessies",
     "speakerNoSessions": "Nog geen sessies aangekondigd.",
     "speakerPageTitle": "Spreker",
-    "gallery": "Galerij"
+    "gallery": "Galerij",
+    "hostedBy": "Georganiseerd door"
   },
   "portal": {
     "day": "Dag {day} · {date}",
@@ -6094,7 +6095,8 @@
       "deviceBoard": {
         "title": "Apparatenoverzicht"
       }
-    }
+    },
+    "openScanner": "Scanner openen"
   },
   "alerts": {
     "title": "Meldingen",

@@ -358,7 +358,7 @@ export function SeatAssignments({
             {t('assign.queue.title', { count: view.unseated.length })}
           </h2>
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="queue-search" className="text-caption text-ink-2">
+            <label htmlFor="queue-search" className="text-[13px] font-bold text-ink">
               {t('assign.queue.search')}
             </label>
             <input
@@ -442,7 +442,7 @@ export function SeatAssignments({
                 {t('assign.form.title')}
               </h3>
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="assign-item" className="text-caption text-ink-2">
+                <label htmlFor="assign-item" className="text-[13px] font-bold text-ink">
                   {t('assign.form.item')}
                 </label>
                 <select
@@ -464,7 +464,7 @@ export function SeatAssignments({
                 </select>
               </div>
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="assign-seat" className="text-caption text-ink-2">
+                <label htmlFor="assign-seat" className="text-[13px] font-bold text-ink">
                   {t('assign.form.seat')}
                 </label>
                 <select
@@ -644,7 +644,7 @@ export function SeatAssignments({
                                 <div className="flex flex-col gap-1">
                                   <label
                                     htmlFor={`move-item-${p.attendeeId}`}
-                                    className="text-caption text-ink-2"
+                                    className="text-[13px] font-bold text-ink"
                                   >
                                     {t('assign.form.item')}
                                   </label>
@@ -677,7 +677,7 @@ export function SeatAssignments({
                                 <div className="flex flex-col gap-1">
                                   <label
                                     htmlFor={`move-seat-${p.attendeeId}`}
-                                    className="text-caption text-ink-2"
+                                    className="text-[13px] font-bold text-ink"
                                   >
                                     {t('assign.form.seat')}
                                   </label>

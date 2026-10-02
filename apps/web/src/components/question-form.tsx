@@ -27,7 +27,7 @@ export function QuestionForm({
     <form ref={ref} action={formAction} className="grid grid-cols-1 gap-4 md:grid-cols-2">
       <Input name="label" required maxLength={200} label={t('questions.label')} />
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="question-type" className="text-caption text-ink-2">
+        <label htmlFor="question-type" className="text-[13px] font-bold text-ink">
           {t('questions.type')}
         </label>
         <select
@@ -46,7 +46,7 @@ export function QuestionForm({
       </div>
       {choice ? (
         <div className="flex flex-col gap-1.5 md:col-span-2">
-          <label htmlFor="question-options" className="text-caption text-ink-2">
+          <label htmlFor="question-options" className="text-[13px] font-bold text-ink">
             {t('questions.options')}
           </label>
           <textarea

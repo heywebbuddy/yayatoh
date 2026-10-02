@@ -61,7 +61,7 @@ export function AlertActions({
             <form action={formAction} className="flex flex-wrap items-end gap-2">
               <input type="hidden" name="op" value="snooze" />
               <div className="flex flex-col gap-1">
-                <label htmlFor={`snooze-${alertId}`} className="text-caption text-ink-2">
+                <label htmlFor={`snooze-${alertId}`} className="text-[13px] font-bold text-ink">
                   {t('snoozeLabel')}
                 </label>
                 <select id={`snooze-${alertId}`} name="minutes" defaultValue="60" className="field">

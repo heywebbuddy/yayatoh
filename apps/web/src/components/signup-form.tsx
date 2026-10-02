@@ -99,7 +99,7 @@ export function SignupForm({
         hint={t('signup.slugHint', { slug: slug || '…' })}
       />
       <fieldset className="flex flex-col gap-2">
-        <legend className="mb-1 text-caption text-ink-2">{t('signup.profile')}</legend>
+        <legend className="mb-1 text-[13px] font-bold text-ink">{t('signup.profile')}</legend>
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
           {PROFILES.map((p, i) => (
             <label

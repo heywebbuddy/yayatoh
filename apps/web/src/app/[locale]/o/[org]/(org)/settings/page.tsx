@@ -49,7 +49,7 @@ export default async function SettingsPage({
   const zones = Intl.supportedValuesOf('timeZone');
   const labelled = (id: string, label: string, control: React.ReactNode) => (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor={id} className="text-caption text-ink-2">
+      <label htmlFor={id} className="text-[13px] font-bold text-ink">
         {label}
       </label>
       {control}

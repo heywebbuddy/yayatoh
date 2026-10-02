@@ -616,7 +616,8 @@
     "speakerSessions": "环节",
     "speakerNoSessions": "尚未公布环节。",
     "speakerPageTitle": "演讲嘉宾",
-    "gallery": "图库"
+    "gallery": "图库",
+    "hostedBy": "主办方"
   },
   "portal": {
     "day": "第 {day} 天 · {date}",
@@ -6094,7 +6095,8 @@
       "deviceBoard": {
         "title": "设备面板"
       }
-    }
+    },
+    "openScanner": "打开扫码器"
   },
   "alerts": {
     "title": "提醒",

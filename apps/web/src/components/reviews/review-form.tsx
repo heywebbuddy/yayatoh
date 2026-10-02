@@ -34,7 +34,7 @@ export function ReviewForm({ action }: { action: (prev: FormState, form: FormDat
         aria-describedby={bad.has('rating') ? 'review-rating-error' : undefined}
         className="flex flex-col gap-2"
       >
-        <legend className="text-caption text-ink-2">{t('rating')}</legend>
+        <legend className="text-[13px] font-bold text-ink">{t('rating')}</legend>
         <div className="flex flex-wrap gap-2">
           {[1, 2, 3, 4, 5].map((n) => (
             <label
@@ -53,7 +53,7 @@ export function ReviewForm({ action }: { action: (prev: FormState, form: FormDat
         ) : null}
       </fieldset>
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="review-body" className="text-caption text-ink-2">
+        <label htmlFor="review-body" className="text-[13px] font-bold text-ink">
           {t('body')}
         </label>
         <textarea
@@ -64,7 +64,7 @@ export function ReviewForm({ action }: { action: (prev: FormState, form: FormDat
           onChange={(e) => setLength(e.target.value.length)}
           aria-invalid={bad.has('body') || undefined}
           aria-describedby="review-body-hint"
-          className={`rounded-card border bg-surface px-4 py-2 text-body ${bad.has('body') ? 'border-danger' : 'border-line'}`}
+          className={`rounded-card border bg-surface px-4 py-2 text-body ${bad.has('body') ? 'field-invalid' : ''}`}
         />
         <p id="review-body-hint" className={`text-caption ${bad.has('body') ? 'text-danger' : 'text-ink-2'}`}>
           {bad.has('body')

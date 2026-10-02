@@ -36,7 +36,7 @@ export function EventDetailsForm({
       <fieldset disabled={disabled} className="grid grid-cols-1 gap-5 md:grid-cols-2">
         <legend className="sr-only">{t('legend')}</legend>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="details-venue" className="text-caption text-ink-2">
+          <label htmlFor="details-venue" className="text-[13px] font-bold text-ink">
             {t('venue')}
           </label>
           <select
@@ -60,7 +60,7 @@ export function EventDetailsForm({
           </p>
         </div>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="details-category" className="text-caption text-ink-2">
+          <label htmlFor="details-category" className="text-[13px] font-bold text-ink">
             {t('category')}
           </label>
           <select
@@ -78,7 +78,7 @@ export function EventDetailsForm({
           </select>
         </div>
         <fieldset className="flex flex-col gap-2 md:col-span-2">
-          <legend className="text-caption text-ink-2">{t('visibility')}</legend>
+          <legend className="text-[13px] font-bold text-ink">{t('visibility')}</legend>
           <div className="flex flex-wrap gap-x-6 gap-y-2">
             {(['public', 'unlisted', 'private'] as const).map((v) => (
               <label key={v} className="flex min-h-6 items-center gap-2 text-body">
@@ -96,7 +96,7 @@ export function EventDetailsForm({
           <p className="text-caption text-ink-2">{t('visibilityHint')}</p>
         </fieldset>
         <fieldset className="flex flex-col gap-2 md:col-span-2">
-          <legend className="text-caption text-ink-2">{t('attendanceMode')}</legend>
+          <legend className="text-[13px] font-bold text-ink">{t('attendanceMode')}</legend>
           <div className="flex flex-wrap gap-x-6 gap-y-2">
             {ATTENDANCE_MODES.map((m) => (
               <label key={m} className="flex min-h-6 items-center gap-2 text-body">

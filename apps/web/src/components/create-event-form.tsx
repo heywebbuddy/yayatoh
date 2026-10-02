@@ -48,7 +48,7 @@ export function CreateEventForm({
         <Input name="name" required minLength={2} maxLength={160} label={t('newEvent.name')} />
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="profile" className="text-caption text-ink-2">
+            <label htmlFor="profile" className="text-[13px] font-bold text-ink">
               {t('newEvent.profile')}
             </label>
             <select id="profile" name="profile" defaultValue={defaults.profile} className={selectClass}>
@@ -60,7 +60,7 @@ export function CreateEventForm({
             </select>
           </div>
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="timezone" className="text-caption text-ink-2">
+            <label htmlFor="timezone" className="text-[13px] font-bold text-ink">
               {t('newEvent.timezone')}
             </label>
             <select id="timezone" name="timezone" defaultValue={defaults.timezone} className={selectClass}>

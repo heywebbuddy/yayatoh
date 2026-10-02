@@ -126,7 +126,7 @@ export function HumanCheckGroup({
   const descId = useId();
   return (
     <fieldset aria-describedby={descId} className="flex flex-col gap-2 rounded-card border border-line p-4">
-      <legend className="px-1 text-caption text-ink-2">{t('legend')}</legend>
+      <legend className="px-1 text-[13px] font-bold text-ink">{t('legend')}</legend>
       <p id={descId} className="text-caption text-ink-2">
         {t('explain')}
       </p>

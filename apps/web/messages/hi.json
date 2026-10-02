@@ -616,7 +616,8 @@
     "speakerSessions": "सत्र",
     "speakerNoSessions": "अभी कोई सत्र घोषित नहीं हुआ।",
     "speakerPageTitle": "वक्ता",
-    "gallery": "गैलरी"
+    "gallery": "गैलरी",
+    "hostedBy": "मेज़बान"
   },
   "portal": {
     "day": "दिन {day} · {date}",
@@ -6094,7 +6095,8 @@
       "deviceBoard": {
         "title": "डिवाइस बोर्ड"
       }
-    }
+    },
+    "openScanner": "स्कैनर खोलें"
   },
   "alerts": {
     "title": "अलर्ट",

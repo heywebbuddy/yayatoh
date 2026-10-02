@@ -166,7 +166,7 @@ export function RecurrenceForm({
           error={err('endTime')}
         />
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="rr-freq" className="text-caption text-ink-2">
+          <label htmlFor="rr-freq" className="text-[13px] font-bold text-ink">
             {t('freq')}
           </label>
           <select
@@ -208,7 +208,7 @@ export function RecurrenceForm({
       </div>
       {freq === 'weekly' ? (
         <fieldset className="flex flex-col gap-2">
-          <legend className="text-caption text-ink-2">{t('weekdays')}</legend>
+          <legend className="text-[13px] font-bold text-ink">{t('weekdays')}</legend>
           <div className="flex flex-wrap gap-2">
             {days.map((d, i) => (
               <label
@@ -230,7 +230,7 @@ export function RecurrenceForm({
         </fieldset>
       ) : null}
       <fieldset className="flex flex-col gap-2">
-        <legend className="text-caption text-ink-2">{t('ends')}</legend>
+        <legend className="text-[13px] font-bold text-ink">{t('ends')}</legend>
         <div className="flex flex-wrap gap-4">
           {(['count', 'until'] as const).map((m) => (
             <label key={m} className="flex min-h-6 items-center gap-2 text-body">
@@ -364,7 +364,7 @@ export function EditDateForm({
       </div>
       {canFollow ? (
         <fieldset className="flex flex-col gap-2">
-          <legend className="text-caption text-ink-2">{t('scope')}</legend>
+          <legend className="text-[13px] font-bold text-ink">{t('scope')}</legend>
           <label className="flex min-h-6 items-center gap-2 text-body">
             <input type="radio" name="scope" value="one" defaultChecked className="size-5 accent-primary" />
             {t('scopeOne')}
@@ -408,7 +408,7 @@ export function SeriesPicker({
   return (
     <form action={formAction} className="flex flex-wrap items-end gap-3">
       <div className="flex min-w-56 flex-col gap-1.5">
-        <label htmlFor="seriesId" className="text-caption text-ink-2">
+        <label htmlFor="seriesId" className="text-[13px] font-bold text-ink">
           {t('series')}
         </label>
         <select id="seriesId" name="seriesId" defaultValue={current ?? ''} className={select}>

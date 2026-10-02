@@ -115,7 +115,7 @@ export function AiDraftPanel({
         }}
       >
         <fieldset className="flex flex-col gap-1.5">
-          <legend className="pb-1.5 text-caption text-ink-2">{t('what')}</legend>
+          <legend className="pb-1.5 text-[13px] font-bold text-ink">{t('what')}</legend>
           <div className="flex flex-wrap gap-x-5 gap-y-1">
             {DRAFT_KINDS.map((k) => (
               <label key={k} className="flex min-h-6 items-center gap-2 text-body">
@@ -133,7 +133,7 @@ export function AiDraftPanel({
           </div>
         </fieldset>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor={`${id}-notes`} className="text-caption text-ink-2">
+          <label htmlFor={`${id}-notes`} className="text-[13px] font-bold text-ink">
             {t('notes')}
           </label>
           <textarea
@@ -165,7 +165,7 @@ export function AiDraftPanel({
             {t('previewTitle', { kind: t(`kinds.${preview.kind}`) })}
           </h3>
           <p className="text-caption text-ink-2">{t('previewHint')}</p>
-          <label htmlFor={`${id}-preview`} className="text-caption text-ink-2">
+          <label htmlFor={`${id}-preview`} className="text-[13px] font-bold text-ink">
             {t('previewLabel')}
           </label>
           <textarea

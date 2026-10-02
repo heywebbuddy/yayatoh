@@ -59,7 +59,7 @@ export function AccessCodeForm({
         />
       </div>
       <fieldset className="flex flex-col gap-2" aria-describedby={nothing ? 'unlocks-error' : undefined}>
-        <legend className="text-caption text-ink-2">{t('unlocks')}</legend>
+        <legend className="text-[13px] font-bold text-ink">{t('unlocks')}</legend>
         <label className="flex min-h-6 items-center gap-2 text-body">
           <input
             type="checkbox"

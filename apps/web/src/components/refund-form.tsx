@@ -71,7 +71,7 @@ export function RefundForm({
   return (
     <form ref={formRef} action={formAction} className="flex flex-col gap-4">
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="refund-reason" className="text-caption text-ink-2">
+        <label htmlFor="refund-reason" className="text-[13px] font-bold text-ink">
           {t('reason')}
         </label>
         <select id="refund-reason" name="reason" className={field} defaultValue="requested_by_customer">
@@ -84,7 +84,7 @@ export function RefundForm({
         <p className="text-caption text-ink-2">{t('feePolicy')}</p>
       </div>
       <fieldset className="flex flex-col gap-2">
-        <legend className="text-caption text-ink-2">{t('what')}</legend>
+        <legend className="text-[13px] font-bold text-ink">{t('what')}</legend>
         <label className="flex min-h-6 items-center gap-2 text-body">
           <input
             type="radio"
@@ -111,7 +111,7 @@ export function RefundForm({
       </fieldset>
       {mode === 'tickets' ? (
         <fieldset className="flex flex-col gap-1.5">
-          <legend className="text-caption text-ink-2">{t('tickets')}</legend>
+          <legend className="text-[13px] font-bold text-ink">{t('tickets')}</legend>
           {tickets.map((tk) => (
             <label key={tk.id} className="flex min-h-6 items-center gap-2 text-body">
               <input type="checkbox" name="ticket" value={tk.id} className="size-5" />
@@ -121,7 +121,7 @@ export function RefundForm({
         </fieldset>
       ) : (
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="refund-amount" className="text-caption text-ink-2">
+          <label htmlFor="refund-amount" className="text-[13px] font-bold text-ink">
             {t('amount', { currency })}
           </label>
           <input
@@ -151,7 +151,7 @@ export function RefundForm({
         </label>
       ) : null}
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="refund-note" className="text-caption text-ink-2">
+        <label htmlFor="refund-note" className="text-[13px] font-bold text-ink">
           {override ? t('overrideNote') : t('note')}
         </label>
         <input

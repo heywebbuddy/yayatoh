@@ -122,7 +122,7 @@ export default async function ActivityPage({
 
       <form method="get" className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5 lg:items-end">
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="activity-actor" className="text-caption text-ink-2">
+          <label htmlFor="activity-actor" className="text-[13px] font-bold text-ink">
             {t('activity.filters.actor')}
           </label>
           <select id="activity-actor" name="actor" defaultValue={values.actor} className={field}>
@@ -135,7 +135,7 @@ export default async function ActivityPage({
           </select>
         </div>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="activity-action" className="text-caption text-ink-2">
+          <label htmlFor="activity-action" className="text-[13px] font-bold text-ink">
             {t('activity.filters.action')}
           </label>
           <select id="activity-action" name="action" defaultValue={values.action} className={field}>
@@ -148,13 +148,13 @@ export default async function ActivityPage({
           </select>
         </div>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="activity-from" className="text-caption text-ink-2">
+          <label htmlFor="activity-from" className="text-[13px] font-bold text-ink">
             {t('activity.filters.from')}
           </label>
           <input id="activity-from" name="from" type="date" defaultValue={values.from} className={field} />
         </div>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="activity-to" className="text-caption text-ink-2">
+          <label htmlFor="activity-to" className="text-[13px] font-bold text-ink">
             {t('activity.filters.to')}
           </label>
           <input id="activity-to" name="to" type="date" defaultValue={values.to} className={field} />

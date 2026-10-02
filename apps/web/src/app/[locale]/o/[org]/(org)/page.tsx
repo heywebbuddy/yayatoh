@@ -196,7 +196,7 @@ async function EventList({
         <form method="get" className="flex flex-wrap items-end gap-3">
           {active ? <input type="hidden" name="series" value={active.slug} /> : null}
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="filter-category" className="text-caption text-ink-2">
+            <label htmlFor="filter-category" className="text-[13px] font-bold text-ink">
               {t('eventFilters.category')}
             </label>
             <select
@@ -214,7 +214,7 @@ async function EventList({
             </select>
           </div>
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="filter-tag" className="text-caption text-ink-2">
+            <label htmlFor="filter-tag" className="text-[13px] font-bold text-ink">
               {t('eventFilters.tag')}
             </label>
             <select

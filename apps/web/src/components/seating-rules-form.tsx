@@ -34,7 +34,7 @@ export function SeatingRulesForm({
   };
   const severity = (name: string, current: 'warn' | 'enforce' | undefined) => (
     <fieldset className="flex flex-col gap-1.5">
-      <legend className="mb-1 text-caption text-ink-2">{t('severity')}</legend>
+      <legend className="mb-1 text-[13px] font-bold text-ink">{t('severity')}</legend>
       {(['warn', 'enforce'] as const).map((s) => (
         <div key={s} className="flex flex-col gap-0.5">
           <label className="flex min-h-6 items-center gap-2 text-body">
@@ -59,13 +59,13 @@ export function SeatingRulesForm({
   return (
     <form onSubmit={onSubmit} noValidate className="flex flex-col gap-6">
       <fieldset className="flex flex-col gap-3">
-        <legend className="mb-1 text-body font-medium">{t('ada.title')}</legend>
+        <legend className="mb-1 text-[13px] font-bold text-ink">{t('ada.title')}</legend>
         <label className="flex min-h-6 items-center gap-2 text-body">
           <input type="checkbox" name="ada" defaultChecked={Boolean(ada)} className="size-5" />
           {t('ada.on')}
         </label>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="rules-ada-days" className="text-caption text-ink-2">
+          <label htmlFor="rules-ada-days" className="text-[13px] font-bold text-ink">
             {t('ada.days')}
           </label>
           <input
@@ -94,13 +94,13 @@ export function SeatingRulesForm({
       </fieldset>
 
       <fieldset className="flex flex-col gap-3">
-        <legend className="mb-1 text-body font-medium">{t('cap.title')}</legend>
+        <legend className="mb-1 text-[13px] font-bold text-ink">{t('cap.title')}</legend>
         <label className="flex min-h-6 items-center gap-2 text-body">
           <input type="checkbox" name="cap" defaultChecked={Boolean(cap)} className="size-5" />
           {t('cap.on')}
         </label>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="rules-cap-max" className="text-caption text-ink-2">
+          <label htmlFor="rules-cap-max" className="text-[13px] font-bold text-ink">
             {t('cap.max')}
           </label>
           <input

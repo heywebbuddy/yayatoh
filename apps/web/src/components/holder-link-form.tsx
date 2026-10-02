@@ -19,7 +19,7 @@ export function HolderLinkForm({
       <p className="text-body text-ink-2">{t('myTickets.requestHint')}</p>
       <form action={formAction} className="flex flex-wrap items-end gap-2">
         <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-          <label htmlFor="holder-email" className="text-caption text-ink-2">
+          <label htmlFor="holder-email" className="text-[13px] font-bold text-ink">
             {t('myTickets.requestEmail')}
           </label>
           <input

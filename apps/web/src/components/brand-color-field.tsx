@@ -16,7 +16,7 @@ export function BrandColorField({ initial, fallback }: { initial: string | null;
     <div className="flex flex-col gap-3">
       <div className="flex flex-wrap items-end gap-3">
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="brand-color" className="text-caption text-ink-2">
+          <label htmlFor="brand-color" className="text-[13px] font-bold text-ink">
             {t('color')}
           </label>
           <input

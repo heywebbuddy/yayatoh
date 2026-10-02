@@ -33,7 +33,7 @@ export function ClaimLinkForm({
     <div className="flex flex-col gap-2">
       <form action={formAction} className="flex flex-wrap items-end gap-2">
         <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-          <label htmlFor={`${idPrefix}-email`} className="text-caption text-ink-2">
+          <label htmlFor={`${idPrefix}-email`} className="text-[13px] font-bold text-ink">
             {t('recipient')}
           </label>
           <input

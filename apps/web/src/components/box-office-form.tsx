@@ -95,7 +95,7 @@ export function BoxOfficeForm({
     <form ref={form} onSubmit={onSubmit} className="flex flex-col gap-4">
       {dates.length > 0 ? (
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="bo-date" className="text-caption text-ink-2">
+          <label htmlFor="bo-date" className="text-[13px] font-bold text-ink">
             {t('date')}
           </label>
           <select id="bo-date" name="occurrenceId" required className={field}>
@@ -108,7 +108,7 @@ export function BoxOfficeForm({
         </div>
       ) : null}
       <fieldset className="flex flex-col gap-2">
-        <legend className="text-caption text-ink-2">{t('tickets')}</legend>
+        <legend className="text-[13px] font-bold text-ink">{t('tickets')}</legend>
         {standing.map((p) => (
           <div key={p.id} className="flex items-center gap-3">
             <input
@@ -170,19 +170,19 @@ export function BoxOfficeForm({
       ) : null}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="bo-name" className="text-caption text-ink-2">
+          <label htmlFor="bo-name" className="text-[13px] font-bold text-ink">
             {t('name')}
           </label>
           <input id="bo-name" name="name" required maxLength={120} autoComplete="off" className={field} />
         </div>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="bo-email" className="text-caption text-ink-2">
+          <label htmlFor="bo-email" className="text-[13px] font-bold text-ink">
             {t('email')}
           </label>
           <input id="bo-email" name="email" type="email" required autoComplete="off" className={field} />
         </div>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="bo-method" className="text-caption text-ink-2">
+          <label htmlFor="bo-method" className="text-[13px] font-bold text-ink">
             {t('methodLabel')}
           </label>
           <select id="bo-method" name="method" defaultValue="cash" className={field}>
@@ -194,7 +194,7 @@ export function BoxOfficeForm({
           </select>
         </div>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="bo-reference" className="text-caption text-ink-2">
+          <label htmlFor="bo-reference" className="text-[13px] font-bold text-ink">
             {t('reference')}
           </label>
           <input id="bo-reference" name="reference" maxLength={120} autoComplete="off" className={field} />

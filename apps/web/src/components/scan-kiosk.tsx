@@ -209,7 +209,7 @@ function PinPad({
       <h2 id="kiosk-pin-title" className="text-section">
         {t('pinTitle')}
       </h2>
-      <label htmlFor="kiosk-pin" className="text-caption text-ink-2">
+      <label htmlFor="kiosk-pin" className="text-[13px] font-bold text-ink">
         {t('pinLabel')}
       </label>
       <input
@@ -220,7 +220,7 @@ function PinPad({
         autoComplete="off"
         aria-invalid={error ? true : undefined}
         aria-describedby={error ? 'kiosk-pin-error' : undefined}
-        className={`min-h-12 rounded-pill border bg-surface px-4 text-title ${error ? 'border-danger' : 'border-line'}`}
+        className={`min-h-12 rounded-pill border bg-surface px-4 text-title ${error ? 'field-invalid' : ''}`}
       />
       {error ? (
         <p id="kiosk-pin-error" role="alert" className="text-caption text-danger">

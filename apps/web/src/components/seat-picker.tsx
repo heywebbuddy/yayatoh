@@ -352,7 +352,7 @@ const SeatGroup = memo(
     const t = useTranslations('checkout.seats');
     return (
       <fieldset className="flex flex-col gap-1.5">
-        <legend className="text-caption text-ink-2">
+        <legend className="text-[13px] font-bold text-ink">
           {t(`group.${group.kind}`, { label: group.label })}
         </legend>
         <div className="flex flex-wrap gap-x-4 gap-y-1.5">

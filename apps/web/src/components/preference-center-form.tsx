@@ -43,7 +43,7 @@ export function PreferenceCenterForm({
       </div>
       {state.error && !phoneError ? <Alert title={t(`errors.${state.error}`)} /> : null}
       <fieldset className="flex flex-col gap-2">
-        <legend className="mb-1 text-body font-medium">{t('emailLegend', { email })}</legend>
+        <legend className="mb-1 text-[13px] font-bold text-ink">{t('emailLegend', { email })}</legend>
         {(['reminders', 'event_updates', 'marketing'] as const).map((k) => (
           <label key={k} className={row}>
             <input
@@ -57,7 +57,7 @@ export function PreferenceCenterForm({
         ))}
       </fieldset>
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="pc-phone" className="text-caption text-ink-2">
+        <label htmlFor="pc-phone" className="text-[13px] font-bold text-ink">
           {t('phoneLabel')}
         </label>
         <input
@@ -70,7 +70,7 @@ export function PreferenceCenterForm({
           maxLength={32}
           aria-invalid={phoneError ? true : undefined}
           aria-describedby={described}
-          className={`field ${phoneError ? 'border-danger' : 'border-line'}`}
+          className={`field ${phoneError ? 'field-invalid' : ''}`}
         />
         <p id="pc-phone-hint" className="text-caption text-ink-2">
           {phone ? t('phoneCurrent', { phone }) : t('phoneHint')}
@@ -83,7 +83,7 @@ export function PreferenceCenterForm({
       </div>
       {(['sms', 'whatsapp'] as const).map((channel) => (
         <fieldset key={channel} className="flex flex-col gap-2" aria-describedby="pc-disclosure">
-          <legend className="mb-1 text-body font-medium">{t(`${channel}Legend`)}</legend>
+          <legend className="mb-1 text-[13px] font-bold text-ink">{t(`${channel}Legend`)}</legend>
           <label className={row}>
             <input
               type="checkbox"

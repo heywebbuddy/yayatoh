@@ -55,7 +55,7 @@ export async function OrgSales({
       </div>
       <form method="get" className="flex flex-wrap items-start gap-3">
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="report-period" className="text-caption text-ink-2">
+          <label htmlFor="report-period" className="text-[13px] font-bold text-ink">
             {t('reports.org.period')}
           </label>
           <select

@@ -31,7 +31,7 @@ export function RefundPolicyForm({
   return (
     <form action={formAction} className="flex flex-col gap-4">
       <fieldset className="flex flex-col gap-2">
-        <legend className="text-caption text-ink-2">{t('kindLegend')}</legend>
+        <legend className="text-[13px] font-bold text-ink">{t('kindLegend')}</legend>
         {KINDS.map((k) => (
           <label key={k} className="flex min-h-6 items-center gap-2 text-body">
             <input
@@ -48,7 +48,7 @@ export function RefundPolicyForm({
       </fieldset>
       {kind === 'until' ? (
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="policy-days" className="text-caption text-ink-2">
+          <label htmlFor="policy-days" className="text-[13px] font-bold text-ink">
             {t('daysLabel')}
           </label>
           <input
@@ -68,7 +68,7 @@ export function RefundPolicyForm({
       ) : null}
       {kind === 'until' || kind === 'always' ? (
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="policy-retained" className="text-caption text-ink-2">
+          <label htmlFor="policy-retained" className="text-[13px] font-bold text-ink">
             {t('retainedLabel', { currency })}
           </label>
           <input

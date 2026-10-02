@@ -91,7 +91,7 @@ export default async function SignalsPage({
         className="flex flex-wrap items-end gap-3"
       >
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="signal-kind" className="text-caption text-ink-2">
+          <label htmlFor="signal-kind" className="text-[13px] font-bold text-ink">
             {t('fraudSignals.filter.kind')}
           </label>
           <select id="signal-kind" name="kind" defaultValue={kind ?? ''} className={select}>
@@ -104,7 +104,7 @@ export default async function SignalsPage({
           </select>
         </div>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="signal-severity" className="text-caption text-ink-2">
+          <label htmlFor="signal-severity" className="text-[13px] font-bold text-ink">
             {t('fraudSignals.filter.severity')}
           </label>
           <select id="signal-severity" name="severity" defaultValue={severity ?? ''} className={select}>
@@ -117,7 +117,7 @@ export default async function SignalsPage({
           </select>
         </div>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="signal-status" className="text-caption text-ink-2">
+          <label htmlFor="signal-status" className="text-[13px] font-bold text-ink">
             {t('fraudSignals.filter.status')}
           </label>
           <select id="signal-status" name="status" defaultValue={status} className={select}>

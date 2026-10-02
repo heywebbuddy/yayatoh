@@ -42,7 +42,7 @@ export function NewIncidentForm({
         error={bad.has('title') ? t('errors.title') : undefined}
       />
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="incident-impact" className="text-caption text-ink-2">
+        <label htmlFor="incident-impact" className="text-[13px] font-bold text-ink">
           {t('new.impact')}
         </label>
         <select id="incident-impact" name="impact" defaultValue="minor" className={select}>
@@ -54,7 +54,7 @@ export function NewIncidentForm({
         </select>
       </div>
       <fieldset className="flex flex-col gap-2">
-        <legend className="mb-1 text-caption text-ink-2">{t('new.components')}</legend>
+        <legend className="mb-1 text-[13px] font-bold text-ink">{t('new.components')}</legend>
         {components.map((c) => (
           <label key={c} className="flex min-h-6 items-center gap-2 text-body">
             <input type="checkbox" name="components" value={c} className="size-5" />
@@ -63,7 +63,7 @@ export function NewIncidentForm({
         ))}
       </fieldset>
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="incident-body" className="text-caption text-ink-2">
+        <label htmlFor="incident-body" className="text-[13px] font-bold text-ink">
           {t('new.body')}
         </label>
         <textarea
@@ -73,7 +73,7 @@ export function NewIncidentForm({
           maxLength={2000}
           aria-invalid={bad.has('body') || undefined}
           aria-describedby={bad.has('body') ? 'incident-body-error' : undefined}
-          className={`${area} ${bad.has('body') ? 'border-danger' : 'border-line'}`}
+          className={`${area} ${bad.has('body') ? 'field-invalid' : ''}`}
         />
         {bad.has('body') ? (
           <p id="incident-body-error" className="text-caption text-danger">
@@ -111,7 +111,7 @@ export function IncidentUpdateForm({
       className="flex flex-col gap-3"
     >
       <div className="flex flex-col gap-1.5">
-        <label htmlFor={`status-${id}`} className="text-caption text-ink-2">
+        <label htmlFor={`status-${id}`} className="text-[13px] font-bold text-ink">
           {t('update.status')}
         </label>
         <select id={`status-${id}`} name="status" className={select}>
@@ -123,7 +123,7 @@ export function IncidentUpdateForm({
         </select>
       </div>
       <div className="flex flex-col gap-1.5">
-        <label htmlFor={`body-${id}`} className="text-caption text-ink-2">
+        <label htmlFor={`body-${id}`} className="text-[13px] font-bold text-ink">
           {t('update.body')}
         </label>
         <textarea
@@ -132,7 +132,7 @@ export function IncidentUpdateForm({
           rows={3}
           maxLength={2000}
           aria-invalid={bad.has('body') || undefined}
-          className={`${area} ${bad.has('body') ? 'border-danger' : 'border-line'}`}
+          className={`${area} ${bad.has('body') ? 'field-invalid' : ''}`}
         />
         {bad.has('body') ? <p className="text-caption text-danger">{t('errors.body')}</p> : null}
       </div>

@@ -616,7 +616,8 @@
     "speakerSessions": "環節",
     "speakerNoSessions": "尚未公佈環節。",
     "speakerPageTitle": "演講嘉賓",
-    "gallery": "相簿"
+    "gallery": "相簿",
+    "hostedBy": "主辦單位"
   },
   "portal": {
     "day": "第 {day} 天 · {date}",
@@ -6094,7 +6095,8 @@
       "deviceBoard": {
         "title": "裝置面板"
       }
-    }
+    },
+    "openScanner": "開啟掃描器"
   },
   "alerts": {
     "title": "警示",

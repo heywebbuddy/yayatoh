@@ -64,7 +64,7 @@ export function Scanner({
     <div className="flex flex-col gap-4">
       {checkpoints.length > 0 || scoped ? (
         <div className="flex flex-col gap-1.5 self-start">
-          <label htmlFor="scan-checkpoint" className="text-caption text-ink-2">
+          <label htmlFor="scan-checkpoint" className="text-[13px] font-bold text-ink">
             {t('checkpoints.scanningAt')}
           </label>
           <select
@@ -89,7 +89,7 @@ export function Scanner({
         <input type="hidden" name="scanId" value={scanId} />
         <input type="hidden" name="checkpointId" value={stand} />
         <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-          <label htmlFor="scan-code" className="text-caption text-ink-2">
+          <label htmlFor="scan-code" className="text-[13px] font-bold text-ink">
             {t('checkin.codeLabel')}
           </label>
           <input

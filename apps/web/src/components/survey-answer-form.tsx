@@ -167,7 +167,7 @@ export function SurveyAnswerForm({
                 rows={4}
                 aria-invalid={error ? true : undefined}
                 aria-describedby={error ? errorId : undefined}
-                className={`rounded-card border bg-surface px-4 py-2.5 text-body text-ink ${error ? 'border-danger' : 'border-line'}`}
+                className={`rounded-card border bg-surface px-4 py-2.5 text-body text-ink ${error ? 'field-invalid' : ''}`}
               />
               {errorText}
             </div>

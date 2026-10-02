@@ -28,7 +28,7 @@ export default async function CommissionPage({
       <form className="flex flex-wrap items-end gap-3">
         {(['from', 'to'] as const).map((k) => (
           <div key={k} className="flex flex-col gap-1.5">
-            <label htmlFor={`period-${k}`} className="text-caption text-ink-2">
+            <label htmlFor={`period-${k}`} className="text-[13px] font-bold text-ink">
               {t(k)}
             </label>
             <input

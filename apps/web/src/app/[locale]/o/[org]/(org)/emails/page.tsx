@@ -58,7 +58,7 @@ export default async function EmailTemplatesPage({
       <PageHeader title={t('title')} description={t('description')} />
       <form method="get" className="flex flex-wrap items-end gap-3" aria-label={t('chooseLabel')}>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="template-kind" className="text-caption text-ink-2">
+          <label htmlFor="template-kind" className="text-[13px] font-bold text-ink">
             {t('kind')}
           </label>
           <select id="template-kind" name="kind" defaultValue={kind} className={field}>
@@ -70,7 +70,7 @@ export default async function EmailTemplatesPage({
           </select>
         </div>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="template-lang" className="text-caption text-ink-2">
+          <label htmlFor="template-lang" className="text-[13px] font-bold text-ink">
             {t('language')}
           </label>
           <select id="template-lang" name="lang" defaultValue={lang} className={field}>

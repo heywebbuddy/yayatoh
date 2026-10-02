@@ -98,7 +98,7 @@ export function AlertRoutingForm({
           className="flex flex-col gap-2 rounded-card border border-line p-4"
           data-role={r.role}
         >
-          <legend className="px-1 text-body font-medium">{r.roleLabel}</legend>
+          <legend className="px-1 text-[13px] font-bold text-ink">{r.roleLabel}</legend>
           <div className="overflow-x-auto">
             <table className="w-full text-start text-body">
               <thead>

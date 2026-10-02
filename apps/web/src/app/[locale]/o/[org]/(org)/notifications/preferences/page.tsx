@@ -49,7 +49,7 @@ export default async function PreferencesPage({
             savedLabel={t('language.saved')}
           >
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="email-language" className="text-caption text-ink-2">
+              <label htmlFor="email-language" className="text-[13px] font-bold text-ink">
                 {t('language.label')}
               </label>
               <select

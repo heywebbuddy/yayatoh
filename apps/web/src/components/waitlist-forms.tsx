@@ -85,7 +85,7 @@ export function WaitlistOfferForm({
     >
       <Card className="flex flex-col gap-4">
         <div className="flex flex-col gap-1">
-          <label htmlFor="offer-quantity" className="text-body font-medium">
+          <label htmlFor="offer-quantity" className="text-[13px] font-bold text-ink">
             {t('quantity')}
           </label>
           <select id="offer-quantity" name="quantity" defaultValue={String(quantity)} className="field w-28">

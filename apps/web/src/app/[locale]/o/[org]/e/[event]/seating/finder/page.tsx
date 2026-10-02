@@ -90,7 +90,7 @@ export default async function SeatFinderSettingsPage({
                     </p>
                   </div>
                   <fieldset className="flex flex-col gap-2">
-                    <legend className="mb-1 text-caption text-ink-2">{t('finder.mode')}</legend>
+                    <legend className="mb-1 text-[13px] font-bold text-ink">{t('finder.mode')}</legend>
                     {(['code', 'name'] as const).map((m) => (
                       <div key={m} className="flex flex-col gap-0.5">
                         <label className="flex min-h-6 items-center gap-2 text-body">

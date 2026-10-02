@@ -77,7 +77,7 @@ export function QuoteForm({
         <input id="quote-website" name="website" type="text" tabIndex={-1} autoComplete="off" />
       </div>
       <div className="flex flex-col gap-1.5 md:col-span-2">
-        <label htmlFor="quote-message" className="text-caption text-ink-2">
+        <label htmlFor="quote-message" className="text-[13px] font-bold text-ink">
           {t('message')}
         </label>
         <textarea
@@ -88,7 +88,7 @@ export function QuoteForm({
           maxLength={4000}
           aria-invalid={bad.has('message') || undefined}
           aria-describedby={bad.has('message') ? 'quote-message-error' : 'quote-message-hint'}
-          className={`rounded-card border bg-surface px-4 py-2 text-body ${bad.has('message') ? 'border-danger' : 'border-line'}`}
+          className={`rounded-card border bg-surface px-4 py-2 text-body ${bad.has('message') ? 'field-invalid' : ''}`}
         />
         {bad.has('message') ? (
           <p id="quote-message-error" className="text-caption text-danger">

@@ -34,7 +34,7 @@ function Section({ id, title, children }: { id: string; title: string; children:
 function Labelled({ id, label, children }: { id: string; label: string; children: ReactNode }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor={id} className="text-caption text-ink-2">
+      <label htmlFor={id} className="text-[13px] font-bold text-ink">
         {label}
       </label>
       {children}
@@ -127,7 +127,7 @@ export default async function MaintenancePage({
 
         <form action={startFreezeAction} className="flex flex-col gap-3" aria-label={t('start.form')}>
           <fieldset className="flex flex-col gap-2">
-            <legend className="text-caption text-ink-2">{t('start.scope')}</legend>
+            <legend className="text-[13px] font-bold text-ink">{t('start.scope')}</legend>
             <label className="flex min-h-6 items-center gap-2 text-body">
               <input type="radio" name="scope" value="orgs" defaultChecked className="size-5" />
               {t('start.scopeOrgs')}

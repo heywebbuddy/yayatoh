@@ -40,7 +40,7 @@ export function ReportForm({
     );
   return (
     <form action={formAction} className="flex flex-col gap-2 rounded-card border border-line p-3">
-      <label htmlFor={`${id}-reason`} className="text-caption text-ink-2">
+      <label htmlFor={`${id}-reason`} className="text-[13px] font-bold text-ink">
         {t('reason')}
       </label>
       <select ref={firstRef} id={`${id}-reason`} name="reason" className="field px-3">
@@ -50,7 +50,7 @@ export function ReportForm({
           </option>
         ))}
       </select>
-      <label htmlFor={`${id}-note`} className="text-caption text-ink-2">
+      <label htmlFor={`${id}-note`} className="text-[13px] font-bold text-ink">
         {t('note')}
       </label>
       <textarea

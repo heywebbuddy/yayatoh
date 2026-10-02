@@ -90,7 +90,7 @@ export default async function TenantMessagingPage({
               {staff.can('messaging') ? (
                 <form action={liftAutoPauseAction.bind(null, id)} className="flex flex-wrap items-end gap-3">
                   <div className="flex min-w-60 flex-1 flex-col gap-1.5">
-                    <label htmlFor="lift-note" className="text-caption text-ink-2">
+                    <label htmlFor="lift-note" className="text-[13px] font-bold text-ink">
                       {t('liftNote')}
                     </label>
                     <input
@@ -138,7 +138,7 @@ export default async function TenantMessagingPage({
               className="flex flex-wrap items-end gap-3"
             >
               <div className="flex min-w-60 flex-1 flex-col gap-1.5">
-                <label htmlFor="sms-sid" className="text-caption text-ink-2">
+                <label htmlFor="sms-sid" className="text-[13px] font-bold text-ink">
                   {t('smsSid')}
                 </label>
                 <input
@@ -150,7 +150,7 @@ export default async function TenantMessagingPage({
                 />
               </div>
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="sms-number" className="text-caption text-ink-2">
+                <label htmlFor="sms-number" className="text-[13px] font-bold text-ink">
                   {t('displayNumber')}
                 </label>
                 <input id="sms-number" name="number" inputMode="tel" className={`${field} w-48 font-mono`} />
@@ -181,7 +181,7 @@ export default async function TenantMessagingPage({
               className="flex flex-wrap items-end gap-3"
             >
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="wa-route" className="text-caption text-ink-2">
+                <label htmlFor="wa-route" className="text-[13px] font-bold text-ink">
                   {t('waRoute')}
                 </label>
                 <select id="wa-route" name="route" className={field}>
@@ -190,7 +190,7 @@ export default async function TenantMessagingPage({
                 </select>
               </div>
               <div className="flex min-w-60 flex-1 flex-col gap-1.5">
-                <label htmlFor="wa-ref" className="text-caption text-ink-2">
+                <label htmlFor="wa-ref" className="text-[13px] font-bold text-ink">
                   {t('waRef')}
                 </label>
                 <input
@@ -202,7 +202,7 @@ export default async function TenantMessagingPage({
                 />
               </div>
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="wa-number" className="text-caption text-ink-2">
+                <label htmlFor="wa-number" className="text-[13px] font-bold text-ink">
                   {t('displayNumber')}
                 </label>
                 <input id="wa-number" name="number" inputMode="tel" className={`${field} w-48 font-mono`} />
@@ -259,7 +259,7 @@ export default async function TenantMessagingPage({
                 className="flex flex-wrap items-end gap-3"
               >
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor={`limit-${c.channel}`} className="text-caption text-ink-2">
+                  <label htmlFor={`limit-${c.channel}`} className="text-[13px] font-bold text-ink">
                     {t('limitLabel', {
                       channel: t(`channels.${c.channel}`),
                       fallback: num.format(DEFAULT_MONTHLY_QUOTAS[c.channel]),
@@ -274,7 +274,7 @@ export default async function TenantMessagingPage({
                   />
                 </div>
                 <div className="flex min-w-60 flex-1 flex-col gap-1.5">
-                  <label htmlFor={`reason-${c.channel}`} className="text-caption text-ink-2">
+                  <label htmlFor={`reason-${c.channel}`} className="text-[13px] font-bold text-ink">
                     {t('reasonLabel', { channel: t(`channels.${c.channel}`) })}
                   </label>
                   <input

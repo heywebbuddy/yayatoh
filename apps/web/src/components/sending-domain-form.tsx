@@ -22,7 +22,7 @@ export function SendingDomainForm({
       className="flex flex-wrap items-end gap-3"
     >
       <div className="flex min-w-60 flex-1 flex-col gap-1.5">
-        <label htmlFor="sending-domain" className="text-caption text-ink-2">
+        <label htmlFor="sending-domain" className="text-[13px] font-bold text-ink">
           {t('domainLabel')}
         </label>
         <input

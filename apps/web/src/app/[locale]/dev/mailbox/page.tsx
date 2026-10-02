@@ -32,7 +32,7 @@ export default async function DevMailboxPage({
       <PageHeader eyebrow={<Label>{t('eyebrow')}</Label>} title={t('title')} description={t('description')} />
       <form className="flex flex-wrap items-end gap-2" method="get">
         <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-          <label htmlFor="mailbox-to" className="text-caption text-ink-2">
+          <label htmlFor="mailbox-to" className="text-[13px] font-bold text-ink">
             {t('filter')}
           </label>
           <input id="mailbox-to" name="to" type="email" defaultValue={to ?? ''} className="field" />

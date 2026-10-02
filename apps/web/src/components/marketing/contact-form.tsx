@@ -47,7 +47,7 @@ export function ContactForm({
   return (
     <form action={formAction} onSubmit={keepValues(formAction)} noValidate className="flex flex-col gap-4">
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="contact-topic" className="text-caption text-ink-2">
+        <label htmlFor="contact-topic" className="text-[13px] font-bold text-ink">
           {t('fields.topic')}
         </label>
         <select
@@ -94,7 +94,7 @@ export function ContactForm({
         error={err('company', 'company')}
       />
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="contact-message" className="text-caption text-ink-2">
+        <label htmlFor="contact-message" className="text-[13px] font-bold text-ink">
           {t('fields.message')}
         </label>
         <textarea
@@ -105,7 +105,7 @@ export function ContactForm({
           maxLength={4000}
           aria-invalid={bad.has('message') || undefined}
           aria-describedby={bad.has('message') ? 'contact-message-error' : 'contact-message-hint'}
-          className={`${area} ${bad.has('message') ? 'border-danger' : 'border-line'}`}
+          className={`${area} ${bad.has('message') ? 'field-invalid' : ''}`}
         />
         {bad.has('message') ? (
           <p id="contact-message-error" className="text-caption text-danger">

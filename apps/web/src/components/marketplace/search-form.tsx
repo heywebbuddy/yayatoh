@@ -28,7 +28,7 @@ export async function SearchForm({
   );
   const labelled = (id: string, label: string, control: React.ReactNode) => (
     <div className="flex min-w-0 flex-col gap-1.5">
-      <label htmlFor={id} className="text-caption text-ink-2">
+      <label htmlFor={id} className="text-[13px] font-bold text-ink">
         {label}
       </label>
       {control}

@@ -103,7 +103,7 @@ export function AnnouncementComposer({
         <Alert title={tr(errorMessageKey(state.code))} />
       ) : null}
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="announcement-subject" className="text-caption text-ink-2">
+        <label htmlFor="announcement-subject" className="text-[13px] font-bold text-ink">
           {t('subject')}
         </label>
         <input
@@ -122,7 +122,7 @@ export function AnnouncementComposer({
         ) : null}
       </div>
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="announcement-body" className="text-caption text-ink-2">
+        <label htmlFor="announcement-body" className="text-[13px] font-bold text-ink">
           {t('message')}
         </label>
         <textarea
@@ -145,7 +145,7 @@ export function AnnouncementComposer({
         className="flex flex-col gap-2"
         aria-describedby={err.channels ? 'announcement-channels-error' : undefined}
       >
-        <legend className="text-caption text-ink-2">{t('channels')}</legend>
+        <legend className="text-[13px] font-bold text-ink">{t('channels')}</legend>
         <div className="flex flex-wrap gap-x-6 gap-y-2">
           {(['email', 'push', 'sms'] as const).map((c) => (
             <label key={c} className="flex min-h-6 items-center gap-2 text-body">

@@ -334,3 +334,14 @@ describe('no raw palette', () => {
     }
   });
 });
+
+describe('cx', () => {
+  it('lets a later colour utility override an earlier one on the same property and variant', async () => {
+    const { cx } = await import('../src/cx.ts');
+    expect(cx('border border-line bg-surface', 'border-danger')).toBe('border bg-surface border-danger');
+    expect(cx('hover:bg-surface-2 bg-surface', 'bg-primary-soft')).toBe('hover:bg-surface-2 bg-primary-soft');
+    // Size and colour are different properties: both stay.
+    expect(cx('text-body text-ink', 'text-danger')).toBe('text-body text-danger');
+    expect(cx('a', false, null, undefined, 'b')).toBe('a b');
+  });
+});

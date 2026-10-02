@@ -69,7 +69,7 @@ export function RefundRequestPanel({
         </fieldset>
         {mode === 'amount' ? (
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="request-amount" className="text-caption text-ink-2">
+            <label htmlFor="request-amount" className="text-[13px] font-bold text-ink">
               {t('amount', { currency })}
             </label>
             <input
@@ -94,7 +94,7 @@ export function RefundRequestPanel({
       <form action={declineAction} className="flex flex-1 flex-col gap-3">
         <h3 className="text-section">{t('declineLegend')}</h3>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="request-decline-reason" className="text-caption text-ink-2">
+          <label htmlFor="request-decline-reason" className="text-[13px] font-bold text-ink">
             {t('reason')}
           </label>
           <textarea
@@ -135,7 +135,7 @@ export function OrderNoteForm({
   const [state, formAction, pending] = useActionState(action, INITIAL_FORM_STATE);
   return (
     <form key={state.stamp ?? 0} action={formAction} className="flex flex-col gap-2">
-      <label htmlFor="order-note" className="text-caption text-ink-2">
+      <label htmlFor="order-note" className="text-[13px] font-bold text-ink">
         {t('label')}
       </label>
       <textarea

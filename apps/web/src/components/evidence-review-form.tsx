@@ -43,7 +43,7 @@ export function EvidenceReviewForm({
   return (
     <form action={formAction} className="flex flex-col gap-4">
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="evidence-summary" className="text-caption text-ink-2">
+        <label htmlFor="evidence-summary" className="text-[13px] font-bold text-ink">
           {t('summary')}
         </label>
         <textarea
@@ -61,7 +61,7 @@ export function EvidenceReviewForm({
         </p>
       </div>
       <fieldset className="flex flex-col gap-2">
-        <legend className="text-caption text-ink-2">{t('sections')}</legend>
+        <legend className="text-[13px] font-bold text-ink">{t('sections')}</legend>
         {SECTIONS.map((s) => (
           <label key={s} className="flex min-h-6 items-center gap-2 text-body">
             <input

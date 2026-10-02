@@ -53,7 +53,7 @@ export function SectionEditor({
       {locales ? (
         <>
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="section-placement" className="text-caption text-ink-2">
+            <label htmlFor="section-placement" className="text-[13px] font-bold text-ink">
               {t('fields.placement')}
             </label>
             <select
@@ -70,7 +70,7 @@ export function SectionEditor({
             </select>
           </div>
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="section-locale" className="text-caption text-ink-2">
+            <label htmlFor="section-locale" className="text-[13px] font-bold text-ink">
               {t('fields.locale')}
             </label>
             <select
@@ -124,7 +124,7 @@ export function SectionEditor({
       />
       <div className="flex flex-col gap-1.5">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <label htmlFor="section-body" className="text-caption text-ink-2">
+          <label htmlFor="section-body" className="text-[13px] font-bold text-ink">
             {t('fields.body')}
           </label>
           <Button
@@ -146,7 +146,7 @@ export function SectionEditor({
           onChange={(e) => setBody(e.target.value)}
           aria-invalid={bad.has('body') || undefined}
           aria-describedby="section-body-hint"
-          className={`${area} font-mono ${bad.has('body') ? 'border-danger' : 'border-line'}`}
+          className={`${area} font-mono ${bad.has('body') ? 'field-invalid' : ''}`}
         />
         <p id="section-body-hint" className="text-caption text-ink-2">
           {tc('bodyHint')}
@@ -165,7 +165,7 @@ export function SectionEditor({
         </section>
       </div>
       <fieldset className="flex flex-col gap-4 rounded-card border border-line p-4">
-        <legend className="px-1 text-caption text-ink-2">{t('ctaLegend')}</legend>
+        <legend className="px-1 text-[13px] font-bold text-ink">{t('ctaLegend')}</legend>
         <Input
           id="section-cta-label"
           name="ctaLabel"

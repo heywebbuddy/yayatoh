@@ -260,7 +260,7 @@ export function EventWizard({
               error={err('tagline')}
             />
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="wizard-profile" className="text-caption text-ink-2">
+              <label htmlFor="wizard-profile" className="text-[13px] font-bold text-ink">
                 {t('profile')}
               </label>
               <select
@@ -283,7 +283,7 @@ export function EventWizard({
         {step === 1 ? (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="flex flex-col gap-1.5 sm:col-span-2">
-              <label htmlFor="wizard-timezone" className="text-caption text-ink-2">
+              <label htmlFor="wizard-timezone" className="text-[13px] font-bold text-ink">
                 {t('timezone')}
               </label>
               <select
@@ -322,7 +322,7 @@ export function EventWizard({
               error={err('endsAt')}
             />
             <fieldset className="flex flex-col gap-1.5 sm:col-span-2">
-              <legend className="pb-1.5 text-caption text-ink-2">{t('attendanceMode')}</legend>
+              <legend className="pb-1.5 text-[13px] font-bold text-ink">{t('attendanceMode')}</legend>
               <div className="flex flex-wrap gap-x-5 gap-y-1">
                 {MODES.map((m) => (
                   <label key={m} className="flex min-h-6 items-center gap-2 text-body">
@@ -341,7 +341,7 @@ export function EventWizard({
             </fieldset>
             {venues.length > 0 ? (
               <div className="flex flex-col gap-1.5 sm:col-span-2">
-                <label htmlFor="wizard-venue" className="text-caption text-ink-2">
+                <label htmlFor="wizard-venue" className="text-[13px] font-bold text-ink">
                   {t('savedVenue')}
                 </label>
                 <select

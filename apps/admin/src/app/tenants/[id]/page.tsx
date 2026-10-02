@@ -73,7 +73,7 @@ const field = 'field';
 function Reason({ id, label }: { id: string; label: string }) {
   return (
     <div className="flex min-w-60 flex-1 flex-col gap-1.5">
-      <label htmlFor={id} className="text-caption text-ink-2">
+      <label htmlFor={id} className="text-[13px] font-bold text-ink">
         {label}
       </label>
       <input id={id} name="reason" required minLength={3} maxLength={500} className={field} />
@@ -199,7 +199,7 @@ export default async function TenantPage({
               <h3 className="text-body font-medium">{t(`status.form.${action}`)}</h3>
               <p className="text-caption text-ink-2">{t(`status.effect.${action}`)}</p>
               <div className="flex flex-col gap-1.5">
-                <label htmlFor={`status-${action}-reason`} className="text-caption text-ink-2">
+                <label htmlFor={`status-${action}-reason`} className="text-[13px] font-bold text-ink">
                   {t('reason')}
                 </label>
                 <textarea
@@ -213,7 +213,7 @@ export default async function TenantPage({
               </div>
               {action === 'terminate' ? (
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor="status-terminate-slug" className="text-caption text-ink-2">
+                  <label htmlFor="status-terminate-slug" className="text-[13px] font-bold text-ink">
                     {t('status.typeSlug', { slug: org.slug })}
                   </label>
                   <input
@@ -279,7 +279,7 @@ export default async function TenantPage({
                 {t('restore.effect', { status: t(`status.value.${restoreTo}`) })}
               </p>
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="restore-reason" className="text-caption text-ink-2">
+                <label htmlFor="restore-reason" className="text-[13px] font-bold text-ink">
                   {t('reason')}
                 </label>
                 <textarea
@@ -292,7 +292,7 @@ export default async function TenantPage({
                 />
               </div>
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="restore-slug" className="text-caption text-ink-2">
+                <label htmlFor="restore-slug" className="text-[13px] font-bold text-ink">
                   {t('status.typeSlug', { slug: org.slug })}
                 </label>
                 <input
@@ -307,7 +307,7 @@ export default async function TenantPage({
                 <p className="text-caption text-ink-2">{t('status.errors.restore_method')}</p>
               ) : (
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor="restore-proof" className="text-caption text-ink-2">
+                  <label htmlFor="restore-proof" className="text-[13px] font-bold text-ink">
                     {stepUpMethod === 'totp' ? t('restore.code') : t('restore.password')}
                   </label>
                   {stepUpMethod === 'totp' ? (
@@ -450,7 +450,7 @@ export default async function TenantPage({
                     action={submitEvidenceAction.bind(null, id, d.id, d.providerDisputeId)}
                     className="flex flex-col gap-2"
                   >
-                    <label htmlFor={`summary-${d.id}`} className="text-caption text-ink-2">
+                    <label htmlFor={`summary-${d.id}`} className="text-[13px] font-bold text-ink">
                       {t('disputes.summary')}
                     </label>
                     <textarea
@@ -506,7 +506,7 @@ export default async function TenantPage({
                     className="flex flex-wrap items-end gap-3"
                   >
                     <div className="flex min-w-60 flex-1 flex-col gap-1.5">
-                      <label htmlFor={`recon-${r.id}`} className="text-caption text-ink-2">
+                      <label htmlFor={`recon-${r.id}`} className="text-[13px] font-bold text-ink">
                         {t('reconciliation.note')}
                       </label>
                       <input
@@ -574,7 +574,7 @@ export default async function TenantPage({
         {staff.can('fees') ? (
           <form action={feeOverrideAction.bind(null, id)} className="flex flex-wrap items-end gap-3">
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="fee-currency" className="text-caption text-ink-2">
+              <label htmlFor="fee-currency" className="text-[13px] font-bold text-ink">
                 {t('fees.currency')}
               </label>
               <input
@@ -587,7 +587,7 @@ export default async function TenantPage({
               />
             </div>
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="fee-bps" className="text-caption text-ink-2">
+              <label htmlFor="fee-bps" className="text-[13px] font-bold text-ink">
                 {t('fees.bps')}
               </label>
               <input
@@ -602,7 +602,7 @@ export default async function TenantPage({
               />
             </div>
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="fee-fixed" className="text-caption text-ink-2">
+              <label htmlFor="fee-fixed" className="text-[13px] font-bold text-ink">
                 {t('fees.fixed')}
               </label>
               <input
@@ -629,7 +629,7 @@ export default async function TenantPage({
         {staff.can('entitlements') ? (
           <form action={entitlementAction.bind(null, id)} className="flex flex-wrap items-end gap-3">
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="ent-module" className="text-caption text-ink-2">
+              <label htmlFor="ent-module" className="text-[13px] font-bold text-ink">
                 {t('entitlements.module')}
               </label>
               <select id="ent-module" name="moduleKey" className={field}>
@@ -641,7 +641,7 @@ export default async function TenantPage({
               </select>
             </div>
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="ent-effect" className="text-caption text-ink-2">
+              <label htmlFor="ent-effect" className="text-[13px] font-bold text-ink">
                 {t('entitlements.effect')}
               </label>
               <select id="ent-effect" name="effect" className={field}>
@@ -660,7 +660,7 @@ export default async function TenantPage({
         {staff.can('impersonate') ? (
           <form action={startImpersonationAction.bind(null, id)} className="flex flex-col gap-3">
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="imp-member" className="text-caption text-ink-2">
+              <label htmlFor="imp-member" className="text-[13px] font-bold text-ink">
                 {t('impersonate.member')}
               </label>
               <select id="imp-member" name="userId" required defaultValue="" className={field}>
@@ -679,7 +679,7 @@ export default async function TenantPage({
               </select>
             </div>
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="imp-reason" className="text-caption text-ink-2">
+              <label htmlFor="imp-reason" className="text-[13px] font-bold text-ink">
                 {t('impersonate.reason')}
               </label>
               <textarea

@@ -43,7 +43,7 @@ export function TicketTypeForm({
         label={t('tickets.maxPerOrder')}
       />
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="feeMode" className="text-caption text-ink-2">
+        <label htmlFor="feeMode" className="text-[13px] font-bold text-ink">
           {t('tickets.feeMode')}
         </label>
         <select id="feeMode" name="feeMode" defaultValue="pass_on" className="field">
@@ -61,7 +61,7 @@ export function TicketTypeForm({
       />
       <Input name="earlyEndsAt" type="datetime-local" label={t('tickets.earlyEndsAt')} />
       <div className="flex flex-col gap-1.5 md:col-span-2">
-        <label htmlFor="accessDates" className="text-caption text-ink-2">
+        <label htmlFor="accessDates" className="text-[13px] font-bold text-ink">
           {t('tickets.accessDates')}
         </label>
         <textarea
@@ -78,7 +78,7 @@ export function TicketTypeForm({
       </div>
       {dates.length > 0 ? (
         <fieldset className="flex flex-col gap-2 md:col-span-2">
-          <legend className="text-caption text-ink-2">{t('tickets.validDates')}</legend>
+          <legend className="text-[13px] font-bold text-ink">{t('tickets.validDates')}</legend>
           <ul className="flex max-h-56 list-none flex-col gap-1 overflow-y-auto p-0">
             {dates.map((d) => (
               <li key={d.id}>

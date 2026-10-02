@@ -36,7 +36,7 @@ export function DeviceEnrollForm({
         </div>
         {staff.length > 0 ? (
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="device-assigned" className="text-caption text-ink-2">
+            <label htmlFor="device-assigned" className="text-[13px] font-bold text-ink">
               {t('devices.handedTo')}
             </label>
             <select id="device-assigned" name="assignedUserId" defaultValue="" className="field">

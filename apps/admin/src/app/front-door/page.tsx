@@ -147,7 +147,7 @@ export default async function FrontDoorPage({
             <p className="text-caption text-ink-2">{t('change.description')}</p>
             <div className="flex flex-wrap gap-3">
               <div className="flex min-w-0 max-w-full flex-col gap-1.5">
-                <label htmlFor="fd-host" className="text-caption text-ink-2">
+                <label htmlFor="fd-host" className="text-[13px] font-bold text-ink">
                   {t('change.host')}
                 </label>
                 <select id="fd-host" name="host" required className={`${field} w-full max-w-full`}>
@@ -159,7 +159,7 @@ export default async function FrontDoorPage({
                 </select>
               </div>
               <div className="flex min-w-0 max-w-full flex-col gap-1.5">
-                <label htmlFor="fd-route" className="text-caption text-ink-2">
+                <label htmlFor="fd-route" className="text-[13px] font-bold text-ink">
                   {t('change.route')}
                 </label>
                 <select id="fd-route" name="route" required className={`${field} w-full max-w-full`}>
@@ -176,7 +176,7 @@ export default async function FrontDoorPage({
               </div>
             </div>
             <fieldset className="flex flex-col gap-1.5">
-              <legend className="text-caption text-ink-2">{t('change.state')}</legend>
+              <legend className="text-[13px] font-bold text-ink">{t('change.state')}</legend>
               <div className="flex flex-wrap gap-x-4 gap-y-1">
                 {ROUTE_STATES.map((s) => (
                   <label key={s} className="flex min-h-6 items-center gap-2 text-body">
@@ -188,7 +188,7 @@ export default async function FrontDoorPage({
               <p className="text-caption text-ink-2">{t('change.stateHelp')}</p>
             </fieldset>
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="fd-reason" className="text-caption text-ink-2">
+              <label htmlFor="fd-reason" className="text-[13px] font-bold text-ink">
                 {t('change.reason')}
               </label>
               <textarea
@@ -205,7 +205,7 @@ export default async function FrontDoorPage({
               <p className="text-caption text-ink-2">{t('errors.method')}</p>
             ) : (
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="fd-proof" className="text-caption text-ink-2">
+                <label htmlFor="fd-proof" className="text-[13px] font-bold text-ink">
                   {method === 'totp' ? t('change.code') : t('change.password')}
                 </label>
                 {method === 'totp' ? (

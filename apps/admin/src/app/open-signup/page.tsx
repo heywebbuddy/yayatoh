@@ -46,7 +46,7 @@ export default async function OpenSignupPage({
         <form action={setOpenSignupAction} className="flex flex-col gap-3">
           {target ? <input type="hidden" name="enabled" value="on" /> : null}
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="open-signup-reason" className="text-caption text-ink-2">
+            <label htmlFor="open-signup-reason" className="text-[13px] font-bold text-ink">
               {t('reason')}
             </label>
             <textarea

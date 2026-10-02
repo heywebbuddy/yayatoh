@@ -616,7 +616,8 @@
     "speakerSessions": "Sesiones",
     "speakerNoSessions": "Aún no se han anunciado sesiones.",
     "speakerPageTitle": "Ponente",
-    "gallery": "Galería"
+    "gallery": "Galería",
+    "hostedBy": "Organizado por"
   },
   "portal": {
     "day": "Día {day} · {date}",
@@ -6094,7 +6095,8 @@
       "deviceBoard": {
         "title": "Panel de dispositivos"
       }
-    }
+    },
+    "openScanner": "Abrir escáner"
   },
   "alerts": {
     "title": "Alertas",

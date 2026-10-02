@@ -101,7 +101,7 @@ export default async function AlertsPage({
         <form method="get" action={base} className="flex flex-wrap items-end gap-2">
           {status === 'resolved' ? <input type="hidden" name="status" value="resolved" /> : null}
           <div className="flex flex-col gap-1">
-            <label htmlFor="alerts-event" className="text-caption text-ink-2">
+            <label htmlFor="alerts-event" className="text-[13px] font-bold text-ink">
               {t('eventLabel')}
             </label>
             <select id="alerts-event" name="event" defaultValue={eventId ?? ''} className="field">

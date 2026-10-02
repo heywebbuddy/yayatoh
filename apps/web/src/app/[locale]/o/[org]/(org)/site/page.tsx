@@ -171,7 +171,7 @@ export default async function SitePage({ params }: { params: Promise<{ locale: s
               savedLabel={t('saved')}
             >
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="widget-origins" className="text-caption text-ink-2">
+                <label htmlFor="widget-origins" className="text-[13px] font-bold text-ink">
                   {t('widget.origins')}
                 </label>
                 <textarea

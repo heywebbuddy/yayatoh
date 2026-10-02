@@ -102,7 +102,7 @@ export function WaitlistJoinForm({
       <Card className="flex flex-col gap-4">
         {passes.length > 1 ? (
           <fieldset className="flex flex-col gap-2">
-            <legend className="mb-1 text-body font-medium">{t('pass')}</legend>
+            <legend className="mb-1 text-[13px] font-bold text-ink">{t('pass')}</legend>
             {passes.map((p) => (
               <label key={p.id} className="flex min-h-6 items-center gap-2.5 text-body">
                 <input
@@ -129,7 +129,7 @@ export function WaitlistJoinForm({
           </>
         ) : null}
         <div className="flex flex-col gap-1">
-          <label htmlFor="waitlist-quantity" className="text-body font-medium">
+          <label htmlFor="waitlist-quantity" className="text-[13px] font-bold text-ink">
             {t('quantity')}
           </label>
           <select

@@ -89,7 +89,7 @@ export default async function BookingsPage({
           />
         </div>
         <div className="flex flex-col gap-1.5 sm:mb-[22px]">
-          <label htmlFor="booking-filter" className="text-caption text-ink-2">
+          <label htmlFor="booking-filter" className="text-[13px] font-bold text-ink">
             {t('reports.bookings.show')}
           </label>
           <select id="booking-filter" name="filter" defaultValue={filter} className="field">

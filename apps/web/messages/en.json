@@ -616,7 +616,8 @@
     "speakerSessions": "Sessions",
     "speakerNoSessions": "No sessions announced yet.",
     "speakerPageTitle": "Speaker",
-    "gallery": "Gallery"
+    "gallery": "Gallery",
+    "hostedBy": "Hosted by"
   },
   "portal": {
     "day": "Day {day} · {date}",
@@ -6094,7 +6095,8 @@
       "deviceBoard": {
         "title": "Device board"
       }
-    }
+    },
+    "openScanner": "Open scanner"
   },
   "alerts": {
     "title": "Alerts",

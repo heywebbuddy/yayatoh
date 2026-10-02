@@ -66,7 +66,7 @@ export function BulkFields({
   return (
     <div ref={box} className="contents">
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="bulk-what" className="text-caption text-ink-2">
+        <label htmlFor="bulk-what" className="text-[13px] font-bold text-ink">
           {t('action')}
         </label>
         <select
@@ -90,7 +90,7 @@ export function BulkFields({
       </div>
       {what === 'addLabel' || what === 'removeLabel' ? (
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="bulk-label" className="text-caption text-ink-2">
+          <label htmlFor="bulk-label" className="text-[13px] font-bold text-ink">
             {t('label')}
           </label>
           <input
@@ -112,13 +112,13 @@ export function BulkFields({
       {what === 'email' ? (
         <div className="flex w-full flex-col gap-3">
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="bulk-subject" className="text-caption text-ink-2">
+            <label htmlFor="bulk-subject" className="text-[13px] font-bold text-ink">
               {t('subject')}
             </label>
             <input id="bulk-subject" name="subject" required maxLength={150} className={cls} />
           </div>
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="bulk-message" className="text-caption text-ink-2">
+            <label htmlFor="bulk-message" className="text-[13px] font-bold text-ink">
               {t('message')}
             </label>
             <textarea
@@ -140,7 +140,7 @@ export function BulkFields({
         <>
           {seatDates.length ? (
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="bulk-date" className="text-caption text-ink-2">
+              <label htmlFor="bulk-date" className="text-[13px] font-bold text-ink">
                 {t('seatDate')}
               </label>
               <select id="bulk-date" name="bulkDate" defaultValue="" className={cls}>
@@ -154,7 +154,7 @@ export function BulkFields({
             </div>
           ) : null}
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="bulk-target" className="text-caption text-ink-2">
+            <label htmlFor="bulk-target" className="text-[13px] font-bold text-ink">
               {t('target')}
             </label>
             <select

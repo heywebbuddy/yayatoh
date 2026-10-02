@@ -103,7 +103,7 @@ export default async function ReportsPage({
                       className="flex flex-col gap-2"
                       aria-label={t('reviewLabel')}
                     >
-                      <label htmlFor={`note-${r.id}`} className="text-caption text-ink-2">
+                      <label htmlFor={`note-${r.id}`} className="text-[13px] font-bold text-ink">
                         {t('reviewNote')}
                       </label>
                       <textarea

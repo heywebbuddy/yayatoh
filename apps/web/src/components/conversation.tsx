@@ -29,7 +29,7 @@ export function MessageForm({ action, label, submit }: { action: Action; label: 
   );
   return (
     <form ref={ref} action={formAction} className="flex flex-col gap-2" noValidate>
-      <label htmlFor="conversation-body" className="text-caption text-ink-2">
+      <label htmlFor="conversation-body" className="text-[13px] font-bold text-ink">
         {label}
       </label>
       <textarea
@@ -87,7 +87,7 @@ export function ReportForm({ action, done }: { action: Action; done?: boolean })
   return (
     <form action={formAction} className="flex flex-col gap-2">
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="report-reason" className="text-caption text-ink-2">
+        <label htmlFor="report-reason" className="text-[13px] font-bold text-ink">
           {t('reportReason')}
         </label>
         <select id="report-reason" name="reason" className="field">
@@ -97,7 +97,7 @@ export function ReportForm({ action, done }: { action: Action; done?: boolean })
         </select>
       </div>
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="report-note" className="text-caption text-ink-2">
+        <label htmlFor="report-note" className="text-[13px] font-bold text-ink">
           {t('reportNote')}
         </label>
         <textarea

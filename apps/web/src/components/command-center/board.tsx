@@ -1,7 +1,7 @@
 'use client';
 
 import { moveWidget, type WidgetChannel, type WidgetKey } from '@yayatoh/command-center/client';
-import { Button, Card, cx, Label, StatusDot } from '@yayatoh/ui';
+import { Button, Card, cx, StatusDot } from '@yayatoh/ui';
 import { ArrowDown, ArrowUp, Eye, EyeOff, GripVertical } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -262,7 +262,7 @@ export function CommandCenterBoard({
         />
       ))}
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h2 id="cc-widgets" className="text-section">
+        <h2 id="cc-widgets" className="text-card">
           {t('widgets')}
         </h2>
         <div className="flex flex-wrap items-center gap-3">
@@ -315,16 +315,14 @@ export function CommandCenterBoard({
             >
               <Card className="flex h-full flex-col gap-3">
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <h3 className="m-0">
-                    <Label>{title(k)}</Label>
-                  </h3>
+                  <h3 className="m-0 text-body font-bold tracking-normal text-ink-2">{title(k)}</h3>
                   {customizing ? (
                     <div className="flex items-center gap-1">
                       <span
                         draggable
                         onDragStart={() => setDragging(k)}
                         onDragEnd={() => setDragging(null)}
-                        className="inline-flex size-7 cursor-grab items-center justify-center rounded-pill text-ink-2"
+                        className="inline-flex size-8 cursor-grab items-center justify-center rounded-[10px] text-ink-2 hover:bg-surface-3"
                         title={t('drag', { widget: title(k) })}
                         aria-hidden="true"
                       >

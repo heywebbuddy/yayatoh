@@ -11,7 +11,7 @@ export function CopySnippet({ label, code }: { label: string; code: string }) {
   const [copied, setCopied] = useState(false);
   return (
     <div className="flex flex-col gap-2">
-      <label htmlFor={id} className="text-caption text-ink-2">
+      <label htmlFor={id} className="text-[13px] font-bold text-ink">
         {label}
       </label>
       <textarea

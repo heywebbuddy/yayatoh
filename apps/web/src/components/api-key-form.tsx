@@ -46,7 +46,7 @@ export function ApiKeyForm({
           aria-describedby={invalid('scopes') ? 'scopes-error' : 'scopes-hint'}
           aria-invalid={invalid('scopes') ? true : undefined}
         >
-          <legend className="text-caption text-ink-2">{t('apiKeys.scopes')}</legend>
+          <legend className="text-[13px] font-bold text-ink">{t('apiKeys.scopes')}</legend>
           <p id="scopes-hint" className="text-caption text-ink-2">
             {t('apiKeys.scopesHint')}
           </p>
@@ -70,7 +70,7 @@ export function ApiKeyForm({
         </fieldset>
         {/* M1.13d: a test key (`yy_test_…`) is read-only and never sees personal data. */}
         <fieldset className="flex flex-col gap-2">
-          <legend className="text-caption text-ink-2">{t('apiKeys.mode')}</legend>
+          <legend className="text-[13px] font-bold text-ink">{t('apiKeys.mode')}</legend>
           {(['live', 'test'] as const).map((m) => (
             <label key={m} className="flex min-h-10 items-start gap-2.5 text-body">
               <input

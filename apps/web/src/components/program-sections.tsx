@@ -9,7 +9,7 @@ import { sponsorLogoClass } from '@/lib/program-media.ts';
 /** M1.4h: speaker photos and exhibitor/sponsor logos by row id (allowlisted `PublicMediaDto`). */
 export type ProgramImages = Readonly<Record<string, PublicMediaDto>>;
 
-const h2 = 'text-[28px] font-extrabold tracking-[-0.03em]';
+const h2 = 'text-section';
 
 /** One session row of the public agenda (times in the event's timezone). */
 export function SessionRow({
@@ -99,7 +99,7 @@ export async function ProgramSections({
         <section
           id="agenda"
           aria-labelledby="agenda-heading"
-          className="flex flex-col gap-4 px-6 pb-10 md:px-16"
+          className="flex scroll-mt-4 flex-col gap-4 rounded-panel border border-line bg-surface p-5 elevation-card glass md:p-6"
         >
           <h2 id="agenda-heading" className={h2}>
             {t('agenda')}
@@ -125,7 +125,7 @@ export async function ProgramSections({
         <section
           id="speakers"
           aria-labelledby="speakers-heading"
-          className="flex flex-col gap-4 px-6 pb-10 md:px-16"
+          className="flex scroll-mt-4 flex-col gap-4 rounded-panel border border-line bg-surface p-5 elevation-card glass md:p-6"
         >
           <h2 id="speakers-heading" className={h2}>
             {t('speakers')}
@@ -165,7 +165,7 @@ export async function ProgramSections({
         <section
           id="exhibitors"
           aria-labelledby="exhibitors-heading"
-          className="flex flex-col gap-4 px-6 pb-10 md:px-16"
+          className="flex scroll-mt-4 flex-col gap-4 rounded-panel border border-line bg-surface p-5 elevation-card glass md:p-6"
         >
           <h2 id="exhibitors-heading" className={h2}>
             {t('exhibitors')}
@@ -205,7 +205,7 @@ export async function ProgramSections({
         <section
           id="sponsors"
           aria-labelledby="sponsors-heading"
-          className="flex flex-col gap-4 px-6 pb-10 md:px-16"
+          className="flex scroll-mt-4 flex-col gap-4 rounded-panel border border-line bg-surface p-5 elevation-card glass md:p-6"
         >
           <h2 id="sponsors-heading" className={h2}>
             {t('sponsors')}

@@ -23,7 +23,7 @@ export function ResolveItemForm({
   const invalid = state.fields?.includes('note') ?? false;
   return (
     <form action={formAction} className="flex flex-col gap-2">
-      <label htmlFor={`${id}-note`} className="text-caption text-ink-2">
+      <label htmlFor={`${id}-note`} className="text-[13px] font-bold text-ink">
         {t('resolveNote', { reference })}
       </label>
       <textarea

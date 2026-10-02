@@ -361,7 +361,7 @@ export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
         <ScanView>
           {client && (client.checkpoints.length > 0 || client.scoped) ? (
             <div className="flex flex-col gap-1.5 self-start">
-              <label htmlFor="scan-app-checkpoint" className="text-caption text-ink-2">
+              <label htmlFor="scan-app-checkpoint" className="text-[13px] font-bold text-ink">
                 {t('checkpoints.scanningAt')}
               </label>
               <select
@@ -398,7 +398,7 @@ export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
             }}
           >
             <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-              <label htmlFor="scan-app-code" className="text-caption text-ink-2">
+              <label htmlFor="scan-app-code" className="text-[13px] font-bold text-ink">
                 {t('checkin.codeLabel')}
               </label>
               <input

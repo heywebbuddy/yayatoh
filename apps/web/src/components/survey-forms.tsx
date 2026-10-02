@@ -66,7 +66,7 @@ export function CreateSessionForm({
     <form action={formAction} noValidate className="flex flex-col gap-3 sm:flex-row sm:items-end">
       <input type="hidden" name="kind" value="session_feedback" />
       <div className="flex flex-1 flex-col gap-1.5">
-        <label htmlFor={`${id}-session`} className="text-caption text-ink-2">
+        <label htmlFor={`${id}-session`} className="text-[13px] font-bold text-ink">
           {t('session')}
         </label>
         <select
@@ -75,7 +75,7 @@ export function CreateSessionForm({
           defaultValue=""
           aria-invalid={bad ? true : undefined}
           aria-describedby={bad ? `${id}-error` : undefined}
-          className={`${field} ${bad ? 'border-danger' : 'border-line'}`}
+          className={`${field} ${bad ? 'field-invalid' : ''}`}
         >
           <option value="">{t('chooseSession')}</option>
           {sessions.map((s) => (
@@ -137,7 +137,7 @@ export function SurveyDetailsForm({
         error={bad ? t('errors.titleRequired') : undefined}
       />
       <div className="flex flex-col gap-1.5">
-        <label htmlFor={`${id}-intro`} className="text-caption text-ink-2">
+        <label htmlFor={`${id}-intro`} className="text-[13px] font-bold text-ink">
           {t('intro')}
         </label>
         <textarea
@@ -197,7 +197,7 @@ export function AddSurveyQuestionForm({ action }: { action: Action }) {
         error={badLabel ? t('errors.labelRequired') : undefined}
       />
       <div className="flex flex-col gap-1.5">
-        <label htmlFor={`${id}-type`} className="text-caption text-ink-2">
+        <label htmlFor={`${id}-type`} className="text-[13px] font-bold text-ink">
           {t('type')}
         </label>
         <select
@@ -216,7 +216,7 @@ export function AddSurveyQuestionForm({ action }: { action: Action }) {
       </div>
       {choice ? (
         <div className="flex flex-col gap-1.5 md:col-span-2">
-          <label htmlFor={`${id}-options`} className="text-caption text-ink-2">
+          <label htmlFor={`${id}-options`} className="text-[13px] font-bold text-ink">
             {t('options')}
           </label>
           <textarea
@@ -226,7 +226,7 @@ export function AddSurveyQuestionForm({ action }: { action: Action }) {
             maxLength={2000}
             aria-invalid={badOptions ? true : undefined}
             aria-describedby={`${id}-options-hint`}
-            className={`rounded-card border bg-surface px-4 py-2.5 text-body ${badOptions ? 'border-danger' : 'border-line'}`}
+            className={`rounded-card border bg-surface px-4 py-2.5 text-body ${badOptions ? 'field-invalid' : ''}`}
           />
           <p
             id={`${id}-options-hint`}
@@ -279,7 +279,7 @@ export function SendSurveyForm({
     >
       <input type="hidden" name="key" value={idempotencyKey} />
       <fieldset className="flex flex-col gap-2 border-0 p-0">
-        <legend className="mb-1 text-caption text-ink-2">{t('audience')}</legend>
+        <legend className="mb-1 text-[13px] font-bold text-ink">{t('audience')}</legend>
         <label className="flex min-h-6 items-center gap-2.5 text-body">
           <input type="radio" name="audience" value="all" defaultChecked className="size-5 accent-primary" />
           {t('audienceAll')}

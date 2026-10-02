@@ -71,7 +71,7 @@ export async function HelpSearchForm({ locale, query }: { locale: string; query?
         className="flex flex-col gap-2 sm:flex-row sm:items-end"
       >
         <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-          <label htmlFor="help-q" className="text-caption text-ink-2">
+          <label htmlFor="help-q" className="text-[13px] font-bold text-ink">
             {t('search.field')}
           </label>
           <input

@@ -20,7 +20,6 @@ export function MobileNav({
 }) {
   const ref = useRef<HTMLDetailsElement>(null);
   const pathname = usePathname();
-  // biome-ignore lint/correctness/useExhaustiveDependencies: close whenever the page changes
   useEffect(() => {
     if (ref.current) ref.current.open = false;
   }, [pathname]);

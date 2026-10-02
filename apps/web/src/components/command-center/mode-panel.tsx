@@ -1,13 +1,14 @@
 'use client';
 
 import { EVENT_MODES, type EventMode } from '@yayatoh/command-center/client';
-import { Button, Card, Label, StatusDot } from '@yayatoh/ui';
+import { Button, Card, Label, StatusPill } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState, useId } from 'react';
 import { errorMessageKey } from '@/lib/errors.ts';
 import { type FormState, INITIAL_FORM_STATE } from '@/lib/form-state.ts';
 
 const DOT = { planning: 'neutral', pre_show: 'warning', live: 'success', wrap: 'info' } as const;
+const PILL = { neutral: 'neutral', warning: 'waiting', success: 'success', info: 'info' } as const;
 
 export interface ModeView {
   readonly mode: EventMode;
@@ -60,8 +61,13 @@ export function ModePanel({
     >
       <div className="flex flex-col gap-1.5">
         <Label>{t('mode.label')}</Label>
-        <p className="flex items-center gap-2 text-section" data-testid="cc-mode">
-          <StatusDot status={DOT[mode.mode]} label={t(`mode.${mode.mode}`)} live={mode.mode === 'live'} />
+        <p className="flex items-center gap-2" data-testid="cc-mode">
+          <StatusPill
+            tone={PILL[DOT[mode.mode]]}
+            label={t(`mode.${mode.mode}`)}
+            live={mode.mode === 'live'}
+            className="px-3 py-1.5 text-body"
+          />
         </p>
         {next ? <p className="text-caption text-ink-2">{next}</p> : null}
         <p className="text-caption text-ink-2">{t('override.autoNote', { timeZone })}</p>
@@ -69,7 +75,7 @@ export function ModePanel({
       {canOverride ? (
         <form action={submit} className="flex flex-wrap items-end gap-2">
           <div className="flex flex-col gap-1">
-            <label htmlFor={id} className="text-caption text-ink-2">
+            <label htmlFor={id} className="text-[13px] font-bold text-ink">
               {t('override.label')}
             </label>
             <select id={id} name="mode" defaultValue={mode.override ?? 'auto'} className="field">

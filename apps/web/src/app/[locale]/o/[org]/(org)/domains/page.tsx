@@ -145,7 +145,7 @@ export default async function DomainsPage({ params }: { params: Promise<{ locale
               savedLabel={t('added')}
             >
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="domain-hostname" className="text-caption text-ink-2">
+                <label htmlFor="domain-hostname" className="text-[13px] font-bold text-ink">
                   {t('hostname')}
                 </label>
                 <input

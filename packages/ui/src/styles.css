@@ -374,7 +374,7 @@
 @utility field {
   min-height: var(--field-h, 44px);
   border-radius: var(--field-r, var(--radius-control));
-  border: 1px solid var(--color-line-strong);
+  border: 1px solid var(--field-border, var(--color-line-strong));
   background-color: var(--color-surface-solid);
   color: var(--color-ink);
   padding-inline: var(--field-px, 14px);
@@ -386,7 +386,7 @@
   &::placeholder {
     color: var(--color-ink-3);
   }
-  &:hover:not(:disabled) {
+  &:hover:not(:disabled):not([aria-invalid="true"]) {
     border-color: var(--color-ink-2);
   }
   &:focus-visible {
@@ -395,7 +395,7 @@
     border-color: var(--color-primary);
   }
   &[aria-invalid="true"] {
-    border-color: var(--color-danger);
+    --field-border: var(--color-danger);
   }
   &:disabled,
   &:read-only:not(select) {
@@ -407,6 +407,10 @@
   }
 }
 
+/* A field showing an error (when aria-invalid is not set on it). */
+@utility field-invalid {
+  --field-border: var(--color-danger);
+}
 /* Compact field for dense tables and inline editors (32 px, still above the 24 px minimum). */
 @utility field-sm {
   --field-h: 32px;

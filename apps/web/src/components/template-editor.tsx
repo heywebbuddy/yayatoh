@@ -74,7 +74,7 @@ export function TemplateEditor({
     [errors[f] ? `template-${f}-error` : null, `template-${f}-default`].filter(Boolean).join(' ');
   const input = (f: TemplateField, label: string) => (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor={`template-${f}`} className="text-caption text-ink-2">
+      <label htmlFor={`template-${f}`} className="text-[13px] font-bold text-ink">
         {label}
       </label>
       {f === 'subject' ? (

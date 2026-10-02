@@ -31,7 +31,7 @@ export function SuppressionLiftForm({
   return (
     <form action={formAction} noValidate className="flex flex-wrap items-start gap-2">
       <div className="flex flex-col gap-1">
-        <label htmlFor={inputId} className="text-caption text-ink-2">
+        <label htmlFor={inputId} className="text-[13px] font-bold text-ink">
           {t('liftNote', { address })}
         </label>
         <input

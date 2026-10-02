@@ -157,7 +157,7 @@ export function UnderlayPanel({
   const pointField = (which: 'a' | 'b', axis: 'x' | 'y') => {
     const key = `${which}${axis}`;
     return (
-      <label className="flex flex-col gap-1 text-caption text-ink-2">
+      <label className="flex flex-col gap-1 text-[13px] font-bold text-ink">
         {t(`point.${key}`)}
         <input
           id={`${id}-${key}`}
@@ -193,7 +193,7 @@ export function UnderlayPanel({
 
       {!readOnly ? (
         <form onSubmit={upload} className="flex flex-wrap items-end gap-3" noValidate>
-          <label className="flex flex-col gap-1 text-caption text-ink-2">
+          <label className="flex flex-col gap-1 text-[13px] font-bold text-ink">
             {u ? t('replace') : t('file')}
             <input
               ref={fileRef}
@@ -277,7 +277,7 @@ export function UnderlayPanel({
                 </p>
               ) : null}
               <div className="flex flex-wrap items-end gap-3">
-                <label className="flex flex-col gap-1 text-caption text-ink-2">
+                <label className="flex flex-col gap-1 text-[13px] font-bold text-ink">
                   {t('metres')}
                   <input
                     id={`${id}-metres`}
@@ -306,7 +306,7 @@ export function UnderlayPanel({
 
           <div className="flex flex-wrap items-end gap-3">
             {(['x', 'y'] as const).map((k) => (
-              <label key={k} className="flex flex-col gap-1 text-caption text-ink-2">
+              <label key={k} className="flex flex-col gap-1 text-[13px] font-bold text-ink">
                 {t(`position.${k}`)}
                 <input
                   key={`${k}:${u[k]}`}
@@ -325,7 +325,7 @@ export function UnderlayPanel({
                 />
               </label>
             ))}
-            <label className="flex flex-col gap-1 text-caption text-ink-2">
+            <label className="flex flex-col gap-1 text-[13px] font-bold text-ink">
               {t('opacity', { percent: Math.round(u.opacity * 100) })}
               <input
                 type="range"

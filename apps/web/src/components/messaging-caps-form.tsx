@@ -49,9 +49,9 @@ export function MessagingCapsForm({
         const hoursErr = state.errors[hoursKey];
         return (
           <fieldset key={c.scope} className="flex flex-wrap items-end gap-3">
-            <legend className="mb-1 text-body font-medium">{scope}</legend>
+            <legend className="mb-1 text-[13px] font-bold text-ink">{scope}</legend>
             <div className="flex flex-col gap-1.5">
-              <label htmlFor={`cap-${maxKey}`} className="text-caption text-ink-2">
+              <label htmlFor={`cap-${maxKey}`} className="text-[13px] font-bold text-ink">
                 {t('maxMessages', { scope })}
               </label>
               <input
@@ -61,7 +61,7 @@ export function MessagingCapsForm({
                 defaultValue={state.values[maxKey]}
                 aria-invalid={maxErr ? true : undefined}
                 aria-describedby={maxErr ? `cap-${maxKey}-error` : undefined}
-                className={`${field} ${maxErr ? 'border-danger' : 'border-line'}`}
+                className={`${field} ${maxErr ? 'field-invalid' : ''}`}
               />
               {maxErr ? (
                 <p id={`cap-${maxKey}-error`} className="text-caption text-danger">
@@ -70,7 +70,7 @@ export function MessagingCapsForm({
               ) : null}
             </div>
             <div className="flex flex-col gap-1.5">
-              <label htmlFor={`cap-${hoursKey}`} className="text-caption text-ink-2">
+              <label htmlFor={`cap-${hoursKey}`} className="text-[13px] font-bold text-ink">
                 {t('windowHours', { scope })}
               </label>
               <input
@@ -80,7 +80,7 @@ export function MessagingCapsForm({
                 defaultValue={state.values[hoursKey]}
                 aria-invalid={hoursErr ? true : undefined}
                 aria-describedby={hoursErr ? `cap-${hoursKey}-error` : undefined}
-                className={`${field} ${hoursErr ? 'border-danger' : 'border-line'}`}
+                className={`${field} ${hoursErr ? 'field-invalid' : ''}`}
               />
               {hoursErr ? (
                 <p id={`cap-${hoursKey}-error`} className="text-caption text-danger">

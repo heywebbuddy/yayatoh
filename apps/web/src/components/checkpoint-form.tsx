@@ -35,7 +35,7 @@ export function CheckpointForm({
         hint={t('checkpoints.nameHint')}
       />
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="checkpoint-kind" className="text-caption text-ink-2">
+        <label htmlFor="checkpoint-kind" className="text-[13px] font-bold text-ink">
           {t('checkpoints.kind')}
         </label>
         <select
@@ -51,7 +51,7 @@ export function CheckpointForm({
       </div>
       {kind === 'zone' ? (
         <fieldset className="flex flex-col gap-2 md:col-span-2">
-          <legend className="text-caption text-ink-2">{t('checkpoints.types')}</legend>
+          <legend className="text-[13px] font-bold text-ink">{t('checkpoints.types')}</legend>
           <p className="text-caption text-ink-2">{t('checkpoints.typesHint')}</p>
           <div className="flex flex-wrap gap-x-5 gap-y-2">
             {ticketTypes.map((tt) => (
@@ -64,7 +64,7 @@ export function CheckpointForm({
         </fieldset>
       ) : null}
       <fieldset className="grid grid-cols-1 gap-4 md:col-span-2 md:grid-cols-2">
-        <legend className="text-caption text-ink-2">{t('checkpoints.location')}</legend>
+        <legend className="text-[13px] font-bold text-ink">{t('checkpoints.location')}</legend>
         <p className="text-caption text-ink-2 md:col-span-2">{t('checkpoints.locationHint')}</p>
         <Input name="latitude" inputMode="decimal" label={t('checkpoints.latitude')} error={locationError} />
         <Input

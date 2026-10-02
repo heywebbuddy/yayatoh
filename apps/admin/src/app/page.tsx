@@ -19,7 +19,7 @@ export default async function TenantsPage({ searchParams }: { searchParams: Prom
       <search>
         <form className="flex flex-wrap items-end gap-2">
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="q" className="text-caption text-ink-2">
+            <label htmlFor="q" className="text-[13px] font-bold text-ink">
               {t('search')}
             </label>
             <input id="q" name="q" defaultValue={q} className="field" />
