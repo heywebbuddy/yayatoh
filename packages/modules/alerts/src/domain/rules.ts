@@ -1,3 +1,4 @@
+import { deliverabilityVerdict } from '@yayatoh/notifications/deliverability';
 import { type EventMode, eventMode, type RuleKey, THRESHOLDS } from './config.ts';
 import type { Firing } from './lifecycle.ts';
 
@@ -43,12 +44,21 @@ export interface OrgFacts {
   readonly bounced: number;
   readonly complained: number;
   readonly messagingAutoPaused: boolean;
+  /**
+   * M3.8b: email per sending domain and per campaign over the same window; the rule also fires
+   * when one of them crosses a threshold on its own (a bad list can hide in a healthy org).
+   */
+  readonly emailScopes?: ReadonlyArray<{
+    readonly kind: 'domain' | 'campaign';
+    readonly sent: number;
+    readonly bounced: number;
+    readonly complained: number;
+  }>;
   readonly failedMessages: number;
   readonly failedBulkActions: number;
 }
 
 const pct = (part: number, whole: number) => (whole > 0 ? Math.floor((part * 100) / whole) : 0);
-const bps = (part: number, whole: number) => (whole > 0 ? Math.floor((part * 10_000) / whole) : 0);
 
 const fire = (
   severity: Firing['severity'],
@@ -155,14 +165,25 @@ export function evaluateOrgRules(f: OrgFacts, t: Thresholds = THRESHOLDS): Parti
       ssl: f.domainsSslPending,
     });
   if (f.payoutRequirementsDue > 0) out.payoutsPastDue = fire('critical', f.payoutRequirementsDue);
-  const bounce = bps(f.bounced, f.emailsSent);
-  const complaint = bps(f.complained, f.emailsSent);
-  const enough = f.emailsSent >= t.deliverabilityMinSent;
-  if (f.messagingAutoPaused || (enough && (bounce >= t.bounceBps || complaint >= t.complaintBps)))
+  const th = {
+    windowMs: t.deliverabilityWindowMs,
+    minSent: t.deliverabilityMinSent,
+    bounceBps: t.bounceBps,
+    complaintBps: t.complaintBps,
+  };
+  const org = deliverabilityVerdict({ sent: f.emailsSent, bounced: f.bounced, complained: f.complained }, th);
+  const scopes = f.emailScopes ?? [];
+  const domainsOver = scopes.filter((s) => s.kind === 'domain' && deliverabilityVerdict(s, th).over).length;
+  const campaignsOver = scopes.filter(
+    (s) => s.kind === 'campaign' && deliverabilityVerdict(s, th).over,
+  ).length;
+  if (f.messagingAutoPaused || org.over || domainsOver > 0 || campaignsOver > 0)
     out.deliverability = fire(f.messagingAutoPaused ? 'critical' : 'warning', f.bounced + f.complained, {
-      bounceBps: bounce,
-      complaintBps: complaint,
+      bounceBps: org.bounceBps,
+      complaintBps: org.complaintBps,
       paused: f.messagingAutoPaused ? 1 : 0,
+      domains: domainsOver,
+      campaigns: campaignsOver,
     });
   const failures = f.failedMessages + f.failedBulkActions;
   if (failures >= t.automationMin)

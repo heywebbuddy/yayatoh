@@ -316,7 +316,8 @@
     "journeys": "Journeys",
     "disputes": "Rückbuchungen",
     "supportMacros": "Support-Makros",
-    "assistance": "Hilfeanfragen"
+    "assistance": "Hilfeanfragen",
+    "marketingAnalytics": "Marketing-Analysen"
   },
   "vocab": {
     "attendee": "Teilnehmer",
@@ -6266,6 +6267,30 @@
       },
       "assistance": {
         "title": "Gästehilfe"
+      },
+      "campaigns": {
+        "title": "Kampagnenergebnisse",
+        "summary": "{orders, plural, one {# Bestellung} other {# Bestellungen}} · {clicks, plural, one {# Klick} other {# Klicks}} · {conversion} Konversion",
+        "firstTouch": "Erster Kontakt: {orders, plural, one {# Bestellung} other {# Bestellungen}}, {amount}",
+        "chartTitle": "Umsatz (letzter Kontakt) nach Kampagne",
+        "campaign": "Kampagne",
+        "clicks": "Klicks",
+        "orders": "Bestellungen",
+        "revenue": "Umsatz",
+        "unnamed": "(keine)",
+        "none": "Noch keine Kampagnen oder Tracking-Links für diese Veranstaltung.",
+        "more": "{count, plural, one {und # weitere Kampagne} other {und # weitere Kampagnen}}",
+        "open": "Marketing-Analysen öffnen"
+      },
+      "deliverability": {
+        "title": "E-Mail-Zustellbarkeit",
+        "paused": "Nachrichten pausiert (Beschwerden)",
+        "attention": "Braucht Aufmerksamkeit",
+        "healthy": "Innerhalb der Schwellenwerte",
+        "rates": "Bounces {bounce} · Beschwerden {complaint}",
+        "window": "{sent, plural, one {# E-Mail} other {# E-Mails}} in den letzten {days} Tagen",
+        "over": "{domains, plural, one {# Absenderdomain} other {# Absenderdomains}} und {campaigns, plural, one {# Kampagne} other {# Kampagnen}} über den Schwellenwerten",
+        "open": "E-Mail-Zustellbarkeit öffnen"
       }
     },
     "tv": {
@@ -6375,7 +6400,7 @@
       "readiness": "Einrichtungsleitfaden öffnen",
       "domain": "Domains korrigieren",
       "payoutsPastDue": "Auszahlungskonto aktualisieren",
-      "deliverability": "Nachrichtenstatus öffnen",
+      "deliverability": "Sperrliste öffnen",
       "automationFailed": "Nachrichtenstatus öffnen",
       "assistanceOverdue": "Hilfeanfragen öffnen"
     },
@@ -8680,5 +8705,139 @@
       "invalid": "Wähle, was du brauchst."
     },
     "guestLine": "{name} · Ticket {ticket}"
+  },
+  "marketingAnalytics": {
+    "title": "Marketing-Analysen",
+    "description": "Was Ihre Kampagnen, Kanäle und Tracking-Links gebracht haben: gesendete Nachrichten, Klicks sowie die folgenden Bestellungen und Umsätze, nach erstem und letztem Kontakt.",
+    "rangeLegend": "Zeitraum",
+    "from": "Von",
+    "to": "Bis",
+    "apply": "Anwenden",
+    "rangeNote": "Tage in {timeZone}. Bestellungen zählen am Tag ihrer Aufgabe; Umsätze in {currency}.",
+    "rangeErrors": {
+      "invalid_date": "Geben Sie gültige Daten ein.",
+      "from_after_to": "Das Startdatum muss am oder vor dem Enddatum liegen.",
+      "range_too_long": "Wählen Sie höchstens 366 Tage."
+    },
+    "summaryLabel": "Summen für den Zeitraum",
+    "figures": {
+      "sends": "Gesendet",
+      "deliveries": "Zugestellt",
+      "clicks": "Klicks",
+      "uniqueClickers": "Eindeutige Klickende",
+      "lastOrders": "Bestellungen (letzter Kontakt)",
+      "lastRevenue": "Umsatz (letzter Kontakt)",
+      "firstOrders": "Bestellungen (erster Kontakt)",
+      "firstRevenue": "Umsatz (erster Kontakt)",
+      "conversion": "Konversion"
+    },
+    "otherCurrency": "{count, plural, one {# Bestellung war in einer anderen Währung: gezählt, aber nicht im Umsatz.} other {# Bestellungen waren in anderen Währungen: gezählt, aber nicht im Umsatz.}}",
+    "viewLabel": "Ergebnisse gruppieren nach",
+    "view": {
+      "campaign": "Kampagnen",
+      "channel": "Kanäle",
+      "link": "Links"
+    },
+    "chartTitle": {
+      "campaign": "Umsatz (letzter Kontakt) nach Kampagne",
+      "channel": "Umsatz (letzter Kontakt) nach Kanal",
+      "link": "Umsatz (letzter Kontakt) nach Link"
+    },
+    "showData": "Daten anzeigen",
+    "tableCaption": {
+      "campaign": "Kampagnen: Versand, Klicks, Bestellungen und Umsatz",
+      "channel": "Kanäle: Versand, Klicks, Bestellungen und Umsatz",
+      "link": "Tracking-Links: Klicks, Bestellungen und Umsatz"
+    },
+    "columns": {
+      "name": "Name"
+    },
+    "kind": {
+      "campaign": "Nachrichtenkampagne",
+      "utm": "UTM-Kampagne"
+    },
+    "unnamed": "(keine)",
+    "empty": "Noch nichts. Erstellen Sie Tracking-Links auf der Seite „Tracking-Links“ einer Veranstaltung oder senden Sie eine Kampagne.",
+    "creditNote": "Jede Bestellung zählt einmal für den ersten und einmal für den letzten Kontakt. Konversion ist Bestellungen (letzter Kontakt) pro Klick.",
+    "export": "CSV exportieren",
+    "deliverabilityLink": "E-Mail-Zustellbarkeit",
+    "deliverabilityTeaser": "Bounce- und Beschwerderaten für Ihre Organisation, jede Absenderdomain und jede Kampagne.",
+    "openDeliverability": "E-Mail-Zustellbarkeit öffnen",
+    "csv": {
+      "name": "Name",
+      "event": "Veranstaltung",
+      "source": "Quelle",
+      "medium": "Medium",
+      "campaign": "Kampagne",
+      "code": "Link-Code",
+      "sends": "Gesendet",
+      "deliveries": "Zugestellt",
+      "clicks": "Klicks",
+      "uniqueClickers": "Eindeutige Klickende",
+      "firstTouchOrders": "Bestellungen (erster Kontakt)",
+      "firstTouchRevenueMinor": "Umsatz erster Kontakt (kleinste Einheit)",
+      "lastTouchOrders": "Bestellungen (letzter Kontakt)",
+      "lastTouchRevenueMinor": "Umsatz letzter Kontakt (kleinste Einheit)",
+      "otherCurrencyOrders": "Bestellungen in anderen Währungen",
+      "conversionPct": "Konversion (%)",
+      "currency": "Währung",
+      "total": "Summe"
+    },
+    "detail": {
+      "title": "Kampagnenergebnisse",
+      "back": "Zurück zu den Marketing-Analysen",
+      "figuresLabel": "Kampagnensummen für den Zeitraum",
+      "deliveryTitle": "Zustellung",
+      "sent": "Gesendet",
+      "delivered": "Zugestellt",
+      "bounced": "Unzustellbar",
+      "complained": "Beschwerden",
+      "bounceRate": "Bounce-Rate",
+      "complaintRate": "Beschwerderate",
+      "linksTitle": "Tracking-Links",
+      "ordersTitle": "Daraus entstandene Bestellungen",
+      "noOrders": "Keine Bestellungen in diesem Zeitraum.",
+      "order": "Bestellung",
+      "event": "Veranstaltung",
+      "credit": "Zuordnung",
+      "total": "Summe",
+      "placed": "Aufgegeben",
+      "touch": {
+        "first": "Erster Kontakt",
+        "last": "Letzter Kontakt",
+        "both": "Erster und letzter Kontakt"
+      }
+    },
+    "deliverability": {
+      "title": "E-Mail-Zustellbarkeit",
+      "description": "Bounce- und Beschwerderaten der letzten {days} Tage für Ihre Organisation, jede Absenderdomain und jede Kampagne. Über einem Schwellenwert erhält Ihr Team eine Warnung.",
+      "back": "Zurück zu den Marketing-Analysen",
+      "paused": "Nachrichten sind pausiert: Die Beschwerderate erreichte am {since} {rate} ({complaints} von {sent} E-Mails).",
+      "pausedBody": "Optionale Nachrichten warten, bis der Yayatoh-Support die Pause aufhebt. Entfernen Sie zuerst die beschwerdeführenden Adressen aus Ihren Listen.",
+      "alertOpen": "{state, select, acknowledged {Zustellbarkeitswarnung: bestätigt} snoozed {Zustellbarkeitswarnung: zurückgestellt} other {Zustellbarkeitswarnung: offen}}",
+      "alertBody": "{domains, plural, one {# Absenderdomain} other {# Absenderdomains}} und {campaigns, plural, one {# Kampagne} other {# Kampagnen}} über den Schwellenwerten.",
+      "openSuppressions": "Sperrliste öffnen",
+      "openAlerts": "Warnungen öffnen",
+      "thresholds": "Warnschwellen: Bounces ab {bounce} oder Beschwerden ab {complaint}, ab {min} gesendeten E-Mails in {days} Tagen.",
+      "orgTitle": "Ihre Organisation",
+      "domainsTitle": "Absenderdomains",
+      "campaignsTitle": "Kampagnen",
+      "scope": "Organisation",
+      "domain": "Domain",
+      "campaign": "Kampagne",
+      "sent": "Gesendet",
+      "delivered": "Zugestellt",
+      "bounceRate": "Bounce-Rate",
+      "complaintRate": "Beschwerderate",
+      "status": "Status",
+      "statusOver": "Über einem Schwellenwert",
+      "statusOk": "Innerhalb der Schwellenwerte",
+      "statusFew": "Weniger als {min} E-Mails: zu wenige für eine Bewertung",
+      "platformSender": "{domain} (gemeinsamer Yayatoh-Absender)",
+      "unrecorded": "Nicht erfasst (vor der Domainerfassung gesendet)",
+      "unnamedCampaign": "Unbenannte Kampagne",
+      "noEmail": "Keine E-Mails in den letzten {days} Tagen.",
+      "noCampaigns": "Keine Kampagnen-E-Mails in den letzten {days} Tagen."
+    }
   }
 }

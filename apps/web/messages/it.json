@@ -316,7 +316,8 @@
     "journeys": "Percorsi",
     "disputes": "Contestazioni",
     "supportMacros": "Macro di assistenza",
-    "assistance": "Richieste di aiuto"
+    "assistance": "Richieste di aiuto",
+    "marketingAnalytics": "Analisi di marketing"
   },
   "vocab": {
     "attendee": "Partecipante",
@@ -6266,6 +6267,30 @@
       },
       "assistance": {
         "title": "Assistenza agli ospiti"
+      },
+      "campaigns": {
+        "title": "Risultati delle campagne",
+        "summary": "{orders, plural, one {# ordine} many {# ordini} other {# ordini}} · {clicks, plural, one {# clic} many {# clic} other {# clic}} · {conversion} di conversione",
+        "firstTouch": "Primo contatto: {orders, plural, one {# ordine} many {# ordini} other {# ordini}}, {amount}",
+        "chartTitle": "Ricavi all’ultimo contatto per campagna",
+        "campaign": "Campagna",
+        "clicks": "Clic",
+        "orders": "Ordini",
+        "revenue": "Ricavi",
+        "unnamed": "(nessuna)",
+        "none": "Ancora nessuna campagna o link tracciato per questo evento.",
+        "more": "{count, plural, one {e # altra campagna} many {e altre # campagne} other {e altre # campagne}}",
+        "open": "Apri le analisi di marketing"
+      },
+      "deliverability": {
+        "title": "Recapitabilità delle email",
+        "paused": "Messaggi in pausa (reclami)",
+        "attention": "Richiede attenzione",
+        "healthy": "Entro le soglie",
+        "rates": "Rimbalzi {bounce} · reclami {complaint}",
+        "window": "{sent, plural, one {# email} many {# email} other {# email}} negli ultimi {days} giorni",
+        "over": "{domains, plural, one {# dominio di invio} many {# domini di invio} other {# domini di invio}} e {campaigns, plural, one {# campagna} many {# campagne} other {# campagne}} oltre le soglie",
+        "open": "Apri la recapitabilità delle email"
       }
     },
     "tv": {
@@ -6375,7 +6400,7 @@
       "readiness": "Apri la guida di configurazione",
       "domain": "Correggi i domini",
       "payoutsPastDue": "Aggiorna l’account di pagamento",
-      "deliverability": "Apri lo stato dei messaggi",
+      "deliverability": "Apri la lista di soppressione",
       "automationFailed": "Apri lo stato dei messaggi",
       "assistanceOverdue": "Apri le richieste di aiuto"
     },
@@ -8680,5 +8705,139 @@
       "invalid": "Scegli di cosa hai bisogno."
     },
     "guestLine": "{name} · biglietto {ticket}"
+  },
+  "marketingAnalytics": {
+    "title": "Analisi di marketing",
+    "description": "Cosa hanno portato campagne, canali e link tracciati: messaggi inviati, clic e gli ordini e i ricavi che ne sono seguiti, al primo e all’ultimo contatto.",
+    "rangeLegend": "Intervallo di date",
+    "from": "Dal",
+    "to": "Al",
+    "apply": "Applica",
+    "rangeNote": "Giorni in {timeZone}. Gli ordini contano nel giorno in cui sono stati effettuati; i ricavi sono in {currency}.",
+    "rangeErrors": {
+      "invalid_date": "Inserisci date valide.",
+      "from_after_to": "La data di inizio deve essere uguale o precedente a quella di fine.",
+      "range_too_long": "Scegli un intervallo di al massimo 366 giorni."
+    },
+    "summaryLabel": "Totali dell’intervallo",
+    "figures": {
+      "sends": "Inviati",
+      "deliveries": "Consegnati",
+      "clicks": "Clic",
+      "uniqueClickers": "Persone uniche",
+      "lastOrders": "Ordini (ultimo contatto)",
+      "lastRevenue": "Ricavi (ultimo contatto)",
+      "firstOrders": "Ordini (primo contatto)",
+      "firstRevenue": "Ricavi (primo contatto)",
+      "conversion": "Conversione"
+    },
+    "otherCurrency": "{count, plural, one {# ordine era in un’altra valuta: contato, ma non nei ricavi.} many {# ordini erano in altre valute: contati, ma non nei ricavi.} other {# ordini erano in altre valute: contati, ma non nei ricavi.}}",
+    "viewLabel": "Raggruppa i risultati per",
+    "view": {
+      "campaign": "Campagne",
+      "channel": "Canali",
+      "link": "Link"
+    },
+    "chartTitle": {
+      "campaign": "Ricavi all’ultimo contatto per campagna",
+      "channel": "Ricavi all’ultimo contatto per canale",
+      "link": "Ricavi all’ultimo contatto per link"
+    },
+    "showData": "Mostra i dati",
+    "tableCaption": {
+      "campaign": "Campagne: invii, clic, ordini e ricavi",
+      "channel": "Canali: invii, clic, ordini e ricavi",
+      "link": "Link tracciati: clic, ordini e ricavi"
+    },
+    "columns": {
+      "name": "Nome"
+    },
+    "kind": {
+      "campaign": "Campagna di messaggi",
+      "utm": "Campagna UTM"
+    },
+    "unnamed": "(nessuna)",
+    "empty": "Ancora niente. Crea link tracciati nella pagina Link tracciati di un evento oppure invia una campagna.",
+    "creditNote": "Ogni ordine conta una volta per il primo contatto e una volta per l’ultimo. La conversione è il numero di ordini all’ultimo contatto per clic.",
+    "export": "Esporta CSV",
+    "deliverabilityLink": "Recapitabilità delle email",
+    "deliverabilityTeaser": "Tassi di rimbalzo e di reclamo per la tua organizzazione, ogni dominio di invio e ogni campagna.",
+    "openDeliverability": "Apri la recapitabilità delle email",
+    "csv": {
+      "name": "Nome",
+      "event": "Evento",
+      "source": "Sorgente",
+      "medium": "Mezzo",
+      "campaign": "Campagna",
+      "code": "Codice del link",
+      "sends": "Inviati",
+      "deliveries": "Consegnati",
+      "clicks": "Clic",
+      "uniqueClickers": "Persone uniche",
+      "firstTouchOrders": "Ordini al primo contatto",
+      "firstTouchRevenueMinor": "Ricavi al primo contatto (unità minime)",
+      "lastTouchOrders": "Ordini all’ultimo contatto",
+      "lastTouchRevenueMinor": "Ricavi all’ultimo contatto (unità minime)",
+      "otherCurrencyOrders": "Ordini in altre valute",
+      "conversionPct": "Conversione (%)",
+      "currency": "Valuta",
+      "total": "Totale"
+    },
+    "detail": {
+      "title": "Risultati della campagna",
+      "back": "Torna alle analisi di marketing",
+      "figuresLabel": "Totali della campagna nell’intervallo",
+      "deliveryTitle": "Consegna",
+      "sent": "Inviati",
+      "delivered": "Consegnati",
+      "bounced": "Rimbalzati",
+      "complained": "Reclami",
+      "bounceRate": "Tasso di rimbalzo",
+      "complaintRate": "Tasso di reclamo",
+      "linksTitle": "Link tracciati",
+      "ordersTitle": "Ordini generati",
+      "noOrders": "Nessun ordine in questo intervallo.",
+      "order": "Ordine",
+      "event": "Evento",
+      "credit": "Attribuzione",
+      "total": "Totale",
+      "placed": "Effettuato",
+      "touch": {
+        "first": "Primo contatto",
+        "last": "Ultimo contatto",
+        "both": "Primo e ultimo contatto"
+      }
+    },
+    "deliverability": {
+      "title": "Recapitabilità delle email",
+      "description": "Tassi di rimbalzo e di reclamo degli ultimi {days} giorni per la tua organizzazione, ogni dominio di invio e ogni campagna. Oltre una soglia, il tuo team riceve un avviso.",
+      "back": "Torna alle analisi di marketing",
+      "paused": "I messaggi sono in pausa: il tasso di reclamo ha raggiunto {rate} ({complaints} su {sent} email) il {since}.",
+      "pausedBody": "I messaggi facoltativi attendono che il supporto Yayatoh tolga la pausa. Prima rimuovi dalle tue liste gli indirizzi che hanno segnalato.",
+      "alertOpen": "{state, select, acknowledged {Avviso di recapitabilità: preso in carico} snoozed {Avviso di recapitabilità: posticipato} other {Avviso di recapitabilità: aperto}}",
+      "alertBody": "{domains, plural, one {# dominio di invio} many {# domini di invio} other {# domini di invio}} e {campaigns, plural, one {# campagna} many {# campagne} other {# campagne}} oltre le soglie.",
+      "openSuppressions": "Apri la lista di soppressione",
+      "openAlerts": "Apri gli avvisi",
+      "thresholds": "Soglie di avviso: rimbalzi da {bounce} o reclami da {complaint}, a partire da {min} email inviate in {days} giorni.",
+      "orgTitle": "La tua organizzazione",
+      "domainsTitle": "Domini di invio",
+      "campaignsTitle": "Campagne",
+      "scope": "Organizzazione",
+      "domain": "Dominio",
+      "campaign": "Campagna",
+      "sent": "Inviati",
+      "delivered": "Consegnati",
+      "bounceRate": "Tasso di rimbalzo",
+      "complaintRate": "Tasso di reclamo",
+      "status": "Stato",
+      "statusOver": "Oltre una soglia",
+      "statusOk": "Entro le soglie",
+      "statusFew": "Meno di {min} email: troppo poche per valutare",
+      "platformSender": "{domain} (mittente condiviso Yayatoh)",
+      "unrecorded": "Non registrato (inviato prima del tracciamento dei domini)",
+      "unnamedCampaign": "Campagna senza nome",
+      "noEmail": "Nessuna email negli ultimi {days} giorni.",
+      "noCampaigns": "Nessuna email di campagna negli ultimi {days} giorni."
+    }
   }
 }

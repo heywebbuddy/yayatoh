@@ -3,7 +3,7 @@
 import type { WidgetKey } from '@yayatoh/command-center/client';
 import { formatMoney, money } from '@yayatoh/kernel';
 import { countWords } from '@yayatoh/notifications/numbers';
-import { ProgressRing, StatusDot } from '@yayatoh/ui';
+import { BarChart, ProgressRing, StatusDot } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
 import { Link } from '@/i18n/navigation.ts';
@@ -98,6 +98,45 @@ type Assistance = {
     state: string;
     overdue: boolean;
   }[];
+};
+type Campaigns = {
+  currency: string;
+  fromDay: string;
+  toDay: string;
+  totals: {
+    sends: number | null;
+    clicks: number;
+    uniqueClickers: number;
+    orders: number;
+    revenueMinor: number;
+    firstTouchOrders: number;
+    firstTouchRevenueMinor: number;
+    conversionBps: number;
+  };
+  campaigns: {
+    key: string;
+    kind: 'campaign' | 'utm';
+    name: string | null;
+    sends: number | null;
+    clicks: number;
+    orders: number;
+    revenueMinor: number;
+    firstTouchOrders: number;
+    firstTouchRevenueMinor: number;
+    conversionBps: number;
+  }[];
+  more: number;
+};
+type Deliverability = {
+  sent: number;
+  bounceBps: number;
+  complaintBps: number;
+  bounceOver: boolean;
+  complaintOver: boolean;
+  domainsOver: number;
+  campaignsOver: number;
+  paused: boolean;
+  windowDays: number;
 };
 
 const num = (n: number, locale: string) => new Intl.NumberFormat(locale).format(n);
@@ -336,6 +375,122 @@ function DeviceBoardBody({ d, c }: { d: DeviceBoard; c: Ctx }) {
   );
 }
 
+const bpsPct = (bps: number, locale: string) =>
+  new Intl.NumberFormat(locale, { style: 'percent', maximumFractionDigits: 2 }).format(bps / 10_000);
+
+/** M3.8b: this event's campaigns → orders and revenue (last touch; first touch alongside). */
+function CampaignsBody({ d, c }: { d: Campaigns; c: Ctx }) {
+  const t = useTranslations('commandCenter.widget.campaigns');
+  const m = (minor: number) => formatMoney(money(minor, d.currency), c.locale);
+  const orgBase = c.base.replace(/\/e\/[^/]+$/, '');
+  const name = (x: Campaigns['campaigns'][number]) => x.name ?? t('unnamed');
+  return (
+    <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-1">
+        <Big testId="cc-campaigns-revenue">{m(d.totals.revenueMinor)}</Big>
+        <p className="text-caption text-zinc-600" data-testid="cc-campaigns-summary">
+          {t('summary', {
+            orders: d.totals.orders,
+            clicks: d.totals.clicks,
+            conversion: bpsPct(d.totals.conversionBps, c.locale),
+          })}
+        </p>
+        <p className="text-caption text-zinc-500">
+          {t('firstTouch', { orders: d.totals.firstTouchOrders, amount: m(d.totals.firstTouchRevenueMinor) })}
+        </p>
+      </div>
+      {d.campaigns.length === 0 ? (
+        <p className="text-body text-zinc-600">{t('none')}</p>
+      ) : (
+        <>
+          <BarChart
+            title={t('chartTitle')}
+            bars={d.campaigns.map((x) => ({ label: name(x).slice(0, 14), value: x.revenueMinor }))}
+            height={120}
+            formatValue={m}
+          />
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse text-body" data-testid="cc-campaigns-table">
+              <caption className="sr-only">{t('chartTitle')}</caption>
+              <thead>
+                <tr className="border-b border-zinc-200">
+                  <th scope="col" className="px-2 py-1.5 text-start text-caption font-normal text-zinc-500">
+                    {t('campaign')}
+                  </th>
+                  <th scope="col" className="px-2 py-1.5 text-end text-caption font-normal text-zinc-500">
+                    {t('clicks')}
+                  </th>
+                  <th scope="col" className="px-2 py-1.5 text-end text-caption font-normal text-zinc-500">
+                    {t('orders')}
+                  </th>
+                  <th scope="col" className="px-2 py-1.5 text-end text-caption font-normal text-zinc-500">
+                    {t('revenue')}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {d.campaigns.map((x) => (
+                  <tr key={x.key} className="border-b border-zinc-100 last:border-0">
+                    <th scope="row" className="px-2 py-1.5 text-start font-normal">
+                      <Link
+                        href={`${orgBase}/marketing-analytics/campaign?key=${encodeURIComponent(x.key)}`}
+                        className="inline-flex min-h-6 items-center underline underline-offset-2"
+                      >
+                        {name(x)}
+                      </Link>
+                    </th>
+                    <td className="px-2 py-1.5 text-end tabular-nums">{num(x.clicks, c.locale)}</td>
+                    <td className="px-2 py-1.5 text-end tabular-nums">{num(x.orders, c.locale)}</td>
+                    <td className="px-2 py-1.5 text-end tabular-nums">{m(x.revenueMinor)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {d.more > 0 ? <p className="text-caption text-zinc-500">{t('more', { count: d.more })}</p> : null}
+        </>
+      )}
+      <Link
+        href={`${orgBase}/marketing-analytics`}
+        className="inline-flex min-h-6 items-center self-start text-body underline underline-offset-2"
+      >
+        {t('open')}
+      </Link>
+    </div>
+  );
+}
+
+/** M3.8b: the org's email bounce and complaint rates, what is over the thresholds, the pause. */
+function DeliverabilityBody({ d, c }: { d: Deliverability; c: Ctx }) {
+  const t = useTranslations('commandCenter.widget.deliverability');
+  const orgBase = c.base.replace(/\/e\/[^/]+$/, '');
+  const over = d.bounceOver || d.complaintOver || d.domainsOver > 0 || d.campaignsOver > 0;
+  return (
+    <div className="flex flex-col gap-2">
+      {d.paused ? <StatusDot status="danger" label={t('paused')} /> : null}
+      <StatusDot status={over ? 'warning' : 'success'} label={over ? t('attention') : t('healthy')} />
+      <p className="text-body tabular-nums" data-testid="cc-deliverability-rates">
+        {t('rates', {
+          bounce: bpsPct(d.bounceBps, c.locale),
+          complaint: bpsPct(d.complaintBps, c.locale),
+        })}
+      </p>
+      <p className="text-caption text-zinc-600">{t('window', { sent: d.sent, days: d.windowDays })}</p>
+      {d.domainsOver + d.campaignsOver > 0 ? (
+        <p className="text-caption text-zinc-600">
+          {t('over', { domains: d.domainsOver, campaigns: d.campaignsOver })}
+        </p>
+      ) : null}
+      <Link
+        href={`${orgBase}/marketing-analytics/deliverability`}
+        className="inline-flex min-h-6 items-center self-start text-body underline underline-offset-2"
+      >
+        {t('open')}
+      </Link>
+    </div>
+  );
+}
+
 function AlertsBody({ d, c }: { d: Alerts; c: Ctx }) {
   const t = useTranslations('commandCenter.widget.alerts');
   const ta = useTranslations('alerts');
@@ -449,5 +604,9 @@ export function WidgetBody({
       return <DeviceBoardBody d={data as DeviceBoard} c={ctx} />;
     case 'assistance':
       return <AssistanceBody d={data as Assistance} c={ctx} />;
+    case 'campaigns':
+      return <CampaignsBody d={data as Campaigns} c={ctx} />;
+    case 'deliverability':
+      return <DeliverabilityBody d={data as Deliverability} c={ctx} />;
   }
 }

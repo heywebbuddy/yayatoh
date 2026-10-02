@@ -694,6 +694,13 @@
       "when": 1790958855936,
       "tag": "0098_slim_lady_ursula",
       "breakpoints": true
+    },
+    {
+      "idx": 99,
+      "version": "7",
+      "when": 1790959584211,
+      "tag": "0099_naive_scorpion",
+      "breakpoints": true
     }
   ]
 }

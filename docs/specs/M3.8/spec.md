@@ -1,7 +1,7 @@
 # Spec: M3.8 — Attribution and marketing analytics
 
 - **Milestone:** M3.8 (roadmap Phase 3, "M3.8 Attribution and marketing analytics"; plan `docs/plans/phase-3.md` Wave A)
-- **Status:** M3.8a built (defaults pending owner, see §16); M3.8b (campaign tiles, deliverability alerts) in Wave C
+- **Status:** M3.8a built (defaults pending owner, see §16); M3.8b built (campaign analytics, tiles, deliverability; see "M3.8b")
 - **Risk tags:** db-migration, tenancy, legal-copy (privacy notice / cookie list)
 - **Related ADRs:** 0018 (tokens), 0019 (toolchain)
 
@@ -173,3 +173,45 @@ Behind the `marketing` module (on in `launch_standard`). No flag. Rollback: hide
   - clicks count for their own event only
   - `marketing:read` for viewers and finance
 - [ ] Add click tracking and the `yy_click` / `yy_utm` cookies to the privacy notice and cookie list, and set a retention period for `marketing.link_clicks` (suggested: 13 months).
+
+## M3.8b — campaign analytics and deliverability
+
+- **Branch:** `agent/m3.8b` · **Risk tags:** db-migration (one nullable column)
+- **Built on:** M3.8a (tracked links, clicks, attribution records), M3.2a (widget registry, role layouts), M3.2b (alert engine, `deliverability` rule), M3.5a/b (delivery events, complaint auto-pause, sending domains). Campaigns (M3.6b) are not merged yet: see "Campaign join point".
+
+### Built
+- **Campaign → registrations and revenue** (`@yayatoh/marketing`: `domain/analytics.ts` pure, `analytics.ts` queries):
+  - `marketing.analyticsReport` (`marketing:read`): one row per **campaign**, **channel** (UTM medium) or **link**, over a date range of calendar days in the org's time zone (default the last 30 days, at most 366; bad input is `validation_failed` with `invalid_date` / `from_after_to` / `range_too_long`). Figures: sends and deliveries (messaging campaigns), clicks, unique clickers (distinct devices), first-touch and last-touch orders and revenue (integer minor units, org currency; other currencies counted apart), conversion (last-touch orders per click, basis points). Every link has a row even with zeros. Only sold orders created inside the range count.
+  - A campaign row is either a messaging campaign (`c.{campaignId}`: its links' `campaign_id`) or a UTM campaign (`u.{utm_campaign}`: other links, and UTM-only orders by their first/last landing).
+  - `marketing.campaignDetail`: one campaign's figures, delivery (sent, delivered, bounced, complained, rates), its links and the orders it touched (first, last or both; no buyer data).
+  - CSV export (`analyticsCsv` through the `marketing.analyticsCsvRow` allowlist serializer; BOM, formula-like cells neutralised, localized header, totals line).
+- **Deliverability** (`marketing.deliverability`, `messages:read`): email bounce and complaint rates over the alert window (7 days) for the org, each **sending domain** and each **campaign**, judged against the same thresholds as the alert (`@yayatoh/notifications/deliverability`: `DELIVERABILITY_THRESHOLDS`, `rateBps`, `deliverabilityVerdict`, pure), plus the M3.5a auto-pause state.
+  - The dispatcher now records the domain each email went out from (`notifications.messages.sender_domain`: the org's verified sending domain, else the platform sender's).
+  - **Alert engine:** `OrgFacts.emailScopes` (per domain and per campaign); the `deliverability` rule also fires when one domain or one campaign is over a threshold on its own (params `domains`, `campaigns`), and its fix link is now the suppression list (`/messaging#suppressions`). It resolves when the window passes.
+- **Command Center tiles** (registered in `COMMAND_CENTER_WIDGETS`): `campaigns` (module `marketing`, `marketing:read`, owner + marketing, `revenue: true` — never the door) and `deliverability` (`messages:read`, owner + marketing, follows `org.alerts`). The marketing layout leads with them. The campaign tile has a bar chart with its data table (accessible alternative) and links into each campaign.
+- **Console:** Marketing analytics (`/o/{org}/marketing-analytics`, org nav, `marketing:read`): range form (GET, keyboard), figure tiles, Campaigns / Channels / Links, chart + "Show the data" table + full table, Export CSV; campaign drill-down (`…/campaign?key={key}`: keys contain dots, which the proxy treats as files in a path); Email deliverability (`…/deliverability`, `messages:read`): alert card, pause banner, org / domain / campaign tables with status, links to the suppression list and alerts. 13 locales, Arabic RTL, strict CSP (SVG attributes only, no inline styles).
+
+### Campaign join point
+M3.6b queues one message per recipient under the dedupe key `campaign:{campaignId}:{contactId}` (`campaignDedupeKey`, `CAMPAIGN_DEDUPE_PREFIX` in notifications) and creates its links with `createTrackedLinkTx(…, { campaignId })`. Sends and deliverability read the campaign id from the dedupe key; clicks and orders from the links' `campaign_id`. A campaign's **name** is its links' label (M3.6b labels them with the campaign name); when campaigns merge, the web can swap in `campaigns.name` without a schema change. Test sends (`campaign-test:`) are never counted.
+
+### Migration
+`packages/db/drizzle/0099_naive_scorpion.sql` (renumbered at merge from 0086): `ALTER TABLE notifications.messages ADD COLUMN sender_domain text` (nullable, metadata-only). **Hand-written** (between markers): `messages_sender_domain_check` added `NOT VALID`, then `VALIDATE CONSTRAINT`. No new tables (the isolation fixture needs no rows); the column is declared `internal` in `notifications/src/private-columns.ts`.
+
+### Later / not yet
+- Per-scope alert rows (one alert per domain or campaign) need the `alerts_scope_check` widened; today one org alert carries the counts.
+- `/v1` read endpoints for the analytics (optional in the brief); open and click rates per message (no open tracking yet); campaign names from the campaigns module; time series per campaign (M3.1 metrics / M6.2 warehouse).
+- Mail sent before this change has no recorded sender domain ("Not recorded").
+
+### Acceptance
+| ID | Criterion | Test |
+|---|---|---|
+| AC-M3.8b-01 | Fixture clicks → orders credited first and last touch exactly, per campaign, channel and link; totals | int `packages/testing/tests/marketing-analytics.int.test.ts`; unit `packages/modules/marketing/tests/analytics.test.ts` |
+| AC-M3.8b-02 | Date range in the org zone (DST, exclusive end), validation errors, empty ranges | unit `analytics.test.ts`; int; e2e `apps/web/e2e/marketing-analytics.spec.ts` |
+| AC-M3.8b-03 | Campaign drill-down (figures, delivery, links, orders with touch) | int; e2e |
+| AC-M3.8b-04 | CSV export through the allowlist (header, rows, totals, formula neutralising, no buyer data) | int; e2e |
+| AC-M3.8b-05 | Rate maths and thresholds (org, domain, campaign; minimum volume) | unit `notifications/tests/deliverability.test.ts`, `alerts/tests/rules.test.ts` |
+| AC-M3.8b-06 | Thresholds raise the deliverability alert, idempotent, resolve when the window passes, reopen; auto-pause shows and is critical; alert links to the suppression list | int `marketing-analytics.int.test.ts`, `alerts-rules.int.test.ts`; e2e |
+| AC-M3.8b-07 | Marketing layout tiles with exact fixture numbers; door gets no revenue (layout, customize, API 403) | unit `command-center/tests/domain.test.ts`; int; e2e |
+| AC-M3.8b-08 | Permissions (viewer reads analytics not deliverability; scanner nothing) and isolation | int; e2e |
+| AC-M3.8b-09 | The dispatcher records the sending domain | int |
+| AC-M3.8b-10 | Keyboard, axe on every screen and state, Arabic RTL, 375/768/1280 | e2e |

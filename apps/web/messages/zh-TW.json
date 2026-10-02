@@ -316,7 +316,8 @@
     "journeys": "旅程",
     "disputes": "爭議",
     "supportMacros": "客服巨集",
-    "assistance": "求助請求"
+    "assistance": "求助請求",
+    "marketingAnalytics": "行銷分析"
   },
   "vocab": {
     "attendee": "參加者",
@@ -6266,6 +6267,30 @@
       },
       "assistance": {
         "title": "來賓協助"
+      },
+      "campaigns": {
+        "title": "活動成效",
+        "summary": "{orders, plural, other {# 筆訂單}} · {clicks, plural, other {# 次點擊}} · 轉換率 {conversion}",
+        "firstTouch": "首次接觸：{orders, plural, other {# 筆訂單}}，{amount}",
+        "chartTitle": "依活動的最後接觸營收",
+        "campaign": "活動",
+        "clicks": "點擊",
+        "orders": "訂單",
+        "revenue": "營收",
+        "unnamed": "（無）",
+        "none": "此活動場次還沒有行銷活動或追蹤連結。",
+        "more": "另有 {count, plural, other {# 個活動}}",
+        "open": "開啟行銷分析"
+      },
+      "deliverability": {
+        "title": "電子郵件送達率",
+        "paused": "訊息已暫停（投訴）",
+        "attention": "需要注意",
+        "healthy": "在門檻內",
+        "rates": "退信 {bounce} · 投訴 {complaint}",
+        "window": "過去 {days} 天 {sent, plural, other {# 封郵件}}",
+        "over": "超過門檻：{domains, plural, other {# 個寄件網域}}，{campaigns, plural, other {# 個活動}}",
+        "open": "開啟電子郵件送達率"
       }
     },
     "tv": {
@@ -6375,7 +6400,7 @@
       "readiness": "開啟設定指南",
       "domain": "修正網域",
       "payoutsPastDue": "更新收款帳戶",
-      "deliverability": "開啟訊息狀態",
+      "deliverability": "開啟封鎖名單",
       "automationFailed": "開啟訊息狀態",
       "assistanceOverdue": "開啟求助請求"
     },
@@ -8680,5 +8705,139 @@
       "invalid": "請選擇你需要什麼。"
     },
     "guestLine": "{name} · 票券 {ticket}"
+  },
+  "marketingAnalytics": {
+    "title": "行銷分析",
+    "description": "你的活動、管道和追蹤連結帶來的成效：已傳送的訊息、點擊，以及之後的訂單和營收，依首次接觸和最後接觸統計。",
+    "rangeLegend": "日期範圍",
+    "from": "開始",
+    "to": "結束",
+    "apply": "套用",
+    "rangeNote": "日期依 {timeZone} 計算。訂單依下單當天計入；營收以 {currency} 計。",
+    "rangeErrors": {
+      "invalid_date": "請輸入有效日期。",
+      "from_after_to": "開始日期必須早於或等於結束日期。",
+      "range_too_long": "範圍最多 366 天。"
+    },
+    "summaryLabel": "範圍內合計",
+    "figures": {
+      "sends": "已傳送",
+      "deliveries": "已送達",
+      "clicks": "點擊",
+      "uniqueClickers": "不重複點擊者",
+      "lastOrders": "訂單（最後接觸）",
+      "lastRevenue": "營收（最後接觸）",
+      "firstOrders": "訂單（首次接觸）",
+      "firstRevenue": "營收（首次接觸）",
+      "conversion": "轉換率"
+    },
+    "otherCurrency": "{count, plural, other {# 筆訂單使用其他貨幣：已計數，但未計入營收。}}",
+    "viewLabel": "結果分組方式",
+    "view": {
+      "campaign": "活動",
+      "channel": "管道",
+      "link": "連結"
+    },
+    "chartTitle": {
+      "campaign": "依活動的最後接觸營收",
+      "channel": "依管道的最後接觸營收",
+      "link": "依連結的最後接觸營收"
+    },
+    "showData": "顯示資料",
+    "tableCaption": {
+      "campaign": "活動：傳送、點擊、訂單和營收",
+      "channel": "管道：傳送、點擊、訂單和營收",
+      "link": "追蹤連結：點擊、訂單和營收"
+    },
+    "columns": {
+      "name": "名稱"
+    },
+    "kind": {
+      "campaign": "訊息活動",
+      "utm": "UTM 活動"
+    },
+    "unnamed": "（無）",
+    "empty": "尚無資料。請在活動場次的「追蹤連結」頁面建立連結，或傳送一次行銷活動。",
+    "creditNote": "每筆訂單依首次接觸計一次、依最後接觸計一次。轉換率為每次點擊的最後接觸訂單數。",
+    "export": "匯出 CSV",
+    "deliverabilityLink": "電子郵件送達率",
+    "deliverabilityTeaser": "你的組織、每個寄件網域和每個活動的退信率和投訴率。",
+    "openDeliverability": "開啟電子郵件送達率",
+    "csv": {
+      "name": "名稱",
+      "event": "活動場次",
+      "source": "來源",
+      "medium": "媒介",
+      "campaign": "活動",
+      "code": "連結代碼",
+      "sends": "已傳送",
+      "deliveries": "已送達",
+      "clicks": "點擊",
+      "uniqueClickers": "不重複點擊者",
+      "firstTouchOrders": "首次接觸訂單",
+      "firstTouchRevenueMinor": "首次接觸營收（最小單位）",
+      "lastTouchOrders": "最後接觸訂單",
+      "lastTouchRevenueMinor": "最後接觸營收（最小單位）",
+      "otherCurrencyOrders": "其他貨幣訂單",
+      "conversionPct": "轉換率（%）",
+      "currency": "貨幣",
+      "total": "合計"
+    },
+    "detail": {
+      "title": "活動成效",
+      "back": "返回行銷分析",
+      "figuresLabel": "範圍內的活動合計",
+      "deliveryTitle": "送達",
+      "sent": "已傳送",
+      "delivered": "已送達",
+      "bounced": "退信",
+      "complained": "投訴",
+      "bounceRate": "退信率",
+      "complaintRate": "投訴率",
+      "linksTitle": "追蹤連結",
+      "ordersTitle": "帶來的訂單",
+      "noOrders": "此範圍內沒有訂單。",
+      "order": "訂單",
+      "event": "活動場次",
+      "credit": "歸因",
+      "total": "金額",
+      "placed": "下單時間",
+      "touch": {
+        "first": "首次接觸",
+        "last": "最後接觸",
+        "both": "首次與最後接觸"
+      }
+    },
+    "deliverability": {
+      "title": "電子郵件送達率",
+      "description": "過去 {days} 天你的組織、每個寄件網域和每個活動的退信率和投訴率。超過門檻時，你的團隊會收到提醒。",
+      "back": "返回行銷分析",
+      "paused": "訊息已暫停：{since} 投訴率達到 {rate}（{sent} 封中有 {complaints} 封）。",
+      "pausedBody": "選擇性訊息會等待，直到 Yayatoh 支援解除暫停。請先從名單中移除投訴的地址。",
+      "alertOpen": "{state, select, acknowledged {送達率提醒：已確認} snoozed {送達率提醒：已延後} other {送達率提醒：未處理}}",
+      "alertBody": "超過門檻：{domains, plural, other {# 個寄件網域}}，{campaigns, plural, other {# 個活動}}。",
+      "openSuppressions": "開啟封鎖名單",
+      "openAlerts": "開啟提醒",
+      "thresholds": "提醒門檻：{days} 天內傳送至少 {min} 封郵件時，退信率達到 {bounce} 或投訴率達到 {complaint}。",
+      "orgTitle": "你的組織",
+      "domainsTitle": "寄件網域",
+      "campaignsTitle": "活動",
+      "scope": "組織",
+      "domain": "網域",
+      "campaign": "活動",
+      "sent": "已傳送",
+      "delivered": "已送達",
+      "bounceRate": "退信率",
+      "complaintRate": "投訴率",
+      "status": "狀態",
+      "statusOver": "超過門檻",
+      "statusOk": "在門檻內",
+      "statusFew": "少於 {min} 封：數量太少，無法判斷",
+      "platformSender": "{domain}（Yayatoh 共用寄件者）",
+      "unrecorded": "未記錄（在記錄網域之前傳送）",
+      "unnamedCampaign": "未命名的活動",
+      "noEmail": "過去 {days} 天沒有郵件。",
+      "noCampaigns": "過去 {days} 天沒有活動郵件。"
+    }
   }
 }

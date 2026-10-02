@@ -316,7 +316,8 @@
     "journeys": "ジャーニー",
     "disputes": "異議申し立て",
     "supportMacros": "サポートマクロ",
-    "assistance": "ヘルプ依頼"
+    "assistance": "ヘルプ依頼",
+    "marketingAnalytics": "マーケティング分析"
   },
   "vocab": {
     "attendee": "参加者",
@@ -6266,6 +6267,30 @@
       },
       "assistance": {
         "title": "ゲスト対応"
+      },
+      "campaigns": {
+        "title": "キャンペーンの成果",
+        "summary": "注文 {orders, plural, other {# 件}} · クリック {clicks, plural, other {# 回}} · コンバージョン率 {conversion}",
+        "firstTouch": "ファーストタッチ：注文 {orders, plural, other {# 件}}、{amount}",
+        "chartTitle": "キャンペーン別ラストタッチ売上",
+        "campaign": "キャンペーン",
+        "clicks": "クリック",
+        "orders": "注文",
+        "revenue": "売上",
+        "unnamed": "（なし）",
+        "none": "このイベントのキャンペーンやトラッキングリンクはまだありません。",
+        "more": "ほか {count, plural, other {# 件のキャンペーン}}",
+        "open": "マーケティング分析を開く"
+      },
+      "deliverability": {
+        "title": "メール到達率",
+        "paused": "メッセージ一時停止中（苦情）",
+        "attention": "対応が必要",
+        "healthy": "しきい値内",
+        "rates": "バウンス {bounce} · 苦情 {complaint}",
+        "window": "過去 {days} 日間に {sent, plural, other {# 通}}",
+        "over": "しきい値超過：送信ドメイン {domains, plural, other {# 件}}、キャンペーン {campaigns, plural, other {# 件}}",
+        "open": "メール到達率を開く"
       }
     },
     "tv": {
@@ -6375,7 +6400,7 @@
       "readiness": "設定ガイドを開く",
       "domain": "ドメインを修正",
       "payoutsPastDue": "受取アカウントを更新",
-      "deliverability": "メッセージ状況を開く",
+      "deliverability": "配信停止リストを開く",
       "automationFailed": "メッセージ状況を開く",
       "assistanceOverdue": "ヘルプ依頼を開く"
     },
@@ -8680,5 +8705,139 @@
       "invalid": "必要なものを選んでください。"
     },
     "guestLine": "{name} · チケット {ticket}"
+  },
+  "marketingAnalytics": {
+    "title": "マーケティング分析",
+    "description": "キャンペーン、チャネル、トラッキングリンクの成果：送信したメッセージ、クリック、その後の注文と売上を、ファーストタッチとラストタッチで表示します。",
+    "rangeLegend": "期間",
+    "from": "開始日",
+    "to": "終了日",
+    "apply": "適用",
+    "rangeNote": "{timeZone} の日付です。注文は注文日に計上され、売上は {currency} です。",
+    "rangeErrors": {
+      "invalid_date": "有効な日付を入力してください。",
+      "from_after_to": "開始日は終了日以前にしてください。",
+      "range_too_long": "期間は最大 366 日までです。"
+    },
+    "summaryLabel": "期間の合計",
+    "figures": {
+      "sends": "送信数",
+      "deliveries": "配信数",
+      "clicks": "クリック数",
+      "uniqueClickers": "ユニーククリック数",
+      "lastOrders": "注文（ラストタッチ）",
+      "lastRevenue": "売上（ラストタッチ）",
+      "firstOrders": "注文（ファーストタッチ）",
+      "firstRevenue": "売上（ファーストタッチ）",
+      "conversion": "コンバージョン率"
+    },
+    "otherCurrency": "{count, plural, other {# 件の注文は他の通貨でした（件数には含み、売上には含みません）。}}",
+    "viewLabel": "結果のグループ化",
+    "view": {
+      "campaign": "キャンペーン",
+      "channel": "チャネル",
+      "link": "リンク"
+    },
+    "chartTitle": {
+      "campaign": "キャンペーン別ラストタッチ売上",
+      "channel": "チャネル別ラストタッチ売上",
+      "link": "リンク別ラストタッチ売上"
+    },
+    "showData": "データを表示",
+    "tableCaption": {
+      "campaign": "キャンペーン：送信、クリック、注文、売上",
+      "channel": "チャネル：送信、クリック、注文、売上",
+      "link": "トラッキングリンク：クリック、注文、売上"
+    },
+    "columns": {
+      "name": "名前"
+    },
+    "kind": {
+      "campaign": "メッセージキャンペーン",
+      "utm": "UTM キャンペーン"
+    },
+    "unnamed": "（なし）",
+    "empty": "まだありません。イベントの「トラッキングリンク」ページでリンクを作成するか、キャンペーンを送信してください。",
+    "creditNote": "各注文はファーストタッチで 1 回、ラストタッチで 1 回計上されます。コンバージョン率はクリックあたりのラストタッチ注文数です。",
+    "export": "CSV をエクスポート",
+    "deliverabilityLink": "メール到達率",
+    "deliverabilityTeaser": "組織全体、各送信ドメイン、各キャンペーンのバウンス率と苦情率。",
+    "openDeliverability": "メール到達率を開く",
+    "csv": {
+      "name": "名前",
+      "event": "イベント",
+      "source": "ソース",
+      "medium": "メディア",
+      "campaign": "キャンペーン",
+      "code": "リンクコード",
+      "sends": "送信数",
+      "deliveries": "配信数",
+      "clicks": "クリック数",
+      "uniqueClickers": "ユニーククリック数",
+      "firstTouchOrders": "ファーストタッチ注文",
+      "firstTouchRevenueMinor": "ファーストタッチ売上（最小単位）",
+      "lastTouchOrders": "ラストタッチ注文",
+      "lastTouchRevenueMinor": "ラストタッチ売上（最小単位）",
+      "otherCurrencyOrders": "他通貨の注文",
+      "conversionPct": "コンバージョン率（%）",
+      "currency": "通貨",
+      "total": "合計"
+    },
+    "detail": {
+      "title": "キャンペーンの成果",
+      "back": "マーケティング分析に戻る",
+      "figuresLabel": "期間中のキャンペーン合計",
+      "deliveryTitle": "配信",
+      "sent": "送信数",
+      "delivered": "配信数",
+      "bounced": "バウンス",
+      "complained": "苦情",
+      "bounceRate": "バウンス率",
+      "complaintRate": "苦情率",
+      "linksTitle": "トラッキングリンク",
+      "ordersTitle": "つながった注文",
+      "noOrders": "この期間の注文はありません。",
+      "order": "注文",
+      "event": "イベント",
+      "credit": "貢献",
+      "total": "合計",
+      "placed": "注文日時",
+      "touch": {
+        "first": "ファーストタッチ",
+        "last": "ラストタッチ",
+        "both": "ファーストタッチとラストタッチ"
+      }
+    },
+    "deliverability": {
+      "title": "メール到達率",
+      "description": "過去 {days} 日間の、組織全体、各送信ドメイン、各キャンペーンのバウンス率と苦情率です。しきい値を超えるとチームにアラートが届きます。",
+      "back": "マーケティング分析に戻る",
+      "paused": "メッセージは一時停止中です：{since} に苦情率が {rate}（{sent} 通中 {complaints} 通）に達しました。",
+      "pausedBody": "任意のメッセージは Yayatoh サポートが停止を解除するまで待機します。先に苦情のあったアドレスをリストから削除してください。",
+      "alertOpen": "{state, select, acknowledged {到達率アラート：確認済み} snoozed {到達率アラート：スヌーズ中} other {到達率アラート：未対応}}",
+      "alertBody": "しきい値超過：送信ドメイン {domains, plural, other {# 件}}、キャンペーン {campaigns, plural, other {# 件}}。",
+      "openSuppressions": "配信停止リストを開く",
+      "openAlerts": "アラートを開く",
+      "thresholds": "アラートのしきい値：{days} 日間で {min} 通以上送信した場合に、バウンス率 {bounce} 以上、または苦情率 {complaint} 以上。",
+      "orgTitle": "あなたの組織",
+      "domainsTitle": "送信ドメイン",
+      "campaignsTitle": "キャンペーン",
+      "scope": "組織",
+      "domain": "ドメイン",
+      "campaign": "キャンペーン",
+      "sent": "送信数",
+      "delivered": "配信数",
+      "bounceRate": "バウンス率",
+      "complaintRate": "苦情率",
+      "status": "状態",
+      "statusOver": "しきい値超過",
+      "statusOk": "しきい値内",
+      "statusFew": "{min} 通未満：判断するには少なすぎます",
+      "platformSender": "{domain}（Yayatoh 共有送信元）",
+      "unrecorded": "未記録（ドメイン記録前に送信）",
+      "unnamedCampaign": "名前のないキャンペーン",
+      "noEmail": "過去 {days} 日間にメールはありません。",
+      "noCampaigns": "過去 {days} 日間にキャンペーンメールはありません。"
+    }
   }
 }

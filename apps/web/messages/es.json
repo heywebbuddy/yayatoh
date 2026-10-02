@@ -316,7 +316,8 @@
     "journeys": "Recorridos",
     "disputes": "Disputas",
     "supportMacros": "Macros de soporte",
-    "assistance": "Solicitudes de ayuda"
+    "assistance": "Solicitudes de ayuda",
+    "marketingAnalytics": "Analítica de marketing"
   },
   "vocab": {
     "attendee": "Asistente",
@@ -6266,6 +6267,30 @@
       },
       "assistance": {
         "title": "Asistencia a invitados"
+      },
+      "campaigns": {
+        "title": "Resultados de campañas",
+        "summary": "{orders, plural, one {# pedido} many {# pedidos} other {# pedidos}} · {clicks, plural, one {# clic} many {# clics} other {# clics}} · {conversion} de conversión",
+        "firstTouch": "Primer contacto: {orders, plural, one {# pedido} many {# pedidos} other {# pedidos}}, {amount}",
+        "chartTitle": "Ingresos de último contacto por campaña",
+        "campaign": "Campaña",
+        "clicks": "Clics",
+        "orders": "Pedidos",
+        "revenue": "Ingresos",
+        "unnamed": "(ninguna)",
+        "none": "Aún no hay campañas ni enlaces rastreados para este evento.",
+        "more": "{count, plural, one {y # campaña más} many {y # campañas más} other {y # campañas más}}",
+        "open": "Abrir la analítica de marketing"
+      },
+      "deliverability": {
+        "title": "Entregabilidad del correo",
+        "paused": "Mensajes en pausa (quejas)",
+        "attention": "Requiere atención",
+        "healthy": "Dentro de los umbrales",
+        "rates": "Rebotes {bounce} · quejas {complaint}",
+        "window": "{sent, plural, one {# correo} many {# correos} other {# correos}} en los últimos {days} días",
+        "over": "{domains, plural, one {# dominio de envío} many {# dominios de envío} other {# dominios de envío}} y {campaigns, plural, one {# campaña} many {# campañas} other {# campañas}} por encima de los umbrales",
+        "open": "Abrir la entregabilidad del correo"
       }
     },
     "tv": {
@@ -6375,7 +6400,7 @@
       "readiness": "Abrir la guía de configuración",
       "domain": "Corregir dominios",
       "payoutsPastDue": "Actualizar la cuenta de pagos",
-      "deliverability": "Abrir el estado de mensajería",
+      "deliverability": "Abrir la lista de supresión",
       "automationFailed": "Abrir el estado de mensajería",
       "assistanceOverdue": "Abrir las solicitudes de ayuda"
     },
@@ -8680,5 +8705,139 @@
       "invalid": "Elige lo que necesitas."
     },
     "guestLine": "{name} · entrada {ticket}"
+  },
+  "marketingAnalytics": {
+    "title": "Analítica de marketing",
+    "description": "Lo que aportaron tus campañas, canales y enlaces rastreados: mensajes enviados, clics y los pedidos e ingresos que siguieron, por primer y último contacto.",
+    "rangeLegend": "Rango de fechas",
+    "from": "Desde",
+    "to": "Hasta",
+    "apply": "Aplicar",
+    "rangeNote": "Días en {timeZone}. Los pedidos cuentan el día en que se hicieron; los ingresos están en {currency}.",
+    "rangeErrors": {
+      "invalid_date": "Introduce fechas válidas.",
+      "from_after_to": "La fecha de inicio debe ser igual o anterior a la de fin.",
+      "range_too_long": "Elige un rango de 366 días como máximo."
+    },
+    "summaryLabel": "Totales del rango",
+    "figures": {
+      "sends": "Enviados",
+      "deliveries": "Entregados",
+      "clicks": "Clics",
+      "uniqueClickers": "Personas únicas que hicieron clic",
+      "lastOrders": "Pedidos (último contacto)",
+      "lastRevenue": "Ingresos (último contacto)",
+      "firstOrders": "Pedidos (primer contacto)",
+      "firstRevenue": "Ingresos (primer contacto)",
+      "conversion": "Conversión"
+    },
+    "otherCurrency": "{count, plural, one {# pedido fue en otra moneda: contado, pero no en los ingresos.} many {# pedidos fueron en otras monedas: contados, pero no en los ingresos.} other {# pedidos fueron en otras monedas: contados, pero no en los ingresos.}}",
+    "viewLabel": "Agrupar resultados por",
+    "view": {
+      "campaign": "Campañas",
+      "channel": "Canales",
+      "link": "Enlaces"
+    },
+    "chartTitle": {
+      "campaign": "Ingresos de último contacto por campaña",
+      "channel": "Ingresos de último contacto por canal",
+      "link": "Ingresos de último contacto por enlace"
+    },
+    "showData": "Mostrar los datos",
+    "tableCaption": {
+      "campaign": "Campañas: envíos, clics, pedidos e ingresos",
+      "channel": "Canales: envíos, clics, pedidos e ingresos",
+      "link": "Enlaces rastreados: clics, pedidos e ingresos"
+    },
+    "columns": {
+      "name": "Nombre"
+    },
+    "kind": {
+      "campaign": "Campaña de mensajes",
+      "utm": "Campaña UTM"
+    },
+    "unnamed": "(ninguna)",
+    "empty": "Aún no hay nada. Crea enlaces rastreados en la página Enlaces rastreados de un evento o envía una campaña.",
+    "creditNote": "Cada pedido cuenta una vez por su primer contacto y una vez por su último contacto. La conversión son los pedidos de último contacto por clic.",
+    "export": "Exportar CSV",
+    "deliverabilityLink": "Entregabilidad del correo",
+    "deliverabilityTeaser": "Tasas de rebote y de quejas de tu organización, de cada dominio de envío y de cada campaña.",
+    "openDeliverability": "Abrir la entregabilidad del correo",
+    "csv": {
+      "name": "Nombre",
+      "event": "Evento",
+      "source": "Fuente",
+      "medium": "Medio",
+      "campaign": "Campaña",
+      "code": "Código del enlace",
+      "sends": "Enviados",
+      "deliveries": "Entregados",
+      "clicks": "Clics",
+      "uniqueClickers": "Personas únicas que hicieron clic",
+      "firstTouchOrders": "Pedidos de primer contacto",
+      "firstTouchRevenueMinor": "Ingresos de primer contacto (unidades mínimas)",
+      "lastTouchOrders": "Pedidos de último contacto",
+      "lastTouchRevenueMinor": "Ingresos de último contacto (unidades mínimas)",
+      "otherCurrencyOrders": "Pedidos en otras monedas",
+      "conversionPct": "Conversión (%)",
+      "currency": "Moneda",
+      "total": "Total"
+    },
+    "detail": {
+      "title": "Resultados de la campaña",
+      "back": "Volver a la analítica de marketing",
+      "figuresLabel": "Totales de la campaña en el rango",
+      "deliveryTitle": "Entrega",
+      "sent": "Enviados",
+      "delivered": "Entregados",
+      "bounced": "Rebotados",
+      "complained": "Quejas",
+      "bounceRate": "Tasa de rebote",
+      "complaintRate": "Tasa de quejas",
+      "linksTitle": "Enlaces rastreados",
+      "ordersTitle": "Pedidos que generó",
+      "noOrders": "No hay pedidos en este rango.",
+      "order": "Pedido",
+      "event": "Evento",
+      "credit": "Atribución",
+      "total": "Total",
+      "placed": "Realizado",
+      "touch": {
+        "first": "Primer contacto",
+        "last": "Último contacto",
+        "both": "Primer y último contacto"
+      }
+    },
+    "deliverability": {
+      "title": "Entregabilidad del correo",
+      "description": "Tasas de rebote y de quejas de los últimos {days} días de tu organización, de cada dominio de envío y de cada campaña. Por encima de un umbral, tu equipo recibe una alerta.",
+      "back": "Volver a la analítica de marketing",
+      "paused": "Los mensajes están en pausa: la tasa de quejas llegó a {rate} ({complaints} de {sent} correos) el {since}.",
+      "pausedBody": "Los mensajes opcionales esperan hasta que el soporte de Yayatoh levante la pausa. Primero quita de tus listas las direcciones que se quejaron.",
+      "alertOpen": "{state, select, acknowledged {Alerta de entregabilidad: confirmada} snoozed {Alerta de entregabilidad: pospuesta} other {Alerta de entregabilidad: abierta}}",
+      "alertBody": "{domains, plural, one {# dominio de envío} many {# dominios de envío} other {# dominios de envío}} y {campaigns, plural, one {# campaña} many {# campañas} other {# campañas}} por encima de los umbrales.",
+      "openSuppressions": "Abrir la lista de supresión",
+      "openAlerts": "Abrir alertas",
+      "thresholds": "Umbrales de alerta: rebotes desde {bounce} o quejas desde {complaint}, a partir de {min} correos enviados en {days} días.",
+      "orgTitle": "Tu organización",
+      "domainsTitle": "Dominios de envío",
+      "campaignsTitle": "Campañas",
+      "scope": "Organización",
+      "domain": "Dominio",
+      "campaign": "Campaña",
+      "sent": "Enviados",
+      "delivered": "Entregados",
+      "bounceRate": "Tasa de rebote",
+      "complaintRate": "Tasa de quejas",
+      "status": "Estado",
+      "statusOver": "Por encima de un umbral",
+      "statusOk": "Dentro de los umbrales",
+      "statusFew": "Menos de {min} correos: demasiado pocos para evaluar",
+      "platformSender": "{domain} (remitente compartido de Yayatoh)",
+      "unrecorded": "Sin registrar (enviado antes de registrar los dominios)",
+      "unnamedCampaign": "Campaña sin nombre",
+      "noEmail": "Ningún correo en los últimos {days} días.",
+      "noCampaigns": "Ningún correo de campaña en los últimos {days} días."
+    }
   }
 }

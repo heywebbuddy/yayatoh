@@ -8,8 +8,10 @@ import {
 import {
   alertsSlotWidget,
   assistanceWidget,
+  campaignsWidget,
   checkinsWidget,
   createWidgetRegistry,
+  deliverabilityWidget,
   deviceBoardWidget,
   devicesWidget,
   entrancesWidget,
@@ -43,4 +45,6 @@ export const COMMAND_CENTER_WIDGETS: WidgetRegistry = createWidgetRegistry([
   capacityWidget,
   staffPresenceWidget(null),
   assistanceWidget,
+  campaignsWidget,
+  deliverabilityWidget,
 ]);

@@ -227,6 +227,12 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
   - **The click cookie lives 24 hours;** longer windows rely on the `yy_did` device cookie (the click log keeps only keyed hashes of the device id and the IP, never the raw values, the user agent or the referrer). Add click tracking to the privacy notice and cookie list (`yy_click`, `yy_utm`), and confirm a retention period for the click log (suggested: 13 months).
   - **Who sees it:** new `marketing:read` permission for owners, admins, managers, marketing, finance and viewers (viewers see revenue per link, as they already see orders). Creating links and the window: `marketing:write`. Door staff and scanners see nothing.
   - **Bots and floods** (link-preview fetchers, crawlers, HTTP tools, over 30 clicks per device per 10 minutes) are redirected but not counted.
+- [ ] **Marketing analytics: confirm the M3.8b defaults (pending owner)** (label: `db-migration`). Built with these defaults; say if any should change:
+  - **Credit:** every sold order in the range counts once for its first touch and once for its last touch (a click, or the landing's UTM values when there was no click). Tiles and the headline revenue use **last touch**; first touch is shown alongside. Conversion = last-touch orders ÷ clicks.
+  - **Revenue in the org's currency only.** Orders in another currency are counted (and flagged: "N orders were in other currencies") but never converted or added.
+  - **Date range:** calendar days in the org's time zone, 30 days by default, at most 366. Orders count on the day they were placed; sends on the day they were sent.
+  - **Deliverability thresholds** are the alert engine's (M3.2b): over 7 days, from 100 emails, bounces ≥ 5 % or complaints ≥ 0.1 % — now judged for the org, **each sending domain and each campaign** separately; any one over raises the single org-level deliverability alert, which links to the suppression list (Messaging health).
+  - **Who sees it:** the analytics and the Command Center campaign tile follow `marketing:read` (so viewers and finance see campaign revenue, as they already see it per link); the deliverability page and tile need `messages:read`. The door layout never gets the campaign tile.
 
 ## Phase 6 (expansion; plan approved 2026-10-02)
 Start the slow reviews early. Everything is built against fakes meanwhile; each connector goes live per org once its account or review is done.

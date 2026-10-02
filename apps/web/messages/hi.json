@@ -316,7 +316,8 @@
     "journeys": "जर्नी",
     "disputes": "विवाद",
     "supportMacros": "सपोर्ट मैक्रो",
-    "assistance": "सहायता अनुरोध"
+    "assistance": "सहायता अनुरोध",
+    "marketingAnalytics": "मार्केटिंग विश्लेषण"
   },
   "vocab": {
     "attendee": "प्रतिभागी",
@@ -6266,6 +6267,30 @@
       },
       "assistance": {
         "title": "मेहमानों की मदद"
+      },
+      "campaigns": {
+        "title": "अभियान के परिणाम",
+        "summary": "{orders, plural, one {# ऑर्डर} other {# ऑर्डर}} · {clicks, plural, one {# क्लिक} other {# क्लिक}} · {conversion} रूपांतरण",
+        "firstTouch": "पहला टच: {orders, plural, one {# ऑर्डर} other {# ऑर्डर}}, {amount}",
+        "chartTitle": "अभियान के अनुसार अंतिम टच राजस्व",
+        "campaign": "अभियान",
+        "clicks": "क्लिक",
+        "orders": "ऑर्डर",
+        "revenue": "राजस्व",
+        "unnamed": "(कोई नहीं)",
+        "none": "इस इवेंट के लिए अभी कोई अभियान या ट्रैक किया गया लिंक नहीं।",
+        "more": "{count, plural, one {और # अभियान} other {और # अभियान}}",
+        "open": "मार्केटिंग विश्लेषण खोलें"
+      },
+      "deliverability": {
+        "title": "ईमेल डिलीवरेबिलिटी",
+        "paused": "संदेश रोके गए (शिकायतें)",
+        "attention": "ध्यान चाहिए",
+        "healthy": "सीमाओं के भीतर",
+        "rates": "बाउंस {bounce} · शिकायतें {complaint}",
+        "window": "पिछले {days} दिनों में {sent, plural, one {# ईमेल} other {# ईमेल}}",
+        "over": "{domains, plural, one {# भेजने वाला डोमेन} other {# भेजने वाले डोमेन}} और {campaigns, plural, one {# अभियान} other {# अभियान}} सीमा से ऊपर",
+        "open": "ईमेल डिलीवरेबिलिटी खोलें"
       }
     },
     "tv": {
@@ -6375,7 +6400,7 @@
       "readiness": "सेटअप गाइड खोलें",
       "domain": "डोमेन ठीक करें",
       "payoutsPastDue": "भुगतान खाता अपडेट करें",
-      "deliverability": "मैसेजिंग स्थिति खोलें",
+      "deliverability": "सप्रेशन सूची खोलें",
       "automationFailed": "मैसेजिंग स्थिति खोलें",
       "assistanceOverdue": "सहायता अनुरोध खोलें"
     },
@@ -8680,5 +8705,139 @@
       "invalid": "चुनें कि आपको क्या चाहिए।"
     },
     "guestLine": "{name} · टिकट {ticket}"
+  },
+  "marketingAnalytics": {
+    "title": "मार्केटिंग विश्लेषण",
+    "description": "आपके अभियानों, चैनलों और ट्रैक किए गए लिंक से क्या मिला: भेजे गए संदेश, क्लिक, और उनके बाद आए ऑर्डर व राजस्व — पहले और अंतिम टच के अनुसार।",
+    "rangeLegend": "तारीख़ सीमा",
+    "from": "से",
+    "to": "तक",
+    "apply": "लागू करें",
+    "rangeNote": "{timeZone} के दिन। ऑर्डर उसी दिन गिने जाते हैं जिस दिन दिए गए; राजस्व {currency} में है।",
+    "rangeErrors": {
+      "invalid_date": "मान्य तारीख़ें दर्ज करें।",
+      "from_after_to": "शुरुआती तारीख़ अंतिम तारीख़ के दिन या उससे पहले होनी चाहिए।",
+      "range_too_long": "अधिकतम 366 दिनों की सीमा चुनें।"
+    },
+    "summaryLabel": "इस सीमा के कुल",
+    "figures": {
+      "sends": "भेजे गए",
+      "deliveries": "पहुँचे",
+      "clicks": "क्लिक",
+      "uniqueClickers": "अद्वितीय क्लिक करने वाले",
+      "lastOrders": "ऑर्डर (अंतिम टच)",
+      "lastRevenue": "राजस्व (अंतिम टच)",
+      "firstOrders": "ऑर्डर (पहला टच)",
+      "firstRevenue": "राजस्व (पहला टच)",
+      "conversion": "रूपांतरण"
+    },
+    "otherCurrency": "{count, plural, one {# ऑर्डर दूसरी मुद्रा में था: गिना गया, पर राजस्व में शामिल नहीं।} other {# ऑर्डर दूसरी मुद्राओं में थे: गिने गए, पर राजस्व में शामिल नहीं।}}",
+    "viewLabel": "परिणाम इसके अनुसार समूहित करें",
+    "view": {
+      "campaign": "अभियान",
+      "channel": "चैनल",
+      "link": "लिंक"
+    },
+    "chartTitle": {
+      "campaign": "अभियान के अनुसार अंतिम टच राजस्व",
+      "channel": "चैनल के अनुसार अंतिम टच राजस्व",
+      "link": "लिंक के अनुसार अंतिम टच राजस्व"
+    },
+    "showData": "डेटा दिखाएँ",
+    "tableCaption": {
+      "campaign": "अभियान: भेजे गए, क्लिक, ऑर्डर और राजस्व",
+      "channel": "चैनल: भेजे गए, क्लिक, ऑर्डर और राजस्व",
+      "link": "ट्रैक किए गए लिंक: क्लिक, ऑर्डर और राजस्व"
+    },
+    "columns": {
+      "name": "नाम"
+    },
+    "kind": {
+      "campaign": "संदेश अभियान",
+      "utm": "UTM अभियान"
+    },
+    "unnamed": "(कोई नहीं)",
+    "empty": "अभी कुछ नहीं। किसी इवेंट के ट्रैक किए गए लिंक पेज पर लिंक बनाएँ, या कोई अभियान भेजें।",
+    "creditNote": "हर ऑर्डर अपने पहले टच के लिए एक बार और अंतिम टच के लिए एक बार गिना जाता है। रूपांतरण = प्रति क्लिक अंतिम टच ऑर्डर।",
+    "export": "CSV निर्यात करें",
+    "deliverabilityLink": "ईमेल डिलीवरेबिलिटी",
+    "deliverabilityTeaser": "आपके संगठन, हर भेजने वाले डोमेन और हर अभियान की बाउंस और शिकायत दरें।",
+    "openDeliverability": "ईमेल डिलीवरेबिलिटी खोलें",
+    "csv": {
+      "name": "नाम",
+      "event": "इवेंट",
+      "source": "स्रोत",
+      "medium": "माध्यम",
+      "campaign": "अभियान",
+      "code": "लिंक कोड",
+      "sends": "भेजे गए",
+      "deliveries": "पहुँचे",
+      "clicks": "क्लिक",
+      "uniqueClickers": "अद्वितीय क्लिक करने वाले",
+      "firstTouchOrders": "पहले टच के ऑर्डर",
+      "firstTouchRevenueMinor": "पहले टच का राजस्व (लघु इकाइयाँ)",
+      "lastTouchOrders": "अंतिम टच के ऑर्डर",
+      "lastTouchRevenueMinor": "अंतिम टच का राजस्व (लघु इकाइयाँ)",
+      "otherCurrencyOrders": "दूसरी मुद्राओं में ऑर्डर",
+      "conversionPct": "रूपांतरण (%)",
+      "currency": "मुद्रा",
+      "total": "कुल"
+    },
+    "detail": {
+      "title": "अभियान के परिणाम",
+      "back": "मार्केटिंग विश्लेषण पर वापस",
+      "figuresLabel": "इस सीमा में अभियान के कुल",
+      "deliveryTitle": "डिलीवरी",
+      "sent": "भेजे गए",
+      "delivered": "पहुँचे",
+      "bounced": "बाउंस हुए",
+      "complained": "शिकायतें",
+      "bounceRate": "बाउंस दर",
+      "complaintRate": "शिकायत दर",
+      "linksTitle": "ट्रैक किए गए लिंक",
+      "ordersTitle": "इससे मिले ऑर्डर",
+      "noOrders": "इस सीमा में कोई ऑर्डर नहीं।",
+      "order": "ऑर्डर",
+      "event": "इवेंट",
+      "credit": "श्रेय",
+      "total": "कुल",
+      "placed": "दिया गया",
+      "touch": {
+        "first": "पहला टच",
+        "last": "अंतिम टच",
+        "both": "पहला और अंतिम टच"
+      }
+    },
+    "deliverability": {
+      "title": "ईमेल डिलीवरेबिलिटी",
+      "description": "पिछले {days} दिनों में आपके संगठन, हर भेजने वाले डोमेन और हर अभियान की बाउंस और शिकायत दरें। सीमा पार होने पर आपकी टीम को अलर्ट मिलता है।",
+      "back": "मार्केटिंग विश्लेषण पर वापस",
+      "paused": "संदेश रोके गए हैं: {since} को शिकायत दर {rate} पहुँच गई ({sent} में से {complaints} ईमेल)।",
+      "pausedBody": "वैकल्पिक संदेश तब तक रुके रहेंगे जब तक Yayatoh सहायता रोक न हटाए। पहले शिकायत करने वाले पते अपनी सूचियों से हटाएँ।",
+      "alertOpen": "{state, select, acknowledged {डिलीवरेबिलिटी अलर्ट: स्वीकार किया गया} snoozed {डिलीवरेबिलिटी अलर्ट: स्नूज़ किया गया} other {डिलीवरेबिलिटी अलर्ट: खुला}}",
+      "alertBody": "{domains, plural, one {# भेजने वाला डोमेन} other {# भेजने वाले डोमेन}} और {campaigns, plural, one {# अभियान} other {# अभियान}} सीमा से ऊपर।",
+      "openSuppressions": "सप्रेशन सूची खोलें",
+      "openAlerts": "अलर्ट खोलें",
+      "thresholds": "अलर्ट सीमाएँ: {days} दिनों में कम से कम {min} ईमेल भेजे जाने पर {bounce} या उससे अधिक बाउंस, या {complaint} या उससे अधिक शिकायतें।",
+      "orgTitle": "आपका संगठन",
+      "domainsTitle": "भेजने वाले डोमेन",
+      "campaignsTitle": "अभियान",
+      "scope": "संगठन",
+      "domain": "डोमेन",
+      "campaign": "अभियान",
+      "sent": "भेजे गए",
+      "delivered": "पहुँचे",
+      "bounceRate": "बाउंस दर",
+      "complaintRate": "शिकायत दर",
+      "status": "स्थिति",
+      "statusOver": "सीमा से ऊपर",
+      "statusOk": "सीमाओं के भीतर",
+      "statusFew": "{min} से कम ईमेल: आँकने के लिए बहुत कम",
+      "platformSender": "{domain} (Yayatoh का साझा प्रेषक)",
+      "unrecorded": "दर्ज नहीं (डोमेन ट्रैक होने से पहले भेजा गया)",
+      "unnamedCampaign": "बिना नाम का अभियान",
+      "noEmail": "पिछले {days} दिनों में कोई ईमेल नहीं।",
+      "noCampaigns": "पिछले {days} दिनों में कोई अभियान ईमेल नहीं।"
+    }
   }
 }
