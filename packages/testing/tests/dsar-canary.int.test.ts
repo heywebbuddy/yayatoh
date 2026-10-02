@@ -6,9 +6,9 @@ import { dataSubjectContributors } from '@yayatoh/platform';
 import { dsarSigner, findSubjectQuery, resolveDataSubjectTx, verifyReceipt } from '@yayatoh/privacy';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { eraseNow, exportNow } from '../src/dsar/helpers.ts';
-import { plantPerson } from '../src/dsar/plant/index.ts';
-import { type ScanHit, scanOrg } from '../src/dsar/scan.ts';
-import { type DsarPerson, dsarPerson } from '../src/dsar/types.ts';
+import { plantPerson } from './dsar/plant/index.ts';
+import { type ScanHit, scanOrg } from './dsar/scan.ts';
+import { type DsarPerson, dsarPerson } from './dsar/types.ts';
 import { type OrgFixture, twoOrgs } from '../src/index.ts';
 import { ports } from '../src/ports.ts';
 

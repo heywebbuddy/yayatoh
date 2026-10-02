@@ -18,7 +18,6 @@ import {
   addressSuppressions,
   emailPreviews,
   inboxItems,
-  messageEvents,
   messages,
   pushTokens,
   suppressions,
