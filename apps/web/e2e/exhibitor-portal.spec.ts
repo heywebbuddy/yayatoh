@@ -74,7 +74,8 @@ async function portalLink(page: Page, email: string, after = 0) {
   await expect
     .poll(
       async () => {
-        await drain(page);
+        // Drain only while it hasn't arrived (a drain of the shared org's backlog is slow under load).
+        if ((await invitations(page, email)).length <= after) await drain(page);
         const list = await invitations(page, email);
         if (list.length <= after) return false;
         link =

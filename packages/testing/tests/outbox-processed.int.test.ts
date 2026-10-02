@@ -2,6 +2,7 @@ import { withTenant } from '@yayatoh/db';
 import { closePools } from '@yayatoh/db/testing';
 import { uuidv7 } from '@yayatoh/kernel';
 import { consumeEvent, defineSubscriber, type PublishedEvent, processedPairsTx } from '@yayatoh/platform';
+import { sql } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { type OrgFixture, systemCtx, twoOrgs } from '../src/index.ts';
 
@@ -9,6 +10,8 @@ import { type OrgFixture, systemCtx, twoOrgs } from '../src/index.ts';
  * Batch 3g merge: the dev drain reads which events its subscribers already handled in one query
  * (`processedPairsTx`) instead of one transaction per event and subscriber. The answer is exactly
  * the handled pairs, per consumer, in the caller's org only.
+ * Batch 3f merge (same helper, its test kept): the pairs named are only the given events', and
+ * only the org's own (row-level security).
  */
 let a: OrgFixture;
 let b: OrgFixture;
@@ -55,5 +58,24 @@ describe('processedPairsTx', () => {
     expect(await consumeEvent(sub, e2)).toBe(true);
     expect(handled).toEqual([e1.id, e2.id]);
     expect((await pairs(a.org.id)).size).toBe(2);
+  });
+
+  it('names the handled (consumer, event) pairs of the given events, in this org only', async () => {
+    const [e1, e2, e3] = [uuidv7(), uuidv7(), uuidv7()];
+    await withTenant(systemCtx(a.org.id), (tx) =>
+      tx.execute(sql`insert into platform.processed_events (org_id, consumer, event_id) values
+        (${a.org.id}, 'test.one', ${e1}), (${a.org.id}, 'test.two', ${e1}), (${a.org.id}, 'test.one', ${e2})`),
+    );
+    const mine = await withTenant(systemCtx(a.org.id), (tx) =>
+      processedPairsTx(tx, ['test.one', 'test.two'], [e1, e3]),
+    );
+    expect([...mine].sort()).toEqual([`test.one|${e1}`, `test.two|${e1}`]);
+    expect(await withTenant(systemCtx(a.org.id), (tx) => processedPairsTx(tx, ['test.one'], []))).toEqual(
+      new Set(),
+    );
+    // Another org's drain sees none of them.
+    expect(
+      await withTenant(systemCtx(b.org.id), (tx) => processedPairsTx(tx, ['test.one', 'test.two'], [e1, e2])),
+    ).toEqual(new Set());
   });
 });

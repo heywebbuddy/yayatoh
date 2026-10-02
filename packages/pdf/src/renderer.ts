@@ -13,6 +13,8 @@ export function gotenbergRenderer(opts: {
   url: string;
   timeoutMs?: number;
   fetch?: typeof fetch;
+  /** Waits before each retry (tests pass zeros). */
+  retryDelaysMs?: readonly number[];
 }): PdfRenderer {
   const doFetch = opts.fetch ?? fetch;
   const endpoint = new URL('/forms/chromium/convert/html', opts.url).toString();
@@ -36,8 +38,14 @@ export function gotenbergRenderer(opts: {
       return new Uint8Array(await res.arrayBuffer());
     },
     async render({ html }) {
-      // One retry on a timeout or 5xx: a cold Chromium (after a Gotenberg restart) can be slow.
+      // Retries on a timeout or 5xx, after a pause: Gotenberg starts its Chromium on the first
+      // conversion, which can take longer than one request's timeout on a busy host, and a
+      // request sent while it starts is refused ("browser start already in progress"). Retrying
+      // at once only collided with that start (batch 3f merge: a cold Gotenberg failed a badge
+      // batch); waiting lets it finish.
+      const delays = opts.retryDelaysMs ?? [2_000, 5_000];
       for (let attempt = 1; ; attempt++) {
+        if (attempt > 1) await new Promise((r) => setTimeout(r, delays[attempt - 2] ?? 0));
         const form = new FormData();
         form.append('files', new Blob([html], { type: 'text/html' }), 'index.html');
         form.append('generateTaggedPdf', 'true');
@@ -53,14 +61,14 @@ export function gotenbergRenderer(opts: {
           });
           if (res.ok) return new Uint8Array(await res.arrayBuffer());
           const err = new Error(`gotenberg: ${res.status} ${(await res.text()).slice(0, 200)}`);
-          if (res.status < 500 || attempt >= 2) throw err;
+          if (res.status < 500 || attempt > delays.length) throw err;
         } catch (err) {
           const retryable =
             err instanceof Error &&
             (err.name === 'TimeoutError' ||
               err.name === 'AbortError' ||
               /gotenberg: 5\d\d/.test(err.message));
-          if (!retryable || attempt >= 2) throw err;
+          if (!retryable || attempt > delays.length) throw err;
         }
       }
     },
