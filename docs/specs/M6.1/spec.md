@@ -68,3 +68,9 @@ Hand-written in the migration: the three `crm.contacts` indexes as `IF NOT EXIST
 | AC11 | E2E on 375/768/1280: find duplicates, merge with field choice, merged timeline, undo; keyboard only; axe; Arabic RTL | `apps/web/e2e/contact-merge.spec.ts` (6 tests × 3 projects) |
 | AC12 | Every contact column has an owner (a new one can't be skipped) | int ("every contact column in the database has a registered owner") |
 | AC13 | No new private column reaches a public page | `canary.int.test.ts` (columns declared in `crm/src/private-columns.ts`) |
+
+### Gate results (M6.1a, 2026-10-02)
+- `pnpm lint`, `pnpm check:modules`, `pnpm typecheck` (turbo, concurrency 2): pass.
+- Unit: 186 files / 2,371 tests pass (new: `crm/tests/merge-domain.test.ts`, 9).
+- Integration: full run 151/152 files, 1,350/1,351 tests; the one failure was `apps/worker/tests/badges.int.test.ts` ("the leader tick queues the batch until its PDF is done", timed out) before merging `origin/merge/next-3g`, which carries batch 3f's badge-tick starvation fix; after the merge it passes, with `contact-merge` (11), `isolation`, `audiences`, `campaigns`, `journeys`, `outbox-processed`, `live-mode`, `seat-finder` rerun green.
+- E2E (375/768/1280, `next start` build): `contact-merge.spec.ts` 18/18; regression on touched pages and the dev drain: `audiences`, `campaigns`, `registration` (51 with the new spec) and `journeys`, `surveys`, `messaging`, `alerts`, `fraud-signals`, `notifications` (87): all pass.
