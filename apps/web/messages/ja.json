@@ -7340,6 +7340,7 @@
     "publicLink": "回答はこちら:",
     "publicLinkText": "公開の登録フォーム",
     "openBuilder": "登録フォームを編集",
+    "openReadOnly": "登録フォームを見る",
     "pagesTitle": "ページ",
     "emptyTitle": "まだページがありません",
     "emptyDescription": "最初のページを追加し、続けて質問を追加します。ページは登録種別に限定したり、特定の回答の後にだけ表示したりできます。",

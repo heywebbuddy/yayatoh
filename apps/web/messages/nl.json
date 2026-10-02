@@ -7340,6 +7340,7 @@
     "publicLink": "Invullen gebeurt via",
     "publicLinkText": "het openbare registratieformulier",
     "openBuilder": "Registratieformulier bewerken",
+    "openReadOnly": "Het registratieformulier bekijken",
     "pagesTitle": "Pagina's",
     "emptyTitle": "Nog geen pagina's",
     "emptyDescription": "Voeg een eerste pagina toe en daarna de vragen. Pagina's kunnen beperkt worden tot registratietypes of pas verschijnen na bepaalde antwoorden.",
