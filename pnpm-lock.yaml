@@ -1137,6 +1137,9 @@ importers:
       '@yayatoh/events':
         specifier: workspace:*
         version: link:../events
+      '@yayatoh/guests':
+        specifier: workspace:*
+        version: link:../guests
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../kernel

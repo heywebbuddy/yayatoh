@@ -116,6 +116,12 @@ export const eventParticipation = tenantTable(
     orders: integer('orders').notNull().default(0),
     /** M3.6: the union of the contact's attendee labels at the event (M1.8f). */
     labels: text('labels').array().notNull().default(sql`'{}'::text[]`),
+    /**
+     * M4.1d: the contact's wedding RSVP at this event when they are also a guest there
+     * (`attending`, `declined`, `awaiting`), else null. Set on rows that exist for other reasons
+     * only: an RSVP never adds a contact to an audience (P4-3), and segments don't read it.
+     */
+    rsvp: text('rsvp'),
   },
   (t) => [
     uniqueIndex('event_participation_org_contact_event_key').on(t.orgId, t.contactId, t.eventId),
@@ -130,6 +136,10 @@ export const eventParticipation = tenantTable(
     check('event_participation_labels_check', sql`cardinality(labels) <= 60`),
     check('event_participation_currency_check', sql`currency ~ '^[A-Z]{3}$'`),
     check('event_participation_source_check', sql`source in ('legacy', 'live')`),
+    check(
+      'event_participation_rsvp_check',
+      sql`rsvp is null or rsvp in ('attending', 'declined', 'awaiting')`,
+    ),
   ],
 );
 
