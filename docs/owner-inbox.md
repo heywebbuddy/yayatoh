@@ -397,3 +397,4 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
 ## M5.1a — registration types (2026-09-29, pending owner)
 - [ ] Conference pack quotas per event: 30 registration types, 20 admission items, 5,000 registrants (defaults in `billing.addons`; free in beta, price with D22). Change them by data, no code change.
 - [ ] Registration always asks buyers for the emailed code (M1.5f), even when an org turned the checkout email check off, so "email domain" eligibility means a proved address. Confirm or relax.
+- **M5.1c decision emails (`legal-copy`, pending owner):** the approval and denial email wording (13 locales) and the defaults chosen per the roadmap: substitution closes 24 h before the start (per type, 0–720 h), one +1 guest per host (1–10), member lists up to 5,000 addresses. Review when convenient.

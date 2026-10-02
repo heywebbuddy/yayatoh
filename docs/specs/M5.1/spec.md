@@ -125,3 +125,42 @@ The forms engine (`@yayatoh/forms`, tier 1) gains a third kind, **`registration`
 | AC8 | Gated by the `registration` module; viewers read but cannot edit; tenant isolation (fixture rows for both orgs in every new table) | `registration-forms.int.test.ts`, `packages/testing/tests/isolation.int.test.ts` |
 | AC9 | Builder with keyboard (move up/down, settings, conditions), preview per type, job titles; persistence after reload; axe; Arabic RTL; viewer sees no controls | `apps/web/e2e/registration-form.spec.ts` |
 | AC10 | Respondent: two types fill different paths, save, resume from the emailed link (dev mailbox), submit; validation messages, focus management, progress; axe; Arabic RTL | `apps/web/e2e/registration-form.spec.ts` |
+
+## M5.1c — Approval, groups and +1 (done)
+
+- **Risk tags:** `db-migration`, `tenancy`, `payments` (pay link on the org's funds flow), `legal-copy` (decision emails).
+- **Related ADRs:** 0002, 0003, 0014, 0021. Decisions: P5-1, P5-11.
+
+### What was built
+- **Registrants** (`registration.registrants`): one named person per row with the states `pending → approved → confirmed` or `denied` (applications), and `reserved → confirmed` or `cancelled` (public, group and +1 checkouts). Every registration through the module now records its registrant; a confirmed registrant holds exactly one admission ticket, named for them. The order lifecycle subscriber `registration.registrants` confirms on `order.paid`, cancels reserved registrants when an order lapses (approved applicants keep their approval), and cancels registrants whose ticket was refunded or cancelled.
+- **Apply-to-attend per type** (`approval = 'manual'`): the public page shows the type "By application" with company, job title and a message; `registration.apply` (email proved first, M1.5f) creates a pending application with **no order** (nobody is charged before approval). Auto-approve rules: **email domains** (subdomains match) and a **member list** (CSV file or pasted addresses, or a snapshot of an audience; at most 5,000). A free selection is confirmed on approval; a paid one is paid from the applicant's signed link (`/events/{slug}/registration/{token}`), which is **idempotent** (an open order of an earlier attempt is returned; the provider call uses the order's idempotency key).
+- **Capacity on approval under concurrency:** approved places are kept back like open waitlist offers (public room, waitlist offer room and the capacity floor count them); approval locks the registrant then the type row.
+- **Decisions:** single (queue drawer) and **bulk** as one resumable bulk operation (`registration.decide`, 50 per chunk, a savepoint per registrant, safe retries: re-deciding changes nothing and sends nothing), with a typed reason or an organizer **reason template**; approval and denial emails (`registration.approved`, `registration.denied`, 13 locales, the reason in the body).
+- **Group registration** (`/events/{slug}/register/group`): one payer (email proved), up to 20 named people, each with their own type and pass, one order and payment; capacity claimed per type (one capacity claim per order and type). The payer's group page (`/events/{slug}/group/{token}`) replaces a name until the type's cut-off (default 24 h before the start); the organizer can too, from the drawer. **Substitution reissues the ticket** (new signed code and short code; older codes stop scanning), so exactly one credential stays valid; the attendee (badge source) moves to the new person; audited.
+- **Guest (+1) types** (`kind = 'guest'`, allowance per host 1–10): never sold directly or listed publicly; a confirmed host adds a guest from their own page, paid by the host in its own order and linked by `host_registrant_id`. Separate from wedding parties (M4.1a): no shared tables; only the word "guest" is shared.
+- **Console:** per-type rules on the Registration page (approval, auto-approve domains, member list, +1 kind and allowance, substitution cut-off) and the **Applications** queue (`/o/{org}/e/{event}/registration/applications`): status chips with counts, type filter, name/email search, pages of 50, a detail drawer with the application answers, decision trail, group and guests, approve/deny with reason or template, bulk decisions with progress, reason templates, substitution. Viewers read only.
+- **Freeze and impersonation:** the registration module joins both sweeps; `registration.removeReasonTemplate` carries `delete`.
+
+### Not yet / later
+- The M5.1b multi-page form inside apply-to-attend (applications ask company, job title and a message today).
+- Add-ons per person and code-only types in group checkout (groups sell open and email-domain types' passes).
+- A host or payer substituting a +1 guest (the organizer can).
+- An "application received" email (the applicant's page shows the status at once).
+- Badges (M5.5) read the ticket holder; nothing extra is needed when they land.
+- Design v2 restyle: `origin/agent/design-v2` conflicted outside this increment's files (ui tokens, the drizzle journal, the message files) and was not merged here.
+
+### Acceptance
+| Criterion | Test |
+|---|---|
+| Apply, auto-approve by domain and member list; no order before approval; approval/guest types refused by the public checkout and waitlist | `packages/testing/tests/registration-approvals.int.test.ts` ("applying makes a pending application…", "auto-approves…"); `apps/web/e2e/registration-approvals.spec.ts` ("apply, get auto-approved by domain…") |
+| Manual approve and pay; pay link idempotent | int ("manual approval, then pay…"); e2e ("manual approval with a reason by keyboard…") |
+| A denied registrant is never charged; denial email with reason (typed or template) | int ("deny with a reason…"); e2e ("bulk deny with a template reason…") |
+| Bulk approve of 500 is one resumable operation (killed mid-chunk and resumed; each decided and emailed once) | int ("approves 500 as one resumable operation…") |
+| Capacity per type respected on approval under concurrency | int ("capacity per type holds under concurrent approvals") |
+| Group checkout with three names; substitution keeps exactly one valid credential; cut-off; audited | int ("one payer, three named registrants…"); e2e ("group checkout with three names…") |
+| +1 type linked to the host, allowance enforced | int ("a confirmed host adds a guest…"); e2e ("…then bring a +1") |
+| Isolation; impersonation and freeze coverage | int ("queue filters… tenant isolation"), `isolation.int.test.ts` (fixture rows), `freeze.int.test.ts`, `impersonation.int.test.ts` |
+| Keyboard only, axe, RTL, viewer denied | e2e (keyboard rules and decisions, `expectAccessible` on every screen, "Arabic…", "the viewer reads the queue…") |
+
+### Migration
+`0095_thick_sabra` (renumbered at merge): new tables `registration.registrants`, `type_members`, `reason_templates` (FORCE RLS, org-leading indexes, composite FKs); new columns on `registration_types` (`approval`, `auto_approve_domains`, `kind`, `guests_per_host`, `substitution_cutoff_hours`). Hand edits: the per-type capacity claim index built before the old per-order one is dropped; the two CHECKs on `registration_types` added `NOT VALID` then validated; cross-module FKs (registrants → events, orders, tickets; type_members and reason_templates → events); managed passes' `max_per_order` raised from 1 to 20 (plain update, before launch).
