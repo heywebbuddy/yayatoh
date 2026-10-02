@@ -5,7 +5,7 @@ import { pageLocale } from '@/server/locale.ts';
 
 type Params = {
   params: Promise<{ locale: string; slug: string }>;
-  searchParams: Promise<{ date?: string }>;
+  searchParams: Promise<{ date?: string; channel?: string }>;
 };
 
 export async function generateMetadata({ params }: Pick<Params, 'params'>): Promise<Metadata> {
@@ -15,7 +15,14 @@ export async function generateMetadata({ params }: Pick<Params, 'params'>): Prom
 
 export default async function PublicEventPage({ params, searchParams }: Params) {
   const { locale, slug } = await params;
-  const { date } = await searchParams;
+  const { date, channel } = await searchParams;
   pageLocale(locale);
-  return <PublicEventView locale={locale} slug={slug} date={date ?? null} />;
+  return (
+    <PublicEventView
+      locale={locale}
+      slug={slug}
+      date={date ?? null}
+      channelCode={channel?.slice(0, 40) ?? null}
+    />
+  );
 }

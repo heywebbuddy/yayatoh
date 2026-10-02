@@ -943,7 +943,11 @@
       "off": "Best available isn't offered for this event any more. Choose your seats instead.",
       "findFirst": "Find your seats first: choose how many, then press Find seats.",
       "expired": "Your seats were held for 10 minutes and have been released. Please find seats again."
-    }
+    },
+    "seatChannel": "Some of those seats are kept for another sales channel. Choose other seats.",
+    "channelInvalid": "This sales code isn't valid for this event. Open the event page again without it, or ask whoever gave you the link.",
+    "channelNotice": "You're buying through {name}: seats kept for {name} are open to you too.",
+    "channelLinkInvalid": "This sales link isn't valid for this event. You can still choose from the seats open to everyone."
   },
   "fakePay": {
     "eyebrow": "Test payment",
@@ -1868,7 +1872,8 @@
     "chooseDate": "Choose a date.",
     "dateSoldOut": "Not enough tickets left for this date.",
     "wrongDate": "One of these tickets isn't sold for this date.",
-    "dateUnavailable": "This date is no longer on sale."
+    "dateUnavailable": "This date is no longer on sale.",
+    "seatChannel": "Some of those seats are kept for another sales channel (a sponsor, a promoter or online sales). Choose other seats."
   },
   "seating": {
     "title": "Seating",
@@ -1964,7 +1969,9 @@
       "title": "Save as a reusable plan",
       "name": "Name",
       "submit": "Save plan",
-      "done": "Saved. You can use it for other events."
+      "done": "Saved. You can use it for other events.",
+      "description": "Saved plans go to your seating library, where you can start new events from them.",
+      "library": "Open the seating library"
     },
     "tabs": {
       "label": "Seating views",
@@ -1972,7 +1979,9 @@
       "assign": "Assign guests",
       "finder": "Seat finder",
       "rules": "Rules",
-      "selection": "Best available"
+      "selection": "Best available",
+      "channels": "Channels",
+      "revisions": "Revisions"
     },
     "assign": {
       "title": "Assign guests",
@@ -2215,6 +2224,136 @@
       "companionError": "A companion seat must sit in a row or at a table with an accessible seat, and can't be an accessible seat itself.",
       "companionList": "Companion seats ({count}): {seats}",
       "companionNone": "No companion seats yet."
+    },
+    "fromLibrary": "This event starts from your saved plan. Price its seats, then put them on sale.",
+    "channels": {
+      "title": "Sales channels",
+      "description": "Keep blocks of seats for the box office, sponsors or promoters. A seat in one channel is never sold through another until the channel releases it.",
+      "noPlan": "This event has no seating plan yet. Create one first, then allot its seats to channels here.",
+      "readOnly": "You can see the channels but not change them.",
+      "saved": "Channel saved.",
+      "deleted": "Channel removed. Its seats are open to every channel again.",
+      "listTitle": "Channels",
+      "empty": "No sales channels yet",
+      "emptyHint": "Add a channel below, then allot seats to it. Seats in no channel are sold through every channel.",
+      "col": {
+        "channel": "Channel",
+        "code": "Code and link",
+        "release": "Release",
+        "seats": "Seats",
+        "sold": "Sold through it",
+        "actions": "Actions"
+      },
+      "kind": {
+        "public": "Online (no code)",
+        "box_office": "Box office",
+        "sponsor": "Sponsor",
+        "promoter": "Promoter"
+      },
+      "linkFor": "Link for {name}",
+      "released": "Released {when}",
+      "neverReleased": "Kept until you change it",
+      "soldCount": "{orders, plural, =0 {No orders yet} one {# order} other {# orders}} · {seats, plural, one {# seat} other {# seats}}",
+      "edit": "Edit",
+      "editNamed": "Edit {name}",
+      "delete": "Remove",
+      "deleteNamed": "Remove {name}",
+      "addTitle": "Add a channel",
+      "editTitle": "Edit {name}",
+      "kindLabel": "Kind",
+      "kindHint": "Online and box office: at most one of each per event. Sponsors and promoters sell through their own code.",
+      "nameLabel": "Name",
+      "nameHint": "Shown to buyers who use the channel's link, and in your reports.",
+      "codeLabel": "Code",
+      "codeHint": "Sponsors and promoters only: 3 to 32 letters, digits, dashes or underscores. Buyers use it through the channel's link.",
+      "releaseLabel": "Release unsold seats at (optional)",
+      "releaseHint": "Unsold seats go back to every channel at this time ({timeZone}). Leave it empty to keep them.",
+      "add": "Add channel",
+      "save": "Save channel",
+      "cancel": "Cancel",
+      "added": "Channel added.",
+      "fixErrors": "Please fix the highlighted field.",
+      "errors": {
+        "kind": "Choose a kind of channel.",
+        "kind_taken": "This event already has a channel of that kind.",
+        "name": "Give the channel a name (up to 80 characters).",
+        "code_required": "Sponsors and promoters need a code.",
+        "code_not_allowed": "Only sponsors and promoters have a code. Leave it empty.",
+        "code_format": "Use 3 to 32 letters, digits, dashes or underscores.",
+        "code_taken": "Another channel of this event has that code.",
+        "releaseAt": "Enter a date and time, or leave it empty.",
+        "seats": "Choose at least one row or table, and seat numbers that exist in it."
+      },
+      "allotTitle": "Allot seats",
+      "allotDescription": "Choose rows and tables, and optionally only some of their seats. Every date of the event follows. Seats already in a channel move to the one you choose.",
+      "noSeats": "The plan has no rows or tables yet.",
+      "allotTo": "Channel",
+      "everyChannel": "No channel (open to every channel)",
+      "which": "Rows and tables",
+      "item": {
+        "row": "Row {label} ({seats, plural, one {# seat} other {# seats}})",
+        "table": "Table {label} ({seats, plural, one {# seat} other {# seats}})"
+      },
+      "itemAllotted": "{count, plural, one {# seat} other {# seats}} in {name}",
+      "seatNumbers": "Only these seats (optional)",
+      "seatNumbersHint": "Seat numbers in the chosen rows and tables, e.g. 1-4, 9. Leave it empty for all their seats.",
+      "allot": "Allot seats",
+      "allotted": "{count, plural, =0 {No seats changed.} one {# seat allotted.} other {# seats allotted.}}",
+      "freed": "{count, plural, =0 {No seats were in a channel.} one {# seat is open to every channel again.} other {# seats are open to every channel again.}}"
+    },
+    "revisions": {
+      "title": "Plan revisions",
+      "description": "Every save of the plan is a revision. See what each one changed, and bring an earlier plan back. Held and sold seats always stay as they are.",
+      "noPlan": "This event has no seating plan yet. Create one first; every save then appears here.",
+      "none": "No revisions yet",
+      "noneHint": "The next save of the plan will be the first revision.",
+      "readOnly": "You can see the revisions but not restore them.",
+      "listTitle": "All revisions",
+      "col": {
+        "revision": "Revision",
+        "when": "Saved",
+        "what": "What",
+        "changes": "Seats changed"
+      },
+      "revision": "Revision {number}",
+      "currentBadge": "The plan now",
+      "kindSave": "Saved",
+      "kindRestore": "Restored revision {number}",
+      "seats": "{count, plural, one {# seat} other {# seats}}",
+      "first": "The first revision kept.",
+      "noSeatChanges": "No seats added, removed or renumbered.",
+      "added": "{count, plural, one {# seat added} other {# seats added}}",
+      "removed": "{count, plural, one {# seat removed} other {# seats removed}}",
+      "renumbered": "{count, plural, one {# seat renumbered} other {# seats renumbered}}",
+      "moved": "{count, plural, one {# seat moved} other {# seats moved}}",
+      "detailTitle": "Revision {number}",
+      "changedTitle": "What it changed",
+      "restoreWouldTitle": "Restoring it would change",
+      "addedTitle": "Seats added",
+      "removedTitle": "Seats removed",
+      "renumberedTitle": "Seats renumbered",
+      "renumberedSeat": "{from} → {to}",
+      "listOf": "{title} ({count})",
+      "more": "{count, plural, one {and # more} other {and # more}}",
+      "inUseTitle": "Held and sold seats",
+      "inUseNone": "No seats are held or sold: nothing stands in the way.",
+      "inUseKept": "{count, plural, =0 {No held or sold seat stays where it is.} one {# held or sold seat stays exactly as it is.} other {# held or sold seats stay exactly as they are.}}",
+      "inUseRemapped": "{count, plural, one {# held or sold seat moves to the seat with its label in this revision (same seat number, same ticket):} other {# held or sold seats move to the seats with their labels in this revision (same seat numbers, same tickets):}}",
+      "conflictsTitle": "{count, plural, one {This revision can't be restored: # held or sold seat would be lost.} other {This revision can't be restored: # held or sold seats would be lost.}}",
+      "conflict": {
+        "removed": {
+          "sold": "{label} is sold and this revision has no seat with that label.",
+          "held": "{label} is held by a buyer and this revision has no seat with that label."
+        },
+        "renumbered": {
+          "sold": "{label} is sold and would become {to}: the buyer's ticket would name another seat.",
+          "held": "{label} is held by a buyer and would become {to}."
+        }
+      },
+      "conflictsRefused": "Held or sold seats are not in that revision any more. Nothing was changed.",
+      "isCurrent": "This is the plan as it is now.",
+      "restore": "Restore revision {number}",
+      "restoredNotice": "Revision {number} restored. The plan now is revision {now}."
     }
   },
   "venueMap": {
@@ -2772,7 +2911,8 @@
       "guests": "Guests",
       "markHandled": "Mark as handled",
       "markNew": "Mark as new"
-    }
+    },
+    "layoutLibrary": "Seating library"
   },
   "details": {
     "title": "Event details",
@@ -4771,8 +4911,13 @@
       "slot_full": "This event has 20 floor plan images already.",
       "forbidden": "You can't change this plan.",
       "network": "The upload failed. Check your connection and try again.",
-      "generic": "The upload failed. Try again."
-    }
+      "generic": "The upload failed. Try again.",
+      "pdf_page": "That page doesn't exist: the PDF has {pages, plural, one {# page} other {# pages}}.",
+      "pdf_unreadable": "This PDF can't be read. Export the plan as an image or another PDF and try again."
+    },
+    "pdfPage": "Page (PDF)",
+    "pdfHint": "A PDF floor plan works too: choose the page with the plan. It is turned into an image in your browser, then uploaded like one.",
+    "pdfDrawing": "Drawing page {page} of the PDF…"
   },
   "humanCheck": {
     "legend": "Security check",
@@ -9091,5 +9236,48 @@
       "stale": "Someone else saved this template meanwhile. Reload the page to see their version.",
       "questionNotAllowed": "That question can't be printed on badges."
     }
+  },
+  "seatingLibrary": {
+    "title": "Seating library",
+    "description": "Floor plans you saved from your events. Start a new event from one; each event keeps its own copy.",
+    "deleted": "Plan removed from the library. Events that used it keep their copy.",
+    "emptyTitle": "Your seating library is empty",
+    "emptyHint": "Open an event's seating plan and choose “Save plan” to keep it here.",
+    "emptyViewer": "Plans saved from events will appear here.",
+    "toEvents": "Go to events",
+    "startTitle": "Start a new event from a plan",
+    "startDescription": "The new event gets its own copy of the plan. You then price its seats and put them on sale.",
+    "layout": "Plan",
+    "layoutOption": "{name} ({seats, plural, one {# seat} other {# seats}})",
+    "eventName": "Event name",
+    "profile": "Kind of event",
+    "timezone": "Time zone",
+    "startsAt": "Starts",
+    "endsAt": "Ends",
+    "start": "Create the event",
+    "fixErrors": "Please fix the highlighted field.",
+    "errors": {
+      "layoutId": "Choose a plan.",
+      "name": "Give the event a name (2 to 160 characters).",
+      "slug": "An event with that name already exists. Choose another name.",
+      "profile": "Choose a kind of event that has seating.",
+      "startsAt": "Enter when the event starts.",
+      "endsAt": "Enter when the event ends, after it starts.",
+      "layoutName": "Give the plan a name (up to 120 characters)."
+    },
+    "listTitle": "Saved plans",
+    "seats": "{count, plural, one {# seat} other {# seats}}",
+    "rows": "{count, plural, one {# row} other {# rows}}",
+    "tables": "{count, plural, one {# table} other {# tables}}",
+    "withImage": "with a floor plan image",
+    "usedBy": "{count, plural, =0 {Not used by an event yet} one {Used by # event} other {Used by # events}}",
+    "updated": "updated {date}",
+    "renameLabel": "Name of {name}",
+    "rename": "Rename",
+    "renamed": "Renamed.",
+    "startFrom": "Start an event from it",
+    "startFromNamed": "Start an event from {name}",
+    "delete": "Remove",
+    "deleteNamed": "Remove {name}"
   }
 }

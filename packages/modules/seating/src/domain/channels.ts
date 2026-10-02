@@ -8,12 +8,17 @@
  * without such a channel sells through "no channel", which only reaches seats in no channel.
  */
 
+/** The kinds of sales channel (stored in `seat_channels.kind`). */
+export const CHANNEL_KINDS = ['public', 'box_office', 'sponsor', 'promoter'] as const;
+/** Channels sold through a code (the code is required for them, and only them). */
+export const CODE_CHANNEL_KINDS = ['sponsor', 'promoter'] as const;
+
 export const SALE_VIAS = ['online', 'box_office'] as const;
 export type SaleVia = (typeof SALE_VIAS)[number];
 
 export interface ChannelRef {
   readonly id: string;
-  readonly kind: 'public' | 'box_office' | 'sponsor' | 'promoter';
+  readonly kind: (typeof CHANNEL_KINDS)[number];
   readonly code: string | null;
   readonly releaseAt: Date | null;
 }

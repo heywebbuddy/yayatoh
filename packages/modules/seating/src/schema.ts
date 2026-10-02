@@ -13,6 +13,7 @@ import {
   uniqueIndex,
   uuid,
 } from 'drizzle-orm/pg-core';
+import { CHANNEL_KINDS, CODE_CHANNEL_KINDS } from './domain/channels.ts';
 import { SEAT_STATUSES } from './domain/seat-state.ts';
 
 export const seatingSchema = pgSchema('seating');
@@ -338,9 +339,7 @@ export const companionSeats = tenantTable(
  * office; `sponsor` and `promoter` = online with the channel's code (a promoter's link carries
  * it). At most one `public` and one `box_office` channel per event.
  */
-export const CHANNEL_KINDS = ['public', 'box_office', 'sponsor', 'promoter'] as const;
-/** Channels sold through a code (the code is required for them, and only them). */
-export const CODE_CHANNEL_KINDS = ['sponsor', 'promoter'] as const;
+export { CHANNEL_KINDS, CODE_CHANNEL_KINDS };
 /** A channel code: 3–32 letters, digits, dashes or underscores, kept upper-case. */
 export const CHANNEL_CODE = /^[A-Z0-9][A-Z0-9_-]{2,31}$/;
 

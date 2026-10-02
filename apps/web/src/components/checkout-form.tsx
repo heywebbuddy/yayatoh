@@ -48,6 +48,7 @@ export function CheckoutForm({
   timeZone,
   bestSeats = null,
   advancedSeating = false,
+  channel = null,
 }: {
   /** Multi-date events (M1.4b): the date chosen on the page, posted with the order. */
   occurrenceId?: string | null;
@@ -62,6 +63,11 @@ export function CheckoutForm({
   bestSeats?: BestSeatsActions | null;
   /** M6.11a: the org has advanced seating (the accessible-seat statement, companion seats). */
   advancedSeating?: boolean;
+  /**
+   * M6.11b: the sales channel of the link the buyer came through (its code is posted with the
+   * order), or `invalid` when the link's code names none.
+   */
+  channel?: { readonly code: string; readonly name: string } | { readonly invalid: true } | null;
   organizer: string;
   /** Organizer brand colour and its readable text colour (brand kit); default styling when absent. */
   brand?: { background: string; text: string } | null;
@@ -106,47 +112,59 @@ export function CheckoutForm({
               ? t('checkout.best.findFirst')
               : state.reason === 'seat_hold_expired'
                 ? t('checkout.best.expired')
-                : state.reason === 'seat_rule'
-                  ? t(
-                      state.rule === 'max_per_order_seats'
-                        ? 'checkout.seatRuleCap'
-                        : state.rule === 'ada_companion'
-                          ? 'checkout.seatRuleCompanion'
-                          : 'checkout.seatRuleAda',
-                    )
-                  : state.reason === 'sold_out'
-                    ? t('checkout.soldOut')
-                    : state.reason === 'empty'
-                      ? t('checkout.chooseTickets')
-                      : state.reason === 'promo_invalid'
-                        ? t('checkout.promoInvalid')
-                        : state.reason === 'credit_invalid'
-                          ? t('checkout.creditInvalid')
-                          : state.reason === 'credit_not_applicable'
-                            ? t('checkout.creditNotApplicable')
-                            : state.reason === 'donation_amount'
-                              ? t('checkout.donationTooLow')
-                              : state.reason === 'form_invalid'
-                                ? t('checkout.questionsInvalid')
-                                : state.reason === 'choose_date'
-                                  ? t('checkout.chooseDate')
-                                  : state.reason === 'date_sold_out'
-                                    ? t('checkout.dateSoldOut')
-                                    : ['date_cancelled', 'date_passed', 'wrong_date'].includes(
-                                          state.reason ?? '',
-                                        )
-                                      ? t('checkout.dateUnavailable')
-                                      : state.reason === 'checkout_paused'
-                                        ? t('publicEvent.salesPausedTitle')
-                                        : state.reason === 'risk_blocked'
-                                          ? t('checkout.riskBlocked')
-                                          : state.reason === 'org_suspended' ||
-                                              state.reason === 'org_terminated'
-                                            ? t('checkout.orgUnavailable')
-                                            : t(errorMessageKey(state.code));
+                : state.reason === 'seat_channel'
+                  ? t('checkout.seatChannel')
+                  : state.reason === 'channel_code_invalid'
+                    ? t('checkout.channelInvalid')
+                    : state.reason === 'seat_rule'
+                      ? t(
+                          state.rule === 'max_per_order_seats'
+                            ? 'checkout.seatRuleCap'
+                            : state.rule === 'ada_companion'
+                              ? 'checkout.seatRuleCompanion'
+                              : 'checkout.seatRuleAda',
+                        )
+                      : state.reason === 'sold_out'
+                        ? t('checkout.soldOut')
+                        : state.reason === 'empty'
+                          ? t('checkout.chooseTickets')
+                          : state.reason === 'promo_invalid'
+                            ? t('checkout.promoInvalid')
+                            : state.reason === 'credit_invalid'
+                              ? t('checkout.creditInvalid')
+                              : state.reason === 'credit_not_applicable'
+                                ? t('checkout.creditNotApplicable')
+                                : state.reason === 'donation_amount'
+                                  ? t('checkout.donationTooLow')
+                                  : state.reason === 'form_invalid'
+                                    ? t('checkout.questionsInvalid')
+                                    : state.reason === 'choose_date'
+                                      ? t('checkout.chooseDate')
+                                      : state.reason === 'date_sold_out'
+                                        ? t('checkout.dateSoldOut')
+                                        : ['date_cancelled', 'date_passed', 'wrong_date'].includes(
+                                              state.reason ?? '',
+                                            )
+                                          ? t('checkout.dateUnavailable')
+                                          : state.reason === 'checkout_paused'
+                                            ? t('publicEvent.salesPausedTitle')
+                                            : state.reason === 'risk_blocked'
+                                              ? t('checkout.riskBlocked')
+                                              : state.reason === 'org_suspended' ||
+                                                  state.reason === 'org_terminated'
+                                                ? t('checkout.orgUnavailable')
+                                                : t(errorMessageKey(state.code));
   return (
     <form action={formAction} onSubmit={onSubmit} className="flex min-w-0 flex-1 flex-col gap-4">
       {occurrenceId ? <input type="hidden" name="occurrenceId" value={occurrenceId} /> : null}
+      {channel && 'code' in channel ? (
+        <>
+          <input type="hidden" name="channelCode" value={channel.code} />
+          <Alert tone="info" title={t('checkout.channelNotice', { name: channel.name })} />
+        </>
+      ) : channel ? (
+        <Alert tone="info" title={t('checkout.channelLinkInvalid')} />
+      ) : null}
       <ul className="grid list-none grid-cols-1 items-start gap-3.5 p-0 sm:grid-cols-2 lg:grid-cols-3">
         {passes.map((p) => (
           <li key={p.id ?? p.name}>

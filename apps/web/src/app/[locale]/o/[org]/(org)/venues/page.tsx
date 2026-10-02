@@ -1,6 +1,6 @@
 import { executeQuery } from '@yayatoh/kernel';
 import { roleCan } from '@yayatoh/tenancy';
-import { Card, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
+import { buttonClass, Card, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import { listVenuesQuery } from '@yayatoh/venues';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { VenueForm } from '@/components/venue-form.tsx';
@@ -28,7 +28,16 @@ export default async function VenuesPage({
   const venues = await executeQuery(listVenuesQuery, { includeArchived: showArchived }, data.ctx, ports);
   return (
     <>
-      <PageHeader title={t('title')} description={t('subtitle')} />
+      <PageHeader
+        title={t('title')}
+        description={t('subtitle')}
+        actions={
+          // M6.11b: the venue layout library (saved floor plans).
+          <Link href={`/o/${org}/seating-library`} className={buttonClass('secondary')}>
+            {t('layoutLibrary')}
+          </Link>
+        }
+      />
       {venues.length === 0 ? (
         <EmptyState
           title={t('emptyTitle')}
