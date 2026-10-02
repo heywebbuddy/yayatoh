@@ -6326,7 +6326,10 @@
       "createdAt": "{time} को बनाया",
       "revokedAt": "{time} को बंद किया",
       "revoke": "बंद करें",
-      "revokeLabel": "{label} बंद करें"
+      "revokeLabel": "{label} बंद करें",
+      "readOnly": "केवल पढ़ने के लिए",
+      "statusOn": "चालू",
+      "statusOff": "बंद"
     }
   },
   "alerts": {
@@ -8730,7 +8733,13 @@
       "offline": "आप ऑफ़लाइन हैं। डिवाइस के फिर से ऑनलाइन होने पर कोशिश करें।",
       "invalid": "चुनें कि आपको क्या चाहिए।"
     },
-    "guestLine": "{name} · टिकट {ticket}"
+    "guestLine": "{name} · टिकट {ticket}",
+    "stats": {
+      "open": "खुले अनुरोध",
+      "urgent": "अत्यावश्यक",
+      "waiting": "किसी की प्रतीक्षा में",
+      "unassigned": "असाइन नहीं"
+    }
   },
   "marketingAnalytics": {
     "title": "मार्केटिंग विश्लेषण",
@@ -8755,7 +8764,8 @@
       "lastRevenue": "राजस्व (अंतिम टच)",
       "firstOrders": "ऑर्डर (पहला टच)",
       "firstRevenue": "राजस्व (पहला टच)",
-      "conversion": "रूपांतरण"
+      "conversion": "रूपांतरण",
+      "deliveredShare": "भेजे गए में से डिलीवर"
     },
     "otherCurrency": "{count, plural, one {# ऑर्डर दूसरी मुद्रा में था: गिना गया, पर राजस्व में शामिल नहीं।} other {# ऑर्डर दूसरी मुद्राओं में थे: गिने गए, पर राजस्व में शामिल नहीं।}}",
     "viewLabel": "परिणाम इसके अनुसार समूहित करें",

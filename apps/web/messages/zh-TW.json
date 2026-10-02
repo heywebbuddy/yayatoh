@@ -6326,7 +6326,10 @@
       "createdAt": "建立於 {time}",
       "revokedAt": "停用於 {time}",
       "revoke": "停用",
-      "revokeLabel": "停用 {label}"
+      "revokeLabel": "停用 {label}",
+      "readOnly": "唯讀",
+      "statusOn": "已開啟",
+      "statusOff": "已關閉"
     }
   },
   "alerts": {
@@ -8730,7 +8733,13 @@
       "offline": "你目前離線。裝置恢復連線後請再試一次。",
       "invalid": "請選擇你需要什麼。"
     },
-    "guestLine": "{name} · 票券 {ticket}"
+    "guestLine": "{name} · 票券 {ticket}",
+    "stats": {
+      "open": "未結請求",
+      "urgent": "緊急",
+      "waiting": "等待處理",
+      "unassigned": "未指派"
+    }
   },
   "marketingAnalytics": {
     "title": "行銷分析",
@@ -8755,7 +8764,8 @@
       "lastRevenue": "營收（最後接觸）",
       "firstOrders": "訂單（首次接觸）",
       "firstRevenue": "營收（首次接觸）",
-      "conversion": "轉換率"
+      "conversion": "轉換率",
+      "deliveredShare": "已送達占已傳送"
     },
     "otherCurrency": "{count, plural, other {# 筆訂單使用其他貨幣：已計數，但未計入營收。}}",
     "viewLabel": "結果分組方式",

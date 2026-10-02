@@ -61,15 +61,15 @@ export default async function SeatFinderPage({
   const ticket = (sp.ticket ?? '').slice(0, 200);
   const helpCheck = ticket ? await checkHelpTicket(slug, ticket) : null;
   const help = (
-    <section aria-labelledby="need-help" className="flex flex-col gap-2 border-t border-zinc-200 pt-5">
+    <section aria-labelledby="need-help" className="flex flex-col gap-2 border-t border-line pt-5">
       <h2 id="need-help" className="text-section">
         {t('assistance.guest.needHelp')}
       </h2>
       {!ticket ? (
-        <p className="text-body text-zinc-600">{t('assistance.guest.needTicketLink')}</p>
+        <p className="text-body text-ink-2">{t('assistance.guest.needTicketLink')}</p>
       ) : helpCheck?.valid ? (
         <>
-          <p className="text-body text-zinc-600">{t('assistance.guest.needHelpHint')}</p>
+          <p className="text-body text-ink-2">{t('assistance.guest.needHelpHint')}</p>
           <Link
             href={`/events/${slug}/seat-finder/help?ticket=${encodeURIComponent(ticket)}`}
             className={buttonClass('primary', 'md', 'self-start')}

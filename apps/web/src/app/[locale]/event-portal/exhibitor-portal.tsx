@@ -2,14 +2,26 @@ import type { PortalPrincipal } from '@yayatoh/events';
 import { executeQuery } from '@yayatoh/kernel';
 import { portalExhibitorLogoQuery } from '@yayatoh/media';
 import { exhibitorPortalQuery } from '@yayatoh/program';
-import { Alert, Button, Card, Chip, EmptyState, Label, PageHeader } from '@yayatoh/ui';
+import {
+  Alert,
+  Avatar,
+  Badge,
+  Button,
+  Card,
+  EmptyState,
+  fieldClass,
+  Label,
+  PageHeader,
+  SectionHeader,
+  StatusPill,
+  Tag,
+} from '@yayatoh/ui';
 import { getTranslations } from 'next-intl/server';
 import { Markdown } from '@/components/markdown.tsx';
-import { PortalSignOutButton } from '@/components/portal-forms.tsx';
+import { PortalFrame } from '@/components/portal-shell.tsx';
 import { type FieldSpec, ProgramForm } from '@/components/program-form.tsx';
 import { portalRequestCtx } from '@/server/portal.ts';
 import { ports } from '@/server/ports.ts';
-import { portalSignOutAction } from './actions.ts';
 import { inviteStaffAction, revokeStaffAction, saveProfileAction } from './exhibitor-actions.ts';
 
 const LOGO_RESULTS = ['saved', 'alt', 'file', 'too_large', 'unsupported', 'failed'] as const;
@@ -71,24 +83,24 @@ export async function ExhibitorPortal({
     },
   ];
   return (
-    <main id="main" className="mx-auto flex min-h-dvh w-full max-w-3xl flex-col gap-6 px-4 py-10 md:px-6">
+    <PortalFrame eventName={view.event.name}>
       <PageHeader
-        eyebrow={<Label>{view.event.name}</Label>}
+        eyebrow={<Label>{t('eyebrow')}</Label>}
         title={x.name}
+        tag={<Tag>{t(`roles.${view.role}`)}</Tag>}
         description={t('signedInAs', { email: view.email, role: t(`roles.${view.role}`) })}
-        actions={<PortalSignOutButton action={portalSignOutAction} />}
+        meta={
+          <span>
+            {t('eventDates', {
+              start: day.format(view.event.startsAt),
+              end: day.format(view.event.endsAt),
+            })}
+          </span>
+        }
       />
-      <p className="text-body text-zinc-600">
-        {t('eventDates', {
-          start: day.format(view.event.startsAt),
-          end: day.format(view.event.endsAt),
-        })}
-      </p>
 
       <section aria-labelledby="booth-heading" className="flex flex-col gap-3">
-        <h2 id="booth-heading" className="text-section">
-          {t('boothHeading')}
-        </h2>
+        <SectionHeader id="booth-heading" title={t('boothHeading')} />
         {view.booths.length === 0 ? (
           <EmptyState title={t('noBoothTitle')} description={t('noBoothDescription')} />
         ) : (
@@ -96,12 +108,16 @@ export async function ExhibitorPortal({
             {view.booths.map((b) => (
               <li key={b.number}>
                 <Card className="flex flex-wrap items-center gap-3">
-                  <span className="text-body font-medium">{t('boothNumber', { number: b.number })}</span>
-                  <span className="text-caption text-zinc-600">
+                  <span className="text-card text-ink">{t('boothNumber', { number: b.number })}</span>
+                  <span className="text-body text-ink-2 tabular-nums">
                     {t('boothSize', { width: b.width / 100, depth: b.height / 100 })}
                   </span>
-                  {b.category ? <Chip>{b.category}</Chip> : null}
-                  <Chip>{b.primary ? t('primary') : t('coExhibitor')}</Chip>
+                  <span className="ms-auto flex flex-wrap gap-2">
+                    {b.category ? <Badge>{b.category}</Badge> : null}
+                    <Badge tone={b.primary ? 'primary' : 'neutral'}>
+                      {b.primary ? t('primary') : t('coExhibitor')}
+                    </Badge>
+                  </span>
                 </Card>
               </li>
             ))}
@@ -110,9 +126,7 @@ export async function ExhibitorPortal({
       </section>
 
       <section aria-labelledby="profile-heading" className="flex flex-col gap-3">
-        <h2 id="profile-heading" className="text-section">
-          {t('profileHeading')}
-        </h2>
+        <SectionHeader id="profile-heading" title={t('profileHeading')} />
         {!x.listed ? <Alert tone="info" title={t('unlisted')} /> : null}
         {view.pendingChange ? (
           <Alert tone="info" title={t('pendingTitle')}>
@@ -121,9 +135,7 @@ export async function ExhibitorPortal({
         ) : null}
         {admin ? (
           <Card size="panel" className="flex flex-col gap-3">
-            {view.approvalRequired ? (
-              <p className="text-caption text-zinc-600">{t('approvalNotice')}</p>
-            ) : null}
+            {view.approvalRequired ? <p className="text-caption text-ink-2">{t('approvalNotice')}</p> : null}
             <ProgramForm
               action={saveProfileAction}
               fields={fields}
@@ -140,25 +152,23 @@ export async function ExhibitorPortal({
           </Card>
         ) : (
           <Card className="flex flex-col gap-2">
-            {x.websiteUrl ? <p className="text-body">{x.websiteUrl}</p> : null}
+            {x.websiteUrl ? <p className="text-body font-bold text-primary-ink">{x.websiteUrl}</p> : null}
             {x.description ? (
               <Markdown source={x.description} />
             ) : (
               <p className="text-body">{t('noDescription')}</p>
             )}
             {x.categories.length ? (
-              <p className="text-caption text-zinc-600">{x.categories.join(' · ')}</p>
+              <p className="text-caption text-ink-2">{x.categories.join(' · ')}</p>
             ) : null}
-            <p className="text-caption text-zinc-500">{t('staffReadOnly')}</p>
+            <p className="text-caption text-ink-2">{t('staffReadOnly')}</p>
           </Card>
         )}
       </section>
 
       {admin ? (
         <section aria-labelledby="logo-heading" className="flex flex-col gap-3">
-          <h2 id="logo-heading" className="text-section">
-            {t('logoHeading')}
-          </h2>
+          <SectionHeader id="logo-heading" title={t('logoHeading')} />
           <Card size="panel" className="flex flex-col gap-3">
             <p className="text-body" aria-live="polite">
               {logo ? t('logoCurrent', { alt: logo.alt }) : t('noLogo')}
@@ -173,7 +183,7 @@ export async function ExhibitorPortal({
             >
               <input type="hidden" name="locale" value={locale} />
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="portal-logo-file" className="text-caption text-zinc-600">
+                <label htmlFor="portal-logo-file" className="text-[13px] font-bold text-ink">
                   {t('logoFile')}
                 </label>
                 <input
@@ -183,14 +193,14 @@ export async function ExhibitorPortal({
                   required
                   accept="image/png,image/jpeg,image/webp,image/svg+xml"
                   aria-describedby="portal-logo-hint"
-                  className="min-h-10 text-body"
+                  className={fieldClass('md', 'py-2')}
                 />
-                <p id="portal-logo-hint" className="text-caption text-zinc-500">
+                <p id="portal-logo-hint" className="text-caption text-ink-2">
                   {t('logoHint')}
                 </p>
               </div>
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="portal-logo-alt" className="text-caption text-zinc-600">
+                <label htmlFor="portal-logo-alt" className="text-[13px] font-bold text-ink">
                   {t('logoAlt')}
                 </label>
                 <input
@@ -200,7 +210,7 @@ export async function ExhibitorPortal({
                   required
                   maxLength={300}
                   defaultValue={logo?.alt ?? t('logoAltDefault', { name: x.name })}
-                  className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
+                  className={fieldClass()}
                 />
               </div>
               <Button type="submit" className="self-start">
@@ -213,21 +223,26 @@ export async function ExhibitorPortal({
 
       {view.staff ? (
         <section aria-labelledby="staff-heading" className="flex flex-col gap-3">
-          <h2 id="staff-heading" className="text-section">
-            {t('staffHeading')}
-          </h2>
-          <p className="text-body" role="status">
+          <SectionHeader id="staff-heading" title={t('staffHeading')} />
+          <p className="text-body text-ink-2 tabular-nums" role="status">
             {t('allowance', { used: view.staff.allowance.used, allowance: view.staff.allowance.allowance })}
           </p>
           <ul className="flex list-none flex-col gap-2 p-0">
             {view.staff.members.map((m) => (
               <li key={m.id}>
                 <Card className="flex flex-wrap items-center justify-between gap-3">
-                  <div className="flex flex-col gap-1">
-                    <span className="text-body font-medium">{m.email}</span>
-                    <span className="text-caption text-zinc-600">
-                      {t(`roles.${m.role}`)} · {t(`statuses.${m.status}`)}
-                    </span>
+                  <div className="flex min-w-0 items-center gap-3">
+                    <Avatar initials={(m.email[0] ?? '?').toUpperCase()} label={m.email} decorative />
+                    <div className="flex min-w-0 flex-col gap-0.5">
+                      <span className="truncate text-body font-bold text-ink">{m.email}</span>
+                      <span className="text-caption text-ink-2">{t(`roles.${m.role}`)}</span>
+                    </div>
+                    <StatusPill
+                      tone={
+                        m.status === 'active' ? 'success' : m.status === 'pending' ? 'waiting' : 'neutral'
+                      }
+                      label={t(`statuses.${m.status}`)}
+                    />
                   </div>
                   {m.role === 'exhibitor_staff' ? (
                     <form action={revokeStaffAction.bind(null, m.id)}>
@@ -241,8 +256,8 @@ export async function ExhibitorPortal({
             ))}
           </ul>
           <Card size="panel" className="flex flex-col gap-3">
-            <h3 className="text-body font-medium">{t('inviteStaff')}</h3>
-            <p className="text-caption text-zinc-600">{t('inviteStaffHint')}</p>
+            <h3 className="m-0 text-card text-ink">{t('inviteStaff')}</h3>
+            <p className="text-caption text-ink-2">{t('inviteStaffHint')}</p>
             <ProgramForm
               action={inviteStaffAction}
               fields={[
@@ -266,9 +281,7 @@ export async function ExhibitorPortal({
       ) : null}
 
       <section aria-labelledby="tasks-heading" className="flex flex-col gap-3">
-        <h2 id="tasks-heading" className="text-section">
-          {t('tasksHeading')}
-        </h2>
+        <SectionHeader id="tasks-heading" title={t('tasksHeading')} />
         {view.tasks.length === 0 ? (
           <EmptyState title={t('noTasksTitle')} description={t('noTasksDescription')} />
         ) : (
@@ -276,11 +289,22 @@ export async function ExhibitorPortal({
             {view.tasks.map((x) => (
               <li key={x.assigneeId}>
                 <Card className="flex flex-wrap items-center justify-between gap-3">
-                  <span className="text-body font-medium">{x.title}</span>
-                  <span className="text-caption text-zinc-600">
-                    {x.status === 'done' && x.completedAt
-                      ? ts('completedOn', { date: day.format(x.completedAt) })
-                      : `${ts('due', { date: day.format(x.dueAt) })} · ${ts(x.dueAt <= new Date() ? 'overdue' : 'open')}`}
+                  <span className="text-body font-bold text-ink">{x.title}</span>
+                  <span className="flex flex-wrap items-center gap-2 text-caption text-ink-2">
+                    {x.status === 'done' && x.completedAt ? (
+                      <StatusPill
+                        tone="success"
+                        label={ts('completedOn', { date: day.format(x.completedAt) })}
+                      />
+                    ) : (
+                      <>
+                        <span>{ts('due', { date: day.format(x.dueAt) })}</span>
+                        <StatusPill
+                          tone={x.dueAt <= new Date() ? 'danger' : 'waiting'}
+                          label={ts(x.dueAt <= new Date() ? 'overdue' : 'open')}
+                        />
+                      </>
+                    )}
                   </span>
                 </Card>
               </li>
@@ -288,6 +312,6 @@ export async function ExhibitorPortal({
           </ul>
         )}
       </section>
-    </main>
+    </PortalFrame>
   );
 }

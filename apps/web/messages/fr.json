@@ -6326,7 +6326,10 @@
       "createdAt": "Créé {time}",
       "revokedAt": "Désactivé {time}",
       "revoke": "Désactiver",
-      "revokeLabel": "Désactiver {label}"
+      "revokeLabel": "Désactiver {label}",
+      "readOnly": "Lecture seule",
+      "statusOn": "Actif",
+      "statusOff": "Désactivé"
     }
   },
   "alerts": {
@@ -8730,7 +8733,13 @@
       "offline": "Vous êtes hors ligne. Réessayez quand l’appareil sera de nouveau en ligne.",
       "invalid": "Choisissez ce dont vous avez besoin."
     },
-    "guestLine": "{name} · billet {ticket}"
+    "guestLine": "{name} · billet {ticket}",
+    "stats": {
+      "open": "Demandes ouvertes",
+      "urgent": "Urgentes",
+      "waiting": "En attente de quelqu’un",
+      "unassigned": "Non attribuées"
+    }
   },
   "marketingAnalytics": {
     "title": "Analyses marketing",
@@ -8755,7 +8764,8 @@
       "lastRevenue": "Revenus (dernier contact)",
       "firstOrders": "Commandes (premier contact)",
       "firstRevenue": "Revenus (premier contact)",
-      "conversion": "Conversion"
+      "conversion": "Conversion",
+      "deliveredShare": "Délivrés, sur les envois"
     },
     "otherCurrency": "{count, plural, one {# commande était dans une autre devise : comptée, mais pas dans les revenus.} many {# commandes étaient dans d’autres devises : comptées, mais pas dans les revenus.} other {# commandes étaient dans d’autres devises : comptées, mais pas dans les revenus.}}",
     "viewLabel": "Regrouper les résultats par",

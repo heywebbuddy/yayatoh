@@ -394,19 +394,19 @@ function CampaignsBody({ d, c }: { d: Campaigns; c: Ctx }) {
     <div className="flex flex-col gap-3">
       <div className="flex flex-col gap-1">
         <Big testId="cc-campaigns-revenue">{m(d.totals.revenueMinor)}</Big>
-        <p className="text-caption text-zinc-600" data-testid="cc-campaigns-summary">
+        <p className="text-caption text-ink-2" data-testid="cc-campaigns-summary">
           {t('summary', {
             orders: d.totals.orders,
             clicks: d.totals.clicks,
             conversion: bpsPct(d.totals.conversionBps, c.locale),
           })}
         </p>
-        <p className="text-caption text-zinc-500">
+        <p className="text-caption text-ink-2">
           {t('firstTouch', { orders: d.totals.firstTouchOrders, amount: m(d.totals.firstTouchRevenueMinor) })}
         </p>
       </div>
       {d.campaigns.length === 0 ? (
-        <p className="text-body text-zinc-600">{t('none')}</p>
+        <p className="text-body text-ink-2">{t('none')}</p>
       ) : (
         <>
           <BarChart
@@ -419,24 +419,24 @@ function CampaignsBody({ d, c }: { d: Campaigns; c: Ctx }) {
             <table className="w-full border-collapse text-body" data-testid="cc-campaigns-table">
               <caption className="sr-only">{t('chartTitle')}</caption>
               <thead>
-                <tr className="border-b border-zinc-200">
-                  <th scope="col" className="px-2 py-1.5 text-start text-caption font-normal text-zinc-500">
+                <tr className="border-b border-line">
+                  <th scope="col" className="px-2 py-1.5 text-start text-caption font-normal text-ink-2">
                     {t('campaign')}
                   </th>
-                  <th scope="col" className="px-2 py-1.5 text-end text-caption font-normal text-zinc-500">
+                  <th scope="col" className="px-2 py-1.5 text-end text-caption font-normal text-ink-2">
                     {t('clicks')}
                   </th>
-                  <th scope="col" className="px-2 py-1.5 text-end text-caption font-normal text-zinc-500">
+                  <th scope="col" className="px-2 py-1.5 text-end text-caption font-normal text-ink-2">
                     {t('orders')}
                   </th>
-                  <th scope="col" className="px-2 py-1.5 text-end text-caption font-normal text-zinc-500">
+                  <th scope="col" className="px-2 py-1.5 text-end text-caption font-normal text-ink-2">
                     {t('revenue')}
                   </th>
                 </tr>
               </thead>
               <tbody>
                 {d.campaigns.map((x) => (
-                  <tr key={x.key} className="border-b border-zinc-100 last:border-0">
+                  <tr key={x.key} className="border-b border-line last:border-0">
                     <th scope="row" className="px-2 py-1.5 text-start font-normal">
                       <Link
                         href={`${orgBase}/marketing-analytics/campaign?key=${encodeURIComponent(x.key)}`}
@@ -453,7 +453,7 @@ function CampaignsBody({ d, c }: { d: Campaigns; c: Ctx }) {
               </tbody>
             </table>
           </div>
-          {d.more > 0 ? <p className="text-caption text-zinc-500">{t('more', { count: d.more })}</p> : null}
+          {d.more > 0 ? <p className="text-caption text-ink-2">{t('more', { count: d.more })}</p> : null}
         </>
       )}
       <Link
@@ -481,9 +481,9 @@ function DeliverabilityBody({ d, c }: { d: Deliverability; c: Ctx }) {
           complaint: bpsPct(d.complaintBps, c.locale),
         })}
       </p>
-      <p className="text-caption text-zinc-600">{t('window', { sent: d.sent, days: d.windowDays })}</p>
+      <p className="text-caption text-ink-2">{t('window', { sent: d.sent, days: d.windowDays })}</p>
       {d.domainsOver + d.campaignsOver > 0 ? (
-        <p className="text-caption text-zinc-600">
+        <p className="text-caption text-ink-2">
           {t('over', { domains: d.domainsOver, campaigns: d.campaignsOver })}
         </p>
       ) : null}
@@ -549,9 +549,9 @@ function AssistanceBody({ d, c }: { d: Assistance; c: Ctx }) {
       <dl className="grid grid-cols-2 gap-x-4 gap-y-1 text-body sm:grid-cols-4">
         {(['waiting', 'assigned', 'inProgress', 'overdue'] as const).map((k) => (
           <div key={k} className="flex flex-col">
-            <dt className="text-caption text-zinc-600">{t(`widget.${k}`)}</dt>
+            <dt className="text-caption text-ink-2">{t(`widget.${k}`)}</dt>
             <dd
-              className={`tabular-nums ${k === 'overdue' && d.overdue > 0 ? 'font-medium text-pink-700' : ''}`}
+              className={`tabular-nums ${k === 'overdue' && d.overdue > 0 ? 'font-medium text-danger' : ''}`}
             >
               {num(d[k], c.locale)}
             </dd>
@@ -559,14 +559,14 @@ function AssistanceBody({ d, c }: { d: Assistance; c: Ctx }) {
         ))}
       </dl>
       {d.top.length === 0 ? (
-        <p className="text-body text-zinc-600">{t('widget.none')}</p>
+        <p className="text-body text-ink-2">{t('widget.none')}</p>
       ) : (
         <ul className="flex list-none flex-col gap-1 p-0">
           {d.top.map((r) => (
             <li key={r.id} className="flex flex-wrap items-baseline gap-x-2 text-body">
               <span className="font-medium">{t('number', { number: r.number })}</span>
               <span>{t(`reason.${r.reason}`)}</span>
-              <span className="text-caption text-zinc-600">
+              <span className="text-caption text-ink-2">
                 {[t(`priority.${r.priority}`), t(`state.${r.state}`), r.overdue ? t('overdue') : null]
                   .filter(Boolean)
                   .join(' · ')}

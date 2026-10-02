@@ -6326,7 +6326,10 @@
       "createdAt": "创建于 {time}",
       "revokedAt": "停用于 {time}",
       "revoke": "停用",
-      "revokeLabel": "停用 {label}"
+      "revokeLabel": "停用 {label}",
+      "readOnly": "只读",
+      "statusOn": "已开启",
+      "statusOff": "已关闭"
     }
   },
   "alerts": {
@@ -8730,7 +8733,13 @@
       "offline": "你处于离线状态。设备恢复在线后请重试。",
       "invalid": "请选择你需要什么。"
     },
-    "guestLine": "{name} · 门票 {ticket}"
+    "guestLine": "{name} · 门票 {ticket}",
+    "stats": {
+      "open": "未结请求",
+      "urgent": "紧急",
+      "waiting": "等待处理",
+      "unassigned": "未分配"
+    }
   },
   "marketingAnalytics": {
     "title": "营销分析",
@@ -8755,7 +8764,8 @@
       "lastRevenue": "收入（末次触达）",
       "firstOrders": "订单（首次触达）",
       "firstRevenue": "收入（首次触达）",
-      "conversion": "转化率"
+      "conversion": "转化率",
+      "deliveredShare": "已送达占已发送"
     },
     "otherCurrency": "{count, plural, other {# 个订单使用其他货币：已计数，但未计入收入。}}",
     "viewLabel": "结果分组方式",

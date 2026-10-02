@@ -6326,7 +6326,10 @@
       "createdAt": "Gemaakt {time}",
       "revokedAt": "Uitgezet {time}",
       "revoke": "Uitzetten",
-      "revokeLabel": "{label} uitzetten"
+      "revokeLabel": "{label} uitzetten",
+      "readOnly": "Alleen lezen",
+      "statusOn": "Aan",
+      "statusOff": "Uit"
     }
   },
   "alerts": {
@@ -8730,7 +8733,13 @@
       "offline": "Je bent offline. Probeer het opnieuw als het apparaat weer online is.",
       "invalid": "Kies wat je nodig hebt."
     },
-    "guestLine": "{name} · ticket {ticket}"
+    "guestLine": "{name} · ticket {ticket}",
+    "stats": {
+      "open": "Open verzoeken",
+      "urgent": "Dringend",
+      "waiting": "Wacht op iemand",
+      "unassigned": "Niet toegewezen"
+    }
   },
   "marketingAnalytics": {
     "title": "Marketinganalyse",
@@ -8755,7 +8764,8 @@
       "lastRevenue": "Omzet (laatste contact)",
       "firstOrders": "Bestellingen (eerste contact)",
       "firstRevenue": "Omzet (eerste contact)",
-      "conversion": "Conversie"
+      "conversion": "Conversie",
+      "deliveredShare": "Afgeleverd, van de verzonden"
     },
     "otherCurrency": "{count, plural, one {# bestelling was in een andere valuta: geteld, maar niet in de omzet.} other {# bestellingen waren in andere valuta: geteld, maar niet in de omzet.}}",
     "viewLabel": "Resultaten groeperen per",

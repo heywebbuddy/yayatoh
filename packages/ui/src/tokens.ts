@@ -291,6 +291,25 @@ export const paper = {
 } as const;
 
 /**
+ * Printed badges (M5.5a) are always on white stock, whatever the screen theme: the ink, the
+ * paper and the ribbon colours (keys are stored in badge designs; every pair is ≥4.5:1).
+ */
+export const print = {
+  paper: constant.white,
+  ink: light.ink,
+  ribbon: {
+    ink: { fill: light.ink, text: constant.white },
+    zinc: { fill: light.tag, text: constant.white },
+    orange: { fill: light.warning, text: constant.white },
+    pink: { fill: light.brandStrong, text: constant.white },
+    green: { fill: light.successDot, text: light.ink },
+    yellow: { fill: light.warningDot, text: light.ink },
+    peach: { fill: light.sand, text: light.ink },
+    grey: { fill: light.ink3, text: light.ink },
+  },
+} as const;
+
+/**
  * Emails are always light (mail clients ignore our theme): inline styles take these values.
  * Body text is ink at 92 % for a softer paragraph colour that still passes 4.5:1.
  */

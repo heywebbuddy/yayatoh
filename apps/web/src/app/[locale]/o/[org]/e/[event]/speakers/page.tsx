@@ -94,16 +94,10 @@ export default async function SpeakersPage({
         description={tp('speakersSubtitle')}
         actions={
           <nav aria-label={ts('portalNav')} className="flex flex-wrap gap-2.5">
-            <Link
-              href={`/o/${org}/e/${event}/speakers/changes`}
-              className={buttonClass('secondary')}
-            >
+            <Link href={`/o/${org}/e/${event}/speakers/changes`} className={buttonClass('secondary')}>
               {ts('changesLink', { count: changes.pending.length })}
             </Link>
-            <Link
-              href={`/o/${org}/e/${event}/speakers/tasks`}
-              className={buttonClass('secondary')}
-            >
+            <Link href={`/o/${org}/e/${event}/speakers/tasks`} className={buttonClass('secondary')}>
               {ts('tasksLink')}
             </Link>
           </nav>

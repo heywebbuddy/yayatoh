@@ -6326,7 +6326,10 @@
       "createdAt": "Created {time}",
       "revokedAt": "Turned off {time}",
       "revoke": "Turn off",
-      "revokeLabel": "Turn off {label}"
+      "revokeLabel": "Turn off {label}",
+      "readOnly": "Read-only",
+      "statusOn": "On",
+      "statusOff": "Off"
     }
   },
   "alerts": {
@@ -8730,7 +8733,13 @@
       "offline": "You're offline. Try again when the device is back online.",
       "invalid": "Choose what you need."
     },
-    "guestLine": "{name} · ticket {ticket}"
+    "guestLine": "{name} · ticket {ticket}",
+    "stats": {
+      "open": "Open requests",
+      "urgent": "Urgent",
+      "waiting": "Waiting for someone",
+      "unassigned": "Unassigned"
+    }
   },
   "marketingAnalytics": {
     "title": "Marketing analytics",
@@ -8755,7 +8764,8 @@
       "lastRevenue": "Revenue (last touch)",
       "firstOrders": "Orders (first touch)",
       "firstRevenue": "Revenue (first touch)",
-      "conversion": "Conversion"
+      "conversion": "Conversion",
+      "deliveredShare": "Delivered, of sends"
     },
     "otherCurrency": "{count, plural, one {# order was in another currency: counted, but not in the revenue.} other {# orders were in other currencies: counted, but not in the revenue.}}",
     "viewLabel": "Group results by",
