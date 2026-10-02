@@ -116,6 +116,10 @@
       "intro": "Je hebt nog niet geantwoord: {org} hoort nog steeds graag hoe je {eventName} vond.",
       "cta": "Vul de enquête in"
     },
+    "automations.message": {
+      "subject": "{subject}",
+      "intro": "Over {eventName}:"
+    },
     "guest.checkout-code": {
       "subject": "{code} is je code om je e-mail te bevestigen",
       "intro": "Voer {code} in om je e-mail te bevestigen en je bestelling bij {org} af te ronden. De code werkt één keer en verloopt over {minutes, plural, one {# minuut} other {# minuten}}. Heb je hier niet om gevraagd, dan kun je deze e-mail negeren."

@@ -15,6 +15,7 @@ import {
   validateImportCommand,
 } from '@yayatoh/attendees';
 import { catchUpParticipation, saveSegmentCommand, templateDefinition } from '@yayatoh/audiences';
+import { createJourneyCommand, journeyTriggers, setJourneyEnabledCommand } from '@yayatoh/automations';
 import { setEntitlementOverrideCommand, setFeeOverrideCommand } from '@yayatoh/billing';
 import {
   createCampaignCommand,
@@ -417,6 +418,30 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ports,
   );
   await executeCommand(setAttributionWindowCommand, { windowDays: 30 }, ctx(), ports);
+  // M3.7a: a switched-on journey for the event; the paid order above enrolls the buyer (a run
+  // with its scheduled steps, both still ahead).
+  const journey = await executeCommand(
+    createJourneyCommand,
+    {
+      name: `${name} welcome`,
+      eventId: event.id,
+      trigger: 'order_paid',
+      steps: [
+        {
+          anchor: 'event_start',
+          offsetDays: -2,
+          action: 'email',
+          subject: 'Soon: {event}',
+          body: 'Hi {name}!',
+        },
+        { anchor: 'event_start', offsetDays: -1, action: 'label', label: 'Reminded' },
+      ],
+    },
+    ctx(),
+    ports,
+  );
+  await executeCommand(setJourneyEnabledCommand, { journeyId: journey.id, enabled: true }, ctx(), ports);
+  await catchUpSubscriber(journeyTriggers(), org.id);
   // A dispute on the paid order, opened (hold) and won (hold undone): isolation coverage.
   for (const [type, outcome] of [
     ['dispute.created', undefined],

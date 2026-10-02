@@ -2,6 +2,7 @@ import 'server-only';
 import { alertEvaluator, evaluateOrgNow } from '@yayatoh/alerts';
 import { attendeeMessageMailer } from '@yayatoh/attendees';
 import { getUsersByIds } from '@yayatoh/auth';
+import { journeySubscribers, runDueActions } from '@yayatoh/automations';
 import {
   chatReportSignals,
   checkoutRiskSignals,
@@ -83,6 +84,8 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     surveyMailer({ notifier, appOrigin }),
     waitlistMailer({ notifier, appOrigin }),
     alertEvaluator({ notifier }),
+    // M3.7a: journeys enroll, follow date changes and cancellations (their steps run below).
+    ...journeySubscribers(),
   ];
 }
 
@@ -106,14 +109,19 @@ export async function drainOrgMessages(
   let consumed = 0;
   // Subscribers may emit events other subscribers consume (fraud signals → alerts, M1.9e): run
   // until a pass consumes nothing new (bounded).
-  for (let pass = 0; pass < 3; pass++) {
+  let journeySteps = 0;
+  for (let pass = 0; pass < 4; pass++) {
     const events = await withTenant(ctx, (tx) => recentEventsTx(tx, orgId, types, 6 * 3600_000));
     let fresh = 0;
     for (const event of events) {
       for (const s of subs) if (subscribes(s, event) && (await consumeEvent(s, event))) fresh += 1;
     }
     consumed += fresh;
-    if (fresh === 0) break;
+    // Journey steps due now (M3.7a; the worker's `automations.run-due` job): they queue messages
+    // and may emit events (a survey step's `survey.sent`), so the next pass picks those up.
+    const steps = await runDueActions(orgId, { notifier }, ports);
+    journeySteps += steps.done + steps.skipped + steps.failed;
+    if (fresh === 0 && steps.done === 0) break;
   }
   // The alert engine's scheduled pass (M3.2b), as the worker's sweep would run it now: only when
   // asked (`sweep`). The alerts evaluator above already re-evaluates what the drained events
@@ -161,5 +169,5 @@ export async function drainOrgMessages(
       );
       reports += out.result?.recorded ?? 0;
     }
-  return { consumed, sent, reports };
+  return { consumed, journeySteps, sent, reports };
 }

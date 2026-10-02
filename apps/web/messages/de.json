@@ -142,6 +142,9 @@
       },
       "campaigns": {
         "test": "Kampagnentest"
+      },
+      "automations": {
+        "message": "Journey-Nachricht"
       }
     },
     "status": {
@@ -291,7 +294,8 @@
     "commandCenter": "Command Center",
     "alerts": "Warnungen",
     "sendingSetup": "Versand-Einrichtung",
-    "campaigns": "Kampagnen"
+    "campaigns": "Kampagnen",
+    "journeys": "Journeys"
   },
   "vocab": {
     "attendee": "Teilnehmer",
@@ -6683,6 +6687,236 @@
       "test_too_many": "Gib höchstens 5 Adressen ein.",
       "test_invalid_email": "Prüfe die E-Mail-Adressen.",
       "unknown": "Etwas ist schiefgelaufen."
+    }
+  },
+  "journeys": {
+    "title": "Journeys",
+    "description": "Automatisierungen für eine Veranstaltung oder Reihe: Ein Auslöser nimmt eine Person in die Journey auf, und jeder Schritt wartet, prüft eine optionale Bedingung und tut eine Sache.",
+    "new": "Neue Journey",
+    "emptyTitle": "Noch keine Journeys",
+    "emptyDescription": "Starten Sie mit der Visions-Journey: eine Bestätigung, Erinnerungen per E-Mail und SMS, ein Push am Veranstaltungstag und die Umfrage.",
+    "emptyReadOnly": "Es wurde noch keine Journey eingerichtet.",
+    "caption": "Journeys",
+    "name": "Name",
+    "scope": "Veranstaltung oder Reihe",
+    "trigger": "Auslöser",
+    "status": "Status",
+    "steps": "Schritte",
+    "runs": "Personen",
+    "updated": "Aktualisiert",
+    "on": "An",
+    "off": "Aus",
+    "seriesScope": "Reihe: {name}",
+    "triggers": {
+      "order_paid": "Kauft ein Ticket",
+      "checked_in": "Checkt ein",
+      "event_time": "Zeit relativ zur Veranstaltung"
+    },
+    "newTitle": "Neue Journey",
+    "newDescription": "Wählen Sie die Veranstaltung (oder Reihe) und wie Personen einsteigen. Sie können jeden Schritt bearbeiten, bevor Sie sie einschalten.",
+    "form": {
+      "name": "Name der Journey",
+      "scope": "Veranstaltung oder Reihe",
+      "pickScope": "Veranstaltung oder Reihe wählen",
+      "events": "Veranstaltungen",
+      "series": "Reihen",
+      "eventOption": "{name} ({date})",
+      "trigger": "Personen steigen ein, wenn sie …",
+      "start": "Beginnen mit",
+      "vision": "Die Visions-Journey",
+      "visionHint": "Bestätigung beim Kauf · Erinnerung 7 Tage vorher · SMS am Vortag · Push am Veranstaltungstag · Umfrage am Morgen danach",
+      "blank": "Eine leere Journey",
+      "blankHint": "Wählen Sie den Auslöser und fügen Sie eigene Schritte hinzu.",
+      "create": "Journey erstellen",
+      "errors": {
+        "name": "Geben Sie einen Namen ein (bis zu 120 Zeichen).",
+        "scope": "Wählen Sie eine Veranstaltung oder Reihe."
+      }
+    },
+    "vision": {
+      "name": "Visions-Journey",
+      "confirmation": {
+        "subject": "Sie sind dabei: {event}",
+        "body": "Hallo {name}, danke für Ihre Bestellung. Wir sehen uns bei {event} am {when}."
+      },
+      "week": {
+        "subject": "Noch eine Woche: {event}",
+        "body": "{event} ist in einer Woche ({when}). Ihre Tickets finden Sie in der Bestätigungs-E-Mail."
+      },
+      "day": {
+        "subject": "Morgen: {event}",
+        "body": "Bis morgen bei {event}, {when}."
+      },
+      "eventDay": {
+        "subject": "Heute: {event}",
+        "body": "Heute ist es so weit! {event} beginnt {when}. Halten Sie Ihre Tickets bereit."
+      }
+    },
+    "detail": {
+      "summary": "{scope} · Auslöser: {trigger}",
+      "enable": "Einschalten",
+      "disable": "Ausschalten",
+      "enableFor": "{name} einschalten",
+      "disableFor": "{name} ausschalten",
+      "enabledSince": "An seit {when}",
+      "created": "Journey erstellt. Prüfen Sie die Schritte und schalten Sie sie dann ein.",
+      "saved": "Journey gespeichert.",
+      "enabledDone": "Journey eingeschaltet. Wer ab jetzt einsteigt, erhält ihre Schritte.",
+      "disabledDone": "{count, plural, =0 {Journey ausgeschaltet.} one {Journey ausgeschaltet. # wartender Schritt wurde abgebrochen.} other {Journey ausgeschaltet. # wartende Schritte wurden abgebrochen.}}",
+      "deleted": "Journey gelöscht.",
+      "delete": "Löschen",
+      "deleteFor": "{name} löschen",
+      "editOff": "Schalten Sie die Journey aus, um ihre Schritte zu bearbeiten.",
+      "stepsTitle": "Schritte",
+      "noSteps": "Noch keine Schritte. Fügen Sie unten einen hinzu.",
+      "stepCounts": "{done} erledigt · {pending} wartend · {skipped} übersprungen",
+      "errors": {
+        "no_steps": "Fügen Sie mindestens einen Schritt hinzu, bevor Sie die Journey einschalten.",
+        "anchor_needs_trigger": "Ein Schritt wartet ab dem Auslöser, aber diese Journey startet zu einer Zeit relativ zur Veranstaltung."
+      }
+    },
+    "editor": {
+      "step": "Schritt {n}",
+      "anchor": "Gemessen ab",
+      "anchors": {
+        "trigger": "Ihrem Einstieg",
+        "event_start": "Beginn der Veranstaltung",
+        "event_end": "Ende der Veranstaltung"
+      },
+      "direction": "Davor oder danach",
+      "before": "Davor",
+      "after": "Danach",
+      "days": "Tage",
+      "hours": "Stunden",
+      "minutes": "Minuten",
+      "atTime": "Zu einer Uhrzeit",
+      "atTimeHint": "Optional, in der Zeitzone der Veranstaltung.",
+      "action": "Aktion",
+      "actions": {
+        "email": "E-Mail senden",
+        "sms": "SMS senden",
+        "whatsapp": "WhatsApp-Nachricht senden",
+        "push": "Push-Benachrichtigung senden",
+        "label": "Label hinzufügen",
+        "survey": "Zur Umfrage einladen"
+      },
+      "condition": "Nur wenn",
+      "conditions": {
+        "none": "Immer",
+        "checked_in": "Eingecheckt",
+        "not_checked_in": "Noch nicht eingecheckt",
+        "has_seat": "Hat einen Platz",
+        "no_seat": "Hat keinen Platz",
+        "answered_survey": "Hat die Umfrage beantwortet",
+        "not_answered_survey": "Hat die Umfrage nicht beantwortet"
+      },
+      "subject": "Betreff",
+      "title": "Titel",
+      "body": "Nachricht",
+      "placeholders": "Sie können {name}, {event} und {when} verwenden.",
+      "label": "Label",
+      "moveUp": "Nach oben",
+      "moveDown": "Nach unten",
+      "remove": "Entfernen",
+      "moveUpFor": "Schritt {n} nach oben",
+      "moveDownFor": "Schritt {n} nach unten",
+      "removeFor": "Schritt {n} entfernen",
+      "add": "Schritt hinzufügen",
+      "max": "Eine Journey hat höchstens {max} Schritte.",
+      "save": "Journey speichern",
+      "errors": {
+        "required": "Bitte ausfüllen.",
+        "anchor": "Diese Journey hat keinen Einstiegszeitpunkt: Messen Sie ab Beginn oder Ende der Veranstaltung.",
+        "direction": "Tage und Stunden müssen in dieselbe Richtung gehen.",
+        "offset": "Prüfen Sie die Anzahl der Tage.",
+        "step": "Prüfen Sie Schritt {n}."
+      }
+    },
+    "wait": {
+      "atTrigger": "Sofort",
+      "afterTrigger": "{offset} nach dem Einstieg",
+      "atStart": "Zu Beginn der Veranstaltung",
+      "beforeStart": "{offset} vor Beginn der Veranstaltung",
+      "afterStart": "{offset} nach Beginn der Veranstaltung",
+      "atEnd": "Am Ende der Veranstaltung",
+      "beforeEnd": "{offset} vor Ende der Veranstaltung",
+      "afterEnd": "{offset} nach Ende der Veranstaltung",
+      "dayTrigger": "{dir, select, same {Am Tag des Einstiegs} other {{days, plural, one {# Tag nach dem Einstieg} other {# Tage nach dem Einstieg}}}}, um {time}",
+      "dayStart": "{dir, select, before {{days, plural, one {# Tag vor dem Veranstaltungstag} other {# Tage vor dem Veranstaltungstag}}} after {{days, plural, one {# Tag nach dem Veranstaltungstag} other {# Tage nach dem Veranstaltungstag}}} other {Am Veranstaltungstag}}, um {time}",
+      "dayEnd": "{dir, select, before {{days, plural, one {# Tag vor dem letzten Tag} other {# Tage vor dem letzten Tag}}} after {{days, plural, one {# Tag nach Ende der Veranstaltung} other {# Tage nach Ende der Veranstaltung}}} other {Am letzten Tag}}, um {time}",
+      "thenOffset": "{base}, {dir, select, before {{offset} früher} other {{offset} später}}"
+    },
+    "duration": {
+      "days": "{count, plural, one {# Tag} other {# Tage}}",
+      "hours": "{count, plural, one {# Stunde} other {# Stunden}}",
+      "minutes": "{count, plural, one {# Minute} other {# Minuten}}"
+    },
+    "history": {
+      "title": "Verlauf",
+      "caption": "Personen in dieser Journey",
+      "person": "Person",
+      "email": "E-Mail",
+      "unknown": "Unbekannte Person",
+      "joined": "Eingestiegen",
+      "status": "Status",
+      "progress": "Schritte",
+      "progressCounts": "{done} von {total} erledigt",
+      "next": "Nächster Schritt",
+      "searchLabel": "Person nach Name oder E-Mail suchen",
+      "search": "Suchen",
+      "clear": "Zurücksetzen",
+      "empty": "Noch niemand ist eingestiegen.",
+      "emptySearch": "Niemand passt zu „{q}“.",
+      "older": "Frühere Personen",
+      "runStatus": {
+        "active": "Läuft",
+        "completed": "Abgeschlossen",
+        "cancelled": "Abgebrochen"
+      }
+    },
+    "run": {
+      "metaTitle": "Journey-Verlauf",
+      "event": "Veranstaltung",
+      "trigger": "Auslöser",
+      "caption": "Schritte für diese Person",
+      "step": "Schritt",
+      "planned": "Geplant für",
+      "result": "Ergebnis",
+      "at": "Erledigt am",
+      "actionStatus": {
+        "pending": "Wartend",
+        "done": "Erledigt",
+        "skipped": "Übersprungen",
+        "failed": "Fehlgeschlagen",
+        "cancelled": "Abgebrochen"
+      }
+    },
+    "outcomes": {
+      "queued": "Nachricht in die Warteschlange gestellt",
+      "already_queued": "Bereits gesendet",
+      "label_added": "Label hinzugefügt",
+      "invited": "Umfrage-Einladung gesendet",
+      "too_late": "Der Zeitpunkt war schon vorbei",
+      "condition_not_met": "Bedingung nicht erfüllt",
+      "no_phone": "Keine Telefonnummer",
+      "no_device": "Kein Gerät für Push",
+      "no_address": "Keine E-Mail-Adresse",
+      "not_attending": "Nicht auf der Liste der Veranstaltung",
+      "too_many_labels": "Zu viele Labels",
+      "no_survey": "Die Veranstaltung hat keine Umfrage",
+      "closed": "Die Umfrage ist geschlossen",
+      "no_questions": "Die Umfrage hat keine Fragen",
+      "already_invited": "Bereits eingeladen",
+      "order_refunded": "Bestellung erstattet",
+      "ticket_cancelled": "Ticket storniert",
+      "event_cancelled": "Veranstaltung abgesagt",
+      "event_postponed": "Veranstaltung verschoben",
+      "journey_disabled": "Journey ausgeschaltet",
+      "step_removed": "Schritt entfernt",
+      "run_ended": "Journey beendet",
+      "event_missing": "Veranstaltung nicht gefunden",
+      "error": "Nach mehreren Versuchen fehlgeschlagen",
+      "other": "Sonstiges"
     }
   }
 }

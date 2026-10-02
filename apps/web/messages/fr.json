@@ -142,6 +142,9 @@
       },
       "campaigns": {
         "test": "Test de campagne"
+      },
+      "automations": {
+        "message": "Message de parcours"
       }
     },
     "status": {
@@ -291,7 +294,8 @@
     "commandCenter": "Centre de commande",
     "alerts": "Alertes",
     "sendingSetup": "Configuration d'envoi",
-    "campaigns": "Campagnes"
+    "campaigns": "Campagnes",
+    "journeys": "Parcours"
   },
   "vocab": {
     "attendee": "Participant",
@@ -6683,6 +6687,236 @@
       "test_too_many": "Saisissez jusqu’à 5 adresses.",
       "test_invalid_email": "Vérifiez les adresses e-mail.",
       "unknown": "Une erreur s’est produite."
+    }
+  },
+  "journeys": {
+    "title": "Parcours",
+    "description": "Des automatisations pour un événement ou une série : un déclencheur fait entrer une personne dans le parcours, et chaque étape attend, vérifie une condition facultative et fait une chose.",
+    "new": "Nouveau parcours",
+    "emptyTitle": "Aucun parcours pour l’instant",
+    "emptyDescription": "Partez du parcours de la vision : une confirmation, des rappels par e-mail et SMS, une notification push le jour J et l’enquête.",
+    "emptyReadOnly": "Personne n’a encore créé de parcours.",
+    "caption": "Parcours",
+    "name": "Nom",
+    "scope": "Événement ou série",
+    "trigger": "Déclencheur",
+    "status": "Statut",
+    "steps": "Étapes",
+    "runs": "Personnes",
+    "updated": "Mis à jour",
+    "on": "Actif",
+    "off": "Inactif",
+    "seriesScope": "Série : {name}",
+    "triggers": {
+      "order_paid": "Achète un billet",
+      "checked_in": "Est enregistré à l’entrée",
+      "event_time": "Moment relatif à l’événement"
+    },
+    "newTitle": "Nouveau parcours",
+    "newDescription": "Choisissez l’événement (ou la série) et la façon dont les personnes entrent. Vous pouvez modifier chaque étape avant de l’activer.",
+    "form": {
+      "name": "Nom du parcours",
+      "scope": "Événement ou série",
+      "pickScope": "Choisissez un événement ou une série",
+      "events": "Événements",
+      "series": "Séries",
+      "eventOption": "{name} ({date})",
+      "trigger": "Les personnes entrent quand elles…",
+      "start": "Partir de",
+      "vision": "Le parcours de la vision",
+      "visionHint": "Confirmation à l’achat · rappel 7 jours avant · SMS la veille · push le jour J · enquête le lendemain matin",
+      "blank": "Un parcours vide",
+      "blankHint": "Choisissez le déclencheur et ajoutez vos propres étapes.",
+      "create": "Créer le parcours",
+      "errors": {
+        "name": "Saisissez un nom (120 caractères maximum).",
+        "scope": "Choisissez un événement ou une série."
+      }
+    },
+    "vision": {
+      "name": "Parcours de la vision",
+      "confirmation": {
+        "subject": "C’est confirmé : {event}",
+        "body": "Bonjour {name}, merci pour votre commande. À bientôt à {event}, le {when}."
+      },
+      "week": {
+        "subject": "Plus qu’une semaine : {event}",
+        "body": "{event} a lieu dans une semaine ({when}). Vos billets sont dans l’e-mail de confirmation."
+      },
+      "day": {
+        "subject": "Demain : {event}",
+        "body": "À demain à {event}, {when}."
+      },
+      "eventDay": {
+        "subject": "Aujourd’hui : {event}",
+        "body": "C’est le grand jour ! {event} commence {when}. Gardez vos billets à portée de main."
+      }
+    },
+    "detail": {
+      "summary": "{scope} · Déclencheur : {trigger}",
+      "enable": "Activer",
+      "disable": "Désactiver",
+      "enableFor": "Activer {name}",
+      "disableFor": "Désactiver {name}",
+      "enabledSince": "Actif depuis le {when}",
+      "created": "Parcours créé. Vérifiez les étapes, puis activez-le.",
+      "saved": "Parcours enregistré.",
+      "enabledDone": "Parcours activé. Les personnes qui entrent à partir de maintenant reçoivent ses étapes.",
+      "disabledDone": "{count, plural, =0 {Parcours désactivé.} one {Parcours désactivé. # étape en attente a été annulée.} other {Parcours désactivé. # étapes en attente ont été annulées.}}",
+      "deleted": "Parcours supprimé.",
+      "delete": "Supprimer",
+      "deleteFor": "Supprimer {name}",
+      "editOff": "Désactivez le parcours pour modifier ses étapes.",
+      "stepsTitle": "Étapes",
+      "noSteps": "Aucune étape pour l’instant. Ajoutez-en une ci-dessous.",
+      "stepCounts": "{done} faites · {pending} en attente · {skipped} ignorées",
+      "errors": {
+        "no_steps": "Ajoutez au moins une étape avant d’activer le parcours.",
+        "anchor_needs_trigger": "Une étape attend depuis le déclencheur, mais ce parcours démarre à un moment relatif à l’événement."
+      }
+    },
+    "editor": {
+      "step": "Étape {n}",
+      "anchor": "À compter de",
+      "anchors": {
+        "trigger": "Leur entrée",
+        "event_start": "Le début de l’événement",
+        "event_end": "La fin de l’événement"
+      },
+      "direction": "Avant ou après",
+      "before": "Avant",
+      "after": "Après",
+      "days": "Jours",
+      "hours": "Heures",
+      "minutes": "Minutes",
+      "atTime": "À une heure précise",
+      "atTimeHint": "Facultatif, dans le fuseau horaire de l’événement.",
+      "action": "Action",
+      "actions": {
+        "email": "Envoyer un e-mail",
+        "sms": "Envoyer un SMS",
+        "whatsapp": "Envoyer un message WhatsApp",
+        "push": "Envoyer une notification push",
+        "label": "Ajouter une étiquette",
+        "survey": "Inviter à l’enquête"
+      },
+      "condition": "Seulement si",
+      "conditions": {
+        "none": "Toujours",
+        "checked_in": "La personne est entrée",
+        "not_checked_in": "La personne n’est pas encore entrée",
+        "has_seat": "La personne a une place attribuée",
+        "no_seat": "La personne n’a pas de place",
+        "answered_survey": "La personne a répondu à l’enquête",
+        "not_answered_survey": "La personne n’a pas répondu à l’enquête"
+      },
+      "subject": "Objet",
+      "title": "Titre",
+      "body": "Message",
+      "placeholders": "Vous pouvez utiliser {name}, {event} et {when}.",
+      "label": "Étiquette",
+      "moveUp": "Monter",
+      "moveDown": "Descendre",
+      "remove": "Retirer",
+      "moveUpFor": "Monter l’étape {n}",
+      "moveDownFor": "Descendre l’étape {n}",
+      "removeFor": "Retirer l’étape {n}",
+      "add": "Ajouter une étape",
+      "max": "Un parcours compte au plus {max} étapes.",
+      "save": "Enregistrer le parcours",
+      "errors": {
+        "required": "Complétez ce champ.",
+        "anchor": "Ce parcours n’a pas de moment d’entrée : comptez depuis le début ou la fin de l’événement.",
+        "direction": "Les jours et les heures doivent aller dans le même sens.",
+        "offset": "Vérifiez le nombre de jours.",
+        "step": "Vérifiez l’étape {n}."
+      }
+    },
+    "wait": {
+      "atTrigger": "Tout de suite",
+      "afterTrigger": "{offset} après l’entrée",
+      "atStart": "Au début de l’événement",
+      "beforeStart": "{offset} avant le début de l’événement",
+      "afterStart": "{offset} après le début de l’événement",
+      "atEnd": "À la fin de l’événement",
+      "beforeEnd": "{offset} avant la fin de l’événement",
+      "afterEnd": "{offset} après la fin de l’événement",
+      "dayTrigger": "{dir, select, same {Le jour de l’entrée} other {{days, plural, one {# jour après l’entrée} other {# jours après l’entrée}}}}, à {time}",
+      "dayStart": "{dir, select, before {{days, plural, one {# jour avant le jour J} other {# jours avant le jour J}}} after {{days, plural, one {# jour après le jour J} other {# jours après le jour J}}} other {Le jour J}}, à {time}",
+      "dayEnd": "{dir, select, before {{days, plural, one {# jour avant le dernier jour} other {# jours avant le dernier jour}}} after {{days, plural, one {# jour après la fin de l’événement} other {# jours après la fin de l’événement}}} other {Le dernier jour}}, à {time}",
+      "thenOffset": "{base}, {dir, select, before {{offset} plus tôt} other {{offset} plus tard}}"
+    },
+    "duration": {
+      "days": "{count, plural, one {# jour} other {# jours}}",
+      "hours": "{count, plural, one {# heure} other {# heures}}",
+      "minutes": "{count, plural, one {# minute} other {# minutes}}"
+    },
+    "history": {
+      "title": "Historique",
+      "caption": "Personnes dans ce parcours",
+      "person": "Personne",
+      "email": "E-mail",
+      "unknown": "Personne inconnue",
+      "joined": "Entrée",
+      "status": "Statut",
+      "progress": "Étapes",
+      "progressCounts": "{done} sur {total} faites",
+      "next": "Prochaine étape",
+      "searchLabel": "Trouver une personne par nom ou e-mail",
+      "search": "Rechercher",
+      "clear": "Effacer",
+      "empty": "Personne n’est encore entré.",
+      "emptySearch": "Personne ne correspond à « {q} ».",
+      "older": "Personnes précédentes",
+      "runStatus": {
+        "active": "En cours",
+        "completed": "Terminé",
+        "cancelled": "Annulé"
+      }
+    },
+    "run": {
+      "metaTitle": "Historique du parcours",
+      "event": "Événement",
+      "trigger": "Déclencheur",
+      "caption": "Étapes pour cette personne",
+      "step": "Étape",
+      "planned": "Prévue le",
+      "result": "Résultat",
+      "at": "Faite le",
+      "actionStatus": {
+        "pending": "En attente",
+        "done": "Faite",
+        "skipped": "Ignorée",
+        "failed": "Échouée",
+        "cancelled": "Annulée"
+      }
+    },
+    "outcomes": {
+      "queued": "Message mis en file d’attente",
+      "already_queued": "Déjà envoyé",
+      "label_added": "Étiquette ajoutée",
+      "invited": "Invitation à l’enquête envoyée",
+      "too_late": "Son heure était passée",
+      "condition_not_met": "Condition non remplie",
+      "no_phone": "Pas de numéro de téléphone",
+      "no_device": "Pas d’appareil pour le push",
+      "no_address": "Pas d’adresse e-mail",
+      "not_attending": "Absent de la liste de l’événement",
+      "too_many_labels": "Trop d’étiquettes",
+      "no_survey": "L’événement n’a pas d’enquête",
+      "closed": "L’enquête est close",
+      "no_questions": "L’enquête n’a pas de questions",
+      "already_invited": "Déjà invité",
+      "order_refunded": "Commande remboursée",
+      "ticket_cancelled": "Billet annulé",
+      "event_cancelled": "Événement annulé",
+      "event_postponed": "Événement reporté",
+      "journey_disabled": "Parcours désactivé",
+      "step_removed": "Étape retirée",
+      "run_ended": "Parcours terminé",
+      "event_missing": "Événement introuvable",
+      "error": "Échec après plusieurs essais",
+      "other": "Autre"
     }
   }
 }

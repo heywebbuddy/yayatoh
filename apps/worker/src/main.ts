@@ -8,6 +8,7 @@ import { runDueBulkOperations } from './bulk.ts';
 import { bossRelease, campaignReleaseJob, campaignTick } from './campaigns.ts';
 import { domainRecheckJob } from './domains.ts';
 import { endExpiredImpersonations } from './impersonations.ts';
+import { enqueueJourneyWork } from './journeys.ts';
 import { enqueueDueMassRefunds, massRefundJob } from './mass-refunds.ts';
 import {
   dispatchNotifications,
@@ -133,6 +134,19 @@ setInterval(() => {
       queueingRefunds = false;
     });
 }, 3_000).unref();
+
+// Journeys (M3.7a): queue a job for each org with due steps every 5 s (leader only); the
+// exclusive queue keeps one job per org.
+let queueingJourneys = false;
+setInterval(() => {
+  if (!release || stopping || queueingJourneys) return;
+  queueingJourneys = true;
+  enqueueJourneyWork(boss)
+    .catch((err) => console.error('journeys', err))
+    .finally(() => {
+      queueingJourneys = false;
+    });
+}, 5_000).unref();
 
 // Daily reconciliation (M1.6e): the previous UTC day, hourly attempts (idempotent per org and
 // day, so only the first run of a day does work), leader only. The fake provider without a

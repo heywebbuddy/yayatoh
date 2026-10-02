@@ -14,6 +14,7 @@ export { SURVEY_EXPORT_COLUMNS, surveyExportAction, surveyExportBulk } from './e
 export { privateColumns } from './private-columns.ts';
 export { SEND_AUDIENCES, SEND_SOURCES, type SendAudience, SURVEY_KINDS, type SurveyKind } from './schema.ts';
 export {
+  answeredEventSurveyTx,
   CreateSurveyInput,
   createSurveyCommand,
   DEFAULT_LINK_DAYS,

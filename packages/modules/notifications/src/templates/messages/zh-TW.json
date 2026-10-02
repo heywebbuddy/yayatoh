@@ -116,6 +116,10 @@
       "intro": "你還沒有填寫：{org} 仍希望了解你對 {eventName} 的感受。",
       "cta": "填寫問卷"
     },
+    "automations.message": {
+      "subject": "{subject}",
+      "intro": "關於 {eventName}："
+    },
     "guest.checkout-code": {
       "subject": "{code} 是您的電子郵件確認碼",
       "intro": "輸入 {code} 以確認您的電子郵件並完成在 {org} 的訂單。驗證碼僅能使用一次，{minutes} 分鐘後失效。如果這不是您本人的要求，請忽略此郵件。"

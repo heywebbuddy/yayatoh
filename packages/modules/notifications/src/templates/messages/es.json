@@ -116,6 +116,10 @@
       "intro": "Aún no has respondido: a {org} le sigue interesando saber qué te pareció {eventName}.",
       "cta": "Responder la encuesta"
     },
+    "automations.message": {
+      "subject": "{subject}",
+      "intro": "Sobre {eventName}:"
+    },
     "guest.checkout-code": {
       "subject": "{code} es tu código para confirmar tu correo",
       "intro": "Introduce {code} para confirmar tu correo y terminar tu pedido con {org}. El código se usa una sola vez y caduca en {minutes, plural, one {# minuto} other {# minutos}}. Si no lo pediste, puedes ignorar este correo."

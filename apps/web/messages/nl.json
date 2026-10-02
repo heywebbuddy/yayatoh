@@ -142,6 +142,9 @@
       },
       "campaigns": {
         "test": "Campagnetest"
+      },
+      "automations": {
+        "message": "Journeybericht"
       }
     },
     "status": {
@@ -291,7 +294,8 @@
     "commandCenter": "Commandocentrum",
     "alerts": "Meldingen",
     "sendingSetup": "Verzendinstellingen",
-    "campaigns": "Campagnes"
+    "campaigns": "Campagnes",
+    "journeys": "Journeys"
   },
   "vocab": {
     "attendee": "Deelnemer",
@@ -6683,6 +6687,236 @@
       "test_too_many": "Vul maximaal 5 adressen in.",
       "test_invalid_email": "Controleer de e-mailadressen.",
       "unknown": "Er ging iets mis."
+    }
+  },
+  "journeys": {
+    "title": "Journeys",
+    "description": "Automatiseringen voor één evenement of reeks: een trigger zet iemand in de journey, en elke stap wacht, controleert een optionele voorwaarde en doet één ding.",
+    "new": "Nieuwe journey",
+    "emptyTitle": "Nog geen journeys",
+    "emptyDescription": "Begin met de visie-journey: een bevestiging, herinneringen per e-mail en sms, een push op de evenementdag en de enquête.",
+    "emptyReadOnly": "Er is nog geen journey ingesteld.",
+    "caption": "Journeys",
+    "name": "Naam",
+    "scope": "Evenement of reeks",
+    "trigger": "Trigger",
+    "status": "Status",
+    "steps": "Stappen",
+    "runs": "Personen",
+    "updated": "Bijgewerkt",
+    "on": "Aan",
+    "off": "Uit",
+    "seriesScope": "Reeks: {name}",
+    "triggers": {
+      "order_paid": "Koopt een ticket",
+      "checked_in": "Checkt in",
+      "event_time": "Tijd ten opzichte van het evenement"
+    },
+    "newTitle": "Nieuwe journey",
+    "newDescription": "Kies het evenement (of de reeks) en hoe mensen instromen. Je kunt elke stap bewerken voordat je de journey aanzet.",
+    "form": {
+      "name": "Naam van de journey",
+      "scope": "Evenement of reeks",
+      "pickScope": "Kies een evenement of reeks",
+      "events": "Evenementen",
+      "series": "Reeksen",
+      "eventOption": "{name} ({date})",
+      "trigger": "Mensen stromen in wanneer ze…",
+      "start": "Beginnen met",
+      "vision": "De visie-journey",
+      "visionHint": "Bevestiging bij aankoop · herinnering 7 dagen vooraf · sms de dag ervoor · push op de evenementdag · enquête de ochtend erna",
+      "blank": "Een lege journey",
+      "blankHint": "Kies de trigger en voeg je eigen stappen toe.",
+      "create": "Journey maken",
+      "errors": {
+        "name": "Vul een naam in (maximaal 120 tekens).",
+        "scope": "Kies een evenement of reeks."
+      }
+    },
+    "vision": {
+      "name": "Visie-journey",
+      "confirmation": {
+        "subject": "Je bent erbij: {event}",
+        "body": "Hallo {name}, bedankt voor je bestelling. Tot bij {event} op {when}."
+      },
+      "week": {
+        "subject": "Nog een week: {event}",
+        "body": "{event} is over een week ({when}). Je tickets staan in de bevestigingsmail."
+      },
+      "day": {
+        "subject": "Morgen: {event}",
+        "body": "Tot morgen bij {event}, {when}."
+      },
+      "eventDay": {
+        "subject": "Vandaag: {event}",
+        "body": "Het is zover! {event} begint {when}. Houd je tickets bij de hand."
+      }
+    },
+    "detail": {
+      "summary": "{scope} · Trigger: {trigger}",
+      "enable": "Aanzetten",
+      "disable": "Uitzetten",
+      "enableFor": "{name} aanzetten",
+      "disableFor": "{name} uitzetten",
+      "enabledSince": "Aan sinds {when}",
+      "created": "Journey gemaakt. Controleer de stappen en zet hem dan aan.",
+      "saved": "Journey opgeslagen.",
+      "enabledDone": "Journey aangezet. Wie vanaf nu instroomt, krijgt de stappen.",
+      "disabledDone": "{count, plural, =0 {Journey uitgezet.} one {Journey uitgezet. # wachtende stap is geannuleerd.} other {Journey uitgezet. # wachtende stappen zijn geannuleerd.}}",
+      "deleted": "Journey verwijderd.",
+      "delete": "Verwijderen",
+      "deleteFor": "{name} verwijderen",
+      "editOff": "Zet de journey uit om de stappen te bewerken.",
+      "stepsTitle": "Stappen",
+      "noSteps": "Nog geen stappen. Voeg er hieronder een toe.",
+      "stepCounts": "{done} klaar · {pending} wachtend · {skipped} overgeslagen",
+      "errors": {
+        "no_steps": "Voeg minstens één stap toe voordat je de journey aanzet.",
+        "anchor_needs_trigger": "Een stap wacht vanaf de trigger, maar deze journey start op een tijd ten opzichte van het evenement."
+      }
+    },
+    "editor": {
+      "step": "Stap {n}",
+      "anchor": "Gemeten vanaf",
+      "anchors": {
+        "trigger": "Het instromen",
+        "event_start": "De start van het evenement",
+        "event_end": "Het einde van het evenement"
+      },
+      "direction": "Ervoor of erna",
+      "before": "Ervoor",
+      "after": "Erna",
+      "days": "Dagen",
+      "hours": "Uren",
+      "minutes": "Minuten",
+      "atTime": "Op een tijdstip",
+      "atTimeHint": "Optioneel, in de tijdzone van het evenement.",
+      "action": "Actie",
+      "actions": {
+        "email": "E-mail sturen",
+        "sms": "Sms sturen",
+        "whatsapp": "WhatsApp-bericht sturen",
+        "push": "Pushmelding sturen",
+        "label": "Label toevoegen",
+        "survey": "Uitnodigen voor de enquête"
+      },
+      "condition": "Alleen als",
+      "conditions": {
+        "none": "Altijd",
+        "checked_in": "Ingecheckt",
+        "not_checked_in": "Nog niet ingecheckt",
+        "has_seat": "Heeft een plaats",
+        "no_seat": "Heeft geen plaats",
+        "answered_survey": "Heeft de enquête ingevuld",
+        "not_answered_survey": "Heeft de enquête niet ingevuld"
+      },
+      "subject": "Onderwerp",
+      "title": "Titel",
+      "body": "Bericht",
+      "placeholders": "Je kunt {name}, {event} en {when} gebruiken.",
+      "label": "Label",
+      "moveUp": "Omhoog",
+      "moveDown": "Omlaag",
+      "remove": "Verwijderen",
+      "moveUpFor": "Stap {n} omhoog",
+      "moveDownFor": "Stap {n} omlaag",
+      "removeFor": "Stap {n} verwijderen",
+      "add": "Stap toevoegen",
+      "max": "Een journey heeft maximaal {max} stappen.",
+      "save": "Journey opslaan",
+      "errors": {
+        "required": "Vul dit in.",
+        "anchor": "Deze journey heeft geen instroommoment: meet vanaf de start of het einde van het evenement.",
+        "direction": "Dagen en uren moeten dezelfde kant op gaan.",
+        "offset": "Controleer het aantal dagen.",
+        "step": "Controleer stap {n}."
+      }
+    },
+    "wait": {
+      "atTrigger": "Meteen",
+      "afterTrigger": "{offset} na het instromen",
+      "atStart": "Wanneer het evenement begint",
+      "beforeStart": "{offset} voor de start van het evenement",
+      "afterStart": "{offset} na de start van het evenement",
+      "atEnd": "Wanneer het evenement eindigt",
+      "beforeEnd": "{offset} voor het einde van het evenement",
+      "afterEnd": "{offset} na het einde van het evenement",
+      "dayTrigger": "{dir, select, same {Op de dag van instromen} other {{days, plural, one {# dag na het instromen} other {# dagen na het instromen}}}}, om {time}",
+      "dayStart": "{dir, select, before {{days, plural, one {# dag voor de evenementdag} other {# dagen voor de evenementdag}}} after {{days, plural, one {# dag na de evenementdag} other {# dagen na de evenementdag}}} other {Op de evenementdag}}, om {time}",
+      "dayEnd": "{dir, select, before {{days, plural, one {# dag voor de laatste dag} other {# dagen voor de laatste dag}}} after {{days, plural, one {# dag na het einde van het evenement} other {# dagen na het einde van het evenement}}} other {Op de laatste dag}}, om {time}",
+      "thenOffset": "{base}, {dir, select, before {{offset} eerder} other {{offset} later}}"
+    },
+    "duration": {
+      "days": "{count, plural, one {# dag} other {# dagen}}",
+      "hours": "{count, plural, one {# uur} other {# uur}}",
+      "minutes": "{count, plural, one {# minuut} other {# minuten}}"
+    },
+    "history": {
+      "title": "Geschiedenis",
+      "caption": "Personen in deze journey",
+      "person": "Persoon",
+      "email": "E-mail",
+      "unknown": "Onbekende persoon",
+      "joined": "Ingestroomd",
+      "status": "Status",
+      "progress": "Stappen",
+      "progressCounts": "{done} van {total} klaar",
+      "next": "Volgende stap",
+      "searchLabel": "Zoek een persoon op naam of e-mail",
+      "search": "Zoeken",
+      "clear": "Wissen",
+      "empty": "Er is nog niemand ingestroomd.",
+      "emptySearch": "Niemand komt overeen met ‘{q}’.",
+      "older": "Eerdere personen",
+      "runStatus": {
+        "active": "Bezig",
+        "completed": "Afgerond",
+        "cancelled": "Geannuleerd"
+      }
+    },
+    "run": {
+      "metaTitle": "Geschiedenis van de journey",
+      "event": "Evenement",
+      "trigger": "Trigger",
+      "caption": "Stappen voor deze persoon",
+      "step": "Stap",
+      "planned": "Gepland voor",
+      "result": "Resultaat",
+      "at": "Gedaan op",
+      "actionStatus": {
+        "pending": "Wachtend",
+        "done": "Klaar",
+        "skipped": "Overgeslagen",
+        "failed": "Mislukt",
+        "cancelled": "Geannuleerd"
+      }
+    },
+    "outcomes": {
+      "queued": "Bericht in de wachtrij gezet",
+      "already_queued": "Al verstuurd",
+      "label_added": "Label toegevoegd",
+      "invited": "Enquête-uitnodiging verstuurd",
+      "too_late": "Het tijdstip was al voorbij",
+      "condition_not_met": "Voorwaarde niet vervuld",
+      "no_phone": "Geen telefoonnummer",
+      "no_device": "Geen apparaat voor push",
+      "no_address": "Geen e-mailadres",
+      "not_attending": "Niet op de lijst van het evenement",
+      "too_many_labels": "Te veel labels",
+      "no_survey": "Het evenement heeft geen enquête",
+      "closed": "De enquête is gesloten",
+      "no_questions": "De enquête heeft geen vragen",
+      "already_invited": "Al uitgenodigd",
+      "order_refunded": "Bestelling terugbetaald",
+      "ticket_cancelled": "Ticket geannuleerd",
+      "event_cancelled": "Evenement geannuleerd",
+      "event_postponed": "Evenement uitgesteld",
+      "journey_disabled": "Journey uitgezet",
+      "step_removed": "Stap verwijderd",
+      "run_ended": "Journey beëindigd",
+      "event_missing": "Evenement niet gevonden",
+      "error": "Mislukt na meerdere pogingen",
+      "other": "Overig"
     }
   }
 }

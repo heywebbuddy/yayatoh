@@ -142,6 +142,9 @@
       },
       "campaigns": {
         "test": "Teste de campanha"
+      },
+      "automations": {
+        "message": "Mensagem da jornada"
       }
     },
     "status": {
@@ -291,7 +294,8 @@
     "commandCenter": "Centro de comando",
     "alerts": "Alertas",
     "sendingSetup": "Configuração de envio",
-    "campaigns": "Campanhas"
+    "campaigns": "Campanhas",
+    "journeys": "Jornadas"
   },
   "vocab": {
     "attendee": "Participante",
@@ -6683,6 +6687,236 @@
       "test_too_many": "Digite até 5 endereços.",
       "test_invalid_email": "Confira os endereços de e-mail.",
       "unknown": "Algo deu errado."
+    }
+  },
+  "journeys": {
+    "title": "Jornadas",
+    "description": "Automações para um evento ou uma série: um gatilho coloca uma pessoa na jornada, e cada etapa espera, verifica uma condição opcional e faz uma coisa.",
+    "new": "Nova jornada",
+    "emptyTitle": "Ainda não há jornadas",
+    "emptyDescription": "Comece pela jornada da visão: uma confirmação, lembretes por e-mail e SMS, um push no dia do evento e a pesquisa.",
+    "emptyReadOnly": "Ninguém configurou uma jornada ainda.",
+    "caption": "Jornadas",
+    "name": "Nome",
+    "scope": "Evento ou série",
+    "trigger": "Gatilho",
+    "status": "Estado",
+    "steps": "Etapas",
+    "runs": "Pessoas",
+    "updated": "Atualizado",
+    "on": "Ativa",
+    "off": "Inativa",
+    "seriesScope": "Série: {name}",
+    "triggers": {
+      "order_paid": "Compra um ingresso",
+      "checked_in": "Faz check-in",
+      "event_time": "Horário relativo ao evento"
+    },
+    "newTitle": "Nova jornada",
+    "newDescription": "Escolha o evento (ou a série) e como as pessoas entram. Você pode editar cada etapa antes de ativá-la.",
+    "form": {
+      "name": "Nome da jornada",
+      "scope": "Evento ou série",
+      "pickScope": "Escolha um evento ou uma série",
+      "events": "Eventos",
+      "series": "Séries",
+      "eventOption": "{name} ({date})",
+      "trigger": "As pessoas entram quando…",
+      "start": "Começar com",
+      "vision": "A jornada da visão",
+      "visionHint": "Confirmação na compra · lembrete 7 dias antes · SMS na véspera · push no dia do evento · pesquisa na manhã seguinte",
+      "blank": "Uma jornada em branco",
+      "blankHint": "Escolha o gatilho e adicione suas próprias etapas.",
+      "create": "Criar jornada",
+      "errors": {
+        "name": "Digite um nome (até 120 caracteres).",
+        "scope": "Escolha um evento ou uma série."
+      }
+    },
+    "vision": {
+      "name": "Jornada da visão",
+      "confirmation": {
+        "subject": "Está confirmado: {event}",
+        "body": "Olá {name}, obrigado pelo seu pedido. Até {event}, em {when}."
+      },
+      "week": {
+        "subject": "Falta uma semana: {event}",
+        "body": "{event} é daqui a uma semana ({when}). Seus ingressos estão no e-mail de confirmação."
+      },
+      "day": {
+        "subject": "Amanhã: {event}",
+        "body": "Até amanhã em {event}, {when}."
+      },
+      "eventDay": {
+        "subject": "Hoje: {event}",
+        "body": "Chegou o dia! {event} começa {when}. Tenha seus ingressos à mão."
+      }
+    },
+    "detail": {
+      "summary": "{scope} · Gatilho: {trigger}",
+      "enable": "Ativar",
+      "disable": "Desativar",
+      "enableFor": "Ativar {name}",
+      "disableFor": "Desativar {name}",
+      "enabledSince": "Ativa desde {when}",
+      "created": "Jornada criada. Confira as etapas e depois ative-a.",
+      "saved": "Jornada salva.",
+      "enabledDone": "Jornada ativada. Quem entrar a partir de agora recebe as etapas.",
+      "disabledDone": "{count, plural, =0 {Jornada desativada.} one {Jornada desativada. # etapa pendente foi cancelada.} other {Jornada desativada. # etapas pendentes foram canceladas.}}",
+      "deleted": "Jornada excluída.",
+      "delete": "Excluir",
+      "deleteFor": "Excluir {name}",
+      "editOff": "Desative a jornada para editar as etapas.",
+      "stepsTitle": "Etapas",
+      "noSteps": "Ainda não há etapas. Adicione uma abaixo.",
+      "stepCounts": "{done} feitas · {pending} pendentes · {skipped} ignoradas",
+      "errors": {
+        "no_steps": "Adicione pelo menos uma etapa antes de ativar a jornada.",
+        "anchor_needs_trigger": "Uma etapa espera a partir do gatilho, mas esta jornada começa num horário relativo ao evento."
+      }
+    },
+    "editor": {
+      "step": "Etapa {n}",
+      "anchor": "Contado a partir de",
+      "anchors": {
+        "trigger": "A entrada",
+        "event_start": "O início do evento",
+        "event_end": "O fim do evento"
+      },
+      "direction": "Antes ou depois",
+      "before": "Antes",
+      "after": "Depois",
+      "days": "Dias",
+      "hours": "Horas",
+      "minutes": "Minutos",
+      "atTime": "Num horário do dia",
+      "atTimeHint": "Opcional, no fuso horário do evento.",
+      "action": "Fazer",
+      "actions": {
+        "email": "Enviar um e-mail",
+        "sms": "Enviar um SMS",
+        "whatsapp": "Enviar uma mensagem no WhatsApp",
+        "push": "Enviar uma notificação push",
+        "label": "Adicionar uma etiqueta",
+        "survey": "Convidar para a pesquisa"
+      },
+      "condition": "Somente se",
+      "conditions": {
+        "none": "Sempre",
+        "checked_in": "Fez check-in",
+        "not_checked_in": "Não fez check-in",
+        "has_seat": "Tem lugar marcado",
+        "no_seat": "Não tem lugar",
+        "answered_survey": "Respondeu à pesquisa",
+        "not_answered_survey": "Não respondeu à pesquisa"
+      },
+      "subject": "Assunto",
+      "title": "Título",
+      "body": "Mensagem",
+      "placeholders": "Você pode usar {name}, {event} e {when}.",
+      "label": "Etiqueta",
+      "moveUp": "Subir",
+      "moveDown": "Descer",
+      "remove": "Remover",
+      "moveUpFor": "Subir a etapa {n}",
+      "moveDownFor": "Descer a etapa {n}",
+      "removeFor": "Remover a etapa {n}",
+      "add": "Adicionar etapa",
+      "max": "Uma jornada tem no máximo {max} etapas.",
+      "save": "Salvar jornada",
+      "errors": {
+        "required": "Preencha este campo.",
+        "anchor": "Esta jornada não tem momento de entrada: conte a partir do início ou do fim do evento.",
+        "direction": "Dias e horas devem ir na mesma direção.",
+        "offset": "Verifique o número de dias.",
+        "step": "Verifique a etapa {n}."
+      }
+    },
+    "wait": {
+      "atTrigger": "Imediatamente",
+      "afterTrigger": "{offset} depois da entrada",
+      "atStart": "Quando o evento começa",
+      "beforeStart": "{offset} antes do início do evento",
+      "afterStart": "{offset} depois do início do evento",
+      "atEnd": "Quando o evento termina",
+      "beforeEnd": "{offset} antes do fim do evento",
+      "afterEnd": "{offset} depois do fim do evento",
+      "dayTrigger": "{dir, select, same {No dia da entrada} other {{days, plural, one {# dia depois da entrada} other {# dias depois da entrada}}}}, às {time}",
+      "dayStart": "{dir, select, before {{days, plural, one {# dia antes do dia do evento} other {# dias antes do dia do evento}}} after {{days, plural, one {# dia depois do dia do evento} other {# dias depois do dia do evento}}} other {No dia do evento}}, às {time}",
+      "dayEnd": "{dir, select, before {{days, plural, one {# dia antes do último dia} other {# dias antes do último dia}}} after {{days, plural, one {# dia depois do fim do evento} other {# dias depois do fim do evento}}} other {No último dia}}, às {time}",
+      "thenOffset": "{base}, {dir, select, before {{offset} antes} other {{offset} depois}}"
+    },
+    "duration": {
+      "days": "{count, plural, one {# dia} other {# dias}}",
+      "hours": "{count, plural, one {# hora} other {# horas}}",
+      "minutes": "{count, plural, one {# minuto} other {# minutos}}"
+    },
+    "history": {
+      "title": "Histórico",
+      "caption": "Pessoas nesta jornada",
+      "person": "Pessoa",
+      "email": "E-mail",
+      "unknown": "Pessoa desconhecida",
+      "joined": "Entrou",
+      "status": "Estado",
+      "progress": "Etapas",
+      "progressCounts": "{done} de {total} feitas",
+      "next": "Próxima etapa",
+      "searchLabel": "Encontrar uma pessoa por nome ou e-mail",
+      "search": "Pesquisar",
+      "clear": "Limpar",
+      "empty": "Ninguém entrou ainda.",
+      "emptySearch": "Ninguém corresponde a “{q}”.",
+      "older": "Pessoas anteriores",
+      "runStatus": {
+        "active": "Em andamento",
+        "completed": "Concluída",
+        "cancelled": "Cancelada"
+      }
+    },
+    "run": {
+      "metaTitle": "Histórico da jornada",
+      "event": "Evento",
+      "trigger": "Gatilho",
+      "caption": "Etapas desta pessoa",
+      "step": "Etapa",
+      "planned": "Prevista para",
+      "result": "Resultado",
+      "at": "Feita em",
+      "actionStatus": {
+        "pending": "Pendente",
+        "done": "Feita",
+        "skipped": "Ignorada",
+        "failed": "Falhou",
+        "cancelled": "Cancelada"
+      }
+    },
+    "outcomes": {
+      "queued": "Mensagem colocada na fila",
+      "already_queued": "Já enviada",
+      "label_added": "Etiqueta adicionada",
+      "invited": "Convite para a pesquisa enviado",
+      "too_late": "O horário já tinha passado",
+      "condition_not_met": "Condição não atendida",
+      "no_phone": "Sem número de telefone",
+      "no_device": "Sem dispositivo para push",
+      "no_address": "Sem endereço de e-mail",
+      "not_attending": "Não está na lista do evento",
+      "too_many_labels": "Etiquetas demais",
+      "no_survey": "O evento não tem pesquisa",
+      "closed": "A pesquisa está encerrada",
+      "no_questions": "A pesquisa não tem perguntas",
+      "already_invited": "Já convidado",
+      "order_refunded": "Pedido reembolsado",
+      "ticket_cancelled": "Ingresso cancelado",
+      "event_cancelled": "Evento cancelado",
+      "event_postponed": "Evento adiado",
+      "journey_disabled": "Jornada desativada",
+      "step_removed": "Etapa removida",
+      "run_ended": "Jornada encerrada",
+      "event_missing": "Evento não encontrado",
+      "error": "Falhou após várias tentativas",
+      "other": "Outro"
     }
   }
 }

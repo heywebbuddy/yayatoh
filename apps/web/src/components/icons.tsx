@@ -42,6 +42,7 @@ import {
   Ticket,
   Undo2,
   Users,
+  Workflow,
 } from 'lucide-react';
 
 /** Icon names used by the profiles registry (packages/platform/src/profiles). */
@@ -53,6 +54,8 @@ const ICONS: Record<string, LucideIcon> = {
   users: Users,
   ticket: Ticket,
   armchair: Armchair,
+  megaphone: Megaphone,
+  workflow: Workflow,
   scan: ScanLine,
   library: Library,
   clipboard: ClipboardList,
@@ -80,7 +83,6 @@ const ICONS: Record<string, LucideIcon> = {
   'map-pin': MapPin,
   'file-text': FileText,
   'life-buoy': LifeBuoy,
-  megaphone: Megaphone,
   lock: Lock,
   building: Building2,
   history: History,

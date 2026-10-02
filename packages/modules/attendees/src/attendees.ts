@@ -344,6 +344,37 @@ export const setAttendeeLabelsCommand = tenantCommand({
   }),
 });
 
+/**
+ * Add labels to some of one event's active attendees inside the caller's transaction (the journey
+ * step "Add label", M3.7a). Idempotent: a label already there changes nothing. Attendees that would
+ * pass `MAX_LABELS` are left as they are and not counted. Returns how many records now carry them.
+ */
+export async function addAttendeeLabelsTx(
+  tx: TenantTx,
+  ctx: Ctx,
+  eventId: string,
+  attendeeIds: readonly string[],
+  labels: readonly string[],
+): Promise<number> {
+  const ids = [...new Set(attendeeIds)];
+  if (ids.length === 0 || labels.length === 0) return 0;
+  const next = nextLabels(labels, []);
+  const rows = await tx
+    .update(attendees)
+    .set({ labels: next, updatedAt: ctx.now })
+    .where(
+      and(
+        eq(attendees.eventId, eventId),
+        inArray(attendees.id, ids),
+        eq(attendees.status, 'active'),
+        sql`cardinality(${next}) <= ${MAX_LABELS}`,
+      ),
+    )
+    .returning({ id: attendees.id, eventId: attendees.eventId, contactId: attendees.contactId });
+  if (rows.length) await emitAttendeesChangedTx(tx, ctx, rows);
+  return rows.length;
+}
+
 export const AttendeeHitDto = z.object({
   id: z.uuid(),
   eventId: z.uuid(),

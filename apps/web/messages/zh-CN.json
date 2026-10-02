@@ -142,6 +142,9 @@
       },
       "campaigns": {
         "test": "营销活动测试"
+      },
+      "automations": {
+        "message": "旅程消息"
       }
     },
     "status": {
@@ -291,7 +294,8 @@
     "commandCenter": "指挥中心",
     "alerts": "提醒",
     "sendingSetup": "发送设置",
-    "campaigns": "营销活动"
+    "campaigns": "营销活动",
+    "journeys": "旅程"
   },
   "vocab": {
     "attendee": "参会者",
@@ -6683,6 +6687,236 @@
       "test_too_many": "最多输入 5 个地址。",
       "test_invalid_email": "请检查邮箱地址。",
       "unknown": "出了点问题。"
+    }
+  },
+  "journeys": {
+    "title": "旅程",
+    "description": "针对一个活动或系列的自动化：触发条件把某人加入旅程，每个步骤等待、检查可选条件并执行一项操作。",
+    "new": "新建旅程",
+    "emptyTitle": "还没有旅程",
+    "emptyDescription": "从愿景旅程开始：确认邮件、邮件和短信提醒、活动当天推送以及问卷。",
+    "emptyReadOnly": "还没有人设置旅程。",
+    "caption": "旅程",
+    "name": "名称",
+    "scope": "活动或系列",
+    "trigger": "触发条件",
+    "status": "状态",
+    "steps": "步骤",
+    "runs": "人数",
+    "updated": "更新时间",
+    "on": "已开启",
+    "off": "已关闭",
+    "seriesScope": "系列：{name}",
+    "triggers": {
+      "order_paid": "购买门票",
+      "checked_in": "签到入场",
+      "event_time": "相对活动的时间"
+    },
+    "newTitle": "新建旅程",
+    "newDescription": "选择活动（或系列）以及加入方式。开启前可以编辑每个步骤。",
+    "form": {
+      "name": "旅程名称",
+      "scope": "活动或系列",
+      "pickScope": "选择活动或系列",
+      "events": "活动",
+      "series": "系列",
+      "eventOption": "{name}（{date}）",
+      "trigger": "加入时机",
+      "start": "起点",
+      "vision": "愿景旅程",
+      "visionHint": "购买时确认 · 提前 7 天提醒 · 前一天短信 · 活动当天推送 · 次日上午问卷",
+      "blank": "空白旅程",
+      "blankHint": "选择触发条件并添加自己的步骤。",
+      "create": "创建旅程",
+      "errors": {
+        "name": "请输入名称（最多 120 个字符）。",
+        "scope": "请选择活动或系列。"
+      }
+    },
+    "vision": {
+      "name": "愿景旅程",
+      "confirmation": {
+        "subject": "报名成功：{event}",
+        "body": "{name}，您好！感谢您的订单。{when}，{event} 见。"
+      },
+      "week": {
+        "subject": "还有一周：{event}",
+        "body": "{event} 还有一周（{when}）。门票在确认邮件中。"
+      },
+      "day": {
+        "subject": "明天：{event}",
+        "body": "明天 {event} 见，{when}。"
+      },
+      "eventDay": {
+        "subject": "今天：{event}",
+        "body": "就是今天！{event} 将于 {when} 开始。请准备好门票。"
+      }
+    },
+    "detail": {
+      "summary": "{scope} · 触发条件：{trigger}",
+      "enable": "开启",
+      "disable": "关闭",
+      "enableFor": "开启 {name}",
+      "disableFor": "关闭 {name}",
+      "enabledSince": "自 {when} 起开启",
+      "created": "旅程已创建。请检查步骤，然后开启。",
+      "saved": "旅程已保存。",
+      "enabledDone": "旅程已开启。从现在起加入的人会收到其步骤。",
+      "disabledDone": "{count, plural, =0 {旅程已关闭。} other {旅程已关闭。已取消 # 个等待中的步骤。}}",
+      "deleted": "旅程已删除。",
+      "delete": "删除",
+      "deleteFor": "删除 {name}",
+      "editOff": "关闭旅程后才能编辑步骤。",
+      "stepsTitle": "步骤",
+      "noSteps": "还没有步骤。请在下方添加。",
+      "stepCounts": "已完成 {done} · 等待中 {pending} · 已跳过 {skipped}",
+      "errors": {
+        "no_steps": "开启旅程前请至少添加一个步骤。",
+        "anchor_needs_trigger": "有步骤从触发时刻开始等待，但此旅程在相对活动的时间开始。"
+      }
+    },
+    "editor": {
+      "step": "步骤 {n}",
+      "anchor": "计时起点",
+      "anchors": {
+        "trigger": "加入时",
+        "event_start": "活动开始",
+        "event_end": "活动结束"
+      },
+      "direction": "之前或之后",
+      "before": "之前",
+      "after": "之后",
+      "days": "天",
+      "hours": "小时",
+      "minutes": "分钟",
+      "atTime": "在某个时刻",
+      "atTimeHint": "可选，按活动时区。",
+      "action": "操作",
+      "actions": {
+        "email": "发送邮件",
+        "sms": "发送短信",
+        "whatsapp": "发送 WhatsApp 消息",
+        "push": "发送推送通知",
+        "label": "添加标签",
+        "survey": "邀请填写问卷"
+      },
+      "condition": "仅当",
+      "conditions": {
+        "none": "始终",
+        "checked_in": "已签到",
+        "not_checked_in": "未签到",
+        "has_seat": "有座位",
+        "no_seat": "无座位",
+        "answered_survey": "已填写问卷",
+        "not_answered_survey": "未填写问卷"
+      },
+      "subject": "主题",
+      "title": "标题",
+      "body": "消息",
+      "placeholders": "可以使用 {name}、{event} 和 {when}。",
+      "label": "标签",
+      "moveUp": "上移",
+      "moveDown": "下移",
+      "remove": "移除",
+      "moveUpFor": "上移步骤 {n}",
+      "moveDownFor": "下移步骤 {n}",
+      "removeFor": "移除步骤 {n}",
+      "add": "添加步骤",
+      "max": "一个旅程最多 {max} 个步骤。",
+      "save": "保存旅程",
+      "errors": {
+        "required": "请填写此项。",
+        "anchor": "此旅程没有加入时刻：请从活动开始或结束计时。",
+        "direction": "天数和小时必须同一方向。",
+        "offset": "请检查天数。",
+        "step": "请检查步骤 {n}。"
+      }
+    },
+    "wait": {
+      "atTrigger": "立即",
+      "afterTrigger": "加入后 {offset}",
+      "atStart": "活动开始时",
+      "beforeStart": "活动开始前 {offset}",
+      "afterStart": "活动开始后 {offset}",
+      "atEnd": "活动结束时",
+      "beforeEnd": "活动结束前 {offset}",
+      "afterEnd": "活动结束后 {offset}",
+      "dayTrigger": "{dir, select, same {加入当天} other {加入后第 {days} 天}} {time}",
+      "dayStart": "{dir, select, before {活动日前 {days} 天} after {活动日后 {days} 天} other {活动当天}} {time}",
+      "dayEnd": "{dir, select, before {最后一天前 {days} 天} after {活动结束后 {days} 天} other {最后一天}} {time}",
+      "thenOffset": "{base}，{dir, select, before {提前 {offset}} other {推迟 {offset}}}"
+    },
+    "duration": {
+      "days": "{count, plural, other {# 天}}",
+      "hours": "{count, plural, other {# 小时}}",
+      "minutes": "{count, plural, other {# 分钟}}"
+    },
+    "history": {
+      "title": "运行记录",
+      "caption": "此旅程中的人",
+      "person": "人员",
+      "email": "邮箱",
+      "unknown": "未知人员",
+      "joined": "加入时间",
+      "status": "状态",
+      "progress": "步骤",
+      "progressCounts": "已完成 {done}/{total}",
+      "next": "下一步",
+      "searchLabel": "按姓名或邮箱查找人员",
+      "search": "搜索",
+      "clear": "清除",
+      "empty": "还没有人加入。",
+      "emptySearch": "没有人匹配“{q}”。",
+      "older": "更早的人员",
+      "runStatus": {
+        "active": "进行中",
+        "completed": "已完成",
+        "cancelled": "已取消"
+      }
+    },
+    "run": {
+      "metaTitle": "旅程记录",
+      "event": "活动",
+      "trigger": "触发条件",
+      "caption": "此人的步骤",
+      "step": "步骤",
+      "planned": "计划时间",
+      "result": "结果",
+      "at": "完成时间",
+      "actionStatus": {
+        "pending": "等待中",
+        "done": "已完成",
+        "skipped": "已跳过",
+        "failed": "失败",
+        "cancelled": "已取消"
+      }
+    },
+    "outcomes": {
+      "queued": "消息已加入发送队列",
+      "already_queued": "已发送过",
+      "label_added": "已添加标签",
+      "invited": "已发送问卷邀请",
+      "too_late": "时间已过",
+      "condition_not_met": "条件不满足",
+      "no_phone": "没有电话号码",
+      "no_device": "没有可推送的设备",
+      "no_address": "没有邮箱地址",
+      "not_attending": "不在活动名单中",
+      "too_many_labels": "标签过多",
+      "no_survey": "活动没有问卷",
+      "closed": "问卷已关闭",
+      "no_questions": "问卷没有问题",
+      "already_invited": "已邀请过",
+      "order_refunded": "订单已退款",
+      "ticket_cancelled": "门票已取消",
+      "event_cancelled": "活动已取消",
+      "event_postponed": "活动已延期",
+      "journey_disabled": "旅程已关闭",
+      "step_removed": "步骤已移除",
+      "run_ended": "旅程已结束",
+      "event_missing": "找不到活动",
+      "error": "多次尝试后失败",
+      "other": "其他"
     }
   }
 }
