@@ -1462,7 +1462,8 @@
   "legal": {
     "platform": "Yayatoh",
     "updated": "Laatst bijgewerkt op {date}",
-    "organizerPages": "Beleid van {org}"
+    "organizerPages": "Beleid van {org}",
+    "privacyRequest": "Vraag een kopie van je gegevens of laat ze wissen"
   },
   "setup": {
     "title": "Klaar om te verkopen · {done} van {total} klaar",
@@ -2459,70 +2460,197 @@
   },
   "privacy": {
     "title": "Privacyverzoeken",
-    "description": "Beantwoord mensen die vragen wat je over hen bewaart, of die vergeten willen worden. Elk verzoek wordt vastgelegd.",
+    "description": "Beantwoord mensen die een kopie vragen van wat je over hen bewaart, of die vergeten willen worden. Elk verzoek moet binnen 30 dagen worden afgehandeld en wordt vastgelegd.",
     "noticeLink": "Privacyverklaring van Yayatoh",
     "noAccessTitle": "Alleen eigenaren en beheerders kunnen privacyverzoeken afhandelen",
-    "noAccessDescription": "Vraag een eigenaar of beheerder van deze organisatie om te helpen met een verzoek over iemands gegevens.",
+    "noAccessDescription": "Vraag een eigenaar of beheerder van deze organisatie om hulp bij een verzoek over iemands gegevens.",
     "find": {
       "title": "Een persoon zoeken",
-      "hint": "Zoek op e-mail in contacten, bestellingen, tickets, gastenlijsten, antwoorden en check-ins.",
+      "hint": "Zoek op e-mail in alles wat deze organisatie bewaart: contacten, bestellingen, tickets, gastenlijsten, formulieren, berichten, sprekers en meer.",
       "email": "E-mailadres",
       "submit": "Zoeken"
     },
     "result": {
       "title": "Wat deze organisatie over {email} bewaart",
       "noneTitle": "Niets gevonden voor dit e-mailadres",
-      "noneDescription": "Geen contact, bestelling, ticket of gast gebruikt dit adres in deze organisatie."
+      "noneDescription": "Geen enkel record in deze organisatie gebruikt dit adres. Je kunt toch een verzoek openen om de persoon formeel te antwoorden."
     },
-    "categories": {
-      "contacts": "Contactgegevens",
-      "consents": "Toestemmingen",
-      "orders": "Bestellingen",
-      "paidOrders": "Betaalde bestellingen (bewaard voor de boekhouding)",
-      "tickets": "Tickets",
-      "activeTickets": "Geldige tickets",
-      "claims": "Links voor ticketoverdracht",
-      "holderLinks": "Toegangslinks voor tickets",
+    "modules": {
+      "crm": "Contacten en toestemmingen",
+      "orders": "Bestellingen en wachtlijsten",
+      "ticketing": "Tickets",
       "attendees": "Vermeldingen op gastenlijsten",
-      "answers": "Antwoorden bij het afrekenen",
-      "admissions": "Check-ins",
-      "invitations": "Teamuitnodigingen"
+      "forms": "Formulierantwoorden",
+      "checkin": "Check-ins",
+      "tenancy": "Teamuitnodigingen",
+      "notifications": "Verzonden berichten",
+      "seating": "Plaatszoeker",
+      "alerts": "Meldingsinstellingen",
+      "guests": "Bruiloft- en feestgasten",
+      "messaging": "Gesprekken",
+      "assistance": "Hulpvragen",
+      "program": "Sprekersgegevens",
+      "events": "Portaalaccounts",
+      "media": "Geüploade bestanden",
+      "cms": "Berichten via het contactformulier",
+      "venues": "Offerteaanvragen voor locaties",
+      "reviews": "Beoordelingen",
+      "payments": "Betalingsgeschillen",
+      "surveys": "Enquêteantwoorden",
+      "registration": "Registraties",
+      "badges": "Badges",
+      "automations": "Journeys",
+      "campaigns": "Campagneverzendingen",
+      "audiences": "Doelgroepen",
+      "marketing": "Marketingtoewijzing",
+      "reports": "Analysegebeurtenissen",
+      "privacy": "Privacyverzoeken",
+      "platform": "Exports en systeemrecords"
     },
-    "export": {
-      "title": "Gegevens exporteren",
-      "hint": "Een JSON-bestand met alles hierboven, om naar de persoon te sturen. Het wordt na 7 dagen verwijderd.",
-      "submit": "Gegevens exporteren (JSON)",
-      "download": "Bestand downloaden",
-      "running": "Het bestand wordt voorbereid… laad de pagina zo opnieuw."
-    },
-    "erase": {
-      "title": "Deze persoon wissen",
-      "what": "Naam, e-mail, telefoon, antwoorden en links worden verwijderd uit contacten, bestellingen, tickets en gastenlijsten, en exportbestanden waarin de persoon voorkomt worden gewist.",
-      "holds": "{paid, plural, =0 {Er hoeven geen betaalde bestellingen bewaard te worden.} one {# betaalde bestelling wordt bewaard voor belasting en boekhouding, zonder naam of e-mail.} other {# betaalde bestellingen worden bewaard voor belasting en boekhouding, zonder naam of e-mail.}}",
-      "tickets": "{active, plural, =0 {Er zijn geen geldige tickets.} one {# geldig ticket blijft geldig, zonder naam.} other {# geldige tickets blijven geldig, zonder naam.}}",
-      "final": "Dit kan niet ongedaan worden gemaakt.",
-      "confirm": "Typ {email} om te bevestigen",
-      "submit": "Persoonsgegevens wissen",
-      "done": "Gewist. {records, plural, one {# record is} other {# records zijn}} geanonimiseerd of verwijderd; {kept, plural, =0 {geen betaalde bestellingen bewaard} one {# betaalde bestelling bewaard zonder persoonsgegevens} other {# betaalde bestellingen bewaard zonder persoonsgegevens}}."
+    "open": {
+      "title": "Een verzoek openen",
+      "hint": "Je hebt bevestigd wie het vraagt. Het verzoek moet binnen 30 dagen worden afgehandeld; dat doe je op de eigen pagina van het verzoek.",
+      "kind": "Wat vraagt de persoon?",
+      "access": "Een kopie van hun gegevens (inzage)",
+      "accessHint": "Een ondertekende ZIP met alles wat over hen wordt bewaard.",
+      "erasure": "Hun gegevens wissen (wissing)",
+      "erasureHint": "Verwijdert hen overal, behalve records die je wettelijk moet bewaren.",
+      "submit": "Verzoek openen",
+      "existing": "Er staat al een verzoek open voor deze persoon.",
+      "review": "Open verzoek bekijken"
     },
     "errors": {
       "invalidEmail": "Voer een geldig e-mailadres in.",
       "confirmMismatch": "Dat komt niet overeen. Typ hetzelfde e-mailadres om te bevestigen.",
-      "nothingHeld": "Er wordt niets meer over dit e-mailadres bewaard."
+      "kindRequired": "Kies wat de persoon vraagt.",
+      "reasonRequired": "Geef een reden van minstens 3 tekens.",
+      "closed": "Dit verzoek is al gesloten."
     },
-    "history": {
-      "title": "Eerdere verzoeken",
-      "caption": "Privacyverzoeken, nieuwste eerst",
-      "empty": "Nog geen verzoeken.",
-      "when": "Wanneer",
+    "queue": {
+      "title": "Open verzoeken",
+      "caption": "Open privacyverzoeken, eerstvolgende deadline eerst",
+      "emptyTitle": "Geen open verzoeken",
+      "empty": "Als iemand naar zijn gegevens vraagt, zoek die persoon hierboven en open een verzoek. Mensen kunnen het ook vragen via je privacyverklaring.",
+      "person": "Persoon",
       "kind": "Verzoek",
-      "subject": "Persoon",
-      "by": "Afgehandeld door",
+      "source": "Van",
+      "opened": "Geopend",
+      "due": "Deadline",
+      "overdue": "Te laat",
+      "action": "Actie",
+      "review": "Bekijken"
+    },
+    "closed": {
+      "title": "Gesloten verzoeken",
+      "caption": "Afgehandelde en ingetrokken verzoeken, nieuwste eerst",
+      "empty": "Nog geen gesloten verzoeken.",
+      "when": "Gesloten",
+      "status": "Status",
       "records": "Records"
     },
     "kinds": {
-      "access": "Inzage (export)",
+      "access": "Inzage (kopie)",
       "erasure": "Wissing"
+    },
+    "statuses": {
+      "open": "Open",
+      "completed": "Afgehandeld",
+      "cancelled": "Ingetrokken"
+    },
+    "sources": {
+      "staff": "Team, namens de persoon",
+      "self": "De persoon zelf (e-mail bevestigd)"
+    },
+    "request": {
+      "titleAccess": "Inzageverzoek",
+      "titleErasure": "Wisverzoek",
+      "openedNotice": "Verzoek geopend. De deadline is {date}.",
+      "cancelledNotice": "Verzoek ingetrokken.",
+      "fields": {
+        "kind": "Verzoek",
+        "source": "Van",
+        "opened": "Geopend",
+        "due": "Uiterlijk",
+        "verified": "E-mail bevestigd",
+        "completed": "Afgehandeld",
+        "cancelled": "Ingetrokken",
+        "reason": "Reden"
+      },
+      "holdings": {
+        "title": "Wat deze organisatie bewaart",
+        "empty": "Er wordt niets over deze persoon bewaard",
+        "emptyHint": "Je kunt het verzoek toch afhandelen: de persoon krijgt een formeel antwoord dat er niets wordt bewaard."
+      },
+      "export": {
+        "title": "Een kopie sturen",
+        "hint": "Eén ZIP met een JSON-bestand per onderdeel van Yayatoh en hun bestanden, ondertekend zodat iedereen kan controleren dat er niets is veranderd. Hij is 7 dagen te downloaden.",
+        "submit": "Archief maken",
+        "done": "Het archief is klaar.",
+        "notified": "We hebben de persoon een downloadlink gemaild.",
+        "until": "Beschikbaar tot {date}.",
+        "download": "Archief downloaden (ZIP)",
+        "expired": "Het archief is verlopen en verwijderd. Open een nieuw verzoek als de persoon nog een kopie nodig heeft."
+      },
+      "erase": {
+        "title": "Deze persoon wissen",
+        "what": "Naam, e-mail, telefoon, antwoorden, berichten en links worden uit elk onderdeel van Yayatoh verwijderd, en exportbestanden waarin de persoon voorkomt worden gewist.",
+        "holds": "Betaalde bestellingen, creditnota's, betalingsgeschillen en de toestemmingsgeschiedenis blijven bewaard waar de wet dat vereist, zonder naam of e-mail, en staan op het bewijs.",
+        "files": "Hun uploads en eerdere archieven worden uit de opslag verwijderd.",
+        "final": "Dit kan niet ongedaan worden gemaakt.",
+        "confirm": "Typ {email} om te bevestigen",
+        "submit": "Persoonsgegevens wissen",
+        "done": "Gewist. Het ondertekende bewijs hieronder toont wat is gewist, wat is bewaard en waarom."
+      },
+      "cancel": {
+        "title": "Verzoek intrekken",
+        "hint": "Als de persoon het heeft ingetrokken, of als het niet echt was. De reden wordt bij het verzoek vastgelegd.",
+        "reason": "Reden",
+        "submit": "Verzoek intrekken"
+      },
+      "receipt": {
+        "title": "Wisbewijs",
+        "erased": "Gewist",
+        "held": "Bewaard vanwege een wettelijke plicht",
+        "noneErased": "Er hoefde niets gewist te worden.",
+        "noneHeld": "Er hoefde niets bewaard te worden.",
+        "table": "Gegevens",
+        "action": "Wat er is gebeurd",
+        "rows": "Records",
+        "ref": "Record",
+        "basis": "Waarom het wordt bewaard",
+        "until": "Bewaard tot",
+        "files": "{count, plural, =0 {Er zijn geen opgeslagen bestanden verwijderd.} one {# opgeslagen bestand is verwijderd.} other {# opgeslagen bestanden zijn verwijderd.}}",
+        "suppressed": "Het adres staat op de platformbrede wislijst: geen enkele organisatie kan er nog marketing naar sturen, tenzij de persoon daar toestemming voor geeft.",
+        "connectors": "{count, plural, =0 {Er hoefden geen gekoppelde diensten te worden ingelicht.} one {Gekoppelde dienst die ook is gevraagd de persoon te wissen: {names}.} other {Gekoppelde diensten die ook is gevraagd de persoon te wissen: {names}.}}",
+        "signature": "Ondertekend met Ed25519-sleutel {key}.",
+        "download": "Bewijs downloaden (PDF)",
+        "notified": "We hebben de persoon een link naar dit bewijs gemaild.",
+        "actions": {
+          "delete": "Verwijderd",
+          "redact": "Persoonsgegevens verwijderd",
+          "hold": "Bewaard, persoonsgegevens verwijderd"
+        },
+        "bases": {
+          "tax_accounting": "Belasting- en boekhoudadministratie (7 jaar)",
+          "payment_dispute": "Bewijs voor een betalingsgeschil",
+          "accountability": "Bewijs dat het verzoek is afgehandeld"
+        }
+      }
+    },
+    "pdf": {
+      "title": "Wisbewijs",
+      "request": "Verzoek",
+      "person": "Persoon",
+      "source": "Aangevraagd door",
+      "requested": "Aangevraagd op",
+      "due": "Uiterlijk",
+      "completed": "Gewist op",
+      "signatureTitle": "Handtekening",
+      "algorithm": "Algoritme",
+      "keyId": "Sleutel-ID",
+      "digest": "SHA-256 van het bewijs",
+      "signature": "Handtekening (base64)",
+      "footer": "Uitgegeven door Yayatoh voor {org}. De handtekening dekt de gegevens van het bewijs; controleer haar met de publieke sleutel hieronder."
     }
   },
   "privacyNotice": {
@@ -9039,5 +9167,37 @@
       "questionNotAllowed": "Die vraag kan niet op badges worden geprint."
     },
     "elements": "Elementen aan deze kant"
+  },
+  "privacyRequest": {
+    "title": "Vraag naar je persoonsgegevens",
+    "description": "Vraag {org} om een kopie van de persoonsgegevens die over je worden bewaard, of om ze te wissen. Je krijgt binnen 30 dagen antwoord. Eerst mailen we je een code om te controleren dat het adres van jou is.",
+    "notice": "Lees de privacyverklaring van {org}",
+    "kindLegend": "Wat wil je?",
+    "access": "Een kopie van mijn gegevens",
+    "accessHint": "Je krijgt een link naar een ZIP-bestand met alles wat over je wordt bewaard.",
+    "erasure": "Mijn gegevens wissen",
+    "erasureHint": "{org} verwijdert je uit de administratie, behalve wat wettelijk bewaard moet blijven (zoals betaalde bestellingen voor de belasting).",
+    "email": "Je e-mailadres",
+    "emailHint": "Het adres dat je bij deze organisator hebt gebruikt.",
+    "submit": "Mail me een code",
+    "sent": "We hebben een code van 6 cijfers naar {email} gemaild. Voer die in om je verzoek te bevestigen. De code werkt 10 minuten.",
+    "resent": "We hebben een nieuwe code naar {email} gestuurd.",
+    "codeLabel": "Bevestigingscode",
+    "confirm": "Mijn verzoek bevestigen",
+    "resend": "Nieuwe code sturen",
+    "changeEmail": "Ander adres gebruiken",
+    "doneTitle": "Verzoek ontvangen",
+    "doneBody": "{org} antwoordt uiterlijk {date}. Je referentie is {reference}. Je krijgt een e-mail zodra het is afgehandeld.",
+    "existingBody": "Je hebt al een open verzoek bij {org}. De deadline is {date}; je referentie is {reference}.",
+    "errors": {
+      "invalidEmail": "Voer een geldig e-mailadres in.",
+      "kindRequired": "Kies een kopie van je gegevens of wissing.",
+      "rateLimited": "{minutes, plural, one {Te veel pogingen. Probeer het over # minuut opnieuw.} other {Te veel pogingen. Probeer het over # minuten opnieuw.}}",
+      "codeFormat": "Voer de 6 cijfers uit de e-mail in.",
+      "wrong": "{count, plural, =0 {Die code klopt niet. Vraag een nieuwe code aan.} one {Die code klopt niet. Nog # poging over.} other {Die code klopt niet. Nog # pogingen over.}}",
+      "locked": "Te veel foute codes. Vraag een nieuwe code aan.",
+      "expired": "Die code is verlopen of al gebruikt. Vraag een nieuwe code aan.",
+      "generic": "Er ging iets mis. Probeer het opnieuw."
+    }
   }
 }

@@ -1,18 +1,20 @@
 import type { TenantTx } from '@yayatoh/db';
 import { and, inArray, isNotNull, or, type SQL, sql } from 'drizzle-orm';
-import { DELETE, type DataSubject, defineDataSubjectContributor, REDACT, refsOf } from './data-subject.ts';
+import { type DataSubject, DELETE, defineDataSubjectContributor, REDACT, refsOf } from './data-subject.ts';
 import { ERASED_EMAIL, ERASED_NAME } from './privacy.ts';
-import { bulkOperationItems, bulkOperations, fileParts, files, idempotencyKeys, realtimeMessages } from './schema.ts';
+import { bulkOperationItems, bulkOperations, fileParts, files, idempotencyKeys } from './schema.ts';
 
 const likeEscape = (s: string) => s.replace(/[\\%_]/g, (c) => `\\${c}`);
 
 /**
- * What identifies the person in free-form platform data: the address, and names other modules
- * found for them (only ones long enough not to hit unrelated text).
+ * What identifies the person in free-form platform data: the address, and names and phone numbers
+ * other modules found for them (only ones long enough not to hit unrelated text).
  */
 export function subjectNeedles(s: DataSubject): string[] {
   const names = refsOf(s, 'name').filter((n) => n.trim().length >= 4 && n !== 'Erased');
-  return [...new Set([s.email, ...names])];
+  // Phones as stored (E.164) and without the plus (text often drops it).
+  const phones = refsOf(s, 'phone').flatMap((p) => (p.length >= 8 ? [p, p.replace(/^\+/, '')] : []));
+  return [...new Set([s.email, ...names, ...phones])];
 }
 
 const mentions = (col: SQL, needles: readonly string[]) =>
@@ -66,16 +68,21 @@ export const platformDataSubjects = defineDataSubjectContributor({
     const undo = await tx
       .update(bulkOperationItems)
       .set({ undo: null, updatedAt: new Date() })
-      .where(and(isNotNull(bulkOperationItems.undo), mentions(sql`${bulkOperationItems.undo}::text`, needles)))
+      .where(
+        and(isNotNull(bulkOperationItems.undo), mentions(sql`${bulkOperationItems.undo}::text`, needles)),
+      )
       .returning({ id: bulkOperationItems.id });
     const replays = await tx
       .delete(idempotencyKeys)
       .where(mentions(sql`${idempotencyKeys.response}::text`, needles))
       .returning({ id: idempotencyKeys.id });
-    const live = await tx
-      .delete(realtimeMessages)
-      .where(mentions(sql`${realtimeMessages.data}::text`, needles))
-      .returning({ id: realtimeMessages.id });
+    // The realtime log is append-only for the app (pruned after an hour): a SECURITY DEFINER purge.
+    const [live] = await tx.execute<{ n: number }>(
+      sql`select platform.purge_subject_realtime(array[${sql.join(
+        needles.map((n) => sql`${n}`),
+        sql`, `,
+      )}]::text[]) as n`,
+    );
     // The outbox log: the address becomes the placeholder address, names the placeholder name.
     const redactEvents = async (list: readonly string[], replacement: string) => {
       if (list.length === 0) return 0;
@@ -99,7 +106,7 @@ export const platformDataSubjects = defineDataSubjectContributor({
         'platform.bulk_operations': params.length,
         'platform.bulk_operation_items': undo.length,
         'platform.idempotency_keys': replays.length,
-        'platform.realtime_messages': live.length,
+        'platform.realtime_messages': Number(live?.n ?? 0),
         'platform.domain_events': events,
       },
     };

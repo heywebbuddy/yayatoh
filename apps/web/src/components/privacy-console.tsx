@@ -117,7 +117,10 @@ export function PrivacyConsole({
               </h2>
               <dl className="grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-2" data-testid="dsar-summary">
                 {rows.map(([m, n]) => (
-                  <div key={m} className="flex items-baseline justify-between gap-3 border-b border-line py-1">
+                  <div
+                    key={m}
+                    className="flex items-baseline justify-between gap-3 border-b border-line py-1"
+                  >
                     <dt className="text-body text-ink-2">{label(m)}</dt>
                     <dd className="font-mono text-body">{n}</dd>
                   </div>

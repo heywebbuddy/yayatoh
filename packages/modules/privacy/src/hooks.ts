@@ -1,4 +1,9 @@
-import { catchUpSubscriber, defineSubscriber, erasureConnectorHooks, type Subscriber } from '@yayatoh/platform';
+import {
+  catchUpSubscriber,
+  defineSubscriber,
+  erasureConnectorHooks,
+  type Subscriber,
+} from '@yayatoh/platform';
 import { z } from 'zod';
 
 const Payload = z.object({ requestId: z.uuid(), subjectRef: z.string().regex(/^[0-9a-f]{64}$/) });

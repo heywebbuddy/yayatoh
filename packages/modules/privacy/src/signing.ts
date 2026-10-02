@@ -17,7 +17,8 @@ export interface DsarSigner {
 const PKCS8_ED25519 = Buffer.from('302e020100300506032b657004220420', 'hex');
 
 export function localDsarSigner(secret: string): DsarSigner {
-  if (process.env.VERCEL_ENV === 'production') throw new Error('The local DSAR signer is not allowed in production');
+  if (process.env.VERCEL_ENV === 'production')
+    throw new Error('The local DSAR signer is not allowed in production');
   if (secret.length < 32) throw new Error('The DSAR signer needs a secret of at least 32 characters');
   const seed = Buffer.from(hkdfSync('sha256', secret, 'yayatoh', 'dsar-signing-key/v1', 32));
   const key = createPrivateKey({ key: Buffer.concat([PKCS8_ED25519, seed]), format: 'der', type: 'pkcs8' });

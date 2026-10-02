@@ -8,7 +8,9 @@ export async function contactDsarTx(tx: TenantTx, emailNorm: string, linked: rea
   const rows = await tx
     .select()
     .from(contacts)
-    .where(or(eq(contacts.emailNorm, emailNorm), linked.length ? inArray(contacts.id, [...linked]) : undefined));
+    .where(
+      or(eq(contacts.emailNorm, emailNorm), linked.length ? inArray(contacts.id, [...linked]) : undefined),
+    );
   const ids = rows.map((r) => r.id);
   const history = ids.length
     ? await tx
@@ -78,7 +80,9 @@ export async function eraseContactDsarTx(
   const rows = await tx
     .select({ id: contacts.id })
     .from(contacts)
-    .where(or(eq(contacts.emailNorm, emailNorm), linked.length ? inArray(contacts.id, [...linked]) : undefined));
+    .where(
+      or(eq(contacts.emailNorm, emailNorm), linked.length ? inArray(contacts.id, [...linked]) : undefined),
+    );
   for (const r of rows) {
     // email_norm is unique per org: make each erased contact's placeholder unique.
     const placeholder = ERASED_EMAIL.replace('@', `+${r.id}@`);

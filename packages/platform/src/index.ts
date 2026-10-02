@@ -32,20 +32,9 @@ export {
 export { tenantCommand, tenantQuery } from './commands/define.ts';
 export { createCommandPorts, type PolicyPorts, recentStepUp, withImpersonator } from './commands/ports.ts';
 export {
-  addressHash,
-  type ErasedAddress,
-  erasedAddress,
-  erasedAddressesTx,
-  erasedAddressTx,
-  liftErasedAccountMail,
-  markAddressErased,
-  markAddressErasedTx,
-  normalizeAddress,
-} from './erased-addresses.ts';
-export {
-  DELETE,
   type DataSubject,
   type DataSubjectContributor,
+  DELETE,
   dataSubjectContributors,
   defineDataSubjectContributor,
   type ErasureConnectorHook,
@@ -68,6 +57,17 @@ export {
   subjectCoverage,
 } from './data-subject.ts';
 export { platformDataSubjects, subjectNeedles } from './data-subject-platform.ts';
+export {
+  addressHash,
+  type ErasedAddress,
+  erasedAddress,
+  erasedAddressesTx,
+  erasedAddressTx,
+  liftErasedAccountMail,
+  markAddressErased,
+  markAddressErasedTx,
+  normalizeAddress,
+} from './erased-addresses.ts';
 export {
   FREEZE_DEFAULT_RETRY_SECONDS,
   type FreezeState,

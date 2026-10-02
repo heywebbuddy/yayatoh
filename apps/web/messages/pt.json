@@ -1462,7 +1462,8 @@
   "legal": {
     "platform": "Yayatoh",
     "updated": "Última atualização em {date}",
-    "organizerPages": "Políticas de {org}"
+    "organizerPages": "Políticas de {org}",
+    "privacyRequest": "Peça uma cópia dos seus dados ou que sejam apagados"
   },
   "setup": {
     "title": "Prepare-se para vender · {done} de {total} concluídos",
@@ -2459,70 +2460,197 @@
   },
   "privacy": {
     "title": "Pedidos de privacidade",
-    "description": "Responda a quem pergunta que dados tem sobre si ou pede para ser esquecido. Cada pedido fica registado.",
+    "description": "Responda a quem pede uma cópia dos dados que tem sobre si ou pede para ser esquecido. Cada pedido tem um prazo de 30 dias e fica registado.",
     "noticeLink": "Aviso de privacidade da Yayatoh",
     "noAccessTitle": "Só proprietários e administradores podem tratar pedidos de privacidade",
     "noAccessDescription": "Peça a um proprietário ou administrador desta organização ajuda com um pedido sobre os dados de alguém.",
     "find": {
       "title": "Encontrar uma pessoa",
-      "hint": "Pesquise por email em contactos, encomendas, bilhetes, listas de convidados, respostas e entradas.",
+      "hint": "Pesquise por email em tudo o que esta organização guarda: contactos, encomendas, bilhetes, listas de convidados, formulários, mensagens, oradores e muito mais.",
       "email": "Endereço de email",
       "submit": "Procurar"
     },
     "result": {
       "title": "O que esta organização tem sobre {email}",
       "noneTitle": "Nada encontrado para este email",
-      "noneDescription": "Nenhum contacto, encomenda, bilhete ou convidado usa este endereço nesta organização."
+      "noneDescription": "Nenhum registo desta organização usa este endereço. Mesmo assim, pode abrir um pedido para responder formalmente à pessoa."
     },
-    "categories": {
-      "contacts": "Registos de contacto",
-      "consents": "Registos de consentimento",
-      "orders": "Encomendas",
-      "paidOrders": "Encomendas pagas (guardadas para a contabilidade)",
-      "tickets": "Bilhetes",
-      "activeTickets": "Bilhetes válidos",
-      "claims": "Ligações de transferência de bilhetes",
-      "holderLinks": "Ligações de acesso a bilhetes",
+    "modules": {
+      "crm": "Contactos e consentimento",
+      "orders": "Encomendas e listas de espera",
+      "ticketing": "Bilhetes",
       "attendees": "Entradas em listas de convidados",
-      "answers": "Respostas no pagamento",
-      "admissions": "Entradas registadas",
-      "invitations": "Convites de equipa"
+      "forms": "Respostas a formulários",
+      "checkin": "Entradas registadas",
+      "tenancy": "Convites de equipa",
+      "notifications": "Mensagens enviadas",
+      "seating": "Localizador de lugares",
+      "alerts": "Definições de alertas",
+      "guests": "Convidados de casamentos e festas",
+      "messaging": "Conversas",
+      "assistance": "Pedidos de ajuda",
+      "program": "Dados dos oradores",
+      "events": "Contas do portal",
+      "media": "Ficheiros carregados",
+      "cms": "Mensagens do formulário de contacto",
+      "venues": "Pedidos de orçamento de locais",
+      "reviews": "Avaliações",
+      "payments": "Contestações de pagamento",
+      "surveys": "Respostas a inquéritos",
+      "registration": "Inscrições",
+      "badges": "Crachás",
+      "automations": "Jornadas",
+      "campaigns": "Envios de campanhas",
+      "audiences": "Públicos",
+      "marketing": "Atribuição de marketing",
+      "reports": "Eventos de análise",
+      "privacy": "Pedidos de privacidade",
+      "platform": "Exportações e registos do sistema"
     },
-    "export": {
-      "title": "Exportar os dados",
-      "hint": "Um ficheiro JSON com tudo o que está acima, para enviar à pessoa. É eliminado após 7 dias.",
-      "submit": "Exportar dados (JSON)",
-      "download": "Transferir o ficheiro",
-      "running": "A preparar o ficheiro… recarregue a página daqui a pouco."
-    },
-    "erase": {
-      "title": "Apagar esta pessoa",
-      "what": "O nome, email, telefone, respostas e ligações são removidos de contactos, encomendas, bilhetes e listas de convidados, e os ficheiros exportados que os mencionam são eliminados.",
-      "holds": "{paid, plural, =0 {Não há encomendas pagas a guardar.} one {# encomenda paga é guardada para impostos e contabilidade, sem nome nem email.} other {# encomendas pagas são guardadas para impostos e contabilidade, sem nome nem email.}}",
-      "tickets": "{active, plural, =0 {Não tem bilhetes válidos.} one {# bilhete válido continua válido, sem nome.} other {# bilhetes válidos continuam válidos, sem nome.}}",
-      "final": "Não é possível anular.",
-      "confirm": "Escreva {email} para confirmar",
-      "submit": "Apagar dados pessoais",
-      "done": "Apagado. {records, plural, one {# registo foi anonimizado ou eliminado} other {# registos foram anonimizados ou eliminados}}; {kept, plural, =0 {nenhuma encomenda paga guardada} one {# encomenda paga guardada sem dados pessoais} other {# encomendas pagas guardadas sem dados pessoais}}."
+    "open": {
+      "title": "Abrir um pedido",
+      "hint": "Confirmou quem está a pedir. O pedido tem um prazo de 30 dias; trata-o na sua própria página.",
+      "kind": "O que pede a pessoa?",
+      "access": "Uma cópia dos seus dados (acesso)",
+      "accessHint": "Um ZIP assinado com tudo o que está guardado sobre a pessoa.",
+      "erasure": "Apagar os seus dados (apagamento)",
+      "erasureHint": "Remove a pessoa de todo o lado, exceto os registos que a lei obriga a guardar.",
+      "submit": "Abrir o pedido",
+      "existing": "Já existe um pedido aberto para esta pessoa.",
+      "review": "Rever o pedido aberto"
     },
     "errors": {
       "invalidEmail": "Introduza um endereço de email válido.",
       "confirmMismatch": "Não corresponde. Escreva o mesmo endereço de email para confirmar.",
-      "nothingHeld": "Já não existe nada guardado sobre este email."
+      "kindRequired": "Escolha o que a pessoa pede.",
+      "reasonRequired": "Indique um motivo com pelo menos 3 caracteres.",
+      "closed": "Este pedido já está fechado."
     },
-    "history": {
-      "title": "Pedidos anteriores",
-      "caption": "Pedidos de privacidade, mais recentes primeiro",
-      "empty": "Ainda sem pedidos.",
-      "when": "Quando",
+    "queue": {
+      "title": "Pedidos abertos",
+      "caption": "Pedidos de privacidade abertos, prazo mais próximo primeiro",
+      "emptyTitle": "Sem pedidos abertos",
+      "empty": "Quando alguém perguntar pelos seus dados, encontre a pessoa acima e abra um pedido. As pessoas também podem pedir a partir do seu aviso de privacidade.",
+      "person": "Pessoa",
       "kind": "Pedido",
-      "subject": "Pessoa",
-      "by": "Tratado por",
+      "source": "Origem",
+      "opened": "Aberto",
+      "due": "Prazo",
+      "overdue": "Em atraso",
+      "action": "Ação",
+      "review": "Rever"
+    },
+    "closed": {
+      "title": "Pedidos fechados",
+      "caption": "Pedidos concluídos e retirados, mais recentes primeiro",
+      "empty": "Ainda sem pedidos fechados.",
+      "when": "Fechado",
+      "status": "Estado",
       "records": "Registos"
     },
     "kinds": {
-      "access": "Acesso (exportação)",
+      "access": "Acesso (cópia)",
       "erasure": "Apagamento"
+    },
+    "statuses": {
+      "open": "Aberto",
+      "completed": "Concluído",
+      "cancelled": "Retirado"
+    },
+    "sources": {
+      "staff": "A equipa, em nome da pessoa",
+      "self": "A própria pessoa (email confirmado)"
+    },
+    "request": {
+      "titleAccess": "Pedido de acesso",
+      "titleErasure": "Pedido de apagamento",
+      "openedNotice": "Pedido aberto. O prazo termina a {date}.",
+      "cancelledNotice": "Pedido retirado.",
+      "fields": {
+        "kind": "Pedido",
+        "source": "Origem",
+        "opened": "Aberto",
+        "due": "Prazo até",
+        "verified": "Email confirmado",
+        "completed": "Concluído",
+        "cancelled": "Retirado",
+        "reason": "Motivo"
+      },
+      "holdings": {
+        "title": "O que esta organização guarda",
+        "empty": "Não há nada guardado sobre esta pessoa",
+        "emptyHint": "Pode concluir o pedido na mesma: a pessoa recebe uma resposta formal de que nada está guardado."
+      },
+      "export": {
+        "title": "Enviar-lhe uma cópia",
+        "hint": "Um ZIP com um ficheiro JSON por cada parte da Yayatoh e os ficheiros da pessoa, assinado para que qualquer pessoa possa verificar que não foi alterado. Pode ser transferido durante 7 dias.",
+        "submit": "Criar o arquivo",
+        "done": "O arquivo está pronto.",
+        "notified": "Enviámos à pessoa uma ligação de transferência por email.",
+        "until": "Disponível até {date}.",
+        "download": "Transferir o arquivo (ZIP)",
+        "expired": "O arquivo expirou e foi eliminado. Abra um novo pedido se a pessoa precisar de outra cópia."
+      },
+      "erase": {
+        "title": "Apagar esta pessoa",
+        "what": "O nome, email, telefone, respostas, mensagens e ligações são removidos de todas as partes da Yayatoh, e os ficheiros exportados que a mencionam são eliminados.",
+        "holds": "Encomendas pagas, notas de crédito, contestações de pagamento e o histórico de consentimento são guardados quando a lei o exige, sem nome nem email, e listados no comprovativo.",
+        "files": "Os ficheiros carregados e arquivos anteriores da pessoa são eliminados do armazenamento.",
+        "final": "Não é possível anular.",
+        "confirm": "Escreva {email} para confirmar",
+        "submit": "Apagar dados pessoais",
+        "done": "Apagado. O comprovativo assinado abaixo indica o que foi apagado, o que foi guardado e porquê."
+      },
+      "cancel": {
+        "title": "Retirar o pedido",
+        "hint": "Se a pessoa o retirou ou se não era genuíno. O motivo fica registado com o pedido.",
+        "reason": "Motivo",
+        "submit": "Retirar pedido"
+      },
+      "receipt": {
+        "title": "Comprovativo de apagamento",
+        "erased": "Apagado",
+        "held": "Guardado por obrigação legal",
+        "noneErased": "Não foi preciso apagar nada.",
+        "noneHeld": "Não foi preciso guardar nada.",
+        "table": "Dados",
+        "action": "O que aconteceu",
+        "rows": "Registos",
+        "ref": "Registo",
+        "basis": "Porque é guardado",
+        "until": "Guardado até",
+        "files": "{count, plural, =0 {Nenhum ficheiro armazenado foi eliminado.} one {# ficheiro armazenado foi eliminado.} other {# ficheiros armazenados foram eliminados.}}",
+        "suppressed": "O endereço está na lista de apagados de toda a plataforma: nenhuma organização lhe pode voltar a enviar marketing, a menos que a pessoa dê o seu consentimento.",
+        "connectors": "{count, plural, =0 {Não foi preciso avisar nenhum serviço ligado.} one {Serviço ligado a que também foi pedido que apague a pessoa: {names}.} other {Serviços ligados a que também foi pedido que apaguem a pessoa: {names}.}}",
+        "signature": "Assinado com a chave Ed25519 {key}.",
+        "download": "Transferir o comprovativo (PDF)",
+        "notified": "Enviámos à pessoa uma ligação para este comprovativo por email.",
+        "actions": {
+          "delete": "Eliminado",
+          "redact": "Dados pessoais removidos",
+          "hold": "Guardado, dados pessoais removidos"
+        },
+        "bases": {
+          "tax_accounting": "Registos fiscais e contabilísticos (7 anos)",
+          "payment_dispute": "Provas para uma contestação de pagamento",
+          "accountability": "Prova de que o pedido foi tratado"
+        }
+      }
+    },
+    "pdf": {
+      "title": "Comprovativo de apagamento",
+      "request": "Pedido",
+      "person": "Pessoa",
+      "source": "Pedido por",
+      "requested": "Pedido em",
+      "due": "Prazo até",
+      "completed": "Apagado em",
+      "signatureTitle": "Assinatura",
+      "algorithm": "Algoritmo",
+      "keyId": "ID da chave",
+      "digest": "SHA-256 do comprovativo",
+      "signature": "Assinatura (base64)",
+      "footer": "Emitido pela Yayatoh para {org}. A assinatura abrange os dados do comprovativo; verifique-a com a chave pública abaixo."
     }
   },
   "privacyNotice": {
@@ -9039,5 +9167,37 @@
       "questionNotAllowed": "Essa pergunta não pode ser impressa nos crachás."
     },
     "elements": "Elementos deste lado"
+  },
+  "privacyRequest": {
+    "title": "Pedido sobre os seus dados pessoais",
+    "description": "Peça a {org} uma cópia dos dados pessoais que tem sobre si, ou que os apague. A resposta chega no prazo de 30 dias. Primeiro enviamos-lhe um código por email para confirmar que o endereço é seu.",
+    "notice": "Leia o aviso de privacidade de {org}",
+    "kindLegend": "O que pretende?",
+    "access": "Uma cópia dos meus dados",
+    "accessHint": "Recebe uma ligação para um ficheiro ZIP com tudo o que está guardado sobre si.",
+    "erasure": "Apagar os meus dados",
+    "erasureHint": "{org} remove-o dos seus registos, exceto o que a lei obriga a guardar (como encomendas pagas, para efeitos fiscais).",
+    "email": "O seu endereço de email",
+    "emailHint": "O endereço que usou com este organizador.",
+    "submit": "Enviar-me um código",
+    "sent": "Enviámos um código de 6 dígitos para {email}. Introduza-o para confirmar o seu pedido. É válido durante 10 minutos.",
+    "resent": "Enviámos um novo código para {email}.",
+    "codeLabel": "Código de confirmação",
+    "confirm": "Confirmar o meu pedido",
+    "resend": "Enviar um novo código",
+    "changeEmail": "Usar outro endereço",
+    "doneTitle": "Pedido recebido",
+    "doneBody": "{org} vai responder até {date}. A sua referência é {reference}. Vai receber um email quando estiver concluído.",
+    "existingBody": "Já tem um pedido aberto com {org}. O prazo termina a {date}; a sua referência é {reference}.",
+    "errors": {
+      "invalidEmail": "Introduza um endereço de email válido.",
+      "kindRequired": "Escolha uma cópia dos seus dados ou o apagamento.",
+      "rateLimited": "{minutes, plural, one {Demasiadas tentativas. Tente novamente dentro de # minuto.} other {Demasiadas tentativas. Tente novamente dentro de # minutos.}}",
+      "codeFormat": "Introduza os 6 dígitos do email.",
+      "wrong": "{count, plural, =0 {Esse código não está correto. Peça um novo código.} one {Esse código não está correto. Resta # tentativa.} other {Esse código não está correto. Restam # tentativas.}}",
+      "locked": "Demasiados códigos errados. Peça um novo código.",
+      "expired": "Esse código expirou ou já foi usado. Peça um novo código.",
+      "generic": "Algo correu mal. Tente novamente."
+    }
   }
 }

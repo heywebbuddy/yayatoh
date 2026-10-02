@@ -6,7 +6,7 @@ export const plantBadges: Planter = async ({ admin, orgId, eventId, person, ids 
   const [b] = await admin`
     insert into badges.batches (org_id, event_id, request_key, status, sort, locale, ticket_ids, version_map,
       total, processed, expires_at)
-    values (${orgId}, ${eventId}, ${`dsar-${person.lastName}`.slice(0, 80)}, 'running', 'last_name', 'en',
+    values (${orgId}, ${eventId}, ${`dsar-badges-${orgId}`.slice(0, 80)}, 'running', 'last_name', 'en',
       array[${ids.ticketId}::uuid], ${admin.json({ byType: {}, fallback: null })}, 1, 1, now() + interval '7 days')
     returning id`;
   ids.badgeBatchId = b?.id as string;

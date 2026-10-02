@@ -181,12 +181,15 @@ export const notificationsDataSubjects = defineDataSubjectContributor({
           )
           .returning({ id: messages.id })
       : [];
+    // Provider events are append-only for the app: their diagnostic text is cleared through the
+    // SECURITY DEFINER `notifications.redact_message_event_details` (this org only).
     const reports = mineIds.length
-      ? await tx
-          .update(messageEvents)
-          .set({ detail: null, updatedAt: now })
-          .where(and(inArray(messageEvents.messageId, mineIds), isNotNull(messageEvents.detail)))
-          .returning({ id: messageEvents.id })
+      ? await tx.execute<{ n: number }>(
+          sql`select notifications.redact_message_event_details(array[${sql.join(
+            mineIds.map((id) => sql`${id}::uuid`),
+            sql`, `,
+          )}]::uuid[]) as n`,
+        )
       : [];
     const unsubscribes = await tx
       .delete(suppressions)
@@ -214,7 +217,7 @@ export const notificationsDataSubjects = defineDataSubjectContributor({
     return {
       erased: {
         'notifications.messages': mine.length + staff.length,
-        'notifications.message_events': reports.length,
+        'notifications.message_events': Number(reports[0]?.n ?? 0),
         'notifications.suppressions': unsubscribes.length,
         'notifications.address_suppressions': blocked.length,
         'notifications.push_tokens': devices,

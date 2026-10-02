@@ -19,7 +19,9 @@ export {
 export { ARCHIVE_FORMAT, type ArchiveManifest, buildArchive, verifyArchive } from './archive.ts';
 export { privacyDataSubjects } from './data-subject.ts';
 export { DsarEmail, DsarHistoryDto, DsarSummary, findSubjectQuery, maskEmail, subjectRefOf } from './dsar.ts';
-export { Receipt, RECEIPT_FORMAT, receiptBytes, signReceipt, verifyReceipt } from './receipt.ts';
+export { catchUpErasureHooks, erasureConnectorNotifier } from './hooks.ts';
+export { privateColumns } from './private-columns.ts';
+export { RECEIPT_FORMAT, Receipt, receiptBytes, signReceipt, verifyReceipt } from './receipt.ts';
 export {
   archiveFileQuery,
   cancelRequestCommand,
@@ -38,6 +40,8 @@ export {
   selfRequestAddressTx,
   submitSelfRequestCommand,
 } from './requests.ts';
+export { RETENTION, RetentionResult, retentionCommand } from './retention.ts';
+export { ACCOUNT_REQUEST_KINDS, DSAR_KINDS, DSAR_SOURCES, DSAR_STATUSES } from './schema.ts';
 export {
   canonicalJson,
   type DsarSigner,
@@ -56,7 +60,3 @@ export {
   summarizeExport,
 } from './subject.ts';
 export { crc32, unzip, zip } from './zip.ts';
-export { privateColumns } from './private-columns.ts';
-export { RETENTION, RetentionResult, retentionCommand } from './retention.ts';
-export { ACCOUNT_REQUEST_KINDS, DSAR_KINDS, DSAR_SOURCES, DSAR_STATUSES } from './schema.ts';
-export { catchUpErasureHooks, erasureConnectorNotifier } from './hooks.ts';

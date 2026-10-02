@@ -26,12 +26,16 @@ export default async function PrivacyRequestPage({
   const found = await privacyOrg(org);
   if (!found) notFound();
   const name =
-    (await withTenant(createCtx({ orgId: found.orgId, actor: { type: 'system', name: 'privacy.self-service' } }), (tx) =>
-      organizationNameTx(tx, found.orgId),
+    (await withTenant(
+      createCtx({ orgId: found.orgId, actor: { type: 'system', name: 'privacy.self-service' } }),
+      (tx) => organizationNameTx(tx, found.orgId),
     )) ?? org;
   const t = await getTranslations('privacyRequest');
   return (
-    <main id="main" className="mx-auto flex min-h-dvh w-full max-w-xl flex-col gap-6 px-4 py-10 sm:px-6 sm:py-16">
+    <main
+      id="main"
+      className="mx-auto flex min-h-dvh w-full max-w-xl flex-col gap-6 px-4 py-10 sm:px-6 sm:py-16"
+    >
       <PageHeader
         eyebrow={<Label>{name}</Label>}
         title={t('title')}
@@ -39,7 +43,10 @@ export default async function PrivacyRequestPage({
       />
       <SelfRequestForm action={selfRequestAction.bind(null, org)} org={name} />
       <p className="text-body text-ink-2">
-        <Link href={`/legal/${org}/privacy`} className="inline-flex min-h-11 items-center underline underline-offset-2">
+        <Link
+          href={`/legal/${org}/privacy`}
+          className="inline-flex min-h-11 items-center underline underline-offset-2"
+        >
           {t('notice', { org: name })}
         </Link>
       </p>

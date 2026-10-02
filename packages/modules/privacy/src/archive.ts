@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
-import type { ModuleExport } from './subject.ts';
 import { type DsarSigner, verifyDsarSignature } from './signing.ts';
+import type { ModuleExport } from './subject.ts';
 import { unzip, type ZipEntry, zip } from './zip.ts';
 
 /**

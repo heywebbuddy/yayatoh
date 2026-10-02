@@ -27,7 +27,11 @@ export async function receiptResponse(input: {
 }): Promise<Response> {
   const { receipt: r, locale } = input;
   const t = await getTranslations({ locale, namespace: 'privacy' });
-  const when = new Intl.DateTimeFormat(locale, { dateStyle: 'long', timeStyle: 'short', timeZone: input.timeZone });
+  const when = new Intl.DateTimeFormat(locale, {
+    dateStyle: 'long',
+    timeStyle: 'short',
+    timeZone: input.timeZone,
+  });
   const day = new Intl.DateTimeFormat(locale, { dateStyle: 'long', timeZone: input.timeZone });
   const signer = dsarSigner();
   const html = dsarReceiptHtml({

@@ -1,7 +1,7 @@
 import type { TenantTx } from '@yayatoh/db';
 import {
-  DELETE,
   type DataSubject,
+  DELETE,
   defineDataSubjectContributor,
   ERASED_EMAIL,
   ERASED_NAME,
@@ -14,7 +14,14 @@ import {
 } from '@yayatoh/platform';
 import { and, asc, eq, inArray, isNotNull } from 'drizzle-orm';
 import { eraseOrdersDsarTx, ordersDsarTx } from './dsar.ts';
-import { creditNotes, orderNotes, orders, refundRequests, supportMacroRuns, waitlistEntries } from './schema.ts';
+import {
+  creditNotes,
+  orderNotes,
+  orders,
+  refundRequests,
+  supportMacroRuns,
+  waitlistEntries,
+} from './schema.ts';
 import { waitlistDsarTx } from './waitlist.ts';
 
 /** Orders that were ever paid: tax and accounting records (D11: kept 7 years). */
@@ -123,7 +130,10 @@ export const ordersDataSubjects = defineDataSubjectContributor({
       .where(eq(orders.buyerEmail, s.email));
     const ids = placed.map((o) => o.id);
     const waiting = (
-      await tx.select({ id: waitlistEntries.id }).from(waitlistEntries).where(eq(waitlistEntries.email, s.email))
+      await tx
+        .select({ id: waitlistEntries.id })
+        .from(waitlistEntries)
+        .where(eq(waitlistEntries.email, s.email))
     ).length;
     // Orders, refund notes, guest sign-ins and waitlist places (M1.14c).
     const r = await eraseOrdersDsarTx(tx, s.email, now);

@@ -194,7 +194,10 @@ export function subjectCoverage(
     }
   for (const [id, mods] of declared) {
     if (mods.length > 1)
-      problems.push({ table: id, message: `${id} is declared by more than one contributor (${mods.join(', ')})` });
+      problems.push({
+        table: id,
+        message: `${id} is declared by more than one contributor (${mods.join(', ')})`,
+      });
     if (!known.has(id) && !tenantTables.has(id))
       problems.push({
         table: id,

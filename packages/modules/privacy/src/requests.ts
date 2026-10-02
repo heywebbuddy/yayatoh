@@ -15,7 +15,7 @@ import { and, asc, desc, eq, inArray, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { buildArchive } from './archive.ts';
 import { DsarEmail, DsarSummary, maskEmail, subjectRefOf } from './dsar.ts';
-import { Receipt, RECEIPT_FORMAT, signReceipt } from './receipt.ts';
+import { RECEIPT_FORMAT, Receipt, signReceipt } from './receipt.ts';
 import { DSAR_KINDS, DSAR_SOURCES, DSAR_STATUSES, dsarRequests } from './schema.ts';
 import { dsarSigner } from './signing.ts';
 import {
@@ -492,7 +492,11 @@ export const cancelRequestCommand = tenantCommand({
       .where(eq(dsarRequests.id, row.id));
     return { requestId: row.id };
   },
-  audit: (_input, r) => ({ action: 'privacy.request_cancelled', targetType: 'dsar_request', targetId: r.requestId }),
+  audit: (_input, r) => ({
+    action: 'privacy.request_cancelled',
+    targetType: 'dsar_request',
+    targetId: r.requestId,
+  }),
 });
 
 /**
@@ -500,7 +504,11 @@ export const cancelRequestCommand = tenantCommand({
  * while the request is open, for self-service requests only. Called by the web before it runs
  * the export or erasure, so the address never has to leave a command's output.
  */
-export async function selfRequestAddressTx(tx: TenantTx, ctx: Ctx, requestId: string): Promise<string | null> {
+export async function selfRequestAddressTx(
+  tx: TenantTx,
+  ctx: Ctx,
+  requestId: string,
+): Promise<string | null> {
   const row = await requestTx(tx, requestId);
   if (row.source !== 'self' || row.status !== 'open') return null;
   return openEmail(requireOrg(ctx), row.emailSealed);

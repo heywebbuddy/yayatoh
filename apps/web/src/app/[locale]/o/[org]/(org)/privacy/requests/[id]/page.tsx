@@ -6,7 +6,11 @@ import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Crumbs } from '@/components/crumbs.tsx';
 import { PRIVACY_MODULES } from '@/components/privacy-console.tsx';
-import { PrivacyCancelForm, PrivacyEraseForm, PrivacyExportForm } from '@/components/privacy-request-actions.tsx';
+import {
+  PrivacyCancelForm,
+  PrivacyEraseForm,
+  PrivacyExportForm,
+} from '@/components/privacy-request-actions.tsx';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import { cancelRequestAction, eraseRequestAction, exportRequestAction } from '../../actions.ts';
@@ -54,7 +58,14 @@ export default async function PrivacyRequestPage({
     (PRIVACY_MODULES as readonly string[]).includes(m) ? t(`privacy.modules.${m}`) : m;
   const prefix = locale === 'en' ? '' : `/${locale}`;
   const base = `${prefix}/o/${org}/privacy/requests/${req.id}`;
-  const tone = req.status === 'open' ? (req.overdue ? 'danger' : 'waiting') : req.status === 'completed' ? 'success' : 'neutral';
+  const tone =
+    req.status === 'open'
+      ? req.overdue
+        ? 'danger'
+        : 'waiting'
+      : req.status === 'completed'
+        ? 'success'
+        : 'neutral';
   const title = req.kind === 'access' ? t('privacy.request.titleAccess') : t('privacy.request.titleErasure');
   const holdings = r.holdings ? Object.entries(r.holdings).filter(([, n]) => n > 0) : [];
 
@@ -62,10 +73,17 @@ export default async function PrivacyRequestPage({
     <>
       <PageHeader
         breadcrumb={
-          <Crumbs items={[{ label: t('privacy.title'), href: `/o/${org}/privacy` }, { label: req.subjectHint }]} />
+          <Crumbs
+            items={[{ label: t('privacy.title'), href: `/o/${org}/privacy` }, { label: req.subjectHint }]}
+          />
         }
         title={title}
-        tag={<StatusPill tone={tone} label={req.overdue ? t('privacy.queue.overdue') : t(`privacy.statuses.${req.status}`)} />}
+        tag={
+          <StatusPill
+            tone={tone}
+            label={req.overdue ? t('privacy.queue.overdue') : t(`privacy.statuses.${req.status}`)}
+          />
+        }
         description={r.email ?? req.subjectHint}
       />
       <div aria-live="polite" className="flex flex-col gap-3">
@@ -121,12 +139,18 @@ export default async function PrivacyRequestPage({
               {t('privacy.request.holdings.title')}
             </h2>
             {holdings.length === 0 ? (
-              <EmptyState title={t('privacy.request.holdings.empty')} description={t('privacy.request.holdings.emptyHint')} />
+              <EmptyState
+                title={t('privacy.request.holdings.empty')}
+                description={t('privacy.request.holdings.emptyHint')}
+              />
             ) : (
               <Card>
                 <dl className="grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-2" data-testid="dsar-summary">
                   {holdings.map(([m, n]) => (
-                    <div key={m} className="flex items-baseline justify-between gap-3 border-b border-line py-1">
+                    <div
+                      key={m}
+                      className="flex items-baseline justify-between gap-3 border-b border-line py-1"
+                    >
                       <dt className="text-body text-ink-2">{moduleLabel(m)}</dt>
                       <dd className="font-mono text-body">{n}</dd>
                     </div>
@@ -179,7 +203,13 @@ export default async function PrivacyRequestPage({
                 header: t('privacy.request.receipt.action'),
                 cell: (e) => t(`privacy.request.receipt.actions.${e.action}`),
               },
-              { key: 'rows', header: t('privacy.request.receipt.rows'), cell: (e) => e.rows, mono: true, align: 'end' },
+              {
+                key: 'rows',
+                header: t('privacy.request.receipt.rows'),
+                cell: (e) => e.rows,
+                mono: true,
+                align: 'end',
+              },
             ]}
           />
           <Table
@@ -195,7 +225,12 @@ export default async function PrivacyRequestPage({
                 header: t('privacy.request.receipt.basis'),
                 cell: (h) => t(`privacy.request.receipt.bases.${h.basis}`),
               },
-              { key: 'until', header: t('privacy.request.receipt.until'), cell: (h) => h.until ?? '—', mono: true },
+              {
+                key: 'until',
+                header: t('privacy.request.receipt.until'),
+                cell: (h) => h.until ?? '—',
+                mono: true,
+              },
             ]}
           />
           <Card className="flex flex-col gap-2 text-body">

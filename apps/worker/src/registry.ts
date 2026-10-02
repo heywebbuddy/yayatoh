@@ -29,8 +29,8 @@ import {
   waitlistMailer,
 } from '@yayatoh/orders';
 import { payoutDestinationMailer } from '@yayatoh/payments';
-import { erasureConnectorNotifier } from '@yayatoh/privacy';
 import { type Subscriber, signLinkToken } from '@yayatoh/platform';
+import { erasureConnectorNotifier } from '@yayatoh/privacy';
 import { portalSpeakerCleanup, taskReminderMailer } from '@yayatoh/program';
 import { registrationCapacity } from '@yayatoh/registration';
 import { analyticsForwarder, metricsProjector, postgresAnalyticsSink } from '@yayatoh/reports';

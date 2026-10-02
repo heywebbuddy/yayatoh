@@ -1,7 +1,7 @@
 import type { TenantTx } from '@yayatoh/db';
 import {
-  DELETE,
   type DataSubject,
+  DELETE,
   defineDataSubjectContributor,
   ERASED_NAME,
   hold,

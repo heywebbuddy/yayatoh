@@ -55,9 +55,7 @@ export const dsarRequests = tenantTable(
     index('dsar_requests_org_created_idx').on(t.orgId, t.createdAt),
     index('dsar_requests_org_subject_idx').on(t.orgId, t.subjectRef),
     // One open request per person per org (M6.1c).
-    uniqueIndex('dsar_requests_org_open_subject_key')
-      .on(t.orgId, t.subjectRef)
-      .where(sql`status = 'open'`),
+    uniqueIndex('dsar_requests_org_open_subject_key').on(t.orgId, t.subjectRef).where(sql`status = 'open'`),
     index('dsar_requests_org_due_idx').on(t.orgId, t.dueAt).where(sql`status = 'open'`),
     check('dsar_requests_kind_check', sql`kind in ('access', 'erasure')`),
     check('dsar_requests_subject_ref_check', sql`subject_ref ~ '^[0-9a-f]{64}$'`),

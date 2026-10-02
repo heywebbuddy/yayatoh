@@ -12,8 +12,8 @@ import {
   bulkStepCommand,
   createCommandPorts,
   localKeyVault,
-  runBulkOperation,
   registerDataSubjectContributors,
+  runBulkOperation,
   setKeyVault,
 } from '@yayatoh/platform';
 import { attendeeExportAction, bookingsExportAction } from '@yayatoh/reports';

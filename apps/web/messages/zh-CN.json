@@ -1462,7 +1462,8 @@
   "legal": {
     "platform": "Yayatoh",
     "updated": "最后更新于 {date}",
-    "organizerPages": "{org} 的政策"
+    "organizerPages": "{org} 的政策",
+    "privacyRequest": "申请获取您的数据副本或将其抹除"
   },
   "setup": {
     "title": "准备开售 · 已完成 {done}/{total}",
@@ -2459,70 +2460,197 @@
   },
   "privacy": {
     "title": "隐私请求",
-    "description": "回应询问您持有其哪些数据或要求被遗忘的人。每个请求都会被记录。",
+    "description": "回应向您索取其数据副本或要求被遗忘的人。每个请求须在 30 天内处理，并会被记录。",
     "noticeLink": "Yayatoh 隐私声明",
     "noAccessTitle": "只有所有者和管理员可以处理隐私请求",
-    "noAccessDescription": "请此组织的所有者或管理员协助处理有关某人数据的请求。",
+    "noAccessDescription": "如需处理有关某人数据的请求，请联系此组织的所有者或管理员。",
     "find": {
       "title": "查找某人",
-      "hint": "按邮箱在联系人、订单、门票、宾客名单、回答和签到记录中搜索。",
+      "hint": "按邮箱搜索此组织持有的所有数据：联系人、订单、门票、宾客名单、表单、消息、演讲嘉宾等。",
       "email": "邮箱地址",
       "submit": "查找"
     },
     "result": {
       "title": "此组织持有的关于 {email} 的数据",
       "noneTitle": "未找到此邮箱的数据",
-      "noneDescription": "此组织中没有任何联系人、订单、门票或宾客记录使用该地址。"
+      "noneDescription": "此组织中没有任何记录使用该地址。您仍可以创建请求，向此人作出正式答复。"
     },
-    "categories": {
-      "contacts": "联系人记录",
-      "consents": "同意记录",
-      "orders": "订单",
-      "paidOrders": "已付款订单（为会计保留）",
-      "tickets": "门票",
-      "activeTickets": "有效门票",
-      "claims": "门票转让链接",
-      "holderLinks": "门票访问链接",
+    "modules": {
+      "crm": "联系人和同意",
+      "orders": "订单和候补名单",
+      "ticketing": "门票",
       "attendees": "宾客名单条目",
-      "answers": "结账时的回答",
-      "admissions": "签到",
-      "invitations": "团队邀请"
+      "forms": "表单回答",
+      "checkin": "签到",
+      "tenancy": "团队邀请",
+      "notifications": "已发送的消息",
+      "seating": "座位查询",
+      "alerts": "提醒设置",
+      "guests": "婚礼和派对宾客",
+      "messaging": "对话",
+      "assistance": "求助请求",
+      "program": "演讲嘉宾信息",
+      "events": "门户账户",
+      "media": "上传的文件",
+      "cms": "联系表单消息",
+      "venues": "场地报价请求",
+      "reviews": "评价",
+      "payments": "付款争议",
+      "surveys": "问卷回答",
+      "registration": "报名",
+      "badges": "胸卡",
+      "automations": "旅程",
+      "campaigns": "营销活动发送记录",
+      "audiences": "受众",
+      "marketing": "营销归因",
+      "reports": "分析事件",
+      "privacy": "隐私请求",
+      "platform": "导出和系统记录"
     },
-    "export": {
-      "title": "导出其数据",
-      "hint": "包含以上全部内容的 JSON 文件，供您发送给本人。7 天后删除。",
-      "submit": "导出数据（JSON）",
-      "download": "下载文件",
-      "running": "正在准备文件……请稍后刷新页面。"
-    },
-    "erase": {
-      "title": "抹除此人",
-      "what": "其姓名、邮箱、电话、回答和链接将从联系人、订单、门票和宾客名单中移除，提及此人的导出文件也会被删除。",
-      "holds": "{paid, plural, =0 {没有需要保留的已付款订单。} other {# 个已付款订单将为税务和会计保留，但不含姓名和邮箱。}}",
-      "tickets": "{active, plural, =0 {没有有效门票。} other {# 张有效门票仍然有效，但不含姓名。}}",
-      "final": "此操作无法撤销。",
-      "confirm": "输入 {email} 以确认",
-      "submit": "抹除个人数据",
-      "done": "已抹除。{records, plural, other {# 条记录}}已脱敏或删除；{kept, plural, =0 {未保留已付款订单} other {已保留 # 个不含个人数据的已付款订单}}。"
+    "open": {
+      "title": "创建请求",
+      "hint": "您已确认请求人身份。请求须在 30 天内处理；您可在其单独页面中完成处理。",
+      "kind": "此人提出了什么请求？",
+      "access": "获取其数据副本（访问）",
+      "accessHint": "一个已签名的 ZIP，包含关于此人的所有数据。",
+      "erasure": "抹除其数据（抹除）",
+      "erasureHint": "从所有地方移除此人，法律要求您保留的记录除外。",
+      "submit": "创建请求",
+      "existing": "此人已有一个未完成的请求。",
+      "review": "查看未完成的请求"
     },
     "errors": {
       "invalidEmail": "请输入有效的邮箱地址。",
       "confirmMismatch": "不匹配。请输入相同的邮箱地址以确认。",
-      "nothingHeld": "已不再持有此邮箱的任何数据。"
+      "kindRequired": "请选择此人提出的请求类型。",
+      "reasonRequired": "请填写至少 3 个字符的原因。",
+      "closed": "此请求已关闭。"
     },
-    "history": {
-      "title": "过往请求",
-      "caption": "隐私请求，最新在前",
-      "empty": "暂无请求。",
-      "when": "时间",
+    "queue": {
+      "title": "未完成的请求",
+      "caption": "未完成的隐私请求，最早到期的在前",
+      "emptyTitle": "没有未完成的请求",
+      "empty": "有人询问其数据时，请在上方查找此人并创建请求。他们也可以通过您的隐私声明提出请求。",
+      "person": "对象",
       "kind": "请求",
-      "subject": "对象",
-      "by": "处理人",
+      "source": "来源",
+      "opened": "创建时间",
+      "due": "截止",
+      "overdue": "已逾期",
+      "action": "操作",
+      "review": "查看"
+    },
+    "closed": {
+      "title": "已关闭的请求",
+      "caption": "已完成和已撤回的请求，最新在前",
+      "empty": "暂无已关闭的请求。",
+      "when": "关闭时间",
+      "status": "状态",
       "records": "记录数"
     },
     "kinds": {
-      "access": "访问（导出）",
+      "access": "访问（副本）",
       "erasure": "抹除"
+    },
+    "statuses": {
+      "open": "未完成",
+      "completed": "已完成",
+      "cancelled": "已撤回"
+    },
+    "sources": {
+      "staff": "工作人员代为提出",
+      "self": "本人（邮箱已确认）"
+    },
+    "request": {
+      "titleAccess": "访问请求",
+      "titleErasure": "抹除请求",
+      "openedNotice": "请求已创建，截止日期为 {date}。",
+      "cancelledNotice": "请求已撤回。",
+      "fields": {
+        "kind": "请求",
+        "source": "来源",
+        "opened": "创建时间",
+        "due": "截止日期",
+        "verified": "邮箱已确认",
+        "completed": "完成时间",
+        "cancelled": "撤回时间",
+        "reason": "原因"
+      },
+      "holdings": {
+        "title": "此组织持有的数据",
+        "empty": "没有持有关于此人的任何数据",
+        "emptyHint": "您仍可以完成请求：此人将收到未持有任何数据的正式答复。"
+      },
+      "export": {
+        "title": "发送副本给此人",
+        "hint": "一个 ZIP，包含 Yayatoh 每个部分的 JSON 文件及此人的文件，并已签名，任何人都可验证其未被篡改。可在 7 天内下载。",
+        "submit": "创建归档",
+        "done": "归档已就绪。",
+        "notified": "我们已通过邮件向此人发送下载链接。",
+        "until": "有效期至 {date}。",
+        "download": "下载归档（ZIP）",
+        "expired": "归档已过期并被删除。如此人需要另一份副本，请创建新请求。"
+      },
+      "erase": {
+        "title": "抹除此人",
+        "what": "其姓名、邮箱、电话、回答、消息和链接将从 Yayatoh 的所有部分中移除，提及此人的导出文件也会被删除。",
+        "holds": "已付款订单、贷记单、付款争议和同意记录会在法律要求的范围内保留，但不含姓名和邮箱，并列在回执中。",
+        "files": "其上传内容和之前的归档将从存储中删除。",
+        "final": "此操作无法撤销。",
+        "confirm": "输入 {email} 以确认",
+        "submit": "抹除个人数据",
+        "done": "已抹除。下方的签名回执列出了已抹除和已保留的内容及原因。"
+      },
+      "cancel": {
+        "title": "撤回请求",
+        "hint": "适用于此人已撤回请求或请求不真实的情况。原因会与请求一起记录。",
+        "reason": "原因",
+        "submit": "撤回请求"
+      },
+      "receipt": {
+        "title": "抹除回执",
+        "erased": "已抹除",
+        "held": "因法定保留义务而保留",
+        "noneErased": "没有需要抹除的内容。",
+        "noneHeld": "没有需要保留的内容。",
+        "table": "数据",
+        "action": "处理方式",
+        "rows": "记录数",
+        "ref": "记录",
+        "basis": "保留原因",
+        "until": "保留至",
+        "files": "{count, plural, =0 {没有删除任何已存储的文件。} other {已删除 # 个已存储的文件。}}",
+        "suppressed": "该地址已列入全平台的已抹除名单：除非此人主动同意，任何组织都不能再向其发送营销信息。",
+        "connectors": "{count, plural, =0 {无需通知任何已连接的服务。} other {已同时要求以下已连接的服务抹除此人：{names}。}}",
+        "signature": "使用 Ed25519 密钥 {key} 签名。",
+        "download": "下载回执（PDF）",
+        "notified": "我们已通过邮件向此人发送此回执的链接。",
+        "actions": {
+          "delete": "已删除",
+          "redact": "已移除个人数据",
+          "hold": "已保留，个人数据已移除"
+        },
+        "bases": {
+          "tax_accounting": "税务和会计记录（7 年）",
+          "payment_dispute": "付款争议的证据",
+          "accountability": "请求已处理的证明"
+        }
+      }
+    },
+    "pdf": {
+      "title": "抹除回执",
+      "request": "请求",
+      "person": "对象",
+      "source": "请求人",
+      "requested": "请求时间",
+      "due": "截止日期",
+      "completed": "抹除时间",
+      "signatureTitle": "签名",
+      "algorithm": "算法",
+      "keyId": "密钥 ID",
+      "digest": "回执 SHA-256",
+      "signature": "签名（base64）",
+      "footer": "由 Yayatoh 代表 {org} 签发。签名涵盖回执数据；请使用下方的公钥进行验证。"
     }
   },
   "privacyNotice": {
@@ -9039,5 +9167,37 @@
       "questionNotAllowed": "该问题不能打印在胸卡上。"
     },
     "elements": "此面的元素"
+  },
+  "privacyRequest": {
+    "title": "查询您的个人数据",
+    "description": "请 {org} 提供其持有的关于您的个人数据副本，或将其抹除。对方会在 30 天内答复。我们会先向您发送一个验证码邮件，以确认该地址属于您。",
+    "notice": "阅读 {org} 的隐私声明",
+    "kindLegend": "您想要什么？",
+    "access": "获取我的数据副本",
+    "accessHint": "您将收到一个 ZIP 文件链接，其中包含关于您的所有数据。",
+    "erasure": "抹除我的数据",
+    "erasureHint": "{org} 会从其记录中移除您，法律要求保留的内容除外（例如用于税务的已付款订单）。",
+    "email": "您的邮箱地址",
+    "emailHint": "您在此主办方使用的邮箱地址。",
+    "submit": "发送验证码到我的邮箱",
+    "sent": "我们已将 6 位验证码发送至 {email}。请输入验证码以确认请求。验证码 10 分钟内有效。",
+    "resent": "我们已向 {email} 发送新的验证码。",
+    "codeLabel": "验证码",
+    "confirm": "确认我的请求",
+    "resend": "发送新的验证码",
+    "changeEmail": "使用其他地址",
+    "doneTitle": "请求已收到",
+    "doneBody": "{org} 将在 {date} 前答复。您的参考编号是 {reference}。处理完成后您会收到邮件。",
+    "existingBody": "您在 {org} 已有一个未完成的请求。截止日期为 {date}；您的参考编号是 {reference}。",
+    "errors": {
+      "invalidEmail": "请输入有效的邮箱地址。",
+      "kindRequired": "请选择获取数据副本或抹除。",
+      "rateLimited": "{minutes, plural, other {尝试次数过多。请在 # 分钟后重试。}}",
+      "codeFormat": "请输入邮件中的 6 位数字。",
+      "wrong": "{count, plural, =0 {验证码不正确。请重新获取验证码。} other {验证码不正确。还剩 # 次机会。}}",
+      "locked": "错误次数过多。请重新获取验证码。",
+      "expired": "验证码已过期或已被使用。请重新获取验证码。",
+      "generic": "出了点问题。请重试。"
+    }
   }
 }

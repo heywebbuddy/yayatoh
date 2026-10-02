@@ -82,10 +82,24 @@ export function SelfRequestForm({
           {t('confirm')}
         </Button>
         <div className="flex flex-col gap-2 sm:flex-row">
-          <Button type="submit" name="intent" value="resend" variant="secondary" formNoValidate disabled={pending}>
+          <Button
+            type="submit"
+            name="intent"
+            value="resend"
+            variant="secondary"
+            formNoValidate
+            disabled={pending}
+          >
             {t('resend')}
           </Button>
-          <Button type="submit" name="intent" value="restart" variant="ghost" formNoValidate disabled={pending}>
+          <Button
+            type="submit"
+            name="intent"
+            value="restart"
+            variant="ghost"
+            formNoValidate
+            disabled={pending}
+          >
             {t('changeEmail')}
           </Button>
         </div>
@@ -95,10 +109,19 @@ export function SelfRequestForm({
   const startError = error(state.code);
   return (
     <form action={formAction} className="flex flex-col gap-4" noValidate>
-      <fieldset className="flex flex-col" aria-describedby={state.code === 'kind_required' ? `${id}-kind-error` : undefined}>
+      <fieldset
+        className="flex flex-col"
+        aria-describedby={state.code === 'kind_required' ? `${id}-kind-error` : undefined}
+      >
         <legend className="text-body font-semibold">{t('kindLegend')}</legend>
         <Radio id={`${id}-access`} name="kind" value="access" label={t('access')} hint={t('accessHint')} />
-        <Radio id={`${id}-erasure`} name="kind" value="erasure" label={t('erasure')} hint={t('erasureHint', { org })} />
+        <Radio
+          id={`${id}-erasure`}
+          name="kind"
+          value="erasure"
+          label={t('erasure')}
+          hint={t('erasureHint', { org })}
+        />
       </fieldset>
       {state.code === 'kind_required' ? (
         <p id={`${id}-kind-error`} role="alert" className="text-body text-danger">

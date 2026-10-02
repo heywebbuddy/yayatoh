@@ -39,7 +39,8 @@ export async function selfRequestAction(
     const code = String(form.get('verifyCode') ?? '').replace(/\s/g, '');
     if (!/^\d{6}$/.test(code)) return { ...prev, code: 'code_format' };
     const r = await confirmRequestCode(org.orgId, prev.email, code, prev.kind);
-    if (r.status !== 'ok' || !('requestId' in r)) return { ...prev, code: r.status, attemptsLeft: r.attemptsLeft };
+    if (r.status !== 'ok' || !('requestId' in r))
+      return { ...prev, code: r.status, attemptsLeft: r.attemptsLeft };
     return {
       step: 'done',
       reference: r.requestId.slice(-8).toUpperCase(),
@@ -53,6 +54,12 @@ export async function selfRequestAction(
   const kindRaw = prev.step === 'code' ? prev.kind : form.get('kind');
   if (kindRaw !== 'access' && kindRaw !== 'erasure') return { step: 'start', code: 'kind_required' };
   const r = await sendRequestCode(org.orgId, normalizeGuestEmail(email.data), kindRaw);
-  if (r.status === 'rate_limited') return { step: 'start', code: 'rate_limited', retryMinutes: minutes(r.retryAfterMs) };
-  return { step: 'code', email: normalizeGuestEmail(email.data), kind: kindRaw, resent: prev.step === 'code' };
+  if (r.status === 'rate_limited')
+    return { step: 'start', code: 'rate_limited', retryMinutes: minutes(r.retryAfterMs) };
+  return {
+    step: 'code',
+    email: normalizeGuestEmail(email.data),
+    kind: kindRaw,
+    resent: prev.step === 'code',
+  };
 }

@@ -65,5 +65,48 @@ BEGIN
 END
 $$;--> statement-breakpoint
 REVOKE ALL ON FUNCTION platform.redact_subject_events(text[], text) FROM PUBLIC;--> statement-breakpoint
-GRANT EXECUTE ON FUNCTION platform.redact_subject_events(text[], text) TO app_user;
+GRANT EXECUTE ON FUNCTION platform.redact_subject_events(text[], text) TO app_user;--> statement-breakpoint
+-- Provider events are append-only for the app; an erasure clears their diagnostic text (a bounce
+-- can quote the address) for the person's messages, in the caller's org only.
+CREATE FUNCTION notifications.redact_message_event_details(p_message_ids uuid[])
+RETURNS integer
+LANGUAGE plpgsql SECURITY DEFINER SET search_path = pg_catalog AS $$
+DECLARE
+  v_org uuid := NULLIF(current_setting('app.org_id', true), '')::uuid;
+  v_count integer;
+BEGIN
+  IF v_org IS NULL THEN
+    RAISE EXCEPTION 'notifications.redact_message_event_details needs a tenant transaction';
+  END IF;
+  UPDATE notifications.message_events e
+     SET detail = NULL, updated_at = now()
+   WHERE e.org_id = v_org AND e.message_id = ANY(p_message_ids) AND e.detail IS NOT NULL;
+  GET DIAGNOSTICS v_count = ROW_COUNT;
+  RETURN v_count;
+END
+$$;--> statement-breakpoint
+REVOKE ALL ON FUNCTION notifications.redact_message_event_details(uuid[]) FROM PUBLIC;--> statement-breakpoint
+GRANT EXECUTE ON FUNCTION notifications.redact_message_event_details(uuid[]) TO app_user;--> statement-breakpoint
+-- The realtime message log is append-only for the app (pruned after an hour); an erasure deletes
+-- this org's messages that mention the person now.
+CREATE FUNCTION platform.purge_subject_realtime(p_needles text[])
+RETURNS integer
+LANGUAGE plpgsql SECURITY DEFINER SET search_path = pg_catalog AS $$
+DECLARE
+  v_org uuid := NULLIF(current_setting('app.org_id', true), '')::uuid;
+  v_count integer;
+BEGIN
+  IF v_org IS NULL THEN
+    RAISE EXCEPTION 'platform.purge_subject_realtime needs a tenant transaction';
+  END IF;
+  DELETE FROM platform.realtime_messages m
+   WHERE m.org_id = v_org
+     AND EXISTS (SELECT 1 FROM unnest(p_needles) AS n
+                  WHERE length(btrim(n)) >= 3 AND strpos(lower(m.data::text), lower(n)) > 0);
+  GET DIAGNOSTICS v_count = ROW_COUNT;
+  RETURN v_count;
+END
+$$;--> statement-breakpoint
+REVOKE ALL ON FUNCTION platform.purge_subject_realtime(text[]) FROM PUBLIC;--> statement-breakpoint
+GRANT EXECUTE ON FUNCTION platform.purge_subject_realtime(text[]) TO app_user;
 -- hand-written: end

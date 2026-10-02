@@ -16,11 +16,16 @@ export const plantOrders: Planter = async ({ admin, orgId, eventId, ownerId, per
   await admin`
     insert into orders.credit_notes (org_id, order_id, event_id, number, kind, disposition, reason,
       amount_minor, balance_minor, currency, buyer_name, buyer_email, issued_by)
-    values (${orgId}, ${ids.orderId}, ${eventId}, ${n?.n as number}, 'goodwill', 'refund', 'Late start',
+    values (${orgId}, ${ids.orderId}, ${eventId}, ${n?.n as number}, 'partial', 'refunded', 'Late start',
       500, 0, 'USD', ${person.name}, ${person.email}, ${`user:${ownerId}`})`;
   await admin`
     insert into orders.refund_requests (org_id, order_id, event_id, message, due_at)
-    values (${orgId}, ${ids.orderId}, ${eventId}, ${`Please refund ${person.name}, call ${person.phone}`}, now() + interval '3 days')`;
+    values (${orgId}, ${ids.orderId}, ${eventId}, ${`Please refund ${person.name}, call ${person.phone}`}, now() + interval '3 days')
+    on conflict do nothing`;
+  // The fixture may already have an open request on that order: it gets the person's message too.
+  await admin`
+    update orders.refund_requests set message = ${`Please refund ${person.name}, call ${person.phone}`}
+    where org_id = ${orgId} and order_id = ${ids.orderId}`;
   await admin`
     insert into orders.order_notes (org_id, order_id, body, author_id)
     values (${orgId}, ${ids.orderId}, ${`${person.name} called about parking`}, ${ownerId})`;

@@ -19,6 +19,7 @@ export {
   upsertContactsTx,
   upsertContactTx,
 } from './contacts.ts';
+export { crmDataSubjects } from './data-subject.ts';
 export { consentRegivenSinceTx, contactDsarTx, eraseContactDsarTx, unlinkContactUserTx } from './dsar.ts';
 export { privateColumns } from './private-columns.ts';
 export {
@@ -52,4 +53,3 @@ export {
   isConsentTerm,
   recordTermConsentTx,
 } from './terms.ts';
-export { crmDataSubjects } from './data-subject.ts';

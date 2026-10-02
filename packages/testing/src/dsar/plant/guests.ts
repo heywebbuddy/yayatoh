@@ -15,5 +15,10 @@ export const plantGuests: Planter = async ({ admin, orgId, eventId, person, ids 
     insert into guests.guests (org_id, event_id, party_id, kind, first_name, last_name, meal, contact_id, is_primary)
     values (${orgId}, ${eventId}, ${party?.id as string}, 'guest', ${person.firstName}, ${person.lastName}, 'Vegan',
       ${ids.contactId}, true)`;
+  // A fixture guest already linked to the attendee record the person took over is them too.
+  if (ids.attendeeId)
+    await admin`
+      update guests.guests set first_name = ${person.firstName}, last_name = ${person.lastName}
+      where org_id = ${orgId} and attendee_id = ${ids.attendeeId}`;
   return ['guests.parties', 'guests.guests'];
 };

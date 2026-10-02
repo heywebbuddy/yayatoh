@@ -94,6 +94,7 @@ export {
   saveSupportMacroCommand,
   supportMacrosQuery,
 } from './commands/support-macros.ts';
+export { ordersDataSubjects } from './data-subject.ts';
 export {
   creditableMinor,
   creditNoteAmount,
@@ -315,4 +316,3 @@ export {
   waitlistRef,
   waitlistToken,
 } from './waitlist.ts';
-export { ordersDataSubjects } from './data-subject.ts';

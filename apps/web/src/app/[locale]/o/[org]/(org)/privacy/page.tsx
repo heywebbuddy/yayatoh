@@ -48,7 +48,11 @@ export default async function PrivacyPage({ params }: { params: Promise<{ locale
           </Link>
         }
       />
-      <PrivacyConsole find={findPersonAction.bind(null, org)} open={openRequestAction.bind(null, org)} org={org} />
+      <PrivacyConsole
+        find={findPersonAction.bind(null, org)}
+        open={openRequestAction.bind(null, org)}
+        org={org}
+      />
       <section aria-labelledby="dsar-open" className="flex flex-col gap-3">
         <SectionHeader id="dsar-open" title={t('privacy.queue.title')} count={open.length} />
         {open.length === 0 ? (
@@ -61,7 +65,11 @@ export default async function PrivacyPage({ params }: { params: Promise<{ locale
             columns={[
               { key: 'subject', header: t('privacy.queue.person'), cell: (r) => r.subjectHint, mono: true },
               { key: 'kind', header: t('privacy.queue.kind'), cell: (r) => t(`privacy.kinds.${r.kind}`) },
-              { key: 'source', header: t('privacy.queue.source'), cell: (r) => t(`privacy.sources.${r.source}`) },
+              {
+                key: 'source',
+                header: t('privacy.queue.source'),
+                cell: (r) => t(`privacy.sources.${r.source}`),
+              },
               {
                 key: 'opened',
                 header: t('privacy.queue.opened'),

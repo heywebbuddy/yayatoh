@@ -25,9 +25,7 @@ export function PrivacyExportForm({
           {t('submit')}
         </Button>
       </form>
-      <div aria-live="polite">
-        {state.kind === 'error' ? <Alert title={message(state.code)} /> : null}
-      </div>
+      <div aria-live="polite">{state.kind === 'error' ? <Alert title={message(state.code)} /> : null}</div>
     </Card>
   );
 }

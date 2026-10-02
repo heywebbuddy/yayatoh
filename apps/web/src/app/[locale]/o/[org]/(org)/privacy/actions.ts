@@ -107,7 +107,14 @@ export async function exportRequestAction(
     const to = await selfAddress(data, requestId);
     const r = await executeCommand(exportSubjectCommand, { requestId }, data.ctx, ports);
     if (to)
-      await notifySelfRequester({ kind: 'archive', to, orgId: data.org.id, orgSlug: org, requestId, until: r.archiveUntil });
+      await notifySelfRequester({
+        kind: 'archive',
+        to,
+        orgId: data.org.id,
+        orgSlug: org,
+        requestId,
+        until: r.archiveUntil,
+      });
   } catch (err) {
     return { kind: 'error', code: code(err) };
   }

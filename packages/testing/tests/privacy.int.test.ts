@@ -90,7 +90,9 @@ describe('data-subject requests: the request (M6.1c)', () => {
     // Another org can open its own request for the same person.
     await expect(open(email, 'access', b.ctx())).resolves.toMatchObject({ requestId: expect.any(String) });
     const row = await withTenant(a.ctx(), (tx) =>
-      tx.execute<{ r: string }>(sql`select row_to_json(d)::text as r from privacy.dsar_requests d where id = ${r.requestId}`),
+      tx.execute<{ r: string }>(
+        sql`select row_to_json(d)::text as r from privacy.dsar_requests d where id = ${r.requestId}`,
+      ),
     );
     expect(row[0]?.r).not.toContain(email);
     const q = await executeQuery(requestQuery, { requestId: r.requestId }, a.ctx(), ports);
@@ -100,7 +102,9 @@ describe('data-subject requests: the request (M6.1c)', () => {
     const list = await executeQuery(requestsQuery, {}, a.ctx(), ports);
     expect(list.open.map((x) => x.id)).toContain(r.requestId);
     // Org B never sees it.
-    await expect(executeQuery(requestQuery, { requestId: r.requestId }, b.ctx(), ports)).rejects.toMatchObject({
+    await expect(
+      executeQuery(requestQuery, { requestId: r.requestId }, b.ctx(), ports),
+    ).rejects.toMatchObject({
       code: 'not_found',
     });
     expect((await executeQuery(requestsQuery, {}, b.ctx(), ports)).open.map((x) => x.id)).not.toContain(
@@ -142,7 +146,9 @@ describe('data-subject requests: the request (M6.1c)', () => {
     const r = await open(`perm-${tag()}@example.test`, 'erasure');
     for (const id of [managerId, a.viewerId]) {
       const ctx = userCtx(id, a.org.id);
-      await expect(open(`x-${tag()}@example.test`, 'access', ctx)).rejects.toMatchObject({ code: 'forbidden' });
+      await expect(open(`x-${tag()}@example.test`, 'access', ctx)).rejects.toMatchObject({
+        code: 'forbidden',
+      });
       await expect(executeQuery(requestQuery, { requestId: r.requestId }, ctx, ports)).rejects.toMatchObject({
         code: 'forbidden',
       });
@@ -161,9 +167,18 @@ describe('data-subject requests: the request (M6.1c)', () => {
     await expect(
       executeCommand(cancelRequestCommand, { requestId: r.requestId, reason: '' }, a.ctx(), ports),
     ).rejects.toMatchObject({ code: 'validation_failed' });
-    await executeCommand(cancelRequestCommand, { requestId: r.requestId, reason: 'Withdrawn by phone' }, a.ctx(), ports);
+    await executeCommand(
+      cancelRequestCommand,
+      { requestId: r.requestId, reason: 'Withdrawn by phone' },
+      a.ctx(),
+      ports,
+    );
     const q = await executeQuery(requestQuery, { requestId: r.requestId }, a.ctx(), ports);
-    expect(q).toMatchObject({ email: null, cancelReason: 'Withdrawn by phone', request: { status: 'cancelled' } });
+    expect(q).toMatchObject({
+      email: null,
+      cancelReason: 'Withdrawn by phone',
+      request: { status: 'cancelled' },
+    });
     await expect(
       executeCommand(eraseSubjectCommand, { requestId: r.requestId, confirm: email }, a.ctx(), ports),
     ).rejects.toMatchObject({ code: 'invalid_state' });
@@ -241,9 +256,19 @@ describe('data-subject requests: access archive (M6.1c)', () => {
 
   it('a self-service request’s archive is downloadable from the link, then expires', async () => {
     const email = `selfcopy-${tag()}@example.test`;
-    const s = await executeCommand(submitSelfRequestCommand, { email, kind: 'access' }, systemCtx(a.org.id), ports);
+    const s = await executeCommand(
+      submitSelfRequestCommand,
+      { email, kind: 'access' },
+      systemCtx(a.org.id),
+      ports,
+    );
     await executeCommand(exportSubjectCommand, { requestId: s.requestId }, a.ctx(), ports);
-    const f = await executeQuery(selfArchiveFileQuery, { requestId: s.requestId }, systemCtx(a.org.id), ports);
+    const f = await executeQuery(
+      selfArchiveFileQuery,
+      { requestId: s.requestId },
+      systemCtx(a.org.id),
+      ports,
+    );
     expect(verifyArchive(f.bytes)).toEqual([]);
     const later = { ...systemCtx(a.org.id), now: new Date(Date.now() + 8 * DAY) };
     await expect(
@@ -256,7 +281,12 @@ describe('data-subject requests: erasure (M6.1c)', () => {
   it('needs the email typed again; nothing changes on a mismatch', async () => {
     const r = await open(`confirm-${tag()}@example.test`, 'erasure');
     await expect(
-      executeCommand(eraseSubjectCommand, { requestId: r.requestId, confirm: 'someone@else.test' }, a.ctx(), ports),
+      executeCommand(
+        eraseSubjectCommand,
+        { requestId: r.requestId, confirm: 'someone@else.test' },
+        a.ctx(),
+        ports,
+      ),
     ).rejects.toMatchObject({ code: 'validation_failed', details: { field: 'confirm' } });
     const q = await executeQuery(requestQuery, { requestId: r.requestId }, a.ctx(), ports);
     expect(q.request.status).toBe('open');
@@ -293,11 +323,13 @@ describe('data-subject requests: erasure (M6.1c)', () => {
     expect(r.receipt.subject.ref).toMatch(/^[0-9a-f]{64}$/);
     expect(JSON.stringify(r.receipt)).not.toContain(buyer(a));
     expect(verifyReceipt(r.receipt, r.signature, dsarSigner().publicKeyPem)).toBe(true);
-    expect(verifyReceipt({ ...r.receipt, files: r.receipt.files + 1 }, r.signature, dsarSigner().publicKeyPem)).toBe(
-      false,
-    );
+    expect(
+      verifyReceipt({ ...r.receipt, files: r.receipt.files + 1 }, r.signature, dsarSigner().publicKeyPem),
+    ).toBe(false);
     const tables = r.receipt.erased.map((e) => e.table);
-    expect(tables).toEqual(expect.arrayContaining(['crm.contacts', 'ticketing.tickets', 'attendees.attendees']));
+    expect(tables).toEqual(
+      expect.arrayContaining(['crm.contacts', 'ticketing.tickets', 'attendees.attendees']),
+    );
     // The paid order is listed as kept, with the basis and the end of the hold.
     expect(r.receipt.held).toEqual(
       expect.arrayContaining([
@@ -325,7 +357,12 @@ describe('data-subject requests: erasure (M6.1c)', () => {
     );
     expect(Number(leftovers[0]?.n)).toBe(0);
     const [orderAfter] = await withTenant(a.ctx(), (tx) =>
-      tx.execute<{ status: string; total_minor: string; buyer_email: string; manage_token_ciphertext: string | null }>(
+      tx.execute<{
+        status: string;
+        total_minor: string;
+        buyer_email: string;
+        manage_token_ciphertext: string | null;
+      }>(
         sql`select status, total_minor::text, buyer_email, manage_token_ciphertext from orders.orders where id = ${orderBefore?.id}`,
       ),
     );
@@ -354,7 +391,9 @@ describe('data-subject requests: erasure (M6.1c)', () => {
     await catchUpErasedMedia(a.org.id);
     await catchUpErasureHooks(a.org.id);
     expect(await mediaStore().get(a.org.id, archiveRow?.k as string)).toBeNull();
-    await expect(executeQuery(archiveFileQuery, { requestId: earlier }, a.ctx(), ports)).rejects.toMatchObject({
+    await expect(
+      executeQuery(archiveFileQuery, { requestId: earlier }, a.ctx(), ports),
+    ).rejects.toMatchObject({
       code: 'not_found',
     });
 
@@ -366,7 +405,8 @@ describe('data-subject requests: erasure (M6.1c)', () => {
     expect(log.entries[0]?.targetId).toBe(r.requestId);
     expect(JSON.stringify(log.entries)).not.toContain(buyer(a));
     expect((await withTenant(a.ctx(), verifyAuditChainTx)).verified).toBe(true);
-    const raw = await adminClient()`select row_to_json(d)::text as r from privacy.dsar_requests d where org_id = ${a.org.id}`;
+    const raw =
+      await adminClient()`select row_to_json(d)::text as r from privacy.dsar_requests d where org_id = ${a.org.id}`;
     for (const row of raw) expect(String(row.r)).not.toContain(buyer(a));
     // Another org is untouched.
     expect((await find(buyer(b), b.ctx())).summary).toEqual(bFind.summary);
@@ -378,7 +418,12 @@ describe('data-subject requests: erasure (M6.1c)', () => {
 
   it('a self-service erasure’s receipt is readable from the link, and verifies', async () => {
     const email = `selfgone-${tag()}@example.test`;
-    const s = await executeCommand(submitSelfRequestCommand, { email, kind: 'erasure' }, systemCtx(a.org.id), ports);
+    const s = await executeCommand(
+      submitSelfRequestCommand,
+      { email, kind: 'erasure' },
+      systemCtx(a.org.id),
+      ports,
+    );
     await executeCommand(eraseSubjectCommand, { requestId: s.requestId, confirm: email }, a.ctx(), ports);
     const r = await executeQuery(selfReceiptQuery, { requestId: s.requestId }, systemCtx(a.org.id), ports);
     expect(r.receipt.source).toBe('self');

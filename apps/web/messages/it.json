@@ -1462,7 +1462,8 @@
   "legal": {
     "platform": "Yayatoh",
     "updated": "Ultimo aggiornamento: {date}",
-    "organizerPages": "Policy di {org}"
+    "organizerPages": "Policy di {org}",
+    "privacyRequest": "Chiedi una copia dei tuoi dati o la loro cancellazione"
   },
   "setup": {
     "title": "Pronto a vendere · {done} di {total} completati",
@@ -2459,70 +2460,197 @@
   },
   "privacy": {
     "title": "Richieste privacy",
-    "description": "Rispondi a chi chiede quali dati conservi su di lui o chiede di essere dimenticato. Ogni richiesta viene registrata.",
+    "description": "Rispondi a chi chiede una copia dei dati che conservi su di lui o chiede di essere dimenticato. Ogni richiesta scade entro 30 giorni e viene registrata.",
     "noticeLink": "Informativa privacy di Yayatoh",
     "noAccessTitle": "Solo proprietari e amministratori possono gestire le richieste privacy",
-    "noAccessDescription": "Chiedi a un proprietario o amministratore di questa organizzazione di gestire una richiesta sui dati di qualcuno.",
+    "noAccessDescription": "Chiedi a un proprietario o amministratore di questa organizzazione di aiutarti con una richiesta sui dati di una persona.",
     "find": {
       "title": "Trova una persona",
-      "hint": "Cerca per email in contatti, ordini, biglietti, liste ospiti, risposte e check-in.",
+      "hint": "Cerca per email in tutto ciò che conserva questa organizzazione: contatti, ordini, biglietti, liste ospiti, moduli, messaggi, relatori e altro.",
       "email": "Indirizzo email",
       "submit": "Cerca"
     },
     "result": {
       "title": "Cosa conserva questa organizzazione su {email}",
       "noneTitle": "Nessun risultato per questa email",
-      "noneDescription": "Nessun contatto, ordine, biglietto o ospite usa questo indirizzo in questa organizzazione."
+      "noneDescription": "Nessun record di questa organizzazione usa questo indirizzo. Puoi comunque aprire una richiesta per rispondere formalmente alla persona."
     },
-    "categories": {
-      "contacts": "Schede contatto",
-      "consents": "Registri di consenso",
-      "orders": "Ordini",
-      "paidOrders": "Ordini pagati (conservati per la contabilità)",
-      "tickets": "Biglietti",
-      "activeTickets": "Biglietti validi",
-      "claims": "Link di trasferimento biglietti",
-      "holderLinks": "Link di accesso ai biglietti",
+    "modules": {
+      "crm": "Contatti e consensi",
+      "orders": "Ordini e liste d’attesa",
+      "ticketing": "Biglietti",
       "attendees": "Voci nelle liste ospiti",
-      "answers": "Risposte al checkout",
-      "admissions": "Check-in",
-      "invitations": "Inviti al team"
+      "forms": "Risposte ai moduli",
+      "checkin": "Check-in",
+      "tenancy": "Inviti al team",
+      "notifications": "Messaggi inviati",
+      "seating": "Trova posto",
+      "alerts": "Impostazioni degli avvisi",
+      "guests": "Ospiti di matrimoni e feste",
+      "messaging": "Conversazioni",
+      "assistance": "Richieste di aiuto",
+      "program": "Dati dei relatori",
+      "events": "Account del portale",
+      "media": "File caricati",
+      "cms": "Messaggi dal modulo di contatto",
+      "venues": "Richieste di preventivo per location",
+      "reviews": "Recensioni",
+      "payments": "Contestazioni di pagamento",
+      "surveys": "Risposte ai sondaggi",
+      "registration": "Registrazioni",
+      "badges": "Badge",
+      "automations": "Percorsi",
+      "campaigns": "Invii delle campagne",
+      "audiences": "Pubblici",
+      "marketing": "Attribuzione marketing",
+      "reports": "Eventi di analisi",
+      "privacy": "Richieste privacy",
+      "platform": "Esportazioni e record di sistema"
     },
-    "export": {
-      "title": "Esporta i suoi dati",
-      "hint": "Un file JSON con tutto quanto sopra, da inviare alla persona. Viene eliminato dopo 7 giorni.",
-      "submit": "Esporta dati (JSON)",
-      "download": "Scarica il file",
-      "running": "Preparazione del file… ricarica la pagina tra poco."
-    },
-    "erase": {
-      "title": "Cancella questa persona",
-      "what": "Nome, email, telefono, risposte e link vengono rimossi da contatti, ordini, biglietti e liste ospiti, e i file esportati che li menzionano vengono eliminati.",
-      "holds": "{paid, plural, =0 {Nessun ordine pagato da conservare.} one {# ordine pagato viene conservato per fisco e contabilità, senza nome né email.} other {# ordini pagati vengono conservati per fisco e contabilità, senza nome né email.}}",
-      "tickets": "{active, plural, =0 {Non ha biglietti validi.} one {# biglietto valido resta valido, senza nome.} other {# biglietti validi restano validi, senza nome.}}",
-      "final": "Non si può annullare.",
-      "confirm": "Digita {email} per confermare",
-      "submit": "Cancella i dati personali",
-      "done": "Cancellato. {records, plural, one {# record è stato oscurato o eliminato} other {# record sono stati oscurati o eliminati}}; {kept, plural, =0 {nessun ordine pagato conservato} one {# ordine pagato conservato senza dati personali} other {# ordini pagati conservati senza dati personali}}."
+    "open": {
+      "title": "Apri una richiesta",
+      "hint": "Hai confermato chi la sta chiedendo. La richiesta scade tra 30 giorni; la evadi nella sua pagina.",
+      "kind": "Cosa chiede la persona?",
+      "access": "Una copia dei suoi dati (accesso)",
+      "accessHint": "Uno ZIP firmato con tutto ciò che è conservato su di lei.",
+      "erasure": "Cancellare i suoi dati (cancellazione)",
+      "erasureHint": "La rimuove ovunque, tranne i record che la legge ti obbliga a conservare.",
+      "submit": "Apri la richiesta",
+      "existing": "Per questa persona c’è già una richiesta aperta.",
+      "review": "Vedi la richiesta aperta"
     },
     "errors": {
       "invalidEmail": "Inserisci un indirizzo email valido.",
       "confirmMismatch": "Non corrisponde. Digita lo stesso indirizzo email per confermare.",
-      "nothingHeld": "Non è più conservato nulla su questa email."
+      "kindRequired": "Scegli cosa chiede la persona.",
+      "reasonRequired": "Indica un motivo di almeno 3 caratteri.",
+      "closed": "Questa richiesta è già chiusa."
     },
-    "history": {
-      "title": "Richieste precedenti",
-      "caption": "Richieste privacy, dalla più recente",
-      "empty": "Ancora nessuna richiesta.",
-      "when": "Quando",
+    "queue": {
+      "title": "Richieste aperte",
+      "caption": "Richieste privacy aperte, dalla scadenza più vicina",
+      "emptyTitle": "Nessuna richiesta aperta",
+      "empty": "Quando qualcuno chiede dei propri dati, cercalo qui sopra e apri una richiesta. Le persone possono anche chiederlo dalla tua informativa privacy.",
+      "person": "Persona",
       "kind": "Richiesta",
-      "subject": "Persona",
-      "by": "Gestita da",
+      "source": "Da",
+      "opened": "Aperta",
+      "due": "Scadenza",
+      "overdue": "Scaduta",
+      "action": "Azione",
+      "review": "Vedi"
+    },
+    "closed": {
+      "title": "Richieste chiuse",
+      "caption": "Richieste evase e ritirate, dalla più recente",
+      "empty": "Ancora nessuna richiesta chiusa.",
+      "when": "Chiusa",
+      "status": "Stato",
       "records": "Record"
     },
     "kinds": {
-      "access": "Accesso (esportazione)",
+      "access": "Accesso (copia)",
       "erasure": "Cancellazione"
+    },
+    "statuses": {
+      "open": "Aperta",
+      "completed": "Evasa",
+      "cancelled": "Ritirata"
+    },
+    "sources": {
+      "staff": "Lo staff, per conto della persona",
+      "self": "La persona (email confermata)"
+    },
+    "request": {
+      "titleAccess": "Richiesta di accesso",
+      "titleErasure": "Richiesta di cancellazione",
+      "openedNotice": "Richiesta aperta. Scade il {date}.",
+      "cancelledNotice": "Richiesta ritirata.",
+      "fields": {
+        "kind": "Richiesta",
+        "source": "Da",
+        "opened": "Aperta",
+        "due": "Scadenza",
+        "verified": "Email confermata",
+        "completed": "Evasa",
+        "cancelled": "Ritirata",
+        "reason": "Motivo"
+      },
+      "holdings": {
+        "title": "Cosa conserva questa organizzazione",
+        "empty": "Non è conservato nulla su questa persona",
+        "emptyHint": "Puoi comunque evadere la richiesta: la persona riceve una risposta formale che non è conservato nulla."
+      },
+      "export": {
+        "title": "Inviale una copia",
+        "hint": "Uno ZIP con un file JSON per ogni parte di Yayatoh e i suoi file, firmato perché chiunque possa verificare che non è stato modificato. Si può scaricare per 7 giorni.",
+        "submit": "Crea l’archivio",
+        "done": "L’archivio è pronto.",
+        "notified": "Abbiamo inviato alla persona un link per il download via email.",
+        "until": "Disponibile fino al {date}.",
+        "download": "Scarica l’archivio (ZIP)",
+        "expired": "L’archivio è scaduto ed è stato eliminato. Apri una nuova richiesta se la persona ha bisogno di un’altra copia."
+      },
+      "erase": {
+        "title": "Cancella questa persona",
+        "what": "Nome, email, telefono, risposte, messaggi e link vengono rimossi da ogni parte di Yayatoh, e i file esportati che la menzionano vengono eliminati.",
+        "holds": "Ordini pagati, note di credito, contestazioni di pagamento e storico dei consensi vengono conservati dove la legge lo richiede, senza nome né email, e sono elencati nella ricevuta.",
+        "files": "I suoi caricamenti e gli archivi precedenti vengono eliminati dallo spazio di archiviazione.",
+        "final": "Non si può annullare.",
+        "confirm": "Digita {email} per confermare",
+        "submit": "Cancella i dati personali",
+        "done": "Cancellato. La ricevuta firmata qui sotto elenca cosa è stato cancellato, cosa è stato conservato e perché."
+      },
+      "cancel": {
+        "title": "Ritira la richiesta",
+        "hint": "Se la persona l’ha ritirata o non era autentica. Il motivo viene registrato con la richiesta.",
+        "reason": "Motivo",
+        "submit": "Ritira la richiesta"
+      },
+      "receipt": {
+        "title": "Ricevuta di cancellazione",
+        "erased": "Cancellato",
+        "held": "Conservato per obbligo di legge",
+        "noneErased": "Non c’era nulla da cancellare.",
+        "noneHeld": "Non c’era nulla da conservare.",
+        "table": "Dati",
+        "action": "Cosa è successo",
+        "rows": "Record",
+        "ref": "Record",
+        "basis": "Perché è conservato",
+        "until": "Conservato fino al",
+        "files": "{count, plural, =0 {Nessun file archiviato è stato eliminato.} one {# file archiviato è stato eliminato.} other {# file archiviati sono stati eliminati.}}",
+        "suppressed": "L’indirizzo è nell’elenco delle cancellazioni di tutta la piattaforma: nessuna organizzazione può inviargli di nuovo marketing, a meno che la persona non dia il consenso.",
+        "connectors": "{count, plural, =0 {Non è stato necessario avvisare alcun servizio collegato.} one {Servizio collegato a cui è stato chiesto di cancellare anche questa persona: {names}.} other {Servizi collegati a cui è stato chiesto di cancellare anche questa persona: {names}.}}",
+        "signature": "Firmata con la chiave Ed25519 {key}.",
+        "download": "Scarica la ricevuta (PDF)",
+        "notified": "Abbiamo inviato alla persona un link a questa ricevuta via email.",
+        "actions": {
+          "delete": "Eliminato",
+          "redact": "Dati personali rimossi",
+          "hold": "Conservato, dati personali rimossi"
+        },
+        "bases": {
+          "tax_accounting": "Documenti fiscali e contabili (7 anni)",
+          "payment_dispute": "Prove per una contestazione di pagamento",
+          "accountability": "Prova che la richiesta è stata gestita"
+        }
+      }
+    },
+    "pdf": {
+      "title": "Ricevuta di cancellazione",
+      "request": "Richiesta",
+      "person": "Persona",
+      "source": "Richiesta da",
+      "requested": "Richiesta il",
+      "due": "Scadenza",
+      "completed": "Cancellato il",
+      "signatureTitle": "Firma",
+      "algorithm": "Algoritmo",
+      "keyId": "ID chiave",
+      "digest": "SHA-256 della ricevuta",
+      "signature": "Firma (base64)",
+      "footer": "Emessa da Yayatoh per {org}. La firma copre i dati della ricevuta; verificala con la chiave pubblica qui sotto."
     }
   },
   "privacyNotice": {
@@ -9039,5 +9167,37 @@
       "questionNotAllowed": "Quella domanda non può essere stampata sui badge."
     },
     "elements": "Elementi su questo lato"
+  },
+  "privacyRequest": {
+    "title": "Chiedi dei tuoi dati personali",
+    "description": "Chiedi a {org} una copia dei dati personali che conserva su di te, oppure di cancellarli. La risposta arriva entro 30 giorni. Prima ti inviamo un codice via email per verificare che l’indirizzo sia tuo.",
+    "notice": "Leggi l’informativa privacy di {org}",
+    "kindLegend": "Cosa desideri?",
+    "access": "Una copia dei miei dati",
+    "accessHint": "Ricevi un link a un file ZIP con tutto ciò che è conservato su di te.",
+    "erasure": "Cancella i miei dati",
+    "erasureHint": "{org} ti rimuove dai suoi archivi, tranne ciò che la legge le impone di conservare (come gli ordini pagati, per il fisco).",
+    "email": "Il tuo indirizzo email",
+    "emailHint": "L’indirizzo che hai usato con questo organizzatore.",
+    "submit": "Inviami un codice",
+    "sent": "Abbiamo inviato un codice di 6 cifre a {email}. Inseriscilo per confermare la richiesta. È valido per 10 minuti.",
+    "resent": "Abbiamo inviato un nuovo codice a {email}.",
+    "codeLabel": "Codice di conferma",
+    "confirm": "Conferma la richiesta",
+    "resend": "Invia un nuovo codice",
+    "changeEmail": "Usa un altro indirizzo",
+    "doneTitle": "Richiesta ricevuta",
+    "doneBody": "{org} risponderà entro il {date}. Il tuo riferimento è {reference}. Riceverai un’email quando sarà evasa.",
+    "existingBody": "Hai già una richiesta aperta con {org}. Scade il {date}; il tuo riferimento è {reference}.",
+    "errors": {
+      "invalidEmail": "Inserisci un indirizzo email valido.",
+      "kindRequired": "Scegli una copia dei tuoi dati o la cancellazione.",
+      "rateLimited": "{minutes, plural, one {Troppi tentativi. Riprova tra # minuto.} other {Troppi tentativi. Riprova tra # minuti.}}",
+      "codeFormat": "Inserisci le 6 cifre dell’email.",
+      "wrong": "{count, plural, =0 {Il codice non è corretto. Chiedi un nuovo codice.} one {Il codice non è corretto. Ti resta # tentativo.} other {Il codice non è corretto. Ti restano # tentativi.}}",
+      "locked": "Troppi codici errati. Chiedi un nuovo codice.",
+      "expired": "Il codice è scaduto o è già stato usato. Chiedi un nuovo codice.",
+      "generic": "Qualcosa è andato storto. Riprova."
+    }
   }
 }

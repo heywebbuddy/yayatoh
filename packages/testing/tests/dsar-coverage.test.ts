@@ -2,8 +2,8 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { columnPrivacy, GLOBAL_TABLES, internal, personal } from '@yayatoh/db';
 import {
-  DELETE,
   type DataSubjectContributor,
+  DELETE,
   defineDataSubjectContributor,
   notSubject,
   registerDataSubjectContributors,
@@ -17,7 +17,9 @@ const meta = join(import.meta.dirname, '../../db/drizzle/meta');
 
 /** Every tenant table (`schema.table`) of the newest migration snapshot. */
 function tenantTables(): Set<string> {
-  const journal = JSON.parse(readFileSync(join(meta, '_journal.json'), 'utf8')) as { entries: { idx: number }[] };
+  const journal = JSON.parse(readFileSync(join(meta, '_journal.json'), 'utf8')) as {
+    entries: { idx: number }[];
+  };
   const idx = Math.max(...journal.entries.map((e) => e.idx));
   const snap = JSON.parse(
     readFileSync(join(meta, `${String(idx).padStart(4, '0')}_snapshot.json`), 'utf8'),
@@ -45,7 +47,9 @@ describe('data-subject coverage (M6.1c)', () => {
     ];
     const problems = subjectCoverage(DATA_SUBJECT_CONTRIBUTORS, planted, tenantTables());
     expect(problems.map((p) => p.table)).toEqual(['donations.donors']);
-    expect(problems[0]?.message).toContain("'donations.donors': DELETE | REDACT | hold(basis) | notSubject(why)");
+    expect(problems[0]?.message).toContain(
+      "'donations.donors': DELETE | REDACT | hold(basis) | notSubject(why)",
+    );
     expect(problems[0]?.message).toContain('donor_name, donor_email');
     // Declaring it closes the gap; internal-only tables need no contributor.
     const donations: DataSubjectContributor = defineDataSubjectContributor({
@@ -55,7 +59,11 @@ describe('data-subject coverage (M6.1c)', () => {
       erase: async () => ({ erased: {} }),
     });
     expect(
-      subjectCoverage([...DATA_SUBJECT_CONTRIBUTORS, donations], planted, new Set([...tenantTables(), 'donations.donors'])),
+      subjectCoverage(
+        [...DATA_SUBJECT_CONTRIBUTORS, donations],
+        planted,
+        new Set([...tenantTables(), 'donations.donors']),
+      ),
     ).toEqual([]);
   });
 
