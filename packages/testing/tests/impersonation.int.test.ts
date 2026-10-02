@@ -90,8 +90,6 @@ const MODULES = {
   crm,
   events,
   forms,
-  // M4.1d: the guests module (parties, sub-events, imports, RSVP).
-  guests,
   marketplace,
   media,
   messaging,
