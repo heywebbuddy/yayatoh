@@ -49,7 +49,10 @@ export type SelectionSettingsDto = z.infer<typeof SelectionSettingsDto>;
 /** The event's best-available settings (defaults when never set: off, no scores). */
 export async function selectionSettingsTx(tx: TenantTx, eventId: string): Promise<SelectionSettingsDto> {
   const [row] = await tx
-    .select({ bestAvailable: selectionSettings.bestAvailable, sectionScores: selectionSettings.sectionScores })
+    .select({
+      bestAvailable: selectionSettings.bestAvailable,
+      sectionScores: selectionSettings.sectionScores,
+    })
     .from(selectionSettings)
     .where(eq(selectionSettings.eventId, eventId));
   const parsed = SelectionSettingsDto.safeParse(row ?? {});
@@ -163,7 +166,11 @@ export const selectionPageQuery = tenantQuery({
  */
 export const setSelectionSettingsCommand = tenantCommand({
   name: 'seating.setSelectionSettings',
-  input: z.object({ eventId: z.uuid(), bestAvailable: z.boolean(), sectionScores: SectionScores.default({}) }),
+  input: z.object({
+    eventId: z.uuid(),
+    bestAvailable: z.boolean(),
+    sectionScores: SectionScores.default({}),
+  }),
   output: SelectionSettingsDto,
   entitlement: 'advanced_seating',
   permission: 'seating:write',
@@ -286,7 +293,12 @@ async function planSeatsTx(
   eventId: string,
   key: ChartKey,
   doc: FloorplanDoc,
-  free: (s: { status: string; ticketTypeId: string | null; accessible: boolean; companion: boolean }) => boolean,
+  free: (s: {
+    status: string;
+    ticketTypeId: string | null;
+    accessible: boolean;
+    companion: boolean;
+  }) => boolean,
 ) {
   const companions = await companionSeatsTx(tx, eventId);
   const rows = await tx
@@ -470,7 +482,13 @@ async function publicEventTx(tx: TenantTx, eventId: string) {
 async function releaseTokenTx(tx: TenantTx, ctx: Ctx, eventId: string, token: string): Promise<number> {
   const rows = await tx
     .update(eventSeats)
-    .set({ status: 'available', holdId: null, holdExpiresAt: null, heldForOccurrenceId: null, updatedAt: ctx.now })
+    .set({
+      status: 'available',
+      holdId: null,
+      holdExpiresAt: null,
+      heldForOccurrenceId: null,
+      updatedAt: ctx.now,
+    })
     .where(
       and(
         eq(eventSeats.eventId, eventId),
@@ -571,7 +589,9 @@ export const releaseBestAvailableCommand = tenantCommand({
   output: z.object({ released: z.int() }),
   entitlement: 'advanced_seating',
   permission: 'public:checkout',
-  handler: async ({ input, ctx, tx }) => ({ released: await releaseTokenTx(tx, ctx, input.eventId, input.token) }),
+  handler: async ({ input, ctx, tx }) => ({
+    released: await releaseTokenTx(tx, ctx, input.eventId, input.token),
+  }),
   audit: (input, r) => ({
     action: 'seating.best_available_released',
     targetType: 'event',
@@ -603,7 +623,11 @@ export async function adoptSeatHoldTx(
         gt(eventSeats.holdExpiresAt, ctx.now),
       ),
     )
-    .returning({ seatUuid: eventSeats.seatUuid, ticketTypeId: eventSeats.ticketTypeId, label: eventSeats.label });
+    .returning({
+      seatUuid: eventSeats.seatUuid,
+      ticketTypeId: eventSeats.ticketTypeId,
+      label: eventSeats.label,
+    });
   if (rows.length === 0)
     throw new DomainError('conflict', 'Those seats are no longer held', { reason: 'seat_hold_expired' });
   return rows;

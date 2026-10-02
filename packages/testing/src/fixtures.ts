@@ -230,6 +230,7 @@ import {
   setEventLayoutCommand,
   setFinderSettingsCommand,
   setSeatingRulesCommand,
+  setSelectionSettingsCommand,
 } from '@yayatoh/seating';
 import {
   createSurveyCommand,
@@ -1014,6 +1015,19 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     },
     ctx(),
     ports,
+  );
+  // M6.11a: best available offered, and one companion seat (isolation coverage). The fixture's row
+  // has no accessible seat, so the companion row is written directly rather than by the command.
+  await executeCommand(
+    setSelectionSettingsCommand,
+    { eventId: event.id, bestAvailable: true, sectionScores: {} },
+    ctx(),
+    ports,
+  );
+  await withTenant(ctx(), (tx) =>
+    tx.execute(
+      sql`insert into seating.companion_seats (org_id, event_id, seat_uuid) values (${org.id}, ${event.id}, ${plan.items[0]?.seats[1]?.id ?? ''})`,
+    ),
   );
   // The public seat finder (M1.7e): opened, and that guest asks for a code (a code row and a
   // rate-limit counter, isolation coverage).

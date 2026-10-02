@@ -197,7 +197,10 @@ describe('best available (M6.11a)', () => {
       const valid = (w: PlanSeat[]) => {
         const acc = w.filter((s) => s.accessible).length;
         const comp = w.filter((s) => s.companion && !s.accessible).length;
-        return acc >= r.accessible && (r.companionsPerAccessible === null || comp <= acc * r.companionsPerAccessible);
+        return (
+          acc >= r.accessible &&
+          (r.companionsPerAccessible === null || comp <= acc * r.companionsPerAccessible)
+        );
       };
       let exists = false;
       for (const free of byItem.values()) {
@@ -235,7 +238,9 @@ describe('best available (M6.11a)', () => {
   });
 
   it('is fast enough on a 20,000-seat plan', () => {
-    const rows = Array.from({ length: 40 }, (_, r) => '.'.repeat(500).replace(/./g, (c, i) => ((i + r) % 13 === 0 ? 'x' : c)));
+    const rows = Array.from({ length: 40 }, (_, r) =>
+      '.'.repeat(500).replace(/./g, (c, i) => ((i + r) % 13 === 0 ? 'x' : c)),
+    );
     const seats = plan(rows);
     const t0 = performance.now();
     const out = pick(req(seats, 8));

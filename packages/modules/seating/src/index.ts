@@ -43,6 +43,14 @@ export {
   pickSeats,
 } from './domain/assign.ts';
 export {
+  type BestAvailableFailure,
+  type BestAvailablePick,
+  type BestAvailableRequest,
+  bestAvailable,
+  isTogether,
+  type PlanSeat,
+} from './domain/best-available.ts';
+export {
   BULK_ASSIGN_FAILURES,
   BULK_ASSIGN_WARNINGS,
   BULK_TARGET_KINDS,
@@ -61,14 +69,6 @@ export {
   type SeatCounts,
   seatCounts,
 } from './domain/live.ts';
-export {
-  type BestAvailableFailure,
-  type BestAvailablePick,
-  type BestAvailableRequest,
-  bestAvailable,
-  isTogether,
-  type PlanSeat,
-} from './domain/best-available.ts';
 export {
   activeAdaRule,
   activeCompanionRule,

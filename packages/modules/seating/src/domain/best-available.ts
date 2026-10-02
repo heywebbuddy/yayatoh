@@ -121,8 +121,7 @@ function itemsOf(req: BestAvailableRequest): Item[] {
       sectionId: first.sectionId,
       size: seats.length,
       // Scored sections first (highest score first), then the rest by distance to the stage.
-      sectionKey:
-        score === undefined ? [1, sectionDistance.get(first.sectionId ?? '') ?? 0] : [0, -score],
+      sectionKey: score === undefined ? [1, sectionDistance.get(first.sectionId ?? '') ?? 0] : [0, -score],
       rowKey: req.stages.length ? Math.round(dist(centre(seats), req.stages)) : first.itemOrder,
       free: seats.filter((s) => s.free).sort((a, b) => a.index - b.index),
     });

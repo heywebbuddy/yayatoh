@@ -121,7 +121,11 @@ describe('companion seats and the accessible-seat statement (M6.11a)', () => {
   });
   const pick = (spec: string) =>
     [...spec].map((c, i) => ({ seatUuid: `s${i}`, accessible: c === 'A', companion: c === 'C' }));
-  const evaluate = (rules: SeatingRule[], spec: string, more: { now?: Date; accessibleNeed?: boolean } = {}) =>
+  const evaluate = (
+    rules: SeatingRule[],
+    spec: string,
+    more: { now?: Date; accessibleNeed?: boolean } = {},
+  ) =>
     evaluateSeatRules(rules, {
       context: 'checkout',
       seats: pick(spec),
@@ -152,7 +156,12 @@ describe('companion seats and the accessible-seat statement (M6.11a)', () => {
 
   it('never applies when the organizer seats guests', () => {
     expect(
-      evaluateSeatRules([companion('enforce')], { context: 'assign', seats: pick('CC'), startsAt, now: early }),
+      evaluateSeatRules([companion('enforce')], {
+        context: 'assign',
+        seats: pick('CC'),
+        startsAt,
+        now: early,
+      }),
     ).toEqual([]);
   });
 
