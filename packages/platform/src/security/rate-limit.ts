@@ -245,6 +245,12 @@ export const RATE_LIMIT_POLICIES = {
     identity: { limit: 10, windowMs: 60 * MIN },
     ipCeiling: { limit: 300, windowMs: 10 * MIN },
   },
+  /** M5.1a: looking up the registration types an email or code may pick (code guessing). */
+  registrationLookup: {
+    device: { limit: 30, windowMs: 10 * MIN },
+    anonymousIp: { limit: 60, windowMs: 10 * MIN },
+    ipCeiling: { limit: 600, windowMs: 10 * MIN },
+  },
   /** Starting a checkout (creates holds on inventory). */
   checkoutStart: {
     device: { limit: 20, windowMs: 10 * MIN },

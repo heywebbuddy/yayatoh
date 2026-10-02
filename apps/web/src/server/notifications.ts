@@ -39,6 +39,7 @@ import {
 } from '@yayatoh/orders';
 import { disputeDeadlineNotifier, payoutDestinationMailer } from '@yayatoh/payments';
 import { consumeEvent, recentEventsTx, type Subscriber, subscribes } from '@yayatoh/platform';
+import { registrationCapacity } from '@yayatoh/registration';
 import { surveyMailer } from '@yayatoh/surveys';
 import { impersonationNotice, invitationMailer, orgStatusNotice } from '@yayatoh/tenancy';
 import {
@@ -105,6 +106,8 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     alertEvaluator({ notifier }),
     // M3.7a: journeys enroll, follow date changes and cancellations (their steps run below).
     ...journeySubscribers(),
+    // M5.1a: its offers (waitlist.offered) are mailed in the same drain.
+    registrationCapacity(),
   ];
 }
 

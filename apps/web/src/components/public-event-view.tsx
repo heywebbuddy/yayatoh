@@ -13,6 +13,7 @@ import { listingBySlug } from '@yayatoh/marketplace';
 import { publicMedia, publicProgramMedia } from '@yayatoh/media';
 import { publicRefundPolicy, waitlistHeldBack } from '@yayatoh/orders';
 import { type PublicProgramDto, publicProgram } from '@yayatoh/program';
+import { hasRegistration } from '@yayatoh/registration';
 import { MIN_REVIEWS_FOR_RATING } from '@yayatoh/reviews';
 import { publicSeatMap } from '@yayatoh/seating';
 import { publicOrgProfile } from '@yayatoh/tenancy';
@@ -97,6 +98,8 @@ export async function PublicEventView({
   const needsDate = dates.length > 0 && !chosen;
   const target = (await checkoutTarget(slug)) ?? (unlockedPrivate && live ? live : null);
   const contentTarget = (await pageTarget(slug)) ?? (unlockedPrivate && live ? live : null);
+  // M5.1a: a conference sells through registration types (its own page).
+  const registrationOpen = target ? await hasRegistration(target.orgId, target.eventId) : false;
   // On a tenant site the event must be the host's org's. Ownership comes from the page target
   // (published or postponed), not the checkout one: a postponed event has no checkout but is
   // still listed in its site's sitemap (M1.11d noindex guard found it 404ing there).
@@ -228,6 +231,11 @@ export async function PublicEventView({
         <p className="text-[15px] leading-[22px] text-zinc-500">
           {t('publicEvent.allIn', { org: ev.organizerName })}
         </p>
+        {registrationOpen ? (
+          <Link href={`/events/${slug}/register`} className={buttonClass('primary', 'md', 'self-start')}>
+            {t('publicEvent.register')}
+          </Link>
+        ) : null}
         {chosen ? (
           <p className="text-body font-medium">
             {t('publicEvent.ticketsFor', {
@@ -255,7 +263,7 @@ export async function PublicEventView({
           title={t('publicEvent.pickDateTitle')}
           description={t('publicEvent.pickDateDescription')}
         />
-      ) : ev.passes.length === 0 ? (
+      ) : ev.passes.length === 0 && registrationOpen ? null : ev.passes.length === 0 ? (
         <EmptyState
           className="min-w-0 flex-1"
           title={t('publicEvent.noTicketsTitle')}

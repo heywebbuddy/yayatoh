@@ -154,6 +154,12 @@ import {
   createTrackCommand,
 } from '@yayatoh/program';
 import {
+  createRegistrationTypeCommand,
+  registrationSetupQuery,
+  seedRegistrationDefaultsCommand,
+  setCellCommand,
+} from '@yayatoh/registration';
+import {
   analyticsForwarder,
   attendeeExportBulk,
   catchUpMetrics,
@@ -1365,6 +1371,54 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ports,
   );
   await draftEventCopy(ctx(), ports, fakeDrafter, { eventId: event.id, kind: 'tagline' });
+  // M5.1a registration: the default types and items (activating the conference pack), a code-only
+  // and a domain-only type, one cell per type, and a capacity claim.
+  await executeCommand(seedRegistrationDefaultsCommand, { eventId: event.id, names: {} }, ctx(), ports);
+  const regSetup = await executeQuery(registrationSetupQuery, { eventId: event.id }, ctx(), ports);
+  const fullPass = regSetup.items.find((i) => i.key === 'full_pass');
+  const member = regSetup.types.find((t) => t.key === 'member');
+  const press = await executeCommand(
+    createRegistrationTypeCommand,
+    {
+      eventId: event.id,
+      name: 'Press',
+      eligibility: 'access_code',
+      accessCode: `PRESS-${slug}`.slice(0, 32).toUpperCase(),
+    },
+    ctx(),
+    ports,
+  );
+  const staff = await executeCommand(
+    createRegistrationTypeCommand,
+    {
+      eventId: event.id,
+      name: 'Staff',
+      eligibility: 'email_domain',
+      emailDomains: ['example.test'],
+      capacity: 10,
+    },
+    ctx(),
+    ports,
+  );
+  if (fullPass && member) {
+    for (const [typeId, priceMinor] of [
+      [member.id, 0],
+      [press.id, 0],
+      [staff.id, 2500],
+    ] as const)
+      await executeCommand(
+        setCellCommand,
+        { eventId: event.id, registrationTypeId: typeId, admissionItemId: fullPass.id, priceMinor },
+        ctx(),
+        ports,
+      );
+    // A capacity claim on the fixture's order (counting nothing): no second order, so tests that
+    // count the fixture's orders are unchanged.
+    await withTenant(systemCtx(org.id), (tx) =>
+      tx.execute(sql`insert into registration.capacity_claims (org_id, event_id, registration_type_id, order_id)
+        values (${org.id}, ${event.id}, ${member.id}, ${checkout.order.id})`),
+    );
+  }
   // M4.1a: a party with a named guest (sealed answers, linked to a guest-list entry), a child and
   // an unnamed plus-one; then an edit and a move, so every history action has rows.
   const party = await executeCommand(

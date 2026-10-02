@@ -329,3 +329,32 @@ export async function orderPolicySnapshotTx(tx: TenantTx, orderId: string) {
   const [r] = await tx.select({ s: orders.refundPolicySnapshot }).from(orders).where(eq(orders.id, orderId));
   return r?.s ?? null;
 }
+
+/**
+ * What an order holds or has sold, per ticket type, for a module keeping its own counters
+ * (M5.1a per-type capacity): while it holds stock, its items; once paid (or partly refunded),
+ * its active tickets; otherwise nothing. Null when the order does not exist.
+ */
+export async function orderStockTx(
+  tx: TenantTx,
+  orderId: string,
+): Promise<{ eventId: string; held: Map<string, number>; sold: Map<string, number> } | null> {
+  const [o] = await tx
+    .select({ id: orders.id, eventId: orders.eventId, status: orders.status })
+    .from(orders)
+    .where(eq(orders.id, orderId));
+  if (!o) return null;
+  const held = new Map<string, number>();
+  const sold = new Map<string, number>();
+  if (['reserved', 'awaiting_payment', 'payment_failed'].includes(o.status)) {
+    for (const i of await tx
+      .select({ ticketTypeId: orderItems.ticketTypeId, quantity: orderItems.quantity })
+      .from(orderItems)
+      .where(eq(orderItems.orderId, o.id)))
+      held.set(i.ticketTypeId, (held.get(i.ticketTypeId) ?? 0) + i.quantity);
+  } else if (['paid', 'partially_refunded'].includes(o.status)) {
+    for (const t of await ticketsForOrderTx(tx, o.id))
+      if (t.status === 'active') sold.set(t.ticketTypeId, (sold.get(t.ticketTypeId) ?? 0) + 1);
+  }
+  return { eventId: o.eventId, held, sold };
+}

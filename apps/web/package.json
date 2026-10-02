@@ -44,6 +44,7 @@
     "@yayatoh/platform": "workspace:*",
     "@yayatoh/privacy": "workspace:*",
     "@yayatoh/program": "workspace:*",
+    "@yayatoh/registration": "workspace:*",
     "@yayatoh/reports": "workspace:*",
     "@yayatoh/reviews": "workspace:*",
     "@yayatoh/seating": "workspace:*",

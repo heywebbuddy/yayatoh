@@ -39,6 +39,7 @@
     "@yayatoh/pdf": "workspace:*",
     "@yayatoh/platform": "workspace:*",
     "@yayatoh/privacy": "workspace:*",
+    "@yayatoh/registration": "workspace:*",
     "@yayatoh/reports": "workspace:*",
     "@yayatoh/seating": "workspace:*",
     "@yayatoh/surveys": "workspace:*",

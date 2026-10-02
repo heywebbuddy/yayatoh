@@ -4,11 +4,13 @@ import {
   bigint,
   check,
   integer,
+  jsonb,
   pgSchema,
   primaryKey,
   text,
   timestamp,
   uniqueIndex,
+  uuid,
 } from 'drizzle-orm/pg-core';
 
 export const billing = pgSchema('billing');
@@ -90,5 +92,53 @@ export const orgFeeOverrides = tenantTable(
   (t) => [
     uniqueIndex('org_fee_overrides_org_currency_key').on(t.orgId, t.currency),
     check('org_fee_overrides_bounds_check', sql`percent_bps between 0 and 5000 and fixed_minor >= 0`),
+  ],
+);
+
+/**
+ * Add-on catalog (P4-4/P5-11 pattern; global reference data written only by migrations). An
+ * `event_addon` is bought (or, in beta, granted free) per event; `price_minor` null means free in
+ * beta, so a price switches on with a data change. `quotas` are the per-event limits the owning
+ * module enforces (e.g. `conference_pack`: registration types, admission items, registrants).
+ */
+export const addons = billing.table(
+  'addons',
+  {
+    key: text('key').primaryKey(),
+    name: text('name').notNull(),
+    kind: text('kind').notNull(),
+    modules: text('modules').array().notNull(),
+    priceMinor: bigint('price_minor', { mode: 'number' }),
+    currency: text('currency'),
+    quotas: jsonb('quotas').$type<Record<string, number>>().notNull(),
+  },
+  () => [
+    check('addons_kind_check', sql`kind in ('event_addon')`),
+    check(
+      'addons_price_check',
+      sql`(price_minor is null) = (currency is null) and (price_minor is null or price_minor >= 0)`,
+    ),
+    check('addons_quotas_check', sql`jsonb_typeof(quotas) = 'object'`),
+  ],
+);
+
+/** An add-on active for one event of the org (how it was obtained, the price then). */
+export const eventAddons = tenantTable(
+  billing,
+  'event_addons',
+  {
+    eventId: uuid('event_id').notNull(),
+    addonKey: text('addon_key')
+      .notNull()
+      .references(() => addons.key),
+    source: text('source').notNull(),
+    priceMinor: bigint('price_minor', { mode: 'number' }).notNull().default(0),
+    currency: text('currency'),
+    activatedAt: timestamp('activated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    uniqueIndex('event_addons_org_event_addon_key').on(t.orgId, t.eventId, t.addonKey),
+    check('event_addons_source_check', sql`source in ('beta_free', 'purchase', 'override')`),
+    check('event_addons_price_check', sql`price_minor >= 0`),
   ],
 );

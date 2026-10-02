@@ -29,6 +29,7 @@ import {
 } from '@yayatoh/orders';
 import { disputeDeadlineNotifier, payoutDestinationMailer } from '@yayatoh/payments';
 import { type Subscriber, signLinkToken } from '@yayatoh/platform';
+import { registrationCapacity } from '@yayatoh/registration';
 import { analyticsForwarder, metricsProjector, postgresAnalyticsSink } from '@yayatoh/reports';
 import { finderCodeMailer, releaseCancelledSeats } from '@yayatoh/seating';
 import { surveyMailer } from '@yayatoh/surveys';
@@ -103,6 +104,8 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     waitlistMailer({ notifier, appOrigin }),
     // M3.7a: journeys enroll on purchase and check-in, follow date changes and cancellations.
     ...journeySubscribers(),
+    // M5.1a: per-type capacity follows orders (paid, expired, refunded, cancelled) and offers freed places.
+    registrationCapacity(),
     // M3.6a: contact × event participation and contact profiles for audiences.
     participationProjector(),
     listingsProjector({ onChange: (orgId) => revalidatePublicCache(appOrigin, orgId, secret) }),

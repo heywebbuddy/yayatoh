@@ -24,6 +24,9 @@ export interface AccessDate {
 
 export const TICKET_TYPE_VISIBILITIES = ['public', 'hidden'] as const;
 export const FEE_MODES = ['pass_on', 'absorb'] as const;
+/** Modules that may manage ticket types (M5.1a, ADR 0021). */
+export const TICKET_TYPE_MANAGERS = ['registration'] as const;
+export type TicketTypeManager = (typeof TICKET_TYPE_MANAGERS)[number];
 
 const ts = (name: string) => timestamp(name, { withTimezone: true, mode: 'date' });
 
@@ -62,6 +65,11 @@ export const ticketTypes = tenantTable(
     transferCutoffHours: integer('transfer_cutoff_hours'),
     /** M3.10c: what a holder transfer costs, in minor units of the ticket's currency (0: free). */
     transferFeeMinor: bigint('transfer_fee_minor', { mode: 'number' }).notNull().default(0),
+    /**
+     * M5.1a (ADR 0021): a ticket type another module sells for itself (a registration type ×
+     * admission item cell). Only that module may quote, edit or archive it; null = ordinary pass.
+     */
+    managedBy: text('managed_by'),
   },
   (t) => [
     index('ticket_types_org_event_idx').on(t.orgId, t.eventId, t.sortOrder),
@@ -88,6 +96,7 @@ export const ticketTypes = tenantTable(
       'ticket_types_transfer_rules_check',
       sql`transfer_fee_minor >= 0 and (transfer_cutoff_hours is null or transfer_cutoff_hours between 0 and 8760)`,
     ),
+    check('ticket_types_managed_by_check', sql`managed_by is null or managed_by in ('registration')`),
   ],
 );
 

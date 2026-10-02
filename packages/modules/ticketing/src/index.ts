@@ -11,11 +11,14 @@ export {
 } from './bulk.ts';
 export {
   archiveTicketTypeCommand,
+  archiveTicketTypeTx,
   createTicketTypeCommand,
+  createTicketTypeTx,
   eventPriceRangeTx,
   listTicketTypesQuery,
   sellsPaidTicketsQuery,
   updateTicketTypeCommand,
+  updateTicketTypeTx,
 } from './commands/ticket-types.ts';
 export { instantiateTicketTypesTx, TicketTypesSnapshot, ticketTypesSnapshotTx } from './copy.ts';
 export {
@@ -109,7 +112,14 @@ export {
   setPromoCodeActiveCommand,
 } from './promo.ts';
 export { publicTicketTypes } from './public.ts';
-export { FEE_MODES, PROMO_KINDS, TICKET_STATUSES, TICKET_TYPE_VISIBILITIES } from './schema.ts';
+export {
+  FEE_MODES,
+  PROMO_KINDS,
+  TICKET_STATUSES,
+  TICKET_TYPE_MANAGERS,
+  TICKET_TYPE_VISIBILITIES,
+  type TicketTypeManager,
+} from './schema.ts';
 export {
   orderIdsByShortCodeTx,
   type TicketTypeStats,

@@ -323,7 +323,13 @@ export default async function TicketsPage({
             <BoxOfficeForm
               action={boxOfficeSaleAction.bind(null, org, event)}
               passes={types
-                .filter((tt) => tt.quantitySold + tt.quantityHeld < tt.quantityTotal && !tt.isDonation)
+                // M5.1a: registration passes are sold only through registration.
+                .filter(
+                  (tt) =>
+                    tt.quantitySold + tt.quantityHeld < tt.quantityTotal &&
+                    !tt.isDonation &&
+                    tt.managedBy === null,
+                )
                 .map((tt) => ({
                   id: tt.id,
                   label: `${tt.name} · ${fmt(tt.allInMinor)}`,
