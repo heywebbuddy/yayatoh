@@ -16,4 +16,7 @@ export const privateColumns = columnPrivacy('registration', {
     email_domains: internal('array', { where: "eligibility = 'email_domain'" }),
   },
   admission_items: { key: 'public', name: 'public', description: 'public', kind: 'vocab' },
+  // M5.2b: session enrollment states and settings are vocabularies; who changed a setting is internal.
+  enrollment_settings: { promotion: 'vocab', updated_by: internal() },
+  session_enrollments: { status: 'vocab', promoted_by: 'vocab', skip_reason: 'vocab' },
 });

@@ -225,6 +225,16 @@
       "subject": "Continue sua inscrição em {eventName}",
       "intro": "Aqui está o seu link para retomar sua inscrição em {eventName} de onde parou. Ele funciona por {days, plural, one {# dia} other {# dias}} após o último salvamento e só para você, então não o encaminhe. Se você não pediu este e-mail, pode ignorá-lo.",
       "cta": "Continuar minha inscrição"
+    },
+    "registration.session-enrolled": {
+      "subject": "Abriu uma vaga: você está em {sessionTitle}",
+      "intro": "Abriu uma vaga em {sessionTitle} no {eventName} ({when}) e você era a próxima pessoa na lista de espera, então agora está inscrito. Se não puder ir, remova a sessão da sua agenda para que a vaga vá para a próxima pessoa.",
+      "cta": "Abrir minha agenda"
+    },
+    "registration.session-offer": {
+      "subject": "Uma vaga em {sessionTitle} é sua até {until}",
+      "intro": "Abriu uma vaga em {sessionTitle} no {eventName} ({when}) e você é a próxima pessoa na lista. Aceite-a na sua agenda antes de {until}; depois disso, ela vai para a próxima pessoa.",
+      "cta": "Aceitar minha vaga"
     }
   },
   "roles": {

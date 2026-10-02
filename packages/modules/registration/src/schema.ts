@@ -164,7 +164,12 @@ export const ENROLLMENT_STATUSES = [
   'cancelled',
 ] as const;
 /** Why a line entry was passed over on promotion (re-checked then, P5-9). */
-export const ENROLLMENT_SKIP_REASONS = ['overlap', 'one_per_group', 'not_available', 'registrant_gone'] as const;
+export const ENROLLMENT_SKIP_REASONS = [
+  'overlap',
+  'one_per_group',
+  'not_available',
+  'registrant_gone',
+] as const;
 export const PROMOTION_MODES = ['auto', 'offer'] as const;
 
 /**

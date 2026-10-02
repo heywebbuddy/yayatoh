@@ -225,6 +225,16 @@
       "subject": "继续您的 {eventName} 报名",
       "intro": "这是您的链接，可从上次中断的地方继续 {eventName} 的报名。它在您最后一次保存后 {days, plural, other {# 天}} 内有效，且仅供您本人使用，请勿转发。如果您没有请求此邮件，可以忽略。",
       "cta": "继续我的报名"
+    },
+    "registration.session-enrolled": {
+      "subject": "有空位了：你已报名 {sessionTitle}",
+      "intro": "{eventName}（{when}）的 {sessionTitle} 有空位了，你是候补名单上的下一位，现已为你报名。如果无法参加，请从日程中移除该场次，让下一位获得名额。",
+      "cta": "打开我的日程"
+    },
+    "registration.session-offer": {
+      "subject": "{sessionTitle} 的名额为你保留至 {until}",
+      "intro": "{eventName}（{when}）的 {sessionTitle} 有空位了，下一位就是你。请在 {until} 前在日程中接受；逾时名额将转给下一位。",
+      "cta": "接受名额"
     }
   },
   "roles": {

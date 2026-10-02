@@ -225,6 +225,16 @@
       "subject": "Continua la tua registrazione a {eventName}",
       "intro": "Ecco il tuo link per riprendere la registrazione a {eventName} da dove l'avevi lasciata. Funziona per {days, plural, one {# giorno} other {# giorni}} dall'ultimo salvataggio e solo per te, quindi non inoltrarlo. Se non l'hai richiesto, puoi ignorare questa email.",
       "cta": "Continua la registrazione"
+    },
+    "registration.session-enrolled": {
+      "subject": "Si è liberato un posto: partecipi a {sessionTitle}",
+      "intro": "Si è liberato un posto in {sessionTitle} a {eventName} ({when}) ed eri il prossimo in lista d'attesa, quindi ora sei iscritto. Se non puoi partecipare, togli la sessione dal tuo programma così il posto passa alla persona successiva.",
+      "cta": "Apri il mio programma"
+    },
+    "registration.session-offer": {
+      "subject": "Un posto in {sessionTitle} è tuo fino al {until}",
+      "intro": "Si è liberato un posto in {sessionTitle} a {eventName} ({when}) e sei il prossimo in lista. Accettalo dal tuo programma entro il {until}; dopo passerà alla persona successiva.",
+      "cta": "Accetta il mio posto"
     }
   },
   "roles": {

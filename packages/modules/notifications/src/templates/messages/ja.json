@@ -225,6 +225,16 @@
       "subject": "{eventName}の登録を続ける",
       "intro": "{eventName}の登録を中断したところから再開するためのリンクです。最後に保存してから{days, plural, other {# 日間}}、ご本人のみ使用できますので転送しないでください。心当たりがない場合は、このメールを無視してください。",
       "cta": "登録を続ける"
+    },
+    "registration.session-enrolled": {
+      "subject": "空きが出ました：{sessionTitle} に登録されました",
+      "intro": "{eventName}（{when}）の {sessionTitle} に空きが出て、キャンセル待ちの次の順番があなたでしたので、登録が完了しました。参加できない場合は、次の方が参加できるようスケジュールからセッションを外してください。",
+      "cta": "スケジュールを開く"
+    },
+    "registration.session-offer": {
+      "subject": "{sessionTitle} の席を {until} まで確保しています",
+      "intro": "{eventName}（{when}）の {sessionTitle} に空きが出て、次の順番はあなたです。{until} までにスケジュールから承諾してください。それを過ぎると次の方に回ります。",
+      "cta": "席を承諾する"
     }
   },
   "roles": {

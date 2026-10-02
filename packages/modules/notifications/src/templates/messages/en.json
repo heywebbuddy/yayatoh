@@ -225,6 +225,16 @@
       "subject": "Continue your registration for {eventName}",
       "intro": "Here is your link to pick up your registration for {eventName} where you left off. It works for {days, plural, one {# day} other {# days}} after your last save and only for you, so please don't forward it. If you didn't ask for it, you can ignore this email.",
       "cta": "Continue my registration"
+    },
+    "registration.session-enrolled": {
+      "subject": "A place opened: you're in {sessionTitle}",
+      "intro": "A place opened in {sessionTitle} at {eventName} ({when}), and you were next in line, so you're now enrolled. If you can't make it, drop the session from your schedule so the next person gets the place.",
+      "cta": "Open my schedule"
+    },
+    "registration.session-offer": {
+      "subject": "A place in {sessionTitle} is yours until {until}",
+      "intro": "A place opened in {sessionTitle} at {eventName} ({when}), and you're next in line. Accept it from your schedule before {until}; after that, it goes to the next person.",
+      "cta": "Accept my place"
     }
   },
   "roles": {

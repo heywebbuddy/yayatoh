@@ -225,6 +225,16 @@
       "subject": "Ga verder met je registratie voor {eventName}",
       "intro": "Hier is je link om je registratie voor {eventName} te hervatten waar je gebleven was. Hij werkt {days, plural, one {# dag} other {# dagen}} na je laatste opslag en alleen voor jou, dus stuur hem niet door. Heb je hier niet om gevraagd, dan kun je deze e-mail negeren.",
       "cta": "Verder met mijn registratie"
+    },
+    "registration.session-enrolled": {
+      "subject": "Er is een plek vrij: je doet mee aan {sessionTitle}",
+      "intro": "Er is een plek vrijgekomen in {sessionTitle} bij {eventName} ({when}) en jij was de volgende op de wachtlijst, dus je bent nu ingeschreven. Kun je niet? Haal de sessie dan uit je programma, zodat de volgende de plek krijgt.",
+      "cta": "Mijn programma openen"
+    },
+    "registration.session-offer": {
+      "subject": "Een plek in {sessionTitle} is voor jou tot {until}",
+      "intro": "Er is een plek vrijgekomen in {sessionTitle} bij {eventName} ({when}) en jij bent de volgende. Accepteer hem vóór {until} in je programma; daarna gaat hij naar de volgende.",
+      "cta": "Mijn plek accepteren"
     }
   },
   "roles": {

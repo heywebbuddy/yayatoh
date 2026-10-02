@@ -225,6 +225,16 @@
       "subject": "Setzen Sie Ihre Anmeldung für {eventName} fort",
       "intro": "Hier ist Ihr Link, um Ihre Anmeldung für {eventName} dort fortzusetzen, wo Sie aufgehört haben. Er gilt {days, plural, one {# Tag} other {# Tage}} nach dem letzten Speichern und nur für Sie; bitte leiten Sie ihn nicht weiter. Wenn Sie ihn nicht angefordert haben, können Sie diese E-Mail ignorieren.",
       "cta": "Anmeldung fortsetzen"
+    },
+    "registration.session-enrolled": {
+      "subject": "Ein Platz ist frei: Du bist in {sessionTitle} dabei",
+      "intro": "In {sessionTitle} bei {eventName} ({when}) ist ein Platz frei geworden, und du warst als Nächstes auf der Warteliste. Du bist jetzt angemeldet. Wenn du nicht kannst, entferne die Session aus deinem Plan, damit die nächste Person den Platz bekommt.",
+      "cta": "Meinen Plan öffnen"
+    },
+    "registration.session-offer": {
+      "subject": "Ein Platz in {sessionTitle} ist bis {until} für dich reserviert",
+      "intro": "In {sessionTitle} bei {eventName} ({when}) ist ein Platz frei geworden, und du bist als Nächstes dran. Nimm ihn vor {until} in deinem Plan an; danach geht er an die nächste Person.",
+      "cta": "Platz annehmen"
     }
   },
   "roles": {
