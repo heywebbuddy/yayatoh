@@ -230,6 +230,21 @@
       "subject": "{reminder, plural, =1 {Rappel : nommez vos invités pour {eventName}} other {Nommez vos invités pour {eventName}}}",
       "intro": "Votre {tableName} compte {size, plural, one {# place} other {# places}}. {missing, plural, =0 {Chaque place a un nom ; vous pouvez les vérifier à tout moment.} one {# place attend encore un nom.} other {# places attendent encore un nom.}} Utilisez le bouton ci-dessous pour nous dire qui est assis à votre table.",
       "cta": "Nommer mes invités"
+    },
+    "portal.invite": {
+      "subject": "Invitation au portail de {eventName}",
+      "intro": "{org} vous a invité au portail de {eventName} en tant que {role}. Vous pourrez y voir vos sessions, mettre à jour votre profil et accomplir vos tâches. Le bouton demande un code de connexion envoyé à cette adresse.",
+      "cta": "Ouvrir le portail"
+    },
+    "portal.sign-in": {
+      "subject": "{code} est votre code de connexion pour {eventName}",
+      "intro": "Saisissez {code} pour vous connecter au portail de {eventName}, ou utilisez le bouton ci-dessous dans le même navigateur. Code valable : {minutes} min. Bouton valable : {linkMinutes} min. Chacun ne fonctionne qu’une fois. Si vous ne l’avez pas demandé, ignorez cet e-mail.",
+      "cta": "Se connecter au portail"
+    },
+    "program.task-reminder": {
+      "subject": "Rappel : {title} pour {eventName}",
+      "intro": "{org} attend toujours « {title} » pour {eventName}. Échéance : {until}.",
+      "cta": "Ouvrir mes tâches"
     }
   },
   "roles": {
@@ -243,7 +258,11 @@
     "viewer": "lecteur",
     "co_host": "co-organisateur",
     "planner": "planificateur",
-    "collaborator": "collaborateur d'événement"
+    "collaborator": "collaborateur d'événement",
+    "speaker": "intervenant",
+    "exhibitor_admin": "administrateur exposant",
+    "exhibitor_staff": "équipe exposant",
+    "sponsor_contact": "contact sponsor"
   },
   "account": {
     "deleted": {

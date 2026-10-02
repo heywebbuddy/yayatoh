@@ -314,3 +314,25 @@ export async function removeUserEventRolesTx(tx: TenantTx, userId: string): Prom
     .returning({ id: eventRoleAssignments.id });
   return rows.length;
 }
+
+/**
+ * The id of one live event-role assignment (M5.4a: the portal principal names the assignment it
+ * was signed in under), or null when there is none.
+ */
+export async function eventRoleAssignmentIdTx(
+  tx: TenantTx,
+  a: { eventId: string; userId: string; role: (typeof EVENT_ROLES)[number]; now: Date },
+): Promise<string | null> {
+  const [row] = await tx
+    .select({ id: eventRoleAssignments.id })
+    .from(eventRoleAssignments)
+    .where(
+      and(
+        eq(eventRoleAssignments.eventId, a.eventId),
+        eq(eventRoleAssignments.userId, a.userId),
+        eq(eventRoleAssignments.role, a.role),
+        liveGrant(a.now),
+      ),
+    );
+  return row?.id ?? null;
+}

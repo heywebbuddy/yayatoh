@@ -230,6 +230,21 @@
       "subject": "{reminder, plural, =1 {リマインダー：{eventName} のゲスト名を入力してください} other {{eventName} のゲスト名を入力してください}}",
       "intro": "{tableName} の席数は {size, plural, other {# 席}} です。{missing, plural, =0 {すべての席に名前が入っています。いつでも確認できます。} other {あと # 席の名前が未入力です。}}下のボタンから、テーブルに座る方をお知らせください。",
       "cta": "ゲスト名を入力する"
+    },
+    "portal.invite": {
+      "subject": "{eventName}のポータルへの招待",
+      "intro": "{org}から{eventName}のポータルに{role}として招待されました。セッションの確認、プロフィールの更新、タスクの完了ができます。ボタンを押すと、このアドレスに送られるサインインコードの入力を求められます。",
+      "cta": "ポータルを開く"
+    },
+    "portal.sign-in": {
+      "subject": "{eventName}のサインインコードは{code}です",
+      "intro": "{code}を入力して{eventName}のポータルにサインインするか、同じブラウザーで下のボタンを使ってください。コードの有効時間：{minutes}分。ボタンの有効時間：{linkMinutes}分。それぞれ1回限り有効です。心当たりがない場合は、このメールを無視してください。",
+      "cta": "ポータルにサインイン"
+    },
+    "program.task-reminder": {
+      "subject": "リマインダー：{eventName}の{title}",
+      "intro": "{org}は{eventName}の「{title}」をまだお待ちしています。期限：{until}。",
+      "cta": "タスクを開く"
     }
   },
   "roles": {
@@ -243,7 +258,11 @@
     "viewer": "閲覧者",
     "co_host": "共同ホスト",
     "planner": "プランナー",
-    "collaborator": "イベント協力者"
+    "collaborator": "イベント協力者",
+    "speaker": "登壇者",
+    "exhibitor_admin": "出展者管理者",
+    "exhibitor_staff": "出展者スタッフ",
+    "sponsor_contact": "スポンサー担当者"
   },
   "account": {
     "deleted": {

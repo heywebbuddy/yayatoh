@@ -15,6 +15,7 @@ export const PRIVATE_PATHS = [
   '/claim/',
   '/tables/',
   '/portal/',
+  '/event-portal',
   '/scan',
   '/dev/',
   '/sign-in',

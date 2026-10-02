@@ -230,6 +230,21 @@
       "subject": "{reminder, plural, =1 {Erinnerung: Nennen Sie Ihre Gäste für {eventName}} other {Nennen Sie Ihre Gäste für {eventName}}}",
       "intro": "Ihr {tableName} hat {size, plural, one {# Platz} other {# Plätze}}. {missing, plural, =0 {Jeder Platz hat einen Namen; Sie können sie jederzeit prüfen.} one {# Platz braucht noch einen Namen.} other {# Plätze brauchen noch einen Namen.}} Sagen Sie uns über die Schaltfläche unten, wer an Ihrem Tisch sitzt.",
       "cta": "Meine Gäste nennen"
+    },
+    "portal.invite": {
+      "subject": "Einladung zum Portal von {eventName}",
+      "intro": "{org} hat Sie als {role} zum Portal von {eventName} eingeladen. Dort sehen Sie Ihre Sessions, aktualisieren Ihr Profil und erledigen Ihre Aufgaben. Die Schaltfläche fragt nach einem Anmeldecode, der an diese Adresse gesendet wird.",
+      "cta": "Portal öffnen"
+    },
+    "portal.sign-in": {
+      "subject": "{code} ist Ihr Anmeldecode für {eventName}",
+      "intro": "Geben Sie {code} ein, um sich im Portal von {eventName} anzumelden, oder nutzen Sie die Schaltfläche unten im selben Browser. Code gültig: {minutes} Min. Schaltfläche gültig: {linkMinutes} Min. Beide funktionieren einmal. Wenn Sie ihn nicht angefordert haben, ignorieren Sie diese E-Mail.",
+      "cta": "Im Portal anmelden"
+    },
+    "program.task-reminder": {
+      "subject": "Erinnerung: {title} für {eventName}",
+      "intro": "{org} wartet noch auf „{title}“ für {eventName}. Fällig: {until}.",
+      "cta": "Meine Aufgaben öffnen"
     }
   },
   "roles": {
@@ -243,7 +258,11 @@
     "viewer": "Leser",
     "co_host": "Co-Gastgeber",
     "planner": "Planer",
-    "collaborator": "Veranstaltungsmitarbeiter"
+    "collaborator": "Veranstaltungsmitarbeiter",
+    "speaker": "Speaker",
+    "exhibitor_admin": "Aussteller-Admin",
+    "exhibitor_staff": "Aussteller-Team",
+    "sponsor_contact": "Sponsor-Kontakt"
   },
   "account": {
     "deleted": {

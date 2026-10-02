@@ -1,0 +1,141 @@
+name: Evidence
+
+# SOC 2 evidence bundle (M5.11a, P5-6). Weekly and on demand: control mapping check, CI runs and
+# gate results, branch protection, merged PRs with reviews and owner-approval labels, repository
+# access, audit-log samples from a freshly seeded CI database (never production), a VPAT draft
+# from the latest e2e shard reports, and the policy drafts. The bundle is scanned by our leak
+# gate and gitleaks before upload; the gate proves itself on planted canaries first.
+# The owner downloads the artifact and uploads it to Vanta (docs/runbooks/evidence-production.md).
+
+on:
+  schedule:
+    # Mondays 06:17 UTC (off the hour to avoid the scheduler's top-of-hour queue).
+    - cron: "17 6 * * 1"
+  workflow_dispatch:
+    inputs:
+      since_days:
+        description: Audit window in days for CI runs and merged PRs
+        default: "90"
+        required: false
+
+# Read-only token: every export is a GET.
+permissions:
+  contents: read
+  actions: read
+  pull-requests: read
+
+concurrency:
+  group: evidence
+  cancel-in-progress: false
+
+env:
+  GITLEAKS_VERSION: 8.28.0
+  GITLEAKS_SHA256: a65b5253807a68ac0cafa4414031fd740aeb55f54fb7e55f386acb52e6a840eb
+
+jobs:
+  bundle:
+    name: evidence bundle
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: yayatoh
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 2s --health-retries 30
+    env:
+      # CI-only throwaway database; role passwords are generated per run.
+      ADMIN_DATABASE_URL: postgres://postgres:postgres@localhost:5432/yayatoh
+      YAYATOH_DEV_AUTH: "1"
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+
+      - name: Control mapping is complete and every path resolves
+        run: node tools/compliance/cli.ts check-controls
+
+      - name: Seeded CI database (throwaway, per-run secrets)
+        run: |
+          APP=$(openssl rand -hex 12); MIG=$(openssl rand -hex 12); PR=$(openssl rand -hex 12)
+          SECRET=$(openssl rand -hex 32); PERSONA=$(openssl rand -hex 12)
+          TOKEN=$(openssl rand -hex 32); FAKE=$(openssl rand -hex 32); KMS=$(openssl rand -hex 32)
+          for v in "$APP" "$MIG" "$PR" "$SECRET" "$PERSONA" "$TOKEN" "$FAKE" "$KMS"; do echo "::add-mask::$v"; done
+          {
+            echo "BETTER_AUTH_SECRET=$SECRET"
+            echo "BETTER_AUTH_URL=http://localhost:3100"
+            echo "APP_TOKEN_SECRET=$TOKEN"
+            echo "FAKE_PAYMENTS_SECRET=$FAKE"
+            echo "LOCAL_KMS_KEY=$KMS"
+            echo "DEV_PERSONA_PASSWORD=$PERSONA"
+            echo "DATABASE_URL=postgres://app_user:$APP@localhost:5432/yayatoh"
+            echo "MIGRATOR_DATABASE_URL=postgres://migrator:$MIG@localhost:5432/yayatoh"
+            echo "PLATFORM_READER_DATABASE_URL=postgres://platform_reader:$PR@localhost:5432/yayatoh"
+          } >> "$GITHUB_ENV"
+          export DATABASE_URL=postgres://app_user:$APP@localhost:5432/yayatoh
+          export MIGRATOR_DATABASE_URL=postgres://migrator:$MIG@localhost:5432/yayatoh
+          export PLATFORM_READER_DATABASE_URL=postgres://platform_reader:$PR@localhost:5432/yayatoh
+          export BETTER_AUTH_SECRET=$SECRET DEV_PERSONA_PASSWORD=$PERSONA APP_TOKEN_SECRET=$TOKEN FAKE_PAYMENTS_SECRET=$FAKE LOCAL_KMS_KEY=$KMS
+          pnpm db:bootstrap && pnpm db:migrate && pnpm seed
+
+      - name: Latest e2e shard reports from main (for the VPAT draft)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/e2e"
+          RUN=$(gh run list --repo "$GITHUB_REPOSITORY" --workflow ci.yml --branch main --status success \
+            --limit 1 --json databaseId --jq '.[0].databaseId // empty')
+          if [ -n "$RUN" ]; then
+            gh run download "$RUN" --repo "$GITHUB_REPOSITORY" --pattern 'e2e-report-*' --dir "$RUNNER_TEMP/e2e" \
+              || echo "::warning::no e2e reports on run $RUN; the VPAT draft will show no automated evidence"
+            echo "E2E_RUN=$RUN" >> "$GITHUB_ENV"
+          else
+            echo "::warning::no successful CI run on main yet; the VPAT draft will show no automated evidence"
+          fi
+
+      - name: Build the bundle (exports, audit samples, VPAT, policies) and run the leak gate
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          node tools/compliance/cli.ts ci --out "$RUNNER_TEMP/evidence" --e2e "$RUNNER_TEMP/e2e" \
+            --since-days "${{ inputs.since_days || '90' }}"
+          echo "BUNDLE=$(cat "$RUNNER_TEMP/evidence/bundle-path")" >> "$GITHUB_ENV"
+
+      - name: Install gitleaks (pinned, checksum verified)
+        run: |
+          curl -sSfL -o "$RUNNER_TEMP/gitleaks.tgz" \
+            "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          echo "${GITLEAKS_SHA256}  $RUNNER_TEMP/gitleaks.tgz" | sha256sum -c -
+          tar -xzf "$RUNNER_TEMP/gitleaks.tgz" -C "$RUNNER_TEMP" gitleaks
+
+      - name: Leak gate self-test (planted canaries must fail both scanners)
+        run: |
+          set +e
+          for cls in secret customer; do
+            T="$RUNNER_TEMP/canary-$cls"; rm -rf "$T"; cp -r "$BUNDLE" "$T"
+            node tools/compliance/cli.ts plant-canaries --dir "$T" --class "$cls" > /dev/null
+            node tools/compliance/cli.ts scan --dir "$T" > /dev/null 2>&1
+            if [ $? -eq 0 ]; then echo "::error::leak gate passed a bundle with $cls canaries"; exit 1; fi
+            echo "ok: leak gate rejects $cls canaries"
+          done
+          "$RUNNER_TEMP/gitleaks" dir "$RUNNER_TEMP/canary-secret" --redact --no-banner > /dev/null 2>&1
+          if [ $? -eq 0 ]; then echo "::error::gitleaks passed a bundle with secret canaries"; exit 1; fi
+          echo "ok: gitleaks rejects secret canaries"
+
+      - name: gitleaks on the bundle
+        run: '"$RUNNER_TEMP/gitleaks" dir "$BUNDLE" --redact --no-banner -v'
+
+      - name: Upload the evidence bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: evidence-${{ github.run_id }}
+          path: ${{ env.BUNDLE }}
+          if-no-files-found: error
+          retention-days: 90

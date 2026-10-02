@@ -1,4 +1,5 @@
 export { legacyQrPayload } from '@yayatoh/ticket-crypto';
+export { type BadgeTicket, badgeTicketsTx, badgeTicketTypesTx } from './badges.ts';
 export {
   attendeeTicketsTx,
   BULK_TICKET_FAILURES,

@@ -230,6 +230,21 @@
       "subject": "{reminder, plural, =1 {Reminder: name your guests for {eventName}} other {Name your guests for {eventName}}}",
       "intro": "Your {tableName} seats {size, plural, one {# guest} other {# guests}}. {missing, plural, =0 {Every seat has a name; you can check them anytime.} one {# seat still needs a name.} other {# seats still need a name.}} Use the button below to tell us who sits at your table.",
       "cta": "Name my guests"
+    },
+    "portal.invite": {
+      "subject": "You're invited to the {eventName} portal",
+      "intro": "{org} invited you to the portal for {eventName} as {role}. There you can see your sessions, update your profile and complete your tasks. The button asks for a sign-in code sent to this address.",
+      "cta": "Open the portal"
+    },
+    "portal.sign-in": {
+      "subject": "{code} is your sign-in code for {eventName}",
+      "intro": "Enter {code} to sign in to the {eventName} portal, or use the button below in the same browser. Code valid for: {minutes} min. Button valid for: {linkMinutes} min. Each works once. If you didn't ask for it, you can ignore this email.",
+      "cta": "Sign in to the portal"
+    },
+    "program.task-reminder": {
+      "subject": "Reminder: {title} for {eventName}",
+      "intro": "{org} is still waiting for “{title}” for {eventName}. Due: {until}.",
+      "cta": "Open my tasks"
     }
   },
   "roles": {
@@ -243,7 +258,11 @@
     "viewer": "viewer",
     "co_host": "co-host",
     "planner": "planner",
-    "collaborator": "event collaborator"
+    "collaborator": "event collaborator",
+    "speaker": "speaker",
+    "exhibitor_admin": "exhibitor admin",
+    "exhibitor_staff": "exhibitor staff",
+    "sponsor_contact": "sponsor contact"
   },
   "account": {
     "deleted": {

@@ -230,6 +230,21 @@
       "subject": "{reminder, plural, =1 {Promemoria: indica i tuoi ospiti per {eventName}} other {Indica i tuoi ospiti per {eventName}}}",
       "intro": "Il tuo {tableName} ha {size, plural, one {# posto} other {# posti}}. {missing, plural, =0 {Ogni posto ha un nome; puoi controllarli quando vuoi.} one {Manca ancora il nome per # posto.} other {Mancano ancora i nomi per # posti.}} Usa il pulsante qui sotto per dirci chi siede al tuo tavolo.",
       "cta": "Indica i miei ospiti"
+    },
+    "portal.invite": {
+      "subject": "Sei invitato al portale di {eventName}",
+      "intro": "{org} ti ha invitato al portale di {eventName} come {role}. Lì puoi vedere le tue sessioni, aggiornare il profilo e completare le attività. Il pulsante chiede un codice di accesso inviato a questo indirizzo.",
+      "cta": "Apri il portale"
+    },
+    "portal.sign-in": {
+      "subject": "{code} è il tuo codice di accesso per {eventName}",
+      "intro": "Inserisci {code} per accedere al portale di {eventName}, oppure usa il pulsante qui sotto nello stesso browser. Codice valido: {minutes} min. Pulsante valido: {linkMinutes} min. Ciascuno funziona una volta. Se non l’hai richiesto, ignora questa email.",
+      "cta": "Accedi al portale"
+    },
+    "program.task-reminder": {
+      "subject": "Promemoria: {title} per {eventName}",
+      "intro": "{org} attende ancora «{title}» per {eventName}. Scadenza: {until}.",
+      "cta": "Apri le mie attività"
     }
   },
   "roles": {
@@ -243,7 +258,11 @@
     "viewer": "lettore",
     "co_host": "co-organizzatore",
     "planner": "planner",
-    "collaborator": "collaboratore dell'evento"
+    "collaborator": "collaboratore dell'evento",
+    "speaker": "relatore",
+    "exhibitor_admin": "amministratore espositore",
+    "exhibitor_staff": "staff espositore",
+    "sponsor_contact": "referente sponsor"
   },
   "account": {
     "deleted": {

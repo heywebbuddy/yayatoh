@@ -162,7 +162,7 @@ touches:
   - packages/modules/tenancy/src/domain/permissions.ts (tables:read, tables:write)
   - packages/modules/notifications/src/{kinds.ts,templates/samples.ts,templates/messages/*.json}
   - packages/modules/command-center/src/{readiness.ts,domain/readiness.ts}
-  - packages/db/drizzle/0096_skinny_quentin_quire.sql
+  - packages/db/drizzle/0099_bitter_odin.sql
   - packages/testing/src/fixtures.ts
   - apps/web/src/app/[locale]/o/[org]/e/[event]/tables-sponsors/**, tables/[token]/**, orders/[token]/page.tsx
   - apps/web/src/components/{gala-tables,ticket-type-form,checkout-form,public-event-view,seating-editor,seating-canvas,seat-finder}.tsx

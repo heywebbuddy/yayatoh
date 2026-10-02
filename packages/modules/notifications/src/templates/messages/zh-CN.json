@@ -230,6 +230,21 @@
       "subject": "{reminder, plural, =1 {提醒：请填写 {eventName} 的宾客姓名} other {请填写 {eventName} 的宾客姓名}}",
       "intro": "您的{tableName}共有 {size, plural, other {# 个座位}}。{missing, plural, =0 {每个座位都已填写姓名，您可随时查看。} other {还有 # 个座位未填写姓名。}}请使用下方按钮告诉我们谁坐在您的桌位。",
       "cta": "填写宾客姓名"
+    },
+    "portal.invite": {
+      "subject": "邀请您加入{eventName}门户",
+      "intro": "{org}邀请您以{role}身份加入{eventName}门户。您可以在那里查看自己的场次、更新个人资料并完成任务。点击按钮后需要输入发送到此邮箱的登录验证码。",
+      "cta": "打开门户"
+    },
+    "portal.sign-in": {
+      "subject": "{code} 是您的{eventName}登录验证码",
+      "intro": "输入 {code} 登录{eventName}门户，或在同一浏览器中使用下面的按钮。验证码有效期：{minutes} 分钟。按钮有效期：{linkMinutes} 分钟。每个只能使用一次。如果不是您本人申请，请忽略此邮件。",
+      "cta": "登录门户"
+    },
+    "program.task-reminder": {
+      "subject": "提醒：{eventName}的{title}",
+      "intro": "{org}仍在等待您提交{eventName}的“{title}”。截止时间：{until}。",
+      "cta": "打开我的任务"
     }
   },
   "roles": {
@@ -243,7 +258,11 @@
     "viewer": "查看者",
     "co_host": "联合主办人",
     "planner": "策划人",
-    "collaborator": "活动协作者"
+    "collaborator": "活动协作者",
+    "speaker": "演讲者",
+    "exhibitor_admin": "参展商管理员",
+    "exhibitor_staff": "参展商工作人员",
+    "sponsor_contact": "赞助商联系人"
   },
   "account": {
     "deleted": {

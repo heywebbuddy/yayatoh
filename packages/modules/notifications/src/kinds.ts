@@ -174,6 +174,27 @@ export const KINDS = {
     urgent: true,
     params: ['code', 'url', 'minutes', 'linkMinutes', 'site'],
   },
+  // M5.3a portal accounts (P5-7): the invitation (queued) and the sign-in code with its magic link
+  // (sent at once by the web app, never queued, like guest.sign-in).
+  'portal.invite': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['url', 'eventName', 'role'],
+  },
+  'portal.sign-in': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['code', 'url', 'minutes', 'linkMinutes', 'eventName'],
+  },
+  // M5.3a: "remind whoever is missing X" and the scheduled reminder before a task is due.
+  'program.task-reminder': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: false,
+    params: ['url', 'eventName', 'title', 'until', 'timeZone'],
+  },
   'guest.waitlist-code': {
     category: 'transactional',
     channels: ['email'],
