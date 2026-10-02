@@ -69,6 +69,10 @@ export default async function EventLayout({
     <ConsoleShell
       data={data}
       context={{ eyebrow: data.org.name, title: ev.name, href: `/o/${org}/e/${event}` }}
+      crumbs={[
+        { label: data.org.name, href: `/o/${org}` },
+        { label: ev.name, href: `/o/${org}/e/${event}` },
+      ]}
       nav={{
         base: `/o/${org}/e/${event}`,
         profile,

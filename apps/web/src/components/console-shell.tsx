@@ -1,6 +1,6 @@
 import { type NavGroup, type NavItem, navLabelKey, type ProfileKey } from '@yayatoh/platform';
 import { roleCan } from '@yayatoh/tenancy';
-import { Avatar, buttonClass, cx, NavSection } from '@yayatoh/ui';
+import { Avatar, buttonClass, type Crumb, cx, NavSection } from '@yayatoh/ui';
 import { ChevronsUpDown, Plus, ShieldCheck } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
@@ -8,6 +8,7 @@ import { Link } from '@/i18n/navigation.ts';
 import type { ConsoleData } from '@/server/console.ts';
 import { currentTheme } from '@/server/theme.ts';
 import { BrandMark } from './brand-mark.tsx';
+import { Crumbs } from './crumbs.tsx';
 import { GlobalSearch } from './global-search.tsx';
 import { Icon } from './icons.tsx';
 import { ImpersonationBanner } from './impersonation-banner.tsx';
@@ -193,12 +194,15 @@ export async function ConsoleShell({
   context,
   nav,
   status,
+  crumbs,
   children,
 }: {
   data: NonNullable<ConsoleData>;
   context: { eyebrow: string; title: string; href: string };
   nav: ShellNav;
   status?: ReactNode;
+  /** Where this page sits (e.g. the org and the event), shown above every page's header. */
+  crumbs?: readonly Crumb[];
   children: ReactNode;
 }) {
   const t = await getTranslations('shell');
@@ -243,6 +247,11 @@ export async function ConsoleShell({
           </div>
         </header>
         <main id="main" className="flex min-w-0 flex-col gap-5">
+          {crumbs ? (
+            <div className="-mb-2">
+              <Crumbs items={crumbs} />
+            </div>
+          ) : null}
           <StepUpProvider>{children}</StepUpProvider>
         </main>
       </div>

@@ -26,13 +26,13 @@ export async function OrgHero({
   return (
     <BrandSection
       aria-labelledby="org-heading"
-      className="mx-2 flex flex-col gap-3 rounded-panel bg-black px-6 py-12 text-white md:px-16"
+      className="mx-3 flex flex-col gap-3 overflow-hidden rounded-[32px] bg-hero px-6 py-12 text-white elevation-card sm:mx-5 md:px-12"
       brand={brand}
     >
       {logo ? (
         <div
           data-testid="org-logo"
-          className="flex size-20 items-center justify-center rounded-card bg-surface p-2"
+          className="flex size-20 items-center justify-center rounded-tile bg-white p-2"
         >
           <MediaPicture image={logo} sizes="80px" eager className="max-h-16 w-auto object-contain" />
         </div>

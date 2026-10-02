@@ -99,7 +99,7 @@ export interface Crumb {
   readonly href?: string;
 }
 
-/** Breadcrumb trail; the last item is the current page. */
+/** Breadcrumb trail; a last item without a link is the current page. */
 export function Breadcrumb({
   items,
   label,
@@ -121,7 +121,7 @@ export function Breadcrumb({
               key={`${i}-${typeof c.label === 'string' ? c.label : ''}`}
               className="flex items-center gap-1.5"
             >
-              {c.href && !last ? (
+              {c.href ? (
                 <LinkC
                   href={c.href}
                   className="rounded-tag hover:text-ink hover:underline underline-offset-2"
@@ -129,7 +129,7 @@ export function Breadcrumb({
                   {c.label}
                 </LinkC>
               ) : (
-                <span aria-current={last ? 'page' : undefined} className={last ? 'text-ink-2' : undefined}>
+                <span aria-current={last ? 'page' : undefined} className={last ? 'text-ink' : undefined}>
                   {c.label}
                 </span>
               )}
