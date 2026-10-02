@@ -52,7 +52,7 @@ export default async function RegistrationFormPage({
 }) {
   const { locale, org, event } = await params;
   setRequestLocale(locale);
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'registration');
   const profile = isProfileKey(ev.profile) ? ev.profile : 'other';
   if (!navIncludes(profile, data.modules, 'registration')) notFound();
   const t = await getTranslations('registrationForm');

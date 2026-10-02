@@ -40,7 +40,7 @@ async function edit(
   form: FormData,
   change: (pages: Page[]) => Page[],
 ): Promise<FormState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'registration');
   // The version the builder showed: a publish from an older one is refused (another editor won).
   const seen = Number(form.get('version'));
   const expectedVersion = Number.isInteger(seen) && seen >= 0 ? seen : undefined;
@@ -88,7 +88,7 @@ const allKeys = (pages: readonly Page[]) =>
 /** Chosen registration types from the form: null (all) unless "Only some types" is picked. */
 async function typesFrom(org: string, event: string, form: FormData): Promise<string[] | null | 'invalid'> {
   if (form.get('audience') !== 'some') return null;
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'registration');
   const known = new Set((await consoleRegistrationTypes(data, ev.id)).map((t) => t.id));
   const chosen = form.getAll('types').map(String);
   if (chosen.length === 0 || chosen.some((id) => !known.has(id))) return 'invalid';
@@ -346,7 +346,7 @@ export async function setJobTitlesAction(
   _prev: FormState,
   form: FormData,
 ): Promise<FormState> {
-  const { data } = await loadEvent(org, event);
+  const { data } = await loadEvent(org, event, 'registration');
   const seen = new Set<string>();
   const titles = String(form.get('titles') ?? '')
     .split(/\r?\n/)
