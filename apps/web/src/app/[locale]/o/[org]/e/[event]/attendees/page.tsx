@@ -8,6 +8,7 @@ import {
   attendeeLabelsQuery,
   getAttendeeQuery,
 } from '@yayatoh/attendees';
+import { contactStatsQuery, contactValueQuery } from '@yayatoh/crm';
 import { executeQuery, formatMoney, isDomainError, money } from '@yayatoh/kernel';
 import { ticketCancelBulk } from '@yayatoh/orders';
 import { type BulkOperationDto, isProfileKey, term } from '@yayatoh/platform';
@@ -50,6 +51,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { AutoRefresh } from '@/components/auto-refresh.tsx';
 import { BulkFields, type SeatTarget } from '@/components/bulk-fields.tsx';
 import { ClaimLinkForm } from '@/components/claim-link-form.tsx';
+import { ContactStatsHeader } from '@/components/contact-stats.tsx';
 import { GuestForm } from '@/components/guest-form.tsx';
 import { LabelForm } from '@/components/label-form.tsx';
 import { StepUpForm } from '@/components/step-up.tsx';
@@ -372,6 +374,14 @@ export default async function AttendeesPage({
   const timeline =
     selectedRecord && roleCan(data.role, 'contacts:read')
       ? await executeQuery(contactTimelineQuery, { attendeeId: selectedRecord.id }, data.ctx, ports)
+      : null;
+  // M6.1b: the person's stats in the timeline header (money only for finance).
+  const timelineStats = timeline
+    ? await executeQuery(contactStatsQuery, { contactId: timeline.contactId }, data.ctx, ports)
+    : null;
+  const timelineValue =
+    timeline && roleCan(data.role, 'finance:read')
+      ? await executeQuery(contactValueQuery, { contactId: timeline.contactId }, data.ctx, ports)
       : null;
   const when = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeZone: real.timezone });
   const filtered = Boolean(
@@ -917,6 +927,9 @@ export default async function AttendeesPage({
                 <h2 id="history-heading" className="text-caption text-zinc-500">
                   {t('timeline.title', { count: timeline.events })}
                 </h2>
+                {timelineStats ? (
+                  <ContactStatsHeader org={org} stats={timelineStats} value={timelineValue} locale={locale} />
+                ) : null}
                 <ol className="flex list-none flex-col gap-1.5 p-0 text-caption">
                   {timeline.items.slice(0, 12).map((i, n) => (
                     <li key={`${i.kind}-${i.at.toISOString()}-${n}`} className="flex flex-col">

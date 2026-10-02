@@ -5021,7 +5021,9 @@
         "consent": "मार्केटिंग सहमति",
         "label": "लेबल",
         "totals": "कुल योग",
-        "seen": "पहली या आख़िरी बार देखा गया"
+        "seen": "पहली या आख़िरी बार देखा गया",
+        "stats": "संपर्क आँकड़े",
+        "ltv": "आजीवन मूल्य"
       },
       "did": "नियम",
       "didYes": "हाँ",
@@ -5079,7 +5081,19 @@
       "event": "इवेंट",
       "editionOf": "इससे पहले का संस्करण",
       "series": "सीरीज़",
-      "noSeries": "अभी कोई सीरीज़ नहीं"
+      "noSeries": "अभी कोई सीरीज़ नहीं",
+      "statsMetric": "आँकड़ा",
+      "statsMetrics": {
+        "engagement": "सहभागिता स्कोर",
+        "noShowPct": "न आने की संभावना",
+        "sessionsAttended": "भाग लिए सत्र",
+        "campaignsOpened": "खोले गए अभियान",
+        "rfmRecency": "RFM नवीनता (पंचमक)",
+        "rfmFrequency": "RFM आवृत्ति (पंचमक)",
+        "rfmMonetary": "RFM मूल्य (पंचमक)"
+      },
+      "valuePercent": "प्रतिशत",
+      "quintile": "पंचमक (1–5)"
     },
     "scopes": {
       "any": "कोई भी इवेंट",
@@ -5134,7 +5148,8 @@
         "unknown_legacy": "अज्ञात (आयातित)",
         "none": "नहीं दी गई"
       }
-    }
+    },
+    "insights": "संपर्क अंतर्दृष्टि"
   },
   "refundOps": {
     "timeline": {
@@ -9008,5 +9023,77 @@
       "questionNotAllowed": "वह प्रश्न बैज पर प्रिंट नहीं किया जा सकता।"
     },
     "elements": "इस तरफ़ के तत्व"
+  },
+  "contactStats": {
+    "title": "संपर्क",
+    "insightsTitle": "संपर्क अंतर्दृष्टि",
+    "insightsDescription": "आपके लोग सभी इवेंट में कैसे भाग लेते हैं: सहभागिता, अनुपस्थिति, नवीनता और आवृत्ति।",
+    "audiencesLink": "ऑडियंस",
+    "notLive": "यह संपर्क किसी अन्य में मिला दिया गया या मिटा दिया गया। इसके आँकड़े अब नहीं गिने जाते।",
+    "emptyTitle": "अभी कोई गतिविधि नहीं",
+    "emptyDescription": "आँकड़े तब दिखेंगे जब यह व्यक्ति किसी इवेंट के लिए पंजीकरण करेगा, सत्र में भाग लेगा या अभियान खोलेगा।",
+    "emptyAction": "ऑडियंस बनाएँ",
+    "glance": "एक नज़र में",
+    "events": "पंजीकृत इवेंट",
+    "attended": "उपस्थित इवेंट",
+    "sessions": "भाग लिए सत्र",
+    "campaigns": "खोले गए अभियान",
+    "firstSeen": "पहली बार देखा",
+    "lastSeen": "आखिरी बार देखा",
+    "never": "—",
+    "lifetimeValue": "आजीवन मूल्य",
+    "lifetimeOrders": "{count, plural, one {# भुगतान किया गया ऑर्डर} other {# भुगतान किए गए ऑर्डर}}",
+    "noSpend": "अभी कोई भुगतान किया गया ऑर्डर नहीं।",
+    "noSpendOrg": "अभी तक किसी ने कुछ भुगतान नहीं किया।",
+    "scores": "स्कोर",
+    "engagement": "सहभागिता स्कोर",
+    "engagementValue": "{score} / 100",
+    "engagementHow": "{wAttended} × {attended} उपस्थित इवेंट + {wSessions} × {sessions} सत्र + {wCampaigns} × {campaigns} खोले गए अभियान = {points} अंक. 100 × {points} ÷ ({points} + {half}) = {score}.",
+    "noShow": "न आने की संभावना",
+    "noShowHow": "({noShows} अनुपस्थितियाँ + {priorNoShows}) ÷ ({past} पिछले पंजीकरण + {priorRegistrations}) = {pct}. आगामी इवेंट अभी नहीं गिने जाते।",
+    "rfm": "RFM",
+    "rfmHow": "इस संगठन के उन लोगों में पंचमक जिन्होंने किसी इवेंट में भाग लिया: 5 शीर्ष पाँचवाँ हिस्सा है।",
+    "rfmNone": "अभी रैंक नहीं: कोई इवेंट नहीं।",
+    "recency": "नवीनता",
+    "frequency": "आवृत्ति",
+    "monetary": "मूल्य",
+    "quintileValue": "5 में से {q}",
+    "updated": "{date} को अपडेट किया गया",
+    "viewContact": "संपर्क देखें",
+    "headerSummary": "सहभागिता {score} · अनुपस्थिति {pct}",
+    "headerValue": "आजीवन {amount}",
+    "totals": "कुल",
+    "total": {
+      "contacts": "संपर्क",
+      "participants": "भाग लिया",
+      "attendedAny": "उपस्थित",
+      "averageEngagement": "औसत सहभागिता",
+      "noShowRate": "अनुपस्थिति दर"
+    },
+    "distributions": "वितरण",
+    "distribution": {
+      "engagement": "सहभागिता स्कोर",
+      "noShow": "न आने की संभावना",
+      "frequency": "भाग लिए इवेंट",
+      "recency": "आखिरी बार देखा"
+    },
+    "showData": "डेटा दिखाएँ",
+    "range": "सीमा",
+    "people": "लोग",
+    "bandRange": "{from}–{to}",
+    "bandFrom": "{from} या अधिक",
+    "recencyWithin": "{days} दिनों के भीतर",
+    "recencyOlder": "इससे पहले",
+    "value": {
+      "currency": "मुद्रा",
+      "payers": "भुगतान करने वाले लोग",
+      "total": "कुल",
+      "average": "औसत",
+      "topFifth": "शीर्ष पाँचवाँ हिस्सा इससे",
+      "max": "सबसे अधिक"
+    },
+    "orgEmptyTitle": "अभी कोई संपर्क गतिविधि नहीं",
+    "orgEmptyDescription": "आँकड़े तब दिखेंगे जब लोग पंजीकरण करेंगे, चेक-इन करेंगे, सत्रों में भाग लेंगे और अभियान खोलेंगे।",
+    "orgEmptyAction": "अपने इवेंट पर जाएँ"
   }
 }

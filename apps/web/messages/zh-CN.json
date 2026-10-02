@@ -5021,7 +5021,9 @@
         "consent": "营销同意",
         "label": "标签",
         "totals": "累计数据",
-        "seen": "首次或最近出现"
+        "seen": "首次或最近出现",
+        "stats": "联系人统计",
+        "ltv": "终身价值"
       },
       "did": "规则",
       "didYes": "是",
@@ -5079,7 +5081,19 @@
       "event": "活动",
       "editionOf": "此前一届",
       "series": "系列",
-      "noSeries": "还没有系列"
+      "noSeries": "还没有系列",
+      "statsMetric": "指标",
+      "statsMetrics": {
+        "engagement": "参与度得分",
+        "noShowPct": "缺席倾向",
+        "sessionsAttended": "参加的分会场",
+        "campaignsOpened": "打开的营销活动",
+        "rfmRecency": "RFM 近度（五分位）",
+        "rfmFrequency": "RFM 频率（五分位）",
+        "rfmMonetary": "RFM 金额（五分位）"
+      },
+      "valuePercent": "百分比",
+      "quintile": "五分位（1–5）"
     },
     "scopes": {
       "any": "任意活动",
@@ -5134,7 +5148,8 @@
         "unknown_legacy": "未知（导入）",
         "none": "未同意"
       }
-    }
+    },
+    "insights": "联系人洞察"
   },
   "refundOps": {
     "timeline": {
@@ -9008,5 +9023,77 @@
       "questionNotAllowed": "该问题不能打印在胸卡上。"
     },
     "elements": "此面的元素"
+  },
+  "contactStats": {
+    "title": "联系人",
+    "insightsTitle": "联系人洞察",
+    "insightsDescription": "你的参与者在所有活动中的表现：参与度、缺席、近度和频率。",
+    "audiencesLink": "受众",
+    "notLive": "此联系人已合并到其他联系人或已被清除，其统计数据不再计入。",
+    "emptyTitle": "暂无活动",
+    "emptyDescription": "此人报名活动、参加分会场或打开营销活动后，统计数据就会显示。",
+    "emptyAction": "创建受众",
+    "glance": "概览",
+    "events": "报名的活动",
+    "attended": "出席的活动",
+    "sessions": "参加的分会场",
+    "campaigns": "打开的营销活动",
+    "firstSeen": "首次出现",
+    "lastSeen": "最近出现",
+    "never": "—",
+    "lifetimeValue": "终身价值",
+    "lifetimeOrders": "{count, plural, other {# 笔已付款订单}}",
+    "noSpend": "暂无已付款订单。",
+    "noSpendOrg": "还没有人付过款。",
+    "scores": "得分",
+    "engagement": "参与度得分",
+    "engagementValue": "{score} / 100",
+    "engagementHow": "{wAttended} × {attended} 出席活动 + {wSessions} × {sessions} 分会场 + {wCampaigns} × {campaigns} 打开的营销活动 = {points} 分. 100 × {points} ÷ ({points} + {half}) = {score}.",
+    "noShow": "缺席倾向",
+    "noShowHow": "({noShows} 次缺席 + {priorNoShows}) ÷ ({past} 次过往报名 + {priorRegistrations}) = {pct}. 即将举行的活动暂不计入。",
+    "rfm": "RFM",
+    "rfmHow": "在本组织参加过活动的人中的五分位：5 为最高的五分之一。",
+    "rfmNone": "尚未排名：没有活动。",
+    "recency": "近度",
+    "frequency": "频率",
+    "monetary": "金额",
+    "quintileValue": "{q} / 5",
+    "updated": "更新于 {date}",
+    "viewContact": "查看联系人",
+    "headerSummary": "参与度 {score} · 缺席 {pct}",
+    "headerValue": "终身 {amount}",
+    "totals": "总计",
+    "total": {
+      "contacts": "联系人",
+      "participants": "参与过",
+      "attendedAny": "出席过",
+      "averageEngagement": "平均参与度",
+      "noShowRate": "缺席率"
+    },
+    "distributions": "分布",
+    "distribution": {
+      "engagement": "参与度得分",
+      "noShow": "缺席倾向",
+      "frequency": "参与的活动数",
+      "recency": "最近出现"
+    },
+    "showData": "显示数据",
+    "range": "区间",
+    "people": "人数",
+    "bandRange": "{from}–{to}",
+    "bandFrom": "{from} 及以上",
+    "recencyWithin": "{days} 天内",
+    "recencyOlder": "更早",
+    "value": {
+      "currency": "币种",
+      "payers": "付款人数",
+      "total": "总计",
+      "average": "平均",
+      "topFifth": "最高五分之一起点",
+      "max": "最高"
+    },
+    "orgEmptyTitle": "暂无联系人活动",
+    "orgEmptyDescription": "随着人们报名、签到、参加分会场和打开营销活动，统计数据会显示。",
+    "orgEmptyAction": "前往你的活动"
   }
 }

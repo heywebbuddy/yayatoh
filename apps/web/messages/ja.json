@@ -5021,7 +5021,9 @@
         "consent": "マーケティングへの同意",
         "label": "ラベル",
         "totals": "累計",
-        "seen": "初回または最終の記録"
+        "seen": "初回または最終の記録",
+        "stats": "連絡先の統計",
+        "ltv": "生涯価値"
       },
       "did": "ルール",
       "didYes": "した",
@@ -5079,7 +5081,19 @@
       "event": "イベント",
       "editionOf": "この前の開催",
       "series": "シリーズ",
-      "noSeries": "シリーズはまだありません"
+      "noSeries": "シリーズはまだありません",
+      "statsMetric": "指標",
+      "statsMetrics": {
+        "engagement": "エンゲージメントスコア",
+        "noShowPct": "不参加の傾向",
+        "sessionsAttended": "参加したセッション",
+        "campaignsOpened": "開封したキャンペーン",
+        "rfmRecency": "RFM 最新性（五分位）",
+        "rfmFrequency": "RFM 頻度（五分位）",
+        "rfmMonetary": "RFM 金額（五分位）"
+      },
+      "valuePercent": "パーセント",
+      "quintile": "五分位（1–5）"
     },
     "scopes": {
       "any": "すべてのイベント",
@@ -5134,7 +5148,8 @@
         "unknown_legacy": "不明（インポート）",
         "none": "なし"
       }
-    }
+    },
+    "insights": "連絡先インサイト"
   },
   "refundOps": {
     "timeline": {
@@ -9008,5 +9023,77 @@
       "questionNotAllowed": "この質問はバッジに印刷できません。"
     },
     "elements": "この面の要素"
+  },
+  "contactStats": {
+    "title": "連絡先",
+    "insightsTitle": "連絡先インサイト",
+    "insightsDescription": "すべてのイベントでの参加状況：エンゲージメント、不参加、最新性、頻度。",
+    "audiencesLink": "オーディエンス",
+    "notLive": "この連絡先は別の連絡先に統合されたか、消去されました。統計はもう集計されません。",
+    "emptyTitle": "まだアクティビティはありません",
+    "emptyDescription": "この人がイベントに登録、セッションに参加、またはキャンペーンを開封すると統計が表示されます。",
+    "emptyAction": "オーディエンスを作成",
+    "glance": "概要",
+    "events": "登録したイベント",
+    "attended": "参加したイベント",
+    "sessions": "参加したセッション",
+    "campaigns": "開封したキャンペーン",
+    "firstSeen": "初回",
+    "lastSeen": "最終",
+    "never": "—",
+    "lifetimeValue": "生涯価値",
+    "lifetimeOrders": "{count, plural, other {支払い済み注文 # 件}}",
+    "noSpend": "支払い済みの注文はまだありません。",
+    "noSpendOrg": "まだ誰も支払っていません。",
+    "scores": "スコア",
+    "engagement": "エンゲージメントスコア",
+    "engagementValue": "{score} / 100",
+    "engagementHow": "{wAttended} × {attended} 参加イベント + {wSessions} × {sessions} セッション + {wCampaigns} × {campaigns} 開封キャンペーン = {points} ポイント. 100 × {points} ÷ ({points} + {half}) = {score}.",
+    "noShow": "不参加の傾向",
+    "noShowHow": "({noShows} 不参加 + {priorNoShows}) ÷ ({past} 過去の登録 + {priorRegistrations}) = {pct}. 今後のイベントはまだ集計されません。",
+    "rfm": "RFM",
+    "rfmHow": "この組織でイベントに参加した人の中での五分位：5 が上位 5 分の 1 です。",
+    "rfmNone": "まだランクなし：イベントがありません。",
+    "recency": "最新性",
+    "frequency": "頻度",
+    "monetary": "金額",
+    "quintileValue": "5 段階中 {q}",
+    "updated": "{date} に更新",
+    "viewContact": "連絡先を表示",
+    "headerSummary": "エンゲージメント {score} · 不参加 {pct}",
+    "headerValue": "生涯 {amount}",
+    "totals": "合計",
+    "total": {
+      "contacts": "連絡先",
+      "participants": "参加者",
+      "attendedAny": "来場者",
+      "averageEngagement": "平均エンゲージメント",
+      "noShowRate": "不参加率"
+    },
+    "distributions": "分布",
+    "distribution": {
+      "engagement": "エンゲージメントスコア",
+      "noShow": "不参加の傾向",
+      "frequency": "参加したイベント数",
+      "recency": "最終"
+    },
+    "showData": "データを表示",
+    "range": "範囲",
+    "people": "人数",
+    "bandRange": "{from}–{to}",
+    "bandFrom": "{from} 以上",
+    "recencyWithin": "{days} 日以内",
+    "recencyOlder": "それ以前",
+    "value": {
+      "currency": "通貨",
+      "payers": "支払った人",
+      "total": "合計",
+      "average": "平均",
+      "topFifth": "上位 5 分の 1 の下限",
+      "max": "最高"
+    },
+    "orgEmptyTitle": "まだ連絡先のアクティビティはありません",
+    "orgEmptyDescription": "登録、チェックイン、セッション参加、キャンペーン開封に応じて統計が表示されます。",
+    "orgEmptyAction": "イベントへ移動"
   }
 }

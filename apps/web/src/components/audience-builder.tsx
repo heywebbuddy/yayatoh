@@ -9,6 +9,9 @@ import {
   MAX_SEGMENT_DEPTH,
   SegmentDefinition,
   type SegmentScope,
+  STATS_METRIC_MAX,
+  STATS_METRICS,
+  type StatsMetric,
   TEMPLATE_KEYS,
   TEMPLATE_PARAMS,
   type TemplateKey,
@@ -19,6 +22,7 @@ import { Alert, Button, Input, Table } from '@yayatoh/ui';
 import { useLocale, useTranslations } from 'next-intl';
 import { type ReactNode, useActionState, useEffect, useId, useMemo, useRef, useState } from 'react';
 import type { PreviewResult, SaveAudienceState } from '@/app/[locale]/o/[org]/(org)/audiences/actions.ts';
+import { Link } from '@/i18n/navigation.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
 
 // Draft nodes are loose (a half-typed label is still a draft); the DSL schema decides validity.
@@ -69,8 +73,15 @@ function newCondition(type: ConditionType, events: readonly BuilderEvent[], curr
       return { type, metric: 'events', op: 'gte', value: 1 };
     case 'seen':
       return { type, which: 'last', from: null, to: null };
+    case 'stats':
+      return { type, metric: 'engagement', op: 'gte', value: 50 };
+    case 'ltv':
+      return { type, currency, op: 'gt', amountMinor: 0 };
   }
 }
+
+/** Money conditions (M6.1b) are offered only to members who can read finance. */
+const MONEY_METRICS: readonly StatsMetric[] = ['rfmMonetary'];
 
 const countLeaves = (n: Node): number =>
   isGroup(n) ? n.conditions.reduce((s, c) => s + countLeaves(c), 0) : 1;
@@ -104,6 +115,8 @@ export function AudienceBuilder({
   preview,
   ticketTypes,
   save,
+  canMoney = false,
+  contactsHref = null,
 }: {
   initial: SegmentDefinition | null;
   segmentId: string | null;
@@ -116,6 +129,10 @@ export function AudienceBuilder({
   preview: (definitionJson: string) => Promise<PreviewResult>;
   ticketTypes: (eventId: string) => Promise<{ id: string; name: string }[]>;
   save: (prev: SaveAudienceState, form: FormData) => Promise<SaveAudienceState>;
+  /** M6.1b: lifetime value and the RFM monetary quintile (finance permission). */
+  canMoney?: boolean;
+  /** M6.1b: the contact pages' base path, when the member may open them. */
+  contactsHref?: string | null;
 }) {
   const t = useTranslations('audiences');
   const te = useTranslations();
@@ -193,6 +210,7 @@ export function AudienceBuilder({
           currency={currency}
           types={types}
           set={set}
+          canMoney={canMoney}
         />
         {!parsed.success ? (
           <p className="text-caption text-pink-700" role="status">
@@ -231,7 +249,18 @@ export function AudienceBuilder({
             rowKey={(r) => r.contactId}
             rows={result.preview.rows}
             columns={[
-              { key: 'name', header: t('preview.name'), cell: (r) => r.name ?? t('preview.noName') },
+              {
+                key: 'name',
+                header: t('preview.name'),
+                cell: (r) =>
+                  contactsHref ? (
+                    <Link href={`${contactsHref}/${r.contactId}`} className="underline underline-offset-2">
+                      {r.name ?? t('preview.noName')}
+                    </Link>
+                  ) : (
+                    (r.name ?? t('preview.noName'))
+                  ),
+              },
               { key: 'email', header: t('preview.email'), cell: (r) => <bdi>{r.email}</bdi> },
               {
                 key: 'events',
@@ -412,6 +441,7 @@ interface EditorProps {
   currency: string;
   types: Record<string, { id: string; name: string }[]>;
   set: (path: readonly number[], fn: (n: Node) => Node | null) => void;
+  canMoney: boolean;
 }
 
 function GroupEditor({
@@ -479,7 +509,7 @@ function GroupEditor({
           value={adding}
           onChange={(e) => setAdding(e.target.value as ConditionType)}
         >
-          {CONDITION_TYPES.map((ct) => (
+          {CONDITION_TYPES.filter((ct) => ct !== 'ltv' || p.canMoney).map((ct) => (
             <option key={ct} value={ct}>
               {t(`types.${ct}`)}
             </option>
@@ -757,6 +787,75 @@ function ConditionEditor({ node, path, ...p }: EditorProps & { node: Draft; path
                 className={SELECT}
                 value={Number(node.value)}
                 onChange={(e) => put({ value: Math.max(0, Math.floor(Number(e.target.value || 0))) })}
+              />,
+            )}
+          </>
+        ) : null}
+        {node.type === 'stats' ? (
+          <>
+            {field(
+              t('statsMetric'),
+              select(
+                String(node.metric),
+                STATS_METRICS.filter(
+                  (m) => p.canMoney || !MONEY_METRICS.includes(m) || m === node.metric,
+                ).map((m) => [m, t(`statsMetrics.${m}`)] as const),
+                (v) => {
+                  const max = STATS_METRIC_MAX[v as StatsMetric];
+                  put({ metric: v, value: Math.min(Number(node.value), max) });
+                },
+              ),
+            )}
+            {field(
+              t('comparison'),
+              select(String(node.op), ops, (v) => put({ op: v })),
+            )}
+            {field(
+              node.metric === 'noShowPct'
+                ? t('valuePercent')
+                : String(node.metric).startsWith('rfm')
+                  ? t('quintile')
+                  : t('value'),
+              <input
+                type="number"
+                min={0}
+                max={STATS_METRIC_MAX[node.metric as StatsMetric]}
+                step={1}
+                className={SELECT}
+                value={Number(node.value)}
+                onChange={(e) => put({ value: Math.max(0, Math.floor(Number(e.target.value || 0))) })}
+              />,
+            )}
+          </>
+        ) : null}
+        {node.type === 'ltv' ? (
+          <>
+            {field(
+              t('currency'),
+              <input
+                className={SELECT}
+                value={String(node.currency)}
+                maxLength={3}
+                size={4}
+                onChange={(e) => put({ currency: e.target.value.toUpperCase() })}
+              />,
+            )}
+            {field(
+              t('comparison'),
+              select(String(node.op), ops, (v) => put({ op: v })),
+            )}
+            {field(
+              t('amount'),
+              <input
+                type="number"
+                min={0}
+                step="0.01"
+                inputMode="decimal"
+                className={SELECT}
+                value={Number(node.amountMinor) / 100}
+                onChange={(e) =>
+                  put({ amountMinor: Math.max(0, Math.round(Number(e.target.value || 0) * 100)) })
+                }
               />,
             )}
           </>
