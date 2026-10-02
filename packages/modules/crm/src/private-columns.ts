@@ -23,4 +23,7 @@ export const privateColumns = columnPrivacy('crm', {
     sms_consent: 'vocab',
   },
   event_participation: { currency: 'vocab', source: 'vocab', labels: internal() },
+  // M6.1b contact stats: counts, scores and money in minor units; the text columns are codes.
+  contact_scores: { monetary_currency: 'vocab' },
+  contact_signals: { kind: 'vocab' },
 });

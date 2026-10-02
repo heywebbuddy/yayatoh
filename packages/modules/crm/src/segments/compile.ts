@@ -1,12 +1,15 @@
 import type { TenantTx } from '@yayatoh/db';
 import { DomainError } from '@yayatoh/kernel';
 import { type SQL, sql } from 'drizzle-orm';
+import { NO_SHOW_PRIOR_BPS } from '../stats/formulas.ts';
+import { RFM_SQL } from '../stats/rfm.ts';
 import {
   type Comparison,
   type SegmentCondition,
   type SegmentDefinition,
   type SegmentNode,
   type SegmentScope,
+  type StatsMetric,
   scopeKey,
 } from './dsl.ts';
 
@@ -107,7 +110,36 @@ function conditionSql(c: SegmentCondition, o: CompileOptions): SQL {
       if (c.to) parts.push(sql`${col} < ${dayEnd(c.to, o.timezone)}`);
       return sql`(${sql.join(parts, sql` and `)})`;
     }
+    case 'stats':
+      return statsSql(c);
+    case 'ltv':
+      return sql`coalesce((select v.spend_minor from crm.contact_stats v
+        where v.contact_id = c.id and v.currency = ${c.currency}), 0) ${OPS[c.op]} ${c.amountMinor}`;
   }
+}
+
+// M6.1b stats columns of `crm.contact_scores` (a contact without a row has none of the counts and
+// the no-show prior), and the RFM quintile columns of `RFM_SQL`.
+const SCORE_COLUMNS: Readonly<Partial<Record<StatsMetric, { col: SQL; missing: number; scale: number }>>> = {
+  engagement: { col: sql.raw('s.engagement_score'), missing: 0, scale: 1 },
+  noShowPct: { col: sql.raw('s.no_show_bps'), missing: NO_SHOW_PRIOR_BPS, scale: 100 },
+  sessionsAttended: { col: sql.raw('s.sessions_attended'), missing: 0, scale: 1 },
+  campaignsOpened: { col: sql.raw('s.campaigns_opened'), missing: 0, scale: 1 },
+};
+const RFM_COLUMNS: Readonly<Partial<Record<StatsMetric, SQL>>> = {
+  rfmRecency: sql.raw('q.recency'),
+  rfmFrequency: sql.raw('q.frequency'),
+  rfmMonetary: sql.raw('q.monetary'),
+};
+
+function statsSql(c: Extract<SegmentCondition, { type: 'stats' }>): SQL {
+  const score = SCORE_COLUMNS[c.metric];
+  if (score)
+    return sql`coalesce((select ${score.col} from crm.contact_scores s where s.contact_id = c.id), ${score.missing}) ${OPS[c.op]} ${c.value * score.scale}`;
+  const rfm = RFM_COLUMNS[c.metric];
+  if (!rfm) throw new DomainError('internal', `Unknown stats metric ${c.metric}`);
+  // Uncorrelated: the org's quintiles are ranked once per query, outside the population none match.
+  return sql`c.id in (select q.contact_id from ${RFM_SQL} q where ${rfm} ${OPS[c.op]} ${c.value})`;
 }
 
 function nodeSql(n: SegmentNode, o: CompileOptions): SQL {

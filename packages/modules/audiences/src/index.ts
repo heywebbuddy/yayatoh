@@ -5,6 +5,7 @@ export {
   audienceExportBulk,
   CONSENT_WORDS,
 } from './export.ts';
+export { assertMoneyConditionsAllowedTx } from './money.ts';
 export { privateColumns } from './private-columns.ts';
 export {
   catchUpParticipation,
@@ -27,3 +28,14 @@ export {
   saveSegmentCommand,
   segmentDefinitionTx,
 } from './segments.ts';
+export {
+  CampaignOpenedPayload,
+  CONTACT_SIGNAL_EVENTS,
+  catchUpContactSignals,
+  contactSignalOf,
+  contactSignalsSubscriber,
+  RESCORE_PAGE,
+  refreshContactStatsTx,
+  rescoreOrgContacts,
+  SessionAttendedPayload,
+} from './stats.ts';

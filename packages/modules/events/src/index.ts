@@ -238,3 +238,4 @@ export {
   TeamMemberDto,
   teamEventBySlugQuery,
 } from './team.ts';
+export { eventsOverTx } from './timings.ts';
