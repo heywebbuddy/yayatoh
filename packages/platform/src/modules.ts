@@ -30,6 +30,8 @@ export const MODULE_KEYS = [
   'badges',
   'gallery',
   'website',
+  /** Phase 6 (P6-13): the analytics warehouse and cross-event dashboards (M6.2), free in beta. */
+  'analytics_pro',
 ] as const;
 export type ModuleKey = (typeof MODULE_KEYS)[number];
 

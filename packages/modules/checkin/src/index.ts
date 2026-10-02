@@ -162,3 +162,5 @@ export {
   verifyKioskPin,
 } from './staff-mode.ts';
 export { type CheckinScope, type CheckinSeriesFact, checkinFactsTx, checkinSeriesTx } from './stats.ts';
+// M6.2a: check-ins per day (first live admission) for the analytics warehouse.
+export { dailyCheckinFactsTx } from './daily-facts.ts';
