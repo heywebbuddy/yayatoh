@@ -364,7 +364,7 @@ export async function transferRulesAction(
   _prev: SupportState,
   form: FormData,
 ): Promise<SupportState> {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'ticketsOrders');
   const cutoff = String(form.get('cutoffHours') ?? '').trim();
   const fee = String(form.get('fee') ?? '')
     .trim()

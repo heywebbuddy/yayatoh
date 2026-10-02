@@ -23,7 +23,7 @@ export async function GET(
   const { org, event, orderId, creditNoteId } = await params;
   const notFound = () => new Response('Not found', { status: 404 });
   if (!z.uuid().safeParse(creditNoteId).success) return notFound();
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'ticketsOrders');
   if (!roleCan(data.role, 'orders:read')) return notFound();
   const requested = new URL(req.url).searchParams.get('locale') ?? 'en';
   const locale = (routing.locales as readonly string[]).includes(requested) ? requested : 'en';

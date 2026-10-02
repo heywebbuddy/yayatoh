@@ -215,7 +215,7 @@ export async function addNoteAction(
 const claimPath = (locale: string, token: string) => `${locale === 'en' ? '' : `/${locale}`}/claim/${token}`;
 
 async function orderOfEvent(org: string, event: string, orderId: string) {
-  const { data, event: ev } = await loadEvent(org, event);
+  const { data, event: ev } = await loadEvent(org, event, 'ticketsOrders');
   const order = await executeQuery(orderDetailQuery, { orderId }, data.ctx, ports);
   if (order.eventId !== ev.id) throw new DomainError('not_found');
   return { data, ev, order };
