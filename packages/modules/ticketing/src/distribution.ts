@@ -6,7 +6,21 @@ import { signLinkToken, tenantCommand, tenantQuery, verifyLinkToken } from '@yay
 import { and, asc, count, desc, eq, gte, inArray, isNull, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { reissueTicketTx } from './issue.ts';
-import { holderLinks, ticketBarcodes, ticketClaims, tickets, ticketTypes } from './schema.ts';
+import {
+  holderLinks,
+  ticketBarcodes,
+  ticketClaims,
+  tickets,
+  ticketTransfers,
+  ticketTypes,
+} from './schema.ts';
+import {
+  cancelPendingTransfersTx,
+  completeTransferTx,
+  holderTransferOptionsTx,
+  transferForClaimTx,
+} from './transfers.ts';
+import { rotateWalletPassTx } from './wallet.ts';
 
 export const CLAIM_PURPOSE = 'ticket-claim';
 export const HOLDER_PURPOSE = 'ticket-holder';
@@ -54,6 +68,8 @@ async function openClaimsTx(
   }) => void,
 ) {
   const orgId = requireOrg(ctx);
+  // M3.10c: a new claim link replaces a pending transfer of the ticket too.
+  await cancelPendingTransfersTx(tx, ctx, ticketIds);
   await tx
     .update(ticketClaims)
     .set({ revokedAt: ctx.now, updatedAt: ctx.now })
@@ -147,8 +163,11 @@ export const revokeClaimLinkCommand = tenantCommand({
           sql`${ticketClaims.ticketId} in (select id from ticketing.tickets where event_id = ${input.eventId})`,
         ),
       )
-      .returning({ id: ticketClaims.id });
+      .returning({ id: ticketClaims.id, ticketId: ticketClaims.ticketId });
     if (rows.length === 0) throw new DomainError('not_found', 'No open claim link');
+    // M3.10c: withdrawing a transfer's link cancels the transfer.
+    const transfer = await transferForClaimTx(tx, input.claimId);
+    if (transfer?.status === 'pending') await cancelPendingTransfersTx(tx, ctx, [transfer.ticketId]);
     return { ok: true };
   },
   audit: (input) => ({ action: 'ticket.claim_revoke', targetType: 'ticket_claim', targetId: input.claimId }),
@@ -198,6 +217,11 @@ export const PublicClaimDto = z.object({
   state: z.enum(['open', 'claimed', 'revoked', 'expired']),
   event: z.object({ name: z.string(), startsAt: z.date(), endsAt: z.date(), timezone: z.string() }),
   ticketTypeName: z.string(),
+  /**
+   * M3.10c: a transfer's link names who sent it and who it is for (the recipient confirms with the
+   * email address it was sent to). Null for a plain claim link.
+   */
+  transfer: z.object({ fromName: z.string(), toName: z.string() }).nullable().default(null),
 });
 
 /** Public: what a claim link offers (no holder details, no codes). */
@@ -223,10 +247,15 @@ export const claimDetailsQuery = tenantQuery({
     const ev = await findEventTx(tx, row.eventId);
     if (!ev) throw new DomainError('not_found');
     const state = row.status === 'active' ? claimState(row.c, ctx.now) : 'revoked';
+    const [transfer] = await tx
+      .select({ fromName: ticketTransfers.fromName, toName: ticketTransfers.toName })
+      .from(ticketTransfers)
+      .where(eq(ticketTransfers.claimId, row.c.id));
     return {
       state,
       event: { name: ev.name, startsAt: ev.startsAt, endsAt: ev.endsAt, timezone: ev.timezone },
       ticketTypeName: row.typeName,
+      transfer: transfer ?? null,
     };
   },
 });
@@ -290,11 +319,24 @@ export const claimTicketCommand = tenantCommand({
     if (!c) throw new DomainError('not_found');
     const state = claimState(c, ctx.now);
     if (state !== 'open') throw new DomainError('invalid_state', `This link is ${state}`, { state });
+    // M3.10c: a transfer is claimed by the person it was sent to, with that email address.
+    const transfer = await transferForClaimTx(tx, c.id);
+    if (transfer && transfer.status !== 'pending')
+      throw new DomainError('invalid_state', 'This link is revoked', { state: 'revoked' });
+    if (transfer && normalizeEmail(input.email) !== transfer.toEmail)
+      throw new DomainError('validation_failed', 'Use the email address this ticket was sent to', {
+        reason: 'email_mismatch',
+        field: 'email',
+      });
     const t = await reissueTicketTx(tx, ctx, c.ticketId, { name: input.name, email: input.email });
     await tx
       .update(ticketClaims)
       .set({ claimedAt: ctx.now, claimedByEmail: input.email, updatedAt: ctx.now })
       .where(eq(ticketClaims.id, c.id));
+    if (transfer) {
+      await completeTransferTx(tx, ctx, emit, transfer.id, t.rev);
+      await rotateWalletPassTx(tx, ctx, { id: t.id, rev: t.rev, holderName: input.name });
+    }
     const [ticket] = await tx.select({ eventId: tickets.eventId }).from(tickets).where(eq(tickets.id, t.id));
     const orgId = requireOrg(ctx);
     emit({
@@ -364,6 +406,19 @@ export const HolderTicketsDto = z.object({
       code: z.string(),
       /** An open claim link for this ticket is waiting to be claimed. */
       pendingTransfer: z.boolean(),
+      /** M3.10c: whether and how this holder may transfer the ticket. */
+      transfer: z
+        .object({
+          allowed: z.boolean(),
+          reason: z.enum(['ticket_void', 'event_ended', 'not_allowed', 'deadline_passed']).nullable(),
+          feeMinor: z.int(),
+          currency: z.string(),
+          deadline: z.date(),
+          pendingTransferId: z.uuid().nullable(),
+          pendingTransferTo: z.string().nullable(),
+        })
+        .nullable()
+        .default(null),
     }),
   ),
 });
@@ -434,10 +489,20 @@ export const holderTicketsQuery = tenantQuery({
           ).map((r) => r.ticketId),
         )
       : new Set<string>();
+    const options = await holderTransferOptionsTx(
+      tx,
+      ctx.now,
+      rows.map((r) => r.id),
+      ev,
+    );
     return {
       event: { id: ev.id, name: ev.name, startsAt: ev.startsAt, endsAt: ev.endsAt, timezone: ev.timezone },
       email: l.emailNorm,
-      tickets: rows.map((r) => ({ ...r, pendingTransfer: open.has(r.id) })),
+      tickets: rows.map((r) => ({
+        ...r,
+        pendingTransfer: open.has(r.id),
+        transfer: options.get(r.id) ?? null,
+      })),
     };
   },
 });
@@ -466,6 +531,17 @@ export const giveTicketCommand = tenantCommand({
         ),
       );
     if (!t) throw new DomainError('not_found', 'Ticket not found');
+    // M3.10c: the ticket type's transfer rules apply to open give-away links too; a ticket with a
+    // transfer fee is passed on by name (startHolderTransfer), where the fee is agreed.
+    const ev = await findEventTx(tx, l.eventId);
+    if (!ev) throw new DomainError('not_found');
+    const rule = (await holderTransferOptionsTx(tx, ctx.now, [t.id], ev)).get(t.id);
+    if (rule && !rule.allowed)
+      throw new DomainError('invalid_state', 'This ticket cannot be passed on now', { reason: rule.reason });
+    if (rule && rule.feeMinor > 0)
+      throw new DomainError('invalid_state', 'Transfer this ticket by name to agree to its fee', {
+        reason: 'fee_required',
+      });
     const [link] = await openClaimsTx(
       tx,
       ctx,

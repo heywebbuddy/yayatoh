@@ -4,7 +4,8 @@ import { defineSubscriber, keyVault, type Notifier } from '@yayatoh/platform';
 import { ticketsForOrderTx } from '@yayatoh/ticketing';
 import { and, eq, inArray } from 'drizzle-orm';
 import { z } from 'zod';
-import { orders, refundRequests } from './schema.ts';
+import { formatCreditNoteNumber } from './domain/credit-notes.ts';
+import { creditNotes, orders, refundRequests, supportMacroRuns } from './schema.ts';
 
 const Payload = z.object({ orgId: z.uuid(), orderId: z.uuid() });
 const RefundPayload = z.object({
@@ -291,6 +292,82 @@ export function postponementMailer(deps: { notifier: Notifier; appOrigin: string
           eventId: ev.id,
         });
       }
+    },
+  });
+}
+
+const buyerOf = (order: typeof orders.$inferSelect, timeZone: string | null) => ({
+  email: order.buyerEmail,
+  name: order.buyerName,
+  userId: order.buyerUserId,
+  locale: order.locale,
+  timeZone,
+});
+
+const CreditPayload = z.object({ orgId: z.uuid(), orderId: z.uuid(), creditNoteId: z.uuid() });
+
+/**
+ * A credit note was issued (M3.10c): the buyer is sent its number and amount, and for store
+ * credit the code to use on a later order of this org (from the note; the event carries no code).
+ */
+export function creditNoteMailer(deps: { notifier: Notifier; appOrigin: string }) {
+  return defineSubscriber({
+    name: 'orders.credit-note-mailer',
+    events: ['order.credit_note_issued@1'],
+    handle: async (tx, event) => {
+      const p = CreditPayload.parse(event.payload);
+      const [order] = await tx.select().from(orders).where(eq(orders.id, p.orderId));
+      const [note] = await tx.select().from(creditNotes).where(eq(creditNotes.id, p.creditNoteId));
+      if (!order || !note) return;
+      const ev = await findEventTx(tx, order.eventId);
+      await deps.notifier.enqueue(tx, {
+        kind: 'orders.credit-note',
+        to: buyerOf(order, ev?.timezone ?? null),
+        params: {
+          url: (await manageUrl(deps.appOrigin, p.orgId, order)) ?? '',
+          name: order.buyerName,
+          eventName: ev?.name ?? '',
+          number: formatCreditNoteNumber(note.number),
+          amountMinor: note.amountMinor,
+          currency: note.currency,
+          storeCredit: note.disposition === 'store_credit' ? 'yes' : 'no',
+          code: note.code ?? '',
+        },
+        dedupeKey: `credit-note:${note.id}`,
+        orderId: order.id,
+        eventId: order.eventId,
+      });
+    },
+  });
+}
+
+const ReplyPayload = z.object({ orgId: z.uuid(), orderId: z.uuid(), runId: z.uuid() });
+
+/** A support macro's reply (M3.10c): the text the organizer's macro produced, sent to the buyer once. */
+export function supportReplyMailer(deps: { notifier: Notifier; appOrigin: string }) {
+  return defineSubscriber({
+    name: 'orders.support-reply-mailer',
+    events: ['order.support_reply@1'],
+    handle: async (tx, event) => {
+      const p = ReplyPayload.parse(event.payload);
+      const [order] = await tx.select().from(orders).where(eq(orders.id, p.orderId));
+      const [run] = await tx.select().from(supportMacroRuns).where(eq(supportMacroRuns.id, p.runId));
+      if (!order || !run) return;
+      const ev = await findEventTx(tx, order.eventId);
+      await deps.notifier.enqueue(tx, {
+        kind: 'orders.support-reply',
+        to: buyerOf(order, ev?.timezone ?? null),
+        params: {
+          url: (await manageUrl(deps.appOrigin, p.orgId, order)) ?? '',
+          name: order.buyerName,
+          eventName: ev?.name ?? '',
+          subject: run.replySubject,
+          body: run.replyBody,
+        },
+        dedupeKey: `support-reply:${run.id}`,
+        orderId: order.id,
+        eventId: order.eventId,
+      });
     },
   });
 }

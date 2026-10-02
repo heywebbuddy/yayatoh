@@ -116,6 +116,10 @@
       "intro": "Vous n’avez pas encore répondu : {org} aimerait toujours savoir comment s’est passé {eventName} pour vous.",
       "cta": "Répondre à l’enquête"
     },
+    "automations.message": {
+      "subject": "{subject}",
+      "intro": "À propos de {eventName} :"
+    },
     "guest.checkout-code": {
       "subject": "{code} est votre code pour confirmer votre e-mail",
       "intro": "Saisissez {code} pour confirmer votre e-mail et finaliser votre commande avec {org}. Le code ne fonctionne qu'une fois et expire dans {minutes, plural, one {# minute} other {# minutes}}. Si vous ne l'avez pas demandé, ignorez cet e-mail."
@@ -184,6 +188,58 @@
     "alerts.alert-text": {
       "subject": "{rule, select, unseated {{count, plural, one {Un participant n’a pas de place} other {{countWords} participants n’ont pas de place}}} undistributed {{count, plural, one {Un billet acheté n’a pas été distribué} other {{countWords} billets achetés n’ont pas été distribués}}} paymentsFailed {{count, plural, one {Un paiement a échoué} other {{countWords} paiements ont échoué}}} paymentsStuck {{count, plural, one {Un paiement est bloqué} other {{countWords} paiements sont bloqués}}} refundSurge {{count, plural, one {Un remboursement au cours de la dernière heure} other {{countWords} remboursements au cours de la dernière heure}}} devicesOffline {{count, plural, one {Un appareil de contrôle est hors ligne} other {{countWords} appareils de contrôle sont hors ligne}}} devicesLowBattery {{count, plural, one {Un appareil de contrôle a une batterie faible} other {{countWords} appareils de contrôle ont une batterie faible}}} devicesBacklog {{count, plural, one {Un appareil de contrôle a des scans en attente de synchronisation} other {{countWords} appareils de contrôle ont des scans en attente de synchronisation}}} capacityNear {Le lieu est rempli à {count} %} capacityFull {Le lieu est complet ({count} %)} sellOut {{count} % des billets sont vendus} salesPace {Les ventes de billets sont à {count} % du rythme visé} readiness {{count, plural, one {Une étape de préparation bloque cet événement} other {{countWords} étapes de préparation bloquent cet événement}}} domain {{count, plural, one {Un domaine personnalisé a un problème} other {{countWords} domaines personnalisés ont un problème}}} payoutsPastDue {{count, plural, one {Une exigence du compte de versement est en retard} other {{countWords} exigences du compte de versement sont en retard}}} deliverability {La délivrabilité des e-mails demande votre attention} automationFailed {{count, plural, one {Un message ou une action groupée a échoué aujourd’hui} other {{countWords} messages ou actions groupées ont échoué aujourd’hui}}} other {Alerte}}",
       "intro": "{eventName, select, none {Quelque chose demande votre attention chez {org}.} other {Quelque chose demande votre attention pour {eventName}.}} Le bouton ouvre la page qui le règle."
+    },
+    "campaigns.test": {
+      "subject": "[Test] {subject}",
+      "intro": "Un envoi de test de votre campagne."
+    },
+    "orders.credit-note": {
+      "subject": "Avoir {number} pour {eventName}",
+      "intro": "{org} a émis l’avoir {number} de {amount} sur votre commande pour {eventName}. {storeCredit, select, yes {Utilisez le code {code} au paiement pour l’utiliser lors d’une prochaine commande chez {org}.} other {Ce montant vous a été remboursé.}}",
+      "cta": "Voir ma commande"
+    },
+    "orders.support-reply": {
+      "subject": "{subject}",
+      "intro": "Un message de {org} au sujet de votre commande pour {eventName} :",
+      "cta": "Voir ma commande"
+    },
+    "payments.dispute-deadline": {
+      "subject": "Preuves de litige bientôt dues : {eventName}",
+      "intro": "Les preuves d’un litige de {amount} sur une commande pour {eventName} sont dues dans {hours, plural, =0 {moins d’une heure} one {# heure} other {# heures}}. Vérifiez-les et envoyez-les avant l’échéance."
+    },
+    "ticketing.transfer-offered": {
+      "subject": "{fromName} vous a envoyé un billet pour {eventName}",
+      "intro": "{fromName} vous transfère un billet pour {eventName}. Récupérez-le avec cette adresse e-mail pour obtenir votre propre code QR.",
+      "cta": "Récupérer mon billet"
+    },
+    "ticketing.transfer-completed": {
+      "subject": "Votre billet pour {eventName} a été transféré",
+      "intro": "{toName} a récupéré le billet que vous avez transféré pour {eventName}. Votre ancien code QR ne fonctionne plus."
+    },
+    "ticketing.transfer-received": {
+      "subject": "Votre billet pour {eventName}",
+      "intro": "Vous avez récupéré le billet que {fromName} vous a envoyé pour {eventName}. Votre propre code QR est prêt.",
+      "cta": "Voir mon billet"
+    },
+    "forms.resume": {
+      "subject": "Poursuivez votre inscription à {eventName}",
+      "intro": "Voici votre lien pour reprendre votre inscription à {eventName} là où vous l'avez laissée. Il fonctionne pendant {days, plural, one {# jour} other {# jours}} après votre dernier enregistrement et uniquement pour vous : ne le transférez pas. Si vous ne l'avez pas demandé, vous pouvez ignorer cet e-mail.",
+      "cta": "Poursuivre mon inscription"
+    },
+    "portal.invite": {
+      "subject": "Invitation au portail de {eventName}",
+      "intro": "{org} vous a invité au portail de {eventName} en tant que {role}. Vous pourrez y voir vos sessions, mettre à jour votre profil et accomplir vos tâches. Le bouton demande un code de connexion envoyé à cette adresse.",
+      "cta": "Ouvrir le portail"
+    },
+    "portal.sign-in": {
+      "subject": "{code} est votre code de connexion pour {eventName}",
+      "intro": "Saisissez {code} pour vous connecter au portail de {eventName}, ou utilisez le bouton ci-dessous dans le même navigateur. Code valable : {minutes} min. Bouton valable : {linkMinutes} min. Chacun ne fonctionne qu’une fois. Si vous ne l’avez pas demandé, ignorez cet e-mail.",
+      "cta": "Se connecter au portail"
+    },
+    "program.task-reminder": {
+      "subject": "Rappel : {title} pour {eventName}",
+      "intro": "{org} attend toujours « {title} » pour {eventName}. Échéance : {until}.",
+      "cta": "Ouvrir mes tâches"
     }
   },
   "roles": {
@@ -197,7 +253,11 @@
     "viewer": "lecteur",
     "co_host": "co-organisateur",
     "planner": "planificateur",
-    "collaborator": "collaborateur d'événement"
+    "collaborator": "collaborateur d'événement",
+    "speaker": "intervenant",
+    "exhibitor_admin": "administrateur exposant",
+    "exhibitor_staff": "équipe exposant",
+    "sponsor_contact": "contact sponsor"
   },
   "account": {
     "deleted": {
@@ -253,5 +313,10 @@
         "intro": "Nous avons remis Yayatoh sur la version précédente le temps de corriger un problème. Les billets achetés depuis le {start} restent valables. Si nous avons dû rembourser l’une de vos commandes, vous recevrez un e-mail séparé avec le montant. Connectez-vous comme avant."
       }
     }
+  },
+  "campaigns": {
+    "testBanner": "E-mail de test : seule votre équipe l’a reçu. Les champs de fusion affichent leur valeur par défaut.",
+    "eventCta": "Voir l’événement",
+    "testSubject": "[Test] {subject}"
   }
 }

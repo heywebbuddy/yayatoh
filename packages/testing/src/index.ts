@@ -5,6 +5,7 @@ export {
   type AudienceScenario,
   audienceScenario,
 } from './audiences.ts';
+export { type CampaignContactSeed, campaignScenario } from './campaigns.ts';
 export { type CanaryAdmin, type CanaryFile, type CanaryOrg, canaryOrg } from './canary/org.ts';
 export {
   createOrgFixture,
@@ -15,4 +16,4 @@ export {
   twoOrgs,
   userCtx,
 } from './fixtures.ts';
-export { BULK_ACTIONS, bulkStep, ports, runBulk } from './ports.ts';
+export { BULK_ACTIONS, bulkStep, ports, runBulk, submitRegistrationForm } from './ports.ts';

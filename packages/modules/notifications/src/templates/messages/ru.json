@@ -116,6 +116,10 @@
       "intro": "Вы ещё не ответили: {org} по-прежнему хотели бы узнать, как вам {eventName}.",
       "cta": "Пройти опрос"
     },
+    "automations.message": {
+      "subject": "{subject}",
+      "intro": "О событии {eventName}:"
+    },
     "guest.checkout-code": {
       "subject": "{code} — ваш код для подтверждения почты",
       "intro": "Введите {code}, чтобы подтвердить почту и завершить заказ у {org}. Код действует один раз и истекает через {minutes, plural, one {# минуту} few {# минуты} many {# минут} other {# минуты}}. Если вы его не запрашивали, просто проигнорируйте это письмо."
@@ -184,6 +188,58 @@
     "alerts.alert-text": {
       "subject": "{rule, select, unseated {{count, plural, one {{countWords} участник без места} few {{countWords} участника без мест} many {{countWords} участников без мест} other {{countWords} участника без мест}}} undistributed {{count, plural, one {{countWords} купленный билет не передан} few {{countWords} купленных билета не переданы} many {{countWords} купленных билетов не переданы} other {{countWords} купленного билета не передано}}} paymentsFailed {{count, plural, one {{countWords} платёж не прошёл} few {{countWords} платежа не прошли} many {{countWords} платежей не прошли} other {{countWords} платежа не прошло}}} paymentsStuck {{count, plural, one {{countWords} платёж завис} few {{countWords} платежа зависли} many {{countWords} платежей зависли} other {{countWords} платежа зависло}}} refundSurge {{count, plural, one {{countWords} возврат за последний час} few {{countWords} возврата за последний час} many {{countWords} возвратов за последний час} other {{countWords} возврата за последний час}}} devicesOffline {{count, plural, one {{countWords} устройство регистрации не в сети} few {{countWords} устройства регистрации не в сети} many {{countWords} устройств регистрации не в сети} other {{countWords} устройства регистрации не в сети}}} devicesLowBattery {{count, plural, one {{countWords} устройство регистрации с низким зарядом} few {{countWords} устройства регистрации с низким зарядом} many {{countWords} устройств регистрации с низким зарядом} other {{countWords} устройства регистрации с низким зарядом}}} devicesBacklog {{count, plural, one {{countWords} устройство регистрации ждёт синхронизации сканов} few {{countWords} устройства регистрации ждут синхронизации сканов} many {{countWords} устройств регистрации ждут синхронизации сканов} other {{countWords} устройства регистрации ждут синхронизации сканов}}} capacityNear {Площадка заполнена на {count} %} capacityFull {Площадка заполнена полностью ({count} %)} sellOut {Продано {count} % билетов} salesPace {Продажи билетов идут на {count} % от целевого темпа} readiness {{count, plural, one {{countWords} шаг настройки блокирует мероприятие} few {{countWords} шага настройки блокируют мероприятие} many {{countWords} шагов настройки блокируют мероприятие} other {{countWords} шага настройки блокируют мероприятие}}} domain {{count, plural, one {{countWords} собственный домен с проблемой} few {{countWords} собственных домена с проблемами} many {{countWords} собственных доменов с проблемами} other {{countWords} собственного домена с проблемами}}} payoutsPastDue {{count, plural, one {{countWords} требование к счёту выплат просрочено} few {{countWords} требования к счёту выплат просрочены} many {{countWords} требований к счёту выплат просрочены} other {{countWords} требования к счёту выплат просрочено}}} deliverability {Доставляемость писем требует внимания} automationFailed {{count, plural, one {{countWords} сообщение или массовое действие сегодня не выполнено} few {{countWords} сообщения или массовых действия сегодня не выполнены} many {{countWords} сообщений или массовых действий сегодня не выполнены} other {{countWords} сообщения или массового действия сегодня не выполнено}}} other {Оповещение}}",
       "intro": "{eventName, select, none {В {org} что-то требует внимания.} other {На мероприятии «{eventName}» что-то требует внимания.}} Кнопка откроет страницу, где это можно исправить."
+    },
+    "campaigns.test": {
+      "subject": "[Тест] {subject}",
+      "intro": "Тестовая отправка вашей кампании."
+    },
+    "orders.credit-note": {
+      "subject": "Кредит-нота {number} для {eventName}",
+      "intro": "{org} выставил кредит-ноту {number} на {amount} по вашему заказу на {eventName}. {storeCredit, select, yes {Введите код {code} при оплате, чтобы использовать её в следующем заказе у {org}.} other {Эта сумма вам возвращена.}}",
+      "cta": "Посмотреть заказ"
+    },
+    "orders.support-reply": {
+      "subject": "{subject}",
+      "intro": "Сообщение от {org} о вашем заказе на {eventName}:",
+      "cta": "Посмотреть заказ"
+    },
+    "payments.dispute-deadline": {
+      "subject": "Скоро срок доказательств по спору: {eventName}",
+      "intro": "Доказательства по спору на {amount} по заказу на {eventName} нужно отправить через {hours, plural, =0 {менее часа} one {# час} few {# часа} many {# часов} other {# часа}}. Проверьте и отправьте их до срока."
+    },
+    "ticketing.transfer-offered": {
+      "subject": "{fromName} отправил(а) вам билет на {eventName}",
+      "intro": "{fromName} передаёт вам билет на {eventName}. Получите его с этим адресом электронной почты, чтобы получить собственный QR-код.",
+      "cta": "Получить билет"
+    },
+    "ticketing.transfer-completed": {
+      "subject": "Ваш билет на {eventName} передан",
+      "intro": "{toName} получил(а) билет на {eventName}, который вы передали. Ваш старый QR-код больше не действует."
+    },
+    "ticketing.transfer-received": {
+      "subject": "Ваш билет на {eventName}",
+      "intro": "Вы получили билет на {eventName}, который отправил(а) {fromName}. Ваш собственный QR-код готов.",
+      "cta": "Посмотреть билет"
+    },
+    "forms.resume": {
+      "subject": "Продолжите регистрацию на {eventName}",
+      "intro": "Вот ваша ссылка, чтобы продолжить регистрацию на {eventName} с того места, где вы остановились. Она действует {days, plural, one {# день} few {# дня} many {# дней} other {# дня}} после последнего сохранения и только для вас, поэтому не пересылайте её. Если вы её не запрашивали, просто проигнорируйте это письмо.",
+      "cta": "Продолжить регистрацию"
+    },
+    "portal.invite": {
+      "subject": "Приглашение в портал «{eventName}»",
+      "intro": "{org} приглашает вас в портал мероприятия «{eventName}» в роли: {role}. Там вы увидите свои сессии, обновите профиль и выполните задачи. Кнопка запросит код входа, который придёт на этот адрес.",
+      "cta": "Открыть портал"
+    },
+    "portal.sign-in": {
+      "subject": "{code} — ваш код входа для «{eventName}»",
+      "intro": "Введите {code}, чтобы войти в портал «{eventName}», или нажмите кнопку ниже в том же браузере. Код действует: {minutes} мин. Кнопка действует: {linkMinutes} мин. Каждый срабатывает один раз. Если вы его не запрашивали, проигнорируйте это письмо.",
+      "cta": "Войти в портал"
+    },
+    "program.task-reminder": {
+      "subject": "Напоминание: {title} для «{eventName}»",
+      "intro": "{org} всё ещё ждёт «{title}» для «{eventName}». Срок: {until}.",
+      "cta": "Открыть мои задачи"
     }
   },
   "roles": {
@@ -197,7 +253,11 @@
     "viewer": "наблюдатель",
     "co_host": "соорганизатор",
     "planner": "планировщик",
-    "collaborator": "участник события"
+    "collaborator": "участник события",
+    "speaker": "спикер",
+    "exhibitor_admin": "администратор экспонента",
+    "exhibitor_staff": "сотрудник экспонента",
+    "sponsor_contact": "контакт спонсора"
   },
   "account": {
     "deleted": {
@@ -253,5 +313,10 @@
         "intro": "Мы вернули Yayatoh к предыдущей версии, пока исправляем проблему. Билеты, купленные с {start}, остаются действительными. Если нам пришлось вернуть деньги за один из ваших заказов, вы получите отдельное письмо с суммой. Входите как раньше."
       }
     }
+  },
+  "campaigns": {
+    "testBanner": "Тестовое письмо: его получила только ваша команда. Поля подстановки показывают запасные значения.",
+    "eventCta": "Открыть мероприятие",
+    "testSubject": "[Тест] {subject}"
   }
 }

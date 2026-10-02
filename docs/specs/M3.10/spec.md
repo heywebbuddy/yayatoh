@@ -1,7 +1,7 @@
 # Spec: M3.10 — Orders and support console
 
 - **Milestone:** M3.10 (roadmap §10 Phase 3, "M3.10 Orders and support console (L)"; Phase 3 plan `docs/plans/phase-3.md`, Wave A: M3.10a)
-- **Status:** M3.10a built (2026-09-28); M3.10b refund operations and M3.10c support tools follow
+- **Status:** M3.10a built (2026-09-28); M3.10b refund operations built; M3.10c support tools built (2026-09-29)
 - **Risk tags:** `db-migration`, `payments`, `tenancy` (owner approval)
 - **Related:** M1.5 (inventory, holds, the hold sweeper, guest checkout with email OTP, M1.5f), M1.4b (multi-date events: one date per order, per-date capacity), M1.14 (rate limits, DSAR), M1.8b (bulk export path), M1.2e (impersonation categories), ADR 0015 (event times in the event's zone), ADR 0018 (tokens only)
 
@@ -170,3 +170,69 @@ Credit notes, the dispute queue and support macros (M3.10c); automatic escalatio
 | AC9 | In the browser: tightening after a sale says how many orders keep their terms; the early buyer keeps "always" and can ask; a later buyer bought under "no refunds" cannot; axe | `refund-operations.spec.ts` |
 | AC10 | In the browser: the wizard (keyboard) previews three orders; confirm cancels and starts the batch; paused (the dev job does nothing), resumed, one order then the rest; finished and reconciled; buyers refunded; axe; Arabic RTL | `refund-operations.spec.ts` |
 | AC11 | In the browser: postponing keeps the ticket's QR and emails the buyer; viewers get no wizard link and a 404, but can read the queue | `refund-operations.spec.ts` |
+
+## M3.10c — support tools
+
+**Scope (phase plan, Wave C):** ticket transfers with a claim step and wallet update; credit notes; dispute queue; support macros. Everything runs on the fake payment provider and a fake wallet pass provider; defaults the owner has not decided are marked **pending owner** and listed in `docs/owner-inbox.md` ("Support tools defaults").
+
+### Ticket transfers with a claim step
+- **Start:** from the order page (Transfers, `orders:support`: owners, admins, managers, box office, event managers) or the holder's "My tickets" page (holder link), name the new holder and their email. `ticketing.startTransfer` / `ticketing.startHolderTransfer` open a claim link (the existing `ticket_claims`: signed `<id>~hmac`, single use, **7 days** or the event's end, pending owner) and record `ticketing.ticket_transfers` (from/to, who started it, fee, the code revision). The ticket stays with its holder until claimed; the link is shown once and emailed to the recipient (`ticketing.transfer-offered`).
+- **Rules per ticket type** (Tickets & orders → Transfer rules, `events:write`; pure in `domain/transfer-rules.ts`): holders may transfer or not, until N hours before the start (empty: until the event ends, as M1.8 links always allowed), for a fee in minor units. Holders must tick "I agree to pay the fee"; the fee is recorded on the transfer (collection waits for live Stripe, pending owner). Organizers transfer regardless of the holder rules and without a fee, but never a void ticket or after the event. Open give-away links (M1.8) now follow the same rules and refuse types with a fee.
+- **Claim:** the claim page names both sides and fills in the recipient's name; only the address the transfer was sent to works (`email_mismatch`). Claiming reissues the ticket (rev + 1: the old QR, short code and wallet pass stop working, the old QR is refused at the door), marks the transfer claimed **exactly once** (`WHERE status = 'pending'` under the claim's row lock), voids the old wallet pass and records the new holder's (`ticketing.wallet_passes`; the fake provider is told after commit by `ticketing.wallet-pass-sync`), and tells both parties (`ticketing.transfer-completed` to the sender, `ticketing.transfer-received` with a link to the new ticket). Expired, cancelled or already-used links are refused.
+- **Cancel before claim:** from the order page (`orders:support`) or the holder's page (their own transfers only): the link stops working. A new claim link or transfer of the same ticket cancels a pending one.
+- The order page lists transfers (state, when, fee) and each ticket's wallet pass state; the timeline shows offered / claimed / withdrawn; dispute evidence lists the transfers.
+
+### Credit notes
+- **Issue** (order page → Credit notes, `orders:refund`: owners, admins, finance; category `money`; **idempotent**: the form carries an Idempotency-Key): full (everything still creditable = paid − refunds − earlier notes) or partial (integer minor units, 1 … creditable), a reason (3–500), settled as **store credit** or **refunded** (recorded; nothing moves). Numbers are gap-free per org (`CN-00001`, `orders.credit_note_sequences`). Audited (`order.credit_note`).
+- **Store credit:** a `CR-XXXX-XXXX` code (shown once to finance, emailed to the buyer with `orders.credit-note`, shown on the buyer's order page) that the buyer types in checkout's code box at any later order of the same org. Checkout locks the note, takes up to its balance off the tickets after any promo (the same amount per ticket, `allocateCredit`; what cannot be split evenly stays on the note), records `orders.credit_note_applications` and lowers the balance in the checkout transaction; an order that lapses unpaid gives the credit back (the hold sweeper), a late payment takes it again if it is still there. Another org's checkout never finds the code (RLS).
+- **PDF** (`…/orders/{id}/credit-notes/{note}/pdf?locale=`), rendered by Gotenberg in the viewer's language (Arabic right to left), dates in the event's timezone; printable HTML without a renderer.
+- **Where it shows:** the order page (list with balance and PDF), the order timeline (issued; store credit used and given back), the buyer's order page, Finance (totals per currency: issued, as store credit, recorded refunded, spent, left; the latest notes; `orders.creditNoteTotals`, `finance:read`).
+
+### Dispute queue
+- **Console → Disputes** (`/o/{org}/disputes`, `finance:read`): open disputes (awaiting evidence or submitted) soonest evidence deadline first, with buyer, event, amount, reason, status, the deadline in the event's timezone and the time left (three days or less: warning; one day or less or past: urgent); closed ones on their own tab. Each opens the M1.6e evidence review (`disputes:respond`) to build and submit the packet through the payment port.
+- **Evidence** now also carries the refund terms snapshotted at purchase (M3.10b) and the order's ticket transfers, next to the order, tickets, door scans, messages and refund policy.
+- **Deadline alerts:** `payments.alertDisputeDeadlines` (worker, hourly; `POST /api/dev/disputes/alerts` in dev/CI) emits `payments.dispute_deadline_approaching@1` once per level (three days, one day before; `payments.disputes.deadline_alert_level`). The M3.2b alert engine is not on the base yet, so no alert code is imported; `payments.dispute-deadline-notifier` tells owners, admins and finance (in-app + email, `payments.dispute-deadline`).
+
+### Support macros
+- **Console → Support macros** (`/o/{org}/macros`, `orders:support`): a name, an email subject and reply with merge fields (`{{buyer_name}}`, `{{buyer_email}}`, `{{event_name}}`, `{{event_date}}`, `{{order_ref}}`, `{{ticket_count}}`, `{{recipient_name}}`; unknown fields are refused when saved), and actions: email the buyer, add a team note, resend the tickets, transfer a ticket. Archived macros stay in the run history.
+- **Run from the order** (Run a macro): the page previews the filled reply; `orders.runSupportMacro` (idempotent, audited `support_macro.run`) does every action in one transaction: the reply to the buyer (`orders.support-reply`), the note, a resend of the live tickets (existing resend mailer; resent emails now carry the order, so they show in its message log), a transfer (the run asks for the ticket and the recipient). The run is on the order timeline.
+
+### Data, migration and privacy
+Migration `0076_harsh_charles_xavier.sql` (renumbered at merge): new tenant tables `ticketing.ticket_transfers`, `ticketing.wallet_passes`, `orders.credit_note_sequences`, `orders.credit_notes`, `orders.credit_note_applications`, `orders.support_macros`, `orders.support_macro_runs` (all `tenantTable`: org_id, ENABLE + FORCE RLS, canonical policy, org-leading indexes, composite FKs, org-scoped uniques and partial uniques: one pending transfer per ticket, one active pass per ticket, one application per order); columns on existing tables with constant defaults (metadata-only): `ticketing.ticket_types.transfers_allowed / transfer_cutoff_hours / transfer_fee_minor`, `payments.disputes.deadline_alert_level`. Hand-written (between the markers): the two CHECKs on the existing tables added `NOT VALID` then validated; composite FKs `credit_notes_event_fk` and `ticket_transfers_event_fk` to `events.events` (down the tiers; new tables). Nothing destructive. Fixture rows for both orgs (a store credit note partly spent, a macro and its run, a cancelled transfer with a voided pass). Private columns declared (transfer names and emails personal; credit note reason and code, macro replies holder; the rest vocab or internal).
+
+### Events and messages
+| Event | Producer | Consumers |
+|---|---|---|
+| `ticket.transfer_offered@1` | start transfer (organizer, holder, macro) | `ticketing.transfer-mailer` (recipient) |
+| `ticket.transferred@1` | claim of a transfer | `ticketing.transfer-mailer` (both parties), `ticketing.wallet-pass-sync` |
+| `ticket.transfer_cancelled@1` | cancel before claim | (none yet) |
+| `order.credit_note_issued@1` | `orders.issueCreditNote` | `orders.credit-note-mailer` (buyer) |
+| `order.support_reply@1` | `orders.runSupportMacro` | `orders.support-reply-mailer` (buyer) |
+| `ticket.resend_requested@1` (existing) | `orders.runSupportMacro` | `ticketing.resend-mailer` |
+| `payments.dispute_deadline_approaching@1` | `payments.alertDisputeDeadlines` | `payments.dispute-deadline-notifier` (members); M3.2b later |
+
+New message kinds (13 locales, 78 render snapshots): `ticketing.transfer-offered`, `ticketing.transfer-completed`, `ticketing.transfer-received`, `orders.credit-note`, `orders.support-reply`, `payments.dispute-deadline`. Console strings under `supportTools.*`, `nav.disputes`, `nav.supportMacros`, timeline kinds, evidence labels and two checkout errors in all 13 locales (ICU plurals incl. Arabic and Russian; parity tested).
+
+### Not in this increment (Later)
+Charging the holder transfer fee (needs live Stripe and an owner decision on who pays); real Apple/Google wallet passes and "Add to wallet" on ticket pages; per-date transfer cutoffs for multi-date events (today: the event's start); restoring store credit when a store-credit order is refunded; combining a promo code with store credit; credit notes and transfers on the `/v1` API (additive later); the Command Center alert for dispute deadlines (M3.2b consumes the event); macro run statistics.
+
+### Acceptance (M3.10c)
+| ID | Criterion | Test |
+|---|---|---|
+| AC1 | Transfer rules: holders allowed/refused per type, cutoff hours before the start with the deadline reported, fee in minor units; organizers past the holder rules for free; never a void ticket or after the end | `packages/modules/ticketing/tests/transfer-rules.test.ts` |
+| AC2 | Store credit allocation: the same amount per ticket of a line, dearest first, never below zero, donations and free lines skipped, the rest stays on the note | `transfer-rules.test.ts` |
+| AC3 | Credit note maths and numbering: creditable = paid − refunds − notes; full vs partial bounds; `CN-00001` numbering; `CR-XXXX-XXXX` codes without look-alikes, parsed back | `packages/modules/orders/tests/credit-notes.test.ts` |
+| AC4 | Macro merge fields filled; unknown fields and stray braces refused at save; nothing raw sent; order reference | `packages/modules/orders/tests/macros.test.ts` |
+| AC5 | Dispute alert levels at three days and one day | `packages/modules/payments/tests/dispute-alerts.test.ts` |
+| AC6 | A claim voids the old code and reissues exactly once (second claim refused, one `ticket.transferred`), the wrong email refused, the old QR refused at the door and the new one admits, wallet pass rotated and pushed once, both parties emailed once each; cancel before claim and expired links refused; holder rules and fees; viewers and other orgs refused (forbidden / not_found) | `packages/testing/tests/support-tools.int.test.ts` |
+| AC7 | Credit notes: numbered per org, code shown once, idempotent (replay returns the same note, key required), full and partial bounds, finance roles only, other orgs see nothing; store credit spent at a later checkout of the same org, returned when that order lapses, spent again, left-over kept, unknown to another org; timeline and finance totals; buyer emailed the code | `support-tools.int.test.ts` |
+| AC8 | Dispute queue: open soonest deadline first with hours left, closed tab, counts, `finance:read` only, isolated; alerts raised once per level and the finance team notified; evidence carries the order, tickets, terms at purchase and transfers | `support-tools.int.test.ts` |
+| AC9 | Macros: known merge fields only, unique names, `orders:support` only; a run fills the reply, adds the note, resends the live tickets and emails the buyer, idempotent, on the timeline; a transfer macro needs the recipient and starts the transfer; archived macros and other orgs refused | `support-tools.int.test.ts` |
+| AC10 | Isolation: fixture rows for every new table in both orgs; canary and column-privacy declarations | `packages/testing/tests/isolation.int.test.ts`, `canary.int.test.ts`, `column-privacy.test.ts` |
+| AC11 | In the browser: transfer a ticket (server validation, keyboard), the recipient claims it with their address (wrong address refused, link used once), the old QR refused at the scan and the new one admitted, the order shows the claim, the wallet pass and the timeline; a transfer cancelled before claim; the new holder passes it on by name at the door; axe; Arabic RTL | `apps/web/e2e/support-tools.spec.ts` |
+| AC12 | In the browser: transfer rules (validation, off, fee); organizer transfers past them; the holder refused while off, then must agree to the fee; waiting state after reload and cancel | `support-tools.spec.ts` |
+| AC13 | In the browser: finance issues a credit note (server validation: amount, reason, too much; keyboard), downloads its PDF, sees it on the timeline and in Finance; the buyer sees the code and spends it on a second ticket; a spent code refused; axe; Arabic RTL | `support-tools.spec.ts` |
+| AC14 | In the browser: a dispute appears in the queue with the time left, its deadline alert is raised, the evidence (with the terms at purchase) is submitted by keyboard from the queue, the queue shows it submitted; finance sees the queue; axe; Arabic RTL | `support-tools.spec.ts` |
+| AC15 | In the browser: create a macro (unknown merge field and no action refused; keyboard), run it on an order with the preview, the note and run on the timeline, the reply and resent tickets in the message log; axe; Arabic RTL | `support-tools.spec.ts` |
+| AC16 | In the browser: viewers see no transfer, credit note or macro controls, no Disputes or Support macros nav items, 404 on those pages, no transfer rules | `support-tools.spec.ts` |
+

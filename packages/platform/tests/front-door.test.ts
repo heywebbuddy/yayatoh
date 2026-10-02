@@ -41,7 +41,7 @@ const decide = (
 
 describe('route table (M2.4a)', () => {
   it('is versioned, with unique keys and only read surfaces', () => {
-    expect(ROUTE_TABLE_VERSION).toBe(2);
+    expect(ROUTE_TABLE_VERSION).toBe(3);
     const keys = FRONT_DOOR_ROUTES.map((r) => r.key);
     expect(new Set(keys).size).toBe(keys.length);
     expect(keys).toEqual([
@@ -49,6 +49,7 @@ describe('route table (M2.4a)', () => {
       'events.search',
       'events.listing',
       'events.page',
+      'events.exhibitors',
       'organizers.page',
       'venues.page',
       'content.blogs',
@@ -67,6 +68,7 @@ describe('route table (M2.4a)', () => {
   it.each([
     ['/', 'home'],
     ['/events', 'events.listing'],
+    ['/events/gala/exhibitors', 'events.exhibitors'],
     ['/events?page=2', 'events.listing'],
     ['/events?q=jazz', 'events.search'],
     ['/events?search=jazz', 'events.search'],
@@ -190,6 +192,11 @@ describe('who serves a request', () => {
       '/auth/start',
       '/my-tickets',
       '/ar/sign-in',
+      '/event-portal',
+      '/event-portal/invite/token',
+      '/event-portal/verify/token',
+      '/event-portal/sign-in/site',
+      '/fr/event-portal',
     ]) {
       expect(isPlatformPath(new URL(p, 'https://x').pathname) || decide(p).owner === 'next').toBe(true);
       expect(decide(p, flags(), { legacy: true })).toEqual({

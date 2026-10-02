@@ -222,3 +222,22 @@ export const utmOnlyReportQuery = tenantQuery({
       .map((g) => ({ ...g, revenue: moneyList(g.revenue) }));
   },
 });
+
+/**
+ * Clicks on the tracked links a campaign created (M3.6b results; M3.8b builds on it): human
+ * clicks (bots are never logged) and distinct devices. Numbers only; no click rows leave here.
+ */
+export async function campaignClicksTx(
+  tx: TenantTx,
+  campaignId: string,
+): Promise<{ clicks: number; devices: number }> {
+  const [row] = await tx
+    .select({
+      clicks: sql<number>`count(*)::int`,
+      devices: sql<number>`count(distinct ${linkClicks.deviceHash})::int`,
+    })
+    .from(linkClicks)
+    .innerJoin(trackingLinks, eq(trackingLinks.id, linkClicks.linkId))
+    .where(eq(trackingLinks.campaignId, campaignId));
+  return { clicks: row?.clicks ?? 0, devices: row?.devices ?? 0 };
+}

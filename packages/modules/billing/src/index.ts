@@ -1,4 +1,11 @@
 export {
+  EVENT_ADDON_KEYS,
+  type EventAddon,
+  type EventAddonKey,
+  ensureEventAddonTx,
+  eventAddonTx,
+} from './addons.ts';
+export {
   billingEntitlements,
   DEFAULT_PLAN,
   effectiveModules,

@@ -39,7 +39,7 @@ async function SidebarContent({
   const t = await getTranslations();
   const groups = GROUP_ORDER.map((g) => nav.items.filter((i) => i.group === g)).filter((g) => g.length > 0);
   return (
-    <div className="flex h-full flex-col gap-px">
+    <div className="flex min-h-full flex-col gap-px">
       <Link
         href="/"
         className="px-2.5 pt-1.5 pb-[18px] text-[21px] font-semibold tracking-[-0.04em] text-zinc-900"

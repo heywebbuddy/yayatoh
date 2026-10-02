@@ -5,6 +5,7 @@ import { and, asc, desc, eq, inArray, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { AnswerError, checkAnswers, FIELD_TYPES, FieldDefinition, FormDefinition } from './definition.ts';
 import {
+  type ALL_FORM_KINDS,
   FORM_KINDS,
   formResponses,
   forms,
@@ -96,8 +97,24 @@ export async function publishFormTx(
   subject: Subject,
   definition: FormDefinition,
 ): Promise<{ version: number }> {
-  const orgId = requireOrg(ctx);
   checkKindRules(subject.kind, definition);
+  const { version } = await writeVersionTx(tx, ctx, subject, definition);
+  return { version };
+}
+
+/**
+ * Append the next immutable version of a form (creating the form on first use), for every kind.
+ * The caller has validated the definition for its kind.
+ */
+export async function writeVersionTx(
+  tx: TenantTx,
+  ctx: Ctx,
+  subject: { kind: (typeof ALL_FORM_KINDS)[number]; subjectType: Subject['subjectType']; subjectId: string },
+  definition: object,
+  /** Refuse the write unless the form is still at this version (0: not created yet). */
+  expectedVersion?: number,
+): Promise<{ version: number; formId: string; versionId: string }> {
+  const orgId = requireOrg(ctx);
   await tx
     .insert(forms)
     .values({ orgId, kind: subject.kind, subjectType: subject.subjectType, subjectId: subject.subjectId })
@@ -115,10 +132,16 @@ export async function publishFormTx(
     )
     .for('update');
   if (!form) throw new DomainError('internal');
+  if (expectedVersion !== undefined && form.currentVersion !== expectedVersion)
+    throw new DomainError('conflict', 'The form changed meanwhile', { reason: 'stale_version' });
   const version = form.currentVersion + 1;
-  await tx.insert(formVersions).values({ orgId, formId: form.id, version, definition });
+  const [row] = await tx
+    .insert(formVersions)
+    .values({ orgId, formId: form.id, version, definition })
+    .returning({ id: formVersions.id });
+  if (!row) throw new DomainError('internal');
   await tx.update(forms).set({ currentVersion: version, updatedAt: ctx.now }).where(eq(forms.id, form.id));
-  return { version };
+  return { version, formId: form.id, versionId: row.id };
 }
 
 export const publishFormCommand = tenantCommand({

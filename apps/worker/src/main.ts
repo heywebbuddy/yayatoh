@@ -5,12 +5,15 @@ import { purgeRealtimeMessages } from '@yayatoh/platform';
 import { fakeDomainProvider } from '@yayatoh/tenancy';
 import { sweepAlerts } from './alerts.ts';
 import { runDueBulkOperations } from './bulk.ts';
+import { bossRelease, campaignReleaseJob, campaignTick } from './campaigns.ts';
 import { domainRecheckJob } from './domains.ts';
 import { endExpiredImpersonations } from './impersonations.ts';
+import { enqueueJourneyWork } from './journeys.ts';
 import { enqueueDueMassRefunds, massRefundJob } from './mass-refunds.ts';
 import {
   dispatchNotifications,
   dispatchStaffPushes,
+  sweepOverdueTasks,
   userEmails,
   userLocales,
   workerTransports,
@@ -20,7 +23,7 @@ import { JOBS, subscribers } from './registry.ts';
 import { relayOnce } from './relay.ts';
 import { runRetention } from './retention.ts';
 import { runSettlements } from './settlements.ts';
-import { sweepExpiredHolds, sweepWaitlists } from './sweeper.ts';
+import { alertDisputeDeadlines, sweepExpiredHolds, sweepWaitlists } from './sweeper.ts';
 import { startWorker } from './worker.ts';
 
 const connectionString = process.env.JOBS_DATABASE_URL;
@@ -52,7 +55,9 @@ const payments = fakeSecret
 
 const SUBSCRIBERS = subscribers();
 // Mass refunds (M3.10b) need the payment provider.
-const jobs = payments ? [...JOBS, massRefundJob(payments)] : JOBS;
+const jobs = payments
+  ? [...JOBS, campaignReleaseJob, massRefundJob(payments)]
+  : [...JOBS, campaignReleaseJob];
 const boss = await startWorker({ connectionString, jobs, subscribers: SUBSCRIBERS });
 console.info(`worker started: ${jobs.length} job(s), ${SUBSCRIBERS.length} subscriber(s)`);
 
@@ -84,10 +89,22 @@ setInterval(() => {
     .catch((err) => console.error('waitlist sweeper', err));
 }, 30_000).unref();
 
+// Dispute evidence deadline alerts (M3.10c): hourly (leader only); each level is raised once.
+setInterval(() => {
+  if (!release || stopping) return;
+  alertDisputeDeadlines().catch((err) => console.error('dispute alerts', err));
+}, 3_600_000).unref();
+
 // Staff impersonations end after an hour (M1.2e): record the end in the org's audit log (leader only).
 setInterval(() => {
   if (!release || stopping) return;
   endExpiredImpersonations().catch((err) => console.error('impersonations', err));
+}, 60_000).unref();
+
+// Overdue portal tasks (M5.3a): once a minute, one event per overdue assignee (leader only).
+setInterval(() => {
+  if (!release || stopping) return;
+  sweepOverdueTasks().catch((err) => console.error('overdue tasks', err));
 }, 60_000).unref();
 
 // Bulk actions and exports (M1.8b): keep unfinished operations moving (leader only).
@@ -130,6 +147,19 @@ setInterval(() => {
       queueingRefunds = false;
     });
 }, 3_000).unref();
+
+// Journeys (M3.7a): queue a job for each org with due steps every 5 s (leader only); the
+// exclusive queue keeps one job per org.
+let queueingJourneys = false;
+setInterval(() => {
+  if (!release || stopping || queueingJourneys) return;
+  queueingJourneys = true;
+  enqueueJourneyWork(boss)
+    .catch((err) => console.error('journeys', err))
+    .finally(() => {
+      queueingJourneys = false;
+    });
+}, 5_000).unref();
 
 // Daily reconciliation (M1.6e): the previous UTC day, hourly attempts (idempotent per org and
 // day, so only the first run of a day does work), leader only. The fake provider without a
@@ -198,6 +228,20 @@ setInterval(() => {
       pushingStaff = false;
     });
 }, 5_000).unref();
+
+// Campaigns (M3.6b): every 2 s the leader starts due schedules, hands out recipients to sending
+// campaigns with the fair scheduler (pg-boss `campaigns.release` jobs) and finalizes finished ones.
+let campaigning = false;
+let campaignTicks = 0;
+setInterval(() => {
+  if (!release || stopping || campaigning) return;
+  campaigning = true;
+  campaignTick({ tick: campaignTicks++, release: bossRelease(boss) })
+    .catch((err) => console.error('campaigns', err))
+    .finally(() => {
+      campaigning = false;
+    });
+}, 2_000).unref();
 // Retention (M1.14c): once a day, first run 10 minutes after start (leader only).
 let retaining = false;
 const retain = () => {
