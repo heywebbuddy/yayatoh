@@ -7478,5 +7478,147 @@
     "submittedDescription": "Thanks, {name}. Your answers were sent to the organizer.",
     "expiredTitle": "This link has expired",
     "expiredDescription": "Links to continue a registration work for 14 days after the last save. Start again from the event page."
+  },
+  "agenda": {
+    "publishing": {
+      "heading": "Public agenda",
+      "badge": {
+        "live": "Live",
+        "draft": "Draft",
+        "published": "Published",
+        "changed": "Changed since publish"
+      },
+      "state": {
+        "live": "Every change shows on the public page right away. Publish the agenda to review changes before they go public.",
+        "draft": "The public page shows no sessions until you publish the agenda.",
+        "published": "Version {version}, published {date}. The public page shows this version.",
+        "changed": "You changed the agenda after publishing version {version} ({date}). The public page still shows that version until you publish again."
+      },
+      "publish": "Publish agenda",
+      "publishChanges": "Publish changes",
+      "unpublish": "Unpublish agenda",
+      "toDraft": "Switch to draft"
+    },
+    "warningsHeading": "{count, plural, one {# agenda warning} other {# agenda warnings}}",
+    "warnings": {
+      "room_too_small": "{room} holds {roomCapacity} people, but “{session}” allows {sessionCapacity}.",
+      "group_not_overlapping": "“{session}” in {group} runs at a different time from the group's other sessions."
+    },
+    "roomTooSmallLabel": "Room too small",
+    "included": "Included",
+    "optional": "Optional",
+    "enrollmentClosed": "Enrollment closed",
+    "placesTaken": "{enrolled} of {capacity} places taken",
+    "settings": {
+      "summary": "Type, admission and group for {title}",
+      "type": "Session type",
+      "noType": "No type",
+      "admission": "Admission",
+      "includedOption": "Included in registration",
+      "optionalOption": "Optional: people enroll",
+      "admissionHint": "Included sessions never need enrollment. Optional sessions with a capacity will.",
+      "group": "Pick-one group",
+      "noGroup": "No group",
+      "groupHint": "People may choose one session of a group. Only optional sessions can join one.",
+      "enrollment": "Enrollment",
+      "open": "Open",
+      "closed": "Closed",
+      "save": "Save agenda settings",
+      "saved": "Agenda settings saved."
+    },
+    "types": {
+      "heading": "Session types",
+      "empty": "No session types yet.",
+      "name": "Type name",
+      "add": "Add type",
+      "added": "Type added.",
+      "addStandard": "Add the standard types",
+      "standardHint": "Keynote, talk, workshop, panel and break.",
+      "standard": {
+        "keynote": "Keynote",
+        "talk": "Talk",
+        "workshop": "Workshop",
+        "panel": "Panel",
+        "break": "Break"
+      }
+    },
+    "groups": {
+      "heading": "Pick-one groups",
+      "intro": "A group holds optional sessions that run at the same time. Each person picks one.",
+      "empty": "No groups yet.",
+      "name": "Group name",
+      "add": "Add group",
+      "added": "Group added.",
+      "deleted": "Group deleted.",
+      "sessions": "{count, plural, =0 {No sessions yet} one {# session} other {# sessions}}"
+    },
+    "errors": {
+      "group_needs_optional": "Only optional sessions can join a pick-one group.",
+      "has_enrollments": "People already hold places or picks in this session, so this can't change.",
+      "group_in_use": "People picked a session of this group, so it can't be deleted."
+    },
+    "import": {
+      "link": "Import agenda (CSV)",
+      "title": "Import agenda",
+      "description": "Add or update sessions from a CSV file. Check the file first: nothing changes until you import.",
+      "back": "Back to sessions",
+      "noAccessTitle": "You can't import the agenda",
+      "noAccessDescription": "Ask an owner or admin of this organization to import it, or to give you a role that can edit events.",
+      "columnsHeading": "What the file needs",
+      "columnsRequired": "Required columns: title, starts, ends. Optional: key, type, admission, capacity, room, track, group, speakers, description.",
+      "columnsTimes": "Write times as YYYY-MM-DD HH:MM in the event's timezone ({timezone}).",
+      "columnsSpeakers": "List speakers by email, separated by semicolons. Give a new speaker's name too: Ada Lovelace '<ada@example.org>'.",
+      "columnsMatch": "Admission is included or optional. Rows with a key are matched by it the next time you import; other rows by title and start time. Importing the same file twice changes nothing.",
+      "file": "CSV file",
+      "check": "Check file",
+      "checked": "Checked {file}",
+      "summary": "{create} to add, {update} to update, {unchanged} unchanged, {error} with problems.",
+      "applied": "Import done: {create} added, {update} updated, {unchanged} unchanged, {error} skipped.",
+      "apply": "{count, plural, one {Import # row} other {Import # rows}}",
+      "nothingToApply": "Nothing to import: every row is unchanged or has a problem.",
+      "rows": "Rows in the file",
+      "line": "Line",
+      "sessionTitle": "Title",
+      "result": "Result",
+      "action": {
+        "create": "Will be added",
+        "update": "Will be updated",
+        "unchanged": "No change",
+        "error": "Can't be imported"
+      },
+      "done": {
+        "create": "Added",
+        "update": "Updated",
+        "unchanged": "No change",
+        "error": "Skipped"
+      },
+      "rowError": {
+        "missing_title": "The title is empty.",
+        "too_long": "A value is too long.",
+        "formula": "A cell starts with =, +, - or @ (a spreadsheet formula).",
+        "invalid_starts": "The start time isn't YYYY-MM-DD HH:MM.",
+        "invalid_ends": "The end time isn't YYYY-MM-DD HH:MM.",
+        "ends_before_starts": "The session ends before it starts.",
+        "invalid_admission": "Admission must be included or optional.",
+        "invalid_capacity": "Capacity must be a whole number of at least 1.",
+        "group_needs_optional": "Only optional sessions can join a group.",
+        "invalid_speaker": "A speaker isn't an email address.",
+        "unknown_speaker": "A speaker is new: give their name as Name '<email>'.",
+        "duplicate_key": "The key is used twice in the file.",
+        "duplicate_row": "The same title and start time appear twice.",
+        "outside_date": "The session would leave its date.",
+        "has_enrollments": "People hold places in this session: its group, admission and capacity can't change."
+      },
+      "fileError": {
+        "no_file": "Choose a CSV file.",
+        "too_large": "The file is larger than 1 MB.",
+        "empty": "The file has no rows.",
+        "too_many_rows": "The file has more than 500 rows.",
+        "too_many_columns": "The file has too many columns.",
+        "cell_too_long": "A cell is too long.",
+        "unterminated_quote": "A quoted value never ends. Check the file's quotes.",
+        "missing_columns": "The file needs the columns title, starts and ends."
+      }
+    }
   }
 }

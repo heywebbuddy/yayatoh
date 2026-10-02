@@ -7478,5 +7478,147 @@
     "submittedDescription": "Bedankt, {name}. Je antwoorden zijn naar de organisator gestuurd.",
     "expiredTitle": "Deze link is verlopen",
     "expiredDescription": "Links om een registratie voort te zetten werken 14 dagen na de laatste opslag. Begin opnieuw via de evenementpagina."
+  },
+  "agenda": {
+    "publishing": {
+      "heading": "Openbaar programma",
+      "badge": {
+        "live": "Live",
+        "draft": "Concept",
+        "published": "Gepubliceerd",
+        "changed": "Gewijzigd sinds publicatie"
+      },
+      "state": {
+        "live": "Elke wijziging staat meteen op de openbare pagina. Publiceer het programma om wijzigingen eerst te controleren.",
+        "draft": "De openbare pagina toont geen sessies tot u het programma publiceert.",
+        "published": "Versie {version}, gepubliceerd op {date}. De openbare pagina toont deze versie.",
+        "changed": "U hebt het programma gewijzigd na versie {version} ({date}). De openbare pagina toont die versie tot u opnieuw publiceert."
+      },
+      "publish": "Programma publiceren",
+      "publishChanges": "Wijzigingen publiceren",
+      "unpublish": "Publicatie intrekken",
+      "toDraft": "Naar concept"
+    },
+    "warningsHeading": "{count, plural, one {# programmawaarschuwing} other {# programmawaarschuwingen}}",
+    "warnings": {
+      "room_too_small": "{room} biedt plaats aan {roomCapacity} mensen, maar ‘{session}’ staat er {sessionCapacity} toe.",
+      "group_not_overlapping": "‘{session}’ in {group} valt op een ander tijdstip dan de andere sessies van de groep."
+    },
+    "roomTooSmallLabel": "Zaal te klein",
+    "included": "Inbegrepen",
+    "optional": "Optioneel",
+    "enrollmentClosed": "Inschrijving gesloten",
+    "placesTaken": "{enrolled} van {capacity} plaatsen bezet",
+    "settings": {
+      "summary": "Type, toegang en groep voor {title}",
+      "type": "Sessietype",
+      "noType": "Geen type",
+      "admission": "Toegang",
+      "includedOption": "Inbegrepen bij registratie",
+      "optionalOption": "Optioneel: met inschrijving",
+      "admissionHint": "Inbegrepen sessies vragen nooit om inschrijving. Optionele sessies met een capaciteit wel.",
+      "group": "Keuzegroep",
+      "noGroup": "Geen groep",
+      "groupHint": "Iedereen kiest één sessie uit een groep. Alleen optionele sessies kunnen erin.",
+      "enrollment": "Inschrijving",
+      "open": "Open",
+      "closed": "Gesloten",
+      "save": "Programma-instellingen opslaan",
+      "saved": "Programma-instellingen opgeslagen."
+    },
+    "types": {
+      "heading": "Sessietypes",
+      "empty": "Nog geen sessietypes.",
+      "name": "Naam van het type",
+      "add": "Type toevoegen",
+      "added": "Type toegevoegd.",
+      "addStandard": "Standaardtypes toevoegen",
+      "standardHint": "Keynote, presentatie, workshop, panel en pauze.",
+      "standard": {
+        "keynote": "Keynote",
+        "talk": "Presentatie",
+        "workshop": "Workshop",
+        "panel": "Panel",
+        "break": "Pauze"
+      }
+    },
+    "groups": {
+      "heading": "Keuzegroepen",
+      "intro": "Een groep bevat optionele sessies die tegelijk plaatsvinden. Iedereen kiest er één.",
+      "empty": "Nog geen groepen.",
+      "name": "Naam van de groep",
+      "add": "Groep toevoegen",
+      "added": "Groep toegevoegd.",
+      "deleted": "Groep verwijderd.",
+      "sessions": "{count, plural, =0 {Nog geen sessies} one {# sessie} other {# sessies}}"
+    },
+    "errors": {
+      "group_needs_optional": "Alleen optionele sessies kunnen in een keuzegroep.",
+      "has_enrollments": "Mensen hebben al een plaats of keuze in deze sessie, dus dit kan niet veranderen.",
+      "group_in_use": "Mensen hebben een sessie uit deze groep gekozen, dus de groep kan niet weg."
+    },
+    "import": {
+      "link": "Programma importeren (CSV)",
+      "title": "Programma importeren",
+      "description": "Voeg sessies toe of werk ze bij vanuit een CSV-bestand. Controleer eerst het bestand: er verandert niets tot u importeert.",
+      "back": "Terug naar sessies",
+      "noAccessTitle": "U kunt het programma niet importeren",
+      "noAccessDescription": "Vraag een eigenaar of beheerder van de organisatie om het te importeren of om u een rol te geven die evenementen mag bewerken.",
+      "columnsHeading": "Wat het bestand nodig heeft",
+      "columnsRequired": "Verplichte kolommen: title, starts, ends. Optioneel: key, type, admission, capacity, room, track, group, speakers, description.",
+      "columnsTimes": "Schrijf tijden als JJJJ-MM-DD UU:MM in de tijdzone van het evenement ({timezone}).",
+      "columnsSpeakers": "Noem sprekers bij e-mailadres, gescheiden door puntkomma's. Geef bij een nieuwe spreker ook de naam: Ada Lovelace '<ada@example.org>'.",
+      "columnsMatch": "admission is included of optional. Rijen met een key worden daaraan herkend bij de volgende import; andere aan titel en begintijd. Hetzelfde bestand twee keer importeren verandert niets.",
+      "file": "CSV-bestand",
+      "check": "Bestand controleren",
+      "checked": "{file} gecontroleerd",
+      "summary": "{create} toe te voegen, {update} bij te werken, {unchanged} ongewijzigd, {error} met problemen.",
+      "applied": "Import klaar: {create} toegevoegd, {update} bijgewerkt, {unchanged} ongewijzigd, {error} overgeslagen.",
+      "apply": "{count, plural, one {# rij importeren} other {# rijen importeren}}",
+      "nothingToApply": "Niets te importeren: elke rij is ongewijzigd of heeft een probleem.",
+      "rows": "Rijen in het bestand",
+      "line": "Regel",
+      "sessionTitle": "Titel",
+      "result": "Resultaat",
+      "action": {
+        "create": "Wordt toegevoegd",
+        "update": "Wordt bijgewerkt",
+        "unchanged": "Geen wijziging",
+        "error": "Kan niet worden geïmporteerd"
+      },
+      "done": {
+        "create": "Toegevoegd",
+        "update": "Bijgewerkt",
+        "unchanged": "Geen wijziging",
+        "error": "Overgeslagen"
+      },
+      "rowError": {
+        "missing_title": "De titel is leeg.",
+        "too_long": "Een waarde is te lang.",
+        "formula": "Een cel begint met =, +, - of @ (een spreadsheetformule).",
+        "invalid_starts": "De begintijd is niet JJJJ-MM-DD UU:MM.",
+        "invalid_ends": "De eindtijd is niet JJJJ-MM-DD UU:MM.",
+        "ends_before_starts": "De sessie eindigt voordat ze begint.",
+        "invalid_admission": "admission moet included of optional zijn.",
+        "invalid_capacity": "De capaciteit moet een geheel getal van minstens 1 zijn.",
+        "group_needs_optional": "Alleen optionele sessies kunnen in een groep.",
+        "invalid_speaker": "Een spreker is geen e-mailadres.",
+        "unknown_speaker": "Een spreker is nieuw: geef de naam als Naam '<e-mail>'.",
+        "duplicate_key": "De key komt twee keer voor in het bestand.",
+        "duplicate_row": "Dezelfde titel en begintijd komen twee keer voor.",
+        "outside_date": "De sessie zou buiten haar datum vallen.",
+        "has_enrollments": "Mensen hebben een plaats in deze sessie: groep, toegang en capaciteit kunnen niet veranderen."
+      },
+      "fileError": {
+        "no_file": "Kies een CSV-bestand.",
+        "too_large": "Het bestand is groter dan 1 MB.",
+        "empty": "Het bestand heeft geen rijen.",
+        "too_many_rows": "Het bestand heeft meer dan 500 rijen.",
+        "too_many_columns": "Het bestand heeft te veel kolommen.",
+        "cell_too_long": "Een cel is te lang.",
+        "unterminated_quote": "Een waarde tussen aanhalingstekens sluit nooit af. Controleer de aanhalingstekens.",
+        "missing_columns": "Het bestand heeft de kolommen title, starts en ends nodig."
+      }
+    }
   }
 }

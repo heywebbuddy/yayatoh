@@ -7478,5 +7478,147 @@
     "submittedDescription": "谢谢，{name}。你的回答已发送给主办方。",
     "expiredTitle": "此链接已过期",
     "expiredDescription": "继续报名的链接在最后一次保存后 14 天内有效。请从活动页面重新开始。"
+  },
+  "agenda": {
+    "publishing": {
+      "heading": "公开日程",
+      "badge": {
+        "live": "实时",
+        "draft": "草稿",
+        "published": "已发布",
+        "changed": "发布后有更改"
+      },
+      "state": {
+        "live": "每次更改都会立即显示在公开页面上。发布日程后，可以先审核更改再公开。",
+        "draft": "在你发布日程之前，公开页面不显示任何场次。",
+        "published": "第 {version} 版，发布于 {date}。公开页面显示此版本。",
+        "changed": "你在发布第 {version} 版（{date}）后更改了日程。再次发布前，公开页面仍显示该版本。"
+      },
+      "publish": "发布日程",
+      "publishChanges": "发布更改",
+      "unpublish": "取消发布日程",
+      "toDraft": "切换为草稿"
+    },
+    "warningsHeading": "{count, plural, other {# 条日程提醒}}",
+    "warnings": {
+      "room_too_small": "{room} 可容纳 {roomCapacity} 人，但“{session}”允许 {sessionCapacity} 人。",
+      "group_not_overlapping": "{group} 中的“{session}”与组内其他场次不在同一时间。"
+    },
+    "roomTooSmallLabel": "场地太小",
+    "included": "已包含",
+    "optional": "可选",
+    "enrollmentClosed": "报名已关闭",
+    "placesTaken": "已占 {enrolled}/{capacity} 个名额",
+    "settings": {
+      "summary": "{title} 的类型、参加方式和分组",
+      "type": "场次类型",
+      "noType": "无类型",
+      "admission": "参加方式",
+      "includedOption": "包含在注册中",
+      "optionalOption": "可选：需要报名",
+      "admissionHint": "包含的场次无需报名。有名额限制的可选场次将需要报名。",
+      "group": "单选组",
+      "noGroup": "无分组",
+      "groupHint": "每人从组中选择一个场次。只有可选场次可以加入。",
+      "enrollment": "报名",
+      "open": "开放",
+      "closed": "关闭",
+      "save": "保存日程设置",
+      "saved": "日程设置已保存。"
+    },
+    "types": {
+      "heading": "场次类型",
+      "empty": "还没有场次类型。",
+      "name": "类型名称",
+      "add": "添加类型",
+      "added": "类型已添加。",
+      "addStandard": "添加标准类型",
+      "standardHint": "主题演讲、演讲、工作坊、圆桌讨论和休息。",
+      "standard": {
+        "keynote": "主题演讲",
+        "talk": "演讲",
+        "workshop": "工作坊",
+        "panel": "圆桌讨论",
+        "break": "休息"
+      }
+    },
+    "groups": {
+      "heading": "单选组",
+      "intro": "一个组包含同一时间进行的可选场次。每人选择一个。",
+      "empty": "还没有分组。",
+      "name": "组名",
+      "add": "添加组",
+      "added": "组已添加。",
+      "deleted": "组已删除。",
+      "sessions": "{count, plural, =0 {还没有场次} other {# 个场次}}"
+    },
+    "errors": {
+      "group_needs_optional": "只有可选场次可以加入单选组。",
+      "has_enrollments": "已有人在此场次中占有名额或做出选择，因此无法更改。",
+      "group_in_use": "已有人选择了此组中的场次，因此无法删除。"
+    },
+    "import": {
+      "link": "导入日程（CSV）",
+      "title": "导入日程",
+      "description": "从 CSV 文件添加或更新场次。请先检查文件：在导入前不会有任何更改。",
+      "back": "返回场次",
+      "noAccessTitle": "你无法导入日程",
+      "noAccessDescription": "请让该组织的所有者或管理员导入，或为你分配可编辑活动的角色。",
+      "columnsHeading": "文件需要包含的内容",
+      "columnsRequired": "必填列：title、starts、ends。可选：key、type、admission、capacity、room、track、group、speakers、description。",
+      "columnsTimes": "时间按活动时区（{timezone}）写成 YYYY-MM-DD HH:MM。",
+      "columnsSpeakers": "用电子邮箱列出演讲者，以分号分隔。新演讲者请附上姓名：Ada Lovelace '<ada@example.org>'。",
+      "columnsMatch": "admission 为 included 或 optional。带 key 的行在下次导入时按 key 匹配，其他行按标题和开始时间匹配。同一文件导入两次不会有任何更改。",
+      "file": "CSV 文件",
+      "check": "检查文件",
+      "checked": "已检查 {file}",
+      "summary": "新增 {create}，更新 {update}，未更改 {unchanged}，有问题 {error}。",
+      "applied": "导入完成：新增 {create}，更新 {update}，未更改 {unchanged}，跳过 {error}。",
+      "apply": "{count, plural, other {导入 # 行}}",
+      "nothingToApply": "没有可导入的内容：每一行都未更改或有问题。",
+      "rows": "文件中的行",
+      "line": "行",
+      "sessionTitle": "标题",
+      "result": "结果",
+      "action": {
+        "create": "将新增",
+        "update": "将更新",
+        "unchanged": "无更改",
+        "error": "无法导入"
+      },
+      "done": {
+        "create": "已新增",
+        "update": "已更新",
+        "unchanged": "无更改",
+        "error": "已跳过"
+      },
+      "rowError": {
+        "missing_title": "标题为空。",
+        "too_long": "某个值太长。",
+        "formula": "某个单元格以 =、+、- 或 @ 开头（电子表格公式）。",
+        "invalid_starts": "开始时间不是 YYYY-MM-DD HH:MM 格式。",
+        "invalid_ends": "结束时间不是 YYYY-MM-DD HH:MM 格式。",
+        "ends_before_starts": "场次在开始前就结束了。",
+        "invalid_admission": "admission 必须为 included 或 optional。",
+        "invalid_capacity": "名额必须是不小于 1 的整数。",
+        "group_needs_optional": "只有可选场次可以加入分组。",
+        "invalid_speaker": "某位演讲者不是电子邮箱地址。",
+        "unknown_speaker": "某位演讲者是新的：请以 姓名 '<邮箱>' 的形式填写姓名。",
+        "duplicate_key": "key 在文件中出现了两次。",
+        "duplicate_row": "相同的标题和开始时间出现了两次。",
+        "outside_date": "场次将超出其所属日期。",
+        "has_enrollments": "已有人占有此场次的名额：其分组、参加方式和名额无法更改。"
+      },
+      "fileError": {
+        "no_file": "请选择一个 CSV 文件。",
+        "too_large": "文件超过 1 MB。",
+        "empty": "文件没有任何行。",
+        "too_many_rows": "文件超过 500 行。",
+        "too_many_columns": "文件的列太多。",
+        "cell_too_long": "某个单元格太长。",
+        "unterminated_quote": "某个带引号的值没有结束。请检查文件中的引号。",
+        "missing_columns": "文件需要 title、starts 和 ends 列。"
+      }
+    }
   }
 }

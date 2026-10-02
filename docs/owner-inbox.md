@@ -21,6 +21,11 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
   - **Legacy route list:** confirm no legacy page lives under `/auth`, `/sign-in`, `/signup`, `/my-tickets`, `/claim`, `/invite`, `/survey`, `/embed` or `/sub-processors` (the new app keeps those paths).
 
 ## Design
+- [ ] **Agenda v2 defaults, pending owner** (M5.2a; labels: `db-migration`, `tenancy`). Built with these defaults; say if any should change:
+  - **Existing and new events start "live"**: until an organizer publishes or switches the agenda to draft, every change shows on the public page at once (the M1.4f behaviour, so no event's public agenda disappears). Once published, the public page serves the published snapshot until the next publish; "changed since publish" is shown in the console. Recommended alternative if you prefer: new conference events start in draft.
+  - **Publishing snapshots the sessions only** (times, rooms, tracks, types, included/optional, speaker names). Speaker profiles, exhibitors and sponsors stay live.
+  - **CSV import creates missing rooms, tracks, session types, groups and speakers by name**; a speaker's email is kept (new `program.speaker_contacts`) so the next import matches them. Rows with problems are skipped and listed; the rest are applied. Limits: 1 MB, 500 rows.
+  - **A room smaller than a session's capacity is a warning**, as are grouped sessions that overlap none of their group; neither blocks a save.
 - [ ] **Metrics pipeline defaults, pending owner** (M3.1a; labels: `db-migration`). Built with these defaults; say if any should change:
   - **Devices online** counts a check-in device whose last heartbeat is within **90 seconds** (the roadmap's "offline alert within 90 s"). Until M3.3 adds a sweep, the value is as of the last device event (each value carries its `asOf`).
   - **Tickets distributed** counts active tickets claimed through a claim link. M3.2b's "undistributed tickets" alert may widen this (e.g. holder ≠ buyer).
