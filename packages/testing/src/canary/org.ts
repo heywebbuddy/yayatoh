@@ -8,6 +8,7 @@ import { executeCommand, executeQuery } from '@yayatoh/kernel';
 import { updateSiteSettingsCommand } from '@yayatoh/marketplace';
 import { announcementMailer, sendAnnouncementCommand } from '@yayatoh/messaging';
 import { createNotifier, dispatchDue, memoryTransports } from '@yayatoh/notifications';
+import { applyAccountEventCommand } from '@yayatoh/payments';
 import { auditExportBulk, consumeEvent, keyVault, recentEventsTx } from '@yayatoh/platform';
 import { dsarExportBulk } from '@yayatoh/privacy';
 import { attendeeExportBulk, BOOKING_EXPORT_COLUMNS, bookingsExportBulk } from '@yayatoh/reports';
@@ -142,6 +143,32 @@ export async function canaryOrg(o: {
 /** One-time extras beyond the shared fixture. */
 async function prepare(admin: CanaryAdmin, orgId: string, ownerId: string, eventId: string) {
   const ctx = () => userCtx(ownerId, orgId);
+  // M4.8a: a connected account, so the giving page shows the fixture's campaign (gifts need one).
+  const [account] = await admin.unsafe(
+    `select account_id from payments.payment_accounts where org_id = $1 limit 1`,
+    [orgId],
+  );
+  if (!account) throw new Error('canary: the fixture has no payout account');
+  await executeCommand(
+    applyAccountEventCommand,
+    {
+      provider: 'fake',
+      id: `fakeevt_canary_${orgId}`,
+      type: 'account.updated',
+      orgId,
+      account: {
+        accountId: account.account_id as string,
+        chargesEnabled: true,
+        payoutsEnabled: true,
+        detailsSubmitted: true,
+        requirementsDue: [],
+        country: 'US',
+        defaultCurrency: 'usd',
+      },
+    },
+    systemCtx(orgId),
+    ports,
+  );
   await executeCommand(
     updateSiteSettingsCommand,
     { listOnMarketplace: true, tenantSite: true, embedOrigins: ['https://canary-embed.test'] },
