@@ -468,3 +468,11 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 ## M5.1a — registration types (2026-09-29, pending owner)
 - [ ] Conference pack quotas per event: 30 registration types, 20 admission items, 5,000 registrants (defaults in `billing.addons`; free in beta, price with D22). Change them by data, no code change.
 - [ ] Registration always asks buyers for the emailed code (M1.5f), even when an org turned the checkout email check off, so "email domain" eligibility means a proved address. Confirm or relax.
+
+## M4.1f — invitations and contact collector (2026-10-02, pending owner)
+- [ ] **Invitations and RSVP reminders are transactional** (P4-3): they go out without marketing consent, carry no unsubscribe link and are not subject to the org's marketing pause, but they **do** respect quiet hours (21:00–08:00 in the event's timezone, as guests have none of their own), bounces, complaints and STOP. Texts need no consent record (a guest who gave their number to the hosts asked to be invited). Confirm, or say if texts should need a recorded consent (they would then need a crm contact, which P4-3 rules out).
+- [ ] **Reminder defaults:** 14 and 3 days before the RSVP deadline, at the deadline's wall-clock time, by email; at most 5 reminder days between 1 and 90. Reminders need a deadline. Changing them starts a new set-up (already-sent reminders stay in each party's history).
+- [ ] **Collector limits:** 5 submissions per device per hour (then the human check), 300 per collector per hour, an IP ceiling of 200 per hour; at most 2,000 pending submissions per event; 12 people per submission. A submission's sealed payload is deleted as soon as the host approves, merges or rejects it.
+- [ ] **Invitation wording:** a built-in text in all 13 languages (`packages/modules/guests/src/domain/invite-copy.ts`) until the host writes their own per language. Please review the built-in wording (labels: `legal-copy`).
+- [ ] **Test sends** go by email to the signed-in host only; the test's RSVP button opens a page that says the link isn't valid (it belongs to no party).
+- [ ] **SMS provider** for invitations: the Twilio account (owner inbox M3.5b) is still needed for real texts; dev and CI use the fake providers.

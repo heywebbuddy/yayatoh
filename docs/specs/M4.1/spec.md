@@ -453,3 +453,125 @@ A lookup reads the event's named guests once (≤ 3,000) and compares in memory;
 - [ ] Set the deadline in the past: the page is read-only; **Reopen RSVP** for one party from the Guests page menu.
 - [ ] As `jordan@lakeside.test` (viewer): states only, no links, QR codes or PINs.
 
+
+## M4.1f — invitations and contact collector (done)
+
+### 1. Goal and users
+Hosts collect their guests' postal addresses and contact details through one shareable link
+(or QR code) and approve each household into the guest list; then they send every party its
+invitation by email and/or text with the party's own RSVP link, see which were sent, opened,
+bounced or failed, and let the platform remind parties that haven't answered before the RSVP
+deadline. Guests send their details from a phone in a minute and never see anyone else.
+
+### 2. References
+- **Plan:** `docs/plans/phase-4.md` Wave B, M4.1f; decisions P4-2 (party magic link), P4-3 (guests are never marketing; addresses sealed).
+- **Roadmap:** §5.1 `guests`, §5.2 (RSVP states), M3.7a (journeys), M1.10/M3.5 (notifications: quiet hours, fallbacks, delivery reports, STOP), M1.14 (rate limits and the human check), M2.4a (route ownership).
+- **Reused:** M4.1d party links and states (`ensurePartyRsvpTx`, `sent`/`viewed`/`responded`), the guests key vault sealing, the M3.7a runner and lifecycle, the notifications dispatcher and dev mailbox, `qrPath`, `limitAction` + `passedHumanCheck`, `ProgramForm`.
+
+### 3. Scope
+**In (built):**
+- **Public collector `/collect/{code}`** (no account, `noindex`, phone first, 44 px targets): household name, one row per person ("Add another person", "Remove person n"), postal address, email, mobile phone and a note; at least one way to reach the household. Every refusal is named next to its field (or as an alert) and takes the focus; values survive any error. Rate limit `contactCollector` (5 per device per hour, 300 per collector per hour, IP ceiling), then the human check. The page names the event only; off or unknown codes are 404.
+- **Host queue `/guests/collector`:** switch the collector on/off, copy the link, a printable QR card; each waiting household with its people, address, email, phone and note; **Approve as a new party**, **Compare and merge** into a chosen party, **Reject**; recent decisions with links to the parties. The merge page `/guests/collector/{submission}?party=` shows the party's and the submitted address, email and phone side by side, a keep/use choice per field and the submitted people the party doesn't have (ticked). After each decision the page says what happened.
+- **Invitations `/guests/invitations`:** the primary action sends every party not sent yet by email and/or text (the page then says how many went and how many had no address); the wording per language (13 languages: the built-in text until edited; subject, message, text message; `{party}` and `{event}`), a preview filled for the first party, a test email to the signed-in host; deadline reminders (on/off, days before the deadline, channels); every party's state (`Not sent`/`Sent`/`Viewed`/`Responded`), language, reachable channels and the latest message per channel with its delivery state; problems (bounced, failed, not sent) are called out.
+- **Party page `/guests/rsvp/{party}`** gains an Invitation panel: email and mobile phone (sealed on the primary guest), the party's language, send (or send again), every invitation, reminder and test message with its delivery state, and the party's reminders (waiting, sent, stopped because it answered).
+- **Commands** (guests, `guests:write` unless noted; audited with ids and counts only): `guests.setCollector`, `guests.submitContact` (`public:collector`), `guests.approveSubmission`, `guests.mergeSubmission`, `guests.rejectSubmission`, `guests.setInvitationTemplate`, `guests.resetInvitationTemplate`, `guests.setPartyLocale`, `guests.setPartyContact`, `guests.sendInvitations`, `guests.sendTestInvitation`; automations: `automations.setRsvpReminders` (`guests:write`, entitlement `guests`), `automations.runPartyAction` (system).
+- **Queries:** `guests.collectorSettings`, `guests.collectorQueue`, `guests.collectorMergePreview` (`guests:write`), `guests.publicCollector` (`public:collector`), `guests.invitationTemplates`, `guests.invitationPreview`, `guests.partyInvites`, `guests.partyInviteMessages`, `guests.partyContact`; `automations.rsvpReminders`, `automations.partyReminders` (all `guests:read` unless noted).
+- **Reminders on the M3.7a journey engine:** a system journey per event (trigger `rsvp_sent`, steps anchored on the RSVP deadline, e.g. 14 and 3 days before at the deadline's wall-clock time in the event's zone), party runs (`journey_runs.party_id`), enrolled when the party's invitation is queued (or when reminders are switched on after it was sent), cancelled when the party answers (`guests.party_responded@1`) and checked again when each step is due; a new deadline re-plans the pending steps. Hidden from the marketing journey builder and list.
+- **Messages:** kinds `guests.invitation` and `guests.rsvp-reminder`, **transactional and not urgent** (P4-3: never marketing, no consent or contact; quiet hours apply in the event's timezone; bounces, complaints and STOP still suppress), copy in 13 locales. Delivery states are read back from notifications by dedupe key (`messageStatesTx`), so a bounce shows on the party.
+
+**Later / not yet:**
+- Editable reminder wording (reminders use the built-in `guests.rsvp-reminder` copy in the party's language); WhatsApp invitations.
+- A real page behind a test email's RSVP button (it points at `/rsvp/test`, which says the link isn't valid).
+- Guests' own timezones for quiet hours (the event's zone is used).
+- An editable deadline reminder schedule per party; a reminder when the deadline moves after a step already ran (steps that ran never run again).
+- Design system v2 components: see the report (the new screens use today's `@yayatoh/ui` primitives only; no new shared component).
+
+### 4. `touches:`
+```yaml
+touches:
+  - packages/modules/guests/src/{schema.ts,index.ts,private-columns.ts}   # appended
+  - packages/modules/guests/src/{collector.ts,invites.ts,invite-delivery.ts,invites-state.ts,domain/collector.ts,domain/invite-copy.ts}  # new
+  - packages/modules/guests/src/guests.ts          # `seal`/`unseal` exported
+  - packages/modules/guests/src/rsvp-state.ts      # guests.party_responded@1
+  - packages/modules/guests/src/rsvp.ts            # guests.rsvp_deadline_set@1
+  - packages/modules/guests/{package.json,MODULE.md,tests/collector.test.ts}
+  - packages/modules/automations/src/{schema.ts,domain/journey.ts,domain/timing.ts,lifecycle.ts,runner.ts,journeys.ts,subscribers.ts,index.ts}
+  - packages/modules/automations/src/rsvp-reminders.ts   # new
+  - packages/modules/automations/{package.json,MODULE.md,tests/rsvp-timing.test.ts}
+  - packages/modules/notifications/src/{kinds.ts,index.ts,message-states.ts,templates/samples.ts,templates/messages/*.json}
+  - packages/platform/src/{front-door/routes.ts,security/rate-limit.ts}, packages/platform/tests/front-door.test.ts
+  - packages/db/drizzle/0100_acoustic_lady_bullseye.sql (+ meta)
+  - packages/testing/src/fixtures.ts, packages/testing/tests/guest-invites.int.test.ts
+  - apps/web/src/app/[locale]/collect/[code]/**
+  - apps/web/src/app/[locale]/o/[org]/e/[event]/guests/{page.tsx,collector/**,invitations/**,rsvp/links.ts,rsvp/[party]/page.tsx}
+  - apps/web/src/server/notifications.ts, apps/worker/src/{registry.ts,journeys.ts}
+  - apps/web/messages/*.json        # collector.*, collectorHost.*, invitations.*, notifications.kinds.guests.*
+  - apps/web/e2e/guest-invites.spec.ts
+  - docs/specs/M4.1/spec.md, docs/owner-inbox.md
+```
+
+### 5. Data model
+| Table | Change | Notes |
+|---|---|---|
+| `guests.collector_settings` | new | unique `(org_id, event_id)`; `enabled`, `code` (unique across the platform, read across tenants only through `guests.collector_target`); event FK cascade (hand-written) |
+| `guests.collector_submissions` | new | `status` pending/approved/merged/rejected, `payload_ciphertext` (sealed JSON, null once decided: CHECK), `locale`, `party_id` (→ parties `ON DELETE SET NULL (party_id)`, hand-written), `decided_at`, `decided_by`; event FK cascade |
+| `guests.invitation_templates` | new | unique `(org_id, event_id, locale)`; subject ≤ 150, message ≤ 2,000, text ≤ 320 |
+| `guests.party_invites` | new | unique `(org_id, party_id)` → parties cascade; `locale` |
+| `guests.invite_messages` | new | kind invitation/reminder/test, channel email/sms, `dedupe_key` (unique per org and channel), `locale`, `sent_by`; party FK cascade (test sends have no party: CHECK) |
+| `guests.rsvp_history` | action CHECK widened | `invitation_sent`, `collector_approved`, `collector_merged` (NOT VALID + VALIDATE) |
+| `automations.journey_runs`, `automations.scheduled_actions` | + `party_id` uuid null; `contact_id` drops NOT NULL | CHECK exactly one of contact/party (NOT VALID + VALIDATE); unique `(org, journey, event, party)` where `party_id` is not null; index `(org, party)` |
+| `automations.journeys`, `journey_steps`, `journey_runs` | CHECKs widened | trigger `rsvp_sent`, anchor `rsvp_deadline`, template `rsvp_reminders` (NOT VALID + VALIDATE) |
+
+**RLS notes:**
+- [x] Tenant tables use `tenantTable()` (ENABLE + FORCE RLS, NULLIF policy, org-leading indexes, composite FKs, org-scoped uniques; the platform-wide `code` unique is read only through the SECURITY DEFINER function)
+- [x] Rows for both orgs in `createOrgFixture` (collector on, one waiting and one rejected submission, English wording, the fixture party's language, a logged invitation)
+- [x] Every new text column declared (`payload_ciphertext` personal sealed-json on pending rows only; `code` internal `code`; wording internal; vocab for statuses, kinds, channels, locales)
+
+**Migration:** `0100_acoustic_lady_bullseye.sql` (expand only; renumber at merge). Hand edits: the seven CHECKs on existing tables (`journey_runs` ×2, `journey_steps`, `journeys` ×2, `scheduled_actions`, `rsvp_history`) as `NOT VALID` + `VALIDATE CONSTRAINT`; a hand-written block with the event FKs of the five new tables, `collector_submissions_party_fk` (`ON DELETE SET NULL (party_id)`), and `guests.collector_target(text)` (SECURITY DEFINER, live orgs and enabled collectors only, ids only; `REVOKE ALL FROM PUBLIC`, `GRANT EXECUTE TO app_user`).
+
+### 6. API diff
+- **`/v1`:** none. **`/api/v2`:** none.
+- **Routes:** `/collect/{code}` (public, `noindex`); `/o/{org}/e/{event}/guests/collector`, `/guests/collector/{submission}`, `/guests/invitations` (console). Route ownership (M2.4a): `/collect` and `/rsvp` added to `PLATFORM_PREFIXES` (never forwarded to the legacy app; the route table version is unchanged).
+
+### 7. Events
+- `guests.invitation_queued@1` `{ orgId, eventId, partyId | null, sendId, channels, kind: invitation | test, locale, userId }` → `guests.invitation-mailer` (queues the messages), `automations.rsvp-reminders` (enrolls the party).
+- `guests.party_responded@1` `{ orgId, eventId, partyId }` (every time a party reaches `responded`) → `automations.rsvp-reminders` (cancels its runs).
+- `guests.rsvp_deadline_set@1` `{ orgId, eventId }` → `automations.rsvp-reminders` (re-plans pending steps).
+
+### 8. Entitlements and flags
+`guests` module for everything (party steps of journeys run under `guests`, not `marketing`). Rate-limit policy `contactCollector`.
+
+### 10. Acceptance criteria
+| ID | Given / When / Then | Test |
+|---|---|---|
+| AC-M4.1f-01 | Reminders stop once a party answers (time travel: day −14 all three parties, day −3 only the one that never answered; the hook and the runner's own check) | `packages/testing/tests/guest-invites.int.test.ts` ("needs a deadline; 14 and 3 days before; stop once a party answers (time travel); quiet hours") |
+| AC-M4.1f-02 | Quiet hours respected: a reminder due at 23:00 in the event's zone waits until 08:00 | int (same test: `quiet_hours`, `send_after` 08:00 CDT) |
+| AC-M4.1f-03 | A collector submission never changes a party without host approval; it is sealed at rest; the audit has counts only | int ("a submission never changes a party without approval…"); e2e `apps/web/e2e/guest-invites.spec.ts` ("a household sends its details…": the list unchanged until approved) |
+| AC-M4.1f-04 | Approve into a new party (people, sealed contact on the primary, language, history); merge field by field (keep/use, only new people); reject deletes the payload; a decision is final | int ("approve into a new party…", "merge field by field…"); e2e ("a household sends its details…", "merge field by field…") |
+| AC-M4.1f-05 | Spam protection: validation, rate limit, then the human check | int (validation); e2e ("past the device budget a submission needs the human check") |
+| AC-M4.1f-06 | Invitations by email and text with each party's own link; sent, then viewed after opening the link; parties without an address are counted and skipped; resend | int ("send: sent with the link on each channel…"); e2e ("wording per language with preview and test send; send by email and text; viewed after the link; a bounce shows") |
+| AC-M4.1f-07 | A bounced email shows on the party | int (same, `recordDeliveryEvents` hard bounce → `bounced`, `problem`); e2e (fake provider `bounce+…@` → "Email: Bounced" on the list and the party page) |
+| AC-M4.1f-08 | Wording per event and language, preview, test send to the host only | int ("wording per language…", "a test send goes to the signed-in host only…"); e2e (wording, preview, test) |
+| AC-M4.1f-09 | Reminders need a deadline, validate the days, switch on/off; a new deadline re-plans; switching off cancels; system journeys stay out of marketing | int ("a new deadline re-plans pending reminders…"); e2e ("deadline reminders: need a deadline…"); `packages/modules/automations/tests/rsvp-timing.test.ts` |
+| AC-M4.1f-10 | Viewer can't send, edit wording, change contacts or decide (control hidden and command refused) | int (viewer `forbidden` in "approve…", "wording…", "send…", reminders); e2e ("viewers see invitations and the queue but cannot send…") |
+| AC-M4.1f-11 | Isolation; impersonation and freeze coverage of the new commands | int ("tenant isolation…", "isolation: another org can neither send…", "isolation: org B sees none…"); `isolation.int.test.ts`, `freeze.int.test.ts`, `impersonation.int.test.ts` (registry sweep) |
+| AC-M4.1f-12 | Route ownership for the collector page | `packages/platform/tests/front-door.test.ts` ("the new app's own paths are never forwarded…": `/collect/…`, `/rsvp/…`) |
+| AC-M4.1f-13 | Keyboard only, axe on every new screen and state, Arabic right to left | e2e ("keyboard only: a guest fills and sends the form…", "Arabic renders right to left…", "viewers… Arabic renders"; `expectAccessible` throughout) |
+| AC-M4.1f-14 | Guests never added to marketing audiences: transactional kinds, no contacts or consents created, system journeys hidden from the marketing builder | int (no contact rows; `rsvp_sent` journeys absent from `listJourneys`); `packages/modules/guests/tests/collector.test.ts` |
+
+### 11. Security and privacy
+- Everything a guest types is sealed with the org's key until the host decides, then deleted; the public page and its command return nothing but "thanks". Contact details live sealed on the primary guest; `invite_messages` stores no address; outbox events carry ids only.
+- The collector's org comes from its code through a SECURITY DEFINER lookup (ids only), never a header. Limits per device, per collector and per IP, then the human check; at most 2,000 pending submissions per event.
+- P4-3: invitations and reminders are transactional; nothing creates contacts, consents or audience members; system journeys are invisible to the marketing journey builder.
+
+### 12. Performance budget
+A bulk send reads each party's sealed guests once (≤ 1,000 parties per event) and emits one outbox event per party; the mailer queues ≤ 2 messages per party. A reminder step reads one party.
+
+### 15. Demo checklist (M4.1f)
+- [ ] As `pani@lakeside.test`, open a wedding → **Guests → Contact collector** → **Turn on the collector**; print the QR card.
+- [ ] On a phone, open the link: send a household with two people and an email.
+- [ ] Back in the queue: **Approve … as a new party**; send another and **Compare and merge** it into an existing party (keep the address, use the email).
+- [ ] **Guests → Invitations:** pick Spanish, edit the subject, see the preview, **Send a test email to me**.
+- [ ] Set a deadline (RSVP page), then turn on reminders (14, 3).
+- [ ] **Send to N parties** (email and text); drain the dev outbox; open a party's link from the dev mailbox → the party shows **Viewed**; a `bounce@…` address shows **Email: Bounced**.
+- [ ] As `jordan@lakeside.test` (viewer): states only, no send or edit controls.

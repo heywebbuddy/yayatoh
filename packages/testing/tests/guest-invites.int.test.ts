@@ -1,5 +1,6 @@
 import {
   journeySubscribers,
+  listJourneysQuery,
   partyRemindersQuery,
   type RunnerDeps,
   rsvpRemindersQuery,
@@ -839,7 +840,13 @@ describe('RSVP deadline reminders (journey engine)', () => {
     const [{ n } = { n: -1 }] = await admin<{ n: number }[]>`
       select count(*)::int as n from automations.journeys where event_id = ${ev.id} and trigger = 'rsvp_sent'`;
     expect(n).toBe(1);
-    void p;
+    const listed = await executeQuery(listJourneysQuery, { eventId: ev.id }, a.ctx(), ports);
+    expect(listed).toEqual([]);
+    // P4-3: nothing here made a crm contact for the guest's address.
+    const contact = await executeQuery(partyContactQuery, { eventId: ev.id, partyId: p.id }, a.ctx(), ports);
+    const [{ c } = { c: -1 }] = await admin<{ c: number }[]>`
+      select count(*)::int as c from crm.contacts where org_id = ${a.org.id} and email_norm = ${contact.email}`;
+    expect(c).toBe(0);
   });
 
   it('isolation: org B sees none of org A’s reminders', async () => {
