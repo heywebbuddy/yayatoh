@@ -175,7 +175,7 @@ export default async function RegistrationPage({
         href={`/o/${org}/e/${event}/registration-form`}
         className="self-start text-body underline underline-offset-2"
       >
-        {tf('openBuilder')}
+        {canWrite ? tf('openBuilder') : tf('openReadOnly')}
       </Link>
       {canWrite ? null : <p className="text-body text-zinc-500">{t('viewerNotice')}</p>}
       <p className="text-caption text-zinc-600">

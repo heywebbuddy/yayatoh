@@ -7356,6 +7356,7 @@
     "publicLink": "É preenchido em",
     "publicLinkText": "o formulário de inscrição público",
     "openBuilder": "Editar o formulário de inscrição",
+    "openReadOnly": "Ver o formulário de inscrição",
     "pagesTitle": "Páginas",
     "emptyTitle": "Ainda não há páginas",
     "emptyDescription": "Adicione uma primeira página e depois as perguntas. As páginas podem ser limitadas a tipos de inscrição ou aparecer só depois de certas respostas.",

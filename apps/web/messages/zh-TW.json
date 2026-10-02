@@ -7356,6 +7356,7 @@
     "publicLink": "填寫地址：",
     "publicLinkText": "公開報名表",
     "openBuilder": "編輯報名表",
+    "openReadOnly": "查看報名表單",
     "pagesTitle": "頁面",
     "emptyTitle": "還沒有頁面",
     "emptyDescription": "先新增第一個頁面，再新增問題。頁面可以限定於某些報名類型，或只在特定回答後顯示。",

@@ -7356,6 +7356,7 @@
     "publicLink": "People fill it in at",
     "publicLinkText": "the public registration form",
     "openBuilder": "Edit the registration form",
+    "openReadOnly": "See the registration form",
     "pagesTitle": "Pages",
     "emptyTitle": "No pages yet",
     "emptyDescription": "Add a first page, then its questions. Pages can be limited to registration types or shown only after certain answers.",
