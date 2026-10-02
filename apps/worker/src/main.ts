@@ -1,3 +1,4 @@
+import { billingEnabled, billingProviderFromEnv } from '@yayatoh/billing';
 import { setPlatformAuditSink, tryAcquireLeadership } from '@yayatoh/db/platform';
 import { createNotifier } from '@yayatoh/notifications';
 import { fakePaymentProvider } from '@yayatoh/payments';
@@ -6,6 +7,7 @@ import { purgeRealtimeMessages } from '@yayatoh/platform';
 import { fakeDomainProvider } from '@yayatoh/tenancy';
 import { sweepAlerts } from './alerts.ts';
 import { badgeBatchJob, enqueueDueBadgeBatches } from './badges.ts';
+import { syncBillingCatalog } from './billing-catalog.ts';
 import { runDueBulkOperations } from './bulk.ts';
 import { bossRelease, campaignReleaseJob, campaignTick } from './campaigns.ts';
 import { DEVICE_WATCHDOG_MS, runDeviceWatchdog } from './device-watchdog.ts';
@@ -199,6 +201,23 @@ const reconcile = () => {
 };
 setTimeout(reconcile, 5 * 60_000).unref();
 setInterval(reconcile, 3_600_000).unref();
+
+// Billing catalog (M6.6a): mirror the provider's plans, prices and Entitlement Features hourly
+// while subscription billing is switched on (BILLING_ENABLED; dormant by default), leader only.
+const billingProvider = billingEnabled() ? billingProviderFromEnv(process.env) : null;
+let syncingCatalog = false;
+const syncCatalog = () => {
+  if (!billingProvider || !release || stopping || syncingCatalog) return;
+  syncingCatalog = true;
+  syncBillingCatalog(billingProvider)
+    .then((r) => console.info(JSON.stringify({ job: 'billing.catalog', ...r })))
+    .catch((err) => console.error('billing.catalog', err))
+    .finally(() => {
+      syncingCatalog = false;
+    });
+};
+setTimeout(syncCatalog, 60_000).unref();
+setInterval(syncCatalog, 3_600_000).unref();
 
 // Pending custom domains (M1.3f): check them again every minute on their backoff schedule, so a
 // domain goes live without "Check now" (leader only; the fake provider until the owner's Vercel).

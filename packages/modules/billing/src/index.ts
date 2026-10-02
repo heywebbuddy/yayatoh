@@ -70,3 +70,4 @@ export {
   linkBillingCustomerCommand,
   setLegacyFeesCommand,
 } from './subscriptions.ts';
+export { type BillingWebhookResult, processBillingWebhook } from './webhook.ts';
