@@ -25,3 +25,4 @@ export {
   seedEmails,
 } from './marketing.ts';
 export { BULK_ACTIONS, bulkStep, ports, runBulk, submitRegistrationForm } from './ports.ts';
+export { warehouseScenario } from './warehouse.ts';
