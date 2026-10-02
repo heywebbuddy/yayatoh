@@ -12,11 +12,9 @@ export function registerWebhooks(app: OpenAPIHono): void {
     'webhook-id': z
       .string()
       .openapi({ description: 'The message id; retries and replays reuse it. Deduplicate on it.' }),
-    'webhook-timestamp': z
-      .string()
-      .openapi({
-        description: 'Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away.',
-      }),
+    'webhook-timestamp': z.string().openapi({
+      description: 'Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away.',
+    }),
     'webhook-signature': z.string().openapi({
       description:
         'Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation).',

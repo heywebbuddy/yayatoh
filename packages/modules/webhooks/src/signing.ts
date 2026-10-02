@@ -28,11 +28,11 @@ export function signWebhook(secret: string, msgId: string, timestamp: number, bo
   return `v1,${mac}`;
 }
 
-export interface SignedHeaders {
+export type SignedHeaders = {
   readonly 'webhook-id': string;
   readonly 'webhook-timestamp': string;
   readonly 'webhook-signature': string;
-}
+};
 
 /** The headers a delivery carries; more than one secret signs it (rotation overlap). */
 export function webhookHeaders(
