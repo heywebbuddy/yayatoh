@@ -214,12 +214,22 @@ export async function evaluateOrgNow(
 export async function watchQuietDevices(
   orgId: string,
   deps: AlertDeps,
-  /** `evaluate: false` when the caller evaluates the org right after anyway (the dev drain). */
-  opts: { now?: Date; evaluate?: boolean } = {},
+  /**
+   * `evaluate: false` when the caller evaluates the org right after anyway; `'devices'` (the dev
+   * drain, batch 3g merge) evaluates only the events the quiet devices were working at, not every
+   * upcoming event of the org (in the shared e2e org that made every drain slow).
+   */
+  opts: { now?: Date; evaluate?: boolean | 'devices' } = {},
 ): Promise<{ quiet: number; changes: AlertChange[] }> {
   const base: Ctx = createCtx({ orgId, actor: { type: 'system', name: 'alerts.device-watchdog' } });
   const ctx: Ctx = opts.now ? { ...base, now: opts.now } : base;
   const quiet = await withTenant(ctx, (tx) => markQuietDevicesTx(tx, ctx, DEVICE_ONLINE_WINDOW_MS));
   if (quiet.length === 0 || opts.evaluate === false) return { quiet: quiet.length, changes: [] };
+  if (opts.evaluate === 'devices') {
+    const changes: AlertChange[] = [];
+    for (const id of new Set(quiet.flatMap((q) => (q.eventId ? [q.eventId] : []))))
+      changes.push(...(await withTenant(ctx, (tx) => evaluateEventAlertsTx(tx, ctx, id, deps, ctx.now))));
+    return { quiet: quiet.length, changes };
+  }
   return { quiet: quiet.length, changes: await evaluateOrgNow(orgId, deps, { now: ctx.now, full: false }) };
 }

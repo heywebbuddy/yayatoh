@@ -719,3 +719,29 @@ describe('isolation', () => {
     ).rejects.toMatchObject({ code: 'not_found' });
   });
 });
+
+describe("the dev drain's scoped watchdog (batch 3g merge)", () => {
+  it('evaluates only the events the quiet devices were working at, and raises devices offline there', async () => {
+    const e = await liveEvent(a, 'Scoped watchdog');
+    const untouched = await liveEvent(a, 'No devices here');
+    const d = await executeCommand(enrollDeviceCommand, { label: 'Door 11' }, a.ctx(), ports);
+    await executeCommand(
+      heartbeatCommand,
+      { batteryPct: 80, queueDepth: 0, clockOffsetMs: 0, eventId: e, checkpointId: null },
+      deviceCtx(d.deviceId, at(50 * MIN)),
+      ports,
+    );
+    const when = at(51 * MIN + 31_000);
+    const r = await watchQuietDevices(a.org.id, deps, { now: when, evaluate: 'devices' });
+    expect(r.quiet).toBeGreaterThanOrEqual(1);
+    expect(r.changes.filter((c) => c.eventId === e && c.rule === 'devicesOffline')).toHaveLength(1);
+    expect(r.changes.some((c) => c.eventId === untouched)).toBe(false);
+    const [alert] = (await executeQuery(listAlertsQuery, { eventId: e }, a.ctx({ now: when }), ports)).filter(
+      (x) => x.rule === 'devicesOffline',
+    );
+    expect(alert).toMatchObject({ severity: 'critical', state: 'open' });
+    await withTenant(systemCtx(a.org.id), (tx) =>
+      tx.execute(sql`update checkin.devices set revoked_at = now() where id = ${d.deviceId}::uuid`),
+    );
+  });
+});
