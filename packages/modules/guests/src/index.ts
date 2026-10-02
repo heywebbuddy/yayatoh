@@ -14,6 +14,15 @@ export {
   parseTags,
   plusOneRefusal,
 } from './domain/guests.ts';
+export {
+  GUEST_IMPORT_FIELDS,
+  GUEST_IMPORT_REJECTIONS,
+  type GuestImportField,
+  type GuestImportRejection,
+  type GuestMapping,
+  guessGuestMapping,
+  parseSheetUrl,
+} from './domain/import.ts';
 export * from './dto.ts';
 export {
   addPartyGuestCommand,
@@ -34,6 +43,23 @@ export {
   updatePartyCommand,
   updatePartyGuestCommand,
 } from './guests.ts';
+export {
+  GuestImportSummaryDto,
+  GuestMappingInput,
+  type GuestTable,
+  type GuestTableInput,
+  guestImportAction,
+  guestImportBulk,
+  guestImportRejectedQuery,
+  guestImportSummaryQuery,
+  IMPORT_TTL_MS,
+  MAX_IMPORT_BYTES,
+  MAX_IMPORT_ROWS,
+  purgeGuestImportsCommand,
+  readGuestTable,
+  stageGuestImportCommand,
+  validateGuestImportCommand,
+} from './imports.ts';
 export { privateColumns } from './private-columns.ts';
 export {
   AGE_CLASSES,
@@ -45,4 +71,8 @@ export {
   type GuestSource,
   HISTORY_ACTIONS,
   type HistoryAction,
+  IMPORT_SOURCES,
+  IMPORT_STATUSES,
+  type ImportSource,
+  type ImportStatus,
 } from './schema.ts';

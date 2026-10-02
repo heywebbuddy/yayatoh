@@ -78,8 +78,13 @@ import {
   addPartyGuestCommand,
   addPlusOneCommand,
   createPartyCommand,
+  guessGuestMapping,
+  guestImportBulk,
   moveGuestCommand,
+  readGuestTable,
+  stageGuestImportCommand,
   updatePartyGuestCommand,
+  validateGuestImportCommand,
 } from '@yayatoh/guests';
 import { type Ctx, createCtx, executeCommand, executeQuery, uuidv7 } from '@yayatoh/kernel';
 import {
@@ -1617,6 +1622,49 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   await executeCommand(
     moveGuestCommand,
     { eventId: event.id, guestId: friend.id, toPartyId: party.id },
+    ctx(),
+    ports,
+  );
+  // M4.1b: a pasted guest list staged, checked and imported (a household with a plus-one and a
+  // child, sealed answers; one rejected row kept sealed for its download), and a second list
+  // left staged, so both import tables hold rows.
+  const pasted = readGuestTable({
+    source: 'paste',
+    text: `Household\tName\tAge\tDietary\tPlus one\n${name} Imported\tImported Guest\t\tNo shellfish\tyes\n${name} Imported\tImported Kid\tchild\t\t\n\tGuest of Nobody\t\t\t\n`,
+  });
+  const guestBatch = await executeCommand(
+    stageGuestImportCommand,
+    {
+      eventId: event.id,
+      source: 'paste',
+      headers: [...pasted.headers],
+      rows: pasted.rows.map((r) => [...r]),
+    },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    validateGuestImportCommand,
+    { eventId: event.id, batchId: guestBatch.batchId, mapping: guessGuestMapping(pasted.headers) },
+    ctx(),
+    ports,
+  );
+  const guestImport = await executeCommand(
+    guestImportBulk.start,
+    { eventId: event.id, selection: { filter: { batchId: guestBatch.batchId } }, params: {} },
+    ctx(),
+    ports,
+  );
+  await runBulk(org.id, guestImport.operationId);
+  await executeCommand(
+    stageGuestImportCommand,
+    {
+      eventId: event.id,
+      source: 'csv',
+      fileName: 'later.csv',
+      headers: ['First name', 'Last name', 'Address'],
+      rows: [['Staged', 'Guest', '2 Fixture Road']],
+    },
     ctx(),
     ports,
   );

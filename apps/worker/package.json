@@ -18,8 +18,8 @@
     "metrics:rebuild": "node scripts/metrics-rebuild.ts"
   },
   "dependencies": {
-    "@yayatoh/attendees": "workspace:*",
     "@yayatoh/alerts": "workspace:*",
+    "@yayatoh/attendees": "workspace:*",
     "@yayatoh/audiences": "workspace:*",
     "@yayatoh/auth": "workspace:*",
     "@yayatoh/automations": "workspace:*",
@@ -30,6 +30,7 @@
     "@yayatoh/db": "workspace:*",
     "@yayatoh/events": "workspace:*",
     "@yayatoh/forms": "workspace:*",
+    "@yayatoh/guests": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
     "@yayatoh/marketplace": "workspace:*",
     "@yayatoh/media": "workspace:*",
