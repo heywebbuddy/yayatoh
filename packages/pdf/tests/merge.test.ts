@@ -28,3 +28,24 @@ describe('Gotenberg merge (M5.5a batch PDFs)', () => {
     await expect(r.merge?.([new Uint8Array([1])])).rejects.toThrow(/gotenberg merge: 400/);
   });
 });
+
+describe('Gotenberg render retries (cold Chromium)', () => {
+  const ok = () => new Response(new Uint8Array([37, 80, 68, 70]));
+  const busy = () => new Response('browser start already in progress', { status: 500 });
+
+  it('waits out a slow first start: timeout, then "start in progress", then the PDF', async () => {
+    const answers = [
+      () => Promise.reject(Object.assign(new Error('timed out'), { name: 'TimeoutError' })),
+      () => Promise.resolve(busy()),
+      () => Promise.resolve(ok()),
+    ];
+    let calls = 0;
+    const r = gotenbergRenderer({
+      url: 'http://g:3000',
+      retryDelaysMs: [0, 0],
+      fetch: (async () => (answers[calls++] as () => Promise<Response>)()) as unknown as typeof fetch,
+    });
+    expect(new TextDecoder().decode(await r.render({ html: '<p>x</p>' }))).toBe('%PDF');
+    expect(calls).toBe(3);
+  });
+});
