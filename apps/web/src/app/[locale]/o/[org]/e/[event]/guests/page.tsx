@@ -14,6 +14,7 @@ import { Download, Plus, Search as SearchIcon } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import type { ReactNode } from 'react';
+import { Crumbs } from '@/components/crumbs.tsx';
 import { type FieldSpec, ProgramForm } from '@/components/program-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatNumber } from '@/lib/format.ts';
@@ -320,6 +321,15 @@ export default async function GuestsPage({
   return (
     <>
       <PageHeader
+        breadcrumb={
+          <Crumbs
+            items={[
+              { label: data.org.name, href: `/o/${org}` },
+              { label: ev.name, href: `/o/${org}/e/${event}` },
+              { label: t(navLabelKey(profile, nav)) },
+            ]}
+          />
+        }
         title={t(navLabelKey(profile, nav))}
         tag={<Tag>{t(`profiles.${profile}`)}</Tag>}
         description={tp('subtitle')}

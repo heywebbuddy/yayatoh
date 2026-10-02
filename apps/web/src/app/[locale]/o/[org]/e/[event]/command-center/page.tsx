@@ -5,7 +5,7 @@ import { ScanLine } from 'lucide-react';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { CommandCenterBoard } from '@/components/command-center/board.tsx';
 import { ModePanel } from '@/components/command-center/mode-panel.tsx';
-import { eventWhen } from '@/components/crumbs.tsx';
+import { Crumbs, eventWhen } from '@/components/crumbs.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { commandCenterCtx, loadWidget, WIDGETS, widgetChannels } from '@/server/command-center.ts';
 import { loadEvent } from '@/server/console.ts';
@@ -65,6 +65,15 @@ export default async function CommandCenterPage({
       data-role={view.role}
     >
       <PageHeader
+        breadcrumb={
+          <Crumbs
+            items={[
+              { label: data.org.name, href: `/o/${org}` },
+              { label: ev.name, href: base },
+              { label: t('title') },
+            ]}
+          />
+        }
         title={t('title')}
         tag={<Tag>{t(`role.${view.role}`)}</Tag>}
         meta={
