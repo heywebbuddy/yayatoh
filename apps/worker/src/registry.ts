@@ -10,7 +10,7 @@ import {
   staffAlertsSubscriber,
 } from '@yayatoh/checkin';
 import { deviceBoardPublisher, publishMetricsChangedTx } from '@yayatoh/command-center';
-import { giftOutcomesSubscriber } from '@yayatoh/donations';
+import { giftOutcomesSubscriber, receiptIssuer, statementMailer } from '@yayatoh/donations';
 import { findEventTx, portalInviteMailer } from '@yayatoh/events';
 import { registrationResumeMailer } from '@yayatoh/forms';
 import { listingsProjector } from '@yayatoh/marketplace';
@@ -137,6 +137,9 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     alertEvaluator({ notifier }),
     // M4.8a: gift orders' outcomes (paid, failed, lapsed) move their gifts.
     giftOutcomesSubscriber,
+    // M4.8b: a receipt per paid gift or charity-ticket order, and year-end statements, to the donor.
+    receiptIssuer({ notifier, appOrigin }),
+    statementMailer({ notifier, appOrigin }),
   ];
 }
 
