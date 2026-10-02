@@ -3298,7 +3298,38 @@
       "attendees_read": "Deelnemers lezen",
       "attendees_write": "Deelnemers wijzigen en tickets opnieuw versturen",
       "checkin_scan": "Tickets scannen"
-    }
+    },
+    "expiry": "Verloopt",
+    "expiryHint": "Een sleutel die verloopt moet je vóór die tijd roteren. Korter is veiliger.",
+    "expiryIn": {
+      "30": "Over 30 dagen",
+      "90": "Over 90 dagen",
+      "365": "Over een jaar",
+      "never": "Nooit"
+    },
+    "expiresColumn": "Verloopt",
+    "createdBy": "Gemaakt door",
+    "createdByPlatform": "Yayatoh",
+    "expired": "Verlopen",
+    "rotatedStatus": "Geroteerd",
+    "rotate": "Roteren",
+    "rotateNamed": "Sleutel {name} roteren",
+    "overlap": "De oude sleutel blijft werken",
+    "overlapFor": {
+      "h0": "Helemaal niet: nu stoppen",
+      "h1": "1 uur lang",
+      "h24": "24 uur lang",
+      "h168": "7 dagen lang"
+    },
+    "rotateNow": "Nu roteren",
+    "rotateNowNamed": "Sleutel {name} nu roteren",
+    "rotated": "Sleutel ‘{name}’ geroteerd. De oude sleutel werkt tot {until}.",
+    "rotatedNow": "Sleutel ‘{name}’ geroteerd. De oude sleutel werkt niet meer.",
+    "related": "API",
+    "usageLink": "Gebruik",
+    "sandboxesLink": "Sandboxes",
+    "rateLimitNote": "Elke sleutel mag {perKey, number} verzoeken per minuut doen, alle sleutels samen {perOrg, number}.",
+    "noApiAccess": "API-toegang hoort niet bij het abonnement van deze organisatie: haar sleutels worden geweigerd."
   },
   "market": {
     "wordmark": "Yayatoh",
@@ -4606,6 +4637,11 @@
     "terminated": {
       "title": "Deze organisatie is gesloten",
       "body": "Yayatoh-support heeft haar gesloten. De openbare pagina's zijn offline en er kan niets meer worden gewijzigd. Als eigenaar kun je haar nog openen en je gegevens downloaden, bijvoorbeeld via Activiteit."
+    },
+    "sandbox": {
+      "label": "Sandbox",
+      "title": "SANDBOX",
+      "body": "Dit is een testorganisatie. Betalingen zijn nep en er wordt niets afgeschreven; de evenementen verschijnen nooit op de marktplaats."
     }
   },
   "seatingDates": {
@@ -9007,5 +9043,56 @@
       "questionNotAllowed": "Die vraag kan niet op badges worden geprint."
     },
     "elements": "Elementen aan deze kant"
+  },
+  "apiUsage": {
+    "title": "API-gebruik",
+    "subtitle": "Verzoeken met de API-sleutels van deze organisatie, per dag in de tijdzone van de organisatie.",
+    "back": "API-sleutels",
+    "range": "Periode",
+    "lastDays": "Laatste {days, number} dagen",
+    "totalsTitle": "Totalen",
+    "requests": "Verzoeken",
+    "errors": "Fouten",
+    "rateLimited": "Begrensd",
+    "perDayTitle": "Verzoeken per dag",
+    "perKeyTitle": "Verzoeken per sleutel",
+    "day": "Dag",
+    "showData": "Gegevens tonen",
+    "emptyTitle": "Geen API-verzoeken in deze periode",
+    "emptyDescription": "Verzoeken met je sleutels verschijnen hier meteen. Maak een sleutel aan op de pagina API-sleutels."
+  },
+  "sandboxes": {
+    "title": "Sandboxes",
+    "subtitle": "Testorganisaties die aan deze gekoppeld zijn, om de API en het afrekenen veilig te proberen.",
+    "noAccessTitle": "Alleen eigenaren en beheerders beheren sandboxes",
+    "noAccessDescription": "Vraag een eigenaar of beheerder van deze organisatie er een voor je te maken.",
+    "factsTitle": "Zo werkt een sandbox",
+    "factPayments": "Betalingen zijn altijd nep: er wordt nooit iets afgeschreven, hoe het platform ook is ingesteld.",
+    "factMarketplace": "De evenementen verschijnen nooit op de marktplaats.",
+    "factData": "Hij begint met een voorbeeldevenement en twee tickettypes.",
+    "factKeys": "Hij heeft eigen API-sleutels en een eigen team. Jij bent de eigenaar.",
+    "createTitle": "Sandbox maken",
+    "name": "Naam",
+    "nameHint": "Bijvoorbeeld ‘Staging’ of ‘Zapier-test’.",
+    "nameRequired": "Geef de sandbox een naam.",
+    "create": "Sandbox maken",
+    "creating": "Bezig met maken…",
+    "created": "Sandbox ‘{name}’ gemaakt met een voorbeeldevenement.",
+    "open": "Sandbox {name} openen",
+    "openShort": "Openen",
+    "limit": "Deze organisatie heeft al {max, number} sandboxes, het maximum. Verwijder er eerst een.",
+    "sandboxOfSandbox": "Een sandbox kan geen eigen sandboxes hebben",
+    "inSandboxDescription": "Maak sandboxes vanuit de organisatie waar deze sandbox bij hoort.",
+    "listTitle": "Je sandboxes",
+    "emptyTitle": "Nog geen sandboxes",
+    "emptyDescription": "Maak er een om de API, het afrekenen en het inchecken te proberen met voorbeeldgegevens en nepbetalingen.",
+    "address": "Adres",
+    "createdAt": "Gemaakt",
+    "actions": "Acties",
+    "delete": "Verwijderen",
+    "deleteNamed": "Sandbox {name} verwijderen",
+    "deleteWarning": "Hij wordt definitief gesloten: de pagina’s gaan offline, leden en sleutels verliezen toegang.",
+    "deleteConfirm": "Definitief verwijderen",
+    "deleteConfirmNamed": "Sandbox {name} definitief verwijderen"
   }
 }

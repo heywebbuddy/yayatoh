@@ -3298,7 +3298,38 @@
       "attendees_read": "读取参会者",
       "attendees_write": "修改参会者并重新发送门票",
       "checkin_scan": "扫描门票"
-    }
+    },
+    "expiry": "过期时间",
+    "expiryHint": "会过期的密钥必须在到期前轮换。有效期越短越安全。",
+    "expiryIn": {
+      "30": "30 天后",
+      "90": "90 天后",
+      "365": "一年后",
+      "never": "永不"
+    },
+    "expiresColumn": "过期时间",
+    "createdBy": "创建者",
+    "createdByPlatform": "Yayatoh",
+    "expired": "已过期",
+    "rotatedStatus": "已轮换",
+    "rotate": "轮换",
+    "rotateNamed": "轮换密钥 {name}",
+    "overlap": "旧密钥继续可用",
+    "overlapFor": {
+      "h0": "不保留：立即停用",
+      "h1": "1 小时",
+      "h24": "24 小时",
+      "h168": "7 天"
+    },
+    "rotateNow": "立即轮换",
+    "rotateNowNamed": "立即轮换密钥 {name}",
+    "rotated": "密钥“{name}”已轮换。旧密钥可用至 {until}。",
+    "rotatedNow": "密钥“{name}”已轮换。旧密钥已停用。",
+    "related": "API",
+    "usageLink": "用量",
+    "sandboxesLink": "沙盒",
+    "rateLimitNote": "每个密钥每分钟可发出 {perKey, number} 个请求，所有密钥合计 {perOrg, number} 个。",
+    "noApiAccess": "此组织的套餐不包含 API 访问：其密钥会被拒绝。"
   },
   "market": {
     "wordmark": "Yayatoh",
@@ -4606,6 +4637,11 @@
     "terminated": {
       "title": "此组织已关闭",
       "body": "Yayatoh 支持团队已关闭此组织。其公开页面已下线，无法再做任何更改。作为所有者，你仍可打开它并下载你的数据，例如在“动态”中。"
+    },
+    "sandbox": {
+      "label": "沙盒",
+      "title": "沙盒",
+      "body": "这是一个测试组织。付款为模拟付款，不会扣款；其活动永远不会出现在市场上。"
     }
   },
   "seatingDates": {
@@ -9007,5 +9043,56 @@
       "questionNotAllowed": "该问题不能打印在胸卡上。"
     },
     "elements": "此面的元素"
+  },
+  "apiUsage": {
+    "title": "API 用量",
+    "subtitle": "使用此组织 API 密钥发出的请求，按组织时区的每天统计。",
+    "back": "API 密钥",
+    "range": "时间段",
+    "lastDays": "最近 {days, number} 天",
+    "totalsTitle": "合计",
+    "requests": "请求",
+    "errors": "错误",
+    "rateLimited": "被限流",
+    "perDayTitle": "每天请求数",
+    "perKeyTitle": "每个密钥的请求数",
+    "day": "日期",
+    "showData": "显示数据",
+    "emptyTitle": "此时间段内没有 API 请求",
+    "emptyDescription": "使用你的密钥发出的请求会立即显示在这里。请在 API 密钥页面创建密钥。"
+  },
+  "sandboxes": {
+    "title": "沙盒",
+    "subtitle": "与此组织关联的测试组织，可安全地试用 API 和结账。",
+    "noAccessTitle": "只有所有者和管理员可以管理沙盒",
+    "noAccessDescription": "请让此组织的所有者或管理员为你创建一个。",
+    "factsTitle": "沙盒如何运作",
+    "factPayments": "付款始终是模拟的：无论平台如何设置，都不会扣款。",
+    "factMarketplace": "其活动永远不会出现在市场上。",
+    "factData": "初始包含一个示例活动和两种票种。",
+    "factKeys": "它有自己的 API 密钥和团队。你是它的所有者。",
+    "createTitle": "创建沙盒",
+    "name": "名称",
+    "nameHint": "例如“Staging”或“Zapier 测试”。",
+    "nameRequired": "请为沙盒命名。",
+    "create": "创建沙盒",
+    "creating": "正在创建…",
+    "created": "已创建沙盒“{name}”，并附带一个示例活动。",
+    "open": "打开沙盒 {name}",
+    "openShort": "打开",
+    "limit": "此组织已有 {max, number} 个沙盒，已达上限。请先删除一个。",
+    "sandboxOfSandbox": "沙盒不能再拥有沙盒",
+    "inSandboxDescription": "请在此沙盒所属的组织中创建沙盒。",
+    "listTitle": "你的沙盒",
+    "emptyTitle": "还没有沙盒",
+    "emptyDescription": "创建一个沙盒，用示例数据和模拟付款试用 API、结账和签到。",
+    "address": "地址",
+    "createdAt": "创建时间",
+    "actions": "操作",
+    "delete": "删除",
+    "deleteNamed": "删除沙盒 {name}",
+    "deleteWarning": "沙盒将被永久关闭：页面下线，成员和密钥失去访问权限。",
+    "deleteConfirm": "永久删除",
+    "deleteConfirmNamed": "永久删除沙盒 {name}"
   }
 }
