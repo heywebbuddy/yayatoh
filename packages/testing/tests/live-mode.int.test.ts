@@ -18,7 +18,7 @@ import {
   undoAdmissionCommand,
 } from '@yayatoh/checkin';
 import {
-  assistanceSlotWidget,
+  assistanceWidget,
   capacityWidget,
   checkinSpeedWidget,
   createDisplayLinkCommand,
@@ -391,8 +391,15 @@ describe('tiles fed from scans and projector events', () => {
     expect((await load(staffPresenceWidget(null), owner(at(3 * MIN)))).people).toEqual([]);
   });
 
-  it('keeps the guest-assistance slot for M3.3b, and refuses live widgets to roles without them', async () => {
-    expect(await load(assistanceSlotWidget, door())).toEqual({ engine: 'pending', open: 0 });
+  it("fills the guest-assistance slot with M3.3b's queue, and refuses live widgets to roles without them", async () => {
+    // Batch 3g merge: M3.3b's help queue is the registry's assistance widget (no requests yet).
+    expect(await load(assistanceWidget, door())).toMatchObject({
+      waiting: 0,
+      assigned: 0,
+      inProgress: 0,
+      overdue: 0,
+      top: [],
+    });
     const finance = uuidv7();
     await executeCommand(addMemberCommand, { userId: finance, role: 'finance' }, a.ctx(), ports);
     for (const w of [
@@ -400,6 +407,7 @@ describe('tiles fed from scans and projector events', () => {
       checkinSpeedWidget,
       scanIssuesWidget,
       capacityWidget,
+      assistanceWidget,
     ] as WidgetDef<unknown>[])
       await expect(load(w, userCtx(finance, a.org.id))).rejects.toMatchObject({ code: 'forbidden' });
   });

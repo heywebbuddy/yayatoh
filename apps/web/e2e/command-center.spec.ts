@@ -213,7 +213,7 @@ test.describe('Command Center (M3.2a)', () => {
       'scanIssues',
       'entrances',
       'deviceBoard',
-      // M3.3a: staff presence and the guest-assistance slot (M3.3b).
+      // M3.3a: staff presence; M3.3b's guest-assistance queue.
       'staffPresence',
       'assistance',
       'timeline',

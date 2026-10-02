@@ -69,8 +69,8 @@
         "org-status": "{status, select, suspended {Yayatoh 已暫停此組織} reactivated {此組織已恢復上線} other {Yayatoh 已關閉此組織}}"
       },
       "alerts": {
-        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords} 位參加者沒有座位}}} undistributed {{count, plural, other {{countWords} 張已購票券尚未分發}}} paymentsFailed {{count, plural, other {{countWords} 筆付款失敗}}} paymentsStuck {{count, plural, other {{countWords} 筆付款卡住了}}} refundSurge {{count, plural, other {過去一小時內有 {countWords} 筆退款}}} devicesOffline {{count, plural, other {{countWords} 台報到裝置離線}}} devicesLowBattery {{count, plural, other {{countWords} 台報到裝置電量不足}}} devicesBacklog {{count, plural, other {{countWords} 台報到裝置有待同步的掃描}}} capacityNear {場地已滿 {count}%} capacityFull {場地已額滿（{count}%）} sellOut {已售出 {count}% 的票券} salesPace {票券銷售達到目標進度的 {count}%} readiness {{count, plural, other {{countWords} 個設定步驟阻礙了此活動}}} domain {{count, plural, other {{countWords} 個自訂網域有問題}}} payoutsPastDue {{count, plural, other {收款帳戶有 {countWords} 項要求已逾期}}} deliverability {電子郵件送達率需要注意} automationFailed {{count, plural, other {今天有 {countWords} 則訊息或批次操作失敗}}} other {警示}}",
-        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords} 位參加者沒有座位}}} undistributed {{count, plural, other {{countWords} 張已購票券尚未分發}}} paymentsFailed {{count, plural, other {{countWords} 筆付款失敗}}} paymentsStuck {{count, plural, other {{countWords} 筆付款卡住了}}} refundSurge {{count, plural, other {過去一小時內有 {countWords} 筆退款}}} devicesOffline {{count, plural, other {{countWords} 台報到裝置離線}}} devicesLowBattery {{count, plural, other {{countWords} 台報到裝置電量不足}}} devicesBacklog {{count, plural, other {{countWords} 台報到裝置有待同步的掃描}}} capacityNear {場地已滿 {count}%} capacityFull {場地已額滿（{count}%）} sellOut {已售出 {count}% 的票券} salesPace {票券銷售達到目標進度的 {count}%} readiness {{count, plural, other {{countWords} 個設定步驟阻礙了此活動}}} domain {{count, plural, other {{countWords} 個自訂網域有問題}}} payoutsPastDue {{count, plural, other {收款帳戶有 {countWords} 項要求已逾期}}} deliverability {電子郵件送達率需要注意} automationFailed {{count, plural, other {今天有 {countWords} 則訊息或批次操作失敗}}} other {警示}}",
+        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords} 位參加者沒有座位}}} undistributed {{count, plural, other {{countWords} 張已購票券尚未分發}}} paymentsFailed {{count, plural, other {{countWords} 筆付款失敗}}} paymentsStuck {{count, plural, other {{countWords} 筆付款卡住了}}} refundSurge {{count, plural, other {過去一小時內有 {countWords} 筆退款}}} devicesOffline {{count, plural, other {{countWords} 台報到裝置離線}}} devicesLowBattery {{count, plural, other {{countWords} 台報到裝置電量不足}}} devicesBacklog {{count, plural, other {{countWords} 台報到裝置有待同步的掃描}}} capacityNear {場地已滿 {count}%} capacityFull {場地已額滿（{count}%）} sellOut {已售出 {count}% 的票券} salesPace {票券銷售達到目標進度的 {count}%} readiness {{count, plural, other {{countWords} 個設定步驟阻礙了此活動}}} domain {{count, plural, other {{countWords} 個自訂網域有問題}}} payoutsPastDue {{count, plural, other {收款帳戶有 {countWords} 項要求已逾期}}} deliverability {電子郵件送達率需要注意} automationFailed {{count, plural, other {今天有 {countWords} 則訊息或批次操作失敗}}} assistanceOverdue {{count, plural, other {{countWords} 個求助請求等待過久}}} other {警示}}",
+        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords} 位參加者沒有座位}}} undistributed {{count, plural, other {{countWords} 張已購票券尚未分發}}} paymentsFailed {{count, plural, other {{countWords} 筆付款失敗}}} paymentsStuck {{count, plural, other {{countWords} 筆付款卡住了}}} refundSurge {{count, plural, other {過去一小時內有 {countWords} 筆退款}}} devicesOffline {{count, plural, other {{countWords} 台報到裝置離線}}} devicesLowBattery {{count, plural, other {{countWords} 台報到裝置電量不足}}} devicesBacklog {{count, plural, other {{countWords} 台報到裝置有待同步的掃描}}} capacityNear {場地已滿 {count}%} capacityFull {場地已額滿（{count}%）} sellOut {已售出 {count}% 的票券} salesPace {票券銷售達到目標進度的 {count}%} readiness {{count, plural, other {{countWords} 個設定步驟阻礙了此活動}}} domain {{count, plural, other {{countWords} 個自訂網域有問題}}} payoutsPastDue {{count, plural, other {收款帳戶有 {countWords} 項要求已逾期}}} deliverability {電子郵件送達率需要注意} automationFailed {{count, plural, other {今天有 {countWords} 則訊息或批次操作失敗}}} assistanceOverdue {{count, plural, other {{countWords} 個求助請求等待過久}}} other {警示}}",
         "alert-urgent-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords} 位參加者沒有座位}}} undistributed {{count, plural, other {{countWords} 張已購票券尚未分發}}} paymentsFailed {{count, plural, other {{countWords} 筆付款失敗}}} paymentsStuck {{count, plural, other {{countWords} 筆付款卡住了}}} refundSurge {{count, plural, other {過去一小時內有 {countWords} 筆退款}}} devicesOffline {{count, plural, other {{countWords} 台報到裝置離線}}} devicesLowBattery {{count, plural, other {{countWords} 台報到裝置電量不足}}} devicesBacklog {{count, plural, other {{countWords} 台報到裝置有待同步的掃描}}} capacityNear {場地已滿 {count}%} capacityFull {場地已額滿（{count}%）} sellOut {已售出 {count}% 的票券} salesPace {票券銷售達到目標進度的 {count}%} readiness {{count, plural, other {{countWords} 個設定步驟阻礙了此活動}}} domain {{count, plural, other {{countWords} 個自訂網域有問題}}} payoutsPastDue {{count, plural, other {收款帳戶有 {countWords} 項要求已逾期}}} deliverability {電子郵件送達率需要注意} automationFailed {{count, plural, other {今天有 {countWords} 則訊息或批次操作失敗}}} other {警示}}"
       }
     },
@@ -315,7 +315,8 @@
     "campaigns": "行銷活動",
     "journeys": "旅程",
     "disputes": "爭議",
-    "supportMacros": "客服巨集"
+    "supportMacros": "客服巨集",
+    "assistance": "求助請求"
   },
   "vocab": {
     "attendee": "參加者",
@@ -6264,9 +6265,7 @@
         "since": "自 {time} 起"
       },
       "assistance": {
-        "title": "來賓協助",
-        "pending": "來賓和入口工作人員的求助請求會顯示在這裡。",
-        "open": "{count, plural, other {# 個待處理請求}}"
+        "title": "來賓協助"
       }
     },
     "tv": {
@@ -6377,7 +6376,8 @@
       "domain": "修正網域",
       "payoutsPastDue": "更新收款帳戶",
       "deliverability": "開啟訊息狀態",
-      "automationFailed": "開啟訊息狀態"
+      "automationFailed": "開啟訊息狀態",
+      "assistanceOverdue": "開啟求助請求"
     },
     "rules": {
       "unseated": "{count, plural, other {{countWords} 位參加者沒有座位}}",
@@ -6396,7 +6396,8 @@
       "domain": "{count, plural, other {{countWords} 個自訂網域有問題}}",
       "payoutsPastDue": "{count, plural, other {收款帳戶有 {countWords} 項要求已逾期}}",
       "deliverability": "電子郵件送達率需要注意",
-      "automationFailed": "{count, plural, other {今天有 {countWords} 則訊息或批次操作失敗}}"
+      "automationFailed": "{count, plural, other {今天有 {countWords} 則訊息或批次操作失敗}}",
+      "assistanceOverdue": "{count, plural, other {{countWords} 個求助請求等待過久}}"
     },
     "widget": {
       "title": "警示",
@@ -6510,7 +6511,9 @@
       "backlogTitle": "掃描待同步",
       "backlogBody": "{label} 有 {count} 筆掃描待同步。",
       "capacityNearTitle": "即將額滿",
-      "capacityNearBody": "預計賓客中已有 {percent}% 入場。"
+      "capacityNearBody": "預計賓客中已有 {percent}% 入場。",
+      "assistanceTitle": "現在需要協助",
+      "assistanceBody": "緊急求助請求 {label}。開啟工作人員模式接手。"
     },
     "supervisorSignIn": "主管模式需要主管在此手機上登入。",
     "signIn": "以主管身分登入",
@@ -8493,5 +8496,189 @@
     "showTable": "以表格顯示",
     "minute": "時間",
     "checkedInColumn": "報到人數"
+  },
+  "assistance": {
+    "pageTitle": "求助請求",
+    "description": "{event} 中來賓透過座位查詢發出的「需要協助」請求與入口工作人員的請求，最緊急的排在前面。",
+    "noAccessTitle": "無權查看求助請求",
+    "noAccess": "你的角色無法查看此活動的求助請求。",
+    "statusLabel": "顯示請求",
+    "tab": {
+      "open": "未關閉",
+      "closed": "已關閉"
+    },
+    "readOnly": "你可以查看請求，但你的角色無法接手或變更。",
+    "empty": {
+      "openTitle": "沒有未關閉的求助請求",
+      "openDescription": "來賓和入口工作人員的新請求一到就會顯示在這裡。",
+      "closedTitle": "還沒有已關閉的請求",
+      "closedDescription": "已解決和已取消的請求顯示在這裡。"
+    },
+    "title": "#{number} · {reason}",
+    "number": "#{number}",
+    "reason": {
+      "seat": "座位問題",
+      "accessibility": "無障礙",
+      "medical": "醫療",
+      "lost_item": "物品遺失",
+      "other": "其他",
+      "backup": "支援",
+      "supervisor": "主管",
+      "security": "保全",
+      "device": "裝置問題"
+    },
+    "priority": {
+      "urgent": "緊急",
+      "high": "高優先",
+      "normal": "一般優先"
+    },
+    "state": {
+      "new": "等待中",
+      "assigned": "已指派",
+      "in_progress": "處理中",
+      "resolved": "已解決",
+      "cancelled": "已取消"
+    },
+    "mineState": "由你負責",
+    "overdue": "已逾時",
+    "sla": {
+      "takeWithin": "請在 {time} 內接手",
+      "overdueBy": "已逾時 {time}"
+    },
+    "source": {
+      "guest": "來自來賓",
+      "staff": "來自入口工作人員"
+    },
+    "askedAt": "{time} 請求",
+    "unassigned": "尚無人接手",
+    "assignedTo": "負責人：{name}",
+    "aDevice": "掃描裝置",
+    "you": "你",
+    "unknownPerson": "前團隊成員",
+    "guest": {
+      "title": "需要協助嗎？",
+      "description": "告訴活動工作人員你需要什麼，他們會來找你。",
+      "closedTitle": "求助請求已關閉",
+      "closedDescription": "此活動不在這裡接受求助請求。請向附近的工作人員求助。",
+      "invalidTitle": "此票券連結對本活動無效",
+      "invalidDescription": "請透過票券上的連結開啟座位查詢，或向附近的工作人員求助。",
+      "back": "返回座位查詢",
+      "reasonLegend": "你需要哪方面的協助？",
+      "emergencyTitle": "緊急情況請立即求救",
+      "emergencyBody": "如果有人嚴重受傷或身處危險，請先撥打當地緊急電話（台灣 119，美國 911），再送出此請求，讓工作人員能找到你。",
+      "locationLabel": "你在哪裡？（選填）",
+      "locationHint": "你的座位、排、桌號或附近的標誌。",
+      "noteLabel": "還有什麼需要工作人員知道的嗎？（選填）",
+      "privacy": "只有活動工作人員能看到這些資訊，用於協助你，絕不會用於行銷。",
+      "submit": "請求協助",
+      "errors": {
+        "reason": "請選擇你需要哪方面的協助。",
+        "noteTooLong": "備註請少於 500 個字元。",
+        "locationTooLong": "位置請少於 120 個字元。",
+        "invalidTicket": "此票券連結對本活動無效。",
+        "tooMany": "你已有 3 個請求在等待。工作人員正在趕來。",
+        "rateLimited": "此裝置的請求過多。請在 {minutes, plural, other {# 分鐘}}後再試。",
+        "closed": "此活動目前不接受求助請求。",
+        "internal": "發生問題。請向附近的工作人員求助。"
+      },
+      "statusTitle": "求助請求 #{number}",
+      "askedAbout": "你請求的是：{reason}",
+      "state": {
+        "new": "等待工作人員",
+        "assigned": "工作人員正在趕來",
+        "in_progress": "工作人員正在協助你",
+        "resolved": "已解決",
+        "cancelled": "工作人員已關閉"
+      },
+      "stateHint": {
+        "new": "你的請求正在排隊。可以的話請留在原地。",
+        "assigned": "團隊中有人已接手你的請求，正在趕來。",
+        "in_progress": "工作人員正在協助你。",
+        "resolved": "工作人員已將你的請求標為已解決。如仍需協助，請再次請求。",
+        "cancelled": "工作人員已關閉你的請求。如仍需協助，請再次請求。"
+      },
+      "lastUpdate": "最後更新 {time}",
+      "emergencyShort": "緊急情況請立即撥打當地緊急電話。",
+      "refresh": "重新整理狀態",
+      "needHelp": "需要協助嗎？",
+      "needTicketLink": "請透過票券上的連結開啟座位查詢，向活動工作人員求助。",
+      "needHelpHint": "關於座位、無障礙、身體不適或物品遺失，都可以向活動工作人員求助。",
+      "askButton": "請求協助",
+      "ticketLink": "在活動現場：查詢座位或請求協助",
+      "ticketLinkLabel": "在活動現場查詢座位或請求協助（票券 {serial}）"
+    },
+    "where": "位置：{place}",
+    "atEntrance": "在 {name}",
+    "fromDevice": "發自 {device}",
+    "activityTitle": "{count, plural, other {# 則動態}}",
+    "actor": {
+      "guest": "來賓",
+      "member": "團隊成員",
+      "device": "掃描裝置",
+      "system": "系統"
+    },
+    "activity": {
+      "created": "{who} 請求協助",
+      "assigned": "{who} 指派給 {to}",
+      "started": "{who} 開始處理",
+      "resolved": "{who} 已解決",
+      "cancelled": "{who} 已取消",
+      "note": "{who}：{note}"
+    },
+    "take": "接手",
+    "takeLabel": "接手 {title}",
+    "start": "開始",
+    "startLabel": "開始處理 {title}",
+    "resolve": "解決",
+    "resolveLabel": "解決 {title}",
+    "cancel": "取消請求",
+    "cancelLabel": "取消 {title}",
+    "assign": "指派",
+    "assignLabel": "將 {title} 指派給",
+    "choosePerson": "選擇人員",
+    "noteLabel": "{title} 的備註",
+    "addNote": "新增備註",
+    "done": {
+      "take": "你已接手 {title}。",
+      "assign": "{title} 已指派。",
+      "start": "{title} 處理中。",
+      "resolve": "{title} 已解決。",
+      "cancel": "{title} 已取消。",
+      "note": "已為 {title} 新增備註。"
+    },
+    "changed": "此請求在這段期間已變更。清單已更新，請再試一次。",
+    "failed": "操作未成功，請再試一次。",
+    "errors": {
+      "assignee": "請選擇要指派給誰。",
+      "note": "請先寫備註。"
+    },
+    "live": {
+      "connecting": "連線中…",
+      "live": "即時",
+      "offline": "離線 — 重新載入以查看最新內容"
+    },
+    "widget": {
+      "waiting": "等待中",
+      "assigned": "已指派",
+      "inProgress": "處理中",
+      "overdue": "已逾時",
+      "none": "沒有未關閉的求助請求。",
+      "open": "開啟求助請求"
+    },
+    "scan": {
+      "queueTitle": "求助請求",
+      "loading": "正在載入求助請求…",
+      "unavailable": "目前無法載入求助請求。",
+      "none": "沒有未關閉的求助請求。",
+      "askTitle": "請求協助",
+      "askHint": "你的請求會連同此裝置及其所在入口一起送給活動團隊。",
+      "reasonLabel": "你需要什麼？",
+      "noteLabel": "備註（選填）",
+      "send": "送出請求",
+      "sent": "求助請求 #{number} 已送出。",
+      "offline": "你目前離線。裝置恢復連線後請再試一次。",
+      "invalid": "請選擇你需要什麼。"
+    },
+    "guestLine": "{name} · 票券 {ticket}"
   }
 }

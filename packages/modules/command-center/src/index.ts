@@ -12,8 +12,6 @@ export {
   tvBoardQuery,
 } from './display.ts';
 export {
-  AssistanceWidgetDto,
-  assistanceSlotWidget,
   CapacityWidgetDto,
   CheckinSpeedWidgetDto,
   capacityWidget,
@@ -48,7 +46,9 @@ export {
 export {
   AlertsWidgetDto,
   type AnyWidgetDef,
+  AssistanceWidgetDto,
   alertsSlotWidget,
+  assistanceWidget,
   CheckinsWidgetDto,
   checkinsWidget,
   createWidgetRegistry,

@@ -238,6 +238,12 @@ export const STAFF_ALERT_KINDS = [
   'capacity_near',
 ] as const;
 export type StaffAlertKind = (typeof STAFF_ALERT_KINDS)[number];
+/**
+ * Everything a staff device can be pushed: the staff alerts plus M3.3b's urgent and
+ * high-priority help requests at its event (`assistance`, placeholder `{label}` = where).
+ */
+export const STAFF_PUSH_KINDS = [...STAFF_ALERT_KINDS, 'assistance'] as const;
+export type StaffPushKind = (typeof STAFF_PUSH_KINDS)[number];
 
 /**
  * Staff web push (M3.4a), opted in per device from the Scan PWA's staff mode. One subscription per
@@ -310,7 +316,7 @@ export const staffAlertPushes = tenantTable(
     }).onDelete('cascade'),
     check(
       'staff_alert_pushes_kind_check',
-      sql.raw(`kind in (${STAFF_ALERT_KINDS.map((k) => `'${k}'`).join(', ')})`),
+      sql.raw(`kind in (${STAFF_PUSH_KINDS.map((k) => `'${k}'`).join(', ')})`),
     ),
     check(
       'staff_alert_pushes_status_check',

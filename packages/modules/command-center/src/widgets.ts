@@ -1,3 +1,4 @@
+import { assistanceSummaryTx, PRIORITIES, REQUEST_STATES } from '@yayatoh/assistance';
 import {
   checkinFactsTx,
   deviceAppVersionsTx,
@@ -165,6 +166,28 @@ export const DeviceBoardWidgetDto = z.object({
       /** M3.3a: the scanner app's build and the device's last scan at this event. */
       appVersion: z.string().nullable(),
       lastScanAt: iso.nullable(),
+    }),
+  ),
+  asOf: iso,
+});
+
+/** M3.3b: the help queue in numbers and its most urgent open requests (no guest details). */
+export const AssistanceWidgetDto = z.object({
+  waiting: Count,
+  assigned: Count,
+  inProgress: Count,
+  overdue: Count,
+  top: z.array(
+    z.object({
+      id: z.uuid(),
+      number: z.int(),
+      source: z.enum(['guest', 'staff']),
+      /** `assistance.reason.<reason>` in the web messages. */
+      reason: z.string(),
+      priority: z.enum(PRIORITIES),
+      state: z.enum(REQUEST_STATES),
+      dueAt: iso,
+      overdue: z.boolean(),
     }),
   ),
   asOf: iso,
@@ -378,6 +401,19 @@ export const deviceBoardWidget = defineWidget(
         appVersion: versions.get(d.id) ?? null,
         lastScanAt: lastScan.get(d.id)?.toISOString() ?? null,
       })),
+      asOf: ctx.now.toISOString(),
+    };
+  },
+);
+
+export const assistanceWidget = defineWidget(
+  WIDGET_META.assistance,
+  AssistanceWidgetDto,
+  async ({ tx, ctx, scope }) => {
+    const s = await assistanceSummaryTx(tx, scope.event.id, ctx.now);
+    return {
+      ...s,
+      top: s.top.map((r) => ({ ...r, dueAt: r.dueAt.toISOString() })),
       asOf: ctx.now.toISOString(),
     };
   },

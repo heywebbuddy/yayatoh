@@ -533,13 +533,3 @@ export function StaffPresenceBody({ d, c }: { d: StaffPresence; c: Ctx }) {
     </ul>
   );
 }
-
-// --- Guest assistance (M3.3b slot) ------------------------------------------------------------------
-
-export type Assistance = { engine: 'pending' | 'ready'; open: number };
-
-export function AssistanceBody({ d }: { d: Assistance }) {
-  const t = useTranslations('commandCenter.widget.assistance');
-  if (d.engine === 'pending') return <p className="text-body text-zinc-600">{t('pending')}</p>;
-  return <p className="text-body">{t('open', { count: d.open })}</p>;
-}

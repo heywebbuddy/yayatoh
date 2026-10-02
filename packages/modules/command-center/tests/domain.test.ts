@@ -326,6 +326,8 @@ describe('widget registry and layouts', () => {
       // Batch 3d merge: M3.4a's counts per entrance are offered to owners (hidden until shown).
       'entrances',
     ]);
+    // M3.3b's help queue: M3.3a's live layout places it for owners (batch 3g merge).
+    expect(r.find((s) => s.key === 'assistance')?.hidden).toBe(false);
     expect(r.find((s) => s.key === 'sales')?.hidden).toBe(true);
     expect(r.find((s) => s.key === 'entrances')?.hidden).toBe(true);
     expect(r.find((s) => s.key === 'checkins')?.hidden).toBe(false);

@@ -33,6 +33,8 @@ const quiet: EventFacts = {
   admitted: 0,
   salesTarget: null,
   ticketTypes: 2,
+  assistanceOverdue: 0,
+  assistanceUrgent: 0,
 };
 const live: Partial<EventFacts> = { startsAt: at(-HOUR), endsAt: at(3 * HOUR) };
 const fired = (f: Partial<EventFacts>, when = now) => evaluateEventRules({ ...quiet, ...f }, when);
@@ -186,6 +188,22 @@ describe('org rules', () => {
     expect(evaluateOrgRules({ ...ok, failedMessages: 1, failedBulkActions: 2 }).automationFailed?.count).toBe(
       3,
     );
+  });
+});
+
+describe('guest assistance (M3.3b)', () => {
+  it('help requests past their SLA raise one alert; critical when one is urgent, live-critical when live', () => {
+    const warn = fired({ assistanceOverdue: 2, assistanceUrgent: 0 }).assistanceOverdue;
+    expect(warn).toMatchObject({ severity: 'warning', count: 2, liveCritical: false });
+    const crit = fired({ ...live, assistanceOverdue: 3, assistanceUrgent: 1 }).assistanceOverdue;
+    expect(crit).toMatchObject({ severity: 'critical', count: 3, liveCritical: true });
+    expect(crit?.params).toEqual({ count: 3, urgent: 1 });
+    expect(fired({ assistanceOverdue: 0 }).assistanceOverdue).toBeUndefined();
+    expect(fired({ status: 'cancelled', assistanceOverdue: 4 }).assistanceOverdue).toBeUndefined();
+  });
+  it('is a door alert for people who read the queue, fixed on the queue page', () => {
+    expect(RULES.assistanceOverdue).toMatchObject({ category: 'door', permission: 'assistance:read' });
+    expect(fixPath('assistanceOverdue', 'gala')).toBe('/e/gala/assistance');
   });
 });
 

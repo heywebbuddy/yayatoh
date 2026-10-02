@@ -53,6 +53,9 @@ export const ALERT_TRIGGER_EVENTS = [
   'messaging.delivery_problems@1',
   'org.suspension_changed@1',
   'bulk.completed@1',
+  // M3.3b: a help request raised, taken or closed (the SLA passing is the sweep's job).
+  'assistance.requested@1',
+  'assistance.updated@1',
 ] as const;
 
 const WithEvent = z.object({ eventId: z.uuid() });

@@ -274,6 +274,8 @@ export const PROFILE_INDEPENDENT_SECTIONS = [
   'team',
   // M3.2a: the Command Center (its widgets follow the profile themselves).
   'commandCenter',
+  // M3.3b: the help queue (guest assistance at the door, every profile with check-in).
+  'assistance',
 ] as const;
 
 /**

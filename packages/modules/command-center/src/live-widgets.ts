@@ -397,16 +397,3 @@ export function staffPresenceWidget(names: MemberNames | null) {
     };
   });
 }
-
-// --- Guest assistance (M3.3b slot) ------------------------------------------------------------------
-
-export const AssistanceWidgetDto = z.object({
-  engine: z.enum(['pending', 'ready']),
-  open: Count,
-});
-
-/** The guest-assistance slot until M3.3b registers its queue (`withWidget`). */
-export const assistanceSlotWidget = defineWidget(WIDGET_META.assistance, AssistanceWidgetDto, async () => ({
-  engine: 'pending' as const,
-  open: 0,
-}));

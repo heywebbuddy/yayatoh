@@ -69,8 +69,8 @@
         "org-status": "{status, select, suspended {Yayatoh 已暂停此组织} reactivated {此组织已恢复上线} other {Yayatoh 已关闭此组织}}"
       },
       "alerts": {
-        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords} 位参会者没有座位}}} undistributed {{count, plural, other {{countWords} 张已购门票尚未分发}}} paymentsFailed {{count, plural, other {{countWords} 笔付款失败}}} paymentsStuck {{count, plural, other {{countWords} 笔付款卡住了}}} refundSurge {{count, plural, other {过去一小时内有 {countWords} 笔退款}}} devicesOffline {{count, plural, other {{countWords} 台签到设备离线}}} devicesLowBattery {{count, plural, other {{countWords} 台签到设备电量不足}}} devicesBacklog {{count, plural, other {{countWords} 台签到设备有待同步的扫描}}} capacityNear {场地已满 {count}%} capacityFull {场地已满员（{count}%）} sellOut {已售出 {count}% 的门票} salesPace {门票销售达到目标进度的 {count}%} readiness {{count, plural, other {{countWords} 个设置步骤阻碍了此活动}}} domain {{count, plural, other {{countWords} 个自定义域名有问题}}} payoutsPastDue {{count, plural, other {收款账户有 {countWords} 项要求已逾期}}} deliverability {电子邮件送达率需要关注} automationFailed {{count, plural, other {今天有 {countWords} 条消息或批量操作失败}}} other {提醒}}",
-        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords} 位参会者没有座位}}} undistributed {{count, plural, other {{countWords} 张已购门票尚未分发}}} paymentsFailed {{count, plural, other {{countWords} 笔付款失败}}} paymentsStuck {{count, plural, other {{countWords} 笔付款卡住了}}} refundSurge {{count, plural, other {过去一小时内有 {countWords} 笔退款}}} devicesOffline {{count, plural, other {{countWords} 台签到设备离线}}} devicesLowBattery {{count, plural, other {{countWords} 台签到设备电量不足}}} devicesBacklog {{count, plural, other {{countWords} 台签到设备有待同步的扫描}}} capacityNear {场地已满 {count}%} capacityFull {场地已满员（{count}%）} sellOut {已售出 {count}% 的门票} salesPace {门票销售达到目标进度的 {count}%} readiness {{count, plural, other {{countWords} 个设置步骤阻碍了此活动}}} domain {{count, plural, other {{countWords} 个自定义域名有问题}}} payoutsPastDue {{count, plural, other {收款账户有 {countWords} 项要求已逾期}}} deliverability {电子邮件送达率需要关注} automationFailed {{count, plural, other {今天有 {countWords} 条消息或批量操作失败}}} other {提醒}}",
+        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords} 位参会者没有座位}}} undistributed {{count, plural, other {{countWords} 张已购门票尚未分发}}} paymentsFailed {{count, plural, other {{countWords} 笔付款失败}}} paymentsStuck {{count, plural, other {{countWords} 笔付款卡住了}}} refundSurge {{count, plural, other {过去一小时内有 {countWords} 笔退款}}} devicesOffline {{count, plural, other {{countWords} 台签到设备离线}}} devicesLowBattery {{count, plural, other {{countWords} 台签到设备电量不足}}} devicesBacklog {{count, plural, other {{countWords} 台签到设备有待同步的扫描}}} capacityNear {场地已满 {count}%} capacityFull {场地已满员（{count}%）} sellOut {已售出 {count}% 的门票} salesPace {门票销售达到目标进度的 {count}%} readiness {{count, plural, other {{countWords} 个设置步骤阻碍了此活动}}} domain {{count, plural, other {{countWords} 个自定义域名有问题}}} payoutsPastDue {{count, plural, other {收款账户有 {countWords} 项要求已逾期}}} deliverability {电子邮件送达率需要关注} automationFailed {{count, plural, other {今天有 {countWords} 条消息或批量操作失败}}} assistanceOverdue {{count, plural, other {{countWords} 个求助请求等待过久}}} other {提醒}}",
+        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords} 位参会者没有座位}}} undistributed {{count, plural, other {{countWords} 张已购门票尚未分发}}} paymentsFailed {{count, plural, other {{countWords} 笔付款失败}}} paymentsStuck {{count, plural, other {{countWords} 笔付款卡住了}}} refundSurge {{count, plural, other {过去一小时内有 {countWords} 笔退款}}} devicesOffline {{count, plural, other {{countWords} 台签到设备离线}}} devicesLowBattery {{count, plural, other {{countWords} 台签到设备电量不足}}} devicesBacklog {{count, plural, other {{countWords} 台签到设备有待同步的扫描}}} capacityNear {场地已满 {count}%} capacityFull {场地已满员（{count}%）} sellOut {已售出 {count}% 的门票} salesPace {门票销售达到目标进度的 {count}%} readiness {{count, plural, other {{countWords} 个设置步骤阻碍了此活动}}} domain {{count, plural, other {{countWords} 个自定义域名有问题}}} payoutsPastDue {{count, plural, other {收款账户有 {countWords} 项要求已逾期}}} deliverability {电子邮件送达率需要关注} automationFailed {{count, plural, other {今天有 {countWords} 条消息或批量操作失败}}} assistanceOverdue {{count, plural, other {{countWords} 个求助请求等待过久}}} other {提醒}}",
         "alert-urgent-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords} 位参会者没有座位}}} undistributed {{count, plural, other {{countWords} 张已购门票尚未分发}}} paymentsFailed {{count, plural, other {{countWords} 笔付款失败}}} paymentsStuck {{count, plural, other {{countWords} 笔付款卡住了}}} refundSurge {{count, plural, other {过去一小时内有 {countWords} 笔退款}}} devicesOffline {{count, plural, other {{countWords} 台签到设备离线}}} devicesLowBattery {{count, plural, other {{countWords} 台签到设备电量不足}}} devicesBacklog {{count, plural, other {{countWords} 台签到设备有待同步的扫描}}} capacityNear {场地已满 {count}%} capacityFull {场地已满员（{count}%）} sellOut {已售出 {count}% 的门票} salesPace {门票销售达到目标进度的 {count}%} readiness {{count, plural, other {{countWords} 个设置步骤阻碍了此活动}}} domain {{count, plural, other {{countWords} 个自定义域名有问题}}} payoutsPastDue {{count, plural, other {收款账户有 {countWords} 项要求已逾期}}} deliverability {电子邮件送达率需要关注} automationFailed {{count, plural, other {今天有 {countWords} 条消息或批量操作失败}}} other {提醒}}"
       }
     },
@@ -315,7 +315,8 @@
     "campaigns": "营销活动",
     "journeys": "旅程",
     "disputes": "争议",
-    "supportMacros": "客服宏"
+    "supportMacros": "客服宏",
+    "assistance": "求助请求"
   },
   "vocab": {
     "attendee": "参会者",
@@ -6264,9 +6265,7 @@
         "since": "自 {time} 起"
       },
       "assistance": {
-        "title": "来宾协助",
-        "pending": "来宾和入口工作人员的求助请求会显示在这里。",
-        "open": "{count, plural, other {# 个待处理请求}}"
+        "title": "来宾协助"
       }
     },
     "tv": {
@@ -6377,7 +6376,8 @@
       "domain": "修复域名",
       "payoutsPastDue": "更新收款账户",
       "deliverability": "打开消息健康状况",
-      "automationFailed": "打开消息健康状况"
+      "automationFailed": "打开消息健康状况",
+      "assistanceOverdue": "打开求助请求"
     },
     "rules": {
       "unseated": "{count, plural, other {{countWords} 位参会者没有座位}}",
@@ -6396,7 +6396,8 @@
       "domain": "{count, plural, other {{countWords} 个自定义域名有问题}}",
       "payoutsPastDue": "{count, plural, other {收款账户有 {countWords} 项要求已逾期}}",
       "deliverability": "电子邮件送达率需要关注",
-      "automationFailed": "{count, plural, other {今天有 {countWords} 条消息或批量操作失败}}"
+      "automationFailed": "{count, plural, other {今天有 {countWords} 条消息或批量操作失败}}",
+      "assistanceOverdue": "{count, plural, other {{countWords} 个求助请求等待过久}}"
     },
     "widget": {
       "title": "提醒",
@@ -6510,7 +6511,9 @@
       "backlogTitle": "扫描待同步",
       "backlogBody": "{label} 有 {count} 条扫描待同步。",
       "capacityNearTitle": "即将满员",
-      "capacityNearBody": "预计宾客中已有 {percent}% 入场。"
+      "capacityNearBody": "预计宾客中已有 {percent}% 入场。",
+      "assistanceTitle": "现在需要帮助",
+      "assistanceBody": "紧急求助请求 {label}。打开工作人员模式接手。"
     },
     "supervisorSignIn": "主管模式需要主管在此手机上登录。",
     "signIn": "以主管身份登录",
@@ -8493,5 +8496,189 @@
     "showTable": "以表格显示",
     "minute": "时间",
     "checkedInColumn": "签到人数"
+  },
+  "assistance": {
+    "pageTitle": "求助请求",
+    "description": "{event} 中来宾通过座位查询发出的“需要帮助”请求和入口工作人员的请求，最紧急的排在前面。",
+    "noAccessTitle": "无权查看求助请求",
+    "noAccess": "你的角色无法查看此活动的求助请求。",
+    "statusLabel": "显示请求",
+    "tab": {
+      "open": "未关闭",
+      "closed": "已关闭"
+    },
+    "readOnly": "你可以查看请求，但你的角色无法接手或更改它们。",
+    "empty": {
+      "openTitle": "没有未关闭的求助请求",
+      "openDescription": "来宾和入口工作人员的新请求一到就会显示在这里。",
+      "closedTitle": "还没有已关闭的请求",
+      "closedDescription": "已解决和已取消的请求显示在这里。"
+    },
+    "title": "#{number} · {reason}",
+    "number": "#{number}",
+    "reason": {
+      "seat": "座位问题",
+      "accessibility": "无障碍",
+      "medical": "医疗",
+      "lost_item": "物品遗失",
+      "other": "其他",
+      "backup": "增援",
+      "supervisor": "主管",
+      "security": "安保",
+      "device": "设备问题"
+    },
+    "priority": {
+      "urgent": "紧急",
+      "high": "高优先级",
+      "normal": "普通优先级"
+    },
+    "state": {
+      "new": "等待中",
+      "assigned": "已分配",
+      "in_progress": "处理中",
+      "resolved": "已解决",
+      "cancelled": "已取消"
+    },
+    "mineState": "由你负责",
+    "overdue": "已超时",
+    "sla": {
+      "takeWithin": "请在 {time} 内接手",
+      "overdueBy": "已超时 {time}"
+    },
+    "source": {
+      "guest": "来自来宾",
+      "staff": "来自入口工作人员"
+    },
+    "askedAt": "{time} 请求",
+    "unassigned": "尚无人接手",
+    "assignedTo": "负责人：{name}",
+    "aDevice": "扫描设备",
+    "you": "你",
+    "unknownPerson": "前团队成员",
+    "guest": {
+      "title": "需要帮助吗？",
+      "description": "告诉活动工作人员你需要什么，他们会来找你。",
+      "closedTitle": "求助请求已关闭",
+      "closedDescription": "此活动不在这里接收求助请求。请向附近的工作人员求助。",
+      "invalidTitle": "此门票链接对本活动无效",
+      "invalidDescription": "请通过门票上的链接打开座位查询，或向附近的工作人员求助。",
+      "back": "返回座位查询",
+      "reasonLegend": "你需要哪方面的帮助？",
+      "emergencyTitle": "紧急情况请立即求救",
+      "emergencyBody": "如果有人严重受伤或处于危险中，请先拨打当地急救电话（中国大陆 120，美国 911），然后发送此请求，以便工作人员找到你。",
+      "locationLabel": "你在哪里？（可选）",
+      "locationHint": "你的座位、排、桌号或附近的标志。",
+      "noteLabel": "还有什么需要工作人员知道的吗？（可选）",
+      "privacy": "只有活动工作人员能看到这些信息，用于帮助你，绝不会用于营销。",
+      "submit": "请求帮助",
+      "errors": {
+        "reason": "请选择你需要哪方面的帮助。",
+        "noteTooLong": "备注请少于 500 个字符。",
+        "locationTooLong": "位置请少于 120 个字符。",
+        "invalidTicket": "此门票链接对本活动无效。",
+        "tooMany": "你已有 3 个请求在等待。工作人员正在赶来。",
+        "rateLimited": "此设备的请求过多。请在 {minutes, plural, other {# 分钟}}后重试。",
+        "closed": "此活动目前不接收求助请求。",
+        "internal": "出了点问题。请向附近的工作人员求助。"
+      },
+      "statusTitle": "求助请求 #{number}",
+      "askedAbout": "你请求的是：{reason}",
+      "state": {
+        "new": "等待工作人员",
+        "assigned": "工作人员正在赶来",
+        "in_progress": "工作人员正在协助你",
+        "resolved": "已解决",
+        "cancelled": "工作人员已关闭"
+      },
+      "stateHint": {
+        "new": "你的请求正在排队。如有可能，请留在原地。",
+        "assigned": "团队中有人已接手你的请求，正在赶来。",
+        "in_progress": "工作人员正在帮助你。",
+        "resolved": "工作人员已将你的请求标为已解决。如仍需帮助，请再次请求。",
+        "cancelled": "工作人员已关闭你的请求。如仍需帮助，请再次请求。"
+      },
+      "lastUpdate": "最后更新 {time}",
+      "emergencyShort": "紧急情况请立即拨打当地急救电话。",
+      "refresh": "刷新状态",
+      "needHelp": "需要帮助吗？",
+      "needTicketLink": "请通过门票上的链接打开座位查询，向活动工作人员求助。",
+      "needHelpHint": "关于座位、无障碍、身体不适或物品遗失，都可以向活动工作人员求助。",
+      "askButton": "请求帮助",
+      "ticketLink": "在活动现场：查找座位或请求帮助",
+      "ticketLinkLabel": "在活动现场查找座位或请求帮助（门票 {serial}）"
+    },
+    "where": "位置：{place}",
+    "atEntrance": "在 {name}",
+    "fromDevice": "发自 {device}",
+    "activityTitle": "{count, plural, other {# 条动态}}",
+    "actor": {
+      "guest": "来宾",
+      "member": "团队成员",
+      "device": "扫描设备",
+      "system": "系统"
+    },
+    "activity": {
+      "created": "{who} 请求帮助",
+      "assigned": "{who} 分配给 {to}",
+      "started": "{who} 开始处理",
+      "resolved": "{who} 已解决",
+      "cancelled": "{who} 已取消",
+      "note": "{who}：{note}"
+    },
+    "take": "接手",
+    "takeLabel": "接手 {title}",
+    "start": "开始",
+    "startLabel": "开始处理 {title}",
+    "resolve": "解决",
+    "resolveLabel": "解决 {title}",
+    "cancel": "取消请求",
+    "cancelLabel": "取消 {title}",
+    "assign": "分配",
+    "assignLabel": "将 {title} 分配给",
+    "choosePerson": "选择人员",
+    "noteLabel": "{title} 的备注",
+    "addNote": "添加备注",
+    "done": {
+      "take": "你已接手 {title}。",
+      "assign": "{title} 已分配。",
+      "start": "{title} 正在处理。",
+      "resolve": "{title} 已解决。",
+      "cancel": "{title} 已取消。",
+      "note": "已为 {title} 添加备注。"
+    },
+    "changed": "此请求在此期间已更改。列表已更新，请重试。",
+    "failed": "操作未成功，请重试。",
+    "errors": {
+      "assignee": "请选择分配给谁。",
+      "note": "请先写备注。"
+    },
+    "live": {
+      "connecting": "正在连接…",
+      "live": "实时",
+      "offline": "离线 — 重新加载以查看最新内容"
+    },
+    "widget": {
+      "waiting": "等待中",
+      "assigned": "已分配",
+      "inProgress": "处理中",
+      "overdue": "已超时",
+      "none": "没有未关闭的求助请求。",
+      "open": "打开求助请求"
+    },
+    "scan": {
+      "queueTitle": "求助请求",
+      "loading": "正在加载求助请求…",
+      "unavailable": "暂时无法加载求助请求。",
+      "none": "没有未关闭的求助请求。",
+      "askTitle": "请求帮助",
+      "askHint": "你的请求会连同此设备及其所在入口一起发送给活动团队。",
+      "reasonLabel": "你需要什么？",
+      "noteLabel": "备注（可选）",
+      "send": "发送请求",
+      "sent": "求助请求 #{number} 已发送。",
+      "offline": "你处于离线状态。设备恢复在线后请重试。",
+      "invalid": "请选择你需要什么。"
+    },
+    "guestLine": "{name} · 门票 {ticket}"
   }
 }

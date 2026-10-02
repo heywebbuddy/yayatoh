@@ -69,8 +69,8 @@
         "org-status": "{status, select, suspended {Yayatoh heeft deze organisatie opgeschort} reactivated {Deze organisatie is weer online} other {Yayatoh heeft deze organisatie gesloten}}"
       },
       "alerts": {
-        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {Eén deelnemer heeft geen plaats} other {{countWords} deelnemers hebben geen plaats}}} undistributed {{count, plural, one {Eén gekocht ticket is niet doorgegeven} other {{countWords} gekochte tickets zijn niet doorgegeven}}} paymentsFailed {{count, plural, one {Eén betaling is mislukt} other {{countWords} betalingen zijn mislukt}}} paymentsStuck {{count, plural, one {Eén betaling blijft hangen} other {{countWords} betalingen blijven hangen}}} refundSurge {{count, plural, one {Eén terugbetaling in het afgelopen uur} other {{countWords} terugbetalingen in het afgelopen uur}}} devicesOffline {{count, plural, one {Eén check-inapparaat is offline} other {{countWords} check-inapparaten zijn offline}}} devicesLowBattery {{count, plural, one {Eén check-inapparaat heeft een bijna lege batterij} other {{countWords} check-inapparaten hebben een bijna lege batterij}}} devicesBacklog {{count, plural, one {Eén check-inapparaat heeft scans die wachten op synchronisatie} other {{countWords} check-inapparaten hebben scans die wachten op synchronisatie}}} capacityNear {De locatie is voor {count}% vol} capacityFull {De locatie is vol ({count}%)} sellOut {{count}% van de tickets is verkocht} salesPace {De ticketverkoop ligt op {count}% van het beoogde tempo} readiness {{count, plural, one {Eén instellingsstap blokkeert dit evenement} other {{countWords} instellingsstappen blokkeren dit evenement}}} domain {{count, plural, one {Eén eigen domein heeft een probleem} other {{countWords} eigen domeinen hebben een probleem}}} payoutsPastDue {{count, plural, one {Eén vereiste voor het uitbetalingsaccount is achterstallig} other {{countWords} vereisten voor het uitbetalingsaccount zijn achterstallig}}} deliverability {De bezorgbaarheid van e-mail vraagt aandacht} automationFailed {{count, plural, one {Eén bericht of bulkactie is vandaag mislukt} other {{countWords} berichten of bulkacties zijn vandaag mislukt}}} other {Melding}}",
-        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {Eén deelnemer heeft geen plaats} other {{countWords} deelnemers hebben geen plaats}}} undistributed {{count, plural, one {Eén gekocht ticket is niet doorgegeven} other {{countWords} gekochte tickets zijn niet doorgegeven}}} paymentsFailed {{count, plural, one {Eén betaling is mislukt} other {{countWords} betalingen zijn mislukt}}} paymentsStuck {{count, plural, one {Eén betaling blijft hangen} other {{countWords} betalingen blijven hangen}}} refundSurge {{count, plural, one {Eén terugbetaling in het afgelopen uur} other {{countWords} terugbetalingen in het afgelopen uur}}} devicesOffline {{count, plural, one {Eén check-inapparaat is offline} other {{countWords} check-inapparaten zijn offline}}} devicesLowBattery {{count, plural, one {Eén check-inapparaat heeft een bijna lege batterij} other {{countWords} check-inapparaten hebben een bijna lege batterij}}} devicesBacklog {{count, plural, one {Eén check-inapparaat heeft scans die wachten op synchronisatie} other {{countWords} check-inapparaten hebben scans die wachten op synchronisatie}}} capacityNear {De locatie is voor {count}% vol} capacityFull {De locatie is vol ({count}%)} sellOut {{count}% van de tickets is verkocht} salesPace {De ticketverkoop ligt op {count}% van het beoogde tempo} readiness {{count, plural, one {Eén instellingsstap blokkeert dit evenement} other {{countWords} instellingsstappen blokkeren dit evenement}}} domain {{count, plural, one {Eén eigen domein heeft een probleem} other {{countWords} eigen domeinen hebben een probleem}}} payoutsPastDue {{count, plural, one {Eén vereiste voor het uitbetalingsaccount is achterstallig} other {{countWords} vereisten voor het uitbetalingsaccount zijn achterstallig}}} deliverability {De bezorgbaarheid van e-mail vraagt aandacht} automationFailed {{count, plural, one {Eén bericht of bulkactie is vandaag mislukt} other {{countWords} berichten of bulkacties zijn vandaag mislukt}}} other {Melding}}",
+        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {Eén deelnemer heeft geen plaats} other {{countWords} deelnemers hebben geen plaats}}} undistributed {{count, plural, one {Eén gekocht ticket is niet doorgegeven} other {{countWords} gekochte tickets zijn niet doorgegeven}}} paymentsFailed {{count, plural, one {Eén betaling is mislukt} other {{countWords} betalingen zijn mislukt}}} paymentsStuck {{count, plural, one {Eén betaling blijft hangen} other {{countWords} betalingen blijven hangen}}} refundSurge {{count, plural, one {Eén terugbetaling in het afgelopen uur} other {{countWords} terugbetalingen in het afgelopen uur}}} devicesOffline {{count, plural, one {Eén check-inapparaat is offline} other {{countWords} check-inapparaten zijn offline}}} devicesLowBattery {{count, plural, one {Eén check-inapparaat heeft een bijna lege batterij} other {{countWords} check-inapparaten hebben een bijna lege batterij}}} devicesBacklog {{count, plural, one {Eén check-inapparaat heeft scans die wachten op synchronisatie} other {{countWords} check-inapparaten hebben scans die wachten op synchronisatie}}} capacityNear {De locatie is voor {count}% vol} capacityFull {De locatie is vol ({count}%)} sellOut {{count}% van de tickets is verkocht} salesPace {De ticketverkoop ligt op {count}% van het beoogde tempo} readiness {{count, plural, one {Eén instellingsstap blokkeert dit evenement} other {{countWords} instellingsstappen blokkeren dit evenement}}} domain {{count, plural, one {Eén eigen domein heeft een probleem} other {{countWords} eigen domeinen hebben een probleem}}} payoutsPastDue {{count, plural, one {Eén vereiste voor het uitbetalingsaccount is achterstallig} other {{countWords} vereisten voor het uitbetalingsaccount zijn achterstallig}}} deliverability {De bezorgbaarheid van e-mail vraagt aandacht} automationFailed {{count, plural, one {Eén bericht of bulkactie is vandaag mislukt} other {{countWords} berichten of bulkacties zijn vandaag mislukt}}} assistanceOverdue {{count, plural, one {{countWords} hulpvraag wacht te lang} other {{countWords} hulpvragen wachten te lang}}} other {Melding}}",
+        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {Eén deelnemer heeft geen plaats} other {{countWords} deelnemers hebben geen plaats}}} undistributed {{count, plural, one {Eén gekocht ticket is niet doorgegeven} other {{countWords} gekochte tickets zijn niet doorgegeven}}} paymentsFailed {{count, plural, one {Eén betaling is mislukt} other {{countWords} betalingen zijn mislukt}}} paymentsStuck {{count, plural, one {Eén betaling blijft hangen} other {{countWords} betalingen blijven hangen}}} refundSurge {{count, plural, one {Eén terugbetaling in het afgelopen uur} other {{countWords} terugbetalingen in het afgelopen uur}}} devicesOffline {{count, plural, one {Eén check-inapparaat is offline} other {{countWords} check-inapparaten zijn offline}}} devicesLowBattery {{count, plural, one {Eén check-inapparaat heeft een bijna lege batterij} other {{countWords} check-inapparaten hebben een bijna lege batterij}}} devicesBacklog {{count, plural, one {Eén check-inapparaat heeft scans die wachten op synchronisatie} other {{countWords} check-inapparaten hebben scans die wachten op synchronisatie}}} capacityNear {De locatie is voor {count}% vol} capacityFull {De locatie is vol ({count}%)} sellOut {{count}% van de tickets is verkocht} salesPace {De ticketverkoop ligt op {count}% van het beoogde tempo} readiness {{count, plural, one {Eén instellingsstap blokkeert dit evenement} other {{countWords} instellingsstappen blokkeren dit evenement}}} domain {{count, plural, one {Eén eigen domein heeft een probleem} other {{countWords} eigen domeinen hebben een probleem}}} payoutsPastDue {{count, plural, one {Eén vereiste voor het uitbetalingsaccount is achterstallig} other {{countWords} vereisten voor het uitbetalingsaccount zijn achterstallig}}} deliverability {De bezorgbaarheid van e-mail vraagt aandacht} automationFailed {{count, plural, one {Eén bericht of bulkactie is vandaag mislukt} other {{countWords} berichten of bulkacties zijn vandaag mislukt}}} assistanceOverdue {{count, plural, one {{countWords} hulpvraag wacht te lang} other {{countWords} hulpvragen wachten te lang}}} other {Melding}}",
         "alert-urgent-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {Eén deelnemer heeft geen plaats} other {{countWords} deelnemers hebben geen plaats}}} undistributed {{count, plural, one {Eén gekocht ticket is niet doorgegeven} other {{countWords} gekochte tickets zijn niet doorgegeven}}} paymentsFailed {{count, plural, one {Eén betaling is mislukt} other {{countWords} betalingen zijn mislukt}}} paymentsStuck {{count, plural, one {Eén betaling blijft hangen} other {{countWords} betalingen blijven hangen}}} refundSurge {{count, plural, one {Eén terugbetaling in het afgelopen uur} other {{countWords} terugbetalingen in het afgelopen uur}}} devicesOffline {{count, plural, one {Eén check-inapparaat is offline} other {{countWords} check-inapparaten zijn offline}}} devicesLowBattery {{count, plural, one {Eén check-inapparaat heeft een bijna lege batterij} other {{countWords} check-inapparaten hebben een bijna lege batterij}}} devicesBacklog {{count, plural, one {Eén check-inapparaat heeft scans die wachten op synchronisatie} other {{countWords} check-inapparaten hebben scans die wachten op synchronisatie}}} capacityNear {De locatie is voor {count}% vol} capacityFull {De locatie is vol ({count}%)} sellOut {{count}% van de tickets is verkocht} salesPace {De ticketverkoop ligt op {count}% van het beoogde tempo} readiness {{count, plural, one {Eén instellingsstap blokkeert dit evenement} other {{countWords} instellingsstappen blokkeren dit evenement}}} domain {{count, plural, one {Eén eigen domein heeft een probleem} other {{countWords} eigen domeinen hebben een probleem}}} payoutsPastDue {{count, plural, one {Eén vereiste voor het uitbetalingsaccount is achterstallig} other {{countWords} vereisten voor het uitbetalingsaccount zijn achterstallig}}} deliverability {De bezorgbaarheid van e-mail vraagt aandacht} automationFailed {{count, plural, one {Eén bericht of bulkactie is vandaag mislukt} other {{countWords} berichten of bulkacties zijn vandaag mislukt}}} other {Melding}}"
       }
     },
@@ -315,7 +315,8 @@
     "campaigns": "Campagnes",
     "journeys": "Journeys",
     "disputes": "Geschillen",
-    "supportMacros": "Supportmacro's"
+    "supportMacros": "Supportmacro's",
+    "assistance": "Hulpvragen"
   },
   "vocab": {
     "attendee": "Deelnemer",
@@ -6264,9 +6265,7 @@
         "since": "sinds {time}"
       },
       "assistance": {
-        "title": "Hulp voor gasten",
-        "pending": "Hulpvragen van gasten en ingangspersoneel verschijnen hier.",
-        "open": "{count, plural, one {# open verzoek} other {# open verzoeken}}"
+        "title": "Hulp voor gasten"
       }
     },
     "tv": {
@@ -6377,7 +6376,8 @@
       "domain": "Domeinen herstellen",
       "payoutsPastDue": "Uitbetalingsaccount bijwerken",
       "deliverability": "Berichtenstatus openen",
-      "automationFailed": "Berichtenstatus openen"
+      "automationFailed": "Berichtenstatus openen",
+      "assistanceOverdue": "Hulpvragen openen"
     },
     "rules": {
       "unseated": "{count, plural, one {Eén deelnemer heeft geen plaats} other {{countWords} deelnemers hebben geen plaats}}",
@@ -6396,7 +6396,8 @@
       "domain": "{count, plural, one {Eén eigen domein heeft een probleem} other {{countWords} eigen domeinen hebben een probleem}}",
       "payoutsPastDue": "{count, plural, one {Eén vereiste voor het uitbetalingsaccount is achterstallig} other {{countWords} vereisten voor het uitbetalingsaccount zijn achterstallig}}",
       "deliverability": "De bezorgbaarheid van e-mail vraagt aandacht",
-      "automationFailed": "{count, plural, one {Eén bericht of bulkactie is vandaag mislukt} other {{countWords} berichten of bulkacties zijn vandaag mislukt}}"
+      "automationFailed": "{count, plural, one {Eén bericht of bulkactie is vandaag mislukt} other {{countWords} berichten of bulkacties zijn vandaag mislukt}}",
+      "assistanceOverdue": "{count, plural, one {{countWords} hulpvraag wacht te lang} other {{countWords} hulpvragen wachten te lang}}"
     },
     "widget": {
       "title": "Meldingen",
@@ -6510,7 +6511,9 @@
       "backlogTitle": "Scans wachten",
       "backlogBody": "Bij {label} wachten {count} scans op synchronisatie.",
       "capacityNearTitle": "Bijna vol",
-      "capacityNearBody": "{percent}% van de verwachte gasten is binnen."
+      "capacityNearBody": "{percent}% van de verwachte gasten is binnen.",
+      "assistanceTitle": "Nu hulp nodig",
+      "assistanceBody": "Dringende hulpvraag {label}. Open Personeel om hem op te pakken."
     },
     "supervisorSignIn": "Voor de supervisormodus moet een supervisor op deze telefoon zijn ingelogd.",
     "signIn": "Inloggen als supervisor",
@@ -8493,5 +8496,189 @@
     "showTable": "Als tabel tonen",
     "minute": "Minuut",
     "checkedInColumn": "Ingecheckt"
+  },
+  "assistance": {
+    "pageTitle": "Hulpvragen",
+    "description": "‘Ik heb hulp nodig’-vragen van gasten via de stoelzoeker en vragen van het deurpersoneel bij {event}, de dringendste eerst.",
+    "noAccessTitle": "Geen toegang tot hulpvragen",
+    "noAccess": "Jouw rol kan de hulpvragen van dit evenement niet zien.",
+    "statusLabel": "Vragen tonen",
+    "tab": {
+      "open": "Open",
+      "closed": "Gesloten"
+    },
+    "readOnly": "Je kunt de vragen zien; jouw rol kan ze niet oppakken of wijzigen.",
+    "empty": {
+      "openTitle": "Geen open hulpvragen",
+      "openDescription": "Nieuwe vragen van gasten en deurpersoneel verschijnen hier zodra ze binnenkomen.",
+      "closedTitle": "Nog niets gesloten",
+      "closedDescription": "Opgeloste en geannuleerde vragen staan hier."
+    },
+    "title": "#{number} · {reason}",
+    "number": "#{number}",
+    "reason": {
+      "seat": "Probleem met plaats",
+      "accessibility": "Toegankelijkheid",
+      "medical": "Medisch",
+      "lost_item": "Verloren voorwerp",
+      "other": "Iets anders",
+      "backup": "Versterking",
+      "supervisor": "Een leidinggevende",
+      "security": "Beveiliging",
+      "device": "Probleem met apparaat"
+    },
+    "priority": {
+      "urgent": "Dringend",
+      "high": "Hoge prioriteit",
+      "normal": "Normale prioriteit"
+    },
+    "state": {
+      "new": "Wacht",
+      "assigned": "Toegewezen",
+      "in_progress": "Bezig",
+      "resolved": "Opgelost",
+      "cancelled": "Geannuleerd"
+    },
+    "mineState": "Van jou",
+    "overdue": "Te laat",
+    "sla": {
+      "takeWithin": "Oppakken binnen {time}",
+      "overdueBy": "{time} te laat"
+    },
+    "source": {
+      "guest": "Van een gast",
+      "staff": "Van deurpersoneel"
+    },
+    "askedAt": "Gevraagd om {time}",
+    "unassigned": "Nog niemand",
+    "assignedTo": "Bij {name}",
+    "aDevice": "een scanner",
+    "you": "jou",
+    "unknownPerson": "een oud-teamlid",
+    "guest": {
+      "title": "Hulp nodig?",
+      "description": "Vertel het personeel van het evenement wat je nodig hebt. Ze komen naar je toe.",
+      "closedTitle": "Hulpvragen zijn gesloten",
+      "closedDescription": "Dit evenement neemt hier geen hulpvragen aan. Vraag het aan iemand van het personeel in de buurt.",
+      "invalidTitle": "Deze ticketlink geldt niet voor dit evenement",
+      "invalidDescription": "Open de stoelzoeker via de link op je ticket, of vraag het aan iemand van het personeel in de buurt.",
+      "back": "Terug naar de stoelzoeker",
+      "reasonLegend": "Waarmee heb je hulp nodig?",
+      "emergencyTitle": "Bel bij nood nu meteen om hulp",
+      "emergencyBody": "Is iemand ernstig gewond of in gevaar? Bel eerst het lokale alarmnummer (112 in Europa, 911 in de VS) en stuur daarna deze vraag, zodat het personeel je kan vinden.",
+      "locationLabel": "Waar ben je? (optioneel)",
+      "locationHint": "Je stoel, rij, tafel of een herkenningspunt in de buurt.",
+      "noteLabel": "Nog iets wat het personeel moet weten? (optioneel)",
+      "privacy": "Alleen het personeel van het evenement ziet dit, om je te helpen. Het wordt nooit voor marketing gebruikt.",
+      "submit": "Om hulp vragen",
+      "errors": {
+        "reason": "Kies waarmee je hulp nodig hebt.",
+        "noteTooLong": "Houd de notitie onder 500 tekens.",
+        "locationTooLong": "Houd de plaats onder 120 tekens.",
+        "invalidTicket": "Deze ticketlink geldt niet voor dit evenement.",
+        "tooMany": "Je hebt al 3 wachtende vragen. Het personeel is onderweg.",
+        "rateLimited": "Te veel vragen vanaf dit apparaat. Probeer het over {minutes, plural, one {# minuut} other {# minuten}} opnieuw.",
+        "closed": "Dit evenement neemt nu geen hulpvragen aan.",
+        "internal": "Er ging iets mis. Vraag het aan iemand van het personeel in de buurt."
+      },
+      "statusTitle": "Hulpvraag #{number}",
+      "askedAbout": "Je vroeg om: {reason}",
+      "state": {
+        "new": "Wacht op personeel",
+        "assigned": "Iemand van het personeel is onderweg",
+        "in_progress": "Iemand van het personeel is bij je",
+        "resolved": "Opgelost",
+        "cancelled": "Gesloten door personeel"
+      },
+      "stateHint": {
+        "new": "Je vraag staat in de wachtrij. Blijf waar je bent als dat kan.",
+        "assigned": "Iemand van het team heeft je vraag en komt eraan.",
+        "in_progress": "Het personeel helpt je nu.",
+        "resolved": "Het personeel heeft je vraag als opgelost gemarkeerd. Vraag opnieuw als je nog hulp nodig hebt.",
+        "cancelled": "Het personeel heeft je vraag gesloten. Vraag opnieuw als je nog hulp nodig hebt."
+      },
+      "lastUpdate": "Laatst bijgewerkt {time}",
+      "emergencyShort": "Bel bij nood nu meteen het lokale alarmnummer.",
+      "refresh": "Status vernieuwen",
+      "needHelp": "Hulp nodig?",
+      "needTicketLink": "Open de stoelzoeker via de link op je ticket om het personeel om hulp te vragen.",
+      "needHelpHint": "Vraag het personeel om hulp met je plaats, toegankelijkheid, een medisch probleem of een verloren voorwerp.",
+      "askButton": "Om hulp vragen",
+      "ticketLink": "Op het evenement: vind je plaats of vraag om hulp",
+      "ticketLinkLabel": "Vind je plaats of vraag om hulp op het evenement (ticket {serial})"
+    },
+    "where": "Waar: {place}",
+    "atEntrance": "Bij {name}",
+    "fromDevice": "Verstuurd vanaf {device}",
+    "activityTitle": "{count, plural, one {# update} other {# updates}}",
+    "actor": {
+      "guest": "De gast",
+      "member": "Een teamlid",
+      "device": "Een scanner",
+      "system": "Het systeem"
+    },
+    "activity": {
+      "created": "{who} vroeg om hulp",
+      "assigned": "{who} gaf hem aan {to}",
+      "started": "{who} is begonnen",
+      "resolved": "{who} heeft hem opgelost",
+      "cancelled": "{who} heeft hem geannuleerd",
+      "note": "{who}: {note}"
+    },
+    "take": "Oppakken",
+    "takeLabel": "{title} oppakken",
+    "start": "Beginnen",
+    "startLabel": "{title} beginnen",
+    "resolve": "Oplossen",
+    "resolveLabel": "{title} oplossen",
+    "cancel": "Vraag annuleren",
+    "cancelLabel": "{title} annuleren",
+    "assign": "Toewijzen",
+    "assignLabel": "{title} toewijzen aan",
+    "choosePerson": "Kies een persoon",
+    "noteLabel": "Notitie bij {title}",
+    "addNote": "Notitie toevoegen",
+    "done": {
+      "take": "Je hebt {title} opgepakt.",
+      "assign": "{title} is toegewezen.",
+      "start": "{title} is bezig.",
+      "resolve": "{title} is opgelost.",
+      "cancel": "{title} is geannuleerd.",
+      "note": "Notitie toegevoegd aan {title}."
+    },
+    "changed": "Deze vraag is intussen gewijzigd. De lijst is nu bijgewerkt; probeer het opnieuw.",
+    "failed": "Dat lukte niet. Probeer het opnieuw.",
+    "errors": {
+      "assignee": "Kies aan wie je hem geeft.",
+      "note": "Schrijf eerst een notitie."
+    },
+    "live": {
+      "connecting": "Verbinden…",
+      "live": "Live",
+      "offline": "Offline — herlaad voor het laatste"
+    },
+    "widget": {
+      "waiting": "Wachtend",
+      "assigned": "Toegewezen",
+      "inProgress": "Bezig",
+      "overdue": "Te laat",
+      "none": "Geen open hulpvragen.",
+      "open": "Hulpvragen openen"
+    },
+    "scan": {
+      "queueTitle": "Hulpvragen",
+      "loading": "Hulpvragen laden…",
+      "unavailable": "Hulpvragen kunnen nu niet worden geladen.",
+      "none": "Geen open hulpvragen.",
+      "askTitle": "Om hulp vragen",
+      "askHint": "Je vraag gaat naar het team van het evenement, met dit apparaat en de ingang waar het scant.",
+      "reasonLabel": "Wat heb je nodig?",
+      "noteLabel": "Notitie (optioneel)",
+      "send": "Vraag versturen",
+      "sent": "Hulpvraag #{number} verstuurd.",
+      "offline": "Je bent offline. Probeer het opnieuw als het apparaat weer online is.",
+      "invalid": "Kies wat je nodig hebt."
+    },
+    "guestLine": "{name} · ticket {ticket}"
   }
 }

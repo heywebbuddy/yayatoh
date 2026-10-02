@@ -26,7 +26,7 @@ export const WIDGET_KEYS = [
   'scanIssues',
   'capacity',
   'staffPresence',
-  // The slot for M3.3b's guest assistance queue (built on agent/m3.3b; fills it with `withWidget`).
+  // M3.3b: the event's help queue (guest and staff requests), for live mode to place.
   'assistance',
 ] as const;
 export type WidgetKey = (typeof WIDGET_KEYS)[number];
@@ -35,7 +35,12 @@ export const WIDGET_SIZES = ['sm', 'md', 'lg'] as const;
 export type WidgetSize = (typeof WIDGET_SIZES)[number];
 
 /** Realtime channels (M3.1b registry keys) a widget follows. */
-export type WidgetChannel = 'event.checkins' | 'event.devices' | 'event.metrics' | 'org.alerts';
+export type WidgetChannel =
+  | 'event.checkins'
+  | 'event.devices'
+  | 'event.metrics'
+  | 'org.alerts'
+  | 'event.assistance';
 
 /** Every channel a widget follows (its own, then the extra ones). */
 export function followedChannels(meta: Pick<WidgetMeta, 'channel' | 'alsoFollows'>): WidgetChannel[] {
@@ -213,16 +218,17 @@ export const WIDGET_META: Readonly<Record<WidgetKey, WidgetMeta>> = {
     size: 'md',
     channel: null,
   },
-  // M3.3b's guest assistance queue fills this slot (a placeholder until it registers).
+  // M3.3b guest assistance: waiting, assigned, in progress and overdue help requests, the most
+  // urgent first. M3.3a's live layouts place it (owner, ops, door); members can show it.
   assistance: {
     key: 'assistance',
-    module: 'core',
-    permission: 'events:read',
+    module: 'checkin',
+    permission: 'assistance:read',
     roles: ['owner', 'ops', 'door'],
     profiles: 'all',
-    modes: ['live'],
+    modes: ['pre_show', 'live'],
     size: 'md',
-    channel: null,
+    channel: 'event.assistance',
   },
   // The slot for the M3.2b alert engine: its loader is a placeholder until the engine registers.
   alerts: {

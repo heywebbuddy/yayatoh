@@ -1,5 +1,6 @@
 import 'server-only';
 import { listAlertsQuery, RULES } from '@yayatoh/alerts';
+import { ASSISTANCE_CHANNEL } from '@yayatoh/assistance';
 import { getUsersByIds } from '@yayatoh/auth';
 import { reportPresenceCommand } from '@yayatoh/checkin';
 import {
@@ -11,6 +12,7 @@ import {
   liveFeedWidget,
   staffPresenceWidget,
   WIDGET_META,
+  type WidgetChannel,
   type WidgetKey,
   type WidgetLoadArgs,
   type WidgetRegistry,
@@ -172,17 +174,18 @@ export async function widgetChannels(opts: {
   eventId: string;
   role: OrgRole;
   modules: ReadonlySet<string>;
-}): Promise<Partial<Record<'event.checkins' | 'event.devices' | 'event.metrics' | 'org.alerts', string>>> {
+}): Promise<Partial<Record<WidgetChannel, string>>> {
   const eventRoles = await eventRolesOf(opts.ctx, opts.eventId);
   const can = (p: string) => roleCan(opts.role, p) || eventRoleCan(eventRoles, p);
-  const out: Partial<Record<'event.checkins' | 'event.devices' | 'event.metrics' | 'org.alerts', string>> =
-    {};
+  const out: Partial<Record<WidgetChannel, string>> = {};
   if (opts.modules.has('checkin') && can('checkin:scan')) {
     out['event.checkins'] = realtimeUrl(realtimeChannelName(CHECKINS_CHANNEL, opts.orgId, opts.eventId));
     out['event.devices'] = realtimeUrl(realtimeChannelName(DEVICES_CHANNEL, opts.orgId, opts.eventId));
   }
   if (opts.modules.has('reports') && can('events:read'))
     out['event.metrics'] = realtimeUrl(realtimeChannelName(METRICS_CHANNEL, opts.orgId, opts.eventId));
+  if (opts.modules.has('checkin') && can('assistance:read'))
+    out['event.assistance'] = realtimeUrl(realtimeChannelName(ASSISTANCE_CHANNEL, opts.orgId, opts.eventId));
   if (roleCan(opts.role, 'events:read'))
     out['org.alerts'] = realtimeUrl(realtimeChannelName(ALERTS_CHANNEL, opts.orgId));
   return out;

@@ -25,6 +25,7 @@ const CHANNEL_EVENTS: Readonly<Record<WidgetChannel, readonly string[]>> = {
   'event.devices': ['device', 'snapshot'],
   'event.metrics': ['metric', 'snapshot'],
   'org.alerts': ['alert', 'snapshot'],
+  'event.assistance': ['request', 'snapshot'],
 };
 const POLL_MS = 30_000;
 const SPAN: Record<Slot['size'], string> = { sm: '', md: 'md:col-span-2', lg: 'md:col-span-2 xl:col-span-3' };

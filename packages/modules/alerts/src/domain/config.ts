@@ -47,6 +47,8 @@ export const RULE_KEYS = [
   'sellOut',
   'salesPace',
   'readiness',
+  // M3.3b guest assistance: help requests nobody has taken within their SLA.
+  'assistanceOverdue',
   'domain',
   'payoutsPastDue',
   'deliverability',
@@ -114,6 +116,7 @@ export const RULES: Readonly<Record<RuleKey, RuleDef>> = {
   sellOut: rule('sellOut', 'event', 'sales', 'orders:read', '/e/{event}/tickets-orders'),
   salesPace: rule('salesPace', 'event', 'sales', 'orders:read', '/e/{event}/analysis'),
   readiness: rule('readiness', 'event', 'setup', 'events:read', '/e/{event}/setup-guide'),
+  assistanceOverdue: rule('assistanceOverdue', 'event', 'door', 'assistance:read', '/e/{event}/assistance'),
   domain: rule('domain', 'org', 'setup', 'org:update', '/domains'),
   payoutsPastDue: rule('payoutsPastDue', 'org', 'payments', 'finance:read', '/payouts'),
   deliverability: rule('deliverability', 'org', 'messaging', 'messages:read', '/messaging'),

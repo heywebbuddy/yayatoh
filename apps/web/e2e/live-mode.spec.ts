@@ -159,9 +159,8 @@ test.describe('Command Center live mode (M3.3a)', () => {
     await feedWidget.getByLabel('Outcome').selectOption('');
     // Setting up the entrances on the door screen counted as being at the doors (the whole event).
     await expect(page.getByTestId('cc-presence')).toContainText('On the door screen · Whole event');
-    await expect(page.getByTestId('cc-widget-assistance')).toContainText(
-      'Help requests from guests and door staff will appear here.',
-    );
+    // M3.3b's help queue fills the assistance slot (batch 3g merge): none open yet.
+    await expect(page.getByTestId('cc-widget-assistance')).toContainText('No open help requests.');
     await expectAccessible(page);
 
     // The door scans at the north gate: the feed updates without a reload.

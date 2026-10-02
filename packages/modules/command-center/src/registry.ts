@@ -1,5 +1,4 @@
 import {
-  assistanceSlotWidget,
   capacityWidget,
   checkinSpeedWidget,
   liveFeedWidget,
@@ -8,6 +7,7 @@ import {
 } from './live-widgets.ts';
 import {
   alertsSlotWidget,
+  assistanceWidget,
   checkinsWidget,
   createWidgetRegistry,
   deviceBoardWidget,
@@ -24,7 +24,7 @@ import {
 /**
  * The module's own registry: every widget with the loaders this module can build alone. The apps
  * replace the slots and the port-backed widgets with `withWidget` (the alert engine's alerts and
- * feed entries, member names for staff presence, M3.3b's assistance queue).
+ * feed entries, member names for staff presence). M3.3b's assistance queue loads here directly.
  */
 export const COMMAND_CENTER_WIDGETS: WidgetRegistry = createWidgetRegistry([
   readinessWidget,
@@ -42,5 +42,5 @@ export const COMMAND_CENTER_WIDGETS: WidgetRegistry = createWidgetRegistry([
   scanIssuesWidget,
   capacityWidget,
   staffPresenceWidget(null),
-  assistanceSlotWidget,
+  assistanceWidget,
 ]);

@@ -45,6 +45,28 @@ describe('org roles', () => {
     ]);
   });
 
+  it('the help queue (M3.3b): viewers only read it; door staff and scanners work it', () => {
+    expect(ORG_ROLES.filter((r) => roleCan(r, 'assistance:read')).sort()).toEqual([
+      'admin',
+      'box_office',
+      'manager',
+      'owner',
+      'scanner',
+      'viewer',
+    ]);
+    expect(ORG_ROLES.filter((r) => roleCan(r, 'assistance:manage')).sort()).toEqual([
+      'admin',
+      'box_office',
+      'manager',
+      'owner',
+      'scanner',
+    ]);
+    for (const role of ['door_staff', 'event_manager', 'co_host', 'planner'])
+      expect(eventRoleCan([role], 'assistance:manage')).toBe(true);
+    expect(eventRoleCan(['session_scanner'], 'assistance:read')).toBe(false);
+    expect(eventRoleCan(['kiosk_operator'], 'assistance:manage')).toBe(false);
+  });
+
   it('owners hold every permission', () => {
     for (const p of PERMISSIONS) expect(roleCan('owner', p)).toBe(true);
   });

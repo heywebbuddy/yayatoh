@@ -9,6 +9,14 @@ import {
   setSalesTargetCommand,
 } from '@yayatoh/alerts';
 import {
+  assignCommand as assistanceAssignCommand,
+  addNoteCommand as assistanceNoteCommand,
+  queueQuery as assistanceQueueQuery,
+  assistanceTicketToken,
+  guestRequestCommand,
+  staffRequestCommand,
+} from '@yayatoh/assistance';
+import {
   attendeeImportBulk,
   attendeeLabelBulk,
   stageImportCommand,
@@ -699,7 +707,9 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   await executeCommand(revokeApiKeyCommand, { apiKeyId: retired.id }, ctx(), ports);
   // One admission (and its scan) at event time, so the check-in tables are covered.
   const [issued] = await withTenant(systemCtx(org.id), (tx) =>
-    tx.execute<{ short_code: string }>(sql`select short_code from ticketing.tickets order by serial limit 1`),
+    tx.execute<{ id: string; short_code: string }>(
+      sql`select id, short_code from ticketing.tickets order by serial limit 1`,
+    ),
   );
   // Two entrances: admitted at one, shown at the other a minute later → a `two_entrances` signal.
   const gate = async (name: string) =>
@@ -1960,6 +1970,40 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ports,
   );
   // M3.2a Command Center: the owner's own layout and a manual mode (isolation coverage).
+  // Guest assistance (M3.3b): a guest asks for help with their ticket's link, the door device asks
+  // for backup, the owner takes the guest's request and writes a note (every assistance table).
+  await executeCommand(
+    guestRequestCommand,
+    {
+      eventId: event.id,
+      ticketToken: assistanceTicketToken(issued?.id ?? ''),
+      reason: 'seat',
+      note: 'Someone is in my seat',
+      location: 'Row C',
+    },
+    createCtx({ orgId: org.id, now: new Date('2027-10-14T15:05:00Z') }),
+    ports,
+  );
+  await executeCommand(
+    staffRequestCommand,
+    { eventId: event.id, reason: 'backup', note: 'Long line', checkpointId: mainGate },
+    deviceCtx,
+    ports,
+  );
+  const [guestAsk] = await executeQuery(assistanceQueueQuery, { eventId: event.id }, ctx(), ports);
+  if (!guestAsk) throw new Error('fixture: no help request');
+  await executeCommand(
+    assistanceAssignCommand,
+    { eventId: event.id, requestId: guestAsk.id, assignee: 'me' },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    assistanceNoteCommand,
+    { eventId: event.id, requestId: guestAsk.id, body: 'On my way' },
+    ctx(),
+    ports,
+  );
   await executeCommand(
     saveWidgetLayoutCommand,
     { eventId: event.id, order: ['sales', 'readiness'], hidden: ['timeline'] },

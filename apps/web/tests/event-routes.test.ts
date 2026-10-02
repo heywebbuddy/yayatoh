@@ -50,6 +50,8 @@ const SECTION_OF: Record<string, string> = {
   cancel: 'home',
   // Batch 3d merge: M3.2a's Command Center (every profile).
   'command-center': 'commandCenter',
+  // M3.3b: the help queue (every profile with check-in).
+  assistance: 'assistance',
 };
 
 describe('event console route sweep (M4.2a)', () => {
