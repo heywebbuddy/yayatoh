@@ -4,6 +4,7 @@ import { Alert, Button, SkeletonCard } from '@yayatoh/ui';
 import { useFormatter, useLocale, useTranslations } from 'next-intl';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { ScanClient, StaffView } from '@/scan/client.ts';
+import { StaffHelp } from './scan-help.tsx';
 
 type Loaded = { view: StaffView; fetchedAt: string; fresh: boolean };
 
@@ -195,6 +196,8 @@ export function StaffPanel({
         )}
       </section>
 
+      <StaffHelp client={client} refreshKey={refreshKey} />
+
       <StaffPushControl client={client} publicKey={publicKey} />
     </div>
   );
@@ -232,8 +235,8 @@ function StaffPushControl({ client, publicKey }: { client: ScanClient; publicKey
   }, [check]);
 
   /** The notification text in this device's language, with placeholders the server fills in. */
-  const copy = () =>
-    Object.fromEntries(
+  const copy = () => ({
+    ...Object.fromEntries(
       KINDS.map((k) => [
         k,
         {
@@ -241,7 +244,10 @@ function StaffPushControl({ client, publicKey }: { client: ScanClient; publicKey
           body: t(`push.${COPY_KEY[k]}Body`, { label: '{label}', percent: '{percent}', count: '{count}' }),
         },
       ]),
-    );
+    ),
+    // M3.3b: urgent and high-priority help requests at this event ({label} = number and where).
+    assistance: { title: t('push.assistanceTitle'), body: t('push.assistanceBody', { label: '{label}' }) },
+  });
 
   async function turnOn() {
     if (!publicKey) return;

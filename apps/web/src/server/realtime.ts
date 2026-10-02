@@ -1,5 +1,6 @@
 import 'server-only';
 import { createHash } from 'node:crypto';
+import { ASSISTANCE_CHANNEL } from '@yayatoh/assistance';
 import { checkinFactsTx, deviceContext } from '@yayatoh/checkin';
 import { type TenantTx, withTenant } from '@yayatoh/db';
 import { findEventTx, isPublicEvent } from '@yayatoh/events';
@@ -58,6 +59,8 @@ export const REALTIME_CHANNELS = createRealtimeRegistry([
   ...CORE_REALTIME_CHANNELS,
   SEATS_CHANNEL,
   SEAT_STATES_CHANNEL,
+  // M3.3b: the event's help queue (ids and states; the console and the Scan PWA re-read).
+  ASSISTANCE_CHANNEL,
 ]);
 
 /** Stream (re)connections per caller and channel per minute. */

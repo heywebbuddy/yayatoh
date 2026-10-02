@@ -1,7 +1,7 @@
-import { type EventViewDto, eventViewQuery, WIDGET_META } from '@yayatoh/command-center';
+import { type EventViewDto, eventViewQuery, followedChannels, WIDGET_META } from '@yayatoh/command-center';
 import { executeQuery, isDomainError } from '@yayatoh/kernel';
 import { buttonClass, EmptyState, PageHeader, Tag } from '@yayatoh/ui';
-import { ScanLine } from 'lucide-react';
+import { MonitorPlay, ScanLine } from 'lucide-react';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { CommandCenterBoard } from '@/components/command-center/board.tsx';
 import { ModePanel } from '@/components/command-center/mode-panel.tsx';
@@ -88,10 +88,18 @@ export default async function CommandCenterPage({
           </>
         }
         actions={
-          <Link href="/scan" className={buttonClass('primary')}>
-            <ScanLine aria-hidden="true" strokeWidth={2} />
-            {t('openScanner')}
-          </Link>
+          <>
+            {data.modules.has('checkin') ? (
+              <Link href={`${base}/command-center/tv`} className={buttonClass('secondary')}>
+                <MonitorPlay aria-hidden="true" strokeWidth={2} />
+                {t('tv.open')}
+              </Link>
+            ) : null}
+            <Link href="/scan" className={buttonClass('primary')}>
+              <ScanLine aria-hidden="true" strokeWidth={2} />
+              {t('openScanner')}
+            </Link>
+          </>
         }
       />
       <ModePanel
@@ -104,7 +112,7 @@ export default async function CommandCenterPage({
       <CommandCenterBoard
         key={`${view.mode.mode}:${slots.map((s) => `${s.key}${s.hidden ? '-' : ''}`).join(',')}`}
         slots={slots}
-        channels={Object.fromEntries(slots.map((s) => [s.key, WIDGET_META[s.key].channel]))}
+        channels={Object.fromEntries(slots.map((s) => [s.key, followedChannels(WIDGET_META[s.key])]))}
         urls={channels}
         initial={initial}
         widgetUrl={`/api/command-center/${org}/${event}`}

@@ -1,0 +1,368 @@
+# SOC 2 control mapping (M5.11a, decision P5-6).
+#
+# Each Trust Services Criterion (AICPA TSC 2017, points of focus revised 2022) in scope —
+# the common criteria CC1–CC9, availability A1 and confidentiality C1 — mapped to the
+# evidence this repository produces. `node tools/compliance/cli.ts check-controls` fails when a
+# criterion is missing, has no evidence, points at a path that does not exist, names a CI job
+# the workflow does not define, or names an export the evidence bundle does not produce.
+#
+# Evidence kinds:
+#   policy   compliance/policies/*.md (drafts, pending owner)
+#   adr      docs/adr/*.md (accepted architecture decisions)
+#   runbook  docs/runbooks/*.md
+#   doc      other documents (roadmap, threat model, SLOs, specs)
+#   test     a test file whose passing run is evidence (CI runs it on every PR)
+#   code     the implementation of a technical control
+#   ci_job   a job in a GitHub Actions workflow (its runs are exported by the evidence workflow)
+#   export   a file the scheduled evidence bundle collects (see tools/compliance/src/bundle.ts)
+#
+# `owner` lists what only the owner can supply (production access lists, signed policies,
+# vendor contracts); docs/runbooks/evidence-production.md says how.
+#
+# Status: draft, pending owner. Vanta and the auditor decide the final mapping (D26).
+
+version: 1
+framework: SOC 2 Trust Services Criteria (2017, revised points of focus 2022)
+scope: [CC1, CC2, CC3, CC4, CC5, CC6, CC7, CC8, CC9, A1, C1]
+status: draft, pending owner
+
+controls:
+  # CC1 — Control environment
+  - id: CC1.1
+    title: Commitment to integrity and ethical values
+    description: Written security commitments, a no-production-data rule for engineering and a code of conduct for anyone with access.
+    evidence:
+      - { kind: policy, path: compliance/policies/information-security.md }
+      - { kind: doc, path: CLAUDE.md, note: "Non-negotiable rules and Safety section binding every build session" }
+    owner: [Sign the information security policy; acknowledgement by each person with production access]
+
+  - id: CC1.2
+    title: Board or owner oversight
+    description: The owner approves plans, decisions and every PR carrying a risk tag.
+    evidence:
+      - { kind: doc, path: docs/decisions.md, note: "Owner decision log" }
+      - { kind: doc, path: .github/pull_request_template.md, note: "Risk tags that require owner approval" }
+      - { kind: export, name: github.pull_requests, note: "Owner approvals on risk-tagged PRs" }
+
+  - id: CC1.3
+    title: Structure, reporting lines and authority
+    description: Roles and responsibilities for the owner, the contracted backup, build sessions and platform staff.
+    evidence:
+      - { kind: policy, path: compliance/policies/information-security.md }
+      - { kind: runbook, path: docs/runbooks/README.md, note: "On-call is human; owner primary" }
+      - { kind: adr, path: docs/adr/0010-auth-and-authz.md }
+
+  - id: CC1.4
+    title: Competence
+    description: Build sessions follow a written agent guide and milestone briefs; reviewers are named per PR.
+    evidence:
+      - { kind: doc, path: CLAUDE.md }
+      - { kind: doc, path: docs/agent-briefs/common.md }
+    owner: [Background checks and training records for people with production access]
+
+  - id: CC1.5
+    title: Accountability
+    description: Every change has an author and a reviewer; every privileged read and write is attributed in the audit log.
+    evidence:
+      - { kind: export, name: github.pull_requests }
+      - { kind: export, name: audit.samples }
+      - { kind: code, path: packages/platform/src/audit.ts }
+
+  # CC2 — Communication and information
+  - id: CC2.1
+    title: Relevant, quality information
+    description: Audit log with a verified hash chain; metrics and SLOs.
+    evidence:
+      - { kind: code, path: packages/platform/src/audit.ts }
+      - { kind: test, path: packages/testing/tests/audit.int.test.ts }
+      - { kind: doc, path: docs/ops/slos.md }
+
+  - id: CC2.2
+    title: Internal communication
+    description: Policies, runbooks and the owner inbox communicate responsibilities internally.
+    evidence:
+      - { kind: runbook, path: docs/runbooks/README.md }
+      - { kind: doc, path: docs/owner-inbox.md }
+      - { kind: policy, path: compliance/policies/incident-response.md }
+
+  - id: CC2.3
+    title: External communication
+    description: Incident communication to customers; a public status page; security contact.
+    evidence:
+      - { kind: runbook, path: docs/runbooks/incident.md }
+      - { kind: policy, path: compliance/policies/incident-response.md }
+    owner: [Status page and security contact address]
+
+  # CC3 — Risk assessment
+  - id: CC3.1
+    title: Objectives specified
+    description: The roadmap states product, security and availability objectives.
+    evidence:
+      - { kind: doc, path: docs/roadmap.md }
+      - { kind: doc, path: docs/ops/slos.md }
+
+  - id: CC3.2
+    title: Risk identification and analysis
+    description: Threat model per surface, with residual risks.
+    evidence:
+      - { kind: doc, path: docs/ops/threat-model.md }
+      - { kind: doc, path: docs/ops/security-testing.md }
+
+  - id: CC3.3
+    title: Fraud risk
+    description: Checkout risk, velocity and fraud signals; payments reconciliation.
+    evidence:
+      - { kind: test, path: packages/testing/tests/checkout-risk.int.test.ts }
+      - { kind: test, path: packages/testing/tests/fraud-signals.int.test.ts }
+      - { kind: test, path: packages/testing/tests/reconciliation.int.test.ts }
+
+  - id: CC3.4
+    title: Significant change
+    description: Each phase plan lists risks and mitigations; owner approves phase plans.
+    evidence:
+      - { kind: doc, path: docs/plans/phase-5.md }
+      - { kind: doc, path: docs/decisions.md }
+
+  # CC4 — Monitoring activities
+  - id: CC4.1
+    title: Ongoing and separate evaluations
+    description: CI runs every gate on every PR; the evidence workflow exports results weekly; the owner commissions the pen test.
+    evidence:
+      - { kind: ci_job, workflow: .github/workflows/ci.yml, job: checks }
+      - { kind: ci_job, workflow: .github/workflows/ci.yml, job: integration }
+      - { kind: ci_job, workflow: .github/workflows/evidence.yml, job: bundle }
+      - { kind: export, name: github.ci_runs }
+      - { kind: test, path: packages/testing/tests/freeze.int.test.ts, note: "Cutover read-only freeze refuses every write except scans and provider completions" }
+    owner: [Pen test after Phase 5 Waves 1–3 merge (P5-6)]
+
+  - id: CC4.2
+    title: Communicating deficiencies
+    description: Failing gates block merges; post-incident reviews update runbooks within 72 h.
+    evidence:
+      - { kind: ci_job, workflow: .github/workflows/ci.yml, job: e2e-all }
+      - { kind: runbook, path: docs/runbooks/incident.md }
+      - { kind: export, name: github.branch_protection }
+
+  # CC5 — Control activities
+  - id: CC5.1
+    title: Control activities selected and developed
+    description: Gates encode the non-negotiable rules (tenancy, allowlists, boundaries, secrets).
+    evidence:
+      - { kind: code, path: tools/check-modules/src/check.ts }
+      - { kind: ci_job, workflow: .github/workflows/ci.yml, job: gate-canaries }
+
+  - id: CC5.2
+    title: Technology general controls
+    description: Row-level security enforced by the database; one command pipeline for every write.
+    evidence:
+      - { kind: adr, path: docs/adr/0003-tenancy-shared-db-force-rls.md }
+      - { kind: adr, path: docs/adr/0002-one-command-model.md }
+      - { kind: test, path: packages/testing/tests/isolation.int.test.ts }
+
+  - id: CC5.3
+    title: Policies and procedures deployed
+    description: Written policies (drafts) and runbooks.
+    evidence:
+      - { kind: policy, path: compliance/policies/information-security.md }
+      - { kind: policy, path: compliance/policies/access-control.md }
+      - { kind: policy, path: compliance/policies/change-management.md }
+      - { kind: runbook, path: docs/runbooks/README.md }
+    owner: [Approve and sign each policy]
+
+  # CC6 — Logical and physical access
+  - id: CC6.1
+    title: Logical access security
+    description: Tenant isolation by FORCE RLS, allowlisted public output, roles and permissions, encrypted private columns.
+    evidence:
+      - { kind: adr, path: docs/adr/0003-tenancy-shared-db-force-rls.md }
+      - { kind: adr, path: docs/adr/0014-public-output-allowlists.md }
+      - { kind: adr, path: docs/adr/0010-auth-and-authz.md }
+      - { kind: test, path: packages/testing/tests/isolation.int.test.ts }
+      - { kind: test, path: packages/testing/tests/canary.int.test.ts }
+      - { kind: code, path: packages/platform/src/key-vault.ts }
+      - { kind: code, path: packages/modules/tenancy/src/authorizer.ts, note: "Portal accounts (M5.3a/M5.4a) may only hold portal:{role}, never a member permission" }
+      - { kind: test, path: packages/testing/tests/speaker-portal.int.test.ts, note: "Speaker portal: own sessions and tasks only; revoked or expired accounts refused" }
+      - { kind: test, path: packages/testing/tests/exhibitor-portal.int.test.ts, note: "An exhibitor cannot see another; speaker and exhibitor principals cannot reach each other's portals" }
+      - { kind: test, path: apps/web/tests/event-routes.test.ts, note: "Every event console page and action loads its event for its own section (profile and event-role gate)" }
+
+  - id: CC6.2
+    title: Registration and authorization of users
+    description: Invitations with roles; staff roles from the owner-approved list (D10); signup codes.
+    evidence:
+      - { kind: test, path: packages/testing/tests/invitations.int.test.ts }
+      - { kind: test, path: apps/admin/tests/staff-roles.test.ts }
+      - { kind: test, path: apps/worker/tests/staff.int.test.ts }
+      - { kind: code, path: packages/modules/events/src/portal.ts, note: "Portal accounts: signed, versioned, revocable invitations expiring 90 days after the event (M5.3a)" }
+      - { kind: policy, path: compliance/policies/access-control.md }
+
+  - id: CC6.3
+    title: Role-based access, least privilege, removal
+    description: Org roles and permissions; platform_reader only in admin and worker, every use audited.
+    evidence:
+      - { kind: code, path: packages/db/src/platform.ts }
+      - { kind: test, path: packages/testing/tests/tenancy.int.test.ts }
+      - { kind: test, path: packages/testing/tests/impersonation.int.test.ts, note: "Staff impersonation refuses money, export and delete commands in every module" }
+      - { kind: test, path: packages/testing/tests/support-tools.int.test.ts, note: "Staff support tools (batch 3e)" }
+      - { kind: export, name: github.access }
+      - { kind: policy, path: compliance/policies/access-control.md }
+    owner: [Quarterly access review of hosting, Doppler, GitHub and staff console (runbook)]
+
+  - id: CC6.4
+    title: Physical access
+    description: No company-run facilities; hosting providers' SOC 2 reports are relied on.
+    evidence:
+      - { kind: adr, path: docs/adr/0004-hosting.md }
+      - { kind: policy, path: compliance/policies/vendor-management.md }
+    owner: [Collect current SOC 2 reports from Vercel, Neon, Fly.io, AWS, Cloudflare]
+
+  - id: CC6.5
+    title: Disposal of data and assets
+    description: Retention jobs purge and redact personal data per D11; terminated orgs follow a documented path.
+    evidence:
+      - { kind: policy, path: compliance/policies/data-retention.md }
+      - { kind: test, path: apps/worker/tests/retention.int.test.ts }
+      - { kind: runbook, path: docs/runbooks/restore-terminated-org.md }
+
+  - id: CC6.6
+    title: Protection against external threats
+    description: Strict CSP, rate limits, human check, SSRF guard, ZAP baseline.
+    evidence:
+      - { kind: test, path: packages/platform/tests/csp.test.ts }
+      - { kind: test, path: packages/platform/tests/ssrf.test.ts }
+      - { kind: test, path: packages/testing/tests/rate-limit.int.test.ts }
+      - { kind: doc, path: docs/ops/security-testing.md }
+
+  - id: CC6.7
+    title: Restricting transmission and movement of data
+    description: Allowlist serializers for every public output, export and webhook; signed webhooks.
+    evidence:
+      - { kind: adr, path: docs/adr/0014-public-output-allowlists.md }
+      - { kind: test, path: packages/testing/tests/canary.int.test.ts }
+      - { kind: runbook, path: docs/runbooks/webhook-replay.md }
+      - { kind: test, path: packages/testing/tests/badges.int.test.ts, note: "Badge PDFs print only allowlisted fields; downloads through signed, expiring links (M5.5a)" }
+      - { kind: test, path: packages/testing/tests/campaigns.int.test.ts, note: "Campaign recipients honour consent (M3.6b)" }
+
+  - id: CC6.8
+    title: Preventing unauthorized or malicious software
+    description: Secret scanning on every push; pinned dependencies with a release-age delay; Renovate.
+    evidence:
+      - { kind: ci_job, workflow: .github/workflows/ci.yml, job: secrets }
+      - { kind: doc, path: renovate.json }
+      - { kind: doc, path: pnpm-workspace.yaml, note: "Pinned catalog and allowed build scripts" }
+
+  # CC7 — System operations
+  - id: CC7.1
+    title: Detecting configuration changes and vulnerabilities
+    description: Boundary gate, contracts check and oasdiff detect unreviewed changes; ZAP and k6 scans.
+    evidence:
+      - { kind: ci_job, workflow: .github/workflows/ci.yml, job: openapi-breaking }
+      - { kind: ci_job, workflow: .github/workflows/ci.yml, job: checks }
+      - { kind: doc, path: docs/ops/security-testing.md }
+
+  - id: CC7.2
+    title: Monitoring for anomalies
+    description: SLO alerts, fraud and velocity signals, platform_reader access log.
+    evidence:
+      - { kind: doc, path: docs/ops/slos.md }
+      - { kind: test, path: packages/testing/tests/velocity.int.test.ts }
+      - { kind: test, path: packages/testing/tests/alerts.int.test.ts, note: "Command Center alert engine (M3.2b; batch 3e signals)" }
+      - { kind: code, path: packages/db/src/platform.ts }
+
+  - id: CC7.3
+    title: Evaluating security events
+    description: Severity levels and triage in the incident runbook.
+    evidence:
+      - { kind: runbook, path: docs/runbooks/incident.md }
+      - { kind: policy, path: compliance/policies/incident-response.md }
+
+  - id: CC7.4
+    title: Responding to security incidents
+    description: Incident runbook, key rotation for leaked secrets, post-incident review.
+    evidence:
+      - { kind: runbook, path: docs/runbooks/incident.md }
+      - { kind: runbook, path: docs/runbooks/key-rotation.md }
+      - { kind: policy, path: compliance/policies/incident-response.md }
+
+  - id: CC7.5
+    title: Recovering from incidents
+    description: Rollback, restore drill and webhook replay.
+    evidence:
+      - { kind: runbook, path: docs/runbooks/rollback.md }
+      - { kind: runbook, path: docs/runbooks/restore-drill.md }
+      - { kind: runbook, path: docs/runbooks/webhook-replay.md }
+      - { kind: policy, path: compliance/policies/business-continuity.md }
+
+  # CC8 — Change management
+  - id: CC8.1
+    title: Authorized, tested and approved changes
+    description: PRs only, CI gates, reviews, risk tags needing owner approval, expand/contract migrations.
+    evidence:
+      - { kind: policy, path: compliance/policies/change-management.md }
+      - { kind: doc, path: .github/pull_request_template.md }
+      - { kind: ci_job, workflow: .github/workflows/ci.yml, job: checks }
+      - { kind: ci_job, workflow: .github/workflows/ci.yml, job: e2e-all }
+      - { kind: runbook, path: docs/runbooks/deploy.md }
+      - { kind: export, name: github.pull_requests }
+      - { kind: export, name: github.branch_protection }
+      - { kind: export, name: github.ci_runs }
+
+  # CC9 — Risk mitigation
+  - id: CC9.1
+    title: Business disruption risk
+    description: Backups, off-site dumps, restore drills, business continuity plan.
+    evidence:
+      - { kind: policy, path: compliance/policies/business-continuity.md }
+      - { kind: runbook, path: docs/runbooks/restore-drill.md }
+      - { kind: code, path: tools/ops/offsite-dump.sh }
+
+  - id: CC9.2
+    title: Vendor and business partner risk
+    description: Vendor inventory, review before onboarding, annual SOC 2 report collection.
+    evidence:
+      - { kind: policy, path: compliance/policies/vendor-management.md }
+      - { kind: adr, path: docs/adr/0004-hosting.md }
+    owner: [Vendor contracts and DPAs; Vanta vendor module]
+
+  # A1 — Availability
+  - id: A1.1
+    title: Capacity management
+    description: SLOs and k6 load tests.
+    evidence:
+      - { kind: doc, path: docs/ops/slos.md }
+      - { kind: doc, path: k6/README.md }
+
+  - id: A1.2
+    title: Environmental protections, backups and recovery infrastructure
+    description: Managed Postgres with point-in-time recovery; off-account backups.
+    evidence:
+      - { kind: adr, path: docs/adr/0004-hosting.md }
+      - { kind: code, path: tools/ops/offsite-dump.sh }
+      - { kind: policy, path: compliance/policies/business-continuity.md }
+
+  - id: A1.3
+    title: Recovery plan testing
+    description: Monthly restore drill with a script; check-in drill.
+    evidence:
+      - { kind: runbook, path: docs/runbooks/restore-drill.md }
+      - { kind: code, path: tools/ops/restore-drill.sh }
+      - { kind: runbook, path: docs/runbooks/checkin-drill.md }
+    owner: [Record each monthly production restore drill]
+
+  # C1 — Confidentiality
+  - id: C1.1
+    title: Identifying and maintaining confidential information
+    description: Private-column classification per module, encrypted sensitive columns, canary leak crawl.
+    evidence:
+      - { kind: code, path: packages/platform/src/private-columns.ts }
+      - { kind: test, path: packages/testing/tests/column-privacy.test.ts }
+      - { kind: test, path: packages/testing/tests/canary.int.test.ts }
+      - { kind: policy, path: compliance/policies/data-retention.md }
+
+  - id: C1.2
+    title: Disposing of confidential information
+    description: Retention (D11) — 24-month attendee PII, archive 24 months; DSAR erasure.
+    evidence:
+      - { kind: policy, path: compliance/policies/data-retention.md }
+      - { kind: test, path: apps/worker/tests/retention.int.test.ts }
+      - { kind: test, path: packages/testing/tests/account-dsar.int.test.ts }
+      - { kind: test, path: packages/testing/tests/privacy.int.test.ts }

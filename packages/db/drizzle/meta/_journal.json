@@ -677,8 +677,50 @@
     {
       "idx": 96,
       "version": "7",
-      "when": 1790956651975,
-      "tag": "0096_bright_red_shift",
+      "when": 1790957678956,
+      "tag": "0096_long_luminals",
+      "breakpoints": true
+    },
+    {
+      "idx": 97,
+      "version": "7",
+      "when": 1790957688815,
+      "tag": "0097_curly_triathlon",
+      "breakpoints": true
+    },
+    {
+      "idx": 98,
+      "version": "7",
+      "when": 1790958346804,
+      "tag": "0098_true_thunderbolt",
+      "breakpoints": true
+    },
+    {
+      "idx": 99,
+      "version": "7",
+      "when": 1790959748792,
+      "tag": "0099_numerous_jackal",
+      "breakpoints": true
+    },
+    {
+      "idx": 100,
+      "version": "7",
+      "when": 1790959758170,
+      "tag": "0100_slim_lady_ursula",
+      "breakpoints": true
+    },
+    {
+      "idx": 101,
+      "version": "7",
+      "when": 1790959768350,
+      "tag": "0101_naive_scorpion",
+      "breakpoints": true
+    },
+    {
+      "idx": 102,
+      "version": "7",
+      "when": 1790972472722,
+      "tag": "0102_bright_red_shift",
       "breakpoints": true
     }
   ]

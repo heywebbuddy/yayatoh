@@ -1,10 +1,11 @@
 import type { ExhibitorDto } from '@yayatoh/program';
-import { Button, Card, EmptyState, PageHeader } from '@yayatoh/ui';
+import { Button, buttonClass, Card, EmptyState, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Markdown } from '@/components/markdown.tsx';
 import { MediaUploader } from '@/components/media-uploader.tsx';
 import { type FieldSpec, ProgramForm } from '@/components/program-form.tsx';
 import { ProgramThumb } from '@/components/program-thumb.tsx';
+import { Link } from '@/i18n/navigation.ts';
 import { defaultProgramAlt } from '@/lib/program-media.ts';
 import { programMediaPanels } from '@/server/media.ts';
 import { loadProgramPage } from '@/server/program.ts';
@@ -27,6 +28,7 @@ export default async function ExhibitorsPage({
   );
   const t = await getTranslations();
   const tp = await getTranslations('program');
+  const tx = await getTranslations('exhibitorAdmin');
   const errors = {
     name: tp('errors.name'),
     websiteUrl: tp('errors.website'),
@@ -60,7 +62,21 @@ export default async function ExhibitorsPage({
   ];
   return (
     <>
-      <PageHeader title={t('nav.exhibitors')} description={tp('exhibitorsSubtitle')} />
+      <PageHeader
+        title={t('nav.exhibitors')}
+        description={tp('exhibitorsSubtitle')}
+        actions={
+          // M5.4a: the exhibitor portal (people, approvals) and booths on the floor plan.
+          <nav aria-label={tx('subnav')} className="flex flex-wrap gap-2.5">
+            <Link href={`/o/${org}/e/${event}/exhibitors/portal`} className={buttonClass('secondary')}>
+              {tx('portalLink')}
+            </Link>
+            <Link href={`/o/${org}/e/${event}/exhibitors/booths`} className={buttonClass('secondary')}>
+              {tx('boothsLink')}
+            </Link>
+          </nav>
+        }
+      />
       {canWrite ? null : <p className="text-body text-ink-2">{tp('viewerNotice')}</p>}
       <section aria-labelledby="exhibitors-heading" className="flex flex-col gap-3">
         <h2 id="exhibitors-heading" className="text-section">

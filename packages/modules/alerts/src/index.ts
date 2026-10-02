@@ -32,6 +32,7 @@ export { type EventFacts, evaluateEventRules, evaluateOrgRules, type OrgFacts } 
 export {
   ALERT_KIND,
   ALERT_TEXT_KIND,
+  ALERT_URGENT_TEXT_KIND,
   type AlertChange,
   type AlertDeps,
   evaluateEventAlertsTx,
@@ -45,4 +46,5 @@ export {
   alertTargetsTx,
   catchUpAlerts,
   evaluateOrgNow,
+  watchQuietDevices,
 } from './subscriber.ts';

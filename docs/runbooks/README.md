@@ -18,6 +18,7 @@ approved by the owner step by step.
 | [front-door.md](front-door.md) | Coexistence: turning the front door on, moving routes between legacy and the new app, rolling back (M2.4) |
 | [legacy-migration.md](legacy-migration.md) | Migrating a legacy instance's data (ELT, rehearsals) |
 | [cutover.md](cutover.md) | Moving an instance to the new platform (M2.5 tooling), the read-only freeze, and the rollback before PONR |
+| [evidence-production.md](evidence-production.md) | SOC 2 evidence: download the weekly bundle, quarterly access reviews, production audit samples (owner) |
 
 **Conventions**
 - Commands are copy-paste ready and marked **(local/staging)** or **(production, owner)**.

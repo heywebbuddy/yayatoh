@@ -3,7 +3,7 @@
 Owner decision 2026-10-02 (`docs/decisions.md`); brief `docs/agent-briefs/design-v2.md`; decision record [ADR 0022](../../adr/0022-design-system-v2.md); approved artboards `docs/design/system-v2/`.
 
 ## What was built
-- **Tokens and theming:** semantic colour roles with light (default) and dark values in `packages/ui` (`tokens.ts` + `styles.css`); `data-theme` on `<html>` from the `yy_theme` cookie read on the server, plus `auth.users.theme` for signed-in people (migration `0096_bright_red_shift`); Light / Dark / System switch in every shell; "System" resolved in CSS.
+- **Tokens and theming:** semantic colour roles with light (default) and dark values in `packages/ui` (`tokens.ts` + `styles.css`); `data-theme` on `<html>` from the `yy_theme` cookie read on the server, plus `auth.users.theme` for signed-in people (migration `0102_bright_red_shift`, renumbered after batch 3g); Light / Dark / System switch in every shell; "System" resolved in CSS.
 - **Fonts:** Manrope (Latin, Latin Extended, Cyrillic), IBM Plex Sans Arabic and Noto Sans Devanagari self-hosted via `next/font/local` with `unicode-range`; CJK by Noto Sans JP/SC/TC name, then the platform face.
 - **Components:** the full ADR 0022 inventory (actions, surfaces, labels, people, navigation, inputs, data, overlays, states, layout), charts restyled.
 - **Shells:** organizer console (floating dark sidebar, account card with "New event", topbar with search/theme/notifications, drawer under 1024 px), staff console, Scan PWA, attendee portal, sign-in and onboarding, public site, tenant sites, public event page.

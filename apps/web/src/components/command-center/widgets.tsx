@@ -3,17 +3,38 @@
 import type { WidgetKey } from '@yayatoh/command-center/client';
 import { formatMoney, money } from '@yayatoh/kernel';
 import { countWords } from '@yayatoh/notifications/numbers';
-import { cx, ProgressBar, ProgressRing, StatusDot, Timeline as TimelineList } from '@yayatoh/ui';
+import { BarChart, cx, ProgressBar, ProgressRing, StatusDot, Timeline as TimelineList } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
 import { Link } from '@/i18n/navigation.ts';
 import { SEVERITY_DOT } from '../alerts-list.tsx';
+import {
+  type Capacity,
+  CapacityBody,
+  type CheckinSpeed,
+  CheckinSpeedBody,
+  type LiveFeed,
+  LiveFeedBody,
+  type ScanIssues,
+  ScanIssuesBody,
+  type StaffPresence,
+  StaffPresenceBody,
+} from './live-widgets.tsx';
 
 /** Widget bodies (M3.2a). Each renders one loader's allowlisted DTO; nothing else reaches them. */
 interface Ctx {
   readonly locale: string;
   readonly timeZone: string;
   readonly base: string;
+}
+
+/** What the board lets a widget control (M3.3a): its options (the feed's filters) and pausing. */
+export interface WidgetControls {
+  readonly params: Readonly<Record<string, string>>;
+  readonly setParams: (next: Readonly<Record<string, string>>) => void;
+  readonly paused: boolean;
+  readonly waiting: boolean;
+  readonly togglePause: () => void;
 }
 
 type Readiness = {
@@ -46,6 +67,8 @@ type DeviceBoard = {
     queueDepth: number | null;
     checkpoint: string | null;
     kiosk: boolean;
+    appVersion?: string | null;
+    lastScanAt?: string | null;
   }[];
 };
 type Alerts = {
@@ -59,6 +82,61 @@ type Alerts = {
     href: string | null;
     at: string;
   }[];
+};
+
+type Assistance = {
+  waiting: number;
+  assigned: number;
+  inProgress: number;
+  overdue: number;
+  top: {
+    id: string;
+    number: number;
+    source: 'guest' | 'staff';
+    reason: string;
+    priority: 'urgent' | 'high' | 'normal';
+    state: string;
+    overdue: boolean;
+  }[];
+};
+type Campaigns = {
+  currency: string;
+  fromDay: string;
+  toDay: string;
+  totals: {
+    sends: number | null;
+    clicks: number;
+    uniqueClickers: number;
+    orders: number;
+    revenueMinor: number;
+    firstTouchOrders: number;
+    firstTouchRevenueMinor: number;
+    conversionBps: number;
+  };
+  campaigns: {
+    key: string;
+    kind: 'campaign' | 'utm';
+    name: string | null;
+    sends: number | null;
+    clicks: number;
+    orders: number;
+    revenueMinor: number;
+    firstTouchOrders: number;
+    firstTouchRevenueMinor: number;
+    conversionBps: number;
+  }[];
+  more: number;
+};
+type Deliverability = {
+  sent: number;
+  bounceBps: number;
+  complaintBps: number;
+  bounceOver: boolean;
+  complaintOver: boolean;
+  domainsOver: number;
+  campaignsOver: number;
+  paused: boolean;
+  windowDays: number;
 };
 
 const num = (n: number, locale: string) => new Intl.NumberFormat(locale).format(n);
@@ -270,6 +348,7 @@ function EntrancesBody({ d, c }: { d: Entrances; c: Ctx }) {
 /** M3.4a staff view (batch 3d merge): each device at the event, as the Scan PWA's board shows it. */
 function DeviceBoardBody({ d, c }: { d: DeviceBoard; c: Ctx }) {
   const t = useTranslations('scanStaff');
+  const tl = useTranslations('commandCenter.widget.deviceBoard');
   const time = new Intl.DateTimeFormat(c.locale, { timeStyle: 'short', timeZone: c.timeZone });
   if (d.devices.length === 0) return <p className="text-body text-ink-2">{t('noDevices')}</p>;
   return (
@@ -290,6 +369,8 @@ function DeviceBoardBody({ d, c }: { d: DeviceBoard; c: Ctx }) {
               v.lastSeenAt ? t('lastSeen', { time: time.format(new Date(v.lastSeenAt)) }) : t('neverSeen'),
               v.batteryPct !== null ? t('battery', { percent: v.batteryPct }) : null,
               v.queueDepth !== null ? t('backlog', { count: v.queueDepth }) : null,
+              v.lastScanAt ? tl('lastScan', { time: time.format(new Date(v.lastScanAt)) }) : null,
+              v.appVersion ? tl('appVersion', { version: v.appVersion }) : null,
             ]
               .filter(Boolean)
               .join(' · ')}
@@ -297,6 +378,122 @@ function DeviceBoardBody({ d, c }: { d: DeviceBoard; c: Ctx }) {
         </li>
       ))}
     </ul>
+  );
+}
+
+const bpsPct = (bps: number, locale: string) =>
+  new Intl.NumberFormat(locale, { style: 'percent', maximumFractionDigits: 2 }).format(bps / 10_000);
+
+/** M3.8b: this event's campaigns → orders and revenue (last touch; first touch alongside). */
+function CampaignsBody({ d, c }: { d: Campaigns; c: Ctx }) {
+  const t = useTranslations('commandCenter.widget.campaigns');
+  const m = (minor: number) => formatMoney(money(minor, d.currency), c.locale);
+  const orgBase = c.base.replace(/\/e\/[^/]+$/, '');
+  const name = (x: Campaigns['campaigns'][number]) => x.name ?? t('unnamed');
+  return (
+    <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-1">
+        <Big testId="cc-campaigns-revenue">{m(d.totals.revenueMinor)}</Big>
+        <p className="text-caption text-zinc-600" data-testid="cc-campaigns-summary">
+          {t('summary', {
+            orders: d.totals.orders,
+            clicks: d.totals.clicks,
+            conversion: bpsPct(d.totals.conversionBps, c.locale),
+          })}
+        </p>
+        <p className="text-caption text-zinc-500">
+          {t('firstTouch', { orders: d.totals.firstTouchOrders, amount: m(d.totals.firstTouchRevenueMinor) })}
+        </p>
+      </div>
+      {d.campaigns.length === 0 ? (
+        <p className="text-body text-zinc-600">{t('none')}</p>
+      ) : (
+        <>
+          <BarChart
+            title={t('chartTitle')}
+            bars={d.campaigns.map((x) => ({ label: name(x).slice(0, 14), value: x.revenueMinor }))}
+            height={120}
+            formatValue={m}
+          />
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse text-body" data-testid="cc-campaigns-table">
+              <caption className="sr-only">{t('chartTitle')}</caption>
+              <thead>
+                <tr className="border-b border-zinc-200">
+                  <th scope="col" className="px-2 py-1.5 text-start text-caption font-normal text-zinc-500">
+                    {t('campaign')}
+                  </th>
+                  <th scope="col" className="px-2 py-1.5 text-end text-caption font-normal text-zinc-500">
+                    {t('clicks')}
+                  </th>
+                  <th scope="col" className="px-2 py-1.5 text-end text-caption font-normal text-zinc-500">
+                    {t('orders')}
+                  </th>
+                  <th scope="col" className="px-2 py-1.5 text-end text-caption font-normal text-zinc-500">
+                    {t('revenue')}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {d.campaigns.map((x) => (
+                  <tr key={x.key} className="border-b border-zinc-100 last:border-0">
+                    <th scope="row" className="px-2 py-1.5 text-start font-normal">
+                      <Link
+                        href={`${orgBase}/marketing-analytics/campaign?key=${encodeURIComponent(x.key)}`}
+                        className="inline-flex min-h-6 items-center underline underline-offset-2"
+                      >
+                        {name(x)}
+                      </Link>
+                    </th>
+                    <td className="px-2 py-1.5 text-end tabular-nums">{num(x.clicks, c.locale)}</td>
+                    <td className="px-2 py-1.5 text-end tabular-nums">{num(x.orders, c.locale)}</td>
+                    <td className="px-2 py-1.5 text-end tabular-nums">{m(x.revenueMinor)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {d.more > 0 ? <p className="text-caption text-zinc-500">{t('more', { count: d.more })}</p> : null}
+        </>
+      )}
+      <Link
+        href={`${orgBase}/marketing-analytics`}
+        className="inline-flex min-h-6 items-center self-start text-body underline underline-offset-2"
+      >
+        {t('open')}
+      </Link>
+    </div>
+  );
+}
+
+/** M3.8b: the org's email bounce and complaint rates, what is over the thresholds, the pause. */
+function DeliverabilityBody({ d, c }: { d: Deliverability; c: Ctx }) {
+  const t = useTranslations('commandCenter.widget.deliverability');
+  const orgBase = c.base.replace(/\/e\/[^/]+$/, '');
+  const over = d.bounceOver || d.complaintOver || d.domainsOver > 0 || d.campaignsOver > 0;
+  return (
+    <div className="flex flex-col gap-2">
+      {d.paused ? <StatusDot status="danger" label={t('paused')} /> : null}
+      <StatusDot status={over ? 'warning' : 'success'} label={over ? t('attention') : t('healthy')} />
+      <p className="text-body tabular-nums" data-testid="cc-deliverability-rates">
+        {t('rates', {
+          bounce: bpsPct(d.bounceBps, c.locale),
+          complaint: bpsPct(d.complaintBps, c.locale),
+        })}
+      </p>
+      <p className="text-caption text-zinc-600">{t('window', { sent: d.sent, days: d.windowDays })}</p>
+      {d.domainsOver + d.campaignsOver > 0 ? (
+        <p className="text-caption text-zinc-600">
+          {t('over', { domains: d.domainsOver, campaigns: d.campaignsOver })}
+        </p>
+      ) : null}
+      <Link
+        href={`${orgBase}/marketing-analytics/deliverability`}
+        className="inline-flex min-h-6 items-center self-start text-body underline underline-offset-2"
+      >
+        {t('open')}
+      </Link>
+    </div>
   );
 }
 
@@ -344,8 +541,69 @@ function AlertsBody({ d, c }: { d: Alerts; c: Ctx }) {
   );
 }
 
-export function WidgetBody({ widget, data, ctx }: { widget: WidgetKey; data: unknown; ctx: Ctx }) {
+/** M3.3b: the help queue in numbers and its most urgent open requests, linking to the queue. */
+function AssistanceBody({ d, c }: { d: Assistance; c: Ctx }) {
+  const t = useTranslations('assistance');
+  return (
+    <div className="flex flex-col gap-3" data-testid="cc-assistance">
+      <dl className="grid grid-cols-2 gap-x-4 gap-y-1 text-body sm:grid-cols-4">
+        {(['waiting', 'assigned', 'inProgress', 'overdue'] as const).map((k) => (
+          <div key={k} className="flex flex-col">
+            <dt className="text-caption text-zinc-600">{t(`widget.${k}`)}</dt>
+            <dd
+              className={`tabular-nums ${k === 'overdue' && d.overdue > 0 ? 'font-medium text-pink-700' : ''}`}
+            >
+              {num(d[k], c.locale)}
+            </dd>
+          </div>
+        ))}
+      </dl>
+      {d.top.length === 0 ? (
+        <p className="text-body text-zinc-600">{t('widget.none')}</p>
+      ) : (
+        <ul className="flex list-none flex-col gap-1 p-0">
+          {d.top.map((r) => (
+            <li key={r.id} className="flex flex-wrap items-baseline gap-x-2 text-body">
+              <span className="font-medium">{t('number', { number: r.number })}</span>
+              <span>{t(`reason.${r.reason}`)}</span>
+              <span className="text-caption text-zinc-600">
+                {[t(`priority.${r.priority}`), t(`state.${r.state}`), r.overdue ? t('overdue') : null]
+                  .filter(Boolean)
+                  .join(' · ')}
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
+      <Link href={`${c.base}/assistance`} className="self-start text-body underline underline-offset-2">
+        {t('widget.open')}
+      </Link>
+    </div>
+  );
+}
+
+export function WidgetBody({
+  widget,
+  data,
+  ctx,
+  controls,
+}: {
+  widget: WidgetKey;
+  data: unknown;
+  ctx: Ctx;
+  controls: WidgetControls;
+}) {
   switch (widget) {
+    case 'liveFeed':
+      return <LiveFeedBody d={data as LiveFeed} c={ctx} controls={controls} />;
+    case 'checkinSpeed':
+      return <CheckinSpeedBody d={data as CheckinSpeed} c={ctx} />;
+    case 'scanIssues':
+      return <ScanIssuesBody d={data as ScanIssues} c={ctx} />;
+    case 'capacity':
+      return <CapacityBody d={data as Capacity} c={ctx} />;
+    case 'staffPresence':
+      return <StaffPresenceBody d={data as StaffPresence} c={ctx} />;
     case 'readiness':
       return <ReadinessBody d={data as Readiness} c={ctx} />;
     case 'sales':
@@ -366,5 +624,11 @@ export function WidgetBody({ widget, data, ctx }: { widget: WidgetKey; data: unk
       return <EntrancesBody d={data as Entrances} c={ctx} />;
     case 'deviceBoard':
       return <DeviceBoardBody d={data as DeviceBoard} c={ctx} />;
+    case 'assistance':
+      return <AssistanceBody d={data as Assistance} c={ctx} />;
+    case 'campaigns':
+      return <CampaignsBody d={data as Campaigns} c={ctx} />;
+    case 'deliverability':
+      return <DeliverabilityBody d={data as Deliverability} c={ctx} />;
   }
 }

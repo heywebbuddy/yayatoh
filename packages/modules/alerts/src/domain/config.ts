@@ -1,3 +1,5 @@
+import { DELIVERABILITY_THRESHOLDS } from '@yayatoh/notifications/deliverability';
+
 /**
  * The alert engine's catalogue (M3.2b): rules, what each one measures, who may see it, the
  * console page that fixes it, and the thresholds. Thresholds are the roadmap's defaults (M3.2),
@@ -47,6 +49,8 @@ export const RULE_KEYS = [
   'sellOut',
   'salesPace',
   'readiness',
+  // M3.3b guest assistance: help requests nobody has taken within their SLA.
+  'assistanceOverdue',
   'domain',
   'payoutsPastDue',
   'deliverability',
@@ -117,9 +121,11 @@ export const RULES: Readonly<Record<RuleKey, RuleDef>> = {
   sellOut: rule('sellOut', 'event', 'sales', 'orders:read', '/e/{event}/tickets-orders'),
   salesPace: rule('salesPace', 'event', 'sales', 'orders:read', '/e/{event}/analysis'),
   readiness: rule('readiness', 'event', 'setup', 'events:read', '/e/{event}/setup-guide'),
+  assistanceOverdue: rule('assistanceOverdue', 'event', 'door', 'assistance:read', '/e/{event}/assistance'),
   domain: rule('domain', 'org', 'setup', 'org:update', '/domains'),
   payoutsPastDue: rule('payoutsPastDue', 'org', 'payments', 'finance:read', '/payouts'),
-  deliverability: rule('deliverability', 'org', 'messaging', 'messages:read', '/messaging'),
+  // M3.8b: the suppression list (bounced and complaining addresses) on Messaging health.
+  deliverability: rule('deliverability', 'org', 'messaging', 'messages:read', '/messaging#suppressions'),
   automationFailed: rule('automationFailed', 'org', 'messaging', 'messages:read', '/messaging'),
   campaignFailed: rule('campaignFailed', 'org', 'messaging', 'marketing:read', '/campaigns'),
   disputeDeadline: rule('disputeDeadline', 'org', 'payments', 'finance:read', '/disputes'),
@@ -167,11 +173,14 @@ export const THRESHOLDS = {
   readinessCriticalMs: 86_400_000,
   /** A live custom domain without a certificate after 24 hours. */
   sslGraceMs: 24 * 3_600_000,
-  /** Email over 7 days, from 100 sent: bounces ≥ 5 %, complaints ≥ 0.1 %. */
-  deliverabilityWindowMs: 7 * 86_400_000,
-  deliverabilityMinSent: 100,
-  bounceBps: 500,
-  complaintBps: 10,
+  /**
+   * Email over 7 days, from 100 sent: bounces ≥ 5 %, complaints ≥ 0.1 % — for the org, and (M3.8b)
+   * each sending domain and each campaign. One source with the deliverability report.
+   */
+  deliverabilityWindowMs: DELIVERABILITY_THRESHOLDS.windowMs,
+  deliverabilityMinSent: DELIVERABILITY_THRESHOLDS.minSent,
+  bounceBps: DELIVERABILITY_THRESHOLDS.bounceBps,
+  complaintBps: DELIVERABILITY_THRESHOLDS.complaintBps,
   /** Failed messages, bulk actions or journey steps (M3.7a) in the last 24 hours. */
   automationWindowMs: 86_400_000,
   automationMin: 1,

@@ -3,7 +3,7 @@ import { isUniqueViolation, type TenantTx } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
 import { type Ctx, DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
-import { and, desc, eq, sql } from 'drizzle-orm';
+import { and, desc, eq, inArray, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import {
   CAMPAIGN_CHANNELS,
@@ -271,6 +271,36 @@ export const listCampaignsQuery = tenantQuery({
       }),
     );
   },
+});
+
+/**
+ * Campaign names by id (batch 3g merge): marketing analytics (M3.8b, a lower tier) keys campaigns
+ * by the id its tracked links and messages carry; the web and the Command Center tile name them
+ * with this. Ids of other orgs or deleted campaigns are simply absent (RLS).
+ */
+export async function campaignNamesTx(
+  tx: TenantTx,
+  ids: readonly string[],
+): Promise<ReadonlyMap<string, string>> {
+  const unique = [...new Set(ids)];
+  if (unique.length === 0) return new Map();
+  const rows = await tx
+    .select({ id: campaigns.id, name: campaigns.name })
+    .from(campaigns)
+    .where(inArray(campaigns.id, unique));
+  return new Map(rows.map((r) => [r.id, r.name]));
+}
+
+export const CampaignNameDto = z.object({ id: z.uuid(), name: z.string() });
+
+export const campaignNamesQuery = tenantQuery({
+  name: 'campaigns.campaignNames',
+  input: z.object({ ids: z.array(z.uuid()).max(MAX_CAMPAIGNS * 10) }),
+  output: z.array(CampaignNameDto),
+  entitlement: 'marketing',
+  permission: 'marketing:read',
+  handler: async ({ input, tx }) =>
+    [...(await campaignNamesTx(tx, input.ids))].map(([id, name]) => ({ id, name })),
 });
 
 export const getCampaignQuery = tenantQuery({

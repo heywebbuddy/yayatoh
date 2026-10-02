@@ -27,6 +27,15 @@ const COMMAND_CENTER: NavItem = {
   icon: 'gauge',
 };
 
+/** M3.3b: the event's help queue (guest and staff requests), with the run items. */
+const ASSISTANCE: NavItem = {
+  key: 'assistance',
+  path: 'assistance',
+  group: 'run',
+  module: 'checkin',
+  icon: 'life-buoy',
+};
+
 /** M1.4b: every event can have several dates, a series and copies, whatever its profile. */
 const COPY_NAV: readonly NavItem[] = [
   { key: 'dates', path: 'dates', group: 'build', module: 'core', icon: 'calendar-range' },
@@ -43,6 +52,7 @@ const NEEDS: Readonly<Record<string, string>> = {
   marketing: 'messages:read',
   team: 'event_team:read',
   trackedLinks: 'marketing:read',
+  assistance: 'assistance:read',
 };
 
 export default async function EventLayout({
@@ -61,6 +71,7 @@ export default async function EventLayout({
   const items = [
     ...composeNav(profile, data.modules).flatMap((i) => (i.key === 'home' ? [i, COMMAND_CENTER] : [i])),
     ...(data.modules.has('marketing') ? [TRACKED_LINKS] : []),
+    ...(data.modules.has('checkin') ? [ASSISTANCE] : []),
     ...COPY_NAV,
   ].filter((i) => opens(i.key) && (!NEEDS[i.key] || can(NEEDS[i.key] as string)));
   const rules = opens('setupGuide') ? await loadReadiness(org, event) : [];
