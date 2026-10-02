@@ -34,6 +34,16 @@ describe('check-modules gate canaries', () => {
     expect(rules('migrator-access')).toContain('migrator-access');
   });
 
+  it('raw colours (hex, rgba, default palette classes) fail in web, admin and ui; token files pass', () => {
+    const v = checkModules(here('../canaries/raw-colour')).filter((x) => x.rule === 'design-tokens');
+    expect(v.map((x) => x.file).sort()).toEqual([
+      'apps/admin/src/rgba.tsx',
+      'apps/web/src/hex.tsx',
+      'apps/web/src/palette.tsx',
+    ]);
+    expect(v.find((x) => x.file === 'apps/web/src/palette.tsx')?.message).toContain('bg-zinc-100');
+  });
+
   it('literal UI strings in the web app fail', () => {
     const v = checkModules(here('../canaries/literal-strings')).filter((x) => x.rule === 'i18n-literal');
     expect(v.map((x) => x.message)).toEqual([

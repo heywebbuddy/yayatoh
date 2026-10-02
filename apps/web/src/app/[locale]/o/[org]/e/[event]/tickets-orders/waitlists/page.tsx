@@ -176,7 +176,7 @@ export default async function WaitlistsPage({
                     cell: (e) => (
                       <span className="flex flex-col">
                         <span>{e.name}</span>
-                        <span className="text-caption text-zinc-500">{e.email}</span>
+                        <span className="text-caption text-ink-2">{e.email}</span>
                       </span>
                     ),
                   },
@@ -232,7 +232,7 @@ export default async function WaitlistsPage({
               {sp.exportError ? (
                 <p
                   role="alert"
-                  className="rounded-card border border-pink-700 bg-pink-50 px-4 py-3 text-body text-pink-700"
+                  className="rounded-card border border-danger bg-danger-soft px-4 py-3 text-body text-danger"
                 >
                   {t('exportError', { reason: (await getTranslations())(errorMessageKey(sp.exportError)) })}
                 </p>
@@ -240,7 +240,7 @@ export default async function WaitlistsPage({
               {op ? (
                 <section
                   aria-labelledby="export-heading"
-                  className="flex flex-col gap-2 rounded-panel border border-zinc-200 bg-white px-5 py-4"
+                  className="flex flex-col gap-2 rounded-panel border border-line bg-surface px-5 py-4"
                 >
                   {opActive ? <AutoRefresh seconds={2} /> : null}
                   <h3 id="export-heading" className="text-section">

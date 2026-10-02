@@ -59,10 +59,10 @@ export function AnnouncementComposer({
             <h3 id="sms-preview-heading" className="text-body font-medium">
               {t('smsPreviewTitle')}
             </h3>
-            <p className="whitespace-pre-line rounded-card border border-zinc-200 bg-zinc-50 px-4 py-3 text-body">
+            <p className="whitespace-pre-line rounded-card border border-line bg-surface-2 px-4 py-3 text-body">
               {state.preview.sms.text}
             </p>
-            <p className="text-caption text-zinc-600">
+            <p className="text-caption text-ink-2">
               {t('smsCount', {
                 characters: state.preview.sms.characters,
                 segments: state.preview.sms.segments,
@@ -76,7 +76,7 @@ export function AnnouncementComposer({
           title={t('previewFrame', { subject: state.preview.subject })}
           src={state.preview.src}
           sandbox=""
-          className="h-[420px] w-full rounded-card border border-zinc-200"
+          className="h-[420px] w-full rounded-card border border-line"
         />
         <div className="flex flex-wrap gap-2">
           <Button type="submit" name="intent" value="send" disabled={pending}>
@@ -103,7 +103,7 @@ export function AnnouncementComposer({
         <Alert title={tr(errorMessageKey(state.code))} />
       ) : null}
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="announcement-subject" className="text-caption text-zinc-600">
+        <label htmlFor="announcement-subject" className="text-[13px] font-bold text-ink">
           {t('subject')}
         </label>
         <input
@@ -113,16 +113,16 @@ export function AnnouncementComposer({
           maxLength={150}
           aria-invalid={err.subject ? true : undefined}
           aria-describedby={err.subject ? 'announcement-subject-error' : undefined}
-          className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
+          className="field"
         />
         {err.subject ? (
-          <p id="announcement-subject-error" className="text-caption text-pink-700">
+          <p id="announcement-subject-error" className="text-caption text-danger">
             {t('errors.subjectRequired')}
           </p>
         ) : null}
       </div>
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="announcement-body" className="text-caption text-zinc-600">
+        <label htmlFor="announcement-body" className="text-[13px] font-bold text-ink">
           {t('message')}
         </label>
         <textarea
@@ -133,10 +133,10 @@ export function AnnouncementComposer({
           maxLength={5000}
           aria-invalid={err.body ? true : undefined}
           aria-describedby={err.body ? 'announcement-body-error' : undefined}
-          className="rounded-card border border-zinc-200 bg-white px-4 py-3 text-body"
+          className="rounded-card border border-line bg-surface px-4 py-3 text-body"
         />
         {err.body ? (
-          <p id="announcement-body-error" className="text-caption text-pink-700">
+          <p id="announcement-body-error" className="text-caption text-danger">
             {t('errors.messageRequired')}
           </p>
         ) : null}
@@ -145,7 +145,7 @@ export function AnnouncementComposer({
         className="flex flex-col gap-2"
         aria-describedby={err.channels ? 'announcement-channels-error' : undefined}
       >
-        <legend className="text-caption text-zinc-600">{t('channels')}</legend>
+        <legend className="text-[13px] font-bold text-ink">{t('channels')}</legend>
         <div className="flex flex-wrap gap-x-6 gap-y-2">
           {(['email', 'push', 'sms'] as const).map((c) => (
             <label key={c} className="flex min-h-6 items-center gap-2 text-body">
@@ -154,16 +154,16 @@ export function AnnouncementComposer({
                 name="channel"
                 value={c}
                 defaultChecked={v.channels.includes(c)}
-                className="size-5 accent-zinc-900"
+                className="size-5 accent-primary"
               />
               {t(`channel.${c}`)}
             </label>
           ))}
         </div>
-        <p className="text-caption text-zinc-500">{t('pushHint')}</p>
-        <p className="text-caption text-zinc-500">{t('smsHint')}</p>
+        <p className="text-caption text-ink-2">{t('pushHint')}</p>
+        <p className="text-caption text-ink-2">{t('smsHint')}</p>
         {err.channels ? (
-          <p id="announcement-channels-error" className="text-caption text-pink-700">
+          <p id="announcement-channels-error" className="text-caption text-danger">
             {t('errors.channelRequired')}
           </p>
         ) : null}

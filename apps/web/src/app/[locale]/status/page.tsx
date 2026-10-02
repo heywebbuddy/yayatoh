@@ -65,10 +65,10 @@ export default async function StatusPageView({ params }: Props) {
   const open = snapshot?.incidents.filter((i) => i.active) ?? [];
   const past = snapshot?.incidents.filter((i) => !i.active) ?? [];
   const incident = (i: StatusIncident) => (
-    <li key={i.id} className="flex flex-col gap-3 rounded-card border border-zinc-200 p-4">
+    <li key={i.id} className="flex flex-col gap-3 rounded-card border border-line p-4">
       <div className="flex flex-col gap-1">
-        <h3 className="text-[19px] font-normal tracking-[-0.02em] break-words">{i.title}</h3>
-        <p className="flex flex-wrap gap-x-3 text-caption text-zinc-600">
+        <h3 className="text-[19px] font-extrabold tracking-[-0.02em] break-words">{i.title}</h3>
+        <p className="flex flex-wrap gap-x-3 text-caption text-ink-2">
           <span>{t(`impact.${i.impact}`)}</span>
           <span>{t(`incidentStatus.${i.status}`)}</span>
           {i.components.length > 0 ? (
@@ -84,12 +84,12 @@ export default async function StatusPageView({ params }: Props) {
       </div>
       <ol
         aria-label={t('updates', { title: i.title })}
-        className="flex list-none flex-col gap-3 border-s border-zinc-200 p-0 ps-4"
+        className="flex list-none flex-col gap-3 border-s border-line p-0 ps-4"
       >
         {i.updates.map((u) => (
           <li key={`${u.at.toISOString()}-${u.status}`} className="flex flex-col gap-0.5">
-            <p className="text-caption text-zinc-500">
-              <span className="font-medium text-zinc-700">{t(`incidentStatus.${u.status}`)}</span> ·{' '}
+            <p className="text-caption text-ink-2">
+              <span className="font-medium text-ink-2">{t(`incidentStatus.${u.status}`)}</span> ·{' '}
               <time dateTime={u.at.toISOString()}>{when(u.at)}</time>
             </p>
             <p className="text-body break-words whitespace-pre-line">{u.body}</p>
@@ -99,12 +99,12 @@ export default async function StatusPageView({ params }: Props) {
     </li>
   );
   return (
-    <div className="min-h-dvh bg-white">
+    <div className="min-h-dvh bg-surface">
       <SiteHeader />
       <main id="main" className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-4 py-8 md:px-6">
         <header className="flex flex-col gap-2">
-          <h1 className="text-[40px] leading-tight font-light tracking-[-0.04em]">{t('page.title')}</h1>
-          <p className="text-[17px] text-zinc-600">{t('page.lede')}</p>
+          <h1 className="text-[40px] leading-tight font-extrabold tracking-[-0.04em]">{t('page.title')}</h1>
+          <p className="text-[17px] text-ink-2">{t('page.lede')}</p>
         </header>
         {!snapshot ? (
           <EmptyState title={t('page.unavailableTitle')} description={t('page.unavailableBody')} />
@@ -113,20 +113,20 @@ export default async function StatusPageView({ params }: Props) {
             <section
               aria-labelledby="status-overall"
               data-overall={snapshot.overall}
-              className="flex flex-col gap-1 rounded-card border border-zinc-200 p-5"
+              className="flex flex-col gap-1 rounded-card border border-line p-5"
             >
-              <h2 id="status-overall" className="text-[24px] font-normal tracking-[-0.02em]">
+              <h2 id="status-overall" className="text-[24px] font-extrabold tracking-[-0.02em]">
                 {t(`overall.${snapshot.overall}`)}
               </h2>
-              <p className="text-caption text-zinc-500">
+              <p className="text-caption text-ink-2">
                 {t('page.checked', { time: when(snapshot.fetchedAt) })}
               </p>
             </section>
             <section aria-labelledby="status-components" className="flex flex-col gap-3">
-              <h2 id="status-components" className="text-[22px] font-normal tracking-[-0.02em]">
+              <h2 id="status-components" className="text-[22px] font-extrabold tracking-[-0.02em]">
                 {t('page.components')}
               </h2>
-              <ul className="flex list-none flex-col divide-y divide-zinc-200 rounded-card border border-zinc-200 p-0">
+              <ul className="flex list-none flex-col divide-y divide-line rounded-card border border-line p-0">
                 {snapshot.components.map((c) => (
                   <li
                     key={c.key}
@@ -140,21 +140,21 @@ export default async function StatusPageView({ params }: Props) {
               </ul>
             </section>
             <section aria-labelledby="status-open" className="flex flex-col gap-3">
-              <h2 id="status-open" className="text-[22px] font-normal tracking-[-0.02em]">
+              <h2 id="status-open" className="text-[22px] font-extrabold tracking-[-0.02em]">
                 {t('page.open')}
               </h2>
               {open.length === 0 ? (
-                <p className="text-body text-zinc-600">{t('page.noOpen')}</p>
+                <p className="text-body text-ink-2">{t('page.noOpen')}</p>
               ) : (
                 <ul className="flex list-none flex-col gap-4 p-0">{open.map(incident)}</ul>
               )}
             </section>
             <section aria-labelledby="status-past" className="flex flex-col gap-3">
-              <h2 id="status-past" className="text-[22px] font-normal tracking-[-0.02em]">
+              <h2 id="status-past" className="text-[22px] font-extrabold tracking-[-0.02em]">
                 {t('page.past')}
               </h2>
               {past.length === 0 ? (
-                <p className="text-body text-zinc-600">{t('page.noPast')}</p>
+                <p className="text-body text-ink-2">{t('page.noPast')}</p>
               ) : (
                 <ul className="flex list-none flex-col gap-4 p-0">{past.map(incident)}</ul>
               )}

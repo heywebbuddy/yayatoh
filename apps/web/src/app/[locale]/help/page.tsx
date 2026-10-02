@@ -38,8 +38,8 @@ export default async function HelpCenter({ params }: Props) {
   return (
     <HelpShell locale={locale} crumbs={[]}>
       <header className="flex flex-col gap-2">
-        <h1 className="text-[40px] leading-tight font-light tracking-[-0.04em]">{t('title')}</h1>
-        <p className="max-w-2xl text-[17px] text-zinc-600">{t('lede')}</p>
+        <h1 className="text-[40px] leading-tight font-extrabold tracking-[-0.04em]">{t('title')}</h1>
+        <p className="max-w-2xl text-[17px] text-ink-2">{t('lede')}</p>
       </header>
       {center.categories.length === 0 ? (
         <EmptyState title={t('emptyTitle')} description={t('emptyDescription')} />
@@ -49,7 +49,7 @@ export default async function HelpCenter({ params }: Props) {
           if (categories.length === 0) return null;
           return (
             <section key={audience} aria-labelledby={`help-${audience}`} className="flex flex-col gap-4">
-              <h2 id={`help-${audience}`} className="text-[24px] font-normal tracking-[-0.02em]">
+              <h2 id={`help-${audience}`} className="text-[24px] font-extrabold tracking-[-0.02em]">
                 {t(`audience.${audience}`)}
               </h2>
               <CategoryGrid categories={categories} headingId={`help-${audience}`} locale={locale} />

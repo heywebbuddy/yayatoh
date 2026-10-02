@@ -53,7 +53,7 @@ export default async function EventTeamPage({
           {TEAM_EVENT_ROLES.map((r) => (
             <div key={r} className="flex flex-col gap-0.5">
               <dt className="text-body font-medium">{t(`eventRoles.${r}`)}</dt>
-              <dd className="text-caption text-zinc-600">{tp(`eventTeam.explain.${r}`)}</dd>
+              <dd className="text-caption text-ink-2">{tp(`eventTeam.explain.${r}`)}</dd>
             </div>
           ))}
         </dl>
@@ -126,11 +126,11 @@ export default async function EventTeamPage({
           <h2 id="event-pending-heading" className="text-section">
             {t('team.pending')}
           </h2>
-          <ul className="flex list-none flex-col divide-y divide-zinc-100 rounded-card border border-zinc-200 bg-white p-0">
+          <ul className="flex list-none flex-col divide-y divide-line rounded-card border border-line bg-surface p-0">
             {team.invitations.map((i) => (
               <li key={i.id} className="flex flex-wrap items-center gap-3 px-4 py-3">
                 <span className="min-w-0 flex-1 truncate">{i.email}</span>
-                <span className="text-caption text-zinc-600">{t(`eventRoles.${i.role}`)}</span>
+                <span className="text-caption text-ink-2">{t(`eventRoles.${i.role}`)}</span>
                 <StatusDot
                   status="warning"
                   label={t('team.expires', { date: formatDate(i.expiresAt.toISOString(), f) })}
