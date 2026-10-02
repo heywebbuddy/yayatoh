@@ -127,3 +127,10 @@ fits session channels).
 | AC13 | Viewer denied moderation (hidden controls, read-only settings, no display link; commands `forbidden`) | `engagement.int.test.ts` ("viewers read but never moderate…"); e2e ("a viewer can follow but not moderate…") |
 | AC14 | Gated by the `sessions` module (P5-1), for organizers and the audience | `engagement.int.test.ts` ("a revoked sessions module refuses…") |
 | AC15 | The public takes part only in published, public events whose session is on | `engagement.int.test.ts` ("is off until enabled…", "the public takes part only in published, public events") |
+
+### 7. Gate results (2026-10-02, on merge/next-3f + m0.5-foundation as of 17:40 UTC)
+- `pnpm lint`, `pnpm check:modules`: clean. Typecheck (`turbo run typecheck --concurrency=2`): 57/57.
+- Unit: 183 files, 2,325 tests passed (engagement: 18 new, incl. the platform session-channel tests).
+- Integration: 146 files, 1,311 of 1,312 passed. The one failure, `apps/worker/tests/badges.int.test.ts` "the leader tick queues the batch until its PDF is done" (M5.5a, merged just before), timed out under full-suite load and passes alone (2/2); unrelated to engagement. `engagement.int.test.ts`: 15 tests.
+- E2E (375/768/1280, `--workers=2`): `engagement.spec.ts` (5 tests × 3), plus `agenda`, `program`, `realtime`, `canary-crawl` (incl. the new live-engagement leak test) and `events`: 85 passed. Earlier in the session `seat-live`, `command-center`, `alerts`, `a11y`, `security` and `program-media` also passed against this change.
+- `agent/design-v2` merge: conflicts outside this feature (messages, the exhibitors and speakers pages, `public-event-view.tsx`, drizzle meta 0096, owner inbox), so it was aborted; the merge session will take it. The new screens use only `@yayatoh/ui` primitives and tokens.
