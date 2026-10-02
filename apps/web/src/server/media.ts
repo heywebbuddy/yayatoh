@@ -12,6 +12,8 @@ import {
   type Slot,
   signUploadTicket,
 } from '@yayatoh/media';
+import { catchUpSubscriber } from '@yayatoh/platform';
+import { portalSpeakerCleanup } from '@yayatoh/program';
 import { roleCan } from '@yayatoh/tenancy';
 import type { ConsoleData } from './console.ts';
 import { ports } from './ports.ts';
@@ -109,6 +111,8 @@ export async function programMediaPanels(
 export async function purgeDeletedProgramMedia(orgId: string): Promise<void> {
   try {
     await catchUpProgramMedia(orgId);
+    // M5.3a: a deleted speaker's portal tasks and access go too.
+    await catchUpSubscriber(portalSpeakerCleanup(), orgId);
   } catch (err) {
     console.warn(`program media cleanup ${orgId}: ${(err as Error).message}`);
   }

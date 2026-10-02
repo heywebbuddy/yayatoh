@@ -1,0 +1,83 @@
+# WCAG 2.2 Level A and AA success criteria for the VPAT draft (M5.11a, ADR 0016).
+#
+# `tools/compliance/src/vpat.ts` reads this file and the Playwright JSON reports of the e2e
+# shards (their `axe-summary` attachments and the test titles) and writes the draft:
+#   - axe rules map to criteria through axe's own `wcagNNN` tags (no hand mapping).
+#   - `signals` name the e2e suites that exercise a criterion beyond axe (patterns below,
+#     matched against test titles; `mobile` matches tests run in the 375 px project).
+#   - `coverage` is how far automated evidence can go:
+#       automated       axe fully decides it
+#       partial         automated evidence helps; a person confirms before sign-off
+#       manual          no automated evidence; a person evaluates it
+#       not_applicable  the product has no such content (the remark says why; owner confirms)
+# 4.1.1 Parsing is obsolete in WCAG 2.2 and not listed.
+#
+# Status: draft, pending owner sign-off (P5-6).
+
+version: 1
+standard: WCAG 2.2 Level AA
+signals:
+  keyboard: "keyboard|arrow keys"
+  rtl: "arabic|right[- ]to[- ]left|\\brtl\\b"
+  drag: "\\bdrag"
+  errors: "validation|error|wrong|invalid|refuse"
+  status: "success|progress|live count|toast|saved"
+  auth: "sign[- ]in|passkey|two-step|two-factor|verification code"
+  mobile: "@project:mobile-375"
+
+criteria:
+  - { id: 1.1.1, name: Non-text Content, level: A, coverage: partial }
+  - { id: 1.2.1, name: Audio-only and Video-only (Prerecorded), level: A, coverage: not_applicable, remark: "Yayatoh publishes no prerecorded audio or video of its own. Organizer-supplied media embeds are the organizer's content." }
+  - { id: 1.2.2, name: Captions (Prerecorded), level: A, coverage: not_applicable, remark: "No prerecorded synchronized media in the product." }
+  - { id: 1.2.3, name: Audio Description or Media Alternative (Prerecorded), level: A, coverage: not_applicable, remark: "No prerecorded synchronized media in the product." }
+  - { id: 1.2.4, name: Captions (Live), level: AA, coverage: not_applicable, remark: "No live audio or video (virtual sessions are Phase 6, M6.9)." }
+  - { id: 1.2.5, name: Audio Description (Prerecorded), level: AA, coverage: not_applicable, remark: "No prerecorded synchronized media in the product." }
+  - { id: 1.3.1, name: Info and Relationships, level: A, coverage: partial }
+  - { id: 1.3.2, name: Meaningful Sequence, level: A, coverage: partial, signals: [rtl] }
+  - { id: 1.3.3, name: Sensory Characteristics, level: A, coverage: manual, manual: "Review instructions for shape, colour or position-only references." }
+  - { id: 1.3.4, name: Orientation, level: AA, coverage: partial, signals: [mobile] }
+  - { id: 1.3.5, name: Identify Input Purpose, level: AA, coverage: partial }
+  - { id: 1.4.1, name: Use of Color, level: A, coverage: partial }
+  - { id: 1.4.2, name: Audio Control, level: A, coverage: not_applicable, remark: "No audio plays automatically." }
+  - { id: 1.4.3, name: Contrast (Minimum), level: AA, coverage: partial, manual: "Check text over images and organizer brand colours." }
+  - { id: 1.4.4, name: Resize Text, level: AA, coverage: manual, manual: "Zoom to 200% on key journeys." }
+  - { id: 1.4.5, name: Images of Text, level: AA, coverage: manual, manual: "Review organizer banners and badges for text baked into images." }
+  - { id: 1.4.10, name: Reflow, level: AA, coverage: partial, signals: [mobile], manual: "The suite runs at 375 px; confirm at 320 px." }
+  - { id: 1.4.11, name: Non-text Contrast, level: AA, coverage: manual, manual: "Check focus rings, input borders and chart marks against ADR 0018 tokens." }
+  - { id: 1.4.12, name: Text Spacing, level: AA, coverage: partial }
+  - { id: 1.4.13, name: Content on Hover or Focus, level: AA, coverage: manual, manual: "Check tooltips and popovers are dismissible, hoverable and persistent." }
+  - { id: 2.1.1, name: Keyboard, level: A, coverage: partial, signals: [keyboard] }
+  - { id: 2.1.2, name: No Keyboard Trap, level: A, coverage: partial, signals: [keyboard] }
+  - { id: 2.1.4, name: Character Key Shortcuts, level: A, coverage: manual, manual: "Confirm no single-character shortcuts (none are defined)." }
+  - { id: 2.2.1, name: Timing Adjustable, level: A, coverage: partial, manual: "Checkout holds expire; confirm the warning and extension path." }
+  - { id: 2.2.2, name: "Pause, Stop, Hide", level: A, coverage: partial, manual: "Live dashboards and carousels need a pause control." }
+  - { id: 2.3.1, name: Three Flashes or Below Threshold, level: A, coverage: manual, manual: "Review animations (scan feedback, confetti) for flashing." }
+  - { id: 2.4.1, name: Bypass Blocks, level: A, coverage: partial }
+  - { id: 2.4.2, name: Page Titled, level: A, coverage: automated }
+  - { id: 2.4.3, name: Focus Order, level: A, coverage: partial, signals: [keyboard] }
+  - { id: 2.4.4, name: Link Purpose (In Context), level: A, coverage: partial }
+  - { id: 2.4.5, name: Multiple Ways, level: AA, coverage: manual, manual: "Navigation plus search on the marketplace and console." }
+  - { id: 2.4.6, name: Headings and Labels, level: AA, coverage: manual, manual: "Review heading and label wording." }
+  - { id: 2.4.7, name: Focus Visible, level: AA, coverage: partial, signals: [keyboard] }
+  - { id: 2.4.11, name: Focus Not Obscured (Minimum), level: AA, coverage: partial, signals: [keyboard], manual: "Check sticky headers and bottom sheets." }
+  - { id: 2.5.1, name: Pointer Gestures, level: A, coverage: partial, signals: [drag], manual: "Every multipoint or path gesture has a single-pointer alternative." }
+  - { id: 2.5.2, name: Pointer Cancellation, level: A, coverage: manual, manual: "Actions fire on up-event." }
+  - { id: 2.5.3, name: Label in Name, level: A, coverage: manual, manual: "Accessible names start with the visible label." }
+  - { id: 2.5.4, name: Motion Actuation, level: A, coverage: not_applicable, remark: "No device-motion input." }
+  - { id: 2.5.7, name: Dragging Movements, level: AA, coverage: partial, signals: [drag, keyboard] }
+  - { id: 2.5.8, name: Target Size (Minimum), level: AA, coverage: partial }
+  - { id: 3.1.1, name: Language of Page, level: A, coverage: automated }
+  - { id: 3.1.2, name: Language of Parts, level: AA, coverage: partial, signals: [rtl] }
+  - { id: 3.2.1, name: On Focus, level: A, coverage: manual, manual: "Focus never triggers navigation or submission." }
+  - { id: 3.2.2, name: On Input, level: A, coverage: manual, manual: "Changing a control never submits without warning." }
+  - { id: 3.2.3, name: Consistent Navigation, level: AA, coverage: manual, manual: "Console navigation comes from one profile registry (composeNav)." }
+  - { id: 3.2.4, name: Consistent Identification, level: AA, coverage: manual, manual: "Shared components from packages/ui." }
+  - { id: 3.2.6, name: Consistent Help, level: A, coverage: manual, manual: "Help links in the same place on every page." }
+  - { id: 3.3.1, name: Error Identification, level: A, coverage: partial, signals: [errors] }
+  - { id: 3.3.2, name: Labels or Instructions, level: A, coverage: partial, signals: [errors] }
+  - { id: 3.3.3, name: Error Suggestion, level: AA, coverage: partial, signals: [errors] }
+  - { id: 3.3.4, name: "Error Prevention (Legal, Financial, Data)", level: AA, coverage: manual, manual: "Checkout review step, refund and delete confirmations." }
+  - { id: 3.3.7, name: Redundant Entry, level: A, coverage: manual, manual: "Checkout and forms never re-ask for entered data." }
+  - { id: 3.3.8, name: Accessible Authentication (Minimum), level: AA, coverage: partial, signals: [auth], manual: "Paste allowed in codes; passkeys and magic links offered." }
+  - { id: 4.1.2, name: "Name, Role, Value", level: A, coverage: partial }
+  - { id: 4.1.3, name: Status Messages, level: AA, coverage: partial, signals: [status] }

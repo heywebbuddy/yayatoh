@@ -26,6 +26,11 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
   - **Publishing snapshots the sessions only** (times, rooms, tracks, types, included/optional, speaker names). Speaker profiles, exhibitors and sponsors stay live.
   - **CSV import creates missing rooms, tracks, session types, groups and speakers by name**; a speaker's email is kept (new `program.speaker_contacts`) so the next import matches them. Rows with problems are skipped and listed; the rest are applied. Limits: 1 MB, 500 rows.
   - **A room smaller than a session's capacity is a warning**, as are grouped sessions that overlap none of their group; neither blocks a save.
+- [ ] **Speaker portal defaults and the speaker release, pending owner** (M5.3a; labels: `auth`, `tenancy`, `db-migration`, `legal-copy`). Built with these defaults; say if any should change:
+  - **Speaker release wording (`legal-copy`):** the "Accept an agreement" task is prefilled with placeholder text ("[Placeholder — pending legal review] I allow the organizer to record my session and to use my name, photo, bio and the recording…") in all 13 locales. Counsel provides the release; organizers can edit the text per task.
+  - **Invitation lifetime:** a portal invitation link keeps working until the event ends + 90 days (P5-7); the organizer ends one sooner by re-inviting (reissue) or removing access. Sessions last 7 days.
+  - **Reminders:** a scheduled reminder 48 hours before a task is due, plus the organizer's "remind whoever is missing it" (transactional email). Overdue tasks emit an event every minute's sweep (for future alert rules).
+  - **Files:** PDF, PowerPoint (.pptx), Word (.docx), JPEG, PNG or WebP, up to 25 MB; proposed photos up to 4 MB. Not counted toward the org's image quota yet.
 - [ ] **Metrics pipeline defaults, pending owner** (M3.1a; labels: `db-migration`). Built with these defaults; say if any should change:
   - **Devices online** counts a check-in device whose last heartbeat is within **90 seconds** (the roadmap's "offline alert within 90 s"). Until M3.3 adds a sweep, the value is as of the last device event (each value carries its `asOf`).
   - **Tickets distributed** counts active tickets claimed through a claim link. M3.2b's "undistributed tickets" alert may widen this (e.g. holder ≠ buyer).
@@ -70,6 +75,13 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
   - Steps are edited only while a journey is **off**; switching it off cancels every waiting step. People are never enrolled retroactively when a journey is switched on. A step whose time has already passed when someone joins is skipped ("too late"), except steps that run when they join.
   - A failed step is retried after 1, 5, 15 and 60 minutes and marked failed after 5 attempts; the failure goes out as `automations.journey_step_failed@1` for the M3.2b alert engine's "automation failures" rule (wiring the rule is the alert engine's side).
   - Reads need `marketing:read` (viewers and finance can look), building needs `marketing:write` (owners, admins, managers, marketing).
+- [ ] **Badges defaults, pending owner** (M5.5a, labels: `db-migration`, `tenancy`). Built with these defaults; say if any should change:
+  - **Company and job title** come from a checkout question the organizer maps on each template (short-text, non-sensitive questions only). Registration types (M5.1a/b) will add proper profile fields in Wave 2.
+  - **First and last name** are split from the ticket holder's full name: "Last, First" with a comma, otherwise the first word is the first name and the rest the last name. Sorting by last name ignores particles (van, de, al-, ال…).
+  - **Who may do what:** designing and assigning templates needs `events:write`; batch PDFs need `attendees:export` and a recent sign-in (names leave the platform in bulk, like every export); one-badge PDFs at the desk need `attendees:write` (owners, admins, managers, box office); everyone who can see the event can preview templates with sample people.
+  - **Files:** batch PDFs are kept 7 days (like other exports); a download link works for 15 minutes. Badge PDFs are stored in the media store and are not counted against the org's media quota yet.
+  - **Brother QL presets:** 62 mm continuous tape cut at 100 mm, and 102 × 152 mm (4 in) die-cut labels. Say if your customers use other Brother stock.
+  - **Gotenberg in production:** the worker needs `GOTENBERG_URL` for badge batch PDFs (the web app already uses it for ticket PDFs); without it batches stay queued.
 - [ ] (Optional) License NB International Pro + NB International Mono Pro (Neubau) for the exact Superpower typeface. Until then the app uses Geist / Geist Mono (ADR 0018).
 - [ ] **Reports: confirm two defaults** (M1.12, label: `payments`):
   - Net revenue is shown to owners, admins and finance members only (`finance:read`); managers and viewers see gross sales and counts. Bookings CSV export needs `attendees:export` (buyer contact data). Change either if you want other roles to see them.
@@ -160,6 +172,11 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
   - an **Anthropic API account** (or OpenAI, if you prefer) exists: put the key in Doppler as `ANTHROPIC_API_KEY` and set `AI_PROVIDER=anthropic` (optional `AI_MODEL`, default `claude-opus-5`). The adapter is a stub that already builds the hardened prompt; wiring the official SDK is one small change once the key exists. Add the provider to the sub-processor list (M1.14) before switching it on.
   - **Confirm the free allowance (pending owner):** 20 drafts per org per calendar month (UTC), topped up **to** 20 on the first draft of each month (unused free drafts don't pile up; credits granted on top are kept). One draft = one credit; a failed draft is refunded. Metering and paid credits arrive with M6.6.
   - **Confirm the burst limit:** 20 drafts per device per 10 minutes and 60 per member per event per hour (M1.14 limiter).
+- [ ] **Exhibitor portal defaults, pending owner** (M5.4a; labels: `auth`, `tenancy`, `db-migration`). Built with these defaults; say if any should change:
+  - **Staff allowance:** 5 staff places per exhibitor unless the organizer sets another number per event or per exhibitor (M5.4b packages will set it). Pending invitations count; revoking frees a place; **exhibitor admins don't count** against it.
+  - **Sign-in (merged into M5.3a's at batch 3f):** exhibitor admins and staff use the one portal sign-in of every portal role: the emailed invitation (valid until the event ends + 90 days), then a 6-digit code or a magic link; a portal session lasts **7 days**. The event's shareable sign-in page (`/event-portal/sign-in/…`) re-sends a live invitation to the address typed (same answer for anyone). The invitation email is the shared `portal.invite` message (its copy mentions sessions and tasks; exhibitor-specific wording can follow with the legal-copy review).
+  - **Approval:** off by default per event; when on, only the latest edit waits (a newer edit replaces it).
+  - **Public map:** on the marketplace event URL only for now (`/events/{slug}/exhibitors`); tenant sites follow. Exhibitors stay listed unless the organizer hides them.
 - [ ] **Program defaults, pending owner** (M1.4f, label: `tenancy`): the lightweight program (sessions, speakers, exhibitors, sponsors) appears for the **conference** profile only (the registry decides; add it to other profiles on request, no code change per page). Conflicts (same room, a speaker in two places, outside the event) are **warnings, not errors**. A session tied to a date of a multi-date event must fall inside that date. Speaker photos and sponsor logos wait for the media pipeline (M1.4e).
 - [ ] **Tenant CMS and reviews: confirm the M1.4g defaults** (pending owner; labels: `tenancy`, `legal-copy`). Built as described; each is easy to change:
   - **A valid ticket is enough to review; check-in is not required.** Many events never scan tickets (free, online, small), and a no-show still paid. Say if only checked-in holders should review.
@@ -251,6 +268,37 @@ Start the slow reviews early. Everything is built against fakes meanwhile; each 
   - **Email and phone** columns are imported sealed with the dietary, accessibility and address answers (shown on the Guests page to the same roles). They create no CRM contacts, consents or audience members (P4-3); M4.1f will use them for invitations.
   - **XLSX parser:** a small cell-values-only reader in `@yayatoh/csv` on top of **fflate 0.8.3** (MIT, maintained, no known advisories); no formulas are evaluated (the cached value is read), macros and other parts are never opened. Old binary `.xls` files are refused with a "save as .xlsx or CSV" message.
   - **Google Sheet links (P4-7):** only `https://docs.google.com/spreadsheets/d/<id>` links, read once as CSV through the SSRF guard (10 s, 5 MB), redirects only to Google's content hosts; the link is not stored. A sheet that isn't shared as "anyone with the link" gets a clear message.
+## Enterprise readiness (M5.11, P5-6)
+Claude Code built the evidence automation (M5.11a): `compliance/controls.yaml`, the policy drafts in
+`compliance/policies/`, the weekly **Evidence** workflow and its bundle, and the VPAT draft. These
+steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
+- [ ] **Vanta** (D26): sign the contract at or after launch (roadmap estimate ~$800–2,000/month,
+  UNVERIFIED), connect GitHub and the hosting accounts, and upload the weekly evidence bundle
+  (download the `evidence-<run>` artifact from Actions → Evidence; verify `sha256sum -c SHA256SUMS`).
+  Nothing in the repo calls Vanta.
+- [ ] **Auditor** for SOC 2 Type I, 6–9 months after launch (D26). Share `compliance/controls.yaml`;
+  the auditor and Vanta may re-map criteria. Tell Claude Code what they change so the file follows.
+- [ ] **Pen test** ($5–15k, roadmap §3.6) **after Phase 5 Waves 1–3 merge**, so the portals, lead
+  retrieval and chat are in scope. Findings come back as issues for Claude Code to fix.
+- [ ] **VPAT sign-off**: each weekly bundle has `vpat/vpat.md`, a draft generated from the e2e axe,
+  keyboard and Arabic RTL suites. Criteria marked "Not Evaluated" need a person (NVDA and
+  VoiceOver passes, 200% zoom, 320 px reflow); "Not Applicable" rows need your confirmation.
+  Sign only after those reviews.
+- [ ] **Data Privacy Framework** self-certification (EU-U.S., UK extension, Swiss-U.S.) with the
+  Department of Commerce, once counsel has reviewed the privacy notice.
+- [ ] **Approve the seven policy drafts** in `compliance/policies/` (information security, access
+  control, change management, incident response, vendor management, data retention per D11,
+  business continuity): edit, then sign each approval row. Confirm the vendor inventory.
+- [ ] **Quarterly access review** of GitHub, Doppler, Vercel, Neon, Fly, AWS, Cloudflare, Stripe and
+  the staff list, and the admin-only GitHub exports (collaborators, branch protection) the
+  read-only workflow can't read. Runbook steps 2–3.
+- [ ] **Branch protection on `main`**: the change-management export flags merged PRs without an
+  independent approval. If build sessions open PRs under your account, add a second reviewer (the
+  contracted backup) or accept and document the exception in `docs/decisions.md`.
+- [ ] **Evidence workflow defaults, pending owner** (M5.11a, label: `infra`): runs Mondays 06:17 UTC and
+  on demand; 90-day audit window; artifacts kept 90 days. Optionally add a fine-grained token with
+  admin *read* on the repository as a secret so the workflow can export collaborators and branch
+  protection itself (today it records them as unavailable and runbook step 2 covers them).
 
 ## Security, privacy and ops readiness (M1.14)
 - [ ] **Confirm the rate limits** (pending owner; `packages/platform/src/security/rate-limit.ts`): sign-in 10 per device / 20 per email / 300 per IP per 10–15 min; emailed codes 5 per device and per email; checkout starts 20 per device, 600 per IP per 10 min; holder links 10 per device; forged webhooks 30 per IP. Shared IPs (venues) only meet the generous per-IP ceilings.

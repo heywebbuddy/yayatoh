@@ -673,6 +673,27 @@
       "when": 1790954632770,
       "tag": "0095_alert_signals",
       "breakpoints": true
+    },
+    {
+      "idx": 96,
+      "version": "7",
+      "when": 1790957678956,
+      "tag": "0096_long_luminals",
+      "breakpoints": true
+    },
+    {
+      "idx": 97,
+      "version": "7",
+      "when": 1790957688815,
+      "tag": "0097_curly_triathlon",
+      "breakpoints": true
+    },
+    {
+      "idx": 98,
+      "version": "7",
+      "when": 1790958346804,
+      "tag": "0098_true_thunderbolt",
+      "breakpoints": true
     }
   ]
 }
