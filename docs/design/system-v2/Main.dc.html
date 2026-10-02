@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Command Center</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>body{margin:0}</style>
+</helmet>
+<div style="min-height: 100%; box-sizing: border-box; font-family: 'Manrope', system-ui, sans-serif; {{theme}}">
+<div style="display: flex; flex-wrap: wrap; gap: 20px; padding: 16px; box-sizing: border-box; min-height: 1080px">
+
+<aside style="flex: 0 0 260px; box-sizing: border-box; background: var(--side); border: 1px solid var(--sideLine); border-radius: 28px; padding: 26px 16px 18px; display: flex; flex-direction: column; gap: 22px; color: var(--sideInk); backdrop-filter: blur(24px)">
+<div style="display: flex; align-items: center; gap: 10px; padding: 0 8px">
+<svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><path d="M5 21C5 13.3 10.6 6 18.5 6c0 7.7-5.6 15-13.5 15z" fill="#FF3D86"></path><path d="M27 11c0 7.7-5.6 15-13.5 15 0-7.7 5.6-15 13.5-15z" fill="#7B5CFF" fill-opacity="0.92"></path></svg>
+<span style="font-size: 21px; font-weight: 800; letter-spacing: -0.02em; color: #FFFFFF">yayatoh</span>
+</div>
+<button style="display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 12px; border-radius: 16px; border: 1px solid var(--sideLine); background: var(--sideTile); color: #FFFFFF; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; text-align: start">
+<span style="width: 28px; height: 28px; border-radius: 9px; background: #FF3D86; display: grid; place-items: center; font-size: 12px; font-weight: 800; color: #FFFFFF">LE</span>
+<span style="flex-grow: 1">Lakeside Events</span>
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 15 5 5 5-5"></path><path d="m7 9 5-5 5 5"></path></svg>
+</button>
+<nav aria-label="Main" style="display: flex; flex-direction: column; gap: 4px">
+<div style="font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; padding: 0 10px 8px; color: var(--sideLabel)">Menu</div>
+<a href="#" style="display: flex; align-items: center; gap: 12px; padding: 6px 10px 6px 6px; border-radius: 14px; color: var(--sideInk); text-decoration: none; font-size: 14px; font-weight: 600">
+<span style="width: 34px; height: 34px; border-radius: 11px; background: var(--sideTile); display: grid; place-items: center"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5 9.5V21h14V9.5"></path></svg></span>Home</a>
+<a href="#" aria-current="page" style="display: flex; align-items: center; gap: 12px; padding: 6px 10px 6px 6px; border-radius: 14px; background: var(--sideRow); color: #FFFFFF; text-decoration: none; font-size: 14px; font-weight: 700">
+<span style="width: 34px; height: 34px; border-radius: 11px; background: var(--sideTileOn); color: var(--sideTileOnInk); display: grid; place-items: center"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="7" cy="7" r="3"></circle><circle cx="17" cy="7" r="3"></circle><circle cx="7" cy="17" r="3"></circle><circle cx="17" cy="17" r="3"></circle></svg></span>
+<span style="flex-grow: 1">Command Center</span>
+<span style="min-width: 22px; height: 22px; padding: 0 6px; box-sizing: border-box; border-radius: 7px; background: #FFFFFF; color: #17121B; font-size: 12px; font-weight: 800; display: grid; place-items: center">3</span></a>
+<a href="#" style="display: flex; align-items: center; gap: 12px; padding: 6px 10px 6px 6px; border-radius: 14px; color: var(--sideInk); text-decoration: none; font-size: 14px; font-weight: 600">
+<span style="width: 34px; height: 34px; border-radius: 11px; background: var(--sideTile); display: grid; place-items: center"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4.5" width="18" height="16.5" rx="3"></rect><path d="M3 9.5h18M8 2.5v4M16 2.5v4"></path></svg></span>Events</a>
+<a href="#" style="display: flex; align-items: center; gap: 12px; padding: 6px 10px 6px 6px; border-radius: 14px; color: var(--sideInk); text-decoration: none; font-size: 14px; font-weight: 600">
+<span style="width: 34px; height: 34px; border-radius: 11px; background: var(--sideTile); display: grid; place-items: center"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5a2 2 0 0 0 0 7V19h18v-3.5a2 2 0 0 0 0-7V5H3z"></path><path d="M14 5v14" stroke-dasharray="2 2.5"></path></svg></span>Tickets &amp; orders</a>
+<a href="#" style="display: flex; align-items: center; gap: 12px; padding: 6px 10px 6px 6px; border-radius: 14px; color: var(--sideInk); text-decoration: none; font-size: 14px; font-weight: 600">
+<span style="width: 34px; height: 34px; border-radius: 11px; background: var(--sideTile); display: grid; place-items: center"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"></path><path d="M16 4.8a3.3 3.3 0 0 1 0 6.4M18 14.8c2 .7 3.2 2.4 3.6 5.2"></path></svg></span>Guests &amp; attendees</a>
+<a href="#" style="display: flex; align-items: center; gap: 12px; padding: 6px 10px 6px 6px; border-radius: 14px; color: var(--sideInk); text-decoration: none; font-size: 14px; font-weight: 600">
+<span style="width: 34px; height: 34px; border-radius: 11px; background: var(--sideTile); display: grid; place-items: center"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11v3a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"></path><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"></path></svg></span>Marketing</a>
+<a href="#" style="display: flex; align-items: center; gap: 12px; padding: 6px 10px 6px 6px; border-radius: 14px; color: var(--sideInk); text-decoration: none; font-size: 14px; font-weight: 600">
+<span style="width: 34px; height: 34px; border-radius: 11px; background: var(--sideTile); display: grid; place-items: center"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"></path></svg></span>Reports</a>
+<a href="#" style="display: flex; align-items: center; gap: 12px; padding: 6px 10px 6px 6px; border-radius: 14px; color: var(--sideInk); text-decoration: none; font-size: 14px; font-weight: 600">
+<span style="width: 34px; height: 34px; border-radius: 11px; background: var(--sideTile); display: grid; place-items: center"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"></path></svg></span>Settings</a>
+</nav>
+<div style="flex-grow: 1"></div>
+<div style="font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; padding: 0 10px; color: var(--sideLabel)">Account</div>
+<div style="border-radius: 22px; padding: 14px; background: var(--sideTile); border: 1px solid var(--sideLine); display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; align-items: center; gap: 10px">
+<span style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #FFB36B, #FF3D86); display: grid; place-items: center; font-weight: 800; font-size: 14px; color: #FFFFFF">OH</span>
+<div style="display: flex; flex-direction: column; gap: 2px">
+<span style="font-size: 14px; font-weight: 700; color: #FFFFFF">Omar Haddad</span>
+<span style="font-size: 12px; color: var(--sideInk)">Owner · Lakeside Events</span>
+</div>
+</div>
+<a href="#" style="display: flex; align-items: center; justify-content: center; gap: 8px; height: 44px; border-radius: 14px; background: var(--primary); color: #FFFFFF; text-decoration: none; font-size: 14px; font-weight: 700; box-shadow: var(--primaryGlow)">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>New event</a>
+</div>
+</aside>
+
+<main style="flex: 1 1 640px; min-width: 0; display: flex; flex-direction: column; gap: 20px; padding: 6px 6px 24px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+<label style="flex: 1 1 280px; max-width: 460px; display: flex; align-items: center; gap: 10px; height: 46px; padding: 0 16px; box-sizing: border-box; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); color: var(--ink2)">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+<input aria-label="Search" placeholder="Search events, guests, orders…" style="flex-grow: 1; border: 0; outline: none; background: transparent; font: inherit; font-size: 14px; color: var(--ink)">
+<span style="font-size: 12px; font-weight: 700; padding: 3px 7px; border-radius: 7px; background: var(--surface2); border: 1px solid var(--line)">⌘K</span>
+</label>
+<div style="flex-grow: 1"></div>
+<button onClick="{{toggle}}" aria-label="{{modeLabel}}" style="width: 46px; height: 46px; border-radius: 16px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); display: grid; place-items: center; cursor: pointer">
+<sc-if value="{{isDark}}" hint-placeholder-val="{{false}}"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg></sc-if>
+<sc-if value="{{isLight}}" hint-placeholder-val="{{true}}"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"></path></svg></sc-if>
+</button>
+<button aria-label="Notifications, 3 new" style="position: relative; width: 46px; height: 46px; border-radius: 16px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); display: grid; place-items: center; cursor: pointer">
+<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 6 2.5 7.5 2.5 7.5h-17S6 15 6 9z"></path><path d="M10 20a2.2 2.2 0 0 0 4 0"></path></svg>
+<span style="position: absolute; top: 10px; inset-inline-end: 11px; width: 9px; height: 9px; border-radius: 50%; background: var(--pinkDot); border: 2px solid var(--surfaceSolid)"></span>
+</button>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 16px">
+<div style="flex: 1 1 420px; display: flex; flex-direction: column; gap: 10px">
+<div style="font-size: 13px; font-weight: 600; color: var(--ink2)">Events <span aria-hidden="true">›</span> Lakeside Summer Gala 2026</div>
+<h1 style="margin: 0; font-size: 40px; line-height: 1.05; font-weight: 800; letter-spacing: -0.035em; color: var(--ink)">Command Center</h1>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: 14px; color: var(--ink2)">
+<span style="display: inline-flex; align-items: center; gap: 8px; height: 30px; padding: 0 12px; border-radius: 999px; background: var(--mintSoft); color: var(--mint); font-weight: 700; font-size: 13px"><span style="width: 8px; height: 8px; border-radius: 50%; background: var(--mintDot); box-shadow: 0 0 0 4px var(--mintSoft)"></span>Live now</span>
+<span>Sat 18 Jul 2026 · 6:30–11:30 PM CEST</span><span aria-hidden="true">·</span><span>Villa Lakeside, Como</span>
+</div>
+</div>
+<div style="display: flex; gap: 10px">
+<a href="#" style="display: inline-flex; align-items: center; gap: 8px; height: 46px; padding: 0 18px; border-radius: 15px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); text-decoration: none; font-size: 14px; font-weight: 700">
+<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="4" width="19" height="13" rx="2.5"></rect><path d="M8 21h8M12 17v4"></path></svg>Open TV display</a>
+<a href="#" style="display: inline-flex; align-items: center; gap: 8px; height: 46px; padding: 0 18px; border-radius: 15px; background: var(--primary); color: #FFFFFF; text-decoration: none; font-size: 14px; font-weight: 700; box-shadow: var(--primaryGlow)">
+<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3M4 12h16"></path></svg>Open scanner</a>
+</div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px">
+<sc-for list="{{kpis}}" as="k" hint-placeholder-count="3">
+<div style="border-radius: 24px; padding: 20px 22px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 10px; backdrop-filter: blur(20px)">
+<div style="display: flex; align-items: center; justify-content: space-between; font-size: 14px; font-weight: 600; color: var(--ink2)"><span>{{k.label}}</span><span style="font-size: 12px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: {{k.chipBg}}; color: {{k.chipInk}}">{{k.chip}}</span></div>
+<div style="font-size: 38px; line-height: 1; font-weight: 800; letter-spacing: -0.04em; color: var(--ink); font-variant-numeric: tabular-nums">{{k.value}}</div>
+<div style="height: 6px; border-radius: 999px; background: var(--track); overflow: hidden"><div style="height: 100%; width: {{k.pct}}; border-radius: 999px; background: {{k.bar}}"></div></div>
+<div style="font-size: 13px; color: var(--ink2)">{{k.sub}}</div>
+</div>
+</sc-for>
+<div style="position: relative; overflow: hidden; border-radius: 24px; padding: 20px 22px; background: var(--hero); color: var(--heroInk); box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 8px; min-height: 170px; box-sizing: border-box">
+<div style="position: absolute; inset-inline-end: -40px; top: -60px; width: 220px; height: 220px; border-radius: 50%; background: var(--heroOrb); filter: blur(6px)"></div>
+<div style="position: relative; font-size: 13px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase">Donations tonight</div>
+<div style="position: relative; flex-grow: 1"></div>
+<div style="position: relative; display: flex; align-items: center; gap: 10px; flex-wrap: wrap"><span style="font-size: 14px; font-weight: 600; opacity: 0.8">Paddle raise + QR gifts</span><span style="font-size: 12px; font-weight: 800; padding: 4px 10px; border-radius: 999px; background: var(--heroChip); color: #FFFFFF">+$4,200 in 10 min</span></div>
+<div style="position: relative; font-size: 52px; line-height: 1; font-weight: 800; letter-spacing: -0.045em; font-variant-numeric: tabular-nums">$18,609</div>
+</div>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 16px">
+<section aria-labelledby="ros" style="flex: 2 1 560px; min-width: 0; border-radius: 24px; padding: 22px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 18px; backdrop-filter: blur(20px)">
+<div style="display: flex; align-items: center; gap: 12px">
+<h2 id="ros" style="margin: 0; font-size: 20px; font-weight: 800; letter-spacing: -0.02em; flex-grow: 1">Run of show</h2>
+<span style="font-size: 13px; color: var(--ink2)">Now 9:04 PM</span>
+<a href="#" style="font-size: 13px; font-weight: 700; color: var(--primaryInk); text-decoration: none">Edit schedule</a>
+</div>
+<div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); column-gap: 10px; row-gap: 12px; position: relative">
+<sc-for list="{{hours}}" as="h" hint-placeholder-count="5">
+<div style="grid-row: 1; display: flex; flex-direction: column; gap: 2px; padding-bottom: 8px; border-bottom: 1px dashed var(--line); font-variant-numeric: tabular-nums"><span style="font-size: 18px; font-weight: 800; color: var(--ink)">{{h.t}}</span><span style="font-size: 12px; font-weight: 600; color: var(--ink2)">PM</span></div>
+</sc-for>
+<sc-for list="{{show}}" as="s" hint-placeholder-count="5">
+<div style="grid-column: {{s.col}}; grid-row: {{s.row}}; border-radius: 18px; padding: 14px 14px 12px; background: {{s.bg}}; border: 1px solid {{s.border}}; box-shadow: {{s.glow}}; display: flex; flex-direction: column; gap: 8px; min-width: 0">
+<div style="display: flex; align-items: center; gap: 8px"><span style="font-size: 14px; font-weight: 800; color: var(--ink); flex-grow: 1">{{s.title}}</span><span style="font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 999px; background: {{s.chipBg}}; color: {{s.chipInk}}">{{s.chip}}</span></div>
+<div style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--ink2)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>{{s.time}} · {{s.where}}</div>
+</div>
+</sc-for>
+</div>
+</section>
+
+<section aria-labelledby="alerts" style="flex: 1 1 320px; min-width: 0; border-radius: 24px; padding: 22px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 14px; backdrop-filter: blur(20px)">
+<div style="display: flex; align-items: center; gap: 10px"><h2 id="alerts" style="margin: 0; font-size: 20px; font-weight: 800; letter-spacing: -0.02em; flex-grow: 1">Alerts</h2><span style="font-size: 12px; font-weight: 800; padding: 3px 9px; border-radius: 999px; background: var(--redSoft); color: var(--red)">3 open</span></div>
+<sc-for list="{{alerts}}" as="a" hint-placeholder-count="3">
+<div style="display: flex; gap: 12px; padding: 14px; border-radius: 18px; background: var(--surface2); border: 1px solid var(--line)">
+<span style="flex: 0 0 auto; width: 36px; height: 36px; border-radius: 12px; background: {{a.bg}}; color: {{a.ink}}; display: grid; place-items: center; font-weight: 800">!</span>
+<div style="display: flex; flex-direction: column; gap: 4px; min-width: 0">
+<span style="font-size: 14px; font-weight: 700; color: var(--ink)">{{a.title}}</span>
+<span style="font-size: 12px; color: var(--ink2)">{{a.meta}}</span>
+<a href="#" style="font-size: 13px; font-weight: 700; color: var(--primaryInk); text-decoration: none">{{a.action}} →</a>
+</div>
+</div>
+</sc-for>
+</section>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 16px">
+<section aria-labelledby="orders" style="flex: 2 1 560px; min-width: 0; border-radius: 24px; padding: 22px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 6px; backdrop-filter: blur(20px)">
+<div style="display: flex; align-items: center; gap: 12px; padding-bottom: 8px"><h2 id="orders" style="margin: 0; font-size: 20px; font-weight: 800; letter-spacing: -0.02em; flex-grow: 1">Latest orders</h2>
+<div role="group" aria-label="Range" style="display: flex; padding: 4px; border-radius: 12px; background: var(--surface2); border: 1px solid var(--line); font-size: 12px; font-weight: 700"><button style="border: 0; background: var(--surfaceSolid); color: var(--ink); font: inherit; padding: 6px 10px; border-radius: 9px; box-shadow: var(--shadow); cursor: pointer">Tonight</button><button style="border: 0; background: transparent; color: var(--ink2); font: inherit; padding: 6px 10px; border-radius: 9px; cursor: pointer">Week</button><button style="border: 0; background: transparent; color: var(--ink2); font: inherit; padding: 6px 10px; border-radius: 9px; cursor: pointer">Month</button></div></div>
+<sc-for list="{{orders}}" as="o" hint-placeholder-count="4">
+<div style="display: grid; grid-template-columns: minmax(0, 2.2fr) minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 0.8fr); align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line)">
+<div style="display: flex; align-items: center; gap: 12px; min-width: 0"><span style="flex: 0 0 auto; width: 42px; height: 42px; border-radius: 50%; background: {{o.av}}; color: var(--ink); display: grid; place-items: center; font-size: 13px; font-weight: 800">{{o.ini}}</span><div style="display: flex; flex-direction: column; gap: 2px; min-width: 0"><span style="font-size: 14px; font-weight: 700; color: var(--ink)">{{o.name}}</span><span style="font-size: 12px; color: var(--ink2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{o.what}}</span></div></div>
+<div style="display: flex; flex-direction: column; gap: 2px; font-size: 13px; font-variant-numeric: tabular-nums"><span style="font-weight: 600; color: var(--ink)">{{o.date}}</span><span style="color: var(--ink2)">{{o.time}}</span></div>
+<span style="justify-self: start; font-size: 11px; font-weight: 800; letter-spacing: 0.08em; padding: 6px 10px; border-radius: 8px; background: var(--tag); color: var(--tagInk)">{{o.src}}</span>
+<span style="justify-self: end; font-size: 15px; font-weight: 800; color: var(--ink); font-variant-numeric: tabular-nums">{{o.amt}}</span>
+</div>
+</sc-for>
+</section>
+
+<section aria-labelledby="crew" style="flex: 1 1 320px; min-width: 0; border-radius: 24px; padding: 22px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 12px; backdrop-filter: blur(20px)">
+<div style="display: flex; align-items: center"><h2 id="crew" style="margin: 0; font-size: 20px; font-weight: 800; letter-spacing: -0.02em; flex-grow: 1">Staff on duty</h2><span style="font-size: 13px; color: var(--ink2)">6 of 8 checked in</span></div>
+<sc-for list="{{crew}}" as="c" hint-placeholder-count="4">
+<div style="display: flex; align-items: center; gap: 12px; padding: 8px 8px 8px 8px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface2)">
+<span style="width: 38px; height: 38px; border-radius: 50%; background: {{c.av}}; color: var(--ink); display: grid; place-items: center; font-size: 13px; font-weight: 800">{{c.ini}}</span>
+<div style="display: flex; flex-direction: column; flex-grow: 1; min-width: 0"><span style="font-size: 14px; font-weight: 700; color: var(--ink)">{{c.name}}</span><span style="font-size: 12px; color: var(--ink2)">{{c.role}}</span></div>
+<span aria-label="{{c.state}}" style="width: 28px; height: 28px; border-radius: 50%; background: {{c.dotBg}}; color: {{c.dotInk}}; display: grid; place-items: center; box-shadow: {{c.dotGlow}}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg></span>
+</div>
+</sc-for>
+</section>
+</div>
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"dark":{"editor":"boolean","default":false},"$preview":{"width":1440,"height":1080}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const LIGHT = "--canvas:#F2F1F6;--surface:#FFFFFF;--surfaceSolid:#FFFFFF;--surface2:#F6F5FA;--line:#E7E4EE;--ink:#16131D;--ink2:#5E596A;--side:#17121B;--sideLine:rgba(255,255,255,0.06);--sideInk:#B9B3C4;--sideLabel:#8E889A;--sideTile:#251E2A;--sideRow:rgba(255,255,255,0.10);--sideTileOn:#FFFFFF;--sideTileOnInk:#17121B;--primary:#6A3BFF;--primaryInk:#5528E8;--primaryGlow:0 8px 20px rgba(106,59,255,0.28);--pinkDot:#FF3D86;--pink:#C41C5E;--pinkSoft:#FDE3EE;--mint:#0B7A50;--mintSoft:#DDF6EA;--mintDot:#16C784;--amber:#8A4F00;--amberSoft:#FFF0D4;--red:#B81F35;--redSoft:#FDE3E7;--tag:#2A2230;--tagInk:#FFFFFF;--hero:linear-gradient(135deg,#FFE0EC 0%,#FAD3EC 45%,#E3D8FF 100%);--heroInk:#16131D;--heroOrb:radial-gradient(circle,rgba(255,255,255,0.9),rgba(255,255,255,0) 70%);--heroChip:#E8246F;--shadow:0 1px 2px rgba(22,19,29,0.04),0 10px 30px rgba(22,19,29,0.06);--track:#EEEAF5;--lav:#E3D9FF;--blush:#FCDDE9;--sky:#D8E8FF;--sand:#FBE8CF;background:#F2F1F6;color:#16131D;";
+    const DARK = "color-scheme:dark;--canvas:#0A0812;--surface:rgba(26,20,46,0.72);--surfaceSolid:#1C1631;--surface2:rgba(255,255,255,0.04);--line:rgba(170,150,255,0.16);--ink:#F4F1FF;--ink2:#ABA4C6;--side:rgba(15,11,28,0.86);--sideLine:rgba(170,150,255,0.16);--sideInk:#A9A3C4;--sideLabel:#8D86A8;--sideTile:rgba(255,255,255,0.05);--sideRow:linear-gradient(135deg,rgba(123,92,255,0.55),rgba(123,92,255,0.16));--sideTileOn:#7B5CFF;--sideTileOnInk:#FFFFFF;--primary:#7B5CFF;--primaryInk:#BBA9FF;--primaryGlow:0 0 0 1px rgba(160,135,255,0.4),0 10px 30px rgba(123,92,255,0.45);--pinkDot:#FF5C9A;--pink:#FF7EAF;--pinkSoft:rgba(255,92,154,0.16);--mint:#4BE9AC;--mintSoft:rgba(59,230,164,0.14);--mintDot:#3BE6A4;--amber:#FFC56E;--amberSoft:rgba(255,197,110,0.14);--red:#FF8798;--redSoft:rgba(255,122,140,0.15);--tag:rgba(255,255,255,0.08);--tagInk:#ECE7FF;--hero:radial-gradient(120% 140% at 85% 0%,#8D6FFF 0%,#4B2FB0 34%,#1A1233 74%);--heroInk:#FFFFFF;--heroOrb:radial-gradient(circle,rgba(220,210,255,0.85),rgba(140,110,255,0) 68%);--heroChip:#FF3D86;--shadow:0 0 0 1px rgba(170,150,255,0.05),0 24px 48px rgba(0,0,0,0.40);--track:rgba(255,255,255,0.08);--lav:rgba(123,92,255,0.34);--blush:rgba(255,92,154,0.28);--sky:rgba(90,160,255,0.28);--sand:rgba(255,197,110,0.26);background:radial-gradient(55% 40% at 72% -6%,rgba(123,92,255,0.45),rgba(123,92,255,0) 70%),radial-gradient(40% 32% at 0% 100%,rgba(255,92,154,0.13),rgba(255,92,154,0) 70%),#0A0812;color:#F4F1FF;";
+    const dark = (this.state && typeof this.state.dark === 'boolean') ? this.state.dark : !!this.props.dark;
+    const now = { bg: 'var(--mintSoft)', border: 'var(--mint)', glow: '0 0 0 3px var(--mintSoft)', chipBg: 'var(--mintDot)', chipInk: '#0A0812' };
+    const card = (tone) => ({ bg: 'var(--surface2)', border: 'var(--line)', glow: 'none', chipBg: tone + 'Soft)', chipInk: tone + ')' });
+    return {
+      theme: dark ? DARK : LIGHT,
+      isDark: dark,
+      isLight: !dark,
+      modeLabel: dark ? 'Switch to light mode' : 'Switch to dark mode',
+      toggle: () => this.setState({ dark: !dark }),
+      kpis: [
+        { label: 'Tickets sold', value: '1,284', chip: '86%', chipBg: 'var(--primarySoftChip, var(--lav))', chipInk: 'var(--ink)', pct: '86%', bar: 'var(--primary)', sub: 'of 1,500 · 216 left across 4 types' },
+        { label: 'Checked in', value: '642', chip: '38 / min', chipBg: 'var(--mintSoft)', chipInk: 'var(--mint)', pct: '50%', bar: 'var(--mintDot)', sub: '50% of attendees · Door A busiest' },
+        { label: 'Revenue', value: '$86,420', chip: '+16%', chipBg: 'var(--mintSoft)', chipInk: 'var(--mint)', pct: '72%', bar: 'var(--pinkDot)', sub: 'vs. last year’s gala at this point' }
+      ],
+      hours: [{ t: '6:00' }, { t: '7:00' }, { t: '8:00' }, { t: '9:00' }, { t: '10:00' }],
+      show: [
+        Object.assign({ col: '1 / span 2', row: '2', title: 'Doors & reception', time: '6:30–7:30', where: 'Terrace', chip: 'Done' }, card('var(--mint')),
+        Object.assign({ col: '2 / span 1', row: '3', title: 'Welcome', time: '7:30', where: 'Main hall', chip: 'Done' }, card('var(--mint')),
+        Object.assign({ col: '3 / span 1', row: '2', title: 'Dinner service', time: '7:45–9:00', where: 'Main hall', chip: 'Done' }, card('var(--mint')),
+        Object.assign({ col: '4 / span 1', row: '3', title: 'Paddle raise', time: '9:00–9:30', where: 'Stage', chip: 'Now' }, now),
+        Object.assign({ col: '5 / span 1', row: '2', title: 'After-party', time: '10:00', where: 'Boathouse', chip: 'Next' }, card('var(--amber'))
+      ],
+      alerts: [
+        { title: 'Door B scanner offline', meta: '2 min ago · last sync 9:02 PM', action: 'Reassign staff', bg: 'var(--redSoft)', ink: 'var(--red)' },
+        { title: '42 guests have not responded to RSVP', meta: 'After-party · closes in 1 h', action: 'Send reminder', bg: 'var(--amberSoft)', ink: 'var(--amber)' },
+        { title: 'VIP table 4 has 2 empty seats', meta: 'Sponsor: Brightwater Bank', action: 'Open seating', bg: 'var(--primarySoftChip, var(--lav))', ink: 'var(--primaryInk)' }
+      ],
+      orders: [
+        { ini: 'JS', av: 'var(--lav)', name: 'Joanna Smith', what: '2 × General admission', date: 'Jul 18, 2026', time: '9:01 PM', src: 'WEBSITE', amt: '$240' },
+        { ini: 'IC', av: 'var(--blush)', name: 'Iann Core', what: 'Table of 10 · Brightwater Bank', date: 'Jul 18, 2026', time: '8:47 PM', src: 'INVOICE', amt: '$4,380' },
+        { ini: 'AS', av: 'var(--sky)', name: 'Ann Shines', what: 'Donation · Paddle 118', date: 'Jul 18, 2026', time: '8:42 PM', src: 'QR GIFT', amt: '$1,000' },
+        { ini: 'PK', av: 'var(--sand)', name: 'Pol Kellerman', what: '1 × VIP + after-party', date: 'Jul 18, 2026', time: '8:30 PM', src: 'BOX OFFICE', amt: '$195' }
+      ],
+      crew: [
+        { ini: 'AJ', av: 'var(--blush)', name: 'Alice James', role: 'Door A lead', state: 'Checked in', dotBg: 'var(--mintDot)', dotInk: '#0A0812', dotGlow: '0 0 0 4px var(--mintSoft)' },
+        { ini: 'OB', av: 'var(--lav)', name: 'Ola Bone', role: 'Door B · scanner offline', state: 'Needs attention', dotBg: 'var(--redSoft)', dotInk: 'var(--red)', dotGlow: 'none' },
+        { ini: 'AM', av: 'var(--sky)', name: 'Alexa May', role: 'Host desk', state: 'Checked in', dotBg: 'var(--mintDot)', dotInk: '#0A0812', dotGlow: '0 0 0 4px var(--mintSoft)' },
+        { ini: 'JA', av: 'var(--sand)', name: 'James Anderson', role: 'Paddle spotter', state: 'Checked in', dotBg: 'var(--mintDot)', dotInk: '#0A0812', dotGlow: '0 0 0 4px var(--mintSoft)' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>
