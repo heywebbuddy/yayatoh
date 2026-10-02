@@ -1,6 +1,6 @@
 {
-  "id": "6ba42dab-a463-43ff-99d8-4a168d4e85ce",
-  "prevId": "0b410834-7266-4121-9087-a34434299377",
+  "id": "1f5fee35-653e-46fb-b6f3-a162cdc00537",
+  "prevId": "6ba42dab-a463-43ff-99d8-4a168d4e85ce",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -32872,6 +32872,74 @@
           "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'completed'"
+        },
+        "source": {
+          "name": "source",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'staff'"
+        },
+        "due_at": {
+          "name": "due_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "verified_at": {
+          "name": "verified_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "email_sealed": {
+          "name": "email_sealed",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "export_key": {
+          "name": "export_key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "export_expires_at": {
+          "name": "export_expires_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "receipt": {
+          "name": "receipt",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "signature": {
+          "name": "signature",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cancel_reason": {
+          "name": "cancel_reason",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cancelled_at": {
+          "name": "cancelled_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {
@@ -32931,6 +32999,50 @@
           "concurrently": false,
           "method": "btree",
           "with": {}
+        },
+        "dsar_requests_org_open_subject_key": {
+          "name": "dsar_requests_org_open_subject_key",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "subject_ref",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "where": "status = 'open'",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "dsar_requests_org_due_idx": {
+          "name": "dsar_requests_org_due_idx",
+          "columns": [
+            {
+              "expression": "org_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "due_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "where": "status = 'open'",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
         }
       },
       "foreignKeys": {},
@@ -32965,6 +33077,22 @@
         "dsar_requests_subject_ref_check": {
           "name": "dsar_requests_subject_ref_check",
           "value": "subject_ref ~ '^[0-9a-f]{64}$'"
+        },
+        "dsar_requests_status_check": {
+          "name": "dsar_requests_status_check",
+          "value": "status in ('open', 'completed', 'cancelled')"
+        },
+        "dsar_requests_source_check": {
+          "name": "dsar_requests_source_check",
+          "value": "source in ('staff', 'self')"
+        },
+        "dsar_requests_open_check": {
+          "name": "dsar_requests_open_check",
+          "value": "(status = 'open') = (completed_at is null and cancelled_at is null) and (status = 'open' or email_sealed is null)"
+        },
+        "dsar_requests_self_verified_check": {
+          "name": "dsar_requests_self_verified_check",
+          "value": "source = 'staff' or verified_at is not null"
         }
       },
       "isRLSEnabled": true

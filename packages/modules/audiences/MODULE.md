@@ -30,3 +30,12 @@ segment DSL and its SQL compiler belong to `crm`, which it calls down the tiers.
   undo), it recomputes both records' participation at every event either took part in, in the same
   transaction.
 
+- **Contact stats (M6.1b).** The participation projector refreshes the stats of every contact it
+  touches in the same transaction; `audiences.contact-signals` records `session.attended@1` and
+  `campaign.opened@1` (v1 contracts; replayed history included) and refreshes that contact.
+  Everything is recomputed from the sources: replaying never double-counts. `rescoreOrgContacts`
+  is the backfill and the daily rescore (worker job `audiences.contact-stats`), so registrations
+  whose events have ended become attended or no-shows.
+- **Money conditions** (`ltv`, `rfmMonetary`) need the member's org role to hold `finance:read`
+  for preview, save and export (`assertMoneyConditionsAllowedTx`; the export checks the
+  transaction's actor). System actors (campaign sends) are not members and pass.

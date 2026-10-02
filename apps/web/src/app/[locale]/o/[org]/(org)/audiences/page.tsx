@@ -36,7 +36,7 @@ export default async function AudiencesPage({
         description={t('description')}
         actions={
           <>
-            {/* M6.1a: the org's people (timelines) and possible duplicates. */}
+            {/* M6.1a: the org's people (timelines) and possible duplicates; M6.1b: contact insights. */}
             {roleCan(data.role, 'contacts:read') ? (
               <>
                 <Link href={`/o/${org}/audiences/people`} className={buttonClass('secondary')}>
@@ -44,6 +44,9 @@ export default async function AudiencesPage({
                 </Link>
                 <Link href={`/o/${org}/audiences/duplicates`} className={buttonClass('secondary')}>
                   {t('duplicatesLink')}
+                </Link>
+                <Link href={`/o/${org}/contacts/stats`} className={buttonClass('secondary')}>
+                  {t('insights')}
                 </Link>
               </>
             ) : null}

@@ -16,6 +16,7 @@
     "retention": "node scripts/retention.ts",
     "drill-tickets": "node scripts/drill-tickets.ts",
     "metrics:rebuild": "node scripts/metrics-rebuild.ts",
+    "contact-stats": "node scripts/contact-stats.ts",
     "audit-sample": "node scripts/audit-sample.ts"
   },
   "dependencies": {

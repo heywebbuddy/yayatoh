@@ -22,7 +22,12 @@ import {
   stageImportCommand,
   validateImportCommand,
 } from '@yayatoh/attendees';
-import { catchUpParticipation, saveSegmentCommand, templateDefinition } from '@yayatoh/audiences';
+import {
+  catchUpContactSignals,
+  catchUpParticipation,
+  saveSegmentCommand,
+  templateDefinition,
+} from '@yayatoh/audiences';
 import { createJourneyCommand, journeyTriggers, setJourneyEnabledCommand } from '@yayatoh/automations';
 import {
   assignTemplateCommand,
@@ -178,6 +183,7 @@ import {
   catchUpSubscriber,
   consumeEvent,
   defineSubscriber,
+  emitEvents,
   publishRealtimeTx,
   recentEventsTx,
 } from '@yayatoh/platform';
@@ -1998,6 +2004,30 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   // M3.6 audiences: the participation projector catches up on everything above (live rows and
   // profiles), and one saved audience (isolation coverage).
   await catchUpParticipation(org.id);
+  // M6.1b contact stats: a session attended and a campaign opened (the signals' outbox contracts),
+  // so `contact_signals` has rows; `contact_scores` follows from the projections above.
+  await withTenant(systemCtx(org.id), async (tx) => {
+    const [someone] = await tx.execute<{ id: string }>(sql`select id from crm.contacts order by id limit 1`);
+    if (!someone) return;
+    const ref = uuidv7();
+    await emitEvents(tx, systemCtx(org.id), [
+      {
+        type: 'session.attended',
+        version: 1,
+        aggregateType: 'session',
+        aggregateId: ref,
+        payload: { eventId: event.id, sessionId: ref, contactId: someone.id },
+      },
+      {
+        type: 'campaign.opened',
+        version: 1,
+        aggregateType: 'campaign',
+        aggregateId: ref,
+        payload: { campaignId: ref, contactId: someone.id },
+      },
+    ]);
+  });
+  await catchUpContactSignals(org.id);
   await executeCommand(
     saveSegmentCommand,
     {

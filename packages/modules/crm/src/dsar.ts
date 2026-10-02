@@ -2,7 +2,14 @@ import type { TenantTx } from '@yayatoh/db';
 import { ERASED_EMAIL } from '@yayatoh/platform';
 import { and, asc, desc, eq, inArray, or } from 'drizzle-orm';
 import { scrubMergeSnapshotsTx } from './merge/engine.ts';
-import { consents, contactStats, contacts, eventParticipation } from './schema.ts';
+import {
+  consents,
+  contactScores,
+  contactSignals,
+  contactStats,
+  contacts,
+  eventParticipation,
+} from './schema.ts';
 
 /** A person's org contact and consent history, allowlisted (M1.14c data-subject access). */
 export async function contactDsarTx(tx: TenantTx, emailNorm: string, linked: readonly string[] = []) {
@@ -29,6 +36,17 @@ export async function contactDsarTx(tx: TenantTx, emailNorm: string, linked: rea
     : [];
   const stats = ids.length
     ? await tx.select().from(contactStats).where(inArray(contactStats.contactId, ids))
+    : [];
+  // M6.1b: the scores and the signals behind them (sessions attended, campaigns opened).
+  const scores = ids.length
+    ? await tx.select().from(contactScores).where(inArray(contactScores.contactId, ids))
+    : [];
+  const signals = ids.length
+    ? await tx
+        .select()
+        .from(contactSignals)
+        .where(inArray(contactSignals.contactId, ids))
+        .orderBy(asc(contactSignals.occurredAt))
     : [];
   return {
     contacts: rows.map((r) => ({
@@ -64,6 +82,22 @@ export async function contactDsarTx(tx: TenantTx, emailNorm: string, linked: rea
       spendMinor: t.spendMinor,
       firstSeenAt: t.firstSeenAt,
       lastSeenAt: t.lastSeenAt,
+    })),
+    scores: scores.map((s) => ({
+      events: s.events,
+      eventsAttended: s.eventsAttended,
+      noShows: s.noShows,
+      sessionsAttended: s.sessionsAttended,
+      campaignsOpened: s.campaignsOpened,
+      engagementScore: s.engagementScore,
+      noShowBps: s.noShowBps,
+      computedAt: s.computedAt,
+    })),
+    signals: signals.map((g) => ({
+      kind: g.kind,
+      refId: g.refId,
+      eventId: g.eventId,
+      occurredAt: g.occurredAt,
     })),
   };
 }

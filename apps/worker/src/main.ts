@@ -8,6 +8,7 @@ import { sweepAlerts } from './alerts.ts';
 import { badgeBatchJob, enqueueDueBadgeBatches } from './badges.ts';
 import { runDueBulkOperations } from './bulk.ts';
 import { bossRelease, campaignReleaseJob, campaignTick } from './campaigns.ts';
+import { enqueueContactStats } from './contact-stats.ts';
 import { DEVICE_WATCHDOG_MS, runDeviceWatchdog } from './device-watchdog.ts';
 import { domainRecheckJob } from './domains.ts';
 import { enqueueDuplicateScans } from './duplicates.ts';
@@ -193,6 +194,16 @@ setInterval(() => {
       queueingBadges = false;
     });
 }, 3_000).unref();
+
+// Contact stats (M6.1b): a rescore of every org with contacts shortly after start (the backfill)
+// and then daily, so registrations whose events have ended count as attended or no-shows
+// (leader only; the exclusive queue keeps one job per org).
+const queueContactStats = () => {
+  if (!release || stopping) return;
+  enqueueContactStats(boss).catch((err) => console.error('contact stats', err));
+};
+setTimeout(queueContactStats, 2 * 60_000).unref();
+setInterval(queueContactStats, 24 * 3_600_000).unref();
 
 // Daily reconciliation (M1.6e): the previous UTC day, hourly attempts (idempotent per org and
 // day, so only the first run of a day does work), leader only. The fake provider without a

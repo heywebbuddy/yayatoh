@@ -9,6 +9,7 @@ import { catchUpSubscriber, defineSubscriber, type PublishedEvent, type Subscrib
 import { seatedAttendeeIdsTx } from '@yayatoh/seating';
 import { orderTicketIdsTx, ticketFactsTx } from '@yayatoh/ticketing';
 import { z } from 'zod';
+import { refreshContactStatsTx } from './stats.ts';
 
 /**
  * Events that can change who took part in an event and how (M3.6). Each names the event and the
@@ -94,7 +95,10 @@ export async function refreshParticipationTx(
     contactIds: only,
     rows,
   });
-  await refreshContactProfilesTx(tx, ctx, [...new Set([...changed, ...(only ?? [])])]);
+  const touched = [...new Set([...changed, ...(only ?? [])])];
+  await refreshContactProfilesTx(tx, ctx, touched);
+  // M6.1b: their contact stats (lifetime value, RFM inputs, scores) follow in the same transaction.
+  await refreshContactStatsTx(tx, ctx, touched);
   return rows.length;
 }
 

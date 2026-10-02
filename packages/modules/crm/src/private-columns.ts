@@ -44,4 +44,7 @@ export const privateColumns = columnPrivacy('crm', {
     currency: 'vocab',
     label: internal(),
   },
+  // M6.1b contact stats: counts, scores and money in minor units; the text columns are codes.
+  contact_scores: { monetary_currency: 'vocab' },
+  contact_signals: { kind: 'vocab' },
 });
