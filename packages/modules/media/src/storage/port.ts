@@ -24,7 +24,11 @@ export function assertOrgKey(orgId: string, key: string): void {
     parts.length !== 3 ||
     parts[0] !== orgId ||
     !UUID.test(parts[1] ?? '') ||
-    !/^[0-9]{1,5}-[0-9a-f]{32}\.(avif|webp|jpg|png|svg)$/.test(parts[2] ?? '')
+    !(
+      /^[0-9]{1,5}-[0-9a-f]{32}\.(avif|webp|jpg|png|svg|pdf)$/.test(parts[2] ?? '') ||
+      // M5.5a badge PDFs share the first form (`{n}-{hash}.pdf`); M5.3a portal files (as uploaded): `f-{hash}.{ext}`.
+      /^f-[0-9a-f]{32}\.(pdf|pptx|docx|jpg|png|webp)$/.test(parts[2] ?? '')
+    )
   )
     throw new Error('media store: key outside the org prefix');
 }

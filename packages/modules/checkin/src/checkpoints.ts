@@ -26,6 +26,8 @@ export const CheckpointDto = z.object({
   archived: z.boolean(),
   latitude: z.number().nullable(),
   longitude: z.number().nullable(),
+  /** M3.3a: how many people the area holds (the capacity gauges); null = not limited. */
+  capacity: z.int().nullable(),
 });
 export type CheckpointDto = z.infer<typeof CheckpointDto>;
 
@@ -38,6 +40,7 @@ const toDto = (c: CheckpointRow): CheckpointDto => ({
   archived: c.archivedAt !== null,
   latitude: c.latitude,
   longitude: c.longitude,
+  capacity: c.capacity,
 });
 
 export const createCheckpointCommand = tenantCommand({
@@ -52,6 +55,8 @@ export const createCheckpointCommand = tenantCommand({
       /** Where it is (WGS 84), for the impossible-travel signal. Both or neither. */
       latitude: z.number().min(-90).max(90).nullable().default(null),
       longitude: z.number().min(-180).max(180).nullable().default(null),
+      /** M3.3a: how many people the area holds (capacity gauges). */
+      capacity: z.int().min(1).max(1_000_000).nullable().default(null),
     })
     .refine((v) => v.kind === 'zone' || v.ticketTypeIds.length === 0, {
       message: 'Only zones list ticket types',
@@ -80,6 +85,7 @@ export const createCheckpointCommand = tenantCommand({
         ticketTypeIds: [...new Set(input.ticketTypeIds)],
         latitude: input.latitude,
         longitude: input.longitude,
+        capacity: input.capacity,
       })
       .onConflictDoNothing()
       .returning();

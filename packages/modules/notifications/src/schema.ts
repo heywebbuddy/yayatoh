@@ -117,6 +117,12 @@ export const messages = tenantTable(
     /** Fallback chains (M3.5b): the message on the previous channel this one replaces, and why. */
     fallbackOf: uuid('fallback_of'),
     fallbackReason: text('fallback_reason'),
+    /**
+     * The domain an email went out from (M3.8b deliverability per sending domain): the org's
+     * verified sending domain, or the platform sender's. Null for other channels and for mail
+     * sent before M3.8b.
+     */
+    senderDomain: text('sender_domain'),
   },
   (t) => [
     uniqueIndex('messages_org_channel_dedupe_key').on(t.orgId, t.channel, t.dedupeKey),
@@ -131,6 +137,10 @@ export const messages = tenantTable(
     index('messages_org_due_idx').on(t.orgId, t.sendAfter).where(sql`status = 'queued'`),
     index('messages_due_orgs_idx').on(t.sendAfter, t.orgId).where(sql`status = 'queued'`),
     check('messages_channel_check', inList('channel', MESSAGE_CHANNELS)),
+    check(
+      'messages_sender_domain_check',
+      sql`sender_domain is null or (sender_domain = lower(sender_domain) and length(sender_domain) between 4 and 253)`,
+    ),
     check('messages_status_check', inList('status', MESSAGE_STATUSES)),
     check('messages_category_check', inList('category', CATEGORIES)),
     check('messages_dedupe_key_length', sql`length(dedupe_key) between 1 and 255`),

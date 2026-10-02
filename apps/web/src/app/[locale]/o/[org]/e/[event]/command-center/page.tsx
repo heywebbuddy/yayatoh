@@ -1,9 +1,10 @@
-import { type EventViewDto, eventViewQuery, WIDGET_META } from '@yayatoh/command-center';
+import { type EventViewDto, eventViewQuery, followedChannels, WIDGET_META } from '@yayatoh/command-center';
 import { executeQuery, isDomainError } from '@yayatoh/kernel';
 import { EmptyState, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { CommandCenterBoard } from '@/components/command-center/board.tsx';
 import { ModePanel } from '@/components/command-center/mode-panel.tsx';
+import { Link } from '@/i18n/navigation.ts';
 import { commandCenterCtx, loadWidget, WIDGETS, widgetChannels } from '@/server/command-center.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
@@ -66,6 +67,14 @@ export default async function CommandCenterPage({
         title={t('title')}
         description={ev.name}
       />
+      {data.modules.has('checkin') ? (
+        <Link
+          href={`${base}/command-center/tv`}
+          className="inline-flex min-h-6 items-center self-start text-body underline underline-offset-2"
+        >
+          {t('tv.open')}
+        </Link>
+      ) : null}
       <ModePanel
         mode={view.mode}
         timeZone={view.timeZone}
@@ -76,7 +85,7 @@ export default async function CommandCenterPage({
       <CommandCenterBoard
         key={`${view.mode.mode}:${slots.map((s) => `${s.key}${s.hidden ? '-' : ''}`).join(',')}`}
         slots={slots}
-        channels={Object.fromEntries(slots.map((s) => [s.key, WIDGET_META[s.key].channel]))}
+        channels={Object.fromEntries(slots.map((s) => [s.key, followedChannels(WIDGET_META[s.key])]))}
         urls={channels}
         initial={initial}
         widgetUrl={`/api/command-center/${org}/${event}`}

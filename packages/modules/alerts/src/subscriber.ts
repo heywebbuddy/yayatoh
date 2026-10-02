@@ -1,3 +1,4 @@
+import { DEVICE_ONLINE_WINDOW_MS, markQuietDevicesTx } from '@yayatoh/checkin';
 import { type TenantTx, withTenant } from '@yayatoh/db';
 import { findEventTx, upcomingEventIdsTx } from '@yayatoh/events';
 import { type Ctx, createCtx } from '@yayatoh/kernel';
@@ -55,6 +56,9 @@ export const ALERT_TRIGGER_EVENTS = [
   'messaging.delivery_problems@1',
   'org.suspension_changed@1',
   'bulk.completed@1',
+  // M3.3b: a help request raised, taken or closed (the SLA passing is the sweep's job).
+  'assistance.requested@1',
+  'assistance.updated@1',
   // Batch 3e merge: failures of same-tier modules (recorded as signals, then the org rules run)
   // and dispute evidence deadlines (M3.10c, levels 3 days and 1 day).
   'automations.journey_step_failed@1',
@@ -198,4 +202,24 @@ export async function evaluateOrgNow(
       })),
     );
   return changes;
+}
+
+/**
+ * The live device watchdog's step for one org (M3.3a; the worker runs it every second for orgs
+ * with a device crossing the offline line). Devices silent for longer than the offline window get
+ * their "offline" transition (the live feed, the device board over `event.devices`), and the
+ * org's live and pre-show events are evaluated at once, so "devices offline" is raised the moment
+ * a device goes quiet instead of at the next 30 s sweep.
+ */
+export async function watchQuietDevices(
+  orgId: string,
+  deps: AlertDeps,
+  /** `evaluate: false` when the caller evaluates the org right after anyway (the dev drain). */
+  opts: { now?: Date; evaluate?: boolean } = {},
+): Promise<{ quiet: number; changes: AlertChange[] }> {
+  const base: Ctx = createCtx({ orgId, actor: { type: 'system', name: 'alerts.device-watchdog' } });
+  const ctx: Ctx = opts.now ? { ...base, now: opts.now } : base;
+  const quiet = await withTenant(ctx, (tx) => markQuietDevicesTx(tx, ctx, DEVICE_ONLINE_WINDOW_MS));
+  if (quiet.length === 0 || opts.evaluate === false) return { quiet: quiet.length, changes: [] };
+  return { quiet: quiet.length, changes: await evaluateOrgNow(orgId, deps, { now: ctx.now, full: false }) };
 }
