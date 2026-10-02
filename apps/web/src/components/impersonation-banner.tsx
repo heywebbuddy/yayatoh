@@ -24,7 +24,7 @@ export async function ImpersonationBanner({
   return (
     <section
       aria-label={t('label')}
-      className="flex flex-wrap items-center gap-3 border-b border-primary bg-primary-soft px-4 py-2.5 text-primary-ink md:px-8"
+      className="flex flex-wrap items-center gap-3 rounded-tile border border-primary/40 bg-primary-soft px-4 py-2.5 text-primary-ink"
     >
       <UserRoundCog aria-hidden="true" className="size-4 shrink-0" strokeWidth={2} />
       <p className="min-w-0 flex-1 text-body">

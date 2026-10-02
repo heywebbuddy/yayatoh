@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, cx, EmptyState } from '@yayatoh/ui';
+import { Button, cx, EmptyState, iconButtonClass } from '@yayatoh/ui';
 import { Bell, Check } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState, useTransition } from 'react';
@@ -51,14 +51,14 @@ export function InboxBell({ org, initial }: { org: string; initial: InboxView })
         type="button"
         popoverTarget="notification-center"
         aria-label={t('openWithCount', { count: view.unread })}
-        className="relative flex size-10 items-center justify-center rounded-pill border border-line bg-surface hover:bg-surface-2"
+        className={cx(iconButtonClass('secondary', 'md'), 'relative')}
       >
         <Bell aria-hidden="true" className="size-4" strokeWidth={2} />
         {view.unread > 0 ? (
           <span
             aria-hidden="true"
             data-testid="inbox-badge"
-            className="absolute -end-1 -top-1 flex min-w-5 items-center justify-center rounded-pill bg-tag px-1 font-mono text-[11px] text-white"
+            className="absolute -end-1.5 -top-1.5 flex h-5 min-w-5 items-center justify-center rounded-pill bg-brand-strong px-1 text-[11px] font-extrabold text-white tabular-nums ring-2 ring-canvas"
           >
             {view.unread > 99 ? '99+' : view.unread}
           </span>
@@ -72,10 +72,10 @@ export function InboxBell({ org, initial }: { org: string; initial: InboxView })
         popover="auto"
         role="dialog"
         aria-label={t('title')}
-        className="m-0 w-[min(380px,calc(100vw-2rem))] rounded-panel border border-line bg-surface p-4 elevation-pop [inset:auto] [inset-block-start:72px] [inset-inline-end:16px]"
+        className="m-0 w-[min(380px,calc(100vw-2rem))] rounded-panel border border-line bg-surface-solid p-4 text-ink elevation-pop [inset:auto] [inset-block-start:72px] [inset-inline-end:16px]"
       >
         <div className="mb-3 flex items-center justify-between gap-2">
-          <p className="text-section">{t('title')}</p>
+          <p className="text-card">{t('title')}</p>
           <Button
             type="button"
             size="sm"
@@ -123,7 +123,7 @@ export function InboxBell({ org, initial }: { org: string; initial: InboxView })
                     aria-label={t('markReadItem', { title: i.title })}
                     disabled={pending}
                     onClick={() => mark([i.id])}
-                    className="flex size-8 shrink-0 items-center justify-center rounded-pill border border-line bg-surface hover:bg-surface-2"
+                    className={iconButtonClass('ghost', 'sm')}
                   >
                     <Check aria-hidden="true" className="size-4" strokeWidth={2} />
                   </button>

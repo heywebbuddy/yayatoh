@@ -27,7 +27,14 @@
     "yourOrganizations": "Tus organizaciones",
     "organization": "Organización",
     "signOut": "Cerrar sesión",
-    "security": "Seguridad de la cuenta"
+    "security": "Seguridad de la cuenta",
+    "menuSection": "Menú",
+    "accountSection": "Cuenta",
+    "newEvent": "Nuevo evento",
+    "breadcrumb": "Ruta de navegación",
+    "closeMenu": "Cerrar menú",
+    "eventSections": "Secciones del evento",
+    "allEvents": "Eventos"
   },
   "notifications": {
     "open": "Notificaciones",
@@ -539,7 +546,10 @@
   },
   "common": {
     "comingSoon": "Llegará en una fase posterior",
-    "loading": "Cargando…"
+    "loading": "Cargando…",
+    "close": "Cerrar",
+    "retry": "Reintentar",
+    "select": "Seleccionar"
   },
   "section": {
     "comingTitle": "Esta sección está en construcción",
@@ -6459,5 +6469,11 @@
       "messages": "Mensajes de clientes para tu equipo",
       "security": "Alertas de seguridad para tu equipo"
     }
+  },
+  "theme": {
+    "label": "Tema de color",
+    "light": "Claro",
+    "dark": "Oscuro",
+    "system": "Sistema"
   }
 }

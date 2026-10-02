@@ -1,90 +1,122 @@
-import Link from 'next/link';
+import {
+  Activity,
+  Building2,
+  ChartColumn,
+  DoorOpen,
+  KeyRound,
+  MessageSquareWarning,
+  Percent,
+  Route,
+  ScrollText,
+  Send,
+  Siren,
+  TicketCheck,
+  UserRoundSearch,
+  Wrench,
+} from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { autoPausedOrgs } from '@/server/messaging-policy.ts';
 import type { Staff } from '@/server/staff.ts';
+import { currentTheme } from '@/server/theme.ts';
+import { NavLink } from './nav-link.tsx';
 import { SignOutButton } from './sign-out-button.tsx';
+import { ThemeSwitch } from './theme-switch.tsx';
 
-/** The console frame: product name, sections, who is signed in and as what. */
+const I = { 'aria-hidden': true, strokeWidth: 2 } as const;
+
+/**
+ * The staff console frame (ADR 0022): the floating dark sidebar on wide screens, a scrolling
+ * strip of the same links on phones (one nav, so every link exists once), who is signed in and
+ * as what, the theme switch and sign out.
+ */
 export async function Shell({ staff, children }: { staff: Staff; children: ReactNode }) {
   const t = await getTranslations('shell');
-  // Staff hear about complaint-rate auto-pauses here (M3.5a): the count sits in the header.
+  // Staff hear about complaint-rate auto-pauses here (M3.5a): the count sits in the nav.
   const paused = staff.can('messaging') ? (await autoPausedOrgs(staff)).length : 0;
+  const theme = await currentTheme();
+  const links: { href: string; label: string; icon: ReactNode; show: boolean }[] = [
+    { href: '/', label: t('tenants'), icon: <Building2 {...I} />, show: true },
+    { href: '/commission', label: t('commission'), icon: <Percent {...I} />, show: staff.can('fees') },
+    { href: '/reports', label: t('reports'), icon: <ChartColumn {...I} />, show: staff.can('reports') },
+    {
+      href: '/signup-codes',
+      label: t('signupCodes'),
+      icon: <TicketCheck {...I} />,
+      show: staff.can('signupCodes'),
+    },
+    {
+      href: '/open-signup',
+      label: t('openSignup'),
+      icon: <DoorOpen {...I} />,
+      show: staff.can('openSignup'),
+    },
+    { href: '/people', label: t('people'), icon: <UserRoundSearch {...I} />, show: staff.can('privacy') },
+    {
+      href: '/messaging',
+      label: paused ? t('messagingCount', { count: paused }) : t('messaging'),
+      icon: <MessageSquareWarning {...I} />,
+      show: staff.can('messaging'),
+    },
+    { href: '/incidents', label: t('incidents'), icon: <Siren {...I} />, show: staff.can('incidents') },
+    {
+      href: '/maintenance',
+      label: t('maintenance'),
+      icon: <Wrench {...I} />,
+      show: staff.can('maintenance'),
+    },
+    { href: '/providers', label: t('providers'), icon: <Send {...I} />, show: staff.can('messaging') },
+    { href: '/access-log', label: t('accessLog'), icon: <ScrollText {...I} />, show: true },
+    { href: '/api-usage', label: t('apiUsage'), icon: <Activity {...I} />, show: true },
+    { href: '/front-door', label: t('frontDoor'), icon: <Route {...I} />, show: true },
+    { href: '/security', label: t('passkeys'), icon: <KeyRound {...I} />, show: true },
+  ];
   return (
-    <div className="flex min-h-dvh flex-col">
-      <a href="#main" className="sr-only focus:not-sr-only">
+    <div className="min-h-dvh lg:flex lg:gap-5 lg:p-4">
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:start-4 focus:top-4 focus:z-50 focus:rounded-control focus:bg-surface-solid focus:px-4 focus:py-2.5 focus:font-bold"
+      >
         {t('skip')}
       </a>
-      <header className="flex flex-wrap items-center gap-x-6 gap-y-2 border-b border-line bg-surface px-6 py-3">
-        <span className="text-[17px] font-semibold tracking-[-0.03em]">{t('product')}</span>
-        <nav aria-label={t('nav')} className="flex flex-wrap gap-x-4 gap-y-1 text-body">
-          <Link href="/" className="underline-offset-2 hover:underline">
-            {t('tenants')}
-          </Link>
-          {staff.can('fees') ? (
-            <Link href="/commission" className="underline-offset-2 hover:underline">
-              {t('commission')}
-            </Link>
-          ) : null}
-          {staff.can('reports') ? (
-            <Link href="/reports" className="underline-offset-2 hover:underline">
-              {t('reports')}
-            </Link>
-          ) : null}
-          {staff.can('signupCodes') ? (
-            <Link href="/signup-codes" className="underline-offset-2 hover:underline">
-              {t('signupCodes')}
-            </Link>
-          ) : null}
-          {staff.can('openSignup') ? (
-            <Link href="/open-signup" className="underline-offset-2 hover:underline">
-              {t('openSignup')}
-            </Link>
-          ) : null}
-          {staff.can('privacy') ? (
-            <Link href="/people" className="underline-offset-2 hover:underline">
-              {t('people')}
-            </Link>
-          ) : null}
-          {staff.can('messaging') ? (
-            <Link href="/messaging" className="underline-offset-2 hover:underline">
-              {paused ? t('messagingCount', { count: paused }) : t('messaging')}
-            </Link>
-          ) : null}
-          {staff.can('incidents') ? (
-            <Link href="/incidents" className="underline-offset-2 hover:underline">
-              {t('incidents')}
-            </Link>
-          ) : null}
-          {staff.can('maintenance') ? (
-            <Link href="/maintenance" className="underline-offset-2 hover:underline">
-              {t('maintenance')}
-            </Link>
-          ) : null}
-          {staff.can('messaging') ? (
-            <Link href="/providers" className="underline-offset-2 hover:underline">
-              {t('providers')}
-            </Link>
-          ) : null}
-          <Link href="/access-log" className="underline-offset-2 hover:underline">
-            {t('accessLog')}
-          </Link>
-          <Link href="/api-usage" className="underline-offset-2 hover:underline">
-            {t('apiUsage')}
-          </Link>
-          <Link href="/front-door" className="underline-offset-2 hover:underline">
-            {t('frontDoor')}
-          </Link>
-          <Link href="/security" className="underline-offset-2 hover:underline">
-            {t('passkeys')}
-          </Link>
+      <aside className="m-3 flex flex-col gap-4 rounded-panel border border-side-line bg-side p-4 text-side-ink lg:sticky lg:top-4 lg:m-0 lg:h-[calc(100dvh-2rem)] lg:w-[256px] lg:shrink-0 lg:gap-5 lg:overflow-y-auto lg:px-4 lg:pt-6 dark:backdrop-blur-xl [&_:focus-visible]:outline-white">
+        <div className="flex items-center gap-2.5 px-2">
+          <svg aria-hidden="true" viewBox="0 0 32 32" className="size-[28px] shrink-0">
+            <path d="M5 21C5 13.3 10.6 6 18.5 6c0 7.7-5.6 15-13.5 15z" className="fill-brand" />
+            <path
+              d="M27 11c0 7.7-5.6 15-13.5 15 0-7.7 5.6-15 13.5-15z"
+              className="fill-primary"
+              fillOpacity="0.92"
+            />
+          </svg>
+          <span className="text-[18px] font-extrabold tracking-[-0.02em] text-side-strong">
+            {t('product')}
+          </span>
+        </div>
+        <nav
+          aria-label={t('nav')}
+          className="-mx-1 flex gap-1 overflow-x-auto px-1 pb-1 [scrollbar-width:thin] lg:mx-0 lg:flex-col lg:overflow-visible lg:px-0"
+        >
+          {links
+            .filter((l) => l.show)
+            .map((l) => (
+              <NavLink key={l.href} href={l.href} icon={l.icon}>
+                {l.label}
+              </NavLink>
+            ))}
         </nav>
-        <span className="ms-auto text-caption text-ink-2">
-          {t('signedInAs', { name: staff.name, role: t(`roles.${staff.role}`) })}
-        </span>
-        <SignOutButton label={t('signOut')} />
-      </header>
-      <main id="main" className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-6 py-8">
+        <div className="flex flex-wrap items-center gap-2 rounded-[18px] border border-side-line bg-side-tile p-2.5 lg:mt-auto">
+          <span className="min-w-0 grow px-1 text-caption text-side-ink">
+            {t('signedInAs', { name: staff.name, role: t(`roles.${staff.role}`) })}
+          </span>
+          <ThemeSwitch initial={theme} />
+          <SignOutButton label={t('signOut')} />
+        </div>
+      </aside>
+      <main
+        id="main"
+        className="mx-auto flex w-full max-w-6xl min-w-0 flex-col gap-6 px-4 pt-2 pb-12 lg:px-2 lg:pt-3"
+      >
         {children}
       </main>
     </div>

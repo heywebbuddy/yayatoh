@@ -27,7 +27,14 @@
     "yourOrganizations": "आपके संगठन",
     "organization": "संगठन",
     "signOut": "साइन आउट करें",
-    "security": "खाते की सुरक्षा"
+    "security": "खाते की सुरक्षा",
+    "menuSection": "मेनू",
+    "accountSection": "खाता",
+    "newEvent": "नया इवेंट",
+    "breadcrumb": "ब्रेडक्रंब",
+    "closeMenu": "मेनू बंद करें",
+    "eventSections": "इवेंट के अनुभाग",
+    "allEvents": "इवेंट"
   },
   "notifications": {
     "open": "सूचनाएँ",
@@ -539,7 +546,10 @@
   },
   "common": {
     "comingSoon": "बाद के माइलस्टोन में आएगा",
-    "loading": "लोड हो रहा है…"
+    "loading": "लोड हो रहा है…",
+    "close": "बंद करें",
+    "retry": "फिर से कोशिश करें",
+    "select": "चुनें"
   },
   "section": {
     "comingTitle": "यह हिस्सा अभी बन रहा है",
@@ -6459,5 +6469,11 @@
       "messages": "आपकी टीम के लिए ग्राहक संदेश",
       "security": "आपकी टीम के लिए सुरक्षा अलर्ट"
     }
+  },
+  "theme": {
+    "label": "रंग थीम",
+    "light": "हल्का",
+    "dark": "गहरा",
+    "system": "सिस्टम"
   }
 }

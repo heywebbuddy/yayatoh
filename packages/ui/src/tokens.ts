@@ -156,8 +156,8 @@ export const constant = { white: '#FFFFFF', black: '#000000' } as const;
 /** Gradients and the canvas glow, per mode (CSS background values). */
 export const gradient = {
   light: {
-    /** The page canvas (flat in light mode). */
-    page: '#F2F1F6',
+    /** The page backdrop over the canvas colour (none in light mode). */
+    page: 'none',
     /** The soft pink-to-lavender highlight card with the huge number. */
     highlight: 'linear-gradient(135deg,#FFE0EC 0%,#FAD3EC 45%,#E3D8FF 100%)',
     /** The public event hero and the feature tiles (violet light). */
@@ -172,7 +172,7 @@ export const gradient = {
     feature: 'linear-gradient(135deg,#FFFFFF 0%,#F4EEFF 100%)',
   },
   dark: {
-    page: 'radial-gradient(55% 40% at 72% -6%,rgba(123,92,255,0.45),rgba(123,92,255,0) 70%),radial-gradient(40% 32% at 0% 100%,rgba(255,92,154,0.13),rgba(255,92,154,0) 70%),#0A0812',
+    page: 'radial-gradient(55% 40% at 72% -6%,rgba(123,92,255,0.45),rgba(123,92,255,0) 70%),radial-gradient(40% 32% at 0% 100%,rgba(255,92,154,0.13),rgba(255,92,154,0) 70%)',
     highlight: 'radial-gradient(120% 140% at 85% 0%,#8D6FFF 0%,#4B2FB0 34%,#1A1233 74%)',
     hero: 'radial-gradient(90% 120% at 90% 0%,#8D6FFF 0%,#4B2FB0 34%,#120C26 78%)',
     promo: 'radial-gradient(120% 120% at 100% 0%,#8D6FFF 0%,#4B2FB0 45%,#1A1233 100%)',

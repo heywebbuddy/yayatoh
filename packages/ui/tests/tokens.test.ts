@@ -5,7 +5,13 @@ import { dark, gradient, light, radius, shadow } from '../src/tokens.ts';
 const css = readFileSync(new URL('../src/styles.css', import.meta.url), 'utf8');
 
 const kebab = (s: string) => s.replace(/([A-Z]|\d+)/g, (c) => `-${c.toLowerCase()}`);
-const norm = (v: string | undefined) => v?.replace(/\s+/g, '').toUpperCase();
+// The formatter writes 0.40 as 0.4: compare numbers without trailing zeros.
+const norm = (v: string | undefined) =>
+  v
+    ?.replace(/\s+/g, '')
+    .replace(/(\.\d*?)0+(?=\D|$)/g, '$1')
+    .replace(/\.(?=\D|$)/g, '')
+    .toUpperCase();
 
 /** The declarations inside the first block that follows `selector`. */
 function block(selector: string): string {

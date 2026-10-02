@@ -1,5 +1,5 @@
 import { composeNav, type NavItem } from '@yayatoh/platform';
-import { Label } from '@yayatoh/ui';
+import { StatusPill } from '@yayatoh/ui';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server';
 import type { ReactNode } from 'react';
@@ -76,12 +76,21 @@ export default async function EventLayout({
         badges: { setupGuide: `${counted.filter((r) => r.done).length}/${counted.length}` },
       }}
       status={
-        <>
-          <Label>
-            {t(`eventStatus.${ev.status}`)} · {t(`phase.${phase.phase}`, { days: phase.days })}
-          </Label>
-          <span aria-hidden="true" className="size-1.5 rounded-full bg-primary" />
-        </>
+        <StatusPill
+          tone={
+            ev.status === 'cancelled'
+              ? 'danger'
+              : phase.phase === 'live'
+                ? 'success'
+                : ev.status === 'draft' || ev.status === 'postponed'
+                  ? 'waiting'
+                  : phase.phase === 'completed'
+                    ? 'neutral'
+                    : 'info'
+          }
+          live={phase.phase === 'live'}
+          label={`${t(`eventStatus.${ev.status}`)} · ${t(`phase.${phase.phase}`, { days: phase.days })}`}
+        />
       }
     >
       {/* M4.2a: the event's profile rewords the sentences its client components show. */}

@@ -12,11 +12,11 @@ export async function OrgStatusBanner({ status }: { status: string }) {
   return (
     <section
       aria-label={t('label')}
-      className="flex items-start gap-3 border-b border-danger/30 bg-danger-soft px-4 py-3 text-danger md:px-8"
+      className="flex items-start gap-3 rounded-tile border border-danger/30 bg-danger-soft px-4 py-3 text-danger"
     >
       <Icon aria-hidden="true" className="mt-0.5 size-4 shrink-0" strokeWidth={2} />
       <div className="flex min-w-0 flex-col gap-0.5">
-        <p className="text-body font-medium">{t(`${status}.title`)}</p>
+        <p className="text-body font-bold">{t(`${status}.title`)}</p>
         <p className="text-body">{t(`${status}.body`)}</p>
       </div>
     </section>

@@ -27,7 +27,14 @@
     "yourOrganizations": "你的組織",
     "organization": "組織",
     "signOut": "登出",
-    "security": "帳戶安全"
+    "security": "帳戶安全",
+    "menuSection": "選單",
+    "accountSection": "帳戶",
+    "newEvent": "新增活動",
+    "breadcrumb": "麵包屑導覽",
+    "closeMenu": "關閉選單",
+    "eventSections": "活動區塊",
+    "allEvents": "活動"
   },
   "notifications": {
     "open": "通知",
@@ -539,7 +546,10 @@
   },
   "common": {
     "comingSoon": "將於後續里程碑推出",
-    "loading": "載入中…"
+    "loading": "載入中…",
+    "close": "關閉",
+    "retry": "重試",
+    "select": "選取"
   },
   "section": {
     "comingTitle": "此區域正在建置中",
@@ -6459,5 +6469,11 @@
       "messages": "團隊的顧客訊息",
       "security": "團隊的安全通知"
     }
+  },
+  "theme": {
+    "label": "顏色主題",
+    "light": "淺色",
+    "dark": "深色",
+    "system": "跟隨系統"
   }
 }

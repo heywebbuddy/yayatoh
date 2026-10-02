@@ -27,7 +27,14 @@
     "yourOrganizations": "Je organisaties",
     "organization": "Organisatie",
     "signOut": "Uitloggen",
-    "security": "Accountbeveiliging"
+    "security": "Accountbeveiliging",
+    "menuSection": "Menu",
+    "accountSection": "Account",
+    "newEvent": "Nieuw evenement",
+    "breadcrumb": "Kruimelpad",
+    "closeMenu": "Menu sluiten",
+    "eventSections": "Onderdelen van het evenement",
+    "allEvents": "Evenementen"
   },
   "notifications": {
     "open": "Meldingen",
@@ -539,7 +546,10 @@
   },
   "common": {
     "comingSoon": "Komt in een latere mijlpaal",
-    "loading": "Laden…"
+    "loading": "Laden…",
+    "close": "Sluiten",
+    "retry": "Opnieuw proberen",
+    "select": "Selecteren"
   },
   "section": {
     "comingTitle": "Dit onderdeel wordt gebouwd",
@@ -6459,5 +6469,11 @@
       "messages": "Klantberichten voor je team",
       "security": "Beveiligingsmeldingen voor je team"
     }
+  },
+  "theme": {
+    "label": "Kleurthema",
+    "light": "Licht",
+    "dark": "Donker",
+    "system": "Systeem"
   }
 }

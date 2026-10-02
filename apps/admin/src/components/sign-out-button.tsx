@@ -1,22 +1,21 @@
 'use client';
 
 import { authClient } from '@yayatoh/auth/client';
-import { Button } from '@yayatoh/ui';
 import { useRouter } from 'next/navigation';
 
 export function SignOutButton({ label }: { label: string }) {
   const router = useRouter();
   return (
-    <Button
-      variant="ghost"
-      size="sm"
+    <button
+      type="button"
       onClick={async () => {
         await authClient.signOut();
         router.replace('/sign-in');
         router.refresh();
       }}
+      className="inline-flex min-h-9 items-center rounded-[12px] px-3 text-[13px] font-bold text-side-strong hover:bg-side-hover"
     >
       {label}
-    </Button>
+    </button>
   );
 }

@@ -27,7 +27,14 @@
     "yourOrganizations": "你的组织",
     "organization": "组织",
     "signOut": "退出登录",
-    "security": "账户安全"
+    "security": "账户安全",
+    "menuSection": "菜单",
+    "accountSection": "账户",
+    "newEvent": "新建活动",
+    "breadcrumb": "面包屑导航",
+    "closeMenu": "关闭菜单",
+    "eventSections": "活动版块",
+    "allEvents": "活动"
   },
   "notifications": {
     "open": "通知",
@@ -539,7 +546,10 @@
   },
   "common": {
     "comingSoon": "将在后续里程碑中推出",
-    "loading": "加载中…"
+    "loading": "加载中…",
+    "close": "关闭",
+    "retry": "重试",
+    "select": "选择"
   },
   "section": {
     "comingTitle": "此区域正在建设中",
@@ -6459,5 +6469,11 @@
       "messages": "团队的客户消息",
       "security": "团队的安全提醒"
     }
+  },
+  "theme": {
+    "label": "颜色主题",
+    "light": "浅色",
+    "dark": "深色",
+    "system": "跟随系统"
   }
 }

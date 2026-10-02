@@ -27,7 +27,14 @@
     "yourOrganizations": "Deine Organisationen",
     "organization": "Organisation",
     "signOut": "Abmelden",
-    "security": "Kontosicherheit"
+    "security": "Kontosicherheit",
+    "menuSection": "Menü",
+    "accountSection": "Konto",
+    "newEvent": "Neue Veranstaltung",
+    "breadcrumb": "Brotkrümelnavigation",
+    "closeMenu": "Menü schließen",
+    "eventSections": "Bereiche der Veranstaltung",
+    "allEvents": "Veranstaltungen"
   },
   "notifications": {
     "open": "Benachrichtigungen",
@@ -539,7 +546,10 @@
   },
   "common": {
     "comingSoon": "Kommt in einem späteren Meilenstein",
-    "loading": "Wird geladen…"
+    "loading": "Wird geladen…",
+    "close": "Schließen",
+    "retry": "Erneut versuchen",
+    "select": "Auswählen"
   },
   "section": {
     "comingTitle": "Dieser Bereich wird gerade gebaut",
@@ -6459,5 +6469,11 @@
       "messages": "Kundennachrichten für Ihr Team",
       "security": "Sicherheitshinweise für Ihr Team"
     }
+  },
+  "theme": {
+    "label": "Farbschema",
+    "light": "Hell",
+    "dark": "Dunkel",
+    "system": "System"
   }
 }

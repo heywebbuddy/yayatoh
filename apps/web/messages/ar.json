@@ -27,7 +27,14 @@
     "yourOrganizations": "مؤسساتك",
     "organization": "المؤسسة",
     "signOut": "تسجيل الخروج",
-    "security": "أمان الحساب"
+    "security": "أمان الحساب",
+    "menuSection": "القائمة",
+    "accountSection": "الحساب",
+    "newEvent": "فعالية جديدة",
+    "breadcrumb": "مسار التنقل",
+    "closeMenu": "إغلاق القائمة",
+    "eventSections": "أقسام الفعالية",
+    "allEvents": "الفعاليات"
   },
   "notifications": {
     "open": "الإشعارات",
@@ -539,7 +546,10 @@
   },
   "common": {
     "comingSoon": "قادم في مرحلة لاحقة",
-    "loading": "جارٍ التحميل…"
+    "loading": "جارٍ التحميل…",
+    "close": "إغلاق",
+    "retry": "حاول مرة أخرى",
+    "select": "تحديد"
   },
   "section": {
     "comingTitle": "هذا القسم قيد الإنشاء",
@@ -6459,5 +6469,11 @@
       "messages": "رسائل العملاء لفريقك",
       "security": "تنبيهات الأمان لفريقك"
     }
+  },
+  "theme": {
+    "label": "سمة الألوان",
+    "light": "فاتح",
+    "dark": "داكن",
+    "system": "النظام"
   }
 }

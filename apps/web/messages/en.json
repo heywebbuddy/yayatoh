@@ -27,7 +27,14 @@
     "yourOrganizations": "Your organizations",
     "organization": "Organization",
     "signOut": "Sign out",
-    "security": "Account security"
+    "security": "Account security",
+    "menuSection": "Menu",
+    "accountSection": "Account",
+    "newEvent": "New event",
+    "breadcrumb": "Breadcrumb",
+    "closeMenu": "Close menu",
+    "eventSections": "Event sections",
+    "allEvents": "Events"
   },
   "notifications": {
     "open": "Notifications",
@@ -539,7 +546,10 @@
   },
   "common": {
     "comingSoon": "Coming in a later milestone",
-    "loading": "Loading…"
+    "loading": "Loading…",
+    "close": "Close",
+    "retry": "Try again",
+    "select": "Select"
   },
   "section": {
     "comingTitle": "This area is being built",
@@ -6459,5 +6469,11 @@
       "messages": "Customer messages for your team",
       "security": "Security alerts for your team"
     }
+  },
+  "theme": {
+    "label": "Colour theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
   }
 }
