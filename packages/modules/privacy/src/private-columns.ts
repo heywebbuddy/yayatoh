@@ -13,7 +13,8 @@ export const privateColumns = columnPrivacy('privacy', {
     // M6.1c: the request lifecycle.
     status: 'vocab',
     source: 'vocab',
-    email_sealed: secret('sealed'),
+    // Kept only while the request is open (CHECK).
+    email_sealed: secret('sealed', { where: "status = 'open'" }),
     export_key: internal(),
     receipt: internal(),
     signature: internal(),

@@ -11,7 +11,7 @@ import {
   tenantQuery,
 } from '@yayatoh/platform';
 import { organizationNameTx } from '@yayatoh/tenancy';
-import { and, asc, desc, eq, inArray, sql } from 'drizzle-orm';
+import { and, asc, desc, eq, inArray, isNotNull, lte, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { buildArchive } from './archive.ts';
 import { DsarEmail, DsarSummary, maskEmail, subjectRefOf } from './dsar.ts';
@@ -519,7 +519,7 @@ export async function purgeExpiredArchivesTx(tx: TenantTx, ctx: Ctx): Promise<nu
   const due = await tx
     .update(dsarRequests)
     .set({ exportKey: null, exportExpiresAt: null, updatedAt: ctx.now })
-    .where(sql`${dsarRequests.exportKey} is not null and ${dsarRequests.exportExpiresAt} <= ${ctx.now}`)
+    .where(and(isNotNull(dsarRequests.exportKey), lte(dsarRequests.exportExpiresAt, ctx.now)))
     .returning({ id: dsarRequests.id });
   for (const r of due) await mediaStore().deleteAsset(requireOrg(ctx), r.id);
   return due.length;

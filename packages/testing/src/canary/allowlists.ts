@@ -61,6 +61,8 @@ export const EXPORT_ALLOW = {
     'attendees.attendees.labels',
     'crm.event_participation.labels',
     'crm.contact_profile.labels',
+    // The wedding sub-events the guest is invited to: their RSVP page shows them the same names.
+    'guests.sub_events.name',
   ],
   // The activity log for owners and admins: who did it and to what.
   audit: ['platform.audit_events.actor', 'platform.audit_events.target_id'],
