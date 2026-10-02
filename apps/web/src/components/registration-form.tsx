@@ -136,7 +136,7 @@ export function RegistrationForm({ find, register }: { find: Action; register: A
                 className="flex flex-col gap-2"
                 aria-invalid={state.field === 'type' ? true : undefined}
               >
-                <legend className="mb-1 text-body font-medium">{t('type')}</legend>
+                <legend className="mb-1 text-[13px] font-bold text-ink">{t('type')}</legend>
                 {options.types.map((x) => (
                   <label key={x.id} className="flex min-h-6 items-start gap-2.5 text-body">
                     <input
@@ -145,7 +145,7 @@ export function RegistrationForm({ find, register }: { find: Action; register: A
                       value={x.id}
                       checked={typeId === x.id}
                       onChange={() => setTypeId(x.id)}
-                      className="mt-0.5 size-5 accent-ink"
+                      className="mt-0.5 size-5 accent-primary"
                     />
                     <span className="flex flex-col">
                       <span>
@@ -153,7 +153,7 @@ export function RegistrationForm({ find, register }: { find: Action; register: A
                         {x.full ? ` · ${t('full')}` : ''}
                       </span>
                       {x.description ? (
-                        <span className="text-caption text-zinc-600">{x.description}</span>
+                        <span className="text-caption text-ink-2">{x.description}</span>
                       ) : null}
                     </span>
                   </label>
@@ -162,7 +162,7 @@ export function RegistrationForm({ find, register }: { find: Action; register: A
               {type ? (
                 <>
                   <fieldset className="flex flex-col gap-2">
-                    <legend className="mb-1 text-body font-medium">{t('pass')}</legend>
+                    <legend className="mb-1 text-[13px] font-bold text-ink">{t('pass')}</legend>
                     {admissions.map((i, k) => (
                       <label key={i.id} className="flex min-h-6 items-center gap-2.5 text-body">
                         <input
@@ -170,7 +170,7 @@ export function RegistrationForm({ find, register }: { find: Action; register: A
                           name="admission"
                           value={i.id}
                           defaultChecked={k === 0}
-                          className="size-5 accent-ink"
+                          className="size-5 accent-primary"
                         />
                         <span>
                           {i.name} · {i.priceLabel}
@@ -180,10 +180,15 @@ export function RegistrationForm({ find, register }: { find: Action; register: A
                   </fieldset>
                   {addOns.length > 0 && !type.full ? (
                     <fieldset className="flex flex-col gap-2">
-                      <legend className="mb-1 text-body font-medium">{t('addOns')}</legend>
+                      <legend className="mb-1 text-[13px] font-bold text-ink">{t('addOns')}</legend>
                       {addOns.map((i) => (
                         <label key={i.id} className="flex min-h-6 items-center gap-2.5 text-body">
-                          <input type="checkbox" name="addOn" value={i.id} className="size-5 accent-ink" />
+                          <input
+                            type="checkbox"
+                            name="addOn"
+                            value={i.id}
+                            className="size-5 accent-primary"
+                          />
                           <span>
                             {i.name} · {i.priceLabel}
                           </span>
@@ -228,7 +233,7 @@ export function RegistrationForm({ find, register }: { find: Action; register: A
                   </div>
                 </>
               ) : (
-                <p className="text-caption text-zinc-600">{t('pickType')}</p>
+                <p className="text-caption text-ink-2">{t('pickType')}</p>
               )}
             </Card>
           )}

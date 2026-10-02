@@ -38,7 +38,7 @@ async function Chrome({
 }) {
   const t = await getTranslations('cmsPublic');
   return (
-    <div className="min-h-dvh bg-white">
+    <div className="min-h-dvh bg-surface">
       {site.variant === 'tenant' ? <TenantHeader org={site.org} current={current} /> : <SiteHeader />}
       {site.variant === 'organizer' ? (
         <nav
@@ -68,7 +68,7 @@ async function Chrome({
       </main>
       <SiteFooter>
         {site.org.poweredByVisible && site.variant === 'tenant' ? (
-          <a href="https://yayatoh.com" className="self-start text-caption text-zinc-500 underline">
+          <a href="https://yayatoh.com" className="self-start text-caption text-ink-2 underline">
             {t('poweredBy')}
           </a>
         ) : null}
@@ -99,7 +99,7 @@ export async function BlogIndexView({
   const list = await cachedEntries(site.org.orgId, 'post', page);
   return (
     <Chrome site={site} current="/blogs">
-      <h1 className="break-words text-[40px] leading-tight font-normal tracking-[-0.03em]">
+      <h1 className="break-words text-[40px] leading-tight font-extrabold tracking-[-0.03em]">
         {t('blogTitle', { org: site.org.name })}
       </h1>
       {list.items.length === 0 ? (
@@ -108,8 +108,8 @@ export async function BlogIndexView({
         <ul aria-label={t('posts')} className="flex list-none flex-col gap-6 p-0">
           {list.items.map((p) => (
             <li key={p.slug}>
-              <article className="flex flex-col gap-2 border-b border-zinc-200 pb-6">
-                <h2 className="break-words text-[24px] font-normal tracking-[-0.02em]">
+              <article className="flex flex-col gap-2 border-b border-line pb-6">
+                <h2 className="break-words text-[24px] font-extrabold tracking-[-0.02em]">
                   <Link
                     href={`${site.base}${entryPath('post', p.slug)}`}
                     className="underline-offset-4 hover:underline"
@@ -117,13 +117,13 @@ export async function BlogIndexView({
                     {p.title}
                   </Link>
                 </h2>
-                <p className="text-caption text-zinc-500">
+                <p className="text-caption text-ink-2">
                   <time dateTime={p.publishedAt.toISOString()}>
                     {fmt(p.publishedAt, locale, site.org.timezone)}
                   </time>
                   {p.authorName ? ` · ${t('by', { name: p.authorName })}` : null}
                 </p>
-                {p.excerpt ? <p className="text-body text-zinc-700">{p.excerpt}</p> : null}
+                {p.excerpt ? <p className="text-body text-ink-2">{p.excerpt}</p> : null}
               </article>
             </li>
           ))}
@@ -177,22 +177,22 @@ export async function EntryView({
       <article className="flex flex-col gap-6">
         <header className="flex flex-col gap-2">
           {kind === 'post' ? (
-            <Link href={`${site.base}/blogs`} className="self-start text-caption text-zinc-600 underline">
+            <Link href={`${site.base}/blogs`} className="self-start text-caption text-ink-2 underline">
               {t('allPosts')}
             </Link>
           ) : null}
-          <h1 className="break-words text-[40px] leading-tight font-normal tracking-[-0.03em]">
+          <h1 className="break-words text-[40px] leading-tight font-extrabold tracking-[-0.03em]">
             {entry.title}
           </h1>
           {kind === 'post' ? (
-            <p className="text-caption text-zinc-500">
+            <p className="text-caption text-ink-2">
               <time dateTime={entry.publishedAt.toISOString()}>
                 {fmt(entry.publishedAt, locale, site.org.timezone)}
               </time>
               {entry.authorName ? ` · ${t('by', { name: entry.authorName })}` : null}
             </p>
           ) : null}
-          {entry.excerpt ? <p className="text-[17px] leading-7 text-zinc-600">{entry.excerpt}</p> : null}
+          {entry.excerpt ? <p className="text-[17px] leading-7 text-ink-2">{entry.excerpt}</p> : null}
         </header>
         <Markdown source={entry.body} />
       </article>

@@ -8,7 +8,7 @@ import type { AiDraftState } from '@/app/[locale]/o/[org]/e/[event]/content/acti
 import { errorMessageKey } from '@/lib/errors.ts';
 import type { FormState } from '@/lib/form-state.ts';
 
-const area = 'rounded-card border bg-white px-4 py-2 text-body';
+const area = 'rounded-card border bg-surface px-4 py-2 text-body';
 
 /**
  * "Draft with AI" (M1.4f). The organizer picks what to draft and may add notes; the draft comes
@@ -96,8 +96,8 @@ export function AiDraftPanel({
 
   return (
     <div className="flex flex-col gap-4">
-      <p className="text-body text-zinc-600">{t('explainer')}</p>
-      <p className="text-caption text-zinc-600" aria-live="polite" data-testid="ai-credits">
+      <p className="text-body text-ink-2">{t('explainer')}</p>
+      <p className="text-caption text-ink-2" aria-live="polite" data-testid="ai-credits">
         {t('credits', { balance, allowance })}
       </p>
       {!enabled ? (
@@ -115,7 +115,7 @@ export function AiDraftPanel({
         }}
       >
         <fieldset className="flex flex-col gap-1.5">
-          <legend className="pb-1.5 text-caption text-zinc-600">{t('what')}</legend>
+          <legend className="pb-1.5 text-[13px] font-bold text-ink">{t('what')}</legend>
           <div className="flex flex-wrap gap-x-5 gap-y-1">
             {DRAFT_KINDS.map((k) => (
               <label key={k} className="flex min-h-6 items-center gap-2 text-body">
@@ -133,7 +133,7 @@ export function AiDraftPanel({
           </div>
         </fieldset>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor={`${id}-notes`} className="text-caption text-zinc-600">
+          <label htmlFor={`${id}-notes`} className="text-[13px] font-bold text-ink">
             {t('notes')}
           </label>
           <textarea
@@ -143,9 +143,9 @@ export function AiDraftPanel({
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             aria-describedby={`${id}-notes-hint`}
-            className={`${area} border-zinc-200`}
+            className={`${area} border-line`}
           />
-          <p id={`${id}-notes-hint`} className="text-caption text-zinc-500">
+          <p id={`${id}-notes-hint`} className="text-caption text-ink-2">
             {t('notesHint')}
           </p>
         </div>
@@ -159,13 +159,13 @@ export function AiDraftPanel({
       {preview ? (
         <section
           aria-labelledby={`${id}-preview-heading`}
-          className="flex flex-col gap-3 rounded-card border border-zinc-200 p-4"
+          className="flex flex-col gap-3 rounded-card border border-line p-4"
         >
           <h3 id={`${id}-preview-heading`} className="text-section">
             {t('previewTitle', { kind: t(`kinds.${preview.kind}`) })}
           </h3>
-          <p className="text-caption text-zinc-500">{t('previewHint')}</p>
-          <label htmlFor={`${id}-preview`} className="text-caption text-zinc-600">
+          <p className="text-caption text-ink-2">{t('previewHint')}</p>
+          <label htmlFor={`${id}-preview`} className="text-[13px] font-bold text-ink">
             {t('previewLabel')}
           </label>
           <textarea
@@ -174,7 +174,7 @@ export function AiDraftPanel({
             rows={preview.kind === 'tagline' ? 2 : 8}
             value={preview.text}
             onChange={(e) => setPreview({ ...preview, text: e.target.value })}
-            className={`${area} border-zinc-200`}
+            className={`${area} border-line`}
           />
           <div className="flex flex-wrap gap-2">
             <Button type="button" onClick={onAccept} disabled={pending || !preview.text.trim()}>

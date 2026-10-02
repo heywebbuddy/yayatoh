@@ -122,7 +122,7 @@ export default async function MessagingLimitsPage({
             },
           ]}
         />
-        <p className="text-caption text-zinc-500">
+        <p className="text-caption text-ink-2">
           {t('resets', { date: day.format(usage.resetsAt) })} {t('smsSegmentsNote')}
         </p>
       </section>
@@ -151,7 +151,7 @@ export default async function MessagingLimitsPage({
               cell: (m) => (
                 <span className="flex flex-col gap-0.5">
                   <StatusDot status={m.status === 'blocked' ? 'danger' : 'warning'} label={t(m.status)} />
-                  <span className="text-caption text-zinc-600">{reason(m.reason)}</span>
+                  <span className="text-caption text-ink-2">{reason(m.reason)}</span>
                 </span>
               ),
             },
@@ -190,7 +190,7 @@ export default async function MessagingLimitsPage({
                           address={s.address}
                         />
                       ) : (
-                        <span className="text-caption text-zinc-600">
+                        <span className="text-caption text-ink-2">
                           {s.reason === 'opt_out' ? t('personOnly') : t('supportOnly')}
                         </span>
                       ),
@@ -205,7 +205,7 @@ export default async function MessagingLimitsPage({
         <h2 id="caps-heading" className="text-section">
           {t('capsTitle')}
         </h2>
-        <p className="text-body text-zinc-600">{t('capsDescription')}</p>
+        <p className="text-body text-ink-2">{t('capsDescription')}</p>
         {canEdit ? (
           <Card>
             <MessagingCapsForm action={saveCapsAction.bind(null, org)} caps={caps} />

@@ -27,7 +27,14 @@
     "yourOrganizations": "你的组织",
     "organization": "组织",
     "signOut": "退出登录",
-    "security": "账户安全"
+    "security": "账户安全",
+    "menuSection": "菜单",
+    "accountSection": "账户",
+    "newEvent": "新建活动",
+    "breadcrumb": "面包屑导航",
+    "closeMenu": "关闭菜单",
+    "eventSections": "活动版块",
+    "allEvents": "活动"
   },
   "notifications": {
     "open": "通知",
@@ -572,7 +579,10 @@
   },
   "common": {
     "comingSoon": "将在后续里程碑中推出",
-    "loading": "加载中…"
+    "loading": "加载中…",
+    "close": "关闭",
+    "retry": "重试",
+    "select": "选择"
   },
   "section": {
     "comingTitle": "此区域正在建设中",
@@ -641,6 +651,7 @@
     "speakerPageTitle": "演讲嘉宾",
     "gallery": "图库",
     "register": "报名",
+    "hostedBy": "主办方",
     "exhibitorMap": "参展商地图"
   },
   "portal": {
@@ -1418,7 +1429,8 @@
       "placeholder": "#rrggbb",
       "preview": "购票",
       "ratio": "文字对比度 {ratio}:1。",
-      "tooLight": "此颜色在白色页面上偏浅（{ratio}:1），按钮可能不易看清。请尝试更深的颜色。"
+      "tooLight": "此颜色在白色页面上偏浅（{ratio}:1），按钮可能不易看清。请尝试更深的颜色。",
+      "tooDark": "在深色主题下，此颜色相对页面偏暗（{ratio}:1），按钮可能不易看清。请尝试更浅的颜色。"
     },
     "legal": {
       "title": "你的法律页面",
@@ -2619,7 +2631,9 @@
     "clear": "清除筛选",
     "noneTitle": "没有符合筛选条件的活动",
     "noneDescription": "试试其他类别或标签，或清除筛选条件。",
-    "tags": "标签"
+    "tags": "标签",
+    "search": "按名称搜索",
+    "showing": "共 {total, plural, other {# 个活动}}，第 {from}–{to} 个"
   },
   "venues": {
     "title": "场地",
@@ -6294,6 +6308,7 @@
         "open": "打开邮件送达率"
       }
     },
+    "openScanner": "打开扫码器",
     "tv": {
       "open": "电视模式",
       "title": "电视模式",
@@ -6313,7 +6328,10 @@
       "createdAt": "创建于 {time}",
       "revokedAt": "停用于 {time}",
       "revoke": "停用",
-      "revokeLabel": "停用 {label}"
+      "revokeLabel": "停用 {label}",
+      "readOnly": "只读",
+      "statusOn": "已开启",
+      "statusOff": "已关闭"
     }
   },
   "alerts": {
@@ -6403,9 +6421,9 @@
       "payoutsPastDue": "更新收款账户",
       "deliverability": "打开屏蔽列表",
       "automationFailed": "打开消息健康状况",
-      "assistanceOverdue": "打开求助请求",
       "campaignFailed": "打开营销活动",
-      "disputeDeadline": "打开争议队列"
+      "disputeDeadline": "打开争议队列",
+      "assistanceOverdue": "打开求助请求"
     },
     "rules": {
       "unseated": "{count, plural, other {{countWords} 位参会者没有座位}}",
@@ -6425,9 +6443,9 @@
       "payoutsPastDue": "{count, plural, other {收款账户有 {countWords} 项要求已逾期}}",
       "deliverability": "电子邮件送达率需要关注",
       "automationFailed": "{count, plural, other {今天有 {countWords} 条消息或批量操作失败}}",
-      "assistanceOverdue": "{count, plural, other {{countWords} 个求助请求等待过久}}",
       "campaignFailed": "{count, plural, other {今天有 {countWords} 次营销活动发送失败}}",
-      "disputeDeadline": "{count, plural, other {有 {countWords} 起争议需要尽快提交证据}}"
+      "disputeDeadline": "{count, plural, other {有 {countWords} 起争议需要尽快提交证据}}",
+      "assistanceOverdue": "{count, plural, other {{countWords} 个求助请求等待过久}}"
     },
     "widget": {
       "title": "提醒",
@@ -7525,6 +7543,7 @@
     "publicLink": "填写地址：",
     "publicLinkText": "公开报名表",
     "openBuilder": "编辑报名表",
+    "openReadOnly": "查看注册表单",
     "pagesTitle": "页面",
     "emptyTitle": "还没有页面",
     "emptyDescription": "先添加第一个页面，再添加问题。页面可以限定于某些报名类型，或只在特定回答后显示。",
@@ -7676,8 +7695,7 @@
     "submittedTitle": "谢谢，你已完成报名",
     "submittedDescription": "谢谢，{name}。你的回答已发送给主办方。",
     "expiredTitle": "此链接已过期",
-    "expiredDescription": "继续报名的链接在最后一次保存后 14 天内有效。请从活动页面重新开始。",
-    "openReadOnly": "查看注册表单"
+    "expiredDescription": "继续报名的链接在最后一次保存后 14 天内有效。请从活动页面重新开始。"
   },
   "agenda": {
     "publishing": {
@@ -8070,6 +8088,12 @@
       "sub_event_has_chart": "它已有专用座位图。",
       "no_chart": "暂无可复制的座位图。请在座位页面创建活动座位图，或选择已保存的平面图。"
     }
+  },
+  "theme": {
+    "label": "颜色主题",
+    "light": "浅色",
+    "dark": "深色",
+    "system": "跟随系统"
   },
   "speakerPortal": {
     "title": "演讲嘉宾门户",
@@ -8711,7 +8735,13 @@
       "offline": "你处于离线状态。设备恢复在线后请重试。",
       "invalid": "请选择你需要什么。"
     },
-    "guestLine": "{name} · 门票 {ticket}"
+    "guestLine": "{name} · 门票 {ticket}",
+    "stats": {
+      "open": "未结请求",
+      "urgent": "紧急",
+      "waiting": "等待处理",
+      "unassigned": "未分配"
+    }
   },
   "marketingAnalytics": {
     "title": "营销分析",
@@ -8736,7 +8766,8 @@
       "lastRevenue": "收入（末次触达）",
       "firstOrders": "订单（首次触达）",
       "firstRevenue": "收入（首次触达）",
-      "conversion": "转化率"
+      "conversion": "转化率",
+      "deliveredShare": "已送达占已发送"
     },
     "otherCurrency": "{count, plural, other {# 个订单使用其他货币：已计数，但未计入收入。}}",
     "viewLabel": "结果分组方式",

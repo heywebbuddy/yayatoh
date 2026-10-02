@@ -19,9 +19,9 @@ import type { JourneyFormState } from '@/app/[locale]/o/[org]/(org)/journeys/act
 import { errorMessageKey } from '@/lib/errors.ts';
 import { describeWait } from '@/lib/journeys.ts';
 
-const SELECT = 'min-h-10 w-full rounded-pill border border-zinc-200 bg-white px-4 text-body';
+const SELECT = 'field w-full';
 const TEXTAREA =
-  'min-h-24 w-full rounded-card border border-zinc-200 bg-white px-4 py-2 text-body text-zinc-900 outline-none focus-visible:border-zinc-900';
+  'min-h-24 w-full rounded-card border border-line bg-surface px-4 py-2 text-body text-ink outline-none focus-visible:border-ink';
 const MESSAGE_ACTIONS: readonly StepAction[] = ['email', 'sms', 'whatsapp', 'push'];
 const INITIAL: JourneyFormState = { ok: false, code: null };
 
@@ -44,13 +44,13 @@ function Select({
 }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor={id} className="text-caption text-zinc-600">
+      <label htmlFor={id} className="text-[13px] font-bold text-ink">
         {label}
       </label>
       <select
         id={id}
         name={name}
-        className={`${SELECT} ${error ? 'border-pink-700' : ''}`}
+        className={`${SELECT} ${error ? 'border-danger' : ''}`}
         value={onChange ? value : undefined}
         defaultValue={onChange ? undefined : value}
         onChange={onChange ? (e) => onChange(e.target.value) : undefined}
@@ -60,7 +60,7 @@ function Select({
         {children}
       </select>
       {error ? (
-        <p id={`${id}-error`} className="text-caption text-pink-700">
+        <p id={`${id}-error`} className="text-caption text-danger">
           {error}
         </p>
       ) : null}
@@ -131,9 +131,9 @@ export function NewJourneyForm({
         ) : null}
       </Select>
       <fieldset className="flex flex-col gap-2">
-        <legend className="mb-1 text-caption text-zinc-600">{t('form.start')}</legend>
+        <legend className="mb-1 text-[13px] font-bold text-ink">{t('form.start')}</legend>
         {(['vision', 'blank'] as const).map((k) => (
-          <label key={k} className="flex min-h-10 items-start gap-3 rounded-card border border-zinc-200 p-3">
+          <label key={k} className="flex min-h-10 items-start gap-3 rounded-card border border-line p-3">
             <input
               type="radio"
               name="template"
@@ -144,7 +144,7 @@ export function NewJourneyForm({
             />
             <span className="flex flex-col gap-0.5">
               <span className="text-body font-medium">{t(`form.${k}`)}</span>
-              <span className="text-caption text-zinc-500">{t(`form.${k}Hint`)}</span>
+              <span className="text-caption text-ink-2">{t(`form.${k}Hint`)}</span>
             </span>
           </label>
         ))}
@@ -365,7 +365,7 @@ export function StepsEditor({
           ))}
         </Select>
       </div>
-      {drafts.length === 0 ? <p className="text-body text-zinc-500">{t('detail.noSteps')}</p> : null}
+      {drafts.length === 0 ? <p className="text-body text-ink-2">{t('detail.noSteps')}</p> : null}
       <ol className="flex flex-col gap-4">
         {drafts.map((d, i) => {
           const id = (f: string) => `${base}-${d.key}-${f}`;
@@ -374,11 +374,11 @@ export function StepsEditor({
           const input = toInput(d);
           return (
             <li key={d.key}>
-              <fieldset className="flex flex-col gap-4 rounded-card border border-zinc-200 bg-white p-4">
+              <fieldset className="flex flex-col gap-4 rounded-card border border-line bg-surface p-4">
                 <legend id={id('legend')} tabIndex={-1} className="px-1 text-body font-medium">
                   {t('editor.step', { n })}
                 </legend>
-                <p className="text-caption text-zinc-500" data-testid="step-summary">
+                <p className="text-caption text-ink-2" data-testid="step-summary">
                   {describeWait(t, locale, input)}
                 </p>
                 <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -485,23 +485,23 @@ export function StepsEditor({
                       error={stepError(i, 'subject')}
                     />
                     <div className="flex flex-col gap-1.5">
-                      <label htmlFor={id('body')} className="text-caption text-zinc-600">
+                      <label htmlFor={id('body')} className="text-[13px] font-bold text-ink">
                         {t('editor.body')}
                       </label>
                       <textarea
                         id={id('body')}
-                        className={`${TEXTAREA} ${stepError(i, 'body') ? 'border-pink-700' : ''}`}
+                        className={`${TEXTAREA} ${stepError(i, 'body') ? 'border-danger' : ''}`}
                         value={d.body}
                         maxLength={2000}
                         onChange={(e) => set(d.key, { body: e.target.value })}
                         aria-invalid={stepError(i, 'body') ? true : undefined}
                         aria-describedby={`${id('body')}-hint${stepError(i, 'body') ? ` ${id('body')}-error` : ''}`}
                       />
-                      <p id={`${id('body')}-hint`} className="text-caption text-zinc-500">
+                      <p id={`${id('body')}-hint`} className="text-caption text-ink-2">
                         {t('editor.placeholders', { name: '{name}', event: '{event}', when: '{when}' })}
                       </p>
                       {stepError(i, 'body') ? (
-                        <p id={`${id('body')}-error`} className="text-caption text-pink-700">
+                        <p id={`${id('body')}-error`} className="text-caption text-danger">
                           {stepError(i, 'body')}
                         </p>
                       ) : null}
@@ -567,7 +567,7 @@ export function StepsEditor({
           {t('editor.add')}
         </Button>
         {drafts.length >= MAX_STEPS ? (
-          <p className="text-caption text-zinc-500">{t('editor.max', { max: MAX_STEPS })}</p>
+          <p className="text-caption text-ink-2">{t('editor.max', { max: MAX_STEPS })}</p>
         ) : null}
       </div>
       <div aria-live="polite">

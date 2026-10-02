@@ -25,7 +25,7 @@ export function LabelForm({
     <form ref={ref} action={formAction} className="flex flex-col gap-2">
       <div className="flex items-end gap-2">
         <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-          <label htmlFor="attendee-label" className="text-caption text-zinc-600">
+          <label htmlFor="attendee-label" className="text-[13px] font-bold text-ink">
             {t('labels.add')}
           </label>
           <input
@@ -35,7 +35,7 @@ export function LabelForm({
             maxLength={40}
             list="attendee-label-suggestions"
             autoComplete="off"
-            className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
+            className="field"
           />
           <datalist id="attendee-label-suggestions">
             {suggestions.map((s) => (

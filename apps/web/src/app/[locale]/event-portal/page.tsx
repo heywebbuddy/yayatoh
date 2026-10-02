@@ -1,4 +1,4 @@
-import { Card, EmptyState } from '@yayatoh/ui';
+import { Card, EmptyState, SectionHeader } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { PortalChangeStatus } from '@/components/portal-change-status.tsx';
@@ -45,9 +45,7 @@ export default async function SpeakerPortalPage({
   return (
     <PortalShell data={data} active="overview" title={t('welcome', { name: data.speaker.name })}>
       <section aria-labelledby="sessions-heading" className="flex flex-col gap-3">
-        <h2 id="sessions-heading" className="text-section">
-          {t('sessionsHeading')}
-        </h2>
+        <SectionHeader id="sessions-heading" title={t('sessionsHeading')} count={data.sessions.length} />
         {data.sessions.length === 0 ? (
           <EmptyState title={t('noSessionsTitle')} description={t('noSessionsDescription')} />
         ) : (
@@ -55,18 +53,21 @@ export default async function SpeakerPortalPage({
             {data.sessions.map((s) => (
               <li key={s.id}>
                 <Card className="flex flex-col gap-2">
-                  <h3 className="text-body font-medium">
-                    <Link href={`/event-portal/sessions/${s.id}`} className="underline underline-offset-2">
+                  <h3 className="m-0 text-card">
+                    <Link
+                      href={`/event-portal/sessions/${s.id}`}
+                      className="text-ink underline-offset-4 transition-colors duration-150 hover:text-primary-ink hover:underline"
+                    >
                       {s.title}
                     </Link>
                   </h3>
-                  <p className="text-caption text-zinc-600">
+                  <p className="m-0 text-body text-ink-2 tabular-nums">
                     {formatSessionTime(s.startsAt, s.endsAt, locale, tz)} ·{' '}
                     {s.room ? t('room', { room: s.room }) : t('roomTba')}
                     {s.track ? ` · ${t('track', { track: s.track })}` : ''}
                   </p>
                   {s.coSpeakers.length ? (
-                    <p className="text-caption text-zinc-600">
+                    <p className="text-caption text-ink-2">
                       {t('withCoSpeakers', { names: s.coSpeakers.join(', ') })}
                     </p>
                   ) : null}
@@ -78,19 +79,23 @@ export default async function SpeakerPortalPage({
         )}
       </section>
       <section aria-labelledby="tasks-heading" className="flex flex-col gap-3">
-        <h2 id="tasks-heading" className="text-section">
-          {t('openTasksHeading', { count: open.length })}
-        </h2>
+        <SectionHeader id="tasks-heading" title={t('openTasksHeading', { count: open.length })} />
         {open.length === 0 ? (
-          <p className="text-body text-zinc-600">{t('noOpenTasks')}</p>
+          <EmptyState title={t('noOpenTasks')} />
         ) : (
-          <ul className="flex list-none flex-col gap-2 p-0">
+          <ul className="m-0 flex list-none flex-col divide-y divide-line rounded-card border border-line bg-surface p-0 glass">
             {open.map((x) => (
-              <li key={x.assigneeId} className="text-body">
-                <Link href="/event-portal/tasks" className="underline underline-offset-2">
+              <li
+                key={x.assigneeId}
+                className="flex flex-wrap items-center justify-between gap-2 px-5 py-3.5"
+              >
+                <Link
+                  href="/event-portal/tasks"
+                  className="text-body font-bold text-ink underline underline-offset-2"
+                >
                   {x.title}
-                </Link>{' '}
-                <span className="text-caption text-zinc-600">
+                </Link>
+                <span className="text-caption text-ink-2 tabular-nums">
                   {t('due', { date: formatMoment(x.dueAt, locale, tz) })}
                 </span>
               </li>

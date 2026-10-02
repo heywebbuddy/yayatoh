@@ -54,3 +54,23 @@ export async function setUserLocale(userId: string, locale: UserLocale | null): 
     throw new Error(`Unknown locale ${locale}`);
   await identityDatabase().update(users).set({ locale, updatedAt: new Date() }).where(eq(users.id, userId));
 }
+
+/** The colour themes a person can choose (ADR 0022); light is the default. */
+export const USER_THEMES = ['light', 'dark', 'system'] as const;
+export type UserTheme = (typeof USER_THEMES)[number];
+
+/** The signed-in person's own colour theme; null = never chosen (the default, light). */
+export async function getUserTheme(userId: string): Promise<UserTheme | null> {
+  const [row] = await identityDatabase()
+    .select({ theme: users.theme })
+    .from(users)
+    .where(eq(users.id, userId));
+  const t = row?.theme ?? null;
+  return t && (USER_THEMES as readonly string[]).includes(t) ? (t as UserTheme) : null;
+}
+
+/** Remember a person's colour theme. The caller passes the session's own user id. */
+export async function setUserTheme(userId: string, theme: UserTheme): Promise<void> {
+  if (!(USER_THEMES as readonly string[]).includes(theme)) throw new Error(`Unknown theme ${theme}`);
+  await identityDatabase().update(users).set({ theme, updatedAt: new Date() }).where(eq(users.id, userId));
+}
