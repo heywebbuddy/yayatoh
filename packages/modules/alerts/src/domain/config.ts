@@ -55,6 +55,9 @@ export const RULE_KEYS = [
   'payoutsPastDue',
   'deliverability',
   'automationFailed',
+  // Batch 3e merge: failed campaign sends (M3.6b) and dispute evidence deadlines (M3.10c).
+  'campaignFailed',
+  'disputeDeadline',
 ] as const;
 export type RuleKey = (typeof RULE_KEYS)[number];
 
@@ -124,6 +127,8 @@ export const RULES: Readonly<Record<RuleKey, RuleDef>> = {
   // M3.8b: the suppression list (bounced and complaining addresses) on Messaging health.
   deliverability: rule('deliverability', 'org', 'messaging', 'messages:read', '/messaging#suppressions'),
   automationFailed: rule('automationFailed', 'org', 'messaging', 'messages:read', '/messaging'),
+  campaignFailed: rule('campaignFailed', 'org', 'messaging', 'marketing:read', '/campaigns'),
+  disputeDeadline: rule('disputeDeadline', 'org', 'payments', 'finance:read', '/disputes'),
 };
 
 export const isRuleKey = (v: string): v is RuleKey => (RULE_KEYS as readonly string[]).includes(v);
@@ -176,9 +181,14 @@ export const THRESHOLDS = {
   deliverabilityMinSent: DELIVERABILITY_THRESHOLDS.minSent,
   bounceBps: DELIVERABILITY_THRESHOLDS.bounceBps,
   complaintBps: DELIVERABILITY_THRESHOLDS.complaintBps,
-  /** Failed messages or bulk actions in the last 24 hours. */
+  /** Failed messages, bulk actions or journey steps (M3.7a) in the last 24 hours. */
   automationWindowMs: 86_400_000,
   automationMin: 1,
+  /** A campaign send that failed (M3.6b) in the last 24 hours (the same window). */
+  campaignFailedMin: 1,
+  /** Open disputes whose evidence is due within 3 days; critical within 1 day (M3.10c levels). */
+  disputeSoonMs: 72 * 3_600_000,
+  disputeCriticalMs: 24 * 3_600_000,
   /** Acknowledged alerts still firing are raised again after 60 minutes (10 when live-critical). */
   ackTimeoutMs: 60 * 60_000,
   liveCriticalAckTimeoutMs: 10 * 60_000,

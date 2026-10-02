@@ -19,6 +19,7 @@
     "@yayatoh/alerts": "workspace:*",
     "@yayatoh/assistance": "workspace:*",
     "@yayatoh/audiences": "workspace:*",
+    "@yayatoh/badges": "workspace:*",
     "@yayatoh/auth": "workspace:*",
     "@yayatoh/automations": "workspace:*",
     "@yayatoh/billing": "workspace:*",

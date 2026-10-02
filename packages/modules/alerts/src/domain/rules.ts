@@ -56,6 +56,13 @@ export interface OrgFacts {
   }>;
   readonly failedMessages: number;
   readonly failedBulkActions: number;
+  /** Journey steps that failed for good (M3.7a `automations.journey_step_failed@1`). */
+  readonly failedJourneySteps: number;
+  /** Campaign sends that failed (M3.6b `campaigns.send_failed@1`). */
+  readonly failedCampaignSends: number;
+  /** Open disputes with evidence due within the warning / critical windows (M3.10c). */
+  readonly disputesDueSoon: number;
+  readonly disputesDueCritical: number;
 }
 
 const pct = (part: number, whole: number) => (whole > 0 ? Math.floor((part * 100) / whole) : 0);
@@ -185,11 +192,18 @@ export function evaluateOrgRules(f: OrgFacts, t: Thresholds = THRESHOLDS): Parti
       domains: domainsOver,
       campaigns: campaignsOver,
     });
-  const failures = f.failedMessages + f.failedBulkActions;
+  const failures = f.failedMessages + f.failedBulkActions + f.failedJourneySteps;
   if (failures >= t.automationMin)
     out.automationFailed = fire('warning', failures, {
       messages: f.failedMessages,
       bulk: f.failedBulkActions,
+      journeys: f.failedJourneySteps,
+    });
+  if (f.failedCampaignSends >= t.campaignFailedMin)
+    out.campaignFailed = fire('warning', f.failedCampaignSends);
+  if (f.disputesDueSoon > 0)
+    out.disputeDeadline = fire(f.disputesDueCritical > 0 ? 'critical' : 'warning', f.disputesDueSoon, {
+      critical: f.disputesDueCritical,
     });
   return out;
 }

@@ -165,6 +165,10 @@ describe('org rules', () => {
     messagingAutoPaused: false,
     failedMessages: 0,
     failedBulkActions: 0,
+    failedJourneySteps: 0,
+    failedCampaignSends: 0,
+    disputesDueSoon: 0,
+    disputesDueCritical: 0,
   };
   it('nothing when all is well', () => expect(evaluateOrgRules(ok)).toEqual({}));
   it('domains: warning, critical for a primary host', () => {
@@ -222,6 +226,20 @@ describe('org rules', () => {
     expect(evaluateOrgRules({ ...ok, failedMessages: 1, failedBulkActions: 2 }).automationFailed?.count).toBe(
       3,
     );
+  });
+  it('batch 3e: journey steps count as automation failures; campaign sends and dispute deadlines', () => {
+    expect(evaluateOrgRules({ ...ok, failedJourneySteps: 2 }).automationFailed).toMatchObject({
+      count: 2,
+      params: { journeys: 2 },
+    });
+    expect(evaluateOrgRules({ ...ok, failedCampaignSends: 1 }).campaignFailed).toMatchObject({
+      count: 1,
+      severity: 'warning',
+    });
+    expect(evaluateOrgRules({ ...ok, disputesDueSoon: 2 }).disputeDeadline?.severity).toBe('warning');
+    expect(
+      evaluateOrgRules({ ...ok, disputesDueSoon: 2, disputesDueCritical: 1 }).disputeDeadline,
+    ).toMatchObject({ count: 2, severity: 'critical', params: { critical: 1 } });
   });
 });
 

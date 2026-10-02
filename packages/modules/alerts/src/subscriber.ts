@@ -4,11 +4,14 @@ import { findEventTx, upcomingEventIdsTx } from '@yayatoh/events';
 import { type Ctx, createCtx } from '@yayatoh/kernel';
 import { orderMetricRefTx, refundMetricRefTx } from '@yayatoh/orders';
 import { catchUpSubscriber, defineSubscriber, type PublishedEvent, type Subscriber } from '@yayatoh/platform';
-import { and, isNotNull, ne } from 'drizzle-orm';
+import { and, isNotNull, lt, ne } from 'drizzle-orm';
 import { z } from 'zod';
 import { eventMode } from './domain/config.ts';
 import { type AlertChange, type AlertDeps, evaluateEventAlertsTx, evaluateOrgAlertsTx } from './engine.ts';
-import { alerts } from './schema.ts';
+import { alerts, type SignalKind, signals } from './schema.ts';
+
+/** How long a reported failure is kept (the rules count the last 24 hours). */
+const SIGNAL_TTL_MS = 7 * 86_400_000;
 
 /**
  * Outbox events that can change what an alert measures (M3.2b). Each one re-evaluates the event
@@ -56,7 +59,18 @@ export const ALERT_TRIGGER_EVENTS = [
   // M3.3b: a help request raised, taken or closed (the SLA passing is the sweep's job).
   'assistance.requested@1',
   'assistance.updated@1',
+  // Batch 3e merge: failures of same-tier modules (recorded as signals, then the org rules run)
+  // and dispute evidence deadlines (M3.10c, levels 3 days and 1 day).
+  'automations.journey_step_failed@1',
+  'campaigns.send_failed@1',
+  'payments.dispute_deadline_approaching@1',
 ] as const;
+
+/** Outbox events that are themselves what an org rule counts (one `alerts.signals` row each). */
+const SIGNAL_OF: Readonly<Record<string, SignalKind>> = {
+  'automations.journey_step_failed': 'journey_step_failed',
+  'campaigns.send_failed': 'campaign_send_failed',
+};
 
 const WithEvent = z.object({ eventId: z.uuid() });
 const WithOrder = z.object({ orderId: z.uuid() });
@@ -82,7 +96,7 @@ export async function alertTargetsTx(
     }
     return { eventIds: around, org: false };
   }
-  if (/^(domain|payouts|messaging|org|bulk)\./.test(event.type)) {
+  if (/^(domain|payouts|messaging|org|bulk|automations|campaigns|payments)\./.test(event.type)) {
     const withEvent = WithEvent.safeParse(p);
     return { eventIds: withEvent.success ? [withEvent.data.eventId] : [], org: true };
   }
@@ -114,6 +128,17 @@ export function alertEvaluator(deps: AlertDeps): Subscriber {
     events: ALERT_TRIGGER_EVENTS,
     handle: async (tx, event) => {
       const ctx = createCtx({ orgId: event.orgId, actor: { type: 'system', name: 'alerts.evaluator' } });
+      const kind = SIGNAL_OF[event.type];
+      if (kind)
+        await tx
+          .insert(signals)
+          .values({
+            orgId: event.orgId,
+            kind,
+            sourceEventId: event.id,
+            occurredAt: event.occurredAt ? new Date(event.occurredAt) : ctx.now,
+          })
+          .onConflictDoNothing();
       const targets = await alertTargetsTx(tx, event, ctx.now);
       for (const id of [...new Set(targets.eventIds)]) await evaluateEventAlertsTx(tx, ctx, id, deps);
       if (targets.org) await evaluateOrgAlertsTx(tx, ctx, deps);
@@ -168,7 +193,14 @@ export async function evaluateOrgNow(
     });
     changes.push(...run);
   }
-  if (full) changes.push(...(await withTenant(ctx, (tx) => evaluateOrgAlertsTx(tx, ctx, deps, now))));
+  if (full)
+    changes.push(
+      ...(await withTenant(ctx, async (tx) => {
+        // Signals outlive the rules' 24-hour window by a few days, then go (batch 3e).
+        await tx.delete(signals).where(lt(signals.occurredAt, new Date(now.getTime() - SIGNAL_TTL_MS)));
+        return evaluateOrgAlertsTx(tx, ctx, deps, now);
+      })),
+    );
   return changes;
 }
 

@@ -24,6 +24,12 @@ import {
 } from '@yayatoh/attendees';
 import { catchUpParticipation, saveSegmentCommand, templateDefinition } from '@yayatoh/audiences';
 import { createJourneyCommand, journeyTriggers, setJourneyEnabledCommand } from '@yayatoh/automations';
+import {
+  assignTemplateCommand,
+  createTemplateCommand,
+  runBadgeBatch,
+  startBatchCommand,
+} from '@yayatoh/badges';
 import { setEntitlementOverrideCommand, setFeeOverrideCommand } from '@yayatoh/billing';
 import {
   createCampaignCommand,
@@ -560,6 +566,32 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   );
   await executeCommand(setJourneyEnabledCommand, { journeyId: journey.id, enabled: true }, ctx(), ports);
   await catchUpSubscriber(journeyTriggers(), org.id);
+  // M5.5a badges: a template (and its version) assigned to the pass, and a batch with one
+  // rendered part left running (a fake renderer: no Gotenberg in the fixture).
+  const badgeTemplate = await executeCommand(
+    createTemplateCommand,
+    { eventId: event.id, name: 'Fixture badge', size: 'fold_4x3' },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    assignTemplateCommand,
+    { eventId: event.id, ticketTypeId: ga.id, templateId: badgeTemplate.id },
+    ctx(),
+    ports,
+  );
+  const badgeBatch = await executeCommand(
+    startBatchCommand,
+    { eventId: event.id, requestKey: `fixture-${slug}`, sort: 'last_name' },
+    ctx(),
+    ports,
+  );
+  await runBadgeBatch(
+    { ports, renderer: { render: async () => new TextEncoder().encode('%PDF-fixture') } },
+    org.id,
+    badgeBatch.id,
+    { maxChunks: 1 },
+  );
   // A dispute on the paid order, opened (hold) and won (hold undone): isolation coverage.
   for (const [type, outcome] of [
     ['dispute.created', undefined],
@@ -2103,6 +2135,12 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   );
   await executeCommand(setMyAlertPhoneCommand, { smsPhone: '+15550100199' }, ctx(), ports);
   await executeCommand(setSalesTargetCommand, { eventId: event.id, tickets: 150 }, ctx(), ports);
+  // Batch 3e: a journey step failure reported two days ago (outside the rules' 24-hour window, so
+  // it raises nothing), as the alerts subscriber records it (isolation coverage of alerts.signals).
+  await withTenant(systemCtx(org.id), (tx) =>
+    tx.execute(sql`insert into alerts.signals (org_id, kind, source_event_id, occurred_at)
+      values (${org.id}, 'journey_step_failed', ${uuidv7()}, now() - interval '2 days')`),
+  );
   return {
     org,
     ownerId,

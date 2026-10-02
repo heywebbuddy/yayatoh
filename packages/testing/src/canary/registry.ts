@@ -4,6 +4,7 @@ import { privateColumns as assistance } from '@yayatoh/assistance';
 import { privateColumns as attendees } from '@yayatoh/attendees';
 import { privateColumns as audiences } from '@yayatoh/audiences';
 import { privateColumns as automations } from '@yayatoh/automations';
+import { privateColumns as badges } from '@yayatoh/badges';
 import { privateColumns as billing } from '@yayatoh/billing';
 import { privateColumns as campaigns } from '@yayatoh/campaigns';
 import { privateColumns as checkin } from '@yayatoh/checkin';
@@ -46,6 +47,7 @@ export const COLUMN_PRIVACY: readonly SchemaPrivacy[] = [
   attendees,
   audiences,
   automations,
+  badges,
   billing,
   campaigns,
   checkin,

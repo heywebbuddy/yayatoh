@@ -85,7 +85,7 @@ only), and venue screens (TV mode).
   `alerts.alert-urgent-text`, in 13 locales (Arabic zero–other, Russian one/few/many/other, ja/zh other).
 
 ### 4. Data model and migration
-`packages/db/drizzle/0097_numerous_jackal.sql` (renumbered at merge from 0086):
+`packages/db/drizzle/0099_numerous_jackal.sql` (renumbered at merge from 0086):
 - New tenant tables (ENABLE + FORCE RLS, canonical NULLIF policy, org-leading indexes, fixture rows for
   both orgs): `checkin.device_events` (device, event, kind ∈ online/offline/low_battery/revoked/wiped,
   at, battery), `checkin.staff_presence` (event, user, device, checkpoint, source ∈
@@ -224,7 +224,7 @@ untaken past its SLA becomes an alert, and urgent ones reach on-duty staff phone
   keys, plain forms, labelled buttons naming the request).
 
 ### 4. Data model and migration
-`packages/db/drizzle/0098_slim_lady_ursula.sql` (renumbered at merge from 0086):
+`packages/db/drizzle/0100_slim_lady_ursula.sql` (renumbered at merge from 0086; batch 3g: its widened `alerts_rule_check` also keeps batch 3e's `campaignFailed` and `disputeDeadline`):
 - New schema `assistance`: `requests` (event, per-event `number`, source, reason, priority,
   state, note, location, ticket / device / checkpoint, assignee user or device, `due_at`,
   assigned/started/closed times; CHECKs on every vocabulary, reason per source, origin per source,

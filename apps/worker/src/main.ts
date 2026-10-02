@@ -1,9 +1,11 @@
 import { setPlatformAuditSink, tryAcquireLeadership } from '@yayatoh/db/platform';
 import { createNotifier } from '@yayatoh/notifications';
 import { fakePaymentProvider } from '@yayatoh/payments';
+import { gotenbergRenderer } from '@yayatoh/pdf';
 import { purgeRealtimeMessages } from '@yayatoh/platform';
 import { fakeDomainProvider } from '@yayatoh/tenancy';
 import { sweepAlerts } from './alerts.ts';
+import { badgeBatchJob, enqueueDueBadgeBatches } from './badges.ts';
 import { runDueBulkOperations } from './bulk.ts';
 import { bossRelease, campaignReleaseJob, campaignTick } from './campaigns.ts';
 import { DEVICE_WATCHDOG_MS, runDeviceWatchdog } from './device-watchdog.ts';
@@ -55,10 +57,15 @@ const payments = fakeSecret
   : null;
 
 const SUBSCRIBERS = subscribers();
-// Mass refunds (M3.10b) need the payment provider.
-const jobs = payments
-  ? [...JOBS, campaignReleaseJob, massRefundJob(payments)]
-  : [...JOBS, campaignReleaseJob];
+// Mass refunds (M3.10b) need the payment provider; badge batch PDFs (M5.5a) need Gotenberg.
+const gotenbergUrl = process.env.GOTENBERG_URL;
+if (!gotenbergUrl) console.warn('badges: GOTENBERG_URL is not set; badge batch PDFs stay queued');
+const jobs = [
+  ...JOBS,
+  campaignReleaseJob,
+  ...(payments ? [massRefundJob(payments)] : []),
+  ...(gotenbergUrl ? [badgeBatchJob(gotenbergRenderer({ url: gotenbergUrl, timeoutMs: 60_000 }))] : []),
+];
 const boss = await startWorker({ connectionString, jobs, subscribers: SUBSCRIBERS });
 console.info(`worker started: ${jobs.length} job(s), ${SUBSCRIBERS.length} subscriber(s)`);
 
@@ -161,6 +168,18 @@ setInterval(() => {
       queueingJourneys = false;
     });
 }, 5_000).unref();
+// Badge batch PDFs (M5.5a): queue a job for each unfinished batch every 3 s (leader only); the
+// exclusive queue keeps one job per batch.
+let queueingBadges = false;
+setInterval(() => {
+  if (!gotenbergUrl || !release || stopping || queueingBadges) return;
+  queueingBadges = true;
+  enqueueDueBadgeBatches(boss)
+    .catch((err) => console.error('badges', err))
+    .finally(() => {
+      queueingBadges = false;
+    });
+}, 3_000).unref();
 
 // Daily reconciliation (M1.6e): the previous UTC day, hourly attempts (idempotent per org and
 // day, so only the first run of a day does work), leader only. The fake provider without a

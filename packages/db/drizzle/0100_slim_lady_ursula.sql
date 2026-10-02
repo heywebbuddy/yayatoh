@@ -68,7 +68,7 @@ CREATE INDEX "requests_org_ticket_idx" ON "assistance"."requests" USING btree ("
 CREATE INDEX "requests_org_open_due_idx" ON "assistance"."requests" USING btree ("org_id","due_at") WHERE state = 'new';--> statement-breakpoint
 -- hand-written: begin
 -- A widened CHECK on an existing table: added NOT VALID (no long lock), then validated.
-ALTER TABLE "alerts"."alerts" ADD CONSTRAINT "alerts_rule_check" CHECK (rule in ('unseated', 'undistributed', 'paymentsFailed', 'paymentsStuck', 'refundSurge', 'devicesOffline', 'devicesLowBattery', 'devicesBacklog', 'capacityNear', 'capacityFull', 'sellOut', 'salesPace', 'readiness', 'assistanceOverdue', 'domain', 'payoutsPastDue', 'deliverability', 'automationFailed')) NOT VALID;--> statement-breakpoint
+ALTER TABLE "alerts"."alerts" ADD CONSTRAINT "alerts_rule_check" CHECK (rule in ('unseated', 'undistributed', 'paymentsFailed', 'paymentsStuck', 'refundSurge', 'devicesOffline', 'devicesLowBattery', 'devicesBacklog', 'capacityNear', 'capacityFull', 'sellOut', 'salesPace', 'readiness', 'assistanceOverdue', 'domain', 'payoutsPastDue', 'deliverability', 'automationFailed', 'campaignFailed', 'disputeDeadline')) NOT VALID;--> statement-breakpoint
 ALTER TABLE "alerts"."alerts" VALIDATE CONSTRAINT "alerts_rule_check";--> statement-breakpoint
 -- hand-written: end
 -- hand-written: begin

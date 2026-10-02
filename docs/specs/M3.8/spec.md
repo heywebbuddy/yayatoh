@@ -195,7 +195,7 @@ Behind the `marketing` module (on in `launch_standard`). No flag. Rollback: hide
 M3.6b queues one message per recipient under the dedupe key `campaign:{campaignId}:{contactId}` (`campaignDedupeKey`, `CAMPAIGN_DEDUPE_PREFIX` in notifications) and creates its links with `createTrackedLinkTx(…, { campaignId })`. Sends and deliverability read the campaign id from the dedupe key; clicks and orders from the links' `campaign_id`. A campaign's **name** is its links' label (M3.6b labels them with the campaign name); when campaigns merge, the web can swap in `campaigns.name` without a schema change. Test sends (`campaign-test:`) are never counted.
 
 ### Migration
-`packages/db/drizzle/0099_naive_scorpion.sql` (renumbered at merge from 0086): `ALTER TABLE notifications.messages ADD COLUMN sender_domain text` (nullable, metadata-only). **Hand-written** (between markers): `messages_sender_domain_check` added `NOT VALID`, then `VALIDATE CONSTRAINT`. No new tables (the isolation fixture needs no rows); the column is declared `internal` in `notifications/src/private-columns.ts`.
+`packages/db/drizzle/0101_naive_scorpion.sql` (renumbered at merge from 0086): `ALTER TABLE notifications.messages ADD COLUMN sender_domain text` (nullable, metadata-only). **Hand-written** (between markers): `messages_sender_domain_check` added `NOT VALID`, then `VALIDATE CONSTRAINT`. No new tables (the isolation fixture needs no rows); the column is declared `internal` in `notifications/src/private-columns.ts`.
 
 ### Later / not yet
 - Per-scope alert rows (one alert per domain or campaign) need the `alerts_scope_check` widened; today one org alert carries the counts.

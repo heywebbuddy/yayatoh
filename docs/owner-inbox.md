@@ -51,7 +51,7 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
   - **Capacity gauges:** the event's capacity is the alert engine's (places on sale on live ticket types), near at **95 %**, over at **100 %**; each entrance or zone can have its own capacity (optional). "Out" counts admissions undone at the door (there is no exit scanning yet).
   - **TV mode:** a display link is a secret URL (anyone holding it sees the board without signing in: counts, speed, capacity and devices, **never money or names**). Staff who can edit the event create and turn links off; there is no expiry.
 - [ ] **Alert engine defaults, pending owner** (M3.2b; labels: `db-migration`, `tenancy`). Built with these defaults (all in `packages/modules/alerts/src/domain/config.ts`, `THRESHOLDS` and `DEFAULT_ROUTING`); say if any should change:
-  - **Thresholds:** unseated attendees — any, at an event with a published seating plan; undistributed tickets — 10 or more, or 5 % of the event's tickets (roadmap); failed payments not retried — 3 or more (critical from 25); a payment stuck — started 30 minutes ago with no outcome; refund surge — 10 refunds within an hour; devices (only from 24 h before the event to 2 h after) — offline when silent for 90 s after being used in the last 12 h, low battery at 15 % or less, a sync backlog at 50 queued scans; capacity (live only) — 95 % admitted is near, 100 % full; sell-out — 90 % of places sold (info); sales pace — at or below 70 % of the straight line to the organizer's ticket target, judged once 20 % of the time from publishing to the start has passed; readiness — a draft event or one without ticket types in its last 7 days (critical in the last 24 h); custom domain — failed, or live 24 h without a certificate (critical for a primary host); payout account — restricted with requirements due (Stripe folds `past_due` into `requirements_due`, so "past due" = onboarded, charges or payouts off, requirements due); deliverability — over 7 days from 100 emails, bounces ≥ 5 % or complaints ≥ 0.1 %, and an automatic messaging pause (critical); "automation failures" — failed messages or bulk actions in the last 24 h (journeys arrive with M3.7a).
+  - **Thresholds:** unseated attendees — any, at an event with a published seating plan; undistributed tickets — 10 or more, or 5 % of the event's tickets (roadmap); failed payments not retried — 3 or more (critical from 25); a payment stuck — started 30 minutes ago with no outcome; refund surge — 10 refunds within an hour; devices (only from 24 h before the event to 2 h after) — offline when silent for 90 s after being used in the last 12 h, low battery at 15 % or less, a sync backlog at 50 queued scans; capacity (live only) — 95 % admitted is near, 100 % full; sell-out — 90 % of places sold (info); sales pace — at or below 70 % of the straight line to the organizer's ticket target, judged once 20 % of the time from publishing to the start has passed; readiness — a draft event or one without ticket types in its last 7 days (critical in the last 24 h); custom domain — failed, or live 24 h without a certificate (critical for a primary host); payout account — restricted with requirements due (Stripe folds `past_due` into `requirements_due`, so "past due" = onboarded, charges or payouts off, requirements due); deliverability — over 7 days from 100 emails, bounces ≥ 5 % or complaints ≥ 0.1 %, and an automatic messaging pause (critical); "automation failures" — failed messages, bulk actions or journey steps (M3.7a) in the last 24 h.
   - **Acknowledgement timeout** 60 minutes (10 minutes when critical during the live window); snoozes of 1 hour, 4 hours or 1 day.
   - **Routing by role** (owners and admins change it under Alerts → Alert settings): owners get every group in-app and by email, plus push for payments and door alerts, plus texts for door alerts; admins the same without texts; managers attendees (in-app, email, push), door (in-app, text, push), sales and messaging in-app, setup in-app and email; finance payments in-app and email; marketing sales in-app, messaging in-app and email; box office attendees in-app, door in-app and push; viewers and scanners nothing (viewers still see their alerts on the alerts page). A member only ever hears about alerts their role may see.
   - **Texts go to a number each member sets for themselves** (Alert settings → "Your alert texts"); staff accounts have no phone number otherwise. Texts wait out quiet hours (21:00–08:00 in the org's timezone, or the member's push device's); in-app, email and push go at once (transactional).
@@ -59,6 +59,7 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
   - **Copy:** counts one to nine are spelled out in English, German, French, Spanish, Italian, Dutch and Hindi ("Three check-in devices are offline"); Arabic, Portuguese, Russian, Japanese and Chinese use digits (numerals there agree in gender or case, or digits are the norm).
   - **Undistributed tickets** = tickets beyond the one each buyer keeps per order that the same person still holds (never claimed through a claim link). The alert links to the attendee list filtered to them ("Waiting to be passed on"), where the existing bulk action "Resend tickets" reminds the holders.
   - **Failed payments have no organizer-side retry yet:** the alert links to the bookings filtered to failed payments; buyers retry from their payment page. A bulk "remind buyers to retry" action is left for later.
+  - **Batch 3e merge defaults:** journey step failures (M3.7a) count in "automation failures"; two new org rules: **failed campaign sends** (M3.6b; any in the last 24 h, warning, messaging group, seen by roles with `marketing:read`, fixed on Campaigns) and **dispute evidence due** (M3.10c; open disputes whose evidence is due within 3 days, critical within 1 day, payments group, `finance:read`, fixed on Disputes). The failures of journeys and campaigns reach the engine only as outbox events, kept as `alerts.signals` rows for 7 days. Finance now hears of dispute deadlines through the alert engine's routing (in-app and email) instead of M3.10c's separate per-dispute notification, so nobody is told twice.
 
 - [ ] **Campaign defaults, pending owner** (M3.6b; labels: `db-migration`, `tenancy`, `legal-copy`). Built with these defaults; say if any should change (details in `docs/specs/M3.6/spec.md` §M3.6b):
   - **Who gets a campaign:** only contacts whose latest email (or SMS / WhatsApp) **marketing** consent in the crm ledger is `granted`; `unknown_legacy` counts as no consent. Bounced/complained addresses, marketing unsubscribes and erased addresses are left out with their reason; the dispatcher's policy gate checks consent, suppressions, quiet hours, caps and quotas again at send time.
@@ -80,6 +81,13 @@ These are tasks only the owner (or their developer, accountant or lawyer) can do
   - Steps are edited only while a journey is **off**; switching it off cancels every waiting step. People are never enrolled retroactively when a journey is switched on. A step whose time has already passed when someone joins is skipped ("too late"), except steps that run when they join.
   - A failed step is retried after 1, 5, 15 and 60 minutes and marked failed after 5 attempts; the failure goes out as `automations.journey_step_failed@1` for the M3.2b alert engine's "automation failures" rule (wiring the rule is the alert engine's side).
   - Reads need `marketing:read` (viewers and finance can look), building needs `marketing:write` (owners, admins, managers, marketing).
+- [ ] **Badges defaults, pending owner** (M5.5a, labels: `db-migration`, `tenancy`). Built with these defaults; say if any should change:
+  - **Company and job title** come from a checkout question the organizer maps on each template (short-text, non-sensitive questions only). Registration types (M5.1a/b) will add proper profile fields in Wave 2.
+  - **First and last name** are split from the ticket holder's full name: "Last, First" with a comma, otherwise the first word is the first name and the rest the last name. Sorting by last name ignores particles (van, de, al-, ال…).
+  - **Who may do what:** designing and assigning templates needs `events:write`; batch PDFs need `attendees:export` and a recent sign-in (names leave the platform in bulk, like every export); one-badge PDFs at the desk need `attendees:write` (owners, admins, managers, box office); everyone who can see the event can preview templates with sample people.
+  - **Files:** batch PDFs are kept 7 days (like other exports); a download link works for 15 minutes. Badge PDFs are stored in the media store and are not counted against the org's media quota yet.
+  - **Brother QL presets:** 62 mm continuous tape cut at 100 mm, and 102 × 152 mm (4 in) die-cut labels. Say if your customers use other Brother stock.
+  - **Gotenberg in production:** the worker needs `GOTENBERG_URL` for badge batch PDFs (the web app already uses it for ticket PDFs); without it batches stay queued.
 - [ ] (Optional) License NB International Pro + NB International Mono Pro (Neubau) for the exact Superpower typeface. Until then the app uses Geist / Geist Mono (ADR 0018).
 - [ ] **Reports: confirm two defaults** (M1.12, label: `payments`):
   - Net revenue is shown to owners, admins and finance members only (`finance:read`); managers and viewers see gross sales and counts. Bookings CSV export needs `attendees:export` (buyer contact data). Change either if you want other roles to see them.
@@ -264,7 +272,7 @@ Start the slow reviews early. Everything is built against fakes meanwhile; each 
   - **Drafts** live 14 days after the last save, then are deleted; a person can ask for the resume email at most 5 times.
   - **Company suggestions** offer a company only once **two** registrants named it (plus the event's exhibitors and sponsors), so one person's answer is never shown to others.
   - **Job titles** are one list per organization, shared by all its events.
-  - Until M5.1a merges, the event's **ticket types stand in for registration types** in the builder and on the public start page.
+  - **Registration types** are M5.1a's (batch 3e): the builder offers every live type; the public start page offers the types the person may pick (open types, or their email's domain type) that have a pass; code-only types are picked on the Register page.
 - [ ] **M4.1b guest import: defaults pending owner** (label: `db-migration`). Built with these defaults; say if any should change:
   - **Staged rows are kept 72 hours.** Uploaded and pasted lists are sealed with the org's key while staged. Rows that are imported lose their content at once; rejected rows stay (sealed) so the host can download them, and everything is purged 72 hours after staging (daily worker pass).
   - **Limits:** 5 MB and 5,000 rows per list, 50 columns, 1,000 characters per cell; XLSX zips expand to at most 100 MB (60 MB per part) with at most 2,000 entries. The M4.1a limits apply per party (a party over 20 guests, or one that would pass the event's 1,000 parties / 3,000 guests, is rejected whole).
@@ -272,6 +280,37 @@ Start the slow reviews early. Everything is built against fakes meanwhile; each 
   - **Email and phone** columns are imported sealed with the dietary, accessibility and address answers (shown on the Guests page to the same roles). They create no CRM contacts, consents or audience members (P4-3); M4.1f will use them for invitations.
   - **XLSX parser:** a small cell-values-only reader in `@yayatoh/csv` on top of **fflate 0.8.3** (MIT, maintained, no known advisories); no formulas are evaluated (the cached value is read), macros and other parts are never opened. Old binary `.xls` files are refused with a "save as .xlsx or CSV" message.
   - **Google Sheet links (P4-7):** only `https://docs.google.com/spreadsheets/d/<id>` links, read once as CSV through the SSRF guard (10 s, 5 MB), redirects only to Google's content hosts; the link is not stored. A sheet that isn't shared as "anyone with the link" gets a clear message.
+## Enterprise readiness (M5.11, P5-6)
+Claude Code built the evidence automation (M5.11a): `compliance/controls.yaml`, the policy drafts in
+`compliance/policies/`, the weekly **Evidence** workflow and its bundle, and the VPAT draft. These
+steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
+- [ ] **Vanta** (D26): sign the contract at or after launch (roadmap estimate ~$800–2,000/month,
+  UNVERIFIED), connect GitHub and the hosting accounts, and upload the weekly evidence bundle
+  (download the `evidence-<run>` artifact from Actions → Evidence; verify `sha256sum -c SHA256SUMS`).
+  Nothing in the repo calls Vanta.
+- [ ] **Auditor** for SOC 2 Type I, 6–9 months after launch (D26). Share `compliance/controls.yaml`;
+  the auditor and Vanta may re-map criteria. Tell Claude Code what they change so the file follows.
+- [ ] **Pen test** ($5–15k, roadmap §3.6) **after Phase 5 Waves 1–3 merge**, so the portals, lead
+  retrieval and chat are in scope. Findings come back as issues for Claude Code to fix.
+- [ ] **VPAT sign-off**: each weekly bundle has `vpat/vpat.md`, a draft generated from the e2e axe,
+  keyboard and Arabic RTL suites. Criteria marked "Not Evaluated" need a person (NVDA and
+  VoiceOver passes, 200% zoom, 320 px reflow); "Not Applicable" rows need your confirmation.
+  Sign only after those reviews.
+- [ ] **Data Privacy Framework** self-certification (EU-U.S., UK extension, Swiss-U.S.) with the
+  Department of Commerce, once counsel has reviewed the privacy notice.
+- [ ] **Approve the seven policy drafts** in `compliance/policies/` (information security, access
+  control, change management, incident response, vendor management, data retention per D11,
+  business continuity): edit, then sign each approval row. Confirm the vendor inventory.
+- [ ] **Quarterly access review** of GitHub, Doppler, Vercel, Neon, Fly, AWS, Cloudflare, Stripe and
+  the staff list, and the admin-only GitHub exports (collaborators, branch protection) the
+  read-only workflow can't read. Runbook steps 2–3.
+- [ ] **Branch protection on `main`**: the change-management export flags merged PRs without an
+  independent approval. If build sessions open PRs under your account, add a second reviewer (the
+  contracted backup) or accept and document the exception in `docs/decisions.md`.
+- [ ] **Evidence workflow defaults, pending owner** (M5.11a, label: `infra`): runs Mondays 06:17 UTC and
+  on demand; 90-day audit window; artifacts kept 90 days. Optionally add a fine-grained token with
+  admin *read* on the repository as a secret so the workflow can export collaborators and branch
+  protection itself (today it records them as unavailable and runbook step 2 covers them).
 
 ## Security, privacy and ops readiness (M1.14)
 - [ ] **Confirm the rate limits** (pending owner; `packages/platform/src/security/rate-limit.ts`): sign-in 10 per device / 20 per email / 300 per IP per 10–15 min; emailed codes 5 per device and per email; checkout starts 20 per device, 600 per IP per 10 min; holder links 10 per device; forged webhooks 30 per IP. Shared IPs (venues) only meet the generous per-IP ceilings.
