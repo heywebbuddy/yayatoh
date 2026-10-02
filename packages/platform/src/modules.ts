@@ -30,6 +30,8 @@ export const MODULE_KEYS = [
   'badges',
   'gallery',
   'website',
+  /** Phase 6 (P6-13, M6.4a): third-party connectors; free within quotas in beta. */
+  'integrations',
 ] as const;
 export type ModuleKey = (typeof MODULE_KEYS)[number];
 

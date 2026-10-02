@@ -45,6 +45,12 @@ export {
 } from './segments/compile.ts';
 export * from './segments/dsl.ts';
 export {
+  type ContactSyncRow,
+  contactSyncRowTx,
+  contactsChangedSinceTx,
+  writeSyncedContactTx,
+} from './sync.ts';
+export {
   CONSENT_TERM_KEYS,
   CONSENT_TERMS,
   type ConsentTerm,

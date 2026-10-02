@@ -71,6 +71,13 @@ export const PERMISSIONS = [
   'assistance:read',
   /** Take, assign, start, resolve and cancel help requests, and add notes (M3.3b). */
   'assistance:manage',
+  /** See the org's integrations: connections, sync history, mappings and the errors inbox (M6.4a). */
+  'integrations:read',
+  /**
+   * Connect, map, sync, pause and disconnect third-party integrations, and work the errors inbox
+   * (M6.4a). Org data leaves through them: owners and admins only.
+   */
+  'integrations:manage',
 ] as const;
 export type Permission = (typeof PERMISSIONS)[number];
 
@@ -105,6 +112,7 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'alerts:manage',
     'assistance:read',
     'assistance:manage',
+    'integrations:read',
   ],
   finance: [
     'org:read',
