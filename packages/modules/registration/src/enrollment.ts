@@ -382,7 +382,11 @@ const positionOf = async (tx: TenantTx, e: Pick<EntryRow, 'sessionId' | 'positio
 };
 
 /** A refusal the attendee can act on: the reason, and the session standing in the way. */
-function refusal(reason: EnrollRefusal, withSession: EnrollableSession | null): DomainError {
+function refusal(
+  reason: EnrollRefusal,
+  withSession: EnrollableSession | null,
+  keepBoth = false,
+): DomainError {
   const code = ['one_per_group', 'overlap', 'keep_both_capped'].includes(reason)
     ? 'conflict'
     : reason === 'not_available'
@@ -392,6 +396,9 @@ function refusal(reason: EnrollRefusal, withSession: EnrollableSession | null): 
     reason,
     sessionId: withSession?.sessionId ?? null,
     sessionTitle: withSession?.title ?? null,
+    groupName: reason === 'one_per_group' ? (withSession?.groupName ?? null) : null,
+    // P5-9: "keep both" is offered only when neither session has a capacity.
+    keepBoth,
   });
 }
 
@@ -477,8 +484,13 @@ export async function enrollTx(
     now: ctx.now,
     choice,
   });
-  if (d.kind === 'refuse')
-    throw refusal(d.reason, d.withSessionId ? (locked.get(d.withSessionId) ?? null) : null);
+  if (d.kind === 'refuse') {
+    const keepBoth =
+      d.reason === 'overlap' &&
+      target.capacity === null &&
+      conflictsWith(slotOf(target), held).overlap.every((o) => o.capacity === null);
+    throw refusal(d.reason, d.withSessionId ? (locked.get(d.withSessionId) ?? null) : null, keepBoth);
+  }
   const orgId = requireOrg(ctx);
   if (d.kind === 'waitlist') {
     const [row] = await tx
