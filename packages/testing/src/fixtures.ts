@@ -57,9 +57,12 @@ import {
   createAccessCodeCommand,
   createAnnouncementCommand,
   createEventCommand,
+  createPortalSession,
   createSeriesCommand,
   type EventDto,
   listOccurrencesQuery,
+  portalCtx,
+  portalPrincipalBySession,
   redeemAccessCodeCommand,
   setEventDetailsCommand,
   setEventSeriesCommand,
@@ -102,7 +105,7 @@ import {
   setAttributionWindowCommand,
 } from '@yayatoh/marketing';
 import { addLegacyRedirectCommand, catchUpListings, updateSiteSettingsCommand } from '@yayatoh/marketplace';
-import { uploadLogo, uploadMedia, uploadProgramImage } from '@yayatoh/media';
+import { uploadLogo, uploadMedia, uploadProgramImage, uploadSpeakerPortalFile } from '@yayatoh/media';
 import {
   announcementMailer,
   contactMessageCommand,
@@ -166,6 +169,7 @@ import { dsarExportBulk } from '@yayatoh/privacy';
 import {
   claimSessionPlaceTx,
   createExhibitorCommand,
+  createPortalTaskCommand,
   createRoomCommand,
   createSessionCommand,
   createSessionGroupCommand,
@@ -174,9 +178,12 @@ import {
   createSponsorCommand,
   createSponsorTierCommand,
   createTrackCommand,
+  inviteSpeakerCommand,
+  proposeProfileChangeCommand,
   publishAgendaCommand,
   recordGroupPickTx,
   setSessionAgendaCommand,
+  speakerPortalQuery,
 } from '@yayatoh/program';
 import {
   createRegistrationTypeCommand,
@@ -246,6 +253,9 @@ export interface OrgFixture {
   readonly testKey: string;
   /** Context of the owner inside this org. */
   readonly ctx: (overrides?: Partial<Ctx>) => Ctx;
+  /** M5.3a: the fixture speaker and their portal account (session cookie value on `fixture.test`). */
+  readonly speakerId: string;
+  readonly portal: { readonly accountId: string; readonly token: string };
 }
 
 /**
@@ -1510,6 +1520,58 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     );
   });
   await executeCommand(publishAgendaCommand, { eventId: weekly.id }, ctx(), ports);
+  // M5.3a speaker portal: the speaker's portal account (and its event-role assignment), a sign-in
+  // code and a session, a proposed profile change, and an upload task answered with a file.
+  const invited = await executeCommand(
+    inviteSpeakerCommand,
+    { eventId: event.id, speakerId: speaker.id, email: `speaker-${slug}@example.test` },
+    ctx(),
+    ports,
+  );
+  const portalSession = await createPortalSession({
+    orgId: org.id,
+    accountId: invited.accountId,
+    host: 'fixture.test',
+  });
+  await withTenant(systemCtx(org.id), (tx) =>
+    tx.execute(sql`
+      insert into events.portal_challenges
+        (org_id, account_id, code_hash, expires_at, link_hash, browser_hash, link_expires_at)
+      values (${org.id}, ${invited.accountId}, ${'0'.repeat(64)}, now(), ${'1'.repeat(64)}, ${'2'.repeat(64)}, now())`),
+  );
+  const principal = await portalPrincipalBySession(portalSession.token, 'fixture.test');
+  if (!principal) throw new Error('fixture: portal session');
+  const speakerCtx = portalCtx(principal);
+  await executeCommand(
+    proposeProfileChangeCommand,
+    { name: `${name} Speaker`, company: name, bio: 'Talks about *portals*.' },
+    speakerCtx,
+    ports,
+  );
+  await executeCommand(
+    createPortalTaskCommand,
+    {
+      eventId: event.id,
+      kind: 'upload',
+      title: 'Upload your slides',
+      dueAt: new Date(event.startsAt.getTime() - 86_400_000),
+    },
+    ctx(),
+    ports,
+  );
+  const speakerView = await executeQuery(speakerPortalQuery, {}, speakerCtx, ports);
+  const slidesTask = speakerView.tasks[0];
+  if (!slidesTask) throw new Error('fixture: speaker task');
+  await uploadSpeakerPortalFile(
+    speakerCtx,
+    {
+      purpose: 'task_answer',
+      assigneeId: slidesTask.assigneeId,
+      file: new TextEncoder().encode('%PDF-1.4\n% fixture slides\n%%EOF\n'),
+      fileName: 'slides.pdf',
+    },
+    ports,
+  );
   await draftEventCopy(ctx(), ports, fakeDrafter, { eventId: event.id, kind: 'tagline' });
   // M5.1a registration: the default types and items (activating the conference pack), a code-only
   // and a domain-only type, one cell per type, and a capacity claim.
@@ -1951,7 +2013,17 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     createCtx({ orgId: org.id, now: new Date(event.startsAt.getTime() - 30 * 86_400_000) }),
     ports,
   );
-  return { org, ownerId, viewerId, event, apiKey, testKey, ctx };
+  return {
+    org,
+    ownerId,
+    viewerId,
+    event,
+    apiKey,
+    testKey,
+    ctx,
+    speakerId: speaker.id,
+    portal: { accountId: invited.accountId, token: portalSession.token },
+  };
 }
 
 /** English headers for attendee exports (the console passes its own locale's). */

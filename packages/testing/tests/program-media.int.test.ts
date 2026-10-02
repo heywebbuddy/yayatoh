@@ -270,10 +270,10 @@ describe('program media: permissions and entitlements', () => {
     expect(
       await executeQuery(listOwnersMediaQuery, { ownerType: 'speaker', ownerIds: [p.id] }, viewer(), ports),
     ).toHaveLength(1);
-    // Nothing written: no stray files from the refused upload.
+    // Nothing written: no stray files from the refused upload. (M5.3a portal files are referenced by media.portal_files.)
     const [orphans] = await withTenant(systemCtx(a.org.id), (tx) =>
       tx.execute<{ n: number }>(
-        sql`select count(*)::int as n from media.blobs b where not exists (select 1 from media.variants v where b.key = v.org_id::text || '/' || v.asset_id::text || '/' || v.file_name)`,
+        sql`select count(*)::int as n from media.blobs b where not exists (select 1 from media.variants v where b.key = v.org_id::text || '/' || v.asset_id::text || '/' || v.file_name) and not exists (select 1 from media.portal_files f where f.storage_key = b.key)`,
       ),
     );
     expect(orphans?.n).toBe(0);
