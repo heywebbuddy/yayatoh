@@ -174,10 +174,14 @@ import {
   setSessionAgendaCommand,
 } from '@yayatoh/program';
 import {
+  applyCommand,
   createRegistrationTypeCommand,
   registrationSetupQuery,
+  replaceMembersCommand,
+  saveReasonTemplateCommand,
   seedRegistrationDefaultsCommand,
   setCellCommand,
+  setTypeRulesCommand,
 } from '@yayatoh/registration';
 import {
   analyticsForwarder,
@@ -1552,6 +1556,59 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     await withTenant(systemCtx(org.id), (tx) =>
       tx.execute(sql`insert into registration.capacity_claims (org_id, event_id, registration_type_id, order_id)
         values (${org.id}, ${event.id}, ${member.id}, ${checkout.order.id})`),
+    );
+    // M5.1c: an approval type with a member list and a reason template, and one pending
+    // application (no order: nobody is charged before approval).
+    const applicants = await executeCommand(
+      createRegistrationTypeCommand,
+      { eventId: event.id, name: 'Applicants', capacity: 50 },
+      ctx(),
+      ports,
+    );
+    await executeCommand(
+      setCellCommand,
+      { eventId: event.id, registrationTypeId: applicants.id, admissionItemId: fullPass.id, priceMinor: 4000 },
+      ctx(),
+      ports,
+    );
+    await executeCommand(
+      setTypeRulesCommand,
+      {
+        eventId: event.id,
+        registrationTypeId: applicants.id,
+        approval: 'manual',
+        autoApproveDomains: [`staff.${slug}.test`],
+        kind: 'standard',
+      },
+      ctx(),
+      ports,
+    );
+    await executeCommand(
+      replaceMembersCommand,
+      { eventId: event.id, registrationTypeId: applicants.id, emails: [`member@${slug}.test`] },
+      ctx(),
+      ports,
+    );
+    await executeCommand(
+      saveReasonTemplateCommand,
+      { eventId: event.id, decision: 'deny', label: 'Full', body: 'Fixture: this rate is full.' },
+      ctx(),
+      ports,
+    );
+    await executeCommand(
+      applyCommand,
+      {
+        eventId: event.id,
+        registrationTypeId: applicants.id,
+        admissionItemId: fullPass.id,
+        name: 'Fixture Applicant',
+        email: `applicant@${slug}.test`,
+        company: 'Fixture Co',
+        jobTitle: 'Fixture Lead',
+        message: 'Fixture: why I want to attend.',
+      },
+      createCtx({ orgId: org.id, actor: { type: 'anonymous' } }),
+      ports,
     );
   }
   // M4.1a: a party with a named guest (sealed answers, linked to a guest-list entry), a child and

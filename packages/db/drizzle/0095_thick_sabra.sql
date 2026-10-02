@@ -107,4 +107,7 @@ ALTER TABLE "registration"."registrants" ADD CONSTRAINT "registrants_order_fk" F
 ALTER TABLE "registration"."registrants" ADD CONSTRAINT "registrants_ticket_fk" FOREIGN KEY ("org_id","ticket_id") REFERENCES "ticketing"."tickets"("org_id","id");--> statement-breakpoint
 ALTER TABLE "registration"."type_members" ADD CONSTRAINT "type_members_event_fk" FOREIGN KEY ("org_id","event_id") REFERENCES "events"."events"("org_id","id") ON DELETE cascade;--> statement-breakpoint
 ALTER TABLE "registration"."reason_templates" ADD CONSTRAINT "reason_templates_event_fk" FOREIGN KEY ("org_id","event_id") REFERENCES "events"."events"("org_id","id") ON DELETE cascade;
+-- hand-written: end--> statement-breakpoint
+-- hand-written: begin (M5.1c: registration's managed passes take up to 20 per order, one per named registrant of a group; before launch, so a plain update)
+UPDATE "ticketing"."ticket_types" SET "max_per_order" = 20 WHERE "managed_by" = 'registration' AND "max_per_order" = 1;
 -- hand-written: end

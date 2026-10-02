@@ -13,6 +13,7 @@ import {
 import { and, asc, eq, isNull } from 'drizzle-orm';
 import { z } from 'zod';
 import { lockTypeTx, offerFreedPlacesTx, typeDemandTx } from './capacity.ts';
+import { MAX_GROUP } from './domain/approval.ts';
 import { capacityFloor } from './domain/capacity.ts';
 import { normalizeAccessCode, normalizeDomain } from './domain/eligibility.ts';
 import { DEFAULT_ITEMS, DEFAULT_NAMES, DEFAULT_TYPE_KEYS, keyFromName, uniqueKey } from './domain/matrix.ts';
@@ -636,7 +637,9 @@ export const setCellCommand = tenantCommand({
         priceMinor: input.priceMinor,
         quantityTotal: CELL_QUANTITY,
         minPerOrder: 1,
-        maxPerOrder: 1,
+        // M5.1c: a group order buys one per named registrant (each registrant still picks each
+        // item once: `selectionProblem`).
+        maxPerOrder: MAX_GROUP,
         visibility: 'hidden',
         sortOrder: type.sortOrder * 100 + item.sortOrder,
       }),

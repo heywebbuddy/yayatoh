@@ -305,6 +305,8 @@ export async function publicRegistration(
     );
     const out: PublicRegistrationDto = { types: [], items: {} };
     for (const t of types) {
+      // M5.1c: +1 types are added by a confirmed host from their own page.
+      if (t.kind === 'guest') continue;
       if (
         eligibilityRefusal(eligibilityOf(t), {
           email: buyer.email ?? '',
@@ -341,6 +343,7 @@ export async function publicRegistration(
         minAllInMinor: range.min,
         maxAllInMinor: range.max,
         full: room !== null && room < 1,
+        apply: t.approval === 'manual',
       });
       out.items[t.id] = mine.map(({ currency: _c, ...i }) => i);
     }

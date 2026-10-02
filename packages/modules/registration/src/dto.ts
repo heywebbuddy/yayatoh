@@ -77,6 +77,8 @@ export const PublicRegistrationTypeDto = z.object({
   minAllInMinor: z.int(),
   maxAllInMinor: z.int(),
   full: z.boolean(),
+  /** M5.1c: this type is applied for (approval before payment). */
+  apply: z.boolean().default(false),
 });
 export type PublicRegistrationTypeDto = z.infer<typeof PublicRegistrationTypeDto>;
 

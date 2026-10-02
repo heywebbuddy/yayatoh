@@ -28,6 +28,7 @@ import * as platform from '@yayatoh/platform';
 import { auditLogQuery, consumeEvent, memoryNotifier } from '@yayatoh/platform';
 import * as privacy from '@yayatoh/privacy';
 import * as program from '@yayatoh/program';
+import * as registration from '@yayatoh/registration';
 import * as reports from '@yayatoh/reports';
 import * as reviews from '@yayatoh/reviews';
 import * as seating from '@yayatoh/seating';
@@ -81,6 +82,8 @@ const MODULES = {
   platform,
   privacy,
   program,
+  // M5.1c: registration's commands (apply, decide, groups, +1, substitution) are swept too.
+  registration,
   reports,
   reviews,
   seating,
