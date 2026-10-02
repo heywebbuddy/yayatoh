@@ -101,3 +101,10 @@ export {
   programOwnerDeleted,
   programOwnerTx,
 } from './shared.ts';
+// M5.2b: session facts and the row lock for registration's enrollment.
+export {
+  type EnrollableSession,
+  enrollableSessionsByIdTx,
+  enrollableSessionsTx,
+  lockEnrollableSessionTx,
+} from './enrollment.ts';

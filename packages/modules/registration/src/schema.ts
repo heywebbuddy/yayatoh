@@ -1,6 +1,7 @@
 import { tenantTable } from '@yayatoh/db';
 import { sql } from 'drizzle-orm';
 import {
+  boolean,
   check,
   foreignKey,
   index,
@@ -146,5 +147,129 @@ export const capacityClaims = tenantTable(
       columns: [t.orgId, t.registrationTypeId],
       foreignColumns: [registrationTypes.orgId, registrationTypes.id],
     }).onDelete('cascade'),
+  ],
+);
+
+/* ------------------------------------------------------- M5.2b: session enrollment ---- */
+
+export const ENROLLMENT_STATUSES = [
+  'enrolled',
+  'waiting',
+  'offered',
+  'dropped',
+  'left',
+  'expired',
+  'declined',
+  'skipped',
+  'cancelled',
+] as const;
+/** Why a line entry was passed over on promotion (re-checked then, P5-9). */
+export const ENROLLMENT_SKIP_REASONS = ['overlap', 'one_per_group', 'not_available', 'registrant_gone'] as const;
+export const PROMOTION_MODES = ['auto', 'offer'] as const;
+
+/**
+ * Which sessions an admission item gives (M5.2b). An `admission` item with no rows gives every
+ * session; with rows, only those. An `add_on` gives only its rows (none: nothing). Included
+ * sessions it gives are on the registrant's schedule; optional ones may be enrolled in.
+ * `session_id` names a `program.sessions` row (hand-written composite FK, cascade).
+ */
+export const itemSessions = tenantTable(
+  registrationSchema,
+  'item_sessions',
+  {
+    eventId: uuid('event_id').notNull(),
+    admissionItemId: uuid('admission_item_id').notNull(),
+    sessionId: uuid('session_id').notNull(),
+  },
+  (t) => [
+    uniqueIndex('item_sessions_org_item_session_key').on(t.orgId, t.admissionItemId, t.sessionId),
+    index('item_sessions_org_event_idx').on(t.orgId, t.eventId),
+    index('item_sessions_org_session_idx').on(t.orgId, t.sessionId),
+    foreignKey({
+      name: 'item_sessions_item_fk',
+      columns: [t.orgId, t.admissionItemId],
+      foreignColumns: [admissionItems.orgId, admissionItems.id],
+    }).onDelete('cascade'),
+  ],
+);
+
+/**
+ * An event's session waitlist setting (M5.2b; no row: the P5-9 default). `auto`: a freed place
+ * enrols the next person at once (with an email); `offer`: the next person is offered the place
+ * for `offer_minutes` and accepts from their schedule. Promotion stops 24 h before a session.
+ */
+export const enrollmentSettings = tenantTable(
+  registrationSchema,
+  'enrollment_settings',
+  {
+    eventId: uuid('event_id').notNull(),
+    promotion: text('promotion').notNull().default('auto'),
+    offerMinutes: integer('offer_minutes').notNull().default(240),
+    updatedBy: text('updated_by').notNull(),
+  },
+  (t) => [
+    uniqueIndex('enrollment_settings_org_event_key').on(t.orgId, t.eventId),
+    check('enrollment_settings_promotion_check', sql`promotion in ('auto', 'offer')`),
+    check('enrollment_settings_offer_minutes_check', sql`offer_minutes between 15 and 2880`),
+  ],
+);
+
+/**
+ * A registrant's place in an optional session, or their place in its line (M5.2b). The
+ * registrant is their admission ticket (`registrant_id`, one per registrant since M5.1a; a
+ * substitution keeps the ticket). `enrolled` and `offered` hold one of the session's places
+ * (program's counter, claimed atomically); `waiting` holds none. The line is `(position_at, id)`.
+ * One live row per registrant and session (unique while enrolled, waiting or offered).
+ */
+export const sessionEnrollments = tenantTable(
+  registrationSchema,
+  'session_enrollments',
+  {
+    eventId: uuid('event_id').notNull(),
+    sessionId: uuid('session_id').notNull(),
+    registrantId: uuid('registrant_id').notNull(),
+    orderId: uuid('order_id').notNull(),
+    status: text('status').notNull(),
+    positionAt: ts('position_at').notNull(),
+    enrolledAt: ts('enrolled_at'),
+    offeredAt: ts('offered_at'),
+    offerExpiresAt: ts('offer_expires_at'),
+    /** How many offers this entry has had (the offer email's dedupe key). */
+    offerCount: integer('offer_count').notNull().default(0),
+    /** Who moved it off the line: `auto`, `offer` (accepted) or `organizer` ("promote now"). */
+    promotedBy: text('promoted_by'),
+    skipReason: text('skip_reason'),
+    /** A pick-one group place is held with this row (program's `session_group_picks`). */
+    picked: boolean('picked').notNull().default(false),
+    endedAt: ts('ended_at'),
+  },
+  (t) => [
+    uniqueIndex('session_enrollments_org_live_key')
+      .on(t.orgId, t.sessionId, t.registrantId)
+      .where(sql`status in ('enrolled', 'waiting', 'offered')`),
+    index('session_enrollments_org_queue_idx').on(t.orgId, t.sessionId, t.status, t.positionAt, t.id),
+    index('session_enrollments_org_registrant_idx').on(t.orgId, t.registrantId),
+    index('session_enrollments_org_event_idx').on(t.orgId, t.eventId, t.status),
+    index('session_enrollments_org_order_idx').on(t.orgId, t.orderId),
+    index('session_enrollments_org_offer_idx').on(t.orgId, t.offerExpiresAt).where(sql`status = 'offered'`),
+    check(
+      'session_enrollments_status_check',
+      sql.raw(`status in (${ENROLLMENT_STATUSES.map((s) => `'${s}'`).join(', ')})`),
+    ),
+    check(
+      'session_enrollments_offer_check',
+      sql`(status = 'offered') = (offer_expires_at is not null and offered_at is not null)`,
+    ),
+    check(
+      'session_enrollments_skip_check',
+      sql.raw(
+        `(status = 'skipped') = (skip_reason is not null) and (skip_reason is null or skip_reason in (${ENROLLMENT_SKIP_REASONS.map((s) => `'${s}'`).join(', ')}))`,
+      ),
+    ),
+    check(
+      'session_enrollments_promoted_check',
+      sql`promoted_by is null or promoted_by in ('auto', 'offer', 'organizer')`,
+    ),
+    check('session_enrollments_offer_count_check', sql`offer_count >= 0`),
   ],
 );
