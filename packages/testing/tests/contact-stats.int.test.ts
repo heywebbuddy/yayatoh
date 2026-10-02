@@ -10,6 +10,7 @@ import {
   saveSegmentCommand,
 } from '@yayatoh/audiences';
 import {
+  contactDsarTx,
   contactStatsQuery,
   contactValueQuery,
   orgContactStatsQuery,
@@ -401,6 +402,21 @@ describe('contact stats (M6.1b)', () => {
         maxMinor: 180_000,
       },
     ]);
+  });
+
+  it('a data-subject export includes the scores and their signals', async () => {
+    const out = await withTenant(sys(a.orgId), (tx) => contactDsarTx(tx, sa.people.john.email));
+    expect(out.scores).toHaveLength(1);
+    expect(out.scores[0]).toMatchObject({ engagementScore: 64, noShowBps: 1_429, sessionsAttended: 4 });
+    expect(out.signals.map((g) => g.kind).sort()).toEqual([
+      'campaign_opened',
+      'campaign_opened',
+      'session_attended',
+      'session_attended',
+      'session_attended',
+      'session_attended',
+    ]);
+    expect(out.stats).toEqual([expect.objectContaining({ currency: 'USD', spendMinor: 180_000 })]);
   });
 
   it('isolation: one org never sees another org’s stats', async () => {

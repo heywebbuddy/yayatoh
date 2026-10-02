@@ -14,3 +14,11 @@ Org-scoped contacts and the consent ledger. Owns Postgres schema `crm`.
 
 - `contact_profile` (M3.6) is a projection of `event_participation` and the consent ledger, rebuilt by the SQL function `crm.refresh_contact_profiles` (shared by the projector, `recordConsentTx` and the migration backfill). Consent is summarized in the same transaction that records it.
 - **Segment DSL (M3.6a):** `SegmentDefinition` (zod, browser-safe via `./client`) is compiled by `compileSegment` to a WHERE clause with bound parameters only; operators and columns come from fixed tables keyed by enum values. Scopes arrive resolved to event ids (crm never reads the events schema). Merged and erased contacts never match.
+- **Contact stats (M6.1b):** `contact_scores` (per contact) and `contact_stats` (per contact ×
+  currency: lifetime value) are projections recomputed from `event_participation` and
+  `contact_signals` by `writeContactStatsTx` (audiences runs it); never written by anything else.
+  `contact_signals` is exactly once per (contact, kind, ref). The formulas are pure and documented
+  (`stats/formulas.ts`); RFM quintiles are computed on read (`stats/rfm.ts`), never stored.
+  Money (lifetime value, the monetary quintile) leaves only through `finance:read` queries;
+  `contactStats`/`orgContactStats` never carry an amount. The `ltv` and `rfmMonetary` segment
+  conditions are money conditions (`usesMoneyConditions`).

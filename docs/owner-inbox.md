@@ -476,3 +476,9 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 ## M5.1a — registration types (2026-09-29, pending owner)
 - [ ] Conference pack quotas per event: 30 registration types, 20 admission items, 5,000 registrants (defaults in `billing.addons`; free in beta, price with D22). Change them by data, no code change.
 - [ ] Registration always asks buyers for the emailed code (M1.5f), even when an org turned the checkout email check off, so "email domain" eligibility means a proved address. Confirm or relax.
+
+## M6.1b — contact stats (2026-10-02, pending owner)
+- [ ] **No-show propensity prior**: (no-shows + 1) ÷ (past registrations + 5), i.e. someone with no history counts as 20 %. Confirm the prior or pick another (it is one constant, `NO_SHOW_PRIOR`).
+- [ ] **Engagement score weights** (placeholder until M5.7b): 10 per event attended, 5 per session, 2 per campaign opened (3 per poll/Q&A answer, 3 per feedback, 2 per enrollment once those exist), score = 100 × points ÷ (points + 25). Confirm, or wait for M5.7b's org-adjustable weights.
+- [ ] **Money in audiences**: lifetime value and the RFM monetary quintile need `finance:read` to preview, save or export an audience, so the marketing role cannot target big spenders. Confirm, or allow `messages:send` roles to filter (without seeing amounts). The older M3.6 `spend` condition (per scope) is not gated: decide whether to gate it the same way.
+- [ ] **Campaign open tracking** (feeds "campaigns opened"): needs a tracking pixel in campaign emails. Decide whether to add it (privacy notice; Apple Mail Privacy Protection inflates opens). The stats consume `campaign.opened@1` already.
