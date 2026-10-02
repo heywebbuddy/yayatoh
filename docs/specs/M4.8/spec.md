@@ -27,6 +27,7 @@ A gala or community host raises money at their event: campaigns with a goal, giv
 - Receipts, charity profile, fair-market value (M4.8b); paddle raise (M4.8c); live screen and QR-to-give (M4.8d); saved cards and pledges (M4.8e); matches (M4.8f); reports and reconciliation (M4.8g).
 - Refunds of gifts from the console (the orders refund path is ticket-shaped; a gift refund lands with M4.8e/g).
 - A link to the giving page on the public event page and the tenant-site copy of the giving page (`/t/{org}/…`): the host shares the link from the tab for now.
+- Data-subject requests (export and erasure, `privacy.eraseSubject`) do not reach gifts yet: privacy and donations are both tier 5, so privacy cannot call donations synchronously, and a receipt record must outlive an erasure (M4.8b, counsel; owner inbox). It lands with M4.8b, through an erasure event or a tier change. Lapsed gifts already lose their donor after 30 days (retention).
 - Recurring gifts; custom display names ("The Smith Family", P4-13): the brief asks for full / first / anonymous.
 
 ### 4. `touches:`
@@ -43,7 +44,9 @@ touches:
   - apps/web/src/app/api/dev/user/route.ts              # profile=…, payouts=active (dev only)
   - apps/web/src/server/bulk.ts, apps/web/messages/*.json, apps/web/package.json
   - apps/web/e2e/{donations.spec.ts,helpers.ts,canary-crawl.spec.ts}
-  - apps/worker/{package.json,src/registry.ts,src/bulk.ts}
+  - apps/worker/{package.json,src/registry.ts,src/bulk.ts,src/retention.ts}
+  - packages/modules/command-center/src/domain/readiness.ts  # donations leaves PLACEHOLDER_SECTIONS
+  - apps/web/tests/event-routes.test.ts, packages/testing/tests/privacy.int.test.ts
 ```
 
 ### 5. Data model
@@ -90,8 +93,10 @@ None yet (M4.8g reports).
 | AC-M4.8a-11 | CSV export with step-up lists donor, email, shown-as, employer and tribute; viewers cannot export | e2e "a donor gives…" (step-up dialog, CSV), "a viewer sees the tab…" (404); int "lists paid gifts…" |
 | AC-M4.8a-12 | Viewer: hidden write controls and refused direct actions | e2e "a viewer sees the tab…"; int "viewers read the tab but cannot change…" |
 | AC-M4.8a-13 | Keyboard only; axe on every new screen and state; Arabic RTL | e2e "keyboard only…", every test calls `expectAccessible`, "Arabic: …" |
+| AC-M4.8a-14 | Retention: a gift left unpaid loses its donor (name, email, employer, tribute) after 30 days, not before; paid gifts and other orgs untouched; idempotent; members cannot run it | int "retention erases the donor of a gift left unpaid…"; `impersonation.int.test.ts` (`donations.retention` is `delete`); `apps/worker/tests/retention.int.test.ts` (the daily pass) |
 
 ### 11. Security and privacy
+- Lapsed gifts (failed or expired, 30 days) lose their donor in the daily retention pass (`donations.retention`, worker), as their orders lose the buyer.
 - No donor data in any public response: the giving page's DTO (`PublicGivingDto`) is an allowlist of campaign text, levels and totals; the thank-you page is reached by an HMAC-signed gift link and shows status and amount only.
 - The host list shows names only as donors chose; the donor's own name and email leave only through the step-up CSV export. Audit rows hold ids and amounts, never donor details.
 - The fee cover and amounts are computed server-side; the form cannot set them. The giving form is rate-limited (`checkoutStart`) and passes the checkout risk rules.

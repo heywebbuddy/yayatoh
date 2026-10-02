@@ -238,6 +238,8 @@ describe('impersonation: the pipeline refuses money, export and delete (M1.2e)',
         'seating.removeDateChart',
         // A giving level (M4.8a; its gifts stay).
         'donations.deleteLevel',
+        // The daily retention pass erases donors of lapsed gifts (M4.8a; platform only).
+        'donations.retention',
       ]),
     );
   });

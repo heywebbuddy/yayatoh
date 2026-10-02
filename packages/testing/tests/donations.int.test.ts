@@ -8,6 +8,7 @@ import {
   donationsConsoleQuery,
   giftPaymentInput,
   giftReceipt,
+  giftRetentionCommand,
   giftsExportBulk,
   processingFeeCover,
   publicGiving,
@@ -23,6 +24,7 @@ import {
   type ProviderEvent,
   signFakeWebhook,
 } from '@yayatoh/payments';
+import { ERASED_EMAIL, ERASED_NAME } from '@yayatoh/platform';
 import { sql } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { type OrgFixture, ports, runBulk, systemCtx, twoOrgs, userCtx } from '../src/index.ts';
@@ -559,5 +561,67 @@ describe('gift CSV export', () => {
     expect(lines.some((l) => l.includes(',Dana,'))).toBe(true);
     // Only paid gifts; never another org's.
     expect(file.content).not.toContain('Fixture Donor');
+  });
+
+  it('retention erases the donor of a gift left unpaid after 30 days; paid gifts keep theirs', async () => {
+    const lapsed = await give({
+      amountMinor: 2_500,
+      employer: 'Lapsed Corp',
+      tribute: { kind: 'honor', name: 'Aunt Lapsed', recipient: 'The Lapsed family', note: 'Never paid.' },
+    });
+    await pay(a, lapsed);
+    await executeCommand(
+      expireOrdersCommand,
+      {},
+      { ...systemCtx(a.org.id), now: new Date(Date.now() + 3_600_000) },
+      ports,
+    );
+    await catchUpGifts(a.org.id);
+    const paid = await give({ amountMinor: 3_500, employer: 'Paid Corp' });
+    await pay(a, paid);
+    await apply(a, await webhook(a, paid));
+    await catchUpGifts(a.org.id);
+    const row = async (orderId: string) =>
+      (
+        await withTenant(a.ctx(), (tx) =>
+          tx.execute<Record<string, string | null>>(
+            sql`select status, donor_name, donor_email, employer, tribute_kind, tribute_name, tribute_recipient,
+              tribute_note, amount_minor::text as amount from donations.gifts where order_id = ${orderId}`,
+          ),
+        )
+      )[0];
+    const at = (days: number) => ({ ...systemCtx(a.org.id), now: new Date(Date.now() + days * 86_400_000) });
+    // Members cannot run it: it is the platform's daily pass.
+    await expect(executeCommand(giftRetentionCommand, {}, a.ctx(), ports)).rejects.toMatchObject({
+      code: 'forbidden',
+    });
+    await executeCommand(giftRetentionCommand, {}, at(29), ports);
+    expect(await row(lapsed.orderId)).toMatchObject({ status: 'expired', donor_name: 'Dana Q. Donor' });
+    const r = await executeCommand(giftRetentionCommand, {}, at(31), ports);
+    expect(r.lapsedGifts).toBeGreaterThanOrEqual(1);
+    expect(await row(lapsed.orderId)).toEqual({
+      status: 'expired',
+      donor_name: ERASED_NAME,
+      donor_email: ERASED_EMAIL,
+      employer: null,
+      tribute_kind: null,
+      tribute_name: null,
+      tribute_recipient: null,
+      tribute_note: null,
+      amount: '2500',
+    });
+    expect(await row(paid.orderId)).toMatchObject({
+      status: 'paid',
+      donor_name: 'Dana Q. Donor',
+      employer: 'Paid Corp',
+    });
+    // Idempotent: nothing left to erase; the other org's lapsed gift is not this pass's.
+    expect((await executeCommand(giftRetentionCommand, {}, at(31), ports)).lapsedGifts).toBe(0);
+    const [other] = await withTenant(b.ctx(), (tx) =>
+      tx.execute<{ donor_name: string }>(
+        sql`select donor_name from donations.gifts where status = 'expired' limit 1`,
+      ),
+    );
+    expect(other?.donor_name).toBe('Fixture Donor');
   });
 });

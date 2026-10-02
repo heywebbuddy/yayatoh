@@ -45,3 +45,4 @@ export {
   startGiftCommand,
 } from './gifts.ts';
 export { privateColumns } from './private-columns.ts';
+export { giftRetentionCommand, LAPSED_GIFT_DAYS, redactLapsedGiftsTx } from './retention.ts';
