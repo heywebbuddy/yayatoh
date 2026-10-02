@@ -404,7 +404,7 @@ export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
               input.current?.focus();
             }}
           >
-            <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+            <div className="flex min-w-0 flex-1 basis-full flex-col gap-1.5 sm:basis-64">
               <label htmlFor="scan-app-code" className="text-[13px] font-bold text-ink">
                 {t('checkin.codeLabel')}
               </label>
@@ -420,11 +420,17 @@ export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
                 className="field field-lg w-full font-mono tracking-[0.08em]"
               />
             </div>
-            <Button type="submit" size="lg">
+            <Button type="submit" size="lg" className="flex-1 sm:flex-none">
               {t('checkin.check')}
             </Button>
             {hasCamera ? (
-              <Button type="button" variant="secondary" size="lg" onClick={() => setCamera((v) => !v)}>
+              <Button
+                type="button"
+                variant="secondary"
+                size="lg"
+                className="flex-1 sm:flex-none"
+                onClick={() => setCamera((v) => !v)}
+              >
                 {camera ? t('scan.stopCamera') : t('scan.camera')}
               </Button>
             ) : null}
