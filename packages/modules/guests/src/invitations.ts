@@ -27,6 +27,7 @@ import {
   rsvpHistory,
   subEventResponses,
 } from './schema.ts';
+import { afterHostAnswerTx } from './rsvp-state.ts';
 import {
   recordSubEventHistoryTx,
   type SubEventHistoryInput,
@@ -225,7 +226,7 @@ export const recordSubEventResponseCommand = tenantCommand({
   output: z.object({ status: z.enum(RESPONSE_STATUSES).nullable() }),
   entitlement: 'guests',
   permission: 'guests:write',
-  handler: async ({ input, ctx, tx }) => {
+  handler: async ({ input, ctx, tx, emit }) => {
     const { guest } = await assertInvitedTx(tx, input);
     const at = {
       eventId: input.eventId,
@@ -242,7 +243,10 @@ export const recordSubEventResponseCommand = tenantCommand({
           and(eq(subEventResponses.subEventId, input.subEventId), eq(subEventResponses.guestId, guest.id)),
         )
         .returning({ id: subEventResponses.id });
-      if (gone.length) await recordSubEventHistoryTx(tx, ctx, [{ ...at, action: 'response_cleared' }]);
+      if (gone.length) {
+        await recordSubEventHistoryTx(tx, ctx, [{ ...at, action: 'response_cleared' }]);
+        await afterHostAnswerTx(tx, ctx, emit, input.eventId, guest.partyId);
+      }
       return { status: null };
     }
     const [before] = await tx
@@ -273,6 +277,9 @@ export const recordSubEventResponseCommand = tenantCommand({
         fields: before?.status === input.status ? ['source'] : ['status'],
       },
     ]);
+    // M4.1d: the party's RSVP state (responded once every invitation is answered) and the
+    // participation event for guests linked to the guest list.
+    await afterHostAnswerTx(tx, ctx, emit, input.eventId, guest.partyId);
     return { status: input.status };
   },
   audit: (input) => ({

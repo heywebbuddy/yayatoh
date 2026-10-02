@@ -29,9 +29,11 @@ import {
   type GuestSource,
   guests,
   type HistoryAction,
+  PARTY_RSVP_STATES,
   parties,
   rsvpHistory,
 } from './schema.ts';
+import { rsvpStateCondition } from './rsvp-filter.ts';
 
 export const MAX_PARTIES_PER_EVENT = 1000;
 export const MAX_GUESTS_PER_PARTY = 20;
@@ -680,6 +682,8 @@ export const GuestListInput = z.object({
   side: z.string().trim().max(40).optional(),
   tag: z.string().trim().max(40).optional(),
   vip: z.boolean().optional(),
+  /** M4.1d: parties in this RSVP state. */
+  rsvp: z.enum(PARTY_RSVP_STATES).optional(),
   limit: z.number().int().min(1).max(200).default(50),
   offset: z.number().int().min(0).max(100_000).default(0),
 });
@@ -705,6 +709,7 @@ export const guestListQuery = tenantQuery({
         sql`exists (select 1 from unnest(${parties.tags}) as t(v) where lower(t.v) = lower(${input.tag}))`,
       );
     if (input.vip !== undefined) conds.push(eq(parties.vip, input.vip));
+    if (input.rsvp) conds.push(rsvpStateCondition(parties.id, input.rsvp));
     if (input.search) {
       const pat = `%${escapeLike(input.search)}%`;
       const match = or(
