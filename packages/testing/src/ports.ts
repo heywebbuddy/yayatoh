@@ -21,6 +21,13 @@ import { seatAssignAction } from '@yayatoh/seating';
 import { surveyExportAction } from '@yayatoh/surveys';
 import { createOrgAuthorizer, orgStatusGate } from '@yayatoh/tenancy';
 import { ticketResendAction } from '@yayatoh/ticketing';
+import {
+  configureWebhooks,
+  type FakePublisher,
+  fakePublisher,
+  fakeResolver,
+  memoryWebhookStore,
+} from '@yayatoh/webhooks';
 
 /** The same composition the apps use: billing entitlements + tenancy authorizer. */
 export const ports = createCommandPorts({
@@ -33,6 +40,14 @@ export const ports = createCommandPorts({
 // Tests get a per-run local key vault (ticket signing keys are envelope-encrypted). Integration
 // runs share one key across files (the global setup provides it); unit runs draw their own.
 setKeyVault(localKeyVault(process.env.LOCAL_KMS_KEY ?? randomBytes(32).toString('hex')));
+
+/** M6.3b: outbound webhooks go to the fake publisher (deliveries recorded, never sent). */
+export const webhookPublisher: FakePublisher = fakePublisher({
+  seed: randomBytes(32).toString('hex'),
+  appOrigin: 'https://app.yayatoh.test',
+  store: memoryWebhookStore(),
+});
+configureWebhooks({ publisher: webhookPublisher, resolver: fakeResolver });
 
 /** The bulk actions the apps register, and the step command built from them. */
 export const BULK_ACTIONS = [

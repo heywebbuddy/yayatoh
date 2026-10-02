@@ -24,4 +24,4 @@ export {
   marketingScenario,
   seedEmails,
 } from './marketing.ts';
-export { BULK_ACTIONS, bulkStep, ports, runBulk, submitRegistrationForm } from './ports.ts';
+export { BULK_ACTIONS, bulkStep, ports, runBulk, submitRegistrationForm, webhookPublisher } from './ports.ts';

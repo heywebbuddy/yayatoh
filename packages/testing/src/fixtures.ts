@@ -263,6 +263,7 @@ import {
   requestHolderLinkCommand,
 } from '@yayatoh/ticketing';
 import { createVenueCommand, submitQuoteRequestCommand } from '@yayatoh/venues';
+import { createEndpointCommand } from '@yayatoh/webhooks';
 import { sql } from 'drizzle-orm';
 import { ports, runBulk, submitRegistrationForm } from './ports.ts';
 
@@ -2145,6 +2146,13 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   await withTenant(systemCtx(org.id), (tx) =>
     tx.execute(sql`insert into alerts.signals (org_id, kind, source_event_id, occurred_at)
       values (${org.id}, 'journey_step_failed', ${uuidv7()}, now() - interval '2 days')`),
+  );
+  // M6.3b: one webhook endpoint (fake publisher), so webhooks.endpoints has rows for both orgs.
+  await executeCommand(
+    createEndpointCommand,
+    { url: `https://hooks.example.com/${slug}`, description: 'Fixture receiver', eventTypes: ['order.paid'] },
+    ctx(),
+    ports,
   );
   return {
     org,
