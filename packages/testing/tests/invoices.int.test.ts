@@ -401,7 +401,7 @@ describe('a $1,200 invoice paid in two parts reconciles to the cent', () => {
       channel: 'offline',
       collectedBy: 'organizer',
     });
-    const amount = (rows: typeof lines, account: string) =>
+    const amount = (rows: readonly { account: string; amount: string }[], account: string) =>
       rows.filter((l) => l.account === account).reduce((s, l) => s + Number(l.amount), 0);
     expect(amount(card, 'platform:stripe_cash')).toBe(60000);
     expect(amount(card, 'org:payable_held')).toBe(-(60000 - f1));

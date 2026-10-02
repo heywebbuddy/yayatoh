@@ -558,8 +558,19 @@ describe('eligibility in the command', () => {
     expect(staff.types.map((t) => t.id)).toEqual(expect.arrayContaining([codeType, domainType]));
     const member = anyone.types.find((t) => t.id === c.typeId);
     expect(Object.keys(member ?? {}).sort()).toEqual(
-      // M5.1c adds `apply` (the type is applied for).
-      ['apply', 'currency', 'description', 'full', 'id', 'maxAllInMinor', 'minAllInMinor', 'name'].sort(),
+      // M5.1c adds `apply` (the type is applied for); M5.1d `payLater` and `poNumber` (the PO rule).
+      [
+        'apply',
+        'currency',
+        'description',
+        'full',
+        'id',
+        'maxAllInMinor',
+        'minAllInMinor',
+        'name',
+        'payLater',
+        'poNumber',
+      ].sort(),
     );
     expect(JSON.stringify(staff)).not.toMatch(/PRESS-2027|acme\.org/);
     // Seeded types with no cells are not offered.

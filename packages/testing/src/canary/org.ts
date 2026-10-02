@@ -219,6 +219,17 @@ async function prepare(admin: CanaryAdmin, orgId: string, ownerId: string, event
      from orders.orders o where org_id = $1 order by created_at limit 1`,
     [orgId],
   );
+  // M5.1d: a pending pay-link invoice payment on a direct-charge flow, so its connected account
+  // column holds a value too.
+  await admin.unsafe(
+    `insert into orders.invoice_payments
+     select (jsonb_populate_record(null::orders.invoice_payments, to_jsonb(p) || jsonb_build_object(
+       'id', gen_random_uuid(), 'channel', 'pay_link', 'method', 'card', 'status', 'pending',
+       'funds_flow', 'organizer_mor', 'connected_account_id', 'acct_canary', 'received_on', null,
+       'completed_at', null, 'fee_part_minor', 0, 'idempotency_key', md5(random()::text)))).*
+     from orders.invoice_payments p where org_id = $1 order by created_at limit 1`,
+    [orgId],
+  );
 }
 
 /** Writes the canaries into every registered private column of the org (every row). */

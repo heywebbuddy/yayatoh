@@ -98,7 +98,7 @@ describe('fee parts reconcile to the cent', () => {
   it('two halves of $1,200 with a $30.99 fee', () => {
     const parts = fee(120000, 3099, [60000, 60000]);
     expect(parts).toEqual([1549, 1550]);
-    expect(parts[0] + parts[1]).toBe(3099);
+    expect((parts[0] ?? 0) + (parts[1] ?? 0)).toBe(3099);
   });
   it('any split adds up to the fee exactly, never more than a payment', () => {
     for (const [total, f, amounts] of [
