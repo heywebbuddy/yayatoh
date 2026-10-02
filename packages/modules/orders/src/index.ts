@@ -315,3 +315,4 @@ export {
   waitlistRef,
   waitlistToken,
 } from './waitlist.ts';
+export { ordersDataSubjects } from './data-subject.ts';

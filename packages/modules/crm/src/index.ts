@@ -52,3 +52,4 @@ export {
   isConsentTerm,
   recordTermConsentTx,
 } from './terms.ts';
+export { crmDataSubjects } from './data-subject.ts';
