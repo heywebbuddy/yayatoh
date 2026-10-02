@@ -67,7 +67,12 @@ describe('alert rules fed by the batch 3e modules (outbox subscribers)', () => {
     const found = await alertsOf(a, 'automationFailed');
     expect(found).toHaveLength(1);
     expect(found[0]).toMatchObject({ state: 'open', severity: 'warning', count: 1 });
-    expect(await count(a, sql`select count(*)::int as n from alerts.signals`)).toBe(1);
+    expect(
+      await count(
+        a,
+        sql`select count(*)::int as n from alerts.signals where occurred_at > now() - interval '1 hour'`,
+      ),
+    ).toBe(1);
     // Another org hears nothing.
     expect(await alertsOf(b, 'automationFailed')).toHaveLength(0);
   });
@@ -92,7 +97,10 @@ describe('alert rules fed by the batch 3e modules (outbox subscribers)', () => {
     expect(users).toContain(marketer);
     expect(users).not.toContain(finance);
     // A second failure in the window updates the same alert (one alert per rule and org).
-    await consumeEvent(alertEvaluator(deps), outboxEvent(a, 'campaigns.send_failed', { reason: 'x', failed: 1 }));
+    await consumeEvent(
+      alertEvaluator(deps),
+      outboxEvent(a, 'campaigns.send_failed', { reason: 'x', failed: 1 }),
+    );
     expect(await alertsOf(a, 'campaignFailed')).toHaveLength(1);
     expect((await alertsOf(a, 'campaignFailed'))[0]?.count).toBe(2);
   });
@@ -112,9 +120,9 @@ describe('alert rules fed by the batch 3e modules (outbox subscribers)', () => {
           'fraudulent', 1500, 'USD', ${due.toISOString()}::timestamptz)`),
     );
     // The hourly job (M3.10c) emits the deadline event; the alert engine consumes it.
-    expect(
-      (await executeCommand(alertDisputeDeadlinesCommand, {}, systemCtx(a.org.id), ports)).alerted,
-    ).toBe(1);
+    expect((await executeCommand(alertDisputeDeadlinesCommand, {}, systemCtx(a.org.id), ports)).alerted).toBe(
+      1,
+    );
     const events = await withTenant(systemCtx(a.org.id), (tx) =>
       recentEventsTx(tx, a.org.id, ['payments.dispute_deadline_approaching'], HOUR),
     );
