@@ -52,3 +52,54 @@ export {
   isConsentTerm,
   recordTermConsentTx,
 } from './terms.ts';
+// M6.1a: duplicates, merge with undo, the person timeline.
+export {
+  BulkMergeDto,
+  MergeChoicesInput,
+  MergeResultDto,
+  mergeContactsCommand,
+  mergeDuplicatesBulkCommand,
+  UndoMergeDto,
+  undoMergeCommand,
+} from './merge/commands.ts';
+export * from './merge/domain.ts';
+export { dismissDuplicateCommand, scanDuplicatesCommand, scanDuplicatesTx } from './merge/duplicates.ts';
+export {
+  type ContactSnapshot,
+  type MergeInput,
+  type MergeResult,
+  mergeContactsTx,
+  scrubMergeSnapshotsTx,
+  undoMergeTx,
+} from './merge/engine.ts';
+export {
+  type ContactReferenceOwner,
+  contactColumnsTx,
+  contactReferenceOwners,
+  type MergeStep,
+  type MovedRow,
+  registerContactReferenceOwners,
+  uncoveredContactColumnsTx,
+} from './merge/owners.ts';
+export {
+  ContactCardDto,
+  DuplicatePairDto,
+  DuplicateQueueDto,
+  duplicatePairQuery,
+  duplicateQueueQuery,
+  PeoplePageDto,
+  PersonDto,
+  peopleQuery,
+  personQuery,
+} from './merge/queries.ts';
+export { DUPLICATE_REASONS, DUPLICATE_STATUSES, MERGE_FIELDS, MERGE_STATUSES, TIMELINE_KINDS } from './schema.ts';
+export {
+  activeContactIdsTx,
+  recordTimelineTx,
+  type TimelineCursor,
+  type TimelineFact,
+  type TimelineKind,
+  type TimelineRow,
+  timelineEventIdsTx,
+  timelinePageTx,
+} from './timeline.ts';

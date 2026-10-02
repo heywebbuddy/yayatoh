@@ -2,6 +2,7 @@ import type { TenantTx } from '@yayatoh/db';
 import { type Ctx, DomainError, requireOrg } from '@yayatoh/kernel';
 import { and, desc, eq, inArray, sql } from 'drizzle-orm';
 import { refreshContactProfilesTx } from './projection.ts';
+import { activeContactIdsTx } from './timeline.ts';
 import {
   type CONSENT_CHANNELS,
   type CONSENT_PURPOSES,
@@ -48,8 +49,11 @@ export async function upsertContactsTx(
       target: [contacts.orgId, contacts.emailNorm],
       set: { name: sql`coalesce(${contacts.name}, excluded.name)`, updatedAt: ctx.now },
     })
-    .returning({ id: contacts.id, emailNorm: contacts.emailNorm });
-  return new Map(rows.map((r) => [r.emailNorm, r.id]));
+    .returning({ id: contacts.id, emailNorm: contacts.emailNorm, mergedInto: contacts.mergedInto });
+  // M6.1a: an address of a merged-away record resolves to the record it was merged into.
+  const merged = rows.filter((r) => r.mergedInto !== null);
+  const active = merged.length ? await activeContactIdsTx(tx, merged.map((r) => r.id)) : new Map<string, string>();
+  return new Map(rows.map((r) => [r.emailNorm, active.get(r.id) ?? r.id]));
 }
 
 /**
@@ -66,9 +70,11 @@ export async function upsertContactTx(tx: TenantTx, ctx: Ctx, input: UpsertConta
       target: [contacts.orgId, contacts.emailNorm],
       set: { name: sql`coalesce(${contacts.name}, excluded.name)`, updatedAt: ctx.now },
     })
-    .returning({ id: contacts.id });
+    .returning({ id: contacts.id, mergedInto: contacts.mergedInto });
   if (!row) throw new DomainError('internal');
-  return row;
+  // M6.1a: an address of a merged-away record resolves to the record it was merged into.
+  if (row.mergedInto === null) return { id: row.id };
+  return { id: (await activeContactIdsTx(tx, [row.id])).get(row.id) ?? row.id };
 }
 
 export interface ConsentInput {

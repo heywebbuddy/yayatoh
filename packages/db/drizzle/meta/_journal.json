@@ -715,6 +715,13 @@
       "when": 1790959768350,
       "tag": "0101_naive_scorpion",
       "breakpoints": true
+    },
+    {
+      "idx": 102,
+      "version": "7",
+      "when": 1790970689295,
+      "tag": "0102_military_paibok",
+      "breakpoints": true
     }
   ]
 }
