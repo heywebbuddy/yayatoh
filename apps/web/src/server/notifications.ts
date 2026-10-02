@@ -1,5 +1,5 @@
 import 'server-only';
-import { alertEvaluator, evaluateOrgNow } from '@yayatoh/alerts';
+import { alertEvaluator, evaluateOrgNow, watchQuietDevices } from '@yayatoh/alerts';
 import { attendeeMessageMailer } from '@yayatoh/attendees';
 import { getUsersByIds } from '@yayatoh/auth';
 import { journeySubscribers, runDueActions } from '@yayatoh/automations';
@@ -11,7 +11,7 @@ import {
   staffAlertsSubscriber,
 } from '@yayatoh/checkin';
 import { withTenant } from '@yayatoh/db';
-import { findEventTx } from '@yayatoh/events';
+import { findEventTx, portalInviteMailer } from '@yayatoh/events';
 import { registrationResumeMailer } from '@yayatoh/forms';
 import { createCtx } from '@yayatoh/kernel';
 import { announcementMailer, contactWroteNotifier, threadReplyMailer } from '@yayatoh/messaging';
@@ -39,7 +39,14 @@ import {
   waitlistMailer,
 } from '@yayatoh/orders';
 import { payoutDestinationMailer } from '@yayatoh/payments';
-import { consumeEvent, recentEventsTx, type Subscriber, subscribes } from '@yayatoh/platform';
+import {
+  consumeEvent,
+  processedPairsTx,
+  recentEventsTx,
+  type Subscriber,
+  subscribes,
+} from '@yayatoh/platform';
+import { taskReminderMailer } from '@yayatoh/program';
 import { registrationCapacity } from '@yayatoh/registration';
 import { surveyMailer } from '@yayatoh/surveys';
 import { impersonationNotice, invitationMailer, orgStatusNotice } from '@yayatoh/tenancy';
@@ -115,6 +122,9 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     ...journeySubscribers(),
     // M5.1a: its offers (waitlist.offered) are mailed in the same drain.
     registrationCapacity(),
+    // M5.3a speaker portal: invitations and task reminders.
+    portalInviteMailer({ notifier, appOrigin }),
+    taskReminderMailer({ notifier, appOrigin }),
   ];
 }
 
@@ -141,9 +151,20 @@ export async function drainOrgMessages(
   let journeySteps = 0;
   for (let pass = 0; pass < 4; pass++) {
     const events = await withTenant(ctx, (tx) => recentEventsTx(tx, orgId, types, 6 * 3600_000));
+    // What each subscriber already handled, in one read (batch 3g merge: one transaction per
+    // event and subscriber made drains of the shared e2e org slow); consumeEvent still guards.
+    const done = await withTenant(ctx, (tx) =>
+      processedPairsTx(
+        tx,
+        subs.map((s) => s.name),
+        events.map((e) => e.id),
+      ),
+    );
     let fresh = 0;
     for (const event of events) {
-      for (const s of subs) if (subscribes(s, event) && (await consumeEvent(s, event))) fresh += 1;
+      for (const s of subs)
+        if (subscribes(s, event) && !done.has(`${s.name}|${event.id}`) && (await consumeEvent(s, event)))
+          fresh += 1;
     }
     consumed += fresh;
     // Journey steps due now (M3.7a; the worker's `automations.run-due` job): they queue messages
@@ -152,6 +173,10 @@ export async function drainOrgMessages(
     journeySteps += steps.done + steps.skipped + steps.failed;
     if (fresh === 0 && steps.done === 0) break;
   }
+  // The live device watchdog (M3.3a), as the worker would run it now. Unless the org-wide pass
+  // follows anyway, it evaluates the events the quiet devices were working at (not every event of
+  // the org: in the shared e2e org that slowed every drain, batch 3g merge).
+  await watchQuietDevices(orgId, { notifier }, { evaluate: opts.sweep ? false : 'devices' });
   // The alert engine's scheduled pass (M3.2b), as the worker's sweep would run it now: only when
   // asked (`sweep`). The alerts evaluator above already re-evaluates what the drained events
   // touched; the org-wide pass re-checks every upcoming event and re-notifies unacknowledged

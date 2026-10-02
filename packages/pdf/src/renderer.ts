@@ -1,6 +1,8 @@
 /** Renders a self-contained HTML document to a tagged PDF (ADR 0017). */
 export interface PdfRenderer {
   render(input: { html: string; filename?: string }): Promise<Uint8Array>;
+  /** Concatenate PDFs in order (batch jobs render in chunks, M5.5a). */
+  merge?(pdfs: readonly Uint8Array[]): Promise<Uint8Array>;
 }
 
 /**
@@ -14,7 +16,25 @@ export function gotenbergRenderer(opts: {
 }): PdfRenderer {
   const doFetch = opts.fetch ?? fetch;
   const endpoint = new URL('/forms/chromium/convert/html', opts.url).toString();
+  const mergeEndpoint = new URL('/forms/pdfengines/merge', opts.url).toString();
   return {
+    async merge(pdfs) {
+      const form = new FormData();
+      // Gotenberg merges in file-name order: zero-padded sequence numbers keep ours.
+      for (const [i, pdf] of pdfs.entries())
+        form.append(
+          'files',
+          new Blob([new Uint8Array(pdf)], { type: 'application/pdf' }),
+          `${String(i).padStart(6, '0')}.pdf`,
+        );
+      const res = await doFetch(mergeEndpoint, {
+        method: 'POST',
+        body: form,
+        signal: AbortSignal.timeout(opts.timeoutMs ?? 60_000),
+      });
+      if (!res.ok) throw new Error(`gotenberg merge: ${res.status} ${(await res.text()).slice(0, 200)}`);
+      return new Uint8Array(await res.arrayBuffer());
+    },
     async render({ html }) {
       // One retry on a timeout or 5xx: a cold Chromium (after a Gotenberg restart) can be slow.
       for (let attempt = 1; ; attempt++) {

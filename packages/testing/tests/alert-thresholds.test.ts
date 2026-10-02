@@ -5,6 +5,7 @@ import {
   LOW_BATTERY_PCT,
   STAFF_OFFLINE_AFTER_MS,
 } from '@yayatoh/checkin';
+import { CAPACITY_NEAR_PCT, CAPACITY_OVER_PCT } from '@yayatoh/command-center';
 import { describe, expect, it } from 'vitest';
 
 /**
@@ -20,5 +21,10 @@ describe('device alert thresholds', () => {
   it('call a device offline after the same silence', () => {
     // The alert engine counts offline devices with the device board's online window.
     expect(STAFF_OFFLINE_AFTER_MS).toBe(DEVICE_ONLINE_WINDOW_MS);
+  });
+
+  it('grade capacity the same on the live gauges and in the capacity alerts (M3.3a)', () => {
+    expect(CAPACITY_NEAR_PCT).toBe(THRESHOLDS.capacityNearPct);
+    expect(CAPACITY_OVER_PCT).toBe(THRESHOLDS.capacityFullPct);
   });
 });

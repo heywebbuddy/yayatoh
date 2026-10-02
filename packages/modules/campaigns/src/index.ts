@@ -1,5 +1,8 @@
 export {
   audienceOf,
+  CampaignNameDto,
+  campaignNamesQuery,
+  campaignNamesTx,
   createCampaignCommand,
   deleteCampaignCommand,
   getCampaignQuery,

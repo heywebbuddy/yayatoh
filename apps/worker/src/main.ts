@@ -1,11 +1,14 @@
 import { setPlatformAuditSink, tryAcquireLeadership } from '@yayatoh/db/platform';
 import { createNotifier } from '@yayatoh/notifications';
 import { fakePaymentProvider } from '@yayatoh/payments';
+import { gotenbergRenderer } from '@yayatoh/pdf';
 import { purgeRealtimeMessages } from '@yayatoh/platform';
 import { fakeDomainProvider } from '@yayatoh/tenancy';
 import { sweepAlerts } from './alerts.ts';
+import { badgeBatchJob, enqueueDueBadgeBatches } from './badges.ts';
 import { runDueBulkOperations } from './bulk.ts';
 import { bossRelease, campaignReleaseJob, campaignTick } from './campaigns.ts';
+import { DEVICE_WATCHDOG_MS, runDeviceWatchdog } from './device-watchdog.ts';
 import { domainRecheckJob } from './domains.ts';
 import { endExpiredImpersonations } from './impersonations.ts';
 import { enqueueJourneyWork } from './journeys.ts';
@@ -13,6 +16,7 @@ import { enqueueDueMassRefunds, massRefundJob } from './mass-refunds.ts';
 import {
   dispatchNotifications,
   dispatchStaffPushes,
+  sweepOverdueTasks,
   userEmails,
   userLocales,
   workerTransports,
@@ -53,10 +57,15 @@ const payments = fakeSecret
   : null;
 
 const SUBSCRIBERS = subscribers();
-// Mass refunds (M3.10b) need the payment provider.
-const jobs = payments
-  ? [...JOBS, campaignReleaseJob, massRefundJob(payments)]
-  : [...JOBS, campaignReleaseJob];
+// Mass refunds (M3.10b) need the payment provider; badge batch PDFs (M5.5a) need Gotenberg.
+const gotenbergUrl = process.env.GOTENBERG_URL;
+if (!gotenbergUrl) console.warn('badges: GOTENBERG_URL is not set; badge batch PDFs stay queued');
+const jobs = [
+  ...JOBS,
+  campaignReleaseJob,
+  ...(payments ? [massRefundJob(payments)] : []),
+  ...(gotenbergUrl ? [badgeBatchJob(gotenbergRenderer({ url: gotenbergUrl, timeoutMs: 60_000 }))] : []),
+];
 const boss = await startWorker({ connectionString, jobs, subscribers: SUBSCRIBERS });
 console.info(`worker started: ${jobs.length} job(s), ${SUBSCRIBERS.length} subscriber(s)`);
 
@@ -98,6 +107,12 @@ setInterval(() => {
 setInterval(() => {
   if (!release || stopping) return;
   endExpiredImpersonations().catch((err) => console.error('impersonations', err));
+}, 60_000).unref();
+
+// Overdue portal tasks (M5.3a): once a minute, one event per overdue assignee (leader only).
+setInterval(() => {
+  if (!release || stopping) return;
+  sweepOverdueTasks().catch((err) => console.error('overdue tasks', err));
 }, 60_000).unref();
 
 // Bulk actions and exports (M1.8b): keep unfinished operations moving (leader only).
@@ -153,6 +168,18 @@ setInterval(() => {
       queueingJourneys = false;
     });
 }, 5_000).unref();
+// Badge batch PDFs (M5.5a): queue a job for each unfinished batch every 3 s (leader only); the
+// exclusive queue keeps one job per batch.
+let queueingBadges = false;
+setInterval(() => {
+  if (!gotenbergUrl || !release || stopping || queueingBadges) return;
+  queueingBadges = true;
+  enqueueDueBadgeBatches(boss)
+    .catch((err) => console.error('badges', err))
+    .finally(() => {
+      queueingBadges = false;
+    });
+}, 3_000).unref();
 
 // Daily reconciliation (M1.6e): the previous UTC day, hourly attempts (idempotent per org and
 // day, so only the first run of a day does work), leader only. The fake provider without a
@@ -267,6 +294,26 @@ setInterval(() => {
       sweepingAlerts = false;
     });
 }, 30_000).unref();
+
+// Live device watchdog (M3.3a): every second, devices that just crossed the 90 s offline line
+// get their transition and raise "devices offline" at once (leader only). The first look covers
+// the last minute, so a restart doesn't miss a device that went quiet meanwhile.
+let watching = false;
+let watchedUntil = new Date(Date.now() - 60_000);
+setInterval(() => {
+  if (!release || stopping || watching) return;
+  watching = true;
+  const to = new Date();
+  runDeviceWatchdog(alertDeps, { from: watchedUntil, to })
+    .then((r) => {
+      watchedUntil = to;
+      if (r.quiet) console.info(JSON.stringify({ job: 'devices.watchdog', ...r }));
+    })
+    .catch((err) => console.error('device watchdog', err))
+    .finally(() => {
+      watching = false;
+    });
+}, DEVICE_WATCHDOG_MS).unref();
 
 // Realtime message log (M3.1b): keep an hour for resumptions; prune every 5 minutes (leader only).
 setInterval(() => {

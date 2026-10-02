@@ -102,7 +102,15 @@ describe('role layouts', () => {
         .filter((s) => !s.hidden)
         .map((s) => s.key);
     expect(await view('finance')).toEqual(['sales', 'tickets', 'alerts', 'timeline']);
-    expect(await view('marketing')).toEqual(['tickets', 'readiness', 'alerts', 'timeline']);
+    // M3.8b: the marketing layout leads with the campaign results and email deliverability tiles.
+    expect(await view('marketing')).toEqual([
+      'campaigns',
+      'tickets',
+      'readiness',
+      'deliverability',
+      'alerts',
+      'timeline',
+    ]);
     expect(await view('manager')).toEqual([
       'readiness',
       'alerts',
@@ -141,7 +149,19 @@ describe('widget loaders refuse what the registry does not allow', () => {
     // The fixture's enrolled device reported at this event (M3.4a heartbeat fixture).
     expect(board.devices.length).toBeGreaterThan(0);
     expect(Object.keys(board.devices[0] ?? {}).sort()).toEqual(
-      ['batteryPct', 'checkpoint', 'id', 'kiosk', 'label', 'lastSeenAt', 'online', 'queueDepth'].sort(),
+      // M3.3a adds the app version and the last scan.
+      [
+        'appVersion',
+        'batteryPct',
+        'checkpoint',
+        'id',
+        'kiosk',
+        'label',
+        'lastScanAt',
+        'lastSeenAt',
+        'online',
+        'queueDepth',
+      ].sort(),
     );
     const entrances = await load(entrancesWidget, a.event.id, door);
     expect(entrances.checkedIn).toBeGreaterThanOrEqual(0);
