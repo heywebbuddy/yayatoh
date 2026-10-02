@@ -264,8 +264,9 @@ describe('sandbox orgs (M6.3a)', () => {
         code: 'validation_failed',
       });
     const live = (await executeQuery(listSandboxesQuery, {}, b.ctx(), ports)).length;
+    // Links alone fill the quota (no need to provision ten orgs).
     for (let i = live; i < MAX_SANDBOX_ORGS; i++)
-      await createSandboxOrg(b.ctx(), { name: `Sandbox ${i}` }, ports);
+      await executeCommand(createSandboxCommand, { name: `Sandbox ${i}` }, b.ctx(), ports);
     await expect(createSandboxOrg(b.ctx(), { name: 'One too many' }, ports)).rejects.toMatchObject({
       code: 'invalid_state',
       details: { reason: 'sandbox_limit' },

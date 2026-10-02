@@ -245,8 +245,8 @@ import {
   addMemberCommand,
   createApiKeyCommand,
   createOrganization,
-  createSandboxOrg,
-  deleteSandboxOrg,
+  createSandboxCommand,
+  deleteSandboxCommand,
   inviteMemberCommand,
   type OrganizationDto,
   PLATFORM_AGREEMENTS,
@@ -730,10 +730,10 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   );
   // M6.3a: one day of the key's usage, and a sandbox org linked to this org (isolation coverage).
   await recordApiKeyUsage({ orgId: org.id, keyId: apiKeyId, status: 200 });
-  // The sandbox is deleted again (a closed sandbox keeps its link row), so the owner's memberships
-  // stay exactly the fixture's own.
-  const sandbox = await createSandboxOrg(ctx(), { name: `Sandbox of ${name}` }, ports);
-  await deleteSandboxOrg(ctx(), { sandboxId: sandbox.id }, ports);
+  // Only the parent's link row (no sandbox org is provisioned, so fixtures add no org that
+  // org-wide jobs must walk), deleted again so the org's live sandbox count starts at zero.
+  const sandbox = await executeCommand(createSandboxCommand, { name: `Sandbox of ${name}` }, ctx(), ports);
+  await executeCommand(deleteSandboxCommand, { sandboxId: sandbox.id }, ctx(), ports);
   const { key: testKey } = await executeCommand(
     createApiKeyCommand,
     { name: `Sandbox ${slug}`, scopes: ['org:read', 'events:read'], mode: 'test' },
