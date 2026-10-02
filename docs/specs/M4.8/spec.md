@@ -35,7 +35,7 @@ touches:
   - packages/modules/donations/**                       # new module
   - packages/modules/orders/src/{schema,private-columns,index,donation-orders}.ts
   - packages/modules/orders/src/commands/checkout.ts    # applyProviderEvent routes gift orders (6 lines)
-  - packages/db/drizzle/0097_abnormal_the_twelve.sql   # + meta (renumbered at merge)
+  - packages/db/drizzle/0099_yummy_young_avengers.sql   # + meta (renumbered at merge)
   - packages/testing/{package.json,src/fixtures.ts,src/ports.ts,src/canary/{registry,org}.ts}
   - packages/testing/tests/{donations,freeze,impersonation}.int.test.ts
   - apps/web/src/app/[locale]/o/[org]/e/[event]/donations/**
@@ -59,7 +59,7 @@ touches:
 - [x] Fixture rows for both orgs (`createOrgFixture` → `donationRows`: a campaign, a level, a lapsed gift with its order and donation item).
 - [x] Text columns declared in `private-columns.ts` (donations; orders' `donation_items`); donor name/email, employer and tribute are `personal`.
 
-**Migration:** `0097_abnormal_the_twelve.sql` (to be renumbered), additive only. Hand-written block: `campaigns_event_fk` (→ `events.events`, cascade), `gifts_event_fk` and `gifts_order_fk` (no action: money records), `gifts_level_fk … ON DELETE SET NULL ("level_id")`.
+**Migration:** `0099_yummy_young_avengers.sql` (to be renumbered), additive only. Hand-written block: `campaigns_event_fk` (→ `events.events`, cascade), `gifts_event_fk` and `gifts_order_fk` (no action: money records), `gifts_level_fk … ON DELETE SET NULL ("level_id")`.
 
 ### 6. API diff
 None (`/v1` unchanged).

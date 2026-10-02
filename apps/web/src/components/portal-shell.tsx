@@ -80,12 +80,11 @@ export async function PortalShell({
 /** Nobody signed in on this host: the portal is reached through the invitation email. */
 export async function PortalSignedOut({ signedOut }: { signedOut?: boolean }) {
   const t = await getTranslations('speakerPortal');
+  // One portal sign-in for every role (speakers, exhibitor admins and staff): no role named here.
+  const ts = await getTranslations('portalSignIn');
   return (
     <main id="main" className="mx-auto flex min-h-dvh w-full max-w-xl flex-col gap-6 px-4 py-12 md:px-6">
-      <PageHeader
-        eyebrow={<Label>{t('title')}</Label>}
-        title={signedOut ? t('signedOutDone') : t('signedOutTitle')}
-      />
+      <PageHeader title={signedOut ? t('signedOutDone') : ts('title')} />
       <p className="text-body text-zinc-700">{t('signedOutDescription')}</p>
     </main>
   );

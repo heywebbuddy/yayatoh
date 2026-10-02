@@ -39,6 +39,8 @@ const eventIdOf = (input: unknown): string | null => {
  * or a system actor; everything else needs a membership whose role grants the permission, or,
  * for a command about one event (`input.eventId`), a member's event-scoped role that grants it.
  */
+const EXHIBITOR_PORTAL_ROLES: ReadonlySet<string> = new Set(['exhibitor_admin', 'exhibitor_staff']);
+
 export function createOrgAuthorizer(
   deps: { eventRoles?: EventRoleResolver } = {},
 ): CommandPorts<unknown>['authorizer'] {
@@ -50,10 +52,15 @@ export function createOrgAuthorizer(
       if (permission === 'invitation:accept') return ctx.actor.type === 'user';
       // Public commands (checkout) are open to anyone; the command itself enforces what may be bought.
       if (permission.startsWith('public:')) return true;
-      // M5.3a portal accounts (P5-7): only `portal:{their role}`, never anything a member can do.
-      // The command re-checks the account (live, its event and its subject) in its transaction.
+      // M5.3a portal accounts (P5-7): only `portal:{their role}` (or `portal:exhibitor` for both
+      // exhibitor roles, M5.4a), never anything a member can do. The command re-checks the account
+      // (live, its event and its subject) in its transaction.
       if (permission.startsWith('portal:'))
-        return ctx.actor.type === 'portal' && permission === `portal:${ctx.actor.role}`;
+        return (
+          ctx.actor.type === 'portal' &&
+          (permission === `portal:${ctx.actor.role}` ||
+            (permission === 'portal:exhibitor' && EXHIBITOR_PORTAL_ROLES.has(ctx.actor.role)))
+        );
       if (ctx.actor.type === 'portal') return false;
       if (permission.startsWith('platform:')) return ctx.actor.type === 'system';
       if (ctx.actor.type === 'system') return true;

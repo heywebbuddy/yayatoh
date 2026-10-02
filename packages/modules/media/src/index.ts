@@ -51,6 +51,11 @@ export { MediaRejected, type RejectReason } from './pipeline/process.ts';
 export { ACCEPT_MIME, sniff } from './pipeline/sniff.ts';
 export { sanitizeSvg } from './pipeline/svg.ts';
 export {
+  portalExhibitorLogoCommand,
+  portalExhibitorLogoQuery,
+  uploadExhibitorLogoFromPortal,
+} from './portal.ts';
+export {
   catchUpSpeakerPhotos,
   PortalFileDto,
   PortalFileResultDto,

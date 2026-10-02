@@ -29,7 +29,9 @@ import {
   portalSessionToken,
   SUBJECT_OF_ROLE,
   signPortalInvite,
+  signPortalSite,
   verifyPortalInvite,
+  verifyPortalSite,
 } from './domain/portal-auth.ts';
 import { eventRoleAssignments, events } from './schema.ts';
 import { portalAccounts, portalChallenges, portalSessions } from './schema-portal.ts';
@@ -352,6 +354,97 @@ export async function portalInviteByToken(token: string, now = new Date()): Prom
     eventName: r.eventName,
     role: r.account.role as PortalRole,
     maskedEmail: maskPortalEmail(r.account.email),
+  };
+}
+
+/* --------------------------------------------------------- the event's sign-in page ---- */
+
+/** The token of an event's shareable portal sign-in page (the organizer copies its link). */
+export const portalSiteToken = (orgId: string, eventId: string) =>
+  signPortalSite(appTokenSecret(), { orgId, eventId });
+
+/** The event a sign-in page token names (its name for the page), or null when forged or gone. */
+export async function portalSiteByToken(token: string): Promise<{ orgId: string; eventName: string } | null> {
+  const t = verifyPortalSite(appTokenSecret(), token);
+  if (!t) return null;
+  const [ev] = await withTenant(systemCtx(t.orgId), (tx) =>
+    tx.select({ name: events.name }).from(events).where(eq(events.id, t.eventId)),
+  );
+  return ev ? { orgId: t.orgId, eventName: ev.name } : null;
+}
+
+export type PortalResendResult =
+  | {
+      readonly status: 'ok';
+      /** Whom to email which invitation (empty when the address has no live account here). */
+      readonly invites: readonly {
+        readonly email: string;
+        readonly url: string;
+        readonly eventName: string;
+        readonly role: PortalRole;
+      }[];
+      readonly orgId: string;
+    }
+  | { readonly status: 'rate_limited'; readonly retryAfterMs: number }
+  | { readonly status: 'refused' };
+
+/**
+ * "Email me my invitation again" on an event's sign-in page: the current invitation link of every
+ * live account of that address at the event, to email to that address only. The caller shows the
+ * same answer whether or not there were any (no enumeration); the M1.14 limiter (`guestCode`,
+ * portal scope) applies per device, IP and address. The invitation then signs in as usual
+ * (emailed code or magic link): there is one sign-in flow for every portal role.
+ */
+export async function resendPortalInvitations(
+  input: {
+    readonly siteToken: string;
+    readonly email: string;
+    readonly appOrigin: string;
+    readonly locale: string;
+  },
+  limits: PortalLimits,
+  now = new Date(),
+): Promise<PortalResendResult> {
+  const t = verifyPortalSite(appTokenSecret(), input.siteToken);
+  if (!t) return { status: 'refused' };
+  const email = normalizePortalEmail(input.email);
+  const decision = await limits.limiter.check(
+    'guestCode',
+    { ...limits.subject, identity: email },
+    { now: now.getTime(), scope: 'portal' },
+  );
+  if (!decision.allowed) return { status: 'rate_limited', retryAfterMs: decision.retryAfterMs };
+  const rows = await withTenant(systemCtx(t.orgId), async (tx) => {
+    const ids = await tx
+      .select({ id: portalAccounts.id })
+      .from(portalAccounts)
+      .where(
+        and(
+          eq(portalAccounts.eventId, t.eventId),
+          eq(portalAccounts.email, email),
+          isNull(portalAccounts.revokedAt),
+        ),
+      );
+    const out: AccountJoin[] = [];
+    for (const { id } of ids) {
+      const r = await accountTx(tx, id);
+      if (r && stateOf(r, now) === 'ok') out.push(r);
+    }
+    return out;
+  });
+  return {
+    status: 'ok',
+    orgId: t.orgId,
+    invites: rows.map((r) => ({
+      email: r.account.email,
+      url: portalInviteUrl(
+        input.appOrigin,
+        portalInviteToken(t.orgId, r.account.id, r.account.inviteVersion),
+        input.locale,
+      ),
+      eventName: r.eventName,
+      role: r.account.role as PortalRole,
+    })),
   };
 }
 

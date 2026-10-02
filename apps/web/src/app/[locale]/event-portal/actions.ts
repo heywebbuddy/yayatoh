@@ -6,6 +6,7 @@ import {
   PORTAL_LINK_TTL_MS,
   parseLinksText,
   requestPortalChallenge,
+  resendPortalInvitations,
   SectionTextError,
   verifyPortalChallenge,
 } from '@yayatoh/events';
@@ -146,6 +147,39 @@ export async function portalLinkCodeAction(
   if (v.status === 'wrong') return { code: null, status: 'wrong', attemptsLeft: v.attemptsLeft };
   if (v.status === 'locked') return { code: null, status: 'locked', attemptsLeft: 0 };
   return { code: null, status: 'expired' };
+}
+
+/**
+ * An event's shareable sign-in page (M5.4a, on the one sign-in flow): "email me my invitation
+ * again". The answer is the same whether or not the address has access (no enumeration); the
+ * invitation it emails then signs in with a code or magic link like any other.
+ */
+export async function resendInvitationAction(
+  site: string,
+  _prev: ProgramFormState,
+  form: FormData,
+): Promise<ProgramFormState> {
+  const email = String(form.get('email') ?? '')
+    .trim()
+    .toLowerCase();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 254)
+    return { ok: false, code: 'validation_failed', fields: ['email'] };
+  const locale = await getLocale();
+  const r = await resendPortalInvitations(
+    { siteToken: site, email, appOrigin: (await requestHost()).origin, locale },
+    await portalLimits(),
+  );
+  if (r.status === 'refused') return { ok: false, code: 'invalid_state', reason: 'site_invalid' };
+  if (r.status === 'rate_limited') return { ok: false, code: 'rate_limited', reason: 'rate_limited' };
+  for (const i of r.invites)
+    await sendGuestEmail({
+      kind: 'portal.invite',
+      to: i.email,
+      locale,
+      orgId: r.orgId,
+      params: { url: i.url, eventName: i.eventName, role: i.role },
+    });
+  return success();
 }
 
 export type PortalSignOutState = { readonly done: string | null };

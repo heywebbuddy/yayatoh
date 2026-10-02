@@ -15,7 +15,8 @@
     "staff": "node scripts/staff.ts",
     "retention": "node scripts/retention.ts",
     "drill-tickets": "node scripts/drill-tickets.ts",
-    "metrics:rebuild": "node scripts/metrics-rebuild.ts"
+    "metrics:rebuild": "node scripts/metrics-rebuild.ts",
+    "audit-sample": "node scripts/audit-sample.ts"
   },
   "dependencies": {
     "@yayatoh/alerts": "workspace:*",
@@ -23,6 +24,7 @@
     "@yayatoh/audiences": "workspace:*",
     "@yayatoh/auth": "workspace:*",
     "@yayatoh/automations": "workspace:*",
+    "@yayatoh/badges": "workspace:*",
     "@yayatoh/billing": "workspace:*",
     "@yayatoh/campaigns": "workspace:*",
     "@yayatoh/checkin": "workspace:*",

@@ -418,7 +418,7 @@ test.describe('speaker portal (M5.3a)', () => {
     await speaker.getByRole('button', { name: 'Sign out' }).click();
     await expect(speaker.getByRole('heading', { name: "You're signed out" })).toBeVisible();
     await speaker.goto('/event-portal/tasks');
-    await expect(speaker.getByRole('heading', { name: 'Sign in to the speaker portal' })).toBeVisible();
+    await expect(speaker.getByRole('heading', { name: 'Sign in to the portal' })).toBeVisible();
     await expectAccessible(speaker);
 
     // The organizer removes access: the invitation link explains, and nothing opens.

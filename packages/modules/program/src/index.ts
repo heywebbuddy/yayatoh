@@ -21,6 +21,17 @@ export {
   unpublishAgendaCommand,
 } from './agenda.ts';
 export * from './agenda-dto.ts';
+// M5.4a: exhibitor portal (members, invitations, profile approval) and booths.
+export {
+  assignBoothCommand,
+  boothAssigned,
+  boothPlanQuery,
+  deleteBoothCommand,
+  MAX_BOOTHS_PER_EVENT,
+  publicExhibitorMap,
+  saveBoothCommand,
+  unassignBoothCommand,
+} from './booths.ts';
 export {
   ADMISSIONS,
   type Admission,
@@ -46,6 +57,19 @@ export {
   readAgendaRow,
 } from './domain/agenda.ts';
 export {
+  allowanceUse,
+  BOOTH_WARNING_KINDS,
+  type BoothWarningKind,
+  boothWarnings,
+  DEFAULT_STAFF_ALLOWANCE,
+  holdsPlace,
+  MEMBER_STATUSES,
+  type MemberStatus,
+  nextPrimary,
+  planAssignment,
+  staffAllowance,
+} from './domain/exhibitors.ts';
+export {
   changeDiff,
   changedValues,
   type FieldChange,
@@ -69,6 +93,23 @@ export {
   warningsFor,
 } from './domain/schedule.ts';
 export * from './dto.ts';
+export * from './exhibitor-dto.ts';
+export {
+  decideProfileChangeCommand,
+  exhibitorPortalAdminQuery,
+  exhibitorPortalQuery,
+  exhibitorPrincipalTx,
+  inviteExhibitorMemberCommand,
+  MAX_MEMBERS_PER_EXHIBITOR,
+  portalInviteStaffCommand,
+  portalRevokeStaffCommand,
+  portalSaveProfileCommand,
+  resendExhibitorInviteCommand,
+  revokeExhibitorMemberCommand,
+  saveExhibitorListingCommand,
+  saveExhibitorSettingsCommand,
+  staffInvited,
+} from './exhibitor-portal.ts';
 export {
   createExhibitorCommand,
   createSpeakerCommand,
@@ -125,6 +166,7 @@ export {
 } from './portal-tasks.ts';
 export { privateColumns } from './private-columns.ts';
 export { publicProgram, publicSpeaker } from './public.ts';
+export { EXHIBITOR_MEMBER_ROLES } from './schema.ts';
 export {
   ASSIGNEE_STATUSES,
   CHANGE_STATUSES,

@@ -3,6 +3,7 @@ import * as alerts from '@yayatoh/alerts';
 import * as attendees from '@yayatoh/attendees';
 import * as audiences from '@yayatoh/audiences';
 import * as automations from '@yayatoh/automations';
+import * as badges from '@yayatoh/badges';
 import * as billing from '@yayatoh/billing';
 import * as campaigns from '@yayatoh/campaigns';
 import * as checkin from '@yayatoh/checkin';
@@ -65,6 +66,8 @@ const MODULES = {
   // Batch 3e merge: M3.7a journeys, M3.6b campaigns and M5.1a registration (M3.10c, M5.1b,
   // M5.2a, M4.1b and M4.1c grew modules already listed).
   automations,
+  // Batch 3f merge: M5.5a badges (M5.3a and M5.4a grew events, program and media).
+  badges,
   billing,
   campaigns,
   checkin,
@@ -170,9 +173,10 @@ describe('read-only freeze (M2.5a)', () => {
     const categories = new Set(
       COMMANDS.filter((c) => !ALLOWED.has(c.name)).map((c) => c.category ?? 'write'),
     );
-    // `export` is a query category (downloads are reads and keep working); every command category
-    // (money, delete and plain writes, which include starting an export job) is swept below.
-    expect([...categories].sort()).toEqual(['delete', 'money', 'write']);
+    // Downloads are `export` queries (reads keep working). Every command category is swept below:
+    // money, delete, plain writes, and (batch 3f merge) `export` commands that start an export job
+    // (M5.5a's badge batch PDF, the first module-level one; bulk exports are built per module).
+    expect([...categories].sort()).toEqual(['delete', 'export', 'money', 'write']);
     expect([...ALLOWED].sort()).toEqual([
       'checkin.heartbeat',
       'checkin.scanTicket',

@@ -16,6 +16,12 @@ import {
 } from '@yayatoh/attendees';
 import { catchUpParticipation, saveSegmentCommand, templateDefinition } from '@yayatoh/audiences';
 import { createJourneyCommand, journeyTriggers, setJourneyEnabledCommand } from '@yayatoh/automations';
+import {
+  assignTemplateCommand,
+  createTemplateCommand,
+  runBadgeBatch,
+  startBatchCommand,
+} from '@yayatoh/badges';
 import { setEntitlementOverrideCommand, setFeeOverrideCommand } from '@yayatoh/billing';
 import {
   createCampaignCommand,
@@ -166,6 +172,7 @@ import {
 } from '@yayatoh/platform';
 import { dsarExportBulk } from '@yayatoh/privacy';
 import {
+  assignBoothCommand,
   claimSessionPlaceTx,
   createExhibitorCommand,
   createPortalTaskCommand,
@@ -177,10 +184,16 @@ import {
   createSponsorCommand,
   createSponsorTierCommand,
   createTrackCommand,
+  inviteExhibitorMemberCommand,
   inviteSpeakerCommand,
+  portalInviteStaffCommand,
+  portalSaveProfileCommand,
   proposeProfileChangeCommand,
   publishAgendaCommand,
   recordGroupPickTx,
+  saveBoothCommand,
+  saveExhibitorListingCommand,
+  saveExhibitorSettingsCommand,
   setSessionAgendaCommand,
   speakerPortalQuery,
 } from '@yayatoh/program';
@@ -543,6 +556,32 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   );
   await executeCommand(setJourneyEnabledCommand, { journeyId: journey.id, enabled: true }, ctx(), ports);
   await catchUpSubscriber(journeyTriggers(), org.id);
+  // M5.5a badges: a template (and its version) assigned to the pass, and a batch with one
+  // rendered part left running (a fake renderer: no Gotenberg in the fixture).
+  const badgeTemplate = await executeCommand(
+    createTemplateCommand,
+    { eventId: event.id, name: 'Fixture badge', size: 'fold_4x3' },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    assignTemplateCommand,
+    { eventId: event.id, ticketTypeId: ga.id, templateId: badgeTemplate.id },
+    ctx(),
+    ports,
+  );
+  const badgeBatch = await executeCommand(
+    startBatchCommand,
+    { eventId: event.id, requestKey: `fixture-${slug}`, sort: 'last_name' },
+    ctx(),
+    ports,
+  );
+  await runBadgeBatch(
+    { ports, renderer: { render: async () => new TextEncoder().encode('%PDF-fixture') } },
+    org.id,
+    badgeBatch.id,
+    { maxChunks: 1 },
+  );
   // A dispute on the paid order, opened (hold) and won (hold undone): isolation coverage.
   for (const [type, outcome] of [
     ['dispute.created', undefined],
@@ -1444,9 +1483,64 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ctx(),
     ports,
   );
-  await executeCommand(
+  const exhibitor = await executeCommand(
     createExhibitorCommand,
     { eventId: event.id, name: `${name} Exhibitor`, boothLabel: 'B1' },
+    ctx(),
+    ports,
+  );
+  // M5.4a: the exhibitor portal (settings, listing, an admin signed in by link, a staff invite, a
+  // pending profile change) and a booth with the exhibitor at it.
+  await executeCommand(
+    saveExhibitorSettingsCommand,
+    { eventId: event.id, defaultStaffAllowance: 3, approvalRequired: true },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    saveExhibitorListingCommand,
+    {
+      eventId: event.id,
+      exhibitorId: exhibitor.id,
+      listed: true,
+      categories: ['Software'],
+      links: [{ label: 'Docs', url: 'https://example.com/docs' }],
+      staffAllowance: null,
+    },
+    ctx(),
+    ports,
+  );
+  // The exhibitor admin is a portal account (M5.3a), signed in like any portal person.
+  const exhibitorInvite = await executeCommand(
+    inviteExhibitorMemberCommand,
+    { eventId: event.id, exhibitorId: exhibitor.id, email: `admin@${slug}.example`, role: 'exhibitor_admin' },
+    ctx(),
+    ports,
+  );
+  const exhibitorSession = await createPortalSession({
+    orgId: org.id,
+    accountId: exhibitorInvite.member.id,
+    host: 'fixture.test',
+  });
+  const exhibitorPrincipal = await portalPrincipalBySession(exhibitorSession.token, 'fixture.test');
+  if (!exhibitorPrincipal) throw new Error('fixture: exhibitor portal session');
+  const exhibitorCtx = portalCtx(exhibitorPrincipal);
+  await executeCommand(portalInviteStaffCommand, { email: `staff@${slug}.example` }, exhibitorCtx, ports);
+  await executeCommand(
+    portalSaveProfileCommand,
+    { name: `${name} Exhibitor`, description: 'Proposed *copy*.' },
+    exhibitorCtx,
+    ports,
+  );
+  const hall = await executeCommand(
+    saveBoothCommand,
+    { eventId: event.id, number: 'A1', category: 'Software', x: 100, y: 100, width: 300, height: 300 },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    assignBoothCommand,
+    { eventId: event.id, boothId: hall.booths[0]?.id ?? '', exhibitorId: exhibitor.id },
     ctx(),
     ports,
   );

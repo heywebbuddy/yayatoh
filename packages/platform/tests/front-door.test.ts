@@ -198,6 +198,13 @@ describe('who serves a request', () => {
       '/events/summit/register',
       '/events/summit/registration-form',
       '/ar/events/summit/register',
+      // Batch 3f merge: the portal and the public exhibitor map.
+      '/event-portal',
+      '/event-portal/invite/token',
+      '/event-portal/verify/token',
+      '/event-portal/sign-in/site',
+      '/fr/event-portal',
+      '/events/summit/exhibitors',
     ]) {
       expect(isPlatformPath(new URL(p, 'https://x').pathname) || decide(p).owner === 'next').toBe(true);
       expect(decide(p, flags(), { legacy: true })).toEqual({
