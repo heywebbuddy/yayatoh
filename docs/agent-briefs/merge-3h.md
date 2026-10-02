@@ -24,7 +24,7 @@ The orchestrator lists the final set in your launch prompt (only builders that r
 
 Each branch's last commit message is its report (migrations, hand edits, owner items): read it before merging. A branch without a report is not in your list.
 
-**Local dev fix (owner hit it on 2026-10-02):** `pnpm dev` runs turbo in strict env mode, so the worker and API get none of the shell's variables (`JOBS_DATABASE_URL is not set`); only the Next apps work because they read `.env.local`. Make the root `dev` script `turbo run dev --env-mode=loose` (dev only; builds stay strict) and note it in `docs/local-development.md`.
+**Local dev fix (owner hit it on 2026-10-02):** `pnpm dev` runs turbo in strict env mode, so the worker and API get none of the shell's variables (`JOBS_DATABASE_URL is not set`); only the Next apps work because they read `.env.local`. Make the root `dev` script `turbo run dev --env-mode=loose` (dev only; builds stay strict) and note it in `docs/local-development.md`, which must also list every variable the worker and API need to start (`NEXT_PUBLIC_APP_ORIGIN`, `APP_TOKEN_SECRET`, `JOBS_DATABASE_URL`, `API_PUBLIC_URL`).
 
 ## Merge procedure
 Follow the "Merge procedure (house rules)" section of `docs/agent-briefs/merge-3e.md` exactly:
