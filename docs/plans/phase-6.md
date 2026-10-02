@@ -1,6 +1,6 @@
 # Phase 6 plan — Expansion tracks
 
-Status: **draft for the owner** (2026-10-02). Roadmap: `docs/roadmap.md` Phase 6 (M6.1–M6.14). Roadmap order: CRM, then API and integrations, then billing and agency, then virtual. Advanced seating and AI can run in parallel. M6.13 (branded tenant apps) stays deferred with the mobile build (§8.3).
+Status: **approved by the owner** (2026-10-02): all thirteen decisions (P6-1 to P6-13) accepted as recommended; Wave 1 starts as cloud slots free (Phases 4 and 5 keep first claim). Roadmap: `docs/roadmap.md` Phase 6 (M6.1–M6.14). Roadmap order: CRM, then API and integrations, then billing and agency, then virtual. Advanced seating and AI can run in parallel. M6.13 (branded tenant apps) stays deferred with the mobile build (§8.3).
 
 Prices marked UNVERIFIED are from memory or old research. Check them before signing anything.
 
