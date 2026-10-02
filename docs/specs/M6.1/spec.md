@@ -123,3 +123,4 @@ worker job, not the migration.
 - After the final merge of `origin/merge/next-3g` and `origin/m0.5-foundation-ey5gqp` (outbox
   dev-drain change, brief), re-ran lint, check:modules, typecheck of platform and web, and the
   contact-stats, outbox-processed and audiences integration files: green.
+- Builder report: the final commit message on `agent/m6.1b`.
