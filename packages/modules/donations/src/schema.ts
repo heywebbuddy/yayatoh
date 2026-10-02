@@ -198,7 +198,10 @@ export const charityProfiles = tenantTable(
       'charity_profiles_sponsor_name_length',
       sql`sponsor_name is null or length(sponsor_name) between 1 and 200`,
     ),
-    check('charity_profiles_sponsor_ein_check', sql`sponsor_ein is null or sponsor_ein ~ '^[0-9]{2}-[0-9]{7}$'`),
+    check(
+      'charity_profiles_sponsor_ein_check',
+      sql`sponsor_ein is null or sponsor_ein ~ '^[0-9]{2}-[0-9]{7}$'`,
+    ),
     check('charity_profiles_address_length', sql`address is null or length(address) between 1 and 300`),
     check('charity_profiles_status_check', inList('status', CHARITY_STATUSES)),
     check('charity_profiles_version_check', sql`version >= 1`),
@@ -206,7 +209,10 @@ export const charityProfiles = tenantTable(
       'charity_profiles_review_check',
       sql`(status = 'pending') = (reviewed_at is null) and (status <> 'verified' or irs_name is not null)`,
     ),
-    check('charity_profiles_review_note_length', sql`review_note is null or length(review_note) between 1 and 500`),
+    check(
+      'charity_profiles_review_note_length',
+      sql`review_note is null or length(review_note) between 1 and 500`,
+    ),
   ],
 );
 

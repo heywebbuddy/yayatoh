@@ -240,6 +240,16 @@
       "subject": "Promemoria: {title} per {eventName}",
       "intro": "{org} attende ancora «{title}» per {eventName}. Scadenza: {until}.",
       "cta": "Apri le mie attività"
+    },
+    "donations.receipt": {
+      "subject": "{deductible, select, yes {La tua ricevuta di donazione da {org}} other {La tua ricevuta di pagamento da {org}}}",
+      "intro": "Grazie per il tuo pagamento di {amount} per {eventName}. La ricevuta è qui sotto. Conservala, o la copia PDF, con i tuoi documenti.",
+      "cta": "Scarica la ricevuta PDF"
+    },
+    "donations.year-end-statement": {
+      "subject": "Il tuo riepilogo donazioni {year} da {org}",
+      "intro": "Grazie per aver sostenuto {org} nel {year}. Il riepilogo dei pagamenti deducibili è qui sotto e in PDF.",
+      "cta": "Scarica il riepilogo PDF"
     }
   },
   "roles": {

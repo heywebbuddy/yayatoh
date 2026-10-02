@@ -20,13 +20,19 @@
     "@yayatoh/events": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
     "@yayatoh/orders": "workspace:*",
+    "@yayatoh/pdf": "workspace:*",
     "@yayatoh/platform": "workspace:*",
+    "@yayatoh/tenancy": "workspace:*",
+    "@yayatoh/ticketing": "workspace:*",
+    "@yayatoh/ui": "workspace:*",
     "drizzle-orm": "catalog:",
+    "intl-messageformat": "11.2.15",
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@yayatoh/config": "workspace:*",
     "@types/node": "catalog:",
+    "@yayatoh/config": "workspace:*",
+    "pdfjs-dist": "5.4.296",
     "typescript": "catalog:"
   }
 }

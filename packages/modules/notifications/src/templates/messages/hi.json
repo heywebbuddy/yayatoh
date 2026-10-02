@@ -240,6 +240,16 @@
       "subject": "याद दिलाना: {eventName} के लिए {title}",
       "intro": "{org} को {eventName} के लिए अभी भी “{title}” का इंतज़ार है। अंतिम तिथि: {until}।",
       "cta": "मेरे कार्य खोलें"
+    },
+    "donations.receipt": {
+      "subject": "{deductible, select, yes {{org} की ओर से आपकी दान रसीद} other {{org} की ओर से आपकी भुगतान रसीद}}",
+      "intro": "{eventName} के लिए {amount} के भुगतान के लिए धन्यवाद। आपकी रसीद नीचे है। इसे या इसकी PDF प्रति को अपने रिकॉर्ड के साथ रखें।",
+      "cta": "PDF रसीद डाउनलोड करें"
+    },
+    "donations.year-end-statement": {
+      "subject": "{org} की ओर से आपका {year} का दान विवरण",
+      "intro": "{year} में {org} का समर्थन करने के लिए धन्यवाद। आपके कर-कटौती योग्य भुगतानों का विवरण नीचे और PDF में है।",
+      "cta": "PDF विवरण डाउनलोड करें"
     }
   },
   "roles": {

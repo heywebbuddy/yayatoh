@@ -240,6 +240,16 @@
       "subject": "Recordatorio: {title} para {eventName}",
       "intro": "{org} sigue esperando «{title}» para {eventName}. Vence: {until}.",
       "cta": "Abrir mis tareas"
+    },
+    "donations.receipt": {
+      "subject": "{deductible, select, yes {Tu recibo de donación de {org}} other {Tu recibo de pago de {org}}}",
+      "intro": "Gracias por tu pago de {amount} para {eventName}. Tu recibo está a continuación. Guárdalo, o su copia en PDF, con tus registros.",
+      "cta": "Descargar el recibo en PDF"
+    },
+    "donations.year-end-statement": {
+      "subject": "Tu resumen de donaciones de {year} de {org}",
+      "intro": "Gracias por apoyar a {org} en {year}. Tu resumen de pagos deducibles de impuestos está a continuación y en PDF.",
+      "cta": "Descargar el resumen en PDF"
     }
   },
   "roles": {

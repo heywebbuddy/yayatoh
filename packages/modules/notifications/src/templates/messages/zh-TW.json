@@ -240,6 +240,16 @@
       "subject": "提醒：{eventName}的{title}",
       "intro": "{org}仍在等待您提交{eventName}的「{title}」。截止時間：{until}。",
       "cta": "開啟我的任務"
+    },
+    "donations.receipt": {
+      "subject": "{deductible, select, yes {來自 {org} 的捐款收據} other {來自 {org} 的付款收據}}",
+      "intro": "感謝您為 {eventName} 支付 {amount}。您的收據如下。請將其或 PDF 副本與您的紀錄一併保存。",
+      "cta": "下載 PDF 收據"
+    },
+    "donations.year-end-statement": {
+      "subject": "來自 {org} 的 {year} 年捐款明細",
+      "intro": "感謝您在 {year} 年支持 {org}。您的可抵稅付款明細如下，並附 PDF。",
+      "cta": "下載 PDF 明細"
     }
   },
   "roles": {
