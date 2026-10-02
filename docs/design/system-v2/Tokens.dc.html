@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Yayatoh foundations</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>body{margin:0}</style>
+</helmet>
+<div style="width: 2960px; height: 760px; display: flex; font-family: 'Manrope', system-ui, sans-serif">
+<sc-for list="{{modes}}" as="m" hint-placeholder-count="2">
+<div style="flex: 1 1 0; box-sizing: border-box; padding: 48px 56px; display: flex; flex-direction: column; gap: 32px; {{m.theme}}">
+<div style="display: flex; align-items: center; gap: 14px">
+<svg width="36" height="36" viewBox="0 0 32 32" aria-hidden="true"><path d="M5 21C5 13.3 10.6 6 18.5 6c0 7.7-5.6 15-13.5 15z" fill="#FF3D86"></path><path d="M27 11c0 7.7-5.6 15-13.5 15 0-7.7 5.6-15 13.5-15z" fill="#7B5CFF" fill-opacity="0.92"></path></svg>
+<span style="font-size: 30px; font-weight: 800; letter-spacing: -0.03em; color: var(--ink)">yayatoh</span>
+<span style="font-size: 11px; font-weight: 800; letter-spacing: 0.1em; padding: 6px 10px; border-radius: 8px; background: var(--tag); color: var(--tagInk)">{{m.name}}</span>
+<span style="flex-grow: 1"></span>
+<span style="font-size: 14px; color: var(--ink2)">Manrope · radius 14 / 18 / 24 / 28 · 8-pt spacing</span>
+</div>
+<div style="display: flex; gap: 40px; flex-grow: 1">
+<div style="flex: 1 1 0; display: flex; flex-direction: column; gap: 16px">
+<span style="font-size: 12px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink2)">Colour</span>
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px">
+<sc-for list="{{m.swatches}}" as="s" hint-placeholder-count="12">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<div style="height: 64px; border-radius: 16px; background: {{s.v}}; border: 1px solid var(--line)"></div>
+<span style="font-size: 13px; font-weight: 700; color: var(--ink)">{{s.n}}</span>
+<span style="font-size: 12px; color: var(--ink2)">{{s.h}}</span>
+</div>
+</sc-for>
+</div>
+</div>
+<div style="flex: 1 1 0; display: flex; flex-direction: column; gap: 14px">
+<span style="font-size: 12px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink2)">Type</span>
+<span style="font-size: 56px; line-height: 1; font-weight: 800; letter-spacing: -0.045em; color: var(--ink)">Display 56</span>
+<span style="font-size: 40px; line-height: 1.05; font-weight: 800; letter-spacing: -0.035em; color: var(--ink)">Page title 40</span>
+<span style="font-size: 22px; font-weight: 800; letter-spacing: -0.02em; color: var(--ink)">Section title 22 / 20</span>
+<span style="font-size: 15px; line-height: 1.7; color: var(--ink2); max-width: 46ch">Body 15 on 1.7. Muted text keeps 4.5:1 contrast in both modes; numbers use tabular figures.</span>
+<span style="font-size: 38px; font-weight: 800; letter-spacing: -0.04em; color: var(--ink); font-variant-numeric: tabular-nums">$86,420 · 1,284</span>
+<span style="font-size: 11px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink2)">Label 11 · uppercase</span>
+</div>
+<div style="flex: 1 1 0; display: flex; flex-direction: column; gap: 16px">
+<span style="font-size: 12px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink2)">Components</span>
+<div style="display: flex; flex-wrap: wrap; gap: 10px">
+<a href="#" style="display: inline-flex; align-items: center; height: 46px; padding: 0 20px; border-radius: 15px; background: var(--primary); color: #FFFFFF; text-decoration: none; font-size: 14px; font-weight: 700; box-shadow: var(--primaryGlow)">Primary action</a>
+<a href="#" style="display: inline-flex; align-items: center; height: 46px; padding: 0 20px; border-radius: 15px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); text-decoration: none; font-size: 14px; font-weight: 700">Secondary</a>
+<a href="#" style="display: inline-flex; align-items: center; height: 46px; padding: 0 20px; border-radius: 15px; background: var(--tag); color: var(--tagInk); text-decoration: none; font-size: 14px; font-weight: 700">Dark</a>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 800; padding: 5px 10px; border-radius: 999px; background: var(--mintSoft); color: var(--mint)"><span style="width: 7px; height: 7px; border-radius: 50%; background: var(--mintDot)"></span>Attending</span>
+<span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 800; padding: 5px 10px; border-radius: 999px; background: var(--amberSoft); color: var(--amber)"><span style="width: 7px; height: 7px; border-radius: 50%; background: #FFB020"></span>Awaiting</span>
+<span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 800; padding: 5px 10px; border-radius: 999px; background: var(--pinkSoft); color: var(--pink)"><span style="width: 7px; height: 7px; border-radius: 50%; background: #FF3D86"></span>Declined</span>
+<span style="font-size: 11px; font-weight: 800; letter-spacing: 0.08em; padding: 6px 10px; border-radius: 8px; background: var(--tag); color: var(--tagInk)">WEBSITE</span>
+</div>
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 700; color: var(--ink)">Event name
+<input value="Lakeside Summer Gala 2026" style="height: 46px; padding: 0 14px; border-radius: 14px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font: inherit; font-size: 14px; font-weight: 600; outline: none"></label>
+<div style="display: flex; align-items: center; gap: 10px; padding: 6px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); max-width: 320px">
+<span style="width: 36px; height: 36px; border-radius: 50%; background: #FFC2D6; color: #16131D; display: grid; place-items: center; font-size: 12px; font-weight: 800">AJ</span>
+<div style="display: flex; flex-direction: column; flex-grow: 1"><span style="font-size: 14px; font-weight: 700; color: var(--ink)">Alice James</span><span style="font-size: 12px; color: var(--ink2)">Door A lead</span></div>
+<span aria-label="Checked in" style="width: 26px; height: 26px; border-radius: 50%; background: var(--mintDot); color: #0A0812; display: grid; place-items: center; box-shadow: 0 0 0 4px var(--mintSoft)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg></span>
+</div>
+<div style="position: relative; overflow: hidden; border-radius: 24px; padding: 18px 20px; background: var(--hero); color: var(--heroInk); display: flex; flex-direction: column; gap: 6px">
+<span style="font-size: 12px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase">Highlight card</span>
+<span style="font-size: 40px; line-height: 1; font-weight: 800; letter-spacing: -0.045em; font-variant-numeric: tabular-nums">$18,609</span>
+</div>
+</div>
+</div>
+</div>
+</sc-for>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":2960,"height":760}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const LIGHT = "--surface:#FFFFFF;--line:#E7E4EE;--ink:#16131D;--ink2:#5E596A;--primary:#6A3BFF;--primaryGlow:0 8px 20px rgba(106,59,255,0.28);--pink:#C41C5E;--pinkSoft:#FDE3EE;--mint:#0B7A50;--mintSoft:#DDF6EA;--mintDot:#16C784;--amber:#8A4F00;--amberSoft:#FFF0D4;--tag:#2A2230;--tagInk:#FFFFFF;--hero:linear-gradient(135deg,#FFE0EC 0%,#FAD3EC 45%,#E3D8FF 100%);--heroInk:#16131D;background:#F2F1F6;color:#16131D;";
+    const DARK = "color-scheme:dark;--surface:rgba(26,20,46,0.72);--line:rgba(170,150,255,0.16);--ink:#F4F1FF;--ink2:#ABA4C6;--primary:#7B5CFF;--primaryGlow:0 0 0 1px rgba(160,135,255,0.4),0 10px 30px rgba(123,92,255,0.45);--pink:#FF7EAF;--pinkSoft:rgba(255,92,154,0.16);--mint:#4BE9AC;--mintSoft:rgba(59,230,164,0.14);--mintDot:#3BE6A4;--amber:#FFC56E;--amberSoft:rgba(255,197,110,0.14);--tag:rgba(255,255,255,0.08);--tagInk:#ECE7FF;--hero:radial-gradient(120% 140% at 85% 0%,#8D6FFF 0%,#4B2FB0 34%,#1A1233 74%);--heroInk:#FFFFFF;background:radial-gradient(50% 60% at 75% -10%,rgba(123,92,255,0.45),rgba(123,92,255,0) 70%),#0A0812;color:#F4F1FF;";
+    return {
+      modes: [
+        { name: 'LIGHT', theme: LIGHT, swatches: [
+          { n: 'Canvas', h: '#F2F1F6', v: '#F2F1F6' }, { n: 'Surface', h: '#FFFFFF', v: '#FFFFFF' }, { n: 'Ink', h: '#16131D', v: '#16131D' }, { n: 'Muted ink', h: '#5E596A', v: '#5E596A' },
+          { n: 'Sidebar', h: '#17121B', v: '#17121B' }, { n: 'Violet · primary', h: '#6A3BFF', v: '#6A3BFF' }, { n: 'Pink · brand', h: '#FF3D86', v: '#FF3D86' }, { n: 'Mint · success', h: '#16C784', v: '#16C784' },
+          { n: 'Lavender', h: '#E3D9FF', v: '#E3D9FF' }, { n: 'Blush', h: '#FCDDE9', v: '#FCDDE9' }, { n: 'Amber · waiting', h: '#FFB020', v: '#FFB020' }, { n: 'Highlight', h: 'blush → lavender', v: 'linear-gradient(135deg,#FFE0EC,#E3D8FF)' }
+        ] },
+        { name: 'DARK', theme: DARK, swatches: [
+          { n: 'Canvas', h: '#0A0812 + violet glow', v: 'radial-gradient(80% 80% at 70% 0%,#3B2585,#0A0812)' }, { n: 'Glass surface', h: '#1A142E · 72%', v: 'rgba(26,20,46,0.9)' }, { n: 'Ink', h: '#F4F1FF', v: '#F4F1FF' }, { n: 'Muted ink', h: '#ABA4C6', v: '#ABA4C6' },
+          { n: 'Sidebar', h: '#0F0B1C · 86%', v: '#0F0B1C' }, { n: 'Violet · primary', h: '#7B5CFF + glow', v: '#7B5CFF' }, { n: 'Pink · brand', h: '#FF5C9A', v: '#FF5C9A' }, { n: 'Mint · success', h: '#3BE6A4', v: '#3BE6A4' },
+          { n: 'Line', h: 'violet 16%', v: 'rgba(170,150,255,0.35)' }, { n: 'Active row', h: 'violet gradient', v: 'linear-gradient(135deg,rgba(123,92,255,0.8),rgba(123,92,255,0.25))' }, { n: 'Amber · waiting', h: '#FFC56E', v: '#FFC56E' }, { n: 'Highlight', h: 'violet light', v: 'radial-gradient(120% 140% at 85% 0%,#8D6FFF,#4B2FB0 34%,#1A1233 74%)' }
+        ] }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>
