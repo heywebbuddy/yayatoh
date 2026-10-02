@@ -643,6 +643,9 @@ importers:
       '@yayatoh/alerts':
         specifier: workspace:*
         version: link:../../packages/modules/alerts
+      '@yayatoh/analytics':
+        specifier: workspace:*
+        version: link:../../packages/modules/analytics
       '@yayatoh/attendees':
         specifier: workspace:*
         version: link:../../packages/modules/attendees

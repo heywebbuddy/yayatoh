@@ -1,6 +1,5 @@
 import { createECDH } from 'node:crypto';
 import { draftEventCopy, fakeDrafter } from '@yayatoh/ai';
-import { backfillOrgNow, catchUpWarehouse, postgresWarehouse } from '@yayatoh/analytics';
 import {
   acknowledgeAlertCommand,
   evaluateEventAlertsTx,
@@ -9,6 +8,7 @@ import {
   setMyAlertPhoneCommand,
   setSalesTargetCommand,
 } from '@yayatoh/alerts';
+import { backfillOrgNow, catchUpWarehouse, postgresWarehouse } from '@yayatoh/analytics';
 import {
   assignCommand as assistanceAssignCommand,
   addNoteCommand as assistanceNoteCommand,

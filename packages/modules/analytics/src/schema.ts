@@ -158,12 +158,13 @@ export const backfillRuns = tenantTable(
     error: text('error'),
   },
   (t) => [
-    uniqueIndex('backfill_runs_org_running_key')
-      .on(t.orgId)
-      .where(sql`status = 'running'`),
+    uniqueIndex('backfill_runs_org_running_key').on(t.orgId).where(sql`status = 'running'`),
     index('backfill_runs_org_created_idx').on(t.orgId, t.createdAt),
     check('backfill_runs_status_check', sql`status in ('running', 'done', 'failed', 'cancelled')`),
     check('backfill_runs_adapter_check', sql`adapter in ('postgres', 'tinybird')`),
-    check('backfill_runs_page_check', sql`page_size between 1 and 500 and pages_per_minute between 1 and 600`),
+    check(
+      'backfill_runs_page_check',
+      sql`page_size between 1 and 500 and pages_per_minute between 1 and 600`,
+    ),
   ],
 );

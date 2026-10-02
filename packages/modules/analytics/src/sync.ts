@@ -39,7 +39,10 @@ export async function syncEventTx(
     eq(eventSync.adapter, warehouse.name),
     eq(eventSync.eventId, eventId),
   );
-  const [prev] = await tx.select({ hash: eventSync.hash, version: eventSync.version }).from(eventSync).where(own);
+  const [prev] = await tx
+    .select({ hash: eventSync.hash, version: eventSync.version })
+    .from(eventSync)
+    .where(own);
   if (prev?.hash === hash) return { written: false, rows: 0 };
   if (!prev && snapshot.state === null) return { written: false, rows: 0 };
   const [clock] = await tx.execute<{ v: string }>(

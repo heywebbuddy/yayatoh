@@ -28,9 +28,12 @@ export function warehouseFromEnv(env: Record<string, string | undefined> = proce
     devFake ??= fakeTinybird();
     return tinybirdWarehouse({ ...devFake.config, fetch: devFake.fetch });
   }
-  const missing = ['TINYBIRD_API_URL', 'TINYBIRD_APPEND_TOKEN', 'TINYBIRD_SIGNING_KEY', 'TINYBIRD_WORKSPACE_ID'].filter(
-    (k) => !env[k],
-  );
+  const missing = [
+    'TINYBIRD_API_URL',
+    'TINYBIRD_APPEND_TOKEN',
+    'TINYBIRD_SIGNING_KEY',
+    'TINYBIRD_WORKSPACE_ID',
+  ].filter((k) => !env[k]);
   if (missing.length) throw new Error(`ANALYTICS_WAREHOUSE=tinybird needs ${missing.join(', ')}`);
   return tinybirdWarehouse({
     apiUrl: env.TINYBIRD_API_URL as string,

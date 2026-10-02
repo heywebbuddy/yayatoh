@@ -1,3 +1,4 @@
+import { warehouseFromEnv } from '@yayatoh/analytics';
 import { setPlatformAuditSink, tryAcquireLeadership } from '@yayatoh/db/platform';
 import { createNotifier } from '@yayatoh/notifications';
 import { fakePaymentProvider } from '@yayatoh/payments';
@@ -27,6 +28,7 @@ import { relayOnce } from './relay.ts';
 import { runRetention } from './retention.ts';
 import { runSettlements } from './settlements.ts';
 import { alertDisputeDeadlines, sweepExpiredHolds, sweepWaitlists } from './sweeper.ts';
+import { backfillJob, enqueueDueBackfills } from './warehouse.ts';
 import { startWorker } from './worker.ts';
 
 const connectionString = process.env.JOBS_DATABASE_URL;
@@ -63,6 +65,8 @@ if (!gotenbergUrl) console.warn('badges: GOTENBERG_URL is not set; badge batch P
 const jobs = [
   ...JOBS,
   campaignReleaseJob,
+  // M6.2a: warehouse backfills, a page at a time at each run's pace.
+  backfillJob(warehouseFromEnv()),
   ...(payments ? [massRefundJob(payments)] : []),
   ...(gotenbergUrl ? [badgeBatchJob(gotenbergRenderer({ url: gotenbergUrl, timeoutMs: 60_000 }))] : []),
 ];
@@ -314,6 +318,19 @@ setInterval(() => {
       watching = false;
     });
 }, DEVICE_WATCHDOG_MS).unref();
+
+// Warehouse backfills (M6.2a): queue a job for each run with a page due every 5 s (leader only);
+// the exclusive queue keeps one job per run.
+let queueingBackfills = false;
+setInterval(() => {
+  if (!release || stopping || queueingBackfills) return;
+  queueingBackfills = true;
+  enqueueDueBackfills(boss)
+    .catch((err) => console.error('analytics backfill', err))
+    .finally(() => {
+      queueingBackfills = false;
+    });
+}, 5_000).unref();
 
 // Realtime message log (M3.1b): keep an hour for resumptions; prune every 5 minutes (leader only).
 setInterval(() => {

@@ -94,6 +94,13 @@ export {
   saveSupportMacroCommand,
   supportMacrosQuery,
 } from './commands/support-macros.ts';
+// M6.2a: per-day facts of one event for the analytics warehouse.
+export {
+  type DailyRefundFact,
+  type DailySalesFact,
+  dailyRefundFactsTx,
+  dailySalesFactsTx,
+} from './daily-facts.ts';
 export {
   creditableMinor,
   creditNoteAmount,
@@ -315,10 +322,3 @@ export {
   waitlistRef,
   waitlistToken,
 } from './waitlist.ts';
-// M6.2a: per-day facts of one event for the analytics warehouse.
-export {
-  type DailyRefundFact,
-  type DailySalesFact,
-  dailyRefundFactsTx,
-  dailySalesFactsTx,
-} from './daily-facts.ts';

@@ -72,7 +72,11 @@ export const startBackfillCommand = tenantCommand({
       .returning();
     return toDto(row as RunRow);
   },
-  audit: (_input, r) => ({ action: 'analytics.backfill_started', targetType: 'backfill_run', targetId: r.id }),
+  audit: (_input, r) => ({
+    action: 'analytics.backfill_started',
+    targetType: 'backfill_run',
+    targetId: r.id,
+  }),
 });
 
 /** The org's latest backfill run, or null. */
@@ -124,7 +128,7 @@ export async function runBackfillPage(
         .from(backfillRuns)
         .where(and(eq(backfillRuns.orgId, orgId), eq(backfillRuns.id, runId)))
         .for('update');
-      if (!run || run.status !== 'running') return { state: 'idle' };
+      if (run?.status !== 'running') return { state: 'idle' };
       if (!opts.ignoreRateLimit && run.nextPageAt.getTime() > ctx.now.getTime())
         return { state: 'waiting', nextPageAt: run.nextPageAt };
       const after = run.cursor;
@@ -210,5 +214,8 @@ export async function backfillOrgNow(orgId: string, warehouse: AnalyticsWarehous
       .returning({ id: backfillRuns.id });
     return row as { id: string };
   });
-  return { runId: run.id, ...(await runBackfill(orgId, run.id, warehouse, { ignoreRateLimit: true, budgetMs: 3_600_000 })) };
+  return {
+    runId: run.id,
+    ...(await runBackfill(orgId, run.id, warehouse, { ignoreRateLimit: true, budgetMs: 3_600_000 })),
+  };
 }

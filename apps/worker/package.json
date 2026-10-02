@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@yayatoh/alerts": "workspace:*",
+    "@yayatoh/analytics": "workspace:*",
     "@yayatoh/attendees": "workspace:*",
     "@yayatoh/audiences": "workspace:*",
     "@yayatoh/auth": "workspace:*",
@@ -43,8 +44,8 @@
     "@yayatoh/pdf": "workspace:*",
     "@yayatoh/platform": "workspace:*",
     "@yayatoh/privacy": "workspace:*",
-    "@yayatoh/registration": "workspace:*",
     "@yayatoh/program": "workspace:*",
+    "@yayatoh/registration": "workspace:*",
     "@yayatoh/reports": "workspace:*",
     "@yayatoh/seating": "workspace:*",
     "@yayatoh/surveys": "workspace:*",

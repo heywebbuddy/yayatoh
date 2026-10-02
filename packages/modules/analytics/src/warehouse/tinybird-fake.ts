@@ -99,8 +99,7 @@ export function fakeTinybird(opts: { now?: () => Date } = {}): FakeTinybird {
     };
     if (pipe === TINYBIRD_PIPES.dailyTotals || pipe === TINYBIRD_PIPES.eventTotals) {
       const rows = latest(TINYBIRD_DATASOURCES.daily, orgId).filter(
-        (r) =>
-          r.metric !== SNAPSHOT_MARKER && String(r.day) >= from && String(r.day) <= to && inEvent(r),
+        (r) => r.metric !== SNAPSHOT_MARKER && String(r.day) >= from && String(r.day) <= to && inEvent(r),
       );
       return pipe === TINYBIRD_PIPES.dailyTotals
         ? sum(

@@ -54,7 +54,11 @@ describe('calendar buckets (org time zone days)', () => {
       '2027-06-01',
       '2027-06-02',
     ]);
-    expect(bucketsBetween('2027-05-12', '2027-05-25', 'week')).toEqual(['2027-05-10', '2027-05-17', '2027-05-24']);
+    expect(bucketsBetween('2027-05-12', '2027-05-25', 'week')).toEqual([
+      '2027-05-10',
+      '2027-05-17',
+      '2027-05-24',
+    ]);
     expect(bucketsBetween('2026-11-15', '2027-02-01', 'month')).toEqual([
       '2026-11-01',
       '2026-12-01',
@@ -80,12 +84,12 @@ describe('calendar buckets (org time zone days)', () => {
       from: '2027-01-01',
       to: '2027-01-30',
     });
-    expect(() => resolveRange({ granularity: 'day', from: '2027-02-02', to: '2027-02-01' }, 'UTC', now)).toThrow(
-      /ends before/,
-    );
-    expect(() => resolveRange({ granularity: 'month', from: '2024-01-01', to: '2026-01-02' }, 'UTC', now)).toThrow(
-      /two years/,
-    );
+    expect(() =>
+      resolveRange({ granularity: 'day', from: '2027-02-02', to: '2027-02-01' }, 'UTC', now),
+    ).toThrow(/ends before/);
+    expect(() =>
+      resolveRange({ granularity: 'month', from: '2024-01-01', to: '2026-01-02' }, 'UTC', now),
+    ).toThrow(/two years/);
     expect(resolveRange({ granularity: 'month', from: '2024-01-01', to: '2025-12-31' }, 'UTC', now).to).toBe(
       '2025-12-31',
     );
@@ -187,7 +191,9 @@ describe('dashboard figures (pure)', () => {
       warehouse: 'postgres',
       hasData: true,
       ...r,
-      topEvents: [{ eventId: EV_A, name: 'A', slug: 'a', registrations: 1, tickets: 1, checkins: 0, grossMinor: 9 }],
+      topEvents: [
+        { eventId: EV_A, name: 'A', slug: 'a', registrations: 1, tickets: 1, checkins: 0, grossMinor: 9 },
+      ],
     });
     expect(JSON.stringify(parsed)).not.toMatch(/grossMinor|USD|EUR/);
     expect(Object.keys(OrgRevenueDto.shape)).toContain('currencies');
@@ -304,16 +310,37 @@ describe('Tinybird adapter against the fake', () => {
     const { fake } = setup();
     const url = (org: string) =>
       `${fake.config.apiUrl}/v0/pipes/${TINYBIRD_PIPES.dailyTotals}.json?org_id=${org}&from=2027-01-01&to=2027-12-31`;
-    const tokenA = signPipeToken(fake.config, TINYBIRD_PIPES.dailyTotals, ORG_A, new Date(NOW.getTime() + 60_000));
-    const get = (u: string, token: string) => fake.fetch(u, { headers: { authorization: `Bearer ${token}` } });
+    const tokenA = signPipeToken(
+      fake.config,
+      TINYBIRD_PIPES.dailyTotals,
+      ORG_A,
+      new Date(NOW.getTime() + 60_000),
+    );
+    const get = (u: string, token: string) =>
+      fake.fetch(u, { headers: { authorization: `Bearer ${token}` } });
     expect((await get(url(ORG_B), tokenA)).status).toBe(403);
     expect((await get(url(ORG_A), tokenA)).status).toBe(200);
     expect((await get(url(ORG_A), 'not.a.jwt')).status).toBe(403);
-    const forged = signPipeToken({ ...fake.config, signingKey: 'other' }, TINYBIRD_PIPES.dailyTotals, ORG_A, NOW);
+    const forged = signPipeToken(
+      { ...fake.config, signingKey: 'other' },
+      TINYBIRD_PIPES.dailyTotals,
+      ORG_A,
+      NOW,
+    );
     expect((await get(url(ORG_A), forged)).status).toBe(403);
-    const expired = signPipeToken(fake.config, TINYBIRD_PIPES.dailyTotals, ORG_A, new Date(NOW.getTime() - 1));
+    const expired = signPipeToken(
+      fake.config,
+      TINYBIRD_PIPES.dailyTotals,
+      ORG_A,
+      new Date(NOW.getTime() - 1),
+    );
     expect((await get(url(ORG_A), expired)).status).toBe(403);
-    const otherPipe = signPipeToken(fake.config, TINYBIRD_PIPES.eventTotals, ORG_A, new Date(NOW.getTime() + 60_000));
+    const otherPipe = signPipeToken(
+      fake.config,
+      TINYBIRD_PIPES.eventTotals,
+      ORG_A,
+      new Date(NOW.getTime() + 60_000),
+    );
     expect((await get(url(ORG_A), otherPipe)).status).toBe(403);
     const noOrg = `${fake.config.apiUrl}/v0/pipes/${TINYBIRD_PIPES.dailyTotals}.json?from=2027-01-01`;
     expect((await get(noOrg, tokenA)).status).toBe(400);
@@ -359,7 +386,9 @@ describe('Tinybird adapter against the fake', () => {
       },
       11,
     );
-    expect(await wh.dailyTotals(s, range)).toEqual([{ day: '2027-05-03', metric: 'orders', currency: '', value: 3 }]);
+    expect(await wh.dailyTotals(s, range)).toEqual([
+      { day: '2027-05-03', metric: 'orders', currency: '', value: 3 },
+    ]);
     await wh.writeEvent(s, { eventId: EV_A, timeZone: 'UTC', daily: [], state: null }, 12);
     expect(await wh.dailyTotals(s, range)).toEqual([]);
     expect(await wh.eventStates(s, range)).toEqual([]);
@@ -368,7 +397,15 @@ describe('Tinybird adapter against the fake', () => {
   it('serves fixture rows and rejects a pipe that returns another org’s row', async () => {
     const { fake, wh } = setup();
     fake.seed(TINYBIRD_DATASOURCES.daily, [
-      { org_id: ORG_A, event_id: EV_A, version: 1, day: '2027-05-02', metric: 'checkins', currency: '', value: 9 },
+      {
+        org_id: ORG_A,
+        event_id: EV_A,
+        version: 1,
+        day: '2027-05-02',
+        metric: 'checkins',
+        currency: '',
+        value: 9,
+      },
     ]);
     expect(await wh.dailyTotals(scopeOf(ORG_A), range)).toEqual([
       { day: '2027-05-02', metric: 'checkins', currency: '', value: 9 },
@@ -378,7 +415,9 @@ describe('Tinybird adapter against the fake', () => {
       now: () => NOW,
       fetch: (async () =>
         new Response(
-          JSON.stringify({ data: [{ org_id: ORG_B, day: '2027-05-02', metric: 'orders', currency: '', value: 1 }] }),
+          JSON.stringify({
+            data: [{ org_id: ORG_B, day: '2027-05-02', metric: 'orders', currency: '', value: 1 }],
+          }),
         )) as typeof fetch,
     });
     await expect(leaky.dailyTotals(scopeOf(ORG_A), range)).rejects.toBeInstanceOf(TinybirdError);
@@ -389,7 +428,9 @@ describe('configuration and event schemas', () => {
   it('uses Postgres unless Tinybird is configured, and refuses a half configuration', () => {
     expect(warehouseFromEnv({}).name).toBe('postgres');
     expect(configuredWarehouseName({})).toBe('postgres');
-    expect(warehouseFromEnv({ ANALYTICS_WAREHOUSE: 'tinybird', TINYBIRD_API_URL: 'fake' }).name).toBe('tinybird');
+    expect(warehouseFromEnv({ ANALYTICS_WAREHOUSE: 'tinybird', TINYBIRD_API_URL: 'fake' }).name).toBe(
+      'tinybird',
+    );
     expect(() => warehouseFromEnv({ ANALYTICS_WAREHOUSE: 'tinybird' })).toThrow(/TINYBIRD_APPEND_TOKEN/);
     expect(() => warehouseFromEnv({ ANALYTICS_WAREHOUSE: 'clickhouse' })).toThrow(/postgres or tinybird/);
     expect(() =>
@@ -399,9 +440,9 @@ describe('configuration and event schemas', () => {
 
   it('subscribes to exact event versions with a payload schema each', () => {
     for (const key of WAREHOUSE_EVENTS) expect(key).toMatch(/^[a-z_]+(\.[a-z_]+)+@\d+$/);
-    expect(WAREHOUSE_EVENT_SCHEMAS['order.paid@1'].safeParse({ orderId: EV_A, extra: 'kept out' }).success).toBe(
-      true,
-    );
+    expect(
+      WAREHOUSE_EVENT_SCHEMAS['order.paid@1'].safeParse({ orderId: EV_A, extra: 'kept out' }).success,
+    ).toBe(true);
     expect(WAREHOUSE_EVENT_SCHEMAS['order.paid@1'].safeParse({ eventId: EV_A }).success).toBe(false);
     expect(WAREHOUSE_EVENT_SCHEMAS['ticket.admitted@1'].safeParse({ eventId: 'nope' }).success).toBe(false);
   });

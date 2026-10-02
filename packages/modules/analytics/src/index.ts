@@ -12,10 +12,10 @@ export {
 export { computeEventSnapshotTx, dayIn, foldDaily, hashSnapshot } from './compute.ts';
 export {
   addDays,
-  buildCounts,
-  buildRevenue,
   bucketOf,
   bucketsBetween,
+  buildCounts,
+  buildRevenue,
   CountFigures,
   DashboardInput,
   DEFAULT_RANGE_DAYS,

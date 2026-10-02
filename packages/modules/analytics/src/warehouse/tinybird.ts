@@ -5,8 +5,8 @@ import {
   type AnalyticsWarehouse,
   type DayRange,
   type EventSnapshot,
-  type WarehouseScope,
   scopeOrg,
+  type WarehouseScope,
 } from './port.ts';
 
 /**
@@ -147,7 +147,8 @@ export function tinybirdWarehouse(cfg: TinybirdConfig): AnalyticsWarehouse {
     if (!res.ok) throw new TinybirdError(`Tinybird pipe ${name} failed`, res.status);
     const { data } = PipeResponse(row).parse(await res.json());
     for (const r of data)
-      if (r.org_id !== orgId) throw new TinybirdError(`Tinybird pipe ${name} returned another org's row`, 500);
+      if (r.org_id !== orgId)
+        throw new TinybirdError(`Tinybird pipe ${name} returned another org's row`, 500);
     return data;
   }
 
@@ -159,7 +160,10 @@ export function tinybirdWarehouse(cfg: TinybirdConfig): AnalyticsWarehouse {
       const head = { org_id: orgId, event_id: snapshot.eventId, version };
       const daily = [
         { ...head, day: '1970-01-01', metric: SNAPSHOT_MARKER, currency: '', value: 0 },
-        ...(snapshot.state ? snapshot.daily.filter((r) => r.value !== 0) : []).map((r) => ({ ...head, ...r })),
+        ...(snapshot.state ? snapshot.daily.filter((r) => r.value !== 0) : []).map((r) => ({
+          ...head,
+          ...r,
+        })),
       ];
       const s = snapshot.state;
       const state = {

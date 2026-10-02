@@ -71,13 +71,22 @@ export const DashboardInput = z.object({
 export type DashboardInput = z.infer<typeof DashboardInput>;
 
 /** The inclusive day range: the input's, or the last 30 days up to today in the org's time zone. */
-export function resolveRange(input: DashboardInput, timeZone: string, now: Date): { from: string; to: string } {
+export function resolveRange(
+  input: DashboardInput,
+  timeZone: string,
+  now: Date,
+): { from: string; to: string } {
   const today = dayIn(now, timeZone);
   const to = input.to ?? (input.from ? addDays(input.from, DEFAULT_RANGE_DAYS - 1) : today);
   const from = input.from ?? addDays(to, -(DEFAULT_RANGE_DAYS - 1));
-  if (from > to) throw new DomainError('validation_failed', 'The period ends before it starts', { reason: 'from_after_to' });
+  if (from > to)
+    throw new DomainError('validation_failed', 'The period ends before it starts', {
+      reason: 'from_after_to',
+    });
   if (daysBetween(from, to) + 1 > MAX_RANGE_DAYS)
-    throw new DomainError('validation_failed', 'The period is longer than two years', { reason: 'range_too_long' });
+    throw new DomainError('validation_failed', 'The period is longer than two years', {
+      reason: 'range_too_long',
+    });
   return { from, to };
 }
 
@@ -245,8 +254,16 @@ export function topEventCounts(rows: readonly EventTotal[], limit = TOP_EVENTS) 
     by.set(r.eventId, f);
   }
   return [...by.entries()]
-    .map(([eventId, f]) => ({ eventId, registrations: f.registrations, tickets: f.tickets, checkins: f.checkins }))
-    .sort((a, b) => b.tickets - a.tickets || b.registrations - a.registrations || (a.eventId < b.eventId ? -1 : 1))
+    .map(([eventId, f]) => ({
+      eventId,
+      registrations: f.registrations,
+      tickets: f.tickets,
+      checkins: f.checkins,
+    }))
+    .sort(
+      (a, b) =>
+        b.tickets - a.tickets || b.registrations - a.registrations || (a.eventId < b.eventId ? -1 : 1),
+    )
     .slice(0, limit);
 }
 

@@ -5,8 +5,8 @@ import {
   type DailyRow,
   type DayRange,
   type EventSnapshot,
-  type WarehouseScope,
   scopeOrg,
+  type WarehouseScope,
 } from './port.ts';
 
 const rowKey = (r: { day: string; metric: string; currency: string }) => `${r.day}|${r.metric}|${r.currency}`;

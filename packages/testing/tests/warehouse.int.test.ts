@@ -83,7 +83,9 @@ async function storedRows(orgId: string) {
 }
 
 async function orgEventIds(orgId: string) {
-  const rows = await admin<{ id: string }[]>`select id from events.events where org_id = ${orgId} order by id`;
+  const rows = await admin<
+    { id: string }[]
+  >`select id from events.events where org_id = ${orgId} order by id`;
   return rows.map((r) => r.id);
 }
 
@@ -91,7 +93,8 @@ async function forgetTinybirdSync() {
   await admin`delete from analytics.event_sync where adapter = 'tinybird' and org_id in (${a.org.id}, ${b.org.id})`;
 }
 
-const tinybird = (fake: FakeTinybird): AnalyticsWarehouse => tinybirdWarehouse({ ...fake.config, fetch: fake.fetch });
+const tinybird = (fake: FakeTinybird): AnalyticsWarehouse =>
+  tinybirdWarehouse({ ...fake.config, fetch: fake.fetch });
 const withoutAdapter = <T extends { warehouse: string }>(d: T) => ({ ...d, warehouse: 'x' });
 
 beforeAll(async () => {
@@ -168,7 +171,12 @@ describe('dashboards match the source tables to the cent', () => {
         const gross = metric(all.metrics, 'sales.gross', c);
         const refunds = metric(all.metrics, 'sales.refunds', c);
         if (gross === 0 && refunds === 0) continue;
-        expect(t).toEqual({ currency: c, grossMinor: gross, refundsMinor: refunds, netMinor: gross - refunds });
+        expect(t).toEqual({
+          currency: c,
+          grossMinor: gross,
+          refundsMinor: refunds,
+          netMinor: gross - refunds,
+        });
       }
       expect(r.currencies.length).toBeGreaterThan(0);
     }
@@ -214,9 +222,18 @@ describe('dashboards match the source tables to the cent', () => {
       noShows: 5,
     });
     // Before the event ended there are no no-shows yet.
-    const before = await counts(a, { ...range, eventId: usd }, a.ctx({ now: new Date('2028-06-01T12:00:00Z') }));
+    const before = await counts(
+      a,
+      { ...range, eventId: usd },
+      a.ctx({ now: new Date('2028-06-01T12:00:00Z') }),
+    );
     expect(before.totals.noShows).toBe(0);
-    expect(d.topEvents[0]).toMatchObject({ eventId: usd, name: 'Warehouse night', tickets: 4, registrations: 3 });
+    expect(d.topEvents[0]).toMatchObject({
+      eventId: usd,
+      name: 'Warehouse night',
+      tickets: 4,
+      registrations: 3,
+    });
   });
 
   it('puts days in the org time zone (America/Chicago), weeks on Mondays and months on the 1st', async () => {
@@ -306,7 +323,10 @@ describe('isolation through the warehouse (Postgres)', () => {
     );
     expect(Number(seen[0]?.n)).toBe(0);
     const viaPort = await withTenant(systemCtx(a.org.id), (tx) =>
-      postgresWarehouse.dailyTotals({ ctx: systemCtx(a.org.id), tx }, { from: '2000-01-01', to: '2100-01-01', eventId: bEvents[0] }),
+      postgresWarehouse.dailyTotals(
+        { ctx: systemCtx(a.org.id), tx },
+        { from: '2000-01-01', to: '2100-01-01', eventId: bEvents[0] },
+      ),
     );
     expect(viaPort).toEqual([]);
     // A new sale in B leaves A's dashboard as it was.
@@ -393,7 +413,9 @@ describe('idempotent ingest and backfill', () => {
     await admin`delete from analytics.event_sync where org_id = ${a.org.id} and event_id = ${usd}`;
     const r = await backfillOrgNow(a.org.id, postgresWarehouse);
     expect(r.written).toBe(1);
-    const computed = await withTenant(systemCtx(a.org.id), (tx) => computeEventSnapshotTx(tx, usd, 'America/Chicago'));
+    const computed = await withTenant(systemCtx(a.org.id), (tx) =>
+      computeEventSnapshotTx(tx, usd, 'America/Chicago'),
+    );
     const stored = await admin<{ day: string; metric: string; currency: string; value: string }[]>`
       select day::text, metric, currency, value::text from analytics.daily_rollups
       where org_id = ${a.org.id} and event_id = ${usd} order by day, metric, currency`;
@@ -408,7 +430,9 @@ describe('backfill runs', () => {
       code: 'forbidden',
     });
     const fin = userCtx(financeId, a.org.id);
-    await expect(executeCommand(startBackfillCommand, {}, fin, ports)).rejects.toMatchObject({ code: 'forbidden' });
+    await expect(executeCommand(startBackfillCommand, {}, fin, ports)).rejects.toMatchObject({
+      code: 'forbidden',
+    });
     const run = await executeCommand(startBackfillCommand, {}, a.ctx(), ports);
     expect(run).toMatchObject({ status: 'running', adapter: 'postgres', pagesDone: 0 });
     await expect(executeCommand(startBackfillCommand, {}, a.ctx(), ports)).rejects.toMatchObject({
@@ -440,18 +464,27 @@ describe('backfill runs', () => {
     );
     const ids = await orgEventIds(b.org.id);
     expect(ids.length).toBeGreaterThan(2);
-    expect(await runBackfillPage(b.org.id, run.id, wh, { now: t0 })).toMatchObject({ state: 'page', events: 1 });
+    expect(await runBackfillPage(b.org.id, run.id, wh, { now: t0 })).toMatchObject({
+      state: 'page',
+      events: 1,
+    });
     // The next page is due 30 s later (2 pages a minute).
-    expect(await runBackfillPage(b.org.id, run.id, wh, { now: new Date(t0.getTime() + 1_000) })).toMatchObject({
+    expect(
+      await runBackfillPage(b.org.id, run.id, wh, { now: new Date(t0.getTime() + 1_000) }),
+    ).toMatchObject({
       state: 'waiting',
     });
-    expect(await runBackfillPage(b.org.id, run.id, wh, { now: new Date(t0.getTime() + 30_000) })).toMatchObject({
+    expect(
+      await runBackfillPage(b.org.id, run.id, wh, { now: new Date(t0.getTime() + 30_000) }),
+    ).toMatchObject({
       state: 'page',
     });
     // A new worker picks the run up where it stopped.
     const rest = await runBackfill(b.org.id, run.id, wh, { ignoreRateLimit: true });
     expect(rest.state).toBe('done');
-    const [row] = await admin<{ status: string; pages_done: number; events_done: number; events_written: number }[]>`
+    const [row] = await admin<
+      { status: string; pages_done: number; events_done: number; events_written: number }[]
+    >`
       select status, pages_done, events_done, events_written from analytics.backfill_runs where id = ${run.id}`;
     expect(row).toEqual({
       status: 'done',
@@ -459,7 +492,9 @@ describe('backfill runs', () => {
       events_done: ids.length,
       events_written: ids.length,
     });
-    const appended = (fake.datasources[TINYBIRD_DATASOURCES.states] ?? []).map((r) => String(r.event_id)).sort();
+    const appended = (fake.datasources[TINYBIRD_DATASOURCES.states] ?? [])
+      .map((r) => String(r.event_id))
+      .sort();
     expect(appended).toEqual(ids);
     for (const r of Object.values(fake.datasources).flat()) expect(r.org_id).toBe(b.org.id);
   });
@@ -508,7 +543,9 @@ describe('the Tinybird adapter (fake) answers like Postgres and keeps orgs apart
       const range = await dataRange(f);
       for (const granularity of ['day', 'week', 'month'] as const) {
         const input = { ...range, granularity };
-        expect(withoutAdapter(await counts(f, input, undefined, tb))).toEqual(withoutAdapter(await counts(f, input)));
+        expect(withoutAdapter(await counts(f, input, undefined, tb))).toEqual(
+          withoutAdapter(await counts(f, input)),
+        );
         expect(withoutAdapter(await revenue(f, input, undefined, tb))).toEqual(
           withoutAdapter(await revenue(f, input)),
         );
@@ -553,7 +590,12 @@ describe('the Tinybird adapter (fake) answers like Postgres and keeps orgs apart
     const r = await backfillOrgNow(a.org.id, wh);
     expect(r.written).toBe(0);
     expect(fake.calls.filter((c) => c.kind === 'append').length).toBe(appendsAfter);
-    const d = await counts(a, { from: dayIn(new Date(), 'America/Chicago'), to: dayIn(new Date(), 'America/Chicago'), eventId: ev }, undefined, tb);
+    const d = await counts(
+      a,
+      { from: dayIn(new Date(), 'America/Chicago'), to: dayIn(new Date(), 'America/Chicago'), eventId: ev },
+      undefined,
+      tb,
+    );
     expect(d.totals.tickets).toBe(2);
   });
 });
