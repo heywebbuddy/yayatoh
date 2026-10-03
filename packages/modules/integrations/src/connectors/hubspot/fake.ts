@@ -50,7 +50,7 @@ const view = (c: HubspotContact) => ({
     hs_object_id: c.id,
     lastmodifieddate: iso(c.updated),
     hs_email_optout: c.properties.hs_email_optout ?? 'false',
-  },
+  } as Record<string, string | null>,
   createdAt: iso(Date.UTC(2026, 0, 1)),
   updatedAt: iso(c.updated),
   archived: false,
