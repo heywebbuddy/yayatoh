@@ -64,7 +64,6 @@ export default async function ReportsPage({
     : null;
   const when = (d: Date, tz: string) =>
     new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short', timeZone: tz }).format(d);
-  const freqOf = new Map(schedules.map((s) => [s.id, s.frequency] as const));
 
   return (
     <>
@@ -183,12 +182,12 @@ export default async function ReportsPage({
             header: t('recentColumns.period'),
             cell: (r) => {
               const p = periodOfKey(r.periodKey);
-              const f = (freqOf.get(r.scheduleId) ??
-                (r.periodKey.startsWith('D')
-                  ? 'daily'
-                  : r.periodKey.startsWith('W')
-                    ? 'weekly'
-                    : 'monthly')) as ReportFrequency;
+              // The period's own kind (its key), whatever the schedule's frequency is now.
+              const f: ReportFrequency = r.periodKey.startsWith('D')
+                ? 'daily'
+                : r.periodKey.startsWith('W')
+                  ? 'weekly'
+                  : 'monthly';
               return p ? periodLabel(p, f, locale) : r.periodKey;
             },
           },

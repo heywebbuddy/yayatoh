@@ -12499,7 +12499,7 @@
       "deleted": "Regola eliminata",
       "turnedOff": "Regola spenta",
       "turnedOn": "Regola attivata",
-      "readOnly": "Puoi vedere queste regole. Proprietari, amministratori, manager e finanza possono modificarle.",
+      "readOnly": "Puoi vedere queste regole, ma non modificarle.",
       "errors": {
         "name": "Inserisci un nome di massimo 80 caratteri.",
         "name_taken": "Esiste già una regola con questo nome.",

@@ -12499,7 +12499,7 @@
       "deleted": "Regel verwijderd",
       "turnedOff": "Regel uitgezet",
       "turnedOn": "Regel aangezet",
-      "readOnly": "Je kunt deze regels zien. Eigenaren, beheerders, managers en financiën kunnen ze wijzigen.",
+      "readOnly": "Je kunt deze regels zien, maar niet wijzigen.",
       "errors": {
         "name": "Vul een naam van maximaal 80 tekens in.",
         "name_taken": "Er bestaat al een regel met deze naam.",

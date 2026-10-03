@@ -12499,7 +12499,7 @@
       "deleted": "Regra excluída",
       "turnedOff": "Regra desligada",
       "turnedOn": "Regra ligada",
-      "readOnly": "Você pode ver estas regras. Proprietários, administradores, gerentes e o financeiro podem alterá-las.",
+      "readOnly": "Você pode ver estas regras, mas não alterá-las.",
       "errors": {
         "name": "Informe um nome com até 80 caracteres.",
         "name_taken": "Já existe uma regra com este nome.",

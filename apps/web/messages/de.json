@@ -12499,7 +12499,7 @@
       "deleted": "Regel gelöscht",
       "turnedOff": "Regel ausgeschaltet",
       "turnedOn": "Regel eingeschaltet",
-      "readOnly": "Du kannst diese Regeln sehen. Inhaber, Admins, Manager und Finanzen können sie ändern.",
+      "readOnly": "Du kannst diese Regeln sehen, aber nicht ändern.",
       "errors": {
         "name": "Gib einen Namen mit höchstens 80 Zeichen ein.",
         "name_taken": "Es gibt bereits eine Regel mit diesem Namen.",

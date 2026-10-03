@@ -2,7 +2,7 @@
 
 import { Alert, Button, Card, Checkbox, Input, Select, Switch } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
-import { useActionState } from 'react';
+import { type FormEvent, startTransition, useActionState } from 'react';
 import { errorMessageKey } from '@/lib/errors.ts';
 import { type FormState, INITIAL_FORM_STATE } from '@/lib/form-state.ts';
 
@@ -13,6 +13,18 @@ import { type FormState, INITIAL_FORM_STATE } from '@/lib/form-state.ts';
  * polite alert. Success navigates (the page announces it). Built only from v2 `@yayatoh/ui`.
  */
 type Action = (prev: FormState, form: FormData) => Promise<FormState>;
+
+/**
+ * Submit through the action without React's automatic form reset, so what was typed stays when
+ * the server says something needs fixing (success navigates away instead).
+ */
+function keepValues(dispatch: (form: FormData) => void) {
+  return (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = new FormData(e.currentTarget);
+    startTransition(() => dispatch(form));
+  };
+}
 
 const has = (s: FormState, field: string) => !s.ok && (s.fields ?? []).includes(field);
 
@@ -75,7 +87,13 @@ export function SaveViewForm({ action, view }: { action: Action; view: Readonly<
         ? t('viewErrors.name')
         : undefined;
   return (
-    <form action={formAction} noValidate className="flex flex-col gap-3" aria-labelledby="save-view-heading">
+    <form
+      action={formAction}
+      onSubmit={keepValues(formAction)}
+      noValidate
+      className="flex flex-col gap-3"
+      aria-labelledby="save-view-heading"
+    >
       <h2 id="save-view-heading" className="text-section">
         {t('saveTitle')}
       </h2>
@@ -153,7 +171,13 @@ export function AlertRuleForm({
   return (
     <Card className="flex flex-col gap-4">
       <h2 className="text-section">{mode === 'create' ? t('createTitle') : t('editTitle')}</h2>
-      <form action={formAction} noValidate className="flex flex-col gap-4" data-testid="alert-rule-form">
+      <form
+        action={formAction}
+        onSubmit={keepValues(formAction)}
+        noValidate
+        className="flex flex-col gap-4"
+        data-testid="alert-rule-form"
+      >
         <Input
           id="rule-name"
           name="name"
@@ -318,7 +342,13 @@ export function ReportScheduleForm({
   return (
     <Card className="flex flex-col gap-4">
       <h2 className="text-section">{mode === 'create' ? t('createTitle') : t('editTitle')}</h2>
-      <form action={formAction} noValidate className="flex flex-col gap-4" data-testid="report-schedule-form">
+      <form
+        action={formAction}
+        onSubmit={keepValues(formAction)}
+        noValidate
+        className="flex flex-col gap-4"
+        data-testid="report-schedule-form"
+      >
         <Input
           id="schedule-name"
           name="name"

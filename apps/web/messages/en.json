@@ -12499,7 +12499,7 @@
       "deleted": "Rule deleted",
       "turnedOff": "Rule turned off",
       "turnedOn": "Rule turned on",
-      "readOnly": "You can see these rules. Owners, admins, managers and finance can change them.",
+      "readOnly": "You can see these rules but not change them.",
       "errors": {
         "name": "Enter a name of up to 80 characters.",
         "name_taken": "A rule with this name already exists.",
