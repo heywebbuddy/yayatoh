@@ -1,6 +1,10 @@
 import { type BrowserContext, expect, type Page, test } from '@playwright/test';
 import { expectAccessible, expectAccessibleBothModes, expectHtmlAccessible, newUser } from './helpers.ts';
 
+// Batch 3h merge: axe runs in light and dark on every screen now (twice the checks), so these long
+// journeys get more than the default 30 s.
+test.describe.configure({ timeout: 120_000 });
+
 /**
  * M4.8b charity profile and receipts (P4-11, P4-13): the owner's charity profile with every
  * validation message, fair-market values on ticket types, the quid-pro-quo notice on the ticket page

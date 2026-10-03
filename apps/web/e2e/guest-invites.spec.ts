@@ -4,6 +4,10 @@ import { resolveOrgSlug } from '@yayatoh/tenancy';
 import { type RsvpScenario, rsvpScenario } from '@yayatoh/testing';
 import { expectAccessibleBothModes, passHumanCheck, signIn } from './helpers.ts';
 
+// Batch 3h merge: axe runs in light and dark on every screen now (twice the checks), so these long
+// journeys get more than the default 30 s.
+test.describe.configure({ timeout: 120_000 });
+
 /**
  * M4.1f: the contact collector (guests send their household's names, address, email and phone;
  * nothing reaches the list until the host approves it into a new party or merges it field by

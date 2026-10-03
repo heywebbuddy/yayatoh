@@ -135,13 +135,21 @@ test.describe('session enrollment and waitlists (M5.2b)', () => {
     await expect(card(other, 'Data workshop').getByText("You're enrolled", { exact: true })).toBeVisible();
     await expect(other.getByRole('button', { name: 'Drop Data workshop' })).toBeVisible();
     // …and hears it by email, with the link back to their schedule.
+    // (Batch 3h merge: a drain of the shared org's backlog takes seconds under the full suite, so the
+    // poll drains only while the email is missing and allows 30 s, like the portal specs.)
+    const mail = async () => {
+      const res = await other.request.get(`/api/dev/mailbox?to=${encodeURIComponent(second.email)}`);
+      const mails = (await res.json()) as { subject: string; text: string }[];
+      return mails.find((m) => m.subject.includes('Data workshop'))?.text ?? '';
+    };
     await expect
-      .poll(async () => {
-        await other.request.post('/api/dev/outbox/drain', { form: { org: ORG } });
-        const res = await other.request.get(`/api/dev/mailbox?to=${encodeURIComponent(second.email)}`);
-        const mails = (await res.json()) as { subject: string; text: string }[];
-        return mails.find((m) => m.subject.includes('Data workshop'))?.text ?? '';
-      })
+      .poll(
+        async () => {
+          if (!(await mail())) await other.request.post('/api/dev/outbox/drain', { form: { org: ORG } });
+          return mail();
+        },
+        { timeout: 30_000 },
+      )
       .toContain(`/orders/${second.token}/schedule`);
     await other.close();
   });
