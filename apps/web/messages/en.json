@@ -12583,7 +12583,7 @@
       "intro": "The event type decides which sections an event has: a wedding gets guests, RSVP and seating; a conference gets sessions, speakers and badges. The category helps people find public events.",
       "step1": "Pick the type closest to your event when you create it.",
       "step2": "Choose a category and add tags on the event's Details page.",
-      "step3": "Not sure? Choose Other: you still get tickets, a public page and check-in."
+      "step3": "Not sure? Choose Other: it has the common sections, and you can add details later."
     },
     "coupons": {
       "title": "How promo codes work",

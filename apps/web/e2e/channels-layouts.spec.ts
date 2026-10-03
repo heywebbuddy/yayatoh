@@ -271,7 +271,7 @@ test.describe('channels, revisions and the layout library (M6.11b)', () => {
 
     // The library, from the venues page.
     await page.goto('/o/lakeside-events/venues');
-    await page.getByRole('link', { name: 'Seating library' }).click();
+    await page.locator('#main').getByRole('link', { name: 'Seating library' }).click();
     await expect(page.getByRole('heading', { name: 'Seating library', level: 1 })).toBeVisible();
     const card = page.getByTestId('library-layout').filter({ hasText: name });
     await expect(card).toContainText('8 seats · 2 tables');
