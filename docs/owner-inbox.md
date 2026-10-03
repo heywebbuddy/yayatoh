@@ -630,3 +630,10 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **Where pages sit in the grouped sidebar** (`apps/web/src/lib/org-nav.ts`): Analytics, Coupons, Refund requests, Disputes and Charity profile under Money; Support macros next to Messages under Audience & marketing; Plan & billing, Sending setup, Messaging limits, Webhooks, Integrations, Sandboxes, Activity, Privacy requests and your own Notifications under Settings; Email templates and Domains under Site & content. Sections start open; each member's collapsed sections are remembered per browser (a cookie, no account column). Confirm or move items.
 - [ ] **Nav visibility now follows page permissions**: a viewer no longer sees Settings, Domains, Public site, Payouts or API keys in the sidebar (those pages only showed a refusal or empty figures to them); the scanner (door) role sees Home and Notifications, and Home now points them to the Scan app. Confirm.
 - [ ] **"Read the guide" links** search the help center (`/help/search?q=…`). When the help team writes articles for domains, templates, series, payouts, sending, event types and promo codes, the links can point to them directly (`lib/help-topics.ts`).
+
+## U5 — Money dashboards (2026-10-03, pending owner)
+- [ ] **Built with these defaults; say if any should change:**
+  - **Who sees what:** Overview, Payouts figures and Fees need finance access (owner, admin, finance). Sales by event is open to everyone who reads orders (viewer, box office, manager) with counts and gross only; refunds, fees and net per event need finance access.
+  - **Comparison:** each figure is compared with the period of the same length just before ("Last 30 days" vs the 30 days before). All time has no comparison.
+  - **Expected payout** on the timeline is the held amount less the 5 % reserve (decision D3 defaults); anything owed is netted at release, so the actual payout can be lower.
+  - **Fees per order** lists the latest 200 orders of the period (the CSV has the same list).
