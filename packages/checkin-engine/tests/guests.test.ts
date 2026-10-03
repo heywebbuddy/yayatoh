@@ -24,16 +24,19 @@ const guest = (
   name: first ? [first, last].filter(Boolean).join(' ') : null,
   guestOf: null,
   status: 'attending',
-  places: [{ chart: null, label: 'Table 1' }],
+  places: [{ chart: null, kind: 'table', label: 'Table 1' }],
   arrivedAt: null,
   ...over,
 });
 
 const luis = guest('Luis', 'López');
-const plusOne = guest(null, null, { guestOf: 'Luis López', places: [{ chart: null, label: 'Table 1' }] });
+const plusOne = guest(null, null, {
+  guestOf: 'Luis López',
+  places: [{ chart: null, kind: 'table', label: 'Table 1' }],
+});
 const ana = guest('Ana', 'García');
-const mei = guest('Mei', 'Chen', { places: [{ chart: null, label: 'Table 2' }] });
-const zed = guest('Zed', 'Ålund', { places: [{ chart: 'Reception', label: 'Table 9' }] });
+const mei = guest('Mei', 'Chen', { places: [{ chart: null, kind: 'table', label: 'Table 2' }] });
+const zed = guest('Zed', 'Ålund', { places: [{ chart: 'Reception', kind: 'table', label: 'Table 9' }] });
 const declined = guest('Dee', 'Clined', { status: 'declined' });
 const unseated = guest('Una', 'Seated', { places: [] });
 const twinA = guest('Sam', 'Lee');
@@ -130,7 +133,7 @@ describe('boardGroups (the A–Z board)', () => {
     ]);
     expect(names).not.toContain('Dee Clined');
     expect(names).not.toContain('Una Seated');
-    expect(groups[0]?.entries[0]?.places).toEqual([{ chart: 'Reception', label: 'Table 9' }]);
+    expect(groups[0]?.entries[0]?.places).toEqual([{ chart: 'Reception', kind: 'table', label: 'Table 9' }]);
   });
 
   it('pages never exceed their size and keep every entry once, letters repeated across a break', () => {

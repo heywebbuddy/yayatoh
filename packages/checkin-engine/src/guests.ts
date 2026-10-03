@@ -12,6 +12,7 @@ export type SnapshotGuestStatus = 'attending' | 'pending' | 'declined';
 /** A guest's place on one chart: the event plan (`chart` null) or a sub-event's ("Reception"). */
 export interface SnapshotPlace {
   readonly chart: string | null;
+  readonly kind: 'table' | 'row';
   readonly label: string;
 }
 

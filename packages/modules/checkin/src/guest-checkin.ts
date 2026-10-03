@@ -26,7 +26,11 @@ import { deviceScanScopeTx } from './staff.ts';
 
 const STATUSES = ['attending', 'pending', 'declined'] as const;
 
-const PlaceDto = z.object({ chart: z.string().nullable(), label: z.string() });
+const PlaceDto = z.object({
+  chart: z.string().nullable(),
+  kind: z.enum(['table', 'row']),
+  label: z.string(),
+});
 
 /** The device snapshot: an allowlist (P4-3: names as the host wrote them, labels, tables). */
 export const GuestSnapshotDto = z.object({
@@ -92,7 +96,11 @@ function snapshotOf(day: Awaited<ReturnType<typeof guestDayTx>>, eventId: string
         name: g.name,
         guestOf: g.guestOf,
         status: g.status,
-        places: (day.placesOf.get(g.id) ?? []).map((pl) => ({ chart: pl.subEventName, label: pl.label })),
+        places: (day.placesOf.get(g.id) ?? []).map((pl) => ({
+          chart: pl.subEventName,
+          kind: pl.kind,
+          label: pl.label,
+        })),
         arrivedAt: day.arrived.get(g.id)?.arrivedAt.toISOString() ?? null,
       })),
     })),
@@ -420,6 +428,7 @@ export const dayOfQuery = tenantQuery({
                 source: a.source as ArrivalSource,
                 places: (day.placesOf.get(a.guestId) ?? []).map((pl) => ({
                   chart: pl.subEventName,
+                  kind: pl.kind,
                   label: pl.label,
                 })),
               },

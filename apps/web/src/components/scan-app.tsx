@@ -3,6 +3,8 @@
 import { Button, cx, Input, Tabs, tabClass } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { GuestKioskScreen, TableBoardScreen } from '@/components/scan-guest-kiosk.tsx';
+import { GuestCheckinPanel } from '@/components/scan-guests.tsx';
 import { KioskScreen } from '@/components/scan-kiosk.tsx';
 import { StaffPanel } from '@/components/scan-staff.tsx';
 import { SupervisorPanel } from '@/components/scan-supervisor.tsx';
@@ -20,7 +22,7 @@ import { followChannel } from '@/scan/stream.ts';
 import { useCameraScan } from '@/scan/use-camera.ts';
 
 type Phase = 'boot' | 'setup' | 'ready' | 'wiped';
-type View = 'scan' | 'staff' | 'supervisor';
+type View = 'scan' | 'guests' | 'staff' | 'supervisor';
 
 /** Local verdicts and server results share the door screen's `checkin.result.*` messages. */
 const RESULT_KEY: Record<string, string> = {
@@ -65,6 +67,8 @@ export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
   const [queue, setQueue] = useState(0);
   const [tickets, setTickets] = useState(0);
   const [lastSync, setLastSync] = useState<Date | null>(null);
+  /** Bumped whenever the guest snapshot or this device's guest check-ins change (M4.4b). */
+  const [guestsVersion, setGuestsVersion] = useState(0);
   const [last, setLast] = useState<ScanOutcome | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [camera, setCamera] = useState(false);
@@ -89,6 +93,7 @@ export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
     setTickets(c.ticketCount);
     setLastSync(c.lastSyncAt);
     setQueue(await c.queueDepth());
+    setGuestsVersion((v) => v + 1);
   }, []);
 
   /** Pull the list and push the queue; any failure just means we stay offline for now. */
@@ -320,6 +325,25 @@ export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
     );
   }
 
+  const afterGuestChange = () => {
+    if (!client) return;
+    void refresh(client);
+    if (navigator.onLine) void syncNow(client);
+  };
+  const leaveKiosk = () => {
+    if (client) void client.leaveKiosk().then(() => setKiosk(false));
+  };
+  if (client && kiosk && client.kiosk?.kind === 'guests')
+    return (
+      <GuestKioskScreen
+        client={client}
+        version={guestsVersion}
+        afterCheckIn={afterGuestChange}
+        onExit={leaveKiosk}
+      />
+    );
+  if (client && kiosk && client.kiosk?.kind === 'board')
+    return <TableBoardScreen client={client} version={guestsVersion} onExit={leaveKiosk} />;
   if (client && kiosk && client.kiosk)
     return (
       <KioskScreen
@@ -339,6 +363,8 @@ export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
   const resultKey = shown ? (RESULT_KEY[shown] ?? 'invalid') : null;
   const views: { key: View; label: string }[] = [
     { key: 'scan', label: t('scanStaff.viewScan') },
+    // M4.4b: guest check-in by name or party, when the event has a guest list.
+    ...(client?.guests.available ? [{ key: 'guests' as const, label: t('scanGuests.view') }] : []),
     { key: 'staff', label: t('scanStaff.viewStaff') },
     { key: 'supervisor', label: t('scanStaff.viewSupervisor') },
   ];
@@ -371,6 +397,9 @@ export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
           </button>
         ))}
       </Tabs>
+      {client && view === 'guests' ? (
+        <GuestCheckinPanel client={client} version={guestsVersion} afterChange={afterGuestChange} />
+      ) : null}
       {client && view === 'staff' ? (
         <StaffPanel
           client={client}

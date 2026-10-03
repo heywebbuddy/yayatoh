@@ -80,7 +80,7 @@ describe('the guest snapshot (devices)', () => {
       firstName: 'Luis',
       lastName: 'López',
       status: 'attending',
-      places: [{ chart: null, label: '1' }],
+      places: [{ chart: null, kind: 'table', label: '1' }],
       arrivedAt: null,
     });
     // An allowlist: no meal, contact, dietary or other private field reaches a device.
@@ -99,7 +99,7 @@ describe('the guest snapshot (devices)', () => {
     // The shared engine works on it as the PWA does.
     expect(searchGuests(snap, '', ['Bride']).map((p) => p.name)).toEqual(['Garcia', 'Okafor']);
     const m = matchGuestByName(snap, 'ADA OKAFOR');
-    expect(m.status === 'found' && m.guest.places).toEqual([{ chart: null, label: '2' }]);
+    expect(m.status === 'found' && m.guest.places).toEqual([{ chart: null, kind: 'table', label: '2' }]);
     expect(matchGuestByName(snap, 'Mei Chen').status).toBe('see_staff');
     expect(boardGroups(snap, 'en').flatMap((g) => g.entries.map((e) => e.name))).toEqual([
       'Ana García',
@@ -233,7 +233,7 @@ describe('the host: day-of view, check-in and undo', () => {
     expect(anaRow).toMatchObject({
       name: 'Ana García',
       partyName: 'Garcia',
-      places: [{ chart: null, label: '1' }],
+      places: [{ chart: null, kind: 'table', label: '1' }],
     });
     expect(day.arrivals.find((x) => x.guestId === s.plusOne)).toMatchObject({
       name: null,
