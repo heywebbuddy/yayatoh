@@ -104,6 +104,7 @@ export {
   provisionSandboxOrgCommand,
   retireSandboxOrgCommand,
   SandboxDto,
+  sandboxOrgName,
   sandboxSlug,
 } from './commands/sandbox.ts';
 export {

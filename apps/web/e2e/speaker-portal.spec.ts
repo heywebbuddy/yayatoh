@@ -106,8 +106,13 @@ async function mailTo(page: Page, email: string, subject: RegExp, drainFirst = f
   await expect
     .poll(
       async () => {
-        if (drainFirst) await drain(page);
         found = (await mailbox(page, email)).find((m) => subject.test(m.subject));
+        // Drain only while it hasn't arrived: under the full suite a drain of the shared org's
+        // whole backlog can outlast the poll, so never drain for a message already delivered.
+        if (!found && drainFirst) {
+          await drain(page);
+          found = (await mailbox(page, email)).find((m) => subject.test(m.subject));
+        }
         return Boolean(found);
       },
       { timeout: 30_000 },

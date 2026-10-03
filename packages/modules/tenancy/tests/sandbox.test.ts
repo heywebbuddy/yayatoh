@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { isApiKeyLive } from '../src/commands/api-keys.ts';
-import { sandboxSlug } from '../src/commands/sandbox.ts';
+import { sandboxOrgName, sandboxSlug } from '../src/commands/sandbox.ts';
 import { roleCan } from '../src/domain/permissions.ts';
 import { ORG_ROLES } from '../src/schema.ts';
 
@@ -11,6 +11,12 @@ describe('sandbox orgs (M6.3a)', () => {
     expect(long.length).toBeLessThanOrEqual(63);
     expect(long).toBe(`${'x'.repeat(39)}-sandbox-ffffff`);
     expect(sandboxSlug('abc')).toMatch(/^abc-sandbox-[0-9a-f]{6}$/);
+  });
+
+  it('names the sandbox org after its parent, so it sorts right after it', () => {
+    expect(sandboxOrgName('Lakeside Events', 'Staging')).toBe('Lakeside Events – Staging');
+    expect(['Lakeside Events – E2E', 'Lakeside Events'].sort()[0]).toBe('Lakeside Events');
+    expect(sandboxOrgName('x'.repeat(120), 'y'.repeat(60)).length).toBeLessThanOrEqual(120);
   });
 
   it('only owners and admins manage sandboxes', () => {

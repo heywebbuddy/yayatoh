@@ -73,6 +73,20 @@ export const subscribes = (s: Subscriber, e: PublishedEvent) =>
   s.events.includes(eventKey(e)) && (!e.replayed || s.acceptsReplayed === true);
 
 /**
+ * Which (consumer, event) pairs of these events were already handled (`processed_events`), as
+ * `"{consumer} {eventId}"` keys, in one query. Dev tooling (the web app's dev drain) skips them
+ * instead of opening a transaction per pair: `consumeEvent` stays the guard for the rest.
+ */
+export async function processedPairsTx(tx: TenantTx, eventIds: readonly string[]): Promise<Set<string>> {
+  if (eventIds.length === 0) return new Set();
+  const rows = await tx
+    .select({ consumer: processedEvents.consumer, eventId: processedEvents.eventId })
+    .from(processedEvents)
+    .where(inArray(processedEvents.eventId, [...eventIds]));
+  return new Set(rows.map((r) => `${r.consumer} ${r.eventId}`));
+}
+
+/**
  * This org's recent outbox events of the given types (dev tooling: the web app's dev drain
  * replays them through subscribers; consumers dedupe, so replays are harmless).
  */

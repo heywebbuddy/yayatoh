@@ -241,7 +241,11 @@ describe('sandbox orgs (M6.3a)', () => {
     const sandboxCtx = userCtx(a.ownerId, s.sandboxOrgId);
     expect(await memberRole(sandboxCtx)).toBe('owner');
     const org = await executeQuery(getOrganizationQuery, {}, sandboxCtx, ports);
-    expect(org).toMatchObject({ name: 'Integration tests', sandbox: true, timezone: 'America/Chicago' });
+    expect(org).toMatchObject({
+      name: 'Alpha Events – Integration tests',
+      sandbox: true,
+      timezone: 'America/Chicago',
+    });
     // The parent's other members are not members of the sandbox.
     expect(await memberRole(userCtx(a.viewerId, s.sandboxOrgId))).toBeNull();
     // A sandbox can't have sandboxes.

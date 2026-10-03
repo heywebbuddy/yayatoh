@@ -1,11 +1,11 @@
 You are the merge session for **Yayatoh 2.0** (repo heywebbuddy/yayatoh), batch 3h: the Phase 4 Wave B and Phase 5 Wave 2 builders, merged on top of **design system v2**. Nobody is watching live: work autonomously to completion and never wait for input. The orchestrator lands your result on the build branch after reading your report.
 
 ## Branch and git
-You start on the build branch `m0.5-foundation-ey5gqp`. By the time you run, it carries batches 3c–3g **and design v2** (`agent/design-v2`, landed by the orchestrator).
-- If `git merge-base --is-ancestor origin/agent/design-v2 origin/m0.5-foundation-ey5gqp` fails, stop and report: design v2 must land first.
+The build branch `m0.5-foundation-ey5gqp` will carry batches 3c–3g **and design v2** (`agent/design-v2`). To save time you may start before 3f, 3g and design v2 have landed on it:
 - `git fetch origin && git checkout -B merge/next-3h origin/m0.5-foundation-ey5gqp`
+- If `origin/agent/design-v2` is not yet an ancestor of the build branch: `git merge --no-edit origin/merge/next-3g`, then `git merge --no-edit origin/agent/design-v2` (design v2 already contains 3f and 3g as of its last merge).
+- Every couple of hours, and **before your final gate**, `git fetch origin` and merge `origin/m0.5-foundation-ey5gqp` again; run the final gate only once design v2 is an ancestor of the build branch (if it still is not, merge the newest `origin/merge/next-3f`, `origin/merge/next-3g` and `origin/agent/design-v2` and say so in the report).
 - Publish with a normal push: `git push -u origin merge/next-3h`. Never push to any other branch. Never force-push. Never open PRs.
-- Before your final gate, fetch and merge the latest `origin/m0.5-foundation-ey5gqp` again.
 
 ## Merge these branches, one at a time, in this order, with merge commits
 The orchestrator lists the final set in your launch prompt (only builders that reported). The expected order:
@@ -23,6 +23,10 @@ The orchestrator lists the final set in your launch prompt (only builders that r
 **Known issue to root-cause, never skip:** in M4.8b's full integration run, `apps/worker/tests/retention.int.test.ts` ("runs every org as a system actor, audits the daily pass") failed once and passes alone. The daily pass sweeps every org the suite created, so it depends on what other test files left behind. Make the assertion scoped to the orgs the test owns, or make the pass deterministic, and prove it with the full suite twice.
 
 Each branch's last commit message is its report (migrations, hand edits, owner items): read it before merging. A branch without a report is not in your list.
+
+**Local dev fix (owner hit it on 2026-10-02):** `pnpm dev` runs turbo in strict env mode, so the worker and API get none of the shell's variables (`JOBS_DATABASE_URL is not set`); only the Next apps work because they read `.env.local`. Make the root `dev` script `turbo run dev --env-mode=loose` (dev only; builds stay strict) and note it in `docs/local-development.md`, which must also list every variable the worker and API need to start (`NEXT_PUBLIC_APP_ORIGIN`, `APP_TOKEN_SECRET`, `JOBS_DATABASE_URL`, `API_PUBLIC_URL`).
+
+**Dev sign-in labels (owner hit it on 2026-10-02):** `/dev/login` shows Nia Newcomer and Omar Ops as "Owner · " with an empty org, so they look like broken owners and land on "You're not in an organization yet". Label them by what they are (Nia: "New account, no organization: sign-up and onboarding"; Omar: "Yayatoh staff: use the admin console on :3001") and send Omar's button to the admin console sign-in, with an e2e for both cards.
 
 ## Merge procedure
 Follow the "Merge procedure (house rules)" section of `docs/agent-briefs/merge-3e.md` exactly:

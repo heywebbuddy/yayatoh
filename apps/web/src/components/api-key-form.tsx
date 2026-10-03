@@ -68,28 +68,6 @@ export function ApiKeyForm({
             </p>
           ) : null}
         </fieldset>
-        {/* M1.13d: a test key (`yy_test_…`) is read-only and never sees personal data. */}
-        <fieldset className="flex flex-col gap-2">
-          <legend className="text-caption text-zinc-600">{t('apiKeys.mode')}</legend>
-          {(['live', 'test'] as const).map((m) => (
-            <label key={m} className="flex min-h-10 items-start gap-2.5 text-body">
-              <input
-                type="radio"
-                name="mode"
-                value={m}
-                defaultChecked={m === 'live'}
-                aria-describedby={`mode-${m}-hint`}
-                className="mt-1 size-4 accent-zinc-900"
-              />
-              <span className="flex flex-col">
-                <span>{t(m === 'live' ? 'apiKeys.modeLive' : 'apiKeys.modeTest')}</span>
-                <span id={`mode-${m}-hint`} className="text-caption text-zinc-600">
-                  {t(m === 'live' ? 'apiKeys.modeLiveHint' : 'apiKeys.modeTestHint')}
-                </span>
-              </span>
-            </label>
-          ))}
-        </fieldset>
         {/* M6.3a: how long the key lives; 90 days unless the creator picks otherwise. */}
         <div className="flex flex-col gap-1.5">
           <label htmlFor="api-key-expiry" className="text-caption text-zinc-600">
@@ -112,6 +90,28 @@ export function ApiKeyForm({
             {t('apiKeys.expiryHint')}
           </p>
         </div>
+        {/* M1.13d: a test key (`yy_test_…`) is read-only and never sees personal data. */}
+        <fieldset className="flex flex-col gap-2">
+          <legend className="text-caption text-zinc-600">{t('apiKeys.mode')}</legend>
+          {(['live', 'test'] as const).map((m) => (
+            <label key={m} className="flex min-h-10 items-start gap-2.5 text-body">
+              <input
+                type="radio"
+                name="mode"
+                value={m}
+                defaultChecked={m === 'live'}
+                aria-describedby={`mode-${m}-hint`}
+                className="mt-1 size-4 accent-zinc-900"
+              />
+              <span className="flex flex-col">
+                <span>{t(m === 'live' ? 'apiKeys.modeLive' : 'apiKeys.modeTest')}</span>
+                <span id={`mode-${m}-hint`} className="text-caption text-zinc-600">
+                  {t(m === 'live' ? 'apiKeys.modeLiveHint' : 'apiKeys.modeTestHint')}
+                </span>
+              </span>
+            </label>
+          ))}
+        </fieldset>
         <div>
           <Button type="submit" disabled={pending}>
             {t('apiKeys.create')}
