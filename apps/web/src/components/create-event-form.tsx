@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, Card, DateTimePicker, Input, Select } from '@yayatoh/ui';
+import { Alert, Button, Card, DateTimePicker, Input, Select, TimeZonePicker } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState, useState } from 'react';
 import type { CreateEventState } from '@/app/[locale]/o/[org]/(org)/events/new/actions.ts';
@@ -9,21 +9,6 @@ import { seriesErrorKey } from './series-errors.ts';
 import { SeriesField } from './series-field.tsx';
 
 const PROFILES = ['conference', 'gala', 'concert', 'wedding', 'community', 'agency', 'other'] as const;
-const ZONES = [
-  'America/New_York',
-  'America/Chicago',
-  'America/Denver',
-  'America/Los_Angeles',
-  'America/Toronto',
-  'Europe/London',
-  'Europe/Paris',
-  'Africa/Lagos',
-  'Africa/Accra',
-  'Asia/Dubai',
-  'Asia/Kolkata',
-  'Asia/Tokyo',
-  'Australia/Sydney',
-] as const;
 
 export function CreateEventForm({
   action,
@@ -40,9 +25,6 @@ export function CreateEventForm({
   const [state, formAction, pending] = useActionState(action, { code: null });
   // One key per form: a double submit returns the same event instead of "name already taken".
   const [requestKey] = useState(() => `create-event:${crypto.randomUUID()}`);
-  const zones = ZONES.includes(defaults.timezone as (typeof ZONES)[number])
-    ? ZONES
-    : [defaults.timezone, ...ZONES];
   const selectClass = 'field';
   return (
     <Card size="panel" className="max-w-2xl">
@@ -85,13 +67,12 @@ export function CreateEventForm({
             <label htmlFor="timezone" className="text-[13px] font-bold text-ink">
               {t('newEvent.timezone')}
             </label>
-            <Select id="timezone" name="timezone" defaultValue={defaults.timezone} className={selectClass}>
-              {zones.map((z) => (
-                <option key={z} value={z}>
-                  {z.replace(/_/g, ' ')}
-                </option>
-              ))}
-            </Select>
+            <TimeZonePicker
+              id="timezone"
+              name="timezone"
+              defaultValue={defaults.timezone}
+              className={selectClass}
+            />
           </div>
           <DateTimePicker
             name="startsAt"
