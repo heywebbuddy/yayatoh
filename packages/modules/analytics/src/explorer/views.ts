@@ -131,6 +131,7 @@ export const deleteViewCommand = tenantCommand({
   output: z.object({ deleted: z.literal(true) }),
   entitlement: 'analytics_pro',
   permission: 'orders:read',
+  category: 'delete',
   handler: async ({ input, ctx, tx }) => {
     const gone = await tx
       .delete(savedViews)
