@@ -12,6 +12,7 @@ export const privateColumns = columnPrivacy('checkin', {
     label: internal(),
     token_hash: secret(),
     mode: 'vocab',
+    app_version: internal(),
     kiosk_pin_hash: secret('none', {
       why: 'CHECK requires the pbkdf2 format; only the kiosk device gets it (staff-mode.int.test)',
     }),
@@ -39,4 +40,7 @@ export const privateColumns = columnPrivacy('checkin', {
   },
   staff_alert_pushes: { alert_key: internal(), kind: 'vocab', params: internal(), status: 'vocab' },
   scans: { result: 'vocab', code_kind: 'vocab', client_scan_id: internal() },
+  // M3.3a live mode: closed sets.
+  device_events: { kind: 'vocab' },
+  staff_presence: { source: 'vocab' },
 });

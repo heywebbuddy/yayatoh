@@ -119,6 +119,11 @@ export async function createCheckpointAction(
     (latitude !== null && Math.abs(latitude) > 90) ||
     (longitude !== null && Math.abs(longitude) > 180);
   if (badLocation) return { ok: false, code: 'validation_failed', field: 'location' };
+  // M3.3a: how many people the area holds (blank = not limited), a whole number from 1.
+  const rawCapacity = String(form.get('capacity') ?? '').trim();
+  const capacity = rawCapacity === '' ? null : Number(rawCapacity);
+  if (capacity !== null && (!Number.isInteger(capacity) || capacity < 1 || capacity > 1_000_000))
+    return { ok: false, code: 'validation_failed', field: 'capacity' };
   try {
     await executeCommand(
       createCheckpointCommand,
@@ -129,6 +134,7 @@ export async function createCheckpointAction(
         ticketTypeIds: form.get('kind') === 'zone' ? form.getAll('ticketTypeIds').map(String) : [],
         latitude,
         longitude,
+        capacity,
       },
       data.ctx,
       ports,
