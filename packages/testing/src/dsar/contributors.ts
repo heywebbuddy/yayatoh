@@ -4,6 +4,7 @@ import { attendeesDataSubjects } from '@yayatoh/attendees';
 import { automationsDataSubjects } from '@yayatoh/automations';
 import { badgesDataSubjects } from '@yayatoh/badges';
 import { campaignsDataSubjects } from '@yayatoh/campaigns';
+import { ceDataSubjects } from '@yayatoh/ce';
 import { checkinDataSubjects } from '@yayatoh/checkin';
 import { cmsDataSubjects } from '@yayatoh/cms';
 import { crmDataSubjects } from '@yayatoh/crm';
@@ -57,6 +58,7 @@ export const DATA_SUBJECT_CONTRIBUTORS = [
   cmsDataSubjects,
   venuesDataSubjects,
   virtualDataSubjects,
+  ceDataSubjects,
   reviewsDataSubjects,
   paymentsDataSubjects,
   surveysDataSubjects,

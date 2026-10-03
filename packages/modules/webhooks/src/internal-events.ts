@@ -35,6 +35,8 @@ export const INTERNAL_EVENTS: Readonly<Record<string, InternalReason>> = {
   'campaigns.send_completed@1': 'later',
   'campaigns.send_failed@1': 'workflow',
   'campaigns.send_started@1': 'later',
+  'ce.certificate_issued@1': 'personal',
+  'ce.certificate_revoked@1': 'personal',
   'checkin.duplicate_offline@1': 'security',
   'checkin.fraud_signal@1': 'security',
   'checkin.session_attended@1': 'later',

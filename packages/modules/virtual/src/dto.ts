@@ -97,3 +97,29 @@ export const HeartbeatDto = z.object({
   minutes: z.number().int().nonnegative(),
 });
 export type HeartbeatDto = z.infer<typeof HeartbeatDto>;
+
+/* ---------------------------------------------------------------------- M6.9b: Zoom ---- */
+
+export const ZoomSessionDto = z.object({
+  sessionId: z.uuid(),
+  title: z.string(),
+  startsAt: z.date(),
+  endsAt: z.date(),
+  /** The linked Zoom webinar's id, or null. */
+  webinarId: z.string().nullable(),
+  /** Holders with online access registered (or to register) for the webinar. */
+  registrants: z.number().int().nonnegative(),
+  /** Registered holders found in the webinar's attendance report. */
+  attendees: z.number().int().nonnegative(),
+});
+export type ZoomSessionDto = z.infer<typeof ZoomSessionDto>;
+
+export const ZoomSetupDto = z.object({ eventId: z.uuid(), sessions: z.array(ZoomSessionDto) });
+export type ZoomSetupDto = z.infer<typeof ZoomSetupDto>;
+
+export const ZoomSyncDto = z.object({
+  added: z.number().int().nonnegative(),
+  updated: z.number().int().nonnegative(),
+  webinarId: z.string().nullable(),
+});
+export type ZoomSyncDto = z.infer<typeof ZoomSyncDto>;

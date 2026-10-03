@@ -335,6 +335,11 @@
     "program.cfp-rejected": {
       "subject": "ご提案「{title}」について",
       "intro": "{eventName}への「{title}」のご提案ありがとうございます。今回、{org}はプログラムに含めることができませんでした。{hasNote, select, yes { 主催者からのメッセージ：{note}} other {}}"
+    },
+    "ce.certificate": {
+      "subject": "{org} からの証明書",
+      "intro": "{eventName} で {credits} を取得しました。証明書（コード {code}）は下記および PDF でご覧いただけます。",
+      "cta": "PDF の証明書をダウンロード"
     }
   },
   "roles": {

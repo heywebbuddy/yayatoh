@@ -335,6 +335,11 @@
     "program.cfp-rejected": {
       "subject": "Zu Ihrem Vorschlag „{title}“",
       "intro": "Danke für Ihren Vorschlag „{title}“ für {eventName}. {org} konnte ihn diesmal leider nicht ins Programm aufnehmen.{hasNote, select, yes { Hinweis der Veranstalter: {note}} other {}}"
+    },
+    "ce.certificate": {
+      "subject": "Ihre Bescheinigung von {org}",
+      "intro": "Sie haben bei {eventName} {credits} erworben. Ihre Bescheinigung (Code {code}) steht unten und als PDF bereit.",
+      "cta": "Bescheinigung als PDF herunterladen"
     }
   },
   "roles": {

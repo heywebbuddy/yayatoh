@@ -1,4 +1,4 @@
-import { columnPrivacy, holder, secret } from '@yayatoh/db';
+import { columnPrivacy, holder, internal, personal, secret } from '@yayatoh/db';
 
 /**
  * Column privacy of the `virtual` schema (roadmap §9 canary leak test; see `columnPrivacy` in
@@ -16,4 +16,13 @@ export const privateColumns = columnPrivacy('virtual', {
     // The provider's fixed ingest address (one per provider), not org data.
     ingest_url: 'vocab',
   },
+  // M6.9b: Zoom. The webinar id is the organizer's Zoom webinar (digits only, so the canary cannot
+  // be written; it reaches registrants inside Zoom's own emails, never a Yayatoh page).
+  zoom_webinars: {
+    webinar_id: internal('none', {
+      why: 'CHECK allows 9–12 digits only; the console shows it to event editors, nothing public reads it.',
+    }),
+  },
+  zoom_registrants: { email: personal('email'), first_name: personal(), last_name: personal() },
+  zoom_attendance: { email: personal('email') },
 });

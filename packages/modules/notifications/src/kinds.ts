@@ -475,6 +475,14 @@ export const KINDS = {
     urgent: false,
     params: ['url', 'name', 'eventName', 'amountMinor', 'currency', 'deductible', 'body'],
   },
+  // M6.9b: a CE certificate (one message per revision), to the ticket holder only. The
+  // certificate's own wording (`body`) is the ce module's legal-copy template.
+  'ce.certificate': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: false,
+    params: ['url', 'name', 'eventName', 'credits', 'code', 'revision', 'body'],
+  },
   'donations.year-end-statement': {
     category: 'transactional',
     channels: ['email'],

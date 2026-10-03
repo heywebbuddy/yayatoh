@@ -335,6 +335,11 @@
     "program.cfp-rejected": {
       "subject": "Over je voorstel ‘{title}’",
       "intro": "Bedankt voor je voorstel ‘{title}’ voor {eventName}. {org} kon het deze keer niet in het programma opnemen.{hasNote, select, yes { Bericht van de organisatoren: {note}} other {}}"
+    },
+    "ce.certificate": {
+      "subject": "Uw bewijs van {org}",
+      "intro": "U behaalde {credits} bij {eventName}. Uw bewijs (code {code}) staat hieronder en als pdf.",
+      "cta": "Het bewijs als pdf downloaden"
     }
   },
   "roles": {

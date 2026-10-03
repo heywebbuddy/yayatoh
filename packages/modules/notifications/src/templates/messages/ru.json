@@ -335,6 +335,11 @@
     "program.cfp-rejected": {
       "subject": "О вашей заявке «{title}»",
       "intro": "Спасибо за заявку «{title}» на {eventName}. В этот раз {org} не смогли включить её в программу.{hasNote, select, yes { Комментарий организаторов: {note}} other {}}"
+    },
+    "ce.certificate": {
+      "subject": "Ваш сертификат от {org}",
+      "intro": "Вы получили {credits} на мероприятии {eventName}. Ваш сертификат (код {code}) ниже и в PDF.",
+      "cta": "Скачать сертификат в PDF"
     }
   },
   "roles": {
