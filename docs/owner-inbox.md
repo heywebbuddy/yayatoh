@@ -775,3 +775,11 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **Unattended kiosks need PrintNode for silent printing.** On the print-dialog path the attendee taps "Open my badge to print" and prints from the PDF (AirPrint). Confirm, or plan PrintNode (Stage 2) for unattended kiosks.
 - [ ] **Email codes** go only to the ticket holder's own address; an address with several tickets at the event, or a registration still waiting, is sent to the desk. Confirm.
 - [ ] **Kiosk email wording** (`badges.kiosk-code`, 13 locales; label `legal-copy`).
+
+## M5.6b — lead retrieval (2026-10-03, pending owner)
+- [ ] **Lead terms wording (`legal-copy`, P5-8):** the exhibitor click-through (`leads.terms.v1`, 13 locales) and the attendee's "Who scanned my badge" wording. The terms are versioned (`LEAD_TERMS_VERSION = 1`); new wording is a new version and every exhibitor accepts again. Needs your counsel.
+- [ ] **What "withdraw email sharing afterwards" does (P5-8):** built as: the attendee can stop sharing with one exhibitor (that lead's email is cleared; the lead keeps a stamp that the email was shared, under which consent version, and when it was withdrawn) and can turn sharing off (or on) for future scans (a consent-ledger row, version 1). The exhibitor's export after a withdrawal has no email. If you prefer that exhibitors keep the email already shared (they became its controller), say so: it is one line.
+- [ ] **Export step-up:** the exhibitor admin's CSV export needs a portal sign-in in the last 10 minutes (an emailed code, the P5-7 sign-in flow). Staff can't export. Confirm, or let staff export their own leads.
+- [ ] **Own vs team default:** staff see only the leads they scanned unless the exhibitor admin turns on team visibility; the admin always sees all; organizers see no lead details. Confirm.
+- [ ] **Rating scale:** hot / warm / cold (or none). Confirm, or ask for 1–5 stars.
+- [ ] **Offline clock:** an offline scan counts at the device's time (unless it runs more than 5 minutes ahead of the server), so a scan made before capture closed still counts when it syncs later, up to the 90-day access end. A device whose clock is set back could stretch that; tell us if you want offline scans to sync within, say, 24 h of closing.

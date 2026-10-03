@@ -15273,5 +15273,170 @@
     "readyTitle": "Votre badge est prêt à imprimer",
     "readyHint": "Ouvrez-le, choisissez Imprimer, puis récupérez-le à l'imprimante.",
     "openBadge": "Ouvrir mon badge pour l'imprimer"
+  },
+  "leads": {
+    "portal": {
+      "heading": "Capture de leads",
+      "window": "La capture ouvre le {opens} et ferme le {closes} (heure de l’événement). Les notes et l’export restent disponibles jusqu’au {until}.",
+      "termsNeededAdmin": "Acceptez les conditions des leads ci-dessous pour que votre équipe puisse capturer des leads.",
+      "termsNeededStaff": "L’administrateur de votre exposant doit accepter les conditions des leads avant que vous puissiez en capturer.",
+      "why": {
+        "unlicensed": "Vous n’avez pas encore de licence de leads. Demandez-en une à l’administrateur de votre exposant.",
+        "over_allowance": "Votre licence dépasse le quota de votre exposant. Demandez à l’administrateur d’en reprendre une ou d’en acheter d’autres."
+      },
+      "open": "Ouvrir la capture de leads"
+    },
+    "license": {
+      "licensed": "Avec licence",
+      "unlicensed": "Sans licence",
+      "over_allowance": "Au-delà du quota"
+    },
+    "capture": {
+      "not_open": "Capture pas encore ouverte",
+      "open": "Capture ouverte",
+      "closed": "Capture fermée"
+    },
+    "terms": {
+      "heading": "Conditions des leads",
+      "v1": "Lorsque vous scannez le badge d’un participant, vous recevez uniquement son nom, sa fonction et son entreprise, et son e-mail seulement s’il a accepté de le partager. Votre entreprise devient responsable de ces données : utilisez-les uniquement pour donner suite à votre échange lors de cet événement, protégez-les et supprimez-les sur demande. Les participants voient que vous les avez scannés et peuvent cesser de partager leur e-mail.",
+      "accepted": "Conditions des leads acceptées",
+      "acceptLabel": "Accord",
+      "accept": "J’accepte les conditions des leads au nom de {exhibitor}",
+      "submit": "Accepter les conditions des leads",
+      "acceptRequired": "Cochez la case pour accepter les conditions des leads."
+    },
+    "settings": {
+      "heading": "Critères et visibilité",
+      "qualifiers": "Critères de qualification",
+      "qualifiersHint": "Un par ligne, jusqu’à 10 (par exemple : Budget validé). Votre équipe les coche pour chaque lead.",
+      "visibility": "Qui voit les leads",
+      "teamVisibility": "Le personnel voit les leads de toute l’équipe (sinon uniquement ceux qu’il a scannés)",
+      "save": "Enregistrer les paramètres des leads",
+      "saved": "Paramètres des leads enregistrés.",
+      "qualifiersInvalid": "Chaque critère peut contenir au plus 60 caractères.",
+      "tooMany": "Vous pouvez avoir au plus 10 critères."
+    },
+    "export": {
+      "heading": "Exporter les leads",
+      "ready": "Confirmé. Vous pouvez maintenant télécharger vos leads.",
+      "count": "{count, plural, =0 {Aucun lead pour l’instant} one {# lead} other {# leads}}",
+      "hint": "Pour votre sécurité, nous vous envoyons un code par e-mail pour confirmer votre identité avant le téléchargement.",
+      "download": "Télécharger les leads (CSV)",
+      "ended": "L’accès aux leads de cet événement est terminé.",
+      "columns": {
+        "name": "Nom",
+        "jobTitle": "Fonction",
+        "company": "Entreprise",
+        "email": "E-mail",
+        "rating": "Évaluation",
+        "qualifiers": "Critères",
+        "notes": "Notes",
+        "capturedAt": "Scanné le",
+        "scannedBy": "Scanné par",
+        "scans": "Scans",
+        "sharedFields": "Champs partagés",
+        "emailConsentVersion": "Version du consentement e-mail"
+      }
+    },
+    "confirm": {
+      "title": "Confirmez votre identité",
+      "intro": "Pour télécharger vos leads, confirmez avec un code envoyé à {email}."
+    },
+    "attendee": {
+      "heading": "Qui a scanné mon badge",
+      "emptyTitle": "Personne n’a encore scanné votre badge",
+      "emptyDescription": "Quand un exposant scanne votre badge, il apparaît ici.",
+      "scannedAt": "Scanné le {time}",
+      "emailShared": "A votre e-mail",
+      "emailWithdrawn": "Partage de l’e-mail arrêté",
+      "emailNotShared": "E-mail non partagé",
+      "withdraw": "Ne plus partager mon e-mail avec {exhibitor}",
+      "withdrawn": "C’est fait. Il ne voit plus votre e-mail.",
+      "sharingOn": "Les exposants qui scannent votre badge reçoivent votre e-mail.",
+      "sharingOff": "Les exposants qui scannent votre badge ne reçoivent pas votre e-mail.",
+      "sharingHint": "Ils reçoivent toujours votre nom, votre fonction et votre entreprise. Jamais votre téléphone ni votre adresse.",
+      "turnOff": "Ne plus partager mon e-mail avec les exposants",
+      "turnOn": "Partager mon e-mail avec les exposants qui scannent mon badge",
+      "saved": "Enregistré."
+    },
+    "app": {
+      "pageTitle": "Capture de leads",
+      "loading": "Chargement…",
+      "signedOutTitle": "Connectez-vous pour capturer des leads",
+      "signedOutDescription": "Ouvrez sur cet appareil le lien de connexion de votre e-mail d’invitation exposant, puis revenez à la capture de leads.",
+      "openPortal": "Aller au portail exposant",
+      "title": "Leads de {exhibitor}",
+      "online": "En ligne",
+      "offline": "Hors ligne : les scans sont enregistrés sur cet appareil",
+      "queued": "{count, plural, =0 {Tout est synchronisé} one {# scan en attente de synchronisation} other {# scans en attente de synchronisation}}",
+      "modes": "Vues de la capture de leads",
+      "viewScan": "Scanner",
+      "viewLeads": "{count, plural, =0 {Leads} other {Leads (#)}}",
+      "blockedTitle": "Vous ne pouvez pas capturer de leads pour le moment",
+      "blocked": {
+        "unlicensed": "Vous n’avez pas de licence de leads. Demandez-en une à l’administrateur de votre exposant.",
+        "over_allowance": "Votre licence dépasse le quota de votre exposant. Adressez-vous à l’administrateur.",
+        "termsAdmin": "Acceptez d’abord les conditions des leads dans le portail exposant.",
+        "termsStaff": "L’administrateur de votre exposant doit d’abord accepter les conditions des leads.",
+        "notOpen": "La capture ouvre le {time}.",
+        "closed": "La capture a fermé le {time}. Vous pouvez encore consulter et modifier vos leads."
+      },
+      "codeLabel": "Code du badge",
+      "codeHint": "Scannez le QR du badge ou saisissez le code imprimé en dessous.",
+      "save": "Enregistrer le lead",
+      "camera": "Scanner avec la caméra",
+      "stopCamera": "Arrêter la caméra",
+      "cameraFailed": "La caméra n’a pas pu démarrer. Saisissez plutôt le code du badge.",
+      "refusals": {
+        "no_license": "Vous n’avez pas de licence de leads. Demandez-en une à l’administrateur de votre exposant.",
+        "over_allowance": "Votre licence dépasse le quota de votre exposant. Vos scans attendent sur cet appareil.",
+        "terms_not_accepted": "Les conditions des leads ne sont pas encore acceptées. Vos scans attendent sur cet appareil.",
+        "access_ended": "L’accès aux leads de cet événement est terminé.",
+        "other": "Un problème est survenu. Vos scans attendent sur cet appareil ; réessayez."
+      },
+      "result": {
+        "queued": "Enregistré sur cet appareil",
+        "queuedHint": "Les détails apparaissent après la synchronisation.",
+        "refused": "Non enregistré",
+        "captured": "Lead enregistré",
+        "rescanned": "Déjà un lead : scan ajouté"
+      },
+      "reasons": {
+        "invalid": "Ce badge est illisible. Vérifiez le code et réessayez.",
+        "wrong_event": "Ce badge est celui d’un autre événement.",
+        "not_open": "Il a été scanné avant l’ouverture de la capture.",
+        "closed": "Il a été scanné après la fermeture de la capture."
+      },
+      "emailWithdrawn": "Partage de l’e-mail arrêté par le participant le {time}",
+      "emailNotShared": "E-mail non partagé",
+      "capturedAt": "Scanné le {time}{count, plural, one {} other { · # scans}}",
+      "scannedBy": "par {email}",
+      "editLabel": "Détails du lead",
+      "rating": "Évaluation",
+      "ratings": {
+        "hot": "Chaud",
+        "warm": "Tiède",
+        "cold": "Froid",
+        "none": "Sans évaluation"
+      },
+      "qualifiers": "Critères",
+      "notes": "Notes",
+      "saveDetails": "Enregistrer les détails",
+      "saved": "Enregistré.",
+      "savedQueued": "Enregistré avec le scan. Synchronisé dès que vous êtes en ligne.",
+      "needsConnection": "Connectez-vous à Internet pour enregistrer les modifications de ce lead.",
+      "saveFailed": "Échec de l’enregistrement. Réessayez.",
+      "accessEnded": "L’accès aux leads de cet événement est terminé.",
+      "scope": {
+        "all": "Tous les leads de {exhibitor}",
+        "team": "Les leads de votre équipe",
+        "own": "Vos leads"
+      },
+      "emptyTitle": "Aucun lead pour l’instant",
+      "emptyDescription": "Scannez un badge dans l’onglet Scanner pour enregistrer votre premier lead.",
+      "search": "Rechercher des leads",
+      "noMatch": "Aucun lead ne correspond à votre recherche.",
+      "edit": "Modifier {name}"
+    }
   }
 }

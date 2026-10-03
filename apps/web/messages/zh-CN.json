@@ -15273,5 +15273,170 @@
     "readyTitle": "你的胸牌可以打印了",
     "readyHint": "打开后选择“打印”，然后到打印机处领取。",
     "openBadge": "打开我的胸牌进行打印"
+  },
+  "leads": {
+    "portal": {
+      "heading": "潜在客户采集",
+      "window": "采集于 {opens} 开启，{closes} 关闭（活动当地时间）。备注和导出可使用至 {until}。",
+      "termsNeededAdmin": "请先在下方接受潜在客户条款，团队才能采集潜在客户。",
+      "termsNeededStaff": "展商管理员需要先接受潜在客户条款，你才能采集潜在客户。",
+      "why": {
+        "unlicensed": "你还没有潜在客户许可。请向展商管理员申请。",
+        "over_allowance": "你的许可超出了展商的配额。请让管理员收回一个许可或购买更多。"
+      },
+      "open": "打开潜在客户采集"
+    },
+    "license": {
+      "licensed": "已授权",
+      "unlicensed": "无许可",
+      "over_allowance": "超出配额"
+    },
+    "capture": {
+      "not_open": "采集尚未开启",
+      "open": "采集已开启",
+      "closed": "采集已关闭"
+    },
+    "terms": {
+      "heading": "潜在客户条款",
+      "v1": "扫描参会者的胸牌时，你只会收到其姓名、职位和公司；仅当其同意分享时才会收到电子邮箱。贵公司将对这些数据负责：仅用于跟进你们在本次活动中的交流，妥善保管，并在对方要求时删除。参会者可以看到你扫描了他们，并可以停止分享电子邮箱。",
+      "accepted": "已接受潜在客户条款",
+      "acceptLabel": "同意",
+      "accept": "我代表 {exhibitor} 接受潜在客户条款",
+      "submit": "接受潜在客户条款",
+      "acceptRequired": "请勾选以接受潜在客户条款。"
+    },
+    "settings": {
+      "heading": "资格项与可见范围",
+      "qualifiers": "资格项",
+      "qualifiersHint": "每行一个，最多 10 个（例如：预算已批准）。团队会在每条潜在客户上勾选。",
+      "visibility": "谁能看到潜在客户",
+      "teamVisibility": "员工可查看整个团队的潜在客户（否则只能看到自己扫描的）",
+      "save": "保存潜在客户设置",
+      "saved": "潜在客户设置已保存。",
+      "qualifiersInvalid": "每个资格项最多 60 个字符。",
+      "tooMany": "最多只能有 10 个资格项。"
+    },
+    "export": {
+      "heading": "导出潜在客户",
+      "ready": "已确认。现在可以下载潜在客户。",
+      "count": "{count, plural, =0 {暂无潜在客户} other {# 条潜在客户}}",
+      "hint": "为保障安全，下载前我们会通过电子邮件向你发送验证码以确认身份。",
+      "download": "下载潜在客户（CSV）",
+      "ended": "本活动的潜在客户访问已结束。",
+      "columns": {
+        "name": "姓名",
+        "jobTitle": "职位",
+        "company": "公司",
+        "email": "电子邮箱",
+        "rating": "评级",
+        "qualifiers": "资格项",
+        "notes": "备注",
+        "capturedAt": "扫描时间",
+        "scannedBy": "扫描人",
+        "scans": "扫描次数",
+        "sharedFields": "已分享字段",
+        "emailConsentVersion": "邮箱同意版本"
+      }
+    },
+    "confirm": {
+      "title": "确认是你本人",
+      "intro": "要下载潜在客户，请使用我们发送到 {email} 的验证码进行确认。"
+    },
+    "attendee": {
+      "heading": "谁扫描了我的胸牌",
+      "emptyTitle": "还没有人扫描你的胸牌",
+      "emptyDescription": "展商扫描你的胸牌后，会显示在这里。",
+      "scannedAt": "扫描于 {time}",
+      "emailShared": "已获得你的邮箱",
+      "emailWithdrawn": "已停止分享邮箱",
+      "emailNotShared": "未分享邮箱",
+      "withdraw": "停止与 {exhibitor} 分享我的邮箱",
+      "withdrawn": "已完成。对方将无法再看到你的邮箱。",
+      "sharingOn": "扫描你胸牌的展商会收到你的电子邮箱。",
+      "sharingOff": "扫描你胸牌的展商不会收到你的电子邮箱。",
+      "sharingHint": "他们总会收到你的姓名、职位和公司，但绝不会收到你的电话或地址。",
+      "turnOff": "停止与展商分享我的邮箱",
+      "turnOn": "与扫描我胸牌的展商分享我的邮箱",
+      "saved": "已保存。"
+    },
+    "app": {
+      "pageTitle": "潜在客户采集",
+      "loading": "正在加载…",
+      "signedOutTitle": "登录后即可采集潜在客户",
+      "signedOutDescription": "请在此设备上打开展商邀请邮件中的登录链接，然后返回潜在客户采集。",
+      "openPortal": "前往展商门户",
+      "title": "{exhibitor} 的潜在客户",
+      "online": "在线",
+      "offline": "离线：扫描将保存在此设备上",
+      "queued": "{count, plural, =0 {已全部同步} other {# 次扫描等待同步}}",
+      "modes": "潜在客户采集视图",
+      "viewScan": "扫描",
+      "viewLeads": "{count, plural, =0 {潜在客户} other {潜在客户（#）}}",
+      "blockedTitle": "你目前无法采集潜在客户",
+      "blocked": {
+        "unlicensed": "你没有潜在客户许可。请向展商管理员申请。",
+        "over_allowance": "你的许可超出了展商的配额。请联系管理员。",
+        "termsAdmin": "请先在展商门户中接受潜在客户条款。",
+        "termsStaff": "展商管理员需要先接受潜在客户条款。",
+        "notOpen": "采集将于 {time} 开启。",
+        "closed": "采集已于 {time} 关闭。你仍可查看和编辑潜在客户。"
+      },
+      "codeLabel": "胸牌代码",
+      "codeHint": "扫描胸牌上的二维码，或输入其下方印的代码。",
+      "save": "保存潜在客户",
+      "camera": "用相机扫描",
+      "stopCamera": "关闭相机",
+      "cameraFailed": "无法启动相机。请输入胸牌代码。",
+      "refusals": {
+        "no_license": "你没有潜在客户许可。请向展商管理员申请。",
+        "over_allowance": "你的许可超出了展商的配额。扫描记录保留在此设备上。",
+        "terms_not_accepted": "尚未接受潜在客户条款。扫描记录保留在此设备上。",
+        "access_ended": "本活动的潜在客户访问已结束。",
+        "other": "出现问题。扫描记录保留在此设备上，请重试。"
+      },
+      "result": {
+        "queued": "已保存在此设备上",
+        "queuedHint": "同步后将显示详情。",
+        "refused": "未保存",
+        "captured": "潜在客户已保存",
+        "rescanned": "已是潜在客户：已添加扫描"
+      },
+      "reasons": {
+        "invalid": "无法读取此胸牌。请检查代码后重试。",
+        "wrong_event": "此胸牌属于其他活动。",
+        "not_open": "扫描时采集尚未开启。",
+        "closed": "扫描时采集已关闭。"
+      },
+      "emailWithdrawn": "参会者已于 {time} 停止分享邮箱",
+      "emailNotShared": "未分享邮箱",
+      "capturedAt": "扫描于 {time}{count, plural, =1 {} other { · # 次}}",
+      "scannedBy": "扫描人：{email}",
+      "editLabel": "潜在客户详情",
+      "rating": "评级",
+      "ratings": {
+        "hot": "热",
+        "warm": "温",
+        "cold": "冷",
+        "none": "未评级"
+      },
+      "qualifiers": "资格项",
+      "notes": "备注",
+      "saveDetails": "保存详情",
+      "saved": "已保存。",
+      "savedQueued": "已随扫描保存，联网后同步。",
+      "needsConnection": "请连接互联网以保存此潜在客户的更改。",
+      "saveFailed": "保存失败，请重试。",
+      "accessEnded": "本活动的潜在客户访问已结束。",
+      "scope": {
+        "all": "{exhibitor} 的全部潜在客户",
+        "team": "你团队的潜在客户",
+        "own": "你的潜在客户"
+      },
+      "emptyTitle": "暂无潜在客户",
+      "emptyDescription": "在“扫描”标签中扫描胸牌，保存你的第一条潜在客户。",
+      "search": "搜索潜在客户",
+      "noMatch": "没有符合搜索条件的潜在客户。",
+      "edit": "编辑 {name}"
+    }
   }
 }

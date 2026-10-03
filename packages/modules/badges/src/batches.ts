@@ -730,3 +730,40 @@ export async function badgeDetailsTx(
     ]),
   );
 }
+
+/**
+ * M5.6b lead capture: each ticket's company and job title as its badge template maps them (the
+ * organizer's mapped checkout questions, read whether or not the template prints them). Empty
+ * when no template maps them.
+ */
+export async function badgeCompanyTitleTx(
+  tx: TenantTx,
+  eventId: string,
+  tickets: readonly { readonly id: string; readonly orderId: string; readonly ticketTypeId: string }[],
+): Promise<Map<string, { company: string; jobTitle: string }>> {
+  const out = new Map<string, { company: string; jobTitle: string }>();
+  if (tickets.length === 0) return out;
+  const map = await currentVersionMapTx(tx, eventId);
+  const designs = await designsTx(
+    tx,
+    tickets.flatMap((t) => versionFor(map, t.ticketTypeId) ?? []),
+  );
+  if (![...designs.values()].some((d) => d.sources.company || d.sources.jobTitle)) return out;
+  const answers = await answersByOrderTx(
+    tx,
+    eventId,
+    tickets.map((t) => t.orderId),
+  );
+  for (const t of tickets) {
+    const v = versionFor(map, t.ticketTypeId);
+    const design = v ? designs.get(v) : undefined;
+    if (!design) continue;
+    const a = answers.get(t.orderId) ?? {};
+    const text = (key: string | null) => {
+      const x = key ? a[key] : undefined;
+      return typeof x === 'string' ? x.trim().slice(0, 200) : '';
+    };
+    out.set(t.id, { company: companyOf(design, a), jobTitle: text(design.sources.jobTitle) });
+  }
+  return out;
+}

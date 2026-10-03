@@ -6,6 +6,7 @@ export {
   BatchDto,
   type BatchRunDeps,
   type BatchSlice,
+  badgeCompanyTitleTx,
   badgeDetailsTx,
   badgePrintableTx,
   badgeTicketsQuery,

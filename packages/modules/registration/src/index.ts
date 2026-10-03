@@ -85,6 +85,8 @@ export {
   substituteRegistrantCommand,
 } from './groups.ts';
 export { hasWaitingRegistrationTx } from './kiosk.ts';
+// M5.6b: a registrant's company and job title for lead capture.
+export { registrantProfilesByTicketTx } from './lead-person.ts';
 export { decisionDedupeKey, decisionMailer, registrantLifecycle } from './lifecycle.ts';
 // M5.1d: pay later by invoice per type (P5-5).
 export {

@@ -1002,6 +1002,13 @@
       "when": 1791060948617,
       "tag": "0142_overconfident_supernaut",
       "breakpoints": true
+    },
+    {
+      "idx": 143,
+      "version": "7",
+      "when": 1791061351601,
+      "tag": "0143_regular_speed",
+      "breakpoints": true
     }
   ]
 }
