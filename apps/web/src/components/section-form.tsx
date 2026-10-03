@@ -1,7 +1,7 @@
 'use client';
 
 import { SECTION_KINDS, type SectionKind } from '@yayatoh/events/ui';
-import { Alert, Button, Input } from '@yayatoh/ui';
+import { Alert, Button, Input, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState, useEffect, useRef, useState } from 'react';
 import { errorMessageKey } from '@/lib/errors.ts';
@@ -85,11 +85,11 @@ export function SectionForm({
           <label htmlFor={`${idPrefix}-kind`} className="text-[13px] font-bold text-ink">
             {t('kind')}
           </label>
-          <select
+          <Select
             id={`${idPrefix}-kind`}
             name="kind"
             value={kind}
-            onChange={(e) => setKind(e.target.value as SectionKind)}
+            onValueChange={(v) => setKind(v as SectionKind)}
             className="field"
           >
             {SECTION_KINDS.map((k) => (
@@ -97,7 +97,7 @@ export function SectionForm({
                 {t(`kinds.${k}`)}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
       )}
       <Input

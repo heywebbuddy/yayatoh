@@ -2,7 +2,7 @@ import { executeQuery } from '@yayatoh/kernel';
 import { composeNav, isProfileKey } from '@yayatoh/platform';
 import { eventSeatingQuery, listLayoutsQuery, planTablesQuery } from '@yayatoh/seating';
 import { listTicketTypesQuery } from '@yayatoh/ticketing';
-import { Alert, Button, Card, PageHeader, StatusDot } from '@yayatoh/ui';
+import { Alert, Button, Card, PageHeader, Select, StatusDot } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { DateChartForm } from '@/components/date-chart-form.tsx';
@@ -153,13 +153,13 @@ export default async function SeatingPage({
                     {labelled(
                       'saved-layout',
                       t('saved.layout'),
-                      <select id="saved-layout" name="layoutId" className={field}>
+                      <Select id="saved-layout" name="layoutId" className={field}>
                         {layouts.map((l) => (
                           <option key={l.id} value={l.id}>
                             {t('saved.option', { name: l.name, seats: l.seatCount })}
                           </option>
                         ))}
-                      </select>,
+                      </Select>,
                     )}
                   </SettingsForm>
                 </Card>
@@ -281,14 +281,14 @@ export default async function SeatingPage({
               {labelled(
                 'prices-type',
                 t('prices.ticketType'),
-                <select id="prices-type" name="ticketTypeId" className={field}>
+                <Select id="prices-type" name="ticketTypeId" className={field}>
                   <option value="">{t('prices.offSale')}</option>
                   {types.map((tt) => (
                     <option key={tt.id} value={tt.id}>
                       {tt.name}
                     </option>
                   ))}
-                </select>,
+                </Select>,
               )}
             </SettingsForm>
           </Card>

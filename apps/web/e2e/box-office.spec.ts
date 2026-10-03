@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { expectAccessible, OPEN_HOUSE, signIn } from './helpers.ts';
+import { expectAccessible, OPEN_HOUSE, pickOption, signIn } from './helpers.ts';
 
 test.describe('box office', () => {
   test.use({ viewport: { width: 1280, height: 900 } });
@@ -25,7 +25,7 @@ test.describe('box office', () => {
     // A refused sale keeps what was typed.
     await expect(box.getByLabel("Buyer's name")).toHaveValue(`Zed Zelle ${stamp}`);
     await box.getByLabel(new RegExp(`^${pass}`)).fill('2');
-    await box.getByLabel('Paid by').selectOption('zelle');
+    await pickOption(box.getByLabel('Paid by'), 'zelle');
     await box.getByLabel(/Reference/).fill('ZL-777');
     await expectAccessible(page);
     await box.getByRole('button', { name: 'Record sale' }).click();
