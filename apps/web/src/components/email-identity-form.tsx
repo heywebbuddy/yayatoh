@@ -4,6 +4,7 @@ import { Alert, Button, Input } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState, useEffect, useState } from 'react';
 import type { IdentityFormState } from '@/app/[locale]/o/[org]/(org)/sending/actions.ts';
+import { keepValues } from '@/lib/keep-values.ts';
 
 /**
  * U10 "Email sending": From name and Reply-To, with the inbox preview ("Harbor Arts
@@ -36,6 +37,7 @@ export function EmailIdentityForm({
   return (
     <form
       action={formAction}
+      onSubmit={keepValues(formAction)}
       noValidate
       aria-label={t('formLabel')}
       onChange={() => setDirty(true)}

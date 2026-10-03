@@ -16,19 +16,21 @@ export async function saveContactPageAction(
   form: FormData,
 ): Promise<FormState> {
   const data = await loadConsole(org);
+  let enabled: boolean;
   try {
-    await executeCommand(
+    ({ enabled } = await executeCommand(
       setContactPageCommand,
       { enabled: form.get('enabled') === 'on', intro: String(form.get('intro') ?? '').trim() || null },
       data.ctx,
       ports,
-    );
+    ));
   } catch (err) {
     return failure(err);
   }
   for (const tag of orgChangeTags(data.org.id)) updateTag(tag);
   revalidatePath(`/o/${org}/content/contact`);
-  return success();
+  // Which notice to show: the page is now on or off.
+  return { ...success(), reason: enabled ? 'on' : 'off' };
 }
 
 /** Mark a contact page message as handled (it leaves the "new" count). */

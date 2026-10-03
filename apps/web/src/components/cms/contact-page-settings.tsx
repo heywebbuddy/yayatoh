@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useActionState, useState } from 'react';
 import { errorMessageKey } from '@/lib/errors.ts';
 import { type FormState, INITIAL_FORM_STATE } from '@/lib/form-state.ts';
+import { keepValues } from '@/lib/keep-values.ts';
 
 /** U10: the contact page block's settings (on/off and its line of text), with inline feedback. */
 export function ContactPageSettings({
@@ -24,7 +25,13 @@ export function ContactPageSettings({
   const [on, setOn] = useState(enabled);
   const bad = new Set(state.fields ?? []);
   return (
-    <form action={formAction} noValidate aria-label={t('settingsLabel')} className="flex flex-col gap-4">
+    <form
+      action={formAction}
+      onSubmit={keepValues(formAction)}
+      noValidate
+      aria-label={t('settingsLabel')}
+      className="flex flex-col gap-4"
+    >
       <Switch
         id="contact-enabled"
         name="enabled"
@@ -47,7 +54,7 @@ export function ContactPageSettings({
       />
       <div aria-live="polite">
         {state.ok ? (
-          <Alert tone="success" title={on ? t('savedOn') : t('savedOff')} />
+          <Alert tone="success" title={state.reason === 'on' ? t('savedOn') : t('savedOff')} />
         ) : state.code ? (
           <Alert title={te(errorMessageKey(state.code))} />
         ) : null}

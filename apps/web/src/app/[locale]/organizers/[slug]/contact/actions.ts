@@ -1,6 +1,6 @@
 'use server';
 
-import { submitOrgContactCommand } from '@yayatoh/cms';
+import { OrgContactInput, submitOrgContactCommand } from '@yayatoh/cms';
 import { createCtx, executeCommand } from '@yayatoh/kernel';
 import { publicOrganizer, publicOrganizerById } from '@yayatoh/marketplace';
 import { resolveHost } from '@yayatoh/tenancy';
@@ -44,22 +44,27 @@ export async function orgContactAction(
   );
   if (stamp === 'invalid') return success();
   if (stamp !== 'ok') return { ok: false, code: 'validation_failed', fields: [], reason: stamp };
+  const input = {
+    submissionKey: String(form.get('submissionKey') ?? ''),
+    name: String(form.get('name') ?? ''),
+    email,
+    message: String(form.get('message') ?? ''),
+    consent: form.get('consent') === 'yes',
+    locale: await getLocale(),
+  };
+  // Every field's problem at once, and the human check's, before anything is stored.
+  const parsed = OrgContactInput.safeParse(input);
+  const fields = new Set(parsed.success ? [] : parsed.error.issues.map((i) => String(i.path[0] ?? '')));
   if (getHumanCheck()) {
     const token = String(form.get('cf-turnstile-response') ?? form.get('human') ?? '');
     const passed = token ? await getHumanCheck()?.verify(token, clientIp(await headers())) : false;
-    if (!passed) return { ok: false, code: 'validation_failed', fields: ['human'], reason: 'human' };
+    if (!passed) fields.add('human');
   }
+  if (fields.size > 0) return { ok: false, code: 'validation_failed', fields: [...fields].filter(Boolean) };
   try {
     await executeCommand(
       submitOrgContactCommand,
-      {
-        submissionKey: String(form.get('submissionKey') ?? ''),
-        name: String(form.get('name') ?? ''),
-        email,
-        message: String(form.get('message') ?? ''),
-        consent: (form.get('consent') === 'yes') as true,
-        locale: (await getLocale()) as never,
-      },
+      input as OrgContactInput,
       createCtx({ orgId: org.orgId }),
       ports,
     );

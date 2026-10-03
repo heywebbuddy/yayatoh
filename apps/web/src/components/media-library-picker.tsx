@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 import { useActionState, useEffect, useId, useState } from 'react';
 import { pickerLibraryAction, reuseFromLibraryAction } from '@/app/[locale]/o/[org]/media-actions.ts';
 import { type FormState, INITIAL_FORM_STATE } from '@/lib/form-state.ts';
+import { keepValues } from '@/lib/keep-values.ts';
 
 type PickerItem = Awaited<ReturnType<typeof pickerLibraryAction>>['items'][number];
 
@@ -83,7 +84,7 @@ export function LibraryPicker({
             </a>
           </p>
         ) : (
-          <form action={action} noValidate className="flex flex-col gap-3">
+          <form action={action} onSubmit={keepValues(action)} noValidate className="flex flex-col gap-3">
             {replaceAssetId ? <input type="hidden" name="replaceAssetId" value={replaceAssetId} /> : null}
             <fieldset className="flex flex-col gap-2">
               <legend className="mb-2 text-[13px] font-bold text-ink">{t('choose')}</legend>
