@@ -1,6 +1,11 @@
 import { type APIRequestContext, expect, type Page, test } from '@playwright/test';
 import { closePools } from '@yayatoh/db';
-import { createEventCommand, setEventDetailsCommand, transitionEventCommand } from '@yayatoh/events';
+import {
+  checkoutTarget,
+  createEventCommand,
+  setEventDetailsCommand,
+  transitionEventCommand,
+} from '@yayatoh/events';
 import { createCtx, executeCommand } from '@yayatoh/kernel';
 import { catchUpListings, moderateListingCommand } from '@yayatoh/marketplace';
 import { resolveOrgSlug } from '@yayatoh/tenancy';
@@ -25,6 +30,8 @@ const MARKET = `http://yayatoh.localhost:${PORT}`;
 
 interface Scenario {
   tag: string;
+  lat: number;
+  lng: number;
   orgSlug: string;
   orgId: string;
   jazz: { slug: string; name: string };
@@ -38,7 +45,7 @@ const scenarios = new Map<string, Scenario>();
 
 async function feed(request: APIRequestContext, s: Pick<Scenario, 'orgId' | 'orgSlug'>) {
   await catchUpListings(s.orgId);
-  const res = await request.post(`${MARKET}/api/dev/search/run`, { form: { org: s.orgSlug } });
+  const res = await request.post(`/api/dev/search/run`, { form: { org: s.orgSlug } });
   expect(res.status()).toBe(200);
 }
 
@@ -58,10 +65,14 @@ async function scenario(request: APIRequestContext, project: string): Promise<Sc
     .replace(/\d/g, (d) => 'abcdefghij'[Number(d)] ?? 'a')}${project.slice(0, 1)}`;
   const starts = new Date(Date.now() + 60 * 86_400_000);
   const made: Record<string, { slug: string; name: string }> = {};
+  // A spot of the map of its own (other projects and reruns land elsewhere), so distances and
+  // "nearby" are this scenario's alone: Jazz at the centre, the gala ~11 km away, Strings ~330 km.
+  const lat = Math.round((Math.random() * 100 - 50) * 1000) / 1000;
+  const lng = Math.round((Math.random() * 300 - 150) * 1000) / 1000;
   const venues = {
-    paris: { name: 'Salle Pleyel', city: 'Paris', latitude: 48.8771, longitude: 2.301 },
-    versailles: { name: 'Opéra Royal', city: 'Versailles', latitude: 48.8049, longitude: 2.1204 },
-    lyon: { name: 'Halle Tony Garnier', city: 'Lyon', latitude: 45.7317, longitude: 4.8233 },
+    paris: { name: 'Salle Pleyel', city: `Paris ${tag}`, latitude: lat, longitude: lng },
+    versailles: { name: 'Opéra Royal', city: `Versailles ${tag}`, latitude: lat + 0.1, longitude: lng },
+    lyon: { name: 'Halle Tony Garnier', city: `Lyon ${tag}`, latitude: lat + 3, longitude: lng },
   };
   const plan = [
     { key: 'jazz', name: `Pleyel Jazz ${tag}`, venue: 'paris', category: 'music', price: 1500 },
@@ -126,19 +137,16 @@ async function scenario(request: APIRequestContext, project: string): Promise<Sc
     await executeCommand(transitionEventCommand, { eventId: e.id, transition: 'publish' }, ctx, ports);
     made[p.key] = { slug: e.slug, name: e.name };
   }
-  const s = { tag, orgSlug, orgId: org.orgId, ...made } as Scenario;
+  const s = { tag, orgSlug, orgId: org.orgId, lat, lng, ...made } as Scenario;
   await feed(request, s);
   scenarios.set(project, s);
   return s;
 }
 
-async function eventIdOf(orgId: string, slug: string): Promise<string> {
-  const { withTenant } = await import('@yayatoh/db');
-  const { sql } = await import('drizzle-orm');
-  const rows = await withTenant(createCtx({ orgId, actor: { type: 'system', name: 'e2e.search' } }), (tx) =>
-    tx.execute<{ id: string }>(sql`select id from events.events where slug = ${slug}`),
-  );
-  return rows[0]?.id ?? '';
+async function eventIdOf(slug: string): Promise<string> {
+  const target = await checkoutTarget(slug);
+  if (!target) throw new Error(`no event ${slug}`);
+  return target.eventId;
 }
 
 const results = (page: Page) => page.getByRole('list', { name: 'Search results' });
@@ -188,10 +196,12 @@ test.describe('marketplace search v2 (M6.14a)', () => {
   }) => {
     const s = await scenario(request, test.info().project.name);
     await page.goto(`${MARKET}/search?q=${s.tag}`);
-    await pickOption(page.getByLabel('Near'), 'Paris');
+    await pickOption(page.getByLabel('Near'), `Paris ${s.tag}`);
     await pickOption(page.getByLabel('Within'), '50 km');
     await page.getByRole('button', { name: 'Search', exact: true }).click();
-    await expect(page.getByRole('heading', { level: 2, name: 'Within 50 km of Paris' })).toBeVisible();
+    await expect(
+      page.getByRole('heading', { level: 2, name: `Within 50 km of Paris ${s.tag}` }),
+    ).toBeVisible();
     const items = results(page).getByRole('listitem');
     await expect(items).toHaveCount(2);
     await expect(items.nth(0).getByRole('link', { name: s.jazz.name })).toBeVisible();
@@ -201,7 +211,7 @@ test.describe('marketplace search v2 (M6.14a)', () => {
     await expectAccessibleBothModes(page);
     // The browser's location (Lyon): the button submits near=me with the coordinates.
     await context.grantPermissions(['geolocation'], { origin: MARKET });
-    await context.setGeolocation({ latitude: 45.76, longitude: 4.83 });
+    await context.setGeolocation({ latitude: s.lat + 3, longitude: s.lng });
     await page.goto(`${MARKET}/search?q=${s.tag}`);
     await page.getByRole('button', { name: 'Use my location' }).click();
     await expect(page).toHaveURL(/near=me/);
@@ -212,6 +222,11 @@ test.describe('marketplace search v2 (M6.14a)', () => {
 
   test('without location permission the visitor is told to pick a city', async ({ page, request }) => {
     const s = await scenario(request, test.info().project.name);
+    // The visitor refuses the browser's location prompt.
+    await page.addInitScript(() => {
+      navigator.geolocation.getCurrentPosition = (_ok, fail) =>
+        fail?.({ code: 1, message: 'denied' } as GeolocationPositionError);
+    });
     await page.goto(`${MARKET}/search?q=${s.tag}`);
     await page.getByRole('button', { name: 'Use my location' }).click();
     await expect(
@@ -301,7 +316,7 @@ test.describe('marketplace search v2 (M6.14a)', () => {
     request,
   }) => {
     const s = await scenario(request, test.info().project.name);
-    const eventId = await eventIdOf(s.orgId, s.gala.slug);
+    const eventId = await eventIdOf(s.gala.slug);
     const staff = createCtx({ orgId: s.orgId, actor: { type: 'system', name: 'staff:e2e' } });
     await executeCommand(moderateListingCommand, { eventId, hidden: true, reason: 'e2e hide' }, staff, ports);
     try {
@@ -326,17 +341,24 @@ test.describe('marketplace search v2 (M6.14a)', () => {
     await expect(results(page).getByRole('link', { name: s.gala.name })).toBeVisible();
   });
 
-  test('Arabic renders right to left; /events links to search; tenant sites have no search', async ({
-    page,
-    request,
-  }) => {
+  test('Arabic renders the search right to left', async ({ page, request }) => {
     const s = await scenario(request, test.info().project.name);
     await page.goto(`${MARKET}/ar/search?q=${s.tag}`);
     await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
     await expect(page.getByRole('heading', { level: 1, name: 'ابحث عن الفعاليات' })).toBeVisible();
     await expect(page.getByRole('list', { name: 'نتائج البحث' }).getByRole('listitem')).toHaveCount(3);
     await expectAccessibleBothModes(page);
-    await page.goto(`${MARKET}/events`);
+  });
+
+  test('/events links to search; only search may ask for the location; tenant sites have no search', async ({
+    page,
+    request,
+  }) => {
+    const s = await scenario(request, test.info().project.name);
+    const search = await page.goto(`${MARKET}/search?q=${s.tag}`);
+    expect(search?.headers()['permissions-policy']).toContain('geolocation=(self)');
+    const events = await page.goto(`${MARKET}/events`);
+    expect(events?.headers()['permissions-policy']).toContain('geolocation=()');
     await page.getByRole('link', { name: 'Search by place, category and price' }).click();
     await expect(page).toHaveURL(/\/search$/);
     const tenant = await page.goto(`http://${s.orgSlug}.yayatoh.events:${PORT}/search`);

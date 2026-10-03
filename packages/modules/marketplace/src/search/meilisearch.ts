@@ -29,12 +29,11 @@ export interface MeilisearchConfig {
 export const DEFAULT_INDEX = 'yayatoh_listings';
 
 export class MeilisearchError extends Error {
-  constructor(
-    message: string,
-    readonly status: number,
-  ) {
+  readonly status: number;
+  constructor(message: string, status: number) {
     super(message);
     this.name = 'MeilisearchError';
+    this.status = status;
   }
 }
 
