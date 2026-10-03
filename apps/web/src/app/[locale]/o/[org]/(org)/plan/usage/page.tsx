@@ -4,6 +4,7 @@ import { roleCan } from '@yayatoh/tenancy';
 import {
   Alert,
   Breadcrumb,
+  buttonClass,
   EmptyState,
   PageHeader,
   SectionHeader,
@@ -47,7 +48,15 @@ export default async function UsagePage({
     return (
       <>
         <PageHeader breadcrumb={breadcrumb} title={t('title')} description={t('subtitle')} />
-        <EmptyState title={tp('noAccessTitle')} description={tp('noAccessDescription')} />
+        <EmptyState
+          title={tp('noAccessTitle')}
+          description={tp('noAccessDescription')}
+          action={
+            <Link href={`/o/${org}/team`} className={buttonClass('primary', 'md')}>
+              {tp('findOwner')}
+            </Link>
+          }
+        />
       </>
     );
   }
@@ -124,7 +133,15 @@ export default async function UsagePage({
       <section aria-labelledby="history-heading" className="flex flex-col gap-3">
         <SectionHeader id="history-heading" title={t('historyTitle')} description={t('historyDescription')} />
         {empty ? (
-          <EmptyState title={t('emptyTitle')} description={t('emptyBody')} />
+          <EmptyState
+            title={t('emptyTitle')}
+            description={t('emptyBody')}
+            action={
+              <Link href={`/o/${org}/plan`} className={buttonClass('primary', 'md')}>
+                {t('backToPlan')}
+              </Link>
+            }
+          />
         ) : (
           <Table
             caption={t('historyTitle')}

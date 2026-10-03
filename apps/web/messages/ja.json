@@ -15412,7 +15412,8 @@
     "historyTitle": "過去のアクセス",
     "revokedColumn": "終了",
     "unknownAgency": "Yayatoh にいない代理店",
-    "roleLabel": "{role, select, manager {イベントの管理} marketing {マーケティング} viewer {閲覧のみ} other {アクセス}}"
+    "roleLabel": "{role, select, manager {イベントの管理} marketing {マーケティング} viewer {閲覧のみ} other {アクセス}}",
+    "homeAction": "組織のホームへ"
   },
   "agency": {
     "title": "クライアント",
@@ -15475,7 +15476,10 @@
       "completed": "終了",
       "archived": "アーカイブ済み"
     },
-    "refreshedAt": "更新日時"
+    "refreshedAt": "更新日時",
+    "homeAction": "組織のホームへ",
+    "helpAction": "代理店の仕組みを読む",
+    "seeClients": "クライアントを見る"
   },
   "billingUsage": {
     "title": "使用量",
@@ -15509,7 +15513,8 @@
     "emptyTitle": "まだ使用量はありません",
     "emptyBody": "メールやSMSを送信したり、AIで下書きしたり、スキャン端末を登録したりすると、ここに使用量が表示されます。",
     "historyEmpty": "過去の月に使用はありません。",
-    "month": "月"
+    "month": "月",
+    "backToPlan": "プランと請求に戻る"
   },
   "billingBanner": {
     "label": "請求",

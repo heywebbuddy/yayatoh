@@ -1,8 +1,9 @@
 import { agencyClientsQuery } from '@yayatoh/agency';
 import { executeQuery } from '@yayatoh/kernel';
-import { EmptyState, Table } from '@yayatoh/ui';
+import { buttonClass, EmptyState, Table } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { Link } from '@/i18n/navigation.ts';
 import { formatNumber } from '@/lib/format.ts';
 import { ports } from '@/server/ports.ts';
 import { loadAgency } from '../load.ts';
@@ -26,7 +27,15 @@ export default async function AgencyMarketingPage({
   const clients = await executeQuery(agencyClientsQuery, {}, data.ctx, ports);
   if (clients.length === 0)
     return (
-      <EmptyState title={t('emptyTitle')} description={t('emptyDescription', { address: data.org.slug })} />
+      <EmptyState
+        title={t('emptyTitle')}
+        description={t('emptyDescription', { address: data.org.slug })}
+        action={
+          <Link href="/help" className={buttonClass('primary', 'md')}>
+            {t('helpAction')}
+          </Link>
+        }
+      />
     );
   const n = (v: number | undefined) => (v === undefined ? '—' : formatNumber(v, locale));
   const pct = (bps: number | undefined) =>

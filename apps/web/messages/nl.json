@@ -15412,7 +15412,8 @@
     "historyTitle": "Eerdere toegang",
     "revokedColumn": "Beëindigd",
     "unknownAgency": "Bureau niet meer op Yayatoh",
-    "roleLabel": "{role, select, manager {Evenementen beheren} marketing {Marketing} viewer {Alleen bekijken} other {Toegang}}"
+    "roleLabel": "{role, select, manager {Evenementen beheren} marketing {Marketing} viewer {Alleen bekijken} other {Toegang}}",
+    "homeAction": "Naar de startpagina van de organisatie"
   },
   "agency": {
     "title": "Klanten",
@@ -15475,7 +15476,10 @@
       "completed": "Afgerond",
       "archived": "Gearchiveerd"
     },
-    "refreshedAt": "Vernieuwd"
+    "refreshedAt": "Vernieuwd",
+    "homeAction": "Naar de startpagina van de organisatie",
+    "helpAction": "Lees hoe bureaus werken",
+    "seeClients": "Je klanten bekijken"
   },
   "billingUsage": {
     "title": "Gebruik",
@@ -15509,7 +15513,8 @@
     "emptyTitle": "Nog geen gebruik",
     "emptyBody": "Gebruik verschijnt hier als je e-mails of sms'jes verstuurt, met AI conceptteksten maakt of scanapparaten registreert.",
     "historyEmpty": "Geen gebruik in eerdere maanden.",
-    "month": "Maand"
+    "month": "Maand",
+    "backToPlan": "Terug naar Abonnement en facturering"
   },
   "billingBanner": {
     "label": "Facturatie",

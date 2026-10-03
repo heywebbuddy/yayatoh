@@ -15412,7 +15412,8 @@
     "historyTitle": "过往访问",
     "revokedColumn": "结束于",
     "unknownAgency": "代理机构已不在 Yayatoh",
-    "roleLabel": "{role, select, manager {管理活动} marketing {营销} viewer {仅查看} other {访问权限}}"
+    "roleLabel": "{role, select, manager {管理活动} marketing {营销} viewer {仅查看} other {访问权限}}",
+    "homeAction": "前往组织主页"
   },
   "agency": {
     "title": "客户",
@@ -15475,7 +15476,10 @@
       "completed": "已结束",
       "archived": "已归档"
     },
-    "refreshedAt": "刷新时间"
+    "refreshedAt": "刷新时间",
+    "homeAction": "前往组织主页",
+    "helpAction": "了解代理机构如何运作",
+    "seeClients": "查看您的客户"
   },
   "billingUsage": {
     "title": "用量",
@@ -15509,7 +15513,8 @@
     "emptyTitle": "暂无用量",
     "emptyBody": "当你发送邮件或短信、用 AI 起草或登记扫描设备时，用量会显示在这里。",
     "historyEmpty": "之前的月份没有用量。",
-    "month": "月份"
+    "month": "月份",
+    "backToPlan": "返回套餐与付费"
   },
   "billingBanner": {
     "label": "账单",

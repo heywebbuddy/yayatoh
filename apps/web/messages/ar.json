@@ -15412,7 +15412,8 @@
     "historyTitle": "وصول سابق",
     "revokedColumn": "انتهى",
     "unknownAgency": "لم تعد الوكالة على Yayatoh",
-    "roleLabel": "{role, select, manager {إدارة الفعاليات} marketing {التسويق} viewer {عرض فقط} other {الوصول}}"
+    "roleLabel": "{role, select, manager {إدارة الفعاليات} marketing {التسويق} viewer {عرض فقط} other {الوصول}}",
+    "homeAction": "الانتقال إلى الصفحة الرئيسية للمؤسسة"
   },
   "agency": {
     "title": "العملاء",
@@ -15475,7 +15476,10 @@
       "completed": "مكتملة",
       "archived": "مؤرشفة"
     },
-    "refreshedAt": "آخر تحديث"
+    "refreshedAt": "آخر تحديث",
+    "homeAction": "الانتقال إلى الصفحة الرئيسية للمؤسسة",
+    "helpAction": "اقرأ كيف تعمل الوكالات",
+    "seeClients": "عرض عملائك"
   },
   "billingUsage": {
     "title": "الاستخدام",
@@ -15509,7 +15513,8 @@
     "emptyTitle": "لا استخدام بعد",
     "emptyBody": "يظهر الاستخدام هنا عندما ترسل رسائل بريد أو رسائل نصية، أو تكتب مسودة بالذكاء الاصطناعي، أو تسجّل أجهزة مسح.",
     "historyEmpty": "لا استخدام في الأشهر السابقة.",
-    "month": "الشهر"
+    "month": "الشهر",
+    "backToPlan": "العودة إلى الخطة والفوترة"
   },
   "billingBanner": {
     "label": "الفوترة",

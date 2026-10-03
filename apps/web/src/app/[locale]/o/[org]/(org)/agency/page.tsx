@@ -31,7 +31,15 @@ export default async function AgencyClientsPage({
   const clients = await executeQuery(agencyClientsQuery, {}, data.ctx, ports);
   if (clients.length === 0)
     return (
-      <EmptyState title={t('emptyTitle')} description={t('emptyDescription', { address: data.org.slug })} />
+      <EmptyState
+        title={t('emptyTitle')}
+        description={t('emptyDescription', { address: data.org.slug })}
+        action={
+          <Link href="/help" className={buttonClass('primary', 'md')}>
+            {t('helpAction')}
+          </Link>
+        }
+      />
     );
   const n = (v: number) => formatNumber(v, locale);
   return (

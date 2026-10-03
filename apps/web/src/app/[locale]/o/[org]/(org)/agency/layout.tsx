@@ -1,7 +1,8 @@
 import { agencyV2Enabled } from '@yayatoh/billing';
-import { EmptyState, PageHeader } from '@yayatoh/ui';
+import { buttonClass, EmptyState, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import type { ReactNode } from 'react';
+import { Link } from '@/i18n/navigation.ts';
 import { refreshAgencyAction } from './actions.ts';
 import { loadAgency } from './load.ts';
 import { RefreshForm } from './refresh-form.tsx';
@@ -29,6 +30,11 @@ export default async function AgencyLayout({
         <EmptyState
           title={t('noAccessTitle')}
           description={t('noAccessDescription', { agency: data.org.name })}
+          action={
+            <Link href={`/o/${org}`} className={buttonClass('primary', 'md')}>
+              {t('homeAction')}
+            </Link>
+          }
         />
       </>
     );

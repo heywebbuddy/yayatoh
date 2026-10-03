@@ -15412,7 +15412,8 @@
     "historyTitle": "過往存取",
     "revokedColumn": "結束於",
     "unknownAgency": "代理商已不在 Yayatoh",
-    "roleLabel": "{role, select, manager {管理活動} marketing {行銷} viewer {僅檢視} other {存取權}}"
+    "roleLabel": "{role, select, manager {管理活動} marketing {行銷} viewer {僅檢視} other {存取權}}",
+    "homeAction": "前往組織首頁"
   },
   "agency": {
     "title": "客戶",
@@ -15475,7 +15476,10 @@
       "completed": "已結束",
       "archived": "已封存"
     },
-    "refreshedAt": "重新整理時間"
+    "refreshedAt": "重新整理時間",
+    "homeAction": "前往組織首頁",
+    "helpAction": "了解代理商如何運作",
+    "seeClients": "查看您的客戶"
   },
   "billingUsage": {
     "title": "用量",
@@ -15509,7 +15513,8 @@
     "emptyTitle": "尚無用量",
     "emptyBody": "當你寄送郵件或簡訊、用 AI 起草或登記掃描裝置時，用量會顯示在這裡。",
     "historyEmpty": "先前的月份沒有用量。",
-    "month": "月份"
+    "month": "月份",
+    "backToPlan": "返回方案與付費"
   },
   "billingBanner": {
     "label": "帳單",

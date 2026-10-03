@@ -15412,7 +15412,8 @@
     "historyTitle": "Accessi precedenti",
     "revokedColumn": "Terminato",
     "unknownAgency": "Agenzia non più su Yayatoh",
-    "roleLabel": "{role, select, manager {Gestire gli eventi} marketing {Marketing} viewer {Solo visualizzazione} other {Accesso}}"
+    "roleLabel": "{role, select, manager {Gestire gli eventi} marketing {Marketing} viewer {Solo visualizzazione} other {Accesso}}",
+    "homeAction": "Vai alla home dell'organizzazione"
   },
   "agency": {
     "title": "Clienti",
@@ -15475,7 +15476,10 @@
       "completed": "Concluso",
       "archived": "Archiviato"
     },
-    "refreshedAt": "Aggiornato"
+    "refreshedAt": "Aggiornato",
+    "homeAction": "Vai alla home dell'organizzazione",
+    "helpAction": "Scopri come funzionano le agenzie",
+    "seeClients": "Vedi i tuoi clienti"
   },
   "billingUsage": {
     "title": "Utilizzo",
@@ -15509,7 +15513,8 @@
     "emptyTitle": "Ancora nessun utilizzo",
     "emptyBody": "L'utilizzo compare qui quando invii email o SMS, scrivi bozze con l'IA o registri dispositivi di scansione.",
     "historyEmpty": "Nessun utilizzo nei mesi precedenti.",
-    "month": "Mese"
+    "month": "Mese",
+    "backToPlan": "Torna a Piano e fatturazione"
   },
   "billingBanner": {
     "label": "Fatturazione",

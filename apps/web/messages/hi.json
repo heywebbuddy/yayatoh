@@ -15412,7 +15412,8 @@
     "historyTitle": "पिछली पहुँच",
     "revokedColumn": "समाप्त",
     "unknownAgency": "एजेंसी अब Yayatoh पर नहीं है",
-    "roleLabel": "{role, select, manager {इवेंट प्रबंधित करें} marketing {मार्केटिंग} viewer {केवल देखें} other {पहुँच}}"
+    "roleLabel": "{role, select, manager {इवेंट प्रबंधित करें} marketing {मार्केटिंग} viewer {केवल देखें} other {पहुँच}}",
+    "homeAction": "संगठन के होम पर जाएँ"
   },
   "agency": {
     "title": "क्लाइंट",
@@ -15475,7 +15476,10 @@
       "completed": "पूर्ण",
       "archived": "संग्रहीत"
     },
-    "refreshedAt": "रीफ़्रेश हुआ"
+    "refreshedAt": "रीफ़्रेश हुआ",
+    "homeAction": "संगठन के होम पर जाएँ",
+    "helpAction": "जानें एजेंसियाँ कैसे काम करती हैं",
+    "seeClients": "अपने क्लाइंट देखें"
   },
   "billingUsage": {
     "title": "उपयोग",
@@ -15509,7 +15513,8 @@
     "emptyTitle": "अभी कोई उपयोग नहीं",
     "emptyBody": "जब आप ईमेल या टेक्स्ट भेजते हैं, AI से ड्राफ़्ट बनाते हैं या स्कैन डिवाइस नामांकित करते हैं, तो उपयोग यहाँ दिखता है।",
     "historyEmpty": "पिछले महीनों में कोई उपयोग नहीं।",
-    "month": "महीना"
+    "month": "महीना",
+    "backToPlan": "प्लान और बिलिंग पर वापस जाएँ"
   },
   "billingBanner": {
     "label": "बिलिंग",

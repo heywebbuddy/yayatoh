@@ -15412,7 +15412,8 @@
     "historyTitle": "Прошлый доступ",
     "revokedColumn": "Завершён",
     "unknownAgency": "Агентства больше нет в Yayatoh",
-    "roleLabel": "{role, select, manager {Управлять мероприятиями} marketing {Маркетинг} viewer {Только просмотр} other {Доступ}}"
+    "roleLabel": "{role, select, manager {Управлять мероприятиями} marketing {Маркетинг} viewer {Только просмотр} other {Доступ}}",
+    "homeAction": "На главную организации"
   },
   "agency": {
     "title": "Клиенты",
@@ -15475,7 +15476,10 @@
       "completed": "Завершено",
       "archived": "В архиве"
     },
-    "refreshedAt": "Обновлено"
+    "refreshedAt": "Обновлено",
+    "homeAction": "На главную организации",
+    "helpAction": "Как работают агентства",
+    "seeClients": "Ваши клиенты"
   },
   "billingUsage": {
     "title": "Использование",
@@ -15509,7 +15513,8 @@
     "emptyTitle": "Использования пока нет",
     "emptyBody": "Использование появится здесь, когда вы отправите письма или SMS, создадите черновик с ИИ или подключите устройства сканирования.",
     "historyEmpty": "В прошлые месяцы использования не было.",
-    "month": "Месяц"
+    "month": "Месяц",
+    "backToPlan": "Назад к тарифу и оплате"
   },
   "billingBanner": {
     "label": "Оплата",
