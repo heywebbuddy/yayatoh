@@ -213,3 +213,9 @@ and of `chat_conversations` and `booth_chat_settings` to `program.exhibitors` (n
 | Retention per D11 | unit `chatRetentionCutoff`; int "retention (D11)" (kept at 23 months, gone at 25; members refused) |
 | Tenant isolation | int "tenant isolation" + the isolation suite (fixture rows for both orgs in every chat table) + `column-privacy` coverage |
 | Strings, RTL, keyboard, axe | `apps/web/tests/messages.test.ts`; e2e Arabic pages, Enter/Shift+Enter, keyboard moderation, `expectAccessibleBothModes` |
+
+### 6. Gate (2026-10-03)
+`pnpm lint`, `check:modules`, `turbo typecheck` (59 tasks), unit (2,718), integration (1,541) all
+green after merging the build branch, `merge/next-3g` and `merge/next-3h`. E2E on all three
+projects: `chat.spec.ts` (12), `networking.spec.ts` and `exhibitor-portal.spec.ts` (24), the
+networking canary crawl, admin `chat-reports.spec.ts` and the messaging-report tests (6).
