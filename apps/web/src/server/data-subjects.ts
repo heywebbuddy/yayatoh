@@ -31,6 +31,7 @@ import { surveysDataSubjects } from '@yayatoh/surveys';
 import { tenancyDataSubjects } from '@yayatoh/tenancy';
 import { ticketingDataSubjects } from '@yayatoh/ticketing';
 import { venuesDataSubjects } from '@yayatoh/venues';
+import { virtualDataSubjects } from '@yayatoh/virtual';
 
 /**
  * Every module's data-subject contributor (M6.1c), in the order erasure runs them (resolving
@@ -58,6 +59,7 @@ export const DATA_SUBJECT_CONTRIBUTORS = [
   mediaDataSubjects,
   cmsDataSubjects,
   venuesDataSubjects,
+  virtualDataSubjects,
   reviewsDataSubjects,
   paymentsDataSubjects,
   surveysDataSubjects,

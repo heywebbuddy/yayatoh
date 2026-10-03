@@ -12,6 +12,7 @@ import {
   fraudSignalAlerts,
   networkChatSignals,
   staffAlertsSubscriber,
+  virtualAttendanceSubscriber,
 } from '@yayatoh/checkin';
 import { deviceBoardPublisher, publishMetricsChangedTx } from '@yayatoh/command-center';
 import {
@@ -149,6 +150,8 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     chatReportSignals(),
     // M5.8b: networking chat reports about attendees.
     networkChatSignals(),
+    // M6.9a: watching a session's stream checks the ticket in at its virtual checkpoint.
+    virtualAttendanceSubscriber(),
     fraudSignalAlerts({ notifier }),
     // M3.4a: staff alerts for the Scan PWA (web push per device). The Command Center alert engine
     // (M3.2b) replaces `derivedStaffAlerts` here and in apps/web/src/server/scan-staff.ts.

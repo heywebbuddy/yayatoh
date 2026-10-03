@@ -22,6 +22,7 @@ import { setOccupantDirectory, setPartyCredentials } from '@yayatoh/seating';
 import { configureSso, ssoRuntimeFromEnv } from '@yayatoh/sso';
 import { surveysContactOwner } from '@yayatoh/surveys';
 import { createOrgAuthorizer, orgStatusGate } from '@yayatoh/tenancy';
+import { configureVirtual, videoProviderFromEnv } from '@yayatoh/virtual';
 import { configureWebhooks, fakeResolver, webhookPublisherFromEnv } from '@yayatoh/webhooks';
 import { DATA_SUBJECT_CONTRIBUTORS } from './data-subjects.ts';
 import { fakeIdpSeed } from './sso-seed.ts';
@@ -81,3 +82,5 @@ configureSso(
   }),
 );
 
+// M6.9a: video for virtual sessions (the Mux fake outside production until the owner's account).
+configureVirtual({ provider: videoProviderFromEnv(process.env) });

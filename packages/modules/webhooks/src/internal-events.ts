@@ -165,6 +165,7 @@ export const INTERNAL_EVENTS: Readonly<Record<string, InternalReason>> = {
   'venue.created@1': 'content',
   'venue.quote_requested@1': 'personal',
   'venue.updated@1': 'content',
+  'virtual.attended@1': 'personal',
   'waitlist.offer_expired@1': 'later',
   'waitlist.offer_released@1': 'later',
 };

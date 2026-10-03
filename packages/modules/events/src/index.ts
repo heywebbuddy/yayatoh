@@ -43,6 +43,8 @@ export { EventSettingsSnapshot, eventSettingsTx, insertEventCopyTx } from './cop
 // M6.5b: events for CRM connectors (Salesforce campaigns).
 export { type CrmEventRow, crmEventRowsTx } from './crm-event-rows.ts';
 export { eventsDataSubjects } from './data-subject.ts';
+// M6.9a: an event's delivery (attendance) mode for the virtual module.
+export { type EventDeliveryFacts, eventDeliveryTx } from './delivery.ts';
 export {
   ACCESS_ATTEMPT_WINDOW_MS,
   ACCESS_ATTEMPTS_PER_WINDOW,

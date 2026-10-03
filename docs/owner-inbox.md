@@ -787,6 +787,12 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **DSAR for batch 3h tables** (written at the merge): donations gifts, receipts and year-end statements and order invoices are kept under the 7-year tax hold with the donor's/buyer's details replaced; registrants are redacted in place, type-member addresses deleted; pending collector submissions deleted; live Q&A questions signed with the person's full name are deleted if never approved, else anonymised. Confirm.
 - [ ] **Promoter channel links during coexistence:** `/events/{slug}?channel=CODE` belongs to the `events.page` route; on a legacy host it reaches the new app only once that route is moved.
 
+## M6.9a — virtual v1 (2026-10-03, pending owner)
+- [ ] **Mux account (P6-9):** create the Mux account, a signing key for signed playback and an API access token. Put `VIDEO_PROVIDER=mux`, `MUX_SIGNING_KEY_ID` and `MUX_SIGNING_PRIVATE_KEY` (base64 of the PEM) in Doppler; the Video API calls (creating live streams, reading stream keys) are a stub until then, so production streaming stays off.
+- [ ] **Defaults:** a hybrid event's ticket types are in person until the organizer gives them online access; an online event's are online. A playback token lives 10 minutes (the player renews it); at most 60 viewings per ticket per session per hour. Confirm or adjust.
+- [ ] **Metering and markup (D24):** watch time is counted per attendee per minute (`viewer-minutes`); set the resale price per viewer-minute when billing meters (M6.6b) go live.
+- [ ] **Virtual-only tickets at the door:** check-in does not refuse a virtual-only ticket yet. Say if the door should refuse them (planned as a check-in port in M6.9b).
+
 ## U1 — form controls (2026-10-03, pending owner)
 - [ ] **Built with these defaults; say if any should change:**
   - **Type-ahead on a closed dropdown chooses straight away**, as the browser's own select did (the keyboard paths and habits stay the same). To search, open the list (Enter, ↓ or a click); lists of more than 8 options open with a search box.
