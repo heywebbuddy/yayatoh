@@ -45,3 +45,15 @@ Owner decision 2026-10-02 (`docs/decisions.md`); brief `docs/agent-briefs/design
 | Existing journeys keep working | whole web suite (3 projects) and admin suite |
 | 3f/3g screens on v2 (portals, live Command Center, TV, assistance, analytics, badges, booths) | `live-mode`, `assistance`, `speaker-portal`, `exhibitor-portal`, `badges`, `marketing-analytics` specs |
 | Org home pages 24 events, upcoming first, keeps filters, searches by name; RTL; axe | `apps/web/e2e/org-home.spec.ts`, `a11y.spec.ts`; `packages/testing/tests/venues.int.test.ts` (q) |
+
+## Batch 3h on v2 (merge, 2026-10-03)
+The Phase 4 Wave B and Phase 5 Wave 2 builders (M5.1c, M5.2b, M5.7a, M4.1d, M4.1e, M4.1f, M4.2b, M4.8a, M4.8b, M5.1d) were built on the old components and merged on top of v2:
+- Their retired palette classes went through the v2 codemod mapping; `check:modules` design-tokens is clean.
+- Their screens use the v2 pieces: Crumbs breadcrumbs, PageHeader actions, StatusPill for every status, StatCard summaries, Tabs filters, Table, EmptyState, info Alerts for read-only viewers, v2 fields; public pages (RSVP, collector, giving, group and invoice pages, live polls) on the v2 public cards with the theme switch where they have their own frame.
+- The live-poll big screen is always dark, like the TV board. QR codes stay black on a light card in both modes.
+- The receipt PDFs and the seat-map sponsor label moved from ADR 0018's `color` export to the `print`, `light` and `paper` tokens.
+
+| Criterion | Test |
+|---|---|
+| Batch 3h screens pass axe in light and dark | `registration-approvals`, `enrollment`, `invoices`, `rsvp`, `rsvp-questions`, `guest-invites`, `gala-tables`, `engagement`, `donations`, `receipts`, `dev-login` specs (`expectAccessibleBothModes`) |
+| No raw colours in the merged screens | `pnpm check:modules` (design-tokens) |
