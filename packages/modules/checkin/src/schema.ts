@@ -144,6 +144,9 @@ export const devices = tenantTable(
     kioskPinHash: text('kiosk_pin_hash'),
     kioskStartedAt: ts('kiosk_started_at'),
     kioskStartedBy: uuid('kiosk_started_by'),
+    // --- Live mode (M3.3a) ---
+    /** The Scan PWA's build as its heartbeat reports it (the device board's "app version"). */
+    appVersion: text('app_version'),
   },
   (t) => [
     // Global: the token alone resolves the device (and so the org) through a definer function.
@@ -159,6 +162,71 @@ export const devices = tenantTable(
       'devices_kiosk_pin_check',
       sql`kiosk_pin_hash is null or kiosk_pin_hash ~ '^pbkdf2-sha256[$][0-9]{4,7}[$][A-Za-z0-9_-]{22}[$][A-Za-z0-9_-]{43}$'`,
     ),
+    check('devices_app_version_check', sql`app_version is null or app_version ~ '^[A-Za-z0-9._+-]{1,64}$'`),
+  ],
+);
+
+/** What happened to a device, for the live feed (M3.3a). */
+export const DEVICE_EVENT_KINDS = ['online', 'offline', 'low_battery', 'revoked', 'wiped'] as const;
+export type DeviceEventKind = (typeof DEVICE_EVENT_KINDS)[number];
+
+/**
+ * A device's transitions (M3.3a live feed): back online after a silence, gone quiet (the live
+ * watchdog, at the moment it crossed the offline line), battery dropping to low, revoked or wiped.
+ * Append-only. `event_id` is the event the device reported working at the time (null: none yet).
+ */
+export const deviceEvents = tenantTable(
+  checkinSchema,
+  'device_events',
+  {
+    deviceId: uuid('device_id').notNull(),
+    eventId: uuid('event_id'),
+    kind: text('kind').notNull(),
+    at: ts('at').notNull(),
+    batteryPct: integer('battery_pct'),
+  },
+  (t) => [
+    index('device_events_org_event_at_idx').on(t.orgId, t.eventId, t.at),
+    index('device_events_org_device_at_idx').on(t.orgId, t.deviceId, t.at),
+    foreignKey({
+      name: 'device_events_device_fk',
+      columns: [t.orgId, t.deviceId],
+      foreignColumns: [devices.orgId, devices.id],
+    }).onDelete('cascade'),
+    check(
+      'device_events_kind_check',
+      sql.raw(`kind in (${DEVICE_EVENT_KINDS.map((k) => `'${k}'`).join(', ')})`),
+    ),
+    check('device_events_battery_check', sql`battery_pct is null or battery_pct between 0 and 100`),
+  ],
+);
+
+export const PRESENCE_SOURCES = ['door_screen', 'device'] as const;
+export type PresenceSource = (typeof PRESENCE_SOURCES)[number];
+
+/**
+ * Staff presence (M3.3a): who is signed in at an event's doors, on which device and entrance.
+ * One row per member per event, refreshed by the web door screen (every 30 s while open) and by
+ * the heartbeat of a device handed to the member. A row counts while `last_seen_at` is within the
+ * presence window (`PRESENCE_TTL_MS`); old rows are simply not shown.
+ */
+export const staffPresence = tenantTable(
+  checkinSchema,
+  'staff_presence',
+  {
+    eventId: uuid('event_id').notNull(),
+    userId: uuid('user_id').notNull(),
+    deviceId: uuid('device_id'),
+    checkpointId: uuid('checkpoint_id'),
+    source: text('source').notNull(),
+    startedAt: ts('started_at').notNull(),
+    lastSeenAt: ts('last_seen_at').notNull(),
+  },
+  (t) => [
+    uniqueIndex('staff_presence_org_event_user_key').on(t.orgId, t.eventId, t.userId),
+    index('staff_presence_org_event_seen_idx').on(t.orgId, t.eventId, t.lastSeenAt),
+    check('staff_presence_source_check', sql`source in ('door_screen', 'device')`),
+    check('staff_presence_time_check', sql`last_seen_at >= started_at`),
   ],
 );
 
@@ -170,6 +238,12 @@ export const STAFF_ALERT_KINDS = [
   'capacity_near',
 ] as const;
 export type StaffAlertKind = (typeof STAFF_ALERT_KINDS)[number];
+/**
+ * Everything a staff device can be pushed: the staff alerts plus M3.3b's urgent and
+ * high-priority help requests at its event (`assistance`, placeholder `{label}` = where).
+ */
+export const STAFF_PUSH_KINDS = [...STAFF_ALERT_KINDS, 'assistance'] as const;
+export type StaffPushKind = (typeof STAFF_PUSH_KINDS)[number];
 
 /**
  * Staff web push (M3.4a), opted in per device from the Scan PWA's staff mode. One subscription per
@@ -242,7 +316,7 @@ export const staffAlertPushes = tenantTable(
     }).onDelete('cascade'),
     check(
       'staff_alert_pushes_kind_check',
-      sql.raw(`kind in (${STAFF_ALERT_KINDS.map((k) => `'${k}'`).join(', ')})`),
+      sql.raw(`kind in (${STAFF_PUSH_KINDS.map((k) => `'${k}'`).join(', ')})`),
     ),
     check(
       'staff_alert_pushes_status_check',
@@ -272,9 +346,12 @@ export const checkpoints = tenantTable(
     /** Where it is (WGS 84), for the impossible-travel signal. Both or neither. */
     latitude: doublePrecision('latitude'),
     longitude: doublePrecision('longitude'),
+    /** How many people the area holds (M3.3a capacity gauges); null = not limited. */
+    capacity: integer('capacity'),
   },
   (t) => [
     uniqueIndex('checkpoints_org_event_name_key').on(t.orgId, t.eventId, t.name),
+    check('checkpoints_capacity_check', sql`capacity is null or capacity between 1 and 1000000`),
     check('checkpoints_kind_check', sql`kind in ('entrance', 'zone')`),
     check(
       'checkpoints_location_check',

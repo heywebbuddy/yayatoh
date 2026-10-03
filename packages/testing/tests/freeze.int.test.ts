@@ -1,5 +1,6 @@
 import * as ai from '@yayatoh/ai';
 import * as alerts from '@yayatoh/alerts';
+import * as assistance from '@yayatoh/assistance';
 import * as attendees from '@yayatoh/attendees';
 import * as audiences from '@yayatoh/audiences';
 import * as automations from '@yayatoh/automations';
@@ -59,6 +60,8 @@ const MODULES = {
   // Batch 3d merge: M3.2b's alert engine and M3.2a's Command Center (M3.4a and M3.5b grew
   // checkin and notifications, already listed).
   alerts,
+  // Batch 3g merge: M3.3b's guest assistance queue (M3.3a grew checkin and the Command Center).
+  assistance,
   attendees,
   // Batch 3c merge: the modules of batch 3b (audiences, marketing) and 3c (guests; cms grew).
   audiences,

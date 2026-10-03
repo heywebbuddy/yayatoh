@@ -33,6 +33,8 @@ const quiet: EventFacts = {
   admitted: 0,
   salesTarget: null,
   ticketTypes: 2,
+  assistanceOverdue: 0,
+  assistanceUrgent: 0,
 };
 const live: Partial<EventFacts> = { startsAt: at(-HOUR), endsAt: at(3 * HOUR) };
 const fired = (f: Partial<EventFacts>, when = now) => evaluateEventRules({ ...quiet, ...f }, when);
@@ -182,6 +184,40 @@ describe('org rules', () => {
     expect(evaluateOrgRules({ ...ok, emailsSent: 50, bounced: 10 }).deliverability).toBeUndefined();
     expect(evaluateOrgRules({ ...ok, messagingAutoPaused: true }).deliverability?.severity).toBe('critical');
   });
+  it('deliverability (M3.8b): a sending domain or a campaign over a threshold raises it on its own', () => {
+    const scope = (kind: 'domain' | 'campaign', sent: number, bounced: number, complained = 0) => ({
+      kind,
+      sent,
+      bounced,
+      complained,
+    });
+    // The org is fine overall (10 of 1000), but one campaign bounced 10 of 120.
+    const f = { ...ok, bounced: 10, emailScopes: [scope('domain', 880, 0), scope('campaign', 120, 10)] };
+    expect(evaluateOrgRules(f).deliverability).toMatchObject({
+      severity: 'warning',
+      count: 10,
+      params: { bounceBps: 100, domains: 0, campaigns: 1, paused: 0 },
+    });
+    // A domain over on complaints (1 of 200 = 0.5 %), counted apart from campaigns.
+    expect(
+      evaluateOrgRules({ ...ok, complained: 1, emailsSent: 5000, emailScopes: [scope('domain', 200, 0, 1)] })
+        .deliverability?.params,
+    ).toMatchObject({ domains: 1, campaigns: 0 });
+    // Under 100 sent, a scope's rate doesn't count.
+    expect(
+      evaluateOrgRules({ ...ok, emailScopes: [scope('campaign', 99, 50)] }).deliverability,
+    ).toBeUndefined();
+    // At the threshold exactly (5 of 100) it fires; one under doesn't.
+    expect(
+      evaluateOrgRules({ ...ok, emailScopes: [scope('campaign', 100, 5)] }).deliverability,
+    ).toBeDefined();
+    expect(
+      evaluateOrgRules({ ...ok, emailScopes: [scope('campaign', 100, 4)] }).deliverability,
+    ).toBeUndefined();
+  });
+  it('deliverability links to the suppression list', () => {
+    expect(fixPath('deliverability', null)).toBe('/messaging#suppressions');
+  });
   it('payouts past due and automation failures', () => {
     expect(evaluateOrgRules({ ...ok, payoutRequirementsDue: 2 }).payoutsPastDue).toMatchObject({
       count: 2,
@@ -204,6 +240,22 @@ describe('org rules', () => {
     expect(
       evaluateOrgRules({ ...ok, disputesDueSoon: 2, disputesDueCritical: 1 }).disputeDeadline,
     ).toMatchObject({ count: 2, severity: 'critical', params: { critical: 1 } });
+  });
+});
+
+describe('guest assistance (M3.3b)', () => {
+  it('help requests past their SLA raise one alert; critical when one is urgent, live-critical when live', () => {
+    const warn = fired({ assistanceOverdue: 2, assistanceUrgent: 0 }).assistanceOverdue;
+    expect(warn).toMatchObject({ severity: 'warning', count: 2, liveCritical: false });
+    const crit = fired({ ...live, assistanceOverdue: 3, assistanceUrgent: 1 }).assistanceOverdue;
+    expect(crit).toMatchObject({ severity: 'critical', count: 3, liveCritical: true });
+    expect(crit?.params).toEqual({ count: 3, urgent: 1 });
+    expect(fired({ assistanceOverdue: 0 }).assistanceOverdue).toBeUndefined();
+    expect(fired({ status: 'cancelled', assistanceOverdue: 4 }).assistanceOverdue).toBeUndefined();
+  });
+  it('is a door alert for people who read the queue, fixed on the queue page', () => {
+    expect(RULES.assistanceOverdue).toMatchObject({ category: 'door', permission: 'assistance:read' });
+    expect(fixPath('assistanceOverdue', 'gala')).toBe('/e/gala/assistance');
   });
 });
 

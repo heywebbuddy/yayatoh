@@ -57,6 +57,10 @@ describe('redaction rules', () => {
     expect(kinds('card 4111-1111-1111-1111')).toEqual(['card_number']);
     expect(kinds('run 4242424242424241')).toEqual([]);
     expect(kinds('run id 17234567890')).toEqual([]);
+    // A Luhn-valid run inside a hex digest or an id is not a card (batch 3g merge).
+    expect(kinds(`${'ab'}4242424242424242${'cd'.repeat(23)}  audit/audit-samples.json`)).toEqual([]);
+    expect(kinds('ref x4242424242424242y')).toEqual([]);
+    expect(kinds('card: 4242424242424242\n')).toEqual(['card_number']);
   });
 
   it('never echoes the value it found', () => {
