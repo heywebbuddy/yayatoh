@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, DateTimePicker, Select } from '@yayatoh/ui';
+import { Alert, Button, DateTimePicker, Select, TimeZonePicker } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { type FormEvent, startTransition, useActionState, useId, useState } from 'react';
 import type { LibraryState, StartEventState } from '@/app/[locale]/o/[org]/(org)/seating-library/actions.ts';
@@ -17,13 +17,11 @@ type Field = NonNullable<StartEventState['field']>;
 export function StartEventForm({
   layouts,
   profiles,
-  zones,
   defaults,
   action,
 }: {
   layouts: readonly { readonly id: string; readonly name: string; readonly seatCount: number }[];
   profiles: readonly string[];
-  zones: readonly string[];
   defaults: { layoutId: string; profile: string; timezone: string };
   action: (prev: StartEventState, form: FormData) => Promise<StartEventState>;
 }) {
@@ -90,13 +88,12 @@ export function StartEventForm({
           <label htmlFor={`${id}-timezone`} className="text-caption text-ink-2">
             {t('timezone')}
           </label>
-          <Select id={`${id}-timezone`} name="timezone" defaultValue={defaults.timezone} className={field}>
-            {zones.map((z) => (
-              <option key={z} value={z}>
-                {z}
-              </option>
-            ))}
-          </Select>
+          <TimeZonePicker
+            id={`${id}-timezone`}
+            name="timezone"
+            defaultValue={defaults.timezone}
+            className={field}
+          />
         </div>
         <div className="hidden md:block" />
         <div className="flex flex-col gap-1.5">

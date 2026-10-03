@@ -6,7 +6,6 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { VenueForm } from '@/components/venue-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatNumber } from '@/lib/format.ts';
-import { zonesWith } from '@/lib/zones.ts';
 import { loadConsole } from '@/server/console.ts';
 import { venueThumbnails } from '@/server/media.ts';
 import { ports } from '@/server/ports.ts';
@@ -134,11 +133,7 @@ export default async function VenuesPage({
             {t('new')}
           </h2>
           <Card size="panel">
-            <VenueForm
-              action={createVenueAction.bind(null, org)}
-              zones={zonesWith(data.org.timezone)}
-              defaultTimezone={data.org.timezone}
-            />
+            <VenueForm action={createVenueAction.bind(null, org)} defaultTimezone={data.org.timezone} />
           </Card>
         </section>
       ) : (

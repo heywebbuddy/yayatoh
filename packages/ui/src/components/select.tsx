@@ -237,7 +237,14 @@ export function Select({
   const [inner, setInner] = useState(() =>
     initialValue(all, undefined, defaultValue ?? parsed.selected ?? parsed.hidden[0]?.value),
   );
-  const value = controlled ?? inner;
+  // Like a native select: an uncontrolled value that matches no option (options that arrived
+  // later, or a removed one) falls back to the first enabled option, unless a placeholder is meant.
+  const known = (v: string) => all.some((o) => o.value === v) || parsed.hidden.some((o) => o.value === v);
+  const value =
+    controlled ??
+    (known(inner) || (inner === '' && placeholder !== undefined) || !all.length
+      ? inner
+      : initialValue(all, undefined, undefined));
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [active, setActive] = useState(-1);
@@ -274,6 +281,22 @@ export function Select({
     setInvalid(false);
     close(focus);
   };
+
+  // A form reset (React resets a form after its action runs) returns to the default, as a
+  // native select does.
+  const resetTo = initialValue(all, undefined, defaultValue ?? parsed.selected ?? parsed.hidden[0]?.value);
+  const resetRef = useRef(resetTo);
+  resetRef.current = resetTo;
+  useEffect(() => {
+    const f = valueInput.current?.form;
+    if (!f) return;
+    const onReset = () => {
+      setInner(resetRef.current);
+      setInvalid(false);
+    };
+    f.addEventListener('reset', onReset);
+    return () => f.removeEventListener('reset', onReset);
+  }, []);
 
   // Submit after React has written the new value into the hidden input.
   useEffect(() => {

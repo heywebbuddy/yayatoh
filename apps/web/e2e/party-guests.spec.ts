@@ -150,7 +150,8 @@ test.describe('guests: parties, guests and plus-ones (M4.1a)', () => {
     await addGuest(page, garcias, { first: 'Luis', last: 'Garcia', meal: 'Beef', dietary: 'No nuts' });
     await addGuest(page, garcias, { first: 'Sofi', last: 'Garcia', age: 'Child', paper: true });
     await expect(g.locator('span', { hasText: /^Primary contact$/ })).toHaveCount(1);
-    await expect(g.locator('span', { hasText: /^Child$/ })).toBeVisible();
+    // The age badge (not the "Age" field's own text, inside its combobox).
+    await expect(g.locator('span:not([role="combobox"] *)', { hasText: /^Child$/ })).toBeVisible();
     await expect(g.locator('dd', { hasText: 'No nuts' })).toBeVisible();
 
     // A placeholder plus-one, named later.
