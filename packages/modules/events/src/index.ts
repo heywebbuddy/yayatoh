@@ -240,3 +240,5 @@ export {
   teamEventBySlugQuery,
 } from './team.ts';
 export { eventsOverTx } from './timings.ts';
+// M6.9a: an event's delivery (attendance) mode for the virtual module.
+export { type EventDeliveryFacts, eventDeliveryTx } from './delivery.ts';

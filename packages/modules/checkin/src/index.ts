@@ -114,6 +114,7 @@ export {
   type ArrivalSource,
   CHECKPOINT_KINDS,
   type CheckpointKind,
+  VIRTUAL_CHECKPOINT_KIND,
   DEVICE_EVENT_KINDS,
   type DeviceEventKind,
   FRAUD_NOTE_MAX,
@@ -223,3 +224,11 @@ export {
 export { type CheckinScope, type CheckinSeriesFact, checkinFactsTx, checkinSeriesTx } from './stats.ts';
 // M6.1a: the person timeline's facts from this module (crm projection).
 export { checkinTimeline } from './timeline.ts';
+// M6.9a: the virtual checkpoint (watching a session's stream checks the ticket in).
+export {
+  VirtualCheckpointDto,
+  virtualAttendanceSubscriber,
+  virtualCheckpointName,
+  virtualCheckpointsQuery,
+  virtualCheckpointTx,
+} from './virtual-attendance.ts';
