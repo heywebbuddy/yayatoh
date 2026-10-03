@@ -1571,6 +1571,9 @@ importers:
       '@yayatoh/program':
         specifier: workspace:*
         version: link:../program
+      '@yayatoh/registration':
+        specifier: workspace:*
+        version: link:../registration
       '@yayatoh/reports':
         specifier: workspace:*
         version: link:../reports
