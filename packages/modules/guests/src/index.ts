@@ -283,3 +283,14 @@ export {
   tablePartiesTx,
   tablePartyTx,
 } from './tables.ts';
+// M4.3a guest seating: the guest list's live channel and seating's OccupantDirectory.
+export { GUESTS_CHANNEL, MAX_PARTY_MESSAGES, publishGuestChangesTx } from './realtime.ts';
+export {
+  guestsOccupantDirectory,
+  type SeatingOccupant,
+  type SeatingOccupantParty,
+  type SeatingStatus,
+  seatingOccupantsTx,
+  seatingSubEventsTx,
+  wholeEventStatus,
+} from './seating-occupants.ts';
