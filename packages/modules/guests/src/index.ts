@@ -301,6 +301,8 @@ export {
   unlockGuestSiteQuery,
   updateGuestSiteBlockCommand,
 } from './site.ts';
+// M4.5b: the gallery behind the guest site (in the gallery module's transactions).
+export { guestSiteAccessTx, guestSiteCodeTx } from './site-access.ts';
 export {
   CreateSubEventInput,
   createSubEventCommand,

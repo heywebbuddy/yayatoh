@@ -117,6 +117,7 @@ import {
   setJobTitlesCommand,
   startRegistrationFormCommand,
 } from '@yayatoh/forms';
+import { addGalleryVideoCommand } from '@yayatoh/gallery';
 import {
   addGuestSiteBlockCommand,
   addPartyGuestCommand,
@@ -308,6 +309,7 @@ import {
 } from '@yayatoh/ticketing';
 import { createVenueCommand, submitQuoteRequestCommand } from '@yayatoh/venues';
 import { sql } from 'drizzle-orm';
+import { enableGallery, guestGalleryPhoto, guestSiteAccess, hostGalleryPhoto } from './gallery.ts';
 import { ports, runBulk, submitRegistrationForm } from './ports.ts';
 
 export interface OrgFixture {
@@ -2429,6 +2431,9 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   // M4.5a: the guest website, published behind a password, with one block of each kind
   // (isolation coverage of `sites` and `site_blocks`; the canary crawl unlocks it).
   await guestSiteRows(event.id, ctx);
+  // M4.5b: the gallery behind it (isolation coverage of every gallery table): a host photo
+  // (published), a guest's photo waiting for approval and a video link.
+  await galleryRows(org.id, event.id, ctx);
   await donationRows(org.id, event.id, slug, ctx);
   await receiptRows(org.id, event.id, ga.id, checkout.order.id, ctx);
   return {
@@ -2643,6 +2648,25 @@ export async function twoOrgs(suffix = uuidv7().slice(-8)) {
 
 /** The fixture's guest website password (the canary crawl unlocks the site with it). */
 export const FIXTURE_SITE_PASSWORD = 'fixture site pass';
+
+/** M4.5b: the fixture event's gallery: on, a host photo, a guest's pending photo, a video link. */
+async function galleryRows(orgId: string, eventId: string, ctx: () => Ctx) {
+  await enableGallery(ctx(), eventId);
+  await hostGalleryPhoto(ctx(), eventId, fixturePng('cover'), 'Fixture host photo');
+  const access = await guestSiteAccess(orgId, eventId, FIXTURE_SITE_PASSWORD);
+  await guestGalleryPhoto(
+    orgId,
+    { eventId, access, name: 'Fixture Guest' },
+    fixturePng('logo'),
+    'Fixture guest photo',
+  );
+  await executeCommand(
+    addGalleryVideoCommand,
+    { eventId, url: 'https://youtu.be/dQw4w9WgXcQ', caption: 'Fixture video' },
+    ctx(),
+    ports,
+  );
+}
 
 /** M4.5a: the fixture event's guest website, one block of each kind, published. */
 async function guestSiteRows(eventId: string, ctx: () => Ctx) {

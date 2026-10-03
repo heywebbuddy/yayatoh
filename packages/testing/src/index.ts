@@ -17,6 +17,7 @@ export {
   twoOrgs,
   userCtx,
 } from './fixtures.ts';
+export { enableGallery, guestGalleryPhoto, guestSiteAccess, hostGalleryPhoto, putToSlot } from './gallery.ts';
 export { GUEST_SITE_PASSWORD, type GuestSiteScenario, guestSiteScenario } from './guest-site.ts';
 export { quietDevice, revokeDevice } from './live.ts';
 export {

@@ -1779,6 +1779,46 @@ importers:
         specifier: 'catalog:'
         version: 6.0.3
 
+  packages/modules/gallery:
+    dependencies:
+      '@yayatoh/db':
+        specifier: workspace:*
+        version: link:../../db
+      '@yayatoh/events':
+        specifier: workspace:*
+        version: link:../events
+      '@yayatoh/guests':
+        specifier: workspace:*
+        version: link:../guests
+      '@yayatoh/kernel':
+        specifier: workspace:*
+        version: link:../../kernel
+      '@yayatoh/media':
+        specifier: workspace:*
+        version: link:../media
+      '@yayatoh/platform':
+        specifier: workspace:*
+        version: link:../../platform
+      drizzle-orm:
+        specifier: 'catalog:'
+        version: 0.45.3(@opentelemetry/api@1.9.0)(kysely@0.29.6)(pg@8.23.0)(postgres@3.4.9)
+      sharp:
+        specifier: 0.35.4
+        version: 0.35.4(@types/node@24.19.0)
+      zod:
+        specifier: 'catalog:'
+        version: 4.6.5
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.19.0
+      '@yayatoh/config':
+        specifier: workspace:*
+        version: link:../../config
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
   packages/modules/guests:
     dependencies:
       '@yayatoh/attendees':
@@ -2802,6 +2842,9 @@ importers:
       '@yayatoh/forms':
         specifier: workspace:*
         version: link:../modules/forms
+      '@yayatoh/gallery':
+        specifier: workspace:*
+        version: link:../modules/gallery
       '@yayatoh/guests':
         specifier: workspace:*
         version: link:../modules/guests
@@ -2884,6 +2927,9 @@ importers:
       pdfjs-dist:
         specifier: 5.4.296
         version: 5.4.296
+      sharp:
+        specifier: 0.35.4
+        version: 0.35.4(@types/node@24.19.0)
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
