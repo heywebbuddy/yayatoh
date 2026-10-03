@@ -29,6 +29,7 @@ export const privateColumns = columnPrivacy('sso', {
   scim_tokens: { prefix: secret('key-prefix'), token_hash: secret() },
   scim_users: {
     user_name: personal('email'),
+    email: personal('email'),
     external_id: internal(),
     display_name: personal(),
     given_name: personal(),

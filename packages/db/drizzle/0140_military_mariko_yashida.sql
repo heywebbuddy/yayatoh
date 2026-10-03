@@ -116,6 +116,7 @@ CREATE TABLE "sso"."scim_users" (
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"user_id" uuid NOT NULL,
 	"user_name" text NOT NULL,
+	"email" text NOT NULL,
 	"external_id" text,
 	"display_name" text,
 	"given_name" text,
@@ -124,6 +125,7 @@ CREATE TABLE "sso"."scim_users" (
 	"deprovisioned_at" timestamp with time zone,
 	CONSTRAINT "scim_users_org_id_id_key" UNIQUE("org_id","id"),
 	CONSTRAINT "scim_users_user_name_check" CHECK (length(user_name) between 3 and 320),
+	CONSTRAINT "scim_users_email_check" CHECK (length(email) between 3 and 320),
 	CONSTRAINT "scim_users_external_check" CHECK (external_id is null or length(external_id) between 1 and 255),
 	CONSTRAINT "scim_users_names_check" CHECK (coalesce(length(display_name), 0) <= 200 and coalesce(length(given_name), 0) <= 100 and coalesce(length(family_name), 0) <= 100)
 );

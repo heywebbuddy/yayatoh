@@ -160,6 +160,8 @@ export const scimUsers = tenantTable(
   {
     userId: uuid('user_id').notNull(),
     userName: text('user_name').notNull(),
+    /** The account's address (the primary email the IdP sent, else `user_name`). */
+    email: text('email').notNull(),
     externalId: text('external_id'),
     displayName: text('display_name'),
     givenName: text('given_name'),
@@ -172,6 +174,7 @@ export const scimUsers = tenantTable(
     uniqueIndex('scim_users_org_user_name_key').on(t.orgId, sql`lower(${t.userName})`),
     uniqueIndex('scim_users_org_external_key').on(t.orgId, t.externalId).where(sql`external_id is not null`),
     check('scim_users_user_name_check', sql`length(user_name) between 3 and 320`),
+    check('scim_users_email_check', sql`length(email) between 3 and 320`),
     check('scim_users_external_check', sql`external_id is null or length(external_id) between 1 and 255`),
     check(
       'scim_users_names_check',

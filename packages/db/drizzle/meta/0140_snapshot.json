@@ -1,5 +1,5 @@
 {
-  "id": "80006b26-f776-43d6-8232-212e5e14c2d5",
+  "id": "e73c191a-6dc1-4fd8-8932-280fec871569",
   "prevId": "f59b0d31-d47a-4d9a-a3b5-d556b26efa84",
   "version": "7",
   "dialect": "postgresql",
@@ -57747,6 +57747,12 @@
           "primaryKey": false,
           "notNull": true
         },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
         "external_id": {
           "name": "external_id",
           "type": "text",
@@ -57894,6 +57900,10 @@
         "scim_users_user_name_check": {
           "name": "scim_users_user_name_check",
           "value": "length(user_name) between 3 and 320"
+        },
+        "scim_users_email_check": {
+          "name": "scim_users_email_check",
+          "value": "length(email) between 3 and 320"
         },
         "scim_users_external_check": {
           "name": "scim_users_external_check",

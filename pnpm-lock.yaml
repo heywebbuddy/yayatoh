@@ -2686,9 +2686,6 @@ importers:
 
   packages/modules/sso:
     dependencies:
-      '@yayatoh/billing':
-        specifier: workspace:*
-        version: link:../billing
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../../db
@@ -2703,7 +2700,7 @@ importers:
         version: link:../tenancy
       drizzle-orm:
         specifier: 'catalog:'
-        version: 0.45.3(@opentelemetry/api@1.9.1)(kysely@0.29.6)(pg@8.23.0)(postgres@3.4.9)
+        version: 0.45.3(@opentelemetry/api@1.9.0)(kysely@0.29.6)(pg@8.23.0)(postgres@3.4.9)
       zod:
         specifier: 'catalog:'
         version: 4.6.5
@@ -3173,6 +3170,9 @@ importers:
       '@yayatoh/seating':
         specifier: workspace:*
         version: link:../modules/seating
+      '@yayatoh/sso':
+        specifier: workspace:*
+        version: link:../modules/sso
       '@yayatoh/surveys':
         specifier: workspace:*
         version: link:../modules/surveys
@@ -10948,13 +10948,6 @@ snapshots:
   drizzle-orm@0.45.3(@opentelemetry/api@1.9.0)(kysely@0.29.6)(pg@8.23.0)(postgres@3.4.9):
     optionalDependencies:
       '@opentelemetry/api': 1.9.0
-      kysely: 0.29.6
-      pg: 8.23.0
-      postgres: 3.4.9
-
-  drizzle-orm@0.45.3(@opentelemetry/api@1.9.1)(kysely@0.29.6)(pg@8.23.0)(postgres@3.4.9):
-    optionalDependencies:
-      '@opentelemetry/api': 1.9.1
       kysely: 0.29.6
       pg: 8.23.0
       postgres: 3.4.9

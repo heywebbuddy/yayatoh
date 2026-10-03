@@ -93,6 +93,11 @@ export const PERMISSIONS = [
    * (M6.4a). Org data leaves through them: owners and admins only.
    */
   'integrations:manage',
+  /**
+   * Single sign-on and SCIM (M6.5a): the IdP connection, verified domains and their enforcement,
+   * the SCIM token and group-to-role mapping. Who can sign in and with which role: owners and admins.
+   */
+  'sso:manage',
 ] as const;
 export type Permission = (typeof PERMISSIONS)[number];
 
