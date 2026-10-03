@@ -334,6 +334,20 @@ import {
   setVipTableCommand,
 } from '@yayatoh/seating';
 import {
+  addDomainCommand,
+  checkDomainCommand,
+  completeSsoLoginCommand,
+  createScimTokenCommand,
+  FAKE_IDP_CERTIFICATE,
+  publishFakeTxt,
+  recordConnectionTestCommand,
+  saveConnectionCommand,
+  scimCreateGroupCommand,
+  scimCreateUserCommand,
+  scimCtx,
+  setConnectionStatusCommand,
+} from '@yayatoh/sso';
+import {
   createSurveyCommand,
   sendSurveyCommand,
   submitSurveyResponseCommand,
@@ -367,20 +381,6 @@ import {
   requestHolderLinkCommand,
 } from '@yayatoh/ticketing';
 import { createVenueCommand, submitQuoteRequestCommand } from '@yayatoh/venues';
-import {
-  addDomainCommand,
-  checkDomainCommand,
-  completeSsoLoginCommand,
-  createScimTokenCommand,
-  FAKE_IDP_CERTIFICATE,
-  publishFakeTxt,
-  recordConnectionTestCommand,
-  saveConnectionCommand,
-  scimCreateGroupCommand,
-  scimCreateUserCommand,
-  scimCtx,
-  setConnectionStatusCommand,
-} from '@yayatoh/sso';
 import { createEndpointCommand } from '@yayatoh/webhooks';
 import { sql } from 'drizzle-orm';
 import { enableGallery, guestGalleryPhoto, guestSiteAccess, hostGalleryPhoto } from './gallery.ts';
@@ -3416,7 +3416,10 @@ async function ssoFixture(orgId: string, slug: string, viewerId: string, ctx: (o
   );
   await executeCommand(
     scimCreateGroupCommand,
-    { baseUrl, fields: { displayName: 'Fixture group', externalId: `grp-${slug}`, members: [user.resource.id] } },
+    {
+      baseUrl,
+      fields: { displayName: 'Fixture group', externalId: `grp-${slug}`, members: [user.resource.id] },
+    },
     scim,
     ports,
   );

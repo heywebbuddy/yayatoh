@@ -5,23 +5,21 @@
  * metadata parser and the connection test see realistic values.
  */
 export const FAKE_IDP_CERTIFICATE = `-----BEGIN CERTIFICATE-----
-MIIDFzCCAf+gAwIBAgIUJ+1UCgyIDcqNbUeNMCmkXoILFSIwDQYJKoZIhvcNAQEL
-BQAwGzEZMBcGA1UEAwwQWWF5YXRvaCBGYWtlIElkUDAeFw0yNjEwMDMxNzU3NDJa
-Fw0zNjA5MzAxNzU3NDJaMBsxGTAXBgNVBAMMEFlheWF0b2ggRmFrZSBJZFAwggEi
-MA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCQZ5duyvKowqEs+LxtgCJtWTMV
-PD8XHiOGGGNvH2tuqVa3EbB7kFiBwvIPtmVxymfy6Q7x5v3CF8xNI0hpS+Ik/qCm
-U/3/6Kn/RZN9ZcUY3CJiPlyff242mxACUbU3MzggJMBe/SzBN5DoU1bUYxpZm5Oe
-MQbXD6tZ3G5YoZsaopNbSE7B4lkAJMzZLQ/c9f/LE95dnRvtwgB/v4VwMWaKfkh7
-0vtrXCC5IQWBcHi2PkZBqF9p0dZGiGFpRVpuz/pycwYTIWmjK4timSbbrWvM+/i6
-JILMTzKfGLqY+q+Edm7yWixYfkOzFG+P7GWwohE4CF5a8KGw9NwolaH/LwUBAgMB
-AAGjUzBRMB0GA1UdDgQWBBQTEmKyjMFpUr54Ag4VRYl9QQ+1gjAfBgNVHSMEGDAW
-gBQTEmKyjMFpUr54Ag4VRYl9QQ+1gjAPBgNVHRMBAf8EBTADAQH/MA0GCSqGSIb3
-DQEBCwUAA4IBAQBVcpngCcygvF55yz63SgvFJPWDGGIDE+pZaoF4wOoBnB3xYyDe
-RG3KkbZewfWYgnI4gnW8Gmtv9SW0TBHzUIyesNl2hb91iDvGl6VILY9UcRQpR4pF
-WJjNPhWMOsvxYIQHW6+vMFShHDOdDcDNdyYWv2xSs90AjcMcqYrRz/k9Kfmi9SF+
-0tNqowbnMaHhOJ1c47fHQ3x74RsRm1njAEKL5o26QZ36u2A+9npxWDEPcCKNnIC3
-eq02D0fLFD2lkaCqa9ba5/+rlYCBAWhJDvvbjCqfLqXPBda0ptPJ++Ro/2qgmeEq
-Tqu5wsm8HRGAaxEJCPkkQmcdYSy2vbLq58Uj
+MIICwjCCAaqgAwIBAgIUYsFoDbDJySSEV9jVjkQaHEhUn6MwDQYJKoZIhvcNAQEL
+BQAwGzEZMBcGA1UEAwwQWWF5YXRvaCBGYWtlIElkUDAeFw0yNTAxMDEwMDAwMDBa
+Fw00NTAxMDEwMDAwMDBaMBsxGTAXBgNVBAMMEFlheWF0b2ggRmFrZSBJZFAwggEi
+MA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQC+SpqEdSgOdx/GEk+NU34w+YiJ
+DbKPk/K09wPa2c36kfpj0QYPvgnRLtb5abikxgHOvlfmr7cATAZNW3pkEOuw6C5d
+Q0aFfr66jIMBoZSkJJShcynqXWhfkjKQemstnCM9nkQpqn+5MZ1bw6lfKLPvJwcu
+GeGbbKw3QIMkb1K8PSJZiWikQaTHUaGZAitUlk9z6brpH/Y3UFtx1OMmgxAzgzk9
+lxFh/nWGpem6MJypFK4KDmbEJHVQDRFVA6kCEDqEYynFKZDar0mPb0EYG0mjOqi1
+M+EUk5WYS7A6MSEFYCRJJxiWVpWRpGgA7oHrtZi0kOW7NeVdUrBwIzAw2bpFAgMB
+AAEwDQYJKoZIhvcNAQELBQADggEBAIChKewdVDnO8GOWmCLsiyghNySjaHfgauV5
+941dDo/+SoQRzL9XQ/V5caumdVloN2ocKTJ9xIgiBPCWf+rbEAdYTuYgl4dND51i
+4DxrTGNOFOpPjSkTE/kbpB8/XWab+fwJ3L7JF1jPwCQuNyDwKqLBO0QLzMIZKmVi
+wZhgPCUP9Dgl+hzjBbP+YEyKEa9VGN9WfLW2uNIj4n+B4/k4lZAS8zBZSsxSt+aj
+RQsVPGQKX/B3jIT3HiWJLO155H1/ftdy1v6TUtTyICXmEtp9JxqI28mjqi51f16a
+VF6YRfza5hNkiJMl5JJxIMnmUa0+5EOcsqoQ1tZIVGsXdDM82Jk=
 -----END CERTIFICATE-----`;
 
 /** A certificate that expired on 2021-01-01 (the connection test refuses it). */
@@ -44,7 +42,10 @@ PcWQGSybpEDdwy0pdD3DDKMVSXudrXkSJeFv7X2+cPsCS01SaHU=
 -----END CERTIFICATE-----`;
 
 /** The fake IdP's SAML metadata for an entity id (what an org admin would upload or link). */
-export function fakeIdpMetadata(entityId: string, ssoUrl = `${entityId.replace(/\/$/, '')}/sso/saml`): string {
+export function fakeIdpMetadata(
+  entityId: string,
+  ssoUrl = `${entityId.replace(/\/$/, '')}/sso/saml`,
+): string {
   const cert = FAKE_IDP_CERTIFICATE.replace(/-----(BEGIN|END) CERTIFICATE-----/g, '').replace(/\s+/g, '');
   return `<?xml version="1.0" encoding="UTF-8"?>
 <md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" entityID="${entityId}">

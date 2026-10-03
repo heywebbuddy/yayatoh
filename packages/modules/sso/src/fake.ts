@@ -79,7 +79,8 @@ export function openFakeIdpAnswer(
   if (input.response.length > 16_384) return { ok: false, reason: 'malformed' };
   const [body, sig, extra] = input.response.split('.');
   if (!body || !sig || extra !== undefined) return { ok: false, reason: 'malformed' };
-  if (!same(sig, sign(keyFor(seed, conn.orgId, conn.id), body))) return { ok: false, reason: 'invalid_signature' };
+  if (!same(sig, sign(keyFor(seed, conn.orgId, conn.id), body)))
+    return { ok: false, reason: 'invalid_signature' };
   let s: FakeIdpStatement;
   try {
     s = JSON.parse(Buffer.from(body, 'base64url').toString('utf8'));
@@ -91,9 +92,11 @@ export function openFakeIdpAnswer(
   if (s.iss !== want.iss) return { ok: false, reason: 'wrong_issuer' };
   if (s.aud !== want.aud) return { ok: false, reason: 'wrong_audience' };
   if (typeof s.exp !== 'number' || s.exp <= now) return { ok: false, reason: 'expired' };
-  if (typeof s.nonce !== 'string' || !same(s.nonce, input.nonce)) return { ok: false, reason: 'wrong_request' };
+  if (typeof s.nonce !== 'string' || !same(s.nonce, input.nonce))
+    return { ok: false, reason: 'wrong_request' };
   if (typeof s.sub !== 'string' || !s.sub || s.sub.length > 255) return { ok: false, reason: 'malformed' };
-  if (typeof s.email !== 'string' || !/^[^\s@]+@[^\s@]+$/.test(s.email)) return { ok: false, reason: 'no_email' };
+  if (typeof s.email !== 'string' || !/^[^\s@]+@[^\s@]+$/.test(s.email))
+    return { ok: false, reason: 'no_email' };
   return {
     ok: true,
     assertion: {

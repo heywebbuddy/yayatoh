@@ -13,7 +13,12 @@ export type ManagedRole = 'admin' | 'manager' | 'finance' | 'marketing' | 'box_o
 
 export type EnsureOutcome =
   | { readonly action: 'added'; readonly membershipId: string; readonly role: string }
-  | { readonly action: 'changed'; readonly membershipId: string; readonly role: string; readonly from: string }
+  | {
+      readonly action: 'changed';
+      readonly membershipId: string;
+      readonly role: string;
+      readonly from: string;
+    }
   | { readonly action: 'kept'; readonly membershipId: string; readonly role: string };
 
 /**

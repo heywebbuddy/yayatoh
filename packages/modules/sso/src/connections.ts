@@ -103,7 +103,11 @@ export const SaveSamlInput = z.object({
   protocol: z.literal('saml'),
   ...Common,
   metadataXml: z.string().max(200_000).nullable().default(null),
-  metadataUrl: z.url({ protocol: /^https$/ }).max(2048).nullable().default(null),
+  metadataUrl: z
+    .url({ protocol: /^https$/ })
+    .max(2048)
+    .nullable()
+    .default(null),
   entityId: z.string().trim().max(1024).nullable().default(null),
   ssoUrl: z.string().trim().max(2048).nullable().default(null),
   certificate: z.string().trim().max(20_000).nullable().default(null),
@@ -139,7 +143,8 @@ async function samlConfigOf(input: z.infer<typeof SaveSamlInput>): Promise<SamlC
       }
     }
     const parsed = parseSamlMetadata(xml);
-    if ('error' in parsed) throw invalid(input.metadataXml?.trim() ? 'metadataXml' : 'metadataUrl', parsed.error, parsed.error);
+    if ('error' in parsed)
+      throw invalid(input.metadataXml?.trim() ? 'metadataXml' : 'metadataUrl', parsed.error, parsed.error);
     source = parsed;
   }
   const r = SamlConfig.safeParse({
@@ -153,7 +158,8 @@ async function samlConfigOf(input: z.infer<typeof SaveSamlInput>): Promise<SamlC
     const field = String(r.error.issues[0]?.path[0] ?? 'entityId');
     throw invalid(field, 'invalid');
   }
-  if (!certificateInfo(r.data.certificate)) throw invalid('certificate', 'certificate_invalid', 'certificate_invalid');
+  if (!certificateInfo(r.data.certificate))
+    throw invalid('certificate', 'certificate_invalid', 'certificate_invalid');
   return r.data;
 }
 
@@ -163,7 +169,15 @@ function oidcConfigOf(input: z.infer<typeof SaveOidcInput>): OidcConfig {
   return r.data;
 }
 
-const sameConfig = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
+/** jsonb reorders keys: compare with sorted keys. */
+const canonical = (v: unknown): string =>
+  v && typeof v === 'object' && !Array.isArray(v)
+    ? `{${Object.keys(v)
+        .sort()
+        .map((k) => `${JSON.stringify(k)}:${canonical((v as Record<string, unknown>)[k])}`)
+        .join(',')}}`
+    : JSON.stringify(v ?? null);
+const sameConfig = (a: unknown, b: unknown) => canonical(a) === canonical(b);
 
 /**
  * Create or change the org's connection. A changed IdP setting (or a new secret) needs a new
@@ -300,11 +314,10 @@ export const setConnectionStatusCommand = tenantCommand({
     const row = await theConnection(tx);
     if (input.status === 'active') {
       if (!testPassed(row))
-        throw new DomainError('invalid_state', 'Run a successful test sign-in first', { reason: 'test_required' });
-      const [verified] = await tx
-        .select({ n: count() })
-        .from(domains)
-        .where(eq(domains.status, 'verified'));
+        throw new DomainError('invalid_state', 'Run a successful test sign-in first', {
+          reason: 'test_required',
+        });
+      const [verified] = await tx.select({ n: count() }).from(domains).where(eq(domains.status, 'verified'));
       if (!verified?.n)
         throw new DomainError('invalid_state', 'Verify a domain first', { reason: 'domain_required' });
     } else {
@@ -437,9 +450,10 @@ export const ssoSettingsQuery = tenantQuery({
 // For the sign-in flow (server only)
 
 /** The org's connection for the IdP adapter, with its secret opened. Null when there is none. */
-export async function connectionView(orgId: string, connectionId: string): Promise<
-  (SsoConnectionView & { status: ConnectionRow['status']; jit: boolean }) | null
-> {
+export async function connectionView(
+  orgId: string,
+  connectionId: string,
+): Promise<(SsoConnectionView & { status: ConnectionRow['status']; jit: boolean }) | null> {
   const ctx = createCtx({ orgId, actor: { type: 'system', name: 'sso.login' } });
   const row = await withTenant(ctx, async (tx) => {
     const [r] = await tx.select().from(connections).where(eq(connections.id, connectionId));

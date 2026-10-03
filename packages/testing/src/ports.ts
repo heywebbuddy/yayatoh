@@ -37,6 +37,7 @@ import {
 import { registrationDecideAction, registrationSessionAccess } from '@yayatoh/registration';
 import { attendeeExportAction, bookingsExportAction } from '@yayatoh/reports';
 import { seatAssignAction, setOccupantDirectory, setPartyCredentials } from '@yayatoh/seating';
+import { configureSso, fakeIdentityProvider, fakeMetadataFetcher, fakeTxtResolver } from '@yayatoh/sso';
 import { surveyExportAction, surveysContactOwner } from '@yayatoh/surveys';
 import { createOrgAuthorizer, orgStatusGate } from '@yayatoh/tenancy';
 import { ticketResendAction } from '@yayatoh/ticketing';
@@ -47,7 +48,6 @@ import {
   fakeResolver,
   memoryWebhookStore,
 } from '@yayatoh/webhooks';
-import { configureSso, fakeIdentityProvider, fakeMetadataFetcher, fakeTxtResolver } from '@yayatoh/sso';
 import { DATA_SUBJECT_CONTRIBUTORS } from './dsar/contributors.ts';
 
 /** The same composition the apps use: billing entitlements + tenancy authorizer. */

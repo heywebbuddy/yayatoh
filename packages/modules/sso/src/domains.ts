@@ -40,7 +40,11 @@ export const addDomainCommand = tenantCommand({
     try {
       const [row] = await tx
         .insert(domains)
-        .values({ orgId: requireOrg(ctx), domain: input.domain, token: randomBytes(24).toString('base64url') })
+        .values({
+          orgId: requireOrg(ctx),
+          domain: input.domain,
+          token: randomBytes(24).toString('base64url'),
+        })
         .returning();
       if (!row) throw new DomainError('internal');
       return row;
@@ -108,7 +112,12 @@ export const checkDomainCommand = tenantCommand({
       if (!isUniqueViolation(err)) throw err;
       const [updated] = await tx
         .update(domains)
-        .set({ status: 'failed', lastCheckedAt: ctx.now, failureReason: 'claimed_elsewhere', updatedAt: ctx.now })
+        .set({
+          status: 'failed',
+          lastCheckedAt: ctx.now,
+          failureReason: 'claimed_elsewhere',
+          updatedAt: ctx.now,
+        })
         .where(eq(domains.id, row.id))
         .returning();
       if (!updated) throw new DomainError('internal');
@@ -166,7 +175,9 @@ export const setDomainEnforcementCommand = tenantCommand({
         throw new DomainError('invalid_state', 'Verify the domain first', { reason: 'domain_not_verified' });
       const [conn] = await tx.select({ status: connections.status }).from(connections);
       if (conn?.status !== 'active')
-        throw new DomainError('invalid_state', 'Activate single sign-on first', { reason: 'connection_inactive' });
+        throw new DomainError('invalid_state', 'Activate single sign-on first', {
+          reason: 'connection_inactive',
+        });
     }
     const [updated] = await tx
       .update(domains)

@@ -34,12 +34,12 @@ import { privateColumns as registration } from '@yayatoh/registration';
 import { privateColumns as reports } from '@yayatoh/reports';
 import { privateColumns as reviews } from '@yayatoh/reviews';
 import { privateColumns as seating } from '@yayatoh/seating';
+import { privateColumns as sso } from '@yayatoh/sso';
 import { privateColumns as surveys } from '@yayatoh/surveys';
 import { privateColumns as templates } from '@yayatoh/templates';
 import { privateColumns as tenancy } from '@yayatoh/tenancy';
 import { privateColumns as ticketing } from '@yayatoh/ticketing';
 import { privateColumns as venues } from '@yayatoh/venues';
-import { privateColumns as sso } from '@yayatoh/sso';
 import { privateColumns as webhooks } from '@yayatoh/webhooks';
 
 /**

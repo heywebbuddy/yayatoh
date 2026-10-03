@@ -146,8 +146,11 @@ async function defaultRoleTx(tx: TenantTx): Promise<SsoRole> {
   return (c?.role as SsoRole | undefined) ?? 'viewer';
 }
 
-const scimError = (code: 'not_found' | 'conflict' | 'validation_failed' | 'invalid_state', detail: string, scimType?: string) =>
-  new DomainError(code, detail, scimType ? { scimType } : {});
+const scimError = (
+  code: 'not_found' | 'conflict' | 'validation_failed' | 'invalid_state',
+  detail: string,
+  scimType?: string,
+) => new DomainError(code, detail, scimType ? { scimType } : {});
 
 /**
  * Bring the person's membership in line with their SCIM state: an active user is a member (role
@@ -159,7 +162,13 @@ async function syncMembershipTx(
   tx: TenantTx,
   ctx: Ctx,
   user: UserRow,
-  emit: (e: { type: string; version: number; aggregateType: string; aggregateId: string; payload: Record<string, unknown> }) => void,
+  emit: (e: {
+    type: string;
+    version: number;
+    aggregateType: string;
+    aggregateId: string;
+    payload: Record<string, unknown>;
+  }) => void,
 ): Promise<{ revoke: boolean }> {
   const orgId = requireOrg(ctx);
   if (!user.active) {
@@ -174,7 +183,10 @@ async function syncMembershipTx(
   const roles = await tx
     .select({ role: scimGroups.role })
     .from(scimGroupMembers)
-    .innerJoin(scimGroups, and(eq(scimGroups.id, scimGroupMembers.groupId), eq(scimGroups.orgId, scimGroupMembers.orgId)))
+    .innerJoin(
+      scimGroups,
+      and(eq(scimGroups.id, scimGroupMembers.groupId), eq(scimGroups.orgId, scimGroupMembers.orgId)),
+    )
     .where(eq(scimGroupMembers.scimUserId, user.id));
   const mapped = mappedRole(roles.map((r) => r.role));
   const r = await ensureManagedMembershipTx(tx, {
@@ -205,11 +217,15 @@ async function userGroups(tx: TenantTx, scimUserIds: readonly string[]) {
   const rows = await tx
     .select({ userId: scimGroupMembers.scimUserId, id: scimGroups.id, displayName: scimGroups.displayName })
     .from(scimGroupMembers)
-    .innerJoin(scimGroups, and(eq(scimGroups.id, scimGroupMembers.groupId), eq(scimGroups.orgId, scimGroupMembers.orgId)))
+    .innerJoin(
+      scimGroups,
+      and(eq(scimGroups.id, scimGroupMembers.groupId), eq(scimGroups.orgId, scimGroupMembers.orgId)),
+    )
     .where(inArray(scimGroupMembers.scimUserId, [...scimUserIds]))
     .orderBy(asc(scimGroups.displayName));
   const map = new Map<string, { id: string; displayName: string }[]>();
-  for (const r of rows) map.set(r.userId, [...(map.get(r.userId) ?? []), { id: r.id, displayName: r.displayName }]);
+  for (const r of rows)
+    map.set(r.userId, [...(map.get(r.userId) ?? []), { id: r.id, displayName: r.displayName }]);
   return map;
 }
 
@@ -259,12 +275,16 @@ export const scimCreateUserCommand = tenantCommand({
           .returning(),
       );
     } catch (err) {
-      if (isUniqueViolation(err)) throw scimError('conflict', 'A user with this userName exists', 'uniqueness');
+      if (isUniqueViolation(err))
+        throw scimError('conflict', 'A user with this userName exists', 'uniqueness');
       throw err;
     }
     if (!row) throw new DomainError('internal');
     const { revoke } = await syncMembershipTx(tx, ctx, row, emit);
-    return { resource: await userResourceTx(tx, row, input.baseUrl), revokeUserId: revoke ? row.userId : null };
+    return {
+      resource: await userResourceTx(tx, row, input.baseUrl),
+      revokeUserId: revoke ? row.userId : null,
+    };
   },
   audit: (input, r) => ({
     action: 'sso.scim.user.create',
@@ -303,7 +323,8 @@ export const scimUpdateUserCommand = tenantCommand({
           .returning(),
       );
     } catch (err) {
-      if (isUniqueViolation(err)) throw scimError('conflict', 'A user with this userName exists', 'uniqueness');
+      if (isUniqueViolation(err))
+        throw scimError('conflict', 'A user with this userName exists', 'uniqueness');
       throw err;
     }
     if (!row) throw new DomainError('internal');
@@ -438,7 +459,10 @@ async function groupResourceTx(tx: TenantTx, row: GroupRow, baseUrl: string): Pr
   const members = await tx
     .select({ id: scimUsers.id, userName: scimUsers.userName })
     .from(scimGroupMembers)
-    .innerJoin(scimUsers, and(eq(scimUsers.id, scimGroupMembers.scimUserId), eq(scimUsers.orgId, scimGroupMembers.orgId)))
+    .innerJoin(
+      scimUsers,
+      and(eq(scimUsers.id, scimGroupMembers.scimUserId), eq(scimUsers.orgId, scimGroupMembers.orgId)),
+    )
     .where(eq(scimGroupMembers.groupId, row.id))
     .orderBy(asc(scimUsers.userName));
   return groupResource({ ...row, members }, baseUrl);
@@ -460,15 +484,22 @@ async function setMembersTx(
 ) {
   const orgId = requireOrg(ctx);
   const before = (
-    await tx.select({ id: scimGroupMembers.scimUserId }).from(scimGroupMembers).where(eq(scimGroupMembers.groupId, group.id))
+    await tx
+      .select({ id: scimGroupMembers.scimUserId })
+      .from(scimGroupMembers)
+      .where(eq(scimGroupMembers.groupId, group.id))
   ).map((r) => r.id);
   const known =
     members.length === 0
       ? []
-      : (await tx.select({ id: scimUsers.id }).from(scimUsers).where(inArray(scimUsers.id, [...members]))).map(
-          (r) => r.id,
-        );
-  if (known.length !== new Set(members).size) throw scimError('validation_failed', 'Unknown member', 'invalidValue');
+      : (
+          await tx
+            .select({ id: scimUsers.id })
+            .from(scimUsers)
+            .where(inArray(scimUsers.id, [...members]))
+        ).map((r) => r.id);
+  if (known.length !== new Set(members).size)
+    throw scimError('validation_failed', 'Unknown member', 'invalidValue');
   const add = known.filter((id) => !before.includes(id));
   const remove = before.filter((id) => !known.includes(id));
   if (remove.length > 0)
@@ -476,7 +507,9 @@ async function setMembersTx(
       .delete(scimGroupMembers)
       .where(and(eq(scimGroupMembers.groupId, group.id), inArray(scimGroupMembers.scimUserId, remove)));
   if (add.length > 0)
-    await tx.insert(scimGroupMembers).values(add.map((scimUserId) => ({ orgId, groupId: group.id, scimUserId })));
+    await tx
+      .insert(scimGroupMembers)
+      .values(add.map((scimUserId) => ({ orgId, groupId: group.id, scimUserId })));
   if (group.role) await resyncUsersTx(tx, ctx, [...add, ...remove], emit);
 }
 
@@ -487,7 +520,10 @@ async function resyncUsersTx(
   emit: Parameters<typeof syncMembershipTx>[3],
 ) {
   if (scimUserIds.length === 0) return;
-  const users = await tx.select().from(scimUsers).where(inArray(scimUsers.id, [...scimUserIds]));
+  const users = await tx
+    .select()
+    .from(scimUsers)
+    .where(inArray(scimUsers.id, [...scimUserIds]));
   for (const u of users) if (u.active) await syncMembershipTx(tx, ctx, u, emit);
 }
 
@@ -504,7 +540,11 @@ export const scimCreateGroupCommand = tenantCommand({
       [row] = await tx.transaction((sp) =>
         sp
           .insert(scimGroups)
-          .values({ orgId: requireOrg(ctx), displayName: input.fields.displayName, externalId: input.fields.externalId })
+          .values({
+            orgId: requireOrg(ctx),
+            displayName: input.fields.displayName,
+            externalId: input.fields.externalId,
+          })
           .returning(),
       );
     } catch (err) {
@@ -536,7 +576,11 @@ export const scimUpdateGroupCommand = tenantCommand({
       [row] = await tx.transaction((sp) =>
         sp
           .update(scimGroups)
-          .set({ displayName: input.fields.displayName, externalId: input.fields.externalId, updatedAt: ctx.now })
+          .set({
+            displayName: input.fields.displayName,
+            externalId: input.fields.externalId,
+            updatedAt: ctx.now,
+          })
           .where(eq(scimGroups.id, current.id))
           .returning(),
       );

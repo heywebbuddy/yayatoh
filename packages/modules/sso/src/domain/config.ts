@@ -11,7 +11,11 @@ export const SamlConfig = z.object({
   entityId: z.string().trim().min(1).max(1024),
   ssoUrl: z.url({ protocol: /^https$/ }).max(2048),
   certificate: z.string().trim().min(1).max(20_000),
-  metadataUrl: z.url({ protocol: /^https$/ }).max(2048).nullable().default(null),
+  metadataUrl: z
+    .url({ protocol: /^https$/ })
+    .max(2048)
+    .nullable()
+    .default(null),
 });
 export type SamlConfig = z.infer<typeof SamlConfig>;
 
@@ -69,10 +73,14 @@ export function parseSamlMetadata(xml: string): ParsedMetadata | { readonly erro
     services.find((s) => s.binding.endsWith(':HTTP-Redirect')) ??
     services.find((s) => s.binding.endsWith(':HTTP-POST'));
   if (!sso?.location) return { error: 'no_sso_url' };
-  const keys = [...idp[0].matchAll(/<(?:\w+:)?KeyDescriptor\b([^>]*)>([\s\S]*?)<\/(?:\w+:)?KeyDescriptor>/gi)];
+  const keys = [
+    ...idp[0].matchAll(/<(?:\w+:)?KeyDescriptor\b([^>]*)>([\s\S]*?)<\/(?:\w+:)?KeyDescriptor>/gi),
+  ];
   const signing = keys.find((k) => !/\buse\s*=\s*"encryption"/i.test(k[1] ?? '')) ?? null;
   const cert = signing
-    ? /<(?:\w+:)?X509Certificate>\s*([A-Za-z0-9+/=\s]+?)\s*<\/(?:\w+:)?X509Certificate>/i.exec(signing[2] ?? '')
+    ? /<(?:\w+:)?X509Certificate>\s*([A-Za-z0-9+/=\s]+?)\s*<\/(?:\w+:)?X509Certificate>/i.exec(
+        signing[2] ?? '',
+      )
     : null;
   if (!cert?.[1]) return { error: 'no_certificate' };
   return { entityId: decode(descriptor[1]), ssoUrl: sso.location, certificate: toPem(cert[1]) };

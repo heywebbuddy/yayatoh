@@ -20,7 +20,10 @@ const DOMAIN = /^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+
 export function normalizeDomain(input: string): string | null {
   let d = input.trim().toLowerCase();
   if (d.includes('@')) d = d.slice(d.lastIndexOf('@') + 1);
-  d = d.replace(/^https?:\/\//, '').replace(/[/:?#].*$/, '').replace(/\.$/, '');
+  d = d
+    .replace(/^https?:\/\//, '')
+    .replace(/[/:?#].*$/, '')
+    .replace(/\.$/, '');
   if (d.length < 4 || d.length > 253 || !DOMAIN.test(d)) return null;
   if (/^[0-9.]+$/.test(d)) return null;
   if (RESERVED.some((r) => d === r || d.endsWith(`.${r}`))) return null;

@@ -6,7 +6,15 @@ import { and, eq, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { emailDomain } from './domain/domains.ts';
 import { mappedRole } from './domain/roles.ts';
-import { connections, domains, identities, scimGroupMembers, scimGroups, scimUsers, SSO_ROLES } from './schema.ts';
+import {
+  connections,
+  domains,
+  identities,
+  type SSO_ROLES,
+  scimGroupMembers,
+  scimGroups,
+  scimUsers,
+} from './schema.ts';
 
 /** The org and connection that sign in an address, from its verified domain; null when none. */
 export async function ssoForEmail(
@@ -32,8 +40,7 @@ export const LOGIN_REFUSALS = [
 ] as const;
 export type LoginRefusal = (typeof LOGIN_REFUSALS)[number];
 
-const refuse = (reason: LoginRefusal) =>
-  new DomainError('forbidden', 'Single sign-on refused', { reason });
+const refuse = (reason: LoginRefusal) => new DomainError('forbidden', 'Single sign-on refused', { reason });
 
 /**
  * Before any account is found or made: the connection signs people in (active; or a test while
@@ -93,7 +100,7 @@ export const completeSsoLoginCommand = tenantCommand({
   handler: async ({ input, ctx, tx, emit }) => {
     const orgId = requireOrg(ctx);
     const [conn] = await tx.select().from(connections).where(eq(connections.id, input.connectionId));
-    if (!conn || conn.status !== 'active') throw refuse('connection_inactive');
+    if (conn?.status !== 'active') throw refuse('connection_inactive');
     const domain = emailDomain(input.email);
     const [verified] = domain
       ? await tx
@@ -139,7 +146,10 @@ export const completeSsoLoginCommand = tenantCommand({
               .from(scimGroupMembers)
               .innerJoin(
                 scimGroups,
-                and(eq(scimGroups.id, scimGroupMembers.groupId), eq(scimGroups.orgId, scimGroupMembers.orgId)),
+                and(
+                  eq(scimGroups.id, scimGroupMembers.groupId),
+                  eq(scimGroups.orgId, scimGroupMembers.orgId),
+                ),
               )
               .where(eq(scimGroupMembers.scimUserId, scim.id))
           ).map((r) => r.role),
@@ -175,7 +185,11 @@ export const completeSsoLoginCommand = tenantCommand({
  * Whether this org requires its single sign-on for the person (a verified, enforced domain holds
  * their address and they are not an owner). Owners keep every way in (break-glass).
  */
-export async function ssoRequiredFor(input: { orgId: string; userId: string; email: string }): Promise<boolean> {
+export async function ssoRequiredFor(input: {
+  orgId: string;
+  userId: string;
+  email: string;
+}): Promise<boolean> {
   const domain = emailDomain(input.email);
   if (!domain) return false;
   const ctx = createCtx({ orgId: input.orgId, actor: { type: 'system', name: 'sso.enforcement' } });

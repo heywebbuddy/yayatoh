@@ -380,36 +380,40 @@ function signInExtrasPlugin() {
        * to that org. People with two-step verification and all platform staff answer the code first
        * (D14: SSO never replaces it); staff without it are refused.
        */
-      ssoSession: createAuthEndpoint('/sso/session', { method: 'POST', body: SsoSessionBody }, async (ctx) => {
-        const user = await ctx.context.internalAdapter.findUserById(ctx.body.userId);
-        if (!user || (user as { deletedAt?: Date | null }).deletedAt)
-          throw new APIError('BAD_REQUEST', { code: 'UNKNOWN_USER', message: 'unknown user' });
-        const twoFactor = Boolean((user as { twoFactorEnabled?: boolean | null }).twoFactorEnabled);
-        const staff = await isPlatformStaff(user.id);
-        if (staff && !twoFactor) {
-          await audit(user.id, 'sso.refused', { by: 'staff_two_factor_required' });
-          throw new APIError('FORBIDDEN', {
-            code: 'STAFF_TWO_FACTOR_REQUIRED',
-            message: 'staff must use two-step verification',
+      ssoSession: createAuthEndpoint(
+        '/sso/session',
+        { method: 'POST', body: SsoSessionBody },
+        async (ctx) => {
+          const user = await ctx.context.internalAdapter.findUserById(ctx.body.userId);
+          if (!user || (user as { deletedAt?: Date | null }).deletedAt)
+            throw new APIError('BAD_REQUEST', { code: 'UNKNOWN_USER', message: 'unknown user' });
+          const twoFactor = Boolean((user as { twoFactorEnabled?: boolean | null }).twoFactorEnabled);
+          const staff = await isPlatformStaff(user.id);
+          if (staff && !twoFactor) {
+            await audit(user.id, 'sso.refused', { by: 'staff_two_factor_required' });
+            throw new APIError('FORBIDDEN', {
+              code: 'STAFF_TWO_FACTOR_REQUIRED',
+              message: 'staff must use two-step verification',
+            });
+          }
+          if (twoFactor) {
+            const identifier = await openChallenge(ctx, user.id);
+            const marker: SsoMarker = { orgId: ctx.body.orgId, staff };
+            await ctx.context.internalAdapter.createVerificationValue({
+              identifier: ssoMarkerKey(identifier),
+              value: JSON.stringify(marker),
+              expiresAt: new Date(Date.now() + CHALLENGE_MAX_AGE_S * 1000),
+            });
+            return ctx.json({ challenge: true });
+          }
+          const session = await ctx.context.internalAdapter.createSession(user.id, false, {
+            ssoOrgId: ctx.body.orgId,
           });
-        }
-        if (twoFactor) {
-          const identifier = await openChallenge(ctx, user.id);
-          const marker: SsoMarker = { orgId: ctx.body.orgId, staff };
-          await ctx.context.internalAdapter.createVerificationValue({
-            identifier: ssoMarkerKey(identifier),
-            value: JSON.stringify(marker),
-            expiresAt: new Date(Date.now() + CHALLENGE_MAX_AGE_S * 1000),
-          });
-          return ctx.json({ challenge: true });
-        }
-        const session = await ctx.context.internalAdapter.createSession(user.id, false, {
-          ssoOrgId: ctx.body.orgId,
-        });
-        await setSessionCookie(ctx, { session, user });
-        await audit(user.id, 'sso.signed_in', { method: 'idp' });
-        return ctx.json({ challenge: false });
-      }),
+          await setSessionCookie(ctx, { session, user });
+          await audit(user.id, 'sso.signed_in', { method: 'idp' });
+          return ctx.json({ challenge: false });
+        },
+      ),
       redeemTrustedDevice: createAuthEndpoint(
         '/trusted-device/redeem',
         { method: 'POST', body: TrustedBody },

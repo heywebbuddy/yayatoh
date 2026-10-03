@@ -124,7 +124,10 @@ const UserBody = z.object({
 
 const lower = (s: string) => s.trim().toLowerCase();
 
-function emailOf(userName: string, emails: readonly { value: string; primary?: boolean }[] | null | undefined) {
+function emailOf(
+  userName: string,
+  emails: readonly { value: string; primary?: boolean }[] | null | undefined,
+) {
   const primary = emails?.find((e) => e.primary) ?? emails?.[0];
   const candidate = primary?.value || userName;
   const parsed = EMAIL.safeParse(lower(candidate));
