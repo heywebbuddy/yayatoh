@@ -85,6 +85,7 @@
     "@yayatoh/config": "workspace:*",
     "@yayatoh/sdk": "workspace:*",
     "@yayatoh/testing": "workspace:*",
+    "lighthouse": "13.5.0",
     "tailwindcss": "catalog:",
     "typescript": "catalog:"
   }

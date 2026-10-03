@@ -15,8 +15,7 @@ import type { Metadata, Viewport } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { TicketQr } from '@/components/ticket-qr.tsx';
-import { Link } from '@/i18n/navigation.ts';
-import { hubPath, loadPartyHub } from '@/server/guest-hub.ts';
+import { hubPath, loadPartyHub, localePath } from '@/server/guest-hub.ts';
 import { HubInstall, HubOffline } from './install.tsx';
 
 type Params = Promise<{ locale: string; token: string }>;
@@ -30,9 +29,12 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
     title: t('metaTitle'),
     robots: { index: false, follow: false },
     referrer: 'no-referrer',
-    manifest: `${path}/app.webmanifest`,
+    manifest: `${path}/manifest`,
     appleWebApp: { capable: true, title: t('metaTitle'), statusBarStyle: 'default' },
-    icons: { apple: [{ url: '/hub-icon-192.png', sizes: '192x192' }] },
+    icons: {
+      icon: [{ url: '/hub-icon-192.png', sizes: '192x192', type: 'image/png' }],
+      apple: [{ url: '/hub-icon-192.png', sizes: '192x192' }],
+    },
   };
 }
 
@@ -97,7 +99,9 @@ function renderHub(
   }).formatRange(hub.startsAt, hub.endsAt);
 
   const next = nextProgramItem(hub.program, now);
-  const rsvpPath = `/rsvp/${encodeURIComponent(token)}`;
+  // Plain links (full page loads): this page's layout carries only its own messages (intl-scope.ts),
+  // so a client-side navigation to another page would find none.
+  const rsvpPath = localePath(`/rsvp/${encodeURIComponent(token)}`, locale);
   const rsvpState = !hub.rsvp.open
     ? ({ tone: 'neutral', label: t('rsvpClosed') } as const)
     : hub.rsvp.awaiting === 0 && hub.program.length > 0
@@ -201,7 +205,7 @@ function renderHub(
           )}
           {hub.program.length ? (
             <div>
-              <Link
+              <a
                 href={rsvpPath}
                 className={buttonClass(
                   hub.rsvp.open && !hub.rsvp.respondedAt ? 'primary' : 'secondary',
@@ -209,7 +213,7 @@ function renderHub(
                 )}
               >
                 {!hub.rsvp.open ? t('rsvpView') : hub.rsvp.respondedAt ? t('rsvpChange') : t('rsvpAnswer')}
-              </Link>
+              </a>
             </div>
           ) : null}
         </Card>
@@ -310,9 +314,9 @@ function renderHub(
         </Card>
         {hub.siteCode ? (
           <p className="m-0">
-            <Link href={`/w/${hub.siteCode}`} className={linkClass}>
+            <a href={localePath(`/w/${hub.siteCode}`, locale)} className={linkClass}>
               {t('website')}
-            </Link>
+            </a>
           </p>
         ) : null}
         <p className="m-0 text-caption text-ink-2">{t('privacy')}</p>

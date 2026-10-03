@@ -1,4 +1,5 @@
 import 'server-only';
+import { DEFAULT_LOCALE } from '@yayatoh/contracts';
 import {
   fakeGuestPassProvider,
   type GuestPassProvider,
@@ -21,9 +22,13 @@ export const partyHub = partyHubQuery({ seats: partySeatsTx, tickets: partyTicke
 
 export const guestPassProvider: GuestPassProvider = fakeGuestPassProvider();
 
-/** The hub's path for a token (no locale prefix: the default locale's own URL). */
+/** A path in a locale (the default locale has no prefix: `as-needed`). */
+export const localePath = (path: string, locale?: string) =>
+  `${locale && locale !== DEFAULT_LOCALE ? `/${locale}` : ''}${path}`;
+
+/** The hub's path for a token. */
 export const hubPath = (token: string, locale?: string) =>
-  `${locale && locale !== 'en' ? `/${locale}` : ''}/hub/${encodeURIComponent(token)}`;
+  localePath(`/hub/${encodeURIComponent(token)}`, locale);
 
 /**
  * The party behind a hub token, in its org (the tenant comes from the signed token, never a

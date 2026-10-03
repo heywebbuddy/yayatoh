@@ -117,7 +117,7 @@ test.describe('guest hub (M4.7a)', () => {
     const closed = await wedding({ seating: false });
     await page.goto(hub(closed.garcia.token));
     await expect(section(page, 'Your seats').getByText("Seating isn't shared yet")).toBeVisible();
-    await expect(section(page, 'Your seats').getByText('Table')).toHaveCount(0);
+    await expect(section(page, 'Your seats').getByText(/^Table /)).toHaveCount(0);
     // Tickets don't wait for the seating.
     await expect(section(page, 'Tickets').getByText('Guest pass')).toBeVisible();
     await expectAccessible(page);
@@ -149,7 +149,7 @@ test.describe('guest hub (M4.7a)', () => {
     const s = await wedding();
     await page.goto(hub(s.garcia.token));
     const href = await page.locator('link[rel="manifest"]').getAttribute('href');
-    expect(href).toBe(`${hub(s.garcia.token)}/app.webmanifest`);
+    expect(href).toBe(`${hub(s.garcia.token)}/manifest`);
     const res = await page.request.get(href ?? '');
     expect(res.status()).toBe(200);
     expect(res.headers()['content-type']).toContain('application/manifest+json');
@@ -232,7 +232,7 @@ test.describe('guest hub (M4.7a)', () => {
       new RegExp(`/hub/${encodeURIComponent(s.garcia.token)}$`),
     );
 
-    for (const path of ['', '/app.webmanifest', '/pass/apple'])
+    for (const path of ['', '/manifest', '/pass/apple'])
       expect((await page.request.get(`${hub(s.garcia.token)}${path}`)).status()).toBe(404);
     await page.goto(hub(s.garcia.token));
     await expect(page.getByRole('heading', { name: 'Welcome, The Garcia family' })).toHaveCount(0);
@@ -249,7 +249,7 @@ test.describe('guest hub (M4.7a)', () => {
     await expect(page.getByText('Please ask the hosts for a new link.')).toBeVisible();
     await expect(page.getByText('Mei')).toHaveCount(0);
     await expect(page.getByText('Ceremony')).toHaveCount(0);
-    expect((await page.request.get(`${hub(s.chen.token)}/app.webmanifest`)).status()).toBe(404);
+    expect((await page.request.get(`${hub(s.chen.token)}/manifest`)).status()).toBe(404);
     await expectAccessible(page);
   });
 
@@ -269,6 +269,29 @@ test.describe('guest hub (M4.7a)', () => {
     await expect(page).toHaveURL(new RegExp(`/w/${site.code}$`));
   });
 
+  test('a private, lean page: no referrer, never indexed or framed, only its own messages', async ({
+    page,
+  }) => {
+    const s = await wedding();
+    const res = await page.request.get(hub(s.garcia.token));
+    expect(res.status()).toBe(200);
+    const h = res.headers();
+    expect(h['referrer-policy']).toBe('no-referrer');
+    expect(h['x-robots-tag']).toContain('noindex');
+    expect(h['x-frame-options']).toBe('DENY');
+    const html = await res.text();
+    // The page's client components get the hub's messages only (intl-scope.ts), not the catalogue.
+    expect(html).not.toContain('Please answer for {name}');
+    expect(html.length).toBeLessThan(200_000);
+    // A client can't scope another page: proxy.ts strips the header, so the RSVP form keeps its messages.
+    const rsvp = await page.request.get(`/rsvp/${encodeURIComponent(s.garcia.token)}`, {
+      headers: { 'x-yy-intl-scope': 'hub' },
+    });
+    expect(await rsvp.text()).toContain('Please answer for {name}');
+    const robots = await (await page.request.get('/robots.txt')).text();
+    expect(robots).toContain('Disallow: /hub/');
+  });
+
   test('Arabic, right to left', async ({ page }) => {
     const s = await wedding();
     await page.goto(hub(s.garcia.token, '/ar'));
@@ -279,9 +302,9 @@ test.describe('guest hub (M4.7a)', () => {
     await expect(page.getByText(`الطاولة ${s.tableLabel} · المقعد ${s.seatLabel}`)).toBeVisible();
     await expect(page.locator('link[rel="manifest"]')).toHaveAttribute(
       'href',
-      `${hub(s.garcia.token, '/ar')}/app.webmanifest`,
+      `${hub(s.garcia.token, '/ar')}/manifest`,
     );
-    const m = await (await page.request.get(`${hub(s.garcia.token, '/ar')}/app.webmanifest`)).json();
+    const m = await (await page.request.get(`${hub(s.garcia.token, '/ar')}/manifest`)).json();
     expect(m).toMatchObject({ lang: 'ar', dir: 'rtl', start_url: hub(s.garcia.token, '/ar') });
     await expectAccessibleBothModes(page);
   });
