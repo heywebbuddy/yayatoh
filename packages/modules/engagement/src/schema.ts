@@ -226,7 +226,12 @@ export const engagementEvents = tenantTable(
     occurredAt: ts('occurred_at').notNull(),
   },
   (t) => [
-    uniqueIndex('engagement_events_org_contact_kind_source_key').on(t.orgId, t.contactId, t.kind, t.sourceRef),
+    uniqueIndex('engagement_events_org_contact_kind_source_key').on(
+      t.orgId,
+      t.contactId,
+      t.kind,
+      t.sourceRef,
+    ),
     index('engagement_events_org_event_contact_idx').on(t.orgId, t.eventId, t.contactId),
     index('engagement_events_org_session_idx').on(t.orgId, t.sessionId).where(sql`session_id is not null`),
     check(

@@ -28,16 +28,25 @@ const PromptInput = z.object({ eventId: z.uuid(), sessionId: z.uuid(), account: 
 type SurveyRow = typeof surveys.$inferSelect;
 
 /** The session's feedback survey when it can be answered now (open, with questions, session over). */
-async function promptableTx(tx: TenantTx, ctx: Ctx, eventId: string, sessionId: string): Promise<SurveyRow | null> {
+async function promptableTx(
+  tx: TenantTx,
+  ctx: Ctx,
+  eventId: string,
+  sessionId: string,
+): Promise<SurveyRow | null> {
   const [s] = await tx
     .select()
     .from(surveys)
     .where(
-      and(eq(surveys.eventId, eventId), eq(surveys.sessionId, sessionId), eq(surveys.kind, 'session_feedback')),
+      and(
+        eq(surveys.eventId, eventId),
+        eq(surveys.sessionId, sessionId),
+        eq(surveys.kind, 'session_feedback'),
+      ),
     );
   if (!s || s.closedAt) return null;
   const ev = await findEventTx(tx, eventId);
-  if (!ev || ev.status !== 'published' || ev.visibility === 'private') return null;
+  if (ev?.status !== 'published' || ev.visibility === 'private') return null;
   if ((await subjectEndsAt(tx, s, ev)) > ctx.now) return null;
   const form = await currentFormTx(tx, formSubject(s.id));
   return form?.definition.fields.length ? s : null;
@@ -48,7 +57,9 @@ async function attendeeOfTx(tx: TenantTx, ctx: Ctx, eventId: string, account: z.
   if (ctx.actor.type !== 'user' || ctx.actor.userId !== account.userId) return null;
   const contactId = await contactForAccountTx(tx, account);
   if (!contactId) return null;
-  const [record] = (await participationAttendeesTx(tx, eventId, [contactId])).filter((r) => r.status === 'active');
+  const [record] = (await participationAttendeesTx(tx, eventId, [contactId])).filter(
+    (r) => r.status === 'active',
+  );
   return record ? { contactId, attendeeId: record.id } : null;
 }
 

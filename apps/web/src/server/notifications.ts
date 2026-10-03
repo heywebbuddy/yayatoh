@@ -12,6 +12,7 @@ import {
 } from '@yayatoh/checkin';
 import { withTenant } from '@yayatoh/db';
 import { receiptIssuer, statementMailer } from '@yayatoh/donations';
+import { engagementActivity } from '@yayatoh/engagement';
 import { findEventTx, portalInviteMailer } from '@yayatoh/events';
 import { registrationResumeMailer } from '@yayatoh/forms';
 import { invitationMailer as guestInvitationMailer } from '@yayatoh/guests';
@@ -149,6 +150,8 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     // M5.2b: cancelled registrants free their session places; promotions are mailed.
     registrationEnrollment(),
     enrollmentMailer({ notifier, appOrigin }),
+    // M5.7b: answered surveys, scans and enrollments become engagement scores (as in the worker).
+    engagementActivity(),
     // M4.8b: receipts per paid gift or charity-ticket order, and year-end statements (as in the worker).
     receiptIssuer({ notifier, appOrigin }),
     statementMailer({ notifier, appOrigin }),

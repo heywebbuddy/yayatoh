@@ -1,4 +1,4 @@
-import { participationAttendeesTx, attendeeContactIdsTx } from '@yayatoh/attendees';
+import { attendeeContactIdsTx, participationAttendeesTx } from '@yayatoh/attendees';
 import { contactForAccountTx, contactsByIdsTx, replaceEventEngagementTx } from '@yayatoh/crm';
 import type { TenantTx } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
@@ -219,7 +219,11 @@ export async function applyEngagementEventTx(
   switch (`${event.type}@${event.version}`) {
     case 'ticket.admitted@1': {
       const v = Admission.parse(event.payload);
-      const people = await attendingTx(tx, v.eventId, await attendeeContactIdsTx(tx, { ticketIds: [v.ticketId] }));
+      const people = await attendingTx(
+        tx,
+        v.eventId,
+        await attendeeContactIdsTx(tx, { ticketIds: [v.ticketId] }),
+      );
       for (const contactId of people)
         await recordEngagementTx(tx, ctx, {
           eventId: v.eventId,
@@ -273,7 +277,12 @@ export async function applyEngagementEventTx(
             occurredAt: at,
           });
       } else if (v.status === 'dropped') {
-        await forgetEngagementTx(tx, ctx, { eventId: v.eventId, kind: 'enrollment', sourceRef: ref, contactIds: people });
+        await forgetEngagementTx(tx, ctx, {
+          eventId: v.eventId,
+          kind: 'enrollment',
+          sourceRef: ref,
+          contactIds: people,
+        });
       }
       return;
     }
@@ -437,7 +446,11 @@ export const eventScoresQuery = tenantQuery({
     const w = await weightsTx(tx);
     const counts = await contactCountsTx(tx, ev.id, null);
     const scored = [...counts]
-      .map(([contactId, c]) => ({ contactId, counts: normalizeCounts(c), score: engagementScore(c, w.weights) }))
+      .map(([contactId, c]) => ({
+        contactId,
+        counts: normalizeCounts(c),
+        score: engagementScore(c, w.weights),
+      }))
       .sort((a, b) => b.score - a.score || a.contactId.localeCompare(b.contactId));
     const shown = input.contactId
       ? scored.filter((s) => s.contactId === input.contactId)
@@ -467,7 +480,10 @@ export const eventScoresQuery = tenantQuery({
     const sessionList = await sessionsOf(tx, ev.id);
     const sessions = sessionList.map((s) => {
       const c = countsOf(bySession.filter((r) => r.sessionId === s.id));
-      const full = Object.fromEntries(ENGAGEMENT_KINDS.map((k) => [k, c[k] ?? 0])) as Record<EngagementKind, number>;
+      const full = Object.fromEntries(ENGAGEMENT_KINDS.map((k) => [k, c[k] ?? 0])) as Record<
+        EngagementKind,
+        number
+      >;
       return {
         sessionId: s.id,
         title: s.title,

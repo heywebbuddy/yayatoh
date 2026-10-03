@@ -11,7 +11,6 @@ import {
   QUESTION_RATE,
 } from './domain/questions.ts';
 import { PARTICIPANT_KEY, verifyDisplayToken } from './domain/tokens.ts';
-import { Account, recordLiveActivityTx } from './scores.ts';
 import type { ParticipantStateDto, PublicLiveStateDto, SettingsDto } from './dto.ts';
 import {
   type PollKind,
@@ -22,6 +21,7 @@ import {
   questionUpvotes,
   sessionSettings,
 } from './schema.ts';
+import { Account, recordLiveActivityTx } from './scores.ts';
 import {
   eventIsLive,
   eventOf,
