@@ -30,13 +30,10 @@ export const HookEventType = z
 
 export const HookSubscribeRequest = z
   .object({
-    url: z
-      .url()
-      .max(2048)
-      .openapi({
-        description: 'Where to deliver: https on port 443, a public host.',
-        example: 'https://hooks.zapier.com/hooks/standard/123/abc',
-      }),
+    url: z.url().max(2048).openapi({
+      description: 'Where to deliver: https on port 443, a public host.',
+      example: 'https://hooks.zapier.com/hooks/standard/123/abc',
+    }),
     event: HookEventType,
   })
   .openapi('HookSubscribeRequest');
