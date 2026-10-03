@@ -1072,6 +1072,9 @@ importers:
       '@yayatoh/assistance':
         specifier: workspace:*
         version: link:../assistance
+      '@yayatoh/badges':
+        specifier: workspace:*
+        version: link:../badges
       '@yayatoh/checkin':
         specifier: workspace:*
         version: link:../checkin

@@ -45,6 +45,7 @@ export {
   browserJobBadgeQuery,
   createPrinterCommand,
   markQuietPrintersCommand,
+  offlinePrinterCountTx,
   PRINTER_OFFLINE_EVENT,
   PRINTER_ONLINE_EVENT,
   PrinterDto,

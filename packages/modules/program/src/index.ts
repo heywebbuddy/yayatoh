@@ -307,6 +307,7 @@ export {
   addSponsorDeliverableCommand,
   deleteSponsorDeliverableCommand,
   MAX_DELIVERABLES_PER_SPONSOR,
+  overdueDeliverableCountTx,
   portalSetDeliverableDoneCommand,
   setSponsorDeliverableDoneCommand,
   sponsorDeliverablesQuery,

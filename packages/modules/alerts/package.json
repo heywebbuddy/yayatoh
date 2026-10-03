@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@yayatoh/assistance": "workspace:*",
+    "@yayatoh/badges": "workspace:*",
     "@yayatoh/checkin": "workspace:*",
     "@yayatoh/contracts": "workspace:*",
     "@yayatoh/db": "workspace:*",

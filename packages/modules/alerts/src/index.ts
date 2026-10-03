@@ -47,7 +47,13 @@ export {
   evaluateEventAlertsTx,
   evaluateOrgAlertsTx,
 } from './engine.ts';
-export { type ConferenceSources, conferenceFactsTx, eventFactsTx, orgFactsTx } from './facts.ts';
+export {
+  type ConferenceSources,
+  conferenceFactsTx,
+  connectedConferenceSources,
+  eventFactsTx,
+  orgFactsTx,
+} from './facts.ts';
 export { privateColumns } from './private-columns.ts';
 export {
   ALERT_TRIGGER_EVENTS,

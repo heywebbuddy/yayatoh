@@ -1,3 +1,4 @@
+import { connectedConferenceSources } from '@yayatoh/alerts';
 import { printNodeFromEnv } from '@yayatoh/badges';
 import { setPlatformAuditSink, tryAcquireLeadership } from '@yayatoh/db/platform';
 import { createNotifier } from '@yayatoh/notifications';
@@ -353,7 +354,8 @@ setTimeout(stateYearEnd, 15 * 60_000).unref();
 setInterval(stateYearEnd, 24 * 3_600_000).unref();
 
 // Alert engine (M3.2b): live and pre-show events every 30 s, everything else every 5 minutes (leader only).
-const alertDeps = { notifier: createNotifier() };
+// Batch 3j merge: M5.9a's conference pack reads sponsor deliverables and badge printers.
+const alertDeps = { notifier: createNotifier(), conference: connectedConferenceSources };
 let sweepingAlerts = false;
 let alertTicks = 0;
 setInterval(() => {

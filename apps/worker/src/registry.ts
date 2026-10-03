@@ -1,4 +1,4 @@
-import { alertEvaluator } from '@yayatoh/alerts';
+import { alertEvaluator, connectedConferenceSources } from '@yayatoh/alerts';
 import { attendeeMessageMailer } from '@yayatoh/attendees';
 import { participationProjector } from '@yayatoh/audiences';
 import { journeySubscribers } from '@yayatoh/automations';
@@ -172,7 +172,7 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     // M3.2: device presence for the Command Center's device widgets (events in pre-show or live).
     deviceBoardPublisher(),
     // M3.2b: the alert engine re-evaluates what each outbox event touched (sends through notifications).
-    alertEvaluator({ notifier }),
+    alertEvaluator({ notifier, conference: connectedConferenceSources }),
     // M4.8a: gift orders' outcomes (paid, failed, lapsed) move their gifts.
     giftOutcomesSubscriber,
     giftRefundsSubscriber,

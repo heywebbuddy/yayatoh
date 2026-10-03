@@ -792,3 +792,15 @@ export const badgePrintStateQuery = tenantQuery({
     };
   },
 });
+
+/**
+ * The event's badge printers that are offline now (M5.5b's watchdog), archived ones aside: for
+ * M5.9a's `printersKiosksOffline` alert (batch 3j merge). Counts only.
+ */
+export async function offlinePrinterCountTx(tx: TenantTx, eventId: string): Promise<number> {
+  const [r] = await tx
+    .select({ n: count() })
+    .from(printers)
+    .where(and(eq(printers.eventId, eventId), eq(printers.status, 'offline'), isNull(printers.archivedAt)));
+  return r?.n ?? 0;
+}

@@ -1,4 +1,5 @@
 import { assistanceOverdueTx } from '@yayatoh/assistance';
+import { offlinePrinterCountTx } from '@yayatoh/badges';
 import { checkinFactsTx, deviceHealthTx, kiosksOfflineTx, sessionsInRoomTx } from '@yayatoh/checkin';
 import type { TenantTx } from '@yayatoh/db';
 import { unpaidPledgeFactsTx } from '@yayatoh/donations';
@@ -7,7 +8,12 @@ import { deliverabilityBreakdownTx, deliverabilityFactsTx } from '@yayatoh/notif
 import { overdueInvoicesTx, paymentAlertFactsTx } from '@yayatoh/orders';
 import { disputeDeadlineFactsTx, payoutRequirementsPastDueTx } from '@yayatoh/payments';
 import { failedBulkOperationsTx } from '@yayatoh/platform';
-import { exhibitorStaffingTx, overdueSpeakerTasksTx, sessionFillTx } from '@yayatoh/program';
+import {
+  exhibitorStaffingTx,
+  overdueDeliverableCountTx,
+  overdueSpeakerTasksTx,
+  sessionFillTx,
+} from '@yayatoh/program';
 import { approvalBacklogTx, sessionWaitlistsTx } from '@yayatoh/registration';
 import { unseatedAttendeesTx } from '@yayatoh/seating';
 import { domainProblemsTx } from '@yayatoh/tenancy';
@@ -30,6 +36,16 @@ export interface ConferenceSources {
   readonly overdueDeliverables?: (tx: TenantTx, eventId: string, now: Date) => Promise<number | null>;
   readonly printersOffline?: (tx: TenantTx, eventId: string, now: Date) => Promise<number | null>;
 }
+
+/**
+ * The sources that are on this build (batch 3j merge): sponsor deliverables (M5.4b) and badge
+ * printers (M5.5b). Leads (M5.6b) are not built yet, so `exhibitorLeads` stays unconnected. The
+ * worker and the web app pass these (the web's dev fake answers first for events it was told about).
+ */
+export const connectedConferenceSources: ConferenceSources = {
+  overdueDeliverables: (tx, eventId, now) => overdueDeliverableCountTx(tx, eventId, now),
+  printersOffline: (tx, eventId) => offlinePrinterCountTx(tx, eventId),
+};
 
 /** The conference pack's facts for one event (M5.9a), from the owning modules and the ports. */
 export async function conferenceFactsTx(

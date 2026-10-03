@@ -1,4 +1,12 @@
-import { type AlertDto, listAlertsQuery, RULES, type RuleKey } from '@yayatoh/alerts';
+import {
+  type AlertDto,
+  connectedConferenceSources,
+  evaluateEventAlertsTx,
+  listAlertsQuery,
+  RULES,
+  type RuleKey,
+} from '@yayatoh/alerts';
+import { createPrinterCommand } from '@yayatoh/badges';
 import {
   type AnyWidgetDef,
   capacityWidget,
@@ -11,7 +19,7 @@ import {
 import { withTenant } from '@yayatoh/db';
 import { closePools } from '@yayatoh/db/testing';
 import { assignEventRoleCommand } from '@yayatoh/events';
-import { executeCommand, executeQuery, uuidv7 } from '@yayatoh/kernel';
+import { createCtx, executeCommand, executeQuery, uuidv7 } from '@yayatoh/kernel';
 import { createNotifier } from '@yayatoh/notifications';
 import { addMemberCommand } from '@yayatoh/tenancy';
 import { sql } from 'drizzle-orm';
@@ -157,6 +165,52 @@ describe('the rest of the pack', () => {
     expect(rules).not.toContain('exhibitorsNoLeads');
     expect(rules).not.toContain('deliverablesOverdue');
     expect((await alertsOf(a, quiet.eventId)).find((x) => x.rule === 'printersKiosksOffline')?.count).toBe(1);
+  }, 120_000);
+});
+
+describe('connected sources (batch 3j merge)', () => {
+  it('real sponsor deliverables (M5.4b) and badge printers (M5.5b) raise their rules, without a fake', async () => {
+    const real = await conferenceScenario(a.org.id, { withoutFakes: true });
+    const sys = systemCtx(a.org.id);
+    const [sponsor] = await withTenant(sys, (tx) =>
+      tx.execute<{ id: string }>(
+        sql`select id from program.sponsors where event_id = ${real.eventId} limit 1`,
+      ),
+    );
+    // One open deliverable past due counts; one due tomorrow and one done (though late) do not.
+    await withTenant(sys, (tx) =>
+      tx.execute(sql`insert into program.sponsor_deliverables (org_id, event_id, sponsor_id, title, owner, due_at,
+        status, completed_at, completed_by) values
+        (${a.org.id}, ${real.eventId}, ${sponsor?.id}, 'Logo files', 'sponsor', now() - interval '1 day', 'open', null, null),
+        (${a.org.id}, ${real.eventId}, ${sponsor?.id}, 'Banner', 'sponsor', now() + interval '1 day', 'open', null, null),
+        (${a.org.id}, ${real.eventId}, ${sponsor?.id}, 'Booth copy', 'sponsor', now() - interval '2 days', 'done', now(), 'sponsor')`),
+    );
+    // Two printers offline, one of them archived (it no longer counts).
+    for (const name of ['Desk printer', 'Old printer'])
+      await executeCommand(
+        createPrinterCommand,
+        { eventId: real.eventId, name, adapter: 'browser' },
+        a.ctx(),
+        ports,
+      );
+    await withTenant(sys, (tx) =>
+      tx.execute(sql`update badges.printers set status = 'offline', offline_at = now(),
+        archived_at = case when name = 'Old printer' then now() else null end where event_id = ${real.eventId}`),
+    );
+    const ctx = createCtx({ orgId: a.org.id, actor: { type: 'system', name: 'test' } });
+    await withTenant(ctx, (tx) =>
+      evaluateEventAlertsTx(tx, ctx, real.eventId, {
+        notifier: createNotifier(),
+        conference: connectedConferenceSources,
+      }),
+    );
+    const open = await active(real.eventId);
+    expect(open.find((x) => x.rule === 'deliverablesOverdue')).toMatchObject({ count: 1 });
+    expect(open.find((x) => x.rule === 'printersKiosksOffline')).toMatchObject({
+      count: 1 + CONFERENCE_FIXTURE.kiosksOffline,
+    });
+    // Leads (M5.6b) are not built: still quiet.
+    expect(open.map((x) => x.rule)).not.toContain('exhibitorsNoLeads');
   }, 120_000);
 });
 

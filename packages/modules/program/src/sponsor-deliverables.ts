@@ -1,7 +1,7 @@
 import type { TenantTx } from '@yayatoh/db';
 import { DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
-import { and, asc, eq, sql } from 'drizzle-orm';
+import { and, asc, eq, lte, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import {
   dueAtFromDate,
@@ -234,3 +234,21 @@ export const portalSetDeliverableDoneCommand = tenantCommand({
     data: { deliverableId: input.deliverableId, done: input.done, by: 'sponsor' },
   }),
 });
+
+/**
+ * Open deliverables of the event past their due time (M5.4b), counted for M5.9a's conference pack
+ * (the `deliverablesOverdue` alert and the sponsor activity tile; batch 3j merge). Counts only.
+ */
+export async function overdueDeliverableCountTx(tx: TenantTx, eventId: string, now: Date): Promise<number> {
+  const [r] = await tx
+    .select({ n: sql<number>`count(*)::int` })
+    .from(sponsorDeliverables)
+    .where(
+      and(
+        eq(sponsorDeliverables.eventId, eventId),
+        eq(sponsorDeliverables.status, 'open'),
+        lte(sponsorDeliverables.dueAt, now),
+      ),
+    );
+  return r?.n ?? 0;
+}

@@ -82,6 +82,12 @@ export const ALERT_TRIGGER_EVENTS = [
   'order.voided@1',
   'checkin.session_attended@1',
   'checkin.session_left@1',
+  // Batch 3j merge: M5.5b's printer watchdog (offline once per silence, online again) and M5.4b's
+  // package activations (they add deliverables); deliverables falling due is the sweep's job.
+  'badges.printer_offline@1',
+  'badges.printer_online@1',
+  'program.sponsor_package.activated@1',
+  'program.sponsor_package.cancelled@1',
 ] as const;
 
 /** Outbox events that are themselves what an org rule counts (one `alerts.signals` row each). */
