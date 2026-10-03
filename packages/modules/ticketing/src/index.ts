@@ -167,3 +167,5 @@ export {
   walletPassSync,
   walletSerial,
 } from './wallet.ts';
+// M4.7a: a party's active tickets for its guest hub (the app passes this reader to the guests module).
+export { partyTicketsTx } from './party-tickets.ts';

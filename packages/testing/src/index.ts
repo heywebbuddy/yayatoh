@@ -17,6 +17,7 @@ export {
   twoOrgs,
   userCtx,
 } from './fixtures.ts';
+export { type GuestHubScenario, guestHubScenario, partyHub } from './guest-hub.ts';
 export { GUEST_SITE_PASSWORD, type GuestSiteScenario, guestSiteScenario } from './guest-site.ts';
 export { quietDevice, revokeDevice } from './live.ts';
 export {

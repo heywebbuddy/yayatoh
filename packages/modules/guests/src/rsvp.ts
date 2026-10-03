@@ -545,7 +545,7 @@ export type PublicRsvpDto = z.infer<typeof PublicRsvpDto>;
 const Token = z.string().min(10).max(200);
 
 /** The party of a link (in the context's org), or `not_found` for any bad, reset or foreign link. */
-async function linkPartyTx(tx: TenantTx, token: string, lock = false) {
+export async function linkPartyTx(tx: TenantTx, token: string, lock = false) {
   const linkId = verifyLinkToken(RSVP_LINK_PURPOSE, token);
   if (!linkId) throw new DomainError('not_found', 'Unknown link', { reason: 'unknown_link' });
   const q = tx.select().from(partyRsvp).where(eq(partyRsvp.linkId, linkId));

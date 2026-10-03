@@ -183,3 +183,5 @@ export {
   setTableSponsorCommand,
   TableSponsorDto,
 } from './table-sponsors.ts';
+// M4.7a: the seats of a party for its guest hub (the app passes this reader to the guests module).
+export { partySeatsTx } from './party-seats.ts';

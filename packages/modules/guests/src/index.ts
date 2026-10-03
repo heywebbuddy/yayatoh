@@ -321,3 +321,34 @@ export {
   tablePartiesTx,
   tablePartyTx,
 } from './tables.ts';
+// M4.7a guest hub: one page per party (RSVP, program, seats, tickets) and its wallet pass port.
+export {
+  type GuestPassContent,
+  type GuestPassFacts,
+  guestPassContent,
+  guestPassSerial,
+  type HubTally,
+  hubTally,
+  nextProgramItem,
+  PASS_SEATS_MAX,
+  PASS_TEXT_MAX,
+} from './domain/hub.ts';
+export {
+  type HubPerson,
+  type HubSeat,
+  type HubTicket,
+  PartyHubDto,
+  type PartyHubReaders,
+  type PartyHubView,
+  partyHubQuery,
+} from './hub.ts';
+export {
+  FAKE_PASS_CONTENT_TYPE,
+  type FakeGuestPass,
+  fakeGuestPassProvider,
+  GUEST_PASS_PLATFORMS,
+  type GuestPassPlatform,
+  type GuestPassProvider,
+  type GuestPassRequest,
+  type GuestPassResult,
+} from './wallet-pass.ts';
