@@ -13337,7 +13337,9 @@
           "not_found": "We couldn't find that.",
           "read_only_freeze": "Changes are paused during scheduled maintenance. Try again when it ends.",
           "internal": "Something went wrong on our side."
-        }
+        },
+        "chooseNow": "Choose the audience",
+        "allIntegrations": "All integrations"
       },
       "hubspot": {
         "title": "What syncs with HubSpot",

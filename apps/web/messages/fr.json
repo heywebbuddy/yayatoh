@@ -13337,7 +13337,9 @@
           "not_found": "Introuvable.",
           "read_only_freeze": "Les modifications sont suspendues pendant la maintenance planifiée. Réessayez à la fin.",
           "internal": "Un problème est survenu de notre côté."
-        }
+        },
+        "chooseNow": "Choisir l’audience",
+        "allIntegrations": "Toutes les intégrations"
       },
       "hubspot": {
         "title": "Ce qui se synchronise avec HubSpot",

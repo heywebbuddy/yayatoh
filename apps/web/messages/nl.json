@@ -13337,7 +13337,9 @@
           "not_found": "We konden dat niet vinden.",
           "read_only_freeze": "Wijzigingen zijn gepauzeerd tijdens gepland onderhoud. Probeer het opnieuw als het klaar is.",
           "internal": "Er ging bij ons iets mis."
-        }
+        },
+        "chooseNow": "Doelgroep kiezen",
+        "allIntegrations": "Alle koppelingen"
       },
       "hubspot": {
         "title": "Wat met HubSpot synchroniseert",

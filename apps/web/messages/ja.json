@@ -13337,7 +13337,9 @@
           "not_found": "見つかりませんでした。",
           "read_only_freeze": "定期メンテナンス中は変更を停止しています。終了後にもう一度お試しください。",
           "internal": "こちら側で問題が発生しました。"
-        }
+        },
+        "chooseNow": "オーディエンスを選ぶ",
+        "allIntegrations": "すべての連携"
       },
       "hubspot": {
         "title": "HubSpot と同期する内容",

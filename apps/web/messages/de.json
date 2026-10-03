@@ -13337,7 +13337,9 @@
           "not_found": "Das konnten wir nicht finden.",
           "read_only_freeze": "Änderungen sind während der geplanten Wartung pausiert. Versuchen Sie es nach deren Ende erneut.",
           "internal": "Bei uns ist etwas schiefgelaufen."
-        }
+        },
+        "chooseNow": "Zielgruppe wählen",
+        "allIntegrations": "Alle Integrationen"
       },
       "hubspot": {
         "title": "Was mit HubSpot synchronisiert wird",

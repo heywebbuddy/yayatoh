@@ -13337,7 +13337,9 @@
           "not_found": "Não encontramos isso.",
           "read_only_freeze": "As alterações estão pausadas durante a manutenção programada. Tente de novo quando terminar.",
           "internal": "Algo deu errado do nosso lado."
-        }
+        },
+        "chooseNow": "Escolher o público",
+        "allIntegrations": "Todas as integrações"
       },
       "hubspot": {
         "title": "O que sincroniza com o HubSpot",

@@ -7,8 +7,19 @@ import {
   providerLists,
 } from '@yayatoh/integrations';
 import { type Ctx, executeQuery } from '@yayatoh/kernel';
-import { Alert, Button, Card, EmptyState, SectionHeader, Select, StatusPill, Table } from '@yayatoh/ui';
+import {
+  Alert,
+  Button,
+  buttonClass,
+  Card,
+  EmptyState,
+  SectionHeader,
+  Select,
+  StatusPill,
+  Table,
+} from '@yayatoh/ui';
 import { getTranslations } from 'next-intl/server';
+import { Link } from '@/i18n/navigation.ts';
 import { integrationAuth } from '@/server/integrations.ts';
 import { ports } from '@/server/ports.ts';
 import { saveAudienceAction } from '../marketing-actions.ts';
@@ -113,6 +124,17 @@ export async function MarketingSection({
               <EmptyState
                 title={t('audience.emptyTitle')}
                 description={canManage ? t('audience.emptyManage', { name }) : t('audience.emptyRead')}
+                action={
+                  canManage && active ? (
+                    <a href="#audience-form" className={buttonClass('secondary')}>
+                      {t('audience.chooseNow')}
+                    </a>
+                  ) : (
+                    <Link href={`/o/${org}/integrations`} className={buttonClass('secondary')}>
+                      {t('audience.allIntegrations')}
+                    </Link>
+                  )
+                }
               />
             )}
             <p className="m-0 text-body text-ink-2">{t('consentRule')}</p>
@@ -121,6 +143,7 @@ export async function MarketingSection({
                 <Alert tone="danger" title={t('audience.feedback.provider_unavailable')} />
               ) : (
                 <form
+                  id="audience-form"
                   action={saveAudienceAction.bind(null, org, connectionId)}
                   className="flex flex-wrap items-end gap-3"
                   aria-label={t('audience.formLabel')}

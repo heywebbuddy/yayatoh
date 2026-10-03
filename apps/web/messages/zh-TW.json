@@ -13337,7 +13337,9 @@
           "not_found": "找不到該內容。",
           "read_only_freeze": "排定維護期間暫停變更。維護結束後請再試一次。",
           "internal": "我們這邊發生問題。"
-        }
+        },
+        "chooseNow": "選擇受眾",
+        "allIntegrations": "所有整合"
       },
       "hubspot": {
         "title": "與 HubSpot 同步的內容",
