@@ -461,7 +461,7 @@ Behind the `donations` entitlement. Works for unconnected orgs (paddles only, no
 ### 14. Build notes (2026-10-03)
 Base: build branch + `merge/next-3g` + `merge/next-3h` (design v2, M4.8a/b) + `agent/m4.8c`. One merge conflict (`command-center/src/widgets.ts`, batch 3g vs 3h: kept the build branch's `days:` call, which already fixes the same day-range bug).
 - The screen is composed from `@yayatoh/ui` (Card, StatusPill, Button, Alert, Select, Checkbox, Input, PageHeader, SectionHeader, EmptyState) and the M5.7a screen's patterns (`StreamBadge`, toggles). Local compositions: `components/donations/giving-screen.tsx` (the thermometer screen and preview), `screen-form.tsx`, `screen-link.tsx`, `cards/print-button.tsx`; the replace-link control reuses M4.8c's `RaiseActionButton`.
-- Gate: see the final commit's report.
+- Gate (2026-10-03): lint, check:modules, typecheck 59/59 (concurrency 2), unit 2,717 passed (201 files), integration 1,519 passed (166 files). e2e on 375/768/1280: `giving-screen.spec.ts` 12/12; related `donations.spec.ts`, `paddle-raise.spec.ts`, `realtime.spec.ts` 48/48 (after making M4.8a's keyboard test name its checkbox); `canary-crawl.spec.ts`, `security.spec.ts` 106 passed (14 skipped by project).
 
 ### 15. Demo checklist
 - [ ] As a gala's owner (connected Stripe, published event): Donations → add a campaign with a $1,000 level → **Live screen** → choose the campaign → Set up the screen.
