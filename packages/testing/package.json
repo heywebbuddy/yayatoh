@@ -28,6 +28,7 @@
     "@yayatoh/crm": "workspace:*",
     "@yayatoh/csv": "workspace:*",
     "@yayatoh/db": "workspace:*",
+    "@yayatoh/donations": "workspace:*",
     "@yayatoh/engagement": "workspace:*",
     "@yayatoh/events": "workspace:*",
     "@yayatoh/floorplan": "workspace:*",

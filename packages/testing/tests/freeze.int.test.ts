@@ -13,6 +13,7 @@ import * as commandCenter from '@yayatoh/command-center';
 import * as crm from '@yayatoh/crm';
 import { withoutTenant } from '@yayatoh/db';
 import { adminClient, closePools } from '@yayatoh/db/testing';
+import * as donations from '@yayatoh/donations';
 import * as engagement from '@yayatoh/engagement';
 import * as events from '@yayatoh/events';
 import * as forms from '@yayatoh/forms';
@@ -78,6 +79,8 @@ const MODULES = {
   commandCenter,
   crm,
   engagement,
+  // M4.8a: gifts, campaigns and the gift CSV.
+  donations,
   events,
   forms,
   guests,

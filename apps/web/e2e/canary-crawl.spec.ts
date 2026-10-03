@@ -80,6 +80,9 @@ test.describe('canary leak crawl (roadmap §9)', () => {
       `${MARKET}/events/${ev}/seat-finder`,
       `${MARKET}/events/${ev}/seat-finder/poster`,
       `${MARKET}/events/${ev}/unlock`,
+      // M4.8a: the giving page (campaign totals only; no donor, tribute or employer, P4-13).
+      `${MARKET}/events/${ev}/give`,
+      `${MARKET}/ar/events/${ev}/give`,
       `${MARKET}/embed/${ev}`,
       `${MARKET}/series/${c.slug}-tour`,
       `${MARKET}/legal/${c.slug}/refund`,
@@ -99,9 +102,17 @@ test.describe('canary leak crawl (roadmap §9)', () => {
     ];
     const r = await crawl({ start, fetch: (u) => browserFetch(page, u), maxPages: 200, follow });
     // The crawl really reached the canary org's pages (a crawl that saw nothing proves nothing).
-    for (const must of [`${MARKET}/events/${ev}`, `${tenant}/events/${ev}`, `${MARKET}/embed/${ev}`])
+    for (const must of [
+      `${MARKET}/events/${ev}`,
+      `${tenant}/events/${ev}`,
+      `${MARKET}/embed/${ev}`,
+      `${MARKET}/events/${ev}/give`,
+    ])
       expect(r.visited).toContain(must);
     expect(r.visited.length).toBeGreaterThan(40);
+    // The giving page really showed the canary org's campaign (its private gift columns are canaries).
+    await page.goto(`${MARKET}/events/${ev}/give`);
+    await expect(page.getByRole('heading', { name: 'Fixture Fund', level: 1 })).toBeVisible();
     expect(formatLeaks(r.leaks)).toBe('no canary leaks');
     expect(r.errors).toEqual([]);
   });

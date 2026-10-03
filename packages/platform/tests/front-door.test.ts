@@ -232,6 +232,10 @@ describe('who serves a request', () => {
       '/es/collect/ABCD2345',
       // M4.2b: a gala table's claim link.
       '/tables/abc~sig',
+      // M4.8a: the giving page and its thank-you page.
+      '/events/summit/give',
+      '/events/summit/give/thanks',
+      '/ar/events/summit/give',
     ]) {
       expect(isPlatformPath(new URL(p, 'https://x').pathname) || decide(p).owner === 'next').toBe(true);
       expect(decide(p, flags(), { legacy: true })).toEqual({
@@ -249,6 +253,7 @@ describe('who serves a request', () => {
     expect(isPlatformPath('/tvguide')).toBe(false);
     expect(isPlatformPath('/events/summit/group')).toBe(false);
     expect(isPlatformPath('/events/summit/live')).toBe(false);
+    expect(isPlatformPath('/events/summit/give/other')).toBe(false);
     expect(isPlatformPath('/displays')).toBe(false);
   });
 });

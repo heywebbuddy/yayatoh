@@ -12,6 +12,7 @@ import { privateColumns as cms } from '@yayatoh/cms';
 import { privateColumns as commandCenter } from '@yayatoh/command-center';
 import { privateColumns as crm } from '@yayatoh/crm';
 import type { CanarySeed, ColumnRule, PrivateClass, PrivateColumn, SchemaPrivacy } from '@yayatoh/db';
+import { privateColumns as donations } from '@yayatoh/donations';
 import { privateColumns as engagement } from '@yayatoh/engagement';
 import { privateColumns as events } from '@yayatoh/events';
 import { privateColumns as forms } from '@yayatoh/forms';
@@ -56,6 +57,7 @@ export const COLUMN_PRIVACY: readonly SchemaPrivacy[] = [
   commandCenter,
   crm,
   engagement,
+  donations,
   events,
   forms,
   guests,

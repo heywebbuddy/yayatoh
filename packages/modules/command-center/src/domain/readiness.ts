@@ -60,7 +60,6 @@ export const PLACEHOLDER_SECTIONS = [
   'messages',
   'day-of',
   'branding',
-  'donations',
   'communications',
   'libraries',
 ] as const;

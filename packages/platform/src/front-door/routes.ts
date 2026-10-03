@@ -210,7 +210,8 @@ export const PLATFORM_PREFIXES: readonly string[] = [
  * merge: the M5.4a public exhibitor map. Batch 3g merge: the seat finder and M3.3b's guest help
  * pages under it (`seat-finder/help`, and a request's status page `seat-finder/help/{token}`).
  * Batch 3h merge: M5.1c's group registration, applicant and group pages; M5.7a's participant
- * page for a session's live polls and Q&A (`/events/{slug}/live/{session}`).
+ * page for a session's live polls and Q&A (`/events/{slug}/live/{session}`); M4.8a's giving page
+ * (`/events/{slug}/give`, `/events/{slug}/give/thanks`).
  */
 export const PLATFORM_PATTERNS: readonly RegExp[] = [
   /^\/events\/[^/]+\/(register|registration-form|waitlist|exhibitors)$/,
@@ -220,6 +221,8 @@ export const PLATFORM_PATTERNS: readonly RegExp[] = [
   /^\/events\/[^/]+\/(registration|group)\/[^/]+$/,
   // M5.7a: a session's live polls and Q&A for participants.
   /^\/events\/[^/]+\/live\/[^/]+$/,
+  // M4.8a: the giving page and its thank-you page.
+  /^\/events\/[^/]+\/give(\/thanks)?$/,
 ];
 export const PLATFORM_FILES: ReadonlySet<string> = new Set([
   '/widget.js',
