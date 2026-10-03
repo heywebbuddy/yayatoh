@@ -181,7 +181,10 @@
       },
       "donations": {
         "receipt": "Recibo de doação",
-        "year-end-statement": "Extrato anual de doações"
+        "year-end-statement": "Extrato anual de doações",
+        "pledge-summary": "Resumo do compromisso",
+        "pledge-invoice": "Fatura do compromisso",
+        "pledge-reminder": "Lembrete do compromisso"
       },
       "guests": {
         "invitation": "Convite de casamento",

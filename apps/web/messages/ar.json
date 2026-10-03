@@ -181,7 +181,10 @@
       },
       "donations": {
         "receipt": "إيصال تبرّع",
-        "year-end-statement": "كشف التبرعات السنوي"
+        "year-end-statement": "كشف التبرعات السنوي",
+        "pledge-summary": "ملخّص التعهّد",
+        "pledge-invoice": "فاتورة التعهّد",
+        "pledge-reminder": "تذكير بالتعهّد"
       },
       "guests": {
         "invitation": "دعوة زفاف",

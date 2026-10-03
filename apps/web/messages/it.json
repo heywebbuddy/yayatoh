@@ -181,7 +181,10 @@
       },
       "donations": {
         "receipt": "Ricevuta di donazione",
-        "year-end-statement": "Riepilogo annuale delle donazioni"
+        "year-end-statement": "Riepilogo annuale delle donazioni",
+        "pledge-summary": "Riepilogo dell’impegno",
+        "pledge-invoice": "Fattura dell’impegno",
+        "pledge-reminder": "Promemoria dell’impegno"
       },
       "guests": {
         "invitation": "Invito di nozze",

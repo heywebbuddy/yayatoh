@@ -181,7 +181,10 @@
       },
       "donations": {
         "receipt": "Spendenquittung",
-        "year-end-statement": "Jährliche Spendenübersicht"
+        "year-end-statement": "Jährliche Spendenübersicht",
+        "pledge-summary": "Zusammenfassung der Zusage",
+        "pledge-invoice": "Rechnung zur Zusage",
+        "pledge-reminder": "Erinnerung an die Zusage"
       },
       "guests": {
         "invitation": "Hochzeitseinladung",

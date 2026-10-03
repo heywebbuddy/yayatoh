@@ -181,7 +181,10 @@
       },
       "donations": {
         "receipt": "捐款收據",
-        "year-end-statement": "年度捐款明細"
+        "year-end-statement": "年度捐款明細",
+        "pledge-summary": "認捐摘要",
+        "pledge-invoice": "認捐帳單",
+        "pledge-reminder": "認捐提醒"
       },
       "guests": {
         "invitation": "婚禮邀請",

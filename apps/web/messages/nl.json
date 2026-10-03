@@ -181,7 +181,10 @@
       },
       "donations": {
         "receipt": "Donatiebewijs",
-        "year-end-statement": "Jaaroverzicht van giften"
+        "year-end-statement": "Jaaroverzicht van giften",
+        "pledge-summary": "Overzicht van toezegging",
+        "pledge-invoice": "Factuur van toezegging",
+        "pledge-reminder": "Herinnering aan toezegging"
       },
       "guests": {
         "invitation": "Huwelijksuitnodiging",

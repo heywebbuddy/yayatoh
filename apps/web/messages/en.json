@@ -181,7 +181,10 @@
       },
       "donations": {
         "receipt": "Donation receipt",
-        "year-end-statement": "Year-end giving statement"
+        "year-end-statement": "Year-end giving statement",
+        "pledge-summary": "Pledge summary",
+        "pledge-invoice": "Pledge invoice",
+        "pledge-reminder": "Pledge reminder"
       },
       "guests": {
         "invitation": "Wedding invitation",

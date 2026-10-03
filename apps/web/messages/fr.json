@@ -181,7 +181,10 @@
       },
       "donations": {
         "receipt": "Reçu de don",
-        "year-end-statement": "Relevé annuel des dons"
+        "year-end-statement": "Relevé annuel des dons",
+        "pledge-summary": "Récapitulatif de promesse",
+        "pledge-invoice": "Facture de promesse",
+        "pledge-reminder": "Rappel de promesse"
       },
       "guests": {
         "invitation": "Faire-part de mariage",

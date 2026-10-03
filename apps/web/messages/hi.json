@@ -181,7 +181,10 @@
       },
       "donations": {
         "receipt": "दान रसीद",
-        "year-end-statement": "वार्षिक दान विवरण"
+        "year-end-statement": "वार्षिक दान विवरण",
+        "pledge-summary": "संकल्प का सारांश",
+        "pledge-invoice": "संकल्प का बिल",
+        "pledge-reminder": "संकल्प का रिमाइंडर"
       },
       "guests": {
         "invitation": "विवाह निमंत्रण",

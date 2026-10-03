@@ -181,7 +181,10 @@
       },
       "donations": {
         "receipt": "Квитанция о пожертвовании",
-        "year-end-statement": "Годовая сводка пожертвований"
+        "year-end-statement": "Годовая сводка пожертвований",
+        "pledge-summary": "Сводка обещания",
+        "pledge-invoice": "Счёт по обещанию",
+        "pledge-reminder": "Напоминание об обещании"
       },
       "guests": {
         "invitation": "Свадебное приглашение",

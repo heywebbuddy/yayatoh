@@ -181,7 +181,10 @@
       },
       "donations": {
         "receipt": "寄付の領収書",
-        "year-end-statement": "年間寄付明細書"
+        "year-end-statement": "年間寄付明細書",
+        "pledge-summary": "寄付のお約束のまとめ",
+        "pledge-invoice": "寄付のお約束の請求書",
+        "pledge-reminder": "寄付のお約束のリマインダー"
       },
       "guests": {
         "invitation": "結婚式の招待状",
