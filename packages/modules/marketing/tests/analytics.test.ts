@@ -181,6 +181,14 @@ describe('date range in the org’s time zone', () => {
     expect(r.to.toISOString()).toBe('2027-03-15T05:00:00.000Z');
   });
 
+  it('the last N days up to today, in the zone (batch 3g: the Command Center tile)', () => {
+    expect(dayRange({ days: 90 }, 'America/Chicago', now)).toMatchObject({
+      fromDay: '2026-12-15',
+      toDay: '2027-03-14',
+    });
+    expect(dayRange({ days: 1 }, 'UTC', now)).toMatchObject({ fromDay: '2027-03-15', toDay: '2027-03-15' });
+  });
+
   it('a day across the DST change is 23 hours long', () => {
     const r = dayRange({ from: '2027-03-14', to: '2027-03-14' }, 'America/Chicago', now);
     if ('problem' in r) throw new Error('unexpected');

@@ -262,13 +262,18 @@ export type RangeProblem = 'invalid_date' | 'from_after_to' | 'range_too_long';
  * default the last 30 days up to today. Returns a problem for bad input instead of guessing.
  */
 export function dayRange(
-  input: { readonly from?: string | null; readonly to?: string | null },
+  input: {
+    readonly from?: string | null;
+    readonly to?: string | null;
+    /** Without `from`: the last `days` days up to `to` (default 30), counted in `timeZone`. */
+    readonly days?: number | null;
+  },
   timeZone: string,
   now: Date,
 ): DayRange | { readonly problem: RangeProblem } {
   const today = utcToZonedInput(now, timeZone).slice(0, 10);
   const toDay = input.to || today;
-  const fromDay = input.from || addDays(toDay, -(DEFAULT_RANGE_DAYS - 1));
+  const fromDay = input.from || addDays(toDay, -((input.days ?? DEFAULT_RANGE_DAYS) - 1));
   if (!validDay(fromDay) || !validDay(toDay)) return { problem: 'invalid_date' };
   if (fromDay > toDay) return { problem: 'from_after_to' };
   if (addDays(fromDay, MAX_RANGE_DAYS - 1) < toDay) return { problem: 'range_too_long' };

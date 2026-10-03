@@ -18,6 +18,7 @@ import {
   DIMENSIONS,
   type Dimension,
   dayRange,
+  MAX_RANGE_DAYS,
   parseCampaignKey,
   type SendFact,
 } from './domain/analytics.ts';
@@ -83,6 +84,8 @@ export type AnalyticsReportDto = z.infer<typeof AnalyticsReportDto>;
 export const RangeInput = z.object({
   from: z.string().max(10).nullish(),
   to: z.string().max(10).nullish(),
+  /** Without `from`: the last N days up to `to` (or today), in the org's time zone. */
+  days: z.int().min(1).max(MAX_RANGE_DAYS).nullish(),
 });
 
 /** The org's zone and currency, and the requested range (a bad range is a validation error). */
