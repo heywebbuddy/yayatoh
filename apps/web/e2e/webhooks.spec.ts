@@ -53,13 +53,14 @@ test.describe('webhooks console (M6.3b)', () => {
     await expect(row).toContainText('200');
     await expectAccessible(page);
 
-    // Any catalog event can be sent with its documented example.
+    // Any catalog event can be sent with its documented example. (In a shared org the relay may
+    // also have fanned real order.paid events to this all-events endpoint: newest row first.)
     await page.getByLabel('Message type').selectOption('order.paid');
     await page.getByRole('button', { name: 'Send test' }).click();
     await expect(
       page.getByRole('status').filter({ hasText: 'Test message sent (order.paid)' }),
     ).toBeVisible();
-    await expect(deliveries(page).getByRole('row').filter({ hasText: 'order.paid' })).toContainText(
+    await expect(deliveries(page).getByRole('row').filter({ hasText: 'order.paid' }).first()).toContainText(
       'Delivered',
     );
 
