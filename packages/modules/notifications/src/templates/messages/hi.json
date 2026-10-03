@@ -294,6 +294,21 @@
     "alerts.alert-urgent-text": {
       "subject": "{rule, select, unseated {{count, plural, one {{countWords} उपस्थित व्यक्ति के पास सीट नहीं है} other {{countWords} उपस्थित लोगों के पास सीट नहीं है}}} undistributed {{count, plural, one {{countWords} खरीदा गया टिकट वितरित नहीं हुआ है} other {{countWords} खरीदे गए टिकट वितरित नहीं हुए हैं}}} paymentsFailed {{count, plural, one {{countWords} भुगतान विफल रहा} other {{countWords} भुगतान विफल रहे}}} paymentsStuck {{count, plural, one {{countWords} भुगतान अटका हुआ है} other {{countWords} भुगतान अटके हुए हैं}}} refundSurge {{count, plural, one {{countWords} रिफ़ंड पिछले घंटे में} other {{countWords} रिफ़ंड पिछले घंटे में}}} devicesOffline {{count, plural, one {{countWords} चेक-इन डिवाइस ऑफ़लाइन है} other {{countWords} चेक-इन डिवाइस ऑफ़लाइन हैं}}} devicesLowBattery {{count, plural, one {{countWords} चेक-इन डिवाइस की बैटरी कम है} other {{countWords} चेक-इन डिवाइसों की बैटरी कम है}}} devicesBacklog {{count, plural, one {{countWords} चेक-इन डिवाइस पर स्कैन सिंक होने की प्रतीक्षा में हैं} other {{countWords} चेक-इन डिवाइसों पर स्कैन सिंक होने की प्रतीक्षा में हैं}}} capacityNear {स्थल {count}% भर चुका है} capacityFull {स्थल पूरी तरह भर गया है ({count}%)} sellOut {{count}% टिकट बिक चुके हैं} salesPace {टिकट बिक्री लक्ष्य गति के {count}% पर है} readiness {{count, plural, one {{countWords} सेटअप चरण इस इवेंट को रोक रहा है} other {{countWords} सेटअप चरण इस इवेंट को रोक रहे हैं}}} domain {{count, plural, one {{countWords} कस्टम डोमेन में समस्या है} other {{countWords} कस्टम डोमेन में समस्या है}}} payoutsPastDue {{count, plural, one {{countWords} भुगतान खाता आवश्यकता की समय-सीमा निकल चुकी है} other {{countWords} भुगतान खाता आवश्यकताओं की समय-सीमा निकल चुकी है}}} deliverability {ईमेल डिलीवरी पर ध्यान देने की ज़रूरत है} automationFailed {{count, plural, one {{countWords} संदेश या बल्क कार्रवाई आज विफल रही} other {{countWords} संदेश या बल्क कार्रवाइयाँ आज विफल रहीं}}} assistanceOverdue {{count, plural, one {{countWords} सहायता अनुरोध बहुत देर से प्रतीक्षा में है} other {{countWords} सहायता अनुरोध बहुत देर से प्रतीक्षा में हैं}}} campaignFailed {{count, plural, one {{countWords} अभियान भेजना आज विफल रहा} other {{countWords} अभियान भेजना आज विफल रहे}}} disputeDeadline {{count, plural, one {{countWords} विवाद के लिए जल्द ही सबूत चाहिए} other {{countWords} विवादों के लिए जल्द ही सबूत चाहिए}}} other {अलर्ट}}",
       "intro": "{eventName, select, none {{org} में किसी चीज़ पर ध्यान देने की ज़रूरत है।} other {{eventName} में किसी चीज़ पर ध्यान देने की ज़रूरत है।}} बटन वह पेज खोलता है जो इसे ठीक करता है।"
+    },
+    "donations.pledge-summary": {
+      "subject": "{mode, select, card {{org} को आपका संकल्प: कल आपके कार्ड से राशि ली जाएगी} other {{org} को आपका संकल्प: भुगतान कैसे करें}}",
+      "intro": "{mode, select, card {{eventName} में {amount} के संकल्प के लिए धन्यवाद। हम {chargeAt} को आपके कार्ड ({card}) से राशि लेंगे। कोई दूसरा कार्ड इस्तेमाल करने या किसी और तरीके से भुगतान करने के लिए, उससे पहले नीचे दिए बटन का उपयोग करें।} other {{eventName} में {amount} के संकल्प के लिए धन्यवाद। कृपया {dueOn} तक नीचे दिए लिंक से ऑनलाइन भुगतान करें।}}",
+      "cta": "{mode, select, card {कार्ड बदलें या दूसरे तरीके से भुगतान करें} other {मेरा संकल्प चुकाएँ}}"
+    },
+    "donations.pledge-invoice": {
+      "subject": "{org} को आपका संकल्प: कृपया ऑनलाइन भुगतान करें",
+      "intro": "{reason, select, declined {{eventName} में {amount} के आपके संकल्प के लिए हम आपके कार्ड से राशि नहीं ले सके।} other {{eventName} में {amount} के आपके संकल्प के लिए आपका सहेजा गया कार्ड अब इस्तेमाल नहीं हो सकता।}} कृपया {dueOn} तक ऑनलाइन भुगतान करें।",
+      "cta": "मेरा संकल्प चुकाएँ"
+    },
+    "donations.pledge-reminder": {
+      "subject": "याद दिलाना: {org} को {amount} का आपका संकल्प",
+      "intro": "{eventName} में {amount} के संकल्प के लिए फिर से धन्यवाद। इसकी नियत तारीख {dueOn} है। अगर आप भुगतान कर चुके हैं, तो इस ईमेल को अनदेखा करें।",
+      "cta": "मेरा संकल्प चुकाएँ"
     }
   },
   "roles": {

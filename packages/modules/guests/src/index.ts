@@ -304,3 +304,5 @@ export {
   tablePartiesTx,
   tablePartyTx,
 } from './tables.ts';
+// M4.8e: where a paddle holder's pledge messages go.
+export { paddleHolderContactTx } from './pledge-contact.ts';

@@ -294,6 +294,21 @@
     "alerts.alert-urgent-text": {
       "subject": "{rule, select, unseated {{count, plural, other {{countWords} 位参会者没有座位}}} undistributed {{count, plural, other {{countWords} 张已购门票尚未分发}}} paymentsFailed {{count, plural, other {{countWords} 笔付款失败}}} paymentsStuck {{count, plural, other {{countWords} 笔付款卡住了}}} refundSurge {{count, plural, other {过去一小时内有 {countWords} 笔退款}}} devicesOffline {{count, plural, other {{countWords} 台签到设备离线}}} devicesLowBattery {{count, plural, other {{countWords} 台签到设备电量不足}}} devicesBacklog {{count, plural, other {{countWords} 台签到设备有待同步的扫描}}} capacityNear {场地已满 {count}%} capacityFull {场地已满员（{count}%）} sellOut {已售出 {count}% 的门票} salesPace {门票销售达到目标进度的 {count}%} readiness {{count, plural, other {{countWords} 个设置步骤阻碍了此活动}}} domain {{count, plural, other {{countWords} 个自定义域名有问题}}} payoutsPastDue {{count, plural, other {收款账户有 {countWords} 项要求已逾期}}} deliverability {电子邮件送达率需要关注} automationFailed {{count, plural, other {今天有 {countWords} 条消息或批量操作失败}}} assistanceOverdue {{count, plural, other {{countWords} 个求助请求等待过久}}} campaignFailed {{count, plural, other {今天有 {countWords} 次营销活动发送失败}}} disputeDeadline {{count, plural, other {有 {countWords} 起争议需要尽快提交证据}}} other {提醒}}",
       "intro": "{eventName, select, none {{org} 有需要关注的事项。} other {{eventName} 有需要关注的事项。}}点击按钮打开处理页面。"
+    },
+    "donations.pledge-summary": {
+      "subject": "{mode, select, card {您对 {org} 的认捐：明天将从您的银行卡扣款} other {您对 {org} 的认捐：付款方式}}",
+      "intro": "{mode, select, card {感谢您在 {eventName} 认捐 {amount}。我们将于 {chargeAt} 从您的银行卡（{card}）扣款。如需更换银行卡或改用其他方式付款，请在此之前使用下方按钮。} other {感谢您在 {eventName} 认捐 {amount}。请在 {dueOn} 前通过下方链接在线付款。}}",
+      "cta": "{mode, select, card {更换银行卡或改用其他方式付款} other {支付我的认捐}}"
+    },
+    "donations.pledge-invoice": {
+      "subject": "您对 {org} 的认捐：请在线付款",
+      "intro": "{reason, select, declined {我们未能从您的银行卡扣取您在 {eventName} 认捐的 {amount}。} other {您保存的银行卡已无法用于您在 {eventName} 认捐的 {amount}。}}请在 {dueOn} 前在线付款。",
+      "cta": "支付我的认捐"
+    },
+    "donations.pledge-reminder": {
+      "subject": "提醒：您对 {org} 认捐的 {amount}",
+      "intro": "再次感谢您在 {eventName} 认捐 {amount}。付款截止日期为 {dueOn}。如果您已付款，请忽略此邮件。",
+      "cta": "支付我的认捐"
     }
   },
   "roles": {
