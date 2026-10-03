@@ -165,7 +165,8 @@ export function evaluateEventRules(
     );
 
   const untilStart = f.startsAt.getTime() - now.getTime();
-  if (f.social) Object.assign(out, evaluateSocialRules(f.social, untilStart, f.endsAt.getTime() - now.getTime(), now, t));
+  if (f.social)
+    Object.assign(out, evaluateSocialRules(f.social, untilStart, f.endsAt.getTime() - now.getTime(), now, t));
 
   if (untilStart > 0 && untilStart <= t.readinessWindowMs) {
     const blockers = (f.status === 'draft' ? 1 : 0) + (f.ticketTypes === 0 ? 1 : 0);
@@ -199,8 +200,16 @@ export function evaluateSocialRules(
         days: Math.max(0, Math.ceil(left / 86_400_000)),
       });
   }
-  if (s.guestsUnseated !== null && s.guestsUnseated > 0 && untilEndMs > 0 && untilStartMs <= t.guestSeatingWindowMs)
-    out.guestsUnseated = fire(untilStartMs <= t.guestSeatingCriticalMs ? 'critical' : 'warning', s.guestsUnseated);
+  if (
+    s.guestsUnseated !== null &&
+    s.guestsUnseated > 0 &&
+    untilEndMs > 0 &&
+    untilStartMs <= t.guestSeatingWindowMs
+  )
+    out.guestsUnseated = fire(
+      untilStartMs <= t.guestSeatingCriticalMs ? 'critical' : 'warning',
+      s.guestsUnseated,
+    );
   if (s.mealsMissing !== null && s.mealsMissing > 0 && untilStartMs > 0 && untilStartMs <= t.mealsWindowMs)
     out.mealsMissing = fire('warning', s.mealsMissing);
   return out;

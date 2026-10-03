@@ -33,6 +33,18 @@ export { privateColumns } from './private-columns.ts';
 export { readinessRulesTx } from './readiness.ts';
 export { DEVICE_BOARD_EVENTS, deviceBoardPublisher, publishMetricsChangedTx } from './realtime.ts';
 export { COMMAND_CENTER_WIDGETS } from './registry.ts';
+// M4.6a social pack: RSVP, guest seating, meals and dietary needs, arrivals.
+export {
+  ArrivalsWidgetDto,
+  arrivalsWidget,
+  GuestSeatingWidgetDto,
+  guestSeatingWidget,
+  MealsWidgetDto,
+  mealsWidget,
+  RsvpWidgetDto,
+  rsvpWidget,
+  SOCIAL_LIST_MAX,
+} from './social-widgets.ts';
 export {
   EventViewDto,
   eventModeTx,
@@ -81,15 +93,3 @@ export {
   type WidgetRegistry,
   withWidget,
 } from './widgets.ts';
-// M4.6a social pack: RSVP, guest seating, meals and dietary needs, arrivals.
-export {
-  ArrivalsWidgetDto,
-  arrivalsWidget,
-  GuestSeatingWidgetDto,
-  guestSeatingWidget,
-  MealsWidgetDto,
-  mealsWidget,
-  RsvpWidgetDto,
-  rsvpWidget,
-  SOCIAL_LIST_MAX,
-} from './social-widgets.ts';

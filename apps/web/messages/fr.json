@@ -6487,6 +6487,52 @@
         "window": "{sent, plural, one {# e-mail} many {# e-mails} other {# e-mails}} sur les {days} derniers jours",
         "over": "{domains, plural, one {# domaine d’envoi} many {# domaines d’envoi} other {# domaines d’envoi}} et {campaigns, plural, one {# campagne} many {# campagnes} other {# campagnes}} au-delà des seuils",
         "open": "Ouvrir la délivrabilité des e-mails"
+      },
+      "rsvp": {
+        "title": "Réponses",
+        "allAnswered": "Tous les invités ont répondu.",
+        "noneInvited": "Personne n’est encore invité à une étape.",
+        "responded": "{responded} invités sur {invited} ont répondu",
+        "meter": "Réponses reçues",
+        "parties": "Foyers sans réponse : {count}",
+        "notSent": "Invitation pas encore envoyée : {count}",
+        "deadline": "Date limite de réponse : {date}",
+        "noDeadline": "Aucune date limite de réponse",
+        "open": "Ouvrir les réponses"
+      },
+      "guestSeating": {
+        "title": "Plan de table",
+        "noChart": "Pas encore de plan de salle pour les invités. Choisissez-en un dans Placement.",
+        "noGuests": "Aucun invité à placer pour l’instant.",
+        "allSeated": "Chaque invité qui n’a pas décliné a une table.",
+        "seated": "{seated} invités sur {guests} ont une table",
+        "listLabel": "Invités sans table",
+        "guestOf": "Invité de {name}",
+        "more": "+{count} autres",
+        "open": "Placer les invités"
+      },
+      "meals": {
+        "title": "Repas et régimes",
+        "attending": "Présents : {count}",
+        "noneAttending": "Les repas sont comptés quand les invités disent oui.",
+        "caption": "Repas des invités présents",
+        "colMeal": "Repas",
+        "colGuests": "Invités",
+        "other": "Autre choix",
+        "none": "Aucun repas choisi",
+        "dietary": "Régimes alimentaires : {count}",
+        "accessibility": "Besoins d’accessibilité : {count}",
+        "open": "Ouvrir les réponses RSVP"
+      },
+      "arrivals": {
+        "title": "Arrivées des invités",
+        "arrivedOf": "{arrived} invités attendus sur {expected} sont arrivés",
+        "notArrived": "Pas encore là : {count}",
+        "none": "Personne n’est encore arrivé.",
+        "noExpected": "Aucun invité attendu pour l’instant.",
+        "recent": "Dernières arrivées",
+        "guestOf": "Invité de {name}",
+        "open": "Ouvrir la vue du jour J"
       }
     },
     "openScanner": "Ouvrir le scanner",
@@ -6604,7 +6650,10 @@
       "automationFailed": "Ouvrir l’état de la messagerie",
       "campaignFailed": "Ouvrir les campagnes",
       "disputeDeadline": "Ouvrir les litiges",
-      "assistanceOverdue": "Ouvrir les demandes d’aide"
+      "assistanceOverdue": "Ouvrir les demandes d’aide",
+      "rsvpPending": "Ouvrir les réponses",
+      "guestsUnseated": "Placer les invités",
+      "mealsMissing": "Ouvrir les réponses RSVP"
     },
     "rules": {
       "unseated": "{count, plural, one {Un participant n’a pas de place} other {{countWords} participants n’ont pas de place}}",
@@ -6626,7 +6675,10 @@
       "automationFailed": "{count, plural, one {Un message ou une action groupée a échoué aujourd’hui} other {{countWords} messages ou actions groupées ont échoué aujourd’hui}}",
       "campaignFailed": "{count, plural, one {Un envoi de campagne a échoué aujourd’hui} other {{countWords} envois de campagne ont échoué aujourd’hui}}",
       "disputeDeadline": "{count, plural, one {Un litige demande bientôt des preuves} other {{countWords} litiges demandent bientôt des preuves}}",
-      "assistanceOverdue": "{count, plural, one {{countWords} demande d’aide attend depuis trop longtemps} other {{countWords} demandes d’aide attendent depuis trop longtemps}}"
+      "assistanceOverdue": "{count, plural, one {{countWords} demande d’aide attend depuis trop longtemps} other {{countWords} demandes d’aide attendent depuis trop longtemps}}",
+      "rsvpPending": "{count, plural, one {Un invité n’a pas répondu à l’invitation} other {{countWords} invités n’ont pas répondu à l’invitation}}",
+      "guestsUnseated": "{count, plural, one {Un invité n’a pas de table} other {{countWords} invités n’ont pas de table}}",
+      "mealsMissing": "{count, plural, one {Un invité présent n’a pas choisi de repas} other {{countWords} invités présents n’ont pas choisi de repas}}"
     },
     "widget": {
       "title": "Alertes",

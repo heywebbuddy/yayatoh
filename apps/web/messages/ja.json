@@ -6487,6 +6487,52 @@
         "window": "過去 {days} 日間に {sent, plural, other {# 通}}",
         "over": "しきい値超過：送信ドメイン {domains, plural, other {# 件}}、キャンペーン {campaigns, plural, other {# 件}}",
         "open": "メール到達率を開く"
+      },
+      "rsvp": {
+        "title": "出欠",
+        "allAnswered": "招待した全員が回答しました。",
+        "noneInvited": "まだ誰もプログラムに招待されていません。",
+        "responded": "招待した{invited}人中{responded}人が回答済み",
+        "meter": "受け取った回答",
+        "parties": "未回答のグループ: {count}",
+        "notSent": "招待状を未送信: {count}",
+        "deadline": "回答期限: {date}",
+        "noDeadline": "回答期限は未設定です",
+        "open": "出欠を開く"
+      },
+      "guestSeating": {
+        "title": "ゲストの席次",
+        "noChart": "ゲスト用のフロアプランがまだありません。座席で選んでください。",
+        "noGuests": "まだ席を決めるゲストがいません。",
+        "allSeated": "欠席以外のゲスト全員にテーブルがあります。",
+        "seated": "{guests}人中{seated}人にテーブルがあります",
+        "listLabel": "テーブルのないゲスト",
+        "guestOf": "{name}の同伴者",
+        "more": "ほか{count}人",
+        "open": "ゲストの席を決める"
+      },
+      "meals": {
+        "title": "料理と食事制限",
+        "attending": "出席: {count}",
+        "noneAttending": "ゲストが出席と回答すると料理が集計されます。",
+        "caption": "出席ゲストの料理",
+        "colMeal": "料理",
+        "colGuests": "ゲスト",
+        "other": "その他の選択",
+        "none": "料理未選択",
+        "dietary": "食事制限あり: {count}",
+        "accessibility": "アクセシビリティの配慮: {count}",
+        "open": "出欠の回答を開く"
+      },
+      "arrivals": {
+        "title": "ゲストの到着",
+        "arrivedOf": "予定の{expected}人中{arrived}人が到着",
+        "notArrived": "未到着: {count}",
+        "none": "まだ誰も到着していません。",
+        "noExpected": "まだ到着予定のゲストはいません。",
+        "recent": "最近の到着",
+        "guestOf": "{name}の同伴者",
+        "open": "当日ビューを開く"
       }
     },
     "openScanner": "スキャナーを開く",
@@ -6604,7 +6650,10 @@
       "automationFailed": "メッセージ状況を開く",
       "campaignFailed": "キャンペーンを開く",
       "disputeDeadline": "異議申し立てを開く",
-      "assistanceOverdue": "ヘルプ依頼を開く"
+      "assistanceOverdue": "ヘルプ依頼を開く",
+      "rsvpPending": "出欠を開く",
+      "guestsUnseated": "ゲストの席を決める",
+      "mealsMissing": "出欠の回答を開く"
     },
     "rules": {
       "unseated": "{count, plural, other {{countWords}人の参加者に座席がありません}}",
@@ -6626,7 +6675,10 @@
       "automationFailed": "{count, plural, other {本日{countWords}件のメッセージまたは一括操作が失敗しました}}",
       "campaignFailed": "{count, plural, other {本日{countWords}件のキャンペーン配信が失敗しました}}",
       "disputeDeadline": "{count, plural, other {{countWords}件の異議申し立てに間もなく証拠の提出が必要です}}",
-      "assistanceOverdue": "{count, plural, other {{countWords}件のヘルプ依頼が長く待たされています}}"
+      "assistanceOverdue": "{count, plural, other {{countWords}件のヘルプ依頼が長く待たされています}}",
+      "rsvpPending": "{count, plural, other {{countWords}人のゲストが出欠に回答していません}}",
+      "guestsUnseated": "{count, plural, other {{countWords}人のゲストにテーブルがありません}}",
+      "mealsMissing": "{count, plural, other {出席する{countWords}人のゲストが料理を選んでいません}}"
     },
     "widget": {
       "title": "アラート",

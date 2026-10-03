@@ -20,6 +20,16 @@ import {
   type StaffPresence,
   StaffPresenceBody,
 } from './live-widgets.tsx';
+import {
+  type Arrivals,
+  ArrivalsBody,
+  type GuestSeating,
+  GuestSeatingBody,
+  type Meals,
+  MealsBody,
+  type Rsvp,
+  RsvpBody,
+} from './social-widgets.tsx';
 
 /** Widget bodies (M3.2a). Each renders one loader's allowlisted DTO; nothing else reaches them. */
 interface Ctx {
@@ -636,5 +646,13 @@ export function WidgetBody({
       return <CampaignsBody d={data as Campaigns} c={ctx} />;
     case 'deliverability':
       return <DeliverabilityBody d={data as Deliverability} c={ctx} />;
+    case 'rsvp':
+      return <RsvpBody d={data as Rsvp} c={ctx} />;
+    case 'guestSeating':
+      return <GuestSeatingBody d={data as GuestSeating} c={ctx} />;
+    case 'meals':
+      return <MealsBody d={data as Meals} c={ctx} />;
+    case 'arrivals':
+      return <ArrivalsBody d={data as Arrivals} c={ctx} />;
   }
 }

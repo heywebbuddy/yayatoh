@@ -6487,6 +6487,52 @@
         "window": "過去 {days} 天 {sent, plural, other {# 封郵件}}",
         "over": "超過門檻：{domains, plural, other {# 個寄件網域}}，{campaigns, plural, other {# 個活動}}",
         "open": "開啟電子郵件送達率"
+      },
+      "rsvp": {
+        "title": "出席回覆",
+        "allAnswered": "所有受邀賓客都已回覆。",
+        "noneInvited": "尚未邀請任何人參加分場活動。",
+        "responded": "{invited} 位受邀賓客中已有 {responded} 位回覆",
+        "meter": "已收到的回覆",
+        "parties": "未回覆的家庭：{count}",
+        "notSent": "尚未寄出邀請：{count}",
+        "deadline": "回覆截止：{date}",
+        "noDeadline": "未設定回覆截止日期",
+        "open": "開啟回覆"
+      },
+      "guestSeating": {
+        "title": "賓客座位",
+        "noChart": "還沒有賓客平面圖。請在座位中選擇一個。",
+        "noGuests": "暫時沒有需要安排座位的賓客。",
+        "allSeated": "每位未婉拒的賓客都有桌位。",
+        "seated": "{guests} 位賓客中有 {seated} 位已有桌位",
+        "listLabel": "沒有桌位的賓客",
+        "guestOf": "{name} 的同伴",
+        "more": "另外 {count} 位",
+        "open": "安排賓客座位"
+      },
+      "meals": {
+        "title": "餐點與飲食需求",
+        "attending": "出席：{count}",
+        "noneAttending": "賓客確認出席後才會統計餐點。",
+        "caption": "出席賓客的餐點",
+        "colMeal": "餐點",
+        "colGuests": "賓客",
+        "other": "其他選擇",
+        "none": "未選擇餐點",
+        "dietary": "飲食需求：{count}",
+        "accessibility": "無障礙需求：{count}",
+        "open": "開啟回覆詳情"
+      },
+      "arrivals": {
+        "title": "賓客到場",
+        "arrivedOf": "{expected} 位預期賓客中已到 {arrived} 位",
+        "notArrived": "尚未到場：{count}",
+        "none": "還沒有人到場。",
+        "noExpected": "暫無預期到場的賓客。",
+        "recent": "最近到場",
+        "guestOf": "{name} 的同伴",
+        "open": "開啟當天檢視"
       }
     },
     "openScanner": "開啟掃描器",
@@ -6604,7 +6650,10 @@
       "automationFailed": "開啟訊息狀態",
       "campaignFailed": "開啟行銷活動",
       "disputeDeadline": "開啟爭議佇列",
-      "assistanceOverdue": "開啟求助請求"
+      "assistanceOverdue": "開啟求助請求",
+      "rsvpPending": "開啟回覆",
+      "guestsUnseated": "安排賓客座位",
+      "mealsMissing": "開啟回覆詳情"
     },
     "rules": {
       "unseated": "{count, plural, other {{countWords} 位參加者沒有座位}}",
@@ -6626,7 +6675,10 @@
       "automationFailed": "{count, plural, other {今天有 {countWords} 則訊息或批次操作失敗}}",
       "campaignFailed": "{count, plural, other {今天有 {countWords} 次行銷活動傳送失敗}}",
       "disputeDeadline": "{count, plural, other {有 {countWords} 起爭議需要盡快提交證據}}",
-      "assistanceOverdue": "{count, plural, other {{countWords} 個求助請求等待過久}}"
+      "assistanceOverdue": "{count, plural, other {{countWords} 個求助請求等待過久}}",
+      "rsvpPending": "{count, plural, other {{countWords} 位賓客尚未回覆出席邀請}}",
+      "guestsUnseated": "{count, plural, other {{countWords} 位賓客沒有桌位}}",
+      "mealsMissing": "{count, plural, other {{countWords} 位出席賓客尚未選擇餐點}}"
     },
     "widget": {
       "title": "警示",

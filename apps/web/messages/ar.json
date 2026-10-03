@@ -6487,6 +6487,52 @@
         "window": "{sent, plural, zero {لا رسائل بريد} one {رسالة بريد واحدة} two {رسالتا بريد} few {# رسائل بريد} many {# رسالة بريد} other {# رسالة بريد}} خلال آخر {days} أيام",
         "over": "فوق الحدود: {domains, plural, zero {لا نطاقات إرسال} one {نطاق إرسال واحد} two {نطاقا إرسال} few {# نطاقات إرسال} many {# نطاق إرسال} other {# نطاق إرسال}} و{campaigns, plural, zero {لا حملات} one {حملة واحدة} two {حملتان} few {# حملات} many {# حملة} other {# حملة}}",
         "open": "افتح قابلية تسليم البريد"
+      },
+      "rsvp": {
+        "title": "الردود على الدعوة",
+        "allAnswered": "ردّ جميع المدعوين.",
+        "noneInvited": "لم تتم دعوة أي شخص إلى فقرة بعد.",
+        "responded": "ردّ {responded} من {invited} من الضيوف المدعوين",
+        "meter": "الردود المستلمة",
+        "parties": "عائلات لم تردّ: {count}",
+        "notSent": "لم تُرسل الدعوة بعد: {count}",
+        "deadline": "آخر موعد للرد: {date}",
+        "noDeadline": "لم يُحدَّد آخر موعد للرد",
+        "open": "افتح الردود"
+      },
+      "guestSeating": {
+        "title": "جلوس الضيوف",
+        "noChart": "لا يوجد مخطط قاعة للضيوف بعد. اختر واحدًا في المقاعد.",
+        "noGuests": "لا يوجد ضيوف لإجلاسهم بعد.",
+        "allSeated": "لكل ضيف لم يعتذر طاولة.",
+        "seated": "لدى {seated} من {guests} ضيفًا طاولة",
+        "listLabel": "ضيوف بلا طاولة",
+        "guestOf": "مرافق {name}",
+        "more": "+{count} آخرون",
+        "open": "أجلِس الضيوف"
+      },
+      "meals": {
+        "title": "الوجبات والاحتياجات الغذائية",
+        "attending": "الحاضرون: {count}",
+        "noneAttending": "تُحسب الوجبات عندما يؤكد الضيوف حضورهم.",
+        "caption": "وجبات الضيوف الحاضرين",
+        "colMeal": "الوجبة",
+        "colGuests": "الضيوف",
+        "other": "اختيار آخر",
+        "none": "لم تُختر وجبة",
+        "dietary": "احتياجات غذائية: {count}",
+        "accessibility": "احتياجات الوصول: {count}",
+        "open": "افتح إجابات الدعوة"
+      },
+      "arrivals": {
+        "title": "وصول الضيوف",
+        "arrivedOf": "وصل {arrived} من {expected} من الضيوف المتوقعين",
+        "notArrived": "لم يصلوا بعد: {count}",
+        "none": "لم يصل أحد بعد.",
+        "noExpected": "لا يُتوقع حضور ضيوف بعد.",
+        "recent": "آخر الواصلين",
+        "guestOf": "مرافق {name}",
+        "open": "افتح عرض يوم الحفل"
       }
     },
     "openScanner": "فتح الماسح",
@@ -6604,7 +6650,10 @@
       "automationFailed": "افتح حالة المراسلة",
       "campaignFailed": "افتح الحملات",
       "disputeDeadline": "افتح النزاعات",
-      "assistanceOverdue": "افتح طلبات المساعدة"
+      "assistanceOverdue": "افتح طلبات المساعدة",
+      "rsvpPending": "افتح الردود",
+      "guestsUnseated": "أجلِس الضيوف",
+      "mealsMissing": "افتح إجابات الدعوة"
     },
     "rules": {
       "unseated": "{count, plural, zero {لا يوجد حاضرون بلا مقاعد} one {حاضر واحد ليس لديه مقعد} two {حاضران ليس لديهما مقعد} few {{countWords} حاضرين ليس لديهم مقاعد} many {{countWords} حاضرًا ليس لديهم مقاعد} other {{countWords} حاضر ليس لديهم مقاعد}}",
@@ -6626,7 +6675,10 @@
       "automationFailed": "{count, plural, zero {لا إخفاقات اليوم} one {فشلت رسالة أو إجراء جماعي واحد اليوم} two {فشلت رسالتان أو إجراءان جماعيان اليوم} few {فشلت {countWords} رسائل أو إجراءات جماعية اليوم} many {فشلت {countWords} رسالة أو إجراءً جماعيًا اليوم} other {فشلت {countWords} رسالة أو إجراء جماعي اليوم}}",
       "campaignFailed": "{count, plural, zero {لا إخفاقات في الحملات اليوم} one {فشل إرسال حملة واحدة اليوم} two {فشل إرسال حملتين اليوم} few {فشل إرسال {countWords} حملات اليوم} many {فشل إرسال {countWords} حملة اليوم} other {فشل إرسال {countWords} حملة اليوم}}",
       "disputeDeadline": "{count, plural, zero {لا نزاعات تحتاج إلى أدلة} one {نزاع واحد يحتاج إلى أدلة قريبًا} two {نزاعان يحتاجان إلى أدلة قريبًا} few {{countWords} نزاعات تحتاج إلى أدلة قريبًا} many {{countWords} نزاعًا يحتاج إلى أدلة قريبًا} other {{countWords} نزاع يحتاج إلى أدلة قريبًا}}",
-      "assistanceOverdue": "{count, plural, zero {لا توجد طلبات مساعدة متأخرة} one {طلب مساعدة واحد انتظر طويلًا} two {طلبا مساعدة انتظرا طويلًا} few {{countWords} طلبات مساعدة انتظرت طويلًا} many {{countWords} طلبًا للمساعدة انتظر طويلًا} other {{countWords} طلب مساعدة انتظر طويلًا}}"
+      "assistanceOverdue": "{count, plural, zero {لا توجد طلبات مساعدة متأخرة} one {طلب مساعدة واحد انتظر طويلًا} two {طلبا مساعدة انتظرا طويلًا} few {{countWords} طلبات مساعدة انتظرت طويلًا} many {{countWords} طلبًا للمساعدة انتظر طويلًا} other {{countWords} طلب مساعدة انتظر طويلًا}}",
+      "rsvpPending": "{count, plural, zero {لا يوجد ضيوف لم يردّوا على الدعوة} one {ضيف واحد لم يردّ على الدعوة} two {ضيفان لم يردّا على الدعوة} few {{countWords} ضيوف لم يردّوا على الدعوة} many {{countWords} ضيفًا لم يردّوا على الدعوة} other {{countWords} ضيف لم يردّوا على الدعوة}}",
+      "guestsUnseated": "{count, plural, zero {لا يوجد ضيوف بلا طاولة} one {ضيف واحد بلا طاولة} two {ضيفان بلا طاولة} few {{countWords} ضيوف بلا طاولة} many {{countWords} ضيفًا بلا طاولة} other {{countWords} ضيف بلا طاولة}}",
+      "mealsMissing": "{count, plural, zero {لا يوجد ضيوف حاضرون بلا وجبة} one {ضيف حاضر واحد لم يختر وجبة} two {ضيفان حاضران لم يختارا وجبة} few {{countWords} ضيوف حاضرين لم يختاروا وجبة} many {{countWords} ضيفًا حاضرًا لم يختاروا وجبة} other {{countWords} ضيف حاضر لم يختاروا وجبة}}"
     },
     "widget": {
       "title": "التنبيهات",

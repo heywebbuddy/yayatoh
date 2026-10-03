@@ -6487,6 +6487,52 @@
         "window": "{sent, plural, one {# e-mail} other {# e-mails}} in de afgelopen {days} dagen",
         "over": "{domains, plural, one {# verzenddomein} other {# verzenddomeinen}} en {campaigns, plural, one {# campagne} other {# campagnes}} boven de drempels",
         "open": "E-mailbezorgbaarheid openen"
+      },
+      "rsvp": {
+        "title": "Reacties",
+        "allAnswered": "Iedereen die is uitgenodigd heeft gereageerd.",
+        "noneInvited": "Er is nog niemand uitgenodigd voor een onderdeel.",
+        "responded": "{responded} van {invited} uitgenodigde gasten hebben gereageerd",
+        "meter": "Ontvangen reacties",
+        "parties": "Huishoudens zonder reactie: {count}",
+        "notSent": "Uitnodiging nog niet verstuurd: {count}",
+        "deadline": "Reageren kan tot: {date}",
+        "noDeadline": "Geen reactietermijn ingesteld",
+        "open": "Reacties openen"
+      },
+      "guestSeating": {
+        "title": "Tafelindeling",
+        "noChart": "Nog geen plattegrond voor gasten. Kies er een bij Plaatsen.",
+        "noGuests": "Nog geen gasten om te plaatsen.",
+        "allSeated": "Elke gast die niet heeft afgezegd, heeft een tafel.",
+        "seated": "{seated} van {guests} gasten hebben een tafel",
+        "listLabel": "Gasten zonder tafel",
+        "guestOf": "Gast van {name}",
+        "more": "+{count} meer",
+        "open": "Gasten plaatsen"
+      },
+      "meals": {
+        "title": "Maaltijden en dieetwensen",
+        "attending": "Aanwezig: {count}",
+        "noneAttending": "Maaltijden worden geteld zodra gasten ja zeggen.",
+        "caption": "Maaltijden van aanwezige gasten",
+        "colMeal": "Maaltijd",
+        "colGuests": "Gasten",
+        "other": "Andere keuze",
+        "none": "Geen maaltijd gekozen",
+        "dietary": "Dieetwensen: {count}",
+        "accessibility": "Toegankelijkheidsbehoeften: {count}",
+        "open": "RSVP-antwoorden openen"
+      },
+      "arrivals": {
+        "title": "Aankomst van gasten",
+        "arrivedOf": "{arrived} van {expected} verwachte gasten zijn er",
+        "notArrived": "Nog niet hier: {count}",
+        "none": "Er is nog niemand aangekomen.",
+        "noExpected": "Er worden nog geen gasten verwacht.",
+        "recent": "Laatst aangekomen",
+        "guestOf": "Gast van {name}",
+        "open": "Dagoverzicht openen"
       }
     },
     "openScanner": "Scanner openen",
@@ -6604,7 +6650,10 @@
       "automationFailed": "Berichtenstatus openen",
       "campaignFailed": "Campagnes openen",
       "disputeDeadline": "Geschillen openen",
-      "assistanceOverdue": "Hulpvragen openen"
+      "assistanceOverdue": "Hulpvragen openen",
+      "rsvpPending": "Reacties openen",
+      "guestsUnseated": "Gasten plaatsen",
+      "mealsMissing": "RSVP-antwoorden openen"
     },
     "rules": {
       "unseated": "{count, plural, one {Eén deelnemer heeft geen plaats} other {{countWords} deelnemers hebben geen plaats}}",
@@ -6626,7 +6675,10 @@
       "automationFailed": "{count, plural, one {Eén bericht of bulkactie is vandaag mislukt} other {{countWords} berichten of bulkacties zijn vandaag mislukt}}",
       "campaignFailed": "{count, plural, one {Eén campagneverzending is vandaag mislukt} other {{countWords} campagneverzendingen zijn vandaag mislukt}}",
       "disputeDeadline": "{count, plural, one {Eén geschil heeft binnenkort bewijs nodig} other {{countWords} geschillen hebben binnenkort bewijs nodig}}",
-      "assistanceOverdue": "{count, plural, one {{countWords} hulpvraag wacht te lang} other {{countWords} hulpvragen wachten te lang}}"
+      "assistanceOverdue": "{count, plural, one {{countWords} hulpvraag wacht te lang} other {{countWords} hulpvragen wachten te lang}}",
+      "rsvpPending": "{count, plural, one {Eén gast heeft nog niet gereageerd op de uitnodiging} other {{countWords} gasten hebben nog niet gereageerd op de uitnodiging}}",
+      "guestsUnseated": "{count, plural, one {Eén gast heeft geen tafel} other {{countWords} gasten hebben geen tafel}}",
+      "mealsMissing": "{count, plural, one {Eén aanwezige gast heeft geen maaltijd gekozen} other {{countWords} aanwezige gasten hebben geen maaltijd gekozen}}"
     },
     "widget": {
       "title": "Meldingen",

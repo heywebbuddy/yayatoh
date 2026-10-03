@@ -6487,6 +6487,52 @@
         "window": "{sent, plural, one {# email} many {# email} other {# email}} negli ultimi {days} giorni",
         "over": "{domains, plural, one {# dominio di invio} many {# domini di invio} other {# domini di invio}} e {campaigns, plural, one {# campagna} many {# campagne} other {# campagne}} oltre le soglie",
         "open": "Apri la recapitabilità delle email"
+      },
+      "rsvp": {
+        "title": "Risposte",
+        "allAnswered": "Tutti gli invitati hanno risposto.",
+        "noneInvited": "Nessuno è ancora invitato a un momento dell’evento.",
+        "responded": "{responded} invitati su {invited} hanno risposto",
+        "meter": "Risposte ricevute",
+        "parties": "Nuclei senza risposta: {count}",
+        "notSent": "Invito non ancora inviato: {count}",
+        "deadline": "Scadenza risposte: {date}",
+        "noDeadline": "Nessuna scadenza per le risposte",
+        "open": "Apri le risposte"
+      },
+      "guestSeating": {
+        "title": "Tavoli degli invitati",
+        "noChart": "Ancora nessuna piantina per gli invitati. Scegline una in Posti.",
+        "noGuests": "Ancora nessun invitato da sistemare.",
+        "allSeated": "Ogni invitato che non ha declinato ha un tavolo.",
+        "seated": "{seated} invitati su {guests} hanno un tavolo",
+        "listLabel": "Invitati senza tavolo",
+        "guestOf": "Accompagnatore di {name}",
+        "more": "+{count} altri",
+        "open": "Assegna i tavoli"
+      },
+      "meals": {
+        "title": "Pasti ed esigenze alimentari",
+        "attending": "Presenti: {count}",
+        "noneAttending": "I pasti si contano quando gli invitati confermano.",
+        "caption": "Pasti degli invitati presenti",
+        "colMeal": "Pasto",
+        "colGuests": "Invitati",
+        "other": "Altra scelta",
+        "none": "Nessun pasto scelto",
+        "dietary": "Esigenze alimentari: {count}",
+        "accessibility": "Esigenze di accessibilità: {count}",
+        "open": "Apri le risposte RSVP"
+      },
+      "arrivals": {
+        "title": "Arrivi degli invitati",
+        "arrivedOf": "Sono arrivati {arrived} invitati attesi su {expected}",
+        "notArrived": "Non ancora arrivati: {count}",
+        "none": "Non è ancora arrivato nessuno.",
+        "noExpected": "Ancora nessun invitato atteso.",
+        "recent": "Ultimi arrivi",
+        "guestOf": "Accompagnatore di {name}",
+        "open": "Apri la vista del giorno"
       }
     },
     "openScanner": "Apri scanner",
@@ -6604,7 +6650,10 @@
       "automationFailed": "Apri lo stato dei messaggi",
       "campaignFailed": "Apri le campagne",
       "disputeDeadline": "Apri le contestazioni",
-      "assistanceOverdue": "Apri le richieste di aiuto"
+      "assistanceOverdue": "Apri le richieste di aiuto",
+      "rsvpPending": "Apri le risposte",
+      "guestsUnseated": "Assegna i tavoli",
+      "mealsMissing": "Apri le risposte RSVP"
     },
     "rules": {
       "unseated": "{count, plural, one {Un partecipante non ha un posto} other {{countWords} partecipanti non hanno un posto}}",
@@ -6626,7 +6675,10 @@
       "automationFailed": "{count, plural, one {Un messaggio o un’azione di massa non è riuscito oggi} other {{countWords} messaggi o azioni di massa non sono riusciti oggi}}",
       "campaignFailed": "{count, plural, one {Un invio di campagna non è riuscito oggi} other {{countWords} invii di campagna non sono riusciti oggi}}",
       "disputeDeadline": "{count, plural, one {Una contestazione richiede presto delle prove} other {{countWords} contestazioni richiedono presto delle prove}}",
-      "assistanceOverdue": "{count, plural, one {{countWords} richiesta di aiuto aspetta da troppo} other {{countWords} richieste di aiuto aspettano da troppo}}"
+      "assistanceOverdue": "{count, plural, one {{countWords} richiesta di aiuto aspetta da troppo} other {{countWords} richieste di aiuto aspettano da troppo}}",
+      "rsvpPending": "{count, plural, one {Un invitato non ha risposto all’invito} other {{countWords} invitati non hanno risposto all’invito}}",
+      "guestsUnseated": "{count, plural, one {Un invitato non ha un tavolo} other {{countWords} invitati non hanno un tavolo}}",
+      "mealsMissing": "{count, plural, one {Un invitato presente non ha scelto il pasto} other {{countWords} invitati presenti non hanno scelto il pasto}}"
     },
     "widget": {
       "title": "Avvisi",

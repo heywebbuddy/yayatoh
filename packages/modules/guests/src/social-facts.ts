@@ -38,7 +38,10 @@ async function factsTx(tx: TenantTx, eventId: string) {
       .filter((s) => facts.invited.get(s.id)?.has(g.id))
       .map((s) => facts.responses.get(s.id)?.get(g.id) ?? null);
     // Only guests who were asked (or hold a seat) can be coming.
-    return (g.ticketId !== null || answers.length > 0) && wholeEventStatus(g.ticketId !== null, answers) === 'attending';
+    return (
+      (g.ticketId !== null || answers.length > 0) &&
+      wholeEventStatus(g.ticketId !== null, answers) === 'attending'
+    );
   });
   return { facts, sentParties: new Set(sent.map((s) => s.partyId)), deadline, menu, attending };
 }
@@ -47,7 +50,12 @@ async function factsTx(tx: TenantTx, eventId: string) {
 export async function socialFactsTx(tx: TenantTx, eventId: string): Promise<SocialFacts> {
   const f = await factsTx(tx, eventId);
   const counts = rsvpPendingCounts(
-    f.facts.guestRows.map((g) => ({ id: g.id, partyId: g.partyId, hasTicket: g.ticketId !== null, meal: g.meal })),
+    f.facts.guestRows.map((g) => ({
+      id: g.id,
+      partyId: g.partyId,
+      hasTicket: g.ticketId !== null,
+      meal: g.meal,
+    })),
     f.facts.invited,
     f.facts.responses,
     f.sentParties,
@@ -70,7 +78,11 @@ export interface MealDietaryCounts extends MealTally {
  * Attending guests' meals by menu option and how many have dietary or accessibility needs. The
  * sealed answers are opened only to count them (P4-3): the text never leaves this function.
  */
-export async function mealDietaryCountsTx(tx: TenantTx, orgId: string, eventId: string): Promise<MealDietaryCounts> {
+export async function mealDietaryCountsTx(
+  tx: TenantTx,
+  orgId: string,
+  eventId: string,
+): Promise<MealDietaryCounts> {
   const f = await factsTx(tx, eventId);
   let dietary = 0;
   let accessibility = 0;

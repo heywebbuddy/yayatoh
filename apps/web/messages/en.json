@@ -6487,6 +6487,52 @@
         "window": "{sent, plural, one {# email} other {# emails}} in the last {days} days",
         "over": "{domains, plural, one {# sending domain} other {# sending domains}} and {campaigns, plural, one {# campaign} other {# campaigns}} over the thresholds",
         "open": "Open email deliverability"
+      },
+      "rsvp": {
+        "title": "RSVP",
+        "allAnswered": "Everyone invited has responded.",
+        "noneInvited": "No one has been invited to a sub-event yet.",
+        "responded": "{responded} of {invited} invited guests have responded",
+        "meter": "Responses received",
+        "parties": "Parties still to answer: {count}",
+        "notSent": "Not sent an invitation yet: {count}",
+        "deadline": "RSVP deadline: {date}",
+        "noDeadline": "No RSVP deadline set",
+        "open": "Open RSVPs"
+      },
+      "guestSeating": {
+        "title": "Guest seating",
+        "noChart": "No guest floor plan yet. Choose one in Seating.",
+        "noGuests": "No guests to seat yet.",
+        "allSeated": "Every guest who hasn’t declined has a table.",
+        "seated": "{seated} of {guests} guests have a table",
+        "listLabel": "Guests without a table",
+        "guestOf": "Guest of {name}",
+        "more": "+{count} more",
+        "open": "Seat guests"
+      },
+      "meals": {
+        "title": "Meals and dietary needs",
+        "attending": "Attending: {count}",
+        "noneAttending": "Meals are counted once guests say yes.",
+        "caption": "Meals of attending guests",
+        "colMeal": "Meal",
+        "colGuests": "Guests",
+        "other": "Other choice",
+        "none": "No meal chosen",
+        "dietary": "Dietary requirements: {count}",
+        "accessibility": "Accessibility needs: {count}",
+        "open": "Open RSVP answers"
+      },
+      "arrivals": {
+        "title": "Guest arrivals",
+        "arrivedOf": "{arrived} of {expected} expected guests have arrived",
+        "notArrived": "Not here yet: {count}",
+        "none": "No one has arrived yet.",
+        "noExpected": "No guests are expected yet.",
+        "recent": "Latest arrivals",
+        "guestOf": "Guest of {name}",
+        "open": "Open the day-of view"
       }
     },
     "openScanner": "Open scanner",
@@ -6604,7 +6650,10 @@
       "automationFailed": "Open messaging health",
       "campaignFailed": "Open campaigns",
       "disputeDeadline": "Open the dispute queue",
-      "assistanceOverdue": "Open the help queue"
+      "assistanceOverdue": "Open the help queue",
+      "rsvpPending": "Open RSVPs",
+      "guestsUnseated": "Seat guests",
+      "mealsMissing": "Open RSVP answers"
     },
     "rules": {
       "unseated": "{count, plural, one {{countWords} attendee does not have a seat} other {{countWords} attendees do not have seats}}",
@@ -6626,7 +6675,10 @@
       "automationFailed": "{count, plural, one {{countWords} message or bulk action failed today} other {{countWords} messages or bulk actions failed today}}",
       "campaignFailed": "{count, plural, one {{countWords} campaign send failed today} other {{countWords} campaign sends failed today}}",
       "disputeDeadline": "{count, plural, one {{countWords} dispute needs evidence soon} other {{countWords} disputes need evidence soon}}",
-      "assistanceOverdue": "{count, plural, one {{countWords} help request has waited too long} other {{countWords} help requests have waited too long}}"
+      "assistanceOverdue": "{count, plural, one {{countWords} help request has waited too long} other {{countWords} help requests have waited too long}}",
+      "rsvpPending": "{count, plural, one {{countWords} guest has not responded to RSVP} other {{countWords} guests have not responded to RSVP}}",
+      "guestsUnseated": "{count, plural, one {{countWords} guest does not have a table} other {{countWords} guests do not have a table}}",
+      "mealsMissing": "{count, plural, one {{countWords} attending guest has not chosen a meal} other {{countWords} attending guests have not chosen a meal}}"
     },
     "widget": {
       "title": "Alerts",

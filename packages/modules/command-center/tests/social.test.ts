@@ -24,14 +24,19 @@ describe('M4.6a social Command Center pack', () => {
       expect(widgetAllowed(WIDGET_META[k], scope('owner', 'gala'))).toBe(true);
       expect(widgetAllowed(WIDGET_META[k], scope('owner', 'concert'))).toBe(false);
       expect(widgetAllowed(WIDGET_META[k], scope('owner', 'conference'))).toBe(false);
-      expect(widgetAllowed(WIDGET_META[k], scope('owner', 'wedding', new Set(['core', 'seating'])))).toBe(false);
+      expect(widgetAllowed(WIDGET_META[k], scope('owner', 'wedding', new Set(['core', 'seating'])))).toBe(
+        false,
+      );
       expect(WIDGET_META[k].revenue).toBeFalsy();
       expect(WIDGET_META[k].permission).toBe('guests:read');
     }
   });
 
   it('the door sees guest seating and arrivals (never RSVP chasing or meals); finance and marketing none', () => {
-    expect(PACK.filter((k) => widgetAllowed(WIDGET_META[k], scope('door')))).toEqual(['guestSeating', 'arrivals']);
+    expect(PACK.filter((k) => widgetAllowed(WIDGET_META[k], scope('door')))).toEqual([
+      'guestSeating',
+      'arrivals',
+    ]);
     expect(PACK.filter((k) => widgetAllowed(WIDGET_META[k], scope('ops')))).toEqual([...PACK]);
     expect(PACK.filter((k) => widgetAllowed(WIDGET_META[k], scope('finance')))).toEqual([]);
     expect(PACK.filter((k) => widgetAllowed(WIDGET_META[k], scope('marketing')))).toEqual([]);

@@ -53,14 +53,16 @@ describe('RSVP pending (M4.6a): deadline −7 d and −1 d', () => {
       params: { count: 42, parties: 17, days: 7 },
       liveCritical: false,
     });
-    expect(evaluateEventRules(wedding({ ...pending, rsvpDeadline: at(DAY) }), now).rsvpPending?.severity).toBe(
-      'critical',
-    );
+    expect(
+      evaluateEventRules(wedding({ ...pending, rsvpDeadline: at(DAY) }), now).rsvpPending?.severity,
+    ).toBe('critical');
     // Past the deadline it stays critical until the event starts.
     const past = evaluateEventRules(wedding({ ...pending, rsvpDeadline: at(-DAY) }), now).rsvpPending;
     expect(past?.severity).toBe('critical');
     expect(past?.params.days).toBe(0);
-    expect(evaluateEventRules(wedding({ ...pending, rsvpDeadline: at(-DAY) }, -HOUR), now).rsvpPending).toBeUndefined();
+    expect(
+      evaluateEventRules(wedding({ ...pending, rsvpDeadline: at(-DAY) }, -HOUR), now).rsvpPending,
+    ).toBeUndefined();
   });
 
   it('clears when everyone has answered; cancelled events raise nothing', () => {
@@ -75,7 +77,9 @@ describe('guests without a table and missing meals (M4.6a)', () => {
   it('unseated: only with a guest chart, in the last 7 days (critical in the last day and while live)', () => {
     expect(evaluateEventRules(wedding({ guestsUnseated: 3 }, 8 * DAY), now)).toEqual({});
     expect(evaluateEventRules(wedding({ guestsUnseated: null }, 2 * DAY), now)).toEqual({});
-    expect(evaluateEventRules(wedding({ guestsUnseated: 3 }, 7 * DAY), now).guestsUnseated?.severity).toBe('warning');
+    expect(evaluateEventRules(wedding({ guestsUnseated: 3 }, 7 * DAY), now).guestsUnseated?.severity).toBe(
+      'warning',
+    );
     expect(evaluateEventRules(wedding({ guestsUnseated: 3 }, 12 * HOUR), now).guestsUnseated?.severity).toBe(
       'critical',
     );

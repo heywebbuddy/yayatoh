@@ -6487,6 +6487,52 @@
         "window": "{sent, plural, one {# E-Mail} other {# E-Mails}} in den letzten {days} Tagen",
         "over": "{domains, plural, one {# Absenderdomain} other {# Absenderdomains}} und {campaigns, plural, one {# Kampagne} other {# Kampagnen}} über den Schwellenwerten",
         "open": "E-Mail-Zustellbarkeit öffnen"
+      },
+      "rsvp": {
+        "title": "Zusagen",
+        "allAnswered": "Alle Eingeladenen haben geantwortet.",
+        "noneInvited": "Noch niemand ist zu einem Programmpunkt eingeladen.",
+        "responded": "{responded} von {invited} eingeladenen Gästen haben geantwortet",
+        "meter": "Erhaltene Antworten",
+        "parties": "Gruppen ohne Antwort: {count}",
+        "notSent": "Einladung noch nicht verschickt: {count}",
+        "deadline": "Antwortfrist: {date}",
+        "noDeadline": "Keine Antwortfrist festgelegt",
+        "open": "Antworten öffnen"
+      },
+      "guestSeating": {
+        "title": "Tischordnung",
+        "noChart": "Noch kein Raumplan für Gäste. Wähle einen unter Sitzplätze.",
+        "noGuests": "Noch keine Gäste zu platzieren.",
+        "allSeated": "Jeder Gast, der nicht abgesagt hat, hat einen Tisch.",
+        "seated": "{seated} von {guests} Gästen haben einen Tisch",
+        "listLabel": "Gäste ohne Tisch",
+        "guestOf": "Begleitung von {name}",
+        "more": "+{count} weitere",
+        "open": "Gäste platzieren"
+      },
+      "meals": {
+        "title": "Essen und Ernährung",
+        "attending": "Zusagen: {count}",
+        "noneAttending": "Essen wird gezählt, sobald Gäste zusagen.",
+        "caption": "Essen der zusagenden Gäste",
+        "colMeal": "Essen",
+        "colGuests": "Gäste",
+        "other": "Andere Wahl",
+        "none": "Kein Essen gewählt",
+        "dietary": "Ernährungswünsche: {count}",
+        "accessibility": "Barrierefreiheit: {count}",
+        "open": "RSVP-Antworten öffnen"
+      },
+      "arrivals": {
+        "title": "Ankunft der Gäste",
+        "arrivedOf": "{arrived} von {expected} erwarteten Gästen sind da",
+        "notArrived": "Noch nicht da: {count}",
+        "none": "Noch niemand ist angekommen.",
+        "noExpected": "Noch keine Gäste erwartet.",
+        "recent": "Zuletzt angekommen",
+        "guestOf": "Begleitung von {name}",
+        "open": "Tagesansicht öffnen"
       }
     },
     "openScanner": "Scanner öffnen",
@@ -6604,7 +6650,10 @@
       "automationFailed": "Nachrichtenstatus öffnen",
       "campaignFailed": "Kampagnen öffnen",
       "disputeDeadline": "Rückbuchungen öffnen",
-      "assistanceOverdue": "Hilfeanfragen öffnen"
+      "assistanceOverdue": "Hilfeanfragen öffnen",
+      "rsvpPending": "Antworten öffnen",
+      "guestsUnseated": "Gäste platzieren",
+      "mealsMissing": "RSVP-Antworten öffnen"
     },
     "rules": {
       "unseated": "{count, plural, one {Ein Teilnehmer hat keinen Sitzplatz} other {{countWords} Teilnehmende haben keinen Sitzplatz}}",
@@ -6626,7 +6675,10 @@
       "automationFailed": "{count, plural, one {Eine Nachricht oder Sammelaktion ist heute fehlgeschlagen} other {{countWords} Nachrichten oder Sammelaktionen sind heute fehlgeschlagen}}",
       "campaignFailed": "{count, plural, one {Ein Kampagnenversand ist heute fehlgeschlagen} other {{countWords} Kampagnenversände sind heute fehlgeschlagen}}",
       "disputeDeadline": "{count, plural, one {Eine Rückbuchung braucht bald Nachweise} other {{countWords} Rückbuchungen brauchen bald Nachweise}}",
-      "assistanceOverdue": "{count, plural, one {Eine Hilfeanfrage wartet zu lange} other {{countWords} Hilfeanfragen warten zu lange}}"
+      "assistanceOverdue": "{count, plural, one {Eine Hilfeanfrage wartet zu lange} other {{countWords} Hilfeanfragen warten zu lange}}",
+      "rsvpPending": "{count, plural, one {Ein Gast hat noch nicht auf die Einladung geantwortet} other {{countWords} Gäste haben noch nicht auf die Einladung geantwortet}}",
+      "guestsUnseated": "{count, plural, one {Ein Gast hat keinen Tisch} other {{countWords} Gäste haben keinen Tisch}}",
+      "mealsMissing": "{count, plural, one {Ein zusagender Gast hat kein Essen gewählt} other {{countWords} zusagende Gäste haben kein Essen gewählt}}"
     },
     "widget": {
       "title": "Warnungen",

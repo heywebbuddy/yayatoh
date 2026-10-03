@@ -65,7 +65,11 @@ export interface MealOption {
 export interface MealTally {
   readonly attending: number;
   /** One line per menu option, in menu order (with the option's dietary notes). */
-  readonly options: readonly { readonly label: string; readonly notes: string | null; readonly count: number }[];
+  readonly options: readonly {
+    readonly label: string;
+    readonly notes: string | null;
+    readonly count: number;
+  }[];
   /** A meal that matches no option (renamed outside the menu, or imported). */
   readonly other: number;
   /** Attending guests with no meal yet. */

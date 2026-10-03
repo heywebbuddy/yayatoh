@@ -24,7 +24,13 @@ describe('rsvpPendingCounts (M4.6a)', () => {
 
   it('a guest who answered only part of their invitations is still pending; all answered clears', () => {
     const responses = new Map([
-      ['ceremony', new Map([['a', 'attending' as const], ['b', 'declined' as const]])],
+      [
+        'ceremony',
+        new Map([
+          ['a', 'attending' as const],
+          ['b', 'declined' as const],
+        ]),
+      ],
     ]);
     const r = rsvpPendingCounts(guests, invited, responses, new Set(['p1']));
     expect(r).toEqual({ invited: 3, pending: 2, pendingParties: 2, responded: 1, notSent: 1 });

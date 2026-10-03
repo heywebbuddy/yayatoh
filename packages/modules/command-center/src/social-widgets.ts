@@ -86,22 +86,26 @@ export const rsvpWidget = defineWidget(WIDGET_META.rsvp, RsvpWidgetDto, async ({
   };
 });
 
-export const guestSeatingWidget = defineWidget(WIDGET_META.guestSeating, GuestSeatingWidgetDto, async (args) => {
-  const d = await dayOfTx(args);
-  const person = (p: { name: string | null; guestOf: string | null; partyName: string }) => ({
-    name: p.name,
-    guestOf: p.guestOf,
-    partyName: p.partyName,
-  });
-  return {
-    hasChart: d.hasChart,
-    guests: d.counts.expected,
-    unseated: d.counts.unseated,
-    list: d.unseated.slice(0, SOCIAL_LIST_MAX).map(person),
-    more: Math.max(0, d.unseated.length - SOCIAL_LIST_MAX),
-    asOf: args.ctx.now.toISOString(),
-  };
-});
+export const guestSeatingWidget = defineWidget(
+  WIDGET_META.guestSeating,
+  GuestSeatingWidgetDto,
+  async (args) => {
+    const d = await dayOfTx(args);
+    const person = (p: { name: string | null; guestOf: string | null; partyName: string }) => ({
+      name: p.name,
+      guestOf: p.guestOf,
+      partyName: p.partyName,
+    });
+    return {
+      hasChart: d.hasChart,
+      guests: d.counts.expected,
+      unseated: d.counts.unseated,
+      list: d.unseated.slice(0, SOCIAL_LIST_MAX).map(person),
+      more: Math.max(0, d.unseated.length - SOCIAL_LIST_MAX),
+      asOf: args.ctx.now.toISOString(),
+    };
+  },
+);
 
 export const mealsWidget = defineWidget(WIDGET_META.meals, MealsWidgetDto, async ({ tx, ctx, scope }) => {
   const m = await mealDietaryCountsTx(tx, requireOrg(ctx), scope.event.id);
