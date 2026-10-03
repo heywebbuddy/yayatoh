@@ -1,4 +1,4 @@
-import { withTenant } from '@yayatoh/db';
+import { type TenantTx, withTenant } from '@yayatoh/db';
 import { closePools } from '@yayatoh/db/testing';
 import {
   addChecklistItemCommand,
@@ -9,7 +9,7 @@ import {
   setChecklistItemDoneCommand,
 } from '@yayatoh/events';
 import { currentFormTx } from '@yayatoh/forms';
-import { executeCommand, executeQuery } from '@yayatoh/kernel';
+import { type Command, executeCommand, executeQuery } from '@yayatoh/kernel';
 import { eventSeatingQuery } from '@yayatoh/seating';
 import {
   addTemplateChecklistItemCommand,
@@ -42,7 +42,7 @@ beforeAll(async () => {
 });
 afterAll(closePools);
 
-const run = <I, O>(cmd: Parameters<typeof executeCommand<I, O>>[0], input: I, f: OrgFixture = a) =>
+const run = <I, O, R>(cmd: Command<I, O, R, TenantTx>, input: unknown, f: OrgFixture = a): Promise<O> =>
   executeCommand(cmd, input, f.ctx(), ports);
 
 /** A from-scratch conference template with two ticket types, three sections and two to-dos. */

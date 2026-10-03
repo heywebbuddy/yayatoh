@@ -1,6 +1,6 @@
 import { PROFILE_KEYS } from '@yayatoh/platform';
 import { roleCan } from '@yayatoh/tenancy';
-import { Breadcrumb, Card, EmptyState, PageHeader } from '@yayatoh/ui';
+import { Breadcrumb, Card, EmptyState, PageHeader, Stepper } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { NewTemplateForm } from '@/components/template-builder.tsx';
 import { Link } from '@/i18n/navigation.ts';
@@ -45,6 +45,13 @@ export default async function NewTemplatePage({
         breadcrumb={breadcrumb}
         title={t('templateBuilder.newTitle')}
         description={t('templateBuilder.newDescription')}
+      />
+      <Stepper
+        label={t('templateBuilder.steps')}
+        steps={(['profile', 'tickets', 'sections', 'content', 'checklist'] as const).map((k) => ({
+          label: t(`templateBuilder.step.${k}`),
+          state: k === 'profile' ? 'current' : 'todo',
+        }))}
       />
       <Card size="panel">
         <NewTemplateForm

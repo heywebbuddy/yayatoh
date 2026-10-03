@@ -336,7 +336,7 @@ export function TemplateTicketForm({ action, currency }: { action: Action; curre
         {state.ok && !pending ? <Alert tone="success" title={t('ticketAdded')} /> : null}
         <FormError state={state} handled={bad.size > 0} />
       </div>
-      <Button type="submit" disabled={pending} className="self-start">
+      <Button type="submit" disabled={pending} className="justify-self-start md:col-span-2">
         {t('addTicket')}
       </Button>
     </form>
