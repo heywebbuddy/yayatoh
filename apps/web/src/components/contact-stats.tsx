@@ -93,9 +93,7 @@ export async function ContactStatsPanel({
                   <span className="text-[28px] font-light tracking-[-0.03em]">
                     {formatMoney(money(v.amountMinor, v.currency), locale)}
                   </span>
-                  <span className="text-caption text-ink-2">
-                    {t('lifetimeOrders', { count: v.orders })}
-                  </span>
+                  <span className="text-caption text-ink-2">{t('lifetimeOrders', { count: v.orders })}</span>
                 </li>
               ))}
             </ul>

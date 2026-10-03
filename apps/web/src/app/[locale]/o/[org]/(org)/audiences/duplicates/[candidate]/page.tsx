@@ -103,10 +103,7 @@ export default async function ComparePage({
                   ['history', t('compare.entries', { count: r.timelineEntries })],
                 ] as const
               ).map(([k, v]) => (
-                <div
-                  key={k}
-                  className="flex items-baseline justify-between gap-3 border-b border-line py-1"
-                >
+                <div key={k} className="flex items-baseline justify-between gap-3 border-b border-line py-1">
                   <dt className="text-body text-ink-2">{t(`fields.${k}`)}</dt>
                   <dd className="text-body break-all text-end">{v ?? t('fields.empty')}</dd>
                 </div>
