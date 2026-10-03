@@ -3977,6 +3977,14 @@
         ],
         "description": "`true` re-reads the last page’s rows as well (after a crash mid-page)."
       },
+      "ScanDirection": {
+        "type": "string",
+        "enum": [
+          "in",
+          "out"
+        ],
+        "description": "Session doors (M5.6a): scanning people in (default) or out."
+      },
       "KioskKind": {
         "type": "string",
         "enum": [
@@ -3985,14 +3993,6 @@
           "board"
         ],
         "description": "What the kiosk shows (M4.4b): ticket self check-in, guest check-in by name, or the A–Z table board. Absent: tickets."
-      },
-      "ScanDirection": {
-        "type": "string",
-        "enum": [
-          "in",
-          "out"
-        ],
-        "description": "Session doors (M5.6a): scanning people in (default) or out."
       },
       "SessionGate": {
         "type": "string",
@@ -10203,6 +10203,42 @@
                             ]
                           }
                         },
+                        "sessions": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "checkpointId": {
+                                "type": "string",
+                                "format": "uuid"
+                              },
+                              "sessionId": {
+                                "type": "string",
+                                "format": "uuid"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "startsAt": {
+                                "type": "string"
+                              },
+                              "endsAt": {
+                                "type": "string"
+                              },
+                              "occupied": {
+                                "type": "integer"
+                              }
+                            },
+                            "required": [
+                              "checkpointId",
+                              "sessionId",
+                              "title",
+                              "startsAt",
+                              "endsAt",
+                              "occupied"
+                            ]
+                          }
+                        },
                         "occurrences": {
                           "type": "array",
                           "items": {
@@ -10254,9 +10290,6 @@
                                 "format": "uuid"
                               }
                             },
-                            "signature": {
-                              "type": "string"
-                            },
                             "sessionGates": {
                               "type": "array",
                               "items": {
@@ -10295,6 +10328,9 @@
                                   "enrolled"
                                 ]
                               }
+                            },
+                            "signature": {
+                              "type": "string"
                             }
                           },
                           "required": [
@@ -10303,42 +10339,6 @@
                             "checkpointIds",
                             "signature"
                           ]
-                        },
-                        "sessions": {
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "checkpointId": {
-                                "type": "string",
-                                "format": "uuid"
-                              },
-                              "sessionId": {
-                                "type": "string",
-                                "format": "uuid"
-                              },
-                              "title": {
-                                "type": "string"
-                              },
-                              "startsAt": {
-                                "type": "string"
-                              },
-                              "endsAt": {
-                                "type": "string"
-                              },
-                              "occupied": {
-                                "type": "integer"
-                              }
-                            },
-                            "required": [
-                              "checkpointId",
-                              "sessionId",
-                              "title",
-                              "startsAt",
-                              "endsAt",
-                              "occupied"
-                            ]
-                          }
                         }
                       },
                       "required": [
