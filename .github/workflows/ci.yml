@@ -186,6 +186,11 @@ jobs:
       - run: pnpm --filter @yayatoh/web build
       - run: pnpm --filter @yayatoh/web exec playwright install --with-deps chromium
       - run: pnpm --filter @yayatoh/web exec playwright test --shard=${{ matrix.shard }}/6
+      # M4.7a: Lighthouse mobile audits (guest hub), alone on the runner after the shard's suite: they
+      # time the CPU, so tests running beside them would skew the score.
+      - name: Lighthouse mobile audits
+        if: matrix.shard == 5
+        run: pnpm --filter @yayatoh/web e2e:lighthouse
       # Staff console (M1.3e): after the web tests on the same runner, because it pauses checkout
       # on a seed org of that runner's database.
       - name: Staff console e2e

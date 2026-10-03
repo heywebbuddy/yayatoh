@@ -105,7 +105,7 @@ names).
 ### 5. Acceptance (M5.10a)
 | ID | Criterion | Test |
 |---|---|---|
-| AC1 | **Lighthouse mobile thresholds met** (performance ≥ 0.90, accessibility and best practices ≥ 0.95, CLS ≤ 0.1, median of 3, default mobile profile) on the hub's today and agenda views | `apps/web/e2e/conference-hub-lighthouse.spec.ts` (`pnpm --filter @yayatoh/web e2e:lighthouse`; 2026-10-03: today 0.90 / 1 / 1 / CLS 0, agenda 0.91 / 1 / 1 / CLS 0) |
+| AC1 | **Lighthouse mobile thresholds met** (performance ≥ 0.90, accessibility and best practices ≥ 0.95, CLS ≤ 0.1, median of 3, default mobile profile) on the hub's today and agenda views | `apps/web/e2e/conference-hub-lighthouse.spec.ts` (`pnpm --filter @yayatoh/web e2e:lighthouse`, also in CI after shard 5; 2026-10-03, two runs: today 0.90 and 0.93, agenda 0.91 and 0.91 performance; accessibility 1, best practices 1, CLS 0) |
 | AC2 | **The ICS feed updates when a session moves** (same UID, new DTSTART/DTEND, higher SEQUENCE; unchanged sessions keep theirs; un-starring removes it) | `packages/testing/tests/conference-hub.int.test.ts` ("the ICS feed updates when a session moves"); `packages/modules/registration/tests/hub.test.ts`; e2e "calendar feed: … it follows a moved session …" |
 | AC3 | Signed feed: forged, other-secret, cross-org and replaced links refused; a cancelled ticket ends it; ETag 304 | `conference-hub.int.test.ts` ("a forged, replaced or cross-org link …"); `hub.test.ts` (tokens); e2e (304, replace, forged 404) |
 | AC4 | Favorites vs enrolled; conflict prompts (refuse with the sessions in the way, keep both, replace favorites only, never an enrolment); concurrent overlapping stars: one wins | `hub.test.ts`; `conference-hub.int.test.ts` (favorites describe); e2e "agenda: star, conflict prompt …" |
@@ -117,3 +117,12 @@ names).
 | AC10 | Gated by the `registration` module | `conference-hub.int.test.ts` ("a revoked registration module …") |
 | AC11 | Freeze and impersonation sweeps cover the new commands | `freeze.int.test.ts`, `impersonation.int.test.ts` (whole-module sweeps) |
 | AC12 | 375/768/1280, keyboard only, axe light and dark on every view and state, empty states, persistence after reload, Arabic RTL; messages in 13 locales | `apps/web/e2e/conference-hub.spec.ts`; `apps/web/tests/messages.test.ts`; `apps/web/tests/intl-scope.test.ts` |
+
+### 6. Gate (2026-10-03, after merging the build branch and `merge/next-3h`)
+- lint, check:modules, typecheck (59 packages, turbo `--concurrency=2`), 2,718 unit tests: green.
+- Integration: 1,528 of 1,528 passed (166 files; isolation, freeze and impersonation sweeps included).
+- E2E (375/768/1280, `--workers=2`): `conference-hub.spec.ts` 18/18; related `enrollment`, `checkout`,
+  `security`, `noindex`, `front-door`, `theme`, `maintenance`, `seo`, `engagement`, `canary-crawl`,
+  `networking`: 292 passed, 44 skipped (the specs' own skips), 0 failed. Lighthouse project: 2/2.
+- The whole web suite was not run (builder rule, 2026-10-03); the root layout and `proxy.ts` hunks
+  are M4.7a's, so the merge batch's full run covers them.
