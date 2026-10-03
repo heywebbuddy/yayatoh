@@ -265,6 +265,8 @@ export {
   SUB_EVENT_KINDS,
   type SubEventKind,
 } from './schema.ts';
+// M4.4a: the guest seat finder's party credentials (seating's `PartyCredentials` port).
+export { guestsPartyCredentials } from './seat-finder-party.ts';
 export {
   guestsOccupantDirectory,
   type SeatingOccupant,

@@ -16,6 +16,7 @@ export {
   twoOrgs,
   userCtx,
 } from './fixtures.ts';
+export { type GuestSeatScenario, guestSeatScenario } from './guest-seat-finder.ts';
 export { quietDevice, revokeDevice } from './live.ts';
 export {
   bareOrg,

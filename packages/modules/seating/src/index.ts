@@ -29,6 +29,8 @@ export {
   planChunk,
   planUndo,
 } from './domain/bulk-assign.ts';
+// M4.4a guest seat finder: the party's page (link), PIN mode and the `PartyCredentials` port.
+export { type FinderGuest, type FinderParty, partyOnChart } from './domain/guest-finder.ts';
 // M4.3a guest seating: parties and guests at tables (the OccupantDirectory port, guests side).
 export {
   declinedSeated,
@@ -75,6 +77,16 @@ export {
   SeatGroupDto,
   seatGroupsQuery,
 } from './groups.ts';
+export {
+  findGuestSeatByPinCommand,
+  GuestSeatResultDto,
+  PARTY_SEATS_STATES,
+  type PartyCredentials,
+  PartySeatsDto,
+  PIN_LOOKUP_STATUSES,
+  partySeatsQuery,
+  setPartyCredentials,
+} from './guest-finder.ts';
 export {
   GUEST_SEATS_CHANNEL,
   GuestSeatDto,
