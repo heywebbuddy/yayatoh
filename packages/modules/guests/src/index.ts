@@ -105,6 +105,20 @@ export {
   strictName,
   tally,
 } from './domain/rsvp.ts';
+// M4.5a guest website: blocks, the password gate, the public page.
+export {
+  emptyContent,
+  MAX_BLOCK_ITEMS,
+  MAX_SITE_BLOCKS,
+  normalizeSitePassword,
+  passwordProblem,
+  programSubEvents,
+  readContent,
+  SITE_PASSWORD_MAX,
+  SITE_PASSWORD_MIN,
+  siteAccessToken,
+  siteAccessValid,
+} from './domain/site.ts';
 export * from './dto.ts';
 export {
   addPartyGuestCommand,
@@ -260,9 +274,33 @@ export {
   type PartyRsvpState,
   RESPONSE_STATUSES,
   type ResponseStatus,
+  SITE_BLOCK_KINDS,
+  SITE_STATUSES,
+  type SiteBlockKind,
+  type SiteStatus,
   SUB_EVENT_KINDS,
   type SubEventKind,
 } from './schema.ts';
+export {
+  addGuestSiteBlockCommand,
+  GuestSiteDto,
+  guestSitePublishedQuery,
+  guestSiteQuery,
+  guestSiteTarget,
+  moveGuestSiteBlockCommand,
+  PublicGuestSiteDto,
+  PublicSiteBlockDto,
+  publicGuestSiteQuery,
+  publishGuestSiteCommand,
+  removeGuestSiteBlockCommand,
+  SaveGuestSiteInput,
+  SiteBlockDto,
+  saveGuestSiteCommand,
+  setGuestSitePasswordCommand,
+  UpdateGuestSiteBlockInput,
+  unlockGuestSiteQuery,
+  updateGuestSiteBlockCommand,
+} from './site.ts';
 export {
   CreateSubEventInput,
   createSubEventCommand,

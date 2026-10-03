@@ -10865,5 +10865,134 @@
       "offer_ended": "{title}の案内は期限切れです。",
       "full": "{title}はちょうど満席になりました。もう一度お試しいただくとキャンセル待ちに登録できます。"
     }
+  },
+  "guestSiteHost": {
+    "subtitle": "ゲストのためのページです。ごあいさつ、プログラム、アクセス、ギフトリスト、よくある質問への回答を載せられます。パスワードで保護され、一覧や検索エンジンには掲載されません。",
+    "open": "サイトを開く",
+    "viewerNotice": "ここでサイトを確認できます。変更できるのはホストとプランナーだけです。",
+    "statusTitle": "あなたのサイト",
+    "published": "公開中",
+    "draft": "下書き",
+    "publishedNote": "{date} に公開しました。ゲストは下のアドレスとパスワードで開きます。",
+    "draftNote": "まだ公開されていません。公開するまでゲストは開けません。",
+    "needsPassword": "先にパスワードを設定してください。パスワードがないとサイトは公開できません。",
+    "address": "サイトのアドレス",
+    "privacyNote": "マーケットプレイスや検索エンジンには掲載されません。ゲストの名前、回答、連絡先は表示されません。",
+    "publish": "サイトを公開",
+    "unpublish": "サイトを非公開にする",
+    "publishedDone": "公開しました。アドレスとパスワードをゲストに伝えてください。",
+    "unpublishedDone": "サイトは非公開です。",
+    "passwordTitle": "パスワード",
+    "passwordSet": "設定済み",
+    "passwordMissing": "未設定",
+    "passwordIntro": "招待状に印刷してください。ゲストは端末ごとに一度入力します。大文字と小文字は区別しません。新しいパスワードにすると、古いパスワードで入った人は閉め出されます。",
+    "savePassword": "パスワードを保存",
+    "passwordSaved": "パスワードを保存しました。",
+    "detailsTitle": "タイトルとごあいさつ",
+    "saveDetails": "タイトルとごあいさつを保存",
+    "detailsSaved": "保存しました。",
+    "blocksTitle": "{count, plural, =0 {セクション} other {セクション（#）}}",
+    "emptyTitle": "セクションはまだありません",
+    "emptyWrite": "下から最初のセクションを追加しましょう。ごあいさつから始め、プログラム、アクセス、よくある質問を続けます。",
+    "emptyRead": "ホストはまだセクションを追加していません。",
+    "kindLabel": "{kind} · セクション {n}",
+    "noSubEvents": "プログラムを作るには、ゲストのページで式次第（挙式、披露宴など）を追加してください。",
+    "saveBlock": "「{name}」を保存",
+    "blockSaved": "セクションを保存しました。",
+    "moveUp": "「{name}」を上へ",
+    "moveDown": "「{name}」を下へ",
+    "moved": "移動しました。",
+    "removeBlock": "「{name}」を削除",
+    "removed": "セクションを削除しました。",
+    "addTitle": "セクションを追加",
+    "addBlock": "セクションを追加",
+    "blockAdded": "セクションを追加しました。上で入力してください。",
+    "subEventEveryone": "{name}（全員を招待）",
+    "kinds": {
+      "text": "テキスト",
+      "program": "プログラム",
+      "travel": "アクセス",
+      "registry": "ギフトリスト",
+      "faq": "よくある質問"
+    },
+    "show": {
+      "everyone": "全員が招待されている式次第",
+      "chosen": "チェックした式次第のみ"
+    },
+    "fields": {
+      "heading": "見出し",
+      "headingHint": "任意。",
+      "body": "本文",
+      "bodyHint": "段落、**太字**、*斜体*、リスト、リンクが使えます。",
+      "show": "表示する式次第",
+      "showHint": "一部のゲストだけを招く式次第（リハーサルディナーなど）は、チェックしたときだけ表示されます。",
+      "subEvents": "表示する式次第",
+      "urlHint": "https:// で始まる完全なリンク。",
+      "password": "パスワード",
+      "newPassword": "新しいパスワード",
+      "passwordHint": "{min} 文字以上。",
+      "title": "タイトル",
+      "intro": "ごあいさつ（任意）",
+      "language": "記入する言語",
+      "languageHint": "ゲストはページのボタンを自分の言語に切り替えられます。あなたの文章は書いたままです。",
+      "kind": "セクションの種類",
+      "kindHint": "プログラムには式次第が時刻とともに表示されます。"
+    },
+    "item": {
+      "travel": {
+        "title": "場所 {n}：名前",
+        "details": "場所 {n}：詳細",
+        "url": "場所 {n}：ウェブサイト"
+      },
+      "registry": {
+        "label": "ギフトリスト {n}：名前",
+        "url": "ギフトリスト {n}：リンク"
+      },
+      "faq": {
+        "question": "質問 {n}",
+        "answer": "回答 {n}"
+      }
+    },
+    "errors": {
+      "title": "サイトのタイトルを入力してください。",
+      "password": "パスワードを入力してください。",
+      "required": "入力してください。",
+      "tooShort": "{min} 文字以上にしてください。",
+      "tooLong": "72 文字以内にしてください。",
+      "passwordRequired": "公開する前にパスワードを設定してください。",
+      "tooManyBlocks": "サイトのセクションは {max} 個までです。",
+      "httpsOnly": "https:// で始まる完全なリンクを使ってください。",
+      "subEvents": "このイベントの式次第を選んでください。"
+    }
+  },
+  "guestSite": {
+    "metaTitle": "ゲスト用サイト",
+    "gateTitle": "このサイトは非公開です",
+    "gateIntro": "詳細を見るには、招待状に記載のパスワードを入力してください。",
+    "formLabel": "サイトを開く",
+    "password": "パスワード",
+    "passwordHint": "招待状に記載されています。大文字と小文字は区別しません。",
+    "submit": "サイトを開く",
+    "challengeTitle": "あと一歩です",
+    "challengeHint": "人であることを確認してから、もう一度お試しください。",
+    "errors": {
+      "empty": "パスワードを入力してください。",
+      "wrong": "パスワードが一致しません。招待状を確認して、もう一度お試しください。",
+      "challengeFailed": "確認に失敗しました。もう一度お試しください。",
+      "rateLimited": "{minutes, plural, other {試行回数が多すぎます。# 分後にもう一度お試しください。}}",
+      "closed": "このサイトは現在ご利用いただけません。"
+    },
+    "languages": "言語",
+    "onThisPage": "このページの内容",
+    "empty": "ホストがこのページを準備中です。",
+    "headings": {
+      "text": "ご案内",
+      "program": "プログラム",
+      "travel": "アクセス",
+      "registry": "ギフトリスト",
+      "faq": "よくある質問"
+    },
+    "visit": "{name} のウェブサイト",
+    "newTab": "（新しいタブで開きます）"
   }
 }

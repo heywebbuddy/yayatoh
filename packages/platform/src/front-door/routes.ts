@@ -199,6 +199,8 @@ export const PLATFORM_PREFIXES: readonly string[] = [
   // new app has them.
   '/rsvp',
   '/collect',
+  // M4.5a: an event's guest website behind its password (`/w/{code}`). Only the new app has it.
+  '/w',
   // Batch 3h merge: M4.2b's signed table claim link (`/tables/{token}`), where a buyer names the
   // guests of a gala table.
   '/tables',
