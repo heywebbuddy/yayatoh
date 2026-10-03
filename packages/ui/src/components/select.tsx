@@ -237,7 +237,14 @@ export function Select({
   const [inner, setInner] = useState(() =>
     initialValue(all, undefined, defaultValue ?? parsed.selected ?? parsed.hidden[0]?.value),
   );
-  const value = controlled ?? inner;
+  // Like a native select: an uncontrolled value that matches no option (options that arrived
+  // later, or a removed one) falls back to the first enabled option, unless a placeholder is meant.
+  const known = (v: string) => all.some((o) => o.value === v) || parsed.hidden.some((o) => o.value === v);
+  const value =
+    controlled ??
+    (known(inner) || (inner === '' && placeholder !== undefined) || !all.length
+      ? inner
+      : initialValue(all, undefined, undefined));
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [active, setActive] = useState(-1);
