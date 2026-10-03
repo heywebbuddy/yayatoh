@@ -227,7 +227,7 @@ describe('checkpoint-scoped door staff (M1.9d)', () => {
 
     const scoped = await enroll('Jordan phone', a.viewerId);
     const page = await executeQuery(deviceManifestQuery, { eventId, limit: 100 }, scoped.ctx(), ports);
-    expect(page.header.version).toBe(2);
+    expect(page.header.version).toBe(3); // v3 since M5.6a (session gates); the scope is unchanged
     expect(page.header.checkpoints.map((c) => c.name)).toEqual(['North gate']);
     expect(page.header.scope).toMatchObject({ eventId, deviceId: scoped.deviceId, checkpointIds: [north] });
     expect(await verifyManifestScope(page.header)).toBe(true);

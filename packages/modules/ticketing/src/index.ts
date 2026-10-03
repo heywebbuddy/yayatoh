@@ -102,6 +102,8 @@ export {
   occurrenceSalesQuery,
   validForOccurrence,
 } from './occurrences.ts';
+// M5.6a: a registrant's order (add-ons) for session doors.
+export { orderSiblingsTx } from './order-siblings.ts';
 export { orderTicketIdsTx, ticketFactsTx } from './participation.ts';
 // M5.1d: tickets sold on an invoice with a balance due.
 export { paymentDueTicketIdsTx, setOrderPaymentDueTx } from './payment-due.ts';

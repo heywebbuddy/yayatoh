@@ -104,6 +104,30 @@ export {
   type StaffAlertKind,
   type StaffPushKind,
 } from './schema.ts';
+// M5.6a: session check-in (gates, scan in/out, overrides, attendance, self check-in flyers).
+export {
+  admitSessionOverrideCommand,
+  SELF_CHECKIN_EARLY_MS,
+  SELF_CHECKIN_RESULTS,
+  SelfCheckinPageDto,
+  SessionAttendanceDto,
+  SessionChoiceDto,
+  selfCheckInCommand,
+  selfCheckinDoor,
+  selfCheckinPageQuery,
+  sessionAttendanceQuery,
+  sessionDoorChoicesQuery,
+  setSelfCheckinCommand,
+} from './session-checkin.ts';
+export {
+  occupiedTx,
+  type SessionAccessSource,
+  type SessionDoor,
+  sessionAccessSource,
+  sessionDoorTx,
+  setSessionAccessSource,
+  type TicketSessionAccess,
+} from './session-doors.ts';
 export {
   DetectionSettingsDto,
   detectionSettingsQuery,

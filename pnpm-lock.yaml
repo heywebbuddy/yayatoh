@@ -398,6 +398,9 @@ importers:
       '@yayatoh/platform':
         specifier: workspace:*
         version: link:../../packages/platform
+      '@yayatoh/registration':
+        specifier: workspace:*
+        version: link:../../packages/modules/registration
       '@yayatoh/tenancy':
         specifier: workspace:*
         version: link:../../packages/modules/tenancy
@@ -1467,6 +1470,9 @@ importers:
       '@yayatoh/platform':
         specifier: workspace:*
         version: link:../../platform
+      '@yayatoh/program':
+        specifier: workspace:*
+        version: link:../program
       '@yayatoh/tenancy':
         specifier: workspace:*
         version: link:../tenancy

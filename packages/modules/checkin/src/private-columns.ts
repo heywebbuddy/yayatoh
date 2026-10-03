@@ -7,7 +7,14 @@ import { columnPrivacy, internal, secret } from '@yayatoh/db';
 export const privateColumns = columnPrivacy('checkin', {
   admissions: { day: 'vocab' },
   // Checkpoint names are staff-facing (the door manifest carries them).
-  checkpoints: { name: internal(), kind: 'vocab' },
+  checkpoints: {
+    name: internal(),
+    kind: 'vocab',
+    // M5.6a: the flyer's token (attendance only); staff print it, the public page never echoes it.
+    self_checkin_token: secret('none', {
+      why: 'CHECK requires a 32-char base64url token on a session door; only sessionAttendanceQuery (staff) returns it',
+    }),
+  },
   devices: {
     label: internal(),
     token_hash: secret(),
@@ -43,4 +50,6 @@ export const privateColumns = columnPrivacy('checkin', {
   // M3.3a live mode: closed sets.
   device_events: { kind: 'vocab' },
   staff_presence: { source: 'vocab' },
+  // M5.6a session check-in: the override reason is staff-written (audited with it).
+  session_attendance: { source: 'vocab', override_gates: 'vocab', override_reason: internal() },
 });

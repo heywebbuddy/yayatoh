@@ -4,6 +4,7 @@ import { Button, cx, Input, Tabs, tabClass } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { KioskScreen } from '@/components/scan-kiosk.tsx';
+import { SessionDoorControls, SessionOverride } from '@/components/scan-session-door.tsx';
 import { StaffPanel } from '@/components/scan-staff.tsx';
 import { SupervisorPanel } from '@/components/scan-supervisor.tsx';
 import { SignalBanner } from '@/components/signal-banner.tsx';
@@ -39,6 +40,14 @@ const RESULT_KEY: Record<string, string> = {
   granted: 'granted',
   no_access: 'no_access',
   wrong_checkpoint: 'wrong_checkpoint',
+  balance_due: 'balance_due',
+  // M5.6a session doors.
+  entered: 'entered',
+  scanned_out: 'scanned_out',
+  not_in_room: 'not_in_room',
+  not_enrolled: 'not_enrolled',
+  admission_level: 'admission_level',
+  capacity: 'capacity',
 };
 
 const TONE: Record<string, string> = {
@@ -49,6 +58,10 @@ const TONE: Record<string, string> = {
   not_today: 'border-warning bg-warning-soft text-warning',
   wrong_date: 'border-warning bg-warning-soft text-warning',
   outside_window: 'border-warning bg-warning-soft text-warning',
+  entered: 'border-success bg-success-soft text-success',
+  scanned_out: 'border-success bg-success-soft text-success',
+  not_in_room: 'border-warning bg-warning-soft text-warning',
+  capacity: 'border-warning bg-warning-soft text-warning',
 };
 const tone = (key: string) => TONE[key] ?? 'border-danger bg-danger-soft text-danger';
 
@@ -413,6 +426,13 @@ export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
               </select>
             </div>
           ) : null}
+          {client?.sessionDoor ? (
+            <SessionDoorControls
+              client={client}
+              refreshKey={`${queue}:${last?.scanId ?? ''}:${last?.server ?? ''}:${checkpointId}`}
+              onDirection={() => input.current?.focus()}
+            />
+          ) : null}
           <form
             className="flex flex-wrap items-end gap-3"
             onSubmit={(e) => {
@@ -487,11 +507,30 @@ export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
                     {last.typeName ? ` · ${last.typeName}` : ''}
                   </p>
                 ) : null}
+                {resultKey === 'not_enrolled' ||
+                resultKey === 'admission_level' ||
+                resultKey === 'capacity' ? (
+                  <p className="text-body">
+                    {t(`sessionCheckin.gateHint.${resultKey === 'not_enrolled' ? 'enrollment' : resultKey}`)}
+                  </p>
+                ) : null}
                 <p className="text-caption">{last.server ? t('scan.confirmed') : t('scan.pending')}</p>
                 <SignalBanner count={last.openSignals ?? 0} />
               </div>
             ) : null}
           </div>
+          {client && last ? (
+            <SessionOverride
+              client={client}
+              outcome={last}
+              online={online}
+              onDone={(result) => {
+                setLast((prev) => (prev ? { ...prev, server: result } : prev));
+                void refresh(client);
+                input.current?.focus();
+              }}
+            />
+          ) : null}
         </ScanView>
       ) : null}
     </div>
