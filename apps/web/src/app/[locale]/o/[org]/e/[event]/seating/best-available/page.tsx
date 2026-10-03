@@ -42,7 +42,13 @@ export default async function BestAvailablePage({
   return (
     <>
       <PageHeader title={t('selection.title')} description={t('selection.description')} />
-      <SeatingTabs base={base} active="selection" finder={data.modules.has('seat_finder')} selection />
+      <SeatingTabs
+        base={base}
+        active="selection"
+        finder={data.modules.has('seat_finder')}
+        selection
+        guests={data.modules.has('guests')}
+      />
       {!page ? (
         <EmptyState
           title={t('selection.noPlan')}

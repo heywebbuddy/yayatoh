@@ -34,7 +34,24 @@
     "breadcrumb": "面包屑导航",
     "closeMenu": "关闭菜单",
     "eventSections": "活动版块",
-    "allEvents": "活动"
+    "allEvents": "活动",
+    "sections": {
+      "events": "活动",
+      "audience": "受众与营销",
+      "money": "资金",
+      "site": "网站与内容",
+      "settings": "设置"
+    },
+    "create": {
+      "label": "创建",
+      "event": "活动",
+      "series": "系列",
+      "template": "模板",
+      "venue": "场地",
+      "coupon": "优惠券",
+      "page": "页面或博客文章"
+    },
+    "help": "帮助"
   },
   "notifications": {
     "open": "通知",
@@ -76,9 +93,9 @@
         "org-status": "{status, select, suspended {Yayatoh 已暂停此组织} reactivated {此组织已恢复上线} other {Yayatoh 已关闭此组织}}"
       },
       "alerts": {
-        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords} 位参会者没有座位}}} undistributed {{count, plural, other {{countWords} 张已购门票尚未分发}}} paymentsFailed {{count, plural, other {{countWords} 笔付款失败}}} paymentsStuck {{count, plural, other {{countWords} 笔付款卡住了}}} refundSurge {{count, plural, other {过去一小时内有 {countWords} 笔退款}}} devicesOffline {{count, plural, other {{countWords} 台签到设备离线}}} devicesLowBattery {{count, plural, other {{countWords} 台签到设备电量不足}}} devicesBacklog {{count, plural, other {{countWords} 台签到设备有待同步的扫描}}} capacityNear {场地已满 {count}%} capacityFull {场地已满员（{count}%）} sellOut {已售出 {count}% 的门票} salesPace {门票销售达到目标进度的 {count}%} readiness {{count, plural, other {{countWords} 个设置步骤阻碍了此活动}}} domain {{count, plural, other {{countWords} 个自定义域名有问题}}} payoutsPastDue {{count, plural, other {收款账户有 {countWords} 项要求已逾期}}} deliverability {电子邮件送达率需要关注} automationFailed {{count, plural, other {今天有 {countWords} 条消息或批量操作失败}}} assistanceOverdue {{count, plural, other {{countWords} 个求助请求等待过久}}} campaignFailed {{count, plural, other {今天有 {countWords} 次营销活动发送失败}}} disputeDeadline {{count, plural, other {有 {countWords} 起争议需要尽快提交证据}}} other {提醒}}",
-        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords} 位参会者没有座位}}} undistributed {{count, plural, other {{countWords} 张已购门票尚未分发}}} paymentsFailed {{count, plural, other {{countWords} 笔付款失败}}} paymentsStuck {{count, plural, other {{countWords} 笔付款卡住了}}} refundSurge {{count, plural, other {过去一小时内有 {countWords} 笔退款}}} devicesOffline {{count, plural, other {{countWords} 台签到设备离线}}} devicesLowBattery {{count, plural, other {{countWords} 台签到设备电量不足}}} devicesBacklog {{count, plural, other {{countWords} 台签到设备有待同步的扫描}}} capacityNear {场地已满 {count}%} capacityFull {场地已满员（{count}%）} sellOut {已售出 {count}% 的门票} salesPace {门票销售达到目标进度的 {count}%} readiness {{count, plural, other {{countWords} 个设置步骤阻碍了此活动}}} domain {{count, plural, other {{countWords} 个自定义域名有问题}}} payoutsPastDue {{count, plural, other {收款账户有 {countWords} 项要求已逾期}}} deliverability {电子邮件送达率需要关注} automationFailed {{count, plural, other {今天有 {countWords} 条消息或批量操作失败}}} assistanceOverdue {{count, plural, other {{countWords} 个求助请求等待过久}}} campaignFailed {{count, plural, other {今天有 {countWords} 次营销活动发送失败}}} disputeDeadline {{count, plural, other {有 {countWords} 起争议需要尽快提交证据}}} other {提醒}}",
-        "alert-urgent-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords} 位参会者没有座位}}} undistributed {{count, plural, other {{countWords} 张已购门票尚未分发}}} paymentsFailed {{count, plural, other {{countWords} 笔付款失败}}} paymentsStuck {{count, plural, other {{countWords} 笔付款卡住了}}} refundSurge {{count, plural, other {过去一小时内有 {countWords} 笔退款}}} devicesOffline {{count, plural, other {{countWords} 台签到设备离线}}} devicesLowBattery {{count, plural, other {{countWords} 台签到设备电量不足}}} devicesBacklog {{count, plural, other {{countWords} 台签到设备有待同步的扫描}}} capacityNear {场地已满 {count}%} capacityFull {场地已满员（{count}%）} sellOut {已售出 {count}% 的门票} salesPace {门票销售达到目标进度的 {count}%} readiness {{count, plural, other {{countWords} 个设置步骤阻碍了此活动}}} domain {{count, plural, other {{countWords} 个自定义域名有问题}}} payoutsPastDue {{count, plural, other {收款账户有 {countWords} 项要求已逾期}}} deliverability {电子邮件送达率需要关注} automationFailed {{count, plural, other {今天有 {countWords} 条消息或批量操作失败}}} assistanceOverdue {{count, plural, other {{countWords} 个求助请求等待过久}}} campaignFailed {{count, plural, other {今天有 {countWords} 次营销活动发送失败}}} disputeDeadline {{count, plural, other {有 {countWords} 起争议需要尽快提交证据}}} other {提醒}}"
+        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords} 位参会者没有座位}}} undistributed {{count, plural, other {{countWords} 张已购门票尚未分发}}} paymentsFailed {{count, plural, other {{countWords} 笔付款失败}}} paymentsStuck {{count, plural, other {{countWords} 笔付款卡住了}}} refundSurge {{count, plural, other {过去一小时内有 {countWords} 笔退款}}} devicesOffline {{count, plural, other {{countWords} 台签到设备离线}}} devicesLowBattery {{count, plural, other {{countWords} 台签到设备电量不足}}} devicesBacklog {{count, plural, other {{countWords} 台签到设备有待同步的扫描}}} capacityNear {场地已满 {count}%} capacityFull {场地已满员（{count}%）} sellOut {已售出 {count}% 的门票} salesPace {门票销售达到目标进度的 {count}%} readiness {{count, plural, other {{countWords} 个设置步骤阻碍了此活动}}} domain {{count, plural, other {{countWords} 个自定义域名有问题}}} payoutsPastDue {{count, plural, other {收款账户有 {countWords} 项要求已逾期}}} deliverability {电子邮件送达率需要关注} automationFailed {{count, plural, other {今天有 {countWords} 条消息或批量操作失败}}} assistanceOverdue {{count, plural, other {{countWords} 个求助请求等待过久}}} campaignFailed {{count, plural, other {今天有 {countWords} 次营销活动发送失败}}} disputeDeadline {{count, plural, other {有 {countWords} 起争议需要尽快提交证据}}} pledgesUnpaid {{count, plural, other {活动结束 14 天后仍有 {countWords} 笔认捐未付款}}} other {提醒}}",
+        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords} 位参会者没有座位}}} undistributed {{count, plural, other {{countWords} 张已购门票尚未分发}}} paymentsFailed {{count, plural, other {{countWords} 笔付款失败}}} paymentsStuck {{count, plural, other {{countWords} 笔付款卡住了}}} refundSurge {{count, plural, other {过去一小时内有 {countWords} 笔退款}}} devicesOffline {{count, plural, other {{countWords} 台签到设备离线}}} devicesLowBattery {{count, plural, other {{countWords} 台签到设备电量不足}}} devicesBacklog {{count, plural, other {{countWords} 台签到设备有待同步的扫描}}} capacityNear {场地已满 {count}%} capacityFull {场地已满员（{count}%）} sellOut {已售出 {count}% 的门票} salesPace {门票销售达到目标进度的 {count}%} readiness {{count, plural, other {{countWords} 个设置步骤阻碍了此活动}}} domain {{count, plural, other {{countWords} 个自定义域名有问题}}} payoutsPastDue {{count, plural, other {收款账户有 {countWords} 项要求已逾期}}} deliverability {电子邮件送达率需要关注} automationFailed {{count, plural, other {今天有 {countWords} 条消息或批量操作失败}}} assistanceOverdue {{count, plural, other {{countWords} 个求助请求等待过久}}} campaignFailed {{count, plural, other {今天有 {countWords} 次营销活动发送失败}}} disputeDeadline {{count, plural, other {有 {countWords} 起争议需要尽快提交证据}}} pledgesUnpaid {{count, plural, other {活动结束 14 天后仍有 {countWords} 笔认捐未付款}}} other {提醒}}",
+        "alert-urgent-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords} 位参会者没有座位}}} undistributed {{count, plural, other {{countWords} 张已购门票尚未分发}}} paymentsFailed {{count, plural, other {{countWords} 笔付款失败}}} paymentsStuck {{count, plural, other {{countWords} 笔付款卡住了}}} refundSurge {{count, plural, other {过去一小时内有 {countWords} 笔退款}}} devicesOffline {{count, plural, other {{countWords} 台签到设备离线}}} devicesLowBattery {{count, plural, other {{countWords} 台签到设备电量不足}}} devicesBacklog {{count, plural, other {{countWords} 台签到设备有待同步的扫描}}} capacityNear {场地已满 {count}%} capacityFull {场地已满员（{count}%）} sellOut {已售出 {count}% 的门票} salesPace {门票销售达到目标进度的 {count}%} readiness {{count, plural, other {{countWords} 个设置步骤阻碍了此活动}}} domain {{count, plural, other {{countWords} 个自定义域名有问题}}} payoutsPastDue {{count, plural, other {收款账户有 {countWords} 项要求已逾期}}} deliverability {电子邮件送达率需要关注} automationFailed {{count, plural, other {今天有 {countWords} 条消息或批量操作失败}}} assistanceOverdue {{count, plural, other {{countWords} 个求助请求等待过久}}} campaignFailed {{count, plural, other {今天有 {countWords} 次营销活动发送失败}}} disputeDeadline {{count, plural, other {有 {countWords} 起争议需要尽快提交证据}}} pledgesUnpaid {{count, plural, other {活动结束 14 天后仍有 {countWords} 笔认捐未付款}}} other {提醒}}"
       }
     },
     "kinds": {
@@ -177,11 +194,17 @@
         "sign-in": "门户登录验证码"
       },
       "program": {
-        "task-reminder": "任务提醒"
+        "task-reminder": "任务提醒",
+        "cfp-received": "已收到提案",
+        "cfp-accepted": "提案已接受",
+        "cfp-rejected": "提案未入选"
       },
       "donations": {
         "receipt": "捐赠收据",
-        "year-end-statement": "年度捐赠明细"
+        "year-end-statement": "年度捐赠明细",
+        "pledge-summary": "认捐摘要",
+        "pledge-invoice": "认捐账单",
+        "pledge-reminder": "认捐提醒"
       },
       "guests": {
         "invitation": "婚礼邀请",
@@ -284,7 +307,9 @@
       "bounced": "退信：地址不存在",
       "soft_bounced": "暂时退信（邮箱已满或不可用）",
       "complained": "收件人标记为垃圾邮件"
-    }
+    },
+    "emptyAction": "选择接收哪些通知",
+    "choosePreferences": "选择接收哪些提醒"
   },
   "nav": {
     "home": "首页",
@@ -348,7 +373,14 @@
     "marketingAnalytics": "营销分析",
     "badges": "胸卡",
     "orgAnalytics": "数据分析",
-    "integrations": "集成"
+    "integrations": "集成",
+    "seatingLibrary": "座位库",
+    "coupons": "优惠券",
+    "charity": "慈善档案",
+    "plan": "套餐与账单",
+    "webhooks": "Webhook",
+    "sandboxes": "沙盒",
+    "notifications": "通知"
   },
   "vocab": {
     "attendee": "参会者",
@@ -408,7 +440,11 @@
     "seriesFilter": "按系列筛选活动",
     "allEvents": "全部活动",
     "seriesEmptyTitle": "{name} 中还没有活动",
-    "seriesEmptyDescription": "可在活动的“场次”页面将其加入此系列。"
+    "seriesEmptyDescription": "可在活动的“场次”页面将其加入此系列。",
+    "showEveryEvent": "显示每个活动",
+    "doorTitle": "扫码在扫码应用中进行",
+    "doorDescription": "你的角色是在入口检票。在此设备上打开扫码应用即可开始。",
+    "openScan": "打开扫码应用"
   },
   "team": {
     "subtitle": "{count, plural, other {# 名成员}}",
@@ -453,7 +489,8 @@
     "readiness": "活动准备情况",
     "readinessPercent": "已准备 {value}%",
     "noSalesTitle": "暂无销售",
-    "noSalesDescription": "门票开售后，报名、销售和座位情况将显示在这里。"
+    "noSalesDescription": "门票开售后，报名、销售和座位情况将显示在这里。",
+    "toTicketsOrders": "前往门票与订单"
   },
   "kpi": {
     "registrations": "报名数",
@@ -570,7 +607,10 @@
     "anyDistribution": "任何分发状态",
     "distributionFilter": {
       "pending": "等待转交"
-    }
+    },
+    "emptyUpload": "从 CSV 文件上传名单",
+    "toTicketsOrders": "前往门票与订单",
+    "backToEvent": "返回活动概览"
   },
   "attendeeStatus": {
     "paid": "已付款",
@@ -609,7 +649,8 @@
   },
   "section": {
     "comingTitle": "此区域正在建设中",
-    "comingDescription": "它将在后续里程碑中推出。你的导航已根据你的套餐和活动类型进行调整。"
+    "comingDescription": "它将在后续里程碑中推出。你的导航已根据你的套餐和活动类型进行调整。",
+    "backToEvent": "返回活动概览"
   },
   "publicEvent": {
     "nav": "活动",
@@ -788,7 +829,8 @@
   },
   "orgPicker": {
     "emptyTitle": "你还没有加入任何组织",
-    "emptyDescription": "请让所有者邀请你，或等待邀请邮件。"
+    "emptyDescription": "请让所有者邀请你，或等待邀请邮件。",
+    "myTickets": "前往我的门票"
   },
   "invite": {
     "eyebrow": "邀请",
@@ -884,7 +926,8 @@
     "validDatesHint": "不勾选则适用于所有场次。",
     "dates": "场次",
     "allDates": "所有场次",
-    "someDates": "{count, plural, other {# 个场次}}"
+    "someDates": "{count, plural, other {# 个场次}}",
+    "emptyAction": "设置门票"
   },
   "checkout": {
     "quantity": "数量",
@@ -984,14 +1027,23 @@
     "seatChannel": "其中部分座位为其他销售渠道保留。请选择其他座位。",
     "channelInvalid": "此销售码不适用于本活动。请不带销售码重新打开活动页面，或询问给你链接的人。",
     "channelNotice": "你正在通过 {name} 购买：为 {name} 保留的座位也向你开放。",
-    "channelLinkInvalid": "此销售链接不适用于本活动。你仍可从向所有人开放的座位中选择。"
+    "channelLinkInvalid": "此销售链接不适用于本活动。你仍可从向所有人开放的座位中选择。",
+    "saveCardForGiving": "为今晚的捐赠保存我的银行卡（在下一页完成；未经您在那里同意，不会保存任何信息）"
   },
   "fakePay": {
     "eyebrow": "测试付款",
     "title": "支付订单",
     "description": "这是测试付款页面，不会产生真实扣款。",
     "pay": "立即付款（测试）",
-    "decline": "模拟银行卡被拒"
+    "decline": "模拟银行卡被拒",
+    "setupTitle": "测试银行卡设置",
+    "setupDescription": "代替支付服务商的安全银行卡表单。不会保存真实的银行卡。",
+    "testCard": "测试银行卡",
+    "card4242": "4242 · 始终扣款成功",
+    "card0002": "0002 · 始终被拒",
+    "card9995": "9995 · 首次扣款被拒",
+    "saveCard": "保存银行卡（测试）",
+    "failSetup": "模拟设置失败"
   },
   "order": {
     "eyebrow": "你的订单",
@@ -1053,7 +1105,8 @@
     "buyer": "买家",
     "items": "门票",
     "total": "合计",
-    "status": "状态"
+    "status": "状态",
+    "emptyAction": "打开活动页面"
   },
   "promo": {
     "title": "优惠码",
@@ -1080,7 +1133,8 @@
     "resumeCode": "恢复{code}",
     "addTitle": "添加优惠码",
     "add": "添加优惠码",
-    "added": "已添加优惠码。"
+    "added": "已添加优惠码。",
+    "emptyAction": "创建代码"
   },
   "questions": {
     "title": "结账问题",
@@ -1115,7 +1169,8 @@
     "moveUp": "上移{label}",
     "moveDown": "下移{label}",
     "remove": "移除{label}",
-    "answers": "回答"
+    "answers": "回答",
+    "emptyAction": "编写问题"
   },
   "checkin": {
     "title": "签到",
@@ -1148,7 +1203,13 @@
       "no_access": "此通行证不包含该区域",
       "wrong_checkpoint": "不是你的检查点",
       "wrong_date": "此门票适用于其他场次",
-      "balance_due": "发票尚有余额未付"
+      "balance_due": "发票尚有余额未付",
+      "entered": "已入场 — 祝你听讲愉快",
+      "scanned_out": "已离开分会场",
+      "not_in_room": "未在此分会场签到",
+      "not_enrolled": "未报名此场次",
+      "admission_level": "此通行证不包含此场次",
+      "capacity": "会场已满"
     },
     "alertsTitle": "{count, plural, other {离线期间有 # 张票被重复放行}}",
     "alertsHint": "两台扫描设备在同步前放行了同一张票。请在入口核查这些宾客。",
@@ -1159,7 +1220,9 @@
     "overrideNote": "放行原因",
     "overrideHint": "将与你的姓名一起保存在活动日志中，例如“采购单已批准，款项在途”。",
     "overrideSubmit": "仍然放行",
-    "overrideNoteRequired": "请填写原因（至少 3 个字符）才能在余额未付时放行。"
+    "overrideNoteRequired": "请填写原因（至少 3 个字符）才能在余额未付时放行。",
+    "backToEvent": "返回活动",
+    "scanFirst": "扫描第一张票"
   },
   "checkinLive": {
     "state": {
@@ -1272,7 +1335,8 @@
     "attendees": "人员",
     "orders": "订单",
     "ticketCode": "门票 {code}",
-    "orderRef": "订单编号 {ref}"
+    "orderRef": "订单编号 {ref}",
+    "browseEvents": "浏览你的活动"
   },
   "bulk": {
     "formLabel": "批量操作",
@@ -1418,7 +1482,8 @@
       "too_many_columns": "文件超过 50 列。",
       "cell_too_long": "有单元格超过 1,000 个字符。",
       "unterminated_quote": "文件中有未闭合的引号，无法作为 CSV 读取。"
-    }
+    },
+    "backToEvent": "返回活动概览"
   },
   "distribution": {
     "title": "发送这张票",
@@ -1539,7 +1604,8 @@
     "activityLink": "活动日志",
     "privacyLink": "隐私请求",
     "charityLink": "慈善机构资料",
-    "planLink": "套餐和模块"
+    "planLink": "套餐和模块",
+    "findOwner": "查找所有者或管理员"
   },
   "legal": {
     "platform": "Yayatoh",
@@ -2035,7 +2101,9 @@
       "rules": "规则",
       "selection": "最佳可选座位",
       "channels": "渠道",
-      "revisions": "版本"
+      "revisions": "版本",
+      "guests": "安排宾客座位",
+      "cards": "桌卡与导出"
     },
     "assign": {
       "title": "安排宾客",
@@ -2126,7 +2194,8 @@
       "modeNow": "查询方式：{mode}",
       "modeShort": {
         "code": "邮箱验证码",
-        "name": "全名"
+        "name": "全名",
+        "pin": "全名和请柬上的 PIN"
       },
       "notPublic": "活动尚未发布（或为私密活动），宾客暂时无法打开座位查询。",
       "settingsTitle": "宾客",
@@ -2137,11 +2206,13 @@
       "mode": "宾客如何查找座位",
       "modeOption": {
         "code": "通过发送到邮箱的验证码（推荐）",
-        "name": "输入全名，立即查看"
+        "name": "输入全名，立即查看",
+        "pin": "通过全名和请柬上印的 PIN"
       },
       "modeHint": {
         "code": "只有能读取宾客邮件的人才能看到其座位，也没有人能知道名单上有谁。",
-        "name": "入场更快，但任何知道宾客全名的人都能看到其座位。"
+        "name": "入场更快，但任何知道宾客全名的人都能看到其座位。",
+        "pin": "宾客输入全名和其所在组请柬上印的 6 位 PIN。他们只能看到自己的桌位，绝不会看到任何人的姓名，也没人能查出谁在名单上。"
       },
       "readOnly": "你可以查看这些设置，但不能修改。",
       "shareTitle": "分享",
@@ -2149,7 +2220,10 @@
       "openPublic": "打开座位查询",
       "poster": "打印座位查询海报",
       "closedNote": "座位查询已关闭。扫描海报的宾客会被提示稍后再来。",
-      "namePoster": "打印姓名列表海报"
+      "namePoster": "打印姓名列表海报",
+      "partyLinksTitle": "各组链接",
+      "partyLinksHint": "每组请柬上的链接和二维码也能打开该组自己的桌位页面：场地图上的桌位以及同桌的人。把他们换到别的桌时，二维码保持不变。",
+      "partyLinksAction": "各组链接和二维码"
     },
     "map": {
       "zoomIn": "放大",
@@ -2353,7 +2427,10 @@
       "seatNumbersHint": "所选排和桌中的座位号，例如 1-4, 9。留空则包括其全部座位。",
       "allot": "分配座位",
       "allotted": "{count, plural, =0 {没有座位变化。} other {已分配 # 个座位。}}",
-      "freed": "{count, plural, =0 {没有座位属于任何渠道。} other {# 个座位重新向所有渠道开放。}}"
+      "freed": "{count, plural, =0 {没有座位属于任何渠道。} other {# 个座位重新向所有渠道开放。}}",
+      "emptyReadOnly": "编辑添加后，渠道会显示在这里。",
+      "addFirst": "添加第一个渠道",
+      "noSeatsHint": "先在座位图中添加排或桌，再在这里分配座位。"
     },
     "revisions": {
       "title": "座位图版本",
@@ -2408,6 +2485,207 @@
       "isCurrent": "这就是当前的座位图。",
       "restore": "恢复版本 {number}",
       "restoredNotice": "已恢复版本 {number}。当前座位图为版本 {now}。"
+    },
+    "guestSeating": {
+      "title": "安排宾客座位",
+      "description": "将各组宾客安排到桌位。从待排队列把一组拖到平面图上，或勾选宾客、选择桌子并按“安排所选宾客”——拖动能做的事，键盘都能做。",
+      "chart": {
+        "label": "座位安排",
+        "event": "整个活动"
+      },
+      "noPlan": "{chart}还没有座位图",
+      "noPlanHint": "请先创建座位图（桌子或排），再在这里安排宾客。",
+      "toPlan": "前往座位图",
+      "noGuests": "还没有需要安排的宾客",
+      "noGuestsHint": "在“宾客”页面添加各组宾客（或邀请他们参加这一环节），然后在这里安排座位。",
+      "toGuests": "前往宾客",
+      "summary": "已安排 {seated} · 待安排 {unseated}",
+      "readOnly": "你可以查看座位安排，但不能修改。",
+      "declinedSeated": "{count, plural, other {# 位已婉拒的宾客仍在座位上。}}请在桌位详情中移除。",
+      "live": {
+        "live": "实时",
+        "connecting": "正在连接…",
+        "offline": "离线，正在重连"
+      },
+      "vip": "VIP",
+      "queue": {
+        "title": "待安排（{count}）",
+        "search": "搜索各组和宾客",
+        "status": "回复",
+        "statusAll": "全部回复",
+        "side": "方",
+        "sideAll": "全部",
+        "list": "待安排的各组宾客",
+        "selectParty": "选中{party}的所有人",
+        "toSeat": "{count, plural, other {待安排 # 位}}",
+        "selected": "{count, plural, =0 {未选择} other {已选 # 位宾客}}",
+        "clear": "清除选择",
+        "empty": "每个人都有座位了。",
+        "noMatch": "没有符合筛选条件的组。"
+      },
+      "status": {
+        "attending": "出席",
+        "pending": "等待回复",
+        "declined": "已婉拒"
+      },
+      "guest": {
+        "guestOf": "{name}的同伴",
+        "meal": "餐食：{meal}",
+        "noMeal": "未选餐食",
+        "child": "儿童",
+        "infant": "婴儿"
+      },
+      "form": {
+        "title": "安排所选宾客",
+        "table": "桌子或排",
+        "choose": "选择桌子或排",
+        "option": "{place} — 空 {free}/{capacity}",
+        "optionVip": "{place} — 空 {free}/{capacity} · VIP 区",
+        "cantFit": "坐不下：已选 {asked, plural, other {# 位宾客}}，{place}{fits, plural, =0 {没有空位} other {只有 # 个空位}}。",
+        "submit": "安排所选宾客",
+        "submitting": "正在安排…"
+      },
+      "place": {
+        "table": "{label} 号桌",
+        "row": "{label} 排"
+      },
+      "map": {
+        "title": "平面图",
+        "hint": "把一组拖到桌子上即可安排。点击桌子查看谁坐在那里。",
+        "readOnlyHint": "点击桌子查看谁坐在那里。",
+        "dropHere": "放到{place}：空 {free}",
+        "dropCantFit": "{place}坐不下：{count, plural, other {# 位宾客}}，空 {free}",
+        "guests": "宾客",
+        "tickets": "持票人",
+        "vip": "VIP 区"
+      },
+      "details": {
+        "title": "桌位详情",
+        "choose": "要查看的桌子",
+        "none": "此座位图没有桌子或排。",
+        "counts": "已坐 {seated} · 空 {free}/{capacity}",
+        "tickets": "{count, plural, other {# 个座位已被门票占用}}",
+        "sponsor": "赞助：{name}",
+        "vipZone": "VIP 区",
+        "vipFromPlan": "位于座位图的 VIP 区域",
+        "warnings": "请检查此桌",
+        "warnDeclined": "{name}已婉拒，但仍在座位上。",
+        "warnVipOutside": "{party}是 VIP 组，但不在 VIP 区。",
+        "warnNotVip": "{party}不是 VIP 组，却坐在 VIP 区。",
+        "meals": "餐食",
+        "mealCount": "{meal}：{count}",
+        "noMeal": "未选择",
+        "empty": "这里还没有人。请从待排队列安排一组。",
+        "unseatParty": "移除{party}",
+        "move": "移到…",
+        "moveLabel": "把{name}移到另一桌",
+        "unseat": "移除",
+        "unseatLabel": "移除{name}",
+        "moveTo": "移动{name}",
+        "moveSubmit": "移动",
+        "cancel": "取消"
+      },
+      "done": {
+        "seated": "已在{place}安排 {count, plural, other {# 位宾客}}。",
+        "moved": "已将{name}移到{place}。",
+        "unseated": "{count, plural, other {# 位宾客}}已回到待排队列。",
+        "vipOn": "{place}现在是 VIP 区。",
+        "vipOff": "{place}不再是 VIP 区。"
+      },
+      "warnings": {
+        "vip_outside": "{party}是 VIP 组，而{place}不是 VIP 区。",
+        "not_vip_inside": "{place}是 VIP 区，而{party}不是 VIP 组。"
+      },
+      "errors": {
+        "forbidden": "你可以查看座位安排，但不能修改。",
+        "cantFit": "坐不下：{asked, plural, other {# 位宾客}}需要座位，而那里{fits, plural, =0 {没有空位} other {只有 # 个空位}}。",
+        "declined": "这位宾客已婉拒。只能安排未婉拒的宾客。",
+        "unknown": "这位宾客已不在名单上。页面将刷新。",
+        "noPlan": "这里还没有座位图。",
+        "noGuests": "请至少选择一位宾客。",
+        "noPlace": "请选择桌子或排。",
+        "dropMiss": "请把这组放到桌子或排上。"
+      }
+    },
+    "cards": {
+      "title": "桌卡与导出",
+      "description": "打印座位卡、引座卡和桌号卡，并下载按桌排列的座位表和给餐饮方的餐食数量。",
+      "print": {
+        "heading": "打印卡片",
+        "kind": "卡片类型",
+        "paper": "纸张尺寸",
+        "language": "卡片语言",
+        "submit": "下载 PDF",
+        "started": "正在生成 PDF，稍后即会下载。",
+        "toSeat": "安排宾客入座",
+        "empty": {
+          "place": "还没有宾客入座，因此没有可打印的座位卡。请先安排宾客入座。",
+          "escort": "还没有宾客入座，因此没有可打印的引座卡。请先安排宾客入座。",
+          "table": "此平面图还没有桌子或排，因此没有可打印的桌号卡。"
+        }
+      },
+      "kinds": {
+        "place": "座位卡",
+        "escort": "引座卡",
+        "table": "桌号卡"
+      },
+      "hints": {
+        "place": "{count, plural, =0 {暂无卡片} other {# 张}}：每位已入座宾客一张，对折立卡",
+        "escort": "{count, plural, =0 {暂无卡片} other {# 张}}：每桌每组宾客一张，放在入口",
+        "table": "{count, plural, =0 {暂无卡片} other {# 张}}：每桌一张，整页对折"
+      },
+      "papers": {
+        "a4": "A4",
+        "letter": "美式 Letter",
+        "a5": "A5",
+        "legal": "美式 Legal"
+      },
+      "exports": {
+        "heading": "导出",
+        "chart": "按桌座位表",
+        "chartHint": "每位宾客一行：桌号、组别、年龄、餐食和回复。",
+        "meals": "餐饮方餐食数量",
+        "mealsHint": "每桌餐食数量，含儿童、婴儿和合计。不计已婉拒的宾客。",
+        "csv": "CSV",
+        "xlsx": "Excel (XLSX)",
+        "download": "以 {format} 格式下载{name}",
+        "note": "导出操作会记录在审计日志中。"
+      },
+      "doc": {
+        "title": {
+          "place": "座位卡",
+          "escort": "引座卡",
+          "table": "桌号卡"
+        },
+        "yourTable": "您的桌号",
+        "guestOf": "{name} 的同伴",
+        "hostedBy": "由 {name} 赞助"
+      },
+      "file": {
+        "place": "桌号",
+        "guest": "宾客",
+        "party": "组别",
+        "age": "年龄",
+        "meal": "餐食",
+        "reply": "回复",
+        "ageClass": {
+          "adult": "成人",
+          "child": "儿童",
+          "infant": "婴儿"
+        },
+        "status": {
+          "attending": "出席",
+          "pending": "待回复",
+          "declined": "婉拒"
+        },
+        "notSeated": "未入座",
+        "notChosen": "未选择",
+        "children": "儿童",
+        "infants": "婴儿",
+        "total": "合计",
+        "sheetChart": "座位表",
+        "sheetMeals": "餐食数量"
+      }
     }
   },
   "venueMap": {
@@ -2447,7 +2725,11 @@
       "bottom": "地图下方",
       "bottom-right": "地图右下方"
     },
-    "yours": "{count, plural, other {你的座位：{seats}}}"
+    "yours": "{count, plural, other {你的座位：{seats}}}",
+    "yourPlace": {
+      "table": "您的桌位",
+      "row": "您的排"
+    }
   },
   "seatFinder": {
     "eyebrow": "座位查询",
@@ -2498,9 +2780,15 @@
       "challengeUnavailable": "此设备的查询次数过多。请稍等一分钟后重试。",
       "closed": "此活动的座位查询未开放。",
       "internal": "我们这边出了点问题。",
-      "rateLimited": "请求验证码次数过多。请在 {minutes, plural, other {# 分钟}}后重试。"
+      "rateLimited": "请求验证码次数过多。请在 {minutes, plural, other {# 分钟}}后重试。",
+      "noMatch": "没有找到与该姓名和 PIN 匹配的桌位。请对照请柬核对，或询问主人。",
+      "invalidPin": "请输入请柬上的 6 位 PIN。",
+      "pinRateLimited": "此设备查询次数过多。请在 {minutes, plural, other {# 分钟}}后重试。"
     },
-    "hostedBy": "赞助商：{sponsor}"
+    "hostedBy": "赞助商：{sponsor}",
+    "pinIntro": "请输入与请柬上一致的全名，以及请柬上印的 6 位 PIN。",
+    "pin": "请柬上的 PIN",
+    "findByPin": "查找我的桌位"
   },
   "seatFinderPoster": {
     "pageTitle": "座位查询海报",
@@ -2513,7 +2801,8 @@
     "step2Code": "输入你的邮箱，我们会发送验证码给你。",
     "step2Name": "输入你的全名。",
     "step3": "在场地地图上查看你的桌号和座位。",
-    "orVisit": "或访问"
+    "orVisit": "或访问",
+    "step2Pin": "输入您的全名和请柬上的 PIN。"
   },
   "reports": {
     "title": "分析",
@@ -2645,7 +2934,8 @@
         "channel": "渠道",
         "bookedAt": "预订时间",
         "paidAt": "付款时间"
-      }
+      },
+      "showAll": "显示所有预订"
     },
     "org": {
       "title": "销售",
@@ -2670,8 +2960,13 @@
       "byEvent": "按活动销售",
       "event": "活动",
       "emptyTitle": "此时间段内没有销售",
-      "emptyDescription": "请选择更长的时间段，或分享活动页面开始售票。"
-    }
+      "emptyDescription": "请选择更长的时间段，或分享活动页面开始售票。",
+      "toEvents": "查看你的活动",
+      "showAllTime": "显示全部时间"
+    },
+    "backToEvent": "返回活动概览",
+    "toTicketsOrders": "前往门票与订单",
+    "toSalesReport": "打开销售概览"
   },
   "activity": {
     "title": "活动",
@@ -2720,7 +3015,10 @@
     },
     "pagination": "活动分页",
     "newest": "最新",
-    "older": "更早的记录"
+    "older": "更早的记录",
+    "findOwner": "查找所有者或管理员",
+    "showAll": "显示全部动态",
+    "toEvents": "前往你的活动"
   },
   "privacy": {
     "title": "隐私请求",
@@ -2737,7 +3035,8 @@
     "result": {
       "title": "此组织持有的关于 {email} 的数据",
       "noneTitle": "未找到此邮箱的数据",
-      "noneDescription": "此组织中没有任何记录使用该地址。您仍可以创建请求，向此人作出正式答复。"
+      "noneDescription": "此组织中没有任何记录使用该地址。您仍可以创建请求，向此人作出正式答复。",
+      "searchAgain": "搜索其他地址"
     },
     "errors": {
       "invalidEmail": "请输入有效的邮箱地址。",
@@ -2808,7 +3107,8 @@
       "due": "截止",
       "overdue": "已逾期",
       "action": "操作",
-      "review": "查看"
+      "review": "查看",
+      "emptyAction": "按邮箱查找某人"
     },
     "closed": {
       "title": "已关闭的请求",
@@ -2845,7 +3145,8 @@
       "holdings": {
         "title": "此组织持有的数据",
         "empty": "没有持有关于此人的任何数据",
-        "emptyHint": "您仍可以完成请求：此人将收到未持有任何数据的正式答复。"
+        "emptyHint": "您仍可以完成请求：此人将收到未持有任何数据的正式答复。",
+        "emptyAction": "答复请求"
       },
       "export": {
         "title": "发送副本给此人",
@@ -2917,7 +3218,24 @@
       "digest": "回执 SHA-256",
       "signature": "签名（base64）",
       "footer": "由 Yayatoh 代表 {org} 签发。签名涵盖回执数据；请使用下方的公钥进行验证。"
-    }
+    },
+    "categories": {
+      "contacts": "联系人记录",
+      "consents": "同意记录",
+      "orders": "订单",
+      "paidOrders": "已付款订单（为会计保留）",
+      "tickets": "门票",
+      "activeTickets": "有效门票",
+      "claims": "门票转让链接",
+      "holderLinks": "门票访问链接",
+      "attendees": "宾客名单条目",
+      "answers": "结账时的回答",
+      "admissions": "签到",
+      "invitations": "团队邀请",
+      "networkProfiles": "社交名片",
+      "chatMessages": "已发送的聊天消息"
+    },
+    "findOwner": "查找所有者或管理员"
   },
   "privacyNotice": {
     "eyebrow": "Yayatoh",
@@ -3096,9 +3414,13 @@
       "eventDate": "活动日期",
       "guests": "宾客人数",
       "markHandled": "标记为已处理",
-      "markNew": "标记为新请求"
+      "markNew": "标记为新请求",
+      "openPublic": "打开场地公开页面",
+      "editListing": "编辑目录信息"
     },
-    "layoutLibrary": "座位图库"
+    "layoutLibrary": "座位图库",
+    "emptyAction": "添加第一个场地",
+    "emptyViewerAction": "浏览场地目录"
   },
   "details": {
     "title": "活动详情",
@@ -3253,7 +3575,9 @@
     "sectionAdded": "已添加板块。",
     "sectionSaved": "已保存板块。",
     "addSection": "添加板块",
-    "saveSection": "保存板块"
+    "saveSection": "保存板块",
+    "emptyAction": "添加第一个板块",
+    "backToEvent": "返回活动概览"
   },
   "dates": {
     "title": "场次",
@@ -3352,7 +3676,8 @@
       "event_finished": "已结束或已取消活动的场次不能更改。",
       "cancelled": "已取消的场次不能更改。",
       "invalid_count": "请输入 1 到 366 之间的场次数。"
-    }
+    },
+    "backToEvent": "返回活动概览"
   },
   "copy": {
     "title": "复制与模板",
@@ -3374,7 +3699,8 @@
     "openTemplates": "打开模板",
     "saveTemplate": "保存模板",
     "nameTaken": "该名称已被使用，请换一个。",
-    "invalid": "请检查此值。"
+    "invalid": "请检查此值。",
+    "backToEvent": "返回活动概览"
   },
   "series": {
     "title": "系列",
@@ -3395,7 +3721,8 @@
     "create": "创建系列",
     "created": "系列已创建。",
     "slugTaken": "已有同名系列，请换一个稍有不同的名称。",
-    "nameInvalid": "请输入 2 到 160 个字符的名称。"
+    "nameInvalid": "请输入 2 到 160 个字符的名称。",
+    "startFirst": "创建第一个系列"
   },
   "templates": {
     "title": "模板",
@@ -3407,7 +3734,8 @@
     "deleteFor": "删除模板 {name}",
     "use": "用 {name} 创建活动",
     "timezone": "时间为 {timezone}。",
-    "createEvent": "创建活动"
+    "createEvent": "创建活动",
+    "pickEvent": "选择要保存的活动"
   },
   "publicSeries": {
     "eyebrow": "{org} 的系列",
@@ -3523,7 +3851,9 @@
     "unpublish": "取消发布{title}",
     "pinOne": "置顶{title}",
     "unpinOne": "取消置顶{title}",
-    "delete": "删除{title}"
+    "delete": "删除{title}",
+    "emptyAction": "撰写第一条公告",
+    "toSections": "查看页面板块"
   },
   "holder": {
     "joinTitle": "线上参与",
@@ -3550,7 +3880,8 @@
     "title": "访问权限",
     "subtitle": "持票人私密信息、线上参与链接和访问码。",
     "viewerTitle": "仅编辑者可见",
-    "viewerDescription": "私密信息和访问码仅对可编辑活动的成员显示。"
+    "viewerDescription": "私密信息和访问码仅对可编辑活动的成员显示。",
+    "backToEvent": "返回活动概览"
   },
   "privateInfo": {
     "heading": "私密信息",
@@ -3605,7 +3936,8 @@
     "new": "新建访问码",
     "create": "创建访问码",
     "created": "已创建访问码。",
-    "unlockLink": "受邀嘉宾打开 {url} 并输入访问码。"
+    "unlockLink": "受邀嘉宾打开 {url} 并输入访问码。",
+    "emptyAction": "创建第一个代码"
   },
   "conversation": {
     "inboxTitle": "消息",
@@ -3658,7 +3990,9 @@
       "blocked": "此对话已被屏蔽。",
       "blocked_by_contact": "此人已屏蔽您组织的消息。",
       "you_blocked": "取消屏蔽主办方后才能写信。"
-    }
+    },
+    "emptyAction": "前往你的活动",
+    "showAll": "显示所有对话"
   },
   "apiKeys": {
     "title": "API 密钥",
@@ -3866,7 +4200,8 @@
       "copy": "复制代码",
       "copied": "已复制。",
       "emptyTitle": "暂无公开活动",
-      "emptyDescription": "发布活动后即可获取其小组件代码。"
+      "emptyDescription": "发布活动后即可获取其小组件代码。",
+      "toEvents": "前往你的活动"
     },
     "navPages": {
       "title": "网站导航",
@@ -3906,7 +4241,8 @@
     "resolveNote": "{reference} 为什么已处理？",
     "noteTooShort": "请填写至少 3 个字符的备注。",
     "alreadyResolved": "已有人处理了此差异。",
-    "resolve": "处理"
+    "resolve": "处理",
+    "emptyAction": "查看每日核对"
   },
   "risk": {
     "flagged": "结账时被标记",
@@ -3975,7 +4311,9 @@
     "customized": "已自定义的邮件",
     "noneTitle": "还没有自定义的邮件",
     "noneDescription": "所有邮件都使用 Yayatoh 的默认文案。",
-    "changed": "修改时间"
+    "changed": "修改时间",
+    "noneAction": "自定义一封邮件",
+    "noneActionViewer": "阅读默认文案"
   },
   "setupGuide": {
     "title": "设置指南",
@@ -4113,7 +4451,15 @@
       "outside_event": "此环节不在活动的开始和结束时间之内。"
     },
     "photoAfterSave": "保存演讲者后即可添加照片。",
-    "logoAfterSave": "保存后即可添加标志。"
+    "logoAfterSave": "保存后即可添加标志。",
+    "emptyExhibitorsAction": "添加第一个参展商",
+    "backToEvent": "返回活动",
+    "emptySessionsReadOnly": "编辑添加后，场次会显示在这里。",
+    "addFirstSession": "添加第一个场次",
+    "emptySpeakersReadOnly": "编辑添加后，演讲者会显示在这里。",
+    "addFirstSpeaker": "添加第一位演讲者",
+    "emptyTiersReadOnly": "编辑添加后，赞助级别及其赞助商会显示在这里。",
+    "addFirstTier": "添加第一个级别"
   },
   "aiDraft": {
     "title": "用 AI 起草",
@@ -4325,7 +4671,10 @@
     "readOnly": "只有所有者和管理员可以更改入口工作人员。",
     "byCheckpoint": "按检查点划分的入口工作人员",
     "nobody": "未分配",
-    "manage": "管理入口工作人员"
+    "manage": "管理入口工作人员",
+    "emptyReadOnly": "所有者或管理员添加后，入口工作人员会显示在这里。",
+    "addFirst": "添加第一位入口工作人员",
+    "openCheckin": "打开签到界面"
   },
   "signals": {
     "title": "欺诈信号",
@@ -4369,7 +4718,9 @@
       "save": "保存规则",
       "saved": "规则已保存。",
       "current": "标记每分钟扫描超过 {rate} 次的设备,以及在检查点之间移动快于每小时 {kmh} 公里的门票。"
-    }
+    },
+    "showAll": "显示全部信号",
+    "reviewDetection": "查看检测设置"
   },
   "security": {
     "metaTitle": "账户安全",
@@ -4654,7 +5005,11 @@
       "survey_exists": "此问卷已存在。",
       "messaging_paused": "Yayatoh 支持团队已暂停你所在组织的消息发送。",
       "form_invalid": "有一个问题无效。"
-    }
+    },
+    "sendFirst": "发送给参会者",
+    "questionsEmptyReadOnly": "编辑添加问题后，问题会显示在这里。",
+    "addFirstQuestion": "添加第一个问题",
+    "browseSurveys": "浏览其他问卷"
   },
   "survey": {
     "metaTitle": "问卷",
@@ -4753,7 +5108,8 @@
     "emptyDescription": "在座位图上为宾客安排座位，然后打印此名单放在入口。",
     "tableSeat": "第 {item} 桌 · {seat} 号座",
     "rowSeat": "第 {item} 排 · {seat} 号座",
-    "unseated": "{count, plural, other {# 位宾客尚未安排座位，未列入海报。}}"
+    "unseated": "{count, plural, other {# 位宾客尚未安排座位，未列入海报。}}",
+    "toPlan": "前往座位图"
   },
   "webPush": {
     "title": "推送通知",
@@ -4917,7 +5273,10 @@
       "body": "它会立即从你的网站消失，且无法撤销。",
       "confirm": "确认删除",
       "cancel": "取消"
-    }
+    },
+    "emptyActionPost": "撰写第一篇文章",
+    "emptyActionPage": "撰写第一个页面",
+    "findOwner": "查找所有者或管理员"
   },
   "cmsPublic": {
     "blog": "博客",
@@ -4977,7 +5336,10 @@
       "reasonError": "请填写原因（3 到 300 个字符）。",
       "hide": "隐藏评价",
       "unhide": "显示评价",
-      "dismissReports": "驳回举报"
+      "dismissReports": "驳回举报",
+      "showAll": "显示全部评价",
+      "seeOrders": "查看门票和订单",
+      "backToEvent": "返回活动"
     },
     "form": {
       "rating": "你的评分",
@@ -5475,7 +5837,8 @@
         "totals": "累计数据",
         "seen": "首次或最近出现",
         "stats": "联系人统计",
-        "ltv": "终身价值"
+        "ltv": "终身价值",
+        "engagement": "参与度评分"
       },
       "did": "规则",
       "didYes": "是",
@@ -5545,7 +5908,8 @@
         "rfmMonetary": "RFM 金额（五分位）"
       },
       "valuePercent": "百分比",
-      "quintile": "五分位（1–5）"
+      "quintile": "五分位（1–5）",
+      "engagementScore": "评分"
     },
     "scopes": {
       "any": "任意活动",
@@ -5603,7 +5967,10 @@
     },
     "peopleLink": "人员",
     "duplicatesLink": "可能的重复",
-    "insights": "联系人洞察"
+    "insights": "联系人洞察",
+    "emptyAction": "选择模板",
+    "emptyViewer": "你的团队为营销活动保存的受众会显示在这里。",
+    "findOwner": "查找所有者或管理员"
   },
   "refundOps": {
     "timeline": {
@@ -5706,7 +6073,16 @@
         "succeeded": "已退款",
         "failed": "退款失败"
       },
-      "age": "{days, plural, =0 {{hours, plural, other {# 小时}}} other {# 天}}"
+      "age": "{days, plural, =0 {{hours, plural, other {# 小时}}} other {# 天}}",
+      "emptyHint": {
+        "open": "买家在订单页面申请退款，他们的请求会在这里等待你的答复。",
+        "approved": "你批准的请求会连同退款状态显示在这里。",
+        "declined": "你拒绝的请求会显示在这里。"
+      },
+      "emptyAction": {
+        "open": "查看已批准的请求",
+        "other": "返回待处理的请求"
+      }
     },
     "buyer": {
       "title": "退款",
@@ -5922,7 +6298,9 @@
         "offerHours": "请输入 0.25 到 168 小时之间的值。",
         "not_enough_stock": "空余门票不足，无法发出此邀请。",
         "not_on_sale": "此通行证或场次未在销售。"
-      }
+      },
+      "viewEventPage": "查看活动页面",
+      "backToEvent": "返回活动"
     }
   },
   "pricingPage": {
@@ -6167,7 +6545,11 @@
     "categorySlugHint": "留空则根据名称自动生成。之后无法更改。",
     "translations": "其他语言的名称",
     "translationsError": "请检查翻译后的名称。",
-    "categoryHasArticles": "请先移动或删除此分类中的文章。"
+    "categoryHasArticles": "请先移动或删除此分类中的文章。",
+    "emptyViewer": "你的团队撰写文章后会显示在这里。",
+    "emptyNeedsCategoryAction": "先添加分类",
+    "emptyArticlesAction": "撰写第一篇文章",
+    "emptyCategoriesAction": "添加第一个分类"
   },
   "siteConsole": {
     "title": "营销网站",
@@ -6219,7 +6601,8 @@
       "partnership": "合作伙伴",
       "other": "其他"
     },
-    "markHandled": "标记为已处理"
+    "markHandled": "标记为已处理",
+    "noRequestsAction": "打开联系页面"
   },
   "parties": {
     "subtitle": "宾客组（情侣、家庭、住户）及每组的宾客。饮食、无障碍需求和地址仅对你的团队可见。",
@@ -6380,7 +6763,10 @@
       "plusOneMoves": "同伴会随带他来的宾客一起移动。"
     },
     "email": "邮箱",
-    "phone": "电话"
+    "phone": "电话",
+    "emptyAction": "添加第一组宾客",
+    "backToEvent": "返回活动概览",
+    "showAll": "显示所有宾客组"
   },
   "eventRoles": {
     "co_host": "联合主办人",
@@ -6397,14 +6783,18 @@
     "inviteTitle": "邀请加入此活动",
     "emptyTitle": "还没有联合主办人或策划人",
     "emptyDescription": "通过电子邮件邀请他人。对方只能访问这个活动。",
-    "revokeFor": "撤回发给 {email} 的邀请"
+    "revokeFor": "撤回发给 {email} 的邀请",
+    "emptyReadOnly": "所有者、管理员或联合主办人邀请后，联合主办人和策划人会显示在这里。",
+    "inviteFirst": "邀请他人",
+    "backToEvent": "返回活动"
   },
   "myEvents": {
     "title": "您的活动",
     "description": "您在 {org} 协助的活动。",
     "emptyTitle": "暂无活动",
     "emptyDescription": "有人邀请您参加活动后，它会显示在这里。",
-    "open": "打开 {name}"
+    "open": "打开 {name}",
+    "myTickets": "前往我的门票"
   },
   "starters": {
     "title": "入门模板",
@@ -6494,7 +6884,8 @@
     "overviewTruncated": "显示 {total} 个活动中的前 {shown} 个（进行中的在前）。",
     "overviewEmpty": {
       "title": "目前没有需要关注的活动",
-      "description": "活动在筹备期间、活动当天及之后一周内显示在这里。"
+      "description": "活动在筹备期间、活动当天及之后一周内显示在这里。",
+      "action": "前往你的活动"
     },
     "columns": {
       "event": "活动",
@@ -6558,7 +6949,9 @@
     "unavailable": "无法加载此小组件。",
     "noAccess": {
       "title": "你的角色没有指挥中心",
-      "description": "请向所有者或管理员申请此活动的访问权限。"
+      "description": "请向所有者或管理员申请此活动的访问权限。",
+      "action": "查找所有者或管理员",
+      "backToEvent": "返回活动概览"
     },
     "empty": {
       "title": "没有显示任何小组件",
@@ -6768,6 +7161,67 @@
         "window": "过去 {days} 天 {sent, plural, other {# 封邮件}}",
         "over": "超过阈值：{domains, plural, other {# 个发件域名}}，{campaigns, plural, other {# 个活动}}",
         "open": "打开邮件送达率"
+      },
+      "sessionLevel": {
+        "none": "不限名额",
+        "ok": "低于 {near}%",
+        "near": "接近满员（{near}% 或以上）",
+        "over": "已满"
+      },
+      "sessionAttendance": {
+        "title": "分会场会议室",
+        "running": "{count, plural, other {# 个分会场进行中}}",
+        "nearlyFull": "{count, plural, other {# 个接近满员}}",
+        "kiosks": "{count, plural, other {# 台自助机离线}}",
+        "none": "现在及未来一小时内没有分会场。分会场入口在分会场签到页面设置。",
+        "table": "当前及接下来的分会场",
+        "session": "分会场",
+        "in": "在场",
+        "capacity": "名额",
+        "status": "状态",
+        "until": "至 {time}",
+        "starts": "{time} 开始",
+        "meter": "{title}：已用名额",
+        "more": "{count, plural, other {另有 # 个}}",
+        "open": "打开分会场签到"
+      },
+      "sessionFill": {
+        "title": "分会场名额",
+        "none": "还没有限定名额的分会场。为分会场设置容量后即可在此查看。",
+        "nearlyFull": "{count, plural, other {{limited} 个分会场中有 # 个已达 {near}% 或以上}}",
+        "full": "{count, plural, other {# 个已满}}",
+        "waiting": "{count, plural, other {# 人候补}}",
+        "longLines": "{count, plural, other {# 个候补名单超过 {max} 人}}",
+        "roomsTooSmall": "{count, plural, other {# 个会议室太小}}",
+        "table": "名额最满的分会场",
+        "session": "分会场",
+        "enrolled": "已占名额",
+        "waitingHeader": "候补",
+        "status": "状态",
+        "roomSmall": "会议室太小",
+        "ofCapacity": "{enrolled} / {capacity}",
+        "open": "打开分会场报名"
+      },
+      "exhibitorActivity": {
+        "title": "展商",
+        "none": "还没有展商。添加后即可在此查看展位人员和潜在客户。",
+        "add": "添加展商",
+        "staffed": "{total} 家展商中有 {staffed} 家已有展位人员",
+        "people": "{count, plural, other {已邀请 # 人}}",
+        "leads": "{count, plural, other {# 个潜在客户}}",
+        "withoutLeads": "{count, plural, other {# 家展商没有潜在客户}}",
+        "leadsPending": "开启潜在客户收集后，数量会显示在这里。",
+        "top": "潜在客户最多",
+        "open": "打开展商门户"
+      },
+      "sponsorActivity": {
+        "title": "赞助商",
+        "none": "还没有赞助商。添加赞助方案和赞助商后即可在此查看交付情况。",
+        "add": "添加赞助商",
+        "total": "{count, plural, other {# 家赞助商}}",
+        "overdue": "{count, plural, other {# 项交付已逾期}}",
+        "deliverablesPending": "开启赞助方案后，交付事项会显示在这里。",
+        "open": "打开赞助商"
       }
     },
     "openScanner": "打开扫码器",
@@ -6793,7 +7247,8 @@
       "revokeLabel": "停用 {label}",
       "readOnly": "只读",
       "statusOn": "已开启",
-      "statusOff": "已关闭"
+      "statusOff": "已关闭",
+      "emptyAction": "创建屏幕链接"
     }
   },
   "alerts": {
@@ -6816,7 +7271,10 @@
       "activeTitle": "目前没有提醒",
       "activeDescription": "当你的某个活动需要关注时，会显示在这里并通知你的团队。",
       "resolvedTitle": "还没有已解决的提醒",
-      "resolvedDescription": "问题解决后，提醒会自动变为已解决。"
+      "resolvedDescription": "问题解决后，提醒会自动变为已解决。",
+      "allEventsAction": "显示每个活动的提醒",
+      "settingsAction": "选择谁接收提醒",
+      "currentAction": "显示当前提醒"
     },
     "severity": {
       "info": "信息",
@@ -6885,7 +7343,18 @@
       "automationFailed": "打开消息健康状况",
       "campaignFailed": "打开营销活动",
       "disputeDeadline": "打开争议队列",
-      "assistanceOverdue": "打开求助请求"
+      "assistanceOverdue": "打开求助请求",
+      "pledgesUnpaid": "打开认捐",
+      "sessionsNearCapacity": "打开分会场",
+      "sessionWaitlists": "打开分会场报名",
+      "roomsTooSmall": "打开分会场",
+      "exhibitorsNoLeads": "打开展商",
+      "exhibitorsNoStaff": "打开展商门户",
+      "speakerTasksOverdue": "打开讲者任务",
+      "deliverablesOverdue": "打开赞助商",
+      "printersKiosksOffline": "打开现场设置",
+      "approvalBacklog": "打开申请",
+      "invoicesOverdue": "打开发票"
     },
     "rules": {
       "unseated": "{count, plural, other {{countWords} 位参会者没有座位}}",
@@ -6907,7 +7376,18 @@
       "automationFailed": "{count, plural, other {今天有 {countWords} 条消息或批量操作失败}}",
       "campaignFailed": "{count, plural, other {今天有 {countWords} 次营销活动发送失败}}",
       "disputeDeadline": "{count, plural, other {有 {countWords} 起争议需要尽快提交证据}}",
-      "assistanceOverdue": "{count, plural, other {{countWords} 个求助请求等待过久}}"
+      "assistanceOverdue": "{count, plural, other {{countWords} 个求助请求等待过久}}",
+      "pledgesUnpaid": "{count, plural, other {活动结束 14 天后仍有 {countWords} 笔认捐未付款}}",
+      "sessionsNearCapacity": "{count, plural, other {{countWords}个分会场已超过容量的 95 %}}",
+      "sessionWaitlists": "{count, plural, other {{countWords}个分会场的候补名单过长}}",
+      "roomsTooSmall": "{count, plural, other {{countWords}个分会场的已占名额超过了会议室座位数}}",
+      "exhibitorsNoLeads": "{count, plural, other {{countWords}家展商还没有潜在客户}}",
+      "exhibitorsNoStaff": "{count, plural, other {{countWords}家展商尚未邀请展位人员}}",
+      "speakerTasksOverdue": "{count, plural, other {{countWords}项讲者任务已逾期}}",
+      "deliverablesOverdue": "{count, plural, other {{countWords}项赞助交付已逾期}}",
+      "printersKiosksOffline": "{count, plural, other {{countWords}台胸卡打印机或自助机已离线}}",
+      "approvalBacklog": "{count, plural, other {{countWords}份申请正在等待审核}}",
+      "invoicesOverdue": "{count, plural, other {{countWords}张发票已逾期}}"
     },
     "widget": {
       "title": "提醒",
@@ -6954,7 +7434,8 @@
       "door": "入场和设备",
       "sales": "销售",
       "setup": "设置和域名",
-      "messaging": "消息"
+      "messaging": "消息",
+      "conference": "分会场、展商和赞助商"
     },
     "channels": {
       "in_app": "应用内",
@@ -7060,7 +7541,12 @@
     "claimOff": "停止设备提醒",
     "claimOnDone": "设备提醒将发送到此手机。",
     "claimOffDone": "此手机已停止接收设备提醒。",
-    "claimNeedsPush": "请先在此设备的“工作人员”中开启提醒。"
+    "claimNeedsPush": "请先在此设备的“工作人员”中开启提醒。",
+    "kioskKind": "{label} 的自助机画面",
+    "kindTickets": "凭票签到",
+    "kindGuests": "按姓名为来宾签到",
+    "kindBoard": "桌位指示屏（A–Z）",
+    "boardStarted": "{label} 现在显示桌位指示屏。"
   },
   "scanKiosk": {
     "welcome": "欢迎参加 {event}",
@@ -7395,7 +7881,10 @@
       "test_too_many": "最多输入 5 个地址。",
       "test_invalid_email": "请检查邮箱地址。",
       "unknown": "出了点问题。"
-    }
+    },
+    "emptyAction": "为第一个营销活动命名",
+    "emptyViewer": "你的团队创建的营销活动会连同受众和结果显示在这里。",
+    "findOwner": "查找所有者或管理员"
   },
   "journeys": {
     "title": "旅程",
@@ -7589,7 +8078,10 @@
         "active": "进行中",
         "completed": "已完成",
         "cancelled": "已取消"
-      }
+      },
+      "emptyDescription": "旅程开启期间，触发条件将人加入后，他们会显示在这里。",
+      "showEveryone": "显示所有人",
+      "reviewSteps": "查看步骤"
     },
     "run": {
       "metaTitle": "旅程记录",
@@ -7786,7 +8278,8 @@
       "update": "保存更改",
       "create": "创建宏",
       "archive": "归档 {name}",
-      "archived": "宏已归档。"
+      "archived": "宏已归档。",
+      "noneAction": "编写第一个宏"
     },
     "holder": {
       "title": "转让这张门票",
@@ -7856,7 +8349,15 @@
       "noDeadline": "无截止时间",
       "overdue": "已过截止时间",
       "hoursLeft": "{hours, plural, =0 {剩余不到 1 小时} other {剩余 # 小时}}",
-      "daysLeft": "{days, plural, other {剩余 # 天}}"
+      "daysLeft": "{days, plural, other {剩余 # 天}}",
+      "emptyHint": {
+        "open": "当买家的银行对你的订单发起拒付时，它会连同举证截止时间显示在这里。",
+        "closed": "争议在胜诉、败诉或撤回后会移到这里。"
+      },
+      "emptyAction": {
+        "open": "查看已结束的争议",
+        "closed": "返回未结争议"
+      }
     },
     "claim": {
       "intro": "{from} 正在把这张门票转让给 {to}。请用接收该门票的邮箱领取:你将获得自己的二维码,原来的二维码随即失效。",
@@ -8294,7 +8795,13 @@
         "same_person": "请输入其他人。",
         "not_confirmed": "只有已确认的报名者才能更换。",
         "too_many": "一个活动最多可有 50 个模板。"
-      }
+      },
+      "clearFilters": "清除筛选",
+      "openSetup": "打开报名设置",
+      "showWaiting": "显示待处理的申请",
+      "noTemplatesHint": "保存常用的理由，批准或拒绝时直接选用。",
+      "writeFirstTemplate": "编写第一个模板",
+      "backToEvent": "返回活动"
     },
     "rules": {
       "title": "申请、嘉宾和姓名更换",
@@ -8525,7 +9032,9 @@
     "submittedTitle": "谢谢，你已完成报名",
     "submittedDescription": "谢谢，{name}。你的回答已发送给主办方。",
     "expiredTitle": "此链接已过期",
-    "expiredDescription": "继续报名的链接在最后一次保存后 14 天内有效。请从活动页面重新开始。"
+    "expiredDescription": "继续报名的链接在最后一次保存后 14 天内有效。请从活动页面重新开始。",
+    "emptyReadOnly": "编辑添加后，表单页面会显示在这里。",
+    "addFirstPage": "添加第一页"
   },
   "agenda": {
     "publishing": {
@@ -8666,7 +9175,8 @@
         "cell_too_long": "某个单元格太长。",
         "unterminated_quote": "某个带引号的值没有结束。请检查文件中的引号。",
         "missing_columns": "文件需要 title、starts 和 ends 列。"
-      }
+      },
+      "backToEvent": "返回活动"
     }
   },
   "guestImport": {
@@ -8917,7 +9427,11 @@
       "not_invited": "该宾客未受邀参加此分场活动。",
       "sub_event_has_chart": "它已有专用座位图。",
       "no_chart": "暂无可复制的座位图。请在座位页面创建活动座位图，或选择已保存的平面图。"
-    }
+    },
+    "emptyAction": "添加第一个子活动",
+    "backToEvent": "返回活动概览",
+    "matrixToSubEvents": "前往子活动",
+    "matrixAddGuests": "向名单添加宾客"
   },
   "donations": {
     "console": {
@@ -9018,7 +9532,12 @@
       },
       "receiptsTitle": "抵税收据",
       "receiptsBody": "每笔付款后，捐赠者都会通过电子邮件收到一张收据。为晚宴门票设置公允市场价值，并查看所有收据。",
-      "receiptsLink": "打开抵税收据"
+      "receiptsLink": "打开抵税收据",
+      "emptyCampaignsAction": "发起第一个募捐活动",
+      "backToEvent": "返回活动概览",
+      "noGiftsDescription": "已支付的捐款会显示在这里，包括捐赠者选择的名称、金额和募捐活动。",
+      "shareGivingPage": "分享捐款页面",
+      "toCampaigns": "查看你的募捐活动"
     },
     "give": {
       "metaTitle": "捐款",
@@ -9082,7 +9601,9 @@
         "not_connected": "此活动未开放在线捐款。",
         "campaign_closed": "此筹款活动已关闭。",
         "risk_blocked": "我们无法接受这笔捐款。请稍后再试或联系主办方。"
-      }
+      },
+      "showOnScreen": "在会场大屏上署名致谢我",
+      "showOnScreenHint": "默认关闭。您的姓名按上方的选择显示;捐款金额从不显示。"
     },
     "thanks": {
       "metaTitle": "谢谢",
@@ -9157,7 +9678,371 @@
         "ticket": "门票"
       },
       "notDeductible": "不可抵税",
-      "pdf": "下载 {number}"
+      "pdf": "下载 {number}",
+      "addTicketTypes": "添加门票类型",
+      "backToEvent": "返回活动概览"
+    },
+    "raiseCard": {
+      "cardTitle": "举牌募捐",
+      "cardBody": "为宾客分配号码牌，从控制台叫出捐赠档位，让观察员在手机上记录举起的号码牌，并确认认捐。",
+      "openConsole": "打开控制台",
+      "openSpotter": "记录号码牌",
+      "openPaddles": "号码牌",
+      "openScreen": "现场大屏",
+      "openPledges": "认捐与收款"
+    },
+    "paddles": {
+      "title": "号码牌",
+      "subtitle": "每位可以认捐的宾客或团体都持有一个带编号的号码牌。观察员只记录号码，从不记录姓名。",
+      "openConsole": "打开控制台",
+      "viewerNotice": "你可以查看号码牌。如需分配或收回，请联系组织者。",
+      "noGuestsTitle": "还没有宾客",
+      "noGuestsDescription": "请先添加团体和宾客，然后在这里分配号码牌。",
+      "openGuests": "打开宾客",
+      "openTables": "打开桌位与赞助商",
+      "bulkTitle": "批量分配号码牌",
+      "bulkBody": "号码按桌依次分配给所有尚未持有号码牌的人。",
+      "bulkSubmit": "分配号码牌",
+      "bulkDone": "号码牌已分配。",
+      "scope": "对象",
+      "scopeAll": "所有宾客或团体",
+      "scopeTables": "{count, plural, other {仅已购桌位（# 桌）}}",
+      "per": "每个号码牌对应",
+      "perGuest": "每位宾客",
+      "perParty": "每个团体或桌",
+      "startAt": "起始号码（可选）",
+      "startAtHint": "留空：从 {number} 开始。",
+      "oneTitle": "分配一个号码牌",
+      "oneBody": "在签到台：选择宾客并递上下一个号码牌。",
+      "oneSubmit": "分配号码牌",
+      "oneDone": "号码牌已分配。",
+      "holder": "宾客或团体",
+      "holderChoose": "选择领取人",
+      "holderGuest": "{name} · {party}",
+      "holderTable": "桌：{name}",
+      "holderParty": "团体：{name}",
+      "number": "号码牌号码（可选）",
+      "numberHint": "留空：下一个空闲号码（{number}）。",
+      "listTitle": "号码牌",
+      "listCount": "{count, plural, other {已分配 # 个}}",
+      "emptyTitle": "还没有分配号码牌",
+      "emptyDescription": "在上方批量或逐个分配号码牌。",
+      "emptyViewer": "组织者会在募捐前分配号码牌。",
+      "columns": {
+        "number": "号码牌",
+        "holder": "持有人",
+        "party": "团体或桌",
+        "entries": "记录次数",
+        "actions": "操作"
+      },
+      "partyPaddle": "{name}（整个团体）",
+      "release": "收回号码牌 {number}",
+      "released": "号码牌已收回。",
+      "errors": {
+        "holder": "请选择宾客或团体。",
+        "number": "请输入 1 到 99999 之间的号码牌号码。",
+        "numberTaken": "该号码已分配。",
+        "hasPaddle": "对方已有号码牌。",
+        "tooMany": "空闲号码不足，请尝试更小的起始号码。",
+        "nobodyLeft": "该范围内的所有人都已有号码牌。",
+        "hasEntries": "该号码牌已在募捐中被记录，无法收回。"
+      }
+    },
+    "raise": {
+      "title": "举牌募捐",
+      "subtitle": "叫出一个档位，看着号码牌涌入，结束后进入下一个。“撤销”可撤回上一步。",
+      "openReview": "{count, plural, =0 {审核} other {审核（# 项待查）}}",
+      "openSpotter": "观察员视图",
+      "viewerNotice": "你可以观看募捐。如需操作控制台，请联系组织者。",
+      "noPaddlesTitle": "还没有分配号码牌",
+      "noPaddlesBody": "观察员只能记录宾客持有的号码。",
+      "openPaddles": "分配号码牌",
+      "controls": "控制台",
+      "close": "结束 {name}",
+      "undo": "撤销上一步",
+      "noLevelsTitle": "还没有捐赠档位",
+      "noLevelsDescription": "请在“捐赠”标签页添加带档位的活动；控制台按从高到低的顺序叫出。",
+      "openDonations": "打开捐赠",
+      "armTitle": "叫出档位",
+      "armBody": "选择拍卖师现在叫出的档位。观察员的手机会立即显示。",
+      "arm": "叫出 {amount} · {name}",
+      "callsTitle": "已叫出的档位",
+      "noCalls": "还没有叫出任何档位。",
+      "columns": {
+        "level": "档位",
+        "status": "状态",
+        "paddles": "号码牌",
+        "total": "合计",
+        "duplicates": "待查"
+      },
+      "levelLine": "{amount} · {name}",
+      "statusOpen": "进行中",
+      "statusClosed": "已结束",
+      "nowCalling": "当前档位",
+      "noneCalling": "当前没有叫出档位",
+      "noneCallingBody": "叫出一个档位后，观察员即可记录。",
+      "stream": {
+        "connecting": "连接中",
+        "live": "实时",
+        "offline": "重新连接中"
+      },
+      "levelRunning": "{count, plural, =0 {尚无号码牌 · {total}} other {# 个号码牌 · {total}}}",
+      "duplicatesToCheck": "{count, plural, other {# 个重复待记录员核对}}",
+      "totalRaised": "举牌筹得",
+      "paddlesRaised": "已记录号码牌",
+      "pledged": "已确认认捐",
+      "toReview": "待审核",
+      "armed": "档位已叫出。",
+      "closed": "档位已结束。",
+      "undoneEntry": "号码牌 {number} 已搁置。",
+      "undoneArm": "{level} 已撤回。",
+      "undoneClose": "{level} 已重新开启。",
+      "errors": {
+        "call_open": "请先结束当前档位。",
+        "not_open": "该档位已不在进行中。",
+        "nothing_to_undo": "没有可撤销的操作。"
+      }
+    },
+    "spot": {
+      "title": "记录号码牌",
+      "subtitle": "输入每个举起的号码牌号码，然后按回车。断网时记录会保存在本机，稍后自动发送。",
+      "calling": "当前档位",
+      "online": "在线",
+      "connecting": "连接中",
+      "offline": "离线 — 正在保存到本机",
+      "levelLine": "{amount} · {name}",
+      "waiting": "等待主持人叫出档位",
+      "formLabel": "记录号码牌",
+      "numberLabel": "号码牌号码",
+      "numberHint": "只输入数字，然后按回车。",
+      "record": "记录号码牌",
+      "queued": "号码牌 {number} 已记录。",
+      "pending": "{count, plural, other {# 条记录等待发送}}",
+      "allSent": "全部已发送。",
+      "sendNow": "立即发送",
+      "recent": "你最近的记录",
+      "noneYet": "还没有记录。",
+      "paddle": "号码牌 {number}",
+      "outcome": {
+        "waiting": "等待发送",
+        "recorded": "已记录",
+        "duplicate": "已记录过 — 已提交记录员核对",
+        "confirmed": "认捐已确认",
+        "voided": "已搁置"
+      },
+      "refused": {
+        "paddle_unknown": "已拒绝：不是本活动的号码牌",
+        "call_unknown": "已拒绝：找不到档位",
+        "call_withdrawn": "已拒绝：该档位已撤回"
+      },
+      "errors": {
+        "number": "请输入 1 到 99999 之间的号码牌号码。",
+        "noLevel": "当前没有叫出档位，请等待主持人。",
+        "unknown": "号码牌 {number} 未在本活动中分配，请核对号码。"
+      }
+    },
+    "review": {
+      "title": "审核认捐",
+      "subtitle": "将已记录的号码牌转为已确认的认捐。重复项等待你决定；错误项请搁置。",
+      "viewerNotice": "你可以查看审核。如需确认认捐，请联系组织者。",
+      "pledges": "认捐",
+      "emptyTitle": "暂无待审核内容",
+      "emptyDescription": "控制台叫出档位后会显示在这里。",
+      "callSummary": "{count, plural, =0 {无号码牌} other {# 个号码牌}} · {total} · 已确认 {confirmed} · 待查 {duplicates}",
+      "confirmAll": "{count, plural, other {确认 # 个已记录号码牌}}",
+      "noEntries": "该档位没有记录号码牌。",
+      "entriesCaption": "{level} 记录的号码牌",
+      "columns": {
+        "paddle": "号码牌",
+        "holder": "持有人",
+        "status": "状态",
+        "recorded": "记录时间",
+        "actions": "操作"
+      },
+      "holderGone": "号码牌已收回",
+      "status": {
+        "recorded": "已记录",
+        "duplicate": "重复",
+        "confirmed": "认捐",
+        "voided": "已搁置"
+      },
+      "confirmOne": "确认号码牌 {number}",
+      "void": "搁置号码牌 {number}",
+      "confirmedCount": "{count, plural, =0 {没有需要确认的号码牌。} other {已确认 # 笔认捐。}}",
+      "confirmedOne": "号码牌 {number} 已确认为认捐。",
+      "voided": "号码牌 {number} 已搁置。",
+      "voidedPledge": "号码牌 {number} 已搁置，其认捐已取消。"
+    },
+    "screen": {
+      "metaTitle": "捐款大屏",
+      "totalLabel": "目前已筹",
+      "progressLabel": "目标进度",
+      "progressText": "{total} / {goal}",
+      "goal": "已达 {goal} 目标的 {percent}%",
+      "goalReached": "目标达成!",
+      "gifts": "{count, plural, =0 {成为第一位捐赠者} other {# 笔捐款}}",
+      "calling": "当前档位",
+      "callingLevel": "{amount} · {name}",
+      "paddles": "{count, plural, =0 {请举起您的号牌!} other {已举牌 # 次}}",
+      "thanksTitle": "感谢您",
+      "thanksEmpty": "每一份捐款都很重要。谢谢!",
+      "scanToGive": "扫码捐款",
+      "qrLabel": "捐款页面二维码:{url}",
+      "sideLabel": "如何捐款,以及我们的感谢",
+      "replacedTitle": "此大屏链接已被替换",
+      "replacedBody": "请向主办方索取新链接。"
+    },
+    "screenPage": {
+      "title": "现场大屏",
+      "subtitle": "为会场投影准备的筹款温度计:目标、总额、当前档位,以及对希望被署名的捐赠者的感谢。",
+      "setupTitle": "设置大屏",
+      "setupBody": "选择温度计跟随的筹款活动。其二维码会打开该活动的捐款页面。",
+      "settingsTitle": "大屏设置",
+      "campaign": "筹款活动",
+      "campaignHint": "温度计跟随此活动:已支付的捐款加上各档位举起的号牌。",
+      "chooseCampaign": "选择筹款活动",
+      "campaignClosed": "{name}(已关闭)",
+      "showNames": "按姓名致谢捐赠者",
+      "showNamesHint": "只显示勾选了“在大屏上署名致谢我”的捐赠者,并按其选择的方式显示。号牌持有人从不显示姓名。关闭:只显示总额。",
+      "setUp": "设置大屏",
+      "save": "保存",
+      "saved": "大屏已保存。已打开的大屏会立即更新。",
+      "rotated": "链接已替换。旧链接上的大屏已停止;请在投影电脑上打开新链接。",
+      "noCampaignsTitle": "请先添加筹款活动",
+      "noCampaignsBody": "大屏显示筹款活动的目标和总额。请在“捐款”标签页中创建。",
+      "openDonations": "打开捐款",
+      "notSetUp": "大屏尚未设置。",
+      "viewerNotice": "您可以在此查看大屏。请让能编辑活动的人进行设置或分享链接。",
+      "linkTitle": "大屏链接",
+      "linkBody": "在连接投影仪的电脑上打开此链接。无需登录,因此只与您的音视频团队分享。",
+      "linkLabel": "大屏链接",
+      "copy": "复制链接",
+      "copied": "链接已复制。",
+      "openScreen": "打开大屏",
+      "openContrast": "以高对比度打开",
+      "openStill": "以减少动画打开",
+      "rotate": "替换链接",
+      "rotateHint": "使用旧链接打开的大屏会立即停止。",
+      "givingTitle": "扫码捐款",
+      "givingOpen": "大屏上的二维码会打开 {campaign} 的捐款页面。手机捐款会实时计入总额。",
+      "givingClosed": "暂无二维码:连接 Stripe、发布活动并开放筹款后,捐款页面才会接受捐款。",
+      "previewTitle": "预览",
+      "cardsLink": "打印桌卡",
+      "errors": {
+        "campaign": "请选择本活动的筹款活动。"
+      },
+      "rotateConfirm": "立即替换(旧链接上的大屏将停止)"
+    },
+    "screenCards": {
+      "title": "桌卡",
+      "subtitle": "打印后在每张桌上放一张。宾客扫码即可用手机捐款。",
+      "print": "打印",
+      "sheetLabel": "桌卡",
+      "cardTitle": "扫码捐款",
+      "cardBody": "用手机为 {campaign} 捐款。您的捐款会计入大屏上的总额。",
+      "qrLabel": "捐款页面二维码:{url}",
+      "noScreenTitle": "请先设置大屏",
+      "noScreenBody": "桌卡打开的是大屏跟随的筹款活动。"
+    },
+    "matches": {
+      "title": "配捐",
+      "subtitle": "让赞助方在一段时间内为捐款配捐，直至上限；并导出雇主会为其捐款配捐的捐赠者名单。",
+      "noAccessTitle": "你无法查看配捐",
+      "noAccessDescription": "请向所有者或管理员申请订单访问权限。",
+      "viewerNotice": "你可以查看配捐挑战。如需添加、结束或取消，请联系组织者。",
+      "listTitle": "配捐挑战",
+      "emptyTitle": "还没有配捐挑战",
+      "emptyDescription": "在下方添加赞助方的配捐：其时段内每笔确认的捐款都计入。",
+      "emptyViewer": "组织者会在这里添加赞助方的配捐。",
+      "noCampaignsTitle": "请先添加募捐活动",
+      "noCampaignsDescription": "配捐针对一个募捐活动的捐款。请在“捐款”标签页创建募捐活动。",
+      "backToDonations": "前往捐款",
+      "headline": "{ratio, select, r50 {每笔捐款配捐 50%，上限 {cap}} r100 {每笔捐款翻倍，上限 {cap}} r200 {每笔捐款变三倍，上限 {cap}} r300 {每笔捐款变四倍，上限 {cap}} other {每笔捐款配捐 {percent}%，上限 {cap}}}",
+      "sponsorShown": "屏幕显示为 {name}",
+      "sponsorHidden": "屏幕显示为一位慷慨的赞助方",
+      "thanksTo": "感谢 {name}。",
+      "thanksAnonymous": "感谢一位慷慨的赞助方。",
+      "window": "{campaign} · {start} 至 {end}",
+      "progress": "已配捐 {matched}，上限 {cap}",
+      "progressLabel": "{name} 的配捐",
+      "basis": "{count, plural, other {# 笔确认的捐款}} · 时段内捐款 {eligible}",
+      "remaining": "再捐 {amount} 即可达到全额配捐",
+      "reached": "已达到全额配捐。",
+      "publicProgress": "目前已配捐 {matched}。",
+      "phase": {
+        "scheduled": "已安排",
+        "live": "进行中",
+        "ended": "时段已结束"
+      },
+      "status": {
+        "closed": "已结束",
+        "cancelled": "已取消"
+      },
+      "pledgeRecorded": "赞助方承诺：{amount}",
+      "pledgeCancelled": "赞助方承诺已取消：所配捐的捐款已退款。",
+      "pledgeNone": "没有产生配捐，因此未记录承诺。",
+      "close": "结束 {name} 的配捐并记录承诺",
+      "closed": "配捐已结束",
+      "cancel": "取消 {name} 的配捐",
+      "cancelled": "配捐已取消",
+      "addTitle": "添加配捐",
+      "addBody": "时段内已支付的在线捐款和已确认的举牌认捐都计入，扣除退款。结束配捐时，按达到的金额记录赞助方的承诺。",
+      "add": "添加配捐",
+      "added": "配捐已添加",
+      "fields": {
+        "campaign": "募捐活动",
+        "sponsorName": "赞助方",
+        "sponsorNameHint": "支付配捐的一方。仅你的团队可见。",
+        "sponsorEmail": "赞助方邮箱",
+        "sponsorEmailHint": "可选。仅你的团队可见。",
+        "publicName": "屏幕显示名称",
+        "publicNameHint": "可选。赞助方在会场屏幕和捐款页面上的显示方式。留空则显示“一位慷慨的赞助方”。",
+        "ratio": "比例",
+        "cap": "上限（{currency}）",
+        "capHint": "赞助方最多出资的金额。",
+        "startsAt": "开始",
+        "endsAt": "结束",
+        "timeHint": "使用活动所在时区（{zone}）。"
+      },
+      "ratios": {
+        "r50": "50%（每笔捐款的一半）",
+        "r100": "1:1（每笔捐款翻倍）",
+        "r200": "2:1（每笔捐款变三倍）",
+        "r300": "3:1（每笔捐款变四倍）"
+      },
+      "errors": {
+        "campaign": "请选择募捐活动。",
+        "sponsorName": "请输入赞助方名称（最多 120 个字符）。",
+        "sponsorEmail": "请输入有效的邮箱地址。",
+        "publicName": "最多 120 个字符。",
+        "ratio": "请选择比例。",
+        "cap": "请输入 1.00 至 10,000,000.00 之间的上限。",
+        "startsAt": "请输入开始日期和时间。",
+        "endsAt": "请输入结束日期和时间。",
+        "window": "配捐的结束时间必须晚于开始时间。",
+        "tooMany": "一个募捐活动最多有 20 个配捐。",
+        "notStarted": "此配捐尚未开始，请改为取消。",
+        "closed": "此配捐已结束。",
+        "cancelled": "此配捐已取消。"
+      },
+      "employerTitle": "雇主配捐",
+      "employerBody": "{count, plural, other {# 笔已支付的捐款填写了雇主。}}许多雇主会为员工的捐款配捐：导出名单，向每家雇主提交申请。",
+      "employerAsk": "请联系所有者或管理员导出名单。",
+      "employerEmptyTitle": "还没有人填写雇主",
+      "employerEmptyDescription": "捐赠者可以在捐款页面填写雇主。支付后，他们的捐款会显示在这里。",
+      "employerExport": "导出雇主名单",
+      "exportTitle": "雇主配捐名单",
+      "exportError": "导出未开始：{reason}",
+      "csv": {
+        "employer": "雇主",
+        "donor": "捐赠者",
+        "email": "邮箱",
+        "date": "日期",
+        "campaign": "募捐活动",
+        "amount": "金额"
+      },
+      "cardLink": "打开配捐",
+      "cardBody": "让赞助方在一段时间内将捐款翻倍直至上限，并导出捐赠者的雇主以申请配捐。"
     }
   },
   "galaTables": {
@@ -9343,7 +10228,8 @@
       "speaker": "演讲嘉宾",
       "exhibitor_admin": "参展商管理员",
       "exhibitor_staff": "参展商工作人员",
-      "sponsor_contact": "赞助商联系人"
+      "sponsor_contact": "赞助商联系人",
+      "cfp_reviewer": "提案评审"
     },
     "errors": {
       "noFile": "请先选择文件。",
@@ -9498,7 +10384,9 @@
       "pastDue": "截止日期必须是将来的时间。",
       "agreementText": "协议需要填写文本。",
       "tooMany": "此活动的任务数已达上限（50 项）。"
-    }
+    },
+    "emptyReadOnly": "编辑创建后，演讲者任务会显示在这里。",
+    "createFirst": "创建第一个任务"
   },
   "exhibitorPortal": {
     "eyebrow": "参展商门户",
@@ -9624,7 +10512,8 @@
     "ownAllowanceHint": "留空则使用活动设置。",
     "errors": {
       "allowance": "请输入 0 到 500 之间的整数。"
-    }
+    },
+    "licensesLink": "线索许可证"
   },
   "booths": {
     "breadcrumb": "面包屑导航",
@@ -9684,7 +10573,9 @@
       "shared_booth": "展位 {booth} 由 {count} 个参展商共用。",
       "several_booths": "{exhibitor} 位于多个展位。",
       "category_mismatch": "{exhibitor} 位于展位 {booth}，但该展位的类别（{category}）不属于其类别。"
-    }
+    },
+    "emptyAction": "添加第一个展位",
+    "emptyViewer": "组织者尚未放置任何展位。"
   },
   "exhibitorMap": {
     "pageTitle": "参展商地图",
@@ -9754,7 +10645,9 @@
       "openTitle": "没有未关闭的求助请求",
       "openDescription": "来宾和入口工作人员的新请求一到就会显示在这里。",
       "closedTitle": "还没有已关闭的请求",
-      "closedDescription": "已解决和已取消的请求显示在这里。"
+      "closedDescription": "已解决和已取消的请求显示在这里。",
+      "toCommandCenter": "打开指挥中心",
+      "showOpen": "显示待处理请求"
     },
     "title": "#{number} · {reason}",
     "number": "#{number}",
@@ -9927,7 +10820,8 @@
       "urgent": "紧急",
       "waiting": "等待处理",
       "unassigned": "未分配"
-    }
+    },
+    "backToEvent": "返回活动概览"
   },
   "marketingAnalytics": {
     "title": "营销分析",
@@ -10230,7 +11124,9 @@
     "overrideNote": "打印原因",
     "overrideHint": "将与你的姓名一起保存在活动日志中。",
     "printAnyway": "仍然打印",
-    "overrideNoteRequired": "请填写原因（至少 3 个字符）。"
+    "overrideNoteRequired": "请填写原因（至少 3 个字符）。",
+    "emptyAction": "创建第一个模板",
+    "backToEvent": "返回活动概览"
   },
   "invoices": {
     "status": {
@@ -10409,7 +11305,10 @@
     "submit": "提交核实",
     "saveAndReview": "保存并提交审核",
     "saved": "已保存。Yayatoh 将进行审核。",
-    "viewerNotice": "只有所有者和管理员可以修改慈善机构资料。"
+    "viewerNotice": "只有所有者和管理员可以修改慈善机构资料。",
+    "seePlan": "查看你的套餐",
+    "findOwner": "查找所有者或管理员",
+    "addDetails": "添加慈善机构信息"
   },
   "rsvp": {
     "metaTitle": "您的回复",
@@ -10460,7 +11359,10 @@
     },
     "questionsTitle": "几个问题",
     "questionsHint": "主人想多了解一些情况。标为私密的回答只有主人能看到。",
-    "questionsFor": "给 {name} 的问题"
+    "questionsFor": "给 {name} 的问题",
+    "seatTitle": "查找您的桌位",
+    "seatHint": "查看您在场地图上的座位以及同桌的人。",
+    "seatLink": "显示我的桌位"
   },
   "rsvpFind": {
     "metaTitle": "查找您的请柬",
@@ -10570,7 +11472,15 @@
     "reopenFor": "为 {party} 重新开放回复",
     "createLinkFor": "为 {party} 创建回复链接",
     "copy": "复制链接",
-    "copied": "链接已复制。"
+    "copied": "链接已复制。",
+    "seatTitle": "桌位页面二维码",
+    "seatHint": "此二维码打开 {party} 的桌位页面：场地图上的桌位以及同桌的人。把他们换到别的桌时它保持不变，因此可以印在引座卡或席位卡上。",
+    "seatQrLabel": "{party} 桌位页面的二维码",
+    "seatLinkLabel": "{party} 桌位页面的链接",
+    "seatClosed": "打开座位查找（座位 → 座位查找）后，宾客即可看到自己的桌位。",
+    "seatScan": "扫码查找您的桌位",
+    "hubLinkLabel": "{party} 的宾客页面链接",
+    "hubLinkHint": "该组宾客专属的页面，包含回复、流程、座位和门票，宾客可以将其添加到主屏幕。它与回复链接使用同一密钥：重置链接会同时关闭两者。"
   },
   "collector": {
     "metaTitle": "分享您的联系方式",
@@ -10687,7 +11597,9 @@
     "submittedValue": "提交的",
     "nothingToMerge": "没有新内容可取：合并会关闭此提交。",
     "mergeSubmit": "合并到{party}",
-    "merged": "已合并。"
+    "merged": "已合并。",
+    "shareLink": "分享收集链接",
+    "setUpLink": "设置收集链接"
   },
   "invitations": {
     "link": "邀请：通过电子邮件和短信发送",
@@ -10950,7 +11862,10 @@
       "count": "显示的问题：{shown} / {total}",
       "none": "这位宾客看不到任何问题。",
       "label": "这位宾客看到的问题"
-    }
+    },
+    "emptyDescription": "你添加的问题会出现在每位宾客的回复表单中，例如餐点选择或点歌。",
+    "emptyAction": "添加第一个问题",
+    "emptyViewerAction": "查看回复表单预览"
   },
   "rsvpAnswers": {
     "link": "回复的回答",
@@ -11159,7 +12074,13 @@
         "offStage": "投票已从大屏移除。",
         "deleted": "投票已删除。",
         "rotated": "新的大屏链接已生成，旧链接已失效。"
-      }
+      },
+      "shareAudienceLink": "分享观众链接",
+      "reviewWaiting": "审核待处理的问题",
+      "checkSettings": "查看问答设置",
+      "noPollsViewer": "编辑添加后，投票会显示在这里。",
+      "createFirstPoll": "创建第一个投票",
+      "howToJoin": "查看参会者如何加入"
     },
     "presenter": {
       "metaTitle": "讲者视图",
@@ -11179,6 +12100,54 @@
       "topQuestions": "热门问题",
       "noQuestions": "还没有问题。",
       "join": "用手机参与"
+    },
+    "scores": {
+      "link": "参与度评分",
+      "title": "参与度评分",
+      "description": "谁在 {event} 中参与最多，以及每场分会的情况。",
+      "back": "返回分会",
+      "engaged": "参与的参会者",
+      "average": "平均分",
+      "attendeesTitle": "参与度最高的参会者",
+      "emptyTitle": "暂无参与",
+      "emptyHint": "参会者签到、在实时投票中投票、提问、填写反馈问卷和报名分会后，评分就会出现。",
+      "attendee": "参会者",
+      "score": "评分",
+      "breakdown": "计入项目",
+      "countOf": "{kind} × {count}",
+      "sessionsTitle": "分会",
+      "session": "分会",
+      "participants": "参与者",
+      "noSessions": "此活动还没有分会。",
+      "weightsTitle": "评分权重",
+      "formula": "评分 = 每类分值 × 参会者完成的次数。签到每个活动只计一次。权重适用于贵组织的所有活动。",
+      "customWeights": "贵组织的权重",
+      "defaultWeights": "默认权重",
+      "weightInvalid": "请输入 0 到 100 的整数。",
+      "saveWeights": "保存权重",
+      "resetWeights": "使用默认权重",
+      "weightsReadOnly": "只有所有者和管理员可以更改权重。",
+      "weightsSaved": "权重已保存，所有评分已重新计算。",
+      "weightsReset": "已恢复默认权重，所有评分已重新计算。",
+      "kinds": {
+        "check_in": "签到",
+        "poll_vote": "投票",
+        "question": "提问",
+        "feedback": "反馈",
+        "enrollment": "分会报名"
+      }
+    },
+    "feedback": {
+      "heading": "这场分会怎么样？",
+      "give": "提交反馈",
+      "answered": "谢谢，我们已收到您的反馈。",
+      "signInHint": "请使用报名时的邮箱登录后提交反馈。",
+      "signIn": "登录",
+      "errors": {
+        "already_answered": "您已对这场分会提交过反馈。",
+        "expired": "您的反馈链接已过期。",
+        "other": "这场分会无法提交反馈。"
+      }
     }
   },
   "enrollment": {
@@ -11295,7 +12264,8 @@
       "label": "按姓名、邮箱或公司搜索",
       "submit": "搜索",
       "noneTitle": "没有匹配的人",
-      "noneDescription": "没有任何姓名、邮箱或公司包含“{q}”。请尝试更短的关键词。"
+      "noneDescription": "没有任何姓名、邮箱或公司包含“{q}”。请尝试更短的关键词。",
+      "clear": "清除搜索"
     },
     "emptyTitle": "还没有人员",
     "emptyDescription": "有人购票、报名或被加入宾客名单后，会出现在这里。",
@@ -11358,7 +12328,9 @@
       "emptyTitle": "这里还没有内容",
       "emptyDescription": "订单、签到、营销活动、消息和问卷发生后会出现在这里。",
       "listLabel": "{name} 的时间线",
-      "older": "更早"
+      "older": "更早",
+      "showEverything": "显示全部",
+      "backToPeople": "返回所有人"
     },
     "kinds": {
       "order_paid": "订单已付款",
@@ -11437,7 +12409,8 @@
       "errors": {
         "noneSelected": "请至少选择一组进行合并。",
         "tooMany": "每次最多选择 50 组。"
-      }
+      },
+      "toPeople": "查看所有人"
     },
     "reasons": {
       "email": "相同邮箱地址",
@@ -11473,7 +12446,8 @@
       "withdrawn": "已退订",
       "unknown_legacy": "未知（导入）",
       "none": "无同意"
-    }
+    },
+    "toEvents": "前往你的活动"
   },
   "contactStats": {
     "title": "联系人",
@@ -11628,7 +12602,10 @@
     "deleteNamed": "删除沙盒 {name}",
     "deleteWarning": "沙盒将被永久关闭：页面下线，成员和密钥失去访问权限。",
     "deleteConfirm": "永久删除",
-    "deleteConfirmNamed": "永久删除沙盒 {name}"
+    "deleteConfirmNamed": "永久删除沙盒 {name}",
+    "findOwner": "查找所有者或管理员",
+    "inSandboxAction": "在此沙盒中试用 API",
+    "emptyAction": "设置第一个沙盒"
   },
   "webhooks": {
     "title": "Webhook",
@@ -11762,7 +12739,8 @@
       "succeeded": "已送达",
       "failed": "失败",
       "at": "时间"
-    }
+    },
+    "emptyAction": "添加第一个端点"
   },
   "developers": {
     "brand": "Yayatoh 开发者",
@@ -11931,7 +12909,8 @@
       "advanced_seating": "高级座位",
       "ai_seating": "AI 排座",
       "analytics_pro": "高级分析"
-    }
+    },
+    "findOwner": "查找所有者或管理员"
   },
   "billingPortal": {
     "eyebrow": "测试计费",
@@ -12308,6 +13287,1974 @@
       "body": "{name} 是测试服务商。允许后，Yayatoh 可以代表你读取和写入以下内容：",
       "allow": "允许",
       "deny": "拒绝"
+    },
+    "webhooksAction": "设置 Webhook"
+  },
+  "guestSeats": {
+    "placeAt": {
+      "table": "{item} 号桌",
+      "row": "第 {item} 排"
+    },
+    "wholeEvent": "座位安排",
+    "resultTitle": "{count, plural, other {您的桌位}}",
+    "partyCount": "{count, plural, other {您组中有 # 人坐在这里}}",
+    "noTableTitle": "您的桌位尚未确定",
+    "noTable": "主人仍在安排座位。请临近活动日再来查看，或询问主人。",
+    "unseatedCount": "{count, plural, other {您组中有 # 人尚未安排桌位。}}",
+    "again": "查找其他人",
+    "mapTitle": "场地图",
+    "mapFor": "场地图：{name}"
+  },
+  "partySeats": {
+    "metaTitle": "您的桌位",
+    "title": "{party} 的座位",
+    "intro": "您在场地图上的桌位，以及与您同桌的人。",
+    "closedTitle": "座位安排尚未就绪",
+    "closed": "主人尚未公布座位安排。请保留此页面或请柬上的二维码：公布后这里会显示您的桌位。",
+    "noChartsTitle": "您的桌位尚未确定",
+    "noCharts": "主人仍在安排座位。桌位一确定，此页面就会显示。",
+    "yourParty": "您组中的人",
+    "tablemates": {
+      "table": "同桌的还有",
+      "row": "同排的还有"
+    },
+    "noTablemates": "这里暂时没有其他人。",
+    "unseated": "尚未安排座位：{names}",
+    "guestOf": "{name} 的同伴",
+    "keep": "此页面始终显示您当前的桌位：即使主人调整了您的座位，请柬上的链接和二维码也不会变。",
+    "toRsvp": "返回您的回复",
+    "saveCard": "为今晚的捐赠保存银行卡"
+  },
+  "scanGuests": {
+    "view": "来宾",
+    "title": "来宾签到",
+    "arrivedOf": "已到 {arrived} / {expected}",
+    "searchLabel": "来宾或团体名称",
+    "searchHint": "输入姓名的一部分，或在下方选择标签。",
+    "labels": "标签",
+    "startHint": "搜索来宾或团体，或选择一个标签列出其来宾。",
+    "noMatchTitle": "没有匹配的来宾",
+    "noMatchDescription": "请检查拼写、尝试团体名称或取消一个标签。",
+    "noListTitle": "此设备上没有来宾名单",
+    "noListDescription": "此活动还没有来宾，或此设备尚未下载。请联网一次以下载名单。",
+    "results": "匹配的来宾",
+    "checkInParty": "为 {party} 的所有人签到（{count}）",
+    "checkInGuest": "为 {name} 签到",
+    "checkIn": "签到",
+    "checkedInAt": "{name} 已签到。{place}。",
+    "checkedInNoPlace": "{name} 已签到。尚未安排桌位。",
+    "checkedInMany": "已签到来宾：{count}",
+    "arrivedAt": "{time} 到达",
+    "declined": "不出席",
+    "noPlace": "尚未安排桌位",
+    "guestOf": "{name} 的同伴",
+    "placeTable": "{label} 号桌",
+    "placeRow": "第 {label} 排",
+    "placeOnChart": "{chart}：{place}",
+    "cardQrLabel": "保存银行卡用于今晚捐款的二维码",
+    "cardTitle": "要保存银行卡用于今晚的捐款吗？",
+    "cardBody": "请宾客用自己的手机扫描。除非宾客在手机上同意，否则不会保存任何信息。"
+  },
+  "scanGuestKiosk": {
+    "welcome": "欢迎来到 {event}",
+    "subtitle": "查找您的桌位并签到",
+    "nameLabel": "请输入您的姓名",
+    "nameHint": "与请柬上的一致。",
+    "find": "查找我的桌位",
+    "hello": "欢迎，{name}！",
+    "welcomeBack": "欢迎回来，{name}！",
+    "yourPlace": "您的桌位：{places}",
+    "noPlace": "您的桌位尚未安排。请联系工作人员。",
+    "checkedIn": "签到成功，祝您愉快！",
+    "alreadyIn": "您已经签到过了。",
+    "noMatch": "没有找到该姓名。请检查拼写或联系工作人员。",
+    "seeStaff": "请联系工作人员。"
+  },
+  "scanBoard": {
+    "title": "查找您的桌位",
+    "empty": "来宾安排座位后，桌位将显示在这里。",
+    "pageOf": "第 {page} 页，共 {total} 页",
+    "pause": "暂停",
+    "resume": "继续",
+    "next": "下一页"
+  },
+  "dayOf": {
+    "description": "谁已到场、谁还需要桌位，以及给厨房的菜品数量。",
+    "setUpKiosk": "设置自助机或指示屏",
+    "noAccessTitle": "您无法查看来宾名单",
+    "noAccessDescription": "请向主办人申请访问此活动来宾的权限。",
+    "arrived": "已到场",
+    "arrivedOf": "已到 {arrived} / 预计 {expected}",
+    "notArrived": "尚未到场",
+    "unseated": "没有桌位",
+    "declined": "不出席",
+    "findTitle": "为来宾签到",
+    "searchLabel": "来宾或团体名称",
+    "search": "搜索",
+    "noMatchTitle": "没有匹配的来宾",
+    "noMatchDescription": "请检查拼写或尝试团体名称。",
+    "matches": "匹配的来宾",
+    "arrivedAt": "{time} 到达",
+    "declinedOne": "不出席",
+    "checkIn": "签到",
+    "checkInGuest": "为 {name} 签到",
+    "checkedIn": "{name} 已签到。",
+    "arrivalsTitle": "到场记录",
+    "noArrivalsTitle": "还没有人到场",
+    "noArrivalsDescription": "通过扫码设备、来宾自助机或此处签到的来宾会在到场时出现在此列表中。",
+    "colTime": "时间",
+    "colGuest": "来宾",
+    "colParty": "团体",
+    "colPlace": "桌位",
+    "colHow": "签到方式",
+    "colActions": "操作",
+    "sourceScanner": "扫码设备",
+    "sourceKiosk": "来宾自助机",
+    "sourceHost": "主办人",
+    "undo": "撤销",
+    "undoGuest": "撤销 {name} 的签到",
+    "undone": "已撤销签到。",
+    "unseatedTitle": "没有桌位的来宾",
+    "noChartTitle": "还没有平面图",
+    "noChartDescription": "请在“座位”中选择平面图，然后为来宾安排桌位。",
+    "toSeating": "前往座位",
+    "allSeatedTitle": "每个人都有桌位",
+    "allSeatedDescription": "所有未拒绝的来宾都已安排座位。",
+    "attending": "出席",
+    "noAnswer": "未回复",
+    "here": "已到场",
+    "seatThem": "安排座位",
+    "mealsTitle": "菜品",
+    "mealsHint": "已确认出席的来宾，按所选菜品。",
+    "noMealsTitle": "暂无可统计的菜品",
+    "noMealsDescription": "来宾确认出席后会统计菜品。",
+    "colMeal": "菜品",
+    "colGuests": "来宾",
+    "colArrived": "已到场",
+    "noMeal": "尚未选择",
+    "kiosksTitle": "来宾自助机和桌位指示屏",
+    "kiosksHint": "将平板或电视添加为设备，在其上打开设置链接，然后选择显示内容。即使场地网络中断，两者都能继续工作；工作人员用 PIN 退出。",
+    "noDevicesTitle": "还没有设备",
+    "noDevicesDescription": "请在下方添加设备，然后在平板或电视上打开设置链接。",
+    "online": "在线",
+    "offline": "离线",
+    "kindTickets": "凭票签到",
+    "kindGuests": "来宾自助机",
+    "kindBoard": "桌位指示屏（A–Z）",
+    "kioskKind": "{device} 的画面",
+    "kioskPin": "{device} 的工作人员 PIN",
+    "pinHint": "4 到 8 位数字。工作人员输入它以退出画面。",
+    "pinInvalid": "请输入 4 到 8 位数字的 PIN。",
+    "kioskStart": "开始",
+    "kioskStarted": "{device} 将在几秒内切换。",
+    "kioskStop": "停止",
+    "kioskStopDevice": "停止 {device} 上的自助机",
+    "kioskStopped": "{device} 已恢复扫码。",
+    "placeTable": "{label} 号桌",
+    "placeRow": "第 {label} 排",
+    "placeOnChart": "{chart}：{place}",
+    "noPlace": "尚未安排桌位",
+    "guestOf": "{name} 的同伴"
+  },
+  "guestSiteHost": {
+    "subtitle": "为宾客准备的页面：欢迎辞、日程、交通住宿、礼物清单以及常见问题解答。受密码保护，从不被列出或收录。",
+    "open": "打开网站",
+    "viewerNotice": "你可以在这里查看网站。只有主人和策划师可以修改。",
+    "statusTitle": "你的网站",
+    "published": "已发布",
+    "draft": "草稿",
+    "publishedNote": "于 {date} 发布。宾客通过下方地址和密码打开。",
+    "draftNote": "尚未发布。发布之前宾客无法打开。",
+    "needsPassword": "请先设置密码：没有密码无法发布网站。",
+    "address": "网站地址",
+    "privacyNote": "从不出现在市场或搜索引擎中。宾客的姓名、回复和联系方式绝不会显示在上面。",
+    "publish": "发布网站",
+    "unpublish": "下线网站",
+    "publishedDone": "已发布。请把地址和密码分享给宾客。",
+    "unpublishedDone": "网站已下线。",
+    "passwordTitle": "密码",
+    "passwordSet": "已设置",
+    "passwordMissing": "未设置",
+    "passwordIntro": "请印在请柬上。宾客在每台设备上输入一次；不区分大小写。设置新密码后，用旧密码进入的人都将被拒之门外。",
+    "savePassword": "保存密码",
+    "passwordSaved": "密码已保存。",
+    "detailsTitle": "标题和欢迎辞",
+    "saveDetails": "保存标题和欢迎辞",
+    "detailsSaved": "已保存。",
+    "blocksTitle": "{count, plural, =0 {版块} other {# 个版块}}",
+    "emptyTitle": "还没有版块",
+    "emptyWrite": "在下方添加第一个版块：先写欢迎辞，再加上日程、交通和常见问题。",
+    "emptyRead": "主人还没有添加版块。",
+    "kindLabel": "{kind} · 第 {n} 个版块",
+    "noSubEvents": "请在宾客页面添加子活动（仪式、晚宴……）来填充日程。",
+    "saveBlock": "保存“{name}”",
+    "blockSaved": "版块已保存。",
+    "moveUp": "上移“{name}”",
+    "moveDown": "下移“{name}”",
+    "moved": "已移动。",
+    "removeBlock": "删除“{name}”",
+    "removed": "版块已删除。",
+    "addTitle": "添加版块",
+    "addBlock": "添加版块",
+    "blockAdded": "版块已添加。请在上方填写。",
+    "subEventEveryone": "{name}（全员受邀）",
+    "kinds": {
+      "text": "文字",
+      "program": "日程",
+      "travel": "交通住宿",
+      "registry": "礼物清单",
+      "faq": "常见问题"
+    },
+    "show": {
+      "everyone": "全员受邀的子活动",
+      "chosen": "仅我勾选的子活动"
+    },
+    "fields": {
+      "heading": "标题",
+      "headingHint": "可选。",
+      "body": "正文",
+      "bodyHint": "段落、**粗体**、*斜体*、列表和链接。",
+      "show": "显示哪些子活动",
+      "showHint": "只邀请部分宾客的子活动（如彩排晚宴）只有勾选后才会显示。",
+      "subEvents": "显示的子活动",
+      "urlHint": "以 https:// 开头的完整链接。",
+      "password": "密码",
+      "newPassword": "新密码",
+      "passwordHint": "至少 {min} 个字符。",
+      "title": "标题",
+      "intro": "欢迎辞（可选）",
+      "language": "你书写所用的语言",
+      "languageHint": "宾客可以把页面按钮切换为自己的语言；你写的内容保持原样。",
+      "kind": "版块类型",
+      "kindHint": "日程会列出子活动及其时间。"
+    },
+    "item": {
+      "travel": {
+        "title": "地点 {n}：名称",
+        "details": "地点 {n}：详情",
+        "url": "地点 {n}：网站"
+      },
+      "registry": {
+        "label": "礼物清单 {n}：名称",
+        "url": "礼物清单 {n}：链接"
+      },
+      "faq": {
+        "question": "问题 {n}",
+        "answer": "回答 {n}"
+      }
+    },
+    "errors": {
+      "title": "请为网站填写标题。",
+      "password": "请输入密码。",
+      "required": "请填写此项。",
+      "tooShort": "至少使用 {min} 个字符。",
+      "tooLong": "最多使用 72 个字符。",
+      "passwordRequired": "发布前请设置密码。",
+      "tooManyBlocks": "一个网站最多有 {max} 个版块。",
+      "httpsOnly": "请使用以 https:// 开头的完整链接。",
+      "subEvents": "请选择本活动的子活动。"
+    }
+  },
+  "guestSite": {
+    "metaTitle": "宾客网站",
+    "gateTitle": "此网站为私密网站",
+    "gateIntro": "请输入请柬上的密码查看详情。",
+    "formLabel": "打开网站",
+    "password": "密码",
+    "passwordHint": "密码在你的请柬上，不区分大小写。",
+    "submit": "打开网站",
+    "challengeTitle": "还差一步",
+    "challengeHint": "请确认你是真人，然后再试一次。",
+    "errors": {
+      "empty": "请输入密码。",
+      "wrong": "密码不正确。请核对请柬后再试一次。",
+      "challengeFailed": "验证未通过，请再试一次。",
+      "rateLimited": "{minutes, plural, other {尝试次数过多。请在 # 分钟后再试。}}",
+      "closed": "此网站目前无法访问。"
+    },
+    "languages": "语言",
+    "onThisPage": "本页内容",
+    "empty": "主人仍在准备此页面。",
+    "headings": {
+      "text": "介绍",
+      "program": "日程",
+      "travel": "交通住宿",
+      "registry": "礼物清单",
+      "faq": "问题"
+    },
+    "visit": "{name} 的网站",
+    "newTab": "（在新标签页中打开）",
+    "galleryLink": "查看和分享照片"
+  },
+  "gallery": {
+    "uploader": {
+      "name": "你的名字",
+      "nameHint": "会显示在你的照片旁，让主人知道是谁分享的。",
+      "nameRequired": "分享前请输入你的名字。",
+      "chooseFirst": "请至少选择一张照片。",
+      "photos": "照片",
+      "photosHint": "手机里的 JPEG、PNG、WebP、AVIF 或 HEIC 照片，每张不超过 {mb} MB。",
+      "caption": "说明（可选）",
+      "captionHint": "会添加到你这次分享的每张照片上。",
+      "submit": "分享照片",
+      "uploading": "正在分享…",
+      "statusTitle": "上传状态",
+      "statusBusy": "正在分享照片：已完成 {done}/{total}",
+      "statusDone": "{done, plural, =0 {没有分享照片} other {已分享 # 张照片}}{failed, plural, =0 {。} other {，# 张未能分享。}}",
+      "state": {
+        "waiting": "等待中",
+        "uploading": "正在分享…",
+        "published": "已在相册中",
+        "pending": "等待主人审核"
+      },
+      "heldNotice": "照片经主人审核后才会对所有人显示。",
+      "errors": {
+        "event_cap": "相册已满：本活动的照片存储空间已全部用完。",
+        "event_items": "相册照片数量已达上限。",
+        "guest_bytes": "你已用完分配给你的相册存储空间。",
+        "guest_items": "你分享的照片已达每位宾客的上限。",
+        "too_large": "此文件超过 {mb} MB。",
+        "size_mismatch": "发送过程中文件发生了变化，请重试。",
+        "unsupported_type": "此文件不是可用的照片格式（JPEG、PNG、WebP、AVIF 或 HEIC）。",
+        "undecodable": "无法读取这张照片，文件可能已损坏。",
+        "too_many_pixels": "这张照片的像素过多。",
+        "heic_unsupported": "无法转换这张 HEIC 照片，请尝试以 JPEG 格式分享。",
+        "expired": "上传时间过长，请重试。",
+        "upload_missing": "照片未能送达，请重试。",
+        "locked": "请先输入网站密码。",
+        "gallery_closed": "相册已关闭。",
+        "rate_limited": "此设备上传次数过多，请稍后再试。",
+        "network": "网络连接已断开，请重试。"
+      }
+    },
+    "slideshow": {
+      "title": "实时幻灯片",
+      "hostIntro": "用于现场大屏幕：新照片一发布就会显示。",
+      "guestIntro": "新照片一发布就会显示。",
+      "backToGallery": "返回相册",
+      "backToGuestGallery": "返回照片",
+      "roleDescription": "幻灯片",
+      "controls": "幻灯片控制",
+      "previous": "上一张",
+      "next": "下一张",
+      "pause": "暂停",
+      "play": "播放",
+      "fullscreen": "全屏",
+      "keys": "按键：左右方向键切换照片，空格键暂停或播放。",
+      "paused": "幻灯片已暂停",
+      "playing": "幻灯片播放中",
+      "position": "第 {n} 张，共 {total} 张",
+      "none": "还没有照片",
+      "arrived": "新增了 {count, plural, other {# 张照片}}",
+      "alt": "第 {n} 张照片，共 {total} 张",
+      "altBy": "{name} 拍摄的照片，第 {n} 张，共 {total} 张",
+      "by": "来自 {name}",
+      "byHosts": "来自主人",
+      "emptyTitle": "还没有照片",
+      "emptyDescription": "照片一发布就会显示在这里。",
+      "stream": {
+        "connecting": "正在连接",
+        "live": "直播中",
+        "offline": "正在重新连接"
+      }
+    },
+    "host": {
+      "subtitle": "宾客和你分享的照片与视频链接，汇集在一个私密相册和实时幻灯片中。",
+      "openSlideshow": "打开幻灯片",
+      "viewerNotice": "你可以查看相册，但不能修改。",
+      "siteNeededTitle": "宾客需要通过你的宾客网站进入相册，请先发布网站。",
+      "siteNeededLink": "前往网站",
+      "statusTitle": "相册",
+      "on": "开",
+      "off": "关",
+      "usage": "已用 {used}/{cap}",
+      "usageLabel": "已用存储空间",
+      "counts": "{published, plural, other {已发布 # 项}} · {pending, plural, other {# 项待审核}}",
+      "fullTitle": "相册已满",
+      "fullBody": "在你删除部分照片或提高上限之前，任何人都无法添加照片。",
+      "guestAddress": "宾客访问地址（需输入网站密码）",
+      "privacyNote": "只有知道网站密码的人才能看到相册。相册不会被搜索引擎收录，也不会公开列出。",
+      "gb": "{n} GB",
+      "mb": "{n} MB",
+      "fields": {
+        "enabled": "宾客相册",
+        "moderation": "宾客照片",
+        "moderationHint": "你自己的照片总是立即显示。",
+        "cap": "本活动存储空间（MB）",
+        "capHint": "目前最多 {max} MB。",
+        "guestBytes": "每位宾客存储空间（MB）",
+        "guestBytesHint": "目前最多 {max} MB。",
+        "guestItems": "每位宾客可分享的照片和链接数",
+        "guestItemsHint": "目前最多 {max} 项。",
+        "videoUrl": "YouTube 或 Vimeo 链接",
+        "videoUrlHint": "粘贴视频页面的网址。",
+        "caption": "说明（可选）"
+      },
+      "enabledOn": "开：宾客可以查看和分享照片",
+      "enabledOff": "关",
+      "moderation": {
+        "hold": "等我审核后发布",
+        "auto": "立即发布"
+      },
+      "saveSettings": "保存相册设置",
+      "settingsSaved": "相册设置已保存。",
+      "uploadTitle": "添加你的照片",
+      "uploadIntro": "你的照片会立即发布，并显示在幻灯片中。",
+      "videoTitle": "添加视频链接",
+      "videoIntro": "视频以 YouTube 或 Vimeo 链接形式添加，相册不存储视频文件。",
+      "videoIntroStream": "添加 YouTube 或 Vimeo 链接。",
+      "addVideo": "添加视频链接",
+      "videoAdded": "视频链接已添加。",
+      "pendingTitle": "待审核（{count}）",
+      "approveAll": "全部通过（{count}）",
+      "approve": "通过：{name}",
+      "reject": "拒绝：{name}",
+      "approved": "已通过。",
+      "rejected": "已拒绝并删除。",
+      "pendingEmptyTitle": "没有待审核的内容",
+      "pendingEmptyHold": "宾客分享的照片会显示在这里，直到你审核通过。",
+      "pendingEmptyAuto": "宾客照片会立即发布，所以这里没有待审核的内容。",
+      "publishedTitle": "相册中（{count}）",
+      "publishedEmptyTitle": "还没有照片",
+      "publishedEmptyWrite": "在上方添加你的第一批照片，或分享宾客访问地址，让宾客添加他们的照片。",
+      "publishedEmptyRead": "已发布的照片和视频链接会显示在这里。",
+      "remove": "删除：{name}",
+      "removed": "已删除。",
+      "photo": "照片",
+      "photoBy": "{name} 拍摄的照片",
+      "photoByHosts": "主人分享的照片",
+      "by": "来自 {name}",
+      "byHosts": "来自主人",
+      "watchOn": {
+        "youtube": "在 YouTube 上观看",
+        "vimeo": "在 Vimeo 上观看"
+      },
+      "provider": {
+        "youtube": "YouTube",
+        "vimeo": "Vimeo"
+      },
+      "errors": {
+        "number": "请输入大于或等于 1 的整数。",
+        "videoLink": "请粘贴 YouTube 或 Vimeo 链接。",
+        "caption": "说明请少于 280 个字符。",
+        "eventItems": "相册内容数量已达上限。",
+        "eventCap": "相册已满。"
+      }
+    },
+    "guest": {
+      "metaTitle": "照片",
+      "title": "照片",
+      "backToSite": "返回网站",
+      "gateIntro": "输入请柬上的密码，即可查看和分享照片。",
+      "closedTitle": "相册尚未开放",
+      "closedDescription": "主人还没有开放照片相册，请稍后再来看看。",
+      "introHold": "与主人分享你的照片。主人审核通过后，照片会显示在这里。",
+      "introAuto": "分享你的照片：照片会立即显示在这里和幻灯片中。",
+      "openSlideshow": "观看幻灯片",
+      "shareTitle": "分享你的照片",
+      "quota": "你已分享 {items}/{quotaItems} 项（{used}/{quota} MB）。",
+      "fullTitle": "相册已满",
+      "fullBody": "目前无法再添加照片。",
+      "quotaReachedTitle": "你已达到分享上限",
+      "quotaReachedBody": "谢谢！在下方撤回一张照片，即可再分享一张。",
+      "privacyNote": "只有知道网站密码的宾客才能看到这些照片。每张照片的位置和相机信息都已移除。",
+      "videoTitle": "分享视频链接",
+      "videoIntro": "先把视频上传到 YouTube 或 Vimeo，再将链接粘贴到这里。",
+      "videoUrl": "YouTube 或 Vimeo 链接",
+      "videoUrlHint": "粘贴视频页面的网址。",
+      "addVideo": "分享链接",
+      "videoHeld": "谢谢！主人审核通过后，链接就会显示。",
+      "videoAdded": "谢谢！链接已添加到相册。",
+      "mineTitle": "你的照片（{count}）",
+      "statePublished": "已在相册中",
+      "statePending": "等待审核",
+      "takeBack": "撤回：{name}",
+      "takenBack": "已撤回。",
+      "publishedTitle": "相册",
+      "emptyTitle": "还没有照片",
+      "emptyDescription": "成为第一个分享照片的人吧。",
+      "photo": "照片",
+      "photoBy": "{name} 拍摄的照片",
+      "photoByHosts": "主人分享的照片",
+      "watchOn": {
+        "youtube": "在 YouTube 上观看",
+        "vimeo": "在 Vimeo 上观看"
+      },
+      "errors": {
+        "videoLink": "请粘贴 YouTube 或 Vimeo 链接。"
+      }
+    }
+  },
+  "hub": {
+    "metaTitle": "您的宾客页面",
+    "title": "欢迎，{party}",
+    "expiredTitle": "此链接已过期",
+    "expired": "请向主人索取新的链接。",
+    "sectionsLabel": "本页内容",
+    "upNext": "接下来",
+    "happeningNow": "正在进行",
+    "rsvpTitle": "回复",
+    "rsvpResponded": "已回复",
+    "rsvpWaiting": "等待您的回复",
+    "rsvpClosed": "回复已截止",
+    "rsvpCounts": "{attending, plural, other {# 人出席}} · {declined, plural, other {# 人无法出席}} · {awaiting, plural, other {# 人待回复}}",
+    "rsvpDeadline": "请在 {deadline} 前回复。",
+    "rsvpAnsweredOn": "您已于 {date} 回复。",
+    "rsvpLocked": "回复截止时间已过。如需修改回复，请联系主人。",
+    "rsvpAnswer": "回复邀请",
+    "rsvpChange": "修改回复",
+    "rsvpView": "查看您的回复",
+    "programTitle": "流程",
+    "programLabel": "您受邀参加的庆典环节",
+    "programEmptyTitle": "暂无流程",
+    "programEmpty": "主人还没有添加邀请你们参加的环节。请稍后再来查看。",
+    "chipNow": "进行中",
+    "chipDone": "已结束",
+    "chipGoing": "{count, plural, other {# 人出席}}",
+    "chipNoAnswer": "尚未回复",
+    "seatsTitle": "您的座位",
+    "seatsHiddenTitle": "座位安排尚未公布",
+    "seatsHidden": "主人公布座位安排后，您的桌号会显示在这里。",
+    "seatsNoneTitle": "您的同行人员暂无座位",
+    "seatsNone": "主人仍在安排座位。请在临近日期时再来查看。",
+    "rowLine": "第 {table} 排 · {seat} 号座",
+    "tableLine": "第 {table} 桌 · {seat} 号座",
+    "sponsoredBy": "由 {sponsor} 赞助",
+    "unseated": "{count, plural, other {您的同行人员中有 # 人还没有座位。}}",
+    "ticketsTitle": "门票",
+    "ticketsNoneTitle": "无需门票",
+    "ticketsNone": "凭邀请即可入场。如果主人给您发送门票，会显示在这里。",
+    "ticketQr": "{name} 的门票二维码",
+    "ticketCode": "代码 {code}",
+    "keepTitle": "随时打开此页面",
+    "keepIntro": "无需安装应用。把此页面添加到主屏幕，或将卡券保存到手机钱包。",
+    "install": "添加到主屏幕",
+    "installed": "此页面已在您的主屏幕上。",
+    "installHelp": "iPhone 或 iPad：点按“共享”，然后选择“添加到主屏幕”。Android：打开浏览器菜单，然后选择“添加到主屏幕”或“安装应用”。",
+    "installDone": "已添加到主屏幕。",
+    "offline": "您处于离线状态。这是保存在手机上的副本，恢复联网后会自动更新。",
+    "walletApple": "添加到 Apple 钱包",
+    "walletGoogle": "保存到 Google 钱包",
+    "walletHint": "卡券会显示时间和地点，座位公布后也会显示您的座位。",
+    "website": "打开主人的网站",
+    "privacy": "此页面仅供您的同行人员使用。请勿分享链接。",
+    "pass": {
+      "party": "同行",
+      "when": "时间",
+      "place": "地点",
+      "seats": "座位"
+    },
+    "openHub": "打开您的宾客页面：流程、座位和门票"
+  },
+  "savedCard": {
+    "metaTitle": "为今晚保存银行卡",
+    "title": "为今晚的捐赠保存银行卡",
+    "intro": "在您自己的手机上保存一次银行卡，整个晚上即可一键捐赠。现在不会扣款。",
+    "introParty": "致 {party}：在您自己的手机上保存一次银行卡，整个晚上即可一键捐赠。您的认捐将在第二天早上扣款。现在不会扣款。",
+    "unavailableTitle": "暂不支持保存银行卡",
+    "unavailableBody": "本活动目前不接受在线捐赠。您仍可在现场捐赠。",
+    "formLabel": "保存银行卡",
+    "formTitle": "您的信息",
+    "name": "姓名",
+    "email": "电子邮箱",
+    "emailHint": "认捐摘要和收据将发送到此邮箱。",
+    "consentLabel": "我授权为今晚保存这张银行卡",
+    "consent": "{org} 可将此卡保存在其支付服务商处，且仅可就我在 {event} 选择的捐款和作出的认捐扣款。认捐将在活动次日早上扣款，扣款前我会收到摘要。此卡将在活动结束 30 天后删除，我也可以随时在本页删除。",
+    "privacy": "您的银行卡信息直接发送给支付服务商。我们从不查看或保存您的卡号。",
+    "save": "保存我的银行卡",
+    "saving": "正在打开安全的银行卡表单…",
+    "savedTitle": "您的银行卡已为今晚保存",
+    "savedBody": "尾号 {last4} 的 {brand} 已可在本活动中一键捐赠。",
+    "card": "银行卡",
+    "giveNow": "立即捐赠",
+    "remove": "删除我的银行卡",
+    "removeHint": "删除后将取消所有尚未进行的扣款；认捐仍可通过链接支付。",
+    "removed": "您的银行卡已删除，不会再被扣款。",
+    "pending": "我们正在与支付服务商确认您的银行卡。请稍后刷新。",
+    "failed": "无法保存您的银行卡。请重试或使用其他银行卡。",
+    "fromCheckout": "谢谢，您的订单已完成。门票将通过电子邮件发送。",
+    "oneTapTitle": "用已保存的银行卡捐赠",
+    "oneTapBody": "一键即从尾号 {last4} 的 {brand} 扣款，随后会立即显示确认。",
+    "oneTapFailed": "这笔捐赠未能完成。请重试，或使用下方表单。",
+    "oneTapGive": "捐赠 {amount} · {name}",
+    "manageCard": "管理我保存的银行卡",
+    "errors": {
+      "name": "请输入您的姓名。",
+      "email": "请输入有效的电子邮箱。",
+      "consent": "请勾选此框以授权保存您的银行卡。",
+      "event_over": "本活动已结束，无法再保存银行卡。",
+      "not_connected": "本活动目前不接受在线捐赠。",
+      "link": "此链接已失效。请向主办方索取新链接。"
+    }
+  },
+  "pledgePay": {
+    "metaTitle": "您的认捐",
+    "title": "您认捐的 {amount}",
+    "subtitle": "{level} · {campaign}。感谢您的慷慨。",
+    "stateTitle": "状态",
+    "status": {
+      "scheduled": "已安排银行卡扣款",
+      "charging": "正在扣款",
+      "invoiced": "等待付款",
+      "paid": "已付款",
+      "paid_offline": "已付款",
+      "written_off": "已关闭"
+    },
+    "card": "银行卡",
+    "cardScheduled": "我们将于 {when} 从尾号 {last4} 的 {brand} 扣款。",
+    "charging": "正在从您的银行卡扣款。请稍后刷新。",
+    "due": "请在 {date} 前付款。",
+    "thanks": "已全额付款。谢谢！收据将通过电子邮件发送。",
+    "closed": "此认捐已关闭，无需再付款。",
+    "payNow": "立即支付 {amount}",
+    "payAnotherWay": "立即以其他方式支付 {amount}",
+    "anotherWayHint": "现在付款将取消银行卡扣款。想用另一张卡？现在就用它付款。",
+    "errors": {
+      "charging": "正在从您的银行卡扣款，因此未发起此次付款。",
+      "settled": "此认捐已结清。",
+      "no_email": "请输入您的电子邮箱以付款。",
+      "rate_limited": "尝试次数过多。请等待一分钟后重试。",
+      "not_connected": "目前无法在线付款。请向主办方询问付款方式。",
+      "generic": "出了点问题。请重试。",
+      "email": "请输入有效的电子邮箱。"
+    },
+    "email": "接收收据的电子邮箱",
+    "emailHint": "收据将发送到此邮箱。"
+  },
+  "pledges": {
+    "title": "认捐",
+    "subtitle": "举牌认捐中的每笔认捐及其收款情况。",
+    "viewerNotice": "您可以查看认捐。财务角色负责结束当晚、登记付款和核销认捐。",
+    "pledged": "认捐总额",
+    "paid": "已付款",
+    "owed": "尚欠",
+    "writtenOffTotal": "已核销",
+    "cardsSaved": "已保存的银行卡",
+    "emptyTitle": "暂无认捐",
+    "emptyDescription": "记录员在举牌认捐中确认号牌后，认捐会显示在这里。",
+    "closeTitle": "{count, plural, other {待发送认捐 # 笔}}",
+    "closeBody": "结束当晚后，每位捐赠者都会收到摘要。已保存银行卡的认捐将于明天 09:00（活动时区）扣款；其他认捐会收到 30 天内到期的付款链接，并在付款前收到提醒。",
+    "close": "结束当晚并发送摘要",
+    "closed": "摘要已发送：{cards, plural, other {# 笔认捐将从已保存的银行卡扣款}}，{invoices, plural, other {# 笔认捐已收到付款链接}}。",
+    "caption": "认捐及其收款",
+    "columns": {
+      "paddle": "号牌",
+      "holder": "捐赠者",
+      "level": "级别",
+      "amount": "金额",
+      "status": "状态",
+      "detail": "详情",
+      "actions": "操作"
+    },
+    "status": {
+      "open": "未发送",
+      "scheduled": "已安排银行卡扣款",
+      "charging": "正在扣款",
+      "invoiced": "已发送付款链接",
+      "paid": "已付款",
+      "paid_offline": "线下已付款",
+      "written_off": "已核销"
+    },
+    "cardLabel": "{brand} ·{last4}",
+    "card": "银行卡",
+    "detail": {
+      "open": "等待结束当晚。",
+      "scheduled": "{card}，{when}",
+      "charging": "{card}，正在扣款",
+      "invoiced": "到期日 {date}。",
+      "declined": "{count, plural, other {银行卡被拒 # 次。}}",
+      "noEmail": "没有登记邮箱：请自行分享付款链接。",
+      "paidCard": "已从 {card} 扣款",
+      "paidLink": "已通过链接付款"
+    },
+    "methods": {
+      "check": "支票",
+      "wire": "电汇",
+      "stock": "股票",
+      "daf": "捐赠者建议基金",
+      "cash": "现金",
+      "other": "其他"
+    },
+    "recordPayment": "登记付款",
+    "method": "付款方式",
+    "chooseMethod": "请选择…",
+    "reference": "参考号（可选）",
+    "receivedOn": "收款日期",
+    "noteOptional": "备注（可选）",
+    "recordSubmit": "登记号牌 {paddle} 的付款",
+    "recorded": "付款已登记。提醒和银行卡扣款已停止。",
+    "writeOff": "核销",
+    "writeOffNote": "核销原因",
+    "writeOffSubmit": "核销号牌 {paddle} 的认捐",
+    "writtenOff": "已核销 {amount} 的认捐。",
+    "errors": {
+      "charging": "正在从银行卡扣款。请几分钟后重试。",
+      "settled": "此认捐已结清。",
+      "future": "日期不能是将来。",
+      "method": "请选择付款方式。",
+      "receivedOn": "请输入收款日期。",
+      "note": "请写明核销原因。",
+      "generic": "出了点问题。请重试。"
+    },
+    "qr": {
+      "label": "为今晚的捐赠保存银行卡的二维码",
+      "checkinTitle": "签到时保存银行卡",
+      "checkinBody": "宾客签到后向其出示此二维码：他们可在自己的手机上保存银行卡，今晚一键捐赠。",
+      "tableTitle": "在餐桌上保存银行卡",
+      "tableBody": "将此二维码印在桌卡上：宾客可在自己的手机上保存银行卡，用于一键捐赠和认捐。"
+    },
+    "payLink": "号牌 {paddle} 的付款链接"
+  },
+  "cfp": {
+    "title": "征稿",
+    "subtitle": "收集演讲提案，请评审打分，然后做出决定。被接受的演讲会成为草稿场次。",
+    "sectionsLabel": "征稿栏目",
+    "tabs": {
+      "submissions": "提案",
+      "reviewers": "评审",
+      "settings": "设置"
+    },
+    "status": {
+      "draft": "尚未开放",
+      "open": "开放中",
+      "closed": "已截止"
+    },
+    "viewerNotice": "你可以查看征稿，但只有编辑者可以修改。",
+    "openPublicForm": "打开公开表单",
+    "setUp": "设置征稿",
+    "submissionsHeading": "提案",
+    "emptyTitle": "还没有提案",
+    "emptyOpen": "分享公开表单的链接；收到的提案会显示在这里。",
+    "emptyDraft": "先在设置中开放征稿，再分享公开表单的链接。",
+    "tableCaption": "提交到征稿的提案",
+    "colTitle": "标题",
+    "colSpeaker": "演讲者",
+    "colLength": "时长",
+    "colTrack": "分会场",
+    "colReviews": "评审",
+    "colScore": "评分",
+    "colStatus": "状态",
+    "colSubmitted": "提交时间",
+    "minutes": "{count} 分钟",
+    "reviewsOf": "{done}/{total}",
+    "decision": {
+      "submitted": "待决定",
+      "accepted": "已接受",
+      "rejected": "未入选"
+    },
+    "settingsHeading": "征稿设置",
+    "save": "保存征稿",
+    "saved": "已保存。",
+    "statusLabel": "状态",
+    "statusHint": "开放中：公开表单接受提案；已截止：页面保留但不再接受提案。",
+    "statusOption": {
+      "draft": "尚未开放（隐藏）",
+      "open": "开放征稿",
+      "closed": "已截止"
+    },
+    "closesAtLabel": "截止时间（可选）",
+    "closesAtHint": "使用活动所在时区（{zone}）。截止后表单不再接受提案。",
+    "durationsLabel": "演讲者可选择的场次时长",
+    "maxCoSpeakersLabel": "每个提案允许的共同演讲者人数",
+    "blindLabel": "盲审",
+    "blindOption": "对评审隐藏提交者（姓名、共同演讲者及你的问题的回答）",
+    "introLabel": "公开表单的介绍",
+    "introHint": "你在寻找什么、主题以及演讲者需要了解的事项。",
+    "yes": "是",
+    "no": "否",
+    "questionsHeading": "附加问题",
+    "questionsHint": "在公开表单中位于演讲和演讲者信息之后。修改问题不会改变已提交的回答。",
+    "noQuestionsTitle": "没有附加问题",
+    "noQuestionsDescription": "如需标题、摘要、时长和演讲者信息之外的内容，请添加问题。",
+    "questionType": {
+      "short_text": "简短回答",
+      "long_text": "段落",
+      "select": "单选",
+      "multi_select": "多选",
+      "checkbox": "复选框",
+      "number": "数字"
+    },
+    "required": "必填",
+    "removeQuestion": "删除“{label}”",
+    "questionRemoved": "问题已删除。",
+    "addQuestion": "添加问题",
+    "questionAdded": "问题已添加。",
+    "questionTypeLabel": "回答类型",
+    "questionLabel": "问题",
+    "optionsLabel": "选项",
+    "optionsHint": "选择题：每行一个选项，至少两个。",
+    "requiredLabel": "回答",
+    "requiredOption": "必填",
+    "colReviewer": "评审",
+    "colEmail": "邮箱",
+    "colAccess": "访问权限",
+    "colProgress": "已评审",
+    "colActions": "操作",
+    "access": {
+      "invited": "已邀请",
+      "active": "已登录",
+      "revoked": "访问已终止",
+      "expired": "已过期",
+      "none": "无访问权限"
+    },
+    "revoke": "终止 {name} 的访问权限",
+    "revoked": "访问已终止。",
+    "reviewersHeading": "评审",
+    "reviewersHint": "评审会收到门户的邀请邮件，只能看到你分配给他们的提案。",
+    "noReviewersTitle": "还没有评审",
+    "noReviewersDescription": "在下方通过邮件邀请评审，然后为他们分配提案。",
+    "reviewersCaption": "征稿评审",
+    "addReviewer": "邀请评审",
+    "inviteReviewer": "发送邀请",
+    "reviewerInvited": "邀请已发送。",
+    "reviewerName": "姓名",
+    "reviewerEmail": "邮箱",
+    "submittedOn": "提交于 {date}",
+    "abstractHeading": "摘要",
+    "speakersHeading": "演讲者",
+    "coSpeakersList": "共同演讲者：{names}",
+    "reviewsHeading": "评审（平均 {score}）",
+    "noReviewsTitle": "尚未分配评审",
+    "noReviewsAssign": "在下方分配评审；评分和意见会显示在这里。",
+    "noReviewsDescription": "尚未请任何人评审此提案。",
+    "notReviewed": "尚未评审",
+    "scoreOf": "{score}/5",
+    "unassign": "移除 {name}",
+    "unassigned": "评审已移除。",
+    "assignHeading": "分配评审",
+    "assign": "分配",
+    "assigned": "评审已分配。",
+    "reviewerLabel": "评审",
+    "allAssigned": "所有评审都已分配。",
+    "addReviewersLink": "邀请更多评审",
+    "decisionHeading": "决定",
+    "decisionHint": "接受后会添加演讲者和一个草稿场次，由你安排进议程。无论结果如何，提案中的每位演讲者都会收到邮件。",
+    "accept": "接受",
+    "reject": "不入选",
+    "noteLabel": "给演讲者的留言（可选，会写入邮件）",
+    "decided": "决定已保存，并已通知演讲者。",
+    "undecided": "尚未决定。",
+    "acceptedOn": "于 {date} 接受。",
+    "rejectedOn": "于 {date} 决定不入选。",
+    "noteSent": "已发送留言：{note}",
+    "placeSessionLink": "将场次安排进议程",
+    "draftSession": "草稿",
+    "draftSessionHint": "来自征稿：在你设定时间并加入议程之前不会公开。",
+    "placeSession": "将“{title}”加入议程",
+    "placed": "已加入议程。",
+    "errors": {
+      "closesAt": "请输入有效的日期和时间。",
+      "pastDeadline": "截止时间已过：请选择更晚的时间来开放征稿。",
+      "durations": "请至少选择一个场次时长。",
+      "questionLabel": "请填写问题。",
+      "options": "请至少填写两个选项，每行一个。",
+      "tooManyQuestions": "已达到 20 个问题的上限。",
+      "reviewerName": "请输入评审姓名。",
+      "email": "请输入有效的邮箱地址。",
+      "eventOver": "活动已结束，无法再发送邀请。",
+      "tooManyReviewers": "已达到 100 位评审的上限。",
+      "reviewer": "请选择评审。",
+      "alreadyAssigned": "该评审已分配。",
+      "decided": "此提案已有决定。",
+      "tooManySessions": "活动场次已达上限。"
+    },
+    "emailedNotice": "已通过邮件将决定告知提案中的每位演讲者。"
+  },
+  "cfpPublic": {
+    "metaTitle": "征稿",
+    "title": "征稿",
+    "deadline": "请在 {date}（{zone}）前提交提案。",
+    "closedTitle": "本次征稿已截止",
+    "closedDescription": "已不再接受提案。感谢你的关注。",
+    "backToEvent": "返回活动",
+    "thanksTitle": "谢谢，你的提案已提交",
+    "thanksBody": "我们已向你发送确认邮件。主办方会通过邮件告知结果。",
+    "optional": "（可选）",
+    "formLabel": "提案",
+    "talkHeading": "你的演讲",
+    "talkTitle": "标题",
+    "abstract": "摘要",
+    "length": "时长",
+    "minutes": "{count} 分钟",
+    "track": "分会场",
+    "noTrack": "无偏好",
+    "youHeading": "关于你",
+    "name": "你的姓名",
+    "email": "你的邮箱",
+    "emailHint": "确认和结果会发送到这个邮箱。",
+    "jobTitle": "职位",
+    "company": "公司或机构",
+    "bio": "个人简介",
+    "coHeading": "共同演讲者",
+    "coHint": "最多 {count} 人可以与你一起演讲。如果单独演讲，请留空。",
+    "coName": "共同演讲者 {n}：姓名",
+    "coEmail": "共同演讲者 {n}：邮箱",
+    "moreHeading": "还有几个问题",
+    "submit": "提交我的提案",
+    "errors": {
+      "title": "请为演讲填写标题。",
+      "abstract": "请描述你的演讲。",
+      "speakerName": "请输入你的姓名。",
+      "speakerEmail": "请输入有效的邮箱地址。",
+      "coName": "请输入共同演讲者的姓名。",
+      "coEmail": "请输入共同演讲者的邮箱地址。",
+      "coDuplicate": "每位演讲者需要使用自己的邮箱地址。",
+      "question": "请回答此问题。",
+      "durationMinutes": "请从提供的时长中选择一个。",
+      "trackId": "请从列表中选择分会场。",
+      "rateLimited": "提交过于频繁，请在 {minutes} 分钟后重试。",
+      "reasons": {
+        "duplicate": "你已提交过相同标题的提案。",
+        "closed": "本次征稿已截止。",
+        "past_deadline": "截止时间已过。"
+      }
+    }
+  },
+  "cfpReview": {
+    "portalTitle": "提案评审",
+    "reviewTitle": "评审提案",
+    "welcome": "你好，{name}",
+    "intro": "请为分配给你的每个提案打 1 到 5 分，并为主办方写下意见。",
+    "introBlind": "本次为盲审：你能看到演讲内容，但看不到提交者。请为每个提案打 1 到 5 分，并为主办方写下意见。",
+    "signedInAs": "当前登录：{email}。",
+    "assignedHeading": "待评审：{count}",
+    "noneTitle": "尚未分配",
+    "noneDescription": "主办方为你分配提案后会显示在这里。",
+    "minutes": "{count} 分钟",
+    "statusDecided": "已决定",
+    "statusTodo": "待评审",
+    "statusScored": "你的评分：{score}",
+    "back": "返回我的提案",
+    "blindNotice": "盲审：演讲者的姓名和信息已隐藏。",
+    "abstractHeading": "摘要",
+    "speakersHeading": "演讲者",
+    "coSpeakers": "共同演讲者：{names}",
+    "yourReview": "你的评审",
+    "decided": "主办方已做出决定，评审已关闭。",
+    "decidedWithScore": "主办方已做出决定；你的评分为 {score}/5。",
+    "scoreLabel": "评分",
+    "scoreOption": "{n}/5",
+    "scoreHint": "1 = 较弱，5 = 优秀。",
+    "commentLabel": "意见（可选）",
+    "commentHint": "只有主办方能看到。",
+    "saved": "评审已保存。",
+    "submit": "保存我的评审",
+    "update": "更新我的评审",
+    "errors": {
+      "score": "请选择 1 到 5 分。",
+      "decided": "主办方已对此提案做出决定。"
+    }
+  },
+  "sponsorship": {
+    "subnav": "赞助商页面",
+    "packagesLink": "套餐和赞助商",
+    "deliverablesLink": "交付事项",
+    "packagesTitle": "赞助套餐",
+    "packagesSubtitle": "设置每个套餐的价格和内容，然后授予赞助商，或让赞助商在门户中购买。",
+    "packagesHeading": "套餐",
+    "noTiersTitle": "还没有套餐",
+    "noTiersDescription": "每个赞助级别就是一个套餐。在“赞助商”页面添加级别，然后在这里设置条件。",
+    "sponsorsHeading": "赞助商（{count}）",
+    "noSponsorsTitle": "还没有赞助商",
+    "noSponsorsDescription": "请先在“赞助商”页面添加赞助商。",
+    "status": {
+      "noTerms": "尚未设置条件",
+      "soldOut": "已售罄",
+      "onSale": "在售",
+      "notSold": "仅由你授予"
+    },
+    "noPrice": "无价格",
+    "holdersUnlimited": "持有者：{holders} · 不限量",
+    "holdersOf": "持有者：{holders} / {quantity} · 剩余：{left}",
+    "templatesSummary": "每位持有者的交付事项：{count}",
+    "noTermsDescription": "设置此套餐的价格和包含内容。",
+    "editPackage": "编辑 {name} 套餐",
+    "savePackage": "保存套餐",
+    "packageSaved": "套餐已保存。",
+    "price": "价格（{currency}）",
+    "priceHint": "如果赞助商不在线购买，请留空。",
+    "quantity": "销售数量",
+    "quantityHint": "留空表示不限量。",
+    "selling": "销售",
+    "onSale": "赞助商可在门户中购买",
+    "allowances": {
+      "compRegistrations": "免费注册",
+      "exhibitorBadges": "参展商胸卡",
+      "leadLicenses": "线索许可证",
+      "sessionSlots": "议程时段",
+      "logoPlacements": "标志展示位置"
+    },
+    "placements": {
+      "website": "网站",
+      "agenda": "议程",
+      "badges": "胸卡",
+      "signage": "指示牌",
+      "stage": "舞台",
+      "emails": "邮件"
+    },
+    "none": "无",
+    "description": "说明",
+    "templates": "每位持有者的交付事项",
+    "templatesHint": "每行一项：标题 | sponsor 或 organizer | 活动前几天。例如：发送标志文件 | sponsor | 21",
+    "grantActive": "{name} 套餐",
+    "grantPending": "等待付款",
+    "grantNone": "无套餐",
+    "boughtFor": "在线购买，{price}",
+    "grantedByOrganizer": "由你授予",
+    "compCode": "免费注册码：",
+    "compCodePending": "正在生成…",
+    "cancelPackage": "取消 {name} 的套餐",
+    "grantPackage": "授予套餐",
+    "packageGranted": "套餐已授予。",
+    "packageFor": "{name} 的套餐",
+    "note": "备注",
+    "noteHint": "供团队查看，例如“已银行转账”。",
+    "setTermsFirst": "请先在上方设置套餐条件再授予。",
+    "exhibitsAs": "参展身份",
+    "noExhibitor": "无参展商",
+    "saveExhibitor": "保存参展商",
+    "exhibitorSaved": "参展商已保存。",
+    "exhibitorFor": "{name} 的参展商",
+    "exhibitorHint": "获得套餐中的参展商胸卡和线索许可证。",
+    "sessionSlots": "已用议程时段：{used} / {slots}",
+    "removeSession": "移除 {title}",
+    "assignSession": "添加议程",
+    "sessionAssigned": "议程已添加。",
+    "sessionFor": "{name} 赞助的议程",
+    "contacts": "联系人（{count}）",
+    "contactStatus": {
+      "pending": "已邀请",
+      "active": "已登录"
+    },
+    "resendTo": "重新发送给 {email}",
+    "revokeContact": "移除 {email}",
+    "noContacts": "还没有联系人。",
+    "inviteContactTo": "邀请 {name} 的联系人",
+    "sendInvite": "发送邀请",
+    "inviteSent": "邀请已发送。",
+    "contactEmail": "电子邮件",
+    "deliverablesSummary": "交付事项：待办 {open} · 已完成 {done} · 已逾期 {overdue}",
+    "deliverablesTitle": "赞助商交付事项",
+    "deliverablesSubtitle": "每位赞助商应提交和应获得的内容及截止时间。截止日期在活动时区（{timezone}）的午夜结束。",
+    "overdueHeading": "已逾期（{count}）",
+    "noOverdue": "没有逾期事项。",
+    "overdueList": "逾期交付事项",
+    "allDeliverables": "全部交付事项（{count}）",
+    "noDeliverablesTitle": "还没有交付事项",
+    "noDeliverablesDescription": "在下方添加一项，或在套餐中设置交付事项，让每位持有者都获得。",
+    "addDeliverable": "添加交付事项",
+    "deliverableAdded": "交付事项已添加。",
+    "sponsor": "赞助商",
+    "deliverableTitle": "需要交付的内容",
+    "owner": "由谁交付",
+    "owners": {
+      "sponsor": "赞助商",
+      "organizer": "主办方"
+    },
+    "ownerName": "负责人",
+    "ownerNameHint": "可选，例如“Maya，市场部”。",
+    "dueDate": "截止日期",
+    "dueDateHint": "在 {timezone} 的当天结束前截止。",
+    "statusDone": "已完成",
+    "statusOverdue": "已逾期",
+    "statusOpen": "待办",
+    "due": "截止 {date}",
+    "reopen": "重新打开 {title}",
+    "markDone": "将 {title} 标为已完成",
+    "deleteDeliverable": "删除 {title}",
+    "errors": {
+      "price": "请输入价格，例如 5000 或 5000.00。",
+      "priceRequired": "在售套餐需要设置价格。",
+      "quantity": "请输入 1 到 999 的数字，或留空。",
+      "allowance": "请输入 0 到 500 的数字。",
+      "slots": "请输入 0 到 20 的数字。",
+      "templates": "每行一项：标题 | sponsor 或 organizer | 活动前几天。",
+      "description": "最多 1000 个字符。",
+      "tier": "请选择套餐。",
+      "soldOut": "此套餐已售罄。",
+      "alreadyGranted": "此赞助商已持有套餐。",
+      "purchasePending": "有一笔购买正在等待付款。",
+      "noTerms": "请先设置此套餐的条件。",
+      "exhibitor": "请选择本活动的参展商。",
+      "exhibitorTaken": "另一位赞助商已以该参展商身份参展。",
+      "session": "请选择议程。",
+      "slotsUsed": "此套餐的议程时段已全部用完。",
+      "sessionTaken": "另一位赞助商已赞助该议程。",
+      "noSlot": "此赞助商的套餐没有议程时段。",
+      "email": "请输入电子邮件地址。",
+      "alreadyInvited": "该地址已被邀请。",
+      "tooManyContacts": "每位赞助商最多 10 位联系人。",
+      "eventOver": "活动已结束。",
+      "sponsor": "请选择赞助商。",
+      "title": "请输入需要交付的内容（最多 120 个字符）。",
+      "owner": "请选择由谁交付。",
+      "ownerName": "最多 80 个字符。",
+      "dueDate": "请输入有效日期。",
+      "tooManyDeliverables": "每位赞助商最多 100 项交付事项。"
+    }
+  },
+  "sponsorPortal": {
+    "title": "赞助商门户",
+    "eyebrow": "赞助商门户",
+    "signedInAs": "已以 {email} 登录。",
+    "eventDates": "{start} – {end}",
+    "paidTitle": "谢谢。你的 {name} 套餐已生效。",
+    "packageHeading": "你的套餐",
+    "active": "已生效",
+    "paid": "已付款：{price}",
+    "granted": "由主办方授予",
+    "allowance": {
+      "compRegistrations": "免费注册：{count}",
+      "exhibitorBadges": "参展商胸卡：{count}",
+      "leadLicenses": "线索许可证：{count}",
+      "sessionSlots": "议程时段：{count}",
+      "logo": "你的标志展示于：{places}",
+      "noLogo": "无标志展示位置"
+    },
+    "placements": {
+      "website": "网站",
+      "agenda": "议程",
+      "badges": "胸卡",
+      "signage": "指示牌",
+      "stage": "舞台",
+      "emails": "邮件"
+    },
+    "compHeading": "免费注册",
+    "compCode": "你的注册码：",
+    "compHint": "分享给你的嘉宾：他们注册时在代码栏中输入，即可免费获得通行证。",
+    "compUsed": "已使用：{used} / {allowance}",
+    "compPending": "正在生成注册码，请稍后刷新。",
+    "exhibitorLinked": "参展商胸卡和线索许可证归属 {name}。",
+    "exhibitorMissing": "请向主办方确认由哪个参展商接收你的胸卡和线索许可证。",
+    "sessionsHeading": "赞助议程：{used} / {slots}",
+    "noSessions": "主办方将添加你的赞助议程。",
+    "pendingTitle": "等待你的付款",
+    "pendingDescription": "请在付款页面完成付款。收到付款后套餐即刻生效。",
+    "noPackageTitle": "还没有套餐",
+    "noPackageDescription": "主办方会添加你的套餐，或在此提供可购买的套餐。",
+    "chooseIntro": "请选择套餐，下一页付款。",
+    "soldOut": "已售罄",
+    "buy": "以 {price} 购买 {name}",
+    "redirecting": "正在打开付款页面…",
+    "deliverablesHeading": "交付事项（待办：{count}）",
+    "noDeliverablesTitle": "暂无待交付事项",
+    "noDeliverablesDescription": "主办方向你提出需求时，会连同截止日期显示在这里。",
+    "ownerYou": "由你交付",
+    "ownerOrganizer": "由主办方交付",
+    "due": "截止 {date}",
+    "done": "已完成",
+    "overdue": "已逾期",
+    "open": "待办",
+    "reopen": "重新打开 {title}",
+    "markDone": "将 {title} 标为已完成",
+    "errors": {
+      "soldOut": "此套餐已售罄。",
+      "alreadyGranted": "你已持有套餐。",
+      "purchasePending": "已有一笔购买正在等待付款。"
+    }
+  },
+  "leadLicenses": {
+    "title": "线索许可证",
+    "subtitle": "每个许可证是参展商分配给一个人的扫码席位。设置包含的数量和额外许可证的价格。",
+    "settingsHeading": "每个参展商的许可证",
+    "settingsSummary": "每个参展商包含：{included}。",
+    "notForSale": "额外许可证不出售。",
+    "forSale": "额外许可证：每个 {price}。",
+    "save": "保存",
+    "saved": "已保存。",
+    "included": "每个参展商包含的许可证",
+    "includedHint": "0 到 50。赞助套餐会另外添加。",
+    "price": "额外许可证价格（{currency}）",
+    "priceHint": "留空表示不出售额外许可证。",
+    "exhibitorsHeading": "参展商（{count}）",
+    "emptyDescription": "添加参展商后即可为其分配线索许可证。",
+    "licensesLine": "使用中的许可证：{used} / {allowance}（包含 {included} · 套餐 {packages} · 购买 {purchased}）",
+    "badgesLine": "工作人员胸卡：{base} + 赞助套餐 {packages}",
+    "portalHeading": "线索许可证",
+    "paidTitle": "谢谢。你的额外许可证可以分配了。",
+    "portalSummary": "使用中的许可证：{used} / {allowance}",
+    "portalBreakdown": "包含：{included} · 来自赞助套餐：{packages} · 购买：{purchased}",
+    "youHaveOne": "你有一个线索许可证。",
+    "youHaveNone": "你没有线索许可证，请向管理员申请。",
+    "licensed": "已分配许可证",
+    "notLicensed": "无许可证",
+    "takeBack": "收回 {email} 的许可证",
+    "give": "为 {email} 分配许可证",
+    "given": "许可证已分配。",
+    "pendingTitle": "一笔额外许可证购买正在等待付款。",
+    "buyHeading": "购买额外许可证",
+    "buyHint": "每个 {price}，付给主办方。下一页付款。",
+    "orderName": "线索许可证",
+    "quantity": "数量",
+    "buy": "购买许可证",
+    "redirecting": "正在打开付款页面…",
+    "errors": {
+      "included": "请输入 0 到 50 的数字。",
+      "price": "请输入价格，例如 250 或 250.00，或留空。",
+      "used": "所有许可证都在使用中。请收回一个或购买更多。",
+      "already": "此人已有许可证。",
+      "quantity": "请输入 1 到 100 的数字。",
+      "tooMany": "购买的许可证将超过 100 个。",
+      "notForSale": "额外许可证不出售。",
+      "pending": "已有一笔购买正在等待付款。"
+    }
+  },
+  "badgePrinting": {
+    "title": "打印机和打印记录",
+    "subtitle": "添加此活动的胸卡打印机，保持每个服务台的打印站在线，并查看每张胸卡的打印或重印情况及原因。",
+    "printers": "打印机",
+    "stationHint": "在每台打印机旁的电脑上保持打开一个打印站。90 秒内没有信号的打印机会显示为离线。",
+    "noPrintersTitle": "暂无打印机",
+    "noPrintersDescription": "为每个服务台添加一台打印机。在此之前，胸卡通过你所用设备的打印对话框打印。",
+    "addPrinter": "添加打印机",
+    "printerName": "打印机名称",
+    "connection": "打印方式",
+    "adapters": {
+      "browser": "服务台电脑或 iPad 上的打印对话框（AirPrint 或任意打印机）",
+      "printnode": "PrintNode（无需打印对话框）"
+    },
+    "adapterShort": {
+      "browser": "打印对话框",
+      "printnode": "PrintNode"
+    },
+    "printnodeId": "PrintNode 打印机编号",
+    "printnodeIdHint": "该打印机在你的 PrintNode 账户中的编号。",
+    "printnodeNumber": "PrintNode 编号 {id}",
+    "printnodeOffHint": "打印机通过服务台设备的打印对话框打印。如需无对话框打印（PrintNode），请联系支持团队为你的组织开通 PrintNode 账户。",
+    "printerAdded": "已添加打印机。",
+    "archive": "归档 {name}",
+    "archived": "已归档打印机。",
+    "status": {
+      "unknown": "尚未连接",
+      "online": "在线",
+      "offline": "离线"
+    },
+    "lastSeen": "最后信号：{time}",
+    "neverSeen": "尚无信号",
+    "offlineSince": "自 {time} 起离线",
+    "openStation": "打开打印站：{name}",
+    "log": "打印记录",
+    "counts": "{prints, plural, other {首次打印 # 次}} · {reprints, plural, other {重印 # 次}}",
+    "filterLabel": "显示",
+    "filters": {
+      "all": "全部",
+      "print": "首次打印",
+      "reprint": "重印"
+    },
+    "logEmptyTitle": "尚未打印任何内容",
+    "logEmptyDescription": "在服务台或从参会者资料中打印的胸卡会显示在这里，并附有每次重印的原因。",
+    "logCaption": "已打印和重印的胸卡，最新的在前",
+    "columns": {
+      "when": "时间",
+      "who": "胸卡",
+      "what": "打印",
+      "reason": "原因",
+      "printer": "打印机",
+      "status": "状态"
+    },
+    "kinds": {
+      "print": "首次打印",
+      "reprint": "重印"
+    },
+    "reasons": {
+      "first_print": "首次打印",
+      "damaged": "损坏",
+      "lost": "丢失",
+      "details_changed": "信息变更",
+      "misprint": "打印错误",
+      "printer_problem": "打印机故障",
+      "other": "其他"
+    },
+    "jobStatus": {
+      "queued": "发送中",
+      "sent": "已发送",
+      "failed": "失败"
+    },
+    "failedHint": "打印失败不计数：再次打印该胸卡仍算作首次打印。",
+    "voided": "门票已取消",
+    "deviceDialog": "此设备上的打印对话框",
+    "stationTitle": "打印站：{name}",
+    "stationIntro": "请在连接 {name} 的电脑上保持此页面打开。它每 30 秒告知 Yayatoh 打印机正在使用；如果页面关闭或离线达 90 秒，打印机将显示为离线。",
+    "stationConnecting": "正在连接…",
+    "stationLive": "已于 {time} 发送信号。",
+    "stationProblem": "未连接",
+    "stationError": "无法连接 Yayatoh。将在 30 秒后重试。",
+    "stationArchived": "此打印机已归档。请关闭此页面。",
+    "stationNotBrowser": "PrintNode 会自行报告此打印机的状态，无需打印站。",
+    "recentJobs": "{name} 上的近期打印",
+    "noJobsYet": "此打印机尚未打印任何内容。",
+    "findBadge": "查找要打印的胸卡",
+    "badgeHeading": "胸卡",
+    "printTitle": "打印胸卡：{name}",
+    "noBadge": "此门票没有胸卡（可能已被取消）。",
+    "neverPrinted": "尚未打印。",
+    "printedTimes": "{count, plural, other {已打印 # 次}}，最近一次：{time}。",
+    "printer": "打印机",
+    "noPrintersHint": "此活动尚无打印机：胸卡将以 PDF 打开，通过此设备的打印对话框打印。",
+    "reason": "为什么要重印？",
+    "reasonPlaceholder": "选择原因",
+    "note": "备注",
+    "noteHint": "选择“其他”时必填。最多 200 个字符。",
+    "print": "为 {name} 打印胸卡",
+    "reprint": "为 {name} 重印胸卡",
+    "printDialogReady": "已记录。请打开胸卡 PDF，按实际大小（100%）打印。",
+    "openPdf": "打开 {name} 的胸卡 PDF",
+    "printSent": "胸卡已发送到 {printer}。",
+    "printFailed": "无法发送胸卡（{code}）。请重试或选择其他打印机。",
+    "history": "打印历史",
+    "noTemplate": "此票种还没有胸卡模板。请在“胸卡”页面创建一个。",
+    "printBadgeFor": "为 {name} 打印胸卡",
+    "deskHint": "服务台使用：查找持票人并打印其胸卡。每次打印和重印都会连同原因记录下来。",
+    "errors": {
+      "name": "请为打印机命名（最多 60 个字符）。",
+      "nameTaken": "此活动已有同名打印机。",
+      "printnode_off": "你的组织尚未开通 PrintNode。",
+      "printnode_id_required": "请输入打印机的 PrintNode 编号。",
+      "printnodePrinterId": "PrintNode 编号须为整数。",
+      "too_many_printers": "此活动的打印机已达上限（50 台）。请先归档一台。",
+      "archived": "该打印机已归档。请选择其他打印机。",
+      "printerId": "请选择打印机。",
+      "reason_required": "请选择重印此胸卡的原因。",
+      "note_required": "选择“其他”时，请简要说明原因。",
+      "note": "备注不得超过 200 个字符。"
+    }
+  },
+  "sessionCheckin": {
+    "title": "场次签到",
+    "description": "单个场次的入口：谁可以进入（已注册并报名、通行证的准入级别、会场容量），扫码入场和离场，以及在会场的停留时间。",
+    "back": "返回签到",
+    "backToSessions": "返回场次签到",
+    "manage": "场次签到",
+    "sessionDoor": "场次入口",
+    "doors": "场次入口",
+    "emptyTitle": "还没有场次入口",
+    "emptyManage": "在下方为场次添加入口；扫码人员随后在入口页面或扫码应用中选择它。",
+    "emptyScan": "主办方会在这里添加场次入口；之后在入口页面选择一个。",
+    "full": "会场已满",
+    "enrollmentRequired": "需要报名",
+    "inRoom": "当前在场",
+    "ofCapacity": "{count} / {capacity}",
+    "attended": "到场人数",
+    "overrides": "破例放行",
+    "avgDwell": "平均停留时间",
+    "minutes": "{count} 分钟",
+    "selfOn": "自助签到海报已开启 · 通过海报签到：{count}",
+    "selfOff": "自助签到海报已关闭",
+    "printFlyer": "打印海报",
+    "printFlyerFor": "打印 {name} 的自助签到海报",
+    "turnOn": "开启海报",
+    "turnOnFor": "开启 {name} 的自助签到海报",
+    "turnOff": "关闭海报",
+    "turnOffFor": "关闭 {name} 的自助签到海报",
+    "setUp": "添加场次入口",
+    "addTitle": "新场次入口",
+    "noSessionsTitle": "还没有场次",
+    "noSessionsDescription": "先在议程中添加场次，再为每个需要签到的场次添加入口。",
+    "openProgram": "打开议程",
+    "doorName": "入口名称",
+    "doorNameHint": "扫码人员看到的名称，例如“2 号厅 — 工作坊入口”。",
+    "session": "场次",
+    "chooseSession": "选择场次",
+    "capacity": "会场可容纳人数（可选）",
+    "capacityHint": "留空则使用议程中会场的容量。",
+    "selfCheckin": "自助签到海报",
+    "selfCheckinHint": "参会者扫描打印海报上的二维码来记录到场。仅记录出席，不放行任何人。",
+    "add": "添加场次入口",
+    "added": "已添加场次入口。",
+    "nameRequired": "请为入口命名。",
+    "nameTaken": "已有同名的检查点。",
+    "sessionRequired": "请选择此入口对应的场次。",
+    "direction": "扫码",
+    "scanIn": "入场",
+    "scanOut": "离场",
+    "dwell": "在场 {minutes} 分钟",
+    "gateHint": {
+      "enrollment": "需要已注册，并已报名此场次。",
+      "admission_level": "其通行证不包含此场次。",
+      "capacity": "会场已无法再容纳更多人。"
+    },
+    "overrideLabel": "仍然放行",
+    "overrideReason": "原因（记录在审计日志中）",
+    "overrideHint": "至少 3 个字符，例如“讲者的嘉宾”。",
+    "overrideSubmit": "仍然放行",
+    "overrideOffline": "破例放行需要联网。",
+    "overrideFailed": "无法放行，请重试。",
+    "nothingToOverride": "无需破例：可以进入。",
+    "roomCount": "在场：{count} / {capacity}",
+    "roomCountOpen": "在场：{count}",
+    "flyerTitle": "自助签到海报",
+    "flyerOffTitle": "海报已关闭",
+    "flyerOffDescription": "请先开启此入口的自助签到海报。",
+    "print": "打印",
+    "flyerQr": "签到 {title} 的二维码",
+    "flyerCall": "扫码签到",
+    "flyerHint": "打开相机扫描二维码，然后输入门票或胸牌上的代码。",
+    "reasonRequired": "请填写放行原因（至少 3 个字符）。"
+  },
+  "selfCheckin": {
+    "metaTitle": "场次签到",
+    "intro": "告诉主办方你已到场：输入门票或胸牌上印的代码。",
+    "codeLabel": "门票或胸牌代码",
+    "codeHint": "8 位字母和数字，例如 K7M2QX9P。",
+    "submit": "签到",
+    "codeRequired": "请输入门票或胸牌上的代码。",
+    "notFound": "未找到此活动中使用该代码的门票。",
+    "rateLimited": "尝试次数过多，请在 {minutes} 分钟后重试。",
+    "entered": "签到成功",
+    "already": "你已签到",
+    "enjoy": "祝你听讲愉快。",
+    "closedTitle": "签到未开放",
+    "closedDescription": "自助签到在场次开始前 30 分钟开放，场次结束时关闭。",
+    "goneTitle": "此海报已失效",
+    "goneDescription": "请向场次工作人员寻求帮助。"
+  },
+  "networking": {
+    "metaTitle": "社交",
+    "title": "认识其他参会者",
+    "publicLink": "社交",
+    "close": "关闭",
+    "backToEvent": "返回 {event}",
+    "sections": "社交板块",
+    "waitingCount": "{count, plural, other {# 个等待你回复}}",
+    "tabs": {
+      "people": "参会者",
+      "connections": "联系人",
+      "meetings": "会面",
+      "profile": "我的资料",
+      "chats": "聊天"
+    },
+    "signIn": {
+      "intro": "看看还有谁会来、建立联系并预约简短会面。这里只显示选择参与的人。",
+      "heading": "确认邮箱以开始",
+      "how": "请使用你报名时的邮箱。我们会发送一个 6 位验证码。"
+    },
+    "notAttendee": {
+      "title": "未找到该邮箱的报名记录",
+      "description": "社交功能面向本活动的报名者。请使用门票上的邮箱登录。",
+      "switch": "使用其他邮箱"
+    },
+    "optIn": {
+      "intro": "在你开启之前，社交功能对你是关闭的。",
+      "offTitle": "你不在名录中",
+      "offDescription": "这里没有人能看到你或联系你。请在下方创建资料以加入。",
+      "heading": "创建你的社交资料",
+      "privacy": "只有本活动中同样加入的其他参会者能看到你的资料。你的邮箱绝不会显示。你可以随时退出。",
+      "submit": "加入社交",
+      "done": "你已加入。你的资料现在对已加入的其他参会者可见。",
+      "hiddenTitle": "主办方已隐藏你的资料",
+      "hiddenDescription": "在收到举报后，主办方已将你的资料从本活动的社交中移除。如认为有误，请联系主办方。"
+    },
+    "profile": {
+      "metaTitle": "我的社交资料",
+      "title": "我的资料",
+      "intro": "这是加入社交的其他参会者看到的内容。",
+      "editHeading": "你的资料",
+      "displayName": "显示名称",
+      "displayNameHint": "你的名字或大家熟知的称呼。",
+      "headline": "职位",
+      "company": "公司",
+      "bio": "个人简介",
+      "bioHint": "简单介绍你的工作或想聊的话题（最多 500 个字符）。",
+      "interests": "兴趣",
+      "interestsHint": "用逗号分隔，例如：设计, 数据, 招聘。",
+      "consentLegend": "你的同意",
+      "consent": "向本活动中同样加入社交的其他参会者展示我的资料。",
+      "displayNameRequired": "请输入显示名称。",
+      "consentRequired": "勾选此框以加入社交。",
+      "tooLong": "最多 80 个字符。",
+      "bioTooLong": "最多 500 个字符。",
+      "save": "保存资料",
+      "saved": "资料已保存。",
+      "blockedHeading": "你屏蔽的人",
+      "noBlocked": "你还没有屏蔽任何人。",
+      "unblock": "取消屏蔽",
+      "unblockName": "取消屏蔽 {name}",
+      "unblocked": "已取消屏蔽 {name}。",
+      "leaveHeading": "退出社交",
+      "leaveHelp": "你的资料会立即从名录中消失。待处理的请求会被撤回，之后的会面会被取消。你以后可以重新加入。",
+      "leave": "退出社交"
+    },
+    "people": {
+      "intro": "这里的每个人都选择了可以被找到。可按姓名、职位、公司或兴趣搜索。",
+      "search": "搜索参会者",
+      "searchHint": "姓名、职位、公司或兴趣。",
+      "searchButton": "搜索",
+      "count": "{count, plural, =0 {还没有其他人加入} other {# 人}}",
+      "resultsFor": "{count, plural, =0 {没有人匹配“{q}”} other {# 人匹配“{q}”}}",
+      "noMatchTitle": "没有人匹配“{q}”",
+      "noMatchDescription": "试试更短的词，或换一个兴趣或公司。",
+      "clearSearch": "显示所有人",
+      "emptyTitle": "还没有其他人加入",
+      "emptyDescription": "有人加入社交后会显示在这里。活动临近时再来看看。",
+      "listLabel": "参会者",
+      "interests": "兴趣",
+      "pages": "参会者分页",
+      "pageOf": "第 {page} 页，共 {pages} 页",
+      "previous": "上一页",
+      "next": "下一页"
+    },
+    "status": {
+      "pendingOut": "已发送请求",
+      "pendingIn": "想与你建立联系",
+      "connected": "已建立联系"
+    },
+    "notice": {
+      "blocked": "已屏蔽。你们在社交中将不再看到彼此。",
+      "reported": "感谢告知。主办方会审核你的举报，你们将不再看到彼此。"
+    },
+    "person": {
+      "metaTitle": "参会者资料",
+      "connectHeading": "建立联系",
+      "note": "留言（可选）",
+      "noteHint": "最多 300 个字符，仅对方可见。",
+      "connect": "发送联系请求",
+      "requestSent": "已向 {name} 发送请求。",
+      "wantsToConnect": "{name} 想与你建立联系。",
+      "connectedHelp": "你和 {name} 已建立联系。",
+      "meetHeading": "预约会面",
+      "meetHelp": "选择时段和地点。时间为活动所在时区（{timezone}）。",
+      "noSlots": "主办方尚未开放会面时段。",
+      "slot": "时段",
+      "chooseSlot": "选择时段",
+      "slotRequired": "请选择时段。",
+      "place": "地点",
+      "choosePlace": "选择地点",
+      "placeRequired": "请选择地点。",
+      "requestMeeting": "发送会面请求",
+      "meetingSent": "已向 {name} 发送会面请求。",
+      "message": "给 {name} 发消息"
+    },
+    "kind": {
+      "booth": "展位",
+      "meeting_point": "会面点"
+    },
+    "reasons": {
+      "spam": "垃圾信息或骚扰推销",
+      "harassment": "骚扰",
+      "inappropriate": "不当内容",
+      "fake": "虚假资料",
+      "other": "其他"
+    },
+    "safety": {
+      "summary": "屏蔽或举报 {name}",
+      "blockHelp": "你们在社交中将不再看到彼此。你们之间的请求会被撤回，之后的会面会被取消。{name} 不会收到通知。",
+      "block": "屏蔽 {name}",
+      "reportHelp": "告诉主办方发生了什么。举报也会屏蔽此人。",
+      "reason": "原因",
+      "chooseReason": "选择原因",
+      "reasonRequired": "请选择原因。",
+      "details": "发生了什么",
+      "detailsHint": "选择“其他”时必填。最多 500 个字符，仅主办方可见。",
+      "detailsRequired": "请告诉我们发生了什么。",
+      "report": "举报 {name}"
+    },
+    "connections": {
+      "metaTitle": "我的联系人",
+      "title": "联系人",
+      "emptyTitle": "还没有联系人",
+      "emptyDescription": "在名录中找到感兴趣的人，并向他们发送联系请求。",
+      "browse": "浏览参会者",
+      "incoming": "发给你的请求",
+      "noIncoming": "没有等待你回复的请求。",
+      "outgoing": "你发出的请求",
+      "noOutgoing": "没有等待回复的请求。",
+      "connected": "你的联系人",
+      "noConnected": "还没有联系人。",
+      "accept": "接受",
+      "acceptFrom": "接受 {name} 的请求",
+      "accepted": "你已与 {name} 建立联系。",
+      "decline": "拒绝",
+      "declineFrom": "拒绝 {name} 的请求",
+      "declined": "已拒绝请求。",
+      "withdraw": "撤回请求",
+      "withdrawTo": "撤回发给 {name} 的请求",
+      "withdrawn": "已撤回请求。",
+      "remove": "移除",
+      "removeName": "移除与 {name} 的联系",
+      "removed": "已移除联系人。",
+      "message": "发消息",
+      "messageTo": "给 {name} 发消息"
+    },
+    "meetings": {
+      "metaTitle": "我的会面",
+      "title": "会面",
+      "intro": "时间为活动所在时区（{timezone}）。",
+      "emptyTitle": "还没有会面",
+      "emptyDescription": "在名录中打开某人的资料即可预约会面。",
+      "incoming": "发给你的会面请求",
+      "noIncoming": "没有等待你回复的会面请求。",
+      "outgoing": "你发出的会面请求",
+      "noOutgoing": "没有等待回复的会面请求。",
+      "upcoming": "你的会面",
+      "noUpcoming": "还没有确定的会面。",
+      "place": "地点：{place}",
+      "placeTable": "地点：{place}，{table} 号桌",
+      "accept": "接受",
+      "acceptFrom": "接受与 {name} 的会面",
+      "accepted": "与 {name} 的会面已确认。",
+      "decline": "拒绝",
+      "declineFrom": "拒绝与 {name} 的会面",
+      "declined": "已拒绝会面。",
+      "withdraw": "撤回请求",
+      "withdrawTo": "撤回发给 {name} 的会面请求",
+      "withdrawn": "已撤回会面请求。",
+      "confirmed": "已确认",
+      "addToCalendar": "添加到日历",
+      "addToCalendarWith": "将与 {name} 的会面添加到日历",
+      "cancel": "取消会面",
+      "cancelWith": "取消与 {name} 的会面",
+      "cancelled": "已取消会面。"
+    },
+    "ics": {
+      "summary": "与 {name} 会面",
+      "placeTable": "{place}，{table} 号桌",
+      "description": "{event} 社交会面，地点：{place}。"
+    },
+    "errors": {
+      "not_opted_in": "请先加入社交。",
+      "hidden": "主办方已隐藏你的资料。",
+      "not_attendee": "该邮箱没有本活动的报名记录。",
+      "connected": "你们已经建立了联系。",
+      "already_requested": "你已经发送过请求。",
+      "declined": "对方拒绝了你之前的请求。",
+      "too_many": "等待回复的请求太多。请先等待一些回复。",
+      "not_pending": "此请求已被回复。",
+      "meetings_off": "主办方已关闭会面功能。",
+      "location_full": "该地点在此时段已约满。请选择其他地点或时间。",
+      "busy": "你在此时段已有会面。",
+      "person_busy": "对方在此时段已有会面。",
+      "past": "该时段已经开始。请选择更晚的时段。",
+      "unknown": "该选项已不可用。请刷新页面。",
+      "in_use": "仍有会面在使用。请先取消它们。",
+      "resolved": "此举报已处理。"
+    },
+    "console": {
+      "link": "社交",
+      "title": "社交",
+      "description": "让参会者互相发现、建立联系，并在展位和会面点预约会面。只有本人选择后才会参与。",
+      "openAttendeePage": "打开参会者页面",
+      "viewerNotice": "你可以查看社交设置。如需更改，请联系管理员。",
+      "offTitle": "社交已关闭",
+      "offDescription": "开启后，参会者可以使用名录、联系请求和会面。在本人选择之前不会显示任何人。",
+      "offViewer": "管理员可以为本活动开启社交。",
+      "enable": "开启社交",
+      "stats": {
+        "optedIn": "名录中的人数",
+        "connections": "联系人",
+        "meetings": "已预约会面"
+      },
+      "settings": "设置",
+      "switches": "本活动的社交",
+      "enabledLabel": "社交已开启（名录和联系人）",
+      "meetingsLabel": "参会者可以预约会面",
+      "saveSettings": "保存设置",
+      "settingsSaved": "设置已保存。",
+      "locations": "会面地点",
+      "locationsHelp": "参会者会面的展位和会面点。容量是指那里同时可以进行的会面数量。",
+      "noLocations": "还没有地点。请在下方添加。",
+      "capacityShort": "{count, plural, other {同时 # 场会面}}",
+      "bookedShort": "{count, plural, =0 {尚无预约} other {已预约 # 场}}",
+      "delete": "删除",
+      "deleteLocation": "删除 {name}",
+      "locationDeleted": "地点已删除。",
+      "editLocation": "编辑 {name}",
+      "saveLocation": "保存地点",
+      "locationSaved": "地点已保存。",
+      "locationName": "名称",
+      "locationNameHint": "例如：12 号展位，或咖啡区旁的会面点 A。",
+      "locationKind": "类型",
+      "capacity": "容量",
+      "capacityHint": "同时进行的会面（桌数），1 到 50。",
+      "addLocation": "添加地点",
+      "locationAdded": "地点已添加。",
+      "slots": "时段",
+      "slotsHelp": "会面在这些时段中预约。时间为活动所在时区（{timezone}）。",
+      "noSlots": "还没有时段。请在下方添加。",
+      "deleteSlot": "删除时段 {slot}",
+      "slotDeleted": "时段已删除。",
+      "addSlots": "添加时段",
+      "slotsAdded": "时段已添加。",
+      "slotsFrom": "从",
+      "slotsTo": "到",
+      "slotMinutes": "每个时段的时长（分钟）",
+      "slotMinutesHint": "时段首尾相连，每个 5 到 240 分钟。",
+      "timeHint": "活动所在时区（{timezone}）。",
+      "reports": "举报",
+      "noReports": "没有待审核的举报。",
+      "openReports": "待审核的举报",
+      "reportTitle": "{reporter} 举报了 {reported}",
+      "hide": "隐藏资料",
+      "hideName": "在社交中隐藏 {name}",
+      "hidden": "已在社交中隐藏 {name}。",
+      "dismiss": "驳回",
+      "dismissReport": "驳回关于 {name} 的举报",
+      "dismissed": "举报已驳回。",
+      "closedReports": "{count, plural, other {# 条已处理的举报}}",
+      "status": {
+        "open": "待处理",
+        "hidden": "已隐藏",
+        "dismissed": "已驳回"
+      },
+      "hiddenPeople": "已隐藏的人",
+      "noHidden": "没有被隐藏的人。",
+      "restore": "恢复",
+      "restoreName": "在社交中恢复 {name}",
+      "restored": "{name} 已恢复到社交中。",
+      "errors": {
+        "name": "请输入名称。",
+        "nameTaken": "已有同名地点。",
+        "capacity": "请输入 1 到 {max} 的容量。",
+        "capacityBelowBooked": "此地点已预约的会面更多。请先取消一些。",
+        "startsAt": "请输入时段开始时间。",
+        "endsAt": "请输入晚于开始的结束时间。",
+        "minutes": "请输入 5 到 240 分钟的时长。",
+        "outsideEvent": "时段必须在活动的日期和时间范围内。",
+        "tooShort": "开始与结束之间的时间短于一个时段。",
+        "overlap": "这些时段与已有时段重叠。",
+        "tooMany": "超出本活动的上限。请先删除一些。"
+      },
+      "chatLabel": "联系人和会面对象之间的聊天，以及与展商在展位上的聊天",
+      "chat": {
+        "heading": "聊天",
+        "on": "参会者可以与联系人、会面对象以及接受聊天的展商聊天。你只能看到被举报的对话。",
+        "off": "聊天已关闭。请在上方设置中开启。",
+        "stats": {
+          "conversations": "对话",
+          "messagesToday": "过去 24 小时的消息",
+          "openReports": "待处理的聊天举报",
+          "booths": "接受聊天的展位"
+        },
+        "reports": "聊天举报",
+        "noReports": "没有需要审核的聊天举报。",
+        "openReports": "待处理的聊天举报",
+        "reportTitle": "{reporter} 举报了与 {reported} 的聊天",
+        "reportTitleBooth": "{reporter} 举报了与 {reported} 的展位聊天",
+        "excerpt": "举报前的最新消息",
+        "removedMessage": "消息已移除",
+        "remove": "移除",
+        "removeFrom": "移除 {name} 在 {time} 发送的消息",
+        "removed": "消息已移除，双方都不会再看到。",
+        "hide": "在社交中隐藏",
+        "hideName": "在社交中隐藏 {name}",
+        "hidden": "已在社交中隐藏 {name}。",
+        "suspend": "暂停展位聊天",
+        "suspendName": "暂停 {name} 的展位聊天",
+        "suspended": "{name} 的展位聊天已暂停。",
+        "dismiss": "驳回",
+        "dismissReport": "驳回关于 {name} 的举报",
+        "dismissed": "举报已驳回。",
+        "closedReports": "{count, plural, other {# 条已处理的聊天举报}}",
+        "moderation": {
+          "open": "待处理",
+          "actioned": "已处理",
+          "dismissed": "已驳回"
+        },
+        "suspendedBooths": "已暂停的展位聊天",
+        "noSuspended": "没有被暂停的展位聊天。",
+        "restore": "解除暂停",
+        "restoreName": "解除 {name} 展位聊天的暂停",
+        "restored": "{name} 可以重新接受聊天了。"
+      }
+    },
+    "unreadChats": "{count, plural, other {# 个聊天有未读消息}}"
+  },
+  "chat": {
+    "metaTitle": "聊天",
+    "title": "聊天",
+    "description": "与联系人、会面对象以及展位上的展商的消息。",
+    "conversationsHeading": "你的聊天",
+    "emptyTitle": "还没有聊天",
+    "emptyDescription": "成为联系人或约定会面后，你就可以给对方发消息。打开一位联系人开始聊天。",
+    "toConnections": "前往联系人",
+    "unread": "{count, plural, other {# 条未读消息}}",
+    "boothLabel": "展位 {numbers}",
+    "lastRemoved": "消息已移除",
+    "lastFromMe": "你：{body}",
+    "lastFromBooth": "你的展位：{body}",
+    "boothsHeading": "与展商聊天",
+    "boothsHelp": "这些展商在展位上回答问题。",
+    "noBooths": "目前没有展商接受聊天。",
+    "chatWithBooth": "与 {name} 聊天",
+    "openBooth": "聊天",
+    "notice": {
+      "reported": "感谢告知。主办方和 Yayatoh 会进行审核，对方将无法再给你发消息。",
+      "blocked": "已屏蔽。你们在社交中将不再看到彼此。"
+    },
+    "closed": {
+      "chat_off": "主办方已关闭本活动的聊天。",
+      "not_connected": "成为联系人或约定会面后，你才能给 {name} 发消息。",
+      "booth_closed": "{name} 目前不接受聊天。",
+      "blocked": "此聊天已被屏蔽。",
+      "blockedByMe": "你已屏蔽此展位的聊天。在下方解除屏蔽后即可再次发送。"
+    },
+    "threadMetaTitle": "聊天",
+    "threadTitle": "与 {name} 的聊天",
+    "backToChats": "全部聊天",
+    "viewProfile": "{name} 的资料",
+    "noMessages": "还没有消息。和 {name} 打个招呼吧。",
+    "logLabel": "与 {name} 的消息",
+    "you": "你",
+    "removed": "主办方移除了这条消息",
+    "messageLabel": "消息",
+    "messageHint": "按 Enter 发送，Shift+Enter 换行。最多 2,000 个字符。",
+    "send": "发送",
+    "live": "新消息一到就会显示在这里。",
+    "connecting": "正在连接…",
+    "reconnecting": "正在重新连接… 恢复在线后会显示新消息。",
+    "errors": {
+      "not_connected": "你只能给联系人或已约定会面的人发消息。",
+      "chat_off": "主办方已关闭本活动的聊天。",
+      "booth_closed": "该展商目前不接受聊天。",
+      "blocked": "此聊天已被屏蔽。",
+      "not_found": "此人已无法聊天。",
+      "too_fast": "你发送消息太快了。请等一分钟再试。",
+      "hourly_limit": "你这一小时发送的消息太多了。请稍后再试。",
+      "too_many_new_chats": "你这一小时发起的新聊天太多了。请稍后再试。",
+      "awaiting_reply": "请等对方回复后再继续发送。",
+      "required": "请先输入消息。",
+      "too_long": "消息最多 2,000 个字符。",
+      "already_removed": "这条消息已被移除。"
+    },
+    "safety": {
+      "summary": "屏蔽或举报 {name}",
+      "block": "屏蔽 {name}",
+      "unblock": "解除屏蔽 {name}",
+      "unblockHelp": "你们可以在此聊天中重新互发消息。",
+      "blockBoothHelp": "{name} 将无法回复你，你也无法给对方发消息。你可以稍后解除屏蔽。",
+      "blockVisitorHelp": "{name} 将无法再给你的展位发消息。你可以稍后解除屏蔽。",
+      "report": "举报并屏蔽 {name}",
+      "reportHelp": "告诉主办方发生了什么。Yayatoh 也会审核聊天举报。举报也会屏蔽此聊天。",
+      "reason": "原因",
+      "chooseReason": "选择原因",
+      "reasonRequired": "请选择原因。",
+      "details": "发生了什么",
+      "detailsHint": "选择“其他”时必填。最多 500 个字符。",
+      "detailsRequired": "请告诉我们发生了什么。"
+    },
+    "portal": {
+      "title": "展位聊天",
+      "description": "加入社交的参会者可以给你的展位发消息。展位团队共用这个收件箱。",
+      "back": "返回 {name}",
+      "backToChats": "全部展位聊天",
+      "on": "正在接受聊天",
+      "off": "不接受聊天",
+      "suspended": "收到举报后，主办方已暂停你的展位聊天。",
+      "eventOff": "本活动的聊天已关闭。",
+      "notAtBooth": "你有公开的展位后，访客才能找到你的展位聊天。",
+      "turnOn": "在我们的展位接受聊天",
+      "turnOff": "停止接受聊天",
+      "adminOnly": "只有展商管理员可以开启或关闭展位聊天。",
+      "conversations": "访客的聊天",
+      "emptyTitle": "还没有聊天",
+      "emptyDescription": "访客给你的展位发消息后，会显示在这里。",
+      "emptyOff": "开启展位聊天，访客才能给你发消息。",
+      "blocked": "已屏蔽",
+      "unreadChats": "{count, plural, =0 {没有未读聊天} other {# 个聊天有未读消息}}",
+      "open": "打开展位聊天",
+      "closedBlockedByMe": "你已屏蔽 {name}。在下方解除屏蔽后即可回复。",
+      "closed": {
+        "chat_off": "本活动的聊天已关闭。",
+        "booth_closed": "你的展位不接受聊天。开启展位聊天后即可回复。",
+        "blocked": "{name} 已屏蔽你的展位聊天。",
+        "not_connected": "此聊天已关闭。"
+      },
+      "reported": "谢谢。主办方和 Yayatoh 会审核你的举报；该访客已无法再给你的展位发消息。"
+    }
+  },
+  "formControls": {
+    "search": "搜索",
+    "noResults": "没有匹配项",
+    "loading": "正在加载…",
+    "remove": "移除{label}",
+    "create": "创建“{query}”",
+    "clear": "清除",
+    "chooseDate": "选择日期",
+    "chooseTime": "选择时间",
+    "previousMonth": "上个月",
+    "nextMonth": "下个月",
+    "today": "今天",
+    "invalidDate": "请输入日期，例如 {example}",
+    "invalidTime": "请输入时间，例如 {example}",
+    "tooEarly": "请选择 {date} 或之后的日期",
+    "tooLate": "请选择 {date} 或之前的日期",
+    "timeZoneNote": "{zone} 时间",
+    "selected": "已选择"
+  },
+  "emptyActions": {
+    "seeEvents": "查看你的活动",
+    "eventHome": "前往活动首页",
+    "clearSearch": "清除搜索"
+  },
+  "coupons": {
+    "title": "优惠券",
+    "description": "促销代码在结账时为买家提供折扣。每个代码属于一个活动：选择活动即可查看或添加代码。",
+    "emptyTitle": "没有可添加代码的活动",
+    "emptyDescription": "促销代码位于活动的“门票与订单”页面。请先创建活动，然后添加代码。",
+    "emptyAction": "创建活动",
+    "caption": "活动及其促销代码",
+    "event": "活动",
+    "when": "日期",
+    "status": "状态",
+    "codes": "促销代码",
+    "manage": "管理代码",
+    "view": "查看代码",
+    "manageFor": "{name} 的促销代码"
+  },
+  "howItWorks": {
+    "docLink": "阅读指南",
+    "hide": "隐藏",
+    "show": "显示",
+    "domains": {
+      "title": "自定义域名如何运作",
+      "intro": "在你自己的地址（例如 tickets.yourbrand.com）展示活动页面，而不是 Yayatoh 链接。你的 Yayatoh 地址也会继续有效。",
+      "step1": "添加你拥有的域名。我们会请你确认身份。",
+      "step2": "将我们显示的 DNS 记录复制到域名服务商的设置中。",
+      "step3": "我们会自动检查记录，最多可能需要一天。",
+      "step4": "验证通过后，我们会配置安全证书（HTTPS），域名随即上线。"
+    },
+    "templates": {
+      "title": "模板如何运作",
+      "intro": "模板会保存活动的设置（门票、问题、版块和页面内容），让下一个活动开箱即用。由模板创建的活动是没有销售记录的草稿。",
+      "step1": "打开一个已按你的需要设置好的活动。",
+      "step2": "选择“复制与模板”，然后将其保存为模板。",
+      "step3": "回到这里即可用它创建新活动，或从下方的入门模板开始。"
+    },
+    "series": {
+      "title": "系列如何运作",
+      "intro": "系列将相关活动（巡演、季度、节日）汇集到一个公开页面，列出即将到来的日期。",
+      "step1": "用名称和简短描述创建系列。",
+      "step2": "打开每个活动的“日期”页面，将其加入系列。",
+      "step3": "分享系列的公开页面，添加活动后会自动更新。"
+    },
+    "payouts": {
+      "title": "付款如何运作",
+      "intro": "门票收入以付款形式到达你的银行账户。只需连接一次收款账户，下方数字会显示即将到账的金额和时间。",
+      "step1": "连接你的收款账户并验证你的商业信息。",
+      "step2": "销售门票。每笔销售扣除费用和退款后计入你的余额。",
+      "step3": "根据你的账户类型，款项会随销售或在活动结束后支付，并保留少量准备金用于退款和争议。",
+      "step4": "每笔付款都会汇入你的银行，并在此显示日期和金额。"
+    },
+    "sending": {
+      "title": "邮件发送如何运作",
+      "intro": "发给买家和来宾的邮件默认由 Yayatoh 发出。验证你自己的域名，让邮件来自你的地址并顺利进入收件箱。",
+      "step1": "添加你的发件域名（例如 mail.yourbrand.com）。",
+      "step2": "将我们显示的 DNS 记录复制到域名服务商的设置中。",
+      "step3": "在此检查记录，验证通常只需几分钟。",
+      "step4": "验证通过后，你的邮件将从你自己的域名发出。"
+    },
+    "eventType": {
+      "title": "活动类型与分类",
+      "intro": "活动类型决定活动包含哪些版块：婚礼有宾客、回复和座位；会议有议程、讲者和胸牌。分类帮助人们找到公开活动。",
+      "step1": "创建活动时，选择最接近的类型。",
+      "step2": "在活动的“详情”页面选择分类并添加标签。",
+      "step3": "不确定？选择“其他”：它包含常用版块，详细信息可以稍后添加。"
+    },
+    "coupons": {
+      "title": "促销代码如何运作",
+      "intro": "促销代码会在收费前按比例或金额减免每张门票的价格。每个代码属于一个活动。",
+      "step1": "在下方选择活动并打开其促销代码。",
+      "step2": "添加代码及折扣，也可以设置次数上限和日期。",
+      "step3": "分享代码。买家在结账时输入，每次使用都会被记录。"
     }
   }
 }

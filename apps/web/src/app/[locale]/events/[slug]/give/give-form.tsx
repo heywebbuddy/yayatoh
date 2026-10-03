@@ -36,6 +36,7 @@ export function GiveForm({ campaign, action }: { campaign: PublicCampaignDto; ac
   const [own, setOwn] = useState('');
   const [cover, setCover] = useState(false);
   const [tribute, setTribute] = useState('none');
+  const [displayAs, setDisplayAs] = useState('');
   const fmt = (minor: number) => formatMoney({ amount: minor, currency: campaign.currency }, locale);
   useEffect(() => {
     if (state.field) ref.current?.querySelector<HTMLElement>(`[name="${state.field}"]`)?.focus();
@@ -202,12 +203,35 @@ export function GiveForm({ campaign, action }: { campaign: PublicCampaignDto; ac
           </p>
           {(['full_name', 'first_name', 'anonymous'] as const).map((v) => (
             <label key={v} className={option}>
-              <input type="radio" name="displayAs" value={v} className={choiceInput} />
+              <input
+                type="radio"
+                name="displayAs"
+                value={v}
+                className={choiceInput}
+                onChange={(e) => setDisplayAs(e.target.value)}
+              />
               <span className="font-bold">{t(`display.${v}`)}</span>
             </label>
           ))}
           <FieldMessage id="displayAs" error={displayError} />
         </fieldset>
+        {/* M4.8d (P4-13): screens show totals only, unless the donor asks to be thanked by name. */}
+        {displayAs === 'anonymous' ? null : (
+          <div className="flex flex-col gap-1.5">
+            <label className={option}>
+              <input
+                type="checkbox"
+                name="showOnScreen"
+                aria-describedby="showOnScreen-hint"
+                className={choiceInput}
+              />
+              <span className="font-bold">{t('showOnScreen')}</span>
+            </label>
+            <p id="showOnScreen-hint" className="m-0 text-caption text-ink-2">
+              {t('showOnScreenHint')}
+            </p>
+          </div>
+        )}
       </div>
 
       <div className={giveCard}>
@@ -218,7 +242,7 @@ export function GiveForm({ campaign, action }: { campaign: PublicCampaignDto; ac
             name="tributeKind"
             label={t('tributeKind')}
             value={tribute}
-            onChange={(e) => setTribute(e.target.value)}
+            onValueChange={(v) => setTribute(v)}
           >
             <option value="none">{t('tributeNone')}</option>
             <option value="honor">{t('tributeHonor')}</option>

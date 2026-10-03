@@ -1,7 +1,17 @@
 'use client';
 
 import { countWords } from '@yayatoh/notifications/numbers';
-import { Avatar, BarChart, Button, ChartTable, cx, fieldClass, ProgressBar, StatusDot } from '@yayatoh/ui';
+import {
+  Avatar,
+  BarChart,
+  Button,
+  ChartTable,
+  cx,
+  fieldClass,
+  ProgressBar,
+  Select,
+  StatusDot,
+} from '@yayatoh/ui';
 import { Pause, Play } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useId } from 'react';
@@ -109,11 +119,11 @@ export function LiveFeedBody({ d, c, controls }: { d: LiveFeed; c: Ctx; controls
           <label htmlFor={`${id}-cp`} className={FIELD_LABEL}>
             {t('entrance')}
           </label>
-          <select
+          <Select
             id={`${id}-cp`}
             className={SELECT}
             value={controls.params.checkpoint ?? ''}
-            onChange={(e) => set('checkpoint', e.target.value)}
+            onValueChange={(v) => set('checkpoint', v)}
           >
             <option value="">{t('allEntrances')}</option>
             {d.options.checkpoints.map((o) => (
@@ -121,17 +131,17 @@ export function LiveFeedBody({ d, c, controls }: { d: LiveFeed; c: Ctx; controls
                 {o.name}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
         <div className="flex flex-col gap-1.5">
           <label htmlFor={`${id}-dev`} className={FIELD_LABEL}>
             {t('device')}
           </label>
-          <select
+          <Select
             id={`${id}-dev`}
             className={SELECT}
             value={controls.params.device ?? ''}
-            onChange={(e) => set('device', e.target.value)}
+            onValueChange={(v) => set('device', v)}
           >
             <option value="">{t('allDevices')}</option>
             {d.options.devices.map((o) => (
@@ -139,17 +149,17 @@ export function LiveFeedBody({ d, c, controls }: { d: LiveFeed; c: Ctx; controls
                 {o.label}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
         <div className="flex flex-col gap-1.5">
           <label htmlFor={`${id}-kind`} className={FIELD_LABEL}>
             {t('outcome')}
           </label>
-          <select
+          <Select
             id={`${id}-kind`}
             className={SELECT}
             value={controls.params.kind ?? ''}
-            onChange={(e) => set('kind', e.target.value)}
+            onValueChange={(v) => set('kind', v)}
           >
             <option value="">{t('allOutcomes')}</option>
             {KINDS.map((k) => (
@@ -157,7 +167,7 @@ export function LiveFeedBody({ d, c, controls }: { d: LiveFeed; c: Ctx; controls
                 {t(`filter.${k}`)}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
         <Button
           variant="secondary"

@@ -5,13 +5,14 @@ import { Alert, buttonClass, EmptyState, Label, PageHeader } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { GuestSeatFinder } from '@/components/guest-seat-finder.tsx';
 import { SeatFinder } from '@/components/seat-finder.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatEventDateRange } from '@/lib/format.ts';
 import { checkHelpTicket } from '@/server/assistance.ts';
 import { ports } from '@/server/ports.ts';
 import { humanCheckWidget, openVenueMap, pendingCode, verifiedCode } from '@/server/seat-finder.ts';
-import { codeFlowAction, findByNameAction, resetFinderAction } from './actions.ts';
+import { codeFlowAction, findByNameAction, findByPinAction, resetFinderAction } from './actions.ts';
 
 export async function generateMetadata({
   params,
@@ -145,17 +146,26 @@ export default async function SeatFinderPage({
           </ul>
         </nav>
       ) : null}
-      <SeatFinder
-        key={`${map.mode}:${date?.id ?? ''}`}
-        mode={map.mode}
-        initialStep={initialStep}
-        verified={verified}
-        doc={map.doc}
-        challenge={humanCheckWidget()}
-        codeFlow={codeFlowAction.bind(null, slug)}
-        byName={findByNameAction.bind(null, slug, date?.id ?? null)}
-        reset={resetFinderAction.bind(null, slug)}
-      />
+      {map.mode === 'pin' ? (
+        // M4.4a: wedding and gala guests, by full name and their invitation's PIN (labels only).
+        <GuestSeatFinder
+          doc={map.doc}
+          challenge={humanCheckWidget()}
+          byPin={findByPinAction.bind(null, slug)}
+        />
+      ) : (
+        <SeatFinder
+          key={`${map.mode}:${date?.id ?? ''}`}
+          mode={map.mode}
+          initialStep={initialStep}
+          verified={verified}
+          doc={map.doc}
+          challenge={humanCheckWidget()}
+          codeFlow={codeFlowAction.bind(null, slug)}
+          byName={findByNameAction.bind(null, slug, date?.id ?? null)}
+          reset={resetFinderAction.bind(null, slug)}
+        />
+      )}
       {help}
       <Link href={`/events/${slug}`} className="self-start text-caption text-ink-2 underline">
         {t('seatFinder.toEvent')}
