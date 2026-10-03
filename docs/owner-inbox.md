@@ -547,3 +547,8 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **Who records offline payments and voids invoices:** `orders:refund` (owners, admins, finance), the existing money permission; box office and managers can't. Confirm, or ask for a separate `invoices:manage` permission.
 - [ ] **Invoice wording (`legal-copy`):** the invoice email, the PDF (terms line "Net 30, due no later than 7 days before the event", "Issued by {org} through Yayatoh"), the buyer's invoice page and the reminder template (13 locales). Late-payment wording is deliberately neutral (P5-5: the registration stands). Our PDF is not a tax invoice (no tax lines or seller tax ids yet).
 - [ ] **Door and badge overrides:** any scanner may admit a balance-due ticket with a reason (audited); badge desk staff (`attendees:write`) may print one. Confirm, or restrict to supervisors.
+
+## M5.5b — badge printing (2026-10-03, pending owner)
+- [ ] **PrintNode account (Stage 2, P5-2).** Open one PrintNode integrator account; for each org that wants silent printing, create a child account with the org id as its creator reference, then switch it on with `pnpm --filter @yayatoh/worker printnode -- --org <slug> --on`. Put `PRINTNODE_API_KEY` in Doppler and set `BADGE_PRINTER_PROVIDER=printnode` only in production. Until then everything uses the fake. Label: `infra`.
+- [ ] **Batch PDFs and the print log.** A downloaded batch PDF is not counted as printed (a download is not a print), so the first onsite print of a pre-printed badge is logged as a first print. Confirm, or ask for "mark this batch as printed".
+- [ ] **Reprint reasons:** Damaged, Lost, Details changed, Misprinted, Printer problem, Other (with a note). Confirm the list.

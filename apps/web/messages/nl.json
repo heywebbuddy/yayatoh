@@ -10865,5 +10865,126 @@
       "offer_ended": "Het aanbod voor {title} is afgelopen.",
       "full": "{title} is net vol. Probeer het opnieuw om op de wachtlijst te komen."
     }
+  },
+  "badgePrinting": {
+    "title": "Printers en printlogboek",
+    "subtitle": "Voeg de badgeprinters van dit evenement toe, houd het printstation van elke balie online en zie elke geprinte of opnieuw geprinte badge, en waarom.",
+    "printers": "Printers",
+    "stationHint": "Houd op de computer naast elke printer een printstation open. Een printer waarvan 90 seconden niets is gehoord, wordt als offline getoond.",
+    "noPrintersTitle": "Nog geen printers",
+    "noPrintersDescription": "Voeg voor elke balie een printer toe. Tot die tijd worden badges geprint via het printvenster van het apparaat dat je gebruikt.",
+    "addPrinter": "Printer toevoegen",
+    "printerName": "Printernaam",
+    "connection": "Hoe er wordt geprint",
+    "adapters": {
+      "browser": "Printvenster op de computer of iPad van de balie (AirPrint of elke andere printer)",
+      "printnode": "PrintNode (print zonder venster)"
+    },
+    "adapterShort": {
+      "browser": "Printvenster",
+      "printnode": "PrintNode"
+    },
+    "printnodeId": "PrintNode-printernummer",
+    "printnodeIdHint": "Het nummer van de printer in je PrintNode-account.",
+    "printnodeNumber": "PrintNode nr. {id}",
+    "printnodeOffHint": "Printers printen via het printvenster van het apparaat aan de balie. Wil je zonder venster printen (PrintNode)? Vraag support om een PrintNode-account voor je organisatie te openen.",
+    "printerAdded": "Printer toegevoegd.",
+    "archive": "{name} archiveren",
+    "archived": "Printer gearchiveerd.",
+    "status": {
+      "unknown": "Nog niet verbonden",
+      "online": "Online",
+      "offline": "Offline"
+    },
+    "lastSeen": "Laatst gehoord {time}",
+    "neverSeen": "Nog geen hartslag",
+    "offlineSince": "Offline sinds {time}",
+    "openStation": "Printstation openen: {name}",
+    "log": "Printlogboek",
+    "counts": "{prints, plural, one {# eerste print} other {# eerste prints}} · {reprints, plural, one {# herdruk} other {# herdrukken}}",
+    "filterLabel": "Toon",
+    "filters": {
+      "all": "Alle",
+      "print": "Eerste prints",
+      "reprint": "Herdrukken"
+    },
+    "logEmptyTitle": "Nog niets geprint",
+    "logEmptyDescription": "Badges die aan de balie of vanuit het profiel van een deelnemer zijn geprint, verschijnen hier, met de reden van elke herdruk.",
+    "logCaption": "Geprinte en opnieuw geprinte badges, nieuwste eerst",
+    "columns": {
+      "when": "Wanneer",
+      "who": "Badge",
+      "what": "Print",
+      "reason": "Reden",
+      "printer": "Printer",
+      "status": "Status"
+    },
+    "kinds": {
+      "print": "Eerste print",
+      "reprint": "Herdruk"
+    },
+    "reasons": {
+      "first_print": "Eerste print",
+      "damaged": "Beschadigd",
+      "lost": "Kwijt",
+      "details_changed": "Gegevens gewijzigd",
+      "misprint": "Verkeerd geprint",
+      "printer_problem": "Printerprobleem",
+      "other": "Anders"
+    },
+    "jobStatus": {
+      "queued": "Verzenden",
+      "sent": "Verzonden",
+      "failed": "Mislukt"
+    },
+    "failedHint": "Een mislukte print telt niet mee: als je die badge opnieuw print, is dat nog steeds de eerste print.",
+    "voided": "Geannuleerd ticket",
+    "deviceDialog": "Printvenster op dit apparaat",
+    "stationTitle": "Printstation: {name}",
+    "stationIntro": "Houd deze pagina open op de computer die met {name} is verbonden. Elke 30 seconden laat de pagina Yayatoh weten dat de printer in gebruik is; is ze 90 seconden gesloten of offline, dan wordt de printer als offline getoond.",
+    "stationConnecting": "Verbinden…",
+    "stationLive": "Hartslag verzonden om {time}.",
+    "stationProblem": "Niet verbonden",
+    "stationError": "Yayatoh is niet bereikbaar. Over 30 seconden proberen we het opnieuw.",
+    "stationArchived": "Deze printer is gearchiveerd. Sluit deze pagina.",
+    "stationNotBrowser": "PrintNode meldt de status van deze printer zelf; een printstation is niet nodig.",
+    "recentJobs": "Recente prints op {name}",
+    "noJobsYet": "Nog niets geprint op deze printer.",
+    "findBadge": "Zoek een badge om te printen",
+    "badgeHeading": "Badge",
+    "printTitle": "Badge printen: {name}",
+    "noBadge": "Dit ticket heeft geen badge (mogelijk is het geannuleerd).",
+    "neverPrinted": "Nog niet geprint.",
+    "printedTimes": "{count, plural, one {Eén keer geprint} other {# keer geprint}}, laatst op {time}.",
+    "printer": "Printer",
+    "noPrintersHint": "Dit evenement heeft nog geen printers: de badge opent als PDF voor het printvenster van dit apparaat.",
+    "reason": "Waarom opnieuw printen?",
+    "reasonPlaceholder": "Kies een reden",
+    "note": "Notitie",
+    "noteHint": "Verplicht bij ‘Anders’. Maximaal 200 tekens.",
+    "print": "Badge printen voor {name}",
+    "reprint": "Badge opnieuw printen voor {name}",
+    "printDialogReady": "Vastgelegd. Open de badge-PDF en print deze op ware grootte (100%).",
+    "openPdf": "Badge-PDF openen voor {name}",
+    "printSent": "Badge verzonden naar {printer}.",
+    "printFailed": "De badge kon niet worden verzonden ({code}). Probeer het opnieuw of kies een andere printer.",
+    "history": "Printgeschiedenis",
+    "noTemplate": "Dit tickettype heeft nog geen badgesjabloon. Maak er een op de pagina Badges.",
+    "printBadgeFor": "Badge printen voor {name}",
+    "deskHint": "Voor de balie: zoek een tickethouder en print diens badge. Elke print en herdruk wordt met de reden vastgelegd.",
+    "errors": {
+      "name": "Geef de printer een naam (maximaal 60 tekens).",
+      "nameTaken": "Dit evenement heeft al een printer met die naam.",
+      "printnode_off": "PrintNode is niet ingeschakeld voor je organisatie.",
+      "printnode_id_required": "Vul het PrintNode-nummer van de printer in.",
+      "printnodePrinterId": "Vul het PrintNode-nummer in als heel getal.",
+      "too_many_printers": "Dit evenement heeft het maximale aantal printers (50). Archiveer er eerst een.",
+      "archived": "Die printer is gearchiveerd. Kies een andere.",
+      "printerId": "Kies een printer.",
+      "reason_required": "Kies waarom deze badge opnieuw wordt geprint.",
+      "note_required": "Geef bij ‘Anders’ in een paar woorden aan waarom.",
+      "note": "Houd de notitie onder de 200 tekens."
+    },
+    "balanceDue": "Er staat een bedrag open voor deze registratie. Druk de badge af via de badgepagina met een reden."
   }
 }

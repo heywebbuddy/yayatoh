@@ -10865,5 +10865,126 @@
       "offer_ended": "Das Angebot für {title} ist abgelaufen.",
       "full": "{title} ist gerade voll geworden. Versuche es erneut, um auf die Warteliste zu kommen."
     }
+  },
+  "badgePrinting": {
+    "title": "Drucker und Druckprotokoll",
+    "subtitle": "Fügen Sie die Badge-Drucker dieser Veranstaltung hinzu, halten Sie die Druckstation jedes Schalters online und sehen Sie jedes gedruckte oder nachgedruckte Badge – und warum.",
+    "printers": "Drucker",
+    "stationHint": "Lassen Sie auf dem Computer neben jedem Drucker eine Druckstation geöffnet. Ein Drucker ohne Signal seit 90 Sekunden wird als offline angezeigt.",
+    "noPrintersTitle": "Noch keine Drucker",
+    "noPrintersDescription": "Fügen Sie für jeden Schalter einen Drucker hinzu. Bis dahin werden Badges über den Druckdialog des verwendeten Geräts gedruckt.",
+    "addPrinter": "Drucker hinzufügen",
+    "printerName": "Druckername",
+    "connection": "Druckmethode",
+    "adapters": {
+      "browser": "Druckdialog auf dem Computer oder iPad des Schalters (AirPrint oder beliebiger Drucker)",
+      "printnode": "PrintNode (druckt ohne Dialog)"
+    },
+    "adapterShort": {
+      "browser": "Druckdialog",
+      "printnode": "PrintNode"
+    },
+    "printnodeId": "PrintNode-Druckernummer",
+    "printnodeIdHint": "Die Nummer des Druckers in Ihrem PrintNode-Konto.",
+    "printnodeNumber": "PrintNode-Nr. {id}",
+    "printnodeOffHint": "Drucker drucken über den Druckdialog des Geräts am Schalter. Um ohne Dialog zu drucken (PrintNode), bitten Sie den Support, ein PrintNode-Konto für Ihre Organisation einzurichten.",
+    "printerAdded": "Drucker hinzugefügt.",
+    "archive": "{name} archivieren",
+    "archived": "Drucker archiviert.",
+    "status": {
+      "unknown": "Noch nicht verbunden",
+      "online": "Online",
+      "offline": "Offline"
+    },
+    "lastSeen": "Letztes Signal: {time}",
+    "neverSeen": "Noch kein Signal",
+    "offlineSince": "Offline seit {time}",
+    "openStation": "Druckstation öffnen: {name}",
+    "log": "Druckprotokoll",
+    "counts": "{prints, plural, one {# Erstdruck} other {# Erstdrucke}} · {reprints, plural, one {# Nachdruck} other {# Nachdrucke}}",
+    "filterLabel": "Anzeigen",
+    "filters": {
+      "all": "Alle",
+      "print": "Erstdrucke",
+      "reprint": "Nachdrucke"
+    },
+    "logEmptyTitle": "Noch nichts gedruckt",
+    "logEmptyDescription": "Badges, die am Schalter oder aus dem Profil einer teilnehmenden Person gedruckt werden, erscheinen hier – mit dem Grund für jeden Nachdruck.",
+    "logCaption": "Gedruckte und nachgedruckte Badges, neueste zuerst",
+    "columns": {
+      "when": "Wann",
+      "who": "Badge",
+      "what": "Druck",
+      "reason": "Grund",
+      "printer": "Drucker",
+      "status": "Status"
+    },
+    "kinds": {
+      "print": "Erstdruck",
+      "reprint": "Nachdruck"
+    },
+    "reasons": {
+      "first_print": "Erstdruck",
+      "damaged": "Beschädigt",
+      "lost": "Verloren",
+      "details_changed": "Angaben geändert",
+      "misprint": "Fehldruck",
+      "printer_problem": "Druckerproblem",
+      "other": "Sonstiges"
+    },
+    "jobStatus": {
+      "queued": "Wird gesendet",
+      "sent": "Gesendet",
+      "failed": "Fehlgeschlagen"
+    },
+    "failedHint": "Ein fehlgeschlagener Druck zählt nicht: Wird dieses Badge erneut gedruckt, ist das weiterhin sein Erstdruck.",
+    "voided": "Storniertes Ticket",
+    "deviceDialog": "Druckdialog auf diesem Gerät",
+    "stationTitle": "Druckstation: {name}",
+    "stationIntro": "Lassen Sie diese Seite auf dem Computer geöffnet, der mit {name} verbunden ist. Alle 30 Sekunden meldet sie Yayatoh, dass der Drucker in Betrieb ist; ist sie 90 Sekunden lang geschlossen oder offline, wird der Drucker als offline angezeigt.",
+    "stationConnecting": "Verbindung wird hergestellt…",
+    "stationLive": "Signal um {time} gesendet.",
+    "stationProblem": "Nicht verbunden",
+    "stationError": "Yayatoh ist nicht erreichbar. Neuer Versuch in 30 Sekunden.",
+    "stationArchived": "Dieser Drucker wurde archiviert. Schließen Sie diese Seite.",
+    "stationNotBrowser": "PrintNode meldet den Status dieses Druckers selbst; eine Druckstation ist nicht nötig.",
+    "recentJobs": "Letzte Drucke auf {name}",
+    "noJobsYet": "Auf diesem Drucker wurde noch nichts gedruckt.",
+    "findBadge": "Badge zum Drucken suchen",
+    "badgeHeading": "Badge",
+    "printTitle": "Badge drucken: {name}",
+    "noBadge": "Dieses Ticket hat kein Badge (es wurde möglicherweise storniert).",
+    "neverPrinted": "Noch nicht gedruckt.",
+    "printedTimes": "{count, plural, one {Einmal gedruckt} other {# Mal gedruckt}}, zuletzt {time}.",
+    "printer": "Drucker",
+    "noPrintersHint": "Diese Veranstaltung hat noch keine Drucker: Das Badge wird als PDF für den Druckdialog dieses Geräts geöffnet.",
+    "reason": "Warum erneut drucken?",
+    "reasonPlaceholder": "Grund auswählen",
+    "note": "Notiz",
+    "noteHint": "Erforderlich bei „Sonstiges“. Bis zu 200 Zeichen.",
+    "print": "Badge für {name} drucken",
+    "reprint": "Badge für {name} nachdrucken",
+    "printDialogReady": "Protokolliert. Öffnen Sie das Badge-PDF und drucken Sie es in Originalgröße (100 %).",
+    "openPdf": "Badge-PDF für {name} öffnen",
+    "printSent": "Badge an {printer} gesendet.",
+    "printFailed": "Das Badge konnte nicht gesendet werden ({code}). Versuchen Sie es erneut oder wählen Sie einen anderen Drucker.",
+    "history": "Druckverlauf",
+    "noTemplate": "Für diesen Tickettyp gibt es noch keine Badge-Vorlage. Erstellen Sie eine auf der Seite „Badges“.",
+    "printBadgeFor": "Badge für {name} drucken",
+    "deskHint": "Für den Schalter: Suchen Sie eine Ticketinhaberin oder einen Ticketinhaber und drucken Sie das Badge. Jeder Druck und Nachdruck wird mit seinem Grund protokolliert.",
+    "errors": {
+      "name": "Geben Sie dem Drucker einen Namen (bis zu 60 Zeichen).",
+      "nameTaken": "Diese Veranstaltung hat bereits einen Drucker mit diesem Namen.",
+      "printnode_off": "PrintNode ist für Ihre Organisation nicht aktiviert.",
+      "printnode_id_required": "Geben Sie die PrintNode-Nummer des Druckers ein.",
+      "printnodePrinterId": "Geben Sie die PrintNode-Nummer als ganze Zahl ein.",
+      "too_many_printers": "Diese Veranstaltung hat die maximal zulässige Anzahl an Druckern (50). Archivieren Sie zuerst einen.",
+      "archived": "Dieser Drucker wurde archiviert. Wählen Sie einen anderen.",
+      "printerId": "Wählen Sie einen Drucker.",
+      "reason_required": "Wählen Sie aus, warum dieses Badge erneut gedruckt wird.",
+      "note_required": "Geben Sie bei „Sonstiges“ kurz den Grund an.",
+      "note": "Die Notiz muss kürzer als 200 Zeichen sein."
+    },
+    "balanceDue": "Für diese Anmeldung ist ein Betrag offen. Drucken Sie das Badge auf der Badge-Seite mit einer Begründung."
   }
 }

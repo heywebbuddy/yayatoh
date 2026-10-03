@@ -10865,5 +10865,126 @@
       "offer_ended": "{title} 的邀請已結束。",
       "full": "{title} 剛剛額滿。再試一次即可加入候補名單。"
     }
+  },
+  "badgePrinting": {
+    "title": "印表機與列印紀錄",
+    "subtitle": "新增此活動的名牌印表機，讓每個服務台的列印站保持連線，並查看每張名牌的列印或重印情形及原因。",
+    "printers": "印表機",
+    "stationHint": "請在每台印表機旁的電腦上保持開啟一個列印站。90 秒內沒有訊號的印表機會顯示為離線。",
+    "noPrintersTitle": "尚無印表機",
+    "noPrintersDescription": "為每個服務台新增一台印表機。在此之前，名牌會透過你所用裝置的列印對話框列印。",
+    "addPrinter": "新增印表機",
+    "printerName": "印表機名稱",
+    "connection": "列印方式",
+    "adapters": {
+      "browser": "服務台電腦或 iPad 上的列印對話框（AirPrint 或任何印表機）",
+      "printnode": "PrintNode（不需列印對話框）"
+    },
+    "adapterShort": {
+      "browser": "列印對話框",
+      "printnode": "PrintNode"
+    },
+    "printnodeId": "PrintNode 印表機編號",
+    "printnodeIdHint": "此印表機在你的 PrintNode 帳戶中的編號。",
+    "printnodeNumber": "PrintNode 編號 {id}",
+    "printnodeOffHint": "印表機會透過服務台裝置的列印對話框列印。如需不經對話框列印（PrintNode），請聯絡支援團隊為你的組織開通 PrintNode 帳戶。",
+    "printerAdded": "已新增印表機。",
+    "archive": "封存 {name}",
+    "archived": "已封存印表機。",
+    "status": {
+      "unknown": "尚未連線",
+      "online": "線上",
+      "offline": "離線"
+    },
+    "lastSeen": "最後訊號：{time}",
+    "neverSeen": "尚無訊號",
+    "offlineSince": "自 {time} 起離線",
+    "openStation": "開啟列印站：{name}",
+    "log": "列印紀錄",
+    "counts": "{prints, plural, other {首次列印 # 次}} · {reprints, plural, other {重印 # 次}}",
+    "filterLabel": "顯示",
+    "filters": {
+      "all": "全部",
+      "print": "首次列印",
+      "reprint": "重印"
+    },
+    "logEmptyTitle": "尚未列印任何內容",
+    "logEmptyDescription": "在服務台或從參加者個人資料列印的名牌會顯示在這裡，並附上每次重印的原因。",
+    "logCaption": "已列印和重印的名牌，最新的在前",
+    "columns": {
+      "when": "時間",
+      "who": "名牌",
+      "what": "列印",
+      "reason": "原因",
+      "printer": "印表機",
+      "status": "狀態"
+    },
+    "kinds": {
+      "print": "首次列印",
+      "reprint": "重印"
+    },
+    "reasons": {
+      "first_print": "首次列印",
+      "damaged": "損壞",
+      "lost": "遺失",
+      "details_changed": "資料變更",
+      "misprint": "列印錯誤",
+      "printer_problem": "印表機故障",
+      "other": "其他"
+    },
+    "jobStatus": {
+      "queued": "傳送中",
+      "sent": "已傳送",
+      "failed": "失敗"
+    },
+    "failedHint": "列印失敗不計入：再次列印該名牌仍算是首次列印。",
+    "voided": "票券已取消",
+    "deviceDialog": "此裝置上的列印對話框",
+    "stationTitle": "列印站：{name}",
+    "stationIntro": "請在連接 {name} 的電腦上保持此頁面開啟。它每 30 秒通知 Yayatoh 印表機正在使用中；若頁面關閉或離線達 90 秒，印表機會顯示為離線。",
+    "stationConnecting": "正在連線…",
+    "stationLive": "已於 {time} 傳送訊號。",
+    "stationProblem": "未連線",
+    "stationError": "無法連線至 Yayatoh。將於 30 秒後重試。",
+    "stationArchived": "此印表機已封存。請關閉此頁面。",
+    "stationNotBrowser": "PrintNode 會自行回報此印表機的狀態，不需要列印站。",
+    "recentJobs": "{name} 的近期列印",
+    "noJobsYet": "此印表機尚未列印任何內容。",
+    "findBadge": "尋找要列印的名牌",
+    "badgeHeading": "名牌",
+    "printTitle": "列印名牌：{name}",
+    "noBadge": "此票券沒有名牌（可能已取消）。",
+    "neverPrinted": "尚未列印。",
+    "printedTimes": "{count, plural, other {已列印 # 次}}，最近一次：{time}。",
+    "printer": "印表機",
+    "noPrintersHint": "此活動尚無印表機：名牌將以 PDF 開啟，透過此裝置的列印對話框列印。",
+    "reason": "為什麼要重印？",
+    "reasonPlaceholder": "選擇原因",
+    "note": "備註",
+    "noteHint": "選擇「其他」時必填。最多 200 個字元。",
+    "print": "為 {name} 列印名牌",
+    "reprint": "為 {name} 重印名牌",
+    "printDialogReady": "已記錄。請開啟名牌 PDF，以實際大小（100%）列印。",
+    "openPdf": "開啟 {name} 的名牌 PDF",
+    "printSent": "名牌已傳送至 {printer}。",
+    "printFailed": "無法傳送名牌（{code}）。請重試或選擇其他印表機。",
+    "history": "列印歷程",
+    "noTemplate": "此票種尚無名牌範本。請在「名牌」頁面建立一個。",
+    "printBadgeFor": "為 {name} 列印名牌",
+    "deskHint": "服務台使用：尋找持票人並列印其名牌。每次列印和重印都會連同原因記錄下來。",
+    "errors": {
+      "name": "請為印表機命名（最多 60 個字元）。",
+      "nameTaken": "此活動已有同名的印表機。",
+      "printnode_off": "你的組織尚未開通 PrintNode。",
+      "printnode_id_required": "請輸入印表機的 PrintNode 編號。",
+      "printnodePrinterId": "PrintNode 編號須為整數。",
+      "too_many_printers": "此活動的印表機已達上限（50 台）。請先封存一台。",
+      "archived": "該印表機已封存。請選擇其他印表機。",
+      "printerId": "請選擇印表機。",
+      "reason_required": "請選擇重印此名牌的原因。",
+      "note_required": "選擇「其他」時，請簡要說明原因。",
+      "note": "備註不得超過 200 個字元。"
+    },
+    "balanceDue": "此報名有未付餘額。請在名牌頁面填寫原因後列印。"
   }
 }

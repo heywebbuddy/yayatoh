@@ -10865,5 +10865,126 @@
       "offer_ended": "{title} 的邀请已结束。",
       "full": "{title} 刚刚满员。再试一次即可加入候补名单。"
     }
+  },
+  "badgePrinting": {
+    "title": "打印机和打印记录",
+    "subtitle": "添加此活动的胸卡打印机，保持每个服务台的打印站在线，并查看每张胸卡的打印或重印情况及原因。",
+    "printers": "打印机",
+    "stationHint": "在每台打印机旁的电脑上保持打开一个打印站。90 秒内没有信号的打印机会显示为离线。",
+    "noPrintersTitle": "暂无打印机",
+    "noPrintersDescription": "为每个服务台添加一台打印机。在此之前，胸卡通过你所用设备的打印对话框打印。",
+    "addPrinter": "添加打印机",
+    "printerName": "打印机名称",
+    "connection": "打印方式",
+    "adapters": {
+      "browser": "服务台电脑或 iPad 上的打印对话框（AirPrint 或任意打印机）",
+      "printnode": "PrintNode（无需打印对话框）"
+    },
+    "adapterShort": {
+      "browser": "打印对话框",
+      "printnode": "PrintNode"
+    },
+    "printnodeId": "PrintNode 打印机编号",
+    "printnodeIdHint": "该打印机在你的 PrintNode 账户中的编号。",
+    "printnodeNumber": "PrintNode 编号 {id}",
+    "printnodeOffHint": "打印机通过服务台设备的打印对话框打印。如需无对话框打印（PrintNode），请联系支持团队为你的组织开通 PrintNode 账户。",
+    "printerAdded": "已添加打印机。",
+    "archive": "归档 {name}",
+    "archived": "已归档打印机。",
+    "status": {
+      "unknown": "尚未连接",
+      "online": "在线",
+      "offline": "离线"
+    },
+    "lastSeen": "最后信号：{time}",
+    "neverSeen": "尚无信号",
+    "offlineSince": "自 {time} 起离线",
+    "openStation": "打开打印站：{name}",
+    "log": "打印记录",
+    "counts": "{prints, plural, other {首次打印 # 次}} · {reprints, plural, other {重印 # 次}}",
+    "filterLabel": "显示",
+    "filters": {
+      "all": "全部",
+      "print": "首次打印",
+      "reprint": "重印"
+    },
+    "logEmptyTitle": "尚未打印任何内容",
+    "logEmptyDescription": "在服务台或从参会者资料中打印的胸卡会显示在这里，并附有每次重印的原因。",
+    "logCaption": "已打印和重印的胸卡，最新的在前",
+    "columns": {
+      "when": "时间",
+      "who": "胸卡",
+      "what": "打印",
+      "reason": "原因",
+      "printer": "打印机",
+      "status": "状态"
+    },
+    "kinds": {
+      "print": "首次打印",
+      "reprint": "重印"
+    },
+    "reasons": {
+      "first_print": "首次打印",
+      "damaged": "损坏",
+      "lost": "丢失",
+      "details_changed": "信息变更",
+      "misprint": "打印错误",
+      "printer_problem": "打印机故障",
+      "other": "其他"
+    },
+    "jobStatus": {
+      "queued": "发送中",
+      "sent": "已发送",
+      "failed": "失败"
+    },
+    "failedHint": "打印失败不计数：再次打印该胸卡仍算作首次打印。",
+    "voided": "门票已取消",
+    "deviceDialog": "此设备上的打印对话框",
+    "stationTitle": "打印站：{name}",
+    "stationIntro": "请在连接 {name} 的电脑上保持此页面打开。它每 30 秒告知 Yayatoh 打印机正在使用；如果页面关闭或离线达 90 秒，打印机将显示为离线。",
+    "stationConnecting": "正在连接…",
+    "stationLive": "已于 {time} 发送信号。",
+    "stationProblem": "未连接",
+    "stationError": "无法连接 Yayatoh。将在 30 秒后重试。",
+    "stationArchived": "此打印机已归档。请关闭此页面。",
+    "stationNotBrowser": "PrintNode 会自行报告此打印机的状态，无需打印站。",
+    "recentJobs": "{name} 上的近期打印",
+    "noJobsYet": "此打印机尚未打印任何内容。",
+    "findBadge": "查找要打印的胸卡",
+    "badgeHeading": "胸卡",
+    "printTitle": "打印胸卡：{name}",
+    "noBadge": "此门票没有胸卡（可能已被取消）。",
+    "neverPrinted": "尚未打印。",
+    "printedTimes": "{count, plural, other {已打印 # 次}}，最近一次：{time}。",
+    "printer": "打印机",
+    "noPrintersHint": "此活动尚无打印机：胸卡将以 PDF 打开，通过此设备的打印对话框打印。",
+    "reason": "为什么要重印？",
+    "reasonPlaceholder": "选择原因",
+    "note": "备注",
+    "noteHint": "选择“其他”时必填。最多 200 个字符。",
+    "print": "为 {name} 打印胸卡",
+    "reprint": "为 {name} 重印胸卡",
+    "printDialogReady": "已记录。请打开胸卡 PDF，按实际大小（100%）打印。",
+    "openPdf": "打开 {name} 的胸卡 PDF",
+    "printSent": "胸卡已发送到 {printer}。",
+    "printFailed": "无法发送胸卡（{code}）。请重试或选择其他打印机。",
+    "history": "打印历史",
+    "noTemplate": "此票种还没有胸卡模板。请在“胸卡”页面创建一个。",
+    "printBadgeFor": "为 {name} 打印胸卡",
+    "deskHint": "服务台使用：查找持票人并打印其胸卡。每次打印和重印都会连同原因记录下来。",
+    "errors": {
+      "name": "请为打印机命名（最多 60 个字符）。",
+      "nameTaken": "此活动已有同名打印机。",
+      "printnode_off": "你的组织尚未开通 PrintNode。",
+      "printnode_id_required": "请输入打印机的 PrintNode 编号。",
+      "printnodePrinterId": "PrintNode 编号须为整数。",
+      "too_many_printers": "此活动的打印机已达上限（50 台）。请先归档一台。",
+      "archived": "该打印机已归档。请选择其他打印机。",
+      "printerId": "请选择打印机。",
+      "reason_required": "请选择重印此胸卡的原因。",
+      "note_required": "选择“其他”时，请简要说明原因。",
+      "note": "备注不得超过 200 个字符。"
+    },
+    "balanceDue": "此报名有未付余额。请在胸牌页面填写原因后打印。"
   }
 }
