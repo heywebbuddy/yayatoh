@@ -15259,7 +15259,8 @@
   },
   "emptyActions": {
     "seeEvents": "Ваши мероприятия",
-    "eventHome": "На главную мероприятия"
+    "eventHome": "На главную мероприятия",
+    "clearSearch": "Очистить поиск"
   },
   "coupons": {
     "title": "Купоны",

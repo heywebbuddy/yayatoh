@@ -1,5 +1,5 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import { expectAccessible, signInStaff, WEB, webPage } from './helpers.ts';
+import { expectAccessible, pickOption, signInStaff, WEB, webPage } from './helpers.ts';
 
 /**
  * M5.8b: networking chat reports reach Yayatoh's review (M1.10d). On the web, two attendees
@@ -64,8 +64,8 @@ test('staff review a networking chat report: excerpt by side, a note is required
   expect(login.status()).toBe(303);
   await web.goto('/o/lakeside-events/events/new');
   await web.getByLabel('Event name', { exact: true }).fill(`Chat review ${stamp}`);
-  await web.getByLabel('Event type').selectOption('conference');
-  await web.getByLabel('Time zone').selectOption(TZ);
+  await pickOption(web.getByLabel('Event type'), 'conference');
+  await pickOption(web.getByLabel('Time zone'), TZ);
   await web.getByLabel('Starts', { exact: true }).fill(`${chicagoDate(40)}T09:00`);
   await web.getByLabel('Ends', { exact: true }).fill(`${chicagoDate(40)}T18:00`);
   await web.getByRole('button', { name: 'Create draft' }).click();
@@ -108,7 +108,7 @@ test('staff review a networking chat report: excerpt by side, a note is required
   await b.getByRole('link', { name: `Message ${ana}` }).click();
   await expect(b.getByRole('log').getByText(`Buy my course ${stamp}`)).toBeVisible();
   await b.getByText(`Block or report ${ana}`).click();
-  await b.getByLabel('Reason').selectOption({ label: 'Spam or unwanted selling' });
+  await pickOption(b.getByLabel('Reason'), { label: 'Spam or unwanted selling' });
   await b.getByLabel('What happened').fill(`Selling ${stamp}`);
   await b.getByRole('button', { name: `Report ${ana}` }).click();
   await expect(b).toHaveURL(/\/network\/chat\?notice=reported$/);

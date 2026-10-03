@@ -15259,7 +15259,8 @@
   },
   "emptyActions": {
     "seeEvents": "Ihre Veranstaltungen ansehen",
-    "eventHome": "Zur Startseite der Veranstaltung"
+    "eventHome": "Zur Startseite der Veranstaltung",
+    "clearSearch": "Suche zurücksetzen"
   },
   "coupons": {
     "title": "Gutscheine",

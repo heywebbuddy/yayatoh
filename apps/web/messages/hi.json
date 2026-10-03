@@ -15259,7 +15259,8 @@
   },
   "emptyActions": {
     "seeEvents": "अपने इवेंट देखें",
-    "eventHome": "इवेंट होम पर जाएँ"
+    "eventHome": "इवेंट होम पर जाएँ",
+    "clearSearch": "खोज साफ़ करें"
   },
   "coupons": {
     "title": "कूपन",

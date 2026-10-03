@@ -15259,7 +15259,8 @@
   },
   "emptyActions": {
     "seeEvents": "Je evenementen bekijken",
-    "eventHome": "Naar de evenementstartpagina"
+    "eventHome": "Naar de evenementstartpagina",
+    "clearSearch": "Zoekopdracht wissen"
   },
   "coupons": {
     "title": "Kortingscodes",

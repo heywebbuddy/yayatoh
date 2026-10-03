@@ -15259,7 +15259,8 @@
   },
   "emptyActions": {
     "seeEvents": "Ver seus eventos",
-    "eventHome": "Ir para o início do evento"
+    "eventHome": "Ir para o início do evento",
+    "clearSearch": "Limpar a pesquisa"
   },
   "coupons": {
     "title": "Cupons",

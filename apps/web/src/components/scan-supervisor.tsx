@@ -376,17 +376,16 @@ function DeviceCard({
               <label htmlFor={`${id}-kind`} className="text-[13px] font-bold text-ink">
                 {t('kioskKind', { label: d.label })}
               </label>
-              <select
+              <Select
                 id={`${id}-kind`}
                 name="kind"
                 value={kind}
-                onChange={(e) => setKind(e.target.value as KioskKind)}
-                className="field"
+                onValueChange={(v) => setKind(v as KioskKind)}
               >
                 <option value="tickets">{t('kindTickets')}</option>
                 <option value="guests">{t('kindGuests')}</option>
                 <option value="board">{t('kindBoard')}</option>
-              </select>
+              </Select>
             </div>
             {entrances.length > 0 && kind !== 'board' ? (
               <div className="flex flex-col gap-1.5">
