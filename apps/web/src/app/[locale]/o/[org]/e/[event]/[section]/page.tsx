@@ -1,7 +1,8 @@
 import { composeNav, navLabelKey } from '@yayatoh/platform';
-import { EmptyState, PageHeader } from '@yayatoh/ui';
+import { buttonClass, EmptyState, PageHeader } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { Link } from '@/i18n/navigation.ts';
 import { loadEventBase } from '@/server/console.ts';
 
 /**
@@ -23,7 +24,15 @@ export default async function SectionPage({
   return (
     <>
       <PageHeader title={t(navLabelKey(profile, item))} />
-      <EmptyState title={t('section.comingTitle')} description={t('section.comingDescription')} />
+      <EmptyState
+        title={t('section.comingTitle')}
+        description={t('section.comingDescription')}
+        action={
+          <Link href={`/o/${org}/e/${event}`} className={buttonClass('primary', 'md')}>
+            {t('section.backToEvent')}
+          </Link>
+        }
+      />
     </>
   );
 }

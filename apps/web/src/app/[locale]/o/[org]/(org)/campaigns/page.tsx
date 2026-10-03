@@ -1,7 +1,7 @@
 import { listCampaignsQuery } from '@yayatoh/campaigns';
 import { executeQuery } from '@yayatoh/kernel';
 import { roleCan } from '@yayatoh/tenancy';
-import { Card, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
+import { buttonClass, Card, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
@@ -45,7 +45,21 @@ export default async function CampaignsPage({
         </Card>
       ) : null}
       {rows.length === 0 ? (
-        <EmptyState title={t('emptyTitle')} description={t('emptyDescription')} />
+        <EmptyState
+          title={t('emptyTitle')}
+          description={canWrite ? t('emptyDescription') : t('emptyViewer')}
+          action={
+            canWrite ? (
+              <Link href="#new-campaign-name" className={buttonClass('secondary', 'md')}>
+                {t('emptyAction')}
+              </Link>
+            ) : (
+              <Link href={`/o/${org}/team`} className={buttonClass('primary', 'md')}>
+                {t('findOwner')}
+              </Link>
+            )
+          }
+        />
       ) : (
         <Table
           caption={t('caption')}

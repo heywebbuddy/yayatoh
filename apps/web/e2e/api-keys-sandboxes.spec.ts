@@ -206,7 +206,7 @@ test.describe('sandbox orgs (M6.3a)', () => {
   }) => {
     await signIn(page);
     await page.goto(KEYS);
-    await page.getByRole('link', { name: 'Sandboxes' }).click();
+    await page.locator('#main').getByRole('link', { name: 'Sandboxes' }).click();
     await expect(page).toHaveURL(/\/sandboxes$/);
     await expect(page.getByRole('heading', { name: 'Sandboxes', level: 1 })).toBeVisible();
     await expect(page.getByText('Payments are always fake')).toBeVisible();
