@@ -62,25 +62,25 @@ export default async function JourneyRunPage({
       />
       <dl className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <div>
-          <dt className="text-caption text-zinc-500">{t('run.event')}</dt>
+          <dt className="text-caption text-ink-2">{t('run.event')}</dt>
           <dd className="text-body">{run.eventName}</dd>
         </div>
         <div>
-          <dt className="text-caption text-zinc-500">{t('run.trigger')}</dt>
+          <dt className="text-caption text-ink-2">{t('run.trigger')}</dt>
           <dd className="text-body">{t(`triggers.${run.trigger}`)}</dd>
         </div>
         <div>
-          <dt className="text-caption text-zinc-500">{t('history.joined')}</dt>
+          <dt className="text-caption text-ink-2">{t('history.joined')}</dt>
           <dd className="text-body">{at.format(run.triggeredAt)}</dd>
         </div>
         <div>
-          <dt className="text-caption text-zinc-500">{t('history.status')}</dt>
+          <dt className="text-caption text-ink-2">{t('history.status')}</dt>
           <dd className="text-body">
             <Chip tone={run.status === 'active' ? 'accent' : 'neutral'}>
               {t(`history.runStatus.${run.status}`)}
             </Chip>
             {run.reason ? (
-              <span className="ms-2 text-caption text-zinc-500">{t(outcomeKey(run.reason))}</span>
+              <span className="ms-2 text-caption text-ink-2">{t(outcomeKey(run.reason))}</span>
             ) : null}
           </dd>
         </div>
@@ -101,9 +101,7 @@ export default async function JourneyRunPage({
                   <span>
                     {t('editor.step', { n: r.position + 1 })} · {t(`editor.actions.${r.action}`)}
                   </span>
-                  {s ? (
-                    <span className="text-caption text-zinc-500">{describeWait(t, locale, s)}</span>
-                  ) : null}
+                  {s ? <span className="text-caption text-ink-2">{describeWait(t, locale, s)}</span> : null}
                 </span>
               );
             },

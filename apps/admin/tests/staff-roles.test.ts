@@ -41,4 +41,10 @@ describe('staff roles (M1.3e/f)', () => {
     expect(staffCan('finance', 'frontDoor')).toBe(false);
     expect(staffCan('finance', 'view')).toBe(true);
   });
+
+  it('M4.8b: admins and support verify charity profiles; finance does not (pending owner)', () => {
+    expect(staffCan('admin', 'charities')).toBe(true);
+    expect(staffCan('support', 'charities')).toBe(true);
+    expect(staffCan('finance', 'charities')).toBe(false);
+  });
 });

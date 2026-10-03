@@ -19,6 +19,13 @@ export const RegistrationTypeDto = z.object({
   /** The type's lines (M3.10a): places waited for and places open offers hold. */
   waiting: z.int(),
   offered: z.int(),
+  /** M5.1c: places approved applicants hold until they pay; how the type admits people. */
+  approved: z.int().default(0),
+  approval: z.enum(['none', 'manual']).default('none'),
+  kind: z.enum(['standard', 'guest']).default('standard'),
+  /** M5.1d: pay later by invoice, and the PO number rule. */
+  payLater: z.boolean().default(false),
+  poNumber: z.enum(['off', 'optional', 'required']).default('off'),
 });
 export type RegistrationTypeDto = z.infer<typeof RegistrationTypeDto>;
 
@@ -73,6 +80,11 @@ export const PublicRegistrationTypeDto = z.object({
   minAllInMinor: z.int(),
   maxAllInMinor: z.int(),
   full: z.boolean(),
+  /** M5.1c: this type is applied for (approval before payment). */
+  apply: z.boolean().default(false),
+  /** M5.1d: the buyer may pay later by invoice; whether a PO number is asked for or required. */
+  payLater: z.boolean().default(false),
+  poNumber: z.enum(['off', 'optional', 'required']).default('off'),
 });
 export type PublicRegistrationTypeDto = z.infer<typeof PublicRegistrationTypeDto>;
 

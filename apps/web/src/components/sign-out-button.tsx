@@ -5,7 +5,7 @@ import { LogOut } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from '@/i18n/navigation.ts';
 
-export function SignOutButton() {
+export function SignOutButton({ className }: { className?: string }) {
   const t = useTranslations('shell');
   const router = useRouter();
   return (
@@ -18,9 +18,12 @@ export function SignOutButton() {
         router.replace('/sign-in');
         router.refresh();
       }}
-      className="flex size-8 shrink-0 items-center justify-center rounded-pill text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900"
+      className={
+        className ??
+        'flex size-9 shrink-0 items-center justify-center rounded-[12px] text-ink-2 hover:bg-surface-3 hover:text-ink'
+      }
     >
-      <LogOut aria-hidden="true" className="size-4" strokeWidth={1.6} />
+      <LogOut aria-hidden="true" className="size-[18px]" strokeWidth={2} />
     </button>
   );
 }

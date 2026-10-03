@@ -65,7 +65,7 @@ export function PrivacyConsole({
     <div className="flex flex-col gap-4">
       <Card className="flex flex-col gap-3">
         <h2 className="text-section">{t('privacy.find.title')}</h2>
-        <p className="text-body text-zinc-600">{t('privacy.find.hint')}</p>
+        <p className="text-body text-ink-2">{t('privacy.find.hint')}</p>
         <form action={findAction} className="flex flex-col gap-3 sm:flex-row sm:items-start" noValidate>
           <div className="flex-1">
             <Input
@@ -95,9 +95,9 @@ export function PrivacyConsole({
                 {CATEGORIES.map((c) => (
                   <div
                     key={c}
-                    className="flex items-baseline justify-between gap-3 border-b border-zinc-100 py-1"
+                    className="flex items-baseline justify-between gap-3 border-b border-line py-1"
                   >
-                    <dt className="text-body text-zinc-600">{t(`privacy.categories.${c}`)}</dt>
+                    <dt className="text-body text-ink-2">{t(`privacy.categories.${c}`)}</dt>
                     <dd className="font-mono text-body">{current.summary[c]}</dd>
                   </div>
                 ))}
@@ -106,7 +106,7 @@ export function PrivacyConsole({
 
             <Card className="flex flex-col gap-3">
               <h2 className="text-section">{t('privacy.export.title')}</h2>
-              <p className="text-body text-zinc-600">{t('privacy.export.hint')}</p>
+              <p className="text-body text-ink-2">{t('privacy.export.hint')}</p>
               <form ref={exportForm} action={exportAction}>
                 <input type="hidden" name="email" value={current.email} />
                 <Button type="submit" variant="secondary" disabled={exporting}>
@@ -132,9 +132,9 @@ export function PrivacyConsole({
               </div>
             </Card>
 
-            <Card className="flex flex-col gap-3 border-pink-700">
+            <Card className="flex flex-col gap-3 border-danger">
               <h2 className="text-section">{t('privacy.erase.title')}</h2>
-              <ul className="flex list-disc flex-col gap-1 ps-5 text-body text-zinc-600">
+              <ul className="flex list-disc flex-col gap-1 ps-5 text-body text-ink-2">
                 <li>{t('privacy.erase.what')}</li>
                 <li>{t('privacy.erase.holds', { paid: current.summary.paidOrders })}</li>
                 <li>{t('privacy.erase.tickets', { active: current.summary.activeTickets })}</li>
@@ -169,7 +169,7 @@ export function PrivacyConsole({
         {showErased && erased.kind === 'erased' ? (
           <p
             role="status"
-            className="rounded-card border border-green-500 bg-white px-4 py-3 text-body"
+            className="rounded-card border border-success bg-surface px-4 py-3 text-body"
             data-testid="dsar-erased"
           >
             {t('privacy.erase.done', {

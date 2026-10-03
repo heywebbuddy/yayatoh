@@ -157,8 +157,13 @@ export default async function TicketsPage({
               cell: (r) => (
                 <span className="flex flex-col">
                   <span>{r.name}</span>
+                  {r.tableSize ? (
+                    <span className="text-caption text-ink-2">
+                      {t('galaTables.tableOf', { size: r.tableSize })}
+                    </span>
+                  ) : null}
                   {r.visibility === 'hidden' ? (
-                    <span className="text-caption text-zinc-500">{t('tickets.hidden')}</span>
+                    <span className="text-caption text-ink-2">{t('tickets.hidden')}</span>
                   ) : null}
                 </span>
               ),
@@ -176,7 +181,7 @@ export default async function TicketsPage({
               cell: (r) => (
                 <span className="flex flex-col items-end">
                   <span>{fmt(r.allInMinor)}</span>
-                  <span className="text-[11px] text-zinc-500">
+                  <span className="text-[11px] text-ink-2">
                     {r.feeMode === 'absorb'
                       ? t('tickets.feeAbsorbed')
                       : t('tickets.feeIncluded', { fee: fmt(r.feeMinor) })}
@@ -263,7 +268,7 @@ export default async function TicketsPage({
           <h2 id="transfer-rules-heading" className="text-section">
             {tr('rules.title')}
           </h2>
-          <p className="text-body text-zinc-600">{tr('rules.description')}</p>
+          <p className="text-body text-ink-2">{tr('rules.description')}</p>
           <ul className="flex list-none flex-col gap-3 p-0">
             {types.map((r) => (
               <li key={r.id}>
@@ -296,10 +301,10 @@ export default async function TicketsPage({
           <h2 id="box-office-heading" className="text-section">
             {t('boxOffice.title')}
           </h2>
-          <p className="text-body text-zinc-600">{t('boxOffice.description')}</p>
+          <p className="text-body text-ink-2">{t('boxOffice.description')}</p>
           {ownCharts.size ? (
             <nav aria-label={t('seatingDates.boxOfficeLabel')} className="flex flex-col gap-1.5">
-              <p className="text-caption text-zinc-600">{t('seatingDates.boxOfficeIntro')}</p>
+              <p className="text-caption text-ink-2">{t('seatingDates.boxOfficeIntro')}</p>
               <ul className="flex list-none flex-wrap gap-1.5">
                 {[{ id: '', label: t('seatingDates.eventPlan') }, ...saleDates].map((d) => {
                   const on = (saleDate?.id ?? '') === d.id;
@@ -308,7 +313,7 @@ export default async function TicketsPage({
                       <Link
                         href={`/o/${org}/e/${event}/tickets-orders${d.id ? `?date=${d.id}` : ''}#box-office-heading`}
                         aria-current={on ? 'page' : undefined}
-                        className={`inline-flex min-h-9 items-center rounded-pill border px-3.5 text-[13px] ${on ? 'border-ink bg-ink text-white' : 'border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50'}`}
+                        className={`inline-flex min-h-9 items-center rounded-pill border px-3.5 text-[13px] ${on ? 'border-ink bg-tag text-white' : 'border-line bg-surface text-ink-2 hover:bg-surface-2'}`}
                       >
                         {d.label}
                         {d.id && ownCharts.has(d.id) ? ` · ${t('seatingDates.ownChart')}` : ''}
@@ -380,7 +385,7 @@ export default async function TicketsPage({
                       >
                         {o.buyerName}
                       </Link>
-                      <span className="text-caption text-zinc-500">{o.buyerEmail}</span>
+                      <span className="text-caption text-ink-2">{o.buyerEmail}</span>
                     </span>
                   ),
                 },
@@ -395,7 +400,7 @@ export default async function TicketsPage({
                         key: 'answers',
                         header: t('questions.answers'),
                         cell: (o: (typeof orders)[number]) => (
-                          <span className="text-caption text-zinc-600">{answersFor(o.id)}</span>
+                          <span className="text-caption text-ink-2">{answersFor(o.id)}</span>
                         ),
                       },
                     ]
@@ -435,12 +440,12 @@ export default async function TicketsPage({
         {fields.length === 0 ? (
           <EmptyState title={t('questions.emptyTitle')} description={t('questions.emptyDescription')} />
         ) : (
-          <ol className="flex list-none flex-col divide-y divide-zinc-100 rounded-card border border-zinc-200 p-0">
+          <ol className="flex list-none flex-col divide-y divide-line rounded-card border border-line p-0">
             {fields.map((f, i) => (
               <li key={f.key} className="flex flex-wrap items-center gap-3 px-4 py-3">
                 <span className="flex min-w-0 flex-1 flex-col">
                   <span>{f.label}</span>
-                  <span className="text-caption text-zinc-500">
+                  <span className="text-caption text-ink-2">
                     {[
                       t(`questions.types.${f.type}`),
                       f.required ? t('questions.requiredBadge') : null,
@@ -509,7 +514,7 @@ export default async function TicketsPage({
           {t('guestVerify.settingTitle')}
         </h2>
         <Card className="flex flex-col gap-3">
-          <p className="text-body text-zinc-600">{t('guestVerify.settingDescription')}</p>
+          <p className="text-body text-ink-2">{t('guestVerify.settingDescription')}</p>
           {canWrite ? (
             <CheckoutVerificationForm
               action={setCheckoutVerificationAction.bind(null, org, event)}
@@ -534,7 +539,7 @@ export default async function TicketsPage({
               ))}
             </ul>
           ) : (
-            <p className="text-body text-zinc-600">{tp('notSet')}</p>
+            <p className="text-body text-ink-2">{tp('notSet')}</p>
           )}
           {canWrite ? (
             <RefundPolicyForm

@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, buttonClass, Card, Input, Label } from '@yayatoh/ui';
+import { Alert, Button, buttonClass, Card, cx, Input } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { type FormEvent, startTransition, useActionState, useState } from 'react';
 import type { CheckoutState } from '@/app/[locale]/events/[slug]/actions.ts';
@@ -26,6 +26,8 @@ export interface PassView {
   /** Choose-your-amount pass: `priceLabel` is the minimum. */
   readonly isDonation?: boolean;
   readonly accessDates?: readonly { readonly key: string; readonly label: string }[];
+  /** M4.2b: a table ticket: one seats this many guests (the buyer names them after paying). */
+  readonly tableSize?: number | null;
   /** M3.10a: sold out, with a waitlist to join (the join page's path). */
   readonly waitlistHref?: string | null;
 }
@@ -124,138 +126,141 @@ export function CheckoutForm({
                                         ? t('checkout.orgUnavailable')
                                         : t(errorMessageKey(state.code));
   return (
-    <form action={formAction} onSubmit={onSubmit} className="flex min-w-0 flex-1 flex-col gap-4">
+    <form action={formAction} onSubmit={onSubmit} className="@container flex min-w-0 flex-1 flex-col gap-4">
       {occurrenceId ? <input type="hidden" name="occurrenceId" value={occurrenceId} /> : null}
-      <ul className="grid list-none grid-cols-1 items-start gap-3.5 p-0 sm:grid-cols-2 lg:grid-cols-3">
-        {passes.map((p) => (
-          <li key={p.id ?? p.name}>
-            <Card tone={p.featured ? 'ink' : 'default'} size="panel" className="flex flex-col gap-2.5">
-              <Label tone={p.featured ? 'inverse' : 'default'}>{p.name}</Label>
-              <p className="text-[40px] leading-[44px] font-light tracking-[-0.04em]">
-                {p.isDonation ? (
-                  <span className="text-[15px] tracking-normal">{t('publicEvent.donationFrom')} </span>
-                ) : null}
-                {p.priceLabel}
-                <span
-                  className={`ms-1 text-[15px] tracking-normal ${p.featured ? 'text-white/65' : 'text-zinc-500'}`}
-                >
-                  {t('publicEvent.allInSuffix')}
-                </span>
-              </p>
-              {p.regularPriceLabel && p.earlyUntil ? (
-                <p className={`text-caption ${p.featured ? 'text-white/75' : 'text-zinc-600'}`}>
-                  {t('publicEvent.earlyBird', { date: p.earlyUntil, regular: p.regularPriceLabel })}
-                </p>
-              ) : null}
-              {p.accessDates && p.accessDates.length > 0 ? (
-                <ul
-                  aria-label={t('publicEvent.accessDates')}
-                  className="flex list-none flex-wrap gap-1.5 p-0"
-                >
-                  {p.accessDates.map((d) => (
-                    <li
-                      key={d.key}
-                      className={`rounded-pill border px-2.5 py-0.5 text-caption ${p.featured ? 'border-white/30 text-white/80' : 'border-zinc-200 text-zinc-600'}`}
-                    >
-                      {d.label}
-                    </li>
-                  ))}
-                </ul>
-              ) : null}
-              {p.description ? (
-                <p className={`text-body ${p.featured ? 'text-white/65' : 'text-zinc-500'}`}>
-                  {p.description}
-                </p>
-              ) : null}
-              {p.availability !== 'available' || p.fewLeft ? (
-                <p className={`text-caption ${p.featured ? 'text-white/75' : 'text-accent-text'}`}>
-                  {t(
-                    `publicEvent.availability.${p.fewLeft && p.availability === 'available' ? 'fewLeft' : p.availability}`,
-                  )}
-                </p>
-              ) : null}
-              {p.waitlistHref ? (
-                <Link
-                  href={p.waitlistHref}
-                  className={buttonClass(p.featured ? 'on-dark' : 'secondary', 'md', 'self-start')}
-                >
-                  {t('waitlist.joinLink')}
-                  <span className="sr-only"> — {p.name}</span>
-                </Link>
-              ) : p.id && p.availability === 'available' && seatedTypes.has(p.id) ? (
-                <p className={`text-caption ${p.featured ? 'text-white/75' : 'text-zinc-600'}`}>
-                  {t('checkout.chooseSeatsBelow')}
-                </p>
-              ) : p.id && p.availability === 'available' ? (
-                <div className="flex flex-wrap items-center gap-2">
-                  <label
-                    htmlFor={`qty-${p.id}`}
-                    className={`text-caption ${p.featured ? 'text-white/75' : 'text-zinc-600'}`}
-                  >
-                    {t('checkout.quantity')}
-                    <span className="sr-only"> — {p.name}</span>
-                  </label>
-                  <select
-                    id={`qty-${p.id}`}
-                    name={`qty:${p.id}`}
-                    defaultValue="0"
-                    className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body text-zinc-900"
-                  >
-                    {Array.from({ length: p.maxPerOrder + 1 }, (_, n) => (
-                      <option key={n} value={n}>
-                        {n}
-                      </option>
-                    ))}
-                  </select>
-                  {p.isDonation ? (
-                    <>
-                      <label
-                        htmlFor={`amount-${p.id}`}
-                        className={`text-caption ${p.featured ? 'text-white/75' : 'text-zinc-600'}`}
-                      >
-                        {t('checkout.donationAmount')}
-                        <span className="sr-only">
-                          {' '}
-                          — {p.name} ({t('checkout.donationMinimum', { minimum: p.priceLabel })})
+      <ul className="grid list-none grid-cols-1 items-start gap-2.5 p-0 @3xl:grid-cols-2">
+        {passes.map((p) => {
+          const muted = 'text-ink-2';
+          return (
+            <li key={p.id ?? p.name}>
+              <div
+                className={cx(
+                  'flex flex-col gap-2.5 rounded-[20px] border p-4 transition-colors duration-150',
+                  p.featured
+                    ? 'border-primary bg-primary-soft ring-[3px] ring-primary-soft'
+                    : 'border-line bg-surface-2 hover:border-line-strong/60',
+                )}
+              >
+                <div className="flex flex-wrap items-start gap-3">
+                  <div className="flex min-w-0 grow basis-40 flex-col gap-1">
+                    <h3 className="m-0 text-[15px] font-extrabold tracking-normal text-ink">{p.name}</h3>
+                    {p.description ? <p className={`m-0 text-caption ${muted}`}>{p.description}</p> : null}
+                    <p className="m-0 text-[22px] leading-tight font-extrabold tracking-[-0.03em] text-ink tabular-nums">
+                      {p.isDonation ? (
+                        <span className="text-caption font-bold tracking-normal">
+                          {t('publicEvent.donationFrom')}{' '}
                         </span>
-                      </label>
-                      <input
-                        id={`amount-${p.id}`}
-                        name={`amount:${p.id}`}
-                        inputMode="decimal"
-                        pattern="[0-9]+([.,][0-9]{1,3})?"
-                        className="min-h-10 w-28 rounded-pill border border-zinc-200 bg-white px-4 text-body text-zinc-900"
-                      />
-                    </>
+                      ) : null}
+                      {p.priceLabel}
+                      <span className={`ms-1 text-caption font-semibold tracking-normal ${muted}`}>
+                        {t('publicEvent.allInSuffix')}
+                      </span>
+                    </p>
+                  </div>
+                  {p.id && p.availability === 'available' && !seatedTypes.has(p.id) && !p.waitlistHref ? (
+                    <div className="flex flex-wrap items-end gap-2">
+                      <div className="flex flex-col gap-1">
+                        <label htmlFor={`qty-${p.id}`} className={`text-caption font-bold ${muted}`}>
+                          {t('checkout.quantity')}
+                          <span className="sr-only"> — {p.name}</span>
+                        </label>
+                        <select
+                          id={`qty-${p.id}`}
+                          name={`qty:${p.id}`}
+                          defaultValue="0"
+                          className="field min-w-20 font-bold tabular-nums"
+                        >
+                          {Array.from({ length: p.maxPerOrder + 1 }, (_, n) => (
+                            <option key={n} value={n}>
+                              {n}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      {p.isDonation ? (
+                        <div className="flex flex-col gap-1">
+                          <label htmlFor={`amount-${p.id}`} className={`text-caption font-bold ${muted}`}>
+                            {t('checkout.donationAmount')}
+                            <span className="sr-only">
+                              {' '}
+                              — {p.name} ({t('checkout.donationMinimum', { minimum: p.priceLabel })})
+                            </span>
+                          </label>
+                          <input
+                            id={`amount-${p.id}`}
+                            name={`amount:${p.id}`}
+                            inputMode="decimal"
+                            pattern="[0-9]+([.,][0-9]{1,3})?"
+                            className="field w-28"
+                          />
+                        </div>
+                      ) : null}
+                    </div>
                   ) : null}
                 </div>
-              ) : (
-                // Preview passes (no ticket type yet) cannot be bought; a disabled control says so.
-                <button
-                  type="button"
-                  disabled
-                  className={buttonClass(p.featured ? 'on-dark' : 'secondary', 'md', 'self-start')}
-                >
-                  {t('publicEvent.select')}
-                </button>
-              )}
-            </Card>
-          </li>
-        ))}
+                {p.regularPriceLabel && p.earlyUntil ? (
+                  <p className="m-0 text-caption font-semibold text-success">
+                    {t('publicEvent.earlyBird', { date: p.earlyUntil, regular: p.regularPriceLabel })}
+                  </p>
+                ) : null}
+                {p.tableSize ? (
+                  <p className={`m-0 text-caption ${muted}`}>
+                    {t('galaTables.publicPass', { size: p.tableSize })}
+                  </p>
+                ) : null}
+                {p.accessDates && p.accessDates.length > 0 ? (
+                  <ul
+                    aria-label={t('publicEvent.accessDates')}
+                    className="flex list-none flex-wrap gap-1.5 p-0"
+                  >
+                    {p.accessDates.map((d) => (
+                      <li
+                        key={d.key}
+                        className="rounded-pill border border-line bg-surface-solid px-2.5 py-0.5 text-caption font-semibold text-ink-2"
+                      >
+                        {d.label}
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+                {p.availability !== 'available' || p.fewLeft ? (
+                  <p className="m-0 self-start rounded-pill bg-brand-soft px-2.5 py-0.5 text-caption font-bold text-brand-ink">
+                    {t(
+                      `publicEvent.availability.${p.fewLeft && p.availability === 'available' ? 'fewLeft' : p.availability}`,
+                    )}
+                  </p>
+                ) : null}
+                {p.waitlistHref ? (
+                  <Link href={p.waitlistHref} className={buttonClass('secondary', 'sm', 'self-start')}>
+                    {t('waitlist.joinLink')}
+                    <span className="sr-only"> — {p.name}</span>
+                  </Link>
+                ) : p.id && p.availability === 'available' && seatedTypes.has(p.id) ? (
+                  <p className={`m-0 text-caption ${muted}`}>{t('checkout.chooseSeatsBelow')}</p>
+                ) : p.id ? null : (
+                  // Preview passes (no ticket type yet) cannot be bought; a disabled control says so.
+                  <button type="button" disabled className={buttonClass('secondary', 'sm', 'self-start')}>
+                    {t('publicEvent.select')}
+                  </button>
+                )}
+              </div>
+            </li>
+          );
+        })}
       </ul>
       {buyable && seatMap ? (
-        <Card>
+        <Card tone="muted">
           <SeatPicker map={seatMap} prices={prices} stream={seatStream} timeZone={timeZone} />
         </Card>
       ) : null}
       {buyable && questions.length > 0 ? (
-        <Card>
+        <Card tone="muted">
           <CheckoutQuestions questions={questions} invalidKey={state.field} />
         </Card>
       ) : null}
       {buyable ? (
-        <Card className="flex flex-col gap-4">
-          <div className="flex flex-col gap-4 md:flex-row md:items-end">
+        <Card tone="muted" className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 @3xl:flex-row @3xl:items-end">
             <div className="flex-1">
               <Input name="name" required autoComplete="name" label={t('checkout.name')} />
             </div>
@@ -269,7 +274,7 @@ export function CheckoutForm({
                 onChange={(e) => setTypedEmail(e.currentTarget.value)}
               />
             </div>
-            <div className="md:w-44">
+            <div className="@3xl:w-44">
               <Input
                 name="promoCode"
                 maxLength={32}
@@ -281,25 +286,31 @@ export function CheckoutForm({
             </div>
             {/* Hidden (not removed) during the email step, so its brand colours stay applied. */}
             <div className={verify ? 'hidden' : 'contents'}>
-              <Button type="submit" disabled={pending} ref={brandButton}>
+              <Button
+                type="submit"
+                size="lg"
+                disabled={pending}
+                ref={brandButton}
+                className="@max-3xl:w-full"
+              >
                 {t('checkout.continue')}
               </Button>
             </div>
           </div>
           {/* Unticked by default: buying is never consent to marketing. */}
-          <label className="flex min-h-6 items-start gap-2.5 text-caption text-zinc-600">
+          <label className="flex min-h-6 items-start gap-2.5 text-caption text-ink-2">
             <input
               type="checkbox"
               name="marketingOptIn"
               value="1"
-              className="mt-0.5 size-5 shrink-0 accent-ink"
+              className="mt-0.5 size-5 shrink-0 accent-primary"
             />
             <span>{t('checkout.marketingOptIn', { org: organizer })}</span>
           </label>
         </Card>
       ) : null}
       {buyable && verify ? (
-        <Card>
+        <Card tone="muted">
           <section aria-labelledby="verify-email-title" className="flex flex-col gap-3">
             <h2 id="verify-email-title" className="text-section">
               {t('guestVerify.title')}
@@ -314,7 +325,7 @@ export function CheckoutForm({
               pending={pending}
               idPrefix="checkout-verify"
             />
-            <p className="text-caption text-zinc-600">{t('guestVerify.changeEmail')}</p>
+            <p className="text-caption text-ink-2">{t('guestVerify.changeEmail')}</p>
           </section>
         </Card>
       ) : null}

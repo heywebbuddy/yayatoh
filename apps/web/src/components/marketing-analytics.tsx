@@ -1,6 +1,6 @@
 import { formatMoney, money } from '@yayatoh/kernel';
 import type { AnalyticsRowDto, FiguresDto } from '@yayatoh/marketing';
-import { BarChart, Button, ChartTable, Table } from '@yayatoh/ui';
+import { BarChart, Button, ChartTable, StatCard, Table } from '@yayatoh/ui';
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/navigation.ts';
 
@@ -44,7 +44,7 @@ export async function RangeForm({
         <input key={k} type="hidden" name={k} value={v} />
       ))}
       <div className="flex flex-wrap items-end gap-3">
-        <label className="flex flex-col gap-1.5 text-caption text-zinc-600">
+        <label className="flex flex-col gap-1.5 text-[13px] font-bold text-ink">
           {t('from')}
           <input
             type="date"
@@ -52,10 +52,10 @@ export async function RangeForm({
             defaultValue={from}
             aria-invalid={error ? true : undefined}
             aria-describedby={error ? 'range-error' : 'range-note'}
-            className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body text-zinc-900 outline-none focus-visible:border-zinc-900"
+            className="field"
           />
         </label>
-        <label className="flex flex-col gap-1.5 text-caption text-zinc-600">
+        <label className="flex flex-col gap-1.5 text-[13px] font-bold text-ink">
           {t('to')}
           <input
             type="date"
@@ -63,7 +63,7 @@ export async function RangeForm({
             defaultValue={to}
             aria-invalid={error ? true : undefined}
             aria-describedby={error ? 'range-error' : 'range-note'}
-            className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body text-zinc-900 outline-none focus-visible:border-zinc-900"
+            className="field"
           />
         </label>
         <Button type="submit" variant="secondary">
@@ -71,11 +71,11 @@ export async function RangeForm({
         </Button>
       </div>
       {error ? (
-        <p id="range-error" role="alert" className="text-caption text-pink-700">
+        <p id="range-error" role="alert" className="text-caption text-danger">
           {t(`rangeErrors.${error}` as 'rangeErrors.invalid_date')}
         </p>
       ) : null}
-      <p id="range-note" className="text-caption text-zinc-500">
+      <p id="range-note" className="text-caption text-ink-2">
         {t('rangeNote', { timeZone, currency })}
       </p>
     </form>
@@ -108,19 +108,32 @@ export async function FigureTiles({
     ['conversion', ratePct(figures.conversionBps, locale)],
   ];
   return (
-    <section aria-label={label}>
-      <dl className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-        {items.map(([k, v]) => (
-          <div
-            key={k}
-            className="flex flex-col gap-1 rounded-card border border-zinc-200 bg-white p-4"
-            data-testid={`figure-${k}`}
-          >
-            <dt className="text-caption text-zinc-600">{t(k as 'sends')}</dt>
-            <dd className="text-section tabular-nums">{v}</dd>
-          </div>
-        ))}
-      </dl>
+    <section aria-label={label} className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {items.map(([k, v]) => (
+        <StatCard
+          key={k}
+          testId={`figure-${k}`}
+          label={t(k as 'sends')}
+          value={v}
+          progress={
+            k === 'deliveries' && figures.sends && figures.deliveries !== null
+              ? {
+                  value: Math.min(figures.deliveries, figures.sends),
+                  max: figures.sends,
+                  label: t('deliveredShare'),
+                  tone: 'success',
+                }
+              : k === 'conversion'
+                ? {
+                    value: Math.min(figures.conversionBps, 10_000),
+                    max: 10_000,
+                    label: t('conversion'),
+                    tone: 'brand',
+                  }
+                : undefined
+          }
+        />
+      ))}
     </section>
   );
 }
@@ -155,8 +168,8 @@ export async function AnalyticsRows({
   return (
     <div className="flex flex-col gap-4">
       {rows.length > 0 ? (
-        <figure className="flex flex-col gap-2 rounded-card border border-zinc-200 bg-white p-4">
-          <figcaption className="text-caption text-zinc-600">{chartTitle}</figcaption>
+        <figure className="m-0 flex flex-col gap-3 rounded-card border border-line bg-surface p-5 elevation-card glass">
+          <figcaption className="text-card text-ink">{chartTitle}</figcaption>
           <BarChart
             title={chartTitle}
             bars={chartRows.map((r) => ({ label: name(r).slice(0, 18), value: r.lastTouch.revenueMinor }))}
@@ -185,17 +198,20 @@ export async function AnalyticsRows({
               return (
                 <span className="flex flex-col gap-0.5">
                   {to ? (
-                    <Link href={to} className="inline-flex min-h-6 items-center underline underline-offset-2">
+                    <Link
+                      href={to}
+                      className="inline-flex min-h-6 items-center font-bold text-primary-ink underline underline-offset-2"
+                    >
                       {name(r)}
                     </Link>
                   ) : (
-                    <span>{name(r)}</span>
+                    <span className="font-bold text-ink">{name(r)}</span>
                   )}
                   {r.kind === 'campaign' || r.kind === 'utm' ? (
-                    <span className="text-caption text-zinc-500">{t(`kind.${r.kind}`)}</span>
+                    <span className="text-caption text-ink-2">{t(`kind.${r.kind}`)}</span>
                   ) : null}
                   {r.link ? (
-                    <span className="text-caption text-zinc-500">
+                    <span className="text-caption text-ink-2">
                       {r.link.eventName ?? ''} · {r.link.source} / {r.link.medium} / {r.link.campaign}
                     </span>
                   ) : null}
@@ -203,61 +219,53 @@ export async function AnalyticsRows({
               );
             },
           },
-          { key: 'sends', header: t('figures.sends'), cell: (r) => opt(r.sends), mono: true, align: 'end' },
+          { key: 'sends', header: t('figures.sends'), cell: (r) => opt(r.sends), align: 'end' },
           {
             key: 'deliveries',
             header: t('figures.deliveries'),
             cell: (r) => opt(r.deliveries),
-            mono: true,
             align: 'end',
           },
           {
             key: 'clicks',
             header: t('figures.clicks'),
             cell: (r) => n.format(r.clicks),
-            mono: true,
             align: 'end',
           },
           {
             key: 'unique',
             header: t('figures.uniqueClickers'),
             cell: (r) => n.format(r.uniqueClickers),
-            mono: true,
             align: 'end',
           },
           {
             key: 'firstOrders',
             header: t('figures.firstOrders'),
             cell: (r) => n.format(r.firstTouch.orders),
-            mono: true,
             align: 'end',
           },
           {
             key: 'firstRevenue',
             header: t('figures.firstRevenue'),
             cell: (r) => m(r.firstTouch.revenueMinor),
-            mono: true,
             align: 'end',
           },
           {
             key: 'lastOrders',
             header: t('figures.lastOrders'),
             cell: (r) => n.format(r.lastTouch.orders),
-            mono: true,
             align: 'end',
           },
           {
             key: 'lastRevenue',
             header: t('figures.lastRevenue'),
             cell: (r) => m(r.lastTouch.revenueMinor),
-            mono: true,
             align: 'end',
           },
           {
             key: 'conversion',
             header: t('figures.conversion'),
             cell: (r) => ratePct(r.conversionBps, locale),
-            mono: true,
             align: 'end',
           },
         ]}
