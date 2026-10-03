@@ -28,6 +28,10 @@ export const AUDIT_DETAIL_KEYS = [
   'reason',
   /** `staff:<id>` when platform staff acted as the member (M1.2e). */
   'impersonatedBy',
+  /** M6.3a: an API key's daily use summary (the day, its errors and 429s; `count` = requests). */
+  'day',
+  'errors',
+  'rateLimited',
 ] as const;
 
 const Detail = z.union([z.string().max(80), z.number(), z.boolean()]);

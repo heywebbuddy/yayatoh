@@ -294,6 +294,20 @@
     "alerts.alert-urgent-text": {
       "subject": "{rule, select, unseated {{count, plural, one {Un asistente no tiene asiento} other {{countWords} asistentes no tienen asiento}}} undistributed {{count, plural, one {Una entrada comprada no se ha distribuido} other {{countWords} entradas compradas no se han distribuido}}} paymentsFailed {{count, plural, one {Un pago falló} other {{countWords} pagos fallaron}}} paymentsStuck {{count, plural, one {Un pago está atascado} other {{countWords} pagos están atascados}}} refundSurge {{count, plural, one {Un reembolso en la última hora} other {{countWords} reembolsos en la última hora}}} devicesOffline {{count, plural, one {Un dispositivo de control de acceso está sin conexión} other {{countWords} dispositivos de control de acceso están sin conexión}}} devicesLowBattery {{count, plural, one {Un dispositivo de control de acceso tiene poca batería} other {{countWords} dispositivos de control de acceso tienen poca batería}}} devicesBacklog {{count, plural, one {Un dispositivo de control de acceso tiene escaneos pendientes de sincronizar} other {{countWords} dispositivos de control de acceso tienen escaneos pendientes de sincronizar}}} capacityNear {El recinto está al {count} % de su capacidad} capacityFull {El recinto está lleno ({count} %)} sellOut {El {count} % de las entradas está vendido} salesPace {La venta de entradas va al {count} % del ritmo objetivo} readiness {{count, plural, one {Un paso de configuración bloquea este evento} other {{countWords} pasos de configuración bloquean este evento}}} domain {{count, plural, one {Un dominio personalizado tiene un problema} other {{countWords} dominios personalizados tienen un problema}}} payoutsPastDue {{count, plural, one {Un requisito de la cuenta de pagos está vencido} other {{countWords} requisitos de la cuenta de pagos están vencidos}}} deliverability {La entregabilidad del correo necesita atención} automationFailed {{count, plural, one {Un mensaje o acción masiva falló hoy} other {{countWords} mensajes o acciones masivas fallaron hoy}}} assistanceOverdue {{count, plural, one {{countWords} solicitud de ayuda lleva demasiado esperando} other {{countWords} solicitudes de ayuda llevan demasiado esperando}}} campaignFailed {{count, plural, one {Un envío de campaña falló hoy} other {{countWords} envíos de campaña fallaron hoy}}} disputeDeadline {{count, plural, one {Una disputa necesita pruebas pronto} other {{countWords} disputas necesitan pruebas pronto}}} other {Alerta}}",
       "intro": "{eventName, select, none {Algo necesita atención en {org}.} other {Algo necesita atención en {eventName}.}} El botón abre la página que lo soluciona."
+    },
+    "privacy.request-code": {
+      "subject": "{code} es tu código para confirmar tu solicitud de privacidad",
+      "intro": "Introduce {code} para confirmar tu solicitud a {org}: {kind, select, erasure {borrar tus datos personales} other {una copia de tus datos personales}}. El código sirve una vez y caduca en {minutes, plural, one {# minuto} other {# minutos}}. Si no lo pediste, puedes ignorar este correo: sin el código no pasa nada."
+    },
+    "privacy.archive-ready": {
+      "subject": "Tus datos personales de {org} están listos",
+      "intro": "{org} respondió a tu solicitud: una copia de los datos personales que guarda sobre ti está lista en un archivo ZIP. El enlace funciona durante {days, plural, one {# día} other {# días}}. El archivo está firmado, así puedes comprobar que no se modificó.",
+      "cta": "Descargar mis datos"
+    },
+    "privacy.erasure-done": {
+      "subject": "{org} borró tus datos personales",
+      "intro": "{org} borró tus datos personales como pediste. Algunos registros deben conservarse por ley (por ejemplo, pedidos pagados por impuestos), sin tu nombre ni tu correo; el recibo los enumera con el motivo. Este es el último correo sobre el tema.",
+      "cta": "Ver el recibo"
     }
   },
   "roles": {

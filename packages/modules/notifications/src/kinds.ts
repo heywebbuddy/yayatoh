@@ -202,6 +202,26 @@ export const KINDS = {
     urgent: false,
     params: ['url', 'eventName', 'title', 'until', 'timeZone'],
   },
+  // M6.1c data-subject requests: the self-service confirmation code (sent at once by the web app,
+  // never queued, like guest.sign-in), then the archive link or the erasure receipt link.
+  'privacy.request-code': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['code', 'minutes', 'kind'],
+  },
+  'privacy.archive-ready': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['url', 'days'],
+  },
+  'privacy.erasure-done': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['url'],
+  },
   'guest.waitlist-code': {
     category: 'transactional',
     channels: ['email'],

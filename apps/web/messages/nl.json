@@ -186,6 +186,11 @@
       "guests": {
         "invitation": "Huwelijksuitnodiging",
         "rsvp-reminder": "Herinnering om te reageren"
+      },
+      "privacy": {
+        "request-code": "Code voor privacyverzoek",
+        "archive-ready": "Archief met persoonsgegevens klaar",
+        "erasure-done": "Bewijs van wissing"
       }
     },
     "status": {
@@ -341,7 +346,9 @@
     "supportMacros": "Supportmacro's",
     "assistance": "Hulpvragen",
     "marketingAnalytics": "Marketinganalyse",
-    "badges": "Badges"
+    "badges": "Badges",
+    "orgAnalytics": "Analyses",
+    "integrations": "Integraties"
   },
   "vocab": {
     "attendee": "Deelnemer",
@@ -923,9 +930,15 @@
         "capReached": "Meer kan niet in één bestelling: {max} plaatsen.",
         "adaChosen": "{count, plural, one {{seats} is een toegankelijke plaats} other {{seats} zijn toegankelijke plaatsen}}, vrijgehouden voor gasten die ze nodig hebben. Kies {count, plural, one {hem} other {ze}} alleen als het nodig is.",
         "overCap": "{count} plaatsen gekozen: de organisator vraagt om maximaal {max} per bestelling.",
-        "keptUntil": "Vrijgehouden tot {date}"
+        "keptUntil": "Vrijgehouden tot {date}",
+        "companionWarn": "Begeleidersplaatsen zijn voor gasten die met een rolstoelgebruiker komen: tot {max} per toegankelijke plaats.",
+        "companionEnforced": "Begeleidersplaatsen worden alleen verkocht met een toegankelijke plaats: tot {max} per toegankelijke plaats.",
+        "companionChosen": "Begeleidersplaatsen zonder toegankelijke plaats: {seats}. Ze zijn voor gasten die met een rolstoelgebruiker komen (tot {max} per toegankelijke plaats).",
+        "companionRefused": "Begeleidersplaatsen zonder toegankelijke plaats: {seats}. Ze worden alleen verkocht met een toegankelijke plaats (tot {max} per plaats): voeg er een toe of kies andere plaatsen.",
+        "adaEnforcedBest": "Toegankelijke plaatsen zijn tot {date} gereserveerd voor gasten die ze nodig hebben. Heb je er een nodig? Vink ‘Iemand in mijn gezelschap gebruikt een rolstoel’ aan en gebruik ‘Beste plaatsen’."
       },
-      "groupSummary": "{group} — {free} van {total} vrij{chosen, plural, =0 {} other { · # gekozen}}"
+      "groupSummary": "{group} — {free} van {total} vrij{chosen, plural, =0 {} other { · # gekozen}}",
+      "companion": "Begeleidersplaats"
     },
     "seatRuleCap": "Dat zijn meer plaatsen dan één bestelling mag hebben. Kies er minder.",
     "seatRuleAda": "Toegankelijke plaatsen worden voorlopig vrijgehouden voor gasten die ze nodig hebben. Kies andere plaatsen.",
@@ -935,7 +948,43 @@
     "orgUnavailable": "Deze organisator verkoopt op dit moment geen tickets. Al gekochte tickets blijven geldig.",
     "riskBlocked": "We kunnen deze bestelling niet aannemen. Neem contact op met de organisator.",
     "creditInvalid": "Die tegoedcode is niet geldig of al gebruikt.",
-    "creditNotApplicable": "Dat tegoed kan niet voor deze tickets worden gebruikt."
+    "creditNotApplicable": "Dat tegoed kan niet voor deze tickets worden gebruikt.",
+    "seatRuleCompanion": "Begeleidersplaatsen worden alleen verkocht met een toegankelijke plaats. Kies ook een toegankelijke plaats, of andere plaatsen.",
+    "best": {
+      "title": "Beste plaatsen",
+      "modeLegend": "Hoe wil je plaatsen kiezen?",
+      "mode": {
+        "best": "Beste plaatsen: wij zoeken de beste plaatsen naast elkaar",
+        "pick": "Zelf plaatsen kiezen"
+      },
+      "need": "Iemand in mijn gezelschap gebruikt een rolstoel en heeft een toegankelijke plaats nodig",
+      "needStaff": "De koper heeft een rolstoelplaats nodig",
+      "needHint": "Toegankelijke plaatsen en de begeleidersplaatsen ernaast zijn gereserveerd voor gasten die ze nodig hebben.",
+      "price": "Prijs",
+      "onePrice": "Prijs: {price}",
+      "quantity": "Aantal plaatsen",
+      "find": "Plaatsen zoeken",
+      "findAgain": "Opnieuw zoeken",
+      "accessibleHint": "We zoeken een rolstoelplaats met begeleidersplaatsen ernaast.",
+      "together": "{count, plural, one {Je plaats:} other {# plaatsen naast elkaar:}}",
+      "split": "We konden je gezelschap van {count} niet samen plaatsen, dus je plaatsen liggen op verschillende plekken (groepen: {pieces}). Je kunt ook zelf plaatsen kiezen.",
+      "seatsLabel": "Je plaatsen",
+      "seatAccessible": "{seat} (rolstoelplaats)",
+      "seatCompanion": "{seat} (begeleidersplaats)",
+      "heldFor": "{minutes} minuten voor je vastgehouden terwijl je afrekent.",
+      "clear": "Deze plaatsen vrijgeven",
+      "notEnough": "Niet genoeg vrije plaatsen tegen deze prijs voor {count}. Probeer minder plaatsen of een andere prijs, of kies zelf je plaatsen.",
+      "noAccessible": "Er is geen rolstoelplaats vrij tegen deze prijs. Probeer een andere prijs of neem contact op met de organisator.",
+      "taken": "Die plaatsen zijn net bezet. Probeer het opnieuw.",
+      "ruleRefused": "De plaatsingsregels van de organisator staan deze keuze niet toe.",
+      "off": "‘Beste plaatsen’ wordt voor dit evenement niet meer aangeboden. Kies zelf je plaatsen.",
+      "findFirst": "Zoek eerst je plaatsen: kies hoeveel en druk op ‘Plaatsen zoeken’.",
+      "expired": "Je plaatsen werden 10 minuten vastgehouden en zijn vrijgegeven. Zoek opnieuw."
+    },
+    "seatChannel": "Sommige van die plaatsen zijn gereserveerd voor een ander verkoopkanaal. Kies andere plaatsen.",
+    "channelInvalid": "Deze verkoopcode is niet geldig voor dit evenement. Open de evenementpagina opnieuw zonder code, of vraag het aan wie je de link gaf.",
+    "channelNotice": "Je koopt via {name}: plaatsen die voor {name} gereserveerd zijn, staan ook voor jou open.",
+    "channelLinkInvalid": "Deze verkooplink is niet geldig voor dit evenement. Je kunt nog steeds kiezen uit de plaatsen die voor iedereen openstaan."
   },
   "fakePay": {
     "eyebrow": "Testbetaling",
@@ -1489,12 +1538,14 @@
     },
     "activityLink": "Activiteitenlogboek",
     "privacyLink": "Privacyverzoeken",
-    "charityLink": "Goededoelenprofiel"
+    "charityLink": "Goededoelenprofiel",
+    "planLink": "Abonnement en modules"
   },
   "legal": {
     "platform": "Yayatoh",
     "updated": "Laatst bijgewerkt op {date}",
-    "organizerPages": "Beleid van {org}"
+    "organizerPages": "Beleid van {org}",
+    "privacyRequest": "Vraag een kopie van je gegevens of laat ze wissen"
   },
   "setup": {
     "title": "Klaar om te verkopen · {done} van {total} klaar",
@@ -1874,7 +1925,8 @@
     "chooseDate": "Kies een datum.",
     "dateSoldOut": "Er zijn niet genoeg tickets meer voor deze datum.",
     "wrongDate": "Een van deze tickets wordt niet voor deze datum verkocht.",
-    "dateUnavailable": "Deze datum is niet meer te koop."
+    "dateUnavailable": "Deze datum is niet meer te koop.",
+    "seatChannel": "Sommige van die plaatsen zijn gereserveerd voor een ander verkoopkanaal (een sponsor, een promotor of de onlineverkoop). Kies andere plaatsen."
   },
   "seating": {
     "title": "Zitplaatsen",
@@ -1971,14 +2023,19 @@
       "title": "Opslaan als herbruikbaar zaalplan",
       "name": "Naam",
       "submit": "Zaalplan opslaan",
-      "done": "Opgeslagen. Je kunt het voor andere evenementen gebruiken."
+      "done": "Opgeslagen. Je kunt het voor andere evenementen gebruiken.",
+      "description": "Opgeslagen plannen komen in je zaalplanbibliotheek, waar je er nieuwe evenementen mee kunt starten.",
+      "library": "Zaalplanbibliotheek openen"
     },
     "tabs": {
       "label": "Weergaven van de zaalindeling",
       "plan": "Plattegrond",
       "assign": "Gasten plaatsen",
       "finder": "Plaatszoeker",
-      "rules": "Regels"
+      "rules": "Regels",
+      "selection": "Beste plaatsen",
+      "channels": "Kanalen",
+      "revisions": "Versies"
     },
     "assign": {
       "title": "Gasten plaatsen",
@@ -2115,7 +2172,8 @@
       "none": "Geen regels: kopers kunnen elke vrije plaats kiezen.",
       "summary": {
         "ada": "Toegankelijke plaatsen vrijgehouden voor gasten die ze nodig hebben tot {days, plural, =0 {het begin} one {# dag voor het evenement} other {# dagen voor het evenement}} ({date}) · {severity}",
-        "cap": "Maximaal {max, plural, one {# plaats} other {# plaatsen}} per bestelling · {severity}"
+        "cap": "Maximaal {max, plural, one {# plaats} other {# plaatsen}} per bestelling · {severity}",
+        "companion": "Begeleidersplaatsen alleen met een toegankelijke plaats, tot {max} per plaats · {severity}"
       },
       "severityShort": {
         "warn": "waarschuwt",
@@ -2148,7 +2206,14 @@
       },
       "save": "Regels opslaan",
       "saved": "Zaalregels opgeslagen.",
-      "fixErrors": "Corrigeer het gemarkeerde veld."
+      "fixErrors": "Corrigeer het gemarkeerde veld.",
+      "companion": {
+        "title": "Begeleidersplaatsen",
+        "on": "Begeleidersplaatsen alleen verkopen met een toegankelijke plaats",
+        "max": "Begeleidersplaatsen per toegankelijke plaats",
+        "maxHint": "Van 1 tot 3. Ze worden samen met de toegankelijke plaatsen vrijgegeven.",
+        "maxError": "Vul een geheel getal van 1 tot 3 in."
+      }
     },
     "groups": {
       "title": "Groepsblokken",
@@ -2177,6 +2242,172 @@
         "forbidden": "Je kunt de groepen zien, maar niet wijzigen.",
         "noMembers": "Nog niemand op de lijst heeft het label {label}."
       }
+    },
+    "selection": {
+      "title": "Beste plaatsen en begeleidersplaatsen",
+      "description": "Laat kopers en de kassa om de beste plaatsen vragen in plaats van ze zelf te kiezen, en houd begeleidersplaatsen vrij naast toegankelijke plaatsen.",
+      "noPlan": "Dit evenement heeft nog geen zaalplan. Maak er eerst een en stel hier daarna ‘Beste plaatsen’ in.",
+      "readOnly": "Je kunt deze instellingen zien, maar niet wijzigen.",
+      "bestTitle": "Beste plaatsen",
+      "bestOn": "‘Beste plaatsen’ aanbieden aan kopers en de kassa",
+      "bestHint": "Kopers geven aan hoeveel plaatsen ze willen tegen welke prijs en krijgen de beste vrije plaatsen naast elkaar. Ze kunnen ook zelf plaatsen kiezen.",
+      "scoresTitle": "Scores per vak",
+      "scoresHint": "Van 0 tot 100: hogere scores worden eerst aangeboden. Laat een vak leeg om het te rangschikken op afstand tot het podium.",
+      "scoreLabel": "Score voor {section}",
+      "scoreError": "Vul een geheel getal van 0 tot 100 in, of laat het leeg.",
+      "noSections": "Dit plan heeft geen vakken: plaatsen worden gerangschikt op afstand tot het podium, daarna op rij en op hoe centraal ze liggen.",
+      "saveBest": "Beste plaatsen opslaan",
+      "savedBest": "Instellingen voor ‘Beste plaatsen’ opgeslagen.",
+      "fixErrors": "Corrigeer het gemarkeerde veld.",
+      "bestOnSummary": "‘Beste plaatsen’ wordt aangeboden aan kopers en de kassa.",
+      "bestOffSummary": "‘Beste plaatsen’ staat uit: kopers kiezen zelf hun plaatsen.",
+      "companionsTitle": "Begeleidersplaatsen",
+      "companionsDescription": "Begeleidersplaatsen liggen naast toegankelijke plaatsen, voor mensen die met een rolstoelgebruiker komen.",
+      "rulesLink": "Stel de regel voor begeleidersplaatsen in op het tabblad Regels",
+      "noAccessible": "Dit plan heeft nog geen toegankelijke plaatsen. Markeer ze in het plan en kies hier daarna de begeleidersplaatsen.",
+      "suggest": "Vink de plaatsen naast toegankelijke plaatsen aan",
+      "group": {
+        "row": "Rij {label}",
+        "table": "Tafel {label}"
+      },
+      "seatAccessible": "Plaats {seat} · toegankelijk",
+      "seatCompanion": "Plaats {seat}",
+      "suggested": "naast een toegankelijke plaats",
+      "saveCompanions": "Begeleidersplaatsen opslaan",
+      "savedCompanions": "Begeleidersplaatsen opgeslagen: {count}.",
+      "companionError": "Een begeleidersplaats moet in een rij of aan een tafel met een toegankelijke plaats liggen en mag zelf geen toegankelijke plaats zijn.",
+      "companionList": "Begeleidersplaatsen ({count}): {seats}",
+      "companionNone": "Nog geen begeleidersplaatsen."
+    },
+    "fromLibrary": "Dit evenement begint met je opgeslagen zaalplan. Prijs de plaatsen en zet ze daarna in de verkoop.",
+    "channels": {
+      "title": "Verkoopkanalen",
+      "description": "Reserveer blokken plaatsen voor de kassa, sponsors of promotors. Een plaats in het ene kanaal wordt nooit via een ander verkocht, tot het kanaal haar vrijgeeft.",
+      "noPlan": "Dit evenement heeft nog geen zaalplan. Maak er eerst een en wijs de plaatsen hier toe aan kanalen.",
+      "readOnly": "Je kunt de kanalen zien, maar niet wijzigen.",
+      "saved": "Kanaal opgeslagen.",
+      "deleted": "Kanaal verwijderd. De plaatsen staan weer open voor alle kanalen.",
+      "listTitle": "Kanalen",
+      "empty": "Nog geen verkoopkanalen",
+      "emptyHint": "Voeg hieronder een kanaal toe en wijs er plaatsen aan toe. Plaatsen zonder kanaal worden via alle kanalen verkocht.",
+      "col": {
+        "channel": "Kanaal",
+        "code": "Code en link",
+        "release": "Vrijgave",
+        "seats": "Plaatsen",
+        "sold": "Via dit kanaal verkocht",
+        "actions": "Acties"
+      },
+      "kind": {
+        "public": "Online (zonder code)",
+        "box_office": "Kassa",
+        "sponsor": "Sponsor",
+        "promoter": "Promotor"
+      },
+      "linkFor": "Link voor {name}",
+      "released": "Vrijgegeven op {when}",
+      "neverReleased": "Gereserveerd tot je het wijzigt",
+      "soldCount": "{orders, plural, =0 {Nog geen bestellingen} one {# bestelling} other {# bestellingen}} · {seats, plural, one {# plaats} other {# plaatsen}}",
+      "edit": "Bewerken",
+      "editNamed": "{name} bewerken",
+      "delete": "Verwijderen",
+      "deleteNamed": "{name} verwijderen",
+      "addTitle": "Een kanaal toevoegen",
+      "editTitle": "{name} bewerken",
+      "kindLabel": "Soort",
+      "kindHint": "Online en kassa: hoogstens één van elk per evenement. Sponsors en promotors verkopen met hun eigen code.",
+      "nameLabel": "Naam",
+      "nameHint": "Getoond aan kopers die de link van het kanaal gebruiken, en in je rapporten.",
+      "codeLabel": "Code",
+      "codeHint": "Alleen sponsors en promotors: 3 tot 32 letters, cijfers, streepjes of underscores. Kopers gebruiken hem via de link van het kanaal.",
+      "releaseLabel": "Onverkochte plaatsen vrijgeven op (optioneel)",
+      "releaseHint": "Onverkochte plaatsen gaan op dit moment terug naar alle kanalen ({timeZone}). Laat leeg om ze te houden.",
+      "add": "Kanaal toevoegen",
+      "save": "Kanaal opslaan",
+      "cancel": "Annuleren",
+      "added": "Kanaal toegevoegd.",
+      "fixErrors": "Corrigeer het gemarkeerde veld.",
+      "errors": {
+        "kind": "Kies een soort kanaal.",
+        "kind_taken": "Dit evenement heeft al een kanaal van die soort.",
+        "name": "Geef het kanaal een naam (maximaal 80 tekens).",
+        "code_required": "Sponsors en promotors hebben een code nodig.",
+        "code_not_allowed": "Alleen sponsors en promotors hebben een code. Laat dit veld leeg.",
+        "code_format": "Gebruik 3 tot 32 letters, cijfers, streepjes of underscores.",
+        "code_taken": "Een ander kanaal van dit evenement heeft die code al.",
+        "releaseAt": "Vul een datum en tijd in, of laat het veld leeg.",
+        "seats": "Kies minstens één rij of tafel, en plaatsnummers die daarin bestaan."
+      },
+      "allotTitle": "Plaatsen toewijzen",
+      "allotDescription": "Kies rijen en tafels, en eventueel alleen een deel van hun plaatsen. Alle datums van het evenement volgen. Plaatsen die al in een kanaal zitten, gaan naar het kanaal dat je kiest.",
+      "noSeats": "Het plan heeft nog geen rijen of tafels.",
+      "allotTo": "Kanaal",
+      "everyChannel": "Geen kanaal (open voor alle kanalen)",
+      "which": "Rijen en tafels",
+      "item": {
+        "row": "Rij {label} ({seats, plural, one {# plaats} other {# plaatsen}})",
+        "table": "Tafel {label} ({seats, plural, one {# plaats} other {# plaatsen}})"
+      },
+      "itemAllotted": "{count, plural, one {# plaats} other {# plaatsen}} in {name}",
+      "seatNumbers": "Alleen deze plaatsen (optioneel)",
+      "seatNumbersHint": "Plaatsnummers in de gekozen rijen en tafels, bijv. 1-4, 9. Laat leeg voor al hun plaatsen.",
+      "allot": "Plaatsen toewijzen",
+      "allotted": "{count, plural, =0 {Geen plaatsen gewijzigd.} one {# plaats toegewezen.} other {# plaatsen toegewezen.}}",
+      "freed": "{count, plural, =0 {Geen enkele plaats zat in een kanaal.} one {# plaats staat weer open voor alle kanalen.} other {# plaatsen staan weer open voor alle kanalen.}}"
+    },
+    "revisions": {
+      "title": "Versies van het zaalplan",
+      "description": "Elke keer dat het plan wordt opgeslagen, is een versie. Bekijk wat elke versie wijzigde en haal een eerder plan terug. Vastgehouden en verkochte plaatsen blijven altijd zoals ze zijn.",
+      "noPlan": "Dit evenement heeft nog geen zaalplan. Maak er eerst een; elke keer opslaan verschijnt dan hier.",
+      "none": "Nog geen versies",
+      "noneHint": "De volgende keer dat het plan wordt opgeslagen, wordt de eerste versie.",
+      "readOnly": "Je kunt de versies zien, maar niet terugzetten.",
+      "listTitle": "Alle versies",
+      "col": {
+        "revision": "Versie",
+        "when": "Opgeslagen",
+        "what": "Wat",
+        "changes": "Gewijzigde plaatsen"
+      },
+      "revision": "Versie {number}",
+      "currentBadge": "Het huidige plan",
+      "kindSave": "Opgeslagen",
+      "kindRestore": "Versie {number} teruggezet",
+      "seats": "{count, plural, one {# plaats} other {# plaatsen}}",
+      "first": "De eerste bewaarde versie.",
+      "noSeatChanges": "Geen plaatsen toegevoegd, verwijderd of hernummerd.",
+      "added": "{count, plural, one {# plaats toegevoegd} other {# plaatsen toegevoegd}}",
+      "removed": "{count, plural, one {# plaats verwijderd} other {# plaatsen verwijderd}}",
+      "renumbered": "{count, plural, one {# plaats hernummerd} other {# plaatsen hernummerd}}",
+      "moved": "{count, plural, one {# plaats verplaatst} other {# plaatsen verplaatst}}",
+      "detailTitle": "Versie {number}",
+      "changedTitle": "Wat deze versie wijzigde",
+      "restoreWouldTitle": "Terugzetten zou wijzigen",
+      "addedTitle": "Toegevoegde plaatsen",
+      "removedTitle": "Verwijderde plaatsen",
+      "renumberedTitle": "Hernummerde plaatsen",
+      "renumberedSeat": "{from} → {to}",
+      "listOf": "{title} ({count})",
+      "more": "{count, plural, one {en nog #} other {en nog #}}",
+      "inUseTitle": "Vastgehouden en verkochte plaatsen",
+      "inUseNone": "Geen plaatsen vastgehouden of verkocht: niets staat in de weg.",
+      "inUseKept": "{count, plural, =0 {Geen vastgehouden of verkochte plaats blijft waar ze is.} one {# vastgehouden of verkochte plaats blijft precies zoals ze is.} other {# vastgehouden of verkochte plaatsen blijven precies zoals ze zijn.}}",
+      "inUseRemapped": "{count, plural, one {# vastgehouden of verkochte plaats gaat naar de plaats met haar label in deze versie (zelfde nummer, zelfde ticket):} other {# vastgehouden of verkochte plaatsen gaan naar de plaatsen met hun labels in deze versie (zelfde nummers, zelfde tickets):}}",
+      "conflictsTitle": "{count, plural, one {Deze versie kan niet worden teruggezet: # vastgehouden of verkochte plaats zou verloren gaan.} other {Deze versie kan niet worden teruggezet: # vastgehouden of verkochte plaatsen zouden verloren gaan.}}",
+      "conflict": {
+        "removed": {
+          "sold": "{label} is verkocht en deze versie heeft geen plaats met dat label.",
+          "held": "{label} wordt vastgehouden door een koper en deze versie heeft geen plaats met dat label."
+        },
+        "renumbered": {
+          "sold": "{label} is verkocht en zou {to} worden: het ticket van de koper zou een andere plaats noemen.",
+          "held": "{label} wordt vastgehouden door een koper en zou {to} worden."
+        }
+      },
+      "conflictsRefused": "Vastgehouden of verkochte plaatsen staan niet meer in die versie. Er is niets gewijzigd.",
+      "isCurrent": "Dit is het plan zoals het nu is.",
+      "restore": "Versie {number} terugzetten",
+      "restoredNotice": "Versie {number} teruggezet. Het huidige plan is versie {now}."
     }
   },
   "venueMap": {
@@ -2493,70 +2724,199 @@
   },
   "privacy": {
     "title": "Privacyverzoeken",
-    "description": "Beantwoord mensen die vragen wat je over hen bewaart, of die vergeten willen worden. Elk verzoek wordt vastgelegd.",
+    "description": "Beantwoord mensen die een kopie vragen van wat je over hen bewaart, of die vergeten willen worden. Elk verzoek moet binnen 30 dagen worden afgehandeld en wordt vastgelegd.",
     "noticeLink": "Privacyverklaring van Yayatoh",
     "noAccessTitle": "Alleen eigenaren en beheerders kunnen privacyverzoeken afhandelen",
-    "noAccessDescription": "Vraag een eigenaar of beheerder van deze organisatie om te helpen met een verzoek over iemands gegevens.",
+    "noAccessDescription": "Vraag een eigenaar of beheerder van deze organisatie om hulp bij een verzoek over iemands gegevens.",
     "find": {
       "title": "Een persoon zoeken",
-      "hint": "Zoek op e-mail in contacten, bestellingen, tickets, gastenlijsten, antwoorden en check-ins.",
+      "hint": "Zoek op e-mail in alles wat deze organisatie bewaart: contacten, bestellingen, tickets, gastenlijsten, formulieren, berichten, sprekers en meer.",
       "email": "E-mailadres",
       "submit": "Zoeken"
     },
     "result": {
       "title": "Wat deze organisatie over {email} bewaart",
       "noneTitle": "Niets gevonden voor dit e-mailadres",
-      "noneDescription": "Geen contact, bestelling, ticket of gast gebruikt dit adres in deze organisatie."
-    },
-    "categories": {
-      "contacts": "Contactgegevens",
-      "consents": "Toestemmingen",
-      "orders": "Bestellingen",
-      "paidOrders": "Betaalde bestellingen (bewaard voor de boekhouding)",
-      "tickets": "Tickets",
-      "activeTickets": "Geldige tickets",
-      "claims": "Links voor ticketoverdracht",
-      "holderLinks": "Toegangslinks voor tickets",
-      "attendees": "Vermeldingen op gastenlijsten",
-      "answers": "Antwoorden bij het afrekenen",
-      "admissions": "Check-ins",
-      "invitations": "Teamuitnodigingen"
-    },
-    "export": {
-      "title": "Gegevens exporteren",
-      "hint": "Een JSON-bestand met alles hierboven, om naar de persoon te sturen. Het wordt na 7 dagen verwijderd.",
-      "submit": "Gegevens exporteren (JSON)",
-      "download": "Bestand downloaden",
-      "running": "Het bestand wordt voorbereid… laad de pagina zo opnieuw."
-    },
-    "erase": {
-      "title": "Deze persoon wissen",
-      "what": "Naam, e-mail, telefoon, antwoorden en links worden verwijderd uit contacten, bestellingen, tickets en gastenlijsten, en exportbestanden waarin de persoon voorkomt worden gewist.",
-      "holds": "{paid, plural, =0 {Er hoeven geen betaalde bestellingen bewaard te worden.} one {# betaalde bestelling wordt bewaard voor belasting en boekhouding, zonder naam of e-mail.} other {# betaalde bestellingen worden bewaard voor belasting en boekhouding, zonder naam of e-mail.}}",
-      "tickets": "{active, plural, =0 {Er zijn geen geldige tickets.} one {# geldig ticket blijft geldig, zonder naam.} other {# geldige tickets blijven geldig, zonder naam.}}",
-      "final": "Dit kan niet ongedaan worden gemaakt.",
-      "confirm": "Typ {email} om te bevestigen",
-      "submit": "Persoonsgegevens wissen",
-      "done": "Gewist. {records, plural, one {# record is} other {# records zijn}} geanonimiseerd of verwijderd; {kept, plural, =0 {geen betaalde bestellingen bewaard} one {# betaalde bestelling bewaard zonder persoonsgegevens} other {# betaalde bestellingen bewaard zonder persoonsgegevens}}."
+      "noneDescription": "Geen enkel record in deze organisatie gebruikt dit adres. Je kunt toch een verzoek openen om de persoon formeel te antwoorden."
     },
     "errors": {
       "invalidEmail": "Voer een geldig e-mailadres in.",
       "confirmMismatch": "Dat komt niet overeen. Typ hetzelfde e-mailadres om te bevestigen.",
-      "nothingHeld": "Er wordt niets meer over dit e-mailadres bewaard."
-    },
-    "history": {
-      "title": "Eerdere verzoeken",
-      "caption": "Privacyverzoeken, nieuwste eerst",
-      "empty": "Nog geen verzoeken.",
-      "when": "Wanneer",
-      "kind": "Verzoek",
-      "subject": "Persoon",
-      "by": "Afgehandeld door",
-      "records": "Records"
+      "kindRequired": "Kies wat de persoon vraagt.",
+      "reasonRequired": "Geef een reden van minstens 3 tekens.",
+      "closed": "Dit verzoek is al gesloten."
     },
     "kinds": {
-      "access": "Inzage (export)",
+      "access": "Inzage (kopie)",
       "erasure": "Wissing"
+    },
+    "modules": {
+      "crm": "Contacten en toestemmingen",
+      "orders": "Bestellingen en wachtlijsten",
+      "ticketing": "Tickets",
+      "attendees": "Vermeldingen op gastenlijsten",
+      "forms": "Formulierantwoorden",
+      "checkin": "Check-ins",
+      "tenancy": "Teamuitnodigingen",
+      "notifications": "Verzonden berichten",
+      "seating": "Plaatszoeker",
+      "alerts": "Meldingsinstellingen",
+      "guests": "Bruiloft- en feestgasten",
+      "messaging": "Gesprekken",
+      "assistance": "Hulpvragen",
+      "program": "Sprekersgegevens",
+      "events": "Portaalaccounts",
+      "media": "Geüploade bestanden",
+      "cms": "Berichten via het contactformulier",
+      "venues": "Offerteaanvragen voor locaties",
+      "reviews": "Beoordelingen",
+      "payments": "Betalingsgeschillen",
+      "surveys": "Enquêteantwoorden",
+      "registration": "Registraties",
+      "badges": "Badges",
+      "automations": "Journeys",
+      "campaigns": "Campagneverzendingen",
+      "audiences": "Doelgroepen",
+      "marketing": "Marketingtoewijzing",
+      "reports": "Analysegebeurtenissen",
+      "privacy": "Privacyverzoeken",
+      "platform": "Exports en systeemrecords",
+      "donations": "Donaties en ontvangstbewijzen",
+      "engagement": "Vragen uit live-Q&A"
+    },
+    "open": {
+      "title": "Een verzoek openen",
+      "hint": "Je hebt bevestigd wie het vraagt. Het verzoek moet binnen 30 dagen worden afgehandeld; dat doe je op de eigen pagina van het verzoek.",
+      "kind": "Wat vraagt de persoon?",
+      "access": "Een kopie van hun gegevens (inzage)",
+      "accessHint": "Een ondertekende ZIP met alles wat over hen wordt bewaard.",
+      "erasure": "Hun gegevens wissen (wissing)",
+      "erasureHint": "Verwijdert hen overal, behalve records die je wettelijk moet bewaren.",
+      "submit": "Verzoek openen",
+      "existing": "Er staat al een verzoek open voor deze persoon.",
+      "review": "Open verzoek bekijken"
+    },
+    "queue": {
+      "title": "Open verzoeken",
+      "caption": "Open privacyverzoeken, eerstvolgende deadline eerst",
+      "emptyTitle": "Geen open verzoeken",
+      "empty": "Als iemand naar zijn gegevens vraagt, zoek die persoon hierboven en open een verzoek. Mensen kunnen het ook vragen via je privacyverklaring.",
+      "person": "Persoon",
+      "kind": "Verzoek",
+      "source": "Van",
+      "opened": "Geopend",
+      "due": "Deadline",
+      "overdue": "Te laat",
+      "action": "Actie",
+      "review": "Bekijken"
+    },
+    "closed": {
+      "title": "Gesloten verzoeken",
+      "caption": "Afgehandelde en ingetrokken verzoeken, nieuwste eerst",
+      "empty": "Nog geen gesloten verzoeken.",
+      "when": "Gesloten",
+      "status": "Status",
+      "records": "Records"
+    },
+    "statuses": {
+      "open": "Open",
+      "completed": "Afgehandeld",
+      "cancelled": "Ingetrokken"
+    },
+    "sources": {
+      "staff": "Team, namens de persoon",
+      "self": "De persoon zelf (e-mail bevestigd)"
+    },
+    "request": {
+      "titleAccess": "Inzageverzoek",
+      "titleErasure": "Wisverzoek",
+      "openedNotice": "Verzoek geopend. De deadline is {date}.",
+      "cancelledNotice": "Verzoek ingetrokken.",
+      "fields": {
+        "kind": "Verzoek",
+        "source": "Van",
+        "opened": "Geopend",
+        "due": "Uiterlijk",
+        "verified": "E-mail bevestigd",
+        "completed": "Afgehandeld",
+        "cancelled": "Ingetrokken",
+        "reason": "Reden"
+      },
+      "holdings": {
+        "title": "Wat deze organisatie bewaart",
+        "empty": "Er wordt niets over deze persoon bewaard",
+        "emptyHint": "Je kunt het verzoek toch afhandelen: de persoon krijgt een formeel antwoord dat er niets wordt bewaard."
+      },
+      "export": {
+        "title": "Een kopie sturen",
+        "hint": "Eén ZIP met een JSON-bestand per onderdeel van Yayatoh en hun bestanden, ondertekend zodat iedereen kan controleren dat er niets is veranderd. Hij is 7 dagen te downloaden.",
+        "submit": "Archief maken",
+        "done": "Het archief is klaar.",
+        "notified": "We hebben de persoon een downloadlink gemaild.",
+        "until": "Beschikbaar tot {date}.",
+        "download": "Archief downloaden (ZIP)",
+        "expired": "Het archief is verlopen en verwijderd. Open een nieuw verzoek als de persoon nog een kopie nodig heeft."
+      },
+      "erase": {
+        "title": "Deze persoon wissen",
+        "what": "Naam, e-mail, telefoon, antwoorden, berichten en links worden uit elk onderdeel van Yayatoh verwijderd, en exportbestanden waarin de persoon voorkomt worden gewist.",
+        "holds": "Betaalde bestellingen, creditnota's, betalingsgeschillen en de toestemmingsgeschiedenis blijven bewaard waar de wet dat vereist, zonder naam of e-mail, en staan op het bewijs.",
+        "files": "Hun uploads en eerdere archieven worden uit de opslag verwijderd.",
+        "final": "Dit kan niet ongedaan worden gemaakt.",
+        "confirm": "Typ {email} om te bevestigen",
+        "submit": "Persoonsgegevens wissen",
+        "done": "Gewist. Het ondertekende bewijs hieronder toont wat is gewist, wat is bewaard en waarom."
+      },
+      "cancel": {
+        "title": "Verzoek intrekken",
+        "hint": "Als de persoon het heeft ingetrokken, of als het niet echt was. De reden wordt bij het verzoek vastgelegd.",
+        "reason": "Reden",
+        "submit": "Verzoek intrekken"
+      },
+      "receipt": {
+        "title": "Wisbewijs",
+        "erased": "Gewist",
+        "held": "Bewaard vanwege een wettelijke plicht",
+        "noneErased": "Er hoefde niets gewist te worden.",
+        "noneHeld": "Er hoefde niets bewaard te worden.",
+        "table": "Gegevens",
+        "action": "Wat er is gebeurd",
+        "rows": "Records",
+        "ref": "Record",
+        "basis": "Waarom het wordt bewaard",
+        "until": "Bewaard tot",
+        "files": "{count, plural, =0 {Er zijn geen opgeslagen bestanden verwijderd.} one {# opgeslagen bestand is verwijderd.} other {# opgeslagen bestanden zijn verwijderd.}}",
+        "suppressed": "Het adres staat op de platformbrede wislijst: geen enkele organisatie kan er nog marketing naar sturen, tenzij de persoon daar toestemming voor geeft.",
+        "connectors": "{count, plural, =0 {Er hoefden geen gekoppelde diensten te worden ingelicht.} one {Gekoppelde dienst die ook is gevraagd de persoon te wissen: {names}.} other {Gekoppelde diensten die ook is gevraagd de persoon te wissen: {names}.}}",
+        "signature": "Ondertekend met Ed25519-sleutel {key}.",
+        "download": "Bewijs downloaden (PDF)",
+        "notified": "We hebben de persoon een link naar dit bewijs gemaild.",
+        "actions": {
+          "delete": "Verwijderd",
+          "redact": "Persoonsgegevens verwijderd",
+          "hold": "Bewaard, persoonsgegevens verwijderd"
+        },
+        "bases": {
+          "tax_accounting": "Belasting- en boekhoudadministratie (7 jaar)",
+          "payment_dispute": "Bewijs voor een betalingsgeschil",
+          "accountability": "Bewijs dat het verzoek is afgehandeld"
+        }
+      }
+    },
+    "pdf": {
+      "title": "Wisbewijs",
+      "request": "Verzoek",
+      "person": "Persoon",
+      "source": "Aangevraagd door",
+      "requested": "Aangevraagd op",
+      "due": "Uiterlijk",
+      "completed": "Gewist op",
+      "signatureTitle": "Handtekening",
+      "algorithm": "Algoritme",
+      "keyId": "Sleutel-ID",
+      "digest": "SHA-256 van het bewijs",
+      "signature": "Handtekening (base64)",
+      "footer": "Uitgegeven door Yayatoh voor {org}. De handtekening dekt de gegevens van het bewijs; controleer haar met de publieke sleutel hieronder."
     }
   },
   "privacyNotice": {
@@ -2737,7 +3097,8 @@
       "guests": "Gasten",
       "markHandled": "Markeren als afgehandeld",
       "markNew": "Markeren als nieuw"
-    }
+    },
+    "layoutLibrary": "Zaalplanbibliotheek"
   },
   "details": {
     "title": "Evenementdetails",
@@ -3346,7 +3707,39 @@
       "attendees_read": "Deelnemers lezen",
       "attendees_write": "Deelnemers wijzigen en tickets opnieuw versturen",
       "checkin_scan": "Tickets scannen"
-    }
+    },
+    "expiry": "Verloopt",
+    "expiryHint": "Een sleutel die verloopt moet je vóór die tijd roteren. Korter is veiliger.",
+    "expiryIn": {
+      "30": "Over 30 dagen",
+      "90": "Over 90 dagen",
+      "365": "Over een jaar",
+      "never": "Nooit"
+    },
+    "expiresColumn": "Verloopt",
+    "createdBy": "Gemaakt door",
+    "createdByPlatform": "Yayatoh",
+    "expired": "Verlopen",
+    "rotatedStatus": "Geroteerd",
+    "rotate": "Roteren",
+    "rotateNamed": "Sleutel {name} roteren",
+    "overlap": "De oude sleutel blijft werken",
+    "overlapFor": {
+      "h0": "Helemaal niet: nu stoppen",
+      "h1": "1 uur lang",
+      "h24": "24 uur lang",
+      "h168": "7 dagen lang"
+    },
+    "rotateNow": "Nu roteren",
+    "rotateNowNamed": "Sleutel {name} nu roteren",
+    "rotated": "Sleutel ‘{name}’ geroteerd. De oude sleutel werkt tot {until}.",
+    "rotatedNow": "Sleutel ‘{name}’ geroteerd. De oude sleutel werkt niet meer.",
+    "related": "API",
+    "usageLink": "Gebruik",
+    "sandboxesLink": "Sandboxes",
+    "rateLimitNote": "Elke sleutel mag {perKey, number} verzoeken per minuut doen, alle sleutels samen {perOrg, number}.",
+    "noApiAccess": "API-toegang hoort niet bij het abonnement van deze organisatie: haar sleutels worden geweigerd.",
+    "webhooksLink": "Webhooks"
   },
   "market": {
     "wordmark": "Yayatoh",
@@ -4655,6 +5048,11 @@
     "terminated": {
       "title": "Deze organisatie is gesloten",
       "body": "Yayatoh-support heeft haar gesloten. De openbare pagina's zijn offline en er kan niets meer worden gewijzigd. Als eigenaar kun je haar nog openen en je gegevens downloaden, bijvoorbeeld via Activiteit."
+    },
+    "sandbox": {
+      "label": "Sandbox",
+      "title": "SANDBOX",
+      "body": "Dit is een testorganisatie. Betalingen zijn nep en er wordt niets afgeschreven; de evenementen verschijnen nooit op de marktplaats."
     }
   },
   "seatingDates": {
@@ -4737,8 +5135,13 @@
       "slot_full": "Dit evenement heeft al 20 plattegrondafbeeldingen.",
       "forbidden": "Je kunt dit plan niet wijzigen.",
       "network": "Uploaden mislukt. Controleer je verbinding en probeer het opnieuw.",
-      "generic": "Uploaden mislukt. Probeer het opnieuw."
-    }
+      "generic": "Uploaden mislukt. Probeer het opnieuw.",
+      "pdf_page": "Die pagina bestaat niet: de pdf heeft {pages, plural, one {# pagina} other {# pagina’s}}.",
+      "pdf_unreadable": "Deze pdf kan niet worden gelezen. Exporteer het plan als afbeelding of als andere pdf en probeer het opnieuw."
+    },
+    "pdfPage": "Pagina (pdf)",
+    "pdfHint": "Een plattegrond als pdf kan ook: kies de pagina met het plan. Die wordt in je browser een afbeelding en dan als afbeelding geüpload.",
+    "pdfDrawing": "Pagina {page} van de pdf wordt getekend…"
   },
   "humanCheck": {
     "legend": "Beveiligingscontrole",
@@ -5070,7 +5473,9 @@
         "consent": "Marketingtoestemming",
         "label": "Label",
         "totals": "Totalen",
-        "seen": "Eerst of laatst gezien"
+        "seen": "Eerst of laatst gezien",
+        "stats": "Contactstatistieken",
+        "ltv": "Klantwaarde"
       },
       "did": "Regel",
       "didYes": "Wel",
@@ -5128,7 +5533,19 @@
       "event": "Evenement",
       "editionOf": "Editie vóór",
       "series": "Reeks",
-      "noSeries": "Nog geen reeksen"
+      "noSeries": "Nog geen reeksen",
+      "statsMetric": "Statistiek",
+      "statsMetrics": {
+        "engagement": "Betrokkenheidsscore",
+        "noShowPct": "Kans op no-show",
+        "sessionsAttended": "Bezochte sessies",
+        "campaignsOpened": "Geopende campagnes",
+        "rfmRecency": "RFM-recentheid (kwintiel)",
+        "rfmFrequency": "RFM-frequentie (kwintiel)",
+        "rfmMonetary": "RFM-waarde (kwintiel)"
+      },
+      "valuePercent": "Procent",
+      "quintile": "Kwintiel (1–5)"
     },
     "scopes": {
       "any": "Elk evenement",
@@ -5183,7 +5600,10 @@
         "unknown_legacy": "Onbekend (geïmporteerd)",
         "none": "Niet gegeven"
       }
-    }
+    },
+    "peopleLink": "Personen",
+    "duplicatesLink": "Mogelijke dubbelen",
+    "insights": "Contactinzichten"
   },
   "refundOps": {
     "timeline": {
@@ -10864,6 +11284,1030 @@
       "waitlist_closed": "{title} is vol en de wachtlijst sloot 24 uur voor de sessie.",
       "offer_ended": "Het aanbod voor {title} is afgelopen.",
       "full": "{title} is net vol. Probeer het opnieuw om op de wachtlijst te komen."
+    }
+  },
+  "people": {
+    "title": "Personen",
+    "audiences": "Doelgroepen",
+    "description": "Iedereen van wie je organisatie een record heeft, nieuwste eerst. Open iemand om de volledige geschiedenis te zien.",
+    "duplicatesLink": "Mogelijke dubbelen",
+    "search": {
+      "label": "Zoeken op naam, e-mail of bedrijf",
+      "submit": "Zoeken",
+      "noneTitle": "Niemand gevonden",
+      "noneDescription": "Geen naam, e-mail of bedrijf bevat ‘{q}’. Probeer een kortere zoekopdracht."
+    },
+    "emptyTitle": "Nog geen personen",
+    "emptyDescription": "Personen verschijnen hier zodra ze tickets kopen, zich registreren of op een gastenlijst worden gezet.",
+    "caption": "Personen",
+    "columns": {
+      "name": "Naam",
+      "email": "E-mail",
+      "company": "Bedrijf",
+      "added": "Toegevoegd"
+    },
+    "next": "Volgende pagina",
+    "person": {
+      "title": "Persoon",
+      "details": "Gegevens",
+      "mergedHere": "Dat record is samengevoegd met dit record."
+    },
+    "fields": {
+      "name": "Naam",
+      "email": "E-mail",
+      "phone": "Telefoon",
+      "company": "Bedrijf",
+      "added": "Toegevoegd",
+      "emailConsent": "Marketingmail",
+      "smsConsent": "Marketing-sms",
+      "history": "Geschiedenis",
+      "empty": "Niet opgegeven"
+    },
+    "merges": {
+      "title": "Samengevoegde records",
+      "line": "{who} samengevoegd op {when}.",
+      "moved": "{moved, plural, =0 {Niets verplaatst.} one {# item verplaatst.} other {# items verplaatst.}}",
+      "undoneOn": "Ongedaan gemaakt op {when}.",
+      "undoUntil": "Kan ongedaan worden gemaakt tot {when}.",
+      "erased": "een gewist record"
+    },
+    "undo": {
+      "submit": "Samenvoegen ongedaan maken",
+      "submitFor": "Samenvoegen van {who} ongedaan maken",
+      "done": "Samenvoegen ongedaan gemaakt. Beide records zijn weer gescheiden, precies zoals eerst.",
+      "openOther": "Het andere record openen",
+      "errors": {
+        "expired": "Deze samenvoeging is ouder dan 30 dagen en kan niet meer ongedaan worden gemaakt.",
+        "blocked": "Dit record is sindsdien met een ander samengevoegd. Maak eerst die samenvoeging ongedaan.",
+        "erased": "Een van deze records is gewist, dus de samenvoeging kan niet meer ongedaan worden gemaakt.",
+        "undone": "Deze samenvoeging is al ongedaan gemaakt."
+      }
+    },
+    "errors": {
+      "forbidden": "Je rol mag geen personen samenvoegen. Vraag het aan een eigenaar, beheerder of manager."
+    },
+    "timeline": {
+      "title": "Tijdlijn",
+      "kind": "Wat",
+      "allKinds": "Alles",
+      "event": "Evenement",
+      "allEvents": "Alle evenementen",
+      "filter": "Filteren",
+      "noMatchTitle": "Niets past bij deze filters",
+      "noMatchDescription": "Kies ‘Alles’ of ‘Alle evenementen’ om meer te zien.",
+      "emptyTitle": "Nog niets",
+      "emptyDescription": "Bestellingen, check-ins, campagnes, berichten en enquêtes verschijnen hier zodra ze gebeuren.",
+      "listLabel": "Tijdlijn van {name}",
+      "older": "Ouder"
+    },
+    "kinds": {
+      "order_paid": "Bestelling betaald",
+      "order_refunded": "Terugbetaling",
+      "checked_in": "Ingecheckt",
+      "session_attended": "Sessie bijgewoond",
+      "campaign_sent": "Campagne verstuurd",
+      "campaign_opened": "Campagne geopend",
+      "campaign_clicked": "Op campagne geklikt",
+      "message_in": "Schreef je",
+      "message_out": "Jij antwoordde",
+      "donation": "Donatie",
+      "rsvp": "Antwoord op uitnodiging",
+      "survey_sent": "Enquête verstuurd",
+      "survey_responded": "Enquête beantwoord"
+    },
+    "merge": {
+      "done": "Records samengevoegd. Je kunt dit 30 dagen lang ongedaan maken op deze pagina.",
+      "submit": "Records samenvoegen",
+      "hint": "Bestellingen, tickets, check-ins, berichten en geschiedenis gaan naar het record dat blijft. Je kunt een samenvoeging 30 dagen lang ongedaan maken.",
+      "errors": {
+        "alreadyMerged": "Een van deze records is samengevoegd of gewijzigd sinds je deze pagina opende. Ga terug naar de lijst.",
+        "erased": "Een van deze records is gewist en kan niet worden samengevoegd.",
+        "unavailable": "Samenvoegen is nu niet mogelijk. Probeer het later opnieuw.",
+        "keep": "Kies welk record blijft."
+      }
+    },
+    "duplicates": {
+      "title": "Mogelijke dubbelen",
+      "description": "Personen die misschien twee keer bekend zijn: hetzelfde e-mailadres, hetzelfde telefoonnummer of een vergelijkbare naam bij hetzelfde bedrijf.",
+      "scan": "Zoeken naar dubbelen",
+      "lastScan": "Laatst gecontroleerd {when}. Nieuwe contacten worden om de paar minuten automatisch gecontroleerd.",
+      "neverScanned": "Nog niet gecontroleerd.",
+      "scanned": "{count, plural, =0 {Geen mogelijke dubbelen gevonden.} one {# mogelijke dubbele gevonden.} other {# mogelijke dubbelen gevonden.}}",
+      "dismissedDone": "Gemarkeerd als niet dezelfde persoon. Dit paar wordt niet meer voorgesteld.",
+      "bulkDone": "{count, plural, =0 {Niets samengevoegd.} one {# paar samengevoegd. Elke samenvoeging kan 30 dagen lang ongedaan worden gemaakt.} other {# paren samengevoegd. Elke samenvoeging kan 30 dagen lang ongedaan worden gemaakt.}}",
+      "statusNav": "Filteren op status",
+      "status": {
+        "open": "Open ({count})",
+        "dismissed": "Geen dubbelen",
+        "merged": "Samengevoegd"
+      },
+      "caption": {
+        "open": "Te controleren mogelijke dubbelen",
+        "dismissed": "Paren gemarkeerd als niet dezelfde persoon",
+        "merged": "Samengevoegde paren"
+      },
+      "empty": {
+        "open": {
+          "title": "Geen mogelijke dubbelen",
+          "description": "Kies ‘Zoeken naar dubbelen’ om nu iedereen te controleren. Nieuwe contacten worden automatisch gecontroleerd."
+        },
+        "dismissed": {
+          "title": "Niets afgewezen",
+          "description": "Paren die je als niet dezelfde persoon markeert, staan hier."
+        },
+        "merged": {
+          "title": "Nog geen samenvoegingen",
+          "description": "Paren die je samenvoegt, staan hier. Maak een samenvoeging ongedaan op de pagina van de persoon."
+        }
+      },
+      "select": "Selecteren",
+      "selectPair": "{pair} selecteren",
+      "pair": "{a} en {b}",
+      "columns": {
+        "people": "Personen",
+        "confidence": "Zekerheid",
+        "reasons": "Waarom",
+        "review": "Bekijken"
+      },
+      "score": "{score}%",
+      "review": "Bekijken",
+      "reviewPair": "{pair} bekijken",
+      "mergeSelected": "Selectie samenvoegen",
+      "mergeSelectedHint": "Houdt per paar het oudste record en de nieuwste gegevens. Je wordt gevraagd te bevestigen dat jij het bent.",
+      "errors": {
+        "noneSelected": "Selecteer minstens één paar om samen te voegen.",
+        "tooMany": "Selecteer hoogstens 50 paren tegelijk."
+      }
+    },
+    "reasons": {
+      "email": "Zelfde e-mailadres",
+      "phone": "Zelfde telefoonnummer",
+      "name_company": "Vergelijkbare naam bij hetzelfde bedrijf"
+    },
+    "compare": {
+      "title": "Mogelijke dubbele bekijken",
+      "description": "{score}% zekerheid: {reasons}.",
+      "resolved": "Dit paar is al afgehandeld.",
+      "record": "Record {n}",
+      "older": "(ouder)",
+      "entries": "{count, plural, =0 {Geen items} one {# item} other {# items}}",
+      "openTimeline": "Tijdlijn van {record} openen",
+      "consentTitle": "Toestemming na samenvoegen",
+      "consentEmail": "Marketingmail: {status}",
+      "consentSms": "Marketing-sms: {status}",
+      "consentRule": "De strengste keuze wint: heeft een van de records zich afgemeld, dan is het samengevoegde record afgemeld.",
+      "keepLegend": "Welk record blijft",
+      "keepHint": "Het andere record wordt hiermee samengevoegd. Het e-mailadres ervan leidt nog steeds naar deze persoon.",
+      "keepOption": "{record} ({email})",
+      "fieldLegend": {
+        "name": "Naam",
+        "email": "E-mail",
+        "phone": "Telefoon",
+        "company": "Bedrijf"
+      },
+      "fieldOption": "{record}: {value}",
+      "dismiss": "Niet dezelfde persoon"
+    },
+    "consent": {
+      "granted": "Aangemeld",
+      "withdrawn": "Afgemeld",
+      "unknown_legacy": "Onbekend (geïmporteerd)",
+      "none": "Geen toestemming"
+    }
+  },
+  "contactStats": {
+    "title": "Contact",
+    "insightsTitle": "Contactinzichten",
+    "insightsDescription": "Hoe uw mensen deelnemen aan al uw evenementen: betrokkenheid, no-shows, recentheid en frequentie.",
+    "audiencesLink": "Doelgroepen",
+    "notLive": "Dit contact is samengevoegd met een ander of gewist. De statistieken tellen niet meer mee.",
+    "emptyTitle": "Nog geen activiteit",
+    "emptyDescription": "Statistieken verschijnen zodra deze persoon zich aanmeldt voor een evenement, een sessie bijwoont of een campagne opent.",
+    "emptyAction": "Doelgroep maken",
+    "glance": "In één oogopslag",
+    "events": "Aangemelde evenementen",
+    "attended": "Bijgewoonde evenementen",
+    "sessions": "Bezochte sessies",
+    "campaigns": "Geopende campagnes",
+    "firstSeen": "Eerst gezien",
+    "lastSeen": "Laatst gezien",
+    "never": "—",
+    "lifetimeValue": "Klantwaarde",
+    "lifetimeOrders": "{count, plural, one {# betaalde bestelling} other {# betaalde bestellingen}}",
+    "noSpend": "Nog geen betaalde bestellingen.",
+    "noSpendOrg": "Nog niemand heeft iets betaald.",
+    "scores": "Scores",
+    "engagement": "Betrokkenheidsscore",
+    "engagementValue": "{score} / 100",
+    "engagementHow": "{wAttended} × {attended} bijgewoonde evenementen + {wSessions} × {sessions} sessies + {wCampaigns} × {campaigns} geopende campagnes = {points} punten. 100 × {points} ÷ ({points} + {half}) = {score}.",
+    "noShow": "Kans op no-show",
+    "noShowHow": "({noShows} no-shows + {priorNoShows}) ÷ ({past} eerdere aanmeldingen + {priorRegistrations}) = {pct}. Komende evenementen tellen nog niet mee.",
+    "rfm": "RFM",
+    "rfmHow": "Kwintielen onder de mensen van deze organisatie die aan een evenement deelnamen: 5 is het hoogste vijfde.",
+    "rfmNone": "Nog niet ingedeeld: geen evenementen.",
+    "recency": "Recentheid",
+    "frequency": "Frequentie",
+    "monetary": "Waarde",
+    "quintileValue": "{q} van 5",
+    "updated": "Bijgewerkt op {date}",
+    "viewContact": "Contact bekijken",
+    "headerSummary": "Betrokkenheid {score} · No-show {pct}",
+    "headerValue": "Klantwaarde {amount}",
+    "totals": "Totalen",
+    "total": {
+      "contacts": "Contacten",
+      "participants": "Deelgenomen",
+      "attendedAny": "Aanwezig",
+      "averageEngagement": "Gemiddelde betrokkenheid",
+      "noShowRate": "No-showpercentage"
+    },
+    "distributions": "Verdelingen",
+    "distribution": {
+      "engagement": "Betrokkenheidsscore",
+      "noShow": "Kans op no-show",
+      "frequency": "Evenementen deelgenomen",
+      "recency": "Laatst gezien"
+    },
+    "showData": "Gegevens tonen",
+    "range": "Bereik",
+    "people": "Personen",
+    "bandRange": "{from}–{to}",
+    "bandFrom": "{from} of meer",
+    "recencyWithin": "Binnen {days} dagen",
+    "recencyOlder": "Langer geleden",
+    "value": {
+      "currency": "Valuta",
+      "payers": "Betalende personen",
+      "total": "Totaal",
+      "average": "Gemiddelde",
+      "topFifth": "Hoogste vijfde vanaf",
+      "max": "Hoogste"
+    },
+    "orgEmptyTitle": "Nog geen contactactiviteit",
+    "orgEmptyDescription": "Statistieken verschijnen zodra mensen zich aanmelden, inchecken, sessies bijwonen en campagnes openen.",
+    "orgEmptyAction": "Naar uw evenementen"
+  },
+  "privacyRequest": {
+    "title": "Vraag naar je persoonsgegevens",
+    "description": "Vraag {org} om een kopie van de persoonsgegevens die over je worden bewaard, of om ze te wissen. Je krijgt binnen 30 dagen antwoord. Eerst mailen we je een code om te controleren dat het adres van jou is.",
+    "notice": "Lees de privacyverklaring van {org}",
+    "kindLegend": "Wat wil je?",
+    "access": "Een kopie van mijn gegevens",
+    "accessHint": "Je krijgt een link naar een ZIP-bestand met alles wat over je wordt bewaard.",
+    "erasure": "Mijn gegevens wissen",
+    "erasureHint": "{org} verwijdert je uit de administratie, behalve wat wettelijk bewaard moet blijven (zoals betaalde bestellingen voor de belasting).",
+    "email": "Je e-mailadres",
+    "emailHint": "Het adres dat je bij deze organisator hebt gebruikt.",
+    "submit": "Mail me een code",
+    "sent": "We hebben een code van 6 cijfers naar {email} gemaild. Voer die in om je verzoek te bevestigen. De code werkt 10 minuten.",
+    "resent": "We hebben een nieuwe code naar {email} gestuurd.",
+    "codeLabel": "Bevestigingscode",
+    "confirm": "Mijn verzoek bevestigen",
+    "resend": "Nieuwe code sturen",
+    "changeEmail": "Ander adres gebruiken",
+    "doneTitle": "Verzoek ontvangen",
+    "doneBody": "{org} antwoordt uiterlijk {date}. Je referentie is {reference}. Je krijgt een e-mail zodra het is afgehandeld.",
+    "existingBody": "Je hebt al een open verzoek bij {org}. De deadline is {date}; je referentie is {reference}.",
+    "errors": {
+      "invalidEmail": "Voer een geldig e-mailadres in.",
+      "kindRequired": "Kies een kopie van je gegevens of wissing.",
+      "rateLimited": "{minutes, plural, one {Te veel pogingen. Probeer het over # minuut opnieuw.} other {Te veel pogingen. Probeer het over # minuten opnieuw.}}",
+      "codeFormat": "Voer de 6 cijfers uit de e-mail in.",
+      "wrong": "{count, plural, =0 {Die code klopt niet. Vraag een nieuwe code aan.} one {Die code klopt niet. Nog # poging over.} other {Die code klopt niet. Nog # pogingen over.}}",
+      "locked": "Te veel foute codes. Vraag een nieuwe code aan.",
+      "expired": "Die code is verlopen of al gebruikt. Vraag een nieuwe code aan.",
+      "generic": "Er ging iets mis. Probeer het opnieuw."
+    }
+  },
+  "apiUsage": {
+    "title": "API-gebruik",
+    "subtitle": "Verzoeken met de API-sleutels van deze organisatie, per dag in de tijdzone van de organisatie.",
+    "back": "API-sleutels",
+    "range": "Periode",
+    "lastDays": "Laatste {days, number} dagen",
+    "totalsTitle": "Totalen",
+    "requests": "Verzoeken",
+    "errors": "Fouten",
+    "rateLimited": "Begrensd",
+    "perDayTitle": "Verzoeken per dag",
+    "perKeyTitle": "Verzoeken per sleutel",
+    "day": "Dag",
+    "showData": "Gegevens tonen",
+    "emptyTitle": "Geen API-verzoeken in deze periode",
+    "emptyDescription": "Verzoeken met je sleutels verschijnen hier meteen. Maak een sleutel aan op de pagina API-sleutels."
+  },
+  "sandboxes": {
+    "title": "Sandboxes",
+    "subtitle": "Testorganisaties die aan deze gekoppeld zijn, om de API en het afrekenen veilig te proberen.",
+    "noAccessTitle": "Alleen eigenaren en beheerders beheren sandboxes",
+    "noAccessDescription": "Vraag een eigenaar of beheerder van deze organisatie er een voor je te maken.",
+    "factsTitle": "Zo werkt een sandbox",
+    "factPayments": "Betalingen zijn altijd nep: er wordt nooit iets afgeschreven, hoe het platform ook is ingesteld.",
+    "factMarketplace": "De evenementen verschijnen nooit op de marktplaats.",
+    "factData": "Hij begint met een voorbeeldevenement en twee tickettypes.",
+    "factKeys": "Hij heeft eigen API-sleutels en een eigen team. Jij bent de eigenaar.",
+    "createTitle": "Sandbox maken",
+    "name": "Naam",
+    "nameHint": "Bijvoorbeeld ‘Staging’ of ‘Zapier-test’.",
+    "nameRequired": "Geef de sandbox een naam.",
+    "create": "Sandbox maken",
+    "creating": "Bezig met maken…",
+    "created": "Sandbox ‘{name}’ gemaakt met een voorbeeldevenement.",
+    "open": "Sandbox {name} openen",
+    "openShort": "Openen",
+    "limit": "Deze organisatie heeft al {max, number} sandboxes, het maximum. Verwijder er eerst een.",
+    "sandboxOfSandbox": "Een sandbox kan geen eigen sandboxes hebben",
+    "inSandboxDescription": "Maak sandboxes vanuit de organisatie waar deze sandbox bij hoort.",
+    "listTitle": "Je sandboxes",
+    "emptyTitle": "Nog geen sandboxes",
+    "emptyDescription": "Maak er een om de API, het afrekenen en het inchecken te proberen met voorbeeldgegevens en nepbetalingen.",
+    "address": "Adres",
+    "createdAt": "Gemaakt",
+    "actions": "Acties",
+    "delete": "Verwijderen",
+    "deleteNamed": "Sandbox {name} verwijderen",
+    "deleteWarning": "Hij wordt definitief gesloten: de pagina’s gaan offline, leden en sleutels verliezen toegang.",
+    "deleteConfirm": "Definitief verwijderen",
+    "deleteConfirmNamed": "Sandbox {name} definitief verwijderen"
+  },
+  "webhooks": {
+    "title": "Webhooks",
+    "subtitle": "Stuur de gebeurtenissen van je organisatie naar je eigen systemen op het moment dat ze plaatsvinden.",
+    "docs": "Webhookhandleiding en handtekeningcontrole",
+    "related": "Gerelateerde pagina’s",
+    "portalLink": "Webhookportaal openen",
+    "apiKeysLink": "API-sleutels",
+    "noAccessTitle": "Alleen eigenaren en beheerders beheren webhooks",
+    "noAccessDescription": "Vraag een eigenaar of beheerder van deze organisatie om webhook-endpoints toe te voegen of te wijzigen.",
+    "noModuleTitle": "Webhooks zitten niet in je abonnement",
+    "noModuleDescription": "Webhooks horen bij API-toegang. Neem contact met ons op om dit voor je organisatie aan te zetten.",
+    "unavailableTitle": "Webhooks zijn nog niet beschikbaar",
+    "unavailableDescription": "Het versturen van webhooks wordt op dit platform nog ingericht. Kom snel terug.",
+    "emptyTitle": "Nog geen webhook-endpoints",
+    "emptyDescription": "Voeg hieronder de https-URL van je ontvanger toe en stuur er een testbericht naartoe.",
+    "listTitle": "Endpoints",
+    "url": "Endpoint-URL",
+    "urlHint": "https op poort 443, bereikbaar vanaf internet. Elk bericht is ondertekend.",
+    "description": "Omschrijving",
+    "descriptionHint": "Optioneel, voor je team (maximaal 200 tekens).",
+    "descriptionTooLong": "Gebruik maximaal 200 tekens.",
+    "events": "Gebeurtenissen",
+    "allEvents": "Alle gebeurtenissen",
+    "eventCount": "{count, plural, one {# gebeurtenis} other {# gebeurtenissen}}",
+    "status": "Status",
+    "active": "Actief",
+    "disabled": "Gepauzeerd",
+    "createdAt": "Toegevoegd",
+    "createTitle": "Endpoint toevoegen",
+    "settingsTitle": "Instellingen van het endpoint",
+    "receive": "Te versturen gebeurtenissen",
+    "receiveAll": "Alle gebeurtenissen, ook nieuwe",
+    "receiveSelected": "Alleen de gebeurtenissen die ik kies",
+    "typesRequired": "Kies minstens één gebeurtenis, of verstuur alle gebeurtenissen.",
+    "groups": {
+      "orders": "Bestellingen en betalingen",
+      "tickets": "Tickets",
+      "checkin": "Toegangscontrole",
+      "events": "Evenementen en tickettypes",
+      "registration": "Registratie",
+      "engagement": "Betrokkenheid",
+      "meta": "Tests"
+    },
+    "enabled": "Berichten naar dit endpoint sturen",
+    "enabledHint": "Zet dit uit om leveringen te pauzeren zonder het endpoint te verwijderen.",
+    "create": "Endpoint toevoegen",
+    "save": "Wijzigingen opslaan",
+    "saved": "Endpoint opgeslagen.",
+    "limit": "Deze organisatie heeft het maximale aantal endpoints. Verwijder er een om een nieuwe toe te voegen.",
+    "urlProblem": {
+      "malformed": "Vul een volledige URL in, zoals https://example.com/webhooks.",
+      "scheme": "Gebruik een https://-URL.",
+      "credentials": "Haal de gebruikersnaam en het wachtwoord uit de URL.",
+      "port": "Gebruik de standaard https-poort (443).",
+      "host": "Deze host kan geen webhooks ontvangen. Gebruik een openbaar adres.",
+      "address": "Dit adres is privé of gereserveerd. Gebruik een openbaar adres.",
+      "dns": "We kunnen deze host niet vinden. Controleer het adres.",
+      "length": "Deze URL is te lang."
+    },
+    "deleted": "Endpoint verwijderd.",
+    "created": "Endpoint toegevoegd. Stuur er een testbericht naartoe om je ontvanger te controleren.",
+    "back": "Alle webhook-endpoints",
+    "endpointTitle": "Webhook-endpoint",
+    "testTitle": "Een testbericht sturen",
+    "testEventType": "Berichttype",
+    "testHint": "webhook.test, of een willekeurige gebeurtenis met de gedocumenteerde voorbeeldgegevens. Alleen dit endpoint ontvangt het.",
+    "sendTest": "Test sturen",
+    "testSent": "Testbericht verstuurd ({type}). De levering staat hieronder.",
+    "secretTitle": "Ondertekeningsgeheim",
+    "secretHint": "Hiermee controleer je dat elk bericht echt van ons komt.",
+    "revealSecret": "Geheim tonen",
+    "hideSecret": "Verbergen",
+    "copy": "Kopiëren",
+    "copied": "Gekopieerd",
+    "rotateHint": "Een nieuw geheim vervangt dit. 24 uur lang ondertekenen beide elk bericht, zodat je tijd hebt om het uit te rollen.",
+    "rotateSecret": "Geheim vernieuwen",
+    "rotatedSecret": "Geheim vernieuwd. Het vorige geheim blijft 24 uur werken.",
+    "deliveriesTitle": "Recente leveringen",
+    "deliveriesUnavailable": "De leveringen kunnen nu niet worden geladen. Probeer het over een minuut opnieuw.",
+    "noDeliveriesTitle": "Nog geen leveringen",
+    "noDeliveriesDescription": "Stuur een testbericht of wacht op de volgende gebeurtenis.",
+    "attemptedAt": "Tijd",
+    "eventType": "Gebeurtenis",
+    "response": "Antwoord",
+    "noResponse": "Geen antwoord",
+    "trigger": "Verstuurd door",
+    "triggerManual": "Opnieuw verstuurd",
+    "triggerScheduled": "Automatisch",
+    "nextRetry": "Volgende poging",
+    "actions": "Acties",
+    "attemptSucceeded": "Geleverd",
+    "attemptFailed": "Mislukt",
+    "attemptPending": "In afwachting",
+    "resend": "Opnieuw sturen",
+    "resendNamed": "{type} van {when} opnieuw sturen",
+    "resent": "Opnieuw verstuurd",
+    "recoverTitle": "Mislukte berichten herstellen",
+    "recoverHint": "Was je ontvanger onbereikbaar? Stuur alle berichten die sinds een bepaald moment mislukten opnieuw.",
+    "recoverSince": "Mislukt sinds",
+    "recoverWindow": {
+      "1h": "Het afgelopen uur",
+      "24h": "De afgelopen 24 uur",
+      "7d": "De afgelopen 7 dagen"
+    },
+    "recover": "Mislukte berichten opnieuw sturen",
+    "recovering": "De mislukte berichten worden opnieuw verstuurd.",
+    "deleteTitle": "Dit endpoint verwijderen",
+    "deleteHint": "Het ontvangt meteen geen berichten meer. Dit kan niet ongedaan worden gemaakt.",
+    "delete": "Endpoint verwijderen",
+    "portalTitle": "Webhookportaal",
+    "portalSubtitle": "Endpoints, leveringslogboeken en opnieuw versturen bij onze webhookprovider.",
+    "portalAlternative": "Alles hier staat ook op <link>de webhookpagina’s</link>.",
+    "portalFrameTitle": "Webhookportaal",
+    "portalUnavailable": "Het webhookportaal kan nu niet worden geopend. Probeer het over een minuut opnieuw.",
+    "fakePortal": {
+      "title": "Webhookportaal (testmodus)",
+      "subtitle": "Een vervanger voor het portaal van de provider: hier wordt niets over het netwerk verstuurd.",
+      "endpoints": "Endpoints",
+      "url": "URL",
+      "types": "Gebeurtenissen",
+      "allTypes": "Alle",
+      "status": "Status",
+      "enabled": "Actief",
+      "disabled": "Gepauzeerd",
+      "noEndpoints": "Nog geen endpoints",
+      "attempts": "Recente pogingen",
+      "noAttempts": "Nog geen pogingen",
+      "type": "Gebeurtenis",
+      "message": "Bericht",
+      "succeeded": "Geleverd",
+      "failed": "Mislukt",
+      "at": "Tijd"
+    }
+  },
+  "developers": {
+    "brand": "Yayatoh voor ontwikkelaars",
+    "skip": "Naar de inhoud",
+    "title": "Ontwikkelaars",
+    "subtitle": "Bouw op Yayatoh: de REST-API, webhooks en SDK’s.",
+    "nav": {
+      "label": "Documentatie voor ontwikkelaars",
+      "home": "Overzicht",
+      "guides": "Handleidingen",
+      "reference": "API-referentie",
+      "events": "Webhook-gebeurtenissen"
+    },
+    "search": {
+      "label": "Zoeken in de documentatie",
+      "placeholder": "Zoek handleidingen, endpoints en gebeurtenissen",
+      "submit": "Zoeken",
+      "results": "{count, plural, =0 {Geen resultaten} one {# resultaat} other {# resultaten}}",
+      "resultsLabel": "Zoekresultaten",
+      "resultsFor": "Resultaten voor ‘{query}’",
+      "none": "Niets gevonden. Probeer een ander woord, zoals ‘orders’ of ‘webhook’.",
+      "kinds": {
+        "guide": "Handleiding",
+        "operation": "Endpoint",
+        "event": "Gebeurtenis"
+      }
+    },
+    "englishNotice": "De handleidingen en de referentie zijn in het Engels.",
+    "startTitle": "Begin hier",
+    "cards": {
+      "guides": "API-sleutels, paginering, idempotentie, webhooks en sandboxes, stap voor stap.",
+      "reference": "Elk /v1-endpoint met parameters en antwoorden, gegenereerd uit OpenAPI.",
+      "events": "Elke webhook-gebeurtenis met een geversioneerd schema en een voorbeeld."
+    },
+    "guidesSubtitle": "Stapsgewijze handleidingen om op de API te bouwen.",
+    "backToGuides": "Alle handleidingen",
+    "reference": {
+      "title": "API-referentie",
+      "subtitle": "Elk /v1-endpoint, gegenereerd uit het OpenAPI-document.",
+      "interactive": "Uitproberen in de interactieve referentie",
+      "download": "openapi.json downloaden",
+      "tags": "Onderdelen",
+      "auth": "Authenticatie",
+      "parameters": "Parameters",
+      "parametersOf": "Parameters van {operation}",
+      "name": "Naam",
+      "in": "Locatie",
+      "type": "Type",
+      "description": "Omschrijving",
+      "requestBody": "Body van het verzoek",
+      "responses": "Antwoorden"
+    },
+    "events": {
+      "title": "Webhook-gebeurtenissen",
+      "subtitle": "Elk bericht dat je endpoints kunnen ontvangen, met een geversioneerd schema. De gegevens bevatten ID’s en feiten, nooit persoonsgegevens.",
+      "verifyLink": "Handtekeningen controleren",
+      "groups": "Groepen gebeurtenissen",
+      "fieldsOf": "Velden van {type}",
+      "data": "data",
+      "field": "Veld",
+      "type": "Type",
+      "required": "Verplicht",
+      "yes": "Ja",
+      "no": "Nee",
+      "example": "Voorbeeldbericht {type}"
+    }
+  },
+  "billingPlan": {
+    "title": "Abonnement en modules",
+    "subtitle": "Je abonnement, de modules die erbij horen en hoe kosten per ticket gelden.",
+    "noAccessTitle": "Alleen eigenaren, beheerders en financiën zien het abonnement",
+    "noAccessDescription": "Vraag een eigenaar van deze organisatie om de details van het abonnement.",
+    "dormantTitle": "Abonnementen staan nog niet aan",
+    "dormantBody": "Je organisatie blijft op haar huidige abonnement en houdt alle modules van vandaag. Er verandert niets tot de abonnementen starten.",
+    "inactiveTitle": "Facturering is niet actief voor deze organisatie",
+    "inactiveBody": "Je organisatie blijft op haar huidige abonnement en houdt alle modules van vandaag. Er verandert niets tot de facturering is ingesteld.",
+    "updatedTitle": "Abonnementswijziging ontvangen",
+    "updatedBody": "De factureringsprovider heeft de wijziging bevestigd. De modules hieronder zijn bijgewerkt.",
+    "currentPlan": "Huidig abonnement",
+    "pricePerMonth": "{price} per maand",
+    "pricePerYear": "{price} per jaar",
+    "priceQuote": "Offerte op maat",
+    "renews": "Wordt verlengd op {date}",
+    "endsOn": "Eindigt op {date}",
+    "source": {
+      "subscription": "Abonnement",
+      "plan": "Inbegrepen pakket"
+    },
+    "status": {
+      "active": "Actief",
+      "trialing": "Proefperiode",
+      "past_due": "Betaling achterstallig",
+      "canceled": "Opgezegd",
+      "unpaid": "Onbetaald",
+      "paused": "Gepauzeerd",
+      "incomplete": "Onvolledig",
+      "incomplete_expired": "Verlopen"
+    },
+    "fees": {
+      "title": "Kosten per ticket",
+      "grandfathered": "Je eerdere kosten per ticket blijven gelden. Een abonnementswijziging verandert ze nooit.",
+      "plan": "De kosten per ticket volgen het abonnement {plan}."
+    },
+    "modules": {
+      "title": "Je modules",
+      "description": "Wat je organisatie nu kan gebruiken.",
+      "count": "{count, plural, one {# module} other {# modules}}"
+    },
+    "catalog": {
+      "title": "Abonnementen",
+      "description": "Voorlopige abonnementen: de prijzen zijn niet definitief en er is nog niets te koop.",
+      "empty": "Nog geen abonnementen.",
+      "plan": "Abonnement",
+      "price": "Prijs",
+      "modules": "Modules",
+      "status": "Status",
+      "onSale": "Te koop",
+      "notOnSale": "Nog niet te koop"
+    },
+    "test": {
+      "title": "Testfacturering (alleen ontwikkeling)",
+      "body": "Simuleer een abonnementswijziging via de test-factureringsprovider. Die stuurt dezelfde webhooks als de echte provider.",
+      "open": "Testportaal voor facturering openen"
+    },
+    "planName": {
+      "launch_standard": "Lancering standaard",
+      "tier_free": "Gratis",
+      "tier_starter": "Starter",
+      "tier_pro": "Pro",
+      "tier_agency": "Bureau",
+      "tier_enterprise": "Enterprise"
+    },
+    "module": {
+      "core": "Basis",
+      "events": "Evenementen",
+      "ticketing": "Ticketverkoop",
+      "orders": "Bestellingen",
+      "attendees": "Deelnemers",
+      "checkin": "Toegang",
+      "seating": "Zitplaatsen",
+      "seat_finder": "Plaatszoeker",
+      "guests": "Gastenlijst",
+      "rsvp": "Reacties",
+      "distribution": "Distributie",
+      "access_codes": "Toegangscodes",
+      "marketing": "Marketing",
+      "messaging": "Berichten",
+      "reports": "Rapporten",
+      "whitelabel": "White label",
+      "ai": "AI-assistent",
+      "chat": "Chat",
+      "donations": "Donaties",
+      "registration": "Registratie",
+      "sessions": "Sessies",
+      "speakers": "Sprekers",
+      "exhibitors": "Exposanten",
+      "sponsors": "Sponsors",
+      "badges": "Badges",
+      "gallery": "Galerij",
+      "website": "Website",
+      "api_access": "API-toegang",
+      "integrations": "Integraties",
+      "enterprise": "SSO en SCIM",
+      "agency": "Bureau",
+      "virtual": "Virtuele evenementen",
+      "advanced_seating": "Geavanceerde zitplaatsen",
+      "ai_seating": "Zitplaatsen met AI",
+      "analytics_pro": "Geavanceerde analyses"
+    }
+  },
+  "billingPortal": {
+    "eyebrow": "Testfacturering",
+    "title": "Kies een abonnement",
+    "description": "Alleen voor ontwikkeling. Deze pagina vervangt het portaal van de factureringsprovider en stuurt dezelfde webhooks.",
+    "planLegend": "Abonnement",
+    "switch": "Abonnement wijzigen",
+    "cancel": "Abonnement opzeggen",
+    "back": "Terug zonder wijzigingen",
+    "chooseError": "Kies het abonnement waarnaar je wilt overstappen."
+  },
+  "seatingLibrary": {
+    "title": "Zaalplanbibliotheek",
+    "description": "De zaalplannen die je uit je evenementen hebt opgeslagen. Start een nieuw evenement vanuit een plan; elk evenement houdt een eigen kopie.",
+    "deleted": "Plan uit de bibliotheek verwijderd. Evenementen die het gebruikten, houden hun kopie.",
+    "emptyTitle": "Je zaalplanbibliotheek is leeg",
+    "emptyHint": "Open het zaalplan van een evenement en kies ‘Plan opslaan’ om het hier te bewaren.",
+    "emptyViewer": "Plannen die uit evenementen zijn opgeslagen, verschijnen hier.",
+    "toEvents": "Naar evenementen",
+    "startTitle": "Een nieuw evenement starten vanuit een plan",
+    "startDescription": "Het nieuwe evenement krijgt een eigen kopie van het plan. Daarna prijs je de plaatsen en zet je ze in de verkoop.",
+    "layout": "Plan",
+    "layoutOption": "{name} ({seats, plural, one {# plaats} other {# plaatsen}})",
+    "eventName": "Naam van het evenement",
+    "profile": "Soort evenement",
+    "timezone": "Tijdzone",
+    "startsAt": "Begint",
+    "endsAt": "Eindigt",
+    "start": "Evenement aanmaken",
+    "fixErrors": "Corrigeer het gemarkeerde veld.",
+    "errors": {
+      "layoutId": "Kies een plan.",
+      "name": "Geef het evenement een naam (2 tot 160 tekens).",
+      "slug": "Er bestaat al een evenement met die naam. Kies een andere naam.",
+      "profile": "Kies een soort evenement met zitplaatsen.",
+      "startsAt": "Vul in wanneer het evenement begint.",
+      "endsAt": "Vul in wanneer het evenement eindigt, na het begin.",
+      "layoutName": "Geef het plan een naam (maximaal 120 tekens)."
+    },
+    "listTitle": "Opgeslagen plannen",
+    "seats": "{count, plural, one {# plaats} other {# plaatsen}}",
+    "rows": "{count, plural, one {# rij} other {# rijen}}",
+    "tables": "{count, plural, one {# tafel} other {# tafels}}",
+    "withImage": "met een afbeelding van de plattegrond",
+    "usedBy": "{count, plural, =0 {Nog door geen evenement gebruikt} one {Gebruikt door # evenement} other {Gebruikt door # evenementen}}",
+    "updated": "bijgewerkt op {date}",
+    "renameLabel": "Naam van {name}",
+    "rename": "Hernoemen",
+    "renamed": "Hernoemd.",
+    "startFrom": "Een evenement ermee starten",
+    "startFromNamed": "Een evenement starten met {name}",
+    "delete": "Verwijderen",
+    "deleteNamed": "{name} verwijderen"
+  },
+  "warehouse": {
+    "title": "Analyses",
+    "description": "Al je evenementen samen: registraties, tickets, check-ins en no-shows door de tijd, en je beste evenementen.",
+    "filters": "Filters",
+    "from": "Van",
+    "to": "Tot",
+    "event": "Evenement",
+    "allEvents": "Alle evenementen",
+    "apply": "Toepassen",
+    "timeZoneNote": "Dagen zijn kalenderdagen in {timeZone}, de tijdzone van je organisatie.",
+    "rangeErrors": {
+      "invalid_date": "Vul datums in als jaar, maand en dag.",
+      "from_after_to": "De einddatum ligt voor de begindatum.",
+      "range_too_long": "Kies een periode van hoogstens twee jaar."
+    },
+    "periodLabel": "Toon per",
+    "view": {
+      "day": "Dag",
+      "week": "Week",
+      "month": "Maand"
+    },
+    "emptyTitle": "Nog niets in deze periode",
+    "emptyBody": "Geen registraties, tickets of check-ins tussen deze datums. Probeer een langere periode of een ander evenement; nieuwe bestellingen verschijnen hier binnen enkele seconden.",
+    "emptyAction": "Toon de laatste 12 maanden",
+    "figures": {
+      "label": "Totalen voor de periode",
+      "registrations": "Registraties",
+      "ticketsIssued": "Uitgegeven betaalde tickets",
+      "tickets": "Verkochte tickets",
+      "compTickets": "Gratis tickets",
+      "checkins": "Check-ins",
+      "noShows": "No-shows"
+    },
+    "revenue": {
+      "title": "Omzet",
+      "net": "Netto-omzet ({currency})",
+      "grossRefunds": "{gross} betaald, {refunds} terugbetaald",
+      "byPeriod": "Omzet per periode",
+      "noRevenue": "Geen verkopen of terugbetalingen in deze periode.",
+      "period": "Periode",
+      "currency": "Valuta",
+      "gross": "Betaald",
+      "refunds": "Terugbetaald",
+      "netColumn": "Netto",
+      "topEvents": "Evenementen met de meeste omzet",
+      "eventColumn": "Evenement",
+      "weekOf": "Week van {day}"
+    },
+    "trend": "Door de tijd",
+    "chartTitle": "Registraties, betaalde tickets en check-ins door de tijd",
+    "byPeriod": "Cijfers per periode",
+    "period": "Periode",
+    "topEvents": "Beste evenementen",
+    "noTopEvents": "Geen enkel evenement had registraties in deze periode.",
+    "definitions": "Verkochte tickets zijn betaalde tickets min terugbetaalde. Een check-in telt elk ticket één keer, op de dag van de eerste toegang. No-shows zijn geldige tickets zonder check-in, geteld op de dag dat een evenement eindigde.",
+    "definitionsFinance": "Verkochte tickets zijn betaalde tickets min terugbetaalde. Een check-in telt elk ticket één keer, op de dag van de eerste toegang. No-shows zijn geldige tickets zonder check-in, geteld op de dag dat een evenement eindigde. Omzet is wat kopers betaalden min terugbetalingen, per valuta en vóór platformkosten (zie Financiën).",
+    "rebuildTitle": "Analyses opnieuw opbouwen",
+    "rebuildBody": "Berekent elk cijfer op deze pagina opnieuw uit je bestellingen en check-ins, een paar evenementen tegelijk. Gebruik dit nadat je de tijdzone van je organisatie hebt gewijzigd.",
+    "rebuild": "Opnieuw opbouwen",
+    "rebuilding": "Starten…",
+    "rebuildStarted": "Opnieuw opbouwen gestart",
+    "rebuildStartedBody": "De cijfers worden op de achtergrond opnieuw berekend; deze pagina blijft intussen bruikbaar.",
+    "rebuildRunning": "Er loopt al een herberekening.",
+    "runStatus": {
+      "running": "Bezig",
+      "done": "Klaar",
+      "failed": "Mislukt",
+      "cancelled": "Geannuleerd"
+    },
+    "runProgress": "{events, plural, one {# evenement gecontroleerd} other {# evenementen gecontroleerd}}, {written, plural, one {# bijgewerkt} other {# bijgewerkt}}"
+  },
+  "integrations": {
+    "title": "Integraties",
+    "description": "Koppel de tools die je al gebruikt. Contacten en records blijven in beide richtingen gelijk, en je hoort het als er iets bekeken moet worden.",
+    "tabsLabel": "Onderdelen van integraties",
+    "tabs": {
+      "connections": "Koppelingen",
+      "errors": "Fouten"
+    },
+    "cancelled": "De koppeling is geannuleerd.",
+    "offTitle": "Integraties staan hier nog niet aan",
+    "offDescription": "Koppelingen hebben de integratiedienst nodig, die op deze site nog niet is ingesteld. Vraag het platformbeheer.",
+    "noneTitle": "Nog geen integraties om te koppelen",
+    "noneDescription": "Nieuwe integraties verschijnen op deze pagina zodra ze beschikbaar zijn.",
+    "connectors": {
+      "demo": {
+        "description": "Een test-app met contacten om integraties uit te proberen: contacten synchroniseren in beide richtingen met je CRM. Alleen in testomgevingen."
+      }
+    },
+    "sandboxBadge": "Test",
+    "account": "Account",
+    "lastSync": "Laatste synchronisatie",
+    "never": "Nooit",
+    "openErrors": "Openstaande fouten",
+    "openErrorCount": "{count, plural, one {# record moet bekeken worden} other {# records moeten bekeken worden}}",
+    "noErrors": "Geen",
+    "notInPlan": "Niet in je abonnement",
+    "manage": "Beheren",
+    "manageNamed": "{name} beheren",
+    "connect": "Koppelen",
+    "connectNamed": "{name} koppelen",
+    "reconnect": "Opnieuw koppelen",
+    "reconnectNamed": "{name} opnieuw koppelen",
+    "readOnly": "Alleen eigenaren en beheerders kunnen integraties koppelen of wijzigen.",
+    "breadcrumb": "Kruimelpad",
+    "objects": {
+      "contacts": "Contacten"
+    },
+    "fields": {
+      "email": "E-mail",
+      "name": "Naam"
+    },
+    "status": {
+      "none": "Niet gekoppeld",
+      "pending": "Wacht op goedkeuring",
+      "active": "Gekoppeld",
+      "paused": "Gepauzeerd",
+      "revoked": "Ontkoppeld",
+      "failed": "Koppelen mislukt"
+    },
+    "runStatus": {
+      "queued": "In de wachtrij",
+      "running": "Bezig",
+      "succeeded": "Gesynchroniseerd",
+      "partial": "Gesynchroniseerd met fouten",
+      "failed": "Mislukt",
+      "cancelled": "Geannuleerd"
+    },
+    "errorsFeedback": {
+      "unavailable": "Deze integratie is hier niet beschikbaar.",
+      "provider_unavailable": "De aanbieder is niet bereikbaar. Probeer het over een paar minuten opnieuw.",
+      "not_approved": "De aanbieder heeft de koppeling nog niet bevestigd. Rond het koppelen daar af en controleer dan opnieuw.",
+      "denied": "De koppeling is niet goedgekeurd, dus er is niets gekoppeld.",
+      "expired": "Deze koppellink is verlopen. Begin opnieuw met Koppelen.",
+      "validation_failed": "Sommige gegevens moeten worden aangepast.",
+      "forbidden": "Je hebt hier geen toegang toe.",
+      "module_not_enabled": "Integraties zitten niet in je abonnement.",
+      "not_found": "Dat konden we niet vinden.",
+      "conflict": "Deze integratie is al gekoppeld.",
+      "invalid_state": "Dat kan nu niet.",
+      "impersonation_blocked": "Medewerkers die als lid optreden, kunnen geen integraties koppelen.",
+      "read_only_freeze": "Wijzigingen zijn gepauzeerd tijdens gepland onderhoud. Probeer het daarna opnieuw.",
+      "internal": "Er ging bij ons iets mis."
+    },
+    "detail": {
+      "title": "Integratie",
+      "syncNow": "Nu synchroniseren",
+      "syncing": "Synchronisatie onderweg",
+      "connected": "{name} is gekoppeld. De eerste synchronisatie start zo.",
+      "sync": {
+        "queued": "Synchronisatie gestart. Vernieuw zo meteen om het resultaat te zien.",
+        "already": "Er is al een synchronisatie onderweg."
+      },
+      "done": {
+        "paused": "Synchroniseren is gepauzeerd.",
+        "resumed": "Synchroniseren staat weer aan.",
+        "interval": "Synchronisatieschema opgeslagen.",
+        "disconnected": "Ontkoppeld. Er wordt niets meer gesynchroniseerd en de toegang is bij de aanbieder ingetrokken."
+      },
+      "revoked": {
+        "user": "Ontkoppeld op {when}.",
+        "provider": "De aanbieder accepteert deze koppeling sinds {when} niet meer, dus het synchroniseren is gestopt. Koppel opnieuw om verder te gaan."
+      },
+      "pending": "Wachten tot de koppeling bij de aanbieder is goedgekeurd.",
+      "checkConnection": "Koppeling controleren",
+      "cancelConnect": "Annuleren",
+      "confirmDisconnect": "{name} ontkoppelen?",
+      "confirmDisconnectBody": "Het synchroniseren stopt meteen en de toegang van Yayatoh wordt bij de aanbieder ingetrokken. Al gesynchroniseerde records blijven waar ze zijn.",
+      "disconnect": "Ontkoppelen",
+      "keep": "Gekoppeld laten",
+      "statusTitle": "Status",
+      "connectedAt": "Gekoppeld",
+      "nextSync": "Volgende synchronisatie",
+      "interval": "Synchroniseer elke",
+      "saveInterval": "Schema opslaan",
+      "pause": "Synchroniseren pauzeren",
+      "resume": "Synchroniseren hervatten",
+      "intervals": {
+        "15": "15 minuten",
+        "60": "Uur",
+        "360": "6 uur",
+        "1440": "Dag"
+      }
+    },
+    "mapping": {
+      "sectionTitle": "Veldkoppeling",
+      "sectionHelp": "Kies welk veld welk veld vult. Elke keer opslaan maakt een nieuwe versie, die de volgende synchronisatie gebruikt.",
+      "title": {
+        "pull": "Naar Yayatoh",
+        "push": "Naar de aanbieder"
+      },
+      "help": {
+        "pull": "De velden van de aanbieder vullen de velden van Yayatoh.",
+        "push": "De velden van Yayatoh vullen de velden van de aanbieder."
+      },
+      "version": "Versie {version}",
+      "saved": "Veldkoppeling opgeslagen als versie {version}. De volgende synchronisatie gebruikt die.",
+      "invalid": "Deze veldkoppeling kan nog niet worden opgeslagen. Controleer de gemarkeerde velden.",
+      "required": "verplicht",
+      "source": "Komt uit",
+      "transform": "Aanpassen",
+      "default": "Indien leeg, gebruik",
+      "notMapped": "— Niet gekoppeld —",
+      "transforms": {
+        "none": "Ongewijzigd",
+        "trim": "Spaties weghalen",
+        "lowercase": "kleine letters",
+        "uppercase": "HOOFDLETTERS",
+        "title_case": "Elk Woord Met Hoofdletter",
+        "first_word": "Eerste woord",
+        "last_word": "Laatste woord",
+        "to_number": "Getal",
+        "to_boolean": "Ja of nee",
+        "to_date": "Datum"
+      },
+      "save": {
+        "pull": "Importkoppeling opslaan",
+        "push": "Exportkoppeling opslaan"
+      },
+      "issue": {
+        "missing_required": "Kies waar {field} vandaan komt: het is verplicht.",
+        "unknown_source": "Dat veld bestaat niet bij de aanbieder.",
+        "unknown_target": "{field} kan niet worden gevuld.",
+        "duplicate_target": "{field} wordt twee keer gevuld.",
+        "other": "Controleer dit veld."
+      }
+    },
+    "runs": {
+      "title": "Recente synchronisaties",
+      "caption": "Recente synchronisaties van deze integratie",
+      "empty": "Nog geen synchronisaties. De eerste start kort na het koppelen.",
+      "when": "Gestart",
+      "trigger": "Gestart door",
+      "status": "Resultaat",
+      "pulled": "In",
+      "pushed": "Uit",
+      "skipped": "Ongewijzigd",
+      "failed": "Fouten",
+      "error": "Probleem",
+      "triggers": {
+        "manual": "Nu synchroniseren",
+        "schedule": "Schema",
+        "retry": "Nieuwe poging"
+      }
+    },
+    "codes": {
+      "auth_revoked": "De aanbieder accepteert deze koppeling niet meer",
+      "invalid_token": "De aanbieder accepteert deze koppeling niet meer",
+      "auth_failed": "De aanbieder weigerde de koppeling",
+      "invalid_value": "Een waarde past niet in het veld",
+      "missing_required": "Een verplicht veld is leeg",
+      "transform_failed": "Een waarde kon niet worden omgezet",
+      "duplicate_record": "Twee records verwijzen naar hetzelfde contact",
+      "write_failed": "Kon niet worden opgeslagen in Yayatoh",
+      "push_failed": "Kon niet naar de aanbieder worden gestuurd",
+      "network": "De aanbieder was niet bereikbaar",
+      "lease_expired": "De synchronisatie stopte onverwacht",
+      "disconnected": "Gestopt door ontkoppelen",
+      "paused": "Gestopt door pauzeren",
+      "sync_failed": "De synchronisatie is mislukt",
+      "unknown_connector": "Deze integratie is niet meer beschikbaar",
+      "other": "Fout ({code})"
+    },
+    "inbox": {
+      "title": "Integratiefouten",
+      "description": "Records die niet konden synchroniseren, gegroepeerd per oorzaak. Ze worden een tijdje automatisch opnieuw geprobeerd. Herstel een record bij de bron en kies Opnieuw proberen, of negeer wat je niet nodig hebt.",
+      "retried": "{count, plural, =0 {Niets om opnieuw te proberen: die koppelingen zijn niet actief.} one {# record wordt bij de volgende synchronisatie opnieuw geprobeerd.} other {# records worden bij de volgende synchronisatie opnieuw geprobeerd.}}",
+      "dismissed": "{count, plural, one {# record genegeerd.} other {# records genegeerd.}}",
+      "filterLabel": "Fouten tonen",
+      "status": {
+        "open": "Open",
+        "resolved": "Opgelost",
+        "dismissed": "Genegeerd"
+      },
+      "empty": {
+        "open": "Geen openstaande fouten",
+        "resolved": "Nog niets opgelost",
+        "dismissed": "Niets genegeerd"
+      },
+      "emptyOpenHelp": "Alles is gesynchroniseerd. Als een record niet kan synchroniseren, verschijnt het hier met de volgende stap.",
+      "backToConnections": "Naar de koppelingen",
+      "groupTitle": "{connector}: {step} · {count, plural, one {# record} other {# records}}",
+      "steps": {
+        "auth": "Koppeling",
+        "pull": "Lezen bij de aanbieder",
+        "map": "Veldkoppeling",
+        "write": "Opslaan in Yayatoh",
+        "push": "Versturen naar de aanbieder"
+      },
+      "field": "Veld: {field}",
+      "lastSeen": "Laatst gezien {when}",
+      "retryAll": "Alles opnieuw proberen",
+      "retryAllNamed": "Alles opnieuw proberen: {group}",
+      "dismissAll": "Alles negeren",
+      "dismissAllNamed": "Alles negeren: {group}",
+      "recordsCaption": "Records: {group}",
+      "record": "Record",
+      "object": "Wat",
+      "objectDirection": "{object} ({direction})",
+      "directions": {
+        "pull": "in",
+        "push": "uit"
+      },
+      "wholeConnection": "Hele koppeling",
+      "attempts": "Pogingen",
+      "nextRetry": "Volgende automatische poging",
+      "closedAt": "Gesloten",
+      "manualRetry": "Wacht op jou",
+      "actions": "Acties",
+      "retry": "Opnieuw proberen",
+      "retryNamed": "{record} opnieuw proberen",
+      "dismiss": "Negeren",
+      "dismissNamed": "{record} negeren",
+      "more": "{count, plural, one {Nog # record niet getoond.} other {Nog # records niet getoond.}}"
+    },
+    "fakeConsent": {
+      "title": "Testtoestemming",
+      "eyebrow": "Testaanbieder",
+      "heading": "{name} koppelen aan Yayatoh?",
+      "body": "{name} is een testaanbieder. Als je toestaat, mag Yayatoh namens jou het volgende lezen en schrijven:",
+      "allow": "Toestaan",
+      "deny": "Weigeren"
     }
   }
 }
