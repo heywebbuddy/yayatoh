@@ -6,7 +6,12 @@ import { createNotifier } from '@yayatoh/notifications';
 import { type OrgFixture, ports, twoOrgs } from '@yayatoh/testing';
 import type { PgBoss } from 'pg-boss';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { ANALYTICS_TICK_JOB, analyticsTickJob, enqueueAnalyticsTicks, orgsWithAnalyticsWork } from '../src/analytics-pro.ts';
+import {
+  ANALYTICS_TICK_JOB,
+  analyticsTickJob,
+  enqueueAnalyticsTicks,
+  orgsWithAnalyticsWork,
+} from '../src/analytics-pro.ts';
 import { startWorker } from '../src/worker.ts';
 
 /**
@@ -61,11 +66,18 @@ describe('analytics tick in the worker (M6.2b)', () => {
     const orgs = await orgsWithAnalyticsWork();
     expect(orgs).toEqual(expect.arrayContaining([a.org.id, b.org.id]));
     expect(audited).toContain('system:analytics');
-    const only = new Set([a.org.id]);
-    expect(await enqueueAnalyticsTicks(boss, only)).toBeLessThanOrEqual(1);
-    // A second tick while the first is queued adds nothing (exclusive per org).
-    const again = await boss.send(ANALYTICS_TICK_JOB, { orgId: a.org.id }, { singletonKey: a.org.id, startAfter: 60 });
-    expect(again === null || typeof again === 'string').toBe(true);
+    expect(await enqueueAnalyticsTicks(boss, new Set([a.org.id]))).toBe(1);
+    // One queued job per singleton key at a time (the queue is exclusive).
+    const key = `probe-${a.org.id}`;
+    const first = await boss.send(
+      ANALYTICS_TICK_JOB,
+      { orgId: a.org.id },
+      { singletonKey: key, startAfter: 60 },
+    );
+    const second = await boss.send(ANALYTICS_TICK_JOB, { orgId: a.org.id }, { singletonKey: key });
+    expect(first).not.toBeNull();
+    expect(second).toBeNull();
+    await boss.cancel(ANALYTICS_TICK_JOB, first as string);
   });
 
   it('the job sends a due report once, whatever runs it', async () => {
@@ -78,14 +90,21 @@ describe('analytics tick in the worker (M6.2b)', () => {
     await admin`update analytics.report_schedules set active_since = now() - interval '3 days' where id = ${s.id}`;
     await executeCommand(
       createAlertRuleCommand,
-      { name: `Worker rule ${Date.now()}`, measure: 'registrations', condition: 'above', threshold: 0, windowDays: 30 },
+      {
+        name: `Worker rule ${Date.now()}`,
+        measure: 'registrations',
+        condition: 'above',
+        threshold: 0,
+        windowDays: 30,
+      },
       b.ctx(),
       ports,
     );
     const runs = () =>
       admin<{ period_key: string; status: string }[]>`
         select period_key, status from analytics.report_runs where schedule_id = ${s.id} order by period_key`;
-    for (let i = 0; i < 3; i++) await boss.send(ANALYTICS_TICK_JOB, { orgId: b.org.id }, { singletonKey: `${b.org.id}:${i}` });
+    for (let i = 0; i < 3; i++)
+      await boss.send(ANALYTICS_TICK_JOB, { orgId: b.org.id }, { singletonKey: `${b.org.id}:${i}` });
     await until(async () => (await runs()).filter((r) => r.status === 'sent').length >= 2);
     await new Promise((r) => setTimeout(r, 1500));
     const sent = await runs();
