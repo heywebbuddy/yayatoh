@@ -2151,7 +2151,8 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   );
   // M5.3b call for papers: an open call with one question, a proposal with a co-speaker and an
   // answer (forms engine), a reviewer (portal account) assigned and reviewing, and a second
-  // proposal accepted (speaker + draft session): isolation coverage of every cfp table.
+  // proposal declined (acceptance would add speakers and a session to the fixture event, which other
+  // suites count; the accept path is covered by cfp.int.test.ts): isolation coverage of every cfp table.
   await executeCommand(
     saveCfpCommand,
     { eventId: event.id, status: 'open', durations: [30, 45], intro: `Speak at ${name}` },
@@ -2213,7 +2214,7 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   );
   await executeCommand(
     decideCfpSubmissionCommand,
-    { eventId: event.id, submissionId: cfpSecond.id, decision: 'accept', note: 'Welcome aboard.' },
+    { eventId: event.id, submissionId: cfpSecond.id, decision: 'reject', note: 'Thank you for applying.' },
     ctx(),
     ports,
   );

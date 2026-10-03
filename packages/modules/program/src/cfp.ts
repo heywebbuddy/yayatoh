@@ -327,6 +327,7 @@ export const addCfpQuestionCommand = tenantCommand({
 
 export const removeCfpQuestionCommand = tenantCommand({
   name: 'program.removeCfpQuestion',
+  category: 'delete',
   input: z.object({ eventId: z.uuid(), key: z.string().max(40) }),
   output: z.object({ version: z.int() }),
   entitlement: 'speakers',
