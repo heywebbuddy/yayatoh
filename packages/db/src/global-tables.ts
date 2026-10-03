@@ -29,6 +29,12 @@ export const GLOBAL_TABLES: Readonly<Record<string, string>> = {
   'billing.addons':
     'Add-on catalog (event add-ons such as conference_pack: modules, price, per-event quotas); reference data written only by migrations (app_user: SELECT).',
   'billing.plan_modules': 'Modules per plan; reference data written only by migrations (app_user: SELECT).',
+  'billing.plan_catalog':
+    'Plans sold through the billing provider (M6.6a: sort order, on/off, provider product id); reference data written by migrations and the SECURITY DEFINER billing.apply_catalog (platform_reader); app_user: SELECT.',
+  'billing.plan_prices':
+    'Plan prices by provider lookup key (M6.6a; placeholders switched off until D22); written by migrations and billing.apply_catalog (platform_reader); app_user: SELECT.',
+  'billing.features':
+    "The billing provider's Entitlement Features mirrored per module key (M6.6a); written by migrations and billing.apply_catalog (platform_reader); app_user: SELECT.",
   'platform.signup_codes':
     'Invite-only signup codes (hashed); no app_user privileges, only SECURITY DEFINER check/claim and staff-only create.',
   'platform.flags':

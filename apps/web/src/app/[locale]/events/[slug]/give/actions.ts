@@ -44,6 +44,8 @@ export async function giveAction(
   slug: string,
   campaignId: string,
   idempotencyKey: string,
+  /** M4.8d: `qr` when the page was opened from a QR code (screen or table card). */
+  source: string,
   _prev: GiveState,
   form: FormData,
 ): Promise<GiveState> {
@@ -126,6 +128,9 @@ export async function giveAction(
       employer: text(form, 'employer', 120) || null,
       tribute,
       locale,
+      // P4-13: named on the room's screen only when the donor ticked the box (never when anonymous).
+      showOnScreen: form.get('showOnScreen') === 'on' && displayAs !== 'anonymous',
+      source: source === 'qr' ? 'qr' : 'online',
     });
   } catch (err) {
     if (!isDomainError(err)) throw err;

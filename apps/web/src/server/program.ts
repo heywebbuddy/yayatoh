@@ -17,7 +17,8 @@ export async function loadProgramPage(org: string, event: string, section: Progr
   const { data, event: ev, profile, can } = await loadEvent(org, event, section);
   if (!navIncludes(profile, data.modules, section)) notFound();
   const program = await executeQuery(programQuery, { eventId: ev.id }, data.ctx, ports);
-  return { data, ev, program, canWrite: can('events:write') };
+  // M5.7b: engagement scores name attendees, so their link needs `attendees:read`.
+  return { data, ev, program, canWrite: can('events:write'), canReadPeople: can('attendees:read') };
 }
 
 /** Localized schedule warnings (M1.4f conflicts), naming the other session, room or speaker. */

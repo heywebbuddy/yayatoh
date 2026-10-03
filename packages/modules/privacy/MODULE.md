@@ -30,4 +30,24 @@ their exported `*DsarTx` / retention functions, inside the caller's tenant trans
 - Org-side erasure also removes team invitations addressed to the person and adds the address to
   the platform-wide erased list (`platform.erased_addresses`).
 
+- M6.1c DSAR propagation: every module that holds personal data exports a `DataSubjectContributor`
+  (`@yayatoh/platform`); the apps register them. A table with a personal or holder column and no
+  contributor fails the coverage test. One open request per person per org (partial unique index),
+  due 30 days after it is opened; the address is sealed with the org's key vault while the request is
+  open and cleared when it closes. Fulfilling needs a recent step-up and is refused while staff act as
+  a member (export / delete categories).
+- The archive is a ZIP with a manifest of SHA-256 checksums signed with Ed25519 (`DsarSigner`;
+  local key from APP_TOKEN_SECRET outside production); it is kept 7 days in the media store. The
+  erasure receipt holds no personal data (masked hint, SHA-256) and is signed the same way.
+- Erasure runs every contributor in one tenant transaction, then the media subscriber deletes stored
+  files and the connector-hook subscriber tells M6.4 integrations (`privacy.subject_erased@1`).
+- Events emitted: `privacy.subject_erased@1` (request id, subject SHA-256, media asset ids).
+
+- Networking and chat (M5.8a/b): covered by engagement's data-subject contributor (batch 3u
+  merge; batch 3j had moved privacy to tier 6 to call engagement directly, which M6.1c's
+  contributors made unnecessary, so privacy stays tier 5). The access document lists the person's
+  networking profiles, the notes on requests they sent, the reports they filed and the chat
+  messages they sent; erasure redacts and opts out their profiles, clears those notes and report
+  details, and deletes the chat messages they sent.
+
 **Public surface:** `.` only.

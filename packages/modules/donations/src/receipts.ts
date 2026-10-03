@@ -5,6 +5,7 @@ import { receiptOrderFactsTx } from '@yayatoh/orders';
 import {
   catchUpSubscriber,
   defineSubscriber,
+  ERASED_EMAIL,
   type Notifier,
   signLinkToken,
   tenantCommand,
@@ -37,6 +38,9 @@ import {
   statementEmailBody,
 } from './receipt-document.ts';
 import { receiptSequences, receipts, yearEndStatements } from './schema.ts';
+
+/** The domain of every erased address (`ERASED_EMAIL`, per-row `erased+<id>@…` variants too). */
+const ERASED_DOMAIN = ERASED_EMAIL.slice(ERASED_EMAIL.indexOf('@'));
 
 type ReceiptRow = typeof receipts.$inferSelect;
 type StatementRow = typeof yearEndStatements.$inferSelect;
@@ -413,6 +417,8 @@ export const yearEndStatementsCommand = tenantCommand({
     );
     const groups = new Map<string, ReceiptRow[]>();
     for (const r of rows) {
+      // An erased donor (M6.1c) keeps their receipts under the tax hold but gets no statement.
+      if (r.donorEmail.endsWith(ERASED_DOMAIN)) continue;
       const key = `${r.donorEmail}|${r.currency}`;
       if (done.has(key)) continue;
       groups.set(key, [...(groups.get(key) ?? []), r]);

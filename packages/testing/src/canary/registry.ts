@@ -1,5 +1,6 @@
 import { privateColumns as ai } from '@yayatoh/ai';
 import { privateColumns as alerts } from '@yayatoh/alerts';
+import { privateColumns as analytics } from '@yayatoh/analytics';
 import { privateColumns as assistance } from '@yayatoh/assistance';
 import { privateColumns as attendees } from '@yayatoh/attendees';
 import { privateColumns as audiences } from '@yayatoh/audiences';
@@ -16,7 +17,9 @@ import { privateColumns as donations } from '@yayatoh/donations';
 import { privateColumns as engagement } from '@yayatoh/engagement';
 import { privateColumns as events } from '@yayatoh/events';
 import { privateColumns as forms } from '@yayatoh/forms';
+import { privateColumns as gallery } from '@yayatoh/gallery';
 import { privateColumns as guests } from '@yayatoh/guests';
+import { privateColumns as integrations } from '@yayatoh/integrations';
 import { privateColumns as marketing } from '@yayatoh/marketing';
 import { privateColumns as marketplace } from '@yayatoh/marketplace';
 import { privateColumns as media } from '@yayatoh/media';
@@ -36,6 +39,7 @@ import { privateColumns as templates } from '@yayatoh/templates';
 import { privateColumns as tenancy } from '@yayatoh/tenancy';
 import { privateColumns as ticketing } from '@yayatoh/ticketing';
 import { privateColumns as venues } from '@yayatoh/venues';
+import { privateColumns as webhooks } from '@yayatoh/webhooks';
 
 /**
  * Every module's column-privacy declaration (roadmap §9). A module that adds tenant tables exports
@@ -45,6 +49,7 @@ import { privateColumns as venues } from '@yayatoh/venues';
 export const COLUMN_PRIVACY: readonly SchemaPrivacy[] = [
   ai,
   alerts,
+  analytics,
   assistance,
   attendees,
   audiences,
@@ -60,7 +65,9 @@ export const COLUMN_PRIVACY: readonly SchemaPrivacy[] = [
   donations,
   events,
   forms,
+  gallery,
   guests,
+  integrations,
   marketing,
   marketplace,
   media,
@@ -80,6 +87,7 @@ export const COLUMN_PRIVACY: readonly SchemaPrivacy[] = [
   tenancy,
   ticketing,
   venues,
+  webhooks,
 ];
 
 /** `schema.table.column` */
@@ -118,6 +126,16 @@ export function privateColumnList(
 ): RegisteredPrivateColumn[] {
   return registeredColumns(list).filter((c): c is RegisteredPrivateColumn => isPrivate(c.rule));
 }
+
+/**
+ * Canaries that live in no column: secrets planted in fakes, which must never reach anything we
+ * store, log or serve. M6.4a: the fake `IntegrationAuth`'s OAuth tokens (`FAKE_ACCESS_TOKEN`,
+ * `FAKE_REFRESH_TOKEN`). The matcher classes them `secret`.
+ */
+export const PLANTED_SECRETS: readonly ColumnId[] = [
+  'integrations.oauth.access_token',
+  'integrations.oauth.refresh_token',
+];
 
 /** The canary a private column is filled with: `__CANARY_<schema>.<table>.<column>__`. */
 export const canaryToken = (id: ColumnId) => `__CANARY_${id}__`;

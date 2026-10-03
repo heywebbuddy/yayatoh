@@ -15,6 +15,11 @@ export {
   setCollectorCommand,
   submitContactCommand,
 } from './collector.ts';
+// M6.1a: contact merges move this module's references (ADR 0023).
+export { guestsContactOwner } from './contact-merge.ts';
+export { guestsDataSubjects } from './data-subject.ts';
+// M4.4b: names for the day of (check-in, kiosk, A–Z board).
+export { guestNamesTx } from './day-of.ts';
 export {
   type CollectorMember,
   type CollectorPayload,
@@ -45,6 +50,18 @@ export {
   parseTags,
   plusOneRefusal,
 } from './domain/guests.ts';
+// M4.7a guest hub: one page per party (RSVP, program, seats, tickets) and its wallet pass port.
+export {
+  type GuestPassContent,
+  type GuestPassFacts,
+  guestPassContent,
+  guestPassSerial,
+  type HubTally,
+  hubTally,
+  nextProgramItem,
+  PASS_SEATS_MAX,
+  PASS_TEXT_MAX,
+} from './domain/hub.ts';
 export {
   GUEST_IMPORT_FIELDS,
   GUEST_IMPORT_REJECTIONS,
@@ -105,6 +122,20 @@ export {
   strictName,
   tally,
 } from './domain/rsvp.ts';
+// M4.5a guest website: blocks, the password gate, the public page.
+export {
+  emptyContent,
+  MAX_BLOCK_ITEMS,
+  MAX_SITE_BLOCKS,
+  normalizeSitePassword,
+  passwordProblem,
+  programSubEvents,
+  readContent,
+  SITE_PASSWORD_MAX,
+  SITE_PASSWORD_MIN,
+  siteAccessToken,
+  siteAccessValid,
+} from './domain/site.ts';
 export * from './dto.ts';
 export {
   addPartyGuestCommand,
@@ -125,6 +156,15 @@ export {
   updatePartyCommand,
   updatePartyGuestCommand,
 } from './guests.ts';
+export {
+  type HubPerson,
+  type HubSeat,
+  type HubTicket,
+  PartyHubDto,
+  type PartyHubReaders,
+  type PartyHubView,
+  partyHubQuery,
+} from './hub.ts';
 export {
   GuestImportSummaryDto,
   GuestMappingInput,
@@ -185,7 +225,19 @@ export {
   setPartyContactCommand,
   setPartyLocaleCommand,
 } from './invites.ts';
+// M4.8c paddle raise: who can hold a paddle, and their names for the organizer.
+export {
+  type PaddleHolderGuest,
+  type PaddleHolderParty,
+  paddleHolderNamesTx,
+  paddleHoldersTx,
+  paddleHolderTx,
+} from './paddle-holders.ts';
+// M4.8e: where a paddle holder's pledge messages go.
+export { paddleHolderContactTx } from './pledge-contact.ts';
 export { privateColumns } from './private-columns.ts';
+// M4.3a guest seating: the guest list's live channel and seating's OccupantDirectory.
+export { GUESTS_CHANNEL, MAX_PARTY_MESSAGES, publishGuestChangesTx } from './realtime.ts';
 export {
   createRsvpLinksCommand,
   findRsvpByNameCommand,
@@ -260,9 +312,46 @@ export {
   type PartyRsvpState,
   RESPONSE_STATUSES,
   type ResponseStatus,
+  SITE_BLOCK_KINDS,
+  SITE_STATUSES,
+  type SiteBlockKind,
+  type SiteStatus,
   SUB_EVENT_KINDS,
   type SubEventKind,
 } from './schema.ts';
+// M4.4a: the guest seat finder's party credentials (seating's `PartyCredentials` port).
+export { guestsPartyCredentials } from './seat-finder-party.ts';
+export {
+  guestsOccupantDirectory,
+  type SeatingOccupant,
+  type SeatingOccupantParty,
+  type SeatingStatus,
+  seatingOccupantsTx,
+  seatingSubEventsTx,
+  wholeEventStatus,
+} from './seating-occupants.ts';
+export {
+  addGuestSiteBlockCommand,
+  GuestSiteDto,
+  guestSitePublishedQuery,
+  guestSiteQuery,
+  guestSiteTarget,
+  moveGuestSiteBlockCommand,
+  PublicGuestSiteDto,
+  PublicSiteBlockDto,
+  publicGuestSiteQuery,
+  publishGuestSiteCommand,
+  removeGuestSiteBlockCommand,
+  SaveGuestSiteInput,
+  SiteBlockDto,
+  saveGuestSiteCommand,
+  setGuestSitePasswordCommand,
+  UpdateGuestSiteBlockInput,
+  unlockGuestSiteQuery,
+  updateGuestSiteBlockCommand,
+} from './site.ts';
+// M4.5b: the gallery behind the guest site (in the gallery module's transactions).
+export { guestSiteAccessTx, guestSiteCodeTx } from './site-access.ts';
 export {
   CreateSubEventInput,
   createSubEventCommand,
@@ -283,3 +372,13 @@ export {
   tablePartiesTx,
   tablePartyTx,
 } from './tables.ts';
+export {
+  FAKE_PASS_CONTENT_TYPE,
+  type FakeGuestPass,
+  fakeGuestPassProvider,
+  GUEST_PASS_PLATFORMS,
+  type GuestPassPlatform,
+  type GuestPassProvider,
+  type GuestPassRequest,
+  type GuestPassResult,
+} from './wallet-pass.ts';

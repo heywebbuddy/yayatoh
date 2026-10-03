@@ -1,3 +1,4 @@
+export { formsDataSubjects } from './data-subject.ts';
 export {
   AnswerError,
   checkAnswers,

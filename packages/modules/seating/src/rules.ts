@@ -12,10 +12,19 @@ import {
   type RuleHit,
   type SeatingRule,
 } from './domain/rules.ts';
-import { eventLayouts, eventSeats, RULE_SEVERITIES, seatingRules } from './schema.ts';
+import {
+  companionSeats,
+  eventLayouts,
+  eventSeats,
+  RULE_SEVERITIES,
+  SEATING_RULE_KINDS,
+  seatingRules,
+} from './schema.ts';
 
 export const MAX_RELEASE_DAYS = 365;
 export const MAX_SEATS_PER_ORDER = 50;
+/** Companion seats one accessible seat may bring (M6.11a). */
+export const MAX_COMPANIONS_PER_ACCESSIBLE = 3;
 
 const Severity = z.enum(RULE_SEVERITIES);
 /** One rule as stored, read and shown (allowlisted: public pages show the organizer's policy). */
@@ -29,6 +38,11 @@ export const SeatingRuleDto = z.discriminatedUnion('kind', [
     kind: z.literal('max_per_order_seats'),
     severity: Severity,
     params: z.object({ max: z.int().min(1).max(MAX_SEATS_PER_ORDER) }),
+  }),
+  z.object({
+    kind: z.literal('ada_companion'),
+    severity: Severity,
+    params: z.object({ maxPerAccessible: z.int().min(1).max(MAX_COMPANIONS_PER_ACCESSIBLE) }),
   }),
 ]);
 export type SeatingRuleDto = z.infer<typeof SeatingRuleDto>;
@@ -46,6 +60,13 @@ export const RuleHitDto = z.discriminatedUnion('rule', [
     severity: Severity,
     max: z.int(),
     count: z.int(),
+  }),
+  z.object({
+    rule: z.literal('ada_companion'),
+    severity: Severity,
+    seats: z.array(z.uuid()),
+    maxPerAccessible: z.int(),
+    accessible: z.int(),
   }),
 ]);
 
@@ -88,7 +109,7 @@ export const setSeatingRulesCommand = tenantCommand({
     eventId: z.uuid(),
     rules: z
       .array(SeatingRuleDto)
-      .max(2)
+      .max(SEATING_RULE_KINDS.length)
       .refine((rs) => new Set(rs.map((r) => r.kind)).size === rs.length, {
         message: 'One rule of each kind',
         path: ['rules'],
@@ -156,6 +177,8 @@ export async function checkSeatRulesTx(
     seatUuids: readonly string[];
     context: RuleContext;
     override?: boolean;
+    /** The buyer says someone in the party needs an accessible seat (M6.11a). */
+    accessibleNeed?: boolean;
   },
 ): Promise<RuleHit[]> {
   const ids = [...new Set(check.seatUuids)];
@@ -169,11 +192,23 @@ export async function checkSeatRulesTx(
     .select({ seatUuid: eventSeats.seatUuid, accessible: eventSeats.accessible })
     .from(eventSeats)
     .where(and(onChart(eventSeats, check.eventId, key), inArray(eventSeats.seatUuid, ids)));
+  // Companion seats (M6.11a) are per event.
+  const companions = rules.some((r) => r.kind === 'ada_companion')
+    ? new Set(
+        (
+          await tx
+            .select({ seatUuid: companionSeats.seatUuid })
+            .from(companionSeats)
+            .where(and(eq(companionSeats.eventId, check.eventId), inArray(companionSeats.seatUuid, ids)))
+        ).map((r) => r.seatUuid),
+      )
+    : new Set<string>();
   const hits = evaluateSeatRules(rules, {
     context: check.context,
-    seats,
+    seats: seats.map((s) => ({ ...s, companion: companions.has(s.seatUuid) })),
     startsAt,
     now: ctx.now,
+    accessibleNeed: check.accessibleNeed ?? false,
   });
   const [blocking] = blockingHits(hits, { context: check.context, override: check.override ?? false });
   if (blocking)
@@ -183,7 +218,9 @@ export async function checkSeatRulesTx(
       overridable: check.context !== 'checkout',
       ...(blocking.rule === 'max_per_order_seats'
         ? { max: blocking.max }
-        : { releaseAt: blocking.releaseAt.toISOString(), seats: blocking.seats }),
+        : blocking.rule === 'ada_companion'
+          ? { maxPerAccessible: blocking.maxPerAccessible, seats: blocking.seats }
+          : { releaseAt: blocking.releaseAt.toISOString(), seats: blocking.seats }),
     });
   return hits;
 }

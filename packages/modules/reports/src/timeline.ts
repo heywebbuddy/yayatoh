@@ -32,6 +32,8 @@ export const ContactTimelineDto = z.object({
   ),
   /** How many of this org's events the person was on the list for. */
   events: z.int(),
+  /** The person's org contact (M6.1b: the contact page and the stats in the timeline header). */
+  contactId: z.uuid(),
 });
 
 /**
@@ -83,6 +85,6 @@ export const contactTimelineQuery = tenantQuery({
       .map((i) => ({ ...i, eventName: names.get(i.eventId) ?? '' }))
       .sort((x, y) => y.at.getTime() - x.at.getTime())
       .slice(0, 200);
-    return { items, events: new Set(attendances.map((a) => a.eventId)).size };
+    return { items, events: new Set(attendances.map((a) => a.eventId)).size, contactId };
   },
 });
