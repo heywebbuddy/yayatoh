@@ -75,6 +75,7 @@ export default async function DonationsPage({
   const tb = await getTranslations('bulk');
   const tg = await getTranslations('donations.give');
   const te = await getTranslations();
+  const tp = await getTranslations('donations.raiseCard');
   const canWrite = can('events:write');
   const canExport = can('attendees:export');
   const fmt = (minor: number, currency = ev.currency) => formatMoney(money(minor, currency), locale);
@@ -273,6 +274,40 @@ export default async function DonationsPage({
             }
           />
           <p className="m-0 text-body text-ink-2">{t('receiptsBody')}</p>
+        </Card>
+      ) : null}
+
+      {/* M4.8c: the paddle raise (console, spotters, review) and the paddle numbers. */}
+      {can('orders:read') || can('checkin:scan') || can('guests:read') ? (
+        <Card className="flex flex-col gap-3" data-testid="paddle-raise-card">
+          <CardHeader as="h2" title={tp('cardTitle')} />
+          <p className="m-0 text-body text-ink-2">{tp('cardBody')}</p>
+          <div className="flex flex-wrap gap-2">
+            {can('orders:read') ? (
+              <Link
+                href={`/o/${org}/e/${event}/donations/paddle-raise`}
+                className={buttonClass('secondary', 'sm')}
+              >
+                {tp('openConsole')}
+              </Link>
+            ) : null}
+            {can('checkin:scan') ? (
+              <Link
+                href={`/o/${org}/e/${event}/donations/paddle-raise/spot`}
+                className={buttonClass('secondary', 'sm')}
+              >
+                {tp('openSpotter')}
+              </Link>
+            ) : null}
+            {can('guests:read') ? (
+              <Link
+                href={`/o/${org}/e/${event}/donations/paddles`}
+                className={buttonClass('secondary', 'sm')}
+              >
+                {tp('openPaddles')}
+              </Link>
+            ) : null}
+          </div>
         </Card>
       ) : null}
 

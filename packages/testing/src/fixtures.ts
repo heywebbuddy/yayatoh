@@ -70,9 +70,15 @@ import {
 } from '@yayatoh/command-center';
 import { withTenant } from '@yayatoh/db';
 import {
+  armLevelCommand,
+  assignPaddleCommand,
+  closeCallCommand,
+  confirmEntriesCommand,
   createCampaignCommand as createGivingCampaignCommand,
   createLevelCommand as createGivingLevelCommand,
   issueReceiptTx,
+  paddleConsoleQuery,
+  recordPaddlesCommand,
   saveCharityProfileCommand,
   setFairValueCommand,
   verifyCharityCommand,
@@ -2422,6 +2428,7 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   );
   await donationRows(org.id, event.id, slug, ctx);
   await receiptRows(org.id, event.id, ga.id, checkout.order.id, ctx);
+  await paddleRaiseRows(event.id, party.id, ctx);
   return {
     org,
     ownerId,
@@ -2604,6 +2611,36 @@ async function receiptRows(
       copy_version) values (${orgId}, 2026, 'fixture-donor@example.test', 'Fixture Donor', 'USD', 1, 10000, 0,
       10000, 'Fixture Charity Inc', '23-4567891', 'fixture')`);
   });
+}
+
+/**
+ * M4.8c paddle raise (isolation coverage of paddles, calls, entries and pledges): the fixture
+ * party's paddle, a called and closed level with one entry confirmed into a pledge. The level is
+ * closed so tests can arm their own.
+ */
+async function paddleRaiseRows(eventId: string, partyId: string, ctx: (o?: Partial<Ctx>) => Ctx) {
+  const paddle = await executeCommand(assignPaddleCommand, { eventId, partyId, number: 1 }, ctx(), ports);
+  const view = await executeQuery(paddleConsoleQuery, { eventId }, ctx(), ports);
+  const campaign = view.campaigns[0];
+  const level = campaign?.levels[0];
+  if (!campaign || !level) throw new Error('fixture: the fixture campaign has no level');
+  const call = await executeCommand(
+    armLevelCommand,
+    { eventId, campaignId: campaign.id, levelId: level.id },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    recordPaddlesCommand,
+    {
+      eventId,
+      entries: [{ clientId: uuidv7(), callId: call.id, paddle: paddle.number, recordedAt: new Date() }],
+    },
+    ctx(),
+    ports,
+  );
+  await executeCommand(closeCallCommand, { eventId, callId: call.id }, ctx(), ports);
+  await executeCommand(confirmEntriesCommand, { eventId, callId: call.id }, ctx(), ports);
 }
 
 /** English headers for attendee exports (the console passes its own locale's). */
