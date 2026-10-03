@@ -13,6 +13,7 @@ import { formatNumber } from '@/lib/format.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import { supervisorView } from '@/server/scan-staff.ts';
+import { CardSavingQr } from '../donations/pledges/card-qr.tsx';
 import {
   enrollDayOfDeviceAction,
   markArrivedAction,
@@ -106,6 +107,11 @@ export default async function DayOfPage({
           <StatCard testId="stat-declined" label={t('declined')} value={n(day.counts.declined)} />
         </div>
 
+        {/* M4.8e on M4.4b's check-in (batch 3j merge): the card-saving code at the desk, while the
+            event takes gifts online. */}
+        {data.modules.has('donations') ? (
+          <CardSavingQr orgId={data.org.id} eventId={ev.id} slug={ev.slug} source="checkin" />
+        ) : null}
         {canCheckIn ? (
           <section aria-labelledby="dayof-find" className="flex flex-col gap-3">
             <h2 id="dayof-find" className="text-section">

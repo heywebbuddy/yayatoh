@@ -166,6 +166,8 @@ test.describe('kiosk, TV board and check-in (M4.4b)', () => {
     await p.keyboard.press('Enter');
     await expect(p.getByTestId('guest-message')).toHaveText('Luis López is checked in. Table 1.');
     await expect(luis).toContainText('Arrived');
+    // This wedding takes no gifts online: no card-saving code after the check-in (M4.8e).
+    await expect(p.getByTestId('checkin-card-qr')).toHaveCount(0);
     await expect(p.getByTestId('scan-queue')).toHaveText('All scans synced', { timeout: 15_000 });
 
     // Offline: the party's other guests by party name, from the device's own list.

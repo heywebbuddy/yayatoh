@@ -11685,7 +11685,10 @@
     "guestOf": "مرافق {name}",
     "placeTable": "طاولة {label}",
     "placeRow": "صف {label}",
-    "placeOnChart": "{chart}: {place}"
+    "placeOnChart": "{chart}: {place}",
+    "cardQrLabel": "رمز QR لحفظ بطاقة لتبرعات الليلة",
+    "cardTitle": "هل تريد حفظ بطاقة لتبرعات الليلة؟",
+    "cardBody": "يمسح الضيف هذا الرمز بهاتفه الخاص. لا يُحفظ شيء إلا إذا وافق على ذلك هناك."
   },
   "scanGuestKiosk": {
     "welcome": "مرحبًا بكم في {event}",

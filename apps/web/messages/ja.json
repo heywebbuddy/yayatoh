@@ -11685,7 +11685,10 @@
     "guestOf": "{name} の同伴者",
     "placeTable": "テーブル {label}",
     "placeRow": "列 {label}",
-    "placeOnChart": "{chart}：{place}"
+    "placeOnChart": "{chart}：{place}",
+    "cardQrLabel": "今夜の寄付用にカードを保存するQRコード",
+    "cardTitle": "今夜の寄付用にカードを保存しますか？",
+    "cardBody": "ゲストが自分のスマートフォンで読み取ります。ゲストが同意しない限り、何も保存されません。"
   },
   "scanGuestKiosk": {
     "welcome": "{event} へようこそ",

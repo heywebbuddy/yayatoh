@@ -11685,7 +11685,10 @@
     "guestOf": "Ospite di {name}",
     "placeTable": "Tavolo {label}",
     "placeRow": "Fila {label}",
-    "placeOnChart": "{chart}: {place}"
+    "placeOnChart": "{chart}: {place}",
+    "cardQrLabel": "Codice QR per salvare una carta per le donazioni di stasera",
+    "cardTitle": "Salvare una carta per le donazioni di stasera?",
+    "cardBody": "L’ospite lo scansiona con il proprio telefono. Non viene salvato nulla senza il suo consenso lì."
   },
   "scanGuestKiosk": {
     "welcome": "Benvenuti a {event}",

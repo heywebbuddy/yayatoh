@@ -11685,7 +11685,10 @@
     "guestOf": "Guest of {name}",
     "placeTable": "Table {label}",
     "placeRow": "Row {label}",
-    "placeOnChart": "{chart}: {place}"
+    "placeOnChart": "{chart}: {place}",
+    "cardQrLabel": "QR code to save a card for tonight's giving",
+    "cardTitle": "Saving a card for tonight's giving?",
+    "cardBody": "The guest scans this with their own phone. Nothing is saved unless they agree there."
   },
   "scanGuestKiosk": {
     "welcome": "Welcome to {event}",

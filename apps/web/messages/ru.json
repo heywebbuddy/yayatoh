@@ -11685,7 +11685,10 @@
     "guestOf": "Гость: {name}",
     "placeTable": "Стол {label}",
     "placeRow": "Ряд {label}",
-    "placeOnChart": "{chart}: {place}"
+    "placeOnChart": "{chart}: {place}",
+    "cardQrLabel": "QR-код, чтобы сохранить карту для сегодняшних пожертвований",
+    "cardTitle": "Сохранить карту для сегодняшних пожертвований?",
+    "cardBody": "Гость сканирует код своим телефоном. Ничего не сохраняется без его согласия на телефоне."
   },
   "scanGuestKiosk": {
     "welcome": "Добро пожаловать на {event}",

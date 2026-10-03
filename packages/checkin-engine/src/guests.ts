@@ -44,6 +44,12 @@ export interface GuestSnapshot {
   readonly eventId: string;
   readonly generatedAt: string;
   readonly parties: readonly SnapshotParty[];
+  /**
+   * M4.8e card saving at check-in (batch 3j merge): the event's card-saving address and its QR
+   * path, while the event takes gifts online. Added by the app (donations is a higher tier); the
+   * guest scans it with their own phone. Not a credential: the same code is on the desk.
+   */
+  readonly card?: { readonly url: string; readonly size: number; readonly d: string } | null;
 }
 
 /** Lower case, accents and punctuation dropped, spaces collapsed: "  José  O'Neil" → "jose oneil". */

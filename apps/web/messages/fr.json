@@ -11685,7 +11685,10 @@
     "guestOf": "Invité de {name}",
     "placeTable": "Table {label}",
     "placeRow": "Rang {label}",
-    "placeOnChart": "{chart} : {place}"
+    "placeOnChart": "{chart} : {place}",
+    "cardQrLabel": "Code QR pour enregistrer une carte pour les dons de ce soir",
+    "cardTitle": "Enregistrer une carte pour les dons de ce soir ?",
+    "cardBody": "L’invité le scanne avec son propre téléphone. Rien n’est enregistré sans son accord sur son téléphone."
   },
   "scanGuestKiosk": {
     "welcome": "Bienvenue à {event}",

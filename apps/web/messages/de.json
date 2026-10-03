@@ -11685,7 +11685,10 @@
     "guestOf": "Gast von {name}",
     "placeTable": "Tisch {label}",
     "placeRow": "Reihe {label}",
-    "placeOnChart": "{chart}: {place}"
+    "placeOnChart": "{chart}: {place}",
+    "cardQrLabel": "QR-Code, um eine Karte für die heutigen Spenden zu speichern",
+    "cardTitle": "Eine Karte für die heutigen Spenden speichern?",
+    "cardBody": "Der Gast scannt dies mit dem eigenen Handy. Gespeichert wird nur, wenn er dort zustimmt."
   },
   "scanGuestKiosk": {
     "welcome": "Willkommen bei {event}",

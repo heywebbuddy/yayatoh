@@ -11685,7 +11685,10 @@
     "guestOf": "{name} 的同伴",
     "placeTable": "{label} 号桌",
     "placeRow": "第 {label} 排",
-    "placeOnChart": "{chart}：{place}"
+    "placeOnChart": "{chart}：{place}",
+    "cardQrLabel": "保存银行卡用于今晚捐款的二维码",
+    "cardTitle": "要保存银行卡用于今晚的捐款吗？",
+    "cardBody": "请宾客用自己的手机扫描。除非宾客在手机上同意，否则不会保存任何信息。"
   },
   "scanGuestKiosk": {
     "welcome": "欢迎来到 {event}",

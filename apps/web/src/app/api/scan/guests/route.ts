@@ -2,6 +2,7 @@ import { guestSnapshotQuery, recordGuestArrivalsCommand } from '@yayatoh/checkin
 import { executeCommand, executeQuery } from '@yayatoh/kernel';
 import { problem, problemFor, problemResponse } from '@yayatoh/platform/http';
 import { ports } from '@/server/ports.ts';
+import { checkinCardEntry } from '@/server/saved-card.ts';
 import { scanDevice } from '@/server/scan-staff.ts';
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
@@ -17,9 +18,10 @@ export async function GET(req: Request) {
   const eventId = new URL(req.url).searchParams.get('eventId') ?? '';
   if (!UUID.test(eventId)) return problemResponse(problem('validation_failed', 'eventId'));
   try {
-    return Response.json(await executeQuery(guestSnapshotQuery, { eventId }, device.ctx, ports), {
-      headers: { 'cache-control': 'no-store' },
-    });
+    const snapshot = await executeQuery(guestSnapshotQuery, { eventId }, device.ctx, ports);
+    // M4.8e: while the event takes gifts, the card-saving code shown after a guest arrives.
+    const card = device.ctx.orgId ? await checkinCardEntry(device.ctx.orgId, eventId) : null;
+    return Response.json({ ...snapshot, card }, { headers: { 'cache-control': 'no-store' } });
   } catch (err) {
     return problemResponse(problemFor(err));
   }

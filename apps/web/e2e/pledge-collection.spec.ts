@@ -258,6 +258,47 @@ test.describe('cards on file and pledge collection (M4.8e)', () => {
     await guest.context.close();
   });
 
+  test('guest check-in in the Scan PWA (M4.4b) offers the card-saving code right after a guest arrives', async ({
+    page,
+    browser,
+  }) => {
+    const g = await gala(page);
+    await page.goto(`/o/${g.org}/e/${g.slug}/onsite`);
+    await page.getByLabel('Device name').fill(`Desk ${test.info().project.name}`);
+    await page.getByRole('button', { name: 'Add device' }).click();
+    const link = await page.getByTestId('scan-link').getAttribute('href');
+    expect(link).toMatch(/\/scan#e=[0-9a-f-]{36}&k=yyd_/);
+
+    // The door device: guest check-in by name, then the code for the guest's own phone.
+    const device = await phone(browser);
+    await device.page.goto(link ?? '');
+    const guests = device.page
+      .getByRole('navigation', { name: 'Scanner mode' })
+      .getByRole('button', { name: 'Guests' });
+    await guests.focus();
+    await device.page.keyboard.press('Enter');
+    await expect(device.page.getByTestId('checkin-card-qr')).toHaveCount(0);
+    await device.page.getByLabel('Guest or party name').fill('sofia');
+    await device.page.getByRole('button', { name: 'Check in Sofia Rivera' }).click();
+    await expect(device.page.getByTestId('guest-message')).toContainText('Sofia Rivera is checked in.');
+    const entry = device.page.getByTestId('checkin-card-qr');
+    await expect(
+      entry.getByRole('img', { name: "QR code to save a card for tonight's giving" }),
+    ).toBeVisible();
+    await expect(entry).toContainText("Saving a card for tonight's giving?");
+    const url = new URL((await entry.getAttribute('data-url')) ?? '');
+    expect(`${url.pathname}${url.search}`).toBe(`/events/${g.slug}/card?src=checkin`);
+    await expectAccessibleBothModes(device.page);
+    await device.context.close();
+
+    // The guest's own phone: the card page, with its consent step (nothing saved yet).
+    const guest = await phone(browser);
+    await guest.page.goto(`${url.pathname}${url.search}`);
+    await expect(guest.page.getByLabel('I authorize saving this card for tonight')).not.toBeChecked();
+    await expect(guest.page.getByRole('button', { name: 'Save my card' })).toBeVisible();
+    await guest.context.close();
+  });
+
   test('the checkout box sends the buyer to save a card after paying', async ({ page, browser }) => {
     const g = await gala(page);
     const buyer = await phone(browser);

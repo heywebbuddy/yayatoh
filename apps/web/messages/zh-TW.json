@@ -11685,7 +11685,10 @@
     "guestOf": "{name} 的同伴",
     "placeTable": "{label} 號桌",
     "placeRow": "第 {label} 排",
-    "placeOnChart": "{chart}：{place}"
+    "placeOnChart": "{chart}：{place}",
+    "cardQrLabel": "儲存信用卡以供今晚捐款的 QR 碼",
+    "cardTitle": "要儲存信用卡以供今晚捐款嗎？",
+    "cardBody": "請賓客用自己的手機掃描。除非賓客在手機上同意，否則不會儲存任何資料。"
   },
   "scanGuestKiosk": {
     "welcome": "歡迎來到 {event}",

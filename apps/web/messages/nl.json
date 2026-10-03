@@ -11685,7 +11685,10 @@
     "guestOf": "Gast van {name}",
     "placeTable": "Tafel {label}",
     "placeRow": "Rij {label}",
-    "placeOnChart": "{chart}: {place}"
+    "placeOnChart": "{chart}: {place}",
+    "cardQrLabel": "QR-code om een kaart op te slaan voor de giften van vanavond",
+    "cardTitle": "Een kaart opslaan voor de giften van vanavond?",
+    "cardBody": "De gast scant dit met de eigen telefoon. Er wordt niets opgeslagen tenzij die daar akkoord gaat."
   },
   "scanGuestKiosk": {
     "welcome": "Welkom bij {event}",

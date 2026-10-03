@@ -11685,7 +11685,10 @@
     "guestOf": "Acompañante de {name}",
     "placeTable": "Mesa {label}",
     "placeRow": "Fila {label}",
-    "placeOnChart": "{chart}: {place}"
+    "placeOnChart": "{chart}: {place}",
+    "cardQrLabel": "Código QR para guardar una tarjeta para las donaciones de esta noche",
+    "cardTitle": "¿Guardar una tarjeta para las donaciones de esta noche?",
+    "cardBody": "El invitado lo escanea con su propio teléfono. No se guarda nada a menos que lo acepte allí."
   },
   "scanGuestKiosk": {
     "welcome": "Bienvenido a {event}",

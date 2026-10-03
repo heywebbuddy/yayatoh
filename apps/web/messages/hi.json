@@ -11685,7 +11685,10 @@
     "guestOf": "{name} के अतिथि",
     "placeTable": "टेबल {label}",
     "placeRow": "पंक्ति {label}",
-    "placeOnChart": "{chart}: {place}"
+    "placeOnChart": "{chart}: {place}",
+    "cardQrLabel": "आज रात के दान के लिए कार्ड सहेजने का QR कोड",
+    "cardTitle": "आज रात के दान के लिए कार्ड सहेजना है?",
+    "cardBody": "मेहमान इसे अपने फ़ोन से स्कैन करते हैं। जब तक वे वहाँ सहमति न दें, कुछ भी सहेजा नहीं जाता।"
   },
   "scanGuestKiosk": {
     "welcome": "{event} में आपका स्वागत है",

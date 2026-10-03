@@ -133,6 +133,7 @@ export function GuestCheckinPanel({
       ) : null}
       <div role="status" aria-live="polite" data-testid="guest-message">
         {message ? <p className="text-body font-semibold text-success">{message}</p> : null}
+        {message && snap.card ? <CardSavingEntry card={snap.card} /> : null}
       </div>
       {!query.trim() && labels.length === 0 ? (
         <p className="text-body text-ink-2">{t('startHint')}</p>
@@ -218,5 +219,36 @@ export function GuestCheckinPanel({
         </ul>
       )}
     </section>
+  );
+}
+
+/**
+ * M4.8e on M4.4b's check-in (batch 3j merge): right after a guest arrives, while the event takes
+ * gifts, the card-saving code for them to scan with their own phone (works offline: it came with
+ * the snapshot). Saving a card stays opt-in on the guest's device (P4-14).
+ */
+function CardSavingEntry({ card }: { card: { url: string; size: number; d: string } }) {
+  const t = useTranslations('scanGuests');
+  return (
+    <div
+      className="flex flex-wrap items-center gap-4 rounded-card border border-line bg-surface px-4 py-3"
+      data-testid="checkin-card-qr"
+      data-url={card.url}
+    >
+      <svg
+        role="img"
+        aria-label={t('cardQrLabel')}
+        viewBox={`0 0 ${card.size} ${card.size}`}
+        shapeRendering="crispEdges"
+        className="size-32 shrink-0 rounded-tile border border-line text-black"
+      >
+        <rect width={card.size} height={card.size} className="fill-white" />
+        <path d={card.d} fill="currentColor" />
+      </svg>
+      <div className="flex min-w-0 flex-1 flex-col gap-1">
+        <p className="m-0 text-body font-semibold">{t('cardTitle')}</p>
+        <p className="m-0 text-caption text-ink-2">{t('cardBody')}</p>
+      </div>
+    </div>
   );
 }
