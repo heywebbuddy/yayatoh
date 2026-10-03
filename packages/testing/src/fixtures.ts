@@ -1650,7 +1650,7 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   });
   // Media (M1.4e): an event cover and the org logo (assets, variants, blobs in the dev store),
   // and a quota override row.
-  await uploadMedia(
+  const coverImage = await uploadMedia(
     ctx(),
     { ownerType: 'event', ownerId: event.id, slot: 'cover', alt: `${name} cover`, file: fixturePng('cover') },
     ports,
@@ -1682,22 +1682,12 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     createCtx({ orgId: org.id }),
     ports,
   );
-  // U10: an image uploaded to the media library, reused in the event's gallery (no new files).
-  const libraryImage = await uploadMedia(
-    ctx(),
-    {
-      ownerType: 'library',
-      ownerId: org.id,
-      slot: 'library',
-      alt: `${name} library`,
-      file: fixturePng('cover'),
-    },
-    ports,
-  );
+  // U10: the cover reused in the event's gallery from the media library (no new files: a reuse
+  // row whose variants name the cover's files).
   await reuseMedia(
     ctx(),
     {
-      sourceAssetId: libraryImage.asset.id,
+      sourceAssetId: coverImage.asset.id,
       target: { ownerType: 'event', ownerId: event.id, slot: 'gallery' },
       alt: `${name} gallery`,
     },
