@@ -2,7 +2,7 @@ You are the merge session for **Yayatoh 2.0** (repo heywebbuddy/yayatoh), batch 
 
 ## Branch and git
 You start on the build branch `m0.5-foundation-ey5gqp`. It carries batches 3c–3h **and design v2**.
-- If `origin/merge/next-3i` or `origin/merge/next-3k` is not an ancestor of the build branch, stop and report: both must land first.
+- If `origin/merge/next-3i` or `origin/merge/next-3j` is not an ancestor of the build branch, stop and report: both must land first.
 - `git fetch origin && git checkout -B merge/next-3k origin/m0.5-foundation-ey5gqp`
 - Publish with a normal push: `git push -u origin merge/next-3k`. Never push to any other branch. Never force-push. Never open PRs.
 - Every couple of hours, and **before your final gate**, fetch and merge the latest `origin/m0.5-foundation-ey5gqp` again.
