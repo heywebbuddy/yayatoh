@@ -3,7 +3,13 @@ import type { TenantTx } from '@yayatoh/db';
 import { exhibitorStaffingTx, sessionFillTx, sponsorTierCountsTx } from '@yayatoh/program';
 import { sessionWaitlistsTx } from '@yayatoh/registration';
 import { z } from 'zod';
-import { fillPct, KIOSK_IN_USE_MS, SESSION_NEAR_PCT, sessionLevel, WAITLIST_MAX } from './domain/conference.ts';
+import {
+  fillPct,
+  KIOSK_IN_USE_MS,
+  SESSION_NEAR_PCT,
+  sessionLevel,
+  WAITLIST_MAX,
+} from './domain/conference.ts';
 import { WIDGET_META } from './domain/widgets.ts';
 import { defineWidget } from './widgets.ts';
 
@@ -180,8 +186,11 @@ export const sessionFillWidget = defineWidget(
   },
 );
 
-/** Leads per exhibitor of an event (M5.6b lead retrieval; the app's port), exhibitor id → count. */
-export type ExhibitorLeads = (tx: TenantTx, eventId: string) => Promise<ReadonlyMap<string, number>>;
+/**
+ * Leads per exhibitor of an event (M5.6b lead retrieval; the app's port), exhibitor id → count;
+ * null when no lead source serves the event.
+ */
+export type ExhibitorLeads = (tx: TenantTx, eventId: string) => Promise<ReadonlyMap<string, number> | null>;
 
 export const ExhibitorActivityWidgetDto = z.object({
   exhibitors: Count,
@@ -223,8 +232,8 @@ export const exhibitorActivityWidget = (leads: ExhibitorLeads | null) =>
     };
   });
 
-/** Open sponsor deliverables past due for an event (M5.4b; the app's port). */
-export type OverdueDeliverables = (tx: TenantTx, eventId: string, now: Date) => Promise<number>;
+/** Open sponsor deliverables past due for an event (M5.4b; the app's port); null when not served. */
+export type OverdueDeliverables = (tx: TenantTx, eventId: string, now: Date) => Promise<number | null>;
 
 export const SponsorActivityWidgetDto = z.object({
   sponsors: Count,
@@ -239,6 +248,6 @@ export const sponsorActivityWidget = (deliverables: OverdueDeliverables | null) 
     return {
       sponsors: tiers.reduce((a, t) => a + t.sponsors, 0),
       tiers,
-      deliverablesOverdue: deliverables ? await deliverables(tx, scope.event.id, ctx.now) : null,
+      deliverablesOverdue: (await deliverables?.(tx, scope.event.id, ctx.now)) ?? null,
     };
   });

@@ -150,7 +150,13 @@ export const RULES: Readonly<Record<RuleKey, RuleDef>> = {
   campaignFailed: rule('campaignFailed', 'org', 'messaging', 'marketing:read', '/campaigns'),
   disputeDeadline: rule('disputeDeadline', 'org', 'payments', 'finance:read', '/disputes'),
   // M5.9a conference pack. Counts only; the fixing page holds the names.
-  sessionsNearCapacity: rule('sessionsNearCapacity', 'event', 'conference', 'events:read', '/e/{event}/sessions'),
+  sessionsNearCapacity: rule(
+    'sessionsNearCapacity',
+    'event',
+    'conference',
+    'events:read',
+    '/e/{event}/sessions',
+  ),
   sessionWaitlists: rule(
     'sessionWaitlists',
     'event',
@@ -174,7 +180,13 @@ export const RULES: Readonly<Record<RuleKey, RuleDef>> = {
     'events:read',
     '/e/{event}/speakers/tasks',
   ),
-  deliverablesOverdue: rule('deliverablesOverdue', 'event', 'conference', 'events:read', '/e/{event}/sponsors'),
+  deliverablesOverdue: rule(
+    'deliverablesOverdue',
+    'event',
+    'conference',
+    'events:read',
+    '/e/{event}/sponsors',
+  ),
   printersKiosksOffline: rule('printersKiosksOffline', 'event', 'door', 'events:read', '/e/{event}/onsite'),
   approvalBacklog: rule(
     'approvalBacklog',
@@ -183,7 +195,13 @@ export const RULES: Readonly<Record<RuleKey, RuleDef>> = {
     'attendees:read',
     '/e/{event}/registration/applications',
   ),
-  invoicesOverdue: rule('invoicesOverdue', 'event', 'payments', 'orders:read', '/e/{event}/registration/invoices'),
+  invoicesOverdue: rule(
+    'invoicesOverdue',
+    'event',
+    'payments',
+    'orders:read',
+    '/e/{event}/registration/invoices',
+  ),
 };
 
 export const isRuleKey = (v: string): v is RuleKey => (RULE_KEYS as readonly string[]).includes(v);

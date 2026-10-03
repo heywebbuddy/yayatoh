@@ -45,9 +45,9 @@ describe('conference pack widgets (M5.9a)', () => {
       expect(widgetAllowed(WIDGET_META[k], scope('owner', 'concert'))).toBe(false);
       expect(widgetAllowed(WIDGET_META[k], scope('owner', 'conference'))).toBe(true);
     }
-    expect(widgetAllowed(WIDGET_META.exhibitorActivity, scope('owner', 'conference', new Set(['core'])))).toBe(
-      false,
-    );
+    expect(
+      widgetAllowed(WIDGET_META.exhibitorActivity, scope('owner', 'conference', new Set(['core']))),
+    ).toBe(false);
     expect(widgetAllowed(WIDGET_META.sponsorActivity, scope('finance'))).toBe(false);
   });
 
@@ -62,7 +62,9 @@ describe('conference pack widgets (M5.9a)', () => {
     );
     expect(shown('owner', 'planning')).not.toContain('sessionAttendance');
     expect(shown('door', 'live')).toContain('sessionAttendance');
-    expect(shown('marketing', 'pre_show')).toEqual(expect.arrayContaining(['sessionFill', 'exhibitorActivity']));
+    expect(shown('marketing', 'pre_show')).toEqual(
+      expect.arrayContaining(['sessionFill', 'exhibitorActivity']),
+    );
     expect(shown('ops', 'wrap')).not.toContain('sessionFill');
     // Every listed default is allowed for its role in that mode.
     for (const role of CC_ROLES)

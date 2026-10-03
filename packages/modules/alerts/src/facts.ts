@@ -19,15 +19,15 @@ import { type SignalKind, salesTargets, signals } from './schema.ts';
 /**
  * M5.9a: conference facts that live in modules not on this build yet, behind ports the app
  * connects (fakes in dev and tests). Each reads inside the evaluation's tenant transaction; a
- * missing port leaves its rule quiet.
+ * missing port, or one answering `null` for the event, leaves its rule quiet.
  * - `exhibitorLeads`: leads per exhibitor (M5.6b lead retrieval), exhibitor id → count.
  * - `overdueDeliverables`: open sponsor deliverables past due (M5.4b).
  * - `printersOffline`: the event's badge printers offline (M5.5b's printer watchdog).
  */
 export interface ConferenceSources {
-  readonly exhibitorLeads?: (tx: TenantTx, eventId: string) => Promise<ReadonlyMap<string, number>>;
-  readonly overdueDeliverables?: (tx: TenantTx, eventId: string, now: Date) => Promise<number>;
-  readonly printersOffline?: (tx: TenantTx, eventId: string, now: Date) => Promise<number>;
+  readonly exhibitorLeads?: (tx: TenantTx, eventId: string) => Promise<ReadonlyMap<string, number> | null>;
+  readonly overdueDeliverables?: (tx: TenantTx, eventId: string, now: Date) => Promise<number | null>;
+  readonly printersOffline?: (tx: TenantTx, eventId: string, now: Date) => Promise<number | null>;
 }
 
 /** The conference pack's facts for one event (M5.9a), from the owning modules and the ports. */
@@ -64,10 +64,8 @@ export async function conferenceFactsTx(
     })),
     speakerTasksOverdue: tasks.assignments,
     speakersOverdue: tasks.speakers,
-    deliverablesOverdue: sources.overdueDeliverables
-      ? await sources.overdueDeliverables(tx, event.id, now)
-      : null,
-    printersOffline: sources.printersOffline ? await sources.printersOffline(tx, event.id, now) : null,
+    deliverablesOverdue: (await sources.overdueDeliverables?.(tx, event.id, now)) ?? null,
+    printersOffline: (await sources.printersOffline?.(tx, event.id, now)) ?? null,
     kiosksOffline: kiosks,
     approvalsPending: approvals.pending,
     oldestApplicationAt: approvals.oldestAt,

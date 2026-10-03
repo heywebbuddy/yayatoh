@@ -70,8 +70,12 @@ export interface ConferenceFacts {
 }
 
 /** A session at or over the "nearly full" line: by places held, or by people in the room while it runs. */
-export function sessionNearlyFull(s: ConferenceFacts['sessions'][number], t: Thresholds = THRESHOLDS): boolean {
-  const near = (n: number, cap: number | null) => cap !== null && cap > 0 && n * 100 >= t.sessionNearPct * cap;
+export function sessionNearlyFull(
+  s: ConferenceFacts['sessions'][number],
+  t: Thresholds = THRESHOLDS,
+): boolean {
+  const near = (n: number, cap: number | null) =>
+    cap !== null && cap > 0 && n * 100 >= t.sessionNearPct * cap;
   return near(s.enrolled, s.capacity) || (s.running && near(s.inRoom, s.capacity ?? s.roomCapacity));
 }
 
@@ -196,7 +200,8 @@ export function evaluateEventRules(
     );
 
   const untilStart = f.startsAt.getTime() - now.getTime();
-  if (f.conference) Object.assign(out, evaluateConferenceRules(f.conference, { live, around, untilStart, now }, t));
+  if (f.conference)
+    Object.assign(out, evaluateConferenceRules(f.conference, { live, around, untilStart, now }, t));
   if (untilStart > 0 && untilStart <= t.readinessWindowMs) {
     const blockers = (f.status === 'draft' ? 1 : 0) + (f.ticketTypes === 0 ? 1 : 0);
     if (blockers > 0)
@@ -260,7 +265,8 @@ export function evaluateConferenceRules(
   }
 
   const waitedTooLong =
-    c.oldestApplicationAt !== null && when.now.getTime() - c.oldestApplicationAt.getTime() >= t.approvalWaitMs;
+    c.oldestApplicationAt !== null &&
+    when.now.getTime() - c.oldestApplicationAt.getTime() >= t.approvalWaitMs;
   if (c.approvalsPending >= t.approvalBacklogMin || (c.approvalsPending > 0 && waitedTooLong))
     out.approvalBacklog = fire('warning', c.approvalsPending, { stale: waitedTooLong ? 1 : 0 });
   if (c.invoicesOverdue > 0) out.invoicesOverdue = fire('warning', c.invoicesOverdue);

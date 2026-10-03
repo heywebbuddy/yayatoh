@@ -19,7 +19,9 @@ const DAY = 24 * HOUR;
 const now = new Date('2030-05-01T12:00:00Z');
 const at = (ms: number) => new Date(now.getTime() + ms);
 
-const session = (s: Partial<ConferenceFacts['sessions'][number]> = {}): ConferenceFacts['sessions'][number] => ({
+const session = (
+  s: Partial<ConferenceFacts['sessions'][number]> = {},
+): ConferenceFacts['sessions'][number] => ({
   capacity: 100,
   enrolled: 10,
   roomCapacity: 200,
@@ -94,7 +96,11 @@ describe('conference pack rules (M5.9a)', () => {
       ],
     });
     expect(Object.keys(r)).toEqual(['sessionsNearCapacity']);
-    expect(r.sessionsNearCapacity).toMatchObject({ severity: 'warning', count: 3, params: { count: 3, full: 1 } });
+    expect(r.sessionsNearCapacity).toMatchObject({
+      severity: 'warning',
+      count: 3,
+      params: { count: 3, full: 1 },
+    });
     // Fixed (places added): it no longer fires.
     expect(fired({ sessions: [session({ capacity: 60, enrolled: 38 })] })).toEqual({});
   });
@@ -104,15 +110,19 @@ describe('conference pack rules (M5.9a)', () => {
     expect(sessionNearlyFull(inRoom)).toBe(true);
     expect(sessionNearlyFull({ ...inRoom, running: false })).toBe(false);
     expect(sessionNearlyFull({ ...inRoom, inRoom: 47 })).toBe(false);
-    expect(sessionNearlyFull(session({ capacity: 20, roomCapacity: 50, inRoom: 19, running: true }))).toBe(true);
-    expect(sessionNearlyFull(session({ capacity: null, roomCapacity: null, inRoom: 900, running: true }))).toBe(
-      false,
+    expect(sessionNearlyFull(session({ capacity: 20, roomCapacity: 50, inRoom: 19, running: true }))).toBe(
+      true,
     );
+    expect(
+      sessionNearlyFull(session({ capacity: null, roomCapacity: null, inRoom: 900, running: true })),
+    ).toBe(false);
   });
 
   it('a line longer than the threshold raises the waitlist alert with the longest line', () => {
     expect(fired({ sessions: [session({ waiting: THRESHOLDS.waitlistMax })] })).toEqual({});
-    const r = fired({ sessions: [session({ waiting: 11 }), session({ waiting: 30 }), session({ waiting: 2 })] });
+    const r = fired({
+      sessions: [session({ waiting: 11 }), session({ waiting: 30 }), session({ waiting: 2 })],
+    });
     expect(r.sessionWaitlists).toMatchObject({ count: 2, params: { longest: 30, max: 10 } });
   });
 
@@ -146,7 +156,10 @@ describe('conference pack rules (M5.9a)', () => {
       { people: 3, leads: 1 },
     ];
     expect(fired({ exhibitors }).exhibitorsNoStaff).toBeUndefined();
-    expect(fired({ exhibitors }, SOON).exhibitorsNoStaff).toMatchObject({ count: 2, params: { exhibitors: 3 } });
+    expect(fired({ exhibitors }, SOON).exhibitorsNoStaff).toMatchObject({
+      count: 2,
+      params: { exhibitors: 3 },
+    });
     expect(fired({ exhibitors }, LIVE).exhibitorsNoStaff).toMatchObject({ count: 2 });
   });
 
@@ -179,15 +192,22 @@ describe('conference pack rules (M5.9a)', () => {
       count: 10,
       params: { stale: 0 },
     });
-    expect(fired({ approvalsPending: 1, oldestApplicationAt: at(-48 * HOUR) }).approvalBacklog).toMatchObject({
-      count: 1,
-      params: { stale: 1 },
-    });
+    expect(fired({ approvalsPending: 1, oldestApplicationAt: at(-48 * HOUR) }).approvalBacklog).toMatchObject(
+      {
+        count: 1,
+        params: { stale: 1 },
+      },
+    );
   });
 
   it('overdue invoices raise a payments alert (counts only, never amounts)', () => {
     const r = fired({ invoicesOverdue: 2 });
-    expect(r.invoicesOverdue).toEqual({ severity: 'warning', count: 2, params: { count: 2 }, liveCritical: false });
+    expect(r.invoicesOverdue).toEqual({
+      severity: 'warning',
+      count: 2,
+      params: { count: 2 },
+      liveCritical: false,
+    });
   });
 
   it('nothing is raised once the event wraps or is cancelled', () => {
