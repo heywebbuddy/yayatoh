@@ -20,7 +20,6 @@ export async function drainOrgWebhooks(orgId: string): Promise<{ published: numb
   const done = await withTenant(ctx, (tx) =>
     processedPairsTx(
       tx,
-      [sub.name],
       events.map((e) => e.id),
     ),
   );
@@ -28,7 +27,7 @@ export async function drainOrgWebhooks(orgId: string): Promise<{ published: numb
   for (const e of events)
     if (
       sub.events.includes(`${e.type}@${e.version}`) &&
-      !done.has(`${sub.name}|${e.id}`) &&
+      !done.has(`${sub.name} ${e.id}`) &&
       (await consumeEvent(sub, e))
     )
       published += 1;
