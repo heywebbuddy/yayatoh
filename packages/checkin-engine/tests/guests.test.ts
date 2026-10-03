@@ -13,7 +13,11 @@ import {
 } from '../src/index.ts';
 
 let n = 0;
-const guest = (first: string | null, last: string | null, over: Partial<SnapshotGuest> = {}): SnapshotGuest => ({
+const guest = (
+  first: string | null,
+  last: string | null,
+  over: Partial<SnapshotGuest> = {},
+): SnapshotGuest => ({
   id: `00000000-0000-7000-8000-${String(++n).padStart(12, '0')}`,
   firstName: first,
   lastName: last,
@@ -115,7 +119,15 @@ describe('boardGroups (the A–Z board)', () => {
     const groups = boardGroups(snap, 'en');
     expect(groups.map((g) => g.letter)).toEqual(['A', 'C', 'G', 'L', '#']);
     const names = groups.flatMap((g) => g.entries.map((e) => e.name));
-    expect(names).toEqual(['Zed Ålund', 'Mei Chen', 'Ana García', 'Sam Lee', 'Sam Lee', 'Luis López', '3rd Wheel']);
+    expect(names).toEqual([
+      'Zed Ålund',
+      'Mei Chen',
+      'Ana García',
+      'Sam Lee',
+      'Sam Lee',
+      'Luis López',
+      '3rd Wheel',
+    ]);
     expect(names).not.toContain('Dee Clined');
     expect(names).not.toContain('Una Seated');
     expect(groups[0]?.entries[0]?.places).toEqual([{ chart: 'Reception', label: 'Table 9' }]);

@@ -88,7 +88,8 @@ export function matchGuestByName(snapshot: GuestSnapshot, typed: string): KioskM
 /** Every label the parties carry, A–Z (the staff screen's filter chips). */
 export function snapshotLabels(snapshot: GuestSnapshot, locale?: string): string[] {
   const seen = new Map<string, string>();
-  for (const p of snapshot.parties) for (const t of p.tags) if (!seen.has(t.toLowerCase())) seen.set(t.toLowerCase(), t);
+  for (const p of snapshot.parties)
+    for (const t of p.tags) if (!seen.has(t.toLowerCase())) seen.set(t.toLowerCase(), t);
   return [...seen.values()].sort((a, b) => a.localeCompare(b, locale, { sensitivity: 'base' }));
 }
 
@@ -155,7 +156,9 @@ export function boardGroups(snapshot: GuestSnapshot, locale?: string): BoardGrou
       rows.push({ entry: { guestId: g.id, name: g.name, places: g.places }, last, first: g.firstName ?? '' });
     }
   const cmp = (a: string, b: string) => a.localeCompare(b, locale, { sensitivity: 'base' });
-  rows.sort((a, b) => cmp(a.last, b.last) || cmp(a.first, b.first) || a.entry.guestId.localeCompare(b.entry.guestId));
+  rows.sort(
+    (a, b) => cmp(a.last, b.last) || cmp(a.first, b.first) || a.entry.guestId.localeCompare(b.entry.guestId),
+  );
   const groups: { letter: string; entries: BoardEntry[] }[] = [];
   for (const r of rows) {
     const letter = letterOf(r.last);

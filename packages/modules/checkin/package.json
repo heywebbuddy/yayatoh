@@ -20,6 +20,7 @@
     "@yayatoh/contracts": "workspace:*",
     "@yayatoh/db": "workspace:*",
     "@yayatoh/events": "workspace:*",
+    "@yayatoh/guests": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
     "@yayatoh/platform": "workspace:*",
     "@yayatoh/seating": "workspace:*",

@@ -30,7 +30,10 @@ export async function guestPlacesTx(tx: TenantTx, eventId: string): Promise<Gues
   const views = [
     { sub: null as { id: string; name: string } | null, view: plan },
     ...(await Promise.all(
-      plan.subEvents.map(async (s) => ({ sub: { id: s.id, name: s.name }, view: await viewTx(tx, eventId, s.id) })),
+      plan.subEvents.map(async (s) => ({
+        sub: { id: s.id, name: s.name },
+        view: await viewTx(tx, eventId, s.id),
+      })),
     )),
   ];
   const placesOf = new Map<string, GuestPlace[]>();
