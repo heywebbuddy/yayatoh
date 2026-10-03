@@ -1,5 +1,5 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import { expectAccessible, lastEmailedCode, signIn } from './helpers.ts';
+import { expectAccessibleBothModes, lastEmailedCode, signIn } from './helpers.ts';
 
 /**
  * M5.1c approval, groups and +1: the organizer makes a type "by application" with an auto-approve
@@ -187,13 +187,13 @@ test('the organizer makes a type by application with an auto-approve domain and 
   await expect(rulesCard(page, 'Applicants')).toContainText(`auto-approved domains: partner-${s}.test`);
   await expect(rulesCard(page, 'Applicants')).toContainText('1 on the member list');
   await expect(rulesCard(page, 'Plus one')).toContainText('+1 guest type: 1 guest per registrant');
-  await expectAccessible(page);
+  await expectAccessibleBothModes(page);
 
   // The queue starts empty, and says what to do.
   await page.getByRole('link', { name: 'Open the applications' }).click();
   await expect(page.getByRole('heading', { name: 'Applications', level: 1 })).toBeVisible();
   await expect(page.getByText('No applications waiting')).toBeVisible();
-  await expectAccessible(page);
+  await expectAccessibleBothModes(page);
 });
 
 test('apply, get auto-approved by domain, pay, then bring a +1', async ({ browser }) => {
@@ -202,7 +202,7 @@ test('apply, get auto-approved by domain, pay, then bring a +1', async ({ browse
   const email = `ana-${s}@partner-${s}.test`;
   await apply(page, email, 'Ana Partner');
   await expect(page.getByRole('heading', { name: "You're approved", level: 1 })).toBeVisible();
-  await expectAccessible(page);
+  await expectAccessibleBothModes(page);
   await page.getByRole('button', { name: 'Pay and confirm' }).click();
   await payOnFakePage(page);
   await expect(page).toHaveURL(/\/registration\/[0-9a-f-]{36}~/);
@@ -229,7 +229,7 @@ test('apply, get auto-approved by domain, pay, then bring a +1', async ({ browse
   await plus.getByRole('button', { name: 'Add guest' }).click();
   await expect(page.getByText('Gil Guest · Confirmed')).toBeVisible();
   await expect(page.getByText("You've added all the guests you can bring.")).toBeVisible();
-  await expectAccessible(page);
+  await expectAccessibleBothModes(page);
   await page.close();
 });
 
@@ -252,7 +252,7 @@ test('manual approval with a reason by keyboard; the applicant pays from the ema
   const drawer = page.getByRole('complementary', { name: 'Bo Applicant' });
   await expect(drawer).toContainText('Acme Research');
   await expect(drawer).toContainText('Hello from Bo Applicant.');
-  await expectAccessible(page);
+  await expectAccessibleBothModes(page);
   const decision = drawer.getByLabel('Decision');
   await decision.focus();
   await page.keyboard.press('Tab');
@@ -311,7 +311,7 @@ test('bulk deny with a template reason: emailed, never charged', async ({ page, 
   await expect(page.getByRole('region', { name: 'Bulk decision' }).getByRole('status')).toContainText(
     'Done: 1 decided, 0 not decided.',
   );
-  await expectAccessible(page);
+  await expectAccessibleBothModes(page);
 
   const link = await decisionLink(applicant, email, /^Your application for/);
   await applicant.goto(link);
@@ -330,7 +330,7 @@ test('group checkout with three names, then the payer replaces one', async ({ br
   await page.getByRole('link', { name: 'Registering several people? Register a group' }).click();
   await expect(page.getByRole('heading', { name: 'Register a group', level: 1 })).toBeVisible();
   await expect(page.getByRole('link', { name: '3 people' })).toHaveAttribute('aria-current', 'page');
-  await expectAccessible(page);
+  await expectAccessibleBothModes(page);
   const form = page.getByRole('form', { name: 'Group registration' });
   await form.getByRole('button', { name: 'Register 3 people' }).click();
   await expect(form.getByText('Enter your name.')).toBeVisible();
@@ -359,7 +359,7 @@ test('group checkout with three names, then the payer replaces one', async ({ br
       { timeout: 30_000 },
     )
     .toBe(3);
-  await expectAccessible(page);
+  await expectAccessibleBothModes(page);
   // Replace Ben (validation first).
   const ben = page.getByRole('listitem').filter({ has: page.getByRole('heading', { name: 'Ben Group' }) });
   await ben.getByText('Replace Ben Group').click();
@@ -391,7 +391,7 @@ test('the viewer reads the queue; every decision is refused', async ({ page, bro
   await viewer.getByRole('link', { name: 'Dan Applicant' }).click();
   await expect(viewer.getByRole('complementary', { name: 'Dan Applicant' })).toBeVisible();
   await expect(viewer.getByRole('button', { name: 'Save decision' })).toHaveCount(0);
-  await expectAccessible(viewer);
+  await expectAccessibleBothModes(viewer);
   await viewer.close();
   // The owner's open drawer, submitted as the viewer: refused by the server.
   await signIn(page);
@@ -413,7 +413,7 @@ test('Arabic: the queue, the applicant page and the group form render right-to-l
   await page.goto(`/ar${base}/registration/applications?status=all`);
   await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
-  await expectAccessible(page);
+  await expectAccessibleBothModes(page);
   // An applicant's page: apply in English first (the locale sticks once Arabic is visited).
   const visitor = await guest(browser);
   await apply(visitor, `rtl-${s}@example.test`, 'Rtl Applicant');
@@ -421,10 +421,10 @@ test('Arabic: the queue, the applicant page and the group form render right-to-l
   await visitor.goto(`/ar${path}`);
   await expect(visitor.locator('html')).toHaveAttribute('dir', 'rtl');
   await expect(visitor.getByRole('heading', { level: 1 })).toBeVisible();
-  await expectAccessible(visitor);
+  await expectAccessibleBothModes(visitor);
   await visitor.goto(`/ar/events/${slug}/register/group`);
   await expect(visitor.locator('html')).toHaveAttribute('dir', 'rtl');
   await expect(visitor.locator('select[name="pass-1"]')).toBeVisible();
-  await expectAccessible(visitor);
+  await expectAccessibleBothModes(visitor);
   await visitor.close();
 });

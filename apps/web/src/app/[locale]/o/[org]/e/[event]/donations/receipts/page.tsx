@@ -6,9 +6,21 @@ import {
   taxNoticeText,
 } from '@yayatoh/donations';
 import { executeQuery, formatMoney, money } from '@yayatoh/kernel';
-import { Card, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
+import {
+  Alert,
+  buttonClass,
+  Card,
+  CardHeader,
+  EmptyState,
+  PageHeader,
+  SectionHeader,
+  StatusPill,
+  Table,
+} from '@yayatoh/ui';
+import { ChevronDown, ReceiptText, Ticket } from 'lucide-react';
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { Crumbs } from '@/components/crumbs.tsx';
 import { type FieldSpec, ProgramForm } from '@/components/program-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { loadEvent } from '@/server/console.ts';
@@ -39,10 +51,21 @@ export default async function ReceiptsPage({
   setRequestLocale(locale);
   const { data, event: ev, can } = await loadEvent(org, event, 'donations');
   const t = await getTranslations('donations.receipts');
+  const tn = await getTranslations('nav');
+  const crumbs = (
+    <Crumbs
+      items={[
+        { label: data.org.name, href: `/o/${org}` },
+        { label: ev.name, href: `/o/${org}/e/${event}` },
+        { label: tn('donations'), href: `/o/${org}/e/${event}/donations` },
+        { label: t('title') },
+      ]}
+    />
+  );
   if (!can('orders:read'))
     return (
       <>
-        <PageHeader title={t('title')} />
+        <PageHeader breadcrumb={crumbs} title={t('title')} />
         <EmptyState title={t('noAccessTitle')} description={t('noAccessDescription')} />
       </>
     );
@@ -73,36 +96,39 @@ export default async function ReceiptsPage({
       defaultValue: description ?? undefined,
     },
   ];
+  const statusTone = { verified: 'success', rejected: 'danger', pending: 'waiting' } as const;
+  const receiptNo = (n: number) => `R-${String(n).padStart(5, '0')}`;
   return (
     <>
-      <p>
-        <Link href={`/o/${org}/e/${event}/donations`} className="text-body underline underline-offset-2">
-          {t('back')}
-        </Link>
-      </p>
-      <PageHeader title={t('title')} description={t('subtitle')} />
+      <PageHeader breadcrumb={crumbs} title={t('title')} description={t('subtitle')} />
+      {canWrite ? null : <Alert tone="info" title={t('viewerNotice')} />}
 
-      <Card className="flex flex-col gap-2">
-        <h2 className="text-section">{t('charityTitle')}</h2>
-        <StatusDot
-          status={status === 'verified' ? 'success' : status === 'rejected' ? 'danger' : 'warning'}
-          label={t(`charity.${status ?? 'none'}`)}
+      <Card size="panel" className="flex flex-col gap-3">
+        <CardHeader
+          title={t('charityTitle')}
+          actions={
+            <StatusPill
+              tone={status ? statusTone[status] : 'neutral'}
+              label={t(`charity.${status ?? 'none'}`)}
+            />
+          }
         />
-        <p className="text-body text-ink-2">{t(`charityBody.${status ?? 'none'}`)}</p>
-        <Link href={`/o/${org}/charity`} className="self-start text-body underline underline-offset-2">
+        <p className="m-0 text-body text-ink-2">{t(`charityBody.${status ?? 'none'}`)}</p>
+        <Link href={`/o/${org}/charity`} className={buttonClass('secondary', 'sm', 'self-start')}>
           {status ? t('charityLink') : t('charityStart')}
         </Link>
       </Card>
 
-      <section aria-labelledby="fmv-heading" className="flex flex-col gap-3">
-        <h2 id="fmv-heading" className="text-section">
-          {t('fmvTitle')}
-        </h2>
-        <p className="text-body text-ink-2">{t('fmvIntro')}</p>
+      <section aria-labelledby="fmv-heading" className="flex flex-col gap-4">
+        <SectionHeader id="fmv-heading" title={t('fmvTitle')} description={t('fmvIntro')} />
         {view.ticketTypes.length === 0 ? (
-          <EmptyState title={t('noTypesTitle')} description={t('noTypesDescription')} />
+          <EmptyState
+            icon={<Ticket strokeWidth={2} />}
+            title={t('noTypesTitle')}
+            description={t('noTypesDescription')}
+          />
         ) : (
-          <ul className="flex list-none flex-col gap-3 p-0">
+          <ul className="m-0 flex list-none flex-col gap-4 p-0">
             {view.ticketTypes.map((tt) => {
               const notice = quidProQuoNotice({
                 priceMinor: tt.priceMinor,
@@ -112,15 +138,24 @@ export default async function ReceiptsPage({
               return (
                 <li key={tt.ticketTypeId}>
                   <Card className="flex flex-col gap-3">
-                    <div className="flex flex-wrap items-baseline justify-between gap-2">
-                      <h3 className="text-body font-medium">{tt.name}</h3>
-                      <span className="text-caption text-ink-2">
-                        {tt.isDonation
-                          ? t('priceFrom', { price: fmt(tt.priceMinor, tt.currency) })
-                          : fmt(tt.priceMinor, tt.currency)}
-                      </span>
-                    </div>
-                    <p className="text-body">
+                    <CardHeader
+                      as="h3"
+                      title={tt.name}
+                      meta={
+                        <span className="tabular-nums">
+                          {tt.isDonation
+                            ? t('priceFrom', { price: fmt(tt.priceMinor, tt.currency) })
+                            : fmt(tt.priceMinor, tt.currency)}
+                        </span>
+                      }
+                    />
+                    <p
+                      className={
+                        tt.fmvMinor === null
+                          ? 'm-0 text-body text-ink-2'
+                          : 'm-0 text-body font-bold text-ink tabular-nums'
+                      }
+                    >
                       {tt.fmvMinor === null
                         ? t('noValue')
                         : t('valueLine', {
@@ -129,16 +164,21 @@ export default async function ReceiptsPage({
                           })}
                     </p>
                     {notice && !tt.isDonation ? (
-                      <p className="text-caption text-ink-2">
+                      <p className="m-0 rounded-tile border border-line bg-surface-2 px-4 py-3 text-caption text-ink-2">
                         {t('noticePreview', {
                           notice: taxNoticeText({ ...notice, currency: tt.currency }, locale).text,
                         })}
                       </p>
                     ) : null}
                     {canWrite ? (
-                      <details>
-                        <summary className="min-h-6 cursor-pointer text-caption text-ink-2">
+                      <details className="group border-t border-line pt-2">
+                        <summary className="inline-flex min-h-9 cursor-pointer list-none items-center gap-1.5 rounded-control text-[13px] font-bold text-primary-ink underline-offset-2 hover:underline [&::-webkit-details-marker]:hidden">
                           {t('setValueFor', { name: tt.name })}
+                          <ChevronDown
+                            aria-hidden="true"
+                            className="size-4 shrink-0 transition-transform duration-150 group-open:rotate-180"
+                            strokeWidth={2}
+                          />
                         </summary>
                         <div className="flex flex-col gap-3 pt-3">
                           <ProgramForm
@@ -168,56 +208,66 @@ export default async function ReceiptsPage({
             })}
           </ul>
         )}
-        {canWrite ? null : <p className="text-body text-ink-2">{t('viewerNotice')}</p>}
       </section>
 
-      <section aria-labelledby="receipts-heading" className="flex flex-col gap-3">
-        <h2 id="receipts-heading" className="text-section">
-          {t('receiptsTitle')}
-        </h2>
-        <Table<HostReceiptDto>
-          caption={t('receiptsCaption')}
-          rows={view.receipts}
-          rowKey={(r) => r.id}
-          empty={t('noReceipts')}
-          columns={[
-            {
-              key: 'number',
-              header: t('columns.number'),
-              mono: true,
-              cell: (r) => `R-${String(r.number).padStart(5, '0')}`,
-            },
-            { key: 'date', header: t('columns.date'), cell: (r) => when.format(r.paidAt) },
-            { key: 'donor', header: t('columns.donor'), cell: (r) => r.donorName },
-            { key: 'kind', header: t('columns.kind'), cell: (r) => t(`kind.${r.kind}`) },
-            {
-              key: 'amount',
-              header: t('columns.amount'),
-              align: 'end',
-              mono: true,
-              cell: (r) => fmt(r.amountMinor, r.currency),
-            },
-            {
-              key: 'deductible',
-              header: t('columns.deductible'),
-              align: 'end',
-              mono: true,
-              cell: (r) => (r.deductible ? fmt(r.deductibleMinor, r.currency) : t('notDeductible')),
-            },
-            {
-              key: 'pdf',
-              header: t('columns.pdf'),
-              cell: (r) => (
-                <a
-                  href={`${prefix}/o/${org}/e/${event}/donations/receipts/${r.id}/pdf`}
-                  className="inline-flex min-h-6 items-center underline underline-offset-2"
-                >
-                  {t('pdf', { number: `R-${String(r.number).padStart(5, '0')}` })}
-                </a>
-              ),
-            },
-          ]}
-        />
+      <section aria-labelledby="receipts-heading" className="flex flex-col gap-4">
+        <SectionHeader id="receipts-heading" title={t('receiptsTitle')} />
+        {view.receipts.length === 0 ? (
+          <EmptyState icon={<ReceiptText strokeWidth={2} />} title={t('noReceipts')} />
+        ) : (
+          <Table<HostReceiptDto>
+            caption={t('receiptsCaption')}
+            rows={view.receipts}
+            rowKey={(r) => r.id}
+            empty={t('noReceipts')}
+            columns={[
+              {
+                key: 'number',
+                header: t('columns.number'),
+                mono: true,
+                cell: (r) => receiptNo(r.number),
+              },
+              { key: 'date', header: t('columns.date'), cell: (r) => when.format(r.paidAt) },
+              {
+                key: 'donor',
+                header: t('columns.donor'),
+                cell: (r) => <span className="font-bold text-ink">{r.donorName}</span>,
+              },
+              { key: 'kind', header: t('columns.kind'), cell: (r) => t(`kind.${r.kind}`) },
+              {
+                key: 'amount',
+                header: t('columns.amount'),
+                align: 'end',
+                mono: true,
+                cell: (r) => fmt(r.amountMinor, r.currency),
+              },
+              {
+                key: 'deductible',
+                header: t('columns.deductible'),
+                align: 'end',
+                mono: true,
+                cell: (r) =>
+                  r.deductible ? (
+                    fmt(r.deductibleMinor, r.currency)
+                  ) : (
+                    <StatusPill tone="neutral" label={t('notDeductible')} />
+                  ),
+              },
+              {
+                key: 'pdf',
+                header: t('columns.pdf'),
+                cell: (r) => (
+                  <a
+                    href={`${prefix}/o/${org}/e/${event}/donations/receipts/${r.id}/pdf`}
+                    className={buttonClass('ghost', 'sm', 'text-primary-ink')}
+                  >
+                    {t('pdf', { number: receiptNo(r.number) })}
+                  </a>
+                ),
+              },
+            ]}
+          />
+        )}
       </section>
     </>
   );

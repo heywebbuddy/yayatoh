@@ -8807,7 +8807,8 @@
       "sponsoredBy": "Sponsorisée par {sponsor}",
       "shown": "Visible par les invités",
       "hidden": "Masqué aux invités",
-      "noSponsor": "Pas encore de sponsor"
+      "noSponsor": "Pas encore de sponsor",
+      "viewerNotice": "Vous pouvez voir les tables et les sponsors. Demandez à un propriétaire ou à un co-organisateur de nommer les invités ou de modifier les sponsors."
     },
     "public": {
       "metaTitle": "Nommez vos invités",

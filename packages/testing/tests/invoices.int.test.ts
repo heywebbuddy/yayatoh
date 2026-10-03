@@ -19,6 +19,7 @@ import {
   expireOrdersCommand,
   invoiceDocumentQuery,
   invoiceMailer,
+  localDay,
   orderInvoiceQuery,
   publicInvoice,
   recordInvoicePaymentCommand,
@@ -111,6 +112,13 @@ interface Conf {
  * `po`, a $1,200 all-in full pass, fee absorbed so the invoice is exactly $1,200.00) and the
  * default Member type (paid at checkout).
  */
+/**
+ * Today in the conference's timezone (America/Chicago): offline payments may not be dated after
+ * the event's local today, so a UTC date fails between UTC midnight and Chicago midnight (batch 3h
+ * merge: the full run hit that window).
+ */
+const eventToday = () => localDay(new Date(), 'America/Chicago');
+
 async function conference(
   o: OrgFixture = a,
   opts: { daysOut?: number; po?: 'off' | 'optional' | 'required'; capacity?: number } = {},
@@ -360,7 +368,7 @@ describe('a $1,200 invoice paid in two parts reconciles to the cent', () => {
         amountMinor: 60000,
         method: 'wire',
         reference: 'WIRE-2026-0042',
-        receivedOn: new Date().toISOString().slice(0, 10),
+        receivedOn: eventToday(),
         note: 'Received from Acme AP.',
       },
       a.ctx({ idempotencyKey: `wire-${r.order.id}` }),
@@ -434,7 +442,7 @@ describe('a $1,200 invoice paid in two parts reconciles to the cent', () => {
   it('validates amounts and dates, and refuses viewers and staff acting as a member', async () => {
     const c = await conference();
     const r = await register(c, 'checks@corp.test');
-    const today = new Date().toISOString().slice(0, 10);
+    const today = eventToday();
     const rec = (input: Record<string, unknown>, ctx: Ctx = a.ctx({ idempotencyKey: uuidv7() })) =>
       code(
         executeCommand(
@@ -830,7 +838,7 @@ describe('isolation', () => {
             orderId: r.order.id,
             amountMinor: 100,
             method: 'cash',
-            receivedOn: new Date().toISOString().slice(0, 10),
+            receivedOn: eventToday(),
           },
           b.ctx({ idempotencyKey: uuidv7() }),
           ports,

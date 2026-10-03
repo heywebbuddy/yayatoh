@@ -1,7 +1,7 @@
 import { checkoutTarget, publicEventBySlug } from '@yayatoh/events';
 import { formatMoney, money } from '@yayatoh/kernel';
 import { MAX_GROUP, publicGroupOptions } from '@yayatoh/registration';
-import { Card, EmptyState, Label, PageHeader } from '@yayatoh/ui';
+import { EmptyState, filterChipClass, Label, PageHeader } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
@@ -41,28 +41,32 @@ export default async function GroupRegisterPage({ params, searchParams }: Params
     >
       <PageHeader eyebrow={<Label>{ev.name}</Label>} title={t('title')} description={t('description')} />
       {passes.length === 0 ? (
-        <Card>
-          <EmptyState title={t('emptyTitle')} description={t('emptyDescription')} />
-        </Card>
+        <EmptyState title={t('emptyTitle')} description={t('emptyDescription')} />
       ) : (
         <>
-          <nav aria-label={t('countLabel')} className="flex flex-wrap items-center gap-2">
-            <span className="text-body text-ink-2">{t('howMany')}</span>
-            {[2, 3, 4, 5, 6, 8, 10].map((k) => (
-              <Link
-                key={k}
-                href={`/events/${slug}/register/group?people=${k}`}
-                aria-current={k === count ? 'page' : undefined}
-                className={`inline-flex min-h-11 min-w-11 items-center justify-center rounded-pill border px-3 text-body ${k === count ? 'border-ink bg-tag text-white' : 'border-line bg-surface'}`}
-              >
-                {t('peopleCount', { count: k })}
-              </Link>
-            ))}
+          <nav aria-label={t('countLabel')} className="flex flex-col gap-2.5">
+            <span className="text-[13px] font-bold text-ink">{t('howMany')}</span>
+            <ul className="m-0 flex list-none flex-wrap gap-2 p-0">
+              {[2, 3, 4, 5, 6, 8, 10].map((k) => (
+                <li key={k}>
+                  <Link
+                    href={`/events/${slug}/register/group?people=${k}`}
+                    aria-current={k === count ? 'page' : undefined}
+                    className={`${filterChipClass(k === count)} min-h-11! min-w-11 justify-center px-4! text-body! ${k === count ? '' : 'bg-surface'}`}
+                  >
+                    {t('peopleCount', { count: k })}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </nav>
           <GroupForm key={count} action={groupAction.bind(null, slug)} count={count} passes={passes} />
         </>
       )}
-      <Link href={`/events/${slug}/register`} className="self-start text-body underline underline-offset-2">
+      <Link
+        href={`/events/${slug}/register`}
+        className="inline-flex min-h-11 items-center self-start text-body text-ink-2 underline underline-offset-2 hover:text-ink"
+      >
         {t('backToRegister')}
       </Link>
     </main>

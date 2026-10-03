@@ -129,7 +129,7 @@ export function ScheduleSessionActions({
       <div aria-live="polite" className="flex flex-col gap-3">
         {done ? (
           <Alert
-            tone="info"
+            tone={done === 'dropped' || done === 'left' || done === 'declined' ? 'info' : 'success'}
             title={t(`done.${done}` as 'done.enrolled', { title, position: result.position ?? 0 })}
           />
         ) : null}
@@ -137,6 +137,7 @@ export function ScheduleSessionActions({
         {conflict ? (
           <div className="flex flex-col gap-3">
             <Alert
+              tone="warning"
               title={
                 result.reason === 'one_per_group'
                   ? t('conflict.group', {

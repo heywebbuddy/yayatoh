@@ -1,5 +1,5 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import { expectAccessible, signIn } from './helpers.ts';
+import { expectAccessible, expectAccessibleBothModes, signIn } from './helpers.ts';
 
 /**
  * M5.7a — live polls and moderated Q&A per session: the moderator console, the participant page
@@ -103,12 +103,12 @@ test.describe('live polls and Q&A (M5.7a)', () => {
     const s = await liveSession(page, 'Live Polls', { enable: false });
     // Off until turned on: the empty state says what to do next.
     await expect(page.getByText('Polls and Q&A are off for this session')).toBeVisible();
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
     await page.getByRole('button', { name: 'Turn on polls and Q&A' }).click();
     await expect(page.getByText('No polls yet')).toBeVisible();
     await expect(page.getByText('No questions waiting.')).toBeVisible();
     await expect(page.locator('[data-stream-state="live"]').first()).toBeVisible({ timeout: 15_000 });
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
 
     // Inline validation of a new poll.
     const form = page.getByRole('region', { name: 'New poll' });
@@ -130,7 +130,7 @@ test.describe('live polls and Q&A (M5.7a)', () => {
     await phone1.goto(s.participant);
     await expect(phone1.getByRole('heading', { name: s.title })).toBeVisible();
     await expect(phone1.getByText('No poll right now')).toBeVisible();
-    await expectAccessible(phone1);
+    await expectAccessibleBothModes(phone1);
 
     await poll.getByRole('button', { name: 'Open voting' }).click();
     await expect(status(page, 'Poll open for votes.')).toBeVisible();
@@ -175,7 +175,7 @@ test.describe('live polls and Q&A (M5.7a)', () => {
     await poll.getByRole('button', { name: 'Close voting' }).click();
     await expect(status(page, 'Voting closed.')).toBeVisible();
     await expect(card2.getByText('Closed')).toBeVisible({ timeout: 10_000 });
-    await expectAccessible(phone2);
+    await expectAccessibleBothModes(phone2);
     await Promise.all([phone1.context().close(), phone2.context().close()]);
   });
 
@@ -389,17 +389,17 @@ test.describe('live polls and Q&A (M5.7a)', () => {
       page.locator('[data-stage="presenter"] [data-stage-poll="How useful was this?"]'),
     ).toBeVisible();
     await expect(page.getByText('Results are hidden from the audience.')).toBeVisible();
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
 
     // Arabic, right to left: the participant page, the console and the big screen.
     await phone.goto(`/ar${s.participant}`);
     await expect(phone.locator('html')).toHaveAttribute('dir', 'rtl');
     await expect(phone.getByRole('heading', { name: 'الاستطلاعات' })).toBeVisible();
-    await expectAccessible(phone);
+    await expectAccessibleBothModes(phone);
     await page.goto(`/ar${s.live}`);
     await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
     await expect(page.getByRole('heading', { name: 'الأسئلة', exact: true })).toBeVisible();
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
     const display = (await page.getByTestId('display-link').getAttribute('href')) ?? '';
     await phone.goto(display.startsWith('/ar/') ? display : `/ar${display}`);
     await expect(phone.locator('html')).toHaveAttribute('dir', 'rtl');
@@ -432,7 +432,7 @@ test.describe('live polls and Q&A (M5.7a)', () => {
     await expect(viewer.getByTestId('display-link')).toHaveCount(0);
     await expect(viewer.getByRole('button', { name: 'Save settings' })).toHaveCount(0);
     await expect(viewer.getByRole('checkbox', { name: 'Take questions' })).toBeDisabled();
-    await expectAccessible(viewer);
+    await expectAccessibleBothModes(viewer);
     // The viewer's own stream works (members who read events), live.
     await expect(viewer.locator('[data-stream-state="live"]')).toBeVisible({ timeout: 15_000 });
     // Their sessions page has no "Turn on" for a session that is off either.

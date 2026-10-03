@@ -2,7 +2,7 @@ import { randomUUID } from 'node:crypto';
 import { catchUpGifts, publicGiving } from '@yayatoh/donations';
 import { checkoutTarget, publicEventBySlug } from '@yayatoh/events';
 import { formatMoney, money } from '@yayatoh/kernel';
-import { Card, EmptyState, Label, PageHeader } from '@yayatoh/ui';
+import { buttonClass, EmptyState, Label, ProgressBar } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
@@ -10,6 +10,7 @@ import { Link } from '@/i18n/navigation.ts';
 import { pageLocale } from '@/server/locale.ts';
 import { giveAction } from './actions.ts';
 import { GiveForm } from './give-form.tsx';
+import { GiveFrame, GiveHero } from './give-frame.tsx';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('donations.give');
@@ -41,24 +42,39 @@ export default async function GivePage({ params, searchParams }: Params) {
   const campaign =
     (c && UUID.test(c) ? giving.campaigns.find((x) => x.id === c) : undefined) ?? giving.campaigns[0] ?? null;
   const fmt = (minor: number, currency: string) => formatMoney(money(minor, currency), locale);
-  const back = (
-    <Link
-      href={`/events/${slug}`}
-      className="inline-flex min-h-11 items-center self-start text-body underline underline-offset-2"
-    >
-      {t('backToEvent')}
-    </Link>
-  );
+  const chip =
+    'inline-flex min-h-11 items-center rounded-pill border border-line bg-surface px-4 text-body font-bold text-ink-2 glass transition-colors duration-150 hover:border-line-strong hover:text-ink aria-[current=page]:border-transparent aria-[current=page]:bg-tag aria-[current=page]:text-tag-ink';
   return (
-    <main
-      id="main"
-      className="mx-auto flex min-h-dvh w-full max-w-xl flex-col gap-6 px-4 py-8 sm:px-6 sm:py-14"
-    >
-      <PageHeader
-        eyebrow={<Label>{ev.name}</Label>}
-        title={campaign ? campaign.name : t('title')}
-        description={campaign?.description ?? undefined}
-      />
+    <GiveFrame organizer={ev.organizerName}>
+      <GiveHero>
+        <Label tone="inverse">{ev.name}</Label>
+        <h1 className="m-0 text-[34px] leading-[1.05] font-extrabold tracking-[-0.04em] md:text-title">
+          {campaign ? campaign.name : t('title')}
+        </h1>
+        {campaign?.description ? (
+          <p className="m-0 text-[15px] leading-relaxed text-white/90">{campaign.description}</p>
+        ) : null}
+        {giving.available && campaign ? (
+          <div className="mt-3 flex flex-col gap-2.5">
+            <p className="m-0 text-[22px] leading-tight font-extrabold tracking-[-0.02em] tabular-nums">
+              {t('raised', {
+                raised: fmt(campaign.raisedMinor, campaign.currency),
+                goal: fmt(campaign.goalMinor, campaign.currency),
+              })}
+            </p>
+            <ProgressBar
+              value={Math.min(campaign.raisedMinor, campaign.goalMinor)}
+              max={campaign.goalMinor}
+              label={t('progressLabel')}
+              tone="success"
+              className="bg-white/25"
+            />
+            <p className="m-0 text-body font-semibold text-white/90">
+              {t('giftCount', { count: campaign.giftCount })}
+            </p>
+          </div>
+        ) : null}
+      </GiveHero>
       {!giving.available ? (
         <EmptyState title={t('unavailableTitle')} description={t('unavailableBody')} />
       ) : !campaign ? (
@@ -72,28 +88,13 @@ export default async function GivePage({ params, searchParams }: Params) {
                   key={x.id}
                   href={`/events/${slug}/give?c=${x.id}`}
                   aria-current={x.id === campaign.id ? 'page' : undefined}
-                  className="inline-flex min-h-11 items-center rounded-pill border border-line bg-surface px-4 text-body aria-[current=page]:border-ink"
+                  className={chip}
                 >
                   {x.name}
                 </Link>
               ))}
             </nav>
           ) : null}
-          <Card className="flex flex-col gap-2">
-            <p className="text-body">
-              {t('raised', {
-                raised: fmt(campaign.raisedMinor, campaign.currency),
-                goal: fmt(campaign.goalMinor, campaign.currency),
-              })}
-            </p>
-            <progress
-              className="h-2 w-full accent-primary"
-              max={campaign.goalMinor}
-              value={Math.min(campaign.raisedMinor, campaign.goalMinor)}
-              aria-label={t('progressLabel')}
-            />
-            <p className="text-caption text-ink-2">{t('giftCount', { count: campaign.giftCount })}</p>
-          </Card>
           <GiveForm
             key={campaign.id}
             campaign={campaign}
@@ -101,7 +102,9 @@ export default async function GivePage({ params, searchParams }: Params) {
           />
         </>
       )}
-      {back}
-    </main>
+      <Link href={`/events/${slug}`} className={buttonClass('secondary', 'md', 'self-start')}>
+        {t('backToEvent')}
+      </Link>
+    </GiveFrame>
   );
 }

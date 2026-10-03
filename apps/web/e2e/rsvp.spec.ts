@@ -6,7 +6,7 @@ import { closePools } from '@yayatoh/db';
 import { resolveOrgSlug } from '@yayatoh/tenancy';
 import { type RsvpScenario, rsvpScenario } from '@yayatoh/testing';
 import { prepareZXingModule, readBarcodes } from 'zxing-wasm/reader';
-import { expectAccessible, passHumanCheck, signIn } from './helpers.ts';
+import { expectAccessible, expectAccessibleBothModes, passHumanCheck, signIn } from './helpers.ts';
 
 /**
  * M4.1d: the RSVP flow. A party answers on its own mobile-first page, reached by its link, the
@@ -65,7 +65,7 @@ test.describe('RSVP (M4.1d)', () => {
     await expect(page.getByRole('group', { name: 'Reception', exact: true })).toBeVisible();
     await expect(pair(page, 'Ana García, Reception')).toHaveCount(0);
     await expect(page.getByText(/The garden/)).toBeVisible();
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
 
     // Nothing chosen: the first missing guest is named.
     await page.getByRole('button', { name: 'Send RSVP' }).click();
@@ -74,7 +74,7 @@ test.describe('RSVP (M4.1d)', () => {
         .getByRole('alert')
         .filter({ hasText: 'Please answer for Luis López for every part of the celebration.' }),
     ).toBeVisible();
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
 
     for (const g of ['Luis López, Ceremony', "Luis's guest, Ceremony", 'Ana García, Ceremony'])
       await answer(page, g, 'Attending');
@@ -84,7 +84,7 @@ test.describe('RSVP (M4.1d)', () => {
     await expect(page.getByText("Enter your guest's first name.")).toBeVisible();
     await expect(page.getByLabel('First name')).toBeFocused();
     await expect(page.getByLabel('First name')).toHaveAttribute('aria-invalid', 'true');
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
 
     await page.getByLabel('First name').fill('Sam');
     await page.getByLabel('Last name (optional)').fill('Lee');
@@ -93,7 +93,7 @@ test.describe('RSVP (M4.1d)', () => {
     await expect(
       page.getByRole('status').filter({ hasText: 'Thank you! Your RSVP is saved.' }),
     ).toBeVisible();
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
 
     // Persisted: a fresh load shows the answers and the named plus-one.
     await page.goto(link(s.garcia.token));
@@ -155,7 +155,7 @@ test.describe('RSVP (M4.1d)', () => {
     await page.goto(`${console_(s)}/guests/rsvp`);
     await expect(page.getByRole('heading', { name: 'RSVP', level: 1 })).toBeVisible();
     await expect(page.getByTestId('rsvp-find-url')).toContainText(`/rsvp/find/${s.lookupCode}`);
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
     await page.getByRole('link', { name: 'Link, QR code and PIN for Garcia' }).click();
     await expect(page.getByRole('heading', { name: 'RSVP: Garcia', level: 1 })).toBeVisible();
     await expect(page.getByTestId('party-rsvp-state')).toHaveText('Invited');
@@ -174,7 +174,7 @@ test.describe('RSVP (M4.1d)', () => {
     expect(await decodeQr((await qr.locator('path').getAttribute('d')) ?? '')).toBe(url);
     await expect(page.getByTestId('party-rsvp-pin')).toHaveText(s.garcia.pin);
     await expect(page.getByTestId('party-rsvp-find-url')).toContainText(`/rsvp/find/${s.lookupCode}`);
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
 
     await page.getByRole('button', { name: 'Mark as sent' }).click();
     // The state and its date replace the button.
@@ -219,7 +219,7 @@ test.describe('RSVP (M4.1d)', () => {
     await expect(page.getByRole('heading', { name: 'Find your invitation', level: 1 })).toBeVisible();
     // The page names no event, no host and no guest.
     await expect(page.getByText(s.eventName)).toHaveCount(0);
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
 
     const find = page.getByRole('button', { name: 'Find my invitation' });
     await find.click();
@@ -229,7 +229,7 @@ test.describe('RSVP (M4.1d)', () => {
     await page.getByLabel('PIN').fill('12');
     await find.click();
     await expect(page.getByText('Enter the 6-digit PIN from your invitation.')).toBeVisible();
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
 
     const wrongPin = String((Number(s.garcia.pin) + 1) % 1_000_000).padStart(6, '0');
     const noMatch =
@@ -250,7 +250,7 @@ test.describe('RSVP (M4.1d)', () => {
       await expect(page).toHaveURL(new RegExp(`/rsvp/find/${s.lookupCode.toLowerCase()}$`));
     }
     expect(new Set(answers).size).toBe(1);
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
 
     // The right full name (any case and spacing) and PIN open the party's page.
     await page.getByLabel('Full name').fill('  ana   GARCÍA ');
@@ -273,7 +273,7 @@ test.describe('RSVP (M4.1d)', () => {
     }
     await submit(page, find);
     await expect(page.getByRole('group', { name: 'One more step' })).toBeVisible();
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
     // Solve it and try with the right PIN.
     await passHumanCheck(page);
     await page.getByLabel('PIN').fill(s.chen.pin);
@@ -295,7 +295,7 @@ test.describe('RSVP (M4.1d)', () => {
     ).toBeVisible();
     await expect(phone.getByRole('button', { name: 'Send RSVP' })).toHaveCount(0);
     await expect(phone.getByText('Luis López: No answer')).toHaveCount(2);
-    await expectAccessible(phone);
+    await expectAccessibleBothModes(phone);
 
     await signIn(page);
     await page.goto(`${console_(s)}/guests`);
@@ -393,7 +393,7 @@ test.describe('RSVP (M4.1d)', () => {
     await expect(page.getByTestId('party-rsvp-pin')).toHaveCount(0);
     await expect(page.getByTestId('party-rsvp-qr')).toHaveCount(0);
     await expect(page.getByText(s.garcia.pin)).toHaveCount(0);
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
   });
 
   test('the host sets the deadline and turns name lookup off; the paper address stops working', async ({
@@ -412,7 +412,7 @@ test.describe('RSVP (M4.1d)', () => {
     await expect(page.getByText(/RSVPs close on January 1, 2020/)).toBeVisible();
     await expect(page.getByText('Finding an invitation by name and PIN is off.')).toBeVisible();
     await expect(page.getByLabel('Deadline (America/Chicago)')).toHaveValue('2020-01-01T12:00');
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
     const res = await page.goto(`/rsvp/find/${s.lookupCode}`);
     expect(res?.status()).toBe(404);
   });
@@ -425,16 +425,16 @@ test.describe('RSVP (M4.1d)', () => {
       page.getByRole('heading', { name: 'الرد على الدعوة: The Garcia family', level: 1 }),
     ).toBeVisible();
     await expect(page.getByRole('button', { name: 'إرسال الرد' })).toBeVisible();
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
     await page.goto(`/ar/rsvp/find/${s.lookupCode}`);
     await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
     await expect(page.getByRole('heading', { name: 'العثور على دعوتك', level: 1 })).toBeVisible();
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
     await signIn(page);
     await page.goto(`/ar${console_(s)}/guests/rsvp`);
     await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
     await expect(page.getByRole('heading', { name: 'الردود', level: 1 })).toBeVisible();
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
   });
 });
 

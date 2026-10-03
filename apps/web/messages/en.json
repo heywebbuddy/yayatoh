@@ -8807,7 +8807,8 @@
       "sponsoredBy": "Sponsored by {sponsor}",
       "shown": "Shown to guests",
       "hidden": "Hidden from guests",
-      "noSponsor": "No sponsor yet"
+      "noSponsor": "No sponsor yet",
+      "viewerNotice": "You can see the tables and sponsors. Ask an owner or co-host to name guests or change sponsors."
     },
     "public": {
       "metaTitle": "Name your guests",

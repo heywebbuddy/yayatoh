@@ -1,5 +1,6 @@
 import { exemptProblem } from '@yayatoh/donations';
-import { Alert, Button, Card, PageHeader, StatusDot } from '@yayatoh/ui';
+import { Alert, Button, buttonClass, Card, cx, PageHeader, StatusDot, StatusPill } from '@yayatoh/ui';
+import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
@@ -9,7 +10,11 @@ import { charityOfOrg, irsList } from '@/server/charities.ts';
 import { requireStaff } from '@/server/staff.ts';
 import { rejectCharityAction, verifyCharityAction } from './actions.ts';
 
-const field = 'min-h-10 rounded-pill border border-line bg-surface px-4 text-body';
+const field = 'field w-full';
+const label = 'text-[13px] font-bold text-ink';
+const term = 'text-caption font-bold text-ink-2';
+const value = 'm-0 text-body text-ink';
+const tone = { pending: 'waiting', verified: 'success', rejected: 'danger' } as const;
 
 export async function generateMetadata() {
   const t = await getTranslations('charities');
@@ -52,107 +57,119 @@ export default async function CharityReviewPage({
   const when = new Intl.DateTimeFormat('en', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'UTC' });
   return (
     <Shell staff={staff}>
-      <p>
-        <Link href="/charities" className="text-body underline underline-offset-2">
-          {t('back')}
-        </Link>
-      </p>
+      <Link href="/charities" className={buttonClass('ghost', 'sm', 'self-start')}>
+        <ArrowLeft aria-hidden="true" strokeWidth={2} className="rtl:-scale-x-100" />
+        {t('back')}
+      </Link>
       <PageHeader title={t('reviewHeading', { org: profile.orgName })} description={t('reviewDescription')} />
-      {done ? <Alert tone="info" title={t(`done.${done === 'verified' ? 'verified' : 'rejected'}`)} /> : null}
+      {done ? (
+        <Alert
+          tone={done === 'verified' ? 'success' : 'info'}
+          title={t(`done.${done === 'verified' ? 'verified' : 'rejected'}`)}
+        />
+      ) : null}
       {error ? (
         <Alert title={t.has(`errors.${error}`) ? t(`errors.${error}`) : t('errors.internal')} />
       ) : null}
 
-      <section aria-labelledby="profile-heading" className="flex flex-col gap-3">
-        <h2 id="profile-heading" className="text-section">
-          {t('profileTitle')}
-        </h2>
-        <Card className="flex flex-col gap-3">
-          <StatusDot
-            status={
-              profile.status === 'verified' ? 'success' : profile.status === 'rejected' ? 'danger' : 'warning'
-            }
-            label={t(`statuses.${profile.status}`)}
-          />
-          <dl className="grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-[auto_1fr]">
-            <dt className="text-caption text-ink-2">{t('legalName')}</dt>
-            <dd className="text-body">{profile.legalName}</dd>
-            <dt className="text-caption text-ink-2">{t('ein')}</dt>
-            <dd className="font-mono text-body">{profile.ein}</dd>
-            <dt className="text-caption text-ink-2">{t('kind')}</dt>
-            <dd className="text-body">{t(`kinds.${profile.exemptKind}`)}</dd>
-            {profile.sponsorName ? (
-              <>
-                <dt className="text-caption text-ink-2">{t('sponsor')}</dt>
-                <dd className="text-body">
-                  {profile.sponsorName} · <span className="font-mono">{profile.sponsorEin}</span>
-                </dd>
-              </>
-            ) : null}
-            {profile.address ? (
-              <>
-                <dt className="text-caption text-ink-2">{t('address')}</dt>
-                <dd className="text-body">{profile.address}</dd>
-              </>
-            ) : null}
-            <dt className="text-caption text-ink-2">{t('submitted')}</dt>
-            <dd className="text-body">
-              {when.format(profile.submittedAt)} UTC · {t('version', { version: profile.version })}
-            </dd>
-            {profile.reviewNote ? (
-              <>
-                <dt className="text-caption text-ink-2">{t('note')}</dt>
-                <dd className="text-body">{profile.reviewNote}</dd>
-              </>
-            ) : null}
-          </dl>
-        </Card>
-      </section>
-
-      <section aria-labelledby="irs-heading" className="flex flex-col gap-3">
-        <h2 id="irs-heading" className="text-section">
-          {t('irsTitle', { ein: checkedEin })}
-        </h2>
-        <Card className="flex flex-col gap-3">
-          {!irs ? (
-            <p className="text-body">{t('irsUnavailable')}</p>
-          ) : (
-            <>
-              <p className="text-caption text-ink-2">{t(`source.${irs.source}`)}</p>
-              {record ? (
-                <dl className="grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-[auto_1fr]">
-                  <dt className="text-caption text-ink-2">{t('irsName')}</dt>
-                  <dd className="text-body">
-                    {record.name}{' '}
-                    <span className="text-caption text-ink-2">
-                      ({nameMatches ? t('nameMatches') : t('nameDiffers')})
-                    </span>
+      <div className="grid items-start gap-4 lg:grid-cols-2">
+        <section aria-labelledby="profile-heading" className="flex min-w-0 flex-col gap-3">
+          <h2 id="profile-heading" className="m-0 text-card text-ink">
+            {t('profileTitle')}
+          </h2>
+          <Card size="panel" className="flex flex-col gap-4">
+            <StatusPill
+              tone={tone[profile.status]}
+              label={t(`statuses.${profile.status}`)}
+              className="self-start"
+            />
+            <dl className="m-0 grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-[auto_1fr]">
+              <dt className={term}>{t('legalName')}</dt>
+              <dd className={value}>{profile.legalName}</dd>
+              <dt className={term}>{t('ein')}</dt>
+              <dd className={cx(value, 'font-mono')}>{profile.ein}</dd>
+              <dt className={term}>{t('kind')}</dt>
+              <dd className={value}>{t(`kinds.${profile.exemptKind}`)}</dd>
+              {profile.sponsorName ? (
+                <>
+                  <dt className={term}>{t('sponsor')}</dt>
+                  <dd className={value}>
+                    {profile.sponsorName} · <span className="font-mono">{profile.sponsorEin}</span>
                   </dd>
-                  <dt className="text-caption text-ink-2">{t('irsPlace')}</dt>
-                  <dd className="text-body">{[record.city, record.state].filter(Boolean).join(', ')}</dd>
-                  <dt className="text-caption text-ink-2">{t('irsSubsection')}</dt>
-                  <dd className="font-mono text-body">{record.subsection}</dd>
-                  <dt className="text-caption text-ink-2">{t('irsDeductibility')}</dt>
-                  <dd className="font-mono text-body">{record.deductibility}</dd>
-                  <dt className="text-caption text-ink-2">{t('irsStatus')}</dt>
-                  <dd className="font-mono text-body">{record.status}</dd>
-                </dl>
+                </>
               ) : null}
-              <StatusDot
-                status={problem ? 'danger' : 'success'}
-                label={problem ? t(`problems.${problem}`) : t('eligible')}
-              />
-            </>
-          )}
-        </Card>
-      </section>
+              {profile.address ? (
+                <>
+                  <dt className={term}>{t('address')}</dt>
+                  <dd className={value}>{profile.address}</dd>
+                </>
+              ) : null}
+              <dt className={term}>{t('submitted')}</dt>
+              <dd className={cx(value, 'tabular-nums')}>
+                {when.format(profile.submittedAt)} UTC · {t('version', { version: profile.version })}
+              </dd>
+              {profile.reviewNote ? (
+                <>
+                  <dt className={term}>{t('note')}</dt>
+                  <dd className={value}>{profile.reviewNote}</dd>
+                </>
+              ) : null}
+            </dl>
+          </Card>
+        </section>
+
+        <section aria-labelledby="irs-heading" className="flex min-w-0 flex-col gap-3">
+          <h2 id="irs-heading" className="m-0 text-card text-ink">
+            {t('irsTitle', { ein: checkedEin })}
+          </h2>
+          <Card size="panel" className="flex flex-col gap-4">
+            {!irs ? (
+              <Alert tone="warning" title={t('irsUnavailable')} />
+            ) : (
+              <>
+                <p className="m-0 text-caption text-ink-2">{t(`source.${irs.source}`)}</p>
+                {record ? (
+                  <dl className="m-0 grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-[auto_1fr]">
+                    <dt className={term}>{t('irsName')}</dt>
+                    <dd className={value}>
+                      {record.name}{' '}
+                      <span
+                        className={cx(
+                          'text-caption font-bold',
+                          nameMatches ? 'text-success' : 'text-warning',
+                        )}
+                      >
+                        ({nameMatches ? t('nameMatches') : t('nameDiffers')})
+                      </span>
+                    </dd>
+                    <dt className={term}>{t('irsPlace')}</dt>
+                    <dd className={value}>{[record.city, record.state].filter(Boolean).join(', ')}</dd>
+                    <dt className={term}>{t('irsSubsection')}</dt>
+                    <dd className={cx(value, 'font-mono')}>{record.subsection}</dd>
+                    <dt className={term}>{t('irsDeductibility')}</dt>
+                    <dd className={cx(value, 'font-mono')}>{record.deductibility}</dd>
+                    <dt className={term}>{t('irsStatus')}</dt>
+                    <dd className={cx(value, 'font-mono')}>{record.status}</dd>
+                  </dl>
+                ) : null}
+                <div className="rounded-tile border border-line bg-surface-2 px-4 py-3">
+                  <StatusDot
+                    status={problem ? 'danger' : 'success'}
+                    label={problem ? t(`problems.${problem}`) : t('eligible')}
+                  />
+                </div>
+              </>
+            )}
+          </Card>
+        </section>
+      </div>
 
       {staff.can('charities') ? (
         <section aria-labelledby="verdict-heading" className="flex flex-col gap-3">
-          <h2 id="verdict-heading" className="text-section">
+          <h2 id="verdict-heading" className="m-0 text-card text-ink">
             {t('verdictTitle')}
           </h2>
-          <Card className="flex flex-col gap-6">
+          <Card size="panel" className="flex flex-col gap-5">
             {!problem && profile.status !== 'verified' ? (
               <form
                 action={verifyCharityAction.bind(null, orgId, profile.version)}
@@ -160,7 +177,7 @@ export default async function CharityReviewPage({
                 className="flex flex-wrap items-end gap-3"
               >
                 <div className="flex min-w-60 flex-1 flex-col gap-1.5">
-                  <label htmlFor="verify-note" className="text-caption text-ink-2">
+                  <label htmlFor="verify-note" className={label}>
                     {t('verifyNote')}
                   </label>
                   <input id="verify-note" name="note" maxLength={500} className={field} />
@@ -168,17 +185,17 @@ export default async function CharityReviewPage({
                 <Button type="submit">{t('verify')}</Button>
               </form>
             ) : (
-              <p className="text-body text-ink-2">
+              <p className="m-0 text-body text-ink-2">
                 {profile.status === 'verified' ? t('alreadyVerified') : t('cannotVerify')}
               </p>
             )}
             <form
               action={rejectCharityAction.bind(null, orgId, profile.version)}
               aria-label={t('rejectForm')}
-              className="flex flex-wrap items-end gap-3"
+              className="flex flex-wrap items-end gap-3 border-t border-line pt-5"
             >
               <div className="flex min-w-60 flex-1 flex-col gap-1.5">
-                <label htmlFor="reject-note" className="text-caption text-ink-2">
+                <label htmlFor="reject-note" className={label}>
                   {t('rejectNote')}
                 </label>
                 <input
@@ -190,7 +207,7 @@ export default async function CharityReviewPage({
                   className={field}
                 />
               </div>
-              <Button type="submit" variant="secondary">
+              <Button type="submit" variant="danger">
                 {profile.status === 'verified' ? t('withdraw') : t('reject')}
               </Button>
             </form>

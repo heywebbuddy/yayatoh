@@ -1,5 +1,12 @@
 import { type BrowserContext, expect, type Page, test } from '@playwright/test';
-import { ageSession, codeForKey, confirmStepUp, expectAccessible, newUser, stepUpDialog } from './helpers.ts';
+import {
+  ageSession,
+  codeForKey,
+  confirmStepUp,
+  expectAccessibleBothModes,
+  newUser,
+  stepUpDialog,
+} from './helpers.ts';
 
 /**
  * M4.8a donations: the gala Donations tab (campaigns, levels, gifts, CSV), the public giving page
@@ -70,7 +77,7 @@ test.describe('donations (M4.8a)', () => {
     await expect(page.getByText('No campaigns yet')).toBeVisible();
     await expect(page.getByText('No gifts yet. Share the giving page to start.')).toBeVisible();
     await expect(page.getByText('Connect Stripe to accept gifts')).toHaveCount(0);
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
 
     const form = page.getByRole('region', { name: 'Add campaign' });
     await form.getByRole('button', { name: 'Add campaign' }).click();
@@ -108,7 +115,7 @@ test.describe('donations (M4.8a)', () => {
       'href',
       `/events/${g.slug}/give`,
     );
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
 
     // Persisted; a level can be removed again.
     await page.reload();
@@ -145,7 +152,7 @@ test.describe('donations (M4.8a)', () => {
     await expect(guest.getByRole('heading', { name, level: 1 })).toBeVisible();
     await expect(guest.getByText('$0.00 raised of $25,000.00')).toBeVisible();
     await expect(guest.getByText('Be the first to give')).toBeVisible();
-    await expectAccessible(guest);
+    await expectAccessibleBothModes(guest);
 
     // Every validation, in page order; the field to fix gets focus.
     const give = guest.getByRole('button', { name: /^Give/ });
@@ -177,7 +184,7 @@ test.describe('donations (M4.8a)', () => {
     await guest.getByLabel('Let someone know (optional)').fill('The Joe family');
     await guest.getByLabel('Note to them (optional)').fill('With love.');
     await guest.getByLabel('Employer (optional)').fill('Acme Corp');
-    await expectAccessible(guest);
+    await expectAccessibleBothModes(guest);
     await guest.getByRole('button', { name: 'Give $1,030.18' }).click();
 
     // The fake provider's page: exactly gift + cover, on the connected account, application fee 0.
@@ -194,7 +201,7 @@ test.describe('donations (M4.8a)', () => {
     await expect(
       guest.getByText('You also covered $30.18 in processing fees.', { exact: false }),
     ).toBeVisible();
-    await expectAccessible(guest);
+    await expectAccessibleBothModes(guest);
 
     // A second donor: an own amount, first name only, no cover; own-amount limits first.
     await guest.goto(`/events/${g.slug}/give`);
@@ -239,7 +246,7 @@ test.describe('donations (M4.8a)', () => {
     await expect(anon).not.toContainText('Dana');
     await expect(gifts.getByRole('row').filter({ hasText: '$25.00' })).toContainText('Robin');
     await expect(gifts.getByRole('row').filter({ hasText: '$25.00' })).not.toContainText('Giver');
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
 
     // The CSV export asks for a fresh step-up, then lists the donor as they are (the host's own list).
     await ageSession(page);
@@ -317,14 +324,14 @@ test.describe('donations (M4.8a)', () => {
     // Campaigns can still be prepared; the giving page link stays hidden.
     await addCampaign(page, 'Waiting Fund');
     await expect(page.getByRole('link', { name: 'Open the giving page' })).toHaveCount(0);
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
     const ctx = await browser.newContext();
     const guest = await donor(ctx);
     await guest.goto(`/events/${g.slug}/give`);
     await expect(guest.getByText('Online giving isn’t open for this event')).toBeVisible();
     await expect(guest.getByRole('button', { name: /^Give/ })).toHaveCount(0);
     await expect(guest.getByText('Waiting Fund')).toHaveCount(0);
-    await expectAccessible(guest);
+    await expectAccessibleBothModes(guest);
     await ctx.close();
   });
 
@@ -351,7 +358,7 @@ test.describe('donations (M4.8a)', () => {
     await expect(viewer.getByText(/^Edit /)).toHaveCount(0);
     await expect(viewer.getByRole('button', { name: 'Export gifts (CSV)' })).toHaveCount(0);
     // Not the payouts link either (only those who manage payouts get it).
-    await expectAccessible(viewer);
+    await expectAccessibleBothModes(viewer);
     const res = await viewer.request.get(`${g.base}/exports/01900000-0000-7000-8000-000000000000`);
     expect(res.status()).toBe(404);
     await ctx.close();
@@ -364,7 +371,7 @@ test.describe('donations (M4.8a)', () => {
     await page.goto(`/ar${g.base}`);
     await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
     await expect(page.getByRole('heading', { name: 'التبرعات', level: 1 })).toBeVisible();
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
     const ctx = await browser.newContext();
     const guest = await donor(ctx);
     await guest.goto(`/ar/events/${g.slug}/give`);
@@ -373,7 +380,7 @@ test.describe('donations (M4.8a)', () => {
     await expect(guest.getByText('اختر مبلغًا', { exact: true })).toBeVisible();
     await guest.getByRole('button', { name: 'تبرّع' }).click();
     await expect(guest.getByText('اختر مستوى أو مبلغًا آخر.')).toBeVisible();
-    await expectAccessible(guest);
+    await expectAccessibleBothModes(guest);
     await ctx.close();
   });
 });

@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { formatMoney, money } from '@yayatoh/kernel';
 import type { OrderInvoiceDto } from '@yayatoh/orders';
-import { Card, StatusDot } from '@yayatoh/ui';
+import { Card, CardHeader, StatusPill } from '@yayatoh/ui';
 import { getTranslations } from 'next-intl/server';
 import type { z } from 'zod';
 import { RecordInvoicePaymentForm, VoidInvoiceForm } from '@/components/invoice-forms.tsx';
@@ -11,7 +11,8 @@ import { minorToDecimal } from '@/lib/minor-decimal.ts';
 type Invoice = z.infer<typeof OrderInvoiceDto>;
 type Action = (prev: FormState, form: FormData) => Promise<FormState>;
 
-export const INVOICE_DOT = { open: 'warning', paid: 'success', void: 'neutral' } as const;
+/** An invoice's status as a StatusPill tone (dot + word). */
+export const INVOICE_TONE = { open: 'waiting', paid: 'success', void: 'neutral' } as const;
 
 /** A calendar day as the locale writes it. */
 export const dayLabel = (locale: string, day: string) =>
@@ -59,60 +60,73 @@ export async function InvoicePanel({
   ];
   return (
     <section aria-labelledby="invoice-heading" className="flex flex-col gap-3">
-      <h2 id="invoice-heading" className="text-section">
-        {t('panel.title', { label: invoice.label })}
-      </h2>
-      <Card className="flex flex-col gap-4">
-        <div className="flex flex-wrap items-center gap-3">
-          <StatusDot status={INVOICE_DOT[invoice.status]} label={t(`status.${invoice.status}`)} />
-          {invoice.overdue ? <StatusDot status="danger" label={t('overdue')} /> : null}
-          <a href={pdfHref} className="text-body underline underline-offset-2">
-            {t('panel.pdf')}
-          </a>
-        </div>
-        <dl className="grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-2">
+      <Card className="flex flex-col gap-5">
+        <CardHeader
+          id="invoice-heading"
+          title={t('panel.title', { label: invoice.label })}
+          actions={
+            <>
+              <StatusPill tone={INVOICE_TONE[invoice.status]} label={t(`status.${invoice.status}`)} />
+              {invoice.overdue ? <StatusPill tone="danger" label={t('overdue')} /> : null}
+            </>
+          }
+        />
+        <dl className="m-0 grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2 lg:grid-cols-3">
           {facts.map(([k, v]) => (
-            <div key={k} className="flex flex-col">
-              <dt className="text-caption text-ink-2">{k}</dt>
-              <dd className="m-0 text-body" dir="auto">
+            <div key={k} className="flex flex-col gap-0.5">
+              <dt className="text-[13px] font-bold text-ink-2">{k}</dt>
+              <dd className="m-0 text-body text-ink tabular-nums" dir="auto">
                 {v}
               </dd>
             </div>
           ))}
         </dl>
         {invoice.status === 'void' ? (
-          <p className="text-body text-ink-2">
+          <p className="m-0 rounded-tile bg-surface-2 px-4 py-3 text-body text-ink-2">
             {t('panel.voided', { reason: invoice.voidReason ?? '' })}
             {invoice.paidAfterVoidMinor > 0
               ? ` ${t('panel.paidAfterVoid', { amount: fmt(invoice.paidAfterVoidMinor) })}`
               : ''}
           </p>
         ) : null}
-        <h3 className="text-body font-medium">{t('panel.payments')}</h3>
-        {invoice.payments.length === 0 ? (
-          <p className="text-body text-ink-2">{t('panel.noPayments')}</p>
-        ) : (
-          <ul className="flex list-none flex-col divide-y divide-line p-0">
-            {invoice.payments.map((p) => (
-              <li key={p.id} className="flex flex-wrap justify-between gap-x-4 gap-y-1 py-2">
-                <span>
-                  {t(`methods.${p.method}`)}
-                  {p.reference ? ` · ${p.reference}` : ''}
-                  {p.status === 'failed' ? ` · ${t('panel.failed')}` : ''}
-                </span>
-                <span className="text-caption text-ink-2">
-                  {p.receivedOn ? dayLabel(locale, p.receivedOn) : when.format(p.completedAt ?? p.createdAt)}
-                </span>
-                <span className="font-mono tabular-nums">{fmt(p.amountMinor)}</span>
-              </li>
-            ))}
-          </ul>
-        )}
+        <div className="flex flex-col gap-2">
+          <h3 className="m-0 text-body font-bold text-ink">{t('panel.payments')}</h3>
+          {invoice.payments.length === 0 ? (
+            <p className="m-0 text-body text-ink-2">{t('panel.noPayments')}</p>
+          ) : (
+            <ul className="m-0 flex list-none flex-col divide-y divide-line rounded-tile border border-line p-0">
+              {invoice.payments.map((p) => (
+                <li
+                  key={p.id}
+                  className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 px-4 py-3"
+                >
+                  <span className="text-body text-ink">
+                    {t(`methods.${p.method}`)}
+                    {p.reference ? ` · ${p.reference}` : ''}
+                    {p.status === 'failed' ? ` · ${t('panel.failed')}` : ''}
+                  </span>
+                  <span className="text-caption text-ink-2 tabular-nums">
+                    {p.receivedOn
+                      ? dayLabel(locale, p.receivedOn)
+                      : when.format(p.completedAt ?? p.createdAt)}
+                  </span>
+                  <span className="font-bold text-ink tabular-nums">{fmt(p.amountMinor)}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+        <a
+          href={pdfHref}
+          className="inline-flex min-h-8 items-center self-start rounded-[10px] text-body font-bold text-primary-ink underline-offset-2 hover:underline"
+        >
+          {t('panel.pdf')}
+        </a>
       </Card>
       {canManage && invoice.status === 'open' ? (
         <>
           <Card className="flex flex-col gap-3">
-            <h3 className="text-body font-medium">{t('record.title')}</h3>
+            <CardHeader as="h3" title={t('record.title')} />
             <RecordInvoicePaymentForm
               action={recordAction}
               currency={invoice.currency}
@@ -123,8 +137,10 @@ export async function InvoicePanel({
             />
           </Card>
           {invoice.paidMinor === 0 ? (
-            <details className="rounded-card border border-line p-4">
-              <summary className="min-h-6 cursor-pointer text-body">{t('void.title')}</summary>
+            <details className="rounded-card border border-line bg-surface p-4 glass">
+              <summary className="inline-flex min-h-8 cursor-pointer items-center rounded-[10px] px-2 text-body font-bold text-danger hover:bg-surface-3">
+                {t('void.title')}
+              </summary>
               <div className="pt-3">
                 <VoidInvoiceForm action={voidAction} />
               </div>

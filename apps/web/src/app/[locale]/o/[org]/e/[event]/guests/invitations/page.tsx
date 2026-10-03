@@ -12,14 +12,25 @@ import {
   rsvpOverviewQuery,
 } from '@yayatoh/guests';
 import { executeQuery } from '@yayatoh/kernel';
-import { isProfileKey, navIncludes, PROFILES } from '@yayatoh/platform';
-import { Alert, Button, Card, EmptyState, PageHeader } from '@yayatoh/ui';
+import { isProfileKey, navIncludes, navLabelKey, PROFILES } from '@yayatoh/platform';
+import {
+  Alert,
+  Button,
+  buttonClass,
+  Card,
+  CardHeader,
+  EmptyState,
+  PageHeader,
+  StatusPill,
+} from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { ProgramForm } from '@/components/program-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
+import { RSVP_STATE_TONE } from '../party-rsvp.tsx';
+import { GuestsCrumbs } from '../rsvp/nav.tsx';
 import {
   resetTemplateAction,
   saveTemplateAction,
@@ -28,9 +39,6 @@ import {
   testSendAction,
 } from './actions.ts';
 import { DeliveryPill, languageName } from './delivery.tsx';
-
-const pill = 'rounded-pill px-2 py-px text-caption';
-const control = 'min-h-10 rounded-pill border border-line bg-surface px-4 text-body';
 
 /**
  * Invitations (M4.1f): send every party its invitation by email and/or text with its own RSVP
@@ -56,6 +64,7 @@ export default async function InvitationsPage({
   const nav = PROFILES[profile].nav.find((i) => i.key === 'guests');
   if (!nav || !navIncludes(profile, data.modules, 'guests') || !can('guests:read')) notFound();
   const t = await getTranslations('invitations');
+  const tr = await getTranslations();
   const canWrite = can('guests:write');
   const wording: InviteLocale = (INVITE_LOCALES as readonly string[]).includes(lang ?? '')
     ? (lang as InviteLocale)
@@ -97,14 +106,24 @@ export default async function InvitationsPage({
 
   return (
     <>
-      <PageHeader title={t('title')} description={t('subtitle')} />
-      <Link href={base} className="min-h-6 self-start py-1 text-caption underline">
-        {t('back')}
-      </Link>
-      {canWrite ? null : <p className="text-body text-ink-2">{t('viewerNotice')}</p>}
+      <PageHeader
+        breadcrumb={
+          <GuestsCrumbs
+            org={org}
+            event={event}
+            orgName={data.org.name}
+            eventName={ev.name}
+            guestsLabel={tr(navLabelKey(profile, nav))}
+            trail={[{ label: t('title') }]}
+          />
+        }
+        title={t('title')}
+        description={t('subtitle')}
+      />
+      {canWrite ? null : <Alert tone="info" title={t('viewerNotice')} />}
 
       <section aria-labelledby="invite-send-heading" className="flex flex-col gap-3">
-        <h2 id="invite-send-heading" className="text-section">
+        <h2 id="invite-send-heading" className="m-0 text-section text-ink">
           {t('sendTitle')}
         </h2>
         {list.partyOptions.length === 0 ? (
@@ -112,7 +131,7 @@ export default async function InvitationsPage({
             title={t('noPartiesTitle')}
             description={t('noParties')}
             action={
-              <Link href={base} className="min-h-6 py-1 text-caption underline">
+              <Link href={base} className={buttonClass('secondary')}>
                 {t('addGuests')}
               </Link>
             }
@@ -121,19 +140,22 @@ export default async function InvitationsPage({
           <Card size="panel" className="flex flex-col gap-3">
             {sentCount !== null ? (
               <div data-testid="invite-sent-result">
-                <Alert tone="info" title={t('sentResult', { count: sentCount })}>
+                <Alert tone="success" title={t('sentResult', { count: sentCount })}>
                   {skippedCount > 0 ? t('skippedResult', { count: skippedCount }) : null}
                 </Alert>
               </div>
             ) : null}
-            <p className="text-body" data-testid="invite-not-sent">
+            <p className="m-0 text-[16px] font-bold text-ink" data-testid="invite-not-sent">
               {t('notSent', { count: notSent.length })}
             </p>
             {unreachable > 0 ? (
-              <p className="text-caption text-ink-2">{t('unreachable', { count: unreachable })}</p>
+              <p className="m-0 text-caption text-ink-2">{t('unreachable', { count: unreachable })}</p>
             ) : null}
             {problems > 0 ? (
-              <p className="text-caption text-danger" data-testid="invite-problems">
+              <p
+                className="m-0 rounded-tile border border-danger/30 bg-danger-soft px-4 py-2.5 text-body font-bold text-danger"
+                data-testid="invite-problems"
+              >
                 {t('problems', { count: problems })}
               </p>
             ) : null}
@@ -160,16 +182,16 @@ export default async function InvitationsPage({
       </section>
 
       <section aria-labelledby="invite-wording-heading" className="flex flex-col gap-3">
-        <h2 id="invite-wording-heading" className="text-section">
+        <h2 id="invite-wording-heading" className="m-0 text-section text-ink">
           {t('wordingTitle')}
         </h2>
-        <p className="text-caption text-ink-2">{t('wordingHint')}</p>
+        <p className="m-0 text-body text-ink-2">{t('wordingHint')}</p>
         <form method="get" className="flex flex-wrap items-end gap-2">
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="invite-lang" className="text-caption text-ink-2">
+            <label htmlFor="invite-lang" className="text-[13px] font-bold text-ink">
               {t('language')}
             </label>
-            <select id="invite-lang" name="lang" defaultValue={wording} className={control}>
+            <select id="invite-lang" name="lang" defaultValue={wording} className="field pe-9">
               {INVITE_LOCALES.map((l) => (
                 <option key={l} value={l}>
                   {languageName(l, locale)}
@@ -182,12 +204,17 @@ export default async function InvitationsPage({
             {t('showLanguage')}
           </Button>
         </form>
-        <div className="grid gap-3 lg:grid-cols-2">
-          <Card size="panel" className="flex flex-col gap-3">
-            <h3 className="text-body font-medium">
-              {t('editTitle', { language: languageName(wording, locale) })}
-              {template?.custom ? ` · ${t('edited')}` : ` · ${t('builtIn')}`}
-            </h3>
+        <div className="grid items-start gap-4 lg:grid-cols-2">
+          <Card size="panel" className="flex flex-col gap-4">
+            <CardHeader
+              as="h3"
+              title={
+                <>
+                  {t('editTitle', { language: languageName(wording, locale) })}
+                  {template?.custom ? ` · ${t('edited')}` : ` · ${t('builtIn')}`}
+                </>
+              }
+            />
             {canWrite && template ? (
               <>
                 <ProgramForm
@@ -241,34 +268,35 @@ export default async function InvitationsPage({
               </>
             ) : null}
           </Card>
-          <Card size="panel" className="flex flex-col gap-3">
-            <h3 className="text-body font-medium">{t('previewTitle')}</h3>
-            <p className="text-caption text-ink-2">
-              {preview.partyName ? t('previewFor', { party: preview.partyName }) : t('previewSample')}
-            </p>
+          <Card size="panel" className="flex flex-col gap-4">
+            <CardHeader
+              as="h3"
+              title={t('previewTitle')}
+              meta={preview.partyName ? t('previewFor', { party: preview.partyName }) : t('previewSample')}
+            />
             <figure
-              className="flex flex-col gap-2 rounded-card border border-line p-3"
+              className="m-0 flex flex-col gap-2 rounded-tile border border-line bg-surface-2 p-4"
               lang={wording}
               dir={wording === 'ar' ? 'rtl' : 'ltr'}
               aria-label={t('emailPreview')}
             >
-              <figcaption className="text-caption text-ink-2">{t('emailPreview')}</figcaption>
-              <p className="text-body font-medium" data-testid="preview-subject">
+              <figcaption className="text-label text-ink-2 uppercase">{t('emailPreview')}</figcaption>
+              <p className="m-0 text-[16px] font-extrabold text-ink" data-testid="preview-subject">
                 {preview.subject}
               </p>
-              <p className="whitespace-pre-line text-body" data-testid="preview-message">
+              <p className="m-0 whitespace-pre-line text-body text-ink" data-testid="preview-message">
                 {preview.message}
               </p>
-              <p className="text-caption text-ink-2">{t('previewLink')}</p>
+              <p className="m-0 text-caption text-ink-2">{t('previewLink')}</p>
             </figure>
             <figure
-              className="flex flex-col gap-2 rounded-card border border-line p-3"
+              className="m-0 flex flex-col gap-2 rounded-tile border border-line bg-surface-2 p-4"
               lang={wording}
               dir={wording === 'ar' ? 'rtl' : 'ltr'}
               aria-label={t('smsPreview')}
             >
-              <figcaption className="text-caption text-ink-2">{t('smsPreview')}</figcaption>
-              <p className="text-body" data-testid="preview-sms">
+              <figcaption className="text-label text-ink-2 uppercase">{t('smsPreview')}</figcaption>
+              <p className="m-0 text-body text-ink" data-testid="preview-sms">
                 {preview.smsText}
               </p>
             </figure>
@@ -288,11 +316,11 @@ export default async function InvitationsPage({
       </section>
 
       <section aria-labelledby="invite-reminders-heading" className="flex flex-col gap-3">
-        <h2 id="invite-reminders-heading" className="text-section">
+        <h2 id="invite-reminders-heading" className="m-0 text-section text-ink">
           {t('remindersTitle')}
         </h2>
         <Card size="panel" className="flex flex-col gap-3">
-          <p className="text-body" data-testid="reminders-state">
+          <p className="m-0 text-[16px] font-bold text-ink" data-testid="reminders-state">
             {reminders.enabled
               ? t('remindersOn', {
                   days: reminders.days.join(', '),
@@ -300,9 +328,9 @@ export default async function InvitationsPage({
                 })
               : t('remindersOff')}
           </p>
-          <p className="text-caption text-ink-2">{t('remindersHint')}</p>
+          <p className="m-0 text-caption text-ink-2">{t('remindersHint')}</p>
           {reminders.enabled ? (
-            <p className="text-caption text-ink-2">
+            <p className="m-0 text-caption text-ink-2 tabular-nums">
               {t('remindersCounts', {
                 pending: reminders.counts.pending ?? 0,
                 done: reminders.counts.done ?? 0,
@@ -311,14 +339,16 @@ export default async function InvitationsPage({
             </p>
           ) : null}
           {deadline ? (
-            <p className="text-caption text-ink-2">{t('deadlineIs', { deadline })}</p>
+            <p className="m-0 text-caption text-ink-2">{t('deadlineIs', { deadline })}</p>
           ) : (
-            <p className="text-caption text-ink-2">
-              {t('noDeadline')}{' '}
-              <Link href={`${base}/rsvp`} className="min-h-6 py-1 underline">
+            <Alert tone="info" title={t('noDeadline')}>
+              <Link
+                href={`${base}/rsvp`}
+                className="inline-flex min-h-6 items-center font-bold text-primary-ink underline underline-offset-2"
+              >
                 {t('setDeadline')}
               </Link>
-            </p>
+            </Alert>
           )}
           {canWrite && reminders.hasDeadline ? (
             <ProgramForm
@@ -364,32 +394,35 @@ export default async function InvitationsPage({
       </section>
 
       <section aria-labelledby="invite-parties-heading" className="flex flex-col gap-3">
-        <h2 id="invite-parties-heading" className="text-section">
+        <h2 id="invite-parties-heading" className="m-0 text-section text-ink">
           {t('partiesTitle', { count: invites.length })}
         </h2>
         {invites.length === 0 ? (
-          <EmptyState title={t('noPartiesTitle')} description={t('noParties')} />
+          <EmptyState
+            title={t('noPartiesTitle')}
+            description={t('noParties')}
+            action={
+              <Link href={base} className={buttonClass('secondary')}>
+                {t('addGuests')}
+              </Link>
+            }
+          />
         ) : (
-          <ul className="flex list-none flex-col gap-2 p-0">
+          <ul className="m-0 grid list-none grid-cols-1 gap-3 p-0 md:grid-cols-2">
             {invites.map((i) => {
               const name = names.get(i.partyId) ?? '';
               const st = state.get(i.partyId) ?? 'invited';
               return (
                 <li key={i.partyId}>
-                  <Card className="flex flex-col gap-2" data-testid={`invite-party-${i.partyId}`}>
+                  <Card className="flex h-full flex-col gap-2.5" data-testid={`invite-party-${i.partyId}`}>
                     <div className="flex flex-wrap items-center gap-2">
-                      <h3 className="text-body font-medium">{name}</h3>
-                      <span
-                        className={`${pill} bg-surface-3 text-ink-2`}
-                        data-testid={`invite-state-${i.partyId}`}
-                      >
-                        {t(`states.${st}`)}
+                      <h3 className="m-0 grow text-[16px] font-extrabold text-ink">{name}</h3>
+                      <span className="inline-flex" data-testid={`invite-state-${i.partyId}`}>
+                        <StatusPill tone={RSVP_STATE_TONE[st]} label={t(`states.${st}`)} />
                       </span>
-                      {i.problem ? (
-                        <span className={`${pill} bg-danger-soft text-danger`}>{t('problem')}</span>
-                      ) : null}
+                      {i.problem ? <StatusPill tone="danger" label={t('problem')} /> : null}
                     </div>
-                    <p className="text-caption text-ink-2">
+                    <p className="m-0 text-caption text-ink-2">
                       {languageName(i.locale, locale)} ·{' '}
                       {i.hasEmail || i.hasPhone
                         ? [i.hasEmail ? t('channels.email') : null, i.hasPhone ? t('channels.sms') : null]
@@ -398,7 +431,7 @@ export default async function InvitationsPage({
                         : t('noAddress')}
                     </p>
                     {i.latest.length ? (
-                      <ul className="flex list-none flex-wrap gap-2 p-0">
+                      <ul className="m-0 flex list-none flex-wrap gap-2 p-0">
                         {i.latest.map((m) => (
                           <li key={m.id}>
                             <DeliveryPill channel={m.channel} state={m.state} />
@@ -408,7 +441,7 @@ export default async function InvitationsPage({
                     ) : null}
                     <Link
                       href={`${base}/rsvp/${i.partyId}`}
-                      className="min-h-6 self-start py-1 text-caption underline"
+                      className="mt-auto inline-flex min-h-8 items-center self-start rounded-[10px] text-caption font-bold text-primary-ink underline-offset-2 hover:underline"
                     >
                       {canWrite ? t('manage', { party: name }) : t('view', { party: name })}
                     </Link>
@@ -419,7 +452,7 @@ export default async function InvitationsPage({
           </ul>
         )}
       </section>
-      <p className="text-caption text-ink-2">{t('privacy')}</p>
+      <p className="m-0 text-caption text-ink-2">{t('privacy')}</p>
     </>
   );
 }

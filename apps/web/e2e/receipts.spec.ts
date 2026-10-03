@@ -1,5 +1,5 @@
 import { type BrowserContext, expect, type Page, test } from '@playwright/test';
-import { expectAccessible, expectHtmlAccessible, newUser } from './helpers.ts';
+import { expectAccessible, expectAccessibleBothModes, expectHtmlAccessible, newUser } from './helpers.ts';
 
 /**
  * M4.8b charity profile and receipts (P4-11, P4-13): the owner's charity profile with every
@@ -128,7 +128,7 @@ test.describe('charity profile and receipts (M4.8b)', () => {
     await page.getByRole('link', { name: 'Charity profile' }).click();
     await expect(page.getByRole('heading', { name: 'Charity profile', level: 1 })).toBeVisible();
     await expect(page.getByText('No charity profile yet')).toBeVisible();
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
 
     const submit = page.getByRole('button', { name: 'Send for verification' });
     await submit.click();
@@ -152,7 +152,7 @@ test.describe('charity profile and receipts (M4.8b)', () => {
     await page.getByLabel('Mailing address (optional)').fill('1 Pier Way, Boston, MA 02110');
     await submit.click();
     await expect(page.getByText('Saved. Yayatoh will review it.')).toBeVisible();
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
 
     // Persisted, normalized, waiting for staff.
     await page.reload();
@@ -172,7 +172,7 @@ test.describe('charity profile and receipts (M4.8b)', () => {
       ),
     ).toBeVisible();
     await expect(page.getByText('No receipts yet.', { exact: false })).toBeVisible();
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
 
     // Verified: the status says so.
     await verify(page, g.org);
@@ -205,7 +205,7 @@ test.describe('charity profile and receipts (M4.8b)', () => {
         'Ticket page notice: Of your $500.00 payment, $350.00 is tax-deductible. The estimated fair-market value of the goods and services you receive is $150.00.',
       ),
     ).toBeVisible();
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
 
     // Not verified yet: the public page shows no notice.
     const ctx = await browser.newContext();
@@ -285,7 +285,7 @@ test.describe('charity profile and receipts (M4.8b)', () => {
     await expect(row).toContainText('$100.00');
     const hostPdf = await row.getByRole('link', { name: 'Download R-00001' }).getAttribute('href');
     expect((await page.request.get(hostPdf ?? '')).status()).toBe(200);
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
     await ctx.close();
   });
 
@@ -368,14 +368,14 @@ test.describe('charity profile and receipts (M4.8b)', () => {
     await expect(viewer.getByText('Harbor Arts Alliance')).toBeVisible();
     await expect(viewer.getByText('Only owners and admins can change the charity profile.')).toBeVisible();
     await expect(viewer.getByRole('button', { name: /Send for verification|Save and send/ })).toHaveCount(0);
-    await expectAccessible(viewer);
+    await expectAccessibleBothModes(viewer);
     await viewer.goto(`${g.base}/donations/receipts`);
     await expect(viewer.getByRole('heading', { name: 'Tax receipts', level: 1 })).toBeVisible();
     await expect(viewer.getByText(/Set the fair-market value of/)).toHaveCount(0);
     await expect(
       viewer.getByText('You can view receipts. Ask an owner or admin to change fair-market values.'),
     ).toBeVisible();
-    await expectAccessible(viewer);
+    await expectAccessibleBothModes(viewer);
     // A receipt that does not exist (or another org's) is a 404.
     const res = await viewer.request.get(
       `${g.base}/donations/receipts/01900000-0000-7000-8000-000000000000/pdf`,
@@ -431,10 +431,10 @@ test.describe('charity profile and receipts (M4.8b)', () => {
     await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
     await expect(page.getByRole('heading', { name: 'الملف الخيري', level: 1 })).toBeVisible();
     await expect(page.getByText('501(c)(3) مُتحقَّق منه')).toBeVisible();
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
     await page.goto(`/ar${g.base}/donations/receipts`);
     await expect(page.getByRole('heading', { name: 'الإيصالات الضريبية', level: 1 })).toBeVisible();
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
     const ctx = await browser.newContext();
     const guest = await ctx.newPage();
     await guest.goto(`/ar/events/${g.slug}`);

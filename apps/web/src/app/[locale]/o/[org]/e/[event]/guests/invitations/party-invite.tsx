@@ -6,7 +6,7 @@ import {
   partyInvitesQuery,
 } from '@yayatoh/guests';
 import { type Ctx, executeQuery } from '@yayatoh/kernel';
-import { Card } from '@yayatoh/ui';
+import { Alert, Card, CardHeader } from '@yayatoh/ui';
 import { getTranslations } from 'next-intl/server';
 import { ProgramForm } from '@/components/program-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
@@ -57,13 +57,13 @@ export async function PartyInvite({
   ];
   return (
     <section aria-labelledby="party-invite-heading" className="flex flex-col gap-3 print:hidden">
-      <h2 id="party-invite-heading" className="text-section">
+      <h2 id="party-invite-heading" className="m-0 text-section text-ink">
         {t('partyTitle')}
       </h2>
       {invite?.problem ? (
-        <p className="text-body text-danger" data-testid="party-invite-problem">
-          {t('partyProblem')}
-        </p>
+        <div data-testid="party-invite-problem">
+          <Alert title={t('partyProblem')} />
+        </div>
       ) : null}
       <Card size="panel" className="flex flex-col gap-4">
         {canWrite ? (
@@ -96,7 +96,7 @@ export async function PartyInvite({
             }}
           />
         ) : (
-          <p className="text-body">
+          <p className="m-0 text-body text-ink">
             {contact.email || contact.phone
               ? [contact.email ? t('channels.email') : null, contact.phone ? t('channels.sms') : null]
                   .filter(Boolean)
@@ -122,7 +122,7 @@ export async function PartyInvite({
             errors={{}}
           />
         ) : (
-          <p className="text-caption text-ink-2">{languageName(invite?.locale ?? 'en', locale)}</p>
+          <p className="m-0 text-caption text-ink-2">{languageName(invite?.locale ?? 'en', locale)}</p>
         )}
         {canWrite ? (
           channels.length ? (
@@ -143,30 +143,35 @@ export async function PartyInvite({
               errors={{ channels: t('errors.channels') }}
             />
           ) : (
-            <p className="text-caption text-ink-2">{t('addAddressFirst')}</p>
+            <Alert tone="info" title={t('addAddressFirst')} />
           )
         ) : null}
       </Card>
-      <h3 className="text-body font-medium">{t('messagesTitle')}</h3>
-      {messages.length === 0 ? (
-        <p className="text-caption text-ink-2">{t('noMessages')}</p>
-      ) : (
-        <ul className="flex list-none flex-col gap-1 p-0" data-testid="party-messages">
-          {messages.map((m) => (
-            <li key={m.id} className="flex flex-wrap items-center gap-2 text-caption">
-              <span>{t(`kinds.${m.kind}`)}</span>
-              <DeliveryPill channel={m.channel} state={m.state} />
-              <span className="text-ink-2">{fmt(m.at)}</span>
-            </li>
-          ))}
-        </ul>
-      )}
+      <Card className="flex flex-col gap-3">
+        <CardHeader as="h3" title={t('messagesTitle')} />
+        {messages.length === 0 ? (
+          <p className="m-0 text-caption text-ink-2">{t('noMessages')}</p>
+        ) : (
+          <ul className="m-0 flex list-none flex-col p-0" data-testid="party-messages">
+            {messages.map((m) => (
+              <li
+                key={m.id}
+                className="flex flex-wrap items-center gap-x-3 gap-y-1 border-b border-line py-2 text-caption last:border-0"
+              >
+                <span className="font-bold text-ink">{t(`kinds.${m.kind}`)}</span>
+                <DeliveryPill channel={m.channel} state={m.state} />
+                <span className="ms-auto text-ink-2 tabular-nums">{fmt(m.at)}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </Card>
       {reminders.length ? (
-        <>
-          <h3 className="text-body font-medium">{t('partyReminders')}</h3>
-          <ul className="flex list-none flex-col gap-1 p-0 text-caption" data-testid="party-reminders">
+        <Card className="flex flex-col gap-3">
+          <CardHeader as="h3" title={t('partyReminders')} />
+          <ul className="m-0 flex list-none flex-col p-0 text-caption text-ink" data-testid="party-reminders">
             {reminders.map((r) => (
-              <li key={r.id}>
+              <li key={r.id} className="border-b border-line py-2 tabular-nums last:border-0">
                 {t('reminderLine', {
                   when: fmt(r.scheduledFor),
                   channel: t(`channels.${r.action === 'sms' ? 'sms' : 'email'}`),
@@ -175,11 +180,11 @@ export async function PartyInvite({
               </li>
             ))}
           </ul>
-        </>
+        </Card>
       ) : null}
       <Link
         href={`/o/${org}/e/${event}/guests/invitations`}
-        className="min-h-6 self-start py-1 text-caption underline"
+        className="inline-flex min-h-8 items-center self-start rounded-[10px] text-caption font-bold text-primary-ink underline-offset-2 hover:underline"
       >
         {t('allInvitations')}
       </Link>

@@ -1,7 +1,10 @@
 import { moderationQuery } from '@yayatoh/engagement';
 import { executeQuery } from '@yayatoh/kernel';
+import { buttonClass, PageHeader } from '@yayatoh/ui';
+import { ArrowLeft } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { Crumbs } from '@/components/crumbs.tsx';
 import { StageView } from '@/components/engagement/stage-view.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { moderationChannelUrl } from '@/server/engagement.ts';
@@ -27,15 +30,31 @@ export default async function PresenterPage({ params }: Params) {
   if (!s) notFound();
   const page = await executeQuery(moderationQuery, { eventId: ev.id, sessionId: s.id }, data.ctx, ports);
   if (!page.enabled || !page.state) notFound();
-  const t = await getTranslations('engagement.presenter');
+  const t = await getTranslations('engagement');
+  const tr = await getTranslations();
+  const live = `/o/${org}/e/${event}/sessions/${s.id}/live`;
   return (
-    <div className="flex flex-col gap-3">
-      <Link
-        href={`/o/${org}/e/${event}/sessions/${s.id}/live`}
-        className="inline-flex min-h-10 items-center self-start underline underline-offset-2"
-      >
-        {t('back')}
-      </Link>
+    <>
+      <PageHeader
+        breadcrumb={
+          <Crumbs
+            items={[
+              { label: data.org.name, href: `/o/${org}` },
+              { label: ev.name, href: `/o/${org}/e/${event}` },
+              { label: tr('nav.sessions'), href: `/o/${org}/e/${event}/sessions` },
+              { label: t('moderator.title'), href: live },
+              { label: t('presenter.metaTitle') },
+            ]}
+          />
+        }
+        title={s.title}
+        actions={
+          <Link href={live} className={buttonClass('secondary')}>
+            <ArrowLeft aria-hidden="true" className="rtl:-scale-x-100" />
+            {t('presenter.back')}
+          </Link>
+        }
+      />
       <StageView
         variant="presenter"
         eventName={ev.name}
@@ -44,6 +63,6 @@ export default async function PresenterPage({ params }: Params) {
         streamUrl={moderationChannelUrl(data.ctx.orgId ?? '', ev.id, s.id)}
         join={null}
       />
-    </div>
+    </>
   );
 }

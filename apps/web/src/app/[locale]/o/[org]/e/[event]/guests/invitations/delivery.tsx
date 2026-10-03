@@ -1,8 +1,18 @@
 import type { DeliveryState, InviteChannel } from '@yayatoh/guests';
+import { StatusPill } from '@yayatoh/ui';
 import { getTranslations } from 'next-intl/server';
 
-const pill = 'rounded-pill px-2 py-px text-caption';
-const BAD = new Set<DeliveryState>(['bounced', 'failed', 'not_sent']);
+/** Delivery as dot + word (ADR 0022): problems red, delivered mint, on the way violet. */
+const TONE = {
+  queued: 'neutral',
+  waiting: 'waiting',
+  sent: 'info',
+  delivered: 'success',
+  bounced: 'danger',
+  failed: 'danger',
+  not_sent: 'danger',
+  canceled: 'neutral',
+} as const satisfies Record<DeliveryState, 'neutral' | 'waiting' | 'info' | 'success' | 'danger'>;
 
 /** A language's own name in the console's language (Intl, no message keys). */
 export function languageName(code: string, uiLocale: string): string {
@@ -17,11 +27,11 @@ export function languageName(code: string, uiLocale: string): string {
 export async function DeliveryPill({ channel, state }: { channel: InviteChannel; state: DeliveryState }) {
   const t = await getTranslations('invitations');
   return (
-    <span
-      className={`${pill} ${BAD.has(state) ? 'bg-danger-soft text-danger' : 'bg-surface-3 text-ink-2'}`}
-      data-testid={`delivery-${channel}`}
-    >
-      {t('delivery', { channel: t(`channels.${channel}`), state: t(`deliveryStates.${state}`) })}
+    <span className="inline-flex" data-testid={`delivery-${channel}`}>
+      <StatusPill
+        tone={TONE[state]}
+        label={t('delivery', { channel: t(`channels.${channel}`), state: t(`deliveryStates.${state}`) })}
+      />
     </span>
   );
 }

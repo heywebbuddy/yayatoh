@@ -1,14 +1,15 @@
 'use client';
 
-import { Alert, Button, Input } from '@yayatoh/ui';
+import { Alert, Button, Input, Textarea } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { startTransition, useActionState, useEffect, useRef, useState } from 'react';
 import { HumanCheckField, type HumanCheckWidget } from '@/components/human-check-field.tsx';
 import type { CollectState } from './actions.ts';
 
 const MAX_MEMBERS = 12;
-const area =
-  'w-full rounded-card border bg-surface px-4 py-2 text-body text-ink outline-none focus-visible:border-ink';
+/** The public pages' card (ADR 0022, as on the public event page). */
+const CARD =
+  'm-0 flex min-w-0 flex-col gap-4 rounded-panel border border-line bg-surface p-5 elevation-card glass';
 
 /**
  * The household's contact details (M4.1f): its name, the people in it (one row each, "Add
@@ -68,7 +69,7 @@ export function CollectForm({
   if (state.done)
     return (
       <div data-collect-done tabIndex={-1} className="outline-none">
-        <Alert tone="info" title={t('doneTitle')}>
+        <Alert tone="success" title={t('doneTitle')}>
           {t('doneBody')}
         </Alert>
       </div>
@@ -96,31 +97,32 @@ export function CollectForm({
       aria-label={t('formLabel')}
       className="flex flex-col gap-5"
     >
-      <Input
-        id="collect-household"
-        name="household"
-        label={t('household')}
-        hint={t('householdHint')}
-        defaultValue={v?.household ?? ''}
-        key={`household-${key}`}
-        maxLength={120}
-        required
-        className="min-h-11"
-        error={state.error === 'household' ? t('errors.household') : undefined}
-      />
+      <div className={CARD}>
+        <Input
+          id="collect-household"
+          name="household"
+          label={t('household')}
+          hint={t('householdHint')}
+          defaultValue={v?.household ?? ''}
+          key={`household-${key}`}
+          maxLength={120}
+          required
+          error={state.error === 'household' ? t('errors.household') : undefined}
+        />
+      </div>
 
-      <fieldset className="flex flex-col gap-3">
-        <legend className="pb-1 text-body font-medium">{t('membersLegend')}</legend>
-        <p className="text-caption text-ink-2">{t('membersHint')}</p>
-        <ol className="flex list-none flex-col gap-3 p-0">
+      <fieldset className={CARD}>
+        <legend className="float-start w-full text-card text-ink">{t('membersLegend')}</legend>
+        <p className="m-0 -mt-2 text-caption text-ink-2">{t('membersHint')}</p>
+        <ol className="m-0 flex list-none flex-col gap-3 p-0">
           {rows.map((row, i) => {
             const value = v?.members[row];
             const bad = state.error === 'member' && state.row === i;
             return (
               <li key={`${row}-${key}`}>
-                <fieldset className="flex flex-col gap-2 rounded-card border border-line p-3">
-                  <legend className="px-1 text-caption text-ink-2">{t('person', { n: i + 1 })}</legend>
-                  <div className="grid gap-2 sm:grid-cols-2">
+                <fieldset className="m-0 flex flex-col gap-3 rounded-tile border border-line bg-surface-2 p-4">
+                  <legend className="px-1 text-[13px] font-bold text-ink">{t('person', { n: i + 1 })}</legend>
+                  <div className="grid gap-3 sm:grid-cols-2">
                     <Input
                       id={`collect-m-${i}-first`}
                       name={`m:${i}:first`}
@@ -129,7 +131,6 @@ export function CollectForm({
                       autoComplete={i === 0 ? 'given-name' : 'off'}
                       maxLength={80}
                       required
-                      className="min-h-11"
                       error={bad ? t('errors.member') : undefined}
                     />
                     <Input
@@ -139,14 +140,13 @@ export function CollectForm({
                       defaultValue={value?.lastName ?? ''}
                       autoComplete={i === 0 ? 'family-name' : 'off'}
                       maxLength={80}
-                      className="min-h-11"
                     />
                   </div>
                   {rows.length > 1 ? (
                     <Button
                       type="button"
-                      variant="secondary"
-                      className="min-h-11 self-start"
+                      variant="ghost"
+                      className="self-start"
                       onClick={() => {
                         // Rows keep their own inputs (stable keys), so what was typed stays.
                         setRows((r) => r.filter((x) => x !== row));
@@ -165,7 +165,7 @@ export function CollectForm({
           <Button
             type="button"
             variant="secondary"
-            className="min-h-11 self-start"
+            className="self-start"
             onClick={() => {
               const id = next.current++;
               setRows((r) => [...r, id]);
@@ -177,24 +177,19 @@ export function CollectForm({
         ) : null}
       </fieldset>
 
-      <fieldset className="flex flex-col gap-3">
-        <legend className="pb-1 text-body font-medium">{t('contactLegend')}</legend>
-        <p className="text-caption text-ink-2">{t('contactHint')}</p>
-        <div className="flex flex-col gap-1.5">
-          <label htmlFor="collect-address" className="text-caption text-ink-2">
-            {t('address')}
-          </label>
-          <textarea
-            id="collect-address"
-            name="address"
-            rows={3}
-            maxLength={500}
-            autoComplete="street-address"
-            defaultValue={v?.address ?? ''}
-            key={`address-${key}`}
-            className={`${area} border-line`}
-          />
-        </div>
+      <fieldset className={CARD}>
+        <legend className="float-start w-full text-card text-ink">{t('contactLegend')}</legend>
+        <p className="m-0 -mt-2 text-caption text-ink-2">{t('contactHint')}</p>
+        <Textarea
+          id="collect-address"
+          name="address"
+          label={t('address')}
+          rows={3}
+          maxLength={500}
+          autoComplete="street-address"
+          defaultValue={v?.address ?? ''}
+          key={`address-${key}`}
+        />
         <Input
           id="collect-email"
           name="email"
@@ -204,7 +199,6 @@ export function CollectForm({
           key={`email-${key}`}
           autoComplete="email"
           maxLength={254}
-          className="min-h-11"
           error={state.error === 'invalidEmail' ? t('errors.invalidEmail') : undefined}
         />
         <Input
@@ -217,33 +211,24 @@ export function CollectForm({
           key={`phone-${key}`}
           autoComplete="tel"
           maxLength={40}
-          className="min-h-11"
           error={state.error === 'invalidPhone' ? t('errors.invalidPhone') : undefined}
         />
-        <div className="flex flex-col gap-1.5">
-          <label htmlFor="collect-note" className="text-caption text-ink-2">
-            {t('note')}
-          </label>
-          <textarea
-            id="collect-note"
-            name="note"
-            rows={3}
-            maxLength={500}
-            defaultValue={v?.note ?? ''}
-            key={`note-${key}`}
-            aria-describedby="collect-note-hint"
-            className={`${area} border-line`}
-          />
-          <p id="collect-note-hint" className="text-caption text-ink-2">
-            {t('noteHint')}
-          </p>
-        </div>
+        <Textarea
+          id="collect-note"
+          name="note"
+          label={t('note')}
+          hint={t('noteHint')}
+          rows={3}
+          maxLength={500}
+          defaultValue={v?.note ?? ''}
+          key={`note-${key}`}
+        />
       </fieldset>
 
       {state.challenge && challenge ? (
-        <fieldset className="flex flex-col gap-2 rounded-card border border-line p-4">
-          <legend className="px-1 text-body font-medium">{t('challengeTitle')}</legend>
-          <p className="text-caption text-ink-2">{t('challengeHint')}</p>
+        <fieldset className="m-0 flex flex-col gap-2 rounded-tile border border-line bg-surface-2 p-4">
+          <legend className="px-1 text-body font-bold text-ink">{t('challengeTitle')}</legend>
+          <p className="m-0 text-caption text-ink-2">{t('challengeHint')}</p>
           <HumanCheckField widget={challenge} />
         </fieldset>
       ) : null}
@@ -254,8 +239,8 @@ export function CollectForm({
           </div>
         ) : null}
       </div>
-      <p className="text-caption text-ink-2">{t('privacy')}</p>
-      <Button type="submit" disabled={pending} className="min-h-11 self-stretch sm:self-start">
+      <p className="m-0 text-caption text-ink-2">{t('privacy')}</p>
+      <Button type="submit" size="lg" disabled={pending} className="self-stretch sm:self-start">
         {t('submit')}
       </Button>
     </form>

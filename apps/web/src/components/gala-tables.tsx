@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, Input } from '@yayatoh/ui';
+import { Alert, Button, Checkbox, Input } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState, useEffect, useRef } from 'react';
 import { errorMessageKey } from '@/lib/errors.ts';
@@ -70,7 +70,6 @@ export function NameGuestForm({
   useEffect(() => {
     if (state.ok) ref.current?.reset();
   }, [state]);
-  const big = large ? 'min-h-11' : undefined;
   return (
     <form ref={ref} action={formAction} className="flex flex-col gap-4" noValidate>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -81,7 +80,6 @@ export function NameGuestForm({
           maxLength={80}
           autoComplete="off"
           label={t('firstName')}
-          className={big}
           error={fieldError(state, 'firstName', t('errors.firstName'))}
         />
         <Input
@@ -90,7 +88,6 @@ export function NameGuestForm({
           maxLength={80}
           autoComplete="off"
           label={t('lastName')}
-          className={big}
         />
       </div>
       <Input
@@ -101,11 +98,10 @@ export function NameGuestForm({
         autoComplete="off"
         label={t('email')}
         hint={t('emailHint')}
-        className={big}
         error={fieldError(state, 'email', t('errors.email'))}
       />
       <div aria-live="polite">
-        {state.ok && state.named ? <Alert tone="info" title={t('named', { name: state.named })} /> : null}
+        {state.ok && state.named ? <Alert tone="success" title={t('named', { name: state.named })} /> : null}
         {state.code && !state.fields?.length ? <Alert title={errorText(state)} /> : null}
       </div>
       <Button type="submit" size={large ? 'lg' : 'md'} disabled={pending} className="self-start">
@@ -130,11 +126,10 @@ export function CompanyForm({ action, current }: { action: Action; current: stri
         defaultValue={current ?? ''}
         label={t('company')}
         hint={t('companyHint')}
-        className="min-h-11"
         error={fieldError(state, 'company', t('errors.company'))}
       />
       <div aria-live="polite">
-        {state.ok ? <Alert tone="info" title={t('companySaved')} /> : null}
+        {state.ok ? <Alert tone="success" title={t('companySaved')} /> : null}
         {state.code && !state.fields?.length ? <Alert title={errorText(state)} /> : null}
       </div>
       <Button type="submit" size="lg" variant="secondary" disabled={pending} className="self-start">
@@ -180,7 +175,9 @@ export function ActionButton({
         {label}
       </Button>
       <div aria-live="polite">
-        {state.ok ? <Alert tone="info" title={message} /> : null}
+        {state.ok ? (
+          <Alert tone={done === 'resend' && !state.sent ? 'info' : 'success'} title={message} />
+        ) : null}
         {state.code ? <Alert title={errorText(state)} /> : null}
       </div>
     </form>
@@ -229,7 +226,7 @@ export function SponsorForm({
             error={fieldError(state, 'sponsorName', t('errors.sponsorName'))}
           />
           <div className="flex flex-col gap-1.5">
-            <label htmlFor={`${idPrefix}-logo`} className="text-caption text-ink-2">
+            <label htmlFor={`${idPrefix}-logo`} className="text-[13px] font-bold text-ink">
               {t('logo')}
             </label>
             <select
@@ -237,7 +234,7 @@ export function SponsorForm({
               name="logoUrl"
               defaultValue={sponsor?.logoUrl ?? ''}
               aria-describedby={`${idPrefix}-logo-hint`}
-              className="min-h-10 rounded-pill border border-line bg-surface px-4 text-body"
+              className="field w-full pe-9"
             >
               <option value="">{t('noLogo')}</option>
               {logos.map((l) => (
@@ -251,21 +248,16 @@ export function SponsorForm({
             </p>
           </div>
         </div>
-        <label className="flex min-h-6 items-start gap-2.5 text-body">
-          <input
-            type="checkbox"
-            name="published"
-            value="1"
-            defaultChecked={sponsor?.published ?? false}
-            className="mt-0.5 size-5 shrink-0 accent-ink"
-          />
-          <span>
-            {t('published')}
-            <span className="block text-caption text-ink-2">{t('publishedHint')}</span>
-          </span>
-        </label>
+        <Checkbox
+          id={`${idPrefix}-published`}
+          name="published"
+          value="1"
+          defaultChecked={sponsor?.published ?? false}
+          label={t('published')}
+          hint={t('publishedHint')}
+        />
         <div aria-live="polite">
-          {state.ok ? <Alert tone="info" title={t('sponsorSaved', { table })} /> : null}
+          {state.ok ? <Alert tone="success" title={t('sponsorSaved', { table })} /> : null}
           {state.code && !state.fields?.length ? <Alert title={errorText(state)} /> : null}
         </div>
         <Button type="submit" disabled={pending} className="self-start">
@@ -273,12 +265,12 @@ export function SponsorForm({
         </Button>
       </form>
       {removeAction && sponsor ? (
-        <form action={removeFormAction}>
-          <Button type="submit" variant="ghost" size="sm" disabled={removing}>
+        <form action={removeFormAction} className="flex flex-col gap-2 border-t border-line pt-3">
+          <Button type="submit" variant="ghost" size="sm" disabled={removing} className="self-start">
             {t('sponsorRemove', { table })}
           </Button>
           <div aria-live="polite">
-            {removed.ok ? <Alert tone="info" title={t('sponsorRemoved', { table })} /> : null}
+            {removed.ok ? <Alert tone="success" title={t('sponsorRemoved', { table })} /> : null}
           </div>
         </form>
       ) : null}

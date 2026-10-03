@@ -5,7 +5,7 @@ import {
   rsvpLinkRef,
 } from '@yayatoh/guests';
 import { createCtx, executeCommand, executeQuery, isDomainError } from '@yayatoh/kernel';
-import { Alert, Card, Label, PageHeader } from '@yayatoh/ui';
+import { Alert, EmptyState, Label, PageHeader, StatusPill } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
@@ -99,7 +99,7 @@ export default async function RsvpPage({
         }
       />
       {thanks === '1' && view.state !== 'expired' ? (
-        <Alert tone="info" title={t('thanksTitle')}>
+        <Alert tone="success" title={t('thanksTitle')}>
           {view.state === 'open' && deadline ? t('thanksChange', { deadline }) : t('thanks')}
         </Alert>
       ) : null}
@@ -110,40 +110,49 @@ export default async function RsvpPage({
           </Alert>
           {view.subEvents.length ? (
             <section aria-labelledby="rsvp-answers" className="flex flex-col gap-3">
-              <h2 id="rsvp-answers" className="text-section">
+              <h2 id="rsvp-answers" className="m-0 text-section text-ink">
                 {t('yourAnswers')}
               </h2>
               {view.subEvents.map((s) => (
-                <Card key={s.id} className="flex flex-col gap-2">
-                  <h3 className="text-body font-medium">{s.name}</h3>
-                  <p className="text-caption text-ink-2">
-                    {[when(s.startsAt, s.endsAt), s.place].filter(Boolean).join(' · ')}
-                  </p>
-                  <ul className="flex list-none flex-col gap-1 p-0">
+                <div
+                  key={s.id}
+                  className="flex flex-col gap-3 rounded-panel border border-line bg-surface p-5 elevation-card glass"
+                >
+                  <div className="flex flex-col gap-1">
+                    <h3 className="m-0 text-card text-ink">{s.name}</h3>
+                    <p className="m-0 text-caption font-semibold text-ink-2">
+                      {[when(s.startsAt, s.endsAt), s.place].filter(Boolean).join(' · ')}
+                    </p>
+                  </div>
+                  <ul className="m-0 flex list-none flex-col gap-2 border-t border-line p-0 pt-3">
                     {s.guestIds.map((id) => {
                       const a = answers[`${s.id}:${id}`];
                       return (
-                        <li key={id} className="text-body">
-                          {label(id)}: {a ? t(a) : t('noAnswer')}
+                        <li
+                          key={id}
+                          className="flex min-h-6 flex-wrap items-center gap-x-1 text-body text-ink"
+                        >
+                          <span className="font-bold">{label(id)}:</span>{' '}
+                          <StatusPill
+                            tone={a === 'attending' ? 'success' : a === 'declined' ? 'neutral' : 'waiting'}
+                            label={a ? t(a) : t('noAnswer')}
+                          />
                         </li>
                       );
                     })}
                   </ul>
-                </Card>
+                </div>
               ))}
             </section>
           ) : null}
         </>
       ) : view.state === 'open' ? (
         view.subEvents.length === 0 ? (
-          <Card className="flex flex-col gap-2">
-            <h2 className="text-section">{t('nothingTitle')}</h2>
-            <p className="text-body text-ink-2">{t('nothing')}</p>
-          </Card>
+          <EmptyState title={t('nothingTitle')} description={t('nothing')} />
         ) : (
           <>
             {view.respondedAt && thanks !== '1' ? (
-              <p role="status" className="text-body text-ink-2">
+              <p role="status" className="m-0 text-body font-semibold text-ink-2">
                 {t('answeredOn', {
                   date: new Intl.DateTimeFormat(locale, {
                     timeZone: view.timezone,

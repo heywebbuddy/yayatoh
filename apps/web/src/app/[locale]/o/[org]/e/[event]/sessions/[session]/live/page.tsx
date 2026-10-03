@@ -1,9 +1,11 @@
 import { moderationQuery } from '@yayatoh/engagement';
 import { executeQuery } from '@yayatoh/kernel';
 import { qrPath } from '@yayatoh/pdf';
-import { Button, EmptyState, PageHeader } from '@yayatoh/ui';
+import { Button, buttonClass, EmptyState, PageHeader } from '@yayatoh/ui';
+import { ArrowLeft, MessagesSquare, Presentation } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { Crumbs } from '@/components/crumbs.tsx';
 import { ModeratorConsole } from '@/components/engagement/moderator-console.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { appOrigin, displayToken, moderationChannelUrl, participantPath } from '@/server/engagement.ts';
@@ -31,21 +33,31 @@ export default async function SessionLivePage({ params }: Params) {
   const s = program.sessions.find((x) => x.id === session);
   if (!s) notFound();
   const t = await getTranslations('engagement.moderator');
+  const tr = await getTranslations();
   const page = await executeQuery(moderationQuery, { eventId: ev.id, sessionId: s.id }, data.ctx, ports);
   const base = `/o/${org}/e/${event}/sessions/${s.id}/live`;
+  const crumbs = (
+    <Crumbs
+      items={[
+        { label: data.org.name, href: `/o/${org}` },
+        { label: ev.name, href: `/o/${org}/e/${event}` },
+        { label: tr('nav.sessions'), href: `/o/${org}/e/${event}/sessions` },
+        { label: t('title') },
+      ]}
+    />
+  );
   const back = (
-    <Link
-      href={`/o/${org}/e/${event}/sessions`}
-      className="inline-flex min-h-10 items-center underline underline-offset-2"
-    >
+    <Link href={`/o/${org}/e/${event}/sessions`} className={buttonClass('ghost')}>
+      <ArrowLeft aria-hidden="true" className="rtl:-scale-x-100" />
       {t('back')}
     </Link>
   );
   if (!page.enabled || !page.settings || !page.state)
     return (
       <>
-        <PageHeader title={t('title')} description={s.title} actions={back} />
+        <PageHeader breadcrumb={crumbs} title={t('title')} description={s.title} actions={back} />
         <EmptyState
+          icon={<MessagesSquare />}
           title={t('offTitle')}
           description={canWrite ? t('offDescription') : t('offViewer')}
           action={
@@ -67,18 +79,17 @@ export default async function SessionLivePage({ params }: Params) {
   return (
     <>
       <PageHeader
+        breadcrumb={crumbs}
         title={t('title')}
         description={s.title}
         actions={
-          <div className="flex flex-wrap items-center gap-3">
-            <Link
-              href={`${base}/present`}
-              className="inline-flex min-h-10 items-center underline underline-offset-2"
-            >
+          <>
+            {back}
+            <Link href={`${base}/present`} className={buttonClass('secondary')}>
+              <Presentation aria-hidden="true" />
               {t('presenterLink')}
             </Link>
-            {back}
-          </div>
+          </>
         }
       />
       <ModeratorConsole

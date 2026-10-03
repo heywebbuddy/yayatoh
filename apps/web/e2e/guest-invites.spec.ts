@@ -2,7 +2,7 @@ import { type Browser, expect, type Page, test } from '@playwright/test';
 import { closePools } from '@yayatoh/db';
 import { resolveOrgSlug } from '@yayatoh/tenancy';
 import { type RsvpScenario, rsvpScenario } from '@yayatoh/testing';
-import { expectAccessible, passHumanCheck, signIn } from './helpers.ts';
+import { expectAccessibleBothModes, passHumanCheck, signIn } from './helpers.ts';
 
 /**
  * M4.1f: the contact collector (guests send their household's names, address, email and phone;
@@ -75,7 +75,7 @@ test.describe('Contact collector (M4.1f)', () => {
     const path = await collectorOn(page, s);
     await expect(page.getByTestId('collector-qr')).toBeVisible();
     await expect(page.getByText('Nothing to review')).toBeVisible();
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
 
     const guest = await guestPage(browser);
     await guest.goto(path);
@@ -84,14 +84,14 @@ test.describe('Contact collector (M4.1f)', () => {
     await expect(guest.getByText(s.eventName).first()).toBeVisible();
     // The page never shows anyone on the list.
     await expect(guest.getByText('Luis')).toHaveCount(0);
-    await expectAccessible(guest);
+    await expectAccessibleBothModes(guest);
 
     const send = guest.getByRole('button', { name: 'Send my details' });
     await send.click();
     await expect(guest.getByText("Enter your household's name.")).toBeVisible();
     await expect(guest.getByLabel('Household name')).toBeFocused();
     await expect(guest.getByLabel('Household name')).toHaveAttribute('aria-invalid', 'true');
-    await expectAccessible(guest);
+    await expectAccessibleBothModes(guest);
 
     const household = `The Nguyens ${tag()}`;
     await guest.getByLabel('Household name').fill(household);
@@ -119,7 +119,7 @@ test.describe('Contact collector (M4.1f)', () => {
     await send.click();
     await expect(guest.getByText('Enter an email address like name@example.com.')).toBeVisible();
     await expect(guest.getByLabel('Email')).toBeFocused();
-    await expectAccessible(guest);
+    await expectAccessibleBothModes(guest);
 
     const email = `linh-${tag()}@example.test`;
     await guest.getByLabel('Email').fill(email);
@@ -129,7 +129,7 @@ test.describe('Contact collector (M4.1f)', () => {
     await expect(
       guest.getByRole('status').filter({ hasText: 'Thank you! Your details were sent to the hosts.' }),
     ).toBeVisible();
-    await expectAccessible(guest);
+    await expectAccessibleBothModes(guest);
 
     // Nothing reached the list yet.
     await page.goto(guests(s));
@@ -141,14 +141,14 @@ test.describe('Contact collector (M4.1f)', () => {
     await expect(card.getByText('Linh Nguyen, Bao Nguyen')).toBeVisible();
     await expect(card.getByText(email)).toBeVisible();
     await expect(card.getByText('+13125550142')).toBeVisible();
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
     await card.getByRole('button', { name: `Approve ${household} as a new party` }).click();
     await expect(
       page.getByTestId('collector-done').getByText(`Approved: ${household} is now on your guest list.`),
     ).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Waiting for you' })).toBeVisible();
     await expect(page.getByText('Approved', { exact: true })).toBeVisible();
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
 
     // The new party, with its people, contact details sealed on its primary guest, and history.
     await page.getByRole('link', { name: `Open ${household}` }).click();
@@ -195,7 +195,7 @@ test.describe('Contact collector (M4.1f)', () => {
     await expect(page.getByRole('heading', { name: 'Merge Garcia family', level: 1 })).toBeVisible();
     const table = page.getByRole('table', { name: 'The party Garcia next to the submission' });
     await expect(table.getByRole('row', { name: /Email/ })).toContainText(email);
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
     // The party has no address or email: the submitted ones are offered; Sofía is new.
     await expect(page.getByLabel('Email', { exact: true })).toHaveValue('use');
     await page.getByLabel('Address', { exact: true }).selectOption('keep');
@@ -284,7 +284,7 @@ test.describe('Contact collector (M4.1f)', () => {
     expect(challenged).toBe(true);
     // What was typed stays; the check lets it through.
     await expect(guest.getByLabel('Household name')).toHaveValue(/^Flood /);
-    await expectAccessible(guest);
+    await expectAccessibleBothModes(guest);
     await passHumanCheck(guest);
     await guest.getByRole('button', { name: 'Send my details' }).click();
     await expect(guest.getByRole('status').filter({ hasText: 'Thank you!' })).toBeVisible();
@@ -298,12 +298,12 @@ test.describe('Contact collector (M4.1f)', () => {
     await guest.goto(`/ar${path}`);
     await expect(guest.locator('html')).toHaveAttribute('dir', 'rtl');
     await expect(guest.getByRole('heading', { name: 'شارك بيانات التواصل', level: 1 })).toBeVisible();
-    await expectAccessible(guest);
+    await expectAccessibleBothModes(guest);
     await guest.getByRole('button', { name: 'إرسال بياناتي' }).click();
     await expect(guest.getByText('أدخل اسم أسرتك.')).toBeVisible();
     await page.goto(`/ar${guests(s)}/collector`);
     await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
     const res = await guest.goto('/collect/ZZZZZZZZ');
     expect(res?.status()).toBe(404);
   });
@@ -337,7 +337,7 @@ test.describe('Invitations (M4.1f)', () => {
     await page.getByLabel('Invitation language').selectOption('es');
     await page.getByRole('button', { name: 'Save the language' }).click();
     await expect(page.getByRole('status').filter({ hasText: 'Language saved.' })).toBeVisible();
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
     await page.goto(`${guests(s)}/rsvp/${s.chen.id}`);
     await page.getByRole('textbox', { name: 'Email' }).fill(bounce);
     await page.getByRole('button', { name: 'Save contact details' }).click();
@@ -351,7 +351,7 @@ test.describe('Invitations (M4.1f)', () => {
       "2 parties haven't been sent their invitation.",
     );
     await expect(page.getByTestId('preview-subject')).toHaveText(`You're invited: ${s.eventName}`);
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
     await page.locator('#invite-lang').selectOption('es');
     await page.getByRole('button', { name: 'Show this language' }).click();
     await expect(page.getByTestId('preview-subject')).toHaveText(`Estás invitado: ${s.eventName}`);
@@ -367,7 +367,7 @@ test.describe('Invitations (M4.1f)', () => {
     await expect(
       page.getByRole('status').filter({ hasText: 'Test sent to your email address.' }),
     ).toBeVisible();
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
 
     // Send to everyone not sent yet, by email and text.
     await page.getByRole('group', { name: 'Send by' }).first().getByLabel('Text message').check();
@@ -407,11 +407,11 @@ test.describe('Invitations (M4.1f)', () => {
     await expect(page.getByTestId('invite-problems')).toHaveText(
       '1 party has a message that bounced or failed.',
     );
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
     await page.getByRole('link', { name: 'Open Chen' }).click();
     await expect(page.getByTestId('party-invite-problem')).toBeVisible();
     await expect(page.getByTestId('party-messages')).toContainText('Email: Bounced');
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
 
     // Send again to one party.
     await page.goto(`${guests(s)}/rsvp/${s.garcia.id}`);
@@ -445,7 +445,7 @@ test.describe('Invitations (M4.1f)', () => {
       'On: 14, 3 days before the deadline, by Email.',
     );
     await expect(page.getByLabel('Days before the deadline')).toHaveValue('14, 3');
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
     await page.getByLabel('Reminders', { exact: true }).selectOption({ label: 'Off' });
     await page.getByRole('button', { name: 'Save reminders' }).click();
     await expect(page.getByRole('status').filter({ hasText: 'Reminders saved.' })).toBeVisible();
@@ -463,7 +463,7 @@ test.describe('Invitations (M4.1f)', () => {
     await expect(page.getByRole('button', { name: /Send to/ })).toHaveCount(0);
     await expect(page.getByRole('button', { name: 'Save the wording' })).toHaveCount(0);
     await expect(page.getByRole('button', { name: 'Send a test email to me' })).toHaveCount(0);
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
     await page.goto(`${guests(s)}/rsvp/${s.garcia.id}`);
     await expect(page.getByRole('heading', { name: 'Invitation', exact: true })).toBeVisible();
     await expect(page.getByRole('button', { name: /Send the invitation/ })).toHaveCount(0);
@@ -480,6 +480,6 @@ test.describe('Invitations (M4.1f)', () => {
     await page.goto(`/ar${guests(s)}/invitations`);
     await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
     await expect(page.getByRole('heading', { name: 'الدعوات', level: 1 })).toBeVisible();
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
   });
 });

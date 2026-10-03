@@ -36,7 +36,7 @@ export function InvoicePayForm({
     <form action={formAction} aria-label={t('payLabel')} className="flex flex-col gap-3" noValidate>
       <input type="hidden" name="key" value={requestKey} />
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="invoice-amount" className="text-caption text-ink-2">
+        <label htmlFor="invoice-amount" className="text-[13px] font-bold text-ink">
           {t('amount', { currency })}
         </label>
         <input
@@ -47,14 +47,14 @@ export function InvoicePayForm({
           defaultValue={balance}
           aria-describedby="invoice-amount-hint"
           aria-invalid={bad}
-          className="min-h-11 w-full max-w-60 rounded-pill border border-line-strong bg-surface px-4 text-body"
+          className="field w-full max-w-60 tabular-nums"
         />
         <p id="invoice-amount-hint" className="text-caption text-ink-2">
           {t('amountHint')}
         </p>
       </div>
       <div aria-live="assertive">{state.code ? <Alert title={message} /> : null}</div>
-      <Button type="submit" disabled={pending} className="min-h-11 self-start">
+      <Button type="submit" size="lg" disabled={pending} className="w-full sm:w-auto sm:self-start">
         {t('pay')}
       </Button>
     </form>

@@ -13,7 +13,17 @@ import {
 import { executeQuery } from '@yayatoh/kernel';
 import { isProfileKey, navIncludes, navLabelKey, PROFILES } from '@yayatoh/platform';
 import { Avatar, AvatarStack, buttonClass, Card, EmptyState, PageHeader, Pagination, Tag } from '@yayatoh/ui';
-import { Download, Plus, Search as SearchIcon } from 'lucide-react';
+import {
+  CalendarDays,
+  ClipboardList,
+  Contact,
+  Download,
+  ListChecks,
+  MailCheck,
+  Plus,
+  Search as SearchIcon,
+  Send,
+} from 'lucide-react';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import type { ReactNode } from 'react';
@@ -374,42 +384,27 @@ export default async function GuestsPage({
           ) : undefined
         }
       />
-      <Link
-        href={`/o/${org}/e/${event}/guests/sub-events`}
-        className="inline-flex min-h-8 items-center self-start rounded-[10px] text-body font-bold text-primary-ink underline-offset-2 hover:underline"
-      >
-        {t('subEvents.link')}
-      </Link>
-      <Link
-        href={`/o/${org}/e/${event}/guests/rsvp`}
-        className="inline-flex min-h-8 items-center self-start rounded-[10px] text-body font-bold text-primary-ink underline-offset-2 hover:underline"
-      >
-        {t('rsvpHost.link')}
-      </Link>
-      <Link
-        href={`/o/${org}/e/${event}/guests/questions`}
-        className="inline-flex min-h-8 items-center self-start rounded-[10px] text-body font-bold text-primary-ink underline-offset-2 hover:underline"
-      >
-        {t('rsvpQuestions.link')}
-      </Link>
-      <Link
-        href={`/o/${org}/e/${event}/guests/answers`}
-        className="inline-flex min-h-8 items-center self-start rounded-[10px] text-body font-bold text-primary-ink underline-offset-2 hover:underline"
-      >
-        {t('rsvpAnswers.link')}
-      </Link>
-      <Link
-        href={`/o/${org}/e/${event}/guests/invitations`}
-        className="inline-flex min-h-8 items-center self-start rounded-[10px] text-body font-bold text-primary-ink underline-offset-2 hover:underline"
-      >
-        {t('invitations.link')}
-      </Link>
-      <Link
-        href={`/o/${org}/e/${event}/guests/collector`}
-        className="inline-flex min-h-8 items-center self-start rounded-[10px] text-body font-bold text-primary-ink underline-offset-2 hover:underline"
-      >
-        {t('collectorHost.link')}
-      </Link>
+      <nav aria-label={t(navLabelKey(profile, nav))} className="flex flex-wrap gap-2">
+        {(
+          [
+            ['sub-events', 'subEvents.link', CalendarDays],
+            ['rsvp', 'rsvpHost.link', MailCheck],
+            ['questions', 'rsvpQuestions.link', ListChecks],
+            ['answers', 'rsvpAnswers.link', ClipboardList],
+            ['invitations', 'invitations.link', Send],
+            ['collector', 'collectorHost.link', Contact],
+          ] as const
+        ).map(([path, key, Icon]) => (
+          <Link
+            key={path}
+            href={`/o/${org}/e/${event}/guests/${path}`}
+            className="inline-flex min-h-9 max-w-full items-center gap-2 rounded-pill border border-line bg-surface px-3.5 py-1.5 text-[13px] font-bold text-ink glass transition-colors duration-150 hover:border-line-strong hover:bg-surface-2 [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:text-primary-ink"
+          >
+            <Icon aria-hidden="true" strokeWidth={2} />
+            {t(key)}
+          </Link>
+        ))}
+      </nav>
       {canWrite ? null : <p className="text-body text-ink-2">{tp('viewerNotice')}</p>}
 
       <section aria-labelledby="guest-counts-heading" className="flex flex-col gap-3">

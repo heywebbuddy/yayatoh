@@ -26,11 +26,11 @@ export function MemberListForm({
   return (
     <form
       action={formAction}
-      className="flex flex-col gap-3"
+      className="flex flex-col gap-3 border-t border-line pt-4"
       aria-label={t('membersFor', { name: typeName })}
     >
       <div className="flex flex-col gap-1.5">
-        <label htmlFor={`${idPrefix}-file`} className="text-caption text-ink-2">
+        <label htmlFor={`${idPrefix}-file`} className="text-[13px] font-bold text-ink">
           {t('membersFile')}
         </label>
         <input
@@ -38,11 +38,11 @@ export function MemberListForm({
           name="file"
           type="file"
           accept=".csv,text/csv,text/plain"
-          className="min-h-10 text-body"
+          className="min-h-11 text-body text-ink-2 file:me-3 file:min-h-10 file:cursor-pointer file:rounded-control file:border file:border-line file:bg-surface file:px-4 file:font-bold file:text-ink hover:file:bg-surface-2"
         />
       </div>
       <div className="flex flex-col gap-1.5">
-        <label htmlFor={`${idPrefix}-members`} className="text-caption text-ink-2">
+        <label htmlFor={`${idPrefix}-members`} className="text-[13px] font-bold text-ink">
           {t('membersPaste')}
         </label>
         <textarea
@@ -51,14 +51,14 @@ export function MemberListForm({
           rows={4}
           aria-invalid={bad ? true : undefined}
           aria-describedby={`${idPrefix}-members-hint`}
-          className={`rounded-card border bg-surface px-4 py-2 text-body ${bad ? 'border-danger' : 'border-line'}`}
+          className="field w-full py-3 leading-relaxed"
         />
         <p id={`${idPrefix}-members-hint`} className="text-caption text-ink-2">
           {t('membersHint')}
         </p>
       </div>
       <div aria-live="polite">
-        {state.ok && !pending ? <Alert tone="info" title={t('membersSaved')} /> : null}
+        {state.ok && !pending ? <Alert tone="success" title={t('membersSaved')} /> : null}
         {state.code ? (
           <Alert
             title={

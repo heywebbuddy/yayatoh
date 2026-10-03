@@ -8807,7 +8807,8 @@
       "sponsoredBy": "贊助商：{sponsor}",
       "shown": "對賓客可見",
       "hidden": "對賓客隱藏",
-      "noSponsor": "尚無贊助商"
+      "noSponsor": "尚無贊助商",
+      "viewerNotice": "你可以檢視桌次和贊助商。如需填寫賓客姓名或變更贊助商，請聯絡擁有者或共同主辦人。"
     },
     "public": {
       "metaTitle": "填寫賓客姓名",

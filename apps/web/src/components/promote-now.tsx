@@ -36,8 +36,13 @@ export function PromoteNow({
           {t('promoteNow', { title })}
         </Button>
       ) : null}
-      <div aria-live="polite">
-        {state.ok ? <Alert tone="info" title={t('promotedCount', { count: state.promoted ?? 0 })} /> : null}
+      <div aria-live="polite" className="flex flex-col gap-2">
+        {state.ok ? (
+          <Alert
+            tone={state.promoted ? 'success' : 'info'}
+            title={t('promotedCount', { count: state.promoted ?? 0 })}
+          />
+        ) : null}
         {state.code ? <Alert title={reason ?? te(errorMessageKey(state.code))} /> : null}
       </div>
     </form>

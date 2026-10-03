@@ -6,8 +6,8 @@ import {
 } from '@yayatoh/guests';
 import { executeQuery } from '@yayatoh/kernel';
 import { qrPath } from '@yayatoh/pdf';
-import { isProfileKey, navIncludes, PROFILES } from '@yayatoh/platform';
-import { Alert, Button, Card, EmptyState, PageHeader } from '@yayatoh/ui';
+import { isProfileKey, navIncludes, navLabelKey, PROFILES } from '@yayatoh/platform';
+import { Alert, Button, Card, CardHeader, EmptyState, PageHeader, StatusPill } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { PrintButton } from '@/components/print-button.tsx';
@@ -17,10 +17,15 @@ import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import { CopyLink } from '../rsvp/copy-link.tsx';
 import { collectUrl } from '../rsvp/links.ts';
+import { GuestsCrumbs } from '../rsvp/nav.tsx';
 import { approveSubmissionAction, rejectSubmissionAction, setCollectorAction } from './actions.ts';
 
-const pill = 'rounded-pill px-2 py-px text-caption';
-const control = 'min-h-10 rounded-pill border border-line bg-surface px-4 text-body';
+const DECIDED_TONE = {
+  pending: 'waiting',
+  approved: 'success',
+  merged: 'info',
+  rejected: 'neutral',
+} as const;
 
 /**
  * The contact collector (M4.1f): switch the public link on or off, share it (copy, QR code to
@@ -43,6 +48,7 @@ export default async function CollectorPage({
   const nav = PROFILES[profile].nav.find((i) => i.key === 'guests');
   if (!nav || !navIncludes(profile, data.modules, 'guests') || !can('guests:read')) notFound();
   const t = await getTranslations('collectorHost');
+  const tr = await getTranslations();
   const canWrite = can('guests:write');
   const [settings, queue, list] = await Promise.all([
     executeQuery(collectorSettingsQuery, { eventId: ev.id }, data.ctx, ports),
@@ -61,18 +67,18 @@ export default async function CollectorPage({
   const partyName = new Map(list.partyOptions.map((p) => [p.id, p.name]));
 
   const details = (s: CollectorSubmissionDto) => (
-    <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-caption">
-      <dt className="text-ink-2">{t('people')}</dt>
+    <dl className="m-0 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 rounded-tile bg-surface-2 px-4 py-3 text-caption text-ink [&_dd]:m-0 [&_dt]:font-bold [&_dt]:text-ink-2">
+      <dt>{t('people')}</dt>
       <dd>{s.members.map((m) => [m.firstName, m.lastName].filter(Boolean).join(' ')).join(', ')}</dd>
       {s.address ? (
         <>
-          <dt className="text-ink-2">{t('address')}</dt>
+          <dt>{t('address')}</dt>
           <dd className="whitespace-pre-line">{s.address}</dd>
         </>
       ) : null}
       {s.email ? (
         <>
-          <dt className="text-ink-2">{t('email')}</dt>
+          <dt>{t('email')}</dt>
           <dd dir="ltr" className="break-all">
             {s.email}
           </dd>
@@ -80,13 +86,13 @@ export default async function CollectorPage({
       ) : null}
       {s.phone ? (
         <>
-          <dt className="text-ink-2">{t('phone')}</dt>
+          <dt>{t('phone')}</dt>
           <dd dir="ltr">{s.phone}</dd>
         </>
       ) : null}
       {s.note ? (
         <>
-          <dt className="text-ink-2">{t('note')}</dt>
+          <dt>{t('note')}</dt>
           <dd className="whitespace-pre-line">{s.note}</dd>
         </>
       ) : null}
@@ -96,20 +102,37 @@ export default async function CollectorPage({
   return (
     <>
       <div className="print:hidden">
-        <PageHeader title={t('title')} description={t('subtitle')} />
+        <PageHeader
+          breadcrumb={
+            <GuestsCrumbs
+              org={org}
+              event={event}
+              orgName={data.org.name}
+              eventName={ev.name}
+              guestsLabel={tr(navLabelKey(profile, nav))}
+              trail={[{ label: t('title') }]}
+            />
+          }
+          title={t('title')}
+          description={t('subtitle')}
+        />
       </div>
-      <Link href={base} className="min-h-6 self-start py-1 text-caption underline print:hidden">
-        {t('back')}
-      </Link>
-      {canWrite ? null : <p className="text-body text-ink-2 print:hidden">{t('viewerNotice')}</p>}
+      {canWrite ? null : (
+        <div className="print:hidden">
+          <Alert tone="info" title={t('viewerNotice')} />
+        </div>
+      )}
       {done === 'approved' || done === 'merged' || done === 'rejected' ? (
         <div className="print:hidden" data-testid="collector-done">
           <Alert
-            tone="info"
+            tone={done === 'rejected' ? 'info' : 'success'}
             title={t(`done.${done}`, { party: (doneParty && partyName.get(doneParty)) || '' })}
           >
             {doneParty && partyName.get(doneParty) ? (
-              <Link href={`${base}/rsvp/${doneParty}`} className="min-h-6 py-1 underline">
+              <Link
+                href={`${base}/rsvp/${doneParty}`}
+                className="inline-flex min-h-6 items-center font-bold text-primary-ink underline underline-offset-2"
+              >
                 {t('openParty', { party: partyName.get(doneParty) ?? '' })}
               </Link>
             ) : null}
@@ -117,12 +140,20 @@ export default async function CollectorPage({
         </div>
       ) : null}
 
-      <section aria-labelledby="collector-link-heading" className="flex flex-col gap-3">
-        <h2 id="collector-link-heading" className="text-section print:hidden">
-          {t('linkTitle')}
-        </h2>
-        <Card size="panel" className="flex flex-col gap-3 print:hidden">
-          <p className="text-body" data-testid="collector-state">
+      <section
+        aria-labelledby="collector-link-heading"
+        className={`grid items-start gap-5 print:block ${qr && url ? 'lg:grid-cols-[minmax(0,1fr)_minmax(0,22rem)]' : ''}`}
+      >
+        <Card size="panel" className="flex flex-col gap-4 print:hidden">
+          <CardHeader id="collector-link-heading" title={t('linkTitle')} />
+          <p
+            className="m-0 flex items-start gap-2.5 text-body font-semibold text-ink"
+            data-testid="collector-state"
+          >
+            <span
+              aria-hidden="true"
+              className={`mt-1.5 size-2 shrink-0 rounded-full ${settings.enabled ? 'bg-success-dot' : 'bg-ink-3'}`}
+            />
             {settings.enabled ? t('on') : t('off')}
           </p>
           {settings.enabled && url ? <CopyLink label={t('linkLabel')} url={url} /> : null}
@@ -138,9 +169,14 @@ export default async function CollectorPage({
           ) : null}
         </Card>
         {qr && url ? (
-          <Card className="flex flex-col items-center gap-4 text-center">
-            <p className="text-section">{ev.name}</p>
-            <p className="text-body">{t('cardText')}</p>
+          <Card
+            // Printed and pinned up: always the light theme (ADR 0022).
+            data-theme="light"
+            size="panel"
+            className="flex flex-col items-center gap-4 text-center"
+          >
+            <p className="m-0 text-section text-ink">{ev.name}</p>
+            <p className="m-0 text-body font-bold text-ink">{t('cardText')}</p>
             <svg
               role="img"
               aria-label={t('qrLabel')}
@@ -148,12 +184,12 @@ export default async function CollectorPage({
               data-url={url}
               viewBox={`0 0 ${qr.size} ${qr.size}`}
               shapeRendering="crispEdges"
-              className="aspect-square w-full max-w-64 text-ink"
+              className="aspect-square w-full max-w-64 text-black"
             >
               <rect width={qr.size} height={qr.size} className="fill-white" />
               <path d={qr.d} fill="currentColor" />
             </svg>
-            <p dir="ltr" className="font-mono text-caption break-all">
+            <p dir="ltr" className="m-0 font-mono text-caption break-all text-ink">
               {url}
             </p>
             <div className="print:hidden">
@@ -164,28 +200,28 @@ export default async function CollectorPage({
       </section>
 
       <section aria-labelledby="collector-queue-heading" className="flex flex-col gap-3 print:hidden">
-        <h2 id="collector-queue-heading" className="text-section">
+        <h2 id="collector-queue-heading" className="m-0 text-section text-ink">
           {t('queueTitle', { count: queue.pending.length })}
         </h2>
         {queue.pending.length === 0 ? (
           <EmptyState title={t('emptyTitle')} description={settings.enabled ? t('emptyOn') : t('emptyOff')} />
         ) : (
-          <ul className="flex list-none flex-col gap-3 p-0">
+          <ul className="m-0 flex list-none flex-col gap-4 p-0">
             {queue.pending.map((s) => (
               <li key={s.id}>
-                <Card className="flex flex-col gap-3">
+                <Card size="panel">
                   <article aria-labelledby={`sub-${s.id}`} className="flex flex-col gap-3">
-                    <div className="flex flex-wrap items-baseline justify-between gap-2">
-                      <h3 id={`sub-${s.id}`} className="text-body font-medium">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <h3 id={`sub-${s.id}`} className="m-0 grow text-card text-ink">
                         {s.household}
                       </h3>
-                      <span className="text-caption text-ink-2">
+                      <span className="text-caption text-ink-2 tabular-nums">
                         {t('submitted', { date: fmt(s.submittedAt) })}
                       </span>
                     </div>
                     {details(s)}
                     {canWrite ? (
-                      <div className="flex flex-col gap-3 border-t border-line pt-3">
+                      <div className="flex flex-col gap-4 border-t border-line pt-4">
                         <ProgramForm
                           action={approveSubmissionAction.bind(null, org, event, s.id)}
                           fields={[]}
@@ -201,10 +237,10 @@ export default async function CollectorPage({
                             className="flex flex-wrap items-end gap-2"
                           >
                             <div className="flex flex-col gap-1.5">
-                              <label htmlFor={`merge-${s.id}`} className="text-caption text-ink-2">
+                              <label htmlFor={`merge-${s.id}`} className="text-[13px] font-bold text-ink">
                                 {t('mergeInto')}
                               </label>
-                              <select id={`merge-${s.id}`} name="party" className={control}>
+                              <select id={`merge-${s.id}`} name="party" className="field pe-9">
                                 {list.partyOptions.map((p) => (
                                   <option key={p.id} value={p.id}>
                                     {p.name}
@@ -237,16 +273,24 @@ export default async function CollectorPage({
 
       {queue.decided.length ? (
         <section aria-labelledby="collector-decided-heading" className="flex flex-col gap-3 print:hidden">
-          <h2 id="collector-decided-heading" className="text-section">
+          <h2 id="collector-decided-heading" className="m-0 text-section text-ink">
             {t('decidedTitle')}
           </h2>
-          <ul className="flex list-none flex-col gap-1 p-0 text-body">
+          <ul className="m-0 flex list-none flex-col rounded-card border border-line bg-surface px-4 py-1 text-body elevation-card glass">
             {queue.decided.map((s) => (
-              <li key={s.id} className="flex flex-wrap items-center gap-2">
-                <span className={`${pill} bg-surface-3 text-ink-2`}>{t(`status.${s.status}`)}</span>
-                <span className="text-caption text-ink-2">{s.decidedAt ? fmt(s.decidedAt) : ''}</span>
+              <li
+                key={s.id}
+                className="flex min-h-11 flex-wrap items-center gap-x-3 gap-y-1 border-b border-line py-2 last:border-0"
+              >
+                <StatusPill tone={DECIDED_TONE[s.status]} label={t(`status.${s.status}`)} />
+                <span className="text-caption text-ink-2 tabular-nums">
+                  {s.decidedAt ? fmt(s.decidedAt) : ''}
+                </span>
                 {s.partyId && partyName.get(s.partyId) ? (
-                  <Link href={`${base}/rsvp/${s.partyId}`} className="min-h-6 py-1 text-caption underline">
+                  <Link
+                    href={`${base}/rsvp/${s.partyId}`}
+                    className="inline-flex min-h-6 items-center text-caption font-bold text-primary-ink underline-offset-2 hover:underline"
+                  >
                     {partyName.get(s.partyId)}
                   </Link>
                 ) : null}

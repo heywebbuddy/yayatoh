@@ -8807,7 +8807,8 @@
       "sponsoredBy": "Sponsorizzato da {sponsor}",
       "shown": "Visibile agli ospiti",
       "hidden": "Nascosto agli ospiti",
-      "noSponsor": "Ancora nessuno sponsor"
+      "noSponsor": "Ancora nessuno sponsor",
+      "viewerNotice": "Puoi vedere i tavoli e gli sponsor. Chiedi a un proprietario o co-organizzatore di inserire i nomi degli ospiti o di cambiare gli sponsor."
     },
     "public": {
       "metaTitle": "Indica i tuoi ospiti",
