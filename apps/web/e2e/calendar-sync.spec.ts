@@ -64,7 +64,7 @@ test.describe('Google Calendar push (M6.5c)', () => {
   test('org calendar: connect, sessions in the event time zone, a moved session updates once, a deleted one comes off', async ({
     page,
   }) => {
-    const owner = await newUser(page, { org: true, twoFactor: true });
+    const owner = await newUser(page, { org: true, twoFactor: true, event: 'published' });
     const org = owner.orgSlug as string;
     const f = await fixture(page, org, `Calendar Summit ${stamp()}`);
 
@@ -109,9 +109,12 @@ test.describe('Google Calendar push (M6.5c)', () => {
     await press(design.getByText('Edit Design workshop'));
     const starts = design.getByLabel('Session starts');
     const ends = design.getByLabel('Session ends');
+    // The picker shows local wall-clock time (`11/12/2026 9:30 AM`) and takes `YYYY-MM-DDTHH:mm`.
     const plusHour = (v: string) => {
-      const d = new Date(`${v}:00Z`);
-      d.setUTCHours(d.getUTCHours() + 1);
+      const m = /^(\d{1,2})\/(\d{1,2})\/(\d{4}),? (\d{1,2}):(\d{2})\s?(AM|PM)$/.exec(v.trim());
+      if (!m) throw new Error(`unexpected picker value ${v}`);
+      const h = (Number(m[4]) % 12) + (m[6] === 'PM' ? 12 : 0);
+      const d = new Date(Date.UTC(Number(m[3]), Number(m[1]) - 1, Number(m[2]), h + 1, Number(m[5])));
       return d.toISOString().slice(0, 16);
     };
     await starts.fill(plusHour(await starts.inputValue()));
@@ -131,7 +134,9 @@ test.describe('Google Calendar push (M6.5c)', () => {
     expect(entries.filter((e) => e.summary !== 'Design workshop').every((e) => e.writes === 1)).toBe(true);
 
     // Syncing again changes nothing.
+    await page.goto(`/o/${org}/integrations/${connection}`);
     await press(page.getByRole('button', { name: 'Sync now' }));
+    await expect(page.getByText('Sync started. Refresh in a moment to see the result.')).toBeVisible();
     await runSyncs(page, org);
     expect((await calendar(page, connection)).map((e) => e.writes)).toEqual(entries.map((e) => e.writes));
 
@@ -142,6 +147,7 @@ test.describe('Google Calendar push (M6.5c)', () => {
     await expect(page.locator('[data-session="Track B"]')).toHaveCount(0);
     await page.goto(`/o/${org}/integrations/${connection}`);
     await press(page.getByRole('button', { name: 'Sync now' }));
+    await expect(page.getByText('Sync started. Refresh in a moment to see the result.')).toBeVisible();
     await runSyncs(page, org);
     entries = await calendar(page, connection);
     expect(entries.find((e) => e.summary === 'Track B')?.status).toBe('cancelled');
@@ -151,7 +157,7 @@ test.describe('Google Calendar push (M6.5c)', () => {
   test('personal schedule: opt in from My schedule (refused first), it fills, follows an enrolment, updates and stops — by keyboard', async ({
     page,
   }) => {
-    const owner = await newUser(page, { org: true, twoFactor: true, signIn: false });
+    const owner = await newUser(page, { org: true, twoFactor: true, signIn: false, event: 'published' });
     const org = owner.orgSlug as string;
     const f = await fixture(page, org, `Personal Calendar ${stamp()}`);
     const [me] = f.people;
@@ -204,7 +210,7 @@ test.describe('Google Calendar push (M6.5c)', () => {
     // Stop: off at once; sessions stay in their calendar; they can connect again.
     await press(panel(page).getByRole('button', { name: 'Stop syncing' }));
     await expect(
-      panel(page).getByText('Syncing stopped. Sessions already in your calendar stay there.'),
+      panel(page).getByText('Syncing is off. Sessions already in your calendar stay there.'),
     ).toBeVisible();
     await page.reload();
     await expect(
@@ -215,7 +221,7 @@ test.describe('Google Calendar push (M6.5c)', () => {
   });
 
   test('a stale or forged callback connects nothing', async ({ page }) => {
-    const owner = await newUser(page, { org: true, twoFactor: true, signIn: false });
+    const owner = await newUser(page, { org: true, twoFactor: true, signIn: false, event: 'published' });
     const f = await fixture(page, owner.orgSlug as string, `Calendar Links ${stamp()}`, 2);
     const [me, other] = f.people;
     if (!me || !other) throw new Error('no registrants');
@@ -235,7 +241,7 @@ test.describe('Google Calendar push (M6.5c)', () => {
   });
 
   test('renders right-to-left in Arabic', async ({ page }) => {
-    const owner = await newUser(page, { org: true, twoFactor: true });
+    const owner = await newUser(page, { org: true, twoFactor: true, event: 'published' });
     const org = owner.orgSlug as string;
     const f = await fixture(page, org, `Calendar RTL ${stamp()}`);
     const [me] = f.people;
