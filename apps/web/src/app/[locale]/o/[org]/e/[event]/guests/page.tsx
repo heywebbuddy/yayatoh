@@ -12,7 +12,17 @@ import {
 } from '@yayatoh/guests';
 import { executeQuery } from '@yayatoh/kernel';
 import { isProfileKey, navIncludes, navLabelKey, PROFILES } from '@yayatoh/platform';
-import { Avatar, AvatarStack, buttonClass, Card, EmptyState, PageHeader, Pagination, Tag } from '@yayatoh/ui';
+import {
+  Avatar,
+  AvatarStack,
+  buttonClass,
+  Card,
+  EmptyState,
+  PageHeader,
+  Pagination,
+  Select,
+  Tag,
+} from '@yayatoh/ui';
 import {
   CalendarDays,
   ClipboardList,
@@ -466,33 +476,33 @@ export default async function GuestsPage({
                   <label htmlFor="guest-side" className="text-[13px] font-bold text-ink">
                     {tp('side')}
                   </label>
-                  <select id="guest-side" name="side" defaultValue={side} className="field">
+                  <Select id="guest-side" name="side" defaultValue={side} className="field">
                     <option value="">{tp('anySide')}</option>
                     {list.sides.map((s) => (
                       <option key={s} value={s}>
                         {s}
                       </option>
                     ))}
-                  </select>
+                  </Select>
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <label htmlFor="guest-tag" className="text-[13px] font-bold text-ink">
                     {tp('tag')}
                   </label>
-                  <select id="guest-tag" name="tag" defaultValue={tag} className="field">
+                  <Select id="guest-tag" name="tag" defaultValue={tag} className="field">
                     <option value="">{tp('anyTag')}</option>
                     {list.tags.map((s) => (
                       <option key={s} value={s}>
                         {s}
                       </option>
                     ))}
-                  </select>
+                  </Select>
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <label htmlFor="guest-vip" className="text-[13px] font-bold text-ink">
                     {tp('vip')}
                   </label>
-                  <select
+                  <Select
                     id="guest-vip"
                     name="vip"
                     defaultValue={sp.vip === 'yes' || sp.vip === 'no' ? sp.vip : ''}
@@ -501,20 +511,20 @@ export default async function GuestsPage({
                     <option value="">{tp('vipAny')}</option>
                     <option value="yes">{tp('vipOnly')}</option>
                     <option value="no">{tp('vipNot')}</option>
-                  </select>
+                  </Select>
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <label htmlFor="guest-rsvp" className="text-[13px] font-bold text-ink">
                     {t('rsvpHost.filter')}
                   </label>
-                  <select id="guest-rsvp" name="rsvp" defaultValue={rsvp ?? ''} className="field">
+                  <Select id="guest-rsvp" name="rsvp" defaultValue={rsvp ?? ''} className="field">
                     <option value="">{t('rsvpHost.filterAny')}</option>
                     {PARTY_RSVP_STATES.map((s) => (
                       <option key={s} value={s}>
                         {t(`rsvpHost.states.${s}`)}
                       </option>
                     ))}
-                  </select>
+                  </Select>
                 </div>
                 <button type="submit" className={buttonClass('secondary')}>
                   {tp('apply')}
@@ -537,9 +547,28 @@ export default async function GuestsPage({
             <EmptyState
               title={tp('emptyTitle')}
               description={canWrite ? tp('emptyDescription') : tp('emptyViewer')}
+              action={
+                canWrite ? (
+                  <a href="#new-party" className={buttonClass('secondary', 'md')}>
+                    {tp('emptyAction')}
+                  </a>
+                ) : (
+                  <Link href={`/o/${org}/e/${event}`} className={buttonClass('primary', 'md')}>
+                    {tp('backToEvent')}
+                  </Link>
+                )
+              }
             />
           ) : list.parties.length === 0 ? (
-            <EmptyState title={tp('noMatchTitle')} description={tp('noMatchDescription')} />
+            <EmptyState
+              title={tp('noMatchTitle')}
+              description={tp('noMatchDescription')}
+              action={
+                <Link href={`/o/${org}/e/${event}/guests`} className={buttonClass('primary', 'md')}>
+                  {tp('showAll')}
+                </Link>
+              }
+            />
           ) : (
             <ol className="flex list-none flex-col gap-3 p-0">
               {list.parties.map((p) => {

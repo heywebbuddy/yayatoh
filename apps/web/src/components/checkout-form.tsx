@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, buttonClass, Card, cx, Input } from '@yayatoh/ui';
+import { Alert, Button, buttonClass, Card, cx, Input, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { type FormEvent, startTransition, useActionState, useState } from 'react';
 import type { CheckoutState } from '@/app/[locale]/events/[slug]/actions.ts';
@@ -51,7 +51,10 @@ export function CheckoutForm({
   bestSeats = null,
   advancedSeating = false,
   channel = null,
+  cardForGiving = false,
 }: {
+  /** M4.8e: the event takes gifts tonight; offer to save a card for them after paying (P4-14). */
+  cardForGiving?: boolean;
   /** Multi-date events (M1.4b): the date chosen on the page, posted with the order. */
   occurrenceId?: string | null;
   passes: readonly PassView[];
@@ -203,7 +206,7 @@ export function CheckoutForm({
                           {t('checkout.quantity')}
                           <span className="sr-only"> — {p.name}</span>
                         </label>
-                        <select
+                        <Select
                           id={`qty-${p.id}`}
                           name={`qty:${p.id}`}
                           defaultValue="0"
@@ -214,7 +217,7 @@ export function CheckoutForm({
                               {n}
                             </option>
                           ))}
-                        </select>
+                        </Select>
                       </div>
                       {p.isDonation ? (
                         <div className="flex flex-col gap-1">
@@ -359,6 +362,18 @@ export function CheckoutForm({
             />
             <span>{t('checkout.marketingOptIn', { org: organizer })}</span>
           </label>
+          {cardForGiving ? (
+            // Unticked by default: saving a card is opt-in only (P4-14).
+            <label className="flex min-h-6 items-start gap-2.5 text-caption text-ink-2">
+              <input
+                type="checkbox"
+                name="saveCardForGiving"
+                value="1"
+                className="mt-0.5 size-5 shrink-0 accent-primary"
+              />
+              <span>{t('checkout.saveCardForGiving')}</span>
+            </label>
+          ) : null}
         </Card>
       ) : null}
       {buyable && verify ? (

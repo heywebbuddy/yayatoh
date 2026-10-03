@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
-import { ageSession, confirmStepUp, expectAccessible, personaCode, signIn } from './helpers.ts';
+import { ageSession, confirmStepUp, expectAccessible, personaCode, pickOption, signIn } from './helpers.ts';
 
 const LIST = '/o/lakeside-events/webhooks';
 const VIEWER = 'jordan@lakeside.test';
@@ -55,7 +55,7 @@ test.describe('webhooks console (M6.3b)', () => {
 
     // Any catalog event can be sent with its documented example. (In a shared org the relay may
     // also have fanned real order.paid events to this all-events endpoint: newest row first.)
-    await page.getByLabel('Message type').selectOption('order.paid');
+    await pickOption(page.getByLabel('Message type'), 'order.paid');
     await page.getByRole('button', { name: 'Send test' }).click();
     await expect(
       page.getByRole('status').filter({ hasText: 'Test message sent (order.paid)' }),
@@ -89,7 +89,7 @@ test.describe('webhooks console (M6.3b)', () => {
     const name = `Hook night ${test.info().project.name} ${Date.now()}`;
     await page.goto('/o/lakeside-events/events/new');
     await page.getByLabel('Event name', { exact: true }).fill(name);
-    await page.getByLabel('Time zone').selectOption('America/Chicago');
+    await pickOption(page.getByLabel('Time zone'), 'America/Chicago');
     await page.getByLabel('Starts', { exact: true }).fill('2031-06-01T19:00');
     await page.getByLabel('Ends', { exact: true }).fill('2031-06-01T23:00');
     await page.getByRole('button', { name: 'Create draft' }).click();
@@ -164,7 +164,7 @@ test.describe('webhooks console (M6.3b)', () => {
     const resent = deliveries(page).getByRole('row').filter({ hasText: 'Resend' }).first();
     await expect(resent).toContainText('Delivered');
 
-    await page.getByLabel('Failed since').selectOption('24h');
+    await pickOption(page.getByLabel('Failed since'), '24h');
     await page.getByRole('button', { name: 'Resend failed messages' }).click();
     await expect(
       page.getByRole('status').filter({ hasText: 'Failed messages are being resent.' }),
@@ -309,7 +309,7 @@ test.describe('webhooks console (M6.3b)', () => {
   test('the API keys page links to webhooks', async ({ page }) => {
     await signIn(page);
     await page.goto('/o/lakeside-events/api-keys');
-    await page.getByRole('link', { name: 'Webhooks', exact: true }).click();
+    await page.locator('#main').getByRole('link', { name: 'Webhooks', exact: true }).click();
     await expect(page).toHaveURL(/\/o\/lakeside-events\/webhooks$/);
   });
 });

@@ -88,7 +88,13 @@ export default async function ChannelsPage({
   return (
     <>
       <PageHeader title={t('title')} description={t('description')} />
-      <SeatingTabs base={base} active="channels" finder={data.modules.has('seat_finder')} selection />
+      <SeatingTabs
+        base={base}
+        active="channels"
+        finder={data.modules.has('seat_finder')}
+        selection
+        guests={data.modules.has('guests')}
+      />
       {!seating ? (
         <EmptyState
           title={t('noPlan')}
@@ -108,7 +114,21 @@ export default async function ChannelsPage({
               {t('listTitle')}
             </h2>
             {page.channels.length === 0 ? (
-              <EmptyState title={t('empty')} description={canWrite ? t('emptyHint') : undefined} />
+              <EmptyState
+                title={t('empty')}
+                description={canWrite ? t('emptyHint') : t('emptyReadOnly')}
+                action={
+                  canWrite ? (
+                    <Link href="#channel-form-heading" className={buttonClass('primary', 'md')}>
+                      {t('addFirst')}
+                    </Link>
+                  ) : (
+                    <Link href={base} className={buttonClass('secondary', 'md')}>
+                      {tt('assign.toPlan')}
+                    </Link>
+                  )
+                }
+              />
             ) : (
               <Card className="overflow-x-auto">
                 <table className="w-full text-start text-body">
@@ -232,7 +252,15 @@ export default async function ChannelsPage({
               </h2>
               <p className="text-body text-ink-2">{t('allotDescription')}</p>
               {items.length === 0 ? (
-                <EmptyState title={t('noSeats')} />
+                <EmptyState
+                  title={t('noSeats')}
+                  description={t('noSeatsHint')}
+                  action={
+                    <Link href={base} className={buttonClass('primary', 'md')}>
+                      {tt('assign.toPlan')}
+                    </Link>
+                  }
+                />
               ) : (
                 <Card>
                   <AllotForm

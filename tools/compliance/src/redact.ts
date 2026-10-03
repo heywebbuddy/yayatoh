@@ -52,6 +52,24 @@ function luhn(digits: string): boolean {
   return sum % 10 === 0;
 }
 
+/**
+ * A Luhn-valid digit run is read as a card only when it could be one (batch 3j merge: the gate
+ * flagged checksum digests, epoch timestamps, decimals and counts in evidence bundles). Issuers'
+ * numbers start with 2–6 (Mastercard 2-series and 5, Amex/Diners/JCB 3, Visa 4, Discover, UnionPay
+ * and Maestro 6) or are 15-digit UATP numbers starting with 1; nothing starts with 0, 7, 8 or 9
+ * (ISO/IEC 7812 industry digits outside payments), so a 13-digit epoch in milliseconds or a
+ * 19-digit one in nanoseconds is not a card. Written with separators, cards come in groups of
+ * three digits or more (4-4-4-4, 4-6-5, 4-6-4, 4-4-4-4-3): "10 20 30 40 50 60 70" is a row of counts.
+ */
+function cardLike(match: string): boolean {
+  const groups = match.split(/[ -]/);
+  if (groups.length > 1 && groups.some((g) => g.length < 3)) return false;
+  const d = groups.join('');
+  const first = d[0] ?? '';
+  if (first === '1' ? d.length !== 15 : !'23456'.includes(first)) return false;
+  return luhn(d);
+}
+
 /** Loopback and unspecified addresses are never customer data; every other address counts. */
 function isReportableIpv4(ip: string): boolean {
   const o = ip.split('.').map(Number);
@@ -94,11 +112,12 @@ export const RULES: readonly Rule[] = [
     confirm: (m) => /[a-f]/i.test(m) || m.split(':').filter(Boolean).length >= 3,
   },
   // Not inside a longer token: a hex digest (SHA256SUMS) or an id can hold a Luhn-valid run of
-  // digits (batch 3g merge: a bundle's checksum line was flagged on 2026-10-03).
+  // digits (batch 3g merge: a bundle's checksum line was flagged on 2026-10-03). Nor the digits of
+  // a decimal number (`0.9234567890123456`, batch 3j merge); see `cardLike` for the rest.
   {
     kind: 'card_number',
-    re: /(?<![\dA-Za-z_-])\d(?:[ -]?\d){12,18}(?![\dA-Za-z_-])/g,
-    confirm: luhn,
+    re: /(?<![\dA-Za-z_-]|\d\.)\d(?:[ -]?\d){12,18}(?![\dA-Za-z_-]|\.\d)/g,
+    confirm: cardLike,
   },
 ];
 

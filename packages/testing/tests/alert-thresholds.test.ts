@@ -5,7 +5,13 @@ import {
   LOW_BATTERY_PCT,
   STAFF_OFFLINE_AFTER_MS,
 } from '@yayatoh/checkin';
-import { CAPACITY_NEAR_PCT, CAPACITY_OVER_PCT } from '@yayatoh/command-center';
+import {
+  CAPACITY_NEAR_PCT,
+  CAPACITY_OVER_PCT,
+  KIOSK_IN_USE_MS,
+  SESSION_NEAR_PCT,
+  WAITLIST_MAX,
+} from '@yayatoh/command-center';
 import { describe, expect, it } from 'vitest';
 
 /**
@@ -26,5 +32,11 @@ describe('device alert thresholds', () => {
   it('grade capacity the same on the live gauges and in the capacity alerts (M3.3a)', () => {
     expect(CAPACITY_NEAR_PCT).toBe(THRESHOLDS.capacityNearPct);
     expect(CAPACITY_OVER_PCT).toBe(THRESHOLDS.capacityFullPct);
+  });
+
+  it('grade sessions, lines and kiosks the same on the conference tiles and in their alerts (M5.9a)', () => {
+    expect(SESSION_NEAR_PCT).toBe(THRESHOLDS.sessionNearPct);
+    expect(WAITLIST_MAX).toBe(THRESHOLDS.waitlistMax);
+    expect(KIOSK_IN_USE_MS).toBe(THRESHOLDS.deviceInUseMs);
   });
 });

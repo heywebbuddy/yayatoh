@@ -31,6 +31,11 @@ export const WIDGET_KEYS = [
   // M3.8b marketing analytics: campaign → registrations and revenue, and email deliverability.
   'campaigns',
   'deliverability',
+  // M5.9a conference pack: session attendance live, session fill and lines, exhibitor and sponsor activity.
+  'sessionAttendance',
+  'sessionFill',
+  'exhibitorActivity',
+  'sponsorActivity',
 ] as const;
 export type WidgetKey = (typeof WIDGET_KEYS)[number];
 
@@ -74,6 +79,7 @@ export interface WidgetMeta {
 
 const ALL_MODES: readonly EventMode[] = ['planning', 'pre_show', 'live', 'wrap'];
 const SELLING: readonly ProfileKey[] = ['gala', 'concert', 'conference', 'community', 'agency', 'other'];
+const CONFERENCE: readonly ProfileKey[] = ['conference'];
 
 export const WIDGET_META: Readonly<Record<WidgetKey, WidgetMeta>> = {
   readiness: {
@@ -257,6 +263,51 @@ export const WIDGET_META: Readonly<Record<WidgetKey, WidgetMeta>> = {
     size: 'md',
     channel: 'org.alerts',
   },
+  // M5.9a conference pack. Counts only (no money), so none of them is revenue.
+  // Live session rooms: who is in each running (or next) session against its places. Door work.
+  sessionAttendance: {
+    key: 'sessionAttendance',
+    module: 'sessions',
+    permission: 'events:read',
+    roles: ['owner', 'ops', 'door'],
+    profiles: CONFERENCE,
+    modes: ['pre_show', 'live'],
+    size: 'lg',
+    channel: 'event.checkins',
+  },
+  // Enrollment: sessions nearly full, waiting lines, sessions in rooms too small.
+  sessionFill: {
+    key: 'sessionFill',
+    module: 'sessions',
+    permission: 'events:read',
+    roles: ['owner', 'ops', 'marketing'],
+    profiles: CONFERENCE,
+    modes: ['planning', 'pre_show', 'live'],
+    size: 'md',
+    channel: null,
+  },
+  // Exhibitors: who has people at the booth, and leads (M5.6b, through the app's port).
+  exhibitorActivity: {
+    key: 'exhibitorActivity',
+    module: 'exhibitors',
+    permission: 'events:read',
+    roles: ['owner', 'ops', 'marketing'],
+    profiles: CONFERENCE,
+    modes: ALL_MODES,
+    size: 'md',
+    channel: null,
+  },
+  // Sponsors per package and overdue deliverables (M5.4b, through the app's port).
+  sponsorActivity: {
+    key: 'sponsorActivity',
+    module: 'sponsors',
+    permission: 'events:read',
+    roles: ['owner', 'ops', 'marketing'],
+    profiles: CONFERENCE,
+    modes: ALL_MODES,
+    size: 'sm',
+    channel: null,
+  },
   // The slot for the M3.2b alert engine: its loader is a placeholder until the engine registers.
   alerts: {
     key: 'alerts',
@@ -276,11 +327,32 @@ export const WIDGET_META: Readonly<Record<WidgetKey, WidgetMeta>> = {
  */
 export const DEFAULT_LAYOUTS: Readonly<Record<CcRole, Readonly<Record<EventMode, readonly WidgetKey[]>>>> = {
   owner: {
-    planning: ['readiness', 'sales', 'tickets', 'alerts', 'timeline'],
-    pre_show: ['readiness', 'alerts', 'sales', 'tickets', 'devices', 'seatFill', 'timeline'],
+    planning: [
+      'readiness',
+      'sales',
+      'tickets',
+      'alerts',
+      'sessionFill',
+      'exhibitorActivity',
+      'sponsorActivity',
+      'timeline',
+    ],
+    pre_show: [
+      'readiness',
+      'alerts',
+      'sales',
+      'tickets',
+      'sessionFill',
+      'sessionAttendance',
+      'exhibitorActivity',
+      'devices',
+      'seatFill',
+      'timeline',
+    ],
     live: [
       'checkins',
       'alerts',
+      'sessionAttendance',
       'liveFeed',
       'checkinSpeed',
       'capacity',
@@ -290,19 +362,34 @@ export const DEFAULT_LAYOUTS: Readonly<Record<CcRole, Readonly<Record<EventMode,
       'staffPresence',
       'assistance',
       'seatFill',
+      'sessionFill',
+      'exhibitorActivity',
+      'sponsorActivity',
       'sales',
       'tickets',
       'timeline',
     ],
-    wrap: ['sales', 'tickets', 'checkins', 'alerts', 'timeline'],
+    wrap: ['sales', 'tickets', 'checkins', 'alerts', 'exhibitorActivity', 'sponsorActivity', 'timeline'],
   },
   ops: {
-    planning: ['readiness', 'tickets', 'sales', 'alerts', 'timeline'],
-    pre_show: ['readiness', 'alerts', 'devices', 'tickets', 'seatFill', 'deviceBoard', 'timeline'],
+    planning: ['readiness', 'tickets', 'sales', 'alerts', 'sessionFill', 'exhibitorActivity', 'timeline'],
+    pre_show: [
+      'readiness',
+      'alerts',
+      'devices',
+      'tickets',
+      'sessionFill',
+      'sessionAttendance',
+      'exhibitorActivity',
+      'seatFill',
+      'deviceBoard',
+      'timeline',
+    ],
     live: [
       'checkins',
       'devices',
       'alerts',
+      'sessionAttendance',
       'liveFeed',
       'checkinSpeed',
       'capacity',
@@ -313,6 +400,8 @@ export const DEFAULT_LAYOUTS: Readonly<Record<CcRole, Readonly<Record<EventMode,
       'deviceBoard',
       'staffPresence',
       'assistance',
+      'sessionFill',
+      'exhibitorActivity',
       'timeline',
     ],
     wrap: ['checkins', 'tickets', 'sales', 'alerts', 'timeline'],
@@ -325,12 +414,13 @@ export const DEFAULT_LAYOUTS: Readonly<Record<CcRole, Readonly<Record<EventMode,
   },
   door: {
     planning: ['timeline', 'alerts'],
-    pre_show: ['devices', 'checkins', 'seatFill', 'alerts', 'deviceBoard', 'timeline'],
+    pre_show: ['devices', 'checkins', 'seatFill', 'alerts', 'sessionAttendance', 'deviceBoard', 'timeline'],
     live: [
       'checkins',
       'devices',
       'seatFill',
       'alerts',
+      'sessionAttendance',
       'liveFeed',
       'checkinSpeed',
       'capacity',
@@ -344,10 +434,30 @@ export const DEFAULT_LAYOUTS: Readonly<Record<CcRole, Readonly<Record<EventMode,
     wrap: ['checkins', 'timeline'],
   },
   marketing: {
-    planning: ['campaigns', 'readiness', 'tickets', 'deliverability', 'alerts', 'timeline'],
-    pre_show: ['campaigns', 'tickets', 'readiness', 'deliverability', 'alerts', 'timeline'],
-    live: ['tickets', 'campaigns', 'alerts', 'timeline'],
-    wrap: ['campaigns', 'tickets', 'deliverability', 'timeline'],
+    planning: [
+      'campaigns',
+      'readiness',
+      'tickets',
+      'sessionFill',
+      'exhibitorActivity',
+      'sponsorActivity',
+      'deliverability',
+      'alerts',
+      'timeline',
+    ],
+    pre_show: [
+      'campaigns',
+      'tickets',
+      'readiness',
+      'sessionFill',
+      'exhibitorActivity',
+      'sponsorActivity',
+      'deliverability',
+      'alerts',
+      'timeline',
+    ],
+    live: ['tickets', 'campaigns', 'exhibitorActivity', 'sponsorActivity', 'alerts', 'timeline'],
+    wrap: ['campaigns', 'tickets', 'exhibitorActivity', 'sponsorActivity', 'deliverability', 'timeline'],
   },
 };
 

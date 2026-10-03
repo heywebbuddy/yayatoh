@@ -4,7 +4,7 @@ import { appTokenSecret, realtimeChannelName } from '@yayatoh/platform';
 import { DEVICE_COOKIE, isDeviceId, newDeviceId } from '@yayatoh/platform/security';
 import { cookies } from 'next/headers';
 import { realtimeUrl } from '@/lib/realtime-url.ts';
-import { getSession } from './session.ts';
+import { getSession, ownSession } from './session.ts';
 
 /**
  * Live polls and Q&A in the web app (M5.7a). A participant is their account when signed in, else
@@ -36,6 +36,16 @@ export async function participantKeyFor(
     });
   }
   return participantKey(appTokenSecret(), sessionId, `device:${device}`);
+}
+
+/**
+ * M5.7b: the signed-in person's own account (never while staff impersonate them), passed to the
+ * engagement and feedback commands so an attendee's votes, named questions and feedback count
+ * toward their engagement score. Read from the session only, never from a form.
+ */
+export async function viewerAccount(): Promise<{ userId: string; email: string } | null> {
+  const s = await ownSession();
+  return s?.email ? { userId: s.userId, email: s.email } : null;
 }
 
 /** The signed-in person's name, offered as the default name on a question. */

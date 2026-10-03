@@ -1,13 +1,16 @@
 import { type NavGroup, type NavItem, navLabelKey, type ProfileKey } from '@yayatoh/platform';
 import { roleCan } from '@yayatoh/tenancy';
-import { Avatar, buttonClass, type Crumb, cx, NavSection } from '@yayatoh/ui';
-import { ChevronsUpDown, Plus, ShieldCheck } from 'lucide-react';
+import { Avatar, buttonClass, type Crumb, cx, iconButtonClass, NavSection } from '@yayatoh/ui';
+import { ChevronsUpDown, CircleHelp, Plus, ShieldCheck } from 'lucide-react';
+import { cookies } from 'next/headers';
 import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { Link } from '@/i18n/navigation.ts';
+import { NAV_COOKIE, type OrgSectionKey, parseClosedSections } from '@/lib/org-nav.ts';
 import type { ConsoleData } from '@/server/console.ts';
 import { currentTheme } from '@/server/theme.ts';
 import { BrandMark } from './brand-mark.tsx';
+import { type CreateEntry, CreateMenu } from './create-menu.tsx';
 import { Crumbs } from './crumbs.tsx';
 import { GlobalSearch } from './global-search.tsx';
 import { Icon } from './icons.tsx';
@@ -17,7 +20,9 @@ import { MediaPicture } from './media-picture.tsx';
 import { MobileNav } from './mobile-nav.tsx';
 import { NotificationCenter } from './notification-center.tsx';
 import { OrgStatusBanner } from './org-status-banner.tsx';
+import { OrgTrail } from './org-trail.tsx';
 import { SidebarLink } from './sidebar-link.tsx';
+import { SidebarSection } from './sidebar-section.tsx';
 import { SignOutButton } from './sign-out-button.tsx';
 import { IncidentBanner } from './status/incident-banner.tsx';
 import { StepUpProvider } from './step-up.tsx';
@@ -29,6 +34,49 @@ export interface ShellNav {
   readonly items: readonly NavItem[];
   /** Per-item badges, e.g. setup progress "7/10". */
   readonly badges?: Readonly<Record<string, string>>;
+  /**
+   * U2: the org console's grouped, collapsible sections (Events, Audience & marketing, Money,
+   * Site & content, Settings). When set, they replace `items`; the event console keeps its
+   * profile-driven items.
+   */
+  readonly sections?: readonly ShellSection[];
+}
+
+export interface ShellSection {
+  readonly key: OrgSectionKey;
+  readonly label: string;
+  readonly items: readonly {
+    readonly key: string;
+    readonly path: string;
+    readonly icon: string;
+    readonly label: string;
+  }[];
+}
+
+const hrefOf = (base: string, path: string) => (path ? `${base}/${path}` : base);
+
+/**
+ * U2: the top bar's Create menu, each entry only for members who may create it (the target page
+ * checks again) and only when the org has the module.
+ */
+function createEntries(data: NonNullable<ConsoleData>, t: (key: string) => string): CreateEntry[] {
+  if (data.role === 'collaborator') return [];
+  const base = `/o/${data.org.slug}`;
+  const can = (p: string) => roleCan(data.role, p);
+  const entries: (CreateEntry & { ok: boolean })[] = [
+    { key: 'event', icon: 'calendar', href: `${base}/events/new/guided`, ok: can('events:write') },
+    { key: 'series', icon: 'layers', href: `${base}/series#new-series`, ok: can('events:write') },
+    { key: 'template', icon: 'copy', href: `${base}/templates#new-template`, ok: can('events:write') },
+    { key: 'venue', icon: 'building', href: `${base}/venues#new-venue`, ok: can('events:write') },
+    {
+      key: 'coupon',
+      icon: 'ticket',
+      href: `${base}/coupons`,
+      ok: can('events:write') && data.modules.has('ticketing'),
+    },
+    { key: 'page', icon: 'file-text', href: `${base}/content/new`, ok: can('marketing:write') },
+  ].map((e) => ({ ...e, label: t(`create.${e.key}`) }));
+  return entries.filter((e) => e.ok).map(({ ok: _, ...e }) => e);
 }
 
 const GROUP_ORDER: readonly NavGroup[] = ['overview', 'build', 'run'];
@@ -55,6 +103,7 @@ async function SidebarContent({
   nav: ShellNav;
 }) {
   const t = await getTranslations();
+  const closed = nav.sections ? parseClosedSections((await cookies()).get(NAV_COOKIE)?.value) : new Set();
   const groups = GROUP_ORDER.map((g) => nav.items.filter((i) => i.group === g)).filter((g) => g.length > 0);
   const canCreate = roleCan(data.role, 'events:write');
   const who = data.session.name || data.session.email;
@@ -115,30 +164,56 @@ async function SidebarContent({
           ))}
         </div>
       </details>
-      <div className="flex flex-col gap-4">
-        {groups.map((items, gi) => {
-          const rows = items.map((i) => (
-            <SidebarLink
-              key={i.key}
-              href={i.path ? `${nav.base}/${i.path}` : nav.base}
-              exact={!i.path}
-              icon={<Icon name={i.icon} className="size-[17px]" />}
-              badge={nav.badges?.[i.key]}
+      {nav.sections ? (
+        <div className="flex flex-col gap-3">
+          {nav.sections.map((section) => (
+            <SidebarSection
+              key={section.key}
+              section={section.key}
+              label={section.label}
+              closed={closed.has(section.key)}
+              paths={section.items.filter((i) => i.path).map((i) => hrefOf(nav.base, i.path))}
             >
-              {t(navLabelKey(nav.profile, i))}
-            </SidebarLink>
-          ));
-          return gi === 0 ? (
-            <NavSection key={items[0]?.group} label={t('shell.menuSection')}>
-              {rows}
-            </NavSection>
-          ) : (
-            <div key={items[0]?.group} className="flex flex-col gap-1 border-t border-side-line pt-4">
-              {rows}
-            </div>
-          );
-        })}
-      </div>
+              {section.items.map((i) => (
+                <SidebarLink
+                  key={i.key}
+                  href={hrefOf(nav.base, i.path)}
+                  exact={!i.path}
+                  icon={<Icon name={i.icon} className="size-[17px]" />}
+                  badge={nav.badges?.[i.key]}
+                >
+                  {i.label}
+                </SidebarLink>
+              ))}
+            </SidebarSection>
+          ))}
+        </div>
+      ) : (
+        <div className="flex flex-col gap-4">
+          {groups.map((items, gi) => {
+            const rows = items.map((i) => (
+              <SidebarLink
+                key={i.key}
+                href={i.path ? `${nav.base}/${i.path}` : nav.base}
+                exact={!i.path}
+                icon={<Icon name={i.icon} className="size-[17px]" />}
+                badge={nav.badges?.[i.key]}
+              >
+                {t(navLabelKey(nav.profile, i))}
+              </SidebarLink>
+            ));
+            return gi === 0 ? (
+              <NavSection key={items[0]?.group} label={t('shell.menuSection')}>
+                {rows}
+              </NavSection>
+            ) : (
+              <div key={items[0]?.group} className="flex flex-col gap-1 border-t border-side-line pt-4">
+                {rows}
+              </div>
+            );
+          })}
+        </div>
+      )}
       <div className="mt-auto flex flex-col gap-2 pt-2">
         <p className="px-2.5 text-label tracking-[0.12em] text-side-label uppercase">
           {t('shell.accountSection')}
@@ -207,6 +282,7 @@ export async function ConsoleShell({
 }) {
   const t = await getTranslations('shell');
   const theme = await currentTheme();
+  const create = createEntries(data, t);
   const sidebar = <SidebarContent data={data} context={context} nav={nav} />;
   return (
     <div className="min-h-dvh lg:flex lg:gap-5 lg:p-4">
@@ -242,6 +318,16 @@ export async function ConsoleShell({
           <GlobalSearch org={data.org.slug} label={t('search')} placeholder={t('searchPlaceholder')} />
           {status ? <div className="flex min-w-0 items-center gap-2.5">{status}</div> : null}
           <div className="ms-auto flex items-center gap-2.5">
+            <CreateMenu label={t('create.label')} entries={create} />
+            {/* U2: the platform help center, from every console page. */}
+            <Link
+              href="/help"
+              aria-label={t('help')}
+              title={t('help')}
+              className={iconButtonClass('secondary', 'md')}
+            >
+              <CircleHelp aria-hidden="true" strokeWidth={2} />
+            </Link>
             <ThemeSwitch initial={theme} />
             <NotificationCenter data={data} />
           </div>
@@ -251,6 +337,15 @@ export async function ConsoleShell({
             <div className="-mb-2">
               <Crumbs items={crumbs} />
             </div>
+          ) : nav.sections ? (
+            <OrgTrail
+              label={t('breadcrumb')}
+              org={{ label: data.org.name, href: nav.base }}
+              sections={nav.sections.map((sec) => ({
+                label: sec.label,
+                items: sec.items.map((i) => ({ label: i.label, href: hrefOf(nav.base, i.path) })),
+              }))}
+            />
           ) : null}
           <StepUpProvider>{children}</StepUpProvider>
         </main>

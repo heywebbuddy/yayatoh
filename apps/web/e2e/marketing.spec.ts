@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
-import { expectAccessible, signIn } from './helpers.ts';
+import { expectAccessible, pickOption, signIn } from './helpers.ts';
 
 // The marketing pages come from the platform CMS (the content org, Harbor Arts in e2e), seeded
 // from apps/web/src/content/platform-starter.ts.
@@ -51,7 +51,7 @@ test.describe('marketing site (M3.11b)', () => {
     await expect(page.getByText('Check the highlighted fields.')).toBeVisible();
     await expect(page.getByText("Confirm that you're a person.")).toBeVisible();
 
-    await page.getByRole('combobox', { name: 'Topic' }).selectOption('sales');
+    await pickOption(page.getByRole('combobox', { name: 'Topic' }), 'sales');
     await page.getByRole('textbox', { name: 'Your name' }).fill(`Robin ${s}`);
     await page.getByRole('textbox', { name: 'Email' }).fill(`robin-${s}@example.test`);
     await page.getByRole('textbox', { name: 'Organization' }).fill('Riverside Festivals');
@@ -119,7 +119,7 @@ test.describe('marketing site (M3.11b)', () => {
     await expectAccessible(page);
 
     await page.getByRole('link', { name: 'New section' }).click();
-    await page.getByRole('combobox', { name: 'Page' }).selectOption('home');
+    await pickOption(page.getByRole('combobox', { name: 'Page' }), 'home');
     await page.getByRole('textbox', { name: 'Heading', exact: true }).fill(heading);
     await page.getByRole('textbox', { name: 'Text', exact: true }).fill('Queues vanish.');
     await page.getByRole('textbox', { name: 'Button text' }).fill('Go');

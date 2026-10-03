@@ -8,6 +8,7 @@ import {
   attendeeLabelsQuery,
   getAttendeeQuery,
 } from '@yayatoh/attendees';
+import { printingSetupQuery } from '@yayatoh/badges';
 import { contactStatsQuery, contactValueQuery } from '@yayatoh/crm';
 import { executeQuery, formatMoney, isDomainError, money } from '@yayatoh/kernel';
 import { ticketCancelBulk } from '@yayatoh/orders';
@@ -43,12 +44,14 @@ import {
   EmptyState,
   Label,
   SearchPill,
+  Select,
   StatusDot,
   Table,
 } from '@yayatoh/ui';
 import { X } from 'lucide-react';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { AutoRefresh } from '@/components/auto-refresh.tsx';
+import { BadgePrintPanel } from '@/components/badge-print-panel.tsx';
 import { BulkFields, type SeatTarget } from '@/components/bulk-fields.tsx';
 import { ClaimLinkForm } from '@/components/claim-link-form.tsx';
 import { ContactStatsHeader } from '@/components/contact-stats.tsx';
@@ -141,6 +144,7 @@ export default async function AttendeesPage({
     opk?: string;
     batch?: string;
     bulkError?: string;
+    printed?: string;
   }>;
 }) {
   const { locale, org, event } = await params;
@@ -155,7 +159,7 @@ export default async function AttendeesPage({
   const distribution = oneOf(DISTRIBUTION_FILTERS, sp.distribution);
   const page = Math.max(1, Math.min(10_000, Number.parseInt(sp.page ?? '1', 10) || 1));
   setRequestLocale(locale);
-  const { data, event: real, can } = await loadEvent(org, event, 'attendees');
+  const { data, event: real, can, opens } = await loadEvent(org, event, 'attendees');
   const t = await getTranslations();
   const profile = isProfileKey(real.profile) ? real.profile : 'other';
   const needle = q.trim().toLowerCase();
@@ -383,6 +387,11 @@ export default async function AttendeesPage({
     timeline && roleCan(data.role, 'finance:read')
       ? await executeQuery(contactValueQuery, { contactId: timeline.contactId }, data.ctx, ports)
       : null;
+  // M5.5b onsite reprint: the badge panel, where the event prints badges and the member works the desk.
+  const badgePrinting =
+    hasReal && selectedTicketId && canWrite && opens('badges') && data.modules.has('badges')
+      ? await executeQuery(printingSetupQuery, { eventId: real.id }, data.ctx, ports)
+      : null;
   const when = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeZone: real.timezone });
   const filtered = Boolean(
     needle || labels.length || source || status || ticketTypeId || checkedIn || distribution,
@@ -473,31 +482,31 @@ export default async function AttendeesPage({
                 <label htmlFor="attendee-source" className="sr-only">
                   {t('attendees.source')}
                 </label>
-                <select id="attendee-source" name="source" defaultValue={source ?? ''} className="field">
+                <Select id="attendee-source" name="source" defaultValue={source ?? ''} className="field">
                   <option value="">{t('attendees.anySource')}</option>
                   {ATTENDEE_SOURCES.map((x) => (
                     <option key={x} value={x}>
                       {t(`attendeeSource.${x}`)}
                     </option>
                   ))}
-                </select>
+                </Select>
                 <label htmlFor="attendee-status" className="sr-only">
                   {t('attendees.status')}
                 </label>
-                <select id="attendee-status" name="status" defaultValue={status ?? ''} className="field">
+                <Select id="attendee-status" name="status" defaultValue={status ?? ''} className="field">
                   <option value="">{t('attendees.anyStatus')}</option>
                   {ATTENDEE_STATUSES.map((x) => (
                     <option key={x} value={x}>
                       {t(`attendeeRecordStatus.${x}`)}
                     </option>
                   ))}
-                </select>
+                </Select>
                 {ticketing ? (
                   <>
                     <label htmlFor="attendee-type" className="sr-only">
                       {t('attendees.ticketType')}
                     </label>
-                    <select
+                    <Select
                       id="attendee-type"
                       name="type"
                       defaultValue={ticketTypeId ?? ''}
@@ -509,11 +518,11 @@ export default async function AttendeesPage({
                           {x.name}
                         </option>
                       ))}
-                    </select>
+                    </Select>
                     <label htmlFor="attendee-checkin" className="sr-only">
                       {t('attendees.checkIn')}
                     </label>
-                    <select
+                    <Select
                       id="attendee-checkin"
                       name="checkin"
                       defaultValue={checkedIn ?? ''}
@@ -525,11 +534,11 @@ export default async function AttendeesPage({
                           {t(`attendees.checkedIn.${x}`)}
                         </option>
                       ))}
-                    </select>
+                    </Select>
                     <label htmlFor="attendee-distribution" className="sr-only">
                       {t('attendees.distribution')}
                     </label>
-                    <select
+                    <Select
                       id="attendee-distribution"
                       name="distribution"
                       defaultValue={distribution ?? ''}
@@ -541,7 +550,7 @@ export default async function AttendeesPage({
                           {t(`attendees.distributionFilter.${x}`)}
                         </option>
                       ))}
-                    </select>
+                    </Select>
                   </>
                 ) : null}
               </>
@@ -717,9 +726,32 @@ export default async function AttendeesPage({
           <EmptyState
             title={t('attendees.emptyTitle', { term: title })}
             description={t('attendees.emptyDescription')}
+            action={
+              !demo && canWrite && data.modules.has('attendees') ? (
+                <Link href={`${base}/import`} className={buttonClass('primary', 'md')}>
+                  {t('attendees.emptyUpload')}
+                </Link>
+              ) : ticketing && opens('ticketsOrders') ? (
+                <Link href={`/o/${org}/e/${event}/tickets-orders`} className={buttonClass('primary', 'md')}>
+                  {t('attendees.toTicketsOrders')}
+                </Link>
+              ) : (
+                <Link href={`/o/${org}/e/${event}`} className={buttonClass('primary', 'md')}>
+                  {t('attendees.backToEvent')}
+                </Link>
+              )
+            }
           />
         ) : rows.length === 0 ? (
-          <EmptyState title={t('attendees.noMatches')} description={t('attendees.noMatchesHint')} />
+          <EmptyState
+            title={t('attendees.noMatches')}
+            description={t('attendees.noMatchesHint')}
+            action={
+              <Link href={base} className={buttonClass('primary', 'md')}>
+                {t('eventFilters.clear')}
+              </Link>
+            }
+          />
         ) : (
           <Table
             caption={title}
@@ -911,6 +943,20 @@ export default async function AttendeesPage({
                   submitLabel={t('distribution.create')}
                 />
               </section>
+            ) : null}
+            {badgePrinting && selectedTicketId && selectedRecord ? (
+              <BadgePrintPanel
+                org={org}
+                event={event}
+                eventId={real.id}
+                ticketId={selectedTicketId}
+                timeZone={real.timezone}
+                ctx={data.ctx}
+                printing={badgePrinting}
+                back={{ to: 'attendee', attendeeId: selectedRecord.id }}
+                printedJobId={sp.printed && /^[0-9a-f-]{36}$/.test(sp.printed) ? sp.printed : undefined}
+                headingId="badge-heading"
+              />
             ) : null}
             {timeline && timeline.items.length > 0 ? (
               <section aria-labelledby="history-heading" className="flex flex-col gap-2">

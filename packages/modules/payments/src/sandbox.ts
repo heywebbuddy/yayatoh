@@ -68,5 +68,20 @@ export function sandboxSafeProvider(opts: {
     listBalanceTransactions(i) {
       return live.listBalanceTransactions(i);
     },
+    // M4.8e cards on file (batch 3u merge): a sandbox org's cards are saved, charged and removed
+    // by the fake provider, and so is any card the fake minted.
+    async createCardSetup(i) {
+      return (byId(i.connectedAccountId) ?? (await byOrg(i.orgId))).createCardSetup(i);
+    },
+    async chargeSavedCard(i) {
+      return (
+        byId(i.paymentMethodId) ??
+        byId(i.connectedAccountId) ??
+        (await byOrg(i.orgId))
+      ).chargeSavedCard(i);
+    },
+    async detachSavedCard(i) {
+      return (byId(i.paymentMethodId) ?? byId(i.connectedAccountId) ?? live).detachSavedCard(i);
+    },
   };
 }

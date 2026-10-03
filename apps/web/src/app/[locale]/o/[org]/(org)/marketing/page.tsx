@@ -136,7 +136,15 @@ export default async function MarketingConsole({
         : null}
       {tab === 'requests' ? (
         requests.length === 0 ? (
-          <EmptyState title={t('noRequestsTitle')} description={t('noRequestsDescription')} />
+          <EmptyState
+            title={t('noRequestsTitle')}
+            description={t('noRequestsDescription')}
+            action={
+              <Link href="/contact" className={buttonClass('secondary', 'md')}>
+                {t('noRequestsAction')}
+              </Link>
+            }
+          />
         ) : (
           <ul aria-label={t('tabs.requests')} className="flex list-none flex-col gap-3 p-0">
             {requests.map((r: ContactRequestDto) => (
