@@ -4,6 +4,7 @@ import { Alert, Button, Input } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState } from 'react';
 import type { SelfCheckinState } from '@/app/[locale]/session-checkin/[token]/actions.ts';
+import { keepValues } from '@/lib/keep-values.ts';
 
 /** M5.6a: "I'm here" — the attendee types the code on their ticket or badge. */
 export function SelfCheckinForm({
@@ -38,7 +39,7 @@ export function SelfCheckinForm({
           ? t('selfCheckin.closedDescription')
           : undefined;
   return (
-    <form action={formAction} noValidate className="flex flex-col gap-4">
+    <form action={formAction} onSubmit={keepValues(formAction)} noValidate className="flex flex-col gap-4">
       <p className="text-body text-ink-2">{t('selfCheckin.intro')}</p>
       <Input
         name="code"

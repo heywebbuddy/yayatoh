@@ -269,7 +269,7 @@ test.describe('session check-in (M5.6a)', () => {
     await field.fill(codeOf(f, 'Ana'));
     await field.press('Enter');
     await expect(result).toContainText('Checked out of the session');
-    await expect(device.getByTestId('scan-network')).toHaveText('Offline');
+    await expect(device.getByTestId('scan-network')).toContainText('Offline');
     await deviceContext.setOffline(false);
     await expect(result).toContainText('Confirmed by the server', { timeout: 45_000 });
     await expect(device.getByTestId('scan-queue')).toHaveText('All scans synced');

@@ -118,17 +118,19 @@ export async function POST(req: NextRequest) {
     const order = await orderByManageToken(r.manageToken);
     people.push({ name: who, code: order?.tickets[0]?.shortCode ?? '' });
     if (who === 'Ana') {
+      // Enrolled before the workshop began (enrollment closes at the start).
+      const earlier = createCtx({ orgId: org.orgId, now: new Date(now - 3 * 60 * MIN) });
       const mine = await executeQuery(
         myScheduleQuery,
         { token: r.manageToken, registrantId: null },
-        anon,
+        earlier,
         ports,
       );
       if (mine.registrantId)
         await executeCommand(
           enrollSessionCommand,
           { token: r.manageToken, registrantId: mine.registrantId, sessionId: workshop.id, choice: 'refuse' },
-          anon,
+          earlier,
           ports,
         );
     }

@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useActionState, useEffect, useRef } from 'react';
 import type { SessionDoorFormState } from '@/app/[locale]/o/[org]/e/[event]/onsite/sessions/actions.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
+import { keepValues } from '@/lib/keep-values.ts';
 
 /** M5.6a: add a door for one session; its gates follow the session (and the room). */
 export function SessionDoorForm({
@@ -36,6 +37,7 @@ export function SessionDoorForm({
     <form
       ref={ref}
       action={formAction}
+      onSubmit={keepValues(formAction)}
       noValidate
       aria-labelledby="session-door-form-heading"
       className="grid grid-cols-1 gap-4 md:grid-cols-2"
