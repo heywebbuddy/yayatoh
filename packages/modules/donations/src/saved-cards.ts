@@ -255,6 +255,7 @@ const detachOf = (c: typeof savedCards.$inferSelect) =>
  */
 export const removeSavedCardCommand = tenantCommand({
   name: 'donations.removeSavedCard',
+  category: 'delete',
   input: z.object({ cardToken: z.string().min(1).max(200) }),
   output: z.object({ removed: z.boolean(), detach: DetachDto.nullable() }),
   entitlement: 'donations',
