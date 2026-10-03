@@ -57,6 +57,8 @@ export {
   ticketsDsarTx,
 } from './dsar.ts';
 export * from './dto.ts';
+// M4.8b: ticket type prices for fair-market values and the quid-pro-quo notice (donations).
+export { type TicketTypePrice, ticketTypePricesTx } from './fair-value-facts.ts';
 export {
   currentFaceMinor,
   holdInventoryTx,
@@ -92,6 +94,7 @@ export {
   ticketsForOrderTx,
   voidTicketsTx,
 } from './issue.ts';
+export { nameTicketHolderTx } from './naming.ts';
 export {
   activeTicketsForOccurrenceTx,
   assertOccurrenceIdsTx,
@@ -100,6 +103,8 @@ export {
   validForOccurrence,
 } from './occurrences.ts';
 export { orderTicketIdsTx, ticketFactsTx } from './participation.ts';
+// M5.1d: tickets sold on an invoice with a balance due.
+export { paymentDueTicketIdsTx, setOrderPaymentDueTx } from './payment-due.ts';
 export { privateColumns } from './private-columns.ts';
 export {
   CreatePromoCodeInput,
@@ -130,6 +135,16 @@ export {
   undistributedTicketsTx,
 } from './stats.ts';
 export { claimLinkMailer, holderLinkMailer, transferMailer } from './subscribers.ts';
+// M4.2b gala tables: purchased tables and their guest slots.
+export {
+  recordTableLinkSentTx,
+  TABLE_NAMING_PURPOSE,
+  type TableUnitRow,
+  tableSlotsTx,
+  tableUnitContext,
+  tableUnitsTx,
+  tableUnitTx,
+} from './tables.ts';
 export {
   cancelHolderTransferCommand,
   cancelTransferCommand,

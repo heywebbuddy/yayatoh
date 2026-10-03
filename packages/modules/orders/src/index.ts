@@ -34,6 +34,35 @@ export {
   issueCreditNoteCommand,
 } from './commands/credit-notes.ts';
 export { applyDisputeEventCommand } from './commands/disputes.ts';
+// M5.1d: invoices, PO and pay later.
+export {
+  applyInvoiceProviderEventTx,
+  attachInvoicePaymentCommand,
+  eventInvoicesQuery,
+  INVOICE_FILTERS,
+  INVOICE_PURPOSE,
+  InvoiceDocumentDto,
+  InvoiceDto,
+  InvoicePaymentDto,
+  IssueInvoiceInput,
+  invoiceDocumentQuery,
+  invoiceDocumentTx,
+  invoiceFactsTx,
+  invoiceIdFromToken,
+  invoiceOfOrderTx,
+  invoicePath,
+  invoiceToken,
+  issueInvoiceTx,
+  OFFLINE_METHODS,
+  OrderInvoiceDto,
+  orderInvoiceQuery,
+  PublicInvoiceDto,
+  publicInvoice,
+  recordInvoicePaymentCommand,
+  StartInvoicePaymentResultDto,
+  startInvoicePaymentCommand,
+  voidInvoiceCommand,
+} from './commands/invoices.ts';
 export {
   CancellationPreviewDto,
   cancellationPreviewQuery,
@@ -101,6 +130,22 @@ export {
   newCreditCode,
   parseCreditCode,
 } from './domain/credit-notes.ts';
+export {
+  addDays,
+  balanceMinor as invoiceBalanceMinor,
+  DAYS_BEFORE_EVENT,
+  DEFAULT_TERMS,
+  feePartMinor,
+  formatInvoiceNumber,
+  type InvoiceTerms,
+  invoiceTerms,
+  isOverdue as isInvoiceOverdue,
+  localDay,
+  NET_DAYS,
+  normalizePoNumber,
+  type PayAmountProblem,
+  payAmountProblem,
+} from './domain/invoices.ts';
 export { HOLD_MINUTES, orderLifecycle, PAYMENT_EXTENSION_MINUTES } from './domain/lifecycle.ts';
 export { MERGE_FIELDS, type MergeField, orderRef, renderMacro, unknownMergeFields } from './domain/macros.ts';
 export {
@@ -130,6 +175,16 @@ export {
   refundDeadline,
   refundsFee,
 } from './domain/refund-policy.ts';
+// M4.2b gala tables: naming a purchased table's guest slots.
+export {
+  mayResend,
+  NAMING_ORDER_STATES,
+  namingRefusal,
+  pickSlot,
+  REMINDER_GAP_MS,
+  RESEND_GAP_MS,
+  tableProgress,
+} from './domain/tables.ts';
 export {
   ACTIVE_STATUSES as WAITLIST_ACTIVE_STATUSES,
   canRejoin,
@@ -143,6 +198,13 @@ export {
   queuePosition,
   sortQueue,
 } from './domain/waitlist.ts';
+export {
+  type DonationOrderInput,
+  donationItemTx,
+  onlineGivingTx,
+  payDonationOrderTx,
+  startDonationOrderTx,
+} from './donation-orders.ts';
 export {
   buyerOrdersDsarTx,
   buyerOrgs,
@@ -234,7 +296,11 @@ export {
   parseGuestLinkToken,
   resendAt,
 } from './guest/otp.ts';
+export { invoiceMailer } from './invoice-mailer.ts';
+// M5.2b: the manage token behind a session-schedule email link.
+export { orderManageTokenTx } from './manage-link.ts';
 export { buyerFactsTx, orderRefTx } from './participation.ts';
+export { orderPaymentStateTx } from './payment-state.ts';
 export { privateColumns } from './private-columns.ts';
 export {
   listOrdersQuery,
@@ -250,6 +316,8 @@ export {
   ordersForContactTx,
   searchOrdersQuery,
 } from './queries.ts';
+// M4.8b: the facts a donation or ticket receipt needs (donations module).
+export { type ReceiptOrderFacts, receiptOrderFactsTx } from './receipt-facts.ts';
 export {
   type MassRefundSlice,
   type RefundOutcome,
@@ -263,6 +331,10 @@ export {
   CHARGE_MODELS,
   CREDIT_NOTE_DISPOSITIONS,
   CREDIT_NOTE_KINDS,
+  INVOICE_PAYMENT_CHANNELS,
+  INVOICE_PAYMENT_METHODS,
+  INVOICE_PAYMENT_STATUSES,
+  INVOICE_STATUSES,
   MACRO_ACTIONS,
   MASS_REFUND_ITEM_STATUSES,
   MASS_REFUND_STATUSES,
@@ -283,6 +355,22 @@ export {
   supportReplyMailer,
   ticketMailer,
 } from './subscribers.ts';
+export {
+  HostedTableDto,
+  HostedTableSlotDto,
+  hostedTablesQuery,
+  hostNameTableSlotCommand,
+  nameTableSlotCommand,
+  orderTablesByManageToken,
+  PublicTableDto,
+  publicTableQuery,
+  resendTableLinkCommand,
+  sendTableRemindersCommand,
+  setTableCompanyCommand,
+  tableLinkContext,
+  tableNamingMailer,
+  tableNamingPath,
+} from './tables.ts';
 export {
   declineWaitlistOfferCommand,
   eraseWaitlistDsarTx,

@@ -61,6 +61,7 @@
     "frontDoor": "Front door",
     "maintenance": "Maintenance",
     "providers": "Messaging providers",
+    "charities": "Charities",
     "menu": "Open menu",
     "closeMenu": "Close menu"
   },
@@ -989,6 +990,88 @@
         "webhook": "Callbacks configured to /api/webhooks/whatsapp/gateway and a verified one has arrived",
         "switch": "WHATSAPP_PROVIDER includes gateway"
       }
+    }
+  },
+  "charities": {
+    "title": "Charity profiles",
+    "description": "Profiles orgs sent for verification. Check each against the IRS exempt-organization list before its receipts turn tax-deductible.",
+    "filter": "Filter charity profiles",
+    "pending": "Waiting",
+    "reviewed": "Reviewed",
+    "pendingCaption": "Charity profiles waiting for review, oldest first",
+    "reviewedCaption": "Reviewed charity profiles, newest first",
+    "emptyPending": "No charity profiles are waiting for review.",
+    "emptyReviewed": "No charity profiles reviewed yet.",
+    "org": "Organization",
+    "legalName": "Legal name",
+    "ein": "EIN",
+    "kind": "Exempt status",
+    "kinds": {
+      "501c3": "Own 501(c)(3)",
+      "fiscal_sponsor": "Fiscal sponsor"
+    },
+    "status": "Status",
+    "statuses": {
+      "pending": "Waiting for review",
+      "verified": "Verified",
+      "rejected": "Rejected"
+    },
+    "submitted": "Submitted",
+    "reviewedAt": "Reviewed",
+    "reviewTitle": "Charity review",
+    "reviewHeading": "Charity profile of {org}",
+    "reviewDescription": "Compare what the org entered with the IRS exempt-organization list, then verify or reject. Every verdict is audited.",
+    "back": "Back to charity profiles",
+    "profileTitle": "What the org entered",
+    "sponsor": "Fiscal sponsor",
+    "address": "Address",
+    "version": "version {version}",
+    "note": "Last note",
+    "irsTitle": "IRS exempt-organization list: EIN {ein}",
+    "irsUnavailable": "The IRS list isn’t loaded on this server, so profiles can’t be verified yet. The owner runs the download job (IRS_EO_BMF_DIR).",
+    "source": {
+      "irs_bulk": "Source: the IRS bulk file (EO Business Master File).",
+      "fixture": "Source: the recorded test list (dev and CI only)."
+    },
+    "irsName": "Name on the list",
+    "irsPlace": "City and state",
+    "irsSubsection": "Subsection (03 = 501(c)(3))",
+    "irsDeductibility": "Deductibility (1 = deductible)",
+    "irsStatus": "Exemption status (01–03 = in force)",
+    "nameMatches": "matches",
+    "nameDiffers": "differs from the profile: check before verifying",
+    "eligible": "Eligible: a 501(c)(3) to which contributions are deductible",
+    "problems": {
+      "not_listed": "Not on the IRS list",
+      "not_501c3": "Not a 501(c)(3) organization",
+      "not_deductible": "Contributions are not deductible",
+      "not_in_force": "Exemption not in force (revoked or terminated)",
+      "unavailable": "The IRS list isn’t available"
+    },
+    "verdictTitle": "Verdict",
+    "verifyForm": "Verify the charity profile",
+    "verifyNote": "Note (optional)",
+    "verify": "Verify",
+    "alreadyVerified": "This profile is verified. Withdraw the verification below if it no longer holds.",
+    "cannotVerify": "This profile can’t be verified: the IRS list doesn’t show an eligible organization for its EIN.",
+    "rejectForm": "Reject the charity profile",
+    "rejectNote": "Note to the org (required)",
+    "reject": "Reject",
+    "withdraw": "Withdraw verification",
+    "done": {
+      "verified": "Verified. The org’s receipts are tax-deductible from now on.",
+      "rejected": "Rejected. The org sees your note; its receipts are not tax-deductible."
+    },
+    "errors": {
+      "stale": "The org changed its profile while you reviewed it. Review the new version.",
+      "note": "Write a note of at least 3 characters for the org.",
+      "ein_mismatch": "The IRS record is for another EIN.",
+      "not_listed": "The EIN is not on the IRS list.",
+      "not_501c3": "The organization is not a 501(c)(3).",
+      "not_deductible": "Contributions to this organization are not deductible.",
+      "not_in_force": "The organization’s exemption is not in force.",
+      "unavailable": "The IRS list isn’t available on this server.",
+      "internal": "Something went wrong. Try again."
     }
   },
   "theme": {

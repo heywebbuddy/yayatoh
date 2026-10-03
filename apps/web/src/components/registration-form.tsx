@@ -24,6 +24,8 @@ export function RegistrationForm({ find, register }: { find: Action; register: A
   // The latest options: a registration attempt may refresh them (a type filled up meanwhile).
   const options = state.options ?? found.options;
   const [typeId, setTypeId] = useState<string>('');
+  // M5.1d: pay now by card, or later by invoice (types that offer it).
+  const [payment, setPayment] = useState<'card' | 'invoice'>('card');
   const type = options?.types.find((x) => x.id === typeId) ?? null;
   const step2 = useRef<HTMLHeadingElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
@@ -70,7 +72,7 @@ export function RegistrationForm({ find, register }: { find: Action; register: A
       </div>
     );
   const findError = message(found, ['email']);
-  const error = message(state, ['name']);
+  const error = message(state, ['name', 'poNumber']);
   const admissions = type?.items.filter((i) => i.kind === 'admission') ?? [];
   const addOns = type?.items.filter((i) => i.kind === 'add_on') ?? [];
   const verify = state.code === 'verify_email' ? state.verify : undefined;
@@ -150,7 +152,7 @@ export function RegistrationForm({ find, register }: { find: Action; register: A
                     <span className="flex flex-col">
                       <span>
                         {x.name} · {x.priceLabel}
-                        {x.full ? ` · ${t('full')}` : ''}
+                        {x.apply ? ` · ${t('byApplication')}` : x.full ? ` · ${t('full')}` : ''}
                       </span>
                       {x.description ? (
                         <span className="text-caption text-ink-2">{x.description}</span>
@@ -203,13 +205,96 @@ export function RegistrationForm({ find, register }: { find: Action; register: A
                     label={t('name')}
                     error={state.field === 'name' ? t('errors.field.name') : undefined}
                   />
-                  {type.full ? (
+                  {type.apply ? (
+                    <>
+                      <p className="text-body text-ink-2">{t('applyHint')}</p>
+                      <Input
+                        name="company"
+                        autoComplete="organization"
+                        maxLength={120}
+                        label={t('company')}
+                      />
+                      <Input
+                        name="jobTitle"
+                        autoComplete="organization-title"
+                        maxLength={120}
+                        label={t('jobTitle')}
+                      />
+                      <div className="flex flex-col gap-1.5">
+                        <label htmlFor="registration-message" className="text-caption text-ink-2">
+                          {t('message')}
+                        </label>
+                        <textarea
+                          id="registration-message"
+                          name="message"
+                          rows={3}
+                          maxLength={2000}
+                          className="rounded-card border border-line bg-surface px-4 py-2 text-body"
+                        />
+                      </div>
+                    </>
+                  ) : null}
+                  {type.payLater && !type.full && !type.apply ? (
+                    <fieldset className="flex flex-col gap-2">
+                      <legend className="mb-1 text-body font-medium">{t('payTitle')}</legend>
+                      {(['card', 'invoice'] as const).map((k) => (
+                        <label key={k} className="flex min-h-6 items-start gap-2.5 text-body">
+                          <input
+                            type="radio"
+                            name="payment"
+                            value={k}
+                            checked={payment === k}
+                            onChange={() => setPayment(k)}
+                            className="mt-0.5 size-5 accent-ink"
+                          />
+                          <span className="flex flex-col">
+                            <span>{t(k === 'card' ? 'payNow' : 'payLater')}</span>
+                            {k === 'invoice' ? (
+                              <span className="text-caption text-ink-2">{t('payLaterHint')}</span>
+                            ) : null}
+                          </span>
+                        </label>
+                      ))}
+                    </fieldset>
+                  ) : null}
+                  {type.payLater && payment === 'invoice' && !type.full && !type.apply ? (
+                    <>
+                      {type.poNumber !== 'off' ? (
+                        <Input
+                          name="poNumber"
+                          maxLength={60}
+                          autoComplete="off"
+                          required={type.poNumber === 'required'}
+                          label={type.poNumber === 'required' ? t('poNumberRequired') : t('poNumber')}
+                          hint={t('poNumberHint')}
+                          error={state.field === 'poNumber' ? t('errors.field.poNumber') : undefined}
+                        />
+                      ) : null}
+                      <Input
+                        name="billingCompany"
+                        maxLength={120}
+                        autoComplete="organization"
+                        label={t('billingCompany')}
+                      />
+                    </>
+                  ) : null}
+                  {type.full && !type.apply ? (
                     <Alert tone="info" title={t('fullTitle', { type: type.name })}>
                       {t('fullHint')}
                     </Alert>
                   ) : null}
                   <div className={verify ? 'hidden' : 'contents'}>
-                    {type.full ? (
+                    {type.apply ? (
+                      <Button
+                        type="submit"
+                        name="intent"
+                        value="apply"
+                        disabled={pending}
+                        className="self-start"
+                      >
+                        {t('apply')}
+                      </Button>
+                    ) : type.full ? (
                       <Button
                         type="submit"
                         name="intent"
@@ -227,7 +312,7 @@ export function RegistrationForm({ find, register }: { find: Action; register: A
                         disabled={pending}
                         className="self-start"
                       >
-                        {t('register')}
+                        {type.payLater && payment === 'invoice' ? t('registerInvoice') : t('register')}
                       </Button>
                     )}
                   </div>
@@ -243,7 +328,11 @@ export function RegistrationForm({ find, register }: { find: Action; register: A
                 <h2 id="registration-verify-title" className="text-section">
                   {tr('guestVerify.title')}
                 </h2>
-                <input type="hidden" name="intent" value={type?.full ? 'waitlist' : 'register'} />
+                <input
+                  type="hidden"
+                  name="intent"
+                  value={type?.apply ? 'apply' : type?.full ? 'waitlist' : 'register'}
+                />
                 {verify.token ? <input type="hidden" name="verifyToken" value={verify.token} /> : null}
                 <GuestCodeFields
                   email={verify.email}

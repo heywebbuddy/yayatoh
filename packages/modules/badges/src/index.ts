@@ -1,3 +1,5 @@
+// M5.1d: print a badge with a balance due (audited override).
+export { OVERRIDE_MINUTES, overrideAllows, overrideBalanceDueCommand } from './balance-override.ts';
 export {
   BatchDto,
   type BatchRunDeps,

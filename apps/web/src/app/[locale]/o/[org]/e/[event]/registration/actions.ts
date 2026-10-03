@@ -1,5 +1,6 @@
 'use server';
 
+import { getSegmentQuery, previewAudienceQuery } from '@yayatoh/audiences';
 import { executeCommand, executeQuery, moneyFromDecimal } from '@yayatoh/kernel';
 import {
   archiveAdmissionItemCommand,
@@ -9,9 +10,14 @@ import {
   DEFAULT_ITEM_KEYS,
   DEFAULT_TYPE_KEYS,
   disableCellCommand,
+  MAX_MEMBERS,
+  parseMemberList,
   registrationSetupQuery,
+  replaceMembersCommand,
   seedRegistrationDefaultsCommand,
   setCellCommand,
+  setPayLaterCommand,
+  setTypeRulesCommand,
   updateAdmissionItemCommand,
   updateRegistrationTypeCommand,
 } from '@yayatoh/registration';
@@ -161,5 +167,111 @@ export async function disableCellAction(
 ) {
   return run(org, event, (eventId, ctx) =>
     executeCommand(disableCellCommand, { eventId, registrationTypeId, admissionItemId }, ctx, ports),
+  );
+}
+
+// M5.1c: how a type admits people (approval, auto-approve domains, +1, substitution cut-off) and
+// its member list (CSV or pasted text, or an audience snapshot).
+
+export async function setTypeRulesAction(
+  org: string,
+  event: string,
+  registrationTypeId: string,
+  _prev: FormState,
+  form: FormData,
+): Promise<FormState> {
+  return run(org, event, (eventId, ctx) =>
+    executeCommand(
+      setTypeRulesCommand,
+      {
+        eventId,
+        registrationTypeId,
+        approval: form.get('approval') === 'manual' ? 'manual' : 'none',
+        autoApproveDomains: String(form.get('autoApproveDomains') ?? '')
+          .split(/[\s,;]+/)
+          .filter(Boolean),
+        kind: form.get('kind') === 'guest' ? 'guest' : 'standard',
+        guestsPerHost: numberOrNull(form, 'guestsPerHost') ?? 1,
+        substitutionCutoffHours: numberOrNull(form, 'substitutionCutoffHours') ?? 24,
+      },
+      ctx,
+      ports,
+    ),
+  );
+}
+
+export async function replaceMembersAction(
+  org: string,
+  event: string,
+  registrationTypeId: string,
+  _prev: FormState,
+  form: FormData,
+): Promise<FormState> {
+  const file = form.get('file');
+  const text =
+    file instanceof File && file.size > 0
+      ? (await file.text()).slice(0, 2_000_000)
+      : String(form.get('members') ?? '').slice(0, 2_000_000);
+  const { emails } = parseMemberList(text);
+  if (emails.length > MAX_MEMBERS)
+    return { ok: false, code: 'validation_failed', fields: ['members'], reason: 'too_many_members' };
+  return run(org, event, (eventId, ctx) =>
+    executeCommand(replaceMembersCommand, { eventId, registrationTypeId, emails, source: 'csv' }, ctx, ports),
+  );
+}
+
+/** Snapshot an audience's addresses into a type's member list (up to the list's limit). */
+export async function importAudienceAction(
+  org: string,
+  event: string,
+  registrationTypeId: string,
+  _prev: FormState,
+  form: FormData,
+): Promise<FormState> {
+  const segmentId = String(form.get('segmentId') ?? '');
+  if (!/^[0-9a-f-]{36}$/.test(segmentId))
+    return { ok: false, code: 'validation_failed', fields: ['segmentId'] };
+  return run(org, event, async (eventId, ctx) => {
+    const segment = await executeQuery(getSegmentQuery, { segmentId }, ctx, ports);
+    const emails: string[] = [];
+    let afterId: string | null = null;
+    do {
+      const page: Awaited<ReturnType<typeof preview>> = await preview(ctx, segment.definition, afterId);
+      emails.push(...page.rows.map((row: { email: string }) => row.email).filter(Boolean));
+      afterId = page.nextAfter;
+    } while (afterId && emails.length < MAX_MEMBERS);
+    return executeCommand(
+      replaceMembersCommand,
+      { eventId, registrationTypeId, emails: emails.slice(0, MAX_MEMBERS), source: 'audience' },
+      ctx,
+      ports,
+    );
+  });
+}
+
+const preview = (ctx: never, definition: unknown, afterId: string | null) =>
+  executeQuery(previewAudienceQuery, { definition, limit: 100, afterId }, ctx, ports);
+
+/** M5.1d: pay later by invoice for a type, and its PO number rule. */
+export async function setPayLaterAction(
+  org: string,
+  event: string,
+  registrationTypeId: string,
+  _prev: FormState,
+  form: FormData,
+): Promise<FormState> {
+  const po = String(form.get('poNumber') ?? 'off');
+  return run(org, event, (eventId, ctx) =>
+    executeCommand(
+      setPayLaterCommand,
+      {
+        eventId,
+        registrationTypeId,
+        payLater: form.get('payLater') === 'on',
+        poNumber: po === 'optional' || po === 'required' ? po : 'off',
+      },
+      ctx,
+      ports,
+    ),
   );
 }

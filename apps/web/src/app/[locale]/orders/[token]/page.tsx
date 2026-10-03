@@ -1,5 +1,10 @@
 import { formatMoney, money } from '@yayatoh/kernel';
-import { orderByManageToken, orderHolderTarget, orderPushDevices } from '@yayatoh/orders';
+import {
+  orderByManageToken,
+  orderHolderTarget,
+  orderPushDevices,
+  orderTablesByManageToken,
+} from '@yayatoh/orders';
 import { buttonClass, Card, Label, PageHeader, StatusDot } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
@@ -12,6 +17,7 @@ import { Link } from '@/i18n/navigation.ts';
 import { refundPolicyLines } from '@/lib/refund-policy-text.ts';
 import { helpLinksForOrder } from '@/server/assistance.ts';
 import { getPdfRenderer } from '@/server/pdf.ts';
+import { scheduleSummary } from '@/server/schedule.ts';
 import { webPushPublicKey } from '@/server/web-push.ts';
 import {
   removeOrderDeviceAction,
@@ -29,6 +35,8 @@ const DOT = {
   cancelled: 'danger',
   partially_refunded: 'info',
   refunded: 'info',
+  awaiting_invoice: 'warning',
+  void: 'neutral',
 } as const;
 
 /** Guest order page, reached by the manage-token link (no account needed). */
@@ -67,6 +75,10 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
         order.tickets.map((tk) => tk.id),
       )
     : new Map<string, string>();
+  // M5.2b: a registration with sessions links to the attendee's schedule.
+  const schedule = await scheduleSummary(token);
+  // M4.2b: tables bought in this order, each with its claim link for naming the guests.
+  const tables = await orderTablesByManageToken(token);
   const sinceFmt = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeZone: order.event.timezone });
   return (
     <main id="main" className="mx-auto flex min-h-dvh max-w-xl flex-col gap-6 px-6 py-16">
@@ -77,6 +89,15 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
       />
       <Card size="panel" className="flex flex-col gap-4">
         <StatusDot status={DOT[order.status]} label={t(`order.status.${order.status}`)} />
+        {/* M5.1d: a pay-later order: its invoice (view, PDF, pay). */}
+        {order.invoicePath ? (
+          <Link
+            href={order.invoicePath}
+            className="inline-flex min-h-8 items-center self-start text-body font-bold text-primary-ink underline-offset-2 hover:underline"
+          >
+            {t('order.viewInvoice')}
+          </Link>
+        ) : null}
         <ul className="flex list-none flex-col divide-y divide-line p-0">
           {order.items.map((i) => (
             <li key={i.ticketTypeId} className="flex justify-between gap-4 py-2.5">
@@ -103,6 +124,31 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
           </p>
         ) : null}
       </Card>
+      {tables.length > 0 ? (
+        <section aria-labelledby="tables-heading" className="flex flex-col gap-3">
+          <h2 id="tables-heading" className="text-section">
+            {t('galaTables.order.title')}
+          </h2>
+          <p className="text-body text-ink-2">{t('galaTables.order.intro')}</p>
+          <ul className="flex list-none flex-col gap-3 p-0">
+            {tables.map((x) => (
+              <li key={x.id}>
+                <Card className="flex flex-col gap-2">
+                  <p className="text-body font-medium">
+                    {t('galaTables.public.tableOf', { table: x.typeName, n: x.unitNo })}
+                  </p>
+                  <p className="text-caption text-ink-2">
+                    {t('galaTables.progress', { named: x.named, size: x.named + x.missing })}
+                  </p>
+                  <Link href={x.path} className={buttonClass('primary', 'lg', 'self-start')}>
+                    {t('galaTables.order.cta', { table: x.typeName, n: x.unitNo })}
+                  </Link>
+                </Card>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
       {order.transferred > 0 ? (
         <p className="text-body text-ink-2">{t('order.transferred', { count: order.transferred })}</p>
       ) : null}
@@ -140,6 +186,11 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
           </ul>
         </section>
       ) : null}
+      {schedule ? (
+        <Link href={`/orders/${token}/schedule`} className={buttonClass('secondary', 'lg', 'self-start')}>
+          {t('mySchedule.open')}
+        </Link>
+      ) : null}
       {order.tickets.length > 0 ? (
         <section aria-labelledby="tickets-heading" className="flex flex-col gap-4">
           <h2 id="tickets-heading" className="text-section">
@@ -166,7 +217,7 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
                   <TicketQr
                     code={tk.code}
                     label={t('order.qrLabel', { serial: tk.serial })}
-                    className="size-60 rounded-tag text-black"
+                    className="size-60 rounded-tag text-ink"
                   />
                   <p className="text-caption text-ink-2">
                     {t('order.shortCode')}{' '}

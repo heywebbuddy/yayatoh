@@ -1,4 +1,4 @@
-import { columnPrivacy, holder, internal } from '@yayatoh/db';
+import { columnPrivacy, holder, internal, personal } from '@yayatoh/db';
 
 /**
  * Column privacy of the `registration` schema (roadmap §9 canary leak test; see `columnPrivacy`
@@ -14,6 +14,30 @@ export const privateColumns = columnPrivacy('registration', {
     // Given to the people who may use it (like an access code); never on a public page.
     access_code: holder('code', { where: "eligibility = 'access_code'" }),
     email_domains: internal('array', { where: "eligibility = 'email_domain'" }),
+    approval: 'vocab',
+    auto_approve_domains: internal('array', { where: "approval = 'manual'" }),
+    kind: 'vocab',
+    // M5.1d: whether the type offers pay later, and its PO rule (shown on the public page).
+    po_number: 'vocab',
   },
   admission_items: { key: 'public', name: 'public', description: 'public', kind: 'vocab' },
+  // M5.1c: the domains that auto-approve stay in the console like the eligibility domains.
+  // Registrants are personal (their own page shows them their name and the decision reason, which
+  // is also emailed to them); reason templates are the organizer's working copy.
+  registrants: {
+    status: 'vocab',
+    name: personal(),
+    email: personal('email'),
+    company: personal(),
+    job_title: personal(),
+    message: personal(),
+    locale: 'vocab',
+    decision_source: 'vocab',
+    decision_reason: personal(),
+  },
+  type_members: { email: personal('email'), source: 'vocab' },
+  reason_templates: { decision: 'vocab', label: internal(), body: internal() },
+  // M5.2b: session enrollment states and settings are vocabularies; who changed a setting is internal.
+  enrollment_settings: { promotion: 'vocab', updated_by: internal() },
+  session_enrollments: { status: 'vocab', promoted_by: 'vocab', skip_reason: 'vocab' },
 });
