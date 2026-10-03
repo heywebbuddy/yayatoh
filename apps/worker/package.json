@@ -20,6 +20,7 @@
     "irs-exempt-list": "node scripts/irs-exempt-list.ts"
   },
   "dependencies": {
+    "@yayatoh/agency": "workspace:*",
     "@yayatoh/alerts": "workspace:*",
     "@yayatoh/attendees": "workspace:*",
     "@yayatoh/audiences": "workspace:*",

@@ -1,3 +1,4 @@
+import { agencySnapshotSubscriber } from '@yayatoh/agency';
 import { alertEvaluator } from '@yayatoh/alerts';
 import { attendeeMessageMailer } from '@yayatoh/attendees';
 import { participationProjector } from '@yayatoh/audiences';
@@ -161,6 +162,8 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     // M4.8b: a receipt per paid gift or charity-ticket order, and year-end statements, to the donor.
     receiptIssuer({ notifier, appOrigin }),
     statementMailer({ notifier, appOrigin }),
+    // M6.7a: a client's grant snapshots it for its agency at once (and a revoke removes it).
+    agencySnapshotSubscriber,
   ];
 }
 

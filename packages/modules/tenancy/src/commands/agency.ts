@@ -382,3 +382,17 @@ export const MONEY_TABLES = [
   'orders.credit_notes',
   'orders.credit_note_applications',
 ] as const;
+
+/** A live grant of the current (client) org by id, inside its tenant transaction, or null. */
+export async function liveAgencyGrantTx(
+  tx: TenantTx,
+  grantId: string,
+): Promise<{ grantId: string; agencyOrgId: string; role: AgencyGrantRole; finance: boolean } | null> {
+  const [row] = await tx
+    .select()
+    .from(orgAccessGrants)
+    .where(and(eq(orgAccessGrants.id, grantId), isNull(orgAccessGrants.revokedAt)));
+  return row
+    ? { grantId: row.id, agencyOrgId: row.agencyOrgId, role: row.role as AgencyGrantRole, finance: row.finance }
+    : null;
+}

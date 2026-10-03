@@ -16,6 +16,7 @@ export {
   GrantAgencyAccessInput,
   grantAgencyAccessCommand,
   listAgencyGrantsQuery,
+  liveAgencyGrantTx,
   MONEY_TABLES,
   myAgencyClients,
   revokeAgencyGrantCommand,

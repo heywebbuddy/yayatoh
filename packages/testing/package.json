@@ -11,6 +11,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@yayatoh/agency": "workspace:*",
     "@yayatoh/ai": "workspace:*",
     "@yayatoh/attendees": "workspace:*",
     "@yayatoh/alerts": "workspace:*",

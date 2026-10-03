@@ -1,3 +1,4 @@
+import * as agency from '@yayatoh/agency';
 import * as ai from '@yayatoh/ai';
 import * as alerts from '@yayatoh/alerts';
 import * as assistance from '@yayatoh/assistance';
@@ -76,6 +77,8 @@ const impersonatedBy = () => ({ staffUserId, impersonationId: uuidv7() });
 const acting = (o: OrgFixture = a) => o.ctx({ impersonatedBy: impersonatedBy() });
 
 const MODULES = {
+  // M6.7a: the agency's snapshot refresh and pages.
+  agency,
   ai,
   // Batch 3e merge: the modules of batches 3b–3e (alerts, audiences, Command Center, guests,
   // marketing; campaigns, journeys and registration), so their commands carry categories too.

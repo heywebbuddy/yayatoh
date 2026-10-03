@@ -68,6 +68,7 @@ export {
   salesSeriesPoints,
   sumSeries,
 } from './metrics/catalog.ts';
+export { type EventHeadline, eventHeadlineTx } from './metrics/headline.ts';
 export {
   EventReportDto,
   eventFinanceQuery,

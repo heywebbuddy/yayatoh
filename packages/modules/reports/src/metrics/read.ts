@@ -61,7 +61,7 @@ async function projectedRowsTx(tx: TenantTx, eventId: string): Promise<EventRows
 }
 
 /** The projection if the event has one, otherwise the same rows computed live from the sources. */
-async function eventRowsTx(tx: TenantTx, event: EventDto, now: Date): Promise<EventRows & { live: boolean }> {
+export async function eventRowsTx(tx: TenantTx, event: EventDto, now: Date): Promise<EventRows & { live: boolean }> {
   const projected = await projectedRowsTx(tx, event.id);
   if (projected.materialized) return { ...projected, live: false };
   const values = new Map<string, number>();
