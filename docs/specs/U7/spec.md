@@ -1,12 +1,11 @@
-# UX track (ux-review-1) — specs
+# U7 — Series and events, connected
 
-The approved plan is `docs/plans/ux-review-1.md`; its section 3 principles are the acceptance bar for every increment below.
+Approved plan: `docs/plans/ux-review-1.md` (review point 9, UX principle 6, row U7). Brief: `docs/agent-briefs/u7.md`. Builds on U1 (Combobox, Select, date pickers).
 
-## U7 — Series and events, connected (this change)
+## What was built (this change)
 
 Review point 9: create-event had no series field (an event joined a series later, in its Dates tab), and the public event page never mentioned its series. U7 connects both ways (principle 6, "every created item links back to where it is used").
 
-**What was built**
 - **Create-event, quick and guided:** a **Series (optional)** field (U1 Combobox). Pick one of the org's series, keep "No series", or type a new name and choose "Create “…”". The guided wizard has it on step 1 (Basics), keeps it on Back/Next and names it in the step 3 summary. `?series={id}` on `/events/new` and `/events/new/guided` picks a series in advance.
 - **`events.createEventInSeries`** (new command, `packages/modules/events/src/series-events.ts`): creates the event and joins an existing series, or creates the new series, in **one transaction** — either both exist afterwards or neither does. A taken series address is a `conflict` on the `series` field (never on the event's `slug`, which the quick form retries on). Same `event.created@1` (and `series.created@1` for a new series) as before; idempotent with the form's request key.
 - **Event header:** "Part of {series}" next to the status pill on every event page, linking the console series page (only for people who can read the org's series; co-hosts with an event role only don't see it).
@@ -17,9 +16,11 @@ Review point 9: create-event had no series field (an event joined a series later
 - **Public event page:** a "Part of {series}" chip in the hero links the public series page (`publicEventSeries(target)`, read under the event's org RLS, slug and name only; allowlist serializer `events.publicSeriesRef`).
 - New reads: `seriesDetailQuery` (by slug; events of any status, earliest first), `eventSeriesQuery` (an event's series or null).
 
-**No migration.** Everything uses the M1.4b `series` / `series_events` tables and the existing SECURITY DEFINER public series functions.
+## Migration
 
-**Later / not yet**
+**None.** Everything uses the M1.4b `series` / `series_events` tables and the existing SECURITY DEFINER public series functions.
+
+## Later / not yet
 - Sales on the series page are all-time (no period picker); a series-level total and trend could follow with the reports track.
 - "Create next event" copies the latest event by start date; choosing which event to copy is not offered.
 - Reordering events inside a series (they sort by start).
