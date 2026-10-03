@@ -49,6 +49,8 @@ export default async function DonationsReconciliationPage({
   const { data, event: ev, can } = await loadEvent(org, event, 'donations');
   const t = await getTranslations('donations.recon');
   const tn = await getTranslations('nav');
+  const tb = await getTranslations('billingPlan');
+  const te = await getTranslations('emptyActions');
   const base = `/o/${org}/e/${event}/donations`;
   const crumbs = (
     <Crumbs
@@ -64,7 +66,15 @@ export default async function DonationsReconciliationPage({
     return (
       <>
         <PageHeader breadcrumb={crumbs} title={t('title')} />
-        <EmptyState title={t('noAccessTitle')} description={t('noAccessDescription')} />
+        <EmptyState
+          title={t('noAccessTitle')}
+          description={t('noAccessDescription')}
+          action={
+            <Link href={`/o/${org}/team`} className={buttonClass('primary', 'md')}>
+              {tb('findOwner')}
+            </Link>
+          }
+        />
       </>
     );
   await catchUpGifts(data.org.id);
@@ -114,6 +124,11 @@ export default async function DonationsReconciliationPage({
           icon={<Landmark strokeWidth={2} />}
           title={t('notConnectedTitle')}
           description={t('notConnectedDescription')}
+          action={
+            <Link href={`/o/${org}/payouts`} className={buttonClass('primary', 'md')}>
+              {te('connectPayouts')}
+            </Link>
+          }
         />
       </>
     );
@@ -185,6 +200,11 @@ export default async function DonationsReconciliationPage({
             icon={<Scale strokeWidth={2} />}
             title={t('cleanTitle')}
             description={t('cleanDescription')}
+            action={
+              <Link href="#recon-run" className={buttonClass('secondary', 'md')}>
+                {te('runAgain')}
+              </Link>
+            }
           />
         ) : (
           <>

@@ -32,6 +32,7 @@ export async function SheetsSection({
   confirm: string | null;
 }) {
   const t = await getTranslations('integrations.sheets');
+  const te = await getTranslations('emptyActions');
   const [links, events] = await Promise.all([
     executeQuery(sheetLinksQuery, { connectionId }, ctx, ports),
     canManage && active ? executeQuery(listEventsQuery, {}, ctx, ports) : Promise.resolve([]),
@@ -65,13 +66,25 @@ export async function SheetsSection({
       ) : null}
       {canManage && active ? (
         linkable.length ? (
-          <LinkSheetForm events={linkable} action={linkSheetAction.bind(null, org, connectionId)} />
+          <div id="new-sheet-link" className="contents">
+            <LinkSheetForm events={linkable} action={linkSheetAction.bind(null, org, connectionId)} />
+          </div>
         ) : (
           <p className="m-0 text-body text-ink-2">{events.length ? t('allLinked') : t('noEvents')}</p>
         )
       ) : null}
       {links.length === 0 ? (
-        <EmptyState title={t('emptyTitle')} description={canManage ? t('emptyHelp') : t('emptyReadOnly')} />
+        <EmptyState
+          title={t('emptyTitle')}
+          description={canManage ? t('emptyHelp') : t('emptyReadOnly')}
+          action={
+            canManage && active && linkable.length ? (
+              <Link href="#new-sheet-link" className={buttonClass('primary', 'md')}>
+                {te('linkSheet')}
+              </Link>
+            ) : undefined
+          }
+        />
       ) : (
         <Table
           caption={t('caption')}

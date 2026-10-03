@@ -16242,9 +16242,14 @@
     "selected": "محدد"
   },
   "emptyActions": {
-    "seeEvents": "عرض فعالياتك",
-    "eventHome": "الانتقال إلى صفحة الفعالية الرئيسية",
-    "clearSearch": "امسح البحث"
+    "addRule": "أضف قاعدة",
+    "scheduleReport": "جدول تقريرًا",
+    "linkSheet": "اربط فعالية",
+    "connectPayouts": "اربط الدفعات",
+    "runAgain": "شغّله مرة أخرى",
+    "agencyAddress": "اعرض عنوان وكالتك",
+    "clients": "اعرض عملاءك",
+    "plan": "افتح الخطة والفوترة"
   },
   "coupons": {
     "title": "القسائم",

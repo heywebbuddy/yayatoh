@@ -16242,9 +16242,14 @@
     "selected": "Выбрано"
   },
   "emptyActions": {
-    "seeEvents": "Ваши мероприятия",
-    "eventHome": "На главную мероприятия",
-    "clearSearch": "Очистить поиск"
+    "addRule": "Добавить правило",
+    "scheduleReport": "Запланировать отчёт",
+    "linkSheet": "Связать мероприятие",
+    "connectPayouts": "Подключить выплаты",
+    "runAgain": "Запустить снова",
+    "agencyAddress": "Адрес вашего агентства",
+    "clients": "Ваши клиенты",
+    "plan": "Открыть тариф и оплату"
   },
   "coupons": {
     "title": "Купоны",

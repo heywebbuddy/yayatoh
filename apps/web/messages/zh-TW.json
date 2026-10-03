@@ -16242,9 +16242,14 @@
     "selected": "已選取"
   },
   "emptyActions": {
-    "seeEvents": "查看你的活動",
-    "eventHome": "前往活動首頁",
-    "clearSearch": "清除搜尋"
+    "addRule": "新增規則",
+    "scheduleReport": "排程報告",
+    "linkSheet": "連結活動",
+    "connectPayouts": "連接收款",
+    "runAgain": "再次執行",
+    "agencyAddress": "查看代理商地址",
+    "clients": "查看客戶",
+    "plan": "開啟方案與帳單"
   },
   "coupons": {
     "title": "優惠券",

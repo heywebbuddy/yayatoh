@@ -16242,9 +16242,14 @@
     "selected": "Geselecteerd"
   },
   "emptyActions": {
-    "seeEvents": "Je evenementen bekijken",
-    "eventHome": "Naar de evenementstartpagina",
-    "clearSearch": "Zoekopdracht wissen"
+    "addRule": "Regel toevoegen",
+    "scheduleReport": "Rapport inplannen",
+    "linkSheet": "Evenement koppelen",
+    "connectPayouts": "Uitbetalingen koppelen",
+    "runAgain": "Opnieuw uitvoeren",
+    "agencyAddress": "Adres van je bureau bekijken",
+    "clients": "Je klanten bekijken",
+    "plan": "Abonnement en facturatie openen"
   },
   "coupons": {
     "title": "Kortingscodes",

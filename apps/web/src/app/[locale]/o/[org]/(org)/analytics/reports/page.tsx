@@ -46,6 +46,7 @@ export default async function ReportsPage({
   const data = await loadConsole(org);
   if (!data.modules.has('analytics_pro') || !roleCan(data.role, 'orders:read')) notFound();
   const t = await getTranslations('analyticsPro.reports');
+  const te = await getTranslations('emptyActions');
   const canManage = roleCan(data.role, 'org:update');
   const schedules = canManage ? await executeQuery(listReportSchedulesQuery, {}, data.ctx, ports) : [];
   const runs = await executeQuery(listReportRunsQuery, { locale }, data.ctx, ports);
@@ -76,23 +77,33 @@ export default async function ReportsPage({
       ) : null}
       {canManage ? (
         <>
-          <ReportScheduleForm
-            action={createScheduleAction.bind(null, org)}
-            mode="create"
-            events={events.map((e) => ({ id: e.id, name: e.name }))}
-            members={members}
-            hours={hourLabels(locale)}
-            timeZone={timeZone}
-            initial={{
-              name: '',
-              frequency: 'weekly',
-              sendHour: 8,
-              eventId: '',
-              recipients: data.ctx.actor.type === 'user' ? [data.ctx.actor.userId] : [],
-            }}
-          />
+          <div id="new-report" className="contents">
+            <ReportScheduleForm
+              action={createScheduleAction.bind(null, org)}
+              mode="create"
+              events={events.map((e) => ({ id: e.id, name: e.name }))}
+              members={members}
+              hours={hourLabels(locale)}
+              timeZone={timeZone}
+              initial={{
+                name: '',
+                frequency: 'weekly',
+                sendHour: 8,
+                eventId: '',
+                recipients: data.ctx.actor.type === 'user' ? [data.ctx.actor.userId] : [],
+              }}
+            />
+          </div>
           {schedules.length === 0 ? (
-            <EmptyState title={t('emptyTitle')} description={t('emptyBody')} />
+            <EmptyState
+              title={t('emptyTitle')}
+              description={t('emptyBody')}
+              action={
+                <Link href="#new-report" className={buttonClass('primary', 'md')}>
+                  {te('scheduleReport')}
+                </Link>
+              }
+            />
           ) : (
             <Table
               caption={t('list')}

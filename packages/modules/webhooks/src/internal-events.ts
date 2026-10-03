@@ -82,6 +82,8 @@ export const INTERNAL_EVENTS: Readonly<Record<string, InternalReason>> = {
   'guests.rsvp_responded@1': 'personal',
   'integrations.connection_connected@1': 'platform',
   'integrations.connection_revoked@1': 'platform',
+  // Batch 3l merge: the alert engine counts failed runs (the engine emits it through a constant).
+  'integrations.sync_completed@1': 'platform',
   'integrations.sheet_linked@1': 'platform',
   'integrations.sheet_unlinked@1': 'platform',
   'invitation.created@1': 'platform',

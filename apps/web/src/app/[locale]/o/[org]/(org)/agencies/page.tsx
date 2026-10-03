@@ -1,9 +1,10 @@
 import { executeQuery } from '@yayatoh/kernel';
 import { listAgencyGrantsQuery, roleCan } from '@yayatoh/tenancy';
-import { Alert, Button, EmptyState, PageHeader, StatusPill, Table } from '@yayatoh/ui';
+import { Alert, Button, buttonClass, EmptyState, PageHeader, StatusPill, Table } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { StepUpForm } from '@/components/step-up.tsx';
+import { Link } from '@/i18n/navigation.ts';
 import { formatDate } from '@/lib/format.ts';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
@@ -32,11 +33,20 @@ export default async function AgenciesPage({
   setRequestLocale(locale);
   const data = await loadConsole(org);
   const t = await getTranslations('agencies');
+  const tb = await getTranslations('billingPlan');
   if (!roleCan(data.role, 'members:read'))
     return (
       <>
         <PageHeader title={t('title')} description={t('subtitle')} />
-        <EmptyState title={t('noAccessTitle')} description={t('noAccessDescription')} />
+        <EmptyState
+          title={t('noAccessTitle')}
+          description={t('noAccessDescription')}
+          action={
+            <Link href={`/o/${org}/team`} className={buttonClass('primary', 'md')}>
+              {tb('findOwner')}
+            </Link>
+          }
+        />
       </>
     );
   const manage = roleCan(data.role, 'members:manage');

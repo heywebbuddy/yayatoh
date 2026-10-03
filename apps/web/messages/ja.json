@@ -16242,9 +16242,14 @@
     "selected": "選択済み"
   },
   "emptyActions": {
-    "seeEvents": "イベントを見る",
-    "eventHome": "イベントのホームへ",
-    "clearSearch": "検索をクリア"
+    "addRule": "ルールを追加",
+    "scheduleReport": "レポートを予約",
+    "linkSheet": "イベントを連携",
+    "connectPayouts": "入金を接続",
+    "runAgain": "もう一度実行",
+    "agencyAddress": "代理店のアドレスを見る",
+    "clients": "クライアントを見る",
+    "plan": "プランと請求を開く"
   },
   "coupons": {
     "title": "クーポン",

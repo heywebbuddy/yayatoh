@@ -16242,9 +16242,14 @@
     "selected": "Sélectionné"
   },
   "emptyActions": {
-    "seeEvents": "Voir vos événements",
-    "eventHome": "Aller à l’accueil de l’événement",
-    "clearSearch": "Effacer la recherche"
+    "addRule": "Ajouter une règle",
+    "scheduleReport": "Planifier un rapport",
+    "linkSheet": "Lier un événement",
+    "connectPayouts": "Connecter les versements",
+    "runAgain": "Relancer",
+    "agencyAddress": "Voir l’adresse de votre agence",
+    "clients": "Voir vos clients",
+    "plan": "Ouvrir l’offre et la facturation"
   },
   "coupons": {
     "title": "Coupons",

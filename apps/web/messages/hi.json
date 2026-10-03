@@ -16242,9 +16242,14 @@
     "selected": "चुना गया"
   },
   "emptyActions": {
-    "seeEvents": "अपने इवेंट देखें",
-    "eventHome": "इवेंट होम पर जाएँ",
-    "clearSearch": "खोज साफ़ करें"
+    "addRule": "नियम जोड़ें",
+    "scheduleReport": "रिपोर्ट शेड्यूल करें",
+    "linkSheet": "इवेंट लिंक करें",
+    "connectPayouts": "भुगतान जोड़ें",
+    "runAgain": "फिर से चलाएँ",
+    "agencyAddress": "अपनी एजेंसी का पता देखें",
+    "clients": "अपने क्लाइंट देखें",
+    "plan": "प्लान और बिलिंग खोलें"
   },
   "coupons": {
     "title": "कूपन",

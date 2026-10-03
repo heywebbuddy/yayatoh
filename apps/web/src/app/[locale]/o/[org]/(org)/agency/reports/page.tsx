@@ -1,8 +1,9 @@
 import { agencyClientsQuery, reportTotals } from '@yayatoh/agency';
 import { executeQuery, formatMoney, money } from '@yayatoh/kernel';
-import { EmptyState, StatCard, Table } from '@yayatoh/ui';
+import { buttonClass, EmptyState, StatCard, Table } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { Link } from '@/i18n/navigation.ts';
 import { formatNumber } from '@/lib/format.ts';
 import { ports } from '@/server/ports.ts';
 import { loadAgency } from '../load.ts';
@@ -26,10 +27,19 @@ export default async function AgencyReportsPage({
   const { data, canRead } = await loadAgency(org);
   if (!canRead) return null;
   const t = await getTranslations('agency');
+  const te = await getTranslations('emptyActions');
   const clients = await executeQuery(agencyClientsQuery, {}, data.ctx, ports);
   if (clients.length === 0)
     return (
-      <EmptyState title={t('emptyTitle')} description={t('emptyDescription', { address: data.org.slug })} />
+      <EmptyState
+        title={t('emptyTitle')}
+        description={t('emptyDescription', { address: data.org.slug })}
+        action={
+          <Link href={`/o/${org}/settings`} className={buttonClass('primary', 'md')}>
+            {te('agencyAddress')}
+          </Link>
+        }
+      />
     );
   const rows = clients.map((c) => ({
     client: c,

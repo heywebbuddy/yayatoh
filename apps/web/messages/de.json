@@ -16242,9 +16242,14 @@
     "selected": "Ausgewählt"
   },
   "emptyActions": {
-    "seeEvents": "Ihre Veranstaltungen ansehen",
-    "eventHome": "Zur Startseite der Veranstaltung",
-    "clearSearch": "Suche zurücksetzen"
+    "addRule": "Regel hinzufügen",
+    "scheduleReport": "Bericht planen",
+    "linkSheet": "Veranstaltung verknüpfen",
+    "connectPayouts": "Auszahlungen verbinden",
+    "runAgain": "Erneut ausführen",
+    "agencyAddress": "Adresse Ihrer Agentur ansehen",
+    "clients": "Ihre Kunden ansehen",
+    "plan": "Tarif und Abrechnung öffnen"
   },
   "coupons": {
     "title": "Gutscheine",

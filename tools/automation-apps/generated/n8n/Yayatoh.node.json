@@ -39,6 +39,10 @@
         "noDataExpression": true,
         "options": [
           {
+            "name": "Contacts",
+            "value": "contacts"
+          },
+          {
             "name": "Bulk actions",
             "value": "bulk_actions"
           },
@@ -51,6 +55,10 @@
             "value": "events"
           },
           {
+            "name": "Attendees",
+            "value": "attendees"
+          },
+          {
             "name": "Ticket types",
             "value": "ticket_types"
           },
@@ -59,19 +67,106 @@
             "value": "event_content"
           },
           {
-            "name": "Attendees",
-            "value": "attendees"
-          },
-          {
             "name": "Orders",
             "value": "orders"
           },
           {
             "name": "Venues",
             "value": "venues"
+          },
+          {
+            "name": "Hooks",
+            "value": "hooks"
           }
         ],
-        "default": "bulk_actions"
+        "default": "contacts"
+      },
+      {
+        "displayName": "Operation",
+        "name": "operation",
+        "type": "options",
+        "noDataExpression": true,
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "contacts"
+            ]
+          }
+        },
+        "options": [
+          {
+            "name": "Add a contact",
+            "value": "addContact",
+            "action": "Add a contact",
+            "description": "Finds or creates the org’s contact for the email; an existing contact keeps its name unless it had none. Records no marketing consent. Needs the contacts:write scope.",
+            "routing": {
+              "request": {
+                "method": "POST",
+                "url": "=/contacts",
+                "headers": {
+                  "Idempotency-Key": "={{ $execution.id + \"-\" + $itemIndex }}"
+                }
+              }
+            }
+          }
+        ],
+        "default": "addContact"
+      },
+      {
+        "displayName": "Email",
+        "name": "email",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "contacts"
+            ],
+            "operation": [
+              "addContact"
+            ]
+          }
+        },
+        "routing": {
+          "send": {
+            "type": "body",
+            "property": "email",
+            "value": "={{ $value }}"
+          }
+        }
+      },
+      {
+        "displayName": "Additional Fields",
+        "name": "additionalFields",
+        "type": "collection",
+        "placeholder": "Add Field",
+        "default": {},
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "contacts"
+            ],
+            "operation": [
+              "addContact"
+            ]
+          }
+        },
+        "options": [
+          {
+            "displayName": "Name",
+            "name": "name",
+            "type": "string",
+            "default": "",
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "name",
+                "value": "={{ $value }}"
+              }
+            }
+          }
+        ]
       },
       {
         "displayName": "Operation",
@@ -1306,6 +1401,375 @@
         "displayOptions": {
           "show": {
             "resource": [
+              "attendees"
+            ]
+          }
+        },
+        "options": [
+          {
+            "name": "Register someone for an event",
+            "value": "createRegistration",
+            "action": "Register someone for an event",
+            "description": "Adds a person to the event’s guest list (no ticket, no payment). One active registration per email per event: a second one is a 409. Needs the attendees:write scope.",
+            "routing": {
+              "request": {
+                "method": "POST",
+                "url": "=/events/{{ encodeURIComponent($parameter[\"eventId\"]) }}/registrations",
+                "headers": {
+                  "Idempotency-Key": "={{ $execution.id + \"-\" + $itemIndex }}"
+                }
+              }
+            }
+          },
+          {
+            "name": "One attendee",
+            "value": "getEventAttendee",
+            "action": "One attendee",
+            "description": "One attendee of the event. Needs the attendees:read scope.",
+            "routing": {
+              "request": {
+                "method": "GET",
+                "url": "=/events/{{ encodeURIComponent($parameter[\"eventId\"]) }}/attendees/{{ encodeURIComponent($parameter[\"attendeeId\"]) }}"
+              }
+            }
+          },
+          {
+            "name": "The event’s attendees, newest first",
+            "value": "listEventAttendees",
+            "action": "The event’s attendees, newest first",
+            "description": "The event’s attendees, newest first, optionally filtered by a search term or status. Needs the attendees:read scope.",
+            "routing": {
+              "request": {
+                "method": "GET",
+                "url": "=/events/{{ encodeURIComponent($parameter[\"eventId\"]) }}/attendees"
+              },
+              "output": {
+                "postReceive": [
+                  {
+                    "type": "rootProperty",
+                    "properties": {
+                      "property": "data"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "Search attendees across events by name or email",
+            "value": "searchAttendees",
+            "action": "Search attendees across events by name or email",
+            "description": "Attendees across the organization’s events matching a name or email. Limited to 60 per minute. Needs the attendees:read scope.",
+            "routing": {
+              "request": {
+                "method": "GET",
+                "url": "=/attendees/search"
+              },
+              "output": {
+                "postReceive": [
+                  {
+                    "type": "rootProperty",
+                    "properties": {
+                      "property": "data"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "default": "createRegistration"
+      },
+      {
+        "displayName": "Event id",
+        "name": "eventId",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "description": "The event id",
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "attendees"
+            ],
+            "operation": [
+              "createRegistration"
+            ]
+          }
+        }
+      },
+      {
+        "displayName": "Name",
+        "name": "name",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "attendees"
+            ],
+            "operation": [
+              "createRegistration"
+            ]
+          }
+        },
+        "routing": {
+          "send": {
+            "type": "body",
+            "property": "name",
+            "value": "={{ $value }}"
+          }
+        }
+      },
+      {
+        "displayName": "Email",
+        "name": "email",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "attendees"
+            ],
+            "operation": [
+              "createRegistration"
+            ]
+          }
+        },
+        "routing": {
+          "send": {
+            "type": "body",
+            "property": "email",
+            "value": "={{ $value }}"
+          }
+        }
+      },
+      {
+        "displayName": "Additional Fields",
+        "name": "additionalFields",
+        "type": "collection",
+        "placeholder": "Add Field",
+        "default": {},
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "attendees"
+            ],
+            "operation": [
+              "createRegistration"
+            ]
+          }
+        },
+        "options": [
+          {
+            "displayName": "Labels",
+            "name": "labels",
+            "type": "string",
+            "default": "",
+            "hint": "Comma-separated",
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "labels",
+                "value": "={{ String($value).split(\",\").map((s) => s.trim()).filter(Boolean) }}"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "displayName": "Event id",
+        "name": "eventId",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "description": "The event id",
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "attendees"
+            ],
+            "operation": [
+              "getEventAttendee"
+            ]
+          }
+        }
+      },
+      {
+        "displayName": "Attendee id",
+        "name": "attendeeId",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "description": "The attendee id",
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "attendees"
+            ],
+            "operation": [
+              "getEventAttendee"
+            ]
+          }
+        }
+      },
+      {
+        "displayName": "Event id",
+        "name": "eventId",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "description": "The event id",
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "attendees"
+            ],
+            "operation": [
+              "listEventAttendees"
+            ]
+          }
+        }
+      },
+      {
+        "displayName": "Additional Fields",
+        "name": "additionalFields",
+        "type": "collection",
+        "placeholder": "Add Field",
+        "default": {},
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "attendees"
+            ],
+            "operation": [
+              "listEventAttendees"
+            ]
+          }
+        },
+        "options": [
+          {
+            "displayName": "Limit",
+            "name": "limit",
+            "type": "number",
+            "default": 0,
+            "description": "Page size (1–100).",
+            "routing": {
+              "send": {
+                "type": "query",
+                "property": "limit",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "Search",
+            "name": "search",
+            "type": "string",
+            "default": "",
+            "description": "Name or email contains",
+            "routing": {
+              "send": {
+                "type": "query",
+                "property": "search",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "Status",
+            "name": "status",
+            "type": "options",
+            "default": "active",
+            "description": "Only attendees with this status",
+            "options": [
+              {
+                "name": "Active",
+                "value": "active"
+              },
+              {
+                "name": "Cancelled",
+                "value": "cancelled"
+              }
+            ],
+            "routing": {
+              "send": {
+                "type": "query",
+                "property": "status",
+                "value": "={{ $value }}"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "displayName": "Q",
+        "name": "q",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "description": "Part of a name or email (2+ characters)",
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "attendees"
+            ],
+            "operation": [
+              "searchAttendees"
+            ]
+          }
+        },
+        "routing": {
+          "send": {
+            "type": "query",
+            "property": "q",
+            "value": "={{ $value }}"
+          }
+        }
+      },
+      {
+        "displayName": "Additional Fields",
+        "name": "additionalFields",
+        "type": "collection",
+        "placeholder": "Add Field",
+        "default": {},
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "attendees"
+            ],
+            "operation": [
+              "searchAttendees"
+            ]
+          }
+        },
+        "options": [
+          {
+            "displayName": "Limit",
+            "name": "limit",
+            "type": "number",
+            "default": 0,
+            "description": "Most hits to return (1–50)",
+            "routing": {
+              "send": {
+                "type": "query",
+                "property": "limit",
+                "value": "={{ $value }}"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "displayName": "Operation",
+        "name": "operation",
+        "type": "options",
+        "noDataExpression": true,
+        "displayOptions": {
+          "show": {
+            "resource": [
               "ticket_types"
             ]
           }
@@ -2402,261 +2866,6 @@
         "displayOptions": {
           "show": {
             "resource": [
-              "attendees"
-            ]
-          }
-        },
-        "options": [
-          {
-            "name": "One attendee",
-            "value": "getEventAttendee",
-            "action": "One attendee",
-            "description": "One attendee of the event. Needs the attendees:read scope.",
-            "routing": {
-              "request": {
-                "method": "GET",
-                "url": "=/events/{{ encodeURIComponent($parameter[\"eventId\"]) }}/attendees/{{ encodeURIComponent($parameter[\"attendeeId\"]) }}"
-              }
-            }
-          },
-          {
-            "name": "The event’s attendees, newest first",
-            "value": "listEventAttendees",
-            "action": "The event’s attendees, newest first",
-            "description": "The event’s attendees, newest first, optionally filtered by a search term or status. Needs the attendees:read scope.",
-            "routing": {
-              "request": {
-                "method": "GET",
-                "url": "=/events/{{ encodeURIComponent($parameter[\"eventId\"]) }}/attendees"
-              },
-              "output": {
-                "postReceive": [
-                  {
-                    "type": "rootProperty",
-                    "properties": {
-                      "property": "data"
-                    }
-                  }
-                ]
-              }
-            }
-          },
-          {
-            "name": "Search attendees across events by name or email",
-            "value": "searchAttendees",
-            "action": "Search attendees across events by name or email",
-            "description": "Attendees across the organization’s events matching a name or email. Limited to 60 per minute. Needs the attendees:read scope.",
-            "routing": {
-              "request": {
-                "method": "GET",
-                "url": "=/attendees/search"
-              },
-              "output": {
-                "postReceive": [
-                  {
-                    "type": "rootProperty",
-                    "properties": {
-                      "property": "data"
-                    }
-                  }
-                ]
-              }
-            }
-          }
-        ],
-        "default": "getEventAttendee"
-      },
-      {
-        "displayName": "Event id",
-        "name": "eventId",
-        "type": "string",
-        "default": "",
-        "required": true,
-        "description": "The event id",
-        "displayOptions": {
-          "show": {
-            "resource": [
-              "attendees"
-            ],
-            "operation": [
-              "getEventAttendee"
-            ]
-          }
-        }
-      },
-      {
-        "displayName": "Attendee id",
-        "name": "attendeeId",
-        "type": "string",
-        "default": "",
-        "required": true,
-        "description": "The attendee id",
-        "displayOptions": {
-          "show": {
-            "resource": [
-              "attendees"
-            ],
-            "operation": [
-              "getEventAttendee"
-            ]
-          }
-        }
-      },
-      {
-        "displayName": "Event id",
-        "name": "eventId",
-        "type": "string",
-        "default": "",
-        "required": true,
-        "description": "The event id",
-        "displayOptions": {
-          "show": {
-            "resource": [
-              "attendees"
-            ],
-            "operation": [
-              "listEventAttendees"
-            ]
-          }
-        }
-      },
-      {
-        "displayName": "Additional Fields",
-        "name": "additionalFields",
-        "type": "collection",
-        "placeholder": "Add Field",
-        "default": {},
-        "displayOptions": {
-          "show": {
-            "resource": [
-              "attendees"
-            ],
-            "operation": [
-              "listEventAttendees"
-            ]
-          }
-        },
-        "options": [
-          {
-            "displayName": "Limit",
-            "name": "limit",
-            "type": "number",
-            "default": 0,
-            "description": "Page size (1–100).",
-            "routing": {
-              "send": {
-                "type": "query",
-                "property": "limit",
-                "value": "={{ $value }}"
-              }
-            }
-          },
-          {
-            "displayName": "Search",
-            "name": "search",
-            "type": "string",
-            "default": "",
-            "description": "Name or email contains",
-            "routing": {
-              "send": {
-                "type": "query",
-                "property": "search",
-                "value": "={{ $value }}"
-              }
-            }
-          },
-          {
-            "displayName": "Status",
-            "name": "status",
-            "type": "options",
-            "default": "active",
-            "description": "Only attendees with this status",
-            "options": [
-              {
-                "name": "Active",
-                "value": "active"
-              },
-              {
-                "name": "Cancelled",
-                "value": "cancelled"
-              }
-            ],
-            "routing": {
-              "send": {
-                "type": "query",
-                "property": "status",
-                "value": "={{ $value }}"
-              }
-            }
-          }
-        ]
-      },
-      {
-        "displayName": "Q",
-        "name": "q",
-        "type": "string",
-        "default": "",
-        "required": true,
-        "description": "Part of a name or email (2+ characters)",
-        "displayOptions": {
-          "show": {
-            "resource": [
-              "attendees"
-            ],
-            "operation": [
-              "searchAttendees"
-            ]
-          }
-        },
-        "routing": {
-          "send": {
-            "type": "query",
-            "property": "q",
-            "value": "={{ $value }}"
-          }
-        }
-      },
-      {
-        "displayName": "Additional Fields",
-        "name": "additionalFields",
-        "type": "collection",
-        "placeholder": "Add Field",
-        "default": {},
-        "displayOptions": {
-          "show": {
-            "resource": [
-              "attendees"
-            ],
-            "operation": [
-              "searchAttendees"
-            ]
-          }
-        },
-        "options": [
-          {
-            "displayName": "Limit",
-            "name": "limit",
-            "type": "number",
-            "default": 0,
-            "description": "Most hits to return (1–50)",
-            "routing": {
-              "send": {
-                "type": "query",
-                "property": "limit",
-                "value": "={{ $value }}"
-              }
-            }
-          }
-        ]
-      },
-      {
-        "displayName": "Operation",
-        "name": "operation",
-        "type": "options",
-        "noDataExpression": true,
-        "displayOptions": {
-          "show": {
-            "resource": [
               "orders"
             ]
           }
@@ -3010,12 +3219,301 @@
             }
           }
         ]
+      },
+      {
+        "displayName": "Operation",
+        "name": "operation",
+        "type": "options",
+        "noDataExpression": true,
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "hooks"
+            ]
+          }
+        },
+        "options": [
+          {
+            "name": "A sample delivery for an event type",
+            "value": "listHookSamples",
+            "action": "A sample delivery for an event type",
+            "description": "Example data with the delivery’s exact shape, for setting up an automation before a real event happens. Needs the webhooks:subscribe scope.",
+            "routing": {
+              "request": {
+                "method": "GET",
+                "url": "=/hooks/samples"
+              },
+              "output": {
+                "postReceive": [
+                  {
+                    "type": "rootProperty",
+                    "properties": {
+                      "property": "data"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "Subscribe a URL to one event type",
+            "value": "subscribeHook",
+            "action": "Subscribe a URL to one event type",
+            "description": "A REST hook (Zapier-style): deliveries are the same signed, thin messages as Settings → Webhooks endpoints. It appears there too, where the organizer can remove it. Needs the webhooks:subscribe scope.",
+            "routing": {
+              "request": {
+                "method": "POST",
+                "url": "=/hooks",
+                "headers": {
+                  "Idempotency-Key": "={{ $execution.id + \"-\" + $itemIndex }}"
+                }
+              }
+            }
+          },
+          {
+            "name": "Unsubscribe a REST hook",
+            "value": "unsubscribeHook",
+            "action": "Unsubscribe a REST hook",
+            "description": "Removes a hook made through this API (never an endpoint the organizer made). A hook that is already gone answers 204 too. Needs the webhooks:subscribe scope.",
+            "routing": {
+              "request": {
+                "method": "DELETE",
+                "url": "=/hooks/{{ encodeURIComponent($parameter[\"hookId\"]) }}",
+                "headers": {
+                  "Idempotency-Key": "={{ $execution.id + \"-\" + $itemIndex }}"
+                }
+              }
+            }
+          }
+        ],
+        "default": "listHookSamples"
+      },
+      {
+        "displayName": "Event",
+        "name": "event",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "description": "A public event type (`HookEventType`), e.g. `order.paid`.",
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "hooks"
+            ],
+            "operation": [
+              "listHookSamples"
+            ]
+          }
+        },
+        "routing": {
+          "send": {
+            "type": "query",
+            "property": "event",
+            "value": "={{ $value }}"
+          }
+        }
+      },
+      {
+        "displayName": "Url",
+        "name": "url",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "description": "Where to deliver: https on port 443, a public host.",
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "hooks"
+            ],
+            "operation": [
+              "subscribeHook"
+            ]
+          }
+        },
+        "routing": {
+          "send": {
+            "type": "body",
+            "property": "url",
+            "value": "={{ $value }}"
+          }
+        }
+      },
+      {
+        "displayName": "Event",
+        "name": "event",
+        "type": "options",
+        "default": "order.paid",
+        "required": true,
+        "description": "A public event type (see the `webhooks` section).",
+        "options": [
+          {
+            "name": "Order paid",
+            "value": "order.paid"
+          },
+          {
+            "name": "Order refunded",
+            "value": "order.refunded"
+          },
+          {
+            "name": "Order expired",
+            "value": "order.expired"
+          },
+          {
+            "name": "Order payment failed",
+            "value": "order.payment_failed"
+          },
+          {
+            "name": "Order disputed",
+            "value": "order.disputed"
+          },
+          {
+            "name": "Order dispute closed",
+            "value": "order.dispute_closed"
+          },
+          {
+            "name": "Tickets cancelled",
+            "value": "tickets.cancelled"
+          },
+          {
+            "name": "Ticket transferred",
+            "value": "ticket.transferred"
+          },
+          {
+            "name": "Ticket claimed",
+            "value": "ticket.claimed"
+          },
+          {
+            "name": "Ticket admitted",
+            "value": "ticket.admitted"
+          },
+          {
+            "name": "Ticket admission undone",
+            "value": "ticket.admission_undone"
+          },
+          {
+            "name": "Event created",
+            "value": "event.created"
+          },
+          {
+            "name": "Event published",
+            "value": "event.published"
+          },
+          {
+            "name": "Event unpublished",
+            "value": "event.unpublished"
+          },
+          {
+            "name": "Event postponed",
+            "value": "event.postponed"
+          },
+          {
+            "name": "Event rescheduled",
+            "value": "event.rescheduled"
+          },
+          {
+            "name": "Event cancelled",
+            "value": "event.cancelled"
+          },
+          {
+            "name": "Event completed",
+            "value": "event.completed"
+          },
+          {
+            "name": "Event archived",
+            "value": "event.archived"
+          },
+          {
+            "name": "Event updated",
+            "value": "event.updated"
+          },
+          {
+            "name": "Event occurrence cancelled",
+            "value": "event.occurrence_cancelled"
+          },
+          {
+            "name": "Ticket type created",
+            "value": "ticket_type.created"
+          },
+          {
+            "name": "Ticket type updated",
+            "value": "ticket_type.updated"
+          },
+          {
+            "name": "Ticket type archived",
+            "value": "ticket_type.archived"
+          },
+          {
+            "name": "Form registration submitted",
+            "value": "form.registration_submitted"
+          },
+          {
+            "name": "Waitlist joined",
+            "value": "waitlist.joined"
+          },
+          {
+            "name": "Waitlist offered",
+            "value": "waitlist.offered"
+          },
+          {
+            "name": "Survey responded",
+            "value": "survey.responded"
+          },
+          {
+            "name": "Review submitted",
+            "value": "review.submitted"
+          },
+          {
+            "name": "Program agenda published",
+            "value": "program.agenda_published"
+          }
+        ],
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "hooks"
+            ],
+            "operation": [
+              "subscribeHook"
+            ]
+          }
+        },
+        "routing": {
+          "send": {
+            "type": "body",
+            "property": "event",
+            "value": "={{ $value }}"
+          }
+        }
+      },
+      {
+        "displayName": "Hook id",
+        "name": "hookId",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "description": "The hook id",
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "hooks"
+            ],
+            "operation": [
+              "unsubscribeHook"
+            ]
+          }
+        }
       }
     ]
   },
   "yayatoh": {
     "api": "0.2.0",
     "operations": {
+      "addContact": {
+        "method": "POST",
+        "path": "/v1/orgs/{org}/contacts",
+        "scope": "contacts:write",
+        "resource": "contacts"
+      },
       "bulkAssignSeats": {
         "method": "POST",
         "path": "/v1/orgs/{org}/events/{eventId}/bulk/seat-assignments",
@@ -3057,6 +3555,12 @@
         "path": "/v1/orgs/{org}/events",
         "scope": "events:write",
         "resource": "events"
+      },
+      "createRegistration": {
+        "method": "POST",
+        "path": "/v1/orgs/{org}/events/{eventId}/registrations",
+        "scope": "attendees:write",
+        "resource": "attendees"
       },
       "createTicketType": {
         "method": "POST",
@@ -3154,6 +3658,12 @@
         "scope": "events:read",
         "resource": "event_content"
       },
+      "listHookSamples": {
+        "method": "GET",
+        "path": "/v1/orgs/{org}/hooks/samples",
+        "scope": "webhooks:subscribe",
+        "resource": "hooks"
+      },
       "listTicketTypes": {
         "method": "GET",
         "path": "/v1/orgs/{org}/events/{eventId}/ticket-types",
@@ -3183,6 +3693,18 @@
         "path": "/v1/orgs/{org}/attendees/search",
         "scope": "attendees:read",
         "resource": "attendees"
+      },
+      "subscribeHook": {
+        "method": "POST",
+        "path": "/v1/orgs/{org}/hooks",
+        "scope": "webhooks:subscribe",
+        "resource": "hooks"
+      },
+      "unsubscribeHook": {
+        "method": "DELETE",
+        "path": "/v1/orgs/{org}/hooks/{hookId}",
+        "scope": "webhooks:subscribe",
+        "resource": "hooks"
       },
       "updateEvent": {
         "method": "PATCH",

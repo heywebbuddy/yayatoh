@@ -65,6 +65,7 @@ export default async function DonationsReportPage({
   const t = await getTranslations('donations.report');
   const tf = await getTranslations('donations.report.file');
   const tn = await getTranslations('nav');
+  const tbp = await getTranslations('billingPlan');
   const tb = await getTranslations('bulk');
   const te = await getTranslations();
   const base = `/o/${org}/e/${event}/donations`;
@@ -82,7 +83,15 @@ export default async function DonationsReportPage({
     return (
       <>
         <PageHeader breadcrumb={crumbs} title={t('title')} />
-        <EmptyState title={t('noAccessTitle')} description={t('noAccessDescription')} />
+        <EmptyState
+          title={t('noAccessTitle')}
+          description={t('noAccessDescription')}
+          action={
+            <Link href={`/o/${org}/team`} className={buttonClass('primary', 'md')}>
+              {tbp('findOwner')}
+            </Link>
+          }
+        />
       </>
     );
   // Gift outcomes and refunds from the outbox (the worker relays them; dev and e2e have none).

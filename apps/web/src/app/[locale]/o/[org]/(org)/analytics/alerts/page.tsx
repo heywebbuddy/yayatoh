@@ -40,6 +40,7 @@ export default async function AlertRulesPage({
   const data = await loadConsole(org);
   if (!data.modules.has('analytics_pro') || !roleCan(data.role, 'orders:read')) notFound();
   const t = await getTranslations('analyticsPro.rules');
+  const te = await getTranslations('emptyActions');
   const canWrite = roleCan(data.role, 'alerts:manage');
   const canMoney = roleCan(data.role, 'finance:read');
   const rules = await executeQuery(listAlertRulesQuery, {}, data.ctx, ports);
@@ -83,19 +84,31 @@ export default async function AlertRulesPage({
         </div>
       ) : null}
       {canWrite ? (
-        <AlertRuleForm
-          action={createRuleAction.bind(null, org)}
-          measures={measures}
-          moneyMeasures={measures.filter((m) => isRuleMoney(m))}
-          events={events.map((e) => ({ id: e.id, name: e.name }))}
-          currencies={ruleCurrencies(data, events)}
-          mode="create"
-        />
+        <div id="new-rule" className="contents">
+          <AlertRuleForm
+            action={createRuleAction.bind(null, org)}
+            measures={measures}
+            moneyMeasures={measures.filter((m) => isRuleMoney(m))}
+            events={events.map((e) => ({ id: e.id, name: e.name }))}
+            currencies={ruleCurrencies(data, events)}
+            mode="create"
+          />
+        </div>
       ) : (
         <p className="m-0 text-body text-ink-2">{t('readOnly')}</p>
       )}
       {rules.length === 0 ? (
-        <EmptyState title={t('emptyTitle')} description={t('emptyBody')} />
+        <EmptyState
+          title={t('emptyTitle')}
+          description={t('emptyBody')}
+          action={
+            canWrite ? (
+              <Link href="#new-rule" className={buttonClass('primary', 'md')}>
+                {te('addRule')}
+              </Link>
+            ) : undefined
+          }
+        />
       ) : (
         <Table
           caption={t('list')}

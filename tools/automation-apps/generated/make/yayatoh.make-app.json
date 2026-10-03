@@ -5,7 +5,7 @@
   "description": "Events, orders, attendees and check-in from Yayatoh. Generated from the /v1 OpenAPI document.",
   "generatedFrom": {
     "api": "0.2.0",
-    "operations": 30,
+    "operations": 35,
     "triggers": 30
   },
   "base": {
@@ -30,11 +30,13 @@
         "attendees:read",
         "attendees:write",
         "checkin:scan",
+        "contacts:write",
         "events:read",
         "events:write",
         "orders:read",
         "orders:refund",
-        "webhooks:manage"
+        "webhooks:manage",
+        "webhooks:subscribe"
       ],
       "parameters": [
         {
@@ -2731,6 +2733,45 @@
       ]
     },
     {
+      "name": "addContact",
+      "label": "Add a contact",
+      "description": "Finds or creates the org’s contact for the email; an existing contact keeps its name unless it had none. Records no marketing consent.",
+      "typeName": "action",
+      "connection": "yayatoh",
+      "scope": "contacts:write",
+      "resource": "contacts",
+      "operation": {
+        "method": "POST",
+        "path": "/v1/orgs/{org}/contacts"
+      },
+      "communication": {
+        "url": "/contacts",
+        "method": "POST",
+        "headers": {
+          "idempotency-key": "{{uuid}}"
+        },
+        "body": "{{pick(parameters, 'email', 'name')}}",
+        "response": {
+          "output": "{{body}}"
+        }
+      },
+      "parameters": [],
+      "expect": [
+        {
+          "name": "email",
+          "label": "Email",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "name",
+          "label": "Name",
+          "type": "text",
+          "required": false
+        }
+      ]
+    },
+    {
       "name": "bulkAssignSeats",
       "label": "Seat many attendees at once",
       "description": "Select attendees by `ids` (all must belong to the event, else 404) or by a list `filter`, resolved once when the operation starts (at most 50,000). Retrying with the same Idempotency-Key returns the same operation; another body with that key is 422. Seats them at a table or row, in a section, in the best available seats or in their group's block, in plan order. Per-person failures: `not_enough_seats`, `seated_by_ticket`, `attendee_cancelled`, `not_found`; a kept-back accessible seat is a warning (`ada_kept_back`). Undo within 10 minutes puts everyone back.",
@@ -3162,6 +3203,61 @@
           "label": "Slug",
           "type": "text",
           "required": false
+        }
+      ]
+    },
+    {
+      "name": "createRegistration",
+      "label": "Register someone for an event",
+      "description": "Adds a person to the event’s guest list (no ticket, no payment). One active registration per email per event: a second one is a 409.",
+      "typeName": "action",
+      "connection": "yayatoh",
+      "scope": "attendees:write",
+      "resource": "attendees",
+      "operation": {
+        "method": "POST",
+        "path": "/v1/orgs/{org}/events/{eventId}/registrations"
+      },
+      "communication": {
+        "url": "/events/{{parameters.eventId}}/registrations",
+        "method": "POST",
+        "headers": {
+          "idempotency-key": "{{uuid}}"
+        },
+        "body": "{{pick(parameters, 'name', 'email', 'labels')}}",
+        "response": {
+          "output": "{{body}}"
+        }
+      },
+      "parameters": [],
+      "expect": [
+        {
+          "name": "eventId",
+          "label": "Event id",
+          "type": "text",
+          "required": true,
+          "help": "The event id"
+        },
+        {
+          "name": "name",
+          "label": "Name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "email",
+          "label": "Email",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "labels",
+          "label": "Labels",
+          "type": "array",
+          "required": false,
+          "spec": {
+            "type": "text"
+          }
         }
       ]
     },
@@ -3900,6 +3996,38 @@
       ]
     },
     {
+      "name": "listHookSamples",
+      "label": "A sample delivery for an event type",
+      "description": "Example data with the delivery’s exact shape, for setting up an automation before a real event happens.",
+      "typeName": "search",
+      "connection": "yayatoh",
+      "scope": "webhooks:subscribe",
+      "resource": "hooks",
+      "operation": {
+        "method": "GET",
+        "path": "/v1/orgs/{org}/hooks/samples"
+      },
+      "communication": {
+        "url": "/hooks/samples",
+        "method": "GET",
+        "qs": "{{pick(parameters, 'event')}}",
+        "response": {
+          "iterate": "{{body.data}}",
+          "output": "{{item}}"
+        }
+      },
+      "parameters": [],
+      "expect": [
+        {
+          "name": "event",
+          "label": "Event",
+          "type": "text",
+          "required": true,
+          "help": "A public event type (`HookEventType`), e.g. `order.paid`."
+        }
+      ]
+    },
+    {
       "name": "listTicketTypes",
       "label": "The event’s ticket types",
       "description": "Every ticket type of the event in display order, with sold and held counts.",
@@ -4124,6 +4252,202 @@
           "type": "number",
           "required": false,
           "help": "Most hits to return (1–50)"
+        }
+      ]
+    },
+    {
+      "name": "subscribeHook",
+      "label": "Subscribe a URL to one event type",
+      "description": "A REST hook (Zapier-style): deliveries are the same signed, thin messages as Settings → Webhooks endpoints. It appears there too, where the organizer can remove it.",
+      "typeName": "action",
+      "connection": "yayatoh",
+      "scope": "webhooks:subscribe",
+      "resource": "hooks",
+      "operation": {
+        "method": "POST",
+        "path": "/v1/orgs/{org}/hooks"
+      },
+      "communication": {
+        "url": "/hooks",
+        "method": "POST",
+        "headers": {
+          "idempotency-key": "{{uuid}}"
+        },
+        "body": "{{pick(parameters, 'url', 'event')}}",
+        "response": {
+          "output": "{{body}}"
+        }
+      },
+      "parameters": [],
+      "expect": [
+        {
+          "name": "url",
+          "label": "Url",
+          "type": "text",
+          "required": true,
+          "help": "Where to deliver: https on port 443, a public host."
+        },
+        {
+          "name": "event",
+          "label": "Event",
+          "type": "select",
+          "required": true,
+          "help": "A public event type (see the `webhooks` section).",
+          "options": [
+            {
+              "label": "order.paid",
+              "value": "order.paid"
+            },
+            {
+              "label": "order.refunded",
+              "value": "order.refunded"
+            },
+            {
+              "label": "order.expired",
+              "value": "order.expired"
+            },
+            {
+              "label": "order.payment_failed",
+              "value": "order.payment_failed"
+            },
+            {
+              "label": "order.disputed",
+              "value": "order.disputed"
+            },
+            {
+              "label": "order.dispute_closed",
+              "value": "order.dispute_closed"
+            },
+            {
+              "label": "tickets.cancelled",
+              "value": "tickets.cancelled"
+            },
+            {
+              "label": "ticket.transferred",
+              "value": "ticket.transferred"
+            },
+            {
+              "label": "ticket.claimed",
+              "value": "ticket.claimed"
+            },
+            {
+              "label": "ticket.admitted",
+              "value": "ticket.admitted"
+            },
+            {
+              "label": "ticket.admission_undone",
+              "value": "ticket.admission_undone"
+            },
+            {
+              "label": "event.created",
+              "value": "event.created"
+            },
+            {
+              "label": "event.published",
+              "value": "event.published"
+            },
+            {
+              "label": "event.unpublished",
+              "value": "event.unpublished"
+            },
+            {
+              "label": "event.postponed",
+              "value": "event.postponed"
+            },
+            {
+              "label": "event.rescheduled",
+              "value": "event.rescheduled"
+            },
+            {
+              "label": "event.cancelled",
+              "value": "event.cancelled"
+            },
+            {
+              "label": "event.completed",
+              "value": "event.completed"
+            },
+            {
+              "label": "event.archived",
+              "value": "event.archived"
+            },
+            {
+              "label": "event.updated",
+              "value": "event.updated"
+            },
+            {
+              "label": "event.occurrence_cancelled",
+              "value": "event.occurrence_cancelled"
+            },
+            {
+              "label": "ticket_type.created",
+              "value": "ticket_type.created"
+            },
+            {
+              "label": "ticket_type.updated",
+              "value": "ticket_type.updated"
+            },
+            {
+              "label": "ticket_type.archived",
+              "value": "ticket_type.archived"
+            },
+            {
+              "label": "form.registration_submitted",
+              "value": "form.registration_submitted"
+            },
+            {
+              "label": "waitlist.joined",
+              "value": "waitlist.joined"
+            },
+            {
+              "label": "waitlist.offered",
+              "value": "waitlist.offered"
+            },
+            {
+              "label": "survey.responded",
+              "value": "survey.responded"
+            },
+            {
+              "label": "review.submitted",
+              "value": "review.submitted"
+            },
+            {
+              "label": "program.agenda_published",
+              "value": "program.agenda_published"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "unsubscribeHook",
+      "label": "Unsubscribe a REST hook",
+      "description": "Removes a hook made through this API (never an endpoint the organizer made). A hook that is already gone answers 204 too.",
+      "typeName": "action",
+      "connection": "yayatoh",
+      "scope": "webhooks:subscribe",
+      "resource": "hooks",
+      "operation": {
+        "method": "DELETE",
+        "path": "/v1/orgs/{org}/hooks/{hookId}"
+      },
+      "communication": {
+        "url": "/hooks/{{parameters.hookId}}",
+        "method": "DELETE",
+        "headers": {
+          "idempotency-key": "{{uuid}}"
+        },
+        "response": {
+          "output": "{{body}}"
+        }
+      },
+      "parameters": [],
+      "expect": [
+        {
+          "name": "hookId",
+          "label": "Hook id",
+          "type": "text",
+          "required": true,
+          "help": "The hook id"
         }
       ]
     },
