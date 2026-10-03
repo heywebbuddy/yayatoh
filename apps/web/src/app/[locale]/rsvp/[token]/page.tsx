@@ -5,10 +5,12 @@ import {
   rsvpLinkRef,
 } from '@yayatoh/guests';
 import { createCtx, executeCommand, executeQuery, isDomainError } from '@yayatoh/kernel';
-import { Alert, EmptyState, Label, PageHeader, StatusPill } from '@yayatoh/ui';
+import { partySeatsQuery } from '@yayatoh/seating';
+import { Alert, buttonClass, Card, EmptyState, Label, PageHeader, StatusPill } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { Link } from '@/i18n/navigation.ts';
 import { ports } from '@/server/ports.ts';
 import { submitRsvpAction } from './actions.ts';
 import { HouseholdForm, type HouseholdGuest } from './household-form.tsx';
@@ -51,8 +53,18 @@ export default async function RsvpPage({
   // M4.1e: the hosts' questions (nothing private comes back, only that it was given).
   const questions =
     view.state === 'open' ? await executeQuery(publicRsvpQuestionsQuery, { token }, ctx, ports) : null;
+  // M4.4a: once the hosts open the seat finder and seat the party, the page leads to its table.
+  const seats =
+    view.state === 'expired'
+      ? null
+      : await executeQuery(partySeatsQuery, { token }, ctx, ports).catch((err) => {
+          if (isDomainError(err)) return null;
+          throw err;
+        });
+  const seated = seats?.state === 'open' && seats.charts.some((c) => c.places.length > 0);
   const { thanks } = await searchParams;
   const t = await getTranslations('rsvp');
+  const tHub = await getTranslations('hub');
 
   const when = (start: Date, end: Date) =>
     new Intl.DateTimeFormat(locale, {
@@ -102,6 +114,18 @@ export default async function RsvpPage({
         <Alert tone="success" title={t('thanksTitle')}>
           {view.state === 'open' && deadline ? t('thanksChange', { deadline }) : t('thanks')}
         </Alert>
+      ) : null}
+      {seated ? (
+        <Card size="panel" className="flex flex-col gap-2" data-testid="rsvp-seat">
+          <h2 className="m-0 text-section text-ink">{t('seatTitle')}</h2>
+          <p className="m-0 text-body text-ink-2">{t('seatHint')}</p>
+          <Link
+            href={`/rsvp/${encodeURIComponent(token)}/seat`}
+            className={buttonClass('primary', 'md', 'self-start')}
+          >
+            {t('seatLink')}
+          </Link>
+        </Card>
       ) : null}
       {view.state === 'locked' ? (
         <>
@@ -187,6 +211,16 @@ export default async function RsvpPage({
             />
           </>
         )
+      ) : null}
+      {view.state !== 'expired' ? (
+        <p className="m-0">
+          <Link
+            href={`/hub/${encodeURIComponent(token)}`}
+            className="inline-flex min-h-11 items-center font-bold text-primary-ink underline underline-offset-2"
+          >
+            {tHub('openHub')}
+          </Link>
+        </p>
       ) : null}
     </main>
   );

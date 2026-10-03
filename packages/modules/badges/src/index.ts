@@ -1,9 +1,13 @@
 // M5.1d: print a badge with a balance due (audited override).
 export { OVERRIDE_MINUTES, overrideAllows, overrideBalanceDueCommand } from './balance-override.ts';
+// M5.5c kiosk self-print.
 export {
+  type BadgeDetails,
   BatchDto,
   type BatchRunDeps,
   type BatchSlice,
+  badgeDetailsTx,
+  badgePrintableTx,
   badgeTicketsQuery,
   batchFileByLink,
   batchFileKey,
@@ -16,6 +20,7 @@ export {
   listBatchesQuery,
   MAX_BATCH_BADGES,
   nextBatchChunkCommand,
+  oneBadgeHtmlTx,
   runBadgeBatch,
   singleBadgeQuery,
   startBatchCommand,
@@ -23,7 +28,63 @@ export {
 } from './batches.ts';
 export * from './client.ts';
 export { badgesDataSubjects } from './data-subject.ts';
+export {
+  KioskBadgeDto,
+  KioskPrintDto,
+  KioskSettingsDto,
+  KioskSnapshotDto,
+  KioskVerifyDto,
+  kioskJobBadgeQuery,
+  kioskLookupQuery,
+  kioskPrintCommand,
+  kioskRequestCodeCommand,
+  kioskSettingsQuery,
+  kioskSnapshotQuery,
+  kioskVerifyCodeCommand,
+  setKioskSettingsCommand,
+  type WaitingRegistrationLookup,
+} from './kiosk.ts';
 export { LINK_TTL_MS, signBatchLink, verifyBatchLink } from './link.ts';
+export {
+  type BadgePrinter,
+  browserPrinter,
+  devPrintNode,
+  type FakePrinterState,
+  type FakePrintNode,
+  fakePrintNode,
+  type PrintSubmission,
+  printNodeFromEnv,
+  printNodePrinter,
+  type ReportedState,
+  type SubmitResult,
+} from './printer-port.ts';
+export {
+  archivePrinterCommand,
+  BadgePrintStateDto,
+  badgePrintStateQuery,
+  browserJobBadgeQuery,
+  createPrinterCommand,
+  markQuietPrintersCommand,
+  offlinePrinterCountTx,
+  PRINTER_OFFLINE_EVENT,
+  PRINTER_ONLINE_EVENT,
+  PrinterDto,
+  PrinterStatePayload,
+  PrintingSetupDto,
+  PrintJobDto,
+  PrintLogEntryDto,
+  pollPrintNodePrinters,
+  printerHeartbeatCommand,
+  printingSetupQuery,
+  printLogQuery,
+  recordPrinterStatesCommand,
+  recordPrintResultCommand,
+  type SendPrintDeps,
+  sendPrintJob,
+  setPrintNodeCommand,
+  startPrintJobCommand,
+  watchQuietPrinters,
+} from './printing.ts';
 export { privateColumns } from './private-columns.ts';
 export { type BadgesHtmlInput, badgesHtml } from './render.ts';
 export { samplePreviewQuery } from './sample.ts';

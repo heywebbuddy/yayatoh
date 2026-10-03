@@ -29,7 +29,18 @@ export {
   type StoredAlert,
   stateAfter,
 } from './domain/lifecycle.ts';
-export { type EventFacts, evaluateEventRules, evaluateOrgRules, type OrgFacts } from './domain/rules.ts';
+export {
+  type ConferenceFacts,
+  type EventFacts,
+  evaluateConferenceRules,
+  evaluateEventRules,
+  evaluateOrgRules,
+  evaluateSocialRules,
+  type OrgFacts,
+  roomTooSmall,
+  type SocialEventFacts,
+  sessionNearlyFull,
+} from './domain/rules.ts';
 export {
   ALERT_KIND,
   ALERT_TEXT_KIND,
@@ -39,7 +50,13 @@ export {
   evaluateEventAlertsTx,
   evaluateOrgAlertsTx,
 } from './engine.ts';
-export { eventFactsTx, orgFactsTx } from './facts.ts';
+export {
+  type ConferenceSources,
+  conferenceFactsTx,
+  connectedConferenceSources,
+  eventFactsTx,
+  orgFactsTx,
+} from './facts.ts';
 export { privateColumns } from './private-columns.ts';
 export {
   ALERT_TRIGGER_EVENTS,

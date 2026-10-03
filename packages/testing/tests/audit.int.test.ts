@@ -115,7 +115,8 @@ describe('audit hash chain', () => {
     } finally {
       await admin.end();
     }
-  });
+    // Two fresh org fixtures (about 18 s each since batch 3j) don't fit the default 30 s.
+  }, 120_000);
 });
 
 describe('Settings → Activity (auditLogQuery)', () => {

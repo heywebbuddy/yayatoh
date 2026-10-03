@@ -35,6 +35,16 @@ export {
   StartRegistrationInput,
   startRegistrationCommand,
 } from './checkout.ts';
+// M5.4b: sponsor comp registration codes.
+export {
+  compCode,
+  isCompCode,
+  makeCompCodeTx,
+  sponsorCompCodes,
+  sponsorCompUsageQuery,
+} from './comp-codes.ts';
+// M5.9a: the conference Command Center pack's counts (alert rules and widgets read these).
+export { approvalBacklogTx, sessionWaitlistsTx } from './conference-facts.ts';
 export { registrationDataSubjects } from './data-subject.ts';
 export * from './domain/approval.ts';
 export * from './domain/capacity.ts';
@@ -74,6 +84,7 @@ export {
   substituteByPayerCommand,
   substituteRegistrantCommand,
 } from './groups.ts';
+export { hasWaitingRegistrationTx } from './kiosk.ts';
 export { decisionDedupeKey, decisionMailer, registrantLifecycle } from './lifecycle.ts';
 // M5.1d: pay later by invoice per type (P5-5).
 export {
@@ -114,6 +125,13 @@ export {
   REGISTRANT_STATUSES,
   TYPE_KINDS,
 } from './schema.ts';
+// M5.6a: session doors (check-in's SessionAccessSource, composed at the roots).
+export {
+  enrolledTicketIdsTx,
+  registrationSessionAccess,
+  sessionAccessTx,
+  type TicketSessionAccess,
+} from './session-access.ts';
 export {
   archiveAdmissionItemCommand,
   archiveRegistrationTypeCommand,

@@ -15,7 +15,16 @@ export const SEVERITIES = ['info', 'warning', 'critical'] as const;
 export type Severity = (typeof SEVERITIES)[number];
 
 /** Routing groups: members choose channels per group (by role, `alerts.routing`). */
-export const ALERT_CATEGORIES = ['attendees', 'payments', 'door', 'sales', 'setup', 'messaging'] as const;
+export const ALERT_CATEGORIES = [
+  'attendees',
+  'payments',
+  'door',
+  'sales',
+  'setup',
+  'messaging',
+  // M5.9a: the conference pack (sessions, exhibitors, speakers, sponsors).
+  'conference',
+] as const;
 export type AlertCategory = (typeof ALERT_CATEGORIES)[number];
 
 /** Where an alert can reach a member besides the alerts page. */
@@ -58,6 +67,24 @@ export const RULE_KEYS = [
   // Batch 3e merge: failed campaign sends (M3.6b) and dispute evidence deadlines (M3.10c).
   'campaignFailed',
   'disputeDeadline',
+  // M4.8e: pledges still unpaid 14 days after the event (P4-12).
+  'pledgesUnpaid',
+  // M5.9a conference pack: sessions, exhibitors, speakers, sponsors, onsite stations, approvals and invoices.
+  'sessionsNearCapacity',
+  'sessionWaitlists',
+  'roomsTooSmall',
+  'exhibitorsNoLeads',
+  'exhibitorsNoStaff',
+  'speakerTasksOverdue',
+  'deliverablesOverdue',
+  'printersKiosksOffline',
+  'approvalBacklog',
+  'invoicesOverdue',
+  // M4.6a social pack: guests who have not answered as the RSVP deadline nears, guests without a
+  // table, and attending guests without a meal in the last week.
+  'rsvpPending',
+  'guestsUnseated',
+  'mealsMissing',
 ] as const;
 export type RuleKey = (typeof RULE_KEYS)[number];
 
@@ -129,6 +156,63 @@ export const RULES: Readonly<Record<RuleKey, RuleDef>> = {
   automationFailed: rule('automationFailed', 'org', 'messaging', 'messages:read', '/messaging'),
   campaignFailed: rule('campaignFailed', 'org', 'messaging', 'marketing:read', '/campaigns'),
   disputeDeadline: rule('disputeDeadline', 'org', 'payments', 'finance:read', '/disputes'),
+  pledgesUnpaid: rule('pledgesUnpaid', 'event', 'payments', 'orders:read', '/e/{event}/donations/pledges'),
+  // M5.9a conference pack. Counts only; the fixing page holds the names.
+  sessionsNearCapacity: rule(
+    'sessionsNearCapacity',
+    'event',
+    'conference',
+    'events:read',
+    '/e/{event}/sessions',
+  ),
+  sessionWaitlists: rule(
+    'sessionWaitlists',
+    'event',
+    'conference',
+    'events:read',
+    '/e/{event}/registration/enrollment',
+  ),
+  roomsTooSmall: rule('roomsTooSmall', 'event', 'conference', 'events:read', '/e/{event}/sessions'),
+  exhibitorsNoLeads: rule('exhibitorsNoLeads', 'event', 'conference', 'events:read', '/e/{event}/exhibitors'),
+  exhibitorsNoStaff: rule(
+    'exhibitorsNoStaff',
+    'event',
+    'conference',
+    'events:read',
+    '/e/{event}/exhibitors/portal',
+  ),
+  speakerTasksOverdue: rule(
+    'speakerTasksOverdue',
+    'event',
+    'conference',
+    'events:read',
+    '/e/{event}/speakers/tasks',
+  ),
+  deliverablesOverdue: rule(
+    'deliverablesOverdue',
+    'event',
+    'conference',
+    'events:read',
+    '/e/{event}/sponsors',
+  ),
+  printersKiosksOffline: rule('printersKiosksOffline', 'event', 'door', 'events:read', '/e/{event}/onsite'),
+  approvalBacklog: rule(
+    'approvalBacklog',
+    'event',
+    'attendees',
+    'attendees:read',
+    '/e/{event}/registration/applications',
+  ),
+  invoicesOverdue: rule(
+    'invoicesOverdue',
+    'event',
+    'payments',
+    'orders:read',
+    '/e/{event}/registration/invoices',
+  ),
+  rsvpPending: rule('rsvpPending', 'event', 'attendees', 'guests:read', '/e/{event}/guests/rsvp'),
+  guestsUnseated: rule('guestsUnseated', 'event', 'attendees', 'guests:read', '/e/{event}/seating/guests'),
+  mealsMissing: rule('mealsMissing', 'event', 'attendees', 'guests:read', '/e/{event}/guests/answers'),
 };
 
 export const isRuleKey = (v: string): v is RuleKey => (RULE_KEYS as readonly string[]).includes(v);
@@ -189,6 +273,26 @@ export const THRESHOLDS = {
   /** Open disputes whose evidence is due within 3 days; critical within 1 day (M3.10c levels). */
   disputeSoonMs: 72 * 3_600_000,
   disputeCriticalMs: 24 * 3_600_000,
+  /** M5.9a: a session is nearly full at 95 % of its places (enrolled, or in the room while it runs). */
+  sessionNearPct: 95,
+  /** M5.9a: a session's line is long when more than this many people wait in it. */
+  waitlistMax: 10,
+  /** M5.9a: exhibitors without people are raised in the last 7 days before the event (and during it). */
+  exhibitorStaffWindowMs: 7 * 86_400_000,
+  /** M5.9a: applications waiting: from 10, or any one waiting longer than 48 hours. */
+  approvalBacklogMin: 10,
+  approvalWaitMs: 48 * 3_600_000,
+  /**
+   * M4.6a: guests who have not answered, from 7 days before the RSVP deadline (warning) and in the
+   * last day before it (critical), until the event starts.
+   */
+  rsvpWarnBeforeMs: 7 * 86_400_000,
+  rsvpCriticalBeforeMs: 86_400_000,
+  /** Guests without a table (not declined) in the last 7 days before the event; critical in the last day and while it runs. */
+  guestSeatingWindowMs: 7 * 86_400_000,
+  guestSeatingCriticalMs: 86_400_000,
+  /** Attending guests without a meal when the event has a menu, in the last 7 days (caterer counts). */
+  mealsWindowMs: 7 * 86_400_000,
   /** Acknowledged alerts still firing are raised again after 60 minutes (10 when live-critical). */
   ackTimeoutMs: 60 * 60_000,
   liveCriticalAckTimeoutMs: 10 * 60_000,
@@ -230,6 +334,7 @@ export const DEFAULT_ROUTING: Readonly<
     sales: ['in_app', 'email'],
     setup: ['in_app', 'email'],
     messaging: ['in_app', 'email'],
+    conference: ['in_app', 'email'],
   },
   admin: {
     attendees: ['in_app', 'email'],
@@ -238,6 +343,7 @@ export const DEFAULT_ROUTING: Readonly<
     sales: ['in_app', 'email'],
     setup: ['in_app', 'email'],
     messaging: ['in_app', 'email'],
+    conference: ['in_app', 'email'],
   },
   manager: {
     attendees: ['in_app', 'email', 'push'],
@@ -245,6 +351,7 @@ export const DEFAULT_ROUTING: Readonly<
     sales: ['in_app'],
     setup: ['in_app', 'email'],
     messaging: ['in_app'],
+    conference: ['in_app', 'email'],
   },
   finance: { payments: ['in_app', 'email'] },
   marketing: { sales: ['in_app'], messaging: ['in_app', 'email'] },

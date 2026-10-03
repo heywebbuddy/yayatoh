@@ -27,3 +27,10 @@ validated there, stored in `forms.form_responses` (respondent `survey_invitation
   step-up, like every export.
 - `sendSurveyStepTx` is the journey step "After event → Survey" (M3.7a): it never throws for a
   missing/closed survey or an already-invited person, it reports why it skipped.
+- **Session-end prompt (M5.7b).** `feedbackPromptQuery` / `openFeedbackCommand` (`public:survey`):
+  once a session feedback survey can be answered (open, with questions, its session over, the
+  event published and public), the signed-in attendee (the actor must be the `account`; contact by
+  account link, else email; an active attendee) gets their invitation: the existing one, or a new
+  one recorded as a `prompt` send without an email. Answered → `conflict` / `already_answered`;
+  an expired emailed link → `invalid_state` / `expired`. `survey.responded@1` carries `contactId`
+  and `sessionId` (engagement scores).

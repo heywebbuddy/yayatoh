@@ -1,4 +1,4 @@
-import { columnPrivacy, internal, personal } from '@yayatoh/db';
+import { columnPrivacy, internal, personal, secret } from '@yayatoh/db';
 
 /**
  * Column privacy of the `donations` schema (roadmap §9 canary leak test; see `columnPrivacy` in
@@ -81,5 +81,91 @@ export const privateColumns = columnPrivacy('donations', {
     sponsor_ein: 'public',
     charity_address: 'public',
     copy_version: 'vocab',
+  },
+  // M4.8c paddle raise. A call copies its level's public name. Who spotted an entry is staff data;
+  // paddle numbers and amounts are numbers (organizer views only, P4-13).
+  paddle_calls: {
+    level_name: 'public',
+    currency: 'vocab',
+    status: 'vocab',
+  },
+  paddle_entries: {
+    status: 'vocab',
+    spotter_user_id: internal(),
+  },
+  pledges: {
+    currency: 'vocab',
+    status: 'vocab',
+    source: 'vocab',
+  },
+  // M4.8e cards on file and pledge collection. The provider's references are secret (never in a
+  // response, export or message); what the guest typed and the card's display details (brand,
+  // last four) are personal: the card's owner sees them through a signed link, the host in the
+  // console, the donor in their own summary. Host notes and offline references are internal.
+  saved_cards: {
+    name: personal(),
+    email: personal('email'),
+    source: 'vocab',
+    status: 'vocab',
+    provider: 'vocab',
+    connected_account_id: secret(),
+    provider_setup_id: secret(),
+    customer_id: secret(),
+    payment_method_id: secret(),
+    brand: personal(),
+    last4: personal(),
+    consent_version: 'vocab',
+    locale: 'vocab',
+  },
+  pledge_collections: {
+    currency: 'vocab',
+    donor_name: personal(),
+    donor_email: personal('email'),
+    locale: 'vocab',
+    status: 'vocab',
+    offline_method: 'vocab',
+    offline_reference: internal(),
+    note: internal(),
+  },
+  pledge_attempts: {
+    kind: 'vocab',
+    status: 'vocab',
+    decline_code: 'vocab',
+  },
+  // M4.8f matching gifts. The sponsor's name and email are for the host (collection, receipts);
+  // the public name is what the sponsor chose to show on screens and the giving page.
+  matches: {
+    sponsor_name: personal(),
+    sponsor_email: personal('email'),
+    public_name: 'public',
+    currency: 'vocab',
+    status: 'vocab',
+  },
+  gift_refunds: {
+    currency: 'vocab',
+  },
+  // M4.8g reconciliation: references are our own order and refund ids (`order:<id>`); the
+  // provider's payout ids and the finance note are internal (the host's finance views only).
+  recon_runs: {
+    provider: 'vocab',
+    totals: internal(),
+    ran_by: internal(),
+  },
+  recon_items: {
+    kind: 'vocab',
+    reference: internal(),
+    currency: 'vocab',
+    status: 'vocab',
+    // Only a resolved difference has a note (recon_items_resolved_check): the canary fills those rows.
+    resolution_note: internal(undefined, {
+      where: "status = 'resolved'",
+      why: 'A note exists only on a resolved difference (recon_items_resolved_check).',
+    }),
+    resolved_by: internal(),
+  },
+  recon_payouts: {
+    payout_id: internal(),
+    status: 'vocab',
+    currency: 'vocab',
   },
 });

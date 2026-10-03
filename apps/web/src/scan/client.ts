@@ -11,6 +11,8 @@ import {
   verifyManifestScope,
 } from '@yayatoh/checkin-engine';
 import { uuidv7 } from '@yayatoh/kernel';
+import { GuestBook } from './guests.ts';
+import { applyDoorVerdict, type DoorLogEntry, pruneDoorLog, sessionOccupancy } from './session-door.ts';
 import {
   kvGet,
   kvSet,
@@ -51,7 +53,15 @@ export type ServerResult =
   | 'provisional'
   | 'granted'
   | 'no_access'
-  | 'wrong_checkpoint';
+  | 'wrong_checkpoint'
+  | 'balance_due'
+  // M5.6a session doors.
+  | 'entered'
+  | 'scanned_out'
+  | 'not_in_room'
+  | 'not_enrolled'
+  | 'admission_level'
+  | 'capacity';
 
 /** A sync the server refused for a reason the scanner should show (not just "offline"). */
 export class ScanSyncError extends Error {
@@ -62,6 +72,12 @@ export class ScanSyncError extends Error {
 
 export interface ScanOutcome {
   readonly scanId: string;
+  /** The code scanned (a session door's override sends it again). */
+  readonly code?: string;
+  /** M5.6a: the session door it was scanned at, if any. */
+  readonly sessionDoorId?: string | null;
+  /** The ticket the code resolved to on this device (kiosk self-print looks its badge up by it). */
+  readonly ticketId?: string | null;
   readonly verdict: OfflineVerdict;
   readonly holderName: string | null;
   readonly typeName: string | null;
@@ -139,11 +155,58 @@ export interface HelpRequest {
   readonly overdue: boolean;
 }
 
+/** Kiosk self-print (M5.5c): one attendee's badge as the kiosk may show it. */
+export interface KioskBadge {
+  readonly ticketId: string;
+  readonly name: string;
+  readonly company: string;
+  readonly jobTitle: string;
+  readonly typeName: string;
+  readonly status: 'ready' | 'printed' | 'desk';
+  /** Proof for printing, from the server (absent when read from the offline snapshot). */
+  readonly pass?: string;
+}
+
+/** What the kiosk keeps sealed on the device to keep working offline (M5.5c). */
+export interface KioskSnapshot {
+  readonly eventId: string;
+  readonly emailCodes: boolean;
+  readonly adapter: 'browser' | 'printnode';
+  readonly asOf: string;
+  readonly badges: KioskBadge[];
+}
+
+export type KioskPrintResult =
+  | {
+      readonly status: 'printing';
+      readonly jobId: string;
+      readonly adapter: 'browser' | 'printnode';
+      readonly pdfToken: string | null;
+      readonly failed?: boolean;
+    }
+  | { readonly status: 'printed' | 'desk' | 'queued' }
+  | { readonly status: 'error'; readonly code: string };
+
+export type KioskVerifyResult =
+  | { readonly status: 'ok'; readonly badge: KioskBadge; readonly checkInCode: string }
+  | { readonly status: 'desk' | 'locked' | 'expired' }
+  | { readonly status: 'wrong'; readonly attemptsLeft: number }
+  | { readonly status: 'error'; readonly code: string };
+
+interface QueuedKioskPrint {
+  readonly ticketId: string;
+  readonly code: string;
+  readonly requestKey: string;
+  readonly locale: string;
+}
+
 export interface KioskConfig {
   readonly eventId: string;
   readonly checkpointId: string | null;
   readonly pinHash: string;
   readonly startedAt: string;
+  /** M4.4b: what the kiosk shows; absent (older servers) = tickets. */
+  readonly kind?: 'tickets' | 'guests' | 'board';
 }
 
 /** What a heartbeat changed on this device. */
@@ -172,6 +235,12 @@ export class ScanClient {
   /** Migrated tickets by their legacy QR payload hashes (M1.9e). */
   private byLegacy = new Map<string, ManifestRow>();
   private admitted = new Set<string>();
+  /** M5.6a: `inRoomKey(ticket, session)` of people this device let into a session and not out. */
+  private inRoom = new Set<string>();
+  /** M5.6a: at a session door, scanning people in or out. */
+  direction: 'in' | 'out' = 'in';
+  /** M5.6a: this device's door scans the manifest's room counts don't include yet. */
+  private doorLog: DoorLogEntry[] = [];
   /** server time − device time, measured at each sync (within the manifest request's round trip). */
   clockOffsetMs = 0;
   /** Where this device stands (an entrance or zone), or null for the whole event. */
@@ -179,7 +248,12 @@ export class ScanClient {
   /** Kiosk mode (M3.4a), or null: set by a supervisor, left with the PIN. */
   kiosk: KioskConfig | null = null;
 
-  constructor(readonly config: ScanConfig) {}
+  /** M4.4b: the event's guests (check-in by name or party, the guest kiosk, the A–Z board). */
+  readonly guests: GuestBook;
+
+  constructor(readonly config: ScanConfig) {
+    this.guests = new GuestBook(config.eventId, config.token);
+  }
 
   get token(): string {
     return this.config.token;
@@ -245,9 +319,13 @@ export class ScanClient {
     // The admitted set is kept on its own (small, sealed): saving a scan never re-seals the list.
     const admitted = await kvGet<{ iv: Uint8Array; data: ArrayBuffer }>('admitted');
     if (admitted) this.admitted = new Set(await openJson<string[]>(this.config.token, admitted));
+    const inRoom = await kvGet<{ iv: Uint8Array; data: ArrayBuffer }>('inRoom');
+    if (inRoom) this.inRoom = new Set(await openJson<string[]>(this.config.token, inRoom));
+    this.doorLog = (await kvGet<DoorLogEntry[]>('doorLog')) ?? [];
     this.clockOffsetMs = (await kvGet<number>('clockOffsetMs')) ?? 0;
     this.checkpointId = (await kvGet<string | null>('checkpointId')) ?? null;
     this.kiosk = (await kvGet<KioskConfig | null>('kiosk')) ?? null;
+    await this.guests.load();
     return true;
   }
 
@@ -268,6 +346,27 @@ export class ScanClient {
 
   private async persistAdmitted() {
     await kvSet('admitted', await sealJson(this.config.token, [...this.admitted]));
+  }
+
+  private async persistInRoom() {
+    await kvSet('inRoom', await sealJson(this.config.token, [...this.inRoom]));
+  }
+
+  /** M5.6a: the session behind the chosen checkpoint (a session door), or null. */
+  get sessionDoor(): { checkpointId: string; sessionId: string; title: string | null } | null {
+    const c = this.checkpoint;
+    if (c?.kind !== 'session' || !c.sessionId) return null;
+    const s = this.snapshot?.header.sessions?.find((x) => x.checkpointId === c.id);
+    return { checkpointId: c.id, sessionId: c.sessionId, title: s?.title ?? null };
+  }
+
+  /** M5.6a: the device's estimate of the chosen session room's count, and how many it holds. */
+  async roomCount(): Promise<{ occupied: number; capacity: number | null } | null> {
+    const door = this.sessionDoor;
+    if (!door || !this.snapshot) return null;
+    const occ = sessionOccupancy(this.snapshot.header, this.doorLog);
+    const gate = this.snapshot.header.scope?.sessionGates?.find((g) => g.checkpointId === door.checkpointId);
+    return { occupied: occ.get(door.sessionId) ?? 0, capacity: gate?.capacity ?? null };
   }
 
   /** Pull manifest changes since the last sync (first page overlaps a minute). */
@@ -330,12 +429,17 @@ export class ScanClient {
     };
     this.byLegacy = legacyIndex(this.byId.values());
     await this.persist();
+    // M4.4b: the guest list for check-in by name, the guest kiosk and the board.
+    await this.guests.sync();
+    this.doorLog = pruneDoorLog(this.doorLog, header.serverTime);
+    await kvSet('doorLog', this.doorLog);
   }
 
   /** Decide locally (instant), record, queue; the flush that follows may refine it. */
   async scan(code: string): Promise<ScanOutcome> {
     if (!this.snapshot) throw new Error('No guest list yet — connect once to download it.');
     const now = new Date(Date.now() + this.clockOffsetMs);
+    const door = this.sessionDoor;
     const { verdict, ticketId, row } = await offlineVerdict(
       {
         header: this.snapshot.header,
@@ -344,15 +448,19 @@ export class ScanClient {
         byLegacyCode: this.byLegacy,
         admitted: this.admitted,
         lastSyncAt: new Date(this.snapshot.lastSyncAt),
+        inRoom: this.inRoom,
+        occupancy: door ? sessionOccupancy(this.snapshot.header, this.doorLog) : new Map(),
       },
       code,
       now,
       this.checkpoint?.id ?? null,
+      { direction: this.direction },
     );
-    if ((verdict === 'admit' || verdict === 'provisional') && ticketId) {
+    if ((verdict === 'admit' || verdict === 'provisional') && ticketId && !door) {
       this.admitted.add(admittedKey(ticketId, eventDay(now, this.snapshot.header.event.timezone)));
       await this.persistAdmitted();
     }
+    if (door && applyDoorVerdict(this.inRoom, verdict, ticketId, door.sessionId)) await this.persistInRoom();
     const scan: QueuedScan = {
       scanId: uuidv7(),
       code: code.trim(),
@@ -360,10 +468,18 @@ export class ScanClient {
       clockOffsetMs: this.clockOffsetMs,
       verdict,
       ...(this.checkpoint ? { checkpointId: this.checkpoint.id } : {}),
+      ...(door ? { direction: this.direction } : {}),
     };
     await queueAdd(scan);
+    if (door) {
+      this.doorLog.push({ scanId: scan.scanId, verdict, checkpointId: door.checkpointId, syncedAt: null });
+      await kvSet('doorLog', this.doorLog);
+    }
     return {
       scanId: scan.scanId,
+      code: code.trim(),
+      sessionDoorId: door?.checkpointId ?? null,
+      ticketId: ticketId ?? null,
       verdict,
       holderName: row?.holderName ?? null,
       typeName: row?.typeName ?? null,
@@ -371,8 +487,9 @@ export class ScanClient {
     };
   }
 
+  /** Ticket scans and guest check-ins waiting to sync. */
   async queueDepth(): Promise<number> {
-    return (await queueAll()).length;
+    return (await queueAll()).length + this.guests.queued;
   }
 
   /**
@@ -395,9 +512,66 @@ export class ScanClient {
       };
       for (const r of body.results) out.set(r.scanId, { result: r.result, openSignals: r.openSignals ?? 0 });
       await queueRemove(batch.map((c) => c.scanId));
+      // Door scans now count on the server: the next manifest made after this includes them.
+      const at = new Date(Date.now() + this.clockOffsetMs).toISOString();
+      if (this.doorLog.some((e) => !e.syncedAt && out.has(e.scanId))) {
+        this.doorLog = this.doorLog.map((e) =>
+          !e.syncedAt && out.has(e.scanId)
+            ? { ...e, verdict: out.get(e.scanId)?.result ?? e.verdict, syncedAt: at }
+            : e,
+        );
+        await kvSet('doorLog', this.doorLog);
+      }
     }
+    if (this.guests.queued) await this.guests.flush();
     return out;
   });
+
+  /**
+   * M5.6a: let someone into a session past the gates that refused them, with a reason (audited).
+   * Online only; the answer is the server's. Returns the result, or an error code.
+   */
+  async sessionOverride(input: {
+    code: string;
+    checkpointId: string;
+    gates: readonly string[];
+    reason: string;
+  }): Promise<{ result: ServerResult } | { error: string }> {
+    let res: Response;
+    try {
+      res = await fetch('/api/v1/checkins/session-override', {
+        method: 'POST',
+        ...this.api,
+        body: JSON.stringify({ eventId: this.config.eventId, ...input }),
+      });
+    } catch {
+      return { error: 'offline' };
+    }
+    if (!res.ok) {
+      const p = (await res.json().catch(() => null)) as {
+        code?: string;
+        details?: { reason?: string };
+      } | null;
+      return { error: p?.details?.reason ?? p?.code ?? 'internal' };
+    }
+    const body = (await res.json()) as { result: ServerResult; ticket: { shortCode: string } | null };
+    const door = this.sessionDoor;
+    const row = body.ticket ? this.byShort.get(body.ticket.shortCode) : undefined;
+    if (door && row && applyDoorVerdict(this.inRoom, body.result, row.ticketId, door.sessionId))
+      await this.persistInRoom();
+    if (door && body.result === 'entered') {
+      // Counted on the server now; the next manifest includes it.
+      const at = new Date(Date.now() + this.clockOffsetMs).toISOString();
+      this.doorLog.push({
+        scanId: uuidv7(),
+        verdict: 'entered',
+        checkpointId: door.checkpointId,
+        syncedAt: at,
+      });
+      await kvSet('doorLog', this.doorLog);
+    }
+    return { result: body.result };
+  }
 
   /**
    * Health every 30 s (and when a supervisor pokes this device): reports where it works and
@@ -472,6 +646,8 @@ export class ScanClient {
     await kvSet('kioskExited', k.startedAt);
     this.kiosk = null;
     await kvSet('kiosk', null);
+    this.kioskPrint = null;
+    await kvSet('kioskBadges', null);
     await this.reportKioskExit(k.startedAt).catch(() => undefined);
   }
 
@@ -570,9 +746,160 @@ export class ScanClient {
     return (await fetch('/api/scan/push', { method: 'DELETE', ...this.api })).ok;
   }
 
+  // --- Kiosk self-print (M5.5c) -------------------------------------------------------------------
+
+  /** The self-print snapshot, or null when self-print is off for this kiosk (or never fetched). */
+  kioskPrint: KioskSnapshot | null = null;
+
+  private async kioskPost<T>(body: Record<string, unknown>): Promise<T | { code: string }> {
+    let res: Response;
+    try {
+      res = await fetch('/api/scan/kiosk/badges', {
+        method: 'POST',
+        ...this.api,
+        body: JSON.stringify({ ...body, eventId: this.config.eventId }),
+      });
+    } catch {
+      return { code: 'offline' };
+    }
+    const json = (await res.json().catch(() => ({}))) as Record<string, unknown>;
+    if (res.ok) return json as T;
+    const reason = (json.details as { reason?: string } | undefined)?.reason;
+    return { code: reason ?? (typeof json.code === 'string' ? json.code : `http_${res.status}`) };
+  }
+
+  /** Load the sealed self-print snapshot (offline start). */
+  async loadKioskPrint(): Promise<void> {
+    const sealed = await kvGet<{ iv: Uint8Array; data: ArrayBuffer } | null>('kioskBadges');
+    this.kioskPrint = sealed ? await openJson<KioskSnapshot>(this.config.token, sealed) : null;
+  }
+
+  /**
+   * Refresh the self-print snapshot (when the kiosk starts, every sync, and on reconnect). Self-print
+   * turned off clears it; offline keeps the last one.
+   */
+  async syncKioskPrint(): Promise<KioskSnapshot | null> {
+    if (!this.kiosk) return this.kioskPrint;
+    try {
+      const res = await fetch(
+        `/api/scan/kiosk/badges?eventId=${encodeURIComponent(this.config.eventId)}`,
+        this.api,
+      );
+      if (res.status === 403 || res.status === 404) {
+        this.kioskPrint = null;
+        await kvSet('kioskBadges', null);
+      } else if (res.ok) {
+        this.kioskPrint = (await res.json()) as KioskSnapshot;
+        await kvSet('kioskBadges', await sealJson(this.config.token, this.kioskPrint));
+      }
+    } catch {
+      // Offline: keep the last snapshot.
+    }
+    return this.kioskPrint;
+  }
+
+  /**
+   * The badge of the attendee whose code was just scanned: from the server (fresh, with the proof
+   * to print), or offline from the snapshot by the ticket the manifest resolved. Never by search.
+   */
+  async kioskBadgeFor(code: string, ticketId: string | null): Promise<KioskBadge | { code: string } | null> {
+    const r = await this.kioskPost<KioskBadge>({ action: 'lookup', code });
+    if (!('code' in r)) return r;
+    if (r.code === 'offline') {
+      const b = ticketId ? this.kioskPrint?.badges.find((x) => x.ticketId === ticketId) : undefined;
+      return b ?? null;
+    }
+    return r.code === 'not_found' ? null : r;
+  }
+
+  /** Ask for an emailed code (the answer is the same whether or not anything was sent). */
+  kioskEmailCode(email: string, locale: string): Promise<{ challengeId: string } | { code: string }> {
+    return this.kioskPost<{ challengeId: string }>({ action: 'email', email, locale });
+  }
+
+  async kioskVerifyCode(challengeId: string, code: string): Promise<KioskVerifyResult> {
+    const r = await this.kioskPost<KioskVerifyResult>({ action: 'verify', challengeId, code });
+    return 'code' in r && !('status' in r) ? { status: 'error', code: r.code } : (r as KioskVerifyResult);
+  }
+
+  /**
+   * Print the identified attendee's badge. Offline, the print waits on the device (sealed, with the
+   * code that proves it) and goes out on reconnect; the server still logs it once.
+   */
+  async kioskPrintBadge(input: {
+    ticketId: string;
+    pass?: string;
+    code?: string;
+    locale: string;
+  }): Promise<KioskPrintResult> {
+    const requestKey = `kiosk-${uuidv7()}`;
+    const r = await this.kioskPost<KioskPrintResult>({ action: 'print', ...input, requestKey });
+    if ('code' in r && !('status' in r)) {
+      // Offline, only a PrintNode kiosk queues the print (it prints at the printer later; a print
+      // dialog needs the attendee still standing here).
+      if (r.code === 'offline' && input.code && this.kioskPrint?.adapter === 'printnode') {
+        const queue = await this.kioskPrintQueue();
+        queue.push({ ticketId: input.ticketId, code: input.code, requestKey, locale: input.locale });
+        await kvSet('kioskPrints', await sealJson(this.config.token, queue));
+        await this.markKioskPrinted(input.ticketId);
+        return { status: 'queued' };
+      }
+      return { status: 'error', code: r.code };
+    }
+    const result = r as KioskPrintResult;
+    if (result.status === 'printing' || result.status === 'printed')
+      await this.markKioskPrinted(input.ticketId);
+    return result;
+  }
+
+  private async kioskPrintQueue(): Promise<QueuedKioskPrint[]> {
+    const sealed = await kvGet<{ iv: Uint8Array; data: ArrayBuffer } | null>('kioskPrints');
+    return sealed ? await openJson<QueuedKioskPrint[]>(this.config.token, sealed) : [];
+  }
+
+  async kioskPrintsWaiting(): Promise<number> {
+    return (await this.kioskPrintQueue()).length;
+  }
+
+  /** Send prints made offline (one at a time, each once; PrintNode prints them). */
+  async flushKioskPrints(): Promise<KioskPrintResult[]> {
+    const queue = await this.kioskPrintQueue();
+    const done: KioskPrintResult[] = [];
+    const left: QueuedKioskPrint[] = [];
+    for (const q of queue) {
+      const r = await this.kioskPost<KioskPrintResult>({ action: 'print', ...q });
+      if ('code' in r && !('status' in r) && r.code === 'offline') left.push(q);
+      else if (!('code' in r)) done.push(r as KioskPrintResult);
+    }
+    await kvSet('kioskPrints', left.length ? await sealJson(this.config.token, left) : null);
+    return done;
+  }
+
+  private async markKioskPrinted(ticketId: string) {
+    const s = this.kioskPrint;
+    if (!s) return;
+    this.kioskPrint = {
+      ...s,
+      badges: s.badges.map((b) => (b.ticketId === ticketId ? { ...b, status: 'printed' as const } : b)),
+    };
+    await kvSet('kioskBadges', await sealJson(this.config.token, this.kioskPrint));
+  }
+
+  /** The PDF of a browser print job this kiosk just made (for its own print dialog). */
+  async kioskBadgePdf(pdfToken: string): Promise<Blob | null> {
+    try {
+      const qs = new URLSearchParams({ eventId: this.config.eventId, token: pdfToken });
+      const res = await fetch(`/api/scan/kiosk/badges/pdf?${qs}`, this.api);
+      return res.ok ? await res.blob() : null;
+    } catch {
+      return null;
+    }
+  }
+
   async wipe(): Promise<void> {
     this.snapshot = null;
     this.kiosk = null;
+    this.kioskPrint = null;
     this.index();
     await wipeAll();
   }

@@ -2,13 +2,21 @@ import Stripe from 'stripe';
 import type {
   BalanceTransaction,
   BalanceTransactionKind,
+  ChargeSavedCardInput,
+  ChargeSavedCardResult,
   ConnectAccountState,
+  ConnectedBalanceTransaction,
+  ConnectedTransactionKind,
+  CreateCardSetupInput,
   CreatePaymentInput,
   IgnoredEvent,
   PaymentProvider,
+  Payout,
+  PayoutStatus,
   RefundInput,
   WebhookEvent,
 } from './port.ts';
+import { PAYOUT_STATUSES } from './port.ts';
 
 /** The Stripe API version this adapter is written and tested against (pinned; upgrades are deliberate). */
 export const STRIPE_API_VERSION = '2026-08-26.dahlia' as const;
@@ -17,6 +25,9 @@ export const STRIPE_API_VERSION = '2026-08-26.dahlia' as const;
 export const EVIDENCE_MAX_BYTES = 4_500_000;
 /** One reconciliation day never needs more; a larger day is reported as truncated by the caller. */
 const BALANCE_TRANSACTIONS_MAX = 10_000;
+/** Automatic payouts are created days after their movements (M4.8g). */
+const PAYOUT_LOOKAHEAD_S = 7 * 86_400;
+const PAYOUT_STATUS_SET: ReadonlySet<string> = new Set(PAYOUT_STATUSES);
 
 /** Stripe keeps a Checkout Session open for at least 30 minutes; the order hold is shorter. */
 const SESSION_MINUTES = 30;
@@ -292,6 +303,125 @@ export function stripePaymentProvider(opts: StripeProviderOptions): PaymentProvi
       return out;
     },
 
+    async listConnectedBalanceTransactions(i) {
+      // M4.8g: the connected account's own balance (direct charges, refunds, payouts), then which
+      // payout paid each one out (Stripe lists a payout's balance transactions by `payout`).
+      const account = on(i.connectedAccountId);
+      const byId = new Map<string, ConnectedBalanceTransaction>();
+      const created = { gte: Math.floor(i.from.getTime() / 1000), lt: Math.floor(i.to.getTime() / 1000) };
+      for await (const bt of stripe.balanceTransactions.list(
+        { created, limit: 100, expand: ['data.source'] },
+        account,
+      )) {
+        byId.set(bt.id, await normalizeConnected(bt, i.connectedAccountId));
+        if (byId.size >= BALANCE_TRANSACTIONS_MAX) break;
+      }
+      // Automatic payouts follow their movements by days: look a week past the window.
+      const payouts = { gte: created.gte, lt: created.lt + PAYOUT_LOOKAHEAD_S };
+      for await (const po of stripe.payouts.list({ created: payouts, limit: 100 }, account))
+        for await (const bt of stripe.balanceTransactions.list({ payout: po.id, limit: 100 }, account)) {
+          const t = byId.get(bt.id);
+          if (t) byId.set(bt.id, { ...t, payoutId: po.id });
+        }
+      return [...byId.values()];
+    },
+
+    async listPayouts(i) {
+      const out: Payout[] = [];
+      const created = { gte: Math.floor(i.from.getTime() / 1000), lt: Math.floor(i.to.getTime() / 1000) };
+      for await (const po of stripe.payouts.list({ created, limit: 100 }, on(i.connectedAccountId))) {
+        out.push({
+          id: po.id,
+          amountMinor: po.amount,
+          currency: po.currency.toUpperCase(),
+          status: (PAYOUT_STATUS_SET.has(po.status) ? po.status : 'pending') as PayoutStatus,
+          createdAt: new Date(po.created * 1000),
+          arrivalDate: new Date(po.arrival_date * 1000).toISOString().slice(0, 10),
+        });
+        if (out.length >= BALANCE_TRANSACTIONS_MAX) break;
+      }
+      return out;
+    },
+
+    async createCardSetup(i: CreateCardSetupInput) {
+      // M4.8e (P4-14): the card lives on the organizer's connected account, on a customer of its
+      // own, saved for off-session use; the hosted step is a Checkout Session in setup mode.
+      const account = on(i.connectedAccountId);
+      const metadata = { orgId: i.orgId, reference: i.reference, kind: 'card_setup' };
+      const customer = await stripe.customers.create(
+        { email: i.email, name: i.name.slice(0, 250), metadata },
+        { idempotencyKey: `${i.idempotencyKey}:customer`, ...account },
+      );
+      const session = await stripe.checkout.sessions.create(
+        {
+          mode: 'setup',
+          customer: customer.id,
+          payment_method_types: ['card'],
+          metadata,
+          setup_intent_data: { metadata, description: i.description.slice(0, 250) },
+          success_url: i.returnUrl,
+          cancel_url: i.returnUrl,
+          expires_at: Math.floor(now().getTime() / 1000) + SESSION_MINUTES * 60,
+        },
+        { idempotencyKey: i.idempotencyKey, ...account },
+      );
+      if (!session.url) throw new Error('Stripe returned a Checkout Session without a URL');
+      return { providerSetupId: session.id, redirectUrl: session.url };
+    },
+
+    async chargeSavedCard(i: ChargeSavedCardInput): Promise<ChargeSavedCardResult> {
+      if (i.amount.amount <= 0) throw new Error('charge amount must be positive');
+      const metadata = {
+        orgId: i.orgId,
+        orderId: i.orderId,
+        fundsFlow: 'organizer_mor',
+        yayatoh_ref: `order:${i.orderId}`,
+      };
+      try {
+        const pi = await stripe.paymentIntents.create(
+          {
+            amount: i.amount.amount,
+            currency: i.amount.currency.toLowerCase(),
+            customer: i.customerId,
+            payment_method: i.paymentMethodId,
+            off_session: true,
+            confirm: true,
+            description: i.description.slice(0, 250),
+            metadata,
+          },
+          { idempotencyKey: i.idempotencyKey, ...on(i.connectedAccountId) },
+        );
+        return pi.status === 'succeeded'
+          ? { providerPaymentId: pi.id, status: 'succeeded' }
+          : { providerPaymentId: pi.id, status: 'declined', declineCode: 'authentication_required' };
+      } catch (err) {
+        if (err instanceof Stripe.errors.StripeCardError) {
+          const raw = err.raw as { payment_intent?: { id?: string } } | undefined;
+          return {
+            providerPaymentId: raw?.payment_intent?.id ?? `declined:${i.idempotencyKey}`,
+            status: 'declined',
+            declineCode: err.decline_code ?? err.code ?? 'card_declined',
+          };
+        }
+        throw err;
+      }
+    },
+
+    async detachSavedCard(i) {
+      try {
+        await stripe.paymentMethods.detach(
+          i.paymentMethodId,
+          {},
+          { idempotencyKey: i.idempotencyKey, ...on(i.connectedAccountId) },
+        );
+        return { status: 'detached' as const };
+      } catch (err) {
+        if (err instanceof Stripe.errors.StripeInvalidRequestError && err.code === 'resource_missing')
+          return { status: 'gone' as const };
+        throw err;
+      }
+    },
+
     async verifyWebhook(rawBody: string, headers: Headers): Promise<WebhookEvent> {
       const signature = headers.get('stripe-signature');
       if (!signature) throw new Error('missing Stripe-Signature');
@@ -334,7 +464,10 @@ export function stripePaymentProvider(opts: StripeProviderOptions): PaymentProvi
    * refund's source is the *fee*, so the reversal or refund is found by its balance transaction
    * (both found against real test-mode payloads, M1.5e3).
    */
-  async function normalizeBalanceTransaction(bt: Stripe.BalanceTransaction): Promise<BalanceTransaction> {
+  async function normalizeBalanceTransaction(
+    bt: Stripe.BalanceTransaction,
+    account: string | null = null,
+  ): Promise<BalanceTransaction> {
     const base = {
       id: bt.id,
       amountMinor: bt.amount,
@@ -360,7 +493,7 @@ export function stripePaymentProvider(opts: StripeProviderOptions): PaymentProvi
       case 'charge':
       case 'payment':
         return src?.object === 'charge'
-          ? ordered('charge', await chargeTags(src, null))
+          ? ordered('charge', await chargeTags(src, account))
           : tagged('charge', null);
       case 'refund':
       case 'payment_refund':
@@ -405,6 +538,64 @@ export function stripePaymentProvider(opts: StripeProviderOptions): PaymentProvi
     }
   }
 
+  /**
+   * One movement of a connected account (M4.8g), attributed like the platform's: a direct charge by
+   * its order, a refund by the reference the platform tagged on it; payouts are payouts.
+   */
+  async function normalizeConnected(
+    bt: Stripe.BalanceTransaction,
+    account: string,
+  ): Promise<ConnectedBalanceTransaction> {
+    const n = await normalizeBalanceTransaction(bt, account);
+    const kind: ConnectedTransactionKind =
+      bt.type === 'payout'
+        ? 'payout'
+        : n.kind === 'charge' || n.kind === 'refund' || n.kind === 'dispute'
+          ? n.kind
+          : 'other';
+    return {
+      id: bt.id,
+      kind,
+      amountMinor: bt.amount,
+      feeMinor: bt.fee,
+      netMinor: bt.net,
+      currency: n.currency,
+      occurredAt: n.occurredAt,
+      reference: kind === 'payout' || kind === 'other' ? null : n.reference,
+      payoutId: null,
+    };
+  }
+
+  /** A card-setup session's outcome (M4.8e): the saved card's references and display details. */
+  async function setupEvent(
+    event: Stripe.Event,
+    s: Stripe.Checkout.Session,
+    account: string | null,
+  ): Promise<WebhookEvent> {
+    const orgId = s.metadata?.orgId;
+    const reference = s.metadata?.reference;
+    if (!orgId || !reference || s.metadata?.kind !== 'card_setup')
+      return { provider: 'stripe', id: event.id, type: 'ignored', reason: 'not a Yayatoh card setup' };
+    const base = { provider: 'stripe' as const, id: event.id, orgId, reference, providerSetupId: s.id };
+    if (event.type !== 'checkout.session.completed' || s.status !== 'complete')
+      return { ...base, type: 'setup.failed' };
+    const setupId = typeof s.setup_intent === 'string' ? s.setup_intent : s.setup_intent?.id;
+    if (!setupId) return { ...base, type: 'setup.failed' };
+    const si = await stripe.setupIntents.retrieve(setupId, { expand: ['payment_method'] }, on(account));
+    const pm = typeof si.payment_method === 'string' ? null : si.payment_method;
+    const customerId = typeof si.customer === 'string' ? si.customer : si.customer?.id;
+    if (si.status !== 'succeeded' || !pm || !customerId) return { ...base, type: 'setup.failed' };
+    return {
+      ...base,
+      type: 'setup.succeeded',
+      customerId,
+      paymentMethodId: pm.id,
+      brand: pm.card?.brand ?? 'card',
+      last4: pm.card?.last4 ?? '',
+      ...(pm.card ? { expMonth: pm.card.exp_month, expYear: pm.card.exp_year } : {}),
+    };
+  }
+
   /** Map a verified Stripe event to the port's events (or an explicit "ignored"). */
   async function normalize(event: Stripe.Event): Promise<WebhookEvent> {
     const account = event.account ?? null;
@@ -420,6 +611,7 @@ export function stripePaymentProvider(opts: StripeProviderOptions): PaymentProvi
       case 'checkout.session.async_payment_failed':
       case 'checkout.session.expired': {
         const s = event.data.object;
+        if (s.mode === 'setup') return setupEvent(event, s, account);
         const orgId = s.metadata?.orgId;
         const orderId = s.metadata?.orderId;
         if (!orgId || !orderId) return ignored('not a Yayatoh order');

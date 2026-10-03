@@ -1,6 +1,6 @@
 # badges (tier 5)
 
-Badge templates, their assignment to ticket types, and batch PDFs (M5.5a). Owns Postgres schema `badges`. Printers, print jobs, the print log and the `BadgePrinter` port arrive with M5.5b; kiosk self-print with M5.5c. Stage 1 printing (P5-2) is the PDF itself: AirPrint or the browser's print dialog, on any printer.
+Badge templates, their assignment to ticket types, and batch PDFs (M5.5a). Owns Postgres schema `badges`. Printers, print jobs, the print log and the `BadgePrinter` port arrived with M5.5b; kiosk self-print arrives with M5.5c. Stage 1 printing (P5-2) is the PDF itself: AirPrint or the browser's print dialog, on any printer.
 
 **Invariants**
 - Gated by the `badges` module key (every command and query) and shown only where the event's profile lists the Badges page (the conference profile).
@@ -14,4 +14,7 @@ Badge templates, their assignment to ticket types, and batch PDFs (M5.5a). Owns 
 - Downloads: `badges.batchLink` signs a 15-minute link (`{org}~{batch}~{exp}~{hmac}`, APP_TOKEN_SECRET); the route serves the file only while the batch is done and unexpired.
 - Writes to templates and assignments need `events:write`; previews with sample people need `events:read` (viewers can preview); the one-badge PDF needs `attendees:write`.
 - Consumes no events and emits none yet.
-- **Balance due (M5.1d):** a ticket with `payment_due` prints only one at a time, with `badges.overrideBalanceDue` (`attendees:write`, a reason, audited) returning a 10-minute signed permission for that ticket (`singleBadgeQuery.overrideToken`); batches leave such tickets out (counted as skipped).
+- **Balance due (M5.1d):** a ticket with `payment_due` prints only one at a time, with `badges.overrideBalanceDue` (`attendees:write`, a reason, audited) returning a 10-minute signed permission for that ticket (`startPrintJobCommand.overrideToken`, and `singleBadgeQuery.overrideToken`); batches leave such tickets out (counted as skipped).
+- **Printing (M5.5b).** Printers belong to one event (`printers`; archived, never deleted). Every print is a `print_jobs` row written before anything prints (`startPrintJobCommand`, `attendees:write`, idempotent per `request_key`); the server decides print vs reprint (any earlier job that did not fail), and a reprint needs a reprint reason (`other` needs a note): `print_jobs_kind_reason_check` ties `kind = 'print'` to `reason = 'first_print'`. A browser job's PDF opens only within 30 minutes of the job; a PrintNode job is handed over through the `BadgePrinter` port (fake in dev/CI) with the job id as idempotency key.
+- **Heartbeat.** A printer goes `online` on a heartbeat (station page every 30 s, or the worker's PrintNode poll) and `offline` exactly once when the watchdog finds it silent for 90 s (`markQuietPrintersCommand`, SKIP LOCKED, only while online). PrintNode is switched on per org by platform staff (`print_settings`).
+- Emits `badges.printer_offline@1` and `badges.printer_online@1` (`PrinterStatePayload`). Consumes no events.

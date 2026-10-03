@@ -89,7 +89,9 @@ export default async function SeatFinderPosterPage({
       </svg>
       <ol className="flex list-none flex-col gap-2 p-0 text-[20px]">
         <li>{t('step1')}</li>
-        <li>{map?.mode === 'name' ? t('step2Name') : t('step2Code')}</li>
+        <li>
+          {map?.mode === 'name' ? t('step2Name') : map?.mode === 'pin' ? t('step2Pin') : t('step2Code')}
+        </li>
         <li>{t('step3')}</li>
       </ol>
       <p className="text-body text-ink-2">

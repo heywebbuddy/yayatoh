@@ -1,14 +1,19 @@
 import { DEVICE_ONLINE_WINDOW_MS, deviceEventIdTx, markQuietDevicesTx } from '@yayatoh/checkin';
 import { type TenantTx, withTenant } from '@yayatoh/db';
+import { unpaidPledgeEventIdsTx } from '@yayatoh/donations';
 import { findEventTx, upcomingEventIdsTx } from '@yayatoh/events';
+import { rsvpDeadlineEventIdsTx } from '@yayatoh/guests';
 import { type Ctx, createCtx } from '@yayatoh/kernel';
 import { orderMetricRefTx, refundMetricRefTx } from '@yayatoh/orders';
 import { catchUpSubscriber, defineSubscriber, type PublishedEvent, type Subscriber } from '@yayatoh/platform';
 import { and, isNotNull, lt, ne } from 'drizzle-orm';
 import { z } from 'zod';
-import { eventMode } from './domain/config.ts';
+import { eventMode, THRESHOLDS } from './domain/config.ts';
 import { type AlertChange, type AlertDeps, evaluateEventAlertsTx, evaluateOrgAlertsTx } from './engine.ts';
 import { alerts, type SignalKind, signals } from './schema.ts';
+
+/** M4.6a: RSVP deadlines this far back still bring their (future) event into the sweep. */
+const RSVP_LOOKBACK_MS = 120 * 86_400_000;
 
 /** How long a reported failure is kept (the rules count the last 24 hours). */
 const SIGNAL_TTL_MS = 7 * 86_400_000;
@@ -64,6 +69,33 @@ export const ALERT_TRIGGER_EVENTS = [
   'automations.journey_step_failed@1',
   'campaigns.send_failed@1',
   'payments.dispute_deadline_approaching@1',
+  // M5.9a conference pack: applications, session lines, exhibitor people, speaker tasks, invoices
+  // and session doors (time passing — a task or invoice falling due — is the sweep's job).
+  'registration.registrant.applied@1',
+  'registration.registrant.approved@1',
+  'registration.registrant.denied@1',
+  'registration.registrant.confirmed@1',
+  'registration.session.promoted@1',
+  'program.exhibitor.staff_invited@1',
+  'portal.account_invited@1',
+  'program.speaker_task.assigned@1',
+  'program.speaker_task.completed@1',
+  'program.speaker_task.overdue@1',
+  'order.invoiced@1',
+  'order.invoice_payment_recorded@1',
+  'order.voided@1',
+  'checkin.session_attended@1',
+  'checkin.session_left@1',
+  // Batch 3j merge: M5.5b's printer watchdog (offline once per silence, online again) and M5.4b's
+  // package activations (they add deliverables); deliverables falling due is the sweep's job.
+  'badges.printer_offline@1',
+  'badges.printer_online@1',
+  'program.sponsor_package.activated@1',
+  'program.sponsor_package.cancelled@1',
+  // M4.6a: a party answered its RSVP, or the deadline moved (guest additions and seating changes
+  // emit nothing: the sweep picks them up).
+  'guests.party_responded@1',
+  'guests.rsvp_deadline_set@1',
 ] as const;
 
 /** Outbox events that are themselves what an org rule counts (one `alerts.signals` row each). */
@@ -173,13 +205,26 @@ export async function evaluateOrgNow(
   const ctx: Ctx = opts.now ? { ...base, now: opts.now } : base;
   const now = ctx.now;
   const full = opts.full !== false;
-  const ids = await withTenant(ctx, (tx) =>
-    upcomingEventIdsTx(
+  const ids = await withTenant(ctx, async (tx) => {
+    const upcoming = await upcomingEventIdsTx(
       tx,
       new Date(now.getTime() - 2 * 3_600_000),
       new Date(now.getTime() + 30 * 86_400_000),
-    ),
-  );
+    );
+    if (!full) return upcoming;
+    // M4.6a: events further out whose RSVP deadline is near (or recently passed) are planning
+    // events the RSVP rule still watches.
+    const rsvp = await rsvpDeadlineEventIdsTx(
+      tx,
+      new Date(now.getTime() - RSVP_LOOKBACK_MS),
+      new Date(now.getTime() + THRESHOLDS.rsvpWarnBeforeMs),
+    );
+    return [...new Set([...upcoming, ...rsvp])];
+  });
+  // M4.8e: events over for 14 days with pledges still unpaid (planning cadence).
+  if (full)
+    for (const id of await withTenant(ctx, (tx) => unpaidPledgeEventIdsTx(tx, now)))
+      if (!ids.includes(id)) ids.push(id);
   const changes: AlertChange[] = [];
   // Alerts of events outside the window (moved, cancelled, over) still resolve.
   const stale = await withTenant(ctx, async (tx) => {

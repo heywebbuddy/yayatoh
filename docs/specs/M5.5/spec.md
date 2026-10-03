@@ -83,3 +83,105 @@ Migration `0076_true_thunderbolt.sql` (renumbered at merge): schema `badges`, fi
 | Viewer previews but every write refused (commands, direct URLs, hidden controls) | `packages/testing/tests/badges.int.test.ts`, `apps/web/e2e/badges.spec.ts` |
 | Design a 4×3 fold-over template by keyboard only, assign it to a ticket type, batch PDF sorted by company, download it; axe on every screen; Arabic RTL | `apps/web/e2e/badges.spec.ts` |
 | Badges nav only for the conference profile, behind the `badges` key | `packages/platform/tests/profiles.test.ts`, `apps/web/e2e/badges.spec.ts` |
+
+## M5.5b — printing and print log (done)
+
+### 1. Goal and users
+Desk staff (box office, managers) print and reprint badges onsite, from the attendee's profile or the desk's badge search, on the event's printers; organizers see every print and reprint with its reason and know when a printer goes quiet. Plan row M5.5b and decision P5-2 (`docs/plans/phase-5.md`).
+
+### 2. What was built
+- **`BadgePrinter` port** (`packages/modules/badges/src/printer-port.ts`): `browserPrinter` (Stage 1: the desk's print dialog, AirPrint or any printer; a hand-off, no states) and `printNodePrinter` (Stage 2: REST, one platform integrator account, each org a child account addressed by its creator reference = the org id, the job id as `X-Idempotency-Key`). Dev and CI always use `fakePrintNode()`; the real adapter only with `BADGE_PRINTER_PROVIDER=printnode` and `PRINTNODE_API_KEY`. Zebra Browser Print is deferred (P5-2).
+- **Printers per event** (`badges.printers`): name (unique per event among live printers), adapter, PrintNode printer number, `status` `unknown → online → offline`, last heartbeat, offline moment; archived, never deleted. PrintNode printers need PrintNode switched on for the org (`badges.print_settings`, platform staff: `pnpm --filter @yayatoh/worker printnode -- --org <slug> --on`).
+- **Print jobs = the print log** (`badges.print_jobs`): one row per print or reprint of one badge, idempotent per request key. Kind is decided by the server (any earlier job that did not fail makes it a reprint); a reprint needs a reason (`damaged`, `lost`, `details_changed`, `misprint`, `printer_problem`, `other` + note), a first print is `first_print`. Browser jobs are `sent` at once and their PDF opens for 30 minutes (`/badges/jobs/{id}/pdf`); PrintNode jobs are `queued`, rendered and handed over, then `sent` or `failed` with a code. A failed job is logged but never counts. Two desks printing the same badge at once are serialized (advisory lock), so one of them is the reprint.
+- **Heartbeat and offline event:** a print station page (`/badges/printing/{printer}`) beats every 30 s for browser printers; the worker polls PrintNode every 30 s for PrintNode printers. The worker's watchdog (every 5 s, leader) turns an online printer silent for 90 s offline once and emits `badges.printer_offline@1` (`{orgId, eventId, printerId, adapter, lastSeenAt, offlineAt}`); coming back emits `badges.printer_online@1`. Orgs are found through SECURITY DEFINER functions (org ids only, platform_reader, audited). The alert rule lands with M5.9a.
+- **UI:** Badges page → "Printers and print log" (printers with status pills, add/archive, station links; the log with counts and First print/Reprint filters); the desk print page (`/badges/print/{ticket}`); the attendee profile's **Badge** panel (onsite print and reprint). The M5.5a one-badge PDF route (`/badges/ticket/{id}`) is replaced by the logged print flow, so no badge prints outside the log.
+- Dev route `/api/dev/printers` (dev auth only): watchdog with the clock ahead, PrintNode poll, PrintNode switch, fake printer states.
+
+### 3. Later / not yet
+- Sending a batch PDF to a PrintNode printer, and counting batch badges as printed (a batch PDF is a download, already audited; it is not in the print log) — pending owner.
+- PrintNode printer discovery (pick from the account's printers instead of typing the number).
+- Retrying `queued` PrintNode jobs left by a crash between logging and hand-over (they stay `queued` in the log; printing again is a first print only if none counted).
+- Kiosk self-print (M5.5c) uses `startPrintJobCommand` with `source: 'kiosk'`; the "printer offline" alert rule (M5.9a) subscribes to `badges.printer_offline@1`.
+
+### 4. Acceptance
+| Criterion | Test |
+|---|---|
+| Every print and reprint is in the log with its reason (first print logged as `first_print`; reprint without reason, `other` without note refused; idempotent; failed jobs logged but not counted) | `packages/testing/tests/badge-printing.int.test.ts`, `apps/web/e2e/badge-printing.spec.ts` |
+| A printer silent for 90 s emits one offline event (89 s none; 90 s one; later ticks, two runners and reruns none; back online then silent again: a second) | `packages/modules/badges/tests/printing.test.ts`, `packages/testing/tests/badge-printing.int.test.ts`, `apps/worker/tests/printers.int.test.ts` |
+| `BadgePrinter` port: browser hand-off, PrintNode REST mapping (stubbed fetch), fake PrintNode (idempotency, states, refusals), real adapter only with an explicit switch | `packages/modules/badges/tests/printing.test.ts` |
+| PrintNode jobs handed over once; refused/unavailable → failed with a code; poll records online printers; per-org switch is staff-only | `packages/testing/tests/badge-printing.int.test.ts`, `apps/worker/tests/printers.int.test.ts` |
+| Printers per event: unique names, archive, PrintNode needs the switch and a number | `packages/testing/tests/badge-printing.int.test.ts`, `apps/web/e2e/badge-printing.spec.ts` |
+| Onsite reprint from the attendee page; desk print page; job PDF only for the job's 30 minutes | `apps/web/e2e/badge-printing.spec.ts`, `packages/testing/tests/badge-printing.int.test.ts` |
+| Permissions: viewers read the log only (hidden controls, 404 station and print pages, 403 job PDF, commands refused); watchdog/report are platform steps | `packages/testing/tests/badge-printing.int.test.ts`, `apps/web/e2e/badge-printing.spec.ts` |
+| Isolation: rows for both orgs in every new table; foreign org refused | `packages/testing/src/fixtures.ts`, `packages/testing/tests/isolation.int.test.ts`, `badge-printing.int.test.ts` |
+| Keyboard only, axe light and dark on every new screen, Arabic RTL | `apps/web/e2e/badge-printing.spec.ts` |
+
+## M5.5c — kiosk self-print (done)
+
+### 1. Goal and users
+An attendee at a check-in kiosk (M3.4a kiosk mode) identifies themselves, checks what their badge
+will say and prints it once, without staff. Organizers turn it on per event. Anything the kiosk
+can't settle (a reprint, a balance due, a registration still waiting, wrong details) goes to the desk.
+
+### 2. What was built
+- **Settings per event** (`badges.kiosk_settings`, `badges.setKioskSettings`, `events:write`; read
+  with `events:read`): off by default; where kiosks print (the kiosk's own print dialog, or one of
+  the event's printers, PrintNode included when switched on); whether "Use your email" is offered.
+  Shown on the printing page ("Kiosk self-print"); viewers see the state only.
+- **Device-only commands** (`checkin:device`; each checks `requireKioskDeviceTx`: the caller is a
+  live kiosk locked to this event, and self-print is on):
+  - `badges.kioskLookup`: the ticket whose active barcode payload or short code was scanned (never a
+    ticket id alone) → `KioskBadgeDto` (name, company, job title as the template places them, ticket
+    type, status `ready | printed | desk`) and a 5-minute pass bound to this kiosk and ticket.
+  - `badges.kioskRequestCode` (factory with a `WaitingRegistrationLookup`, composed in the web app
+    with `registration.hasWaitingRegistrationTx`) and `badges.kioskVerifyCode`: a six-digit code to
+    the holder's own address. One own ticket → that ticket; several, or an application/approval/
+    reservation still waiting → the desk; nothing → no email, same answer. Only the code's HMAC is
+    stored (`badges.kiosk_challenges`; no address); 10 minutes; 5 wrong tries lock it; only the kiosk
+    that asked can use it; a newer code retires older ones; the M1.14 `guestCode` limiter (scope
+    `kiosk`) applies. A verified code returns the badge, its pass, and the short code the kiosk
+    checks the attendee in with (never shown).
+  - `badges.kioskPrint`: proof is the pass or the ticket's own code (offline queue). Idempotent per
+    `requestKey`; under the same advisory lock as the desk, a badge with any counted print returns
+    `printed` (no job), a balance due or no template returns `desk`. Jobs are logged
+    `source = 'kiosk'`, `kind = 'print'`, `first_print`. PrintNode jobs are handed over at once.
+  - `badges.kioskJobBadge`: a browser job's badge PDF for the kiosk that made it (signed token bound
+    to the device, 30 minutes).
+  - `badges.kioskSnapshot`: every badge's allowlisted details and status, for offline use.
+- **Routes** (device bearer token): `GET|POST /api/scan/kiosk/badges` (`lookup`, `email`, `verify`,
+  `print`), `GET /api/scan/kiosk/badges/pdf`. An emailed code is never in a response.
+- **Kiosk screen**: after a scan that admits (or finds the ticket already in), the "Check your
+  details" panel replaces the code field: name, company, job title, ticket; "Print my badge",
+  "Something's wrong" (→ desk), "Not me". The browser path opens the badge PDF ("Open my badge to
+  print", P5-2 stage 1: AirPrint/print dialog; the CSP allows no frames, so no silent iframe print);
+  PrintNode prints silently. "No ticket with you? Use your email" → email → code → details (and the
+  attendee is checked in). One attendee at a time: "Done", "Not me", a desk message (after 10 s) or a
+  minute without a touch unmounts the panel, so nothing about them stays for the next person.
+- **Offline**: the snapshot is sealed in IndexedDB with the device key (like the manifest), refreshed
+  on start, every 30 s and on reconnect; it is only opened by the ticket a scan resolved from the
+  manifest. Offline prints queue (sealed, with the scanned code as proof) only on PrintNode kiosks
+  and go out on reconnect; a print-dialog kiosk sends the attendee to the desk.
+- **Merged on the way**: M5.1d's balance-due override now gates M5.5b print jobs
+  (`startPrintJob.overrideToken`, `badges.printState.paymentDue`; the override opens the print page).
+- **Email**: message kind `badges.kiosk-code` (13 locales).
+
+### 3. Later / not yet
+- Editing details at the kiosk (corrections go to the desk).
+- Choosing between several own tickets at the kiosk (sent to the desk).
+- Silent printing on the browser path (needs a kiosk browser with kiosk printing or PrintNode).
+
+### 4. Acceptance
+| # | Criterion | Test |
+|---|---|---|
+| AC1 | A kiosk never shows another attendee's details: possession only (code or emailed code on that kiosk), allowlisted fields, other events/orgs/devices refused, scanners and members refused, nothing left on screen between visits | `packages/testing/tests/kiosk-print.int.test.ts`, `apps/web/e2e/kiosk-print.spec.ts` |
+| AC2 | A printed badge is logged once: retries reuse the job, a second try (or two kiosks at once) says printed, the desk still reprints with a reason | `kiosk-print.int.test.ts`, `kiosk-print.spec.ts` (print log) |
+| AC3 | Balance due, no template, several tickets and waiting registrations go to the desk | `kiosk-print.int.test.ts` |
+| AC4 | Email code: same answer for unknown addresses, no address or code stored, wrong tries count, lock after 5, one kiosk only | `kiosk-print.int.test.ts`, `packages/modules/badges/tests/kiosk.test.ts`, e2e |
+| AC5 | Offline snapshot: details from the sealed snapshot; PrintNode prints queue, print-dialog kiosks send to the desk | `kiosk-print.spec.ts`, `kiosk-print.int.test.ts` (snapshot) |
+| AC6 | Settings: off by default, organizer only, keyboard, persisted, viewer sees no controls; axe light/dark; Arabic RTL | `kiosk-print.spec.ts` |
+| AC7 | Isolation: both orgs have kiosk settings and a kiosk code in the fixture | `isolation.int.test.ts` |
+
+### 5. Gate results (M5.5c)
+`pnpm verify` green on the merged branch (build branch with batch 3h, M5.5b): lint, check:modules,
+typecheck 59/59, unit 2730/2730 (12 new), integration 1534/1534 (18 new). E2E on 375/768/1280:
+`kiosk-print.spec.ts` 6/6, with `badge-printing`, `staff-mode`, `invoices` and `badges` 63/63 in all.

@@ -1,7 +1,7 @@
 import type { TenantTx } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
 import { actorId, type Ctx, DomainError, type DomainEvent, requireOrg } from '@yayatoh/kernel';
-import { eventTransferTx, postRefundTx } from '@yayatoh/payments';
+import { eventTransferTx, postDonationRefundMemoTx, postRefundTx } from '@yayatoh/payments';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { releaseAttendeeSeatsTx, voidSeatTx } from '@yayatoh/seating';
 import { ticketsForOrderTx, voidTicketsTx } from '@yayatoh/ticketing';
@@ -397,6 +397,15 @@ async function succeedTx(tx: TenantTx, ctx: Ctx, refund: typeof refunds.$inferSe
     feeRefundedMinor: refund.feeRefundedMinor,
     currency: refund.currency,
   });
+  // M4.8g: a gift's refund is on the charity's own account: a memo entry, like the gift.
+  if (order.createdVia === 'donation')
+    await postDonationRefundMemoTx(tx, ctx, {
+      refundId: refund.id,
+      orderId: order.id,
+      eventId: order.eventId,
+      amountMinor: refund.amountMinor,
+      currency: refund.currency,
+    });
   const done = await tx
     .select({ amount: refunds.amountMinor })
     .from(refunds)

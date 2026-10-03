@@ -9,6 +9,16 @@ import type { ReactNode } from 'react';
 import { Link } from '@/i18n/navigation.ts';
 import { SEVERITY_DOT } from '../alerts-list.tsx';
 import {
+  type ExhibitorActivity,
+  ExhibitorActivityBody,
+  type SessionAttendance,
+  SessionAttendanceBody,
+  type SessionFill,
+  SessionFillBody,
+  type SponsorActivity,
+  SponsorActivityBody,
+} from './conference-widgets.tsx';
+import {
   type Capacity,
   CapacityBody,
   type CheckinSpeed,
@@ -20,6 +30,16 @@ import {
   type StaffPresence,
   StaffPresenceBody,
 } from './live-widgets.tsx';
+import {
+  type Arrivals,
+  ArrivalsBody,
+  type GuestSeating,
+  GuestSeatingBody,
+  type Meals,
+  MealsBody,
+  type Rsvp,
+  RsvpBody,
+} from './social-widgets.tsx';
 
 /** Widget bodies (M3.2a). Each renders one loader's allowlisted DTO; nothing else reaches them. */
 interface Ctx {
@@ -636,5 +656,21 @@ export function WidgetBody({
       return <CampaignsBody d={data as Campaigns} c={ctx} />;
     case 'deliverability':
       return <DeliverabilityBody d={data as Deliverability} c={ctx} />;
+    case 'sessionAttendance':
+      return <SessionAttendanceBody d={data as SessionAttendance} c={ctx} />;
+    case 'sessionFill':
+      return <SessionFillBody d={data as SessionFill} c={ctx} />;
+    case 'exhibitorActivity':
+      return <ExhibitorActivityBody d={data as ExhibitorActivity} c={ctx} />;
+    case 'sponsorActivity':
+      return <SponsorActivityBody d={data as SponsorActivity} c={ctx} />;
+    case 'rsvp':
+      return <RsvpBody d={data as Rsvp} c={ctx} />;
+    case 'guestSeating':
+      return <GuestSeatingBody d={data as GuestSeating} c={ctx} />;
+    case 'meals':
+      return <MealsBody d={data as Meals} c={ctx} />;
+    case 'arrivals':
+      return <ArrivalsBody d={data as Arrivals} c={ctx} />;
   }
 }

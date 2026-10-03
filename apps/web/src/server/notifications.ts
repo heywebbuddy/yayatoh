@@ -9,11 +9,13 @@ import {
   checkinTimeline,
   checkoutRiskSignals,
   fraudSignalAlerts,
+  networkChatSignals,
   sendStaffAlertPushes,
   staffAlertsSubscriber,
 } from '@yayatoh/checkin';
 import { withTenant } from '@yayatoh/db';
-import { receiptIssuer, statementMailer } from '@yayatoh/donations';
+import { pledgeMailer, pledgeOutcomesSubscriber, receiptIssuer, statementMailer } from '@yayatoh/donations';
+import { engagementActivity } from '@yayatoh/engagement';
 import { findEventTx, portalInviteMailer } from '@yayatoh/events';
 import { registrationResumeMailer } from '@yayatoh/forms';
 import { invitationMailer as guestInvitationMailer } from '@yayatoh/guests';
@@ -60,13 +62,14 @@ import {
   type Subscriber,
   subscribes,
 } from '@yayatoh/platform';
-import { taskReminderMailer } from '@yayatoh/program';
+import { cfpMailer, taskReminderMailer } from '@yayatoh/program';
 import {
   decisionMailer,
   enrollmentMailer,
   registrantLifecycle,
   registrationCapacity,
   registrationEnrollment,
+  sponsorCompCodes,
 } from '@yayatoh/registration';
 import { surveyMailer, surveysTimeline } from '@yayatoh/surveys';
 import { impersonationNotice, invitationMailer, orgStatusNotice } from '@yayatoh/tenancy';
@@ -78,6 +81,7 @@ import {
   transferMailer,
   walletPassSync,
 } from '@yayatoh/ticketing';
+import { conferenceSources } from './conference-sources.ts';
 import { webhookAdapter } from './delivery-webhooks.ts';
 // The composition root registers the key vault (message params and manage links are encrypted).
 import { ports } from './ports.ts';
@@ -129,6 +133,8 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     orgStatusNotice({ notifier, appOrigin }),
     checkoutRiskSignals(),
     chatReportSignals(),
+    // M5.8b: networking chat reports about attendees.
+    networkChatSignals(),
     fraudSignalAlerts({ notifier }),
     // M3.4a: staff alerts for the Scan PWA (web push per device).
     staffAlertsSubscriber(staffAlertSource),
@@ -143,11 +149,13 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     waitlistMailer({ notifier, appOrigin }),
     // M4.2b: a purchased table's claim link to its buyer.
     tableNamingMailer({ notifier, appOrigin }),
-    alertEvaluator({ notifier }),
+    alertEvaluator({ notifier, conference: conferenceSources() }),
     // M3.7a: journeys enroll, follow date changes and cancellations (their steps run below).
     ...journeySubscribers(),
     // M5.1a: its offers (waitlist.offered) are mailed in the same drain.
     registrationCapacity(),
+    // M5.4b: sponsor comp registration codes.
+    sponsorCompCodes(),
     // M5.3a speaker portal: invitations and task reminders.
     portalInviteMailer({ notifier, appOrigin }),
     taskReminderMailer({ notifier, appOrigin }),
@@ -157,9 +165,16 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     // M5.2b: cancelled registrants free their session places; promotions are mailed.
     registrationEnrollment(),
     enrollmentMailer({ notifier, appOrigin }),
+    // M5.7b: answered surveys, scans and enrollments become engagement scores (as in the worker).
+    engagementActivity(),
     // M4.8b: receipts per paid gift or charity-ticket order, and year-end statements (as in the worker).
     receiptIssuer({ notifier, appOrigin }),
     statementMailer({ notifier, appOrigin }),
+    // M4.8e: pledge payments settle their pledges; the donor's summary, invoice and reminders.
+    pledgeOutcomesSubscriber,
+    pledgeMailer({ notifier, appOrigin }),
+    // M5.3b: call-for-papers receipts and decisions.
+    cfpMailer({ notifier }),
     // M6.1a: the person timeline (crm projection), as in the worker.
     ordersTimeline(),
     checkinTimeline(),
@@ -220,13 +235,17 @@ export async function drainOrgMessages(
   // The live device watchdog (M3.3a), as the worker would run it now. Unless the org-wide pass
   // follows anyway, it evaluates the events the quiet devices were working at (not every event of
   // the org: in the shared e2e org that slowed every drain, batch 3g merge).
-  await watchQuietDevices(orgId, { notifier }, { evaluate: opts.sweep ? false : 'devices' });
+  await watchQuietDevices(
+    orgId,
+    { notifier, conference: conferenceSources() },
+    { evaluate: opts.sweep ? false : 'devices' },
+  );
   // The alert engine's scheduled pass (M3.2b), as the worker's sweep would run it now: only when
   // asked (`sweep`). The alerts evaluator above already re-evaluates what the drained events
   // touched; the org-wide pass re-checks every upcoming event and re-notifies unacknowledged
   // alerts, which in a shared e2e org (hundreds of events, never acknowledged) made every other
   // suite's drain dispatch that backlog (batch 3d merge).
-  if (opts.sweep) await evaluateOrgNow(orgId, { notifier });
+  if (opts.sweep) await evaluateOrgNow(orgId, { notifier, conference: conferenceSources() });
   const deps: DispatchDeps = {
     // Web push goes through the real adapter (VAPID + aes128gcm); in dev/CI the only endpoints
     // it may reach besides real push services are the fake push service on this origin.
