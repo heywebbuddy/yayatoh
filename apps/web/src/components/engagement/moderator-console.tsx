@@ -508,7 +508,7 @@ function CreatePollForm({ action }: { action: FormAction }) {
           name="kind"
           label={t('moderator.kind')}
           value={kind}
-          onChange={(e) => setKind(e.currentTarget.value)}
+          onValueChange={(v) => setKind(v)}
         >
           {(['single', 'multi', 'rating', 'word_cloud'] as const).map((k) => (
             <option key={k} value={k}>

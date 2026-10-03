@@ -218,7 +218,7 @@ export function GiveForm({ campaign, action }: { campaign: PublicCampaignDto; ac
             name="tributeKind"
             label={t('tributeKind')}
             value={tribute}
-            onChange={(e) => setTribute(e.target.value)}
+            onValueChange={(v) => setTribute(v)}
           >
             <option value="none">{t('tributeNone')}</option>
             <option value="honor">{t('tributeHonor')}</option>
