@@ -361,6 +361,7 @@ export {
   CATEGORIES,
   DELIVERY_STATES,
   FALLBACK_REASONS,
+  INTEGRATION_SUPPRESSION_SOURCES,
   MESSAGE_CHANNELS,
   MESSAGE_PROVIDERS,
   MESSAGE_STATUSES,
@@ -497,3 +498,5 @@ export {
   ingestInboundKeywords,
   type WebhookOutcome,
 } from './webhooks.ts';
+// M6.4d: unsubscribes and cleaned addresses reported by connected marketing tools.
+export { suppressAddressFromIntegrationTx, suppressFromIntegrationTx } from './integration-suppressions.ts';

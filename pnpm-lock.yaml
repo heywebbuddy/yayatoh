@@ -2012,6 +2012,9 @@ importers:
 
   packages/modules/integrations:
     dependencies:
+      '@yayatoh/audiences':
+        specifier: workspace:*
+        version: link:../audiences
       '@yayatoh/billing':
         specifier: workspace:*
         version: link:../billing
@@ -2024,9 +2027,15 @@ importers:
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../../db
+      '@yayatoh/events':
+        specifier: workspace:*
+        version: link:../events
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../kernel
+      '@yayatoh/notifications':
+        specifier: workspace:*
+        version: link:../notifications
       '@yayatoh/platform':
         specifier: workspace:*
         version: link:../../platform

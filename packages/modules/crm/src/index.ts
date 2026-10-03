@@ -147,3 +147,14 @@ export {
   timelineEventIdsTx,
   timelinePageTx,
 } from './timeline.ts';
+// M6.4d: consent and participation reads/writes for Mailchimp, Klaviyo and HubSpot syncs.
+export {
+  type ContactConsentRow,
+  contactIdsAfterTx,
+  contactsConsentTx,
+  type ParticipationSyncRow,
+  participationByIdTx,
+  participationsAfterTx,
+  setSyncedContactCompanyTx,
+  withdrawEmailMarketingTx,
+} from './integration-consent.ts';

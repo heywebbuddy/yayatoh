@@ -33,7 +33,9 @@ export const CATEGORIES = [
 ] as const;
 export const PREFERENCE_CHANNELS = ['in_app', 'email', 'sms', 'push'] as const;
 export const PUSH_PLATFORMS = ['fcm', 'apns', 'webpush'] as const;
-export const SUPPRESSION_SOURCES = ['one_click', 'page', 'legacy', 'block'] as const;
+/** M6.4d: an unsubscribe a connected marketing tool reported (the provider is the source). */
+export const INTEGRATION_SUPPRESSION_SOURCES = ['mailchimp', 'klaviyo', 'hubspot'] as const;
+export const SUPPRESSION_SOURCES = ['one_click', 'page', 'legacy', 'block', ...INTEGRATION_SUPPRESSION_SOURCES] as const;
 /** What the provider last told us about a sent message (M1.10d delivery events). */
 export const DELIVERY_STATES = ['delivered', 'bounced', 'soft_bounced', 'complained'] as const;
 export const DELIVERY_EVENT_TYPES = ['delivered', 'bounced', 'complained'] as const;

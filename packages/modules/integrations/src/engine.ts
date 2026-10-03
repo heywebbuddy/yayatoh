@@ -378,7 +378,7 @@ export function pullPageCommand(connector: ConnectorDefinition) {
     output: z.object({ pulled: z.int(), skipped: z.int(), failed: z.int() }),
     entitlement: 'integrations',
     permission: SYNC_PERMISSION,
-    handler: async ({ input, ctx, tx }) => {
+    handler: async ({ input, ctx, tx, emit }) => {
       const { run, connection } = await runningTx(tx, input.runId);
       const object = connector.objects.find((o) => o.key === input.objectType);
       if (!object?.pull || connection.connector !== connector.key)
@@ -433,7 +433,11 @@ export function pullPageCommand(connector: ConnectorDefinition) {
         try {
           // A savepoint: a failed write leaves nothing behind and the page goes on.
           await tx.transaction(async (sp) => {
-            const { localId } = await pull.write(sp, ctx, mapped.values, link?.localId ?? null);
+            const { localId } = await pull.write(sp, ctx, mapped.values, link?.localId ?? null, {
+              connectionId: connection.id,
+              record,
+              emit,
+            });
             const after = object.push ? await object.push.read(sp, localId) : null;
             const values = {
               localId,
@@ -934,6 +938,7 @@ async function pushObject(
           externalId: link?.externalId ?? null,
           values: mapped.values,
           idempotencyKey: pushKey(connectionId, object.key, local.id, hash),
+          local,
         });
         results.push({
           outcome: 'sent',
@@ -971,7 +976,9 @@ async function pushObject(
   }
   let cursor = await cursorOf(ctx, connectionId, object.key, 'push');
   for (let page = 0; page < MAX_PAGES; page++) {
-    const p = await withTenant(ctx, (tx) => push.changes(tx, cursor, PUSH_PAGE));
+    const p = await withTenant(ctx, (tx) =>
+      push.changes(tx, cursor, PUSH_PAGE, { connectionId, scope: io.scope }),
+    );
     if (p.records.length === 0) break;
     await sendAll(p.records, [], p.cursor);
     if (!p.hasMore || p.cursor === null) break;
@@ -1037,7 +1044,10 @@ export async function runSync(
   try {
     if ((await deps.auth.check(ref)) === 'revoked')
       return finish('failed', { errorCode: 'auth_revoked', revoked: true });
-    const io: SyncIO = { client: deps.auth.client(ref), origin: originStamp(connectionId), now };
+    const scope = connector.loadScope
+      ? await withTenant(ctx, (tx) => connector.loadScope?.(tx, connectionId) ?? Promise.resolve({}))
+      : {};
+    const io: SyncIO = { client: deps.auth.client(ref), origin: originStamp(connectionId), now, scope };
     for (const object of connector.objects) {
       await pullObject(ctx, ports, connector, object, io, runId, connectionId);
       try {

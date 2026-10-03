@@ -9,9 +9,11 @@ import {
   pgSchema,
   text,
   timestamp,
+  boolean,
   uniqueIndex,
   uuid,
 } from 'drizzle-orm/pg-core';
+import { INBOUND_CHANGES } from './audience/consent.ts';
 import { MAPPING_DIRECTIONS } from './domain/mapping.ts';
 import {
   CONNECTION_STATUSES,
@@ -287,5 +289,72 @@ export const syncErrors = tenantTable(
     check('sync_errors_external_check', sql`external_id is null or length(external_id) between 1 and 255`),
     check('sync_errors_counts_check', sql`attempts between 0 and 1000 and occurrences between 1 and 1000000`),
     check('sync_errors_resolved_check', sql`(status = 'open') = (resolved_at is null)`),
+  ],
+);
+
+/**
+ * M6.4d: what a Mailchimp or Klaviyo connection pushes: the audience (a saved segment, or null for
+ * every contact with email marketing consent) and the provider's list it lands in. One row per
+ * connection; changing the list starts the members over (links and cursors reset).
+ */
+export const audienceSyncs = tenantTable(
+  integrationsSchema,
+  'audience_syncs',
+  {
+    connectionId: uuid('connection_id').notNull(),
+    /** `audiences.segments` id; null: everyone with consent. A deleted segment pauses the push. */
+    segmentId: uuid('segment_id'),
+    /** The provider's list (Mailchimp audience id, Klaviyo list id): not a secret. */
+    listId: text('list_id').notNull(),
+    listName: text('list_name').notNull(),
+    updatedBy: uuid('updated_by'),
+  },
+  (t) => [
+    uniqueIndex('audience_syncs_org_connection_key').on(t.orgId, t.connectionId),
+    foreignKey({
+      name: 'audience_syncs_connection_fk',
+      columns: [t.orgId, t.connectionId],
+      foreignColumns: [connections.orgId, connections.id],
+    }).onDelete('cascade'),
+    check('audience_syncs_list_id_check', sql`list_id ~ '^[A-Za-z0-9_-]{1,100}$'`),
+    check('audience_syncs_list_name_check', sql`length(list_name) between 1 and 200`),
+  ],
+);
+
+/**
+ * M6.4d: consent changes a provider reported and a pull applied here (an unsubscribe, a cleaned
+ * address, a complaint), with what it changed: the consent ledger (withdrawn) and the suppression
+ * lists. Unique per (connection, provider record, remote version): a replayed page writes once.
+ * `(org_id, contact_id)` references `crm.contacts` (hand-written FK); merges move the rows.
+ */
+export const consentChanges = tenantTable(
+  integrationsSchema,
+  'consent_changes',
+  {
+    connectionId: uuid('connection_id').notNull(),
+    contactId: uuid('contact_id').notNull(),
+    change: text('change').notNull(),
+    externalId: text('external_id').notNull(),
+    remoteVersion: text('remote_version').notNull(),
+    consentWithdrawn: boolean('consent_withdrawn').notNull(),
+    suppressed: boolean('suppressed').notNull(),
+  },
+  (t) => [
+    uniqueIndex('consent_changes_org_connection_record_key').on(
+      t.orgId,
+      t.connectionId,
+      t.externalId,
+      t.remoteVersion,
+    ),
+    index('consent_changes_org_connection_created_idx').on(t.orgId, t.connectionId, t.createdAt),
+    index('consent_changes_org_contact_idx').on(t.orgId, t.contactId),
+    foreignKey({
+      name: 'consent_changes_connection_fk',
+      columns: [t.orgId, t.connectionId],
+      foreignColumns: [connections.orgId, connections.id],
+    }).onDelete('cascade'),
+    check('consent_changes_change_check', inList('change', INBOUND_CHANGES)),
+    check('consent_changes_external_check', sql`length(external_id) between 1 and 255`),
+    check('consent_changes_version_check', sql`length(remote_version) between 1 and 255`),
   ],
 );

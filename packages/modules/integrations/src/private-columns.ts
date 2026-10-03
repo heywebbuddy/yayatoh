@@ -38,4 +38,7 @@ export const privateColumns = columnPrivacy('integrations', {
     field: 'vocab',
     status: 'vocab',
   },
+  // M6.4d
+  audience_syncs: { list_id: internal(), list_name: internal() },
+  consent_changes: { change: 'vocab', external_id: internal(), remote_version: internal() },
 });

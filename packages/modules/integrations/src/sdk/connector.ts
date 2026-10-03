@@ -1,5 +1,5 @@
 import type { TenantTx } from '@yayatoh/db';
-import type { Ctx } from '@yayatoh/kernel';
+import type { Ctx, DomainEvent } from '@yayatoh/kernel';
 import type { ModuleKey } from '@yayatoh/platform';
 import type { FakeProvider } from '../auth/fake.ts';
 import type { ProviderClient } from '../auth/port.ts';
@@ -46,6 +46,20 @@ export interface SyncIO {
   /** This connection's origin stamp: write it on provider records where the API allows (loop guard). */
   readonly origin: string;
   readonly now: Date;
+  /**
+   * M6.4b: what the connector's `loadScope` read for this run (e.g. the linked sheets); empty for
+   * connectors without one. Ids and labels only: never a token.
+   */
+  readonly scope: Readonly<Record<string, unknown>>;
+}
+
+/** M6.4b: what a pull `write` learns about the record beyond its mapped values. */
+export interface WriteMeta {
+  readonly connectionId: string;
+  /** The provider record as listed (nested data the mapping does not cover, e.g. an order's attendees). */
+  readonly record: RemoteRecord;
+  /** Queue a domain event on the page command's outbox (the owning module's commands emit through it). */
+  readonly emit: (event: DomainEvent) => void;
 }
 
 export interface PullSide {
@@ -64,6 +78,7 @@ export interface PullSide {
     ctx: Ctx,
     values: Readonly<Record<string, unknown>>,
     localId: string | null,
+    meta: WriteMeta,
   ): Promise<{ readonly localId: string }>;
 }
 
@@ -71,7 +86,13 @@ export interface PushSide {
   /** Mapping offered when the connection is made (Yayatoh field → remote field). */
   readonly defaultMapping: readonly MappingRule[];
   /** Yayatoh records changed after `cursor` (null: from the beginning), one page. */
-  changes(tx: TenantTx, cursor: string | null, limit: number): Promise<Page<LocalRecord>>;
+  changes(
+    tx: TenantTx,
+    cursor: string | null,
+    limit: number,
+    /** M6.4b: which connection is pushing and its run's scope (e.g. the events with a linked sheet). */
+    meta: { readonly connectionId: string; readonly scope: Readonly<Record<string, unknown>> },
+  ): Promise<Page<LocalRecord>>;
   /** One Yayatoh record (also used by the pull's loop guard); null when it is gone. */
   read(tx: TenantTx, localId: string): Promise<LocalRecord | null>;
   /**
@@ -84,6 +105,8 @@ export interface PushSide {
       readonly externalId: string | null;
       readonly values: Readonly<Record<string, unknown>>;
       readonly idempotencyKey: string;
+      /** M6.4b: the Yayatoh record being sent (fields the mapping does not cover, e.g. its event). */
+      readonly local: LocalRecord;
     },
   ): Promise<{ readonly externalId: string; readonly version: string }>;
 }
@@ -114,6 +137,8 @@ export interface ConnectorDefinition {
   readonly entitlement: ModuleKey;
   /** `fake_only`: offered only where the auth port is the fake (dev, CI, previews). */
   readonly availability: 'general' | 'fake_only';
+  /** M6.4b: read once per run, inside a tenant transaction, and handed to the connector as `io.scope`. */
+  readonly loadScope?: (tx: TenantTx, connectionId: string) => Promise<Readonly<Record<string, unknown>>>;
   readonly objects: readonly ObjectDefinition[];
   /** The connector's fake provider API for dev and CI. */
   readonly fake?: FakeProvider;

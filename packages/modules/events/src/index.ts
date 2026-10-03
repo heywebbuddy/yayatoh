@@ -240,3 +240,5 @@ export {
   teamEventBySlugQuery,
 } from './team.ts';
 export { eventsOverTx } from './timings.ts';
+// M6.4d: events for marketing-tool syncs (HubSpot marketing events).
+export { type EventSyncRow, eventForSyncTx, eventsForSyncAfterTx } from './integration-sync.ts';
