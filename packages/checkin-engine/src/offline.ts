@@ -6,6 +6,7 @@ import {
   verifyTicketCode,
 } from '@yayatoh/ticket-crypto';
 import { type EventWindow, eventDay, ruleResult } from './rules.ts';
+import { inRoomKey, type SessionAccessFacts, type SessionGateRule, sessionGateResult } from './session.ts';
 
 /** One manifest row (roadmap §5.4). Contact details only as per-event salted hashes. */
 export interface ManifestRow {
@@ -28,6 +29,15 @@ export interface ManifestRow {
    * tickets without one.
    */
   readonly legacyCodes?: readonly string[];
+  /**
+   * M5.6a (manifest v3): what the pass may do at sessions. Absent = every session (an event
+   * without registration, or an older manifest).
+   */
+  readonly sessionAccess?: {
+    readonly registrant: boolean;
+    /** The sessions the pass gives; null = every session. */
+    readonly sessionIds: readonly string[] | null;
+  };
 }
 
 export interface ManifestHeader {
@@ -55,6 +65,28 @@ export interface ManifestHeader {
   readonly scope?: ManifestScope;
   /** Multi-date events (M1.4b): every date, so offline scans can tell a ticket's date. */
   readonly occurrences?: readonly ManifestOccurrence[];
+  /**
+   * M5.6a (v3): the sessions behind the device's session checkpoints, for the screen (title,
+   * times) and the room count when the manifest was made. The gates themselves are in `scope`.
+   */
+  readonly sessions?: readonly ManifestSession[];
+}
+
+export interface ManifestSession {
+  readonly checkpointId: string;
+  readonly sessionId: string;
+  readonly title: string;
+  readonly startsAt: string;
+  readonly endsAt: string;
+  /** People in the room when the manifest was made. */
+  readonly occupied: number;
+}
+
+/** A session checkpoint's gates, signed with the scope (v3): what an offline device checks. */
+export interface SignedSessionGate extends SessionGateRule {
+  readonly checkpointId: string;
+  /** Ticket ids holding a place in the session (enrollment-required sessions only), sorted. */
+  readonly enrolled: readonly string[];
 }
 
 export interface ManifestOccurrence {
@@ -72,25 +104,45 @@ export interface ManifestScope {
   readonly eventId: string;
   readonly deviceId: string;
   readonly checkpointIds: readonly string[] | null;
+  /** v3 (M5.6a): the gates of the session checkpoints in scope, signed with it. */
+  readonly sessionGates?: readonly SignedSessionGate[];
   /** Detached signature over `scopeMessage(scope)` (see `verifyManifestScope`). */
   readonly signature: string;
 }
 
-export const MANIFEST_VERSION = 2;
+export const MANIFEST_VERSION = 3;
 export const SCOPE_TAG = 'checkin-scope-v1';
 
-/** The canonical signed form of a scope (sorted ids, fixed key order). */
+/**
+ * The canonical signed form of a scope (sorted ids, fixed key order). A v3 scope also signs its
+ * session gates (sorted by checkpoint, each with its sorted enrolled list); v2 scopes have none.
+ */
 export const scopeMessage = (s: Omit<ManifestScope, 'signature'>) =>
   JSON.stringify({
     eventId: s.eventId,
     deviceId: s.deviceId,
     checkpointIds: s.checkpointIds === null ? null : [...s.checkpointIds].sort(),
+    ...(s.sessionGates
+      ? {
+          sessionGates: [...s.sessionGates]
+            .sort((a, b) => (a.checkpointId < b.checkpointId ? -1 : a.checkpointId > b.checkpointId ? 1 : 0))
+            .map((g) => ({
+              checkpointId: g.checkpointId,
+              sessionId: g.sessionId,
+              capacity: g.capacity,
+              enrollmentRequired: g.enrollmentRequired,
+              enrolled: [...g.enrolled].sort(),
+            })),
+        }
+      : {}),
   });
 
 /** True when the header's scope was signed by one of the header's (org) keys for this event. */
 export async function verifyManifestScope(header: ManifestHeader): Promise<boolean> {
   const s = header.scope;
-  if (!s) return (header.version ?? 1) < MANIFEST_VERSION;
+  if (!s) return (header.version ?? 1) < 2;
+  // A session checkpoint in a v3 header must have its gates signed.
+  if (header.checkpoints.some((c) => c.kind === 'session') && !s.sessionGates) return false;
   if (s.eventId !== header.event.id) return false;
   const keys = new Map(Object.entries(header.publicKeys).map(([kid, k]) => [Number(kid), b64(k)]));
   return verifyStatement(SCOPE_TAG, scopeMessage(s), s.signature, keys);
@@ -108,9 +160,11 @@ export const scopeAllows = (
 export interface ManifestCheckpoint {
   readonly id: string;
   readonly name: string;
-  readonly kind: 'entrance' | 'zone';
+  readonly kind: 'entrance' | 'zone' | 'session';
   /** Zones: ticket types allowed in; empty = every type. */
   readonly ticketTypeIds: readonly string[];
+  /** Session checkpoints (M5.6a): the program session it is the door of. */
+  readonly sessionId?: string | null;
 }
 
 /** A zone admits a pass whose type it lists (or any pass, when it lists none). */
@@ -131,7 +185,20 @@ export type OfflineVerdict =
   | 'granted'
   | 'no_access'
   /** The device's scope doesn't include where it is scanning (checkpoint-scoped door staff). */
-  | 'wrong_checkpoint';
+  | 'wrong_checkpoint'
+  // M5.6a session checkpoints.
+  /** Let into the session (attendance recorded). */
+  | 'entered'
+  /** Left the session (scan out). */
+  | 'scanned_out'
+  /** A scan out of someone the device never saw go in. */
+  | 'not_in_room'
+  /** Gate `enrollment`: not registered, or not enrolled in a session that needs it. */
+  | 'not_enrolled'
+  /** Gate `admission_level`: the pass doesn't include this session. */
+  | 'admission_level'
+  /** Gate `capacity`: the room is full. */
+  | 'capacity';
 
 export interface OfflineState {
   readonly header: ManifestHeader;
@@ -143,6 +210,10 @@ export interface OfflineState {
   readonly admitted: ReadonlySet<string>;
   /** When this device last completed a manifest sync. */
   readonly lastSyncAt: Date;
+  /** M5.6a: `inRoomKey(ticketId, sessionId)` of people this device let into a session and not out. */
+  readonly inRoom?: ReadonlySet<string>;
+  /** M5.6a: the device's estimate of people in each session's room (session id → count). */
+  readonly occupancy?: ReadonlyMap<string, number>;
 }
 
 export const admittedKey = (ticketId: string, day: string) => `${ticketId}:${day}`;
@@ -162,10 +233,13 @@ export async function offlineVerdict(
   rawCode: string,
   now: Date,
   checkpointId: string | null = null,
+  opts: { readonly direction?: 'in' | 'out' } = {},
 ): Promise<{ verdict: OfflineVerdict; ticketId: string | null; row: ManifestRow | null }> {
   // A scoped device refuses anywhere outside its checkpoints, before looking at the code.
   if (!scopeAllows(state.header.scope, checkpointId))
     return { verdict: 'wrong_checkpoint', ticketId: null, row: null };
+  const session = state.header.checkpoints.find((c) => c.id === checkpointId && c.kind === 'session');
+  if (session) return sessionVerdict(state, rawCode, now, session, opts.direction ?? 'in');
   const zone = state.header.checkpoints.find((c) => c.id === checkpointId && c.kind === 'zone') ?? null;
   const r = await entranceVerdict(state, rawCode, now);
   if (!zone) return r;
@@ -176,10 +250,47 @@ export async function offlineVerdict(
   return r;
 }
 
+/**
+ * A session door (M5.6a): the event rules, then in → duplicate (already in) or the three gates
+ * from the signed scope; out → `scanned_out` when this device saw them go in, else `not_in_room`.
+ */
+async function sessionVerdict(
+  state: OfflineState,
+  rawCode: string,
+  now: Date,
+  checkpoint: ManifestCheckpoint,
+  direction: 'in' | 'out',
+): Promise<{ verdict: OfflineVerdict; ticketId: string | null; row: ManifestRow | null }> {
+  const r = await entranceVerdict(state, rawCode, now, false);
+  const sessionId = checkpoint.sessionId ?? '';
+  const gate = state.header.scope?.sessionGates?.find((g) => g.checkpointId === checkpoint.id);
+  // A session door whose gates aren't signed admits nobody offline.
+  if (!gate || gate.sessionId !== sessionId) return { ...r, verdict: 'invalid' };
+  if (r.verdict !== 'admit' && r.verdict !== 'provisional') return r;
+  const key = r.ticketId ? inRoomKey(r.ticketId, sessionId) : '';
+  if (direction === 'out')
+    return { ...r, verdict: state.inRoom?.has(key) ? 'scanned_out' : 'not_in_room' };
+  if (state.inRoom?.has(key)) return { ...r, verdict: 'duplicate' };
+  const access: SessionAccessFacts | null = r.row
+    ? {
+        registrant: r.row.sessionAccess?.registrant ?? true,
+        sessionIds: r.row.sessionAccess?.sessionIds ?? null,
+        enrolled: r.ticketId !== null && gate.enrolled.includes(r.ticketId),
+      }
+    : null;
+  const result = sessionGateResult({
+    rule: gate,
+    access,
+    occupied: state.occupancy?.get(sessionId) ?? 0,
+  });
+  return { ...r, verdict: result === 'ok' ? 'entered' : result };
+}
+
 async function entranceVerdict(
   state: OfflineState,
   rawCode: string,
   now: Date,
+  checkAdmitted = true,
 ): Promise<{ verdict: OfflineVerdict; ticketId: string | null; row: ManifestRow | null }> {
   const code = rawCode.trim().toUpperCase();
   const h = state.header;
@@ -199,7 +310,7 @@ async function entranceVerdict(
     if (!row) {
       // Signed by this org but not in our manifest. Ticket ids are UUIDv7, so the id tells when it
       // was issued: after our last sync → org policy (D17, default provisional); before → reject.
-      if (state.admitted.has(admittedKey(v.ticketId, day)))
+      if (checkAdmitted && state.admitted.has(admittedKey(v.ticketId, day)))
         return { verdict: 'duplicate', ticketId: v.ticketId, row: null };
       const issuedAfterSync = uuidv7Time(v.ticketId) > state.lastSyncAt.getTime();
       return {
@@ -234,7 +345,7 @@ async function entranceVerdict(
     },
   });
   if (rule !== 'ok') return { verdict: rule, ticketId: row.ticketId, row };
-  if (state.admitted.has(admittedKey(row.ticketId, day)))
+  if (checkAdmitted && state.admitted.has(admittedKey(row.ticketId, day)))
     return { verdict: 'duplicate', ticketId: row.ticketId, row };
   return { verdict: 'admit', ticketId: row.ticketId, row };
 }
