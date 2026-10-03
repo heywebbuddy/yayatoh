@@ -1,5 +1,5 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import { expectAccessibleBothModes, lastEmailedCode, signIn } from './helpers.ts';
+import { expectAccessibleBothModes, lastEmailedCode, pickOption, signIn } from './helpers.ts';
 
 /**
  * M5.1c approval, groups and +1: the organizer makes a type "by application" with an auto-approve
@@ -133,8 +133,8 @@ test('the organizer makes a type by application with an auto-approve domain and 
   await signIn(page);
   await page.goto(`/o/${ORG}/events/new`);
   await page.getByLabel('Event name', { exact: true }).fill(`Approvals ${s}`);
-  await page.getByLabel('Event type').selectOption('conference');
-  await page.getByLabel('Time zone').selectOption(TZ);
+  await pickOption(page.getByLabel('Event type'), 'conference');
+  await pickOption(page.getByLabel('Time zone'), TZ);
   await page.getByLabel('Starts', { exact: true }).fill(`${chicagoDate(40)}T09:00`);
   await page.getByLabel('Ends', { exact: true }).fill(`${chicagoDate(42)}T18:00`);
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -157,7 +157,7 @@ test('the organizer makes a type by application with an auto-approve domain and 
   const rules = rulesCard(page, 'Applicants');
   await expect(rules).toContainText('Open registration');
   await rules.getByText('Admission rules for Applicants').click();
-  await rules.getByLabel('Who gets in').selectOption('manual');
+  await pickOption(rules.getByLabel('Who gets in'), 'manual');
   await rules.getByLabel('Auto-approve email domains').fill('not a domain');
   await rules.getByRole('button', { name: 'Save rules' }).click();
   await expect(rules.getByText('Enter valid domains, such as partner.org.')).toBeVisible();
@@ -178,11 +178,11 @@ test('the organizer makes a type by application with an auto-approve domain and 
   // Plus one: a +1 guest type; it can't also be by application.
   const plus = rulesCard(page, 'Plus one');
   await plus.getByText('Admission rules for Plus one').click();
-  await plus.getByLabel('Kind').selectOption('guest');
-  await plus.getByLabel('Who gets in').selectOption('manual');
+  await pickOption(plus.getByLabel('Kind'), 'guest');
+  await pickOption(plus.getByLabel('Who gets in'), 'manual');
   await plus.getByRole('button', { name: 'Save rules' }).click();
   await expect(plus.getByText("A +1 guest type can't be by application.")).toBeVisible();
-  await plus.getByLabel('Who gets in').selectOption('none');
+  await pickOption(plus.getByLabel('Who gets in'), 'none');
   await plus.getByRole('button', { name: 'Save rules' }).click();
   await expect(plus.getByText('Saved.')).toBeVisible();
 
@@ -308,8 +308,8 @@ test('bulk deny with a template reason: emailed, never charged', async ({ page, 
   await bulk.getByRole('button', { name: 'Apply decision' }).click();
   await expect(page.getByText('Select at least one person, or choose everyone matching.')).toBeVisible();
   await page.getByRole('checkbox', { name: 'Select Cy Applicant' }).check();
-  await page.getByLabel('Decision', { exact: true }).selectOption('deny');
-  await page.locator('#bulk-template').selectOption({ label: 'Deny · Full this year' });
+  await pickOption(page.getByLabel('Decision', { exact: true }), 'deny');
+  await pickOption(page.locator('#bulk-template'), { label: 'Deny · Full this year' });
   await page.getByRole('button', { name: 'Apply decision' }).click();
   await expect(page.getByRole('region', { name: 'Bulk decision' }).getByRole('status')).toContainText(
     'Done: 1 decided, 0 not decided.',
@@ -346,7 +346,7 @@ test('group checkout with three names, then the payer replaces one', async ({ br
     await person.getByLabel('Full name').fill(name);
     await person.getByLabel('Email').fill(`${name.split(' ')[0]?.toLowerCase()}-${s}@example.test`);
     // The first pass offered: Member · Full pass (approval and +1 types are not sold as groups).
-    await person.getByLabel('Pass').selectOption({ index: 1 });
+    await pickOption(person.getByLabel('Pass'), { index: 1 });
   }
   await form.getByRole('button', { name: 'Register 3 people' }).click();
   await verify(page, payer);
@@ -427,7 +427,7 @@ test('Arabic: the queue, the applicant page and the group form render right-to-l
   await expectAccessibleBothModes(visitor);
   await visitor.goto(`/ar/events/${slug}/register/group`);
   await expect(visitor.locator('html')).toHaveAttribute('dir', 'rtl');
-  await expect(visitor.locator('select[name="pass-1"]')).toBeVisible();
+  await expect(visitor.locator('[role="combobox"][data-name="pass-1"]')).toBeVisible();
   await expectAccessibleBothModes(visitor);
   await visitor.close();
 });

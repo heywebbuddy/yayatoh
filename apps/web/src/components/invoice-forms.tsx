@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, Input } from '@yayatoh/ui';
+import { Alert, Button, DatePicker, Input, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState } from 'react';
 import { errorMessageKey } from '@/lib/errors.ts';
@@ -77,22 +77,21 @@ export function RecordInvoicePaymentForm({
           <label htmlFor="invoice-pay-method" className={label}>
             {t('method')}
           </label>
-          <select id="invoice-pay-method" name="method" className="field" defaultValue="check">
+          <Select id="invoice-pay-method" name="method" className="field" defaultValue="check">
             {(['check', 'wire', 'cash', 'other'] as const).map((m) => (
               <option key={m} value={m}>
                 {t(`methods.${m}`)}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
         <div className="flex flex-col gap-1.5">
           <label htmlFor="invoice-pay-date" className={label}>
             {t('receivedOn')}
           </label>
-          <input
+          <DatePicker
             id="invoice-pay-date"
             name="receivedOn"
-            type="date"
             required
             max={today}
             defaultValue={today}

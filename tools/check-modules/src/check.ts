@@ -168,6 +168,21 @@ export function checkModules(root: string): Violation[] {
         );
     }
 
+    // One look for every control (U1, UX principle 1): no browser-default select or date/time
+    // input outside the UI kit. Use Select, Combobox, DatePicker, DateTimePicker, TimePicker,
+    // TimeZonePicker or CurrencyPicker from @yayatoh/ui.
+    if (rel.startsWith('apps/') && /\.(tsx|jsx)$/.test(rel) && !test) {
+      for (const m of src.matchAll(/<select\b/g))
+        add('no-native-select', `native <select> at offset ${m.index} — use Select from @yayatoh/ui`);
+      for (const m of src.matchAll(
+        /<input\b[^>]*?\stype=(?:"|'|\{\s*['"`])(date|time|datetime-local|month|week)\b/g,
+      ))
+        add(
+          'no-native-select',
+          `native type="${m[1]}" input — use DatePicker, DateTimePicker or TimePicker from @yayatoh/ui`,
+        );
+    }
+
     // UI strings go through next-intl (CLAUDE.md → UI): no literal JSX text or literal labels.
     if (rel.startsWith('apps/web/src/') && rel.endsWith('.tsx') && !test) {
       for (const text of literalJsxText(src))

@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { expectAccessible, signIn } from './helpers.ts';
+import { expectAccessible, pickOption, signIn } from './helpers.ts';
 
 test.describe('events', () => {
   test.use({ viewport: { width: 1280, height: 900 } });
@@ -10,8 +10,8 @@ test.describe('events', () => {
     await expectAccessible(page);
     const name = `Autumn Mixer ${Date.now()}`;
     await page.getByLabel('Event name', { exact: true }).fill(name);
-    await page.getByLabel('Event type').selectOption('concert');
-    await page.getByLabel('Time zone').selectOption('America/Chicago');
+    await pickOption(page.getByLabel('Event type'), 'concert');
+    await pickOption(page.getByLabel('Time zone'), 'America/Chicago');
     await page.getByLabel('Starts', { exact: true }).fill('2027-11-05T19:00');
     await page.getByLabel('Ends', { exact: true }).fill('2027-11-05T23:00');
     await page.getByLabel('Venue').fill('Riverside Hall');
