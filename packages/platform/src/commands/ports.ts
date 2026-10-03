@@ -43,12 +43,23 @@ export const recentStepUp: CommandPorts<TenantTx>['stepUp'] = {
  * member (`actor` stays the member): inside `data`, so the hash chain covers it.
  */
 export function withImpersonator(ctx: Ctx, data: Record<string, unknown>): Record<string, unknown> {
-  if (!ctx.impersonatedBy) return data;
+  const out = withAgency(ctx, data);
+  if (!ctx.impersonatedBy) return out;
   return {
-    ...data,
+    ...out,
     impersonatedBy: `staff:${ctx.impersonatedBy.staffUserId}`,
     impersonationId: ctx.impersonatedBy.impersonationId,
   };
+}
+
+/**
+ * Every audit row written while a user acts in a client org through an agency grant (M6.7a)
+ * names the agency org and the grant next to the user (`actor` stays the user), inside `data`, so
+ * the hash chain covers it.
+ */
+export function withAgency(ctx: Ctx, data: Record<string, unknown>): Record<string, unknown> {
+  if (!ctx.viaAgency) return data;
+  return { ...data, viaAgency: `org:${ctx.viaAgency.agencyOrgId}`, agencyGrantId: ctx.viaAgency.grantId };
 }
 
 /**

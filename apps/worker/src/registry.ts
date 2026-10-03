@@ -1,3 +1,4 @@
+import { agencySnapshotSubscriber } from '@yayatoh/agency';
 import { alertEvaluator, type ConferenceSources, connectedConferenceSources } from '@yayatoh/alerts';
 import { warehouseFromEnv, warehouseIngestor } from '@yayatoh/analytics';
 import { attendeeMessageMailer } from '@yayatoh/attendees';
@@ -226,6 +227,8 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     // verified charity profile gives the org the nonprofit discount.
     billingUsageMeter(),
     nonprofitDiscountFromCharity(),
+    // M6.7a: a client's grant snapshots it for its agency at once (and a revoke removes it).
+    agencySnapshotSubscriber,
   ];
 }
 

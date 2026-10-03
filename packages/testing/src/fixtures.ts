@@ -1637,6 +1637,24 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     { slug: `${slug}-affiliate`, name: `${name} Affiliate` },
     ports,
   );
+  // M6.7a: the org grants an agency (its own org and owner) viewer access, and holds agency
+  // snapshots of its affiliate (isolation coverage: the agency tables are owned by the agency org).
+  const agencyOrg = await createOrganization(
+    userCtx(uuidv7()),
+    { slug: `${slug}-agency`, name: `${name} Agency`, kind: 'agency' },
+    ports,
+  );
+  await withTenant(systemCtx(org.id), async (tx) => {
+    await tx.execute(
+      sql`insert into tenancy.org_access_grants (org_id, agency_org_id, role, granted_by) values (${org.id}, ${agencyOrg.id}, 'viewer', ${ownerId})`,
+    );
+    await tx.execute(sql`insert into agency.client_snapshots (org_id, client_org_id, grant_id, events_total,
+      next_event_name, revenue, with_finance, refreshed_at)
+      values (${org.id}, ${affiliate.id}, ${uuidv7()}, 1, 'Affiliate Gala', '{"USD": 1000}'::jsonb, true, now())`);
+    await tx.execute(sql`insert into agency.event_snapshots (org_id, client_org_id, event_id, name, slug, status, starts_at,
+      ends_at, timezone, currency, refreshed_at) values (${org.id}, ${affiliate.id}, ${uuidv7()}, 'Affiliate Gala',
+      'affiliate-gala', 'published', now(), now() + interval '3 hours', 'America/New_York', 'USD', now())`);
+  });
   await withTenant(systemCtx(org.id), async (tx) => {
     await tx.execute(
       sql`insert into tenancy.org_relationships (org_id, child_org_id, kind, source) values (${org.id}, ${affiliate.id}, 'host_affiliate', 'fixture')`,

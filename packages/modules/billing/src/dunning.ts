@@ -141,7 +141,12 @@ export function billingReadOnlyGate(deps: {
       requireOrg(ctx);
       const s = await billingStandingTx(tx, ctx.now);
       if (s.standing !== 'read_only') return;
-      const memberRole = ctx.actor.type === 'user' ? await deps.memberRole(tx, ctx.actor.userId) : null;
+      // Batch 3k merge: someone acting through an agency grant (M6.7a) is not a member of the org
+      // but writes like one: read-only for them too.
+      const memberRole =
+        ctx.actor.type === 'user'
+          ? ((await deps.memberRole(tx, ctx.actor.userId)) ?? (ctx.viaAgency ? 'agency' : null))
+          : null;
       const refused = billingWriteRefused({
         standing: s.standing,
         actorType: ctx.actor.type,
