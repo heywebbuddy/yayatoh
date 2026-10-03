@@ -2,7 +2,10 @@ import Stripe from 'stripe';
 import type {
   BalanceTransaction,
   BalanceTransactionKind,
+  ChargeSavedCardInput,
+  ChargeSavedCardResult,
   ConnectAccountState,
+  CreateCardSetupInput,
   CreatePaymentInput,
   IgnoredEvent,
   PaymentProvider,
@@ -292,6 +295,80 @@ export function stripePaymentProvider(opts: StripeProviderOptions): PaymentProvi
       return out;
     },
 
+    async createCardSetup(i: CreateCardSetupInput) {
+      // M4.8e (P4-14): the card lives on the organizer's connected account, on a customer of its
+      // own, saved for off-session use; the hosted step is a Checkout Session in setup mode.
+      const account = on(i.connectedAccountId);
+      const metadata = { orgId: i.orgId, reference: i.reference, kind: 'card_setup' };
+      const customer = await stripe.customers.create(
+        { email: i.email, name: i.name.slice(0, 250), metadata },
+        { idempotencyKey: `${i.idempotencyKey}:customer`, ...account },
+      );
+      const session = await stripe.checkout.sessions.create(
+        {
+          mode: 'setup',
+          customer: customer.id,
+          payment_method_types: ['card'],
+          metadata,
+          setup_intent_data: { metadata, description: i.description.slice(0, 250) },
+          success_url: i.returnUrl,
+          cancel_url: i.returnUrl,
+          expires_at: Math.floor(now().getTime() / 1000) + SESSION_MINUTES * 60,
+        },
+        { idempotencyKey: i.idempotencyKey, ...account },
+      );
+      if (!session.url) throw new Error('Stripe returned a Checkout Session without a URL');
+      return { providerSetupId: session.id, redirectUrl: session.url };
+    },
+
+    async chargeSavedCard(i: ChargeSavedCardInput): Promise<ChargeSavedCardResult> {
+      if (i.amount.amount <= 0) throw new Error('charge amount must be positive');
+      const metadata = { orgId: i.orgId, orderId: i.orderId, fundsFlow: 'organizer_mor', yayatoh_ref: `order:${i.orderId}` };
+      try {
+        const pi = await stripe.paymentIntents.create(
+          {
+            amount: i.amount.amount,
+            currency: i.amount.currency.toLowerCase(),
+            customer: i.customerId,
+            payment_method: i.paymentMethodId,
+            off_session: true,
+            confirm: true,
+            description: i.description.slice(0, 250),
+            metadata,
+          },
+          { idempotencyKey: i.idempotencyKey, ...on(i.connectedAccountId) },
+        );
+        return pi.status === 'succeeded'
+          ? { providerPaymentId: pi.id, status: 'succeeded' }
+          : { providerPaymentId: pi.id, status: 'declined', declineCode: 'authentication_required' };
+      } catch (err) {
+        if (err instanceof Stripe.errors.StripeCardError) {
+          const raw = err.raw as { payment_intent?: { id?: string } } | undefined;
+          return {
+            providerPaymentId: raw?.payment_intent?.id ?? `declined:${i.idempotencyKey}`,
+            status: 'declined',
+            declineCode: err.decline_code ?? err.code ?? 'card_declined',
+          };
+        }
+        throw err;
+      }
+    },
+
+    async detachSavedCard(i) {
+      try {
+        await stripe.paymentMethods.detach(
+          i.paymentMethodId,
+          {},
+          { idempotencyKey: i.idempotencyKey, ...on(i.connectedAccountId) },
+        );
+        return { status: 'detached' as const };
+      } catch (err) {
+        if (err instanceof Stripe.errors.StripeInvalidRequestError && err.code === 'resource_missing')
+          return { status: 'gone' as const };
+        throw err;
+      }
+    },
+
     async verifyWebhook(rawBody: string, headers: Headers): Promise<WebhookEvent> {
       const signature = headers.get('stripe-signature');
       if (!signature) throw new Error('missing Stripe-Signature');
@@ -405,6 +482,36 @@ export function stripePaymentProvider(opts: StripeProviderOptions): PaymentProvi
     }
   }
 
+  /** A card-setup session's outcome (M4.8e): the saved card's references and display details. */
+  async function setupEvent(
+    event: Stripe.Event,
+    s: Stripe.Checkout.Session,
+    account: string | null,
+  ): Promise<WebhookEvent> {
+    const orgId = s.metadata?.orgId;
+    const reference = s.metadata?.reference;
+    if (!orgId || !reference || s.metadata?.kind !== 'card_setup')
+      return { provider: 'stripe', id: event.id, type: 'ignored', reason: 'not a Yayatoh card setup' };
+    const base = { provider: 'stripe' as const, id: event.id, orgId, reference, providerSetupId: s.id };
+    if (event.type !== 'checkout.session.completed' || s.status !== 'complete')
+      return { ...base, type: 'setup.failed' };
+    const setupId = typeof s.setup_intent === 'string' ? s.setup_intent : s.setup_intent?.id;
+    if (!setupId) return { ...base, type: 'setup.failed' };
+    const si = await stripe.setupIntents.retrieve(setupId, { expand: ['payment_method'] }, on(account));
+    const pm = typeof si.payment_method === 'string' ? null : si.payment_method;
+    const customerId = typeof si.customer === 'string' ? si.customer : si.customer?.id;
+    if (si.status !== 'succeeded' || !pm || !customerId) return { ...base, type: 'setup.failed' };
+    return {
+      ...base,
+      type: 'setup.succeeded',
+      customerId,
+      paymentMethodId: pm.id,
+      brand: pm.card?.brand ?? 'card',
+      last4: pm.card?.last4 ?? '',
+      ...(pm.card ? { expMonth: pm.card.exp_month, expYear: pm.card.exp_year } : {}),
+    };
+  }
+
   /** Map a verified Stripe event to the port's events (or an explicit "ignored"). */
   async function normalize(event: Stripe.Event): Promise<WebhookEvent> {
     const account = event.account ?? null;
@@ -420,6 +527,7 @@ export function stripePaymentProvider(opts: StripeProviderOptions): PaymentProvi
       case 'checkout.session.async_payment_failed':
       case 'checkout.session.expired': {
         const s = event.data.object;
+        if (s.mode === 'setup') return setupEvent(event, s, account);
         const orgId = s.metadata?.orgId;
         const orderId = s.metadata?.orderId;
         if (!orgId || !orderId) return ignored('not a Yayatoh order');

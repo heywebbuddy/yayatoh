@@ -38,12 +38,17 @@ export {
   saveEvidenceDraftCommand,
 } from './disputes.ts';
 export {
+  FAKE_TEST_CARDS,
   type FakeBalanceStore,
+  type FakeCardStore,
+  type FakeTestCard,
   fakePaymentProvider,
   memoryBalanceStore,
   processFakeBalanceStore,
+  processFakeCardStore,
   signFakeAccountWebhook,
   signFakeDisputeWebhook,
+  signFakeSetupWebhook,
   signFakeWebhook,
 } from './fake.ts';
 // M5.1d: invoice payments (pay link and organizer-collected) on the ledger.
@@ -64,6 +69,9 @@ export {
 export type {
   AccountEvent,
   BalanceTransaction,
+  ChargeSavedCardInput,
+  ChargeSavedCardResult,
+  CreateCardSetupInput,
   BalanceTransactionKind,
   ConnectAccountState,
   CreatePaymentInput,
@@ -74,9 +82,16 @@ export type {
   PaymentProvider,
   ProviderEvent,
   RefundInput,
+  SetupEvent,
   WebhookEvent,
 } from './port.ts';
-export { BALANCE_TRANSACTION_KINDS, isAccountEvent, isDisputeEvent, isIgnoredEvent } from './port.ts';
+export {
+  BALANCE_TRANSACTION_KINDS,
+  isAccountEvent,
+  isDisputeEvent,
+  isIgnoredEvent,
+  isSetupEvent,
+} from './port.ts';
 export { privateColumns } from './private-columns.ts';
 export {
   dayBounds,
