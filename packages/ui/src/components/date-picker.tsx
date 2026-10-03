@@ -75,6 +75,8 @@ export interface DatePickerProps {
   autoFocus?: boolean;
   'aria-label'?: string;
   'aria-describedby'?: string;
+  /** A form-level error on this field (e.g. "the end is before the start"). */
+  'aria-invalid'?: boolean | 'true' | 'false';
   'data-testid'?: string;
 }
 
@@ -630,7 +632,9 @@ function Picker({ kind, ...p }: DatePickerProps & { kind: Kind }) {
             disabled={disabled}
             // biome-ignore lint/a11y/noAutofocus: passed through from the call site, as on a native input
             autoFocus={autoFocus}
-            aria-invalid={shownError ? true : undefined}
+            aria-invalid={
+              shownError || p['aria-invalid'] === true || p['aria-invalid'] === 'true' ? true : undefined
+            }
             aria-describedby={describedBy}
             aria-label={p['aria-label']}
             data-testid={p['data-testid']}

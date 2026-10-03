@@ -2,7 +2,7 @@ import { type Browser, expect, type Page, test } from '@playwright/test';
 import { closePools } from '@yayatoh/db';
 import { resolveOrgSlug } from '@yayatoh/tenancy';
 import { type RsvpScenario, rsvpScenario } from '@yayatoh/testing';
-import { expectAccessibleBothModes, passHumanCheck, pickOption, signIn } from './helpers.ts';
+import { expectAccessibleBothModes, expectPicked, passHumanCheck, pickOption, signIn } from './helpers.ts';
 
 // Batch 3h merge: axe runs in light and dark on every screen now (twice the checks), so these long
 // journeys get more than the default 30 s.
@@ -201,7 +201,7 @@ test.describe('Contact collector (M4.1f)', () => {
     await expect(table.getByRole('row', { name: /Email/ })).toContainText(email);
     await expectAccessibleBothModes(page);
     // The party has no address or email: the submitted ones are offered; Sofía is new.
-    await expect(page.getByLabel('Email', { exact: true })).toHaveValue('use');
+    await expectPicked(page.getByLabel('Email', { exact: true }), 'use');
     await pickOption(page.getByLabel('Address', { exact: true }), 'keep');
     await expect(page.getByRole('checkbox', { name: 'Sofía García' })).toBeChecked();
     await page.getByRole('button', { name: 'Merge into Garcia' }).click();

@@ -213,15 +213,25 @@ export async function withOpenSignupLock<T>(fn: () => Promise<T>): Promise<T> {
 }
 
 /**
+ * The trigger of a U1 `Select`, by id: the open list carries the field's label too, so a label
+ * locator matches two elements while the list is open.
+ */
+async function triggerOf(field: Locator): Promise<Locator> {
+  const id = await field.getAttribute('id');
+  return id ? field.page().locator(`[id="${id}"]`) : field;
+}
+
+/**
  * Chooses an option in a U1 `Select`/picker (the replacement for `locator.selectOption`): opens the
  * listbox from its trigger and clicks the option. Like `selectOption`, a string matches an option's
  * value first, then its visible label; `{ label }` matches the label only, `{ value }` the value
  * only, `{ index }` the nth option.
  */
 export async function pickOption(
-  trigger: Locator,
+  field: Locator,
   choice: string | { label?: string | RegExp; value?: string; index?: number },
 ): Promise<void> {
+  const trigger = await triggerOf(field);
   await trigger.click();
   const listId = await trigger.getAttribute('aria-controls');
   const list = trigger.page().locator(`[id="${listId}"]`);
@@ -254,15 +264,23 @@ export async function expectPicked(trigger: Locator, value: string | RegExp): Pr
  * moves with ArrowDown until the active option matches (by value, else label), then Enter.
  */
 export async function pickWithKeyboard(
-  trigger: Locator,
+  field: Locator,
   choice: string | { label: string | RegExp },
 ): Promise<void> {
-  const page = trigger.page();
+  const page = field.page();
+  const trigger = await triggerOf(field);
   await trigger.focus();
   await page.keyboard.press('ArrowDown');
   const listId = await trigger.getAttribute('aria-controls');
   const list = page.locator(`[id="${listId}"]`);
   await expect(list).toBeVisible();
+  const activeOf = async () =>
+    ((await trigger.getAttribute('aria-activedescendant'))
+      ? trigger
+      : page.locator(`[aria-controls="${listId}"][aria-activedescendant]`).last()
+    ).getAttribute('aria-activedescendant');
+  // From the top of the list (PageUp also works from the search box).
+  for (let i = 0; i < 60 && !/-0$/.test((await activeOf()) ?? ''); i++) await page.keyboard.press('PageUp');
   const want = (o: { value: string | null; text: string }) =>
     typeof choice === 'string'
       ? o.value === choice || o.text === choice
@@ -270,10 +288,7 @@ export async function pickWithKeyboard(
         ? choice.label.test(o.text)
         : o.text === choice.label;
   for (let i = 0; i < 400; i++) {
-    const owner = (await trigger.getAttribute('aria-activedescendant'))
-      ? trigger
-      : page.locator(`[aria-controls="${listId}"][aria-activedescendant]`).last();
-    const activeId = await owner.getAttribute('aria-activedescendant');
+    const activeId = await activeOf();
     const active = page.locator(`[id="${activeId}"]`);
     const o = { value: await active.getAttribute('data-value'), text: (await active.innerText()).trim() };
     if (want(o)) {
@@ -287,7 +302,8 @@ export async function pickWithKeyboard(
 }
 
 /** Opens a U1 `Select`, runs `fn` on its listbox (the options), then closes it with Escape. */
-export async function inOptions<T>(trigger: Locator, fn: (list: Locator) => Promise<T>): Promise<T> {
+export async function inOptions<T>(field: Locator, fn: (list: Locator) => Promise<T>): Promise<T> {
+  const trigger = await triggerOf(field);
   await trigger.click();
   const list = trigger.page().locator(`[id="${await trigger.getAttribute('aria-controls')}"]`);
   await expect(list).toBeVisible();
@@ -301,8 +317,9 @@ export async function inOptions<T>(trigger: Locator, fn: (list: Locator) => Prom
  * The keyboard step a closed native select took on ArrowDown (or ArrowUp): open the U1 list with
  * ArrowDown, move `by` options from the current one, Enter.
  */
-export async function stepOption(trigger: Locator, by = 1): Promise<void> {
-  const page = trigger.page();
+export async function stepOption(field: Locator, by = 1): Promise<void> {
+  const page = field.page();
+  const trigger = await triggerOf(field);
   await trigger.focus();
   await page.keyboard.press('ArrowDown');
   for (let i = 0; i < Math.abs(by); i++) await page.keyboard.press(by > 0 ? 'ArrowDown' : 'ArrowUp');
