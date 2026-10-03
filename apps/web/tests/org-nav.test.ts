@@ -100,8 +100,16 @@ describe('who sees which sections', () => {
       expect(keysOf(role)).not.toContain('finance');
       expect(keysOf(role)).not.toContain('payouts');
       expect(keysOf(role)).not.toContain('disputes');
+      // U5: the Money overview and fees are finance figures.
+      expect(keysOf(role)).not.toContain('moneyOverview');
+      expect(keysOf(role)).not.toContain('fees');
     }
-    expect(keysOf('finance')).toEqual(expect.arrayContaining(['finance', 'payouts', 'disputes']));
+    expect(keysOf('finance')).toEqual(
+      expect.arrayContaining(['finance', 'payouts', 'disputes', 'moneyOverview', 'salesByEvent', 'fees']),
+    );
+    // Sales by event shows counts and gross to anyone who reads orders (money columns need finance).
+    expect(keysOf('viewer')).toContain('salesByEvent');
+    expect(keysOf('scanner')).not.toContain('salesByEvent');
   });
 
   it('keeps org settings to the roles that can change them', () => {

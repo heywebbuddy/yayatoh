@@ -782,3 +782,9 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - **Demo personas confirm step-up without a code (dev and preview only).** Reviewers sign in with one click on `/dev/login`, so they never had the persona's authenticator, and every sensitive action (adding a domain, refunds, exports) ended on "Please confirm it's you". The confirm dialog now offers "Continue without a code (demo account)" to seeded personas only, and only when `YAYATOH_DEV_AUTH=1` outside production (the same switch as the persona list). It runs the real, audited step-up with the persona's dev secret. Say if previews should keep asking for a code instead.
 - **Domains:** the connect wizard is provider-agnostic. Real DNS checks and certificates arrive with the Vercel Domains adapter (your Vercel account, already listed above).
 
+## U5 — Money dashboards (2026-10-03, pending owner)
+- [ ] **Built with these defaults; say if any should change:**
+  - **Who sees what:** Overview, Payouts figures and Fees need finance access (owner, admin, finance). Sales by event is open to everyone who reads orders (viewer, box office, manager) with counts and gross only; refunds, fees and net per event need finance access.
+  - **Comparison:** each figure is compared with the period of the same length just before ("Last 30 days" vs the 30 days before). All time has no comparison.
+  - **Expected payout** on the timeline is the held amount less the 5 % reserve (decision D3 defaults); anything owed is netted at release, so the actual payout can be lower.
+  - **Fees per order** lists the latest 200 orders of the period (the CSV has the same list).

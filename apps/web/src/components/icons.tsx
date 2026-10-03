@@ -7,6 +7,7 @@ import {
   Calendar,
   CalendarCheck,
   CalendarRange,
+  ChartColumn,
   ChartLine,
   ClipboardList,
   Copy,
@@ -35,6 +36,7 @@ import {
   MessageSquare,
   Mic,
   Palette,
+  Percent,
   Scale,
   ScanLine,
   Search,
@@ -47,6 +49,7 @@ import {
   Ticket,
   Undo2,
   Users,
+  Wallet,
   Webhook,
   Workflow,
   Zap,
@@ -104,6 +107,10 @@ const ICONS: Record<string, LucideIcon> = {
   flask: FlaskConical,
   'bell-ring': BellRing,
   webhook: Webhook,
+  // U5: the Money dashboards.
+  wallet: Wallet,
+  'chart-column': ChartColumn,
+  percent: Percent,
 };
 
 export function Icon({ name, className = 'size-4' }: { name: string; className?: string }) {

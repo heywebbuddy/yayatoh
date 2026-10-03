@@ -67,6 +67,19 @@ export {
   postTransferReversalTx,
   refundJournalTotalsTx,
 } from './ledger.ts';
+export {
+  type HeldFundsFact,
+  heldFundsTx,
+  lostDisputeEventIdsTx,
+  type PayoutLineFact,
+  type PayoutLineKind,
+  type PayoutTotalFact,
+  payoutTotalsTx,
+  type ReserveFact,
+  reservesHeldTx,
+  type SettlementLinesFact,
+  settlementLinesTx,
+} from './payouts.ts';
 export type {
   AccountEvent,
   BalanceTransaction,
