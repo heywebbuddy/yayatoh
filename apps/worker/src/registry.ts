@@ -17,6 +17,7 @@ import { giftOutcomesSubscriber, receiptIssuer, statementMailer } from '@yayatoh
 import { findEventTx, portalInviteMailer } from '@yayatoh/events';
 import { registrationResumeMailer } from '@yayatoh/forms';
 import { invitationMailer as guestInvitationMailer } from '@yayatoh/guests';
+import { slackAlertsSubscriber } from '@yayatoh/integrations';
 import { listingsProjector } from '@yayatoh/marketplace';
 import { programMediaCleaner, speakerPhotoApprover, subjectErasedMediaCleaner } from '@yayatoh/media';
 import {
@@ -70,7 +71,7 @@ import { configureWebhooks, webhookPublisherFromEnv, webhookPublisherSubscriber 
 import { z } from 'zod';
 import { contactStatsJob } from './contact-stats.ts';
 import { duplicateScanJob } from './duplicates.ts';
-import { syncJob } from './integrations.ts';
+import { slackJob, syncJob } from './integrations.ts';
 import { defineJob } from './jobs.ts';
 import { journeyJob } from './journeys.ts';
 
@@ -83,7 +84,14 @@ export const heartbeat = defineJob({
 
 /** Composition root for jobs and event subscribers. Modules register theirs here as they land. */
 // M6.4a: integration syncs (the fake port in dev/CI; off in production until Nango is configured).
-export const JOBS = [heartbeat, journeyJob(), duplicateScanJob(), contactStatsJob(), syncJob()] as const;
+export const JOBS = [
+  heartbeat,
+  journeyJob(),
+  duplicateScanJob(),
+  contactStatsJob(),
+  syncJob(),
+  slackJob(),
+] as const;
 export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] {
   const secret = env.APP_TOKEN_SECRET;
   const appOrigin = env.NEXT_PUBLIC_APP_ORIGIN;
@@ -191,6 +199,8 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     statementMailer({ notifier, appOrigin }),
     // M6.3b: public outbox events to the org's webhook endpoints (thin payloads, catalog only).
     webhookPublisherSubscriber({ publisher: () => webhooks }),
+    // M6.4c: alerts the engine sent are queued for Slack channels (the Slack job posts them).
+    slackAlertsSubscriber,
   ];
 }
 

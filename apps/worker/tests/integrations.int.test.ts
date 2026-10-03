@@ -5,7 +5,15 @@ import { executeCommand, executeQuery } from '@yayatoh/kernel';
 import { fakeAuth, type OrgFixture, ports, twoOrgs } from '@yayatoh/testing';
 import type { PgBoss } from 'pg-boss';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { enqueueSyncWork, SYNC_JOB, syncJob } from '../src/integrations.ts';
+import {
+  enqueueSlackWork,
+  enqueueSyncWork,
+  orgsWithSlackWork,
+  SLACK_JOB,
+  SYNC_JOB,
+  slackJob,
+  syncJob,
+} from '../src/integrations.ts';
 import { JOBS } from '../src/registry.ts';
 import { startWorker } from '../src/worker.ts';
 
@@ -33,7 +41,7 @@ beforeAll(async () => {
   admin = adminClient();
   boss = await startWorker({
     connectionString: process.env.MIGRATOR_DATABASE_URL as string,
-    jobs: [syncJob(fakeAuth)],
+    jobs: [syncJob(fakeAuth), slackJob(fakeAuth, 'https://app.yayatoh.test')],
   });
 }, 240_000);
 afterAll(async () => {
@@ -82,3 +90,20 @@ describe('integration sync job (M6.4a, pg-boss)', () => {
     await until(async () => (await enqueueSyncWork(boss, new Set([a.org.id]))) === 0);
   });
 });
+
+describe('Slack job (M6.4c, pg-boss)', () => {
+  it('the worker registers the Slack job; the leader queues one per org with due messages', async () => {
+    expect(JOBS.map((j) => j.name)).toContain(SLACK_JOB);
+    // The fixture queued a test alert to its Slack channel.
+    expect(await orgsWithSlackWork()).toContain(a.org.id);
+    expect(audited).toContain('system:integrations');
+    expect(await enqueueSlackWork(boss, new Set([a.org.id]))).toBe(1);
+    await until(async () => {
+      const rows = await admin<{ status: string }[]>`
+        select status from integrations.slack_messages where org_id = ${a.org.id} and kind = 'test'`;
+      return rows.length > 0 && rows.every((r) => r.status === 'sent');
+    });
+    await until(async () => (await enqueueSlackWork(boss, new Set([a.org.id]))) === 0);
+  });
+});
+

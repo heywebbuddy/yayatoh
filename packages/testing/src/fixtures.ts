@@ -2616,6 +2616,7 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   await runSync(org.id, demo.connectionId, { auth: fakeAuth }, ports);
   // M6.4c: Slack connected through the fake port, its channel and digest set, a test alert queued.
   const slack = await connectSlack(ctx());
+  await runSync(org.id, slack.connectionId, { auth: fakeAuth }, ports);
   await executeCommand(
     saveSlackSettingsCommand,
     {
