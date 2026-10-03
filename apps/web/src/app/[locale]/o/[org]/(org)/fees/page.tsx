@@ -132,9 +132,15 @@ export default async function FeesPage({
             title={t('emptyTitle')}
             description={t('empty')}
             action={
-              <Link href={`/o/${org}/fees?period=all`} className={buttonClass('primary', 'md')}>
-                {tm('overview.showAllTime')}
-              </Link>
+              period.period === 'all' ? (
+                <Link href={`/o/${org}/money`} className={buttonClass('primary', 'md')}>
+                  {tm('payouts.toOverview')}
+                </Link>
+              ) : (
+                <Link href={`/o/${org}/fees?period=all`} className={buttonClass('primary', 'md')}>
+                  {tm('overview.showAllTime')}
+                </Link>
+              )
             }
           />
         ) : (

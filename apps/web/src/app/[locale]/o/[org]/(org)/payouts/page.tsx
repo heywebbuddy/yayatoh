@@ -104,17 +104,20 @@ export default async function PayoutsPage({
           status: 'held' as const,
           tone: 'neutral' as const,
         })),
-        ...d.reserves.map((r) => ({
-          id: `r-${r.settlementId}`,
-          at: r.releaseAt,
-          title: tm('payouts.reserveBack', {
-            event: r.eventName || '—',
-            amount: fmt(r.leftMinor, r.currency),
-          }),
-          detail: tm('payouts.reserveDetail', { kept: fmt(r.reserveMinor, r.currency) }),
-          status: 'held' as const,
-          tone: 'neutral' as const,
-        })),
+        // A reserve that refunds used up has nothing to come back.
+        ...d.reserves
+          .filter((r) => r.leftMinor > 0)
+          .map((r) => ({
+            id: `r-${r.settlementId}`,
+            at: r.releaseAt,
+            title: tm('payouts.reserveBack', {
+              event: r.eventName || '—',
+              amount: fmt(r.leftMinor, r.currency),
+            }),
+            detail: tm('payouts.reserveDetail', { kept: fmt(r.reserveMinor, r.currency) }),
+            status: 'held' as const,
+            tone: 'neutral' as const,
+          })),
       ].sort((a, b) => a.at.getTime() - b.at.getTime())
     : [];
   const next = d?.held[0] ?? null;
@@ -266,13 +269,7 @@ export default async function PayoutsPage({
               captionHidden
               rowKey={(s) => s.settlementId}
               rows={[
-                ...d.pending.map((p) => ({
-                  ...p,
-                  releasedMinor: null,
-                  reserveMinor: null,
-                  nettedMinor: null,
-                  transferredAt: null,
-                })),
+                ...d.pending.map((p) => ({ ...p, transferredAt: null })),
                 ...d.past.map((p) => ({ ...p, status: 'transferred' as const })),
               ].sort((a, b) => b.releasedAt.getTime() - a.releasedAt.getTime())}
               columns={[
@@ -296,15 +293,14 @@ export default async function PayoutsPage({
                 {
                   key: 'released',
                   header: t('settlements.released'),
-                  cell: (s) => (s.releasedMinor === null ? '—' : fmt(s.releasedMinor, s.currency)),
+                  cell: (s) => fmt(s.releasedMinor, s.currency),
                   mono: true,
                   align: 'end',
                 },
                 {
                   key: 'kept',
                   header: t('settlements.kept'),
-                  cell: (s) =>
-                    s.reserveMinor === null ? '—' : fmt(s.reserveMinor + (s.nettedMinor ?? 0), s.currency),
+                  cell: (s) => fmt(s.reserveMinor + s.nettedMinor, s.currency),
                   mono: true,
                   align: 'end',
                 },

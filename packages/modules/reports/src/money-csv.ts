@@ -109,9 +109,9 @@ export function payoutsCsv(
       status(x.status),
       x.eventName,
       x.currency,
-      '',
-      '',
-      '',
+      decimal(x.releasedMinor, x.currency),
+      decimal(x.reserveMinor, x.currency),
+      decimal(x.nettedMinor, x.currency),
       decimal(x.amountMinor, x.currency),
     ]);
   for (const x of d.past)
