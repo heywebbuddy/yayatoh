@@ -22,7 +22,9 @@ import {
   LevelInput,
   UpdateCampaignInput,
 } from './dto.ts';
+import { offlinePledgeTotalsTx } from './pledge-totals.ts';
 import { campaigns, gifts, levels } from './schema.ts';
+import { publishScreenStateTx, screenEventsOfCampaignTx } from './screen-live.ts';
 
 type CampaignRow = typeof campaigns.$inferSelect;
 
@@ -135,6 +137,9 @@ export const updateCampaignCommand = tenantCommand({
     } catch (err) {
       throw nameTaken(err);
     }
+    // A new name or goal reaches the room's screen at once (M4.8d).
+    for (const eventId of await screenEventsOfCampaignTx(tx, c.id))
+      await publishScreenStateTx(tx, requireOrg(ctx), eventId);
     return { id: c.id };
   },
   audit: (input) => ({
@@ -250,6 +255,15 @@ export async function campaignTotalsTx(tx: TenantTx, campaignIds: readonly strin
       giftCount: r.n,
       feeCoverMinor: Number(r.covered),
     });
+  // M4.8e: pledges the host recorded as paid offline count like paid gifts (P4-12).
+  for (const [campaignId, o] of await offlinePledgeTotalsTx(tx, campaignIds)) {
+    const t = out.get(campaignId) ?? { raisedMinor: 0, giftCount: 0, feeCoverMinor: 0 };
+    out.set(campaignId, {
+      ...t,
+      raisedMinor: t.raisedMinor + o.raisedMinor,
+      giftCount: t.giftCount + o.count,
+    });
+  }
   return out;
 }
 

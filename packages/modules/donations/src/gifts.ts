@@ -19,7 +19,9 @@ import {
   StartGiftResultDto as StartGiftResult,
   type StartGiftResultDto,
 } from './dto.ts';
+import { activeMatchesTx } from './match-progress.ts';
 import { campaigns, gifts, levels } from './schema.ts';
+import { publishScreenStateTx } from './screen-live.ts';
 
 const GIFT_PURPOSE = 'donations.gift';
 
@@ -97,6 +99,9 @@ export const startGiftCommand = tenantCommand({
       tributeRecipient: input.tribute?.recipient ?? null,
       tributeNote: input.tribute?.note ?? null,
       locale: input.locale,
+      // P4-13: thanked by name on the room's screen only when the donor asked for it (M4.8d).
+      showOnScreen: input.showOnScreen && input.displayAs !== 'anonymous',
+      source: input.source,
     });
     return {
       giftId,
@@ -154,10 +159,11 @@ const OrderOutcome = z.object({ orgId: z.uuid(), orderId: z.uuid() });
 /** A gift order's outcome → the gift's status (each change only from `pending`; paid also from a lapse). */
 async function applyOutcomeTx(tx: TenantTx, orderId: string, to: 'paid' | 'failed' | 'expired', at: Date) {
   const from = to === 'paid' ? ['pending', 'failed', 'expired'] : ['pending'];
-  await tx
+  return tx
     .update(gifts)
     .set({ status: to, paidAt: to === 'paid' ? at : null, updatedAt: at })
-    .where(and(eq(gifts.orderId, orderId), inArray(gifts.status, from)));
+    .where(and(eq(gifts.orderId, orderId), inArray(gifts.status, from)))
+    .returning({ eventId: gifts.eventId });
 }
 
 /**
@@ -173,7 +179,9 @@ export const giftOutcomesSubscriber = defineSubscriber({
     const at = event.occurredAt ? new Date(event.occurredAt) : new Date();
     const to =
       event.type === 'order.donation_paid' ? 'paid' : event.type === 'order.expired' ? 'expired' : 'failed';
-    await applyOutcomeTx(tx, p.orderId, to, at);
+    const moved = await applyOutcomeTx(tx, p.orderId, to, at);
+    // A paid gift moves the room's thermometer at once (M4.8d), in this same transaction.
+    if (to === 'paid') for (const g of moved) await publishScreenStateTx(tx, p.orgId, g.eventId);
   },
 });
 
@@ -202,7 +210,11 @@ export async function publicGiving(orgId: string, eventId: string): Promise<Publ
           .orderBy(asc(campaigns.position), asc(campaigns.createdAt))
       : [];
     const ids = rows.map((r) => r.id);
-    const [lv, totals] = await Promise.all([levelsByCampaignTx(tx, ids), campaignTotalsTx(tx, ids)]);
+    const [lv, totals, live] = await Promise.all([
+      levelsByCampaignTx(tx, ids),
+      campaignTotalsTx(tx, ids),
+      activeMatchesTx(tx, eventId, ctx.now, ids),
+    ]);
     return PublicGivingDto.parse({
       available: connected,
       campaigns: rows.map((r) => ({
@@ -216,6 +228,7 @@ export async function publicGiving(orgId: string, eventId: string): Promise<Publ
         raisedMinor: totals.get(r.id)?.raisedMinor ?? 0,
         giftCount: totals.get(r.id)?.giftCount ?? 0,
         levels: lv.get(r.id) ?? [],
+        matches: live.filter((m) => m.campaignId === r.id),
       })),
       processingFee: DEFAULT_PROCESSING_FEE,
     });

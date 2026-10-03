@@ -162,7 +162,7 @@ export function KioskScreen({
   );
 }
 
-function PinPad({
+export function PinPad({
   pinHash,
   onCancel,
   onUnlock,

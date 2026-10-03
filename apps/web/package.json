@@ -9,6 +9,7 @@
     "start": "next start --keepAliveTimeout 75000",
     "typecheck": "next typegen && tsc --noEmit",
     "e2e": "playwright test",
+    "e2e:lighthouse": "E2E_LIGHTHOUSE=1 playwright test --project=lighthouse --workers=1",
     "seed": "node scripts/seed.ts",
     "load:prepare": "node scripts/load-prepare.ts"
   },
@@ -34,12 +35,14 @@
     "@yayatoh/command-center": "workspace:*",
     "@yayatoh/contracts": "workspace:*",
     "@yayatoh/crm": "workspace:*",
+    "@yayatoh/csv": "workspace:*",
     "@yayatoh/db": "workspace:*",
     "@yayatoh/donations": "workspace:*",
     "@yayatoh/engagement": "workspace:*",
     "@yayatoh/events": "workspace:*",
     "@yayatoh/floorplan": "workspace:*",
     "@yayatoh/forms": "workspace:*",
+    "@yayatoh/gallery": "workspace:*",
     "@yayatoh/guests": "workspace:*",
     "@yayatoh/integrations": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
@@ -89,6 +92,8 @@
     "@yayatoh/config": "workspace:*",
     "@yayatoh/sdk": "workspace:*",
     "@yayatoh/testing": "workspace:*",
+    "lighthouse": "13.5.0",
+    "sharp": "0.35.4",
     "tailwindcss": "catalog:",
     "typescript": "catalog:"
   }

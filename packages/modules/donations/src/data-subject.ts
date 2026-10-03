@@ -6,12 +6,15 @@ import {
   ERASED_NAME,
   type HeldRecord,
   hold,
+  REDACT,
   type SubjectErasure,
   type SubjectRefs,
 } from '@yayatoh/platform';
 import { asc, eq, inArray, sql } from 'drizzle-orm';
 import type { AnyPgColumn } from 'drizzle-orm/pg-core';
 import { gifts, receipts, yearEndStatements } from './schema.ts';
+import { pledgeCollections, savedCards } from './schema-collection.ts';
+import { matches } from './schema-matches.ts';
 
 /** Gifts and receipts are tax and accounting records (D11: kept 7 years). */
 const HOLD_YEARS = 7;
@@ -36,6 +39,12 @@ async function giftRowsTx(tx: TenantTx, s: DataSubject) {
  * erased donors), the employer and the tribute (names of other people) removed and the gift shown
  * anonymously on donor walls. Each kept row is listed in the receipt. Campaigns, levels and the
  * charity profile are the organizer's own.
+ *
+ * Batch 3u merge (M4.8d/e): cards the person saved for an event's giving lose the holder's name,
+ * address and card description and are removed from the charity's customer on the next sweep
+ * (`remove_after` now); pledge collections addressed to them lose the donor's name and address
+ * (and the organizer's note); a matching sponsor who is the person loses the name, address and
+ * public name (screens show "a generous sponsor"). Amounts stay with the campaign.
  */
 export const donationsDataSubjects = defineDataSubjectContributor({
   module: 'donations',
@@ -43,6 +52,9 @@ export const donationsDataSubjects = defineDataSubjectContributor({
     'donations.gifts': hold('tax_accounting'),
     'donations.receipts': hold('tax_accounting'),
     'donations.year_end_statements': hold('tax_accounting'),
+    'donations.saved_cards': REDACT,
+    'donations.pledge_collections': REDACT,
+    'donations.matches': REDACT,
   },
   async resolve(tx, s): Promise<SubjectRefs> {
     const rows = await giftRowsTx(tx, s);
@@ -65,8 +77,59 @@ export const donationsDataSubjects = defineDataSubjectContributor({
       .from(yearEndStatements)
       .where(eq(yearEndStatements.donorEmail, s.email))
       .orderBy(asc(yearEndStatements.taxYear));
+    const cards = await tx
+      .select()
+      .from(savedCards)
+      .where(eq(savedCards.email, s.email))
+      .orderBy(asc(savedCards.createdAt));
+    const collections = await tx
+      .select()
+      .from(pledgeCollections)
+      .where(eq(pledgeCollections.donorEmail, s.email))
+      .orderBy(asc(pledgeCollections.createdAt));
+    const matched = await tx
+      .select()
+      .from(matches)
+      .where(eq(matches.sponsorEmail, s.email))
+      .orderBy(asc(matches.createdAt));
     return {
       sections: {
+        savedCards: cards.map((c) => ({
+          eventId: c.eventId,
+          name: c.name,
+          email: c.email,
+          status: c.status,
+          brand: c.brand,
+          last4: c.last4,
+          expMonth: c.expMonth,
+          expYear: c.expYear,
+          consentVersion: c.consentVersion,
+          consentedAt: c.consentedAt,
+          removedAt: c.removedAt,
+        })),
+        pledgeCollections: collections.map((c) => ({
+          eventId: c.eventId,
+          donorName: c.donorName,
+          donorEmail: c.donorEmail,
+          amountMinor: c.amountMinor,
+          currency: c.currency,
+          status: c.status,
+          dueOn: c.dueOn,
+          paidAt: c.paidAt,
+        })),
+        matches: matched.map((m) => ({
+          eventId: m.eventId,
+          sponsorName: m.sponsorName,
+          sponsorEmail: m.sponsorEmail,
+          publicName: m.publicName,
+          ratioPercent: m.ratioPercent,
+          capMinor: m.capMinor,
+          currency: m.currency,
+          startsAt: m.startsAt,
+          endsAt: m.endsAt,
+          status: m.status,
+          matchedMinor: m.matchedMinor,
+        })),
         gifts: given.map((g) => ({
           eventId: g.eventId,
           orderId: g.orderId,
@@ -145,6 +208,30 @@ export const donationsDataSubjects = defineDataSubjectContributor({
         taxYear: yearEndStatements.taxYear,
         createdAt: yearEndStatements.createdAt,
       });
+    const cards = await tx
+      .update(savedCards)
+      .set({
+        name: ERASED_NAME,
+        email: ERASED_EMAIL,
+        brand: null,
+        last4: null,
+        expMonth: null,
+        expYear: null,
+        removeAfter: now,
+        updatedAt: now,
+      })
+      .where(eq(savedCards.email, s.email))
+      .returning({ id: savedCards.id });
+    const collections = await tx
+      .update(pledgeCollections)
+      .set({ donorName: ERASED_NAME, donorEmail: null, note: null, updatedAt: now })
+      .where(eq(pledgeCollections.donorEmail, s.email))
+      .returning({ id: pledgeCollections.id });
+    const matched = await tx
+      .update(matches)
+      .set({ sponsorName: ERASED_NAME, sponsorEmail: null, publicName: null, updatedAt: now })
+      .where(eq(matches.sponsorEmail, s.email))
+      .returning({ id: matches.id });
     const paid = given.filter((g) => g.status === 'paid');
     const held: HeldRecord[] = [
       ...paid.map((g) => ({
@@ -169,6 +256,14 @@ export const donationsDataSubjects = defineDataSubjectContributor({
         until: holdUntil(y.createdAt),
       })),
     ];
-    return { erased: { 'donations.gifts': given.length - paid.length }, held };
+    return {
+      erased: {
+        'donations.gifts': given.length - paid.length,
+        'donations.saved_cards': cards.length,
+        'donations.pledge_collections': collections.length,
+        'donations.matches': matched.length,
+      },
+      held,
+    };
   },
 });

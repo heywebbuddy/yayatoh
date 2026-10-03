@@ -4,7 +4,15 @@ import { asc, eq } from 'drizzle-orm';
 import { z } from 'zod';
 import { PublicSessionDto, type SessionDto, type SpeakerDto } from './dto.ts';
 import { speakersOf } from './people.ts';
-import { agendaPublications, rooms, sessionDetails, sessionTypes, tracks } from './schema.ts';
+import {
+  agendaPublications,
+  rooms,
+  sessionDetails,
+  sessionSpeakers,
+  sessions,
+  sessionTypes,
+  tracks,
+} from './schema.ts';
 import { sessionsOf } from './sessions.ts';
 
 type Named = { readonly id: string; readonly name: string };
@@ -62,7 +70,8 @@ export async function currentPublicSessionsTx(tx: TenantTx, eventId: string): Pr
     })
     .from(sessionDetails)
     .where(eq(sessionDetails.eventId, eventId));
-  const list = await sessionsOf(tx, eventId);
+  // M5.3b: drafts (accepted proposals not yet placed) are the organizer's only.
+  const list = (await sessionsOf(tx, eventId)).filter((s) => !s.draft);
   const people = await speakersOf(tx, eventId);
   return list.map((s) => toPublicSession(s, roomRows, trackRows, people, details, typeRows));
 }
@@ -110,4 +119,19 @@ export async function servedPublicSessionsTx(
   if (!pub) return current();
   if (pub.state !== 'published') return [];
   return z.array(SnapshotSession).parse(pub.snapshot ?? []);
+}
+
+/**
+ * M5.3b: speakers who speak only in draft sessions (an accepted call-for-papers proposal not yet
+ * placed): the public program leaves them out until one of their sessions is on the agenda.
+ * Speakers with no session at all keep showing (as before).
+ */
+export async function draftOnlySpeakerIdsTx(tx: TenantTx, eventId: string): Promise<Set<string>> {
+  const rows = await tx
+    .select({ speakerId: sessionSpeakers.speakerId, draft: sessions.draft })
+    .from(sessionSpeakers)
+    .innerJoin(sessions, eq(sessions.id, sessionSpeakers.sessionId))
+    .where(eq(sessions.eventId, eventId));
+  const placed = new Set(rows.filter((r) => !r.draft).map((r) => r.speakerId));
+  return new Set(rows.filter((r) => r.draft && !placed.has(r.speakerId)).map((r) => r.speakerId));
 }
