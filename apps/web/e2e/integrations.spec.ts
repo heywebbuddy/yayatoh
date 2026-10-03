@@ -60,7 +60,13 @@ test.describe('integrations (M6.4a)', () => {
     // (On phones the nav sits in the menu drawer, so look for the link itself.)
     expect(await page.locator(`a[href="/o/${org}/integrations"]`).count()).toBeGreaterThan(0);
     await expect(page.getByRole('heading', { name: 'Demo CRM' })).toBeVisible();
-    await expect(page.getByText('Not connected')).toBeVisible();
+    // M6.4c: Slack is listed too, so the state is read on the demo's own card.
+    await expect(
+      page
+        .getByRole('listitem')
+        .filter({ has: page.getByRole('heading', { name: 'Demo CRM' }) })
+        .getByText('Not connected'),
+    ).toBeVisible();
     await expectAccessibleBothModes(page);
 
     const connection = await connectDemo(page, org);
