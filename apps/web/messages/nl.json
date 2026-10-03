@@ -1743,14 +1743,13 @@
         "back": "Kom hier terug en kies Nu controleren."
       },
       "copyColumn": "Kopiëren",
-      "copyName": "naam van het {type}-record {name}",
-      "copyValue": "waarde van het {type}-record {name}",
+      "copyName": "naam van het {type}-record",
+      "copyValue": "waarde van het {type}-record",
       "copy": "Kopiëren",
       "copied": "Gekopieerd",
       "verify": "We hebben je DNS-records gevonden en verifiëren ze. Controleer over een paar minuten opnieuw.",
       "ssl": "Je domein is geverifieerd. We geven het beveiligde (https-)certificaat uit; dat duurt meestal een paar minuten.",
-      "primary": "{host} is live. Maak het je hoofdadres zodat je links, tickets en e-mails het gebruiken.",
-      "result": "{status} · gecontroleerd {when}"
+      "primary": "{host} is live. Maak het je hoofdadres zodat je links, tickets en e-mails het gebruiken."
     }
   },
   "suspensions": {
@@ -4558,7 +4557,7 @@
     },
     "persona": {
       "explain": "Demo-account: het is ingelogd zonder authenticator, dus je kunt bevestigen zonder code. Dit wordt nooit aangeboden op de live site.",
-      "confirm": "Bevestigen zonder code (demo-account)"
+      "confirm": "Doorgaan zonder code (demo-account)"
     }
   },
   "surveys": {

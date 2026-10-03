@@ -1743,14 +1743,13 @@
         "back": "回到这里并选择“立即检查”。"
       },
       "copyColumn": "复制",
-      "copyName": "{type} 记录 {name} 的名称",
-      "copyValue": "{type} 记录 {name} 的值",
+      "copyName": "{type} 记录的名称",
+      "copyValue": "{type} 记录的值",
       "copy": "复制",
       "copied": "已复制",
       "verify": "我们已找到你的 DNS 记录，正在验证。请几分钟后再检查。",
       "ssl": "你的域名已验证。我们正在签发安全（https）证书，通常需要几分钟。",
-      "primary": "{host} 已生效。将其设为主地址，让你的链接、门票和邮件都使用它。",
-      "result": "{status} · 检查于 {when}"
+      "primary": "{host} 已生效。将其设为主地址，让你的链接、门票和邮件都使用它。"
     }
   },
   "suspensions": {
@@ -4558,7 +4557,7 @@
     },
     "persona": {
       "explain": "演示账号：它登录时未使用身份验证器，因此可以无需验证码确认。正式网站上绝不会提供此选项。",
-      "confirm": "无需验证码确认（演示账号）"
+      "confirm": "无需验证码继续（演示账号）"
     }
   },
   "surveys": {

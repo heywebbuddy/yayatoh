@@ -1743,14 +1743,13 @@
         "back": "Torna qui e seleziona Controlla ora."
       },
       "copyColumn": "Copia",
-      "copyName": "nome del record {type} {name}",
-      "copyValue": "valore del record {type} {name}",
+      "copyName": "nome del record {type}",
+      "copyValue": "valore del record {type}",
       "copy": "Copia",
       "copied": "Copiato",
       "verify": "Abbiamo trovato i tuoi record DNS e li stiamo verificando. Controlla di nuovo tra qualche minuto.",
       "ssl": "Il tuo dominio è verificato. Stiamo emettendo il certificato sicuro (https), di solito in pochi minuti.",
-      "primary": "{host} è attivo. Rendilo principale così i tuoi link, biglietti ed email lo useranno.",
-      "result": "{status} · controllato {when}"
+      "primary": "{host} è attivo. Rendilo principale così i tuoi link, biglietti ed email lo useranno."
     }
   },
   "suspensions": {
@@ -4558,7 +4557,7 @@
     },
     "persona": {
       "explain": "Account demo: ha effettuato l'accesso senza app di autenticazione, quindi puoi confermare senza codice. Non viene mai offerto sul sito reale.",
-      "confirm": "Conferma senza codice (account demo)"
+      "confirm": "Continua senza codice (account demo)"
     }
   },
   "surveys": {

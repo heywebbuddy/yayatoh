@@ -1743,14 +1743,13 @@
         "back": "Revenez ici et sélectionnez Vérifier maintenant."
       },
       "copyColumn": "Copier",
-      "copyName": "nom de l'enregistrement {type} {name}",
-      "copyValue": "valeur de l'enregistrement {type} {name}",
+      "copyName": "nom de l'enregistrement {type}",
+      "copyValue": "valeur de l'enregistrement {type}",
       "copy": "Copier",
       "copied": "Copié",
       "verify": "Nous avons trouvé vos enregistrements DNS et les vérifions. Vérifiez à nouveau dans quelques minutes.",
       "ssl": "Votre domaine est vérifié. Nous émettons son certificat sécurisé (https), ce qui prend généralement quelques minutes.",
-      "primary": "{host} est actif. Faites-en votre domaine principal pour que vos liens, billets et e-mails l’utilisent.",
-      "result": "{status} · vérifié {when}"
+      "primary": "{host} est actif. Faites-en votre domaine principal pour que vos liens, billets et e-mails l’utilisent."
     }
   },
   "suspensions": {
@@ -4558,7 +4557,7 @@
     },
     "persona": {
       "explain": "Compte de démonstration : il s'est connecté sans application d'authentification, vous pouvez donc confirmer sans code. Ce n'est jamais proposé sur le site réel.",
-      "confirm": "Confirmer sans code (compte de démonstration)"
+      "confirm": "Continuer sans code (compte de démonstration)"
     }
   },
   "surveys": {

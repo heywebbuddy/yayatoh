@@ -1743,14 +1743,13 @@
         "back": "Volte aqui e selecione Verificar agora."
       },
       "copyColumn": "Copiar",
-      "copyName": "nome do registro {type} {name}",
-      "copyValue": "valor do registro {type} {name}",
+      "copyName": "nome do registro {type}",
+      "copyValue": "valor do registro {type}",
       "copy": "Copiar",
       "copied": "Copiado",
       "verify": "Encontramos seus registros DNS e estamos verificando-os. Verifique de novo em alguns minutos.",
       "ssl": "Seu domínio está verificado. Estamos emitindo o certificado seguro (https), o que costuma levar alguns minutos.",
-      "primary": "{host} está ativo. Torne-o principal para que seus links, ingressos e e-mails o usem.",
-      "result": "{status} · verificado {when}"
+      "primary": "{host} está ativo. Torne-o principal para que seus links, ingressos e e-mails o usem."
     }
   },
   "suspensions": {
@@ -4558,7 +4557,7 @@
     },
     "persona": {
       "explain": "Conta de demonstração: ela entrou sem autenticador, então você pode confirmar sem código. Isso nunca é oferecido no site real.",
-      "confirm": "Confirmar sem código (conta de demonstração)"
+      "confirm": "Continuar sem código (conta de demonstração)"
     }
   },
   "surveys": {

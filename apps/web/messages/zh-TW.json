@@ -1743,14 +1743,13 @@
         "back": "回到這裡並選擇「立即檢查」。"
       },
       "copyColumn": "複製",
-      "copyName": "{type} 記錄 {name} 的名稱",
-      "copyValue": "{type} 記錄 {name} 的值",
+      "copyName": "{type} 記錄的名稱",
+      "copyValue": "{type} 記錄的值",
       "copy": "複製",
       "copied": "已複製",
       "verify": "我們已找到你的 DNS 記錄，正在驗證。請幾分鐘後再檢查。",
       "ssl": "你的網域已驗證。我們正在簽發安全（https）憑證，通常需要幾分鐘。",
-      "primary": "{host} 已生效。將其設為主要位址，讓你的連結、票券和電子郵件都使用它。",
-      "result": "{status} · 檢查於 {when}"
+      "primary": "{host} 已生效。將其設為主要位址，讓你的連結、票券和電子郵件都使用它。"
     }
   },
   "suspensions": {
@@ -4558,7 +4557,7 @@
     },
     "persona": {
       "explain": "示範帳號：它登入時未使用驗證器，因此可以不用驗證碼確認。正式網站上絕不會提供此選項。",
-      "confirm": "不用驗證碼確認（示範帳號）"
+      "confirm": "不用驗證碼繼續（示範帳號）"
     }
   },
   "surveys": {

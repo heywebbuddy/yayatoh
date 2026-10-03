@@ -1743,14 +1743,13 @@
         "back": "Kommen Sie hierher zurück und wählen Sie „Jetzt prüfen“."
       },
       "copyColumn": "Kopieren",
-      "copyName": "Name des {type}-Eintrags {name}",
-      "copyValue": "Wert des {type}-Eintrags {name}",
+      "copyName": "Name des {type}-Eintrags",
+      "copyValue": "Wert des {type}-Eintrags",
       "copy": "Kopieren",
       "copied": "Kopiert",
       "verify": "Wir haben Ihre DNS-Einträge gefunden und prüfen sie. Prüfen Sie in ein paar Minuten erneut.",
       "ssl": "Ihre Domain ist bestätigt. Wir stellen das sichere (https-)Zertifikat aus, was meist ein paar Minuten dauert.",
-      "primary": "{host} ist aktiv. Machen Sie die Domain zur Hauptadresse, damit Ihre Links, Tickets und E-Mails sie verwenden.",
-      "result": "{status} · geprüft {when}"
+      "primary": "{host} ist aktiv. Machen Sie die Domain zur Hauptadresse, damit Ihre Links, Tickets und E-Mails sie verwenden."
     }
   },
   "suspensions": {
@@ -4558,7 +4557,7 @@
     },
     "persona": {
       "explain": "Demokonto: Es wurde ohne Authentifizierungs-App angemeldet, daher können Sie ohne Code bestätigen. Auf der Live-Website wird das nie angeboten.",
-      "confirm": "Ohne Code bestätigen (Demokonto)"
+      "confirm": "Ohne Code fortfahren (Demokonto)"
     }
   },
   "surveys": {

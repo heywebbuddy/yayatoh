@@ -1743,14 +1743,13 @@
         "back": "Come back here and select Check now."
       },
       "copyColumn": "Copy",
-      "copyName": "name of the {type} record {name}",
-      "copyValue": "value of the {type} record {name}",
+      "copyName": "name of the {type} record",
+      "copyValue": "value of the {type} record",
       "copy": "Copy",
       "copied": "Copied",
       "verify": "We found your DNS records and are verifying them. Check again in a few minutes.",
       "ssl": "Your domain is verified. We're issuing its secure (https) certificate, which usually takes a few minutes.",
-      "primary": "{host} is live. Make it primary so your links, tickets and emails use it.",
-      "result": "{status} · checked {when}"
+      "primary": "{host} is live. Make it primary so your links, tickets and emails use it."
     }
   },
   "suspensions": {
@@ -4558,7 +4557,7 @@
     },
     "persona": {
       "explain": "Demo account: it signed in without an authenticator, so you can confirm without a code. This is never offered on the live site.",
-      "confirm": "Confirm without a code (demo account)"
+      "confirm": "Continue without a code (demo account)"
     }
   },
   "surveys": {

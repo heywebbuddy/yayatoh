@@ -40,6 +40,10 @@ export async function ConnectWizard({
 }) {
   const t = await getTranslations('domains');
   const step = wizardStep(d);
+  // Copy buttons name the record by its type ("TXT"), numbered only when a type repeats; the
+  // record's name stays out of the label so each table cell keeps one accessible name.
+  const recordLabel = (r: { type: string }, i: number) =>
+    d.records.filter((x) => x.type === r.type).length > 1 ? `${r.type} ${i + 1}` : r.type;
   const check = canManage ? (
     <form action={checkDomainAction.bind(null, org, d.id)}>
       <Button type="submit" size="sm" variant={step === 'primary' ? 'secondary' : 'primary'}>
@@ -87,7 +91,7 @@ export async function ConnectWizard({
                   </tr>
                 </thead>
                 <tbody>
-                  {d.records.map((r) => (
+                  {d.records.map((r, i) => (
                     <tr key={`${r.type}:${r.name}`} className="border-t border-line">
                       <td className="py-1.5 pe-4 align-top font-mono">{r.type}</td>
                       <td className="py-1.5 pe-4 align-top font-mono break-all" dir="ltr">
@@ -100,11 +104,11 @@ export async function ConnectWizard({
                         <span className="flex flex-wrap gap-2">
                           <CopyValue
                             value={r.name}
-                            label={t('wizard.copyName', { type: r.type, name: r.name })}
+                            label={t('wizard.copyName', { type: recordLabel(r, i) })}
                           />
                           <CopyValue
                             value={r.value}
-                            label={t('wizard.copyValue', { type: r.type, name: r.name })}
+                            label={t('wizard.copyValue', { type: recordLabel(r, i) })}
                           />
                         </span>
                       </td>
@@ -135,7 +139,7 @@ export async function ConnectWizard({
         {check}
         {lastChecked ? (
           <span className="text-caption text-ink-2" aria-live="polite">
-            {t('wizard.result', { status: t(`status.${d.status}`), when: lastChecked })}
+            {t('lastChecked', { when: lastChecked })}
           </span>
         ) : null}
       </div>
