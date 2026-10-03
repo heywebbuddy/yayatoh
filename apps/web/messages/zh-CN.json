@@ -214,6 +214,9 @@
         "request-code": "隐私请求验证码",
         "archive-ready": "个人数据存档已就绪",
         "erasure-done": "删除收据"
+      },
+      "cms": {
+        "contact_message": "来自联系页面的消息"
       }
     },
     "status": {
@@ -380,7 +383,9 @@
     "plan": "套餐与账单",
     "webhooks": "Webhook",
     "sandboxes": "沙盒",
-    "notifications": "通知"
+    "notifications": "通知",
+    "mediaLibrary": "媒体库",
+    "storage": "存储空间"
   },
   "vocab": {
     "attendee": "参会者",
@@ -4568,7 +4573,8 @@
       "logo": "徽标",
       "speaker": "演讲者照片",
       "exhibitor": "参展商标志",
-      "sponsor": "赞助商标志"
+      "sponsor": "赞助商标志",
+      "library": "上传到媒体库"
     },
     "hint": {
       "cover": "显示在活动页面顶部、活动卡片和链接预览中。",
@@ -4577,7 +4583,8 @@
       "logo": "显示在控制台、你的主办方页面和网站以及邮件中。",
       "speaker": "显示在活动页面、演讲者页面以及议程中其场次旁边。",
       "exhibitor": "在活动页面上与参展商一起显示。SVG 标志在任何尺寸下都保持清晰。",
-      "sponsor": "显示在活动页面上赞助商所在的级别中（级别越高标志越大）。SVG 标志保持清晰。"
+      "sponsor": "显示在活动页面上赞助商所在的级别中（级别越高标志越大）。SVG 标志保持清晰。",
+      "library": "在这里上传的图片可用于活动、场地、演讲者和你的标志，无需再次上传。"
     },
     "empty": {
       "cover": "还没有封面图片。",
@@ -4586,7 +4593,8 @@
       "logo": "还没有徽标。",
       "speaker": "还没有照片。",
       "exhibitor": "还没有标志。",
-      "sponsor": "还没有标志。"
+      "sponsor": "还没有标志。",
+      "library": "媒体库中还没有图片。"
     },
     "count": "{count, plural, other {# 张}}，共 {max} 张",
     "listLabel": "当前图片",
@@ -5206,7 +5214,8 @@
     "tabsLabel": "内容类型",
     "tabs": {
       "post": "博客文章",
-      "page": "页面"
+      "page": "页面",
+      "contact": "联系页面"
     },
     "kind": {
       "post": "博客文章",
@@ -5289,7 +5298,8 @@
     "emptyDescription": "{org} 还没有在这里发布任何内容。",
     "posts": "文章",
     "by": "作者：{name}",
-    "allPosts": "全部文章"
+    "allPosts": "全部文章",
+    "contact": "联系我们"
   },
   "reviews": {
     "ratingLabel": "评分 {rating}/5",
@@ -15255,5 +15265,191 @@
       "step2": "添加代码及折扣，也可以设置次数上限和日期。",
       "step3": "分享代码。买家在结账时输入，每次使用都会被记录。"
     }
+  },
+  "mediaLibrary": {
+    "title": "媒体库",
+    "description": "你的组织上传过的所有图片。无需再次上传即可在任何地方使用。",
+    "upload": "上传图片",
+    "uploadTitle": "上传到媒体库",
+    "summaryLabel": "媒体库概况",
+    "summary": "图片：{images} · 重复使用：{reuses} · 存储：{used} / {limit}",
+    "storageLink": "查看存储空间",
+    "usedPercent": "已使用 {percent}% 的存储空间",
+    "filtersLabel": "显示",
+    "filters": {
+      "all": "所有图片",
+      "unused": "未在任何地方使用"
+    },
+    "emptyTitle": "还没有图片",
+    "emptyDescription": "把标志、场地照片和活动设计图上传一次，之后可在任何图片字段中选择。",
+    "emptyViewer": "你的团队上传的图片会显示在这里。",
+    "emptyUnusedTitle": "所有图片都在使用中",
+    "emptyUnusedDescription": "不再在任何地方使用的图片会显示在这里，可以删除。",
+    "findOwner": "查看谁可以上传",
+    "listLabel": "媒体库图片",
+    "decorativeName": "装饰性图片",
+    "meta": "{size} · {width} × {height} 像素 · {type}",
+    "usedIn": "使用位置",
+    "usedInFor": "{name} 的使用位置",
+    "unused": "未使用",
+    "places": {
+      "event": "活动：{name}",
+      "venue": "场地：{name}",
+      "org": "组织标志",
+      "speaker": "演讲者：{name}",
+      "exhibitor": "参展商：{name}",
+      "sponsor": "赞助商：{name}",
+      "library": "媒体库"
+    },
+    "delete": "删除",
+    "deleteFor": "删除 {name}",
+    "confirmDelete": "永久删除这张图片？它没有在任何地方使用。",
+    "deleteForGood": "永久删除",
+    "cancel": "取消",
+    "inUseNote": "使用中：删除前请先从使用它的位置移除。",
+    "picker": {
+      "open": "从媒体库选择",
+      "hint": "使用组织已有的图片，不会再次上传。",
+      "loading": "正在加载媒体库…",
+      "empty": "媒体库中还没有图片。",
+      "openLibrary": "打开媒体库",
+      "choose": "选择一张图片",
+      "noAlt": "装饰性图片",
+      "alt": "此位置的替代文本",
+      "altHint": "为看不到图片的人描述图片内容。",
+      "altRequired": "请描述图片，或将其标记为装饰性图片。",
+      "decorative": "装饰性（无需描述）",
+      "use": "使用这张图片",
+      "placed": "已添加图片。",
+      "alreadyHere": "这张图片已经在这里了。",
+      "noChoice": "请先选择一张图片。"
+    }
+  },
+  "storage": {
+    "title": "存储空间",
+    "description": "你的图片占用了多少空间。存储由 Yayatoh 管理，无需连接任何服务。",
+    "openLibrary": "打开媒体库",
+    "summaryLabel": "存储概况",
+    "used": "已用",
+    "ofDefault": "共 {limit}（已包含）",
+    "ofCustom": "共 {limit}（你的套餐）",
+    "usedPercent": "已使用 {percent}% 的存储空间",
+    "free": "可用",
+    "freeSub": "重复使用的图片不占用额外空间。",
+    "images": "图片",
+    "imagesSub": "已存储文件：{files} · 重复使用：{reuses}",
+    "nearlyFull": "存储空间即将用完。请删除不再使用的图片，或联系 Yayatoh 支持获取更多空间。",
+    "byKindTitle": "空间占用情况",
+    "kind": "类型",
+    "imagesCol": "图片",
+    "size": "大小",
+    "share": "占比",
+    "shareOf": "{kind}：占已用空间的 {percent}%",
+    "kinds": {
+      "events": "活动图片",
+      "venues": "场地照片",
+      "program": "演讲者、参展商和赞助商",
+      "logo": "组织标志",
+      "library": "仅在媒体库中"
+    },
+    "portalFiles": "演讲者门户的文档单独存储，不计入配额：{files} 个文件，{size}。",
+    "largestTitle": "最大的图片",
+    "emptyTitle": "还没有图片",
+    "emptyDescription": "你的图片及其占用的空间会显示在这里。",
+    "emptyAction": "上传图片",
+    "image": "图片",
+    "decorative": "装饰性图片",
+    "usedIn": "使用位置",
+    "unused": "未使用",
+    "places": "使用位置：{count}",
+    "managedNote": "需要更多空间？请联系 Yayatoh 支持。你永远不需要自己的存储或邮箱账户。"
+  },
+  "emailIdentity": {
+    "title": "你的邮件显示方式",
+    "description": "在组织发送的每封邮件（门票、提醒、营销活动和消息）中，收件人看到的名称以及回复发往的地址。",
+    "formLabel": "发件人名称和回复地址",
+    "fromName": "发件人名称",
+    "fromNameHint": "留空则使用 {org}。不能包含网址或邮箱地址。",
+    "replyTo": "回复地址（Reply-To）",
+    "replyToHint": "回复会发到这里。留空则回复发往发件地址。",
+    "errors": {
+      "too_long": "最多 80 个字符。",
+      "has_address": "名称中不能包含邮箱地址或 @ < > \" 字符。",
+      "has_domain": "名称不能看起来像网址（例如 example.com）。",
+      "invalid_email": "请输入类似 name@example.com 的地址。",
+      "platform_address": "请使用你自己的地址，而不是 Yayatoh 的地址。"
+    },
+    "previewTitle": "收件箱中显示为",
+    "previewReplyTo": "回复发往 {address}",
+    "previewNoReplyTo": "回复发往发件地址",
+    "saved": "已保存。之后的每封新邮件都会使用这些设置。",
+    "fixErrors": "请检查标出的字段。",
+    "done": {
+      "forbidden": "只有所有者和管理员可以更改此项。",
+      "internal": "出了点问题，请重试。"
+    },
+    "save": "保存",
+    "readOnly": "只有所有者和管理员可以更改此项。"
+  },
+  "orgContact": {
+    "title": "联系 {org}",
+    "defaultIntro": "给 {org} 发送消息，对方会通过邮件回复你。",
+    "formLabel": "发给 {org} 的消息",
+    "honeypot": "请将此字段留空",
+    "fields": {
+      "name": "你的姓名",
+      "email": "你的邮箱",
+      "message": "消息"
+    },
+    "emailHint": "方便对方回复你。",
+    "messageHint": "至少 10 个字符。",
+    "consent": "我同意 {org} 使用我的姓名和邮箱回复此消息。",
+    "errors": {
+      "name": "请输入你的姓名。",
+      "email": "请输入类似 name@example.com 的地址。",
+      "message": "请至少写 10 个字符。",
+      "consent": "请勾选此项，以便对方回复你。",
+      "human": "请确认你是真人。"
+    },
+    "rateLimited": "消息太多，请在 {minutes} 分钟后重试。",
+    "tooFast": "提交得太快了，请稍等片刻再发送。",
+    "expired": "此页面打开时间过长，请刷新后重新发送。",
+    "fixErrors": "请检查标出的字段。",
+    "submit": "发送消息",
+    "sentTitle": "消息已发送",
+    "sentBody": "谢谢！{org} 会回复到你的邮箱。"
+  },
+  "orgContactConsole": {
+    "title": "联系页面",
+    "description": "你网站上的联系表单。消息会进入你的通知；你自己的邮箱地址永远不会显示。",
+    "settingsTitle": "联系页面",
+    "settingsLabel": "联系页面设置",
+    "enabled": "在你的网站上显示联系页面",
+    "enabledHint": "在网站菜单中添加“联系我们”。",
+    "intro": "表单上方的文字",
+    "introHint": "可选，最多 500 个字符。",
+    "introError": "最多 500 个字符。",
+    "savedOn": "已保存。联系页面已上线。",
+    "savedOff": "已保存。联系页面已关闭。",
+    "save": "保存",
+    "liveAt": "上线地址",
+    "offNote": "页面已关闭：访客无法发送消息。",
+    "privacyNote": "访客同意你使用其姓名和邮箱进行回复。垃圾消息在到达你之前会被过滤。",
+    "messagesTitle": "消息",
+    "newCount": "新消息：{count}",
+    "messagesHidden": "消息包含访客信息：只有编辑网站的人可以查看。",
+    "emptyTitle": "还没有消息",
+    "emptyOn": "来自联系页面的消息会显示在这里和你的通知中。",
+    "emptyOff": "开启联系页面即可接收消息。",
+    "openPage": "打开联系页面",
+    "turnOn": "开启联系页面",
+    "from": "发件人",
+    "message": "消息",
+    "received": "收到时间",
+    "status": "状态",
+    "statusNew": "新",
+    "statusHandled": "已处理",
+    "markHandled": "标记为已处理",
+    "markHandledFor": "将 {name} 的消息标记为已处理"
   }
 }

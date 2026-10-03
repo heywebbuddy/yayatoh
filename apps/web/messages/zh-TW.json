@@ -214,6 +214,9 @@
         "request-code": "隱私請求驗證碼",
         "archive-ready": "個人資料封存檔已就緒",
         "erasure-done": "刪除收據"
+      },
+      "cms": {
+        "contact_message": "來自聯絡頁面的訊息"
       }
     },
     "status": {
@@ -380,7 +383,9 @@
     "plan": "方案與帳單",
     "webhooks": "Webhook",
     "sandboxes": "沙盒",
-    "notifications": "通知"
+    "notifications": "通知",
+    "mediaLibrary": "媒體庫",
+    "storage": "儲存空間"
   },
   "vocab": {
     "attendee": "參加者",
@@ -4568,7 +4573,8 @@
       "logo": "標誌",
       "speaker": "講者照片",
       "exhibitor": "參展商標誌",
-      "sponsor": "贊助商標誌"
+      "sponsor": "贊助商標誌",
+      "library": "上傳到媒體庫"
     },
     "hint": {
       "cover": "顯示在活動頁面頂端、活動卡片和連結預覽中。",
@@ -4577,7 +4583,8 @@
       "logo": "顯示在主控台、你的主辦單位頁面和網站，以及電子郵件中。",
       "speaker": "顯示在活動頁面、講者頁面以及議程中其場次旁邊。",
       "exhibitor": "在活動頁面上與參展商一起顯示。SVG 標誌在任何尺寸下都保持清晰。",
-      "sponsor": "顯示在活動頁面上贊助商所在的級別中（級別越高標誌越大）。SVG 標誌保持清晰。"
+      "sponsor": "顯示在活動頁面上贊助商所在的級別中（級別越高標誌越大）。SVG 標誌保持清晰。",
+      "library": "在這裡上傳的圖片可用於活動、場地、講者和你的標誌，不必再次上傳。"
     },
     "empty": {
       "cover": "還沒有封面圖片。",
@@ -4586,7 +4593,8 @@
       "logo": "還沒有標誌。",
       "speaker": "尚無照片。",
       "exhibitor": "尚無標誌。",
-      "sponsor": "尚無標誌。"
+      "sponsor": "尚無標誌。",
+      "library": "媒體庫中還沒有圖片。"
     },
     "count": "{count, plural, other {# 張}}，共 {max} 張",
     "listLabel": "目前的圖片",
@@ -5206,7 +5214,8 @@
     "tabsLabel": "內容類型",
     "tabs": {
       "post": "部落格文章",
-      "page": "頁面"
+      "page": "頁面",
+      "contact": "聯絡頁面"
     },
     "kind": {
       "post": "部落格文章",
@@ -5289,7 +5298,8 @@
     "emptyDescription": "{org} 尚未在此發布任何內容。",
     "posts": "文章",
     "by": "作者：{name}",
-    "allPosts": "所有文章"
+    "allPosts": "所有文章",
+    "contact": "聯絡我們"
   },
   "reviews": {
     "ratingLabel": "評分 {rating}/5",
@@ -15255,5 +15265,191 @@
       "step2": "新增代碼及折扣，也可以設定次數上限與日期。",
       "step3": "分享代碼。買家在結帳時輸入，每次使用都會被記錄。"
     }
+  },
+  "mediaLibrary": {
+    "title": "媒體庫",
+    "description": "你的組織上傳過的所有圖片。不必再次上傳即可在任何地方使用。",
+    "upload": "上傳圖片",
+    "uploadTitle": "上傳到媒體庫",
+    "summaryLabel": "媒體庫概況",
+    "summary": "圖片：{images} · 重複使用：{reuses} · 儲存：{used} / {limit}",
+    "storageLink": "查看儲存空間",
+    "usedPercent": "已使用 {percent}% 的儲存空間",
+    "filtersLabel": "顯示",
+    "filters": {
+      "all": "所有圖片",
+      "unused": "未在任何地方使用"
+    },
+    "emptyTitle": "還沒有圖片",
+    "emptyDescription": "把標誌、場地照片和活動設計圖上傳一次，之後可在任何圖片欄位中選擇。",
+    "emptyViewer": "你的團隊上傳的圖片會顯示在這裡。",
+    "emptyUnusedTitle": "所有圖片都在使用中",
+    "emptyUnusedDescription": "不再在任何地方使用的圖片會顯示在這裡，可以刪除。",
+    "findOwner": "查看誰可以上傳",
+    "listLabel": "媒體庫圖片",
+    "decorativeName": "裝飾性圖片",
+    "meta": "{size} · {width} × {height} 像素 · {type}",
+    "usedIn": "使用位置",
+    "usedInFor": "{name} 的使用位置",
+    "unused": "未使用",
+    "places": {
+      "event": "活動：{name}",
+      "venue": "場地：{name}",
+      "org": "組織標誌",
+      "speaker": "講者：{name}",
+      "exhibitor": "參展商：{name}",
+      "sponsor": "贊助商：{name}",
+      "library": "媒體庫"
+    },
+    "delete": "刪除",
+    "deleteFor": "刪除 {name}",
+    "confirmDelete": "永久刪除這張圖片？它沒有在任何地方使用。",
+    "deleteForGood": "永久刪除",
+    "cancel": "取消",
+    "inUseNote": "使用中：刪除前請先從使用它的位置移除。",
+    "picker": {
+      "open": "從媒體庫選擇",
+      "hint": "使用組織已有的圖片，不會再次上傳。",
+      "loading": "正在載入媒體庫…",
+      "empty": "媒體庫中還沒有圖片。",
+      "openLibrary": "開啟媒體庫",
+      "choose": "選擇一張圖片",
+      "noAlt": "裝飾性圖片",
+      "alt": "此位置的替代文字",
+      "altHint": "為看不到圖片的人描述圖片內容。",
+      "altRequired": "請描述圖片，或將其標記為裝飾性圖片。",
+      "decorative": "裝飾性（不需描述）",
+      "use": "使用這張圖片",
+      "placed": "已新增圖片。",
+      "alreadyHere": "這張圖片已經在這裡了。",
+      "noChoice": "請先選擇一張圖片。"
+    }
+  },
+  "storage": {
+    "title": "儲存空間",
+    "description": "你的圖片佔用了多少空間。儲存由 Yayatoh 管理，不需要連接任何服務。",
+    "openLibrary": "開啟媒體庫",
+    "summaryLabel": "儲存概況",
+    "used": "已用",
+    "ofDefault": "共 {limit}（已包含）",
+    "ofCustom": "共 {limit}（你的方案）",
+    "usedPercent": "已使用 {percent}% 的儲存空間",
+    "free": "可用",
+    "freeSub": "重複使用的圖片不會佔用額外空間。",
+    "images": "圖片",
+    "imagesSub": "已儲存檔案：{files} · 重複使用：{reuses}",
+    "nearlyFull": "儲存空間快滿了。請刪除不再使用的圖片，或聯絡 Yayatoh 支援取得更多空間。",
+    "byKindTitle": "空間使用情況",
+    "kind": "類型",
+    "imagesCol": "圖片",
+    "size": "大小",
+    "share": "比例",
+    "shareOf": "{kind}：佔已用空間的 {percent}%",
+    "kinds": {
+      "events": "活動圖片",
+      "venues": "場地照片",
+      "program": "講者、參展商和贊助商",
+      "logo": "組織標誌",
+      "library": "僅在媒體庫中"
+    },
+    "portalFiles": "講者入口的文件另外儲存，不計入配額：{files} 個檔案，{size}。",
+    "largestTitle": "最大的圖片",
+    "emptyTitle": "還沒有圖片",
+    "emptyDescription": "你的圖片及其佔用的空間會顯示在這裡。",
+    "emptyAction": "上傳圖片",
+    "image": "圖片",
+    "decorative": "裝飾性圖片",
+    "usedIn": "使用位置",
+    "unused": "未使用",
+    "places": "使用位置：{count}",
+    "managedNote": "需要更多空間？請聯絡 Yayatoh 支援。你永遠不需要自己的儲存或郵件帳號。"
+  },
+  "emailIdentity": {
+    "title": "你的郵件顯示方式",
+    "description": "在組織寄出的每封郵件（票券、提醒、行銷活動和訊息）中，收件人看到的名稱以及回覆寄往的地址。",
+    "formLabel": "寄件者名稱和回覆地址",
+    "fromName": "寄件者名稱",
+    "fromNameHint": "留空則使用 {org}。不能包含網址或電子郵件地址。",
+    "replyTo": "回覆地址（Reply-To）",
+    "replyToHint": "回覆會寄到這裡。留空則回覆寄往寄件地址。",
+    "errors": {
+      "too_long": "最多 80 個字元。",
+      "has_address": "名稱中不能包含電子郵件地址或 @ < > \" 字元。",
+      "has_domain": "名稱不能看起來像網址（例如 example.com）。",
+      "invalid_email": "請輸入類似 name@example.com 的地址。",
+      "platform_address": "請使用你自己的地址，而不是 Yayatoh 的地址。"
+    },
+    "previewTitle": "收件匣中顯示為",
+    "previewReplyTo": "回覆寄往 {address}",
+    "previewNoReplyTo": "回覆寄往寄件地址",
+    "saved": "已儲存。之後的每封新郵件都會使用這些設定。",
+    "fixErrors": "請檢查標示的欄位。",
+    "done": {
+      "forbidden": "只有擁有者和管理員可以變更此項。",
+      "internal": "發生問題，請再試一次。"
+    },
+    "save": "儲存",
+    "readOnly": "只有擁有者和管理員可以變更此項。"
+  },
+  "orgContact": {
+    "title": "聯絡 {org}",
+    "defaultIntro": "傳送訊息給 {org}，對方會以電子郵件回覆你。",
+    "formLabel": "傳給 {org} 的訊息",
+    "honeypot": "請將此欄位留空",
+    "fields": {
+      "name": "你的姓名",
+      "email": "你的電子郵件",
+      "message": "訊息"
+    },
+    "emailHint": "方便對方回覆你。",
+    "messageHint": "至少 10 個字元。",
+    "consent": "我同意 {org} 使用我的姓名和電子郵件回覆此訊息。",
+    "errors": {
+      "name": "請輸入你的姓名。",
+      "email": "請輸入類似 name@example.com 的地址。",
+      "message": "請至少寫 10 個字元。",
+      "consent": "請勾選此項，以便對方回覆你。",
+      "human": "請確認你是真人。"
+    },
+    "rateLimited": "訊息太多，請在 {minutes} 分鐘後再試。",
+    "tooFast": "送出得太快了，請稍候片刻再傳送。",
+    "expired": "此頁面開啟時間過長，請重新整理後再傳送。",
+    "fixErrors": "請檢查標示的欄位。",
+    "submit": "傳送訊息",
+    "sentTitle": "訊息已傳送",
+    "sentBody": "謝謝！{org} 會回覆到你的電子郵件。"
+  },
+  "orgContactConsole": {
+    "title": "聯絡頁面",
+    "description": "你網站上的聯絡表單。訊息會進入你的通知；你自己的電子郵件地址永遠不會顯示。",
+    "settingsTitle": "聯絡頁面",
+    "settingsLabel": "聯絡頁面設定",
+    "enabled": "在你的網站上顯示聯絡頁面",
+    "enabledHint": "在網站選單中加入「聯絡我們」。",
+    "intro": "表單上方的文字",
+    "introHint": "選填，最多 500 個字元。",
+    "introError": "最多 500 個字元。",
+    "savedOn": "已儲存。聯絡頁面已上線。",
+    "savedOff": "已儲存。聯絡頁面已關閉。",
+    "save": "儲存",
+    "liveAt": "上線網址",
+    "offNote": "頁面已關閉：訪客無法傳送訊息。",
+    "privacyNote": "訪客同意你使用其姓名和電子郵件回覆。垃圾訊息在送達你之前就會被過濾。",
+    "messagesTitle": "訊息",
+    "newCount": "新訊息：{count}",
+    "messagesHidden": "訊息包含訪客資料：只有編輯網站的人可以查看。",
+    "emptyTitle": "還沒有訊息",
+    "emptyOn": "來自聯絡頁面的訊息會顯示在這裡和你的通知中。",
+    "emptyOff": "開啟聯絡頁面即可接收訊息。",
+    "openPage": "開啟聯絡頁面",
+    "turnOn": "開啟聯絡頁面",
+    "from": "寄件者",
+    "message": "訊息",
+    "received": "收到時間",
+    "status": "狀態",
+    "statusNew": "新",
+    "statusHandled": "已處理",
+    "markHandled": "標記為已處理",
+    "markHandledFor": "將 {name} 的訊息標記為已處理"
   }
 }

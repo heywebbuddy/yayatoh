@@ -214,6 +214,9 @@
         "request-code": "Code de demande de confidentialité",
         "archive-ready": "Archive de données personnelles prête",
         "erasure-done": "Reçu d’effacement"
+      },
+      "cms": {
+        "contact_message": "Message de la page de contact"
       }
     },
     "status": {
@@ -380,7 +383,9 @@
     "plan": "Forfait et facturation",
     "webhooks": "Webhooks",
     "sandboxes": "Bacs à sable",
-    "notifications": "Notifications"
+    "notifications": "Notifications",
+    "mediaLibrary": "Médiathèque",
+    "storage": "Stockage"
   },
   "vocab": {
     "attendee": "Participant",
@@ -4568,7 +4573,8 @@
       "logo": "Logo",
       "speaker": "Photo de l’intervenant",
       "exhibitor": "Logo de l’exposant",
-      "sponsor": "Logo du sponsor"
+      "sponsor": "Logo du sponsor",
+      "library": "Importer dans la médiathèque"
     },
     "hint": {
       "cover": "Affichée en haut de la page de l'événement, sur les cartes d'événements et dans les aperçus de liens.",
@@ -4577,7 +4583,8 @@
       "logo": "Affiché dans la console, sur votre page et votre site d'organisateur, et dans les e-mails.",
       "speaker": "Affichée sur la page de l’événement, la page de l’intervenant et à côté de ses sessions dans le programme.",
       "exhibitor": "Affiché avec l’exposant sur la page de l’événement. Les logos SVG restent nets à toutes les tailles.",
-      "sponsor": "Affiché dans le niveau du sponsor sur la page de l’événement (les niveaux supérieurs ont des logos plus grands). Les logos SVG restent nets."
+      "sponsor": "Affiché dans le niveau du sponsor sur la page de l’événement (les niveaux supérieurs ont des logos plus grands). Les logos SVG restent nets.",
+      "library": "Les images importées ici peuvent servir pour les événements, les lieux, les intervenants et votre logo sans être importées à nouveau."
     },
     "empty": {
       "cover": "Pas encore d’image de couverture.",
@@ -4586,7 +4593,8 @@
       "logo": "Pas encore de logo.",
       "speaker": "Pas encore de photo.",
       "exhibitor": "Pas encore de logo.",
-      "sponsor": "Pas encore de logo."
+      "sponsor": "Pas encore de logo.",
+      "library": "Aucune image dans la médiathèque pour l’instant."
     },
     "count": "{count, plural, one {# image} other {# images}} sur {max}",
     "listLabel": "Images actuelles",
@@ -5206,7 +5214,8 @@
     "tabsLabel": "Type de contenu",
     "tabs": {
       "post": "Articles de blog",
-      "page": "Pages"
+      "page": "Pages",
+      "contact": "Page de contact"
     },
     "kind": {
       "post": "Article de blog",
@@ -5289,7 +5298,8 @@
     "emptyDescription": "{org} n’a encore rien publié ici.",
     "posts": "Articles",
     "by": "par {name}",
-    "allPosts": "Tous les articles"
+    "allPosts": "Tous les articles",
+    "contact": "Contact"
   },
   "reviews": {
     "ratingLabel": "Noté {rating} sur 5",
@@ -15255,5 +15265,191 @@
       "step2": "Ajoutez un code avec sa remise et, si vous le souhaitez, une limite et des dates.",
       "step3": "Partagez le code. Les acheteurs le saisissent au paiement et chaque utilisation est comptée."
     }
+  },
+  "mediaLibrary": {
+    "title": "Médiathèque",
+    "description": "Toutes les images importées par votre organisation. Utilisez-les partout sans les importer à nouveau.",
+    "upload": "Importer des images",
+    "uploadTitle": "Importer dans la médiathèque",
+    "summaryLabel": "Résumé de la médiathèque",
+    "summary": "Images : {images} · Réutilisations : {reuses} · Stockage : {used} sur {limit}",
+    "storageLink": "Voir le stockage",
+    "usedPercent": "{percent} % du stockage utilisé",
+    "filtersLabel": "Afficher",
+    "filters": {
+      "all": "Toutes les images",
+      "unused": "Utilisées nulle part"
+    },
+    "emptyTitle": "Aucune image pour l’instant",
+    "emptyDescription": "Importez une fois vos logos, photos de lieux et visuels d’événements, puis choisissez-les depuis n’importe quel champ d’image.",
+    "emptyViewer": "Les images importées par votre équipe apparaîtront ici.",
+    "emptyUnusedTitle": "Toutes les images sont utilisées",
+    "emptyUnusedDescription": "Les images que vous n’utilisez plus nulle part apparaîtront ici, prêtes à être supprimées.",
+    "findOwner": "Voir qui peut importer",
+    "listLabel": "Images de la médiathèque",
+    "decorativeName": "Image décorative",
+    "meta": "{size} · {width} × {height} px · {type}",
+    "usedIn": "Utilisée dans",
+    "usedInFor": "Où {name} est utilisée",
+    "unused": "Non utilisée",
+    "places": {
+      "event": "Événement : {name}",
+      "venue": "Lieu : {name}",
+      "org": "Logo de l’organisation",
+      "speaker": "Intervenant : {name}",
+      "exhibitor": "Exposant : {name}",
+      "sponsor": "Sponsor : {name}",
+      "library": "Médiathèque"
+    },
+    "delete": "Supprimer",
+    "deleteFor": "Supprimer {name}",
+    "confirmDelete": "Supprimer définitivement cette image ? Elle n’est utilisée nulle part.",
+    "deleteForGood": "Supprimer définitivement",
+    "cancel": "Annuler",
+    "inUseNote": "Utilisée : retirez-la de là où elle sert avant de la supprimer.",
+    "picker": {
+      "open": "Choisir dans la médiathèque",
+      "hint": "Utilisez une image que votre organisation possède déjà. Rien n’est importé à nouveau.",
+      "loading": "Chargement de la médiathèque…",
+      "empty": "La médiathèque ne contient encore aucune image.",
+      "openLibrary": "Ouvrir la médiathèque",
+      "choose": "Choisissez une image",
+      "noAlt": "Image décorative",
+      "alt": "Texte alternatif pour cet emplacement",
+      "altHint": "Décrivez l’image pour les personnes qui ne peuvent pas la voir.",
+      "altRequired": "Décrivez l’image ou marquez-la comme décorative.",
+      "decorative": "Décorative (aucune description nécessaire)",
+      "use": "Utiliser cette image",
+      "placed": "Image ajoutée.",
+      "alreadyHere": "Cette image est déjà ici.",
+      "noChoice": "Choisissez d’abord une image."
+    }
+  },
+  "storage": {
+    "title": "Stockage",
+    "description": "L’espace utilisé par vos images. Le stockage est géré par Yayatoh : il n’y a rien à connecter.",
+    "openLibrary": "Ouvrir la médiathèque",
+    "summaryLabel": "Résumé du stockage",
+    "used": "Utilisé",
+    "ofDefault": "sur {limit} inclus",
+    "ofCustom": "sur {limit} (votre offre)",
+    "usedPercent": "{percent} % du stockage utilisé",
+    "free": "Libre",
+    "freeSub": "Les images réutilisées ne prennent pas de place en plus.",
+    "images": "Images",
+    "imagesSub": "Fichiers stockés : {files} · Réutilisations : {reuses}",
+    "nearlyFull": "Le stockage est presque plein. Supprimez les images inutilisées ou contactez le support Yayatoh pour plus d’espace.",
+    "byKindTitle": "Ce qui l’occupe",
+    "kind": "Type",
+    "imagesCol": "Images",
+    "size": "Taille",
+    "share": "Part",
+    "shareOf": "{kind} : {percent} % du stockage utilisé",
+    "kinds": {
+      "events": "Images d’événements",
+      "venues": "Photos de lieux",
+      "program": "Intervenants, exposants et sponsors",
+      "logo": "Logo de l’organisation",
+      "library": "Médiathèque seule"
+    },
+    "portalFiles": "Les documents du portail intervenants sont stockés à part et ne comptent pas : {files} fichiers, {size}.",
+    "largestTitle": "Plus grandes images",
+    "emptyTitle": "Aucune image pour l’instant",
+    "emptyDescription": "Vos images et l’espace qu’elles occupent apparaîtront ici.",
+    "emptyAction": "Importer des images",
+    "image": "Image",
+    "decorative": "Image décorative",
+    "usedIn": "Utilisée dans",
+    "unused": "Non utilisée",
+    "places": "Emplacements : {count}",
+    "managedNote": "Besoin de plus d’espace ? Contactez le support Yayatoh. Vous n’avez jamais besoin de vos propres comptes de stockage ou d’e-mail."
+  },
+  "emailIdentity": {
+    "title": "L’apparence de vos e-mails",
+    "description": "Le nom que les gens voient et l’adresse où vont leurs réponses, sur chaque e-mail envoyé par votre organisation : billets, rappels, campagnes et messages.",
+    "formLabel": "Nom d’expéditeur et Reply-To",
+    "fromName": "Nom d’expéditeur",
+    "fromNameHint": "Laissez vide pour utiliser {org}. Pas d’adresse web ni e-mail.",
+    "replyTo": "Adresse de réponse (Reply-To)",
+    "replyToHint": "Les réponses arrivent ici. Laissez vide pour les recevoir à l’adresse d’expédition.",
+    "errors": {
+      "too_long": "80 caractères au maximum.",
+      "has_address": "Un nom ne peut pas contenir d’adresse e-mail ni les caractères @ < > \".",
+      "has_domain": "Un nom ne peut pas ressembler à une adresse web (comme example.com).",
+      "invalid_email": "Saisissez une adresse comme nom@example.com.",
+      "platform_address": "Utilisez votre propre adresse, pas une adresse Yayatoh."
+    },
+    "previewTitle": "Les boîtes de réception affichent",
+    "previewReplyTo": "Les réponses vont à {address}",
+    "previewNoReplyTo": "Les réponses vont à l’adresse d’expédition",
+    "saved": "Enregistré. Chaque nouvel e-mail utilise ces réglages.",
+    "fixErrors": "Vérifiez les champs signalés.",
+    "done": {
+      "forbidden": "Seuls les propriétaires et administrateurs peuvent modifier ceci.",
+      "internal": "Un problème est survenu. Réessayez."
+    },
+    "save": "Enregistrer",
+    "readOnly": "Seuls les propriétaires et administrateurs peuvent modifier ceci."
+  },
+  "orgContact": {
+    "title": "Contacter {org}",
+    "defaultIntro": "Envoyez un message à {org}. La réponse arrivera par e-mail.",
+    "formLabel": "Message à {org}",
+    "honeypot": "Laissez ce champ vide",
+    "fields": {
+      "name": "Votre nom",
+      "email": "Votre e-mail",
+      "message": "Message"
+    },
+    "emailHint": "Pour qu’on puisse vous répondre.",
+    "messageHint": "Au moins 10 caractères.",
+    "consent": "J’accepte que {org} utilise mon nom et mon e-mail pour répondre à ce message.",
+    "errors": {
+      "name": "Saisissez votre nom.",
+      "email": "Saisissez une adresse comme nom@example.com.",
+      "message": "Écrivez au moins 10 caractères.",
+      "consent": "Cochez la case pour qu’on puisse vous répondre.",
+      "human": "Confirmez que vous êtes une personne."
+    },
+    "rateLimited": "Trop de messages. Réessayez dans {minutes} min.",
+    "tooFast": "C’était très rapide. Patientez un instant, puis renvoyez.",
+    "expired": "Cette page est restée ouverte longtemps. Rechargez-la et renvoyez.",
+    "fixErrors": "Vérifiez les champs signalés.",
+    "submit": "Envoyer le message",
+    "sentTitle": "Message envoyé",
+    "sentBody": "Merci ! {org} répondra à votre e-mail."
+  },
+  "orgContactConsole": {
+    "title": "Page de contact",
+    "description": "Un formulaire de contact sur votre site. Les messages arrivent dans vos notifications ; votre propre adresse n’est jamais affichée.",
+    "settingsTitle": "Page de contact",
+    "settingsLabel": "Réglages de la page de contact",
+    "enabled": "Afficher la page de contact sur votre site",
+    "enabledHint": "Ajoute Contact au menu de votre site.",
+    "intro": "Texte au-dessus du formulaire",
+    "introHint": "Facultatif, 500 caractères au maximum.",
+    "introError": "500 caractères au maximum.",
+    "savedOn": "Enregistré. Votre page de contact est en ligne.",
+    "savedOff": "Enregistré. Votre page de contact est désactivée.",
+    "save": "Enregistrer",
+    "liveAt": "En ligne à",
+    "offNote": "La page est désactivée : les visiteurs ne peuvent pas envoyer de messages.",
+    "privacyNote": "Les visiteurs acceptent que vous utilisiez leur nom et leur e-mail pour répondre. Le spam est filtré avant de vous parvenir.",
+    "messagesTitle": "Messages",
+    "newCount": "Nouveaux : {count}",
+    "messagesHidden": "Les messages contiennent des données de visiteurs : les personnes qui modifient le site peuvent les lire.",
+    "emptyTitle": "Aucun message pour l’instant",
+    "emptyOn": "Les messages de votre page de contact apparaîtront ici et dans vos notifications.",
+    "emptyOff": "Activez la page de contact pour recevoir des messages.",
+    "openPage": "Ouvrir la page de contact",
+    "turnOn": "Activer la page de contact",
+    "from": "De",
+    "message": "Message",
+    "received": "Reçu",
+    "status": "Statut",
+    "statusNew": "Nouveau",
+    "statusHandled": "Traité",
+    "markHandled": "Marquer comme traité",
+    "markHandledFor": "Marquer le message de {name} comme traité"
   }
 }

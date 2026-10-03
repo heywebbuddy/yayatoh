@@ -214,6 +214,9 @@
         "request-code": "Privacy request code",
         "archive-ready": "Personal data archive ready",
         "erasure-done": "Erasure receipt"
+      },
+      "cms": {
+        "contact_message": "Contact page message"
       }
     },
     "status": {
@@ -380,7 +383,9 @@
     "plan": "Plan & billing",
     "webhooks": "Webhooks",
     "sandboxes": "Sandboxes",
-    "notifications": "Notifications"
+    "notifications": "Notifications",
+    "mediaLibrary": "Media library",
+    "storage": "Storage"
   },
   "vocab": {
     "attendee": "Attendee",
@@ -4568,7 +4573,8 @@
       "logo": "Logo",
       "speaker": "Speaker photo",
       "exhibitor": "Exhibitor logo",
-      "sponsor": "Sponsor logo"
+      "sponsor": "Sponsor logo",
+      "library": "Upload to the library"
     },
     "hint": {
       "cover": "Shown at the top of the event page, on listing cards and in link previews.",
@@ -4577,7 +4583,8 @@
       "logo": "Shown in the console, on your organizer page and site, and in emails.",
       "speaker": "Shown on the event page, the speaker's own page and next to their sessions in the agenda.",
       "exhibitor": "Shown with the exhibitor on the event page. SVG logos stay sharp at any size.",
-      "sponsor": "Shown in the sponsor's tier on the event page (higher tiers show bigger logos). SVG logos stay sharp."
+      "sponsor": "Shown in the sponsor's tier on the event page (higher tiers show bigger logos). SVG logos stay sharp.",
+      "library": "Images you upload here can be used for events, venues, speakers and your logo without uploading them again."
     },
     "empty": {
       "cover": "No cover image yet.",
@@ -4586,7 +4593,8 @@
       "logo": "No logo yet.",
       "speaker": "No photo yet.",
       "exhibitor": "No logo yet.",
-      "sponsor": "No logo yet."
+      "sponsor": "No logo yet.",
+      "library": "No images in the library yet."
     },
     "count": "{count, plural, one {# image} other {# images}} of {max}",
     "listLabel": "Current images",
@@ -5206,7 +5214,8 @@
     "tabsLabel": "Content type",
     "tabs": {
       "post": "Blog posts",
-      "page": "Pages"
+      "page": "Pages",
+      "contact": "Contact page"
     },
     "kind": {
       "post": "Blog post",
@@ -5289,7 +5298,8 @@
     "emptyDescription": "{org} hasn't published anything here yet.",
     "posts": "Posts",
     "by": "by {name}",
-    "allPosts": "All posts"
+    "allPosts": "All posts",
+    "contact": "Contact"
   },
   "reviews": {
     "ratingLabel": "Rated {rating} out of 5",
@@ -15255,5 +15265,191 @@
       "step2": "Add a code with its discount and, if you like, a limit and dates.",
       "step3": "Share the code. Buyers enter it at checkout and each use is counted."
     }
+  },
+  "mediaLibrary": {
+    "title": "Media library",
+    "description": "Every image your organization has uploaded. Use one anywhere without uploading it again.",
+    "upload": "Upload images",
+    "uploadTitle": "Upload to the library",
+    "summaryLabel": "Library summary",
+    "summary": "Images: {images} · Reuses: {reuses} · Storage: {used} of {limit}",
+    "storageLink": "See storage",
+    "usedPercent": "{percent}% of storage used",
+    "filtersLabel": "Show",
+    "filters": {
+      "all": "All images",
+      "unused": "Not used anywhere"
+    },
+    "emptyTitle": "No images yet",
+    "emptyDescription": "Upload your logos, venue photos and event artwork once, then pick them from any image field.",
+    "emptyViewer": "Images your team uploads will appear here.",
+    "emptyUnusedTitle": "Every image is in use",
+    "emptyUnusedDescription": "Images you no longer use anywhere will be listed here, ready to delete.",
+    "findOwner": "See who can upload",
+    "listLabel": "Library images",
+    "decorativeName": "Decorative image",
+    "meta": "{size} · {width} × {height} px · {type}",
+    "usedIn": "Used in",
+    "usedInFor": "Where {name} is used",
+    "unused": "Not used",
+    "places": {
+      "event": "Event: {name}",
+      "venue": "Venue: {name}",
+      "org": "Organization logo",
+      "speaker": "Speaker: {name}",
+      "exhibitor": "Exhibitor: {name}",
+      "sponsor": "Sponsor: {name}",
+      "library": "Library"
+    },
+    "delete": "Delete",
+    "deleteFor": "Delete {name}",
+    "confirmDelete": "Delete this image for good? It isn't used anywhere.",
+    "deleteForGood": "Delete for good",
+    "cancel": "Cancel",
+    "inUseNote": "In use: remove it where it is used before deleting it.",
+    "picker": {
+      "open": "Choose from the media library",
+      "hint": "Use an image your organization already has. Nothing is uploaded again.",
+      "loading": "Loading the library…",
+      "empty": "The library has no images yet.",
+      "openLibrary": "Open the media library",
+      "choose": "Pick an image",
+      "noAlt": "Decorative image",
+      "alt": "Alt text for this place",
+      "altHint": "Describe the image for people who can't see it.",
+      "altRequired": "Describe the image, or mark it decorative.",
+      "decorative": "Decorative (no description needed)",
+      "use": "Use this image",
+      "placed": "Image added.",
+      "alreadyHere": "This image is already here.",
+      "noChoice": "Pick an image first."
+    }
+  },
+  "storage": {
+    "title": "Storage",
+    "description": "How much space your images use. Storage is managed by Yayatoh: there is nothing to connect.",
+    "openLibrary": "Open the media library",
+    "summaryLabel": "Storage summary",
+    "used": "Used",
+    "ofDefault": "of {limit} included",
+    "ofCustom": "of {limit} (your plan)",
+    "usedPercent": "{percent}% of storage used",
+    "free": "Free",
+    "freeSub": "Reused images take no extra space.",
+    "images": "Images",
+    "imagesSub": "Stored files: {files} · Reuses: {reuses}",
+    "nearlyFull": "Storage is nearly full. Delete images you no longer use, or contact Yayatoh support for more space.",
+    "byKindTitle": "What uses it",
+    "kind": "Kind",
+    "imagesCol": "Images",
+    "size": "Size",
+    "share": "Share",
+    "shareOf": "{kind}: {percent}% of used storage",
+    "kinds": {
+      "events": "Event images",
+      "venues": "Venue photos",
+      "program": "Speakers, exhibitors and sponsors",
+      "logo": "Organization logo",
+      "library": "Library only"
+    },
+    "portalFiles": "Speaker portal documents are stored separately and don't count: {files} files, {size}.",
+    "largestTitle": "Largest images",
+    "emptyTitle": "No images yet",
+    "emptyDescription": "Your images and the space they use will show here.",
+    "emptyAction": "Upload images",
+    "image": "Image",
+    "decorative": "Decorative image",
+    "usedIn": "Used in",
+    "unused": "Not used",
+    "places": "Places: {count}",
+    "managedNote": "Need more space? Contact Yayatoh support. Your own storage or email accounts are never needed."
+  },
+  "emailIdentity": {
+    "title": "How your email looks",
+    "description": "The name people see and where their replies go, on every email your organization sends: tickets, reminders, campaigns and messages.",
+    "formLabel": "From name and Reply-To",
+    "fromName": "From name",
+    "fromNameHint": "Leave empty to use {org}. No web or email addresses.",
+    "replyTo": "Reply-To address",
+    "replyToHint": "Replies go here. Leave empty to send replies to the From address.",
+    "errors": {
+      "too_long": "Use at most 80 characters.",
+      "has_address": "A name can't contain an email address or the characters @ < > \".",
+      "has_domain": "A name can't look like a web address (such as example.com).",
+      "invalid_email": "Enter an email address like name@example.com.",
+      "platform_address": "Use your own address, not a Yayatoh one."
+    },
+    "previewTitle": "Inboxes show",
+    "previewReplyTo": "Replies go to {address}",
+    "previewNoReplyTo": "Replies go to the From address",
+    "saved": "Saved. Every new email uses these settings.",
+    "fixErrors": "Check the highlighted fields.",
+    "done": {
+      "forbidden": "Only owners and admins can change this.",
+      "internal": "Something went wrong. Try again."
+    },
+    "save": "Save",
+    "readOnly": "Only owners and admins can change this."
+  },
+  "orgContact": {
+    "title": "Contact {org}",
+    "defaultIntro": "Send {org} a message. They will answer by email.",
+    "formLabel": "Message to {org}",
+    "honeypot": "Leave this field empty",
+    "fields": {
+      "name": "Your name",
+      "email": "Your email",
+      "message": "Message"
+    },
+    "emailHint": "So they can answer you.",
+    "messageHint": "At least 10 characters.",
+    "consent": "I agree that {org} may use my name and email to answer this message.",
+    "errors": {
+      "name": "Enter your name.",
+      "email": "Enter an email address like name@example.com.",
+      "message": "Write at least 10 characters.",
+      "consent": "Tick the box so they may answer you.",
+      "human": "Confirm you're a person."
+    },
+    "rateLimited": "Too many messages. Try again in {minutes} min.",
+    "tooFast": "That was very fast. Wait a moment, then send again.",
+    "expired": "This page was open for a long time. Reload it and send again.",
+    "fixErrors": "Check the highlighted fields.",
+    "submit": "Send message",
+    "sentTitle": "Message sent",
+    "sentBody": "Thanks! {org} will reply to your email."
+  },
+  "orgContactConsole": {
+    "title": "Contact page",
+    "description": "A contact form on your site. Messages arrive in your notifications; your own email address is never shown.",
+    "settingsTitle": "Contact page",
+    "settingsLabel": "Contact page settings",
+    "enabled": "Show the contact page on your site",
+    "enabledHint": "Adds Contact to your site's menu.",
+    "intro": "Text above the form",
+    "introHint": "Optional, up to 500 characters.",
+    "introError": "Use at most 500 characters.",
+    "savedOn": "Saved. Your contact page is live.",
+    "savedOff": "Saved. Your contact page is off.",
+    "save": "Save",
+    "liveAt": "Live at",
+    "offNote": "The page is off: visitors can't send messages.",
+    "privacyNote": "Visitors agree that you may use their name and email to answer. Spam is filtered before it reaches you.",
+    "messagesTitle": "Messages",
+    "newCount": "New: {count}",
+    "messagesHidden": "Messages hold visitors' details: people who edit the site can read them.",
+    "emptyTitle": "No messages yet",
+    "emptyOn": "Messages from your contact page will appear here and in your notifications.",
+    "emptyOff": "Turn on the contact page to receive messages.",
+    "openPage": "Open the contact page",
+    "turnOn": "Turn on the contact page",
+    "from": "From",
+    "message": "Message",
+    "received": "Received",
+    "status": "Status",
+    "statusNew": "New",
+    "statusHandled": "Handled",
+    "markHandled": "Mark handled",
+    "markHandledFor": "Mark the message from {name} handled"
   }
 }

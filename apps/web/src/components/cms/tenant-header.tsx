@@ -3,7 +3,7 @@ import { getLocale, getTranslations } from 'next-intl/server';
 import { TenantAccount } from '@/components/tenant-account.tsx';
 import { ThemeSwitch } from '@/components/theme-switch.tsx';
 import { Link } from '@/i18n/navigation.ts';
-import { cachedEntries, cachedNavPages, entryPath } from '@/server/cms.ts';
+import { cachedContactPage, cachedEntries, cachedNavPages, entryPath } from '@/server/cms.ts';
 import { currentTheme } from '@/server/theme.ts';
 
 const linkClass =
@@ -16,15 +16,18 @@ const linkClass =
  */
 export async function TenantHeader({ org, current }: { org: PublicOrganizer; current?: string }) {
   const t = await getTranslations('cmsPublic');
-  const [nav, posts, locale, theme] = await Promise.all([
+  const [nav, posts, contact, locale, theme] = await Promise.all([
     cachedNavPages(org.orgId),
     cachedEntries(org.orgId, 'post', 1),
+    cachedContactPage(org.orgId),
     getLocale(),
     currentTheme(),
   ]);
   const links = [
     ...(posts.items.length > 0 ? [{ href: '/blogs', label: t('blog') }] : []),
     ...nav.map((p) => ({ href: entryPath('page', p.slug), label: p.title })),
+    // U10: the contact page, while the organizer has it on.
+    ...(contact ? [{ href: '/contact', label: t('contact') }] : []),
   ];
   return (
     <div className="mx-auto w-full max-w-6xl px-3 pt-3 sm:px-5 sm:pt-5">

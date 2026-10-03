@@ -1,5 +1,6 @@
 import { executeQuery } from '@yayatoh/kernel';
 import {
+  emailIdentityQuery,
   identityPortFromEnv,
   type SendingDomainDto,
   sendingSetupQuery,
@@ -9,11 +10,17 @@ import { roleCan } from '@yayatoh/tenancy';
 import { Alert, Button, Card, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { EmailIdentityForm } from '@/components/email-identity-form.tsx';
 import { HowItWorks } from '@/components/how-it-works.tsx';
 import { SendingDomainForm } from '@/components/sending-domain-form.tsx';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
-import { addSendingDomainAction, checkSendingDomainAction, removeSendingDomainAction } from './actions.ts';
+import {
+  addSendingDomainAction,
+  checkSendingDomainAction,
+  removeSendingDomainAction,
+  saveEmailIdentityAction,
+} from './actions.ts';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('sendingSetup');
@@ -49,6 +56,8 @@ export default async function SendingSetupPage({
   const t = await getTranslations('sendingSetup');
   const tn = await getTranslations('notifications');
   const setup = await executeQuery(sendingSetupQuery, {}, data.ctx, ports);
+  const identity = await executeQuery(emailIdentityQuery, {}, data.ctx, ports);
+  const ti = await getTranslations('emailIdentity');
   const canEdit = roleCan(data.role, 'org:update');
   const available = identityPortFromEnv(process.env) !== null;
   const when = new Intl.DateTimeFormat(locale, {
@@ -78,6 +87,24 @@ export default async function SendingSetupPage({
           title={t(`done.${outcome}`)}
         />
       ) : null}
+
+      {/* U10: From name and Reply-To, next to the sending domain (one "Email sending" page). */}
+      <section aria-labelledby="identity-heading" className="flex flex-col gap-3">
+        <h2 id="identity-heading" className="text-section">
+          {ti('title')}
+        </h2>
+        <Card className="flex flex-col gap-4">
+          <p className="text-body text-ink-2">{ti('description')}</p>
+          <EmailIdentityForm
+            action={saveEmailIdentityAction.bind(null, org)}
+            fromName={identity.fromName}
+            replyTo={identity.replyTo}
+            orgName={data.org.name}
+            fromAddress={identity.fromAddress}
+            canEdit={canEdit}
+          />
+        </Card>
+      </section>
 
       <section aria-labelledby="domain-heading" className="flex flex-col gap-3">
         <h2 id="domain-heading" className="text-section">
