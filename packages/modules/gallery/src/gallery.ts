@@ -547,7 +547,7 @@ async function completeTx(
     .from(items)
     .where(and(eq(items.id, itemId), eq(items.eventId, eventId), eq(items.uploaderId, uploaderId)))
     .for('update');
-  if (!item || item.kind !== 'photo' || !item.uploadId || !item.uploadKey)
+  if (item?.kind !== 'photo' || !item.uploadId || !item.uploadKey)
     throw new DomainError('not_found', 'Upload not found', { field: 'itemId' });
   // Completing twice answers the same.
   if (item.status !== 'uploading')
