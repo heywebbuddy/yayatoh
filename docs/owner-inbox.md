@@ -552,3 +552,8 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **PrintNode account (Stage 2, P5-2).** Open one PrintNode integrator account; for each org that wants silent printing, create a child account with the org id as its creator reference, then switch it on with `pnpm --filter @yayatoh/worker printnode -- --org <slug> --on`. Put `PRINTNODE_API_KEY` in Doppler and set `BADGE_PRINTER_PROVIDER=printnode` only in production. Until then everything uses the fake. Label: `infra`.
 - [ ] **Batch PDFs and the print log.** A downloaded batch PDF is not counted as printed (a download is not a print), so the first onsite print of a pre-printed badge is logged as a first print. Confirm, or ask for "mark this batch as printed".
 - [ ] **Reprint reasons:** Damaged, Lost, Details changed, Misprinted, Printer problem, Other (with a note). Confirm the list.
+
+## M5.5c — kiosk self-print (2026-10-03, pending owner)
+- [ ] **Unattended kiosks need PrintNode for silent printing.** On the print-dialog path the attendee taps "Open my badge to print" and prints from the PDF (AirPrint). Confirm, or plan PrintNode (Stage 2) for unattended kiosks.
+- [ ] **Email codes** go only to the ticket holder's own address; an address with several tickets at the event, or a registration still waiting, is sent to the desk. Confirm.
+- [ ] **Kiosk email wording** (`badges.kiosk-code`, 13 locales; label `legal-copy`).
