@@ -18,5 +18,7 @@ guests were pasted through the guest import. No real data.
 | 7 | Scan PWA, a paired device right after a successful scan ("Welcome in") | `07-scan-pwa-light.png` | `07-scan-pwa-dark.png` | `07-scan-pwa-phone-light.png` / `07-scan-pwa-phone-dark.png` |
 | 8 | Command Center in Arabic (RTL: sidebar on the right) | `08-command-center-arabic-light.png` | `08-command-center-arabic-dark.png` | — |
 | 9 | Living style guide `/dev/design` (top section; development builds only) | `09-style-guide-light.png` | `09-style-guide-dark.png` | — |
+| 10 | TV mode: the venue-screen board (always dark), 1920×1080 (batch 3g) | — | `10-tv-board-1920.png` | — |
 
-Each image is the first screen (above the fold), not the full page.
+Each image is the first screen (above the fold), not the full page. Shots 1 and 8 were
+re-captured on 2026-10-03 after batches 3f/3g landed on v2 (live mode: TV mode button, live feed).
