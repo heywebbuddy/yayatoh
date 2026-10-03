@@ -230,6 +230,8 @@ describe('who serves a request', () => {
       '/rsvp/find/ABCD2345',
       '/collect/ABCD2345',
       '/es/collect/ABCD2345',
+      // M4.2b: a gala table's claim link.
+      '/tables/abc~sig',
     ]) {
       expect(isPlatformPath(new URL(p, 'https://x').pathname) || decide(p).owner === 'next').toBe(true);
       expect(decide(p, flags(), { legacy: true })).toEqual({

@@ -226,6 +226,11 @@
       "intro": "Hier is je link om je registratie voor {eventName} te hervatten waar je gebleven was. Hij werkt {days, plural, one {# dag} other {# dagen}} na je laatste opslag en alleen voor jou, dus stuur hem niet door. Heb je hier niet om gevraagd, dan kun je deze e-mail negeren.",
       "cta": "Verder met mijn registratie"
     },
+    "orders.table-naming": {
+      "subject": "{reminder, plural, =1 {Herinnering: geef de namen van uw gasten door voor {eventName}} other {Geef de namen van uw gasten door voor {eventName}}}",
+      "intro": "Uw {tableName} heeft {size, plural, one {# plaats} other {# plaatsen}}. {missing, plural, =0 {Elke plaats heeft een naam; u kunt ze altijd bekijken.} one {Er mist nog # naam.} other {Er missen nog # namen.}} Laat ons met de knop hieronder weten wie er aan uw tafel zit.",
+      "cta": "Mijn gasten doorgeven"
+    },
     "registration.approved": {
       "subject": "Je aanvraag voor {eventName} is goedgekeurd",
       "intro": "Goed nieuws, {name}: je aanvraag om {eventName} bij te wonen als {typeName} is goedgekeurd. Gebruik de knop hieronder om je registratie te bekijken en, als je pas iets kost, te betalen en je plek te bevestigen.",

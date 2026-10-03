@@ -92,7 +92,8 @@
         "waitlist-offer": "候補名單購票邀請",
         "waitlist-expired": "候補名單購票邀請已逾期",
         "credit-note": "折讓單",
-        "support-reply": "客服回覆"
+        "support-reply": "客服回覆",
+        "table-naming": "餐桌賓客填寫連結"
       },
       "events": {
         "reminder": "活動提醒",
@@ -1932,7 +1933,8 @@
       },
       "accessibleCol": "無障礙座位",
       "accessibleOf": "{item} 的無障礙座位",
-      "accessibleHint": "無障礙座位：輸入座位號，例如「1, 2」。它們在座位圖上帶外框顯示，座位規則可以為其保留。"
+      "accessibleHint": "無障礙座位：輸入座位號，例如「1, 2」。它們在座位圖上帶外框顯示，座位規則可以為其保留。",
+      "sponsoredBy": "贊助商：{sponsor}"
     },
     "prices": {
       "title": "價格",
@@ -2248,7 +2250,8 @@
       "closed": "此活動的座位查詢未開放。",
       "internal": "我們這邊發生了問題。",
       "rateLimited": "索取驗證碼次數過多。請在 {minutes, plural, other {# 分鐘}}後再試。"
-    }
+    },
+    "hostedBy": "贊助商：{sponsor}"
   },
   "seatFinderPoster": {
     "pageTitle": "座位查詢海報",
@@ -8413,6 +8416,119 @@
       "sub_event_has_chart": "它已有專用座位圖。",
       "no_chart": "尚無可複製的座位圖。請在座位頁面建立活動座位圖，或選擇已儲存的平面圖。"
     }
+  },
+  "galaTables": {
+    "tableSize": "每桌座位數",
+    "tableSizeHint": "用於整桌票：一次購買可坐這麼多位賓客（2–20），由購買者填寫姓名。單人票請留空。",
+    "tableOf": "{size} 人桌",
+    "publicPass": "可坐 {size} 位賓客。付款後通過您的餐桌連結填寫他們的姓名。",
+    "tableName": "{table} #{n} · {who}",
+    "progress": "{size} 個座位中已填寫 {named} 個姓名",
+    "missing": "{count, plural, other {還缺 # 個姓名}}",
+    "seat": "座位 {n}",
+    "unnamed": "尚未填寫姓名",
+    "firstName": "名",
+    "lastName": "姓（可選）",
+    "email": "接收門票的電子郵件（可選）",
+    "emailHint": "賓客本人的門票會傳到這裡。留空則門票仍由您保管。",
+    "named": "{name} 已在餐桌就座。",
+    "company": "公司或贊助商名稱",
+    "companyHint": "您的賓客所屬的團體，主辦方會看到這個名稱。",
+    "companySave": "儲存名稱",
+    "companySaved": "名稱已儲存。",
+    "imageN": "圖片 {n}",
+    "sponsorName": "贊助商名稱",
+    "logo": "標誌（可選）",
+    "noLogo": "無標誌",
+    "logoHint": "從活動圖片中選擇一張（可在“媒體”中新增）。",
+    "published": "向賓客顯示贊助商",
+    "publishedHint": "座位圖開售後，賓客可在查座中看到贊助商。",
+    "sponsorSave": "儲存贊助商",
+    "sponsorSaved": "已為 {table} 儲存贊助商。",
+    "sponsorRemove": "移除 {table} 的贊助商",
+    "sponsorRemoved": "已移除 {table} 的贊助商。",
+    "sponsorFormOf": "{table} 的贊助商",
+    "reminders": {
+      "title": "填寫姓名提醒",
+      "send": "傳送填寫姓名提醒",
+      "hint": "給仍缺少姓名的每張餐桌的購買者傳送郵件（每張餐桌每小時最多一次）。",
+      "done": "{sent, plural, =0 {未傳送提醒。} other {已向 # 位購買者傳送提醒。}} {skipped, plural, =0 {} other {已略過 # 張餐桌（已填滿、已關閉或剛提醒過）。}}"
+    },
+    "console": {
+      "description": "賓客購買的餐桌、仍缺少的姓名，以及座位圖上的贊助商。",
+      "soldTitle": "已購餐桌",
+      "caption": "已購餐桌",
+      "table": "餐桌",
+      "party": "公司或贊助商",
+      "buyer": "購買者",
+      "size": "座位",
+      "named": "已填寫",
+      "missing": "姓名",
+      "complete": "已全部填寫",
+      "noParty": "未設定",
+      "emptyTitle": "尚未售出餐桌",
+      "emptyOnSale": "您的整桌票正在銷售。一旦有人購買，餐桌就會顯示在這裡。",
+      "emptyNoType": "新增整桌票（例如 10 人桌）即可按整桌銷售。",
+      "addTableTicket": "在“門票和訂單”中新增整桌票",
+      "reminded": "{count, plural, other {已提醒 # 次}}",
+      "seatsOf": "{table} 的座位",
+      "ticket": "門票 {code}",
+      "nameGuest": "為 {table} 填寫賓客",
+      "nameSubmit": "填寫賓客",
+      "sponsorsTitle": "贊助餐桌",
+      "sponsorsIntro": "為座位圖上的餐桌設定贊助商。名稱會顯示在座位編輯器的餐桌上，向賓客公開後也會顯示在查座中。",
+      "noPlanTitle": "還沒有座位圖",
+      "noPlanHint": "在“座位”中建立座位圖，其中的餐桌會顯示在這裡。",
+      "openSeating": "打開座位",
+      "planTable": "{table} · {seats, plural, other {# 個座位}}",
+      "sponsoredBy": "贊助商：{sponsor}",
+      "shown": "對賓客可見",
+      "hidden": "對賓客隱藏",
+      "noSponsor": "尚無贊助商"
+    },
+    "public": {
+      "metaTitle": "填寫賓客姓名",
+      "eyebrow": "您的餐桌",
+      "title": "填寫賓客姓名",
+      "tableOf": "{table} #{n}",
+      "full": "每個座位都有賓客",
+      "closed": {
+        "not_paid": "這張餐桌尚未付款，無法填寫姓名。",
+        "event_over": "活動已結束，無法再為這張餐桌填寫姓名。"
+      },
+      "companyTitle": "您的公司或贊助商",
+      "nameTitle": "新增賓客",
+      "nameIntro": "每位賓客獲得一個座位及其門票。",
+      "submit": "新增賓客",
+      "seatsTitle": "座位",
+      "noSeats": "這張餐桌已沒有座位",
+      "noSeatsHint": "這張餐桌已退款。",
+      "resendTitle": "需要再次取得連結？",
+      "resendIntro": "我們會把這個連結傳送到您購買餐桌時使用的電子郵件。",
+      "resend": "把此連結傳到我的電子郵件",
+      "resent": "連結已傳送到您的電子郵件。",
+      "resendWait": "剛剛已傳送，請一分鐘後再試。"
+    },
+    "order": {
+      "title": "您的餐桌",
+      "intro": "告訴我們誰坐在您的餐桌：每位賓客獲得一個座位和一張門票。",
+      "cta": "為 {table} #{n} 填寫賓客"
+    },
+    "errors": {
+      "table_full": "這張餐桌的每個座位都有賓客。",
+      "slot_named": "這個座位已有賓客。",
+      "event_over": "活動已結束，無法再為這張餐桌填寫姓名。",
+      "not_paid": "這張餐桌尚未付款。",
+      "party_full": "該團體已滿。",
+      "not_a_table": "請選擇座位圖上的餐桌。",
+      "foreign_logo": "請從活動圖片中選擇。",
+      "no_plan": "請先建立座位圖。",
+      "firstName": "請輸入賓客的名。",
+      "email": "請輸入有效的電子郵件，或留空。",
+      "company": "請輸入名稱。",
+      "sponsorName": "請輸入贊助商名稱。"
+    },
+    "tableLabel": "{label} 號桌"
   },
   "theme": {
     "label": "顏色主題",

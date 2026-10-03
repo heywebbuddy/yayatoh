@@ -131,6 +131,16 @@ export {
   undistributedTicketsTx,
 } from './stats.ts';
 export { claimLinkMailer, holderLinkMailer, transferMailer } from './subscribers.ts';
+// M4.2b gala tables: purchased tables and their guest slots.
+export {
+  recordTableLinkSentTx,
+  TABLE_NAMING_PURPOSE,
+  type TableUnitRow,
+  tableSlotsTx,
+  tableUnitContext,
+  tableUnitsTx,
+  tableUnitTx,
+} from './tables.ts';
 export {
   cancelHolderTransferCommand,
   cancelTransferCommand,

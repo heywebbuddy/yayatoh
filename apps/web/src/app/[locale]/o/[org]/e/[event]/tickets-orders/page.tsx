@@ -157,6 +157,11 @@ export default async function TicketsPage({
               cell: (r) => (
                 <span className="flex flex-col">
                   <span>{r.name}</span>
+                  {r.tableSize ? (
+                    <span className="text-caption text-ink-2">
+                      {t('galaTables.tableOf', { size: r.tableSize })}
+                    </span>
+                  ) : null}
                   {r.visibility === 'hidden' ? (
                     <span className="text-caption text-ink-2">{t('tickets.hidden')}</span>
                   ) : null}

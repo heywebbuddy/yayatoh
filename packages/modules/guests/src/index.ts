@@ -275,3 +275,11 @@ export {
   subEventsQuery,
   updateSubEventCommand,
 } from './sub-events.ts';
+// M4.2b gala tables: a purchased table's party and the guests holding its tickets.
+export {
+  addTableGuestTx,
+  guestsByTicketTx,
+  type TableSource,
+  tablePartiesTx,
+  tablePartyTx,
+} from './tables.ts';

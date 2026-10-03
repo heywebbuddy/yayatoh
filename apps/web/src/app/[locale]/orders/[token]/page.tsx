@@ -1,5 +1,10 @@
 import { formatMoney, money } from '@yayatoh/kernel';
-import { orderByManageToken, orderHolderTarget, orderPushDevices } from '@yayatoh/orders';
+import {
+  orderByManageToken,
+  orderHolderTarget,
+  orderPushDevices,
+  orderTablesByManageToken,
+} from '@yayatoh/orders';
 import { buttonClass, Card, Label, PageHeader, StatusDot } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
@@ -70,6 +75,8 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
     : new Map<string, string>();
   // M5.2b: a registration with sessions links to the attendee's schedule.
   const schedule = await scheduleSummary(token);
+  // M4.2b: tables bought in this order, each with its claim link for naming the guests.
+  const tables = await orderTablesByManageToken(token);
   const sinceFmt = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeZone: order.event.timezone });
   return (
     <main id="main" className="mx-auto flex min-h-dvh max-w-xl flex-col gap-6 px-6 py-16">
@@ -106,6 +113,31 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
           </p>
         ) : null}
       </Card>
+      {tables.length > 0 ? (
+        <section aria-labelledby="tables-heading" className="flex flex-col gap-3">
+          <h2 id="tables-heading" className="text-section">
+            {t('galaTables.order.title')}
+          </h2>
+          <p className="text-body text-ink-2">{t('galaTables.order.intro')}</p>
+          <ul className="flex list-none flex-col gap-3 p-0">
+            {tables.map((x) => (
+              <li key={x.id}>
+                <Card className="flex flex-col gap-2">
+                  <p className="text-body font-medium">
+                    {t('galaTables.public.tableOf', { table: x.typeName, n: x.unitNo })}
+                  </p>
+                  <p className="text-caption text-ink-2">
+                    {t('galaTables.progress', { named: x.named, size: x.named + x.missing })}
+                  </p>
+                  <Link href={x.path} className={buttonClass('primary', 'lg', 'self-start')}>
+                    {t('galaTables.order.cta', { table: x.typeName, n: x.unitNo })}
+                  </Link>
+                </Card>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
       {order.transferred > 0 ? (
         <p className="text-body text-ink-2">{t('order.transferred', { count: order.transferred })}</p>
       ) : null}

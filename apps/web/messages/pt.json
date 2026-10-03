@@ -92,7 +92,8 @@
         "waitlist-offer": "Oferta da lista de espera",
         "waitlist-expired": "Oferta da lista de espera expirada",
         "credit-note": "Nota de crédito",
-        "support-reply": "Resposta do suporte"
+        "support-reply": "Resposta do suporte",
+        "table-naming": "Link para indicar os convidados da mesa"
       },
       "events": {
         "reminder": "Lembrete do evento",
@@ -1932,7 +1933,8 @@
       },
       "accessibleCol": "Assentos acessíveis",
       "accessibleOf": "Assentos acessíveis de {item}",
-      "accessibleHint": "Assentos acessíveis: digite os números, por ex. “1, 2”. Eles aparecem contornados na planta e as regras de lugares podem reservá-los."
+      "accessibleHint": "Assentos acessíveis: digite os números, por ex. “1, 2”. Eles aparecem contornados na planta e as regras de lugares podem reservá-los.",
+      "sponsoredBy": "Patrocinador: {sponsor}"
     },
     "prices": {
       "title": "Preços",
@@ -2248,7 +2250,8 @@
       "closed": "O localizador de assentos não está aberto para este evento.",
       "internal": "Algo deu errado do nosso lado.",
       "rateLimited": "Foram pedidos demasiados códigos. Tente novamente dentro de {minutes, plural, one {# minuto} other {# minutos}}."
-    }
+    },
+    "hostedBy": "Patrocinada por {sponsor}"
   },
   "seatFinderPoster": {
     "pageTitle": "Cartaz do localizador de assentos",
@@ -8413,6 +8416,119 @@
       "sub_event_has_chart": "Ele já tem um mapa próprio.",
       "no_chart": "Ainda não há mapa para copiar. Crie o mapa do evento na página Assentos ou escolha um mapa salvo."
     }
+  },
+  "galaTables": {
+    "tableSize": "Lugares por mesa",
+    "tableSizeHint": "Para um bilhete de mesa: uma compra senta este número de convidados (2–20), indicados pelo comprador. Deixe vazio para um bilhete individual.",
+    "tableOf": "Mesa para {size}",
+    "publicPass": "Para {size} convidados. Depois de pagar, indica-os com o link da sua mesa.",
+    "tableName": "{table} n.º {n} · {who}",
+    "progress": "{named} de {size} lugares com nome",
+    "missing": "{count, plural, one {Falta # nome} many {Faltam # nomes} other {Faltam # nomes}}",
+    "seat": "Lugar {n}",
+    "unnamed": "Ainda sem nome",
+    "firstName": "Nome próprio",
+    "lastName": "Apelido (opcional)",
+    "email": "Email para o bilhete (opcional)",
+    "emailHint": "O bilhete do convidado vai para lá. Deixe vazio para ficar com o bilhete.",
+    "named": "{name} tem um lugar na mesa.",
+    "company": "Nome da empresa ou patrocinador",
+    "companyHint": "O grupo dos seus convidados, tal como o anfitrião o vê.",
+    "companySave": "Guardar nome",
+    "companySaved": "Nome guardado.",
+    "imageN": "Imagem {n}",
+    "sponsorName": "Nome do patrocinador",
+    "logo": "Logótipo (opcional)",
+    "noLogo": "Sem logótipo",
+    "logoHint": "Escolha uma das imagens do evento (adicione-as em Multimédia).",
+    "published": "Mostrar o patrocinador aos convidados",
+    "publishedHint": "Os convidados veem-no na pesquisa de lugares quando a planta estiver à venda.",
+    "sponsorSave": "Guardar patrocinador",
+    "sponsorSaved": "Patrocinador guardado para {table}.",
+    "sponsorRemove": "Remover o patrocinador de {table}",
+    "sponsorRemoved": "Patrocinador removido de {table}.",
+    "sponsorFormOf": "Patrocinador de {table}",
+    "reminders": {
+      "title": "Lembretes de nomes",
+      "send": "Enviar lembretes de nomes",
+      "hint": "Envia um email ao comprador de cada mesa a que ainda faltam nomes (no máximo uma vez por hora e por mesa).",
+      "done": "{sent, plural, =0 {Nenhum lembrete enviado.} one {Lembrete enviado a # comprador.} many {Lembretes enviados a # compradores.} other {Lembretes enviados a # compradores.}} {skipped, plural, =0 {} one {# mesa ignorada (completa, fechada ou lembrada há pouco).} many {# mesas ignoradas (completas, fechadas ou lembradas há pouco).} other {# mesas ignoradas (completas, fechadas ou lembradas há pouco).}}"
+    },
+    "console": {
+      "description": "As mesas que os convidados compraram, os nomes que faltam e os patrocinadores da sua planta.",
+      "soldTitle": "Mesas compradas",
+      "caption": "Mesas compradas",
+      "table": "Mesa",
+      "party": "Empresa ou patrocinador",
+      "buyer": "Comprador",
+      "size": "Lugares",
+      "named": "Com nome",
+      "missing": "Nomes",
+      "complete": "Todos com nome",
+      "noParty": "Não definido",
+      "emptyTitle": "Ainda não foi vendida nenhuma mesa",
+      "emptyOnSale": "Os seus bilhetes de mesa estão à venda. As mesas aparecem aqui assim que alguém comprar uma.",
+      "emptyNoType": "Adicione um bilhete de mesa (por exemplo, uma mesa para 10) para vender mesas inteiras.",
+      "addTableTicket": "Adicionar um bilhete de mesa em Bilhetes e encomendas",
+      "reminded": "{count, plural, one {lembrada uma vez} many {lembrada # vezes} other {lembrada # vezes}}",
+      "seatsOf": "Lugares de {table}",
+      "ticket": "Bilhete {code}",
+      "nameGuest": "Indicar um convidado em {table}",
+      "nameSubmit": "Indicar convidado",
+      "sponsorsTitle": "Mesas patrocinadas",
+      "sponsorsIntro": "Atribua um patrocinador às mesas da sua planta. O nome aparece na mesa no editor de lugares e, quando mostrado aos convidados, na pesquisa de lugares.",
+      "noPlanTitle": "Ainda sem planta",
+      "noPlanHint": "Crie a planta em Lugares; as mesas aparecem aqui.",
+      "openSeating": "Abrir Lugares",
+      "planTable": "{table} · {seats, plural, one {# lugar} many {# lugares} other {# lugares}}",
+      "sponsoredBy": "Patrocinada por {sponsor}",
+      "shown": "Visível para os convidados",
+      "hidden": "Oculto aos convidados",
+      "noSponsor": "Ainda sem patrocinador"
+    },
+    "public": {
+      "metaTitle": "Indique os seus convidados",
+      "eyebrow": "A sua mesa",
+      "title": "Indique os seus convidados",
+      "tableOf": "{table} n.º {n}",
+      "full": "Todos os lugares têm convidado",
+      "closed": {
+        "not_paid": "Esta mesa não está paga, por isso não pode indicar convidados.",
+        "event_over": "O evento terminou; já não pode indicar convidados nesta mesa."
+      },
+      "companyTitle": "A sua empresa ou patrocinador",
+      "nameTitle": "Adicionar um convidado",
+      "nameIntro": "Cada convidado recebe um lugar e o respetivo bilhete.",
+      "submit": "Adicionar convidado",
+      "seatsTitle": "Lugares",
+      "noSeats": "Já não há lugares nesta mesa",
+      "noSeatsHint": "A mesa foi reembolsada.",
+      "resendTitle": "Precisa do link outra vez?",
+      "resendIntro": "Enviaremos este link para o email com que comprou a mesa.",
+      "resend": "Enviar-me este link",
+      "resent": "Enviámos-lhe o link por email.",
+      "resendWait": "Acabámos de o enviar. Tente de novo dentro de um minuto."
+    },
+    "order": {
+      "title": "As suas mesas",
+      "intro": "Diga-nos quem se senta à sua mesa: cada convidado recebe um lugar e um bilhete.",
+      "cta": "Indicar convidados em {table} n.º {n}"
+    },
+    "errors": {
+      "table_full": "Todos os lugares desta mesa têm convidado.",
+      "slot_named": "Este lugar já tem convidado.",
+      "event_over": "O evento terminou; já não pode indicar convidados nesta mesa.",
+      "not_paid": "Esta mesa não está paga.",
+      "party_full": "Este grupo está completo.",
+      "not_a_table": "Escolha uma mesa da planta.",
+      "foreign_logo": "Escolha uma das imagens do evento.",
+      "no_plan": "Crie primeiro uma planta.",
+      "firstName": "Escreva o nome próprio do convidado.",
+      "email": "Escreva um email válido ou deixe vazio.",
+      "company": "Escreva um nome.",
+      "sponsorName": "Escreva o nome do patrocinador."
+    },
+    "tableLabel": "Mesa {label}"
   },
   "theme": {
     "label": "Tema de cores",

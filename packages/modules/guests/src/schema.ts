@@ -21,7 +21,7 @@ export const guestsSchema = pgSchema('guests');
  * source"). `manual`: the host typed it; `paper`: the host typed a paper reply on the guest's
  * behalf. `import`, `collector` and `rsvp` arrive with M4.1b, M4.1f and M4.1d.
  */
-export const GUEST_SOURCES = ['manual', 'paper', 'import', 'collector', 'rsvp'] as const;
+export const GUEST_SOURCES = ['manual', 'paper', 'import', 'collector', 'rsvp', 'table_link'] as const;
 export type GuestSource = (typeof GUEST_SOURCES)[number];
 /** What the console lets a host pick today. */
 export const ENTRY_SOURCES = ['manual', 'paper'] as const satisfies readonly GuestSource[];
@@ -91,9 +91,17 @@ export const parties = tenantTable(
     /** Host-only notes. */
     notes: text('notes').notNull().default(''),
     source: text('source').notNull().default('manual'),
+    /**
+     * M4.2b gala tables: the purchased table (`ticketing.table_units`, hand-written FK) whose named
+     * guests this party holds: the buyer's company or the sponsor. One party per table.
+     */
+    tableUnitId: uuid('table_unit_id'),
   },
   (t) => [
     index('parties_org_event_idx').on(t.orgId, t.eventId, t.name),
+    uniqueIndex('parties_org_table_unit_key')
+      .on(t.orgId, t.tableUnitId)
+      .where(sql`table_unit_id is not null`),
     check('parties_name_length', sql`length(name) between 1 and 120`),
     check('parties_envelope_length', sql`envelope_name is null or length(envelope_name) between 1 and 200`),
     check('parties_side_length', sql`side is null or length(side) between 1 and 40`),
@@ -130,6 +138,11 @@ export const guests = tenantTable(
     attendeeId: uuid('attendee_id'),
     contactId: uuid('contact_id'),
     isPrimary: boolean('is_primary').notNull().default(false),
+    /**
+     * M4.2b: the ticket (a table's guest slot, `ticketing.tickets`, hand-written FK) this guest
+     * holds; the ticket shows its guest and the guest its ticket. One guest per ticket.
+     */
+    ticketId: uuid('ticket_id'),
   },
   (t) => [
     index('guests_org_party_idx').on(t.orgId, t.partyId, t.createdAt),
@@ -139,6 +152,7 @@ export const guests = tenantTable(
     uniqueIndex('guests_org_host_key').on(t.orgId, t.hostGuestId).where(sql`host_guest_id is not null`),
     uniqueIndex('guests_org_attendee_key').on(t.orgId, t.attendeeId).where(sql`attendee_id is not null`),
     index('guests_org_contact_idx').on(t.orgId, t.contactId).where(sql`contact_id is not null`),
+    uniqueIndex('guests_org_ticket_key').on(t.orgId, t.ticketId).where(sql`ticket_id is not null`),
     check('guests_kind_check', inList('kind', GUEST_KINDS)),
     check('guests_age_class_check', inList('age_class', AGE_CLASSES)),
     check(

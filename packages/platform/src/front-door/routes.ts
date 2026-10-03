@@ -199,6 +199,9 @@ export const PLATFORM_PREFIXES: readonly string[] = [
   // new app has them.
   '/rsvp',
   '/collect',
+  // Batch 3h merge: M4.2b's signed table claim link (`/tables/{token}`), where a buyer names the
+  // guests of a gala table.
+  '/tables',
 ];
 
 /**

@@ -26,6 +26,7 @@ import {
   refundRequestNotifier,
   reminderRescheduler,
   supportReplyMailer,
+  tableNamingMailer,
   ticketMailer,
   waitlistMailer,
 } from '@yayatoh/orders';
@@ -124,6 +125,8 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
       eventName: async (tx, id) => (await findEventTx(tx, id))?.name ?? null,
     }),
     waitlistMailer({ notifier, appOrigin }),
+    // M4.2b: a purchased table's claim link to its buyer.
+    tableNamingMailer({ notifier, appOrigin }),
     // M3.7a: journeys enroll on purchase and check-in, follow date changes and cancellations.
     ...journeySubscribers(),
     // M5.1a: per-type capacity follows orders (paid, expired, refunded, cancelled) and offers freed places.

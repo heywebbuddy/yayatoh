@@ -92,7 +92,8 @@
         "waitlist-offer": "Angebot von der Warteliste",
         "waitlist-expired": "Angebot von der Warteliste abgelaufen",
         "credit-note": "Gutschrift",
-        "support-reply": "Support-Antwort"
+        "support-reply": "Support-Antwort",
+        "table-naming": "Link zum Benennen des Tisches"
       },
       "events": {
         "reminder": "Veranstaltungserinnerung",
@@ -1932,7 +1933,8 @@
       },
       "accessibleCol": "Barrierefreie Plätze",
       "accessibleOf": "Barrierefreie Plätze von {item}",
-      "accessibleHint": "Barrierefreie Plätze: Nummern eintragen, z. B. „1, 2“. Sie sind im Plan umrandet, und die Sitzregeln können sie zurückhalten."
+      "accessibleHint": "Barrierefreie Plätze: Nummern eintragen, z. B. „1, 2“. Sie sind im Plan umrandet, und die Sitzregeln können sie zurückhalten.",
+      "sponsoredBy": "Sponsor: {sponsor}"
     },
     "prices": {
       "title": "Preise",
@@ -2248,7 +2250,8 @@
       "closed": "Der Platzfinder ist für diese Veranstaltung nicht geöffnet.",
       "internal": "Bei uns ist etwas schiefgelaufen.",
       "rateLimited": "Zu viele Codes angefordert. Versuchen Sie es in {minutes, plural, one {# Minute} other {# Minuten}} erneut."
-    }
+    },
+    "hostedBy": "Gesponsert von {sponsor}"
   },
   "seatFinderPoster": {
     "pageTitle": "Platzfinder-Plakat",
@@ -8413,6 +8416,119 @@
       "sub_event_has_chart": "Er hat bereits einen eigenen Plan.",
       "no_chart": "Es gibt noch keinen Plan zum Kopieren. Erstellen Sie den Plan der Veranstaltung auf der Seite Sitzplätze oder wählen Sie einen gespeicherten Plan."
     }
+  },
+  "galaTables": {
+    "tableSize": "Plätze pro Tisch",
+    "tableSizeHint": "Für ein Tischticket: Ein Kauf bietet so vielen Gästen Platz (2–20), die der Käufer benennt. Für ein Einzelticket leer lassen.",
+    "tableOf": "Tisch für {size}",
+    "publicPass": "Für {size} Gäste. Nach dem Bezahlen nennen Sie sie über den Link Ihres Tisches.",
+    "tableName": "{table} Nr. {n} · {who}",
+    "progress": "{named} von {size} Plätzen benannt",
+    "missing": "{count, plural, one {# Name fehlt} other {# Namen fehlen}}",
+    "seat": "Platz {n}",
+    "unnamed": "Noch ohne Namen",
+    "firstName": "Vorname",
+    "lastName": "Nachname (optional)",
+    "email": "E-Mail für das Ticket (optional)",
+    "emailHint": "Das eigene Ticket des Gastes geht dorthin. Leer lassen, um das Ticket selbst zu behalten.",
+    "named": "{name} hat einen Platz am Tisch.",
+    "company": "Name des Unternehmens oder Sponsors",
+    "companyHint": "Die Gruppe Ihrer Gäste, wie der Gastgeber sie sieht.",
+    "companySave": "Namen speichern",
+    "companySaved": "Name gespeichert.",
+    "imageN": "Bild {n}",
+    "sponsorName": "Name des Sponsors",
+    "logo": "Logo (optional)",
+    "noLogo": "Kein Logo",
+    "logoHint": "Wählen Sie eines der Bilder der Veranstaltung (unter Medien hinzufügen).",
+    "published": "Sponsor den Gästen zeigen",
+    "publishedHint": "Gäste sehen ihn in der Platzsuche, sobald der Saalplan im Verkauf ist.",
+    "sponsorSave": "Sponsor speichern",
+    "sponsorSaved": "Sponsor für {table} gespeichert.",
+    "sponsorRemove": "Sponsor von {table} entfernen",
+    "sponsorRemoved": "Sponsor von {table} entfernt.",
+    "sponsorFormOf": "Sponsor von {table}",
+    "reminders": {
+      "title": "Erinnerungen an Namen",
+      "send": "Erinnerungen an Namen senden",
+      "hint": "Schreibt dem Käufer jedes Tisches, an dem noch Namen fehlen (höchstens einmal pro Stunde und Tisch).",
+      "done": "{sent, plural, =0 {Keine Erinnerung gesendet.} one {Erinnerung an # Käufer gesendet.} other {Erinnerungen an # Käufer gesendet.}} {skipped, plural, =0 {} one {# Tisch übersprungen (vollständig, geschlossen oder gerade erinnert).} other {# Tische übersprungen (vollständig, geschlossen oder gerade erinnert).}}"
+    },
+    "console": {
+      "description": "Die von Gästen gekauften Tische, die noch fehlenden Namen und die Sponsoren auf Ihrem Saalplan.",
+      "soldTitle": "Gekaufte Tische",
+      "caption": "Gekaufte Tische",
+      "table": "Tisch",
+      "party": "Unternehmen oder Sponsor",
+      "buyer": "Käufer",
+      "size": "Plätze",
+      "named": "Benannt",
+      "missing": "Namen",
+      "complete": "Alle benannt",
+      "noParty": "Nicht festgelegt",
+      "emptyTitle": "Noch keine Tische verkauft",
+      "emptyOnSale": "Ihre Tischtickets sind im Verkauf. Tische erscheinen hier, sobald jemand einen kauft.",
+      "emptyNoType": "Fügen Sie ein Tischticket hinzu (zum Beispiel einen Tisch für 10), um ganze Tische zu verkaufen.",
+      "addTableTicket": "Tischticket unter Tickets & Bestellungen hinzufügen",
+      "reminded": "{count, plural, one {einmal erinnert} other {# Mal erinnert}}",
+      "seatsOf": "Plätze an {table}",
+      "ticket": "Ticket {code}",
+      "nameGuest": "Gast an {table} benennen",
+      "nameSubmit": "Gast benennen",
+      "sponsorsTitle": "Gesponserte Tische",
+      "sponsorsIntro": "Geben Sie den Tischen Ihres Saalplans einen Sponsor. Der Name steht im Sitzplan-Editor am Tisch und, sobald den Gästen gezeigt, in der Platzsuche.",
+      "noPlanTitle": "Noch kein Saalplan",
+      "noPlanHint": "Erstellen Sie den Saalplan unter Sitzplan; seine Tische erscheinen hier.",
+      "openSeating": "Sitzplan öffnen",
+      "planTable": "{table} · {seats, plural, one {# Platz} other {# Plätze}}",
+      "sponsoredBy": "Gesponsert von {sponsor}",
+      "shown": "Für Gäste sichtbar",
+      "hidden": "Für Gäste verborgen",
+      "noSponsor": "Noch kein Sponsor"
+    },
+    "public": {
+      "metaTitle": "Gäste benennen",
+      "eyebrow": "Ihr Tisch",
+      "title": "Benennen Sie Ihre Gäste",
+      "tableOf": "{table} Nr. {n}",
+      "full": "Jeder Platz hat einen Gast",
+      "closed": {
+        "not_paid": "Dieser Tisch ist nicht bezahlt und kann daher nicht benannt werden.",
+        "event_over": "Die Veranstaltung ist vorbei; dieser Tisch kann nicht mehr benannt werden."
+      },
+      "companyTitle": "Ihr Unternehmen oder Sponsor",
+      "nameTitle": "Gast hinzufügen",
+      "nameIntro": "Jeder Gast erhält einen Platz und dessen Ticket.",
+      "submit": "Gast hinzufügen",
+      "seatsTitle": "Plätze",
+      "noSeats": "An diesem Tisch sind keine Plätze mehr",
+      "noSeatsHint": "Der Tisch wurde erstattet.",
+      "resendTitle": "Link noch einmal benötigt?",
+      "resendIntro": "Wir senden diesen Link an die Adresse, mit der Sie den Tisch gekauft haben.",
+      "resend": "Diesen Link per E-Mail senden",
+      "resent": "Wir haben Ihnen den Link per E-Mail gesendet.",
+      "resendWait": "Gerade gesendet. Versuchen Sie es in einer Minute erneut."
+    },
+    "order": {
+      "title": "Ihre Tische",
+      "intro": "Sagen Sie uns, wer an Ihrem Tisch sitzt: Jeder Gast erhält einen Platz und ein Ticket.",
+      "cta": "Gäste an {table} Nr. {n} benennen"
+    },
+    "errors": {
+      "table_full": "Jeder Platz an diesem Tisch hat einen Gast.",
+      "slot_named": "Dieser Platz hat bereits einen Gast.",
+      "event_over": "Die Veranstaltung ist vorbei; dieser Tisch kann nicht mehr benannt werden.",
+      "not_paid": "Dieser Tisch ist nicht bezahlt.",
+      "party_full": "Diese Gruppe ist voll.",
+      "not_a_table": "Wählen Sie einen Tisch des Saalplans.",
+      "foreign_logo": "Wählen Sie eines der Bilder der Veranstaltung.",
+      "no_plan": "Erstellen Sie zuerst einen Saalplan.",
+      "firstName": "Geben Sie den Vornamen des Gastes ein.",
+      "email": "Geben Sie eine gültige E-Mail-Adresse ein oder lassen Sie das Feld leer.",
+      "company": "Geben Sie einen Namen ein.",
+      "sponsorName": "Geben Sie den Namen des Sponsors ein."
+    },
+    "tableLabel": "Tisch {label}"
   },
   "theme": {
     "label": "Farbschema",

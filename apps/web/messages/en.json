@@ -92,7 +92,8 @@
         "waitlist-offer": "Waitlist offer",
         "waitlist-expired": "Waitlist offer expired",
         "credit-note": "Credit note",
-        "support-reply": "Support reply"
+        "support-reply": "Support reply",
+        "table-naming": "Table naming link"
       },
       "events": {
         "reminder": "Event reminder",
@@ -1932,7 +1933,8 @@
       },
       "accessibleCol": "Accessible seats",
       "accessibleOf": "Accessible seats of {item}",
-      "accessibleHint": "Accessible seats: type their numbers, e.g. “1, 2”. They are outlined on the plan, and the seating rules can keep them back."
+      "accessibleHint": "Accessible seats: type their numbers, e.g. “1, 2”. They are outlined on the plan, and the seating rules can keep them back.",
+      "sponsoredBy": "Sponsor: {sponsor}"
     },
     "prices": {
       "title": "Prices",
@@ -2248,7 +2250,8 @@
       "closed": "The seat finder isn't open for this event.",
       "internal": "Something went wrong on our side.",
       "rateLimited": "Too many codes asked for. Try again in {minutes, plural, one {# minute} other {# minutes}}."
-    }
+    },
+    "hostedBy": "Hosted by {sponsor}"
   },
   "seatFinderPoster": {
     "pageTitle": "Seat-finder poster",
@@ -8413,6 +8416,119 @@
       "sub_event_has_chart": "It already has its own chart.",
       "no_chart": "There's no chart to copy yet. Create the event's plan on the Seating page, or choose a saved floor plan."
     }
+  },
+  "galaTables": {
+    "tableSize": "Seats per table",
+    "tableSizeHint": "For a table ticket: one purchase seats this many guests (2–20), named by the buyer. Leave empty for a single ticket.",
+    "tableOf": "Table of {size}",
+    "publicPass": "Seats {size} guests. After paying, you name them with your table’s link.",
+    "tableName": "{table} #{n} · {who}",
+    "progress": "{named} of {size} seats named",
+    "missing": "{count, plural, one {# name missing} other {# names missing}}",
+    "seat": "Seat {n}",
+    "unnamed": "Not named yet",
+    "firstName": "First name",
+    "lastName": "Last name (optional)",
+    "email": "Email for their ticket (optional)",
+    "emailHint": "Their own ticket goes there. Leave it empty to keep the ticket with you.",
+    "named": "{name} has a seat at the table.",
+    "company": "Company or sponsor name",
+    "companyHint": "The party your guests belong to, as the host sees it.",
+    "companySave": "Save name",
+    "companySaved": "Name saved.",
+    "imageN": "Image {n}",
+    "sponsorName": "Sponsor name",
+    "logo": "Logo (optional)",
+    "noLogo": "No logo",
+    "logoHint": "Choose one of the event’s images (add them on Media).",
+    "published": "Show the sponsor to guests",
+    "publishedHint": "Guests see it in the seat finder once the floor plan is on sale.",
+    "sponsorSave": "Save sponsor",
+    "sponsorSaved": "Sponsor saved for {table}.",
+    "sponsorRemove": "Remove the sponsor of {table}",
+    "sponsorRemoved": "Sponsor removed from {table}.",
+    "sponsorFormOf": "Sponsor of {table}",
+    "reminders": {
+      "title": "Naming reminders",
+      "send": "Send naming reminders",
+      "hint": "Emails the buyer of every table that still has names missing (at most once an hour per table).",
+      "done": "{sent, plural, =0 {No reminders sent.} one {Reminder sent to # buyer.} other {Reminders sent to # buyers.}} {skipped, plural, =0 {} one {# table skipped (complete, closed or just reminded).} other {# tables skipped (complete, closed or just reminded).}}"
+    },
+    "console": {
+      "description": "The tables guests bought, the names still missing, and the sponsors on your floor plan.",
+      "soldTitle": "Purchased tables",
+      "caption": "Purchased tables",
+      "table": "Table",
+      "party": "Company or sponsor",
+      "buyer": "Buyer",
+      "size": "Seats",
+      "named": "Named",
+      "missing": "Names",
+      "complete": "All named",
+      "noParty": "Not set",
+      "emptyTitle": "No tables sold yet",
+      "emptyOnSale": "Your table tickets are on sale. Tables appear here as soon as someone buys one.",
+      "emptyNoType": "Add a table ticket (for example a table of 10) to sell whole tables.",
+      "addTableTicket": "Add a table ticket on Tickets & Orders",
+      "reminded": "{count, plural, one {reminded once} other {reminded # times}}",
+      "seatsOf": "Seats at {table}",
+      "ticket": "Ticket {code}",
+      "nameGuest": "Name a guest at {table}",
+      "nameSubmit": "Name guest",
+      "sponsorsTitle": "Hosted tables",
+      "sponsorsIntro": "Give the tables on your floor plan their sponsor. The name shows on the table in the seating editor and, once shown to guests, in the seat finder.",
+      "noPlanTitle": "No floor plan yet",
+      "noPlanHint": "Create the floor plan on Seating; its tables appear here.",
+      "openSeating": "Open Seating",
+      "planTable": "{table} · {seats, plural, one {# seat} other {# seats}}",
+      "sponsoredBy": "Sponsored by {sponsor}",
+      "shown": "Shown to guests",
+      "hidden": "Hidden from guests",
+      "noSponsor": "No sponsor yet"
+    },
+    "public": {
+      "metaTitle": "Name your guests",
+      "eyebrow": "Your table",
+      "title": "Name your guests",
+      "tableOf": "{table} #{n}",
+      "full": "Every seat has a guest",
+      "closed": {
+        "not_paid": "This table isn’t paid, so it can’t be named.",
+        "event_over": "The event is over; this table can no longer be named."
+      },
+      "companyTitle": "Your company or sponsor",
+      "nameTitle": "Add a guest",
+      "nameIntro": "Each guest gets one seat and its ticket.",
+      "submit": "Add guest",
+      "seatsTitle": "Seats",
+      "noSeats": "No seats left at this table",
+      "noSeatsHint": "The table was refunded.",
+      "resendTitle": "Need the link again?",
+      "resendIntro": "We’ll email this link to the address you bought the table with.",
+      "resend": "Email me this link",
+      "resent": "We sent the link to your email.",
+      "resendWait": "We just sent it. Try again in a minute."
+    },
+    "order": {
+      "title": "Your tables",
+      "intro": "Tell us who sits at your table: each guest gets a seat and a ticket.",
+      "cta": "Name guests at {table} #{n}"
+    },
+    "errors": {
+      "table_full": "Every seat at this table has a guest.",
+      "slot_named": "This seat already has a guest.",
+      "event_over": "The event is over; this table can no longer be named.",
+      "not_paid": "This table isn’t paid.",
+      "party_full": "This party is full.",
+      "not_a_table": "Choose a table of the floor plan.",
+      "foreign_logo": "Choose one of the event’s images.",
+      "no_plan": "Create a floor plan first.",
+      "firstName": "Enter the guest’s first name.",
+      "email": "Enter a valid email address, or leave it empty.",
+      "company": "Enter a name.",
+      "sponsorName": "Enter the sponsor’s name."
+    },
+    "tableLabel": "Table {label}"
   },
   "theme": {
     "label": "Colour theme",

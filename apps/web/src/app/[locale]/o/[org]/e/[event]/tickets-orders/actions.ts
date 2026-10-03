@@ -73,6 +73,8 @@ export async function createTicketTypeAction(
         accessDates: parseAccessDates(get('accessDates')),
         // Multi-date events: none ticked = every date.
         occurrenceIds: form.getAll('occurrenceIds').map(String),
+        // M4.2b: a table ticket ("Table of 10"): one purchase seats this many guests.
+        tableSize: get('tableSize') ? Number(get('tableSize')) : null,
       },
       data.ctx,
       ports,

@@ -97,6 +97,14 @@ export const KINDS = {
     urgent: true,
     params: ['url', 'name', 'fromName', 'eventName'],
   },
+  // M4.2b gala tables: a table's claim link to its buyer (after payment, on request, or the
+  // host's naming reminder: `reminder` = 1).
+  'orders.table-naming': {
+    category: 'transactional',
+    channels: ['email'],
+    urgent: true,
+    params: ['url', 'name', 'eventName', 'tableName', 'size', 'missing', 'reminder'],
+  },
   'events.postponed': {
     category: 'transactional',
     channels: ['email'],

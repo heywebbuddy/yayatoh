@@ -36,6 +36,7 @@ import {
   refundRequestNotifier,
   reminderRescheduler,
   supportReplyMailer,
+  tableNamingMailer,
   ticketMailer,
   waitlistMailer,
 } from '@yayatoh/orders';
@@ -126,6 +127,8 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
       eventName: async (tx, id) => (await findEventTx(tx, id))?.name ?? null,
     }),
     waitlistMailer({ notifier, appOrigin }),
+    // M4.2b: a purchased table's claim link to its buyer.
+    tableNamingMailer({ notifier, appOrigin }),
     alertEvaluator({ notifier }),
     // M3.7a: journeys enroll, follow date changes and cancellations (their steps run below).
     ...journeySubscribers(),

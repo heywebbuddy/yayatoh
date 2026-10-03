@@ -201,6 +201,7 @@ export async function PublicEventView({
           earlyEndsAt: p.earlyEndsAt,
           isDonation: p.isDonation,
           accessDates: p.accessDates,
+          tableSize: p.tableSize,
         }))
       : (demo?.passes ?? []).map((p) => ({
           ...p,
@@ -214,6 +215,7 @@ export async function PublicEventView({
           earlyEndsAt: null,
           isDonation: false,
           accessDates: [],
+          tableSize: null,
         }));
   const ev = {
     ...pub,

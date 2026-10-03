@@ -226,6 +226,11 @@
       "intro": "Este es tu enlace para retomar tu inscripción a {eventName} donde la dejaste. Funciona durante {days, plural, one {# día} other {# días}} después de tu último guardado y solo para ti, así que no lo reenvíes. Si no lo pediste, puedes ignorar este correo.",
       "cta": "Continuar mi inscripción"
     },
+    "orders.table-naming": {
+      "subject": "{reminder, plural, =1 {Recordatorio: indica tus invitados para {eventName}} other {Indica tus invitados para {eventName}}}",
+      "intro": "Tu {tableName} tiene {size, plural, one {# asiento} other {# asientos}}. {missing, plural, =0 {Todos los asientos tienen nombre; puedes revisarlos cuando quieras.} one {Aún falta el nombre de # asiento.} other {Aún faltan los nombres de # asientos.}} Usa el botón de abajo para decirnos quién se sienta en tu mesa.",
+      "cta": "Indicar mis invitados"
+    },
     "registration.approved": {
       "subject": "Tu solicitud para {eventName} ha sido aprobada",
       "intro": "Buenas noticias, {name}: tu solicitud para asistir a {eventName} como {typeName} ha sido aprobada. Usa el botón de abajo para ver tu inscripción y, si tu pase tiene precio, pagar y confirmar tu plaza.",

@@ -92,7 +92,8 @@
         "waitlist-offer": "Aanbod van de wachtlijst",
         "waitlist-expired": "Aanbod van de wachtlijst verlopen",
         "credit-note": "Creditnota",
-        "support-reply": "Antwoord van support"
+        "support-reply": "Antwoord van support",
+        "table-naming": "Link om de tafel in te vullen"
       },
       "events": {
         "reminder": "Herinnering evenement",
@@ -1932,7 +1933,8 @@
       },
       "accessibleCol": "Toegankelijke plaatsen",
       "accessibleOf": "Toegankelijke plaatsen van {item}",
-      "accessibleHint": "Toegankelijke plaatsen: typ hun nummers, bijv. ‘1, 2’. Ze zijn omlijnd op de plattegrond en de zaalregels kunnen ze vrijhouden."
+      "accessibleHint": "Toegankelijke plaatsen: typ hun nummers, bijv. ‘1, 2’. Ze zijn omlijnd op de plattegrond en de zaalregels kunnen ze vrijhouden.",
+      "sponsoredBy": "Sponsor: {sponsor}"
     },
     "prices": {
       "title": "Prijzen",
@@ -2248,7 +2250,8 @@
       "closed": "De plaatszoeker is niet open voor dit evenement.",
       "internal": "Er ging bij ons iets mis.",
       "rateLimited": "Te veel codes aangevraagd. Probeer het over {minutes, plural, one {# minuut} other {# minuten}} opnieuw."
-    }
+    },
+    "hostedBy": "Gesponsord door {sponsor}"
   },
   "seatFinderPoster": {
     "pageTitle": "Poster plaatszoeker",
@@ -8413,6 +8416,119 @@
       "sub_event_has_chart": "Het heeft al een eigen plattegrond.",
       "no_chart": "Er is nog geen plattegrond om te kopiëren. Maak de plattegrond van het evenement op de pagina Plaatsen, of kies een opgeslagen plattegrond."
     }
+  },
+  "galaTables": {
+    "tableSize": "Plaatsen per tafel",
+    "tableSizeHint": "Voor een tafelticket: één aankoop biedt plaats aan zoveel gasten (2–20), die de koper opgeeft. Laat leeg voor een los ticket.",
+    "tableOf": "Tafel voor {size}",
+    "publicPass": "Voor {size} gasten. Na betaling geeft u hun namen op via de link van uw tafel.",
+    "tableName": "{table} nr. {n} · {who}",
+    "progress": "{named} van {size} plaatsen met naam",
+    "missing": "{count, plural, one {# naam ontbreekt} other {# namen ontbreken}}",
+    "seat": "Plaats {n}",
+    "unnamed": "Nog geen naam",
+    "firstName": "Voornaam",
+    "lastName": "Achternaam (optioneel)",
+    "email": "E-mail voor hun ticket (optioneel)",
+    "emailHint": "Hun eigen ticket gaat daarheen. Laat leeg om het ticket zelf te houden.",
+    "named": "{name} heeft een plaats aan de tafel.",
+    "company": "Naam van bedrijf of sponsor",
+    "companyHint": "De groep van uw gasten, zoals de organisator die ziet.",
+    "companySave": "Naam opslaan",
+    "companySaved": "Naam opgeslagen.",
+    "imageN": "Afbeelding {n}",
+    "sponsorName": "Naam van de sponsor",
+    "logo": "Logo (optioneel)",
+    "noLogo": "Geen logo",
+    "logoHint": "Kies een van de afbeeldingen van het evenement (voeg ze toe bij Media).",
+    "published": "Sponsor tonen aan gasten",
+    "publishedHint": "Gasten zien de sponsor in de plaatszoeker zodra de plattegrond in de verkoop is.",
+    "sponsorSave": "Sponsor opslaan",
+    "sponsorSaved": "Sponsor opgeslagen voor {table}.",
+    "sponsorRemove": "Sponsor van {table} verwijderen",
+    "sponsorRemoved": "Sponsor verwijderd van {table}.",
+    "sponsorFormOf": "Sponsor van {table}",
+    "reminders": {
+      "title": "Herinneringen voor namen",
+      "send": "Herinneringen voor namen versturen",
+      "hint": "Mailt de koper van elke tafel waar nog namen ontbreken (hoogstens één keer per uur per tafel).",
+      "done": "{sent, plural, =0 {Geen herinneringen verstuurd.} one {Herinnering verstuurd naar # koper.} other {Herinneringen verstuurd naar # kopers.}} {skipped, plural, =0 {} one {# tafel overgeslagen (compleet, gesloten of net herinnerd).} other {# tafels overgeslagen (compleet, gesloten of net herinnerd).}}"
+    },
+    "console": {
+      "description": "De tafels die gasten kochten, de namen die nog ontbreken en de sponsors op uw plattegrond.",
+      "soldTitle": "Gekochte tafels",
+      "caption": "Gekochte tafels",
+      "table": "Tafel",
+      "party": "Bedrijf of sponsor",
+      "buyer": "Koper",
+      "size": "Plaatsen",
+      "named": "Met naam",
+      "missing": "Namen",
+      "complete": "Alles met naam",
+      "noParty": "Niet ingesteld",
+      "emptyTitle": "Nog geen tafels verkocht",
+      "emptyOnSale": "Uw tafeltickets zijn te koop. Tafels verschijnen hier zodra iemand er een koopt.",
+      "emptyNoType": "Voeg een tafelticket toe (bijvoorbeeld een tafel voor 10) om hele tafels te verkopen.",
+      "addTableTicket": "Tafelticket toevoegen bij Tickets en bestellingen",
+      "reminded": "{count, plural, one {één keer herinnerd} other {# keer herinnerd}}",
+      "seatsOf": "Plaatsen aan {table}",
+      "ticket": "Ticket {code}",
+      "nameGuest": "Gast opgeven aan {table}",
+      "nameSubmit": "Gast opgeven",
+      "sponsorsTitle": "Gesponsorde tafels",
+      "sponsorsIntro": "Geef de tafels op uw plattegrond een sponsor. De naam staat op de tafel in de zitplaatseditor en, zodra getoond aan gasten, in de plaatszoeker.",
+      "noPlanTitle": "Nog geen plattegrond",
+      "noPlanHint": "Maak de plattegrond bij Zitplaatsen; de tafels verschijnen hier.",
+      "openSeating": "Zitplaatsen openen",
+      "planTable": "{table} · {seats, plural, one {# plaats} other {# plaatsen}}",
+      "sponsoredBy": "Gesponsord door {sponsor}",
+      "shown": "Zichtbaar voor gasten",
+      "hidden": "Verborgen voor gasten",
+      "noSponsor": "Nog geen sponsor"
+    },
+    "public": {
+      "metaTitle": "Geef uw gasten op",
+      "eyebrow": "Uw tafel",
+      "title": "Geef uw gasten op",
+      "tableOf": "{table} nr. {n}",
+      "full": "Elke plaats heeft een gast",
+      "closed": {
+        "not_paid": "Deze tafel is niet betaald, dus u kunt geen gasten opgeven.",
+        "event_over": "Het evenement is voorbij; voor deze tafel kunt u geen gasten meer opgeven."
+      },
+      "companyTitle": "Uw bedrijf of sponsor",
+      "nameTitle": "Gast toevoegen",
+      "nameIntro": "Elke gast krijgt een plaats en het bijbehorende ticket.",
+      "submit": "Gast toevoegen",
+      "seatsTitle": "Plaatsen",
+      "noSeats": "Geen plaatsen meer aan deze tafel",
+      "noSeatsHint": "De tafel is terugbetaald.",
+      "resendTitle": "Link nog eens nodig?",
+      "resendIntro": "We mailen deze link naar het adres waarmee u de tafel kocht.",
+      "resend": "Mail mij deze link",
+      "resent": "We hebben de link naar uw e-mail gestuurd.",
+      "resendWait": "Net verstuurd. Probeer het over een minuut opnieuw."
+    },
+    "order": {
+      "title": "Uw tafels",
+      "intro": "Laat ons weten wie aan uw tafel zit: elke gast krijgt een plaats en een ticket.",
+      "cta": "Gasten opgeven aan {table} nr. {n}"
+    },
+    "errors": {
+      "table_full": "Elke plaats aan deze tafel heeft een gast.",
+      "slot_named": "Deze plaats heeft al een gast.",
+      "event_over": "Het evenement is voorbij; voor deze tafel kunt u geen gasten meer opgeven.",
+      "not_paid": "Deze tafel is niet betaald.",
+      "party_full": "Deze groep is vol.",
+      "not_a_table": "Kies een tafel van de plattegrond.",
+      "foreign_logo": "Kies een van de afbeeldingen van het evenement.",
+      "no_plan": "Maak eerst een plattegrond.",
+      "firstName": "Vul de voornaam van de gast in.",
+      "email": "Vul een geldig e-mailadres in of laat het leeg.",
+      "company": "Vul een naam in.",
+      "sponsorName": "Vul de naam van de sponsor in."
+    },
+    "tableLabel": "Tafel {label}"
   },
   "theme": {
     "label": "Kleurthema",

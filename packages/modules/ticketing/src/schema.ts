@@ -70,6 +70,12 @@ export const ticketTypes = tenantTable(
      * admission item cell). Only that module may quote, edit or archive it; null = ordinary pass.
      */
     managedBy: text('managed_by'),
+    /**
+     * M4.2b gala tables: a table ticket ("Table of 10"). One unit sold = one table of this many
+     * seats: `table_size` tickets (guest slots) the buyer names through the table's claim link.
+     * Null = an ordinary pass. Inventory, price and per-order limits count tables.
+     */
+    tableSize: integer('table_size'),
   },
   (t) => [
     index('ticket_types_org_event_idx').on(t.orgId, t.eventId, t.sortOrder),
@@ -97,6 +103,10 @@ export const ticketTypes = tenantTable(
       sql`transfer_fee_minor >= 0 and (transfer_cutoff_hours is null or transfer_cutoff_hours between 0 and 8760)`,
     ),
     check('ticket_types_managed_by_check', sql`managed_by is null or managed_by in ('registration')`),
+    check(
+      'ticket_types_table_size_check',
+      sql`table_size is null or (table_size between 2 and 20 and not is_donation)`,
+    ),
   ],
 );
 
@@ -138,6 +148,8 @@ export const tickets = tenantTable(
     seatLabel: text('seat_label'),
     /** Multi-date events (M1.4b): the date this ticket admits (`events.occurrences`, hand-written FK). */
     occurrenceId: uuid('occurrence_id'),
+    /** M4.2b: the purchased table this ticket is a guest slot of (`table_units`, hand-written FK). */
+    tableUnitId: uuid('table_unit_id'),
   },
   (t) => [
     uniqueIndex('tickets_org_event_serial_key').on(t.orgId, t.eventId, t.serial),
@@ -145,6 +157,7 @@ export const tickets = tenantTable(
     index('tickets_org_order_idx').on(t.orgId, t.orderId),
     index('tickets_org_event_updated_idx').on(t.orgId, t.eventId, t.updatedAt, t.id),
     index('tickets_org_occurrence_idx').on(t.orgId, t.occurrenceId).where(sql`occurrence_id is not null`),
+    index('tickets_org_table_unit_idx').on(t.orgId, t.tableUnitId).where(sql`table_unit_id is not null`),
     foreignKey({
       name: 'tickets_ticket_type_fk',
       columns: [t.orgId, t.ticketTypeId],
@@ -359,5 +372,42 @@ export const walletPasses = tenantTable(
     check('wallet_passes_status_check', sql`status in ('active', 'voided')`),
     check('wallet_passes_provider_check', sql`provider in ('fake', 'apple', 'google')`),
     check('wallet_passes_voided_check', sql`(status = 'voided') = (voided_at is not null)`),
+  ],
+);
+
+/**
+ * M4.2b gala tables: one purchased table (a unit of a table ticket type). Its `size` tickets are
+ * issued with it in the order's transaction and point here (`tickets.table_unit_id`), so a table
+ * always has exactly `size` guest slots. The buyer names them through the table's claim link
+ * (`<id>~hmac`, purpose `table-naming`); `link_sends` / `last_link_sent_at` count the emails that
+ * carried it (the first after payment, resends by the buyer, reminders by the host).
+ */
+export const tableUnits = tenantTable(
+  ticketingSchema,
+  'table_units',
+  {
+    eventId: uuid('event_id').notNull(),
+    orderId: uuid('order_id').notNull(),
+    orderItemId: uuid('order_item_id').notNull(),
+    ticketTypeId: uuid('ticket_type_id').notNull(),
+    /** 1…n within the order item ("Table 2 of 3"). */
+    unitNo: integer('unit_no').notNull(),
+    size: integer('size').notNull(),
+    linkSends: integer('link_sends').notNull().default(0),
+    lastLinkSentAt: ts('last_link_sent_at'),
+    reminders: integer('reminders').notNull().default(0),
+    lastRemindedAt: ts('last_reminded_at'),
+  },
+  (t) => [
+    uniqueIndex('table_units_org_item_unit_key').on(t.orgId, t.orderItemId, t.unitNo),
+    index('table_units_org_event_idx').on(t.orgId, t.eventId, t.createdAt),
+    index('table_units_org_order_idx').on(t.orgId, t.orderId),
+    foreignKey({
+      name: 'table_units_ticket_type_fk',
+      columns: [t.orgId, t.ticketTypeId],
+      foreignColumns: [ticketTypes.orgId, ticketTypes.id],
+    }),
+    check('table_units_size_check', sql`size between 2 and 20 and unit_no >= 1`),
+    check('table_units_counts_check', sql`link_sends >= 0 and reminders >= 0`),
   ],
 );

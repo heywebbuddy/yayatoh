@@ -226,6 +226,11 @@
       "intro": "{eventName}の登録を中断したところから再開するためのリンクです。最後に保存してから{days, plural, other {# 日間}}、ご本人のみ使用できますので転送しないでください。心当たりがない場合は、このメールを無視してください。",
       "cta": "登録を続ける"
     },
+    "orders.table-naming": {
+      "subject": "{reminder, plural, =1 {リマインダー：{eventName} のゲスト名を入力してください} other {{eventName} のゲスト名を入力してください}}",
+      "intro": "{tableName} の席数は {size, plural, other {# 席}} です。{missing, plural, =0 {すべての席に名前が入っています。いつでも確認できます。} other {あと # 席の名前が未入力です。}}下のボタンから、テーブルに座る方をお知らせください。",
+      "cta": "ゲスト名を入力する"
+    },
     "registration.approved": {
       "subject": "{eventName} への参加申請が承認されました",
       "intro": "{name} 様、{typeName} として {eventName} に参加する申請が承認されました。下のボタンから登録内容を確認し、有料のパスの場合はお支払いを済ませて参加を確定してください。",
