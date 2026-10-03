@@ -699,7 +699,7 @@ touches:
   - packages/modules/donations/src/{domain/report.ts,domain/reconcile.ts,domain/crm.ts,report.ts,report-dto.ts,report-export.ts,reconciliation.ts,schema-reconciliation.ts}  # new
   - packages/modules/donations/src/{index.ts,private-columns.ts,campaigns.ts,pledge-collection.ts}, MODULE.md
   - packages/modules/donations/tests/report.test.ts
-  - packages/db/drizzle/0119_pale_the_liberteens.sql (+ meta)   # renumber at merge
+  - packages/db/drizzle/0119_short_namorita.sql (+ meta)   # renumber at merge
   - packages/testing/src/{fixtures.ts,ports.ts}, tests/{donations-report,donations,pledge-collection}.int.test.ts
   - apps/worker/src/bulk.ts
   - apps/web/src/app/[locale]/o/[org]/e/[event]/donations/{page.tsx,report/**,reconciliation/**}
@@ -723,7 +723,7 @@ touches:
 - [x] Fixture rows for both orgs (`donationReconRows`: one run over the fixture gift order with a `missing_in_ledger` difference and a payout).
 - [x] Every text/jsonb column declared in `private-columns.ts` (references, payout ids, totals, notes and actors internal).
 
-**Migration:** `0119_pale_the_liberteens.sql` (renumber at merge), additive. Hand-written block: (1) `recon_runs_event_fk`, `recon_items_event_fk`, `recon_payouts_event_fk` (→ `events.events`, cascade); (2) `payments.post_memo(uuid, text, text, text, uuid, timestamptz, jsonb, uuid)` SECURITY DEFINER (`search_path = pg_catalog`), owned by `ledger_writer` (with the `GRANT CREATE` / `REVOKE CREATE ON SCHEMA payments` dance post_journal uses), `REVOKE ALL … FROM PUBLIC`, `GRANT EXECUTE … TO app_user`.
+**Migration:** `0119_short_namorita.sql` (renumber at merge), additive. Hand-written block: (1) `recon_runs_event_fk`, `recon_items_event_fk`, `recon_payouts_event_fk` (→ `events.events`, cascade); (2) `payments.post_memo(uuid, text, text, text, uuid, timestamptz, jsonb, uuid)` SECURITY DEFINER (`search_path = pg_catalog`), owned by `ledger_writer` (with the `GRANT CREATE` / `REVOKE CREATE ON SCHEMA payments` dance post_journal uses), `REVOKE ALL … FROM PUBLIC`, `GRANT EXECUTE … TO app_user`.
 The stacked branches' migrations were renumbered in this branch: M4.8e's `0113`–`0116` kept, M4.8d's `0114_long_fat_cobra` → `0117`, M4.8f's `0114_medical_santa_claus` → `0118` (snapshots rebased; `drizzle-kit generate` shows no changes).
 
 ### 6. API diff

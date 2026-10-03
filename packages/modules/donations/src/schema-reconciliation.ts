@@ -88,7 +88,7 @@ export const reconItems = tenantTable(
     check('recon_items_reference_length', sql`length(reference) between 1 and 200`),
     check(
       'recon_items_resolved_check',
-      sql`(status = 'resolved') = (resolved_at is not null) and (status = 'resolved') = (resolution_note is not null)`,
+      sql`status <> 'resolved' or (resolved_at is not null and resolution_note is not null)`,
     ),
     check(
       'recon_items_note_length',

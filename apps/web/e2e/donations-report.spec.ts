@@ -163,7 +163,9 @@ test.describe('donations report and reconciliation (M4.8g)', () => {
     await expect(item.getByLabel('What you found')).toHaveAttribute('aria-invalid', 'true');
     await item.getByLabel('What you found').fill('Stripe adjustment, confirmed');
     await resolve.click();
-    await expect(item.getByText('Resolved.')).toBeVisible();
+    // The card itself confirms it: resolved, with the note, and no form left.
+    await expect(item.getByText('Resolved: Stripe adjustment, confirmed')).toBeVisible();
+    await expect(item.getByRole('button', { name: /^Resolve/ })).toHaveCount(0);
     await page.reload();
     await expect(page.getByText('Resolved: Stripe adjustment, confirmed')).toBeVisible();
     await expect(page.getByText('No open differences: every one is resolved or cleared.')).toBeVisible();

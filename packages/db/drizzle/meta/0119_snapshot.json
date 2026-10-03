@@ -1,5 +1,5 @@
 {
-  "id": "41d3a5f6-2932-46ad-91c9-2d91ebfe6ff3",
+  "id": "6cb9425a-7235-455e-8e32-9783dd87fefc",
   "prevId": "89c5c1f6-bb53-4cbc-8029-cf799d41cf0a",
   "version": "7",
   "dialect": "postgresql",
@@ -53506,7 +53506,7 @@
         },
         "recon_items_resolved_check": {
           "name": "recon_items_resolved_check",
-          "value": "(status = 'resolved') = (resolved_at is not null) and (status = 'resolved') = (resolution_note is not null)"
+          "value": "status <> 'resolved' or (resolved_at is not null and resolution_note is not null)"
         },
         "recon_items_note_length": {
           "name": "recon_items_note_length",

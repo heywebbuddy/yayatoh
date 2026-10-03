@@ -19,7 +19,7 @@ CREATE TABLE "donations"."recon_items" (
 	CONSTRAINT "recon_items_status_check" CHECK (status in ('open', 'resolved', 'cleared')),
 	CONSTRAINT "recon_items_currency_check" CHECK (currency ~ '^[A-Z]{3}$'),
 	CONSTRAINT "recon_items_reference_length" CHECK (length(reference) between 1 and 200),
-	CONSTRAINT "recon_items_resolved_check" CHECK ((status = 'resolved') = (resolved_at is not null) and (status = 'resolved') = (resolution_note is not null)),
+	CONSTRAINT "recon_items_resolved_check" CHECK (status <> 'resolved' or (resolved_at is not null and resolution_note is not null)),
 	CONSTRAINT "recon_items_note_length" CHECK (resolution_note is null or length(resolution_note) between 3 and 500)
 );
 --> statement-breakpoint
