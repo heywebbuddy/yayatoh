@@ -36,6 +36,21 @@ export {
   TRIBUTE_KINDS,
   type TributeKind,
 } from './domain/giving.ts';
+// M4.8c paddle raise: paddles, the console, spotters' entries and the recorder's pledges.
+export {
+  BULK_SCOPES,
+  CALL_STATUSES,
+  DEFAULT_PADDLE_START,
+  ENTRY_REFUSALS,
+  ENTRY_STATUSES,
+  type EntryOutcome,
+  type EntryRefusal,
+  type EntryStatus,
+  MAX_SYNC_BATCH,
+  PADDLE_MAX,
+  PADDLE_MIN,
+  parsePaddleNumber,
+} from './domain/paddles.ts';
 export {
   CHARITY_STATUSES,
   type CharityStatus,
@@ -92,55 +107,6 @@ export {
   startGiftCommand,
 } from './gifts.ts';
 export { RECEIPT_COPY, RECEIPT_COPY_VERSION, type ReceiptCopy } from './legal/receipt-copy.ts';
-export { privateColumns } from './private-columns.ts';
-export {
-  type ReceiptDocInput,
-  receiptEmailBody,
-  receiptHtml,
-  receiptText,
-  type StatementDocInput,
-  statementEmailBody,
-  statementHtml,
-  taxNoticeText,
-} from './receipt-document.ts';
-export {
-  catchUpReceipts,
-  FairValueRowDto,
-  HostReceiptDto,
-  issueReceiptTx,
-  ReceiptDocumentDto,
-  ReceiptsConsoleDto,
-  receiptByToken,
-  receiptDocumentQuery,
-  receiptIssuer,
-  receiptsConsoleQuery,
-  receiptsOfOrdersTx,
-  receiptToken,
-  receiptUrl,
-  StatementDocumentDto,
-  statementByToken,
-  statementMailer,
-  statementsOfYearTx,
-  statementToken,
-  statementUrl,
-  yearEndStatementsCommand,
-} from './receipts.ts';
-export { giftRetentionCommand, LAPSED_GIFT_DAYS, redactLapsedGiftsTx } from './retention.ts';
-// M4.8c paddle raise: paddles, the console, spotters' entries and the recorder's pledges.
-export {
-  BULK_SCOPES,
-  CALL_STATUSES,
-  DEFAULT_PADDLE_START,
-  ENTRY_REFUSALS,
-  ENTRY_STATUSES,
-  type EntryOutcome,
-  type EntryRefusal,
-  type EntryStatus,
-  MAX_SYNC_BATCH,
-  PADDLE_MAX,
-  PADDLE_MIN,
-  parsePaddleNumber,
-} from './domain/paddles.ts';
 export {
   AssignPaddleInput,
   BulkAssignInput,
@@ -179,3 +145,37 @@ export {
   paddlesQuery,
   releasePaddleCommand,
 } from './paddles.ts';
+export { privateColumns } from './private-columns.ts';
+export {
+  type ReceiptDocInput,
+  receiptEmailBody,
+  receiptHtml,
+  receiptText,
+  type StatementDocInput,
+  statementEmailBody,
+  statementHtml,
+  taxNoticeText,
+} from './receipt-document.ts';
+export {
+  catchUpReceipts,
+  FairValueRowDto,
+  HostReceiptDto,
+  issueReceiptTx,
+  ReceiptDocumentDto,
+  ReceiptsConsoleDto,
+  receiptByToken,
+  receiptDocumentQuery,
+  receiptIssuer,
+  receiptsConsoleQuery,
+  receiptsOfOrdersTx,
+  receiptToken,
+  receiptUrl,
+  StatementDocumentDto,
+  statementByToken,
+  statementMailer,
+  statementsOfYearTx,
+  statementToken,
+  statementUrl,
+  yearEndStatementsCommand,
+} from './receipts.ts';
+export { giftRetentionCommand, LAPSED_GIFT_DAYS, redactLapsedGiftsTx } from './retention.ts';
