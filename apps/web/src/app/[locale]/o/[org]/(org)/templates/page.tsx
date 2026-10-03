@@ -39,13 +39,13 @@ export default async function TemplatesPage({
                 <Card className="flex h-full flex-col gap-3">
                   <Label>{t('starters.label')}</Label>
                   <h3 className="text-section">{t(`starters.${key}.name`)}</h3>
-                  <p className="text-body text-zinc-600">{t(`starters.${key}.description`)}</p>
-                  <p className="text-caption text-zinc-500">
+                  <p className="text-body text-ink-2">{t(`starters.${key}.description`)}</p>
+                  <p className="text-caption text-ink-2">
                     {t('starters.sections', {
                       list: nav.map((i) => t(navLabelKey(profile, i))).join(', '),
                     })}
                   </p>
-                  <p className="text-caption text-zinc-500">
+                  <p className="text-caption text-ink-2">
                     {t('starters.checklist', {
                       list: checklist.map((k) => t(`readiness.${k}`)).join(', '),
                     })}
@@ -83,8 +83,8 @@ export default async function TemplatesPage({
                   <div className="flex flex-col gap-1">
                     <Label>{t(`profiles.${tpl.profile}`)}</Label>
                     <h2 className="text-section">{tpl.name}</h2>
-                    {tpl.description ? <p className="text-body text-zinc-600">{tpl.description}</p> : null}
-                    <p className="text-caption text-zinc-500">
+                    {tpl.description ? <p className="text-body text-ink-2">{tpl.description}</p> : null}
+                    <p className="text-caption text-ink-2">
                       {t('templates.contents', {
                         ticketTypes: tpl.ticketTypes,
                         questions: tpl.questions,
@@ -111,7 +111,7 @@ export default async function TemplatesPage({
                       {t('templates.use', { name: tpl.name })}
                     </summary>
                     <div className="pt-3">
-                      <p className="pb-3 text-caption text-zinc-500">
+                      <p className="pb-3 text-caption text-ink-2">
                         {t('templates.timezone', { timezone: tpl.timezone.replace(/_/g, ' ') })}
                       </p>
                       <CopyEventForm

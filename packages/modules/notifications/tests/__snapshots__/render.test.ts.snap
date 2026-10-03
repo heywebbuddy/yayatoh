@@ -1365,6 +1365,552 @@ exports[`renderMessage: every kind in all 13 locales > campaigns.test · zh-TW 1
 }
 `;
 
+exports[`renderMessage: every kind in all 13 locales > donations.receipt · ar 1`] = `
+{
+  "subject": "إيصال تبرّعك من Lakeside Events",
+  "text": "إيصال تبرّعك من Lakeside Events
+
+مرحبًا Amina Diallo،
+
+شكرًا على دفعتك البالغة ‏500.00 US$ مقابل Harbor Arts Gala. إيصالك أدناه. احتفظ به أو بنسخة PDF مع سجلاتك.
+
+Receipt number: R-00007
+Amount paid: $500.00
+Tax-deductible amount: $350.00
+
+تنزيل الإيصال بصيغة PDF: https://app.yayatoh.test/receipts/sample
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.receipt · de 1`] = `
+{
+  "subject": "Ihre Spendenquittung von Lakeside Events",
+  "text": "Ihre Spendenquittung von Lakeside Events
+
+Hallo Amina Diallo,
+
+Danke für Ihre Zahlung von 500,00 $ für Harbor Arts Gala. Ihr Beleg steht unten. Bewahren Sie ihn oder die PDF-Kopie bei Ihren Unterlagen auf.
+
+Receipt number: R-00007
+Amount paid: $500.00
+Tax-deductible amount: $350.00
+
+PDF-Beleg herunterladen: https://app.yayatoh.test/receipts/sample
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.receipt · en 1`] = `
+{
+  "subject": "Your donation receipt from Lakeside Events",
+  "text": "Your donation receipt from Lakeside Events
+
+Hi Amina Diallo,
+
+Thank you for your payment of $500.00 for Harbor Arts Gala. Your receipt is below. Keep it, or the PDF copy, with your records.
+
+Receipt number: R-00007
+Amount paid: $500.00
+Tax-deductible amount: $350.00
+
+Download the PDF receipt: https://app.yayatoh.test/receipts/sample
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.receipt · es 1`] = `
+{
+  "subject": "Tu recibo de donación de Lakeside Events",
+  "text": "Tu recibo de donación de Lakeside Events
+
+Hola, Amina Diallo:
+
+Gracias por tu pago de 500,00 US$ para Harbor Arts Gala. Tu recibo está a continuación. Guárdalo, o su copia en PDF, con tus registros.
+
+Receipt number: R-00007
+Amount paid: $500.00
+Tax-deductible amount: $350.00
+
+Descargar el recibo en PDF: https://app.yayatoh.test/receipts/sample
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.receipt · fr 1`] = `
+{
+  "subject": "Votre reçu de don de Lakeside Events",
+  "text": "Votre reçu de don de Lakeside Events
+
+Bonjour Amina Diallo,
+
+Merci pour votre paiement de 500,00 $US pour Harbor Arts Gala. Votre reçu figure ci-dessous. Conservez-le, ou sa copie PDF, avec vos documents.
+
+Receipt number: R-00007
+Amount paid: $500.00
+Tax-deductible amount: $350.00
+
+Télécharger le reçu PDF: https://app.yayatoh.test/receipts/sample
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.receipt · hi 1`] = `
+{
+  "subject": "Lakeside Events की ओर से आपकी दान रसीद",
+  "text": "Lakeside Events की ओर से आपकी दान रसीद
+
+नमस्ते Amina Diallo,
+
+Harbor Arts Gala के लिए $500.00 के भुगतान के लिए धन्यवाद। आपकी रसीद नीचे है। इसे या इसकी PDF प्रति को अपने रिकॉर्ड के साथ रखें।
+
+Receipt number: R-00007
+Amount paid: $500.00
+Tax-deductible amount: $350.00
+
+PDF रसीद डाउनलोड करें: https://app.yayatoh.test/receipts/sample
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.receipt · it 1`] = `
+{
+  "subject": "La tua ricevuta di donazione da Lakeside Events",
+  "text": "La tua ricevuta di donazione da Lakeside Events
+
+Ciao Amina Diallo,
+
+Grazie per il tuo pagamento di 500,00 USD per Harbor Arts Gala. La ricevuta è qui sotto. Conservala, o la copia PDF, con i tuoi documenti.
+
+Receipt number: R-00007
+Amount paid: $500.00
+Tax-deductible amount: $350.00
+
+Scarica la ricevuta PDF: https://app.yayatoh.test/receipts/sample
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.receipt · ja 1`] = `
+{
+  "subject": "Lakeside Eventsからの寄付の領収書",
+  "text": "Lakeside Eventsからの寄付の領収書
+
+Amina Diallo 様
+
+Harbor Arts Galaへの$500.00のお支払いをありがとうございます。領収書は以下のとおりです。この領収書またはPDFの控えを記録として保管してください。
+
+Receipt number: R-00007
+Amount paid: $500.00
+Tax-deductible amount: $350.00
+
+PDFの領収書をダウンロード: https://app.yayatoh.test/receipts/sample
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.receipt · nl 1`] = `
+{
+  "subject": "Uw donatiebewijs van Lakeside Events",
+  "text": "Uw donatiebewijs van Lakeside Events
+
+Hoi Amina Diallo,
+
+Dank voor uw betaling van US$ 500,00 voor Harbor Arts Gala. Uw bewijs staat hieronder. Bewaar het, of de pdf-kopie, bij uw administratie.
+
+Receipt number: R-00007
+Amount paid: $500.00
+Tax-deductible amount: $350.00
+
+Pdf-bewijs downloaden: https://app.yayatoh.test/receipts/sample
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.receipt · pt 1`] = `
+{
+  "subject": "Seu recibo de doação de Lakeside Events",
+  "text": "Seu recibo de doação de Lakeside Events
+
+Olá, Amina Diallo!
+
+Obrigado pelo seu pagamento de US$ 500,00 para Harbor Arts Gala. O seu recibo está abaixo. Guarde-o, ou a cópia em PDF, com os seus registros.
+
+Receipt number: R-00007
+Amount paid: $500.00
+Tax-deductible amount: $350.00
+
+Baixar o recibo em PDF: https://app.yayatoh.test/receipts/sample
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.receipt · ru 1`] = `
+{
+  "subject": "Квитанция о пожертвовании от Lakeside Events",
+  "text": "Квитанция о пожертвовании от Lakeside Events
+
+Здравствуйте, Amina Diallo!
+
+Спасибо за ваш платёж в размере 500,00 $ за Harbor Arts Gala. Квитанция приведена ниже. Сохраните её или PDF-копию вместе с вашими документами.
+
+Receipt number: R-00007
+Amount paid: $500.00
+Tax-deductible amount: $350.00
+
+Скачать квитанцию в PDF: https://app.yayatoh.test/receipts/sample
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.receipt · zh-CN 1`] = `
+{
+  "subject": "来自 Lakeside Events 的捐赠收据",
+  "text": "来自 Lakeside Events 的捐赠收据
+
+Amina Diallo，您好：
+
+感谢您为 Harbor Arts Gala 支付 US$500.00。您的收据如下。请将其或 PDF 副本与您的记录一起保存。
+
+Receipt number: R-00007
+Amount paid: $500.00
+Tax-deductible amount: $350.00
+
+下载 PDF 收据: https://app.yayatoh.test/receipts/sample
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.receipt · zh-TW 1`] = `
+{
+  "subject": "來自 Lakeside Events 的捐款收據",
+  "text": "來自 Lakeside Events 的捐款收據
+
+Amina Diallo，您好：
+
+感謝您為 Harbor Arts Gala 支付 US$500.00。您的收據如下。請將其或 PDF 副本與您的紀錄一併保存。
+
+Receipt number: R-00007
+Amount paid: $500.00
+Tax-deductible amount: $350.00
+
+下載 PDF 收據: https://app.yayatoh.test/receipts/sample
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.year-end-statement · ar 1`] = `
+{
+  "subject": "كشف تبرعاتك لعام 2027 من Lakeside Events",
+  "text": "كشف تبرعاتك لعام 2027 من Lakeside Events
+
+مرحبًا Amina Diallo،
+
+شكرًا لدعمك Lakeside Events في عام 2027. كشف مدفوعاتك القابلة للخصم الضريبي أدناه وبصيغة PDF.
+
+Total tax-deductible amount for 2027: $1,350.00.
+
+تنزيل الكشف بصيغة PDF: https://app.yayatoh.test/statements/sample
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.year-end-statement · de 1`] = `
+{
+  "subject": "Ihre Spendenübersicht 2027 von Lakeside Events",
+  "text": "Ihre Spendenübersicht 2027 von Lakeside Events
+
+Hallo Amina Diallo,
+
+Danke, dass Sie Lakeside Events im Jahr 2027 unterstützt haben. Ihre Übersicht der steuerlich absetzbaren Zahlungen steht unten und als PDF.
+
+Total tax-deductible amount for 2027: $1,350.00.
+
+PDF-Übersicht herunterladen: https://app.yayatoh.test/statements/sample
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.year-end-statement · en 1`] = `
+{
+  "subject": "Your 2027 giving statement from Lakeside Events",
+  "text": "Your 2027 giving statement from Lakeside Events
+
+Hi Amina Diallo,
+
+Thank you for supporting Lakeside Events in 2027. Your statement of tax-deductible payments is below, and as a PDF.
+
+Total tax-deductible amount for 2027: $1,350.00.
+
+Download the PDF statement: https://app.yayatoh.test/statements/sample
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.year-end-statement · es 1`] = `
+{
+  "subject": "Tu resumen de donaciones de 2027 de Lakeside Events",
+  "text": "Tu resumen de donaciones de 2027 de Lakeside Events
+
+Hola, Amina Diallo:
+
+Gracias por apoyar a Lakeside Events en 2027. Tu resumen de pagos deducibles de impuestos está a continuación y en PDF.
+
+Total tax-deductible amount for 2027: $1,350.00.
+
+Descargar el resumen en PDF: https://app.yayatoh.test/statements/sample
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.year-end-statement · fr 1`] = `
+{
+  "subject": "Votre relevé des dons 2027 de Lakeside Events",
+  "text": "Votre relevé des dons 2027 de Lakeside Events
+
+Bonjour Amina Diallo,
+
+Merci d’avoir soutenu Lakeside Events en 2027. Votre relevé des paiements déductibles des impôts figure ci-dessous et en PDF.
+
+Total tax-deductible amount for 2027: $1,350.00.
+
+Télécharger le relevé PDF: https://app.yayatoh.test/statements/sample
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.year-end-statement · hi 1`] = `
+{
+  "subject": "Lakeside Events की ओर से आपका 2027 का दान विवरण",
+  "text": "Lakeside Events की ओर से आपका 2027 का दान विवरण
+
+नमस्ते Amina Diallo,
+
+2027 में Lakeside Events का समर्थन करने के लिए धन्यवाद। आपके कर-कटौती योग्य भुगतानों का विवरण नीचे और PDF में है।
+
+Total tax-deductible amount for 2027: $1,350.00.
+
+PDF विवरण डाउनलोड करें: https://app.yayatoh.test/statements/sample
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.year-end-statement · it 1`] = `
+{
+  "subject": "Il tuo riepilogo donazioni 2027 da Lakeside Events",
+  "text": "Il tuo riepilogo donazioni 2027 da Lakeside Events
+
+Ciao Amina Diallo,
+
+Grazie per aver sostenuto Lakeside Events nel 2027. Il riepilogo dei pagamenti deducibili è qui sotto e in PDF.
+
+Total tax-deductible amount for 2027: $1,350.00.
+
+Scarica il riepilogo PDF: https://app.yayatoh.test/statements/sample
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.year-end-statement · ja 1`] = `
+{
+  "subject": "Lakeside Eventsからの2027年 寄付明細書",
+  "text": "Lakeside Eventsからの2027年 寄付明細書
+
+Amina Diallo 様
+
+2027年にLakeside Eventsをご支援いただきありがとうございます。税控除対象のお支払いの明細は以下とPDFのとおりです。
+
+Total tax-deductible amount for 2027: $1,350.00.
+
+PDFの明細書をダウンロード: https://app.yayatoh.test/statements/sample
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.year-end-statement · nl 1`] = `
+{
+  "subject": "Uw giftenoverzicht 2027 van Lakeside Events",
+  "text": "Uw giftenoverzicht 2027 van Lakeside Events
+
+Hoi Amina Diallo,
+
+Dank dat u Lakeside Events in 2027 hebt gesteund. Uw overzicht van aftrekbare betalingen staat hieronder en als pdf.
+
+Total tax-deductible amount for 2027: $1,350.00.
+
+Pdf-overzicht downloaden: https://app.yayatoh.test/statements/sample
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.year-end-statement · pt 1`] = `
+{
+  "subject": "Seu extrato de doações de 2027 de Lakeside Events",
+  "text": "Seu extrato de doações de 2027 de Lakeside Events
+
+Olá, Amina Diallo!
+
+Obrigado por apoiar Lakeside Events em 2027. O extrato dos seus pagamentos dedutíveis de impostos está abaixo e em PDF.
+
+Total tax-deductible amount for 2027: $1,350.00.
+
+Baixar o extrato em PDF: https://app.yayatoh.test/statements/sample
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.year-end-statement · ru 1`] = `
+{
+  "subject": "Сводка пожертвований за 2027 год от Lakeside Events",
+  "text": "Сводка пожертвований за 2027 год от Lakeside Events
+
+Здравствуйте, Amina Diallo!
+
+Спасибо, что поддержали Lakeside Events в 2027 году. Сводка платежей, подлежащих налоговому вычету, приведена ниже и в PDF.
+
+Total tax-deductible amount for 2027: $1,350.00.
+
+Скачать сводку в PDF: https://app.yayatoh.test/statements/sample
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.year-end-statement · zh-CN 1`] = `
+{
+  "subject": "来自 Lakeside Events 的 2027 年捐赠明细",
+  "text": "来自 Lakeside Events 的 2027 年捐赠明细
+
+Amina Diallo，您好：
+
+感谢您在 2027 年支持 Lakeside Events。您的可抵税付款明细如下，并附 PDF。
+
+Total tax-deductible amount for 2027: $1,350.00.
+
+下载 PDF 明细: https://app.yayatoh.test/statements/sample
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.year-end-statement · zh-TW 1`] = `
+{
+  "subject": "來自 Lakeside Events 的 2027 年捐款明細",
+  "text": "來自 Lakeside Events 的 2027 年捐款明細
+
+Amina Diallo，您好：
+
+感謝您在 2027 年支持 Lakeside Events。您的可抵稅付款明細如下，並附 PDF。
+
+Total tax-deductible amount for 2027: $1,350.00.
+
+下載 PDF 明細: https://app.yayatoh.test/statements/sample
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
 exports[`renderMessage: every kind in all 13 locales > events.postponed · ar 1`] = `
 {
   "subject": "تأجيل Lakeside Jazz Night",
@@ -2761,6 +3307,500 @@ exports[`renderMessage: every kind in all 13 locales > guest.waitlist-code · zh
 您好：
 
 輸入 305117 以確認您的電子郵件並加入 Lakeside Events 的 Lakeside Jazz Night 候補名單。驗證碼僅能使用一次，10 分鐘後失效。如果這不是您本人的要求，請忽略此郵件。
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.invitation · ar 1`] = `
+{
+  "subject": "You're invited: Lopez Chen Wedding",
+  "text": "You're invited: Lopez Chen Wedding
+
+مرحبًا،
+
+Dear The Garcia family,
+
+We would love to celebrate Lopez Chen Wedding with you. Please let us know who of your household can come.
+
+الرد على الدعوة: https://app.yayatoh.test/rsvp/sample-token
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.invitation · de 1`] = `
+{
+  "subject": "You're invited: Lopez Chen Wedding",
+  "text": "You're invited: Lopez Chen Wedding
+
+Hallo,
+
+Dear The Garcia family,
+
+We would love to celebrate Lopez Chen Wedding with you. Please let us know who of your household can come.
+
+Auf die Einladung antworten: https://app.yayatoh.test/rsvp/sample-token
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.invitation · en 1`] = `
+{
+  "subject": "You're invited: Lopez Chen Wedding",
+  "text": "You're invited: Lopez Chen Wedding
+
+Hello,
+
+Dear The Garcia family,
+
+We would love to celebrate Lopez Chen Wedding with you. Please let us know who of your household can come.
+
+Reply to the invitation: https://app.yayatoh.test/rsvp/sample-token
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.invitation · es 1`] = `
+{
+  "subject": "You're invited: Lopez Chen Wedding",
+  "text": "You're invited: Lopez Chen Wedding
+
+Hola:
+
+Dear The Garcia family,
+
+We would love to celebrate Lopez Chen Wedding with you. Please let us know who of your household can come.
+
+Responder a la invitación: https://app.yayatoh.test/rsvp/sample-token
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.invitation · fr 1`] = `
+{
+  "subject": "You're invited: Lopez Chen Wedding",
+  "text": "You're invited: Lopez Chen Wedding
+
+Bonjour,
+
+Dear The Garcia family,
+
+We would love to celebrate Lopez Chen Wedding with you. Please let us know who of your household can come.
+
+Répondre à l'invitation: https://app.yayatoh.test/rsvp/sample-token
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.invitation · hi 1`] = `
+{
+  "subject": "You're invited: Lopez Chen Wedding",
+  "text": "You're invited: Lopez Chen Wedding
+
+नमस्ते,
+
+Dear The Garcia family,
+
+We would love to celebrate Lopez Chen Wedding with you. Please let us know who of your household can come.
+
+निमंत्रण का उत्तर दें: https://app.yayatoh.test/rsvp/sample-token
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.invitation · it 1`] = `
+{
+  "subject": "You're invited: Lopez Chen Wedding",
+  "text": "You're invited: Lopez Chen Wedding
+
+Ciao,
+
+Dear The Garcia family,
+
+We would love to celebrate Lopez Chen Wedding with you. Please let us know who of your household can come.
+
+Rispondi all'invito: https://app.yayatoh.test/rsvp/sample-token
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.invitation · ja 1`] = `
+{
+  "subject": "You're invited: Lopez Chen Wedding",
+  "text": "You're invited: Lopez Chen Wedding
+
+こんにちは。
+
+Dear The Garcia family,
+
+We would love to celebrate Lopez Chen Wedding with you. Please let us know who of your household can come.
+
+招待状に返信する: https://app.yayatoh.test/rsvp/sample-token
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.invitation · nl 1`] = `
+{
+  "subject": "You're invited: Lopez Chen Wedding",
+  "text": "You're invited: Lopez Chen Wedding
+
+Hallo,
+
+Dear The Garcia family,
+
+We would love to celebrate Lopez Chen Wedding with you. Please let us know who of your household can come.
+
+Reageer op de uitnodiging: https://app.yayatoh.test/rsvp/sample-token
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.invitation · pt 1`] = `
+{
+  "subject": "You're invited: Lopez Chen Wedding",
+  "text": "You're invited: Lopez Chen Wedding
+
+Olá!
+
+Dear The Garcia family,
+
+We would love to celebrate Lopez Chen Wedding with you. Please let us know who of your household can come.
+
+Responder ao convite: https://app.yayatoh.test/rsvp/sample-token
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.invitation · ru 1`] = `
+{
+  "subject": "You're invited: Lopez Chen Wedding",
+  "text": "You're invited: Lopez Chen Wedding
+
+Здравствуйте!
+
+Dear The Garcia family,
+
+We would love to celebrate Lopez Chen Wedding with you. Please let us know who of your household can come.
+
+Ответить на приглашение: https://app.yayatoh.test/rsvp/sample-token
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.invitation · zh-CN 1`] = `
+{
+  "subject": "You're invited: Lopez Chen Wedding",
+  "text": "You're invited: Lopez Chen Wedding
+
+您好：
+
+Dear The Garcia family,
+
+We would love to celebrate Lopez Chen Wedding with you. Please let us know who of your household can come.
+
+回复邀请: https://app.yayatoh.test/rsvp/sample-token
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.invitation · zh-TW 1`] = `
+{
+  "subject": "You're invited: Lopez Chen Wedding",
+  "text": "You're invited: Lopez Chen Wedding
+
+您好：
+
+Dear The Garcia family,
+
+We would love to celebrate Lopez Chen Wedding with you. Please let us know who of your household can come.
+
+回覆邀請: https://app.yayatoh.test/rsvp/sample-token
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.rsvp-reminder · ar 1`] = `
+{
+  "subject": "تذكير: يُرجى الرد بخصوص Lopez Chen Wedding",
+  "text": "تذكير: يُرجى الرد بخصوص Lopez Chen Wedding
+
+مرحبًا The Garcia family،
+
+The Garcia family، لم يصلنا ردكم بعد. يُرجى إخبارنا بمن سيحضر Lopez Chen Wedding قبل May 1, 2027.
+
+الرد الآن: https://app.yayatoh.test/rsvp/sample-token
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.rsvp-reminder · de 1`] = `
+{
+  "subject": "Erinnerung: Bitte antworten Sie für Lopez Chen Wedding",
+  "text": "Erinnerung: Bitte antworten Sie für Lopez Chen Wedding
+
+Hallo The Garcia family,
+
+The Garcia family, wir haben noch keine Antwort von Ihnen. Bitte sagen Sie uns bis May 1, 2027, wer zu Lopez Chen Wedding kommt.
+
+Jetzt antworten: https://app.yayatoh.test/rsvp/sample-token
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.rsvp-reminder · en 1`] = `
+{
+  "subject": "Reminder: please reply for Lopez Chen Wedding",
+  "text": "Reminder: please reply for Lopez Chen Wedding
+
+Hi The Garcia family,
+
+The Garcia family, we haven't heard from you yet. Please let us know who can come to Lopez Chen Wedding by May 1, 2027.
+
+Reply now: https://app.yayatoh.test/rsvp/sample-token
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.rsvp-reminder · es 1`] = `
+{
+  "subject": "Recordatorio: confirma tu asistencia a Lopez Chen Wedding",
+  "text": "Recordatorio: confirma tu asistencia a Lopez Chen Wedding
+
+Hola, The Garcia family:
+
+The Garcia family, aún no hemos recibido su respuesta. Indíquennos quiénes vendrán a Lopez Chen Wedding antes del May 1, 2027.
+
+Responder ahora: https://app.yayatoh.test/rsvp/sample-token
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.rsvp-reminder · fr 1`] = `
+{
+  "subject": "Rappel : merci de répondre pour Lopez Chen Wedding",
+  "text": "Rappel : merci de répondre pour Lopez Chen Wedding
+
+Bonjour The Garcia family,
+
+The Garcia family, nous n'avons pas encore reçu votre réponse. Dites-nous qui viendra à Lopez Chen Wedding avant le May 1, 2027.
+
+Répondre maintenant: https://app.yayatoh.test/rsvp/sample-token
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.rsvp-reminder · hi 1`] = `
+{
+  "subject": "अनुस्मारक: कृपया Lopez Chen Wedding के लिए उत्तर दें",
+  "text": "अनुस्मारक: कृपया Lopez Chen Wedding के लिए उत्तर दें
+
+नमस्ते The Garcia family,
+
+The Garcia family, हमें अभी तक आपका उत्तर नहीं मिला है। कृपया May 1, 2027 तक बताएँ कि Lopez Chen Wedding में कौन आएगा।
+
+अभी उत्तर दें: https://app.yayatoh.test/rsvp/sample-token
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.rsvp-reminder · it 1`] = `
+{
+  "subject": "Promemoria: rispondi per Lopez Chen Wedding",
+  "text": "Promemoria: rispondi per Lopez Chen Wedding
+
+Ciao The Garcia family,
+
+The Garcia family, non abbiamo ancora ricevuto la vostra risposta. Fateci sapere chi verrà a Lopez Chen Wedding entro il May 1, 2027.
+
+Rispondi ora: https://app.yayatoh.test/rsvp/sample-token
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.rsvp-reminder · ja 1`] = `
+{
+  "subject": "リマインダー：Lopez Chen Wedding のご返信のお願い",
+  "text": "リマインダー：Lopez Chen Wedding のご返信のお願い
+
+The Garcia family 様
+
+The Garcia family 様、まだご返信をいただいておりません。May 1, 2027 までに Lopez Chen Wedding へのご出席者をお知らせください。
+
+今すぐ返信する: https://app.yayatoh.test/rsvp/sample-token
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.rsvp-reminder · nl 1`] = `
+{
+  "subject": "Herinnering: laat het ons weten voor Lopez Chen Wedding",
+  "text": "Herinnering: laat het ons weten voor Lopez Chen Wedding
+
+Hoi The Garcia family,
+
+The Garcia family, we hebben nog niets van jullie gehoord. Laat ons vóór May 1, 2027 weten wie naar Lopez Chen Wedding komt.
+
+Nu reageren: https://app.yayatoh.test/rsvp/sample-token
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.rsvp-reminder · pt 1`] = `
+{
+  "subject": "Lembrete: responda sobre Lopez Chen Wedding",
+  "text": "Lembrete: responda sobre Lopez Chen Wedding
+
+Olá, The Garcia family!
+
+The Garcia family, ainda não recebemos a sua resposta. Digam-nos quem virá a Lopez Chen Wedding até May 1, 2027.
+
+Responder agora: https://app.yayatoh.test/rsvp/sample-token
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.rsvp-reminder · ru 1`] = `
+{
+  "subject": "Напоминание: ответьте на приглашение на Lopez Chen Wedding",
+  "text": "Напоминание: ответьте на приглашение на Lopez Chen Wedding
+
+Здравствуйте, The Garcia family!
+
+The Garcia family, мы ещё не получили ваш ответ. Сообщите, пожалуйста, до May 1, 2027, кто придёт на Lopez Chen Wedding.
+
+Ответить: https://app.yayatoh.test/rsvp/sample-token
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.rsvp-reminder · zh-CN 1`] = `
+{
+  "subject": "提醒：请回复Lopez Chen Wedding的邀请",
+  "text": "提醒：请回复Lopez Chen Wedding的邀请
+
+The Garcia family，您好：
+
+The Garcia family，我们尚未收到您的回复。请在May 1, 2027前告诉我们哪几位会出席Lopez Chen Wedding。
+
+立即回复: https://app.yayatoh.test/rsvp/sample-token
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > guests.rsvp-reminder · zh-TW 1`] = `
+{
+  "subject": "提醒：請回覆Lopez Chen Wedding的邀請",
+  "text": "提醒：請回覆Lopez Chen Wedding的邀請
+
+The Garcia family，您好：
+
+The Garcia family，我們尚未收到您的回覆。請在May 1, 2027前告訴我們哪幾位會出席Lopez Chen Wedding。
+
+立即回覆: https://app.yayatoh.test/rsvp/sample-token
 
 --
 由 Lakeside Events 透過 Yayatoh 寄送。
@@ -4472,6 +5512,240 @@ Lakeside Events 已為你在 Lakeside Jazz Night 的訂單開立金額 US$25.00 
 }
 `;
 
+exports[`renderMessage: every kind in all 13 locales > orders.invoice · ar 1`] = `
+{
+  "subject": "الفاتورة INV-00012 لـ Midwest Leadership Summit",
+  "text": "الفاتورة INV-00012 لـ Midwest Leadership Summit
+
+مرحبًا Amina Diallo،
+
+تم تسجيلك في Midwest Leadership Summit. أصدرت Lakeside Events الفاتورة INV-00012 بمبلغ ‏1,200.00 US$، وتاريخ استحقاقها 12 أبريل 2027. استخدم الزر أدناه لعرضها أو تنزيل ملف PDF أو دفعها كاملة أو جزءًا منها.
+
+عرض الفاتورة ودفعها: https://app.yayatoh.test/events/sample/invoice/sample
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.invoice · de 1`] = `
+{
+  "subject": "Rechnung INV-00012 für Midwest Leadership Summit",
+  "text": "Rechnung INV-00012 für Midwest Leadership Summit
+
+Hallo Amina Diallo,
+
+Sie sind für Midwest Leadership Summit angemeldet. Lakeside Events hat die Rechnung INV-00012 über 1.200,00 $ ausgestellt, fällig am 12. April 2027. Über die Schaltfläche unten können Sie sie ansehen, als PDF herunterladen oder ganz oder teilweise bezahlen.
+
+Rechnung ansehen und bezahlen: https://app.yayatoh.test/events/sample/invoice/sample
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.invoice · en 1`] = `
+{
+  "subject": "Invoice INV-00012 for Midwest Leadership Summit",
+  "text": "Invoice INV-00012 for Midwest Leadership Summit
+
+Hi Amina Diallo,
+
+You're registered for Midwest Leadership Summit. Lakeside Events has issued invoice INV-00012 for $1,200.00, due on April 12, 2027. Use the button below to view it, download the PDF, or pay all or part of it.
+
+View and pay the invoice: https://app.yayatoh.test/events/sample/invoice/sample
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.invoice · es 1`] = `
+{
+  "subject": "Factura INV-00012 para Midwest Leadership Summit",
+  "text": "Factura INV-00012 para Midwest Leadership Summit
+
+Hola, Amina Diallo:
+
+Tu inscripción en Midwest Leadership Summit está registrada. Lakeside Events ha emitido la factura INV-00012 por 1200,00 US$, con vencimiento el 12 de abril de 2027. Usa el botón de abajo para verla, descargar el PDF o pagarla total o parcialmente.
+
+Ver y pagar la factura: https://app.yayatoh.test/events/sample/invoice/sample
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.invoice · fr 1`] = `
+{
+  "subject": "Facture INV-00012 pour Midwest Leadership Summit",
+  "text": "Facture INV-00012 pour Midwest Leadership Summit
+
+Bonjour Amina Diallo,
+
+Votre inscription à Midwest Leadership Summit est enregistrée. Lakeside Events a émis la facture INV-00012 d’un montant de 1 200,00 $US, à régler au plus tard le 12 avril 2027. Utilisez le bouton ci-dessous pour la consulter, télécharger le PDF ou la payer en totalité ou en partie.
+
+Voir et payer la facture: https://app.yayatoh.test/events/sample/invoice/sample
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.invoice · hi 1`] = `
+{
+  "subject": "Midwest Leadership Summit के लिए इनवॉइस INV-00012",
+  "text": "Midwest Leadership Summit के लिए इनवॉइस INV-00012
+
+नमस्ते Amina Diallo,
+
+आप Midwest Leadership Summit के लिए पंजीकृत हैं। Lakeside Events ने $1,200.00 का इनवॉइस INV-00012 जारी किया है, जिसकी नियत तिथि 12 अप्रैल 2027 है। इसे देखने, PDF डाउनलोड करने या पूरा या आंशिक भुगतान करने के लिए नीचे दिए गए बटन का उपयोग करें।
+
+इनवॉइस देखें और भुगतान करें: https://app.yayatoh.test/events/sample/invoice/sample
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.invoice · it 1`] = `
+{
+  "subject": "Fattura INV-00012 per Midwest Leadership Summit",
+  "text": "Fattura INV-00012 per Midwest Leadership Summit
+
+Ciao Amina Diallo,
+
+La tua iscrizione a Midwest Leadership Summit è registrata. Lakeside Events ha emesso la fattura INV-00012 di 1200,00 USD, con scadenza il 12 aprile 2027. Usa il pulsante qui sotto per vederla, scaricare il PDF o pagarla in tutto o in parte.
+
+Vedi e paga la fattura: https://app.yayatoh.test/events/sample/invoice/sample
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.invoice · ja 1`] = `
+{
+  "subject": "Midwest Leadership Summitの請求書 INV-00012",
+  "text": "Midwest Leadership Summitの請求書 INV-00012
+
+Amina Diallo 様
+
+Midwest Leadership Summitへの登録が完了しました。Lakeside Eventsが請求書 INV-00012（$1,200.00、支払期限 2027年4月12日）を発行しました。下のボタンから請求書の確認、PDFのダウンロード、全額または一部のお支払いができます。
+
+請求書を確認して支払う: https://app.yayatoh.test/events/sample/invoice/sample
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.invoice · nl 1`] = `
+{
+  "subject": "Factuur INV-00012 voor Midwest Leadership Summit",
+  "text": "Factuur INV-00012 voor Midwest Leadership Summit
+
+Hoi Amina Diallo,
+
+Je bent ingeschreven voor Midwest Leadership Summit. Lakeside Events heeft factuur INV-00012 van US$ 1.200,00 uitgegeven, te betalen uiterlijk op 12 april 2027. Gebruik de knop hieronder om de factuur te bekijken, de pdf te downloaden of geheel of gedeeltelijk te betalen.
+
+Factuur bekijken en betalen: https://app.yayatoh.test/events/sample/invoice/sample
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.invoice · pt 1`] = `
+{
+  "subject": "Fatura INV-00012 para Midwest Leadership Summit",
+  "text": "Fatura INV-00012 para Midwest Leadership Summit
+
+Olá, Amina Diallo!
+
+A sua inscrição em Midwest Leadership Summit está registada. Lakeside Events emitiu a fatura INV-00012 no valor de US$ 1.200,00, com vencimento em 12 de abril de 2027. Use o botão abaixo para a ver, descarregar o PDF ou pagá-la total ou parcialmente.
+
+Ver e pagar a fatura: https://app.yayatoh.test/events/sample/invoice/sample
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.invoice · ru 1`] = `
+{
+  "subject": "Счёт INV-00012 за Midwest Leadership Summit",
+  "text": "Счёт INV-00012 за Midwest Leadership Summit
+
+Здравствуйте, Amina Diallo!
+
+Вы зарегистрированы на Midwest Leadership Summit. Lakeside Events выставила счёт INV-00012 на сумму 1 200,00 $ со сроком оплаты 12 апреля 2027 г.. Нажмите кнопку ниже, чтобы открыть его, скачать PDF или оплатить полностью или частично.
+
+Открыть и оплатить счёт: https://app.yayatoh.test/events/sample/invoice/sample
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.invoice · zh-CN 1`] = `
+{
+  "subject": "Midwest Leadership Summit 的发票 INV-00012",
+  "text": "Midwest Leadership Summit 的发票 INV-00012
+
+Amina Diallo，您好：
+
+您已报名参加 Midwest Leadership Summit。Lakeside Events 已开具发票 INV-00012，金额 US$1,200.00，付款截止日期为 2027年4月12日。请使用下方按钮查看发票、下载 PDF，或支付全部或部分款项。
+
+查看并支付发票: https://app.yayatoh.test/events/sample/invoice/sample
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.invoice · zh-TW 1`] = `
+{
+  "subject": "Midwest Leadership Summit 的發票 INV-00012",
+  "text": "Midwest Leadership Summit 的發票 INV-00012
+
+Amina Diallo，您好：
+
+您已報名參加 Midwest Leadership Summit。Lakeside Events 已開立發票 INV-00012，金額 US$1,200.00，付款期限為 2027年4月12日。請使用下方按鈕查看發票、下載 PDF，或支付全部或部分款項。
+
+查看並支付發票: https://app.yayatoh.test/events/sample/invoice/sample
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
 exports[`renderMessage: every kind in all 13 locales > orders.order-link · ar 1`] = `
 {
   "subject": "رابطك إلى طلبك لـ Lakeside Jazz Night",
@@ -5673,6 +6947,240 @@ Hi Amina, we sent your tickets again.
 See you at the show!
 
 查看我的訂單: https://app.yayatoh.test/orders/sample
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.table-naming · ar 1`] = `
+{
+  "subject": "أدخل أسماء ضيوفك في Harbor Autumn Gala",
+  "text": "أدخل أسماء ضيوفك في Harbor Autumn Gala
+
+مرحبًا Amina Diallo،
+
+تتسع Table of 10 الخاصة بك لـ 10 ضيوف. ما زالت 4 مقاعد بلا أسماء. استخدم الزر أدناه لتخبرنا بمن يجلس على طاولتك.
+
+إدخال أسماء ضيوفي: https://app.yayatoh.test/tables/sample
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.table-naming · de 1`] = `
+{
+  "subject": "Nennen Sie Ihre Gäste für Harbor Autumn Gala",
+  "text": "Nennen Sie Ihre Gäste für Harbor Autumn Gala
+
+Hallo Amina Diallo,
+
+Ihr Table of 10 hat 10 Plätze. 4 Plätze brauchen noch einen Namen. Sagen Sie uns über die Schaltfläche unten, wer an Ihrem Tisch sitzt.
+
+Meine Gäste nennen: https://app.yayatoh.test/tables/sample
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.table-naming · en 1`] = `
+{
+  "subject": "Name your guests for Harbor Autumn Gala",
+  "text": "Name your guests for Harbor Autumn Gala
+
+Hi Amina Diallo,
+
+Your Table of 10 seats 10 guests. 4 seats still need a name. Use the button below to tell us who sits at your table.
+
+Name my guests: https://app.yayatoh.test/tables/sample
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.table-naming · es 1`] = `
+{
+  "subject": "Indica tus invitados para Harbor Autumn Gala",
+  "text": "Indica tus invitados para Harbor Autumn Gala
+
+Hola, Amina Diallo:
+
+Tu Table of 10 tiene 10 asientos. Aún faltan los nombres de 4 asientos. Usa el botón de abajo para decirnos quién se sienta en tu mesa.
+
+Indicar mis invitados: https://app.yayatoh.test/tables/sample
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.table-naming · fr 1`] = `
+{
+  "subject": "Nommez vos invités pour Harbor Autumn Gala",
+  "text": "Nommez vos invités pour Harbor Autumn Gala
+
+Bonjour Amina Diallo,
+
+Votre Table of 10 compte 10 places. 4 places attendent encore un nom. Utilisez le bouton ci-dessous pour nous dire qui est assis à votre table.
+
+Nommer mes invités: https://app.yayatoh.test/tables/sample
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.table-naming · hi 1`] = `
+{
+  "subject": "Harbor Autumn Gala के लिए अपने मेहमानों के नाम बताएँ",
+  "text": "Harbor Autumn Gala के लिए अपने मेहमानों के नाम बताएँ
+
+नमस्ते Amina Diallo,
+
+आपकी Table of 10 में 10 सीटें हैं। 4 सीटों के नाम अभी बाकी हैं। नीचे दिए बटन से बताएँ कि आपकी टेबल पर कौन बैठेगा।
+
+मेहमानों के नाम दें: https://app.yayatoh.test/tables/sample
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.table-naming · it 1`] = `
+{
+  "subject": "Indica i tuoi ospiti per Harbor Autumn Gala",
+  "text": "Indica i tuoi ospiti per Harbor Autumn Gala
+
+Ciao Amina Diallo,
+
+Il tuo Table of 10 ha 10 posti. Mancano ancora i nomi per 4 posti. Usa il pulsante qui sotto per dirci chi siede al tuo tavolo.
+
+Indica i miei ospiti: https://app.yayatoh.test/tables/sample
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.table-naming · ja 1`] = `
+{
+  "subject": "Harbor Autumn Gala のゲスト名を入力してください",
+  "text": "Harbor Autumn Gala のゲスト名を入力してください
+
+Amina Diallo 様
+
+Table of 10 の席数は 10 席 です。あと 4 席の名前が未入力です。下のボタンから、テーブルに座る方をお知らせください。
+
+ゲスト名を入力する: https://app.yayatoh.test/tables/sample
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.table-naming · nl 1`] = `
+{
+  "subject": "Geef de namen van uw gasten door voor Harbor Autumn Gala",
+  "text": "Geef de namen van uw gasten door voor Harbor Autumn Gala
+
+Hoi Amina Diallo,
+
+Uw Table of 10 heeft 10 plaatsen. Er missen nog 4 namen. Laat ons met de knop hieronder weten wie er aan uw tafel zit.
+
+Mijn gasten doorgeven: https://app.yayatoh.test/tables/sample
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.table-naming · pt 1`] = `
+{
+  "subject": "Indique os seus convidados para Harbor Autumn Gala",
+  "text": "Indique os seus convidados para Harbor Autumn Gala
+
+Olá, Amina Diallo!
+
+A sua Table of 10 tem 10 lugares. Ainda faltam os nomes de 4 lugares. Use o botão abaixo para nos dizer quem se senta à sua mesa.
+
+Indicar os meus convidados: https://app.yayatoh.test/tables/sample
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.table-naming · ru 1`] = `
+{
+  "subject": "Укажите гостей на Harbor Autumn Gala",
+  "text": "Укажите гостей на Harbor Autumn Gala
+
+Здравствуйте, Amina Diallo!
+
+За вашим столом «Table of 10» 10 мест. Ещё 4 местам нужны имена. Нажмите кнопку ниже и укажите, кто сидит за вашим столом.
+
+Указать гостей: https://app.yayatoh.test/tables/sample
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.table-naming · zh-CN 1`] = `
+{
+  "subject": "请填写 Harbor Autumn Gala 的宾客姓名",
+  "text": "请填写 Harbor Autumn Gala 的宾客姓名
+
+Amina Diallo，您好：
+
+您的Table of 10共有 10 个座位。还有 4 个座位未填写姓名。请使用下方按钮告诉我们谁坐在您的桌位。
+
+填写宾客姓名: https://app.yayatoh.test/tables/sample
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > orders.table-naming · zh-TW 1`] = `
+{
+  "subject": "請填寫 Harbor Autumn Gala 的賓客姓名",
+  "text": "請填寫 Harbor Autumn Gala 的賓客姓名
+
+Amina Diallo，您好：
+
+您的Table of 10共有 10 個座位。還有 4 個座位未填寫姓名。請使用下方按鈕告訴我們誰坐在您的桌位。
+
+填寫賓客姓名: https://app.yayatoh.test/tables/sample
 
 --
 由 Lakeside Events 透過 Yayatoh 寄送。
@@ -7766,6 +9274,994 @@ exports[`renderMessage: every kind in all 13 locales > program.task-reminder · 
 Lakeside Events仍在等待您提交Midwest Leadership Summit的「Upload your slides」。截止時間：2027年5月10日 中午12:00。
 
 開啟我的任務: https://app.yayatoh.test/event-portal/invite/sample
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.approved · ar 1`] = `
+{
+  "subject": "تمت الموافقة على طلبك لحضور Midwest Leadership Summit",
+  "text": "تمت الموافقة على طلبك لحضور Midwest Leadership Summit
+
+مرحبًا Amina Diallo،
+
+أخبار سارة يا Amina Diallo: تمت الموافقة على طلبك لحضور Midwest Leadership Summit بصفة Member. استخدم الزر أدناه لعرض تسجيلك، وإذا كان لتذكرتك سعر، للدفع وتأكيد مكانك.
+
+We look forward to seeing you at the members’ breakfast.
+
+عرض تسجيلي: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.approved · de 1`] = `
+{
+  "subject": "Ihre Anmeldung für Midwest Leadership Summit wurde bestätigt",
+  "text": "Ihre Anmeldung für Midwest Leadership Summit wurde bestätigt
+
+Hallo Amina Diallo,
+
+Gute Nachrichten, Amina Diallo: Ihre Bewerbung zur Teilnahme an Midwest Leadership Summit als Member wurde angenommen. Über die Schaltfläche unten sehen Sie Ihre Anmeldung und können, falls Ihr Pass etwas kostet, bezahlen und Ihren Platz bestätigen.
+
+We look forward to seeing you at the members’ breakfast.
+
+Meine Anmeldung ansehen: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.approved · en 1`] = `
+{
+  "subject": "You're approved for Midwest Leadership Summit",
+  "text": "You're approved for Midwest Leadership Summit
+
+Hi Amina Diallo,
+
+Good news, Amina Diallo: your application to attend Midwest Leadership Summit as Member was approved. Use the button below to see your registration and, if your pass has a price, to pay and confirm your place.
+
+We look forward to seeing you at the members’ breakfast.
+
+View my registration: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.approved · es 1`] = `
+{
+  "subject": "Tu solicitud para Midwest Leadership Summit ha sido aprobada",
+  "text": "Tu solicitud para Midwest Leadership Summit ha sido aprobada
+
+Hola, Amina Diallo:
+
+Buenas noticias, Amina Diallo: tu solicitud para asistir a Midwest Leadership Summit como Member ha sido aprobada. Usa el botón de abajo para ver tu inscripción y, si tu pase tiene precio, pagar y confirmar tu plaza.
+
+We look forward to seeing you at the members’ breakfast.
+
+Ver mi inscripción: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.approved · fr 1`] = `
+{
+  "subject": "Votre demande pour Midwest Leadership Summit est acceptée",
+  "text": "Votre demande pour Midwest Leadership Summit est acceptée
+
+Bonjour Amina Diallo,
+
+Bonne nouvelle, Amina Diallo : votre demande de participation à Midwest Leadership Summit en tant que Member a été acceptée. Utilisez le bouton ci-dessous pour voir votre inscription et, si votre pass est payant, payer et confirmer votre place.
+
+We look forward to seeing you at the members’ breakfast.
+
+Voir mon inscription: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.approved · hi 1`] = `
+{
+  "subject": "Midwest Leadership Summit के लिए आपका आवेदन स्वीकृत हुआ",
+  "text": "Midwest Leadership Summit के लिए आपका आवेदन स्वीकृत हुआ
+
+नमस्ते Amina Diallo,
+
+अच्छी खबर, Amina Diallo: Member के रूप में Midwest Leadership Summit में भाग लेने का आपका आवेदन स्वीकृत हो गया है। अपना पंजीकरण देखने और, यदि आपके पास का शुल्क है, भुगतान करके अपनी जगह पक्की करने के लिए नीचे दिए बटन का उपयोग करें।
+
+We look forward to seeing you at the members’ breakfast.
+
+मेरा पंजीकरण देखें: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.approved · it 1`] = `
+{
+  "subject": "La tua richiesta per Midwest Leadership Summit è stata approvata",
+  "text": "La tua richiesta per Midwest Leadership Summit è stata approvata
+
+Ciao Amina Diallo,
+
+Buone notizie, Amina Diallo: la tua richiesta di partecipare a Midwest Leadership Summit come Member è stata approvata. Usa il pulsante qui sotto per vedere la tua iscrizione e, se il tuo pass è a pagamento, pagare e confermare il tuo posto.
+
+We look forward to seeing you at the members’ breakfast.
+
+Vedi la mia iscrizione: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.approved · ja 1`] = `
+{
+  "subject": "Midwest Leadership Summit への参加申請が承認されました",
+  "text": "Midwest Leadership Summit への参加申請が承認されました
+
+Amina Diallo 様
+
+Amina Diallo 様、Member として Midwest Leadership Summit に参加する申請が承認されました。下のボタンから登録内容を確認し、有料のパスの場合はお支払いを済ませて参加を確定してください。
+
+We look forward to seeing you at the members’ breakfast.
+
+登録内容を見る: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.approved · nl 1`] = `
+{
+  "subject": "Je aanvraag voor Midwest Leadership Summit is goedgekeurd",
+  "text": "Je aanvraag voor Midwest Leadership Summit is goedgekeurd
+
+Hoi Amina Diallo,
+
+Goed nieuws, Amina Diallo: je aanvraag om Midwest Leadership Summit bij te wonen als Member is goedgekeurd. Gebruik de knop hieronder om je registratie te bekijken en, als je pas iets kost, te betalen en je plek te bevestigen.
+
+We look forward to seeing you at the members’ breakfast.
+
+Mijn registratie bekijken: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.approved · pt 1`] = `
+{
+  "subject": "Sua solicitação para Midwest Leadership Summit foi aprovada",
+  "text": "Sua solicitação para Midwest Leadership Summit foi aprovada
+
+Olá, Amina Diallo!
+
+Boas notícias, Amina Diallo: sua solicitação para participar de Midwest Leadership Summit como Member foi aprovada. Use o botão abaixo para ver sua inscrição e, se o seu passe tiver preço, pagar e confirmar sua vaga.
+
+We look forward to seeing you at the members’ breakfast.
+
+Ver minha inscrição: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.approved · ru 1`] = `
+{
+  "subject": "Ваша заявка на Midwest Leadership Summit одобрена",
+  "text": "Ваша заявка на Midwest Leadership Summit одобрена
+
+Здравствуйте, Amina Diallo!
+
+Хорошие новости, Amina Diallo: ваша заявка на участие в Midwest Leadership Summit в категории «Member» одобрена. Нажмите кнопку ниже, чтобы открыть регистрацию и, если пропуск платный, оплатить его и подтвердить место.
+
+We look forward to seeing you at the members’ breakfast.
+
+Открыть мою регистрацию: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.approved · zh-CN 1`] = `
+{
+  "subject": "您参加 Midwest Leadership Summit 的申请已获批准",
+  "text": "您参加 Midwest Leadership Summit 的申请已获批准
+
+Amina Diallo，您好：
+
+Amina Diallo，好消息：您以 Member 身份参加 Midwest Leadership Summit 的申请已获批准。请点击下方按钮查看您的报名；如果您的通行证需要付费，请完成付款以确认名额。
+
+We look forward to seeing you at the members’ breakfast.
+
+查看我的报名: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.approved · zh-TW 1`] = `
+{
+  "subject": "您參加 Midwest Leadership Summit 的申請已獲核准",
+  "text": "您參加 Midwest Leadership Summit 的申請已獲核准
+
+Amina Diallo，您好：
+
+Amina Diallo，好消息：您以 Member 身分參加 Midwest Leadership Summit 的申請已獲核准。請點選下方按鈕查看您的報名；如果您的通行證需要付費，請完成付款以確認名額。
+
+We look forward to seeing you at the members’ breakfast.
+
+查看我的報名: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.denied · ar 1`] = `
+{
+  "subject": "طلبك لحضور Midwest Leadership Summit",
+  "text": "طلبك لحضور Midwest Leadership Summit
+
+مرحبًا Amina Diallo،
+
+شكرًا لتقديمك طلب حضور Midwest Leadership Summit بصفة Member يا Amina Diallo. لم يتمكن المنظم من الموافقة على طلبك هذه المرة. لم يتم خصم أي مبلغ منك.
+
+This rate is for current members; the non-member rate is still open.
+
+عرض طلبي: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.denied · de 1`] = `
+{
+  "subject": "Ihre Bewerbung für Midwest Leadership Summit",
+  "text": "Ihre Bewerbung für Midwest Leadership Summit
+
+Hallo Amina Diallo,
+
+Danke für Ihre Bewerbung zur Teilnahme an Midwest Leadership Summit als Member, Amina Diallo. Der Veranstalter konnte Ihre Bewerbung diesmal nicht annehmen. Ihnen wurde nichts berechnet.
+
+This rate is for current members; the non-member rate is still open.
+
+Meine Bewerbung ansehen: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.denied · en 1`] = `
+{
+  "subject": "Your application for Midwest Leadership Summit",
+  "text": "Your application for Midwest Leadership Summit
+
+Hi Amina Diallo,
+
+Thank you for applying to attend Midwest Leadership Summit as Member, Amina Diallo. The organizer could not approve your application this time. You have not been charged.
+
+This rate is for current members; the non-member rate is still open.
+
+View my application: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.denied · es 1`] = `
+{
+  "subject": "Tu solicitud para Midwest Leadership Summit",
+  "text": "Tu solicitud para Midwest Leadership Summit
+
+Hola, Amina Diallo:
+
+Gracias por solicitar asistir a Midwest Leadership Summit como Member, Amina Diallo. El organizador no ha podido aprobar tu solicitud esta vez. No se te ha cobrado nada.
+
+This rate is for current members; the non-member rate is still open.
+
+Ver mi solicitud: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.denied · fr 1`] = `
+{
+  "subject": "Votre demande pour Midwest Leadership Summit",
+  "text": "Votre demande pour Midwest Leadership Summit
+
+Bonjour Amina Diallo,
+
+Merci d’avoir demandé à participer à Midwest Leadership Summit en tant que Member, Amina Diallo. L’organisateur n’a pas pu accepter votre demande cette fois-ci. Aucun montant ne vous a été facturé.
+
+This rate is for current members; the non-member rate is still open.
+
+Voir ma demande: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.denied · hi 1`] = `
+{
+  "subject": "Midwest Leadership Summit के लिए आपका आवेदन",
+  "text": "Midwest Leadership Summit के लिए आपका आवेदन
+
+नमस्ते Amina Diallo,
+
+Member के रूप में Midwest Leadership Summit में भाग लेने के लिए आवेदन करने हेतु धन्यवाद, Amina Diallo। आयोजक इस बार आपका आवेदन स्वीकृत नहीं कर सके। आपसे कोई शुल्क नहीं लिया गया है।
+
+This rate is for current members; the non-member rate is still open.
+
+मेरा आवेदन देखें: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.denied · it 1`] = `
+{
+  "subject": "La tua richiesta per Midwest Leadership Summit",
+  "text": "La tua richiesta per Midwest Leadership Summit
+
+Ciao Amina Diallo,
+
+Grazie per aver chiesto di partecipare a Midwest Leadership Summit come Member, Amina Diallo. Questa volta l’organizzatore non ha potuto approvare la tua richiesta. Non ti è stato addebitato nulla.
+
+This rate is for current members; the non-member rate is still open.
+
+Vedi la mia richiesta: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.denied · ja 1`] = `
+{
+  "subject": "Midwest Leadership Summit への参加申請について",
+  "text": "Midwest Leadership Summit への参加申請について
+
+Amina Diallo 様
+
+Amina Diallo 様、Member として Midwest Leadership Summit への参加をお申し込みいただきありがとうございます。今回は主催者が申請を承認できませんでした。料金は請求されていません。
+
+This rate is for current members; the non-member rate is still open.
+
+申請内容を見る: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.denied · nl 1`] = `
+{
+  "subject": "Je aanvraag voor Midwest Leadership Summit",
+  "text": "Je aanvraag voor Midwest Leadership Summit
+
+Hoi Amina Diallo,
+
+Bedankt voor je aanvraag om Midwest Leadership Summit bij te wonen als Member, Amina Diallo. De organisator kon je aanvraag deze keer niet goedkeuren. Er is niets in rekening gebracht.
+
+This rate is for current members; the non-member rate is still open.
+
+Mijn aanvraag bekijken: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.denied · pt 1`] = `
+{
+  "subject": "Sua solicitação para Midwest Leadership Summit",
+  "text": "Sua solicitação para Midwest Leadership Summit
+
+Olá, Amina Diallo!
+
+Obrigado por solicitar participar de Midwest Leadership Summit como Member, Amina Diallo. O organizador não pôde aprovar sua solicitação desta vez. Nada foi cobrado.
+
+This rate is for current members; the non-member rate is still open.
+
+Ver minha solicitação: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.denied · ru 1`] = `
+{
+  "subject": "Ваша заявка на Midwest Leadership Summit",
+  "text": "Ваша заявка на Midwest Leadership Summit
+
+Здравствуйте, Amina Diallo!
+
+Спасибо за заявку на участие в Midwest Leadership Summit в категории «Member», Amina Diallo. В этот раз организатор не смог её одобрить. Деньги с вас не списывались.
+
+This rate is for current members; the non-member rate is still open.
+
+Открыть мою заявку: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.denied · zh-CN 1`] = `
+{
+  "subject": "您参加 Midwest Leadership Summit 的申请",
+  "text": "您参加 Midwest Leadership Summit 的申请
+
+Amina Diallo，您好：
+
+Amina Diallo，感谢您申请以 Member 身份参加 Midwest Leadership Summit。主办方这次未能批准您的申请。您没有被收取任何费用。
+
+This rate is for current members; the non-member rate is still open.
+
+查看我的申请: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.denied · zh-TW 1`] = `
+{
+  "subject": "您參加 Midwest Leadership Summit 的申請",
+  "text": "您參加 Midwest Leadership Summit 的申請
+
+Amina Diallo，您好：
+
+Amina Diallo，感謝您申請以 Member 身分參加 Midwest Leadership Summit。主辦單位這次未能核准您的申請。您沒有被收取任何費用。
+
+This rate is for current members; the non-member rate is still open.
+
+查看我的申請: https://app.yayatoh.test/events/sample/registration/sample
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.session-enrolled · ar 1`] = `
+{
+  "subject": "توفّر مقعد: أنت مسجَّل في Hands-on data workshop",
+  "text": "توفّر مقعد: أنت مسجَّل في Hands-on data workshop
+
+مرحبًا Amina Diallo،
+
+توفّر مقعد في Hands-on data workshop ضمن Midwest Leadership Summit (الخميس، 14 أكتوبر 2027 في 10:00 ص)، وكنت التالي في قائمة الانتظار، فأصبحت مسجَّلًا الآن. إن لم تتمكن من الحضور، فأزل الجلسة من جدولك ليحصل التالي على المقعد.
+
+افتح جدولي: https://app.yayatoh.test/orders/sample/schedule
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.session-enrolled · de 1`] = `
+{
+  "subject": "Ein Platz ist frei: Du bist in Hands-on data workshop dabei",
+  "text": "Ein Platz ist frei: Du bist in Hands-on data workshop dabei
+
+Hallo Amina Diallo,
+
+In Hands-on data workshop bei Midwest Leadership Summit (Donnerstag, 14. Oktober 2027 um 10:00) ist ein Platz frei geworden, und du warst als Nächstes auf der Warteliste. Du bist jetzt angemeldet. Wenn du nicht kannst, entferne die Session aus deinem Plan, damit die nächste Person den Platz bekommt.
+
+Meinen Plan öffnen: https://app.yayatoh.test/orders/sample/schedule
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.session-enrolled · en 1`] = `
+{
+  "subject": "A place opened: you're in Hands-on data workshop",
+  "text": "A place opened: you're in Hands-on data workshop
+
+Hi Amina Diallo,
+
+A place opened in Hands-on data workshop at Midwest Leadership Summit (Thursday, October 14, 2027 at 10:00 AM), and you were next in line, so you're now enrolled. If you can't make it, drop the session from your schedule so the next person gets the place.
+
+Open my schedule: https://app.yayatoh.test/orders/sample/schedule
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.session-enrolled · es 1`] = `
+{
+  "subject": "Se liberó una plaza: estás en Hands-on data workshop",
+  "text": "Se liberó una plaza: estás en Hands-on data workshop
+
+Hola, Amina Diallo:
+
+Se liberó una plaza en Hands-on data workshop de Midwest Leadership Summit (jueves, 14 de octubre de 2027, 10:00) y eras la siguiente persona en la lista de espera, así que ya estás inscrito. Si no puedes asistir, quita la sesión de tu agenda para que la plaza pase a la siguiente persona.
+
+Abrir mi agenda: https://app.yayatoh.test/orders/sample/schedule
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.session-enrolled · fr 1`] = `
+{
+  "subject": "Une place s'est libérée : vous participez à Hands-on data workshop",
+  "text": "Une place s'est libérée : vous participez à Hands-on data workshop
+
+Bonjour Amina Diallo,
+
+Une place s'est libérée dans Hands-on data workshop à Midwest Leadership Summit (jeudi 14 octobre 2027 à 10:00) et vous étiez le prochain sur la liste d'attente : vous êtes maintenant inscrit. Si vous ne pouvez pas venir, retirez la session de votre programme pour que la personne suivante obtienne la place.
+
+Ouvrir mon programme: https://app.yayatoh.test/orders/sample/schedule
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.session-enrolled · hi 1`] = `
+{
+  "subject": "एक सीट खाली हुई: आप Hands-on data workshop में शामिल हैं",
+  "text": "एक सीट खाली हुई: आप Hands-on data workshop में शामिल हैं
+
+नमस्ते Amina Diallo,
+
+Midwest Leadership Summit (गुरुवार, 14 अक्टूबर 2027 को 10:00 am बजे) के Hands-on data workshop में एक सीट खाली हुई और प्रतीक्षा सूची में अगला नंबर आपका था, इसलिए अब आपका नामांकन हो गया है। अगर आप नहीं आ सकते, तो सत्र को अपने शेड्यूल से हटा दें ताकि सीट अगले व्यक्ति को मिल जाए।
+
+मेरा शेड्यूल खोलें: https://app.yayatoh.test/orders/sample/schedule
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.session-enrolled · it 1`] = `
+{
+  "subject": "Si è liberato un posto: partecipi a Hands-on data workshop",
+  "text": "Si è liberato un posto: partecipi a Hands-on data workshop
+
+Ciao Amina Diallo,
+
+Si è liberato un posto in Hands-on data workshop a Midwest Leadership Summit (giovedì 14 ottobre 2027 alle ore 10:00) ed eri il prossimo in lista d'attesa, quindi ora sei iscritto. Se non puoi partecipare, togli la sessione dal tuo programma così il posto passa alla persona successiva.
+
+Apri il mio programma: https://app.yayatoh.test/orders/sample/schedule
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.session-enrolled · ja 1`] = `
+{
+  "subject": "空きが出ました：Hands-on data workshop に登録されました",
+  "text": "空きが出ました：Hands-on data workshop に登録されました
+
+Amina Diallo 様
+
+Midwest Leadership Summit（2027年10月14日木曜日 10:00）の Hands-on data workshop に空きが出て、キャンセル待ちの次の順番があなたでしたので、登録が完了しました。参加できない場合は、次の方が参加できるようスケジュールからセッションを外してください。
+
+スケジュールを開く: https://app.yayatoh.test/orders/sample/schedule
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.session-enrolled · nl 1`] = `
+{
+  "subject": "Er is een plek vrij: je doet mee aan Hands-on data workshop",
+  "text": "Er is een plek vrij: je doet mee aan Hands-on data workshop
+
+Hoi Amina Diallo,
+
+Er is een plek vrijgekomen in Hands-on data workshop bij Midwest Leadership Summit (donderdag 14 oktober 2027 om 10:00) en jij was de volgende op de wachtlijst, dus je bent nu ingeschreven. Kun je niet? Haal de sessie dan uit je programma, zodat de volgende de plek krijgt.
+
+Mijn programma openen: https://app.yayatoh.test/orders/sample/schedule
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.session-enrolled · pt 1`] = `
+{
+  "subject": "Abriu uma vaga: você está em Hands-on data workshop",
+  "text": "Abriu uma vaga: você está em Hands-on data workshop
+
+Olá, Amina Diallo!
+
+Abriu uma vaga em Hands-on data workshop no Midwest Leadership Summit (quinta-feira, 14 de outubro de 2027 às 10:00) e você era a próxima pessoa na lista de espera, então agora está inscrito. Se não puder ir, remova a sessão da sua agenda para que a vaga vá para a próxima pessoa.
+
+Abrir minha agenda: https://app.yayatoh.test/orders/sample/schedule
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.session-enrolled · ru 1`] = `
+{
+  "subject": "Освободилось место: вы записаны на Hands-on data workshop",
+  "text": "Освободилось место: вы записаны на Hands-on data workshop
+
+Здравствуйте, Amina Diallo!
+
+В Hands-on data workshop на Midwest Leadership Summit (четверг, 14 октября 2027 г. в 10:00) освободилось место, и вы были следующим в листе ожидания, поэтому теперь вы записаны. Если не сможете прийти, уберите сессию из своего расписания, чтобы место досталось следующему.
+
+Открыть моё расписание: https://app.yayatoh.test/orders/sample/schedule
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.session-enrolled · zh-CN 1`] = `
+{
+  "subject": "有空位了：你已报名 Hands-on data workshop",
+  "text": "有空位了：你已报名 Hands-on data workshop
+
+Amina Diallo，您好：
+
+Midwest Leadership Summit（2027年10月14日星期四 10:00）的 Hands-on data workshop 有空位了，你是候补名单上的下一位，现已为你报名。如果无法参加，请从日程中移除该场次，让下一位获得名额。
+
+打开我的日程: https://app.yayatoh.test/orders/sample/schedule
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.session-enrolled · zh-TW 1`] = `
+{
+  "subject": "有空位了：你已報名 Hands-on data workshop",
+  "text": "有空位了：你已報名 Hands-on data workshop
+
+Amina Diallo，您好：
+
+Midwest Leadership Summit（2027年10月14日 星期四 上午10:00）的 Hands-on data workshop 有空位了，你是候補名單上的下一位，現已為你報名。如果無法參加，請從行程中移除該場次，讓下一位取得名額。
+
+開啟我的行程: https://app.yayatoh.test/orders/sample/schedule
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.session-offer · ar 1`] = `
+{
+  "subject": "مقعد في Hands-on data workshop محجوز لك حتى 12‏/10‏/2027، 2:00 م",
+  "text": "مقعد في Hands-on data workshop محجوز لك حتى 12‏/10‏/2027، 2:00 م
+
+مرحبًا Amina Diallo،
+
+توفّر مقعد في Hands-on data workshop ضمن Midwest Leadership Summit (الخميس، 14 أكتوبر 2027 في 10:00 ص)، وأنت التالي في قائمة الانتظار. اقبله من جدولك قبل 12‏/10‏/2027، 2:00 م؛ وبعد ذلك ينتقل إلى الشخص التالي.
+
+اقبل مقعدي: https://app.yayatoh.test/orders/sample/schedule
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.session-offer · de 1`] = `
+{
+  "subject": "Ein Platz in Hands-on data workshop ist bis 12.10.2027, 14:00 für dich reserviert",
+  "text": "Ein Platz in Hands-on data workshop ist bis 12.10.2027, 14:00 für dich reserviert
+
+Hallo Amina Diallo,
+
+In Hands-on data workshop bei Midwest Leadership Summit (Donnerstag, 14. Oktober 2027 um 10:00) ist ein Platz frei geworden, und du bist als Nächstes dran. Nimm ihn vor 12.10.2027, 14:00 in deinem Plan an; danach geht er an die nächste Person.
+
+Platz annehmen: https://app.yayatoh.test/orders/sample/schedule
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.session-offer · en 1`] = `
+{
+  "subject": "A place in Hands-on data workshop is yours until Oct 12, 2027, 2:00 PM",
+  "text": "A place in Hands-on data workshop is yours until Oct 12, 2027, 2:00 PM
+
+Hi Amina Diallo,
+
+A place opened in Hands-on data workshop at Midwest Leadership Summit (Thursday, October 14, 2027 at 10:00 AM), and you're next in line. Accept it from your schedule before Oct 12, 2027, 2:00 PM; after that, it goes to the next person.
+
+Accept my place: https://app.yayatoh.test/orders/sample/schedule
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.session-offer · es 1`] = `
+{
+  "subject": "Tienes una plaza en Hands-on data workshop hasta 12 oct 2027, 14:00",
+  "text": "Tienes una plaza en Hands-on data workshop hasta 12 oct 2027, 14:00
+
+Hola, Amina Diallo:
+
+Se liberó una plaza en Hands-on data workshop de Midwest Leadership Summit (jueves, 14 de octubre de 2027, 10:00) y eres la siguiente persona en la lista. Acéptala desde tu agenda antes de 12 oct 2027, 14:00; después pasará a la siguiente persona.
+
+Aceptar mi plaza: https://app.yayatoh.test/orders/sample/schedule
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.session-offer · fr 1`] = `
+{
+  "subject": "Une place dans Hands-on data workshop vous est réservée jusqu'au 12 oct. 2027, 14:00",
+  "text": "Une place dans Hands-on data workshop vous est réservée jusqu'au 12 oct. 2027, 14:00
+
+Bonjour Amina Diallo,
+
+Une place s'est libérée dans Hands-on data workshop à Midwest Leadership Summit (jeudi 14 octobre 2027 à 10:00) et vous êtes le prochain sur la liste. Acceptez-la depuis votre programme avant le 12 oct. 2027, 14:00 ; ensuite, elle ira à la personne suivante.
+
+Accepter ma place: https://app.yayatoh.test/orders/sample/schedule
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.session-offer · hi 1`] = `
+{
+  "subject": "Hands-on data workshop में एक सीट 12 अक्टू॰ 2027, 2:00 pm तक आपके लिए है",
+  "text": "Hands-on data workshop में एक सीट 12 अक्टू॰ 2027, 2:00 pm तक आपके लिए है
+
+नमस्ते Amina Diallo,
+
+Midwest Leadership Summit (गुरुवार, 14 अक्टूबर 2027 को 10:00 am बजे) के Hands-on data workshop में एक सीट खाली हुई है और अगला नंबर आपका है। इसे 12 अक्टू॰ 2027, 2:00 pm से पहले अपने शेड्यूल से स्वीकार करें; उसके बाद यह अगले व्यक्ति को मिल जाएगी।
+
+मेरी सीट स्वीकार करें: https://app.yayatoh.test/orders/sample/schedule
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.session-offer · it 1`] = `
+{
+  "subject": "Un posto in Hands-on data workshop è tuo fino al 12 ott 2027, 14:00",
+  "text": "Un posto in Hands-on data workshop è tuo fino al 12 ott 2027, 14:00
+
+Ciao Amina Diallo,
+
+Si è liberato un posto in Hands-on data workshop a Midwest Leadership Summit (giovedì 14 ottobre 2027 alle ore 10:00) e sei il prossimo in lista. Accettalo dal tuo programma entro il 12 ott 2027, 14:00; dopo passerà alla persona successiva.
+
+Accetta il mio posto: https://app.yayatoh.test/orders/sample/schedule
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.session-offer · ja 1`] = `
+{
+  "subject": "Hands-on data workshop の席を 2027/10/12 14:00 まで確保しています",
+  "text": "Hands-on data workshop の席を 2027/10/12 14:00 まで確保しています
+
+Amina Diallo 様
+
+Midwest Leadership Summit（2027年10月14日木曜日 10:00）の Hands-on data workshop に空きが出て、次の順番はあなたです。2027/10/12 14:00 までにスケジュールから承諾してください。それを過ぎると次の方に回ります。
+
+席を承諾する: https://app.yayatoh.test/orders/sample/schedule
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.session-offer · nl 1`] = `
+{
+  "subject": "Een plek in Hands-on data workshop is voor jou tot 12 okt 2027, 14:00",
+  "text": "Een plek in Hands-on data workshop is voor jou tot 12 okt 2027, 14:00
+
+Hoi Amina Diallo,
+
+Er is een plek vrijgekomen in Hands-on data workshop bij Midwest Leadership Summit (donderdag 14 oktober 2027 om 10:00) en jij bent de volgende. Accepteer hem vóór 12 okt 2027, 14:00 in je programma; daarna gaat hij naar de volgende.
+
+Mijn plek accepteren: https://app.yayatoh.test/orders/sample/schedule
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.session-offer · pt 1`] = `
+{
+  "subject": "Uma vaga em Hands-on data workshop é sua até 12 de out. de 2027, 14:00",
+  "text": "Uma vaga em Hands-on data workshop é sua até 12 de out. de 2027, 14:00
+
+Olá, Amina Diallo!
+
+Abriu uma vaga em Hands-on data workshop no Midwest Leadership Summit (quinta-feira, 14 de outubro de 2027 às 10:00) e você é a próxima pessoa na lista. Aceite-a na sua agenda antes de 12 de out. de 2027, 14:00; depois disso, ela vai para a próxima pessoa.
+
+Aceitar minha vaga: https://app.yayatoh.test/orders/sample/schedule
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.session-offer · ru 1`] = `
+{
+  "subject": "Место на Hands-on data workshop за вами до 12 окт. 2027 г., 14:00",
+  "text": "Место на Hands-on data workshop за вами до 12 окт. 2027 г., 14:00
+
+Здравствуйте, Amina Diallo!
+
+В Hands-on data workshop на Midwest Leadership Summit (четверг, 14 октября 2027 г. в 10:00) освободилось место, и вы следующий в очереди. Примите его в своём расписании до 12 окт. 2027 г., 14:00; после этого оно перейдёт следующему.
+
+Принять место: https://app.yayatoh.test/orders/sample/schedule
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.session-offer · zh-CN 1`] = `
+{
+  "subject": "Hands-on data workshop 的名额为你保留至 2027年10月12日 14:00",
+  "text": "Hands-on data workshop 的名额为你保留至 2027年10月12日 14:00
+
+Amina Diallo，您好：
+
+Midwest Leadership Summit（2027年10月14日星期四 10:00）的 Hands-on data workshop 有空位了，下一位就是你。请在 2027年10月12日 14:00 前在日程中接受；逾时名额将转给下一位。
+
+接受名额: https://app.yayatoh.test/orders/sample/schedule
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > registration.session-offer · zh-TW 1`] = `
+{
+  "subject": "Hands-on data workshop 的名額為你保留至 2027年10月12日 下午2:00",
+  "text": "Hands-on data workshop 的名額為你保留至 2027年10月12日 下午2:00
+
+Amina Diallo，您好：
+
+Midwest Leadership Summit（2027年10月14日 星期四 上午10:00）的 Hands-on data workshop 有空位了，下一位就是你。請在 2027年10月12日 下午2:00 前在行程中接受；逾時名額將轉給下一位。
+
+接受名額: https://app.yayatoh.test/orders/sample/schedule
 
 --
 由 Lakeside Events 透過 Yayatoh 寄送。

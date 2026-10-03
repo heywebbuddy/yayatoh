@@ -15,7 +15,7 @@ export interface SectionValues {
   readonly fields: Readonly<Record<string, string>>;
 }
 
-const area = 'rounded-card border bg-white px-4 py-2 font-mono text-body';
+const area = 'rounded-card border bg-surface px-4 py-2 font-mono text-body';
 
 /** Add a section (kind chosen here) or edit one (kind fixed). */
 export function SectionForm({
@@ -48,7 +48,7 @@ export function SectionForm({
     const error = contentError && name !== 'directions' && name !== 'address' ? contentError : undefined;
     return (
       <div className="flex flex-col gap-1.5">
-        <label htmlFor={id} className="text-caption text-zinc-600">
+        <label htmlFor={id} className="text-[13px] font-bold text-ink">
           {label}
         </label>
         <textarea
@@ -58,14 +58,14 @@ export function SectionForm({
           defaultValue={values?.fields[name] ?? ''}
           aria-invalid={error ? true : undefined}
           aria-describedby={error ? `${id}-error` : `${id}-hint`}
-          className={`${area} ${error ? 'border-pink-700' : 'border-zinc-200'}`}
+          className={`${area} ${error ? 'field-invalid' : ''}`}
         />
         {error ? (
-          <p id={`${id}-error`} className="text-caption text-pink-700">
+          <p id={`${id}-error`} className="text-caption text-danger">
             {error}
           </p>
         ) : (
-          <p id={`${id}-hint`} className="text-caption text-zinc-500">
+          <p id={`${id}-hint`} className="text-caption text-ink-2">
             {hint}
           </p>
         )}
@@ -82,7 +82,7 @@ export function SectionForm({
     >
       {fixedKind ? null : (
         <div className="flex flex-col gap-1.5">
-          <label htmlFor={`${idPrefix}-kind`} className="text-caption text-zinc-600">
+          <label htmlFor={`${idPrefix}-kind`} className="text-[13px] font-bold text-ink">
             {t('kind')}
           </label>
           <select
@@ -90,7 +90,7 @@ export function SectionForm({
             name="kind"
             value={kind}
             onChange={(e) => setKind(e.target.value as SectionKind)}
-            className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
+            className="field"
           >
             {SECTION_KINDS.map((k) => (
               <option key={k} value={k}>

@@ -36,7 +36,7 @@ export default async function EventDetailsPage({
   return (
     <>
       <PageHeader title={t('title')} description={t('subtitle')} />
-      {canWrite ? null : <p className="text-body text-zinc-500">{t('viewerNotice')}</p>}
+      {canWrite ? null : <p className="text-body text-ink-2">{t('viewerNotice')}</p>}
       <Card size="panel">
         <EventDetailsForm
           action={saveDetailsAction.bind(null, org, event)}
@@ -46,7 +46,7 @@ export default async function EventDetailsPage({
           disabled={!canWrite}
         />
         {canWrite && venues.length === 0 ? (
-          <p className="pt-3 text-caption text-zinc-500">
+          <p className="pt-3 text-caption text-ink-2">
             {t.rich('noVenuesYet', {
               link: (chunks) => (
                 <Link href={`/o/${org}/venues`} className="underline underline-offset-2">
@@ -62,12 +62,12 @@ export default async function EventDetailsPage({
           {t('shortLinks')}
         </h2>
         <Card size="panel" className="flex flex-col gap-4">
-          <p className="text-body text-zinc-500">{live ? t('shortLinksLive') : t('shortLinksDraft')}</p>
+          <p className="text-body text-ink-2">{live ? t('shortLinksLive') : t('shortLinksDraft')}</p>
           <dl className="flex flex-col gap-2">
             {[auto, vanity].filter(Boolean).map((l) =>
               l ? (
                 <div key={l.kind} className="flex flex-wrap items-center gap-x-3 gap-y-1">
-                  <dt className="text-caption text-zinc-600">{t(`kind.${l.kind}`)}</dt>
+                  <dt className="text-caption text-ink-2">{t(`kind.${l.kind}`)}</dt>
                   <dd className="m-0 font-mono text-body break-all" data-testid={`short-link-${l.kind}`}>
                     {`${origin}/e/${l.code}`}
                   </dd>

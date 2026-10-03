@@ -50,20 +50,20 @@ export default async function PayoutsPage({
     <>
       <PageHeader title={t('title')} description={t('description')} />
       {onboarding === 'returned' && account.state !== 'active' ? (
-        <p role="status" className="rounded-card border border-zinc-200 bg-zinc-50 px-4 py-3 text-body">
+        <p role="status" className="rounded-card border border-line bg-surface-2 px-4 py-3 text-body">
           {t('returned')}
         </p>
       ) : null}
       {account.onHold ? (
         <p
           role="status"
-          className="rounded-card border border-accent-700 bg-accent-50 px-4 py-3 text-body text-accent-text"
+          className="rounded-card border border-primary bg-primary-soft px-4 py-3 text-body text-primary-ink"
         >
           {t('onHold')}
         </p>
       ) : null}
       {account.destinationHoldUntil ? (
-        <p role="status" className="rounded-card border border-zinc-200 bg-white px-4 py-3 text-body">
+        <p role="status" className="rounded-card border border-line bg-surface px-4 py-3 text-body">
           {t('destinationHold', {
             until: new Intl.DateTimeFormat(locale, {
               dateStyle: 'medium',
@@ -75,10 +75,10 @@ export default async function PayoutsPage({
       ) : null}
       <Card className="flex flex-col gap-4">
         <StatusDot status={DOT[account.state]} label={t(`state.${account.state}`)} />
-        <p className="text-body text-zinc-600">{t(`explain.${account.state}`)}</p>
+        <p className="text-body text-ink-2">{t(`explain.${account.state}`)}</p>
         {account.state === 'restricted' && account.requirementsDue.length > 0 ? (
           <div className="flex flex-col gap-1.5">
-            <p className="text-caption text-zinc-600">{t('requirements')}</p>
+            <p className="text-caption text-ink-2">{t('requirements')}</p>
             <ul className="flex list-none flex-col gap-1 p-0">
               {account.requirementsDue.map((r) => (
                 <li key={r} className="font-mono text-caption">
@@ -88,13 +88,13 @@ export default async function PayoutsPage({
             </ul>
           </div>
         ) : null}
-        <p className="text-caption text-zinc-500">{t(`flow.${account.fundsFlow}`)}</p>
+        <p className="text-caption text-ink-2">{t(`flow.${account.fundsFlow}`)}</p>
         {canManage && account.state !== 'active' ? (
           <StepUpForm action={startPayoutOnboarding.bind(null, org, locale)}>
             <Button type="submit">{account.state === 'none' ? t('start') : t('continue')}</Button>
           </StepUpForm>
         ) : !canManage ? (
-          <p className="text-caption text-zinc-600">{t('noAccess')}</p>
+          <p className="text-caption text-ink-2">{t('noAccess')}</p>
         ) : null}
       </Card>
       {canSeeMoney ? (
@@ -102,9 +102,9 @@ export default async function PayoutsPage({
           <h2 id="settlements-heading" className="text-section">
             {t('settlements.title')}
           </h2>
-          <p className="text-body text-zinc-600">{t('settlements.description')}</p>
+          <p className="text-body text-ink-2">{t('settlements.description')}</p>
           {settlements.length === 0 ? (
-            <p className="text-caption text-zinc-500">{t('settlements.empty')}</p>
+            <p className="text-caption text-ink-2">{t('settlements.empty')}</p>
           ) : (
             <Table
               caption={t('settlements.title')}
@@ -161,9 +161,9 @@ export default async function PayoutsPage({
           <h2 id="receivables-heading" className="text-section">
             {t('receivables.title')}
           </h2>
-          <p className="text-body text-zinc-600">{t('receivables.description')}</p>
+          <p className="text-body text-ink-2">{t('receivables.description')}</p>
           {receivables.outstanding.length === 0 ? (
-            <p className="text-caption text-zinc-500">{t('receivables.none')}</p>
+            <p className="text-caption text-ink-2">{t('receivables.none')}</p>
           ) : (
             <ul className="flex list-none flex-col gap-2 p-0">
               {receivables.outstanding.map((o) => (
@@ -171,7 +171,7 @@ export default async function PayoutsPage({
                   <Card className="flex flex-wrap items-center gap-x-6 gap-y-2">
                     <StatusDot status="warning" label={t('receivables.owed')} />
                     <span className="font-mono tabular-nums">{fmt(o.amountMinor, o.currency)}</span>
-                    <span className="text-caption text-zinc-600">{t('receivables.nettedNext')}</span>
+                    <span className="text-caption text-ink-2">{t('receivables.nettedNext')}</span>
                   </Card>
                 </li>
               ))}

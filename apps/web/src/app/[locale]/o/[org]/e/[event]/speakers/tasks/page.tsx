@@ -1,10 +1,10 @@
 import { executeQuery } from '@yayatoh/kernel';
 import { type PortalTaskDto, portalTaskBoardQuery } from '@yayatoh/program';
-import { Card, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
+import { Alert, Card, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { Crumbs } from '@/components/crumbs.tsx';
 import { ActionButtonForm, RemindForm } from '@/components/portal-admin-forms.tsx';
 import { ProgramForm } from '@/components/program-form.tsx';
-import { Link } from '@/i18n/navigation.ts';
 import { formatMoment } from '@/lib/portal-format.ts';
 import { ports } from '@/server/ports.ts';
 import { loadProgramPage } from '@/server/program.ts';
@@ -31,6 +31,7 @@ export default async function SpeakerTasksBoardPage({
   setRequestLocale(locale);
   const { data, ev, program, canWrite } = await loadProgramPage(org, event, 'speakers');
   const t = await getTranslations('speakerTasks');
+  const tn = await getTranslations('nav');
   const tasks = await executeQuery(portalTaskBoardQuery, { eventId: ev.id }, data.ctx, ports);
   const tz = ev.timezone;
   const columns = [
@@ -76,15 +77,20 @@ export default async function SpeakerTasksBoardPage({
   return (
     <>
       <PageHeader
-        eyebrow={
-          <Link href={`/o/${org}/e/${event}/speakers`} className="text-caption underline underline-offset-2">
-            {t('back')}
-          </Link>
+        breadcrumb={
+          <Crumbs
+            items={[
+              { label: data.org.name, href: `/o/${org}` },
+              { label: ev.name, href: `/o/${org}/e/${event}` },
+              { label: tn('speakers'), href: `/o/${org}/e/${event}/speakers` },
+              { label: t('title') },
+            ]}
+          />
         }
         title={t('title')}
         description={t('subtitle', { zone: tz })}
       />
-      {canWrite ? null : <p className="text-body text-zinc-500">{t('viewerNotice')}</p>}
+      {canWrite ? null : <Alert tone="info" title={t('viewerNotice')} />}
       <section aria-labelledby="tasks-heading" className="flex flex-col gap-3">
         <h2 id="tasks-heading" className="text-section">
           {t('listHeading', { count: tasks.length })}
@@ -103,7 +109,7 @@ export default async function SpeakerTasksBoardPage({
                 <li key={task.id}>
                   <Card className="flex flex-col gap-3">
                     <h3 className="text-section">{task.title}</h3>
-                    <p className="text-caption text-zinc-600">
+                    <p className="text-caption text-ink-2">
                       {t(`kinds.${task.kind}`)} · {t('due', { date: formatMoment(task.dueAt, locale, tz) })} ·{' '}
                       {t('progress', {
                         done: task.assignees.length - missing.length,

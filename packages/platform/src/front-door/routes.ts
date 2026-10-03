@@ -192,6 +192,20 @@ export const PLATFORM_PREFIXES: readonly string[] = [
   '/event-portal',
   // Batch 3g merge: M3.3a's TV display links (a venue screen opens `/tv/{token}`, no session).
   '/tv',
+  // Batch 3h merge: M5.7a's signed big-screen link for live polls and Q&A (`/display/{token}`).
+  '/display',
+  // M4.1d/M4.1f: a wedding party's RSVP page and its paper fallback (`/rsvp/{token}`,
+  // `/rsvp/find/{code}`), and an event's public contact collector (`/collect/{code}`). Only the
+  // new app has them.
+  '/rsvp',
+  '/collect',
+  // Batch 3h merge: M4.2b's signed table claim link (`/tables/{token}`), where a buyer names the
+  // guests of a gala table.
+  '/tables',
+  // M4.8b: a donor's tax receipt and year-end statement PDFs (`/receipts/{org}/{token}`,
+  // `/statements/{org}/{token}`).
+  '/receipts',
+  '/statements',
 ];
 
 /**
@@ -199,10 +213,22 @@ export const PLATFORM_PREFIXES: readonly string[] = [
  * merge: the registration pages of M5.1a and M5.1b, and the M3.10a waitlist join page. Batch 3f
  * merge: the M5.4a public exhibitor map. Batch 3g merge: the seat finder and M3.3b's guest help
  * pages under it (`seat-finder/help`, and a request's status page `seat-finder/help/{token}`).
+ * Batch 3h merge: M5.1c's group registration, applicant and group pages; M5.7a's participant
+ * page for a session's live polls and Q&A (`/events/{slug}/live/{session}`); M4.8a's giving page
+ * (`/events/{slug}/give`, `/events/{slug}/give/thanks`).
  */
 export const PLATFORM_PATTERNS: readonly RegExp[] = [
   /^\/events\/[^/]+\/(register|registration-form|waitlist|exhibitors)$/,
   /^\/events\/[^/]+\/seat-finder(\/help(\/[^/]+)?)?$/,
+  // M5.1c: group registration, an applicant's or registrant's own page, the payer's group page.
+  /^\/events\/[^/]+\/register\/group$/,
+  /^\/events\/[^/]+\/(registration|group)\/[^/]+$/,
+  // M5.7a: a session's live polls and Q&A for participants.
+  /^\/events\/[^/]+\/live\/[^/]+$/,
+  // M4.8a: the giving page and its thank-you page.
+  /^\/events\/[^/]+\/give(\/thanks)?$/,
+  // M5.1d: a buyer's invoice (view and pay) and its PDF.
+  /^\/events\/[^/]+\/invoice\/[^/]+(\/pdf)?$/,
 ];
 export const PLATFORM_FILES: ReadonlySet<string> = new Set([
   '/widget.js',

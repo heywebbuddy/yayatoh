@@ -10,14 +10,17 @@ import {
   staffAlertsSubscriber,
 } from '@yayatoh/checkin';
 import { deviceBoardPublisher, publishMetricsChangedTx } from '@yayatoh/command-center';
+import { giftOutcomesSubscriber, receiptIssuer, statementMailer } from '@yayatoh/donations';
 import { findEventTx, portalInviteMailer } from '@yayatoh/events';
 import { registrationResumeMailer } from '@yayatoh/forms';
+import { invitationMailer as guestInvitationMailer } from '@yayatoh/guests';
 import { listingsProjector } from '@yayatoh/marketplace';
 import { programMediaCleaner, speakerPhotoApprover } from '@yayatoh/media';
 import { announcementMailer, contactWroteNotifier, threadReplyMailer } from '@yayatoh/messaging';
 import { createNotifier } from '@yayatoh/notifications';
 import {
   creditNoteMailer,
+  invoiceMailer,
   orderLinkMailer,
   postponementMailer,
   refundDeclineMailer,
@@ -25,13 +28,20 @@ import {
   refundRequestNotifier,
   reminderRescheduler,
   supportReplyMailer,
+  tableNamingMailer,
   ticketMailer,
   waitlistMailer,
 } from '@yayatoh/orders';
 import { payoutDestinationMailer } from '@yayatoh/payments';
 import { type Subscriber, signLinkToken } from '@yayatoh/platform';
 import { portalSpeakerCleanup, taskReminderMailer } from '@yayatoh/program';
-import { registrationCapacity } from '@yayatoh/registration';
+import {
+  decisionMailer,
+  enrollmentMailer,
+  registrantLifecycle,
+  registrationCapacity,
+  registrationEnrollment,
+} from '@yayatoh/registration';
 import { analyticsForwarder, metricsProjector, postgresAnalyticsSink } from '@yayatoh/reports';
 import { finderCodeMailer, releaseCancelledSeats } from '@yayatoh/seating';
 import { surveyMailer } from '@yayatoh/surveys';
@@ -83,6 +93,8 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     transferMailer({ notifier, appOrigin }),
     walletPassSync({ provider: fakeWalletPassProvider() }),
     creditNoteMailer({ notifier, appOrigin }),
+    // M5.1d: pay-later invoices.
+    invoiceMailer({ notifier, appOrigin }),
     supportReplyMailer({ notifier, appOrigin }),
     // Dispute evidence deadlines reach finance through the alert engine (batch 3e: the
     // `disputeDeadline` rule), not a second notification.
@@ -109,16 +121,26 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     speakerPhotoApprover(),
     portalSpeakerCleanup(),
     surveyMailer({ notifier, appOrigin }),
+    // M4.1f: wedding invitations by email and text (the reminders run on the journey job).
+    guestInvitationMailer({ notifier, appOrigin }),
     registrationResumeMailer({
       notifier,
       appOrigin,
       eventName: async (tx, id) => (await findEventTx(tx, id))?.name ?? null,
     }),
     waitlistMailer({ notifier, appOrigin }),
+    // M4.2b: a purchased table's claim link to its buyer.
+    tableNamingMailer({ notifier, appOrigin }),
     // M3.7a: journeys enroll on purchase and check-in, follow date changes and cancellations.
     ...journeySubscribers(),
     // M5.1a: per-type capacity follows orders (paid, expired, refunded, cancelled) and offers freed places.
     registrationCapacity(),
+    // M5.1c: registrants follow their orders; approval and denial emails.
+    registrantLifecycle(),
+    decisionMailer({ notifier, appOrigin }),
+    // M5.2b: cancelled registrants give their session places back; promotions are emailed.
+    registrationEnrollment(),
+    enrollmentMailer({ notifier, appOrigin }),
     // M3.6a: contact × event participation and contact profiles for audiences.
     participationProjector(),
     listingsProjector({ onChange: (orgId) => revalidatePublicCache(appOrigin, orgId, secret) }),
@@ -134,6 +156,11 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     deviceBoardPublisher(),
     // M3.2b: the alert engine re-evaluates what each outbox event touched (sends through notifications).
     alertEvaluator({ notifier }),
+    // M4.8a: gift orders' outcomes (paid, failed, lapsed) move their gifts.
+    giftOutcomesSubscriber,
+    // M4.8b: a receipt per paid gift or charity-ticket order, and year-end statements, to the donor.
+    receiptIssuer({ notifier, appOrigin }),
+    statementMailer({ notifier, appOrigin }),
   ];
 }
 

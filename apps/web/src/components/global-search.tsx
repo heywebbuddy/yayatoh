@@ -36,7 +36,7 @@ export function GlobalSearch({
     return () => window.removeEventListener('keydown', onKey);
   }, []);
   return (
-    <search className="order-last w-full sm:order-none sm:w-[300px]">
+    <search className="order-last w-full sm:order-none sm:w-auto sm:max-w-[460px] sm:flex-[1_1_280px]">
       <form action={`${locale === 'en' ? '' : `/${locale}`}/o/${org}/search`}>
         <SearchPill
           ref={input}

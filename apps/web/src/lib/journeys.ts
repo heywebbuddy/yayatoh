@@ -5,7 +5,7 @@
 type T = (key: string, values?: Record<string, string | number>) => string;
 
 export interface WaitLike {
-  readonly anchor: 'trigger' | 'event_start' | 'event_end';
+  readonly anchor: 'trigger' | 'event_start' | 'event_end' | 'invoice_due';
   readonly offsetDays: number;
   readonly offsetMinutes: number;
   readonly atTime: string | null;
@@ -24,7 +24,14 @@ export function durationText(t: T, locale: string, days: number, minutes: number
 
 /** "7 days before the event starts", "On the event day, at 09:00", "Right away"… */
 export function describeWait(t: T, locale: string, w: WaitLike): string {
-  const anchor = w.anchor === 'trigger' ? 'Trigger' : w.anchor === 'event_start' ? 'Start' : 'End';
+  const anchor =
+    w.anchor === 'trigger'
+      ? 'Trigger'
+      : w.anchor === 'event_start'
+        ? 'Start'
+        : w.anchor === 'invoice_due'
+          ? 'Due'
+          : 'End';
   if (w.atTime) {
     const time = formatTime(locale, w.atTime);
     const dir = w.offsetDays < 0 ? 'before' : w.offsetDays > 0 ? 'after' : 'same';
@@ -76,6 +83,10 @@ export const OUTCOMES = [
   'run_ended',
   'event_missing',
   'error',
+  // M5.1d: invoice reminders.
+  'invoice_paid',
+  'invoice_void',
+  'invoice_settled',
 ] as const;
 
 export const outcomeKey = (code: string | null) =>

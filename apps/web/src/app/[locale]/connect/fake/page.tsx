@@ -22,7 +22,7 @@ export default async function FakeConnect({
     <main id="main" className="mx-auto flex min-h-dvh max-w-md flex-col justify-center gap-6 px-6 py-16">
       <PageHeader eyebrow={<Label>{t('eyebrow')}</Label>} title={t('title')} description={t('description')} />
       <Card size="panel" className="flex flex-col gap-4">
-        <p className="font-mono text-caption text-zinc-600">{sp.acct}</p>
+        <p className="font-mono text-caption text-ink-2">{sp.acct}</p>
         <form action={completeFakeOnboarding.bind(null, p, 'complete')}>
           <Button type="submit" className="w-full">
             {t('complete')}

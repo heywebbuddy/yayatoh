@@ -1,6 +1,6 @@
 import { formatLinksText } from '@yayatoh/events';
 import { PORTAL_PHOTO_MAX_BYTES } from '@yayatoh/media';
-import { Card } from '@yayatoh/ui';
+import { Avatar, Card } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { proposeProfileAction } from '@/app/[locale]/event-portal/actions.ts';
@@ -9,6 +9,7 @@ import { PortalChangeStatus } from '@/components/portal-change-status.tsx';
 import { PortalFileUpload } from '@/components/portal-forms.tsx';
 import { PortalShell, PortalSignedOut } from '@/components/portal-shell.tsx';
 import { ProgramForm } from '@/components/program-form.tsx';
+import { initialsOf } from '@/lib/initials.ts';
 import { loadSpeakerPortal } from '@/server/portal.ts';
 
 export async function generateMetadata({
@@ -53,19 +54,25 @@ export default async function SpeakerProfilePage({ params }: { params: Promise<{
       {data.profileChange ? <PortalChangeStatus change={data.profileChange} /> : null}
       <section aria-labelledby="current-heading">
         <Card className="flex flex-col gap-2">
-          <h2 id="current-heading" className="text-section">
+          <h2 id="current-heading" className="m-0 text-label text-ink-2 uppercase">
             {t('currentProfile')}
           </h2>
-          <p className="text-body font-medium">{s.name}</p>
-          {s.title || s.company ? (
-            <p className="text-caption text-zinc-600">{[s.title, s.company].filter(Boolean).join(' · ')}</p>
-          ) : null}
+          <div className="flex items-center gap-3">
+            <Avatar initials={initialsOf(s.name)} label={s.name} size={48} decorative />
+            <div className="flex min-w-0 flex-col gap-0.5">
+              <p className="m-0 text-card text-ink">{s.name}</p>
+              {s.title || s.company ? (
+                <p className="m-0 text-body text-ink-2">{[s.title, s.company].filter(Boolean).join(' · ')}</p>
+              ) : null}
+            </div>
+          </div>
           {s.bio ? <Markdown source={s.bio} /> : null}
           {s.links.length ? (
-            <ul className="flex list-none flex-col gap-1 p-0 text-body">
+            <ul className="m-0 flex list-none flex-col gap-1 p-0 text-body">
               {s.links.map((l) => (
                 <li key={l.url}>
-                  {l.label}: {l.url}
+                  <span className="font-bold text-ink">{l.label}:</span>{' '}
+                  <span className="text-primary-ink">{l.url}</span>
                 </li>
               ))}
             </ul>
@@ -74,10 +81,10 @@ export default async function SpeakerProfilePage({ params }: { params: Promise<{
       </section>
       <section aria-labelledby="edit-heading">
         <Card size="panel" className="flex flex-col gap-3">
-          <h2 id="edit-heading" className="text-section">
+          <h2 id="edit-heading" className="m-0 text-card text-ink">
             {t('suggestChanges')}
           </h2>
-          <p className="text-caption text-zinc-600">{t('approvalHint')}</p>
+          <p className="text-caption text-ink-2">{t('approvalHint')}</p>
           <ProgramForm
             action={proposeProfileAction}
             idPrefix="portal-profile"
@@ -129,11 +136,11 @@ export default async function SpeakerProfilePage({ params }: { params: Promise<{
       </section>
       <section aria-labelledby="photo-heading">
         <Card size="panel" className="flex flex-col gap-3">
-          <h2 id="photo-heading" className="text-section">
+          <h2 id="photo-heading" className="m-0 text-card text-ink">
             {t('photoHeading')}
           </h2>
           {data.profileChange?.status === 'pending' && data.profileChange.hasPhoto ? (
-            <p className="text-caption text-zinc-600">{t('photoPending')}</p>
+            <p className="text-caption text-ink-2">{t('photoPending')}</p>
           ) : null}
           <PortalFileUpload
             purpose="speaker_photo"

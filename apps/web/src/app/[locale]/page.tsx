@@ -42,15 +42,15 @@ export default async function Home({ params, searchParams }: Props) {
   const content = await platformContentOrg(await requestHost());
   const sections = content ? await cachedSections(content.orgId, 'home', locale) : [];
   return (
-    <div className="min-h-dvh bg-white">
+    <div className="min-h-dvh bg-surface">
       <SiteHeader />
       <main id="main" className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 pb-8 md:px-6">
         <section className="flex flex-col gap-4 pt-8 md:pt-16">
           <CardLabel>{t('home.eyebrow')}</CardLabel>
-          <h1 className="text-[40px] leading-none font-light tracking-[-0.045em] md:text-display">
+          <h1 className="text-[40px] leading-none font-extrabold tracking-[-0.045em] md:text-display">
             {t('home.title')}
           </h1>
-          <p className="max-w-xl text-[15px] text-zinc-600">{t('home.lede')}</p>
+          <p className="max-w-xl text-[15px] text-ink-2">{t('home.lede')}</p>
           {devAuthEnabled() ? (
             <div className="flex flex-wrap gap-3">
               <Link className={buttonClass('secondary')} href="/dev/login">
@@ -63,10 +63,13 @@ export default async function Home({ params, searchParams }: Props) {
         {sections.length > 0 ? (
           <section
             aria-labelledby="home-organizers"
-            className="flex flex-col gap-6 border-t border-zinc-200 pt-10"
+            className="flex flex-col gap-6 border-t border-line pt-10"
           >
             <div className="flex flex-col gap-2">
-              <h2 id="home-organizers" className="text-[32px] leading-tight font-light tracking-[-0.03em]">
+              <h2
+                id="home-organizers"
+                className="text-[32px] leading-tight font-extrabold tracking-[-0.03em]"
+              >
                 {t('home.organizersTitle')}
               </h2>
               <Link href="/features" className="self-start text-body underline underline-offset-4">

@@ -12,6 +12,8 @@ export interface BadgeTicket {
   readonly holderName: string;
   /** The active signed yy1 code (ADR 0011), exactly as the ticket carries it. */
   readonly code: string;
+  /** M5.1d: its invoice still has a balance (printing needs an audited staff override). */
+  readonly paymentDue: boolean;
 }
 
 /**
@@ -41,6 +43,7 @@ export async function badgeTicketsTx(
       serial: tickets.serial,
       holderName: tickets.holderName,
       code: ticketBarcodes.payload,
+      paymentDue: tickets.paymentDue,
     })
     .from(tickets)
     .innerJoin(ticketTypes, eq(ticketTypes.id, tickets.ticketTypeId))
