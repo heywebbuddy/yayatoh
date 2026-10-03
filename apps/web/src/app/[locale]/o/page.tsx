@@ -1,7 +1,7 @@
 import { myOrganizations } from '@yayatoh/tenancy';
-import { EmptyState } from '@yayatoh/ui';
+import { buttonClass, EmptyState } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { redirect } from '@/i18n/navigation.ts';
+import { Link, redirect } from '@/i18n/navigation.ts';
 import { getSession } from '@/server/session.ts';
 
 /** Entry after sign-in: open the user's first organization. */
@@ -18,7 +18,15 @@ export default async function OrgPicker({ params }: { params: Promise<{ locale: 
   const t = await getTranslations('orgPicker');
   return (
     <main id="main" className="mx-auto max-w-xl px-6 py-24">
-      <EmptyState title={t('emptyTitle')} description={t('emptyDescription')} />
+      <EmptyState
+        title={t('emptyTitle')}
+        description={t('emptyDescription')}
+        action={
+          <Link href="/my-tickets" className={buttonClass('primary', 'md')}>
+            {t('myTickets')}
+          </Link>
+        }
+      />
     </main>
   );
 }

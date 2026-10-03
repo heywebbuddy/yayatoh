@@ -85,8 +85,16 @@ export default async function GuestImportPage({
   if (!can('guests:write'))
     return (
       <>
-        <PageHeader title={t('title')} actions={back} />
-        <EmptyState title={t('noAccessTitle')} description={t('noAccessDescription')} />
+        <PageHeader title={t('title')} />
+        <EmptyState
+          title={t('noAccessTitle')}
+          description={t('noAccessDescription')}
+          action={
+            <Link href={guestsHref} className={buttonClass('primary', 'md')}>
+              {t('backToGuests')}
+            </Link>
+          }
+        />
       </>
     );
 

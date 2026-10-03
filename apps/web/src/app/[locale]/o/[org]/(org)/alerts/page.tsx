@@ -122,6 +122,24 @@ export default async function AlertsPage({
         <EmptyState
           title={status === 'active' ? t('empty.activeTitle') : t('empty.resolvedTitle')}
           description={status === 'active' ? t('empty.activeDescription') : t('empty.resolvedDescription')}
+          action={
+            eventId ? (
+              <Link
+                href={status === 'resolved' ? `${base}?status=resolved` : base}
+                className={buttonClass('primary', 'md')}
+              >
+                {t('empty.allEventsAction')}
+              </Link>
+            ) : status === 'active' ? (
+              <Link href={`${base}/settings`} className={buttonClass('primary', 'md')}>
+                {t('empty.settingsAction')}
+              </Link>
+            ) : (
+              <Link href={base} className={buttonClass('primary', 'md')}>
+                {t('empty.currentAction')}
+              </Link>
+            )
+          }
         />
       ) : (
         <ul className="flex list-none flex-col gap-3 p-0" aria-label={t(status)}>
