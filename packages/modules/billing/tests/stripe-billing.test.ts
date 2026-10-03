@@ -379,3 +379,159 @@ describe('Stripe billing adapter — catalog and customers (M6.6a)', () => {
     expect(() => stripeBillingProvider({ secretKey: 'sk_test_x', webhookSecret: '' })).toThrow();
   });
 });
+
+describe('Stripe billing adapter — plan changes, payments, meters, coupons (M6.6b)', () => {
+  const priceList = () => ({
+    json: list([
+      {
+        id: 'price_test_starter_month',
+        object: 'price',
+        lookup_key: 'tier_starter_month_usd',
+        currency: 'usd',
+        unit_amount: 2900,
+        active: true,
+        product: 'prod_test_starter',
+        recurring: { interval: 'month' },
+      },
+    ]),
+  });
+  const invoice = (over: Record<string, unknown> = {}) => ({
+    id: 'in_test_1',
+    object: 'invoice',
+    currency: 'usd',
+    amount_due: 3780,
+    total: 3780,
+    status: 'draft',
+    lines: list([
+      { id: 'il_1', object: 'line_item', amount: -4950 },
+      { id: 'il_2', object: 'line_item', amount: 8450 },
+    ]),
+    total_discount_amounts: [],
+    total_taxes: [{ amount: 280, tax_behavior: 'exclusive', taxable_amount: 3500 }],
+    ...over,
+  });
+  const current = {
+    id: 'sub_test_1',
+    priceLookupKey: 'tier_pro_month_usd',
+    currentPeriodEnd: new Date(1_792_000_000_000),
+  };
+
+  it('previews a change with the invoice preview: proration date, automatic tax, the item swapped', async () => {
+    const { provider, calls } = adapter({
+      'GET /v1/prices': priceList,
+      'GET /v1/subscriptions/sub_test_1': () => ({ json: subscriptionObject() }),
+      'POST /v1/invoices/create_preview': () => ({ json: invoice() }),
+    });
+    const at = new Date(1_791_000_000_000);
+    const p = await provider.previewPlanChange({
+      customerId: 'cus_test_1',
+      subscription: current,
+      priceLookupKey: 'tier_starter_month_usd',
+      at,
+      coupon: null,
+    });
+    expect(p).toEqual({
+      currency: 'USD',
+      creditMinor: 4950,
+      chargeMinor: 8450,
+      discountMinor: 0,
+      taxMinor: 280,
+      amountDueMinor: 3780,
+      creditBalanceMinor: 0,
+      nextRenewalMinor: 2900,
+      nextRenewalAt: current.currentPeriodEnd,
+    });
+    const preview = calls.find((c) => c.path === '/v1/invoices/create_preview');
+    expect(preview?.body.get('subscription')).toBe('sub_test_1');
+    expect(preview?.body.get('automatic_tax[enabled]')).toBe('true');
+    expect(preview?.body.get('subscription_details[items][0][id]')).toBe('si_test_1');
+    expect(preview?.body.get('subscription_details[items][0][price]')).toBe('price_test_starter_month');
+    expect(preview?.body.get('subscription_details[proration_date]')).toBe(String(at.getTime() / 1000));
+    expect(calls.find((c) => c.path === '/v1/prices')?.query.get('lookup_keys[0]')).toBe(
+      'tier_starter_month_usd',
+    );
+  });
+
+  it('changes the subscription with prorations and the idempotency key; starts one with the coupon', async () => {
+    const { provider, calls } = adapter({
+      'GET /v1/prices': priceList,
+      'GET /v1/subscriptions/sub_test_1': () => ({ json: subscriptionObject() }),
+      'POST /v1/subscriptions/sub_test_1': () => ({ json: subscriptionObject() }),
+      'POST /v1/subscriptions': () => ({ json: subscriptionObject({ id: 'sub_test_new' }) }),
+    });
+    const at = new Date(1_791_000_000_000);
+    const changed = await provider.changePlan({
+      customerId: 'cus_test_1',
+      subscription: current,
+      priceLookupKey: 'tier_starter_month_usd',
+      at,
+      coupon: null,
+      idempotencyKey: 'billing-plan-change:1',
+    });
+    expect(changed).toEqual({ subscriptionId: 'sub_test_1' });
+    const update = calls.find((c) => c.method === 'POST' && c.path === '/v1/subscriptions/sub_test_1');
+    expect(update?.idempotencyKey).toBe('billing-plan-change:1');
+    expect(update?.body.get('proration_behavior')).toBe('always_invoice');
+    expect(update?.body.get('items[0][id]')).toBe('si_test_1');
+    expect(update?.body.get('automatic_tax[enabled]')).toBe('true');
+    const started = await provider.changePlan({
+      customerId: 'cus_test_1',
+      subscription: null,
+      priceLookupKey: 'tier_starter_month_usd',
+      at,
+      coupon: 'nonprofit',
+      idempotencyKey: 'billing-plan-change:2',
+    });
+    expect(started).toEqual({ subscriptionId: 'sub_test_new' });
+    const create = calls.find((c) => c.method === 'POST' && c.path === '/v1/subscriptions');
+    expect(create?.idempotencyKey).toBe('billing-plan-change:2');
+    expect(create?.body.get('discounts[0][coupon]')).toBe('nonprofit');
+    expect(create?.body.get('customer')).toBe('cus_test_1');
+  });
+
+  it('pays the open invoice (idempotent); nothing open counts as paid', async () => {
+    let open = true;
+    const { provider, calls } = adapter({
+      'GET /v1/invoices': () => ({ json: list(open ? [invoice({ status: 'open' })] : []) }),
+      'POST /v1/invoices/in_test_1/pay': () => ({ json: invoice({ status: 'paid' }) }),
+    });
+    const i = { customerId: 'cus_test_1', subscription: current, idempotencyKey: 'billing-pay:k1' };
+    expect(await provider.payOutstanding(i)).toEqual({ paid: true });
+    expect(calls.find((c) => c.path === '/v1/invoices/in_test_1/pay')?.idempotencyKey).toBe('billing-pay:k1');
+    expect(calls.find((c) => c.path === '/v1/invoices')?.query.get('status')).toBe('open');
+    open = false;
+    expect(await provider.payOutstanding(i)).toEqual({ paid: true });
+  });
+
+  it('reports usage as meter events with our record id as the identifier', async () => {
+    const { provider, calls } = adapter({
+      'POST /v1/billing/meter_events': () => ({
+        json: { object: 'billing.meter_event', event_name: 'yayatoh_sms' },
+      }),
+    });
+    await provider.reportUsage({
+      customerId: 'cus_test_1',
+      meter: 'sms',
+      quantity: 3,
+      identifier: '0199a0a0-0000-7000-8000-000000000001',
+      timestamp: new Date(1_791_000_000_000),
+    });
+    const c = calls[0];
+    expect(c?.body.get('event_name')).toBe('yayatoh_sms');
+    expect(c?.body.get('payload[stripe_customer_id]')).toBe('cus_test_1');
+    expect(c?.body.get('payload[value]')).toBe('3');
+    expect(c?.body.get('identifier')).toBe('0199a0a0-0000-7000-8000-000000000001');
+    expect(c?.body.get('timestamp')).toBe('1791000000');
+  });
+
+  it('puts the nonprofit coupon on the subscription and takes it off', async () => {
+    const { provider, calls } = adapter({
+      'POST /v1/subscriptions/sub_test_1': () => ({ json: subscriptionObject() }),
+    });
+    await provider.setDiscount({ subscriptionId: 'sub_test_1', coupon: 'nonprofit', idempotencyKey: 'd1' });
+    await provider.setDiscount({ subscriptionId: 'sub_test_1', coupon: null, idempotencyKey: 'd2' });
+    expect(calls[0]?.body.get('discounts[0][coupon]')).toBe('nonprofit');
+    expect(calls[0]?.idempotencyKey).toBe('d1');
+    expect(calls[1]?.body.get('discounts')).toBe('');
+  });
+});

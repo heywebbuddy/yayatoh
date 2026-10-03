@@ -7120,6 +7120,16 @@
               }
             }
           },
+          "402": {
+            "description": "The organization is read-only until its subscription is paid (`read_only_billing`): nothing was changed",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
           "403": {
             "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
             "content": {
@@ -7382,6 +7392,16 @@
               }
             }
           },
+          "402": {
+            "description": "The organization is read-only until its subscription is paid (`read_only_billing`): nothing was changed",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
           "403": {
             "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
             "content": {
@@ -7522,6 +7542,16 @@
           },
           "401": {
             "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "The organization is read-only until its subscription is paid (`read_only_billing`): nothing was changed",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -7792,6 +7822,16 @@
               }
             }
           },
+          "402": {
+            "description": "The organization is read-only until its subscription is paid (`read_only_billing`): nothing was changed",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
           "403": {
             "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
             "content": {
@@ -7942,6 +7982,16 @@
           },
           "401": {
             "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "The organization is read-only until its subscription is paid (`read_only_billing`): nothing was changed",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -8336,6 +8386,16 @@
           },
           "401": {
             "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "The organization is read-only until its subscription is paid (`read_only_billing`): nothing was changed",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -8889,6 +8949,16 @@
               }
             }
           },
+          "402": {
+            "description": "The organization is read-only until its subscription is paid (`read_only_billing`): nothing was changed",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
           "403": {
             "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
             "content": {
@@ -9039,6 +9109,16 @@
           },
           "401": {
             "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "The organization is read-only until its subscription is paid (`read_only_billing`): nothing was changed",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -9205,6 +9285,16 @@
               }
             }
           },
+          "402": {
+            "description": "The organization is read-only until its subscription is paid (`read_only_billing`): nothing was changed",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
           "403": {
             "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
             "content": {
@@ -9355,6 +9445,16 @@
           },
           "401": {
             "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "The organization is read-only until its subscription is paid (`read_only_billing`): nothing was changed",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -9521,6 +9621,16 @@
               }
             }
           },
+          "402": {
+            "description": "The organization is read-only until its subscription is paid (`read_only_billing`): nothing was changed",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
           "403": {
             "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
             "content": {
@@ -9671,6 +9781,16 @@
           },
           "401": {
             "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "The organization is read-only until its subscription is paid (`read_only_billing`): nothing was changed",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -9950,6 +10070,16 @@
           },
           "401": {
             "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "The organization is read-only until its subscription is paid (`read_only_billing`): nothing was changed",
             "content": {
               "application/problem+json": {
                 "schema": {
