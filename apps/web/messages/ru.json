@@ -6591,6 +6591,67 @@
         "window": "{sent, plural, one {# письмо} few {# письма} many {# писем} other {# письма}} за последние {days} дн.",
         "over": "Выше порогов: {domains, plural, one {# домен отправки} few {# домена отправки} many {# доменов отправки} other {# домена отправки}} и {campaigns, plural, one {# кампания} few {# кампании} many {# кампаний} other {# кампании}}",
         "open": "Открыть доставляемость писем"
+      },
+      "sessionLevel": {
+        "none": "Без ограничения",
+        "ok": "Ниже {near}%",
+        "near": "Почти заполнена ({near}% и более)",
+        "over": "Заполнена"
+      },
+      "sessionAttendance": {
+        "title": "Залы сессий",
+        "running": "{count, plural, one {# сессия идёт} few {# сессии идут} many {# сессий идут} other {# сессии идут}}",
+        "nearlyFull": "{count, plural, one {# почти заполнена} few {# почти заполнены} many {# почти заполнены} other {# почти заполнены}}",
+        "kiosks": "{count, plural, one {# киоск не в сети} few {# киоска не в сети} many {# киосков не в сети} other {# киоска не в сети}}",
+        "none": "Сейчас и в ближайший час сессий нет. Входы в залы настраиваются на странице регистрации на сессии.",
+        "table": "Сессии сейчас и далее",
+        "session": "Сессия",
+        "in": "В зале",
+        "capacity": "Мест",
+        "status": "Статус",
+        "until": "до {time}",
+        "starts": "начало в {time}",
+        "meter": "{title}: занято мест",
+        "more": "{count, plural, one {и ещё #} few {и ещё #} many {и ещё #} other {и ещё #}}",
+        "open": "Открыть регистрацию на сессии"
+      },
+      "sessionFill": {
+        "title": "Заполненность сессий",
+        "none": "Пока ни у одной сессии нет лимита мест. Укажите вместимость, чтобы следить за заполненностью здесь.",
+        "nearlyFull": "{count, plural, one {# из {limited} сессий заполнена на {near}% и более} few {# из {limited} сессий заполнены на {near}% и более} many {# из {limited} сессий заполнены на {near}% и более} other {# из {limited} сессий заполнены на {near}% и более}}",
+        "full": "{count, plural, one {# заполнена} few {# заполнены} many {# заполнены} other {# заполнены}}",
+        "waiting": "{count, plural, one {# человек ждёт} few {# человека ждут} many {# человек ждут} other {# человека ждут}}",
+        "longLines": "{count, plural, one {# очередь длиннее {max}} few {# очереди длиннее {max}} many {# очередей длиннее {max}} other {# очереди длиннее {max}}}",
+        "roomsTooSmall": "{count, plural, one {# в слишком маленьком зале} few {# в слишком маленьких залах} many {# в слишком маленьких залах} other {# в слишком маленьких залах}}",
+        "table": "Самые заполненные сессии",
+        "session": "Сессия",
+        "enrolled": "Занято мест",
+        "waitingHeader": "В очереди",
+        "status": "Статус",
+        "roomSmall": "Зал слишком мал",
+        "ofCapacity": "{enrolled} из {capacity}",
+        "open": "Открыть запись на сессии"
+      },
+      "exhibitorActivity": {
+        "title": "Экспоненты",
+        "none": "Экспонентов пока нет. Добавьте их, чтобы следить здесь за персоналом стендов и лидами.",
+        "add": "Добавить экспонентов",
+        "staffed": "{staffed} из {total} экспонентов имеют персонал стенда",
+        "people": "{count, plural, one {# человек приглашён} few {# человека приглашены} many {# человек приглашены} other {# человека приглашены}}",
+        "leads": "{count, plural, one {# лид} few {# лида} many {# лидов} other {# лида}}",
+        "withoutLeads": "{count, plural, one {# экспонент без лидов} few {# экспонента без лидов} many {# экспонентов без лидов} other {# экспонента без лидов}}",
+        "leadsPending": "Число лидов появится здесь, когда включится сбор лидов.",
+        "top": "Больше всего лидов",
+        "open": "Открыть портал экспонентов"
+      },
+      "sponsorActivity": {
+        "title": "Спонсоры",
+        "none": "Спонсоров пока нет. Добавьте пакеты и спонсоров, чтобы следить здесь за их обязательствами.",
+        "add": "Добавить спонсоров",
+        "total": "{count, plural, one {# спонсор} few {# спонсора} many {# спонсоров} other {# спонсора}}",
+        "overdue": "{count, plural, one {# обязательство просрочено} few {# обязательства просрочены} many {# обязательств просрочено} other {# обязательства просрочены}}",
+        "deliverablesPending": "Обязательства появятся здесь, когда включатся спонсорские пакеты.",
+        "open": "Открыть спонсоров"
       }
     },
     "openScanner": "Открыть сканер",
@@ -6709,7 +6770,17 @@
       "campaignFailed": "Открыть рассылки",
       "disputeDeadline": "Открыть споры",
       "assistanceOverdue": "Открыть запросы помощи",
-      "pledgesUnpaid": "Открыть обещания"
+      "pledgesUnpaid": "Открыть обещания",
+      "sessionsNearCapacity": "Открыть сессии",
+      "sessionWaitlists": "Открыть запись на сессии",
+      "roomsTooSmall": "Открыть сессии",
+      "exhibitorsNoLeads": "Открыть экспонентов",
+      "exhibitorsNoStaff": "Открыть портал экспонентов",
+      "speakerTasksOverdue": "Открыть задачи спикеров",
+      "deliverablesOverdue": "Открыть спонсоров",
+      "printersKiosksOffline": "Открыть настройки на площадке",
+      "approvalBacklog": "Открыть заявки",
+      "invoicesOverdue": "Открыть счета"
     },
     "rules": {
       "unseated": "{count, plural, one {{countWords} участник без места} few {{countWords} участника без мест} many {{countWords} участников без мест} other {{countWords} участника без мест}}",
@@ -6732,7 +6803,17 @@
       "campaignFailed": "{count, plural, one {{countWords} рассылка сегодня не удалась} few {{countWords} рассылки сегодня не удались} many {{countWords} рассылок сегодня не удались} other {{countWords} рассылки сегодня не удалось}}",
       "disputeDeadline": "{count, plural, one {По {countWords} спору скоро нужны доказательства} few {По {countWords} спорам скоро нужны доказательства} many {По {countWords} спорам скоро нужны доказательства} other {По {countWords} спора скоро нужны доказательства}}",
       "assistanceOverdue": "{count, plural, one {{countWords} запрос помощи ждёт слишком долго} few {{countWords} запроса помощи ждут слишком долго} many {{countWords} запросов помощи ждут слишком долго} other {{countWords} запроса помощи ждут слишком долго}}",
-      "pledgesUnpaid": "{count, plural, one {{countWords} обещание пожертвования не оплачено через 14 дней после мероприятия} few {{countWords} обещания пожертвования не оплачены через 14 дней после мероприятия} many {{countWords} обещаний пожертвования не оплачены через 14 дней после мероприятия} other {{countWords} обещания пожертвования не оплачены через 14 дней после мероприятия}}"
+      "pledgesUnpaid": "{count, plural, one {{countWords} обещание пожертвования не оплачено через 14 дней после мероприятия} few {{countWords} обещания пожертвования не оплачены через 14 дней после мероприятия} many {{countWords} обещаний пожертвования не оплачены через 14 дней после мероприятия} other {{countWords} обещания пожертвования не оплачены через 14 дней после мероприятия}}",
+      "sessionsNearCapacity": "{count, plural, one {{countWords} сессия заполнена более чем на 95 %} few {{countWords} сессии заполнены более чем на 95 %} many {{countWords} сессий заполнены более чем на 95 %} other {{countWords} сессии заполнены более чем на 95 %}}",
+      "sessionWaitlists": "{count, plural, one {У {countWords} сессии длинная очередь} few {У {countWords} сессий длинные очереди} many {У {countWords} сессий длинные очереди} other {У {countWords} сессии длинные очереди}}",
+      "roomsTooSmall": "{count, plural, one {В {countWords} сессии занято больше мест, чем в зале} few {В {countWords} сессиях занято больше мест, чем в залах} many {В {countWords} сессиях занято больше мест, чем в залах} other {В {countWords} сессиях занято больше мест, чем в залах}}",
+      "exhibitorsNoLeads": "{count, plural, one {У {countWords} экспонента нет лидов} few {У {countWords} экспонентов нет лидов} many {У {countWords} экспонентов нет лидов} other {У {countWords} экспонента нет лидов}}",
+      "exhibitorsNoStaff": "{count, plural, one {{countWords} экспонент не пригласил персонал стенда} few {{countWords} экспонента не пригласили персонал стенда} many {{countWords} экспонентов не пригласили персонал стенда} other {{countWords} экспонента не пригласили персонал стенда}}",
+      "speakerTasksOverdue": "{count, plural, one {{countWords} задача спикера просрочена} few {{countWords} задачи спикеров просрочены} many {{countWords} задач спикеров просрочено} other {{countWords} задачи спикеров просрочены}}",
+      "deliverablesOverdue": "{count, plural, one {{countWords} обязательство спонсора просрочено} few {{countWords} обязательства спонсоров просрочены} many {{countWords} обязательств спонсоров просрочено} other {{countWords} обязательства спонсоров просрочены}}",
+      "printersKiosksOffline": "{count, plural, one {{countWords} принтер бейджей или киоск не в сети} few {{countWords} принтера бейджей или киоска не в сети} many {{countWords} принтеров бейджей или киосков не в сети} other {{countWords} принтера бейджей или киоска не в сети}}",
+      "approvalBacklog": "{count, plural, one {{countWords} заявка ждёт решения} few {{countWords} заявки ждут решения} many {{countWords} заявок ждут решения} other {{countWords} заявки ждут решения}}",
+      "invoicesOverdue": "{count, plural, one {{countWords} счёт просрочен} few {{countWords} счёта просрочены} many {{countWords} счетов просрочено} other {{countWords} счёта просрочены}}"
     },
     "widget": {
       "title": "Оповещения",
@@ -6779,7 +6860,8 @@
       "door": "Вход и устройства",
       "sales": "Продажи",
       "setup": "Настройка и домены",
-      "messaging": "Рассылки"
+      "messaging": "Рассылки",
+      "conference": "Сессии, экспоненты и спонсоры"
     },
     "channels": {
       "in_app": "В приложении",

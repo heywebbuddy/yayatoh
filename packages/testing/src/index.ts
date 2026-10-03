@@ -8,6 +8,13 @@ export {
 export { type CampaignContactSeed, campaignScenario } from './campaigns.ts';
 export { type CanaryAdmin, type CanaryFile, type CanaryOrg, canaryOrg } from './canary/org.ts';
 export {
+  CONFERENCE_FIXTURE,
+  type ConferenceScenario,
+  conferenceScenario,
+  type FakeConferenceState,
+  fakeConferenceSources,
+} from './conference.ts';
+export {
   createOrgFixture,
   EXPORT_PARAMS,
   FIXTURE_ENGAGEMENT_WEIGHTS,

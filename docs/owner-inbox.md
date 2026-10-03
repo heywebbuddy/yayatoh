@@ -675,3 +675,8 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **Chat wording (`legal-copy`):** the report and block texts and the "the organizer and Yayatoh review reports" lines (13 languages, namespace `chat`). Please have counsel review.
 - [ ] **DSAR:** chat messages are not yet in the access document or erasure (the same tier question as M5.8a's profiles). Until then an erasure leaves the person's messages until retention removes them.
 - [ ] **Realtime:** chat uses the in-house SSE transport (the M3.1b log); with Ably configured the same inbox channels are published there, but browsers attach to chat only through the app's own stream routes (no Ably token is issued for chat). Nothing to buy for now.
+
+## M5.9a — conference Command Center pack (2026-10-03, pending owner)
+- [ ] **Thresholds** (roadmap-style defaults, one value for every org): a session is "nearly full" at 95 % of its places; a waiting line is long above 10 people; the approval backlog fires from 10 pending applications or one older than 48 hours; exhibitors without booth staff are raised from 7 days before the event. Confirm or adjust (per-org settings are "later").
+- [ ] **Routing:** the new "Sessions, exhibitors and sponsors" group reaches owners, admins and managers in-app and by email by default. Confirm.
+- [ ] **Leads, sponsor deliverables and badge printers** have no source in production until M5.6b, M5.4b and M5.5b are merged: those three rules stay quiet and their tiles say so. Nothing for you to set up; listed so the merge connects them.

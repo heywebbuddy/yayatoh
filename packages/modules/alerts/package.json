@@ -25,6 +25,8 @@
     "@yayatoh/orders": "workspace:*",
     "@yayatoh/payments": "workspace:*",
     "@yayatoh/platform": "workspace:*",
+    "@yayatoh/program": "workspace:*",
+    "@yayatoh/registration": "workspace:*",
     "@yayatoh/seating": "workspace:*",
     "@yayatoh/tenancy": "workspace:*",
     "@yayatoh/ticketing": "workspace:*",

@@ -6591,6 +6591,67 @@
         "window": "{sent, plural, one {# e-mail} other {# e-mails}} in de afgelopen {days} dagen",
         "over": "{domains, plural, one {# verzenddomein} other {# verzenddomeinen}} en {campaigns, plural, one {# campagne} other {# campagnes}} boven de drempels",
         "open": "E-mailbezorgbaarheid openen"
+      },
+      "sessionLevel": {
+        "none": "Geen limiet",
+        "ok": "Onder {near}%",
+        "near": "Bijna vol ({near}% of meer)",
+        "over": "Vol"
+      },
+      "sessionAttendance": {
+        "title": "Sessiezalen",
+        "running": "{count, plural, one {# sessie bezig} other {# sessies bezig}}",
+        "nearlyFull": "{count, plural, one {# bijna vol} other {# bijna vol}}",
+        "kiosks": "{count, plural, one {# kiosk offline} other {# kiosken offline}}",
+        "none": "Nu en het komende uur geen sessies. Sessiedeuren stelt u in op de pagina Sessie-check-in.",
+        "table": "Sessies nu en hierna",
+        "session": "Sessie",
+        "in": "In de zaal",
+        "capacity": "Plaatsen",
+        "status": "Status",
+        "until": "tot {time}",
+        "starts": "begint {time}",
+        "meter": "{title}: bezette plaatsen",
+        "more": "{count, plural, one {en # meer} other {en # meer}}",
+        "open": "Sessie-check-in openen"
+      },
+      "sessionFill": {
+        "title": "Sessiebezetting",
+        "none": "Nog geen sessie met beperkte plaatsen. Stel een capaciteit in om de bezetting hier te volgen.",
+        "nearlyFull": "{count, plural, one {# van {limited} sessies is voor {near}% of meer bezet} other {# van {limited} sessies zijn voor {near}% of meer bezet}}",
+        "full": "{count, plural, one {# vol} other {# vol}}",
+        "waiting": "{count, plural, one {# persoon wacht} other {# mensen wachten}}",
+        "longLines": "{count, plural, one {# wachtlijst boven {max}} other {# wachtlijsten boven {max}}}",
+        "roomsTooSmall": "{count, plural, one {# in een te kleine zaal} other {# in te kleine zalen}}",
+        "table": "Drukst bezette sessies",
+        "session": "Sessie",
+        "enrolled": "Bezette plaatsen",
+        "waitingHeader": "Wachtend",
+        "status": "Status",
+        "roomSmall": "Zaal te klein",
+        "ofCapacity": "{enrolled} van {capacity}",
+        "open": "Sessie-inschrijving openen"
+      },
+      "exhibitorActivity": {
+        "title": "Exposanten",
+        "none": "Nog geen exposanten. Voeg ze toe om hier hun standpersoneel en leads te volgen.",
+        "add": "Exposanten toevoegen",
+        "staffed": "{staffed} van {total} exposanten hebben standpersoneel",
+        "people": "{count, plural, one {# persoon uitgenodigd} other {# mensen uitgenodigd}}",
+        "leads": "{count, plural, one {# lead} other {# leads}}",
+        "withoutLeads": "{count, plural, one {# exposant zonder leads} other {# exposanten zonder leads}}",
+        "leadsPending": "Aantallen leads verschijnen hier zodra leadregistratie aan staat.",
+        "top": "Meeste leads",
+        "open": "Exposantenportaal openen"
+      },
+      "sponsorActivity": {
+        "title": "Sponsors",
+        "none": "Nog geen sponsors. Voeg pakketten en sponsors toe om hun leveringen hier te volgen.",
+        "add": "Sponsors toevoegen",
+        "total": "{count, plural, one {# sponsor} other {# sponsors}}",
+        "overdue": "{count, plural, one {# levering te laat} other {# leveringen te laat}}",
+        "deliverablesPending": "Leveringen verschijnen hier zodra sponsorpakketten aan staan.",
+        "open": "Sponsors openen"
       }
     },
     "openScanner": "Scanner openen",
@@ -6709,7 +6770,17 @@
       "campaignFailed": "Campagnes openen",
       "disputeDeadline": "Geschillen openen",
       "assistanceOverdue": "Hulpvragen openen",
-      "pledgesUnpaid": "Toezeggingen openen"
+      "pledgesUnpaid": "Toezeggingen openen",
+      "sessionsNearCapacity": "Sessies openen",
+      "sessionWaitlists": "Sessie-inschrijving openen",
+      "roomsTooSmall": "Sessies openen",
+      "exhibitorsNoLeads": "Exposanten openen",
+      "exhibitorsNoStaff": "Exposantenportaal openen",
+      "speakerTasksOverdue": "Sprekerstaken openen",
+      "deliverablesOverdue": "Sponsors openen",
+      "printersKiosksOffline": "Instellingen ter plaatse openen",
+      "approvalBacklog": "Aanvragen openen",
+      "invoicesOverdue": "Facturen openen"
     },
     "rules": {
       "unseated": "{count, plural, one {Eén deelnemer heeft geen plaats} other {{countWords} deelnemers hebben geen plaats}}",
@@ -6732,7 +6803,17 @@
       "campaignFailed": "{count, plural, one {Eén campagneverzending is vandaag mislukt} other {{countWords} campagneverzendingen zijn vandaag mislukt}}",
       "disputeDeadline": "{count, plural, one {Eén geschil heeft binnenkort bewijs nodig} other {{countWords} geschillen hebben binnenkort bewijs nodig}}",
       "assistanceOverdue": "{count, plural, one {{countWords} hulpvraag wacht te lang} other {{countWords} hulpvragen wachten te lang}}",
-      "pledgesUnpaid": "{count, plural, one {Eén toezegging is 14 dagen na het evenement nog niet betaald} other {{countWords} toezeggingen zijn 14 dagen na het evenement nog niet betaald}}"
+      "pledgesUnpaid": "{count, plural, one {Eén toezegging is 14 dagen na het evenement nog niet betaald} other {{countWords} toezeggingen zijn 14 dagen na het evenement nog niet betaald}}",
+      "sessionsNearCapacity": "{count, plural, one {{countWords} sessie zit boven 95 % van de capaciteit} other {{countWords} sessies zitten boven 95 % van de capaciteit}}",
+      "sessionWaitlists": "{count, plural, one {{countWords} sessie heeft een lange wachtlijst} other {{countWords} sessies hebben lange wachtlijsten}}",
+      "roomsTooSmall": "{count, plural, one {{countWords} sessie heeft meer plaatsen bezet dan de zaal stoelen heeft} other {{countWords} sessies hebben meer plaatsen bezet dan hun zalen stoelen hebben}}",
+      "exhibitorsNoLeads": "{count, plural, one {{countWords} exposant heeft geen leads} other {{countWords} exposanten hebben geen leads}}",
+      "exhibitorsNoStaff": "{count, plural, one {{countWords} exposant heeft geen standpersoneel uitgenodigd} other {{countWords} exposanten hebben geen standpersoneel uitgenodigd}}",
+      "speakerTasksOverdue": "{count, plural, one {{countWords} sprekerstaak is te laat} other {{countWords} sprekerstaken zijn te laat}}",
+      "deliverablesOverdue": "{count, plural, one {{countWords} sponsorlevering is te laat} other {{countWords} sponsorleveringen zijn te laat}}",
+      "printersKiosksOffline": "{count, plural, one {{countWords} badgeprinter of kiosk is offline} other {{countWords} badgeprinters of kiosken zijn offline}}",
+      "approvalBacklog": "{count, plural, one {{countWords} aanvraag wacht op een besluit} other {{countWords} aanvragen wachten op een besluit}}",
+      "invoicesOverdue": "{count, plural, one {{countWords} factuur is te laat} other {{countWords} facturen zijn te laat}}"
     },
     "widget": {
       "title": "Meldingen",
@@ -6779,7 +6860,8 @@
       "door": "Deur en apparaten",
       "sales": "Verkoop",
       "setup": "Instellingen en domeinen",
-      "messaging": "Berichten"
+      "messaging": "Berichten",
+      "conference": "Sessies, exposanten en sponsors"
     },
     "channels": {
       "in_app": "In de app",

@@ -6591,6 +6591,67 @@
         "window": "過去 {days} 日間に {sent, plural, other {# 通}}",
         "over": "しきい値超過：送信ドメイン {domains, plural, other {# 件}}、キャンペーン {campaigns, plural, other {# 件}}",
         "open": "メール到達率を開く"
+      },
+      "sessionLevel": {
+        "none": "上限なし",
+        "ok": "{near}%未満",
+        "near": "ほぼ満席（{near}%以上）",
+        "over": "満席"
+      },
+      "sessionAttendance": {
+        "title": "セッション会場",
+        "running": "{count, plural, other {進行中のセッション #件}}",
+        "nearlyFull": "{count, plural, other {ほぼ満席 #件}}",
+        "kiosks": "{count, plural, other {オフラインのキオスク #台}}",
+        "none": "現在および1時間以内のセッションはありません。セッションの入口はセッションチェックインのページで設定します。",
+        "table": "現在と次のセッション",
+        "session": "セッション",
+        "in": "在室",
+        "capacity": "定員",
+        "status": "状態",
+        "until": "{time}まで",
+        "starts": "{time}開始",
+        "meter": "{title}：使用中の席",
+        "more": "{count, plural, other {ほか #件}}",
+        "open": "セッションチェックインを開く"
+      },
+      "sessionFill": {
+        "title": "セッションの埋まり具合",
+        "none": "まだ定員のあるセッションはありません。定員を設定すると、ここで埋まり具合を確認できます。",
+        "nearlyFull": "{count, plural, other {{limited}件中 #件のセッションが{near}%以上埋まっています}}",
+        "full": "{count, plural, other {満席 #件}}",
+        "waiting": "{count, plural, other {キャンセル待ち #人}}",
+        "longLines": "{count, plural, other {{max}人超の待ち列 #件}}",
+        "roomsTooSmall": "{count, plural, other {部屋が小さすぎる #件}}",
+        "table": "埋まり具合の高いセッション",
+        "session": "セッション",
+        "enrolled": "確保済み",
+        "waitingHeader": "待ち",
+        "status": "状態",
+        "roomSmall": "部屋が小さすぎます",
+        "ofCapacity": "{capacity}中{enrolled}",
+        "open": "セッション登録を開く"
+      },
+      "exhibitorActivity": {
+        "title": "出展者",
+        "none": "まだ出展者がいません。追加すると、ブーススタッフとリードをここで確認できます。",
+        "add": "出展者を追加",
+        "staffed": "{total}社中{staffed}社にブーススタッフがいます",
+        "people": "{count, plural, other {招待済み #人}}",
+        "leads": "{count, plural, other {リード #件}}",
+        "withoutLeads": "{count, plural, other {リードのない出展者 #社}}",
+        "leadsPending": "リード収集が有効になると、ここにリード数が表示されます。",
+        "top": "リード数上位",
+        "open": "出展者ポータルを開く"
+      },
+      "sponsorActivity": {
+        "title": "スポンサー",
+        "none": "まだスポンサーがいません。パッケージとスポンサーを追加すると、ここで納品物を確認できます。",
+        "add": "スポンサーを追加",
+        "total": "{count, plural, other {スポンサー #社}}",
+        "overdue": "{count, plural, other {期限切れの納品物 #件}}",
+        "deliverablesPending": "スポンサーパッケージが有効になると、ここに納品物が表示されます。",
+        "open": "スポンサーを開く"
       }
     },
     "openScanner": "スキャナーを開く",
@@ -6709,7 +6770,17 @@
       "campaignFailed": "キャンペーンを開く",
       "disputeDeadline": "異議申し立てを開く",
       "assistanceOverdue": "ヘルプ依頼を開く",
-      "pledgesUnpaid": "寄付のお約束を開く"
+      "pledgesUnpaid": "寄付のお約束を開く",
+      "sessionsNearCapacity": "セッションを開く",
+      "sessionWaitlists": "セッション登録を開く",
+      "roomsTooSmall": "セッションを開く",
+      "exhibitorsNoLeads": "出展者を開く",
+      "exhibitorsNoStaff": "出展者ポータルを開く",
+      "speakerTasksOverdue": "登壇者タスクを開く",
+      "deliverablesOverdue": "スポンサーを開く",
+      "printersKiosksOffline": "現地設定を開く",
+      "approvalBacklog": "申込を開く",
+      "invoicesOverdue": "請求書を開く"
     },
     "rules": {
       "unseated": "{count, plural, other {{countWords}人の参加者に座席がありません}}",
@@ -6732,7 +6803,17 @@
       "campaignFailed": "{count, plural, other {本日{countWords}件のキャンペーン配信が失敗しました}}",
       "disputeDeadline": "{count, plural, other {{countWords}件の異議申し立てに間もなく証拠の提出が必要です}}",
       "assistanceOverdue": "{count, plural, other {{countWords}件のヘルプ依頼が長く待たされています}}",
-      "pledgesUnpaid": "{count, plural, other {イベントから14日経っても{countWords}件の寄付のお約束が未払いです}}"
+      "pledgesUnpaid": "{count, plural, other {イベントから14日経っても{countWords}件の寄付のお約束が未払いです}}",
+      "sessionsNearCapacity": "{count, plural, other {{countWords}件のセッションが定員の95 %を超えています}}",
+      "sessionWaitlists": "{count, plural, other {{countWords}件のセッションでキャンセル待ちが長くなっています}}",
+      "roomsTooSmall": "{count, plural, other {{countWords}件のセッションで、確保された席数が部屋の座席数を超えています}}",
+      "exhibitorsNoLeads": "{count, plural, other {{countWords}社の出展者にリードがありません}}",
+      "exhibitorsNoStaff": "{count, plural, other {{countWords}社の出展者がブーススタッフを招待していません}}",
+      "speakerTasksOverdue": "{count, plural, other {{countWords}件の登壇者タスクが期限切れです}}",
+      "deliverablesOverdue": "{count, plural, other {{countWords}件のスポンサー納品物が期限切れです}}",
+      "printersKiosksOffline": "{count, plural, other {{countWords}台のバッジプリンターまたはキオスクがオフラインです}}",
+      "approvalBacklog": "{count, plural, other {{countWords}件の申込が審査待ちです}}",
+      "invoicesOverdue": "{count, plural, other {{countWords}件の請求書が支払期限を過ぎています}}"
     },
     "widget": {
       "title": "アラート",
@@ -6779,7 +6860,8 @@
       "door": "入場と端末",
       "sales": "販売",
       "setup": "設定とドメイン",
-      "messaging": "メッセージ"
+      "messaging": "メッセージ",
+      "conference": "セッション・出展者・スポンサー"
     },
     "channels": {
       "in_app": "アプリ内",

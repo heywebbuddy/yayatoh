@@ -6591,6 +6591,67 @@
         "window": "过去 {days} 天 {sent, plural, other {# 封邮件}}",
         "over": "超过阈值：{domains, plural, other {# 个发件域名}}，{campaigns, plural, other {# 个活动}}",
         "open": "打开邮件送达率"
+      },
+      "sessionLevel": {
+        "none": "不限名额",
+        "ok": "低于 {near}%",
+        "near": "接近满员（{near}% 或以上）",
+        "over": "已满"
+      },
+      "sessionAttendance": {
+        "title": "分会场会议室",
+        "running": "{count, plural, other {# 个分会场进行中}}",
+        "nearlyFull": "{count, plural, other {# 个接近满员}}",
+        "kiosks": "{count, plural, other {# 台自助机离线}}",
+        "none": "现在及未来一小时内没有分会场。分会场入口在分会场签到页面设置。",
+        "table": "当前及接下来的分会场",
+        "session": "分会场",
+        "in": "在场",
+        "capacity": "名额",
+        "status": "状态",
+        "until": "至 {time}",
+        "starts": "{time} 开始",
+        "meter": "{title}：已用名额",
+        "more": "{count, plural, other {另有 # 个}}",
+        "open": "打开分会场签到"
+      },
+      "sessionFill": {
+        "title": "分会场名额",
+        "none": "还没有限定名额的分会场。为分会场设置容量后即可在此查看。",
+        "nearlyFull": "{count, plural, other {{limited} 个分会场中有 # 个已达 {near}% 或以上}}",
+        "full": "{count, plural, other {# 个已满}}",
+        "waiting": "{count, plural, other {# 人候补}}",
+        "longLines": "{count, plural, other {# 个候补名单超过 {max} 人}}",
+        "roomsTooSmall": "{count, plural, other {# 个会议室太小}}",
+        "table": "名额最满的分会场",
+        "session": "分会场",
+        "enrolled": "已占名额",
+        "waitingHeader": "候补",
+        "status": "状态",
+        "roomSmall": "会议室太小",
+        "ofCapacity": "{enrolled} / {capacity}",
+        "open": "打开分会场报名"
+      },
+      "exhibitorActivity": {
+        "title": "展商",
+        "none": "还没有展商。添加后即可在此查看展位人员和潜在客户。",
+        "add": "添加展商",
+        "staffed": "{total} 家展商中有 {staffed} 家已有展位人员",
+        "people": "{count, plural, other {已邀请 # 人}}",
+        "leads": "{count, plural, other {# 个潜在客户}}",
+        "withoutLeads": "{count, plural, other {# 家展商没有潜在客户}}",
+        "leadsPending": "开启潜在客户收集后，数量会显示在这里。",
+        "top": "潜在客户最多",
+        "open": "打开展商门户"
+      },
+      "sponsorActivity": {
+        "title": "赞助商",
+        "none": "还没有赞助商。添加赞助方案和赞助商后即可在此查看交付情况。",
+        "add": "添加赞助商",
+        "total": "{count, plural, other {# 家赞助商}}",
+        "overdue": "{count, plural, other {# 项交付已逾期}}",
+        "deliverablesPending": "开启赞助方案后，交付事项会显示在这里。",
+        "open": "打开赞助商"
       }
     },
     "openScanner": "打开扫码器",
@@ -6709,7 +6770,17 @@
       "campaignFailed": "打开营销活动",
       "disputeDeadline": "打开争议队列",
       "assistanceOverdue": "打开求助请求",
-      "pledgesUnpaid": "打开认捐"
+      "pledgesUnpaid": "打开认捐",
+      "sessionsNearCapacity": "打开分会场",
+      "sessionWaitlists": "打开分会场报名",
+      "roomsTooSmall": "打开分会场",
+      "exhibitorsNoLeads": "打开展商",
+      "exhibitorsNoStaff": "打开展商门户",
+      "speakerTasksOverdue": "打开讲者任务",
+      "deliverablesOverdue": "打开赞助商",
+      "printersKiosksOffline": "打开现场设置",
+      "approvalBacklog": "打开申请",
+      "invoicesOverdue": "打开发票"
     },
     "rules": {
       "unseated": "{count, plural, other {{countWords} 位参会者没有座位}}",
@@ -6732,7 +6803,17 @@
       "campaignFailed": "{count, plural, other {今天有 {countWords} 次营销活动发送失败}}",
       "disputeDeadline": "{count, plural, other {有 {countWords} 起争议需要尽快提交证据}}",
       "assistanceOverdue": "{count, plural, other {{countWords} 个求助请求等待过久}}",
-      "pledgesUnpaid": "{count, plural, other {活动结束 14 天后仍有 {countWords} 笔认捐未付款}}"
+      "pledgesUnpaid": "{count, plural, other {活动结束 14 天后仍有 {countWords} 笔认捐未付款}}",
+      "sessionsNearCapacity": "{count, plural, other {{countWords}个分会场已超过容量的 95 %}}",
+      "sessionWaitlists": "{count, plural, other {{countWords}个分会场的候补名单过长}}",
+      "roomsTooSmall": "{count, plural, other {{countWords}个分会场的已占名额超过了会议室座位数}}",
+      "exhibitorsNoLeads": "{count, plural, other {{countWords}家展商还没有潜在客户}}",
+      "exhibitorsNoStaff": "{count, plural, other {{countWords}家展商尚未邀请展位人员}}",
+      "speakerTasksOverdue": "{count, plural, other {{countWords}项讲者任务已逾期}}",
+      "deliverablesOverdue": "{count, plural, other {{countWords}项赞助交付已逾期}}",
+      "printersKiosksOffline": "{count, plural, other {{countWords}台胸卡打印机或自助机已离线}}",
+      "approvalBacklog": "{count, plural, other {{countWords}份申请正在等待审核}}",
+      "invoicesOverdue": "{count, plural, other {{countWords}张发票已逾期}}"
     },
     "widget": {
       "title": "提醒",
@@ -6779,7 +6860,8 @@
       "door": "入场和设备",
       "sales": "销售",
       "setup": "设置和域名",
-      "messaging": "消息"
+      "messaging": "消息",
+      "conference": "分会场、展商和赞助商"
     },
     "channels": {
       "in_app": "应用内",

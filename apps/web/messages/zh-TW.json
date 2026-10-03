@@ -6591,6 +6591,67 @@
         "window": "過去 {days} 天 {sent, plural, other {# 封郵件}}",
         "over": "超過門檻：{domains, plural, other {# 個寄件網域}}，{campaigns, plural, other {# 個活動}}",
         "open": "開啟電子郵件送達率"
+      },
+      "sessionLevel": {
+        "none": "不限名額",
+        "ok": "低於 {near}%",
+        "near": "接近滿額（{near}% 或以上）",
+        "over": "已滿"
+      },
+      "sessionAttendance": {
+        "title": "場次會議室",
+        "running": "{count, plural, other {# 個場次進行中}}",
+        "nearlyFull": "{count, plural, other {# 個接近滿額}}",
+        "kiosks": "{count, plural, other {# 台自助機離線}}",
+        "none": "現在及未來一小時內沒有場次。場次入口在場次報到頁面設定。",
+        "table": "目前及接下來的場次",
+        "session": "場次",
+        "in": "在場",
+        "capacity": "名額",
+        "status": "狀態",
+        "until": "至 {time}",
+        "starts": "{time} 開始",
+        "meter": "{title}：已用名額",
+        "more": "{count, plural, other {另有 # 個}}",
+        "open": "開啟場次報到"
+      },
+      "sessionFill": {
+        "title": "場次名額",
+        "none": "還沒有限定名額的場次。為場次設定容量後即可在此查看。",
+        "nearlyFull": "{count, plural, other {{limited} 個場次中有 # 個已達 {near}% 或以上}}",
+        "full": "{count, plural, other {# 個已滿}}",
+        "waiting": "{count, plural, other {# 人候補}}",
+        "longLines": "{count, plural, other {# 個候補名單超過 {max} 人}}",
+        "roomsTooSmall": "{count, plural, other {# 個會議室太小}}",
+        "table": "名額最滿的場次",
+        "session": "場次",
+        "enrolled": "已占名額",
+        "waitingHeader": "候補",
+        "status": "狀態",
+        "roomSmall": "會議室太小",
+        "ofCapacity": "{enrolled} / {capacity}",
+        "open": "開啟場次報名"
+      },
+      "exhibitorActivity": {
+        "title": "參展商",
+        "none": "還沒有參展商。新增後即可在此查看攤位人員和潛在客戶。",
+        "add": "新增參展商",
+        "staffed": "{total} 家參展商中有 {staffed} 家已有攤位人員",
+        "people": "{count, plural, other {已邀請 # 人}}",
+        "leads": "{count, plural, other {# 個潛在客戶}}",
+        "withoutLeads": "{count, plural, other {# 家參展商沒有潛在客戶}}",
+        "leadsPending": "開啟潛在客戶收集後，數量會顯示在這裡。",
+        "top": "潛在客戶最多",
+        "open": "開啟參展商入口"
+      },
+      "sponsorActivity": {
+        "title": "贊助商",
+        "none": "還沒有贊助商。新增贊助方案和贊助商後即可在此查看交付情況。",
+        "add": "新增贊助商",
+        "total": "{count, plural, other {# 家贊助商}}",
+        "overdue": "{count, plural, other {# 項交付已逾期}}",
+        "deliverablesPending": "開啟贊助方案後，交付事項會顯示在這裡。",
+        "open": "開啟贊助商"
       }
     },
     "openScanner": "開啟掃描器",
@@ -6709,7 +6770,17 @@
       "campaignFailed": "開啟行銷活動",
       "disputeDeadline": "開啟爭議佇列",
       "assistanceOverdue": "開啟求助請求",
-      "pledgesUnpaid": "開啟認捐"
+      "pledgesUnpaid": "開啟認捐",
+      "sessionsNearCapacity": "開啟場次",
+      "sessionWaitlists": "開啟場次報名",
+      "roomsTooSmall": "開啟場次",
+      "exhibitorsNoLeads": "開啟參展商",
+      "exhibitorsNoStaff": "開啟參展商入口",
+      "speakerTasksOverdue": "開啟講者任務",
+      "deliverablesOverdue": "開啟贊助商",
+      "printersKiosksOffline": "開啟現場設定",
+      "approvalBacklog": "開啟申請",
+      "invoicesOverdue": "開啟發票"
     },
     "rules": {
       "unseated": "{count, plural, other {{countWords} 位參加者沒有座位}}",
@@ -6732,7 +6803,17 @@
       "campaignFailed": "{count, plural, other {今天有 {countWords} 次行銷活動傳送失敗}}",
       "disputeDeadline": "{count, plural, other {有 {countWords} 起爭議需要盡快提交證據}}",
       "assistanceOverdue": "{count, plural, other {{countWords} 個求助請求等待過久}}",
-      "pledgesUnpaid": "{count, plural, other {活動結束 14 天後仍有 {countWords} 筆認捐未付款}}"
+      "pledgesUnpaid": "{count, plural, other {活動結束 14 天後仍有 {countWords} 筆認捐未付款}}",
+      "sessionsNearCapacity": "{count, plural, other {{countWords}個場次已超過容量的 95 %}}",
+      "sessionWaitlists": "{count, plural, other {{countWords}個場次的候補名單過長}}",
+      "roomsTooSmall": "{count, plural, other {{countWords}個場次的已占名額超過了會議室座位數}}",
+      "exhibitorsNoLeads": "{count, plural, other {{countWords}家參展商還沒有潛在客戶}}",
+      "exhibitorsNoStaff": "{count, plural, other {{countWords}家參展商尚未邀請攤位人員}}",
+      "speakerTasksOverdue": "{count, plural, other {{countWords}項講者任務已逾期}}",
+      "deliverablesOverdue": "{count, plural, other {{countWords}項贊助交付已逾期}}",
+      "printersKiosksOffline": "{count, plural, other {{countWords}台識別證印表機或自助機已離線}}",
+      "approvalBacklog": "{count, plural, other {{countWords}份申請正在等待審核}}",
+      "invoicesOverdue": "{count, plural, other {{countWords}張發票已逾期}}"
     },
     "widget": {
       "title": "警示",
@@ -6779,7 +6860,8 @@
       "door": "入場與裝置",
       "sales": "銷售",
       "setup": "設定與網域",
-      "messaging": "訊息"
+      "messaging": "訊息",
+      "conference": "場次、參展商與贊助商"
     },
     "channels": {
       "in_app": "應用程式內",

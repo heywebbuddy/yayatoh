@@ -14,6 +14,8 @@ export {
   setCheckpointArchivedCommand,
   TWO_ENTRANCES_WINDOW_MS,
 } from './checkpoints.ts';
+// M5.9a: the conference Command Center pack's counts (alert rules and widgets read these).
+export { kiosksOfflineTx, sessionsInRoomTx } from './conference-facts.ts';
 export {
   DEVICE_ONLINE_WINDOW_MS,
   DeviceDto,
