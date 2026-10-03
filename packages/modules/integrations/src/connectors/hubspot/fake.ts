@@ -5,7 +5,7 @@ import type { ProviderRequest, ProviderResponse } from '../../auth/port.ts';
  * The HubSpot fake (M6.4d): CRM v3 contacts (search by `lastmodifieddate`, create, read,
  * update), the communication preferences unsubscribe, and Marketing Events (events by
  * `externalEventId`, attendance by email with `register`/`attend`/`cancel`), held in memory per
- * fake account; bodies follow `fixtures/hubspot.json`. As in HubSpot, `hs_email_optout` is read
+ * fake account; bodies follow `tests/fixtures/hubspot.json`. As in HubSpot, `hs_email_optout` is read
  * only (set by an unsubscribe) and a contact can't be re-subscribed through the API.
  */
 

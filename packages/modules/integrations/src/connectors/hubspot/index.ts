@@ -55,7 +55,7 @@ const CONTACT_PROPERTIES = [
   'yayatoh_origin',
 ];
 
-/** A HubSpot CRM contact as the API returns it (see `fixtures/hubspot.json`). */
+/** A HubSpot CRM contact as the API returns it (see `tests/fixtures/hubspot.json`). */
 export function parseHubspotContact(raw: unknown): RemoteRecord | null {
   const c = raw as { id?: unknown; properties?: Record<string, unknown>; updatedAt?: unknown } | null;
   const p = c?.properties;

@@ -24,7 +24,7 @@ export function klaviyoStatus(marketing: { consent?: unknown; suppression?: unkn
   return marketing?.consent === 'SUBSCRIBED' ? 'subscribed' : 'never_subscribed';
 }
 
-/** A Klaviyo profile resource as the API returns it (see `fixtures/klaviyo.json`). */
+/** A Klaviyo profile resource as the API returns it (see `tests/fixtures/klaviyo.json`). */
 export function parseKlaviyoProfile(raw: unknown): RemoteRecord | null {
   const p = raw as { id?: unknown; attributes?: Record<string, unknown> } | null;
   const a = p?.attributes;

@@ -11,7 +11,7 @@ import { mailchimpFakeProvider, subscriberHash } from './fake.ts';
 
 const PAGE = 100;
 
-/** A Mailchimp list member as the API returns it (see `fixtures/mailchimp.json`). */
+/** A Mailchimp list member as the API returns it (see `tests/fixtures/mailchimp.json`). */
 export function parseMailchimpMember(raw: unknown): RemoteRecord | null {
   const m = raw as Record<string, unknown> | null;
   if (!m || typeof m.id !== 'string' || typeof m.email_address !== 'string') return null;

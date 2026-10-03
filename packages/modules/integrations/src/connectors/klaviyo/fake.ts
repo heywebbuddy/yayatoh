@@ -4,7 +4,7 @@ import type { ProviderRequest, ProviderResponse } from '../../auth/port.ts';
 /**
  * The Klaviyo fake (M6.4d): the JSON:API shapes the connector uses (lists, a list's profiles with
  * their email marketing subscription, profile import, subscribe/unsubscribe jobs, removing a
- * profile from a list), held in memory per fake account; bodies follow `fixtures/klaviyo.json`.
+ * profile from a list), held in memory per fake account; bodies follow `tests/fixtures/klaviyo.json`.
  * Email consent is per profile (account-wide), as in Klaviyo; `updated` is strictly increasing.
  */
 

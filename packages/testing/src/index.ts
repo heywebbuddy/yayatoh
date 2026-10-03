@@ -39,7 +39,7 @@ export { type GuestCheckinScenario, guestCheckinScenario } from './guest-checkin
 export { type GuestHubScenario, guestHubScenario, partyHub } from './guest-hub.ts';
 export { type GuestSeatScenario, guestSeatScenario } from './guest-seat-finder.ts';
 export { GUEST_SITE_PASSWORD, type GuestSiteScenario, guestSiteScenario } from './guest-site.ts';
-export { connectDemo, fakeAuth } from './integrations.ts';
+export { connectDemo, connectFake, fakeAuth } from './integrations.ts';
 export { quietDevice, revokeDevice } from './live.ts';
 export {
   bareOrg,

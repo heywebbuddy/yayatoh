@@ -1,0 +1,70 @@
+{
+  "_comment": "Response shapes of the Klaviyo API (revision 2024-10-15) as documented (GET /api/lists, GET /api/lists/{id}/profiles?additional-fields[profile]=subscriptions). Hand-recorded from the public reference, with fake data.",
+  "lists": {
+    "data": [
+      {
+        "type": "list",
+        "id": "Y6nRLr",
+        "attributes": { "name": "Newsletter", "created": "2026-01-01T00:00:00+00:00", "updated": "2026-01-02T00:00:00+00:00", "opt_in_process": "single_opt_in" },
+        "links": { "self": "https://a.klaviyo.com/api/lists/Y6nRLr/" }
+      }
+    ],
+    "links": { "self": "https://a.klaviyo.com/api/lists/", "next": null, "prev": null }
+  },
+  "profiles": {
+    "data": [
+      {
+        "type": "profile",
+        "id": "01GDDKASAP8TKDDA2GRZDSVP4H",
+        "attributes": {
+          "email": "unsub.person@example.test",
+          "phone_number": null,
+          "external_id": null,
+          "first_name": "Unsub",
+          "last_name": "Person",
+          "organization": "Example Org",
+          "title": null,
+          "image": null,
+          "created": "2026-01-03T00:00:00+00:00",
+          "updated": "2026-03-04T10:11:12+00:00",
+          "last_event_date": null,
+          "location": { "country": "US" },
+          "properties": {},
+          "subscriptions": {
+            "email": {
+              "marketing": {
+                "can_receive_email_marketing": false,
+                "consent": "UNSUBSCRIBED",
+                "consent_timestamp": "2026-03-04T10:11:12+00:00",
+                "last_updated": "2026-03-04T10:11:12+00:00",
+                "method": "EMAIL_UNSUBSCRIBE",
+                "suppression": [],
+                "list_suppressions": []
+              }
+            }
+          }
+        },
+        "links": { "self": "https://a.klaviyo.com/api/profiles/01GDDKASAP8TKDDA2GRZDSVP4H/" }
+      },
+      {
+        "type": "profile",
+        "id": "01GDDKASAP8TKDDA2GRZDSVP5J",
+        "attributes": {
+          "email": "complained.person@example.test",
+          "first_name": "Complained",
+          "updated": "2026-03-04T10:13:00+00:00",
+          "subscriptions": {
+            "email": {
+              "marketing": {
+                "can_receive_email_marketing": false,
+                "consent": "SUBSCRIBED",
+                "suppression": [{ "reason": "SPAM_COMPLAINT", "timestamp": "2026-03-04T10:13:00+00:00" }]
+              }
+            }
+          }
+        }
+      }
+    ],
+    "links": { "self": "https://a.klaviyo.com/api/lists/Y6nRLr/profiles/", "next": null, "prev": null }
+  }
+}

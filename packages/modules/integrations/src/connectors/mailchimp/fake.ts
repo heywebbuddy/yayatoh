@@ -5,7 +5,7 @@ import type { ProviderRequest, ProviderResponse } from '../../auth/port.ts';
 /**
  * The Mailchimp fake (M6.4d): the Marketing API v3 shapes the connector uses (lists, list
  * members by subscriber hash, archive), held in memory per fake account. Response bodies follow
- * the recorded samples in `fixtures/` (the connector's parser is tested against both). Behaviour
+ * the recorded samples in `tests/fixtures/` (the connector's parser is tested against both). Behaviour
  * that matters for consent is Mailchimp's: a member who unsubscribed can't be set back to
  * `subscribed` through the API (400, "Member In Compliance State"); archiving keeps the
  * unsubscribe. `last_changed` is strictly increasing so `since_last_changed` pages are exact.

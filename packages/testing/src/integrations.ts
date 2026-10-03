@@ -1,6 +1,7 @@
 import {
   beginConnectCommand,
   completeConnectCommand,
+  connectorByKey,
   demoFakeProvider,
   fakeAuthForConnectors,
   fakeIntegrations,
@@ -34,6 +35,30 @@ export async function connectDemo(ctx: Ctx): Promise<{ connectionId: string; aut
   });
   fakeIntegrations.approve({ orgId, connectionId, providerConfigKey: 'demo' }, demoFakeProvider);
   const resolved = await fakeAuth.resolve({ orgId, connectionId, providerConfigKey: 'demo' });
+  if (!resolved) throw new Error('fake connect did not resolve');
+  await executeCommand(
+    completeConnectCommand,
+    { connectionId, state, authConnectionId: resolved.authConnectionId, accountLabel: resolved.accountLabel },
+    ctx,
+    ports,
+  );
+  return { connectionId, authConnectionId: resolved.authConnectionId };
+}
+
+/**
+ * M6.4d: connect any connector through the fake port as the console does (Mailchimp, Klaviyo,
+ * HubSpot …), with that connector's fake provider API.
+ */
+export async function connectFake(
+  ctx: Ctx,
+  connector: string,
+): Promise<{ connectionId: string; authConnectionId: string }> {
+  const def = connectorByKey(connector);
+  if (!def?.fake) throw new Error(`no fake for ${connector}`);
+  const orgId = requireOrg(ctx);
+  const { connectionId, state } = await executeCommand(beginConnectCommand, { connector }, ctx, ports);
+  fakeIntegrations.approve({ orgId, connectionId, providerConfigKey: def.providerConfigKey }, def.fake);
+  const resolved = await fakeAuth.resolve({ orgId, connectionId, providerConfigKey: def.providerConfigKey });
   if (!resolved) throw new Error('fake connect did not resolve');
   await executeCommand(
     completeConnectCommand,
