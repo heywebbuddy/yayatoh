@@ -30,6 +30,8 @@ export const MODULE_KEYS = [
   'badges',
   'gallery',
   'website',
+  // P6-13 (M6.12a): seating rules and the tabu-search solver; free in beta (launch_standard).
+  'ai_seating',
 ] as const;
 export type ModuleKey = (typeof MODULE_KEYS)[number];
 

@@ -261,6 +261,7 @@ import {
 } from '@yayatoh/reports';
 import { reportReviewCommand, submitReviewCommand } from '@yayatoh/reviews';
 import {
+  addSolverRuleCommand,
   assignSeatsCommand,
   giveSubEventOwnChartCommand,
   holdSeatsTx,
@@ -2026,6 +2027,13 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   await executeCommand(
     setVipTableCommand,
     { eventId: event.id, subEventId: reception.id, itemId: rowA, vip: true },
+    ctx(),
+    ports,
+  );
+  // M6.12a seating solver (isolation coverage): a keep-together rule for every party.
+  await executeCommand(
+    addSolverRuleCommand,
+    { eventId: event.id, spec: { kind: 'keep_together', params: { group: { by: 'party' } } } },
     ctx(),
     ports,
   );

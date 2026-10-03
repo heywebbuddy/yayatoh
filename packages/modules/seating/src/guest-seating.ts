@@ -101,7 +101,7 @@ export const GUEST_SEATS_CHANNEL = defineRealtimeChannel({
   },
 });
 
-async function publishSeatsTx(
+export async function publishSeatsTx(
   tx: TenantTx,
   orgId: string,
   eventId: string,
@@ -191,7 +191,7 @@ async function takenByItemTx(tx: TenantTx, eventId: string): Promise<Map<string,
   return new Map(rows.map((r) => [r.itemId, Number(r.n)]));
 }
 
-const onContext = (eventId: string, subEventId: string | null) =>
+export const onContext = (eventId: string, subEventId: string | null) =>
   and(
     eq(guestSeats.eventId, eventId),
     subEventId ? eq(guestSeats.subEventId, subEventId) : isNull(guestSeats.subEventId),
@@ -220,7 +220,7 @@ async function subEventOf(tx: TenantTx, eventId: string, subEventId: string | nu
 }
 
 /** The editor's whole view, assembled once (the query and the commands' checks share it). */
-async function viewTx(tx: TenantTx, eventId: string, subEventId: string | null) {
+export async function viewTx(tx: TenantTx, eventId: string, subEventId: string | null) {
   const dir = occupants();
   const subEvents = await dir.subEventsTx(tx, eventId);
   const sub = subEventId ? subEvents.find((s) => s.id === subEventId) : null;
@@ -370,7 +370,7 @@ export const guestSeatingQuery = tenantQuery({
 /* -------------------------------------------------------------------- commands ---- */
 
 /** One host at a time per chart: capacity is checked and written under this lock. */
-const lockChartTx = (tx: TenantTx, eventId: string, subEventId: string | null) =>
+export const lockChartTx = (tx: TenantTx, eventId: string, subEventId: string | null) =>
   tx.execute(
     sql`select pg_advisory_xact_lock(hashtextextended(${`guest-seats:${eventId}:${subEventId ?? 'plan'}`}, 0))`,
   );

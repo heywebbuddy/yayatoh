@@ -177,16 +177,18 @@ function nearestZone(
 ): Uint8Array {
   const inside = new Uint8Array(places.length);
   const dist = places.map((p) => Math.min(...targets.map((t) => Math.hypot(p.x - t.x, p.y - t.y))));
-  const order = places.map((_, i) => i).sort((a, b) => dist[a] - dist[b] || a - b);
+  const order = places.map((_, i) => i).sort((a, b) => (dist[a] as number) - (dist[b] as number) || a - b);
   let got = 0;
   for (const i of order) {
     if (got >= need) break;
-    if ((room[i] ?? 0) <= 0) continue;
+    if (((room[i] as number) ?? 0) <= 0) continue;
     inside[i] = 1;
-    got += room[i];
+    got += room[i] as number;
   }
   return inside;
 }
+
+type Unit = Compiled['units'][number];
 
 export function compile(problem: SolverProblem): Compiled {
   const { places, guests, rules } = problem;
@@ -202,7 +204,7 @@ export function compile(problem: SolverProblem): Compiled {
     const p = placeIndex.get(itemId);
     if (g === undefined || p === undefined) continue;
     fixedOf[g] = p;
-    fixedAt[p] = (fixedAt[p] ?? 0) + 1;
+    fixedAt[p] = ((fixedAt[p] as number) ?? 0) + 1;
   }
 
   let tableMax: Compiled['tableMax'] = null;
@@ -213,9 +215,9 @@ export function compile(problem: SolverProblem): Compiled {
   const tm = tableMax as Compiled['tableMax'];
   // What a place can hold at most (hard table maximum included), then what proposals may use.
   const limit = Array.from(places, (p, i) =>
-    tm?.hard ? Math.max(0, Math.min(cap[i], tm.max - p.taken)) : cap[i],
+    tm?.hard ? Math.max(0, Math.min(cap[i] as number, tm.max - p.taken)) : (cap[i] as number),
   );
-  const room = Int32Array.from(limit, (l, i) => Math.max(0, l - fixedAt[i]));
+  const room = Int32Array.from(limit, (l, i) => Math.max(0, l - (fixedAt[i] as number)));
   const biggest = Math.max(0, ...limit);
 
   const groups: Group[] = [];
@@ -223,7 +225,7 @@ export function compile(problem: SolverProblem): Compiled {
   const zones: Zone[] = [];
   const all = guests.map((_, i) => i);
   const membersOf = (target: { by: 'party' | 'tag' | 'side'; value: string }) =>
-    all.filter((i) => matches(guests[i], target));
+    all.filter((i) => matches(guests[i] as SolverGuest, target));
 
   rules.forEach((r, ruleIndex) => {
     const hard = r.strength === 'hard';
@@ -232,7 +234,7 @@ export function compile(problem: SolverProblem): Compiled {
       const sets =
         g.by === 'party'
           ? [...new Set(guests.map((x) => x.partyId))].map((partyId) =>
-              all.filter((i) => guests[i].partyId === partyId),
+              all.filter((i) => (guests[i] as SolverGuest).partyId === partyId),
             )
           : [membersOf(g)];
       for (const members of sets) {
@@ -266,7 +268,11 @@ export function compile(problem: SolverProblem): Compiled {
         return;
       }
       const who = new Set(
-        all.filter((i) => (r.kind === 'vip_near_stage' ? guests[i].vip : hasTag(guests[i], r.params.tag))),
+        all.filter((i) =>
+          r.kind === 'vip_near_stage'
+            ? (guests[i] as SolverGuest).vip
+            : hasTag(guests[i] as SolverGuest, r.params.tag),
+        ),
       );
       if (!who.size) return;
       zones.push({
@@ -282,20 +288,20 @@ export function compile(problem: SolverProblem): Compiled {
   // Units: movable guests; a hard together group that fits a table moves as one.
   const parent = all.map((i) => i);
   const find = (i: number): number => {
-    while (parent[i] !== i) {
-      parent[i] = parent[parent[i]];
-      i = parent[i];
+    while ((parent[i] as number) !== i) {
+      parent[i] = parent[parent[i] as number] as number;
+      i = parent[i] as number;
     }
     return i;
   };
   for (const g of groups) {
     if (!g.hardTogether) continue;
-    const movable = g.members.filter((i) => fixedOf[i] === -1);
-    for (const i of movable.slice(1)) parent[find(i)] = find(movable[0]);
+    const movable = g.members.filter((i) => (fixedOf[i] as number) === -1);
+    for (const i of movable.slice(1)) parent[find(i)] = find(movable[0] as number);
   }
   const bundles = new Map<number, number[]>();
   for (const i of all) {
-    if (fixedOf[i] !== -1) continue;
+    if ((fixedOf[i] as number) !== -1) continue;
     const root = find(i);
     const list = bundles.get(root) ?? [];
     list.push(i);
@@ -305,12 +311,14 @@ export function compile(problem: SolverProblem): Compiled {
     const allowed = new Uint8Array(P).fill(1);
     for (const z of zones) {
       if (!z.hard || !members.some((i) => z.guests.has(i))) continue;
-      for (let p = 0; p < P; p++) if (!z.inside[p]) allowed[p] = 0;
+      for (let p = 0; p < P; p++) if (!(z.inside[p] as number)) allowed[p] = 0;
     }
     // A hard group with someone seated by hand joins them there (when they all sit at one table).
     for (const g of groups) {
       if (!g.hardTogether || !members.some((i) => g.members.includes(i))) continue;
-      const at = new Set(g.members.filter((i) => fixedOf[i] !== -1).map((i) => fixedOf[i]));
+      const at = new Set(
+        g.members.filter((i) => (fixedOf[i] as number) !== -1).map((i) => fixedOf[i] as number),
+      );
       if (at.size === 1) {
         const only = [...at][0];
         for (let p = 0; p < P; p++) if (p !== only) allowed[p] = 0;
@@ -385,48 +393,48 @@ export function evaluate(c: Compiled, seats: Readonly<Record<string, string | nu
   const G = problem.guests.length;
   const at = new Int32Array(G).fill(-1);
   for (let i = 0; i < G; i++) {
-    const item = seats[problem.guests[i].id];
+    const item = seats[(problem.guests[i] as SolverGuest).id];
     const p = item ? c.placeIndex.get(item) : undefined;
     at[i] = p ?? -1;
   }
   const count = new Int32Array(P);
-  for (const p of at) if (p >= 0) count[p] += 1;
+  for (const p of at) if (p >= 0) count[p] = (count[p] as number) + 1;
   const hard: Violation[] = [];
   const breaches = problem.rules.map(() => 0);
   const penalties = problem.rules.map(() => 0);
-  const ids = (list: readonly number[]) => list.map((i) => problem.guests[i].id);
+  const ids = (list: readonly number[]) => list.map((i) => (problem.guests[i] as SolverGuest).id);
   const placesOf = (list: readonly number[]) =>
-    [...new Set(list.map((i) => at[i]).filter((p) => p >= 0))].sort((a, b) => a - b);
+    [...new Set(list.map((i) => at[i] as number).filter((p) => p >= 0))].sort((a, b) => a - b);
   let hardCount = 0;
 
   for (let p = 0; p < P; p++) {
-    const over = count[p] - c.cap[p];
+    const over = (count[p] as number) - (c.cap[p] as number);
     if (over > 0) {
       hardCount += over;
       hard.push({
         ruleId: null,
         kind: 'capacity',
-        itemIds: [problem.places[p].itemId],
+        itemIds: [(problem.places[p] as SolverPlace).itemId],
         guestIds: ids(at.reduce<number[]>((a, q, i) => (q === p ? [...a, i] : a), [])),
       });
     }
   }
   const tm = c.tableMax;
   if (tm) {
-    const rule = problem.rules[tm.ruleIndex];
+    const rule = problem.rules[tm.ruleIndex] as SolverRule;
     for (let p = 0; p < P; p++) {
-      const over = problem.places[p].taken + count[p] - tm.max;
+      const over = (problem.places[p] as SolverPlace).taken + (count[p] as number) - tm.max;
       if (over <= 0) continue;
-      breaches[tm.ruleIndex] += over;
+      breaches[tm.ruleIndex] = (breaches[tm.ruleIndex] as number) + over;
       if (tm.hard) {
         hardCount += over;
         hard.push({
           ruleId: rule.id,
           kind: 'table_max',
-          itemIds: [problem.places[p].itemId],
+          itemIds: [(problem.places[p] as SolverPlace).itemId],
           guestIds: ids(at.reduce<number[]>((a, q, i) => (q === p ? [...a, i] : a), [])),
         });
-      } else penalties[tm.ruleIndex] += over * tm.cost;
+      } else penalties[tm.ruleIndex] = (penalties[tm.ruleIndex] as number) + over * tm.cost;
     }
   }
   for (const g of c.groups) {
@@ -434,49 +442,49 @@ export function evaluate(c: Compiled, seats: Readonly<Record<string, string | nu
     const used = placesOf(g.members);
     const extra = Math.max(0, used.length - 1);
     if (!extra) continue;
-    breaches[g.ruleIndex] += extra;
+    breaches[g.ruleIndex] = (breaches[g.ruleIndex] as number) + extra;
     if (g.hardTogether) {
       hardCount += extra;
       hard.push({
-        ruleId: problem.rules[g.ruleIndex].id,
+        ruleId: (problem.rules[g.ruleIndex] as SolverRule).id,
         kind: 'keep_together',
-        itemIds: used.map((p) => problem.places[p].itemId),
-        guestIds: ids(g.members.filter((i) => at[i] >= 0)),
+        itemIds: used.map((p) => (problem.places[p] as SolverPlace).itemId),
+        guestIds: ids(g.members.filter((i) => (at[i] as number) >= 0)),
       });
-    } else penalties[g.ruleIndex] += extra * g.togetherCost;
+    } else penalties[g.ruleIndex] = (penalties[g.ruleIndex] as number) + extra * g.togetherCost;
   }
   for (const pair of c.apart) {
-    const a = c.groups[pair.a];
-    const b = c.groups[pair.b];
+    const a = c.groups[pair.a] as Group;
+    const b = c.groups[pair.b] as Group;
     const inA = new Set(placesOf(a.members));
     const shared = placesOf(b.members).filter((p) => inA.has(p));
     if (!shared.length) continue;
-    breaches[pair.ruleIndex] += shared.length;
+    breaches[pair.ruleIndex] = (breaches[pair.ruleIndex] as number) + shared.length;
     if (pair.hard) {
       hardCount += shared.length;
       const set = new Set(shared);
       hard.push({
-        ruleId: problem.rules[pair.ruleIndex].id,
+        ruleId: (problem.rules[pair.ruleIndex] as SolverRule).id,
         kind: 'keep_apart',
-        itemIds: shared.map((p) => problem.places[p].itemId),
-        guestIds: ids([...a.members, ...b.members].filter((i) => set.has(at[i]))),
+        itemIds: shared.map((p) => (problem.places[p] as SolverPlace).itemId),
+        guestIds: ids([...a.members, ...b.members].filter((i) => set.has(at[i] as number))),
       });
-    } else penalties[pair.ruleIndex] += shared.length * pair.cost;
+    } else penalties[pair.ruleIndex] = (penalties[pair.ruleIndex] as number) + shared.length * pair.cost;
   }
   for (const z of c.zones) {
-    const out = [...z.guests].filter((i) => at[i] >= 0 && !z.inside[at[i]]);
+    const out = [...z.guests].filter((i) => (at[i] as number) >= 0 && !(z.inside[at[i] as number] as number));
     if (!out.length) continue;
-    breaches[z.ruleIndex] += out.length;
-    const rule = problem.rules[z.ruleIndex];
+    breaches[z.ruleIndex] = (breaches[z.ruleIndex] as number) + out.length;
+    const rule = problem.rules[z.ruleIndex] as SolverRule;
     if (z.hard) {
       hardCount += out.length;
       hard.push({
         ruleId: rule.id,
         kind: rule.kind,
-        itemIds: placesOf(out).map((p) => problem.places[p].itemId),
+        itemIds: placesOf(out).map((p) => (problem.places[p] as SolverPlace).itemId),
         guestIds: ids(out),
       });
-    } else penalties[z.ruleIndex] += out.length * z.cost;
+    } else penalties[z.ruleIndex] = (penalties[z.ruleIndex] as number) + out.length * z.cost;
   }
   const unseated = at.reduce((a, p) => a + (p < 0 ? 1 : 0), 0);
   const softPenalty = penalties.reduce((a, b) => a + b, 0);
@@ -484,7 +492,11 @@ export function evaluate(c: Compiled, seats: Readonly<Record<string, string | nu
     hard,
     softPenalty,
     unseated,
-    perRule: problem.rules.map((r, i) => ({ ruleId: r.id, breaches: breaches[i], penalty: penalties[i] })),
+    perRule: problem.rules.map((r, i) => ({
+      ruleId: r.id,
+      breaches: breaches[i] as number,
+      penalty: penalties[i] as number,
+    })),
     cost: hardCount * HARD_COST + unseated * UNSEATED_COST + softPenalty,
   };
 }
@@ -551,12 +563,13 @@ export function createSearch(c: Compiled, opts: SearchOptions): Search {
   // Per unit and place: queue and zone costs (fixed for the whole search).
   const unitCost = new Float64Array(U * W);
   for (let u = 0; u < U; u++) {
-    const members = units[u].guests;
+    const members = (units[u] as Unit).guests;
     unitCost[u * W + P] = members.length * UNSEATED_COST;
     for (const z of zones) {
       const n = members.reduce((a, i) => a + (z.guests.has(i) ? 1 : 0), 0);
       if (!n) continue;
-      for (let p = 0; p < P; p++) if (!z.inside[p]) unitCost[u * W + p] += n * z.cost;
+      for (let p = 0; p < P; p++)
+        if (!(z.inside[p] as number)) unitCost[u * W + p] = (unitCost[u * W + p] as number) + n * z.cost;
     }
   }
   // Group memberships per unit: [group, count] pairs, and the apart pairs a unit touches.
@@ -584,7 +597,7 @@ export function createSearch(c: Compiled, opts: SearchOptions): Search {
   });
   const pairsOfUnit = memberships.map((ms) => [...new Set(ms.flatMap(([g]) => pairsOfGroup.get(g) ?? []))]);
   const contrib = (u: number, g: number) => {
-    for (const [gg, n] of memberships[u]) if (gg === g) return n;
+    for (const [gg, n] of memberships[u] as [number, number][]) if (gg === g) return n;
     return 0;
   };
 
@@ -594,40 +607,49 @@ export function createSearch(c: Compiled, opts: SearchOptions): Search {
   const cnt = new Int32Array(groups.length * W);
   const distinct = new Int32Array(groups.length);
   for (let gi = 0; gi < groups.length; gi++) {
-    for (const i of groups[gi].members) {
-      const p = c.fixedOf[i] >= 0 ? c.fixedOf[i] : P;
-      cnt[gi * W + p] += 1;
+    for (const i of (groups[gi] as Group).members) {
+      const p = (c.fixedOf[i] as number) >= 0 ? (c.fixedOf[i] as number) : P;
+      cnt[gi * W + p] = (cnt[gi * W + p] as number) + 1;
     }
-    for (let p = 0; p < P; p++) if (cnt[gi * W + p] > 0) distinct[gi] += 1;
+    for (let p = 0; p < P; p++)
+      if ((cnt[gi * W + p] as number) > 0) distinct[gi] = (distinct[gi] as number) + 1;
   }
-  for (let u = 0; u < U; u++) load[P] += size[u];
+  for (let u = 0; u < U; u++) load[P] = (load[P] as number) + (size[u] as number);
   const tm = c.tableMax;
   const softMax = tm && !tm.hard ? tm : null;
   const over = (p: number, n: number) =>
     softMax && p < P
-      ? Math.max(0, problem.places[p].taken + c.fixedAt[p] + n - softMax.max) * softMax.cost
+      ? Math.max(0, (problem.places[p] as SolverPlace).taken + (c.fixedAt[p] as number) + n - softMax.max) *
+        softMax.cost
       : 0;
 
   const fits = (u: number, q: number, freed = 0) =>
-    q === P || (units[u].allowed[q] === 1 && load[q] + size[u] - freed <= c.room[q]);
+    q === P ||
+    (((units[u] as Unit).allowed[q] as number) === 1 &&
+      (load[q] as number) + (size[u] as number) - freed <= (c.room[q] as number));
 
   function moveDelta(u: number, q: number): number {
-    const p = place[u];
+    const p = place[u] as number;
     if (p === q) return 0;
-    const s = size[u];
-    let d = unitCost[u * W + q] - unitCost[u * W + p];
-    if (softMax) d += over(p, load[p] - s) - over(p, load[p]) + over(q, load[q] + s) - over(q, load[q]);
-    for (const [g, n] of memberships[u]) {
-      const tc = groups[g].togetherCost;
+    const s = size[u] as number;
+    let d = (unitCost[u * W + q] as number) - (unitCost[u * W + p] as number);
+    if (softMax)
+      d +=
+        over(p, (load[p] as number) - s) -
+        over(p, load[p] as number) +
+        over(q, (load[q] as number) + s) -
+        over(q, load[q] as number);
+    for (const [g, n] of memberships[u] as [number, number][]) {
+      const tc = (groups[g] as Group).togetherCost;
       if (!tc) continue;
-      const D = distinct[g];
+      const D = distinct[g] as number;
       let dd = 0;
-      if (p < P && cnt[g * W + p] === n) dd -= 1;
-      if (q < P && cnt[g * W + q] === 0) dd += 1;
+      if (p < P && (cnt[g * W + p] as number) === n) dd -= 1;
+      if (q < P && (cnt[g * W + q] as number) === 0) dd += 1;
       if (dd) d += tc * (Math.max(0, D + dd - 1) - Math.max(0, D - 1));
     }
-    for (const k of pairsOfUnit[u]) {
-      const pr = apart[k];
+    for (const k of pairsOfUnit[u] as number[]) {
+      const pr = apart[k] as ApartPair;
       const ca = contrib(u, pr.a);
       const cb = contrib(u, pr.b);
       for (const [x, sign] of [
@@ -635,8 +657,8 @@ export function createSearch(c: Compiled, opts: SearchOptions): Search {
         [q, 1],
       ] as const) {
         if (x === P) continue;
-        const a0 = cnt[pr.a * W + x];
-        const b0 = cnt[pr.b * W + x];
+        const a0 = cnt[pr.a * W + x] as number;
+        const b0 = cnt[pr.b * W + x] as number;
         const before = a0 > 0 && b0 > 0 ? 1 : 0;
         const after = a0 + sign * ca > 0 && b0 + sign * cb > 0 ? 1 : 0;
         d += (after - before) * pr.cost;
@@ -646,15 +668,15 @@ export function createSearch(c: Compiled, opts: SearchOptions): Search {
   }
 
   function apply(u: number, q: number) {
-    const p = place[u];
+    const p = place[u] as number;
     if (p === q) return;
-    load[p] -= size[u];
-    load[q] += size[u];
-    for (const [g, n] of memberships[u]) {
-      if (p < P && cnt[g * W + p] === n) distinct[g] -= 1;
-      if (q < P && cnt[g * W + q] === 0) distinct[g] += 1;
-      cnt[g * W + p] -= n;
-      cnt[g * W + q] += n;
+    load[p] = (load[p] as number) - (size[u] as number);
+    load[q] = (load[q] as number) + (size[u] as number);
+    for (const [g, n] of memberships[u] as [number, number][]) {
+      if (p < P && (cnt[g * W + p] as number) === n) distinct[g] = (distinct[g] as number) - 1;
+      if (q < P && (cnt[g * W + q] as number) === 0) distinct[g] = (distinct[g] as number) + 1;
+      cnt[g * W + p] = (cnt[g * W + p] as number) - n;
+      cnt[g * W + q] = (cnt[g * W + q] as number) + n;
     }
     place[u] = q;
   }
@@ -664,7 +686,8 @@ export function createSearch(c: Compiled, opts: SearchOptions): Search {
     const out: Record<string, string | null> = {};
     units.forEach((un, u) => {
       for (const i of un.guests)
-        out[problem.guests[i].id] = place[u] < P ? problem.places[place[u]].itemId : null;
+        out[(problem.guests[i] as SolverGuest).id] =
+          (place[u] as number) < P ? (problem.places[place[u] as number] as SolverPlace).itemId : null;
     });
     return out;
   };
@@ -680,9 +703,9 @@ export function createSearch(c: Compiled, opts: SearchOptions): Search {
   const order = units
     .map((_, u) => u)
     .sort((a, b) => {
-      const fa = units[a].allowed.reduce((x, y) => x + y, 0);
-      const fb = units[b].allowed.reduce((x, y) => x + y, 0);
-      return fa - fb || size[b] - size[a] || a - b;
+      const fa = (units[a] as Unit).allowed.reduce((x, y) => x + y, 0);
+      const fb = (units[b] as Unit).allowed.reduce((x, y) => x + y, 0);
+      return fa - fb || (size[b] as number) - (size[a] as number) || a - b;
     });
   for (const u of order) {
     let best = P;
@@ -691,7 +714,7 @@ export function createSearch(c: Compiled, opts: SearchOptions): Search {
     for (let q = 0; q < P; q++) {
       if (!fits(u, q)) continue;
       const d = moveDelta(u, q);
-      const left = c.room[q] - load[q] - size[u];
+      const left = (c.room[q] as number) - (load[q] as number) - (size[u] as number);
       if (d < bestD || (d === bestD && best !== P && left < bestLeft)) {
         best = q;
         bestD = d;
@@ -715,31 +738,35 @@ export function createSearch(c: Compiled, opts: SearchOptions): Search {
     let pick: { u: number; q: number; v: number; d: number } | null = null;
     for (let k = 0; k < sample; k++) {
       const u = Math.floor(rand() * U);
-      const p = place[u];
+      const p = place[u] as number;
       if (rand() < 0.65) {
         // Move: a random place (now and then the queue).
         const q = rand() < 0.03 ? P : Math.floor(rand() * P);
         if (q === p || !fits(u, q)) continue;
         const d = moveDelta(u, q);
-        if (tabu[u * W + q] > iter && cost + d >= bestCost) continue;
+        if ((tabu[u * W + q] as number) > iter && cost + d >= bestCost) continue;
         if (!pick || d < pick.d) pick = { u, q, v: -1, d };
       } else {
         // Swap with a unit at another place.
         const v = Math.floor(rand() * U);
-        const q = place[v];
+        const q = place[v] as number;
         if (v === u || q === p) continue;
-        if (!fits(u, q, size[v]) || !fits(v, p, size[u])) continue;
+        if (!fits(u, q, size[v] as number) || !fits(v, p, size[u] as number)) continue;
         const d1 = moveDelta(u, q);
         apply(u, q);
         const d2 = moveDelta(v, p);
         apply(u, p);
         const d = d1 + d2;
-        if ((tabu[u * W + q] > iter || tabu[v * W + p] > iter) && cost + d >= bestCost) continue;
+        if (
+          ((tabu[u * W + q] as number) > iter || (tabu[v * W + p] as number) > iter) &&
+          cost + d >= bestCost
+        )
+          continue;
         if (!pick || d < pick.d) pick = { u, q, v, d };
       }
     }
     if (!pick) return;
-    const p = place[pick.u];
+    const p = place[pick.u] as number;
     apply(pick.u, pick.q);
     tabu[pick.u * W + p] = iter + tenure + Math.floor(rand() * tenure);
     if (pick.v >= 0) {
@@ -773,8 +800,10 @@ export function createSearch(c: Compiled, opts: SearchOptions): Search {
     result(): Proposal {
       const seats: Record<string, string | null> = {};
       units.forEach((un, u) => {
-        const p = best[u];
-        for (const i of un.guests) seats[problem.guests[i].id] = p < P ? problem.places[p].itemId : null;
+        const p = best[u] as number;
+        for (const i of un.guests)
+          seats[(problem.guests[i] as SolverGuest).id] =
+            p < P ? (problem.places[p] as SolverPlace).itemId : null;
       });
       return { seats, evaluation: evaluate(c, withFixed(seats)), issues: c.issues, iterations: iter };
     },
@@ -794,7 +823,7 @@ export function solve(problem: SolverProblem, opts: SearchOptions): Proposal {
 export function unitIndexOf(c: Compiled): ReadonlyMap<string, number> {
   const m = new Map<string, number>();
   c.units.forEach((u, ui) => {
-    for (const i of u.guests) m.set(c.problem.guests[i].id, ui);
+    for (const i of u.guests) m.set((c.problem.guests[i] as SolverGuest).id, ui);
   });
   return m;
 }
