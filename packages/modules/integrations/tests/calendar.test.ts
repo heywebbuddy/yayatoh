@@ -15,7 +15,7 @@ import {
   MAX_CALENDAR_DESCRIPTION,
   zonedDateTime,
 } from '../src/domain/calendar.ts';
-import { defineConnector } from '../src/sdk/connector.ts';
+import { defineConnector, type PushSide } from '../src/sdk/connector.ts';
 
 /** M6.5c calendar rules and the fake Google Calendar API. */
 
@@ -81,7 +81,7 @@ describe('calendar entries', () => {
         objects: [
           {
             ...(googleCalendarConnector.objects[0] as (typeof googleCalendarConnector.objects)[number]),
-            push: { ...(googleCalendarConnector.objects[0]?.push as never), remove: undefined },
+            push: { ...(googleCalendarConnector.objects[0]?.push as PushSide), remove: undefined },
           },
         ],
       }),
