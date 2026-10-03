@@ -280,6 +280,17 @@ Start the slow reviews early. Everything is built against fakes meanwhile; each 
   - **Email and phone** columns are imported sealed with the dietary, accessibility and address answers (shown on the Guests page to the same roles). They create no CRM contacts, consents or audience members (P4-3); M4.1f will use them for invitations.
   - **XLSX parser:** a small cell-values-only reader in `@yayatoh/csv` on top of **fflate 0.8.3** (MIT, maintained, no known advisories); no formulas are evaluated (the cached value is read), macros and other parts are never opened. Old binary `.xls` files are refused with a "save as .xlsx or CSV" message.
   - **Google Sheet links (P4-7):** only `https://docs.google.com/spreadsheets/d/<id>` links, read once as CSV through the SSRF guard (10 s, 5 MB), redirects only to Google's content hosts; the link is not stored. A sheet that isn't shared as "anyone with the link" gets a clear message.
+- [ ] **M4.1d RSVP flow: defaults pending owner** (labels: `db-migration`, `auth`). Built with these defaults; say if any should change:
+  - **A PIN per party, not one per event.** P4-2 says "the event PIN"; the paper fallback uses a six-digit PIN printed on each party's invitation instead, so a guest who knows one PIN can't open another household by typing its names. Hosts reset a party's PIN from the Guests page.
+  - **Strict name matching:** case, extra spaces and Unicode forms don't matter; accents, letters, word order and partial names do ("Ana Lopez" is not "Ana López"). Any guest of the party (named plus-ones too) may use their own full name with the party's PIN. Hosts can turn name lookup off (the address then answers "not found").
+  - **Rate limit (`rsvpLookup`):** 5 tries per device per 10 minutes, then the human check before each further try (or a "wait N minutes" message where no check is configured); 100 tries per event per 15 minutes across devices; the usual IP ceiling. Wrong names, partial names and wrong PINs get the same answer.
+  - **Links last until 60 days after the event ends.** A guest who proves the PIN after that gets the same link renewed. "Reset the link" makes every earlier link and QR code stop at once.
+  - **Deadline and reopen:** after the deadline the page shows the party's answers read-only with "contact the hosts". "Reopen" lets one party answer once more; its next answer closes it again.
+  - **States:** `sent` is set by the host ("Mark as sent") until M4.1f sends invitations; `viewed` on the first open of the link; `responded` when the party answers, or when the host has recorded an answer (paper/typed) for every invitation of the party.
+  - **Plus-ones:** a placeholder plus-one who attends anything must be named; one who declines everything can stay unnamed.
+  - **Participation (M3.6a):** the RSVP sets `event_participation.rsvp` (attending / declined / awaiting) on rows that already exist for a guest linked to a guest-list entry. It never creates a contact, consent or participation row, and segments and campaigns don't read it (P4-3).
+  - **Paper address:** printed as `https://<app>/rsvp/find/<CODE>` (8 characters without look-alikes). The code names no one.
+
 ## Enterprise readiness (M5.11, P5-6)
 Claude Code built the evidence automation (M5.11a): `compliance/controls.yaml`, the policy drafts in
 `compliance/policies/`, the weekly **Evidence** workflow and its bundle, and the VPAT draft. These
@@ -476,12 +487,25 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 ## M5.1a — registration types (2026-09-29, pending owner)
 - [ ] Conference pack quotas per event: 30 registration types, 20 admission items, 5,000 registrants (defaults in `billing.addons`; free in beta, price with D22). Change them by data, no code change.
 - [ ] Registration always asks buyers for the emailed code (M1.5f), even when an org turned the checkout email check off, so "email domain" eligibility means a proved address. Confirm or relax.
+- **M5.1c decision emails (`legal-copy`, pending owner):** the approval and denial email wording (13 locales) and the defaults chosen per the roadmap: substitution closes 24 h before the start (per type, 0–720 h), one +1 guest per host (1–10), member lists up to 5,000 addresses. Review when convenient.
 
 ## Design system v2 (2026-10-02, pending owner)
 - [ ] **Event workspace navigation.** The approved Guests artboard puts the org menu in the sidebar and the event's sections in a top tab row. The build keeps the event's sections in the sidebar (conferences have ~20 sections; one list beats two navigations with the same names for keyboard and screen-reader users) and uses segmented tabs inside sections. Confirm, or ask for the artboard's tab IA (ADR 0022 "Shells").
 - [ ] **Dark primary fill.** `#7B5CFF` gives white button text 4.36:1; buttons use `#6C4CF2` (5.3:1) and `#7B5CFF` stays for glows, rings and the active sidebar tile. Confirm.
 - [ ] **CJK fonts** are not self-hosted (5–9 MB per face); Chinese and Japanese use Noto Sans JP/SC/TC when installed, then the platform face. Confirm, or approve per-locale font CSS.
 - [ ] **Required-field marker.** No asterisk on required labels (the browser announces "required"; errors say what is missing). Confirm or ask for "(optional)" markers on optional fields instead.
+
+## M5.2b — session enrollment and waitlists (2026-10-02, pending owner)
+- [ ] Offer window default when an event chooses "offer the place" instead of auto-enrol: 4 hours (15 minutes to 48 hours allowed; offers always end at the 24 h close). Auto-enrol stays the default (P5-9).
+- [ ] After the 24 h close, a place that frees up goes to whoever enrols first from their schedule and the waitlist takes nobody new (until M5.6's door line). Confirm, or keep the line open without promotion.
+- [ ] "Keep both" for overlapping sessions is offered only when neither session has a capacity (P5-9 as written). Confirm.
+- [ ] A registrant is their admission ticket; in a group order (M5.1c) the order's add-ons give their sessions to every registrant of that order. Confirm or ask for per-person add-ons.
+
+## M5.7a — live polls and Q&A (2026-10-02, pending owner)
+- [ ] **Who may take part:** anyone with the link, on **published events that are not private**, without an account (one vote per browser or account). Private events and "ticket holders only" are not supported yet. Confirm, or ask for holder-only participation.
+- [ ] **Anonymous questions:** allowed by default; the name behind an anonymous question is **not kept** by default ("Nobody sees them"); organizers can switch a session to "Moderators can see them" (askers are told). Confirm the defaults.
+- [ ] **Limits:** 5 questions per person per session per 10 minutes, 300 characters a question, 50 polls and 2,000 questions per session, word clouds keep 300 distinct words. Big-screen links never expire on their own (organizers replace them to revoke). Confirm or adjust.
+- [ ] **Questions and tallies are kept with the event** (no separate retention yet; only an optional typed name is personal). Decide a retention period if wanted.
 
 ## M6.2a — analytics warehouse (2026-10-02, pending owner)
 - [ ] **Tinybird account (when an org's volume needs it, P6-2).** Create a workspace, push the files in `packages/modules/analytics/tinybird/` (two datasources, three pipes), and put `TINYBIRD_API_URL`, `TINYBIRD_APPEND_TOKEN` (DATASOURCES:APPEND on the two datasources), `TINYBIRD_SIGNING_KEY` (the workspace admin token, used only to sign per-org read JWTs) and `TINYBIRD_WORKSPACE_ID` in Doppler, then set `ANALYTICS_WAREHOUSE=tinybird` and run a rebuild per org. Until then Postgres rollups serve every org; nothing calls Tinybird.

@@ -1,3 +1,4 @@
+import { liveSessionIds } from '@yayatoh/engagement';
 import {
   accessTarget,
   checkoutTarget,
@@ -127,6 +128,12 @@ export async function PublicEventView({
         await publicProgramMedia(contentTarget.orgId, contentTarget.eventId, { privateOk: unlockedPrivate }),
       )
     : {};
+  // M5.7a: sessions with live polls and Q&A link to their participant page (public events only).
+  const publicTarget = await checkoutTarget(slug);
+  const liveSessions =
+    publicTarget && fullProgram.sessions.length > 0
+      ? await liveSessionIds(publicTarget.orgId, publicTarget.eventId)
+      : [];
   // M5.4a: the exhibitor map page exists once the event has booths.
   const exhibitorMap =
     contentTarget && fullProgram.exhibitors.length > 0
@@ -417,7 +424,7 @@ export async function PublicEventView({
   const navLink =
     'inline-flex min-h-10 items-center rounded-[10px] px-3 text-body font-bold text-ink-2 hover:bg-surface-3 hover:text-ink';
   const chip =
-    'inline-flex min-h-8 items-center gap-2 rounded-pill border border-white/30 bg-white/15 px-3 text-[13px] font-bold';
+    'inline-flex min-h-8 items-center gap-2 rounded-pill border border-white/30 bg-surface/15 px-3 text-[13px] font-bold';
   return (
     <div className="min-h-dvh">
       {ev.visibility === 'public' ? (
@@ -472,7 +479,7 @@ export async function PublicEventView({
               <>
                 <div
                   aria-hidden="true"
-                  className="pointer-events-none absolute end-[6%] -top-20 -z-10 h-[460px] w-[180px] rotate-[32deg] rounded-full bg-white/45 blur-[34px]"
+                  className="pointer-events-none absolute end-[6%] -top-20 -z-10 h-[460px] w-[180px] rotate-[32deg] rounded-full bg-surface/45 blur-[34px]"
                 />
                 <div
                   aria-hidden="true"
@@ -480,7 +487,7 @@ export async function PublicEventView({
                 />
                 <div
                   aria-hidden="true"
-                  className="pointer-events-none absolute end-40 bottom-28 -z-10 hidden h-[140px] w-[200px] -rotate-[16deg] rounded-[40px] border border-white/40 bg-white/15 backdrop-blur-sm md:block"
+                  className="pointer-events-none absolute end-40 bottom-28 -z-10 hidden h-[140px] w-[200px] -rotate-[16deg] rounded-[40px] border border-white/40 bg-surface/15 backdrop-blur-sm md:block"
                 />
               </>
             )}
@@ -627,6 +634,7 @@ export async function PublicEventView({
                 locale={locale}
                 timeZone={ev.timezone}
                 images={programImages}
+                liveSessions={liveSessions}
                 exhibitorMap={exhibitorMap}
               />
 

@@ -226,6 +226,16 @@
       "intro": "Voici votre lien pour reprendre votre inscription à {eventName} là où vous l'avez laissée. Il fonctionne pendant {days, plural, one {# jour} other {# jours}} après votre dernier enregistrement et uniquement pour vous : ne le transférez pas. Si vous ne l'avez pas demandé, vous pouvez ignorer cet e-mail.",
       "cta": "Poursuivre mon inscription"
     },
+    "registration.approved": {
+      "subject": "Votre demande pour {eventName} est acceptée",
+      "intro": "Bonne nouvelle, {name} : votre demande de participation à {eventName} en tant que {typeName} a été acceptée. Utilisez le bouton ci-dessous pour voir votre inscription et, si votre pass est payant, payer et confirmer votre place.",
+      "cta": "Voir mon inscription"
+    },
+    "registration.denied": {
+      "subject": "Votre demande pour {eventName}",
+      "intro": "Merci d’avoir demandé à participer à {eventName} en tant que {typeName}, {name}. L’organisateur n’a pas pu accepter votre demande cette fois-ci. Aucun montant ne vous a été facturé.",
+      "cta": "Voir ma demande"
+    },
     "portal.invite": {
       "subject": "Invitation au portail de {eventName}",
       "intro": "{org} vous a invité au portail de {eventName} en tant que {role}. Vous pourrez y voir vos sessions, mettre à jour votre profil et accomplir vos tâches. Le bouton demande un code de connexion envoyé à cette adresse.",
@@ -240,6 +250,16 @@
       "subject": "Rappel : {title} pour {eventName}",
       "intro": "{org} attend toujours « {title} » pour {eventName}. Échéance : {until}.",
       "cta": "Ouvrir mes tâches"
+    },
+    "registration.session-enrolled": {
+      "subject": "Une place s'est libérée : vous participez à {sessionTitle}",
+      "intro": "Une place s'est libérée dans {sessionTitle} à {eventName} ({when}) et vous étiez le prochain sur la liste d'attente : vous êtes maintenant inscrit. Si vous ne pouvez pas venir, retirez la session de votre programme pour que la personne suivante obtienne la place.",
+      "cta": "Ouvrir mon programme"
+    },
+    "registration.session-offer": {
+      "subject": "Une place dans {sessionTitle} vous est réservée jusqu'au {until}",
+      "intro": "Une place s'est libérée dans {sessionTitle} à {eventName} ({when}) et vous êtes le prochain sur la liste. Acceptez-la depuis votre programme avant le {until} ; ensuite, elle ira à la personne suivante.",
+      "cta": "Accepter ma place"
     },
     "alerts.alert-urgent-text": {
       "subject": "{rule, select, unseated {{count, plural, one {Un participant n’a pas de place} other {{countWords} participants n’ont pas de place}}} undistributed {{count, plural, one {Un billet acheté n’a pas été distribué} other {{countWords} billets achetés n’ont pas été distribués}}} paymentsFailed {{count, plural, one {Un paiement a échoué} other {{countWords} paiements ont échoué}}} paymentsStuck {{count, plural, one {Un paiement est bloqué} other {{countWords} paiements sont bloqués}}} refundSurge {{count, plural, one {Un remboursement au cours de la dernière heure} other {{countWords} remboursements au cours de la dernière heure}}} devicesOffline {{count, plural, one {Un appareil de contrôle est hors ligne} other {{countWords} appareils de contrôle sont hors ligne}}} devicesLowBattery {{count, plural, one {Un appareil de contrôle a une batterie faible} other {{countWords} appareils de contrôle ont une batterie faible}}} devicesBacklog {{count, plural, one {Un appareil de contrôle a des scans en attente de synchronisation} other {{countWords} appareils de contrôle ont des scans en attente de synchronisation}}} capacityNear {Le lieu est rempli à {count} %} capacityFull {Le lieu est complet ({count} %)} sellOut {{count} % des billets sont vendus} salesPace {Les ventes de billets sont à {count} % du rythme visé} readiness {{count, plural, one {Une étape de préparation bloque cet événement} other {{countWords} étapes de préparation bloquent cet événement}}} domain {{count, plural, one {Un domaine personnalisé a un problème} other {{countWords} domaines personnalisés ont un problème}}} payoutsPastDue {{count, plural, one {Une exigence du compte de versement est en retard} other {{countWords} exigences du compte de versement sont en retard}}} deliverability {La délivrabilité des e-mails demande votre attention} automationFailed {{count, plural, one {Un message ou une action groupée a échoué aujourd’hui} other {{countWords} messages ou actions groupées ont échoué aujourd’hui}}} assistanceOverdue {{count, plural, one {{countWords} demande d’aide attend depuis trop longtemps} other {{countWords} demandes d’aide attendent depuis trop longtemps}}} campaignFailed {{count, plural, one {Un envoi de campagne a échoué aujourd’hui} other {{countWords} envois de campagne ont échoué aujourd’hui}}} disputeDeadline {{count, plural, one {Un litige demande bientôt des preuves} other {{countWords} litiges demandent bientôt des preuves}}} other {Alerte}}",

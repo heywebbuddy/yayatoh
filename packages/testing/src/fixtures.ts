@@ -71,6 +71,18 @@ import {
 } from '@yayatoh/command-center';
 import { withTenant } from '@yayatoh/db';
 import {
+  askQuestionCommand,
+  createPollCommand,
+  enableLiveCommand,
+  moderateQuestionCommand,
+  openPollCommand,
+  participantKey,
+  pinQuestionCommand,
+  updateSettingsCommand,
+  upvoteQuestionCommand,
+  voteCommand,
+} from '@yayatoh/engagement';
+import {
   addRecurringOccurrencesCommand,
   addSectionCommand,
   assignEventRoleCommand,
@@ -102,13 +114,18 @@ import {
   addPartyGuestCommand,
   addPlusOneCommand,
   createPartyCommand,
+  createRsvpLinksCommand,
   createSubEventCommand,
   guessGuestMapping,
   guestImportBulk,
+  markRsvpSentCommand,
+  markRsvpViewedCommand,
   moveGuestCommand,
+  partyRsvpQuery,
   readGuestTable,
   recordSubEventResponseCommand,
   setInvitationsCommand,
+  setRsvpSettingsCommand,
   stageGuestImportCommand,
   updatePartyGuestCommand,
   validateGuestImportCommand,
@@ -199,6 +216,7 @@ import {
   inviteSpeakerCommand,
   portalInviteStaffCommand,
   portalSaveProfileCommand,
+  sessionsOf as programSessionsOf,
   proposeProfileChangeCommand,
   publishAgendaCommand,
   recordGroupPickTx,
@@ -209,10 +227,15 @@ import {
   speakerPortalQuery,
 } from '@yayatoh/program';
 import {
+  applyCommand,
   createRegistrationTypeCommand,
   registrationSetupQuery,
+  replaceMembersCommand,
+  saveReasonTemplateCommand,
   seedRegistrationDefaultsCommand,
   setCellCommand,
+  setEnrollmentSettingsCommand,
+  setTypeRulesCommand,
 } from '@yayatoh/registration';
 import {
   analyticsForwarder,
@@ -1726,6 +1749,84 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
       tx.execute(sql`insert into registration.capacity_claims (org_id, event_id, registration_type_id, order_id)
         values (${org.id}, ${event.id}, ${member.id}, ${checkout.order.id})`),
     );
+    // M5.1c: an approval type with a member list and a reason template, and one pending
+    // application (no order: nobody is charged before approval).
+    const applicants = await executeCommand(
+      createRegistrationTypeCommand,
+      { eventId: event.id, name: 'Applicants', capacity: 50 },
+      ctx(),
+      ports,
+    );
+    await executeCommand(
+      setCellCommand,
+      {
+        eventId: event.id,
+        registrationTypeId: applicants.id,
+        admissionItemId: fullPass.id,
+        priceMinor: 4000,
+      },
+      ctx(),
+      ports,
+    );
+    await executeCommand(
+      setTypeRulesCommand,
+      {
+        eventId: event.id,
+        registrationTypeId: applicants.id,
+        approval: 'manual',
+        autoApproveDomains: [`staff.${slug}.test`],
+        kind: 'standard',
+      },
+      ctx(),
+      ports,
+    );
+    await executeCommand(
+      replaceMembersCommand,
+      { eventId: event.id, registrationTypeId: applicants.id, emails: [`member@${slug}.test`] },
+      ctx(),
+      ports,
+    );
+    await executeCommand(
+      saveReasonTemplateCommand,
+      { eventId: event.id, decision: 'deny', label: 'Full', body: 'Fixture: this rate is full.' },
+      ctx(),
+      ports,
+    );
+    await executeCommand(
+      applyCommand,
+      {
+        eventId: event.id,
+        registrationTypeId: applicants.id,
+        admissionItemId: fullPass.id,
+        name: 'Fixture Applicant',
+        email: `applicant@${slug}.test`,
+        company: 'Fixture Co',
+        jobTitle: 'Fixture Lead',
+        message: 'Fixture: why I want to attend.',
+      },
+      createCtx({ orgId: org.id, actor: { type: 'anonymous' } }),
+      ports,
+    );
+  }
+  // M5.2b session enrollment: the full pass lists the event's first session, the event's waitlist
+  // offers places (2 h), and one fixture ticket waits in that session's line (raw inserts: no
+  // place is held, so the counter is unchanged).
+  if (fullPass) {
+    await executeCommand(
+      setEnrollmentSettingsCommand,
+      { eventId: event.id, promotion: 'offer', offerMinutes: 120 },
+      ctx(),
+      ports,
+    );
+    await withTenant(systemCtx(org.id), async (tx) => {
+      await tx.execute(sql`insert into registration.item_sessions (org_id, event_id, admission_item_id, session_id)
+        select ${org.id}, ${event.id}, ${fullPass.id}, id from program.sessions where event_id = ${event.id} limit 1`);
+      await tx.execute(sql`insert into registration.session_enrollments
+          (org_id, event_id, session_id, registrant_id, order_id, status, position_at)
+        select ${org.id}, ${event.id}, s.id, t.id, t.order_id, 'waiting', now()
+        from program.sessions s, ticketing.tickets t
+        where s.event_id = ${event.id} and t.order_id = ${checkout.order.id} limit 1`);
+    });
   }
   // M4.1a: a party with a named guest (sealed answers, linked to a guest-list entry), a child and
   // an unnamed plus-one; then an edit and a move, so every history action has rows.
@@ -2140,11 +2241,34 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   );
   await executeCommand(setMyAlertPhoneCommand, { smsPhone: '+15550100199' }, ctx(), ports);
   await executeCommand(setSalesTargetCommand, { eventId: event.id, tickets: 150 }, ctx(), ports);
+  await liveEngagementFixture(org.id, event.id, ctx);
   // Batch 3e: a journey step failure reported two days ago (outside the rules' 24-hour window, so
   // it raises nothing), as the alerts subscriber records it (isolation coverage of alerts.signals).
   await withTenant(systemCtx(org.id), (tx) =>
     tx.execute(sql`insert into alerts.signals (org_id, kind, source_event_id, occurred_at)
       values (${org.id}, 'journey_step_failed', ${uuidv7()}, now() - interval '2 days')`),
+  );
+  // M4.1d: RSVP settings (deadline, name lookup), links for every party, the fixture party sent
+  // and opened through its link (isolation coverage of `rsvp_settings` and `party_rsvp`).
+  await executeCommand(
+    setRsvpSettingsCommand,
+    { eventId: event.id, deadline: new Date(event.startsAt.getTime() - 7 * 86_400_000), nameLookup: true },
+    ctx(),
+    ports,
+  );
+  await executeCommand(createRsvpLinksCommand, { eventId: event.id }, ctx(), ports);
+  await executeCommand(markRsvpSentCommand, { eventId: event.id, partyId: party.id }, ctx(), ports);
+  const partyLink = await executeQuery(
+    partyRsvpQuery,
+    { eventId: event.id, partyId: party.id },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    markRsvpViewedCommand,
+    { token: partyLink.token ?? '' },
+    createCtx({ orgId: org.id, now: new Date(event.startsAt.getTime() - 30 * 86_400_000) }),
+    ports,
   );
   return {
     org,
@@ -2157,6 +2281,81 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     speakerId: speaker.id,
     portal: { accountId: invited.accountId, token: portalSession.token },
   };
+}
+
+/**
+ * M5.7a live engagement on the fixture event's keynote: polls and Q&A on (names behind anonymous
+ * questions visible to moderators), an open single-choice poll with one vote, an open word cloud
+ * with one word, an approved, upvoted and pinned question, and a pending anonymous one.
+ */
+async function liveEngagementFixture(orgId: string, eventId: string, ctx: (o?: Partial<Ctx>) => Ctx) {
+  const [keynote] = await withTenant(systemCtx(orgId), (tx) => programSessionsOf(tx, eventId));
+  if (!keynote) throw new Error('fixture: the fixture event has no session');
+  const at = { eventId, sessionId: keynote.id };
+  const visitor = (n: number) => participantKey('fixture-secret', keynote.id, `device-${n}`);
+  const public_ = createCtx({ orgId });
+  await executeCommand(enableLiveCommand, at, ctx(), ports);
+  await executeCommand(
+    updateSettingsCommand,
+    { ...at, qaOpen: true, allowAnonymous: true, anonymousIdentity: 'moderators' },
+    ctx(),
+    ports,
+  );
+  const choice = await executeCommand(
+    createPollCommand,
+    { ...at, kind: 'single', question: 'Which track next?', options: ['Design', 'Data'] },
+    ctx(),
+    ports,
+  );
+  await executeCommand(openPollCommand, { eventId, pollId: choice.id }, ctx(), ports);
+  await executeCommand(
+    voteCommand,
+    { eventId, pollId: choice.id, participantKey: visitor(1), optionIds: ['o1'] },
+    public_,
+    ports,
+  );
+  const cloud = await executeCommand(
+    createPollCommand,
+    { ...at, kind: 'word_cloud', question: 'One word for today?' },
+    ctx(),
+    ports,
+  );
+  await executeCommand(openPollCommand, { eventId, pollId: cloud.id }, ctx(), ports);
+  await executeCommand(
+    voteCommand,
+    { eventId, pollId: cloud.id, participantKey: visitor(1), word: 'Inspiring' },
+    public_,
+    ports,
+  );
+  const askedBy = async (n: number, body: string, anonymous: boolean) => {
+    await executeCommand(
+      askQuestionCommand,
+      { ...at, participantKey: visitor(n), body, name: `Visitor ${n}`, anonymous },
+      public_,
+      ports,
+    );
+    const rows = await withTenant(systemCtx(orgId), (tx) =>
+      tx.execute<{ id: string }>(
+        sql`select id from engagement.questions where session_id = ${keynote.id} and body = ${body} limit 1`,
+      ),
+    );
+    return rows[0]?.id ?? '';
+  };
+  const approved = await askedBy(1, 'How do fixtures stay isolated?', false);
+  await executeCommand(
+    moderateQuestionCommand,
+    { eventId, questionId: approved, action: 'approve' },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    upvoteQuestionCommand,
+    { eventId, questionId: approved, participantKey: visitor(2) },
+    public_,
+    ports,
+  );
+  await executeCommand(pinQuestionCommand, { ...at, questionId: approved }, ctx(), ports);
+  await askedBy(2, 'A question still waiting for a moderator', true);
 }
 
 /** English headers for attendee exports (the console passes its own locale's). */

@@ -52,6 +52,14 @@ export const HISTORY_ACTIONS = [
   'invitation_removed',
   'response_recorded',
   'response_cleared',
+  // M4.1d: the RSVP flow (party link, PIN, states, deadline).
+  'rsvp_link_created',
+  'rsvp_link_reset',
+  'rsvp_pin_reset',
+  'rsvp_sent',
+  'rsvp_viewed',
+  'rsvp_submitted',
+  'rsvp_reopened',
 ] as const;
 export type HistoryAction = (typeof HISTORY_ACTIONS)[number];
 
@@ -380,6 +388,74 @@ export const subEventResponses = tenantTable(
       name: 'sub_event_responses_guest_fk',
       columns: [t.orgId, t.guestId],
       foreignColumns: [guests.orgId, guests.id],
+    }).onDelete('cascade'),
+  ],
+);
+
+/* ------------------------------------------------------------------------ M4.1d: RSVP ---- */
+
+/**
+ * Where a party is in the RSVP flow (roadmap §5.2): `invited` (on the list), `sent` (the host
+ * sent or printed the invitation), `viewed` (the party opened its page), `responded` (it
+ * answered, or the host recorded its answer).
+ */
+export const PARTY_RSVP_STATES = ['invited', 'sent', 'viewed', 'responded'] as const;
+export type PartyRsvpState = (typeof PARTY_RSVP_STATES)[number];
+
+/**
+ * An event's RSVP settings (M4.1d): the deadline (after it the page is read-only unless the host
+ * reopens a party), whether the paper fallback (exact full name + the party's PIN) is on, and the
+ * short code of that fallback's address (`/rsvp/find/{code}`), unique across the platform so the
+ * address alone finds the event (a SECURITY DEFINER function resolves it, ids only).
+ */
+export const rsvpSettings = tenantTable(
+  guestsSchema,
+  'rsvp_settings',
+  {
+    eventId: uuid('event_id').notNull(),
+    deadline: timestamp('deadline', { withTimezone: true, mode: 'date' }),
+    nameLookup: boolean('name_lookup').notNull().default(true),
+    lookupCode: text('lookup_code').notNull(),
+  },
+  (t) => [
+    uniqueIndex('rsvp_settings_org_event_key').on(t.orgId, t.eventId),
+    uniqueIndex('rsvp_settings_lookup_code_key').on(t.lookupCode),
+    // Generated codes are 8 characters (`LOOKUP_ALPHABET`); the check also admits the canary's
+    // `CANARY_<nn>_<row>` shape (column privacy seed `code`).
+    check('rsvp_settings_lookup_code_check', sql`lookup_code ~ '^[0-9A-Z_]{8,40}$'`),
+  ],
+);
+
+/**
+ * A party's RSVP state and credentials (M4.1d). The party link is `signLinkToken(link_id)`:
+ * resetting the link gives a new `link_id`, so every earlier link (and its QR) stops working;
+ * it also stops at `link_expires_at`. The PIN printed on the invitation is derived from the party
+ * and `pin_version` under the app secret (never stored); resetting it bumps the version.
+ * `reopened`: the host let the party answer once more after the deadline.
+ */
+export const partyRsvp = tenantTable(
+  guestsSchema,
+  'party_rsvp',
+  {
+    eventId: uuid('event_id').notNull(),
+    partyId: uuid('party_id').notNull(),
+    linkId: uuid('link_id').notNull(),
+    linkExpiresAt: timestamp('link_expires_at', { withTimezone: true, mode: 'date' }).notNull(),
+    pinVersion: integer('pin_version').notNull().default(1),
+    sentAt: timestamp('sent_at', { withTimezone: true, mode: 'date' }),
+    viewedAt: timestamp('viewed_at', { withTimezone: true, mode: 'date' }),
+    respondedAt: timestamp('responded_at', { withTimezone: true, mode: 'date' }),
+    reopened: boolean('reopened').notNull().default(false),
+  },
+  (t) => [
+    uniqueIndex('party_rsvp_org_party_key').on(t.orgId, t.partyId),
+    index('party_rsvp_org_event_idx').on(t.orgId, t.eventId),
+    uniqueIndex('party_rsvp_link_key').on(t.linkId),
+    check('party_rsvp_pin_version_check', sql`pin_version >= 1`),
+    foreignKey({
+      name: 'party_rsvp_party_fk',
+      columns: [t.orgId, t.partyId],
+      foreignColumns: [parties.orgId, parties.id],
     }).onDelete('cascade'),
   ],
 );

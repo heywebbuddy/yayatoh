@@ -492,6 +492,9 @@ importers:
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@yayatoh/engagement':
+        specifier: workspace:*
+        version: link:../../packages/modules/engagement
       '@yayatoh/events':
         specifier: workspace:*
         version: link:../../packages/modules/events
@@ -1247,6 +1250,9 @@ importers:
       '@yayatoh/events':
         specifier: workspace:*
         version: link:../events
+      '@yayatoh/guests':
+        specifier: workspace:*
+        version: link:../guests
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../kernel
@@ -1633,6 +1639,40 @@ importers:
       '@yayatoh/platform':
         specifier: workspace:*
         version: link:../../platform
+      drizzle-orm:
+        specifier: 'catalog:'
+        version: 0.45.3(@opentelemetry/api@1.9.0)(kysely@0.29.6)(pg@8.23.0)(postgres@3.4.9)
+      zod:
+        specifier: 'catalog:'
+        version: 4.6.5
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.19.0
+      '@yayatoh/config':
+        specifier: workspace:*
+        version: link:../../config
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  packages/modules/engagement:
+    dependencies:
+      '@yayatoh/db':
+        specifier: workspace:*
+        version: link:../../db
+      '@yayatoh/events':
+        specifier: workspace:*
+        version: link:../events
+      '@yayatoh/kernel':
+        specifier: workspace:*
+        version: link:../../kernel
+      '@yayatoh/platform':
+        specifier: workspace:*
+        version: link:../../platform
+      '@yayatoh/program':
+        specifier: workspace:*
+        version: link:../program
       drizzle-orm:
         specifier: 'catalog:'
         version: 0.45.3(@opentelemetry/api@1.9.0)(kysely@0.29.6)(pg@8.23.0)(postgres@3.4.9)
@@ -2219,6 +2259,9 @@ importers:
       '@yayatoh/platform':
         specifier: workspace:*
         version: link:../../platform
+      '@yayatoh/program':
+        specifier: workspace:*
+        version: link:../program
       '@yayatoh/ticketing':
         specifier: workspace:*
         version: link:../ticketing
@@ -2717,6 +2760,9 @@ importers:
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../db
+      '@yayatoh/engagement':
+        specifier: workspace:*
+        version: link:../modules/engagement
       '@yayatoh/events':
         specifier: workspace:*
         version: link:../modules/events

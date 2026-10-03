@@ -226,6 +226,16 @@
       "intro": "這是您的連結，可從上次中斷的地方繼續 {eventName} 的報名。它在您最後一次儲存後 {days, plural, other {# 天}} 內有效，且僅供您本人使用，請勿轉寄。如果您沒有要求此郵件，可以忽略。",
       "cta": "繼續我的報名"
     },
+    "registration.approved": {
+      "subject": "您參加 {eventName} 的申請已獲核准",
+      "intro": "{name}，好消息：您以 {typeName} 身分參加 {eventName} 的申請已獲核准。請點選下方按鈕查看您的報名；如果您的通行證需要付費，請完成付款以確認名額。",
+      "cta": "查看我的報名"
+    },
+    "registration.denied": {
+      "subject": "您參加 {eventName} 的申請",
+      "intro": "{name}，感謝您申請以 {typeName} 身分參加 {eventName}。主辦單位這次未能核准您的申請。您沒有被收取任何費用。",
+      "cta": "查看我的申請"
+    },
     "portal.invite": {
       "subject": "邀請您加入{eventName}入口網站",
       "intro": "{org}邀請您以{role}身分加入{eventName}入口網站。您可以在那裡查看自己的場次、更新個人檔案並完成任務。點選按鈕後需要輸入寄到此信箱的登入驗證碼。",
@@ -240,6 +250,16 @@
       "subject": "提醒：{eventName}的{title}",
       "intro": "{org}仍在等待您提交{eventName}的「{title}」。截止時間：{until}。",
       "cta": "開啟我的任務"
+    },
+    "registration.session-enrolled": {
+      "subject": "有空位了：你已報名 {sessionTitle}",
+      "intro": "{eventName}（{when}）的 {sessionTitle} 有空位了，你是候補名單上的下一位，現已為你報名。如果無法參加，請從行程中移除該場次，讓下一位取得名額。",
+      "cta": "開啟我的行程"
+    },
+    "registration.session-offer": {
+      "subject": "{sessionTitle} 的名額為你保留至 {until}",
+      "intro": "{eventName}（{when}）的 {sessionTitle} 有空位了，下一位就是你。請在 {until} 前在行程中接受；逾時名額將轉給下一位。",
+      "cta": "接受名額"
     },
     "alerts.alert-urgent-text": {
       "subject": "{rule, select, unseated {{count, plural, other {{countWords} 位參加者沒有座位}}} undistributed {{count, plural, other {{countWords} 張已購票券尚未分發}}} paymentsFailed {{count, plural, other {{countWords} 筆付款失敗}}} paymentsStuck {{count, plural, other {{countWords} 筆付款卡住了}}} refundSurge {{count, plural, other {過去一小時內有 {countWords} 筆退款}}} devicesOffline {{count, plural, other {{countWords} 台報到裝置離線}}} devicesLowBattery {{count, plural, other {{countWords} 台報到裝置電量不足}}} devicesBacklog {{count, plural, other {{countWords} 台報到裝置有待同步的掃描}}} capacityNear {場地已滿 {count}%} capacityFull {場地已額滿（{count}%）} sellOut {已售出 {count}% 的票券} salesPace {票券銷售達到目標進度的 {count}%} readiness {{count, plural, other {{countWords} 個設定步驟阻礙了此活動}}} domain {{count, plural, other {{countWords} 個自訂網域有問題}}} payoutsPastDue {{count, plural, other {收款帳戶有 {countWords} 項要求已逾期}}} deliverability {電子郵件送達率需要注意} automationFailed {{count, plural, other {今天有 {countWords} 則訊息或批次操作失敗}}} assistanceOverdue {{count, plural, other {{countWords} 個求助請求等待過久}}} campaignFailed {{count, plural, other {今天有 {countWords} 次行銷活動傳送失敗}}} disputeDeadline {{count, plural, other {有 {countWords} 起爭議需要盡快提交證據}}} other {警示}}",

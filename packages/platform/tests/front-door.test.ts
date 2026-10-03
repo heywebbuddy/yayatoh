@@ -216,6 +216,15 @@ describe('who serves a request', () => {
       '/api/scan/assistance',
       '/api/tv/abc~sig',
       '/api/command-center/org/event/presence',
+      // M5.1c: group registration, the applicant's page, the payer's group page.
+      '/events/summit/register/group',
+      '/events/summit/registration/abc~sig',
+      '/events/summit/group/abc~sig',
+      // M5.7a: the participant page and the big screen (and its stream).
+      '/events/summit/live/0190a0b0-0000-7000-8000-000000000001',
+      '/ar/events/summit/live/0190a0b0-0000-7000-8000-000000000001',
+      '/display/org~session~1~sig',
+      '/api/engagement/display/org~session~1~sig',
     ]) {
       expect(isPlatformPath(new URL(p, 'https://x').pathname) || decide(p).owner === 'next').toBe(true);
       expect(decide(p, flags(), { legacy: true })).toEqual({
@@ -231,6 +240,9 @@ describe('who serves a request', () => {
     expect(isPlatformPath('/events/summit/attendee')).toBe(false);
     expect(isPlatformPath('/events/summit/seat-finder/help/a/b')).toBe(false);
     expect(isPlatformPath('/tvguide')).toBe(false);
+    expect(isPlatformPath('/events/summit/group')).toBe(false);
+    expect(isPlatformPath('/events/summit/live')).toBe(false);
+    expect(isPlatformPath('/displays')).toBe(false);
   });
 });
 

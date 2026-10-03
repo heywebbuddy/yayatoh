@@ -64,7 +64,7 @@ touches:
   - packages/modules/orders/src/{daily-facts,index}.ts
   - packages/modules/checkin/src/{daily-facts,index}.ts
   - packages/platform/src/modules.ts              # MODULE_KEYS += analytics_pro
-  - packages/db/drizzle/0103_glamorous_demogoblin.sql (+ meta)
+  - packages/db/drizzle/0107_needy_stryfe.sql (+ meta)
   - packages/testing/src/{fixtures,warehouse,index}.ts, src/canary/registry.ts, package.json
   - packages/testing/tests/warehouse.int.test.ts
   - apps/worker/src/{warehouse,registry,main}.ts, tests/warehouse.int.test.ts, package.json
@@ -89,7 +89,7 @@ All `tenantTable` (org_id NOT NULL, ENABLE + FORCE RLS, canonical policy, org-le
 fixture rows for both orgs (`createOrgFixture`: catch-up + one backfill), every text column declared
 in `private-columns.ts`.
 
-**Migration** `0103_glamorous_demogoblin.sql` (new schema and tables only; nothing destructive).
+**Migration** `0107_needy_stryfe.sql` (new schema and tables only; nothing destructive).
 Hand-written block: composite FKs `(org_id, event_id) → events.events (org_id, id) ON DELETE
 CASCADE` on `daily_rollups`, `event_rollups`, `event_sync`; `REVOKE UPDATE, DELETE, TRUNCATE ON
 analytics.ingest_log FROM app_user`; `INSERT INTO billing.plan_modules ('launch_standard',

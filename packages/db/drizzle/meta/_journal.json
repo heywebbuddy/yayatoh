@@ -726,8 +726,36 @@
     {
       "idx": 103,
       "version": "7",
-      "when": 1790981403233,
-      "tag": "0103_glamorous_demogoblin",
+      "when": 1790984579575,
+      "tag": "0103_aspiring_mad_thinker",
+      "breakpoints": true
+    },
+    {
+      "idx": 104,
+      "version": "7",
+      "when": 1790985406991,
+      "tag": "0104_regular_landau",
+      "breakpoints": true
+    },
+    {
+      "idx": 105,
+      "version": "7",
+      "when": 1790986522595,
+      "tag": "0105_glossy_tyger_tiger",
+      "breakpoints": true
+    },
+    {
+      "idx": 106,
+      "version": "7",
+      "when": 1790986631919,
+      "tag": "0106_harsh_grey_gargoyle",
+      "breakpoints": true
+    },
+    {
+      "idx": 107,
+      "version": "7",
+      "when": 1790986762804,
+      "tag": "0107_needy_stryfe",
       "breakpoints": true
     }
   ]

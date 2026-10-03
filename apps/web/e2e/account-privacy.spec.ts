@@ -226,8 +226,12 @@ async function deleteFromPage(page: Page, email: string, setupKey: string) {
   await region.getByLabel(`Type ${email} to confirm`, { exact: true }).fill(email);
   await region.getByRole('button', { name: 'Delete my account' }).click();
   const dialog = stepUpDialog(page);
-  // Only if the fresh window passed while the test ran.
-  if (await dialog.isVisible().catch(() => false)) {
+  // The step-up dialog only if the fresh window passed while the test ran. Wait for either
+  // outcome: sampling the dialog right after the click missed one that opened a moment later.
+  await expect(
+    dialog.or(page.getByRole('heading', { level: 1, name: 'Your account was deleted' })),
+  ).toBeVisible();
+  if (await dialog.isVisible()) {
     await dialog.getByLabel('Code', { exact: true }).fill(codeForKey(setupKey));
     await dialog.getByRole('button', { name: 'Confirm' }).click();
   }

@@ -153,25 +153,30 @@ test.describe('marketplace home and search (M1.11a)', () => {
   });
 
   test('results page through with previous and next, keeping the filters', async ({ page }) => {
-    await page.goto('/events?q=Harbor');
     const pages = page.getByRole('navigation', { name: 'Pages' });
-    await expect(pages.getByText(/Page 1 of \d+/)).toBeVisible();
-    await expect(pages.getByRole('link', { name: 'Previous page' })).toHaveCount(0);
-    const first = await page
-      .getByRole('list', { name: 'Search results' })
-      .getByRole('heading')
-      .allTextContents();
-    await pages.getByRole('link', { name: 'Next page' }).click();
-    await expect(page).toHaveURL(/q=Harbor&page=2/);
-    await expect(pages.getByText(/Page 2 of \d+/)).toBeVisible();
-    const second = await page
-      .getByRole('list', { name: 'Search results' })
-      .getByRole('heading')
-      .allTextContents();
+    const names = () =>
+      page.getByRole('list', { name: 'Search results' }).getByRole('heading').allTextContents();
+    // Other specs publish matching events in parallel, which can shift an item from page 1 to
+    // page 2 between the two loads. Compare a round in which page 1 did not change meanwhile.
+    let first: string[] = [];
+    let second: string[] = [];
+    for (let round = 0; round < 5; round++) {
+      await page.goto('/events?q=Harbor');
+      await expect(pages.getByText(/Page 1 of \d+/)).toBeVisible();
+      await expect(pages.getByRole('link', { name: 'Previous page' })).toHaveCount(0);
+      first = await names();
+      await pages.getByRole('link', { name: 'Next page' }).click();
+      await expect(page).toHaveURL(/q=Harbor&page=2/);
+      await expect(pages.getByText(/Page 2 of \d+/)).toBeVisible();
+      second = await names();
+      await pages.getByRole('link', { name: 'Previous page' }).click();
+      await expect(page).toHaveURL(/q=Harbor$/);
+      await expect(pages.getByText(/Page 1 of \d+/)).toBeVisible();
+      if (JSON.stringify(await names()) === JSON.stringify(first)) break;
+    }
+    expect(second.length).toBeGreaterThan(0);
     expect(second.some((n) => first.includes(n))).toBe(false);
     await expectAccessible(page);
-    await pages.getByRole('link', { name: 'Previous page' }).click();
-    await expect(page).toHaveURL(/q=Harbor$/);
   });
 
   test('Arabic renders right to left with translated filters', async ({ page }) => {

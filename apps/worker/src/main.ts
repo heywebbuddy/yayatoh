@@ -27,7 +27,7 @@ import { JOBS, subscribers } from './registry.ts';
 import { relayOnce } from './relay.ts';
 import { runRetention } from './retention.ts';
 import { runSettlements } from './settlements.ts';
-import { alertDisputeDeadlines, sweepExpiredHolds, sweepWaitlists } from './sweeper.ts';
+import { alertDisputeDeadlines, sweepEnrollments, sweepExpiredHolds, sweepWaitlists } from './sweeper.ts';
 import { backfillJob, enqueueDueBackfills } from './warehouse.ts';
 import { startWorker } from './worker.ts';
 
@@ -98,7 +98,10 @@ setInterval(() => {
   sweepExpiredHolds()
     .catch((err) => console.error('sweeper', err))
     .then(() => sweepWaitlists())
-    .catch((err) => console.error('waitlist sweeper', err));
+    .catch((err) => console.error('waitlist sweeper', err))
+    // M5.2b: lapsed session offers, then session lines with free places.
+    .then(() => sweepEnrollments())
+    .catch((err) => console.error('enrollment sweeper', err));
 }, 30_000).unref();
 
 // Dispute evidence deadline alerts (M3.10c): hourly (leader only); each level is raised once.

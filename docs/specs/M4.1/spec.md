@@ -1,7 +1,7 @@
 # Spec: M4.1 — Guests, parties and RSVP
 
 - **Milestone:** M4.1 (roadmap §10 Phase 4, "M4.1 Guests, parties and RSVP (L)"; Phase 4 plan `docs/plans/phase-4.md`, Wave A; decisions 2026-09-28 P4-1…P4-8)
-- **Status:** M4.1a built (2026-09-28); M4.1b and M4.1c built (2026-09-29); M4.1d–f to follow
+- **Status:** M4.1a built (2026-09-28); M4.1b and M4.1c built (2026-09-29); M4.1d built (2026-10-02); M4.1e–f to follow
 - **Risk tags:** `db-migration`, `tenancy`
 - **Related ADRs:** 0018 (tokens only)
 
@@ -342,4 +342,114 @@ None (P4-3: nothing here feeds marketing; tested).
 - [ ] Record a paper "Attending" for an invited guest; try one for an uninvited guest (refused).
 - [ ] Link the Reception to a date that has its own chart (Seating page); see "the chart of …"; give the Ceremony its own chart.
 - [ ] As `jordan@lakeside.test` (viewer): everything is read-only.
+
+## M4.1d — RSVP flow (done)
+
+### 1. Goal and users
+A wedding party answers the invitation on one mobile-first page: who of the household comes to
+which part of the celebration, and who the plus-one is. Guests reach it from the link on their
+invitation, the QR code of the same link, or, with a paper invitation and no link, by their exact
+full name and the PIN printed on the invitation. Hosts (co-hosts, planners) see where each party
+is (`invited → sent → viewed → responded`, with attending/declined counts), copy links, print the
+QR code with the PIN, reset PINs and links, and reopen a party after the deadline.
+
+### 2. References
+- **Plan:** `docs/plans/phase-4.md` Wave B, M4.1d; decisions P4-2 (party magic link, QR, strict name + PIN, rate limits and a human check, no guest list ever), P4-3 (never marketing), P4-8 (co-hosts and planners).
+- **Roadmap:** §5.1 `guests` (RSVP), §5.2 (states; every change in `rsvp_history` with its source), M3.6a (`event_participation`).
+- **Reused:** `assertInvitedTx` (M4.1c), `signLinkToken`/`verifyLinkToken`, the M1.14 limiter (`limitAction`) and human check (M1.2f/M1.7e), `qrPath` (`@yayatoh/pdf`), the seat finder's zxing decoder in e2e.
+
+### 3. Scope
+**In (built):**
+- **Public page `/rsvp/{token}`** (no account; `noindex`): the party's own guests (plus-ones after their host) and only the sub-events it is invited to (times in the event's zone, place), one Attending / Can't attend pair per invited guest and sub-event (native radios, 44 px pills), names for placeholder plus-ones, "Send RSVP"; the server's refusal names the guest and moves the focus there. Success: "Thank you" (and until when answers can change); a later visit shows the saved answers. After the deadline: read-only answers and "contact the hosts". Expired link: the event's name only. The first open records `viewed`. Strict CSP (no inline styles), tokens only, logical CSS, 13 locales, Arabic right to left.
+- **Paper fallback `/rsvp/find/{code}`** (printed on the invitation; the code names no one; 404 while name lookup is off): full name + PIN. Unknown, partial or misspelled names and wrong PINs get one answer ("We couldn't find an invitation with that name and PIN…"), after the same work (every named guest of the event is read and compared in memory; a PIN is always computed and compared, a dummy one on a miss). Rate limit `rsvpLookup` (5 per device per 10 min, 100 per event per 15 min, IP ceiling), then the human check before each further try. A match opens the party's page.
+- **Commands** (`tenantCommand`): host side (`guests:write`, entitlement `guests`, audited): `guests.setRsvpSettings` (deadline, name lookup), `guests.createRsvpLinks` (every party without one, or listed parties; makes the event's lookup code on first use), `guests.resetRsvpLink`, `guests.resetRsvpPin`, `guests.markRsvpSent`, `guests.reopenRsvp`. Public (`public:rsvp`; the org from the signed link or the printed code): `guests.markRsvpViewed`, `guests.submitRsvp`, `guests.findRsvpByName`. `guests.recordSubEventResponse` (M4.1c, host paper/typed answers) now also settles `responded` and emits the participation event.
+- **Queries:** `guests.rsvpOverview` (`guests:read`: state, reopened, counts per sub-event; no credentials), `guests.partyRsvp` and `guests.rsvpLinks` (`guests:write`: link token, PIN, dates), `guests.rsvpSettings`, `guests.publicRsvp` (`public:rsvp`, allowlist `PublicRsvpDto`: no private answers, no other party). `guests.guestList` gains an `rsvp` state filter.
+- **Host UI:** the Guests page shows each party's RSVP state and per-sub-event counts, an "RSVP" state filter, and an "RSVP options for {party}" menu (copy link, show QR code and PIN, reset PIN, reopen after the deadline, or create the link). `/o/{org}/e/{event}/guests/rsvp`: parties per state, "Create links and PINs for every party", deadline (in the event's zone) and name-lookup settings with the paper address, every party with its counts. `/guests/rsvp/{party}`: state and dates, the link with "Copy link", a printable invitation card (event, party, QR code of the link, the paper address and the PIN), and the tools (mark as sent, reset PIN, reset link, reopen). Viewers see states and counts only.
+- **Participation (M3.6a):** `guests.rsvp_responded@1` (ids and counts) when the answering party has guests linked to guest-list entries; the `audiences.participation` projector sets `crm.event_participation.rsvp` on existing rows only. P4-3: no contact, consent, participation row or audience member is ever created by an RSVP.
+
+**Later / not yet:**
+- RSVP questions and meal choices (M4.1e); sending invitations by email and text and the contact collector (M4.1f, which will set `sent` itself).
+- Design system v2 components: `origin/agent/design-v2` conflicted outside this branch's files (on 2026-10-02: the exhibitors and speakers pages, `public-event-view.tsx`, `e2e/helpers.ts`, the 13 message files and the drizzle journal/snapshot), so the merge was aborted for the merge session; the new screens use today's `@yayatoh/ui` primitives only (a local `CopyLink` in the RSVP folder; no new shared component).
+- A guest site (M4.5a) linking to the RSVP page; tablemates for guests signed in through their party link (M4.4a).
+- An "undo" of a party's answers by the host (they can record answers on the sub-events page or reopen the party).
+
+### 4. `touches:`
+```yaml
+touches:
+  - packages/modules/guests/src/{schema.ts,index.ts,private-columns.ts}         # appended
+  - packages/modules/guests/src/{rsvp.ts,rsvp-state.ts,rsvp-filter.ts,domain/rsvp.ts}   # new
+  - packages/modules/guests/src/guests.ts           # guestList `rsvp` filter (2 lines)
+  - packages/modules/guests/src/invitations.ts      # recordSubEventResponse settles `responded`
+  - packages/modules/guests/{MODULE.md,tests/rsvp.test.ts}
+  - packages/modules/crm/src/{schema.ts,projection.ts,private-columns.ts}   # event_participation.rsvp
+  - packages/modules/audiences/{package.json,MODULE.md,src/projector.ts}  # guests.rsvp_responded@1
+  - packages/platform/src/security/rate-limit.ts    # `rsvpLookup` policy
+  - packages/db/drizzle/0099_harsh_grey_gargoyle.sql (+ meta)
+  - packages/testing/src/{fixtures.ts,rsvp.ts,index.ts}, packages/testing/tests/rsvp.int.test.ts
+  - apps/web/src/app/[locale]/rsvp/**                          # public page and paper fallback
+  - apps/web/src/app/[locale]/o/[org]/e/[event]/guests/{page.tsx,party-rsvp.tsx,rsvp/**}
+  - apps/web/messages/*.json                                   # rsvp.*, rsvpFind.*, rsvpHost.*, parties.actions.rsvp_*
+  - apps/web/e2e/rsvp.spec.ts
+  - docs/specs/M4.1/spec.md, docs/owner-inbox.md
+```
+
+### 5. Data model
+| Table | Change | Notes |
+|---|---|---|
+| `guests.rsvp_settings` | new | unique `(org_id, event_id)`; `deadline` (timestamptz), `name_lookup`, `lookup_code` (unique across the platform: the printed address finds the event); `(org_id, event_id)` → events cascade (hand-written) |
+| `guests.party_rsvp` | new | unique `(org_id, party_id)` → parties cascade; `link_id` (unique; the signed link's id), `link_expires_at`, `pin_version`, `sent_at`, `viewed_at`, `responded_at`, `reopened`; `(org_id, event_id)` → events cascade (hand-written) |
+| `guests.rsvp_history` | action CHECK widened | `rsvp_link_created`, `rsvp_link_reset`, `rsvp_pin_reset`, `rsvp_sent`, `rsvp_viewed`, `rsvp_submitted`, `rsvp_reopened` (NOT VALID + VALIDATE) |
+| `crm.event_participation` | + `rsvp` text null | CHECK `attending / declined / awaiting` (NOT VALID + VALIDATE) |
+
+**RLS notes:**
+- [x] Tenant tables use `tenantTable()` (ENABLE + FORCE RLS, NULLIF policy, org-leading indexes, composite FKs, org-scoped uniques; the two platform-wide uniques are the random `link_id` and `lookup_code`, read across tenants only through the SECURITY DEFINER functions)
+- [x] Rows for both orgs in `createOrgFixture` (settings with a deadline, links for every party, the fixture party sent and viewed)
+- [x] Every new text column declared (`rsvp_settings.lookup_code` internal, canary seed `code`; `event_participation.rsvp` vocab)
+
+**Migration:** `0099_harsh_grey_gargoyle.sql` (expand only; last in the journal after batches 3e and 3f; renumber at merge). Hand edits: the two CHECKs on existing tables as `NOT VALID` + `VALIDATE CONSTRAINT`; a hand-written block with the two event foreign keys and the SECURITY DEFINER functions `guests.rsvp_link_org(uuid)` and `guests.rsvp_lookup_target(text)` (live orgs only, ids only; `REVOKE ALL FROM PUBLIC`, `GRANT EXECUTE TO app_user`).
+
+### 6. API diff
+- **`/v1`:** none. **`/api/v2`:** none.
+- **Routes:** `/rsvp/{token}`, `/rsvp/find/{code}` (public, `noindex`); `/o/{org}/e/{event}/guests/rsvp`, `/o/{org}/e/{event}/guests/rsvp/{party}` (console).
+
+### 7. Events
+`guests.rsvp_responded@1` `{ orgId, eventId, partyId, contactIds, attending, declined }` (only when the party has guests linked to guest-list entries); consumed by `audiences.participation`. Nothing else.
+
+### 8. Entitlements and flags
+`guests` module (wedding profile). Rate-limit policy `rsvpLookup` (M1.14 limiter).
+
+### 10. Acceptance criteria
+| ID | Given / When / Then | Test |
+|---|---|---|
+| AC-M4.1d-01 | Name lookup never reveals the guest list: wrong, partial, misspelled and unknown names and wrong PINs get the same response and timing class; the page names no one | `packages/testing/tests/rsvp.int.test.ts` ("the exact full name and the PIN…": same output, medians within 4×); e2e `apps/web/e2e/rsvp.spec.ts` ("paper fallback: name + PIN…": identical page text) |
+| AC-M4.1d-02 | After the limit the human check appears before another try | e2e ("paper fallback: past the limit…") |
+| AC-M4.1d-03 | An RSVP to a sub-event the party is not invited to is refused in the command (also another event's sub-event) | int ("an RSVP to a sub-event the party is not invited to…"); `packages/modules/guests/tests/rsvp.test.ts` ("refuses an answer for a sub-event…") |
+| AC-M4.1d-04 | After the deadline the page is read-only and writes are refused; the host reopens one party, it answers once, then it is locked again | int ("after the deadline…"); e2e ("after the deadline the page is read-only…") |
+| AC-M4.1d-05 | A link works for its party only; a reset link fails at once; an expired link shows nothing; forged tokens are unknown | int ("a link works for its party only…"); e2e ("the host copies the link… resets it": old link 404) |
+| AC-M4.1d-06 | Household RSVP with a plus-one named; missing answers and an unnamed attending plus-one are named on the page; saved after a reload | e2e ("a household answers by its link…", "keyboard only…"); int ("a household answers…", "declining everything…") |
+| AC-M4.1d-07 | States `invited → sent → viewed → responded` with counts per sub-event; host paper answers count | int ("a household answers…", "host answers on paper count…"); e2e (state pill and counts) |
+| AC-M4.1d-08 | Every change writes `rsvp_history` with its source (`rsvp` from the page, `manual` from the host), field names only | int ("a household answers…": actions/sources, no values); e2e (history on the Guests page) |
+| AC-M4.1d-09 | The QR code decodes to the party's link and opens its page | e2e ("the host copies the link, prints the QR code…", zxing) |
+| AC-M4.1d-10 | The RSVP feeds `event_participation` for linked guests; nothing is added to contacts, consents, participation or profiles (P4-3) | int ("a guest linked to the guest list carries the RSVP…") |
+| AC-M4.1d-11 | Isolation, permissions (viewers: no links/PINs, no resets), impersonation and the read-only freeze for the new commands | int ("another org's link…", "viewers see states…", "staff acting as a member…", "a read-only freeze…"); `isolation.int.test.ts`, `freeze.int.test.ts`, `impersonation.int.test.ts` (registry); e2e ("a viewer sees RSVP states…") |
+| AC-M4.1d-12 | Declined; filter by RSVP state; deadline and name-lookup settings (address 404 when off) | e2e ("a party declines…", "the host sets the deadline…") |
+| AC-M4.1d-13 | Keyboard only, axe on every new screen and state, Arabic right to left | e2e ("keyboard only…", "Arabic…"; `expectAccessible` throughout) |
+| AC-M4.1d-14 | Strict names, codes, states, deadline lock, household rules and tallies | `packages/modules/guests/tests/rsvp.test.ts` |
+
+### 11. Security and privacy
+- The link and the printed code are the only credentials; their org comes from SECURITY DEFINER lookups returning ids, never from a header. PINs are derived (HMAC of the party and its version under the app secret), never stored; links are signed ids that a reset replaces.
+- The public DTO is an allowlist: the party's own guests' names, the sub-events it is invited to, its answers. No dietary, access or address answers; no other party.
+- Enumeration: one answer and the same work for every miss; per-device and per-event limits; the human check past the budget.
+- P4-3: guests never become audience members; the outbox event carries ids and counts only.
+
+### 12. Performance budget
+A lookup reads the event's named guests once (≤ 3,000) and compares in memory; a submit checks ≤ 20 guests × 20 sub-events.
+
+### 15. Demo checklist (M4.1d)
+- [ ] As `pani@lakeside.test`, open a wedding with sub-events and parties → **Guests → RSVP: links, QR codes and deadline** → **Create links and PINs for every party**; set a deadline; note the paper address.
+- [ ] Open a party → copy the link, print the card (QR + PIN), **Mark as sent**.
+- [ ] On a phone, scan the QR: answer for the household, name the plus-one, **Send RSVP**; back on the Guests page the party is **Responded** with counts.
+- [ ] On another phone, open the paper address, type a wrong PIN (same message as a wrong name), then the right name and PIN.
+- [ ] Set the deadline in the past: the page is read-only; **Reopen RSVP** for one party from the Guests page menu.
+- [ ] As `jordan@lakeside.test` (viewer): states only, no links, QR codes or PINs.
 

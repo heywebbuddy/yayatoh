@@ -14,7 +14,7 @@ import {
   TrackDto,
 } from './dto.ts';
 import { exhibitorsOf, speakersOf, sponsorsOf, sponsorTiersOf } from './people.ts';
-import { rooms, sessionSpeakers, sessions, speakers, tracks } from './schema.ts';
+import { rooms, sessionDetails, sessionSpeakers, sessions, speakers, tracks } from './schema.ts';
 import { eventOf, invalid } from './shared.ts';
 
 export const MAX_SESSIONS_PER_EVENT = 500;
@@ -325,6 +325,21 @@ export const updateSessionCommand = tenantCommand({
   handler: async ({ input, ctx, tx }) => {
     const ev = await eventOf(tx, input.eventId);
     const speakerIds = await checkRefs(tx, input.eventId, input);
+    // M5.2b: a capacity below the places people hold is refused with a clear reason (the
+    // counter's CHECK would refuse it anyway); the counter row is locked against new claims.
+    if (input.capacity !== null) {
+      const [held] = await tx
+        .select({ enrolled: sessionDetails.enrolled })
+        .from(sessionDetails)
+        .where(eq(sessionDetails.sessionId, input.sessionId))
+        .for('update');
+      if (held && held.enrolled > input.capacity)
+        throw new DomainError('invalid_state', 'People hold more places than that', {
+          field: 'capacity',
+          reason: 'capacity_below_enrolled',
+          enrolled: held.enrolled,
+        });
+    }
     const rows = await tx
       .update(sessions)
       .set({

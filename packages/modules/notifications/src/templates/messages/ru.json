@@ -226,6 +226,16 @@
       "intro": "Вот ваша ссылка, чтобы продолжить регистрацию на {eventName} с того места, где вы остановились. Она действует {days, plural, one {# день} few {# дня} many {# дней} other {# дня}} после последнего сохранения и только для вас, поэтому не пересылайте её. Если вы её не запрашивали, просто проигнорируйте это письмо.",
       "cta": "Продолжить регистрацию"
     },
+    "registration.approved": {
+      "subject": "Ваша заявка на {eventName} одобрена",
+      "intro": "Хорошие новости, {name}: ваша заявка на участие в {eventName} в категории «{typeName}» одобрена. Нажмите кнопку ниже, чтобы открыть регистрацию и, если пропуск платный, оплатить его и подтвердить место.",
+      "cta": "Открыть мою регистрацию"
+    },
+    "registration.denied": {
+      "subject": "Ваша заявка на {eventName}",
+      "intro": "Спасибо за заявку на участие в {eventName} в категории «{typeName}», {name}. В этот раз организатор не смог её одобрить. Деньги с вас не списывались.",
+      "cta": "Открыть мою заявку"
+    },
     "portal.invite": {
       "subject": "Приглашение в портал «{eventName}»",
       "intro": "{org} приглашает вас в портал мероприятия «{eventName}» в роли: {role}. Там вы увидите свои сессии, обновите профиль и выполните задачи. Кнопка запросит код входа, который придёт на этот адрес.",
@@ -240,6 +250,16 @@
       "subject": "Напоминание: {title} для «{eventName}»",
       "intro": "{org} всё ещё ждёт «{title}» для «{eventName}». Срок: {until}.",
       "cta": "Открыть мои задачи"
+    },
+    "registration.session-enrolled": {
+      "subject": "Освободилось место: вы записаны на {sessionTitle}",
+      "intro": "В {sessionTitle} на {eventName} ({when}) освободилось место, и вы были следующим в листе ожидания, поэтому теперь вы записаны. Если не сможете прийти, уберите сессию из своего расписания, чтобы место досталось следующему.",
+      "cta": "Открыть моё расписание"
+    },
+    "registration.session-offer": {
+      "subject": "Место на {sessionTitle} за вами до {until}",
+      "intro": "В {sessionTitle} на {eventName} ({when}) освободилось место, и вы следующий в очереди. Примите его в своём расписании до {until}; после этого оно перейдёт следующему.",
+      "cta": "Принять место"
     },
     "alerts.alert-urgent-text": {
       "subject": "{rule, select, unseated {{count, plural, one {{countWords} участник без места} few {{countWords} участника без мест} many {{countWords} участников без мест} other {{countWords} участника без мест}}} undistributed {{count, plural, one {{countWords} купленный билет не передан} few {{countWords} купленных билета не переданы} many {{countWords} купленных билетов не переданы} other {{countWords} купленного билета не передано}}} paymentsFailed {{count, plural, one {{countWords} платёж не прошёл} few {{countWords} платежа не прошли} many {{countWords} платежей не прошли} other {{countWords} платежа не прошло}}} paymentsStuck {{count, plural, one {{countWords} платёж завис} few {{countWords} платежа зависли} many {{countWords} платежей зависли} other {{countWords} платежа зависло}}} refundSurge {{count, plural, one {{countWords} возврат за последний час} few {{countWords} возврата за последний час} many {{countWords} возвратов за последний час} other {{countWords} возврата за последний час}}} devicesOffline {{count, plural, one {{countWords} устройство регистрации не в сети} few {{countWords} устройства регистрации не в сети} many {{countWords} устройств регистрации не в сети} other {{countWords} устройства регистрации не в сети}}} devicesLowBattery {{count, plural, one {{countWords} устройство регистрации с низким зарядом} few {{countWords} устройства регистрации с низким зарядом} many {{countWords} устройств регистрации с низким зарядом} other {{countWords} устройства регистрации с низким зарядом}}} devicesBacklog {{count, plural, one {{countWords} устройство регистрации ждёт синхронизации сканов} few {{countWords} устройства регистрации ждут синхронизации сканов} many {{countWords} устройств регистрации ждут синхронизации сканов} other {{countWords} устройства регистрации ждут синхронизации сканов}}} capacityNear {Площадка заполнена на {count} %} capacityFull {Площадка заполнена полностью ({count} %)} sellOut {Продано {count} % билетов} salesPace {Продажи билетов идут на {count} % от целевого темпа} readiness {{count, plural, one {{countWords} шаг настройки блокирует мероприятие} few {{countWords} шага настройки блокируют мероприятие} many {{countWords} шагов настройки блокируют мероприятие} other {{countWords} шага настройки блокируют мероприятие}}} domain {{count, plural, one {{countWords} собственный домен с проблемой} few {{countWords} собственных домена с проблемами} many {{countWords} собственных доменов с проблемами} other {{countWords} собственного домена с проблемами}}} payoutsPastDue {{count, plural, one {{countWords} требование к счёту выплат просрочено} few {{countWords} требования к счёту выплат просрочены} many {{countWords} требований к счёту выплат просрочены} other {{countWords} требования к счёту выплат просрочено}}} deliverability {Доставляемость писем требует внимания} automationFailed {{count, plural, one {{countWords} сообщение или массовое действие сегодня не выполнено} few {{countWords} сообщения или массовых действия сегодня не выполнены} many {{countWords} сообщений или массовых действий сегодня не выполнены} other {{countWords} сообщения или массового действия сегодня не выполнено}}} assistanceOverdue {{count, plural, one {{countWords} запрос помощи ждёт слишком долго} few {{countWords} запроса помощи ждут слишком долго} many {{countWords} запросов помощи ждут слишком долго} other {{countWords} запроса помощи ждут слишком долго}}} campaignFailed {{count, plural, one {{countWords} рассылка сегодня не удалась} few {{countWords} рассылки сегодня не удались} many {{countWords} рассылок сегодня не удались} other {{countWords} рассылки сегодня не удалось}}} disputeDeadline {{count, plural, one {По {countWords} спору скоро нужны доказательства} few {По {countWords} спорам скоро нужны доказательства} many {По {countWords} спорам скоро нужны доказательства} other {По {countWords} спора скоро нужны доказательства}}} other {Оповещение}}",
