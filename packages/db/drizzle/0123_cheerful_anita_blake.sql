@@ -195,12 +195,12 @@ CREATE INDEX "saved_views_org_user_idx" ON "analytics"."saved_views" USING btree
 CREATE INDEX "attribution_touches_org_id_idx" ON "marketing"."attribution_touches" USING btree ("org_id");--> statement-breakpoint
 CREATE UNIQUE INDEX "attribution_touches_org_order_position_key" ON "marketing"."attribution_touches" USING btree ("org_id","order_id","position");--> statement-breakpoint
 -- hand-written: begin (M6.2b: the CHECKs on the existing alerts table added NOT VALID, then validated;
--- the rule list gains the organizer rules, the scope allows m:{rule id}, a title for those rules only)
+-- the rule list gains the organizer rules, the scope allows m:{rule id}, the new title column)
 ALTER TABLE "alerts"."alerts" ADD CONSTRAINT "alerts_rule_check" CHECK (rule in ('unseated', 'undistributed', 'paymentsFailed', 'paymentsStuck', 'refundSurge', 'devicesOffline', 'devicesLowBattery', 'devicesBacklog', 'capacityNear', 'capacityFull', 'sellOut', 'salesPace', 'readiness', 'assistanceOverdue', 'domain', 'payoutsPastDue', 'deliverability', 'automationFailed', 'campaignFailed', 'disputeDeadline', 'metricRule', 'metricRuleFinance')) NOT VALID;--> statement-breakpoint
 ALTER TABLE "alerts"."alerts" VALIDATE CONSTRAINT "alerts_rule_check";--> statement-breakpoint
 ALTER TABLE "alerts"."alerts" ADD CONSTRAINT "alerts_scope_check" CHECK (scope_key = coalesce(event_id::text, 'org') or (rule in ('metricRule', 'metricRuleFinance') and event_id is null and scope_key ~ '^m:[0-9a-f-]{36}$')) NOT VALID;--> statement-breakpoint
 ALTER TABLE "alerts"."alerts" VALIDATE CONSTRAINT "alerts_scope_check";--> statement-breakpoint
-ALTER TABLE "alerts"."alerts" ADD CONSTRAINT "alerts_title_check" CHECK (title is null or (rule in ('metricRule', 'metricRuleFinance') and length(title) between 1 and 80)) NOT VALID;--> statement-breakpoint
+ALTER TABLE "alerts"."alerts" ADD CONSTRAINT "alerts_title_check" CHECK (title is null or length(title) between 1 and 80) NOT VALID;--> statement-breakpoint
 ALTER TABLE "alerts"."alerts" VALIDATE CONSTRAINT "alerts_title_check";--> statement-breakpoint
 -- hand-written: end
 CREATE POLICY "alert_rules_tenant_isolation" ON "analytics"."alert_rules" AS PERMISSIVE FOR ALL TO "app_user" USING (org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)) WITH CHECK (org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid));--> statement-breakpoint

@@ -1,6 +1,12 @@
 import { and, between, eq, inArray, sql } from 'drizzle-orm';
 import { type AttributionRow, foldAttribution } from '../attribution/models.ts';
-import { attributionRollups, DAILY_METRICS, type DailyMetric, dailyRollups, eventRollups } from '../schema.ts';
+import {
+  attributionRollups,
+  DAILY_METRICS,
+  type DailyMetric,
+  dailyRollups,
+  eventRollups,
+} from '../schema.ts';
 import {
   type AnalyticsWarehouse,
   type AttributionRange,
@@ -101,7 +107,10 @@ export const postgresWarehouse: AnalyticsWarehouse = {
       rows += chunk.length;
     }
     // M6.2b: the event's attribution rows, replaced with the snapshot like its daily rows.
-    const ownAttr = and(eq(attributionRollups.orgId, orgId), eq(attributionRollups.eventId, snapshot.eventId));
+    const ownAttr = and(
+      eq(attributionRollups.orgId, orgId),
+      eq(attributionRollups.eventId, snapshot.eventId),
+    );
     const storedAttr = await tx
       .select({
         id: attributionRollups.id,

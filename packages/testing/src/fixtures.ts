@@ -2401,7 +2401,13 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   );
   await executeCommand(
     createAlertRuleCommand,
-    { name: 'Registrations today', measure: 'registrations', condition: 'above', threshold: 1000, windowDays: 1 },
+    {
+      name: 'Registrations today',
+      measure: 'registrations',
+      condition: 'above',
+      threshold: 1000,
+      windowDays: 1,
+    },
     ctx(),
     ports,
   );

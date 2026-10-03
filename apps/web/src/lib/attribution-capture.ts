@@ -38,9 +38,11 @@ export function captureLanding(req: NextRequest, res: NextResponse, opts: { http
     return;
   }
   const dest = req.headers.get('sec-fetch-dest');
-  const pageLoad = (!dest || dest === 'document') && !req.headers.get('rsc') && !req.headers.get('next-router-prefetch');
+  const pageLoad =
+    (!dest || dest === 'document') && !req.headers.get('rsc') && !req.headers.get('next-router-prefetch');
   const utm =
-    utmFromParams(params) ?? (pageLoad ? referralUtm(req.headers.get('referer'), req.headers.get('host') ?? req.nextUrl.host) : null);
+    utmFromParams(params) ??
+    (pageLoad ? referralUtm(req.headers.get('referer'), req.headers.get('host') ?? req.nextUrl.host) : null);
   if (!utm) return;
   const windowMs = MAX_WINDOW_DAYS * DAY_MS;
   const next = nextUtmCookie(decodeUtmCookie(req.cookies.get(UTM_COOKIE)?.value), utm, Date.now(), windowMs);

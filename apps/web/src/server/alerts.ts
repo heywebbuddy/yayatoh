@@ -11,8 +11,17 @@ import { ports } from './ports.ts';
 type T = Awaited<ReturnType<typeof getTranslations<'alerts'>>>;
 
 /** An alert's text in the reader's language: small counts spelled out per the locale's rule. */
-export function alertTitle(t: T, locale: string, a: Pick<AlertDto, 'rule' | 'count'>): string {
-  return t(`rules.${a.rule}`, { count: a.count, countWords: countWords(a.count, locale) });
+export function alertTitle(
+  t: T,
+  locale: string,
+  a: Pick<AlertDto, 'rule' | 'count'> & { title?: string | null },
+): string {
+  // M6.2b: organizer rules carry their own name.
+  return t(`rules.${a.rule}`, {
+    count: a.count,
+    countWords: countWords(a.count, locale),
+    title: a.title ?? '',
+  });
 }
 
 /** One alert as a compact row (the Alerts widget, the event home). */

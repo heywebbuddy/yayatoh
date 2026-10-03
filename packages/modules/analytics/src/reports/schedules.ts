@@ -6,6 +6,8 @@ import { memberUserIdsTx, ORG_ROLES, type OrgRole, roleCan } from '@yayatoh/tena
 import { and, asc, desc, eq, inArray } from 'drizzle-orm';
 import { z } from 'zod';
 import { actorCanTx, memberUserId } from '../access.ts';
+import { dayIn } from '../compute.ts';
+import { addDays } from '../dashboard.ts';
 import { reportFiles, reportRuns, reportSchedules } from '../schema.ts';
 import { orgTimeZoneTx } from '../sync.ts';
 import {
@@ -16,8 +18,6 @@ import {
   type ReportFrequency,
 } from './catalog.ts';
 import { periodContaining, periodDueAt } from './period.ts';
-import { dayIn } from '../compute.ts';
-import { addDays } from '../dashboard.ts';
 
 /**
  * Scheduled PDF reports (M6.2b): owners and admins (`org:update`) choose a frequency, a send hour
@@ -278,13 +278,19 @@ export const listReportRunsQuery = tenantQuery({
     const ids = rows.map((r) => r.run.id);
     const files = ids.length
       ? await tx
-          .select({ id: reportFiles.id, runId: reportFiles.runId, locale: reportFiles.locale, finance: reportFiles.finance })
+          .select({
+            id: reportFiles.id,
+            runId: reportFiles.runId,
+            locale: reportFiles.locale,
+            finance: reportFiles.finance,
+          })
           .from(reportFiles)
           .where(and(inArray(reportFiles.runId, ids), eq(reportFiles.finance, finance)))
       : [];
     return rows.map(({ run, name }) => {
       const mine = files.filter((f) => f.runId === run.id);
-      const file = mine.find((f) => f.locale === input.locale) ?? mine.find((f) => f.locale === 'en') ?? mine[0];
+      const file =
+        mine.find((f) => f.locale === input.locale) ?? mine.find((f) => f.locale === 'en') ?? mine[0];
       return ReportRunDto.parse({
         id: run.id,
         scheduleId: run.scheduleId,
@@ -318,7 +324,10 @@ export const reportFileQuery = tenantQuery({
     const [f] = await tx
       .select({ pdf: reportFiles.pdf, finance: reportFiles.finance, key: reportRuns.periodKey })
       .from(reportFiles)
-      .innerJoin(reportRuns, and(eq(reportRuns.orgId, reportFiles.orgId), eq(reportRuns.id, reportFiles.runId)))
+      .innerJoin(
+        reportRuns,
+        and(eq(reportRuns.orgId, reportFiles.orgId), eq(reportRuns.id, reportFiles.runId)),
+      )
       .where(eq(reportFiles.id, input.fileId));
     if (!f || (f.finance && !(await actorCanTx(tx, ctx, 'finance:read'))))
       throw new DomainError('not_found', 'Report not found');

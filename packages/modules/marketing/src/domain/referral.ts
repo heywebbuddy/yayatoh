@@ -1,5 +1,5 @@
-import { cleanUtmValue, type Utm } from './utm.ts';
 import { REFERRAL_MEDIUM } from './touches.ts';
+import { cleanUtmValue, type Utm } from './utm.ts';
 
 /**
  * Referral landings (M6.2b): a page request without UTM values or a click id whose `Referer` is
@@ -24,7 +24,11 @@ export function referralUtm(referer: string | null | undefined, ownHost: string)
   }
   if (url.protocol !== 'https:' && url.protocol !== 'http:') return null;
   const host = url.hostname.toLowerCase().replace(/^www\./, '');
-  const own = ownHost.toLowerCase().split(':')[0]?.replace(/^www\./, '') ?? '';
+  const own =
+    ownHost
+      .toLowerCase()
+      .split(':')[0]
+      ?.replace(/^www\./, '') ?? '';
   // Our own host and its parent or child hosts (abc.yayatoh.com and yayatoh.com) are not referrers.
   if (!host || host === own || host.endsWith(`.${own}`) || own.endsWith(`.${host}`)) return null;
   if (NOT_REFERRERS.some((re) => re.test(host))) return null;

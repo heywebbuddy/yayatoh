@@ -182,7 +182,8 @@ export const backfillRuns = tenantTable(
 
 const listOf = (values: readonly (string | number)[]) =>
   values.map((v) => (typeof v === 'number' ? String(v) : `'${v}'`)).join(', ');
-const inList = (col: string, values: readonly (string | number)[]) => sql.raw(`${col} in (${listOf(values)})`);
+const inList = (col: string, values: readonly (string | number)[]) =>
+  sql.raw(`${col} in (${listOf(values)})`);
 
 const bytea = customType<{ data: Uint8Array; driverData: Buffer }>({
   dataType: () => 'bytea',
@@ -365,7 +366,10 @@ export const reportRuns = tenantTable(
     }).onDelete('cascade'),
     check('report_runs_status_check', inList('status', REPORT_RUN_STATUSES)),
     check('report_runs_period_check', sql`period_from <= period_to`),
-    check('report_runs_key_check', sql`period_key ~ '^(D[0-9]{4}-[0-9]{2}-[0-9]{2}|W[0-9]{4}-[0-9]{2}-[0-9]{2}|M[0-9]{4}-[0-9]{2})$'`),
+    check(
+      'report_runs_key_check',
+      sql`period_key ~ '^(D[0-9]{4}-[0-9]{2}-[0-9]{2}|W[0-9]{4}-[0-9]{2}-[0-9]{2}|M[0-9]{4}-[0-9]{2})$'`,
+    ),
   ],
 );
 

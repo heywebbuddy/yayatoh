@@ -70,10 +70,7 @@ export const alerts = tenantTable(
       'alerts_scope_check',
       sql`scope_key = coalesce(event_id::text, 'org') or (rule in ('metricRule', 'metricRuleFinance') and event_id is null and scope_key ~ '^m:[0-9a-f-]{36}$')`,
     ),
-    check(
-      'alerts_title_check',
-      sql`title is null or (rule in ('metricRule', 'metricRuleFinance') and length(title) between 1 and 80)`,
-    ),
+    check('alerts_title_check', sql`title is null or length(title) between 1 and 80`),
     check('alerts_count_check', sql`count >= 0 and notify_count >= 0 and reopen_count >= 0`),
     check('alerts_params_check', sql`jsonb_typeof(params) = 'object'`),
     check('alerts_snooze_check', sql`state <> 'snoozed' or snoozed_until is not null`),

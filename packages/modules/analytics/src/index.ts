@@ -1,3 +1,17 @@
+// M6.2b: attribution, the curated explorer, organizer alert rules, scheduled reports.
+export { actorCanTx } from './access.ts';
+export {
+  ATTRIBUTION_MODELS,
+  type AttributableOrder,
+  type AttributionModel,
+  AttributionRow,
+  attributionRowsOf,
+  creditTouches,
+  foldAttribution,
+  ORDER_CREDIT_BPS,
+  type PathTouch,
+  splitEvenly,
+} from './attribution/models.ts';
 export {
   BACKFILL_ACTOR,
   BACKFILL_DEFAULTS,
@@ -35,67 +49,6 @@ export {
   topEventRevenue,
 } from './dashboard.ts';
 export {
-  applyUnpublishedWarehouseEvents,
-  catchUpWarehouse,
-  type IngestOutcome,
-  ingestEventTx,
-  WAREHOUSE_CONSUMER,
-  WAREHOUSE_EVENT_SCHEMAS,
-  WAREHOUSE_EVENTS,
-  type WarehouseEventKey,
-  warehouseIngestor,
-} from './ingest.ts';
-export { privateColumns } from './private-columns.ts';
-export {
-  BACKFILL_STATUSES,
-  type BackfillStatus,
-  DAILY_METRICS,
-  type DailyMetric,
-  WAREHOUSE_ADAPTERS,
-  type WarehouseAdapterName,
-} from './schema.ts';
-export { orgTimeZoneTx, type SyncResult, syncEventTx } from './sync.ts';
-export {
-  type AnalyticsWarehouse,
-  type DailyRow,
-  type DailyTotal,
-  type DayRange,
-  EventSnapshot,
-  EventState,
-  type EventStateRow,
-  type EventTotal,
-  scopeOrg,
-  sortDaily,
-  type WarehouseScope,
-  type WriteResult,
-} from './warehouse/port.ts';
-export { diffDaily, postgresWarehouse } from './warehouse/postgres.ts';
-export { configuredWarehouseName, lazyWarehouse, warehouseFromEnv } from './warehouse/select.ts';
-export {
-  SNAPSHOT_MARKER,
-  signPipeToken,
-  TINYBIRD_DATASOURCES,
-  TINYBIRD_PIPES,
-  type TinybirdConfig,
-  TinybirdError,
-  tinybirdWarehouse,
-} from './warehouse/tinybird.ts';
-export { type FakeTinybird, type FakeTinybirdCall, fakeTinybird } from './warehouse/tinybird-fake.ts';
-// M6.2b: attribution, the curated explorer, organizer alert rules, scheduled reports.
-export { actorCanTx } from './access.ts';
-export {
-  ATTRIBUTION_MODELS,
-  type AttributableOrder,
-  type AttributionModel,
-  AttributionRow,
-  attributionRowsOf,
-  creditTouches,
-  foldAttribution,
-  ORDER_CREDIT_BPS,
-  type PathTouch,
-  splitEvenly,
-} from './attribution/models.ts';
-export {
   COUNT_MEASURES,
   type CountMeasure,
   comboProblem,
@@ -104,8 +57,8 @@ export {
   isAttributionMeasure,
   isMoneyMeasure,
   MEASURES,
-  MONEY_MEASURES,
   type Measure,
+  MONEY_MEASURES,
   type MoneyMeasure,
   PRESET_DAYS,
   RANGE_PRESETS,
@@ -113,8 +66,8 @@ export {
   TOUCH_DIMENSIONS,
 } from './explorer/catalog.ts';
 export {
-  currencyDigits,
   csvValue,
+  currencyDigits,
   decimalOf,
   EXPLORE_CSV_COLUMNS,
   type ExploreCsvColumn,
@@ -130,8 +83,8 @@ export {
   exploreMoneyQuery,
   exploreQuery,
   exploreRange,
-  exploreTx,
   explorerQueries,
+  exploreTx,
   MAX_ROWS as EXPLORE_MAX_ROWS,
 } from './explorer/explore.ts';
 export {
@@ -142,6 +95,18 @@ export {
   saveViewCommand,
 } from './explorer/views.ts';
 export {
+  applyUnpublishedWarehouseEvents,
+  catchUpWarehouse,
+  type IngestOutcome,
+  ingestEventTx,
+  WAREHOUSE_CONSUMER,
+  WAREHOUSE_EVENT_SCHEMAS,
+  WAREHOUSE_EVENTS,
+  type WarehouseEventKey,
+  warehouseIngestor,
+} from './ingest.ts';
+export { privateColumns } from './private-columns.ts';
+export {
   MAX_CATCH_UP,
   MAX_RECIPIENTS,
   MAX_RUN_ATTEMPTS,
@@ -149,14 +114,20 @@ export {
   type ReportFrequency,
 } from './reports/catalog.ts';
 export { fill, REPORT_LABELS, REPORT_LOCALES, type ReportLocale, reportLocale } from './reports/labels.ts';
-export { duePeriods, periodContaining, periodDueAt, periodOfKey, type ReportPeriod } from './reports/period.ts';
+export {
+  duePeriods,
+  periodContaining,
+  periodDueAt,
+  periodOfKey,
+  type ReportPeriod,
+} from './reports/period.ts';
 export {
   dueReportsTx,
   periodLabel,
   REPORT_KIND,
   type ReportDeps,
-  reportHtml,
   type RunOutcome,
+  reportHtml,
   runDueReports,
   runReportPeriod,
 } from './reports/run.ts';
@@ -198,6 +169,41 @@ export {
   setAlertRuleEnabledCommand,
   updateAlertRuleCommand,
 } from './rules/rules.ts';
+export {
+  BACKFILL_STATUSES,
+  type BackfillStatus,
+  DAILY_METRICS,
+  type DailyMetric,
+  WAREHOUSE_ADAPTERS,
+  type WarehouseAdapterName,
+} from './schema.ts';
+export { orgTimeZoneTx, type SyncResult, syncEventTx } from './sync.ts';
 export { analyticsOrgTick } from './tick.ts';
-export { type AttributionRange, type AttributionTotal } from './warehouse/port.ts';
-export { diffAttribution } from './warehouse/postgres.ts';
+export {
+  type AnalyticsWarehouse,
+  type AttributionRange,
+  type AttributionTotal,
+  type DailyRow,
+  type DailyTotal,
+  type DayRange,
+  EventSnapshot,
+  EventState,
+  type EventStateRow,
+  type EventTotal,
+  scopeOrg,
+  sortDaily,
+  type WarehouseScope,
+  type WriteResult,
+} from './warehouse/port.ts';
+export { diffAttribution, diffDaily, postgresWarehouse } from './warehouse/postgres.ts';
+export { configuredWarehouseName, lazyWarehouse, warehouseFromEnv } from './warehouse/select.ts';
+export {
+  SNAPSHOT_MARKER,
+  signPipeToken,
+  TINYBIRD_DATASOURCES,
+  TINYBIRD_PIPES,
+  type TinybirdConfig,
+  TinybirdError,
+  tinybirdWarehouse,
+} from './warehouse/tinybird.ts';
+export { type FakeTinybird, type FakeTinybirdCall, fakeTinybird } from './warehouse/tinybird-fake.ts';

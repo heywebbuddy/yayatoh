@@ -39,7 +39,8 @@ export const PRESET_DAYS: Readonly<Record<Exclude<RangePreset, 'custom'>, number
   '365d': 365,
 };
 
-export const isMoneyMeasure = (m: string): m is MoneyMeasure => (MONEY_MEASURES as readonly string[]).includes(m);
+export const isMoneyMeasure = (m: string): m is MoneyMeasure =>
+  (MONEY_MEASURES as readonly string[]).includes(m);
 export const isAttributionMeasure = (m: Measure) => m === 'attributed_orders' || m === 'attributed_revenue';
 
 /** Why a measure and dimension cannot go together (null: they can). */

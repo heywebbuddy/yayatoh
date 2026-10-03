@@ -3,7 +3,7 @@ import { type Ctx, requireOrg } from '@yayatoh/kernel';
 import type { PublishedEvent } from '@yayatoh/platform';
 import { and, eq, inArray, ne, sql } from 'drizzle-orm';
 import { z } from 'zod';
-import { METRIC_RULES, metricScopeKey, type RuleKey, type Severity, SEVERITIES } from './domain/config.ts';
+import { METRIC_RULES, metricScopeKey, type RuleKey, SEVERITIES, type Severity } from './domain/config.ts';
 import type { Firing } from './domain/lifecycle.ts';
 import { type AlertChange, type AlertDeps, reconcileTx } from './engine.ts';
 import { alerts } from './schema.ts';
@@ -49,7 +49,8 @@ export function readingText(value: number, money: boolean, currency: string): st
   if (!money) return new Intl.NumberFormat('en').format(value);
   try {
     const digits =
-      new Intl.NumberFormat('en', { style: 'currency', currency }).resolvedOptions().maximumFractionDigits ?? 2;
+      new Intl.NumberFormat('en', { style: 'currency', currency }).resolvedOptions().maximumFractionDigits ??
+      2;
     return new Intl.NumberFormat('en', { style: 'currency', currency }).format(value / 10 ** digits);
   } catch {
     return `${value} ${currency}`;

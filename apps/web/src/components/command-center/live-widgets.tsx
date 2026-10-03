@@ -91,6 +91,7 @@ export function LiveFeedBody({ d, c, controls }: { d: LiveFeed; c: Ctx; controls
         title: ta(`rules.${i.reason}`, {
           count: i.alert.count,
           countWords: countWords(i.alert.count, c.locale),
+          title: '',
         }),
         state: i.alert.state === 'resolved' ? 'resolved' : 'open',
       });

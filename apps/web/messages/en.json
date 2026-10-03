@@ -155,7 +155,9 @@
       "alerts": {
         "alert": "Alert",
         "alert-text": "Alert text",
-        "alert-urgent-text": "Urgent alert text"
+        "alert-urgent-text": "Urgent alert text",
+        "metric": "Alert rule",
+        "metric-now": "Alert rule (sent at once)"
       },
       "campaigns": {
         "test": "Campaign test"
@@ -191,6 +193,9 @@
         "request-code": "Privacy request code",
         "archive-ready": "Personal data archive ready",
         "erasure-done": "Erasure receipt"
+      },
+      "analytics": {
+        "report": "Scheduled report"
       }
     },
     "status": {
@@ -6885,7 +6890,9 @@
       "automationFailed": "Open messaging health",
       "campaignFailed": "Open campaigns",
       "disputeDeadline": "Open the dispute queue",
-      "assistanceOverdue": "Open the help queue"
+      "assistanceOverdue": "Open the help queue",
+      "metricRule": "Open alert rules",
+      "metricRuleFinance": "Open alert rules"
     },
     "rules": {
       "unseated": "{count, plural, one {{countWords} attendee does not have a seat} other {{countWords} attendees do not have seats}}",
@@ -6907,7 +6914,9 @@
       "automationFailed": "{count, plural, one {{countWords} message or bulk action failed today} other {{countWords} messages or bulk actions failed today}}",
       "campaignFailed": "{count, plural, one {{countWords} campaign send failed today} other {{countWords} campaign sends failed today}}",
       "disputeDeadline": "{count, plural, one {{countWords} dispute needs evidence soon} other {{countWords} disputes need evidence soon}}",
-      "assistanceOverdue": "{count, plural, one {{countWords} help request has waited too long} other {{countWords} help requests have waited too long}}"
+      "assistanceOverdue": "{count, plural, one {{countWords} help request has waited too long} other {{countWords} help requests have waited too long}}",
+      "metricRule": "Alert rule “{title}” is firing",
+      "metricRuleFinance": "Alert rule “{title}” is firing"
     },
     "widget": {
       "title": "Alerts",
@@ -12308,6 +12317,277 @@
       "body": "{name} is a test provider. Allowing lets Yayatoh read and write the following on your behalf:",
       "allow": "Allow",
       "deny": "Deny"
+    }
+  },
+  "analyticsPro": {
+    "tabs": {
+      "label": "Analytics sections",
+      "overview": "Overview",
+      "explore": "Explore",
+      "alerts": "Alert rules",
+      "reports": "Reports"
+    },
+    "explore": {
+      "title": "Explore",
+      "description": "Pick a measure and how to break it down. Attribution shows which campaigns, channels and sources led to sales.",
+      "form": "Choose what to show",
+      "measure": "Measure",
+      "groupCounts": "Counts",
+      "groupMoney": "Money",
+      "groupAttribution": "Attribution",
+      "measures": {
+        "registrations": "Registrations",
+        "tickets": "Tickets sold (net)",
+        "comp_tickets": "Free tickets",
+        "refunded_tickets": "Refunded tickets",
+        "checkins": "Check-ins",
+        "no_shows": "No-shows",
+        "attributed_orders": "Attributed orders",
+        "gross": "Paid",
+        "refunds": "Refunded",
+        "net": "Net sales",
+        "attributed_revenue": "Attributed revenue"
+      },
+      "dimension": "Break down by",
+      "dimensions": {
+        "period": "Period",
+        "event": "Event",
+        "channel": "Channel",
+        "source": "Source",
+        "campaign": "Campaign"
+      },
+      "model": "Attribution model",
+      "modelHint": "Used for attributed orders and revenue only.",
+      "models": {
+        "first": "First touch",
+        "last": "Last touch",
+        "linear": "Linear (shared equally)"
+      },
+      "range": "Period",
+      "ranges": {
+        "7d": "Last 7 days",
+        "30d": "Last 30 days",
+        "90d": "Last 90 days",
+        "365d": "Last 12 months",
+        "custom": "Custom dates"
+      },
+      "from": "From",
+      "to": "To",
+      "customHint": "Used when the period is “Custom dates”.",
+      "granularity": "Show by",
+      "granularities": {
+        "day": "Day",
+        "week": "Week",
+        "month": "Month"
+      },
+      "event": "Event",
+      "allEvents": "All events",
+      "apply": "Show",
+      "errors": {
+        "touch_dimension": "Channel, source and campaign work only with attributed orders or revenue.",
+        "custom_needs_dates": "Enter both dates for a custom period.",
+        "from_after_to": "The end date is before the start date.",
+        "range_too_long": "Choose a period of two years or less.",
+        "invalid_date": "Enter dates as year, month and day."
+      },
+      "resultsCaption": "{measure} by {dimension}, {from} to {to}",
+      "total": "Total",
+      "none": "None",
+      "unnamedCampaign": "Unnamed campaign",
+      "weekOf": "Week of {day}",
+      "currency": "Currency",
+      "value": "Value",
+      "truncated": "Showing the first 500 rows. Choose a shorter period or one event to see the rest.",
+      "emptyTitle": "Nothing to show for this choice",
+      "emptyBody": "There is no data for this measure in this period. Try a longer period, another event or another measure.",
+      "emptyAction": "Show the last 12 months",
+      "export": "Export CSV",
+      "exportLabel": "Export these results as a CSV file",
+      "timeZoneNote": "Days are calendar days in {timeZone}, your organization’s time zone.",
+      "attributionNote": "Attribution shares each attributed order among the visits that led to it inside your attribution window: tracked links clicked, landings with UTM values and other sites that sent the buyer. First touch credits the first visit, last touch the last one, and linear splits the order equally (any leftover cent goes to the last visit). Revenue is what the buyer paid, per currency; orders with no recorded visit are not attributed.",
+      "saveTitle": "Save this view",
+      "viewName": "Name",
+      "save": "Save view",
+      "saved": "View saved",
+      "viewErrors": {
+        "name": "Enter a name of up to 80 characters.",
+        "name_taken": "You already have a view with this name.",
+        "too_many_views": "You have 50 saved views. Delete one first."
+      },
+      "views": "Your saved views",
+      "noViews": "No saved views yet. Choose what to show above, then save it here to come back in one click.",
+      "deleteView": "Delete",
+      "deleteViewLabel": "Delete the view {name}",
+      "deleted": "View deleted"
+    },
+    "rules": {
+      "title": "Alert rules",
+      "description": "Get told when a number crosses a line. Rule alerts go to your team through Alerts, like the built-in ones.",
+      "createTitle": "New alert rule",
+      "editTitle": "Edit alert rule",
+      "name": "Name",
+      "nameHint": "Shown in the alert and its email.",
+      "measure": "Measure",
+      "measures": {
+        "registrations": "Registrations",
+        "tickets": "Tickets sold (net)",
+        "refunded_tickets": "Refunded tickets",
+        "checkins": "Check-ins",
+        "gross": "Paid",
+        "refunds": "Refunded",
+        "net": "Net sales"
+      },
+      "condition": "When it",
+      "conditions": {
+        "above": "is at least",
+        "below": "is below",
+        "rise": "rises by at least (%)",
+        "drop": "drops by at least (%)"
+      },
+      "threshold": "Threshold",
+      "thresholdHint": "A count, an amount for money, or a percentage for rises and drops (compared with the period before).",
+      "window": "Over",
+      "windows": {
+        "d1": "Today",
+        "d7": "The last 7 days",
+        "d14": "The last 14 days",
+        "d30": "The last 30 days"
+      },
+      "currency": "Currency",
+      "currencyHint": "Money rules compare one currency.",
+      "noCurrency": "Not money",
+      "event": "Event",
+      "allEvents": "All events",
+      "severity": "Severity",
+      "severities": {
+        "info": "Info",
+        "warning": "Warning",
+        "critical": "Critical"
+      },
+      "quietHours": "Respect quiet hours",
+      "quietHoursHint": "Email and push wait until 8:00 in each recipient’s time zone when the rule fires between 21:00 and 8:00. In-app alerts show at once.",
+      "create": "Create rule",
+      "save": "Save changes",
+      "back": "Back to alert rules",
+      "created": "Rule created",
+      "saved": "Changes saved",
+      "list": "Your rules",
+      "emptyTitle": "No alert rules yet",
+      "emptyBody": "Create a rule above, for example “Refunds today are at least 10”. You’ll be alerted the moment it’s true.",
+      "columns": {
+        "name": "Rule",
+        "condition": "Condition",
+        "status": "Status",
+        "lastValue": "Latest reading",
+        "actions": "Actions"
+      },
+      "summary": "{measure} {condition} {threshold}, {window}",
+      "status": {
+        "firing": "Firing",
+        "ok": "OK",
+        "off": "Off",
+        "new": "Not checked yet"
+      },
+      "edit": "Edit",
+      "editLabel": "Edit {name}",
+      "turnOff": "Turn off",
+      "turnOn": "Turn on",
+      "turnOffLabel": "Turn off {name}",
+      "turnOnLabel": "Turn on {name}",
+      "delete": "Delete",
+      "deleteLabel": "Delete {name}",
+      "deleted": "Rule deleted",
+      "turnedOff": "Rule turned off",
+      "turnedOn": "Rule turned on",
+      "readOnly": "You can see these rules. Owners, admins, managers and finance can change them.",
+      "errors": {
+        "name": "Enter a name of up to 80 characters.",
+        "name_taken": "A rule with this name already exists.",
+        "threshold": "Enter a number of 0 or more.",
+        "percent_range": "Enter a percentage between 1 and 1000.",
+        "currency_required": "Choose a currency for a money rule.",
+        "too_many_rules": "You have 50 rules. Delete one first."
+      }
+    },
+    "reports": {
+      "title": "Scheduled reports",
+      "description": "A PDF of your analytics by email every day, week or month, counted in your organization’s time zone.",
+      "createTitle": "New scheduled report",
+      "editTitle": "Edit scheduled report",
+      "name": "Name",
+      "frequency": "How often",
+      "frequencies": {
+        "daily": "Every day (yesterday’s figures)",
+        "weekly": "Every Monday (last week, Monday to Sunday)",
+        "monthly": "On the 1st (last month)"
+      },
+      "frequencyShort": {
+        "daily": "Daily",
+        "weekly": "Weekly",
+        "monthly": "Monthly"
+      },
+      "sendHour": "Send at",
+      "sendHourHint": "Time in {timeZone}.",
+      "event": "Event",
+      "allEvents": "All events",
+      "recipients": "Send to",
+      "recipientsHint": "Members who can see orders. Revenue is in the PDF only for those who can see finance; each PDF is in its reader’s language.",
+      "you": "{name} (you)",
+      "create": "Schedule report",
+      "save": "Save changes",
+      "back": "Back to scheduled reports",
+      "created": "Report scheduled",
+      "saved": "Changes saved",
+      "list": "Schedules",
+      "emptyTitle": "No scheduled reports yet",
+      "emptyBody": "Schedule one above: it arrives by email once per period, with a link to its PDF.",
+      "columns": {
+        "name": "Report",
+        "frequency": "How often",
+        "next": "Next send",
+        "recipients": "Recipients",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "recipientsCount": "{count, plural, one {# member} other {# members}}",
+      "status": {
+        "on": "On",
+        "off": "Off"
+      },
+      "edit": "Edit",
+      "editLabel": "Edit {name}",
+      "turnOff": "Turn off",
+      "turnOn": "Turn on",
+      "turnOffLabel": "Turn off {name}",
+      "turnOnLabel": "Turn on {name}",
+      "delete": "Delete",
+      "deleteLabel": "Delete {name}",
+      "deleted": "Schedule deleted",
+      "turnedOff": "Schedule turned off",
+      "turnedOn": "Schedule turned on",
+      "recent": "Recent reports",
+      "recentEmpty": "No report has been sent yet. The first one goes out at the next send time.",
+      "recentColumns": {
+        "report": "Report",
+        "period": "Period",
+        "status": "Status",
+        "file": "PDF"
+      },
+      "runStatus": {
+        "pending": "Waiting",
+        "sent": "Sent",
+        "failed": "Failed"
+      },
+      "download": "Download PDF",
+      "downloadLabel": "Download {name} for {period} (PDF)",
+      "notReady": "Not ready",
+      "errors": {
+        "name": "Enter a name of up to 80 characters.",
+        "name_taken": "A schedule with this name already exists.",
+        "recipients": "Choose at least one member.",
+        "bad_recipient": "Choose members who can see orders.",
+        "too_many_schedules": "You have 25 schedules. Delete one first."
+      }
     }
   }
 }

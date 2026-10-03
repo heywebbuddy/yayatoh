@@ -88,7 +88,8 @@ export const REPORT_LABELS: Readonly<Record<ReportLocale, ReportLabels>> = {
     event: 'Evento',
     empty: 'Nada en este periodo.',
     footer: 'Enviado por Yayatoh para {org}.',
-    footerFinance: 'Enviado por Yayatoh para {org}. Ingresos antes de comisiones; las monedas nunca se suman.',
+    footerFinance:
+      'Enviado por Yayatoh para {org}. Ingresos antes de comisiones; las monedas nunca se suman.',
   },
   fr: {
     subtitle: '{org} · {period}',
@@ -110,7 +111,8 @@ export const REPORT_LABELS: Readonly<Record<ReportLocale, ReportLabels>> = {
     event: 'Événement',
     empty: 'Rien sur cette période.',
     footer: 'Envoyé par Yayatoh pour {org}.',
-    footerFinance: 'Envoyé par Yayatoh pour {org}. Revenus avant frais ; les devises ne sont jamais additionnées.',
+    footerFinance:
+      'Envoyé par Yayatoh pour {org}. Revenus avant frais ; les devises ne sont jamais additionnées.',
   },
   de: {
     subtitle: '{org} · {period}',
@@ -132,7 +134,8 @@ export const REPORT_LABELS: Readonly<Record<ReportLocale, ReportLabels>> = {
     event: 'Event',
     empty: 'Nichts in diesem Zeitraum.',
     footer: 'Gesendet von Yayatoh für {org}.',
-    footerFinance: 'Gesendet von Yayatoh für {org}. Umsatz vor Gebühren; Währungen werden nie zusammengezählt.',
+    footerFinance:
+      'Gesendet von Yayatoh für {org}. Umsatz vor Gebühren; Währungen werden nie zusammengezählt.',
   },
   it: {
     subtitle: '{org} · {period}',
@@ -154,7 +157,8 @@ export const REPORT_LABELS: Readonly<Record<ReportLocale, ReportLabels>> = {
     event: 'Evento',
     empty: 'Niente in questo periodo.',
     footer: 'Inviato da Yayatoh per {org}.',
-    footerFinance: 'Inviato da Yayatoh per {org}. Ricavi al lordo delle commissioni; le valute non vengono mai sommate.',
+    footerFinance:
+      'Inviato da Yayatoh per {org}. Ricavi al lordo delle commissioni; le valute non vengono mai sommate.',
   },
   pt: {
     subtitle: '{org} · {period}',
@@ -198,7 +202,8 @@ export const REPORT_LABELS: Readonly<Record<ReportLocale, ReportLabels>> = {
     event: 'Evenement',
     empty: 'Niets in deze periode.',
     footer: 'Verzonden door Yayatoh voor {org}.',
-    footerFinance: 'Verzonden door Yayatoh voor {org}. Omzet vóór kosten; valuta worden nooit bij elkaar opgeteld.',
+    footerFinance:
+      'Verzonden door Yayatoh voor {org}. Omzet vóór kosten; valuta worden nooit bij elkaar opgeteld.',
   },
   ar: {
     subtitle: '{org} · {period}',

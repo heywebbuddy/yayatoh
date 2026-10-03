@@ -2,7 +2,7 @@ import { DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { and, asc, eq } from 'drizzle-orm';
 import { z } from 'zod';
-import { requireActorTx, memberUserId } from '../access.ts';
+import { memberUserId, requireActorTx } from '../access.ts';
 import { ATTRIBUTION_MODELS } from '../attribution/models.ts';
 import { GRANULARITIES } from '../dashboard.ts';
 import { savedViews } from '../schema.ts';
@@ -90,7 +90,10 @@ export const saveViewCommand = tenantCommand({
       throw new DomainError('validation_failed', 'The period ends before it starts', {
         reason: 'from_after_to',
       });
-    const mine = await tx.select({ id: savedViews.id, name: savedViews.name }).from(savedViews).where(eq(savedViews.userId, userId));
+    const mine = await tx
+      .select({ id: savedViews.id, name: savedViews.name })
+      .from(savedViews)
+      .where(eq(savedViews.userId, userId));
     if (mine.some((v) => v.name.toLowerCase() === input.name.toLowerCase()))
       throw new DomainError('conflict', 'You already have a view with this name', { reason: 'name_taken' });
     if (mine.length >= MAX_VIEWS_PER_MEMBER)

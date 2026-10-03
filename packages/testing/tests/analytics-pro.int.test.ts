@@ -40,9 +40,9 @@ import { addMemberCommand } from '@yayatoh/tenancy';
 import { sql } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import {
-  ATTRIBUTION_FIXTURE as F,
   type AttributionScenario,
   attributionScenario,
+  ATTRIBUTION_FIXTURE as F,
   type OrgFixture,
   ports,
   systemCtx,
@@ -87,7 +87,9 @@ beforeAll(async () => {
   await executeCommand(addMemberCommand, { userId: financeId, role: 'finance' }, a.ctx(), ports);
   await executeCommand(addMemberCommand, { userId: managerId, role: 'manager' }, a.ctx(), ports);
   await executeCommand(addMemberCommand, { userId: scannerId, role: 'scanner' }, a.ctx(), ports);
-  const [o] = await admin<{ timezone: string }[]>`select timezone from tenancy.organizations where id = ${a.org.id}`;
+  const [o] = await admin<
+    { timezone: string }[]
+  >`select timezone from tenancy.organizations where id = ${a.org.id}`;
   tz = o?.timezone ?? 'UTC';
 }, 600_000);
 
@@ -123,9 +125,17 @@ describe('multi-touch attribution (hand-computed, to the cent)', () => {
     });
 
   it('linear by channel and campaign; campaign labels; by period and event', async () => {
-    const channel = await exploreMoney({ measure: 'attributed_revenue', dimension: 'channel', model: 'linear' });
+    const channel = await exploreMoney({
+      measure: 'attributed_revenue',
+      dimension: 'channel',
+      model: 'linear',
+    });
     expect(byKey(channel)).toEqual(F.linearByChannel);
-    const campaign = await exploreMoney({ measure: 'attributed_revenue', dimension: 'campaign', model: 'linear' });
+    const campaign = await exploreMoney({
+      measure: 'attributed_revenue',
+      dimension: 'campaign',
+      model: 'linear',
+    });
     expect(byKey(campaign)).toEqual({
       [`c.${s.campaignId}`]: 1333,
       'u.autumn-social': 1333,
@@ -141,7 +151,9 @@ describe('multi-touch attribution (hand-computed, to the cent)', () => {
     expect(period.rows).toHaveLength(30);
     expect(period.rows.reduce((t, r) => t + r.value, 0)).toBe(F.attributedMinor);
     const event = await exploreMoney({ measure: 'attributed_revenue', dimension: 'event', model: 'last' });
-    expect(event.rows).toEqual([{ key: s.eventId, label: s.eventName, currency: 'USD', value: F.attributedMinor }]);
+    expect(event.rows).toEqual([
+      { key: s.eventId, label: s.eventName, currency: 'USD', value: F.attributedMinor },
+    ]);
     // Everything sold, attributed or not: gross by event.
     const gross = await exploreMoney({ measure: 'gross', dimension: 'event' });
     expect(gross.rows).toEqual([{ key: s.eventId, label: s.eventName, currency: 'USD', value: F.soldMinor }]);
@@ -155,10 +167,20 @@ describe('multi-touch attribution (hand-computed, to the cent)', () => {
     const q = explorerQueries(wh);
     for (const model of ['first', 'last', 'linear'] as const) {
       const pg = await exploreMoney({ measure: 'attributed_revenue', dimension: 'source', model });
-      const tbd = await exploreMoney({ measure: 'attributed_revenue', dimension: 'source', model }, owner(), q.exploreMoneyQuery);
+      const tbd = await exploreMoney(
+        { measure: 'attributed_revenue', dimension: 'source', model },
+        owner(),
+        q.exploreMoneyQuery,
+      );
       expect(tbd.rows).toEqual(pg.rows);
-      const orders = await explore({ measure: 'attributed_orders', dimension: 'campaign', model }, owner(), q.exploreQuery);
-      expect(orders.rows).toEqual((await explore({ measure: 'attributed_orders', dimension: 'campaign', model })).rows);
+      const orders = await explore(
+        { measure: 'attributed_orders', dimension: 'campaign', model },
+        owner(),
+        q.exploreQuery,
+      );
+      expect(orders.rows).toEqual(
+        (await explore({ measure: 'attributed_orders', dimension: 'campaign', model })).rows,
+      );
     }
     tb.assertEveryQueryScoped();
     await admin`delete from analytics.event_sync where adapter = 'tinybird' and org_id = ${a.org.id}`;
@@ -204,18 +226,28 @@ describe('explorer: finance gating, validation, saved views, CSV', () => {
     await expect(
       exploreMoney({ measure: 'attributed_revenue', dimension: 'source' }, viewer),
     ).rejects.toMatchObject({ code: 'forbidden' });
-    await expect(exploreMoney({ measure: 'gross', dimension: 'period' }, as(managerId))).rejects.toMatchObject({
+    await expect(
+      exploreMoney({ measure: 'gross', dimension: 'period' }, as(managerId)),
+    ).rejects.toMatchObject({
       code: 'forbidden',
     });
     // The counts query does not take money measures at all.
     await expect(
       explore({ measure: 'attributed_revenue', dimension: 'source' }, viewer),
     ).rejects.toMatchObject({ code: 'validation_failed' });
-    const counts = await explore({ measure: 'attributed_orders', dimension: 'source', model: 'linear' }, viewer);
+    const counts = await explore(
+      { measure: 'attributed_orders', dimension: 'source', model: 'linear' },
+      viewer,
+    );
     expect(byKey(counts)).toEqual(F.orders.linear);
-    const fin = await exploreMoney({ measure: 'net', dimension: 'period', granularity: 'month' }, as(financeId));
+    const fin = await exploreMoney(
+      { measure: 'net', dimension: 'period', granularity: 'month' },
+      as(financeId),
+    );
     expect(fin.rows.every((r) => r.currency === 'USD')).toBe(true);
-    await expect(explore({ measure: 'registrations', dimension: 'period' }, as(scannerId))).rejects.toMatchObject({
+    await expect(
+      explore({ measure: 'registrations', dimension: 'period' }, as(scannerId)),
+    ).rejects.toMatchObject({
       code: 'forbidden',
     });
   });
@@ -225,16 +257,31 @@ describe('explorer: finance gating, validation, saved views, CSV', () => {
       code: 'validation_failed',
       details: { reason: 'touch_dimension' },
     });
-    await expect(explore({ measure: 'registrations', dimension: 'period', range: 'custom' })).rejects.toMatchObject({
+    await expect(
+      explore({ measure: 'registrations', dimension: 'period', range: 'custom' }),
+    ).rejects.toMatchObject({
       details: { reason: 'custom_needs_dates' },
     });
     await expect(
-      explore({ measure: 'registrations', dimension: 'period', range: 'custom', from: '2027-02-01', to: '2027-01-01' }),
+      explore({
+        measure: 'registrations',
+        dimension: 'period',
+        range: 'custom',
+        from: '2027-02-01',
+        to: '2027-01-01',
+      }),
     ).rejects.toMatchObject({ details: { reason: 'from_after_to' } });
-    await expect(explore({ measure: 'sql', dimension: 'period' })).rejects.toMatchObject({ code: 'validation_failed' });
+    await expect(explore({ measure: 'sql', dimension: 'period' })).rejects.toMatchObject({
+      code: 'validation_failed',
+    });
     const regs = await explore({ measure: 'registrations', dimension: 'event' });
     expect(regs.rows).toEqual([{ key: s.eventId, label: s.eventName, currency: null, value: 4 }]);
-    const tickets = await explore({ measure: 'tickets', dimension: 'period', granularity: 'month', range: '7d' });
+    const tickets = await explore({
+      measure: 'tickets',
+      dimension: 'period',
+      granularity: 'month',
+      range: '7d',
+    });
     expect(tickets.rows.reduce((t, r) => t + r.value, 0)).toBe(5);
   });
 
@@ -248,28 +295,55 @@ describe('explorer: finance gating, validation, saved views, CSV', () => {
     };
     const mine = await executeCommand(saveViewCommand, view, as(a.viewerId), ports);
     expect(mine).toMatchObject({ measure: 'attributed_orders', model: 'linear', range: '90d', from: null });
-    await expect(executeCommand(saveViewCommand, { ...view, name: view.name.toUpperCase() }, as(a.viewerId), ports)).rejects.toMatchObject({
+    await expect(
+      executeCommand(saveViewCommand, { ...view, name: view.name.toUpperCase() }, as(a.viewerId), ports),
+    ).rejects.toMatchObject({
       code: 'conflict',
     });
     // Another member may use the same name; neither sees the other's.
     await executeCommand(saveViewCommand, view, as(managerId), ports);
     const viewerViews = await executeQuery(listSavedViewsQuery, {}, as(a.viewerId), ports);
     expect(viewerViews.map((v) => v.id)).toEqual([mine.id]);
-    await expect(executeCommand(deleteViewCommand, { viewId: mine.id }, as(managerId), ports)).rejects.toMatchObject({
+    await expect(
+      executeCommand(deleteViewCommand, { viewId: mine.id }, as(managerId), ports),
+    ).rejects.toMatchObject({
       code: 'not_found',
     });
     await expect(
-      executeCommand(saveViewCommand, { ...view, name: 'Money', measure: 'gross', dimension: 'period' }, as(a.viewerId), ports),
+      executeCommand(
+        saveViewCommand,
+        { ...view, name: 'Money', measure: 'gross', dimension: 'period' },
+        as(a.viewerId),
+        ports,
+      ),
     ).rejects.toMatchObject({ code: 'forbidden' });
     await expect(
-      executeCommand(saveViewCommand, { ...view, name: 'Bad', measure: 'checkins', dimension: 'campaign' }, as(a.viewerId), ports),
+      executeCommand(
+        saveViewCommand,
+        { ...view, name: 'Bad', measure: 'checkins', dimension: 'campaign' },
+        as(a.viewerId),
+        ports,
+      ),
     ).rejects.toMatchObject({ details: { reason: 'touch_dimension' } });
     await expect(
-      executeCommand(saveViewCommand, { ...view, name: 'Custom', range: 'custom', from: '2027-01-01' }, as(a.viewerId), ports),
+      executeCommand(
+        saveViewCommand,
+        { ...view, name: 'Custom', range: 'custom', from: '2027-01-01' },
+        as(a.viewerId),
+        ports,
+      ),
     ).rejects.toMatchObject({ details: { reason: 'custom_needs_dates' } });
     const custom = await executeCommand(
       saveViewCommand,
-      { ...view, name: 'Custom', measure: 'gross', dimension: 'event', range: 'custom', from: '2027-01-01', to: '2027-01-31' },
+      {
+        ...view,
+        name: 'Custom',
+        measure: 'gross',
+        dimension: 'event',
+        range: 'custom',
+        from: '2027-01-01',
+        to: '2027-01-31',
+      },
       as(financeId),
       ports,
     );
@@ -278,14 +352,21 @@ describe('explorer: finance gating, validation, saved views, CSV', () => {
     expect(await executeQuery(listSavedViewsQuery, {}, as(a.viewerId), ports)).toEqual([]);
     // Org B's member never sees org A's views (RLS).
     const [leak] = await withTenant(b.ctx(), (tx) =>
-      tx.execute<{ n: number }>(sql`select count(*)::int as n from analytics.saved_views where org_id = ${a.org.id}::uuid`),
+      tx.execute<{ n: number }>(
+        sql`select count(*)::int as n from analytics.saved_views where org_id = ${a.org.id}::uuid`,
+      ),
     );
     expect(leak?.n).toBe(0);
   });
 
   it('CSV export through the allowlist serializer', async () => {
     const d = await exploreMoney({ measure: 'attributed_revenue', dimension: 'source', model: 'linear' });
-    const csv = exploreCsv(d, { dimension: 'Source', currency: 'Currency', value: 'Revenue' }, (r) => r.label ?? 'None', 'Total');
+    const csv = exploreCsv(
+      d,
+      { dimension: 'Source', currency: 'Currency', value: 'Revenue' },
+      (r) => r.label ?? 'None',
+      'Total',
+    );
     const lines = csv.split('\r\n');
     expect(EXPLORE_CSV_COLUMNS).toHaveLength(3);
     expect(lines[0]).toBe('﻿Source,Currency,Revenue');
@@ -300,7 +381,9 @@ async function deliverAlerts() {
   await catchUpAlerts(a.org.id, { notifier: createNotifier() });
 }
 const ruleAlerts = async (ctx: Ctx = owner()) =>
-  (await executeQuery(listAlertsQuery, { status: 'active' }, ctx, ports)).filter((x) => x.rule.startsWith('metricRule'));
+  (await executeQuery(listAlertsQuery, { status: 'active' }, ctx, ports)).filter((x) =>
+    x.rule.startsWith('metricRule'),
+  );
 
 describe('organizer alert rules on the M3.2b engine', () => {
   it('fires, updates, resolves and reopens through the outbox; sent once per change', async () => {
@@ -314,7 +397,13 @@ describe('organizer alert rules on the M3.2b engine', () => {
     expect(rule).toMatchObject({ state: 'firing', lastValue: 4, enabled: true, quietHours: true });
     await deliverAlerts();
     const [alert] = (await ruleAlerts()).filter((x) => x.title === name);
-    expect(alert).toMatchObject({ rule: 'metricRule', state: 'open', count: 4, severity: 'warning', fixPath: '/analytics/alerts' });
+    expect(alert).toMatchObject({
+      rule: 'metricRule',
+      state: 'open',
+      count: 4,
+      severity: 'warning',
+      fixPath: '/analytics/alerts',
+    });
     expect(alert?.params).toMatchObject({ value: 4, threshold: 3, windowDays: 1 });
     const sent = () =>
       admin<{ kind: string; channel: string }[]>`
@@ -324,14 +413,24 @@ describe('organizer alert rules on the M3.2b engine', () => {
     expect(new Set(first.map((m) => m.kind))).toEqual(new Set(['alerts.metric']));
     expect(first.some((m) => m.channel === 'sms')).toBe(false);
     // Evaluating again with nothing new emits nothing and sends nothing.
-    const again = await withTenant(systemCtx(a.org.id), (tx) => evaluateAlertRulesTx(systemCtx(a.org.id), tx));
+    const again = await withTenant(systemCtx(a.org.id), (tx) =>
+      evaluateAlertRulesTx(systemCtx(a.org.id), tx),
+    );
     expect(again.emitted).toBe(0);
     await deliverAlerts();
     expect(await sent()).toHaveLength(first.length);
     // A higher threshold clears it: the alert resolves.
     await executeCommand(
       updateAlertRuleCommand,
-      { ruleId: rule.id, name, measure: 'registrations', condition: 'above', threshold: 10, windowDays: 1, eventId: s.eventId },
+      {
+        ruleId: rule.id,
+        name,
+        measure: 'registrations',
+        condition: 'above',
+        threshold: 10,
+        windowDays: 1,
+        eventId: s.eventId,
+      },
       owner(),
       ports,
     );
@@ -369,14 +468,26 @@ describe('organizer alert rules on the M3.2b engine', () => {
   it('quiet hours in the recipient’s time zone: email waits; without quiet hours it goes at once', async () => {
     const quiet = await executeCommand(
       createAlertRuleCommand,
-      { name: `Quiet ${uuidv7().slice(-6)}`, measure: 'tickets', condition: 'above', threshold: 1, windowDays: 7, eventId: s.eventId },
+      {
+        name: `Quiet ${uuidv7().slice(-6)}`,
+        measure: 'tickets',
+        condition: 'above',
+        threshold: 1,
+        windowDays: 7,
+        eventId: s.eventId,
+      },
       owner(),
       ports,
     );
     await deliverAlerts();
     const [alert] = (await ruleAlerts()).filter((x) => x.title === quiet.name);
     // 23:30 in the org's (and so the recipients') time zone.
-    const local = new Intl.DateTimeFormat('en-CA', { timeZone: tz, year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
+    const local = new Intl.DateTimeFormat('en-CA', {
+      timeZone: tz,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).format(new Date());
     const night = zonedTimeToUtc(`${local}T23:30`, tz);
     await admin`update notifications.messages set send_after = ${night}::timestamptz - interval '1 minute'
       where org_id = ${a.org.id} and dedupe_key like ${`alert:${alert?.id}:%`}`;
@@ -401,14 +512,25 @@ describe('organizer alert rules on the M3.2b engine', () => {
   it('an acknowledged rule alert still firing opens again after the timeout (the sweep)', async () => {
     const r = await executeCommand(
       createAlertRuleCommand,
-      { name: `Sweep ${uuidv7().slice(-6)}`, measure: 'checkins', condition: 'below', threshold: 5, windowDays: 30, eventId: s.eventId },
+      {
+        name: `Sweep ${uuidv7().slice(-6)}`,
+        measure: 'checkins',
+        condition: 'below',
+        threshold: 5,
+        windowDays: 30,
+        eventId: s.eventId,
+      },
       owner(),
       ports,
     );
     await deliverAlerts();
     const [alert] = (await ruleAlerts()).filter((x) => x.title === r.name);
     await executeCommand(acknowledgeAlertCommand, { alertId: alert?.id as string }, owner(), ports);
-    await evaluateOrgNow(a.org.id, { notifier: createNotifier() }, { now: new Date(Date.now() + 61 * 60_000) });
+    await evaluateOrgNow(
+      a.org.id,
+      { notifier: createNotifier() },
+      { now: new Date(Date.now() + 61 * 60_000) },
+    );
     const [after] = (await ruleAlerts()).filter((x) => x.title === r.name);
     expect(after?.state).toBe('open');
     await executeCommand(deleteAlertRuleCommand, { ruleId: r.id }, owner(), ports);
@@ -420,23 +542,54 @@ describe('organizer alert rules on the M3.2b engine', () => {
     await expect(
       executeCommand(createAlertRuleCommand, { ...base, name: 'Viewer' }, as(a.viewerId), ports),
     ).rejects.toMatchObject({ code: 'forbidden' });
-    const m = await executeCommand(createAlertRuleCommand, { ...base, name: `Manager ${uuidv7().slice(-6)}` }, as(managerId), ports);
+    const m = await executeCommand(
+      createAlertRuleCommand,
+      { ...base, name: `Manager ${uuidv7().slice(-6)}` },
+      as(managerId),
+      ports,
+    );
     await expect(
-      executeCommand(createAlertRuleCommand, { ...base, name: 'Money', measure: 'gross', currency: 'USD' }, as(managerId), ports),
+      executeCommand(
+        createAlertRuleCommand,
+        { ...base, name: 'Money', measure: 'gross', currency: 'USD' },
+        as(managerId),
+        ports,
+      ),
     ).rejects.toMatchObject({ code: 'forbidden' });
     const money = await executeCommand(
       createAlertRuleCommand,
-      { ...base, name: `Refunds ${uuidv7().slice(-6)}`, measure: 'refunds', condition: 'above', threshold: 100_000, currency: 'USD' },
+      {
+        ...base,
+        name: `Refunds ${uuidv7().slice(-6)}`,
+        measure: 'refunds',
+        condition: 'above',
+        threshold: 100_000,
+        currency: 'USD',
+      },
       as(financeId),
       ports,
     );
-    expect((await executeQuery(listAlertRulesQuery, {}, as(managerId), ports)).some((r) => r.id === money.id)).toBe(false);
-    expect((await executeQuery(listAlertRulesQuery, {}, as(financeId), ports)).some((r) => r.id === money.id)).toBe(true);
+    expect(
+      (await executeQuery(listAlertRulesQuery, {}, as(managerId), ports)).some((r) => r.id === money.id),
+    ).toBe(false);
+    expect(
+      (await executeQuery(listAlertRulesQuery, {}, as(financeId), ports)).some((r) => r.id === money.id),
+    ).toBe(true);
     await expect(
-      executeCommand(createAlertRuleCommand, { ...base, name: 'No currency', measure: 'net' }, as(financeId), ports),
+      executeCommand(
+        createAlertRuleCommand,
+        { ...base, name: 'No currency', measure: 'net' },
+        as(financeId),
+        ports,
+      ),
     ).rejects.toMatchObject({ details: { reason: 'currency_required' } });
     await expect(
-      executeCommand(createAlertRuleCommand, { ...base, name: 'Huge', condition: 'rise', threshold: 5000 }, owner(), ports),
+      executeCommand(
+        createAlertRuleCommand,
+        { ...base, name: 'Huge', condition: 'rise', threshold: 5000 },
+        owner(),
+        ports,
+      ),
     ).rejects.toMatchObject({ details: { reason: 'percent_range' } });
     await expect(
       executeCommand(createAlertRuleCommand, { ...base, name: m.name.toLowerCase() }, owner(), ports),
@@ -489,7 +642,9 @@ describe('scheduled PDF reports', () => {
 
   it('owners and admins only; recipients must be members who read orders', async () => {
     const base = { name: `Weekly ${uuidv7().slice(-6)}`, frequency: 'weekly', recipients: [a.ownerId] };
-    await expect(executeCommand(createReportScheduleCommand, base, as(managerId), ports)).rejects.toMatchObject({
+    await expect(
+      executeCommand(createReportScheduleCommand, base, as(managerId), ports),
+    ).rejects.toMatchObject({
       code: 'forbidden',
     });
     await expect(
@@ -509,7 +664,9 @@ describe('scheduled PDF reports', () => {
     await expect(executeCommand(createReportScheduleCommand, base, owner(), ports)).rejects.toMatchObject({
       code: 'conflict',
     });
-    expect((await executeQuery(listReportSchedulesQuery, {}, owner(), ports)).some((x) => x.id === sched.id)).toBe(true);
+    expect(
+      (await executeQuery(listReportSchedulesQuery, {}, owner(), ports)).some((x) => x.id === sched.id),
+    ).toBe(true);
     await expect(executeQuery(listReportSchedulesQuery, {}, as(a.viewerId), ports)).rejects.toMatchObject({
       code: 'forbidden',
     });
@@ -523,7 +680,13 @@ describe('scheduled PDF reports', () => {
     const r = fakeRenderer();
     const sched = await executeCommand(
       createReportScheduleCommand,
-      { name: `Daily ${uuidv7().slice(-6)}`, frequency: 'daily', sendHour: 7, eventId: s.eventId, recipients: [a.ownerId, a.viewerId, financeId] },
+      {
+        name: `Daily ${uuidv7().slice(-6)}`,
+        frequency: 'daily',
+        sendHour: 7,
+        eventId: s.eventId,
+        recipients: [a.ownerId, a.viewerId, financeId],
+      },
       owner(),
       ports,
     );
@@ -578,10 +741,14 @@ describe('scheduled PDF reports', () => {
     expect(new TextDecoder().decode(pdf.pdf)).toMatch(/^%PDF-1\.7/);
     const ownerRuns = await executeQuery(listReportRunsQuery, {}, owner(), ports);
     const financeFile = ownerRuns.find((x) => x.scheduleId === sched.id)?.fileId as string;
-    await expect(executeQuery(reportFileQuery, { fileId: financeFile }, as(a.viewerId), ports)).rejects.toMatchObject({
+    await expect(
+      executeQuery(reportFileQuery, { fileId: financeFile }, as(a.viewerId), ports),
+    ).rejects.toMatchObject({
       code: 'not_found',
     });
-    await expect(executeQuery(reportFileQuery, { fileId: financeFile }, b.ctx(), ports)).rejects.toMatchObject({
+    await expect(
+      executeQuery(reportFileQuery, { fileId: financeFile }, b.ctx(), ports),
+    ).rejects.toMatchObject({
       code: 'not_found',
     });
     // A period sent is never sent again, even run directly.
@@ -589,7 +756,12 @@ describe('scheduled PDF reports', () => {
     expect(await runReportPeriod(a.org.id, sched.id, period, deps(r), at)).toBe('skipped');
     expect(await messages(sched.id)).toHaveLength(msgs.length);
     // Switched off: nothing more.
-    await executeCommand(setReportScheduleEnabledCommand, { scheduleId: sched.id, enabled: false }, owner(), ports);
+    await executeCommand(
+      setReportScheduleEnabledCommand,
+      { scheduleId: sched.id, enabled: false },
+      owner(),
+      ports,
+    );
     const later = await runDueReports(a.org.id, deps(r), new Date(at.getTime() + 3 * 86_400_000));
     expect(later.sent).toBe(0);
     await executeCommand(
@@ -614,11 +786,20 @@ describe('scheduled PDF reports', () => {
       // Started at 03:00 on Mar 26 (Berlin): the first period it sends is Mar 26 itself.
       await admin`update analytics.report_schedules set active_since = '2027-03-26T02:00:00Z' where id = ${sched.id}`;
       await admin`update analytics.report_schedules set enabled = false where org_id = ${a.org.id} and id <> ${sched.id}`;
-      for (let t = Date.parse('2027-03-26T00:00:00Z'); t <= Date.parse('2027-03-30T12:00:00Z'); t += 50 * 60_000)
+      for (
+        let t = Date.parse('2027-03-26T00:00:00Z');
+        t <= Date.parse('2027-03-30T12:00:00Z');
+        t += 50 * 60_000
+      )
         await runDueReports(a.org.id, deps(r), new Date(t));
       const runs = await admin<{ period_key: string; sent_at: Date }[]>`
         select period_key, sent_at from analytics.report_runs where schedule_id = ${sched.id} order by period_key`;
-      expect(runs.map((x) => x.period_key)).toEqual(['D2027-03-26', 'D2027-03-27', 'D2027-03-28', 'D2027-03-29']);
+      expect(runs.map((x) => x.period_key)).toEqual([
+        'D2027-03-26',
+        'D2027-03-27',
+        'D2027-03-28',
+        'D2027-03-29',
+      ]);
       const emails = (await messages(sched.id)).filter((m) => m.channel === 'email');
       expect(emails).toHaveLength(4);
       await executeCommand(deleteReportScheduleCommand, { scheduleId: sched.id }, owner(), ports);

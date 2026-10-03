@@ -37,5 +37,10 @@ export const privateColumns = columnPrivacy('analytics', {
   },
   report_schedules: { name: internal(), frequency: 'vocab' },
   report_runs: { period_key: 'vocab', status: 'vocab', error: internal() },
-  report_files: { locale: 'vocab' },
+  report_files: {
+    locale: 'vocab',
+    pdf: internal('none', {
+      why: 'rendered report PDF bytes (figures, event names), never text; served only to members by reportFileQuery',
+    }),
+  },
 });

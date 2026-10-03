@@ -13,6 +13,7 @@ export {
   verifyClickToken,
 } from './domain/click-token.ts';
 export { type DestinationProblem, destinationProblem, redirectTarget } from './domain/destination.ts';
+export { referralUtm } from './domain/referral.ts';
 export {
   cleanUtmValue,
   decodeUtmCookie,
@@ -26,4 +27,3 @@ export {
   utmFromParams,
 } from './domain/utm.ts';
 export { DAY_MS, DEFAULT_WINDOW_DAYS, MAX_WINDOW_DAYS } from './domain/window.ts';
-export { referralUtm } from './domain/referral.ts';

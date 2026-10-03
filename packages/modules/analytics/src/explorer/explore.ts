@@ -29,8 +29,8 @@ import {
   type Dimension,
   isAttributionMeasure,
   MEASURES,
-  MONEY_MEASURES,
   type Measure,
+  MONEY_MEASURES,
   type MoneyMeasure,
   PRESET_DAYS,
   RANGE_PRESETS,
@@ -175,7 +175,11 @@ export async function exploreTx(
   if (isAttributionMeasure(measure)) {
     for (const r of await warehouse.attributionTotals(scope, { ...q, model: input.model })) {
       const key =
-        dimension === 'period' ? bucketOf(r.day, g) : dimension === 'event' ? r.eventId : touchKey(dimension, r);
+        dimension === 'period'
+          ? bucketOf(r.day, g)
+          : dimension === 'event'
+            ? r.eventId
+            : touchKey(dimension, r);
       if (measure === 'attributed_orders') add(acc, key, '', r.creditBps);
       else add(acc, key, r.currency, r.revenueMinor);
     }
@@ -184,8 +188,7 @@ export async function exploreTx(
     if (money) {
       const { series } = buildRevenue(daily, range, g, null);
       for (const s of series) {
-        const v =
-          measure === 'gross' ? s.grossMinor : measure === 'refunds' ? s.refundsMinor : s.netMinor;
+        const v = measure === 'gross' ? s.grossMinor : measure === 'refunds' ? s.refundsMinor : s.netMinor;
         add(acc, s.bucket, s.currency, v);
       }
     } else {
@@ -215,16 +218,13 @@ export async function exploreTx(
   // Period rows: every bucket in order, zeros included (counts; money per currency seen).
   let rows: ExploreRowDto[] = [];
   if (dimension === 'period') {
-    const currencies = money
-      ? [...new Set([...acc.values()].flatMap((m) => [...m.keys()]))].sort()
-      : [''];
+    const currencies = money ? [...new Set([...acc.values()].flatMap((m) => [...m.keys()]))].sort() : [''];
     for (const b of bucketsBetween(range.from, range.to, g))
       for (const c of currencies)
         rows.push({ key: b, label: null, currency: money ? c : null, value: acc.get(b)?.get(c) ?? 0 });
   } else {
     for (const [key, per] of acc)
-      for (const [c, value] of per)
-        rows.push({ key, label: null, currency: money ? c : null, value });
+      for (const [c, value] of per) rows.push({ key, label: null, currency: money ? c : null, value });
     rows.sort(
       (a, b) =>
         (a.currency ?? '').localeCompare(b.currency ?? '') || b.value - a.value || a.key.localeCompare(b.key),

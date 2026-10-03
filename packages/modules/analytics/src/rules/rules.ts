@@ -1,6 +1,6 @@
 import type { TenantTx } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
-import { type Ctx, type DomainEvent, DomainError, requireOrg } from '@yayatoh/kernel';
+import { type Ctx, DomainError, type DomainEvent, requireOrg } from '@yayatoh/kernel';
 import { emitEvents, tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { asc, eq, sql } from 'drizzle-orm';
 import { z } from 'zod';
@@ -115,8 +115,13 @@ function checkFields(input: z.output<typeof RuleFields>) {
   const money = isRuleMoney(input.measure);
   if (money && !input.currency)
     throw new DomainError('validation_failed', 'Choose a currency', { reason: 'currency_required' });
-  if ((input.condition === 'rise' || input.condition === 'drop') && (input.threshold < 1 || input.threshold > 1000))
-    throw new DomainError('validation_failed', 'A change is between 1 % and 1000 %', { reason: 'percent_range' });
+  if (
+    (input.condition === 'rise' || input.condition === 'drop') &&
+    (input.threshold < 1 || input.threshold > 1000)
+  )
+    throw new DomainError('validation_failed', 'A change is between 1 % and 1000 %', {
+      reason: 'percent_range',
+    });
   return { ...input, currency: money ? input.currency : '' };
 }
 
@@ -382,7 +387,8 @@ export function alertRuleCommands(warehouse: AnalyticsWarehouse) {
       const row = await loadRuleTx(tx, ctx, input.ruleId);
       await tx.delete(alertRules).where(eq(alertRules.id, row.id));
       // Its alert resolves (and stays resolved: the rule is gone).
-      if (row.lastState === 'firing') emit(evaluatedEvent(payloadOf(row, false, false, row.lastValue ?? 0, 0)));
+      if (row.lastState === 'firing')
+        emit(evaluatedEvent(payloadOf(row, false, false, row.lastValue ?? 0, 0)));
       return { deleted: true as const };
     },
     audit: (input) => ({
@@ -392,8 +398,17 @@ export function alertRuleCommands(warehouse: AnalyticsWarehouse) {
     }),
   });
 
-  return { createAlertRuleCommand, updateAlertRuleCommand, setAlertRuleEnabledCommand, deleteAlertRuleCommand };
+  return {
+    createAlertRuleCommand,
+    updateAlertRuleCommand,
+    setAlertRuleEnabledCommand,
+    deleteAlertRuleCommand,
+  };
 }
 
-export const { createAlertRuleCommand, updateAlertRuleCommand, setAlertRuleEnabledCommand, deleteAlertRuleCommand } =
-  alertRuleCommands(lazyWarehouse());
+export const {
+  createAlertRuleCommand,
+  updateAlertRuleCommand,
+  setAlertRuleEnabledCommand,
+  deleteAlertRuleCommand,
+} = alertRuleCommands(lazyWarehouse());

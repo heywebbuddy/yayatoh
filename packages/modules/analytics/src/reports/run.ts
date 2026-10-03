@@ -60,7 +60,9 @@ interface Gathered {
 }
 
 const lockPair = (tx: TenantTx, orgId: string, scheduleId: string, key: string) =>
-  tx.execute(sql`select pg_advisory_xact_lock(hashtextextended(${`an:report:${orgId}:${scheduleId}:${key}`}, 0))`);
+  tx.execute(
+    sql`select pg_advisory_xact_lock(hashtextextended(${`an:report:${orgId}:${scheduleId}:${key}`}, 0))`,
+  );
 
 const sysCtx = (orgId: string, now: Date) =>
   ({ ...createCtx({ orgId, actor: { type: 'system', name: REPORT_ACTOR } }), now }) as Ctx;
@@ -85,7 +87,7 @@ async function claimTx(
     .select()
     .from(reportRuns)
     .where(and(eq(reportRuns.scheduleId, scheduleId), eq(reportRuns.periodKey, period.key)));
-  if (!run || run.status !== 'pending' || run.attempts >= MAX_RUN_ATTEMPTS) return null;
+  if (run?.status !== 'pending' || run.attempts >= MAX_RUN_ATTEMPTS) return null;
   await tx
     .update(reportRuns)
     .set({ attempts: run.attempts + 1, updatedAt: ctx.now })
@@ -103,7 +105,12 @@ async function claimTx(
   const top = [];
   for (const t of topEventCounts(await warehouse.eventTotals(scope, q), TOP_EVENTS)) {
     const e = await findEventTx(tx, t.eventId);
-    top.push({ name: e?.name ?? '', registrations: t.registrations, tickets: t.tickets, checkins: t.checkins });
+    top.push({
+      name: e?.name ?? '',
+      registrations: t.registrations,
+      tickets: t.tickets,
+      checkins: t.checkins,
+    });
   }
   return {
     runId: run.id,
@@ -125,7 +132,9 @@ async function claimTx(
 export function periodLabel(period: ReportPeriod, frequency: ReportFrequency, locale: string): string {
   const d = (day: string) => new Date(`${day}T12:00:00Z`);
   if (frequency === 'monthly')
-    return new Intl.DateTimeFormat(locale, { timeZone: 'UTC', month: 'long', year: 'numeric' }).format(d(period.from));
+    return new Intl.DateTimeFormat(locale, { timeZone: 'UTC', month: 'long', year: 'numeric' }).format(
+      d(period.from),
+    );
   const f = new Intl.DateTimeFormat(locale, { timeZone: 'UTC', dateStyle: 'medium' });
   return frequency === 'daily' ? f.format(d(period.from)) : f.formatRange(d(period.from), d(period.to));
 }
@@ -137,11 +146,25 @@ const money = (minor: number, currency: string, locale: string) => {
 };
 
 /** The report's HTML for one language and revenue visibility (pure). */
-export function reportHtml(g: Omit<Gathered, 'runId' | 'recipients'>, locale: ReportLocale, finance: boolean, now: Date) {
+export function reportHtml(
+  g: Omit<Gathered, 'runId' | 'recipients'>,
+  locale: ReportLocale,
+  finance: boolean,
+  now: Date,
+) {
   const L = REPORT_LABELS[locale];
   const n = new Intl.NumberFormat(locale);
-  const dayFmt = new Intl.DateTimeFormat(locale, { timeZone: 'UTC', weekday: 'short', day: 'numeric', month: 'short' });
-  const madeFmt = new Intl.DateTimeFormat(locale, { timeZone: g.timeZone, dateStyle: 'medium', timeStyle: 'short' });
+  const dayFmt = new Intl.DateTimeFormat(locale, {
+    timeZone: 'UTC',
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+  });
+  const madeFmt = new Intl.DateTimeFormat(locale, {
+    timeZone: g.timeZone,
+    dateStyle: 'medium',
+    timeStyle: 'short',
+  });
   const figures: [string, string][] = [
     [L.registrations, n.format(g.totals.registrations)],
     [L.tickets, n.format(g.totals.tickets)],
@@ -216,15 +239,20 @@ export async function runReportPeriod(
     const variantOf = (r: Recipient): string => `${reportLocale(locales.get(r.userId))}|${r.finance ? 1 : 0}`;
     const variants = [...new Set(g.recipients.map(variantOf))];
     const have = await withTenant(ctx, async (tx) =>
-      (await tx
-        .select({ locale: reportFiles.locale, finance: reportFiles.finance })
-        .from(reportFiles)
-        .where(eq(reportFiles.runId, g.runId))).map((f) => `${f.locale}|${f.finance ? 1 : 0}`),
+      (
+        await tx
+          .select({ locale: reportFiles.locale, finance: reportFiles.finance })
+          .from(reportFiles)
+          .where(eq(reportFiles.runId, g.runId))
+      ).map((f) => `${f.locale}|${f.finance ? 1 : 0}`),
     );
     const rendered: { locale: string; finance: boolean; pdf: Uint8Array }[] = [];
     for (const v of variants.filter((x) => !have.includes(x))) {
       const [locale, fin] = v.split('|') as [ReportLocale, string];
-      const pdf = await deps.renderer.render({ html: reportHtml(g, locale, fin === '1', now), filename: `report-${period.key}.pdf` });
+      const pdf = await deps.renderer.render({
+        html: reportHtml(g, locale, fin === '1', now),
+        filename: `report-${period.key}.pdf`,
+      });
       rendered.push({ locale, finance: fin === '1', pdf });
     }
     return await withTenant(ctx, async (tx) => {
@@ -234,7 +262,14 @@ export async function runReportPeriod(
       for (const r of rendered)
         await tx
           .insert(reportFiles)
-          .values({ orgId, runId: g.runId, locale: r.locale, finance: r.finance, pdf: r.pdf, bytes: r.pdf.byteLength })
+          .values({
+            orgId,
+            runId: g.runId,
+            locale: r.locale,
+            finance: r.finance,
+            pdf: r.pdf,
+            bytes: r.pdf.byteLength,
+          })
           .onConflictDoNothing();
       const files = await tx
         .select({ id: reportFiles.id, locale: reportFiles.locale, finance: reportFiles.finance })
@@ -247,12 +282,12 @@ export async function runReportPeriod(
         const locale = reportLocale(locales.get(r.userId));
         const href = `/analytics/reports/files/${fileId}`;
         await deps.notifier.enqueue(tx, {
-            kind: REPORT_KIND,
-            to: { userId: r.userId, locale },
-            params: { name: g.scheduleName, period: periodLabel(period, g.frequency, locale), _href: href },
-            dedupeKey: `report:${scheduleId}:${period.key}:${r.userId}`,
-            href,
-          });
+          kind: REPORT_KIND,
+          to: { userId: r.userId, locale },
+          params: { name: g.scheduleName, period: periodLabel(period, g.frequency, locale), _href: href },
+          dedupeKey: `report:${scheduleId}:${period.key}:${r.userId}`,
+          href,
+        });
       }
       await tx
         .update(reportRuns)
@@ -299,7 +334,15 @@ export async function dueReportsTx(
     const runs = await tx
       .select({ key: reportRuns.periodKey, status: reportRuns.status, attempts: reportRuns.attempts })
       .from(reportRuns)
-      .where(and(eq(reportRuns.scheduleId, s.id), inArray(reportRuns.periodKey, periods.map((p) => p.key))));
+      .where(
+        and(
+          eq(reportRuns.scheduleId, s.id),
+          inArray(
+            reportRuns.periodKey,
+            periods.map((p) => p.key),
+          ),
+        ),
+      );
     const done = new Set(
       runs.filter((r) => r.status !== 'pending' || r.attempts >= MAX_RUN_ATTEMPTS).map((r) => r.key),
     );

@@ -9,11 +9,7 @@ export function CodeBlock({ title, code }: { title: string; code: string }) {
         tabIndex={0}
         className="overflow-x-auto rounded-card border border-line bg-surface-solid"
       >
-        <pre
-          dir="ltr"
-          lang="en"
-          className="w-max min-w-full p-4 font-mono text-caption leading-5 text-ink"
-        >
+        <pre dir="ltr" lang="en" className="w-max min-w-full p-4 font-mono text-caption leading-5 text-ink">
           <code>{code}</code>
         </pre>
       </section>

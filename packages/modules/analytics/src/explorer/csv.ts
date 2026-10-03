@@ -16,13 +16,20 @@ export const ExploreCsvRow = z.strictObject({
 });
 export type ExploreCsvRow = z.infer<typeof ExploreCsvRow>;
 export const exploreCsvSerializer = defineSerializer('analytics.exploreCsvRow', ExploreCsvRow);
-export const EXPLORE_CSV_COLUMNS = ['dimension', 'currency', 'value'] as const satisfies readonly (keyof ExploreCsvRow)[];
+export const EXPLORE_CSV_COLUMNS = [
+  'dimension',
+  'currency',
+  'value',
+] as const satisfies readonly (keyof ExploreCsvRow)[];
 export type ExploreCsvColumn = (typeof EXPLORE_CSV_COLUMNS)[number];
 
 /** Decimals of a currency's minor unit (USD 2, JPY 0, KWD 3). */
 export function currencyDigits(currency: string): number {
   try {
-    return new Intl.NumberFormat('en', { style: 'currency', currency }).resolvedOptions().maximumFractionDigits ?? 2;
+    return (
+      new Intl.NumberFormat('en', { style: 'currency', currency }).resolvedOptions().maximumFractionDigits ??
+      2
+    );
   } catch {
     return 2;
   }

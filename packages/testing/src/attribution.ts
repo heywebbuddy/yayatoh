@@ -37,7 +37,13 @@ const DAY = 86_400_000;
 export const ATTRIBUTION_FIXTURE = {
   priceMinor: 1000,
   campaignName: 'Autumn launch',
-  sources: { campaign: 'yayatoh', social: 'instagram', partner: 'partner-news', podcast: 'podcast', google: 'google.com' },
+  sources: {
+    campaign: 'yayatoh',
+    social: 'instagram',
+    partner: 'partner-news',
+    podcast: 'podcast',
+    google: 'google.com',
+  },
   revenue: {
     first: { yayatoh: 1000, instagram: 2000, podcast: 1000 },
     last: { 'partner-news': 1000, yayatoh: 2000, 'google.com': 1000 },
@@ -62,9 +68,15 @@ export interface AttributionScenario {
   readonly orders: readonly string[];
 }
 
-export async function attributionScenario(orgId: string, opts: { now?: Date } = {}): Promise<AttributionScenario> {
+export async function attributionScenario(
+  orgId: string,
+  opts: { now?: Date } = {},
+): Promise<AttributionScenario> {
   const now = opts.now ?? new Date();
-  const sys = (at = now) => ({ ...createCtx({ orgId, actor: { type: 'system', name: 'attribution-fixture' } }), now: at });
+  const sys = (at = now) => ({
+    ...createCtx({ orgId, actor: { type: 'system', name: 'attribution-fixture' } }),
+    now: at,
+  });
   const anon = (at = now) => ({ ...createCtx({ orgId }), now: at });
   const tag = uuidv7().slice(-8);
   const eventName = `Autumn Social ${tag}`;

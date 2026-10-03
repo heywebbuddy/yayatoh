@@ -1,5 +1,5 @@
 {
-  "id": "89e15d14-775e-4b0b-83cd-d878897471b1",
+  "id": "a13f96c9-f6d6-4a21-b9b4-a274c6606bb9",
   "prevId": "e2e40e91-d978-48bf-886d-53e2f6d2db65",
   "version": "7",
   "dialect": "postgresql",
@@ -5187,7 +5187,7 @@
         },
         "alerts_title_check": {
           "name": "alerts_title_check",
-          "value": "title is null or (rule in ('metricRule', 'metricRuleFinance') and length(title) between 1 and 80)"
+          "value": "title is null or length(title) between 1 and 80"
         },
         "alerts_count_check": {
           "name": "alerts_count_check",

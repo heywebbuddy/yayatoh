@@ -72,7 +72,9 @@ describe('multi-touch attribution (hand-computed)', () => {
     expect(creditTouches(path, 'last', 10_000)).toEqual([
       { touch: referral, creditBps: ORDER_CREDIT_BPS, revenueMinor: 10_000 },
     ]);
-    expect(creditTouches(path, 'linear', 10_000).map((c) => [c.touch.source, c.creditBps, c.revenueMinor])).toEqual([
+    expect(
+      creditTouches(path, 'linear', 10_000).map((c) => [c.touch.source, c.creditBps, c.revenueMinor]),
+    ).toEqual([
       ['newsletter', 3333, 3333],
       ['facebook', 3333, 3333],
       ['blog.example', 3334, 3334],
@@ -109,9 +111,18 @@ describe('multi-touch attribution (hand-computed)', () => {
       revenueMinor: 3334,
       campaign: '',
     });
-    expect(pick('first', 'newsletter', '2027-05-01', 'USD')).toMatchObject({ creditBps: 20_000, revenueMinor: 12_501 });
-    expect(pick('last', 'blog.example', '2027-05-01', 'USD')).toMatchObject({ creditBps: 10_000, revenueMinor: 10_000 });
-    expect(pick('last', 'facebook', '2027-05-02', 'EUR')).toMatchObject({ creditBps: 10_000, revenueMinor: 900 });
+    expect(pick('first', 'newsletter', '2027-05-01', 'USD')).toMatchObject({
+      creditBps: 20_000,
+      revenueMinor: 12_501,
+    });
+    expect(pick('last', 'blog.example', '2027-05-01', 'USD')).toMatchObject({
+      creditBps: 10_000,
+      revenueMinor: 10_000,
+    });
+    expect(pick('last', 'facebook', '2027-05-02', 'EUR')).toMatchObject({
+      creditBps: 10_000,
+      revenueMinor: 900,
+    });
     for (const model of ['first', 'last', 'linear']) {
       const usd = rows.filter((r) => r.model === model && r.currency === 'USD');
       expect(usd.reduce((a, r) => a + r.revenueMinor, 0)).toBe(12_501);
@@ -160,13 +171,35 @@ describe('Tinybird attribution (fake)', () => {
     const attr = (total: number) =>
       attributionRowsOf(
         [{ orderId: 'o1', day: '2027-05-01', currency: 'USD', totalMinor: total }],
-        [{ orderId: 'o1', touches: [{ source: 'newsletter', medium: 'email', campaignKey: null, linkId: null }] }],
+        [
+          {
+            orderId: 'o1',
+            touches: [{ source: 'newsletter', medium: 'email', campaignKey: null, linkId: null }],
+          },
+        ],
       );
-    await wh.writeEvent(scope(ORG_A), { eventId: EV_A, timeZone: 'UTC', daily: [], state, attribution: attr(500) }, 1);
-    await wh.writeEvent(scope(ORG_A), { eventId: EV_A, timeZone: 'UTC', daily: [], state, attribution: attr(700) }, 2);
-    await wh.writeEvent(scope(ORG_B), { eventId: EV_B, timeZone: 'UTC', daily: [], state, attribution: attr(9_999) }, 1);
-    for (const r of tb.datasources[TINYBIRD_DATASOURCES.attribution] ?? []) expect(typeof r.org_id).toBe('string');
-    const a = await wh.attributionTotals(scope(ORG_A), { from: '2027-05-01', to: '2027-05-31', model: 'linear' });
+    await wh.writeEvent(
+      scope(ORG_A),
+      { eventId: EV_A, timeZone: 'UTC', daily: [], state, attribution: attr(500) },
+      1,
+    );
+    await wh.writeEvent(
+      scope(ORG_A),
+      { eventId: EV_A, timeZone: 'UTC', daily: [], state, attribution: attr(700) },
+      2,
+    );
+    await wh.writeEvent(
+      scope(ORG_B),
+      { eventId: EV_B, timeZone: 'UTC', daily: [], state, attribution: attr(9_999) },
+      1,
+    );
+    for (const r of tb.datasources[TINYBIRD_DATASOURCES.attribution] ?? [])
+      expect(typeof r.org_id).toBe('string');
+    const a = await wh.attributionTotals(scope(ORG_A), {
+      from: '2027-05-01',
+      to: '2027-05-31',
+      model: 'linear',
+    });
     expect(a).toEqual([
       {
         eventId: EV_A,
@@ -181,10 +214,14 @@ describe('Tinybird attribution (fake)', () => {
       },
     ]);
     // A later write without attribution empties it (the version moves on).
-    await wh.writeEvent(scope(ORG_A), { eventId: EV_A, timeZone: 'UTC', daily: [], state, attribution: [] }, 3);
-    expect(await wh.attributionTotals(scope(ORG_A), { from: '2027-05-01', to: '2027-05-31', model: 'linear' })).toEqual(
-      [],
+    await wh.writeEvent(
+      scope(ORG_A),
+      { eventId: EV_A, timeZone: 'UTC', daily: [], state, attribution: [] },
+      3,
     );
+    expect(
+      await wh.attributionTotals(scope(ORG_A), { from: '2027-05-01', to: '2027-05-31', model: 'linear' }),
+    ).toEqual([]);
     tb.assertEveryQueryScoped();
   });
 });
@@ -199,10 +236,18 @@ describe('explorer', () => {
 
   it('presets end today in the org time zone; custom needs both dates', () => {
     // 2027-05-10 12:00 UTC is still 2027-05-10 in Los Angeles, already 2027-05-11 in Kiritimati.
-    expect(exploreRange({ range: '7d' }, 'America/Los_Angeles', NOW)).toEqual({ from: '2027-05-04', to: '2027-05-10' });
-    expect(exploreRange({ range: '30d' }, 'Pacific/Kiritimati', NOW)).toEqual({ from: '2027-04-12', to: '2027-05-11' });
+    expect(exploreRange({ range: '7d' }, 'America/Los_Angeles', NOW)).toEqual({
+      from: '2027-05-04',
+      to: '2027-05-10',
+    });
+    expect(exploreRange({ range: '30d' }, 'Pacific/Kiritimati', NOW)).toEqual({
+      from: '2027-04-12',
+      to: '2027-05-11',
+    });
     expect(() => exploreRange({ range: 'custom', from: '2027-01-01' }, 'UTC', NOW)).toThrow(/both dates/);
-    expect(() => exploreRange({ range: 'custom', from: '2027-02-01', to: '2027-01-01' }, 'UTC', NOW)).toThrow();
+    expect(() =>
+      exploreRange({ range: 'custom', from: '2027-02-01', to: '2027-01-01' }, 'UTC', NOW),
+    ).toThrow();
     expect(exploreRange({ range: 'custom', from: '2027-01-01', to: '2027-01-31' }, 'UTC', NOW)).toEqual({
       from: '2027-01-01',
       to: '2027-01-31',
@@ -298,11 +343,27 @@ describe('organizer alert rules (pure)', () => {
 
 describe('report periods (org calendar days)', () => {
   it('periods, keys and due times', () => {
-    expect(periodContaining('daily', '2026-10-02')).toEqual({ key: 'D2026-10-02', from: '2026-10-02', to: '2026-10-02' });
-    expect(periodContaining('weekly', '2026-10-02')).toEqual({ key: 'W2026-09-28', from: '2026-09-28', to: '2026-10-04' });
-    expect(periodContaining('monthly', '2026-02-15')).toEqual({ key: 'M2026-02', from: '2026-02-01', to: '2026-02-28' });
+    expect(periodContaining('daily', '2026-10-02')).toEqual({
+      key: 'D2026-10-02',
+      from: '2026-10-02',
+      to: '2026-10-02',
+    });
+    expect(periodContaining('weekly', '2026-10-02')).toEqual({
+      key: 'W2026-09-28',
+      from: '2026-09-28',
+      to: '2026-10-04',
+    });
+    expect(periodContaining('monthly', '2026-02-15')).toEqual({
+      key: 'M2026-02',
+      from: '2026-02-01',
+      to: '2026-02-28',
+    });
     expect(periodContaining('monthly', '2028-02-15').to).toBe('2028-02-29');
-    expect(periodContaining('monthly', '2026-12-31')).toEqual({ key: 'M2026-12', from: '2026-12-01', to: '2026-12-31' });
+    expect(periodContaining('monthly', '2026-12-31')).toEqual({
+      key: 'M2026-12',
+      from: '2026-12-01',
+      to: '2026-12-31',
+    });
     for (const p of [
       periodContaining('daily', '2026-03-29'),
       periodContaining('weekly', '2026-03-29'),
@@ -329,23 +390,30 @@ describe('report periods (org calendar days)', () => {
       duePeriods('daily', 8, tz, new Date('2026-10-03T12:00:00Z'), created, 1).map((p) => p.key),
     ).toEqual(['D2026-10-02']);
     // A schedule made today sends nothing that was due before it existed.
-    expect(duePeriods('daily', 8, tz, new Date('2026-10-03T12:30:00Z'), new Date('2026-10-03T12:10:00Z'))).toEqual(
-      [],
-    );
+    expect(
+      duePeriods('daily', 8, tz, new Date('2026-10-03T12:30:00Z'), new Date('2026-10-03T12:10:00Z')),
+    ).toEqual([]);
     expect(duePeriods('weekly', 8, tz, new Date('2026-10-05T12:00:00Z'), created).map((p) => p.key)).toEqual([
       'W2026-09-14',
       'W2026-09-21',
       'W2026-09-28',
     ]);
-    expect(duePeriods('monthly', 0, tz, new Date('2026-10-01T04:00:00Z'), created).map((p) => p.key)).toEqual([
-      'M2026-08',
-      'M2026-09',
-    ]);
+    expect(duePeriods('monthly', 0, tz, new Date('2026-10-01T04:00:00Z'), created).map((p) => p.key)).toEqual(
+      ['M2026-08', 'M2026-09'],
+    );
     expect(
-      nextSendAt({ frequency: 'weekly', sendHour: 8, activeSince: created }, tz, new Date('2026-10-03T12:00:00Z')).toISOString(),
+      nextSendAt(
+        { frequency: 'weekly', sendHour: 8, activeSince: created },
+        tz,
+        new Date('2026-10-03T12:00:00Z'),
+      ).toISOString(),
     ).toBe('2026-10-05T12:00:00.000Z');
     expect(
-      nextSendAt({ frequency: 'daily', sendHour: 8, activeSince: created }, tz, new Date('2026-10-03T11:00:00Z')).toISOString(),
+      nextSendAt(
+        { frequency: 'daily', sendHour: 8, activeSince: created },
+        tz,
+        new Date('2026-10-03T11:00:00Z'),
+      ).toISOString(),
     ).toBe('2026-10-03T12:00:00.000Z');
   });
 
@@ -375,32 +443,66 @@ describe('report periods (org calendar days)', () => {
     ['America/New_York', 2, '2026-03-05T00:00:00Z', '2026-03-12T00:00:00Z'],
     ['America/New_York', 1, '2026-10-29T00:00:00Z', '2026-11-05T00:00:00Z'],
     ['Australia/Lord_Howe', 2, '2026-04-01T00:00:00Z', '2026-04-08T00:00:00Z'],
-  ])('daily in %s at %i:00 across a DST change: every day once, none skipped', { timeout: 60_000 }, (tz, hour, from, to) => {
-    const sent = simulate('daily', hour, tz, from, to, 7);
-    const keys = [...sent.keys()];
-    expect(new Set(keys).size).toBe(keys.length);
-    // Consecutive days, no gap.
-    for (let i = 1; i < keys.length; i++) {
-      const prev = keys[i - 1]?.slice(1) as string;
-      const next = new Date(Date.parse(`${prev}T00:00:00Z`) + 86_400_000).toISOString().slice(0, 10);
-      expect(keys[i]).toBe(`D${next}`);
-    }
-    expect(keys.length).toBeGreaterThanOrEqual(6);
-    // Each one went out at the send hour in local time (or right after a gap that swallowed it).
-    for (const [key, at] of sent) {
-      const local = new Intl.DateTimeFormat('en-GB', { timeZone: tz, hour: '2-digit', hourCycle: 'h23' }).format(
-        new Date(at),
-      );
-      expect(Number(local) - hour, key).toBeGreaterThanOrEqual(0);
-      expect(Number(local) - hour, key).toBeLessThanOrEqual(1);
-    }
-  });
+  ])(
+    'daily in %s at %i:00 across a DST change: every day once, none skipped',
+    { timeout: 60_000 },
+    (tz, hour, from, to) => {
+      const sent = simulate('daily', hour, tz, from, to, 7);
+      const keys = [...sent.keys()];
+      expect(new Set(keys).size).toBe(keys.length);
+      // Consecutive days, no gap.
+      for (let i = 1; i < keys.length; i++) {
+        const prev = keys[i - 1]?.slice(1) as string;
+        const next = new Date(Date.parse(`${prev}T00:00:00Z`) + 86_400_000).toISOString().slice(0, 10);
+        expect(keys[i]).toBe(`D${next}`);
+      }
+      expect(keys.length).toBeGreaterThanOrEqual(6);
+      // Each one went out at the send hour in local time (or right after a gap that swallowed it).
+      for (const [key, at] of sent) {
+        const local = new Intl.DateTimeFormat('en-GB', {
+          timeZone: tz,
+          hour: '2-digit',
+          hourCycle: 'h23',
+        }).format(new Date(at));
+        expect(Number(local) - hour, key).toBeGreaterThanOrEqual(0);
+        expect(Number(local) - hour, key).toBeLessThanOrEqual(1);
+      }
+    },
+  );
 
   it('weekly and monthly across DST changes: once per period', () => {
     const weeks = simulate('weekly', 2, 'Europe/Berlin', '2026-03-01T00:00:00Z', '2026-04-30T00:00:00Z', 37);
-    expect([...weeks.keys()]).toEqual(['W2026-02-23', 'W2026-03-02', 'W2026-03-09', 'W2026-03-16', 'W2026-03-23', 'W2026-03-30', 'W2026-04-06', 'W2026-04-13', 'W2026-04-20']);
-    const months = simulate('monthly', 0, 'America/New_York', '2026-02-15T00:00:00Z', '2026-12-02T00:00:00Z', 241);
-    expect([...months.keys()]).toEqual(['M2026-02', 'M2026-03', 'M2026-04', 'M2026-05', 'M2026-06', 'M2026-07', 'M2026-08', 'M2026-09', 'M2026-10', 'M2026-11']);
+    expect([...weeks.keys()]).toEqual([
+      'W2026-02-23',
+      'W2026-03-02',
+      'W2026-03-09',
+      'W2026-03-16',
+      'W2026-03-23',
+      'W2026-03-30',
+      'W2026-04-06',
+      'W2026-04-13',
+      'W2026-04-20',
+    ]);
+    const months = simulate(
+      'monthly',
+      0,
+      'America/New_York',
+      '2026-02-15T00:00:00Z',
+      '2026-12-02T00:00:00Z',
+      241,
+    );
+    expect([...months.keys()]).toEqual([
+      'M2026-02',
+      'M2026-03',
+      'M2026-04',
+      'M2026-05',
+      'M2026-06',
+      'M2026-07',
+      'M2026-08',
+      'M2026-09',
+      'M2026-10',
+      'M2026-11',
+    ]);
   }, 60_000);
 });
 
