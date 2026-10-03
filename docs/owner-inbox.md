@@ -252,6 +252,25 @@ Start the slow reviews early. Everything is built against fakes meanwhile; each 
 - [ ] Accounts: Svix, Nango, Mux, Meilisearch Cloud, Tinybird (only when volume needs it), Anthropic API key for production AI.
 - [ ] Prices: subscription tiers (D22, with launch data), agency commission defaults (P6-8), streaming markup (D24).
 - [ ] Legal (`legal-copy`): API terms, DPA and subprocessor list, integration privacy disclosures, agency agreement terms, CE certificate wording.
+- [ ] **M6.1a CRM merge defaults, pending owner** (labels: `db-migration`, `tenancy`). Built with these defaults; say if any should change:
+  - Who merges: the new permission `contacts:merge` goes to owners, admins and managers. Marketing members (and anyone with `contacts:read`) see People, timelines and the duplicates queue but can't merge.
+  - Entitlement: People, duplicates and merging sit under the `marketing` module key (the Audiences area). P6-13 named no CRM key; a separate key (e.g. `crm_pro`) can be added later with no code change elsewhere.
+  - Consent on a merge: an opt-out on either record wins; otherwise a grant on either record carries over (a legacy "unknown" only if neither granted). The person's own choice is never invented.
+  - Duplicate score: same mailbox (plus-tags and Gmail dots ignored) 90, same phone 80, similar name at the same company 65–85, combined as independent evidence and capped at 99. Pairs are only suggested; a person always decides.
+  - Undo window: 30 days. Erasing either record ends it (the snapshot is scrubbed).
+- [ ] **M6.11a best available and ADA — defaults to confirm (pending owner, 2026-10-02):**
+  - The buyer's accessible-seat statement is **self-declared** ("Someone in my party uses a wheelchair and needs an accessible seat"; staff tick it at the box office). No proof is asked (the usual practice under the US ADA ticketing rules); it is recorded in the audit row.
+  - Companion seats per accessible seat: the organizer chooses 1–3 per event (the rule's default is **1**; US rules allow up to 3).
+  - Companion seats are **released together with the accessible seats** (the `ada_reserved` release); without that rule the companion rule always applies.
+  - Best available is **off per event** until the organizer turns it on, and holds the found seats for **10 minutes** before checkout.
+  - The `advanced_seating` module is **free in beta** (granted to today's plan, P6-13).
+- [ ] **M6.11b channels and layouts — defaults to confirm (pending owner, 2026-10-02):**
+  - **Who may sell what.** A seat in no channel is sold through every channel. A seat allotted to a channel is sold only through it until its release time: online without a code = the event's "Online" channel, the box office = its "Box office" channel, sponsors and promoters = online with their code (`/events/{slug}?channel=CODE`). A buyer with a promoter's code may also buy seats in no channel; never another channel's. The box office can't sell a sponsor's or promoter's seats (staff remove the allotment or wait for the release).
+  - **Allotments outlive the module.** If an org loses `advanced_seating`, allotted seats stay kept (never oversold); the console pages hide until the module is back.
+  - **Restoring a revision** keeps every held and sold seat exactly (same seat, same label, same ticket). A seat whose label exists in the revision under another seat id is moved onto it (remapped, explained on the page); a seat that would disappear or be renumbered blocks the restore. Restores work on plans already on sale and on locked plans.
+  - **Revisions kept:** the newest 100 per chart; every save is one (the editor autosaves, so a long editing session makes many).
+  - **PDF floor plans** are turned into an image in the organizer's browser (pdf.js, no server-side PDF parsing) and stored like any upload (4 MB, re-encoded).
+  - The **layout library** is per org (no sharing between orgs or venues yet: that is the M6.14 venue portal).
 
 ## Phase 4 (weddings and galas)
 - [ ] **M4.1a guest list: defaults pending owner** (labels: `db-migration`, `tenancy`). Built with these defaults; say if any should change:
@@ -547,3 +566,55 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **Who records offline payments and voids invoices:** `orders:refund` (owners, admins, finance), the existing money permission; box office and managers can't. Confirm, or ask for a separate `invoices:manage` permission.
 - [ ] **Invoice wording (`legal-copy`):** the invoice email, the PDF (terms line "Net 30, due no later than 7 days before the event", "Issued by {org} through Yayatoh"), the buyer's invoice page and the reminder template (13 locales). Late-payment wording is deliberately neutral (P5-5: the registration stands). Our PDF is not a tax invoice (no tax lines or seller tax ids yet).
 - [ ] **Door and badge overrides:** any scanner may admit a balance-due ticket with a reason (audited); badge desk staff (`attendees:write`) may print one. Confirm, or restrict to supervisors.
+
+## M6.1b — contact stats (2026-10-02, pending owner)
+- [ ] **No-show propensity prior**: (no-shows + 1) ÷ (past registrations + 5), i.e. someone with no history counts as 20 %. Confirm the prior or pick another (it is one constant, `NO_SHOW_PRIOR`).
+- [ ] **Engagement score weights** (placeholder until M5.7b): 10 per event attended, 5 per session, 2 per campaign opened (3 per poll/Q&A answer, 3 per feedback, 2 per enrollment once those exist), score = 100 × points ÷ (points + 25). Confirm, or wait for M5.7b's org-adjustable weights.
+- [ ] **Money in audiences**: lifetime value and the RFM monetary quintile need `finance:read` to preview, save or export an audience, so the marketing role cannot target big spenders. Confirm, or allow `messages:send` roles to filter (without seeing amounts). The older M3.6 `spend` condition (per scope) is not gated: decide whether to gate it the same way.
+- [ ] **Campaign open tracking** (feeds "campaigns opened"): needs a tracking pixel in campaign emails. Decide whether to add it (privacy notice; Apple Mail Privacy Protection inflates opens). The stats consume `campaign.opened@1` already.
+
+## M6.1c — DSAR propagation (2026-10-02, pending owner)
+- [ ] **Receipt and archive signing key:** dev/CI derive an Ed25519 key from `APP_TOKEN_SECRET`; production needs an asymmetric signing key in AWS KMS (with your AWS account) and its public key published (`setDsarSigner`).
+- [ ] **Phone opt-outs after erasure:** org SMS/WhatsApp STOP rows are deleted with the person (a re-entered number needs fresh consent). Approve, or ask for a hashed platform-wide phone suppression list like the email one.
+- [ ] **Legal hold periods:** paid orders and credit notes are held 7 years (D11); payment disputes are held without an end date. Confirm, or give the dispute period.
+- [ ] **Receipt wording** (`privacy.request.receipt.*`, `privacy.pdf.*`) and the self-service page copy for legal review (`legal-copy`).
+
+## M6.3a — API keys and sandbox orgs (2026-10-02, pending owner)
+- [ ] `api_access` quotas (P6-13 placeholders on every plan, `billing.plans.quotas`): 600 requests a minute per live key, 1,200 per org, 120 per test key, 300 per key of a sandbox org. Change them by data, no code change.
+- [ ] Sandboxes: at most 10 live per org (fixed placeholder); new keys default to a 90-day lifetime in the console (no expiry stays possible).
+- [ ] A deleted sandbox is closed (offline, members and keys removed) but its fake data is kept, because ledgers are append-only. Approve a later purge job, or keep them inert.
+- [ ] Production: sandbox checkouts need `FAKE_PAYMENTS_SECRET` set next to the Stripe keys, and the fake hosted page is refused in production today (`VERCEL_ENV=production`), so sandboxes take no payments there until you decide to allow the fake page on production for sandbox orgs only. They never reach Stripe either way.
+- [ ] Rate limits run in memory per instance until the Upstash account exists (already listed for M1.13).
+
+## M6.3b — Webhooks GA and developer docs (2026-10-02, pending owner)
+- [ ] **Svix account** (Basic, ~$20/month at launch, UNVERIFIED): put `SVIX_API_KEY` in Doppler for the web app and the worker (and `SVIX_SERVER_URL` if the account is not in the key's region; `SVIX_PORTAL_ORIGIN` only for a custom portal domain). Until then every non-production deployment uses the fake publisher, and production has no publisher: Settings → Webhooks says webhooks are not available yet and nothing is sent. Event types sync to Svix on the first endpoint created.
+- [ ] **npm:** create the `@yayatoh` npm organization and an automation token, stored as the GitHub secret `NPM_TOKEN`. CI builds the package and runs `npm publish --dry-run` today (`sdk-npm` job); the real publish is the same command without `--dry-run`. Decide the SDK's **license** (its package.json says `UNLICENSED`; MIT is usual for API clients).
+- [ ] **Public events:** 31 catalog types (30 from the outbox plus `webhook.test`), listed on `/developers/events`. Every other outbox event is internal, with a reason (`packages/modules/webhooks/src/internal-events.ts`); those marked `later` (announcements, credit notes, mass refunds, seating changes, waitlist expiry…) can be promoted on request, additively.
+- [ ] **Payloads are thin only** (D21): ids, statuses, amounts, counts and times; no "full" payload mode per endpoint yet. Approve, or ask for full payloads on non-personal events later.
+- [ ] Placeholders: at most **20 endpoints per org**; recovery reaches back **14 days**; secret rotation keeps the old secret signing for **24 hours** (Svix's default).
+- [ ] Docs live at `/developers` on the marketplace host; guides and the reference are English in every locale (the shell is translated).
+## Design system v2 (2026-10-02, pending owner)
+- [ ] **Event workspace navigation.** The approved Guests artboard puts the org menu in the sidebar and the event's sections in a top tab row. The build keeps the event's sections in the sidebar (conferences have ~20 sections; one list beats two navigations with the same names for keyboard and screen-reader users) and uses segmented tabs inside sections. Confirm, or ask for the artboard's tab IA (ADR 0022 "Shells").
+- [ ] **Dark primary fill.** `#7B5CFF` gives white button text 4.36:1; buttons use `#6C4CF2` (5.3:1) and `#7B5CFF` stays for glows, rings and the active sidebar tile. Confirm.
+- [ ] **CJK fonts** are not self-hosted (5–9 MB per face); Chinese and Japanese use Noto Sans JP/SC/TC when installed, then the platform face. Confirm, or approve per-locale font CSS.
+- [ ] **Required-field marker.** No asterisk on required labels (the browser announces "required"; errors say what is missing). Confirm or ask for "(optional)" markers on optional fields instead.
+
+## M6.6a — billing foundation (2026-10-02, pending owner)
+- [ ] **Tiers and prices (D22).** Free $0 / Starter $29 / Pro $99 / Agency $249 / Enterprise (quote) are seeded as placeholders, switched off, with placeholder module sets (`PLACEHOLDER_PLANS`). Their per-ticket fee schedules are copies of the legacy one until you set them. Change by data (or in Stripe, then run the catalog sync); no code change.
+- [ ] **When a subscription ends** (canceled, expired), a non-grandfathered org falls back to the default plan (`launch_standard`: today's modules and fees). Confirm, or choose the Free tier; M6.6b adds read-only dunning.
+- [ ] **Grandfathering.** Every org that existed at the migration, and every organizer the legacy migration creates, keeps its legacy per-ticket fees when subscriptions switch on. Confirm the rule (staff can change one org).
+- [ ] **Stripe Billing setup** (when you switch billing on): products with `plan_key` and `sort_order` metadata, recurring prices with lookup keys (`tier_pro_month_usd`), Entitlement Features whose lookup keys are module keys, a billing webhook endpoint at `/api/webhooks/billing/stripe` (its secret is `STRIPE_BILLING_WEBHOOK_SECRET`), then `BILLING_PROVIDER=stripe` and `BILLING_ENABLED=1`. Label: `payments`.
+## M6.2a — analytics warehouse (2026-10-02, pending owner)
+- [ ] **Tinybird account (when an org's volume needs it, P6-2).** Create a workspace, push the files in `packages/modules/analytics/tinybird/` (two datasources, three pipes), and put `TINYBIRD_API_URL`, `TINYBIRD_APPEND_TOKEN` (DATASOURCES:APPEND on the two datasources), `TINYBIRD_SIGNING_KEY` (the workspace admin token, used only to sign per-org read JWTs) and `TINYBIRD_WORKSPACE_ID` in Doppler, then set `ANALYTICS_WAREHOUSE=tinybird` and run a rebuild per org. Until then Postgres rollups serve every org; nothing calls Tinybird.
+- [ ] **Physical partitioning of the Postgres rollups.** `analytics.daily_rollups` is partitioned logically by org and day (every index leads with `org_id`, then `day`; an event's rows are replaced as one unit). Declarative Postgres partitioning would need the partition key in the primary key, which `tenantTable()` (UUID `id` primary key) does not allow; propose it with ADR-level review when one org's rollups pass ~10 M rows. Confirm the deferral.
+- [ ] **Definitions on the dashboard** (shown under the figures): check-ins count each ticket once on the day of its first entry (a period's check-ins can therefore differ from the event report, which counts tickets admitted in the period); no-shows count on the day an event ended; revenue is gross minus refunds per currency, before fees. Confirm.
+- [ ] **Entitlement `analytics_pro`** is granted on `launch_standard` (free in beta, P6-13). The warehouse ingests every org's events regardless, so switching the key on later shows full history.
+- [ ] **After deploying**, run a rebuild once per org (Analytics → Rebuild, or the `analytics.backfill` job) so history that predates the subscriber lands in the warehouse.
+## M6.4a — integrations framework (2026-10-03, pending owner)
+- [ ] **Nango (Cloud) account** (P6-4): create it, add each provider integration as M6.4b–d land (Eventbrite, Google, Zapier, Slack, Mailchimp, HubSpot, Klaviyo OAuth apps are yours to register), and put `NANGO_SECRET_KEY` (and `INTEGRATIONS_AUTH_PROVIDER=nango`) in Doppler. Until then integrations are off in production and run against the fake elsewhere. The adapter's endpoints (connect sessions, connection lookup by end user, proxy header forwarding) are UNVERIFIED against a real account.
+- [ ] Defaults to confirm: integrations are on every plan, free in beta (P6-13); syncs run hourly by default (15 min, 6 h and daily selectable); failed records retry after 1, 5, 15, 60 and 240 minutes, then wait for a person; only owners and admins connect (managers read).
+
+## Batch 3i merge (2026-10-03, pending owner)
+- [ ] **Webhook event set:** the 32 outbox events added by batches 3h and 3i (registrations, invoices, donations, RSVPs, contact merges, billing, integrations, privacy erasure …) are classified internal in `packages/modules/webhooks/src/internal-events.ts` (personal / platform / workflow, or `later` for plausible public ones such as `registration.registrant.approved`, `order.invoiced`, `order.donation_paid`). Say which `later` events should become public webhooks (additive).
+- [ ] **DSAR for batch 3h tables** (written at the merge): donations gifts, receipts and year-end statements and order invoices are kept under the 7-year tax hold with the donor's/buyer's details replaced; registrants are redacted in place, type-member addresses deleted; pending collector submissions deleted; live Q&A questions signed with the person's full name are deleted if never approved, else anonymised. Confirm.
+- [ ] **Promoter channel links during coexistence:** `/events/{slug}?channel=CODE` belongs to the `events.page` route; on a legacy host it reaches the new app only once that route is moved.

@@ -219,6 +219,43 @@ jobs:
             echo "::error::e2e shards: ${{ needs.e2e.result }}"; exit 1
           fi
 
+  sdk-npm:
+    # M6.3b: @yayatoh/sdk as npm would ship it. A dry run only: the real publish needs the owner's
+    # npm token (owner inbox), and then runs the same build with `npm publish`.
+    name: SDK npm package (publish dry run)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @yayatoh/sdk generate:check
+      - name: Build and publish (dry run, no token)
+        run: pnpm --filter @yayatoh/sdk publish:dry-run
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sdk-npm
+          path: packages/sdk/dist
+          retention-days: 14
+
+  sdk-mobile:
+    # M6.3b (P6-3): the Swift and Kotlin /v1 clients, generated with openapi-generator as build
+    # artifacts. Published with the mobile build (roadmap §8.3), not now.
+    name: SDK Swift + Kotlin clients (generated, not published)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Generate (pinned openapi-generator image)
+        run: bash packages/sdk/scripts/generate-mobile.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sdk-mobile
+          path: packages/sdk/mobile/out
+          retention-days: 14
+
   openapi-breaking:
     name: oasdiff (/v1 additive only)
     if: github.event_name == 'pull_request'

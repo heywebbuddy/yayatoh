@@ -3,7 +3,7 @@
   "info": {
     "title": "Yayatoh API",
     "version": "0.2.0",
-    "description": "Yayatoh `/v1`. Changes are additive only (oasdiff gate).\n\n- **Auth:** an org API key (`Authorization: Bearer yy_live_…`, created in the console under\n  Settings → API keys) or a user token: `POST /v1/auth/token` (15-minute access token and a\n  rotating refresh token; recommended) or `POST /v1/auth/login` (a 14-day session). No cookies.\n- **Test keys:** `yy_test_…` keys are read-only and carry no personal data (`org:read`,\n  `events:read` only), with a smaller rate limit. Build against them, ship with a live key.\n- **Tenant:** org resources live under `/v1/orgs/{org}`; the org must match the key, or the\n  user must be a member. It is never read from a header.\n- **Pagination:** `limit` (≤ 100) and `cursor` (the previous page’s `nextCursor`).\n- **Errors:** RFC 9457 `application/problem+json` with a stable `code`.\n- **Idempotency:** every write needs an `Idempotency-Key`; a retry returns the stored result.\n- **Rate limits:** per key or user, with `RateLimit-*` headers and `Retry-After` on 429.\n- **Request ids:** every response has `X-Request-Id` (send your own to correlate).\n- **Caching:** content reads send an `ETag`; send it back as `If-None-Match` for a 304.\n- **Deprecation:** a deprecated route answers with `Deprecation` (RFC 9745) and, once a\n  date is set, `Sunset` (RFC 8594) and a `Link` to the migration notes."
+    "description": "Yayatoh `/v1`. Changes are additive only (oasdiff gate).\n\n- **Auth:** an org API key (`Authorization: Bearer yy_live_…`, created in the console under\n  Settings → API keys) or a user token: `POST /v1/auth/token` (15-minute access token and a\n  rotating refresh token; recommended) or `POST /v1/auth/login` (a 14-day session). No cookies.\n- **Test keys:** `yy_test_…` keys are read-only and carry no personal data (`org:read`,\n  `events:read` only), with a smaller rate limit. Build against them, ship with a live key.\n- **Tenant:** org resources live under `/v1/orgs/{org}`; the org must match the key, or the\n  user must be a member. It is never read from a header.\n- **Pagination:** `limit` (≤ 100) and `cursor` (the previous page’s `nextCursor`).\n- **Errors:** RFC 9457 `application/problem+json` with a stable `code`.\n- **Idempotency:** every write needs an `Idempotency-Key`; a retry returns the stored result.\n- **Rate limits:** per key or user, with `RateLimit-Limit`, `RateLimit-Remaining`,\n  `RateLimit-Reset` and `RateLimit-Policy` headers and `Retry-After` on 429. An API key gets\n  its plan’s `api_access` quotas: a per-minute budget per key and one for the whole org.\n- **Key lifetimes:** a key may expire (30, 90 or 365 days) and can be rotated with an overlap\n  window; an expired, rotated-out or revoked key answers 401 on the next request.\n- **Sandbox orgs:** create one from Settings → Sandboxes for seeded data and fake payments;\n  its keys work exactly like live ones, and it never takes real money.\n- **Webhooks:** add endpoints under Settings → Webhooks. Every message is listed under\n  `webhooks` with its versioned schema; payloads are thin (ids and facts, never personal\n  data) and signed with Standard Webhooks (`webhook-id`, `webhook-timestamp`, `webhook-signature`).\n- **Request ids:** every response has `X-Request-Id` (send your own to correlate).\n- **Caching:** content reads send an `ETag`; send it back as `If-None-Match` for a 304.\n- **Deprecation:** a deprecated route answers with `Deprecation` (RFC 9745) and, once a\n  date is set, `Sunset` (RFC 8594) and a `Link` to the migration notes."
   },
   "tags": [
     {
@@ -69,6 +69,10 @@
     {
       "name": "scanner",
       "description": "The Scan PWA’s device-token routes (manifest, offline sync)."
+    },
+    {
+      "name": "webhooks",
+      "description": "Messages your webhook endpoints receive (Settings → Webhooks): thin payloads of ids and facts, signed with Standard Webhooks."
     }
   ],
   "components": {
@@ -90,6 +94,2245 @@
       }
     },
     "schemas": {
+      "WebhookOrderPaidV1Message": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "order.paid"
+            ]
+          },
+          "version": {
+            "type": "number",
+            "enum": [
+              1
+            ]
+          },
+          "apiVersion": {
+            "type": "string",
+            "enum": [
+              "v1"
+            ]
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "orgId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "data": {
+            "$ref": "#/components/schemas/WebhookOrderPaidV1"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "version",
+          "apiVersion",
+          "occurredAt",
+          "orgId",
+          "data"
+        ],
+        "description": "An order was paid and its tickets issued."
+      },
+      "WebhookOrderPaidV1": {
+        "type": "object",
+        "properties": {
+          "orderId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "eventId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "totalMinor": {
+            "type": "integer"
+          },
+          "currency": {
+            "type": "string",
+            "pattern": "^[A-Z]{3}$"
+          },
+          "via": {
+            "$ref": "#/components/schemas/WebhookPaymentVia"
+          }
+        },
+        "required": [
+          "orderId",
+          "eventId",
+          "totalMinor",
+          "currency",
+          "via"
+        ]
+      },
+      "WebhookPaymentVia": {
+        "type": "string",
+        "enum": [
+          "free",
+          "box_office",
+          "fake",
+          "stripe",
+          "invoice"
+        ]
+      },
+      "WebhookOrderRefundedV1Message": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "order.refunded"
+            ]
+          },
+          "version": {
+            "type": "number",
+            "enum": [
+              1
+            ]
+          },
+          "apiVersion": {
+            "type": "string",
+            "enum": [
+              "v1"
+            ]
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "orgId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "data": {
+            "$ref": "#/components/schemas/WebhookOrderRefundedV1"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "version",
+          "apiVersion",
+          "occurredAt",
+          "orgId",
+          "data"
+        ],
+        "description": "All or part of an order was refunded."
+      },
+      "WebhookOrderRefundedV1": {
+        "type": "object",
+        "properties": {
+          "orderId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "refundId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "amountMinor": {
+            "type": "integer"
+          },
+          "currency": {
+            "type": "string",
+            "pattern": "^[A-Z]{3}$"
+          },
+          "tickets": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "fully": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "orderId",
+          "refundId",
+          "amountMinor",
+          "currency",
+          "tickets",
+          "fully"
+        ]
+      },
+      "WebhookOrderExpiredV1Message": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "order.expired"
+            ]
+          },
+          "version": {
+            "type": "number",
+            "enum": [
+              1
+            ]
+          },
+          "apiVersion": {
+            "type": "string",
+            "enum": [
+              "v1"
+            ]
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "orgId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "data": {
+            "$ref": "#/components/schemas/WebhookOrderExpiredV1"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "version",
+          "apiVersion",
+          "occurredAt",
+          "orgId",
+          "data"
+        ],
+        "description": "An unpaid order expired and released its tickets."
+      },
+      "WebhookOrderExpiredV1": {
+        "type": "object",
+        "properties": {
+          "orderId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "orderId"
+        ]
+      },
+      "WebhookOrderPaymentFailedV1Message": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "order.payment_failed"
+            ]
+          },
+          "version": {
+            "type": "number",
+            "enum": [
+              1
+            ]
+          },
+          "apiVersion": {
+            "type": "string",
+            "enum": [
+              "v1"
+            ]
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "orgId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "data": {
+            "$ref": "#/components/schemas/WebhookOrderPaymentFailedV1"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "version",
+          "apiVersion",
+          "occurredAt",
+          "orgId",
+          "data"
+        ],
+        "description": "A payment attempt for an order failed."
+      },
+      "WebhookOrderPaymentFailedV1": {
+        "type": "object",
+        "properties": {
+          "orderId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "eventId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "orderId",
+          "eventId"
+        ]
+      },
+      "WebhookOrderDisputedV1Message": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "order.disputed"
+            ]
+          },
+          "version": {
+            "type": "number",
+            "enum": [
+              1
+            ]
+          },
+          "apiVersion": {
+            "type": "string",
+            "enum": [
+              "v1"
+            ]
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "orgId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "data": {
+            "$ref": "#/components/schemas/WebhookOrderDisputedV1"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "version",
+          "apiVersion",
+          "occurredAt",
+          "orgId",
+          "data"
+        ],
+        "description": "A buyer disputed a payment (chargeback)."
+      },
+      "WebhookOrderDisputedV1": {
+        "type": "object",
+        "properties": {
+          "orderId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "disputeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "amountMinor": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "orderId",
+          "disputeId",
+          "amountMinor"
+        ]
+      },
+      "WebhookOrderDisputeClosedV1Message": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "order.dispute_closed"
+            ]
+          },
+          "version": {
+            "type": "number",
+            "enum": [
+              1
+            ]
+          },
+          "apiVersion": {
+            "type": "string",
+            "enum": [
+              "v1"
+            ]
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "orgId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "data": {
+            "$ref": "#/components/schemas/WebhookOrderDisputeClosedV1"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "version",
+          "apiVersion",
+          "occurredAt",
+          "orgId",
+          "data"
+        ],
+        "description": "A dispute was decided."
+      },
+      "WebhookOrderDisputeClosedV1": {
+        "type": "object",
+        "properties": {
+          "orderId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "disputeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "outcome": {
+            "$ref": "#/components/schemas/WebhookDisputeOutcome"
+          }
+        },
+        "required": [
+          "orderId",
+          "disputeId",
+          "outcome"
+        ]
+      },
+      "WebhookDisputeOutcome": {
+        "type": "string",
+        "enum": [
+          "won",
+          "lost"
+        ]
+      },
+      "WebhookTicketsCancelledV1Message": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "tickets.cancelled"
+            ]
+          },
+          "version": {
+            "type": "number",
+            "enum": [
+              1
+            ]
+          },
+          "apiVersion": {
+            "type": "string",
+            "enum": [
+              "v1"
+            ]
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "orgId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "data": {
+            "$ref": "#/components/schemas/WebhookTicketsCancelledV1"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "version",
+          "apiVersion",
+          "occurredAt",
+          "orgId",
+          "data"
+        ],
+        "description": "Tickets were cancelled in bulk."
+      },
+      "WebhookTicketsCancelledV1": {
+        "type": "object",
+        "properties": {
+          "operationId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "orderId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "eventId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "ticketIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "maxItems": 1000
+          }
+        },
+        "required": [
+          "eventId",
+          "ticketIds"
+        ]
+      },
+      "WebhookTicketTransferredV1Message": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "ticket.transferred"
+            ]
+          },
+          "version": {
+            "type": "number",
+            "enum": [
+              1
+            ]
+          },
+          "apiVersion": {
+            "type": "string",
+            "enum": [
+              "v1"
+            ]
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "orgId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "data": {
+            "$ref": "#/components/schemas/WebhookTicketTransferredV1"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "version",
+          "apiVersion",
+          "occurredAt",
+          "orgId",
+          "data"
+        ],
+        "description": "A ticket moved to a new holder."
+      },
+      "WebhookTicketTransferredV1": {
+        "type": "object",
+        "properties": {
+          "transferId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "ticketId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "eventId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "rev": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "transferId",
+          "ticketId",
+          "eventId",
+          "rev"
+        ]
+      },
+      "WebhookTicketClaimedV1Message": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "ticket.claimed"
+            ]
+          },
+          "version": {
+            "type": "number",
+            "enum": [
+              1
+            ]
+          },
+          "apiVersion": {
+            "type": "string",
+            "enum": [
+              "v1"
+            ]
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "orgId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "data": {
+            "$ref": "#/components/schemas/WebhookTicketClaimedV1"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "version",
+          "apiVersion",
+          "occurredAt",
+          "orgId",
+          "data"
+        ],
+        "description": "A distributed ticket was claimed by its guest."
+      },
+      "WebhookTicketClaimedV1": {
+        "type": "object",
+        "properties": {
+          "ticketId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "claimId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "eventId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "rev": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "ticketId",
+          "claimId",
+          "eventId",
+          "rev"
+        ]
+      },
+      "WebhookTicketAdmittedV1Message": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "ticket.admitted"
+            ]
+          },
+          "version": {
+            "type": "number",
+            "enum": [
+              1
+            ]
+          },
+          "apiVersion": {
+            "type": "string",
+            "enum": [
+              "v1"
+            ]
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "orgId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "data": {
+            "$ref": "#/components/schemas/WebhookTicketAdmittedV1"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "version",
+          "apiVersion",
+          "occurredAt",
+          "orgId",
+          "data"
+        ],
+        "description": "A ticket was scanned in."
+      },
+      "WebhookTicketAdmittedV1": {
+        "type": "object",
+        "properties": {
+          "eventId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "ticketId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "admissionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "day": {
+            "type": "string",
+            "format": "date"
+          },
+          "admittedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "offline": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "eventId",
+          "ticketId",
+          "admissionId",
+          "day",
+          "admittedAt"
+        ]
+      },
+      "WebhookTicketAdmissionUndoneV1Message": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "ticket.admission_undone"
+            ]
+          },
+          "version": {
+            "type": "number",
+            "enum": [
+              1
+            ]
+          },
+          "apiVersion": {
+            "type": "string",
+            "enum": [
+              "v1"
+            ]
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "orgId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "data": {
+            "$ref": "#/components/schemas/WebhookTicketAdmissionUndoneV1"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "version",
+          "apiVersion",
+          "occurredAt",
+          "orgId",
+          "data"
+        ],
+        "description": "A scan was undone."
+      },
+      "WebhookTicketAdmissionUndoneV1": {
+        "type": "object",
+        "properties": {
+          "eventId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "ticketId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "admissionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "day": {
+            "type": "string",
+            "format": "date"
+          },
+          "admittedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "eventId",
+          "ticketId",
+          "admissionId",
+          "day",
+          "admittedAt"
+        ]
+      },
+      "WebhookEventCreatedV1Message": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "event.created"
+            ]
+          },
+          "version": {
+            "type": "number",
+            "enum": [
+              1
+            ]
+          },
+          "apiVersion": {
+            "type": "string",
+            "enum": [
+              "v1"
+            ]
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "orgId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "data": {
+            "$ref": "#/components/schemas/WebhookEventCreatedV1"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "version",
+          "apiVersion",
+          "occurredAt",
+          "orgId",
+          "data"
+        ],
+        "description": "An event was created (new, duplicated or from a template)."
+      },
+      "WebhookEventCreatedV1": {
+        "type": "object",
+        "properties": {
+          "eventId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "slug": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]{0,99}$"
+          },
+          "profile": {
+            "type": "string",
+            "pattern": "^[a-z_]{1,32}$"
+          }
+        },
+        "required": [
+          "eventId",
+          "slug",
+          "profile"
+        ]
+      },
+      "WebhookEventPublishedV1Message": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "event.published"
+            ]
+          },
+          "version": {
+            "type": "number",
+            "enum": [
+              1
+            ]
+          },
+          "apiVersion": {
+            "type": "string",
+            "enum": [
+              "v1"
+            ]
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "orgId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "data": {
+            "$ref": "#/components/schemas/WebhookEventPublishedV1"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "version",
+          "apiVersion",
+          "occurredAt",
+          "orgId",
+          "data"
+        ],
+        "description": "An event was published."
+      },
+      "WebhookEventPublishedV1": {
+        "type": "object",
+        "properties": {
+          "eventId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "from": {
+            "$ref": "#/components/schemas/WebhookEventStatus"
+          },
+          "to": {
+            "$ref": "#/components/schemas/WebhookEventStatus"
+          }
+        },
+        "required": [
+          "eventId",
+          "from",
+          "to"
+        ]
+      },
+      "WebhookEventStatus": {
+        "type": "string",
+        "enum": [
+          "draft",
+          "published",
+          "postponed",
+          "cancelled",
+          "completed",
+          "archived"
+        ]
+      },
+      "WebhookEventUnpublishedV1Message": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "event.unpublished"
+            ]
+          },
+          "version": {
+            "type": "number",
+            "enum": [
+              1
+            ]
+          },
+          "apiVersion": {
+            "type": "string",
+            "enum": [
+              "v1"
+            ]
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "orgId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "data": {
+            "$ref": "#/components/schemas/WebhookEventUnpublishedV1"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "version",
+          "apiVersion",
+          "occurredAt",
+          "orgId",
+          "data"
+        ],
+        "description": "An event was taken offline."
+      },
+      "WebhookEventUnpublishedV1": {
+        "type": "object",
+        "properties": {
+          "eventId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "from": {
+            "$ref": "#/components/schemas/WebhookEventStatus"
+          },
+          "to": {
+            "$ref": "#/components/schemas/WebhookEventStatus"
+          }
+        },
+        "required": [
+          "eventId",
+          "from",
+          "to"
+        ]
+      },
+      "WebhookEventPostponedV1Message": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "event.postponed"
+            ]
+          },
+          "version": {
+            "type": "number",
+            "enum": [
+              1
+            ]
+          },
+          "apiVersion": {
+            "type": "string",
+            "enum": [
+              "v1"
+            ]
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "orgId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "data": {
+            "$ref": "#/components/schemas/WebhookEventPostponedV1"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "version",
+          "apiVersion",
+          "occurredAt",
+          "orgId",
+          "data"
+        ],
+        "description": "An event was postponed."
+      },
+      "WebhookEventPostponedV1": {
+        "type": "object",
+        "properties": {
+          "eventId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "from": {
+            "$ref": "#/components/schemas/WebhookEventStatus"
+          },
+          "to": {
+            "$ref": "#/components/schemas/WebhookEventStatus"
+          }
+        },
+        "required": [
+          "eventId",
+          "from",
+          "to"
+        ]
+      },
+      "WebhookEventRescheduledV1Message": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "event.rescheduled"
+            ]
+          },
+          "version": {
+            "type": "number",
+            "enum": [
+              1
+            ]
+          },
+          "apiVersion": {
+            "type": "string",
+            "enum": [
+              "v1"
+            ]
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "orgId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "data": {
+            "$ref": "#/components/schemas/WebhookEventRescheduledV1"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "version",
+          "apiVersion",
+          "occurredAt",
+          "orgId",
+          "data"
+        ],
+        "description": "A postponed event has a new date."
+      },
+      "WebhookEventRescheduledV1": {
+        "type": "object",
+        "properties": {
+          "eventId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "from": {
+            "$ref": "#/components/schemas/WebhookEventStatus"
+          },
+          "to": {
+            "$ref": "#/components/schemas/WebhookEventStatus"
+          }
+        },
+        "required": [
+          "eventId",
+          "from",
+          "to"
+        ]
+      },
+      "WebhookEventCancelledV1Message": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "event.cancelled"
+            ]
+          },
+          "version": {
+            "type": "number",
+            "enum": [
+              1
+            ]
+          },
+          "apiVersion": {
+            "type": "string",
+            "enum": [
+              "v1"
+            ]
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "orgId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "data": {
+            "$ref": "#/components/schemas/WebhookEventCancelledV1"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "version",
+          "apiVersion",
+          "occurredAt",
+          "orgId",
+          "data"
+        ],
+        "description": "An event was cancelled."
+      },
+      "WebhookEventCancelledV1": {
+        "type": "object",
+        "properties": {
+          "eventId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "from": {
+            "$ref": "#/components/schemas/WebhookEventStatus"
+          },
+          "to": {
+            "$ref": "#/components/schemas/WebhookEventStatus"
+          }
+        },
+        "required": [
+          "eventId",
+          "from",
+          "to"
+        ]
+      },
+      "WebhookEventCompletedV1Message": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "event.completed"
+            ]
+          },
+          "version": {
+            "type": "number",
+            "enum": [
+              1
+            ]
+          },
+          "apiVersion": {
+            "type": "string",
+            "enum": [
+              "v1"
+            ]
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "orgId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "data": {
+            "$ref": "#/components/schemas/WebhookEventCompletedV1"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "version",
+          "apiVersion",
+          "occurredAt",
+          "orgId",
+          "data"
+        ],
+        "description": "An event was marked as completed."
+      },
+      "WebhookEventCompletedV1": {
+        "type": "object",
+        "properties": {
+          "eventId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "from": {
+            "$ref": "#/components/schemas/WebhookEventStatus"
+          },
+          "to": {
+            "$ref": "#/components/schemas/WebhookEventStatus"
+          }
+        },
+        "required": [
+          "eventId",
+          "from",
+          "to"
+        ]
+      },
+      "WebhookEventArchivedV1Message": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "event.archived"
+            ]
+          },
+          "version": {
+            "type": "number",
+            "enum": [
+              1
+            ]
+          },
+          "apiVersion": {
+            "type": "string",
+            "enum": [
+              "v1"
+            ]
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "orgId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "data": {
+            "$ref": "#/components/schemas/WebhookEventArchivedV1"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "version",
+          "apiVersion",
+          "occurredAt",
+          "orgId",
+          "data"
+        ],
+        "description": "An event was archived."
+      },
+      "WebhookEventArchivedV1": {
+        "type": "object",
+        "properties": {
+          "eventId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "from": {
+            "$ref": "#/components/schemas/WebhookEventStatus"
+          },
+          "to": {
+            "$ref": "#/components/schemas/WebhookEventStatus"
+          }
+        },
+        "required": [
+          "eventId",
+          "from",
+          "to"
+        ]
+      },
+      "WebhookEventUpdatedV1Message": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "event.updated"
+            ]
+          },
+          "version": {
+            "type": "number",
+            "enum": [
+              1
+            ]
+          },
+          "apiVersion": {
+            "type": "string",
+            "enum": [
+              "v1"
+            ]
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "orgId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "data": {
+            "$ref": "#/components/schemas/WebhookEventUpdatedV1"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "version",
+          "apiVersion",
+          "occurredAt",
+          "orgId",
+          "data"
+        ],
+        "description": "An event’s details changed."
+      },
+      "WebhookEventUpdatedV1": {
+        "type": "object",
+        "properties": {
+          "eventId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-zA-Z][a-zA-Z0-9]{0,47}$"
+            },
+            "maxItems": 64
+          }
+        },
+        "required": [
+          "eventId",
+          "fields"
+        ]
+      },
+      "WebhookEventOccurrenceCancelledV1Message": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "event.occurrence_cancelled"
+            ]
+          },
+          "version": {
+            "type": "number",
+            "enum": [
+              1
+            ]
+          },
+          "apiVersion": {
+            "type": "string",
+            "enum": [
+              "v1"
+            ]
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "orgId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "data": {
+            "$ref": "#/components/schemas/WebhookEventOccurrenceCancelledV1"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "version",
+          "apiVersion",
+          "occurredAt",
+          "orgId",
+          "data"
+        ],
+        "description": "One date of a recurring event was cancelled."
+      },
+      "WebhookEventOccurrenceCancelledV1": {
+        "type": "object",
+        "properties": {
+          "eventId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "occurrenceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "startsAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "eventId",
+          "occurrenceId",
+          "startsAt"
+        ]
+      },
+      "WebhookTicketTypeCreatedV1Message": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "ticket_type.created"
+            ]
+          },
+          "version": {
+            "type": "number",
+            "enum": [
+              1
+            ]
+          },
+          "apiVersion": {
+            "type": "string",
+            "enum": [
+              "v1"
+            ]
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "orgId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "data": {
+            "$ref": "#/components/schemas/WebhookTicketTypeCreatedV1"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "version",
+          "apiVersion",
+          "occurredAt",
+          "orgId",
+          "data"
+        ],
+        "description": "A ticket type was added to an event."
+      },
+      "WebhookTicketTypeCreatedV1": {
+        "type": "object",
+        "properties": {
+          "eventId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "ticketTypeId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "eventId",
+          "ticketTypeId"
+        ]
+      },
+      "WebhookTicketTypeUpdatedV1Message": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "ticket_type.updated"
+            ]
+          },
+          "version": {
+            "type": "number",
+            "enum": [
+              1
+            ]
+          },
+          "apiVersion": {
+            "type": "string",
+            "enum": [
+              "v1"
+            ]
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "orgId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "data": {
+            "$ref": "#/components/schemas/WebhookTicketTypeUpdatedV1"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "version",
+          "apiVersion",
+          "occurredAt",
+          "orgId",
+          "data"
+        ],
+        "description": "A ticket type changed."
+      },
+      "WebhookTicketTypeUpdatedV1": {
+        "type": "object",
+        "properties": {
+          "eventId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "ticketTypeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-zA-Z][a-zA-Z0-9]{0,47}$"
+            },
+            "maxItems": 64
+          }
+        },
+        "required": [
+          "eventId",
+          "ticketTypeId",
+          "fields"
+        ]
+      },
+      "WebhookTicketTypeArchivedV1Message": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "ticket_type.archived"
+            ]
+          },
+          "version": {
+            "type": "number",
+            "enum": [
+              1
+            ]
+          },
+          "apiVersion": {
+            "type": "string",
+            "enum": [
+              "v1"
+            ]
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "orgId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "data": {
+            "$ref": "#/components/schemas/WebhookTicketTypeArchivedV1"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "version",
+          "apiVersion",
+          "occurredAt",
+          "orgId",
+          "data"
+        ],
+        "description": "A ticket type was archived."
+      },
+      "WebhookTicketTypeArchivedV1": {
+        "type": "object",
+        "properties": {
+          "eventId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "ticketTypeId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "eventId",
+          "ticketTypeId"
+        ]
+      },
+      "WebhookRegistrationSubmittedV1Message": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "form.registration_submitted"
+            ]
+          },
+          "version": {
+            "type": "number",
+            "enum": [
+              1
+            ]
+          },
+          "apiVersion": {
+            "type": "string",
+            "enum": [
+              "v1"
+            ]
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "orgId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "data": {
+            "$ref": "#/components/schemas/WebhookRegistrationSubmittedV1"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "version",
+          "apiVersion",
+          "occurredAt",
+          "orgId",
+          "data"
+        ],
+        "description": "A registration form was submitted."
+      },
+      "WebhookRegistrationSubmittedV1": {
+        "type": "object",
+        "properties": {
+          "respondentId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "eventId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "registrationTypeId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[A-Za-z0-9_-]{1,64}$"
+          },
+          "formVersion": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 1
+          }
+        },
+        "required": [
+          "respondentId",
+          "eventId",
+          "registrationTypeId",
+          "formVersion"
+        ]
+      },
+      "WebhookWaitlistJoinedV1Message": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "waitlist.joined"
+            ]
+          },
+          "version": {
+            "type": "number",
+            "enum": [
+              1
+            ]
+          },
+          "apiVersion": {
+            "type": "string",
+            "enum": [
+              "v1"
+            ]
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "orgId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "data": {
+            "$ref": "#/components/schemas/WebhookWaitlistJoinedV1"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "version",
+          "apiVersion",
+          "occurredAt",
+          "orgId",
+          "data"
+        ],
+        "description": "Someone joined an event’s waitlist."
+      },
+      "WebhookWaitlistJoinedV1": {
+        "type": "object",
+        "properties": {
+          "entryId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "eventId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "entryId",
+          "eventId"
+        ]
+      },
+      "WebhookWaitlistOfferedV1Message": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "waitlist.offered"
+            ]
+          },
+          "version": {
+            "type": "number",
+            "enum": [
+              1
+            ]
+          },
+          "apiVersion": {
+            "type": "string",
+            "enum": [
+              "v1"
+            ]
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "orgId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "data": {
+            "$ref": "#/components/schemas/WebhookWaitlistOfferedV1"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "version",
+          "apiVersion",
+          "occurredAt",
+          "orgId",
+          "data"
+        ],
+        "description": "A waitlist entry was offered a place."
+      },
+      "WebhookWaitlistOfferedV1": {
+        "type": "object",
+        "properties": {
+          "entryId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "eventId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "offer": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "required": [
+          "entryId",
+          "eventId",
+          "offer"
+        ]
+      },
+      "WebhookSurveyRespondedV1Message": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "survey.responded"
+            ]
+          },
+          "version": {
+            "type": "number",
+            "enum": [
+              1
+            ]
+          },
+          "apiVersion": {
+            "type": "string",
+            "enum": [
+              "v1"
+            ]
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "orgId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "data": {
+            "$ref": "#/components/schemas/WebhookSurveyRespondedV1"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "version",
+          "apiVersion",
+          "occurredAt",
+          "orgId",
+          "data"
+        ],
+        "description": "A survey was answered."
+      },
+      "WebhookSurveyRespondedV1": {
+        "type": "object",
+        "properties": {
+          "surveyId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "eventId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "invitationId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "surveyId",
+          "eventId",
+          "invitationId"
+        ]
+      },
+      "WebhookReviewSubmittedV1Message": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "review.submitted"
+            ]
+          },
+          "version": {
+            "type": "number",
+            "enum": [
+              1
+            ]
+          },
+          "apiVersion": {
+            "type": "string",
+            "enum": [
+              "v1"
+            ]
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "orgId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "data": {
+            "$ref": "#/components/schemas/WebhookReviewSubmittedV1"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "version",
+          "apiVersion",
+          "occurredAt",
+          "orgId",
+          "data"
+        ],
+        "description": "An attendee rated an event."
+      },
+      "WebhookReviewSubmittedV1": {
+        "type": "object",
+        "properties": {
+          "eventId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "reviewId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "rating": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5
+          }
+        },
+        "required": [
+          "eventId",
+          "reviewId",
+          "rating"
+        ]
+      },
+      "WebhookAgendaPublishedV1Message": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "program.agenda_published"
+            ]
+          },
+          "version": {
+            "type": "number",
+            "enum": [
+              1
+            ]
+          },
+          "apiVersion": {
+            "type": "string",
+            "enum": [
+              "v1"
+            ]
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "orgId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "data": {
+            "$ref": "#/components/schemas/WebhookAgendaPublishedV1"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "version",
+          "apiVersion",
+          "occurredAt",
+          "orgId",
+          "data"
+        ],
+        "description": "An event’s agenda was published."
+      },
+      "WebhookAgendaPublishedV1": {
+        "type": "object",
+        "properties": {
+          "eventId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "agendaVersion": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "sessions": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "publishedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "eventId",
+          "agendaVersion",
+          "sessions",
+          "publishedAt"
+        ]
+      },
+      "WebhookTestV1Message": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "webhook.test"
+            ]
+          },
+          "version": {
+            "type": "number",
+            "enum": [
+              1
+            ]
+          },
+          "apiVersion": {
+            "type": "string",
+            "enum": [
+              "v1"
+            ]
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "orgId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "data": {
+            "$ref": "#/components/schemas/WebhookTestV1"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "version",
+          "apiVersion",
+          "occurredAt",
+          "orgId",
+          "data"
+        ],
+        "description": "A test message sent from the console."
+      },
+      "WebhookTestV1": {
+        "type": "object",
+        "properties": {
+          "endpointId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "test": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          }
+        },
+        "required": [
+          "endpointId",
+          "test"
+        ]
+      },
       "Health": {
         "type": "object",
         "properties": {
@@ -3046,6 +5289,95 @@
             "type": "boolean"
           }
         }
+      },
+      "ApiKeyInfo": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "prefix": {
+            "type": "string",
+            "description": "The first characters of the key, e.g. `yy_live_AbC1`."
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApiKeyScope"
+            }
+          },
+          "test": {
+            "type": "boolean",
+            "description": "A test key (`yy_test_…`): read-only, no personal data."
+          },
+          "sandboxOrg": {
+            "type": "boolean",
+            "description": "The key belongs to a sandbox org: seeded data, fake payments only."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "expiresAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "description": "When the key stops working (null: never). Set when the key was rotated."
+          },
+          "rotated": {
+            "type": "boolean",
+            "description": "A newer key replaced this one; switch before `expiresAt`."
+          },
+          "rateLimit": {
+            "type": "object",
+            "properties": {
+              "keyPerMinute": {
+                "type": "integer",
+                "description": "Requests per minute for this key."
+              },
+              "orgPerMinute": {
+                "type": "integer",
+                "description": "Requests per minute for every key of the org together."
+              }
+            },
+            "required": [
+              "keyPerMinute",
+              "orgPerMinute"
+            ],
+            "description": "The plan’s `api_access` quotas that apply to this key."
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "prefix",
+          "scopes",
+          "test",
+          "sandboxOrg",
+          "createdAt",
+          "expiresAt",
+          "rotated",
+          "rateLimit"
+        ]
+      },
+      "ApiKeyScope": {
+        "type": "string",
+        "enum": [
+          "org:read",
+          "events:read",
+          "events:write",
+          "orders:read",
+          "orders:refund",
+          "attendees:read",
+          "attendees:write",
+          "checkin:scan"
+        ]
       },
       "OrderPage": {
         "type": "object",
@@ -8013,6 +10345,98 @@
         }
       }
     },
+    "/v1/orgs/{org}/api-key": {
+      "get": {
+        "operationId": "getCurrentApiKey",
+        "tags": [
+          "organizations"
+        ],
+        "summary": "The calling API key: scopes, expiry and rate limits (any scope)",
+        "description": "Who am I, for an org API key (M6.3a): its name, prefix, scopes, expiry (rotation sets one) and the per-minute quotas of the org’s plan. Never the secret. A user session gets `403`.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 63,
+              "description": "Organization id or slug",
+              "example": "lakeside-events"
+            },
+            "required": true,
+            "description": "Organization id or slug",
+            "name": "org",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The calling key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiKeyInfo"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/orgs/{org}/events/{eventId}/orders": {
       "get": {
         "operationId": "listEventOrders",
@@ -11082,5 +13506,1773 @@
       }
     }
   },
-  "webhooks": {}
+  "webhooks": {
+    "order.paid": {
+      "post": {
+        "operationId": "webhook_order_paid_v1",
+        "tags": [
+          "webhooks"
+        ],
+        "summary": "An order was paid and its tickets issued.",
+        "description": "Sent once per order when payment completes (online, at the box office, by invoice, or a free order). `via` says how it was paid. Read the order and its tickets with `GET /v1/orgs/{org}/orders/{orderId}`.\n\nVersion 1. Sent as a Standard Webhooks message (see the verification guide).",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "The message id; retries and replays reuse it. Deduplicate on it."
+            },
+            "required": true,
+            "description": "The message id; retries and replays reuse it. Deduplicate on it.",
+            "name": "webhook-id",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away."
+            },
+            "required": true,
+            "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away.",
+            "name": "webhook-timestamp",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation)."
+            },
+            "required": true,
+            "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation).",
+            "name": "webhook-signature",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookOrderPaidV1Message"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Any 2xx answer acknowledges the message; anything else is retried for about 28 hours."
+          }
+        }
+      }
+    },
+    "order.refunded": {
+      "post": {
+        "operationId": "webhook_order_refunded_v1",
+        "tags": [
+          "webhooks"
+        ],
+        "summary": "All or part of an order was refunded.",
+        "description": "Sent for each refund. `fully` is true when nothing is left to refund; `tickets` counts the tickets the refund cancelled.\n\nVersion 1. Sent as a Standard Webhooks message (see the verification guide).",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "The message id; retries and replays reuse it. Deduplicate on it."
+            },
+            "required": true,
+            "description": "The message id; retries and replays reuse it. Deduplicate on it.",
+            "name": "webhook-id",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away."
+            },
+            "required": true,
+            "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away.",
+            "name": "webhook-timestamp",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation)."
+            },
+            "required": true,
+            "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation).",
+            "name": "webhook-signature",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookOrderRefundedV1Message"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Any 2xx answer acknowledges the message; anything else is retried for about 28 hours."
+          }
+        }
+      }
+    },
+    "order.expired": {
+      "post": {
+        "operationId": "webhook_order_expired_v1",
+        "tags": [
+          "webhooks"
+        ],
+        "summary": "An unpaid order expired and released its tickets.",
+        "description": "The checkout hold ran out before payment; the held tickets went back on sale.\n\nVersion 1. Sent as a Standard Webhooks message (see the verification guide).",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "The message id; retries and replays reuse it. Deduplicate on it."
+            },
+            "required": true,
+            "description": "The message id; retries and replays reuse it. Deduplicate on it.",
+            "name": "webhook-id",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away."
+            },
+            "required": true,
+            "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away.",
+            "name": "webhook-timestamp",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation)."
+            },
+            "required": true,
+            "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation).",
+            "name": "webhook-signature",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookOrderExpiredV1Message"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Any 2xx answer acknowledges the message; anything else is retried for about 28 hours."
+          }
+        }
+      }
+    },
+    "order.payment_failed": {
+      "post": {
+        "operationId": "webhook_order_payment_failed_v1",
+        "tags": [
+          "webhooks"
+        ],
+        "summary": "A payment attempt for an order failed.",
+        "description": "The buyer can try again until the order expires.\n\nVersion 1. Sent as a Standard Webhooks message (see the verification guide).",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "The message id; retries and replays reuse it. Deduplicate on it."
+            },
+            "required": true,
+            "description": "The message id; retries and replays reuse it. Deduplicate on it.",
+            "name": "webhook-id",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away."
+            },
+            "required": true,
+            "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away.",
+            "name": "webhook-timestamp",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation)."
+            },
+            "required": true,
+            "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation).",
+            "name": "webhook-signature",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookOrderPaymentFailedV1Message"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Any 2xx answer acknowledges the message; anything else is retried for about 28 hours."
+          }
+        }
+      }
+    },
+    "order.disputed": {
+      "post": {
+        "operationId": "webhook_order_disputed_v1",
+        "tags": [
+          "webhooks"
+        ],
+        "summary": "A buyer disputed a payment (chargeback).",
+        "description": "Evidence can be submitted from the console before the provider’s deadline.\n\nVersion 1. Sent as a Standard Webhooks message (see the verification guide).",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "The message id; retries and replays reuse it. Deduplicate on it."
+            },
+            "required": true,
+            "description": "The message id; retries and replays reuse it. Deduplicate on it.",
+            "name": "webhook-id",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away."
+            },
+            "required": true,
+            "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away.",
+            "name": "webhook-timestamp",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation)."
+            },
+            "required": true,
+            "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation).",
+            "name": "webhook-signature",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookOrderDisputedV1Message"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Any 2xx answer acknowledges the message; anything else is retried for about 28 hours."
+          }
+        }
+      }
+    },
+    "order.dispute_closed": {
+      "post": {
+        "operationId": "webhook_order_dispute_closed_v1",
+        "tags": [
+          "webhooks"
+        ],
+        "summary": "A dispute was decided.",
+        "description": "A lost dispute cancels the order’s live tickets.\n\nVersion 1. Sent as a Standard Webhooks message (see the verification guide).",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "The message id; retries and replays reuse it. Deduplicate on it."
+            },
+            "required": true,
+            "description": "The message id; retries and replays reuse it. Deduplicate on it.",
+            "name": "webhook-id",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away."
+            },
+            "required": true,
+            "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away.",
+            "name": "webhook-timestamp",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation)."
+            },
+            "required": true,
+            "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation).",
+            "name": "webhook-signature",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookOrderDisputeClosedV1Message"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Any 2xx answer acknowledges the message; anything else is retried for about 28 hours."
+          }
+        }
+      }
+    },
+    "tickets.cancelled": {
+      "post": {
+        "operationId": "webhook_tickets_cancelled_v1",
+        "tags": [
+          "webhooks"
+        ],
+        "summary": "Tickets were cancelled in bulk.",
+        "description": "One message per bulk cancellation (`operationId`) or per voided invoice (`orderId`: M5.1d pay later), with the ids of the tickets it voided. Exactly one of `operationId` and `orderId` is present.\n\nVersion 1. Sent as a Standard Webhooks message (see the verification guide).",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "The message id; retries and replays reuse it. Deduplicate on it."
+            },
+            "required": true,
+            "description": "The message id; retries and replays reuse it. Deduplicate on it.",
+            "name": "webhook-id",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away."
+            },
+            "required": true,
+            "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away.",
+            "name": "webhook-timestamp",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation)."
+            },
+            "required": true,
+            "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation).",
+            "name": "webhook-signature",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookTicketsCancelledV1Message"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Any 2xx answer acknowledges the message; anything else is retried for about 28 hours."
+          }
+        }
+      }
+    },
+    "ticket.transferred": {
+      "post": {
+        "operationId": "webhook_ticket_transferred_v1",
+        "tags": [
+          "webhooks"
+        ],
+        "summary": "A ticket moved to a new holder.",
+        "description": "The previous QR code stops working; `rev` is the ticket’s new revision. The new holder’s details are not in the payload.\n\nVersion 1. Sent as a Standard Webhooks message (see the verification guide).",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "The message id; retries and replays reuse it. Deduplicate on it."
+            },
+            "required": true,
+            "description": "The message id; retries and replays reuse it. Deduplicate on it.",
+            "name": "webhook-id",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away."
+            },
+            "required": true,
+            "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away.",
+            "name": "webhook-timestamp",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation)."
+            },
+            "required": true,
+            "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation).",
+            "name": "webhook-signature",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookTicketTransferredV1Message"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Any 2xx answer acknowledges the message; anything else is retried for about 28 hours."
+          }
+        }
+      }
+    },
+    "ticket.claimed": {
+      "post": {
+        "operationId": "webhook_ticket_claimed_v1",
+        "tags": [
+          "webhooks"
+        ],
+        "summary": "A distributed ticket was claimed by its guest.",
+        "description": "Sent when someone opens a claim link and takes the ticket.\n\nVersion 1. Sent as a Standard Webhooks message (see the verification guide).",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "The message id; retries and replays reuse it. Deduplicate on it."
+            },
+            "required": true,
+            "description": "The message id; retries and replays reuse it. Deduplicate on it.",
+            "name": "webhook-id",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away."
+            },
+            "required": true,
+            "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away.",
+            "name": "webhook-timestamp",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation)."
+            },
+            "required": true,
+            "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation).",
+            "name": "webhook-signature",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookTicketClaimedV1Message"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Any 2xx answer acknowledges the message; anything else is retried for about 28 hours."
+          }
+        }
+      }
+    },
+    "ticket.admitted": {
+      "post": {
+        "operationId": "webhook_ticket_admitted_v1",
+        "tags": [
+          "webhooks"
+        ],
+        "summary": "A ticket was scanned in.",
+        "description": "`day` is the event day in the event’s time zone. `offline` is true when a door device scanned without a connection and synced later.\n\nVersion 1. Sent as a Standard Webhooks message (see the verification guide).",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "The message id; retries and replays reuse it. Deduplicate on it."
+            },
+            "required": true,
+            "description": "The message id; retries and replays reuse it. Deduplicate on it.",
+            "name": "webhook-id",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away."
+            },
+            "required": true,
+            "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away.",
+            "name": "webhook-timestamp",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation)."
+            },
+            "required": true,
+            "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation).",
+            "name": "webhook-signature",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookTicketAdmittedV1Message"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Any 2xx answer acknowledges the message; anything else is retried for about 28 hours."
+          }
+        }
+      }
+    },
+    "ticket.admission_undone": {
+      "post": {
+        "operationId": "webhook_ticket_admission_undone_v1",
+        "tags": [
+          "webhooks"
+        ],
+        "summary": "A scan was undone.",
+        "description": "Door staff reversed an admission (a mistaken scan); the ticket can be scanned again.\n\nVersion 1. Sent as a Standard Webhooks message (see the verification guide).",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "The message id; retries and replays reuse it. Deduplicate on it."
+            },
+            "required": true,
+            "description": "The message id; retries and replays reuse it. Deduplicate on it.",
+            "name": "webhook-id",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away."
+            },
+            "required": true,
+            "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away.",
+            "name": "webhook-timestamp",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation)."
+            },
+            "required": true,
+            "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation).",
+            "name": "webhook-signature",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookTicketAdmissionUndoneV1Message"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Any 2xx answer acknowledges the message; anything else is retried for about 28 hours."
+          }
+        }
+      }
+    },
+    "event.created": {
+      "post": {
+        "operationId": "webhook_event_created_v1",
+        "tags": [
+          "webhooks"
+        ],
+        "summary": "An event was created (new, duplicated or from a template).",
+        "description": "The event starts as a draft. `profile` is its kind (concert, gala, conference…).\n\nVersion 1. Sent as a Standard Webhooks message (see the verification guide).",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "The message id; retries and replays reuse it. Deduplicate on it."
+            },
+            "required": true,
+            "description": "The message id; retries and replays reuse it. Deduplicate on it.",
+            "name": "webhook-id",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away."
+            },
+            "required": true,
+            "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away.",
+            "name": "webhook-timestamp",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation)."
+            },
+            "required": true,
+            "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation).",
+            "name": "webhook-signature",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookEventCreatedV1Message"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Any 2xx answer acknowledges the message; anything else is retried for about 28 hours."
+          }
+        }
+      }
+    },
+    "event.published": {
+      "post": {
+        "operationId": "webhook_event_published_v1",
+        "tags": [
+          "webhooks"
+        ],
+        "summary": "An event was published.",
+        "description": "It is on sale and visible according to its visibility. `from` and `to` are the event’s status before and after.\n\nVersion 1. Sent as a Standard Webhooks message (see the verification guide).",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "The message id; retries and replays reuse it. Deduplicate on it."
+            },
+            "required": true,
+            "description": "The message id; retries and replays reuse it. Deduplicate on it.",
+            "name": "webhook-id",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away."
+            },
+            "required": true,
+            "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away.",
+            "name": "webhook-timestamp",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation)."
+            },
+            "required": true,
+            "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation).",
+            "name": "webhook-signature",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookEventPublishedV1Message"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Any 2xx answer acknowledges the message; anything else is retried for about 28 hours."
+          }
+        }
+      }
+    },
+    "event.unpublished": {
+      "post": {
+        "operationId": "webhook_event_unpublished_v1",
+        "tags": [
+          "webhooks"
+        ],
+        "summary": "An event was taken offline.",
+        "description": "It went back to draft; its page and sales are closed. `from` and `to` are the event’s status before and after.\n\nVersion 1. Sent as a Standard Webhooks message (see the verification guide).",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "The message id; retries and replays reuse it. Deduplicate on it."
+            },
+            "required": true,
+            "description": "The message id; retries and replays reuse it. Deduplicate on it.",
+            "name": "webhook-id",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away."
+            },
+            "required": true,
+            "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away.",
+            "name": "webhook-timestamp",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation)."
+            },
+            "required": true,
+            "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation).",
+            "name": "webhook-signature",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookEventUnpublishedV1Message"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Any 2xx answer acknowledges the message; anything else is retried for about 28 hours."
+          }
+        }
+      }
+    },
+    "event.postponed": {
+      "post": {
+        "operationId": "webhook_event_postponed_v1",
+        "tags": [
+          "webhooks"
+        ],
+        "summary": "An event was postponed.",
+        "description": "The date is to be announced; ticket holders keep their tickets. `from` and `to` are the event’s status before and after.\n\nVersion 1. Sent as a Standard Webhooks message (see the verification guide).",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "The message id; retries and replays reuse it. Deduplicate on it."
+            },
+            "required": true,
+            "description": "The message id; retries and replays reuse it. Deduplicate on it.",
+            "name": "webhook-id",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away."
+            },
+            "required": true,
+            "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away.",
+            "name": "webhook-timestamp",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation)."
+            },
+            "required": true,
+            "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation).",
+            "name": "webhook-signature",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookEventPostponedV1Message"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Any 2xx answer acknowledges the message; anything else is retried for about 28 hours."
+          }
+        }
+      }
+    },
+    "event.rescheduled": {
+      "post": {
+        "operationId": "webhook_event_rescheduled_v1",
+        "tags": [
+          "webhooks"
+        ],
+        "summary": "A postponed event has a new date.",
+        "description": "Read the event for its new `startsAt`. `from` and `to` are the event’s status before and after.\n\nVersion 1. Sent as a Standard Webhooks message (see the verification guide).",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "The message id; retries and replays reuse it. Deduplicate on it."
+            },
+            "required": true,
+            "description": "The message id; retries and replays reuse it. Deduplicate on it.",
+            "name": "webhook-id",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away."
+            },
+            "required": true,
+            "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away.",
+            "name": "webhook-timestamp",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation)."
+            },
+            "required": true,
+            "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation).",
+            "name": "webhook-signature",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookEventRescheduledV1Message"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Any 2xx answer acknowledges the message; anything else is retried for about 28 hours."
+          }
+        }
+      }
+    },
+    "event.cancelled": {
+      "post": {
+        "operationId": "webhook_event_cancelled_v1",
+        "tags": [
+          "webhooks"
+        ],
+        "summary": "An event was cancelled.",
+        "description": "Refunds follow the organizer’s policy (`order.refunded` per order). `from` and `to` are the event’s status before and after.\n\nVersion 1. Sent as a Standard Webhooks message (see the verification guide).",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "The message id; retries and replays reuse it. Deduplicate on it."
+            },
+            "required": true,
+            "description": "The message id; retries and replays reuse it. Deduplicate on it.",
+            "name": "webhook-id",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away."
+            },
+            "required": true,
+            "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away.",
+            "name": "webhook-timestamp",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation)."
+            },
+            "required": true,
+            "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation).",
+            "name": "webhook-signature",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookEventCancelledV1Message"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Any 2xx answer acknowledges the message; anything else is retried for about 28 hours."
+          }
+        }
+      }
+    },
+    "event.completed": {
+      "post": {
+        "operationId": "webhook_event_completed_v1",
+        "tags": [
+          "webhooks"
+        ],
+        "summary": "An event was marked as completed.",
+        "description": "It is over; reports are final. `from` and `to` are the event’s status before and after.\n\nVersion 1. Sent as a Standard Webhooks message (see the verification guide).",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "The message id; retries and replays reuse it. Deduplicate on it."
+            },
+            "required": true,
+            "description": "The message id; retries and replays reuse it. Deduplicate on it.",
+            "name": "webhook-id",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away."
+            },
+            "required": true,
+            "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away.",
+            "name": "webhook-timestamp",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation)."
+            },
+            "required": true,
+            "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation).",
+            "name": "webhook-signature",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookEventCompletedV1Message"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Any 2xx answer acknowledges the message; anything else is retried for about 28 hours."
+          }
+        }
+      }
+    },
+    "event.archived": {
+      "post": {
+        "operationId": "webhook_event_archived_v1",
+        "tags": [
+          "webhooks"
+        ],
+        "summary": "An event was archived.",
+        "description": "It is hidden from lists; its data is kept. `from` and `to` are the event’s status before and after.\n\nVersion 1. Sent as a Standard Webhooks message (see the verification guide).",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "The message id; retries and replays reuse it. Deduplicate on it."
+            },
+            "required": true,
+            "description": "The message id; retries and replays reuse it. Deduplicate on it.",
+            "name": "webhook-id",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away."
+            },
+            "required": true,
+            "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away.",
+            "name": "webhook-timestamp",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation)."
+            },
+            "required": true,
+            "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation).",
+            "name": "webhook-signature",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookEventArchivedV1Message"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Any 2xx answer acknowledges the message; anything else is retried for about 28 hours."
+          }
+        }
+      }
+    },
+    "event.updated": {
+      "post": {
+        "operationId": "webhook_event_updated_v1",
+        "tags": [
+          "webhooks"
+        ],
+        "summary": "An event’s details changed.",
+        "description": "`fields` names what changed (for example `startsAt`); read the event for the new values.\n\nVersion 1. Sent as a Standard Webhooks message (see the verification guide).",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "The message id; retries and replays reuse it. Deduplicate on it."
+            },
+            "required": true,
+            "description": "The message id; retries and replays reuse it. Deduplicate on it.",
+            "name": "webhook-id",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away."
+            },
+            "required": true,
+            "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away.",
+            "name": "webhook-timestamp",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation)."
+            },
+            "required": true,
+            "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation).",
+            "name": "webhook-signature",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookEventUpdatedV1Message"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Any 2xx answer acknowledges the message; anything else is retried for about 28 hours."
+          }
+        }
+      }
+    },
+    "event.occurrence_cancelled": {
+      "post": {
+        "operationId": "webhook_event_occurrence_cancelled_v1",
+        "tags": [
+          "webhooks"
+        ],
+        "summary": "One date of a recurring event was cancelled.",
+        "description": "`startsAt` is when the cancelled date was due to start.\n\nVersion 1. Sent as a Standard Webhooks message (see the verification guide).",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "The message id; retries and replays reuse it. Deduplicate on it."
+            },
+            "required": true,
+            "description": "The message id; retries and replays reuse it. Deduplicate on it.",
+            "name": "webhook-id",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away."
+            },
+            "required": true,
+            "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away.",
+            "name": "webhook-timestamp",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation)."
+            },
+            "required": true,
+            "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation).",
+            "name": "webhook-signature",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookEventOccurrenceCancelledV1Message"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Any 2xx answer acknowledges the message; anything else is retried for about 28 hours."
+          }
+        }
+      }
+    },
+    "ticket_type.created": {
+      "post": {
+        "operationId": "webhook_ticket_type_created_v1",
+        "tags": [
+          "webhooks"
+        ],
+        "summary": "A ticket type was added to an event.",
+        "description": "Read it with `GET /v1/orgs/{org}/events/{eventId}/ticket-types`.\n\nVersion 1. Sent as a Standard Webhooks message (see the verification guide).",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "The message id; retries and replays reuse it. Deduplicate on it."
+            },
+            "required": true,
+            "description": "The message id; retries and replays reuse it. Deduplicate on it.",
+            "name": "webhook-id",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away."
+            },
+            "required": true,
+            "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away.",
+            "name": "webhook-timestamp",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation)."
+            },
+            "required": true,
+            "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation).",
+            "name": "webhook-signature",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookTicketTypeCreatedV1Message"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Any 2xx answer acknowledges the message; anything else is retried for about 28 hours."
+          }
+        }
+      }
+    },
+    "ticket_type.updated": {
+      "post": {
+        "operationId": "webhook_ticket_type_updated_v1",
+        "tags": [
+          "webhooks"
+        ],
+        "summary": "A ticket type changed.",
+        "description": "`fields` names what changed (for example `priceMinor`).\n\nVersion 1. Sent as a Standard Webhooks message (see the verification guide).",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "The message id; retries and replays reuse it. Deduplicate on it."
+            },
+            "required": true,
+            "description": "The message id; retries and replays reuse it. Deduplicate on it.",
+            "name": "webhook-id",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away."
+            },
+            "required": true,
+            "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away.",
+            "name": "webhook-timestamp",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation)."
+            },
+            "required": true,
+            "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation).",
+            "name": "webhook-signature",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookTicketTypeUpdatedV1Message"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Any 2xx answer acknowledges the message; anything else is retried for about 28 hours."
+          }
+        }
+      }
+    },
+    "ticket_type.archived": {
+      "post": {
+        "operationId": "webhook_ticket_type_archived_v1",
+        "tags": [
+          "webhooks"
+        ],
+        "summary": "A ticket type was archived.",
+        "description": "It is no longer sold; tickets already issued stay valid.\n\nVersion 1. Sent as a Standard Webhooks message (see the verification guide).",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "The message id; retries and replays reuse it. Deduplicate on it."
+            },
+            "required": true,
+            "description": "The message id; retries and replays reuse it. Deduplicate on it.",
+            "name": "webhook-id",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away."
+            },
+            "required": true,
+            "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away.",
+            "name": "webhook-timestamp",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation)."
+            },
+            "required": true,
+            "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation).",
+            "name": "webhook-signature",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookTicketTypeArchivedV1Message"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Any 2xx answer acknowledges the message; anything else is retried for about 28 hours."
+          }
+        }
+      }
+    },
+    "form.registration_submitted": {
+      "post": {
+        "operationId": "webhook_form_registration_submitted_v1",
+        "tags": [
+          "webhooks"
+        ],
+        "summary": "A registration form was submitted.",
+        "description": "The answers are never in the payload; they stay in the console. `formVersion` is the form version answered.\n\nVersion 1. Sent as a Standard Webhooks message (see the verification guide).",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "The message id; retries and replays reuse it. Deduplicate on it."
+            },
+            "required": true,
+            "description": "The message id; retries and replays reuse it. Deduplicate on it.",
+            "name": "webhook-id",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away."
+            },
+            "required": true,
+            "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away.",
+            "name": "webhook-timestamp",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation)."
+            },
+            "required": true,
+            "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation).",
+            "name": "webhook-signature",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookRegistrationSubmittedV1Message"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Any 2xx answer acknowledges the message; anything else is retried for about 28 hours."
+          }
+        }
+      }
+    },
+    "waitlist.joined": {
+      "post": {
+        "operationId": "webhook_waitlist_joined_v1",
+        "tags": [
+          "webhooks"
+        ],
+        "summary": "Someone joined an event’s waitlist.",
+        "description": "Who joined is not in the payload.\n\nVersion 1. Sent as a Standard Webhooks message (see the verification guide).",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "The message id; retries and replays reuse it. Deduplicate on it."
+            },
+            "required": true,
+            "description": "The message id; retries and replays reuse it. Deduplicate on it.",
+            "name": "webhook-id",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away."
+            },
+            "required": true,
+            "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away.",
+            "name": "webhook-timestamp",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation)."
+            },
+            "required": true,
+            "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation).",
+            "name": "webhook-signature",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookWaitlistJoinedV1Message"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Any 2xx answer acknowledges the message; anything else is retried for about 28 hours."
+          }
+        }
+      }
+    },
+    "waitlist.offered": {
+      "post": {
+        "operationId": "webhook_waitlist_offered_v1",
+        "tags": [
+          "webhooks"
+        ],
+        "summary": "A waitlist entry was offered a place.",
+        "description": "`offer` counts the offers this entry has had (1 for the first).\n\nVersion 1. Sent as a Standard Webhooks message (see the verification guide).",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "The message id; retries and replays reuse it. Deduplicate on it."
+            },
+            "required": true,
+            "description": "The message id; retries and replays reuse it. Deduplicate on it.",
+            "name": "webhook-id",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away."
+            },
+            "required": true,
+            "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away.",
+            "name": "webhook-timestamp",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation)."
+            },
+            "required": true,
+            "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation).",
+            "name": "webhook-signature",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookWaitlistOfferedV1Message"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Any 2xx answer acknowledges the message; anything else is retried for about 28 hours."
+          }
+        }
+      }
+    },
+    "survey.responded": {
+      "post": {
+        "operationId": "webhook_survey_responded_v1",
+        "tags": [
+          "webhooks"
+        ],
+        "summary": "A survey was answered.",
+        "description": "The answers stay in the console; the payload says which survey and invitation.\n\nVersion 1. Sent as a Standard Webhooks message (see the verification guide).",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "The message id; retries and replays reuse it. Deduplicate on it."
+            },
+            "required": true,
+            "description": "The message id; retries and replays reuse it. Deduplicate on it.",
+            "name": "webhook-id",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away."
+            },
+            "required": true,
+            "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away.",
+            "name": "webhook-timestamp",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation)."
+            },
+            "required": true,
+            "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation).",
+            "name": "webhook-signature",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookSurveyRespondedV1Message"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Any 2xx answer acknowledges the message; anything else is retried for about 28 hours."
+          }
+        }
+      }
+    },
+    "review.submitted": {
+      "post": {
+        "operationId": "webhook_review_submitted_v1",
+        "tags": [
+          "webhooks"
+        ],
+        "summary": "An attendee rated an event.",
+        "description": "`rating` is 1 to 5. The review text is not in the payload.\n\nVersion 1. Sent as a Standard Webhooks message (see the verification guide).",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "The message id; retries and replays reuse it. Deduplicate on it."
+            },
+            "required": true,
+            "description": "The message id; retries and replays reuse it. Deduplicate on it.",
+            "name": "webhook-id",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away."
+            },
+            "required": true,
+            "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away.",
+            "name": "webhook-timestamp",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation)."
+            },
+            "required": true,
+            "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation).",
+            "name": "webhook-signature",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookReviewSubmittedV1Message"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Any 2xx answer acknowledges the message; anything else is retried for about 28 hours."
+          }
+        }
+      }
+    },
+    "program.agenda_published": {
+      "post": {
+        "operationId": "webhook_program_agenda_published_v1",
+        "tags": [
+          "webhooks"
+        ],
+        "summary": "An event’s agenda was published.",
+        "description": "`agendaVersion` increases with each publish; read the agenda from the public content API.\n\nVersion 1. Sent as a Standard Webhooks message (see the verification guide).",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "The message id; retries and replays reuse it. Deduplicate on it."
+            },
+            "required": true,
+            "description": "The message id; retries and replays reuse it. Deduplicate on it.",
+            "name": "webhook-id",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away."
+            },
+            "required": true,
+            "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away.",
+            "name": "webhook-timestamp",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation)."
+            },
+            "required": true,
+            "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation).",
+            "name": "webhook-signature",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookAgendaPublishedV1Message"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Any 2xx answer acknowledges the message; anything else is retried for about 28 hours."
+          }
+        }
+      }
+    },
+    "webhook.test": {
+      "post": {
+        "operationId": "webhook_webhook_test_v1",
+        "tags": [
+          "webhooks"
+        ],
+        "summary": "A test message sent from the console.",
+        "description": "Sent only to the endpoint you test, with `test: true`. Use it to check that your endpoint verifies signatures and answers 2xx.\n\nVersion 1. Sent as a Standard Webhooks message (see the verification guide).",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "The message id; retries and replays reuse it. Deduplicate on it."
+            },
+            "required": true,
+            "description": "The message id; retries and replays reuse it. Deduplicate on it.",
+            "name": "webhook-id",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away."
+            },
+            "required": true,
+            "description": "Unix seconds when this attempt was signed. Refuse it if more than 5 minutes away.",
+            "name": "webhook-timestamp",
+            "in": "header"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation)."
+            },
+            "required": true,
+            "description": "Space-separated `v1,<base64 HMAC-SHA256>` signatures of `<id>.<timestamp>.<raw body>` with the endpoint secret (two during a rotation).",
+            "name": "webhook-signature",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookTestV1Message"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Any 2xx answer acknowledges the message; anything else is retried for about 28 hours."
+          }
+        }
+      }
+    }
+  }
 }

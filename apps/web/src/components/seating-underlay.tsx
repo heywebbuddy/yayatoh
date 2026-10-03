@@ -16,6 +16,7 @@ import { Alert, Button } from '@yayatoh/ui';
 import { useLocale, useTranslations } from 'next-intl';
 import { type FormEvent, useId, useRef, useState } from 'react';
 import { looksLikeImage, UPLOAD_ACCEPT, UPLOAD_MAX_BYTES } from '@/lib/media-limits.ts';
+import { looksLikePdf, PDF_MAX_PAGE, pdfPageImage } from '@/lib/pdf-page.ts';
 
 const field = 'field w-24 px-3';
 type Point = { x: string; y: string };
@@ -30,6 +31,9 @@ const UPLOAD_REASONS = new Set([
   'slot_full',
   'forbidden',
   'network',
+  // M6.11b: a page of a PDF floor plan.
+  'pdf_page',
+  'pdf_unreadable',
 ]);
 type Sized = Underlay & { imageWidth: number; imageHeight: number };
 const sized = (u: Underlay | null): u is Sized => Boolean(u?.imageWidth && u.imageHeight);
@@ -74,6 +78,9 @@ export function UnderlayPanel({
     null,
   );
   const [metres, setMetres] = useState('');
+  // M6.11b: which page of a PDF to trace (pages counted from 1), and how many it has.
+  const [pdfPage, setPdfPage] = useState('1');
+  const [pdfPages, setPdfPages] = useState<number | null>(null);
   const u = doc.underlay;
   const readOnly = locked || !ticket;
   const imageLocked = readOnly || Boolean(u?.locked);
@@ -92,12 +99,44 @@ export function UnderlayPanel({
       fileRef.current?.focus();
     };
     if (!file) return fail('no_file');
-    if (!looksLikeImage(file)) return fail('unsupported_type');
-    if (file.size > UPLOAD_MAX_BYTES) return fail('too_large');
+    const pdf = looksLikePdf(file);
+    if (!pdf && !looksLikeImage(file)) return fail('unsupported_type');
+    if (!pdf && file.size > UPLOAD_MAX_BYTES) return fail('too_large');
     setError(null);
-    const body = new FormData();
+    const send = (image: Blob, name: string) => {
+      const body = new FormData();
+      body.set('file', image, name);
+      return body;
+    };
+    if (pdf) {
+      // M6.11b: the chosen page is drawn here, then uploaded as an image like any other.
+      const page = Number(pdfPage);
+      setStatus(t('pdfDrawing', { page: Number.isFinite(page) ? page : 0 }));
+      pdfPageImage(file, page, UPLOAD_MAX_BYTES)
+        .then((r) => {
+          setPdfPages(r.pages ?? null);
+          if (!r.ok) return fail(r.reason);
+          post(
+            send(
+              r.blob,
+              `${file.name.replace(/\.pdf$/i, '')}-page-${page}.${r.blob.type === 'image/png' ? 'png' : 'jpg'}`,
+            ),
+          );
+        })
+        .catch(() => fail('pdf_unreadable'));
+      return;
+    }
+    post(send(file, file.name));
+  }
+
+  function post(body: FormData) {
+    if (!ticket) return;
+    const fail = (reason: string) => {
+      setError(reason);
+      setStatus('');
+      fileRef.current?.focus();
+    };
     body.set('ticket', ticket);
-    body.set('file', file);
     // A background, not content: the plan itself is described by its list.
     body.set('decorative', '1');
     body.set('locale', locale);
@@ -198,21 +237,40 @@ export function UnderlayPanel({
             <input
               ref={fileRef}
               type="file"
-              accept={UPLOAD_ACCEPT.join(',')}
+              accept={[...UPLOAD_ACCEPT, 'application/pdf'].join(',')}
               aria-invalid={error ? true : undefined}
               aria-describedby={error ? `${id}-up-error` : `${id}-up-hint`}
               className="min-h-10 text-body"
             />
           </label>
+          <label className="flex flex-col gap-1 text-caption text-ink-2">
+            {t('pdfPage')}
+            <input
+              type="number"
+              inputMode="numeric"
+              min={1}
+              max={PDF_MAX_PAGE}
+              value={pdfPage}
+              aria-describedby={`${id}-pdf-hint`}
+              aria-invalid={error === 'pdf_page' || undefined}
+              onChange={(e) => setPdfPage(e.currentTarget.value)}
+              className={field}
+            />
+          </label>
           <Button type="submit" size="sm" variant="secondary">
             {t('upload')}
           </Button>
+          <p id={`${id}-pdf-hint`} className="w-full text-caption text-ink-2">
+            {t('pdfHint')}
+          </p>
           <p id={`${id}-up-hint`} className="w-full text-caption text-ink-2">
             {t('fileHint')}
           </p>
           {error ? (
             <p id={`${id}-up-error`} className="w-full text-caption text-danger">
-              {t(`errors.${UPLOAD_REASONS.has(error) ? error : 'generic'}`)}
+              {error === 'pdf_page'
+                ? t('errors.pdf_page', { pages: pdfPages ?? 0 })
+                : t(`errors.${UPLOAD_REASONS.has(error) ? error : 'generic'}`)}
             </p>
           ) : null}
         </form>

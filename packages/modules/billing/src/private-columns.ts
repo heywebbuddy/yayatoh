@@ -9,4 +9,19 @@ export const privateColumns = columnPrivacy('billing', {
   entitlement_overrides: { module_key: 'vocab', effect: 'vocab', reason: internal() },
   org_fee_overrides: { currency: 'vocab', reason: internal() },
   org_plans: { plan_key: 'vocab' },
+  org_billing: {
+    provider: 'vocab',
+    provider_customer_id: internal(),
+    grandfathered_reason: 'vocab',
+  },
+  subscriptions: {
+    provider: 'vocab',
+    provider_subscription_id: internal(),
+    provider_customer_id: internal(),
+    status: 'vocab',
+    plan_key: 'vocab',
+    price_lookup_key: 'vocab',
+  },
+  org_entitlements: { module_key: 'vocab', provider: 'vocab' },
+  provider_events: { provider: 'vocab', provider_event_id: internal(), type: 'vocab' },
 });
