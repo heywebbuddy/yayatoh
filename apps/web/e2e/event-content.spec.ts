@@ -35,7 +35,7 @@ async function createEvent(
   const start = opts.startMin ?? 60 * 24 * 30;
   await page.goto(`${ORG}/events/new`);
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Time zone').selectOption('America/Chicago');
+  await pickOption(page.getByLabel('Time zone'), 'America/Chicago');
   await page.getByLabel('Starts', { exact: true }).fill(chicago(start));
   await page.getByLabel('Ends', { exact: true }).fill(chicago(start + (opts.lengthMin ?? 180)));
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -61,7 +61,7 @@ async function addPass(page: Page, base: string, name: string, opts: { hidden?: 
 /** A guest buys one free pass on the public page; returns their order page. */
 async function buyFree(guest: Page, slug: string, pass: string, who: string) {
   if (!guest.url().includes(`/events/${slug}`)) await guest.goto(`/events/${slug}`);
-  await guest.getByLabel(`Quantity — ${pass}`).selectOption('1');
+  await pickOption(guest.getByLabel(`Quantity — ${pass}`), '1');
   await guest.getByLabel('Full name').fill(who);
   await guest
     .getByLabel('Email for your tickets')
@@ -109,7 +109,7 @@ test.describe('page content, announcements and access (M1.4d)', () => {
     await expect(sectionRows).toHaveCount(1);
 
     // A schedule with a bad time: the error names the line; the typed text is kept.
-    await pickOption(add.getByRole('combobox', { name: 'Section type' }), 'schedule');
+    await pickOption(add.getByLabel('Section type'), 'schedule');
     await add.getByLabel('Section title').fill('Programme');
     await add.getByLabel('Schedule', { exact: true }).fill('18:00 | Doors\n25:00 | Too late');
     await add.getByRole('button', { name: 'Add section' }).click();
@@ -122,7 +122,7 @@ test.describe('page content, announcements and access (M1.4d)', () => {
     await expect(sectionRows).toHaveCount(2);
 
     // FAQ: an answer is required.
-    await pickOption(add.getByRole('combobox', { name: 'Section type' }), 'faq');
+    await pickOption(add.getByLabel('Section type'), 'faq');
     await add.getByLabel('Section title').fill('FAQ');
     await add.getByLabel('Questions and answers').fill('Is there parking?');
     await add.getByRole('button', { name: 'Add section' }).click();

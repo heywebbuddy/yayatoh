@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@yayatoh/ui';
+import { Button, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState, useEffect, useRef, useState } from 'react';
 import type { ScanState } from '@/app/[locale]/o/[org]/e/[event]/onsite/actions.ts';
@@ -90,11 +90,11 @@ export function Scanner({
           <label htmlFor="scan-checkpoint" className="text-[13px] font-bold text-ink">
             {t('checkpoints.scanningAt')}
           </label>
-          <select
+          <Select
             id="scan-checkpoint"
             value={stand}
-            onChange={(e) => {
-              setCheckpointId(e.target.value);
+            onValueChange={(v) => {
+              setCheckpointId(v);
               input.current?.focus();
             }}
             className="field"
@@ -105,7 +105,7 @@ export function Scanner({
                 {c.name}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
       ) : null}
       <form action={formAction} className="flex flex-wrap items-end gap-3">

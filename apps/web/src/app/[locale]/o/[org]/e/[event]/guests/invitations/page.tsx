@@ -21,6 +21,7 @@ import {
   CardHeader,
   EmptyState,
   PageHeader,
+  Select,
   StatusPill,
 } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
@@ -191,14 +192,14 @@ export default async function InvitationsPage({
             <label htmlFor="invite-lang" className="text-[13px] font-bold text-ink">
               {t('language')}
             </label>
-            <select id="invite-lang" name="lang" defaultValue={wording} className="field pe-9">
+            <Select id="invite-lang" name="lang" defaultValue={wording} className="field pe-9">
               {INVITE_LOCALES.map((l) => (
                 <option key={l} value={l}>
                   {languageName(l, locale)}
                   {templates.find((x) => x.locale === l)?.custom ? ` · ${t('edited')}` : ''}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
           <Button type="submit" variant="secondary">
             {t('showLanguage')}

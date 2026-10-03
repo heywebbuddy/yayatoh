@@ -81,14 +81,24 @@ export function SectionForm({
       noValidate
     >
       {fixedKind ? null : (
-        <Select
-          id={`${idPrefix}-kind`}
-          name="kind"
-          label={t('kind')}
-          value={kind}
-          onValueChange={(v) => setKind(v as SectionKind)}
-          options={SECTION_KINDS.map((k) => ({ value: k, label: t(`kinds.${k}`), text: t(`kinds.${k}`) }))}
-        />
+        <div className="flex flex-col gap-1.5">
+          <label htmlFor={`${idPrefix}-kind`} className="text-[13px] font-bold text-ink">
+            {t('kind')}
+          </label>
+          <Select
+            id={`${idPrefix}-kind`}
+            name="kind"
+            value={kind}
+            onValueChange={(v) => setKind(v as SectionKind)}
+            className="field"
+          >
+            {SECTION_KINDS.map((k) => (
+              <option key={k} value={k}>
+                {t(`kinds.${k}`)}
+              </option>
+            ))}
+          </Select>
+        </div>
       )}
       <Input
         id={`${idPrefix}-title`}

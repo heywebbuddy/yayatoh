@@ -211,7 +211,7 @@ export function Combobox({
   const describedBy = error ? `${inputId}-error` : hint ? `${inputId}-hint` : undefined;
 
   return (
-    <div className="flex flex-col gap-1.5">
+    <div className="flex min-w-0 flex-col gap-1.5">
       {label ? (
         <label id={labelId} htmlFor={inputId} className="text-[13px] font-bold text-ink">
           {label}

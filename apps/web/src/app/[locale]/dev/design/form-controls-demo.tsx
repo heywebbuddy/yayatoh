@@ -94,7 +94,7 @@ export function FormControlsDemo({ id }: { id: string }) {
         </Select>
         <Select id={`err-${id}`} name="ticket" label={C.errorLabel} error={C.error} defaultValue="">
           <option value="">—</option>
-          <option value="ga">GA</option>
+          <option value="ga">{C.ga}</option>
         </Select>
         <Select id={`dis-sel-${id}`} name="locked" label={C.disabled} disabled defaultValue="published">
           {C.statuses.map((s) => (

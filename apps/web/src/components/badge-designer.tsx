@@ -23,7 +23,7 @@ import {
   sampleRows,
   TEXT_KINDS,
 } from '@yayatoh/badges/client';
-import { Alert, Button, Input } from '@yayatoh/ui';
+import { Alert, Button, Input, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import {
   type KeyboardEvent,
@@ -375,14 +375,14 @@ export function BadgeDesigner({ template, ticketTypes, questions, canWrite, samp
           <label htmlFor={`${uid}-size`} className="text-[13px] font-bold text-ink">
             {t('size')}
           </label>
-          <select
+          <Select
             id={`${uid}-size`}
             className={control}
             value={design.size}
             disabled={!canWrite}
             aria-describedby={`${uid}-size-hint`}
-            onChange={(e) => {
-              update(rescaleDesign(design, e.currentTarget.value as BadgeSize));
+            onValueChange={(v) => {
+              update(rescaleDesign(design, v as BadgeSize));
               setFace('front');
             }}
           >
@@ -391,7 +391,7 @@ export function BadgeDesigner({ template, ticketTypes, questions, canWrite, samp
                 {t(`sizes.${k}`)}
               </option>
             ))}
-          </select>
+          </Select>
           <p id={`${uid}-size-hint`} className="text-caption text-ink-2">
             {t('sizeHint', { bleed: s.bleedMm, safe: s.safeMm })}
           </p>
@@ -400,16 +400,16 @@ export function BadgeDesigner({ template, ticketTypes, questions, canWrite, samp
           <label htmlFor={`${uid}-dir`} className="text-[13px] font-bold text-ink">
             {t('direction')}
           </label>
-          <select
+          <Select
             id={`${uid}-dir`}
             className={control}
             value={design.direction}
             disabled={!canWrite}
-            onChange={(e) => update({ ...design, direction: e.currentTarget.value as 'ltr' | 'rtl' })}
+            onValueChange={(v) => update({ ...design, direction: v as 'ltr' | 'rtl' })}
           >
             <option value="ltr">{t('directionLtr')}</option>
             <option value="rtl">{t('directionRtl')}</option>
-          </select>
+          </Select>
         </div>
       </div>
 
@@ -576,18 +576,16 @@ export function BadgeDesigner({ template, ticketTypes, questions, canWrite, samp
                       <label htmlFor={`${uid}-align`} className="text-[13px] font-bold text-ink">
                         {t('align')}
                       </label>
-                      <select
+                      <Select
                         id={`${uid}-align`}
                         className={control}
                         value={current.align}
-                        onChange={(e) =>
-                          patch(current.id, { align: e.currentTarget.value as BadgeElement['align'] })
-                        }
+                        onValueChange={(v) => patch(current.id, { align: v as BadgeElement['align'] })}
                       >
                         <option value="start">{t('alignStart')}</option>
                         <option value="center">{t('alignCenter')}</option>
                         <option value="end">{t('alignEnd')}</option>
-                      </select>
+                      </Select>
                     </div>
                   </>
                 ) : null}
@@ -615,18 +613,18 @@ export function BadgeDesigner({ template, ticketTypes, questions, canWrite, samp
                 <label htmlFor={`${uid}-add`} className="text-[13px] font-bold text-ink">
                   {t('addKind')}
                 </label>
-                <select
+                <Select
                   id={`${uid}-add`}
                   className={control}
                   value={addKind}
-                  onChange={(e) => setAddKind(e.currentTarget.value as ElementKind)}
+                  onValueChange={(v) => setAddKind(v as ElementKind)}
                 >
                   {ELEMENT_KINDS.map((k) => (
                     <option key={k} value={k}>
                       {kindLabel(k)}
                     </option>
                   ))}
-                </select>
+                </Select>
               </div>
               <Button
                 type="button"
@@ -660,13 +658,13 @@ export function BadgeDesigner({ template, ticketTypes, questions, canWrite, samp
                         <label htmlFor={`${uid}-rc-${tt.id}`} className="text-[13px] font-bold text-ink">
                           {t('ribbonColor', { type: tt.name })}
                         </label>
-                        <select
+                        <Select
                           id={`${uid}-rc-${tt.id}`}
                           className={control}
                           value={r?.color ?? ''}
-                          onChange={(e) =>
+                          onValueChange={(v) =>
                             setRibbon(tt.id, {
-                              color: e.currentTarget.value as RibbonColor | '',
+                              color: v as RibbonColor | '',
                               label: r?.label || tt.name.toUpperCase().slice(0, 40),
                             })
                           }
@@ -677,7 +675,7 @@ export function BadgeDesigner({ template, ticketTypes, questions, canWrite, samp
                               {t(`colors.${c}`)}
                             </option>
                           ))}
-                        </select>
+                        </Select>
                       </div>
                       {r ? (
                         <Input
@@ -706,14 +704,14 @@ export function BadgeDesigner({ template, ticketTypes, questions, canWrite, samp
                   <label htmlFor={`${uid}-src-${field}`} className="text-[13px] font-bold text-ink">
                     {t(field === 'company' ? 'companyFrom' : 'jobTitleFrom')}
                   </label>
-                  <select
+                  <Select
                     id={`${uid}-src-${field}`}
                     className={control}
                     value={design.sources[field] ?? ''}
-                    onChange={(e) =>
+                    onValueChange={(v) =>
                       update({
                         ...design,
-                        sources: { ...design.sources, [field]: e.currentTarget.value || null },
+                        sources: { ...design.sources, [field]: v || null },
                       })
                     }
                   >
@@ -723,7 +721,7 @@ export function BadgeDesigner({ template, ticketTypes, questions, canWrite, samp
                         {q.label}
                       </option>
                     ))}
-                  </select>
+                  </Select>
                 </div>
               ))}
             </div>

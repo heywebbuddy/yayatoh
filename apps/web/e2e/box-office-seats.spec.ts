@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
-import { expectAccessible, signIn } from './helpers.ts';
+import { expectAccessible, pickOption, signIn } from './helpers.ts';
 import { holdSeats, seatBox, seatedGala, unique, waitLive } from './seating-helpers.ts';
 
 const VIEWER = 'jordan@lakeside.test';
@@ -38,7 +38,7 @@ test.describe('box office seat choice (M1.7f)', () => {
     await seatBox(page, 'Table 1 · 2').focus();
     await page.keyboard.press('Space');
     await expect(box.getByRole('status').filter({ hasText: '1 seat selected' })).toBeVisible();
-    await box.getByLabel('Paid by').selectOption('cash');
+    await pickOption(box.getByLabel('Paid by'), 'cash');
     await expectAccessible(page);
     await box.getByRole('button', { name: 'Record sale' }).click();
     await expect(box.getByText('Sale recorded with 1 seat. The tickets are on their way.')).toBeVisible();

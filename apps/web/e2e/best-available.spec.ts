@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
-import { continueToPayment, expectAccessible, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, expectPicked, pickOption, signIn } from './helpers.ts';
 import { createGala, seatBox, seatedGala, unique, waitLive } from './seating-helpers.ts';
 
 const VIEWER = 'jordan@lakeside.test';
@@ -192,7 +192,7 @@ test.describe('best available and the ADA engine (M6.11a)', () => {
     // Keyboard: how many, then Find seats.
     await buyer.getByLabel('Number of seats').focus();
     await buyer.keyboard.type('4');
-    await expect(buyer.getByLabel('Number of seats')).toHaveValue('4');
+    await expectPicked(buyer.getByLabel('Number of seats'), '4');
     await buyer.keyboard.press('Tab');
     await expect(buyer.getByRole('button', { name: 'Find seats' })).toBeFocused();
     await buyer.keyboard.press('Enter');
@@ -209,7 +209,7 @@ test.describe('best available and the ADA engine (M6.11a)', () => {
     // Those seats are held: the organizer's plan says so, and the next buyer gets the next best.
     const next = await (await browser.newContext()).newPage();
     await next.goto(`/events/${slug}`);
-    await next.getByLabel('Number of seats').selectOption('4');
+    await pickOption(next.getByLabel('Number of seats'), '4');
     await next.getByRole('button', { name: 'Find seats' }).click();
     await expect(result(next).getByRole('list', { name: 'Your seats' })).toHaveText(
       /Row B · 4\s*Row B · 5\s*Row B · 6\s*Row B · 7/,
@@ -243,14 +243,14 @@ test.describe('best available and the ADA engine (M6.11a)', () => {
     await offerBestAvailable(page, base);
     const buyer = await (await browser.newContext()).newPage();
     await buyer.goto(`/events/${slug}`);
-    await buyer.getByLabel('Number of seats').selectOption('6');
+    await pickOption(buyer.getByLabel('Number of seats'), '6');
     await buyer.getByRole('button', { name: 'Find seats' }).click();
     await expect(result(buyer)).toContainText(
       "We couldn't seat your party of 6 together, so your seats are in separate places (groups: 2). You can choose your seats instead.",
     );
     await expect(result(buyer).getByRole('listitem')).toHaveCount(6);
     await expectAccessible(buyer);
-    await buyer.getByLabel('Number of seats').selectOption('11');
+    await pickOption(buyer.getByLabel('Number of seats'), '11');
     await buyer.getByRole('button', { name: 'Find seats again' }).click();
     await expect(
       buyer.getByText(
@@ -301,7 +301,7 @@ test.describe('best available and the ADA engine (M6.11a)', () => {
     await expect(
       buyer.getByText("We'll look for a wheelchair-accessible seat with companion seats next to it."),
     ).toBeVisible();
-    await buyer.getByLabel('Number of seats').selectOption('2');
+    await pickOption(buyer.getByLabel('Number of seats'), '2');
     await buyer.getByRole('button', { name: 'Find seats' }).click();
     await expect(result(buyer).getByRole('list', { name: 'Your seats' })).toHaveText(
       /Row B · 1 \(wheelchair-accessible\)\s*Row B · 2 \(companion seat\)/,
@@ -314,14 +314,14 @@ test.describe('best available and the ADA engine (M6.11a)', () => {
     // Everyone else: never the kept-back seats.
     const other = await (await browser.newContext()).newPage();
     await other.goto(`/events/${slug}`);
-    await other.getByLabel('Number of seats').selectOption('2');
+    await pickOption(other.getByLabel('Number of seats'), '2');
     await other.getByRole('button', { name: 'Find seats' }).click();
     await expect(result(other).getByRole('list', { name: 'Your seats' })).toHaveText(/Row A · 5\s*Row A · 6/);
     // The other accessible seat goes to the next wheelchair user; then none is left.
     const third = await (await browser.newContext()).newPage();
     await third.goto(`/events/${slug}`);
     await third.getByLabel('Someone in my party uses a wheelchair and needs an accessible seat').check();
-    await third.getByLabel('Number of seats').selectOption('1');
+    await pickOption(third.getByLabel('Number of seats'), '1');
     await third.getByRole('button', { name: 'Find seats' }).click();
     await expect(result(third).getByRole('list', { name: 'Your seats' })).toHaveText(
       'Row B · 10 (wheelchair-accessible)',
@@ -363,7 +363,7 @@ test.describe('best available and the ADA engine (M6.11a)', () => {
       box.getByText('Find your seats first: choose how many, then press Find seats.'),
     ).toBeVisible();
     await box.getByLabel('The buyer needs a wheelchair-accessible seat').check();
-    await box.getByLabel('Number of seats').selectOption('2');
+    await pickOption(box.getByLabel('Number of seats'), '2');
     await box.getByRole('button', { name: 'Find seats' }).click();
     await expect(result(page).getByRole('list', { name: 'Your seats' })).toHaveText(
       /Row A · 1 \(wheelchair-accessible\)\s*Row A · 2 \(companion seat\)/,

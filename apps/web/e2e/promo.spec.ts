@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { continueToPayment, expectAccessible, OPEN_HOUSE, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, OPEN_HOUSE, pickOption, signIn } from './helpers.ts';
 
 test.describe('promo codes', () => {
   test.use({ viewport: { width: 1280, height: 900 } });
@@ -20,7 +20,7 @@ test.describe('promo codes', () => {
     await expect(page.getByRole('row').filter({ hasText: pass })).toBeVisible();
 
     await page.getByLabel('Code', { exact: true }).fill(code.toLowerCase());
-    await page.getByLabel('Discount type').selectOption('percent');
+    await pickOption(page.getByLabel('Discount type'), 'percent');
     await page.getByLabel('Discount', { exact: true }).fill('25');
     await page.getByLabel('Maximum uses (optional)').fill('1');
     await page.getByRole('button', { name: 'Add code' }).click();
@@ -32,7 +32,7 @@ test.describe('promo codes', () => {
     const buy = async (name: string) => {
       const guest = await (await browser.newContext()).newPage();
       await guest.goto('/events/lakeside-open-house');
-      await guest.getByLabel(`Quantity — ${pass}`).selectOption('1');
+      await pickOption(guest.getByLabel(`Quantity — ${pass}`), '1');
       await guest.getByLabel('Full name').fill(`${name} ${stamp}`);
       await guest.getByLabel('Email for your tickets').fill(`${name.toLowerCase()}+${stamp}@example.test`);
       await guest.getByLabel('Promo code').fill(code.toLowerCase());

@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
-import { continueToPayment, expectAccessible, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, expectPicked, pickOption, signIn } from './helpers.ts';
 
 /** M1.4b: event series (console + public page + filter), duplicate event, org templates. */
 
@@ -10,7 +10,7 @@ const tagOf = () => `${test.info().project.name.replace(/[^a-z0-9]/g, '')}${Date
 async function createEvent(page: Page, name: string): Promise<string> {
   await page.goto(`${ORG}/events/new`);
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Time zone').selectOption('America/Chicago');
+  await pickOption(page.getByLabel('Time zone'), 'America/Chicago');
   await page.getByLabel('Starts', { exact: true }).fill('2027-09-10T19:00');
   await page.getByLabel('Ends', { exact: true }).fill('2027-09-10T23:00');
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -63,11 +63,11 @@ test.describe('series', () => {
     await addTicketType(page, base, 'Stop pass');
     await page.goto(`${base}/dates`);
     const picker = page.getByRole('region', { name: 'Series' });
-    await picker.getByRole('combobox', { name: 'Series' }).selectOption({ label: name });
+    await pickOption(picker.getByRole('combobox', { name: 'Series' }), { label: name });
     await picker.getByRole('button', { name: 'Save series' }).click();
     await expect(picker.getByText('Series saved.')).toBeVisible();
     await page.reload();
-    await expect(page.getByRole('combobox', { name: 'Series' })).toHaveValue(/.+/);
+    await expectPicked(page.getByRole('combobox', { name: 'Series' }), /.+/);
     await page.goto(base);
     await page.getByRole('button', { name: 'Publish' }).click();
     await expect(page.getByText('Published ·')).toBeVisible();
@@ -139,7 +139,7 @@ test.describe('duplicate and templates', () => {
     // A real order on the source.
     const guest = await (await browser.newContext()).newPage();
     await guest.goto(`/events/${slug}`);
-    await guest.getByLabel('Quantity — Gala seat').selectOption('2');
+    await pickOption(guest.getByLabel('Quantity — Gala seat'), '2');
     await guest.getByLabel('Full name').fill(`Ada ${tag}`);
     await guest.getByLabel('Email for your tickets').fill(`ada${tag}@example.test`);
     await continueToPayment(guest, `ada${tag}@example.test`);
@@ -151,7 +151,6 @@ test.describe('duplicate and templates', () => {
     await expectAccessible(page);
     const dup = page.getByRole('region', { name: 'Duplicate this event' });
     await expect(dup.getByLabel('Name of the new event')).toHaveValue(`${name} (copy)`);
-    // U6: a U1 date-time picker; `data-value` is the wall time it submits.
     await expect(dup.getByLabel('Starts', { exact: true })).toHaveAttribute('data-value', '2027-09-10T19:00');
     // Validation: a one-letter name.
     await dup.getByLabel('Name of the new event').fill('X');

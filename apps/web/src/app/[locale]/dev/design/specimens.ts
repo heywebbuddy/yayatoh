@@ -121,6 +121,7 @@ export const S = {
     series: ['Concert season'],
     errorLabel: 'Ticket type',
     error: 'Choose a ticket type.',
+    ga: 'General admission',
     hint: 'Shown to guests at checkout.',
     disabled: 'Locked after the first sale',
     tags: 'Tags',

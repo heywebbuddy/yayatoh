@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, cx, Input, Tabs, tabClass } from '@yayatoh/ui';
+import { Button, cx, Input, Select, Tabs, tabClass } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { KioskScreen } from '@/components/scan-kiosk.tsx';
@@ -390,11 +390,11 @@ export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
               <label htmlFor="scan-app-checkpoint" className="text-[13px] font-bold text-ink">
                 {t('checkpoints.scanningAt')}
               </label>
-              <select
+              <Select
                 id="scan-app-checkpoint"
                 value={checkpointId}
-                onChange={(e) => {
-                  const id = e.target.value;
+                onValueChange={(v) => {
+                  const id = v;
                   setCheckpointId(id);
                   // Tell the device board at once (the next heartbeat would take up to 30 s).
                   void client.setCheckpoint(id || null).then(() => tick());
@@ -410,7 +410,7 @@ export function ScanApp({ publicKey = null }: { publicKey?: string | null }) {
                     {c.name}
                   </option>
                 ))}
-              </select>
+              </Select>
             </div>
           ) : null}
           <form

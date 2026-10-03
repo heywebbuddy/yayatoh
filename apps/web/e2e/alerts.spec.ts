@@ -3,7 +3,7 @@ import { closePools } from '@yayatoh/db';
 import { localKeyVault, setKeyVault } from '@yayatoh/platform';
 import { resolveOrgSlug } from '@yayatoh/tenancy';
 import { type AlertScenario, alertScenario } from '@yayatoh/testing';
-import { expectAccessible, newUser } from './helpers.ts';
+import { expectAccessible, expectPicked, newUser, pickOption, pickWithKeyboard } from './helpers.ts';
 
 // Tickets are signed with the org's keys: seal them under the web server's key vault.
 const kms = process.env.LOCAL_KMS_KEY;
@@ -79,7 +79,7 @@ test.describe('alerts (M3.2b)', () => {
     const devices = card(page, 'Three check-in devices are offline');
     const pick = devices.getByLabel('Snooze for');
     await pick.focus();
-    await pick.selectOption('240');
+    await pickOption(pick, '240');
     await page.keyboard.press('Tab');
     await expect(
       devices.getByRole('button', { name: 'Snooze “Three check-in devices are offline”' }),
@@ -133,9 +133,7 @@ test.describe('alerts (M3.2b)', () => {
     await other.keyboard.press('Enter');
     await expect(other.getByText('37 selected')).toBeVisible();
     const item = other.getByLabel('Table or row');
-    const rowF = await item.locator('option', { hasText: '40 of 40 free' }).getAttribute('value');
-    await item.focus();
-    await item.selectOption(rowF ?? '');
+    await pickWithKeyboard(item, { label: /40 of 40 free/ });
     await other.getByRole('button', { name: 'Seat them' }).focus();
     await other.keyboard.press('Enter');
     await expect(other.locator('[aria-live="polite"]').getByRole('status')).toContainText(
@@ -162,7 +160,7 @@ test.describe('alerts (M3.2b)', () => {
       .getByRole('link', { name: 'Distribute tickets' })
       .click();
     await expect(page).toHaveURL(/\/attendees\?distribution=pending$/);
-    await expect(page.getByLabel('Distribution')).toHaveValue('pending');
+    await expectPicked(page.getByLabel('Distribution'), 'pending');
     await expect(page.getByText(/^1–50 of 120/)).toBeVisible();
     await expectAccessible(page);
 
@@ -209,7 +207,7 @@ test.describe('alerts (M3.2b)', () => {
     await newUser(door, { join: [`${slug}:viewer`], name });
     await page.goto(`${base}/onsite/staff`);
     const add = page.getByRole('region', { name: 'Add door staff' });
-    await add.getByLabel('Team member').selectOption({ label: name });
+    await pickOption(add.getByLabel('Team member'), { label: name });
     await add.getByRole('button', { name: 'Add door staff' }).click();
     await expect(add.getByRole('status')).toHaveText('Saved.');
     await door.goto(`${base}/command-center`);

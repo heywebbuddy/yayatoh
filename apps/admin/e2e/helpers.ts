@@ -220,7 +220,7 @@ export async function withOpenSignupLock<T>(fn: () => Promise<T>): Promise<T> {
  */
 export async function pickOption(
   trigger: Locator,
-  choice: string | { label?: string; value?: string; index?: number },
+  choice: string | { label?: string | RegExp; value?: string; index?: number },
 ): Promise<void> {
   await trigger.click();
   const listId = await trigger.getAttribute('aria-controls');
@@ -235,6 +235,7 @@ export async function pickOption(
     if (!(await option.count())) option = list.getByRole('option', { name: choice, exact: true });
     if (!(await option.count())) option = options.filter({ hasText: choice }).first();
   } else if (choice.value !== undefined) option = byValue(choice.value);
+  else if (choice.label instanceof RegExp) option = options.filter({ hasText: choice.label }).first();
   else if (choice.label !== undefined) {
     const exact = list.getByRole('option', { name: choice.label, exact: true });
     option = (await exact.count()) ? exact : options.filter({ hasText: choice.label }).first();
@@ -246,4 +247,65 @@ export async function pickOption(
 /** The value a U1 `Select`/picker holds (what its hidden input submits). */
 export async function expectPicked(trigger: Locator, value: string | RegExp): Promise<void> {
   await expect(trigger).toHaveAttribute('data-value', value);
+}
+
+/**
+ * Keyboard-only choice in a U1 `Select`: focuses the trigger, opens the list with ArrowDown and
+ * moves with ArrowDown until the active option matches (by value, else label), then Enter.
+ */
+export async function pickWithKeyboard(
+  trigger: Locator,
+  choice: string | { label: string | RegExp },
+): Promise<void> {
+  const page = trigger.page();
+  await trigger.focus();
+  await page.keyboard.press('ArrowDown');
+  const listId = await trigger.getAttribute('aria-controls');
+  const list = page.locator(`[id="${listId}"]`);
+  await expect(list).toBeVisible();
+  const want = (o: { value: string | null; text: string }) =>
+    typeof choice === 'string'
+      ? o.value === choice || o.text === choice
+      : choice.label instanceof RegExp
+        ? choice.label.test(o.text)
+        : o.text === choice.label;
+  for (let i = 0; i < 400; i++) {
+    const owner = (await trigger.getAttribute('aria-activedescendant'))
+      ? trigger
+      : page.locator(`[aria-controls="${listId}"][aria-activedescendant]`).last();
+    const activeId = await owner.getAttribute('aria-activedescendant');
+    const active = page.locator(`[id="${activeId}"]`);
+    const o = { value: await active.getAttribute('data-value'), text: (await active.innerText()).trim() };
+    if (want(o)) {
+      await page.keyboard.press('Enter');
+      await expect(list.getByRole('option')).toHaveCount(0);
+      return;
+    }
+    await page.keyboard.press('ArrowDown');
+  }
+  throw new Error(`option ${JSON.stringify(choice)} not found with the keyboard`);
+}
+
+/** Opens a U1 `Select`, runs `fn` on its listbox (the options), then closes it with Escape. */
+export async function inOptions<T>(trigger: Locator, fn: (list: Locator) => Promise<T>): Promise<T> {
+  await trigger.click();
+  const list = trigger.page().locator(`[id="${await trigger.getAttribute('aria-controls')}"]`);
+  await expect(list).toBeVisible();
+  const out = await fn(list);
+  await trigger.page().keyboard.press('Escape');
+  await expect(list.getByRole('option')).toHaveCount(0);
+  return out;
+}
+
+/**
+ * The keyboard step a closed native select took on ArrowDown (or ArrowUp): open the U1 list with
+ * ArrowDown, move `by` options from the current one, Enter.
+ */
+export async function stepOption(trigger: Locator, by = 1): Promise<void> {
+  const page = trigger.page();
+  await trigger.focus();
+  await page.keyboard.press('ArrowDown');
+  for (let i = 0; i < Math.abs(by); i++) await page.keyboard.press(by > 0 ? 'ArrowDown' : 'ArrowUp');
+  await page.keyboard.press('Enter');
+  await expect(trigger).toHaveAttribute('aria-expanded', 'false');
 }
