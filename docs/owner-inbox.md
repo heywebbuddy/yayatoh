@@ -551,3 +551,8 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **Who records offline payments and voids invoices:** `orders:refund` (owners, admins, finance), the existing money permission; box office and managers can't. Confirm, or ask for a separate `invoices:manage` permission.
 - [ ] **Invoice wording (`legal-copy`):** the invoice email, the PDF (terms line "Net 30, due no later than 7 days before the event", "Issued by {org} through Yayatoh"), the buyer's invoice page and the reminder template (13 locales). Late-payment wording is deliberately neutral (P5-5: the registration stands). Our PDF is not a tax invoice (no tax lines or seller tax ids yet).
 - [ ] **Door and badge overrides:** any scanner may admit a balance-due ticket with a reason (audited); badge desk staff (`attendees:write`) may print one. Confirm, or restrict to supervisors.
+
+## M5.9a — conference Command Center pack (2026-10-03, pending owner)
+- [ ] **Thresholds** (roadmap-style defaults, one value for every org): a session is "nearly full" at 95 % of its places; a waiting line is long above 10 people; the approval backlog fires from 10 pending applications or one older than 48 hours; exhibitors without booth staff are raised from 7 days before the event. Confirm or adjust (per-org settings are "later").
+- [ ] **Routing:** the new "Sessions, exhibitors and sponsors" group reaches owners, admins and managers in-app and by email by default. Confirm.
+- [ ] **Leads, sponsor deliverables and badge printers** have no source in production until M5.6b, M5.4b and M5.5b are merged: those three rules stay quiet and their tiles say so. Nothing for you to set up; listed so the merge connects them.
