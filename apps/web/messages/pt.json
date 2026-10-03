@@ -1489,7 +1489,8 @@
     },
     "activityLink": "Registo de atividade",
     "privacyLink": "Pedidos de privacidade",
-    "charityLink": "Perfil beneficente"
+    "charityLink": "Perfil beneficente",
+    "planLink": "Plano e módulos"
   },
   "legal": {
     "platform": "Yayatoh",
@@ -10865,5 +10866,118 @@
       "offer_ended": "A oferta para {title} terminou.",
       "full": "{title} acabou de lotar. Tente de novo para entrar na lista de espera."
     }
+  },
+  "billingPlan": {
+    "title": "Plano e módulos",
+    "subtitle": "O seu plano, os módulos incluídos e como se aplicam as taxas por ingresso.",
+    "noAccessTitle": "Só proprietários, administradores e finanças veem o plano",
+    "noAccessDescription": "Peça os detalhes do plano a um proprietário desta organização.",
+    "dormantTitle": "As assinaturas ainda não estão ativadas",
+    "dormantBody": "A sua organização continua no plano atual e mantém todos os módulos que tem hoje. Nada muda até o lançamento das assinaturas.",
+    "inactiveTitle": "A cobrança não está ativa para esta organização",
+    "inactiveBody": "A sua organização continua no plano atual e mantém todos os módulos que tem hoje. Nada muda até a cobrança ser configurada.",
+    "updatedTitle": "Mudança de plano recebida",
+    "updatedBody": "O provedor de cobrança confirmou a mudança. Os módulos abaixo estão atualizados.",
+    "currentPlan": "Plano atual",
+    "pricePerMonth": "{price} por mês",
+    "pricePerYear": "{price} por ano",
+    "priceQuote": "Orçamento personalizado",
+    "renews": "Renova em {date}",
+    "endsOn": "Termina em {date}",
+    "source": {
+      "subscription": "Assinatura",
+      "plan": "Plano incluído"
+    },
+    "status": {
+      "active": "Ativa",
+      "trialing": "Teste",
+      "past_due": "Pagamento em atraso",
+      "canceled": "Cancelada",
+      "unpaid": "Não paga",
+      "paused": "Pausada",
+      "incomplete": "Incompleta",
+      "incomplete_expired": "Expirada"
+    },
+    "fees": {
+      "title": "Taxas por ingresso",
+      "grandfathered": "As suas taxas por ingresso anteriores são mantidas. Uma mudança de plano nunca as altera.",
+      "plan": "As taxas por ingresso seguem o plano {plan}."
+    },
+    "modules": {
+      "title": "Os seus módulos",
+      "description": "O que a sua organização pode usar agora.",
+      "count": "{count, plural, one {# módulo} other {# módulos}}"
+    },
+    "catalog": {
+      "title": "Planos",
+      "description": "Planos provisórios: os preços não são definitivos e nada está à venda ainda.",
+      "empty": "Ainda não há planos.",
+      "plan": "Plano",
+      "price": "Preço",
+      "modules": "Módulos",
+      "status": "Estado",
+      "onSale": "À venda",
+      "notOnSale": "Ainda não está à venda"
+    },
+    "test": {
+      "title": "Cobrança de teste (só desenvolvimento)",
+      "body": "Simule uma mudança de plano com o provedor de cobrança de teste. Ele envia os mesmos webhooks que o provedor real.",
+      "open": "Abrir o portal de cobrança de teste"
+    },
+    "planName": {
+      "launch_standard": "Padrão de lançamento",
+      "tier_free": "Grátis",
+      "tier_starter": "Inicial",
+      "tier_pro": "Pro",
+      "tier_agency": "Agência",
+      "tier_enterprise": "Empresarial"
+    },
+    "module": {
+      "core": "Base",
+      "events": "Eventos",
+      "ticketing": "Venda de ingressos",
+      "orders": "Pedidos",
+      "attendees": "Participantes",
+      "checkin": "Credenciamento",
+      "seating": "Assentos",
+      "seat_finder": "Localizador de assento",
+      "guests": "Lista de convidados",
+      "rsvp": "Confirmações",
+      "distribution": "Distribuição",
+      "access_codes": "Códigos de acesso",
+      "marketing": "Marketing",
+      "messaging": "Mensagens",
+      "reports": "Relatórios",
+      "whitelabel": "Marca branca",
+      "ai": "Assistente de IA",
+      "chat": "Chat",
+      "donations": "Doações",
+      "registration": "Inscrição",
+      "sessions": "Sessões",
+      "speakers": "Palestrantes",
+      "exhibitors": "Expositores",
+      "sponsors": "Patrocinadores",
+      "badges": "Crachás",
+      "gallery": "Galeria",
+      "website": "Site",
+      "api_access": "Acesso à API",
+      "integrations": "Integrações",
+      "enterprise": "SSO e SCIM",
+      "agency": "Agência",
+      "virtual": "Eventos virtuais",
+      "advanced_seating": "Assentos avançados",
+      "ai_seating": "Assentos com IA",
+      "analytics_pro": "Análises avançadas"
+    }
+  },
+  "billingPortal": {
+    "eyebrow": "Cobrança de teste",
+    "title": "Escolha um plano",
+    "description": "Só para desenvolvimento. Esta página substitui o portal do provedor de cobrança e envia os mesmos webhooks.",
+    "planLegend": "Plano",
+    "switch": "Mudar de plano",
+    "cancel": "Cancelar a assinatura",
+    "back": "Voltar sem alterações",
+    "chooseError": "Escolha o plano para o qual mudar."
   }
 }

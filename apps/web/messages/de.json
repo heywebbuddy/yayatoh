@@ -1489,7 +1489,8 @@
     },
     "activityLink": "Aktivitätsprotokoll",
     "privacyLink": "Datenschutzanfragen",
-    "charityLink": "Gemeinnützigkeitsprofil"
+    "charityLink": "Gemeinnützigkeitsprofil",
+    "planLink": "Tarif und Module"
   },
   "legal": {
     "platform": "Yayatoh",
@@ -10865,5 +10866,118 @@
       "offer_ended": "Das Angebot für {title} ist abgelaufen.",
       "full": "{title} ist gerade voll geworden. Versuche es erneut, um auf die Warteliste zu kommen."
     }
+  },
+  "billingPlan": {
+    "title": "Tarif und Module",
+    "subtitle": "Ihr Tarif, die enthaltenen Module und wie Gebühren pro Ticket gelten.",
+    "noAccessTitle": "Nur Inhaber, Admins und Finanzen sehen den Tarif",
+    "noAccessDescription": "Fragen Sie einen Inhaber dieser Organisation, wenn Sie die Tarifdetails brauchen.",
+    "dormantTitle": "Abonnements sind noch nicht eingeschaltet",
+    "dormantBody": "Ihre Organisation bleibt in ihrem aktuellen Tarif und behält alle Module von heute. Bis zum Start der Abonnements ändert sich nichts.",
+    "inactiveTitle": "Die Abrechnung ist für diese Organisation nicht aktiv",
+    "inactiveBody": "Ihre Organisation bleibt in ihrem aktuellen Tarif und behält alle Module von heute. Bis die Abrechnung eingerichtet ist, ändert sich nichts.",
+    "updatedTitle": "Tarifwechsel erhalten",
+    "updatedBody": "Der Abrechnungsanbieter hat die Änderung bestätigt. Die Module unten sind aktuell.",
+    "currentPlan": "Aktueller Tarif",
+    "pricePerMonth": "{price} pro Monat",
+    "pricePerYear": "{price} pro Jahr",
+    "priceQuote": "Individuelles Angebot",
+    "renews": "Verlängert sich am {date}",
+    "endsOn": "Endet am {date}",
+    "source": {
+      "subscription": "Abonnement",
+      "plan": "Enthaltener Tarif"
+    },
+    "status": {
+      "active": "Aktiv",
+      "trialing": "Testphase",
+      "past_due": "Zahlung überfällig",
+      "canceled": "Gekündigt",
+      "unpaid": "Unbezahlt",
+      "paused": "Pausiert",
+      "incomplete": "Unvollständig",
+      "incomplete_expired": "Abgelaufen"
+    },
+    "fees": {
+      "title": "Gebühren pro Ticket",
+      "grandfathered": "Ihre bisherigen Gebühren pro Ticket bleiben erhalten. Ein Tarifwechsel ändert sie nie.",
+      "plan": "Die Gebühren pro Ticket folgen dem Tarif {plan}."
+    },
+    "modules": {
+      "title": "Ihre Module",
+      "description": "Was Ihre Organisation jetzt nutzen kann.",
+      "count": "{count, plural, one {# Modul} other {# Module}}"
+    },
+    "catalog": {
+      "title": "Tarife",
+      "description": "Platzhalter-Tarife: Die Preise sind nicht endgültig und noch nichts ist im Verkauf.",
+      "empty": "Noch keine Tarife.",
+      "plan": "Tarif",
+      "price": "Preis",
+      "modules": "Module",
+      "status": "Status",
+      "onSale": "Im Verkauf",
+      "notOnSale": "Noch nicht im Verkauf"
+    },
+    "test": {
+      "title": "Testabrechnung (nur Entwicklung)",
+      "body": "Simulieren Sie einen Tarifwechsel über den Test-Abrechnungsanbieter. Er sendet dieselben Webhooks wie der echte Anbieter.",
+      "open": "Testportal für die Abrechnung öffnen"
+    },
+    "planName": {
+      "launch_standard": "Start-Standard",
+      "tier_free": "Free",
+      "tier_starter": "Starter",
+      "tier_pro": "Pro",
+      "tier_agency": "Agentur",
+      "tier_enterprise": "Enterprise"
+    },
+    "module": {
+      "core": "Basis",
+      "events": "Veranstaltungen",
+      "ticketing": "Ticketverkauf",
+      "orders": "Bestellungen",
+      "attendees": "Teilnehmende",
+      "checkin": "Einlass",
+      "seating": "Bestuhlung",
+      "seat_finder": "Platzfinder",
+      "guests": "Gästeliste",
+      "rsvp": "Zusagen",
+      "distribution": "Vertrieb",
+      "access_codes": "Zugangscodes",
+      "marketing": "Marketing",
+      "messaging": "Nachrichten",
+      "reports": "Berichte",
+      "whitelabel": "White Label",
+      "ai": "KI-Assistent",
+      "chat": "Chat",
+      "donations": "Spenden",
+      "registration": "Registrierung",
+      "sessions": "Sessions",
+      "speakers": "Referierende",
+      "exhibitors": "Aussteller",
+      "sponsors": "Sponsoren",
+      "badges": "Namensschilder",
+      "gallery": "Galerie",
+      "website": "Website",
+      "api_access": "API-Zugang",
+      "integrations": "Integrationen",
+      "enterprise": "SSO und SCIM",
+      "agency": "Agentur",
+      "virtual": "Virtuelle Veranstaltungen",
+      "advanced_seating": "Erweiterte Bestuhlung",
+      "ai_seating": "KI-Bestuhlung",
+      "analytics_pro": "Erweiterte Analysen"
+    }
+  },
+  "billingPortal": {
+    "eyebrow": "Testabrechnung",
+    "title": "Tarif wählen",
+    "description": "Nur für die Entwicklung. Diese Seite ersetzt das Portal des Abrechnungsanbieters und sendet dieselben Webhooks.",
+    "planLegend": "Tarif",
+    "switch": "Tarif wechseln",
+    "cancel": "Abonnement kündigen",
+    "back": "Ohne Änderung zurück",
+    "chooseError": "Wählen Sie einen Tarif, zu dem Sie wechseln möchten."
   }
 }

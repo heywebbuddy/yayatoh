@@ -17,7 +17,8 @@
     "drill-tickets": "node scripts/drill-tickets.ts",
     "metrics:rebuild": "node scripts/metrics-rebuild.ts",
     "audit-sample": "node scripts/audit-sample.ts",
-    "irs-exempt-list": "node scripts/irs-exempt-list.ts"
+    "irs-exempt-list": "node scripts/irs-exempt-list.ts",
+    "billing:sync-catalog": "node scripts/billing-sync-catalog.ts"
   },
   "dependencies": {
     "@yayatoh/alerts": "workspace:*",
