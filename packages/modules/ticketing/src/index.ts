@@ -103,10 +103,10 @@ export {
   occurrenceSalesQuery,
   validForOccurrence,
 } from './occurrences.ts';
-// M6.4b: ticket counts of imported orders.
-export { ticketCountsForOrdersTx } from './order-ticket-counts.ts';
 // M5.6a: a registrant's order (add-ons) for session doors.
 export { orderSiblingsTx } from './order-siblings.ts';
+// M6.4b: ticket counts of imported orders.
+export { ticketCountsForOrdersTx } from './order-ticket-counts.ts';
 export { orderTicketIdsTx, ticketFactsTx } from './participation.ts';
 // M4.7a: a party's active tickets for its guest hub (the app passes this reader to the guests module).
 export { partyTicketsTx } from './party-tickets.ts';

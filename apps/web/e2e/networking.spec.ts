@@ -4,6 +4,7 @@ import {
   expectAccessibleBothModes,
   lastEmailedCode,
   ownClientIp,
+  pickOption,
   signIn,
 } from './helpers.ts';
 import { addGuests } from './seating-helpers.ts';
@@ -43,8 +44,8 @@ async function conference(page: Page, label: string, opts: { enable?: boolean } 
   const tag = stamp();
   await page.goto(`${ORG}/events/new`);
   await page.getByLabel('Event name', { exact: true }).fill(`${label} ${tag}`);
-  await page.getByLabel('Event type').selectOption('conference');
-  await page.getByLabel('Time zone').selectOption(TZ);
+  await pickOption(page.getByLabel('Event type'), 'conference');
+  await pickOption(page.getByLabel('Time zone'), TZ);
   await page.getByLabel('Starts', { exact: true }).fill(at(40, '09:00'));
   await page.getByLabel('Ends', { exact: true }).fill(at(40, '18:00'));
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -65,7 +66,7 @@ async function conference(page: Page, label: string, opts: { enable?: boolean } 
 async function addPlace(page: Page, name: string, kind: 'Booth' | 'Meeting point', capacity: number) {
   const form = page.getByRole('region', { name: 'Add place' });
   await form.getByLabel('Name', { exact: true }).fill(name);
-  await form.getByLabel('Type').selectOption({ label: kind });
+  await pickOption(form.getByLabel('Type'), { label: kind });
   await form.getByLabel('Capacity').fill(String(capacity));
   await form.getByRole('button', { name: 'Add place' }).click();
   await expect(form.getByText('Place added.')).toBeVisible();
@@ -149,7 +150,7 @@ test.describe('networking (M5.8a)', () => {
     await place.getByRole('button', { name: 'Add place' }).click();
     await expect(place.getByText('Enter a capacity from 1 to 50.')).toBeVisible();
     await expect(place.getByLabel('Name', { exact: true })).toHaveValue('Booth 12');
-    await place.getByLabel('Type').selectOption({ label: 'Booth' });
+    await pickOption(place.getByLabel('Type'), { label: 'Booth' });
     await place.getByLabel('Capacity').fill('2');
     await place.getByRole('button', { name: 'Add place' }).click();
     await expect(place.getByText('Place added.')).toBeVisible();
@@ -378,15 +379,15 @@ test.describe('networking (M5.8a)', () => {
     await meet.getByRole('button', { name: 'Send meeting request' }).click();
     await expect(meet.getByText('Choose a time slot.')).toBeVisible();
     await expect(meet.getByText('Choose a place.')).toBeVisible();
-    await meet.getByLabel('Time slot').selectOption({ index: 1 });
-    await meet.getByLabel('Place').selectOption({ label: 'Booth 7 (Booth)' });
+    await pickOption(meet.getByLabel('Time slot'), { index: 1 });
+    await pickOption(meet.getByLabel('Place'), { label: 'Booth 7 (Booth)' });
     await meet.getByLabel('Note (optional)').fill('Coffee?');
     await meet.getByRole('button', { name: 'Send meeting request' }).click();
     await expect(a.getByText(`Meeting request sent to ${ben}.`)).toBeVisible();
     await expectAccessible(a);
     // Asking twice for the same slot is refused.
-    await meet.getByLabel('Time slot').selectOption({ index: 1 });
-    await meet.getByLabel('Place').selectOption({ label: 'Booth 7 (Booth)' });
+    await pickOption(meet.getByLabel('Time slot'), { index: 1 });
+    await pickOption(meet.getByLabel('Place'), { label: 'Booth 7 (Booth)' });
     await meet.getByRole('button', { name: 'Send meeting request' }).click();
     await expect(meet.getByRole('alert')).toHaveText("You've already sent a request.");
 
@@ -394,8 +395,8 @@ test.describe('networking (M5.8a)', () => {
     await c.reload();
     await people(c).getByRole('link', { name: dee }).click();
     const cmeet = c.getByRole('region', { name: 'Request a meeting' });
-    await cmeet.getByLabel('Time slot').selectOption({ index: 1 });
-    await cmeet.getByLabel('Place').selectOption({ label: 'Booth 7 (Booth)' });
+    await pickOption(cmeet.getByLabel('Time slot'), { index: 1 });
+    await pickOption(cmeet.getByLabel('Place'), { label: 'Booth 7 (Booth)' });
     await cmeet.getByRole('button', { name: 'Send meeting request' }).click();
     await expect(c.getByText(`Meeting request sent to ${dee}.`)).toBeVisible();
 
@@ -494,7 +495,7 @@ test.describe('networking (M5.8a)', () => {
     await c.getByText(`Block or report ${ben}`).click();
     await c.getByRole('button', { name: `Report ${ben}` }).click();
     await expect(c.getByText('Choose a reason.')).toBeVisible();
-    await c.getByLabel('Reason').selectOption({ label: 'Something else' });
+    await pickOption(c.getByLabel('Reason'), { label: 'Something else' });
     await c.getByRole('button', { name: `Report ${ben}` }).click();
     await expect(c.getByText('Tell us what happened.')).toBeVisible();
     await c.getByLabel('What happened').fill('Kept pitching after I said no.');

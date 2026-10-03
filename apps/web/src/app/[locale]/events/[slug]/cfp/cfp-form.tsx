@@ -1,7 +1,7 @@
 'use client';
 
 import type { PublicCfpDto } from '@yayatoh/program';
-import { Alert, Button, Card, Input } from '@yayatoh/ui';
+import { Alert, Button, Card, Input, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { startTransition, useActionState, useEffect, useRef } from 'react';
 import { errorMessageKey } from '@/lib/errors.ts';
@@ -168,7 +168,7 @@ export function CfpForm({
           <label htmlFor="cfp-durationMinutes" className={LABEL}>
             {t('length')}
           </label>
-          <select
+          <Select
             id="cfp-durationMinutes"
             name="durationMinutes"
             defaultValue={String(call.durations[0] ?? '')}
@@ -181,7 +181,7 @@ export function CfpForm({
                 {t('minutes', { count: m })}
               </option>
             ))}
-          </select>
+          </Select>
           {errorText('cfp-durationMinutes', errorFor('durationMinutes'))}
         </div>
         {call.tracks.length ? (
@@ -189,7 +189,7 @@ export function CfpForm({
             <label htmlFor="cfp-trackId" className={LABEL}>
               {optional(t('track'))}
             </label>
-            <select
+            <Select
               id="cfp-trackId"
               name="trackId"
               defaultValue=""
@@ -202,7 +202,7 @@ export function CfpForm({
                   {x.name}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
         ) : null}
       </fieldset>
