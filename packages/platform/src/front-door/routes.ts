@@ -206,6 +206,12 @@ export const PLATFORM_PREFIXES: readonly string[] = [
   // `/statements/{org}/{token}`).
   '/receipts',
   '/statements',
+  // Batch 3i merge: M6.1c's self-service privacy requests and the archive/receipt links emailed
+  // to the person (`/privacy-request/{org}`, `…/archive/{token}`, `…/receipt/{token}`), M6.3b's
+  // public developer docs (`/developers/…`) and the webhook portal link (`/webhook-portal/{token}`).
+  '/privacy-request',
+  '/developers',
+  '/webhook-portal',
 ];
 
 /**

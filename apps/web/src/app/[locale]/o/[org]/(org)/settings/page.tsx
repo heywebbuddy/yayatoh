@@ -76,6 +76,11 @@ export default async function SettingsPage({
             <Link href={`/o/${org}/charity`} className={buttonClass('secondary', 'sm')}>
               {t('settings.charityLink')}
             </Link>
+            {roleCan(data.role, 'billing:read') ? (
+              <Link href={`/o/${org}/plan`} className={buttonClass('secondary', 'sm')}>
+                {t('settings.planLink')}
+              </Link>
+            ) : null}
           </>
         }
       />

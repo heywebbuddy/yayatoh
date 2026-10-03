@@ -43,6 +43,14 @@ describe('listing rules (M1.11a)', () => {
     );
   });
 
+  it('never puts a sandbox org’s events on the marketplace, though its own site still lists them (M6.3a)', () => {
+    const s = source();
+    const sandbox = { ...s, org: { ...s.org, sandbox: true } };
+    expect(isOnMarketplace(sandbox)).toBe(false);
+    expect(isListable(sandbox)).toBe(true);
+    expect(isOnMarketplace({ ...s, org: { ...s.org, sandbox: false } })).toBe(true);
+  });
+
   it('canonical host: custom domain, else tenant subdomain with a tenant site, else apex', () => {
     const managed = { status: 'active', primaryHost: 'x.yayatoh.events', primaryHostManaged: true };
     const custom = { status: 'active', primaryHost: 'tickets.example.com', primaryHostManaged: false };

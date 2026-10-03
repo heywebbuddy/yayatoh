@@ -19,6 +19,7 @@ export {
   TICKET_PURPOSE,
   updateCommand,
 } from './api.ts';
+export { assistanceDataSubjects } from './data-subject.ts';
 export * from './domain/rules.ts';
 export { privateColumns } from './private-columns.ts';
 export { ASSISTANCE_CHANNEL, publishRequestTx } from './realtime.ts';

@@ -1,24 +1,27 @@
 import { OpenAPIHono } from '@hono/zod-openapi';
+import { type ApiAccessQuotas, apiAccessQuotas } from '@yayatoh/billing';
 import { DEVICE_TOKEN_SCHEME, scannerRoutes } from '@yayatoh/checkin/routes';
 import { createCtx, DomainError } from '@yayatoh/kernel';
 import { recordApiUsage } from '@yayatoh/platform';
-import { apiKeyIdentity, memberRole, resolveOrgSlug } from '@yayatoh/tenancy';
+import { apiKeyIdentity, memberRole, recordApiKeyUsage, resolveOrgSlug } from '@yayatoh/tenancy';
 import { createMiddleware } from 'hono/factory';
 import { routePath } from 'hono/route';
 import type { Principal, V1Deps, V1Env } from './context.ts';
 import { deprecationMiddleware } from './deprecation.ts';
 import { onV1Error, problem, sendProblem } from './http.ts';
-import { memoryRateLimiter, RATE_LIMITS } from './rate-limit.ts';
+import { memoryRateLimiter, RATE_LIMITS, type RateDecision } from './rate-limit.ts';
 import { authRoutes } from './routes/auth.ts';
 import { bulkRoutes } from './routes/bulk.ts';
 import { contentRoutes } from './routes/content.ts';
 import { docsRoutes } from './routes/docs.ts';
 import { health } from './routes/health.ts';
+import { keyRoutes } from './routes/key.ts';
 import { orgRoutes } from './routes/org.ts';
 import { publicRoutes } from './routes/public.ts';
 import { salesRoutes } from './routes/sales.ts';
 import { API_VERSION } from './routes/version.ts';
 import { clientInfo } from './telemetry.ts';
+import { registerWebhooks } from './webhooks.ts';
 
 export { cachedJson, etagOf } from './caching.ts';
 export type { MobileSettings, Principal, V1Deps } from './context.ts';
@@ -59,6 +62,11 @@ const API_TAGS = [
   },
   { name: 'check-in', description: 'Online scans with an API key or session.' },
   { name: 'scanner', description: 'The Scan PWA’s device-token routes (manifest, offline sync).' },
+  {
+    name: 'webhooks',
+    description:
+      'Messages your webhook endpoints receive (Settings → Webhooks): thin payloads of ids and facts, signed with Standard Webhooks.',
+  },
 ];
 
 export const OPENAPI_INFO = {
@@ -79,7 +87,16 @@ export const OPENAPI_INFO = {
       '- **Pagination:** `limit` (≤ 100) and `cursor` (the previous page’s `nextCursor`).',
       '- **Errors:** RFC 9457 `application/problem+json` with a stable `code`.',
       '- **Idempotency:** every write needs an `Idempotency-Key`; a retry returns the stored result.',
-      '- **Rate limits:** per key or user, with `RateLimit-*` headers and `Retry-After` on 429.',
+      '- **Rate limits:** per key or user, with `RateLimit-Limit`, `RateLimit-Remaining`,',
+      '  `RateLimit-Reset` and `RateLimit-Policy` headers and `Retry-After` on 429. An API key gets',
+      '  its plan’s `api_access` quotas: a per-minute budget per key and one for the whole org.',
+      '- **Key lifetimes:** a key may expire (30, 90 or 365 days) and can be rotated with an overlap',
+      '  window; an expired, rotated-out or revoked key answers 401 on the next request.',
+      '- **Sandbox orgs:** create one from Settings → Sandboxes for seeded data and fake payments;',
+      '  its keys work exactly like live ones, and it never takes real money.',
+      '- **Webhooks:** add endpoints under Settings → Webhooks. Every message is listed under',
+      '  `webhooks` with its versioned schema; payloads are thin (ids and facts, never personal',
+      '  data) and signed with Standard Webhooks (`webhook-id`, `webhook-timestamp`, `webhook-signature`).',
       '- **Request ids:** every response has `X-Request-Id` (send your own to correlate).',
       '- **Caching:** content reads send an `ETag`; send it back as `If-None-Match` for a 304.',
       '- **Deprecation:** a deprecated route answers with `Deprecation` (RFC 9745) and, once a',
@@ -97,6 +114,33 @@ export function clientIp(h: Headers): string {
   return h.get('x-forwarded-for')?.split(',')[0]?.trim() || h.get('x-real-ip') || 'unknown';
 }
 
+/**
+ * The org's `api_access` quotas (M6.3a), cached per org for `ttlMs` so a key's requests don't
+ * each read the plan. A plan change or a revoked module applies within that window.
+ */
+function quotaCache(load: (orgId: string) => Promise<ApiAccessQuotas | null>, ttlMs: number) {
+  const cache = new Map<string, { at: number; q: Promise<ApiAccessQuotas | null> }>();
+  return (orgId: string) => {
+    const now = Date.now();
+    const hit = cache.get(orgId);
+    if (hit && now - hit.at < ttlMs) return hit.q;
+    const q = load(orgId).catch((err: unknown) => {
+      cache.delete(orgId);
+      throw err;
+    });
+    cache.set(orgId, { at: now, q });
+    if (cache.size > 10_000) cache.delete(cache.keys().next().value as string);
+    return q;
+  };
+}
+
+/** The per-minute budget of one key (M6.3a): test keys, sandbox orgs' keys and live keys. */
+export function keyRequestsPerMinute(q: ApiAccessQuotas, key: { sandbox: boolean; orgSandbox: boolean }) {
+  if (key.sandbox) return Math.min(q.testKeyRequestsPerMinute, q.requestsPerMinute);
+  if (key.orgSandbox) return Math.min(q.sandboxRequestsPerMinute, q.requestsPerMinute);
+  return q.requestsPerMinute;
+}
+
 const credentialKey = (p: Principal | null) =>
   p?.kind === 'api_key' ? `key:${p.key.keyId}` : p?.kind === 'user' ? `user:${p.session.user.id}` : 'anon';
 
@@ -107,6 +151,11 @@ const credentialKey = (p: Principal | null) =>
 export function createV1(deps: V1Deps) {
   const basePath = deps.basePath ?? '/v1';
   const limiter = deps.rateLimiter ?? memoryRateLimiter();
+  const quotasFor = quotaCache(
+    deps.apiQuotas ??
+      ((orgId) => apiAccessQuotas(createCtx({ orgId, actor: { type: 'system', name: 'api-quotas' } }))),
+    deps.quotaCacheMs ?? 30_000,
+  );
   const v1 = new OpenAPIHono<V1Env>({
     defaultHook: (result) => {
       if (!result.success) {
@@ -144,6 +193,19 @@ export function createV1(deps: V1Deps) {
     });
   }
 
+  // M6.3a: every request made with an org API key is counted per key and day (status ≥ 400 as an
+  // error, 429 as rate limited), after the response is decided. Never fails the request.
+  if (deps.keyUsage !== false) {
+    v1.use('*', async (c, next) => {
+      await next();
+      const p = c.get('principal');
+      if (p?.kind !== 'api_key') return;
+      await recordApiKeyUsage({ orgId: p.key.orgId, keyId: p.key.keyId, status: c.res.status }).catch(
+        (err: unknown) => console.warn('api key usage not recorded', err),
+      );
+    });
+  }
+
   // Credential → principal. Device tokens (`yyd_`) are left to the scanner routes.
   v1.use('*', async (c, next) => {
     c.set('principal', null);
@@ -152,7 +214,7 @@ export function createV1(deps: V1Deps) {
     if (token && !token.startsWith('yyd_')) {
       if (token.startsWith('yy_')) {
         const key = await apiKeyIdentity(token);
-        if (!key) throw new DomainError('unauthenticated', 'Unknown or revoked API key');
+        if (!key) throw new DomainError('unauthenticated', 'Unknown, expired or revoked API key');
         c.set('principal', { kind: 'api_key', key });
       } else {
         const session = deps.sessions ? await deps.sessions().session(token) : null;
@@ -160,26 +222,39 @@ export function createV1(deps: V1Deps) {
         c.set('principal', { kind: 'user', session });
       }
     }
-    // Rate limit per credential; anonymous callers per IP with a generous budget.
+    // Rate limit per credential; anonymous callers per IP with a generous budget. An org API key
+    // (M6.3a) gets its plan's `api_access` quotas: a budget per key and one for the whole org; the
+    // headers describe the tighter of the two. Without the module its keys are refused.
     const p = c.get('principal');
     const device = token?.startsWith('yyd_');
-    const rule =
-      p?.kind === 'api_key' && p.key.sandbox
-        ? RATE_LIMITS.testKey
-        : p
-          ? RATE_LIMITS.credential
-          : device
-            ? { limit: 3000, window: 60 }
-            : RATE_LIMITS.anonymous;
-    const key = p
-      ? credentialKey(p)
-      : device
-        ? `device:${token?.slice(0, 20)}`
-        : `ip:${clientIp(c.req.raw.headers)}`;
-    const d = limiter.take(key, rule.limit, rule.window);
+    let d: RateDecision;
+    let window: number;
+    if (p?.kind === 'api_key') {
+      const q = await quotasFor(p.key.orgId);
+      if (!q)
+        throw new DomainError('module_not_enabled', 'API access is not part of this organization’s plan', {
+          module: 'api_access',
+        });
+      window = 60;
+      const perKey = limiter.take(credentialKey(p), keyRequestsPerMinute(q, p.key), window);
+      const perOrg = perKey.allowed
+        ? limiter.take(`org:${p.key.orgId}`, q.orgRequestsPerMinute, window)
+        : perKey;
+      d = !perOrg.allowed || perOrg.remaining < perKey.remaining ? perOrg : perKey;
+    } else {
+      const rule = p ? RATE_LIMITS.credential : device ? { limit: 3000, window: 60 } : RATE_LIMITS.anonymous;
+      const key = p
+        ? credentialKey(p)
+        : device
+          ? `device:${token?.slice(0, 20)}`
+          : `ip:${clientIp(c.req.raw.headers)}`;
+      window = rule.window;
+      d = limiter.take(key, rule.limit, rule.window);
+    }
     c.header('ratelimit-limit', String(d.limit));
     c.header('ratelimit-remaining', String(d.remaining));
     c.header('ratelimit-reset', String(d.resetSeconds));
+    c.header('ratelimit-policy', `${d.limit};w=${window}`);
     if (!d.allowed)
       throw new DomainError('rate_limited', 'Rate limit exceeded', { retryAfter: d.resetSeconds });
     await next();
@@ -218,6 +293,13 @@ export function createV1(deps: V1Deps) {
   v1.route('/', publicRoutes());
   v1.route('/', contentRoutes(deps));
   v1.route('/', orgRoutes(deps));
+  v1.route(
+    '/',
+    keyRoutes(async (orgId, key) => {
+      const q = await quotasFor(orgId);
+      return q ? { keyPerMinute: keyRequestsPerMinute(q, key), orgPerMinute: q.orgRequestsPerMinute } : null;
+    }),
+  );
   v1.route('/', salesRoutes(deps, limiter, credentialKey));
   v1.route('/', bulkRoutes(deps));
   v1.route('/', scannerRoutes(deps.ports));
@@ -243,6 +325,7 @@ export function createV1(deps: V1Deps) {
     if (!doc) {
       const wrapper = new OpenAPIHono();
       wrapper.route('/v1', v1);
+      registerWebhooks(wrapper);
       doc = wrapper.getOpenAPI31Document(OPENAPI_INFO);
     }
     const prefix = basePath.replace(/\/v1$/, '');
@@ -255,5 +338,6 @@ export function createV1(deps: V1Deps) {
 export function openApiDocument(deps: V1Deps) {
   const app = new OpenAPIHono();
   app.route('/v1', createV1(deps));
+  registerWebhooks(app);
   return app.getOpenAPI31Document(OPENAPI_INFO);
 }

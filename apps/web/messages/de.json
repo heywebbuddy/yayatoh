@@ -186,6 +186,11 @@
       "guests": {
         "invitation": "Hochzeitseinladung",
         "rsvp-reminder": "Erinnerung an die Antwort"
+      },
+      "privacy": {
+        "request-code": "Code für Datenschutzanfrage",
+        "archive-ready": "Archiv mit personenbezogenen Daten bereit",
+        "erasure-done": "Löschbestätigung"
       }
     },
     "status": {
@@ -341,7 +346,9 @@
     "supportMacros": "Support-Makros",
     "assistance": "Hilfeanfragen",
     "marketingAnalytics": "Marketing-Analysen",
-    "badges": "Badges"
+    "badges": "Badges",
+    "orgAnalytics": "Analysen",
+    "integrations": "Integrationen"
   },
   "vocab": {
     "attendee": "Teilnehmer",
@@ -923,9 +930,15 @@
         "capReached": "Mehr geht in einer Bestellung nicht: {max} Plätze.",
         "adaChosen": "{count, plural, one {{seats} ist ein barrierefreier Platz} other {{seats} sind barrierefreie Plätze}}, reserviert für Gäste, die {count, plural, one {ihn} other {sie}} brauchen. Bitte nur bei Bedarf wählen.",
         "overCap": "{count} Plätze gewählt: Der Veranstalter bittet um höchstens {max} pro Bestellung.",
-        "keptUntil": "Zurückgehalten bis {date}"
+        "keptUntil": "Zurückgehalten bis {date}",
+        "companionWarn": "Begleitplätze sind für Gäste, die mit einem Rollstuhlnutzer kommen: bis zu {max} je barrierefreiem Platz.",
+        "companionEnforced": "Begleitplätze gibt es nur zusammen mit einem barrierefreien Platz: bis zu {max} je barrierefreiem Platz.",
+        "companionChosen": "Begleitplätze ohne barrierefreien Platz: {seats}. Sie sind für Gäste, die mit einem Rollstuhlnutzer kommen (bis zu {max} je barrierefreiem Platz).",
+        "companionRefused": "Begleitplätze ohne barrierefreien Platz: {seats}. Sie werden nur zusammen mit einem barrierefreien Platz verkauft (bis zu {max} je Platz): Füge einen hinzu oder wähle andere Plätze.",
+        "adaEnforcedBest": "Barrierefreie Plätze sind bis {date} für Gäste reserviert, die sie brauchen. Wenn du einen brauchst, kreuze „Jemand in meiner Gruppe nutzt einen Rollstuhl“ an und nutze „Bester Platz“."
       },
-      "groupSummary": "{group} — {free} von {total} frei{chosen, plural, =0 {} other { · # gewählt}}"
+      "groupSummary": "{group} — {free} von {total} frei{chosen, plural, =0 {} other { · # gewählt}}",
+      "companion": "Begleitplatz"
     },
     "seatRuleCap": "Das sind mehr Plätze, als eine Bestellung haben darf. Bitte wähle weniger.",
     "seatRuleAda": "Barrierefreie Plätze sind vorerst für Gäste reserviert, die sie brauchen. Bitte wähle andere Plätze.",
@@ -935,7 +948,43 @@
     "orgUnavailable": "Dieser Veranstalter verkauft gerade keine Tickets. Bereits gekaufte Tickets bleiben gültig.",
     "riskBlocked": "Diese Bestellung können wir nicht annehmen. Bitte wende dich an den Veranstalter.",
     "creditInvalid": "Dieser Guthabencode ist ungültig oder wurde bereits eingelöst.",
-    "creditNotApplicable": "Dieses Guthaben kann für diese Tickets nicht verwendet werden."
+    "creditNotApplicable": "Dieses Guthaben kann für diese Tickets nicht verwendet werden.",
+    "seatRuleCompanion": "Begleitplätze gibt es nur zusammen mit einem barrierefreien Platz. Wähle zusätzlich einen barrierefreien Platz oder andere Plätze.",
+    "best": {
+      "title": "Bester Platz",
+      "modeLegend": "Wie möchtest du deine Plätze wählen?",
+      "mode": {
+        "best": "Bester Platz: Wir finden die besten Plätze nebeneinander",
+        "pick": "Plätze selbst wählen"
+      },
+      "need": "Jemand in meiner Gruppe nutzt einen Rollstuhl und braucht einen barrierefreien Platz",
+      "needStaff": "Die Person braucht einen rollstuhlgerechten Platz",
+      "needHint": "Barrierefreie Plätze und die Begleitplätze daneben sind für Gäste reserviert, die sie brauchen.",
+      "price": "Preis",
+      "onePrice": "Preis: {price}",
+      "quantity": "Anzahl der Plätze",
+      "find": "Plätze finden",
+      "findAgain": "Erneut suchen",
+      "accessibleHint": "Wir suchen einen rollstuhlgerechten Platz mit Begleitplätzen daneben.",
+      "together": "{count, plural, one {Dein Platz:} other {# Plätze nebeneinander:}}",
+      "split": "Wir konnten deine Gruppe von {count} nicht zusammen setzen, deine Plätze liegen an verschiedenen Stellen (Gruppen: {pieces}). Du kannst deine Plätze stattdessen selbst wählen.",
+      "seatsLabel": "Deine Plätze",
+      "seatAccessible": "{seat} (rollstuhlgerecht)",
+      "seatCompanion": "{seat} (Begleitplatz)",
+      "heldFor": "{minutes} Minuten für dich reserviert, während du bezahlst.",
+      "clear": "Diese Plätze freigeben",
+      "notEnough": "Nicht genug freie Plätze zu diesem Preis für {count}. Versuche weniger Plätze oder einen anderen Preis, oder wähle deine Plätze selbst.",
+      "noAccessible": "Zu diesem Preis ist kein rollstuhlgerechter Platz frei. Versuche einen anderen Preis oder wende dich an den Veranstalter.",
+      "taken": "Diese Plätze wurden gerade vergeben. Bitte versuche es erneut.",
+      "ruleRefused": "Die Sitzplatzregeln des Veranstalters erlauben diese Auswahl nicht.",
+      "off": "„Bester Platz“ wird für diese Veranstaltung nicht mehr angeboten. Wähle deine Plätze stattdessen selbst.",
+      "findFirst": "Finde zuerst deine Plätze: Wähle die Anzahl und drücke dann „Plätze finden“.",
+      "expired": "Deine Plätze waren 10 Minuten reserviert und wurden freigegeben. Bitte suche erneut."
+    },
+    "seatChannel": "Einige dieser Plätze sind für einen anderen Verkaufskanal reserviert. Wählen Sie andere Plätze.",
+    "channelInvalid": "Dieser Verkaufscode gilt nicht für diese Veranstaltung. Öffnen Sie die Veranstaltungsseite ohne den Code oder fragen Sie, wer Ihnen den Link gegeben hat.",
+    "channelNotice": "Sie kaufen über {name}: Plätze, die für {name} reserviert sind, stehen Ihnen ebenfalls offen.",
+    "channelLinkInvalid": "Dieser Verkaufslink gilt nicht für diese Veranstaltung. Sie können weiterhin aus den Plätzen wählen, die allen offenstehen."
   },
   "fakePay": {
     "eyebrow": "Testzahlung",
@@ -1489,12 +1538,14 @@
     },
     "activityLink": "Aktivitätsprotokoll",
     "privacyLink": "Datenschutzanfragen",
-    "charityLink": "Gemeinnützigkeitsprofil"
+    "charityLink": "Gemeinnützigkeitsprofil",
+    "planLink": "Tarif und Module"
   },
   "legal": {
     "platform": "Yayatoh",
     "updated": "Zuletzt aktualisiert am {date}",
-    "organizerPages": "Richtlinien von {org}"
+    "organizerPages": "Richtlinien von {org}",
+    "privacyRequest": "Eine Kopie Ihrer Daten oder deren Löschung anfordern"
   },
   "setup": {
     "title": "Bereit für den Verkauf · {done} von {total} erledigt",
@@ -1874,7 +1925,8 @@
     "chooseDate": "Wähle einen Termin.",
     "dateSoldOut": "Für diesen Termin sind nicht mehr genug Tickets übrig.",
     "wrongDate": "Eines dieser Tickets wird für diesen Termin nicht verkauft.",
-    "dateUnavailable": "Dieser Termin ist nicht mehr im Verkauf."
+    "dateUnavailable": "Dieser Termin ist nicht mehr im Verkauf.",
+    "seatChannel": "Einige dieser Plätze sind für einen anderen Verkaufskanal reserviert (einen Sponsor, einen Promoter oder den Online-Verkauf). Wählen Sie andere Plätze."
   },
   "seating": {
     "title": "Sitzplätze",
@@ -1971,14 +2023,19 @@
       "title": "Als wiederverwendbaren Plan speichern",
       "name": "Name",
       "submit": "Plan speichern",
-      "done": "Gespeichert. Du kannst ihn für andere Events verwenden."
+      "done": "Gespeichert. Du kannst ihn für andere Events verwenden.",
+      "description": "Gespeicherte Pläne landen in Ihrer Saalplan-Bibliothek, von der aus Sie neue Veranstaltungen anlegen können.",
+      "library": "Saalplan-Bibliothek öffnen"
     },
     "tabs": {
       "label": "Sitzplan-Ansichten",
       "plan": "Plan",
       "assign": "Gäste platzieren",
       "finder": "Platzfinder",
-      "rules": "Regeln"
+      "rules": "Regeln",
+      "selection": "Bester Platz",
+      "channels": "Kanäle",
+      "revisions": "Versionen"
     },
     "assign": {
       "title": "Gäste platzieren",
@@ -2115,7 +2172,8 @@
       "none": "Keine Regeln: Käufer können jeden freien Platz wählen.",
       "summary": {
         "ada": "Barrierefreie Plätze für Gäste mit Bedarf reserviert bis {days, plural, =0 {zum Beginn} one {# Tag vor der Veranstaltung} other {# Tage vor der Veranstaltung}} ({date}) · {severity}",
-        "cap": "Höchstens {max, plural, one {# Platz} other {# Plätze}} pro Bestellung · {severity}"
+        "cap": "Höchstens {max, plural, one {# Platz} other {# Plätze}} pro Bestellung · {severity}",
+        "companion": "Begleitplätze nur zusammen mit einem barrierefreien Platz, bis zu {max} je Platz · {severity}"
       },
       "severityShort": {
         "warn": "warnt",
@@ -2148,7 +2206,14 @@
       },
       "save": "Regeln speichern",
       "saved": "Sitzregeln gespeichert.",
-      "fixErrors": "Bitte korrigiere das markierte Feld."
+      "fixErrors": "Bitte korrigiere das markierte Feld.",
+      "companion": {
+        "title": "Begleitplätze",
+        "on": "Begleitplätze nur zusammen mit einem barrierefreien Platz verkaufen",
+        "max": "Begleitplätze je barrierefreiem Platz",
+        "maxHint": "Von 1 bis 3. Sie werden zusammen mit den barrierefreien Plätzen freigegeben.",
+        "maxError": "Gib eine ganze Zahl von 1 bis 3 ein."
+      }
     },
     "groups": {
       "title": "Gruppenblöcke",
@@ -2177,6 +2242,172 @@
         "forbidden": "Du kannst die Gruppen sehen, aber nicht ändern.",
         "noMembers": "Noch niemand auf der Liste hat das Label {label}."
       }
+    },
+    "selection": {
+      "title": "Bester Platz und Begleitplätze",
+      "description": "Lass Käufer und die Abendkasse die besten Plätze anfragen, statt sie selbst zu wählen, und halte Begleitplätze neben barrierefreien Plätzen frei.",
+      "noPlan": "Diese Veranstaltung hat noch keinen Sitzplan. Erstelle zuerst einen und richte dann hier „Bester Platz“ ein.",
+      "readOnly": "Du kannst diese Einstellungen sehen, aber nicht ändern.",
+      "bestTitle": "Bester Platz",
+      "bestOn": "„Bester Platz“ für Käufer und die Abendkasse anbieten",
+      "bestHint": "Käufer geben an, wie viele Plätze zu welchem Preis sie möchten, und erhalten die besten freien Plätze nebeneinander. Sie können ihre Plätze weiterhin selbst wählen.",
+      "scoresTitle": "Bereichswertungen",
+      "scoresHint": "Von 0 bis 100: Höhere Wertungen werden zuerst angeboten. Lass einen Bereich leer, um ihn nach seiner Entfernung zur Bühne zu ordnen.",
+      "scoreLabel": "Wertung für {section}",
+      "scoreError": "Gib eine ganze Zahl von 0 bis 100 ein oder lass das Feld leer.",
+      "noSections": "Dieser Plan hat keine Bereiche: Plätze werden nach ihrer Entfernung zur Bühne geordnet, dann nach Reihe und nach ihrer Lage zur Mitte.",
+      "saveBest": "„Bester Platz“ speichern",
+      "savedBest": "Einstellungen für „Bester Platz“ gespeichert.",
+      "fixErrors": "Bitte korrigiere das markierte Feld.",
+      "bestOnSummary": "„Bester Platz“ wird Käufern und der Abendkasse angeboten.",
+      "bestOffSummary": "„Bester Platz“ ist aus: Käufer wählen ihre Plätze selbst.",
+      "companionsTitle": "Begleitplätze",
+      "companionsDescription": "Begleitplätze liegen neben barrierefreien Plätzen, für Personen, die mit einem Rollstuhlnutzer kommen.",
+      "rulesLink": "Die Regel für Begleitplätze legst du im Tab „Regeln“ fest",
+      "noAccessible": "Dieser Plan hat noch keine barrierefreien Plätze. Markiere sie im Plan und wähle dann hier die Begleitplätze.",
+      "suggest": "Plätze neben barrierefreien Plätzen ankreuzen",
+      "group": {
+        "row": "Reihe {label}",
+        "table": "Tisch {label}"
+      },
+      "seatAccessible": "Platz {seat} · barrierefrei",
+      "seatCompanion": "Platz {seat}",
+      "suggested": "neben einem barrierefreien Platz",
+      "saveCompanions": "Begleitplätze speichern",
+      "savedCompanions": "Begleitplätze gespeichert: {count}.",
+      "companionError": "Ein Begleitplatz muss in einer Reihe oder an einem Tisch mit einem barrierefreien Platz liegen und darf selbst kein barrierefreier Platz sein.",
+      "companionList": "Begleitplätze ({count}): {seats}",
+      "companionNone": "Noch keine Begleitplätze."
+    },
+    "fromLibrary": "Diese Veranstaltung beginnt mit Ihrem gespeicherten Saalplan. Legen Sie die Preise der Plätze fest und geben Sie sie dann in den Verkauf.",
+    "channels": {
+      "title": "Verkaufskanäle",
+      "description": "Reservieren Sie Platzblöcke für die Abendkasse, Sponsoren oder Promoter. Ein Platz eines Kanals wird nie über einen anderen verkauft, bis der Kanal ihn freigibt.",
+      "noPlan": "Diese Veranstaltung hat noch keinen Saalplan. Erstellen Sie zuerst einen und teilen Sie seine Plätze dann hier den Kanälen zu.",
+      "readOnly": "Sie können die Kanäle sehen, aber nicht ändern.",
+      "saved": "Kanal gespeichert.",
+      "deleted": "Kanal entfernt. Seine Plätze stehen wieder allen Kanälen offen.",
+      "listTitle": "Kanäle",
+      "empty": "Noch keine Verkaufskanäle",
+      "emptyHint": "Fügen Sie unten einen Kanal hinzu und teilen Sie ihm Plätze zu. Plätze ohne Kanal werden über alle Kanäle verkauft.",
+      "col": {
+        "channel": "Kanal",
+        "code": "Code und Link",
+        "release": "Freigabe",
+        "seats": "Plätze",
+        "sold": "Darüber verkauft",
+        "actions": "Aktionen"
+      },
+      "kind": {
+        "public": "Online (ohne Code)",
+        "box_office": "Abendkasse",
+        "sponsor": "Sponsor",
+        "promoter": "Promoter"
+      },
+      "linkFor": "Link für {name}",
+      "released": "Freigegeben am {when}",
+      "neverReleased": "Reserviert, bis Sie es ändern",
+      "soldCount": "{orders, plural, =0 {Noch keine Bestellungen} one {# Bestellung} other {# Bestellungen}} · {seats, plural, one {# Platz} other {# Plätze}}",
+      "edit": "Bearbeiten",
+      "editNamed": "{name} bearbeiten",
+      "delete": "Entfernen",
+      "deleteNamed": "{name} entfernen",
+      "addTitle": "Kanal hinzufügen",
+      "editTitle": "{name} bearbeiten",
+      "kindLabel": "Art",
+      "kindHint": "Online und Abendkasse: höchstens je einer pro Veranstaltung. Sponsoren und Promoter verkaufen mit ihrem eigenen Code.",
+      "nameLabel": "Name",
+      "nameHint": "Wird Käufern angezeigt, die den Link des Kanals nutzen, und erscheint in Ihren Berichten.",
+      "codeLabel": "Code",
+      "codeHint": "Nur Sponsoren und Promoter: 3 bis 32 Buchstaben, Ziffern, Bindestriche oder Unterstriche. Käufer nutzen ihn über den Link des Kanals.",
+      "releaseLabel": "Unverkaufte Plätze freigeben am (optional)",
+      "releaseHint": "Unverkaufte Plätze gehen zu diesem Zeitpunkt ({timeZone}) an alle Kanäle zurück. Leer lassen, um sie zu behalten.",
+      "add": "Kanal hinzufügen",
+      "save": "Kanal speichern",
+      "cancel": "Abbrechen",
+      "added": "Kanal hinzugefügt.",
+      "fixErrors": "Bitte korrigieren Sie das markierte Feld.",
+      "errors": {
+        "kind": "Wählen Sie eine Kanalart.",
+        "kind_taken": "Diese Veranstaltung hat bereits einen Kanal dieser Art.",
+        "name": "Geben Sie dem Kanal einen Namen (bis zu 80 Zeichen).",
+        "code_required": "Sponsoren und Promoter brauchen einen Code.",
+        "code_not_allowed": "Nur Sponsoren und Promoter haben einen Code. Lassen Sie das Feld leer.",
+        "code_format": "Verwenden Sie 3 bis 32 Buchstaben, Ziffern, Bindestriche oder Unterstriche.",
+        "code_taken": "Ein anderer Kanal dieser Veranstaltung hat diesen Code bereits.",
+        "releaseAt": "Geben Sie Datum und Uhrzeit ein oder lassen Sie das Feld leer.",
+        "seats": "Wählen Sie mindestens eine Reihe oder einen Tisch und Platznummern, die es dort gibt."
+      },
+      "allotTitle": "Plätze zuteilen",
+      "allotDescription": "Wählen Sie Reihen und Tische und auf Wunsch nur einige ihrer Plätze. Alle Termine der Veranstaltung folgen. Plätze, die schon in einem Kanal sind, wechseln in den gewählten.",
+      "noSeats": "Der Plan hat noch keine Reihen oder Tische.",
+      "allotTo": "Kanal",
+      "everyChannel": "Kein Kanal (allen Kanälen offen)",
+      "which": "Reihen und Tische",
+      "item": {
+        "row": "Reihe {label} ({seats, plural, one {# Platz} other {# Plätze}})",
+        "table": "Tisch {label} ({seats, plural, one {# Platz} other {# Plätze}})"
+      },
+      "itemAllotted": "{count, plural, one {# Platz} other {# Plätze}} in {name}",
+      "seatNumbers": "Nur diese Plätze (optional)",
+      "seatNumbersHint": "Platznummern in den gewählten Reihen und Tischen, z. B. 1-4, 9. Leer lassen für alle ihre Plätze.",
+      "allot": "Plätze zuteilen",
+      "allotted": "{count, plural, =0 {Keine Plätze geändert.} one {# Platz zugeteilt.} other {# Plätze zugeteilt.}}",
+      "freed": "{count, plural, =0 {Kein Platz war in einem Kanal.} one {# Platz steht wieder allen Kanälen offen.} other {# Plätze stehen wieder allen Kanälen offen.}}"
+    },
+    "revisions": {
+      "title": "Versionen des Saalplans",
+      "description": "Jedes Speichern des Plans ist eine Version. Sehen Sie, was jede geändert hat, und holen Sie einen früheren Plan zurück. Reservierte und verkaufte Plätze bleiben immer, wie sie sind.",
+      "noPlan": "Diese Veranstaltung hat noch keinen Saalplan. Erstellen Sie zuerst einen; jedes Speichern erscheint dann hier.",
+      "none": "Noch keine Versionen",
+      "noneHint": "Das nächste Speichern des Plans wird die erste Version.",
+      "readOnly": "Sie können die Versionen sehen, aber nicht wiederherstellen.",
+      "listTitle": "Alle Versionen",
+      "col": {
+        "revision": "Version",
+        "when": "Gespeichert",
+        "what": "Was",
+        "changes": "Geänderte Plätze"
+      },
+      "revision": "Version {number}",
+      "currentBadge": "Der aktuelle Plan",
+      "kindSave": "Gespeichert",
+      "kindRestore": "Version {number} wiederhergestellt",
+      "seats": "{count, plural, one {# Platz} other {# Plätze}}",
+      "first": "Die erste aufbewahrte Version.",
+      "noSeatChanges": "Keine Plätze hinzugefügt, entfernt oder umnummeriert.",
+      "added": "{count, plural, one {# Platz hinzugefügt} other {# Plätze hinzugefügt}}",
+      "removed": "{count, plural, one {# Platz entfernt} other {# Plätze entfernt}}",
+      "renumbered": "{count, plural, one {# Platz umnummeriert} other {# Plätze umnummeriert}}",
+      "moved": "{count, plural, one {# Platz verschoben} other {# Plätze verschoben}}",
+      "detailTitle": "Version {number}",
+      "changedTitle": "Was sie geändert hat",
+      "restoreWouldTitle": "Eine Wiederherstellung würde ändern",
+      "addedTitle": "Hinzugefügte Plätze",
+      "removedTitle": "Entfernte Plätze",
+      "renumberedTitle": "Umnummerierte Plätze",
+      "renumberedSeat": "{from} → {to}",
+      "listOf": "{title} ({count})",
+      "more": "{count, plural, one {und # weiterer} other {und # weitere}}",
+      "inUseTitle": "Reservierte und verkaufte Plätze",
+      "inUseNone": "Kein Platz ist reserviert oder verkauft: nichts steht im Weg.",
+      "inUseKept": "{count, plural, =0 {Kein reservierter oder verkaufter Platz bleibt, wo er ist.} one {# reservierter oder verkaufter Platz bleibt genau, wie er ist.} other {# reservierte oder verkaufte Plätze bleiben genau, wie sie sind.}}",
+      "inUseRemapped": "{count, plural, one {# reservierter oder verkaufter Platz wechselt auf den Platz mit seiner Bezeichnung in dieser Version (gleiche Nummer, gleiches Ticket):} other {# reservierte oder verkaufte Plätze wechseln auf die Plätze mit ihren Bezeichnungen in dieser Version (gleiche Nummern, gleiche Tickets):}}",
+      "conflictsTitle": "{count, plural, one {Diese Version kann nicht wiederhergestellt werden: # reservierter oder verkaufter Platz ginge verloren.} other {Diese Version kann nicht wiederhergestellt werden: # reservierte oder verkaufte Plätze gingen verloren.}}",
+      "conflict": {
+        "removed": {
+          "sold": "{label} ist verkauft, und diese Version hat keinen Platz mit dieser Bezeichnung.",
+          "held": "{label} ist von einem Käufer reserviert, und diese Version hat keinen Platz mit dieser Bezeichnung."
+        },
+        "renumbered": {
+          "sold": "{label} ist verkauft und würde zu {to}: Das Ticket des Käufers nennt dann einen anderen Platz.",
+          "held": "{label} ist von einem Käufer reserviert und würde zu {to}."
+        }
+      },
+      "conflictsRefused": "Reservierte oder verkaufte Plätze sind in dieser Version nicht mehr vorhanden. Es wurde nichts geändert.",
+      "isCurrent": "Das ist der Plan, wie er jetzt ist.",
+      "restore": "Version {number} wiederherstellen",
+      "restoredNotice": "Version {number} wiederhergestellt. Der aktuelle Plan ist Version {now}."
     }
   },
   "venueMap": {
@@ -2493,70 +2724,199 @@
   },
   "privacy": {
     "title": "Datenschutzanfragen",
-    "description": "Beantworten Sie Anfragen von Personen, die wissen möchten, was Sie über sie speichern, oder die gelöscht werden möchten. Jede Anfrage wird protokolliert.",
+    "description": "Beantworten Sie Anfragen von Personen, die eine Kopie ihrer bei Ihnen gespeicherten Daten verlangen oder gelöscht werden möchten. Jede Anfrage ist innerhalb von 30 Tagen fällig und wird protokolliert.",
     "noticeLink": "Datenschutzhinweis von Yayatoh",
     "noAccessTitle": "Nur Inhaber und Admins können Datenschutzanfragen bearbeiten",
     "noAccessDescription": "Bitten Sie einen Inhaber oder Admin dieser Organisation um Hilfe bei einer Anfrage zu den Daten einer Person.",
     "find": {
       "title": "Person finden",
-      "hint": "Suche per E-Mail in Kontakten, Bestellungen, Tickets, Gästelisten, Antworten und Check-ins.",
+      "hint": "Suche per E-Mail in allem, was diese Organisation speichert: Kontakte, Bestellungen, Tickets, Gästelisten, Formulare, Nachrichten, Speaker und mehr.",
       "email": "E-Mail-Adresse",
       "submit": "Suchen"
     },
     "result": {
       "title": "Was diese Organisation über {email} speichert",
       "noneTitle": "Nichts zu dieser E-Mail gefunden",
-      "noneDescription": "Kein Kontakt, keine Bestellung, kein Ticket und kein Gasteintrag nutzt diese Adresse in dieser Organisation."
-    },
-    "categories": {
-      "contacts": "Kontakteinträge",
-      "consents": "Einwilligungseinträge",
-      "orders": "Bestellungen",
-      "paidOrders": "Bezahlte Bestellungen (für die Buchhaltung aufbewahrt)",
-      "tickets": "Tickets",
-      "activeTickets": "Gültige Tickets",
-      "claims": "Links zur Ticketweitergabe",
-      "holderLinks": "Links zum Ticketzugang",
-      "attendees": "Gästelisteneinträge",
-      "answers": "Antworten beim Checkout",
-      "admissions": "Check-ins",
-      "invitations": "Team-Einladungen"
-    },
-    "export": {
-      "title": "Daten exportieren",
-      "hint": "Eine JSON-Datei mit allem oben Genannten, die Sie der Person schicken können. Sie wird nach 7 Tagen gelöscht.",
-      "submit": "Daten exportieren (JSON)",
-      "download": "Datei herunterladen",
-      "running": "Die Datei wird vorbereitet … laden Sie die Seite gleich neu."
-    },
-    "erase": {
-      "title": "Diese Person löschen",
-      "what": "Name, E-Mail, Telefon, Antworten und Links werden aus Kontakten, Bestellungen, Tickets und Gästelisten entfernt, und Exportdateien, in denen die Person vorkommt, werden gelöscht.",
-      "holds": "{paid, plural, =0 {Es müssen keine bezahlten Bestellungen aufbewahrt werden.} one {# bezahlte Bestellung wird für Steuer und Buchhaltung aufbewahrt, ohne Name und E-Mail.} other {# bezahlte Bestellungen werden für Steuer und Buchhaltung aufbewahrt, ohne Name und E-Mail.}}",
-      "tickets": "{active, plural, =0 {Keine gültigen Tickets vorhanden.} one {# gültiges Ticket bleibt gültig, ohne Namen.} other {# gültige Tickets bleiben gültig, ohne Namen.}}",
-      "final": "Das kann nicht rückgängig gemacht werden.",
-      "confirm": "Geben Sie zur Bestätigung {email} ein",
-      "submit": "Personenbezogene Daten löschen",
-      "done": "Gelöscht. {records, plural, one {# Eintrag wurde} other {# Einträge wurden}} geschwärzt oder gelöscht; {kept, plural, =0 {keine bezahlten Bestellungen aufbewahrt} one {# bezahlte Bestellung ohne personenbezogene Daten aufbewahrt} other {# bezahlte Bestellungen ohne personenbezogene Daten aufbewahrt}}."
+      "noneDescription": "Kein Eintrag in dieser Organisation nutzt diese Adresse. Sie können trotzdem eine Anfrage eröffnen, um der Person formell zu antworten."
     },
     "errors": {
       "invalidEmail": "Geben Sie eine gültige E-Mail-Adresse ein.",
       "confirmMismatch": "Das stimmt nicht überein. Geben Sie zur Bestätigung dieselbe E-Mail-Adresse ein.",
-      "nothingHeld": "Zu dieser E-Mail ist nichts mehr gespeichert."
-    },
-    "history": {
-      "title": "Frühere Anfragen",
-      "caption": "Datenschutzanfragen, neueste zuerst",
-      "empty": "Noch keine Anfragen.",
-      "when": "Wann",
-      "kind": "Anfrage",
-      "subject": "Person",
-      "by": "Bearbeitet von",
-      "records": "Einträge"
+      "kindRequired": "Wählen Sie, was die Person verlangt.",
+      "reasonRequired": "Geben Sie einen Grund mit mindestens 3 Zeichen an.",
+      "closed": "Diese Anfrage ist bereits abgeschlossen."
     },
     "kinds": {
-      "access": "Auskunft (Export)",
+      "access": "Auskunft (Kopie)",
       "erasure": "Löschung"
+    },
+    "modules": {
+      "crm": "Kontakte und Einwilligungen",
+      "orders": "Bestellungen und Wartelisten",
+      "ticketing": "Tickets",
+      "attendees": "Gästelisteneinträge",
+      "forms": "Formularantworten",
+      "checkin": "Check-ins",
+      "tenancy": "Team-Einladungen",
+      "notifications": "Gesendete Nachrichten",
+      "seating": "Platzfinder",
+      "alerts": "Einstellungen für Warnungen",
+      "guests": "Hochzeits- und Partygäste",
+      "messaging": "Gespräche",
+      "assistance": "Hilfeanfragen",
+      "program": "Speaker-Angaben",
+      "events": "Portal-Konten",
+      "media": "Hochgeladene Dateien",
+      "cms": "Nachrichten aus dem Kontaktformular",
+      "venues": "Angebotsanfragen für Veranstaltungsorte",
+      "reviews": "Bewertungen",
+      "payments": "Rückbuchungen",
+      "surveys": "Umfrageantworten",
+      "registration": "Anmeldungen",
+      "badges": "Badges",
+      "automations": "Journeys",
+      "campaigns": "Kampagnenversand",
+      "audiences": "Zielgruppen",
+      "marketing": "Marketing-Zuordnung",
+      "reports": "Analyse-Ereignisse",
+      "privacy": "Datenschutzanfragen",
+      "platform": "Exporte und Systemeinträge",
+      "donations": "Spenden und Spendenquittungen",
+      "engagement": "Fragen aus Live-Q&A"
+    },
+    "open": {
+      "title": "Anfrage eröffnen",
+      "hint": "Sie haben bestätigt, wer anfragt. Die Anfrage ist in 30 Tagen fällig; Sie bearbeiten sie auf ihrer eigenen Seite.",
+      "kind": "Was verlangt die Person?",
+      "access": "Eine Kopie ihrer Daten (Auskunft)",
+      "accessHint": "Ein signiertes ZIP mit allem, was über die Person gespeichert ist.",
+      "erasure": "Ihre Daten löschen (Löschung)",
+      "erasureHint": "Entfernt die Person überall, außer Einträgen, die Sie gesetzlich aufbewahren müssen.",
+      "submit": "Anfrage eröffnen",
+      "existing": "Für diese Person ist bereits eine Anfrage offen.",
+      "review": "Offene Anfrage ansehen"
+    },
+    "queue": {
+      "title": "Offene Anfragen",
+      "caption": "Offene Datenschutzanfragen, die am frühesten fälligen zuerst",
+      "emptyTitle": "Keine offenen Anfragen",
+      "empty": "Wenn jemand nach seinen Daten fragt, suchen Sie die Person oben und eröffnen Sie eine Anfrage. Personen können auch über Ihren Datenschutzhinweis anfragen.",
+      "person": "Person",
+      "kind": "Anfrage",
+      "source": "Von",
+      "opened": "Eröffnet",
+      "due": "Fällig",
+      "overdue": "Überfällig",
+      "action": "Aktion",
+      "review": "Ansehen"
+    },
+    "closed": {
+      "title": "Abgeschlossene Anfragen",
+      "caption": "Erledigte und zurückgezogene Anfragen, neueste zuerst",
+      "empty": "Noch keine abgeschlossenen Anfragen.",
+      "when": "Abgeschlossen",
+      "status": "Status",
+      "records": "Einträge"
+    },
+    "statuses": {
+      "open": "Offen",
+      "completed": "Erledigt",
+      "cancelled": "Zurückgezogen"
+    },
+    "sources": {
+      "staff": "Team, im Auftrag der Person",
+      "self": "Die Person selbst (E-Mail bestätigt)"
+    },
+    "request": {
+      "titleAccess": "Auskunftsanfrage",
+      "titleErasure": "Löschanfrage",
+      "openedNotice": "Anfrage eröffnet. Sie ist bis {date} fällig.",
+      "cancelledNotice": "Anfrage zurückgezogen.",
+      "fields": {
+        "kind": "Anfrage",
+        "source": "Von",
+        "opened": "Eröffnet",
+        "due": "Fällig bis",
+        "verified": "E-Mail bestätigt",
+        "completed": "Erledigt",
+        "cancelled": "Zurückgezogen",
+        "reason": "Grund"
+      },
+      "holdings": {
+        "title": "Was diese Organisation speichert",
+        "empty": "Über diese Person ist nichts gespeichert",
+        "emptyHint": "Sie können die Anfrage trotzdem erledigen: Die Person erhält eine formelle Antwort, dass nichts gespeichert ist."
+      },
+      "export": {
+        "title": "Eine Kopie senden",
+        "hint": "Ein ZIP mit einer JSON-Datei pro Bereich von Yayatoh und den Dateien der Person, signiert, damit jeder prüfen kann, dass es nicht verändert wurde. Es kann 7 Tage lang heruntergeladen werden.",
+        "submit": "Archiv erstellen",
+        "done": "Das Archiv ist fertig.",
+        "notified": "Wir haben der Person einen Download-Link per E-Mail geschickt.",
+        "until": "Verfügbar bis {date}.",
+        "download": "Archiv herunterladen (ZIP)",
+        "expired": "Das Archiv ist abgelaufen und wurde gelöscht. Eröffnen Sie eine neue Anfrage, wenn die Person eine weitere Kopie braucht."
+      },
+      "erase": {
+        "title": "Diese Person löschen",
+        "what": "Name, E-Mail, Telefon, Antworten, Nachrichten und Links werden aus allen Bereichen von Yayatoh entfernt, und Exportdateien, in denen die Person vorkommt, werden gelöscht.",
+        "holds": "Bezahlte Bestellungen, Gutschriften, Rückbuchungen und der Einwilligungsverlauf bleiben erhalten, wo das Gesetz es verlangt, ohne Name und E-Mail, und werden im Beleg aufgeführt.",
+        "files": "Ihre Uploads und früheren Archive werden aus dem Speicher gelöscht.",
+        "final": "Das kann nicht rückgängig gemacht werden.",
+        "confirm": "Geben Sie zur Bestätigung {email} ein",
+        "submit": "Personenbezogene Daten löschen",
+        "done": "Gelöscht. Der signierte Beleg unten zeigt, was gelöscht und was aufbewahrt wurde, und warum."
+      },
+      "cancel": {
+        "title": "Anfrage zurückziehen",
+        "hint": "Wenn die Person sie zurückgezogen hat oder sie nicht echt war. Der Grund wird mit der Anfrage gespeichert.",
+        "reason": "Grund",
+        "submit": "Anfrage zurückziehen"
+      },
+      "receipt": {
+        "title": "Löschbeleg",
+        "erased": "Gelöscht",
+        "held": "Wegen gesetzlicher Aufbewahrungspflicht behalten",
+        "noneErased": "Es musste nichts gelöscht werden.",
+        "noneHeld": "Es musste nichts aufbewahrt werden.",
+        "table": "Daten",
+        "action": "Was passiert ist",
+        "rows": "Einträge",
+        "ref": "Eintrag",
+        "basis": "Grund der Aufbewahrung",
+        "until": "Aufbewahrt bis",
+        "files": "{count, plural, =0 {Es wurden keine gespeicherten Dateien gelöscht.} one {# gespeicherte Datei wurde gelöscht.} other {# gespeicherte Dateien wurden gelöscht.}}",
+        "suppressed": "Die Adresse steht auf der plattformweiten Löschliste: Keine Organisation kann ihr erneut Marketing senden, es sei denn, die Person willigt ein.",
+        "connectors": "{count, plural, =0 {Es mussten keine verbundenen Dienste informiert werden.} one {Verbundener Dienst, der die Person ebenfalls löschen soll: {names}.} other {Verbundene Dienste, die die Person ebenfalls löschen sollen: {names}.}}",
+        "signature": "Signiert mit dem Ed25519-Schlüssel {key}.",
+        "download": "Beleg herunterladen (PDF)",
+        "notified": "Wir haben der Person einen Link zu diesem Beleg per E-Mail geschickt.",
+        "actions": {
+          "delete": "Gelöscht",
+          "redact": "Personenbezogene Daten entfernt",
+          "hold": "Aufbewahrt, personenbezogene Daten entfernt"
+        },
+        "bases": {
+          "tax_accounting": "Steuer- und Buchhaltungsunterlagen (7 Jahre)",
+          "payment_dispute": "Nachweise für eine Rückbuchung",
+          "accountability": "Nachweis, dass die Anfrage bearbeitet wurde"
+        }
+      }
+    },
+    "pdf": {
+      "title": "Löschbeleg",
+      "request": "Anfrage",
+      "person": "Person",
+      "source": "Angefragt von",
+      "requested": "Angefragt am",
+      "due": "Fällig bis",
+      "completed": "Gelöscht",
+      "signatureTitle": "Signatur",
+      "algorithm": "Algorithmus",
+      "keyId": "Schlüssel-ID",
+      "digest": "SHA-256 des Belegs",
+      "signature": "Signatur (base64)",
+      "footer": "Ausgestellt von Yayatoh für {org}. Die Signatur deckt die Daten des Belegs ab; prüfen Sie sie mit dem öffentlichen Schlüssel unten."
     }
   },
   "privacyNotice": {
@@ -2737,7 +3097,8 @@
       "guests": "Gäste",
       "markHandled": "Als erledigt markieren",
       "markNew": "Als neu markieren"
-    }
+    },
+    "layoutLibrary": "Saalplan-Bibliothek"
   },
   "details": {
     "title": "Eventdetails",
@@ -3346,7 +3707,39 @@
       "attendees_read": "Teilnehmende lesen",
       "attendees_write": "Teilnehmende ändern und Tickets erneut senden",
       "checkin_scan": "Tickets scannen"
-    }
+    },
+    "expiry": "Läuft ab",
+    "expiryHint": "Ein ablaufender Schlüssel muss vorher rotiert werden. Kürzer ist sicherer.",
+    "expiryIn": {
+      "30": "In 30 Tagen",
+      "90": "In 90 Tagen",
+      "365": "In einem Jahr",
+      "never": "Nie"
+    },
+    "expiresColumn": "Läuft ab",
+    "createdBy": "Erstellt von",
+    "createdByPlatform": "Yayatoh",
+    "expired": "Abgelaufen",
+    "rotatedStatus": "Rotiert",
+    "rotate": "Rotieren",
+    "rotateNamed": "Schlüssel {name} rotieren",
+    "overlap": "Der alte Schlüssel funktioniert weiter",
+    "overlapFor": {
+      "h0": "Gar nicht: sofort stoppen",
+      "h1": "1 Stunde lang",
+      "h24": "24 Stunden lang",
+      "h168": "7 Tage lang"
+    },
+    "rotateNow": "Jetzt rotieren",
+    "rotateNowNamed": "Schlüssel {name} jetzt rotieren",
+    "rotated": "Schlüssel „{name}“ rotiert. Der alte Schlüssel funktioniert bis {until}.",
+    "rotatedNow": "Schlüssel „{name}“ rotiert. Der alte Schlüssel funktioniert nicht mehr.",
+    "related": "API",
+    "usageLink": "Nutzung",
+    "sandboxesLink": "Sandboxes",
+    "rateLimitNote": "Jeder Schlüssel darf {perKey, number} Anfragen pro Minute stellen, alle Schlüssel zusammen {perOrg, number}.",
+    "noApiAccess": "API-Zugang gehört nicht zum Tarif dieser Organisation: ihre Schlüssel werden abgewiesen.",
+    "webhooksLink": "Webhooks"
   },
   "market": {
     "wordmark": "Yayatoh",
@@ -4655,6 +5048,11 @@
     "terminated": {
       "title": "Diese Organisation ist geschlossen",
       "body": "Der Yayatoh-Support hat sie geschlossen. Die öffentlichen Seiten sind offline, und nichts kann mehr geändert werden. Als Inhaber kannst du sie weiterhin öffnen und deine Daten herunterladen, zum Beispiel unter Aktivität."
+    },
+    "sandbox": {
+      "label": "Sandbox",
+      "title": "SANDBOX",
+      "body": "Dies ist eine Test-Organisation. Zahlungen sind simuliert und es wird nichts abgebucht; ihre Veranstaltungen erscheinen nie auf dem Marktplatz."
     }
   },
   "seatingDates": {
@@ -4737,8 +5135,13 @@
       "slot_full": "Diese Veranstaltung hat bereits 20 Grundrissbilder.",
       "forbidden": "Sie können diesen Plan nicht ändern.",
       "network": "Das Hochladen ist fehlgeschlagen. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
-      "generic": "Das Hochladen ist fehlgeschlagen. Versuchen Sie es erneut."
-    }
+      "generic": "Das Hochladen ist fehlgeschlagen. Versuchen Sie es erneut.",
+      "pdf_page": "Diese Seite gibt es nicht: Das PDF hat {pages, plural, one {# Seite} other {# Seiten}}.",
+      "pdf_unreadable": "Dieses PDF lässt sich nicht lesen. Exportieren Sie den Plan als Bild oder als anderes PDF und versuchen Sie es erneut."
+    },
+    "pdfPage": "Seite (PDF)",
+    "pdfHint": "Ein Grundriss als PDF geht auch: Wählen Sie die Seite mit dem Plan. Sie wird in Ihrem Browser in ein Bild umgewandelt und dann wie eines hochgeladen.",
+    "pdfDrawing": "Seite {page} des PDFs wird gezeichnet…"
   },
   "humanCheck": {
     "legend": "Sicherheitsprüfung",
@@ -5070,7 +5473,9 @@
         "consent": "Marketing-Einwilligung",
         "label": "Label",
         "totals": "Gesamtwerte",
-        "seen": "Zuerst oder zuletzt gesehen"
+        "seen": "Zuerst oder zuletzt gesehen",
+        "stats": "Kontaktstatistik",
+        "ltv": "Lebenszeitwert"
       },
       "did": "Regel",
       "didYes": "Ja",
@@ -5128,7 +5533,19 @@
       "event": "Veranstaltung",
       "editionOf": "Ausgabe vor",
       "series": "Reihe",
-      "noSeries": "Noch keine Reihen"
+      "noSeries": "Noch keine Reihen",
+      "statsMetric": "Kennzahl",
+      "statsMetrics": {
+        "engagement": "Engagement-Score",
+        "noShowPct": "No-Show-Neigung",
+        "sessionsAttended": "Besuchte Sessions",
+        "campaignsOpened": "Geöffnete Kampagnen",
+        "rfmRecency": "RFM-Aktualität (Quintil)",
+        "rfmFrequency": "RFM-Häufigkeit (Quintil)",
+        "rfmMonetary": "RFM-Umsatz (Quintil)"
+      },
+      "valuePercent": "Prozent",
+      "quintile": "Quintil (1–5)"
     },
     "scopes": {
       "any": "Beliebige Veranstaltung",
@@ -5183,7 +5600,10 @@
         "unknown_legacy": "Unbekannt (importiert)",
         "none": "Nicht erteilt"
       }
-    }
+    },
+    "peopleLink": "Personen",
+    "duplicatesLink": "Mögliche Duplikate",
+    "insights": "Kontakt-Einblicke"
   },
   "refundOps": {
     "timeline": {
@@ -10864,6 +11284,1030 @@
       "waitlist_closed": "{title} ist ausgebucht und die Warteliste wurde 24 Stunden vor der Session geschlossen.",
       "offer_ended": "Das Angebot für {title} ist abgelaufen.",
       "full": "{title} ist gerade voll geworden. Versuche es erneut, um auf die Warteliste zu kommen."
+    }
+  },
+  "people": {
+    "title": "Personen",
+    "audiences": "Zielgruppen",
+    "description": "Alle Personen, zu denen Ihre Organisation einen Datensatz hat, die neuesten zuerst. Öffnen Sie eine Person, um ihren gesamten Verlauf zu sehen.",
+    "duplicatesLink": "Mögliche Duplikate",
+    "search": {
+      "label": "Nach Name, E-Mail oder Firma suchen",
+      "submit": "Suchen",
+      "noneTitle": "Keine Treffer",
+      "noneDescription": "Kein Name, keine E-Mail und keine Firma enthält „{q}“. Versuchen Sie eine kürzere Suche."
+    },
+    "emptyTitle": "Noch keine Personen",
+    "emptyDescription": "Personen erscheinen hier, wenn sie Tickets kaufen, sich anmelden oder auf eine Gästeliste gesetzt werden.",
+    "caption": "Personen",
+    "columns": {
+      "name": "Name",
+      "email": "E-Mail",
+      "company": "Firma",
+      "added": "Hinzugefügt"
+    },
+    "next": "Nächste Seite",
+    "person": {
+      "title": "Person",
+      "details": "Angaben",
+      "mergedHere": "Dieser Datensatz wurde mit diesem hier zusammengeführt."
+    },
+    "fields": {
+      "name": "Name",
+      "email": "E-Mail",
+      "phone": "Telefon",
+      "company": "Firma",
+      "added": "Hinzugefügt",
+      "emailConsent": "Marketing-E-Mails",
+      "smsConsent": "Marketing-SMS",
+      "history": "Verlauf",
+      "empty": "Nicht angegeben"
+    },
+    "merges": {
+      "title": "Zusammengeführte Datensätze",
+      "line": "{who} am {when} zusammengeführt.",
+      "moved": "{moved, plural, =0 {Nichts verschoben.} one {# Eintrag verschoben.} other {# Einträge verschoben.}}",
+      "undoneOn": "Rückgängig gemacht am {when}.",
+      "undoUntil": "Kann bis {when} rückgängig gemacht werden.",
+      "erased": "ein gelöschter Datensatz"
+    },
+    "undo": {
+      "submit": "Zusammenführung rückgängig machen",
+      "submitFor": "Zusammenführung von {who} rückgängig machen",
+      "done": "Zusammenführung rückgängig gemacht. Beide Datensätze sind wieder getrennt, genau wie vorher.",
+      "openOther": "Den anderen Datensatz öffnen",
+      "errors": {
+        "expired": "Diese Zusammenführung ist älter als 30 Tage und kann nicht mehr rückgängig gemacht werden.",
+        "blocked": "Dieser Datensatz wurde inzwischen mit einem anderen zusammengeführt. Machen Sie zuerst diese Zusammenführung rückgängig.",
+        "erased": "Einer dieser Datensätze wurde gelöscht, daher kann die Zusammenführung nicht mehr rückgängig gemacht werden.",
+        "undone": "Diese Zusammenführung wurde bereits rückgängig gemacht."
+      }
+    },
+    "errors": {
+      "forbidden": "Ihre Rolle darf keine Personen zusammenführen. Fragen Sie eine Inhaberin, einen Admin oder eine Managerin."
+    },
+    "timeline": {
+      "title": "Verlauf",
+      "kind": "Was",
+      "allKinds": "Alles",
+      "event": "Veranstaltung",
+      "allEvents": "Alle Veranstaltungen",
+      "filter": "Filtern",
+      "noMatchTitle": "Nichts passt zu diesen Filtern",
+      "noMatchDescription": "Wählen Sie „Alles“ oder „Alle Veranstaltungen“, um mehr zu sehen.",
+      "emptyTitle": "Noch nichts hier",
+      "emptyDescription": "Bestellungen, Check-ins, Kampagnen, Nachrichten und Umfragen erscheinen hier, sobald sie geschehen.",
+      "listLabel": "Verlauf von {name}",
+      "older": "Ältere"
+    },
+    "kinds": {
+      "order_paid": "Bestellung bezahlt",
+      "order_refunded": "Erstattung",
+      "checked_in": "Eingecheckt",
+      "session_attended": "Session besucht",
+      "campaign_sent": "Kampagne gesendet",
+      "campaign_opened": "Kampagne geöffnet",
+      "campaign_clicked": "Kampagne angeklickt",
+      "message_in": "Hat Ihnen geschrieben",
+      "message_out": "Sie haben geantwortet",
+      "donation": "Spende",
+      "rsvp": "Rückmeldung",
+      "survey_sent": "Umfrage gesendet",
+      "survey_responded": "Umfrage beantwortet"
+    },
+    "merge": {
+      "done": "Datensätze zusammengeführt. Sie können dies 30 Tage lang auf dieser Seite rückgängig machen.",
+      "submit": "Datensätze zusammenführen",
+      "hint": "Bestellungen, Tickets, Check-ins, Nachrichten und der Verlauf gehen auf den bleibenden Datensatz über. Eine Zusammenführung lässt sich 30 Tage lang rückgängig machen.",
+      "errors": {
+        "alreadyMerged": "Einer dieser Datensätze wurde seit dem Öffnen dieser Seite zusammengeführt oder geändert. Gehen Sie zurück zur Liste.",
+        "erased": "Einer dieser Datensätze wurde gelöscht und kann nicht zusammengeführt werden.",
+        "unavailable": "Zusammenführen ist gerade nicht möglich. Versuchen Sie es später erneut.",
+        "keep": "Wählen Sie, welcher Datensatz bleibt."
+      }
+    },
+    "duplicates": {
+      "title": "Mögliche Duplikate",
+      "description": "Personen, die vielleicht doppelt erfasst sind: gleiche E-Mail, gleiche Telefonnummer oder ähnlicher Name bei derselben Firma.",
+      "scan": "Nach Duplikaten suchen",
+      "lastScan": "Zuletzt geprüft {when}. Neue Kontakte werden alle paar Minuten automatisch geprüft.",
+      "neverScanned": "Noch nicht geprüft.",
+      "scanned": "{count, plural, =0 {Keine möglichen Duplikate gefunden.} one {# mögliches Duplikat gefunden.} other {# mögliche Duplikate gefunden.}}",
+      "dismissedDone": "Als nicht dieselbe Person markiert. Dieses Paar wird nicht mehr vorgeschlagen.",
+      "bulkDone": "{count, plural, =0 {Nichts wurde zusammengeführt.} one {# Paar zusammengeführt. Jede Zusammenführung lässt sich 30 Tage lang rückgängig machen.} other {# Paare zusammengeführt. Jede Zusammenführung lässt sich 30 Tage lang rückgängig machen.}}",
+      "statusNav": "Nach Status filtern",
+      "status": {
+        "open": "Offen ({count})",
+        "dismissed": "Keine Duplikate",
+        "merged": "Zusammengeführt"
+      },
+      "caption": {
+        "open": "Zu prüfende mögliche Duplikate",
+        "dismissed": "Als nicht dieselbe Person markierte Paare",
+        "merged": "Zusammengeführte Paare"
+      },
+      "empty": {
+        "open": {
+          "title": "Keine möglichen Duplikate",
+          "description": "Wählen Sie „Nach Duplikaten suchen“, um jetzt alle zu prüfen. Neue Kontakte werden automatisch geprüft."
+        },
+        "dismissed": {
+          "title": "Nichts verworfen",
+          "description": "Paare, die Sie als nicht dieselbe Person markieren, stehen hier."
+        },
+        "merged": {
+          "title": "Noch keine Zusammenführungen",
+          "description": "Paare, die Sie zusammenführen, stehen hier. Rückgängig machen können Sie es auf der Seite der Person."
+        }
+      },
+      "select": "Auswählen",
+      "selectPair": "{pair} auswählen",
+      "pair": "{a} und {b}",
+      "columns": {
+        "people": "Personen",
+        "confidence": "Sicherheit",
+        "reasons": "Warum",
+        "review": "Prüfen"
+      },
+      "score": "{score} %",
+      "review": "Prüfen",
+      "reviewPair": "{pair} prüfen",
+      "mergeSelected": "Auswahl zusammenführen",
+      "mergeSelectedHint": "Behält jeweils den älteren Datensatz und die neuesten Angaben. Sie werden gebeten, Ihre Identität zu bestätigen.",
+      "errors": {
+        "noneSelected": "Wählen Sie mindestens ein Paar zum Zusammenführen.",
+        "tooMany": "Wählen Sie höchstens 50 Paare auf einmal."
+      }
+    },
+    "reasons": {
+      "email": "Gleiche E-Mail-Adresse",
+      "phone": "Gleiche Telefonnummer",
+      "name_company": "Ähnlicher Name bei derselben Firma"
+    },
+    "compare": {
+      "title": "Mögliches Duplikat prüfen",
+      "description": "{score} % Sicherheit: {reasons}.",
+      "resolved": "Dieses Paar wurde bereits erledigt.",
+      "record": "Datensatz {n}",
+      "older": "(älter)",
+      "entries": "{count, plural, =0 {Keine Einträge} one {# Eintrag} other {# Einträge}}",
+      "openTimeline": "Verlauf von {record} öffnen",
+      "consentTitle": "Einwilligung nach dem Zusammenführen",
+      "consentEmail": "Marketing-E-Mails: {status}",
+      "consentSms": "Marketing-SMS: {status}",
+      "consentRule": "Die strengste Wahl gilt: Hat ein Datensatz widersprochen, gilt der Widerspruch für den zusammengeführten Datensatz.",
+      "keepLegend": "Welcher Datensatz bleibt",
+      "keepHint": "Der andere Datensatz wird mit ihm zusammengeführt. Seine E-Mail-Adresse führt weiterhin zu dieser Person.",
+      "keepOption": "{record} ({email})",
+      "fieldLegend": {
+        "name": "Name",
+        "email": "E-Mail",
+        "phone": "Telefon",
+        "company": "Firma"
+      },
+      "fieldOption": "{record}: {value}",
+      "dismiss": "Nicht dieselbe Person"
+    },
+    "consent": {
+      "granted": "Eingewilligt",
+      "withdrawn": "Widersprochen",
+      "unknown_legacy": "Unbekannt (importiert)",
+      "none": "Keine Einwilligung"
+    }
+  },
+  "contactStats": {
+    "title": "Kontakt",
+    "insightsTitle": "Kontakt-Einblicke",
+    "insightsDescription": "Wie Ihre Leute über alle Veranstaltungen hinweg teilnehmen: Engagement, No-Shows, Aktualität und Häufigkeit.",
+    "audiencesLink": "Zielgruppen",
+    "notLive": "Dieser Kontakt wurde mit einem anderen zusammengeführt oder gelöscht. Seine Statistiken zählen nicht mehr.",
+    "emptyTitle": "Noch keine Aktivität",
+    "emptyDescription": "Statistiken erscheinen, sobald sich diese Person für eine Veranstaltung anmeldet, eine Session besucht oder eine Kampagne öffnet.",
+    "emptyAction": "Zielgruppe erstellen",
+    "glance": "Auf einen Blick",
+    "events": "Angemeldete Veranstaltungen",
+    "attended": "Besuchte Veranstaltungen",
+    "sessions": "Besuchte Sessions",
+    "campaigns": "Geöffnete Kampagnen",
+    "firstSeen": "Zuerst gesehen",
+    "lastSeen": "Zuletzt gesehen",
+    "never": "—",
+    "lifetimeValue": "Lebenszeitwert",
+    "lifetimeOrders": "{count, plural, one {# bezahlte Bestellung} other {# bezahlte Bestellungen}}",
+    "noSpend": "Noch keine bezahlten Bestellungen.",
+    "noSpendOrg": "Noch niemand hat etwas bezahlt.",
+    "scores": "Scores",
+    "engagement": "Engagement-Score",
+    "engagementValue": "{score} / 100",
+    "engagementHow": "{wAttended} × {attended} besuchte Veranstaltungen + {wSessions} × {sessions} Sessions + {wCampaigns} × {campaigns} geöffnete Kampagnen = {points} Punkte. 100 × {points} ÷ ({points} + {half}) = {score}.",
+    "noShow": "No-Show-Neigung",
+    "noShowHow": "({noShows} No-Shows + {priorNoShows}) ÷ ({past} vergangene Anmeldungen + {priorRegistrations}) = {pct}. Kommende Veranstaltungen zählen noch nicht.",
+    "rfm": "RFM",
+    "rfmHow": "Quintile unter den Personen dieser Organisation, die an einer Veranstaltung teilgenommen haben: 5 ist das oberste Fünftel.",
+    "rfmNone": "Noch nicht eingestuft: keine Veranstaltungen.",
+    "recency": "Aktualität",
+    "frequency": "Häufigkeit",
+    "monetary": "Umsatz",
+    "quintileValue": "{q} von 5",
+    "updated": "Aktualisiert am {date}",
+    "viewContact": "Kontakt ansehen",
+    "headerSummary": "Engagement {score} · No-Show {pct}",
+    "headerValue": "Lebenszeit {amount}",
+    "totals": "Summen",
+    "total": {
+      "contacts": "Kontakte",
+      "participants": "Teilgenommen",
+      "attendedAny": "Anwesend",
+      "averageEngagement": "Durchschnittliches Engagement",
+      "noShowRate": "No-Show-Quote"
+    },
+    "distributions": "Verteilungen",
+    "distribution": {
+      "engagement": "Engagement-Score",
+      "noShow": "No-Show-Neigung",
+      "frequency": "Besuchte Veranstaltungen",
+      "recency": "Zuletzt gesehen"
+    },
+    "showData": "Daten anzeigen",
+    "range": "Bereich",
+    "people": "Personen",
+    "bandRange": "{from}–{to}",
+    "bandFrom": "{from} oder mehr",
+    "recencyWithin": "Innerhalb von {days} Tagen",
+    "recencyOlder": "Länger her",
+    "value": {
+      "currency": "Währung",
+      "payers": "Zahlende Personen",
+      "total": "Gesamt",
+      "average": "Durchschnitt",
+      "topFifth": "Oberstes Fünftel ab",
+      "max": "Höchster Wert"
+    },
+    "orgEmptyTitle": "Noch keine Kontaktaktivität",
+    "orgEmptyDescription": "Statistiken erscheinen, sobald sich Personen anmelden, einchecken, Sessions besuchen und Kampagnen öffnen.",
+    "orgEmptyAction": "Zu Ihren Veranstaltungen"
+  },
+  "privacyRequest": {
+    "title": "Anfrage zu Ihren personenbezogenen Daten",
+    "description": "Bitten Sie {org} um eine Kopie der personenbezogenen Daten, die über Sie gespeichert sind, oder um deren Löschung. Die Antwort kommt innerhalb von 30 Tagen. Zuerst senden wir Ihnen einen Code per E-Mail, um zu prüfen, dass die Adresse Ihnen gehört.",
+    "notice": "Datenschutzhinweis von {org} lesen",
+    "kindLegend": "Was möchten Sie?",
+    "access": "Eine Kopie meiner Daten",
+    "accessHint": "Sie erhalten einen Link zu einer ZIP-Datei mit allem, was über Sie gespeichert ist.",
+    "erasure": "Meine Daten löschen",
+    "erasureHint": "{org} löscht Ihre Daten, außer dem, was gesetzlich aufbewahrt werden muss (etwa bezahlte Bestellungen für die Steuer).",
+    "email": "Ihre E-Mail-Adresse",
+    "emailHint": "Die Adresse, die Sie bei diesem Veranstalter verwendet haben.",
+    "submit": "Code per E-Mail senden",
+    "sent": "Wir haben einen 6-stelligen Code an {email} gesendet. Geben Sie ihn ein, um Ihre Anfrage zu bestätigen. Er ist 10 Minuten gültig.",
+    "resent": "Wir haben einen neuen Code an {email} gesendet.",
+    "codeLabel": "Bestätigungscode",
+    "confirm": "Anfrage bestätigen",
+    "resend": "Neuen Code senden",
+    "changeEmail": "Andere Adresse verwenden",
+    "doneTitle": "Anfrage eingegangen",
+    "doneBody": "{org} antwortet bis {date}. Ihre Referenz lautet {reference}. Sie erhalten eine E-Mail, sobald die Anfrage erledigt ist.",
+    "existingBody": "Sie haben bereits eine offene Anfrage bei {org}. Sie ist bis {date} fällig; Ihre Referenz lautet {reference}.",
+    "errors": {
+      "invalidEmail": "Geben Sie eine gültige E-Mail-Adresse ein.",
+      "kindRequired": "Wählen Sie eine Kopie Ihrer Daten oder die Löschung.",
+      "rateLimited": "{minutes, plural, one {Zu viele Versuche. Versuchen Sie es in # Minute erneut.} other {Zu viele Versuche. Versuchen Sie es in # Minuten erneut.}}",
+      "codeFormat": "Geben Sie die 6 Ziffern aus der E-Mail ein.",
+      "wrong": "{count, plural, =0 {Der Code ist nicht richtig. Fordern Sie einen neuen Code an.} one {Der Code ist nicht richtig. Noch # Versuch.} other {Der Code ist nicht richtig. Noch # Versuche.}}",
+      "locked": "Zu viele falsche Codes. Fordern Sie einen neuen Code an.",
+      "expired": "Der Code ist abgelaufen oder wurde bereits verwendet. Fordern Sie einen neuen Code an.",
+      "generic": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
+    }
+  },
+  "apiUsage": {
+    "title": "API-Nutzung",
+    "subtitle": "Anfragen mit den API-Schlüsseln dieser Organisation, pro Tag in der Zeitzone der Organisation.",
+    "back": "API-Schlüssel",
+    "range": "Zeitraum",
+    "lastDays": "Letzte {days, number} Tage",
+    "totalsTitle": "Summen",
+    "requests": "Anfragen",
+    "errors": "Fehler",
+    "rateLimited": "Ratenbegrenzt",
+    "perDayTitle": "Anfragen pro Tag",
+    "perKeyTitle": "Anfragen pro Schlüssel",
+    "day": "Tag",
+    "showData": "Daten anzeigen",
+    "emptyTitle": "Keine API-Anfragen in diesem Zeitraum",
+    "emptyDescription": "Anfragen mit Ihren Schlüsseln erscheinen hier sofort. Erstellen Sie einen Schlüssel auf der Seite API-Schlüssel."
+  },
+  "sandboxes": {
+    "title": "Sandboxes",
+    "subtitle": "Test-Organisationen, die mit dieser verknüpft sind, um API und Checkout gefahrlos auszuprobieren.",
+    "noAccessTitle": "Nur Inhaber und Admins verwalten Sandboxes",
+    "noAccessDescription": "Bitten Sie einen Inhaber oder Admin dieser Organisation, eine für Sie anzulegen.",
+    "factsTitle": "So funktioniert eine Sandbox",
+    "factPayments": "Zahlungen sind immer simuliert: Es wird nie etwas abgebucht, egal wie die Plattform eingestellt ist.",
+    "factMarketplace": "Ihre Veranstaltungen erscheinen nie auf dem Marktplatz.",
+    "factData": "Sie beginnt mit einer Beispielveranstaltung und zwei Ticketarten.",
+    "factKeys": "Sie hat eigene API-Schlüssel und ein eigenes Team. Sie sind ihr Inhaber.",
+    "createTitle": "Sandbox erstellen",
+    "name": "Name",
+    "nameHint": "Zum Beispiel „Staging“ oder „Zapier-Test“.",
+    "nameRequired": "Geben Sie der Sandbox einen Namen.",
+    "create": "Sandbox erstellen",
+    "creating": "Wird erstellt…",
+    "created": "Sandbox „{name}“ mit einer Beispielveranstaltung erstellt.",
+    "open": "Sandbox {name} öffnen",
+    "openShort": "Öffnen",
+    "limit": "Diese Organisation hat bereits {max, number} Sandboxes, das Maximum. Löschen Sie zuerst eine.",
+    "sandboxOfSandbox": "Eine Sandbox kann keine eigenen Sandboxes haben",
+    "inSandboxDescription": "Erstellen Sie Sandboxes in der Organisation, zu der diese Sandbox gehört.",
+    "listTitle": "Ihre Sandboxes",
+    "emptyTitle": "Noch keine Sandboxes",
+    "emptyDescription": "Erstellen Sie eine, um API, Checkout und Einlass mit Beispieldaten und simulierten Zahlungen auszuprobieren.",
+    "address": "Adresse",
+    "createdAt": "Erstellt",
+    "actions": "Aktionen",
+    "delete": "Löschen",
+    "deleteNamed": "Sandbox {name} löschen",
+    "deleteWarning": "Sie wird endgültig geschlossen: Ihre Seiten gehen offline, Mitglieder und Schlüssel verlieren den Zugang.",
+    "deleteConfirm": "Endgültig löschen",
+    "deleteConfirmNamed": "Sandbox {name} endgültig löschen"
+  },
+  "webhooks": {
+    "title": "Webhooks",
+    "subtitle": "Senden Sie die Ereignisse Ihrer Organisation in dem Moment, in dem sie passieren, an Ihre eigenen Systeme.",
+    "docs": "Webhook-Anleitung und Signaturprüfung",
+    "related": "Verwandte Seiten",
+    "portalLink": "Webhook-Portal öffnen",
+    "apiKeysLink": "API-Schlüssel",
+    "noAccessTitle": "Nur Inhaber und Admins verwalten Webhooks",
+    "noAccessDescription": "Bitten Sie einen Inhaber oder Admin dieser Organisation, Webhook-Endpunkte hinzuzufügen oder zu ändern.",
+    "noModuleTitle": "Webhooks sind nicht Teil Ihres Tarifs",
+    "noModuleDescription": "Webhooks gehören zum API-Zugang. Kontaktieren Sie uns, um ihn für Ihre Organisation freizuschalten.",
+    "unavailableTitle": "Webhooks sind noch nicht verfügbar",
+    "unavailableDescription": "Der Versand von Webhooks wird auf dieser Plattform noch eingerichtet. Schauen Sie bald wieder vorbei.",
+    "emptyTitle": "Noch keine Webhook-Endpunkte",
+    "emptyDescription": "Fügen Sie unten die https-URL Ihres Empfängers hinzu und senden Sie ihm eine Testnachricht.",
+    "listTitle": "Endpunkte",
+    "url": "Endpunkt-URL",
+    "urlHint": "https auf Port 443, aus dem Internet erreichbar. Jede Nachricht ist signiert.",
+    "description": "Beschreibung",
+    "descriptionHint": "Optional, für Ihr Team (bis zu 200 Zeichen).",
+    "descriptionTooLong": "Verwenden Sie höchstens 200 Zeichen.",
+    "events": "Ereignisse",
+    "allEvents": "Alle Ereignisse",
+    "eventCount": "{count, plural, one {# Ereignis} other {# Ereignisse}}",
+    "status": "Status",
+    "active": "Aktiv",
+    "disabled": "Pausiert",
+    "createdAt": "Hinzugefügt",
+    "createTitle": "Endpunkt hinzufügen",
+    "settingsTitle": "Endpunkt-Einstellungen",
+    "receive": "Zu sendende Ereignisse",
+    "receiveAll": "Alle Ereignisse, auch neue",
+    "receiveSelected": "Nur die Ereignisse, die ich wähle",
+    "typesRequired": "Wählen Sie mindestens ein Ereignis oder senden Sie alle Ereignisse.",
+    "groups": {
+      "orders": "Bestellungen und Zahlungen",
+      "tickets": "Tickets",
+      "checkin": "Einlass",
+      "events": "Veranstaltungen und Ticketarten",
+      "registration": "Anmeldung",
+      "engagement": "Beteiligung",
+      "meta": "Tests"
+    },
+    "enabled": "Nachrichten an diesen Endpunkt senden",
+    "enabledHint": "Ausschalten, um Zustellungen zu pausieren, ohne den Endpunkt zu löschen.",
+    "create": "Endpunkt hinzufügen",
+    "save": "Änderungen speichern",
+    "saved": "Endpunkt gespeichert.",
+    "limit": "Diese Organisation hat die maximale Anzahl an Endpunkten. Löschen Sie einen, um einen neuen hinzuzufügen.",
+    "urlProblem": {
+      "malformed": "Geben Sie eine vollständige URL ein, z. B. https://example.com/webhooks.",
+      "scheme": "Verwenden Sie eine https://-URL.",
+      "credentials": "Entfernen Sie Benutzername und Passwort aus der URL.",
+      "port": "Verwenden Sie den Standard-https-Port (443).",
+      "host": "Dieser Host kann keine Webhooks empfangen. Verwenden Sie eine öffentliche Adresse.",
+      "address": "Diese Adresse ist privat oder reserviert. Verwenden Sie eine öffentliche Adresse.",
+      "dns": "Dieser Host wurde nicht gefunden. Prüfen Sie die Adresse.",
+      "length": "Diese URL ist zu lang."
+    },
+    "deleted": "Endpunkt gelöscht.",
+    "created": "Endpunkt hinzugefügt. Senden Sie ihm eine Testnachricht, um Ihren Empfänger zu prüfen.",
+    "back": "Alle Webhook-Endpunkte",
+    "endpointTitle": "Webhook-Endpunkt",
+    "testTitle": "Testnachricht senden",
+    "testEventType": "Nachrichtentyp",
+    "testHint": "webhook.test oder ein beliebiges Ereignis mit seinen dokumentierten Beispieldaten. Nur dieser Endpunkt erhält sie.",
+    "sendTest": "Test senden",
+    "testSent": "Testnachricht gesendet ({type}). Die Zustellung steht unten.",
+    "secretTitle": "Signatur-Secret",
+    "secretHint": "Damit prüfen Sie, dass jede Nachricht wirklich von uns kommt.",
+    "revealSecret": "Secret anzeigen",
+    "hideSecret": "Ausblenden",
+    "copy": "Kopieren",
+    "copied": "Kopiert",
+    "rotateHint": "Ein neues Secret ersetzt dieses. 24 Stunden lang signieren beide jede Nachricht, damit Sie Zeit zum Ausrollen haben.",
+    "rotateSecret": "Secret erneuern",
+    "rotatedSecret": "Secret erneuert. Das bisherige Secret funktioniert noch 24 Stunden.",
+    "deliveriesTitle": "Letzte Zustellungen",
+    "deliveriesUnavailable": "Die Zustellungen können gerade nicht geladen werden. Versuchen Sie es in einer Minute erneut.",
+    "noDeliveriesTitle": "Noch keine Zustellungen",
+    "noDeliveriesDescription": "Senden Sie eine Testnachricht oder warten Sie auf das nächste Ereignis.",
+    "attemptedAt": "Zeit",
+    "eventType": "Ereignis",
+    "response": "Antwort",
+    "noResponse": "Keine Antwort",
+    "trigger": "Gesendet durch",
+    "triggerManual": "Erneut gesendet",
+    "triggerScheduled": "Automatisch",
+    "nextRetry": "Nächster Versuch",
+    "actions": "Aktionen",
+    "attemptSucceeded": "Zugestellt",
+    "attemptFailed": "Fehlgeschlagen",
+    "attemptPending": "Ausstehend",
+    "resend": "Erneut senden",
+    "resendNamed": "{type} von {when} erneut senden",
+    "resent": "Erneut gesendet",
+    "recoverTitle": "Fehlgeschlagene Nachrichten wiederherstellen",
+    "recoverHint": "War Ihr Empfänger nicht erreichbar, senden Sie alle seit einem Zeitpunkt fehlgeschlagenen Nachrichten erneut.",
+    "recoverSince": "Fehlgeschlagen seit",
+    "recoverWindow": {
+      "1h": "Der letzten Stunde",
+      "24h": "Den letzten 24 Stunden",
+      "7d": "Den letzten 7 Tagen"
+    },
+    "recover": "Fehlgeschlagene erneut senden",
+    "recovering": "Fehlgeschlagene Nachrichten werden erneut gesendet.",
+    "deleteTitle": "Diesen Endpunkt löschen",
+    "deleteHint": "Er erhält sofort keine Nachrichten mehr. Das lässt sich nicht rückgängig machen.",
+    "delete": "Endpunkt löschen",
+    "portalTitle": "Webhook-Portal",
+    "portalSubtitle": "Endpunkte, Zustellprotokolle und erneutes Senden bei unserem Webhook-Anbieter.",
+    "portalAlternative": "Alles hier finden Sie auch auf <link>den Webhook-Seiten</link>.",
+    "portalFrameTitle": "Webhook-Portal",
+    "portalUnavailable": "Das Webhook-Portal kann gerade nicht geöffnet werden. Versuchen Sie es in einer Minute erneut.",
+    "fakePortal": {
+      "title": "Webhook-Portal (Testmodus)",
+      "subtitle": "Ein Platzhalter für das Portal des Anbieters: Hier wird nichts über das Netz gesendet.",
+      "endpoints": "Endpunkte",
+      "url": "URL",
+      "types": "Ereignisse",
+      "allTypes": "Alle",
+      "status": "Status",
+      "enabled": "Aktiv",
+      "disabled": "Pausiert",
+      "noEndpoints": "Noch keine Endpunkte",
+      "attempts": "Letzte Versuche",
+      "noAttempts": "Noch keine Versuche",
+      "type": "Ereignis",
+      "message": "Nachricht",
+      "succeeded": "Zugestellt",
+      "failed": "Fehlgeschlagen",
+      "at": "Zeit"
+    }
+  },
+  "developers": {
+    "brand": "Yayatoh für Entwickler",
+    "skip": "Zum Inhalt springen",
+    "title": "Entwickler",
+    "subtitle": "Bauen Sie auf Yayatoh auf: die REST-API, Webhooks und SDKs.",
+    "nav": {
+      "label": "Entwicklerdokumentation",
+      "home": "Übersicht",
+      "guides": "Anleitungen",
+      "reference": "API-Referenz",
+      "events": "Webhook-Ereignisse"
+    },
+    "search": {
+      "label": "Dokumentation durchsuchen",
+      "placeholder": "Anleitungen, Endpunkte und Ereignisse suchen",
+      "submit": "Suchen",
+      "results": "{count, plural, =0 {Keine Treffer} one {# Treffer} other {# Treffer}}",
+      "resultsLabel": "Suchergebnisse",
+      "resultsFor": "Ergebnisse für „{query}“",
+      "none": "Keine Treffer. Versuchen Sie ein anderes Wort, etwa „orders“ oder „webhook“.",
+      "kinds": {
+        "guide": "Anleitung",
+        "operation": "Endpunkt",
+        "event": "Ereignis"
+      }
+    },
+    "englishNotice": "Anleitungen und Referenz sind auf Englisch.",
+    "startTitle": "Hier beginnen",
+    "cards": {
+      "guides": "API-Schlüssel, Paginierung, Idempotenz, Webhooks und Sandboxes Schritt für Schritt.",
+      "reference": "Jeder /v1-Endpunkt mit Parametern und Antworten, aus OpenAPI erzeugt.",
+      "events": "Jedes Webhook-Ereignis mit versioniertem Schema und einem Beispiel."
+    },
+    "guidesSubtitle": "Schritt-für-Schritt-Anleitungen für die Arbeit mit der API.",
+    "backToGuides": "Alle Anleitungen",
+    "reference": {
+      "title": "API-Referenz",
+      "subtitle": "Jeder /v1-Endpunkt, aus dem OpenAPI-Dokument erzeugt.",
+      "interactive": "In der interaktiven Referenz ausprobieren",
+      "download": "openapi.json herunterladen",
+      "tags": "Abschnitte",
+      "auth": "Authentifizierung",
+      "parameters": "Parameter",
+      "parametersOf": "Parameter von {operation}",
+      "name": "Name",
+      "in": "Ort",
+      "type": "Typ",
+      "description": "Beschreibung",
+      "requestBody": "Anfragekörper",
+      "responses": "Antworten"
+    },
+    "events": {
+      "title": "Webhook-Ereignisse",
+      "subtitle": "Jede Nachricht, die Ihre Endpunkte erhalten können, mit versioniertem Schema. Die Daten enthalten IDs und Fakten, niemals personenbezogene Daten.",
+      "verifyLink": "So prüfen Sie Signaturen",
+      "groups": "Ereignisgruppen",
+      "fieldsOf": "Felder von {type}",
+      "data": "data",
+      "field": "Feld",
+      "type": "Typ",
+      "required": "Pflicht",
+      "yes": "Ja",
+      "no": "Nein",
+      "example": "Beispielnachricht {type}"
+    }
+  },
+  "billingPlan": {
+    "title": "Tarif und Module",
+    "subtitle": "Ihr Tarif, die enthaltenen Module und wie Gebühren pro Ticket gelten.",
+    "noAccessTitle": "Nur Inhaber, Admins und Finanzen sehen den Tarif",
+    "noAccessDescription": "Fragen Sie einen Inhaber dieser Organisation, wenn Sie die Tarifdetails brauchen.",
+    "dormantTitle": "Abonnements sind noch nicht eingeschaltet",
+    "dormantBody": "Ihre Organisation bleibt in ihrem aktuellen Tarif und behält alle Module von heute. Bis zum Start der Abonnements ändert sich nichts.",
+    "inactiveTitle": "Die Abrechnung ist für diese Organisation nicht aktiv",
+    "inactiveBody": "Ihre Organisation bleibt in ihrem aktuellen Tarif und behält alle Module von heute. Bis die Abrechnung eingerichtet ist, ändert sich nichts.",
+    "updatedTitle": "Tarifwechsel erhalten",
+    "updatedBody": "Der Abrechnungsanbieter hat die Änderung bestätigt. Die Module unten sind aktuell.",
+    "currentPlan": "Aktueller Tarif",
+    "pricePerMonth": "{price} pro Monat",
+    "pricePerYear": "{price} pro Jahr",
+    "priceQuote": "Individuelles Angebot",
+    "renews": "Verlängert sich am {date}",
+    "endsOn": "Endet am {date}",
+    "source": {
+      "subscription": "Abonnement",
+      "plan": "Enthaltener Tarif"
+    },
+    "status": {
+      "active": "Aktiv",
+      "trialing": "Testphase",
+      "past_due": "Zahlung überfällig",
+      "canceled": "Gekündigt",
+      "unpaid": "Unbezahlt",
+      "paused": "Pausiert",
+      "incomplete": "Unvollständig",
+      "incomplete_expired": "Abgelaufen"
+    },
+    "fees": {
+      "title": "Gebühren pro Ticket",
+      "grandfathered": "Ihre bisherigen Gebühren pro Ticket bleiben erhalten. Ein Tarifwechsel ändert sie nie.",
+      "plan": "Die Gebühren pro Ticket folgen dem Tarif {plan}."
+    },
+    "modules": {
+      "title": "Ihre Module",
+      "description": "Was Ihre Organisation jetzt nutzen kann.",
+      "count": "{count, plural, one {# Modul} other {# Module}}"
+    },
+    "catalog": {
+      "title": "Tarife",
+      "description": "Platzhalter-Tarife: Die Preise sind nicht endgültig und noch nichts ist im Verkauf.",
+      "empty": "Noch keine Tarife.",
+      "plan": "Tarif",
+      "price": "Preis",
+      "modules": "Module",
+      "status": "Status",
+      "onSale": "Im Verkauf",
+      "notOnSale": "Noch nicht im Verkauf"
+    },
+    "test": {
+      "title": "Testabrechnung (nur Entwicklung)",
+      "body": "Simulieren Sie einen Tarifwechsel über den Test-Abrechnungsanbieter. Er sendet dieselben Webhooks wie der echte Anbieter.",
+      "open": "Testportal für die Abrechnung öffnen"
+    },
+    "planName": {
+      "launch_standard": "Start-Standard",
+      "tier_free": "Free",
+      "tier_starter": "Starter",
+      "tier_pro": "Pro",
+      "tier_agency": "Agentur",
+      "tier_enterprise": "Enterprise"
+    },
+    "module": {
+      "core": "Basis",
+      "events": "Veranstaltungen",
+      "ticketing": "Ticketverkauf",
+      "orders": "Bestellungen",
+      "attendees": "Teilnehmende",
+      "checkin": "Einlass",
+      "seating": "Bestuhlung",
+      "seat_finder": "Platzfinder",
+      "guests": "Gästeliste",
+      "rsvp": "Zusagen",
+      "distribution": "Vertrieb",
+      "access_codes": "Zugangscodes",
+      "marketing": "Marketing",
+      "messaging": "Nachrichten",
+      "reports": "Berichte",
+      "whitelabel": "White Label",
+      "ai": "KI-Assistent",
+      "chat": "Chat",
+      "donations": "Spenden",
+      "registration": "Registrierung",
+      "sessions": "Sessions",
+      "speakers": "Referierende",
+      "exhibitors": "Aussteller",
+      "sponsors": "Sponsoren",
+      "badges": "Namensschilder",
+      "gallery": "Galerie",
+      "website": "Website",
+      "api_access": "API-Zugang",
+      "integrations": "Integrationen",
+      "enterprise": "SSO und SCIM",
+      "agency": "Agentur",
+      "virtual": "Virtuelle Veranstaltungen",
+      "advanced_seating": "Erweiterte Bestuhlung",
+      "ai_seating": "KI-Bestuhlung",
+      "analytics_pro": "Erweiterte Analysen"
+    }
+  },
+  "billingPortal": {
+    "eyebrow": "Testabrechnung",
+    "title": "Tarif wählen",
+    "description": "Nur für die Entwicklung. Diese Seite ersetzt das Portal des Abrechnungsanbieters und sendet dieselben Webhooks.",
+    "planLegend": "Tarif",
+    "switch": "Tarif wechseln",
+    "cancel": "Abonnement kündigen",
+    "back": "Ohne Änderung zurück",
+    "chooseError": "Wählen Sie einen Tarif, zu dem Sie wechseln möchten."
+  },
+  "seatingLibrary": {
+    "title": "Saalplan-Bibliothek",
+    "description": "Die Saalpläne, die Sie aus Ihren Veranstaltungen gespeichert haben. Legen Sie aus einem davon eine neue Veranstaltung an; jede Veranstaltung behält ihre eigene Kopie.",
+    "deleted": "Plan aus der Bibliothek entfernt. Veranstaltungen, die ihn nutzten, behalten ihre Kopie.",
+    "emptyTitle": "Ihre Saalplan-Bibliothek ist leer",
+    "emptyHint": "Öffnen Sie den Saalplan einer Veranstaltung und wählen Sie „Plan speichern“, um ihn hier aufzubewahren.",
+    "emptyViewer": "Aus Veranstaltungen gespeicherte Pläne erscheinen hier.",
+    "toEvents": "Zu den Veranstaltungen",
+    "startTitle": "Neue Veranstaltung aus einem Plan anlegen",
+    "startDescription": "Die neue Veranstaltung erhält ihre eigene Kopie des Plans. Danach legen Sie die Preise der Plätze fest und geben sie in den Verkauf.",
+    "layout": "Plan",
+    "layoutOption": "{name} ({seats, plural, one {# Platz} other {# Plätze}})",
+    "eventName": "Name der Veranstaltung",
+    "profile": "Art der Veranstaltung",
+    "timezone": "Zeitzone",
+    "startsAt": "Beginn",
+    "endsAt": "Ende",
+    "start": "Veranstaltung anlegen",
+    "fixErrors": "Bitte korrigieren Sie das markierte Feld.",
+    "errors": {
+      "layoutId": "Wählen Sie einen Plan.",
+      "name": "Geben Sie der Veranstaltung einen Namen (2 bis 160 Zeichen).",
+      "slug": "Es gibt schon eine Veranstaltung mit diesem Namen. Wählen Sie einen anderen.",
+      "profile": "Wählen Sie eine Veranstaltungsart mit Sitzplätzen.",
+      "startsAt": "Geben Sie an, wann die Veranstaltung beginnt.",
+      "endsAt": "Geben Sie an, wann die Veranstaltung endet, nach ihrem Beginn.",
+      "layoutName": "Geben Sie dem Plan einen Namen (bis zu 120 Zeichen)."
+    },
+    "listTitle": "Gespeicherte Pläne",
+    "seats": "{count, plural, one {# Platz} other {# Plätze}}",
+    "rows": "{count, plural, one {# Reihe} other {# Reihen}}",
+    "tables": "{count, plural, one {# Tisch} other {# Tische}}",
+    "withImage": "mit einem Grundrissbild",
+    "usedBy": "{count, plural, =0 {Noch von keiner Veranstaltung genutzt} one {Von # Veranstaltung genutzt} other {Von # Veranstaltungen genutzt}}",
+    "updated": "aktualisiert am {date}",
+    "renameLabel": "Name von {name}",
+    "rename": "Umbenennen",
+    "renamed": "Umbenannt.",
+    "startFrom": "Veranstaltung damit anlegen",
+    "startFromNamed": "Veranstaltung mit {name} anlegen",
+    "delete": "Entfernen",
+    "deleteNamed": "{name} entfernen"
+  },
+  "warehouse": {
+    "title": "Analysen",
+    "description": "Alle Ihre Veranstaltungen zusammen: Anmeldungen, Tickets, Check-ins und Nichterscheinen im Zeitverlauf und Ihre stärksten Veranstaltungen.",
+    "filters": "Filter",
+    "from": "Von",
+    "to": "Bis",
+    "event": "Veranstaltung",
+    "allEvents": "Alle Veranstaltungen",
+    "apply": "Anwenden",
+    "timeZoneNote": "Tage sind Kalendertage in {timeZone}, der Zeitzone Ihrer Organisation.",
+    "rangeErrors": {
+      "invalid_date": "Geben Sie Daten als Jahr, Monat und Tag ein.",
+      "from_after_to": "Das Enddatum liegt vor dem Startdatum.",
+      "range_too_long": "Wählen Sie einen Zeitraum von höchstens zwei Jahren."
+    },
+    "periodLabel": "Anzeigen nach",
+    "view": {
+      "day": "Tag",
+      "week": "Woche",
+      "month": "Monat"
+    },
+    "emptyTitle": "In diesem Zeitraum noch nichts",
+    "emptyBody": "Zwischen diesen Daten gibt es keine Anmeldungen, Tickets oder Check-ins. Wählen Sie einen längeren Zeitraum oder eine andere Veranstaltung; neue Bestellungen erscheinen hier innerhalb von Sekunden.",
+    "emptyAction": "Die letzten 12 Monate anzeigen",
+    "figures": {
+      "label": "Summen für den Zeitraum",
+      "registrations": "Anmeldungen",
+      "ticketsIssued": "Ausgestellte bezahlte Tickets",
+      "tickets": "Verkaufte Tickets",
+      "compTickets": "Freitickets",
+      "checkins": "Check-ins",
+      "noShows": "Nicht erschienen"
+    },
+    "revenue": {
+      "title": "Umsatz",
+      "net": "Nettoumsatz ({currency})",
+      "grossRefunds": "{gross} bezahlt, {refunds} erstattet",
+      "byPeriod": "Umsatz nach Zeitraum",
+      "noRevenue": "Keine Verkäufe oder Erstattungen in diesem Zeitraum.",
+      "period": "Zeitraum",
+      "currency": "Währung",
+      "gross": "Bezahlt",
+      "refunds": "Erstattet",
+      "netColumn": "Netto",
+      "topEvents": "Umsatzstärkste Veranstaltungen",
+      "eventColumn": "Veranstaltung",
+      "weekOf": "Woche ab {day}"
+    },
+    "trend": "Im Zeitverlauf",
+    "chartTitle": "Anmeldungen, bezahlte Tickets und Check-ins im Zeitverlauf",
+    "byPeriod": "Zahlen nach Zeitraum",
+    "period": "Zeitraum",
+    "topEvents": "Stärkste Veranstaltungen",
+    "noTopEvents": "Keine Veranstaltung hatte in diesem Zeitraum Anmeldungen.",
+    "definitions": "Verkaufte Tickets sind bezahlte Tickets abzüglich erstatteter. Ein Check-in zählt jedes Ticket einmal, am Tag des ersten Einlasses. Nicht erschienen sind gültige Tickets ohne Check-in, gezählt am Tag, an dem die Veranstaltung endete.",
+    "definitionsFinance": "Verkaufte Tickets sind bezahlte Tickets abzüglich erstatteter. Ein Check-in zählt jedes Ticket einmal, am Tag des ersten Einlasses. Nicht erschienen sind gültige Tickets ohne Check-in, gezählt am Tag, an dem die Veranstaltung endete. Umsatz ist, was Käufer bezahlt haben, abzüglich Erstattungen, je Währung und vor Plattformgebühren (siehe Finanzen).",
+    "rebuildTitle": "Analysen neu aufbauen",
+    "rebuildBody": "Berechnet jede Zahl auf dieser Seite aus Ihren Bestellungen und Check-ins neu, einige Veranstaltungen nach der anderen. Nutzen Sie dies, nachdem Sie die Zeitzone Ihrer Organisation geändert haben.",
+    "rebuild": "Neu aufbauen",
+    "rebuilding": "Wird gestartet…",
+    "rebuildStarted": "Neuaufbau gestartet",
+    "rebuildStartedBody": "Die Zahlen werden im Hintergrund neu berechnet; die Seite bleibt währenddessen nutzbar.",
+    "rebuildRunning": "Es läuft bereits ein Neuaufbau.",
+    "runStatus": {
+      "running": "Läuft",
+      "done": "Fertig",
+      "failed": "Fehlgeschlagen",
+      "cancelled": "Abgebrochen"
+    },
+    "runProgress": "{events, plural, one {# Veranstaltung geprüft} other {# Veranstaltungen geprüft}}, {written, plural, one {# aktualisiert} other {# aktualisiert}}"
+  },
+  "integrations": {
+    "title": "Integrationen",
+    "description": "Verbinde die Tools, die du schon nutzt. Kontakte und Datensätze bleiben in beide Richtungen abgeglichen, und du erfährst, wenn etwas geprüft werden muss.",
+    "tabsLabel": "Bereiche der Integrationen",
+    "tabs": {
+      "connections": "Verbindungen",
+      "errors": "Fehler"
+    },
+    "cancelled": "Die Verbindung wurde abgebrochen.",
+    "offTitle": "Integrationen sind hier noch nicht eingeschaltet",
+    "offDescription": "Verbindungen brauchen den Integrationsdienst, der auf dieser Website noch nicht eingerichtet ist. Wende dich an die Plattformverwaltung.",
+    "noneTitle": "Noch keine Integrationen verfügbar",
+    "noneDescription": "Neue Integrationen erscheinen auf dieser Seite, sobald sie verfügbar sind.",
+    "connectors": {
+      "demo": {
+        "description": "Eine Sandbox-Kontakte-App zum Ausprobieren: Kontakte werden in beide Richtungen mit deinem CRM abgeglichen. Nur in Testumgebungen."
+      }
+    },
+    "sandboxBadge": "Sandbox",
+    "account": "Konto",
+    "lastSync": "Letzter Abgleich",
+    "never": "Nie",
+    "openErrors": "Offene Fehler",
+    "openErrorCount": "{count, plural, one {# Datensatz muss geprüft werden} other {# Datensätze müssen geprüft werden}}",
+    "noErrors": "Keine",
+    "notInPlan": "Nicht in deinem Tarif",
+    "manage": "Verwalten",
+    "manageNamed": "{name} verwalten",
+    "connect": "Verbinden",
+    "connectNamed": "{name} verbinden",
+    "reconnect": "Neu verbinden",
+    "reconnectNamed": "{name} neu verbinden",
+    "readOnly": "Nur Inhaber und Admins können Integrationen verbinden oder ändern.",
+    "breadcrumb": "Brotkrümelnavigation",
+    "objects": {
+      "contacts": "Kontakte"
+    },
+    "fields": {
+      "email": "E-Mail",
+      "name": "Name"
+    },
+    "status": {
+      "none": "Nicht verbunden",
+      "pending": "Wartet auf Zustimmung",
+      "active": "Verbunden",
+      "paused": "Pausiert",
+      "revoked": "Getrennt",
+      "failed": "Verbindung fehlgeschlagen"
+    },
+    "runStatus": {
+      "queued": "In der Warteschlange",
+      "running": "Läuft",
+      "succeeded": "Abgeglichen",
+      "partial": "Abgeglichen mit Fehlern",
+      "failed": "Fehlgeschlagen",
+      "cancelled": "Abgebrochen"
+    },
+    "errorsFeedback": {
+      "unavailable": "Diese Integration ist hier nicht verfügbar.",
+      "provider_unavailable": "Der Anbieter ist nicht erreichbar. Versuche es in ein paar Minuten erneut.",
+      "not_approved": "Der Anbieter hat die Verbindung noch nicht bestätigt. Schließe das Verbinden dort ab und prüfe dann erneut.",
+      "denied": "Die Verbindung wurde nicht genehmigt, daher wurde nichts verbunden.",
+      "expired": "Dieser Verbindungslink ist abgelaufen. Beginne erneut mit „Verbinden“.",
+      "validation_failed": "Einige Angaben müssen korrigiert werden.",
+      "forbidden": "Du hast keinen Zugriff darauf.",
+      "module_not_enabled": "Integrationen sind nicht in deinem Tarif enthalten.",
+      "not_found": "Das konnten wir nicht finden.",
+      "conflict": "Diese Integration ist bereits verbunden.",
+      "invalid_state": "Das ist gerade nicht möglich.",
+      "impersonation_blocked": "Mitarbeitende, die als Mitglied handeln, können keine Integrationen verbinden.",
+      "read_only_freeze": "Änderungen sind während der geplanten Wartung pausiert. Versuche es danach erneut.",
+      "internal": "Bei uns ist etwas schiefgelaufen."
+    },
+    "detail": {
+      "title": "Integration",
+      "syncNow": "Jetzt abgleichen",
+      "syncing": "Abgleich unterwegs",
+      "connected": "{name} ist verbunden. Der erste Abgleich startet in Kürze.",
+      "sync": {
+        "queued": "Abgleich gestartet. Aktualisiere gleich, um das Ergebnis zu sehen.",
+        "already": "Ein Abgleich ist bereits unterwegs."
+      },
+      "done": {
+        "paused": "Der Abgleich ist pausiert.",
+        "resumed": "Der Abgleich läuft wieder.",
+        "interval": "Abgleichsplan gespeichert.",
+        "disconnected": "Getrennt. Es wird nichts mehr abgeglichen und der Zugriff wurde beim Anbieter widerrufen."
+      },
+      "revoked": {
+        "user": "Getrennt am {when}.",
+        "provider": "Der Anbieter akzeptiert diese Verbindung seit {when} nicht mehr, daher wurde der Abgleich gestoppt. Verbinde neu, um fortzufahren."
+      },
+      "pending": "Warten darauf, dass die Verbindung beim Anbieter genehmigt wird.",
+      "checkConnection": "Verbindung prüfen",
+      "cancelConnect": "Abbrechen",
+      "confirmDisconnect": "{name} trennen?",
+      "confirmDisconnectBody": "Der Abgleich stoppt sofort und der Zugriff von Yayatoh wird beim Anbieter widerrufen. Bereits abgeglichene Datensätze bleiben, wo sie sind.",
+      "disconnect": "Trennen",
+      "keep": "Verbunden lassen",
+      "statusTitle": "Status",
+      "connectedAt": "Verbunden",
+      "nextSync": "Nächster Abgleich",
+      "interval": "Abgleichen alle",
+      "saveInterval": "Plan speichern",
+      "pause": "Abgleich pausieren",
+      "resume": "Abgleich fortsetzen",
+      "intervals": {
+        "15": "15 Minuten",
+        "60": "Stunde",
+        "360": "6 Stunden",
+        "1440": "Tag"
+      }
+    },
+    "mapping": {
+      "sectionTitle": "Feldzuordnung",
+      "sectionHelp": "Lege fest, welches Feld welches füllt. Jedes Speichern legt eine neue Version an, die der nächste Abgleich verwendet.",
+      "title": {
+        "pull": "Nach Yayatoh",
+        "push": "Zum Anbieter"
+      },
+      "help": {
+        "pull": "Die Felder des Anbieters füllen die Felder von Yayatoh.",
+        "push": "Die Felder von Yayatoh füllen die Felder des Anbieters."
+      },
+      "version": "Version {version}",
+      "saved": "Zuordnung als Version {version} gespeichert. Der nächste Abgleich verwendet sie.",
+      "invalid": "Diese Zuordnung kann noch nicht gespeichert werden. Prüfe die markierten Felder.",
+      "required": "Pflichtfeld",
+      "source": "Kommt aus",
+      "transform": "Ändern",
+      "default": "Wenn leer, verwende",
+      "notMapped": "— Nicht zugeordnet —",
+      "transforms": {
+        "none": "Unverändert",
+        "trim": "Leerzeichen entfernen",
+        "lowercase": "kleinbuchstaben",
+        "uppercase": "GROSSBUCHSTABEN",
+        "title_case": "Wortanfänge Groß",
+        "first_word": "Erstes Wort",
+        "last_word": "Letztes Wort",
+        "to_number": "Zahl",
+        "to_boolean": "Ja oder nein",
+        "to_date": "Datum"
+      },
+      "save": {
+        "pull": "Import-Zuordnung speichern",
+        "push": "Export-Zuordnung speichern"
+      },
+      "issue": {
+        "missing_required": "Wähle, woher {field} kommt: Das Feld ist Pflicht.",
+        "unknown_source": "Dieses Feld gibt es beim Anbieter nicht.",
+        "unknown_target": "{field} kann nicht gefüllt werden.",
+        "duplicate_target": "{field} wird doppelt gefüllt.",
+        "other": "Prüfe dieses Feld."
+      }
+    },
+    "runs": {
+      "title": "Letzte Abgleiche",
+      "caption": "Letzte Abgleiche dieser Integration",
+      "empty": "Noch keine Abgleiche. Der erste startet kurz nach dem Verbinden.",
+      "when": "Gestartet",
+      "trigger": "Ausgelöst durch",
+      "status": "Ergebnis",
+      "pulled": "Rein",
+      "pushed": "Raus",
+      "skipped": "Unverändert",
+      "failed": "Fehler",
+      "error": "Problem",
+      "triggers": {
+        "manual": "Jetzt abgleichen",
+        "schedule": "Zeitplan",
+        "retry": "Wiederholung"
+      }
+    },
+    "codes": {
+      "auth_revoked": "Der Anbieter akzeptiert diese Verbindung nicht mehr",
+      "invalid_token": "Der Anbieter akzeptiert diese Verbindung nicht mehr",
+      "auth_failed": "Der Anbieter hat die Verbindung abgelehnt",
+      "invalid_value": "Ein Wert passt nicht zu seinem Feld",
+      "missing_required": "Ein Pflichtfeld ist leer",
+      "transform_failed": "Ein Wert konnte nicht umgewandelt werden",
+      "duplicate_record": "Zwei Datensätze verweisen auf denselben Kontakt",
+      "write_failed": "Konnte in Yayatoh nicht gespeichert werden",
+      "push_failed": "Konnte nicht an den Anbieter gesendet werden",
+      "network": "Der Anbieter war nicht erreichbar",
+      "lease_expired": "Der Abgleich wurde unerwartet beendet",
+      "disconnected": "Durch Trennen gestoppt",
+      "paused": "Durch Pausieren gestoppt",
+      "sync_failed": "Der Abgleich ist fehlgeschlagen",
+      "unknown_connector": "Diese Integration ist nicht mehr verfügbar",
+      "other": "Fehler ({code})"
+    },
+    "inbox": {
+      "title": "Integrationsfehler",
+      "description": "Datensätze, die nicht abgeglichen werden konnten, gruppiert nach Ursache. Sie werden eine Weile automatisch wiederholt. Korrigiere einen Datensatz an seiner Quelle und tippe dann auf „Wiederholen“ oder verwirf, was du nicht brauchst.",
+      "retried": "{count, plural, =0 {Nichts zu wiederholen: Diese Verbindungen sind nicht aktiv.} one {# Datensatz wird beim nächsten Abgleich wiederholt.} other {# Datensätze werden beim nächsten Abgleich wiederholt.}}",
+      "dismissed": "{count, plural, one {# Datensatz verworfen.} other {# Datensätze verworfen.}}",
+      "filterLabel": "Fehler anzeigen",
+      "status": {
+        "open": "Offen",
+        "resolved": "Behoben",
+        "dismissed": "Verworfen"
+      },
+      "empty": {
+        "open": "Keine offenen Fehler",
+        "resolved": "Noch nichts behoben",
+        "dismissed": "Nichts verworfen"
+      },
+      "emptyOpenHelp": "Alles ist abgeglichen. Wenn ein Datensatz nicht abgeglichen werden kann, erscheint er hier mit dem nächsten Schritt.",
+      "backToConnections": "Zu den Verbindungen",
+      "groupTitle": "{connector}: {step} · {count, plural, one {# Datensatz} other {# Datensätze}}",
+      "steps": {
+        "auth": "Verbindung",
+        "pull": "Lesen beim Anbieter",
+        "map": "Zuordnung",
+        "write": "Speichern in Yayatoh",
+        "push": "Senden an den Anbieter"
+      },
+      "field": "Feld: {field}",
+      "lastSeen": "Zuletzt gesehen {when}",
+      "retryAll": "Alle wiederholen",
+      "retryAllNamed": "Alle wiederholen: {group}",
+      "dismissAll": "Alle verwerfen",
+      "dismissAllNamed": "Alle verwerfen: {group}",
+      "recordsCaption": "Datensätze: {group}",
+      "record": "Datensatz",
+      "object": "Was",
+      "objectDirection": "{object} ({direction})",
+      "directions": {
+        "pull": "rein",
+        "push": "raus"
+      },
+      "wholeConnection": "Ganze Verbindung",
+      "attempts": "Versuche",
+      "nextRetry": "Nächste automatische Wiederholung",
+      "closedAt": "Geschlossen",
+      "manualRetry": "Wartet auf dich",
+      "actions": "Aktionen",
+      "retry": "Wiederholen",
+      "retryNamed": "{record} wiederholen",
+      "dismiss": "Verwerfen",
+      "dismissNamed": "{record} verwerfen",
+      "more": "{count, plural, one {# weiterer Datensatz nicht angezeigt.} other {# weitere Datensätze nicht angezeigt.}}"
+    },
+    "fakeConsent": {
+      "title": "Sandbox-Zustimmung",
+      "eyebrow": "Sandbox-Anbieter",
+      "heading": "{name} mit Yayatoh verbinden?",
+      "body": "{name} ist ein Testanbieter. Wenn du zustimmst, darf Yayatoh in deinem Namen Folgendes lesen und schreiben:",
+      "allow": "Zulassen",
+      "deny": "Ablehnen"
     }
   }
 }

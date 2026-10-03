@@ -123,6 +123,16 @@ export {
   saveSupportMacroCommand,
   supportMacrosQuery,
 } from './commands/support-macros.ts';
+// M6.1a: contact merges move this module's references (ADR 0023).
+export { ordersContactOwner } from './contact-merge.ts';
+// M6.2a: per-day facts of one event for the analytics warehouse.
+export {
+  type DailyRefundFact,
+  type DailySalesFact,
+  dailyRefundFactsTx,
+  dailySalesFactsTx,
+} from './daily-facts.ts';
+export { ordersDataSubjects } from './data-subject.ts';
 export {
   creditableMinor,
   creditNoteAmount,
@@ -371,6 +381,8 @@ export {
   tableNamingMailer,
   tableNamingPath,
 } from './tables.ts';
+// M6.1a: the person timeline's facts from this module (crm projection).
+export { ordersTimeline } from './timeline.ts';
 export {
   declineWaitlistOfferCommand,
   eraseWaitlistDsarTx,
