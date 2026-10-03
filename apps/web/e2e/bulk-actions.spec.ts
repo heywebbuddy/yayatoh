@@ -1,5 +1,5 @@
 import { type Browser, expect, type Locator, type Page, test } from '@playwright/test';
-import { continueToPayment, expectAccessible, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, pickOption, pickWithKeyboard, signIn } from './helpers.ts';
 import { addGuests, createGala, quickPlan, unique } from './seating-helpers.ts';
 
 const VIEWER = 'jordan@lakeside.test';
@@ -23,8 +23,8 @@ function chicago(offsetH: number): string {
 async function liveEvent(page: Page, name: string, types: readonly string[]) {
   await page.goto('/o/lakeside-events/events/new');
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Event type').selectOption('gala');
-  await page.getByLabel('Time zone').selectOption('America/Chicago');
+  await pickOption(page.getByLabel('Event type'), 'gala');
+  await pickOption(page.getByLabel('Time zone'), 'America/Chicago');
   await page.getByLabel('Starts', { exact: true }).fill(chicago(-1));
   await page.getByLabel('Ends', { exact: true }).fill(chicago(3));
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -47,7 +47,7 @@ async function liveEvent(page: Page, name: string, types: readonly string[]) {
 async function buy(browser: Browser, base: string, type: string, who: string) {
   const buyer = await (await browser.newContext()).newPage();
   await buyer.goto(`/events/${base.split('/').pop()}`);
-  await buyer.getByLabel(`Quantity — ${type}`).selectOption('1');
+  await pickOption(buyer.getByLabel(`Quantity — ${type}`), '1');
   await buyer.getByLabel('Full name').fill(who);
   const email = `${who.toLowerCase().replace(/\W+/g, '.')}@example.test`;
   await buyer.getByLabel('Email for your tickets').fill(email);
@@ -58,14 +58,11 @@ async function buy(browser: Browser, base: string, type: string, who: string) {
   return code;
 }
 
-/** Choose an option of a focused native select with the arrow keys only. */
-async function arrowTo(page: Page, select: Locator, label: string) {
+/** Choose an option of a focused select with the arrow keys only. */
+async function arrowTo(_page: Page, select: Locator, label: string) {
   await expect(select).toBeFocused();
-  for (let i = 0; i < 12; i++) {
-    if ((await select.locator('option:checked').textContent())?.trim() === label) return;
-    await page.keyboard.press('ArrowDown');
-  }
-  await expect(select.locator('option:checked')).toHaveText(label);
+  await pickWithKeyboard(select, { label });
+  await expect(select).toHaveText(label);
 }
 
 const bulkForm = (page: Page) => page.getByRole('form', { name: 'Bulk actions' });
@@ -92,7 +89,7 @@ test.describe('bulk seat assignment (M1.8f)', () => {
     await arrowTo(page, bulk.getByLabel('Action', { exact: true }), 'Assign seats');
     await page.keyboard.press('Tab');
     const target = bulk.getByLabel('Seat them in', { exact: true });
-    await expect(target.locator('option:checked')).toHaveText('Best available seats — 8 free');
+    await expect(target).toHaveText('Best available seats — 8 free');
     await arrowTo(page, target, 'Table 1 — 4 of 4 free');
     await expect(bulk).toContainText('You can undo for 10 minutes.');
     await expectAccessible(page);
@@ -141,13 +138,13 @@ test.describe('bulk seat assignment (M1.8f)', () => {
     await page.goto(`${base}/attendees`);
     await page.getByLabel(`Select ${ann}`).check();
     const bulk = bulkForm(page);
-    await bulk.getByLabel('Action', { exact: true }).selectOption({ label: 'Assign seats' });
+    await pickOption(bulk.getByLabel('Action', { exact: true }), { label: 'Assign seats' });
     await bulk.getByRole('button', { name: 'Apply' }).click();
     const panel = page.getByRole('region', { name: 'Seat assignment' });
     await expect(panel.getByRole('status')).toHaveText('Seated 1 person of 1.');
     await expect(panel.getByRole('button', { name: 'Undo' })).toBeVisible();
     // Nothing selected: refused with a message.
-    await bulk.getByLabel('Action', { exact: true }).selectOption({ label: 'Assign seats' });
+    await pickOption(bulk.getByLabel('Action', { exact: true }), { label: 'Assign seats' });
     await bulk.getByRole('button', { name: 'Apply' }).click();
     await expect(page.getByRole('alert').filter({ hasText: 'Some details need fixing.' })).toBeVisible();
   });
@@ -167,7 +164,7 @@ test.describe('bulk ticket actions (M1.8f)', () => {
     await page.goto(`${base}/attendees`);
     const bulk = bulkForm(page);
     await bulk.getByLabel('All 3 matching').check();
-    await bulk.getByLabel('Action', { exact: true }).selectOption({ label: 'Resend tickets' });
+    await pickOption(bulk.getByLabel('Action', { exact: true }), { label: 'Resend tickets' });
     await expect(bulk).toContainText('Everyone with a ticket gets it again by email');
     await expectAccessible(page);
     await bulk.getByRole('button', { name: 'Apply' }).click();
@@ -193,7 +190,7 @@ test.describe('bulk ticket actions (M1.8f)', () => {
     await buy(browser, base, 'Pass', ben);
     await page.goto(`${base}/attendees`);
     const bulk = bulkForm(page);
-    await bulk.getByLabel('Action', { exact: true }).selectOption({ label: 'Cancel tickets (no refund)' });
+    await pickOption(bulk.getByLabel('Action', { exact: true }), { label: 'Cancel tickets (no refund)' });
     await expect(bulk).toContainText('No money is refunded');
     // Nobody selected yet.
     await bulk.getByRole('button', { name: 'Review cancellation…' }).click();
@@ -239,7 +236,7 @@ test.describe('bulk ticket actions (M1.8f)', () => {
     await page.goto(`${base}/attendees`);
     await page.getByLabel(`Select ${who}`).check();
     const bulk = bulkForm(page);
-    await bulk.getByLabel('Action', { exact: true }).selectOption({ label: 'Cancel tickets (no refund)' });
+    await pickOption(bulk.getByLabel('Action', { exact: true }), { label: 'Cancel tickets (no refund)' });
     await bulk.getByRole('button', { name: 'Review cancellation…' }).click();
     await page.getByRole('button', { name: 'Cancel tickets for 1 person' }).click();
     await expect(page.getByRole('region', { name: 'Cancelled tickets' }).getByRole('status')).toHaveText(
@@ -283,14 +280,14 @@ test.describe('attendee filters: ticket type and check-in (M1.8f)', () => {
 
     await page.goto(`${base}/attendees`);
     const search = page.getByRole('search');
-    await search.getByLabel('Ticket type', { exact: true }).selectOption({ label: 'VIP' });
+    await pickOption(search.getByLabel('Ticket type', { exact: true }), { label: 'VIP' });
     await search.getByRole('button', { name: 'Search' }).click();
     await expect(row(page, ben)).toBeVisible();
     await expect(row(page, cy)).toBeVisible();
     await expect(row(page, ann)).toHaveCount(0);
     await expect(row(page, gus)).toHaveCount(0);
 
-    await search.getByLabel('Check-in', { exact: true }).selectOption({ label: 'Not checked in' });
+    await pickOption(search.getByLabel('Check-in', { exact: true }), { label: 'Not checked in' });
     await search.getByRole('button', { name: 'Search' }).click();
     await expect(row(page, cy)).toBeVisible();
     await expect(row(page, ben)).toHaveCount(0);
@@ -298,35 +295,31 @@ test.describe('attendee filters: ticket type and check-in (M1.8f)', () => {
     await expectAccessible(page);
     // Kept after a reload (they live in the address).
     await page.reload();
-    await expect(search.getByLabel('Ticket type', { exact: true }).locator('option:checked')).toHaveText(
-      'VIP',
-    );
-    await expect(search.getByLabel('Check-in', { exact: true }).locator('option:checked')).toHaveText(
-      'Not checked in',
-    );
+    await expect(search.getByLabel('Ticket type', { exact: true })).toHaveText('VIP');
+    await expect(search.getByLabel('Check-in', { exact: true })).toHaveText('Not checked in');
     await expect(row(page, cy)).toBeVisible();
 
     // Not checked in, any ticket type: guests without a ticket count too.
-    await search.getByLabel('Ticket type', { exact: true }).selectOption({ label: 'Any ticket type' });
+    await pickOption(search.getByLabel('Ticket type', { exact: true }), { label: 'Any ticket type' });
     await search.getByRole('button', { name: 'Search' }).click();
     for (const who of [ann, cy, gus]) await expect(row(page, who)).toBeVisible();
     await expect(row(page, ben)).toHaveCount(0);
 
     // Checked in today, General only: no one — the empty state.
-    await search.getByLabel('Ticket type', { exact: true }).selectOption({ label: 'General' });
-    await search.getByLabel('Check-in', { exact: true }).selectOption({ label: 'Checked in today' });
+    await pickOption(search.getByLabel('Ticket type', { exact: true }), { label: 'General' });
+    await pickOption(search.getByLabel('Check-in', { exact: true }), { label: 'Checked in today' });
     await search.getByRole('button', { name: 'Search' }).click();
     await expect(page.getByText('No matches')).toBeVisible();
     await expectAccessible(page);
 
     // Checked in today, any type: Ben; the export of everything matching carries only him.
-    await search.getByLabel('Ticket type', { exact: true }).selectOption({ label: 'Any ticket type' });
+    await pickOption(search.getByLabel('Ticket type', { exact: true }), { label: 'Any ticket type' });
     await search.getByRole('button', { name: 'Search' }).click();
     await expect(row(page, ben)).toBeVisible();
     await expect(page.getByRole('row')).toHaveCount(2);
     const bulk = bulkForm(page);
     await bulk.getByLabel('The 1 matching').check();
-    await bulk.getByLabel('Action', { exact: true }).selectOption({ label: 'Export as CSV' });
+    await pickOption(bulk.getByLabel('Action', { exact: true }), { label: 'Export as CSV' });
     await bulk.getByRole('button', { name: 'Apply' }).click();
     const exportPanel = page.getByRole('region', { name: 'Attendee export' });
     await expect(exportPanel).toContainText('Ready: 1 rows exported.');
@@ -340,7 +333,7 @@ test.describe('attendee filters: ticket type and check-in (M1.8f)', () => {
 
     // Labels on "everything matching" follow the check-in filter too.
     await bulk.getByLabel('The 1 matching').check();
-    await bulk.getByLabel('Action', { exact: true }).selectOption({ label: 'Add label' });
+    await pickOption(bulk.getByLabel('Action', { exact: true }), { label: 'Add label' });
     await bulk.getByLabel('Label', { exact: true }).fill('Arrived');
     await bulk.getByRole('button', { name: 'Apply' }).click();
     await expect(page.getByRole('region', { name: 'Bulk labels' })).toContainText(
@@ -388,7 +381,7 @@ test.describe('group seat blocks (M1.8f)', () => {
     await form.getByLabel('Group (label)', { exact: true }).fill(label);
     await submit.click();
     await expect(alert).toHaveText('Choose where to keep the seats.');
-    await form.getByLabel('Keep seats at', { exact: true }).selectOption({ label: 'Table 2 — 4 of 4 free' });
+    await pickOption(form.getByLabel('Keep seats at', { exact: true }), { label: 'Table 2 — 4 of 4 free' });
     await form.getByLabel('Number of seats', { exact: true }).fill('0');
     await submit.click();
     await expect(alert).toHaveText('Enter a number of seats from 1 to 2,000, or leave it empty.');
@@ -466,7 +459,7 @@ test.describe('bulk actions: viewers and Arabic (M1.8f)', () => {
     await page.goto(`${base}/attendees`);
     await page.getByLabel(`Select ${jo}`).check();
     const bulk = bulkForm(page);
-    await bulk.getByLabel('Action', { exact: true }).selectOption({ label: 'Assign seats' });
+    await pickOption(bulk.getByLabel('Action', { exact: true }), { label: 'Assign seats' });
     await signIn(page, VIEWER);
     await bulk.getByRole('button', { name: 'Apply' }).click();
     await expect(page.getByRole('alert').filter({ hasText: "You don't have access to this." })).toBeVisible();
@@ -485,7 +478,7 @@ test.describe('bulk actions: viewers and Arabic (M1.8f)', () => {
     await page.goto(`${base}/seating/assign`);
     const form = page.getByRole('form', { name: 'Keep seats for a group' });
     await form.getByLabel('Group (label)', { exact: true }).fill('Press');
-    await form.getByLabel('Keep seats at', { exact: true }).selectOption({ label: 'Table 1 — 4 of 4 free' });
+    await pickOption(form.getByLabel('Keep seats at', { exact: true }), { label: 'Table 1 — 4 of 4 free' });
     await signIn(page, VIEWER);
     await form.getByRole('button', { name: 'Keep seats' }).click();
     await expect(form.getByRole('alert')).toHaveText('You can see the groups but not change them.');
@@ -507,11 +500,11 @@ test.describe('bulk actions: viewers and Arabic (M1.8f)', () => {
     await page.goto(`/ar${base}/attendees`);
     await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
     const bulk = page.getByRole('form', { name: 'إجراءات جماعية' });
-    await bulk.getByLabel('الإجراء', { exact: true }).selectOption({ label: 'تخصيص المقاعد' });
+    await pickOption(bulk.getByLabel('الإجراء', { exact: true }), { label: 'تخصيص المقاعد' });
     await expect(bulk.getByLabel('إجلاسهم في', { exact: true })).toBeVisible();
     await expect(page.getByRole('search').getByLabel('تسجيل الدخول للحدث', { exact: true })).toBeVisible();
     await expectAccessible(page);
-    await bulk.getByLabel('الإجراء', { exact: true }).selectOption({ label: 'إلغاء التذاكر (دون استرداد)' });
+    await pickOption(bulk.getByLabel('الإجراء', { exact: true }), { label: 'إلغاء التذاكر (دون استرداد)' });
     await expect(bulk.getByRole('button', { name: 'مراجعة الإلغاء…' })).toBeVisible();
     await expectAccessible(page);
     await page.goto(`/ar${base}/seating/assign`);

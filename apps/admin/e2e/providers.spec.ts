@@ -1,5 +1,14 @@
 import { expect, test } from '@playwright/test';
-import { expectAccessible, makeStaff, openTenant, signInStaff, WEB, webPage, webUser } from './helpers.ts';
+import {
+  expectAccessible,
+  makeStaff,
+  openTenant,
+  pickOption,
+  signInStaff,
+  WEB,
+  webPage,
+  webUser,
+} from './helpers.ts';
 
 /**
  * M3.5b in the staff console: provider health (last webhook, 24-hour counts, error rate) and each
@@ -93,10 +102,10 @@ test("staff set a tenant's dedicated senders; the organizer sees them (English a
   ).toBeVisible();
   // WhatsApp: the Cloud API needs a phone number id; the gateway route doesn't.
   const wa = page.getByRole('form', { name: 'WhatsApp route' });
-  await wa.getByLabel('Route').selectOption('cloud');
+  await pickOption(wa.getByLabel('Route'), 'cloud');
   await wa.getByRole('button', { name: 'Save the WhatsApp route' }).click();
   await expect(page.getByText('The Cloud API needs the phone number id (digits).')).toBeVisible();
-  await wa.getByLabel('Route').selectOption('gateway');
+  await pickOption(wa.getByLabel('Route'), 'gateway');
   await wa.getByRole('button', { name: 'Save the WhatsApp route' }).click();
   await expect(page.getByText("WhatsApp: the owner's gateway.")).toBeVisible();
   await expectAccessible(page);

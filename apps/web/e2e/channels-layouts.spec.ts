@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
-import { continueToPayment, expectAccessible, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, expectPicked, pickOption, signIn } from './helpers.ts';
 import { createGala, holdSeats, quickPlan, seatBox, seatedGala, unique } from './seating-helpers.ts';
 
 const VIEWER = 'jordan@lakeside.test';
@@ -50,7 +50,7 @@ test.describe('channels, revisions and the layout library (M6.11b)', () => {
 
     // Every validation error, at its field.
     const form = page.getByRole('region', { name: 'Add a channel' });
-    await form.getByLabel('Kind').selectOption('promoter');
+    await pickOption(form.getByLabel('Kind'), 'promoter');
     await form.getByLabel('Name', { exact: true }).fill('DJ Kai');
     await form.getByRole('button', { name: 'Add channel' }).click();
     await expect(form.getByText('Sponsors and promoters need a code.')).toBeVisible();
@@ -72,7 +72,7 @@ test.describe('channels, revisions and the layout library (M6.11b)', () => {
       `/events/${slug}?channel=${code.toUpperCase()}`,
     );
     // The same code twice, and a second box office, are refused.
-    await form.getByLabel('Kind').selectOption('sponsor');
+    await pickOption(form.getByLabel('Kind'), 'sponsor');
     await form.getByLabel('Name', { exact: true }).fill('Acme');
     await form.getByLabel('Code', { exact: true }).fill(code.toUpperCase());
     await form.getByRole('button', { name: 'Add channel' }).click();
@@ -80,7 +80,7 @@ test.describe('channels, revisions and the layout library (M6.11b)', () => {
 
     // Allot seats 1–3 of row A, by keyboard only.
     const allot = page.getByRole('region', { name: 'Allot seats' });
-    await expect(allot.getByLabel('Channel', { exact: true })).toHaveValue(/.+/);
+    await expectPicked(allot.getByLabel('Channel', { exact: true }), /.+/);
     await allot.getByRole('checkbox', { name: /^Row A \(6 seats\)/ }).focus();
     await page.keyboard.press('Space');
     await allot.getByLabel('Only these seats (optional)').focus();
@@ -281,17 +281,15 @@ test.describe('channels, revisions and the layout library (M6.11b)', () => {
     // Start a new event from it: every validation error first, then by keyboard.
     await card.getByRole('link', { name: `Start an event from ${name}` }).click();
     const start = page.getByRole('region', { name: 'Start a new event from a plan' });
-    await expect(start.getByLabel('Plan', { exact: true })).toHaveValue(/.+/);
-    await expect(start.getByLabel('Plan', { exact: true }).locator('option:checked')).toHaveText(
-      `${name} (8 seats)`,
-    );
+    await expectPicked(start.getByLabel('Plan', { exact: true }), /.+/);
+    await expect(start.getByLabel('Plan', { exact: true })).toHaveText(`${name} (8 seats)`);
     await start.getByRole('button', { name: 'Create the event' }).click();
     await expect(start.getByText('Give the event a name (2 to 160 characters).')).toBeVisible();
     await expect(start.getByLabel('Event name')).toHaveAttribute('aria-invalid', 'true');
     await expectAccessible(page);
     const eventName = unique('From Library Gala');
     await start.getByLabel('Event name').fill(eventName);
-    await start.getByLabel('Kind of event').selectOption({ label: 'Gala' });
+    await pickOption(start.getByLabel('Kind of event'), { label: 'Gala' });
     await start.getByLabel('Starts').fill('2027-11-05T18:00');
     await start.getByLabel('Ends').fill('2027-11-05T17:00');
     await start.getByRole('button', { name: 'Create the event' }).click();

@@ -9,7 +9,7 @@ import {
   templateOverridesQuery,
 } from '@yayatoh/notifications';
 import { roleCan } from '@yayatoh/tenancy';
-import { Card, EmptyState, PageHeader } from '@yayatoh/ui';
+import { Card, EmptyState, PageHeader, Select } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { TemplateEditor } from '@/components/template-editor.tsx';
@@ -61,25 +61,25 @@ export default async function EmailTemplatesPage({
           <label htmlFor="template-kind" className="text-[13px] font-bold text-ink">
             {t('kind')}
           </label>
-          <select id="template-kind" name="kind" defaultValue={kind} className={field}>
+          <Select id="template-kind" name="kind" defaultValue={kind} className={field}>
             {EMAIL_KINDS.map((k) => (
               <option key={k} value={k}>
                 {tk(k)}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
         <div className="flex flex-col gap-1.5">
           <label htmlFor="template-lang" className="text-[13px] font-bold text-ink">
             {t('language')}
           </label>
-          <select id="template-lang" name="lang" defaultValue={lang} className={field}>
+          <Select id="template-lang" name="lang" defaultValue={lang} className={field}>
             {LOCALES.map((l) => (
               <option key={l} value={l} lang={l}>
                 {langName(l)}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
         <button type="submit" className="field">
           {t('open')}

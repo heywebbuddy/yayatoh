@@ -2,7 +2,14 @@ import { expect, type Page, test } from '@playwright/test';
 import { closePools } from '@yayatoh/db';
 import { resolveOrgSlug } from '@yayatoh/tenancy';
 import { type RsvpQuestionsScenario, rsvpQuestionsScenario } from '@yayatoh/testing';
-import { ageSession, confirmStepUp, expectAccessibleBothModes, personaCode, signIn } from './helpers.ts';
+import {
+  ageSession,
+  confirmStepUp,
+  expectAccessibleBothModes,
+  personaCode,
+  pickOption,
+  signIn,
+} from './helpers.ts';
 
 // Batch 3h merge: axe runs in light and dark on every screen now (twice the checks), so these long
 // journeys get more than the default 30 s.
@@ -54,10 +61,10 @@ async function addQuestion(
   await page.getByRole('button', { name: 'Add a question' }).click();
   const form = page.getByRole('group', { name: 'Add question' });
   await form.getByLabel('Question', { exact: true }).fill(q.label);
-  if (q.type) await form.getByLabel('Answer type').selectOption({ label: q.type });
+  if (q.type) await pickOption(form.getByLabel('Answer type'), { label: q.type });
   if (q.options) await form.getByLabel('Options', { exact: true }).fill(q.options);
-  if (q.about) await form.getByLabel('About').selectOption({ label: q.about });
-  if (q.savedTo) await form.getByLabel('Save the answer to the guest').selectOption({ label: q.savedTo });
+  if (q.about) await pickOption(form.getByLabel('About'), { label: q.about });
+  if (q.savedTo) await pickOption(form.getByLabel('Save the answer to the guest'), { label: q.savedTo });
   if (q.required) await form.getByLabel('Required', { exact: true }).check();
   if (q.attending) await form.getByLabel('Only guests who are attending').check();
   if (q.adults) await form.getByLabel('Only adults').check();
@@ -90,7 +97,7 @@ test.describe('RSVP questions (M4.1e)', () => {
     await expect(form.getByLabel('Question', { exact: true })).toBeFocused();
     await expect(form.getByLabel('Question', { exact: true })).toHaveAttribute('aria-invalid', 'true');
     await form.getByLabel('Question', { exact: true }).fill('Which table side?');
-    await form.getByLabel('Answer type').selectOption({ label: 'One choice' });
+    await pickOption(form.getByLabel('Answer type'), { label: 'One choice' });
     await form.getByRole('button', { name: 'Add question' }).click();
     await expect(form.getByText('Add at least one option, one per line.')).toBeVisible();
     await expectAccessibleBothModes(page);
@@ -109,10 +116,9 @@ test.describe('RSVP questions (M4.1e)', () => {
       .getByRole('group', { name: 'Add question' })
       .getByLabel('Question', { exact: true })
       .fill('Second meal');
-    await page
-      .getByRole('group', { name: 'Add question' })
-      .getByLabel('Answer type')
-      .selectOption({ label: 'Meal choice (from the menu)' });
+    await pickOption(page.getByRole('group', { name: 'Add question' }).getByLabel('Answer type'), {
+      label: 'Meal choice (from the menu)',
+    });
     await page
       .getByRole('group', { name: 'Add question' })
       .getByRole('button', { name: 'Add question' })
@@ -141,7 +147,7 @@ test.describe('RSVP questions (M4.1e)', () => {
     await expect(preview.getByText('Questions shown: 3 of 3')).toBeVisible();
     await expect(preview.getByRole('group', { name: 'Reception: meal choice (required)' })).toBeVisible();
     await expect(preview.getByText('Vegan on request')).toBeVisible();
-    await preview.getByLabel('Age').selectOption({ label: 'Child' });
+    await pickOption(preview.getByLabel('Age'), { label: 'Child' });
     await expect(preview.getByText('Questions shown: 2 of 3')).toBeVisible();
     await expect(preview.getByLabel('Ceremony: song request')).toHaveCount(0);
     await preview.getByLabel('Attending', { exact: true }).uncheck();
@@ -352,7 +358,7 @@ test.describe('RSVP questions (M4.1e)', () => {
     await page.keyboard.type('Need a ride from the hotel?');
     await page.keyboard.press('Tab');
     await expect(form.getByLabel('Answer type')).toBeFocused();
-    await form.getByLabel('Answer type').selectOption({ label: 'Tick box' });
+    await pickOption(form.getByLabel('Answer type'), { label: 'Tick box' });
     await form.getByLabel('Only guests who are attending').focus();
     await page.keyboard.press('Space');
     await expect(form.getByLabel('Only guests who are attending')).toBeChecked();

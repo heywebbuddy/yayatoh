@@ -10,7 +10,7 @@ import {
   moveBlock,
   newBlockId,
 } from '@yayatoh/campaigns/client';
-import { Alert, Button, cx } from '@yayatoh/ui';
+import { Alert, Button, cx, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState, useEffect, useRef, useState, useTransition } from 'react';
 import type { CampaignFormState, PreviewResult } from '@/app/[locale]/o/[org]/(org)/campaigns/actions.ts';
@@ -166,13 +166,13 @@ export function CampaignEditor({
             <label htmlFor="campaign-locale" className="text-[13px] font-bold text-ink">
               {t('language')}
             </label>
-            <select id="campaign-locale" name="locale" defaultValue={initial.locale} className={FIELD}>
+            <Select id="campaign-locale" name="locale" defaultValue={initial.locale} className={FIELD}>
               {LOCALES.map((l) => (
                 <option key={l} value={l}>
                   {t(`languages.${l}`)}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
         </div>
         <div className="flex flex-col gap-1.5">
@@ -208,10 +208,10 @@ export function CampaignEditor({
             <label htmlFor="font" className="text-[13px] font-bold text-ink">
               {t('font')}
             </label>
-            <select
+            <Select
               id="font"
               value={content.font}
-              onChange={(e) => setContent({ ...content, font: e.target.value as CampaignContent['font'] })}
+              onValueChange={(v) => setContent({ ...content, font: v as CampaignContent['font'] })}
               className={FIELD}
             >
               {CAMPAIGN_FONTS.map((f) => (
@@ -219,7 +219,7 @@ export function CampaignEditor({
                   {t(`fonts.${f}`)}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
         </div>
         {channel !== 'email' ? (
@@ -343,10 +343,10 @@ export function CampaignEditor({
                       <label htmlFor={id('event')} className="text-[13px] font-bold text-ink">
                         {b.type === 'button' ? t('buttonEvent') : t('cardEvent')}
                       </label>
-                      <select
+                      <Select
                         id={id('event')}
                         value={b.eventId}
-                        onChange={(e) => update(b.id, { eventId: e.target.value })}
+                        onValueChange={(v) => update(b.id, { eventId: v })}
                         className={FIELD}
                         {...described(p('eventId'))}
                       >
@@ -356,7 +356,7 @@ export function CampaignEditor({
                             {e.name} · {e.date}
                           </option>
                         ))}
-                      </select>
+                      </Select>
                       <p className="text-caption text-ink-2">{t('trackedHint')}</p>
                       {errorText(p('eventId'))}
                     </div>
@@ -456,10 +456,10 @@ export function CampaignEditor({
             <label htmlFor="campaign-add-type" className="text-[13px] font-bold text-ink">
               {t('blockType')}
             </label>
-            <select
+            <Select
               id="campaign-add-type"
               value={addType}
-              onChange={(e) => setAddType(e.target.value as BlockType)}
+              onValueChange={(v) => setAddType(v as BlockType)}
               className={FIELD}
             >
               {ADDABLE.map((type) => (
@@ -467,7 +467,7 @@ export function CampaignEditor({
                   {typeName(type)}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
           <Button type="button" variant="secondary" onClick={add} disabled={content.blocks.length >= 40}>
             {t('addBlock')}

@@ -2,7 +2,7 @@ import { executeQuery, isDomainError } from '@yayatoh/kernel';
 import { BOOKING_FILTERS, type BookingFilter, bookingSearchQuery } from '@yayatoh/orders';
 import type { BulkOperationDto } from '@yayatoh/platform';
 import { bookingsExportBulk } from '@yayatoh/reports';
-import { Button, buttonClass, EmptyState, Input, PageHeader, StatusDot, Table } from '@yayatoh/ui';
+import { Button, buttonClass, EmptyState, Input, PageHeader, Select, StatusDot, Table } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { AutoRefresh } from '@/components/auto-refresh.tsx';
 import { fmtMoney, ReportTabs } from '@/components/reports.tsx';
@@ -92,13 +92,13 @@ export default async function BookingsPage({
           <label htmlFor="booking-filter" className="text-[13px] font-bold text-ink">
             {t('reports.bookings.show')}
           </label>
-          <select id="booking-filter" name="filter" defaultValue={filter} className="field">
+          <Select id="booking-filter" name="filter" defaultValue={filter} className="field">
             {BOOKING_FILTERS.map((f) => (
               <option key={f} value={f}>
                 {t(`reports.bookings.filters.${f}`)}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
         <Button type="submit" className="sm:mb-[22px]">
           {t('reports.bookings.submit')}

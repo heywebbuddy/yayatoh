@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { continueToPayment, expectAccessible, newUser } from './helpers.ts';
+import { continueToPayment, expectAccessible, newUser, pickOption } from './helpers.ts';
 
 /** `YYYY-MM-DDTHH:mm` wall-clock time in Chicago, `offsetH` hours from now (for datetime-local). */
 function chicago(offsetH: number): string {
@@ -56,7 +56,7 @@ test.describe('payouts', () => {
     await expect(agreements.getByText(/Accepted on/).first()).toBeVisible();
     await page.goto(`/o/${org}/events/new`);
     await page.getByLabel('Event name', { exact: true }).fill(`Direct Night ${stamp}`);
-    await page.getByLabel('Time zone').selectOption('America/Chicago');
+    await pickOption(page.getByLabel('Time zone'), 'America/Chicago');
     await page.getByLabel('Starts', { exact: true }).fill(chicago(24));
     await page.getByLabel('Ends', { exact: true }).fill(chicago(27));
     await page.getByRole('button', { name: 'Create draft' }).click();
@@ -73,7 +73,7 @@ test.describe('payouts', () => {
     await expect(page.getByRole('row').filter({ hasText: `Direct pass ${stamp}` })).toBeVisible();
     const guest = await (await browser.newContext()).newPage();
     await guest.goto(`/events/${slug}`);
-    await guest.getByLabel(`Quantity — Direct pass ${stamp}`).selectOption('1');
+    await pickOption(guest.getByLabel(`Quantity — Direct pass ${stamp}`), '1');
     await guest.getByLabel('Full name').fill('Direct Buyer');
     await guest.getByLabel('Email for your tickets').fill(`direct+${stamp}@example.test`);
     await continueToPayment(guest, `direct+${stamp}@example.test`);
