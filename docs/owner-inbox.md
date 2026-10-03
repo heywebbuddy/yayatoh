@@ -746,6 +746,7 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **Card saving at guest check-in (M4.8e on M4.4b):** right after a guest is checked in on the Scan PWA (and on the day-of page), while the event takes gifts online, staff show the event's card-saving code (`/events/{slug}/card?src=checkin`), not the party's own link: a party's link is a credential to its RSVP, so it is not put on door devices. A card saved there is matched to the guest's pledges by email.
 - [ ] **Badge printing with a balance due (M5.1d on M5.5b):** a print job for a registration whose invoice is unpaid needs the same audited override as before (10 minutes, this ticket); the override now opens the logged print page.
 - [ ] **Conference alerts read sponsor deliverables (M5.4b) and badge printers (M5.5b)** now that both are built; leads (M5.6b) are still not connected.
+
 ## M6.6a — billing foundation (2026-10-02, pending owner)
 - [ ] **Tiers and prices (D22).** Free $0 / Starter $29 / Pro $99 / Agency $249 / Enterprise (quote) are seeded as placeholders, switched off, with placeholder module sets (`PLACEHOLDER_PLANS`). Their per-ticket fee schedules are copies of the legacy one until you set them. Change by data (or in Stripe, then run the catalog sync); no code change.
 - [ ] **When a subscription ends** (canceled, expired), a non-grandfathered org falls back to the default plan (`launch_standard`: today's modules and fees). Confirm, or choose the Free tier; M6.6b adds read-only dunning.
@@ -789,3 +790,11 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **Favorites:** at most 300 per registrant; starring an overlapping session asks first ("Keep both", "Replace" un-stars overlapping favorites but never drops an enrolment). Confirm.
 - [ ] **Offline copy:** the service worker keeps the last copy of each hub view on the phone (badge and schedule open without signal). Confirm, or limit it to the badge.
 - [ ] **Performance finding (`infra`):** every page loads the whole of zod (about 390 KB) through `apps/web/src/instrumentation-client.ts` (`z.config({ jitless: true })`). The hub meets the Lighthouse bar (median performance 0.90–0.91) but with little margin; importing only zod's core config there would help every page. Not changed here (shared file).
+
+## M6.6b — meters, plan changes and dunning (2026-10-03, pending owner)
+- [ ] **Grace period and who is read-only.** A failed renewal gives **14 days** of grace (Stripe's default retry window), then the org is read-only until it pays; it is read-only at once if Stripe stops retrying. Read-only means the org's **members and API keys** can't change anything; **ticket buyers, guests, speaker/exhibitor portals and the door keep working**, and members can still look, export, pay, change plan and use their personal settings. Nothing is ever deleted. Confirm, or choose a different grace or a stricter rule (e.g. pause ticket sales too). Labels: `payments`, `tenancy`.
+- [ ] **Nonprofit discount: 20 % off the plan** (research figure), automatic for orgs with a verified charity profile (M4.8b), or by staff for others (churches, associations). Applies to the plan price only, not metered usage. Confirm the percentage and scope; create the coupon `nonprofit` in Stripe when billing goes live.
+- [ ] **Meters to create in Stripe** when billing goes live: `yayatoh_email`, `yayatoh_sms` (segments), `yayatoh_whatsapp`, `yayatoh_ai_credits` (refunds count negative), `yayatoh_devices` (enrollments), all "sum"; then their prices (D22, D16, D12). Usage before an org's first subscription is never billed.
+- [ ] **Stripe Tax**: previews, plan changes and new subscriptions ask Stripe for automatic tax; turn on Stripe Tax and register where needed. Dev and CI use a flat 8 % placeholder.
+- [ ] **Who changes the plan**: owners and admins (new permission `billing:manage`); finance sees plan and usage only. Confirm.
+

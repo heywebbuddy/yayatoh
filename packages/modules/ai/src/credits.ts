@@ -108,6 +108,15 @@ async function append(
   return rows.map((r) => r.id);
 }
 
+/** The AI meter's usage event (M6.6b): credits spent on, or given back for, one draft. */
+const creditUsageEvent = (type: string, orgId: string, debitId: string, credits: number) => ({
+  type,
+  version: 1,
+  aggregateType: 'ai_credit',
+  aggregateId: debitId,
+  payload: { orgId, debitId, credits },
+});
+
 export const creditBalanceQuery = tenantQuery({
   name: 'ai.creditBalance',
   input: z.object({}),
@@ -154,7 +163,7 @@ export const debitDraftCreditCommand = tenantCommand({
   output: z.object({ debitId: z.uuid(), balance: z.number().int() }),
   entitlement: 'ai',
   permission: 'events:write',
-  handler: async ({ input, ctx, tx }) => {
+  handler: async ({ input, ctx, tx, emit }) => {
     if (!(await findEventTx(tx, input.eventId))) throw new DomainError('not_found');
     const account = await lockedAccount(tx, ctx);
     const spent = debit(account);
@@ -166,6 +175,8 @@ export const debitDraftCreditCommand = tenantCommand({
       eventId: input.eventId,
     });
     if (!id) throw new DomainError('internal');
+    // The AI meter (M6.6b, P6-7/D12) counts credits from this event (billing's usage meter).
+    emit(creditUsageEvent('ai.credits_spent', requireOrg(ctx), id, Math.abs(spent.entry.amount)));
     return { debitId: id, balance: spent.state.balance };
   },
   audit: (input, res) => ({
@@ -184,7 +195,7 @@ export const refundDraftCreditCommand = tenantCommand({
   output: z.object({ balance: z.number().int(), refunded: z.boolean() }),
   entitlement: 'ai',
   permission: 'events:write',
-  handler: async ({ input, ctx, tx }) => {
+  handler: async ({ input, ctx, tx, emit }) => {
     const account = await lockedAccount(tx, ctx);
     const [d] = await tx
       .select()
@@ -203,6 +214,7 @@ export const refundDraftCreditCommand = tenantCommand({
       ...(d.eventId ? { eventId: d.eventId } : {}),
       refId: d.id,
     });
+    emit(creditUsageEvent('ai.credits_refunded', requireOrg(ctx), d.id, Math.abs(back.entry.amount)));
     return { balance: back.state.balance, refunded: true };
   },
   audit: (input) => ({ action: 'ai.draft.refund', targetType: 'credit', targetId: input.debitId }),

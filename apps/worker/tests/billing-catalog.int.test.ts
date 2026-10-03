@@ -22,13 +22,10 @@ afterAll(async () => {
   await closePools();
 });
 
+// The fake provider with a different catalog (M6.6b added methods this test never calls).
 const withCatalog = (catalog: ProviderCatalog): BillingProvider => ({
-  name: 'fake',
+  ...fakeBillingProvider({ secret: 'c'.repeat(64) }),
   listCatalog: async () => catalog,
-  createCustomer: async () => ({ customerId: 'unused' }),
-  verifyWebhook: async () => {
-    throw new Error('unused');
-  },
 });
 
 const read = <T extends Record<string, unknown>>(q: ReturnType<typeof sql>) =>

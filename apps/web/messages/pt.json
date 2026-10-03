@@ -725,7 +725,8 @@
     "reference": "Referência: {id}",
     "rateLimitedRetry": "Demasiadas tentativas. Tente novamente dentro de {minutes, plural, one {# minuto} other {# minutos}}.",
     "impersonation_blocked": "A equipe atuando como membro não pode fazer isso: reembolsos, pagamentos, exportações, exclusões e confirmações estão desativados.",
-    "read_only_freeze": "As alterações estão pausadas durante a manutenção programada. Nada foi salvo; tente novamente quando terminar."
+    "read_only_freeze": "As alterações estão pausadas durante a manutenção programada. Nada foi salvo; tente novamente quando terminar.",
+    "read_only_billing": "Esta organização está somente leitura até a assinatura ser paga. Nada foi salvo nem excluído."
   },
   "notFound": {
     "title": "Página não encontrada",
@@ -14846,6 +14847,73 @@
       "advanced_seating": "Assentos avançados",
       "ai_seating": "Assentos com IA",
       "analytics_pro": "Análises avançadas"
+    },
+    "usageLink": "Uso",
+    "renewalReceived": "Atualização de renovação recebida",
+    "dunning": {
+      "graceTitle": "O pagamento da sua assinatura não foi concluído",
+      "graceBody": "Tudo funciona normalmente até {date}. Pague antes disso para continuar fazendo alterações; depois, a organização fica somente leitura até o pagamento.",
+      "readOnlyTitle": "Esta organização está somente leitura",
+      "readOnlyBody": "O pagamento da assinatura falhou, então as alterações estão pausadas. Nada foi excluído: você ainda pode ver tudo, exportar seus dados e escanear ingressos na entrada. Pague para liberar as alterações na hora.",
+      "payNow": "Pagar agora",
+      "askOwner": "Peça a um proprietário ou administrador desta organização para pagar.",
+      "paidTitle": "Pagamento recebido",
+      "paidBody": "Obrigado. As alterações voltaram para todos na organização.",
+      "declinedTitle": "O pagamento não foi concluído",
+      "declinedBody": "Nada mudou. Confira o cartão cadastrado no seu provedor de cobrança e tente de novo.",
+      "payError": "Não foi possível iniciar o pagamento. Tente de novo em instantes."
+    },
+    "change": {
+      "title": "Mudar de plano",
+      "description": "Upgrades e downgrades valem na hora. Você paga ou recebe crédito só pelo restante deste período de cobrança.",
+      "discountCharity": "Seu perfil de entidade beneficente verificado dá {percent}% de desconto em todos os planos.",
+      "discountStaff": "Sua organização tem {percent}% de desconto para organizações sem fins lucrativos em todos os planos.",
+      "legend": "Planos",
+      "offer": "{plan}: {price} {interval, select, year {por ano} other {por mês}}",
+      "direction": {
+        "upgrade": "Upgrade",
+        "downgrade": "Downgrade",
+        "switch": "Troca",
+        "start": "Início"
+      },
+      "turnsOff": "{count, plural, one {Desativa # módulo} other {Desativa # módulos}}",
+      "chooseError": "Escolha um plano para ver a prévia.",
+      "preview": "Ver prévia da mudança",
+      "previewTitle": "Mudar para {plan}",
+      "previewLead": {
+        "upgrade": "Você está fazendo upgrade. Veja o que paga hoje pelo restante deste período de cobrança.",
+        "downgrade": "Você está fazendo downgrade. O tempo não usado do plano atual vira crédito.",
+        "switch": "Você está trocando para um plano com o mesmo preço.",
+        "start": "Sua assinatura começa hoje."
+      },
+      "rows": {
+        "charge": "Novo plano, restante do período",
+        "credit": "Crédito pelo tempo não usado",
+        "discount": "Desconto para sem fins lucrativos",
+        "tax": "Impostos",
+        "due": "A pagar hoje"
+      },
+      "creditKept": "{amount} de crédito ficam guardados para as próximas faturas.",
+      "nextRenewal": "Depois, {amount} em {date}.",
+      "nextRenewalNoDate": "Depois, {amount} a cada período.",
+      "taxNote": "Os impostos são calculados pelo provedor de cobrança a partir dos dados de cobrança da sua organização.",
+      "removedTitle": "{count, plural, one {# módulo será desativado} other {# módulos serão desativados}}",
+      "removedBody": "Os dados deles são mantidos. Eles voltam como estavam se você mudar para um plano que os inclua.",
+      "confirmRemoved": "{count, plural, one {Entendo que este módulo será desativado} other {Entendo que estes módulos serão desativados}}",
+      "confirmError": "Confirme os módulos que serão desativados para continuar.",
+      "confirm": "Confirmar mudança",
+      "cancel": "Manter meu plano",
+      "doneTitle": "Mudança de plano enviada",
+      "doneBody": "Seu provedor de cobrança confirmou a mudança. Seu plano e seus módulos estão atualizados abaixo.",
+      "errorTitle": "O plano não foi alterado",
+      "errors": {
+        "billing_off": "A cobrança não está ativa para esta organização.",
+        "same_plan": "Você já está neste plano.",
+        "validation_failed": "Escolha um dos planos oferecidos.",
+        "provider": "O provedor de cobrança não aceitou a mudança. Nada foi cobrado; tente de novo.",
+        "forbidden": "Só proprietários e administradores podem mudar o plano.",
+        "other": "Algo deu errado. Nada foi alterado."
+      }
     }
   },
   "billingPortal": {
@@ -14856,7 +14924,11 @@
     "switch": "Mudar de plano",
     "cancel": "Cancelar a assinatura",
     "back": "Voltar sem alterações",
-    "chooseError": "Escolha o plano para o qual mudar."
+    "chooseError": "Escolha o plano para o qual mudar.",
+    "noSubscriptionError": "Este cliente ainda não tem assinatura. Escolha um plano primeiro.",
+    "renewalLegend": "Renovação",
+    "failRenewal": "Fazer o pagamento da renovação falhar",
+    "stopRetrying": "Parar de tentar o pagamento"
   },
   "seatingLibrary": {
     "title": "Biblioteca de mapas",
@@ -15533,5 +15605,47 @@
       "noneTitle": "Ainda sem crachá",
       "noneDescription": "O seu crachá aparece aqui quando a inscrição for confirmada."
     }
+  },
+  "billingUsage": {
+    "title": "Uso",
+    "subtitle": "O que sua organização usou, por medidor: mensagens, créditos de IA e dispositivos de leitura.",
+    "breadcrumb": "Trilha de navegação",
+    "period": "Este mês: {start} a {end} ({zone})",
+    "filterLabel": "Medidores",
+    "allMeters": "Todos os medidores",
+    "meter": {
+      "email": "E-mail",
+      "sms": "SMS",
+      "whatsapp": "WhatsApp",
+      "ai_credits": "Créditos de IA",
+      "devices": "Dispositivos de leitura"
+    },
+    "unit": {
+      "email": "{count, plural, one {# e-mail enviado} other {# e-mails enviados}}",
+      "sms": "{count, plural, one {# segmento de SMS} other {# segmentos de SMS}}",
+      "whatsapp": "{count, plural, one {# mensagem enviada} other {# mensagens enviadas}}",
+      "ai_credits": "{count, plural, one {# crédito usado} other {# créditos usados}}",
+      "devices": "{count, plural, one {# dispositivo cadastrado} other {# dispositivos cadastrados}}"
+    },
+    "reportingTitle": "O uso é enviado ao seu provedor de cobrança",
+    "reportingBody": "{count, plural, =0 {Tudo até agora já foi enviado.} one {# registro aguarda envio.} other {# registros aguardam envio.}}",
+    "countingTitle": "O uso é contado, nada é cobrado",
+    "countingBody": "A cobrança não está ativa para esta organização, então o uso só é contado aqui.",
+    "currentTitle": "Este mês",
+    "currentDescription": "Contado no fuso horário da sua organização.",
+    "historyTitle": "Meses anteriores",
+    "historyDescription": "Os últimos 12 meses com uso.",
+    "emptyTitle": "Ainda sem uso",
+    "emptyBody": "O uso aparece aqui quando você envia e-mails ou SMS, cria rascunhos com IA ou cadastra dispositivos de leitura.",
+    "historyEmpty": "Sem uso nos meses anteriores.",
+    "month": "Mês"
+  },
+  "billingBanner": {
+    "label": "Cobrança",
+    "graceTitle": "O pagamento da sua assinatura não foi concluído",
+    "graceBody": "Tudo funciona até {date}. Depois, a organização fica somente leitura até o pagamento.",
+    "readOnlyTitle": "Esta organização está somente leitura",
+    "readOnlyBody": "O pagamento da assinatura falhou. Nada foi excluído: você pode ver, exportar e escanear ingressos, mas as alterações estão pausadas até o pagamento.",
+    "action": "Plano e cobrança"
   }
 }

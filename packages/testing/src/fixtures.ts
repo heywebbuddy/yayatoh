@@ -45,6 +45,7 @@ import {
 import {
   applyBillingEventCommand,
   linkBillingCustomerCommand,
+  recordUsageTx,
   setEntitlementOverrideCommand,
   setFeeOverrideCommand,
   setLegacyFeesCommand,
@@ -2985,6 +2986,23 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   // mappings, cursors, a run, record links and the demo's broken record in the errors inbox).
   const demo = await connectDemo(ctx());
   await runSync(org.id, demo.connectionId, { auth: fakeAuth }, ports);
+  // M6.6b meters and plan changes (isolation coverage of usage_records and plan_changes): one
+  // device's usage from a (synthetic) outbox event, and an in-app plan change as recorded.
+  await withTenant(systemCtx(org.id), async (tx) => {
+    await recordUsageTx(tx, {
+      id: uuidv7(),
+      orgId: org.id,
+      type: 'device.enrolled',
+      version: 1,
+      payload: { orgId: org.id, deviceId: uuidv7() },
+      occurredAt: new Date(billedAt.getTime() + 1000).toISOString(),
+    });
+    await tx.execute(sql`insert into billing.plan_changes
+      (org_id, from_plan_key, to_plan_key, price_lookup_key, direction, currency, amount_due_minor,
+       tax_minor, discount_minor, status, requested_by, idempotency_key)
+      values (${org.id}, 'launch_standard', 'tier_pro', 'tier_pro_month_usd', 'start', 'USD', 10692,
+       792, 0, 'submitted', ${`user:${ownerId}`}, ${`fixture:${uuidv7()}`})`);
+  });
   return {
     org,
     ownerId,

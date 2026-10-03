@@ -1,4 +1,4 @@
-import { fakeBillingProvider } from './fake.ts';
+import { type FakeBillingDelivery, fakeBillingProvider } from './fake.ts';
 import type { BillingProvider } from './port.ts';
 import { stripeBillingProvider } from './stripe.ts';
 
@@ -11,7 +11,11 @@ type Env = Readonly<Record<string, string | undefined>>;
  * Stripe keys in an environment never switch dev and CI off the fake. The fake signs with a key
  * derived from FAKE_PAYMENTS_SECRET (no new secret to manage).
  */
-export function billingProviderFromEnv(env: Env = process.env): BillingProvider {
+export function billingProviderFromEnv(
+  env: Env = process.env,
+  /** The fake's webhook delivery (the web app hands them to its own billing endpoint). */
+  opts: { deliver?: (d: FakeBillingDelivery) => Promise<void> } = {},
+): BillingProvider {
   const which = env.BILLING_PROVIDER || 'fake';
   if (which === 'stripe') {
     const secretKey = env.STRIPE_SECRET_KEY;
@@ -24,7 +28,7 @@ export function billingProviderFromEnv(env: Env = process.env): BillingProvider 
     const secret = env.FAKE_PAYMENTS_SECRET;
     if (!secret)
       throw new Error('No billing provider configured (FAKE_PAYMENTS_SECRET, or BILLING_PROVIDER=stripe)');
-    return fakeBillingProvider({ secret });
+    return fakeBillingProvider({ secret, ...(opts.deliver ? { deliver: opts.deliver } : {}) });
   }
   throw new Error(`Unknown BILLING_PROVIDER "${which}" (fake or stripe)`);
 }
