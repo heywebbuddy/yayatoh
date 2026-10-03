@@ -1,7 +1,7 @@
 import { listOccurrencesQuery } from '@yayatoh/events';
 import { executeQuery, utcToZonedInput } from '@yayatoh/kernel';
 import { agendaQuery, groupByDay, type SessionDto } from '@yayatoh/program';
-import { Button, buttonClass, Card, EmptyState, Label, PageHeader } from '@yayatoh/ui';
+import { Button, buttonClass, Card, EmptyState, Label, PageHeader, StatusPill } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import {
   AgendaPublishing,
@@ -10,11 +10,13 @@ import {
   SessionAgendaLine,
   TypesAndGroups,
 } from '@/components/agenda-console.tsx';
+import { ActionButtonForm } from '@/components/portal-admin-forms.tsx';
 import { type FieldSpec, ProgramForm, ScheduleWarning } from '@/components/program-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { agendaWarningMessages } from '@/server/agenda.ts';
 import { ports } from '@/server/ports.ts';
 import { loadProgramPage, warningMessages } from '@/server/program.ts';
+import { placeDraftSessionAction } from '../speakers/cfp/actions.ts';
 import {
   createRoomAction,
   createSessionAction,
@@ -40,6 +42,7 @@ export default async function SessionsPage({
   const { data, ev, program, canWrite } = await loadProgramPage(org, event, 'sessions');
   const t = await getTranslations();
   const tp = await getTranslations('program');
+  const tcfp = await getTranslations('cfp');
   const dates = (await executeQuery(listOccurrencesQuery, { eventId: ev.id }, data.ctx, ports)).filter(
     (d) => d.status === 'scheduled',
   );
@@ -237,7 +240,21 @@ export default async function SessionsPage({
                           </span>
                           <h4 className="text-body font-medium">{s.title}</h4>
                           {mine.length > 0 ? <Label>{tp('conflictLabel')}</Label> : null}
+                          {s.draft ? <StatusPill tone="waiting" label={tcfp('draftSession')} /> : null}
                         </div>
+                        {s.draft ? (
+                          // M5.3b: an accepted proposal waits here (placeholder time) until placed.
+                          <div className="flex flex-col gap-2">
+                            <p className="m-0 text-caption text-ink-2">{tcfp('draftSessionHint')}</p>
+                            {canWrite ? (
+                              <ActionButtonForm
+                                action={placeDraftSessionAction.bind(null, org, event, s.id)}
+                                label={tcfp('placeSession', { title: s.title })}
+                                successLabel={tcfp('placed')}
+                              />
+                            ) : null}
+                          </div>
+                        ) : null}
                         <p className="text-caption text-ink-2">
                           {[room, track, people.join(', ')].filter(Boolean).join(' · ') || tp('noDetails')}
                         </p>
