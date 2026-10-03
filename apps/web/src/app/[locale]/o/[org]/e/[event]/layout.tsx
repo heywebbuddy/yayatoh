@@ -1,9 +1,11 @@
 import { composeNav, type NavItem } from '@yayatoh/platform';
-import { StatusPill } from '@yayatoh/ui';
+import { buttonClass, StatusPill } from '@yayatoh/ui';
+import { CopyPlus } from 'lucide-react';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { ConsoleShell } from '@/components/console-shell.tsx';
+import { Link } from '@/i18n/navigation.ts';
 import { eventPhase } from '@/lib/event-status.ts';
 import { profileMessages } from '@/lib/profile-copy.ts';
 import { loadEventBase } from '@/server/console.ts';
@@ -87,21 +89,31 @@ export default async function EventLayout({
         badges: { setupGuide: `${counted.filter((r) => r.done).length}/${counted.length}` },
       }}
       status={
-        <StatusPill
-          tone={
-            ev.status === 'cancelled'
-              ? 'danger'
-              : phase.phase === 'live'
-                ? 'success'
-                : ev.status === 'draft' || ev.status === 'postponed'
-                  ? 'waiting'
-                  : phase.phase === 'completed'
-                    ? 'neutral'
-                    : 'info'
-          }
-          live={phase.phase === 'live'}
-          label={`${t(`eventStatus.${ev.status}`)} · ${t(`phase.${phase.phase}`, { days: phase.days })}`}
-        />
+        <>
+          <StatusPill
+            tone={
+              ev.status === 'cancelled'
+                ? 'danger'
+                : phase.phase === 'live'
+                  ? 'success'
+                  : ev.status === 'draft' || ev.status === 'postponed'
+                    ? 'waiting'
+                    : phase.phase === 'completed'
+                      ? 'neutral'
+                      : 'info'
+            }
+            live={phase.phase === 'live'}
+            label={`${t(`eventStatus.${ev.status}`)} · ${t(`phase.${phase.phase}`, { days: phase.days })}`}
+          />
+          {/* U6: "Save as template" on the event header, not only under Duplicate & template. */}
+          {opens('copy') && can('events:write') ? (
+            <Link href={`/o/${org}/e/${event}/copy#save-template`} className={buttonClass('secondary', 'sm')}>
+              <CopyPlus className="size-4 shrink-0" aria-hidden="true" />
+              {/* Phones: the icon only (the name stays for screen readers). */}
+              <span className="sr-only sm:not-sr-only">{t('copy.headerSave')}</span>
+            </Link>
+          ) : null}
+        </>
       }
     >
       {/* M4.2a: the event's profile rewords the sentences its client components show. */}

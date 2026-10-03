@@ -988,6 +988,13 @@
       "when": 1791061257336,
       "tag": "0140_social_guest_pack",
       "breakpoints": true
+    },
+    {
+      "idx": 141,
+      "version": "7",
+      "when": 1791062479243,
+      "tag": "0141_massive_tusk",
+      "breakpoints": true
     }
   ]
 }

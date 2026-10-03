@@ -766,6 +766,11 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **Guests without a table** (not declined, on a guest floor plan) alert in the last 7 days before the event (critical in the last day and while it runs). **Missing meals** (attending guests without a meal, events with a menu) alert in the last 7 days. Both thresholds are ours; say if you want other windows.
 - [ ] **Door staff see guest names** on the Command Center's guest seating and arrivals widgets (the same names they see on the Scan PWA's guest check-in); RSVP chasing and meals stay with hosts and planners (`guests:read`). Dietary and accessibility needs show as counts only, for everyone. Confirm.
 
+## U6 — templates from scratch (2026-10-03, pending owner)
+- [ ] **What "sections" and "checklist items" mean in a template.** Chosen default: *sections* are the event page's content sections (text, FAQ, schedule, location, links — the M1.4d blocks); *checklist items* are the organizer's own to-dos, a new per-event list shown under "Your checklist" on the setup guide (the profile's readiness checks stay computed). Per-event switching of workspace sections (nav items) was not built: profiles stay the unit that switches sections on (UX-2). Confirm, or ask for nav-section toggles as a later increment.
+- [ ] **Duplicating an event and saving it as a template now also copy its page sections and checklist titles** (snapshot v2; v1 templates still read). Confirm.
+- [ ] **A template's kind of event is fixed once made** (change it by starting a new template). Confirm.
+
 ## U1 — form controls (2026-10-03, pending owner)
 - [ ] **Built with these defaults; say if any should change:**
   - **Type-ahead on a closed dropdown chooses straight away**, as the browser's own select did (the keyboard paths and habits stay the same). To search, open the list (Enter, ↓ or a click); lists of more than 8 options open with a search box.

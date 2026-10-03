@@ -1,1 +1,1 @@
-export { eventTemplates } from './schema.ts';
+export { eventTemplates, templateEvents } from './schema.ts';
