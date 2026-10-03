@@ -59,3 +59,8 @@ Money now opens with **Overview** (`/o/{org}/money`, `finance:read`), then **Pay
 | axe in both themes, RTL | e2e (`expectAccessibleBothModes` on overview, payouts, payout, sales, fees; `/ar/…` for all four pages) |
 | Pure logic | `packages/modules/reports/tests/money-buckets.test.ts`, `apps/web/tests/money.test.ts` |
 | Screenshots | `docs/ux/screenshots/u5/` (before: payouts, finance, home; after: overview, payouts, payout, sales, fees; light and dark, 1280 and 390 px) |
+
+## Gate (2026-10-03)
+- `pnpm lint`, `pnpm check:modules`, typecheck (62/62 packages): pass. Unit: 3066 passed.
+- Integration: 1670 of 1671 passed. The one failure is `audit.int.test.ts` › "detects an edited, a deleted and a re-hashed entry", a 30 s timeout that reproduces when the file runs alone. That test builds two extra full fixtures (`twoOrgs()`) inside its 30 s limit; U5 changes no fixture, audit or tenancy code. Pre-existing on this base (3i + U1 + U2).
+- e2e on 375/768/1280: `money.spec.ts` 12/12; related `console-nav`, `payouts`, `receivables`, `reports`, `reconciliation`: 60/60 (and payouts + receivables again after the last change).
