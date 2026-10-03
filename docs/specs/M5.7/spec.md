@@ -1,7 +1,7 @@
 # Spec: M5.7 — Live engagement
 
 - **Milestone:** M5.7 (roadmap Phase 5, "M5.7 Live engagement"; Phase 5 plan `docs/plans/phase-5.md`, Wave 2: M5.7a, Wave 3: M5.7b)
-- **Status:** M5.7a built (2026-10-02); M5.7b (session feedback and the engagement score) follows in Wave 3
+- **Status:** M5.7a built (2026-10-02); M5.7b (session feedback and the engagement score) built (2026-10-03)
 - **Risk tags:** `db-migration`, `tenancy` (owner approval)
 - **Related:** M3.1b (realtime publisher: SSE, reconnect snapshot), M1.4f / M5.2a (program sessions), M1.14a (strict CSP, rate limits), ADRs 0008 (outbox), 0009 (realtime); owner decisions P5-1 (behind the `sessions` module key), P5-2/P5-3 (in-house realtime)
 
@@ -134,3 +134,115 @@ fits session channels).
 - Integration: 146 files, 1,311 of 1,312 passed. The one failure, `apps/worker/tests/badges.int.test.ts` "the leader tick queues the batch until its PDF is done" (M5.5a, merged just before), timed out under full-suite load and passes alone (2/2); unrelated to engagement. `engagement.int.test.ts`: 15 tests.
 - E2E (375/768/1280, `--workers=2`): `engagement.spec.ts` (5 tests × 3), plus `agenda`, `program`, `realtime`, `canary-crawl` (incl. the new live-engagement leak test) and `events`: 85 passed. Earlier in the session `seat-live`, `command-center`, `alerts`, `a11y`, `security` and `program-media` also passed against this change.
 - `agent/design-v2` merge: conflicts outside this feature (messages, the exhibitors and speakers pages, `public-event-view.tsx`, drizzle meta 0096, owner inbox), so it was aborted; the merge session will take it. The new screens use only `@yayatoh/ui` primitives and tokens.
+
+## M5.7b — Feedback and engagement score (done)
+
+### 1. Goal and users
+Organizers see who took part most in an event and how each session went, and target the most (or
+least) engaged people with audiences. **Attendees** are asked for feedback on the live session page
+once the session is over. **Owners and admins** (`org:update`) set how much each kind of
+engagement counts for their organization; anyone who may read attendees (`attendees:read`: owners,
+admins, managers, viewers, event managers) sees the scores.
+
+### 2. References
+- **Phase 5 plan:** Wave 3 row M5.7b ("session feedback prompt at session end (reusing M3.9a session
+  surveys); `engagement_events` from scans, polls, Q&A, feedback, enrollments; an engagement score
+  per attendee and session (documented formula, org-adjustable weights), fed to M3.6a audiences";
+  acceptance "the fixture attendee's score reproduces exactly; feedback is one response per person").
+- Builds on M5.7a (polls and Q&A), M3.9a (surveys), M5.2b (enrollments), M3.4a/M1.8 (door scans),
+  M3.6a (audiences, crm segment DSL).
+
+### 3. Scope (built)
+**The formula** (`packages/modules/engagement/src/domain/score.ts`, pure):
+`score = Σ weight(kind) × count(kind)` over five kinds, per attendee per event:
+`check_in` (1 when any of their tickets was admitted; several tickets or re-entries count once),
+`poll_vote` (polls voted in), `question` (named questions asked), `feedback` (surveys answered:
+session feedback and post-event), `enrollment` (optional sessions they hold a place in). A
+session's score is the same sum over what happened in it; its participants are the distinct
+people. Weights are whole points 0–100 per kind, per org; defaults check-in 10, poll vote 2,
+question 3, feedback 5, enrollment 1.
+
+**Module `engagement`** (tier 5):
+- `engagement_events`: one row per thing an attendee did (`event_id`, `contact_id`, `session_id`,
+  `kind`, `source_ref`, `occurred_at`), unique per (contact, kind, source) so nothing counts
+  twice. Never a choice, an answer or an anonymous question. Composite FKs to `events.events`
+  (cascade), `program.sessions` (set null: the facts still count) and `crm.contacts` (cascade).
+- `score_weights`: the org's weights (no row: the defaults). `setScoreWeightsCommand` /
+  `resetScoreWeightsCommand` (`org:update`, audited) recompute every score of the org in the same
+  transaction; `scoreWeightsQuery` (`events:read`).
+- Sources: live polls and named questions are logged inside the vote/ask commands when the actor
+  is a signed-in account whose contact (by account link, else email) is an active attendee of the
+  event (`recordLiveActivityTx`; a device, a visitor who isn't attending, an account that isn't
+  the actor, and every anonymous question are never scored). The `engagement.activity` subscriber
+  (worker and dev drain) turns `ticket.admitted@1` / `ticket.admission_undone@1`,
+  `survey.responded@1`, `registration.session.promoted@1` and the new
+  `registration.session.enrollment_changed@1` into facts (an undone admission or a dropped
+  session takes its fact back). Exactly once per event and idempotent besides.
+- Each change rescores that attendee and writes `crm.event_engagement` in the same transaction.
+- `eventScoresQuery` (`attendees:read`): the top 50 attendees by score (name, email, score, counts)
+  and every session's participants, score and counts, recomputed from the log with the current
+  weights.
+
+**crm** (tier 1): `event_engagement` (contact × event score, FORCE RLS, written only through
+`replaceEventEngagementTx`), `contactForAccountTx`, and the segment condition
+`{ type: 'engagement', scope, op, value }`: the sum of the contact's scores over the events in
+scope, compared with a whole number (bound parameter).
+
+**surveys** (M3.9a): `feedbackPromptQuery` and `openFeedbackCommand` (`public:survey`): once a
+session's feedback survey can be answered (open, with questions, the session over, the event
+published and public), the signed-in attendee gets their invitation: the one an emailed send
+already gave them, or a new one recorded as a `prompt` send (no email). One invitation and one
+response per person per survey still hold. `survey.responded@1` now also carries `contactId` and
+`sessionId` (additive).
+
+**registration** (M5.2b): emits `registration.session.enrollment_changed@1`
+(`{ eventId, sessionId, registrantId, status: enrolled | dropped }`) when a registrant enrolls
+directly, accepts an offer or drops a session.
+
+**Web:**
+- Live session page (`/events/{slug}/live/{session}`): the feedback card after the session ends:
+  "Give feedback" (to the survey link), "Sign in" for visitors (back to the page after), "Thanks,
+  your feedback is in." once answered, and the refusals (already answered, expired). Votes and
+  named questions of a signed-in person carry their account (never while impersonating).
+- Console `/o/{org}/e/{event}/engagement` (linked from Sessions): engaged attendees and average
+  score, the most engaged attendees, the sessions table, the formula and the weights form
+  (owners/admins; read-only for others), inline validation and success messages.
+- Audience builder: "Engagement score" condition (scope, comparison, score).
+- Dev only: `/api/dev/engagement` (an ended live session with a feedback survey and a registered
+  attendee) for the e2e.
+- Messages: `engagement.scores.*`, `engagement.feedback.*`, `audiences.builder.types.engagement`,
+  `audiences.builder.engagementScore` in all 13 locales.
+
+### 4. Later / not yet
+- Session check-in scans (M5.6a) are not a source yet: only the event door (`ticket.admitted`).
+  When M5.6a lands, its session scans become a sixth kind (or count as `check_in` per session).
+- Enrollments that end for other reasons (organizer moves, cancelled tickets, lapsed offers) keep
+  their fact; only a drop by the attendee takes it back.
+- Anonymous questions are never scored; upvotes are not scored.
+- Scores are per event; there is no per-attendee page yet (the scores page and audiences only),
+  and no export of scores.
+- The prompt lives on the live session page, so it shows for sessions with live polls/Q&A on; an
+  automatic feedback email at session end is not built (organizers send it from Surveys).
+- Weight changes rescore the whole org in one transaction (fine at today's sizes; a bulk job later).
+- Data-subject exports (M1.14c) don't list engagement scores or facts yet (they hold no answers,
+  only counts and ids); erasure keeps them on the pseudonymized contact.
+
+### 5. Migration
+`0113_curvy_warlock.sql` (renumbered at merge): three new tenant tables (`crm.event_engagement`,
+`engagement.engagement_events`, `engagement.score_weights`) with FORCE RLS and the NULLIF policy.
+Hand-written block: `surveys.sends.sends_source_check` widened to `'prompt'` (dropped, re-added
+`NOT VALID`, then `VALIDATE`); composite FKs `engagement_events` → `events.events` (cascade),
+`program.sessions` (`ON DELETE SET NULL (session_id)`) and `crm.contacts` (cascade).
+
+### 6. Acceptance (M5.7b)
+| ID | Criterion | Test |
+|---|---|---|
+| AC1 | The fixture attendee's score reproduces exactly (both orgs: 8 + 3 + 4 + 6 = 21 with the fixture weights; crm row and query agree; replaying events changes nothing) | `packages/testing/tests/engagement-score.int.test.ts` ("reproduces the fixture attendee's score exactly…", "handling the same outbox events again…"); `packages/modules/engagement/tests/score.test.ts` |
+| AC2 | Feedback is one response per person (one invitation per person through the prompt; 6 parallel submits → 1 ok, 5 `already_answered`; the prompt then says answered; scored once) | `engagement-score.int.test.ts` ("one invitation and one response per person, even under concurrency…"); e2e (answered once, the prompt thanks after reload) |
+| AC3 | The prompt appears only after the session ends, only for attendees (sign-in for visitors, nothing for others or a closed survey), and sends no email | `engagement-score.int.test.ts` (session feedback block); e2e |
+| AC4 | Sources: votes and named questions of signed-in attendees, door scans (once; undo takes it back), answered surveys, enrollments (drop takes it back); devices, non-attendees, mismatched accounts and anonymous questions unscored | `engagement-score.int.test.ts` ("sources" block, "an undone admission…") |
+| AC5 | Session scores and participants | `engagement-score.int.test.ts` ("session scores add up…"); e2e (Closing panel row) |
+| AC6 | Org-adjustable weights: validation, owners/admins only, rescoring at once, reset; the other org untouched | `engagement-score.int.test.ts` ("follows the weights…", "weights are whole points…"); e2e (keyboard, inline error, persistence, reset) |
+| AC7 | Fed to audiences: the engagement condition (validation, bound SQL, scope) finds the fixture attendee at ≥ 21 and not at ≥ 22 | `packages/modules/crm/tests/segments.test.ts` ("engagement condition"); `engagement-score.int.test.ts` ("the engagement condition finds…"); e2e (builder: 1 person at ≥ 7, 0 at ≥ 8) |
+| AC8 | Permissions and isolation (scores need `attendees:read`; another org's event `not_found`; fixture rows for both orgs in all three tables) | `engagement-score.int.test.ts`; `isolation.int.test.ts` (fixture rows) |
+| AC9 | E2E on all three projects: keyboard only, `expectAccessible` light and dark, Arabic RTL (scores page, participant prompt), viewer read-only, a lower role refused (no link, 404) | `apps/web/e2e/engagement-score.spec.ts` (3 tests × 3 projects) |

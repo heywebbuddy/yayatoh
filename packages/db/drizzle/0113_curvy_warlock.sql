@@ -67,6 +67,8 @@ ALTER TABLE "surveys"."sends" VALIDATE CONSTRAINT "sends_source_check";--> state
 ALTER TABLE "engagement"."engagement_events" ADD CONSTRAINT "engagement_events_event_fk" FOREIGN KEY ("org_id","event_id") REFERENCES "events"."events"("org_id","id") ON DELETE cascade;--> statement-breakpoint
 ALTER TABLE "engagement"."engagement_events" ADD CONSTRAINT "engagement_events_session_fk" FOREIGN KEY ("org_id","session_id") REFERENCES "program"."sessions"("org_id","id") ON DELETE SET NULL ("session_id");--> statement-breakpoint
 ALTER TABLE "engagement"."engagement_events" ADD CONSTRAINT "engagement_events_contact_fk" FOREIGN KEY ("org_id","contact_id") REFERENCES "crm"."contacts"("org_id","id") ON DELETE cascade;--> statement-breakpoint
+-- Like event_participation: crm's event reference, a composite FK to events.events.
+ALTER TABLE "crm"."event_engagement" ADD CONSTRAINT "event_engagement_event_fk" FOREIGN KEY ("org_id","event_id") REFERENCES "events"."events"("org_id","id") ON DELETE cascade;--> statement-breakpoint
 -- hand-written: end
 CREATE POLICY "event_engagement_tenant_isolation" ON "crm"."event_engagement" AS PERMISSIVE FOR ALL TO "app_user" USING (org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)) WITH CHECK (org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid));--> statement-breakpoint
 CREATE POLICY "engagement_events_tenant_isolation" ON "engagement"."engagement_events" AS PERMISSIVE FOR ALL TO "app_user" USING (org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)) WITH CHECK (org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid));--> statement-breakpoint
