@@ -282,6 +282,22 @@ export function Select({
     close(focus);
   };
 
+  // A form reset (React resets a form after its action runs) returns to the default, as a
+  // native select does.
+  const resetTo = initialValue(all, undefined, defaultValue ?? parsed.selected ?? parsed.hidden[0]?.value);
+  const resetRef = useRef(resetTo);
+  resetRef.current = resetTo;
+  useEffect(() => {
+    const f = valueInput.current?.form;
+    if (!f) return;
+    const onReset = () => {
+      setInner(resetRef.current);
+      setInvalid(false);
+    };
+    f.addEventListener('reset', onReset);
+    return () => f.removeEventListener('reset', onReset);
+  }, []);
+
   // Submit after React has written the new value into the hidden input.
   useEffect(() => {
     if (!pendingSubmit.current) return;

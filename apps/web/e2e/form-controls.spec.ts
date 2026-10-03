@@ -153,6 +153,20 @@ test.describe('Select keyboard (WAI-ARIA select-only combobox)', () => {
   });
 });
 
+test('a form reset returns Select and DatePicker to their defaults, like native controls', async ({
+  page,
+}) => {
+  const form = page.getByRole('form', { name: 'A form with a reset button' }).first();
+  await pickOption(form.getByLabel('Status'), 'cancelled');
+  await form.getByLabel('Event date').fill('2027-01-02');
+  await expect(form.locator('input[name="rs-status"]')).toHaveValue('cancelled');
+  await form.getByRole('button', { name: 'Reset' }).click();
+  await expect(form.locator('input[name="rs-status"]')).toHaveValue('draft');
+  await expect(form.getByLabel('Status')).toHaveText('Draft');
+  await expect(form.locator('input[name="rs-date"]')).toHaveValue('2026-11-05');
+  await expect(form.getByLabel('Event date')).toHaveValue('11/05/2026');
+});
+
 test.describe('Combobox', () => {
   test('multi-select chips: add by typing, remove with the chip button or Backspace, create new', async ({
     page,

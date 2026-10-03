@@ -114,6 +114,20 @@ export function Combobox({
     });
   }, [options, selectedOptions]);
 
+  // A form reset returns to the default values.
+  const defaultsRef = useRef(asArray(defaultValue));
+  defaultsRef.current = asArray(defaultValue);
+  useEffect(() => {
+    const f = input.current?.form;
+    if (!f) return;
+    const onReset = () => {
+      setInner(defaultsRef.current);
+      setQuery('');
+    };
+    f.addEventListener('reset', onReset);
+    return () => f.removeEventListener('reset', onReset);
+  }, []);
+
   // Async options, debounced; an older answer never overwrites a newer one.
   useEffect(() => {
     if (!loadOptions || !open) return;
