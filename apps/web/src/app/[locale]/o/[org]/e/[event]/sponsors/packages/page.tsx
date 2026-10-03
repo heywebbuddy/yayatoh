@@ -107,7 +107,15 @@ export default async function SponsorPackagesPage({ params }: Params) {
           <ul className="flex list-none flex-col gap-3 p-0">
             {admin.packages.map((p) => (
               <li key={p.tierId}>
-                <PackageCard p={p} org={org} event={event} canWrite={canWrite} locale={locale} t={t} />
+                <PackageCard
+                  p={p}
+                  currency={admin.currency}
+                  org={org}
+                  event={event}
+                  canWrite={canWrite}
+                  locale={locale}
+                  t={t}
+                />
               </li>
             ))}
           </ul>
@@ -152,6 +160,7 @@ export default async function SponsorPackagesPage({ params }: Params) {
 
 function PackageCard({
   p,
+  currency,
   org,
   event,
   canWrite,
@@ -159,6 +168,7 @@ function PackageCard({
   t,
 }: {
   p: SponsorPackageDto;
+  currency: string;
   org: string;
   event: string;
   canWrite: boolean;
@@ -225,7 +235,7 @@ function PackageCard({
                 {
                   kind: 'text',
                   name: 'price',
-                  label: t('price', { currency: terms?.currency ?? '' }),
+                  label: t('price', { currency }),
                   hint: t('priceHint'),
                   maxLength: 20,
                   defaultValue:
