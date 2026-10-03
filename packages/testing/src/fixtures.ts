@@ -112,6 +112,7 @@ import {
 import {
   addPartyGuestCommand,
   addPlusOneCommand,
+  collectorQueueQuery,
   createPartyCommand,
   createRsvpLinksCommand,
   createSubEventCommand,
@@ -124,10 +125,15 @@ import {
   publishRsvpQuestionsCommand,
   readGuestTable,
   recordSubEventResponseCommand,
+  rejectSubmissionCommand,
   saveMenuOptionCommand,
+  setCollectorCommand,
   setInvitationsCommand,
+  setInvitationTemplateCommand,
+  setPartyLocaleCommand,
   setRsvpSettingsCommand,
   stageGuestImportCommand,
+  submitContactCommand,
   updatePartyGuestCommand,
   validateGuestImportCommand,
 } from '@yayatoh/guests';
@@ -2310,6 +2316,52 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     },
     ctx(),
     ports,
+  );
+  // M4.1f: the contact collector (on), one submission waiting and one rejected, the event's own
+  // English invitation wording, the fixture party's invitation language and a logged invitation
+  // (isolation coverage of `collector_settings`, `collector_submissions`, `invitation_templates`,
+  // `party_invites` and `invite_messages`).
+  await executeCommand(setCollectorCommand, { eventId: event.id, enabled: true }, ctx(), ports);
+  const submit = (household: string) =>
+    executeCommand(
+      submitContactCommand,
+      {
+        eventId: event.id,
+        household,
+        members: [{ firstName: 'Rosa', lastName: household }],
+        address: '12 Lake Road',
+        email: `${household.toLowerCase()}@example.test`,
+      },
+      createCtx({ orgId: org.id }),
+      ports,
+    );
+  await submit('Moreno');
+  await submit('Spam');
+  const queue = await executeQuery(collectorQueueQuery, { eventId: event.id }, ctx(), ports);
+  const spam = queue.pending.find((q) => q.household === 'Spam');
+  if (spam)
+    await executeCommand(rejectSubmissionCommand, { eventId: event.id, submissionId: spam.id }, ctx(), ports);
+  await executeCommand(
+    setInvitationTemplateCommand,
+    {
+      eventId: event.id,
+      locale: 'en',
+      subject: 'Join us: {event}',
+      message: 'Dear {party}, please join us.',
+      smsText: '{party}, join us at {event}:',
+    },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    setPartyLocaleCommand,
+    { eventId: event.id, partyId: party.id, locale: 'es' },
+    ctx(),
+    ports,
+  );
+  await withTenant(systemCtx(org.id), (tx) =>
+    tx.execute(sql`insert into guests.invite_messages (org_id, event_id, party_id, kind, channel, dedupe_key, locale)
+      values (${org.id}, ${event.id}, ${party.id}, 'invitation', 'email', ${`guests-invite:${party.id}:${uuidv7()}`}, 'es')`),
   );
   return {
     org,

@@ -251,6 +251,16 @@
       "intro": "{org}仍在等待您提交{eventName}的「{title}」。截止時間：{until}。",
       "cta": "開啟我的任務"
     },
+    "guests.invitation": {
+      "subject": "{subject}",
+      "intro": "{message}",
+      "cta": "回覆邀請"
+    },
+    "guests.rsvp-reminder": {
+      "subject": "提醒：請回覆{eventName}的邀請",
+      "intro": "{name}，我們尚未收到您的回覆。請在{deadline}前告訴我們哪幾位會出席{eventName}。",
+      "cta": "立即回覆"
+    },
     "registration.session-enrolled": {
       "subject": "有空位了：你已報名 {sessionTitle}",
       "intro": "{eventName}（{when}）的 {sessionTitle} 有空位了，你是候補名單上的下一位，現已為你報名。如果無法參加，請從行程中移除該場次，讓下一位取得名額。",

@@ -21,6 +21,7 @@
     "@yayatoh/events": "workspace:*",
     "@yayatoh/forms": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
+    "@yayatoh/notifications": "workspace:*",
     "@yayatoh/platform": "workspace:*",
     "@yayatoh/venues": "workspace:*",
     "drizzle-orm": "catalog:",

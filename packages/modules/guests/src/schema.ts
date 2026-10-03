@@ -60,6 +60,10 @@ export const HISTORY_ACTIONS = [
   'rsvp_viewed',
   'rsvp_submitted',
   'rsvp_reopened',
+  // M4.1f: invitations sent by email/text and the contact collector's approvals.
+  'invitation_sent',
+  'collector_approved',
+  'collector_merged',
 ] as const;
 export type HistoryAction = (typeof HISTORY_ACTIONS)[number];
 
@@ -484,5 +488,151 @@ export const menuOptions = tenantTable(
     check('menu_options_label_length', sql`length(label) between 1 and 80`),
     check('menu_options_notes_length', sql`notes is null or length(notes) between 1 and 200`),
     check('menu_options_position_check', sql`position >= 0`),
+  ],
+);
+
+/* ------------------------------------------- M4.1f: invitations and the contact collector ---- */
+
+/**
+ * The public contact collector of an event (M4.1f): a shareable link (`/collect/{code}`, also a
+ * QR code) where guests leave their household's names, postal address, email and phone. The code
+ * is unique across the platform so the address alone finds the event (a SECURITY DEFINER function
+ * resolves it while the collector is on, ids only).
+ */
+export const collectorSettings = tenantTable(
+  guestsSchema,
+  'collector_settings',
+  {
+    eventId: uuid('event_id').notNull(),
+    enabled: boolean('enabled').notNull().default(false),
+    code: text('code').notNull(),
+  },
+  (t) => [
+    uniqueIndex('collector_settings_org_event_key').on(t.orgId, t.eventId),
+    uniqueIndex('collector_settings_code_key').on(t.code),
+    // Generated codes are 8 characters (`LOOKUP_ALPHABET`); the canary seeds `CANARY_<nn>_<row>`.
+    check('collector_settings_code_check', sql`code ~ '^[0-9A-Z_]{8,40}$'`),
+  ],
+);
+
+/** pending → approved (a new party) | merged (into an existing party) | rejected. */
+export const COLLECTOR_STATUSES = ['pending', 'approved', 'merged', 'rejected'] as const;
+export type CollectorStatus = (typeof COLLECTOR_STATUSES)[number];
+
+/**
+ * One collector submission waiting for the host (M4.1f). Everything the guest typed is sealed
+ * in `payload_ciphertext` (names, address, email, phone: P4-3) and nothing reaches the guest list
+ * until the host approves it into a new party or merges it into an existing one; the payload is
+ * cleared once the host decides (the data then lives on the party, or nowhere).
+ */
+export const collectorSubmissions = tenantTable(
+  guestsSchema,
+  'collector_submissions',
+  {
+    eventId: uuid('event_id').notNull(),
+    status: text('status').notNull().default('pending'),
+    /** Sealed JSON `CollectorPayload` (key vault, org-scoped); null once decided. */
+    payloadCiphertext: text('payload_ciphertext'),
+    /** The language the guest used (their invitations' default). */
+    locale: text('locale').notNull().default('en'),
+    /** The party it became part of (approved or merged). */
+    partyId: uuid('party_id'),
+    decidedAt: timestamp('decided_at', { withTimezone: true, mode: 'date' }),
+    decidedBy: uuid('decided_by'),
+  },
+  (t) => [
+    index('collector_submissions_org_event_idx').on(t.orgId, t.eventId, t.status, t.createdAt),
+    check('collector_submissions_status_check', inList('status', COLLECTOR_STATUSES)),
+    check('collector_submissions_locale_check', sql`locale ~ '^[a-z]{2}(-[A-Z]{2})?$'`),
+    check(
+      'collector_submissions_decided_check',
+      sql`(status = 'pending') = (decided_at is null) and (status = 'pending' or payload_ciphertext is null)`,
+    ),
+  ],
+);
+
+/** How an invitation reaches a party. */
+export const INVITE_CHANNELS = ['email', 'sms'] as const;
+export type InviteChannel = (typeof INVITE_CHANNELS)[number];
+
+/**
+ * An event's invitation wording in one language (M4.1f): the email's subject and message and the
+ * text message. Without a row the built-in wording of that language is used.
+ */
+export const invitationTemplates = tenantTable(
+  guestsSchema,
+  'invitation_templates',
+  {
+    eventId: uuid('event_id').notNull(),
+    locale: text('locale').notNull(),
+    subject: text('subject').notNull(),
+    message: text('message').notNull(),
+    smsText: text('sms_text').notNull(),
+  },
+  (t) => [
+    uniqueIndex('invitation_templates_org_event_locale_key').on(t.orgId, t.eventId, t.locale),
+    check('invitation_templates_locale_check', sql`locale ~ '^[a-z]{2}(-[A-Z]{2})?$'`),
+    check('invitation_templates_subject_length', sql`length(subject) between 1 and 150`),
+    check('invitation_templates_message_length', sql`length(message) between 1 and 2000`),
+    check('invitation_templates_sms_length', sql`length(sms_text) between 1 and 320`),
+  ],
+);
+
+/** A party's invitation preferences (M4.1f): the language its invitations and reminders use. */
+export const partyInvites = tenantTable(
+  guestsSchema,
+  'party_invites',
+  {
+    eventId: uuid('event_id').notNull(),
+    partyId: uuid('party_id').notNull(),
+    locale: text('locale').notNull().default('en'),
+  },
+  (t) => [
+    uniqueIndex('party_invites_org_party_key').on(t.orgId, t.partyId),
+    index('party_invites_org_event_idx').on(t.orgId, t.eventId),
+    check('party_invites_locale_check', sql`locale ~ '^[a-z]{2}(-[A-Z]{2})?$'`),
+    foreignKey({
+      name: 'party_invites_party_fk',
+      columns: [t.orgId, t.partyId],
+      foreignColumns: [parties.orgId, parties.id],
+    }).onDelete('cascade'),
+  ],
+);
+
+/** What a message to a party was: the invitation, a deadline reminder, or the host's test. */
+export const INVITE_MESSAGE_KINDS = ['invitation', 'reminder', 'test'] as const;
+export type InviteMessageKind = (typeof INVITE_MESSAGE_KINDS)[number];
+
+/**
+ * Every invitation, reminder and test message queued for a party (M4.1f): the channel and the
+ * notifications dedupe key. Its delivery state (sent, delivered, bounced, failed) is read from
+ * the notifications module by that key, so a bounce shows on the party. Test sends have no party.
+ * No address is stored here (it stays sealed on the guest).
+ */
+export const inviteMessages = tenantTable(
+  guestsSchema,
+  'invite_messages',
+  {
+    eventId: uuid('event_id').notNull(),
+    partyId: uuid('party_id'),
+    kind: text('kind').notNull(),
+    channel: text('channel').notNull(),
+    dedupeKey: text('dedupe_key').notNull(),
+    locale: text('locale').notNull(),
+    sentBy: uuid('sent_by'),
+  },
+  (t) => [
+    uniqueIndex('invite_messages_org_channel_key').on(t.orgId, t.channel, t.dedupeKey),
+    index('invite_messages_org_party_idx').on(t.orgId, t.partyId, t.createdAt),
+    index('invite_messages_org_event_idx').on(t.orgId, t.eventId, t.createdAt),
+    check('invite_messages_kind_check', inList('kind', INVITE_MESSAGE_KINDS)),
+    check('invite_messages_channel_check', inList('channel', INVITE_CHANNELS)),
+    check('invite_messages_party_check', sql`(kind = 'test') = (party_id is null)`),
+    check('invite_messages_key_length', sql`length(dedupe_key) between 1 and 255`),
+    foreignKey({
+      name: 'invite_messages_party_fk',
+      columns: [t.orgId, t.partyId],
+      foreignColumns: [parties.orgId, parties.id],
+    }).onDelete('cascade'),
   ],
 );

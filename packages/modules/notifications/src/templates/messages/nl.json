@@ -251,6 +251,16 @@
       "intro": "{org} wacht nog op ‘{title}’ voor {eventName}. Uiterlijk: {until}.",
       "cta": "Mijn taken openen"
     },
+    "guests.invitation": {
+      "subject": "{subject}",
+      "intro": "{message}",
+      "cta": "Reageer op de uitnodiging"
+    },
+    "guests.rsvp-reminder": {
+      "subject": "Herinnering: laat het ons weten voor {eventName}",
+      "intro": "{name}, we hebben nog niets van jullie gehoord. Laat ons vóór {deadline} weten wie naar {eventName} komt.",
+      "cta": "Nu reageren"
+    },
     "registration.session-enrolled": {
       "subject": "Er is een plek vrij: je doet mee aan {sessionTitle}",
       "intro": "Er is een plek vrijgekomen in {sessionTitle} bij {eventName} ({when}) en jij was de volgende op de wachtlijst, dus je bent nu ingeschreven. Kun je niet? Haal de sessie dan uit je programma, zodat de volgende de plek krijgt.",

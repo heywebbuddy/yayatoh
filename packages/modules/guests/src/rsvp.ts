@@ -153,9 +153,18 @@ export const setRsvpSettingsCommand = tenantCommand({
   output: RsvpSettingsDto,
   entitlement: 'guests',
   permission: 'guests:write',
-  handler: async ({ input, ctx, tx }) => {
+  handler: async ({ input, ctx, tx, emit }) => {
     await eventOfTx(tx, input.eventId);
     const row = await ensureSettingsTx(tx, ctx, input.eventId);
+    // M4.1f: RSVP reminder steps count back from the deadline; their journey re-plans them.
+    if ((row.deadline?.getTime() ?? null) !== (input.deadline?.getTime() ?? null))
+      emit({
+        type: 'guests.rsvp_deadline_set',
+        version: 1,
+        aggregateType: 'event',
+        aggregateId: input.eventId,
+        payload: { orgId: requireOrg(ctx), eventId: input.eventId },
+      });
     const [updated] = await tx
       .update(rsvpSettings)
       .set({ deadline: input.deadline, nameLookup: input.nameLookup, updatedAt: ctx.now })

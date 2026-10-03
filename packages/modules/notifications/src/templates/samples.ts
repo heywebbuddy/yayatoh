@@ -253,6 +253,19 @@ export const SAMPLE_PARAMS: Readonly<Record<MessageKind, Readonly<Record<string,
   },
   'tenancy.org-status': { url: 'https://app.yayatoh.test/o/lakeside-events', status: 'suspended' },
   'campaigns.test': { subject: 'Early-bird tickets are back' },
+  'guests.invitation': {
+    url: 'https://app.yayatoh.test/rsvp/sample-token',
+    subject: "You're invited: Lopez Chen Wedding",
+    message:
+      'Dear The Garcia family,\n\nWe would love to celebrate Lopez Chen Wedding with you. Please let us know who of your household can come.',
+    eventName: 'Lopez Chen Wedding',
+  },
+  'guests.rsvp-reminder': {
+    url: 'https://app.yayatoh.test/rsvp/sample-token',
+    name: 'The Garcia family',
+    eventName: 'Lopez Chen Wedding',
+    deadline: 'May 1, 2027',
+  },
   'automations.message': {
     subject: 'One week to go',
     body: 'Lakeside Jazz Night is next Friday. Doors open at 7 pm.',

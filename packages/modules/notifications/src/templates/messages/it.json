@@ -251,6 +251,16 @@
       "intro": "{org} attende ancora «{title}» per {eventName}. Scadenza: {until}.",
       "cta": "Apri le mie attività"
     },
+    "guests.invitation": {
+      "subject": "{subject}",
+      "intro": "{message}",
+      "cta": "Rispondi all'invito"
+    },
+    "guests.rsvp-reminder": {
+      "subject": "Promemoria: rispondi per {eventName}",
+      "intro": "{name}, non abbiamo ancora ricevuto la vostra risposta. Fateci sapere chi verrà a {eventName} entro il {deadline}.",
+      "cta": "Rispondi ora"
+    },
     "registration.session-enrolled": {
       "subject": "Si è liberato un posto: partecipi a {sessionTitle}",
       "intro": "Si è liberato un posto in {sessionTitle} a {eventName} ({when}) ed eri il prossimo in lista d'attesa, quindi ora sei iscritto. Se non puoi partecipare, togli la sessione dal tuo programma così il posto passa alla persona successiva.",

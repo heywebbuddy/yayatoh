@@ -66,4 +66,30 @@ export const privateColumns = columnPrivacy('guests', {
     label: internal(),
     notes: internal(),
   },
+  // M4.1f: the contact collector (everything a guest typed is sealed until the host decides)
+  // and invitations (the host's wording; addresses stay sealed on the guest).
+  collector_settings: {
+    code: internal('code'),
+  },
+  collector_submissions: {
+    status: 'vocab',
+    // Cleared once the host decides (the CHECK allows a payload on pending rows only).
+    payload_ciphertext: personal('sealed-json', { where: "status = 'pending'" }),
+    locale: 'vocab',
+  },
+  invitation_templates: {
+    locale: 'vocab',
+    subject: internal(),
+    message: internal(),
+    sms_text: internal(),
+  },
+  party_invites: {
+    locale: 'vocab',
+  },
+  invite_messages: {
+    kind: 'vocab',
+    channel: 'vocab',
+    dedupe_key: internal(),
+    locale: 'vocab',
+  },
 });

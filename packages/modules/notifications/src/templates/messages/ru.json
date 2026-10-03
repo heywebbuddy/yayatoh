@@ -251,6 +251,16 @@
       "intro": "{org} всё ещё ждёт «{title}» для «{eventName}». Срок: {until}.",
       "cta": "Открыть мои задачи"
     },
+    "guests.invitation": {
+      "subject": "{subject}",
+      "intro": "{message}",
+      "cta": "Ответить на приглашение"
+    },
+    "guests.rsvp-reminder": {
+      "subject": "Напоминание: ответьте на приглашение на {eventName}",
+      "intro": "{name}, мы ещё не получили ваш ответ. Сообщите, пожалуйста, до {deadline}, кто придёт на {eventName}.",
+      "cta": "Ответить"
+    },
     "registration.session-enrolled": {
       "subject": "Освободилось место: вы записаны на {sessionTitle}",
       "intro": "В {sessionTitle} на {eventName} ({when}) освободилось место, и вы были следующим в листе ожидания, поэтому теперь вы записаны. Если не сможете прийти, уберите сессию из своего расписания, чтобы место досталось следующему.",

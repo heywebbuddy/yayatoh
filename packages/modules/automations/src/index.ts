@@ -30,16 +30,31 @@ export {
   enrollTx,
   eventAnchorsTx,
   journeysForEventTx,
+  partyActionKey,
   type RescheduleResult,
   rescheduleEventTx,
+  runsOfParty,
 } from './lifecycle.ts';
 export { privateColumns } from './private-columns.ts';
+// M4.1f: RSVP deadline reminders (a system journey per event, party runs).
+export {
+  MAX_REMINDER_DAYS,
+  PartyReminderDto,
+  partyRemindersQuery,
+  REMINDER_CHANNELS,
+  RSVP_TEMPLATE,
+  RsvpRemindersDto,
+  rsvpReminderHooks,
+  rsvpRemindersQuery,
+  setRsvpRemindersCommand,
+} from './rsvp-reminders.ts';
 export {
   enrollEventTimeCommand,
   type RunDueResult,
   type RunnerDeps,
   recordStepFailureCommand,
   runDueActions,
+  runPartyActionCommand,
   runScheduledActionCommand,
   STEP_FAILED_EVENT,
   StepFailedPayload,

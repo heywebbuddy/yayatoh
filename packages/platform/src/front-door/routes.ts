@@ -194,6 +194,11 @@ export const PLATFORM_PREFIXES: readonly string[] = [
   '/tv',
   // Batch 3h merge: M5.7a's signed big-screen link for live polls and Q&A (`/display/{token}`).
   '/display',
+  // M4.1d/M4.1f: a wedding party's RSVP page and its paper fallback (`/rsvp/{token}`,
+  // `/rsvp/find/{code}`), and an event's public contact collector (`/collect/{code}`). Only the
+  // new app has them.
+  '/rsvp',
+  '/collect',
 ];
 
 /**

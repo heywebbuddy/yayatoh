@@ -251,6 +251,16 @@
       "intro": "{org} ainda aguarda “{title}” para {eventName}. Prazo: {until}.",
       "cta": "Abrir minhas tarefas"
     },
+    "guests.invitation": {
+      "subject": "{subject}",
+      "intro": "{message}",
+      "cta": "Responder ao convite"
+    },
+    "guests.rsvp-reminder": {
+      "subject": "Lembrete: responda sobre {eventName}",
+      "intro": "{name}, ainda não recebemos a sua resposta. Digam-nos quem virá a {eventName} até {deadline}.",
+      "cta": "Responder agora"
+    },
     "registration.session-enrolled": {
       "subject": "Abriu uma vaga: você está em {sessionTitle}",
       "intro": "Abriu uma vaga em {sessionTitle} no {eventName} ({when}) e você era a próxima pessoa na lista de espera, então agora está inscrito. Se não puder ir, remova a sessão da sua agenda para que a vaga vá para a próxima pessoa.",

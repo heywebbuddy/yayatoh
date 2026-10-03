@@ -251,6 +251,16 @@
       "intro": "ما زالت {org} بانتظار «{title}» لـ {eventName}. الموعد النهائي: {until}.",
       "cta": "فتح مهامي"
     },
+    "guests.invitation": {
+      "subject": "{subject}",
+      "intro": "{message}",
+      "cta": "الرد على الدعوة"
+    },
+    "guests.rsvp-reminder": {
+      "subject": "تذكير: يُرجى الرد بخصوص {eventName}",
+      "intro": "{name}، لم يصلنا ردكم بعد. يُرجى إخبارنا بمن سيحضر {eventName} قبل {deadline}.",
+      "cta": "الرد الآن"
+    },
     "registration.session-enrolled": {
       "subject": "توفّر مقعد: أنت مسجَّل في {sessionTitle}",
       "intro": "توفّر مقعد في {sessionTitle} ضمن {eventName} ({when})، وكنت التالي في قائمة الانتظار، فأصبحت مسجَّلًا الآن. إن لم تتمكن من الحضور، فأزل الجلسة من جدولك ليحصل التالي على المقعد.",

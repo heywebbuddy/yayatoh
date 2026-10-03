@@ -1,5 +1,5 @@
 import { utcToZonedInput, zonedTimeToUtc } from '@yayatoh/kernel';
-import type { WaitAnchor } from './journey.ts';
+import type { AnyAnchor } from './journey.ts';
 
 /**
  * When a journey step is due (M3.7a). Pure: no I/O, Intl only.
@@ -12,7 +12,7 @@ import type { WaitAnchor } from './journey.ts';
  */
 
 export interface StepWait {
-  readonly anchor: WaitAnchor;
+  readonly anchor: AnyAnchor;
   readonly offsetDays: number;
   readonly offsetMinutes: number;
   readonly atTime: string | null;
@@ -25,6 +25,8 @@ export interface Anchors {
   readonly eventEnd: Date;
   /** The event's IANA zone. */
   readonly timeZone: string;
+  /** M4.1f: the event's RSVP deadline (`rsvp_deadline` steps), when it has one. */
+  readonly rsvpDeadline?: Date | null;
 }
 
 const DAY_MS = 86_400_000;
@@ -38,12 +40,15 @@ const validZone = (tz: string) => {
   }
 };
 
-export function anchorTime(anchor: WaitAnchor, anchors: Anchors): Date {
+/** The anchor's instant (an `rsvp_deadline` step of an event without a deadline: the event's start). */
+export function anchorTime(anchor: AnyAnchor, anchors: Anchors): Date {
   return anchor === 'trigger'
     ? anchors.trigger
     : anchor === 'event_start'
       ? anchors.eventStart
-      : anchors.eventEnd;
+      : anchor === 'rsvp_deadline'
+        ? (anchors.rsvpDeadline ?? anchors.eventStart)
+        : anchors.eventEnd;
 }
 
 /** The instant a step with this wait is due. */
@@ -64,7 +69,7 @@ export function stepDueAt(wait: StepWait, anchors: Anchors): Date {
   return new Date(at.getTime() + wait.offsetMinutes * 60_000);
 }
 
-export type StepPlan = { readonly dueAt: Date } | { readonly skip: 'too_late' };
+export type StepPlan = { readonly dueAt: Date } | { readonly skip: 'too_late' | 'no_deadline' };
 
 /**
  * Where a step goes. On enrollment a step whose time has passed is skipped (`too_late`: someone
@@ -79,6 +84,8 @@ export function planStep(
   now: Date,
   mode: 'enroll' | 'reschedule',
 ): StepPlan {
+  // An RSVP reminder needs a deadline to count back from (M4.1f).
+  if (wait.anchor === 'rsvp_deadline' && !anchors.rsvpDeadline) return { skip: 'no_deadline' };
   const due = stepDueAt(wait, anchors);
   if (due.getTime() >= now.getTime() - 60_000) return { dueAt: due };
   if (wait.anchor === 'trigger') return { dueAt: now };

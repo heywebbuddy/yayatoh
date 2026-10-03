@@ -251,6 +251,16 @@
       "intro": "{org}は{eventName}の「{title}」をまだお待ちしています。期限：{until}。",
       "cta": "タスクを開く"
     },
+    "guests.invitation": {
+      "subject": "{subject}",
+      "intro": "{message}",
+      "cta": "招待状に返信する"
+    },
+    "guests.rsvp-reminder": {
+      "subject": "リマインダー：{eventName} のご返信のお願い",
+      "intro": "{name} 様、まだご返信をいただいておりません。{deadline} までに {eventName} へのご出席者をお知らせください。",
+      "cta": "今すぐ返信する"
+    },
     "registration.session-enrolled": {
       "subject": "空きが出ました：{sessionTitle} に登録されました",
       "intro": "{eventName}（{when}）の {sessionTitle} に空きが出て、キャンセル待ちの次の順番があなたでしたので、登録が完了しました。参加できない場合は、次の方が参加できるようスケジュールからセッションを外してください。",

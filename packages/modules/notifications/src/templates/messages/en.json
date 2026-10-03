@@ -251,6 +251,16 @@
       "intro": "{org} is still waiting for “{title}” for {eventName}. Due: {until}.",
       "cta": "Open my tasks"
     },
+    "guests.invitation": {
+      "subject": "{subject}",
+      "intro": "{message}",
+      "cta": "Reply to the invitation"
+    },
+    "guests.rsvp-reminder": {
+      "subject": "Reminder: please reply for {eventName}",
+      "intro": "{name}, we haven't heard from you yet. Please let us know who can come to {eventName} by {deadline}.",
+      "cta": "Reply now"
+    },
     "registration.session-enrolled": {
       "subject": "A place opened: you're in {sessionTitle}",
       "intro": "A place opened in {sessionTitle} at {eventName} ({when}), and you were next in line, so you're now enrolled. If you can't make it, drop the session from your schedule so the next person gets the place.",

@@ -251,6 +251,16 @@
       "intro": "{org} को {eventName} के लिए अभी भी “{title}” का इंतज़ार है। अंतिम तिथि: {until}।",
       "cta": "मेरे कार्य खोलें"
     },
+    "guests.invitation": {
+      "subject": "{subject}",
+      "intro": "{message}",
+      "cta": "निमंत्रण का उत्तर दें"
+    },
+    "guests.rsvp-reminder": {
+      "subject": "अनुस्मारक: कृपया {eventName} के लिए उत्तर दें",
+      "intro": "{name}, हमें अभी तक आपका उत्तर नहीं मिला है। कृपया {deadline} तक बताएँ कि {eventName} में कौन आएगा।",
+      "cta": "अभी उत्तर दें"
+    },
     "registration.session-enrolled": {
       "subject": "एक सीट खाली हुई: आप {sessionTitle} में शामिल हैं",
       "intro": "{eventName} ({when}) के {sessionTitle} में एक सीट खाली हुई और प्रतीक्षा सूची में अगला नंबर आपका था, इसलिए अब आपका नामांकन हो गया है। अगर आप नहीं आ सकते, तो सत्र को अपने शेड्यूल से हटा दें ताकि सीट अगले व्यक्ति को मिल जाए।",

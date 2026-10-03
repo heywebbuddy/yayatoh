@@ -1,3 +1,34 @@
+// M4.1f: the contact collector, invitations by email and text, and RSVP reminder delivery.
+export {
+  approveSubmissionCommand,
+  CollectorSettingsDto,
+  CollectorSubmissionDto,
+  collectorMergePreviewQuery,
+  collectorQueueQuery,
+  collectorSettingsQuery,
+  collectorTarget,
+  MAX_PENDING_SUBMISSIONS,
+  mergeSubmissionCommand,
+  publicCollectorQuery,
+  rejectSubmissionCommand,
+  SubmitContactInput,
+  setCollectorCommand,
+  submitContactCommand,
+} from './collector.ts';
+export {
+  type CollectorMember,
+  type CollectorPayload,
+  type ContactValues,
+  isE164,
+  MAX_COLLECTOR_MEMBERS,
+  MERGE_FIELDS,
+  type MergeChoice,
+  type MergeField,
+  mergeContact,
+  newMembers,
+  normalizeEmail,
+  normalizePhone,
+} from './domain/collector.ts';
 export {
   changedFields,
   countGuests,
@@ -42,6 +73,18 @@ export {
   uninvitedWith,
   windowInputs,
 } from './domain/invitations.ts';
+export {
+  DEFAULT_INVITE_COPY,
+  defaultInviteCopy,
+  fillInvite,
+  INVITE_LOCALES,
+  type InviteCopy,
+  type InviteLocale,
+  isInviteLocale,
+  MESSAGE_MAX as INVITE_MESSAGE_MAX,
+  SMS_MAX as INVITE_SMS_MAX,
+  SUBJECT_MAX as INVITE_SUBJECT_MAX,
+} from './domain/invite-copy.ts';
 // M4.1d: the RSVP flow (party link, QR, name + PIN, household answers, deadline, host tools).
 export {
   checkHouseholdAnswers,
@@ -109,6 +152,39 @@ export {
   setInvitationsCommand,
   subEventHistoryQuery,
 } from './invitations.ts';
+export {
+  awaitingPartiesTx,
+  DELIVERY_STATES,
+  type DeliveryDeps,
+  type DeliveryState,
+  deliveryState,
+  INVITATION_QUEUED_EVENT,
+  InvitationQueuedPayload,
+  invitationMailer,
+  inviteDedupeKey,
+  type PartyMessage,
+  partyAnsweredTx,
+  type QueueOutcome,
+  queuePartyMessageTx,
+  rsvpDeadlineTx,
+} from './invite-delivery.ts';
+export {
+  InvitationTemplateDto,
+  InviteMessageDto,
+  invitationPreviewQuery,
+  invitationTemplatesQuery,
+  PartyContactDto,
+  PartyInviteDto,
+  partyContactQuery,
+  partyInviteMessagesQuery,
+  partyInvitesQuery,
+  resetInvitationTemplateCommand,
+  sendInvitationsCommand,
+  sendTestInvitationCommand,
+  setInvitationTemplateCommand,
+  setPartyContactCommand,
+  setPartyLocaleCommand,
+} from './invites.ts';
 export { privateColumns } from './private-columns.ts';
 export {
   createRsvpLinksCommand,
@@ -163,6 +239,8 @@ export { RSVP_LINK_TTL_MS, rsvpByContactTx } from './rsvp-state.ts';
 export {
   AGE_CLASSES,
   type AgeClass,
+  COLLECTOR_STATUSES,
+  type CollectorStatus,
   ENTRY_SOURCES,
   GUEST_KINDS,
   GUEST_SOURCES,
@@ -174,6 +252,10 @@ export {
   IMPORT_STATUSES,
   type ImportSource,
   type ImportStatus,
+  INVITE_CHANNELS,
+  INVITE_MESSAGE_KINDS,
+  type InviteChannel,
+  type InviteMessageKind,
   PARTY_RSVP_STATES,
   type PartyRsvpState,
   RESPONSE_STATUSES,

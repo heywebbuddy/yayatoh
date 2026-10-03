@@ -251,6 +251,16 @@
       "intro": "{org} sigue esperando «{title}» para {eventName}. Vence: {until}.",
       "cta": "Abrir mis tareas"
     },
+    "guests.invitation": {
+      "subject": "{subject}",
+      "intro": "{message}",
+      "cta": "Responder a la invitación"
+    },
+    "guests.rsvp-reminder": {
+      "subject": "Recordatorio: confirma tu asistencia a {eventName}",
+      "intro": "{name}, aún no hemos recibido su respuesta. Indíquennos quiénes vendrán a {eventName} antes del {deadline}.",
+      "cta": "Responder ahora"
+    },
     "registration.session-enrolled": {
       "subject": "Se liberó una plaza: estás en {sessionTitle}",
       "intro": "Se liberó una plaza en {sessionTitle} de {eventName} ({when}) y eras la siguiente persona en la lista de espera, así que ya estás inscrito. Si no puedes asistir, quita la sesión de tu agenda para que la plaza pase a la siguiente persona.",
