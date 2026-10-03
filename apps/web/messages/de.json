@@ -12309,5 +12309,24 @@
       "allow": "Zulassen",
       "deny": "Ablehnen"
     }
+  },
+  "formControls": {
+    "search": "Suchen",
+    "noResults": "Keine Treffer",
+    "loading": "Wird geladen…",
+    "remove": "{label} entfernen",
+    "create": "„{query}“ erstellen",
+    "clear": "Leeren",
+    "chooseDate": "Datum wählen",
+    "chooseTime": "Uhrzeit wählen",
+    "previousMonth": "Vorheriger Monat",
+    "nextMonth": "Nächster Monat",
+    "today": "Heute",
+    "invalidDate": "Gib ein Datum wie {example} ein",
+    "invalidTime": "Gib eine Uhrzeit wie {example} ein",
+    "tooEarly": "Wähle ein Datum ab {date}",
+    "tooLate": "Wähle ein Datum bis {date}",
+    "timeZoneNote": "Zeiten in {zone}",
+    "selected": "Ausgewählt"
   }
 }

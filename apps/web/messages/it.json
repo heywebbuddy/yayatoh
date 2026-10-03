@@ -12309,5 +12309,24 @@
       "allow": "Consenti",
       "deny": "Rifiuta"
     }
+  },
+  "formControls": {
+    "search": "Cerca",
+    "noResults": "Nessun risultato",
+    "loading": "Caricamento…",
+    "remove": "Rimuovi {label}",
+    "create": "Crea «{query}»",
+    "clear": "Cancella",
+    "chooseDate": "Scegli una data",
+    "chooseTime": "Scegli un orario",
+    "previousMonth": "Mese precedente",
+    "nextMonth": "Mese successivo",
+    "today": "Oggi",
+    "invalidDate": "Inserisci una data come {example}",
+    "invalidTime": "Inserisci un orario come {example}",
+    "tooEarly": "Scegli una data dal {date} in poi",
+    "tooLate": "Scegli una data entro il {date}",
+    "timeZoneNote": "Orari in {zone}",
+    "selected": "Selezionato"
   }
 }
