@@ -9039,5 +9039,125 @@
       "questionNotAllowed": "この質問はバッジに印刷できません。"
     },
     "elements": "この面の要素"
+  },
+  "badgePrinting": {
+    "title": "プリンターと印刷ログ",
+    "subtitle": "このイベントのバッジプリンターを追加し、各受付の印刷ステーションをオンラインに保ち、すべてのバッジの印刷・再印刷とその理由を確認できます。",
+    "printers": "プリンター",
+    "stationHint": "各プリンターの隣にあるパソコンで印刷ステーションを開いたままにしてください。90 秒間応答のないプリンターはオフラインと表示されます。",
+    "noPrintersTitle": "プリンターはまだありません",
+    "noPrintersDescription": "受付ごとにプリンターを追加してください。追加するまでは、使用中のデバイスの印刷ダイアログからバッジを印刷します。",
+    "addPrinter": "プリンターを追加",
+    "printerName": "プリンター名",
+    "connection": "印刷方法",
+    "adapters": {
+      "browser": "受付のパソコンまたは iPad の印刷ダイアログ（AirPrint または任意のプリンター）",
+      "printnode": "PrintNode（ダイアログなしで印刷）"
+    },
+    "adapterShort": {
+      "browser": "印刷ダイアログ",
+      "printnode": "PrintNode"
+    },
+    "printnodeId": "PrintNode プリンター番号",
+    "printnodeIdHint": "PrintNode アカウントでのプリンターの番号です。",
+    "printnodeNumber": "PrintNode 番号 {id}",
+    "printnodeOffHint": "プリンターは受付のデバイスの印刷ダイアログから印刷します。ダイアログなしで印刷する（PrintNode）には、組織の PrintNode アカウントの開設をサポートに依頼してください。",
+    "printerAdded": "プリンターを追加しました。",
+    "archive": "{name} をアーカイブ",
+    "archived": "プリンターをアーカイブしました。",
+    "status": {
+      "unknown": "未接続",
+      "online": "オンライン",
+      "offline": "オフライン"
+    },
+    "lastSeen": "最終応答 {time}",
+    "neverSeen": "ハートビートはまだありません",
+    "offlineSince": "{time} からオフライン",
+    "openStation": "印刷ステーションを開く: {name}",
+    "log": "印刷ログ",
+    "counts": "{prints, plural, other {初回印刷 # 件}} · {reprints, plural, other {再印刷 # 件}}",
+    "filterLabel": "表示",
+    "filters": {
+      "all": "すべて",
+      "print": "初回印刷",
+      "reprint": "再印刷"
+    },
+    "logEmptyTitle": "まだ印刷されていません",
+    "logEmptyDescription": "受付または参加者のプロフィールから印刷したバッジがここに表示されます。再印刷にはそれぞれ理由が記録されます。",
+    "logCaption": "印刷・再印刷されたバッジ（新しい順）",
+    "columns": {
+      "when": "日時",
+      "who": "バッジ",
+      "what": "印刷",
+      "reason": "理由",
+      "printer": "プリンター",
+      "status": "状態"
+    },
+    "kinds": {
+      "print": "初回印刷",
+      "reprint": "再印刷"
+    },
+    "reasons": {
+      "first_print": "初回印刷",
+      "damaged": "破損",
+      "lost": "紛失",
+      "details_changed": "情報の変更",
+      "misprint": "印刷ミス",
+      "printer_problem": "プリンターの問題",
+      "other": "その他"
+    },
+    "jobStatus": {
+      "queued": "送信中",
+      "sent": "送信済み",
+      "failed": "失敗"
+    },
+    "failedHint": "失敗した印刷はカウントされません。そのバッジを再度印刷しても、初回印刷として扱われます。",
+    "voided": "キャンセル済みのチケット",
+    "deviceDialog": "このデバイスの印刷ダイアログ",
+    "stationTitle": "印刷ステーション: {name}",
+    "stationIntro": "{name} に接続されたパソコンでこのページを開いたままにしてください。30 秒ごとにプリンターが使用中であることを Yayatoh に通知します。90 秒間閉じられているかオフラインの場合、プリンターはオフラインと表示されます。",
+    "stationConnecting": "接続中…",
+    "stationLive": "{time} にハートビートを送信しました。",
+    "stationProblem": "未接続",
+    "stationError": "Yayatoh に接続できませんでした。30 秒後に再試行します。",
+    "stationArchived": "このプリンターはアーカイブされました。このページを閉じてください。",
+    "stationNotBrowser": "このプリンターの状態は PrintNode が自動で報告するため、印刷ステーションは不要です。",
+    "recentJobs": "{name} の最近の印刷",
+    "noJobsYet": "このプリンターではまだ何も印刷されていません。",
+    "findBadge": "印刷するバッジを検索",
+    "badgeHeading": "バッジ",
+    "printTitle": "バッジを印刷: {name}",
+    "noBadge": "このチケットにはバッジがありません（キャンセルされた可能性があります）。",
+    "neverPrinted": "まだ印刷されていません。",
+    "printedTimes": "{count, plural, other {# 回印刷済み}}（最終: {time}）。",
+    "printer": "プリンター",
+    "noPrintersHint": "このイベントにはまだプリンターがありません。バッジは PDF として開き、このデバイスの印刷ダイアログで印刷します。",
+    "reason": "再印刷する理由",
+    "reasonPlaceholder": "理由を選択してください",
+    "note": "メモ",
+    "noteHint": "「その他」の場合は必須です。200 文字以内で入力してください。",
+    "print": "{name} のバッジを印刷",
+    "reprint": "{name} のバッジを再印刷",
+    "printDialogReady": "記録しました。バッジの PDF を開き、実際のサイズ（100%）で印刷してください。",
+    "openPdf": "{name} のバッジ PDF を開く",
+    "printSent": "バッジを {printer} に送信しました。",
+    "printFailed": "バッジを送信できませんでした（{code}）。もう一度お試しいただくか、別のプリンターを選択してください。",
+    "history": "印刷履歴",
+    "noTemplate": "このチケットタイプにはまだバッジテンプレートがありません。バッジページで作成してください。",
+    "printBadgeFor": "{name} のバッジを印刷",
+    "deskHint": "受付用: チケット所有者を検索してバッジを印刷します。すべての印刷と再印刷は理由とともに記録されます。",
+    "errors": {
+      "name": "プリンター名を入力してください（60 文字以内）。",
+      "nameTaken": "このイベントには同じ名前のプリンターがすでにあります。",
+      "printnode_off": "この組織では PrintNode が有効になっていません。",
+      "printnode_id_required": "プリンターの PrintNode 番号を入力してください。",
+      "printnodePrinterId": "PrintNode 番号は整数で入力してください。",
+      "too_many_printers": "このイベントのプリンター数が上限（50 台）に達しています。先にいずれかをアーカイブしてください。",
+      "archived": "そのプリンターはアーカイブされました。別のプリンターを選択してください。",
+      "printerId": "プリンターを選択してください。",
+      "reason_required": "このバッジを再印刷する理由を選択してください。",
+      "note_required": "「その他」の場合は、理由を簡単に入力してください。",
+      "note": "メモは 200 文字未満で入力してください。"
+    }
   }
 }

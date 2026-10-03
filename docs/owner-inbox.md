@@ -482,3 +482,8 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **Dark primary fill.** `#7B5CFF` gives white button text 4.36:1; buttons use `#6C4CF2` (5.3:1) and `#7B5CFF` stays for glows, rings and the active sidebar tile. Confirm.
 - [ ] **CJK fonts** are not self-hosted (5–9 MB per face); Chinese and Japanese use Noto Sans JP/SC/TC when installed, then the platform face. Confirm, or approve per-locale font CSS.
 - [ ] **Required-field marker.** No asterisk on required labels (the browser announces "required"; errors say what is missing). Confirm or ask for "(optional)" markers on optional fields instead.
+
+## M5.5b — badge printing (2026-10-03, pending owner)
+- [ ] **PrintNode account (Stage 2, P5-2).** Open one PrintNode integrator account; for each org that wants silent printing, create a child account with the org id as its creator reference, then switch it on with `pnpm --filter @yayatoh/worker printnode -- --org <slug> --on`. Put `PRINTNODE_API_KEY` in Doppler and set `BADGE_PRINTER_PROVIDER=printnode` only in production. Until then everything uses the fake. Label: `infra`.
+- [ ] **Batch PDFs and the print log.** A downloaded batch PDF is not counted as printed (a download is not a print), so the first onsite print of a pre-printed badge is logged as a first print. Confirm, or ask for "mark this batch as printed".
+- [ ] **Reprint reasons:** Damaged, Lost, Details changed, Misprinted, Printer problem, Other (with a note). Confirm the list.

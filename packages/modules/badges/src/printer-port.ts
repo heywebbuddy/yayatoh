@@ -161,11 +161,14 @@ export function fakePrintNode(): FakePrintNode {
   };
 }
 
-let devFake: FakePrintNode | undefined;
-/** The process's fake PrintNode (dev routes and the worker share their own process's one). */
+/**
+ * The process's fake PrintNode: one per process (on `globalThis`, so the web's route handlers and
+ * Server Actions, bundled separately, share it); the worker has its own.
+ */
 export const devPrintNode = (): FakePrintNode => {
-  devFake ??= fakePrintNode();
-  return devFake;
+  const g = globalThis as { __yayatohFakePrintNode?: FakePrintNode };
+  g.__yayatohFakePrintNode ??= fakePrintNode();
+  return g.__yayatohFakePrintNode;
 };
 
 /**
