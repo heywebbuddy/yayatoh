@@ -1,6 +1,7 @@
 import { type AlertDto, listAlertsQuery, RULES, type RuleKey } from '@yayatoh/alerts';
 import {
   type AnyWidgetDef,
+  capacityWidget,
   exhibitorActivityWidget,
   sessionAttendanceWidget,
   sessionFillWidget,
@@ -263,6 +264,13 @@ describe('who sees what', () => {
     );
     expect(sp).toEqual({ sponsors: 2, tiers: [{ tier: 'Gold', sponsors: 2 }], deliverablesOverdue: 2 });
   }, 120_000);
+});
+
+describe('live mode with session doors', () => {
+  it('the capacity tile loads beside a session door (its room is on the session rooms tile)', async () => {
+    const cap = await load(capacityWidget);
+    expect(cap.areas.map((x) => x.kind)).not.toContain('session');
+  });
 });
 
 describe('tenant isolation', () => {
