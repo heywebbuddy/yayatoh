@@ -204,3 +204,105 @@ describe('campaign analytics on M3.6b campaigns (batch 3g wiring)', () => {
     expect(other.rows.find((r) => r.key === `c.${c.id}`)).toBeUndefined();
   }, 120_000);
 });
+
+describe('the campaigns tile counts days in the org’s zone (batch 3g merge)', () => {
+  it('includes the org’s today while the event’s zone is still on the day before', async () => {
+    const t = uuidv7().slice(-8);
+    await person(b, `cz1+${t}@x.test`);
+    // 00:10 on 17 July in Chicago (the org's zone) is still 16 July in Honolulu (the event's).
+    const sendAt = new Date('2030-07-17T05:10:00Z');
+    const readAt = new Date('2030-07-17T05:30:00Z');
+    const event = await executeCommand(
+      createEventCommand,
+      {
+        name: `Island night ${t}`,
+        slug: `cz-${t}`,
+        timezone: 'Pacific/Honolulu',
+        startsAt: '2030-08-01T06:00:00.000Z',
+        endsAt: '2030-08-01T10:00:00.000Z',
+      },
+      b.ctx(),
+      ports,
+    );
+    const c = await executeCommand(
+      createCampaignCommand,
+      { name: `Island ${t}`, channel: 'email' },
+      b.ctx(),
+      ports,
+    );
+    await executeCommand(
+      saveCampaignCommand,
+      {
+        campaignId: c.id,
+        name: c.name,
+        locale: 'en',
+        content: {
+          subject: 'Aloha',
+          preheader: '',
+          font: 'sans',
+          smsBody: '',
+          blocks: [
+            { id: 'b1', type: 'button', label: 'Get tickets', eventId: event.id, path: null },
+            { id: 'b2', type: 'footer', postalAddress: '1 Lake St, Chicago IL 60601', note: '' },
+          ],
+        },
+      },
+      b.ctx(),
+      ports,
+    );
+    const seg = await executeCommand(
+      saveSegmentCommand,
+      {
+        name: `Island ${t}`,
+        definition: {
+          version: 1,
+          root: {
+            type: 'group',
+            op: 'and',
+            conditions: [{ type: 'consent', channel: 'email', granted: true }],
+          },
+        },
+      },
+      b.ctx(),
+      ports,
+    );
+    await executeCommand(
+      setAudienceCommand,
+      { campaignId: c.id, audience: { kind: 'segment', segmentId: seg.id } },
+      b.ctx(),
+      ports,
+    );
+    await executeCommand(
+      sendNowCommand,
+      { campaignId: c.id },
+      b.ctx({ idempotencyKey: `zone-${c.id}`, now: sendAt }),
+      ports,
+    );
+    await runOrgCampaigns(b.org.id, ports, { now: sendAt });
+    const mem = memoryTransports();
+    for (let i = 0; i < 20; i++) {
+      const r = await dispatchDue(
+        b.org.id,
+        { transports: mem.transports, appOrigin: ORIGIN, now: () => sendAt, ignoreQuietHours: true },
+        200,
+      );
+      if (r.sent + r.suppressed + r.failed + r.held === 0) break;
+    }
+    const [row] = await withTenant(systemCtx(b.org.id), (tx) =>
+      tx.execute<{ n: number }>(
+        sql`select count(*)::int as n from notifications.messages
+          where dedupe_key like ${`campaign:${c.id}:%`} and status = 'sent'`,
+      ),
+    );
+    const sends = Number(row?.n ?? 0);
+    expect(sends).toBeGreaterThanOrEqual(1);
+    const tile = await executeQuery(
+      campaignsWidget(null).loader,
+      { eventId: event.id },
+      b.ctx({ now: readAt }),
+      ports,
+    );
+    expect(tile.toDay).toBe('2030-07-17');
+    expect(tile.campaigns.find((x) => x.key === `c.${c.id}`)?.sends).toBe(sends);
+  }, 120_000);
+});
