@@ -182,7 +182,7 @@ import {
   updatePartyGuestCommand,
   validateGuestImportCommand,
 } from '@yayatoh/guests';
-import { runSync } from '@yayatoh/integrations';
+import { dayIn, runSync, saveAccountMapCommand } from '@yayatoh/integrations';
 import { type Ctx, createCtx, executeCommand, executeQuery, uuidv7 } from '@yayatoh/kernel';
 import {
   attributeOrderCommand,
@@ -371,7 +371,7 @@ import { createVenueCommand, submitQuoteRequestCommand } from '@yayatoh/venues';
 import { createEndpointCommand } from '@yayatoh/webhooks';
 import { sql } from 'drizzle-orm';
 import { enableGallery, guestGalleryPhoto, guestSiteAccess, hostGalleryPhoto } from './gallery.ts';
-import { connectDemo, fakeAuth } from './integrations.ts';
+import { connectAccounting, connectDemo, fakeAccountMap, fakeAuth } from './integrations.ts';
 import { catchUpTimeline } from './merge.ts';
 import { networkingFixture } from './networking.ts';
 import { ports, runBulk, submitRegistrationForm } from './ports.ts';
@@ -2906,6 +2906,23 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   // mappings, cursors, a run, record links and the demo's broken record in the errors inbox).
   const demo = await connectDemo(ctx());
   await runSync(org.id, demo.connectionId, { auth: fakeAuth }, ports);
+  // M6.5d: QuickBooks (fake) with the accounts mapped from today, and today's ledger posted as a
+  // daily summary journal by a run "as of" tomorrow (a day is posted once it has ended).
+  const books = await connectAccounting(ctx(), 'quickbooks');
+  await executeCommand(
+    saveAccountMapCommand,
+    {
+      connectionId: books.connectionId,
+      accounts: fakeAccountMap('quickbooks'),
+      startsOn: dayIn(new Date(), 'America/Chicago'),
+    },
+    ctx(),
+    ports,
+  );
+  await runSync(org.id, books.connectionId, { auth: fakeAuth }, ports, {
+    now: new Date(Date.now() + 24 * 60 * 60_000),
+    force: true,
+  });
   // Batch 3u merge: the warehouse catches up again on what the fixture emitted after its first
   // catch-up (batch 3j's rows: the gift refund), as the worker would.
   await catchUpWarehouse(org.id);
