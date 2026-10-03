@@ -86,7 +86,8 @@ export async function GET(
   };
   if (!isPublic) headers.vary = 'Cookie';
   if (req.headers.get('if-none-match') === etag) return new Response(null, { status: 304, headers });
-  const bytes = await readVariant(org, asset, file);
+  // U10: a library reuse reads its original's files (nothing is stored twice).
+  const bytes = await readVariant(org, target.storageAssetId, file);
   if (!bytes) return notFound();
   headers['content-length'] = String(bytes.byteLength);
   return new Response(bytes as Uint8Array<ArrayBuffer>, { headers });

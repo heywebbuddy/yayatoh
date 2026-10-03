@@ -53,6 +53,7 @@ export {
   UpdateSettingsInput,
   updateSettingsCommand,
 } from './commands.ts';
+export { engagementContactOwner } from './contact-merge.ts';
 // M6.1c: data-subject requests (questions signed with the person's full name).
 export { engagementDataSubjects } from './data-subject.ts';
 export {

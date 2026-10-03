@@ -243,7 +243,7 @@ export function speakerPhotoApprover(): Subscriber {
         alt: owner.name,
       });
       await emitEvents(tx, ctx, events);
-      if (r.replacedAssetId) await mediaStore().deleteAsset(event.orgId, r.replacedAssetId);
+      if (r.replacedAssetId && !r.filesKept) await mediaStore().deleteAsset(event.orgId, r.replacedAssetId);
     },
   });
 }

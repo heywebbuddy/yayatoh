@@ -190,7 +190,13 @@ import {
   setAttributionWindowCommand,
 } from '@yayatoh/marketing';
 import { addLegacyRedirectCommand, catchUpListings, updateSiteSettingsCommand } from '@yayatoh/marketplace';
-import { uploadLogo, uploadMedia, uploadProgramImage, uploadSpeakerPortalFile } from '@yayatoh/media';
+import {
+  reuseMedia,
+  uploadLogo,
+  uploadMedia,
+  uploadProgramImage,
+  uploadSpeakerPortalFile,
+} from '@yayatoh/media';
 import {
   announcementMailer,
   contactMessageCommand,
@@ -1646,6 +1652,27 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ports,
   );
   await uploadLogo(ctx(), { alt: `${name} logo`, file: fixturePng('logo') }, ports);
+  // U10: an image uploaded to the media library, reused in the event's gallery (no new files).
+  const libraryImage = await uploadMedia(
+    ctx(),
+    {
+      ownerType: 'library',
+      ownerId: org.id,
+      slot: 'library',
+      alt: `${name} library`,
+      file: fixturePng('cover'),
+    },
+    ports,
+  );
+  await reuseMedia(
+    ctx(),
+    {
+      sourceAssetId: libraryImage.asset.id,
+      target: { ownerType: 'event', ownerId: event.id, slot: 'gallery' },
+      alt: `${name} gallery`,
+    },
+    ports,
+  );
   await withTenant(systemCtx(org.id), (tx) =>
     tx.execute(sql`insert into media.quotas (org_id, bytes_limit) values (${org.id}, ${512 * 1024 * 1024})`),
   );

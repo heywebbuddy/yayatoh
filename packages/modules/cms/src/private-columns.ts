@@ -68,5 +68,8 @@ export const privateColumns = columnPrivacy('cms', {
     message: personal(),
     locale: 'vocab',
     status: 'vocab',
+    source: 'vocab',
   },
+  // U10: the org contact page's line above the form (shown on the page when it is on).
+  contact_pages: { intro: 'public' },
 });

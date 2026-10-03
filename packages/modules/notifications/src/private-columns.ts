@@ -91,6 +91,9 @@ export const privateColumns = columnPrivacy('notifications', {
   },
   // Provider adapters (M3.5b). A sending domain appears in the From line of every email it sends
   // and its DNS records are public DNS data; the messaging service / phone number ids stay inside.
+  // U10 "Email sending": the From name is shown on every email (as the org chose it); the Reply-To
+  // address goes out in email headers only and is never on a page (contact page canary crawl).
+  email_settings: { from_name: 'public', reply_to: personal('email') },
   sending_domains: {
     domain: 'public',
     status: 'vocab',

@@ -12,6 +12,7 @@ import { campaignsContactOwner } from '@yayatoh/campaigns';
 import { checkinContactOwner, setSessionAccessSource } from '@yayatoh/checkin';
 import { recordTermConsentTx, registerContactReferenceOwners } from '@yayatoh/crm';
 import { employerExportAction, giftsExportAction } from '@yayatoh/donations';
+import { engagementContactOwner } from '@yayatoh/engagement';
 import { eventRolesOf } from '@yayatoh/events';
 import { submitRegistrationFormCommand } from '@yayatoh/forms';
 import {
@@ -119,5 +120,6 @@ export const CONTACT_REFERENCE_OWNERS = [
   campaignsContactOwner,
   automationsContactOwner,
   participationContactOwner,
+  engagementContactOwner,
 ] as const;
 registerContactReferenceOwners(CONTACT_REFERENCE_OWNERS);

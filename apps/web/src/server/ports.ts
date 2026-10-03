@@ -5,6 +5,7 @@ import { billingEntitlements } from '@yayatoh/billing';
 import { campaignsContactOwner } from '@yayatoh/campaigns';
 import { checkinContactOwner, setSessionAccessSource } from '@yayatoh/checkin';
 import { registerContactReferenceOwners } from '@yayatoh/crm';
+import { engagementContactOwner } from '@yayatoh/engagement';
 import { eventRolesOf } from '@yayatoh/events';
 import { guestsContactOwner, guestsOccupantDirectory, guestsPartyCredentials } from '@yayatoh/guests';
 import { notificationsContactOwner } from '@yayatoh/notifications';
@@ -50,6 +51,7 @@ registerContactReferenceOwners([
   campaignsContactOwner,
   automationsContactOwner,
   participationContactOwner,
+  engagementContactOwner,
 ]);
 // M6.3b: outbound webhooks through Svix, or the fake (dev, preview, CI) until the owner's account.
 const webhookPublisher = webhookPublisherFromEnv(
