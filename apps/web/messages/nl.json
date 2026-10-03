@@ -1608,6 +1608,7 @@
     "privacyLink": "Privacyverzoeken",
     "charityLink": "Goededoelenprofiel",
     "planLink": "Abonnement en modules",
+    "categoriesLink": "Evenementcategorieën",
     "findOwner": "Zoek een eigenaar of beheerder"
   },
   "legal": {
@@ -3479,7 +3480,7 @@
     },
     "attendanceHint": "Voeg voor online en hybride evenementen de deelnamelink toe onder Toegang. Alleen tickethouders zien die.",
     "tags": "Tags",
-    "tagsHint": "Scheid tags met komma's. Maximaal 10, elk maximaal 40 tekens.",
+    "tagsHint": "Typ een tag en druk op Enter, of kies er een die je al gebruikte. Maximaal 10, elk tot 40 tekens.",
     "tagErrors": {
       "too_many_tags": "Gebruik maximaal 10 tags.",
       "tag_too_long": "Elke tag mag maximaal 40 tekens lang zijn."
@@ -3511,7 +3512,10 @@
       "unlisted": "Niet vermeld (alleen via link)",
       "private": "Privé (toegangscode)"
     },
-    "visibilityHint": "Niet-vermelde evenementen zijn alleen via de link te openen. Privé-evenementen hebben een toegangscode nodig die de evenementpagina ontgrendelt."
+    "visibilityHint": "Niet-vermelde evenementen zijn alleen via de link te openen. Privé-evenementen hebben een toegangscode nodig die de evenementpagina ontgrendelt.",
+    "hiddenCategory": "{name} (verborgen)",
+    "categoryHiddenHint": "Deze categorie is verborgen: het evenement houdt haar, maar ze wordt niet meer aangeboden voor andere evenementen.",
+    "manageCategories": "Categorieën beheren"
   },
   "directory": {
     "title": "Locatiegids",
@@ -4217,7 +4221,12 @@
     "help": "Hulp",
     "helpCenter": "Helpcentrum",
     "contact": "Neem contact op",
-    "status": "Systeemstatus"
+    "status": "Systeemstatus",
+    "tags": {
+      "label": "Filteren op tag",
+      "all": "Alle evenementen",
+      "tagLabel": "{tag}, {count, plural, one {# evenement} other {# evenementen}}"
+    }
   },
   "widget": {
     "title": "Tickets: {event}",
@@ -15359,6 +15368,66 @@
     "tooLate": "Kies een datum op of voor {date}",
     "timeZoneNote": "Tijden in {zone}",
     "selected": "Geselecteerd"
+  },
+  "orgCategories": {
+    "breadcrumb": "Kruimelpad",
+    "title": "Evenementcategorieën",
+    "description": "Orden je evenementen op jouw manier. Elke categorie hoort ook bij een marketplace-categorie, zodat je evenementen goed vindbaar blijven.",
+    "howTitle": "Zo werkt het",
+    "howMarketplace": "Je lijst begint met de categorieën van het platform. Geef ze een andere naam, voeg eigen categorieën toe en zet ze in de volgorde die je wilt.",
+    "howHidden": "Verberg een categorie die je niet meer gebruikt: ze verdwijnt uit de keuzelijsten, maar evenementen die haar hebben houden haar.",
+    "howTags": "Fijner nodig? Voeg vrije tags toe aan een evenement op de pagina Details en filter erop.",
+    "addTitle": "Categorie toevoegen",
+    "listTitle": "Je categorieën ({visible} van {count} zichtbaar)",
+    "name": "Naam van de categorie",
+    "nameHint": "Maximaal {max} tekens.",
+    "marketplace": "Marketplace-categorie",
+    "marketplaceHint": "Waar deze evenementen verschijnen als mensen de marketplace doorzoeken.",
+    "added": "Categorie toegevoegd.",
+    "add": "Categorie toevoegen",
+    "hidden": "Verborgen",
+    "mapsTo": "Marketplace: {marketplace}",
+    "events": "{count, plural, one {# evenement} other {# evenementen}}",
+    "moveUp": "{name} omhoog",
+    "moveDown": "{name} omlaag",
+    "rename": "Naam wijzigen",
+    "renameLabel": "Naam van {name} wijzigen",
+    "hide": "Verbergen",
+    "show": "Tonen",
+    "hideLabel": "{name} verbergen",
+    "showLabel": "{name} tonen",
+    "newName": "Nieuwe naam voor {name}",
+    "saveName": "Naam opslaan",
+    "cancel": "Annuleren",
+    "done": {
+      "hide": "Verborgen. Evenementen die haar hebben houden haar.",
+      "show": "Weer zichtbaar in de keuzelijsten.",
+      "up": "Omhoog verplaatst.",
+      "down": "Omlaag verplaatst.",
+      "rename": "Naam gewijzigd."
+    },
+    "errors": {
+      "name_required": "Vul een naam in.",
+      "name_too_long": "Gebruik maximaal {max} tekens.",
+      "name_taken": "Je hebt al een categorie met die naam.",
+      "too_many": "Je hebt het maximumaantal categorieën bereikt. Verberg er een of geef er een een andere naam.",
+      "last_visible": "Laat minstens één categorie zichtbaar."
+    }
+  },
+  "profilePicker": {
+    "question": "Wat voor evenement?",
+    "summaryLabel": "Wat een evenement van het type {kind} bevat",
+    "includes": "Bevat",
+    "labelsHint": "Het soort bepaalt welke onderdelen het evenement heeft. Eigen categorieën en tags stel je in op de pagina Details van het evenement.",
+    "descriptions": {
+      "conference": "Sessies, sprekers, sponsors en exposanten, met registratie en badges.",
+      "gala": "Een diner met tickets, tafels, sponsors en donaties.",
+      "concert": "Tickets en fans voor een show of een tourdatum.",
+      "wedding": "Gasten, reacties, tafelschikking en een gastenwebsite.",
+      "community": "Leden, aanmeldingen en berichten voor een groep of een goed doel.",
+      "agency": "Evenementen die je voor klanten organiseert, met marketing en rapporten.",
+      "other": "Tickets, deelnemers en inchecken voor al het andere."
+    }
   },
   "seriesField": {
     "label": "Reeks (optioneel)",

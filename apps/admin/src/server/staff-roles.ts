@@ -18,7 +18,8 @@ export type StaffAction =
   | 'incidents'
   | 'frontDoor'
   | 'maintenance'
-  | 'charities';
+  | 'charities'
+  | 'categories';
 
 /**
  * What each staff role may do in the console (roadmap §8 M1.3; owner-approved staff only).
@@ -40,6 +41,8 @@ export type StaffAction =
  * - `maintenance` (M2.5a): the read-only freeze stops every organizer's writes: admins only.
  * - `charities` (M4.8b): verify or reject charity profiles against the IRS exempt-organization
  *   list (what makes an org's receipts tax-deductible): admins and support (pending owner).
+ * - `categories` (U8): the platform's default event category list, which every new organization
+ *   starts from: admins only (pending owner).
  */
 const CAN: Readonly<Record<StaffRole, readonly StaffAction[]>> = {
   admin: [
@@ -60,6 +63,7 @@ const CAN: Readonly<Record<StaffRole, readonly StaffAction[]>> = {
     'frontDoor',
     'maintenance',
     'charities',
+    'categories',
   ],
   support: ['view', 'suspend', 'reports', 'signupCodes', 'privacy', 'messaging', 'incidents', 'charities'],
   finance: ['view', 'payouts', 'fees', 'quotas'],

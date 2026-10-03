@@ -11,6 +11,7 @@ import {
   ScrollText,
   Send,
   Siren,
+  Tags,
   TicketCheck,
   UserRoundSearch,
   Wrench,
@@ -67,6 +68,8 @@ export async function Shell({ staff, children }: { staff: Staff; children: React
       show: staff.can('messaging'),
     },
     { href: '/incidents', label: t('incidents'), icon: <Siren {...I} />, show: staff.can('incidents') },
+    // U8: the default event categories every new organization starts with.
+    { href: '/categories', label: t('categories'), icon: <Tags {...I} />, show: staff.can('categories') },
     {
       href: '/maintenance',
       label: t('maintenance'),

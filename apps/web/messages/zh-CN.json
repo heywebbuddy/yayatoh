@@ -1608,6 +1608,7 @@
     "privacyLink": "隐私请求",
     "charityLink": "慈善机构资料",
     "planLink": "套餐和模块",
+    "categoriesLink": "活动分类",
     "findOwner": "查找所有者或管理员"
   },
   "legal": {
@@ -3479,7 +3480,7 @@
     },
     "attendanceHint": "线上和混合活动请在“访问权限”下添加参与链接。只有持票人可以看到。",
     "tags": "标签",
-    "tagsHint": "用逗号分隔标签。最多 10 个，每个不超过 40 个字符。",
+    "tagsHint": "输入标签并按 Enter，或选择用过的标签。最多 10 个，每个不超过 40 个字符。",
     "tagErrors": {
       "too_many_tags": "最多使用 10 个标签。",
       "tag_too_long": "每个标签最多 40 个字符。"
@@ -3511,7 +3512,10 @@
       "unlisted": "不公开列出（仅限链接）",
       "private": "私密（访问码）"
     },
-    "visibilityHint": "不公开列出的活动只能通过链接访问。私密活动需要访问码来解锁活动页面。"
+    "visibilityHint": "不公开列出的活动只能通过链接访问。私密活动需要访问码来解锁活动页面。",
+    "hiddenCategory": "{name}（已隐藏）",
+    "categoryHiddenHint": "此分类已隐藏：本活动保留它，但其他活动不能再选择它。",
+    "manageCategories": "管理分类"
   },
   "directory": {
     "title": "场地目录",
@@ -4217,7 +4221,12 @@
     "help": "帮助",
     "helpCenter": "帮助中心",
     "contact": "联系我们",
-    "status": "系统状态"
+    "status": "系统状态",
+    "tags": {
+      "label": "按标签筛选",
+      "all": "全部活动",
+      "tagLabel": "{tag}，{count, plural, other {# 个活动}}"
+    }
   },
   "widget": {
     "title": "门票：{event}",
@@ -15359,6 +15368,66 @@
     "tooLate": "请选择 {date} 或之前的日期",
     "timeZoneNote": "{zone} 时间",
     "selected": "已选择"
+  },
+  "orgCategories": {
+    "breadcrumb": "面包屑导航",
+    "title": "活动分类",
+    "description": "按你的方式整理活动。每个分类也对应一个市场分类，让你的活动依然容易被找到。",
+    "howTitle": "运作方式",
+    "howMarketplace": "你的列表从平台分类开始。你可以重命名、添加自己的分类，并按需要排序。",
+    "howHidden": "隐藏不再使用的分类：它会从选择列表中消失，但已使用它的活动会保留它。",
+    "howTags": "需要更细的划分？在活动的详情页添加自由标签，并按标签筛选。",
+    "addTitle": "添加分类",
+    "listTitle": "你的分类（显示 {visible} / 共 {count}）",
+    "name": "分类名称",
+    "nameHint": "最多 {max} 个字符。",
+    "marketplace": "市场分类",
+    "marketplaceHint": "人们浏览市场时这些活动出现的位置。",
+    "added": "已添加分类。",
+    "add": "添加分类",
+    "hidden": "已隐藏",
+    "mapsTo": "市场：{marketplace}",
+    "events": "{count, plural, other {# 个活动}}",
+    "moveUp": "上移{name}",
+    "moveDown": "下移{name}",
+    "rename": "重命名",
+    "renameLabel": "重命名{name}",
+    "hide": "隐藏",
+    "show": "显示",
+    "hideLabel": "隐藏{name}",
+    "showLabel": "显示{name}",
+    "newName": "{name}的新名称",
+    "saveName": "保存名称",
+    "cancel": "取消",
+    "done": {
+      "hide": "已隐藏。使用它的活动会保留它。",
+      "show": "已重新出现在选择列表中。",
+      "up": "已上移。",
+      "down": "已下移。",
+      "rename": "已重命名。"
+    },
+    "errors": {
+      "name_required": "请输入名称。",
+      "name_too_long": "最多使用 {max} 个字符。",
+      "name_taken": "已有同名分类。",
+      "too_many": "分类数量已达组织上限。请改为隐藏或重命名一个分类。",
+      "last_visible": "请至少保留一个可见分类。"
+    }
+  },
+  "profilePicker": {
+    "question": "是什么类型的活动？",
+    "summaryLabel": "{kind}活动包含的内容",
+    "includes": "包含",
+    "labelsHint": "类型决定活动有哪些版块。你自己的分类和标签在活动的详情页设置。",
+    "descriptions": {
+      "conference": "议程、讲者、赞助商和参展商，含报名和胸牌。",
+      "gala": "售票晚宴，含桌位、赞助商和捐款。",
+      "concert": "演出或巡演场次的门票和粉丝。",
+      "wedding": "宾客、回复、座位安排和宾客网站。",
+      "community": "为团体或公益事业管理成员、报名和消息。",
+      "agency": "为客户举办的活动，含营销和报表。",
+      "other": "其他任何活动的门票、参与者和签到。"
+    }
   },
   "seriesField": {
     "label": "系列（可选）",

@@ -79,6 +79,10 @@ export default async function SettingsPage({
                 {t('settings.privacyLink')}
               </Link>
             ) : null}
+            {/* U8: the org's own event categories. */}
+            <Link href={`/o/${org}/settings/categories`} className={buttonClass('secondary', 'sm')}>
+              {t('settings.categoriesLink')}
+            </Link>
             {/* M4.8b: the charity profile behind tax-deductible receipts. */}
             <Link href={`/o/${org}/charity`} className={buttonClass('secondary', 'sm')}>
               {t('settings.charityLink')}

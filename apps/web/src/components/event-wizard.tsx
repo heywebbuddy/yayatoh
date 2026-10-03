@@ -7,10 +7,10 @@ import { useActionState, useEffect, useRef, useState } from 'react';
 import type { WizardState } from '@/app/[locale]/o/[org]/(org)/events/new/actions.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
 import { readinessRules } from '@/lib/readiness.ts';
+import { type PickerProfile, ProfilePicker } from './profile-picker.tsx';
 import { seriesErrorKey } from './series-errors.ts';
 import { NEW_SERIES, SeriesField } from './series-field.tsx';
 
-const PROFILES = ['conference', 'gala', 'concert', 'wedding', 'community', 'agency', 'other'] as const;
 const MODES = ['in_person', 'online', 'hybrid'] as const;
 const STEPS = ['basics', 'when', 'tickets'] as const;
 /** Fields with their own message under `wizard.errors.*`; others get the generic one. */
@@ -84,10 +84,13 @@ export function EventWizard({
   currency,
   ticketing,
   series = null,
+  profiles,
 }: {
   action: (prev: WizardState, form: FormData) => Promise<WizardState>;
   /** `series`: the series picked in advance (U7, "Create event in this series"). */
   defaults: { profile: string; timezone: string; series?: string };
+  /** U8: the "What kind of event?" choices with the sections each includes. */
+  profiles: readonly PickerProfile[];
   venues: readonly { id: string; name: string; city: string | null }[];
   currency: string;
   /** Whether the org sells tickets (the first-pass fields and rule). */
@@ -254,24 +257,14 @@ export function EventWizard({
               onChange={set('tagline')}
               error={err('tagline')}
             />
-            <div className="flex flex-col gap-1.5">
-              <label htmlFor="wizard-profile" className="text-[13px] font-bold text-ink">
-                {t('profile')}
-              </label>
-              <Select
-                id="wizard-profile"
-                name="profile"
-                value={v.profile}
-                onValueChange={setTo('profile')}
-                className={selectClass}
-              >
-                {PROFILES.map((p) => (
-                  <option key={p} value={p}>
-                    {tn(`profiles.${p}`)}
-                  </option>
-                ))}
-              </Select>
-            </div>
+            <ProfilePicker
+              id="wizard-profile"
+              label={t('profile')}
+              profiles={profiles}
+              value={v.profile}
+              onValueChange={setTo('profile')}
+              className={selectClass}
+            />
             {series ? (
               <SeriesField
                 id="wizard-series"

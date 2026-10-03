@@ -793,3 +793,11 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
   - **Comparison:** each figure is compared with the period of the same length just before ("Last 30 days" vs the 30 days before). All time has no comparison.
   - **Expected payout** on the timeline is the held amount less the 5 % reserve (decision D3 defaults); anything owed is netted at release, so the actual payout can be lower.
   - **Fees per order** lists the latest 200 orders of the period (the CSV has the same list).
+
+## U8 — categories, tags and the event-type picker (2026-10-03, pending owner)
+- [ ] **Built with these defaults; say if any should change:**
+  - **Who manages org categories:** owners and admins (`org:update`, the Settings permission). Managers pick categories on events but don't change the list.
+  - **Who manages the platform defaults:** admins only (staff action `categories`). Staff choose and order the existing taxonomy keys; a new platform key needs a code change.
+  - **Defaults reach new orgs only:** an org's list is stored on its first change and never follows later staff changes.
+  - **Public event pages** still show the platform category label, not the org's own name (Later).
+

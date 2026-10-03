@@ -1,8 +1,8 @@
 import {
-  EVENT_CATEGORIES,
   type EventCategory,
   listEventsQuery,
   listSeriesQuery,
+  orgCategoriesQuery,
   orgTagsQuery,
   searchEventsQuery,
 } from '@yayatoh/events';
@@ -125,9 +125,8 @@ export default async function OrgHome({
               create={create}
               seriesSlug={sp.series ?? null}
               filters={{
-                category: (EVENT_CATEGORIES as readonly string[]).includes(sp.category ?? '')
-                  ? (sp.category as EventCategory)
-                  : undefined,
+                // U8: an org category ref (platform key of an unchanged default, else its id).
+                category: sp.category?.trim().slice(0, 80) || undefined,
                 tag: sp.tag?.trim().slice(0, 40) || undefined,
                 q: sp.q?.trim().slice(0, 80) || undefined,
               }}
@@ -179,7 +178,7 @@ async function EventList({
   create: ReactNode;
   /** M1.4b: show only this series' events. */
   seriesSlug: string | null;
-  filters: { category?: EventCategory; tag?: string; q?: string };
+  filters: { category?: string; tag?: string; q?: string };
   page: number;
   /** Other parameters of the page (the sales period) that the list's links keep. */
   keep: Record<string, string | undefined>;
@@ -187,10 +186,16 @@ async function EventList({
   const data = await loadConsole(org);
   const t = await getTranslations();
   const filtered = Boolean(filters.category || filters.tag || filters.q);
-  const [all, series, tags] = await Promise.all([
-    executeQuery(searchEventsQuery, filters, data.ctx, ports),
+  const [all, series, tags, categories] = await Promise.all([
+    executeQuery(
+      searchEventsQuery,
+      { categoryRef: filters.category, tag: filters.tag, q: filters.q },
+      data.ctx,
+      ports,
+    ),
     executeQuery(listSeriesQuery, {}, data.ctx, ports),
     executeQuery(orgTagsQuery, {}, data.ctx, ports),
+    executeQuery(orgCategoriesQuery, {}, data.ctx, ports),
   ]);
   const active = series.find((s) => s.slug === seriesSlug) ?? null;
   const listed = all.filter((e) => e.status !== 'archived' && (!active || active.eventIds.includes(e.id)));
@@ -277,9 +282,9 @@ async function EventList({
               className={selectClass}
             >
               <option value="">{t('eventFilters.anyCategory')}</option>
-              {EVENT_CATEGORIES.map((c) => (
-                <option key={c} value={c}>
-                  {t(`categories.${c}`)}
+              {categories.map((c) => (
+                <option key={c.ref} value={c.ref}>
+                  {c.name ?? t(`categories.${c.platformKey}`)}
                 </option>
               ))}
             </Select>
@@ -358,7 +363,11 @@ async function EventList({
                   <Card className="flex h-full flex-col gap-3">
                     <Label>
                       {t(`profiles.${e.profile}`)}
-                      {e.category ? ` · ${t(`categories.${e.category as EventCategory}`)}` : ''}
+                      {e.categoryName
+                        ? ` · ${e.categoryName}`
+                        : e.category
+                          ? ` · ${t(`categories.${e.category as EventCategory}`)}`
+                          : ''}
                     </Label>
                     <h3 className="text-[22px] leading-tight font-extrabold tracking-[-0.03em]">{e.name}</h3>
                     <p className="text-body text-ink-2">

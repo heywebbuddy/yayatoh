@@ -374,7 +374,7 @@ export interface paths {
         };
         /**
          * Events by start time (scope `events:read`)
-         * @description The organization’s events by start time, every status and visibility.
+         * @description The organization’s events by start time, every status and visibility. `tag` narrows the list to events with that tag.
          *
          *     Scope `events:read`.
          */
@@ -2187,6 +2187,7 @@ export interface components {
             nextCursor: string | null;
         };
         Event: {
+            category: components["schemas"]["EventCategory"] & unknown;
             city: string | null;
             country: string | null;
             currency: string;
@@ -2203,6 +2204,8 @@ export interface components {
             startsAt: string;
             status: components["schemas"]["EventStatus"];
             tagline: string | null;
+            /** @description The event’s tags, in alphabetical order (filter with `tag` on the list). */
+            tags: string[];
             /** @description IANA timezone; event times render in it. */
             timezone: string;
             venueName: string | null;
@@ -5048,6 +5051,8 @@ export interface operations {
                 cursor?: string;
                 /** @description Page size (1–100). */
                 limit?: number;
+                /** @description Only events with this tag (case-insensitive). */
+                tag?: string;
             };
             header?: never;
             path: {

@@ -22,6 +22,9 @@ export const privateColumns = columnPrivacy('marketplace', {
     org_slug: 'public',
     org_name: 'public',
     canonical_host: 'public',
+    // U8: an event's tags are shown on its public page and the org site's tag filter.
+    tags: 'public',
+    tag_keys: 'public',
   },
   // Sent to every browser in the widget's CSP frame-ancestors.
   site_settings: { embed_origins: 'public' },

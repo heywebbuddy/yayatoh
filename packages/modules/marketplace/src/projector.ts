@@ -1,5 +1,5 @@
 import type { TenantTx } from '@yayatoh/db';
-import { findEventTx, publicCandidateEventIdsTx } from '@yayatoh/events';
+import { eventTagsTx, findEventTx, publicCandidateEventIdsTx, tagKey } from '@yayatoh/events';
 import { catchUpSubscriber, defineSubscriber, type Subscriber } from '@yayatoh/platform';
 import { organizationPublicTx } from '@yayatoh/tenancy';
 import { eventPriceRangeTx } from '@yayatoh/ticketing';
@@ -59,6 +59,7 @@ export async function refreshListingTx(tx: TenantTx, orgId: string, eventId: str
     return;
   }
   const price = await eventPriceRangeTx(tx, eventId, now);
+  const tags = await eventTagsTx(tx, eventId);
   const values = {
     orgId,
     eventId,
@@ -83,6 +84,8 @@ export async function refreshListingTx(tx: TenantTx, orgId: string, eventId: str
     publishedAt: event.publishedAt,
     sourceUpdatedAt: now,
     updatedAt: now,
+    tags,
+    tagKeys: tags.map(tagKey),
   };
   const { orgId: _o, eventId: _e, ...set } = values;
   await tx

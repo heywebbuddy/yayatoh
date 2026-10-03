@@ -18,6 +18,7 @@
     "@yayatoh/db": "workspace:*",
     "@yayatoh/donations": "workspace:*",
     "@yayatoh/engagement": "workspace:*",
+    "@yayatoh/events": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
     "@yayatoh/messaging": "workspace:*",
     "@yayatoh/notifications": "workspace:*",
@@ -47,6 +48,7 @@
     "@types/react-dom": "catalog:",
     "@yayatoh/config": "workspace:*",
     "@yayatoh/marketplace": "workspace:*",
+    "@yayatoh/testing": "workspace:*",
     "@yayatoh/worker": "workspace:*",
     "tailwindcss": "catalog:",
     "typescript": "catalog:"

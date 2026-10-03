@@ -1608,6 +1608,7 @@
     "privacyLink": "隱私請求",
     "charityLink": "慈善機構資料",
     "planLink": "方案和模組",
+    "categoriesLink": "活動分類",
     "findOwner": "尋找擁有者或管理員"
   },
   "legal": {
@@ -3479,7 +3480,7 @@
     },
     "attendanceHint": "線上與混合活動請在「存取權限」下新增參加連結。只有持票人看得到。",
     "tags": "標籤",
-    "tagsHint": "以逗號分隔標籤。最多 10 個，每個最多 40 個字元。",
+    "tagsHint": "輸入標籤並按 Enter，或選擇用過的標籤。最多 10 個，每個不超過 40 個字元。",
     "tagErrors": {
       "too_many_tags": "最多使用 10 個標籤。",
       "tag_too_long": "每個標籤最多 40 個字元。"
@@ -3511,7 +3512,10 @@
       "unlisted": "不公開列出（僅限連結）",
       "private": "私人（存取碼）"
     },
-    "visibilityHint": "不公開列出的活動只能透過連結開啟。私人活動需要存取碼才能解鎖活動頁面。"
+    "visibilityHint": "不公開列出的活動只能透過連結開啟。私人活動需要存取碼才能解鎖活動頁面。",
+    "hiddenCategory": "{name}（已隱藏）",
+    "categoryHiddenHint": "此分類已隱藏：本活動保留它，但其他活動不能再選擇它。",
+    "manageCategories": "管理分類"
   },
   "directory": {
     "title": "場地目錄",
@@ -4217,7 +4221,12 @@
     "help": "說明",
     "helpCenter": "說明中心",
     "contact": "聯絡我們",
-    "status": "系統狀態"
+    "status": "系統狀態",
+    "tags": {
+      "label": "依標籤篩選",
+      "all": "全部活動",
+      "tagLabel": "{tag}，{count, plural, other {# 個活動}}"
+    }
   },
   "widget": {
     "title": "門票：{event}",
@@ -15359,6 +15368,66 @@
     "tooLate": "請選擇 {date} 或之前的日期",
     "timeZoneNote": "{zone} 時間",
     "selected": "已選取"
+  },
+  "orgCategories": {
+    "breadcrumb": "麵包屑導覽",
+    "title": "活動分類",
+    "description": "依你的方式整理活動。每個分類也對應一個市集分類，讓你的活動依然容易被找到。",
+    "howTitle": "運作方式",
+    "howMarketplace": "你的清單從平台分類開始。你可以重新命名、新增自己的分類，並依需要排序。",
+    "howHidden": "隱藏不再使用的分類：它會從選擇清單中消失，但已使用它的活動會保留它。",
+    "howTags": "需要更細的區分？在活動的詳細資料頁新增自由標籤，並依標籤篩選。",
+    "addTitle": "新增分類",
+    "listTitle": "你的分類（顯示 {visible} / 共 {count}）",
+    "name": "分類名稱",
+    "nameHint": "最多 {max} 個字元。",
+    "marketplace": "市集分類",
+    "marketplaceHint": "大家瀏覽市集時這些活動出現的位置。",
+    "added": "已新增分類。",
+    "add": "新增分類",
+    "hidden": "已隱藏",
+    "mapsTo": "市集：{marketplace}",
+    "events": "{count, plural, other {# 個活動}}",
+    "moveUp": "上移{name}",
+    "moveDown": "下移{name}",
+    "rename": "重新命名",
+    "renameLabel": "重新命名{name}",
+    "hide": "隱藏",
+    "show": "顯示",
+    "hideLabel": "隱藏{name}",
+    "showLabel": "顯示{name}",
+    "newName": "{name}的新名稱",
+    "saveName": "儲存名稱",
+    "cancel": "取消",
+    "done": {
+      "hide": "已隱藏。使用它的活動會保留它。",
+      "show": "已重新出現在選擇清單中。",
+      "up": "已上移。",
+      "down": "已下移。",
+      "rename": "已重新命名。"
+    },
+    "errors": {
+      "name_required": "請輸入名稱。",
+      "name_too_long": "最多使用 {max} 個字元。",
+      "name_taken": "已有同名分類。",
+      "too_many": "分類數量已達組織上限。請改為隱藏或重新命名一個分類。",
+      "last_visible": "請至少保留一個可見分類。"
+    }
+  },
+  "profilePicker": {
+    "question": "是什麼類型的活動？",
+    "summaryLabel": "{kind}活動包含的內容",
+    "includes": "包含",
+    "labelsHint": "類型決定活動有哪些區塊。你自己的分類和標籤在活動的詳細資料頁設定。",
+    "descriptions": {
+      "conference": "議程、講者、贊助商和參展商，含報名和識別證。",
+      "gala": "售票晚宴，含桌位、贊助商和捐款。",
+      "concert": "演出或巡演場次的門票和粉絲。",
+      "wedding": "賓客、回覆、座位安排和賓客網站。",
+      "community": "為團體或公益事業管理成員、報名和訊息。",
+      "agency": "為客戶舉辦的活動，含行銷和報表。",
+      "other": "其他任何活動的門票、參與者和報到。"
+    }
   },
   "seriesField": {
     "label": "系列（選填）",

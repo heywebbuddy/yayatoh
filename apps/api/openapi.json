@@ -4806,6 +4806,23 @@
               "null"
             ],
             "format": "date-time"
+          },
+          "category": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/EventCategory"
+              },
+              {
+                "description": "The platform category the event maps to (the org may label it with its own name)."
+              }
+            ]
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "The event’s tags, in alphabetical order (filter with `tag` on the list)."
           }
         },
         "required": [
@@ -4823,7 +4840,9 @@
           "city",
           "country",
           "currency",
-          "publishedAt"
+          "publishedAt",
+          "category",
+          "tags"
         ]
       },
       "EventVisibility": {
@@ -9290,7 +9309,7 @@
           "events"
         ],
         "summary": "Events by start time (scope `events:read`)",
-        "description": "The organization’s events by start time, every status and visibility.\n\nScope `events:read`.",
+        "description": "The organization’s events by start time, every status and visibility. `tag` narrows the list to events with that tag.\n\nScope `events:read`.",
         "security": [
           {
             "apiKey": []
@@ -9335,6 +9354,19 @@
             "required": false,
             "description": "The previous page’s `nextCursor`.",
             "name": "cursor",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "description": "Only events with this tag (case-insensitive).",
+              "example": "outdoor"
+            },
+            "required": false,
+            "description": "Only events with this tag (case-insensitive).",
+            "name": "tag",
             "in": "query"
           }
         ],

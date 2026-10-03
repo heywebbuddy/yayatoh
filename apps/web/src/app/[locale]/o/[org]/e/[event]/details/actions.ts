@@ -37,9 +37,11 @@ export async function saveDetailsAction(
       {
         eventId: ev.id,
         venueId: venueId || null,
-        category: category || null,
+        // U8: the picker submits an org category ref (platform key of an unchanged default, else id).
+        orgCategory: category || null,
         attendanceMode: String(form.get('attendanceMode') ?? 'in_person'),
-        tags: String(form.get('tags') ?? '').split(','),
+        // U8: one value per chosen tag (the combobox); a comma list still works without JavaScript.
+        tags: form.getAll('tags').flatMap((v) => String(v).split(',')),
       },
       data.ctx,
       ports,

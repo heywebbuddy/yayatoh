@@ -9,6 +9,7 @@ import { HowItWorks } from '@/components/how-it-works.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
+import { pickerProfiles } from '@/server/profile-picker.ts';
 import { createEventAction } from './actions.ts';
 
 export default async function NewEventPage({
@@ -55,6 +56,7 @@ export default async function NewEventPage({
           ...(preset ? { series: preset } : {}),
         }}
         series={series.map((s) => ({ id: s.id, name: s.name }))}
+        profiles={await pickerProfiles(data.modules)}
       />
     </>
   );

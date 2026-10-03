@@ -1608,6 +1608,7 @@
     "privacyLink": "Datenschutzanfragen",
     "charityLink": "Gemeinnützigkeitsprofil",
     "planLink": "Tarif und Module",
+    "categoriesLink": "Veranstaltungskategorien",
     "findOwner": "Inhaber oder Admin finden"
   },
   "legal": {
@@ -3479,7 +3480,7 @@
     },
     "attendanceHint": "Füge für Online- und Hybrid-Events den Teilnahmelink unter Zugang hinzu. Nur Ticketinhaber sehen ihn.",
     "tags": "Tags",
-    "tagsHint": "Trenne Tags mit Kommas. Bis zu 10, jeweils bis zu 40 Zeichen.",
+    "tagsHint": "Tag eingeben und Enter drücken oder einen bereits verwendeten wählen. Bis zu 10, je bis zu 40 Zeichen.",
     "tagErrors": {
       "too_many_tags": "Verwende höchstens 10 Tags.",
       "tag_too_long": "Jeder Tag darf höchstens 40 Zeichen lang sein."
@@ -3511,7 +3512,10 @@
       "unlisted": "Nicht gelistet (nur per Link)",
       "private": "Privat (Zugangscode)"
     },
-    "visibilityHint": "Nicht gelistete Events sind nur über den Link erreichbar. Private Events brauchen einen Zugangscode, der die Eventseite freischaltet."
+    "visibilityHint": "Nicht gelistete Events sind nur über den Link erreichbar. Private Events brauchen einen Zugangscode, der die Eventseite freischaltet.",
+    "hiddenCategory": "{name} (ausgeblendet)",
+    "categoryHiddenHint": "Diese Kategorie ist ausgeblendet: Die Veranstaltung behält sie, für andere Veranstaltungen wird sie nicht mehr angeboten.",
+    "manageCategories": "Kategorien verwalten"
   },
   "directory": {
     "title": "Verzeichnis der Veranstaltungsorte",
@@ -4217,7 +4221,12 @@
     "help": "Hilfe",
     "helpCenter": "Hilfecenter",
     "contact": "Kontakt",
-    "status": "Systemstatus"
+    "status": "Systemstatus",
+    "tags": {
+      "label": "Nach Tag filtern",
+      "all": "Alle Veranstaltungen",
+      "tagLabel": "{tag}, {count, plural, one {# Veranstaltung} other {# Veranstaltungen}}"
+    }
   },
   "widget": {
     "title": "Tickets: {event}",
@@ -15359,6 +15368,66 @@
     "tooLate": "Wähle ein Datum bis {date}",
     "timeZoneNote": "Zeiten in {zone}",
     "selected": "Ausgewählt"
+  },
+  "orgCategories": {
+    "breadcrumb": "Brotkrümelnavigation",
+    "title": "Veranstaltungskategorien",
+    "description": "Ordnen Sie Ihre Veranstaltungen nach Ihrer Art. Jede Kategorie ist außerdem einer Marktplatz-Kategorie zugeordnet, damit Ihre Veranstaltungen leicht zu finden bleiben.",
+    "howTitle": "So funktioniert es",
+    "howMarketplace": "Ihre Liste beginnt mit den Kategorien der Plattform. Benennen Sie sie um, fügen Sie eigene hinzu und bringen Sie sie in Ihre Reihenfolge.",
+    "howHidden": "Blenden Sie eine Kategorie aus, die Sie nicht mehr nutzen: Sie verschwindet aus den Auswahllisten, aber Veranstaltungen mit ihr behalten sie.",
+    "howTags": "Brauchen Sie es feiner? Fügen Sie einer Veranstaltung auf ihrer Detailseite freie Tags hinzu und filtern Sie danach.",
+    "addTitle": "Kategorie hinzufügen",
+    "listTitle": "Ihre Kategorien ({visible} von {count} sichtbar)",
+    "name": "Name der Kategorie",
+    "nameHint": "Bis zu {max} Zeichen.",
+    "marketplace": "Marktplatz-Kategorie",
+    "marketplaceHint": "Wo diese Veranstaltungen erscheinen, wenn man den Marktplatz durchsucht.",
+    "added": "Kategorie hinzugefügt.",
+    "add": "Kategorie hinzufügen",
+    "hidden": "Ausgeblendet",
+    "mapsTo": "Marktplatz: {marketplace}",
+    "events": "{count, plural, one {# Veranstaltung} other {# Veranstaltungen}}",
+    "moveUp": "{name} nach oben",
+    "moveDown": "{name} nach unten",
+    "rename": "Umbenennen",
+    "renameLabel": "{name} umbenennen",
+    "hide": "Ausblenden",
+    "show": "Einblenden",
+    "hideLabel": "{name} ausblenden",
+    "showLabel": "{name} einblenden",
+    "newName": "Neuer Name für {name}",
+    "saveName": "Namen speichern",
+    "cancel": "Abbrechen",
+    "done": {
+      "hide": "Ausgeblendet. Veranstaltungen mit dieser Kategorie behalten sie.",
+      "show": "Wieder in den Auswahllisten.",
+      "up": "Nach oben verschoben.",
+      "down": "Nach unten verschoben.",
+      "rename": "Umbenannt."
+    },
+    "errors": {
+      "name_required": "Geben Sie einen Namen ein.",
+      "name_too_long": "Verwenden Sie höchstens {max} Zeichen.",
+      "name_taken": "Sie haben bereits eine Kategorie mit diesem Namen.",
+      "too_many": "Sie haben die Höchstzahl an Kategorien erreicht. Blenden Sie stattdessen eine aus oder benennen Sie eine um.",
+      "last_visible": "Lassen Sie mindestens eine Kategorie sichtbar."
+    }
+  },
+  "profilePicker": {
+    "question": "Was für eine Veranstaltung?",
+    "summaryLabel": "Was eine Veranstaltung der Art {kind} enthält",
+    "includes": "Enthält",
+    "labelsHint": "Die Art bestimmt, welche Bereiche die Veranstaltung hat. Eigene Kategorien und Tags legen Sie auf der Detailseite der Veranstaltung fest.",
+    "descriptions": {
+      "conference": "Sessions, Speaker, Sponsoren und Aussteller, mit Registrierung und Namensschildern.",
+      "gala": "Ein Dinner mit Tickets, Tischen, Sponsoren und Spenden.",
+      "concert": "Tickets und Fans für eine Show oder einen Tourtermin.",
+      "wedding": "Gäste, Zusagen, Sitzordnung und eine Gäste-Website.",
+      "community": "Mitglieder, Anmeldungen und Nachrichten für eine Gruppe oder ein Anliegen.",
+      "agency": "Veranstaltungen für Ihre Kunden, mit Marketing und Berichten.",
+      "other": "Tickets, Teilnehmende und Check-in für alles andere."
+    }
   },
   "seriesField": {
     "label": "Serie (optional)",

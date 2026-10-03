@@ -1608,6 +1608,7 @@
     "privacyLink": "Solicitudes de privacidad",
     "charityLink": "Perfil benéfico",
     "planLink": "Plan y módulos",
+    "categoriesLink": "Categorías de eventos",
     "findOwner": "Buscar un propietario o administrador"
   },
   "legal": {
@@ -3479,7 +3480,7 @@
     },
     "attendanceHint": "Para eventos en línea o híbridos, añade el enlace de acceso en Acceso. Solo lo ven quienes tienen entrada.",
     "tags": "Etiquetas",
-    "tagsHint": "Separa las etiquetas con comas. Hasta 10, de hasta 40 caracteres cada una.",
+    "tagsHint": "Escribe una etiqueta y pulsa Intro, o elige una que ya hayas usado. Hasta 10, cada una de hasta 40 caracteres.",
     "tagErrors": {
       "too_many_tags": "Usa como máximo 10 etiquetas.",
       "tag_too_long": "Cada etiqueta puede tener como máximo 40 caracteres."
@@ -3511,7 +3512,10 @@
       "unlisted": "No listado (solo con enlace)",
       "private": "Privado (código de acceso)"
     },
-    "visibilityHint": "Los eventos no listados solo se abren con el enlace. Los privados necesitan un código de acceso que desbloquee la página del evento."
+    "visibilityHint": "Los eventos no listados solo se abren con el enlace. Los privados necesitan un código de acceso que desbloquee la página del evento.",
+    "hiddenCategory": "{name} (oculta)",
+    "categoryHiddenHint": "Esta categoría está oculta: el evento la conserva, pero ya no se ofrece para otros eventos.",
+    "manageCategories": "Gestionar categorías"
   },
   "directory": {
     "title": "Directorio de recintos",
@@ -4217,7 +4221,12 @@
     "help": "Ayuda",
     "helpCenter": "Centro de ayuda",
     "contact": "Contacto",
-    "status": "Estado del sistema"
+    "status": "Estado del sistema",
+    "tags": {
+      "label": "Filtrar por etiqueta",
+      "all": "Todos los eventos",
+      "tagLabel": "{tag}, {count, plural, one {# evento} other {# eventos}}"
+    }
   },
   "widget": {
     "title": "Entradas: {event}",
@@ -15359,6 +15368,66 @@
     "tooLate": "Elige una fecha hasta el {date}",
     "timeZoneNote": "Horas en {zone}",
     "selected": "Seleccionado"
+  },
+  "orgCategories": {
+    "breadcrumb": "Ruta de navegación",
+    "title": "Categorías de eventos",
+    "description": "Organiza tus eventos a tu manera. Cada categoría corresponde también a una categoría del marketplace, para que tus eventos sigan siendo fáciles de encontrar.",
+    "howTitle": "Cómo funciona",
+    "howMarketplace": "Tu lista empieza con las categorías de la plataforma. Cámbiales el nombre, añade las tuyas y ordénalas como quieras.",
+    "howHidden": "Oculta una categoría que ya no uses: desaparece de los selectores, pero los eventos que la tienen la conservan.",
+    "howTags": "¿Necesitas más detalle? Añade etiquetas libres a un evento en su página de Detalles y filtra por ellas.",
+    "addTitle": "Añadir una categoría",
+    "listTitle": "Tus categorías ({visible} visibles de {count})",
+    "name": "Nombre de la categoría",
+    "nameHint": "Hasta {max} caracteres.",
+    "marketplace": "Categoría del marketplace",
+    "marketplaceHint": "Dónde aparecen estos eventos cuando la gente explora el marketplace.",
+    "added": "Categoría añadida.",
+    "add": "Añadir categoría",
+    "hidden": "Oculta",
+    "mapsTo": "Marketplace: {marketplace}",
+    "events": "{count, plural, one {# evento} other {# eventos}}",
+    "moveUp": "Subir {name}",
+    "moveDown": "Bajar {name}",
+    "rename": "Cambiar nombre",
+    "renameLabel": "Cambiar el nombre de {name}",
+    "hide": "Ocultar",
+    "show": "Mostrar",
+    "hideLabel": "Ocultar {name}",
+    "showLabel": "Mostrar {name}",
+    "newName": "Nuevo nombre para {name}",
+    "saveName": "Guardar nombre",
+    "cancel": "Cancelar",
+    "done": {
+      "hide": "Oculta. Los eventos que la tienen la conservan.",
+      "show": "Vuelve a aparecer en los selectores.",
+      "up": "Subida.",
+      "down": "Bajada.",
+      "rename": "Nombre cambiado."
+    },
+    "errors": {
+      "name_required": "Escribe un nombre.",
+      "name_too_long": "Usa como máximo {max} caracteres.",
+      "name_taken": "Ya tienes una categoría con ese nombre.",
+      "too_many": "Has alcanzado el máximo de categorías de una organización. Oculta o cambia el nombre de una.",
+      "last_visible": "Deja al menos una categoría visible."
+    }
+  },
+  "profilePicker": {
+    "question": "¿Qué tipo de evento?",
+    "summaryLabel": "Qué incluye un evento de tipo {kind}",
+    "includes": "Incluye",
+    "labelsHint": "El tipo decide qué secciones tiene el evento. Tus propias categorías y etiquetas se ponen en la página de Detalles del evento.",
+    "descriptions": {
+      "conference": "Sesiones, ponentes, patrocinadores y expositores, con inscripción y credenciales.",
+      "gala": "Una cena con entradas, mesas, patrocinadores y donaciones.",
+      "concert": "Entradas y fans para un espectáculo o una fecha de gira.",
+      "wedding": "Invitados, confirmaciones, asientos y una web para invitados.",
+      "community": "Miembros, inscripciones y mensajes para un grupo o una causa.",
+      "agency": "Eventos que organizas para clientes, con marketing e informes.",
+      "other": "Entradas, asistentes y check-in para cualquier otra cosa."
+    }
   },
   "seriesField": {
     "label": "Serie (opcional)",

@@ -1608,6 +1608,7 @@
     "privacyLink": "Privacy requests",
     "charityLink": "Charity profile",
     "planLink": "Plan and modules",
+    "categoriesLink": "Event categories",
     "findOwner": "Find an owner or admin"
   },
   "legal": {
@@ -3479,7 +3480,7 @@
     },
     "attendanceHint": "For online and hybrid events, add the join link under Access. Only ticket holders see it.",
     "tags": "Tags",
-    "tagsHint": "Separate tags with commas. Up to 10, each up to 40 characters.",
+    "tagsHint": "Type a tag and press Enter, or pick one you have used before. Up to 10, each up to 40 characters.",
     "tagErrors": {
       "too_many_tags": "Use at most 10 tags.",
       "tag_too_long": "Each tag can be at most 40 characters."
@@ -3511,7 +3512,10 @@
       "unlisted": "Unlisted (link only)",
       "private": "Private (access code)"
     },
-    "visibilityHint": "Unlisted events are reachable by link only. Private events need an access code that unlocks the event page."
+    "visibilityHint": "Unlisted events are reachable by link only. Private events need an access code that unlocks the event page.",
+    "hiddenCategory": "{name} (hidden)",
+    "categoryHiddenHint": "This category is hidden: the event keeps it, but it is no longer offered for other events.",
+    "manageCategories": "Manage categories"
   },
   "directory": {
     "title": "Venue directory",
@@ -4217,7 +4221,12 @@
     "help": "Help",
     "helpCenter": "Help center",
     "contact": "Contact us",
-    "status": "System status"
+    "status": "System status",
+    "tags": {
+      "label": "Filter by tag",
+      "all": "All events",
+      "tagLabel": "{tag}, {count, plural, one {# event} other {# events}}"
+    }
   },
   "widget": {
     "title": "Tickets: {event}",
@@ -15359,6 +15368,66 @@
     "tooLate": "Choose a date on or before {date}",
     "timeZoneNote": "Times in {zone}",
     "selected": "Selected"
+  },
+  "orgCategories": {
+    "breadcrumb": "Breadcrumb",
+    "title": "Event categories",
+    "description": "Sort your events your way. Each category also maps to a marketplace category, so your events stay easy to find.",
+    "howTitle": "How it works",
+    "howMarketplace": "Your list starts with the platform’s categories. Rename them, add your own and put them in the order you want.",
+    "howHidden": "Hide a category you no longer use: it leaves the pickers, but events that have it keep it.",
+    "howTags": "Need something finer? Add free tags to an event on its Details page and filter by them.",
+    "addTitle": "Add a category",
+    "listTitle": "Your categories ({visible} shown of {count})",
+    "name": "Category name",
+    "nameHint": "Up to {max} characters.",
+    "marketplace": "Marketplace category",
+    "marketplaceHint": "Where these events appear when people browse the marketplace.",
+    "added": "Category added.",
+    "add": "Add category",
+    "hidden": "Hidden",
+    "mapsTo": "Marketplace: {marketplace}",
+    "events": "{count, plural, one {# event} other {# events}}",
+    "moveUp": "Move {name} up",
+    "moveDown": "Move {name} down",
+    "rename": "Rename",
+    "renameLabel": "Rename {name}",
+    "hide": "Hide",
+    "show": "Show",
+    "hideLabel": "Hide {name}",
+    "showLabel": "Show {name}",
+    "newName": "New name for {name}",
+    "saveName": "Save name",
+    "cancel": "Cancel",
+    "done": {
+      "hide": "Hidden. Events that have it keep it.",
+      "show": "Shown in the pickers again.",
+      "up": "Moved up.",
+      "down": "Moved down.",
+      "rename": "Renamed."
+    },
+    "errors": {
+      "name_required": "Enter a name.",
+      "name_too_long": "Use at most {max} characters.",
+      "name_taken": "You already have a category with that name.",
+      "too_many": "You have reached the most categories an organization can have. Hide or rename one instead.",
+      "last_visible": "Keep at least one category visible."
+    }
+  },
+  "profilePicker": {
+    "question": "What kind of event?",
+    "summaryLabel": "What a {kind} event includes",
+    "includes": "Includes",
+    "labelsHint": "The kind decides which sections the event has. Your own categories and tags are set on the event’s Details page.",
+    "descriptions": {
+      "conference": "Sessions, speakers, sponsors and exhibitors, with registration and badges.",
+      "gala": "A ticketed dinner with tables, sponsors and donations.",
+      "concert": "Tickets and fans for a show or a tour date.",
+      "wedding": "Guests, RSVPs, seating and a guest website.",
+      "community": "Members, sign-ups and messages for a group or a cause.",
+      "agency": "Events you run for clients, with marketing and reports.",
+      "other": "Tickets, attendees and check-in for anything else."
+    }
   },
   "seriesField": {
     "label": "Series (optional)",

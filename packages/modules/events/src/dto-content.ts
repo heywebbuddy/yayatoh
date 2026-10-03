@@ -13,6 +13,11 @@ export const EventDetailsDto = z.object({
   category: z.enum(EVENT_CATEGORIES).nullable(),
   attendanceMode: z.enum(ATTENDANCE_MODES),
   tags: z.array(z.string()),
+  /** U8: the org category (its ref, see `categoryRef`) and its own name (null = platform label). */
+  categoryRef: z.string().nullable(),
+  categoryName: z.string().nullable(),
+  /** U8: the event's category is hidden (it stays on the event, out of the pickers). */
+  categoryHidden: z.boolean(),
 });
 export type EventDetailsDto = z.infer<typeof EventDetailsDto>;
 
@@ -20,6 +25,8 @@ export const SetEventDetailsInput = z.object({
   eventId: z.uuid(),
   venueId: z.uuid().nullable().optional(),
   category: z.enum(EVENT_CATEGORIES).nullable().optional(),
+  /** U8: an org category by ref (platform key of an unchanged default, else id); wins over `category`. */
+  orgCategory: z.string().max(80).nullable().optional(),
   attendanceMode: z.enum(ATTENDANCE_MODES).optional(),
   tags: z.array(z.string().max(200)).max(50).optional(),
 });

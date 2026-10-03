@@ -57,6 +57,9 @@ export const publicListings = tenantTable(
     publishedAt: ts('published_at'),
     /** When the source last changed (sitemap lastmod). */
     sourceUpdatedAt: ts('source_updated_at').notNull(),
+    /** U8: the event's tags (display spelling) and their case-folded keys (the public tag filter). */
+    tags: text('tags').array().notNull().default(sql`'{}'::text[]`),
+    tagKeys: text('tag_keys').array().notNull().default(sql`'{}'::text[]`),
   },
   (t) => [
     uniqueIndex('public_listings_org_event_key').on(t.orgId, t.eventId),
