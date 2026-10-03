@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@yayatoh/alerts": "workspace:*",
+    "@yayatoh/analytics": "workspace:*",
     "@yayatoh/attendees": "workspace:*",
     "@yayatoh/audiences": "workspace:*",
     "@yayatoh/auth": "workspace:*",

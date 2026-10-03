@@ -346,7 +346,8 @@
     "supportMacros": "Supportmacro's",
     "assistance": "Hulpvragen",
     "marketingAnalytics": "Marketinganalyse",
-    "badges": "Badges"
+    "badges": "Badges",
+    "orgAnalytics": "Analyses"
   },
   "vocab": {
     "attendee": "Deelnemer",
@@ -11983,5 +11984,76 @@
     "startFromNamed": "Een evenement starten met {name}",
     "delete": "Verwijderen",
     "deleteNamed": "{name} verwijderen"
+  },
+  "warehouse": {
+    "title": "Analyses",
+    "description": "Al je evenementen samen: registraties, tickets, check-ins en no-shows door de tijd, en je beste evenementen.",
+    "filters": "Filters",
+    "from": "Van",
+    "to": "Tot",
+    "event": "Evenement",
+    "allEvents": "Alle evenementen",
+    "apply": "Toepassen",
+    "timeZoneNote": "Dagen zijn kalenderdagen in {timeZone}, de tijdzone van je organisatie.",
+    "rangeErrors": {
+      "invalid_date": "Vul datums in als jaar, maand en dag.",
+      "from_after_to": "De einddatum ligt voor de begindatum.",
+      "range_too_long": "Kies een periode van hoogstens twee jaar."
+    },
+    "periodLabel": "Toon per",
+    "view": {
+      "day": "Dag",
+      "week": "Week",
+      "month": "Maand"
+    },
+    "emptyTitle": "Nog niets in deze periode",
+    "emptyBody": "Geen registraties, tickets of check-ins tussen deze datums. Probeer een langere periode of een ander evenement; nieuwe bestellingen verschijnen hier binnen enkele seconden.",
+    "emptyAction": "Toon de laatste 12 maanden",
+    "figures": {
+      "label": "Totalen voor de periode",
+      "registrations": "Registraties",
+      "ticketsIssued": "Uitgegeven betaalde tickets",
+      "tickets": "Verkochte tickets",
+      "compTickets": "Gratis tickets",
+      "checkins": "Check-ins",
+      "noShows": "No-shows"
+    },
+    "revenue": {
+      "title": "Omzet",
+      "net": "Netto-omzet ({currency})",
+      "grossRefunds": "{gross} betaald, {refunds} terugbetaald",
+      "byPeriod": "Omzet per periode",
+      "noRevenue": "Geen verkopen of terugbetalingen in deze periode.",
+      "period": "Periode",
+      "currency": "Valuta",
+      "gross": "Betaald",
+      "refunds": "Terugbetaald",
+      "netColumn": "Netto",
+      "topEvents": "Evenementen met de meeste omzet",
+      "eventColumn": "Evenement",
+      "weekOf": "Week van {day}"
+    },
+    "trend": "Door de tijd",
+    "chartTitle": "Registraties, betaalde tickets en check-ins door de tijd",
+    "byPeriod": "Cijfers per periode",
+    "period": "Periode",
+    "topEvents": "Beste evenementen",
+    "noTopEvents": "Geen enkel evenement had registraties in deze periode.",
+    "definitions": "Verkochte tickets zijn betaalde tickets min terugbetaalde. Een check-in telt elk ticket één keer, op de dag van de eerste toegang. No-shows zijn geldige tickets zonder check-in, geteld op de dag dat een evenement eindigde.",
+    "definitionsFinance": "Verkochte tickets zijn betaalde tickets min terugbetaalde. Een check-in telt elk ticket één keer, op de dag van de eerste toegang. No-shows zijn geldige tickets zonder check-in, geteld op de dag dat een evenement eindigde. Omzet is wat kopers betaalden min terugbetalingen, per valuta en vóór platformkosten (zie Financiën).",
+    "rebuildTitle": "Analyses opnieuw opbouwen",
+    "rebuildBody": "Berekent elk cijfer op deze pagina opnieuw uit je bestellingen en check-ins, een paar evenementen tegelijk. Gebruik dit nadat je de tijdzone van je organisatie hebt gewijzigd.",
+    "rebuild": "Opnieuw opbouwen",
+    "rebuilding": "Starten…",
+    "rebuildStarted": "Opnieuw opbouwen gestart",
+    "rebuildStartedBody": "De cijfers worden op de achtergrond opnieuw berekend; deze pagina blijft intussen bruikbaar.",
+    "rebuildRunning": "Er loopt al een herberekening.",
+    "runStatus": {
+      "running": "Bezig",
+      "done": "Klaar",
+      "failed": "Mislukt",
+      "cancelled": "Geannuleerd"
+    },
+    "runProgress": "{events, plural, one {# evenement gecontroleerd} other {# evenementen gecontroleerd}}, {written, plural, one {# bijgewerkt} other {# bijgewerkt}}"
   }
 }

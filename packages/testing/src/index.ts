@@ -55,3 +55,4 @@ export {
   rsvpQuestionsScenario,
   standardRsvpQuestions,
 } from './rsvp-questions.ts';
+export { warehouseScenario } from './warehouse.ts';

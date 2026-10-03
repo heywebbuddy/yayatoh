@@ -346,7 +346,8 @@
     "supportMacros": "客服宏",
     "assistance": "求助请求",
     "marketingAnalytics": "营销分析",
-    "badges": "胸卡"
+    "badges": "胸卡",
+    "orgAnalytics": "数据分析"
   },
   "vocab": {
     "attendee": "参会者",
@@ -11983,5 +11984,76 @@
     "startFromNamed": "用 {name} 创建活动",
     "delete": "删除",
     "deleteNamed": "删除 {name}"
+  },
+  "warehouse": {
+    "title": "数据分析",
+    "description": "汇总所有活动：报名、门票、签到和未到场随时间的变化，以及表现最好的活动。",
+    "filters": "筛选",
+    "from": "开始日期",
+    "to": "结束日期",
+    "event": "活动",
+    "allEvents": "所有活动",
+    "apply": "应用",
+    "timeZoneNote": "日期按贵组织时区 {timeZone} 的自然日计算。",
+    "rangeErrors": {
+      "invalid_date": "请按年、月、日输入日期。",
+      "from_after_to": "结束日期早于开始日期。",
+      "range_too_long": "请选择不超过两年的时间段。"
+    },
+    "periodLabel": "显示方式",
+    "view": {
+      "day": "按日",
+      "week": "按周",
+      "month": "按月"
+    },
+    "emptyTitle": "该时间段内暂无数据",
+    "emptyBody": "这些日期之间没有报名、门票或签到。请尝试更长的时间段或其他活动；新订单会在几秒内显示在这里。",
+    "emptyAction": "显示最近 12 个月",
+    "figures": {
+      "label": "该时间段合计",
+      "registrations": "报名",
+      "ticketsIssued": "已出付费门票",
+      "tickets": "售出门票",
+      "compTickets": "免费门票",
+      "checkins": "签到",
+      "noShows": "未到场"
+    },
+    "revenue": {
+      "title": "收入",
+      "net": "净销售额（{currency}）",
+      "grossRefunds": "已付 {gross}，已退 {refunds}",
+      "byPeriod": "按时间段的收入",
+      "noRevenue": "该时间段内没有销售或退款。",
+      "period": "时间段",
+      "currency": "币种",
+      "gross": "已付",
+      "refunds": "已退",
+      "netColumn": "净额",
+      "topEvents": "收入最高的活动",
+      "eventColumn": "活动",
+      "weekOf": "{day} 起的一周"
+    },
+    "trend": "趋势",
+    "chartTitle": "报名、付费门票和签到的趋势",
+    "byPeriod": "按时间段的数据",
+    "period": "时间段",
+    "topEvents": "表现最好的活动",
+    "noTopEvents": "该时间段内没有活动有报名。",
+    "definitions": "售出门票为付费门票减去已退款门票。签到按每张门票首次入场的日期计一次。未到场为从未签到的有效门票，计入活动结束当天。",
+    "definitionsFinance": "售出门票为付费门票减去已退款门票。签到按每张门票首次入场的日期计一次。未到场为从未签到的有效门票，计入活动结束当天。收入为买家支付金额减去退款，按币种分别计算，未扣除平台费用（见财务）。",
+    "rebuildTitle": "重建数据分析",
+    "rebuildBody": "根据您的订单和签到重新计算本页所有数据，每次处理几个活动。更改组织时区后请使用此功能。",
+    "rebuild": "重建",
+    "rebuilding": "正在启动…",
+    "rebuildStarted": "已开始重建",
+    "rebuildStartedBody": "数据正在后台重新计算；在此期间本页仍可使用。",
+    "rebuildRunning": "已有重建正在进行。",
+    "runStatus": {
+      "running": "进行中",
+      "done": "已完成",
+      "failed": "失败",
+      "cancelled": "已取消"
+    },
+    "runProgress": "{events, plural, other {已检查 # 个活动}}，{written, plural, other {已更新 # 个}}"
   }
 }

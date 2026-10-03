@@ -16,6 +16,8 @@ export {
 } from './checkpoints.ts';
 // M6.1a: contact merges move this module's references (ADR 0023).
 export { checkinContactOwner } from './contact-merge.ts';
+// M6.2a: check-ins per day (first live admission) for the analytics warehouse.
+export { dailyCheckinFactsTx } from './daily-facts.ts';
 export { checkinDataSubjects } from './data-subject.ts';
 export {
   DEVICE_ONLINE_WINDOW_MS,

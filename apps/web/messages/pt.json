@@ -346,7 +346,8 @@
     "supportMacros": "Macros de suporte",
     "assistance": "Pedidos de ajuda",
     "marketingAnalytics": "Análise de marketing",
-    "badges": "Crachás"
+    "badges": "Crachás",
+    "orgAnalytics": "Análises"
   },
   "vocab": {
     "attendee": "Participante",
@@ -11983,5 +11984,76 @@
     "startFromNamed": "Criar um evento com {name}",
     "delete": "Remover",
     "deleteNamed": "Remover {name}"
+  },
+  "warehouse": {
+    "title": "Análises",
+    "description": "Todos os seus eventos juntos: inscrições, ingressos, check-ins e ausências ao longo do tempo, e seus melhores eventos.",
+    "filters": "Filtros",
+    "from": "De",
+    "to": "Até",
+    "event": "Evento",
+    "allEvents": "Todos os eventos",
+    "apply": "Aplicar",
+    "timeZoneNote": "Os dias são dias corridos em {timeZone}, o fuso horário da sua organização.",
+    "rangeErrors": {
+      "invalid_date": "Informe as datas como ano, mês e dia.",
+      "from_after_to": "A data final é anterior à data inicial.",
+      "range_too_long": "Escolha um período de no máximo dois anos."
+    },
+    "periodLabel": "Mostrar por",
+    "view": {
+      "day": "Dia",
+      "week": "Semana",
+      "month": "Mês"
+    },
+    "emptyTitle": "Ainda não há nada neste período",
+    "emptyBody": "Nenhuma inscrição, ingresso ou check-in entre essas datas. Tente um período maior ou outro evento; novos pedidos aparecem aqui em segundos.",
+    "emptyAction": "Mostrar os últimos 12 meses",
+    "figures": {
+      "label": "Totais do período",
+      "registrations": "Inscrições",
+      "ticketsIssued": "Ingressos pagos emitidos",
+      "tickets": "Ingressos vendidos",
+      "compTickets": "Ingressos gratuitos",
+      "checkins": "Check-ins",
+      "noShows": "Ausências"
+    },
+    "revenue": {
+      "title": "Receita",
+      "net": "Vendas líquidas ({currency})",
+      "grossRefunds": "{gross} pagos, {refunds} reembolsados",
+      "byPeriod": "Receita por período",
+      "noRevenue": "Nenhuma venda ou reembolso neste período.",
+      "period": "Período",
+      "currency": "Moeda",
+      "gross": "Pago",
+      "refunds": "Reembolsado",
+      "netColumn": "Líquido",
+      "topEvents": "Eventos com mais receita",
+      "eventColumn": "Evento",
+      "weekOf": "Semana de {day}"
+    },
+    "trend": "Ao longo do tempo",
+    "chartTitle": "Inscrições, ingressos pagos e check-ins ao longo do tempo",
+    "byPeriod": "Números por período",
+    "period": "Período",
+    "topEvents": "Melhores eventos",
+    "noTopEvents": "Nenhum evento teve inscrições neste período.",
+    "definitions": "Ingressos vendidos são os pagos menos os reembolsados. Um check-in conta cada ingresso uma vez, no dia da primeira entrada. Ausências são ingressos válidos sem check-in, contados no dia em que o evento terminou.",
+    "definitionsFinance": "Ingressos vendidos são os pagos menos os reembolsados. Um check-in conta cada ingresso uma vez, no dia da primeira entrada. Ausências são ingressos válidos sem check-in, contados no dia em que o evento terminou. Receita é o que os compradores pagaram menos os reembolsos, por moeda e antes das taxas da plataforma (veja Finanças).",
+    "rebuildTitle": "Reconstruir as análises",
+    "rebuildBody": "Recalcula todos os números desta página a partir dos seus pedidos e check-ins, alguns eventos por vez. Use depois de mudar o fuso horário da sua organização.",
+    "rebuild": "Reconstruir",
+    "rebuilding": "Iniciando…",
+    "rebuildStarted": "Reconstrução iniciada",
+    "rebuildStartedBody": "Os números são recalculados em segundo plano; enquanto isso, a página continua utilizável.",
+    "rebuildRunning": "Já existe uma reconstrução em andamento.",
+    "runStatus": {
+      "running": "Em andamento",
+      "done": "Concluída",
+      "failed": "Falhou",
+      "cancelled": "Cancelada"
+    },
+    "runProgress": "{events, plural, one {# evento verificado} many {# eventos verificados} other {# eventos verificados}}, {written, plural, one {# atualizado} many {# atualizados} other {# atualizados}}"
   }
 }

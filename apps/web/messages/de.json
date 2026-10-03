@@ -346,7 +346,8 @@
     "supportMacros": "Support-Makros",
     "assistance": "Hilfeanfragen",
     "marketingAnalytics": "Marketing-Analysen",
-    "badges": "Badges"
+    "badges": "Badges",
+    "orgAnalytics": "Analysen"
   },
   "vocab": {
     "attendee": "Teilnehmer",
@@ -11983,5 +11984,76 @@
     "startFromNamed": "Veranstaltung mit {name} anlegen",
     "delete": "Entfernen",
     "deleteNamed": "{name} entfernen"
+  },
+  "warehouse": {
+    "title": "Analysen",
+    "description": "Alle Ihre Veranstaltungen zusammen: Anmeldungen, Tickets, Check-ins und Nichterscheinen im Zeitverlauf und Ihre stärksten Veranstaltungen.",
+    "filters": "Filter",
+    "from": "Von",
+    "to": "Bis",
+    "event": "Veranstaltung",
+    "allEvents": "Alle Veranstaltungen",
+    "apply": "Anwenden",
+    "timeZoneNote": "Tage sind Kalendertage in {timeZone}, der Zeitzone Ihrer Organisation.",
+    "rangeErrors": {
+      "invalid_date": "Geben Sie Daten als Jahr, Monat und Tag ein.",
+      "from_after_to": "Das Enddatum liegt vor dem Startdatum.",
+      "range_too_long": "Wählen Sie einen Zeitraum von höchstens zwei Jahren."
+    },
+    "periodLabel": "Anzeigen nach",
+    "view": {
+      "day": "Tag",
+      "week": "Woche",
+      "month": "Monat"
+    },
+    "emptyTitle": "In diesem Zeitraum noch nichts",
+    "emptyBody": "Zwischen diesen Daten gibt es keine Anmeldungen, Tickets oder Check-ins. Wählen Sie einen längeren Zeitraum oder eine andere Veranstaltung; neue Bestellungen erscheinen hier innerhalb von Sekunden.",
+    "emptyAction": "Die letzten 12 Monate anzeigen",
+    "figures": {
+      "label": "Summen für den Zeitraum",
+      "registrations": "Anmeldungen",
+      "ticketsIssued": "Ausgestellte bezahlte Tickets",
+      "tickets": "Verkaufte Tickets",
+      "compTickets": "Freitickets",
+      "checkins": "Check-ins",
+      "noShows": "Nicht erschienen"
+    },
+    "revenue": {
+      "title": "Umsatz",
+      "net": "Nettoumsatz ({currency})",
+      "grossRefunds": "{gross} bezahlt, {refunds} erstattet",
+      "byPeriod": "Umsatz nach Zeitraum",
+      "noRevenue": "Keine Verkäufe oder Erstattungen in diesem Zeitraum.",
+      "period": "Zeitraum",
+      "currency": "Währung",
+      "gross": "Bezahlt",
+      "refunds": "Erstattet",
+      "netColumn": "Netto",
+      "topEvents": "Umsatzstärkste Veranstaltungen",
+      "eventColumn": "Veranstaltung",
+      "weekOf": "Woche ab {day}"
+    },
+    "trend": "Im Zeitverlauf",
+    "chartTitle": "Anmeldungen, bezahlte Tickets und Check-ins im Zeitverlauf",
+    "byPeriod": "Zahlen nach Zeitraum",
+    "period": "Zeitraum",
+    "topEvents": "Stärkste Veranstaltungen",
+    "noTopEvents": "Keine Veranstaltung hatte in diesem Zeitraum Anmeldungen.",
+    "definitions": "Verkaufte Tickets sind bezahlte Tickets abzüglich erstatteter. Ein Check-in zählt jedes Ticket einmal, am Tag des ersten Einlasses. Nicht erschienen sind gültige Tickets ohne Check-in, gezählt am Tag, an dem die Veranstaltung endete.",
+    "definitionsFinance": "Verkaufte Tickets sind bezahlte Tickets abzüglich erstatteter. Ein Check-in zählt jedes Ticket einmal, am Tag des ersten Einlasses. Nicht erschienen sind gültige Tickets ohne Check-in, gezählt am Tag, an dem die Veranstaltung endete. Umsatz ist, was Käufer bezahlt haben, abzüglich Erstattungen, je Währung und vor Plattformgebühren (siehe Finanzen).",
+    "rebuildTitle": "Analysen neu aufbauen",
+    "rebuildBody": "Berechnet jede Zahl auf dieser Seite aus Ihren Bestellungen und Check-ins neu, einige Veranstaltungen nach der anderen. Nutzen Sie dies, nachdem Sie die Zeitzone Ihrer Organisation geändert haben.",
+    "rebuild": "Neu aufbauen",
+    "rebuilding": "Wird gestartet…",
+    "rebuildStarted": "Neuaufbau gestartet",
+    "rebuildStartedBody": "Die Zahlen werden im Hintergrund neu berechnet; die Seite bleibt währenddessen nutzbar.",
+    "rebuildRunning": "Es läuft bereits ein Neuaufbau.",
+    "runStatus": {
+      "running": "Läuft",
+      "done": "Fertig",
+      "failed": "Fehlgeschlagen",
+      "cancelled": "Abgebrochen"
+    },
+    "runProgress": "{events, plural, one {# Veranstaltung geprüft} other {# Veranstaltungen geprüft}}, {written, plural, one {# aktualisiert} other {# aktualisiert}}"
   }
 }

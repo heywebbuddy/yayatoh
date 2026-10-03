@@ -346,7 +346,8 @@
     "supportMacros": "Macros d’assistance",
     "assistance": "Demandes d’aide",
     "marketingAnalytics": "Analyses marketing",
-    "badges": "Badges"
+    "badges": "Badges",
+    "orgAnalytics": "Analyses"
   },
   "vocab": {
     "attendee": "Participant",
@@ -11983,5 +11984,76 @@
     "startFromNamed": "Créer un événement avec {name}",
     "delete": "Supprimer",
     "deleteNamed": "Supprimer {name}"
+  },
+  "warehouse": {
+    "title": "Analyses",
+    "description": "Tous vos événements réunis : inscriptions, billets, entrées et absences dans le temps, et vos meilleurs événements.",
+    "filters": "Filtres",
+    "from": "Du",
+    "to": "Au",
+    "event": "Événement",
+    "allEvents": "Tous les événements",
+    "apply": "Appliquer",
+    "timeZoneNote": "Les jours sont des jours calendaires en {timeZone}, le fuseau horaire de votre organisation.",
+    "rangeErrors": {
+      "invalid_date": "Saisissez les dates sous la forme année, mois et jour.",
+      "from_after_to": "La date de fin est antérieure à la date de début.",
+      "range_too_long": "Choisissez une période de deux ans maximum."
+    },
+    "periodLabel": "Afficher par",
+    "view": {
+      "day": "Jour",
+      "week": "Semaine",
+      "month": "Mois"
+    },
+    "emptyTitle": "Rien sur cette période pour l’instant",
+    "emptyBody": "Aucune inscription, aucun billet ni aucune entrée entre ces dates. Essayez une période plus longue ou un autre événement ; les nouvelles commandes apparaissent ici en quelques secondes.",
+    "emptyAction": "Afficher les 12 derniers mois",
+    "figures": {
+      "label": "Totaux de la période",
+      "registrations": "Inscriptions",
+      "ticketsIssued": "Billets payants émis",
+      "tickets": "Billets vendus",
+      "compTickets": "Billets gratuits",
+      "checkins": "Entrées",
+      "noShows": "Absences"
+    },
+    "revenue": {
+      "title": "Chiffre d’affaires",
+      "net": "Ventes nettes ({currency})",
+      "grossRefunds": "{gross} payés, {refunds} remboursés",
+      "byPeriod": "Chiffre d’affaires par période",
+      "noRevenue": "Aucune vente ni aucun remboursement sur cette période.",
+      "period": "Période",
+      "currency": "Devise",
+      "gross": "Payé",
+      "refunds": "Remboursé",
+      "netColumn": "Net",
+      "topEvents": "Événements au plus fort chiffre d’affaires",
+      "eventColumn": "Événement",
+      "weekOf": "Semaine du {day}"
+    },
+    "trend": "Dans le temps",
+    "chartTitle": "Inscriptions, billets payants et entrées dans le temps",
+    "byPeriod": "Chiffres par période",
+    "period": "Période",
+    "topEvents": "Meilleurs événements",
+    "noTopEvents": "Aucun événement n’a eu d’inscription sur cette période.",
+    "definitions": "Les billets vendus sont les billets payants moins les billets remboursés. Une entrée compte chaque billet une fois, le jour de son premier passage. Les absences sont les billets valides jamais scannés, comptés le jour où l’événement s’est terminé.",
+    "definitionsFinance": "Les billets vendus sont les billets payants moins les billets remboursés. Une entrée compte chaque billet une fois, le jour de son premier passage. Les absences sont les billets valides jamais scannés, comptés le jour où l’événement s’est terminé. Le chiffre d’affaires est ce que les acheteurs ont payé moins les remboursements, par devise et avant les frais de plateforme (voir Finances).",
+    "rebuildTitle": "Reconstruire les analyses",
+    "rebuildBody": "Recalcule chaque chiffre de cette page à partir de vos commandes et de vos entrées, quelques événements à la fois. À utiliser après avoir changé le fuseau horaire de votre organisation.",
+    "rebuild": "Reconstruire",
+    "rebuilding": "Démarrage…",
+    "rebuildStarted": "Reconstruction lancée",
+    "rebuildStartedBody": "Les chiffres sont recalculés en arrière-plan ; la page reste utilisable pendant ce temps.",
+    "rebuildRunning": "Une reconstruction est déjà en cours.",
+    "runStatus": {
+      "running": "En cours",
+      "done": "Terminée",
+      "failed": "Échec",
+      "cancelled": "Annulée"
+    },
+    "runProgress": "{events, plural, one {# événement vérifié} many {# événements vérifiés} other {# événements vérifiés}}, {written, plural, one {# mis à jour} many {# mis à jour} other {# mis à jour}}"
   }
 }

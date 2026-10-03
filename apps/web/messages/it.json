@@ -346,7 +346,8 @@
     "supportMacros": "Macro di assistenza",
     "assistance": "Richieste di aiuto",
     "marketingAnalytics": "Analisi di marketing",
-    "badges": "Badge"
+    "badges": "Badge",
+    "orgAnalytics": "Analisi"
   },
   "vocab": {
     "attendee": "Partecipante",
@@ -11983,5 +11984,76 @@
     "startFromNamed": "Crea un evento da {name}",
     "delete": "Rimuovi",
     "deleteNamed": "Rimuovi {name}"
+  },
+  "warehouse": {
+    "title": "Analisi",
+    "description": "Tutti i tuoi eventi insieme: iscrizioni, biglietti, check-in e assenze nel tempo, e i tuoi eventi migliori.",
+    "filters": "Filtri",
+    "from": "Dal",
+    "to": "Al",
+    "event": "Evento",
+    "allEvents": "Tutti gli eventi",
+    "apply": "Applica",
+    "timeZoneNote": "I giorni sono giorni di calendario nel fuso {timeZone}, quello della tua organizzazione.",
+    "rangeErrors": {
+      "invalid_date": "Inserisci le date come anno, mese e giorno.",
+      "from_after_to": "La data di fine è precedente a quella di inizio.",
+      "range_too_long": "Scegli un periodo di massimo due anni."
+    },
+    "periodLabel": "Mostra per",
+    "view": {
+      "day": "Giorno",
+      "week": "Settimana",
+      "month": "Mese"
+    },
+    "emptyTitle": "Ancora niente in questo periodo",
+    "emptyBody": "Nessuna iscrizione, biglietto o check-in tra queste date. Prova un periodo più lungo o un altro evento; i nuovi ordini compaiono qui in pochi secondi.",
+    "emptyAction": "Mostra gli ultimi 12 mesi",
+    "figures": {
+      "label": "Totali del periodo",
+      "registrations": "Iscrizioni",
+      "ticketsIssued": "Biglietti a pagamento emessi",
+      "tickets": "Biglietti venduti",
+      "compTickets": "Biglietti gratuiti",
+      "checkins": "Check-in",
+      "noShows": "Assenze"
+    },
+    "revenue": {
+      "title": "Ricavi",
+      "net": "Vendite nette ({currency})",
+      "grossRefunds": "{gross} pagati, {refunds} rimborsati",
+      "byPeriod": "Ricavi per periodo",
+      "noRevenue": "Nessuna vendita o rimborso in questo periodo.",
+      "period": "Periodo",
+      "currency": "Valuta",
+      "gross": "Pagato",
+      "refunds": "Rimborsato",
+      "netColumn": "Netto",
+      "topEvents": "Eventi con più ricavi",
+      "eventColumn": "Evento",
+      "weekOf": "Settimana del {day}"
+    },
+    "trend": "Nel tempo",
+    "chartTitle": "Iscrizioni, biglietti a pagamento e check-in nel tempo",
+    "byPeriod": "Cifre per periodo",
+    "period": "Periodo",
+    "topEvents": "Eventi migliori",
+    "noTopEvents": "Nessun evento ha avuto iscrizioni in questo periodo.",
+    "definitions": "I biglietti venduti sono quelli a pagamento meno quelli rimborsati. Un check-in conta ogni biglietto una volta, nel giorno del primo ingresso. Le assenze sono biglietti validi mai registrati, contati nel giorno in cui l’evento è finito.",
+    "definitionsFinance": "I biglietti venduti sono quelli a pagamento meno quelli rimborsati. Un check-in conta ogni biglietto una volta, nel giorno del primo ingresso. Le assenze sono biglietti validi mai registrati, contati nel giorno in cui l’evento è finito. I ricavi sono quanto pagato dagli acquirenti meno i rimborsi, per valuta e prima delle commissioni della piattaforma (vedi Finanza).",
+    "rebuildTitle": "Ricostruisci le analisi",
+    "rebuildBody": "Ricalcola ogni cifra di questa pagina dai tuoi ordini e check-in, pochi eventi alla volta. Usalo dopo aver cambiato il fuso orario della tua organizzazione.",
+    "rebuild": "Ricostruisci",
+    "rebuilding": "Avvio…",
+    "rebuildStarted": "Ricostruzione avviata",
+    "rebuildStartedBody": "Le cifre vengono ricalcolate in background; nel frattempo la pagina resta utilizzabile.",
+    "rebuildRunning": "È già in corso una ricostruzione.",
+    "runStatus": {
+      "running": "In corso",
+      "done": "Completata",
+      "failed": "Non riuscita",
+      "cancelled": "Annullata"
+    },
+    "runProgress": "{events, plural, one {# evento controllato} many {# eventi controllati} other {# eventi controllati}}, {written, plural, one {# aggiornato} many {# aggiornati} other {# aggiornati}}"
   }
 }

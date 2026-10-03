@@ -1,4 +1,5 @@
 import { alertEvaluator } from '@yayatoh/alerts';
+import { warehouseFromEnv, warehouseIngestor } from '@yayatoh/analytics';
 import { attendeeMessageMailer } from '@yayatoh/attendees';
 import { contactSignalsSubscriber, participationProjector } from '@yayatoh/audiences';
 import { journeySubscribers } from '@yayatoh/automations';
@@ -175,6 +176,8 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
       },
     }),
     analyticsForwarder(postgresAnalyticsSink),
+    // M6.2a: the analytics warehouse (Postgres rollups, or Tinybird with ANALYTICS_WAREHOUSE).
+    warehouseIngestor(warehouseFromEnv(env)),
     // M3.2: device presence for the Command Center's device widgets (events in pre-show or live).
     deviceBoardPublisher(),
     // M3.2b: the alert engine re-evaluates what each outbox event touched (sends through notifications).

@@ -346,7 +346,8 @@
     "supportMacros": "客服巨集",
     "assistance": "求助請求",
     "marketingAnalytics": "行銷分析",
-    "badges": "名牌"
+    "badges": "名牌",
+    "orgAnalytics": "數據分析"
   },
   "vocab": {
     "attendee": "參加者",
@@ -11983,5 +11984,76 @@
     "startFromNamed": "用 {name} 建立活動",
     "delete": "移除",
     "deleteNamed": "移除 {name}"
+  },
+  "warehouse": {
+    "title": "數據分析",
+    "description": "彙整所有活動：報名、票券、報到與未到場隨時間的變化，以及表現最好的活動。",
+    "filters": "篩選",
+    "from": "開始日期",
+    "to": "結束日期",
+    "event": "活動",
+    "allEvents": "所有活動",
+    "apply": "套用",
+    "timeZoneNote": "日期依貴組織時區 {timeZone} 的日曆日計算。",
+    "rangeErrors": {
+      "invalid_date": "請依年、月、日輸入日期。",
+      "from_after_to": "結束日期早於開始日期。",
+      "range_too_long": "請選擇不超過兩年的期間。"
+    },
+    "periodLabel": "顯示方式",
+    "view": {
+      "day": "按日",
+      "week": "按週",
+      "month": "按月"
+    },
+    "emptyTitle": "此期間尚無資料",
+    "emptyBody": "這些日期之間沒有報名、票券或報到。請嘗試更長的期間或其他活動；新訂單會在幾秒內顯示於此。",
+    "emptyAction": "顯示最近 12 個月",
+    "figures": {
+      "label": "此期間合計",
+      "registrations": "報名",
+      "ticketsIssued": "已開立付費票券",
+      "tickets": "售出票券",
+      "compTickets": "免費票券",
+      "checkins": "報到",
+      "noShows": "未到場"
+    },
+    "revenue": {
+      "title": "營收",
+      "net": "淨銷售額（{currency}）",
+      "grossRefunds": "已付 {gross}，已退 {refunds}",
+      "byPeriod": "依期間的營收",
+      "noRevenue": "此期間沒有銷售或退款。",
+      "period": "期間",
+      "currency": "幣別",
+      "gross": "已付",
+      "refunds": "已退",
+      "netColumn": "淨額",
+      "topEvents": "營收最高的活動",
+      "eventColumn": "活動",
+      "weekOf": "{day} 起的一週"
+    },
+    "trend": "趨勢",
+    "chartTitle": "報名、付費票券與報到的趨勢",
+    "byPeriod": "依期間的數據",
+    "period": "期間",
+    "topEvents": "表現最好的活動",
+    "noTopEvents": "此期間沒有活動有報名。",
+    "definitions": "售出票券為付費票券減去已退款票券。報到依每張票券首次入場的日期計一次。未到場為從未報到的有效票券，計入活動結束當天。",
+    "definitionsFinance": "售出票券為付費票券減去已退款票券。報到依每張票券首次入場的日期計一次。未到場為從未報到的有效票券，計入活動結束當天。營收為買家支付金額減去退款，依幣別分別計算，未扣除平台費用（見財務）。",
+    "rebuildTitle": "重建數據分析",
+    "rebuildBody": "依您的訂單與報到重新計算本頁所有數據，每次處理幾個活動。變更組織時區後請使用此功能。",
+    "rebuild": "重建",
+    "rebuilding": "正在啟動…",
+    "rebuildStarted": "已開始重建",
+    "rebuildStartedBody": "數據正在背景重新計算；在此期間本頁仍可使用。",
+    "rebuildRunning": "已有重建正在進行。",
+    "runStatus": {
+      "running": "進行中",
+      "done": "已完成",
+      "failed": "失敗",
+      "cancelled": "已取消"
+    },
+    "runProgress": "{events, plural, other {已檢查 # 個活動}}，{written, plural, other {已更新 # 個}}"
   }
 }

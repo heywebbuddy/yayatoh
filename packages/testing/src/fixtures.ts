@@ -8,6 +8,7 @@ import {
   setMyAlertPhoneCommand,
   setSalesTargetCommand,
 } from '@yayatoh/alerts';
+import { backfillOrgNow, catchUpWarehouse, postgresWarehouse } from '@yayatoh/analytics';
 import {
   assignCommand as assistanceAssignCommand,
   addNoteCommand as assistanceNoteCommand,
@@ -2368,6 +2369,10 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   // analytics sink over this org's outbox, as the worker would.
   await catchUpMetrics(org.id);
   await catchUpSubscriber(analyticsForwarder(postgresAnalyticsSink), org.id);
+  // M6.2a: the analytics warehouse (Postgres rollups) over this org's outbox, as the worker would,
+  // then one backfill run (rows in every analytics table for the isolation suite).
+  await catchUpWarehouse(org.id);
+  await backfillOrgNow(org.id, postgresWarehouse);
   // M3.2b alert engine: the fixture event's unseated ticket holders raise an alert (evaluated as
   // the worker would, a day before the event), the owner acknowledges it; one routing row, the
   // owner's alert number and a sales target (isolation coverage of every alerts table).
