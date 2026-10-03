@@ -29,9 +29,16 @@ export interface RetentionRun {
  * then runs `privacy.retention` per org under its own RLS as a system actor. Global housekeeping
  * follows: expired rate-limit counters, and (only once the owner has an off-account WORM
  * archive, `ACCESS_LOG_ARCHIVED=1`) platform access-log rows older than 12 months.
+ *
+ * `onlyOrgs` skips the listing and runs exactly those orgs. `within` still lists through
+ * platform_reader (audited) but runs only the listed orgs among the given ids: tests use it so the
+ * pass covers their own orgs, not every org other test files left in the shared database (batch
+ * 3h: the full integration run had hundreds, and the pass outlasted the test's 30 s).
  */
-export async function runRetention(opts: { onlyOrgs?: readonly string[] } = {}): Promise<RetentionRun> {
-  const rows = opts.onlyOrgs
+export async function runRetention(
+  opts: { onlyOrgs?: readonly string[]; within?: readonly string[] } = {},
+): Promise<RetentionRun> {
+  const listed = opts.onlyOrgs
     ? opts.onlyOrgs.map((org_id) => ({ org_id }))
     : await withPlatformReader(
         { actor: 'system:retention', reason: 'list organizations for the daily retention pass' },
@@ -40,6 +47,8 @@ export async function runRetention(opts: { onlyOrgs?: readonly string[] } = {}):
             sql`select id as org_id from tenancy.organizations where status <> 'terminated' order by id`,
           ),
       );
+  const within = opts.within ? new Set(opts.within) : null;
+  const rows = within ? listed.filter((r) => within.has(r.org_id)) : listed;
   const totals: Record<string, number> = {};
   let failed = 0;
   for (const { org_id } of rows) {

@@ -1,7 +1,7 @@
 import { LOCALES, type Locale, RTL_LOCALES } from '@yayatoh/contracts';
 import { formatMoney, money } from '@yayatoh/kernel';
 import { html, SafeHtml } from '@yayatoh/pdf';
-import { color } from '@yayatoh/ui/tokens';
+import { light, print } from '@yayatoh/ui/tokens';
 import { IntlMessageFormat } from 'intl-messageformat';
 import { formatReceiptNumber } from './domain/receipts.ts';
 import { RECEIPT_COPY, type ReceiptCopy } from './legal/receipt-copy.ts';
@@ -140,18 +140,18 @@ export function receiptEmailBody(d: ReceiptDocInput, locale: string): string {
 // Our own constant stylesheet (token colours): trusted, so not escaped.
 const CSS = new SafeHtml(`
   @page { size: A4; margin: 18mm 16mm; }
-  body { margin: 0; color: ${color.ink}; font: 10pt/1.5 'Noto Sans', 'Noto Sans Arabic', 'Noto Sans Devanagari', 'Noto Sans SC', 'Noto Sans TC', 'Noto Sans JP', sans-serif; }
+  body { margin: 0; color: ${print.ink}; font: 10pt/1.5 'Noto Sans', 'Noto Sans Arabic', 'Noto Sans Devanagari', 'Noto Sans SC', 'Noto Sans TC', 'Noto Sans JP', sans-serif; }
   h1 { margin: 0; font-size: 18pt; font-weight: 600; }
-  .charity { margin: 1mm 0 8mm; color: ${color.zinc[600]}; }
+  .charity { margin: 1mm 0 8mm; color: ${light.ink2}; }
   dl { display: grid; grid-template-columns: 62mm 1fr; gap: 1.2mm 4mm; margin: 0 0 8mm; }
-  dt { color: ${color.zinc[600]}; }
+  dt { color: ${light.ink2}; }
   dd { margin: 0; }
   .statement { margin: 0 0 3mm; }
   table { width: 100%; border-collapse: collapse; margin: 0 0 6mm; }
-  th, td { text-align: start; padding: 1.5mm 2mm; border-block-end: 0.2mm solid ${color.zinc[200]}; }
+  th, td { text-align: start; padding: 1.5mm 2mm; border-block-end: 0.2mm solid ${light.line}; }
   td.num, th.num { text-align: end; font-variant-numeric: tabular-nums; }
-  tfoot td { font-weight: 600; border-block-start: 0.4mm solid ${color.ink}; }
-  footer { margin-block-start: 12mm; color: ${color.zinc[500]}; font-size: 8pt; }
+  tfoot td { font-weight: 600; border-block-start: 0.4mm solid ${print.ink}; }
+  footer { margin-block-start: 12mm; color: ${light.ink2}; font-size: 8pt; }
 `);
 
 /** A receipt as a self-contained A4 HTML document for the PDF renderer. */
