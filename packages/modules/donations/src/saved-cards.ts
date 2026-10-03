@@ -187,8 +187,7 @@ export const applyCardSetupCommand = tenantCommand({
     const cardId = z.uuid().safeParse(input.reference);
     if (!cardId.success) return { outcome: 'ignored' as const, status: 'unknown' };
     const [card] = await tx.select().from(savedCards).where(eq(savedCards.id, cardId.data)).for('update');
-    if (!card || card.status !== 'pending')
-      return { outcome: 'ignored' as const, status: card?.status ?? 'unknown' };
+    if (card?.status !== 'pending') return { outcome: 'ignored' as const, status: card?.status ?? 'unknown' };
     if (card.providerSetupId && card.providerSetupId !== input.providerSetupId)
       throw new DomainError('conflict', 'Setup does not match the card');
     if (input.type === 'setup.failed' || !input.customerId || !input.paymentMethodId) {

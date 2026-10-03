@@ -421,7 +421,7 @@ export const settleCardChargeCommand = tenantCommand({
       .from(pledgeAttempts)
       .where(eq(pledgeAttempts.id, input.attemptId))
       .for('update');
-    if (!a || a.kind !== 'card') throw new DomainError('not_found', 'Attempt not found');
+    if (a?.kind !== 'card') throw new DomainError('not_found', 'Attempt not found');
     const [c] = await tx
       .select()
       .from(pledgeCollections)
