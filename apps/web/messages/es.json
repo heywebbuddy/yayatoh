@@ -435,7 +435,10 @@
     "allEvents": "Todos los eventos",
     "seriesEmptyTitle": "Aún no hay eventos en {name}",
     "seriesEmptyDescription": "Añade un evento a esta serie desde su página Fechas.",
-    "showEveryEvent": "Ver cada evento"
+    "showEveryEvent": "Ver cada evento",
+    "doorTitle": "El escaneo se hace en la app de escaneo",
+    "doorDescription": "Tu función es revisar entradas en la puerta. Abre la app de escaneo en este dispositivo para empezar.",
+    "openScan": "Abrir la app de escaneo"
   },
   "team": {
     "subtitle": "{count, plural, one {# miembro} other {# miembros}}",

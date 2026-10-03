@@ -435,7 +435,10 @@
     "allEvents": "सभी इवेंट",
     "seriesEmptyTitle": "{name} में अभी कोई इवेंट नहीं है",
     "seriesEmptyDescription": "इवेंट के “तारीखें” पेज से उसे इस सीरीज़ में जोड़ें।",
-    "showEveryEvent": "हर इवेंट दिखाएँ"
+    "showEveryEvent": "हर इवेंट दिखाएँ",
+    "doorTitle": "स्कैनिंग स्कैन ऐप में होती है",
+    "doorDescription": "आपकी भूमिका दरवाज़े पर टिकट जाँचना है। शुरू करने के लिए इस डिवाइस पर स्कैन ऐप खोलें।",
+    "openScan": "स्कैन ऐप खोलें"
   },
   "team": {
     "subtitle": "{count, plural, one {# सदस्य} other {# सदस्य}}",

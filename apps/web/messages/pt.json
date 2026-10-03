@@ -435,7 +435,10 @@
     "allEvents": "Todos os eventos",
     "seriesEmptyTitle": "Ainda não há eventos em {name}",
     "seriesEmptyDescription": "Adicione um evento a esta série na página Datas do evento.",
-    "showEveryEvent": "Ver cada evento"
+    "showEveryEvent": "Ver cada evento",
+    "doorTitle": "A leitura é feita no app de leitura",
+    "doorDescription": "Sua função é conferir ingressos na entrada. Abra o app de leitura neste dispositivo para começar.",
+    "openScan": "Abrir o app de leitura"
   },
   "team": {
     "subtitle": "{count, plural, one {# membro} other {# membros}}",

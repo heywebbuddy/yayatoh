@@ -435,7 +435,10 @@
     "allEvents": "全部活动",
     "seriesEmptyTitle": "{name} 中还没有活动",
     "seriesEmptyDescription": "可在活动的“场次”页面将其加入此系列。",
-    "showEveryEvent": "显示每个活动"
+    "showEveryEvent": "显示每个活动",
+    "doorTitle": "扫码在扫码应用中进行",
+    "doorDescription": "你的角色是在入口检票。在此设备上打开扫码应用即可开始。",
+    "openScan": "打开扫码应用"
   },
   "team": {
     "subtitle": "{count, plural, other {# 名成员}}",

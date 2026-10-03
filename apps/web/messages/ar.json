@@ -435,7 +435,10 @@
     "allEvents": "كل الفعاليات",
     "seriesEmptyTitle": "لا توجد فعاليات في {name} بعد",
     "seriesEmptyDescription": "أضف فعالية إلى هذه السلسلة من صفحة «المواعيد» الخاصة بها.",
-    "showEveryEvent": "عرض كل فعالية"
+    "showEveryEvent": "عرض كل فعالية",
+    "doorTitle": "يتم المسح في تطبيق المسح",
+    "doorDescription": "دورك هو فحص التذاكر عند الباب. افتح تطبيق المسح على هذا الجهاز للبدء.",
+    "openScan": "فتح تطبيق المسح"
   },
   "team": {
     "subtitle": "{count, plural, zero {لا أعضاء} one {عضو واحد} two {عضوان} few {# أعضاء} many {# عضوًا} other {# عضو}}",

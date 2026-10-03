@@ -435,7 +435,10 @@
     "allEvents": "Alle Events",
     "seriesEmptyTitle": "Noch keine Events in {name}",
     "seriesEmptyDescription": "Füge ein Event über seine Seite „Termine“ zu dieser Reihe hinzu.",
-    "showEveryEvent": "Jedes Event anzeigen"
+    "showEveryEvent": "Jedes Event anzeigen",
+    "doorTitle": "Gescannt wird in der Scan-App",
+    "doorDescription": "Ihre Rolle prüft Tickets am Einlass. Öffnen Sie die Scan-App auf diesem Gerät, um zu beginnen.",
+    "openScan": "Scan-App öffnen"
   },
   "team": {
     "subtitle": "{count, plural, one {# Mitglied} other {# Mitglieder}}",

@@ -435,7 +435,10 @@
     "allEvents": "All events",
     "seriesEmptyTitle": "No events in {name} yet",
     "seriesEmptyDescription": "Add an event to this series from the event's Dates page.",
-    "showEveryEvent": "Show every event"
+    "showEveryEvent": "Show every event",
+    "doorTitle": "Scanning happens in the Scan app",
+    "doorDescription": "Your role checks tickets at the door. Open the Scan app on this device to start.",
+    "openScan": "Open the Scan app"
   },
   "team": {
     "subtitle": "{count, plural, one {# member} other {# members}}",

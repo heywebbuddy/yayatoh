@@ -435,7 +435,10 @@
     "allEvents": "Alle evenementen",
     "seriesEmptyTitle": "Nog geen evenementen in {name}",
     "seriesEmptyDescription": "Voeg een evenement aan deze reeks toe via de pagina Data van het evenement.",
-    "showEveryEvent": "Elk evenement tonen"
+    "showEveryEvent": "Elk evenement tonen",
+    "doorTitle": "Scannen gebeurt in de Scan-app",
+    "doorDescription": "Jouw rol is tickets controleren bij de deur. Open de Scan-app op dit apparaat om te beginnen.",
+    "openScan": "Scan-app openen"
   },
   "team": {
     "subtitle": "{count, plural, one {# lid} other {# leden}}",

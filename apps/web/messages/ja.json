@@ -435,7 +435,10 @@
     "allEvents": "すべてのイベント",
     "seriesEmptyTitle": "{name}にはまだイベントがありません",
     "seriesEmptyDescription": "イベントの「日程」ページからこのシリーズに追加できます。",
-    "showEveryEvent": "すべてのイベントを表示"
+    "showEveryEvent": "すべてのイベントを表示",
+    "doorTitle": "スキャンはスキャンアプリで行います",
+    "doorDescription": "あなたの役割は入口でのチケット確認です。この端末でスキャンアプリを開いて始めましょう。",
+    "openScan": "スキャンアプリを開く"
   },
   "team": {
     "subtitle": "{count, plural, other {#人のメンバー}}",
