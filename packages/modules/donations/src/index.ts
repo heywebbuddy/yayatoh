@@ -292,3 +292,5 @@ export {
   ScreenStateDto,
 } from './screen-dto.ts';
 export { type ScreenClaim, signScreenToken, verifyScreenToken } from './screen-link.ts';
+// M6.5d: online giving per day and currency (accounting summaries).
+export { type DonationDayTotals, donationDailyTotalsTx } from './daily-totals.ts';

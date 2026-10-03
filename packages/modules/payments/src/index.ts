@@ -157,3 +157,5 @@ export {
   type StripeProviderOptions,
   stripePaymentProvider,
 } from './stripe.ts';
+// M6.5d: the ledger per day and currency (accounting summaries).
+export { type LedgerDayTotals, ledgerDailyTotalsTx } from './daily-totals.ts';
