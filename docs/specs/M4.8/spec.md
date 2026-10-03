@@ -285,7 +285,7 @@ touches:
   - packages/modules/donations/src/{index.ts,private-columns.ts}, package.json (+@yayatoh/guests, ./paddles and ./paddle-queue exports), MODULE.md   # appended
   - packages/modules/donations/tests/paddles.test.ts
   - packages/modules/guests/src/{paddle-holders.ts,index.ts}       # new read helpers + one export block
-  - packages/db/drizzle/0113_aromatic_captain_stacy.sql (+ meta)   # renumbered at merge
+  - packages/db/drizzle/0115_aromatic_captain_stacy.sql (+ meta)   # renumbered at merge
   - packages/testing/src/fixtures.ts                               # paddleRaiseRows
   - packages/testing/tests/{paddle-raise.int.test.ts,impersonation.int.test.ts}
   - apps/web/src/app/[locale]/o/[org]/e/[event]/donations/{page.tsx,paddles/**,paddle-raise/**}
@@ -307,7 +307,7 @@ touches:
 - [x] Fixture rows for both orgs (`paddleRaiseRows`: the fixture party's paddle, a called and closed level, one entry confirmed into a pledge).
 - [x] Text columns declared in `private-columns.ts` (level name public, statuses and currency vocab, the spotter's user id internal).
 
-**Migration:** `0113_aromatic_captain_stacy.sql` (to be renumbered), additive only. Hand-written block: `paddles_event_fk`, `paddle_calls_event_fk`, `paddle_entries_event_fk` (→ `events.events`, cascade); `paddles_guest_fk` / `paddles_party_fk` (→ `guests.guests` / `guests.parties`, cascade); `paddle_calls_level_fk` (→ `donations.levels`, `SET NULL (level_id)`); `paddle_entries_paddle_fk` (→ `donations.paddles`, `SET NULL (paddle_id)`); `pledges_event_fk` (→ `events.events`, no action: a money promise, like a gift); `pledges_guest_fk` / `pledges_party_fk` (`SET NULL (guest_id)` / `(party_id)`).
+**Migration:** `0115_aromatic_captain_stacy.sql` (0113 on agent/m4.8c; renumbered after M4.4a's 0113/0114 when M4.8e stacked them) (to be renumbered), additive only. Hand-written block: `paddles_event_fk`, `paddle_calls_event_fk`, `paddle_entries_event_fk` (→ `events.events`, cascade); `paddles_guest_fk` / `paddles_party_fk` (→ `guests.guests` / `guests.parties`, cascade); `paddle_calls_level_fk` (→ `donations.levels`, `SET NULL (level_id)`); `paddle_entries_paddle_fk` (→ `donations.paddles`, `SET NULL (paddle_id)`); `pledges_event_fk` (→ `events.events`, no action: a money promise, like a gift); `pledges_guest_fk` / `pledges_party_fk` (`SET NULL (guest_id)` / `(party_id)`).
 
 ### 6. API diff
 None on `/v1`. One web route: `POST /o/{org}/e/{event}/donations/paddle-raise/sync` (session, JSON, same-origin).
