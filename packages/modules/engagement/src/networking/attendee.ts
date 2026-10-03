@@ -36,6 +36,7 @@ import {
 import {
   activeProfilesTx,
   blockedWithTx,
+  dropEmbeddingTx,
   leaveNetworkTx,
   listed,
   memberOf,
@@ -80,7 +81,7 @@ const toMine = (p: ProfileRow): MyProfileDto => ({
 });
 
 /** The relation of `me` to each of `ids`: pending either way or connected, with the row id. */
-async function relationsTx(tx: TenantTx, me: string, ids: readonly string[]) {
+export async function relationsTx(tx: TenantTx, me: string, ids: readonly string[]) {
   const out = new Map<string, { connection: PersonDto['connection']; id: string }>();
   if (ids.length === 0) return out;
   const rows = await tx
@@ -105,7 +106,7 @@ async function relationsTx(tx: TenantTx, me: string, ids: readonly string[]) {
   return out;
 }
 
-const toPerson = (p: ProfileRow, rel?: { connection: PersonDto['connection'] }): PersonDto => ({
+export const toPerson = (p: ProfileRow, rel?: { connection: PersonDto['connection'] }): PersonDto => ({
   id: p.id,
   displayName: p.displayName,
   headline: p.headline,
@@ -210,6 +211,8 @@ export const updateProfileCommand = tenantCommand({
         updatedAt: ctx.now,
       })
       .where(eq(networkProfiles.id, me.id));
+    // M6.12b: the old embedding no longer describes them; the next refresh embeds the new text.
+    await dropEmbeddingTx(tx, me.id);
     return { ok: true as const };
   },
   audit: (input) => ({

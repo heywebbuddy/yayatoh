@@ -60,6 +60,8 @@ export const privateColumns = columnPrivacy('engagement', {
   // excerpt of a reported conversation); a report's details likewise.
   chat_conversations: { kind: 'vocab', started_by: 'vocab', blocked_by: 'vocab' },
   chat_messages: { sender: 'vocab', body: personal() },
+  // M6.12b: the provider/model name of a matchmaking embedding.
+  network_embeddings: { model: 'vocab' },
   chat_reports: {
     reporter: 'vocab',
     reason: 'vocab',

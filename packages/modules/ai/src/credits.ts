@@ -15,6 +15,8 @@ import { and, desc, eq } from 'drizzle-orm';
 import { z } from 'zod';
 import { cleanDraft, DraftOutputError, MAX_NOTES_LENGTH } from './domain/drafts.ts';
 import {
+  AI_PURPOSES,
+  type AiPurpose,
   type CreditState,
   DRAFT_KINDS,
   type DraftKind,
@@ -45,7 +47,7 @@ export const CreditEntryDto = z.object({
   amount: z.number().int(),
   balanceAfter: z.number().int(),
   reason: z.string(),
-  draftKind: z.enum(DRAFT_KINDS).nullable(),
+  draftKind: z.enum(AI_PURPOSES).nullable(),
   createdAt: z.date(),
 });
 export type CreditEntryDto = z.infer<typeof CreditEntryDto>;
@@ -56,7 +58,7 @@ type AccountRow = typeof creditAccounts.$inferSelect;
  * The org's account, locked for this transaction (FOR UPDATE), brought into the current month.
  * Two concurrent drafts serialize here, so neither can spend a credit the other already spent.
  */
-async function lockedAccount(tx: TenantTx, ctx: Ctx): Promise<AccountRow> {
+export async function lockedAccount(tx: TenantTx, ctx: Ctx): Promise<AccountRow> {
   const orgId = requireOrg(ctx);
   const find = () => tx.select().from(creditAccounts).where(eq(creditAccounts.orgId, orgId)).for('update');
   let [row] = await find();
@@ -75,13 +77,13 @@ async function lockedAccount(tx: TenantTx, ctx: Ctx): Promise<AccountRow> {
   return { ...row, ...state };
 }
 
-async function append(
+export async function append(
   tx: TenantTx,
   ctx: Ctx,
   accountId: string,
   state: CreditState,
   entries: readonly LedgerEntry[],
-  meta: { reason: string; draftKind?: DraftKind; eventId?: string; refId?: string },
+  meta: { reason: string; draftKind?: AiPurpose; eventId?: string; refId?: string },
 ): Promise<string[]> {
   const orgId = requireOrg(ctx);
   await tx
@@ -109,7 +111,7 @@ async function append(
 }
 
 /** The AI meter's usage event (M6.6b): credits spent on, or given back for, one draft. */
-const creditUsageEvent = (type: string, orgId: string, debitId: string, credits: number) => ({
+export const creditUsageEvent = (type: string, orgId: string, debitId: string, credits: number) => ({
   type,
   version: 1,
   aggregateType: 'ai_credit',
@@ -187,6 +189,35 @@ export const debitDraftCreditCommand = tenantCommand({
   }),
 });
 
+/** Give a debit back, once: a second refund of the same debit is a no-op. */
+export async function refundTx(
+  tx: TenantTx,
+  ctx: Ctx,
+  debitId: string,
+  emit: (e: ReturnType<typeof creditUsageEvent>) => void,
+): Promise<{ balance: number; refunded: boolean }> {
+  const account = await lockedAccount(tx, ctx);
+  const [d] = await tx
+    .select()
+    .from(creditLedger)
+    .where(and(eq(creditLedger.id, debitId), eq(creditLedger.kind, 'debit')));
+  if (!d) throw new DomainError('not_found');
+  const [already] = await tx
+    .select({ id: creditLedger.id })
+    .from(creditLedger)
+    .where(and(eq(creditLedger.refId, d.id), eq(creditLedger.kind, 'refund')));
+  if (already) return { balance: account.balance, refunded: false };
+  const back = refund(account, d.amount);
+  await append(tx, ctx, account.id, back.state, [back.entry], {
+    reason: d.reason === 'draft' ? 'draft_failed' : 'ai_failed',
+    ...(d.draftKind ? { draftKind: d.draftKind as AiPurpose } : {}),
+    ...(d.eventId ? { eventId: d.eventId } : {}),
+    refId: d.id,
+  });
+  emit(creditUsageEvent('ai.credits_refunded', requireOrg(ctx), d.id, Math.abs(back.entry.amount)));
+  return { balance: back.state.balance, refunded: true };
+}
+
 /** Give a failed draft's credit back, once (a second refund of the same debit is a no-op). */
 export const refundDraftCreditCommand = tenantCommand({
   name: 'ai.refundCredit',
@@ -195,28 +226,7 @@ export const refundDraftCreditCommand = tenantCommand({
   output: z.object({ balance: z.number().int(), refunded: z.boolean() }),
   entitlement: 'ai',
   permission: 'events:write',
-  handler: async ({ input, ctx, tx, emit }) => {
-    const account = await lockedAccount(tx, ctx);
-    const [d] = await tx
-      .select()
-      .from(creditLedger)
-      .where(and(eq(creditLedger.id, input.debitId), eq(creditLedger.kind, 'debit')));
-    if (!d) throw new DomainError('not_found');
-    const [already] = await tx
-      .select({ id: creditLedger.id })
-      .from(creditLedger)
-      .where(and(eq(creditLedger.refId, d.id), eq(creditLedger.kind, 'refund')));
-    if (already) return { balance: account.balance, refunded: false };
-    const back = refund(account, d.amount);
-    await append(tx, ctx, account.id, back.state, [back.entry], {
-      reason: 'draft_failed',
-      ...(d.draftKind ? { draftKind: d.draftKind as DraftKind } : {}),
-      ...(d.eventId ? { eventId: d.eventId } : {}),
-      refId: d.id,
-    });
-    emit(creditUsageEvent('ai.credits_refunded', requireOrg(ctx), d.id, Math.abs(back.entry.amount)));
-    return { balance: back.state.balance, refunded: true };
-  },
+  handler: ({ input, ctx, tx, emit }) => refundTx(tx, ctx, input.debitId, emit),
   audit: (input) => ({ action: 'ai.draft.refund', targetType: 'credit', targetId: input.debitId }),
 });
 

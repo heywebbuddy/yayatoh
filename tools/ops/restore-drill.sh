@@ -7,7 +7,7 @@
 set -euo pipefail
 : "${DUMP:?set DUMP}"
 : "${TARGET_URL:?set TARGET_URL}"
-IMAGE="${PG_IMAGE:-postgres:18}"
+IMAGE="${PG_IMAGE:-pgvector/pgvector:pg18}"
 case "$TARGET_URL" in *prod*|*production*) echo "restore-drill: refusing a production-looking target" >&2; exit 1;; esac
 START=$(date +%s)
 DB="yayatoh_restore_$(date -u +%Y%m%d%H%M%S)"

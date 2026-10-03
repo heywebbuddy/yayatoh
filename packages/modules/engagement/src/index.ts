@@ -173,6 +173,20 @@ export {
   updateNetworkSettingsCommand,
 } from './networking/console.ts';
 export * from './networking/dto.ts';
+// M6.12b: matchmaking (embeddings of listed profiles, suggestions within the event).
+export {
+  MATCH_BATCH,
+  MAX_MATCHES,
+  MatchDto,
+  MatchesDto,
+  MatchmakingStatusDto,
+  matchmakingStatusQuery,
+  PendingEmbeddingsDto,
+  pendingEmbeddingsQuery,
+  profileEmbeddingText,
+  storeEmbeddingsCommand,
+  suggestedMatchesQuery,
+} from './networking/matchmaking.ts';
 export { networkingEvent, networkingOpen } from './networking/public.ts';
 export {
   AskInput,
@@ -190,6 +204,7 @@ export {
   voteCommand,
 } from './participate.ts';
 export { privateColumns } from './private-columns.ts';
+export { NETWORK_EMBEDDING_DIMENSIONS } from './schema.ts';
 export { ENGAGEMENT_REALTIME_CHANNELS, LIVE_CHANNEL, MODERATION_CHANNEL } from './realtime.ts';
 export {
   ANONYMOUS_IDENTITY,

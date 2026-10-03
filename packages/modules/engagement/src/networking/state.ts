@@ -8,6 +8,7 @@ import {
   meetings,
   networkBlocks,
   networkConnections,
+  networkEmbeddings,
   networkProfiles,
   networkReports,
   networkSettings,
@@ -119,12 +120,19 @@ export async function visiblePersonTx(
   return p;
 }
 
+/** M6.12b: forget a profile's matchmaking embedding (opt-out, hidden, edited, erased). */
+export async function dropEmbeddingTx(tx: TenantTx, profileId: string): Promise<void> {
+  await tx.delete(networkEmbeddings).where(eq(networkEmbeddings.profileId, profileId));
+}
+
 /**
  * Leaving the directory (opting out, being hidden by the organizer): requests still waiting are
  * withdrawn and meetings not yet held are cancelled, so tables free up. Accepted connections stay
  * (they come back if the person opts in again) but are never shown meanwhile.
  */
 export async function leaveNetworkTx(tx: TenantTx, ctx: Ctx, profileId: string): Promise<void> {
+  // M6.12b: no matchmaking embedding outlives a listing.
+  await dropEmbeddingTx(tx, profileId);
   await tx
     .update(networkConnections)
     .set({ status: 'withdrawn', respondedAt: ctx.now, updatedAt: ctx.now })

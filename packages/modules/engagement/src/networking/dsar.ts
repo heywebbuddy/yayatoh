@@ -6,6 +6,7 @@ import {
   chatReports,
   meetings,
   networkConnections,
+  networkEmbeddings,
   networkProfiles,
   networkReports,
 } from '../schema.ts';
@@ -183,6 +184,8 @@ export async function eraseNetworkingDsarTx(tx: TenantTx, contactIds: readonly s
       interests: [],
     })
     .where(inArray(networkProfiles.id, ids));
+  // M6.12b: the matchmaking embeddings were derived from the profile: gone with it.
+  await tx.delete(networkEmbeddings).where(inArray(networkEmbeddings.profileId, ids));
   const connections = await tx
     .update(networkConnections)
     .set({ message: null })
