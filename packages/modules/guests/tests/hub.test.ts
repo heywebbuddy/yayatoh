@@ -70,7 +70,10 @@ describe('guestPassContent (M4.7a)', () => {
   });
   it('clips long text and caps the seats, counting the rest', () => {
     const long = 'x'.repeat(200);
-    const seats = Array.from({ length: PASS_SEATS_MAX + 3 }, (_, i) => ({ itemLabel: long, seatLabel: `${i}` }));
+    const seats = Array.from({ length: PASS_SEATS_MAX + 3 }, (_, i) => ({
+      itemLabel: long,
+      seatLabel: `${i}`,
+    }));
     const c = guestPassContent({ ...base, eventName: long, partyName: long, seats });
     expect(c.eventName).toHaveLength(PASS_TEXT_MAX);
     expect(c.eventName.endsWith('…')).toBe(true);
@@ -92,7 +95,10 @@ describe('fake guest pass provider (M4.7a)', () => {
       startsAt: at(18),
       endsAt: at(23),
       program: [],
-      seats: Array.from({ length: PASS_SEATS_MAX + 1 }, (_, i) => ({ itemLabel: 'T1', seatLabel: `${i + 1}` })),
+      seats: Array.from({ length: PASS_SEATS_MAX + 1 }, (_, i) => ({
+        itemLabel: 'T1',
+        seatLabel: `${i + 1}`,
+      })),
     });
     const r = await p.issuePass({
       platform: 'google',
