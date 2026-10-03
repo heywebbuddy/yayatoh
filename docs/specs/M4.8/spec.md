@@ -349,7 +349,8 @@ A sync batch (≤ 100 entries) is a handful of indexed reads and one insert per 
 Behind the `donations` entitlement. Works for unconnected orgs too (pledges only, P4-9).
 
 ### 14. Build notes (2026-10-03)
-Base: build branch + `merge/next-3g` + `agent/design-v2` + `merge/next-3h` (which carries `agent/m4.8a`, `agent/m4.8b` and `agent/m4.2b`). The screens use design v2 components only (PageHeader, Card, StatCard, StatusPill, EmptyState, Table, Alert, Button); one local composition, `RaiseActionButton` (a one-button form announcing the server's answer), lives in the feature folder.
+Base: build branch + `merge/next-3g` + `agent/design-v2` + `merge/next-3h` (which carries `agent/m4.8a`, `agent/m4.8b` and `agent/m4.2b`).
+- Gate: lint, check:modules, typecheck (59/59), unit 2,703 passed (200 files), integration 1,509 passed (165 files). e2e: `paddle-raise.spec.ts` 12/12 (3 projects); related `donations`, `realtime` 36/36; `canary-crawl`, `security` 106 passed (14 skipped by project). The screens use design v2 components only (PageHeader, Card, StatCard, StatusPill, EmptyState, Table, Alert, Button); one local composition, `RaiseActionButton` (a one-button form announcing the server's answer), lives in the feature folder.
 
 ### 15. Demo checklist
 - [ ] As the Lakeside owner, create a gala, add a "Table of 4" ticket, publish, buy a table on the public page (fake provider) and name three guests through the table's link.
