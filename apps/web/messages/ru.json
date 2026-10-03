@@ -5070,7 +5070,9 @@
         "consent": "Согласие на маркетинг",
         "label": "Метка",
         "totals": "Итоги за всё время",
-        "seen": "Впервые или последний раз"
+        "seen": "Впервые или последний раз",
+        "stats": "Статистика контакта",
+        "ltv": "Пожизненная ценность"
       },
       "did": "Правило",
       "didYes": "Да",
@@ -5128,7 +5130,19 @@
       "event": "Мероприятие",
       "editionOf": "Выпуск перед",
       "series": "Серия",
-      "noSeries": "Серий пока нет"
+      "noSeries": "Серий пока нет",
+      "statsMetric": "Показатель",
+      "statsMetrics": {
+        "engagement": "Оценка вовлечённости",
+        "noShowPct": "Вероятность неявки",
+        "sessionsAttended": "Посещённые сессии",
+        "campaignsOpened": "Открытые кампании",
+        "rfmRecency": "RFM давность (квинтиль)",
+        "rfmFrequency": "RFM частота (квинтиль)",
+        "rfmMonetary": "RFM сумма (квинтиль)"
+      },
+      "valuePercent": "Процент",
+      "quintile": "Квинтиль (1–5)"
     },
     "scopes": {
       "any": "Любое мероприятие",
@@ -5185,7 +5199,8 @@
       }
     },
     "peopleLink": "Люди",
-    "duplicatesLink": "Возможные дубликаты"
+    "duplicatesLink": "Возможные дубликаты",
+    "insights": "Аналитика контактов"
   },
   "refundOps": {
     "timeline": {
@@ -11056,5 +11071,77 @@
       "unknown_legacy": "Неизвестно (импорт)",
       "none": "Нет согласия"
     }
+  },
+  "contactStats": {
+    "title": "Контакт",
+    "insightsTitle": "Аналитика контактов",
+    "insightsDescription": "Как ваши люди участвуют во всех мероприятиях: вовлечённость, неявки, давность и частота.",
+    "audiencesLink": "Аудитории",
+    "notLive": "Этот контакт объединён с другим или удалён. Его статистика больше не учитывается.",
+    "emptyTitle": "Пока нет активности",
+    "emptyDescription": "Статистика появится, когда этот человек зарегистрируется на мероприятие, посетит сессию или откроет кампанию.",
+    "emptyAction": "Создать аудиторию",
+    "glance": "Кратко",
+    "events": "Регистрации на мероприятия",
+    "attended": "Посещённые мероприятия",
+    "sessions": "Посещённые сессии",
+    "campaigns": "Открытые кампании",
+    "firstSeen": "Впервые",
+    "lastSeen": "В последний раз",
+    "never": "—",
+    "lifetimeValue": "Пожизненная ценность",
+    "lifetimeOrders": "{count, plural, one {# оплаченный заказ} few {# оплаченных заказа} many {# оплаченных заказов} other {# оплаченного заказа}}",
+    "noSpend": "Пока нет оплаченных заказов.",
+    "noSpendOrg": "Пока никто ничего не оплатил.",
+    "scores": "Оценки",
+    "engagement": "Оценка вовлечённости",
+    "engagementValue": "{score} / 100",
+    "engagementHow": "{wAttended} × {attended} посещённых мероприятий + {wSessions} × {sessions} сессий + {wCampaigns} × {campaigns} открытых кампаний = {points} баллов. 100 × {points} ÷ ({points} + {half}) = {score}.",
+    "noShow": "Вероятность неявки",
+    "noShowHow": "({noShows} неявок + {priorNoShows}) ÷ ({past} прошедших регистраций + {priorRegistrations}) = {pct}. Предстоящие мероприятия пока не учитываются.",
+    "rfm": "RFM",
+    "rfmHow": "Квинтили среди людей этой организации, участвовавших в мероприятии: 5 — верхняя пятая часть.",
+    "rfmNone": "Пока без ранга: нет мероприятий.",
+    "recency": "Давность",
+    "frequency": "Частота",
+    "monetary": "Сумма",
+    "quintileValue": "{q} из 5",
+    "updated": "Обновлено {date}",
+    "viewContact": "Открыть контакт",
+    "headerSummary": "Вовлечённость {score} · Неявка {pct}",
+    "headerValue": "За всё время {amount}",
+    "totals": "Итоги",
+    "total": {
+      "contacts": "Контакты",
+      "participants": "Участвовали",
+      "attendedAny": "Посетили",
+      "averageEngagement": "Средняя вовлечённость",
+      "noShowRate": "Доля неявок"
+    },
+    "distributions": "Распределения",
+    "distribution": {
+      "engagement": "Оценка вовлечённости",
+      "noShow": "Вероятность неявки",
+      "frequency": "Мероприятия с участием",
+      "recency": "В последний раз"
+    },
+    "showData": "Показать данные",
+    "range": "Диапазон",
+    "people": "Люди",
+    "bandRange": "{from}–{to}",
+    "bandFrom": "{from} и больше",
+    "recencyWithin": "За {days} дн.",
+    "recencyOlder": "Раньше",
+    "value": {
+      "currency": "Валюта",
+      "payers": "Плательщики",
+      "total": "Всего",
+      "average": "Среднее",
+      "topFifth": "Верхняя пятая часть от",
+      "max": "Максимум"
+    },
+    "orgEmptyTitle": "Пока нет активности контактов",
+    "orgEmptyDescription": "Статистика появится, когда люди будут регистрироваться, проходить check-in, посещать сессии и открывать кампании.",
+    "orgEmptyAction": "К мероприятиям"
   }
 }

@@ -5070,7 +5070,9 @@
         "consent": "Consentimento de marketing",
         "label": "Etiqueta",
         "totals": "Totais acumulados",
-        "seen": "Visto pela primeira ou última vez"
+        "seen": "Visto pela primeira ou última vez",
+        "stats": "Estatísticas do contato",
+        "ltv": "Valor vitalício"
       },
       "did": "Regra",
       "didYes": "Sim",
@@ -5128,7 +5130,19 @@
       "event": "Evento",
       "editionOf": "Edição anterior a",
       "series": "Série",
-      "noSeries": "Ainda não há séries"
+      "noSeries": "Ainda não há séries",
+      "statsMetric": "Métrica",
+      "statsMetrics": {
+        "engagement": "Pontuação de engajamento",
+        "noShowPct": "Propensão a faltar",
+        "sessionsAttended": "Sessões assistidas",
+        "campaignsOpened": "Campanhas abertas",
+        "rfmRecency": "RFM recência (quintil)",
+        "rfmFrequency": "RFM frequência (quintil)",
+        "rfmMonetary": "RFM monetário (quintil)"
+      },
+      "valuePercent": "Percentual",
+      "quintile": "Quintil (1–5)"
     },
     "scopes": {
       "any": "Qualquer evento",
@@ -5185,7 +5199,8 @@
       }
     },
     "peopleLink": "Pessoas",
-    "duplicatesLink": "Possíveis duplicados"
+    "duplicatesLink": "Possíveis duplicados",
+    "insights": "Insights de contatos"
   },
   "refundOps": {
     "timeline": {
@@ -11056,5 +11071,77 @@
       "unknown_legacy": "Desconhecido (importado)",
       "none": "Sem consentimento"
     }
+  },
+  "contactStats": {
+    "title": "Contato",
+    "insightsTitle": "Insights de contatos",
+    "insightsDescription": "Como seu público participa em todos os eventos: engajamento, faltas, recência e frequência.",
+    "audiencesLink": "Públicos",
+    "notLive": "Este contato foi mesclado com outro ou apagado. As estatísticas dele não contam mais.",
+    "emptyTitle": "Ainda sem atividade",
+    "emptyDescription": "As estatísticas aparecem quando esta pessoa se inscreve em um evento, assiste a uma sessão ou abre uma campanha.",
+    "emptyAction": "Criar um público",
+    "glance": "Visão geral",
+    "events": "Eventos inscritos",
+    "attended": "Eventos frequentados",
+    "sessions": "Sessões assistidas",
+    "campaigns": "Campanhas abertas",
+    "firstSeen": "Visto pela primeira vez",
+    "lastSeen": "Visto pela última vez",
+    "never": "—",
+    "lifetimeValue": "Valor vitalício",
+    "lifetimeOrders": "{count, plural, one {# pedido pago} other {# pedidos pagos}}",
+    "noSpend": "Ainda não há pedidos pagos.",
+    "noSpendOrg": "Ninguém pagou nada ainda.",
+    "scores": "Pontuações",
+    "engagement": "Pontuação de engajamento",
+    "engagementValue": "{score} / 100",
+    "engagementHow": "{wAttended} × {attended} eventos frequentados + {wSessions} × {sessions} sessões + {wCampaigns} × {campaigns} campanhas abertas = {points} pontos. 100 × {points} ÷ ({points} + {half}) = {score}.",
+    "noShow": "Propensão a faltar",
+    "noShowHow": "({noShows} faltas + {priorNoShows}) ÷ ({past} inscrições passadas + {priorRegistrations}) = {pct}. Eventos futuros ainda não contam.",
+    "rfm": "RFM",
+    "rfmHow": "Quintis entre as pessoas desta organização que participaram de um evento: 5 é o quinto superior.",
+    "rfmNone": "Ainda sem classificação: nenhum evento.",
+    "recency": "Recência",
+    "frequency": "Frequência",
+    "monetary": "Monetário",
+    "quintileValue": "{q} de 5",
+    "updated": "Atualizado em {date}",
+    "viewContact": "Ver contato",
+    "headerSummary": "Engajamento {score} · Falta {pct}",
+    "headerValue": "Vitalício {amount}",
+    "totals": "Totais",
+    "total": {
+      "contacts": "Contatos",
+      "participants": "Participaram",
+      "attendedAny": "Compareceram",
+      "averageEngagement": "Engajamento médio",
+      "noShowRate": "Taxa de faltas"
+    },
+    "distributions": "Distribuições",
+    "distribution": {
+      "engagement": "Pontuação de engajamento",
+      "noShow": "Propensão a faltar",
+      "frequency": "Eventos em que participou",
+      "recency": "Visto pela última vez"
+    },
+    "showData": "Mostrar os dados",
+    "range": "Faixa",
+    "people": "Pessoas",
+    "bandRange": "{from}–{to}",
+    "bandFrom": "{from} ou mais",
+    "recencyWithin": "Nos últimos {days} dias",
+    "recencyOlder": "Há mais tempo",
+    "value": {
+      "currency": "Moeda",
+      "payers": "Pessoas pagantes",
+      "total": "Total",
+      "average": "Média",
+      "topFifth": "Quinto superior a partir de",
+      "max": "Máximo"
+    },
+    "orgEmptyTitle": "Ainda sem atividade de contatos",
+    "orgEmptyDescription": "As estatísticas aparecem conforme as pessoas se inscrevem, fazem check-in, assistem a sessões e abrem campanhas.",
+    "orgEmptyAction": "Ir para seus eventos"
   }
 }

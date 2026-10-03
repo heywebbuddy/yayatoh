@@ -5070,7 +5070,9 @@
         "consent": "Marketingtoestemming",
         "label": "Label",
         "totals": "Totalen",
-        "seen": "Eerst of laatst gezien"
+        "seen": "Eerst of laatst gezien",
+        "stats": "Contactstatistieken",
+        "ltv": "Klantwaarde"
       },
       "did": "Regel",
       "didYes": "Wel",
@@ -5128,7 +5130,19 @@
       "event": "Evenement",
       "editionOf": "Editie vóór",
       "series": "Reeks",
-      "noSeries": "Nog geen reeksen"
+      "noSeries": "Nog geen reeksen",
+      "statsMetric": "Statistiek",
+      "statsMetrics": {
+        "engagement": "Betrokkenheidsscore",
+        "noShowPct": "Kans op no-show",
+        "sessionsAttended": "Bezochte sessies",
+        "campaignsOpened": "Geopende campagnes",
+        "rfmRecency": "RFM-recentheid (kwintiel)",
+        "rfmFrequency": "RFM-frequentie (kwintiel)",
+        "rfmMonetary": "RFM-waarde (kwintiel)"
+      },
+      "valuePercent": "Procent",
+      "quintile": "Kwintiel (1–5)"
     },
     "scopes": {
       "any": "Elk evenement",
@@ -5185,7 +5199,8 @@
       }
     },
     "peopleLink": "Personen",
-    "duplicatesLink": "Mogelijke dubbelen"
+    "duplicatesLink": "Mogelijke dubbelen",
+    "insights": "Contactinzichten"
   },
   "refundOps": {
     "timeline": {
@@ -11056,5 +11071,77 @@
       "unknown_legacy": "Onbekend (geïmporteerd)",
       "none": "Geen toestemming"
     }
+  },
+  "contactStats": {
+    "title": "Contact",
+    "insightsTitle": "Contactinzichten",
+    "insightsDescription": "Hoe uw mensen deelnemen aan al uw evenementen: betrokkenheid, no-shows, recentheid en frequentie.",
+    "audiencesLink": "Doelgroepen",
+    "notLive": "Dit contact is samengevoegd met een ander of gewist. De statistieken tellen niet meer mee.",
+    "emptyTitle": "Nog geen activiteit",
+    "emptyDescription": "Statistieken verschijnen zodra deze persoon zich aanmeldt voor een evenement, een sessie bijwoont of een campagne opent.",
+    "emptyAction": "Doelgroep maken",
+    "glance": "In één oogopslag",
+    "events": "Aangemelde evenementen",
+    "attended": "Bijgewoonde evenementen",
+    "sessions": "Bezochte sessies",
+    "campaigns": "Geopende campagnes",
+    "firstSeen": "Eerst gezien",
+    "lastSeen": "Laatst gezien",
+    "never": "—",
+    "lifetimeValue": "Klantwaarde",
+    "lifetimeOrders": "{count, plural, one {# betaalde bestelling} other {# betaalde bestellingen}}",
+    "noSpend": "Nog geen betaalde bestellingen.",
+    "noSpendOrg": "Nog niemand heeft iets betaald.",
+    "scores": "Scores",
+    "engagement": "Betrokkenheidsscore",
+    "engagementValue": "{score} / 100",
+    "engagementHow": "{wAttended} × {attended} bijgewoonde evenementen + {wSessions} × {sessions} sessies + {wCampaigns} × {campaigns} geopende campagnes = {points} punten. 100 × {points} ÷ ({points} + {half}) = {score}.",
+    "noShow": "Kans op no-show",
+    "noShowHow": "({noShows} no-shows + {priorNoShows}) ÷ ({past} eerdere aanmeldingen + {priorRegistrations}) = {pct}. Komende evenementen tellen nog niet mee.",
+    "rfm": "RFM",
+    "rfmHow": "Kwintielen onder de mensen van deze organisatie die aan een evenement deelnamen: 5 is het hoogste vijfde.",
+    "rfmNone": "Nog niet ingedeeld: geen evenementen.",
+    "recency": "Recentheid",
+    "frequency": "Frequentie",
+    "monetary": "Waarde",
+    "quintileValue": "{q} van 5",
+    "updated": "Bijgewerkt op {date}",
+    "viewContact": "Contact bekijken",
+    "headerSummary": "Betrokkenheid {score} · No-show {pct}",
+    "headerValue": "Klantwaarde {amount}",
+    "totals": "Totalen",
+    "total": {
+      "contacts": "Contacten",
+      "participants": "Deelgenomen",
+      "attendedAny": "Aanwezig",
+      "averageEngagement": "Gemiddelde betrokkenheid",
+      "noShowRate": "No-showpercentage"
+    },
+    "distributions": "Verdelingen",
+    "distribution": {
+      "engagement": "Betrokkenheidsscore",
+      "noShow": "Kans op no-show",
+      "frequency": "Evenementen deelgenomen",
+      "recency": "Laatst gezien"
+    },
+    "showData": "Gegevens tonen",
+    "range": "Bereik",
+    "people": "Personen",
+    "bandRange": "{from}–{to}",
+    "bandFrom": "{from} of meer",
+    "recencyWithin": "Binnen {days} dagen",
+    "recencyOlder": "Langer geleden",
+    "value": {
+      "currency": "Valuta",
+      "payers": "Betalende personen",
+      "total": "Totaal",
+      "average": "Gemiddelde",
+      "topFifth": "Hoogste vijfde vanaf",
+      "max": "Hoogste"
+    },
+    "orgEmptyTitle": "Nog geen contactactiviteit",
+    "orgEmptyDescription": "Statistieken verschijnen zodra mensen zich aanmelden, inchecken, sessies bijwonen en campagnes openen.",
+    "orgEmptyAction": "Naar uw evenementen"
   }
 }

@@ -5070,7 +5070,9 @@
         "consent": "Marketing consent",
         "label": "Label",
         "totals": "Lifetime totals",
-        "seen": "First or last seen"
+        "seen": "First or last seen",
+        "stats": "Contact stats",
+        "ltv": "Lifetime value"
       },
       "did": "Rule",
       "didYes": "Did",
@@ -5128,7 +5130,19 @@
       "event": "Event",
       "editionOf": "Edition before",
       "series": "Series",
-      "noSeries": "No series yet"
+      "noSeries": "No series yet",
+      "statsMetric": "Stat",
+      "statsMetrics": {
+        "engagement": "Engagement score",
+        "noShowPct": "No-show propensity",
+        "sessionsAttended": "Sessions attended",
+        "campaignsOpened": "Campaigns opened",
+        "rfmRecency": "RFM recency (quintile)",
+        "rfmFrequency": "RFM frequency (quintile)",
+        "rfmMonetary": "RFM monetary (quintile)"
+      },
+      "valuePercent": "Percent",
+      "quintile": "Quintile (1–5)"
     },
     "scopes": {
       "any": "Any event",
@@ -5185,7 +5199,8 @@
       }
     },
     "peopleLink": "People",
-    "duplicatesLink": "Possible duplicates"
+    "duplicatesLink": "Possible duplicates",
+    "insights": "Contact insights"
   },
   "refundOps": {
     "timeline": {
@@ -11056,5 +11071,77 @@
       "unknown_legacy": "Unknown (imported)",
       "none": "No consent"
     }
+  },
+  "contactStats": {
+    "title": "Contact",
+    "insightsTitle": "Contact insights",
+    "insightsDescription": "How your people take part across every event: engagement, no-shows, recency and frequency.",
+    "audiencesLink": "Audiences",
+    "notLive": "This contact was merged into another or erased. Their stats no longer count.",
+    "emptyTitle": "No activity yet",
+    "emptyDescription": "Stats appear once this person registers for an event, attends a session or opens a campaign.",
+    "emptyAction": "Build an audience",
+    "glance": "At a glance",
+    "events": "Events registered",
+    "attended": "Events attended",
+    "sessions": "Sessions attended",
+    "campaigns": "Campaigns opened",
+    "firstSeen": "First seen",
+    "lastSeen": "Last seen",
+    "never": "—",
+    "lifetimeValue": "Lifetime value",
+    "lifetimeOrders": "{count, plural, one {# paid order} other {# paid orders}}",
+    "noSpend": "No paid orders yet.",
+    "noSpendOrg": "Nobody has paid for anything yet.",
+    "scores": "Scores",
+    "engagement": "Engagement score",
+    "engagementValue": "{score} / 100",
+    "engagementHow": "{wAttended} × {attended} events attended + {wSessions} × {sessions} sessions + {wCampaigns} × {campaigns} campaigns opened = {points} points. 100 × {points} ÷ ({points} + {half}) = {score}.",
+    "noShow": "No-show propensity",
+    "noShowHow": "({noShows} no-shows + {priorNoShows}) ÷ ({past} past registrations + {priorRegistrations}) = {pct}. Upcoming events don’t count yet.",
+    "rfm": "RFM",
+    "rfmHow": "Quintiles among this organization’s people who took part in an event: 5 is the top fifth.",
+    "rfmNone": "Not ranked yet: no events.",
+    "recency": "Recency",
+    "frequency": "Frequency",
+    "monetary": "Monetary",
+    "quintileValue": "{q} of 5",
+    "updated": "Updated {date}",
+    "viewContact": "View contact",
+    "headerSummary": "Engagement {score} · No-show {pct}",
+    "headerValue": "Lifetime {amount}",
+    "totals": "Totals",
+    "total": {
+      "contacts": "Contacts",
+      "participants": "Took part",
+      "attendedAny": "Attended",
+      "averageEngagement": "Average engagement",
+      "noShowRate": "No-show rate"
+    },
+    "distributions": "Distributions",
+    "distribution": {
+      "engagement": "Engagement score",
+      "noShow": "No-show propensity",
+      "frequency": "Events taken part in",
+      "recency": "Last seen"
+    },
+    "showData": "Show the data",
+    "range": "Range",
+    "people": "People",
+    "bandRange": "{from}–{to}",
+    "bandFrom": "{from} or more",
+    "recencyWithin": "Within {days} days",
+    "recencyOlder": "Longer ago",
+    "value": {
+      "currency": "Currency",
+      "payers": "Paying people",
+      "total": "Total",
+      "average": "Average",
+      "topFifth": "Top fifth from",
+      "max": "Highest"
+    },
+    "orgEmptyTitle": "No contact activity yet",
+    "orgEmptyDescription": "Stats appear as people register, check in, attend sessions and open campaigns.",
+    "orgEmptyAction": "Go to your events"
   }
 }

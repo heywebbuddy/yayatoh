@@ -21,3 +21,11 @@ Org-scoped contacts and the consent ledger. Owns Postgres schema `crm`.
 - **Undo** within 30 days restores the split exactly: owners move back the recorded rows, timeline entries go back with their subjects, the merge's consent rows are removed, both records get their snapshot fields (and `updated_at`) back; emits `crm.contacts_unmerged@1`. Refused once expired, after erasure (the snapshot is scrubbed by `eraseContactDsarTx`) or while the target has been merged again.
 - `upsertContactTx`, `upsertContactsTx` and `contactIdByEmailTx` follow `merged_into` (a merged-away address finds the record that stays).
 - **Timeline** (`timeline_entries`): a projection written only by owners' outbox subscribers through `recordTimelineTx`, exactly once per `(kind, source_ref)`; a fact about a merged contact lands on the active record. Never PII beyond a short label (a campaign or survey name). Read by keyset (`timelinePageTx`).
+- **Contact stats (M6.1b):** `contact_scores` (per contact) and `contact_stats` (per contact ×
+  currency: lifetime value) are projections recomputed from `event_participation` and
+  `contact_signals` by `writeContactStatsTx` (audiences runs it); never written by anything else.
+  `contact_signals` is exactly once per (contact, kind, ref). The formulas are pure and documented
+  (`stats/formulas.ts`); RFM quintiles are computed on read (`stats/rfm.ts`), never stored.
+  Money (lifetime value, the monetary quintile) leaves only through `finance:read` queries;
+  `contactStats`/`orgContactStats` never carry an amount. The `ltv` and `rfmMonetary` segment
+  conditions are money conditions (`usesMoneyConditions`).

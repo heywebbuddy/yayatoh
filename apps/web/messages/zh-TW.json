@@ -5070,7 +5070,9 @@
         "consent": "行銷同意",
         "label": "標籤",
         "totals": "累計資料",
-        "seen": "首次或最近出現"
+        "seen": "首次或最近出現",
+        "stats": "聯絡人統計",
+        "ltv": "終身價值"
       },
       "did": "規則",
       "didYes": "是",
@@ -5128,7 +5130,19 @@
       "event": "活動",
       "editionOf": "此前一屆",
       "series": "系列",
-      "noSeries": "還沒有系列"
+      "noSeries": "還沒有系列",
+      "statsMetric": "指標",
+      "statsMetrics": {
+        "engagement": "參與度分數",
+        "noShowPct": "缺席傾向",
+        "sessionsAttended": "參加的場次",
+        "campaignsOpened": "開啟的行銷活動",
+        "rfmRecency": "RFM 近度（五分位）",
+        "rfmFrequency": "RFM 頻率（五分位）",
+        "rfmMonetary": "RFM 金額（五分位）"
+      },
+      "valuePercent": "百分比",
+      "quintile": "五分位（1–5）"
     },
     "scopes": {
       "any": "任意活動",
@@ -5185,7 +5199,8 @@
       }
     },
     "peopleLink": "人員",
-    "duplicatesLink": "可能的重複"
+    "duplicatesLink": "可能的重複",
+    "insights": "聯絡人洞察"
   },
   "refundOps": {
     "timeline": {
@@ -11056,5 +11071,77 @@
       "unknown_legacy": "未知（匯入）",
       "none": "無同意"
     }
+  },
+  "contactStats": {
+    "title": "聯絡人",
+    "insightsTitle": "聯絡人洞察",
+    "insightsDescription": "你的參與者在所有活動中的表現：參與度、缺席、近度與頻率。",
+    "audiencesLink": "受眾",
+    "notLive": "此聯絡人已合併至其他聯絡人或已被清除，其統計資料不再計入。",
+    "emptyTitle": "尚無活動",
+    "emptyDescription": "此人報名活動、參加場次或開啟行銷活動後，統計資料就會顯示。",
+    "emptyAction": "建立受眾",
+    "glance": "概覽",
+    "events": "報名的活動",
+    "attended": "出席的活動",
+    "sessions": "參加的場次",
+    "campaigns": "開啟的行銷活動",
+    "firstSeen": "首次出現",
+    "lastSeen": "最近出現",
+    "never": "—",
+    "lifetimeValue": "終身價值",
+    "lifetimeOrders": "{count, plural, other {# 筆已付款訂單}}",
+    "noSpend": "尚無已付款訂單。",
+    "noSpendOrg": "還沒有人付過款。",
+    "scores": "分數",
+    "engagement": "參與度分數",
+    "engagementValue": "{score} / 100",
+    "engagementHow": "{wAttended} × {attended} 出席活動 + {wSessions} × {sessions} 場次 + {wCampaigns} × {campaigns} 開啟的行銷活動 = {points} 分. 100 × {points} ÷ ({points} + {half}) = {score}.",
+    "noShow": "缺席傾向",
+    "noShowHow": "({noShows} 次缺席 + {priorNoShows}) ÷ ({past} 次過往報名 + {priorRegistrations}) = {pct}. 即將舉行的活動暫不計入。",
+    "rfm": "RFM",
+    "rfmHow": "在本組織參加過活動的人之中的五分位：5 為最高的五分之一。",
+    "rfmNone": "尚未排名：沒有活動。",
+    "recency": "近度",
+    "frequency": "頻率",
+    "monetary": "金額",
+    "quintileValue": "{q} / 5",
+    "updated": "更新於 {date}",
+    "viewContact": "檢視聯絡人",
+    "headerSummary": "參與度 {score} · 缺席 {pct}",
+    "headerValue": "終身 {amount}",
+    "totals": "總計",
+    "total": {
+      "contacts": "聯絡人",
+      "participants": "參與過",
+      "attendedAny": "出席過",
+      "averageEngagement": "平均參與度",
+      "noShowRate": "缺席率"
+    },
+    "distributions": "分布",
+    "distribution": {
+      "engagement": "參與度分數",
+      "noShow": "缺席傾向",
+      "frequency": "參與的活動數",
+      "recency": "最近出現"
+    },
+    "showData": "顯示資料",
+    "range": "區間",
+    "people": "人數",
+    "bandRange": "{from}–{to}",
+    "bandFrom": "{from} 以上",
+    "recencyWithin": "{days} 天內",
+    "recencyOlder": "更早",
+    "value": {
+      "currency": "幣別",
+      "payers": "付款人數",
+      "total": "總計",
+      "average": "平均",
+      "topFifth": "最高五分之一起點",
+      "max": "最高"
+    },
+    "orgEmptyTitle": "尚無聯絡人活動",
+    "orgEmptyDescription": "隨著大家報名、報到、參加場次和開啟行銷活動，統計資料就會顯示。",
+    "orgEmptyAction": "前往你的活動"
   }
 }

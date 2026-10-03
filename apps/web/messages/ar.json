@@ -5070,7 +5070,9 @@
         "consent": "الموافقة التسويقية",
         "label": "تصنيف",
         "totals": "الإجماليات",
-        "seen": "أول أو آخر ظهور"
+        "seen": "أول أو آخر ظهور",
+        "stats": "إحصاءات جهة الاتصال",
+        "ltv": "القيمة مدى الحياة"
       },
       "did": "القاعدة",
       "didYes": "نعم",
@@ -5128,7 +5130,19 @@
       "event": "الفعالية",
       "editionOf": "النسخة السابقة لـ",
       "series": "السلسلة",
-      "noSeries": "لا توجد سلاسل بعد"
+      "noSeries": "لا توجد سلاسل بعد",
+      "statsMetric": "المؤشر",
+      "statsMetrics": {
+        "engagement": "درجة التفاعل",
+        "noShowPct": "احتمال عدم الحضور",
+        "sessionsAttended": "الجلسات التي حضرها",
+        "campaignsOpened": "الحملات المفتوحة",
+        "rfmRecency": "RFM الحداثة (خُمس)",
+        "rfmFrequency": "RFM التكرار (خُمس)",
+        "rfmMonetary": "RFM القيمة (خُمس)"
+      },
+      "valuePercent": "نسبة مئوية",
+      "quintile": "الخُمس (1–5)"
     },
     "scopes": {
       "any": "أي فعالية",
@@ -5185,7 +5199,8 @@
       }
     },
     "peopleLink": "الأشخاص",
-    "duplicatesLink": "تكرارات محتملة"
+    "duplicatesLink": "تكرارات محتملة",
+    "insights": "رؤى جهات الاتصال"
   },
   "refundOps": {
     "timeline": {
@@ -11056,5 +11071,77 @@
       "unknown_legacy": "غير معروف (مستورد)",
       "none": "لا موافقة"
     }
+  },
+  "contactStats": {
+    "title": "جهة اتصال",
+    "insightsTitle": "رؤى جهات الاتصال",
+    "insightsDescription": "كيف يشارك جمهورك في كل الفعاليات: التفاعل وعدم الحضور والحداثة والتكرار.",
+    "audiencesLink": "الجماهير",
+    "notLive": "دُمجت جهة الاتصال هذه في جهة أخرى أو مُحيت. لم تعد إحصاءاتها تُحتسب.",
+    "emptyTitle": "لا نشاط بعد",
+    "emptyDescription": "تظهر الإحصاءات بمجرد أن يسجّل هذا الشخص في فعالية أو يحضر جلسة أو يفتح حملة.",
+    "emptyAction": "أنشئ جمهورًا",
+    "glance": "نظرة سريعة",
+    "events": "الفعاليات المسجّل فيها",
+    "attended": "الفعاليات التي حضرها",
+    "sessions": "الجلسات التي حضرها",
+    "campaigns": "الحملات المفتوحة",
+    "firstSeen": "أول ظهور",
+    "lastSeen": "آخر ظهور",
+    "never": "—",
+    "lifetimeValue": "القيمة مدى الحياة",
+    "lifetimeOrders": "{count, plural, zero {لا طلبات مدفوعة} one {طلب مدفوع واحد} two {طلبان مدفوعان} few {# طلبات مدفوعة} many {# طلبًا مدفوعًا} other {# طلب مدفوع}}",
+    "noSpend": "لا طلبات مدفوعة بعد.",
+    "noSpendOrg": "لم يدفع أحد شيئًا بعد.",
+    "scores": "الدرجات",
+    "engagement": "درجة التفاعل",
+    "engagementValue": "{score} / 100",
+    "engagementHow": "{wAttended} × {attended} فعاليات حضرها + {wSessions} × {sessions} جلسات + {wCampaigns} × {campaigns} حملات مفتوحة = {points} نقطة. 100 × {points} ÷ ({points} + {half}) = {score}.",
+    "noShow": "احتمال عدم الحضور",
+    "noShowHow": "({noShows} مرات عدم حضور + {priorNoShows}) ÷ ({past} تسجيلات سابقة + {priorRegistrations}) = {pct}. الفعاليات القادمة لا تُحتسب بعد.",
+    "rfm": "RFM",
+    "rfmHow": "أخماس بين أشخاص هذه المؤسسة الذين شاركوا في فعالية: 5 هو الخُمس الأعلى.",
+    "rfmNone": "غير مصنّف بعد: لا فعاليات.",
+    "recency": "الحداثة",
+    "frequency": "التكرار",
+    "monetary": "القيمة",
+    "quintileValue": "{q} من 5",
+    "updated": "حُدّث في {date}",
+    "viewContact": "عرض جهة الاتصال",
+    "headerSummary": "التفاعل {score} · عدم الحضور {pct}",
+    "headerValue": "مدى الحياة {amount}",
+    "totals": "الإجماليات",
+    "total": {
+      "contacts": "جهات الاتصال",
+      "participants": "شاركوا",
+      "attendedAny": "حضروا",
+      "averageEngagement": "متوسط التفاعل",
+      "noShowRate": "معدل عدم الحضور"
+    },
+    "distributions": "التوزيعات",
+    "distribution": {
+      "engagement": "درجة التفاعل",
+      "noShow": "احتمال عدم الحضور",
+      "frequency": "الفعاليات التي شارك فيها",
+      "recency": "آخر ظهور"
+    },
+    "showData": "عرض البيانات",
+    "range": "النطاق",
+    "people": "الأشخاص",
+    "bandRange": "{from}–{to}",
+    "bandFrom": "{from} أو أكثر",
+    "recencyWithin": "خلال {days} يومًا",
+    "recencyOlder": "منذ مدة أطول",
+    "value": {
+      "currency": "العملة",
+      "payers": "الأشخاص الدافعون",
+      "total": "الإجمالي",
+      "average": "المتوسط",
+      "topFifth": "الخُمس الأعلى من",
+      "max": "الأعلى"
+    },
+    "orgEmptyTitle": "لا نشاط لجهات الاتصال بعد",
+    "orgEmptyDescription": "تظهر الإحصاءات عندما يسجّل الأشخاص ويسجّلون الحضور ويحضرون الجلسات ويفتحون الحملات.",
+    "orgEmptyAction": "انتقل إلى فعالياتك"
   }
 }

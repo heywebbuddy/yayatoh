@@ -17,6 +17,7 @@
     "drill-tickets": "node scripts/drill-tickets.ts",
     "metrics:rebuild": "node scripts/metrics-rebuild.ts",
     "audit-sample": "node scripts/audit-sample.ts",
+    "contact-stats": "node scripts/contact-stats.ts",
     "irs-exempt-list": "node scripts/irs-exempt-list.ts"
   },
   "dependencies": {
