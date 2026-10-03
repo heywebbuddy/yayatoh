@@ -32,6 +32,7 @@ export {
 export { type EventFacts, evaluateEventRules, evaluateOrgRules, type OrgFacts } from './domain/rules.ts';
 export {
   ALERT_KIND,
+  ALERT_NOTIFIED_EVENT,
   ALERT_TEXT_KIND,
   ALERT_URGENT_TEXT_KIND,
   type AlertChange,

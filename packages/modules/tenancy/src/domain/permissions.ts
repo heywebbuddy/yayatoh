@@ -32,6 +32,8 @@ export const PERMISSIONS = [
   'contacts:read',
   /** Merge duplicate contacts and undo merges (M6.1a): moves orders, tickets and history. */
   'contacts:merge',
+  /** Add contacts to the org's CRM from outside (/v1 and Zapier's "Add contact", M6.4c). */
+  'contacts:write',
   'finance:read',
   /** Resolve reconciliation differences (M1.6e). */
   'finance:reconcile',
@@ -86,6 +88,11 @@ export const PERMISSIONS = [
   'sandbox:manage',
   /** Webhook endpoints, their signing secrets, test sends and replays (M6.3b). Owners and admins. */
   'webhooks:manage',
+  /**
+   * Subscribe and unsubscribe REST hooks (/v1 `hooks`, M6.4c): Zapier-style endpoints that receive
+   * one event type. Narrower than `webhooks:manage` (no secrets, no other endpoints). Owners, admins.
+   */
+  'webhooks:subscribe',
   /** See the org's integrations: connections, sync history, mappings and the errors inbox (M6.4a). */
   'integrations:read',
   /**
@@ -118,6 +125,7 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'attendees:export',
     'contacts:read',
     'contacts:merge',
+    'contacts:write',
     'marketing:read',
     'marketing:write',
     'checkin:scan',
@@ -150,6 +158,7 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'org:read',
     'events:read',
     'contacts:read',
+    'contacts:write',
     'marketing:read',
     'marketing:write',
     'messages:read',

@@ -1,0 +1,30 @@
+{
+  "severity": {
+    "info": "Info",
+    "warning": "Avertissement",
+    "critical": "Critique"
+  },
+  "alert": {
+    "context": "{severity} · {where}",
+    "open": "Ouvrir dans Yayatoh"
+  },
+  "test": {
+    "title": "Alerte de test de {org}",
+    "body": "Slack est connecté. Les alertes et le récapitulatif quotidien de Yayatoh arriveront dans ce canal."
+  },
+  "digest": {
+    "title": "Récapitulatif quotidien · {org}",
+    "salesTitle": "Ventes",
+    "sales": "{orders, plural, =0 {Aucune nouvelle commande} one {# nouvelle commande} other {# nouvelles commandes}} · {tickets, plural, one {# billet} other {# billets}}",
+    "revenue": "Chiffre d’affaires : {amounts}",
+    "checkins": "{count, plural, =0 {Aucune entrée enregistrée} one {# entrée enregistrée} other {# entrées enregistrées}}",
+    "eventLine": "{name} : {tickets, plural, one {# billet} other {# billets}}",
+    "eventLineRevenue": "{name} : {tickets, plural, one {# billet} other {# billets}} · {amounts}",
+    "moreEvents": "{count, plural, one {Et # autre événement} other {Et # autres événements}}",
+    "todayTitle": "Aujourd’hui",
+    "todayEvent": "{name} · {time}",
+    "noEventsToday": "Aucun événement aujourd’hui.",
+    "open": "Ouvrir le tableau de bord"
+  },
+  "footer": "Envoyé par Yayatoh. Modifiez-le dans Paramètres → Intégrations → Slack."
+}

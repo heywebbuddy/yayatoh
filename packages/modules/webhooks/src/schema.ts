@@ -23,6 +23,13 @@ export const endpoints = tenantTable(
     eventTypes: text('event_types').array().notNull().default(sql`'{}'::text[]`),
     status: text('status').notNull().default('active'),
     createdBy: uuid('created_by'),
+    /**
+     * M6.4c: `console` (Settings → Webhooks) or `rest_hook` (subscribed through /v1 `hooks` by an
+     * automation tool such as Zapier, for one event type; it unsubscribes the same way).
+     */
+    source: text('source').notNull().default('console'),
+    /** M6.4c: the API key that subscribed a REST hook. */
+    apiKeyId: uuid('api_key_id'),
   },
   (t) => [
     uniqueIndex('endpoints_org_provider_key').on(t.orgId, t.providerEndpointId),
@@ -30,5 +37,6 @@ export const endpoints = tenantTable(
     check('endpoints_status_check', sql`status in ('active', 'disabled')`),
     check('endpoints_url_check', sql`url ~ '^https://' and length(url) <= 2048`),
     check('endpoints_description_check', sql`length(description) <= 200`),
+    check('endpoints_source_check', sql`source in ('console', 'rest_hook')`),
   ],
 );

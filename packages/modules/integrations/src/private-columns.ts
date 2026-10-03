@@ -38,4 +38,21 @@ export const privateColumns = columnPrivacy('integrations', {
     field: 'vocab',
     status: 'vocab',
   },
+  // M6.4c Slack: the channel picked (an id and a name from the workspace), what to send, and the
+  // send log (ids and counts in the payload; never personal data).
+  slack_settings: {
+    channel_id: internal(),
+    channel_name: internal(),
+    alert_min_severity: 'vocab',
+    digest_time: 'vocab',
+  },
+  slack_messages: {
+    channel_id: internal(),
+    kind: 'vocab',
+    dedupe_key: internal(),
+    status: 'vocab',
+    payload: internal(),
+    provider_ts: internal(),
+    error_code: 'vocab',
+  },
 });

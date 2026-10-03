@@ -317,6 +317,10 @@ export const API_KEY_SCOPES = [
   /** Bulk attendee and ticket actions on /v1 (labels, email, resend tickets; M1.13d). */
   'attendees:write',
   'checkin:scan',
+  /** M6.4c: add contacts (/v1 `contacts`, Zapier's "Add contact"). */
+  'contacts:write',
+  /** M6.4c: subscribe and unsubscribe REST hooks (/v1 `hooks`, Zapier triggers). */
+  'webhooks:subscribe',
 ] as const;
 export type ApiKeyScope = (typeof API_KEY_SCOPES)[number];
 

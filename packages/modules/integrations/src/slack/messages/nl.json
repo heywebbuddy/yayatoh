@@ -1,0 +1,30 @@
+{
+  "severity": {
+    "info": "Info",
+    "warning": "Waarschuwing",
+    "critical": "Kritiek"
+  },
+  "alert": {
+    "context": "{severity} · {where}",
+    "open": "Openen in Yayatoh"
+  },
+  "test": {
+    "title": "Testmelding van {org}",
+    "body": "Slack is gekoppeld. Meldingen en het dagelijkse overzicht van Yayatoh komen in dit kanaal binnen."
+  },
+  "digest": {
+    "title": "Dagelijks overzicht · {org}",
+    "salesTitle": "Verkoop",
+    "sales": "{orders, plural, =0 {Geen nieuwe bestellingen} one {# nieuwe bestelling} other {# nieuwe bestellingen}} · {tickets, plural, one {# ticket} other {# tickets}}",
+    "revenue": "Omzet: {amounts}",
+    "checkins": "{count, plural, =0 {Geen check-ins} one {# check-in} other {# check-ins}}",
+    "eventLine": "{name}: {tickets, plural, one {# ticket} other {# tickets}}",
+    "eventLineRevenue": "{name}: {tickets, plural, one {# ticket} other {# tickets}} · {amounts}",
+    "moreEvents": "{count, plural, one {En nog # evenement} other {En nog # evenementen}}",
+    "todayTitle": "Vandaag",
+    "todayEvent": "{name} · {time}",
+    "noEventsToday": "Vandaag geen evenementen.",
+    "open": "Dashboard openen"
+  },
+  "footer": "Verzonden door Yayatoh. Wijzig dit in Instellingen → Integraties → Slack."
+}

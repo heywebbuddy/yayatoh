@@ -1,3 +1,4 @@
+export { addContactCommand } from './add-contact.ts';
 export {
   type ConsentInput,
   consentSummaryTx,

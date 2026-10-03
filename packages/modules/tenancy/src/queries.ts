@@ -266,3 +266,12 @@ export async function domainProblemsTx(
   }
   return { failed, sslPending, primary };
 }
+
+/** M6.4c: the org's default language (messages to shared channels such as Slack), inside its transaction. */
+export async function organizationLocaleTx(tx: TenantTx, orgId: string): Promise<string> {
+  const [row] = await tx
+    .select({ locale: organizations.defaultLocale })
+    .from(organizations)
+    .where(eq(organizations.id, orgId));
+  return row?.locale ?? 'en';
+}

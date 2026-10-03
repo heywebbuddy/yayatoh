@@ -13,5 +13,6 @@ export const privateColumns = columnPrivacy('webhooks', {
     description: internal(),
     event_types: 'vocab',
     status: 'vocab',
+    source: 'vocab',
   },
 });

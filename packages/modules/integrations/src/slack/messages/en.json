@@ -1,0 +1,30 @@
+{
+  "severity": {
+    "info": "Info",
+    "warning": "Warning",
+    "critical": "Critical"
+  },
+  "alert": {
+    "context": "{severity} · {where}",
+    "open": "Open in Yayatoh"
+  },
+  "test": {
+    "title": "Test alert from {org}",
+    "body": "Slack is connected. Alerts and the daily digest from Yayatoh will arrive in this channel."
+  },
+  "digest": {
+    "title": "Daily digest · {org}",
+    "salesTitle": "Sales",
+    "sales": "{orders, plural, =0 {No new orders} one {# new order} other {# new orders}} · {tickets, plural, one {# ticket} other {# tickets}}",
+    "revenue": "Revenue: {amounts}",
+    "checkins": "{count, plural, =0 {No check-ins} one {# check-in} other {# check-ins}}",
+    "eventLine": "{name}: {tickets, plural, one {# ticket} other {# tickets}}",
+    "eventLineRevenue": "{name}: {tickets, plural, one {# ticket} other {# tickets}} · {amounts}",
+    "moreEvents": "{count, plural, one {And # more event} other {And # more events}}",
+    "todayTitle": "Today",
+    "todayEvent": "{name} · {time}",
+    "noEventsToday": "No events today.",
+    "open": "Open the dashboard"
+  },
+  "footer": "Sent by Yayatoh. Change this in Settings → Integrations → Slack."
+}

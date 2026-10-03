@@ -1,0 +1,30 @@
+{
+  "severity": {
+    "info": "Info",
+    "warning": "Warnung",
+    "critical": "Kritisch"
+  },
+  "alert": {
+    "context": "{severity} · {where}",
+    "open": "In Yayatoh öffnen"
+  },
+  "test": {
+    "title": "Testwarnung von {org}",
+    "body": "Slack ist verbunden. Warnungen und die tägliche Zusammenfassung von Yayatoh kommen in diesem Kanal an."
+  },
+  "digest": {
+    "title": "Tägliche Zusammenfassung · {org}",
+    "salesTitle": "Verkäufe",
+    "sales": "{orders, plural, =0 {Keine neuen Bestellungen} one {# neue Bestellung} other {# neue Bestellungen}} · {tickets, plural, one {# Ticket} other {# Tickets}}",
+    "revenue": "Umsatz: {amounts}",
+    "checkins": "{count, plural, =0 {Keine Check-ins} one {# Check-in} other {# Check-ins}}",
+    "eventLine": "{name}: {tickets, plural, one {# Ticket} other {# Tickets}}",
+    "eventLineRevenue": "{name}: {tickets, plural, one {# Ticket} other {# Tickets}} · {amounts}",
+    "moreEvents": "{count, plural, one {Und # weitere Veranstaltung} other {Und # weitere Veranstaltungen}}",
+    "todayTitle": "Heute",
+    "todayEvent": "{name} · {time}",
+    "noEventsToday": "Heute keine Veranstaltungen.",
+    "open": "Dashboard öffnen"
+  },
+  "footer": "Gesendet von Yayatoh. Ändern unter Einstellungen → Integrationen → Slack."
+}

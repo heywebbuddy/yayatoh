@@ -11,6 +11,7 @@ import { deprecationMiddleware } from './deprecation.ts';
 import { onV1Error, problem, sendProblem } from './http.ts';
 import { memoryRateLimiter, RATE_LIMITS, type RateDecision } from './rate-limit.ts';
 import { authRoutes } from './routes/auth.ts';
+import { automationRoutes } from './routes/automation.ts';
 import { bulkRoutes } from './routes/bulk.ts';
 import { contentRoutes } from './routes/content.ts';
 import { docsRoutes } from './routes/docs.ts';
@@ -61,6 +62,12 @@ const API_TAGS = [
     description: 'Label, email, seat, resend or cancel many attendees at once; progress and undo.',
   },
   { name: 'check-in', description: 'Online scans with an API key or session.' },
+  { name: 'contacts', description: 'The organization’s contacts (add one from another tool).' },
+  {
+    name: 'hooks',
+    description:
+      'REST hooks for automation tools (Zapier): subscribe a URL to one event type and unsubscribe.',
+  },
   { name: 'scanner', description: 'The Scan PWA’s device-token routes (manifest, offline sync).' },
   {
     name: 'webhooks',
@@ -301,6 +308,7 @@ export function createV1(deps: V1Deps) {
     }),
   );
   v1.route('/', salesRoutes(deps, limiter, credentialKey));
+  v1.route('/', automationRoutes(deps));
   v1.route('/', bulkRoutes(deps));
   v1.route('/', scannerRoutes(deps.ports));
   v1.route('/', docsRoutes(basePath));
