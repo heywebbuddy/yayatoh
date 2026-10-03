@@ -543,3 +543,58 @@ export const orgAccessGrants = tenantTable(
     }).onDelete('cascade'),
   ],
 );
+
+/** Agency staff access kinds (M6.8b): a standing team member, or a time-boxed day-of pass. */
+export const AGENCY_STAFF_KINDS = ['team', 'day_of'] as const;
+
+/**
+ * Agency v2 team and day-of grants (M6.8b, P6-8). Owned by the **client** (`org_id`), under one of
+ * its agency grants. With no live `team` row for a grant, every agency member except collaborators
+ * acts through it (M6.7a); once the agency names a team, only the team does. A `day_of` row lets one
+ * agency person (collaborators too: event-day freelancers) act through the grant between
+ * `starts_at` and `ends_at` only. `role` is a ceiling under the grant's own role. The access
+ * function (`tenancy.agency_access()`) reads these rows on every request, so a revoked or expired
+ * row cuts access on the next one. Rows are kept after revocation (history).
+ */
+export const agencyStaffGrants = tenantTable(
+  tenancy,
+  'agency_staff_grants',
+  {
+    grantId: uuid('grant_id').notNull(),
+    agencyOrgId: uuid('agency_org_id').notNull(),
+    userId: uuid('user_id').notNull(),
+    kind: text('kind').notNull(),
+    role: text('role').notNull(),
+    /** The client event a day-of pass is for (its window defaults around the event). */
+    eventId: uuid('event_id'),
+    startsAt: timestamp('starts_at', { withTimezone: true }),
+    endsAt: timestamp('ends_at', { withTimezone: true }),
+    createdBy: uuid('created_by').notNull(),
+    revokedAt: timestamp('revoked_at', { withTimezone: true }),
+    revokedBy: uuid('revoked_by'),
+  },
+  (t) => [
+    uniqueIndex('agency_staff_grants_team_live_key')
+      .on(t.orgId, t.grantId, t.userId)
+      .where(sql`kind = 'team' and revoked_at is null`),
+    index('agency_staff_grants_org_grant_idx').on(t.orgId, t.grantId),
+    index('agency_staff_grants_agency_idx').on(t.agencyOrgId).where(sql`revoked_at is null`),
+    check('agency_staff_grants_kind_check', inList('kind', AGENCY_STAFF_KINDS)),
+    check('agency_staff_grants_role_check', inList('role', AGENCY_GRANT_ROLES)),
+    check(
+      'agency_staff_grants_window_check',
+      sql`(kind = 'team' and event_id is null and starts_at is null and ends_at is null) or (kind = 'day_of' and event_id is not null and starts_at is not null and ends_at > starts_at and ends_at - starts_at <= interval '72 hours')`,
+    ),
+    check('agency_staff_grants_revoked_check', sql`(revoked_at is null) = (revoked_by is null)`),
+    foreignKey({
+      name: 'agency_staff_grants_grant_fk',
+      columns: [t.orgId, t.grantId],
+      foreignColumns: [orgAccessGrants.orgId, orgAccessGrants.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'agency_staff_grants_agency_fk',
+      columns: [t.agencyOrgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+  ],
+);

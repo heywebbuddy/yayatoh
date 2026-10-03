@@ -231,3 +231,6 @@ export const listTemplatesQuery = tenantQuery({
   handler: async ({ tx }) =>
     (await tx.select().from(eventTemplates).orderBy(asc(eventTemplates.name))).map(toDto),
 });
+
+/** M6.8b: the DTO of a template row (copies made for agency clients). */
+export const templateDtoOf = (r: typeof eventTemplates.$inferSelect): TemplateDto => toDto(r);

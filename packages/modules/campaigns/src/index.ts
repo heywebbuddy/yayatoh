@@ -7,6 +7,7 @@ export {
   deleteCampaignCommand,
   getCampaignQuery,
   listCampaignsQuery,
+  postalAddressQuery,
   saveCampaignCommand,
   setAudienceCommand,
 } from './campaigns.ts';

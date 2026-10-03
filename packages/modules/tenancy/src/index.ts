@@ -20,9 +20,24 @@ export {
   MONEY_TABLES,
   myAgencyClients,
   revokeAgencyGrantCommand,
+  revokeAgencyGrantTx,
   UpdateAgencyGrantInput,
   updateAgencyGrantCommand,
 } from './commands/agency.ts';
+// M6.8b: agency team and day-of grants.
+export {
+  AgencyStaffGrantDto,
+  agencyStaffGrantsTx,
+  agencyStaffOfAgencyTx,
+  cappedAgencyRole,
+  DAY_OF_MAX_MS,
+  insertAgencyStaffGrantTx,
+  listAgencyStaffGrantsQuery,
+  type NewAgencyStaffGrant,
+  revokeAgencyStaffGrantCommand,
+  revokeAgencyStaffGrantTx,
+  revokeAllAgencyStaffTx,
+} from './commands/agency-staff.ts';
 export {
   ApiUsageDto,
   apiUsageQuery,
@@ -50,6 +65,8 @@ export {
   revokeApiKeyCommand,
   rotateApiKeyCommand,
 } from './commands/api-keys.ts';
+// M6.8b: applying a brand kit received from an agency.
+export { setBrandColorTx } from './commands/brand.ts';
 export {
   addDomainCommand,
   DomainDto,
@@ -242,6 +259,7 @@ export {
 } from './queries.ts';
 export {
   AGENCY_GRANT_ROLES,
+  AGENCY_STAFF_KINDS,
   API_KEY_SCOPES,
   type ApiKeyScope,
   DOMAIN_STATUSES,

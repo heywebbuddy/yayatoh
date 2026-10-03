@@ -96,6 +96,13 @@ export const PERMISSIONS = [
   'integrations:manage',
   /** An agency org's Clients | Events | Marketing | Reports pages, read from its snapshots (M6.7a). */
   'agency:read',
+  /**
+   * Agency v2 operations (M6.8b): publish templates and brand kits to clients, hand a client over,
+   * and give the agency's staff team and day-of access. Owners, admins and managers.
+   */
+  'agency:manage',
+  /** Fan one campaign out to clients, each sent in the client's own org (M6.8b). */
+  'agency:campaigns',
 ] as const;
 export type Permission = (typeof PERMISSIONS)[number];
 
@@ -135,6 +142,8 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'tables:write',
     'integrations:read',
     'agency:read',
+    'agency:manage',
+    'agency:campaigns',
   ],
   finance: [
     'org:read',
@@ -159,6 +168,7 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'messages:read',
     'messages:send',
     'agency:read',
+    'agency:campaigns',
   ],
   box_office: [
     'org:read',
