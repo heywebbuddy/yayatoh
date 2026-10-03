@@ -10,20 +10,12 @@ import {
 } from '@yayatoh/checkin';
 import type { TenantTx } from '@yayatoh/db';
 import { listOccurrencesQuery } from '@yayatoh/events';
-import {
-  type Ctx,
-  DomainError,
-  type Query,
-  requireOrg,
-  utcToZonedInput,
-  zonedTimeToUtc,
-} from '@yayatoh/kernel';
+import { type Ctx, DomainError, type Query, utcToZonedInput, zonedTimeToUtc } from '@yayatoh/kernel';
 import { analyticsReportTx, deliverabilityReportTx } from '@yayatoh/marketing';
 import { navIncludes, tenantQuery } from '@yayatoh/platform';
 import { programQuery } from '@yayatoh/program';
 import { eventMetricsQuery, eventTimeseriesQuery, type ProjectedKey } from '@yayatoh/reports';
 import { seatFillTx } from '@yayatoh/seating';
-import { organizationDefaultsTx } from '@yayatoh/tenancy';
 import { z } from 'zod';
 import { type CallerScope, callerScopeTx } from './access.ts';
 import { computeEventMode, modeWindows } from './domain/modes.ts';
@@ -487,17 +479,12 @@ export type CampaignNames = (tx: TenantTx, ids: readonly string[]) => Promise<Re
 
 export const campaignsWidget = (names: CampaignNames | null) =>
   defineWidget(WIDGET_META.campaigns, CampaignsWidgetDto, async ({ tx, ctx, scope }) => {
-    const from = new Date(ctx.now.getTime() - (CAMPAIGNS_WIDGET_DAYS - 1) * 86_400_000);
-    // Days in the org's timezone: the report reads `from`/`to` as org-local days (batch 3h merge:
-    // the event's zone put "today" a day early for a UTC org between the two midnights, and that
-    // day's orders fell outside the range).
-    const zone = (await organizationDefaultsTx(tx, requireOrg(ctx)))?.timezone ?? scope.event.timezone;
-    const day = (d: Date) => utcToZonedInput(d, zone).slice(0, 10);
+    // The last 90 days up to today in the org's time zone, as the report counts days (batch 3g
+    // merge: days taken in the event's zone missed today's orders while the two zones' dates differ).
     const r = await analyticsReportTx(tx, ctx, {
       dimension: 'campaign',
       eventId: scope.event.id,
-      from: day(from),
-      to: day(ctx.now),
+      days: CAMPAIGNS_WIDGET_DAYS,
     });
     const campaigns = r.rows.filter(
       (x): x is typeof x & { kind: 'campaign' | 'utm' } => x.kind === 'campaign' || x.kind === 'utm',
