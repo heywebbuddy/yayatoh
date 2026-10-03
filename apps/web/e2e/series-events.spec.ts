@@ -18,6 +18,14 @@ const VIEWER = 'jordan@lakeside.test';
 const tagOf = () => `${test.info().project.name.replace(/[^a-z0-9]/g, '')}${Date.now().toString(36)}`;
 const seriesCombo = (page: Page) => page.getByRole('combobox', { name: 'Series (optional)' });
 
+/** Pick an existing series in the Series field, then move on (Tab) so its list is closed. */
+async function pickSeries(page: Page, name: string) {
+  await pickOption(seriesCombo(page), { label: name });
+  await expect(seriesCombo(page)).toHaveValue(name);
+  await page.keyboard.press('Tab');
+  await expect(page.getByRole('listbox', { name: 'Series (optional)' })).toHaveCount(0);
+}
+
 /** The quick create form, up to (not including) the submit; the series is picked by the caller. */
 async function fillQuickEvent(page: Page, name: string, day = '10') {
   await page.getByLabel('Event name', { exact: true }).fill(name);
@@ -163,7 +171,7 @@ test.describe('series ↔ events', () => {
     await page.reload();
     await expect(page.getByRole('row').filter({ hasText: first })).toHaveCount(0);
     await page.goto(base);
-    await expect(page.getByText(first).first()).toBeVisible();
+    await expect(page.getByRole('main').getByText(first).first()).toBeVisible();
     await expect(page.getByRole('link', { name: `Part of ${series}` })).toHaveCount(0);
     await guest.goto(`/events/${slug}`);
     await expect(guest.getByRole('link', { name: `Part of ${series}` })).toHaveCount(0);
@@ -203,7 +211,7 @@ test.describe('series ↔ events', () => {
     // The existing series, picked from the list.
     await page.goto(`${ORG}/events/new`);
     await fillQuickEvent(page, `Picked ${tag}`);
-    await pickOption(seriesCombo(page), { label: series });
+    await pickSeries(page, series);
     await page.getByRole('button', { name: 'Create draft' }).click();
     await expect(page).toHaveURL(/\/o\/lakeside-events\/e\/[a-z0-9-]+$/);
     await expect(page.getByRole('link', { name: `Part of ${series}` })).toBeVisible();
@@ -244,7 +252,7 @@ test.describe('series ↔ events', () => {
     await createSeries(page, series);
     await page.goto(`${ORG}/events/new/guided`);
     await page.getByLabel('Event name', { exact: true }).fill(`Wizard ${tag}`);
-    await pickOption(seriesCombo(page), { label: series });
+    await pickSeries(page, series);
     await expectAccessible(page);
     await page.getByRole('button', { name: 'Next' }).click();
     await pickOption(page.getByLabel('Time zone'), 'America/Chicago');
