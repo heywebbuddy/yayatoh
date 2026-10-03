@@ -68,7 +68,7 @@ describe('verifyWebhook (SDK, Web Crypto)', () => {
     };
     const m = await verifyWebhook<'order.paid'>(secret, headers, body);
     expect(m.data.totalMinor).toBe(5000);
-    expectTypeOf(m.data.via).toEqualTypeOf<'free' | 'box_office' | 'fake' | 'stripe'>();
+    expectTypeOf(m.data.via).toEqualTypeOf<'free' | 'box_office' | 'fake' | 'stripe' | 'invoice'>();
     expectTypeOf<WebhookMessage<'event.cancelled'>['data']['to']>().toEqualTypeOf<
       'draft' | 'published' | 'postponed' | 'cancelled' | 'completed' | 'archived'
     >();
