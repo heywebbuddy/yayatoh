@@ -943,6 +943,56 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/orgs/{org}/webhook-endpoints": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The org’s webhook endpoints (scope `webhooks:manage`)
+         * @description Every webhook endpoint of the organization, oldest first: where it sends and which event types. Never the signing secret.
+         *
+         *     Scope `webhooks:manage`.
+         */
+        get: operations["listWebhookEndpoints"];
+        put?: never;
+        /**
+         * Subscribe a URL to event types (scope `webhooks:manage`)
+         * @description Adds a webhook endpoint (REST hooks: Make and n8n instant triggers call this when turned on). The URL must be https on the public internet; an org has at most 20 endpoints. Needs an `Idempotency-Key`.
+         *
+         *     Scope `webhooks:manage`.
+         */
+        post: operations["createWebhookEndpoint"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/orgs/{org}/webhook-endpoints/{endpointId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Unsubscribe: delete a webhook endpoint (scope `webhooks:manage`)
+         * @description Deletes the endpoint; no message is sent to it afterwards (Make and n8n call this when a trigger is turned off). Needs an `Idempotency-Key`.
+         *
+         *     Scope `webhooks:manage`.
+         */
+        delete: operations["deleteWebhookEndpoint"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/public/events/{slug}": {
         parameters: {
             query?: never;
@@ -1996,7 +2046,7 @@ export interface components {
             test: boolean;
         };
         /** @enum {string} */
-        ApiKeyScope: "org:read" | "events:read" | "events:write" | "orders:read" | "orders:refund" | "attendees:read" | "attendees:write" | "checkin:scan";
+        ApiKeyScope: "org:read" | "events:read" | "events:write" | "orders:read" | "orders:refund" | "attendees:read" | "attendees:write" | "checkin:scan" | "webhooks:manage";
         /** @enum {string} */
         AttendanceMode: "in_person" | "online" | "hybrid";
         Attendee: {
@@ -2171,6 +2221,19 @@ export interface components {
             salesStartAt?: string | null;
             sortOrder?: number;
             visibility?: components["schemas"]["TicketTypeVisibility"];
+        };
+        CreateWebhookEndpointRequest: {
+            /**
+             * @default
+             * @example Make: order paid
+             */
+            description: string;
+            eventTypes: components["schemas"]["SubscribableEventType"][];
+            /**
+             * @description An https URL on the public internet (Make’s or n8n’s webhook URL).
+             * @example https://hook.eu1.make.com/abc123
+             */
+            url: string;
         };
         /** @enum {string} */
         DateStatus: "scheduled" | "cancelled";
@@ -2793,6 +2856,11 @@ export interface components {
         SponsorTierList: {
             data: components["schemas"]["SponsorTier"][];
         };
+        /**
+         * @description A webhook event type (see `webhooks`).
+         * @enum {string}
+         */
+        SubscribableEventType: "order.paid" | "order.refunded" | "order.expired" | "order.payment_failed" | "order.disputed" | "order.dispute_closed" | "tickets.cancelled" | "ticket.transferred" | "ticket.claimed" | "ticket.admitted" | "ticket.admission_undone" | "event.created" | "event.published" | "event.unpublished" | "event.postponed" | "event.rescheduled" | "event.cancelled" | "event.completed" | "event.archived" | "event.updated" | "event.occurrence_cancelled" | "ticket_type.created" | "ticket_type.updated" | "ticket_type.archived" | "form.registration_submitted" | "waitlist.joined" | "waitlist.offered" | "survey.responded" | "review.submitted" | "program.agenda_published";
         TextSection: {
             content: components["schemas"]["TextSectionContent"];
             /** Format: uuid */
@@ -2986,6 +3054,27 @@ export interface components {
         };
         /** @enum {string} */
         WebhookDisputeOutcome: "won" | "lost";
+        WebhookEndpoint: {
+            /** Format: date-time */
+            createdAt: string;
+            description: string;
+            /** @description Empty: every subscribable type. */
+            eventTypes: components["schemas"]["SubscribableEventType"][];
+            /** Format: uuid */
+            id: string;
+            status: components["schemas"]["WebhookEndpointStatus"];
+            /** @description Where messages are sent (https). */
+            url: string;
+        };
+        WebhookEndpointDeleted: {
+            /** @enum {boolean} */
+            deleted: true;
+        };
+        WebhookEndpointList: {
+            data: components["schemas"]["WebhookEndpoint"][];
+        };
+        /** @enum {string} */
+        WebhookEndpointStatus: "active" | "disabled";
         WebhookEventArchivedV1: {
             /** Format: uuid */
             eventId: string;
@@ -7581,6 +7670,276 @@ export interface operations {
             };
             /** @description Too many requests (`rate_limited`); see `Retry-After` */
             429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    listWebhookEndpoints: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Organization id or slug */
+                org: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The endpoints */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebhookEndpointList"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    createWebhookEndpoint: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Required on every write. Retrying with the same key returns the stored result (kept 24 h). */
+                "idempotency-key": string;
+            };
+            path: {
+                /** @description Organization id or slug */
+                org: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateWebhookEndpointRequest"];
+            };
+        };
+        responses: {
+            /** @description The new endpoint */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebhookEndpoint"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Conflict, invalid state, or the same Idempotency-Key is in flight */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The Idempotency-Key was used with a different request (`idempotency_key_reused`) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Read-only maintenance (`read_only_freeze`): nothing was changed; retry after `Retry-After` seconds */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    deleteWebhookEndpoint: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Required on every write. Retrying with the same key returns the stored result (kept 24 h). */
+                "idempotency-key": string;
+            };
+            path: {
+                /** @description The endpoint id */
+                endpointId: string;
+                /** @description Organization id or slug */
+                org: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Deleted */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebhookEndpointDeleted"];
+                };
+            };
+            /** @description Validation failed (`validation_failed`) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Missing, unknown or revoked credential (`unauthenticated`) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The credential lacks the scope or role (`forbidden`, `module_not_enabled`) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Not found, or not visible to this credential (`not_found`) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Conflict, invalid state, or the same Idempotency-Key is in flight */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The Idempotency-Key was used with a different request (`idempotency_key_reused`) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Too many requests (`rate_limited`); see `Retry-After` */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Read-only maintenance (`read_only_freeze`): nothing was changed; retry after `Retry-After` seconds */
+            503: {
                 headers: {
                     [name: string]: unknown;
                 };

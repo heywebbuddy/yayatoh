@@ -1,0 +1,4419 @@
+{
+  "$schema": "yayatoh.make-app/1",
+  "name": "yayatoh",
+  "label": "Yayatoh",
+  "description": "Events, orders, attendees and check-in from Yayatoh. Generated from the /v1 OpenAPI document.",
+  "generatedFrom": {
+    "api": "0.2.0",
+    "operations": 30,
+    "triggers": 30
+  },
+  "base": {
+    "baseUrl": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}",
+    "headers": {
+      "authorization": "Bearer {{connection.apiKey}}",
+      "accept": "application/json"
+    },
+    "response": {
+      "error": {
+        "type": "{{body.code}}",
+        "message": "[{{statusCode}}] {{body.detail}}"
+      }
+    }
+  },
+  "connections": [
+    {
+      "name": "yayatoh",
+      "label": "Yayatoh API key",
+      "type": "basic",
+      "scopes": [
+        "attendees:read",
+        "attendees:write",
+        "checkin:scan",
+        "events:read",
+        "events:write",
+        "orders:read",
+        "orders:refund",
+        "webhooks:manage"
+      ],
+      "parameters": [
+        {
+          "name": "apiKey",
+          "label": "API key",
+          "type": "password",
+          "required": true,
+          "help": "Create one under Settings → API keys with the scopes your scenario needs (triggers need webhooks:manage)."
+        },
+        {
+          "name": "org",
+          "label": "Organization (id or slug)",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "baseUrl",
+          "label": "Base URL",
+          "type": "url",
+          "required": true,
+          "default": "https://app.yayatoh.com/api",
+          "advanced": true
+        }
+      ],
+      "communication": {
+        "url": "{{parameters.baseUrl}}/v1/orgs/{{parameters.org}}/api-key",
+        "method": "GET",
+        "headers": {
+          "authorization": "Bearer {{parameters.apiKey}}"
+        },
+        "response": {
+          "metadata": {
+            "type": "text",
+            "value": "{{body.name}} ({{body.prefix}})"
+          },
+          "error": {
+            "message": "[{{statusCode}}] {{body.detail}}"
+          }
+        }
+      }
+    }
+  ],
+  "webhooks": [
+    {
+      "name": "yayatoh_watch_event_archived",
+      "label": "An event was archived",
+      "type": "dedicated",
+      "connection": "yayatoh",
+      "eventType": "event.archived",
+      "attach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints",
+        "method": "POST",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        },
+        "body": {
+          "url": "{{webhook.url}}",
+          "description": "Make: event.archived",
+          "eventTypes": [
+            "event.archived"
+          ]
+        },
+        "response": {
+          "data": {
+            "externalHookId": "{{body.id}}"
+          }
+        }
+      },
+      "detach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints/{{webhook.externalHookId}}",
+        "method": "DELETE",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        }
+      }
+    },
+    {
+      "name": "yayatoh_watch_event_cancelled",
+      "label": "An event was cancelled",
+      "type": "dedicated",
+      "connection": "yayatoh",
+      "eventType": "event.cancelled",
+      "attach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints",
+        "method": "POST",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        },
+        "body": {
+          "url": "{{webhook.url}}",
+          "description": "Make: event.cancelled",
+          "eventTypes": [
+            "event.cancelled"
+          ]
+        },
+        "response": {
+          "data": {
+            "externalHookId": "{{body.id}}"
+          }
+        }
+      },
+      "detach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints/{{webhook.externalHookId}}",
+        "method": "DELETE",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        }
+      }
+    },
+    {
+      "name": "yayatoh_watch_event_completed",
+      "label": "An event was marked as completed",
+      "type": "dedicated",
+      "connection": "yayatoh",
+      "eventType": "event.completed",
+      "attach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints",
+        "method": "POST",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        },
+        "body": {
+          "url": "{{webhook.url}}",
+          "description": "Make: event.completed",
+          "eventTypes": [
+            "event.completed"
+          ]
+        },
+        "response": {
+          "data": {
+            "externalHookId": "{{body.id}}"
+          }
+        }
+      },
+      "detach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints/{{webhook.externalHookId}}",
+        "method": "DELETE",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        }
+      }
+    },
+    {
+      "name": "yayatoh_watch_event_created",
+      "label": "An event was created (new, duplicated or from a template)",
+      "type": "dedicated",
+      "connection": "yayatoh",
+      "eventType": "event.created",
+      "attach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints",
+        "method": "POST",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        },
+        "body": {
+          "url": "{{webhook.url}}",
+          "description": "Make: event.created",
+          "eventTypes": [
+            "event.created"
+          ]
+        },
+        "response": {
+          "data": {
+            "externalHookId": "{{body.id}}"
+          }
+        }
+      },
+      "detach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints/{{webhook.externalHookId}}",
+        "method": "DELETE",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        }
+      }
+    },
+    {
+      "name": "yayatoh_watch_event_occurrence_cancelled",
+      "label": "One date of a recurring event was cancelled",
+      "type": "dedicated",
+      "connection": "yayatoh",
+      "eventType": "event.occurrence_cancelled",
+      "attach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints",
+        "method": "POST",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        },
+        "body": {
+          "url": "{{webhook.url}}",
+          "description": "Make: event.occurrence_cancelled",
+          "eventTypes": [
+            "event.occurrence_cancelled"
+          ]
+        },
+        "response": {
+          "data": {
+            "externalHookId": "{{body.id}}"
+          }
+        }
+      },
+      "detach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints/{{webhook.externalHookId}}",
+        "method": "DELETE",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        }
+      }
+    },
+    {
+      "name": "yayatoh_watch_event_postponed",
+      "label": "An event was postponed",
+      "type": "dedicated",
+      "connection": "yayatoh",
+      "eventType": "event.postponed",
+      "attach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints",
+        "method": "POST",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        },
+        "body": {
+          "url": "{{webhook.url}}",
+          "description": "Make: event.postponed",
+          "eventTypes": [
+            "event.postponed"
+          ]
+        },
+        "response": {
+          "data": {
+            "externalHookId": "{{body.id}}"
+          }
+        }
+      },
+      "detach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints/{{webhook.externalHookId}}",
+        "method": "DELETE",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        }
+      }
+    },
+    {
+      "name": "yayatoh_watch_event_published",
+      "label": "An event was published",
+      "type": "dedicated",
+      "connection": "yayatoh",
+      "eventType": "event.published",
+      "attach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints",
+        "method": "POST",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        },
+        "body": {
+          "url": "{{webhook.url}}",
+          "description": "Make: event.published",
+          "eventTypes": [
+            "event.published"
+          ]
+        },
+        "response": {
+          "data": {
+            "externalHookId": "{{body.id}}"
+          }
+        }
+      },
+      "detach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints/{{webhook.externalHookId}}",
+        "method": "DELETE",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        }
+      }
+    },
+    {
+      "name": "yayatoh_watch_event_rescheduled",
+      "label": "A postponed event has a new date",
+      "type": "dedicated",
+      "connection": "yayatoh",
+      "eventType": "event.rescheduled",
+      "attach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints",
+        "method": "POST",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        },
+        "body": {
+          "url": "{{webhook.url}}",
+          "description": "Make: event.rescheduled",
+          "eventTypes": [
+            "event.rescheduled"
+          ]
+        },
+        "response": {
+          "data": {
+            "externalHookId": "{{body.id}}"
+          }
+        }
+      },
+      "detach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints/{{webhook.externalHookId}}",
+        "method": "DELETE",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        }
+      }
+    },
+    {
+      "name": "yayatoh_watch_event_unpublished",
+      "label": "An event was taken offline",
+      "type": "dedicated",
+      "connection": "yayatoh",
+      "eventType": "event.unpublished",
+      "attach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints",
+        "method": "POST",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        },
+        "body": {
+          "url": "{{webhook.url}}",
+          "description": "Make: event.unpublished",
+          "eventTypes": [
+            "event.unpublished"
+          ]
+        },
+        "response": {
+          "data": {
+            "externalHookId": "{{body.id}}"
+          }
+        }
+      },
+      "detach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints/{{webhook.externalHookId}}",
+        "method": "DELETE",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        }
+      }
+    },
+    {
+      "name": "yayatoh_watch_event_updated",
+      "label": "An event’s details changed",
+      "type": "dedicated",
+      "connection": "yayatoh",
+      "eventType": "event.updated",
+      "attach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints",
+        "method": "POST",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        },
+        "body": {
+          "url": "{{webhook.url}}",
+          "description": "Make: event.updated",
+          "eventTypes": [
+            "event.updated"
+          ]
+        },
+        "response": {
+          "data": {
+            "externalHookId": "{{body.id}}"
+          }
+        }
+      },
+      "detach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints/{{webhook.externalHookId}}",
+        "method": "DELETE",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        }
+      }
+    },
+    {
+      "name": "yayatoh_watch_form_registration_submitted",
+      "label": "A registration form was submitted",
+      "type": "dedicated",
+      "connection": "yayatoh",
+      "eventType": "form.registration_submitted",
+      "attach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints",
+        "method": "POST",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        },
+        "body": {
+          "url": "{{webhook.url}}",
+          "description": "Make: form.registration_submitted",
+          "eventTypes": [
+            "form.registration_submitted"
+          ]
+        },
+        "response": {
+          "data": {
+            "externalHookId": "{{body.id}}"
+          }
+        }
+      },
+      "detach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints/{{webhook.externalHookId}}",
+        "method": "DELETE",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        }
+      }
+    },
+    {
+      "name": "yayatoh_watch_order_dispute_closed",
+      "label": "A dispute was decided",
+      "type": "dedicated",
+      "connection": "yayatoh",
+      "eventType": "order.dispute_closed",
+      "attach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints",
+        "method": "POST",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        },
+        "body": {
+          "url": "{{webhook.url}}",
+          "description": "Make: order.dispute_closed",
+          "eventTypes": [
+            "order.dispute_closed"
+          ]
+        },
+        "response": {
+          "data": {
+            "externalHookId": "{{body.id}}"
+          }
+        }
+      },
+      "detach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints/{{webhook.externalHookId}}",
+        "method": "DELETE",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        }
+      }
+    },
+    {
+      "name": "yayatoh_watch_order_disputed",
+      "label": "A buyer disputed a payment (chargeback)",
+      "type": "dedicated",
+      "connection": "yayatoh",
+      "eventType": "order.disputed",
+      "attach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints",
+        "method": "POST",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        },
+        "body": {
+          "url": "{{webhook.url}}",
+          "description": "Make: order.disputed",
+          "eventTypes": [
+            "order.disputed"
+          ]
+        },
+        "response": {
+          "data": {
+            "externalHookId": "{{body.id}}"
+          }
+        }
+      },
+      "detach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints/{{webhook.externalHookId}}",
+        "method": "DELETE",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        }
+      }
+    },
+    {
+      "name": "yayatoh_watch_order_expired",
+      "label": "An unpaid order expired and released its tickets",
+      "type": "dedicated",
+      "connection": "yayatoh",
+      "eventType": "order.expired",
+      "attach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints",
+        "method": "POST",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        },
+        "body": {
+          "url": "{{webhook.url}}",
+          "description": "Make: order.expired",
+          "eventTypes": [
+            "order.expired"
+          ]
+        },
+        "response": {
+          "data": {
+            "externalHookId": "{{body.id}}"
+          }
+        }
+      },
+      "detach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints/{{webhook.externalHookId}}",
+        "method": "DELETE",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        }
+      }
+    },
+    {
+      "name": "yayatoh_watch_order_paid",
+      "label": "An order was paid and its tickets issued",
+      "type": "dedicated",
+      "connection": "yayatoh",
+      "eventType": "order.paid",
+      "attach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints",
+        "method": "POST",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        },
+        "body": {
+          "url": "{{webhook.url}}",
+          "description": "Make: order.paid",
+          "eventTypes": [
+            "order.paid"
+          ]
+        },
+        "response": {
+          "data": {
+            "externalHookId": "{{body.id}}"
+          }
+        }
+      },
+      "detach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints/{{webhook.externalHookId}}",
+        "method": "DELETE",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        }
+      }
+    },
+    {
+      "name": "yayatoh_watch_order_payment_failed",
+      "label": "A payment attempt for an order failed",
+      "type": "dedicated",
+      "connection": "yayatoh",
+      "eventType": "order.payment_failed",
+      "attach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints",
+        "method": "POST",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        },
+        "body": {
+          "url": "{{webhook.url}}",
+          "description": "Make: order.payment_failed",
+          "eventTypes": [
+            "order.payment_failed"
+          ]
+        },
+        "response": {
+          "data": {
+            "externalHookId": "{{body.id}}"
+          }
+        }
+      },
+      "detach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints/{{webhook.externalHookId}}",
+        "method": "DELETE",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        }
+      }
+    },
+    {
+      "name": "yayatoh_watch_order_refunded",
+      "label": "All or part of an order was refunded",
+      "type": "dedicated",
+      "connection": "yayatoh",
+      "eventType": "order.refunded",
+      "attach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints",
+        "method": "POST",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        },
+        "body": {
+          "url": "{{webhook.url}}",
+          "description": "Make: order.refunded",
+          "eventTypes": [
+            "order.refunded"
+          ]
+        },
+        "response": {
+          "data": {
+            "externalHookId": "{{body.id}}"
+          }
+        }
+      },
+      "detach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints/{{webhook.externalHookId}}",
+        "method": "DELETE",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        }
+      }
+    },
+    {
+      "name": "yayatoh_watch_program_agenda_published",
+      "label": "An event’s agenda was published",
+      "type": "dedicated",
+      "connection": "yayatoh",
+      "eventType": "program.agenda_published",
+      "attach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints",
+        "method": "POST",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        },
+        "body": {
+          "url": "{{webhook.url}}",
+          "description": "Make: program.agenda_published",
+          "eventTypes": [
+            "program.agenda_published"
+          ]
+        },
+        "response": {
+          "data": {
+            "externalHookId": "{{body.id}}"
+          }
+        }
+      },
+      "detach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints/{{webhook.externalHookId}}",
+        "method": "DELETE",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        }
+      }
+    },
+    {
+      "name": "yayatoh_watch_review_submitted",
+      "label": "An attendee rated an event",
+      "type": "dedicated",
+      "connection": "yayatoh",
+      "eventType": "review.submitted",
+      "attach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints",
+        "method": "POST",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        },
+        "body": {
+          "url": "{{webhook.url}}",
+          "description": "Make: review.submitted",
+          "eventTypes": [
+            "review.submitted"
+          ]
+        },
+        "response": {
+          "data": {
+            "externalHookId": "{{body.id}}"
+          }
+        }
+      },
+      "detach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints/{{webhook.externalHookId}}",
+        "method": "DELETE",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        }
+      }
+    },
+    {
+      "name": "yayatoh_watch_survey_responded",
+      "label": "A survey was answered",
+      "type": "dedicated",
+      "connection": "yayatoh",
+      "eventType": "survey.responded",
+      "attach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints",
+        "method": "POST",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        },
+        "body": {
+          "url": "{{webhook.url}}",
+          "description": "Make: survey.responded",
+          "eventTypes": [
+            "survey.responded"
+          ]
+        },
+        "response": {
+          "data": {
+            "externalHookId": "{{body.id}}"
+          }
+        }
+      },
+      "detach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints/{{webhook.externalHookId}}",
+        "method": "DELETE",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        }
+      }
+    },
+    {
+      "name": "yayatoh_watch_ticket_type_archived",
+      "label": "A ticket type was archived",
+      "type": "dedicated",
+      "connection": "yayatoh",
+      "eventType": "ticket_type.archived",
+      "attach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints",
+        "method": "POST",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        },
+        "body": {
+          "url": "{{webhook.url}}",
+          "description": "Make: ticket_type.archived",
+          "eventTypes": [
+            "ticket_type.archived"
+          ]
+        },
+        "response": {
+          "data": {
+            "externalHookId": "{{body.id}}"
+          }
+        }
+      },
+      "detach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints/{{webhook.externalHookId}}",
+        "method": "DELETE",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        }
+      }
+    },
+    {
+      "name": "yayatoh_watch_ticket_type_created",
+      "label": "A ticket type was added to an event",
+      "type": "dedicated",
+      "connection": "yayatoh",
+      "eventType": "ticket_type.created",
+      "attach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints",
+        "method": "POST",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        },
+        "body": {
+          "url": "{{webhook.url}}",
+          "description": "Make: ticket_type.created",
+          "eventTypes": [
+            "ticket_type.created"
+          ]
+        },
+        "response": {
+          "data": {
+            "externalHookId": "{{body.id}}"
+          }
+        }
+      },
+      "detach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints/{{webhook.externalHookId}}",
+        "method": "DELETE",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        }
+      }
+    },
+    {
+      "name": "yayatoh_watch_ticket_type_updated",
+      "label": "A ticket type changed",
+      "type": "dedicated",
+      "connection": "yayatoh",
+      "eventType": "ticket_type.updated",
+      "attach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints",
+        "method": "POST",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        },
+        "body": {
+          "url": "{{webhook.url}}",
+          "description": "Make: ticket_type.updated",
+          "eventTypes": [
+            "ticket_type.updated"
+          ]
+        },
+        "response": {
+          "data": {
+            "externalHookId": "{{body.id}}"
+          }
+        }
+      },
+      "detach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints/{{webhook.externalHookId}}",
+        "method": "DELETE",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        }
+      }
+    },
+    {
+      "name": "yayatoh_watch_ticket_admission_undone",
+      "label": "A scan was undone",
+      "type": "dedicated",
+      "connection": "yayatoh",
+      "eventType": "ticket.admission_undone",
+      "attach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints",
+        "method": "POST",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        },
+        "body": {
+          "url": "{{webhook.url}}",
+          "description": "Make: ticket.admission_undone",
+          "eventTypes": [
+            "ticket.admission_undone"
+          ]
+        },
+        "response": {
+          "data": {
+            "externalHookId": "{{body.id}}"
+          }
+        }
+      },
+      "detach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints/{{webhook.externalHookId}}",
+        "method": "DELETE",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        }
+      }
+    },
+    {
+      "name": "yayatoh_watch_ticket_admitted",
+      "label": "A ticket was scanned in",
+      "type": "dedicated",
+      "connection": "yayatoh",
+      "eventType": "ticket.admitted",
+      "attach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints",
+        "method": "POST",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        },
+        "body": {
+          "url": "{{webhook.url}}",
+          "description": "Make: ticket.admitted",
+          "eventTypes": [
+            "ticket.admitted"
+          ]
+        },
+        "response": {
+          "data": {
+            "externalHookId": "{{body.id}}"
+          }
+        }
+      },
+      "detach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints/{{webhook.externalHookId}}",
+        "method": "DELETE",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        }
+      }
+    },
+    {
+      "name": "yayatoh_watch_ticket_claimed",
+      "label": "A distributed ticket was claimed by its guest",
+      "type": "dedicated",
+      "connection": "yayatoh",
+      "eventType": "ticket.claimed",
+      "attach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints",
+        "method": "POST",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        },
+        "body": {
+          "url": "{{webhook.url}}",
+          "description": "Make: ticket.claimed",
+          "eventTypes": [
+            "ticket.claimed"
+          ]
+        },
+        "response": {
+          "data": {
+            "externalHookId": "{{body.id}}"
+          }
+        }
+      },
+      "detach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints/{{webhook.externalHookId}}",
+        "method": "DELETE",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        }
+      }
+    },
+    {
+      "name": "yayatoh_watch_ticket_transferred",
+      "label": "A ticket moved to a new holder",
+      "type": "dedicated",
+      "connection": "yayatoh",
+      "eventType": "ticket.transferred",
+      "attach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints",
+        "method": "POST",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        },
+        "body": {
+          "url": "{{webhook.url}}",
+          "description": "Make: ticket.transferred",
+          "eventTypes": [
+            "ticket.transferred"
+          ]
+        },
+        "response": {
+          "data": {
+            "externalHookId": "{{body.id}}"
+          }
+        }
+      },
+      "detach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints/{{webhook.externalHookId}}",
+        "method": "DELETE",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        }
+      }
+    },
+    {
+      "name": "yayatoh_watch_tickets_cancelled",
+      "label": "Tickets were cancelled in bulk",
+      "type": "dedicated",
+      "connection": "yayatoh",
+      "eventType": "tickets.cancelled",
+      "attach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints",
+        "method": "POST",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        },
+        "body": {
+          "url": "{{webhook.url}}",
+          "description": "Make: tickets.cancelled",
+          "eventTypes": [
+            "tickets.cancelled"
+          ]
+        },
+        "response": {
+          "data": {
+            "externalHookId": "{{body.id}}"
+          }
+        }
+      },
+      "detach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints/{{webhook.externalHookId}}",
+        "method": "DELETE",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        }
+      }
+    },
+    {
+      "name": "yayatoh_watch_waitlist_joined",
+      "label": "Someone joined an event’s waitlist",
+      "type": "dedicated",
+      "connection": "yayatoh",
+      "eventType": "waitlist.joined",
+      "attach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints",
+        "method": "POST",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        },
+        "body": {
+          "url": "{{webhook.url}}",
+          "description": "Make: waitlist.joined",
+          "eventTypes": [
+            "waitlist.joined"
+          ]
+        },
+        "response": {
+          "data": {
+            "externalHookId": "{{body.id}}"
+          }
+        }
+      },
+      "detach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints/{{webhook.externalHookId}}",
+        "method": "DELETE",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        }
+      }
+    },
+    {
+      "name": "yayatoh_watch_waitlist_offered",
+      "label": "A waitlist entry was offered a place",
+      "type": "dedicated",
+      "connection": "yayatoh",
+      "eventType": "waitlist.offered",
+      "attach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints",
+        "method": "POST",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        },
+        "body": {
+          "url": "{{webhook.url}}",
+          "description": "Make: waitlist.offered",
+          "eventTypes": [
+            "waitlist.offered"
+          ]
+        },
+        "response": {
+          "data": {
+            "externalHookId": "{{body.id}}"
+          }
+        }
+      },
+      "detach": {
+        "url": "{{connection.baseUrl}}/v1/orgs/{{connection.org}}/webhook-endpoints/{{webhook.externalHookId}}",
+        "method": "DELETE",
+        "headers": {
+          "authorization": "Bearer {{connection.apiKey}}",
+          "idempotency-key": "{{uuid}}"
+        }
+      }
+    }
+  ],
+  "modules": [
+    {
+      "name": "watch_event_archived",
+      "label": "Watch: An event was archived",
+      "description": "It is hidden from lists; its data is kept. `from` and `to` are the event’s status before and after.",
+      "typeName": "instant_trigger",
+      "connection": "yayatoh",
+      "scope": "webhooks:manage",
+      "webhook": "yayatoh_watch_event_archived",
+      "eventType": "event.archived",
+      "communication": {
+        "output": "{{body}}"
+      },
+      "interface": [
+        {
+          "name": "id",
+          "label": "Message id",
+          "type": "text"
+        },
+        {
+          "name": "type",
+          "label": "Event type",
+          "type": "text"
+        },
+        {
+          "name": "occurredAt",
+          "label": "Occurred at",
+          "type": "date"
+        },
+        {
+          "name": "data",
+          "label": "Data",
+          "type": "collection",
+          "spec": [
+            {
+              "name": "eventId",
+              "label": "Event id",
+              "type": "text"
+            },
+            {
+              "name": "from",
+              "label": "From",
+              "type": "select"
+            },
+            {
+              "name": "to",
+              "label": "To",
+              "type": "select"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "watch_event_cancelled",
+      "label": "Watch: An event was cancelled",
+      "description": "Refunds follow the organizer’s policy (`order.refunded` per order). `from` and `to` are the event’s status before and after.",
+      "typeName": "instant_trigger",
+      "connection": "yayatoh",
+      "scope": "webhooks:manage",
+      "webhook": "yayatoh_watch_event_cancelled",
+      "eventType": "event.cancelled",
+      "communication": {
+        "output": "{{body}}"
+      },
+      "interface": [
+        {
+          "name": "id",
+          "label": "Message id",
+          "type": "text"
+        },
+        {
+          "name": "type",
+          "label": "Event type",
+          "type": "text"
+        },
+        {
+          "name": "occurredAt",
+          "label": "Occurred at",
+          "type": "date"
+        },
+        {
+          "name": "data",
+          "label": "Data",
+          "type": "collection",
+          "spec": [
+            {
+              "name": "eventId",
+              "label": "Event id",
+              "type": "text"
+            },
+            {
+              "name": "from",
+              "label": "From",
+              "type": "select"
+            },
+            {
+              "name": "to",
+              "label": "To",
+              "type": "select"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "watch_event_completed",
+      "label": "Watch: An event was marked as completed",
+      "description": "It is over; reports are final. `from` and `to` are the event’s status before and after.",
+      "typeName": "instant_trigger",
+      "connection": "yayatoh",
+      "scope": "webhooks:manage",
+      "webhook": "yayatoh_watch_event_completed",
+      "eventType": "event.completed",
+      "communication": {
+        "output": "{{body}}"
+      },
+      "interface": [
+        {
+          "name": "id",
+          "label": "Message id",
+          "type": "text"
+        },
+        {
+          "name": "type",
+          "label": "Event type",
+          "type": "text"
+        },
+        {
+          "name": "occurredAt",
+          "label": "Occurred at",
+          "type": "date"
+        },
+        {
+          "name": "data",
+          "label": "Data",
+          "type": "collection",
+          "spec": [
+            {
+              "name": "eventId",
+              "label": "Event id",
+              "type": "text"
+            },
+            {
+              "name": "from",
+              "label": "From",
+              "type": "select"
+            },
+            {
+              "name": "to",
+              "label": "To",
+              "type": "select"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "watch_event_created",
+      "label": "Watch: An event was created (new, duplicated or from a template)",
+      "description": "The event starts as a draft. `profile` is its kind (concert, gala, conference…).",
+      "typeName": "instant_trigger",
+      "connection": "yayatoh",
+      "scope": "webhooks:manage",
+      "webhook": "yayatoh_watch_event_created",
+      "eventType": "event.created",
+      "communication": {
+        "output": "{{body}}"
+      },
+      "interface": [
+        {
+          "name": "id",
+          "label": "Message id",
+          "type": "text"
+        },
+        {
+          "name": "type",
+          "label": "Event type",
+          "type": "text"
+        },
+        {
+          "name": "occurredAt",
+          "label": "Occurred at",
+          "type": "date"
+        },
+        {
+          "name": "data",
+          "label": "Data",
+          "type": "collection",
+          "spec": [
+            {
+              "name": "eventId",
+              "label": "Event id",
+              "type": "text"
+            },
+            {
+              "name": "slug",
+              "label": "Slug",
+              "type": "text"
+            },
+            {
+              "name": "profile",
+              "label": "Profile",
+              "type": "text"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "watch_event_occurrence_cancelled",
+      "label": "Watch: One date of a recurring event was cancelled",
+      "description": "`startsAt` is when the cancelled date was due to start.",
+      "typeName": "instant_trigger",
+      "connection": "yayatoh",
+      "scope": "webhooks:manage",
+      "webhook": "yayatoh_watch_event_occurrence_cancelled",
+      "eventType": "event.occurrence_cancelled",
+      "communication": {
+        "output": "{{body}}"
+      },
+      "interface": [
+        {
+          "name": "id",
+          "label": "Message id",
+          "type": "text"
+        },
+        {
+          "name": "type",
+          "label": "Event type",
+          "type": "text"
+        },
+        {
+          "name": "occurredAt",
+          "label": "Occurred at",
+          "type": "date"
+        },
+        {
+          "name": "data",
+          "label": "Data",
+          "type": "collection",
+          "spec": [
+            {
+              "name": "eventId",
+              "label": "Event id",
+              "type": "text"
+            },
+            {
+              "name": "occurrenceId",
+              "label": "Occurrence id",
+              "type": "text"
+            },
+            {
+              "name": "startsAt",
+              "label": "Starts at",
+              "type": "date"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "watch_event_postponed",
+      "label": "Watch: An event was postponed",
+      "description": "The date is to be announced; ticket holders keep their tickets. `from` and `to` are the event’s status before and after.",
+      "typeName": "instant_trigger",
+      "connection": "yayatoh",
+      "scope": "webhooks:manage",
+      "webhook": "yayatoh_watch_event_postponed",
+      "eventType": "event.postponed",
+      "communication": {
+        "output": "{{body}}"
+      },
+      "interface": [
+        {
+          "name": "id",
+          "label": "Message id",
+          "type": "text"
+        },
+        {
+          "name": "type",
+          "label": "Event type",
+          "type": "text"
+        },
+        {
+          "name": "occurredAt",
+          "label": "Occurred at",
+          "type": "date"
+        },
+        {
+          "name": "data",
+          "label": "Data",
+          "type": "collection",
+          "spec": [
+            {
+              "name": "eventId",
+              "label": "Event id",
+              "type": "text"
+            },
+            {
+              "name": "from",
+              "label": "From",
+              "type": "select"
+            },
+            {
+              "name": "to",
+              "label": "To",
+              "type": "select"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "watch_event_published",
+      "label": "Watch: An event was published",
+      "description": "It is on sale and visible according to its visibility. `from` and `to` are the event’s status before and after.",
+      "typeName": "instant_trigger",
+      "connection": "yayatoh",
+      "scope": "webhooks:manage",
+      "webhook": "yayatoh_watch_event_published",
+      "eventType": "event.published",
+      "communication": {
+        "output": "{{body}}"
+      },
+      "interface": [
+        {
+          "name": "id",
+          "label": "Message id",
+          "type": "text"
+        },
+        {
+          "name": "type",
+          "label": "Event type",
+          "type": "text"
+        },
+        {
+          "name": "occurredAt",
+          "label": "Occurred at",
+          "type": "date"
+        },
+        {
+          "name": "data",
+          "label": "Data",
+          "type": "collection",
+          "spec": [
+            {
+              "name": "eventId",
+              "label": "Event id",
+              "type": "text"
+            },
+            {
+              "name": "from",
+              "label": "From",
+              "type": "select"
+            },
+            {
+              "name": "to",
+              "label": "To",
+              "type": "select"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "watch_event_rescheduled",
+      "label": "Watch: A postponed event has a new date",
+      "description": "Read the event for its new `startsAt`. `from` and `to` are the event’s status before and after.",
+      "typeName": "instant_trigger",
+      "connection": "yayatoh",
+      "scope": "webhooks:manage",
+      "webhook": "yayatoh_watch_event_rescheduled",
+      "eventType": "event.rescheduled",
+      "communication": {
+        "output": "{{body}}"
+      },
+      "interface": [
+        {
+          "name": "id",
+          "label": "Message id",
+          "type": "text"
+        },
+        {
+          "name": "type",
+          "label": "Event type",
+          "type": "text"
+        },
+        {
+          "name": "occurredAt",
+          "label": "Occurred at",
+          "type": "date"
+        },
+        {
+          "name": "data",
+          "label": "Data",
+          "type": "collection",
+          "spec": [
+            {
+              "name": "eventId",
+              "label": "Event id",
+              "type": "text"
+            },
+            {
+              "name": "from",
+              "label": "From",
+              "type": "select"
+            },
+            {
+              "name": "to",
+              "label": "To",
+              "type": "select"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "watch_event_unpublished",
+      "label": "Watch: An event was taken offline",
+      "description": "It went back to draft; its page and sales are closed. `from` and `to` are the event’s status before and after.",
+      "typeName": "instant_trigger",
+      "connection": "yayatoh",
+      "scope": "webhooks:manage",
+      "webhook": "yayatoh_watch_event_unpublished",
+      "eventType": "event.unpublished",
+      "communication": {
+        "output": "{{body}}"
+      },
+      "interface": [
+        {
+          "name": "id",
+          "label": "Message id",
+          "type": "text"
+        },
+        {
+          "name": "type",
+          "label": "Event type",
+          "type": "text"
+        },
+        {
+          "name": "occurredAt",
+          "label": "Occurred at",
+          "type": "date"
+        },
+        {
+          "name": "data",
+          "label": "Data",
+          "type": "collection",
+          "spec": [
+            {
+              "name": "eventId",
+              "label": "Event id",
+              "type": "text"
+            },
+            {
+              "name": "from",
+              "label": "From",
+              "type": "select"
+            },
+            {
+              "name": "to",
+              "label": "To",
+              "type": "select"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "watch_event_updated",
+      "label": "Watch: An event’s details changed",
+      "description": "`fields` names what changed (for example `startsAt`); read the event for the new values.",
+      "typeName": "instant_trigger",
+      "connection": "yayatoh",
+      "scope": "webhooks:manage",
+      "webhook": "yayatoh_watch_event_updated",
+      "eventType": "event.updated",
+      "communication": {
+        "output": "{{body}}"
+      },
+      "interface": [
+        {
+          "name": "id",
+          "label": "Message id",
+          "type": "text"
+        },
+        {
+          "name": "type",
+          "label": "Event type",
+          "type": "text"
+        },
+        {
+          "name": "occurredAt",
+          "label": "Occurred at",
+          "type": "date"
+        },
+        {
+          "name": "data",
+          "label": "Data",
+          "type": "collection",
+          "spec": [
+            {
+              "name": "eventId",
+              "label": "Event id",
+              "type": "text"
+            },
+            {
+              "name": "fields",
+              "label": "Fields",
+              "type": "array"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "watch_form_registration_submitted",
+      "label": "Watch: A registration form was submitted",
+      "description": "The answers are never in the payload; they stay in the console. `formVersion` is the form version answered.",
+      "typeName": "instant_trigger",
+      "connection": "yayatoh",
+      "scope": "webhooks:manage",
+      "webhook": "yayatoh_watch_form_registration_submitted",
+      "eventType": "form.registration_submitted",
+      "communication": {
+        "output": "{{body}}"
+      },
+      "interface": [
+        {
+          "name": "id",
+          "label": "Message id",
+          "type": "text"
+        },
+        {
+          "name": "type",
+          "label": "Event type",
+          "type": "text"
+        },
+        {
+          "name": "occurredAt",
+          "label": "Occurred at",
+          "type": "date"
+        },
+        {
+          "name": "data",
+          "label": "Data",
+          "type": "collection",
+          "spec": [
+            {
+              "name": "respondentId",
+              "label": "Respondent id",
+              "type": "text"
+            },
+            {
+              "name": "eventId",
+              "label": "Event id",
+              "type": "text"
+            },
+            {
+              "name": "registrationTypeId",
+              "label": "Registration type id",
+              "type": "text"
+            },
+            {
+              "name": "formVersion",
+              "label": "Form version",
+              "type": "number"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "watch_order_dispute_closed",
+      "label": "Watch: A dispute was decided",
+      "description": "A lost dispute cancels the order’s live tickets.",
+      "typeName": "instant_trigger",
+      "connection": "yayatoh",
+      "scope": "webhooks:manage",
+      "webhook": "yayatoh_watch_order_dispute_closed",
+      "eventType": "order.dispute_closed",
+      "communication": {
+        "output": "{{body}}"
+      },
+      "interface": [
+        {
+          "name": "id",
+          "label": "Message id",
+          "type": "text"
+        },
+        {
+          "name": "type",
+          "label": "Event type",
+          "type": "text"
+        },
+        {
+          "name": "occurredAt",
+          "label": "Occurred at",
+          "type": "date"
+        },
+        {
+          "name": "data",
+          "label": "Data",
+          "type": "collection",
+          "spec": [
+            {
+              "name": "orderId",
+              "label": "Order id",
+              "type": "text"
+            },
+            {
+              "name": "disputeId",
+              "label": "Dispute id",
+              "type": "text"
+            },
+            {
+              "name": "outcome",
+              "label": "Outcome",
+              "type": "select"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "watch_order_disputed",
+      "label": "Watch: A buyer disputed a payment (chargeback)",
+      "description": "Evidence can be submitted from the console before the provider’s deadline.",
+      "typeName": "instant_trigger",
+      "connection": "yayatoh",
+      "scope": "webhooks:manage",
+      "webhook": "yayatoh_watch_order_disputed",
+      "eventType": "order.disputed",
+      "communication": {
+        "output": "{{body}}"
+      },
+      "interface": [
+        {
+          "name": "id",
+          "label": "Message id",
+          "type": "text"
+        },
+        {
+          "name": "type",
+          "label": "Event type",
+          "type": "text"
+        },
+        {
+          "name": "occurredAt",
+          "label": "Occurred at",
+          "type": "date"
+        },
+        {
+          "name": "data",
+          "label": "Data",
+          "type": "collection",
+          "spec": [
+            {
+              "name": "orderId",
+              "label": "Order id",
+              "type": "text"
+            },
+            {
+              "name": "disputeId",
+              "label": "Dispute id",
+              "type": "text"
+            },
+            {
+              "name": "amountMinor",
+              "label": "Amount minor",
+              "type": "number"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "watch_order_expired",
+      "label": "Watch: An unpaid order expired and released its tickets",
+      "description": "The checkout hold ran out before payment; the held tickets went back on sale.",
+      "typeName": "instant_trigger",
+      "connection": "yayatoh",
+      "scope": "webhooks:manage",
+      "webhook": "yayatoh_watch_order_expired",
+      "eventType": "order.expired",
+      "communication": {
+        "output": "{{body}}"
+      },
+      "interface": [
+        {
+          "name": "id",
+          "label": "Message id",
+          "type": "text"
+        },
+        {
+          "name": "type",
+          "label": "Event type",
+          "type": "text"
+        },
+        {
+          "name": "occurredAt",
+          "label": "Occurred at",
+          "type": "date"
+        },
+        {
+          "name": "data",
+          "label": "Data",
+          "type": "collection",
+          "spec": [
+            {
+              "name": "orderId",
+              "label": "Order id",
+              "type": "text"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "watch_order_paid",
+      "label": "Watch: An order was paid and its tickets issued",
+      "description": "Sent once per order when payment completes (online, at the box office, by invoice, or a free order). `via` says how it was paid. Read the order and its tickets with `GET /v1/orgs/{org}/orders/{orderId}`.",
+      "typeName": "instant_trigger",
+      "connection": "yayatoh",
+      "scope": "webhooks:manage",
+      "webhook": "yayatoh_watch_order_paid",
+      "eventType": "order.paid",
+      "communication": {
+        "output": "{{body}}"
+      },
+      "interface": [
+        {
+          "name": "id",
+          "label": "Message id",
+          "type": "text"
+        },
+        {
+          "name": "type",
+          "label": "Event type",
+          "type": "text"
+        },
+        {
+          "name": "occurredAt",
+          "label": "Occurred at",
+          "type": "date"
+        },
+        {
+          "name": "data",
+          "label": "Data",
+          "type": "collection",
+          "spec": [
+            {
+              "name": "orderId",
+              "label": "Order id",
+              "type": "text"
+            },
+            {
+              "name": "eventId",
+              "label": "Event id",
+              "type": "text"
+            },
+            {
+              "name": "totalMinor",
+              "label": "Total minor",
+              "type": "number"
+            },
+            {
+              "name": "currency",
+              "label": "Currency",
+              "type": "text"
+            },
+            {
+              "name": "via",
+              "label": "Via",
+              "type": "select"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "watch_order_payment_failed",
+      "label": "Watch: A payment attempt for an order failed",
+      "description": "The buyer can try again until the order expires.",
+      "typeName": "instant_trigger",
+      "connection": "yayatoh",
+      "scope": "webhooks:manage",
+      "webhook": "yayatoh_watch_order_payment_failed",
+      "eventType": "order.payment_failed",
+      "communication": {
+        "output": "{{body}}"
+      },
+      "interface": [
+        {
+          "name": "id",
+          "label": "Message id",
+          "type": "text"
+        },
+        {
+          "name": "type",
+          "label": "Event type",
+          "type": "text"
+        },
+        {
+          "name": "occurredAt",
+          "label": "Occurred at",
+          "type": "date"
+        },
+        {
+          "name": "data",
+          "label": "Data",
+          "type": "collection",
+          "spec": [
+            {
+              "name": "orderId",
+              "label": "Order id",
+              "type": "text"
+            },
+            {
+              "name": "eventId",
+              "label": "Event id",
+              "type": "text"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "watch_order_refunded",
+      "label": "Watch: All or part of an order was refunded",
+      "description": "Sent for each refund. `fully` is true when nothing is left to refund; `tickets` counts the tickets the refund cancelled.",
+      "typeName": "instant_trigger",
+      "connection": "yayatoh",
+      "scope": "webhooks:manage",
+      "webhook": "yayatoh_watch_order_refunded",
+      "eventType": "order.refunded",
+      "communication": {
+        "output": "{{body}}"
+      },
+      "interface": [
+        {
+          "name": "id",
+          "label": "Message id",
+          "type": "text"
+        },
+        {
+          "name": "type",
+          "label": "Event type",
+          "type": "text"
+        },
+        {
+          "name": "occurredAt",
+          "label": "Occurred at",
+          "type": "date"
+        },
+        {
+          "name": "data",
+          "label": "Data",
+          "type": "collection",
+          "spec": [
+            {
+              "name": "orderId",
+              "label": "Order id",
+              "type": "text"
+            },
+            {
+              "name": "refundId",
+              "label": "Refund id",
+              "type": "text"
+            },
+            {
+              "name": "amountMinor",
+              "label": "Amount minor",
+              "type": "number"
+            },
+            {
+              "name": "currency",
+              "label": "Currency",
+              "type": "text"
+            },
+            {
+              "name": "tickets",
+              "label": "Tickets",
+              "type": "number"
+            },
+            {
+              "name": "fully",
+              "label": "Fully",
+              "type": "boolean"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "watch_program_agenda_published",
+      "label": "Watch: An event’s agenda was published",
+      "description": "`agendaVersion` increases with each publish; read the agenda from the public content API.",
+      "typeName": "instant_trigger",
+      "connection": "yayatoh",
+      "scope": "webhooks:manage",
+      "webhook": "yayatoh_watch_program_agenda_published",
+      "eventType": "program.agenda_published",
+      "communication": {
+        "output": "{{body}}"
+      },
+      "interface": [
+        {
+          "name": "id",
+          "label": "Message id",
+          "type": "text"
+        },
+        {
+          "name": "type",
+          "label": "Event type",
+          "type": "text"
+        },
+        {
+          "name": "occurredAt",
+          "label": "Occurred at",
+          "type": "date"
+        },
+        {
+          "name": "data",
+          "label": "Data",
+          "type": "collection",
+          "spec": [
+            {
+              "name": "eventId",
+              "label": "Event id",
+              "type": "text"
+            },
+            {
+              "name": "agendaVersion",
+              "label": "Agenda version",
+              "type": "number"
+            },
+            {
+              "name": "sessions",
+              "label": "Sessions",
+              "type": "number"
+            },
+            {
+              "name": "publishedAt",
+              "label": "Published at",
+              "type": "date"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "watch_review_submitted",
+      "label": "Watch: An attendee rated an event",
+      "description": "`rating` is 1 to 5. The review text is not in the payload.",
+      "typeName": "instant_trigger",
+      "connection": "yayatoh",
+      "scope": "webhooks:manage",
+      "webhook": "yayatoh_watch_review_submitted",
+      "eventType": "review.submitted",
+      "communication": {
+        "output": "{{body}}"
+      },
+      "interface": [
+        {
+          "name": "id",
+          "label": "Message id",
+          "type": "text"
+        },
+        {
+          "name": "type",
+          "label": "Event type",
+          "type": "text"
+        },
+        {
+          "name": "occurredAt",
+          "label": "Occurred at",
+          "type": "date"
+        },
+        {
+          "name": "data",
+          "label": "Data",
+          "type": "collection",
+          "spec": [
+            {
+              "name": "eventId",
+              "label": "Event id",
+              "type": "text"
+            },
+            {
+              "name": "reviewId",
+              "label": "Review id",
+              "type": "text"
+            },
+            {
+              "name": "rating",
+              "label": "Rating",
+              "type": "number"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "watch_survey_responded",
+      "label": "Watch: A survey was answered",
+      "description": "The answers stay in the console; the payload says which survey and invitation.",
+      "typeName": "instant_trigger",
+      "connection": "yayatoh",
+      "scope": "webhooks:manage",
+      "webhook": "yayatoh_watch_survey_responded",
+      "eventType": "survey.responded",
+      "communication": {
+        "output": "{{body}}"
+      },
+      "interface": [
+        {
+          "name": "id",
+          "label": "Message id",
+          "type": "text"
+        },
+        {
+          "name": "type",
+          "label": "Event type",
+          "type": "text"
+        },
+        {
+          "name": "occurredAt",
+          "label": "Occurred at",
+          "type": "date"
+        },
+        {
+          "name": "data",
+          "label": "Data",
+          "type": "collection",
+          "spec": [
+            {
+              "name": "surveyId",
+              "label": "Survey id",
+              "type": "text"
+            },
+            {
+              "name": "eventId",
+              "label": "Event id",
+              "type": "text"
+            },
+            {
+              "name": "invitationId",
+              "label": "Invitation id",
+              "type": "text"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "watch_ticket_type_archived",
+      "label": "Watch: A ticket type was archived",
+      "description": "It is no longer sold; tickets already issued stay valid.",
+      "typeName": "instant_trigger",
+      "connection": "yayatoh",
+      "scope": "webhooks:manage",
+      "webhook": "yayatoh_watch_ticket_type_archived",
+      "eventType": "ticket_type.archived",
+      "communication": {
+        "output": "{{body}}"
+      },
+      "interface": [
+        {
+          "name": "id",
+          "label": "Message id",
+          "type": "text"
+        },
+        {
+          "name": "type",
+          "label": "Event type",
+          "type": "text"
+        },
+        {
+          "name": "occurredAt",
+          "label": "Occurred at",
+          "type": "date"
+        },
+        {
+          "name": "data",
+          "label": "Data",
+          "type": "collection",
+          "spec": [
+            {
+              "name": "eventId",
+              "label": "Event id",
+              "type": "text"
+            },
+            {
+              "name": "ticketTypeId",
+              "label": "Ticket type id",
+              "type": "text"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "watch_ticket_type_created",
+      "label": "Watch: A ticket type was added to an event",
+      "description": "Read it with `GET /v1/orgs/{org}/events/{eventId}/ticket-types`.",
+      "typeName": "instant_trigger",
+      "connection": "yayatoh",
+      "scope": "webhooks:manage",
+      "webhook": "yayatoh_watch_ticket_type_created",
+      "eventType": "ticket_type.created",
+      "communication": {
+        "output": "{{body}}"
+      },
+      "interface": [
+        {
+          "name": "id",
+          "label": "Message id",
+          "type": "text"
+        },
+        {
+          "name": "type",
+          "label": "Event type",
+          "type": "text"
+        },
+        {
+          "name": "occurredAt",
+          "label": "Occurred at",
+          "type": "date"
+        },
+        {
+          "name": "data",
+          "label": "Data",
+          "type": "collection",
+          "spec": [
+            {
+              "name": "eventId",
+              "label": "Event id",
+              "type": "text"
+            },
+            {
+              "name": "ticketTypeId",
+              "label": "Ticket type id",
+              "type": "text"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "watch_ticket_type_updated",
+      "label": "Watch: A ticket type changed",
+      "description": "`fields` names what changed (for example `priceMinor`).",
+      "typeName": "instant_trigger",
+      "connection": "yayatoh",
+      "scope": "webhooks:manage",
+      "webhook": "yayatoh_watch_ticket_type_updated",
+      "eventType": "ticket_type.updated",
+      "communication": {
+        "output": "{{body}}"
+      },
+      "interface": [
+        {
+          "name": "id",
+          "label": "Message id",
+          "type": "text"
+        },
+        {
+          "name": "type",
+          "label": "Event type",
+          "type": "text"
+        },
+        {
+          "name": "occurredAt",
+          "label": "Occurred at",
+          "type": "date"
+        },
+        {
+          "name": "data",
+          "label": "Data",
+          "type": "collection",
+          "spec": [
+            {
+              "name": "eventId",
+              "label": "Event id",
+              "type": "text"
+            },
+            {
+              "name": "ticketTypeId",
+              "label": "Ticket type id",
+              "type": "text"
+            },
+            {
+              "name": "fields",
+              "label": "Fields",
+              "type": "array"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "watch_ticket_admission_undone",
+      "label": "Watch: A scan was undone",
+      "description": "Door staff reversed an admission (a mistaken scan); the ticket can be scanned again.",
+      "typeName": "instant_trigger",
+      "connection": "yayatoh",
+      "scope": "webhooks:manage",
+      "webhook": "yayatoh_watch_ticket_admission_undone",
+      "eventType": "ticket.admission_undone",
+      "communication": {
+        "output": "{{body}}"
+      },
+      "interface": [
+        {
+          "name": "id",
+          "label": "Message id",
+          "type": "text"
+        },
+        {
+          "name": "type",
+          "label": "Event type",
+          "type": "text"
+        },
+        {
+          "name": "occurredAt",
+          "label": "Occurred at",
+          "type": "date"
+        },
+        {
+          "name": "data",
+          "label": "Data",
+          "type": "collection",
+          "spec": [
+            {
+              "name": "eventId",
+              "label": "Event id",
+              "type": "text"
+            },
+            {
+              "name": "ticketId",
+              "label": "Ticket id",
+              "type": "text"
+            },
+            {
+              "name": "admissionId",
+              "label": "Admission id",
+              "type": "text"
+            },
+            {
+              "name": "day",
+              "label": "Day",
+              "type": "text"
+            },
+            {
+              "name": "admittedAt",
+              "label": "Admitted at",
+              "type": "date"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "watch_ticket_admitted",
+      "label": "Watch: A ticket was scanned in",
+      "description": "`day` is the event day in the event’s time zone. `offline` is true when a door device scanned without a connection and synced later.",
+      "typeName": "instant_trigger",
+      "connection": "yayatoh",
+      "scope": "webhooks:manage",
+      "webhook": "yayatoh_watch_ticket_admitted",
+      "eventType": "ticket.admitted",
+      "communication": {
+        "output": "{{body}}"
+      },
+      "interface": [
+        {
+          "name": "id",
+          "label": "Message id",
+          "type": "text"
+        },
+        {
+          "name": "type",
+          "label": "Event type",
+          "type": "text"
+        },
+        {
+          "name": "occurredAt",
+          "label": "Occurred at",
+          "type": "date"
+        },
+        {
+          "name": "data",
+          "label": "Data",
+          "type": "collection",
+          "spec": [
+            {
+              "name": "eventId",
+              "label": "Event id",
+              "type": "text"
+            },
+            {
+              "name": "ticketId",
+              "label": "Ticket id",
+              "type": "text"
+            },
+            {
+              "name": "admissionId",
+              "label": "Admission id",
+              "type": "text"
+            },
+            {
+              "name": "day",
+              "label": "Day",
+              "type": "text"
+            },
+            {
+              "name": "admittedAt",
+              "label": "Admitted at",
+              "type": "date"
+            },
+            {
+              "name": "offline",
+              "label": "Offline",
+              "type": "boolean"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "watch_ticket_claimed",
+      "label": "Watch: A distributed ticket was claimed by its guest",
+      "description": "Sent when someone opens a claim link and takes the ticket.",
+      "typeName": "instant_trigger",
+      "connection": "yayatoh",
+      "scope": "webhooks:manage",
+      "webhook": "yayatoh_watch_ticket_claimed",
+      "eventType": "ticket.claimed",
+      "communication": {
+        "output": "{{body}}"
+      },
+      "interface": [
+        {
+          "name": "id",
+          "label": "Message id",
+          "type": "text"
+        },
+        {
+          "name": "type",
+          "label": "Event type",
+          "type": "text"
+        },
+        {
+          "name": "occurredAt",
+          "label": "Occurred at",
+          "type": "date"
+        },
+        {
+          "name": "data",
+          "label": "Data",
+          "type": "collection",
+          "spec": [
+            {
+              "name": "ticketId",
+              "label": "Ticket id",
+              "type": "text"
+            },
+            {
+              "name": "claimId",
+              "label": "Claim id",
+              "type": "text"
+            },
+            {
+              "name": "eventId",
+              "label": "Event id",
+              "type": "text"
+            },
+            {
+              "name": "rev",
+              "label": "Rev",
+              "type": "number"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "watch_ticket_transferred",
+      "label": "Watch: A ticket moved to a new holder",
+      "description": "The previous QR code stops working; `rev` is the ticket’s new revision. The new holder’s details are not in the payload.",
+      "typeName": "instant_trigger",
+      "connection": "yayatoh",
+      "scope": "webhooks:manage",
+      "webhook": "yayatoh_watch_ticket_transferred",
+      "eventType": "ticket.transferred",
+      "communication": {
+        "output": "{{body}}"
+      },
+      "interface": [
+        {
+          "name": "id",
+          "label": "Message id",
+          "type": "text"
+        },
+        {
+          "name": "type",
+          "label": "Event type",
+          "type": "text"
+        },
+        {
+          "name": "occurredAt",
+          "label": "Occurred at",
+          "type": "date"
+        },
+        {
+          "name": "data",
+          "label": "Data",
+          "type": "collection",
+          "spec": [
+            {
+              "name": "transferId",
+              "label": "Transfer id",
+              "type": "text"
+            },
+            {
+              "name": "ticketId",
+              "label": "Ticket id",
+              "type": "text"
+            },
+            {
+              "name": "eventId",
+              "label": "Event id",
+              "type": "text"
+            },
+            {
+              "name": "rev",
+              "label": "Rev",
+              "type": "number"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "watch_tickets_cancelled",
+      "label": "Watch: Tickets were cancelled in bulk",
+      "description": "One message per bulk cancellation (`operationId`) or per voided invoice (`orderId`: M5.1d pay later), with the ids of the tickets it voided. Exactly one of `operationId` and `orderId` is present.",
+      "typeName": "instant_trigger",
+      "connection": "yayatoh",
+      "scope": "webhooks:manage",
+      "webhook": "yayatoh_watch_tickets_cancelled",
+      "eventType": "tickets.cancelled",
+      "communication": {
+        "output": "{{body}}"
+      },
+      "interface": [
+        {
+          "name": "id",
+          "label": "Message id",
+          "type": "text"
+        },
+        {
+          "name": "type",
+          "label": "Event type",
+          "type": "text"
+        },
+        {
+          "name": "occurredAt",
+          "label": "Occurred at",
+          "type": "date"
+        },
+        {
+          "name": "data",
+          "label": "Data",
+          "type": "collection",
+          "spec": [
+            {
+              "name": "operationId",
+              "label": "Operation id",
+              "type": "text"
+            },
+            {
+              "name": "orderId",
+              "label": "Order id",
+              "type": "text"
+            },
+            {
+              "name": "eventId",
+              "label": "Event id",
+              "type": "text"
+            },
+            {
+              "name": "ticketIds",
+              "label": "Ticket ids",
+              "type": "array"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "watch_waitlist_joined",
+      "label": "Watch: Someone joined an event’s waitlist",
+      "description": "Who joined is not in the payload.",
+      "typeName": "instant_trigger",
+      "connection": "yayatoh",
+      "scope": "webhooks:manage",
+      "webhook": "yayatoh_watch_waitlist_joined",
+      "eventType": "waitlist.joined",
+      "communication": {
+        "output": "{{body}}"
+      },
+      "interface": [
+        {
+          "name": "id",
+          "label": "Message id",
+          "type": "text"
+        },
+        {
+          "name": "type",
+          "label": "Event type",
+          "type": "text"
+        },
+        {
+          "name": "occurredAt",
+          "label": "Occurred at",
+          "type": "date"
+        },
+        {
+          "name": "data",
+          "label": "Data",
+          "type": "collection",
+          "spec": [
+            {
+              "name": "entryId",
+              "label": "Entry id",
+              "type": "text"
+            },
+            {
+              "name": "eventId",
+              "label": "Event id",
+              "type": "text"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "watch_waitlist_offered",
+      "label": "Watch: A waitlist entry was offered a place",
+      "description": "`offer` counts the offers this entry has had (1 for the first).",
+      "typeName": "instant_trigger",
+      "connection": "yayatoh",
+      "scope": "webhooks:manage",
+      "webhook": "yayatoh_watch_waitlist_offered",
+      "eventType": "waitlist.offered",
+      "communication": {
+        "output": "{{body}}"
+      },
+      "interface": [
+        {
+          "name": "id",
+          "label": "Message id",
+          "type": "text"
+        },
+        {
+          "name": "type",
+          "label": "Event type",
+          "type": "text"
+        },
+        {
+          "name": "occurredAt",
+          "label": "Occurred at",
+          "type": "date"
+        },
+        {
+          "name": "data",
+          "label": "Data",
+          "type": "collection",
+          "spec": [
+            {
+              "name": "entryId",
+              "label": "Entry id",
+              "type": "text"
+            },
+            {
+              "name": "eventId",
+              "label": "Event id",
+              "type": "text"
+            },
+            {
+              "name": "offer",
+              "label": "Offer",
+              "type": "number"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "bulkAssignSeats",
+      "label": "Seat many attendees at once",
+      "description": "Select attendees by `ids` (all must belong to the event, else 404) or by a list `filter`, resolved once when the operation starts (at most 50,000). Retrying with the same Idempotency-Key returns the same operation; another body with that key is 422. Seats them at a table or row, in a section, in the best available seats or in their group's block, in plan order. Per-person failures: `not_enough_seats`, `seated_by_ticket`, `attendee_cancelled`, `not_found`; a kept-back accessible seat is a warning (`ada_kept_back`). Undo within 10 minutes puts everyone back.",
+      "typeName": "action",
+      "connection": "yayatoh",
+      "scope": "events:write",
+      "resource": "bulk actions",
+      "operation": {
+        "method": "POST",
+        "path": "/v1/orgs/{org}/events/{eventId}/bulk/seat-assignments"
+      },
+      "communication": {
+        "url": "/events/{{parameters.eventId}}/bulk/seat-assignments",
+        "method": "POST",
+        "headers": {
+          "idempotency-key": "{{uuid}}"
+        },
+        "body": "{{pick(parameters, 'selection', 'target', 'overrideRules')}}",
+        "response": {
+          "output": "{{body}}"
+        }
+      },
+      "parameters": [],
+      "expect": [
+        {
+          "name": "eventId",
+          "label": "Event id",
+          "type": "text",
+          "required": true,
+          "help": "The event id"
+        },
+        {
+          "name": "selection",
+          "label": "Selection",
+          "type": "any",
+          "required": true
+        },
+        {
+          "name": "target",
+          "label": "Target",
+          "type": "any",
+          "required": true,
+          "help": "A table or row (`item`), a section, the best available seats, or a group’s block."
+        },
+        {
+          "name": "overrideRules",
+          "label": "Override rules",
+          "type": "boolean",
+          "required": false,
+          "help": "Use accessible seats an enforced rule keeps back (audited)."
+        }
+      ]
+    },
+    {
+      "name": "bulkCancelTickets",
+      "label": "Cancel tickets without a refund",
+      "description": "Voids the named attendees’ tickets (scanners reject them), cancels the attendees and returns their places and seats to sale. No money moves: refunds stay per order. It cannot be undone, so only explicit `ids` are accepted, never a filter.",
+      "typeName": "action",
+      "connection": "yayatoh",
+      "scope": "orders:refund",
+      "resource": "bulk actions",
+      "operation": {
+        "method": "POST",
+        "path": "/v1/orgs/{org}/events/{eventId}/bulk/ticket-cancellations"
+      },
+      "communication": {
+        "url": "/events/{{parameters.eventId}}/bulk/ticket-cancellations",
+        "method": "POST",
+        "headers": {
+          "idempotency-key": "{{uuid}}"
+        },
+        "body": "{{pick(parameters, 'selection')}}",
+        "response": {
+          "output": "{{body}}"
+        }
+      },
+      "parameters": [],
+      "expect": [
+        {
+          "name": "eventId",
+          "label": "Event id",
+          "type": "text",
+          "required": true,
+          "help": "The event id"
+        },
+        {
+          "name": "selection",
+          "label": "Selection",
+          "type": "any",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "bulkEmailAttendees",
+      "label": "Email many attendees about the event",
+      "description": "Select attendees by `ids` (all must belong to the event, else 404) or by a list `filter`, resolved once when the operation starts (at most 50,000). Retrying with the same Idempotency-Key returns the same operation; another body with that key is 422. One email per attending person; the others fail `not_attending`. Refused while messaging is paused for the organization.",
+      "typeName": "action",
+      "connection": "yayatoh",
+      "scope": "attendees:write",
+      "resource": "bulk actions",
+      "operation": {
+        "method": "POST",
+        "path": "/v1/orgs/{org}/events/{eventId}/bulk/emails"
+      },
+      "communication": {
+        "url": "/events/{{parameters.eventId}}/bulk/emails",
+        "method": "POST",
+        "headers": {
+          "idempotency-key": "{{uuid}}"
+        },
+        "body": "{{pick(parameters, 'selection', 'subject', 'body')}}",
+        "response": {
+          "output": "{{body}}"
+        }
+      },
+      "parameters": [],
+      "expect": [
+        {
+          "name": "eventId",
+          "label": "Event id",
+          "type": "text",
+          "required": true,
+          "help": "The event id"
+        },
+        {
+          "name": "selection",
+          "label": "Selection",
+          "type": "any",
+          "required": true
+        },
+        {
+          "name": "subject",
+          "label": "Subject",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "body",
+          "label": "Body",
+          "type": "text",
+          "required": true,
+          "help": "Plain text."
+        }
+      ]
+    },
+    {
+      "name": "bulkLabelAttendees",
+      "label": "Add or remove labels on many attendees",
+      "description": "Select attendees by `ids` (all must belong to the event, else 404) or by a list `filter`, resolved once when the operation starts (at most 50,000). Retrying with the same Idempotency-Key returns the same operation; another body with that key is 422. Removal wins over addition; an attendee carries at most 20 labels (`too_many_labels`). Undo within 10 minutes restores each attendee's previous labels.",
+      "typeName": "action",
+      "connection": "yayatoh",
+      "scope": "attendees:write",
+      "resource": "bulk actions",
+      "operation": {
+        "method": "POST",
+        "path": "/v1/orgs/{org}/events/{eventId}/bulk/labels"
+      },
+      "communication": {
+        "url": "/events/{{parameters.eventId}}/bulk/labels",
+        "method": "POST",
+        "headers": {
+          "idempotency-key": "{{uuid}}"
+        },
+        "body": "{{pick(parameters, 'selection', 'add', 'remove')}}",
+        "response": {
+          "output": "{{body}}"
+        }
+      },
+      "parameters": [],
+      "expect": [
+        {
+          "name": "eventId",
+          "label": "Event id",
+          "type": "text",
+          "required": true,
+          "help": "The event id"
+        },
+        {
+          "name": "selection",
+          "label": "Selection",
+          "type": "any",
+          "required": true
+        },
+        {
+          "name": "add",
+          "label": "Add",
+          "type": "array",
+          "required": false,
+          "spec": {
+            "type": "text"
+          }
+        },
+        {
+          "name": "remove",
+          "label": "Remove",
+          "type": "array",
+          "required": false,
+          "spec": {
+            "type": "text"
+          }
+        }
+      ]
+    },
+    {
+      "name": "bulkResendTickets",
+      "label": "Email attendees their tickets again",
+      "description": "Select attendees by `ids` (all must belong to the event, else 404) or by a list `filter`, resolved once when the operation starts (at most 50,000). Retrying with the same Idempotency-Key returns the same operation; another body with that key is 422. Each ticket holder gets one email with a fresh link to their tickets. Guests without a ticket fail `no_ticket`; void tickets fail `ticket_void`.",
+      "typeName": "action",
+      "connection": "yayatoh",
+      "scope": "attendees:write",
+      "resource": "bulk actions",
+      "operation": {
+        "method": "POST",
+        "path": "/v1/orgs/{org}/events/{eventId}/bulk/ticket-resends"
+      },
+      "communication": {
+        "url": "/events/{{parameters.eventId}}/bulk/ticket-resends",
+        "method": "POST",
+        "headers": {
+          "idempotency-key": "{{uuid}}"
+        },
+        "body": "{{pick(parameters, 'selection')}}",
+        "response": {
+          "output": "{{body}}"
+        }
+      },
+      "parameters": [],
+      "expect": [
+        {
+          "name": "eventId",
+          "label": "Event id",
+          "type": "text",
+          "required": true,
+          "help": "The event id"
+        },
+        {
+          "name": "selection",
+          "label": "Selection",
+          "type": "any",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "checkInTicket",
+      "label": "Scan a ticket online and get the door verdict",
+      "description": "The same engine as the Scan PWA. Retrying with the same Idempotency-Key returns the first verdict instead of a duplicate.",
+      "typeName": "action",
+      "connection": "yayatoh",
+      "scope": "checkin:scan",
+      "resource": "check-in",
+      "operation": {
+        "method": "POST",
+        "path": "/v1/orgs/{org}/events/{eventId}/checkins"
+      },
+      "communication": {
+        "url": "/events/{{parameters.eventId}}/checkins",
+        "method": "POST",
+        "headers": {
+          "idempotency-key": "{{uuid}}"
+        },
+        "body": "{{pick(parameters, 'code', 'checkpointId')}}",
+        "response": {
+          "output": "{{body}}"
+        }
+      },
+      "parameters": [],
+      "expect": [
+        {
+          "name": "eventId",
+          "label": "Event id",
+          "type": "text",
+          "required": true,
+          "help": "The event id"
+        },
+        {
+          "name": "code",
+          "label": "Code",
+          "type": "text",
+          "required": true,
+          "help": "The QR payload (`yy1…`) or the printed short code."
+        },
+        {
+          "name": "checkpointId",
+          "label": "Checkpoint id",
+          "type": "text",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "createEvent",
+      "label": "Create a draft event",
+      "description": "Creates a draft event. Times are instants; `timezone` is how they render. Needs an `Idempotency-Key`.",
+      "typeName": "action",
+      "connection": "yayatoh",
+      "scope": "events:write",
+      "resource": "events",
+      "operation": {
+        "method": "POST",
+        "path": "/v1/orgs/{org}/events"
+      },
+      "communication": {
+        "url": "/events",
+        "method": "POST",
+        "headers": {
+          "idempotency-key": "{{uuid}}"
+        },
+        "body": "{{pick(parameters, 'name', 'tagline', 'profile', 'visibility', 'timezone', 'startsAt', 'endsAt', 'venueName', 'city', 'country', 'currency', 'slug')}}",
+        "response": {
+          "output": "{{body}}"
+        }
+      },
+      "parameters": [],
+      "expect": [
+        {
+          "name": "name",
+          "label": "Name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "tagline",
+          "label": "Tagline",
+          "type": "text",
+          "required": false
+        },
+        {
+          "name": "profile",
+          "label": "Profile",
+          "type": "select",
+          "required": false,
+          "options": [
+            {
+              "label": "wedding",
+              "value": "wedding"
+            },
+            {
+              "label": "gala",
+              "value": "gala"
+            },
+            {
+              "label": "concert",
+              "value": "concert"
+            },
+            {
+              "label": "conference",
+              "value": "conference"
+            },
+            {
+              "label": "community",
+              "value": "community"
+            },
+            {
+              "label": "agency",
+              "value": "agency"
+            },
+            {
+              "label": "other",
+              "value": "other"
+            }
+          ]
+        },
+        {
+          "name": "visibility",
+          "label": "Visibility",
+          "type": "select",
+          "required": false,
+          "options": [
+            {
+              "label": "public",
+              "value": "public"
+            },
+            {
+              "label": "unlisted",
+              "value": "unlisted"
+            },
+            {
+              "label": "private",
+              "value": "private"
+            }
+          ]
+        },
+        {
+          "name": "timezone",
+          "label": "Timezone",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "startsAt",
+          "label": "Starts at",
+          "type": "date",
+          "required": true
+        },
+        {
+          "name": "endsAt",
+          "label": "Ends at",
+          "type": "date",
+          "required": true
+        },
+        {
+          "name": "venueName",
+          "label": "Venue name",
+          "type": "text",
+          "required": false
+        },
+        {
+          "name": "city",
+          "label": "City",
+          "type": "text",
+          "required": false
+        },
+        {
+          "name": "country",
+          "label": "Country",
+          "type": "text",
+          "required": false
+        },
+        {
+          "name": "currency",
+          "label": "Currency",
+          "type": "text",
+          "required": false
+        },
+        {
+          "name": "slug",
+          "label": "Slug",
+          "type": "text",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "createTicketType",
+      "label": "Add a ticket type",
+      "description": "Adds a ticket type (prices in minor units). Needs an `Idempotency-Key`.",
+      "typeName": "action",
+      "connection": "yayatoh",
+      "scope": "events:write",
+      "resource": "ticket types",
+      "operation": {
+        "method": "POST",
+        "path": "/v1/orgs/{org}/events/{eventId}/ticket-types"
+      },
+      "communication": {
+        "url": "/events/{{parameters.eventId}}/ticket-types",
+        "method": "POST",
+        "headers": {
+          "idempotency-key": "{{uuid}}"
+        },
+        "body": "{{pick(parameters, 'name', 'description', 'priceMinor', 'feeMode', 'quantityTotal', 'minPerOrder', 'maxPerOrder', 'salesStartAt', 'salesEndAt', 'visibility', 'sortOrder', 'earlyPriceMinor', 'earlyEndsAt', 'isDonation')}}",
+        "response": {
+          "output": "{{body}}"
+        }
+      },
+      "parameters": [],
+      "expect": [
+        {
+          "name": "eventId",
+          "label": "Event id",
+          "type": "text",
+          "required": true,
+          "help": "The event id"
+        },
+        {
+          "name": "name",
+          "label": "Name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "description",
+          "label": "Description",
+          "type": "text",
+          "required": false
+        },
+        {
+          "name": "priceMinor",
+          "label": "Price minor",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "feeMode",
+          "label": "Fee mode",
+          "type": "select",
+          "required": false,
+          "options": [
+            {
+              "label": "pass_on",
+              "value": "pass_on"
+            },
+            {
+              "label": "absorb",
+              "value": "absorb"
+            }
+          ]
+        },
+        {
+          "name": "quantityTotal",
+          "label": "Quantity total",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "minPerOrder",
+          "label": "Min per order",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "maxPerOrder",
+          "label": "Max per order",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "salesStartAt",
+          "label": "Sales start at",
+          "type": "date",
+          "required": false
+        },
+        {
+          "name": "salesEndAt",
+          "label": "Sales end at",
+          "type": "date",
+          "required": false
+        },
+        {
+          "name": "visibility",
+          "label": "Visibility",
+          "type": "select",
+          "required": false,
+          "options": [
+            {
+              "label": "public",
+              "value": "public"
+            },
+            {
+              "label": "hidden",
+              "value": "hidden"
+            }
+          ]
+        },
+        {
+          "name": "sortOrder",
+          "label": "Sort order",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "earlyPriceMinor",
+          "label": "Early price minor",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "earlyEndsAt",
+          "label": "Early ends at",
+          "type": "date",
+          "required": false
+        },
+        {
+          "name": "isDonation",
+          "label": "Is donation",
+          "type": "boolean",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "getEvent",
+      "label": "One event",
+      "description": "One event of the organization; another org’s event is a 404.",
+      "typeName": "search",
+      "connection": "yayatoh",
+      "scope": "events:read",
+      "resource": "events",
+      "operation": {
+        "method": "GET",
+        "path": "/v1/orgs/{org}/events/{eventId}"
+      },
+      "communication": {
+        "url": "/events/{{parameters.eventId}}",
+        "method": "GET",
+        "response": {
+          "output": "{{body}}"
+        }
+      },
+      "parameters": [],
+      "expect": [
+        {
+          "name": "eventId",
+          "label": "Event id",
+          "type": "text",
+          "required": true,
+          "help": "The event id"
+        }
+      ]
+    },
+    {
+      "name": "getEventAgenda",
+      "label": "An event’s agenda",
+      "description": "Tracks, rooms and sessions grouped by day in the event’s timezone, with ids and capacities.",
+      "typeName": "search",
+      "connection": "yayatoh",
+      "scope": "events:read",
+      "resource": "event content",
+      "operation": {
+        "method": "GET",
+        "path": "/v1/orgs/{org}/events/{eventId}/agenda"
+      },
+      "communication": {
+        "url": "/events/{{parameters.eventId}}/agenda",
+        "method": "GET",
+        "qs": "{{pick(parameters, 'dateId')}}",
+        "response": {
+          "output": "{{body}}"
+        }
+      },
+      "parameters": [],
+      "expect": [
+        {
+          "name": "eventId",
+          "label": "Event id",
+          "type": "text",
+          "required": true,
+          "help": "The event id"
+        },
+        {
+          "name": "dateId",
+          "label": "Date id",
+          "type": "text",
+          "required": false,
+          "help": "Only this date’s sessions (and those on no date), for multi-date events."
+        }
+      ]
+    },
+    {
+      "name": "getEventAttendee",
+      "label": "One attendee",
+      "description": "One attendee of the event.",
+      "typeName": "search",
+      "connection": "yayatoh",
+      "scope": "attendees:read",
+      "resource": "attendees",
+      "operation": {
+        "method": "GET",
+        "path": "/v1/orgs/{org}/events/{eventId}/attendees/{attendeeId}"
+      },
+      "communication": {
+        "url": "/events/{{parameters.eventId}}/attendees/{{parameters.attendeeId}}",
+        "method": "GET",
+        "response": {
+          "output": "{{body}}"
+        }
+      },
+      "parameters": [],
+      "expect": [
+        {
+          "name": "eventId",
+          "label": "Event id",
+          "type": "text",
+          "required": true,
+          "help": "The event id"
+        },
+        {
+          "name": "attendeeId",
+          "label": "Attendee id",
+          "type": "text",
+          "required": true,
+          "help": "The attendee id"
+        }
+      ]
+    },
+    {
+      "name": "getEventSpeaker",
+      "label": "One speaker",
+      "description": "A speaker and the sessions they speak in.",
+      "typeName": "search",
+      "connection": "yayatoh",
+      "scope": "events:read",
+      "resource": "event content",
+      "operation": {
+        "method": "GET",
+        "path": "/v1/orgs/{org}/events/{eventId}/speakers/{speakerId}"
+      },
+      "communication": {
+        "url": "/events/{{parameters.eventId}}/speakers/{{parameters.speakerId}}",
+        "method": "GET",
+        "response": {
+          "output": "{{body}}"
+        }
+      },
+      "parameters": [],
+      "expect": [
+        {
+          "name": "eventId",
+          "label": "Event id",
+          "type": "text",
+          "required": true,
+          "help": "The event id"
+        },
+        {
+          "name": "speakerId",
+          "label": "Speaker id",
+          "type": "text",
+          "required": true,
+          "help": "The speaker id"
+        }
+      ]
+    },
+    {
+      "name": "getOrder",
+      "label": "One order with its tickets",
+      "description": "One order with its line items and tickets.",
+      "typeName": "search",
+      "connection": "yayatoh",
+      "scope": "orders:read",
+      "resource": "orders",
+      "operation": {
+        "method": "GET",
+        "path": "/v1/orgs/{org}/orders/{orderId}"
+      },
+      "communication": {
+        "url": "/orders/{{parameters.orderId}}",
+        "method": "GET",
+        "response": {
+          "output": "{{body}}"
+        }
+      },
+      "parameters": [],
+      "expect": [
+        {
+          "name": "orderId",
+          "label": "Order id",
+          "type": "text",
+          "required": true,
+          "help": "The order id"
+        }
+      ]
+    },
+    {
+      "name": "getVenue",
+      "label": "One venue",
+      "description": "A saved venue.",
+      "typeName": "search",
+      "connection": "yayatoh",
+      "scope": "events:read",
+      "resource": "venues",
+      "operation": {
+        "method": "GET",
+        "path": "/v1/orgs/{org}/venues/{venueId}"
+      },
+      "communication": {
+        "url": "/venues/{{parameters.venueId}}",
+        "method": "GET",
+        "response": {
+          "output": "{{body}}"
+        }
+      },
+      "parameters": [],
+      "expect": [
+        {
+          "name": "venueId",
+          "label": "Venue id",
+          "type": "text",
+          "required": true,
+          "help": "The venue id"
+        }
+      ]
+    },
+    {
+      "name": "listEventAnnouncements",
+      "label": "An event’s announcements",
+      "description": "Every announcement, newest first: drafts (`publishedAt` null) and both audiences.",
+      "typeName": "search",
+      "connection": "yayatoh",
+      "scope": "events:read",
+      "resource": "event content",
+      "operation": {
+        "method": "GET",
+        "path": "/v1/orgs/{org}/events/{eventId}/announcements"
+      },
+      "communication": {
+        "url": "/events/{{parameters.eventId}}/announcements",
+        "method": "GET",
+        "qs": "{{pick(parameters, 'limit')}}",
+        "response": {
+          "iterate": "{{body.data}}",
+          "output": "{{item}}"
+        },
+        "pagination": {
+          "qs": {
+            "cursor": "{{body.nextCursor}}"
+          },
+          "condition": "{{body.nextCursor}}"
+        }
+      },
+      "parameters": [],
+      "expect": [
+        {
+          "name": "eventId",
+          "label": "Event id",
+          "type": "text",
+          "required": true,
+          "help": "The event id"
+        },
+        {
+          "name": "limit",
+          "label": "Limit",
+          "type": "number",
+          "required": false,
+          "help": "Page size (1–100)."
+        }
+      ]
+    },
+    {
+      "name": "listEventAttendees",
+      "label": "The event’s attendees, newest first",
+      "description": "The event’s attendees, newest first, optionally filtered by a search term or status.",
+      "typeName": "search",
+      "connection": "yayatoh",
+      "scope": "attendees:read",
+      "resource": "attendees",
+      "operation": {
+        "method": "GET",
+        "path": "/v1/orgs/{org}/events/{eventId}/attendees"
+      },
+      "communication": {
+        "url": "/events/{{parameters.eventId}}/attendees",
+        "method": "GET",
+        "qs": "{{pick(parameters, 'limit', 'search', 'status')}}",
+        "response": {
+          "iterate": "{{body.data}}",
+          "output": "{{item}}"
+        },
+        "pagination": {
+          "qs": {
+            "cursor": "{{body.nextCursor}}"
+          },
+          "condition": "{{body.nextCursor}}"
+        }
+      },
+      "parameters": [],
+      "expect": [
+        {
+          "name": "eventId",
+          "label": "Event id",
+          "type": "text",
+          "required": true,
+          "help": "The event id"
+        },
+        {
+          "name": "limit",
+          "label": "Limit",
+          "type": "number",
+          "required": false,
+          "help": "Page size (1–100)."
+        },
+        {
+          "name": "search",
+          "label": "Search",
+          "type": "text",
+          "required": false,
+          "help": "Name or email contains"
+        },
+        {
+          "name": "status",
+          "label": "Status",
+          "type": "select",
+          "required": false,
+          "help": "Only attendees with this status",
+          "options": [
+            {
+              "label": "active",
+              "value": "active"
+            },
+            {
+              "label": "cancelled",
+              "value": "cancelled"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "listEventDates",
+      "label": "An event’s dates",
+      "description": "The dates of a multi-date event in start order, with capacities.",
+      "typeName": "search",
+      "connection": "yayatoh",
+      "scope": "events:read",
+      "resource": "event content",
+      "operation": {
+        "method": "GET",
+        "path": "/v1/orgs/{org}/events/{eventId}/dates"
+      },
+      "communication": {
+        "url": "/events/{{parameters.eventId}}/dates",
+        "method": "GET",
+        "qs": "{{pick(parameters, 'limit')}}",
+        "response": {
+          "iterate": "{{body.data}}",
+          "output": "{{item}}"
+        },
+        "pagination": {
+          "qs": {
+            "cursor": "{{body.nextCursor}}"
+          },
+          "condition": "{{body.nextCursor}}"
+        }
+      },
+      "parameters": [],
+      "expect": [
+        {
+          "name": "eventId",
+          "label": "Event id",
+          "type": "text",
+          "required": true,
+          "help": "The event id"
+        },
+        {
+          "name": "limit",
+          "label": "Limit",
+          "type": "number",
+          "required": false,
+          "help": "Page size (1–100)."
+        }
+      ]
+    },
+    {
+      "name": "listEventExhibitors",
+      "label": "An event’s exhibitors",
+      "description": "Exhibitors by name.",
+      "typeName": "search",
+      "connection": "yayatoh",
+      "scope": "events:read",
+      "resource": "event content",
+      "operation": {
+        "method": "GET",
+        "path": "/v1/orgs/{org}/events/{eventId}/exhibitors"
+      },
+      "communication": {
+        "url": "/events/{{parameters.eventId}}/exhibitors",
+        "method": "GET",
+        "qs": "{{pick(parameters, 'limit')}}",
+        "response": {
+          "iterate": "{{body.data}}",
+          "output": "{{item}}"
+        },
+        "pagination": {
+          "qs": {
+            "cursor": "{{body.nextCursor}}"
+          },
+          "condition": "{{body.nextCursor}}"
+        }
+      },
+      "parameters": [],
+      "expect": [
+        {
+          "name": "eventId",
+          "label": "Event id",
+          "type": "text",
+          "required": true,
+          "help": "The event id"
+        },
+        {
+          "name": "limit",
+          "label": "Limit",
+          "type": "number",
+          "required": false,
+          "help": "Page size (1–100)."
+        }
+      ]
+    },
+    {
+      "name": "listEventOrders",
+      "label": "The event’s orders, newest first",
+      "description": "The event’s orders, newest first, without payment-provider internals.",
+      "typeName": "search",
+      "connection": "yayatoh",
+      "scope": "orders:read",
+      "resource": "orders",
+      "operation": {
+        "method": "GET",
+        "path": "/v1/orgs/{org}/events/{eventId}/orders"
+      },
+      "communication": {
+        "url": "/events/{{parameters.eventId}}/orders",
+        "method": "GET",
+        "qs": "{{pick(parameters, 'limit')}}",
+        "response": {
+          "iterate": "{{body.data}}",
+          "output": "{{item}}"
+        },
+        "pagination": {
+          "qs": {
+            "cursor": "{{body.nextCursor}}"
+          },
+          "condition": "{{body.nextCursor}}"
+        }
+      },
+      "parameters": [],
+      "expect": [
+        {
+          "name": "eventId",
+          "label": "Event id",
+          "type": "text",
+          "required": true,
+          "help": "The event id"
+        },
+        {
+          "name": "limit",
+          "label": "Limit",
+          "type": "number",
+          "required": false,
+          "help": "Page size (1–100)."
+        }
+      ]
+    },
+    {
+      "name": "listEvents",
+      "label": "Events by start time",
+      "description": "The organization’s events by start time, every status and visibility.",
+      "typeName": "search",
+      "connection": "yayatoh",
+      "scope": "events:read",
+      "resource": "events",
+      "operation": {
+        "method": "GET",
+        "path": "/v1/orgs/{org}/events"
+      },
+      "communication": {
+        "url": "/events",
+        "method": "GET",
+        "qs": "{{pick(parameters, 'limit')}}",
+        "response": {
+          "iterate": "{{body.data}}",
+          "output": "{{item}}"
+        },
+        "pagination": {
+          "qs": {
+            "cursor": "{{body.nextCursor}}"
+          },
+          "condition": "{{body.nextCursor}}"
+        }
+      },
+      "parameters": [],
+      "expect": [
+        {
+          "name": "limit",
+          "label": "Limit",
+          "type": "number",
+          "required": false,
+          "help": "Page size (1–100)."
+        }
+      ]
+    },
+    {
+      "name": "listEventSections",
+      "label": "An event’s content sections",
+      "description": "Every content section in page order, hidden ones included (`visible`).",
+      "typeName": "search",
+      "connection": "yayatoh",
+      "scope": "events:read",
+      "resource": "event content",
+      "operation": {
+        "method": "GET",
+        "path": "/v1/orgs/{org}/events/{eventId}/sections"
+      },
+      "communication": {
+        "url": "/events/{{parameters.eventId}}/sections",
+        "method": "GET",
+        "response": {
+          "iterate": "{{body.data}}",
+          "output": "{{item}}"
+        }
+      },
+      "parameters": [],
+      "expect": [
+        {
+          "name": "eventId",
+          "label": "Event id",
+          "type": "text",
+          "required": true,
+          "help": "The event id"
+        }
+      ]
+    },
+    {
+      "name": "listEventSpeakers",
+      "label": "An event’s speakers",
+      "description": "Speakers by name.",
+      "typeName": "search",
+      "connection": "yayatoh",
+      "scope": "events:read",
+      "resource": "event content",
+      "operation": {
+        "method": "GET",
+        "path": "/v1/orgs/{org}/events/{eventId}/speakers"
+      },
+      "communication": {
+        "url": "/events/{{parameters.eventId}}/speakers",
+        "method": "GET",
+        "qs": "{{pick(parameters, 'limit')}}",
+        "response": {
+          "iterate": "{{body.data}}",
+          "output": "{{item}}"
+        },
+        "pagination": {
+          "qs": {
+            "cursor": "{{body.nextCursor}}"
+          },
+          "condition": "{{body.nextCursor}}"
+        }
+      },
+      "parameters": [],
+      "expect": [
+        {
+          "name": "eventId",
+          "label": "Event id",
+          "type": "text",
+          "required": true,
+          "help": "The event id"
+        },
+        {
+          "name": "limit",
+          "label": "Limit",
+          "type": "number",
+          "required": false,
+          "help": "Page size (1–100)."
+        }
+      ]
+    },
+    {
+      "name": "listEventSponsors",
+      "label": "An event’s sponsor tiers",
+      "description": "Every sponsor tier in display order (empty ones included) with its sponsors.",
+      "typeName": "search",
+      "connection": "yayatoh",
+      "scope": "events:read",
+      "resource": "event content",
+      "operation": {
+        "method": "GET",
+        "path": "/v1/orgs/{org}/events/{eventId}/sponsors"
+      },
+      "communication": {
+        "url": "/events/{{parameters.eventId}}/sponsors",
+        "method": "GET",
+        "response": {
+          "iterate": "{{body.data}}",
+          "output": "{{item}}"
+        }
+      },
+      "parameters": [],
+      "expect": [
+        {
+          "name": "eventId",
+          "label": "Event id",
+          "type": "text",
+          "required": true,
+          "help": "The event id"
+        }
+      ]
+    },
+    {
+      "name": "listTicketTypes",
+      "label": "The event’s ticket types",
+      "description": "Every ticket type of the event in display order, with sold and held counts.",
+      "typeName": "search",
+      "connection": "yayatoh",
+      "scope": "events:read",
+      "resource": "ticket types",
+      "operation": {
+        "method": "GET",
+        "path": "/v1/orgs/{org}/events/{eventId}/ticket-types"
+      },
+      "communication": {
+        "url": "/events/{{parameters.eventId}}/ticket-types",
+        "method": "GET",
+        "response": {
+          "iterate": "{{body.data}}",
+          "output": "{{item}}"
+        }
+      },
+      "parameters": [],
+      "expect": [
+        {
+          "name": "eventId",
+          "label": "Event id",
+          "type": "text",
+          "required": true,
+          "help": "The event id"
+        }
+      ]
+    },
+    {
+      "name": "listVenues",
+      "label": "The organization’s venues",
+      "description": "Saved venues by name, archived ones included (`archivedAt`).",
+      "typeName": "search",
+      "connection": "yayatoh",
+      "scope": "events:read",
+      "resource": "venues",
+      "operation": {
+        "method": "GET",
+        "path": "/v1/orgs/{org}/venues"
+      },
+      "communication": {
+        "url": "/venues",
+        "method": "GET",
+        "qs": "{{pick(parameters, 'limit')}}",
+        "response": {
+          "iterate": "{{body.data}}",
+          "output": "{{item}}"
+        },
+        "pagination": {
+          "qs": {
+            "cursor": "{{body.nextCursor}}"
+          },
+          "condition": "{{body.nextCursor}}"
+        }
+      },
+      "parameters": [],
+      "expect": [
+        {
+          "name": "limit",
+          "label": "Limit",
+          "type": "number",
+          "required": false,
+          "help": "Page size (1–100)."
+        }
+      ]
+    },
+    {
+      "name": "publishEvent",
+      "label": "Publish a draft event",
+      "description": "Publishes a draft event (lifecycle `draft → published`). Needs an `Idempotency-Key`.",
+      "typeName": "action",
+      "connection": "yayatoh",
+      "scope": "events:write",
+      "resource": "events",
+      "operation": {
+        "method": "POST",
+        "path": "/v1/orgs/{org}/events/{eventId}/publish"
+      },
+      "communication": {
+        "url": "/events/{{parameters.eventId}}/publish",
+        "method": "POST",
+        "headers": {
+          "idempotency-key": "{{uuid}}"
+        },
+        "response": {
+          "output": "{{body}}"
+        }
+      },
+      "parameters": [],
+      "expect": [
+        {
+          "name": "eventId",
+          "label": "Event id",
+          "type": "text",
+          "required": true,
+          "help": "The event id"
+        }
+      ]
+    },
+    {
+      "name": "refundOrder",
+      "label": "Refund tickets or an amount under the refund policy",
+      "description": "Refunds whole tickets or an amount under the event’s refund policy, through the payment provider. Needs an `Idempotency-Key`; a retry returns the first result.",
+      "typeName": "action",
+      "connection": "yayatoh",
+      "scope": "orders:refund",
+      "resource": "orders",
+      "operation": {
+        "method": "POST",
+        "path": "/v1/orgs/{org}/orders/{orderId}/refunds"
+      },
+      "communication": {
+        "url": "/orders/{{parameters.orderId}}/refunds",
+        "method": "POST",
+        "headers": {
+          "idempotency-key": "{{uuid}}"
+        },
+        "body": "{{pick(parameters, 'reason', 'ticketIds', 'amountMinor', 'note')}}",
+        "response": {
+          "output": "{{body}}"
+        }
+      },
+      "parameters": [],
+      "expect": [
+        {
+          "name": "orderId",
+          "label": "Order id",
+          "type": "text",
+          "required": true,
+          "help": "The order id"
+        },
+        {
+          "name": "reason",
+          "label": "Reason",
+          "type": "select",
+          "required": true,
+          "options": [
+            {
+              "label": "requested_by_customer",
+              "value": "requested_by_customer"
+            },
+            {
+              "label": "event_cancelled",
+              "value": "event_cancelled"
+            },
+            {
+              "label": "event_postponed",
+              "value": "event_postponed"
+            },
+            {
+              "label": "duplicate",
+              "value": "duplicate"
+            },
+            {
+              "label": "fraudulent",
+              "value": "fraudulent"
+            },
+            {
+              "label": "goodwill",
+              "value": "goodwill"
+            }
+          ]
+        },
+        {
+          "name": "ticketIds",
+          "label": "Ticket ids",
+          "type": "array",
+          "required": false,
+          "spec": {
+            "type": "text"
+          }
+        },
+        {
+          "name": "amountMinor",
+          "label": "Amount minor",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "note",
+          "label": "Note",
+          "type": "text",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "searchAttendees",
+      "label": "Search attendees across events by name or email",
+      "description": "Attendees across the organization’s events matching a name or email. Limited to 60 per minute.",
+      "typeName": "search",
+      "connection": "yayatoh",
+      "scope": "attendees:read",
+      "resource": "attendees",
+      "operation": {
+        "method": "GET",
+        "path": "/v1/orgs/{org}/attendees/search"
+      },
+      "communication": {
+        "url": "/attendees/search",
+        "method": "GET",
+        "qs": "{{pick(parameters, 'q', 'limit')}}",
+        "response": {
+          "iterate": "{{body.data}}",
+          "output": "{{item}}"
+        }
+      },
+      "parameters": [],
+      "expect": [
+        {
+          "name": "q",
+          "label": "Q",
+          "type": "text",
+          "required": true,
+          "help": "Part of a name or email (2+ characters)"
+        },
+        {
+          "name": "limit",
+          "label": "Limit",
+          "type": "number",
+          "required": false,
+          "help": "Most hits to return (1–50)"
+        }
+      ]
+    },
+    {
+      "name": "updateEvent",
+      "label": "Change an event",
+      "description": "Changes the fields given; the slug is frozen once published. Needs an `Idempotency-Key`.",
+      "typeName": "action",
+      "connection": "yayatoh",
+      "scope": "events:write",
+      "resource": "events",
+      "operation": {
+        "method": "PATCH",
+        "path": "/v1/orgs/{org}/events/{eventId}"
+      },
+      "communication": {
+        "url": "/events/{{parameters.eventId}}",
+        "method": "PATCH",
+        "headers": {
+          "idempotency-key": "{{uuid}}"
+        },
+        "body": "{{pick(parameters, 'name', 'tagline', 'profile', 'visibility', 'timezone', 'startsAt', 'endsAt', 'venueName', 'city', 'country', 'currency', 'slug')}}",
+        "response": {
+          "output": "{{body}}"
+        }
+      },
+      "parameters": [],
+      "expect": [
+        {
+          "name": "eventId",
+          "label": "Event id",
+          "type": "text",
+          "required": true,
+          "help": "The event id"
+        },
+        {
+          "name": "name",
+          "label": "Name",
+          "type": "text",
+          "required": false
+        },
+        {
+          "name": "tagline",
+          "label": "Tagline",
+          "type": "text",
+          "required": false
+        },
+        {
+          "name": "profile",
+          "label": "Profile",
+          "type": "select",
+          "required": false,
+          "options": [
+            {
+              "label": "wedding",
+              "value": "wedding"
+            },
+            {
+              "label": "gala",
+              "value": "gala"
+            },
+            {
+              "label": "concert",
+              "value": "concert"
+            },
+            {
+              "label": "conference",
+              "value": "conference"
+            },
+            {
+              "label": "community",
+              "value": "community"
+            },
+            {
+              "label": "agency",
+              "value": "agency"
+            },
+            {
+              "label": "other",
+              "value": "other"
+            }
+          ]
+        },
+        {
+          "name": "visibility",
+          "label": "Visibility",
+          "type": "select",
+          "required": false,
+          "options": [
+            {
+              "label": "public",
+              "value": "public"
+            },
+            {
+              "label": "unlisted",
+              "value": "unlisted"
+            },
+            {
+              "label": "private",
+              "value": "private"
+            }
+          ]
+        },
+        {
+          "name": "timezone",
+          "label": "Timezone",
+          "type": "text",
+          "required": false
+        },
+        {
+          "name": "startsAt",
+          "label": "Starts at",
+          "type": "date",
+          "required": false
+        },
+        {
+          "name": "endsAt",
+          "label": "Ends at",
+          "type": "date",
+          "required": false
+        },
+        {
+          "name": "venueName",
+          "label": "Venue name",
+          "type": "text",
+          "required": false
+        },
+        {
+          "name": "city",
+          "label": "City",
+          "type": "text",
+          "required": false
+        },
+        {
+          "name": "country",
+          "label": "Country",
+          "type": "text",
+          "required": false
+        },
+        {
+          "name": "currency",
+          "label": "Currency",
+          "type": "text",
+          "required": false
+        },
+        {
+          "name": "slug",
+          "label": "Slug",
+          "type": "text",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "updateTicketType",
+      "label": "Change a ticket type",
+      "description": "Changes the fields given. Needs an `Idempotency-Key`.",
+      "typeName": "action",
+      "connection": "yayatoh",
+      "scope": "events:write",
+      "resource": "ticket types",
+      "operation": {
+        "method": "PATCH",
+        "path": "/v1/orgs/{org}/ticket-types/{ticketTypeId}"
+      },
+      "communication": {
+        "url": "/ticket-types/{{parameters.ticketTypeId}}",
+        "method": "PATCH",
+        "headers": {
+          "idempotency-key": "{{uuid}}"
+        },
+        "body": "{{pick(parameters, 'name', 'description', 'priceMinor', 'feeMode', 'quantityTotal', 'minPerOrder', 'maxPerOrder', 'salesStartAt', 'salesEndAt', 'visibility', 'sortOrder', 'earlyPriceMinor', 'earlyEndsAt', 'isDonation')}}",
+        "response": {
+          "output": "{{body}}"
+        }
+      },
+      "parameters": [],
+      "expect": [
+        {
+          "name": "ticketTypeId",
+          "label": "Ticket type id",
+          "type": "text",
+          "required": true,
+          "help": "The ticket type id"
+        },
+        {
+          "name": "name",
+          "label": "Name",
+          "type": "text",
+          "required": false
+        },
+        {
+          "name": "description",
+          "label": "Description",
+          "type": "text",
+          "required": false
+        },
+        {
+          "name": "priceMinor",
+          "label": "Price minor",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "feeMode",
+          "label": "Fee mode",
+          "type": "select",
+          "required": false,
+          "options": [
+            {
+              "label": "pass_on",
+              "value": "pass_on"
+            },
+            {
+              "label": "absorb",
+              "value": "absorb"
+            }
+          ]
+        },
+        {
+          "name": "quantityTotal",
+          "label": "Quantity total",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "minPerOrder",
+          "label": "Min per order",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "maxPerOrder",
+          "label": "Max per order",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "salesStartAt",
+          "label": "Sales start at",
+          "type": "date",
+          "required": false
+        },
+        {
+          "name": "salesEndAt",
+          "label": "Sales end at",
+          "type": "date",
+          "required": false
+        },
+        {
+          "name": "visibility",
+          "label": "Visibility",
+          "type": "select",
+          "required": false,
+          "options": [
+            {
+              "label": "public",
+              "value": "public"
+            },
+            {
+              "label": "hidden",
+              "value": "hidden"
+            }
+          ]
+        },
+        {
+          "name": "sortOrder",
+          "label": "Sort order",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "earlyPriceMinor",
+          "label": "Early price minor",
+          "type": "number",
+          "required": false
+        },
+        {
+          "name": "earlyEndsAt",
+          "label": "Early ends at",
+          "type": "date",
+          "required": false
+        },
+        {
+          "name": "isDonation",
+          "label": "Is donation",
+          "type": "boolean",
+          "required": false
+        }
+      ]
+    }
+  ]
+}

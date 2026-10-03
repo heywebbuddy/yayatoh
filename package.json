@@ -32,8 +32,9 @@
     "cutover": "node tools/cutover/cli.ts",
     "cutover:rehearse": "node tools/cutover/cli.ts rehearse",
     "vapid:generate": "node packages/modules/notifications/scripts/generate-vapid-keys.ts",
-    "contracts:check": "pnpm --filter @yayatoh/api openapi:check && pnpm --filter @yayatoh/api openapi:lint && pnpm --filter @yayatoh/sdk generate:check",
-    "verify": "pnpm lint && pnpm check:modules && pnpm typecheck && pnpm test && pnpm test:int"
+    "contracts:check": "pnpm --filter @yayatoh/api openapi:check && pnpm --filter @yayatoh/api openapi:lint && pnpm --filter @yayatoh/sdk generate:check && pnpm --filter @yayatoh/automation-apps generate:check",
+    "verify": "pnpm lint && pnpm check:modules && pnpm typecheck && pnpm test && pnpm test:int",
+    "apps:generate": "pnpm --filter @yayatoh/automation-apps generate"
   },
   "devDependencies": {
     "@biomejs/biome": "catalog:",
