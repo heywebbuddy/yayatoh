@@ -380,7 +380,10 @@
     "plan": "套餐与账单",
     "webhooks": "Webhook",
     "sandboxes": "沙盒",
-    "notifications": "通知"
+    "notifications": "通知",
+    "moneyOverview": "概览",
+    "salesByEvent": "按活动查看销售",
+    "fees": "费用"
   },
   "vocab": {
     "attendee": "参会者",
@@ -1784,7 +1787,31 @@
     "added": "域名已添加。现在请发布上方显示的 DNS 记录。",
     "managedMissing": "你的免费地址 {host} 尚未设置。",
     "managedCreate": "设置我的免费地址",
-    "noAccess": "只有所有者和管理员可以更改域名。"
+    "noAccess": "只有所有者和管理员可以更改域名。",
+    "wizard": {
+      "label": "连接 {host}",
+      "steps": "连接 {host} 的步骤",
+      "step": {
+        "domain": "已添加域名",
+        "dns": "DNS 记录",
+        "verify": "已验证",
+        "ssl": "安全连接",
+        "primary": "主地址"
+      },
+      "dns": {
+        "signIn": "登录你管理域名 DNS 的地方（域名注册商或 Cloudflare 等服务）。",
+        "open": "打开此域名的 DNS 设置。",
+        "add": "按显示内容准确添加下面的每条记录。删除同名的其他 A 或 CNAME 记录。",
+        "back": "回到这里并选择“立即检查”。"
+      },
+      "copyName": "{type} 记录的名称",
+      "copyValue": "{type} 记录的值",
+      "copy": "复制",
+      "copied": "已复制",
+      "verify": "我们已找到你的 DNS 记录，正在验证。请几分钟后再检查。",
+      "ssl": "你的域名已验证。我们正在签发安全（https）证书，通常需要几分钟。",
+      "primary": "{host} 已生效。将其设为主地址，让你的链接、门票和邮件都使用它。"
+    }
   },
   "suspensions": {
     "pause_checkout": "门票销售已被 Yayatoh 支持团队暂停。",
@@ -3419,6 +3446,16 @@
       "editListing": "编辑目录信息"
     },
     "layoutLibrary": "座位图库",
+    "createNext": "照片和其他信息（地址、地图、无障碍）将在下一步填写。",
+    "createdNext": "现在添加照片，然后填写下面的信息。",
+    "steps": {
+      "label": "新场地",
+      "create": "创建",
+      "photos": "照片",
+      "details": "信息"
+    },
+    "detailsTitle": "信息",
+    "photo": "照片",
     "emptyAction": "添加第一个场地",
     "emptyViewerAction": "浏览场地目录"
   },
@@ -3700,13 +3737,14 @@
     "saveTemplate": "保存模板",
     "nameTaken": "该名称已被使用，请换一个。",
     "invalid": "请检查此值。",
+    "headerSave": "另存为模板",
     "backToEvent": "返回活动概览"
   },
   "series": {
     "title": "系列",
     "description": "将活动归入巡演、演出季或节庆。每个系列都有公开页面，列出即将举行的活动。",
     "emptyTitle": "还没有系列",
-    "emptyDescription": "先创建系列，再在各活动的“场次”页面将其加入。",
+    "emptyDescription": "在下方创建系列，或在创建活动时为系列命名。",
     "caption": "系列",
     "name": "名称",
     "descriptionField": "描述（可选）",
@@ -3728,14 +3766,27 @@
     "title": "模板",
     "description": "使用你自己的模板创建新活动。由模板创建的活动是没有销售记录的草稿。",
     "emptyTitle": "还没有模板",
-    "emptyDescription": "打开一个活动，选择“复制与模板”，将其保存为模板。",
+    "emptyDescription": "使用“新建模板”从零创建，复制一个入门模板，或在活动页头将活动另存为模板。",
     "contents": "{ticketTypes, plural, other {# 个票种}} · {questions, plural, other {# 个问题}} · {seats, plural, =0 {无座位图} other {# 个座位}}",
     "delete": "删除",
     "deleteFor": "删除模板 {name}",
     "use": "用 {name} 创建活动",
     "timezone": "时间为 {timezone}。",
     "createEvent": "创建活动",
-    "pickEvent": "选择要保存的活动"
+    "newTemplate": "新建模板",
+    "summary": "{sections, plural, =0 {无页面版块} other {# 个页面版块}} · {checklist, plural, =0 {无清单事项} other {# 项清单事项}}",
+    "originEvent": "从活动保存",
+    "originScratch": "从零创建",
+    "edit": "编辑",
+    "editFor": "编辑模板 {name}",
+    "duplicate": "复制",
+    "duplicateFor": "复制模板 {name}",
+    "archive": "归档",
+    "archiveFor": "归档模板 {name}",
+    "restore": "恢复",
+    "restoreFor": "恢复模板 {name}",
+    "archivedTitle": "已归档的模板（{count}）",
+    "archivedHint": "已归档的模板不会出现在任何选择列表中。用它们创建的活动不受影响。"
   },
   "publicSeries": {
     "eyebrow": "{org} 的系列",
@@ -4338,6 +4389,21 @@
       "floorPlanChosen": "为场地选择平面图，或按数量生成一个。",
       "guestSitePublished": "发布宾客打开的密码保护网站。",
       "tablesSponsors": "为桌位和赞助商命名。"
+    },
+    "own": {
+      "title": "你的清单",
+      "hint": "此活动你自己的待办事项，与上方检查项并列。完成后逐项勾选。",
+      "empty": "这里还没有内容。添加你的第一项待办。",
+      "list": "你的清单事项",
+      "progress": "已完成 {done}/{total}",
+      "newItem": "新事项",
+      "add": "添加事项",
+      "added": "事项已添加。",
+      "invalid": "请输入 1 到 200 个字符。",
+      "tooMany": "此列表已满。请先移除一项。",
+      "markDone": "将 {title} 标为已完成",
+      "markOpen": "将 {title} 标为未完成",
+      "remove": "移除 {title}"
     }
   },
   "program": {
@@ -4856,7 +4922,18 @@
     "invalidCode": "验证码无效，请重试。",
     "invalidPassword": "密码不正确。",
     "rateLimited": "尝试次数过多。请等待 15 分钟后重试。",
-    "unauthenticated": "会话已结束，请重新登录。"
+    "unauthenticated": "会话已结束，请重新登录。",
+    "again": "确认是你本人",
+    "retry": "重试",
+    "problem": {
+      "impersonating": "你正在以该成员身份操作，无法代其确认。请让对方自行完成此更改。",
+      "unauthenticated": "你的会话已结束。请重新登录。",
+      "failed": "无法开始确认。请检查网络连接后重试。"
+    },
+    "persona": {
+      "explain": "演示账号：它登录时未使用身份验证器，因此可以无需验证码确认。正式网站上绝不会提供此选项。",
+      "confirm": "无需验证码继续（演示账号）"
+    }
   },
   "surveys": {
     "title": "问卷",
@@ -6810,7 +6887,10 @@
     "gala": {
       "name": "晚宴",
       "description": "门票、桌位与赞助商、座位、捐款和现场签到。"
-    }
+    },
+    "copy": "复制到你的模板",
+    "copyFor": "将入门模板 {name} 复制到你的模板",
+    "readOnly": "只读。复制到你的模板后即可修改票种、版块或清单。"
   },
   "profileCopy": {
     "wedding": {
@@ -6891,7 +6971,9 @@
       "event": "活动",
       "mode": "模式",
       "starts": "开始时间",
-      "readiness": "准备度"
+      "readiness": "准备度",
+      "sales": "销售额",
+      "tickets": "门票"
     },
     "manual": "手动设置",
     "role": {
@@ -6962,9 +7044,10 @@
       "readiness": {
         "title": "准备度",
         "score": "准备度 {score}%",
-        "blocking": "阻碍项",
-        "todo": "其他待办",
-        "allDone": "一切就绪。"
+        "allDone": "一切就绪。",
+        "count": "已完成 {done}/{total}",
+        "required": "开售必需",
+        "recommended": "建议完成"
       },
       "sales": {
         "title": "销售额",
@@ -7011,7 +7094,9 @@
       "alerts": {
         "title": "提醒",
         "pending": "启用提醒规则后，提醒会显示在这里。",
-        "none": "没有未处理的提醒。"
+        "none": "没有未处理的提醒。",
+        "watching": "警报规则会监控销售、付款、设备、容量和来宾，并在此显示。",
+        "viewAll": "查看全部警报"
       },
       "entrances": {
         "title": "入口"
@@ -7162,6 +7247,52 @@
         "over": "超过阈值：{domains, plural, other {# 个发件域名}}，{campaigns, plural, other {# 个活动}}",
         "open": "打开邮件送达率"
       },
+      "rsvp": {
+        "title": "出席回复",
+        "allAnswered": "所有受邀宾客都已回复。",
+        "noneInvited": "尚未邀请任何人参加分场活动。",
+        "responded": "{invited} 位受邀宾客中已有 {responded} 位回复",
+        "meter": "已收到的回复",
+        "parties": "未回复的家庭：{count}",
+        "notSent": "尚未发送邀请：{count}",
+        "deadline": "回复截止：{date}",
+        "noDeadline": "未设置回复截止日期",
+        "open": "打开回复"
+      },
+      "guestSeating": {
+        "title": "宾客座位",
+        "noChart": "还没有宾客平面图。请在座位中选择一个。",
+        "noGuests": "暂时没有需要安排座位的宾客。",
+        "allSeated": "每位未婉拒的宾客都有桌位。",
+        "seated": "{guests} 位宾客中有 {seated} 位已有桌位",
+        "listLabel": "没有桌位的宾客",
+        "guestOf": "{name} 的同伴",
+        "more": "另外 {count} 位",
+        "open": "安排宾客座位"
+      },
+      "meals": {
+        "title": "餐点与饮食需求",
+        "attending": "出席：{count}",
+        "noneAttending": "宾客确认出席后才会统计餐点。",
+        "caption": "出席宾客的餐点",
+        "colMeal": "餐点",
+        "colGuests": "宾客",
+        "other": "其他选择",
+        "none": "未选择餐点",
+        "dietary": "饮食需求：{count}",
+        "accessibility": "无障碍需求：{count}",
+        "open": "打开回复详情"
+      },
+      "arrivals": {
+        "title": "宾客到场",
+        "arrivedOf": "{expected} 位预期宾客中已到 {arrived} 位",
+        "notArrived": "尚未到场：{count}",
+        "none": "还没有人到场。",
+        "noExpected": "暂无预期到场的宾客。",
+        "recent": "最近到场",
+        "guestOf": "{name} 的同伴",
+        "open": "打开当天视图"
+      },
       "sessionLevel": {
         "none": "不限名额",
         "ok": "低于 {near}%",
@@ -7249,6 +7380,49 @@
       "statusOn": "已开启",
       "statusOff": "已关闭",
       "emptyAction": "创建屏幕链接"
+    },
+    "hero": {
+      "startsIn": "{duration}后开始",
+      "endsIn": "{duration}后结束",
+      "ended": "已于{duration}前结束",
+      "nextLabel": "下一步",
+      "blocking": "开售前必须完成",
+      "next": {
+        "readiness": "待完成：{item}",
+        "scanner": "在门口为来宾签到",
+        "publicPage": "一切就绪。以来宾视角查看活动页面。",
+        "report": "活动已结束。看看效果如何。",
+        "none": "目前没有需要处理的事项。"
+      },
+      "do": {
+        "alert": "去处理",
+        "readiness": "立即完成",
+        "scanner": "开始扫码",
+        "publicPage": "查看活动页面",
+        "report": "打开报告"
+      }
+    },
+    "kpi": {
+      "title": "关键数据",
+      "sales": "销售额",
+      "salesToday": "今日 {amount}",
+      "tickets": "已售门票",
+      "ofCapacity": "共 {capacity}",
+      "noCapacity": "尚无在售门票",
+      "checkins": "已签到",
+      "ofValid": "共 {valid} 张有效门票",
+      "alerts": "未处理警报",
+      "allClear": "一切正常",
+      "needsYou": "需要处理",
+      "critical": "{count, plural, =0 {无严重警报} other {# 个严重}}"
+    },
+    "soldOf": "{sold}/{capacity}",
+    "overviewCounts": "按模式分类的活动",
+    "overviewGroup": {
+      "live": "进行中（{count}）",
+      "pre_show": "开场前（{count}）",
+      "planning": "筹备中（{count}）",
+      "wrap": "收尾中（{count}）"
     }
   },
   "alerts": {
@@ -7344,6 +7518,9 @@
       "campaignFailed": "打开营销活动",
       "disputeDeadline": "打开争议队列",
       "assistanceOverdue": "打开求助请求",
+      "rsvpPending": "打开回复",
+      "guestsUnseated": "安排宾客座位",
+      "mealsMissing": "打开回复详情",
       "pledgesUnpaid": "打开认捐",
       "sessionsNearCapacity": "打开分会场",
       "sessionWaitlists": "打开分会场报名",
@@ -7377,6 +7554,9 @@
       "campaignFailed": "{count, plural, other {今天有 {countWords} 次营销活动发送失败}}",
       "disputeDeadline": "{count, plural, other {有 {countWords} 起争议需要尽快提交证据}}",
       "assistanceOverdue": "{count, plural, other {{countWords} 个求助请求等待过久}}",
+      "rsvpPending": "{count, plural, other {{countWords} 位宾客尚未回复出席邀请}}",
+      "guestsUnseated": "{count, plural, other {{countWords} 位宾客没有桌位}}",
+      "mealsMissing": "{count, plural, other {{countWords} 位出席宾客尚未选择餐点}}",
       "pledgesUnpaid": "{count, plural, other {活动结束 14 天后仍有 {countWords} 笔认捐未付款}}",
       "sessionsNearCapacity": "{count, plural, other {{countWords}个分会场已超过容量的 95 %}}",
       "sessionWaitlists": "{count, plural, other {{countWords}个分会场的候补名单过长}}",
@@ -15271,6 +15451,376 @@
     "timeZoneNote": "{zone} 时间",
     "selected": "已选择"
   },
+  "seriesField": {
+    "label": "系列（可选）",
+    "hint": "将此活动与其他活动归入巡演或季度。输入新名称即可创建系列。",
+    "none": "不属于系列",
+    "newOption": "新系列：{name}",
+    "summary": "系列",
+    "errors": {
+      "taken": "已有同名系列。请从列表中选择它。",
+      "missing": "该系列已不存在。请选择其他系列。",
+      "name": "请输入 2 到 160 个字符的系列名称。"
+    }
+  },
+  "seriesLink": {
+    "partOf": "属于{name}"
+  },
+  "seriesPage": {
+    "back": "全部系列",
+    "tabs": {
+      "label": "系列视图",
+      "events": "活动",
+      "details": "详情"
+    },
+    "columns": {
+      "event": "活动",
+      "status": "状态",
+      "dates": "日期",
+      "sales": "销售",
+      "actions": "操作"
+    },
+    "sold": "{count, plural, other {已售 {n} 张票}}",
+    "noSales": "暂无销售",
+    "remove": "移出系列",
+    "removeFor": "将{name}移出系列",
+    "createNext": "创建系列中的下一场活动",
+    "createIn": "在此系列中创建活动",
+    "added": "活动已加入系列。",
+    "removed": "活动已移出系列。活动本身没有变化。",
+    "deleted": "系列已删除。其活动没有变化。",
+    "eventsHeading": "{count, plural, other {# 场活动}}",
+    "emptyTitle": "此系列中还没有活动",
+    "emptyDescription": "在此系列中创建活动，或添加已有的活动。",
+    "emptyReadOnly": "加入此系列的活动会显示在这里。",
+    "caption": "{name}的活动",
+    "add": {
+      "heading": "添加已有活动",
+      "label": "活动",
+      "placeholder": "选择活动",
+      "hint": "属于其他系列的活动会移到此系列。",
+      "option": "{name} · {when}",
+      "optionMoves": "{name} · {when}（在{series}中）",
+      "required": "请选择要添加的活动。",
+      "submit": "加入系列"
+    },
+    "next": {
+      "back": "返回{name}",
+      "title": "创建系列中的下一场活动",
+      "description": "{name}中的新草稿，沿用最新一场活动的设置。",
+      "copies": "复制{name}（{when}）的设置、票种、问题和座位图。订单、参会者和签到记录不会复制。",
+      "name": "活动名称",
+      "startsAt": "开始",
+      "startsAtHint": "使用活动所在时区（{zone}）。",
+      "nameInvalid": "请输入 2 到 160 个字符的名称。",
+      "startInvalid": "请输入有效的开始日期和时间。",
+      "submit": "创建草稿"
+    },
+    "details": {
+      "heading": "系列详情",
+      "address": "公开页面：",
+      "saved": "系列已保存。",
+      "save": "保存更改",
+      "deleteHeading": "删除系列",
+      "deleteHint": "删除系列会移除其公开页面。其活动会保留，不再属于任何系列。",
+      "delete": "删除系列"
+    }
+  },
+  "templateBuilder": {
+    "breadcrumb": "面包屑导航",
+    "newTitle": "新建模板",
+    "newDescription": "先选择活动类型。票种、页面版块和清单在下一屏添加。",
+    "profileLegend": "是什么类型的活动？",
+    "profileInvalid": "请选择活动类型。",
+    "profileHelp": {
+      "wedding": "宾客、回复、座位安排、私密宾客网站和当天流程。从不公开展示。",
+      "gala": "门票、桌位与赞助商、座位安排、捐款和签到。",
+      "concert": "门票、粉丝、营销和入口快速签到。",
+      "conference": "报名、议程、讲者、展商、赞助商和胸卡。",
+      "community": "聚会和课程：免费或付费报名、重复日期和签到。",
+      "agency": "为客户举办的活动，使用客户的品牌和报告。",
+      "other": "通用活动：门票、参与者、活动页面和签到。"
+    },
+    "name": "模板名称",
+    "nameInvalid": "请输入 2 到 120 个字符的名称。",
+    "nameTaken": "该名称已被使用，请换一个。",
+    "description": "描述（可选）",
+    "duration": "默认时长",
+    "hours": "小时",
+    "minutes": "分钟",
+    "durationHint": "用它创建的活动在开始后经过这段时间结束。",
+    "durationInvalid": "请输入 15 分钟到 14 天之间的时长。",
+    "timezone": "时区",
+    "timezoneHint": "新活动的开始时间按此时区填写。",
+    "currency": "货币",
+    "create": "创建模板",
+    "steps": "模板步骤",
+    "step": {
+      "profile": "活动类型",
+      "tickets": "票种",
+      "sections": "页面版块",
+      "content": "页面内容",
+      "checklist": "清单"
+    },
+    "created": "模板已创建。请在下方添加票种、页面版块和清单。",
+    "copied": "入门模板已复制到你的模板。请在下方填写。",
+    "duplicated": "模板已复制。你正在编辑副本。",
+    "archivedNotice": "此模板已归档：不会出现在任何选择列表中，也无法修改。恢复后即可再次使用。",
+    "useAction": "创建活动",
+    "durationHours": "{hours, plural, other {# 小时}}",
+    "durationMinutes": "{minutes, plural, other {# 分钟}}",
+    "profileTitle": "活动类型",
+    "profileFixed": "活动类型在创建模板时确定。如需其他类型，请新建模板。",
+    "ticketsTitle": "默认票种",
+    "ticketsHint": "用模板创建的每个活动都从这些票种开始，没有任何销售。",
+    "ticketsEmpty": "还没有票种。请在下方添加第一个。",
+    "ticketsList": "票种",
+    "ticketName": "票种名称",
+    "ticketNameInvalid": "请输入 1 到 120 个字符的名称。",
+    "ticketDescription": "票种说明（可选）",
+    "price": "价格（{currency}）",
+    "priceInvalid": "请输入价格，如 25 或 25.00。",
+    "quantity": "可售数量",
+    "quantityInvalid": "请输入 1 到 1,000,000 之间的数量。",
+    "addTicket": "添加票种",
+    "ticketAdded": "票种已添加。",
+    "free": "免费",
+    "ticketLine": "{price} · {quantity, plural, other {可售 #}}",
+    "removeTicket": "移除票种 {name}",
+    "seatPriced": "已保存的座位图正在使用",
+    "sectionsTitle": "页面版块",
+    "sectionsHint": "活动页面上的版块，按此顺序显示。",
+    "sectionsEmpty": "还没有页面版块。请在下方添加第一个。",
+    "sectionsList": "按顺序排列的页面版块",
+    "addSection": "添加页面版块",
+    "moveUp": "上移 {title}",
+    "moveDown": "下移 {title}",
+    "removeSection": "移除版块 {title}",
+    "contentTitle": "页面内容",
+    "contentHint": "用模板创建的每个活动在其页面上显示的内容。",
+    "tagline": "标语（可选）",
+    "venueName": "场地（可选）",
+    "city": "城市（可选）",
+    "visibility": "谁能找到它",
+    "settingsTitle": "名称和默认值",
+    "save": "保存更改",
+    "saved": "更改已保存。",
+    "checklistTitle": "清单",
+    "checklistHint": "你自己的待办事项。用模板创建的每个活动都会在设置指南中带着这些未完成事项开始。",
+    "checklistEmpty": "还没有清单事项。",
+    "checklistList": "清单事项",
+    "checklistItem": "新清单事项",
+    "itemInvalid": "请输入 1 到 200 个字符。",
+    "tooMany": "此列表已满。请先移除一项。",
+    "addItem": "添加事项",
+    "itemAdded": "事项已添加。",
+    "removeItem": "移除事项 {title}",
+    "eventsTitle": "用它创建的活动",
+    "eventsEmpty": "还没有活动。请在下方创建第一个。",
+    "eventsList": "用此模板创建的活动",
+    "useTitle": "用此模板创建活动",
+    "useHint": "一个新的草稿，包含模板的票种、页面版块、内容和清单。"
+  },
+  "money": {
+    "export": "导出 CSV",
+    "periodForm": "选择期间",
+    "tabs": {
+      "label": "财务页面",
+      "overview": "概览",
+      "payouts": "结算",
+      "sales": "按活动查看销售",
+      "fees": "费用"
+    },
+    "grain": {
+      "label": "图表粒度",
+      "auto": "自动",
+      "day": "日",
+      "week": "周",
+      "month": "月"
+    },
+    "overview": {
+      "title": "财务概览",
+      "description": "您的销售额、扣除项以及到账金额。日期按 {timeZone} 时间计算。",
+      "range": "{from} – {to}",
+      "allTime": "全部时间",
+      "comparedWith": "对比 {from} – {to}",
+      "net": "净收入",
+      "netChange": "较上期 {change}",
+      "netExplained": "总销售额减去退款、败诉的争议和费用。",
+      "new": "新",
+      "previous": "上期：{amount}",
+      "gross": "总销售额",
+      "refunds": "退款",
+      "fees": "费用",
+      "disputes": "败诉的争议",
+      "payouts": "已结算",
+      "keyNumbers": "关键数据（{currency}）",
+      "inCurrency": "以 {currency} 计",
+      "nextPayout": "下一笔结算",
+      "nextPayoutOn": "预计 {date} · {event}",
+      "noNextPayout": "暂无计划中的结算。线上销售款在每场活动结束后结算。",
+      "toPayouts": "查看所有结算",
+      "chart": {
+        "day": "每日总销售额",
+        "week": "每周总销售额",
+        "month": "每月总销售额"
+      },
+      "bucket": {
+        "day": "日",
+        "week": "周起始日",
+        "month": "月"
+      },
+      "chartNote": "退款和费用见数据表。",
+      "showData": "显示数据",
+      "noSalesInPeriod": "此期间无销售或退款。",
+      "emptyTitle": "此期间无资金变动",
+      "emptyDescription": "销售、退款和结算发生后会显示在此处。请尝试更长的期间，或售出您的第一张门票。",
+      "showAllTime": "显示全部时间",
+      "createEvent": "创建活动"
+    },
+    "payouts": {
+      "summary": "结算摘要",
+      "next": "下一笔结算",
+      "nextOn": "预计 {date} · {event}",
+      "nothingScheduled": "暂无计划。",
+      "held": "为您的活动暂扣",
+      "heldSub": "{count, plural, =0 {暂无待结算的活动。} other {# 场活动等待放款日期。}}",
+      "inReserve": "准备金",
+      "reserveNext": "下一笔将于 {date} 退还。",
+      "noReserve": "无准备金。",
+      "owed": "您的欠款",
+      "owedSub": "将从下一笔结算中扣除。",
+      "upcoming": "即将进行的结算",
+      "upcomingEmptyTitle": "暂无待到账款项",
+      "upcomingEmpty": "当 Yayatoh 代您收取票款时，每场活动的结算及其日期将显示在此处。",
+      "toOverview": "查看财务概览",
+      "payoutOf": "{event}：{amount}",
+      "reserveOf": "准备金退还 · {event}：{amount}",
+      "expected": "{event}：约 {amount}",
+      "heldDetail": "暂扣 {held}，保留准备金 {reserve}",
+      "reserveBack": "准备金退还 · {event}：最多 {amount}",
+      "reserveDetail": "结算时保留 {kept}",
+      "status": {
+        "held": "暂扣至放款日",
+        "ready": "发送中",
+        "waiting_account": "等待您的收款账户",
+        "failed": "重试中",
+        "transferred": "已结算"
+      }
+    },
+    "payout": {
+      "metaTitle": "结算",
+      "title": "{event} 的结算",
+      "titleReserve": "{event} 的准备金退还",
+      "description": "于 {date} 放款。",
+      "export": "导出订单（CSV）",
+      "summary": "从放款到结算",
+      "released": "从活动销售额中放款",
+      "reserve": "保留为准备金",
+      "netted": "抵扣您的欠款",
+      "amount": "支付给您",
+      "paidOn": "已于 {date} 汇入您的银行账户。",
+      "notYet": {
+        "ready": "正在汇入您的银行账户。",
+        "waiting_account": "等待您的收款账户。",
+        "failed": "转账失败，将自动重试。"
+      },
+      "reserveOn": "准备金将于 {date} 退还。",
+      "eventFinance": "{event}：财务分析",
+      "lines": "此结算包含的订单",
+      "totals": "合计",
+      "date": "日期",
+      "type": "类型",
+      "order": "订单",
+      "orderLink": "订单 {ref} · {buyer}",
+      "buyer": "购票者",
+      "gross": "购票者支付",
+      "fee": "费用",
+      "organizer": "您的份额",
+      "kind": {
+        "sale": "销售",
+        "refund": "退款"
+      },
+      "reserveTitle": "准备金放款",
+      "reserveExplain": "此笔结算退还之前结算时保留的准备金，并扣除此后因退款或争议收回的金额。",
+      "toOriginal": "查看原始结算",
+      "noLinesTitle": "无订单记录",
+      "noLines": "此结算没有订单明细（放款时尚未记录订单明细）。",
+      "back": "所有结算"
+    },
+    "sales": {
+      "title": "按活动查看销售",
+      "description": "期间内每场活动的订单、门票和金额。打开活动可查看完整财务分析。",
+      "descriptionNoFinance": "期间内每场活动的订单、门票和总销售额。",
+      "tableTitle": "活动",
+      "event": "活动",
+      "orders": "订单",
+      "tickets": "门票",
+      "gross": "总额",
+      "refunds": "退款",
+      "fees": "费用",
+      "net": "净收入",
+      "openFinance": "{event}：财务分析",
+      "openAnalysis": "{event}：销售分析",
+      "netNote": "净收入为期间内总额减去退款、败诉的争议和费用。",
+      "emptyTitle": "此期间无销售",
+      "empty": "期间内有销售或退款的活动会列在此处。请尝试更长的期间。"
+    },
+    "fees": {
+      "title": "费用",
+      "description": "您的费用方案，以及按订单和按结算收取的所有费用。",
+      "plan": "您的费用方案",
+      "planName": "方案：{plan}",
+      "grandfathered": "旧版费率",
+      "override": "协议费率",
+      "rate": "每张付费门票 {percent} + {fixed}",
+      "ratePercent": "每张付费门票 {percent}",
+      "noFee": "免费",
+      "planNote": "费率由 Yayatoh 设定。如需商议，请联系支持团队。",
+      "totals": "期间内费用",
+      "net": "费用（{currency}）",
+      "takenRefunded": "已收取 {taken}，已退还 {refunded}",
+      "perOrder": "按订单统计的费用",
+      "perPayout": "按结算统计的费用",
+      "date": "日期",
+      "order": "订单",
+      "event": "活动",
+      "total": "订单总额",
+      "fee": "费用",
+      "feeRefunded": "已退还",
+      "payout": "结算",
+      "paidOut": "已结算",
+      "truncated": "显示最近 {count} 笔订单。CSV 导出包含相同列表。",
+      "noPayouts": "暂无结算。",
+      "emptyTitle": "此期间无费用",
+      "empty": "期间内产生费用的订单会列在此处。请尝试更长的期间。"
+    },
+    "csv": {
+      "period": "期间起始",
+      "currency": "币种",
+      "gross": "总额",
+      "refunds": "退款",
+      "fees": "费用",
+      "event": "活动",
+      "orders": "订单",
+      "tickets": "门票",
+      "disputesLost": "败诉的争议",
+      "net": "净收入",
+      "date": "日期",
+      "status": "状态",
+      "released": "已放款",
+      "reserve": "准备金",
+      "netted": "已抵扣",
+      "amount": "金额",
+      "type": "类型",
+      "order": "订单",
+      "buyer": "购票者",
+      "fee": "费用",
+      "organizer": "您的份额",
+      "total": "订单总额",
+      "feeRefunded": "已退还费用"
+    }
+  },
   "emptyActions": {
     "seeEvents": "查看你的活动",
     "eventHome": "前往活动首页",
@@ -15306,9 +15856,9 @@
     "templates": {
       "title": "模板如何运作",
       "intro": "模板会保存活动的设置（门票、问题、版块和页面内容），让下一个活动开箱即用。由模板创建的活动是没有销售记录的草稿。",
-      "step1": "打开一个已按你的需要设置好的活动。",
-      "step2": "选择“复制与模板”，然后将其保存为模板。",
-      "step3": "回到这里即可用它创建新活动，或从下方的入门模板开始。"
+      "step1": "选择活动类型及其默认时长。",
+      "step2": "添加默认票种、页面版块和清单事项。",
+      "step3": "用它创建活动：每个活动都是包含这些内容的草稿，没有任何销售。"
     },
     "series": {
       "title": "系列如何运作",
@@ -15346,6 +15896,28 @@
       "step1": "在下方选择活动并打开其促销代码。",
       "step2": "添加代码及折扣，也可以设置次数上限和日期。",
       "step3": "分享代码。买家在结账时输入，每次使用都会被记录。"
+    },
+    "money": {
+      "title": "金额如何计算",
+      "intro": "此处所有数据均按币种从账本读取，统计期间为您按组织时区选择的日期。",
+      "step1": "总销售额是购票者支付的金额（含费用）。",
+      "step2": "扣除退款、败诉的争议和 Yayatoh 的费用；随退款退还的费用会计回。",
+      "step3": "剩余部分即为您的净收入。线上销售款在每场活动结束后结算；您自行收取的款项已归您所有。",
+      "step4": "已结算是指期间内到达您银行账户的金额。结算页面可查看每笔结算及其包含的订单。"
+    },
+    "payoutRules": {
+      "title": "结算时间",
+      "intro": "以下规则适用于 Yayatoh 代您收取票款的情况。",
+      "step1": "每场活动的款项在活动结束 5 个工作日后结算。",
+      "step2": "保留 5% 作为准备金 90 天，以应对退款或争议，之后同样结算给您。",
+      "step3": "您的欠款（结算后发生的退款或争议、自行收款销售的费用）将尽可能通过撤销转账收回，否则从下一笔结算中扣除。"
+    },
+    "fees": {
+      "title": "费用说明",
+      "intro": "Yayatoh 的费率由我们的团队在您的协议中设定，无法在此更改。",
+      "step1": "每张付费门票按您的方案收取费用。免费门票不收取费用。",
+      "step2": "费用从每笔订单中扣除，并显示在每笔结算中。",
+      "step3": "因退款而退还的费用会显示在“已退还费用”下。"
     }
   }
 }

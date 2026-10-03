@@ -380,7 +380,10 @@
     "plan": "Abonnement & facturatie",
     "webhooks": "Webhooks",
     "sandboxes": "Sandboxes",
-    "notifications": "Meldingen"
+    "notifications": "Meldingen",
+    "moneyOverview": "Overzicht",
+    "salesByEvent": "Verkoop per evenement",
+    "fees": "Kosten"
   },
   "vocab": {
     "attendee": "Deelnemer",
@@ -1784,7 +1787,31 @@
     "added": "Domein toegevoegd. Publiceer nu de DNS-records die hierboven staan.",
     "managedMissing": "Je gratis adres {host} is nog niet ingesteld.",
     "managedCreate": "Mijn gratis adres instellen",
-    "noAccess": "Alleen eigenaren en beheerders kunnen domeinen wijzigen."
+    "noAccess": "Alleen eigenaren en beheerders kunnen domeinen wijzigen.",
+    "wizard": {
+      "label": "{host} koppelen",
+      "steps": "Stappen om {host} te koppelen",
+      "step": {
+        "domain": "Domein toegevoegd",
+        "dns": "DNS-records",
+        "verify": "Geverifieerd",
+        "ssl": "Beveiligde verbinding",
+        "primary": "Hoofdadres"
+      },
+      "dns": {
+        "signIn": "Log in waar je de DNS van je domein beheert (je registrar of een dienst als Cloudflare).",
+        "open": "Open de DNS-instellingen van dit domein.",
+        "add": "Voeg elk record hieronder precies zo toe. Verwijder andere A- of CNAME-records met dezelfde naam.",
+        "back": "Kom hier terug en kies Nu controleren."
+      },
+      "copyName": "naam van het {type}-record",
+      "copyValue": "waarde van het {type}-record",
+      "copy": "Kopiëren",
+      "copied": "Gekopieerd",
+      "verify": "We hebben je DNS-records gevonden en verifiëren ze. Controleer over een paar minuten opnieuw.",
+      "ssl": "Je domein is geverifieerd. We geven het beveiligde (https-)certificaat uit; dat duurt meestal een paar minuten.",
+      "primary": "{host} is live. Maak het je hoofdadres zodat je links, tickets en e-mails het gebruiken."
+    }
   },
   "suspensions": {
     "pause_checkout": "De ticketverkoop is gepauzeerd door Yayatoh-support.",
@@ -3419,6 +3446,16 @@
       "editListing": "Vermelding in de gids bewerken"
     },
     "layoutLibrary": "Zaalplanbibliotheek",
+    "createNext": "Foto’s en de overige gegevens (adres, kaart, toegankelijkheid) volgen hierna.",
+    "createdNext": "Voeg nu foto’s toe en vul daarna de gegevens hieronder in.",
+    "steps": {
+      "label": "Nieuwe locatie",
+      "create": "Aanmaken",
+      "photos": "Foto’s",
+      "details": "Gegevens"
+    },
+    "detailsTitle": "Gegevens",
+    "photo": "Foto",
     "emptyAction": "Voeg je eerste locatie toe",
     "emptyViewerAction": "Bekijk de locatiegids"
   },
@@ -3700,13 +3737,14 @@
     "saveTemplate": "Sjabloon opslaan",
     "nameTaken": "Deze naam is al in gebruik. Kies een andere.",
     "invalid": "Controleer deze waarde.",
+    "headerSave": "Opslaan als sjabloon",
     "backToEvent": "Terug naar het evenementoverzicht"
   },
   "series": {
     "title": "Reeksen",
     "description": "Groepeer evenementen in tours, seizoenen of festivals. Elke reeks heeft een openbare pagina met de komende evenementen.",
     "emptyTitle": "Nog geen reeksen",
-    "emptyDescription": "Maak een reeks en voeg er evenementen aan toe via de pagina Data van elk evenement.",
+    "emptyDescription": "Maak hieronder een reeks, of geef er een naam aan bij het maken van een evenement.",
     "caption": "Reeksen",
     "name": "Naam",
     "descriptionField": "Beschrijving (optioneel)",
@@ -3728,14 +3766,27 @@
     "title": "Sjablonen",
     "description": "Begin nieuwe evenementen met je eigen sjablonen. Een evenement uit een sjabloon is een concept zonder verkopen.",
     "emptyTitle": "Nog geen sjablonen",
-    "emptyDescription": "Open een evenement, kies Dupliceren & sjabloon en sla het op als sjabloon.",
+    "emptyDescription": "Maak er een vanaf nul met Nieuw sjabloon, kopieer een startsjabloon of sla een evenement via de kop op als sjabloon.",
     "contents": "{ticketTypes, plural, one {# tickettype} other {# tickettypes}} · {questions, plural, one {# vraag} other {# vragen}} · {seats, plural, =0 {geen plattegrond} one {# stoel} other {# stoelen}}",
     "delete": "Verwijderen",
     "deleteFor": "Het sjabloon {name} verwijderen",
     "use": "Een evenement maken uit {name}",
     "timezone": "Tijden in {timezone}.",
     "createEvent": "Evenement maken",
-    "pickEvent": "Kies een evenement om op te slaan"
+    "newTemplate": "Nieuw sjabloon",
+    "summary": "{sections, plural, =0 {geen paginasecties} one {# paginasectie} other {# paginasecties}} · {checklist, plural, =0 {geen checklistpunten} one {# checklistpunt} other {# checklistpunten}}",
+    "originEvent": "Opgeslagen vanuit een evenement",
+    "originScratch": "Vanaf nul gemaakt",
+    "edit": "Bewerken",
+    "editFor": "Sjabloon {name} bewerken",
+    "duplicate": "Dupliceren",
+    "duplicateFor": "Sjabloon {name} dupliceren",
+    "archive": "Archiveren",
+    "archiveFor": "Sjabloon {name} archiveren",
+    "restore": "Herstellen",
+    "restoreFor": "Sjabloon {name} herstellen",
+    "archivedTitle": "Gearchiveerde sjablonen ({count})",
+    "archivedHint": "Gearchiveerde sjablonen staan in geen enkele keuzelijst. Evenementen die ervan zijn gemaakt, blijven ongewijzigd."
   },
   "publicSeries": {
     "eyebrow": "Een reeks van {org}",
@@ -4338,6 +4389,21 @@
       "floorPlanChosen": "Kies een plattegrond voor de zaal of maak er een op basis van aantallen.",
       "guestSitePublished": "Publiceer de met een wachtwoord beveiligde website voor je gasten.",
       "tablesSponsors": "Geef je tafels en hun sponsors een naam."
+    },
+    "own": {
+      "title": "Je checklist",
+      "hint": "Je eigen taken voor dit evenement, naast de controles hierboven. Vink ze af terwijl je bezig bent.",
+      "empty": "Nog niets. Voeg je eerste taak toe.",
+      "list": "Je checklistpunten",
+      "progress": "{done} van {total} klaar",
+      "newItem": "Nieuw punt",
+      "add": "Punt toevoegen",
+      "added": "Punt toegevoegd.",
+      "invalid": "Vul 1 tot 200 tekens in.",
+      "tooMany": "Deze lijst is vol. Verwijder eerst een punt.",
+      "markDone": "{title} markeren als klaar",
+      "markOpen": "{title} markeren als niet klaar",
+      "remove": "{title} verwijderen"
     }
   },
   "program": {
@@ -4856,7 +4922,18 @@
     "invalidCode": "Die code werkte niet. Probeer het opnieuw.",
     "invalidPassword": "Dat wachtwoord klopt niet.",
     "rateLimited": "Te veel pogingen. Wacht 15 minuten en probeer het dan opnieuw.",
-    "unauthenticated": "Je sessie is verlopen. Log opnieuw in."
+    "unauthenticated": "Je sessie is verlopen. Log opnieuw in.",
+    "again": "Bevestig dat jij het bent",
+    "retry": "Opnieuw proberen",
+    "problem": {
+      "impersonating": "Je handelt als dit lid en kunt niet voor hen bevestigen. Vraag hen deze wijziging zelf te doen.",
+      "unauthenticated": "Je sessie is verlopen. Log opnieuw in.",
+      "failed": "We konden de bevestiging niet starten. Controleer je verbinding en probeer het opnieuw."
+    },
+    "persona": {
+      "explain": "Demo-account: het is ingelogd zonder authenticator, dus je kunt bevestigen zonder code. Dit wordt nooit aangeboden op de live site.",
+      "confirm": "Doorgaan zonder code (demo-account)"
+    }
   },
   "surveys": {
     "title": "Enquêtes",
@@ -6810,7 +6887,10 @@
     "gala": {
       "name": "Gala",
       "description": "Tickets, tafels en sponsors, plaatsen, donaties en inchecken ter plaatse."
-    }
+    },
+    "copy": "Kopiëren naar je sjablonen",
+    "copyFor": "Startsjabloon {name} kopiëren naar je sjablonen",
+    "readOnly": "Alleen-lezen. Kopieer het naar je sjablonen om tickets, secties of checklist te wijzigen."
   },
   "profileCopy": {
     "wedding": {
@@ -6891,7 +6971,9 @@
       "event": "Evenement",
       "mode": "Modus",
       "starts": "Begint",
-      "readiness": "Gereedheid"
+      "readiness": "Gereedheid",
+      "sales": "Verkoop",
+      "tickets": "Tickets"
     },
     "manual": "Handmatig ingesteld",
     "role": {
@@ -6962,9 +7044,10 @@
       "readiness": {
         "title": "Gereedheid",
         "score": "Gereedheid {score}%",
-        "blocking": "Blokkerend",
-        "todo": "Ook nog te doen",
-        "allDone": "Klaar om te beginnen."
+        "allDone": "Klaar om te beginnen.",
+        "count": "{done} van {total} klaar",
+        "required": "Nodig om te verkopen",
+        "recommended": "Aanbevolen"
       },
       "sales": {
         "title": "Verkoop",
@@ -7011,7 +7094,9 @@
       "alerts": {
         "title": "Meldingen",
         "pending": "Meldingen verschijnen hier zodra meldingsregels aan staan.",
-        "none": "Geen open meldingen."
+        "none": "Geen open meldingen.",
+        "watching": "Meldingsregels bewaken verkoop, betalingen, apparaten, capaciteit en gasten, en verschijnen hier.",
+        "viewAll": "Alle meldingen bekijken"
       },
       "entrances": {
         "title": "Ingangen"
@@ -7162,6 +7247,52 @@
         "over": "{domains, plural, one {# verzenddomein} other {# verzenddomeinen}} en {campaigns, plural, one {# campagne} other {# campagnes}} boven de drempels",
         "open": "E-mailbezorgbaarheid openen"
       },
+      "rsvp": {
+        "title": "Reacties",
+        "allAnswered": "Iedereen die is uitgenodigd heeft gereageerd.",
+        "noneInvited": "Er is nog niemand uitgenodigd voor een onderdeel.",
+        "responded": "{responded} van {invited} uitgenodigde gasten hebben gereageerd",
+        "meter": "Ontvangen reacties",
+        "parties": "Huishoudens zonder reactie: {count}",
+        "notSent": "Uitnodiging nog niet verstuurd: {count}",
+        "deadline": "Reageren kan tot: {date}",
+        "noDeadline": "Geen reactietermijn ingesteld",
+        "open": "Reacties openen"
+      },
+      "guestSeating": {
+        "title": "Tafelindeling",
+        "noChart": "Nog geen plattegrond voor gasten. Kies er een bij Plaatsen.",
+        "noGuests": "Nog geen gasten om te plaatsen.",
+        "allSeated": "Elke gast die niet heeft afgezegd, heeft een tafel.",
+        "seated": "{seated} van {guests} gasten hebben een tafel",
+        "listLabel": "Gasten zonder tafel",
+        "guestOf": "Gast van {name}",
+        "more": "+{count} meer",
+        "open": "Gasten plaatsen"
+      },
+      "meals": {
+        "title": "Maaltijden en dieetwensen",
+        "attending": "Aanwezig: {count}",
+        "noneAttending": "Maaltijden worden geteld zodra gasten ja zeggen.",
+        "caption": "Maaltijden van aanwezige gasten",
+        "colMeal": "Maaltijd",
+        "colGuests": "Gasten",
+        "other": "Andere keuze",
+        "none": "Geen maaltijd gekozen",
+        "dietary": "Dieetwensen: {count}",
+        "accessibility": "Toegankelijkheidsbehoeften: {count}",
+        "open": "RSVP-antwoorden openen"
+      },
+      "arrivals": {
+        "title": "Aankomst van gasten",
+        "arrivedOf": "{arrived} van {expected} verwachte gasten zijn er",
+        "notArrived": "Nog niet hier: {count}",
+        "none": "Er is nog niemand aangekomen.",
+        "noExpected": "Er worden nog geen gasten verwacht.",
+        "recent": "Laatst aangekomen",
+        "guestOf": "Gast van {name}",
+        "open": "Dagoverzicht openen"
+      },
       "sessionLevel": {
         "none": "Geen limiet",
         "ok": "Onder {near}%",
@@ -7249,6 +7380,49 @@
       "statusOn": "Aan",
       "statusOff": "Uit",
       "emptyAction": "Maak een schermlink"
+    },
+    "hero": {
+      "startsIn": "Begint over {duration}",
+      "endsIn": "Eindigt over {duration}",
+      "ended": "{duration} geleden afgelopen",
+      "nextLabel": "Volgende stap",
+      "blocking": "Nodig voordat je kunt verkopen",
+      "next": {
+        "readiness": "Afronden: {item}",
+        "scanner": "Gasten inchecken bij de deur",
+        "publicPage": "Alles klaar. Bekijk de eventpagina zoals gasten die zien.",
+        "report": "Het is voorbij. Bekijk hoe het ging.",
+        "none": "Er is nu niets dat je aandacht nodig heeft."
+      },
+      "do": {
+        "alert": "Oplossen",
+        "readiness": "Nu regelen",
+        "scanner": "Begin met scannen",
+        "publicPage": "Eventpagina bekijken",
+        "report": "Rapport openen"
+      }
+    },
+    "kpi": {
+      "title": "Kerncijfers",
+      "sales": "Verkoop",
+      "salesToday": "{amount} vandaag",
+      "tickets": "Verkochte tickets",
+      "ofCapacity": "van {capacity}",
+      "noCapacity": "Nog geen tickets te koop",
+      "checkins": "Ingecheckt",
+      "ofValid": "van {valid} geldige tickets",
+      "alerts": "Open meldingen",
+      "allClear": "Alles in orde",
+      "needsYou": "Actie nodig",
+      "critical": "{count, plural, =0 {Geen kritiek} one {# kritiek} other {# kritiek}}"
+    },
+    "soldOf": "{sold} van {capacity}",
+    "overviewCounts": "Events per modus",
+    "overviewGroup": {
+      "live": "Live ({count})",
+      "pre_show": "Voorafgaand ({count})",
+      "planning": "In voorbereiding ({count})",
+      "wrap": "In afronding ({count})"
     }
   },
   "alerts": {
@@ -7344,6 +7518,9 @@
       "campaignFailed": "Campagnes openen",
       "disputeDeadline": "Geschillen openen",
       "assistanceOverdue": "Hulpvragen openen",
+      "rsvpPending": "Reacties openen",
+      "guestsUnseated": "Gasten plaatsen",
+      "mealsMissing": "RSVP-antwoorden openen",
       "pledgesUnpaid": "Toezeggingen openen",
       "sessionsNearCapacity": "Sessies openen",
       "sessionWaitlists": "Sessie-inschrijving openen",
@@ -7377,6 +7554,9 @@
       "campaignFailed": "{count, plural, one {Eén campagneverzending is vandaag mislukt} other {{countWords} campagneverzendingen zijn vandaag mislukt}}",
       "disputeDeadline": "{count, plural, one {Eén geschil heeft binnenkort bewijs nodig} other {{countWords} geschillen hebben binnenkort bewijs nodig}}",
       "assistanceOverdue": "{count, plural, one {{countWords} hulpvraag wacht te lang} other {{countWords} hulpvragen wachten te lang}}",
+      "rsvpPending": "{count, plural, one {Eén gast heeft nog niet gereageerd op de uitnodiging} other {{countWords} gasten hebben nog niet gereageerd op de uitnodiging}}",
+      "guestsUnseated": "{count, plural, one {Eén gast heeft geen tafel} other {{countWords} gasten hebben geen tafel}}",
+      "mealsMissing": "{count, plural, one {Eén aanwezige gast heeft geen maaltijd gekozen} other {{countWords} aanwezige gasten hebben geen maaltijd gekozen}}",
       "pledgesUnpaid": "{count, plural, one {Eén toezegging is 14 dagen na het evenement nog niet betaald} other {{countWords} toezeggingen zijn 14 dagen na het evenement nog niet betaald}}",
       "sessionsNearCapacity": "{count, plural, one {{countWords} sessie zit boven 95 % van de capaciteit} other {{countWords} sessies zitten boven 95 % van de capaciteit}}",
       "sessionWaitlists": "{count, plural, one {{countWords} sessie heeft een lange wachtlijst} other {{countWords} sessies hebben lange wachtlijsten}}",
@@ -15271,6 +15451,376 @@
     "timeZoneNote": "Tijden in {zone}",
     "selected": "Geselecteerd"
   },
+  "seriesField": {
+    "label": "Reeks (optioneel)",
+    "hint": "Groepeer dit evenement met andere in een tour of seizoen. Typ een nieuwe naam om er een te maken.",
+    "none": "Geen reeks",
+    "newOption": "Nieuwe reeks: {name}",
+    "summary": "Reeks",
+    "errors": {
+      "taken": "Er bestaat al een reeks met deze naam. Kies die uit de lijst.",
+      "missing": "Die reeks bestaat niet meer. Kies een andere.",
+      "name": "Vul een reeksnaam van 2 tot 160 tekens in."
+    }
+  },
+  "seriesLink": {
+    "partOf": "Onderdeel van {name}"
+  },
+  "seriesPage": {
+    "back": "Alle reeksen",
+    "tabs": {
+      "label": "Weergaven van de reeks",
+      "events": "Evenementen",
+      "details": "Details"
+    },
+    "columns": {
+      "event": "Evenement",
+      "status": "Status",
+      "dates": "Data",
+      "sales": "Verkoop",
+      "actions": "Acties"
+    },
+    "sold": "{count, plural, one {{n} ticket verkocht} other {{n} tickets verkocht}}",
+    "noSales": "Nog geen verkoop",
+    "remove": "Uit de reeks halen",
+    "removeFor": "{name} uit de reeks halen",
+    "createNext": "Volgend evenement in de reeks maken",
+    "createIn": "Evenement in deze reeks maken",
+    "added": "Evenement aan de reeks toegevoegd.",
+    "removed": "Evenement uit de reeks gehaald. Het evenement zelf blijft hetzelfde.",
+    "deleted": "Reeks verwijderd. De evenementen blijven hetzelfde.",
+    "eventsHeading": "{count, plural, one {# evenement} other {# evenementen}}",
+    "emptyTitle": "Nog geen evenementen in deze reeks",
+    "emptyDescription": "Maak een evenement in deze reeks of voeg een bestaand evenement toe.",
+    "emptyReadOnly": "Evenementen in deze reeks verschijnen hier.",
+    "caption": "Evenementen in {name}",
+    "add": {
+      "heading": "Bestaand evenement toevoegen",
+      "label": "Evenement",
+      "placeholder": "Kies een evenement",
+      "hint": "Een evenement uit een andere reeks verhuist naar deze.",
+      "option": "{name} · {when}",
+      "optionMoves": "{name} · {when} (in {series})",
+      "required": "Kies een evenement om toe te voegen.",
+      "submit": "Aan reeks toevoegen"
+    },
+    "next": {
+      "back": "Terug naar {name}",
+      "title": "Volgend evenement in de reeks maken",
+      "description": "Een nieuw concept in {name} met de opzet van het laatste evenement.",
+      "copies": "Neemt de instellingen, tickettypes, vragen en zaalplattegrond over van {name} ({when}). Bestellingen, deelnemers en check-ins blijven achter.",
+      "name": "Naam van het evenement",
+      "startsAt": "Begint",
+      "startsAtHint": "In de tijdzone van het evenement ({zone}).",
+      "nameInvalid": "Vul een naam van 2 tot 160 tekens in.",
+      "startInvalid": "Vul een geldige begindatum en -tijd in.",
+      "submit": "Concept maken"
+    },
+    "details": {
+      "heading": "Gegevens van de reeks",
+      "address": "Openbare pagina:",
+      "saved": "Reeks opgeslagen.",
+      "save": "Wijzigingen opslaan",
+      "deleteHeading": "Reeks verwijderen",
+      "deleteHint": "Als je de reeks verwijdert, verdwijnt de openbare pagina. De evenementen blijven, zonder reeks.",
+      "delete": "Reeks verwijderen"
+    }
+  },
+  "templateBuilder": {
+    "breadcrumb": "Kruimelpad",
+    "newTitle": "Nieuw sjabloon",
+    "newDescription": "Begin met het soort evenement. Tickets, paginasecties en een checklist voeg je in het volgende scherm toe.",
+    "profileLegend": "Wat voor evenement?",
+    "profileInvalid": "Kies een soort evenement.",
+    "profileHelp": {
+      "wedding": "Gasten, RSVP, tafelindeling, een privé gastenwebsite en de dag zelf. Nooit openbaar vermeld.",
+      "gala": "Tickets, tafels en sponsors, tafelindeling, donaties en check-in.",
+      "concert": "Tickets, fans, marketing en snelle check-in bij de deur.",
+      "conference": "Registratie, sessies, sprekers, exposanten, sponsors en badges.",
+      "community": "Meetups en lessen: gratis of betaalde aanmeldingen, terugkerende data en check-in.",
+      "agency": "Evenementen die je voor klanten organiseert, met hun huisstijl en rapporten.",
+      "other": "Een algemeen evenement: tickets, deelnemers, een pagina en check-in."
+    },
+    "name": "Naam van het sjabloon",
+    "nameInvalid": "Vul een naam van 2 tot 120 tekens in.",
+    "nameTaken": "Deze naam is al in gebruik. Kies een andere.",
+    "description": "Beschrijving (optioneel)",
+    "duration": "Standaardduur",
+    "hours": "Uren",
+    "minutes": "Minuten",
+    "durationHint": "Evenementen die ervan worden gemaakt, eindigen zo lang na de start.",
+    "durationInvalid": "Vul een duur in tussen 15 minuten en 14 dagen.",
+    "timezone": "Tijdzone",
+    "timezoneHint": "De start van nieuwe evenementen vul je in deze zone in.",
+    "currency": "Valuta",
+    "create": "Sjabloon maken",
+    "steps": "Stappen van het sjabloon",
+    "step": {
+      "profile": "Soort evenement",
+      "tickets": "Tickettypes",
+      "sections": "Paginasecties",
+      "content": "Pagina-inhoud",
+      "checklist": "Checklist"
+    },
+    "created": "Sjabloon gemaakt. Voeg hieronder de tickettypes, paginasecties en checklist toe.",
+    "copied": "Startsjabloon gekopieerd naar je sjablonen. Vul het hieronder aan.",
+    "duplicated": "Sjabloon gedupliceerd. Je bewerkt de kopie.",
+    "archivedNotice": "Dit sjabloon is gearchiveerd: het staat in geen enkele keuzelijst en kan niet worden gewijzigd. Herstel het om het weer te gebruiken.",
+    "useAction": "Evenement maken",
+    "durationHours": "{hours, plural, one {# uur} other {# uur}}",
+    "durationMinutes": "{minutes, plural, one {# minuut} other {# minuten}}",
+    "profileTitle": "Soort evenement",
+    "profileFixed": "Het soort evenement ligt vast zodra het sjabloon is gemaakt. Maak voor een ander soort een nieuw sjabloon.",
+    "ticketsTitle": "Standaard tickettypes",
+    "ticketsHint": "Elk evenement dat van het sjabloon wordt gemaakt, begint hiermee, zonder verkopen.",
+    "ticketsEmpty": "Nog geen tickettypes. Voeg hieronder het eerste toe.",
+    "ticketsList": "Tickettypes",
+    "ticketName": "Ticketnaam",
+    "ticketNameInvalid": "Vul een naam van 1 tot 120 tekens in.",
+    "ticketDescription": "Ticketbeschrijving (optioneel)",
+    "price": "Prijs ({currency})",
+    "priceInvalid": "Vul een prijs in zoals 25 of 25.00.",
+    "quantity": "Beschikbaar aantal",
+    "quantityInvalid": "Vul een aantal in van 1 tot 1.000.000.",
+    "addTicket": "Tickettype toevoegen",
+    "ticketAdded": "Tickettype toegevoegd.",
+    "free": "Gratis",
+    "ticketLine": "{price} · {quantity, plural, one {# beschikbaar} other {# beschikbaar}}",
+    "removeTicket": "Tickettype {name} verwijderen",
+    "seatPriced": "Gebruikt door de opgeslagen plattegrond",
+    "sectionsTitle": "Paginasecties",
+    "sectionsHint": "De blokken op de evenementpagina, in deze volgorde.",
+    "sectionsEmpty": "Nog geen paginasecties. Voeg hieronder de eerste toe.",
+    "sectionsList": "Paginasecties op volgorde",
+    "addSection": "Paginasectie toevoegen",
+    "moveUp": "{title} omhoog",
+    "moveDown": "{title} omlaag",
+    "removeSection": "Sectie {title} verwijderen",
+    "contentTitle": "Pagina-inhoud",
+    "contentHint": "Wat elk evenement dat van het sjabloon wordt gemaakt op zijn pagina toont.",
+    "tagline": "Slogan (optioneel)",
+    "venueName": "Locatie (optioneel)",
+    "city": "Plaats (optioneel)",
+    "visibility": "Wie het kan vinden",
+    "settingsTitle": "Naam en standaardwaarden",
+    "save": "Wijzigingen opslaan",
+    "saved": "Wijzigingen opgeslagen.",
+    "checklistTitle": "Checklist",
+    "checklistHint": "Je eigen taken. Elk evenement dat van het sjabloon wordt gemaakt, begint er open mee, in de installatiegids.",
+    "checklistEmpty": "Nog geen checklistpunten.",
+    "checklistList": "Checklistpunten",
+    "checklistItem": "Nieuw checklistpunt",
+    "itemInvalid": "Vul 1 tot 200 tekens in.",
+    "tooMany": "Deze lijst is vol. Verwijder eerst een punt.",
+    "addItem": "Punt toevoegen",
+    "itemAdded": "Punt toegevoegd.",
+    "removeItem": "Punt {title} verwijderen",
+    "eventsTitle": "Evenementen die ervan zijn gemaakt",
+    "eventsEmpty": "Nog geen evenementen. Maak hieronder het eerste.",
+    "eventsList": "Evenementen gemaakt van dit sjabloon",
+    "useTitle": "Evenement maken van dit sjabloon",
+    "useHint": "Een nieuw concept met de tickets, paginasecties, inhoud en checklist van het sjabloon."
+  },
+  "money": {
+    "export": "CSV exporteren",
+    "periodForm": "Kies een periode",
+    "tabs": {
+      "label": "Financiële pagina's",
+      "overview": "Overzicht",
+      "payouts": "Uitbetalingen",
+      "sales": "Verkoop per evenement",
+      "fees": "Kosten"
+    },
+    "grain": {
+      "label": "Grafiek per",
+      "auto": "Automatisch",
+      "day": "Dag",
+      "week": "Week",
+      "month": "Maand"
+    },
+    "overview": {
+      "title": "Financieel overzicht",
+      "description": "Wat u hebt verkocht, wat ervan is afgegaan en wat op uw bankrekening is binnengekomen. Dagen zijn in {timeZone}-tijd.",
+      "range": "{from} – {to}",
+      "allTime": "Altijd",
+      "comparedWith": "vergeleken met {from} – {to}",
+      "net": "Netto",
+      "netChange": "{change} t.o.v. vorige periode",
+      "netExplained": "Bruto min terugbetalingen, verloren geschillen en kosten.",
+      "new": "Nieuw",
+      "previous": "Vorige periode: {amount}",
+      "gross": "Brutoverkoop",
+      "refunds": "Terugbetalingen",
+      "fees": "Kosten",
+      "disputes": "Verloren geschillen",
+      "payouts": "Uitbetaald",
+      "keyNumbers": "Kerncijfers in {currency}",
+      "inCurrency": "In {currency}",
+      "nextPayout": "Volgende uitbetaling",
+      "nextPayoutOn": "Verwacht op {date} · {event}",
+      "noNextPayout": "Er is geen uitbetaling gepland. Online verkopen worden na elk evenement uitbetaald.",
+      "toPayouts": "Alle uitbetalingen bekijken",
+      "chart": {
+        "day": "Brutoverkoop per dag",
+        "week": "Brutoverkoop per week",
+        "month": "Brutoverkoop per maand"
+      },
+      "bucket": {
+        "day": "Dag",
+        "week": "Week vanaf",
+        "month": "Maand"
+      },
+      "chartNote": "Terugbetalingen en kosten staan in de gegevenstabel.",
+      "showData": "Gegevens tonen",
+      "noSalesInPeriod": "Geen verkopen of terugbetalingen in deze periode.",
+      "emptyTitle": "Geen geldbewegingen in deze periode",
+      "emptyDescription": "Verkopen, terugbetalingen en uitbetalingen verschijnen hier zodra ze plaatsvinden. Probeer een langere periode of verkoop uw eerste tickets.",
+      "showAllTime": "Alles tonen",
+      "createEvent": "Evenement aanmaken"
+    },
+    "payouts": {
+      "summary": "Overzicht uitbetalingen",
+      "next": "Volgende uitbetaling",
+      "nextOn": "Verwacht op {date} · {event}",
+      "nothingScheduled": "Nog niets gepland.",
+      "held": "Aangehouden voor uw evenementen",
+      "heldSub": "{count, plural, =0 {Er staat voor geen enkel evenement geld klaar.} one {# evenement wacht op de vrijgavedatum.} other {# evenementen wachten op de vrijgavedatum.}}",
+      "inReserve": "In reserve",
+      "reserveNext": "Volgende teruggave op {date}.",
+      "noReserve": "Geen reserve aangehouden.",
+      "owed": "U bent verschuldigd",
+      "owedSub": "Wordt ingehouden op uw volgende uitbetaling.",
+      "upcoming": "Komende uitbetalingen",
+      "upcomingEmptyTitle": "Nog niets onderweg",
+      "upcomingEmpty": "Wanneer Yayatoh ticketgeld voor u int, verschijnt de uitbetaling van elk evenement hier met de datum.",
+      "toOverview": "Financieel overzicht bekijken",
+      "payoutOf": "{event}: {amount}",
+      "reserveOf": "Reserve teruggegeven · {event}: {amount}",
+      "expected": "{event}: circa {amount}",
+      "heldDetail": "{held} aangehouden, {reserve} als reserve",
+      "reserveBack": "Reserve komt terug · {event}: tot {amount}",
+      "reserveDetail": "{kept} aangehouden bij uitbetaling",
+      "status": {
+        "held": "Aangehouden tot vrijgave",
+        "ready": "Wordt verzonden",
+        "waiting_account": "Wacht op uw uitbetalingsrekening",
+        "failed": "Nieuwe poging",
+        "transferred": "Uitbetaald"
+      }
+    },
+    "payout": {
+      "metaTitle": "Uitbetaling",
+      "title": "Uitbetaling voor {event}",
+      "titleReserve": "Reserve teruggegeven voor {event}",
+      "description": "Vrijgegeven op {date}.",
+      "export": "Orders exporteren (CSV)",
+      "summary": "Van vrijgave tot uitbetaling",
+      "released": "Vrijgegeven uit de verkoop van het evenement",
+      "reserve": "Aangehouden als reserve",
+      "netted": "Ingehouden voor wat u verschuldigd was",
+      "amount": "Aan u betaald",
+      "paidOn": "Op {date} naar uw bankrekening verzonden.",
+      "notYet": {
+        "ready": "Wordt naar uw bankrekening verzonden.",
+        "waiting_account": "Wacht op uw uitbetalingsrekening.",
+        "failed": "De overboeking is mislukt; er wordt een nieuwe poging gedaan."
+      },
+      "reserveOn": "De reserve komt terug op {date}.",
+      "eventFinance": "{event}: financiële analyse",
+      "lines": "Orders in deze uitbetaling",
+      "totals": "Totalen",
+      "date": "Datum",
+      "type": "Type",
+      "order": "Order",
+      "orderLink": "Order {ref} · {buyer}",
+      "buyer": "Koper",
+      "gross": "Betaald door de koper",
+      "fee": "Kosten",
+      "organizer": "Uw aandeel",
+      "kind": {
+        "sale": "Verkoop",
+        "refund": "Terugbetaling"
+      },
+      "reserveTitle": "Een vrijgave van de reserve",
+      "reserveExplain": "Deze uitbetaling geeft de reserve terug die bij een eerdere uitbetaling is aangehouden, min wat sindsdien is teruggehaald voor terugbetalingen of geschillen.",
+      "toOriginal": "Oorspronkelijke uitbetaling bekijken",
+      "noLinesTitle": "Geen orders vermeld",
+      "noLines": "Deze uitbetaling heeft geen orderregels (ze is vrijgegeven voordat orderregels werden vastgelegd).",
+      "back": "Alle uitbetalingen"
+    },
+    "sales": {
+      "title": "Verkoop per evenement",
+      "description": "Orders, tickets en bedragen per evenement in de periode. Open een evenement voor de volledige financiële analyse.",
+      "descriptionNoFinance": "Orders, tickets en brutoverkoop per evenement in de periode.",
+      "tableTitle": "Evenementen",
+      "event": "Evenement",
+      "orders": "Orders",
+      "tickets": "Tickets",
+      "gross": "Bruto",
+      "refunds": "Terugbetalingen",
+      "fees": "Kosten",
+      "net": "Netto",
+      "openFinance": "{event}: financiële analyse",
+      "openAnalysis": "{event}: verkoopanalyse",
+      "netNote": "Netto is bruto min terugbetalingen, verloren geschillen en kosten in de periode.",
+      "emptyTitle": "Geen verkopen in deze periode",
+      "empty": "Evenementen met verkopen of terugbetalingen in de periode worden hier vermeld. Probeer een langere periode."
+    },
+    "fees": {
+      "title": "Kosten",
+      "description": "Uw kostenabonnement en alle ingehouden kosten, per order en per uitbetaling.",
+      "plan": "Uw kostenabonnement",
+      "planName": "Abonnement: {plan}",
+      "grandfathered": "Eerdere tarieven",
+      "override": "Afgesproken tarief",
+      "rate": "{percent} + {fixed} per betaald ticket",
+      "ratePercent": "{percent} per betaald ticket",
+      "noFee": "Geen kosten",
+      "planNote": "Tarieven worden vastgesteld door Yayatoh. Neem contact op met support om ze te bespreken.",
+      "totals": "Kosten in de periode",
+      "net": "Kosten in {currency}",
+      "takenRefunded": "{taken} ingehouden, {refunded} teruggegeven",
+      "perOrder": "Kosten per order",
+      "perPayout": "Kosten per uitbetaling",
+      "date": "Datum",
+      "order": "Order",
+      "event": "Evenement",
+      "total": "Ordertotaal",
+      "fee": "Kosten",
+      "feeRefunded": "Teruggegeven",
+      "payout": "Uitbetaling",
+      "paidOut": "Uitbetaald",
+      "truncated": "De laatste {count} orders worden getoond. De CSV-export bevat dezelfde lijst.",
+      "noPayouts": "Nog geen uitbetalingen.",
+      "emptyTitle": "Geen kosten in deze periode",
+      "empty": "Orders met kosten in de periode worden hier vermeld. Probeer een langere periode."
+    },
+    "csv": {
+      "period": "Begin periode",
+      "currency": "Valuta",
+      "gross": "Bruto",
+      "refunds": "Terugbetalingen",
+      "fees": "Kosten",
+      "event": "Evenement",
+      "orders": "Orders",
+      "tickets": "Tickets",
+      "disputesLost": "Verloren geschillen",
+      "net": "Netto",
+      "date": "Datum",
+      "status": "Status",
+      "released": "Vrijgegeven",
+      "reserve": "Reserve",
+      "netted": "Verrekend",
+      "amount": "Bedrag",
+      "type": "Type",
+      "order": "Order",
+      "buyer": "Koper",
+      "fee": "Kosten",
+      "organizer": "Uw aandeel",
+      "total": "Ordertotaal",
+      "feeRefunded": "Teruggegeven kosten"
+    }
+  },
   "emptyActions": {
     "seeEvents": "Je evenementen bekijken",
     "eventHome": "Naar de evenementstartpagina",
@@ -15306,9 +15856,9 @@
     "templates": {
       "title": "Zo werken sjablonen",
       "intro": "Een sjabloon bewaart de opzet van een evenement (tickets, vragen, onderdelen en pagina-inhoud), zodat je volgende evenement klaar start. Evenementen uit een sjabloon zijn concepten zonder verkopen.",
-      "step1": "Open een evenement dat is ingericht zoals je wilt.",
-      "step2": "Kies Dupliceren & sjabloon en sla het op als sjabloon.",
-      "step3": "Kom hier terug om er nieuwe evenementen mee te maken, of begin hieronder met een startsjabloon."
+      "step1": "Kies het soort evenement en de standaardduur.",
+      "step2": "Voeg standaard tickettypes, paginasecties en checklistpunten toe.",
+      "step3": "Maak er evenementen van: elk is een concept met precies die onderdelen en zonder verkopen."
     },
     "series": {
       "title": "Zo werken reeksen",
@@ -15346,6 +15896,28 @@
       "step1": "Kies hieronder het evenement en open de kortingscodes.",
       "step2": "Voeg een code toe met de korting en eventueel een limiet en data.",
       "step3": "Deel de code. Kopers vullen hem in bij het afrekenen en elk gebruik wordt geteld."
+    },
+    "money": {
+      "title": "Hoe uw bedragen worden berekend",
+      "intro": "Elk bedrag hier komt uit het grootboek, per valuta, voor de dagen die u kiest in de tijdzone van uw organisatie.",
+      "step1": "Bruto is wat kopers hebben betaald, inclusief kosten.",
+      "step2": "Terugbetalingen, verloren geschillen en de kosten van Yayatoh worden afgetrokken; kosten die bij een terugbetaling worden teruggegeven, worden weer opgeteld.",
+      "step3": "Wat overblijft is uw netto. Online verkopen worden na elk evenement uitbetaald; verkopen die u zelf hebt geïnd, zijn al van u.",
+      "step4": "Uitbetaald is wat in de periode op uw bankrekening is binnengekomen. De pagina Uitbetalingen toont elke uitbetaling tot op orderniveau."
+    },
+    "payoutRules": {
+      "title": "Wanneer uitbetalingen worden verzonden",
+      "intro": "Deze regels gelden wanneer Yayatoh ticketgeld voor u int.",
+      "step1": "Het geld van elk evenement wordt 5 werkdagen na afloop van het evenement uitbetaald.",
+      "step2": "5% wordt 90 dagen als reserve aangehouden voor terugbetalingen of geschillen en daarna ook uitbetaald.",
+      "step3": "Wat u verschuldigd bent (een terugbetaling of geschil na uitbetaling, kosten op verkopen die u zelf hebt geïnd) wordt waar mogelijk teruggehaald via een terugboeking van de overboeking, anders van uw volgende uitbetaling."
+    },
+    "fees": {
+      "title": "Hoe kosten werken",
+      "intro": "De kostentarieven van Yayatoh worden door ons team in uw overeenkomst vastgelegd; u kunt ze hier niet wijzigen.",
+      "step1": "Voor elk betaald ticket gelden de kosten uit uw abonnement. Voor gratis tickets gelden geen kosten.",
+      "step2": "De kosten worden van elke order ingehouden en op elke uitbetaling vermeld.",
+      "step3": "Wanneer kosten bij een terugbetaling worden teruggegeven, verschijnen ze onder teruggegeven kosten."
     }
   }
 }

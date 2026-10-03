@@ -78,7 +78,7 @@ export default async function EventDashboard({
             ) : null}
             {canWrite
               ? actions.slice(0, 3).map((a, i) => (
-                  <form key={a} action={transitionAction.bind(null, org, event, a)}>
+                  <form key={a} id={`event-action-${a}`} action={transitionAction.bind(null, org, event, a)}>
                     <Button type="submit" variant={i === 0 && a !== 'cancel' ? 'primary' : 'secondary'}>
                       {t(`eventActions.${a}`)}
                     </Button>

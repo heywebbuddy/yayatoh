@@ -68,33 +68,41 @@ test.describe('venues, categories and tags (M1.4c)', () => {
     await expectAccessible(page);
     await noHorizontalScroll(page);
 
-    // Invalid country, an http map link and a latitude without longitude.
+    // U3: creating asks for the essentials only; the rest is validated on the details form next.
+    // Invalid country first.
     await page.getByLabel('Venue name').fill(`Harbor Hall ${s}`);
     await page.getByLabel('Country code').fill('U');
-    await page.getByLabel('Map link').fill('http://maps.example.com/harbor');
-    await page.getByLabel('Latitude').fill('43.07');
     await page.getByRole('button', { name: 'Add venue' }).click();
     await expect(page.getByText('Some details need fixing. Check the highlighted fields.')).toBeVisible();
     await expect(page.getByText('Use a two-letter country code, for example US.')).toBeVisible();
-    await expect(page.getByText('Use a link that starts with https://.')).toBeVisible();
-    await expect(
-      page.getByText('Give latitude and longitude together; longitude must be between -180 and 180.'),
-    ).toBeVisible();
     await expect(page.getByLabel('Country code')).toHaveAttribute('aria-invalid', 'true');
     await expectAccessible(page);
 
     await page.getByLabel('Country code').fill('us');
-    await page.getByLabel('Map link').fill('https://maps.example.com/harbor');
-    await page.getByLabel('Longitude').fill('-89.4');
     await page.getByLabel('Capacity', { exact: true }).fill('0');
     await page.getByRole('button', { name: 'Add venue' }).click();
     await expect(page.getByText('Capacity must be a whole number of at least 1.')).toBeVisible();
     await page.getByLabel('Capacity', { exact: true }).fill('300');
-    await page.getByLabel('Accessibility notes').fill('Step-free entrance on Shore Road.');
     await page.getByRole('button', { name: 'Add venue' }).click();
     await expect(page.getByText('Venue added.')).toBeVisible();
     await expect(page.getByRole('heading', { name: `Harbor Hall ${s}`, level: 1 })).toBeVisible();
     await expectAccessible(page);
+
+    // The details: an http map link and a latitude without longitude.
+    await page.getByLabel('Map link').fill('http://maps.example.com/harbor');
+    await page.getByLabel('Latitude').fill('43.07');
+    await page.getByRole('button', { name: 'Save venue' }).click();
+    await expect(page.getByText('Some details need fixing. Check the highlighted fields.')).toBeVisible();
+    await expect(page.getByText('Use a link that starts with https://.')).toBeVisible();
+    await expect(
+      page.getByText('Give latitude and longitude together; longitude must be between -180 and 180.'),
+    ).toBeVisible();
+    await expectAccessible(page);
+    await page.getByLabel('Map link').fill('https://maps.example.com/harbor');
+    await page.getByLabel('Longitude').fill('-89.4');
+    await page.getByLabel('Accessibility notes').fill('Step-free entrance on Shore Road.');
+    await page.getByRole('button', { name: 'Save venue' }).click();
+    await expect(page.getByText('Venue saved.')).toBeVisible();
 
     // Edit and persist across a reload.
     await page.getByLabel('City', { exact: true }).fill('Madison');
@@ -104,6 +112,8 @@ test.describe('venues, categories and tags (M1.4c)', () => {
     await expect(page.getByLabel('City', { exact: true })).toHaveValue('Madison');
     await expect(page.getByLabel('Country code')).toHaveValue('US');
     await expect(page.getByLabel('Capacity', { exact: true })).toHaveValue('300');
+    await expect(page.getByLabel('Map link')).toHaveValue('https://maps.example.com/harbor');
+    await expect(page.getByLabel('Accessibility notes')).toHaveValue('Step-free entrance on Shore Road.');
     // Unlisted venues have no quote inbox yet.
     await expect(page.getByText('List the venue in the directory to receive quote requests.')).toBeVisible();
 

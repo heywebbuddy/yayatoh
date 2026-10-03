@@ -18,7 +18,13 @@ import {
   useState,
 } from 'react';
 import { errorMessageKey } from '@/lib/errors.ts';
-import { beginStepUpAction, confirmStepUpAction, type StepUpState } from '@/server/step-up-actions.ts';
+import {
+  beginStepUpAction,
+  confirmStepUpAction,
+  confirmStepUpAsPersonaAction,
+  type StepUpStart,
+  type StepUpState,
+} from '@/server/step-up-actions.ts';
 
 /**
  * Step-up UI (M1.2c). Commands marked `stepUp` answer `step_up_required` when the session's fresh
@@ -72,6 +78,9 @@ function StepUpDialog({ onDone }: { onDone: (ok: boolean) => void }) {
   const descId = useId();
   const errorId = useId();
   const [method, setMethod] = useState<StepUpMethod | null>(null);
+  const [problem, setProblem] = useState<StepUpStart['problem'] | null>(null);
+  const [persona, setPersona] = useState(false);
+  const [attempt, setAttempt] = useState(0);
   const [resent, setResent] = useState(false);
   const [code, setCode] = useState<StepUpState['code']>(null);
   const [busy, setBusy] = useState(false);
@@ -79,14 +88,28 @@ function StepUpDialog({ onDone }: { onDone: (ok: boolean) => void }) {
   useEffect(() => {
     const d = ref.current;
     if (d && !d.open) d.showModal();
+  }, []);
+
+  // U3: a failed start (network, an email that could not be sent) says so and can be retried,
+  // instead of leaving the dialog on "One moment…" with Confirm disabled.
+  useEffect(() => {
     let live = true;
-    void beginStepUpAction().then((r) => {
-      if (live) setMethod(r.method);
-    });
+    setProblem(null);
+    beginStepUpAction().then(
+      (r) => {
+        if (!live) return;
+        setMethod(r.method);
+        setPersona(Boolean(r.persona));
+        setProblem(r.ok ? null : (r.problem ?? 'failed'));
+      },
+      () => {
+        if (live) setProblem('failed');
+      },
+    );
     return () => {
       live = false;
     };
-  }, []);
+  }, [attempt]);
 
   // Close first: the browser returns focus to whatever opened the dialog.
   const finish = useCallback(
@@ -120,6 +143,18 @@ function StepUpDialog({ onDone }: { onDone: (ok: boolean) => void }) {
     }
   }
 
+  async function confirmAsPersona() {
+    if (busy) return;
+    setBusy(true);
+    try {
+      const r = await confirmStepUpAsPersonaAction();
+      if (r.ok) return finish(true);
+      setCode(r.code);
+    } finally {
+      setBusy(false);
+    }
+  }
+
   const error =
     code === 'invalid_password'
       ? t('invalidPassword')
@@ -148,8 +183,35 @@ function StepUpDialog({ onDone }: { onDone: (ok: boolean) => void }) {
         </h2>
         <div id={descId} className="flex flex-col gap-1.5 text-body text-ink-2">
           <p>{t('why')}</p>
-          {method ? <p>{t(`explain.${method}`)}</p> : <p aria-live="polite">{t('loading')}</p>}
+          {method ? (
+            <p>{t(`explain.${method}`)}</p>
+          ) : problem ? null : (
+            <p aria-live="polite">{t('loading')}</p>
+          )}
         </div>
+        {problem ? (
+          <Alert title={t(`problem.${problem}`)}>
+            {problem === 'failed' ? (
+              <Button variant="secondary" size="sm" className="mt-2" onClick={() => setAttempt((n) => n + 1)}>
+                {t('retry')}
+              </Button>
+            ) : null}
+          </Alert>
+        ) : null}
+        {persona ? (
+          <div className="flex flex-col gap-2 rounded-tile border border-line bg-surface-2 px-4 py-3">
+            <p className="m-0 text-caption text-ink-2">{t('persona.explain')}</p>
+            <Button
+              variant="secondary"
+              size="sm"
+              className="self-start"
+              disabled={busy}
+              onClick={confirmAsPersona}
+            >
+              {t('persona.confirm')}
+            </Button>
+          </div>
+        ) : null}
         <div id={errorId} aria-live="polite">
           {error ? <Alert title={error} /> : null}
           {resent && !error ? <Alert tone="info" title={t('resent')} /> : null}
@@ -235,6 +297,35 @@ function refill(form: HTMLFormElement, fd: FormData) {
   }
 }
 
+/**
+ * The error a step-up form shows (U3). `step_up_required` (the dialog was cancelled or closed)
+ * says why and offers "Confirm it's you", which sends the same submission again, so there is
+ * never a dead end; any other code is a plain alert.
+ */
+export function StepUpError({
+  code,
+  formRef,
+}: {
+  code: string;
+  formRef: { readonly current: HTMLFormElement | null };
+}) {
+  const t = useTranslations();
+  return (
+    <Alert title={t(errorMessageKey(code))}>
+      {code === 'step_up_required' ? (
+        <Button
+          variant="secondary"
+          size="sm"
+          className="mt-2"
+          onClick={() => formRef.current?.requestSubmit()}
+        >
+          {t('stepUp.again')}
+        </Button>
+      ) : null}
+    </Alert>
+  );
+}
+
 /** The error code an action state carries, if any (`{ code }` states, or union states with one). */
 const codeOf = (s: unknown): string | null =>
   s && typeof s === 'object' && 'code' in s && typeof s.code === 'string' ? s.code : null;
@@ -264,6 +355,21 @@ export function useStepUpActionState<S>(action: (prev: S, form: FormData) => Pro
   // States are plain objects, never promises: Awaited<S> is S.
   type Reducer = (prev: Awaited<S>, form: FormData) => Promise<Awaited<S>>;
   const [state, formAction, pending] = useActionState(wrapped as unknown as Reducer, initial as Awaited<S>);
+  // React resets a form after its action; when the action answered with a code (the dialog was
+  // cancelled, or refused) the form keeps what was typed and picked instead. The reset event is
+  // stopped before any control hears it, so custom controls (U1 Select, pickers) keep their
+  // values too. The refill below stays as the fallback for anything reset another way.
+  useEffect(() => {
+    const form = formRef.current;
+    if (!form) return;
+    const keep = (e: Event) => {
+      if (!refillWith.current) return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+    };
+    form.addEventListener('reset', keep, { capture: true });
+    return () => form.removeEventListener('reset', keep, { capture: true });
+  }, []);
   useEffect(() => {
     const fd = refillWith.current;
     if (!fd || !formRef.current || !state) return;
@@ -287,7 +393,6 @@ export function StepUpForm({
   action: (form: FormData) => Promise<StepUpActionResult>;
   children: ReactNode;
 } & Omit<FormHTMLAttributes<HTMLFormElement>, 'action' | 'children'>) {
-  const t = useTranslations();
   const run = useCallback(
     async (_prev: { code: string | null }, form: FormData) => ({ code: (await action(form))?.code ?? null }),
     [action],
@@ -298,7 +403,7 @@ export function StepUpForm({
       {children}
       {state.code ? (
         <div aria-live="polite" className="basis-full">
-          <Alert title={t(errorMessageKey(state.code))} />
+          <StepUpError code={state.code} formRef={formRef} />
         </div>
       ) : null}
     </form>

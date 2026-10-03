@@ -380,7 +380,10 @@
     "plan": "Forfait et facturation",
     "webhooks": "Webhooks",
     "sandboxes": "Bacs à sable",
-    "notifications": "Notifications"
+    "notifications": "Notifications",
+    "moneyOverview": "Vue d’ensemble",
+    "salesByEvent": "Ventes par événement",
+    "fees": "Frais"
   },
   "vocab": {
     "attendee": "Participant",
@@ -1784,7 +1787,31 @@
     "added": "Domaine ajouté. Publiez maintenant les enregistrements DNS affichés ci-dessus.",
     "managedMissing": "Votre adresse gratuite {host} n’est pas encore configurée.",
     "managedCreate": "Configurer mon adresse gratuite",
-    "noAccess": "Seuls les propriétaires et les administrateurs peuvent modifier les domaines."
+    "noAccess": "Seuls les propriétaires et les administrateurs peuvent modifier les domaines.",
+    "wizard": {
+      "label": "Connecter {host}",
+      "steps": "Étapes pour connecter {host}",
+      "step": {
+        "domain": "Domaine ajouté",
+        "dns": "Enregistrements DNS",
+        "verify": "Vérifié",
+        "ssl": "Connexion sécurisée",
+        "primary": "Principal"
+      },
+      "dns": {
+        "signIn": "Connectez-vous là où vous gérez le DNS de votre domaine (votre registraire ou un service comme Cloudflare).",
+        "open": "Ouvrez les réglages DNS de ce domaine.",
+        "add": "Ajoutez chaque enregistrement ci-dessous exactement comme affiché. Supprimez les autres enregistrements A ou CNAME portant le même nom.",
+        "back": "Revenez ici et sélectionnez Vérifier maintenant."
+      },
+      "copyName": "nom de l'enregistrement {type}",
+      "copyValue": "valeur de l'enregistrement {type}",
+      "copy": "Copier",
+      "copied": "Copié",
+      "verify": "Nous avons trouvé vos enregistrements DNS et les vérifions. Vérifiez à nouveau dans quelques minutes.",
+      "ssl": "Votre domaine est vérifié. Nous émettons son certificat sécurisé (https), ce qui prend généralement quelques minutes.",
+      "primary": "{host} est actif. Faites-en votre domaine principal pour que vos liens, billets et e-mails l’utilisent."
+    }
   },
   "suspensions": {
     "pause_checkout": "La vente de billets a été suspendue par le support Yayatoh.",
@@ -3419,6 +3446,16 @@
       "editListing": "Modifier la fiche de l’annuaire"
     },
     "layoutLibrary": "Bibliothèque de plans",
+    "createNext": "Les photos et les autres informations (adresse, plan, accessibilité) viennent ensuite.",
+    "createdNext": "Ajoutez des photos maintenant, puis complétez les informations ci-dessous.",
+    "steps": {
+      "label": "Nouveau lieu",
+      "create": "Créer",
+      "photos": "Photos",
+      "details": "Informations"
+    },
+    "detailsTitle": "Informations",
+    "photo": "Photo",
     "emptyAction": "Ajouter votre premier lieu",
     "emptyViewerAction": "Parcourir l’annuaire des lieux"
   },
@@ -3700,13 +3737,14 @@
     "saveTemplate": "Enregistrer le modèle",
     "nameTaken": "Ce nom est déjà utilisé. Choisissez-en un autre.",
     "invalid": "Vérifiez cette valeur.",
+    "headerSave": "Enregistrer comme modèle",
     "backToEvent": "Retour à l’aperçu de l’événement"
   },
   "series": {
     "title": "Séries",
     "description": "Regroupez des événements en tournées, saisons ou festivals. Chaque série a une page publique qui liste ses prochains événements.",
     "emptyTitle": "Aucune série pour l’instant",
-    "emptyDescription": "Créez une série, puis ajoutez-y des événements depuis leur page Dates.",
+    "emptyDescription": "Créez une série ci-dessous, ou nommez-en une en créant un événement.",
     "caption": "Séries",
     "name": "Nom",
     "descriptionField": "Description (facultatif)",
@@ -3728,14 +3766,27 @@
     "title": "Modèles",
     "description": "Créez de nouveaux événements à partir de vos propres modèles. Un événement créé depuis un modèle est un brouillon sans ventes.",
     "emptyTitle": "Aucun modèle pour l’instant",
-    "emptyDescription": "Ouvrez un événement, choisissez Dupliquer et modèle, puis enregistrez-le comme modèle.",
+    "emptyDescription": "Créez-en un de zéro avec Nouveau modèle, copiez un modèle de départ, ou enregistrez un événement comme modèle depuis son en-tête.",
     "contents": "{ticketTypes, plural, one {# type de billet} other {# types de billets}} · {questions, plural, one {# question} other {# questions}} · {seats, plural, =0 {sans plan de salle} one {# place} other {# places}}",
     "delete": "Supprimer",
     "deleteFor": "Supprimer le modèle {name}",
     "use": "Créer un événement à partir de {name}",
     "timezone": "Heures en {timezone}.",
     "createEvent": "Créer l’événement",
-    "pickEvent": "Choisir un événement à enregistrer"
+    "newTemplate": "Nouveau modèle",
+    "summary": "{sections, plural, =0 {aucune section de page} one {# section de page} other {# sections de page}} · {checklist, plural, =0 {aucun élément de liste} one {# élément de liste} other {# éléments de liste}}",
+    "originEvent": "Enregistré à partir d'un événement",
+    "originScratch": "Créé de zéro",
+    "edit": "Modifier",
+    "editFor": "Modifier le modèle {name}",
+    "duplicate": "Dupliquer",
+    "duplicateFor": "Dupliquer le modèle {name}",
+    "archive": "Archiver",
+    "archiveFor": "Archiver le modèle {name}",
+    "restore": "Restaurer",
+    "restoreFor": "Restaurer le modèle {name}",
+    "archivedTitle": "Modèles archivés ({count})",
+    "archivedHint": "Les modèles archivés n'apparaissent dans aucun sélecteur. Les événements créés à partir d'eux ne changent pas."
   },
   "publicSeries": {
     "eyebrow": "Une série de {org}",
@@ -4338,6 +4389,21 @@
       "floorPlanChosen": "Choisissez un plan de salle, ou créez-en un à partir de chiffres.",
       "guestSitePublished": "Publiez le site protégé par mot de passe que vos invités consultent.",
       "tablesSponsors": "Nommez vos tables et leurs sponsors."
+    },
+    "own": {
+      "title": "Votre liste de contrôle",
+      "hint": "Vos propres tâches pour cet événement, en plus des vérifications ci-dessus. Cochez-les au fur et à mesure.",
+      "empty": "Rien pour l'instant. Ajoutez votre première tâche.",
+      "list": "Vos éléments de liste",
+      "progress": "{done} sur {total} terminés",
+      "newItem": "Nouvel élément",
+      "add": "Ajouter l'élément",
+      "added": "Élément ajouté.",
+      "invalid": "Saisissez de 1 à 200 caractères.",
+      "tooMany": "Cette liste est pleine. Retirez d'abord un élément.",
+      "markDone": "Marquer {title} comme terminé",
+      "markOpen": "Marquer {title} comme non terminé",
+      "remove": "Retirer {title}"
     }
   },
   "program": {
@@ -4856,7 +4922,18 @@
     "invalidCode": "Ce code n’a pas fonctionné. Réessayez.",
     "invalidPassword": "Ce mot de passe n’est pas correct.",
     "rateLimited": "Trop de tentatives. Attendez 15 minutes, puis réessayez.",
-    "unauthenticated": "Votre session a expiré. Reconnectez-vous."
+    "unauthenticated": "Votre session a expiré. Reconnectez-vous.",
+    "again": "Confirmer que c'est vous",
+    "retry": "Réessayer",
+    "problem": {
+      "impersonating": "Vous agissez en tant que ce membre et ne pouvez pas confirmer à sa place. Demandez-lui de faire cette modification.",
+      "unauthenticated": "Votre session a expiré. Reconnectez-vous.",
+      "failed": "Impossible de lancer la confirmation. Vérifiez votre connexion et réessayez."
+    },
+    "persona": {
+      "explain": "Compte de démonstration : il s'est connecté sans application d'authentification, vous pouvez donc confirmer sans code. Ce n'est jamais proposé sur le site réel.",
+      "confirm": "Continuer sans code (compte de démonstration)"
+    }
   },
   "surveys": {
     "title": "Enquêtes",
@@ -6810,7 +6887,10 @@
     "gala": {
       "name": "Gala",
       "description": "Billets, tables et sponsors, placement, dons et enregistrement sur place."
-    }
+    },
+    "copy": "Copier dans vos modèles",
+    "copyFor": "Copier le modèle de départ {name} dans vos modèles",
+    "readOnly": "Lecture seule. Copiez-le dans vos modèles pour modifier ses billets, sections ou sa liste de contrôle."
   },
   "profileCopy": {
     "wedding": {
@@ -6891,7 +6971,9 @@
       "event": "Événement",
       "mode": "Mode",
       "starts": "Début",
-      "readiness": "Préparation"
+      "readiness": "Préparation",
+      "sales": "Ventes",
+      "tickets": "Billets"
     },
     "manual": "Réglé à la main",
     "role": {
@@ -6962,9 +7044,10 @@
       "readiness": {
         "title": "Préparation",
         "score": "Préparation {score} %",
-        "blocking": "Bloquant",
-        "todo": "Reste à faire",
-        "allDone": "Tout est prêt."
+        "allDone": "Tout est prêt.",
+        "count": "{done} sur {total} faits",
+        "required": "Requis pour vendre",
+        "recommended": "Recommandé"
       },
       "sales": {
         "title": "Ventes",
@@ -7011,7 +7094,9 @@
       "alerts": {
         "title": "Alertes",
         "pending": "Les alertes apparaîtront ici dès que les règles d’alerte seront activées.",
-        "none": "Aucune alerte ouverte."
+        "none": "Aucune alerte ouverte.",
+        "watching": "Les règles d’alerte surveillent les ventes, les paiements, les appareils, la capacité et les invités, et s’affichent ici.",
+        "viewAll": "Voir toutes les alertes"
       },
       "entrances": {
         "title": "Accès"
@@ -7162,6 +7247,52 @@
         "over": "{domains, plural, one {# domaine d’envoi} many {# domaines d’envoi} other {# domaines d’envoi}} et {campaigns, plural, one {# campagne} many {# campagnes} other {# campagnes}} au-delà des seuils",
         "open": "Ouvrir la délivrabilité des e-mails"
       },
+      "rsvp": {
+        "title": "Réponses",
+        "allAnswered": "Tous les invités ont répondu.",
+        "noneInvited": "Personne n’est encore invité à une étape.",
+        "responded": "{responded} invités sur {invited} ont répondu",
+        "meter": "Réponses reçues",
+        "parties": "Foyers sans réponse : {count}",
+        "notSent": "Invitation pas encore envoyée : {count}",
+        "deadline": "Date limite de réponse : {date}",
+        "noDeadline": "Aucune date limite de réponse",
+        "open": "Ouvrir les réponses"
+      },
+      "guestSeating": {
+        "title": "Plan de table",
+        "noChart": "Pas encore de plan de salle pour les invités. Choisissez-en un dans Placement.",
+        "noGuests": "Aucun invité à placer pour l’instant.",
+        "allSeated": "Chaque invité qui n’a pas décliné a une table.",
+        "seated": "{seated} invités sur {guests} ont une table",
+        "listLabel": "Invités sans table",
+        "guestOf": "Invité de {name}",
+        "more": "+{count} autres",
+        "open": "Placer les invités"
+      },
+      "meals": {
+        "title": "Repas et régimes",
+        "attending": "Présents : {count}",
+        "noneAttending": "Les repas sont comptés quand les invités disent oui.",
+        "caption": "Repas des invités présents",
+        "colMeal": "Repas",
+        "colGuests": "Invités",
+        "other": "Autre choix",
+        "none": "Aucun repas choisi",
+        "dietary": "Régimes alimentaires : {count}",
+        "accessibility": "Besoins d’accessibilité : {count}",
+        "open": "Ouvrir les réponses RSVP"
+      },
+      "arrivals": {
+        "title": "Arrivées des invités",
+        "arrivedOf": "{arrived} invités attendus sur {expected} sont arrivés",
+        "notArrived": "Pas encore là : {count}",
+        "none": "Personne n’est encore arrivé.",
+        "noExpected": "Aucun invité attendu pour l’instant.",
+        "recent": "Dernières arrivées",
+        "guestOf": "Invité de {name}",
+        "open": "Ouvrir la vue du jour J"
+      },
       "sessionLevel": {
         "none": "Sans limite",
         "ok": "Sous {near} %",
@@ -7249,6 +7380,49 @@
       "statusOn": "Actif",
       "statusOff": "Désactivé",
       "emptyAction": "Créer un lien d’écran"
+    },
+    "hero": {
+      "startsIn": "Commence dans {duration}",
+      "endsIn": "Se termine dans {duration}",
+      "ended": "Terminé il y a {duration}",
+      "nextLabel": "Prochaine étape",
+      "blocking": "Nécessaire avant de pouvoir vendre",
+      "next": {
+        "readiness": "À faire : {item}",
+        "scanner": "Enregistrez les invités à l’entrée",
+        "publicPage": "Tout est prêt. Voyez la page de l’événement comme vos invités.",
+        "report": "C’est terminé. Voyez le bilan.",
+        "none": "Rien ne requiert votre attention pour le moment."
+      },
+      "do": {
+        "alert": "Résoudre",
+        "readiness": "Le faire maintenant",
+        "scanner": "Commencer à scanner",
+        "publicPage": "Voir la page de l’événement",
+        "report": "Ouvrir le rapport"
+      }
+    },
+    "kpi": {
+      "title": "Chiffres clés",
+      "sales": "Ventes",
+      "salesToday": "{amount} aujourd’hui",
+      "tickets": "Billets vendus",
+      "ofCapacity": "sur {capacity}",
+      "noCapacity": "Aucun billet en vente pour l’instant",
+      "checkins": "Enregistrés",
+      "ofValid": "sur {valid} billets valides",
+      "alerts": "Alertes ouvertes",
+      "allClear": "Tout va bien",
+      "needsYou": "Requiert votre attention",
+      "critical": "{count, plural, =0 {Aucune critique} one {# critique} other {# critiques}}"
+    },
+    "soldOf": "{sold} sur {capacity}",
+    "overviewCounts": "Événements par mode",
+    "overviewGroup": {
+      "live": "En direct ({count})",
+      "pre_show": "Avant-spectacle ({count})",
+      "planning": "En préparation ({count})",
+      "wrap": "En clôture ({count})"
     }
   },
   "alerts": {
@@ -7344,6 +7518,9 @@
       "campaignFailed": "Ouvrir les campagnes",
       "disputeDeadline": "Ouvrir les litiges",
       "assistanceOverdue": "Ouvrir les demandes d’aide",
+      "rsvpPending": "Ouvrir les réponses",
+      "guestsUnseated": "Placer les invités",
+      "mealsMissing": "Ouvrir les réponses RSVP",
       "pledgesUnpaid": "Ouvrir les promesses",
       "sessionsNearCapacity": "Ouvrir les sessions",
       "sessionWaitlists": "Ouvrir les inscriptions aux sessions",
@@ -7377,6 +7554,9 @@
       "campaignFailed": "{count, plural, one {Un envoi de campagne a échoué aujourd’hui} other {{countWords} envois de campagne ont échoué aujourd’hui}}",
       "disputeDeadline": "{count, plural, one {Un litige demande bientôt des preuves} other {{countWords} litiges demandent bientôt des preuves}}",
       "assistanceOverdue": "{count, plural, one {{countWords} demande d’aide attend depuis trop longtemps} other {{countWords} demandes d’aide attendent depuis trop longtemps}}",
+      "rsvpPending": "{count, plural, one {Un invité n’a pas répondu à l’invitation} other {{countWords} invités n’ont pas répondu à l’invitation}}",
+      "guestsUnseated": "{count, plural, one {Un invité n’a pas de table} other {{countWords} invités n’ont pas de table}}",
+      "mealsMissing": "{count, plural, one {Un invité présent n’a pas choisi de repas} other {{countWords} invités présents n’ont pas choisi de repas}}",
       "pledgesUnpaid": "{count, plural, one {Une promesse de don reste impayée 14 jours après l’événement} other {{countWords} promesses de don restent impayées 14 jours après l’événement}}",
       "sessionsNearCapacity": "{count, plural, one {{countWords} session dépasse 95 % de sa capacité} other {{countWords} sessions dépassent 95 % de leur capacité}}",
       "sessionWaitlists": "{count, plural, one {{countWords} session a une longue liste d'attente} other {{countWords} sessions ont de longues listes d'attente}}",
@@ -15271,6 +15451,376 @@
     "timeZoneNote": "Heures en {zone}",
     "selected": "Sélectionné"
   },
+  "seriesField": {
+    "label": "Série (facultatif)",
+    "hint": "Regroupez cet événement avec d’autres dans une tournée ou une saison. Saisissez un nouveau nom pour en créer une.",
+    "none": "Aucune série",
+    "newOption": "Nouvelle série : {name}",
+    "summary": "Série",
+    "errors": {
+      "taken": "Une série porte déjà ce nom. Choisissez-la plutôt dans la liste.",
+      "missing": "Cette série n’existe plus. Choisissez-en une autre.",
+      "name": "Saisissez un nom de série de 2 à 160 caractères."
+    }
+  },
+  "seriesLink": {
+    "partOf": "Fait partie de {name}"
+  },
+  "seriesPage": {
+    "back": "Toutes les séries",
+    "tabs": {
+      "label": "Vues de la série",
+      "events": "Événements",
+      "details": "Détails"
+    },
+    "columns": {
+      "event": "Événement",
+      "status": "Statut",
+      "dates": "Dates",
+      "sales": "Ventes",
+      "actions": "Actions"
+    },
+    "sold": "{count, plural, one {{n} billet vendu} other {{n} billets vendus}}",
+    "noSales": "Aucune vente pour l’instant",
+    "remove": "Retirer de la série",
+    "removeFor": "Retirer {name} de la série",
+    "createNext": "Créer l’événement suivant de la série",
+    "createIn": "Créer un événement dans cette série",
+    "added": "Événement ajouté à la série.",
+    "removed": "Événement retiré de la série. L’événement lui-même ne change pas.",
+    "deleted": "Série supprimée. Ses événements ne changent pas.",
+    "eventsHeading": "{count, plural, one {# événement} other {# événements}}",
+    "emptyTitle": "Aucun événement dans cette série pour l’instant",
+    "emptyDescription": "Créez un événement dans cette série ou ajoutez-en un existant.",
+    "emptyReadOnly": "Les événements ajoutés à cette série apparaissent ici.",
+    "caption": "Événements de {name}",
+    "add": {
+      "heading": "Ajouter un événement existant",
+      "label": "Événement",
+      "placeholder": "Choisissez un événement",
+      "hint": "Un événement d’une autre série passe dans celle-ci.",
+      "option": "{name} · {when}",
+      "optionMoves": "{name} · {when} (dans {series})",
+      "required": "Choisissez un événement à ajouter.",
+      "submit": "Ajouter à la série"
+    },
+    "next": {
+      "back": "Retour à {name}",
+      "title": "Créer l’événement suivant de la série",
+      "description": "Un nouveau brouillon dans {name} avec la configuration du dernier événement.",
+      "copies": "Copie les réglages, types de billets, questions et plan de salle de {name} ({when}). Les commandes, participants et enregistrements restent sur l’original.",
+      "name": "Nom de l’événement",
+      "startsAt": "Début",
+      "startsAtHint": "Dans le fuseau horaire de l’événement ({zone}).",
+      "nameInvalid": "Saisissez un nom de 2 à 160 caractères.",
+      "startInvalid": "Saisissez une date et une heure de début valides.",
+      "submit": "Créer le brouillon"
+    },
+    "details": {
+      "heading": "Détails de la série",
+      "address": "Page publique :",
+      "saved": "Série enregistrée.",
+      "save": "Enregistrer les modifications",
+      "deleteHeading": "Supprimer la série",
+      "deleteHint": "Supprimer la série retire sa page publique. Ses événements restent, hors de toute série.",
+      "delete": "Supprimer la série"
+    }
+  },
+  "templateBuilder": {
+    "breadcrumb": "Fil d'Ariane",
+    "newTitle": "Nouveau modèle",
+    "newDescription": "Commencez par le type d'événement. Vous ajoutez les billets, les sections de page et une liste de contrôle à l'écran suivant.",
+    "profileLegend": "Quel type d'événement ?",
+    "profileInvalid": "Choisissez un type d'événement.",
+    "profileHelp": {
+      "wedding": "Invités, réponses, plan de table, un site privé pour les invités et le jour J. Jamais listé publiquement.",
+      "gala": "Billets, tables et sponsors, placement, dons et accueil.",
+      "concert": "Billets, fans, marketing et contrôle rapide à l'entrée.",
+      "conference": "Inscriptions, sessions, intervenants, exposants, sponsors et badges.",
+      "community": "Rencontres et cours : inscriptions gratuites ou payantes, dates récurrentes et accueil.",
+      "agency": "Des événements que vous organisez pour des clients, avec leur image de marque et leurs rapports.",
+      "other": "Un événement général : billets, participants, une page et l'accueil."
+    },
+    "name": "Nom du modèle",
+    "nameInvalid": "Saisissez un nom de 2 à 120 caractères.",
+    "nameTaken": "Ce nom est déjà utilisé. Choisissez-en un autre.",
+    "description": "Description (facultatif)",
+    "duration": "Durée par défaut",
+    "hours": "Heures",
+    "minutes": "Minutes",
+    "durationHint": "Les événements créés à partir du modèle se terminent ce temps après leur début.",
+    "durationInvalid": "Saisissez une durée entre 15 minutes et 14 jours.",
+    "timezone": "Fuseau horaire",
+    "timezoneHint": "Le début des nouveaux événements est saisi dans ce fuseau.",
+    "currency": "Devise",
+    "create": "Créer le modèle",
+    "steps": "Étapes du modèle",
+    "step": {
+      "profile": "Type d'événement",
+      "tickets": "Types de billets",
+      "sections": "Sections de page",
+      "content": "Contenu de la page",
+      "checklist": "Liste de contrôle"
+    },
+    "created": "Modèle créé. Ajoutez ci-dessous ses types de billets, ses sections de page et sa liste de contrôle.",
+    "copied": "Modèle de départ copié dans vos modèles. Complétez-le ci-dessous.",
+    "duplicated": "Modèle dupliqué. Vous modifiez la copie.",
+    "archivedNotice": "Ce modèle est archivé : il n'apparaît dans aucun sélecteur et ne peut pas être modifié. Restaurez-le pour l'utiliser à nouveau.",
+    "useAction": "Créer un événement",
+    "durationHours": "{hours, plural, one {# heure} other {# heures}}",
+    "durationMinutes": "{minutes, plural, one {# minute} other {# minutes}}",
+    "profileTitle": "Type d'événement",
+    "profileFixed": "Le type d'événement est fixé à la création du modèle. Pour un autre type, créez un nouveau modèle.",
+    "ticketsTitle": "Types de billets par défaut",
+    "ticketsHint": "Chaque événement créé à partir du modèle commence avec ceux-ci, sans aucune vente.",
+    "ticketsEmpty": "Aucun type de billet pour l'instant. Ajoutez le premier ci-dessous.",
+    "ticketsList": "Types de billets",
+    "ticketName": "Nom du billet",
+    "ticketNameInvalid": "Saisissez un nom de 1 à 120 caractères.",
+    "ticketDescription": "Description du billet (facultatif)",
+    "price": "Prix ({currency})",
+    "priceInvalid": "Saisissez un prix comme 25 ou 25.00.",
+    "quantity": "Quantité disponible",
+    "quantityInvalid": "Saisissez une quantité de 1 à 1 000 000.",
+    "addTicket": "Ajouter un type de billet",
+    "ticketAdded": "Type de billet ajouté.",
+    "free": "Gratuit",
+    "ticketLine": "{price} · {quantity, plural, one {# disponible} other {# disponibles}}",
+    "removeTicket": "Retirer le type de billet {name}",
+    "seatPriced": "Utilisé par le plan de salle enregistré",
+    "sectionsTitle": "Sections de page",
+    "sectionsHint": "Les blocs de la page de l'événement, dans cet ordre.",
+    "sectionsEmpty": "Aucune section de page pour l'instant. Ajoutez la première ci-dessous.",
+    "sectionsList": "Sections de page dans l'ordre",
+    "addSection": "Ajouter une section de page",
+    "moveUp": "Monter {title}",
+    "moveDown": "Descendre {title}",
+    "removeSection": "Retirer la section {title}",
+    "contentTitle": "Contenu de la page",
+    "contentHint": "Ce que chaque événement créé à partir du modèle affiche sur sa page.",
+    "tagline": "Accroche (facultatif)",
+    "venueName": "Lieu (facultatif)",
+    "city": "Ville (facultatif)",
+    "visibility": "Qui peut le trouver",
+    "settingsTitle": "Nom et valeurs par défaut",
+    "save": "Enregistrer les modifications",
+    "saved": "Modifications enregistrées.",
+    "checklistTitle": "Liste de contrôle",
+    "checklistHint": "Vos propres tâches. Chaque événement créé à partir du modèle commence avec elles à faire, dans son guide de configuration.",
+    "checklistEmpty": "Aucun élément pour l'instant.",
+    "checklistList": "Éléments de la liste de contrôle",
+    "checklistItem": "Nouvel élément de liste",
+    "itemInvalid": "Saisissez de 1 à 200 caractères.",
+    "tooMany": "Cette liste est pleine. Retirez d'abord un élément.",
+    "addItem": "Ajouter l'élément",
+    "itemAdded": "Élément ajouté.",
+    "removeItem": "Retirer l'élément {title}",
+    "eventsTitle": "Événements créés à partir du modèle",
+    "eventsEmpty": "Aucun événement pour l'instant. Créez le premier ci-dessous.",
+    "eventsList": "Événements créés à partir de ce modèle",
+    "useTitle": "Créer un événement à partir de ce modèle",
+    "useHint": "Un nouveau brouillon avec les billets, les sections de page, le contenu et la liste de contrôle du modèle."
+  },
+  "money": {
+    "export": "Exporter en CSV",
+    "periodForm": "Choisir une période",
+    "tabs": {
+      "label": "Pages financières",
+      "overview": "Vue d’ensemble",
+      "payouts": "Versements",
+      "sales": "Ventes par événement",
+      "fees": "Frais"
+    },
+    "grain": {
+      "label": "Graphique par",
+      "auto": "Automatique",
+      "day": "Jour",
+      "week": "Semaine",
+      "month": "Mois"
+    },
+    "overview": {
+      "title": "Vue d’ensemble financière",
+      "description": "Ce que vous avez vendu, ce qui a été déduit et ce qui a été versé sur votre compte bancaire. Jours exprimés dans le fuseau {timeZone}.",
+      "range": "{from} – {to}",
+      "allTime": "Depuis le début",
+      "comparedWith": "par rapport à {from} – {to}",
+      "net": "Net",
+      "netChange": "{change} par rapport à la période précédente",
+      "netExplained": "Brut moins les remboursements, les litiges perdus et les frais.",
+      "new": "Nouveau",
+      "previous": "Période précédente : {amount}",
+      "gross": "Ventes brutes",
+      "refunds": "Remboursements",
+      "fees": "Frais",
+      "disputes": "Litiges perdus",
+      "payouts": "Versé",
+      "keyNumbers": "Chiffres clés en {currency}",
+      "inCurrency": "En {currency}",
+      "nextPayout": "Prochain versement",
+      "nextPayoutOn": "Prévu le {date} · {event}",
+      "noNextPayout": "Aucun versement n’est prévu. Les ventes en ligne sont versées après chaque événement.",
+      "toPayouts": "Voir tous les versements",
+      "chart": {
+        "day": "Ventes brutes par jour",
+        "week": "Ventes brutes par semaine",
+        "month": "Ventes brutes par mois"
+      },
+      "bucket": {
+        "day": "Jour",
+        "week": "Semaine du",
+        "month": "Mois"
+      },
+      "chartNote": "Les remboursements et les frais figurent dans le tableau de données.",
+      "showData": "Afficher les données",
+      "noSalesInPeriod": "Aucune vente ni aucun remboursement sur cette période.",
+      "emptyTitle": "Aucun mouvement sur cette période",
+      "emptyDescription": "Les ventes, remboursements et versements s’affichent ici au fur et à mesure. Essayez une période plus longue ou vendez vos premiers billets.",
+      "showAllTime": "Afficher depuis le début",
+      "createEvent": "Créer un événement"
+    },
+    "payouts": {
+      "summary": "Récapitulatif des versements",
+      "next": "Prochain versement",
+      "nextOn": "Prévu le {date} · {event}",
+      "nothingScheduled": "Rien de prévu pour l’instant.",
+      "held": "Retenu pour vos événements",
+      "heldSub": "{count, plural, =0 {Aucun événement n’a de fonds en attente.} one {# événement en attente de sa date de libération.} many {# événements en attente de leur date de libération.} other {# événements en attente de leur date de libération.}}",
+      "inReserve": "En réserve",
+      "reserveNext": "Prochaine restitution le {date}.",
+      "noReserve": "Aucune réserve retenue.",
+      "owed": "Montant dû",
+      "owedSub": "Déduit de votre prochain versement.",
+      "upcoming": "Versements à venir",
+      "upcomingEmptyTitle": "Aucun versement en cours",
+      "upcomingEmpty": "Lorsque Yayatoh encaisse le produit de la billetterie pour vous, le versement de chaque événement apparaît ici avec sa date.",
+      "toOverview": "Voir la vue d’ensemble financière",
+      "payoutOf": "{event} : {amount}",
+      "reserveOf": "Réserve restituée · {event} : {amount}",
+      "expected": "{event} : environ {amount}",
+      "heldDetail": "{held} retenus, {reserve} conservés en réserve",
+      "reserveBack": "Restitution de la réserve · {event} : jusqu’à {amount}",
+      "reserveDetail": "{kept} conservés lors du versement",
+      "status": {
+        "held": "Retenu jusqu’à la libération",
+        "ready": "Envoi en cours",
+        "waiting_account": "En attente de votre compte de versement",
+        "failed": "Nouvelle tentative",
+        "transferred": "Versé"
+      }
+    },
+    "payout": {
+      "metaTitle": "Versement",
+      "title": "Versement pour {event}",
+      "titleReserve": "Réserve restituée pour {event}",
+      "description": "Libéré le {date}.",
+      "export": "Exporter les commandes (CSV)",
+      "summary": "De la libération au versement",
+      "released": "Libéré à partir des ventes de l’événement",
+      "reserve": "Conservé en réserve",
+      "netted": "Déduit au titre des sommes dues",
+      "amount": "Versé à vous",
+      "paidOn": "Envoyé à votre banque le {date}.",
+      "notYet": {
+        "ready": "Envoi en cours vers votre banque.",
+        "waiting_account": "En attente de votre compte de versement.",
+        "failed": "Le virement a échoué ; il sera relancé."
+      },
+      "reserveOn": "La réserve sera restituée le {date}.",
+      "eventFinance": "{event} : analyse financière",
+      "lines": "Commandes de ce versement",
+      "totals": "Totaux",
+      "date": "Date",
+      "type": "Type",
+      "order": "Commande",
+      "orderLink": "Commande {ref} · {buyer}",
+      "buyer": "Acheteur",
+      "gross": "Payé par l’acheteur",
+      "fee": "Frais",
+      "organizer": "Votre part",
+      "kind": {
+        "sale": "Vente",
+        "refund": "Remboursement"
+      },
+      "reserveTitle": "Une libération de réserve",
+      "reserveExplain": "Ce versement restitue la réserve conservée lors d’un versement précédent, déduction faite des sommes reprises depuis pour des remboursements ou des litiges.",
+      "toOriginal": "Voir le versement d’origine",
+      "noLinesTitle": "Aucune commande listée",
+      "noLines": "Ce versement ne comporte aucune ligne de commande (il a été libéré avant l’enregistrement des lignes de commande).",
+      "back": "Tous les versements"
+    },
+    "sales": {
+      "title": "Ventes par événement",
+      "description": "Commandes, billets et montants par événement sur la période. Ouvrez un événement pour consulter son analyse financière complète.",
+      "descriptionNoFinance": "Commandes, billets et ventes brutes par événement sur la période.",
+      "tableTitle": "Événements",
+      "event": "Événement",
+      "orders": "Commandes",
+      "tickets": "Billets",
+      "gross": "Brut",
+      "refunds": "Remboursements",
+      "fees": "Frais",
+      "net": "Net",
+      "openFinance": "{event} : analyse financière",
+      "openAnalysis": "{event} : analyse des ventes",
+      "netNote": "Le net correspond au brut moins les remboursements, les litiges perdus et les frais sur la période.",
+      "emptyTitle": "Aucune vente sur cette période",
+      "empty": "Les événements ayant des ventes ou des remboursements sur la période sont listés ici. Essayez une période plus longue."
+    },
+    "fees": {
+      "title": "Frais",
+      "description": "Votre formule de frais et tous les frais prélevés, par commande et par versement.",
+      "plan": "Votre formule de frais",
+      "planName": "Formule : {plan}",
+      "grandfathered": "Tarifs historiques",
+      "override": "Taux négocié",
+      "rate": "{percent} + {fixed} par billet payant",
+      "ratePercent": "{percent} par billet payant",
+      "noFee": "Aucuns frais",
+      "planNote": "Les taux sont fixés par Yayatoh. Pour en discuter, contactez le support.",
+      "totals": "Frais sur la période",
+      "net": "Frais en {currency}",
+      "takenRefunded": "{taken} prélevés, {refunded} restitués",
+      "perOrder": "Frais par commande",
+      "perPayout": "Frais par versement",
+      "date": "Date",
+      "order": "Commande",
+      "event": "Événement",
+      "total": "Total de la commande",
+      "fee": "Frais",
+      "feeRefunded": "Restitués",
+      "payout": "Versement",
+      "paidOut": "Versé",
+      "truncated": "Affichage des {count} dernières commandes. L’export CSV contient la même liste.",
+      "noPayouts": "Aucun versement pour l’instant.",
+      "emptyTitle": "Aucuns frais sur cette période",
+      "empty": "Les commandes soumises à des frais sur la période sont listées ici. Essayez une période plus longue."
+    },
+    "csv": {
+      "period": "Début de période",
+      "currency": "Devise",
+      "gross": "Brut",
+      "refunds": "Remboursements",
+      "fees": "Frais",
+      "event": "Événement",
+      "orders": "Commandes",
+      "tickets": "Billets",
+      "disputesLost": "Litiges perdus",
+      "net": "Net",
+      "date": "Date",
+      "status": "Statut",
+      "released": "Libéré",
+      "reserve": "Réserve",
+      "netted": "Compensé",
+      "amount": "Montant",
+      "type": "Type",
+      "order": "Commande",
+      "buyer": "Acheteur",
+      "fee": "Frais",
+      "organizer": "Votre part",
+      "total": "Total de la commande",
+      "feeRefunded": "Frais restitués"
+    }
+  },
   "emptyActions": {
     "seeEvents": "Voir vos événements",
     "eventHome": "Aller à l’accueil de l’événement",
@@ -15306,9 +15856,9 @@
     "templates": {
       "title": "Comment fonctionnent les modèles",
       "intro": "Un modèle enregistre la configuration d’un événement (billets, questions, sections et contenu de page) pour que le suivant démarre prêt. Les événements créés à partir d’un modèle sont des brouillons sans ventes.",
-      "step1": "Ouvrez un événement configuré comme vous le souhaitez.",
-      "step2": "Choisissez Dupliquer et modèle, puis enregistrez-le comme modèle.",
-      "step3": "Revenez ici pour créer de nouveaux événements à partir de celui-ci, ou partez d’un modèle de départ ci-dessous."
+      "step1": "Choisissez le type d'événement et sa durée par défaut.",
+      "step2": "Ajoutez les types de billets, les sections de page et les éléments de liste de contrôle par défaut.",
+      "step3": "Créez des événements à partir du modèle : chacun est un brouillon avec exactement ces éléments, sans aucune vente."
     },
     "series": {
       "title": "Comment fonctionnent les séries",
@@ -15346,6 +15896,28 @@
       "step1": "Choisissez l’événement ci-dessous et ouvrez ses codes promo.",
       "step2": "Ajoutez un code avec sa remise et, si vous le souhaitez, une limite et des dates.",
       "step3": "Partagez le code. Les acheteurs le saisissent au paiement et chaque utilisation est comptée."
+    },
+    "money": {
+      "title": "Comment se calculent vos revenus",
+      "intro": "Chaque montant provient du grand livre, par devise, pour les jours choisis dans le fuseau horaire de votre organisation.",
+      "step1": "Le brut correspond au montant payé par les acheteurs, frais compris.",
+      "step2": "Les remboursements, les litiges perdus et les frais de Yayatoh sont déduits ; les frais restitués lors d’un remboursement sont réintégrés.",
+      "step3": "Le solde constitue votre net. Les ventes en ligne sont versées après chaque événement ; les ventes que vous avez encaissées vous-même vous appartiennent déjà.",
+      "step4": "Le montant versé correspond à ce qui a été crédité sur votre compte bancaire sur la période. La page Versements détaille chaque versement jusqu’aux commandes."
+    },
+    "payoutRules": {
+      "title": "Quand les versements sont effectués",
+      "intro": "Ces règles s’appliquent lorsque Yayatoh encaisse le produit de la billetterie pour vous.",
+      "step1": "Les recettes de chaque événement sont versées 5 jours ouvrés après la fin de l’événement.",
+      "step2": "5 % sont conservés en réserve pendant 90 jours en cas de remboursements ou de litiges, puis versés également.",
+      "step3": "Toute somme due (un remboursement ou un litige après votre versement, des frais sur les ventes encaissées vous-même) est reprise par annulation de virement si possible, sinon sur votre prochain versement."
+    },
+    "fees": {
+      "title": "Fonctionnement des frais",
+      "intro": "Les taux de frais de Yayatoh sont fixés par notre équipe dans votre contrat ; vous ne pouvez pas les modifier ici.",
+      "step1": "Chaque billet payant est soumis aux frais de votre formule. Les billets gratuits ne sont soumis à aucuns frais.",
+      "step2": "Les frais sont prélevés sur chaque commande et indiqués sur chaque versement.",
+      "step3": "Lorsqu’un remboursement restitue les frais, ceux-ci apparaissent sous « Frais restitués »."
     }
   }
 }

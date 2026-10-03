@@ -380,7 +380,10 @@
     "plan": "Plan y facturación",
     "webhooks": "Webhooks",
     "sandboxes": "Entornos de prueba",
-    "notifications": "Notificaciones"
+    "notifications": "Notificaciones",
+    "moneyOverview": "Resumen",
+    "salesByEvent": "Ventas por evento",
+    "fees": "Comisiones"
   },
   "vocab": {
     "attendee": "Asistente",
@@ -1784,7 +1787,31 @@
     "added": "Dominio añadido. Ahora publica los registros DNS que se muestran arriba.",
     "managedMissing": "Tu dirección gratuita {host} aún no está configurada.",
     "managedCreate": "Configurar mi dirección gratuita",
-    "noAccess": "Solo los propietarios y administradores pueden cambiar los dominios."
+    "noAccess": "Solo los propietarios y administradores pueden cambiar los dominios.",
+    "wizard": {
+      "label": "Conectar {host}",
+      "steps": "Pasos para conectar {host}",
+      "step": {
+        "domain": "Dominio añadido",
+        "dns": "Registros DNS",
+        "verify": "Verificado",
+        "ssl": "Conexión segura",
+        "primary": "Principal"
+      },
+      "dns": {
+        "signIn": "Inicia sesión donde gestionas el DNS de tu dominio (tu registrador o un servicio como Cloudflare).",
+        "open": "Abre la configuración DNS de este dominio.",
+        "add": "Añade cada registro de abajo tal como aparece. Elimina otros registros A o CNAME con el mismo nombre.",
+        "back": "Vuelve aquí y selecciona Comprobar ahora."
+      },
+      "copyName": "nombre del registro {type}",
+      "copyValue": "valor del registro {type}",
+      "copy": "Copiar",
+      "copied": "Copiado",
+      "verify": "Encontramos tus registros DNS y los estamos verificando. Vuelve a comprobar en unos minutos.",
+      "ssl": "Tu dominio está verificado. Estamos emitiendo su certificado seguro (https), lo que suele tardar unos minutos.",
+      "primary": "{host} está activo. Hazlo principal para que tus enlaces, entradas y correos lo usen."
+    }
   },
   "suspensions": {
     "pause_checkout": "El soporte de Yayatoh ha pausado la venta de entradas.",
@@ -3419,6 +3446,16 @@
       "editListing": "Editar la ficha del directorio"
     },
     "layoutLibrary": "Biblioteca de planos",
+    "createNext": "Las fotos y el resto de los datos (dirección, mapa, accesibilidad) vienen después.",
+    "createdNext": "Añade fotos ahora y luego completa los datos de abajo.",
+    "steps": {
+      "label": "Nuevo recinto",
+      "create": "Crear",
+      "photos": "Fotos",
+      "details": "Datos"
+    },
+    "detailsTitle": "Datos",
+    "photo": "Foto",
     "emptyAction": "Añade tu primer recinto",
     "emptyViewerAction": "Explorar el directorio de recintos"
   },
@@ -3700,13 +3737,14 @@
     "saveTemplate": "Guardar plantilla",
     "nameTaken": "Ese nombre ya está en uso. Elige otro.",
     "invalid": "Revisa este valor.",
+    "headerSave": "Guardar como plantilla",
     "backToEvent": "Volver al resumen del evento"
   },
   "series": {
     "title": "Series",
     "description": "Agrupa eventos en giras, temporadas o festivales. Cada serie tiene una página pública con sus próximos eventos.",
     "emptyTitle": "Aún no hay series",
-    "emptyDescription": "Crea una serie y añádele eventos desde la página Fechas de cada evento.",
+    "emptyDescription": "Crea una serie abajo o ponle nombre al crear un evento.",
     "caption": "Series",
     "name": "Nombre",
     "descriptionField": "Descripción (opcional)",
@@ -3728,14 +3766,27 @@
     "title": "Plantillas",
     "description": "Crea eventos a partir de tus propias plantillas. Un evento creado desde una plantilla es un borrador sin ventas.",
     "emptyTitle": "Aún no hay plantillas",
-    "emptyDescription": "Abre un evento, elige Duplicar y plantilla y guárdalo como plantilla.",
+    "emptyDescription": "Crea una desde cero con Nueva plantilla, copia una plantilla inicial o guarda un evento como plantilla desde su encabezado.",
     "contents": "{ticketTypes, plural, one {# tipo de entrada} other {# tipos de entrada}} · {questions, plural, one {# pregunta} other {# preguntas}} · {seats, plural, =0 {sin plano de sala} one {# asiento} other {# asientos}}",
     "delete": "Eliminar",
     "deleteFor": "Eliminar la plantilla {name}",
     "use": "Crear un evento a partir de {name}",
     "timezone": "Horas en {timezone}.",
     "createEvent": "Crear evento",
-    "pickEvent": "Elige un evento para guardar"
+    "newTemplate": "Nueva plantilla",
+    "summary": "{sections, plural, =0 {sin secciones de página} one {# sección de página} other {# secciones de página}} · {checklist, plural, =0 {sin elementos de lista} one {# elemento de lista} other {# elementos de lista}}",
+    "originEvent": "Guardada desde un evento",
+    "originScratch": "Creada desde cero",
+    "edit": "Editar",
+    "editFor": "Editar la plantilla {name}",
+    "duplicate": "Duplicar",
+    "duplicateFor": "Duplicar la plantilla {name}",
+    "archive": "Archivar",
+    "archiveFor": "Archivar la plantilla {name}",
+    "restore": "Restaurar",
+    "restoreFor": "Restaurar la plantilla {name}",
+    "archivedTitle": "Plantillas archivadas ({count})",
+    "archivedHint": "Las plantillas archivadas no aparecen en ningún selector. Los eventos creados con ellas no cambian."
   },
   "publicSeries": {
     "eyebrow": "Una serie de {org}",
@@ -4338,6 +4389,21 @@
       "floorPlanChosen": "Elige un plano para el salón o crea uno a partir de números.",
       "guestSitePublished": "Publica el sitio web protegido con contraseña que abren tus invitados.",
       "tablesSponsors": "Pon nombre a tus mesas y a sus patrocinadores."
+    },
+    "own": {
+      "title": "Tu lista de comprobación",
+      "hint": "Tus propias tareas para este evento, además de las comprobaciones de arriba. Márcalas a medida que avances.",
+      "empty": "Aún no hay nada. Añade tu primera tarea.",
+      "list": "Tus elementos de la lista",
+      "progress": "{done} de {total} hechos",
+      "newItem": "Nuevo elemento",
+      "add": "Añadir elemento",
+      "added": "Elemento añadido.",
+      "invalid": "Escribe de 1 a 200 caracteres.",
+      "tooMany": "Esta lista está llena. Quita antes un elemento.",
+      "markDone": "Marcar {title} como hecho",
+      "markOpen": "Marcar {title} como pendiente",
+      "remove": "Quitar {title}"
     }
   },
   "program": {
@@ -4856,7 +4922,18 @@
     "invalidCode": "Ese código no funcionó. Inténtalo de nuevo.",
     "invalidPassword": "Esa contraseña no es correcta.",
     "rateLimited": "Demasiados intentos. Espera 15 minutos e inténtalo de nuevo.",
-    "unauthenticated": "Tu sesión terminó. Vuelve a iniciar sesión."
+    "unauthenticated": "Tu sesión terminó. Vuelve a iniciar sesión.",
+    "again": "Confirmar que eres tú",
+    "retry": "Intentar de nuevo",
+    "problem": {
+      "impersonating": "Estás actuando como este miembro, así que no puedes confirmar por él. Pídele que haga este cambio.",
+      "unauthenticated": "Tu sesión ha terminado. Vuelve a iniciar sesión.",
+      "failed": "No pudimos iniciar la confirmación. Revisa tu conexión e inténtalo de nuevo."
+    },
+    "persona": {
+      "explain": "Cuenta de demostración: inició sesión sin autenticador, así que puedes confirmar sin código. Nunca se ofrece en el sitio real.",
+      "confirm": "Continuar sin código (cuenta de demostración)"
+    }
   },
   "surveys": {
     "title": "Encuestas",
@@ -6810,7 +6887,10 @@
     "gala": {
       "name": "Gala",
       "description": "Entradas, mesas y patrocinadores, asientos, donaciones y registro en el lugar."
-    }
+    },
+    "copy": "Copiar a tus plantillas",
+    "copyFor": "Copiar la plantilla inicial {name} a tus plantillas",
+    "readOnly": "Solo lectura. Cópiala a tus plantillas para cambiar sus entradas, secciones o lista de comprobación."
   },
   "profileCopy": {
     "wedding": {
@@ -6891,7 +6971,9 @@
       "event": "Evento",
       "mode": "Modo",
       "starts": "Empieza",
-      "readiness": "Preparación"
+      "readiness": "Preparación",
+      "sales": "Ventas",
+      "tickets": "Entradas"
     },
     "manual": "Fijado a mano",
     "role": {
@@ -6962,9 +7044,10 @@
       "readiness": {
         "title": "Preparación",
         "score": "Preparación {score} %",
-        "blocking": "Bloqueante",
-        "todo": "También pendiente",
-        "allDone": "Todo listo."
+        "allDone": "Todo listo.",
+        "count": "{done} de {total} hechos",
+        "required": "Necesario para vender",
+        "recommended": "Recomendado"
       },
       "sales": {
         "title": "Ventas",
@@ -7011,7 +7094,9 @@
       "alerts": {
         "title": "Alertas",
         "pending": "Las alertas aparecerán aquí cuando se activen las reglas de alerta.",
-        "none": "No hay alertas abiertas."
+        "none": "No hay alertas abiertas.",
+        "watching": "Las reglas de alerta vigilan ventas, pagos, dispositivos, aforo e invitados, y aparecen aquí.",
+        "viewAll": "Ver todas las alertas"
       },
       "entrances": {
         "title": "Accesos"
@@ -7162,6 +7247,52 @@
         "over": "{domains, plural, one {# dominio de envío} many {# dominios de envío} other {# dominios de envío}} y {campaigns, plural, one {# campaña} many {# campañas} other {# campañas}} por encima de los umbrales",
         "open": "Abrir la entregabilidad del correo"
       },
+      "rsvp": {
+        "title": "Confirmaciones",
+        "allAnswered": "Todos los invitados han respondido.",
+        "noneInvited": "Aún no hay nadie invitado a un subevento.",
+        "responded": "{responded} de {invited} invitados han respondido",
+        "meter": "Respuestas recibidas",
+        "parties": "Grupos sin responder: {count}",
+        "notSent": "Invitación aún no enviada: {count}",
+        "deadline": "Fecha límite: {date}",
+        "noDeadline": "Sin fecha límite de respuesta",
+        "open": "Abrir las respuestas"
+      },
+      "guestSeating": {
+        "title": "Mesas de invitados",
+        "noChart": "Aún no hay plano para los invitados. Elige uno en Asientos.",
+        "noGuests": "Aún no hay invitados que sentar.",
+        "allSeated": "Todos los invitados que no declinaron tienen mesa.",
+        "seated": "{seated} de {guests} invitados tienen mesa",
+        "listLabel": "Invitados sin mesa",
+        "guestOf": "Acompañante de {name}",
+        "more": "+{count} más",
+        "open": "Sentar a los invitados"
+      },
+      "meals": {
+        "title": "Menús y dietas",
+        "attending": "Asisten: {count}",
+        "noneAttending": "Los menús se cuentan cuando los invitados confirman.",
+        "caption": "Menús de los invitados que asisten",
+        "colMeal": "Menú",
+        "colGuests": "Invitados",
+        "other": "Otra elección",
+        "none": "Sin menú elegido",
+        "dietary": "Requisitos dietéticos: {count}",
+        "accessibility": "Necesidades de accesibilidad: {count}",
+        "open": "Abrir las respuestas RSVP"
+      },
+      "arrivals": {
+        "title": "Llegadas de invitados",
+        "arrivedOf": "Han llegado {arrived} de {expected} invitados esperados",
+        "notArrived": "Aún no han llegado: {count}",
+        "none": "Aún no ha llegado nadie.",
+        "noExpected": "Aún no se espera a ningún invitado.",
+        "recent": "Últimas llegadas",
+        "guestOf": "Acompañante de {name}",
+        "open": "Abrir la vista del día"
+      },
       "sessionLevel": {
         "none": "Sin límite",
         "ok": "Por debajo del {near} %",
@@ -7249,6 +7380,49 @@
       "statusOn": "Activo",
       "statusOff": "Desactivado",
       "emptyAction": "Crear un enlace de pantalla"
+    },
+    "hero": {
+      "startsIn": "Empieza en {duration}",
+      "endsIn": "Termina en {duration}",
+      "ended": "Terminó hace {duration}",
+      "nextLabel": "Siguiente paso",
+      "blocking": "Necesario antes de poder vender",
+      "next": {
+        "readiness": "Completa: {item}",
+        "scanner": "Registra a los invitados en la puerta",
+        "publicPage": "Todo listo. Mira la página del evento como la ven los invitados.",
+        "report": "Ha terminado. Mira cómo fue.",
+        "none": "Ahora mismo no hay nada pendiente."
+      },
+      "do": {
+        "alert": "Resolver",
+        "readiness": "Hacerlo ahora",
+        "scanner": "Empezar a escanear",
+        "publicPage": "Ver página del evento",
+        "report": "Abrir el informe"
+      }
+    },
+    "kpi": {
+      "title": "Cifras clave",
+      "sales": "Ventas",
+      "salesToday": "{amount} hoy",
+      "tickets": "Entradas vendidas",
+      "ofCapacity": "de {capacity}",
+      "noCapacity": "Aún no hay entradas a la venta",
+      "checkins": "Registrados",
+      "ofValid": "de {valid} entradas válidas",
+      "alerts": "Alertas abiertas",
+      "allClear": "Todo en orden",
+      "needsYou": "Te necesita",
+      "critical": "{count, plural, =0 {Ninguna crítica} one {# crítica} other {# críticas}}"
+    },
+    "soldOf": "{sold} de {capacity}",
+    "overviewCounts": "Eventos por modo",
+    "overviewGroup": {
+      "live": "En directo ({count})",
+      "pre_show": "Previa ({count})",
+      "planning": "En planificación ({count})",
+      "wrap": "En cierre ({count})"
     }
   },
   "alerts": {
@@ -7344,6 +7518,9 @@
       "campaignFailed": "Abrir las campañas",
       "disputeDeadline": "Abrir las disputas",
       "assistanceOverdue": "Abrir las solicitudes de ayuda",
+      "rsvpPending": "Abrir las respuestas",
+      "guestsUnseated": "Sentar a los invitados",
+      "mealsMissing": "Abrir las respuestas RSVP",
       "pledgesUnpaid": "Abrir los compromisos",
       "sessionsNearCapacity": "Abrir sesiones",
       "sessionWaitlists": "Abrir la inscripción a sesiones",
@@ -7377,6 +7554,9 @@
       "campaignFailed": "{count, plural, one {Un envío de campaña falló hoy} other {{countWords} envíos de campaña fallaron hoy}}",
       "disputeDeadline": "{count, plural, one {Una disputa necesita pruebas pronto} other {{countWords} disputas necesitan pruebas pronto}}",
       "assistanceOverdue": "{count, plural, one {{countWords} solicitud de ayuda lleva demasiado esperando} other {{countWords} solicitudes de ayuda llevan demasiado esperando}}",
+      "rsvpPending": "{count, plural, one {Un invitado no ha respondido a la invitación} other {{countWords} invitados no han respondido a la invitación}}",
+      "guestsUnseated": "{count, plural, one {Un invitado no tiene mesa} other {{countWords} invitados no tienen mesa}}",
+      "mealsMissing": "{count, plural, one {Un invitado que asiste no ha elegido menú} other {{countWords} invitados que asisten no han elegido menú}}",
       "pledgesUnpaid": "{count, plural, one {Un compromiso sigue sin pagar 14 días después del evento} other {{countWords} compromisos siguen sin pagar 14 días después del evento}}",
       "sessionsNearCapacity": "{count, plural, one {{countWords} sesión supera el 95 % de su capacidad} other {{countWords} sesiones superan el 95 % de su capacidad}}",
       "sessionWaitlists": "{count, plural, one {{countWords} sesión tiene una lista de espera larga} other {{countWords} sesiones tienen listas de espera largas}}",
@@ -15271,6 +15451,376 @@
     "timeZoneNote": "Horas en {zone}",
     "selected": "Seleccionado"
   },
+  "seriesField": {
+    "label": "Serie (opcional)",
+    "hint": "Agrupa este evento con otros en una gira o temporada. Escribe un nombre nuevo para crear una.",
+    "none": "Sin serie",
+    "newOption": "Nueva serie: {name}",
+    "summary": "Serie",
+    "errors": {
+      "taken": "Ya existe una serie con este nombre. Elígela de la lista.",
+      "missing": "Esa serie ya no existe. Elige otra.",
+      "name": "Escribe un nombre de serie de 2 a 160 caracteres."
+    }
+  },
+  "seriesLink": {
+    "partOf": "Parte de {name}"
+  },
+  "seriesPage": {
+    "back": "Todas las series",
+    "tabs": {
+      "label": "Vistas de la serie",
+      "events": "Eventos",
+      "details": "Detalles"
+    },
+    "columns": {
+      "event": "Evento",
+      "status": "Estado",
+      "dates": "Fechas",
+      "sales": "Ventas",
+      "actions": "Acciones"
+    },
+    "sold": "{count, plural, one {{n} entrada vendida} other {{n} entradas vendidas}}",
+    "noSales": "Aún no hay ventas",
+    "remove": "Quitar de la serie",
+    "removeFor": "Quitar {name} de la serie",
+    "createNext": "Crear el siguiente evento de la serie",
+    "createIn": "Crear evento en esta serie",
+    "added": "Evento añadido a la serie.",
+    "removed": "Evento quitado de la serie. El evento en sí no cambia.",
+    "deleted": "Serie eliminada. Sus eventos no cambian.",
+    "eventsHeading": "{count, plural, one {# evento} other {# eventos}}",
+    "emptyTitle": "Aún no hay eventos en esta serie",
+    "emptyDescription": "Crea un evento en esta serie o añade uno que ya tengas.",
+    "emptyReadOnly": "Los eventos que se añadan a esta serie aparecerán aquí.",
+    "caption": "Eventos de {name}",
+    "add": {
+      "heading": "Añadir un evento existente",
+      "label": "Evento",
+      "placeholder": "Elige un evento",
+      "hint": "Un evento que está en otra serie pasa a esta.",
+      "option": "{name} · {when}",
+      "optionMoves": "{name} · {when} (en {series})",
+      "required": "Elige un evento para añadir.",
+      "submit": "Añadir a la serie"
+    },
+    "next": {
+      "back": "Volver a {name}",
+      "title": "Crear el siguiente evento de la serie",
+      "description": "Un nuevo borrador en {name} con la configuración del último evento.",
+      "copies": "Copia la configuración, los tipos de entrada, las preguntas y el plano de asientos de {name} ({when}). Los pedidos, asistentes y registros de entrada no se copian.",
+      "name": "Nombre del evento",
+      "startsAt": "Empieza",
+      "startsAtHint": "En la zona horaria del evento ({zone}).",
+      "nameInvalid": "Escribe un nombre de 2 a 160 caracteres.",
+      "startInvalid": "Escribe una fecha y hora de inicio válidas.",
+      "submit": "Crear borrador"
+    },
+    "details": {
+      "heading": "Detalles de la serie",
+      "address": "Página pública:",
+      "saved": "Serie guardada.",
+      "save": "Guardar cambios",
+      "deleteHeading": "Eliminar serie",
+      "deleteHint": "Al eliminar la serie desaparece su página pública. Sus eventos se mantienen, fuera de cualquier serie.",
+      "delete": "Eliminar serie"
+    }
+  },
+  "templateBuilder": {
+    "breadcrumb": "Ruta de navegación",
+    "newTitle": "Nueva plantilla",
+    "newDescription": "Empieza por el tipo de evento. Las entradas, las secciones de página y una lista de comprobación se añaden en la siguiente pantalla.",
+    "profileLegend": "¿Qué tipo de evento?",
+    "profileInvalid": "Elige un tipo de evento.",
+    "profileHelp": {
+      "wedding": "Invitados, confirmaciones, asientos, una web privada para invitados y el gran día. Nunca aparece en público.",
+      "gala": "Entradas, mesas y patrocinadores, asientos, donaciones y acreditación.",
+      "concert": "Entradas, fans, marketing y acceso rápido en la puerta.",
+      "conference": "Inscripción, sesiones, ponentes, expositores, patrocinadores y acreditaciones.",
+      "community": "Encuentros y clases: inscripciones gratis o de pago, fechas recurrentes y acceso.",
+      "agency": "Eventos que organizas para clientes, con su marca y sus informes.",
+      "other": "Un evento general: entradas, asistentes, una página y acceso."
+    },
+    "name": "Nombre de la plantilla",
+    "nameInvalid": "Escribe un nombre de 2 a 120 caracteres.",
+    "nameTaken": "Ese nombre ya está en uso. Elige otro.",
+    "description": "Descripción (opcional)",
+    "duration": "Duración predeterminada",
+    "hours": "Horas",
+    "minutes": "Minutos",
+    "durationHint": "Los eventos creados con ella terminan este tiempo después de empezar.",
+    "durationInvalid": "Escribe una duración entre 15 minutos y 14 días.",
+    "timezone": "Zona horaria",
+    "timezoneHint": "El inicio de los nuevos eventos se introduce en esta zona.",
+    "currency": "Moneda",
+    "create": "Crear plantilla",
+    "steps": "Pasos de la plantilla",
+    "step": {
+      "profile": "Tipo de evento",
+      "tickets": "Tipos de entrada",
+      "sections": "Secciones de página",
+      "content": "Contenido de la página",
+      "checklist": "Lista de comprobación"
+    },
+    "created": "Plantilla creada. Añade abajo sus tipos de entrada, secciones de página y lista de comprobación.",
+    "copied": "Plantilla inicial copiada a tus plantillas. Complétala abajo.",
+    "duplicated": "Plantilla duplicada. Estás editando la copia.",
+    "archivedNotice": "Esta plantilla está archivada: no aparece en ningún selector y no se puede cambiar. Restáurala para volver a usarla.",
+    "useAction": "Crear un evento",
+    "durationHours": "{hours, plural, one {# hora} other {# horas}}",
+    "durationMinutes": "{minutes, plural, one {# minuto} other {# minutos}}",
+    "profileTitle": "Tipo de evento",
+    "profileFixed": "El tipo de evento se fija al crear la plantilla. Para otro tipo, crea una plantilla nueva.",
+    "ticketsTitle": "Tipos de entrada predeterminados",
+    "ticketsHint": "Cada evento creado con la plantilla empieza con estos, sin nada vendido.",
+    "ticketsEmpty": "Aún no hay tipos de entrada. Añade el primero abajo.",
+    "ticketsList": "Tipos de entrada",
+    "ticketName": "Nombre de la entrada",
+    "ticketNameInvalid": "Escribe un nombre de 1 a 120 caracteres.",
+    "ticketDescription": "Descripción de la entrada (opcional)",
+    "price": "Precio ({currency})",
+    "priceInvalid": "Escribe un precio como 25 o 25.00.",
+    "quantity": "Cantidad disponible",
+    "quantityInvalid": "Escribe una cantidad de 1 a 1.000.000.",
+    "addTicket": "Añadir tipo de entrada",
+    "ticketAdded": "Tipo de entrada añadido.",
+    "free": "Gratis",
+    "ticketLine": "{price} · {quantity, plural, one {# disponible} other {# disponibles}}",
+    "removeTicket": "Quitar el tipo de entrada {name}",
+    "seatPriced": "Lo usa el plano de sala guardado",
+    "sectionsTitle": "Secciones de página",
+    "sectionsHint": "Los bloques de la página del evento, en este orden.",
+    "sectionsEmpty": "Aún no hay secciones de página. Añade la primera abajo.",
+    "sectionsList": "Secciones de página en orden",
+    "addSection": "Añadir una sección de página",
+    "moveUp": "Subir {title}",
+    "moveDown": "Bajar {title}",
+    "removeSection": "Quitar la sección {title}",
+    "contentTitle": "Contenido de la página",
+    "contentHint": "Lo que cada evento creado con la plantilla muestra en su página.",
+    "tagline": "Lema (opcional)",
+    "venueName": "Lugar (opcional)",
+    "city": "Ciudad (opcional)",
+    "visibility": "Quién puede encontrarlo",
+    "settingsTitle": "Nombre y valores predeterminados",
+    "save": "Guardar cambios",
+    "saved": "Cambios guardados.",
+    "checklistTitle": "Lista de comprobación",
+    "checklistHint": "Tus propias tareas. Cada evento creado con la plantilla empieza con ellas pendientes, en su guía de configuración.",
+    "checklistEmpty": "Aún no hay elementos.",
+    "checklistList": "Elementos de la lista",
+    "checklistItem": "Nuevo elemento de la lista",
+    "itemInvalid": "Escribe de 1 a 200 caracteres.",
+    "tooMany": "Esta lista está llena. Quita antes un elemento.",
+    "addItem": "Añadir elemento",
+    "itemAdded": "Elemento añadido.",
+    "removeItem": "Quitar el elemento {title}",
+    "eventsTitle": "Eventos creados con ella",
+    "eventsEmpty": "Aún no hay eventos. Crea el primero abajo.",
+    "eventsList": "Eventos creados con esta plantilla",
+    "useTitle": "Crear un evento con esta plantilla",
+    "useHint": "Un borrador nuevo con las entradas, las secciones de página, el contenido y la lista de comprobación de la plantilla."
+  },
+  "money": {
+    "export": "Exportar CSV",
+    "periodForm": "Elegir un período",
+    "tabs": {
+      "label": "Páginas de finanzas",
+      "overview": "Resumen",
+      "payouts": "Pagos",
+      "sales": "Ventas por evento",
+      "fees": "Comisiones"
+    },
+    "grain": {
+      "label": "Gráfico por",
+      "auto": "Automático",
+      "day": "Día",
+      "week": "Semana",
+      "month": "Mes"
+    },
+    "overview": {
+      "title": "Resumen financiero",
+      "description": "Lo que vendió, lo que se descontó y lo que llegó a su banco. Los días se muestran en la zona horaria {timeZone}.",
+      "range": "{from} – {to}",
+      "allTime": "Todo el historial",
+      "comparedWith": "en comparación con {from} – {to}",
+      "net": "Neto",
+      "netChange": "{change} frente al período anterior",
+      "netExplained": "Bruto menos reembolsos, disputas perdidas y comisiones.",
+      "new": "Nuevo",
+      "previous": "Período anterior: {amount}",
+      "gross": "Ventas brutas",
+      "refunds": "Reembolsos",
+      "fees": "Comisiones",
+      "disputes": "Disputas perdidas",
+      "payouts": "Pagado",
+      "keyNumbers": "Cifras clave en {currency}",
+      "inCurrency": "En {currency}",
+      "nextPayout": "Próximo pago",
+      "nextPayoutOn": "Previsto el {date} · {event}",
+      "noNextPayout": "No hay ningún pago programado. Las ventas en línea se pagan después de cada evento.",
+      "toPayouts": "Ver todos los pagos",
+      "chart": {
+        "day": "Ventas brutas por día",
+        "week": "Ventas brutas por semana",
+        "month": "Ventas brutas por mes"
+      },
+      "bucket": {
+        "day": "Día",
+        "week": "Semana del",
+        "month": "Mes"
+      },
+      "chartNote": "Los reembolsos y las comisiones figuran en la tabla de datos.",
+      "showData": "Mostrar los datos",
+      "noSalesInPeriod": "No hay ventas ni reembolsos en este período.",
+      "emptyTitle": "No hubo movimientos en este período",
+      "emptyDescription": "Las ventas, los reembolsos y los pagos aparecen aquí a medida que se producen. Pruebe con un período más largo o venda sus primeras entradas.",
+      "showAllTime": "Mostrar todo el historial",
+      "createEvent": "Crear un evento"
+    },
+    "payouts": {
+      "summary": "Resumen de pagos",
+      "next": "Próximo pago",
+      "nextOn": "Previsto el {date} · {event}",
+      "nothingScheduled": "Aún no hay nada programado.",
+      "held": "Retenido para sus eventos",
+      "heldSub": "{count, plural, =0 {Ningún evento tiene fondos pendientes.} one {# evento a la espera de su fecha de liberación.} many {# eventos a la espera de su fecha de liberación.} other {# eventos a la espera de su fecha de liberación.}}",
+      "inReserve": "En reserva",
+      "reserveNext": "La próxima devolución será el {date}.",
+      "noReserve": "No hay reserva retenida.",
+      "owed": "Importe adeudado",
+      "owedSub": "Se descontará de su próximo pago.",
+      "upcoming": "Próximos pagos",
+      "upcomingEmptyTitle": "Aún no hay pagos en camino",
+      "upcomingEmpty": "Cuando Yayatoh cobre el importe de las entradas por usted, el pago de cada evento aparecerá aquí con su fecha.",
+      "toOverview": "Ver el resumen financiero",
+      "payoutOf": "{event}: {amount}",
+      "reserveOf": "Reserva devuelta · {event}: {amount}",
+      "expected": "{event}: unos {amount}",
+      "heldDetail": "{held} retenido, {reserve} en reserva",
+      "reserveBack": "Devolución de la reserva · {event}: hasta {amount}",
+      "reserveDetail": "{kept} retenido en el pago",
+      "status": {
+        "held": "Retenido hasta la liberación",
+        "ready": "Enviando",
+        "waiting_account": "A la espera de su cuenta de pagos",
+        "failed": "Reintentando",
+        "transferred": "Pagado"
+      }
+    },
+    "payout": {
+      "metaTitle": "Pago",
+      "title": "Pago de {event}",
+      "titleReserve": "Reserva devuelta de {event}",
+      "description": "Liberado el {date}.",
+      "export": "Exportar pedidos (CSV)",
+      "summary": "De la liberación al pago",
+      "released": "Liberado de las ventas del evento",
+      "reserve": "Retenido como reserva",
+      "netted": "Descontado por importes adeudados",
+      "amount": "Pagado a usted",
+      "paidOn": "Enviado a su banco el {date}.",
+      "notYet": {
+        "ready": "Enviándose a su banco.",
+        "waiting_account": "A la espera de su cuenta de pagos.",
+        "failed": "La transferencia falló; se volverá a intentar."
+      },
+      "reserveOn": "La reserva se devolverá el {date}.",
+      "eventFinance": "{event}: análisis financiero",
+      "lines": "Pedidos de este pago",
+      "totals": "Totales",
+      "date": "Fecha",
+      "type": "Tipo",
+      "order": "Pedido",
+      "orderLink": "Pedido {ref} · {buyer}",
+      "buyer": "Comprador",
+      "gross": "Pagado por el comprador",
+      "fee": "Comisión",
+      "organizer": "Su parte",
+      "kind": {
+        "sale": "Venta",
+        "refund": "Reembolso"
+      },
+      "reserveTitle": "Una liberación de reserva",
+      "reserveExplain": "Este pago devuelve la reserva retenida en un pago anterior, menos lo recuperado desde entonces por reembolsos o disputas.",
+      "toOriginal": "Ver el pago original",
+      "noLinesTitle": "No hay pedidos",
+      "noLines": "Este pago no tiene líneas de pedido (se liberó antes de que se registraran las líneas de pedido).",
+      "back": "Todos los pagos"
+    },
+    "sales": {
+      "title": "Ventas por evento",
+      "description": "Pedidos, entradas e importes por evento en el período. Abra un evento para ver su análisis financiero completo.",
+      "descriptionNoFinance": "Pedidos, entradas y ventas brutas por evento en el período.",
+      "tableTitle": "Eventos",
+      "event": "Evento",
+      "orders": "Pedidos",
+      "tickets": "Entradas",
+      "gross": "Bruto",
+      "refunds": "Reembolsos",
+      "fees": "Comisiones",
+      "net": "Neto",
+      "openFinance": "{event}: análisis financiero",
+      "openAnalysis": "{event}: análisis de ventas",
+      "netNote": "El neto es el bruto menos reembolsos, disputas perdidas y comisiones del período.",
+      "emptyTitle": "No hay ventas en este período",
+      "empty": "Aquí se muestran los eventos con ventas o reembolsos en el período. Pruebe con un período más largo."
+    },
+    "fees": {
+      "title": "Comisiones",
+      "description": "Su plan de comisiones y todas las comisiones cobradas, por pedido y por pago.",
+      "plan": "Su plan de comisiones",
+      "planName": "Plan: {plan}",
+      "grandfathered": "Tarifas anteriores",
+      "override": "Tarifa acordada",
+      "rate": "{percent} + {fixed} por entrada de pago",
+      "ratePercent": "{percent} por entrada de pago",
+      "noFee": "Sin comisión",
+      "planNote": "Yayatoh fija las tarifas. Para consultarlas, contacte con el soporte.",
+      "totals": "Comisiones del período",
+      "net": "Comisiones en {currency}",
+      "takenRefunded": "{taken} cobrado, {refunded} devuelto",
+      "perOrder": "Comisiones por pedido",
+      "perPayout": "Comisiones por pago",
+      "date": "Fecha",
+      "order": "Pedido",
+      "event": "Evento",
+      "total": "Total del pedido",
+      "fee": "Comisión",
+      "feeRefunded": "Devuelto",
+      "payout": "Pago",
+      "paidOut": "Pagado",
+      "truncated": "Se muestran los últimos {count} pedidos. La exportación CSV contiene la misma lista.",
+      "noPayouts": "Aún no hay pagos.",
+      "emptyTitle": "No hay comisiones en este período",
+      "empty": "Aquí se muestran los pedidos con comisión en el período. Pruebe con un período más largo."
+    },
+    "csv": {
+      "period": "Inicio del período",
+      "currency": "Moneda",
+      "gross": "Bruto",
+      "refunds": "Reembolsos",
+      "fees": "Comisiones",
+      "event": "Evento",
+      "orders": "Pedidos",
+      "tickets": "Entradas",
+      "disputesLost": "Disputas perdidas",
+      "net": "Neto",
+      "date": "Fecha",
+      "status": "Estado",
+      "released": "Liberado",
+      "reserve": "Reserva",
+      "netted": "Compensado",
+      "amount": "Importe",
+      "type": "Tipo",
+      "order": "Pedido",
+      "buyer": "Comprador",
+      "fee": "Comisión",
+      "organizer": "Su parte",
+      "total": "Total del pedido",
+      "feeRefunded": "Comisión devuelta"
+    }
+  },
   "emptyActions": {
     "seeEvents": "Ver tus eventos",
     "eventHome": "Ir al inicio del evento",
@@ -15306,9 +15856,9 @@
     "templates": {
       "title": "Cómo funcionan las plantillas",
       "intro": "Una plantilla guarda la configuración de un evento (entradas, preguntas, secciones y contenido de la página) para que tu próximo evento empiece listo. Los eventos creados desde una plantilla son borradores sin ventas.",
-      "step1": "Abre un evento configurado como te gusta.",
-      "step2": "Elige Duplicar y plantilla y guárdalo como plantilla.",
-      "step3": "Vuelve aquí para crear eventos nuevos a partir de ella, o empieza con una plantilla inicial abajo."
+      "step1": "Elige el tipo de evento y su duración predeterminada.",
+      "step2": "Añade tipos de entrada, secciones de página y elementos de la lista de comprobación predeterminados.",
+      "step3": "Crea eventos a partir de ella: cada uno es un borrador con exactamente eso y sin ventas."
     },
     "series": {
       "title": "Cómo funcionan las series",
@@ -15346,6 +15896,28 @@
       "step1": "Elige el evento abajo y abre sus códigos promocionales.",
       "step2": "Añade un código con su descuento y, si quieres, un límite y fechas.",
       "step3": "Comparte el código. Los compradores lo introducen al pagar y se cuenta cada uso."
+    },
+    "money": {
+      "title": "Cómo se calculan sus ingresos",
+      "intro": "Cada cifra procede del libro contable, por moneda, para los días elegidos en la zona horaria de su organización.",
+      "step1": "El bruto es lo que pagaron los compradores, comisiones incluidas.",
+      "step2": "Se descuentan los reembolsos, las disputas perdidas y las comisiones de Yayatoh; las comisiones devueltas con un reembolso se vuelven a sumar.",
+      "step3": "Lo que queda es su neto. Las ventas en línea se pagan después de cada evento; las ventas que cobró directamente ya son suyas.",
+      "step4": "Lo pagado es lo que llegó a su banco en el período. La página Pagos muestra cada pago con el detalle de sus pedidos."
+    },
+    "payoutRules": {
+      "title": "Cuándo se envían los pagos",
+      "intro": "Estas reglas se aplican cuando Yayatoh cobra el importe de las entradas por usted.",
+      "step1": "Los ingresos de cada evento se pagan 5 días hábiles después de que termine.",
+      "step2": "Se retiene un 5 % como reserva durante 90 días ante posibles reembolsos o disputas, y después también se paga.",
+      "step3": "Cualquier importe adeudado (un reembolso o una disputa posterior al pago, comisiones de ventas que cobró directamente) se recupera mediante una reversión de transferencia cuando es posible; de lo contrario, se descuenta de su próximo pago."
+    },
+    "fees": {
+      "title": "Cómo funcionan las comisiones",
+      "intro": "Nuestro equipo fija las tarifas de comisión de Yayatoh en su acuerdo; no se pueden modificar aquí.",
+      "step1": "Cada entrada de pago lleva la comisión de su plan. Las entradas gratuitas no llevan comisión.",
+      "step2": "La comisión se descuenta de cada pedido y se indica en cada pago.",
+      "step3": "Cuando un reembolso devuelve la comisión, aparece en «Comisiones devueltas»."
     }
   }
 }

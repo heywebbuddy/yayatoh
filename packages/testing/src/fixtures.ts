@@ -120,6 +120,7 @@ import {
   voteCommand,
 } from '@yayatoh/engagement';
 import {
+  addChecklistItemCommand,
   addRecurringOccurrencesCommand,
   addSectionCommand,
   assignEventRoleCommand,
@@ -1533,7 +1534,25 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   );
   for (const e of [event, weekly])
     await executeCommand(setEventSeriesCommand, { eventId: e.id, seriesId: tour.id }, ctx(), ports);
-  await executeCommand(saveTemplateCommand, { eventId: event.id, name: `${name} template` }, ctx(), ports);
+  // U6: the organizer's own checklist item (a template made from the event carries it).
+  await executeCommand(
+    addChecklistItemCommand,
+    { eventId: event.id, title: `${name} walkthrough` },
+    ctx(),
+    ports,
+  );
+  const template = await executeCommand(
+    saveTemplateCommand,
+    { eventId: event.id, name: `${name} template` },
+    ctx(),
+    ports,
+  );
+  // U6 template → events link (template_events): the fixture event stands for one made from it.
+  await withTenant(systemCtx(org.id), (tx) =>
+    tx.execute(
+      sql`insert into templates.template_events (org_id, template_id, event_id) values (${org.id}, ${template.id}, ${event.id})`,
+    ),
+  );
   // M1.4c: a directory venue picked for the event, a quote request on it, and tags.
   const venue = await executeCommand(
     createVenueCommand,

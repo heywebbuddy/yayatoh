@@ -12,6 +12,10 @@ export const HELP_TOPICS = {
   sending: { steps: 4, query: 'sending domain' },
   eventType: { steps: 3, query: 'event type' },
   coupons: { steps: 3, query: 'promo code' },
+  // U5: the Money pages (the payout rules were prose on the Payouts page).
+  money: { steps: 4, query: 'net revenue' },
+  payoutRules: { steps: 3, query: 'payout schedule' },
+  fees: { steps: 3, query: 'platform fees' },
 } as const satisfies Record<string, { steps: number; query: string }>;
 
 export type HelpTopic = keyof typeof HELP_TOPICS;

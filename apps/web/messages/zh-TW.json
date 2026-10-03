@@ -380,7 +380,10 @@
     "plan": "方案與帳單",
     "webhooks": "Webhook",
     "sandboxes": "沙盒",
-    "notifications": "通知"
+    "notifications": "通知",
+    "moneyOverview": "總覽",
+    "salesByEvent": "依活動檢視銷售",
+    "fees": "手續費"
   },
   "vocab": {
     "attendee": "參加者",
@@ -1784,7 +1787,31 @@
     "added": "網域已新增。現在請發布上方顯示的 DNS 記錄。",
     "managedMissing": "你的免費網址 {host} 尚未設定。",
     "managedCreate": "設定我的免費網址",
-    "noAccess": "只有擁有者和管理員可以變更網域。"
+    "noAccess": "只有擁有者和管理員可以變更網域。",
+    "wizard": {
+      "label": "連接 {host}",
+      "steps": "連接 {host} 的步驟",
+      "step": {
+        "domain": "已新增網域",
+        "dns": "DNS 記錄",
+        "verify": "已驗證",
+        "ssl": "安全連線",
+        "primary": "主要位址"
+      },
+      "dns": {
+        "signIn": "登入你管理網域 DNS 的地方（網域註冊商或 Cloudflare 等服務）。",
+        "open": "開啟此網域的 DNS 設定。",
+        "add": "依照顯示內容準確新增下方每筆記錄。刪除同名的其他 A 或 CNAME 記錄。",
+        "back": "回到這裡並選擇「立即檢查」。"
+      },
+      "copyName": "{type} 記錄的名稱",
+      "copyValue": "{type} 記錄的值",
+      "copy": "複製",
+      "copied": "已複製",
+      "verify": "我們已找到你的 DNS 記錄，正在驗證。請幾分鐘後再檢查。",
+      "ssl": "你的網域已驗證。我們正在簽發安全（https）憑證，通常需要幾分鐘。",
+      "primary": "{host} 已生效。將其設為主要位址，讓你的連結、票券和電子郵件都使用它。"
+    }
   },
   "suspensions": {
     "pause_checkout": "票券販售已由 Yayatoh 支援團隊暫停。",
@@ -3419,6 +3446,16 @@
       "editListing": "編輯目錄資訊"
     },
     "layoutLibrary": "座位圖庫",
+    "createNext": "照片和其他資訊（地址、地圖、無障礙）將在下一步填寫。",
+    "createdNext": "現在新增照片，然後填寫下方的資訊。",
+    "steps": {
+      "label": "新場地",
+      "create": "建立",
+      "photos": "照片",
+      "details": "資訊"
+    },
+    "detailsTitle": "資訊",
+    "photo": "照片",
     "emptyAction": "新增第一個場地",
     "emptyViewerAction": "瀏覽場地目錄"
   },
@@ -3700,13 +3737,14 @@
     "saveTemplate": "儲存範本",
     "nameTaken": "此名稱已被使用，請換一個。",
     "invalid": "請檢查此值。",
+    "headerSave": "另存為範本",
     "backToEvent": "返回活動概覽"
   },
   "series": {
     "title": "系列",
     "description": "將活動歸入巡演、演出季或節慶。每個系列都有公開頁面，列出即將舉行的活動。",
     "emptyTitle": "還沒有系列",
-    "emptyDescription": "先建立系列，再於各活動的「場次」頁面將其加入。",
+    "emptyDescription": "在下方建立系列，或在建立活動時為系列命名。",
     "caption": "系列",
     "name": "名稱",
     "descriptionField": "說明（選填）",
@@ -3728,14 +3766,27 @@
     "title": "範本",
     "description": "使用你自己的範本建立新活動。由範本建立的活動是沒有銷售紀錄的草稿。",
     "emptyTitle": "還沒有範本",
-    "emptyDescription": "開啟一個活動，選擇「複製與範本」，將其儲存為範本。",
+    "emptyDescription": "使用「新增範本」從零建立，複製一個入門範本，或在活動頁首將活動另存為範本。",
     "contents": "{ticketTypes, plural, other {# 個票種}} · {questions, plural, other {# 個問題}} · {seats, plural, =0 {無座位圖} other {# 個座位}}",
     "delete": "刪除",
     "deleteFor": "刪除範本 {name}",
     "use": "用 {name} 建立活動",
     "timezone": "時間為 {timezone}。",
     "createEvent": "建立活動",
-    "pickEvent": "選擇要儲存的活動"
+    "newTemplate": "新增範本",
+    "summary": "{sections, plural, =0 {無頁面區塊} other {# 個頁面區塊}} · {checklist, plural, =0 {無清單事項} other {# 項清單事項}}",
+    "originEvent": "從活動儲存",
+    "originScratch": "從零建立",
+    "edit": "編輯",
+    "editFor": "編輯範本 {name}",
+    "duplicate": "複製",
+    "duplicateFor": "複製範本 {name}",
+    "archive": "封存",
+    "archiveFor": "封存範本 {name}",
+    "restore": "還原",
+    "restoreFor": "還原範本 {name}",
+    "archivedTitle": "已封存的範本（{count}）",
+    "archivedHint": "已封存的範本不會出現在任何選擇清單中。用它們建立的活動不受影響。"
   },
   "publicSeries": {
     "eyebrow": "{org} 的系列",
@@ -4338,6 +4389,21 @@
       "floorPlanChosen": "為場地選擇平面圖，或依數量產生一個。",
       "guestSitePublished": "發布賓客開啟的密碼保護網站。",
       "tablesSponsors": "為桌位和贊助商命名。"
+    },
+    "own": {
+      "title": "你的清單",
+      "hint": "此活動你自己的待辦事項，與上方檢查項並列。完成後逐項勾選。",
+      "empty": "這裡還沒有內容。新增你的第一項待辦。",
+      "list": "你的清單事項",
+      "progress": "已完成 {done}/{total}",
+      "newItem": "新事項",
+      "add": "新增事項",
+      "added": "事項已新增。",
+      "invalid": "請輸入 1 到 200 個字元。",
+      "tooMany": "此清單已滿。請先移除一項。",
+      "markDone": "將 {title} 標為已完成",
+      "markOpen": "將 {title} 標為未完成",
+      "remove": "移除 {title}"
     }
   },
   "program": {
@@ -4856,7 +4922,18 @@
     "invalidCode": "驗證碼無效，請再試一次。",
     "invalidPassword": "密碼不正確。",
     "rateLimited": "嘗試次數過多。請等候 15 分鐘後再試。",
-    "unauthenticated": "工作階段已結束，請重新登入。"
+    "unauthenticated": "工作階段已結束，請重新登入。",
+    "again": "確認是你本人",
+    "retry": "重試",
+    "problem": {
+      "impersonating": "你正以此成員的身分操作，無法代其確認。請對方自行完成此變更。",
+      "unauthenticated": "你的工作階段已結束。請重新登入。",
+      "failed": "無法開始確認。請檢查網路連線後重試。"
+    },
+    "persona": {
+      "explain": "示範帳號：它登入時未使用驗證器，因此可以不用驗證碼確認。正式網站上絕不會提供此選項。",
+      "confirm": "不用驗證碼繼續（示範帳號）"
+    }
   },
   "surveys": {
     "title": "問卷",
@@ -6810,7 +6887,10 @@
     "gala": {
       "name": "晚宴",
       "description": "門票、桌位與贊助商、座位、捐款和現場報到。"
-    }
+    },
+    "copy": "複製到你的範本",
+    "copyFor": "將入門範本 {name} 複製到你的範本",
+    "readOnly": "唯讀。複製到你的範本後即可修改票種、區塊或清單。"
   },
   "profileCopy": {
     "wedding": {
@@ -6891,7 +6971,9 @@
       "event": "活動",
       "mode": "模式",
       "starts": "開始時間",
-      "readiness": "準備度"
+      "readiness": "準備度",
+      "sales": "銷售額",
+      "tickets": "票券"
     },
     "manual": "手動設定",
     "role": {
@@ -6962,9 +7044,10 @@
       "readiness": {
         "title": "準備度",
         "score": "準備度 {score}%",
-        "blocking": "阻礙項目",
-        "todo": "其他待辦",
-        "allDone": "一切就緒。"
+        "allDone": "一切就緒。",
+        "count": "已完成 {done}/{total}",
+        "required": "開賣必需",
+        "recommended": "建議完成"
       },
       "sales": {
         "title": "銷售額",
@@ -7011,7 +7094,9 @@
       "alerts": {
         "title": "提醒",
         "pending": "啟用提醒規則後，提醒會顯示在這裡。",
-        "none": "沒有未處理的提醒。"
+        "none": "沒有未處理的提醒。",
+        "watching": "警示規則會監控銷售、付款、裝置、容量和來賓，並在此顯示。",
+        "viewAll": "查看所有警示"
       },
       "entrances": {
         "title": "入口"
@@ -7162,6 +7247,52 @@
         "over": "超過門檻：{domains, plural, other {# 個寄件網域}}，{campaigns, plural, other {# 個活動}}",
         "open": "開啟電子郵件送達率"
       },
+      "rsvp": {
+        "title": "出席回覆",
+        "allAnswered": "所有受邀賓客都已回覆。",
+        "noneInvited": "尚未邀請任何人參加分場活動。",
+        "responded": "{invited} 位受邀賓客中已有 {responded} 位回覆",
+        "meter": "已收到的回覆",
+        "parties": "未回覆的家庭：{count}",
+        "notSent": "尚未寄出邀請：{count}",
+        "deadline": "回覆截止：{date}",
+        "noDeadline": "未設定回覆截止日期",
+        "open": "開啟回覆"
+      },
+      "guestSeating": {
+        "title": "賓客座位",
+        "noChart": "還沒有賓客平面圖。請在座位中選擇一個。",
+        "noGuests": "暫時沒有需要安排座位的賓客。",
+        "allSeated": "每位未婉拒的賓客都有桌位。",
+        "seated": "{guests} 位賓客中有 {seated} 位已有桌位",
+        "listLabel": "沒有桌位的賓客",
+        "guestOf": "{name} 的同伴",
+        "more": "另外 {count} 位",
+        "open": "安排賓客座位"
+      },
+      "meals": {
+        "title": "餐點與飲食需求",
+        "attending": "出席：{count}",
+        "noneAttending": "賓客確認出席後才會統計餐點。",
+        "caption": "出席賓客的餐點",
+        "colMeal": "餐點",
+        "colGuests": "賓客",
+        "other": "其他選擇",
+        "none": "未選擇餐點",
+        "dietary": "飲食需求：{count}",
+        "accessibility": "無障礙需求：{count}",
+        "open": "開啟回覆詳情"
+      },
+      "arrivals": {
+        "title": "賓客到場",
+        "arrivedOf": "{expected} 位預期賓客中已到 {arrived} 位",
+        "notArrived": "尚未到場：{count}",
+        "none": "還沒有人到場。",
+        "noExpected": "暫無預期到場的賓客。",
+        "recent": "最近到場",
+        "guestOf": "{name} 的同伴",
+        "open": "開啟當天檢視"
+      },
       "sessionLevel": {
         "none": "不限名額",
         "ok": "低於 {near}%",
@@ -7249,6 +7380,49 @@
       "statusOn": "已開啟",
       "statusOff": "已關閉",
       "emptyAction": "建立螢幕連結"
+    },
+    "hero": {
+      "startsIn": "{duration}後開始",
+      "endsIn": "{duration}後結束",
+      "ended": "已於{duration}前結束",
+      "nextLabel": "下一步",
+      "blocking": "開賣前必須完成",
+      "next": {
+        "readiness": "待完成：{item}",
+        "scanner": "在門口為來賓報到",
+        "publicPage": "一切就緒。以來賓視角查看活動頁面。",
+        "report": "活動已結束。看看成效如何。",
+        "none": "目前沒有需要處理的事項。"
+      },
+      "do": {
+        "alert": "去處理",
+        "readiness": "立即完成",
+        "scanner": "開始掃描",
+        "publicPage": "查看活動頁面",
+        "report": "開啟報告"
+      }
+    },
+    "kpi": {
+      "title": "關鍵數據",
+      "sales": "銷售額",
+      "salesToday": "今日 {amount}",
+      "tickets": "已售票券",
+      "ofCapacity": "共 {capacity}",
+      "noCapacity": "尚無販售中的票券",
+      "checkins": "已報到",
+      "ofValid": "共 {valid} 張有效票券",
+      "alerts": "未處理警示",
+      "allClear": "一切正常",
+      "needsYou": "需要處理",
+      "critical": "{count, plural, =0 {無嚴重警示} other {# 個嚴重}}"
+    },
+    "soldOf": "{sold}/{capacity}",
+    "overviewCounts": "依模式分類的活動",
+    "overviewGroup": {
+      "live": "進行中（{count}）",
+      "pre_show": "開場前（{count}）",
+      "planning": "籌備中（{count}）",
+      "wrap": "收尾中（{count}）"
     }
   },
   "alerts": {
@@ -7344,6 +7518,9 @@
       "campaignFailed": "開啟行銷活動",
       "disputeDeadline": "開啟爭議佇列",
       "assistanceOverdue": "開啟求助請求",
+      "rsvpPending": "開啟回覆",
+      "guestsUnseated": "安排賓客座位",
+      "mealsMissing": "開啟回覆詳情",
       "pledgesUnpaid": "開啟認捐",
       "sessionsNearCapacity": "開啟場次",
       "sessionWaitlists": "開啟場次報名",
@@ -7377,6 +7554,9 @@
       "campaignFailed": "{count, plural, other {今天有 {countWords} 次行銷活動傳送失敗}}",
       "disputeDeadline": "{count, plural, other {有 {countWords} 起爭議需要盡快提交證據}}",
       "assistanceOverdue": "{count, plural, other {{countWords} 個求助請求等待過久}}",
+      "rsvpPending": "{count, plural, other {{countWords} 位賓客尚未回覆出席邀請}}",
+      "guestsUnseated": "{count, plural, other {{countWords} 位賓客沒有桌位}}",
+      "mealsMissing": "{count, plural, other {{countWords} 位出席賓客尚未選擇餐點}}",
       "pledgesUnpaid": "{count, plural, other {活動結束 14 天後仍有 {countWords} 筆認捐未付款}}",
       "sessionsNearCapacity": "{count, plural, other {{countWords}個場次已超過容量的 95 %}}",
       "sessionWaitlists": "{count, plural, other {{countWords}個場次的候補名單過長}}",
@@ -15271,6 +15451,376 @@
     "timeZoneNote": "{zone} 時間",
     "selected": "已選取"
   },
+  "seriesField": {
+    "label": "系列（選填）",
+    "hint": "將此活動與其他活動歸入巡演或季度。輸入新名稱即可建立系列。",
+    "none": "不屬於系列",
+    "newOption": "新系列：{name}",
+    "summary": "系列",
+    "errors": {
+      "taken": "已有同名系列。請從清單中選擇它。",
+      "missing": "該系列已不存在。請選擇其他系列。",
+      "name": "請輸入 2 到 160 個字元的系列名稱。"
+    }
+  },
+  "seriesLink": {
+    "partOf": "屬於{name}"
+  },
+  "seriesPage": {
+    "back": "所有系列",
+    "tabs": {
+      "label": "系列檢視",
+      "events": "活動",
+      "details": "詳細資料"
+    },
+    "columns": {
+      "event": "活動",
+      "status": "狀態",
+      "dates": "日期",
+      "sales": "銷售",
+      "actions": "操作"
+    },
+    "sold": "{count, plural, other {已售 {n} 張票}}",
+    "noSales": "尚無銷售",
+    "remove": "移出系列",
+    "removeFor": "將{name}移出系列",
+    "createNext": "建立系列中的下一場活動",
+    "createIn": "在此系列中建立活動",
+    "added": "活動已加入系列。",
+    "removed": "活動已移出系列。活動本身沒有變更。",
+    "deleted": "系列已刪除。其活動沒有變更。",
+    "eventsHeading": "{count, plural, other {# 場活動}}",
+    "emptyTitle": "此系列中還沒有活動",
+    "emptyDescription": "在此系列中建立活動，或加入已有的活動。",
+    "emptyReadOnly": "加入此系列的活動會顯示在這裡。",
+    "caption": "{name}的活動",
+    "add": {
+      "heading": "加入已有活動",
+      "label": "活動",
+      "placeholder": "選擇活動",
+      "hint": "屬於其他系列的活動會移到此系列。",
+      "option": "{name} · {when}",
+      "optionMoves": "{name} · {when}（在{series}中）",
+      "required": "請選擇要加入的活動。",
+      "submit": "加入系列"
+    },
+    "next": {
+      "back": "返回{name}",
+      "title": "建立系列中的下一場活動",
+      "description": "{name}中的新草稿，沿用最新一場活動的設定。",
+      "copies": "複製{name}（{when}）的設定、票種、問題和座位圖。訂單、參加者和報到記錄不會複製。",
+      "name": "活動名稱",
+      "startsAt": "開始",
+      "startsAtHint": "使用活動所在時區（{zone}）。",
+      "nameInvalid": "請輸入 2 到 160 個字元的名稱。",
+      "startInvalid": "請輸入有效的開始日期和時間。",
+      "submit": "建立草稿"
+    },
+    "details": {
+      "heading": "系列詳細資料",
+      "address": "公開頁面：",
+      "saved": "系列已儲存。",
+      "save": "儲存變更",
+      "deleteHeading": "刪除系列",
+      "deleteHint": "刪除系列會移除其公開頁面。其活動會保留，不再屬於任何系列。",
+      "delete": "刪除系列"
+    }
+  },
+  "templateBuilder": {
+    "breadcrumb": "導覽路徑",
+    "newTitle": "新增範本",
+    "newDescription": "先選擇活動類型。票種、頁面區塊和清單在下一個畫面新增。",
+    "profileLegend": "是什麼類型的活動？",
+    "profileInvalid": "請選擇活動類型。",
+    "profileHelp": {
+      "wedding": "賓客、回覆、座位安排、私人賓客網站和當天流程。從不公開展示。",
+      "gala": "門票、桌位與贊助商、座位安排、捐款和報到。",
+      "concert": "門票、粉絲、行銷和入口快速報到。",
+      "conference": "報名、議程、講者、展商、贊助商和名牌。",
+      "community": "聚會和課程：免費或付費報名、重複日期和報到。",
+      "agency": "為客戶舉辦的活動，使用客戶的品牌和報告。",
+      "other": "通用活動：門票、參與者、活動頁面和報到。"
+    },
+    "name": "範本名稱",
+    "nameInvalid": "請輸入 2 到 120 個字元的名稱。",
+    "nameTaken": "該名稱已被使用，請換一個。",
+    "description": "描述（選填）",
+    "duration": "預設時長",
+    "hours": "小時",
+    "minutes": "分鐘",
+    "durationHint": "用它建立的活動在開始後經過這段時間結束。",
+    "durationInvalid": "請輸入 15 分鐘到 14 天之間的時長。",
+    "timezone": "時區",
+    "timezoneHint": "新活動的開始時間依此時區填寫。",
+    "currency": "貨幣",
+    "create": "建立範本",
+    "steps": "範本步驟",
+    "step": {
+      "profile": "活動類型",
+      "tickets": "票種",
+      "sections": "頁面區塊",
+      "content": "頁面內容",
+      "checklist": "清單"
+    },
+    "created": "範本已建立。請在下方新增票種、頁面區塊和清單。",
+    "copied": "入門範本已複製到你的範本。請在下方填寫。",
+    "duplicated": "範本已複製。你正在編輯副本。",
+    "archivedNotice": "此範本已封存：不會出現在任何選擇清單中，也無法修改。還原後即可再次使用。",
+    "useAction": "建立活動",
+    "durationHours": "{hours, plural, other {# 小時}}",
+    "durationMinutes": "{minutes, plural, other {# 分鐘}}",
+    "profileTitle": "活動類型",
+    "profileFixed": "活動類型在建立範本時確定。如需其他類型，請新增範本。",
+    "ticketsTitle": "預設票種",
+    "ticketsHint": "用範本建立的每個活動都從這些票種開始，沒有任何銷售。",
+    "ticketsEmpty": "還沒有票種。請在下方新增第一個。",
+    "ticketsList": "票種",
+    "ticketName": "票種名稱",
+    "ticketNameInvalid": "請輸入 1 到 120 個字元的名稱。",
+    "ticketDescription": "票種說明（選填）",
+    "price": "價格（{currency}）",
+    "priceInvalid": "請輸入價格，如 25 或 25.00。",
+    "quantity": "可售數量",
+    "quantityInvalid": "請輸入 1 到 1,000,000 之間的數量。",
+    "addTicket": "新增票種",
+    "ticketAdded": "票種已新增。",
+    "free": "免費",
+    "ticketLine": "{price} · {quantity, plural, other {可售 #}}",
+    "removeTicket": "移除票種 {name}",
+    "seatPriced": "已儲存的座位圖正在使用",
+    "sectionsTitle": "頁面區塊",
+    "sectionsHint": "活動頁面上的區塊，依此順序顯示。",
+    "sectionsEmpty": "還沒有頁面區塊。請在下方新增第一個。",
+    "sectionsList": "按順序排列的頁面區塊",
+    "addSection": "新增頁面區塊",
+    "moveUp": "上移 {title}",
+    "moveDown": "下移 {title}",
+    "removeSection": "移除區塊 {title}",
+    "contentTitle": "頁面內容",
+    "contentHint": "用範本建立的每個活動在其頁面上顯示的內容。",
+    "tagline": "標語（選填）",
+    "venueName": "場地（選填）",
+    "city": "城市（選填）",
+    "visibility": "誰能找到它",
+    "settingsTitle": "名稱和預設值",
+    "save": "儲存變更",
+    "saved": "變更已儲存。",
+    "checklistTitle": "清單",
+    "checklistHint": "你自己的待辦事項。用範本建立的每個活動都會在設定指南中帶著這些未完成事項開始。",
+    "checklistEmpty": "還沒有清單事項。",
+    "checklistList": "清單事項",
+    "checklistItem": "新清單事項",
+    "itemInvalid": "請輸入 1 到 200 個字元。",
+    "tooMany": "此清單已滿。請先移除一項。",
+    "addItem": "新增事項",
+    "itemAdded": "事項已新增。",
+    "removeItem": "移除事項 {title}",
+    "eventsTitle": "用它建立的活動",
+    "eventsEmpty": "還沒有活動。請在下方建立第一個。",
+    "eventsList": "用此範本建立的活動",
+    "useTitle": "用此範本建立活動",
+    "useHint": "一個新的草稿，包含範本的票種、頁面區塊、內容和清單。"
+  },
+  "money": {
+    "export": "匯出 CSV",
+    "periodForm": "選擇期間",
+    "tabs": {
+      "label": "財務頁面",
+      "overview": "總覽",
+      "payouts": "撥款",
+      "sales": "依活動檢視銷售",
+      "fees": "手續費"
+    },
+    "grain": {
+      "label": "圖表單位",
+      "auto": "自動",
+      "day": "日",
+      "week": "週",
+      "month": "月"
+    },
+    "overview": {
+      "title": "財務總覽",
+      "description": "您的銷售額、扣除項目及入帳金額。日期依 {timeZone} 時間計算。",
+      "range": "{from} – {to}",
+      "allTime": "全部期間",
+      "comparedWith": "與 {from} – {to} 比較",
+      "net": "淨收入",
+      "netChange": "較上期 {change}",
+      "netExplained": "總銷售額減去退款、敗訴的爭議款項及手續費。",
+      "new": "新",
+      "previous": "上期：{amount}",
+      "gross": "總銷售額",
+      "refunds": "退款",
+      "fees": "手續費",
+      "disputes": "敗訴的爭議款項",
+      "payouts": "已撥款",
+      "keyNumbers": "關鍵數據（{currency}）",
+      "inCurrency": "以 {currency} 計",
+      "nextPayout": "下一筆撥款",
+      "nextPayoutOn": "預計 {date} · {event}",
+      "noNextPayout": "目前沒有排定的撥款。線上銷售款項於每場活動結束後撥款。",
+      "toPayouts": "查看所有撥款",
+      "chart": {
+        "day": "每日總銷售額",
+        "week": "每週總銷售額",
+        "month": "每月總銷售額"
+      },
+      "bucket": {
+        "day": "日",
+        "week": "週起始日",
+        "month": "月"
+      },
+      "chartNote": "退款與手續費請見資料表。",
+      "showData": "顯示資料",
+      "noSalesInPeriod": "此期間沒有銷售或退款。",
+      "emptyTitle": "此期間沒有資金異動",
+      "emptyDescription": "銷售、退款與撥款發生後會顯示於此。請嘗試較長的期間，或售出您的第一張票券。",
+      "showAllTime": "顯示全部期間",
+      "createEvent": "建立活動"
+    },
+    "payouts": {
+      "summary": "撥款摘要",
+      "next": "下一筆撥款",
+      "nextOn": "預計 {date} · {event}",
+      "nothingScheduled": "目前尚無排定項目。",
+      "held": "為您的活動暫扣",
+      "heldSub": "{count, plural, =0 {沒有待撥款的活動。} other {# 場活動等待撥款日期。}}",
+      "inReserve": "準備金",
+      "reserveNext": "下一筆將於 {date} 退還。",
+      "noReserve": "無保留準備金。",
+      "owed": "您的欠款",
+      "owedSub": "將從下一筆撥款中扣除。",
+      "upcoming": "即將撥款",
+      "upcomingEmptyTitle": "目前尚無待入帳款項",
+      "upcomingEmpty": "當 Yayatoh 代您收取票款時，每場活動的撥款及其日期將顯示於此。",
+      "toOverview": "查看財務總覽",
+      "payoutOf": "{event}：{amount}",
+      "reserveOf": "準備金退還 · {event}：{amount}",
+      "expected": "{event}：約 {amount}",
+      "heldDetail": "暫扣 {held}，保留準備金 {reserve}",
+      "reserveBack": "準備金退還 · {event}：最多 {amount}",
+      "reserveDetail": "撥款時保留 {kept}",
+      "status": {
+        "held": "暫扣至撥款日",
+        "ready": "傳送中",
+        "waiting_account": "等待您的收款帳戶",
+        "failed": "重試中",
+        "transferred": "已撥款"
+      }
+    },
+    "payout": {
+      "metaTitle": "撥款",
+      "title": "{event} 的撥款",
+      "titleReserve": "{event} 的準備金退還",
+      "description": "於 {date} 釋出。",
+      "export": "匯出訂單（CSV）",
+      "summary": "從釋出到撥款",
+      "released": "從活動銷售額釋出",
+      "reserve": "保留為準備金",
+      "netted": "抵扣您的欠款",
+      "amount": "支付給您",
+      "paidOn": "已於 {date} 匯入您的銀行帳戶。",
+      "notYet": {
+        "ready": "正在匯入您的銀行帳戶。",
+        "waiting_account": "等待您的收款帳戶。",
+        "failed": "轉帳失敗，系統將重試。"
+      },
+      "reserveOn": "準備金將於 {date} 退還。",
+      "eventFinance": "{event}：財務分析",
+      "lines": "此筆撥款包含的訂單",
+      "totals": "合計",
+      "date": "日期",
+      "type": "類型",
+      "order": "訂單",
+      "orderLink": "訂單 {ref} · {buyer}",
+      "buyer": "購票者",
+      "gross": "購票者支付",
+      "fee": "手續費",
+      "organizer": "您的分潤",
+      "kind": {
+        "sale": "銷售",
+        "refund": "退款"
+      },
+      "reserveTitle": "準備金釋出",
+      "reserveExplain": "此筆撥款退還先前撥款時保留的準備金，並扣除之後因退款或爭議款項收回的金額。",
+      "toOriginal": "查看原始撥款",
+      "noLinesTitle": "沒有訂單",
+      "noLines": "此筆撥款沒有訂單明細（釋出時尚未記錄訂單明細）。",
+      "back": "所有撥款"
+    },
+    "sales": {
+      "title": "依活動檢視銷售",
+      "description": "期間內每場活動的訂單、票券與金額。開啟活動可查看完整財務分析。",
+      "descriptionNoFinance": "期間內每場活動的訂單、票券與總銷售額。",
+      "tableTitle": "活動",
+      "event": "活動",
+      "orders": "訂單",
+      "tickets": "票券",
+      "gross": "總額",
+      "refunds": "退款",
+      "fees": "手續費",
+      "net": "淨收入",
+      "openFinance": "{event}：財務分析",
+      "openAnalysis": "{event}：銷售分析",
+      "netNote": "淨收入為期間內總額減去退款、敗訴的爭議款項及手續費。",
+      "emptyTitle": "此期間沒有銷售",
+      "empty": "期間內有銷售或退款的活動會列於此處。請嘗試較長的期間。"
+    },
+    "fees": {
+      "title": "手續費",
+      "description": "您的手續費方案，以及依訂單與依撥款收取的所有手續費。",
+      "plan": "您的手續費方案",
+      "planName": "方案：{plan}",
+      "grandfathered": "舊版費率",
+      "override": "協議費率",
+      "rate": "每張付費票券 {percent} + {fixed}",
+      "ratePercent": "每張付費票券 {percent}",
+      "noFee": "免手續費",
+      "planNote": "費率由 Yayatoh 設定。如需洽談，請聯絡客服。",
+      "totals": "期間內手續費",
+      "net": "手續費（{currency}）",
+      "takenRefunded": "已收取 {taken}，已退還 {refunded}",
+      "perOrder": "依訂單統計的手續費",
+      "perPayout": "依撥款統計的手續費",
+      "date": "日期",
+      "order": "訂單",
+      "event": "活動",
+      "total": "訂單總額",
+      "fee": "手續費",
+      "feeRefunded": "已退還",
+      "payout": "撥款",
+      "paidOut": "已撥款",
+      "truncated": "顯示最近 {count} 筆訂單。CSV 匯出包含相同清單。",
+      "noPayouts": "目前尚無撥款。",
+      "emptyTitle": "此期間沒有手續費",
+      "empty": "期間內產生手續費的訂單會列於此處。請嘗試較長的期間。"
+    },
+    "csv": {
+      "period": "期間起始",
+      "currency": "幣別",
+      "gross": "總額",
+      "refunds": "退款",
+      "fees": "手續費",
+      "event": "活動",
+      "orders": "訂單",
+      "tickets": "票券",
+      "disputesLost": "敗訴的爭議款項",
+      "net": "淨收入",
+      "date": "日期",
+      "status": "狀態",
+      "released": "已釋出",
+      "reserve": "準備金",
+      "netted": "已抵扣",
+      "amount": "金額",
+      "type": "類型",
+      "order": "訂單",
+      "buyer": "購票者",
+      "fee": "手續費",
+      "organizer": "您的分潤",
+      "total": "訂單總額",
+      "feeRefunded": "已退還手續費"
+    }
+  },
   "emptyActions": {
     "seeEvents": "查看你的活動",
     "eventHome": "前往活動首頁",
@@ -15306,9 +15856,9 @@
     "templates": {
       "title": "範本如何運作",
       "intro": "範本會儲存活動的設定（票券、問題、區塊與頁面內容），讓下一個活動一開始就準備就緒。由範本建立的活動是沒有銷售紀錄的草稿。",
-      "step1": "開啟一個已按你的需要設定好的活動。",
-      "step2": "選擇「複製與範本」，然後將其儲存為範本。",
-      "step3": "回到這裡即可用它建立新活動，或從下方的入門範本開始。"
+      "step1": "選擇活動類型及其預設時長。",
+      "step2": "新增預設票種、頁面區塊和清單事項。",
+      "step3": "用它建立活動：每個活動都是包含這些內容的草稿，沒有任何銷售。"
     },
     "series": {
       "title": "系列如何運作",
@@ -15346,6 +15896,28 @@
       "step1": "在下方選擇活動並開啟其優惠代碼。",
       "step2": "新增代碼及折扣，也可以設定次數上限與日期。",
       "step3": "分享代碼。買家在結帳時輸入，每次使用都會被記錄。"
+    },
+    "money": {
+      "title": "金額如何計算",
+      "intro": "此處所有數據皆依幣別從帳本讀取，統計期間為您依組織時區選擇的日期。",
+      "step1": "總銷售額是購票者支付的金額（含手續費）。",
+      "step2": "扣除退款、敗訴的爭議款項及 Yayatoh 的手續費；隨退款退還的手續費會計回。",
+      "step3": "剩餘部分即為您的淨收入。線上銷售款項於每場活動結束後撥款；您自行收取的款項已歸您所有。",
+      "step4": "已撥款是指期間內匯入您銀行帳戶的金額。撥款頁面可查看每筆撥款及其包含的訂單。"
+    },
+    "payoutRules": {
+      "title": "撥款時間",
+      "intro": "以下規則適用於 Yayatoh 代您收取票款的情況。",
+      "step1": "每場活動的款項於活動結束 5 個工作天後撥款。",
+      "step2": "保留 5% 作為準備金 90 天，以因應退款或爭議款項，之後同樣撥款給您。",
+      "step3": "您的欠款（撥款後發生的退款或爭議款項、自行收款銷售的手續費）將盡可能透過撤銷轉帳收回，否則從下一筆撥款中扣除。"
+    },
+    "fees": {
+      "title": "手續費說明",
+      "intro": "Yayatoh 的手續費率由我們的團隊於您的合約中設定，無法在此變更。",
+      "step1": "每張付費票券依您的方案收取手續費。免費票券不收取手續費。",
+      "step2": "手續費從每筆訂單中扣除，並顯示於每筆撥款中。",
+      "step3": "因退款而退還的手續費會顯示於「已退還手續費」下。"
     }
   }
 }

@@ -11,6 +11,7 @@ import {
   scanIssuesWidget,
   staffPresenceWidget,
 } from './live-widgets.ts';
+import { arrivalsWidget, guestSeatingWidget, mealsWidget, rsvpWidget } from './social-widgets.ts';
 import {
   alertsSlotWidget,
   assistanceWidget,
@@ -60,4 +61,10 @@ export const COMMAND_CENTER_WIDGETS: WidgetRegistry = createWidgetRegistry([
   sessionFillWidget,
   exhibitorActivityWidget(null),
   sponsorActivityWidget(null),
+
+  // M4.6a social pack.
+  rsvpWidget,
+  guestSeatingWidget,
+  mealsWidget,
+  arrivalsWidget,
 ]);

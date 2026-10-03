@@ -1,3 +1,15 @@
+// U6: the organizer's own checklist on an event, and page sections in copies and templates.
+export {
+  addChecklistItemCommand,
+  ChecklistTitle,
+  checklistTitlesTx,
+  deleteChecklistItemCommand,
+  EventChecklistItemDto,
+  eventChecklistQuery,
+  insertChecklistItemsTx,
+  MAX_CHECKLIST_ITEMS,
+  setChecklistItemDoneCommand,
+} from './checklist.ts';
 export {
   accessGrant,
   accessGrantTx,
@@ -40,6 +52,7 @@ export {
   shortLinksQuery,
 } from './commands/short-links.ts';
 export { EventSettingsSnapshot, eventSettingsTx, insertEventCopyTx } from './copy.ts';
+export { insertSectionsTx, SectionsSnapshot, sectionsSnapshotTx } from './copy-content.ts';
 export { eventsDataSubjects } from './data-subject.ts';
 export {
   ACCESS_ATTEMPT_WINDOW_MS,
@@ -112,6 +125,7 @@ export {
   parseFaqText,
   parseLinksText,
   parseScheduleText,
+  SectionBody,
   type SectionContent,
   SectionTextError,
 } from './domain/sections.ts';
@@ -225,6 +239,15 @@ export {
   setEventSeriesCommand,
   updateSeriesCommand,
 } from './series.ts';
+export {
+  createEventInSeriesCommand,
+  eventSeriesQuery,
+  PublicSeriesRefDto,
+  publicEventSeries,
+  SeriesDetailDto,
+  SeriesRefDto,
+  seriesDetailQuery,
+} from './series-events.ts';
 export {
   changeTeamRoleCommand,
   eventTeamQuery,

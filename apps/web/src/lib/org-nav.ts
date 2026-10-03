@@ -78,8 +78,18 @@ export const ORG_SECTIONS: readonly OrgNavSection[] = [
   {
     key: 'money',
     items: [
-      { key: 'finance', path: 'finance', icon: 'scale', module: 'core', needs: 'finance:read' },
+      // U5: the Money dashboards (overview, payouts with their drill-down, sales by event, fees).
+      { key: 'moneyOverview', path: 'money', icon: 'wallet', module: 'core', needs: 'finance:read' },
       { key: 'payouts', path: 'payouts', icon: 'landmark', module: 'core', needs: 'finance:read' },
+      {
+        key: 'salesByEvent',
+        path: 'sales-by-event',
+        icon: 'chart-column',
+        module: 'core',
+        needs: 'orders:read',
+      },
+      { key: 'fees', path: 'fees', icon: 'percent', module: 'core', needs: 'finance:read' },
+      { key: 'finance', path: 'finance', icon: 'scale', module: 'core', needs: 'finance:read' },
       // M6.2a: cross-event dashboards from the analytics warehouse.
       {
         key: 'orgAnalytics',

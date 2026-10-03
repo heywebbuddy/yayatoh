@@ -67,6 +67,25 @@ export async function mediaPanel(
 }
 
 /**
+ * U3: the first photo of each venue, for the venue list's thumbnails (one query for the page).
+ * Venues without a photo are absent from the map.
+ */
+export async function venueThumbnails(
+  data: ConsoleData,
+  venueIds: readonly string[],
+): Promise<Map<string, MediaItem>> {
+  const assets = await executeQuery(
+    listOwnersMediaQuery,
+    { ownerType: 'venue', ownerIds: [...venueIds].slice(0, 500) },
+    data.ctx,
+    ports,
+  );
+  const out = new Map<string, MediaItem>();
+  for (const a of assets) if (a.slot === 'photo' && !out.has(a.ownerId)) out.set(a.ownerId, toItem(a));
+  return out;
+}
+
+/**
  * M1.4h: the images of every speaker, exhibitor or sponsor on a program page in one query, with
  * an upload ticket per row for people who may change them (event editors). Viewers get no
  * tickets, so no upload control renders for them.

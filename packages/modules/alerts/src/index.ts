@@ -35,8 +35,10 @@ export {
   evaluateConferenceRules,
   evaluateEventRules,
   evaluateOrgRules,
+  evaluateSocialRules,
   type OrgFacts,
   roomTooSmall,
+  type SocialEventFacts,
   sessionNearlyFull,
 } from './domain/rules.ts';
 export {

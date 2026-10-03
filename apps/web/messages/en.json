@@ -380,7 +380,10 @@
     "plan": "Plan & billing",
     "webhooks": "Webhooks",
     "sandboxes": "Sandboxes",
-    "notifications": "Notifications"
+    "notifications": "Notifications",
+    "moneyOverview": "Overview",
+    "salesByEvent": "Sales by event",
+    "fees": "Fees"
   },
   "vocab": {
     "attendee": "Attendee",
@@ -1784,7 +1787,31 @@
     "added": "Domain added. Now publish the DNS records shown above.",
     "managedMissing": "Your free address {host} is not set up yet.",
     "managedCreate": "Set up my free address",
-    "noAccess": "Only owners and admins can change domains."
+    "noAccess": "Only owners and admins can change domains.",
+    "wizard": {
+      "label": "Connect {host}",
+      "steps": "Steps to connect {host}",
+      "step": {
+        "domain": "Domain added",
+        "dns": "DNS records",
+        "verify": "Verified",
+        "ssl": "Secure connection",
+        "primary": "Primary"
+      },
+      "dns": {
+        "signIn": "Sign in where you manage your domain's DNS (your registrar, or a service such as Cloudflare).",
+        "open": "Open the DNS settings for this domain.",
+        "add": "Add each record below exactly as shown. Remove other A or CNAME records with the same name.",
+        "back": "Come back here and select Check now."
+      },
+      "copyName": "name of the {type} record",
+      "copyValue": "value of the {type} record",
+      "copy": "Copy",
+      "copied": "Copied",
+      "verify": "We found your DNS records and are verifying them. Check again in a few minutes.",
+      "ssl": "Your domain is verified. We're issuing its secure (https) certificate, which usually takes a few minutes.",
+      "primary": "{host} is live. Make it primary so your links, tickets and emails use it."
+    }
   },
   "suspensions": {
     "pause_checkout": "Ticket sales are paused by Yayatoh support.",
@@ -3419,6 +3446,16 @@
       "editListing": "Edit directory listing"
     },
     "layoutLibrary": "Seating library",
+    "createNext": "Photos and the other details (address, map, accessibility) come next.",
+    "createdNext": "Add photos now, then fill in the details below.",
+    "steps": {
+      "label": "New venue",
+      "create": "Create",
+      "photos": "Photos",
+      "details": "Details"
+    },
+    "detailsTitle": "Details",
+    "photo": "Photo",
     "emptyAction": "Add your first venue",
     "emptyViewerAction": "Browse the venue directory"
   },
@@ -3700,13 +3737,14 @@
     "saveTemplate": "Save template",
     "nameTaken": "That name is already used. Choose another.",
     "invalid": "Check this value.",
+    "headerSave": "Save as template",
     "backToEvent": "Back to the event overview"
   },
   "series": {
     "title": "Series",
     "description": "Group events into tours, seasons or festivals. Each series has a public page listing its upcoming events.",
     "emptyTitle": "No series yet",
-    "emptyDescription": "Create a series, then add events to it from each event's Dates page.",
+    "emptyDescription": "Create a series below, or name one when you create an event.",
     "caption": "Series",
     "name": "Name",
     "descriptionField": "Description (optional)",
@@ -3728,14 +3766,27 @@
     "title": "Templates",
     "description": "Start new events from your own templates. An event made from a template is a draft with no sales.",
     "emptyTitle": "No templates yet",
-    "emptyDescription": "Open an event, choose Duplicate & template, and save it as a template.",
+    "emptyDescription": "Build one from scratch with New template, copy a starter, or save an event as a template from its header.",
     "contents": "{ticketTypes, plural, one {# ticket type} other {# ticket types}} · {questions, plural, one {# question} other {# questions}} · {seats, plural, =0 {no floor plan} one {# seat} other {# seats}}",
     "delete": "Delete",
     "deleteFor": "Delete the template {name}",
     "use": "Create an event from {name}",
     "timezone": "Times are in {timezone}.",
     "createEvent": "Create event",
-    "pickEvent": "Pick an event to save"
+    "newTemplate": "New template",
+    "summary": "{sections, plural, =0 {no page sections} one {# page section} other {# page sections}} · {checklist, plural, =0 {no checklist items} one {# checklist item} other {# checklist items}}",
+    "originEvent": "Saved from an event",
+    "originScratch": "Built from scratch",
+    "edit": "Edit",
+    "editFor": "Edit the template {name}",
+    "duplicate": "Duplicate",
+    "duplicateFor": "Duplicate the template {name}",
+    "archive": "Archive",
+    "archiveFor": "Archive the template {name}",
+    "restore": "Restore",
+    "restoreFor": "Restore the template {name}",
+    "archivedTitle": "Archived templates ({count})",
+    "archivedHint": "Archived templates are hidden from every picker. Events made from them are unchanged."
   },
   "publicSeries": {
     "eyebrow": "A series by {org}",
@@ -4338,6 +4389,21 @@
       "floorPlanChosen": "Pick a floor plan for the room, or build one from numbers.",
       "guestSitePublished": "Publish the password-protected website your guests open.",
       "tablesSponsors": "Name your hosted tables and their sponsors."
+    },
+    "own": {
+      "title": "Your checklist",
+      "hint": "Your own to-dos for this event, beside the checks above. Tick them off as you go.",
+      "empty": "Nothing here yet. Add your first to-do.",
+      "list": "Your checklist items",
+      "progress": "{done} of {total} done",
+      "newItem": "New item",
+      "add": "Add item",
+      "added": "Item added.",
+      "invalid": "Enter 1 to 200 characters.",
+      "tooMany": "This list is full. Remove an item first.",
+      "markDone": "Mark {title} as done",
+      "markOpen": "Mark {title} as not done",
+      "remove": "Remove {title}"
     }
   },
   "program": {
@@ -4856,7 +4922,18 @@
     "invalidCode": "That code didn't work. Try again.",
     "invalidPassword": "That password isn't right.",
     "rateLimited": "Too many attempts. Wait 15 minutes, then try again.",
-    "unauthenticated": "Your session has ended. Sign in again."
+    "unauthenticated": "Your session has ended. Sign in again.",
+    "again": "Confirm it's you",
+    "retry": "Try again",
+    "problem": {
+      "impersonating": "You're acting as this member, so you can't confirm for them. Ask them to make this change.",
+      "unauthenticated": "Your session has ended. Sign in again.",
+      "failed": "We couldn't start the confirmation. Check your connection and try again."
+    },
+    "persona": {
+      "explain": "Demo account: it signed in without an authenticator, so you can confirm without a code. This is never offered on the live site.",
+      "confirm": "Continue without a code (demo account)"
+    }
   },
   "surveys": {
     "title": "Surveys",
@@ -6810,7 +6887,10 @@
     "gala": {
       "name": "Gala",
       "description": "Tickets, tables and sponsors, seating, donations and on-site check-in."
-    }
+    },
+    "copy": "Copy to your templates",
+    "copyFor": "Copy the {name} starter to your templates",
+    "readOnly": "Read-only. Copy it to your templates to change its tickets, sections or checklist."
   },
   "profileCopy": {
     "wedding": {
@@ -6891,7 +6971,9 @@
       "event": "Event",
       "mode": "Mode",
       "starts": "Starts",
-      "readiness": "Readiness"
+      "readiness": "Readiness",
+      "sales": "Sales",
+      "tickets": "Tickets"
     },
     "manual": "Set by hand",
     "role": {
@@ -6962,9 +7044,10 @@
       "readiness": {
         "title": "Readiness",
         "score": "Readiness {score}%",
-        "blocking": "Blocking",
-        "todo": "Also to do",
-        "allDone": "Ready to go."
+        "allDone": "Ready to go.",
+        "count": "{done} of {total} done",
+        "required": "Needed to sell",
+        "recommended": "Recommended"
       },
       "sales": {
         "title": "Sales",
@@ -7011,7 +7094,9 @@
       "alerts": {
         "title": "Alerts",
         "pending": "Alerts will appear here once alert rules are switched on.",
-        "none": "No open alerts."
+        "none": "No open alerts.",
+        "watching": "Alert rules watch sales, payments, devices, capacity and guests, and show up here.",
+        "viewAll": "See all alerts"
       },
       "entrances": {
         "title": "Entrances"
@@ -7162,6 +7247,52 @@
         "over": "{domains, plural, one {# sending domain} other {# sending domains}} and {campaigns, plural, one {# campaign} other {# campaigns}} over the thresholds",
         "open": "Open email deliverability"
       },
+      "rsvp": {
+        "title": "RSVP",
+        "allAnswered": "Everyone invited has responded.",
+        "noneInvited": "No one has been invited to a sub-event yet.",
+        "responded": "{responded} of {invited} invited guests have responded",
+        "meter": "Responses received",
+        "parties": "Parties still to answer: {count}",
+        "notSent": "Not sent an invitation yet: {count}",
+        "deadline": "RSVP deadline: {date}",
+        "noDeadline": "No RSVP deadline set",
+        "open": "Open RSVPs"
+      },
+      "guestSeating": {
+        "title": "Guest seating",
+        "noChart": "No guest floor plan yet. Choose one in Seating.",
+        "noGuests": "No guests to seat yet.",
+        "allSeated": "Every guest who hasn’t declined has a table.",
+        "seated": "{seated} of {guests} guests have a table",
+        "listLabel": "Guests without a table",
+        "guestOf": "Guest of {name}",
+        "more": "+{count} more",
+        "open": "Seat guests"
+      },
+      "meals": {
+        "title": "Meals and dietary needs",
+        "attending": "Attending: {count}",
+        "noneAttending": "Meals are counted once guests say yes.",
+        "caption": "Meals of attending guests",
+        "colMeal": "Meal",
+        "colGuests": "Guests",
+        "other": "Other choice",
+        "none": "No meal chosen",
+        "dietary": "Dietary requirements: {count}",
+        "accessibility": "Accessibility needs: {count}",
+        "open": "Open RSVP answers"
+      },
+      "arrivals": {
+        "title": "Guest arrivals",
+        "arrivedOf": "{arrived} of {expected} expected guests have arrived",
+        "notArrived": "Not here yet: {count}",
+        "none": "No one has arrived yet.",
+        "noExpected": "No guests are expected yet.",
+        "recent": "Latest arrivals",
+        "guestOf": "Guest of {name}",
+        "open": "Open the day-of view"
+      },
       "sessionLevel": {
         "none": "No limit",
         "ok": "Below {near}%",
@@ -7249,6 +7380,49 @@
       "statusOn": "On",
       "statusOff": "Off",
       "emptyAction": "Create a screen link"
+    },
+    "hero": {
+      "startsIn": "Starts in {duration}",
+      "endsIn": "Ends in {duration}",
+      "ended": "Ended {duration} ago",
+      "nextLabel": "Next step",
+      "blocking": "Needed before you can sell",
+      "next": {
+        "readiness": "Finish: {item}",
+        "scanner": "Check guests in at the door",
+        "publicPage": "All set. See the event page as guests do.",
+        "report": "It’s over. See how it went.",
+        "none": "Nothing needs you right now."
+      },
+      "do": {
+        "alert": "Resolve",
+        "readiness": "Fix it now",
+        "scanner": "Start scanning",
+        "publicPage": "View event page",
+        "report": "Open the report"
+      }
+    },
+    "kpi": {
+      "title": "Key figures",
+      "sales": "Sales",
+      "salesToday": "{amount} today",
+      "tickets": "Tickets sold",
+      "ofCapacity": "of {capacity}",
+      "noCapacity": "No tickets on sale yet",
+      "checkins": "Checked in",
+      "ofValid": "of {valid} valid tickets",
+      "alerts": "Open alerts",
+      "allClear": "All clear",
+      "needsYou": "Needs you",
+      "critical": "{count, plural, =0 {None critical} one {# critical} other {# critical}}"
+    },
+    "soldOf": "{sold} of {capacity}",
+    "overviewCounts": "Events by mode",
+    "overviewGroup": {
+      "live": "Live ({count})",
+      "pre_show": "Pre-show ({count})",
+      "planning": "Being planned ({count})",
+      "wrap": "Wrapping up ({count})"
     }
   },
   "alerts": {
@@ -7344,6 +7518,9 @@
       "campaignFailed": "Open campaigns",
       "disputeDeadline": "Open the dispute queue",
       "assistanceOverdue": "Open the help queue",
+      "rsvpPending": "Open RSVPs",
+      "guestsUnseated": "Seat guests",
+      "mealsMissing": "Open RSVP answers",
       "pledgesUnpaid": "Open the pledges",
       "sessionsNearCapacity": "Open sessions",
       "sessionWaitlists": "Open session enrollment",
@@ -7377,6 +7554,9 @@
       "campaignFailed": "{count, plural, one {{countWords} campaign send failed today} other {{countWords} campaign sends failed today}}",
       "disputeDeadline": "{count, plural, one {{countWords} dispute needs evidence soon} other {{countWords} disputes need evidence soon}}",
       "assistanceOverdue": "{count, plural, one {{countWords} help request has waited too long} other {{countWords} help requests have waited too long}}",
+      "rsvpPending": "{count, plural, one {{countWords} guest has not responded to RSVP} other {{countWords} guests have not responded to RSVP}}",
+      "guestsUnseated": "{count, plural, one {{countWords} guest does not have a table} other {{countWords} guests do not have a table}}",
+      "mealsMissing": "{count, plural, one {{countWords} attending guest has not chosen a meal} other {{countWords} attending guests have not chosen a meal}}",
       "pledgesUnpaid": "{count, plural, one {{countWords} pledge is still unpaid 14 days after the event} other {{countWords} pledges are still unpaid 14 days after the event}}",
       "sessionsNearCapacity": "{count, plural, one {{countWords} session is over 95 % capacity} other {{countWords} sessions are over 95 % capacity}}",
       "sessionWaitlists": "{count, plural, one {{countWords} session has a long waiting line} other {{countWords} sessions have long waiting lines}}",
@@ -15271,6 +15451,376 @@
     "timeZoneNote": "Times in {zone}",
     "selected": "Selected"
   },
+  "seriesField": {
+    "label": "Series (optional)",
+    "hint": "Group this event with others in a tour or season. Type a new name to create one.",
+    "none": "No series",
+    "newOption": "New series: {name}",
+    "summary": "Series",
+    "errors": {
+      "taken": "A series with this name already exists. Pick it from the list instead.",
+      "missing": "That series no longer exists. Pick another one.",
+      "name": "Enter a series name of 2 to 160 characters."
+    }
+  },
+  "seriesLink": {
+    "partOf": "Part of {name}"
+  },
+  "seriesPage": {
+    "back": "All series",
+    "tabs": {
+      "label": "Series views",
+      "events": "Events",
+      "details": "Details"
+    },
+    "columns": {
+      "event": "Event",
+      "status": "Status",
+      "dates": "Dates",
+      "sales": "Sales",
+      "actions": "Actions"
+    },
+    "sold": "{count, plural, one {{n} ticket sold} other {{n} tickets sold}}",
+    "noSales": "No sales yet",
+    "remove": "Remove from series",
+    "removeFor": "Remove {name} from the series",
+    "createNext": "Create next event in series",
+    "createIn": "Create event in this series",
+    "added": "Event added to the series.",
+    "removed": "Event removed from the series. The event itself is unchanged.",
+    "deleted": "Series deleted. Its events are unchanged.",
+    "eventsHeading": "{count, plural, one {# event} other {# events}}",
+    "emptyTitle": "No events in this series yet",
+    "emptyDescription": "Create an event in this series, or add one you already have.",
+    "emptyReadOnly": "Events added to this series appear here.",
+    "caption": "Events in {name}",
+    "add": {
+      "heading": "Add an existing event",
+      "label": "Event",
+      "placeholder": "Choose an event",
+      "hint": "An event that is in another series moves to this one.",
+      "option": "{name} · {when}",
+      "optionMoves": "{name} · {when} (in {series})",
+      "required": "Choose an event to add.",
+      "submit": "Add to series"
+    },
+    "next": {
+      "back": "Back to {name}",
+      "title": "Create next event in series",
+      "description": "A new draft in {name} with the latest event's setup.",
+      "copies": "Copies the settings, ticket types, questions and seating plan of {name} ({when}). Orders, attendees and check-ins stay behind.",
+      "name": "Event name",
+      "startsAt": "Starts",
+      "startsAtHint": "In the event's time zone ({zone}).",
+      "nameInvalid": "Enter a name of 2 to 160 characters.",
+      "startInvalid": "Enter a valid start date and time.",
+      "submit": "Create draft"
+    },
+    "details": {
+      "heading": "Series details",
+      "address": "Public page:",
+      "saved": "Series saved.",
+      "save": "Save changes",
+      "deleteHeading": "Delete series",
+      "deleteHint": "Deleting the series removes its public page. Its events stay, outside any series.",
+      "delete": "Delete series"
+    }
+  },
+  "templateBuilder": {
+    "breadcrumb": "Breadcrumb",
+    "newTitle": "New template",
+    "newDescription": "Start with the kind of event. You add tickets, page sections and a checklist on the next screen.",
+    "profileLegend": "What kind of event?",
+    "profileInvalid": "Choose a kind of event.",
+    "profileHelp": {
+      "wedding": "Guests, RSVP, seating, a private guest website and the day itself. Never listed publicly.",
+      "gala": "Tickets, tables and sponsors, seating, donations and check-in.",
+      "concert": "Tickets, fans, marketing and fast check-in at the door.",
+      "conference": "Registration, sessions, speakers, exhibitors, sponsors and badges.",
+      "community": "Meetups and classes: free or paid sign-ups, recurring dates and check-in.",
+      "agency": "Events you run for clients, with their branding and reports.",
+      "other": "A general event: tickets, attendees, a page and check-in."
+    },
+    "name": "Template name",
+    "nameInvalid": "Enter a name of 2 to 120 characters.",
+    "nameTaken": "That name is already used. Choose another.",
+    "description": "Description (optional)",
+    "duration": "Default length",
+    "hours": "Hours",
+    "minutes": "Minutes",
+    "durationHint": "Events made from it end this long after they start.",
+    "durationInvalid": "Enter a length between 15 minutes and 14 days.",
+    "timezone": "Time zone",
+    "timezoneHint": "Starts of new events are entered in this zone.",
+    "currency": "Currency",
+    "create": "Create template",
+    "steps": "Template steps",
+    "step": {
+      "profile": "Kind of event",
+      "tickets": "Ticket types",
+      "sections": "Page sections",
+      "content": "Page content",
+      "checklist": "Checklist"
+    },
+    "created": "Template created. Add its ticket types, page sections and checklist below.",
+    "copied": "Starter copied to your templates. Fill it in below.",
+    "duplicated": "Template duplicated. You are editing the copy.",
+    "archivedNotice": "This template is archived: it is hidden from every picker and can't be changed. Restore it to use it again.",
+    "useAction": "Create an event",
+    "durationHours": "{hours, plural, one {# hour} other {# hours}}",
+    "durationMinutes": "{minutes, plural, one {# minute} other {# minutes}}",
+    "profileTitle": "Kind of event",
+    "profileFixed": "The kind of event is set when the template is made. For another kind, start a new template.",
+    "ticketsTitle": "Default ticket types",
+    "ticketsHint": "Each event made from the template starts with these, nothing sold.",
+    "ticketsEmpty": "No ticket types yet. Add the first one below.",
+    "ticketsList": "Ticket types",
+    "ticketName": "Ticket name",
+    "ticketNameInvalid": "Enter a name of 1 to 120 characters.",
+    "ticketDescription": "Ticket description (optional)",
+    "price": "Price ({currency})",
+    "priceInvalid": "Enter a price like 25 or 25.00.",
+    "quantity": "Quantity available",
+    "quantityInvalid": "Enter a quantity from 1 to 1,000,000.",
+    "addTicket": "Add ticket type",
+    "ticketAdded": "Ticket type added.",
+    "free": "Free",
+    "ticketLine": "{price} · {quantity, plural, one {# available} other {# available}}",
+    "removeTicket": "Remove the ticket type {name}",
+    "seatPriced": "Used by the saved floor plan",
+    "sectionsTitle": "Page sections",
+    "sectionsHint": "The blocks on the event page, in this order.",
+    "sectionsEmpty": "No page sections yet. Add the first one below.",
+    "sectionsList": "Page sections in order",
+    "addSection": "Add a page section",
+    "moveUp": "Move {title} up",
+    "moveDown": "Move {title} down",
+    "removeSection": "Remove the section {title}",
+    "contentTitle": "Page content",
+    "contentHint": "What every event made from the template shows on its page.",
+    "tagline": "Tagline (optional)",
+    "venueName": "Venue (optional)",
+    "city": "City (optional)",
+    "visibility": "Who can find it",
+    "settingsTitle": "Name and defaults",
+    "save": "Save changes",
+    "saved": "Changes saved.",
+    "checklistTitle": "Checklist",
+    "checklistHint": "Your own to-dos. Every event made from the template starts with them open, on its setup guide.",
+    "checklistEmpty": "No checklist items yet.",
+    "checklistList": "Checklist items",
+    "checklistItem": "New checklist item",
+    "itemInvalid": "Enter 1 to 200 characters.",
+    "tooMany": "This list is full. Remove an item first.",
+    "addItem": "Add item",
+    "itemAdded": "Item added.",
+    "removeItem": "Remove the item {title}",
+    "eventsTitle": "Events made from it",
+    "eventsEmpty": "No events yet. Create the first one below.",
+    "eventsList": "Events made from this template",
+    "useTitle": "Create an event from this template",
+    "useHint": "A new draft with the template's tickets, page sections, content and checklist."
+  },
+  "money": {
+    "export": "Export CSV",
+    "periodForm": "Choose a period",
+    "tabs": {
+      "label": "Money pages",
+      "overview": "Overview",
+      "payouts": "Payouts",
+      "sales": "Sales by event",
+      "fees": "Fees"
+    },
+    "grain": {
+      "label": "Chart by",
+      "auto": "Automatic",
+      "day": "Day",
+      "week": "Week",
+      "month": "Month"
+    },
+    "overview": {
+      "title": "Money overview",
+      "description": "What you sold, what came off it and what reached your bank. Days are in {timeZone} time.",
+      "range": "{from} – {to}",
+      "allTime": "All time",
+      "comparedWith": "compared with {from} – {to}",
+      "net": "Net",
+      "netChange": "{change} vs previous period",
+      "netExplained": "Gross less refunds, lost disputes and fees.",
+      "new": "New",
+      "previous": "Previous period: {amount}",
+      "gross": "Gross sales",
+      "refunds": "Refunds",
+      "fees": "Fees",
+      "disputes": "Lost disputes",
+      "payouts": "Paid out",
+      "keyNumbers": "Key numbers in {currency}",
+      "inCurrency": "In {currency}",
+      "nextPayout": "Next payout",
+      "nextPayoutOn": "Expected {date} · {event}",
+      "noNextPayout": "No payout is scheduled. Online sales are paid out after each event.",
+      "toPayouts": "See all payouts",
+      "chart": {
+        "day": "Gross sales per day",
+        "week": "Gross sales per week",
+        "month": "Gross sales per month"
+      },
+      "bucket": {
+        "day": "Day",
+        "week": "Week starting",
+        "month": "Month"
+      },
+      "chartNote": "Refunds and fees are in the data table.",
+      "showData": "Show the data",
+      "noSalesInPeriod": "No sales or refunds in this period.",
+      "emptyTitle": "No money moved in this period",
+      "emptyDescription": "Sales, refunds and payouts show up here as they happen. Try a longer period, or sell your first tickets.",
+      "showAllTime": "Show all time",
+      "createEvent": "Create an event"
+    },
+    "payouts": {
+      "summary": "Payout summary",
+      "next": "Next payout",
+      "nextOn": "Expected {date} · {event}",
+      "nothingScheduled": "Nothing scheduled yet.",
+      "held": "Held for your events",
+      "heldSub": "{count, plural, =0 {No event has money waiting.} one {# event waiting for its release date.} other {# events waiting for their release date.}}",
+      "inReserve": "In reserve",
+      "reserveNext": "Next comes back on {date}.",
+      "noReserve": "No reserve held.",
+      "owed": "You owe",
+      "owedSub": "Taken from your next payout.",
+      "upcoming": "Upcoming payouts",
+      "upcomingEmptyTitle": "Nothing on its way yet",
+      "upcomingEmpty": "When Yayatoh collects ticket money for you, each event's payout appears here with its date.",
+      "toOverview": "See the money overview",
+      "payoutOf": "{event}: {amount}",
+      "reserveOf": "Reserve returned · {event}: {amount}",
+      "expected": "{event}: about {amount}",
+      "heldDetail": "{held} held, {reserve} kept as reserve",
+      "reserveBack": "Reserve comes back · {event}: up to {amount}",
+      "reserveDetail": "{kept} kept at payout",
+      "status": {
+        "held": "Held until release",
+        "ready": "Sending",
+        "waiting_account": "Waiting for your payout account",
+        "failed": "Retrying",
+        "transferred": "Paid out"
+      }
+    },
+    "payout": {
+      "metaTitle": "Payout",
+      "title": "Payout for {event}",
+      "titleReserve": "Reserve returned for {event}",
+      "description": "Released on {date}.",
+      "export": "Export orders (CSV)",
+      "summary": "From release to payout",
+      "released": "Released from the event's sales",
+      "reserve": "Kept as reserve",
+      "netted": "Taken for what you owed",
+      "amount": "Paid to you",
+      "paidOn": "Sent to your bank on {date}.",
+      "notYet": {
+        "ready": "Being sent to your bank.",
+        "waiting_account": "Waiting for your payout account.",
+        "failed": "The transfer failed; it will be retried."
+      },
+      "reserveOn": "The reserve comes back on {date}.",
+      "eventFinance": "{event}: finance analysis",
+      "lines": "Orders in this payout",
+      "totals": "Totals",
+      "date": "Date",
+      "type": "Type",
+      "order": "Order",
+      "orderLink": "Order {ref} · {buyer}",
+      "buyer": "Buyer",
+      "gross": "Paid by the buyer",
+      "fee": "Fee",
+      "organizer": "Your share",
+      "kind": {
+        "sale": "Sale",
+        "refund": "Refund"
+      },
+      "reserveTitle": "A reserve release",
+      "reserveExplain": "This payout returns the reserve kept from an earlier payout, less anything taken back for refunds or disputes since.",
+      "toOriginal": "See the original payout",
+      "noLinesTitle": "No orders listed",
+      "noLines": "This payout has no order lines (it was released before order lines were recorded).",
+      "back": "All payouts"
+    },
+    "sales": {
+      "title": "Sales by event",
+      "description": "Orders, tickets and money per event for the period. Open an event for its full finance analysis.",
+      "descriptionNoFinance": "Orders, tickets and gross sales per event for the period.",
+      "tableTitle": "Events",
+      "event": "Event",
+      "orders": "Orders",
+      "tickets": "Tickets",
+      "gross": "Gross",
+      "refunds": "Refunds",
+      "fees": "Fees",
+      "net": "Net",
+      "openFinance": "{event}: finance analysis",
+      "openAnalysis": "{event}: sales analysis",
+      "netNote": "Net is gross less refunds, lost disputes and fees in the period.",
+      "emptyTitle": "No sales in this period",
+      "empty": "Events with sales or refunds in the period are listed here. Try a longer period."
+    },
+    "fees": {
+      "title": "Fees",
+      "description": "Your fee plan and every fee taken, per order and per payout.",
+      "plan": "Your fee plan",
+      "planName": "Plan: {plan}",
+      "grandfathered": "Legacy rates",
+      "override": "Agreed rate",
+      "rate": "{percent} + {fixed} per paid ticket",
+      "ratePercent": "{percent} per paid ticket",
+      "noFee": "No fee",
+      "planNote": "Rates are set by Yayatoh. To discuss them, contact support.",
+      "totals": "Fees in the period",
+      "net": "Fees in {currency}",
+      "takenRefunded": "{taken} taken, {refunded} given back",
+      "perOrder": "Fees per order",
+      "perPayout": "Fees per payout",
+      "date": "Date",
+      "order": "Order",
+      "event": "Event",
+      "total": "Order total",
+      "fee": "Fee",
+      "feeRefunded": "Given back",
+      "payout": "Payout",
+      "paidOut": "Paid out",
+      "truncated": "Showing the latest {count} orders. The CSV export has the same list.",
+      "noPayouts": "No payouts yet.",
+      "emptyTitle": "No fees in this period",
+      "empty": "Orders with a fee in the period are listed here. Try a longer period."
+    },
+    "csv": {
+      "period": "Period starting",
+      "currency": "Currency",
+      "gross": "Gross",
+      "refunds": "Refunds",
+      "fees": "Fees",
+      "event": "Event",
+      "orders": "Orders",
+      "tickets": "Tickets",
+      "disputesLost": "Lost disputes",
+      "net": "Net",
+      "date": "Date",
+      "status": "Status",
+      "released": "Released",
+      "reserve": "Reserve",
+      "netted": "Netted",
+      "amount": "Amount",
+      "type": "Type",
+      "order": "Order",
+      "buyer": "Buyer",
+      "fee": "Fee",
+      "organizer": "Your share",
+      "total": "Order total",
+      "feeRefunded": "Fee given back"
+    }
+  },
   "emptyActions": {
     "seeEvents": "See your events",
     "eventHome": "Go to the event home",
@@ -15306,9 +15856,9 @@
     "templates": {
       "title": "How templates work",
       "intro": "A template saves an event's setup (tickets, questions, sections and page content) so your next event starts ready. Events made from a template are drafts with no sales.",
-      "step1": "Open an event that's set up the way you like.",
-      "step2": "Choose Duplicate & template, then save it as a template.",
-      "step3": "Come back here to create new events from it, or start from a starter template below."
+      "step1": "Pick the kind of event and its default length.",
+      "step2": "Add default ticket types, page sections and checklist items.",
+      "step3": "Create events from it: each one is a draft with exactly those, and no sales."
     },
     "series": {
       "title": "How series work",
@@ -15346,6 +15896,28 @@
       "step1": "Pick the event below and open its promo codes.",
       "step2": "Add a code with its discount and, if you like, a limit and dates.",
       "step3": "Share the code. Buyers enter it at checkout and each use is counted."
+    },
+    "money": {
+      "title": "How your money adds up",
+      "intro": "Every figure here is read from the ledger, per currency, for the days you choose in your organization's time zone.",
+      "step1": "Gross is what buyers paid, fees included.",
+      "step2": "Refunds, lost disputes and Yayatoh's fees come off; fees given back with a refund count back in.",
+      "step3": "What is left is your net. Online sales are paid out after each event; sales you collected yourself are already yours.",
+      "step4": "Paid out is what reached your bank in the period. The Payouts page shows every payout down to its orders."
+    },
+    "payoutRules": {
+      "title": "When payouts are sent",
+      "intro": "These rules apply when Yayatoh collects ticket money for you.",
+      "step1": "Each event's money is paid out 5 business days after the event ends.",
+      "step2": "5% is kept as a reserve for 90 days in case of refunds or disputes, then paid out too.",
+      "step3": "Anything you owe (a refund or dispute after you were paid, fees on sales you collected yourself) is taken back by a transfer reversal where possible, otherwise from your next payout."
+    },
+    "fees": {
+      "title": "How fees work",
+      "intro": "Yayatoh's fee rates are set by our team in your agreement; you can't change them here.",
+      "step1": "Each paid ticket carries the fee in your plan. Free tickets carry no fee.",
+      "step2": "The fee is taken from each order and shown on every payout.",
+      "step3": "When a refund gives the fee back, it appears under fees given back."
     }
   }
 }

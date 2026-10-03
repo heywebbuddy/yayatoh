@@ -654,6 +654,7 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **Exports download directly** (a link, audited as `seating.guests.export` with kind, format and row count) **without "Confirm it's you"**: they hold names, parties, meals and replies but no private answers (dietary, accessibility, addresses stay out). The RSVP answers export asks for step-up because it can include private answers. Confirm, or ask for step-up here too.
 - [ ] **Card stock:** place cards are 90 × 50 mm tents (90 × 100 mm flat), escort cards 3.5 × 2 in, table cards a whole sheet folded in half; paper A4, US Letter, A5 or US Legal (Letter is preselected for events in an `America/…` time zone). Pre-cut stock of other brands (Avery templates) is not matched yet: say which you want.
 - [ ] **Declined guests** never get a card and are not counted for the caterer; guests who haven't answered are printed and counted. Confirm.
+
 ## M4.4a — guest seat finder (2026-10-03, pending owner)
 - [ ] **PIN mode uses each party's own PIN, not one event-wide PIN.** P4-2 says "strict name lookup plus the event PIN"; M4.1d made the printed PIN per party (the one on the invitation), so the seat finder's new "full name + PIN" mode reuses it. With a party PIN, typing names reveals nothing (the reply is the same for every miss, and a hit needs that party's PIN). A single event-wide PIN on a poster would let anyone at the venue test whether a name is on the list. Confirm, or ask for an event PIN as well (it would need its own enumeration answer).
 - [ ] **The permanent QR code is the party's RSVP link** (`/rsvp/{token}/seat`): it shows the party's current table however it is moved. "Reset link" on the party's RSVP page replaces it (old printed codes stop working), as for the RSVP itself. Confirm.
@@ -758,6 +759,18 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **Badge printing with a balance due (M5.1d on M5.5b):** a print job for a registration whose invoice is unpaid needs the same audited override as before (10 minutes, this ticket); the override now opens the logged print page.
 - [ ] **Conference alerts read sponsor deliverables (M5.4b) and badge printers (M5.5b)** now that both are built; leads (M5.6b) are still not connected.
 
+
+## M4.6a — social Command Center pack (2026-10-03, pending owner)
+- [ ] **"Not responded" counts guests, not households:** a guest invited to a sub-event who hasn't answered every one of their invitations. Guests invited to nothing (never asked) and gala table seat holders (coming by ticket) are not counted. The alert also says how many households (`parties`). Confirm.
+- [ ] **RSVP pending levels:** warning from RSVP deadline −7 days, critical from −1 day, and it stays critical after the deadline until the event starts (so late answers keep being chased). No deadline set: no alert (the widget still shows the count). Confirm, or say if it should stop at the deadline.
+- [ ] **Guests without a table** (not declined, on a guest floor plan) alert in the last 7 days before the event (critical in the last day and while it runs). **Missing meals** (attending guests without a meal, events with a menu) alert in the last 7 days. Both thresholds are ours; say if you want other windows.
+- [ ] **Door staff see guest names** on the Command Center's guest seating and arrivals widgets (the same names they see on the Scan PWA's guest check-in); RSVP chasing and meals stay with hosts and planners (`guests:read`). Dietary and accessibility needs show as counts only, for everyone. Confirm.
+
+## U6 — templates from scratch (2026-10-03, pending owner)
+- [ ] **What "sections" and "checklist items" mean in a template.** Chosen default: *sections* are the event page's content sections (text, FAQ, schedule, location, links — the M1.4d blocks); *checklist items* are the organizer's own to-dos, a new per-event list shown under "Your checklist" on the setup guide (the profile's readiness checks stay computed). Per-event switching of workspace sections (nav items) was not built: profiles stay the unit that switches sections on (UX-2). Confirm, or ask for nav-section toggles as a later increment.
+- [ ] **Duplicating an event and saving it as a template now also copy its page sections and checklist titles** (snapshot v2; v1 templates still read). Confirm.
+- [ ] **A template's kind of event is fixed once made** (change it by starting a new template). Confirm.
+
 ## U1 — form controls (2026-10-03, pending owner)
 - [ ] **Built with these defaults; say if any should change:**
   - **Type-ahead on a closed dropdown chooses straight away**, as the browser's own select did (the keyboard paths and habits stay the same). To search, open the list (Enter, ↓ or a click); lists of more than 8 options open with a search box.
@@ -770,6 +783,16 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **Nav visibility now follows page permissions**: a viewer no longer sees Settings, Domains, Public site, Payouts or API keys in the sidebar (those pages only showed a refusal or empty figures to them); the scanner (door) role sees Home and Notifications, and Home now points them to the Scan app. Confirm.
 - [ ] **"Read the guide" links** search the help center (`/help/search?q=…`). When the help team writes articles for domains, templates, series, payouts, sending, event types and promo codes, the links can point to them directly (`lib/help-topics.ts`).
 
+## U3 — review bugs (2026-10-03, pending owner)
+- **Demo personas confirm step-up without a code (dev and preview only).** Reviewers sign in with one click on `/dev/login`, so they never had the persona's authenticator, and every sensitive action (adding a domain, refunds, exports) ended on "Please confirm it's you". The confirm dialog now offers "Continue without a code (demo account)" to seeded personas only, and only when `YAYATOH_DEV_AUTH=1` outside production (the same switch as the persona list). It runs the real, audited step-up with the persona's dev secret. Say if previews should keep asking for a code instead.
+- **Domains:** the connect wizard is provider-agnostic. Real DNS checks and certificates arrive with the Vercel Domains adapter (your Vercel account, already listed above).
+
+## U5 — Money dashboards (2026-10-03, pending owner)
+- [ ] **Built with these defaults; say if any should change:**
+  - **Who sees what:** Overview, Payouts figures and Fees need finance access (owner, admin, finance). Sales by event is open to everyone who reads orders (viewer, box office, manager) with counts and gross only; refunds, fees and net per event need finance access.
+  - **Comparison:** each figure is compared with the period of the same length just before ("Last 30 days" vs the 30 days before). All time has no comparison.
+  - **Expected payout** on the timeline is the held amount less the 5 % reserve (decision D3 defaults); anything owed is netted at release, so the actual payout can be lower.
+  - **Fees per order** lists the latest 200 orders of the period (the CSV has the same list).
 ## M6.5d — accounting: QuickBooks Online and Xero (2026-10-03, pending owner)
 - [ ] **Accounts to create (owner only):** an Intuit developer app (QuickBooks Online Accounting
   scope `com.intuit.quickbooks.accounting`) and a Xero app (`accounting.transactions`,

@@ -36,6 +36,11 @@ export const WIDGET_KEYS = [
   'sessionFill',
   'exhibitorActivity',
   'sponsorActivity',
+  // M4.6a social pack (weddings and galas): RSVP, guest seating, meals and dietary, arrivals.
+  'rsvp',
+  'guestSeating',
+  'meals',
+  'arrivals',
 ] as const;
 export type WidgetKey = (typeof WIDGET_KEYS)[number];
 
@@ -80,6 +85,8 @@ export interface WidgetMeta {
 const ALL_MODES: readonly EventMode[] = ['planning', 'pre_show', 'live', 'wrap'];
 const SELLING: readonly ProfileKey[] = ['gala', 'concert', 'conference', 'community', 'agency', 'other'];
 const CONFERENCE: readonly ProfileKey[] = ['conference'];
+/** M4.6a: the profiles with a guest list (parties, RSVP, guest seating). */
+const SOCIAL: readonly ProfileKey[] = ['wedding', 'gala'];
 
 export const WIDGET_META: Readonly<Record<WidgetKey, WidgetMeta>> = {
   readiness: {
@@ -308,6 +315,52 @@ export const WIDGET_META: Readonly<Record<WidgetKey, WidgetMeta>> = {
     size: 'sm',
     channel: null,
   },
+  // M4.6a social pack. Counts and guest names only (never a private answer); no money, so the
+  // door may see seating and arrivals (it checks guests in and shows them to their tables). All
+  // four need the guest list (the `guests` module): without it there is nothing to count.
+  // Seating and arrivals need `events:read` like the other door widgets (door staff hold no
+  // `guests:read`; they see the same names on the Scan PWA's guest check-in); RSVP and meals
+  // need `guests:read`.
+  rsvp: {
+    key: 'rsvp',
+    module: 'guests',
+    permission: 'guests:read',
+    roles: ['owner', 'ops'],
+    profiles: SOCIAL,
+    modes: ['planning', 'pre_show'],
+    size: 'md',
+    channel: null,
+  },
+  guestSeating: {
+    key: 'guestSeating',
+    module: 'guests',
+    permission: 'events:read',
+    roles: ['owner', 'ops', 'door'],
+    profiles: SOCIAL,
+    modes: ['planning', 'pre_show', 'live'],
+    size: 'md',
+    channel: null,
+  },
+  meals: {
+    key: 'meals',
+    module: 'guests',
+    permission: 'guests:read',
+    roles: ['owner', 'ops'],
+    profiles: SOCIAL,
+    modes: ['planning', 'pre_show', 'live'],
+    size: 'md',
+    channel: null,
+  },
+  arrivals: {
+    key: 'arrivals',
+    module: 'guests',
+    permission: 'events:read',
+    roles: ['owner', 'ops', 'door'],
+    profiles: SOCIAL,
+    modes: ['pre_show', 'live', 'wrap'],
+    size: 'md',
+    channel: null,
+  },
   // The slot for the M3.2b alert engine: its loader is a placeholder until the engine registers.
   alerts: {
     key: 'alerts',
@@ -329,9 +382,12 @@ export const DEFAULT_LAYOUTS: Readonly<Record<CcRole, Readonly<Record<EventMode,
   owner: {
     planning: [
       'readiness',
+      'rsvp',
       'sales',
       'tickets',
       'alerts',
+      'guestSeating',
+      'meals',
       'sessionFill',
       'exhibitorActivity',
       'sponsorActivity',
@@ -340,6 +396,9 @@ export const DEFAULT_LAYOUTS: Readonly<Record<CcRole, Readonly<Record<EventMode,
     pre_show: [
       'readiness',
       'alerts',
+      'rsvp',
+      'guestSeating',
+      'meals',
       'sales',
       'tickets',
       'sessionFill',
@@ -351,6 +410,7 @@ export const DEFAULT_LAYOUTS: Readonly<Record<CcRole, Readonly<Record<EventMode,
     ],
     live: [
       'checkins',
+      'arrivals',
       'alerts',
       'sessionAttendance',
       'liveFeed',
@@ -362,6 +422,8 @@ export const DEFAULT_LAYOUTS: Readonly<Record<CcRole, Readonly<Record<EventMode,
       'staffPresence',
       'assistance',
       'seatFill',
+      'guestSeating',
+      'meals',
       'sessionFill',
       'exhibitorActivity',
       'sponsorActivity',
@@ -369,13 +431,36 @@ export const DEFAULT_LAYOUTS: Readonly<Record<CcRole, Readonly<Record<EventMode,
       'tickets',
       'timeline',
     ],
-    wrap: ['sales', 'tickets', 'checkins', 'alerts', 'exhibitorActivity', 'sponsorActivity', 'timeline'],
+    wrap: [
+      'sales',
+      'tickets',
+      'checkins',
+      'arrivals',
+      'alerts',
+      'exhibitorActivity',
+      'sponsorActivity',
+      'timeline',
+    ],
   },
   ops: {
-    planning: ['readiness', 'tickets', 'sales', 'alerts', 'sessionFill', 'exhibitorActivity', 'timeline'],
+    planning: [
+      'readiness',
+      'rsvp',
+      'tickets',
+      'sales',
+      'alerts',
+      'guestSeating',
+      'meals',
+      'sessionFill',
+      'exhibitorActivity',
+      'timeline',
+    ],
     pre_show: [
       'readiness',
       'alerts',
+      'rsvp',
+      'guestSeating',
+      'meals',
       'devices',
       'tickets',
       'sessionFill',
@@ -387,6 +472,7 @@ export const DEFAULT_LAYOUTS: Readonly<Record<CcRole, Readonly<Record<EventMode,
     ],
     live: [
       'checkins',
+      'arrivals',
       'devices',
       'alerts',
       'sessionAttendance',
@@ -395,6 +481,8 @@ export const DEFAULT_LAYOUTS: Readonly<Record<CcRole, Readonly<Record<EventMode,
       'capacity',
       'scanIssues',
       'seatFill',
+      'guestSeating',
+      'meals',
       'tickets',
       'entrances',
       'deviceBoard',
@@ -404,7 +492,7 @@ export const DEFAULT_LAYOUTS: Readonly<Record<CcRole, Readonly<Record<EventMode,
       'exhibitorActivity',
       'timeline',
     ],
-    wrap: ['checkins', 'tickets', 'sales', 'alerts', 'timeline'],
+    wrap: ['checkins', 'arrivals', 'tickets', 'sales', 'alerts', 'timeline'],
   },
   finance: {
     planning: ['sales', 'tickets', 'alerts', 'timeline'],
@@ -414,11 +502,22 @@ export const DEFAULT_LAYOUTS: Readonly<Record<CcRole, Readonly<Record<EventMode,
   },
   door: {
     planning: ['timeline', 'alerts'],
-    pre_show: ['devices', 'checkins', 'seatFill', 'alerts', 'sessionAttendance', 'deviceBoard', 'timeline'],
+    pre_show: [
+      'devices',
+      'checkins',
+      'seatFill',
+      'guestSeating',
+      'alerts',
+      'sessionAttendance',
+      'deviceBoard',
+      'timeline',
+    ],
     live: [
       'checkins',
+      'arrivals',
       'devices',
       'seatFill',
+      'guestSeating',
       'alerts',
       'sessionAttendance',
       'liveFeed',
@@ -431,7 +530,7 @@ export const DEFAULT_LAYOUTS: Readonly<Record<CcRole, Readonly<Record<EventMode,
       'assistance',
       'timeline',
     ],
-    wrap: ['checkins', 'timeline'],
+    wrap: ['checkins', 'arrivals', 'timeline'],
   },
   marketing: {
     planning: [
@@ -486,6 +585,21 @@ export function availableWidgets(
   return WIDGET_KEYS.map((k) => registry[k]).filter(
     (m): m is WidgetMeta => widgetAllowed(m, scope) && m.modes.includes(mode),
   );
+}
+
+/**
+ * The KPI row above the board (U4): sales, tickets sold of capacity, check-ins and open alerts,
+ * each only for members whose role, profile and modules allow the widget it comes from (the same
+ * rule as the widget's loader), so the door never gets the sales figure here either.
+ */
+export const KPI_KEYS = ['sales', 'tickets', 'checkins', 'alerts'] as const satisfies readonly WidgetKey[];
+export type KpiKey = (typeof KPI_KEYS)[number];
+
+export function kpiKeys(
+  registry: Readonly<Partial<Record<string, WidgetMeta>>>,
+  scope: WidgetScope,
+): KpiKey[] {
+  return KPI_KEYS.filter((k) => widgetAllowed(registry[k], scope));
 }
 
 /** A user's saved arrangement (per event): widget order and the widgets they hid. */
