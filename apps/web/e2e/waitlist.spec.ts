@@ -5,6 +5,7 @@ import {
   expectAccessible,
   lastEmailedCode,
   personaCode,
+  pickOption,
   signIn,
 } from './helpers.ts';
 
@@ -29,7 +30,7 @@ interface Mail {
 async function eventWithPass(page: Page, name: string, quantity: number) {
   await page.goto(`/o/${ORG}/events/new`);
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Time zone').selectOption('America/Chicago');
+  await pickOption(page.getByLabel('Time zone'), 'America/Chicago');
   const d = new Date(Date.now() + 30 * 86_400_000).toISOString().slice(0, 10);
   await page.getByLabel('Starts', { exact: true }).fill(`${d}T19:00`);
   await page.getByLabel('Ends', { exact: true }).fill(`${d}T23:00`);
@@ -51,7 +52,7 @@ async function eventWithPass(page: Page, name: string, quantity: number) {
 async function buyOne(browser: Browser, slug: string, who: string) {
   const buyer = await (await browser.newContext()).newPage();
   await buyer.goto(`/events/${slug}`);
-  await buyer.getByLabel('Quantity — Pass').selectOption('1');
+  await pickOption(buyer.getByLabel('Quantity — Pass'), '1');
   await buyer.getByLabel('Full name').fill(who);
   await buyer.getByLabel('Email for your tickets').fill(emailOf(who));
   await buyer.getByRole('button', { name: 'Continue to payment' }).click();
@@ -132,7 +133,7 @@ async function cancelTicketOf(page: Page, base: string, who: string) {
   await page.goto(`${base}/attendees`);
   await page.getByLabel(`Select ${who}`).check();
   const bulk = page.getByRole('form', { name: 'Bulk actions' });
-  await bulk.getByLabel('Action', { exact: true }).selectOption({ label: 'Cancel tickets (no refund)' });
+  await pickOption(bulk.getByLabel('Action', { exact: true }), { label: 'Cancel tickets (no refund)' });
   await bulk.getByRole('button', { name: 'Review cancellation…' }).click();
   await page.getByRole('button', { name: 'Cancel tickets for 1 person' }).click();
   await expect(page.getByRole('region', { name: 'Cancelled tickets' }).getByRole('status')).toHaveText(

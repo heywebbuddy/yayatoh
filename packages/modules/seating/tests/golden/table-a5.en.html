@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<title>Table cards · Harper &amp; Theo</title>
+<style>
+  @page { size: 148mm 210mm; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body { color: #16131D; background: #FFFFFF; font-family: 'Noto Sans', 'Noto Sans Arabic', 'Noto Sans Devanagari', 'Noto Sans CJK JP', 'Noto Sans CJK SC', 'Noto Sans CJK TC', sans-serif; }
+  .sheet { position: relative; width: 148mm; height: 210mm; overflow: hidden; break-after: page; }
+  .sheet:last-child { break-after: auto; }
+  .card { position: absolute; width: 128mm; height: 190mm; outline: 0.2mm dashed #8F899C; outline-offset: -0.1mm; overflow: hidden; }
+  .s0 { left: 10mm; top: 10mm; }
+  p { margin: 0; overflow-wrap: anywhere; }
+  .face, .half { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.5mm; text-align: center; padding: 4mm 6mm; }
+  .face { width: 100%; height: 100%; }
+  .half { position: absolute; inset-inline-start: 0; width: 100%; height: 50%; }
+  .back { top: 0; transform: rotate(180deg); }
+  .front { top: 50%; border-block-start: 0.2mm dotted #8F899C; }
+  .name { font-size: 18pt; line-height: 1.15; font-weight: 600; }
+  .place { font-size: 10pt; color: #5E596A; }
+  .party { font-size: 12pt; font-weight: 600; line-height: 1.2; }
+  .names { font-size: 8pt; color: #5E596A; line-height: 1.3; }
+  .caption { font-size: 8pt; color: #5E596A; text-transform: uppercase; letter-spacing: 0.06em; margin-block-start: 1mm; }
+  .place-big { font-size: 16pt; font-weight: 700; line-height: 1.1; }
+  .table-label { font-size: 51.2pt; font-weight: 700; line-height: 1.05; }
+  .sponsor { font-size: 14pt; color: #5E596A; }
+  .event { font-size: 10pt; color: #5E596A; margin-block-start: 4mm; }
+</style>
+</head>
+<body><section class="sheet"><div class="card s0"><div class="half back" aria-hidden="true"><p class="table-label"><bdi>Table 1</bdi></p><p class="event"><bdi>Harper &amp; Theo</bdi> · June 12, 2027</p></div><div class="half front"><p class="table-label"><bdi>Table 1</bdi></p><p class="event"><bdi>Harper &amp; Theo</bdi> · June 12, 2027</p></div></div></section><section class="sheet"><div class="card s0"><div class="half back" aria-hidden="true"><p class="table-label"><bdi>Table 2</bdi></p><p class="sponsor">Hosted by Rosewood Florals</p><p class="event"><bdi>Harper &amp; Theo</bdi> · June 12, 2027</p></div><div class="half front"><p class="table-label"><bdi>Table 2</bdi></p><p class="sponsor">Hosted by Rosewood Florals</p><p class="event"><bdi>Harper &amp; Theo</bdi> · June 12, 2027</p></div></div></section><section class="sheet"><div class="card s0"><div class="half back" aria-hidden="true"><p class="table-label"><bdi>Table 10</bdi></p><p class="event"><bdi>Harper &amp; Theo</bdi> · June 12, 2027</p></div><div class="half front"><p class="table-label"><bdi>Table 10</bdi></p><p class="event"><bdi>Harper &amp; Theo</bdi> · June 12, 2027</p></div></div></section></body>
+</html>

@@ -1,5 +1,5 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import { expectAccessible, lastEmailedCode, signIn } from './helpers.ts';
+import { expectAccessible, lastEmailedCode, pickOption, signIn } from './helpers.ts';
 
 /**
  * M5.3a speaker portal: an organizer invites a speaker, the speaker signs in with the emailed
@@ -38,8 +38,8 @@ async function newPage(browser: Browser): Promise<Page> {
 async function createEvent(page: Page, name: string) {
   await page.goto(`${ORG}/events/new`);
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Event type').selectOption('conference');
-  await page.getByLabel('Time zone').selectOption(TZ);
+  await pickOption(page.getByLabel('Event type'), 'conference');
+  await pickOption(page.getByLabel('Time zone'), TZ);
   await page.getByLabel('Starts', { exact: true }).fill(at(40, '09:00'));
   await page.getByLabel('Ends', { exact: true }).fill(at(42, '18:00'));
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -276,7 +276,7 @@ test.describe('speaker portal (M5.3a)', () => {
     await form.getByLabel(/^Due/).fill(at(20, '17:00'));
     await form.getByRole('button', { name: 'Create task' }).click();
     await expect(form.getByText('Task created. Every speaker has it.')).toBeVisible();
-    await form.getByLabel('Type').selectOption('agreement');
+    await pickOption(form.getByLabel('Type'), 'agreement');
     await form.getByLabel('Title').fill(`Speaker release ${s}`);
     await form.getByLabel(/^Due/).fill(at(20, '17:00'));
     await expect(form.getByLabel(/^Agreement text/)).toHaveValue(/Placeholder/);

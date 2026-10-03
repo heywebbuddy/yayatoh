@@ -7,6 +7,7 @@ import { and, asc, eq, inArray, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { changedFields } from './domain/guests.ts';
 import { moveInOrder } from './domain/invitations.ts';
+import { publishGuestChangesTx } from './realtime.ts';
 import {
   ENTRY_SOURCES,
   type GuestSource,
@@ -100,6 +101,13 @@ export async function recordSubEventHistoryTx(
         detail: e.detail ?? {},
       })),
     );
+  // M4.3a: invitations and answers change who is in the seating queue (live).
+  await publishGuestChangesTx(
+    tx,
+    orgId,
+    entries.map((e) => ({ eventId: e.eventId, partyId: e.partyId ?? null })),
+    ctx.now,
+  );
 }
 
 /* ------------------------------------------------------------------------------- helpers ---- */

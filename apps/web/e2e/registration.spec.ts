@@ -1,5 +1,5 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import { expectAccessible, lastEmailedCode, signIn } from './helpers.ts';
+import { expectAccessible, lastEmailedCode, pickOption, signIn } from './helpers.ts';
 
 /**
  * M5.1a registration types and admission items: the organizer seeds the standard types and items,
@@ -26,8 +26,8 @@ function chicagoDate(days: number): string {
 async function conference(page: Page, name: string) {
   await page.goto(`${ORG}/events/new`);
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Event type').selectOption('conference');
-  await page.getByLabel('Time zone').selectOption(TZ);
+  await pickOption(page.getByLabel('Event type'), 'conference');
+  await pickOption(page.getByLabel('Time zone'), TZ);
   await page.getByLabel('Starts', { exact: true }).fill(`${chicagoDate(40)}T09:00`);
   await page.getByLabel('Ends', { exact: true }).fill(`${chicagoDate(42)}T18:00`);
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -119,7 +119,7 @@ test.describe('registration types and admission items (M5.1a)', () => {
     await add.getByRole('button', { name: 'Add registration type' }).click();
     await expect(add.getByText('Enter a name (up to 80 characters).')).toBeVisible();
     await add.getByLabel('Type name').fill('Press');
-    await add.getByLabel('Who may register').selectOption('access_code');
+    await pickOption(add.getByLabel('Who may register'), 'access_code');
     await add.getByRole('button', { name: 'Add registration type' }).click();
     await expect(add.getByText('Enter an access code of 4 to 32 letters, digits, - or _.')).toBeVisible();
     await add.getByLabel('Access code').fill(`press-${s}`);
@@ -127,7 +127,7 @@ test.describe('registration types and admission items (M5.1a)', () => {
     await expect(add.getByText('Registration type added.')).toBeVisible();
     await expect(typeCard(page, 'Press')).toContainText('Needs an access code');
     await add.getByLabel('Type name').fill('Staff');
-    await add.getByLabel('Who may register').selectOption('email_domain');
+    await pickOption(add.getByLabel('Who may register'), 'email_domain');
     await add.getByRole('button', { name: 'Add registration type' }).click();
     await expect(add.getByText('Enter at least one valid domain, such as acme.org.')).toBeVisible();
     await add.getByLabel('Email domains').fill('acme.test');

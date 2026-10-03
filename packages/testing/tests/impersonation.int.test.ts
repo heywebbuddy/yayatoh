@@ -260,6 +260,8 @@ describe('impersonation: the pipeline refuses money, export and delete (M1.2e)',
         'donations.deleteLevel',
         // The daily retention pass erases donors of lapsed gifts (M4.8a; platform only).
         'donations.retention',
+        // Taking back a paddle number (M4.8c; refused once it has entries).
+        'donations.releasePaddle',
       ]),
     );
   });

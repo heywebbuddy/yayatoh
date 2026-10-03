@@ -90,9 +90,34 @@ export interface IgnoredEvent {
   readonly reason: string;
 }
 
-export type WebhookEvent = ProviderEvent | AccountEvent | DisputeEvent | IgnoredEvent;
+/**
+ * A verified card-setup notification (M4.8e, P4-14): a guest saved a card for off-session gifts on
+ * the organizer's connected account (Stripe SetupIntent through a Checkout Session in setup mode).
+ * Only the provider's references and the card's display details (brand, last four, expiry) — never
+ * card data.
+ */
+export interface SetupEvent {
+  readonly provider: 'fake' | 'stripe';
+  readonly id: string;
+  readonly type: 'setup.succeeded' | 'setup.failed';
+  readonly orgId: string;
+  /** The platform's own reference the setup was created with (the saved card's id). */
+  readonly reference: string;
+  readonly providerSetupId: string;
+  /** setup.succeeded only. */
+  readonly customerId?: string;
+  readonly paymentMethodId?: string;
+  readonly brand?: string;
+  readonly last4?: string;
+  readonly expMonth?: number;
+  readonly expYear?: number;
+}
+
+export type WebhookEvent = ProviderEvent | AccountEvent | DisputeEvent | SetupEvent | IgnoredEvent;
 export const isIgnoredEvent = (e: WebhookEvent): e is IgnoredEvent => e.type === 'ignored';
 export const isAccountEvent = (e: WebhookEvent): e is AccountEvent => e.type === 'account.updated';
+export const isSetupEvent = (e: WebhookEvent): e is SetupEvent =>
+  e.type === 'setup.succeeded' || e.type === 'setup.failed';
 export const isDisputeEvent = (e: WebhookEvent): e is DisputeEvent =>
   e.type === 'dispute.created' || e.type === 'dispute.closed';
 
@@ -172,6 +197,57 @@ export interface PaymentProvider {
    * adapter cannot list them (the fake provider without a store): reconciliation is skipped.
    */
   listBalanceTransactions(input: { from: Date; to: Date }): Promise<readonly BalanceTransaction[] | null>;
+  /**
+   * Cards on file (M4.8e, P4-14): a hosted step where the guest saves a card for later off-session
+   * gifts on the organizer's connected account (a SetupIntent with `usage: off_session`). The
+   * outcome arrives as a `SetupEvent` webhook carrying `reference`. Idempotent per key.
+   */
+  createCardSetup(input: CreateCardSetupInput): Promise<{ providerSetupId: string; redirectUrl: string }>;
+  /**
+   * Charge a saved card off-session (the guest is not present), exactly `amount`, on the connected
+   * account the card was saved on. Answers synchronously; idempotent per key, so a replayed job
+   * gets the first attempt's answer and never a second charge.
+   */
+  chargeSavedCard(input: ChargeSavedCardInput): Promise<ChargeSavedCardResult>;
+  /** Remove a saved card from the organizer's customer (P4-14: 30 days after the event). */
+  detachSavedCard(input: {
+    connectedAccountId: string;
+    paymentMethodId: string;
+    idempotencyKey: string;
+  }): Promise<{ status: 'detached' | 'gone' }>;
+}
+
+export interface CreateCardSetupInput {
+  readonly orgId: string;
+  /** The saved card's id: comes back on the setup webhook. */
+  readonly reference: string;
+  /** Cards are saved on the organizer's connected account (direct charges, P4-9). */
+  readonly connectedAccountId: string;
+  readonly email: string;
+  readonly name: string;
+  /** Shown on the hosted step (the event and what the card is for). */
+  readonly description: string;
+  readonly idempotencyKey: string;
+  readonly returnUrl: string;
+}
+
+export interface ChargeSavedCardInput {
+  readonly orgId: string;
+  readonly orderId: string;
+  readonly amount: Money;
+  readonly connectedAccountId: string;
+  readonly customerId: string;
+  readonly paymentMethodId: string;
+  readonly description: string;
+  /** `order:<id>:1`: one order, one charge. */
+  readonly idempotencyKey: string;
+}
+
+export interface ChargeSavedCardResult {
+  readonly providerPaymentId: string;
+  readonly status: 'succeeded' | 'declined';
+  /** declined: the provider's reason (`card_declined`, `insufficient_funds`, `authentication_required`…). */
+  readonly declineCode?: string;
 }
 
 export const BALANCE_TRANSACTION_KINDS = [

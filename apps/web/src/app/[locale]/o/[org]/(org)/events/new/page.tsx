@@ -3,6 +3,7 @@ import { buttonClass, PageHeader } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { CreateEventForm } from '@/components/create-event-form.tsx';
+import { HowItWorks } from '@/components/how-it-works.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { loadConsole } from '@/server/console.ts';
 import { createEventAction } from './actions.ts';
@@ -29,6 +30,7 @@ export default async function NewEventPage({ params }: { params: Promise<{ local
           </>
         }
       />
+      <HowItWorks topic="eventType" />
       <CreateEventForm
         action={createEventAction.bind(null, org)}
         defaults={{ profile: data.profile, timezone: data.org.timezone }}

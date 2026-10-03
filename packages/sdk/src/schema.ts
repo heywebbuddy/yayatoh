@@ -121,6 +121,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/checkins/session-override": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Let someone into a session past a refusing gate, with a reason (audited)
+         * @description Session doors (M5.6a): waives the named gates (`enrollment`, `admission_level`, `capacity`) when they are the ones refusing; every other rule still applies. Audited with the reason. Device token only.
+         */
+        post: operations["overrideSessionGate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/devices/heartbeat": {
         parameters: {
             query?: never;
@@ -2115,7 +2135,7 @@ export interface components {
             ids: string[];
         };
         /** @enum {string} */
-        CheckpointKind: "entrance" | "zone";
+        CheckpointKind: "entrance" | "zone" | "session";
         CreateEventRequest: {
             city?: string | null;
             country?: string | null;
@@ -2296,6 +2316,11 @@ export interface components {
             url: string;
             width: number;
         };
+        /**
+         * @description What the kiosk shows (M4.4b): ticket self check-in, guest check-in by name, or the A–Z table board. Absent: tickets.
+         * @enum {string}
+         */
+        KioskKind: "tickets" | "guests" | "board";
         Link: {
             label: string;
             url: string;
@@ -2666,6 +2691,11 @@ export interface components {
             id: string;
             name: string;
         };
+        /**
+         * @description Session doors (M5.6a): scanning people in (default) or out.
+         * @enum {string}
+         */
+        ScanDirection: "in" | "out";
         ScanRequest: {
             /** Format: uuid */
             checkpointId?: string;
@@ -2673,7 +2703,7 @@ export interface components {
             code: string;
         };
         /** @enum {string} */
-        ScanResult: "admitted" | "duplicate" | "invalid" | "void" | "wrong_event" | "not_today" | "outside_window" | "wrong_date" | "duplicate_offline" | "superseded" | "provisional" | "granted" | "no_access" | "wrong_checkpoint" | "balance_due";
+        ScanResult: "admitted" | "duplicate" | "invalid" | "void" | "wrong_event" | "not_today" | "outside_window" | "wrong_date" | "duplicate_offline" | "superseded" | "provisional" | "granted" | "no_access" | "wrong_checkpoint" | "balance_due" | "entered" | "scanned_out" | "not_in_room" | "not_enrolled" | "admission_level" | "capacity";
         ScanVerdict: {
             /** Format: uuid */
             admissionId: string | null;
@@ -2717,6 +2747,8 @@ export interface components {
             tokenType: "bearer";
             user: components["schemas"]["User"];
         };
+        /** @enum {string} */
+        SessionGate: "enrollment" | "admission_level" | "capacity";
         Speaker: {
             /** @description Sanitized Markdown. */
             bio: string;
@@ -4013,6 +4045,7 @@ export interface operations {
                     /** Format: uuid */
                     checkpointId?: string;
                     code: string;
+                    direction?: components["schemas"]["ScanDirection"];
                     /** Format: uuid */
                     eventId: string;
                 };
@@ -4060,6 +4093,109 @@ export interface operations {
             };
             /** @description Not found */
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": {
+                        code: string;
+                        detail?: string;
+                        details?: {
+                            [key: string]: unknown;
+                        };
+                        status: number;
+                        title: string;
+                        type: string;
+                    };
+                };
+            };
+        };
+    };
+    overrideSessionGate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /**
+                     * Format: uuid
+                     * @description The session door.
+                     */
+                    checkpointId: string;
+                    code: string;
+                    /** Format: uuid */
+                    eventId: string;
+                    /** @description The gates to waive (only those actually refusing are waived). */
+                    gates: components["schemas"]["SessionGate"][];
+                    /** @description Why staff let them in (audited). */
+                    reason: string;
+                };
+            };
+        };
+        responses: {
+            /** @description The verdict */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: uuid */
+                        admissionId: string | null;
+                        /** Format: date-time */
+                        firstAdmittedAt: string | null;
+                        result: components["schemas"]["ScanResult"];
+                        ticket: {
+                            holderName: string | null;
+                            serial: number;
+                            shortCode: string;
+                            typeName: string;
+                        } | null;
+                    };
+                };
+            };
+            /** @description Missing or unknown device token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": {
+                        code: string;
+                        detail?: string;
+                        details?: {
+                            [key: string]: unknown;
+                        };
+                        status: number;
+                        title: string;
+                        type: string;
+                    };
+                };
+            };
+            /** @description Not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": {
+                        code: string;
+                        detail?: string;
+                        details?: {
+                            [key: string]: unknown;
+                        };
+                        status: number;
+                        title: string;
+                        type: string;
+                    };
+                };
+            };
+            /** @description Nothing to override, or the ticket cannot be let in */
+            409: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -4128,6 +4264,7 @@ export interface operations {
                             checkpointId: string | null;
                             /** Format: uuid */
                             eventId: string;
+                            kind?: components["schemas"]["KioskKind"];
                             pinHash: string;
                             /** Format: date-time */
                             startedAt: string;
@@ -4214,6 +4351,8 @@ export interface operations {
                                 id: string;
                                 kind: components["schemas"]["CheckpointKind"];
                                 name: string;
+                                /** Format: uuid */
+                                sessionId?: string | null;
                                 ticketTypeIds: string[];
                             }[];
                             event: {
@@ -4241,9 +4380,28 @@ export interface operations {
                                 deviceId: string;
                                 /** Format: uuid */
                                 eventId: string;
+                                sessionGates?: {
+                                    capacity: number | null;
+                                    /** Format: uuid */
+                                    checkpointId: string;
+                                    enrolled: string[];
+                                    enrollmentRequired: boolean;
+                                    /** Format: uuid */
+                                    sessionId: string;
+                                }[];
                                 signature: string;
                             };
                             serverTime: string;
+                            sessions?: {
+                                /** Format: uuid */
+                                checkpointId: string;
+                                endsAt: string;
+                                occupied: number;
+                                /** Format: uuid */
+                                sessionId: string;
+                                startsAt: string;
+                                title: string;
+                            }[];
                             unknownPolicy: components["schemas"]["UnknownTicketPolicy"];
                             version: number;
                         };
@@ -4259,6 +4417,10 @@ export interface operations {
                             /** Format: uuid */
                             occurrenceId: string | null;
                             rev: number;
+                            sessionAccess?: {
+                                registrant: boolean;
+                                sessionIds: string[] | null;
+                            };
                             shortCode: string;
                             status: components["schemas"]["ManifestTicketStatus"];
                             /** Format: uuid */
@@ -8201,6 +8363,7 @@ export interface operations {
                         code: string;
                         /** Format: date-time */
                         deviceTs: string;
+                        direction?: components["schemas"]["ScanDirection"];
                         /** Format: uuid */
                         scanId: string;
                         verdict: string;

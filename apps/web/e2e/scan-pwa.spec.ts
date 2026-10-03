@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { continueToPayment, expectAccessible, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, pickOption, signIn } from './helpers.ts';
 
 function chicago(offsetH: number): string {
   const parts = new Intl.DateTimeFormat('en-CA', {
@@ -26,7 +26,7 @@ test.describe('Scan PWA', () => {
     await signIn(page);
     await page.goto('/o/lakeside-events/events/new');
     await page.getByLabel('Event name', { exact: true }).fill(`Scan ${stamp}`);
-    await page.getByLabel('Time zone').selectOption('America/Chicago');
+    await pickOption(page.getByLabel('Time zone'), 'America/Chicago');
     await page.getByLabel('Starts', { exact: true }).fill(chicago(-1));
     await page.getByLabel('Ends', { exact: true }).fill(chicago(3));
     await page.getByRole('button', { name: 'Create draft' }).click();
@@ -43,7 +43,7 @@ test.describe('Scan PWA', () => {
 
     const guest = await (await browser.newContext()).newPage();
     await guest.goto(`/events/${base.split('/').pop()}`);
-    await guest.getByLabel('Quantity — Gate pass').selectOption('2');
+    await pickOption(guest.getByLabel('Quantity — Gate pass'), '2');
     await guest.getByLabel('Full name').fill(`Ida ${stamp}`);
     await guest.getByLabel('Email for your tickets').fill(`ida+${stamp}@example.test`);
     await continueToPayment(guest, `ida+${stamp}@example.test`);

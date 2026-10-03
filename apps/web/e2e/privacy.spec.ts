@@ -5,6 +5,7 @@ import {
   expectAccessible,
   lastEmailedCode,
   OPEN_HOUSE,
+  pickOption,
   signIn,
   WEDDING_OWNER,
 } from './helpers.ts';
@@ -30,7 +31,7 @@ async function buyFreeTicket(page: Page, browser: Browser, email: string, stamp:
   await expect(page.getByRole('row').filter({ hasText: pass })).toBeVisible();
   const guest = await (await browser.newContext({ viewport: { width: 1280, height: 900 } })).newPage();
   await guest.goto('/events/lakeside-open-house');
-  await guest.getByLabel(`Quantity — ${pass}`).selectOption('1');
+  await pickOption(guest.getByLabel(`Quantity — ${pass}`), '1');
   await guest.getByLabel('Full name').fill(`Ada Private ${stamp}`);
   await guest.getByLabel('Email for your tickets').fill(email);
   await continueToPayment(guest, email);

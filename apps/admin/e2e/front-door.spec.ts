@@ -4,6 +4,7 @@ import { FD_YAY_HOST } from './front-door-env.ts';
 import {
   devPassword,
   expectAccessible,
+  expectPicked,
   makeStaff,
   replayForm,
   serverForm,
@@ -35,11 +36,11 @@ async function moveRoute(
   const form = page.getByRole('form', { name: 'Move a route' });
   await form.getByLabel('Host', { exact: true }).focus();
   await page.keyboard.type('yay.front');
-  await expect(form.getByLabel('Host', { exact: true })).toHaveValue(FD_YAY_HOST);
+  await expectPicked(form.getByLabel('Host', { exact: true }), FD_YAY_HOST);
   await page.keyboard.press('Tab');
   await expect(form.getByLabel('Route', { exact: true })).toBeFocused();
   await page.keyboard.type('content.p');
-  await expect(form.getByLabel('Route', { exact: true })).toHaveValue(ROUTE);
+  await expectPicked(form.getByLabel('Route', { exact: true }), ROUTE);
   await page.keyboard.press('Tab');
   // The radio group: Space checks the first choice, arrows move the choice.
   await page.keyboard.press('Space');

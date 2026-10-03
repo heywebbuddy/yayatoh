@@ -1,7 +1,7 @@
 import { executeQuery } from '@yayatoh/kernel';
 import { orgFinanceQuery, orgReportQuery } from '@yayatoh/reports';
 import { roleCan } from '@yayatoh/tenancy';
-import { Button, EmptyState, Input, Table } from '@yayatoh/ui';
+import { Button, buttonClass, DatePicker, EmptyState, Select, Table } from '@yayatoh/ui';
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/navigation.ts';
 import { formatNumber } from '@/lib/format.ts';
@@ -58,7 +58,7 @@ export async function OrgSales({
           <label htmlFor="report-period" className="text-[13px] font-bold text-ink">
             {t('reports.org.period')}
           </label>
-          <select
+          <Select
             id="report-period"
             name="period"
             defaultValue={period.error ? 'custom' : period.period}
@@ -69,19 +69,17 @@ export async function OrgSales({
                 {t(`reports.org.periods.${p}`)}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
-        <Input
+        <DatePicker
           name="from"
-          type="date"
           id="report-from"
           label={t('reports.org.from')}
           defaultValue={period.period === 'custom' ? period.from : undefined}
           hint={t('reports.org.customHint')}
         />
-        <Input
+        <DatePicker
           name="to"
-          type="date"
           id="report-to"
           label={t('reports.org.to')}
           defaultValue={period.period === 'custom' ? period.to : undefined}
@@ -92,7 +90,21 @@ export async function OrgSales({
         </Button>
       </form>
       {!r.hasSales ? (
-        <EmptyState title={t('reports.org.emptyTitle')} description={t('reports.org.emptyDescription')} />
+        <EmptyState
+          title={t('reports.org.emptyTitle')}
+          description={t('reports.org.emptyDescription')}
+          action={
+            period.period === 'all' ? (
+              <Link href="#events-heading" className={buttonClass('primary', 'md')}>
+                {t('reports.org.toEvents')}
+              </Link>
+            ) : (
+              <Link href={`/o/${org}?period=all`} className={buttonClass('primary', 'md')}>
+                {t('reports.org.showAllTime')}
+              </Link>
+            )
+          }
+        />
       ) : (
         <>
           <KpiGrid label={t('reports.org.keyNumbers')}>

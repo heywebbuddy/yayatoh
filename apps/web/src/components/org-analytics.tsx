@@ -1,5 +1,5 @@
 import type { Granularity, OrgDashboardDto, OrgRevenueDto } from '@yayatoh/analytics';
-import { Button, Input, LineChart, Select, StatCard, Table } from '@yayatoh/ui';
+import { Button, DatePicker, LineChart, Select, StatCard, Table } from '@yayatoh/ui';
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/navigation.ts';
 import { moneyText } from './marketing-analytics.tsx';
@@ -47,8 +47,7 @@ export async function AnalyticsFilters({
       </h2>
       <input type="hidden" name="view" value={granularity} />
       <div className="flex flex-wrap items-end gap-3">
-        <Input
-          type="date"
+        <DatePicker
           id="analytics-from"
           name="from"
           label={t('from')}
@@ -56,8 +55,7 @@ export async function AnalyticsFilters({
           aria-invalid={error ? true : undefined}
           aria-describedby={error ? 'analytics-to-error' : undefined}
         />
-        <Input
-          type="date"
+        <DatePicker
           id="analytics-to"
           name="to"
           label={t('to')}

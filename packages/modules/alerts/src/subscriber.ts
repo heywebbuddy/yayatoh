@@ -1,5 +1,6 @@
 import { DEVICE_ONLINE_WINDOW_MS, deviceEventIdTx, markQuietDevicesTx } from '@yayatoh/checkin';
 import { type TenantTx, withTenant } from '@yayatoh/db';
+import { unpaidPledgeEventIdsTx } from '@yayatoh/donations';
 import { findEventTx, upcomingEventIdsTx } from '@yayatoh/events';
 import { type Ctx, createCtx } from '@yayatoh/kernel';
 import { orderMetricRefTx, refundMetricRefTx } from '@yayatoh/orders';
@@ -64,6 +65,29 @@ export const ALERT_TRIGGER_EVENTS = [
   'automations.journey_step_failed@1',
   'campaigns.send_failed@1',
   'payments.dispute_deadline_approaching@1',
+  // M5.9a conference pack: applications, session lines, exhibitor people, speaker tasks, invoices
+  // and session doors (time passing — a task or invoice falling due — is the sweep's job).
+  'registration.registrant.applied@1',
+  'registration.registrant.approved@1',
+  'registration.registrant.denied@1',
+  'registration.registrant.confirmed@1',
+  'registration.session.promoted@1',
+  'program.exhibitor.staff_invited@1',
+  'portal.account_invited@1',
+  'program.speaker_task.assigned@1',
+  'program.speaker_task.completed@1',
+  'program.speaker_task.overdue@1',
+  'order.invoiced@1',
+  'order.invoice_payment_recorded@1',
+  'order.voided@1',
+  'checkin.session_attended@1',
+  'checkin.session_left@1',
+  // Batch 3j merge: M5.5b's printer watchdog (offline once per silence, online again) and M5.4b's
+  // package activations (they add deliverables); deliverables falling due is the sweep's job.
+  'badges.printer_offline@1',
+  'badges.printer_online@1',
+  'program.sponsor_package.activated@1',
+  'program.sponsor_package.cancelled@1',
 ] as const;
 
 /** Outbox events that are themselves what an org rule counts (one `alerts.signals` row each). */
@@ -180,6 +204,10 @@ export async function evaluateOrgNow(
       new Date(now.getTime() + 30 * 86_400_000),
     ),
   );
+  // M4.8e: events over for 14 days with pledges still unpaid (planning cadence).
+  if (full)
+    for (const id of await withTenant(ctx, (tx) => unpaidPledgeEventIdsTx(tx, now)))
+      if (!ids.includes(id)) ids.push(id);
   const changes: AlertChange[] = [];
   // Alerts of events outside the window (moved, cancelled, over) still resolve.
   const stale = await withTenant(ctx, async (tx) => {

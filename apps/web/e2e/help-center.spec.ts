@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
-import { expectAccessible, signIn } from './helpers.ts';
+import { expectAccessible, pickOption, signIn } from './helpers.ts';
 
 // The help center is the platform CMS of the marketplace content org (Harbor Arts in e2e, see
 // playwright.config.ts), seeded with the starter articles (apps/web/src/content/platform-starter.ts).
@@ -168,7 +168,7 @@ test.describe('help center (M3.11b)', () => {
     await page.getByRole('link', { name: 'New article' }).click();
     await page.getByRole('button', { name: 'Create draft' }).click();
     await expect(page.getByText('Enter a title.')).toBeVisible();
-    await page.getByRole('combobox', { name: 'Category' }).selectOption({ label: 'Check-in · Organizers' });
+    await pickOption(page.getByRole('combobox', { name: 'Category' }), { label: 'Check-in · Organizers' });
     await page.getByRole('textbox', { name: 'Title', exact: true }).fill(title);
     await page.getByRole('textbox', { name: 'Summary' }).fill('Print a door list as a backup.');
     await page.getByRole('textbox', { name: 'Text', exact: true }).fill(`Print **${s}** from the event.`);
