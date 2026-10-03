@@ -82,3 +82,21 @@ export {
   setDefaultTemplateCommand,
   TemplateDto,
 } from './templates.ts';
+// M5.5c kiosk self-print.
+export { type BadgeDetails, badgeDetailsTx } from './batches.ts';
+export {
+  KioskBadgeDto,
+  KioskPrintDto,
+  KioskSettingsDto,
+  KioskSnapshotDto,
+  KioskVerifyDto,
+  kioskJobBadgeQuery,
+  kioskLookupQuery,
+  kioskPrintCommand,
+  kioskRequestCodeCommand,
+  kioskSettingsQuery,
+  kioskSnapshotQuery,
+  kioskVerifyCodeCommand,
+  setKioskSettingsCommand,
+  type WaitingRegistrationLookup,
+} from './kiosk.ts';

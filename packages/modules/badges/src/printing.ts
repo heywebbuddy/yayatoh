@@ -90,12 +90,12 @@ export type PrinterDto = z.infer<typeof PrinterDto>;
 
 const printerDto = (p: PrinterRow): PrinterDto => PrinterDto.parse({ ...p, archived: p.archivedAt !== null });
 
-async function printNodeEnabledTx(tx: TenantTx): Promise<boolean> {
+export async function printNodeEnabledTx(tx: TenantTx): Promise<boolean> {
   const [s] = await tx.select({ on: printSettings.printnodeEnabled }).from(printSettings).limit(1);
   return s?.on ?? false;
 }
 
-async function printerOfTx(tx: TenantTx, eventId: string, printerId: string, lock = false) {
+export async function printerOfTx(tx: TenantTx, eventId: string, printerId: string, lock = false) {
   const q = tx
     .select()
     .from(printers)
@@ -444,10 +444,15 @@ export const PrintJobDto = z.object({
 export type PrintJobDto = z.infer<typeof PrintJobDto>;
 
 type JobRow = typeof printJobs.$inferSelect;
-const jobDto = (j: JobRow): PrintJobDto => PrintJobDto.parse(j);
+export const jobDto = (j: JobRow): PrintJobDto => PrintJobDto.parse(j);
+
+/** One badge's prints one at a time (desks and kiosks alike): the second sees the first's job. */
+export async function lockBadgePrintTx(tx: TenantTx, ticketId: string): Promise<void> {
+  await tx.execute(sql`select pg_advisory_xact_lock(hashtextextended(${`badges.print:${ticketId}`}, 0))`);
+}
 
 /** Prints of a ticket that count (every job that did not fail). */
-async function priorPrintsTx(tx: TenantTx, ticketId: string): Promise<number> {
+export async function priorPrintsTx(tx: TenantTx, ticketId: string): Promise<number> {
   const [r] = await tx
     .select({ n: count() })
     .from(printJobs)
@@ -512,9 +517,7 @@ export const startPrintJobCommand = tenantCommand({
         field: 'printerId',
       });
     // Two desks printing the same badge at once: one waits for the other, so one is the reprint.
-    await tx.execute(
-      sql`select pg_advisory_xact_lock(hashtextextended(${`badges.print:${input.ticketId}`}, 0))`,
-    );
+    await lockBadgePrintTx(tx, input.ticketId);
     const kind = printKindFor(await priorPrintsTx(tx, input.ticketId));
     const problem = reasonProblem(kind, input.reason, input.note);
     if (problem)
@@ -601,7 +604,7 @@ const JobBadgeDto = z.object({
 });
 
 /** A print job's badge HTML (the template it prints with now) and its queue title. */
-async function jobBadgeTx(tx: TenantTx, ctx: Ctx, jobId: string, forBrowser: boolean) {
+export async function jobBadgeTx(tx: TenantTx, ctx: Ctx, jobId: string, forBrowser: boolean) {
   const [j] = await tx.select().from(printJobs).where(eq(printJobs.id, jobId));
   if (!j) throw new DomainError('not_found', 'Print job not found');
   if (forBrowser) {

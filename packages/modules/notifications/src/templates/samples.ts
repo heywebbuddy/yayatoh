@@ -123,6 +123,7 @@ export const SAMPLE_PARAMS: Readonly<Record<MessageKind, Readonly<Record<string,
     url: 'https://app.yayatoh.test/events/lakeside-jazz-night/seat-finder',
     minutes: 10,
   },
+  'badges.kiosk-code': { code: '730514', eventName: 'Midwest Leadership Summit', minutes: 10 },
   'guest.checkout-code': { code: '305117', minutes: 10 },
   'portal.invite': {
     url: 'https://app.yayatoh.test/event-portal/invite/sample',

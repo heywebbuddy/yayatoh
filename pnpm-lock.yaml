@@ -1308,6 +1308,9 @@ importers:
 
   packages/modules/badges:
     dependencies:
+      '@yayatoh/checkin':
+        specifier: workspace:*
+        version: link:../checkin
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../../db

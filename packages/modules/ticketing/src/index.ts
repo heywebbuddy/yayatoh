@@ -167,3 +167,4 @@ export {
   walletPassSync,
   walletSerial,
 } from './wallet.ts';
+export { activeTicketIdForCodeTx, activeTicketShortCodeTx, activeTicketsHeldByTx } from './kiosk.ts';

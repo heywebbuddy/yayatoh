@@ -165,3 +165,4 @@ export {
   verifyKioskPin,
 } from './staff-mode.ts';
 export { type CheckinScope, type CheckinSeriesFact, checkinFactsTx, checkinSeriesTx } from './stats.ts';
+export { requireKioskDeviceTx } from './kiosk-device.ts';

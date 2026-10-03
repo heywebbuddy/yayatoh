@@ -128,3 +128,4 @@ export {
   updateAdmissionItemCommand,
   updateRegistrationTypeCommand,
 } from './setup.ts';
+export { hasWaitingRegistrationTx } from './kiosk.ts';
