@@ -99,13 +99,15 @@ async function ticketFor(name: string): Promise<string> {
 }
 
 let n = 0;
-const print = (ctx: Ctx, input: Record<string, unknown>) =>
-  executeCommand(
+const print = (ctx: Ctx, input: Record<string, unknown>) => {
+  n += 1;
+  return executeCommand(
     startPrintJobCommand,
-    { eventId: ev.id, requestKey: `print-${Date.now()}-${(n += 1)}`, ...input },
+    { eventId: ev.id, requestKey: `print-${Date.now()}-${n}`, ...input },
     ctx,
     ports,
   );
+};
 
 const printerEvents = async (printerId: string) =>
   (
