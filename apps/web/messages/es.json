@@ -13052,6 +13052,12 @@
     "connectors": {
       "demo": {
         "description": "Una app de contactos de prueba para probar integraciones: los contactos se sincronizan en ambos sentidos con tu CRM. Solo en entornos de prueba."
+      },
+      "quickbooks": {
+        "description": "Registra cada día un asiento resumen de tus ventas, comisiones, reembolsos, pagos y donaciones en QuickBooks Online."
+      },
+      "xero": {
+        "description": "Registra cada día un asiento resumen de tus ventas, comisiones, reembolsos, pagos y donaciones en Xero."
       }
     },
     "sandboxBadge": "Pruebas",
@@ -13071,7 +13077,8 @@
     "readOnly": "Solo propietarios y administradores pueden conectar o cambiar integraciones.",
     "breadcrumb": "Ruta de navegación",
     "objects": {
-      "contacts": "Contactos"
+      "contacts": "Contactos",
+      "journals": "Asientos diarios"
     },
     "fields": {
       "email": "Correo electrónico",
@@ -13226,7 +13233,14 @@
       "paused": "Detenida al pausar",
       "sync_failed": "La sincronización falló",
       "unknown_connector": "Esta integración ya no está disponible",
-      "other": "Error ({code})"
+      "other": "Error ({code})",
+      "currency_unsupported": "Tu contabilidad solo acepta su moneda base",
+      "post_failed": "No se pudo registrar en tu contabilidad",
+      "http_400": "Tu contabilidad lo rechazó: revisa las cuentas asignadas",
+      "http_429": "El proveedor nos pidió ir más despacio",
+      "http_503": "El proveedor no está disponible en este momento",
+      "no_organisation": "No se encontró ninguna organización para esta conexión",
+      "account_code_missing": "Una cuenta asignada no tiene código"
     },
     "inbox": {
       "title": "Errores de integración",
@@ -13288,7 +13302,84 @@
       "allow": "Permitir",
       "deny": "Denegar"
     },
-    "webhooksAction": "Configurar un webhook"
+    "webhooksAction": "Configurar un webhook",
+    "accounting": {
+      "mapTitle": "Plan de cuentas",
+      "mapHelp": "Elige a qué cuenta de tu contabilidad va cada línea del asiento resumen diario. Los días se registran cuando terminan, en la zona horaria de tu organización.",
+      "notMapped": "Asigna tus cuentas para empezar a registrar los asientos diarios.",
+      "version": "Versión {version} · registrando días desde el {day}",
+      "chartUnavailable": "No pudimos cargar tu plan de cuentas desde {name}. Inténtalo de nuevo en un momento.",
+      "chooseAccount": "Elige una cuenta",
+      "categories": {
+        "sales": {
+          "label": "Venta de entradas",
+          "hint": "Se abona con las ventas brutas de entradas del día."
+        },
+        "donations": {
+          "label": "Donaciones",
+          "hint": "Se abona con las donaciones en línea del día."
+        },
+        "refunds": {
+          "label": "Reembolsos",
+          "hint": "Se carga con lo reembolsado a compradores y donantes."
+        },
+        "fees": {
+          "label": "Comisiones de Yayatoh",
+          "hint": "Se carga con las comisiones de la plataforma del día, menos las devueltas."
+        },
+        "payouts": {
+          "label": "Pagos",
+          "hint": "La cuenta bancaria donde llegan los pagos de Yayatoh."
+        },
+        "clearing": {
+          "label": "Cuenta puente",
+          "hint": "Recoge el dinero que Yayatoh o tu procesador guardan para ti. Cuadra cada asiento."
+        }
+      },
+      "startsOn": "Registrar días desde",
+      "startsOnHint": "El primer día que se registra, hasta un año atrás.",
+      "save": "Guardar asignación de cuentas",
+      "saved": "Asignación de cuentas guardada como versión {version}. La próxima sincronización la usará.",
+      "invalid": "Esta asignación aún no se puede guardar. Revisa los campos marcados.",
+      "saveFailed": "No se pudo guardar la asignación. Inténtalo de nuevo en un momento.",
+      "issue": {
+        "missing": "Elige una cuenta para {field}.",
+        "unknown_account": "Esa cuenta ya no está en tu contabilidad. Elige otra para {field}.",
+        "clearing_shared": "La cuenta puente no puede usarse también para {field}.",
+        "starts_in_future": "Elige hoy o un día anterior.",
+        "starts_too_early": "Elige un día dentro del último año.",
+        "missing_date": "Indica el primer día que se registra.",
+        "other": "Revisa este campo."
+      },
+      "journalsTitle": "Asientos diarios",
+      "journalsHelp": "Un asiento por día y moneda. Si un día cambia después de registrarse, se anula y se vuelve a registrar; nunca se edita.",
+      "journalsCaption": "Asientos resumen diarios enviados a tu contabilidad",
+      "waiting": "{count, plural, one {# asiento espera para enviarse.} other {# asientos esperan para enviarse.}}",
+      "emptyTitle": "Aún no hay asientos",
+      "emptyMapped": "Los días se registran cuando terminan, en la próxima sincronización.",
+      "emptyUnmapped": "Asigna tus cuentas y sincroniza para registrar los días desde tu primer día.",
+      "emptyMapAction": "Asignar cuentas",
+      "emptyPostAction": "Buscar días por registrar",
+      "emptyBackAction": "Volver a integraciones",
+      "columns": {
+        "day": "Día",
+        "currency": "Moneda",
+        "kind": "Asiento",
+        "amount": "Importe",
+        "status": "Estado",
+        "reference": "Referencia en tu contabilidad"
+      },
+      "kinds": {
+        "journal": "Asiento · revisión {revision}",
+        "reversal": "Anulación de la revisión {revision}"
+      },
+      "status": {
+        "pending": "En espera",
+        "posted": "Registrado",
+        "failed": "No registrado",
+        "superseded": "Reemplazado"
+      }
+    }
   },
   "guestSeats": {
     "placeAt": {

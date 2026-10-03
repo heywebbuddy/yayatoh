@@ -13052,6 +13052,12 @@
     "connectors": {
       "demo": {
         "description": "Een test-app met contacten om integraties uit te proberen: contacten synchroniseren in beide richtingen met je CRM. Alleen in testomgevingen."
+      },
+      "quickbooks": {
+        "description": "Boek elke dag een verzamelboeking van je verkopen, kosten, terugbetalingen, uitbetalingen en donaties in QuickBooks Online."
+      },
+      "xero": {
+        "description": "Boek elke dag een verzamelboeking van je verkopen, kosten, terugbetalingen, uitbetalingen en donaties in Xero."
       }
     },
     "sandboxBadge": "Test",
@@ -13071,7 +13077,8 @@
     "readOnly": "Alleen eigenaren en beheerders kunnen integraties koppelen of wijzigen.",
     "breadcrumb": "Kruimelpad",
     "objects": {
-      "contacts": "Contacten"
+      "contacts": "Contacten",
+      "journals": "Dagboekingen"
     },
     "fields": {
       "email": "E-mail",
@@ -13226,7 +13233,14 @@
       "paused": "Gestopt door pauzeren",
       "sync_failed": "De synchronisatie is mislukt",
       "unknown_connector": "Deze integratie is niet meer beschikbaar",
-      "other": "Fout ({code})"
+      "other": "Fout ({code})",
+      "currency_unsupported": "Je boekhouding accepteert alleen de basisvaluta",
+      "post_failed": "Kon niet in je boekhouding worden geboekt",
+      "http_400": "Je boekhouding weigerde het: controleer de gekoppelde rekeningen",
+      "http_429": "De aanbieder vroeg ons het rustiger aan te doen",
+      "http_503": "De aanbieder is nu niet beschikbaar",
+      "no_organisation": "Geen organisatie gevonden voor deze koppeling",
+      "account_code_missing": "Een gekoppelde rekening heeft geen nummer"
     },
     "inbox": {
       "title": "Integratiefouten",
@@ -13288,7 +13302,84 @@
       "allow": "Toestaan",
       "deny": "Weigeren"
     },
-    "webhooksAction": "Een webhook instellen"
+    "webhooksAction": "Een webhook instellen",
+    "accounting": {
+      "mapTitle": "Rekeningschema",
+      "mapHelp": "Kies waar elke regel van de dagelijkse verzamelboeking in je boekhouding komt. Dagen worden geboekt nadat ze voorbij zijn, in de tijdzone van je organisatie.",
+      "notMapped": "Koppel je rekeningen om dagboekingen te gaan boeken.",
+      "version": "Versie {version} · boekt dagen vanaf {day}",
+      "chartUnavailable": "We konden je rekeningschema niet ophalen bij {name}. Probeer het zo opnieuw.",
+      "chooseAccount": "Kies een rekening",
+      "categories": {
+        "sales": {
+          "label": "Ticketverkoop",
+          "hint": "Gecrediteerd met de bruto ticketverkoop van de dag."
+        },
+        "donations": {
+          "label": "Donaties",
+          "hint": "Gecrediteerd met de online giften van de dag."
+        },
+        "refunds": {
+          "label": "Terugbetalingen",
+          "hint": "Gedebiteerd met wat aan kopers en donateurs is terugbetaald."
+        },
+        "fees": {
+          "label": "Yayatoh-kosten",
+          "hint": "Gedebiteerd met de platformkosten van de dag, min teruggegeven kosten."
+        },
+        "payouts": {
+          "label": "Uitbetalingen",
+          "hint": "De bankrekening waarop uitbetalingen van Yayatoh binnenkomen."
+        },
+        "clearing": {
+          "label": "Tussenrekening",
+          "hint": "Houdt het geld dat Yayatoh of je betaalverwerker voor je bewaart. Brengt elke boeking in evenwicht."
+        }
+      },
+      "startsOn": "Dagen boeken vanaf",
+      "startsOnHint": "De eerste dag die wordt geboekt, tot een jaar terug.",
+      "save": "Rekeningkoppeling opslaan",
+      "saved": "Rekeningkoppeling opgeslagen als versie {version}. De volgende synchronisatie boekt ermee.",
+      "invalid": "Deze koppeling kan nog niet worden opgeslagen. Controleer de gemarkeerde velden.",
+      "saveFailed": "De koppeling kon niet worden opgeslagen. Probeer het zo opnieuw.",
+      "issue": {
+        "missing": "Kies een rekening voor {field}.",
+        "unknown_account": "Die rekening staat niet meer in je boekhouding. Kies een andere voor {field}.",
+        "clearing_shared": "De tussenrekening kan niet ook voor {field} worden gebruikt.",
+        "starts_in_future": "Kies vandaag of een eerdere dag.",
+        "starts_too_early": "Kies een dag in het afgelopen jaar.",
+        "missing_date": "Vul de eerste dag in die wordt geboekt.",
+        "other": "Controleer dit veld."
+      },
+      "journalsTitle": "Dagboekingen",
+      "journalsHelp": "Eén boeking per dag en valuta. Verandert een dag nadat hij is geboekt, dan wordt hij tegengeboekt en opnieuw geboekt, nooit gewijzigd.",
+      "journalsCaption": "Dagelijkse verzamelboekingen verstuurd naar je boekhouding",
+      "waiting": "{count, plural, one {# boeking wacht op verzending.} other {# boekingen wachten op verzending.}}",
+      "emptyTitle": "Nog geen boekingen",
+      "emptyMapped": "Dagen worden geboekt nadat ze voorbij zijn, bij de volgende synchronisatie.",
+      "emptyUnmapped": "Koppel je rekeningen en synchroniseer dan om de dagen vanaf je eerste dag te boeken.",
+      "emptyMapAction": "Rekeningen koppelen",
+      "emptyPostAction": "Zoeken naar te boeken dagen",
+      "emptyBackAction": "Terug naar integraties",
+      "columns": {
+        "day": "Dag",
+        "currency": "Valuta",
+        "kind": "Boeking",
+        "amount": "Bedrag",
+        "status": "Status",
+        "reference": "Referentie in je boekhouding"
+      },
+      "kinds": {
+        "journal": "Boeking · revisie {revision}",
+        "reversal": "Tegenboeking van revisie {revision}"
+      },
+      "status": {
+        "pending": "Wacht",
+        "posted": "Geboekt",
+        "failed": "Niet geboekt",
+        "superseded": "Vervangen"
+      }
+    }
   },
   "guestSeats": {
     "placeAt": {

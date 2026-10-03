@@ -25,6 +25,7 @@ import {
   syncNowAction,
 } from '../actions.ts';
 import { ConnectionPill, codeText, ERROR_CODES, IntegrationTabs, RunPill } from '../parts.tsx';
+import { AccountingSection } from './accounting.tsx';
 import { MappingForm } from './mapping-form.tsx';
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -230,7 +231,20 @@ export default async function ConnectionPage({
           ) : null}
         </Card>
       </section>
-      {live || detail.mappings.length ? (
+      {connector.accounting ? (
+        <AccountingSection
+          org={org}
+          connectionId={c.id}
+          connectorName={connector.name}
+          ctx={data.ctx}
+          locale={locale}
+          timeZone={data.org.timezone}
+          canManage={canManage}
+          live={live}
+          status={c.status}
+        />
+      ) : null}
+      {connector.objects.length > 0 && (live || detail.mappings.length) ? (
         <section aria-labelledby="mapping-heading" className="flex flex-col gap-3">
           <SectionHeader
             id="mapping-heading"

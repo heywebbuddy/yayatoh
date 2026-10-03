@@ -13052,6 +13052,12 @@
     "connectors": {
       "demo": {
         "description": "Eine Sandbox-Kontakte-App zum Ausprobieren: Kontakte werden in beide Richtungen mit deinem CRM abgeglichen. Nur in Testumgebungen."
+      },
+      "quickbooks": {
+        "description": "Buchen Sie täglich eine Sammelbuchung Ihrer Verkäufe, Gebühren, Erstattungen, Auszahlungen und Spenden in QuickBooks Online."
+      },
+      "xero": {
+        "description": "Buchen Sie täglich eine Sammelbuchung Ihrer Verkäufe, Gebühren, Erstattungen, Auszahlungen und Spenden in Xero."
       }
     },
     "sandboxBadge": "Sandbox",
@@ -13071,7 +13077,8 @@
     "readOnly": "Nur Inhaber und Admins können Integrationen verbinden oder ändern.",
     "breadcrumb": "Brotkrümelnavigation",
     "objects": {
-      "contacts": "Kontakte"
+      "contacts": "Kontakte",
+      "journals": "Tagesbuchungen"
     },
     "fields": {
       "email": "E-Mail",
@@ -13226,7 +13233,14 @@
       "paused": "Durch Pausieren gestoppt",
       "sync_failed": "Der Abgleich ist fehlgeschlagen",
       "unknown_connector": "Diese Integration ist nicht mehr verfügbar",
-      "other": "Fehler ({code})"
+      "other": "Fehler ({code})",
+      "currency_unsupported": "Ihre Buchhaltung akzeptiert nur ihre Basiswährung",
+      "post_failed": "Konnte nicht in Ihre Buchhaltung gebucht werden",
+      "http_400": "Ihre Buchhaltung hat es abgelehnt: Prüfen Sie die zugeordneten Konten",
+      "http_429": "Der Anbieter hat uns gebeten, langsamer zu machen",
+      "http_503": "Der Anbieter ist gerade nicht erreichbar",
+      "no_organisation": "Für diese Verbindung wurde keine Organisation gefunden",
+      "account_code_missing": "Einem zugeordneten Konto fehlt die Kontonummer"
     },
     "inbox": {
       "title": "Integrationsfehler",
@@ -13288,7 +13302,84 @@
       "allow": "Zulassen",
       "deny": "Ablehnen"
     },
-    "webhooksAction": "Webhook einrichten"
+    "webhooksAction": "Webhook einrichten",
+    "accounting": {
+      "mapTitle": "Kontenplan",
+      "mapHelp": "Legen Sie fest, wohin jede Zeile der täglichen Sammelbuchung in Ihrer Buchhaltung geht. Tage werden nach ihrem Ende gebucht, in der Zeitzone Ihrer Organisation.",
+      "notMapped": "Ordnen Sie Ihre Konten zu, um mit den Tagesbuchungen zu beginnen.",
+      "version": "Version {version} · Buchung ab {day}",
+      "chartUnavailable": "Ihr Kontenplan konnte nicht von {name} geladen werden. Versuchen Sie es gleich noch einmal.",
+      "chooseAccount": "Konto wählen",
+      "categories": {
+        "sales": {
+          "label": "Ticketverkäufe",
+          "hint": "Wird mit den Brutto-Ticketverkäufen des Tages im Haben gebucht."
+        },
+        "donations": {
+          "label": "Spenden",
+          "hint": "Wird mit den Online-Spenden des Tages im Haben gebucht."
+        },
+        "refunds": {
+          "label": "Erstattungen",
+          "hint": "Wird mit dem an Käufer und Spender Erstatteten im Soll gebucht."
+        },
+        "fees": {
+          "label": "Yayatoh-Gebühren",
+          "hint": "Wird mit den Plattformgebühren des Tages abzüglich erstatteter Gebühren im Soll gebucht."
+        },
+        "payouts": {
+          "label": "Auszahlungen",
+          "hint": "Das Bankkonto, auf dem Auszahlungen von Yayatoh eingehen."
+        },
+        "clearing": {
+          "label": "Verrechnungskonto",
+          "hint": "Enthält das Geld, das Yayatoh oder Ihr Zahlungsdienst für Sie verwahrt. Es gleicht jede Buchung aus."
+        }
+      },
+      "startsOn": "Tage buchen ab",
+      "startsOnHint": "Der erste zu buchende Tag, bis zu ein Jahr zurück.",
+      "save": "Kontenzuordnung speichern",
+      "saved": "Kontenzuordnung als Version {version} gespeichert. Die nächste Synchronisierung bucht damit.",
+      "invalid": "Diese Zuordnung kann noch nicht gespeichert werden. Prüfen Sie die markierten Felder.",
+      "saveFailed": "Die Zuordnung konnte nicht gespeichert werden. Versuchen Sie es gleich noch einmal.",
+      "issue": {
+        "missing": "Wählen Sie ein Konto für {field}.",
+        "unknown_account": "Dieses Konto gibt es in Ihrer Buchhaltung nicht mehr. Wählen Sie ein anderes für {field}.",
+        "clearing_shared": "Das Verrechnungskonto kann nicht auch für {field} verwendet werden.",
+        "starts_in_future": "Wählen Sie heute oder einen früheren Tag.",
+        "starts_too_early": "Wählen Sie einen Tag innerhalb des letzten Jahres.",
+        "missing_date": "Geben Sie den ersten zu buchenden Tag ein.",
+        "other": "Prüfen Sie dieses Feld."
+      },
+      "journalsTitle": "Tagesbuchungen",
+      "journalsHelp": "Eine Buchung pro Tag und Währung. Ändert sich ein bereits gebuchter Tag, wird er storniert und neu gebucht, nie bearbeitet.",
+      "journalsCaption": "An Ihre Buchhaltung gesendete tägliche Sammelbuchungen",
+      "waiting": "{count, plural, one {# Buchung wartet auf den Versand.} other {# Buchungen warten auf den Versand.}}",
+      "emptyTitle": "Noch keine Buchungen",
+      "emptyMapped": "Tage werden nach ihrem Ende bei der nächsten Synchronisierung gebucht.",
+      "emptyUnmapped": "Ordnen Sie Ihre Konten zu und synchronisieren Sie dann, um die Tage ab Ihrem ersten Tag zu buchen.",
+      "emptyMapAction": "Konten zuordnen",
+      "emptyPostAction": "Nach zu buchenden Tagen suchen",
+      "emptyBackAction": "Zurück zu den Integrationen",
+      "columns": {
+        "day": "Tag",
+        "currency": "Währung",
+        "kind": "Eintrag",
+        "amount": "Betrag",
+        "status": "Status",
+        "reference": "Referenz in Ihrer Buchhaltung"
+      },
+      "kinds": {
+        "journal": "Buchung · Revision {revision}",
+        "reversal": "Storno von Revision {revision}"
+      },
+      "status": {
+        "pending": "Wartet",
+        "posted": "Gebucht",
+        "failed": "Nicht gebucht",
+        "superseded": "Ersetzt"
+      }
+    }
   },
   "guestSeats": {
     "placeAt": {

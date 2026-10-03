@@ -13052,6 +13052,12 @@
     "connectors": {
       "demo": {
         "description": "Um app de contatos de teste para experimentar integrações: os contatos são sincronizados nos dois sentidos com o seu CRM. Somente em ambientes de teste."
+      },
+      "quickbooks": {
+        "description": "Lance todos os dias um lançamento resumo das suas vendas, taxas, reembolsos, repasses e doações no QuickBooks Online."
+      },
+      "xero": {
+        "description": "Lance todos os dias um lançamento resumo das suas vendas, taxas, reembolsos, repasses e doações no Xero."
       }
     },
     "sandboxBadge": "Teste",
@@ -13071,7 +13077,8 @@
     "readOnly": "Somente proprietários e administradores podem conectar ou alterar integrações.",
     "breadcrumb": "Trilha de navegação",
     "objects": {
-      "contacts": "Contatos"
+      "contacts": "Contatos",
+      "journals": "Lançamentos diários"
     },
     "fields": {
       "email": "E-mail",
@@ -13226,7 +13233,14 @@
       "paused": "Interrompida pela pausa",
       "sync_failed": "A sincronização falhou",
       "unknown_connector": "Esta integração não está mais disponível",
-      "other": "Erro ({code})"
+      "other": "Erro ({code})",
+      "currency_unsupported": "Sua contabilidade só aceita a moeda base",
+      "post_failed": "Não foi possível lançar na sua contabilidade",
+      "http_400": "Sua contabilidade recusou: verifique as contas mapeadas",
+      "http_429": "O provedor pediu para irmos mais devagar",
+      "http_503": "O provedor está indisponível no momento",
+      "no_organisation": "Nenhuma organização encontrada para esta conexão",
+      "account_code_missing": "Uma conta mapeada não tem código"
     },
     "inbox": {
       "title": "Erros de integração",
@@ -13288,7 +13302,84 @@
       "allow": "Permitir",
       "deny": "Negar"
     },
-    "webhooksAction": "Configurar um webhook"
+    "webhooksAction": "Configurar um webhook",
+    "accounting": {
+      "mapTitle": "Plano de contas",
+      "mapHelp": "Escolha para onde vai cada linha do lançamento resumo diário na sua contabilidade. Os dias são lançados depois que terminam, no fuso horário da sua organização.",
+      "notMapped": "Mapeie suas contas para começar a lançar os lançamentos diários.",
+      "version": "Versão {version} · lançando dias a partir de {day}",
+      "chartUnavailable": "Não conseguimos carregar seu plano de contas do {name}. Tente novamente em instantes.",
+      "chooseAccount": "Escolha uma conta",
+      "categories": {
+        "sales": {
+          "label": "Venda de ingressos",
+          "hint": "Creditada com as vendas brutas de ingressos do dia."
+        },
+        "donations": {
+          "label": "Doações",
+          "hint": "Creditada com as doações online do dia."
+        },
+        "refunds": {
+          "label": "Reembolsos",
+          "hint": "Debitada com o que foi reembolsado a compradores e doadores."
+        },
+        "fees": {
+          "label": "Taxas da Yayatoh",
+          "hint": "Debitada com as taxas da plataforma do dia, menos as devolvidas."
+        },
+        "payouts": {
+          "label": "Repasses",
+          "hint": "A conta bancária em que os repasses da Yayatoh chegam."
+        },
+        "clearing": {
+          "label": "Conta transitória",
+          "hint": "Guarda o dinheiro que a Yayatoh ou seu processador mantém para você. Equilibra cada lançamento."
+        }
+      },
+      "startsOn": "Lançar dias a partir de",
+      "startsOnHint": "O primeiro dia a lançar, até um ano atrás.",
+      "save": "Salvar mapeamento de contas",
+      "saved": "Mapeamento de contas salvo como versão {version}. A próxima sincronização o usará.",
+      "invalid": "Este mapeamento ainda não pode ser salvo. Verifique os campos marcados.",
+      "saveFailed": "Não foi possível salvar o mapeamento. Tente novamente em instantes.",
+      "issue": {
+        "missing": "Escolha uma conta para {field}.",
+        "unknown_account": "Essa conta não está mais na sua contabilidade. Escolha outra para {field}.",
+        "clearing_shared": "A conta transitória não pode ser usada também para {field}.",
+        "starts_in_future": "Escolha hoje ou um dia anterior.",
+        "starts_too_early": "Escolha um dia dentro do último ano.",
+        "missing_date": "Informe o primeiro dia a lançar.",
+        "other": "Verifique este campo."
+      },
+      "journalsTitle": "Lançamentos diários",
+      "journalsHelp": "Um lançamento por dia e moeda. Um dia que muda depois de lançado é estornado e lançado de novo, nunca editado.",
+      "journalsCaption": "Lançamentos resumo diários enviados para sua contabilidade",
+      "waiting": "{count, plural, one {# lançamento aguarda envio.} many {# lançamentos aguardam envio.} other {# lançamentos aguardam envio.}}",
+      "emptyTitle": "Ainda não há lançamentos",
+      "emptyMapped": "Os dias são lançados depois que terminam, na próxima sincronização.",
+      "emptyUnmapped": "Mapeie suas contas e sincronize para lançar os dias desde o seu primeiro dia.",
+      "emptyMapAction": "Mapear contas",
+      "emptyPostAction": "Procurar dias a lançar",
+      "emptyBackAction": "Voltar às integrações",
+      "columns": {
+        "day": "Dia",
+        "currency": "Moeda",
+        "kind": "Lançamento",
+        "amount": "Valor",
+        "status": "Status",
+        "reference": "Referência na sua contabilidade"
+      },
+      "kinds": {
+        "journal": "Lançamento · revisão {revision}",
+        "reversal": "Estorno da revisão {revision}"
+      },
+      "status": {
+        "pending": "Aguardando",
+        "posted": "Lançado",
+        "failed": "Não lançado",
+        "superseded": "Substituído"
+      }
+    }
   },
   "guestSeats": {
     "placeAt": {

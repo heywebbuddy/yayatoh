@@ -13052,6 +13052,12 @@
     "connectors": {
       "demo": {
         "description": "連携を試すためのテスト用連絡先アプリです。連絡先が CRM と双方向に同期されます。テスト環境のみ。"
+      },
+      "quickbooks": {
+        "description": "売上、手数料、払い戻し、入金、寄付の日次サマリー仕訳を毎日 QuickBooks Online に計上します。"
+      },
+      "xero": {
+        "description": "売上、手数料、払い戻し、入金、寄付の日次サマリー仕訳を毎日 Xero に計上します。"
       }
     },
     "sandboxBadge": "テスト",
@@ -13071,7 +13077,8 @@
     "readOnly": "連携の接続や変更ができるのはオーナーと管理者だけです。",
     "breadcrumb": "パンくずリスト",
     "objects": {
-      "contacts": "連絡先"
+      "contacts": "連絡先",
+      "journals": "日次仕訳"
     },
     "fields": {
       "email": "メール",
@@ -13226,7 +13233,14 @@
       "paused": "一時停止により停止",
       "sync_failed": "同期に失敗しました",
       "unknown_connector": "この連携は利用できなくなりました",
-      "other": "エラー（{code}）"
+      "other": "エラー（{code}）",
+      "currency_unsupported": "会計ソフトは基準通貨のみ受け付けます",
+      "post_failed": "会計ソフトに計上できませんでした",
+      "http_400": "会計ソフトに拒否されました。対応付けた勘定科目を確認してください",
+      "http_429": "プロバイダーから処理を遅くするよう求められました",
+      "http_503": "プロバイダーは現在利用できません",
+      "no_organisation": "この接続の組織が見つかりませんでした",
+      "account_code_missing": "対応付けた勘定科目にコードがありません"
     },
     "inbox": {
       "title": "連携エラー",
@@ -13288,7 +13302,84 @@
       "allow": "許可",
       "deny": "拒否"
     },
-    "webhooksAction": "Webhook を設定"
+    "webhooksAction": "Webhook を設定",
+    "accounting": {
+      "mapTitle": "勘定科目表",
+      "mapHelp": "日次サマリー仕訳の各行を会計ソフトのどの勘定科目に計上するかを選びます。日付は終わった後に、組織のタイムゾーンで計上されます。",
+      "notMapped": "日次仕訳の計上を始めるには、勘定科目を対応付けてください。",
+      "version": "バージョン {version} ・ {day} から計上",
+      "chartUnavailable": "{name} から勘定科目表を読み込めませんでした。しばらくしてからもう一度お試しください。",
+      "chooseAccount": "勘定科目を選択",
+      "categories": {
+        "sales": {
+          "label": "チケット売上",
+          "hint": "その日のチケット総売上を貸方に計上します。"
+        },
+        "donations": {
+          "label": "寄付",
+          "hint": "その日のオンライン寄付を貸方に計上します。"
+        },
+        "refunds": {
+          "label": "払い戻し",
+          "hint": "購入者と寄付者に払い戻した額を借方に計上します。"
+        },
+        "fees": {
+          "label": "Yayatoh 手数料",
+          "hint": "その日のプラットフォーム手数料（返金分を差し引いた額）を借方に計上します。"
+        },
+        "payouts": {
+          "label": "入金",
+          "hint": "Yayatoh からの入金を受け取る銀行口座です。"
+        },
+        "clearing": {
+          "label": "仮勘定",
+          "hint": "Yayatoh または決済代行が預かっている資金です。各仕訳の貸借を合わせます。"
+        }
+      },
+      "startsOn": "計上開始日",
+      "startsOnHint": "最初に計上する日（最大 1 年前まで）。",
+      "save": "勘定科目の対応付けを保存",
+      "saved": "勘定科目の対応付けをバージョン {version} として保存しました。次回の同期から使われます。",
+      "invalid": "この対応付けはまだ保存できません。印の付いた項目を確認してください。",
+      "saveFailed": "対応付けを保存できませんでした。しばらくしてからもう一度お試しください。",
+      "issue": {
+        "missing": "{field}の勘定科目を選んでください。",
+        "unknown_account": "その勘定科目は会計ソフトにもうありません。{field}に別の科目を選んでください。",
+        "clearing_shared": "仮勘定は{field}にも使えません。",
+        "starts_in_future": "今日またはそれ以前の日を選んでください。",
+        "starts_too_early": "過去 1 年以内の日を選んでください。",
+        "missing_date": "最初に計上する日を入力してください。",
+        "other": "この項目を確認してください。"
+      },
+      "journalsTitle": "日次仕訳",
+      "journalsHelp": "日付と通貨ごとに 1 件の仕訳です。計上後に変わった日は、編集せずに取り消して計上し直します。",
+      "journalsCaption": "会計ソフトに送った日次サマリー仕訳",
+      "waiting": "{count, plural, other {# 件の仕訳が送信待ちです。}}",
+      "emptyTitle": "仕訳はまだありません",
+      "emptyMapped": "日付は終わった後、次回の同期で計上されます。",
+      "emptyUnmapped": "勘定科目を対応付けてから同期すると、計上開始日からの日付が計上されます。",
+      "emptyMapAction": "勘定科目を対応付ける",
+      "emptyPostAction": "計上する日を確認",
+      "emptyBackAction": "連携に戻る",
+      "columns": {
+        "day": "日付",
+        "currency": "通貨",
+        "kind": "エントリー",
+        "amount": "金額",
+        "status": "状態",
+        "reference": "会計ソフトでの参照番号"
+      },
+      "kinds": {
+        "journal": "仕訳 ・ 改訂 {revision}",
+        "reversal": "改訂 {revision} の取消"
+      },
+      "status": {
+        "pending": "送信待ち",
+        "posted": "計上済み",
+        "failed": "未計上",
+        "superseded": "置き換え済み"
+      }
+    }
   },
   "guestSeats": {
     "placeAt": {
