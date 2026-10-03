@@ -34,7 +34,24 @@
     "breadcrumb": "麵包屑導覽",
     "closeMenu": "關閉選單",
     "eventSections": "活動區塊",
-    "allEvents": "活動"
+    "allEvents": "活動",
+    "sections": {
+      "events": "活動",
+      "audience": "受眾與行銷",
+      "money": "資金",
+      "site": "網站與內容",
+      "settings": "設定"
+    },
+    "create": {
+      "label": "建立",
+      "event": "活動",
+      "series": "系列",
+      "template": "範本",
+      "venue": "場地",
+      "coupon": "優惠券",
+      "page": "頁面或部落格文章"
+    },
+    "help": "說明"
   },
   "notifications": {
     "open": "通知",
@@ -284,7 +301,9 @@
       "bounced": "退信：地址不存在",
       "soft_bounced": "暫時退信（信箱已滿或無法使用）",
       "complained": "收件人標為垃圾郵件"
-    }
+    },
+    "emptyAction": "選擇接收哪些通知",
+    "choosePreferences": "選擇接收哪些提醒"
   },
   "nav": {
     "home": "首頁",
@@ -348,7 +367,14 @@
     "marketingAnalytics": "行銷分析",
     "badges": "名牌",
     "orgAnalytics": "數據分析",
-    "integrations": "整合"
+    "integrations": "整合",
+    "seatingLibrary": "座位庫",
+    "coupons": "優惠券",
+    "charity": "慈善檔案",
+    "plan": "方案與帳單",
+    "webhooks": "Webhook",
+    "sandboxes": "沙盒",
+    "notifications": "通知"
   },
   "vocab": {
     "attendee": "參加者",
@@ -408,7 +434,11 @@
     "seriesFilter": "依系列篩選活動",
     "allEvents": "全部活動",
     "seriesEmptyTitle": "{name} 中還沒有活動",
-    "seriesEmptyDescription": "可在活動的「場次」頁面將其加入此系列。"
+    "seriesEmptyDescription": "可在活動的「場次」頁面將其加入此系列。",
+    "showEveryEvent": "顯示每個活動",
+    "doorTitle": "掃碼在掃碼應用程式中進行",
+    "doorDescription": "你的角色是在入口驗票。在此裝置上開啟掃碼應用程式即可開始。",
+    "openScan": "開啟掃碼應用程式"
   },
   "team": {
     "subtitle": "{count, plural, other {# 位成員}}",
@@ -453,7 +483,8 @@
     "readiness": "活動準備狀態",
     "readinessPercent": "已完成 {value}%",
     "noSalesTitle": "尚無銷售",
-    "noSalesDescription": "票券開賣後，報名、銷售與座位情況將顯示在這裡。"
+    "noSalesDescription": "票券開賣後，報名、銷售與座位情況將顯示在這裡。",
+    "toTicketsOrders": "前往票券與訂單"
   },
   "kpi": {
     "registrations": "報名數",
@@ -570,7 +601,10 @@
     "anyDistribution": "任何分發狀態",
     "distributionFilter": {
       "pending": "等待轉交"
-    }
+    },
+    "emptyUpload": "從 CSV 檔案上傳名單",
+    "toTicketsOrders": "前往票券與訂單",
+    "backToEvent": "返回活動概覽"
   },
   "attendeeStatus": {
     "paid": "已付款",
@@ -609,7 +643,8 @@
   },
   "section": {
     "comingTitle": "此區域正在建置中",
-    "comingDescription": "此功能將於後續里程碑推出。你的導覽已依據你的方案與活動類型調整。"
+    "comingDescription": "此功能將於後續里程碑推出。你的導覽已依據你的方案與活動類型調整。",
+    "backToEvent": "返回活動概覽"
   },
   "publicEvent": {
     "nav": "活動",
@@ -788,7 +823,8 @@
   },
   "orgPicker": {
     "emptyTitle": "你尚未加入任何組織",
-    "emptyDescription": "請擁有者邀請你，或等候邀請電子郵件。"
+    "emptyDescription": "請擁有者邀請你，或等候邀請電子郵件。",
+    "myTickets": "前往我的票券"
   },
   "invite": {
     "eyebrow": "邀請",
@@ -884,7 +920,8 @@
     "validDatesHint": "不勾選則適用於所有場次。",
     "dates": "場次",
     "allDates": "所有場次",
-    "someDates": "{count, plural, other {# 個場次}}"
+    "someDates": "{count, plural, other {# 個場次}}",
+    "emptyAction": "設定票券"
   },
   "checkout": {
     "quantity": "數量",
@@ -1053,7 +1090,8 @@
     "buyer": "買家",
     "items": "票券",
     "total": "總計",
-    "status": "狀態"
+    "status": "狀態",
+    "emptyAction": "開啟活動頁面"
   },
   "promo": {
     "title": "優惠碼",
@@ -1080,7 +1118,8 @@
     "resumeCode": "恢復{code}",
     "addTitle": "新增優惠碼",
     "add": "新增優惠碼",
-    "added": "已新增優惠碼。"
+    "added": "已新增優惠碼。",
+    "emptyAction": "建立代碼"
   },
   "questions": {
     "title": "結帳問題",
@@ -1115,7 +1154,8 @@
     "moveUp": "上移{label}",
     "moveDown": "下移{label}",
     "remove": "移除{label}",
-    "answers": "回答"
+    "answers": "回答",
+    "emptyAction": "撰寫問題"
   },
   "checkin": {
     "title": "報到",
@@ -1159,7 +1199,9 @@
     "overrideNote": "放行原因",
     "overrideHint": "將與你的姓名一起儲存在活動紀錄中，例如「採購單已核准，款項處理中」。",
     "overrideSubmit": "仍然放行",
-    "overrideNoteRequired": "請填寫原因（至少 3 個字元）才能在餘額未付時放行。"
+    "overrideNoteRequired": "請填寫原因（至少 3 個字元）才能在餘額未付時放行。",
+    "backToEvent": "返回活動",
+    "scanFirst": "掃描第一張票"
   },
   "checkinLive": {
     "state": {
@@ -1272,7 +1314,8 @@
     "attendees": "人員",
     "orders": "訂單",
     "ticketCode": "票券 {code}",
-    "orderRef": "訂單編號 {ref}"
+    "orderRef": "訂單編號 {ref}",
+    "browseEvents": "瀏覽你的活動"
   },
   "bulk": {
     "formLabel": "批次操作",
@@ -1418,7 +1461,8 @@
       "too_many_columns": "檔案超過 50 欄。",
       "cell_too_long": "有儲存格超過 1,000 個字元。",
       "unterminated_quote": "檔案中有未閉合的引號，無法作為 CSV 讀取。"
-    }
+    },
+    "backToEvent": "返回活動概覽"
   },
   "distribution": {
     "title": "傳送這張票",
@@ -1539,7 +1583,8 @@
     "activityLink": "活動紀錄",
     "privacyLink": "隱私請求",
     "charityLink": "慈善機構資料",
-    "planLink": "方案和模組"
+    "planLink": "方案和模組",
+    "findOwner": "尋找擁有者或管理員"
   },
   "legal": {
     "platform": "Yayatoh",
@@ -2353,7 +2398,10 @@
       "seatNumbersHint": "所選排和桌中的座位號碼，例如 1-4, 9。留白則包括其全部座位。",
       "allot": "分配座位",
       "allotted": "{count, plural, =0 {沒有座位變更。} other {已分配 # 個座位。}}",
-      "freed": "{count, plural, =0 {沒有座位屬於任何通路。} other {# 個座位重新向所有通路開放。}}"
+      "freed": "{count, plural, =0 {沒有座位屬於任何通路。} other {# 個座位重新向所有通路開放。}}",
+      "emptyReadOnly": "編輯新增後，通路會顯示在這裡。",
+      "addFirst": "新增第一個通路",
+      "noSeatsHint": "先在座位圖中新增排或桌，再在這裡分配座位。"
     },
     "revisions": {
       "title": "座位圖版本",
@@ -2645,7 +2693,8 @@
         "channel": "通路",
         "bookedAt": "預訂時間",
         "paidAt": "付款時間"
-      }
+      },
+      "showAll": "顯示所有預訂"
     },
     "org": {
       "title": "銷售",
@@ -2670,8 +2719,13 @@
       "byEvent": "依活動銷售",
       "event": "活動",
       "emptyTitle": "此期間沒有銷售",
-      "emptyDescription": "請選擇更長的期間，或分享活動頁面開始售票。"
-    }
+      "emptyDescription": "請選擇更長的期間，或分享活動頁面開始售票。",
+      "toEvents": "查看你的活動",
+      "showAllTime": "顯示全部時間"
+    },
+    "backToEvent": "返回活動概覽",
+    "toTicketsOrders": "前往票券與訂單",
+    "toSalesReport": "開啟銷售概覽"
   },
   "activity": {
     "title": "活動",
@@ -2720,7 +2774,10 @@
     },
     "pagination": "活動分頁",
     "newest": "最新",
-    "older": "更早的紀錄"
+    "older": "更早的紀錄",
+    "findOwner": "尋找擁有者或管理員",
+    "showAll": "顯示全部動態",
+    "toEvents": "前往你的活動"
   },
   "privacy": {
     "title": "隱私請求",
@@ -2737,7 +2794,8 @@
     "result": {
       "title": "此組織持有的關於 {email} 的資料",
       "noneTitle": "找不到此電子郵件的資料",
-      "noneDescription": "此組織中沒有任何紀錄使用該地址。您仍可建立請求，向此人作出正式答覆。"
+      "noneDescription": "此組織中沒有任何紀錄使用該地址。您仍可建立請求，向此人作出正式答覆。",
+      "searchAgain": "搜尋其他地址"
     },
     "errors": {
       "invalidEmail": "請輸入有效的電子郵件地址。",
@@ -2808,7 +2866,8 @@
       "due": "期限",
       "overdue": "已逾期",
       "action": "操作",
-      "review": "查看"
+      "review": "查看",
+      "emptyAction": "依電子郵件查找某人"
     },
     "closed": {
       "title": "已關閉的請求",
@@ -2845,7 +2904,8 @@
       "holdings": {
         "title": "此組織持有的資料",
         "empty": "沒有持有關於此人的任何資料",
-        "emptyHint": "您仍可完成請求：此人將收到未持有任何資料的正式答覆。"
+        "emptyHint": "您仍可完成請求：此人將收到未持有任何資料的正式答覆。",
+        "emptyAction": "回覆請求"
       },
       "export": {
         "title": "傳送副本給此人",
@@ -2917,7 +2977,8 @@
       "digest": "收據 SHA-256",
       "signature": "簽章（base64）",
       "footer": "由 Yayatoh 代表 {org} 核發。簽章涵蓋收據資料；請使用下方的公開金鑰驗證。"
-    }
+    },
+    "findOwner": "尋找擁有者或管理員"
   },
   "privacyNotice": {
     "eyebrow": "Yayatoh",
@@ -3096,9 +3157,13 @@
       "eventDate": "活動日期",
       "guests": "賓客人數",
       "markHandled": "標示為已處理",
-      "markNew": "標示為新請求"
+      "markNew": "標示為新請求",
+      "openPublic": "開啟場地公開頁面",
+      "editListing": "編輯目錄資訊"
     },
-    "layoutLibrary": "座位圖庫"
+    "layoutLibrary": "座位圖庫",
+    "emptyAction": "新增第一個場地",
+    "emptyViewerAction": "瀏覽場地目錄"
   },
   "details": {
     "title": "活動詳細資料",
@@ -3253,7 +3318,9 @@
     "sectionAdded": "已新增區塊。",
     "sectionSaved": "已儲存區塊。",
     "addSection": "新增區塊",
-    "saveSection": "儲存區塊"
+    "saveSection": "儲存區塊",
+    "emptyAction": "新增第一個區塊",
+    "backToEvent": "返回活動概覽"
   },
   "dates": {
     "title": "場次",
@@ -3352,7 +3419,8 @@
       "event_finished": "已結束或已取消活動的場次無法變更。",
       "cancelled": "已取消的場次無法變更。",
       "invalid_count": "請輸入 1 到 366 之間的場次數。"
-    }
+    },
+    "backToEvent": "返回活動概覽"
   },
   "copy": {
     "title": "複製與範本",
@@ -3374,7 +3442,8 @@
     "openTemplates": "開啟範本",
     "saveTemplate": "儲存範本",
     "nameTaken": "此名稱已被使用，請換一個。",
-    "invalid": "請檢查此值。"
+    "invalid": "請檢查此值。",
+    "backToEvent": "返回活動概覽"
   },
   "series": {
     "title": "系列",
@@ -3395,7 +3464,8 @@
     "create": "建立系列",
     "created": "系列已建立。",
     "slugTaken": "已有同名系列，請換一個稍有不同的名稱。",
-    "nameInvalid": "請輸入 2 到 160 個字元的名稱。"
+    "nameInvalid": "請輸入 2 到 160 個字元的名稱。",
+    "startFirst": "建立第一個系列"
   },
   "templates": {
     "title": "範本",
@@ -3407,7 +3477,8 @@
     "deleteFor": "刪除範本 {name}",
     "use": "用 {name} 建立活動",
     "timezone": "時間為 {timezone}。",
-    "createEvent": "建立活動"
+    "createEvent": "建立活動",
+    "pickEvent": "選擇要儲存的活動"
   },
   "publicSeries": {
     "eyebrow": "{org} 的系列",
@@ -3523,7 +3594,9 @@
     "unpublish": "取消發布{title}",
     "pinOne": "置頂{title}",
     "unpinOne": "取消置頂{title}",
-    "delete": "刪除{title}"
+    "delete": "刪除{title}",
+    "emptyAction": "撰寫第一則公告",
+    "toSections": "查看頁面區塊"
   },
   "holder": {
     "joinTitle": "線上參加",
@@ -3550,7 +3623,8 @@
     "title": "存取權限",
     "subtitle": "持票人專屬資訊、線上參加連結與存取碼。",
     "viewerTitle": "僅編輯者可查看",
-    "viewerDescription": "私人資訊與存取碼只會顯示給可編輯活動的成員。"
+    "viewerDescription": "私人資訊與存取碼只會顯示給可編輯活動的成員。",
+    "backToEvent": "返回活動概覽"
   },
   "privateInfo": {
     "heading": "私人資訊",
@@ -3605,7 +3679,8 @@
     "new": "新增存取碼",
     "create": "建立存取碼",
     "created": "已建立存取碼。",
-    "unlockLink": "受邀賓客開啟 {url} 並輸入存取碼。"
+    "unlockLink": "受邀賓客開啟 {url} 並輸入存取碼。",
+    "emptyAction": "建立第一個代碼"
   },
   "conversation": {
     "inboxTitle": "訊息",
@@ -3658,7 +3733,9 @@
       "blocked": "此對話已被封鎖。",
       "blocked_by_contact": "此人已封鎖您組織的訊息。",
       "you_blocked": "解除封鎖主辦單位後才能寫信。"
-    }
+    },
+    "emptyAction": "前往你的活動",
+    "showAll": "顯示所有對話"
   },
   "apiKeys": {
     "title": "API 金鑰",
@@ -3866,7 +3943,8 @@
       "copy": "複製程式碼",
       "copied": "已複製。",
       "emptyTitle": "目前沒有公開活動",
-      "emptyDescription": "發布活動即可取得小工具程式碼。"
+      "emptyDescription": "發布活動即可取得小工具程式碼。",
+      "toEvents": "前往你的活動"
     },
     "navPages": {
       "title": "網站導覽",
@@ -3906,7 +3984,8 @@
     "resolveNote": "{reference} 為什麼已處理？",
     "noteTooShort": "請填寫至少 3 個字元的備註。",
     "alreadyResolved": "已有人處理了此差異。",
-    "resolve": "處理"
+    "resolve": "處理",
+    "emptyAction": "查看每日核對"
   },
   "risk": {
     "flagged": "結帳時被標記",
@@ -3975,7 +4054,9 @@
     "customized": "已自訂的郵件",
     "noneTitle": "尚無自訂的郵件",
     "noneDescription": "所有郵件都使用 Yayatoh 的預設文案。",
-    "changed": "修改時間"
+    "changed": "修改時間",
+    "noneAction": "自訂一封郵件",
+    "noneActionViewer": "閱讀預設文案"
   },
   "setupGuide": {
     "title": "設定指南",
@@ -4113,7 +4194,15 @@
       "outside_event": "此環節不在活動的開始和結束時間之內。"
     },
     "photoAfterSave": "儲存講者後即可新增照片。",
-    "logoAfterSave": "儲存後即可新增標誌。"
+    "logoAfterSave": "儲存後即可新增標誌。",
+    "emptyExhibitorsAction": "新增第一個參展商",
+    "backToEvent": "返回活動",
+    "emptySessionsReadOnly": "編輯新增後，場次會顯示在這裡。",
+    "addFirstSession": "新增第一個場次",
+    "emptySpeakersReadOnly": "編輯新增後，講者會顯示在這裡。",
+    "addFirstSpeaker": "新增第一位講者",
+    "emptyTiersReadOnly": "編輯新增後，贊助等級及其贊助商會顯示在這裡。",
+    "addFirstTier": "新增第一個等級"
   },
   "aiDraft": {
     "title": "用 AI 起草",
@@ -4325,7 +4414,10 @@
     "readOnly": "只有擁有者和管理員可以變更入口工作人員。",
     "byCheckpoint": "依檢查點劃分的入口工作人員",
     "nobody": "未分配",
-    "manage": "管理入口工作人員"
+    "manage": "管理入口工作人員",
+    "emptyReadOnly": "擁有者或管理員新增後，入口工作人員會顯示在這裡。",
+    "addFirst": "新增第一位入口工作人員",
+    "openCheckin": "開啟報到畫面"
   },
   "signals": {
     "title": "詐欺訊號",
@@ -4369,7 +4461,9 @@
       "save": "儲存規則",
       "saved": "規則已儲存。",
       "current": "標記每分鐘掃描超過 {rate} 次的裝置,以及在檢查點之間移動快於每小時 {kmh} 公里的票券。"
-    }
+    },
+    "showAll": "顯示全部訊號",
+    "reviewDetection": "查看偵測設定"
   },
   "security": {
     "metaTitle": "帳戶安全",
@@ -4654,7 +4748,11 @@
       "survey_exists": "此問卷已存在。",
       "messaging_paused": "Yayatoh 支援團隊已暫停你所屬組織的訊息傳送。",
       "form_invalid": "有一個問題無效。"
-    }
+    },
+    "sendFirst": "傳送給參加者",
+    "questionsEmptyReadOnly": "編輯新增問題後，問題會顯示在這裡。",
+    "addFirstQuestion": "新增第一個問題",
+    "browseSurveys": "瀏覽其他問卷"
   },
   "survey": {
     "metaTitle": "問卷",
@@ -4753,7 +4851,8 @@
     "emptyDescription": "在座位圖上為賓客安排座位，再列印此名單放在入口。",
     "tableSeat": "第 {item} 桌 · {seat} 號座",
     "rowSeat": "第 {item} 排 · {seat} 號座",
-    "unseated": "{count, plural, other {# 位賓客尚未安排座位，未列入海報。}}"
+    "unseated": "{count, plural, other {# 位賓客尚未安排座位，未列入海報。}}",
+    "toPlan": "前往座位圖"
   },
   "webPush": {
     "title": "推播通知",
@@ -4917,7 +5016,10 @@
       "body": "它會立即從你的網站消失，且無法復原。",
       "confirm": "確認刪除",
       "cancel": "取消"
-    }
+    },
+    "emptyActionPost": "撰寫第一篇文章",
+    "emptyActionPage": "撰寫第一個頁面",
+    "findOwner": "尋找擁有者或管理員"
   },
   "cmsPublic": {
     "blog": "部落格",
@@ -4977,7 +5079,10 @@
       "reasonError": "請填寫原因（3 到 300 個字元）。",
       "hide": "隱藏評價",
       "unhide": "顯示評價",
-      "dismissReports": "駁回檢舉"
+      "dismissReports": "駁回檢舉",
+      "showAll": "顯示全部評價",
+      "seeOrders": "查看票券與訂單",
+      "backToEvent": "返回活動"
     },
     "form": {
       "rating": "你的評分",
@@ -5603,7 +5708,10 @@
     },
     "peopleLink": "人員",
     "duplicatesLink": "可能的重複",
-    "insights": "聯絡人洞察"
+    "insights": "聯絡人洞察",
+    "emptyAction": "選擇範本",
+    "emptyViewer": "你的團隊為行銷活動儲存的受眾會顯示在這裡。",
+    "findOwner": "尋找擁有者或管理員"
   },
   "refundOps": {
     "timeline": {
@@ -5706,7 +5814,16 @@
         "succeeded": "已退款",
         "failed": "退款失敗"
       },
-      "age": "{days, plural, =0 {{hours, plural, other {# 小時}}} other {# 天}}"
+      "age": "{days, plural, =0 {{hours, plural, other {# 小時}}} other {# 天}}",
+      "emptyHint": {
+        "open": "買家在訂單頁面申請退款，他們的請求會在這裡等待你的回覆。",
+        "approved": "你核准的請求會連同退款狀態顯示在這裡。",
+        "declined": "你拒絕的請求會顯示在這裡。"
+      },
+      "emptyAction": {
+        "open": "查看已核准的請求",
+        "other": "返回待處理的請求"
+      }
     },
     "buyer": {
       "title": "退款",
@@ -5922,7 +6039,9 @@
         "offerHours": "請輸入 0.25 到 168 小時之間的值。",
         "not_enough_stock": "空餘票券不足，無法發出此邀請。",
         "not_on_sale": "此通行證或場次未在販售。"
-      }
+      },
+      "viewEventPage": "查看活動頁面",
+      "backToEvent": "返回活動"
     }
   },
   "pricingPage": {
@@ -6167,7 +6286,11 @@
     "categorySlugHint": "留空即根據名稱自動產生。之後無法變更。",
     "translations": "其他語言的名稱",
     "translationsError": "請檢查翻譯後的名稱。",
-    "categoryHasArticles": "請先移動或刪除此類別中的文章。"
+    "categoryHasArticles": "請先移動或刪除此類別中的文章。",
+    "emptyViewer": "你的團隊撰寫文章後會顯示在這裡。",
+    "emptyNeedsCategoryAction": "先新增分類",
+    "emptyArticlesAction": "撰寫第一篇文章",
+    "emptyCategoriesAction": "新增第一個分類"
   },
   "siteConsole": {
     "title": "行銷網站",
@@ -6219,7 +6342,8 @@
       "partnership": "合作夥伴",
       "other": "其他"
     },
-    "markHandled": "標示為已處理"
+    "markHandled": "標示為已處理",
+    "noRequestsAction": "開啟聯絡頁面"
   },
   "parties": {
     "subtitle": "賓客組（情侶、家庭、住戶）及每組的賓客。飲食、無障礙需求和地址僅對你的團隊可見。",
@@ -6380,7 +6504,10 @@
       "plusOneMoves": "同伴會隨帶他來的賓客一起移動。"
     },
     "email": "電子郵件",
-    "phone": "電話"
+    "phone": "電話",
+    "emptyAction": "新增第一組賓客",
+    "backToEvent": "返回活動概覽",
+    "showAll": "顯示所有賓客組"
   },
   "eventRoles": {
     "co_host": "共同主辦人",
@@ -6397,14 +6524,18 @@
     "inviteTitle": "邀請加入此活動",
     "emptyTitle": "還沒有共同主辦人或策劃人",
     "emptyDescription": "透過電子郵件邀請他人。對方只能存取這個活動。",
-    "revokeFor": "撤回寄給 {email} 的邀請"
+    "revokeFor": "撤回寄給 {email} 的邀請",
+    "emptyReadOnly": "擁有者、管理員或共同主辦人邀請後，共同主辦人和企劃人員會顯示在這裡。",
+    "inviteFirst": "邀請他人",
+    "backToEvent": "返回活動"
   },
   "myEvents": {
     "title": "您的活動",
     "description": "您在 {org} 協助的活動。",
     "emptyTitle": "目前沒有活動",
     "emptyDescription": "有人邀請您參加活動後，它會顯示在這裡。",
-    "open": "開啟 {name}"
+    "open": "開啟 {name}",
+    "myTickets": "前往我的票券"
   },
   "starters": {
     "title": "入門範本",
@@ -6494,7 +6625,8 @@
     "overviewTruncated": "顯示 {total} 個活動中的前 {shown} 個（進行中的在前）。",
     "overviewEmpty": {
       "title": "目前沒有需要關注的活動",
-      "description": "活動在籌備期間、活動當天及之後一週內顯示在這裡。"
+      "description": "活動在籌備期間、活動當天及之後一週內顯示在這裡。",
+      "action": "前往你的活動"
     },
     "columns": {
       "event": "活動",
@@ -6558,7 +6690,9 @@
     "unavailable": "無法載入此小工具。",
     "noAccess": {
       "title": "你的角色沒有指揮中心",
-      "description": "請向擁有者或管理員申請此活動的存取權限。"
+      "description": "請向擁有者或管理員申請此活動的存取權限。",
+      "action": "尋找擁有者或管理員",
+      "backToEvent": "返回活動概覽"
     },
     "empty": {
       "title": "沒有顯示任何小工具",
@@ -6793,7 +6927,8 @@
       "revokeLabel": "停用 {label}",
       "readOnly": "唯讀",
       "statusOn": "已開啟",
-      "statusOff": "已關閉"
+      "statusOff": "已關閉",
+      "emptyAction": "建立螢幕連結"
     }
   },
   "alerts": {
@@ -6816,7 +6951,10 @@
       "activeTitle": "目前沒有警示",
       "activeDescription": "當你的某個活動需要注意時，會顯示在這裡並通知你的團隊。",
       "resolvedTitle": "還沒有已解決的警示",
-      "resolvedDescription": "問題解決後，警示會自動變為已解決。"
+      "resolvedDescription": "問題解決後，警示會自動變為已解決。",
+      "allEventsAction": "顯示每個活動的提醒",
+      "settingsAction": "選擇誰接收提醒",
+      "currentAction": "顯示目前提醒"
     },
     "severity": {
       "info": "資訊",
@@ -7395,7 +7533,10 @@
       "test_too_many": "最多輸入 5 個地址。",
       "test_invalid_email": "請檢查電子郵件地址。",
       "unknown": "發生問題。"
-    }
+    },
+    "emptyAction": "為第一個行銷活動命名",
+    "emptyViewer": "你的團隊建立的行銷活動會連同受眾和成果顯示在這裡。",
+    "findOwner": "尋找擁有者或管理員"
   },
   "journeys": {
     "title": "旅程",
@@ -7589,7 +7730,10 @@
         "active": "進行中",
         "completed": "已完成",
         "cancelled": "已取消"
-      }
+      },
+      "emptyDescription": "旅程開啟期間，觸發條件將人加入後，他們會顯示在這裡。",
+      "showEveryone": "顯示所有人",
+      "reviewSteps": "檢視步驟"
     },
     "run": {
       "metaTitle": "旅程紀錄",
@@ -7786,7 +7930,8 @@
       "update": "儲存變更",
       "create": "建立巨集",
       "archive": "封存 {name}",
-      "archived": "已封存巨集。"
+      "archived": "已封存巨集。",
+      "noneAction": "撰寫第一個巨集"
     },
     "holder": {
       "title": "轉讓這張票券",
@@ -7856,7 +8001,15 @@
       "noDeadline": "無截止時間",
       "overdue": "已過截止時間",
       "hoursLeft": "{hours, plural, =0 {剩不到 1 小時} other {剩 # 小時}}",
-      "daysLeft": "{days, plural, other {剩 # 天}}"
+      "daysLeft": "{days, plural, other {剩 # 天}}",
+      "emptyHint": {
+        "open": "當買家的銀行對你的訂單提出退單時，它會連同舉證截止時間顯示在這裡。",
+        "closed": "爭議在勝訴、敗訴或撤回後會移到這裡。"
+      },
+      "emptyAction": {
+        "open": "查看已結束的爭議",
+        "closed": "返回未結爭議"
+      }
     },
     "claim": {
       "intro": "{from} 正在將這張票券轉讓給 {to}。請用收到票券的電子郵件地址領取:你會取得自己的 QR 碼,原本的 QR 碼隨即失效。",
@@ -8294,7 +8447,13 @@
         "same_person": "請輸入其他人。",
         "not_confirmed": "只有已確認的報名者才能更換。",
         "too_many": "一個活動最多 50 個範本。"
-      }
+      },
+      "clearFilters": "清除篩選",
+      "openSetup": "開啟報名設定",
+      "showWaiting": "顯示待處理的申請",
+      "noTemplatesHint": "儲存常用的理由，核准或拒絕時直接選用。",
+      "writeFirstTemplate": "撰寫第一個範本",
+      "backToEvent": "返回活動"
     },
     "rules": {
       "title": "申請、來賓與姓名更換",
@@ -8525,7 +8684,9 @@
     "submittedTitle": "謝謝，你已完成報名",
     "submittedDescription": "謝謝，{name}。你的回答已傳送給主辦方。",
     "expiredTitle": "此連結已過期",
-    "expiredDescription": "繼續報名的連結在最後一次儲存後 14 天內有效。請從活動頁面重新開始。"
+    "expiredDescription": "繼續報名的連結在最後一次儲存後 14 天內有效。請從活動頁面重新開始。",
+    "emptyReadOnly": "編輯新增後，表單頁面會顯示在這裡。",
+    "addFirstPage": "新增第一頁"
   },
   "agenda": {
     "publishing": {
@@ -8666,7 +8827,8 @@
         "cell_too_long": "某個儲存格太長。",
         "unterminated_quote": "某個加引號的值沒有結束。請檢查檔案中的引號。",
         "missing_columns": "檔案需要 title、starts 和 ends 欄位。"
-      }
+      },
+      "backToEvent": "返回活動"
     }
   },
   "guestImport": {
@@ -8917,7 +9079,11 @@
       "not_invited": "此賓客未受邀參加該分場活動。",
       "sub_event_has_chart": "它已有專用座位圖。",
       "no_chart": "尚無可複製的座位圖。請在座位頁面建立活動座位圖，或選擇已儲存的平面圖。"
-    }
+    },
+    "emptyAction": "新增第一個子活動",
+    "backToEvent": "返回活動概覽",
+    "matrixToSubEvents": "前往子活動",
+    "matrixAddGuests": "向名單新增賓客"
   },
   "donations": {
     "console": {
@@ -9018,7 +9184,12 @@
       },
       "receiptsTitle": "抵稅收據",
       "receiptsBody": "每筆付款後，捐款人都會透過電子郵件收到一張收據。為晚宴門票設定公平市場價值，並查看所有收據。",
-      "receiptsLink": "開啟抵稅收據"
+      "receiptsLink": "開啟抵稅收據",
+      "emptyCampaignsAction": "發起第一個募款活動",
+      "backToEvent": "返回活動概覽",
+      "noGiftsDescription": "已付款的捐款會顯示在這裡，包括捐款人選擇的名稱、金額和募款活動。",
+      "shareGivingPage": "分享捐款頁面",
+      "toCampaigns": "查看你的募款活動"
     },
     "give": {
       "metaTitle": "捐款",
@@ -9157,7 +9328,9 @@
         "ticket": "門票"
       },
       "notDeductible": "不可抵稅",
-      "pdf": "下載 {number}"
+      "pdf": "下載 {number}",
+      "addTicketTypes": "新增票種",
+      "backToEvent": "返回活動概覽"
     }
   },
   "galaTables": {
@@ -9498,7 +9671,9 @@
       "pastDue": "期限必須是未來的時間。",
       "agreementText": "同意書需要填寫內容。",
       "tooMany": "此活動的任務數已達上限（50 項）。"
-    }
+    },
+    "emptyReadOnly": "編輯建立後，講者任務會顯示在這裡。",
+    "createFirst": "建立第一個任務"
   },
   "exhibitorPortal": {
     "eyebrow": "參展商入口",
@@ -9684,7 +9859,9 @@
       "shared_booth": "攤位 {booth} 由 {count} 個參展商共用。",
       "several_booths": "{exhibitor} 位於多個攤位。",
       "category_mismatch": "{exhibitor} 位於攤位 {booth}，但此攤位的類別（{category}）不屬於其類別。"
-    }
+    },
+    "emptyAction": "新增第一個攤位",
+    "emptyViewer": "主辦方尚未放置任何攤位。"
   },
   "exhibitorMap": {
     "pageTitle": "參展商地圖",
@@ -9754,7 +9931,9 @@
       "openTitle": "沒有未關閉的求助請求",
       "openDescription": "來賓和入口工作人員的新請求一到就會顯示在這裡。",
       "closedTitle": "還沒有已關閉的請求",
-      "closedDescription": "已解決和已取消的請求顯示在這裡。"
+      "closedDescription": "已解決和已取消的請求顯示在這裡。",
+      "toCommandCenter": "開啟指揮中心",
+      "showOpen": "顯示待處理請求"
     },
     "title": "#{number} · {reason}",
     "number": "#{number}",
@@ -9927,7 +10106,8 @@
       "urgent": "緊急",
       "waiting": "等待處理",
       "unassigned": "未指派"
-    }
+    },
+    "backToEvent": "返回活動概覽"
   },
   "marketingAnalytics": {
     "title": "行銷分析",
@@ -10230,7 +10410,9 @@
     "overrideNote": "列印原因",
     "overrideHint": "將與你的姓名一起儲存在活動紀錄中。",
     "printAnyway": "仍然列印",
-    "overrideNoteRequired": "請填寫原因（至少 3 個字元）。"
+    "overrideNoteRequired": "請填寫原因（至少 3 個字元）。",
+    "emptyAction": "建立第一個範本",
+    "backToEvent": "返回活動概覽"
   },
   "invoices": {
     "status": {
@@ -10409,7 +10591,10 @@
     "submit": "送出核實",
     "saveAndReview": "儲存並送出審核",
     "saved": "已儲存。Yayatoh 將進行審核。",
-    "viewerNotice": "只有擁有者和管理員可以修改慈善機構資料。"
+    "viewerNotice": "只有擁有者和管理員可以修改慈善機構資料。",
+    "seePlan": "查看你的方案",
+    "findOwner": "尋找擁有者或管理員",
+    "addDetails": "新增慈善機構資料"
   },
   "rsvp": {
     "metaTitle": "您的回覆",
@@ -10687,7 +10872,9 @@
     "submittedValue": "提交的",
     "nothingToMerge": "沒有新內容可取：合併會關閉此提交。",
     "mergeSubmit": "合併到{party}",
-    "merged": "已合併。"
+    "merged": "已合併。",
+    "shareLink": "分享收集連結",
+    "setUpLink": "設定收集連結"
   },
   "invitations": {
     "link": "邀請：透過電子郵件和簡訊傳送",
@@ -10950,7 +11137,10 @@
       "count": "顯示的問題：{shown} / {total}",
       "none": "這位賓客看不到任何問題。",
       "label": "這位賓客看到的問題"
-    }
+    },
+    "emptyDescription": "你新增的問題會出現在每位賓客的回覆表單中，例如餐點選擇或點歌。",
+    "emptyAction": "新增第一個問題",
+    "emptyViewerAction": "查看回覆表單預覽"
   },
   "rsvpAnswers": {
     "link": "回覆的回答",
@@ -11159,7 +11349,13 @@
         "offStage": "投票已從大螢幕移除。",
         "deleted": "投票已刪除。",
         "rotated": "新的大螢幕連結已產生，舊連結已失效。"
-      }
+      },
+      "shareAudienceLink": "分享觀眾連結",
+      "reviewWaiting": "審核待處理的問題",
+      "checkSettings": "查看問答設定",
+      "noPollsViewer": "編輯新增後，投票會顯示在這裡。",
+      "createFirstPoll": "建立第一個投票",
+      "howToJoin": "查看參加者如何加入"
     },
     "presenter": {
       "metaTitle": "講者檢視",
@@ -11295,7 +11491,8 @@
       "label": "依姓名、電子郵件或公司搜尋",
       "submit": "搜尋",
       "noneTitle": "沒有符合的人",
-      "noneDescription": "沒有任何姓名、電子郵件或公司包含「{q}」。請嘗試較短的關鍵字。"
+      "noneDescription": "沒有任何姓名、電子郵件或公司包含「{q}」。請嘗試較短的關鍵字。",
+      "clear": "清除搜尋"
     },
     "emptyTitle": "還沒有人員",
     "emptyDescription": "有人購票、報名或被加入賓客名單後，會出現在這裡。",
@@ -11358,7 +11555,9 @@
       "emptyTitle": "這裡還沒有內容",
       "emptyDescription": "訂單、報到、行銷活動、訊息和問卷發生後會出現在這裡。",
       "listLabel": "{name} 的時間軸",
-      "older": "更早"
+      "older": "更早",
+      "showEverything": "顯示全部",
+      "backToPeople": "返回所有人"
     },
     "kinds": {
       "order_paid": "訂單已付款",
@@ -11437,7 +11636,8 @@
       "errors": {
         "noneSelected": "請至少選取一組進行合併。",
         "tooMany": "每次最多選取 50 組。"
-      }
+      },
+      "toPeople": "查看所有人"
     },
     "reasons": {
       "email": "相同電子郵件地址",
@@ -11473,7 +11673,8 @@
       "withdrawn": "已取消訂閱",
       "unknown_legacy": "未知（匯入）",
       "none": "無同意"
-    }
+    },
+    "toEvents": "前往你的活動"
   },
   "contactStats": {
     "title": "聯絡人",
@@ -11628,7 +11829,10 @@
     "deleteNamed": "刪除沙盒 {name}",
     "deleteWarning": "沙盒將永久關閉：頁面下線，成員和金鑰失去存取權。",
     "deleteConfirm": "永久刪除",
-    "deleteConfirmNamed": "永久刪除沙盒 {name}"
+    "deleteConfirmNamed": "永久刪除沙盒 {name}",
+    "findOwner": "尋找擁有者或管理員",
+    "inSandboxAction": "在此沙盒中試用 API",
+    "emptyAction": "設定第一個沙盒"
   },
   "webhooks": {
     "title": "Webhook",
@@ -11762,7 +11966,8 @@
       "succeeded": "已送達",
       "failed": "失敗",
       "at": "時間"
-    }
+    },
+    "emptyAction": "新增第一個端點"
   },
   "developers": {
     "brand": "Yayatoh 開發者",
@@ -11931,7 +12136,8 @@
       "advanced_seating": "進階座位",
       "ai_seating": "AI 排座",
       "analytics_pro": "進階分析"
-    }
+    },
+    "findOwner": "尋找擁有者或管理員"
   },
   "billingPortal": {
     "eyebrow": "測試計費",
@@ -12308,6 +12514,83 @@
       "body": "{name} 是測試服務商。允許後，Yayatoh 可代表你讀取和寫入以下內容：",
       "allow": "允許",
       "deny": "拒絕"
+    },
+    "webhooksAction": "設定 Webhook"
+  },
+  "emptyActions": {
+    "seeEvents": "查看你的活動",
+    "eventHome": "前往活動首頁"
+  },
+  "coupons": {
+    "title": "優惠券",
+    "description": "優惠代碼在結帳時為買家提供折扣。每個代碼屬於一個活動：選擇活動即可查看或新增代碼。",
+    "emptyTitle": "沒有可新增代碼的活動",
+    "emptyDescription": "優惠代碼位於活動的「票券與訂單」頁面。請先建立活動，再新增代碼。",
+    "emptyAction": "建立活動",
+    "caption": "活動及其優惠代碼",
+    "event": "活動",
+    "when": "日期",
+    "status": "狀態",
+    "codes": "優惠代碼",
+    "manage": "管理代碼",
+    "view": "查看代碼",
+    "manageFor": "{name} 的優惠代碼"
+  },
+  "howItWorks": {
+    "docLink": "閱讀指南",
+    "hide": "隱藏",
+    "show": "顯示",
+    "domains": {
+      "title": "自訂網域如何運作",
+      "intro": "在你自己的網址（例如 tickets.yourbrand.com）展示活動頁面，而不是 Yayatoh 連結。你的 Yayatoh 網址也會繼續有效。",
+      "step1": "新增你擁有的網域。我們會請你確認身分。",
+      "step2": "將我們顯示的 DNS 記錄複製到網域服務商的設定中。",
+      "step3": "我們會自動檢查記錄，最多可能需要一天。",
+      "step4": "驗證通過後，我們會設定安全憑證（HTTPS），網域隨即上線。"
+    },
+    "templates": {
+      "title": "範本如何運作",
+      "intro": "範本會儲存活動的設定（票券、問題、區塊與頁面內容），讓下一個活動一開始就準備就緒。由範本建立的活動是沒有銷售紀錄的草稿。",
+      "step1": "開啟一個已按你的需要設定好的活動。",
+      "step2": "選擇「複製與範本」，然後將其儲存為範本。",
+      "step3": "回到這裡即可用它建立新活動，或從下方的入門範本開始。"
+    },
+    "series": {
+      "title": "系列如何運作",
+      "intro": "系列將相關活動（巡演、季度、節慶）匯集到一個公開頁面，列出即將到來的日期。",
+      "step1": "以名稱和簡短描述建立系列。",
+      "step2": "開啟每個活動的「日期」頁面，將其加入系列。",
+      "step3": "分享系列的公開頁面，新增活動後會自動更新。"
+    },
+    "payouts": {
+      "title": "撥款如何運作",
+      "intro": "票券收入以撥款形式匯入你的銀行帳戶。只需連結一次收款帳戶，下方數字會顯示即將入帳的金額與時間。",
+      "step1": "連結你的收款帳戶並驗證你的商業資訊。",
+      "step2": "銷售票券。每筆銷售扣除費用與退款後計入你的餘額。",
+      "step3": "依你的帳戶類型，款項會隨銷售或於活動結束後撥付，並保留少量準備金用於退款與爭議。",
+      "step4": "每筆撥款都會匯入你的銀行，並在此顯示日期與金額。"
+    },
+    "sending": {
+      "title": "郵件寄送如何運作",
+      "intro": "寄給買家與來賓的郵件預設由 Yayatoh 寄出。驗證你自己的網域，讓郵件來自你的地址並順利進入收件匣。",
+      "step1": "新增你的寄件網域（例如 mail.yourbrand.com）。",
+      "step2": "將我們顯示的 DNS 記錄複製到網域服務商的設定中。",
+      "step3": "在此檢查記錄，驗證通常只需幾分鐘。",
+      "step4": "驗證通過後，你的郵件將從你自己的網域寄出。"
+    },
+    "eventType": {
+      "title": "活動類型與分類",
+      "intro": "活動類型決定活動包含哪些區塊：婚禮有賓客、回覆與座位；會議有議程、講者與名牌。分類幫助大家找到公開活動。",
+      "step1": "建立活動時，選擇最接近的類型。",
+      "step2": "在活動的「詳細資料」頁面選擇分類並新增標籤。",
+      "step3": "不確定？選擇「其他」：它包含常用區塊，詳細資料可以稍後新增。"
+    },
+    "coupons": {
+      "title": "優惠代碼如何運作",
+      "intro": "優惠代碼會在收費前按比例或金額減免每張票券的價格。每個代碼屬於一個活動。",
+      "step1": "在下方選擇活動並開啟其優惠代碼。",
+      "step2": "新增代碼及折扣，也可以設定次數上限與日期。",
+      "step3": "分享代碼。買家在結帳時輸入，每次使用都會被記錄。"
     }
   },
   "formControls": {

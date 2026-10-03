@@ -219,7 +219,21 @@ export default async function SessionsPage({
         </h2>
         <p className="text-caption text-ink-2">{tp('timesIn', { timezone: tz.replace(/_/g, ' ') })}</p>
         {days.length === 0 ? (
-          <EmptyState title={tp('emptySessionsTitle')} description={tp('emptySessionsDescription')} />
+          <EmptyState
+            title={tp('emptySessionsTitle')}
+            description={canWrite ? tp('emptySessionsDescription') : tp('emptySessionsReadOnly')}
+            action={
+              canWrite ? (
+                <Link href="#adding-session-heading" className={buttonClass('primary', 'md')}>
+                  {tp('addFirstSession')}
+                </Link>
+              ) : (
+                <Link href={`/o/${org}/e/${event}`} className={buttonClass('secondary', 'md')}>
+                  {tp('backToEvent')}
+                </Link>
+              )
+            }
+          />
         ) : (
           days.map((d) => (
             <section key={d.day} aria-labelledby={`day-${d.day}`} className="flex flex-col gap-2">
@@ -301,9 +315,9 @@ export default async function SessionsPage({
           ))
         )}
         {canWrite ? (
-          <section aria-labelledby="add-session-heading">
+          <section aria-labelledby="adding-session-heading">
             <Card size="panel" className="flex flex-col gap-3">
-              <h3 id="add-session-heading" className="text-section">
+              <h3 id="adding-session-heading" className="text-section">
                 {tp('addSession')}
               </h3>
               <ProgramForm

@@ -4,13 +4,13 @@ import { roleCan } from '@yayatoh/tenancy';
 import { Alert, buttonClass, Card, EmptyState, PageHeader, StatusPill, Table } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { Crumbs } from '@/components/crumbs.tsx';
 
 import {
   PrivacyCancelForm,
   PrivacyEraseForm,
   PrivacyExportForm,
 } from '@/components/privacy-request-actions.tsx';
+import { Link } from '@/i18n/navigation.ts';
 import { PRIVACY_MODULES } from '@/lib/privacy-modules.ts';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
@@ -39,7 +39,15 @@ export default async function PrivacyRequestPage({
     return (
       <>
         <PageHeader title={t('privacy.title')} />
-        <EmptyState title={t('privacy.noAccessTitle')} description={t('privacy.noAccessDescription')} />
+        <EmptyState
+          title={t('privacy.noAccessTitle')}
+          description={t('privacy.noAccessDescription')}
+          action={
+            <Link href={`/o/${org}/team`} className={buttonClass('primary', 'md')}>
+              {t('privacy.findOwner')}
+            </Link>
+          }
+        />
       </>
     );
   }
@@ -73,11 +81,6 @@ export default async function PrivacyRequestPage({
   return (
     <>
       <PageHeader
-        breadcrumb={
-          <Crumbs
-            items={[{ label: t('privacy.title'), href: `/o/${org}/privacy` }, { label: req.subjectHint }]}
-          />
-        }
         title={title}
         tag={
           <StatusPill
@@ -143,6 +146,11 @@ export default async function PrivacyRequestPage({
               <EmptyState
                 title={t('privacy.request.holdings.empty')}
                 description={t('privacy.request.holdings.emptyHint')}
+                action={
+                  <Link href="#dsar-answer" className={buttonClass('primary', 'md')}>
+                    {t('privacy.request.holdings.emptyAction')}
+                  </Link>
+                }
               />
             ) : (
               <Card>
@@ -160,11 +168,13 @@ export default async function PrivacyRequestPage({
               </Card>
             )}
           </section>
-          {req.kind === 'access' ? (
-            <PrivacyExportForm action={exportRequestAction.bind(null, org, req.id)} />
-          ) : (
-            <PrivacyEraseForm action={eraseRequestAction.bind(null, org, req.id)} email={r.email ?? ''} />
-          )}
+          <div id="dsar-answer" className="flex flex-col">
+            {req.kind === 'access' ? (
+              <PrivacyExportForm action={exportRequestAction.bind(null, org, req.id)} />
+            ) : (
+              <PrivacyEraseForm action={eraseRequestAction.bind(null, org, req.id)} email={r.email ?? ''} />
+            )}
+          </div>
           <PrivacyCancelForm action={cancelRequestAction.bind(null, org, req.id)} />
         </>
       ) : null}

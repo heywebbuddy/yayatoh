@@ -1,9 +1,10 @@
 import { executeQuery } from '@yayatoh/kernel';
 import { eventFinanceQuery } from '@yayatoh/reports';
-import { EmptyState, PageHeader } from '@yayatoh/ui';
+import { buttonClass, EmptyState, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { FinanceWaterfall } from '@/components/finance-waterfall.tsx';
 import { AsOf, ReportTabs } from '@/components/reports.tsx';
+import { Link } from '@/i18n/navigation.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 
@@ -27,6 +28,17 @@ export default async function FinancePage({
         <EmptyState
           title={t('reports.financeNoAccessTitle')}
           description={t('reports.financeNoAccessDescription')}
+          action={
+            can('orders:read') ? (
+              <Link href={base} className={buttonClass('primary', 'md')}>
+                {t('reports.toSalesReport')}
+              </Link>
+            ) : (
+              <Link href={`/o/${org}/e/${event}`} className={buttonClass('primary', 'md')}>
+                {t('reports.backToEvent')}
+              </Link>
+            )
+          }
         />
       </>
     );

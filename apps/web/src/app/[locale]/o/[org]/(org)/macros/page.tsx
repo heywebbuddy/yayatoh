@@ -1,10 +1,11 @@
 import { executeQuery } from '@yayatoh/kernel';
 import { MERGE_FIELDS, supportMacrosQuery } from '@yayatoh/orders';
 import { roleCan } from '@yayatoh/tenancy';
-import { Card, EmptyState, PageHeader } from '@yayatoh/ui';
+import { buttonClass, Card, EmptyState, PageHeader } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { ConfirmButton, MacroEditor } from '@/components/support-tools.tsx';
+import { Link } from '@/i18n/navigation.ts';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import { archiveMacroAction, saveMacroAction } from './actions.ts';
@@ -41,7 +42,15 @@ export default async function MacrosPage({ params }: { params: Promise<{ locale:
           {t('listTitle')}
         </h2>
         {macros.length === 0 ? (
-          <EmptyState title={t('noneTitle')} description={t('noneDescription')} />
+          <EmptyState
+            title={t('noneTitle')}
+            description={t('noneDescription')}
+            action={
+              <Link href="#macro-new-heading" className={buttonClass('secondary', 'md')}>
+                {t('noneAction')}
+              </Link>
+            }
+          />
         ) : (
           <ul className="flex list-none flex-col gap-4 p-0">
             {macros.map((m) => (
