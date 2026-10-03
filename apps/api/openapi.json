@@ -67,6 +67,14 @@
       "description": "Online scans with an API key or session."
     },
     {
+      "name": "contacts",
+      "description": "The organization’s contacts (add one from another tool)."
+    },
+    {
+      "name": "hooks",
+      "description": "REST hooks for automation tools (Zapier): subscribe a URL to one event type and unsubscribe."
+    },
+    {
       "name": "scanner",
       "description": "The Scan PWA’s device-token routes (manifest, offline sync)."
     },
@@ -5376,7 +5384,9 @@
           "orders:refund",
           "attendees:read",
           "attendees:write",
-          "checkin:scan"
+          "checkin:scan",
+          "contacts:write",
+          "webhooks:subscribe"
         ]
       },
       "OrderPage": {
@@ -5886,6 +5896,208 @@
         },
         "required": [
           "code"
+        ]
+      },
+      "Hook": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Keep it to unsubscribe."
+          },
+          "event": {
+            "$ref": "#/components/schemas/HookEventType"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "event",
+          "createdAt"
+        ]
+      },
+      "HookEventType": {
+        "type": "string",
+        "enum": [
+          "order.paid",
+          "order.refunded",
+          "order.expired",
+          "order.payment_failed",
+          "order.disputed",
+          "order.dispute_closed",
+          "tickets.cancelled",
+          "ticket.transferred",
+          "ticket.claimed",
+          "ticket.admitted",
+          "ticket.admission_undone",
+          "event.created",
+          "event.published",
+          "event.unpublished",
+          "event.postponed",
+          "event.rescheduled",
+          "event.cancelled",
+          "event.completed",
+          "event.archived",
+          "event.updated",
+          "event.occurrence_cancelled",
+          "ticket_type.created",
+          "ticket_type.updated",
+          "ticket_type.archived",
+          "form.registration_submitted",
+          "waitlist.joined",
+          "waitlist.offered",
+          "survey.responded",
+          "review.submitted",
+          "program.agenda_published"
+        ],
+        "description": "A public event type (see the `webhooks` section)."
+      },
+      "HookSubscribeRequest": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "maxLength": 2048,
+            "format": "uri",
+            "description": "Where to deliver: https on port 443, a public host.",
+            "example": "https://hooks.zapier.com/hooks/standard/123/abc"
+          },
+          "event": {
+            "$ref": "#/components/schemas/HookEventType"
+          }
+        },
+        "required": [
+          "url",
+          "event"
+        ]
+      },
+      "HookSampleList": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/HookSample"
+            }
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "HookSample": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "pattern": "^[a-z_]+(\\.[a-z_]+)+$"
+          },
+          "version": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "apiVersion": {
+            "type": "string",
+            "enum": [
+              "v1"
+            ]
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "orgId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "The event’s thin payload."
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "version",
+          "apiVersion",
+          "occurredAt",
+          "orgId",
+          "data"
+        ]
+      },
+      "ContactRef": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "created": {
+            "type": "boolean",
+            "description": "False when the org already had this email (nothing was duplicated)."
+          }
+        },
+        "required": [
+          "id",
+          "created"
+        ]
+      },
+      "AddContactRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "maxLength": 254,
+            "format": "email"
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "minLength": 1,
+            "maxLength": 200
+          }
+        },
+        "required": [
+          "email"
+        ]
+      },
+      "CreateRegistrationRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "email": {
+            "type": "string",
+            "maxLength": 254,
+            "format": "email"
+          },
+          "labels": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40
+            },
+            "maxItems": 10
+          }
+        },
+        "required": [
+          "name",
+          "email"
         ]
       },
       "BulkOperation": {
@@ -11289,6 +11501,691 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ScanVerdict"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict, invalid state, or the same Idempotency-Key is in flight",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The Idempotency-Key was used with a different request (`idempotency_key_reused`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Read-only maintenance (`read_only_freeze`): nothing was changed; retry after `Retry-After` seconds",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/orgs/{org}/hooks": {
+      "post": {
+        "operationId": "subscribeHook",
+        "tags": [
+          "hooks"
+        ],
+        "summary": "Subscribe a URL to one event type (scope `webhooks:subscribe`)",
+        "description": "A REST hook (Zapier-style): deliveries are the same signed, thin messages as Settings → Webhooks endpoints. It appears there too, where the organizer can remove it.",
+        "security": [
+          {
+            "apiKey": []
+          },
+          {
+            "bearerSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 63,
+              "description": "Organization id or slug",
+              "example": "lakeside-events"
+            },
+            "required": true,
+            "description": "Organization id or slug",
+            "name": "org",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "pattern": "^[\\x21-\\x7e]{8,255}$",
+              "description": "Required on every write. Retrying with the same key returns the stored result (kept 24 h).",
+              "example": "6f1c2c1e-5d1e-4d7a-9f5b-2c4b1f0e9a11"
+            },
+            "required": true,
+            "description": "Required on every write. Retrying with the same key returns the stored result (kept 24 h).",
+            "name": "idempotency-key",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HookSubscribeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Subscribed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Hook"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict, invalid state, or the same Idempotency-Key is in flight",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The Idempotency-Key was used with a different request (`idempotency_key_reused`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Read-only maintenance (`read_only_freeze`): nothing was changed; retry after `Retry-After` seconds",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/orgs/{org}/hooks/{hookId}": {
+      "delete": {
+        "operationId": "unsubscribeHook",
+        "tags": [
+          "hooks"
+        ],
+        "summary": "Unsubscribe a REST hook (scope `webhooks:subscribe`)",
+        "description": "Removes a hook made through this API (never an endpoint the organizer made). A hook that is already gone answers 204 too.",
+        "security": [
+          {
+            "apiKey": []
+          },
+          {
+            "bearerSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 63,
+              "description": "Organization id or slug",
+              "example": "lakeside-events"
+            },
+            "required": true,
+            "description": "Organization id or slug",
+            "name": "org",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The hook id"
+            },
+            "required": true,
+            "description": "The hook id",
+            "name": "hookId",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Unsubscribed"
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict, invalid state, or the same Idempotency-Key is in flight",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The Idempotency-Key was used with a different request (`idempotency_key_reused`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Read-only maintenance (`read_only_freeze`): nothing was changed; retry after `Retry-After` seconds",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/orgs/{org}/hooks/samples": {
+      "get": {
+        "operationId": "listHookSamples",
+        "tags": [
+          "hooks"
+        ],
+        "summary": "A sample delivery for an event type (scope `webhooks:subscribe`)",
+        "description": "Example data with the delivery’s exact shape, for setting up an automation before a real event happens.",
+        "security": [
+          {
+            "apiKey": []
+          },
+          {
+            "bearerSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 63,
+              "description": "Organization id or slug",
+              "example": "lakeside-events"
+            },
+            "required": true,
+            "description": "Organization id or slug",
+            "name": "org",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "$ref": "#/components/schemas/HookEventType"
+            },
+            "required": true,
+            "description": "A public event type (see the `webhooks` section).",
+            "name": "event",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "One sample message",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HookSampleList"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/orgs/{org}/contacts": {
+      "post": {
+        "operationId": "addContact",
+        "tags": [
+          "contacts"
+        ],
+        "summary": "Add a contact (scope `contacts:write`)",
+        "description": "Finds or creates the org’s contact for the email; an existing contact keeps its name unless it had none. Records no marketing consent.",
+        "security": [
+          {
+            "apiKey": []
+          },
+          {
+            "bearerSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 63,
+              "description": "Organization id or slug",
+              "example": "lakeside-events"
+            },
+            "required": true,
+            "description": "Organization id or slug",
+            "name": "org",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "pattern": "^[\\x21-\\x7e]{8,255}$",
+              "description": "Required on every write. Retrying with the same key returns the stored result (kept 24 h).",
+              "example": "6f1c2c1e-5d1e-4d7a-9f5b-2c4b1f0e9a11"
+            },
+            "required": true,
+            "description": "Required on every write. Retrying with the same key returns the stored result (kept 24 h).",
+            "name": "idempotency-key",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddContactRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The contact",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContactRef"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict, invalid state, or the same Idempotency-Key is in flight",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The Idempotency-Key was used with a different request (`idempotency_key_reused`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Read-only maintenance (`read_only_freeze`): nothing was changed; retry after `Retry-After` seconds",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/orgs/{org}/events/{eventId}/registrations": {
+      "post": {
+        "operationId": "createRegistration",
+        "tags": [
+          "attendees"
+        ],
+        "summary": "Register someone for an event (scope `attendees:write`)",
+        "description": "Adds a person to the event’s guest list (no ticket, no payment). One active registration per email per event: a second one is a 409.",
+        "security": [
+          {
+            "apiKey": []
+          },
+          {
+            "bearerSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 63,
+              "description": "Organization id or slug",
+              "example": "lakeside-events"
+            },
+            "required": true,
+            "description": "Organization id or slug",
+            "name": "org",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The event id"
+            },
+            "required": true,
+            "description": "The event id",
+            "name": "eventId",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "pattern": "^[\\x21-\\x7e]{8,255}$",
+              "description": "Required on every write. Retrying with the same key returns the stored result (kept 24 h).",
+              "example": "6f1c2c1e-5d1e-4d7a-9f5b-2c4b1f0e9a11"
+            },
+            "required": true,
+            "description": "Required on every write. Retrying with the same key returns the stored result (kept 24 h).",
+            "name": "idempotency-key",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRegistrationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Registered",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Attendee"
                 }
               }
             }

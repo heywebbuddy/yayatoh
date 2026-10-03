@@ -1,7 +1,9 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi';
 import { addGuestCommand } from '@yayatoh/attendees';
 import { addContactCommand } from '@yayatoh/crm';
-import { executeCommand, executeQuery } from '@yayatoh/kernel';
+import { withTenant } from '@yayatoh/db';
+import { findEventTx } from '@yayatoh/events';
+import { DomainError, executeCommand, executeQuery } from '@yayatoh/kernel';
 import { hookSampleQuery, subscribeHookCommand, unsubscribeHookCommand } from '@yayatoh/webhooks';
 import { SUBSCRIBABLE_EVENT_TYPES, WebhookEnvelopeBase } from '@yayatoh/webhooks/catalog';
 import type { V1Deps, V1Env } from '../context.ts';
@@ -178,6 +180,11 @@ export function automationRoutes(deps: V1Deps) {
       return c.json(toWire(ContactRef, r), 200);
     })
     .openapi(routes.register, async (c) => {
+      // The guest-list command trusts its caller's event id (the console's own pages): from outside,
+      // the event must be one of this org's (RLS shows no other org's events).
+      const { eventId } = c.req.valid('param');
+      if (!(await withTenant(c.get('ctx'), (tx) => findEventTx(tx, eventId))))
+        throw new DomainError('not_found', 'Event not found');
       const a = await executeCommand(
         idempotent(addGuestCommand),
         { ...c.req.valid('json'), eventId: c.req.valid('param').eventId },
