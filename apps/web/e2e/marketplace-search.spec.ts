@@ -49,7 +49,7 @@ async function feed(request: APIRequestContext, s: Pick<Scenario, 'orgId' | 'org
   expect(res.status()).toBe(200);
 }
 
-/** One enrolled org with three public events in Paris, Versailles and Lyon, a wedding and a private event. */
+/** One enrolled org with three public events (a centre, a neighbour, one far away), a wedding and a private event. */
 async function scenario(request: APIRequestContext, project: string): Promise<Scenario> {
   const known = scenarios.get(project);
   if (known) return known;
@@ -66,18 +66,18 @@ async function scenario(request: APIRequestContext, project: string): Promise<Sc
   const starts = new Date(Date.now() + 60 * 86_400_000);
   const made: Record<string, { slug: string; name: string }> = {};
   // A spot of the map of its own (other projects and reruns land elsewhere), so distances and
-  // "nearby" are this scenario's alone: Jazz at the centre, the gala ~11 km away, Strings ~330 km.
+  // "nearby" are this scenario's alone: the quartet at the centre, the banquet ~11 km away, the recital ~330 km.
   const lat = Math.round((Math.random() * 100 - 50) * 1000) / 1000;
   const lng = Math.round((Math.random() * 300 - 150) * 1000) / 1000;
   const venues = {
-    paris: { name: 'Salle Pleyel', city: `Paris ${tag}`, latitude: lat, longitude: lng },
-    versailles: { name: 'Opéra Royal', city: `Versailles ${tag}`, latitude: lat + 0.1, longitude: lng },
-    lyon: { name: 'Halle Tony Garnier', city: `Lyon ${tag}`, latitude: lat + 3, longitude: lng },
+    paris: { name: 'Salle Pleyel', city: `Centre ${tag}`, latitude: lat, longitude: lng },
+    versailles: { name: 'Opéra Royal', city: `Voisine ${tag}`, latitude: lat + 0.1, longitude: lng },
+    lyon: { name: 'Halle Tony Garnier', city: `Lointaine ${tag}`, latitude: lat + 3, longitude: lng },
   };
   const plan = [
-    { key: 'jazz', name: `Pleyel Jazz ${tag}`, venue: 'paris', category: 'music', price: 1500 },
-    { key: 'gala', name: `Royal Gala ${tag}`, venue: 'versailles', category: 'charity', price: 15_000 },
-    { key: 'lyon', name: `Lyon Strings ${tag}`, venue: 'lyon', category: 'music', price: 0 },
+    { key: 'jazz', name: `Pleyel Quartet ${tag}`, venue: 'paris', category: 'music', price: 1500 },
+    { key: 'gala', name: `Opera Banquet ${tag}`, venue: 'versailles', category: 'charity', price: 15_000 },
+    { key: 'lyon', name: `Garnier Recital ${tag}`, venue: 'lyon', category: 'music', price: 0 },
     {
       key: 'vows',
       name: `Harper Vows ${tag}`,
@@ -156,6 +156,8 @@ test.afterAll(async () => {
 });
 
 test.describe('marketplace search v2 (M6.14a)', () => {
+  // One scenario (org and events) per project: the tests share it, so they run in one worker.
+  test.describe.configure({ mode: 'serial' });
   test('search with facets: counts on every option, category and price narrow the results', async ({
     page,
     request,
@@ -196,11 +198,11 @@ test.describe('marketplace search v2 (M6.14a)', () => {
   }) => {
     const s = await scenario(request, test.info().project.name);
     await page.goto(`${MARKET}/search?q=${s.tag}`);
-    await pickOption(page.getByLabel('Near'), `Paris ${s.tag}`);
+    await pickOption(page.getByLabel('Near'), `Centre ${s.tag}`);
     await pickOption(page.getByLabel('Within'), '50 km');
     await page.getByRole('button', { name: 'Search', exact: true }).click();
     await expect(
-      page.getByRole('heading', { level: 2, name: `Within 50 km of Paris ${s.tag}` }),
+      page.getByRole('heading', { level: 2, name: `Within 50 km of Centre ${s.tag}` }),
     ).toBeVisible();
     const items = results(page).getByRole('listitem');
     await expect(items).toHaveCount(2);
@@ -274,9 +276,9 @@ test.describe('marketplace search v2 (M6.14a)', () => {
     const s = await scenario(request, test.info().project.name);
     await page.goto(`${MARKET}/search`);
     await page.getByRole('searchbox', { name: 'Search by name, place or organizer' }).focus();
-    await page.keyboard.type(`gala ${s.tag}`);
+    await page.keyboard.type(`banquet ${s.tag}`);
     await page.keyboard.press('Enter');
-    await expect(page).toHaveURL(new RegExp(`q=gala\\+${s.tag}`));
+    await expect(page).toHaveURL(new RegExp(`q=banquet\\+${s.tag}`));
     await expect(page.getByText('1 event', { exact: true })).toBeVisible();
     // Open the price select with the keyboard and pick "Over 100".
     await page.getByRole('searchbox', { name: 'Search by name, place or organizer' }).focus();
