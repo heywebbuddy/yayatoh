@@ -2254,7 +2254,7 @@
       },
       "details": {
         "title": "Détail de la table",
-        "choose": "Table ou rangée",
+        "choose": "Table à afficher",
         "none": "Ce plan n’a ni tables ni rangées.",
         "counts": "{seated} placés · {free} sur {capacity} libres",
         "tickets": "{count, plural, one {# place occupée par un billet} other {# places occupées par des billets}}",

@@ -2254,7 +2254,7 @@
       },
       "details": {
         "title": "桌位详情",
-        "choose": "桌子或排",
+        "choose": "要查看的桌子",
         "none": "此座位图没有桌子或排。",
         "counts": "已坐 {seated} · 空 {free}/{capacity}",
         "tickets": "{count, plural, other {# 个座位已被门票占用}}",

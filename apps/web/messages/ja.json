@@ -2254,7 +2254,7 @@
       },
       "details": {
         "title": "テーブル詳細",
-        "choose": "テーブルまたは列",
+        "choose": "表示するテーブル",
         "none": "この座席表にはテーブルも列もありません。",
         "counts": "着席 {seated} · 空き {free}/{capacity}",
         "tickets": "{count, plural, other {チケットで埋まっている席 #}}",

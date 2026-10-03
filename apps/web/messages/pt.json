@@ -2254,7 +2254,7 @@
       },
       "details": {
         "title": "Detalhes da mesa",
-        "choose": "Mesa ou fila",
+        "choose": "Mesa a mostrar",
         "none": "Este mapa não tem mesas nem filas.",
         "counts": "{seated} acomodados · {free} de {capacity} livres",
         "tickets": "{count, plural, one {# lugar ocupado por um ingresso} other {# lugares ocupados por ingressos}}",

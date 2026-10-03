@@ -2254,7 +2254,7 @@
       },
       "details": {
         "title": "Dettagli del tavolo",
-        "choose": "Tavolo o fila",
+        "choose": "Tavolo da mostrare",
         "none": "Questa piantina non ha tavoli né file.",
         "counts": "{seated} seduti · {free} di {capacity} liberi",
         "tickets": "{count, plural, one {# posto occupato da un biglietto} other {# posti occupati da biglietti}}",

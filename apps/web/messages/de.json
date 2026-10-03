@@ -2254,7 +2254,7 @@
       },
       "details": {
         "title": "Tischdetails",
-        "choose": "Tisch oder Reihe",
+        "choose": "Angezeigter Tisch",
         "none": "Dieser Plan hat keine Tische oder Reihen.",
         "counts": "{seated} platziert · {free} von {capacity} frei",
         "tickets": "{count, plural, one {# Platz durch ein Ticket belegt} other {# Plätze durch Tickets belegt}}",

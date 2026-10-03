@@ -2254,7 +2254,7 @@
       },
       "details": {
         "title": "Table details",
-        "choose": "Table or row",
+        "choose": "Table to show",
         "none": "This chart has no tables or rows.",
         "counts": "{seated} seated · {free} of {capacity} free",
         "tickets": "{count, plural, one {# seat held by a ticket} other {# seats held by tickets}}",

@@ -2254,7 +2254,7 @@
       },
       "details": {
         "title": "Tafeldetails",
-        "choose": "Tafel of rij",
+        "choose": "Tafel om te tonen",
         "none": "Deze plattegrond heeft geen tafels of rijen.",
         "counts": "{seated} geplaatst · {free} van {capacity} vrij",
         "tickets": "{count, plural, one {# plaats bezet door een ticket} other {# plaatsen bezet door tickets}}",

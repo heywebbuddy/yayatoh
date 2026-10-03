@@ -83,6 +83,8 @@ export function GuestSeatingEditor({
   const [moving, setMoving] = useState<{ guestIds: string[]; name: string; itemId: string } | null>(null);
   const [feedback, setFeedback] = useState<Feedback>(null);
   const [dragHint, setDragHint] = useState('');
+  /** The VIP switch shows the host's choice at once (the page re-reads after the change). */
+  const [vipChoice, setVipChoice] = useState<Readonly<Record<string, boolean>>>({});
   const dragged = useRef<string[] | null>(null);
   const plan = useRef<HTMLDivElement>(null);
   const moveSelect = useRef<HTMLSelectElement>(null);
@@ -224,9 +226,13 @@ export function GuestSeatingEditor({
       } else setFeedback({ tone: 'danger', text: errorText(r) });
     });
 
-  const doVip = (place: Place, vip: boolean) =>
+  // A fresh view from the server replaces any choice shown ahead of it.
+  useEffect(() => setVipChoice({}), [places]);
+  const doVip = (place: Place, vip: boolean) => {
+    setVipChoice((c) => ({ ...c, [place.itemId]: vip }));
     startTransition(async () => {
       const r = await setVip({ itemId: place.itemId, vip });
+      if (!r.ok) setVipChoice((c) => ({ ...c, [place.itemId]: !vip }));
       if (r.ok) {
         setFeedback({
           tone: 'success',
@@ -235,6 +241,7 @@ export function GuestSeatingEditor({
         router.refresh();
       } else setFeedback({ tone: 'danger', text: errorText(r) });
     });
+  };
 
   const onMove = (e: FormEvent) => {
     e.preventDefault();
@@ -672,7 +679,7 @@ export function GuestSeatingEditor({
                   <input
                     type="checkbox"
                     className="size-6 shrink-0"
-                    checked={shownPlace.vip}
+                    checked={vipChoice[shownPlace.itemId] ?? shownPlace.vip}
                     disabled={pending}
                     onChange={(e) => doVip(shownPlace, e.currentTarget.checked)}
                   />
