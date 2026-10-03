@@ -43,6 +43,19 @@ export const SCAN_RESULTS = [
   'wrong_checkpoint',
   /** M5.1d: the ticket's invoice still has a balance; admitted only with a staff override. */
   'balance_due',
+  // M5.6a session doors (no event admission is recorded; attendance is).
+  /** Let into the session. */
+  'entered',
+  /** Left the session (scan out). */
+  'scanned_out',
+  /** A scan out of someone not in the room. */
+  'not_in_room',
+  /** Gate `enrollment`: not a registrant, or not enrolled in a session that needs it. */
+  'not_enrolled',
+  /** Gate `admission_level`: the pass doesn't give this session. */
+  'admission_level',
+  /** Gate `capacity`: the room is full. */
+  'capacity',
 ] as const;
 export type ScanResult = (typeof SCAN_RESULTS)[number];
 
@@ -340,7 +353,7 @@ export const staffAlertPushes = tenantTable(
   ],
 );
 
-export const CHECKPOINT_KINDS = ['entrance', 'zone'] as const;
+export const CHECKPOINT_KINDS = ['entrance', 'zone', 'session'] as const;
 export type CheckpointKind = (typeof CHECKPOINT_KINDS)[number];
 
 /**
@@ -362,11 +375,27 @@ export const checkpoints = tenantTable(
     longitude: doublePrecision('longitude'),
     /** How many people the area holds (M3.3a capacity gauges); null = not limited. */
     capacity: integer('capacity'),
+    /** M5.6a: a session door's program session (kind `session` only; no FK across modules). */
+    sessionId: uuid('session_id'),
+    /**
+     * M5.6a: the self check-in flyer's token (session doors with the option on; random, printed
+     * on the flyer's QR). Global: the public page finds the org through a definer function.
+     */
+    selfCheckinToken: text('self_checkin_token'),
   },
   (t) => [
     uniqueIndex('checkpoints_org_event_name_key').on(t.orgId, t.eventId, t.name),
     check('checkpoints_capacity_check', sql`capacity is null or capacity between 1 and 1000000`),
-    check('checkpoints_kind_check', sql`kind in ('entrance', 'zone')`),
+    check('checkpoints_kind_check', sql`kind in ('entrance', 'zone', 'session')`),
+    check('checkpoints_session_check', sql`(kind = 'session') = (session_id is not null)`),
+    check(
+      'checkpoints_self_checkin_check',
+      sql`self_checkin_token is null or (kind = 'session' and self_checkin_token ~ '^[A-Za-z0-9_-]{32}$')`,
+    ),
+    uniqueIndex('checkpoints_self_checkin_token_key')
+      .on(t.selfCheckinToken)
+      .where(sql`self_checkin_token is not null`),
+    index('checkpoints_org_session_idx').on(t.orgId, t.sessionId).where(sql`session_id is not null`),
     check(
       'checkpoints_location_check',
       sql`(latitude is null) = (longitude is null) and (latitude is null or (latitude between -90 and 90 and longitude between -180 and 180))`,
@@ -543,5 +572,57 @@ export const guestArrivals = tenantTable(
     index('guest_arrivals_org_event_at_idx').on(t.orgId, t.eventId, t.arrivedAt),
     check('guest_arrivals_source_check', sql`source in ('scanner', 'kiosk', 'host')`),
     check('guest_arrivals_device_check', sql`source <> 'host' or device_id is null`),
+  ],
+);
+
+/* ------------------------------------------------------------- M5.6a: session check-in ---- */
+
+export const ATTENDANCE_SOURCES = ['scan', 'override', 'self'] as const;
+export type AttendanceSource = (typeof ATTENDANCE_SOURCES)[number];
+
+/**
+ * One visit to a session's room (M5.6a): in at a session door, out when scanned out (null while
+ * in the room). At most one open visit per ticket and session (a second scan in is `duplicate`);
+ * leaving and coming back is a new visit. Dwell time is the sum of the visits. `source`: a door
+ * scan, a staff override of the gates (`override_gates` + `override_reason`, audited), or the
+ * attendee's own check-in from a flyer (`self`, attendance only, never gated).
+ */
+export const sessionAttendance = tenantTable(
+  checkinSchema,
+  'session_attendance',
+  {
+    eventId: uuid('event_id').notNull(),
+    checkpointId: uuid('checkpoint_id').notNull(),
+    sessionId: uuid('session_id').notNull(),
+    ticketId: uuid('ticket_id').notNull(),
+    inAt: ts('in_at').notNull(),
+    outAt: ts('out_at'),
+    source: text('source').notNull().default('scan'),
+    inBy: uuid('in_by'),
+    inDeviceId: uuid('in_device_id'),
+    outDeviceId: uuid('out_device_id'),
+    /** Scanned on a device while offline (the in scan). */
+    offline: boolean('offline').notNull().default(false),
+    overrideGates: text('override_gates').array().notNull().default(sql`'{}'::text[]`),
+    overrideReason: text('override_reason'),
+  },
+  (t) => [
+    uniqueIndex('session_attendance_org_open_key')
+      .on(t.orgId, t.sessionId, t.ticketId)
+      .where(sql`out_at is null`),
+    index('session_attendance_org_session_in_idx').on(t.orgId, t.sessionId, t.inAt),
+    index('session_attendance_org_event_idx').on(t.orgId, t.eventId),
+    index('session_attendance_org_ticket_idx').on(t.orgId, t.ticketId),
+    foreignKey({
+      name: 'session_attendance_checkpoint_fk',
+      columns: [t.orgId, t.checkpointId],
+      foreignColumns: [checkpoints.orgId, checkpoints.id],
+    }),
+    check('session_attendance_out_check', sql`out_at is null or out_at >= in_at`),
+    check('session_attendance_source_check', sql`source in ('scan', 'override', 'self')`),
+    check(
+      'session_attendance_override_check',
+      sql`override_gates <@ array['enrollment', 'admission_level', 'capacity']::text[] and (source = 'override') = (cardinality(override_gates) > 0) and (override_reason is null) = (source <> 'override') and (override_reason is null or char_length(override_reason) between 3 and 300)`,
+    ),
   ],
 );

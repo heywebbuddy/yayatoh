@@ -2029,6 +2029,30 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
         where s.event_id = ${event.id} and t.order_id = ${checkout.order.id} limit 1`);
     });
   }
+  // M5.6a session check-in: a door for the event's first session with its flyer on, and one
+  // visit there (let in past the full room by a staff override, then scanned out).
+  if (fullPass) {
+    const [first] = await withTenant(systemCtx(org.id), (tx) =>
+      tx.execute<{ id: string }>(
+        sql`select id from program.sessions where event_id = ${event.id} order by starts_at, id limit 1`,
+      ),
+    );
+    if (first) {
+      const sessionDoor = await executeCommand(
+        createCheckpointCommand,
+        { eventId: event.id, name: 'Session door', kind: 'session', sessionId: first.id, selfCheckin: true },
+        ctx(),
+        ports,
+      );
+      await withTenant(systemCtx(org.id), (tx) =>
+        tx.execute(sql`insert into checkin.session_attendance
+            (org_id, event_id, checkpoint_id, session_id, ticket_id, in_at, out_at, source, override_gates, override_reason)
+          select ${org.id}, ${event.id}, ${sessionDoor.id}, ${first.id}, t.id, now() - interval '50 minutes',
+            now() - interval '5 minutes', 'override', array['capacity']::text[], 'Fixture: speaker guest.'
+          from ticketing.tickets t where t.order_id = ${checkout.order.id} limit 1`),
+      );
+    }
+  }
   // M4.1a: a party with a named guest (sealed answers, linked to a guest-list entry), a child and
   // an unnamed plus-one; then an edit and a move, so every history action has rows.
   const party = await executeCommand(

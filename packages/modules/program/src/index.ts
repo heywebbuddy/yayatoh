@@ -66,6 +66,13 @@ export {
   submitCfpReviewCommand,
   unassignCfpReviewerCommand,
 } from './cfp.ts';
+// M5.6a: session doors (check-in reads its session's facts through these).
+export {
+  eventSessionIdsTx,
+  type SessionDoorFacts,
+  sessionDoorChoicesTx,
+  sessionDoorFactsTx,
+} from './checkin-facts.ts';
 export {
   ADMISSIONS,
   type Admission,

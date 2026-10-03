@@ -1,8 +1,10 @@
 import { billingEntitlements } from '@yayatoh/billing';
+import { setSessionAccessSource } from '@yayatoh/checkin';
 import { eventRolesOf } from '@yayatoh/events';
 import { guestsOccupantDirectory, guestsPartyCredentials } from '@yayatoh/guests';
 import { createCommandPorts, localKeyVault, setKeyVault } from '@yayatoh/platform';
 import { setOccupantDirectory, setPartyCredentials } from '@yayatoh/seating';
+import { registrationSessionAccess } from '@yayatoh/registration';
 import { createOrgAuthorizer, orgStatusGate } from '@yayatoh/tenancy';
 
 /** Composition root for the web transport (Server Actions / RSC). Same ports as /v1. */
@@ -21,3 +23,6 @@ if (localKms) setKeyVault(localKeyVault(localKms));
 setOccupantDirectory(guestsOccupantDirectory);
 // M4.4a: the guest seat finder checks party links and PINs through its PartyCredentials port.
 setPartyCredentials(guestsPartyCredentials);
+// M5.6a: session doors learn registrations and enrollments from the registration module
+// (a higher tier than check-in, so it is plugged in here).
+setSessionAccessSource(registrationSessionAccess);

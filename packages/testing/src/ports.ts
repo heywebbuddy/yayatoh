@@ -2,6 +2,7 @@ import { randomBytes } from 'node:crypto';
 import { attendeeEmailAction, attendeeImportAction, attendeeLabelAction } from '@yayatoh/attendees';
 import { audienceExportAction } from '@yayatoh/audiences';
 import { billingEntitlements } from '@yayatoh/billing';
+import { setSessionAccessSource } from '@yayatoh/checkin';
 import { recordTermConsentTx } from '@yayatoh/crm';
 import { employerExportAction, giftsExportAction } from '@yayatoh/donations';
 import { eventRolesOf } from '@yayatoh/events';
@@ -23,7 +24,7 @@ import {
   setKeyVault,
 } from '@yayatoh/platform';
 import { dsarExportAction } from '@yayatoh/privacy';
-import { registrationDecideAction } from '@yayatoh/registration';
+import { registrationDecideAction, registrationSessionAccess } from '@yayatoh/registration';
 import { attendeeExportAction, bookingsExportAction } from '@yayatoh/reports';
 import { seatAssignAction, setOccupantDirectory, setPartyCredentials } from '@yayatoh/seating';
 import { surveyExportAction } from '@yayatoh/surveys';
@@ -45,6 +46,9 @@ setKeyVault(localKeyVault(process.env.LOCAL_KMS_KEY ?? randomBytes(32).toString(
 setOccupantDirectory(guestsOccupantDirectory);
 // M4.4a: the guest seat finder's party links and PINs (seating's PartyCredentials port).
 setPartyCredentials(guestsPartyCredentials);
+
+// M5.6a: session doors learn registrations and enrollments from the registration module.
+setSessionAccessSource(registrationSessionAccess);
 
 /** The bulk actions the apps register, and the step command built from them. */
 export const BULK_ACTIONS = [

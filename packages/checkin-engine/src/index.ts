@@ -31,10 +31,12 @@ export {
   type ManifestOccurrence,
   type ManifestRow,
   type ManifestScope,
+  type ManifestSession,
   type OfflineState,
   type OfflineVerdict,
   offlineVerdict,
   SCOPE_TAG,
+  type SignedSessionGate,
   scopeAllows,
   scopeMessage,
   uuidv7Time,
@@ -51,6 +53,18 @@ export {
   type RuleVerdict,
   ruleResult,
 } from './rules.ts';
+export {
+  dwellMs,
+  GATE_RESULT,
+  gateOf,
+  inRoomKey,
+  SESSION_GATES,
+  type SessionAccessFacts,
+  type SessionGate,
+  type SessionGateRule,
+  type SessionRefusal,
+  sessionGateResult,
+} from './session.ts';
 export {
   DEFAULT_VELOCITY_RULES,
   detectVelocity,

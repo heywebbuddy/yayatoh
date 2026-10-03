@@ -23,6 +23,7 @@
     "@yayatoh/guests": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
     "@yayatoh/platform": "workspace:*",
+    "@yayatoh/program": "workspace:*",
     "@yayatoh/seating": "workspace:*",
     "@yayatoh/tenancy": "workspace:*",
     "@yayatoh/ticket-crypto": "workspace:*",
