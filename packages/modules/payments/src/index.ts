@@ -105,6 +105,7 @@ export {
   RISK_WINDOW_MINUTES,
   rulesRiskProvider,
 } from './risk.ts';
+export { type SandboxCheck, sandboxSafeProvider } from './sandbox.ts';
 export {
   DISPUTE_STATUSES,
   LEDGER_ACCOUNTS,

@@ -3481,7 +3481,38 @@
       "attendees_read": "Read attendees",
       "attendees_write": "Change attendees and resend tickets",
       "checkin_scan": "Scan tickets"
-    }
+    },
+    "expiry": "Expires",
+    "expiryHint": "An expiring key must be rotated before it ends. Shorter is safer.",
+    "expiryIn": {
+      "30": "In 30 days",
+      "90": "In 90 days",
+      "365": "In a year",
+      "never": "Never"
+    },
+    "expiresColumn": "Expires",
+    "createdBy": "Created by",
+    "createdByPlatform": "Yayatoh",
+    "expired": "Expired",
+    "rotatedStatus": "Rotated",
+    "rotate": "Rotate",
+    "rotateNamed": "Rotate key {name}",
+    "overlap": "The old key keeps working",
+    "overlapFor": {
+      "h0": "Not at all: stop it now",
+      "h1": "For 1 hour",
+      "h24": "For 24 hours",
+      "h168": "For 7 days"
+    },
+    "rotateNow": "Rotate now",
+    "rotateNowNamed": "Rotate key {name} now",
+    "rotated": "Key “{name}” rotated. The old key works until {until}.",
+    "rotatedNow": "Key “{name}” rotated. The old key has stopped working.",
+    "related": "API",
+    "usageLink": "Usage",
+    "sandboxesLink": "Sandboxes",
+    "rateLimitNote": "Each key can make {perKey, number} requests a minute, and all keys together {perOrg, number}.",
+    "noApiAccess": "API access is not part of this organization’s plan: its keys are refused."
   },
   "market": {
     "wordmark": "Yayatoh",
@@ -4790,6 +4821,11 @@
     "terminated": {
       "title": "This organization is closed",
       "body": "Yayatoh support closed it. Its public pages are offline and nothing can be changed. As an owner you can still open it and download your data, for example from Activity."
+    },
+    "sandbox": {
+      "label": "Sandbox",
+      "title": "SANDBOX",
+      "body": "This is a test organization. Payments are fake and nothing is charged; its events never appear on the marketplace."
     }
   },
   "seatingDates": {
@@ -11310,5 +11346,56 @@
       "expired": "That code has expired or was already used. Ask for a new code.",
       "generic": "Something went wrong. Please try again."
     }
+  },
+  "apiUsage": {
+    "title": "API usage",
+    "subtitle": "Requests made with this organization’s API keys, per day in the organization’s time zone.",
+    "back": "API keys",
+    "range": "Period",
+    "lastDays": "Last {days, number} days",
+    "totalsTitle": "Totals",
+    "requests": "Requests",
+    "errors": "Errors",
+    "rateLimited": "Rate limited",
+    "perDayTitle": "Requests per day",
+    "perKeyTitle": "Requests per key",
+    "day": "Day",
+    "showData": "Show the data",
+    "emptyTitle": "No API requests in this period",
+    "emptyDescription": "Requests made with your keys show up here as soon as they are made. Create a key on the API keys page."
+  },
+  "sandboxes": {
+    "title": "Sandboxes",
+    "subtitle": "Test organizations linked to this one, to try the API and checkout safely.",
+    "noAccessTitle": "Only owners and admins manage sandboxes",
+    "noAccessDescription": "Ask an owner or admin of this organization to create one for you.",
+    "factsTitle": "How a sandbox works",
+    "factPayments": "Payments are always fake: nothing is ever charged, whatever the platform’s settings.",
+    "factMarketplace": "Its events never appear on the marketplace.",
+    "factData": "It starts with a sample event and two ticket types.",
+    "factKeys": "It has its own API keys and team. You are its owner.",
+    "createTitle": "Create a sandbox",
+    "name": "Name",
+    "nameHint": "For example “Staging” or “Zapier test”.",
+    "nameRequired": "Give the sandbox a name.",
+    "create": "Create sandbox",
+    "creating": "Creating…",
+    "created": "Sandbox “{name}” created with a sample event.",
+    "open": "Open sandbox {name}",
+    "openShort": "Open",
+    "limit": "This organization already has {max, number} sandboxes, the most it can have. Delete one first.",
+    "sandboxOfSandbox": "A sandbox can’t have sandboxes of its own",
+    "inSandboxDescription": "Create sandboxes from the organization this sandbox belongs to.",
+    "listTitle": "Your sandboxes",
+    "emptyTitle": "No sandboxes yet",
+    "emptyDescription": "Create one to try the API, checkout and check-in with sample data and fake payments.",
+    "address": "Address",
+    "createdAt": "Created",
+    "actions": "Actions",
+    "delete": "Delete",
+    "deleteNamed": "Delete sandbox {name}",
+    "deleteWarning": "It closes for good: its pages go offline, its members and keys lose access.",
+    "deleteConfirm": "Delete for good",
+    "deleteConfirmNamed": "Delete sandbox {name} for good"
   }
 }

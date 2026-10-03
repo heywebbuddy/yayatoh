@@ -16,10 +16,19 @@ import {
 export const billing = pgSchema('billing');
 
 // Global reference data (listed in GLOBAL_TABLES; app_user has SELECT only).
-export const plans = billing.table('plans', {
-  key: text('key').primaryKey(),
-  name: text('name').notNull(),
-});
+export const plans = billing.table(
+  'plans',
+  {
+    key: text('key').primaryKey(),
+    name: text('name').notNull(),
+    /**
+     * M6.3a (P6-13): limits per module key the owning code enforces, e.g. `api_access`:
+     * `{ requestsPerMinute, orgRequestsPerMinute, … }`. Placeholders until the owner prices plans.
+     */
+    quotas: jsonb('quotas').$type<Record<string, Record<string, number>>>().notNull().default({}),
+  },
+  () => [check('plans_quotas_check', sql`jsonb_typeof(quotas) = 'object'`)],
+);
 
 export const planModules = billing.table(
   'plan_modules',

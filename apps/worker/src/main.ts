@@ -28,7 +28,13 @@ import { JOBS, subscribers } from './registry.ts';
 import { relayOnce } from './relay.ts';
 import { runRetention } from './retention.ts';
 import { runSettlements } from './settlements.ts';
-import { alertDisputeDeadlines, sweepEnrollments, sweepExpiredHolds, sweepWaitlists } from './sweeper.ts';
+import {
+  alertDisputeDeadlines,
+  summarizeApiKeyUsage,
+  sweepEnrollments,
+  sweepExpiredHolds,
+  sweepWaitlists,
+} from './sweeper.ts';
 import { startWorker } from './worker.ts';
 import { runYearEndStatements } from './year-end.ts';
 
@@ -107,6 +113,12 @@ setInterval(() => {
 setInterval(() => {
   if (!release || stopping) return;
   alertDisputeDeadlines().catch((err) => console.error('dispute alerts', err));
+}, 3_600_000).unref();
+
+// API key usage (M6.3a): each finished day's counts per key go to the org's audit log, hourly (leader only).
+setInterval(() => {
+  if (!release || stopping) return;
+  summarizeApiKeyUsage().catch((err) => console.error('api key usage summaries', err));
 }, 3_600_000).unref();
 
 // Staff impersonations end after an hour (M1.2e): record the end in the org's audit log (leader only).

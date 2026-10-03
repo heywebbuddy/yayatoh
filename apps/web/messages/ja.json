@@ -3481,7 +3481,38 @@
       "attendees_read": "参加者の閲覧",
       "attendees_write": "参加者の変更とチケットの再送",
       "checkin_scan": "チケットのスキャン"
-    }
+    },
+    "expiry": "有効期限",
+    "expiryHint": "期限のあるキーは期限前にローテーションが必要です。短いほど安全です。",
+    "expiryIn": {
+      "30": "30日後",
+      "90": "90日後",
+      "365": "1年後",
+      "never": "なし"
+    },
+    "expiresColumn": "有効期限",
+    "createdBy": "作成者",
+    "createdByPlatform": "Yayatoh",
+    "expired": "期限切れ",
+    "rotatedStatus": "ローテーション済み",
+    "rotate": "ローテーション",
+    "rotateNamed": "キー {name} をローテーション",
+    "overlap": "旧キーが使える期間",
+    "overlapFor": {
+      "h0": "なし：今すぐ停止",
+      "h1": "1時間",
+      "h24": "24時間",
+      "h168": "7日間"
+    },
+    "rotateNow": "今すぐローテーション",
+    "rotateNowNamed": "キー {name} を今すぐローテーション",
+    "rotated": "キー「{name}」をローテーションしました。旧キーは {until} まで使えます。",
+    "rotatedNow": "キー「{name}」をローテーションしました。旧キーは停止しました。",
+    "related": "API",
+    "usageLink": "利用状況",
+    "sandboxesLink": "サンドボックス",
+    "rateLimitNote": "各キーは1分あたり {perKey, number} リクエスト、全キー合計で {perOrg, number} リクエストまで送れます。",
+    "noApiAccess": "この組織のプランには API アクセスが含まれていないため、キーは拒否されます。"
   },
   "market": {
     "wordmark": "Yayatoh",
@@ -4790,6 +4821,11 @@
     "terminated": {
       "title": "この組織は閉鎖されています",
       "body": "Yayatoh サポートがこの組織を閉鎖しました。公開ページは停止され、何も変更できません。オーナーは引き続き開いて、アクティビティなどからデータをダウンロードできます。"
+    },
+    "sandbox": {
+      "label": "サンドボックス",
+      "title": "サンドボックス",
+      "body": "これはテスト用の組織です。決済はテスト用で請求は発生せず、イベントがマーケットプレイスに表示されることはありません。"
     }
   },
   "seatingDates": {
@@ -11310,5 +11346,56 @@
       "expired": "このコードは期限切れか、すでに使用されています。新しいコードをリクエストしてください。",
       "generic": "問題が発生しました。もう一度お試しください。"
     }
+  },
+  "apiUsage": {
+    "title": "API 利用状況",
+    "subtitle": "この組織の API キーによるリクエスト（組織のタイムゾーンでの日別）。",
+    "back": "API キー",
+    "range": "期間",
+    "lastDays": "過去 {days, number} 日",
+    "totalsTitle": "合計",
+    "requests": "リクエスト",
+    "errors": "エラー",
+    "rateLimited": "レート制限",
+    "perDayTitle": "日別リクエスト",
+    "perKeyTitle": "キー別リクエスト",
+    "day": "日付",
+    "showData": "データを表示",
+    "emptyTitle": "この期間の API リクエストはありません",
+    "emptyDescription": "キーによるリクエストはすぐにここに表示されます。API キーのページでキーを作成してください。"
+  },
+  "sandboxes": {
+    "title": "サンドボックス",
+    "subtitle": "この組織にリンクされたテスト用の組織で、API や決済を安全に試せます。",
+    "noAccessTitle": "サンドボックスを管理できるのはオーナーと管理者だけです",
+    "noAccessDescription": "この組織のオーナーか管理者に作成を依頼してください。",
+    "factsTitle": "サンドボックスの仕組み",
+    "factPayments": "決済は常にテスト用です。プラットフォームの設定にかかわらず、請求されることはありません。",
+    "factMarketplace": "イベントがマーケットプレイスに表示されることはありません。",
+    "factData": "サンプルイベントと2種類のチケットが用意されています。",
+    "factKeys": "独自の API キーとチームを持ちます。あなたがオーナーです。",
+    "createTitle": "サンドボックスを作成",
+    "name": "名前",
+    "nameHint": "例：「Staging」「Zapier テスト」",
+    "nameRequired": "サンドボックスの名前を入力してください。",
+    "create": "サンドボックスを作成",
+    "creating": "作成中…",
+    "created": "サンプルイベント付きのサンドボックス「{name}」を作成しました。",
+    "open": "サンドボックス {name} を開く",
+    "openShort": "開く",
+    "limit": "この組織にはすでに上限の {max, number} 個のサンドボックスがあります。先に1つ削除してください。",
+    "sandboxOfSandbox": "サンドボックスの中にサンドボックスは作れません",
+    "inSandboxDescription": "このサンドボックスが属する組織から作成してください。",
+    "listTitle": "サンドボックス一覧",
+    "emptyTitle": "サンドボックスはまだありません",
+    "emptyDescription": "サンプルデータとテスト決済で API、決済、チェックインを試すために作成しましょう。",
+    "address": "アドレス",
+    "createdAt": "作成日",
+    "actions": "操作",
+    "delete": "削除",
+    "deleteNamed": "サンドボックス {name} を削除",
+    "deleteWarning": "完全に閉鎖されます。ページは公開停止になり、メンバーとキーはアクセスできなくなります。",
+    "deleteConfirm": "完全に削除",
+    "deleteConfirmNamed": "サンドボックス {name} を完全に削除"
   }
 }

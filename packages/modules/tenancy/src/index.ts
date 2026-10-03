@@ -1,15 +1,30 @@
 export { createOrgAuthorizer, type EventRoleResolver, memberRole, orgAuthorizer } from './authorizer.ts';
 export {
+  ApiUsageDto,
+  apiUsageQuery,
+  recordApiKeyUsage,
+  summarizeApiKeyUsageCommand,
+  unsummarizedApiKeyUsage,
+} from './commands/api-key-usage.ts';
+// M6.3a: key lifetimes and rotation, daily usage, sandbox orgs.
+export {
+  API_KEY_LIFETIMES,
   API_KEY_MODES,
   API_KEY_PATTERN,
+  API_KEY_ROTATION_OVERLAPS,
   ApiKeyDto,
   type ApiKeyIdentity,
   type ApiKeyMode,
+  type ApiKeySelf,
   apiKeyIdentity,
+  apiKeySelf,
   CreateApiKeyInput,
   createApiKeyCommand,
+  isApiKeyLive,
   listApiKeysQuery,
+  RotateApiKeyInput,
   revokeApiKeyCommand,
+  rotateApiKeyCommand,
 } from './commands/api-keys.ts';
 export {
   addDomainCommand,
@@ -76,6 +91,22 @@ export {
   signupCodeValid,
   updateOrganizationCommand,
 } from './commands/organizations.ts';
+export {
+  CreateSandboxInput,
+  createSandboxCommand,
+  createSandboxOrg,
+  deleteSandboxCommand,
+  deleteSandboxOrg,
+  isSandboxOrg,
+  isSandboxOrgTx,
+  listSandboxesQuery,
+  MAX_SANDBOX_ORGS,
+  provisionSandboxOrgCommand,
+  retireSandboxOrgCommand,
+  SandboxDto,
+  sandboxOrgName,
+  sandboxSlug,
+} from './commands/sandbox.ts';
 export {
   AgreementStatusDto,
   acceptAgreementCommand,

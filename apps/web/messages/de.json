@@ -3481,7 +3481,38 @@
       "attendees_read": "Teilnehmende lesen",
       "attendees_write": "Teilnehmende ändern und Tickets erneut senden",
       "checkin_scan": "Tickets scannen"
-    }
+    },
+    "expiry": "Läuft ab",
+    "expiryHint": "Ein ablaufender Schlüssel muss vorher rotiert werden. Kürzer ist sicherer.",
+    "expiryIn": {
+      "30": "In 30 Tagen",
+      "90": "In 90 Tagen",
+      "365": "In einem Jahr",
+      "never": "Nie"
+    },
+    "expiresColumn": "Läuft ab",
+    "createdBy": "Erstellt von",
+    "createdByPlatform": "Yayatoh",
+    "expired": "Abgelaufen",
+    "rotatedStatus": "Rotiert",
+    "rotate": "Rotieren",
+    "rotateNamed": "Schlüssel {name} rotieren",
+    "overlap": "Der alte Schlüssel funktioniert weiter",
+    "overlapFor": {
+      "h0": "Gar nicht: sofort stoppen",
+      "h1": "1 Stunde lang",
+      "h24": "24 Stunden lang",
+      "h168": "7 Tage lang"
+    },
+    "rotateNow": "Jetzt rotieren",
+    "rotateNowNamed": "Schlüssel {name} jetzt rotieren",
+    "rotated": "Schlüssel „{name}“ rotiert. Der alte Schlüssel funktioniert bis {until}.",
+    "rotatedNow": "Schlüssel „{name}“ rotiert. Der alte Schlüssel funktioniert nicht mehr.",
+    "related": "API",
+    "usageLink": "Nutzung",
+    "sandboxesLink": "Sandboxes",
+    "rateLimitNote": "Jeder Schlüssel darf {perKey, number} Anfragen pro Minute stellen, alle Schlüssel zusammen {perOrg, number}.",
+    "noApiAccess": "API-Zugang gehört nicht zum Tarif dieser Organisation: ihre Schlüssel werden abgewiesen."
   },
   "market": {
     "wordmark": "Yayatoh",
@@ -4790,6 +4821,11 @@
     "terminated": {
       "title": "Diese Organisation ist geschlossen",
       "body": "Der Yayatoh-Support hat sie geschlossen. Die öffentlichen Seiten sind offline, und nichts kann mehr geändert werden. Als Inhaber kannst du sie weiterhin öffnen und deine Daten herunterladen, zum Beispiel unter Aktivität."
+    },
+    "sandbox": {
+      "label": "Sandbox",
+      "title": "SANDBOX",
+      "body": "Dies ist eine Test-Organisation. Zahlungen sind simuliert und es wird nichts abgebucht; ihre Veranstaltungen erscheinen nie auf dem Marktplatz."
     }
   },
   "seatingDates": {
@@ -11310,5 +11346,56 @@
       "expired": "Der Code ist abgelaufen oder wurde bereits verwendet. Fordern Sie einen neuen Code an.",
       "generic": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
     }
+  },
+  "apiUsage": {
+    "title": "API-Nutzung",
+    "subtitle": "Anfragen mit den API-Schlüsseln dieser Organisation, pro Tag in der Zeitzone der Organisation.",
+    "back": "API-Schlüssel",
+    "range": "Zeitraum",
+    "lastDays": "Letzte {days, number} Tage",
+    "totalsTitle": "Summen",
+    "requests": "Anfragen",
+    "errors": "Fehler",
+    "rateLimited": "Ratenbegrenzt",
+    "perDayTitle": "Anfragen pro Tag",
+    "perKeyTitle": "Anfragen pro Schlüssel",
+    "day": "Tag",
+    "showData": "Daten anzeigen",
+    "emptyTitle": "Keine API-Anfragen in diesem Zeitraum",
+    "emptyDescription": "Anfragen mit Ihren Schlüsseln erscheinen hier sofort. Erstellen Sie einen Schlüssel auf der Seite API-Schlüssel."
+  },
+  "sandboxes": {
+    "title": "Sandboxes",
+    "subtitle": "Test-Organisationen, die mit dieser verknüpft sind, um API und Checkout gefahrlos auszuprobieren.",
+    "noAccessTitle": "Nur Inhaber und Admins verwalten Sandboxes",
+    "noAccessDescription": "Bitten Sie einen Inhaber oder Admin dieser Organisation, eine für Sie anzulegen.",
+    "factsTitle": "So funktioniert eine Sandbox",
+    "factPayments": "Zahlungen sind immer simuliert: Es wird nie etwas abgebucht, egal wie die Plattform eingestellt ist.",
+    "factMarketplace": "Ihre Veranstaltungen erscheinen nie auf dem Marktplatz.",
+    "factData": "Sie beginnt mit einer Beispielveranstaltung und zwei Ticketarten.",
+    "factKeys": "Sie hat eigene API-Schlüssel und ein eigenes Team. Sie sind ihr Inhaber.",
+    "createTitle": "Sandbox erstellen",
+    "name": "Name",
+    "nameHint": "Zum Beispiel „Staging“ oder „Zapier-Test“.",
+    "nameRequired": "Geben Sie der Sandbox einen Namen.",
+    "create": "Sandbox erstellen",
+    "creating": "Wird erstellt…",
+    "created": "Sandbox „{name}“ mit einer Beispielveranstaltung erstellt.",
+    "open": "Sandbox {name} öffnen",
+    "openShort": "Öffnen",
+    "limit": "Diese Organisation hat bereits {max, number} Sandboxes, das Maximum. Löschen Sie zuerst eine.",
+    "sandboxOfSandbox": "Eine Sandbox kann keine eigenen Sandboxes haben",
+    "inSandboxDescription": "Erstellen Sie Sandboxes in der Organisation, zu der diese Sandbox gehört.",
+    "listTitle": "Ihre Sandboxes",
+    "emptyTitle": "Noch keine Sandboxes",
+    "emptyDescription": "Erstellen Sie eine, um API, Checkout und Einlass mit Beispieldaten und simulierten Zahlungen auszuprobieren.",
+    "address": "Adresse",
+    "createdAt": "Erstellt",
+    "actions": "Aktionen",
+    "delete": "Löschen",
+    "deleteNamed": "Sandbox {name} löschen",
+    "deleteWarning": "Sie wird endgültig geschlossen: Ihre Seiten gehen offline, Mitglieder und Schlüssel verlieren den Zugang.",
+    "deleteConfirm": "Endgültig löschen",
+    "deleteConfirmNamed": "Sandbox {name} endgültig löschen"
   }
 }

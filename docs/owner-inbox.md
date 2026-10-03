@@ -565,3 +565,10 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **Phone opt-outs after erasure:** org SMS/WhatsApp STOP rows are deleted with the person (a re-entered number needs fresh consent). Approve, or ask for a hashed platform-wide phone suppression list like the email one.
 - [ ] **Legal hold periods:** paid orders and credit notes are held 7 years (D11); payment disputes are held without an end date. Confirm, or give the dispute period.
 - [ ] **Receipt wording** (`privacy.request.receipt.*`, `privacy.pdf.*`) and the self-service page copy for legal review (`legal-copy`).
+
+## M6.3a — API keys and sandbox orgs (2026-10-02, pending owner)
+- [ ] `api_access` quotas (P6-13 placeholders on every plan, `billing.plans.quotas`): 600 requests a minute per live key, 1,200 per org, 120 per test key, 300 per key of a sandbox org. Change them by data, no code change.
+- [ ] Sandboxes: at most 10 live per org (fixed placeholder); new keys default to a 90-day lifetime in the console (no expiry stays possible).
+- [ ] A deleted sandbox is closed (offline, members and keys removed) but its fake data is kept, because ledgers are append-only. Approve a later purge job, or keep them inert.
+- [ ] Production: sandbox checkouts need `FAKE_PAYMENTS_SECRET` set next to the Stripe keys, and the fake hosted page is refused in production today (`VERCEL_ENV=production`), so sandboxes take no payments there until you decide to allow the fake page on production for sandbox orgs only. They never reach Stripe either way.
+- [ ] Rate limits run in memory per instance until the Upstash account exists (already listed for M1.13).

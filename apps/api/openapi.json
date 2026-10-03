@@ -3,7 +3,7 @@
   "info": {
     "title": "Yayatoh API",
     "version": "0.2.0",
-    "description": "Yayatoh `/v1`. Changes are additive only (oasdiff gate).\n\n- **Auth:** an org API key (`Authorization: Bearer yy_live_…`, created in the console under\n  Settings → API keys) or a user token: `POST /v1/auth/token` (15-minute access token and a\n  rotating refresh token; recommended) or `POST /v1/auth/login` (a 14-day session). No cookies.\n- **Test keys:** `yy_test_…` keys are read-only and carry no personal data (`org:read`,\n  `events:read` only), with a smaller rate limit. Build against them, ship with a live key.\n- **Tenant:** org resources live under `/v1/orgs/{org}`; the org must match the key, or the\n  user must be a member. It is never read from a header.\n- **Pagination:** `limit` (≤ 100) and `cursor` (the previous page’s `nextCursor`).\n- **Errors:** RFC 9457 `application/problem+json` with a stable `code`.\n- **Idempotency:** every write needs an `Idempotency-Key`; a retry returns the stored result.\n- **Rate limits:** per key or user, with `RateLimit-*` headers and `Retry-After` on 429.\n- **Request ids:** every response has `X-Request-Id` (send your own to correlate).\n- **Caching:** content reads send an `ETag`; send it back as `If-None-Match` for a 304.\n- **Deprecation:** a deprecated route answers with `Deprecation` (RFC 9745) and, once a\n  date is set, `Sunset` (RFC 8594) and a `Link` to the migration notes."
+    "description": "Yayatoh `/v1`. Changes are additive only (oasdiff gate).\n\n- **Auth:** an org API key (`Authorization: Bearer yy_live_…`, created in the console under\n  Settings → API keys) or a user token: `POST /v1/auth/token` (15-minute access token and a\n  rotating refresh token; recommended) or `POST /v1/auth/login` (a 14-day session). No cookies.\n- **Test keys:** `yy_test_…` keys are read-only and carry no personal data (`org:read`,\n  `events:read` only), with a smaller rate limit. Build against them, ship with a live key.\n- **Tenant:** org resources live under `/v1/orgs/{org}`; the org must match the key, or the\n  user must be a member. It is never read from a header.\n- **Pagination:** `limit` (≤ 100) and `cursor` (the previous page’s `nextCursor`).\n- **Errors:** RFC 9457 `application/problem+json` with a stable `code`.\n- **Idempotency:** every write needs an `Idempotency-Key`; a retry returns the stored result.\n- **Rate limits:** per key or user, with `RateLimit-Limit`, `RateLimit-Remaining`,\n  `RateLimit-Reset` and `RateLimit-Policy` headers and `Retry-After` on 429. An API key gets\n  its plan’s `api_access` quotas: a per-minute budget per key and one for the whole org.\n- **Key lifetimes:** a key may expire (30, 90 or 365 days) and can be rotated with an overlap\n  window; an expired, rotated-out or revoked key answers 401 on the next request.\n- **Sandbox orgs:** create one from Settings → Sandboxes for seeded data and fake payments;\n  its keys work exactly like live ones, and it never takes real money.\n- **Request ids:** every response has `X-Request-Id` (send your own to correlate).\n- **Caching:** content reads send an `ETag`; send it back as `If-None-Match` for a 304.\n- **Deprecation:** a deprecated route answers with `Deprecation` (RFC 9745) and, once a\n  date is set, `Sunset` (RFC 8594) and a `Link` to the migration notes."
   },
   "tags": [
     {
@@ -3046,6 +3046,95 @@
             "type": "boolean"
           }
         }
+      },
+      "ApiKeyInfo": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "prefix": {
+            "type": "string",
+            "description": "The first characters of the key, e.g. `yy_live_AbC1`."
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApiKeyScope"
+            }
+          },
+          "test": {
+            "type": "boolean",
+            "description": "A test key (`yy_test_…`): read-only, no personal data."
+          },
+          "sandboxOrg": {
+            "type": "boolean",
+            "description": "The key belongs to a sandbox org: seeded data, fake payments only."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "expiresAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "description": "When the key stops working (null: never). Set when the key was rotated."
+          },
+          "rotated": {
+            "type": "boolean",
+            "description": "A newer key replaced this one; switch before `expiresAt`."
+          },
+          "rateLimit": {
+            "type": "object",
+            "properties": {
+              "keyPerMinute": {
+                "type": "integer",
+                "description": "Requests per minute for this key."
+              },
+              "orgPerMinute": {
+                "type": "integer",
+                "description": "Requests per minute for every key of the org together."
+              }
+            },
+            "required": [
+              "keyPerMinute",
+              "orgPerMinute"
+            ],
+            "description": "The plan’s `api_access` quotas that apply to this key."
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "prefix",
+          "scopes",
+          "test",
+          "sandboxOrg",
+          "createdAt",
+          "expiresAt",
+          "rotated",
+          "rateLimit"
+        ]
+      },
+      "ApiKeyScope": {
+        "type": "string",
+        "enum": [
+          "org:read",
+          "events:read",
+          "events:write",
+          "orders:read",
+          "orders:refund",
+          "attendees:read",
+          "attendees:write",
+          "checkin:scan"
+        ]
       },
       "OrderPage": {
         "type": "object",
@@ -8002,6 +8091,98 @@
           },
           "503": {
             "description": "Read-only maintenance (`read_only_freeze`): nothing was changed; retry after `Retry-After` seconds",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/orgs/{org}/api-key": {
+      "get": {
+        "operationId": "getCurrentApiKey",
+        "tags": [
+          "organizations"
+        ],
+        "summary": "The calling API key: scopes, expiry and rate limits (any scope)",
+        "description": "Who am I, for an org API key (M6.3a): its name, prefix, scopes, expiry (rotation sets one) and the per-minute quotas of the org’s plan. Never the secret. A user session gets `403`.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 63,
+              "description": "Organization id or slug",
+              "example": "lakeside-events"
+            },
+            "required": true,
+            "description": "Organization id or slug",
+            "name": "org",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The calling key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiKeyInfo"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed (`validation_failed`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, unknown or revoked credential (`unauthenticated`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The credential lacks the scope or role (`forbidden`, `module_not_enabled`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found, or not visible to this credential (`not_found`)",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests (`rate_limited`); see `Retry-After`",
             "content": {
               "application/problem+json": {
                 "schema": {

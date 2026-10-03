@@ -82,6 +82,8 @@ export const PERMISSIONS = [
   'tables:read',
   /** Name a purchased table's guests by hand and send naming reminders (M4.2b). */
   'tables:write',
+  /** Create and delete sandbox orgs linked to this org (M6.3a). Owners and admins. */
+  'sandbox:manage',
 ] as const;
 export type Permission = (typeof PERMISSIONS)[number];
 
@@ -316,7 +318,7 @@ export const TEAM_EVENT_ROLES = ['co_host', 'planner'] as const;
 export type TeamEventRole = (typeof TEAM_EVENT_ROLES)[number];
 
 /** Permissions that no event role ever grants, whatever its wildcards (defence in depth). */
-const NEVER_EVENT_SCOPED = /^(platform|payouts|billing|members|api_keys|audit|privacy|org):/;
+const NEVER_EVENT_SCOPED = /^(platform|payouts|billing|members|api_keys|sandbox|audit|privacy|org):/;
 
 function grants(entry: string, permission: string): boolean {
   if (entry === permission) return true;
