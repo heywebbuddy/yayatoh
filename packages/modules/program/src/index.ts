@@ -199,3 +199,73 @@ export {
   programOwnerDeleted,
   programOwnerTx,
 } from './shared.ts';
+// M5.4b: sponsor packages, deliverables, the sponsor portal and lead licenses.
+export {
+  DEFAULT_INCLUDED_LEAD_LICENSES,
+  dueAtFromDate,
+  dueDateOf,
+  isOverdue as isDeliverableOverdue,
+  leadLicenseAllowance,
+  overdueDeliverables,
+  PURCHASE_HOLD_MINUTES,
+  packagesLeft,
+  snapshotAllowances,
+  staffAllowanceWithPackages,
+  templateDueAt,
+} from './domain/sponsorship.ts';
+export {
+  activateLicensePurchaseTx,
+  attachLicenseOrderTx,
+  leadLicenseSettingsTx,
+  leadLicensesAdminQuery,
+  leadLicenseUseTx,
+  MAX_PURCHASED_LICENSES,
+  portalAssignLeadLicenseCommand,
+  portalLeadLicensesQuery,
+  portalReleaseLeadLicenseCommand,
+  reserveLeadLicensesTx,
+  saveLeadLicenseSettingsCommand,
+} from './lead-licenses.ts';
+export {
+  DELIVERABLE_OWNERS,
+  type DeliverableOwner,
+  GRANT_SOURCES,
+  GRANT_STATUSES,
+  LOGO_PLACEMENTS,
+  type LogoPlacement,
+} from './schema-sponsors.ts';
+export { packageBadgesTx, packageLicensesTx, sponsorPrincipalTx } from './sponsor-allowances.ts';
+export {
+  addSponsorDeliverableCommand,
+  deleteSponsorDeliverableCommand,
+  MAX_DELIVERABLES_PER_SPONSOR,
+  portalSetDeliverableDoneCommand,
+  setSponsorDeliverableDoneCommand,
+  sponsorDeliverablesQuery,
+} from './sponsor-deliverables.ts';
+export * from './sponsor-dto.ts';
+export {
+  activatePurchasedGrantTx,
+  activeGrantOfSponsorTx,
+  assignSponsoredSessionCommand,
+  attachCompCodeTx,
+  attachGrantOrderTx,
+  cancelSponsorGrantCommand,
+  DeliverableTemplate,
+  grantCompStateTx,
+  grantSponsorPackageCommand,
+  inviteSponsorContactCommand,
+  MAX_CONTACTS_PER_SPONSOR,
+  MAX_TEMPLATE_DELIVERABLES,
+  packageActivated,
+  packageCancelled,
+  reserveSponsorPackageTx,
+  resendSponsorInviteCommand,
+  revokeSponsorContactCommand,
+  SavePackageInput,
+  saveSponsorPackageCommand,
+  setSponsorExhibitorCommand,
+  sponsorshipAdminQuery,
+  unassignSponsoredSessionCommand,
+} from './sponsor-packages.ts';
+export { sponsorPortalQuery } from './sponsor-portal.ts';

@@ -8,6 +8,13 @@ export {
   bookingRowsTx,
   bookingSearchQuery,
 } from './bookings.ts';
+// M5.4b: add-on orders (sponsor packages, extra lead licenses).
+export {
+  addonItemTx,
+  payAddonOrderTx,
+  startLeadLicenseCheckoutCommand,
+  startSponsorPackageCheckoutCommand,
+} from './addon-orders.ts';
 export { BuyerOrderDto, buyerOrdersInOrg } from './buyer.ts';
 export { PAYMENT_METHODS, recordBoxOfficeSaleCommand } from './commands/box-office.ts';
 export { ticketCancelAction, ticketCancelBulk } from './commands/cancel-tickets.ts';

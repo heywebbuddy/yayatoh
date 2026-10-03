@@ -38,6 +38,7 @@ import { and, eq, inArray, lte, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { formatCreditNoteNumber, parseCreditCode } from '../domain/credit-notes.ts';
 import { HOLD_MINUTES, orderLifecycle, PAYMENT_EXTENSION_MINUTES } from '../domain/lifecycle.ts';
+import { addonItemTx, payAddonOrderTx } from '../addon-orders.ts';
 import { policySnapshot } from '../domain/refund-policy.ts';
 import { CheckoutResultDto, OrderDto, StartCheckoutInput } from '../dto.ts';
 import { claimOccurrenceTx } from '../occurrence.ts';
@@ -476,6 +477,9 @@ export const applyProviderEventCommand = tenantCommand({
       return { outcome: 'applied' as const, status: row.status };
     }
     if (order.status === 'paid') return { outcome: 'ignored' as const, status: order.status };
+    // M5.4b: an add-on order (a sponsor package, lead licenses) has no tickets and holds no stock.
+    const addon = await addonItemTx(tx, order.id);
+    if (addon) return payAddonOrderTx(tx, ctx, order, addon, e.provider, emit);
     if (order.status === 'expired') {
       // Paid after the hold lapsed: re-hold if stock is still there, otherwise flag for refund.
       let stockHeld = false;

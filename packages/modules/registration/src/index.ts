@@ -6,6 +6,14 @@ export {
   registrationCapacity,
   syncOrderClaimTx,
 } from './capacity.ts';
+// M5.4b: sponsor comp registration codes.
+export {
+  compCode,
+  isCompCode,
+  makeCompCodeTx,
+  sponsorCompCodes,
+  sponsorCompUsageQuery,
+} from './comp-codes.ts';
 export {
   eligibilityOf,
   hasRegistration,

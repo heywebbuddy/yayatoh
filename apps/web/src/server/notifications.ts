@@ -47,7 +47,7 @@ import {
   subscribes,
 } from '@yayatoh/platform';
 import { taskReminderMailer } from '@yayatoh/program';
-import { registrationCapacity } from '@yayatoh/registration';
+import { registrationCapacity, sponsorCompCodes } from '@yayatoh/registration';
 import { surveyMailer } from '@yayatoh/surveys';
 import { impersonationNotice, invitationMailer, orgStatusNotice } from '@yayatoh/tenancy';
 import {
@@ -122,6 +122,8 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     ...journeySubscribers(),
     // M5.1a: its offers (waitlist.offered) are mailed in the same drain.
     registrationCapacity(),
+    // M5.4b: sponsor comp registration codes.
+    sponsorCompCodes(),
     // M5.3a speaker portal: invitations and task reminders.
     portalInviteMailer({ notifier, appOrigin }),
     taskReminderMailer({ notifier, appOrigin }),
