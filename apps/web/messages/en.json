@@ -12690,5 +12690,125 @@
       "notForSale": "Extra licenses are not for sale.",
       "pending": "A purchase is already waiting for payment."
     }
+  },
+  "badgePrinting": {
+    "title": "Printers and print log",
+    "subtitle": "Add this event's badge printers, keep each desk's print station online, and see every badge printed or reprinted, and why.",
+    "printers": "Printers",
+    "stationHint": "Keep a print station open on the computer next to each printer. A printer not heard from for 90 seconds shows as offline.",
+    "noPrintersTitle": "No printers yet",
+    "noPrintersDescription": "Add a printer for each desk. Until then, badges print through the print dialog of the device you use.",
+    "addPrinter": "Add printer",
+    "printerName": "Printer name",
+    "connection": "How it prints",
+    "adapters": {
+      "browser": "Print dialog on the desk's computer or iPad (AirPrint or any printer)",
+      "printnode": "PrintNode (prints without a dialog)"
+    },
+    "adapterShort": {
+      "browser": "Print dialog",
+      "printnode": "PrintNode"
+    },
+    "printnodeId": "PrintNode printer number",
+    "printnodeIdHint": "The printer's number in your PrintNode account.",
+    "printnodeNumber": "PrintNode no. {id}",
+    "printnodeOffHint": "Printers print through the print dialog of the desk's device. To print without a dialog (PrintNode), ask support to open a PrintNode account for your organization.",
+    "printerAdded": "Printer added.",
+    "archive": "Archive {name}",
+    "archived": "Printer archived.",
+    "status": {
+      "unknown": "Not connected yet",
+      "online": "Online",
+      "offline": "Offline"
+    },
+    "lastSeen": "Last heard from {time}",
+    "neverSeen": "No heartbeat yet",
+    "offlineSince": "Offline since {time}",
+    "openStation": "Open print station: {name}",
+    "log": "Print log",
+    "counts": "{prints, plural, one {# first print} other {# first prints}} · {reprints, plural, one {# reprint} other {# reprints}}",
+    "filterLabel": "Show",
+    "filters": {
+      "all": "All",
+      "print": "First prints",
+      "reprint": "Reprints"
+    },
+    "logEmptyTitle": "Nothing printed yet",
+    "logEmptyDescription": "Badges printed at the desk or from an attendee's profile appear here, with the reason for every reprint.",
+    "logCaption": "Badges printed and reprinted, newest first",
+    "columns": {
+      "when": "When",
+      "who": "Badge",
+      "what": "Print",
+      "reason": "Reason",
+      "printer": "Printer",
+      "status": "Status"
+    },
+    "kinds": {
+      "print": "First print",
+      "reprint": "Reprint"
+    },
+    "reasons": {
+      "first_print": "First print",
+      "damaged": "Damaged",
+      "lost": "Lost",
+      "details_changed": "Details changed",
+      "misprint": "Misprinted",
+      "printer_problem": "Printer problem",
+      "other": "Other"
+    },
+    "jobStatus": {
+      "queued": "Sending",
+      "sent": "Sent",
+      "failed": "Failed"
+    },
+    "failedHint": "A failed print does not count: printing that badge again is still its first print.",
+    "voided": "Cancelled ticket",
+    "deviceDialog": "Print dialog on this device",
+    "stationTitle": "Print station: {name}",
+    "stationIntro": "Keep this page open on the computer connected to {name}. Every 30 seconds it tells Yayatoh the printer is in use; if it is closed or offline for 90 seconds, the printer shows as offline.",
+    "stationConnecting": "Connecting…",
+    "stationLive": "Heartbeat sent at {time}.",
+    "stationProblem": "Not connected",
+    "stationError": "Yayatoh could not be reached. Trying again in 30 seconds.",
+    "stationArchived": "This printer was archived. Close this page.",
+    "stationNotBrowser": "PrintNode reports this printer's state itself; no print station is needed.",
+    "recentJobs": "Recent prints on {name}",
+    "noJobsYet": "Nothing printed on this printer yet.",
+    "findBadge": "Find a badge to print",
+    "badgeHeading": "Badge",
+    "printTitle": "Print badge: {name}",
+    "noBadge": "This ticket has no badge (it may have been cancelled).",
+    "neverPrinted": "Not printed yet.",
+    "printedTimes": "{count, plural, one {Printed once} other {Printed # times}}, last on {time}.",
+    "printer": "Printer",
+    "noPrintersHint": "This event has no printers yet: the badge opens as a PDF for this device's print dialog.",
+    "reason": "Why print it again?",
+    "reasonPlaceholder": "Choose a reason",
+    "note": "Note",
+    "noteHint": "Needed for “Other”. Up to 200 characters.",
+    "print": "Print badge for {name}",
+    "reprint": "Reprint badge for {name}",
+    "printDialogReady": "Logged. Open the badge PDF and print it at actual size (100%).",
+    "openPdf": "Open badge PDF for {name}",
+    "printSent": "Badge sent to {printer}.",
+    "printFailed": "The badge could not be sent ({code}). Try again or choose another printer.",
+    "history": "Print history",
+    "noTemplate": "This ticket type has no badge template yet. Create one on the Badges page.",
+    "printBadgeFor": "Print badge for {name}",
+    "deskHint": "For the desk: find a ticket holder and print their badge. Every print and reprint is logged with its reason.",
+    "errors": {
+      "name": "Give the printer a name (up to 60 characters).",
+      "nameTaken": "This event already has a printer with that name.",
+      "printnode_off": "PrintNode is not switched on for your organization.",
+      "printnode_id_required": "Enter the printer's PrintNode number.",
+      "printnodePrinterId": "Enter the PrintNode number as a whole number.",
+      "too_many_printers": "This event has the most printers allowed (50). Archive one first.",
+      "archived": "That printer was archived. Choose another.",
+      "printerId": "Choose a printer.",
+      "reason_required": "Choose why this badge is printed again.",
+      "note_required": "For “Other”, say why in a few words.",
+      "note": "Keep the note under 200 characters."
+    }
   }
 }

@@ -12690,5 +12690,125 @@
       "notForSale": "Le licenze extra non sono in vendita.",
       "pending": "Un acquisto è già in attesa di pagamento."
     }
+  },
+  "badgePrinting": {
+    "title": "Stampanti e registro di stampa",
+    "subtitle": "Le stampanti di badge dell'evento, la postazione di stampa di ogni desk sempre online e ogni badge stampato o ristampato, con il motivo.",
+    "printers": "Stampanti",
+    "stationHint": "Tenere aperta una postazione di stampa sul computer accanto a ogni stampante. Una stampante senza segnali da 90 secondi risulta offline.",
+    "noPrintersTitle": "Ancora nessuna stampante",
+    "noPrintersDescription": "Aggiungere una stampante per ogni desk. Fino ad allora, i badge si stampano dalla finestra di stampa del dispositivo in uso.",
+    "addPrinter": "Aggiungi stampante",
+    "printerName": "Nome della stampante",
+    "connection": "Modalità di stampa",
+    "adapters": {
+      "browser": "Finestra di stampa sul computer o iPad del desk (AirPrint o qualsiasi stampante)",
+      "printnode": "PrintNode (stampa senza finestra di dialogo)"
+    },
+    "adapterShort": {
+      "browser": "Finestra di stampa",
+      "printnode": "PrintNode"
+    },
+    "printnodeId": "Numero stampante PrintNode",
+    "printnodeIdHint": "Il numero della stampante nell'account PrintNode.",
+    "printnodeNumber": "PrintNode n. {id}",
+    "printnodeOffHint": "Le stampanti stampano dalla finestra di stampa del dispositivo del desk. Per stampare senza finestra di dialogo (PrintNode), chiedere all'assistenza di aprire un account PrintNode per l'organizzazione.",
+    "printerAdded": "Stampante aggiunta.",
+    "archive": "Archivia {name}",
+    "archived": "Stampante archiviata.",
+    "status": {
+      "unknown": "Non ancora connessa",
+      "online": "Online",
+      "offline": "Offline"
+    },
+    "lastSeen": "Ultimo segnale {time}",
+    "neverSeen": "Ancora nessun segnale",
+    "offlineSince": "Offline da {time}",
+    "openStation": "Apri postazione di stampa: {name}",
+    "log": "Registro di stampa",
+    "counts": "{prints, plural, one {# prima stampa} other {# prime stampe}} · {reprints, plural, one {# ristampa} other {# ristampe}}",
+    "filterLabel": "Mostra",
+    "filters": {
+      "all": "Tutte",
+      "print": "Prime stampe",
+      "reprint": "Ristampe"
+    },
+    "logEmptyTitle": "Ancora nessuna stampa",
+    "logEmptyDescription": "Qui compaiono i badge stampati al desk o dal profilo di un partecipante, con il motivo di ogni ristampa.",
+    "logCaption": "Badge stampati e ristampati, dal più recente",
+    "columns": {
+      "when": "Quando",
+      "who": "Badge",
+      "what": "Stampa",
+      "reason": "Motivo",
+      "printer": "Stampante",
+      "status": "Stato"
+    },
+    "kinds": {
+      "print": "Prima stampa",
+      "reprint": "Ristampa"
+    },
+    "reasons": {
+      "first_print": "Prima stampa",
+      "damaged": "Danneggiato",
+      "lost": "Smarrito",
+      "details_changed": "Dati modificati",
+      "misprint": "Stampa errata",
+      "printer_problem": "Problema della stampante",
+      "other": "Altro"
+    },
+    "jobStatus": {
+      "queued": "Invio in corso",
+      "sent": "Inviata",
+      "failed": "Non riuscita"
+    },
+    "failedHint": "Una stampa non riuscita non conta: stampare di nuovo quel badge vale ancora come prima stampa.",
+    "voided": "Biglietto annullato",
+    "deviceDialog": "Finestra di stampa di questo dispositivo",
+    "stationTitle": "Postazione di stampa: {name}",
+    "stationIntro": "Tenere aperta questa pagina sul computer collegato a {name}. Ogni 30 secondi comunica a Yayatoh che la stampante è in uso; se resta chiusa o offline per 90 secondi, la stampante risulta offline.",
+    "stationConnecting": "Connessione…",
+    "stationLive": "Segnale inviato alle {time}.",
+    "stationProblem": "Non connessa",
+    "stationError": "Impossibile raggiungere Yayatoh. Nuovo tentativo tra 30 secondi.",
+    "stationArchived": "Questa stampante è stata archiviata. Chiudere questa pagina.",
+    "stationNotBrowser": "PrintNode comunica da sé lo stato di questa stampante; non serve una postazione di stampa.",
+    "recentJobs": "Stampe recenti su {name}",
+    "noJobsYet": "Ancora nessuna stampa su questa stampante.",
+    "findBadge": "Trova un badge da stampare",
+    "badgeHeading": "Badge",
+    "printTitle": "Stampa badge: {name}",
+    "noBadge": "Questo biglietto non ha un badge (potrebbe essere stato annullato).",
+    "neverPrinted": "Non ancora stampato.",
+    "printedTimes": "{count, plural, one {Stampato una volta} other {Stampato # volte}}, l'ultima il {time}.",
+    "printer": "Stampante",
+    "noPrintersHint": "Questo evento non ha ancora stampanti: il badge si apre come PDF per la finestra di stampa di questo dispositivo.",
+    "reason": "Perché ristamparlo?",
+    "reasonPlaceholder": "Scegli un motivo",
+    "note": "Nota",
+    "noteHint": "Obbligatoria per «Altro». Massimo 200 caratteri.",
+    "print": "Stampa il badge di {name}",
+    "reprint": "Ristampa il badge di {name}",
+    "printDialogReady": "Registrato. Aprire il PDF del badge e stamparlo in dimensioni reali (100%).",
+    "openPdf": "Apri il PDF del badge di {name}",
+    "printSent": "Badge inviato a {printer}.",
+    "printFailed": "Impossibile inviare il badge ({code}). Riprovare o scegliere un'altra stampante.",
+    "history": "Cronologia di stampa",
+    "noTemplate": "Questo tipo di biglietto non ha ancora un modello di badge. Crearne uno nella pagina Badge.",
+    "printBadgeFor": "Stampa il badge di {name}",
+    "deskHint": "Per il desk: trovare il titolare di un biglietto e stamparne il badge. Ogni stampa e ristampa viene registrata con il suo motivo.",
+    "errors": {
+      "name": "Dare un nome alla stampante (massimo 60 caratteri).",
+      "nameTaken": "Questo evento ha già una stampante con questo nome.",
+      "printnode_off": "PrintNode non è attivo per l'organizzazione.",
+      "printnode_id_required": "Inserire il numero PrintNode della stampante.",
+      "printnodePrinterId": "Inserire il numero PrintNode come numero intero.",
+      "too_many_printers": "Questo evento ha già il numero massimo di stampanti consentite (50). Archiviarne prima una.",
+      "archived": "Quella stampante è stata archiviata. Sceglierne un'altra.",
+      "printerId": "Scegliere una stampante.",
+      "reason_required": "Scegliere perché questo badge viene ristampato.",
+      "note_required": "Per «Altro», indicare il motivo in poche parole.",
+      "note": "La nota deve avere meno di 200 caratteri."
+    }
   }
 }

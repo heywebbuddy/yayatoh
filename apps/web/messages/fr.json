@@ -12690,5 +12690,125 @@
       "notForSale": "Les licences supplémentaires ne sont pas en vente.",
       "pending": "Un achat attend déjà son paiement."
     }
+  },
+  "badgePrinting": {
+    "title": "Imprimantes et journal d’impression",
+    "subtitle": "Ajoutez les imprimantes de badges de cet événement, gardez en ligne le poste d’impression de chaque comptoir et consultez chaque badge imprimé ou réimprimé, avec la raison.",
+    "printers": "Imprimantes",
+    "stationHint": "Gardez un poste d’impression ouvert sur l’ordinateur à côté de chaque imprimante. Une imprimante sans signal depuis 90 secondes apparaît hors ligne.",
+    "noPrintersTitle": "Aucune imprimante pour l’instant",
+    "noPrintersDescription": "Ajoutez une imprimante pour chaque comptoir. D’ici là, les badges s’impriment via la boîte de dialogue d’impression de l’appareil utilisé.",
+    "addPrinter": "Ajouter une imprimante",
+    "printerName": "Nom de l’imprimante",
+    "connection": "Mode d’impression",
+    "adapters": {
+      "browser": "Boîte de dialogue d’impression sur l’ordinateur ou l’iPad du comptoir (AirPrint ou toute imprimante)",
+      "printnode": "PrintNode (imprime sans boîte de dialogue)"
+    },
+    "adapterShort": {
+      "browser": "Dialogue d’impression",
+      "printnode": "PrintNode"
+    },
+    "printnodeId": "Numéro d’imprimante PrintNode",
+    "printnodeIdHint": "Le numéro de l’imprimante dans votre compte PrintNode.",
+    "printnodeNumber": "PrintNode n° {id}",
+    "printnodeOffHint": "Les imprimantes impriment via la boîte de dialogue d’impression de l’appareil du comptoir. Pour imprimer sans boîte de dialogue (PrintNode), demandez au support d’ouvrir un compte PrintNode pour votre organisation.",
+    "printerAdded": "Imprimante ajoutée.",
+    "archive": "Archiver {name}",
+    "archived": "Imprimante archivée.",
+    "status": {
+      "unknown": "Pas encore connectée",
+      "online": "En ligne",
+      "offline": "Hors ligne"
+    },
+    "lastSeen": "Dernier signal : {time}",
+    "neverSeen": "Aucun signal pour l’instant",
+    "offlineSince": "Hors ligne depuis {time}",
+    "openStation": "Ouvrir le poste d’impression : {name}",
+    "log": "Journal d’impression",
+    "counts": "{prints, plural, one {# première impression} other {# premières impressions}} · {reprints, plural, one {# réimpression} other {# réimpressions}}",
+    "filterLabel": "Afficher",
+    "filters": {
+      "all": "Tout",
+      "print": "Premières impressions",
+      "reprint": "Réimpressions"
+    },
+    "logEmptyTitle": "Rien d’imprimé pour l’instant",
+    "logEmptyDescription": "Les badges imprimés au comptoir ou depuis le profil d’un participant apparaissent ici, avec la raison de chaque réimpression.",
+    "logCaption": "Badges imprimés et réimprimés, du plus récent au plus ancien",
+    "columns": {
+      "when": "Quand",
+      "who": "Badge",
+      "what": "Impression",
+      "reason": "Raison",
+      "printer": "Imprimante",
+      "status": "Statut"
+    },
+    "kinds": {
+      "print": "Première impression",
+      "reprint": "Réimpression"
+    },
+    "reasons": {
+      "first_print": "Première impression",
+      "damaged": "Endommagé",
+      "lost": "Perdu",
+      "details_changed": "Informations modifiées",
+      "misprint": "Mal imprimé",
+      "printer_problem": "Problème d’imprimante",
+      "other": "Autre"
+    },
+    "jobStatus": {
+      "queued": "Envoi en cours",
+      "sent": "Envoyé",
+      "failed": "Échec"
+    },
+    "failedHint": "Une impression échouée ne compte pas : si vous réimprimez ce badge, il s’agit toujours de sa première impression.",
+    "voided": "Billet annulé",
+    "deviceDialog": "Boîte de dialogue d’impression de cet appareil",
+    "stationTitle": "Poste d’impression : {name}",
+    "stationIntro": "Gardez cette page ouverte sur l’ordinateur relié à {name}. Toutes les 30 secondes, elle indique à Yayatoh que l’imprimante est en service ; si elle est fermée ou hors ligne pendant 90 secondes, l’imprimante apparaît hors ligne.",
+    "stationConnecting": "Connexion…",
+    "stationLive": "Signal envoyé à {time}.",
+    "stationProblem": "Non connecté",
+    "stationError": "Impossible de joindre Yayatoh. Nouvelle tentative dans 30 secondes.",
+    "stationArchived": "Cette imprimante a été archivée. Fermez cette page.",
+    "stationNotBrowser": "PrintNode signale lui-même l’état de cette imprimante ; aucun poste d’impression n’est nécessaire.",
+    "recentJobs": "Impressions récentes sur {name}",
+    "noJobsYet": "Rien n’a encore été imprimé sur cette imprimante.",
+    "findBadge": "Trouver un badge à imprimer",
+    "badgeHeading": "Badge",
+    "printTitle": "Imprimer le badge : {name}",
+    "noBadge": "Ce billet n’a pas de badge (il a peut-être été annulé).",
+    "neverPrinted": "Pas encore imprimé.",
+    "printedTimes": "{count, plural, one {Imprimé une fois} other {Imprimé # fois}}, dernière fois {time}.",
+    "printer": "Imprimante",
+    "noPrintersHint": "Cet événement n’a pas encore d’imprimante : le badge s’ouvre en PDF pour la boîte de dialogue d’impression de cet appareil.",
+    "reason": "Pourquoi le réimprimer ?",
+    "reasonPlaceholder": "Choisissez une raison",
+    "note": "Note",
+    "noteHint": "Obligatoire pour « Autre ». 200 caractères maximum.",
+    "print": "Imprimer le badge de {name}",
+    "reprint": "Réimprimer le badge de {name}",
+    "printDialogReady": "Enregistré. Ouvrez le PDF du badge et imprimez-le en taille réelle (100 %).",
+    "openPdf": "Ouvrir le PDF du badge de {name}",
+    "printSent": "Badge envoyé à {printer}.",
+    "printFailed": "Le badge n’a pas pu être envoyé ({code}). Réessayez ou choisissez une autre imprimante.",
+    "history": "Historique d’impression",
+    "noTemplate": "Ce type de billet n’a pas encore de modèle de badge. Créez-en un sur la page Badges.",
+    "printBadgeFor": "Imprimer le badge de {name}",
+    "deskHint": "Pour le comptoir : trouvez un détenteur de billet et imprimez son badge. Chaque impression et réimpression est enregistrée avec sa raison.",
+    "errors": {
+      "name": "Donnez un nom à l’imprimante (60 caractères maximum).",
+      "nameTaken": "Cet événement a déjà une imprimante portant ce nom.",
+      "printnode_off": "PrintNode n’est pas activé pour votre organisation.",
+      "printnode_id_required": "Saisissez le numéro PrintNode de l’imprimante.",
+      "printnodePrinterId": "Saisissez le numéro PrintNode sous forme de nombre entier.",
+      "too_many_printers": "Cet événement a atteint le nombre maximal d’imprimantes (50). Archivez-en une d’abord.",
+      "archived": "Cette imprimante a été archivée. Choisissez-en une autre.",
+      "printerId": "Choisissez une imprimante.",
+      "reason_required": "Indiquez pourquoi ce badge est réimprimé.",
+      "note_required": "Pour « Autre », indiquez la raison en quelques mots.",
+      "note": "La note doit faire moins de 200 caractères."
+    }
   }
 }

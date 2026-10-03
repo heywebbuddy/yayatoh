@@ -12690,5 +12690,125 @@
       "notForSale": "Licenças extras não estão à venda.",
       "pending": "Já há uma compra aguardando pagamento."
     }
+  },
+  "badgePrinting": {
+    "title": "Impressoras e registro de impressões",
+    "subtitle": "Adicione as impressoras de crachás deste evento, mantenha a estação de impressão de cada balcão online e veja cada crachá impresso ou reimpresso, e o motivo.",
+    "printers": "Impressoras",
+    "stationHint": "Mantenha uma estação de impressão aberta no computador ao lado de cada impressora. Uma impressora sem sinal por 90 segundos aparece como offline.",
+    "noPrintersTitle": "Nenhuma impressora ainda",
+    "noPrintersDescription": "Adicione uma impressora para cada balcão. Até lá, os crachás são impressos pela caixa de impressão do dispositivo que você usa.",
+    "addPrinter": "Adicionar impressora",
+    "printerName": "Nome da impressora",
+    "connection": "Como imprime",
+    "adapters": {
+      "browser": "Caixa de impressão no computador ou iPad do balcão (AirPrint ou qualquer impressora)",
+      "printnode": "PrintNode (imprime sem caixa de diálogo)"
+    },
+    "adapterShort": {
+      "browser": "Caixa de impressão",
+      "printnode": "PrintNode"
+    },
+    "printnodeId": "Número da impressora no PrintNode",
+    "printnodeIdHint": "O número da impressora na sua conta PrintNode.",
+    "printnodeNumber": "PrintNode nº {id}",
+    "printnodeOffHint": "As impressoras imprimem pela caixa de impressão do dispositivo do balcão. Para imprimir sem caixa de diálogo (PrintNode), peça ao suporte que abra uma conta PrintNode para sua organização.",
+    "printerAdded": "Impressora adicionada.",
+    "archive": "Arquivar {name}",
+    "archived": "Impressora arquivada.",
+    "status": {
+      "unknown": "Ainda não conectada",
+      "online": "Online",
+      "offline": "Offline"
+    },
+    "lastSeen": "Último sinal {time}",
+    "neverSeen": "Nenhum sinal ainda",
+    "offlineSince": "Offline desde {time}",
+    "openStation": "Abrir estação de impressão: {name}",
+    "log": "Registro de impressões",
+    "counts": "{prints, plural, one {# primeira impressão} other {# primeiras impressões}} · {reprints, plural, one {# reimpressão} other {# reimpressões}}",
+    "filterLabel": "Mostrar",
+    "filters": {
+      "all": "Todas",
+      "print": "Primeiras impressões",
+      "reprint": "Reimpressões"
+    },
+    "logEmptyTitle": "Nada impresso ainda",
+    "logEmptyDescription": "Os crachás impressos no balcão ou a partir do perfil de um participante aparecem aqui, com o motivo de cada reimpressão.",
+    "logCaption": "Crachás impressos e reimpressos, mais recentes primeiro",
+    "columns": {
+      "when": "Quando",
+      "who": "Crachá",
+      "what": "Impressão",
+      "reason": "Motivo",
+      "printer": "Impressora",
+      "status": "Status"
+    },
+    "kinds": {
+      "print": "Primeira impressão",
+      "reprint": "Reimpressão"
+    },
+    "reasons": {
+      "first_print": "Primeira impressão",
+      "damaged": "Danificado",
+      "lost": "Perdido",
+      "details_changed": "Dados alterados",
+      "misprint": "Impressão com erro",
+      "printer_problem": "Problema na impressora",
+      "other": "Outro"
+    },
+    "jobStatus": {
+      "queued": "Enviando",
+      "sent": "Enviado",
+      "failed": "Falhou"
+    },
+    "failedHint": "Uma impressão com falha não conta: imprimir esse crachá de novo ainda é a primeira impressão.",
+    "voided": "Ingresso cancelado",
+    "deviceDialog": "Caixa de impressão neste dispositivo",
+    "stationTitle": "Estação de impressão: {name}",
+    "stationIntro": "Mantenha esta página aberta no computador conectado a {name}. A cada 30 segundos ela avisa ao Yayatoh que a impressora está em uso; se ficar fechada ou offline por 90 segundos, a impressora aparece como offline.",
+    "stationConnecting": "Conectando…",
+    "stationLive": "Sinal enviado às {time}.",
+    "stationProblem": "Não conectada",
+    "stationError": "Não foi possível conectar ao Yayatoh. Nova tentativa em 30 segundos.",
+    "stationArchived": "Esta impressora foi arquivada. Feche esta página.",
+    "stationNotBrowser": "O PrintNode informa o estado desta impressora por conta própria; não é preciso uma estação de impressão.",
+    "recentJobs": "Impressões recentes em {name}",
+    "noJobsYet": "Nada impresso nesta impressora ainda.",
+    "findBadge": "Encontre um crachá para imprimir",
+    "badgeHeading": "Crachá",
+    "printTitle": "Imprimir crachá: {name}",
+    "noBadge": "Este ingresso não tem crachá (pode ter sido cancelado).",
+    "neverPrinted": "Ainda não impresso.",
+    "printedTimes": "{count, plural, one {Impresso # vez} other {Impresso # vezes}}, a última em {time}.",
+    "printer": "Impressora",
+    "noPrintersHint": "Este evento ainda não tem impressoras: o crachá abre como PDF para a caixa de impressão deste dispositivo.",
+    "reason": "Por que imprimir de novo?",
+    "reasonPlaceholder": "Escolha um motivo",
+    "note": "Observação",
+    "noteHint": "Obrigatória para “Outro”. Até 200 caracteres.",
+    "print": "Imprimir crachá de {name}",
+    "reprint": "Reimprimir crachá de {name}",
+    "printDialogReady": "Registrado. Abra o PDF do crachá e imprima em tamanho real (100%).",
+    "openPdf": "Abrir PDF do crachá de {name}",
+    "printSent": "Crachá enviado para {printer}.",
+    "printFailed": "Não foi possível enviar o crachá ({code}). Tente de novo ou escolha outra impressora.",
+    "history": "Histórico de impressões",
+    "noTemplate": "Este tipo de ingresso ainda não tem modelo de crachá. Crie um na página Crachás.",
+    "printBadgeFor": "Imprimir crachá de {name}",
+    "deskHint": "Para o balcão: encontre um titular de ingresso e imprima o crachá dele. Cada impressão e reimpressão é registrada com o motivo.",
+    "errors": {
+      "name": "Dê um nome à impressora (até 60 caracteres).",
+      "nameTaken": "Este evento já tem uma impressora com esse nome.",
+      "printnode_off": "O PrintNode não está ativado para sua organização.",
+      "printnode_id_required": "Informe o número da impressora no PrintNode.",
+      "printnodePrinterId": "Informe o número do PrintNode como um número inteiro.",
+      "too_many_printers": "Este evento já tem o máximo de impressoras permitido (50). Arquive uma primeiro.",
+      "archived": "Essa impressora foi arquivada. Escolha outra.",
+      "printerId": "Escolha uma impressora.",
+      "reason_required": "Escolha por que este crachá está sendo impresso de novo.",
+      "note_required": "Para “Outro”, explique o motivo em poucas palavras.",
+      "note": "A observação deve ter menos de 200 caracteres."
+    }
   }
 }

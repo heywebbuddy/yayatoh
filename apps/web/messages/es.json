@@ -12690,5 +12690,125 @@
       "notForSale": "Las licencias adicionales no están a la venta.",
       "pending": "Ya hay una compra esperando el pago."
     }
+  },
+  "badgePrinting": {
+    "title": "Impresoras y registro de impresión",
+    "subtitle": "Añade las impresoras de acreditaciones de este evento, mantén en línea la estación de impresión de cada mostrador y consulta cada acreditación impresa o reimpresa, y el motivo.",
+    "printers": "Impresoras",
+    "stationHint": "Mantén abierta una estación de impresión en el ordenador junto a cada impresora. Una impresora sin señal durante 90 segundos aparece como desconectada.",
+    "noPrintersTitle": "Aún no hay impresoras",
+    "noPrintersDescription": "Añade una impresora para cada mostrador. Hasta entonces, las acreditaciones se imprimen con el diálogo de impresión del dispositivo que uses.",
+    "addPrinter": "Añadir impresora",
+    "printerName": "Nombre de la impresora",
+    "connection": "Cómo imprime",
+    "adapters": {
+      "browser": "Diálogo de impresión en el ordenador o iPad del mostrador (AirPrint o cualquier impresora)",
+      "printnode": "PrintNode (imprime sin diálogo)"
+    },
+    "adapterShort": {
+      "browser": "Diálogo de impresión",
+      "printnode": "PrintNode"
+    },
+    "printnodeId": "Número de impresora en PrintNode",
+    "printnodeIdHint": "El número de la impresora en tu cuenta de PrintNode.",
+    "printnodeNumber": "PrintNode n.º {id}",
+    "printnodeOffHint": "Las impresoras imprimen con el diálogo de impresión del dispositivo del mostrador. Para imprimir sin diálogo (PrintNode), pide al equipo de soporte que abra una cuenta de PrintNode para tu organización.",
+    "printerAdded": "Impresora añadida.",
+    "archive": "Archivar {name}",
+    "archived": "Impresora archivada.",
+    "status": {
+      "unknown": "Aún no conectada",
+      "online": "En línea",
+      "offline": "Desconectada"
+    },
+    "lastSeen": "Última señal: {time}",
+    "neverSeen": "Aún sin señal",
+    "offlineSince": "Desconectada desde {time}",
+    "openStation": "Abrir estación de impresión: {name}",
+    "log": "Registro de impresión",
+    "counts": "{prints, plural, one {# primera impresión} other {# primeras impresiones}} · {reprints, plural, one {# reimpresión} other {# reimpresiones}}",
+    "filterLabel": "Mostrar",
+    "filters": {
+      "all": "Todo",
+      "print": "Primeras impresiones",
+      "reprint": "Reimpresiones"
+    },
+    "logEmptyTitle": "Aún no se ha impreso nada",
+    "logEmptyDescription": "Aquí aparecen las acreditaciones impresas en el mostrador o desde el perfil de un asistente, con el motivo de cada reimpresión.",
+    "logCaption": "Acreditaciones impresas y reimpresas, de la más reciente a la más antigua",
+    "columns": {
+      "when": "Cuándo",
+      "who": "Acreditación",
+      "what": "Impresión",
+      "reason": "Motivo",
+      "printer": "Impresora",
+      "status": "Estado"
+    },
+    "kinds": {
+      "print": "Primera impresión",
+      "reprint": "Reimpresión"
+    },
+    "reasons": {
+      "first_print": "Primera impresión",
+      "damaged": "Dañada",
+      "lost": "Perdida",
+      "details_changed": "Datos modificados",
+      "misprint": "Mal impresa",
+      "printer_problem": "Problema de impresora",
+      "other": "Otro"
+    },
+    "jobStatus": {
+      "queued": "Enviando",
+      "sent": "Enviada",
+      "failed": "Fallida"
+    },
+    "failedHint": "Una impresión fallida no cuenta: si vuelves a imprimir esa acreditación, sigue siendo su primera impresión.",
+    "voided": "Entrada cancelada",
+    "deviceDialog": "Diálogo de impresión de este dispositivo",
+    "stationTitle": "Estación de impresión: {name}",
+    "stationIntro": "Mantén esta página abierta en el ordenador conectado a {name}. Cada 30 segundos avisa a Yayatoh de que la impresora está en uso; si se cierra o pierde la conexión durante 90 segundos, la impresora aparece como desconectada.",
+    "stationConnecting": "Conectando…",
+    "stationLive": "Señal enviada a las {time}.",
+    "stationProblem": "Sin conexión",
+    "stationError": "No se pudo conectar con Yayatoh. Se reintentará en 30 segundos.",
+    "stationArchived": "Esta impresora se archivó. Cierra esta página.",
+    "stationNotBrowser": "PrintNode informa del estado de esta impresora por sí mismo; no hace falta una estación de impresión.",
+    "recentJobs": "Impresiones recientes en {name}",
+    "noJobsYet": "Aún no se ha impreso nada en esta impresora.",
+    "findBadge": "Buscar una acreditación para imprimir",
+    "badgeHeading": "Acreditación",
+    "printTitle": "Imprimir acreditación: {name}",
+    "noBadge": "Esta entrada no tiene acreditación (puede que se haya cancelado).",
+    "neverPrinted": "Aún no impresa.",
+    "printedTimes": "{count, plural, one {Impresa una vez} other {Impresa # veces}}, la última {time}.",
+    "printer": "Impresora",
+    "noPrintersHint": "Este evento aún no tiene impresoras: la acreditación se abre como PDF para el diálogo de impresión de este dispositivo.",
+    "reason": "¿Por qué se vuelve a imprimir?",
+    "reasonPlaceholder": "Elige un motivo",
+    "note": "Nota",
+    "noteHint": "Obligatoria para «Otro». Hasta 200 caracteres.",
+    "print": "Imprimir acreditación de {name}",
+    "reprint": "Reimprimir acreditación de {name}",
+    "printDialogReady": "Registrado. Abre el PDF de la acreditación e imprímelo a tamaño real (100 %).",
+    "openPdf": "Abrir PDF de la acreditación de {name}",
+    "printSent": "Acreditación enviada a {printer}.",
+    "printFailed": "No se pudo enviar la acreditación ({code}). Inténtalo de nuevo o elige otra impresora.",
+    "history": "Historial de impresión",
+    "noTemplate": "Este tipo de entrada aún no tiene plantilla de acreditación. Crea una en la página Acreditaciones.",
+    "printBadgeFor": "Imprimir acreditación de {name}",
+    "deskHint": "Para el mostrador: busca a un titular de entrada e imprime su acreditación. Cada impresión y reimpresión se registra con su motivo.",
+    "errors": {
+      "name": "Ponle un nombre a la impresora (hasta 60 caracteres).",
+      "nameTaken": "Este evento ya tiene una impresora con ese nombre.",
+      "printnode_off": "PrintNode no está activado para tu organización.",
+      "printnode_id_required": "Introduce el número de PrintNode de la impresora.",
+      "printnodePrinterId": "Introduce el número de PrintNode como número entero.",
+      "too_many_printers": "Este evento ya tiene el máximo de impresoras permitidas (50). Archiva una primero.",
+      "archived": "Esa impresora se archivó. Elige otra.",
+      "printerId": "Elige una impresora.",
+      "reason_required": "Elige por qué se vuelve a imprimir esta acreditación.",
+      "note_required": "Para «Otro», indica el motivo en pocas palabras.",
+      "note": "La nota debe tener menos de 200 caracteres."
+    }
   }
 }
