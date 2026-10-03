@@ -16,6 +16,7 @@ import {
   createLevelCommand,
   createMatchCommand,
   type DonorExportParams,
+  donationsConsoleQuery,
   donationReconciliationQuery,
   donationReportQuery,
   donorCsvExportBulk,
@@ -504,6 +505,13 @@ describe('the report (M4.8g)', () => {
         openMinor: 100_000,
       },
     ]);
+  });
+
+  it('the campaign’s raised total nets refunds too (the giving page and the screen read it)', async () => {
+    const view = await executeQuery(donationsConsoleQuery, { eventId: evt(a) }, a.ctx(), ports);
+    const c = view.campaigns.find((x) => x.id === campaign.id);
+    // Gifts less the $50 refund, the card-paid pledge, and the pledge paid by check.
+    expect(c).toMatchObject({ raisedMinor: 100_000 + 50_000 + 15_000 + 100_000 + 25_000, feeCoverMinor: cover });
   });
 
   it('acceptance: the totals equal the ledger memo entries and the provider’s balance transactions to the cent', async () => {

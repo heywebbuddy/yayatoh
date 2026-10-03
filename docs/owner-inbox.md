@@ -294,7 +294,7 @@ Start the slow reviews early. Everything is built against fakes meanwhile; each 
   - **Ratios offered:** 50 %, 1:1, 2:1, 3:1 (the store takes any 1–1,000 %). No per-donor limit yet.
   - **After the close, the sponsor's pledge only goes down** (refunds, voided paddles), never up, and is cancelled at zero. Gifts after the close never count.
   - **The sponsor appears on screens and the giving page only by the public name the host types** (empty: "a generous sponsor"); their name and email are host-only.
-  - **Gift orders can be refunded by amount from the order page** (the e2e does it), so the M4.8a note above about refunds is out of date; campaign totals still count refunded gifts in full until M4.8g.
+  - **Gift orders can be refunded by amount from the order page** (the e2e does it), so the M4.8a note above about refunds is out of date; campaign totals net refunds since M4.8g.
   - **Employer matching databases** (e.g. Double the Donation) are not integrated (P4-17: paid, your call); the charity exports the employer list as CSV.
 - [ ] **Legal copy (M4.1, `legal-copy`):** the privacy notice for guests whose details a host enters (already listed in the Phase 4 plan §4).
 - [ ] **Registration forms: consent wording and defaults, pending owner** (M5.1b; labels: `legal-copy`, `db-migration`, `tenancy`). Built with these; say if any should change (`docs/specs/M5.1/spec.md`):
@@ -589,3 +589,12 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **Offline-paid pledges count in the campaign's "raised" total**; they get no receipt yet (receipts follow paid orders, M4.8b). Confirm, and say whether offline payments need receipts.
 - [ ] **Card removal** (P4-14): cards are detached from the charity's customer 30 days after the event; a removal the provider refuses is retried by no one (the card is never used again either way). Confirm.
 - [ ] **Stripe** (owner account, ADR 0010): setup-mode Checkout Sessions and off-session PaymentIntents on the connected account are written against the pinned API version and tested with a recorded fake; the live contract test (`pnpm --filter @yayatoh/payments stripe:contract`) needs the owner's test keys for the new calls.
+
+## M4.8g — donations reporting, exports and reconciliation (2026-10-03, pending owner; labels `db-migration`, `payments`, `tenancy`)
+- [ ] **Memo entries for gifts:** gifts never touch a platform account, so the ledger now keeps a memo-only journal per paid gift and per gift refund (no postings; written only by `payments.post_memo`). Confirm. Gifts paid before this ships have none and show as "At Stripe, not in the ledger" until a one-off backfill script runs (yours to approve, only if real gifts exist by then).
+- [ ] **Who sees the report and exports:** `finance:read` (owners, admins, finance, co-hosts on their event); reconciling and resolving: `finance:reconcile` (owners, admins, finance). Viewers and managers are refused (managers can still export the M4.8a gift list). Confirm.
+- [ ] **CRM layouts:** generic (the requester's language), Salesforce NPSP Data Import, Bloomerang, Little Green Light, with each CRM's own column names. Please have a charity that uses one of them try an import; say which other CRMs (e.g. DonorPerfect, Blackbaud Raiser's Edge NXT, Neon) to add.
+- [ ] **What a CRM row is:** one per gift, offline pledge payment and donation-ticket line; fully refunded gifts are left out; "Amount" is what reached the charity (gift plus covered fee, less refunds). Anonymous donors keep their name and email with `Anonymous = TRUE` (the charity needs them for receipts; its CRM must not list them). Confirm.
+- [ ] **Campaign totals now net refunds** (the giving page, Donations tab and room screen): a refund takes the covered fee first, then the gift. Confirm.
+- [ ] **Reconciliation runs on demand** (Reconcile now), not on a schedule; say if the worker should run it nightly like M1.6e. Fees shown are Stripe's per charge (the fake uses the US nonprofit rate, 2.2% + 30¢).
+- [ ] **Stripe (owner account, ADR 0010):** listing a connected account's balance transactions and payouts (`Stripe-Account` header) is written against the pinned API version and tested on the fake Stripe API only.

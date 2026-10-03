@@ -24,6 +24,7 @@ import {
 } from './dto.ts';
 import { offlinePledgeTotalsTx } from './pledge-totals.ts';
 import { campaigns, gifts, levels } from './schema.ts';
+import { giftRefunds } from './schema-matches.ts';
 import { publishScreenStateTx, screenEventsOfCampaignTx } from './screen-live.ts';
 
 type CampaignRow = typeof campaigns.$inferSelect;
@@ -235,15 +236,19 @@ export async function levelsByCampaignTx(tx: TenantTx, campaignIds: readonly str
   return out;
 }
 
-/** Totals of paid gifts per campaign (sums, never rows: a replayed payment cannot count twice). */
+/**
+ * Totals of paid gifts per campaign (sums, never rows: a replayed payment cannot count twice).
+ * M4.8g: net of refunds; a refund takes the covered fee first, then the gift (as matches do).
+ */
 export async function campaignTotalsTx(tx: TenantTx, campaignIds: readonly string[]) {
   const out = new Map<string, { raisedMinor: number; giftCount: number; feeCoverMinor: number }>();
   if (campaignIds.length === 0) return out;
+  const refunded = sql`coalesce((select sum(${giftRefunds.amountMinor}) from ${giftRefunds} where ${giftRefunds.giftId} = ${gifts.id}), 0)`;
   const rows = await tx
     .select({
       campaignId: gifts.campaignId,
-      raised: sql<string>`coalesce(sum(${gifts.amountMinor}), 0)::text`,
-      covered: sql<string>`coalesce(sum(${gifts.feeCoverMinor}), 0)::text`,
+      raised: sql<string>`coalesce(sum(greatest(0, ${gifts.amountMinor} - greatest(0, ${refunded} - ${gifts.feeCoverMinor}))), 0)::text`,
+      covered: sql<string>`coalesce(sum(greatest(0, ${gifts.feeCoverMinor} - ${refunded})), 0)::text`,
       n: sql<number>`count(*)::int`,
     })
     .from(gifts)
