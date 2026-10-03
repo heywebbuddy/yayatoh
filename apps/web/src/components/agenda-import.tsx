@@ -53,7 +53,7 @@ export function AgendaImport({
       <Card className="flex flex-col gap-3">
         <form action={checkAction} className="flex flex-wrap items-end gap-3">
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="agenda-file" className="text-caption text-zinc-600">
+            <label htmlFor="agenda-file" className="text-[13px] font-bold text-ink">
               {t('file')}
             </label>
             <input
@@ -63,7 +63,7 @@ export function AgendaImport({
               accept=".csv,text/csv"
               aria-invalid={error === 'no_file' ? true : undefined}
               aria-describedby={errorText ? 'agenda-import-error' : undefined}
-              className="min-h-10 text-body file:me-3 file:min-h-10 file:rounded-pill file:border file:border-zinc-200 file:bg-white file:px-4"
+              className="min-h-10 text-body file:me-3 file:min-h-10 file:rounded-pill file:border file:border-line file:bg-surface file:px-4"
             />
           </div>
           <Button type="submit" variant={r && !wasApplied ? 'secondary' : 'primary'} disabled={checking}>
@@ -72,7 +72,7 @@ export function AgendaImport({
         </form>
         <div aria-live="polite">
           {errorText ? (
-            <p id="agenda-import-error" role="alert" className="text-body text-pink-700">
+            <p id="agenda-import-error" role="alert" className="text-body text-danger">
               {errorText}
             </p>
           ) : null}
@@ -105,7 +105,7 @@ export function AgendaImport({
                 header: t('result'),
                 cell: (row) =>
                   row.action === 'error' ? (
-                    <span className="text-pink-700" data-row-result="error">
+                    <span className="text-danger" data-row-result="error">
                       {t(`${wasApplied ? 'done' : 'action'}.error`)}:{' '}
                       {row.errors.map((e) => t(`rowError.${e}`)).join(' ')}
                     </span>
@@ -126,7 +126,7 @@ export function AgendaImport({
                 </Button>
               </form>
             ) : (
-              <p className="text-body text-zinc-600">{t('nothingToApply')}</p>
+              <p className="text-body text-ink-2">{t('nothingToApply')}</p>
             )
           ) : null}
         </section>

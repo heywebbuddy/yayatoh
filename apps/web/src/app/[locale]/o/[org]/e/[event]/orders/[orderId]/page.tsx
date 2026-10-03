@@ -8,7 +8,9 @@ import { orderMessagesQuery } from '@yayatoh/notifications';
 import {
   creditableMinor,
   creditNotesQuery,
+  localDay,
   orderDetailQuery,
+  orderInvoiceQuery,
   orderRefundsQuery,
   previewSupportMacroQuery,
   refundRequestsQuery,
@@ -23,6 +25,7 @@ import { Card, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { z } from 'zod';
+import { InvoicePanel } from '@/components/invoice-panel.tsx';
 import { OrderTimeline } from '@/components/order-timeline.tsx';
 import { RefundForm } from '@/components/refund-form.tsx';
 import { OrderNoteForm, RefundRequestPanel } from '@/components/refund-request-panel.tsx';
@@ -46,10 +49,12 @@ import {
   cancelTransferAction,
   declineRequestAction,
   issueCreditNoteAction,
+  recordInvoicePaymentAction,
   refundAction,
   reissueLinkAction,
   runMacroAction,
   transferTicketAction,
+  voidInvoiceAction,
 } from './actions.ts';
 
 /**
@@ -80,6 +85,8 @@ export default async function OrderPage({
   }
   if (order.eventId !== ev.id) notFound();
   const refunds = await executeQuery(orderRefundsQuery, { orderId }, data.ctx, ports);
+  // M5.1d: a pay-later order's invoice and its payments.
+  const invoice = await executeQuery(orderInvoiceQuery, { orderId }, data.ctx, ports);
   const messages = await executeQuery(orderMessagesQuery, { orderId }, data.ctx, ports);
   const disputes = roleCan(data.role, 'finance:read')
     ? await executeQuery(disputesQuery, { orderId }, data.ctx, ports)
@@ -152,9 +159,12 @@ export default async function OrderPage({
     timeZone: data.org.timezone,
   });
   // Organizer-collected money is refunded in person, not through the payment provider.
+  // M5.1d: an invoice's payments came by several ways (pay link, check, wire): a credit note
+  // (recorded refund) settles money paid back, not a provider refund.
   const canRefund =
     roleCan(data.role, 'orders:refund') &&
     order.collectedBy === 'platform' &&
+    !invoice &&
     ['paid', 'partially_refunded'].includes(order.status) &&
     order.totalMinor > 0;
   const active = order.tickets.filter((tk) => tk.status === 'active');
@@ -185,12 +195,16 @@ export default async function OrderPage({
         <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
           <StatusDot
             status={
-              order.status === 'paid' ? 'success' : order.status.includes('refunded') ? 'warning' : 'neutral'
+              order.status === 'paid'
+                ? 'success'
+                : order.status.includes('refunded') || order.status === 'awaiting_invoice'
+                  ? 'warning'
+                  : 'neutral'
             }
             label={t(`order.status.${order.status}`)}
           />
           <span className="font-mono tabular-nums">{fmt(order.totalMinor)}</span>
-          <span className="text-caption text-zinc-600">
+          <span className="text-caption text-ink-2">
             {order.collectedBy === 'organizer'
               ? [
                   t('boxOffice.collected'),
@@ -202,25 +216,37 @@ export default async function OrderPage({
               : t(`refunds.soldBy.${order.fundsFlow}`)}
           </span>
         </div>
-        <p className="text-caption text-zinc-600">
+        <p className="text-caption text-ink-2">
           {order.items.map((i) => `${i.quantity} × ${i.name}`).join(', ')}
         </p>
         {order.riskReview.length > 0 ? (
           <p className="flex flex-wrap items-center gap-2 text-caption">
             <StatusDot status="warning" label={t('risk.flagged')} />
-            <span className="text-zinc-600">
+            <span className="text-ink-2">
               {order.riskReview.map((r) => (t.has(`risk.rules.${r}`) ? t(`risk.rules.${r}`) : r)).join(' · ')}
             </span>
           </p>
         ) : null}
       </Card>
 
+      {invoice ? (
+        <InvoicePanel
+          invoice={invoice}
+          locale={locale}
+          today={localDay(new Date(), ev.timezone)}
+          pdfHref={`/o/${org}/e/${event}/orders/${orderId}/invoice/pdf?locale=${locale}`}
+          canManage={roleCan(data.role, 'orders:refund')}
+          recordAction={recordInvoicePaymentAction.bind(null, org, event, orderId)}
+          voidAction={voidInvoiceAction.bind(null, org, event, orderId)}
+        />
+      ) : null}
+
       {roleCan(data.role, 'orders:support') ? (
         <section aria-labelledby="order-link-heading" className="flex flex-col gap-3">
           <h2 id="order-link-heading" className="text-section">
             {t('orderLinks.organizerTitle')}
           </h2>
-          <p className="text-body text-zinc-600">{t('orderLinks.organizerDescription')}</p>
+          <p className="text-body text-ink-2">{t('orderLinks.organizerDescription')}</p>
           <ReissueLinkForm
             action={reissueLinkAction.bind(null, org, event, orderId)}
             email={order.buyerEmail}
@@ -239,15 +265,15 @@ export default async function OrderPage({
                 const touch = attribution[k];
                 return (
                   <div key={k} className="flex flex-col gap-1" data-testid={`attribution-${k}`}>
-                    <dt className="text-caption text-zinc-600">{t(`trackedLinks.${k}`)}</dt>
+                    <dt className="text-caption text-ink-2">{t(`trackedLinks.${k}`)}</dt>
                     <dd className="m-0 text-body">
                       {[touch.source, touch.medium, touch.campaign].filter(Boolean).join(' / ')}
                       {touch.code ? (
-                        <span dir="ltr" className="ms-2 font-mono text-caption text-zinc-500">
+                        <span dir="ltr" className="ms-2 font-mono text-caption text-ink-2">
                           /r/{touch.code}
                         </span>
                       ) : null}
-                      <span className="block text-caption text-zinc-500">
+                      <span className="block text-caption text-ink-2">
                         {attribution.model === 'click'
                           ? t('trackedLinks.viaClick')
                           : t('trackedLinks.viaUtm')}{' '}
@@ -288,7 +314,7 @@ export default async function OrderPage({
               cell: (tk) => (
                 <span className="flex flex-col">
                   <span>{tk.holderName}</span>
-                  <span className="text-caption text-zinc-500">{tk.holderEmail}</span>
+                  <span className="text-caption text-ink-2">{tk.holderEmail}</span>
                 </span>
               ),
             },
@@ -319,9 +345,9 @@ export default async function OrderPage({
         <h2 id="transfers-heading" className="text-section">
           {ts('transfers.title')}
         </h2>
-        <p className="text-body text-zinc-600">{ts('transfers.description')}</p>
+        <p className="text-body text-ink-2">{ts('transfers.description')}</p>
         {transfers.length === 0 ? (
-          <p className="text-body text-zinc-600">{ts('transfers.empty')}</p>
+          <p className="text-body text-ink-2">{ts('transfers.empty')}</p>
         ) : (
           <Table
             caption={ts('transfers.title')}
@@ -335,7 +361,7 @@ export default async function OrderPage({
                 cell: (x) => (
                   <span className="flex flex-col">
                     <span>{x.fromName}</span>
-                    <span className="text-caption text-zinc-500">{x.fromEmail}</span>
+                    <span className="text-caption text-ink-2">{x.fromEmail}</span>
                   </span>
                 ),
               },
@@ -345,7 +371,7 @@ export default async function OrderPage({
                 cell: (x) => (
                   <span className="flex flex-col">
                     <span>{x.toName}</span>
-                    <span className="text-caption text-zinc-500">{x.toEmail}</span>
+                    <span className="text-caption text-ink-2">{x.toEmail}</span>
                   </span>
                 ),
               },
@@ -364,7 +390,7 @@ export default async function OrderPage({
                       status={x.state === 'claimed' ? 'success' : x.state === 'pending' ? 'info' : 'neutral'}
                       label={ts(`transfers.state.${x.state}`)}
                     />
-                    <span className="text-caption text-zinc-500">
+                    <span className="text-caption text-ink-2">
                       {x.state === 'claimed' && x.claimedAt
                         ? eventWhen.format(x.claimedAt)
                         : x.state === 'pending'
@@ -407,7 +433,7 @@ export default async function OrderPage({
           {t('fraudSignals.timeline.title')}
         </h2>
         {signals.length === 0 ? (
-          <p className="text-body text-zinc-600">{t('fraudSignals.timeline.empty')}</p>
+          <p className="text-body text-ink-2">{t('fraudSignals.timeline.empty')}</p>
         ) : (
           <ol aria-labelledby="signals-heading" className="flex list-none flex-col gap-3 p-0">
             {signals.map((s) => (
@@ -436,15 +462,15 @@ export default async function OrderPage({
                 label={openRequest.overdue ? tr('request.overdue') : tr('request.onTime')}
               />
               <span className="text-body">{tr('request.tickets', { count: openRequest.tickets })}</span>
-              <span className="text-caption text-zinc-600">
+              <span className="text-caption text-ink-2">
                 {tr('request.asked', { date: eventWhen.format(openRequest.createdAt) })}
               </span>
-              <span className="text-caption text-zinc-600">
+              <span className="text-caption text-ink-2">
                 {tr('request.due', { date: eventWhen.format(openRequest.dueAt) })}
               </span>
             </div>
             <div className="flex flex-col gap-1">
-              <p className="text-caption text-zinc-600">{tr('request.message')}</p>
+              <p className="text-caption text-ink-2">{tr('request.message')}</p>
               <p className="whitespace-pre-line break-words text-body">
                 {openRequest.message ?? tr('request.noMessage')}
               </p>
@@ -456,7 +482,7 @@ export default async function OrderPage({
                 currency={order.currency}
               />
             ) : (
-              <p className="text-caption text-zinc-600">{tr('request.readOnly')}</p>
+              <p className="text-caption text-ink-2">{tr('request.readOnly')}</p>
             )}
           </Card>
         </section>
@@ -517,7 +543,7 @@ export default async function OrderPage({
                   <span className="flex flex-col items-end">
                     <span>{fmt(r.retainedMinor)}</span>
                     {r.policyOverride ? (
-                      <span className="font-sans text-caption text-zinc-500">{t('refunds.overridden')}</span>
+                      <span className="font-sans text-caption text-ink-2">{t('refunds.overridden')}</span>
                     ) : null}
                   </span>
                 ),
@@ -544,7 +570,7 @@ export default async function OrderPage({
           {ts('credit.title')}
         </h2>
         {credits.length === 0 ? (
-          <p className="text-body text-zinc-600">{ts('credit.empty')}</p>
+          <p className="text-body text-ink-2">{ts('credit.empty')}</p>
         ) : (
           <Table
             caption={ts('credit.title')}
@@ -560,7 +586,7 @@ export default async function OrderPage({
                   <span className="flex flex-col">
                     <span>{ts(`credit.disposition.${c.disposition}`)}</span>
                     {c.codeLast4 ? (
-                      <span className="text-caption text-zinc-500">
+                      <span className="text-caption text-ink-2">
                         {ts('credit.codeEnding', { last4: c.codeLast4 })}
                       </span>
                     ) : null}
@@ -614,7 +640,7 @@ export default async function OrderPage({
           <h2 id="disputes-heading" className="text-section">
             {t('disputes.title')}
           </h2>
-          <p className="text-body text-zinc-600">{t(`disputes.explain.${order.fundsFlow}`)}</p>
+          <p className="text-body text-ink-2">{t(`disputes.explain.${order.fundsFlow}`)}</p>
           <ul className="flex list-none flex-col gap-2 p-0">
             {disputes.map((d) => (
               <li key={d.id}>
@@ -624,9 +650,9 @@ export default async function OrderPage({
                     label={t(`disputes.status.${d.status}`)}
                   />
                   <span className="font-mono tabular-nums">{fmt(d.amountMinor)}</span>
-                  <span className="text-caption text-zinc-600">{d.reason}</span>
+                  <span className="text-caption text-ink-2">{d.reason}</span>
                   {d.evidenceDueBy ? (
-                    <span className="text-caption text-zinc-600">
+                    <span className="text-caption text-ink-2">
                       {t('disputes.dueBy', { date: when.format(d.evidenceDueBy) })}
                     </span>
                   ) : null}
@@ -644,7 +670,7 @@ export default async function OrderPage({
                       {t('disputes.respond')}
                     </Link>
                   ) : d.status === 'evidence_submitted' ? (
-                    <span className="text-caption text-zinc-600">{t('disputes.submitted')}</span>
+                    <span className="text-caption text-ink-2">{t('disputes.submitted')}</span>
                   ) : null}
                 </Card>
               </li>
@@ -658,7 +684,7 @@ export default async function OrderPage({
           {t('notifications.log.title')}
         </h2>
         {messages.length === 0 ? (
-          <p className="text-body text-zinc-600">{t('notifications.log.empty')}</p>
+          <p className="text-body text-ink-2">{t('notifications.log.empty')}</p>
         ) : (
           <Table
             caption={t('notifications.log.title')}
@@ -672,7 +698,7 @@ export default async function OrderPage({
                 cell: (m) => (
                   <span className="flex flex-col">
                     <span>{t(`notifications.kinds.${m.kind}`)}</span>
-                    {m.subject ? <span className="text-caption text-zinc-500">{m.subject}</span> : null}
+                    {m.subject ? <span className="text-caption text-ink-2">{m.subject}</span> : null}
                   </span>
                 ),
               },
@@ -700,14 +726,14 @@ export default async function OrderPage({
                       label={t(`notifications.status.${m.status}`)}
                     />
                     {m.reason && m.status !== 'sent' ? (
-                      <span className="text-caption text-zinc-500">
+                      <span className="text-caption text-ink-2">
                         {t.has(`notifications.reasons.${m.reason}`)
                           ? t(`notifications.reasons.${m.reason}`)
                           : m.reason}
                       </span>
                     ) : null}
                     {m.status === 'sent' && m.delivery ? (
-                      <span className="text-caption text-zinc-500">
+                      <span className="text-caption text-ink-2">
                         {t(`notifications.delivery.${m.delivery}`)}
                       </span>
                     ) : null}
@@ -768,7 +794,7 @@ export default async function OrderPage({
           </h2>
           <Card className="flex flex-col gap-4">
             <div className="flex flex-col gap-1">
-              <p className="text-caption text-zinc-600">{tr('policy.orderTitle')}</p>
+              <p className="text-caption text-ink-2">{tr('policy.orderTitle')}</p>
               {policy ? (
                 <ul className="flex list-none flex-col gap-0.5 p-0 text-caption">
                   {refundPolicyLines(tp, policy, locale).map((line) => (

@@ -56,23 +56,23 @@ export function SeatGroups({
           : null;
   const itemName = (i: { kind: 'row' | 'table'; label: string }) =>
     t(`prices.item.${i.kind}`, { label: i.label });
-  const cls = 'min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body';
+  const cls = 'field';
   const invalid = (f: GroupState['field']) => (state.field === f ? true : undefined);
   return (
     <section
       aria-labelledby="groups-heading"
-      className="flex flex-col gap-3 rounded-panel border border-zinc-200 bg-white px-5 py-4"
+      className="flex flex-col gap-3 rounded-panel border border-line bg-surface px-5 py-4"
     >
       <h2 id="groups-heading" className="text-section">
         {t('groups.title')}
       </h2>
-      <p className="text-caption text-zinc-500">{t('groups.description')}</p>
+      <p className="text-caption text-ink-2">{t('groups.description')}</p>
       {groups.length === 0 ? (
-        <p className="text-body text-zinc-600">{t('groups.empty')}</p>
+        <p className="text-body text-ink-2">{t('groups.empty')}</p>
       ) : (
         <ul aria-label={t('groups.list')} className="flex list-none flex-col gap-2 p-0">
           {groups.map((g) => (
-            <li key={g.label} className="flex flex-col gap-2 rounded-card border border-zinc-200 px-4 py-3">
+            <li key={g.label} className="flex flex-col gap-2 rounded-card border border-line px-4 py-3">
               <p className="text-body">
                 <span className="font-medium">{g.label}</span>
                 {' · '}
@@ -131,13 +131,13 @@ export function SeatGroups({
           }}
           noValidate
           aria-labelledby="groups-form-heading"
-          className="flex flex-wrap items-end gap-3 border-t border-zinc-200 pt-3"
+          className="flex flex-wrap items-end gap-3 border-t border-line pt-3"
         >
           <h3 id="groups-form-heading" className="w-full text-body font-medium">
             {t('groups.form.title')}
           </h3>
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="group-label" className="text-caption text-zinc-600">
+            <label htmlFor="group-label" className="text-[13px] font-bold text-ink">
               {t('groups.form.label')}
             </label>
             <input
@@ -150,7 +150,7 @@ export function SeatGroups({
               aria-describedby="group-label-hint"
               className={cls}
             />
-            <span id="group-label-hint" className="text-caption text-zinc-500">
+            <span id="group-label-hint" className="text-caption text-ink-2">
               {t('groups.form.labelHint')}
             </span>
             <datalist id="group-label-suggestions">
@@ -160,7 +160,7 @@ export function SeatGroups({
             </datalist>
           </div>
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="group-item" className="text-caption text-zinc-600">
+            <label htmlFor="group-item" className="text-[13px] font-bold text-ink">
               {t('groups.form.item')}
             </label>
             <select
@@ -179,7 +179,7 @@ export function SeatGroups({
             </select>
           </div>
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="group-count" className="text-caption text-zinc-600">
+            <label htmlFor="group-count" className="text-[13px] font-bold text-ink">
               {t('groups.form.count')}
             </label>
             <input
@@ -193,7 +193,7 @@ export function SeatGroups({
               aria-describedby="group-count-hint"
               className={`${cls} w-32`}
             />
-            <span id="group-count-hint" className="text-caption text-zinc-500">
+            <span id="group-count-hint" className="text-caption text-ink-2">
               {t('groups.form.countHint')}
             </span>
           </div>

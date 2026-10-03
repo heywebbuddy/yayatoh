@@ -14,3 +14,4 @@ Badge templates, their assignment to ticket types, and batch PDFs (M5.5a). Owns 
 - Downloads: `badges.batchLink` signs a 15-minute link (`{org}~{batch}~{exp}~{hmac}`, APP_TOKEN_SECRET); the route serves the file only while the batch is done and unexpired.
 - Writes to templates and assignments need `events:write`; previews with sample people need `events:read` (viewers can preview); the one-badge PDF needs `attendees:write`.
 - Consumes no events and emits none yet.
+- **Balance due (M5.1d):** a ticket with `payment_due` prints only one at a time, with `badges.overrideBalanceDue` (`attendees:write`, a reason, audited) returning a 10-minute signed permission for that ticket (`singleBadgeQuery.overrideToken`); batches leave such tickets out (counted as skipped).

@@ -40,7 +40,7 @@ export async function AsOf({ asOf, locale }: { asOf: Date; locale: string }) {
         : rtf.format(Math.round(secs / 3600), 'hour');
   const full = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' }).format(asOf);
   return (
-    <p className="text-caption text-zinc-500" data-as-of={asOf.toISOString()}>
+    <p className="text-caption text-ink-2" data-as-of={asOf.toISOString()}>
       <time dateTime={asOf.toISOString()} title={full}>
         {t('asOf', { time: rel })}
       </time>
@@ -55,12 +55,12 @@ export function Kpi({ label, values, note }: { label: string; values: string[]; 
       <Label>{label}</Label>
       <div className="flex flex-col gap-1">
         {values.map((v) => (
-          <p key={v} className="text-[32px] leading-none font-light tracking-[-0.045em] tabular-nums">
+          <p key={v} className="text-[32px] leading-none font-extrabold tracking-[-0.045em] tabular-nums">
             {v}
           </p>
         ))}
       </div>
-      {note ? <p className="text-[13px] text-zinc-500">{note}</p> : null}
+      {note ? <p className="text-[13px] text-ink-2">{note}</p> : null}
     </Card>
   );
 }
@@ -99,8 +99,8 @@ export async function ReportTabs({
               aria-current={tab.key === current ? 'page' : undefined}
               className={
                 tab.key === current
-                  ? 'inline-flex min-h-9 items-center rounded-pill bg-zinc-900 px-4 text-body text-white'
-                  : 'inline-flex min-h-9 items-center rounded-pill border border-zinc-200 bg-white px-4 text-body text-zinc-700 hover:bg-zinc-50'
+                  ? 'inline-flex min-h-9 items-center rounded-pill bg-tag px-4 text-body text-white'
+                  : 'inline-flex min-h-9 items-center rounded-pill border border-line bg-surface px-4 text-body text-ink-2 hover:bg-surface-2'
               }
             >
               {t(tab.key)}

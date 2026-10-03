@@ -72,7 +72,7 @@ export function KioskScreen({
     <div className="flex min-h-[80dvh] flex-col gap-8" data-kiosk>
       <header className="flex flex-col gap-2 text-center">
         <h1 className="text-display">{t('welcome', { event: client.eventName ?? '' })}</h1>
-        {place ? <p className="text-title text-zinc-600">{t('entrance', { place })}</p> : null}
+        {place ? <p className="text-title text-ink-2">{t('entrance', { place })}</p> : null}
       </header>
       <form
         className="flex flex-col gap-4"
@@ -96,7 +96,7 @@ export function KioskScreen({
           autoComplete="off"
           autoCapitalize="characters"
           spellCheck={false}
-          className="min-h-20 w-full rounded-panel border-2 border-zinc-300 bg-white px-6 text-center font-mono text-[32px] tracking-[0.08em]"
+          className="min-h-20 w-full rounded-panel border-2 border-line-strong bg-surface px-6 text-center font-mono text-[32px] tracking-[0.08em]"
         />
         <div className="flex flex-wrap justify-center gap-4">
           <Button type="submit" className="min-h-16 min-w-48 text-title">
@@ -114,7 +114,7 @@ export function KioskScreen({
           ) : null}
         </div>
       </form>
-      {cameraError ? <p className="text-center text-body text-pink-700">{t('cameraFailed')}</p> : null}
+      {cameraError ? <p className="text-center text-body text-danger">{t('cameraFailed')}</p> : null}
       {camera ? (
         <video
           ref={video}
@@ -129,10 +129,10 @@ export function KioskScreen({
             data-kiosk-result={tone}
             className={`flex flex-col items-center gap-2 rounded-panel border-4 px-8 py-10 text-center ${
               tone === 'ok'
-                ? 'border-green-600 bg-green-50 text-green-900'
+                ? 'border-success bg-success-soft text-success'
                 : tone === 'again'
-                  ? 'border-accent-700 bg-accent-50 text-accent-text'
-                  : 'border-pink-700 bg-pink-50 text-pink-700'
+                  ? 'border-warning bg-warning-soft text-warning'
+                  : 'border-danger bg-danger-soft text-danger'
             }`}
           >
             <p className="text-display">{t(tone === 'ok' ? 'ok' : tone === 'again' ? 'again' : 'help')}</p>
@@ -180,7 +180,7 @@ function PinPad({
   useEffect(() => field.current?.focus(), []);
   return (
     <form
-      className="flex w-full max-w-sm flex-col gap-3 rounded-panel border border-zinc-200 bg-white px-5 py-4"
+      className="flex w-full max-w-sm flex-col gap-3 rounded-panel border border-line bg-surface px-5 py-4"
       aria-labelledby="kiosk-pin-title"
       noValidate
       onSubmit={async (e) => {
@@ -209,7 +209,7 @@ function PinPad({
       <h2 id="kiosk-pin-title" className="text-section">
         {t('pinTitle')}
       </h2>
-      <label htmlFor="kiosk-pin" className="text-caption text-zinc-600">
+      <label htmlFor="kiosk-pin" className="text-[13px] font-bold text-ink">
         {t('pinLabel')}
       </label>
       <input
@@ -220,10 +220,10 @@ function PinPad({
         autoComplete="off"
         aria-invalid={error ? true : undefined}
         aria-describedby={error ? 'kiosk-pin-error' : undefined}
-        className={`min-h-12 rounded-pill border bg-white px-4 text-title ${error ? 'border-pink-700' : 'border-zinc-200'}`}
+        className={`min-h-12 rounded-pill border bg-surface px-4 text-title ${error ? 'field-invalid' : ''}`}
       />
       {error ? (
-        <p id="kiosk-pin-error" role="alert" className="text-caption text-pink-700">
+        <p id="kiosk-pin-error" role="alert" className="text-caption text-danger">
           {error}
         </p>
       ) : null}

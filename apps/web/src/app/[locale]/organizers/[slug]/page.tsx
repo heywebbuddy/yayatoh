@@ -55,7 +55,7 @@ export default async function OrganizerPage({ params, searchParams }: Props) {
   const posts = await cachedEntries(o.orgId, 'post', 1);
   const tc = await getTranslations('cmsPublic');
   return (
-    <div className="min-h-dvh bg-white">
+    <div className="min-h-dvh bg-surface">
       <SiteHeader />
       <main id="main" className="flex flex-col gap-8">
         <OrgHero orgId={o.orgId} eyebrow={t('organizer.eyebrow')} name={o.name} brandColor={o.brandColor}>
@@ -74,7 +74,7 @@ export default async function OrganizerPage({ params, searchParams }: Props) {
           aria-labelledby="upcoming-heading"
           className="mx-auto flex w-full max-w-6xl flex-col gap-4 px-4 md:px-6"
         >
-          <h2 id="upcoming-heading" className="text-[28px] font-normal tracking-[-0.03em]">
+          <h2 id="upcoming-heading" className="text-[28px] font-extrabold tracking-[-0.03em]">
             {t('upcoming')}
           </h2>
           <ListingGrid
