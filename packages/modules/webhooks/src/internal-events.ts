@@ -16,6 +16,7 @@
 export type InternalReason = 'personal' | 'security' | 'workflow' | 'platform' | 'content' | 'later';
 
 export const INTERNAL_EVENTS: Readonly<Record<string, InternalReason>> = {
+  'analytics.alert_rule_evaluated@1': 'workflow',
   'announcement.sent@1': 'later',
   'assistance.requested@1': 'personal',
   'assistance.updated@1': 'personal',
@@ -51,6 +52,7 @@ export const INTERNAL_EVENTS: Readonly<Record<string, InternalReason>> = {
   'event.short_link_changed@1': 'content',
   'form.resume_requested@1': 'personal',
   'invitation.created@1': 'platform',
+  'marketing.order_attributed@1': 'workflow',
   'marketplace.site_settings_changed@1': 'platform',
   'media.asset_added@1': 'content',
   'media.asset_removed@1': 'content',

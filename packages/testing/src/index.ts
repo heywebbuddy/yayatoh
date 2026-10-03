@@ -57,3 +57,4 @@ export {
   standardRsvpQuestions,
 } from './rsvp-questions.ts';
 export { warehouseScenario } from './warehouse.ts';
+export { ATTRIBUTION_FIXTURE, type AttributionScenario, attributionScenario } from './attribution.ts';
