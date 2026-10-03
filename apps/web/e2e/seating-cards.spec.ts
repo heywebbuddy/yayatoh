@@ -215,7 +215,9 @@ test.describe('cards and exports (M4.3b)', () => {
     await page.goto(`${base}/seating/cards`);
     // Nobody seated yet: table cards are chosen, and the next step is offered.
     await expect(page.getByRole('radio', { name: 'Table cards' })).toBeChecked();
-    await expect(page.getByText('No cards yet: one per seated guest, a tent card folded in half')).toBeVisible();
+    await expect(
+      page.getByText('No cards yet: one per seated guest, a tent card folded in half'),
+    ).toBeVisible();
     await expect(page.getByRole('link', { name: 'Seat guests' }).last()).toBeVisible();
     await page.getByRole('radio', { name: 'Place cards' }).check();
     let downloaded = false;
