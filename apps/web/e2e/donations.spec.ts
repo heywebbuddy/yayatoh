@@ -286,9 +286,10 @@ test.describe('donations (M4.8a)', () => {
     await guest.keyboard.press('Tab');
     await expect(guest.getByLabel('Amount (USD)')).toBeFocused();
     await guest.keyboard.press('Tab');
-    await expect(guest.getByRole('checkbox')).toBeFocused();
+    const cover = guest.getByRole('checkbox', { name: /cover the processing fee/ });
+    await expect(cover).toBeFocused();
     await guest.keyboard.press('Space');
-    await expect(guest.getByRole('checkbox')).toBeChecked();
+    await expect(cover).toBeChecked();
     await guest.keyboard.press('Tab');
     await expect(guest.getByRole('textbox', { name: 'Full name' })).toBeFocused();
     await guest.keyboard.type('Kay Board');
@@ -301,6 +302,13 @@ test.describe('donations (M4.8a)', () => {
     await guest.keyboard.press('Space');
     await guest.keyboard.press('ArrowDown');
     await expect(guest.getByRole('radio', { name: 'Show my first name only' })).toBeChecked();
+    // M4.8d: the screen opt-in follows (off by default), reachable and togglable by keyboard.
+    await guest.keyboard.press('Tab');
+    const onScreen = guest.getByRole('checkbox', { name: 'Thank me by name on the screen in the room' });
+    await expect(onScreen).toBeFocused();
+    await expect(onScreen).not.toBeChecked();
+    await guest.keyboard.press('Space');
+    await expect(onScreen).toBeChecked();
     await guest.keyboard.press('Tab');
     await expect(guest.getByLabel('Dedication')).toBeFocused();
     await guest.keyboard.press('Tab');

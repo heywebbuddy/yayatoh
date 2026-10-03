@@ -3,6 +3,7 @@ import { sql } from 'drizzle-orm';
 import {
   boolean,
   check,
+  foreignKey,
   index,
   integer,
   jsonb,
@@ -12,6 +13,7 @@ import {
   uniqueIndex,
   uuid,
 } from 'drizzle-orm/pg-core';
+import { CHANNEL_KINDS, CODE_CHANNEL_KINDS } from './domain/channels.ts';
 import { SEAT_STATUSES } from './domain/seat-state.ts';
 
 export const seatingSchema = pgSchema('seating');
@@ -19,9 +21,11 @@ export const seatingSchema = pgSchema('seating');
 export const EVENT_LAYOUT_STATUSES = ['draft', 'published', 'locked'] as const;
 /**
  * How guests look themselves up in the public seat finder (M1.7e): `code` = a one-time code
- * emailed to an address on the list (no enumeration); `name` = instant, by exact full name.
+ * emailed to an address on the list (no enumeration); `name` = instant, by exact full name;
+ * `pin` (M4.4a) = a wedding guest's exact full name plus the PIN printed on their party's invitation
+ * (the M4.1d PIN), answered with table labels only and the same reply for every miss.
  */
-export const FINDER_MODES = ['code', 'name'] as const;
+export const FINDER_MODES = ['code', 'name', 'pin'] as const;
 /** Reasons an organizer blocks seats by hand. */
 export const BLOCK_REASONS = ['channel', 'ada', 'kill'] as const;
 /**
@@ -35,9 +39,10 @@ export const ASSIGNABLE_BLOCKS = ['channel', 'ada', 'group'] as const;
 export const MAX_GROUP_LABEL = 40;
 /**
  * Seating rules (M1.7f): `ada_reserved` keeps accessible seats back until some days before the
- * event; `max_per_order_seats` caps the seats in one order.
+ * event; `max_per_order_seats` caps the seats in one order. M6.11a: `ada_companion` sells
+ * companion seats only with an accessible seat.
  */
-export const SEATING_RULE_KINDS = ['ada_reserved', 'max_per_order_seats'] as const;
+export const SEATING_RULE_KINDS = ['ada_reserved', 'max_per_order_seats', 'ada_companion'] as const;
 /** Decision D18: rules warn by default; `enforce` refuses (staff may override, audited). */
 export const RULE_SEVERITIES = ['warn', 'enforce'] as const;
 
@@ -321,4 +326,223 @@ export const tableSponsors = tenantTable(
       sql`logo_url is null or (length(logo_url) <= 300 and logo_url ~ '^/media/[0-9a-f-]{36}/[0-9a-f-]{36}/[A-Za-z0-9._-]+$')`,
     ),
   ],
+);
+/**
+ * Best available (M6.11a): whether buyers and the box office may ask for "best available"
+ * instead of choosing seats, and the organizer's section scores (`{ sectionId: 0–100 }`, higher
+ * is better; sections without a score rank by distance to the stage). One row per event; every
+ * chart of the event uses it (seat and section ids repeat across charts).
+ */
+export const selectionSettings = tenantTable(
+  seatingSchema,
+  'selection_settings',
+  {
+    eventId: uuid('event_id').notNull(),
+    bestAvailable: boolean('best_available').notNull().default(false),
+    sectionScores: jsonb('section_scores').notNull().default(sql`'{}'::jsonb`),
+  },
+  (t) => [
+    uniqueIndex('selection_settings_org_event_key').on(t.orgId, t.eventId),
+    check('selection_settings_scores_check', sql`jsonb_typeof(section_scores) = 'object'`),
+  ],
+);
+
+/**
+ * Companion seats (M6.11a): seats the organizer keeps next to accessible seats for the people
+ * who come with a wheelchair user. With the `ada_companion` rule they are sold only with an
+ * accessible seat. Per event (seat ids repeat across an event's charts, so a date's own chart
+ * keeps them).
+ */
+export const companionSeats = tenantTable(
+  seatingSchema,
+  'companion_seats',
+  {
+    eventId: uuid('event_id').notNull(),
+    seatUuid: uuid('seat_uuid').notNull(),
+  },
+  (t) => [uniqueIndex('companion_seats_org_event_seat_key').on(t.orgId, t.eventId, t.seatUuid)],
+);
+
+// ─── M6.11b: sales channels and allotments, layout revisions ────────────────────────────────
+
+/**
+ * Sales channels (M6.11b). `public` = online without a code; `box_office` = staff at the box
+ * office; `sponsor` and `promoter` = online with the channel's code (a promoter's link carries
+ * it). At most one `public` and one `box_office` channel per event.
+ */
+export { CHANNEL_KINDS, CODE_CHANNEL_KINDS };
+/** A channel code: 3–32 letters, digits, dashes or underscores, kept upper-case. */
+export const CHANNEL_CODE = /^[A-Z0-9][A-Z0-9_-]{2,31}$/;
+
+/**
+ * An event's sales channel (M6.11b): seats allotted to it (`channel_seats`) are sold only through
+ * it until `release_at`, when unsold ones go back to every channel. Per event: every chart of the
+ * event uses the same allotments (seat ids repeat across charts).
+ */
+export const seatChannels = tenantTable(
+  seatingSchema,
+  'seat_channels',
+  {
+    eventId: uuid('event_id').notNull(),
+    kind: text('kind').notNull(),
+    name: text('name').notNull(),
+    /** Upper-case; required for sponsor and promoter channels, none for the others. */
+    code: text('code'),
+    /** When unsold allotted seats go back to every channel; null = never. */
+    releaseAt: timestamp('release_at', { withTimezone: true }),
+  },
+  (t) => [
+    index('seat_channels_org_event_idx').on(t.orgId, t.eventId),
+    uniqueIndex('seat_channels_org_event_code_key')
+      .on(t.orgId, t.eventId, t.code)
+      .where(sql`code is not null`),
+    uniqueIndex('seat_channels_org_event_kind_key')
+      .on(t.orgId, t.eventId, t.kind)
+      .where(sql`kind in ('public', 'box_office')`),
+    check('seat_channels_kind_check', sql.raw(`kind in (${CHANNEL_KINDS.map((s) => `'${s}'`).join(', ')})`)),
+    check('seat_channels_name_length', sql`length(name) between 1 and 80`),
+    check(
+      'seat_channels_code_check',
+      sql`(kind in ('sponsor', 'promoter')) = (code is not null) and (code is null or code ~ '^[A-Z0-9][A-Z0-9_-]{2,31}$')`,
+    ),
+  ],
+);
+
+/**
+ * Seats allotted to a channel (M6.11b): a seat is in at most one channel per event. Removing the
+ * channel removes its allotment (the seats go back to every channel).
+ */
+export const channelSeats = tenantTable(
+  seatingSchema,
+  'channel_seats',
+  {
+    eventId: uuid('event_id').notNull(),
+    channelId: uuid('channel_id').notNull(),
+    seatUuid: uuid('seat_uuid').notNull(),
+  },
+  (t) => [
+    uniqueIndex('channel_seats_org_event_seat_key').on(t.orgId, t.eventId, t.seatUuid),
+    index('channel_seats_org_channel_idx').on(t.orgId, t.channelId),
+    foreignKey({
+      name: 'channel_seats_channel_fk',
+      columns: [t.orgId, t.channelId],
+      foreignColumns: [seatChannels.orgId, seatChannels.id],
+    }).onDelete('cascade'),
+  ],
+);
+
+/**
+ * The channel an order's seats were sold through (M6.11b): attribution for the channel's
+ * report, and the channel a paid-late order re-holds its seats through. `order_id` is the
+ * order's id (the seat hold's id); orders is a higher tier, so there is no FK to it.
+ */
+export const channelOrders = tenantTable(
+  seatingSchema,
+  'channel_orders',
+  {
+    eventId: uuid('event_id').notNull(),
+    channelId: uuid('channel_id').notNull(),
+    orderId: uuid('order_id').notNull(),
+    seats: integer('seats').notNull(),
+    /** When the order's seats were sold (its payment); null while it is only reserved. */
+    soldAt: timestamp('sold_at', { withTimezone: true }),
+  },
+  (t) => [
+    uniqueIndex('channel_orders_org_order_key').on(t.orgId, t.orderId),
+    index('channel_orders_org_channel_idx').on(t.orgId, t.channelId),
+    check('channel_orders_seats_check', sql`seats between 1 and 500`),
+    foreignKey({
+      name: 'channel_orders_channel_fk',
+      columns: [t.orgId, t.channelId],
+      foreignColumns: [seatChannels.orgId, seatChannels.id],
+    }).onDelete('cascade'),
+  ],
+);
+
+/** Why a revision was written: an edit of the plan, or a restore of an earlier revision. */
+export const REVISION_KINDS = ['save', 'restore'] as const;
+
+/**
+ * Layout revisions (M6.11b): every save of a chart's plan (and every restore) is a numbered
+ * revision of that chart, with the whole document. The newest 100 per chart are kept.
+ */
+export const layoutRevisions = tenantTable(
+  seatingSchema,
+  'layout_revisions',
+  {
+    eventId: uuid('event_id').notNull(),
+    /** The chart (M1.7g): null = the event plan, else the date with its own chart. */
+    occurrenceId: uuid('occurrence_id'),
+    number: integer('number').notNull(),
+    kind: text('kind').notNull().default('save'),
+    /** For a restore: the revision it brought back. */
+    restoredFrom: integer('restored_from'),
+    doc: jsonb('doc').notNull(),
+    checksum: text('checksum').notNull(),
+    seatCount: integer('seat_count').notNull(),
+    /** Who saved it (a member's user id; null for the system). */
+    actorId: uuid('actor_id'),
+  },
+  (t) => [
+    uniqueIndex('layout_revisions_org_event_plan_number_key')
+      .on(t.orgId, t.eventId, t.number)
+      .where(sql`occurrence_id is null`),
+    uniqueIndex('layout_revisions_org_event_date_number_key')
+      .on(t.orgId, t.eventId, t.occurrenceId, t.number)
+      .where(sql`occurrence_id is not null`),
+    check(
+      'layout_revisions_kind_check',
+      sql.raw(`kind in (${REVISION_KINDS.map((s) => `'${s}'`).join(', ')})`),
+    ),
+    check('layout_revisions_number_check', sql`number >= 1`),
+    check('layout_revisions_restore_check', sql`(kind = 'restore') = (restored_from is not null)`),
+  ],
+);
+
+/**
+ * Guest seating (M4.3a): a guest of the guests module (wedding or gala guest, plus-ones
+ * included) sits at a table or row of a chart. The chart is the event plan (`sub_event_id` null)
+ * or the chart a sub-event uses (its own, its date's, else the event plan: a ceremony in rows and
+ * a reception at tables are seated separately). A table-level place: no seat of the plan is held,
+ * so guest seating never changes what is on sale. One place per guest per chart.
+ * `(org_id, guest_id)` references `guests.guests` and `(org_id, event_id, sub_event_id)`
+ * `guests.sub_events` (same tier: hand-written foreign keys, a reference only, never an import);
+ * a guest or sub-event that goes takes its places with it.
+ */
+export const guestSeats = tenantTable(
+  seatingSchema,
+  'guest_seats',
+  {
+    eventId: uuid('event_id').notNull(),
+    /** The sub-event whose chart this is; null = the event plan. */
+    subEventId: uuid('sub_event_id'),
+    guestId: uuid('guest_id').notNull(),
+    /** The table (or row) item of the chart's document. */
+    itemId: uuid('item_id').notNull(),
+  },
+  (t) => [
+    uniqueIndex('guest_seats_org_event_plan_guest_key')
+      .on(t.orgId, t.eventId, t.guestId)
+      .where(sql`sub_event_id is null`),
+    uniqueIndex('guest_seats_org_sub_event_guest_key')
+      .on(t.orgId, t.subEventId, t.guestId)
+      .where(sql`sub_event_id is not null`),
+    index('guest_seats_org_event_item_idx').on(t.orgId, t.eventId, t.subEventId, t.itemId),
+    index('guest_seats_org_guest_idx').on(t.orgId, t.guestId),
+  ],
+);
+
+/**
+ * VIP zones for guest seating (M4.3a): the host marks a table or row of the event's charts as a
+ * VIP zone (item ids are kept by chart copies, so one row covers every chart, like
+ * `table_sponsors`). A table in a VIP section of the plan document is a VIP zone too.
+ */
+export const vipTables = tenantTable(
+  seatingSchema,
+  'vip_tables',
+  {
+    eventId: uuid('event_id').notNull(),
+    itemId: uuid('item_id').notNull(),
+  },
+  (t) => [uniqueIndex('vip_tables_org_event_item_key').on(t.orgId, t.eventId, t.itemId)],
 );

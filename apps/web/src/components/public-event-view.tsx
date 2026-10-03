@@ -1,5 +1,5 @@
-import { publicTaxNotices, taxNoticeText } from '@yayatoh/donations';
-import { liveSessionIds } from '@yayatoh/engagement';
+import { publicGiving, publicTaxNotices, taxNoticeText } from '@yayatoh/donations';
+import { liveSessionIds, networkingOpen } from '@yayatoh/engagement';
 import {
   accessTarget,
   checkoutTarget,
@@ -26,7 +26,10 @@ import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import {
   checkoutAction,
+  findBestSeatsAction,
+  findChannelBestSeatsAction,
   redeemAccessCodeAction,
+  releaseBestSeatsAction,
   requestHolderLinkAction,
 } from '@/app/[locale]/events/[slug]/actions.ts';
 import { AccessCodeEntry } from '@/components/access-code-entry.tsx';
@@ -48,6 +51,7 @@ import { formatEventDateRange, formatNumber } from '@/lib/format.ts';
 import { refundPolicyLines } from '@/lib/refund-policy-text.ts';
 import { aggregateRatingJsonLd, eventJsonLd, jsonLdScript } from '@/lib/seo/jsonld.ts';
 import { localizedPath } from '@/lib/seo/urls.ts';
+import { hasAdvancedSeating } from '@/server/advanced-seating.ts';
 import { publicDemoOverlay } from '@/server/demo.ts';
 import { cachedExhibitorMap } from '@/server/exhibitor-map.ts';
 import { cachedReviews } from '@/server/public-data.ts';
@@ -68,6 +72,7 @@ export async function PublicEventView({
   orgId = null,
   embedded = false,
   date = null,
+  channelCode = null,
 }: {
   locale: string;
   slug: string;
@@ -76,6 +81,8 @@ export async function PublicEventView({
   date?: string | null;
   /** The ticket widget (M1.11c): passes and checkout only. */
   embedded?: boolean;
+  /** M6.11b: a sponsor's or promoter's sales code from their link (`?channel=`). */
+  channelCode?: string | null;
 }) {
   // M1.4d: an access code (signed cookie, re-checked here) may open a private event and hidden
   // passes. The ticket widget is a third-party frame without the visitor's cookie: public only.
@@ -135,6 +142,11 @@ export async function PublicEventView({
     publicTarget && fullProgram.sessions.length > 0
       ? await liveSessionIds(publicTarget.orgId, publicTarget.eventId)
       : [];
+  // M5.8a: networking is on (its pages live on the marketplace host, not the org's own site).
+  const networking =
+    publicTarget && !orgId && !embedded
+      ? await networkingOpen(publicTarget.orgId, publicTarget.eventId)
+      : false;
   // M5.4a: the exhibitor map page exists once the event has booths.
   const exhibitorMap =
     contentTarget && fullProgram.exhibitors.length > 0
@@ -154,6 +166,9 @@ export async function PublicEventView({
   ].filter((x) => x.value > 0);
   const unlockedPasses = real.some((p) => p.unlocked);
   const orgProfile = target ? await publicOrgProfile(target.orgId) : null;
+  // M4.8e: a campaign open tonight → the checkout offers saving a card for giving (P4-14).
+  const giving = target ? await publicGiving(target.orgId, target.eventId) : null;
+  const cardForGiving = Boolean(giving?.available && giving.campaigns.length > 0);
   // The event's refund policy (M1.6e), in the buyer's words, before they buy.
   const refundPolicy = target ? await publicRefundPolicy(target.orgId, target.eventId) : null;
   // M4.8b: a verified charity's passes over $75 with a fair-market value show the quid-pro-quo
@@ -164,9 +179,24 @@ export async function PublicEventView({
     return n ? [{ id: p.id, name: p.name, ...taxNoticeText(n, locale) }] : [];
   });
   // Per-date charts (M1.7g): the chosen date's own chart when it has one, else the event plan.
+  // M6.11a: best available and companion seats come with advanced seating.
+  const advancedSeating = target ? await hasAdvancedSeating(target.orgId) : false;
   const seatMap = target
-    ? await publicSeatMap(target.orgId, target.eventId, { occurrenceId: chosen?.id ?? null })
+    ? await publicSeatMap(target.orgId, target.eventId, {
+        occurrenceId: chosen?.id ?? null,
+        advancedSeating,
+        // M6.11b: a sales code opens its channel's seats (the widget never carries one).
+        channelCode: embedded ? null : channelCode,
+      })
     : null;
+  // The code is posted with the order only when it named one of the event's channels.
+  const channel: { code: string; name: string } | { invalid: true } | null =
+    seatMap?.channel && channelCode
+      ? seatMap.channel === 'invalid'
+        ? { invalid: true }
+        : { code: channelCode, name: seatMap.channel.name }
+      : null;
+  const saleCode = channel && 'code' in channel ? channel.code : null;
   // M3.10a: passes whose remaining stock is kept for their waitlist read as sold out, and sold-out
   // passes (not seated, not choose-your-amount, not code-unlocked) offer "Join the waitlist".
   const heldBack = target && !embedded ? await waitlistHeldBack(target.orgId, target.eventId) : [];
@@ -325,6 +355,7 @@ export async function PublicEventView({
             })),
           }))}
           organizer={ev.organizerName}
+          cardForGiving={cardForGiving}
           brand={brand ? { background: brand.background, text: brand.text } : null}
           questions={questions}
           seatMap={seatMap}
@@ -344,6 +375,18 @@ export async function PublicEventView({
               : null
           }
           timeZone={ev.timezone}
+          advancedSeating={advancedSeating}
+          channel={channel}
+          bestSeats={
+            seatMap?.bestAvailable
+              ? {
+                  find: saleCode
+                    ? findChannelBestSeatsAction.bind(null, slug, saleCode)
+                    : findBestSeatsAction.bind(null, slug),
+                  release: releaseBestSeatsAction.bind(null, slug),
+                }
+              : null
+          }
           action={checkoutAction.bind(null, slug)}
         />
       )}
@@ -481,6 +524,12 @@ export async function PublicEventView({
               <a href="#agenda" className={navLink}>
                 {t('publicEvent.agenda')}
               </a>
+            ) : null}
+            {networking ? (
+              // M5.8a: the event's networking (on the marketplace host only).
+              <Link href={`/events/${slug}/network`} className={navLink}>
+                {t('networking.publicLink')}
+              </Link>
             ) : null}
           </nav>
           <div className="flex flex-wrap items-center gap-2">

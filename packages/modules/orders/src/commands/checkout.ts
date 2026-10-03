@@ -13,11 +13,15 @@ import {
 } from '@yayatoh/payments';
 import { keyVault, tenantCommand } from '@yayatoh/platform';
 import {
+  adoptSeatHoldTx,
   checkSeatRulesTx,
   extendSeatHoldTx,
   heldSeatsTx,
   holdSeatsTx,
+  orderChannelTx,
+  recordChannelOrderTx,
   releaseSeatHoldTx,
+  resolveSaleChannelTx,
   seatedTicketTypesTx,
   sellSeatsTx,
 } from '@yayatoh/seating';
@@ -36,6 +40,7 @@ import {
 } from '@yayatoh/ticketing';
 import { and, eq, inArray, lte, sql } from 'drizzle-orm';
 import { z } from 'zod';
+import { addonItemTx, payAddonOrderTx } from '../addon-orders.ts';
 import { formatCreditNoteNumber, parseCreditCode } from '../domain/credit-notes.ts';
 import { HOLD_MINUTES, orderLifecycle, PAYMENT_EXTENSION_MINUTES } from '../domain/lifecycle.ts';
 import { policySnapshot } from '../domain/refund-policy.ts';
@@ -174,14 +179,36 @@ export async function startCheckoutTx(
   if (input.items.some((i) => seatedTypes.has(i.ticketTypeId)))
     throw new DomainError('validation_failed', 'Choose seats for this ticket', { reason: 'choose_seats' });
   const seatItems = new Map<string, number>();
-  if (input.seats.length) {
-    const held = await holdSeatsTx(tx, ctx, {
-      eventId: event.id,
-      occurrenceId: input.occurrenceId ?? null,
-      seatUuids: input.seats,
-      holdId: orderId,
-      expiresAt,
+  if (input.seatHold && input.seats.length)
+    throw new DomainError('validation_failed', 'Choose seats or best available, not both', {
+      reason: 'choose_seats',
     });
+  let seatIds: readonly string[] = input.seats;
+  // M6.11b: seats are sold online through the buyer's sales code, else the public channel.
+  const channel =
+    input.seats.length || input.seatHold
+      ? await resolveSaleChannelTx(tx, event.id, { via: 'online', code: input.channelCode ?? null })
+      : null;
+  if (input.seats.length || input.seatHold) {
+    // M6.11a: seats best available already holds for this buyer move to the order's hold.
+    const held = input.seatHold
+      ? await adoptSeatHoldTx(tx, ctx, {
+          eventId: event.id,
+          occurrenceId: input.occurrenceId ?? null,
+          token: input.seatHold,
+          holdId: orderId,
+          expiresAt,
+          channelId: channel?.id ?? null,
+        })
+      : await holdSeatsTx(tx, ctx, {
+          eventId: event.id,
+          occurrenceId: input.occurrenceId ?? null,
+          seatUuids: input.seats,
+          holdId: orderId,
+          expiresAt,
+          channelId: channel?.id ?? null,
+        });
+    seatIds = held.map((s) => s.seatUuid);
     for (const s of held) {
       if (!s.ticketTypeId)
         throw new DomainError('validation_failed', 'That seat is not on sale', {
@@ -194,8 +221,9 @@ export async function startCheckoutTx(
     await checkSeatRulesTx(tx, ctx, {
       eventId: event.id,
       occurrenceId: input.occurrenceId ?? null,
-      seatUuids: input.seats,
+      seatUuids: seatIds,
       context: 'checkout',
+      accessibleNeed: input.accessibleNeed,
     });
   }
   const wanted = [
@@ -209,7 +237,7 @@ export async function startCheckoutTx(
         token: input.waitlistToken,
         eventId: event.id,
         items: wanted,
-        seats: input.seats,
+        seats: [...seatIds],
         occurrenceId: input.occurrenceId,
         email: input.buyer.email,
         now: ctx.now,
@@ -270,7 +298,7 @@ export async function startCheckoutTx(
       id: orderId,
       orgId,
       eventId: event.id,
-      seatUuids: [...new Set(input.seats)],
+      seatUuids: [...new Set(seatIds)],
       occurrenceId,
       status: 'reserved',
       buyerEmail: input.buyer.email,
@@ -297,6 +325,12 @@ export async function startCheckoutTx(
     })
     .returning();
   if (!order) throw new DomainError('internal');
+  await recordChannelOrderTx(tx, ctx, {
+    eventId: event.id,
+    orderId: order.id,
+    channelId: channel?.id ?? null,
+    seats: order.seatUuids.length,
+  });
   if (credit) await applyCreditTx(tx, ctx, credit, order.id, quote.creditMinor);
   await submitResponseTx(tx, ctx, {
     kind: 'checkout_questions',
@@ -389,7 +423,14 @@ export const startCheckoutCommand = tenantCommand({
     action: 'order.checkout',
     targetType: 'order',
     targetId: r.order.id,
-    data: { eventId: input.eventId, totalMinor: r.order.totalMinor, items: input.items.length },
+    data: {
+      eventId: input.eventId,
+      totalMinor: r.order.totalMinor,
+      items: input.items.length,
+      ...(input.seatHold ? { bestAvailable: true } : {}),
+      ...(input.accessibleNeed ? { accessibleNeed: true } : {}),
+      ...(input.channelCode ? { channelCode: true } : {}),
+    },
   }),
 });
 
@@ -486,6 +527,9 @@ export const applyProviderEventCommand = tenantCommand({
       const row = await payDonationOrderTx(tx, ctx, order, gift.giftId, e.provider, emit);
       return { outcome: 'applied' as const, status: row.status };
     }
+    // M5.4b: an add-on order (a sponsor package, lead licenses) has no tickets and holds no stock.
+    const addon = await addonItemTx(tx, order.id);
+    if (addon) return payAddonOrderTx(tx, ctx, order, addon, e.provider, emit);
     if (order.status === 'expired') {
       // Paid after the hold lapsed: re-hold if stock is still there, otherwise flag for refund.
       let stockHeld = false;
@@ -500,6 +544,8 @@ export const applyProviderEventCommand = tenantCommand({
             seatUuids: order.seatUuids,
             holdId: order.id,
             expiresAt: new Date(ctx.now.getTime() + HOLD_MINUTES * 60_000),
+            // M6.11b: through the channel the order was sold through.
+            channelId: await orderChannelTx(tx, order.id),
           });
         // The buyer paid the discounted price, so the use counts again if there is one left.
         if (order.promoCodeId) await claimPromoTx(tx, order.promoCodeId).catch(() => undefined);

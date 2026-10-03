@@ -267,7 +267,11 @@ export const toWarningDto = (w: ScheduleWarning): ScheduleWarningDto => ({
 });
 
 function warningsOf(ev: EventDto, list: readonly SessionDto[]): ScheduleWarning[] {
-  return scheduleWarnings(list, { startsAt: ev.startsAt, endsAt: ev.endsAt });
+  // M5.3b: a draft has placeholder times until the organizer places it, so it warns about nothing.
+  return scheduleWarnings(
+    list.filter((s) => !s.draft),
+    { startsAt: ev.startsAt, endsAt: ev.endsAt },
+  );
 }
 
 async function resultFor(tx: TenantTx, ev: EventDto, sessionId: string): Promise<SessionResultDto> {

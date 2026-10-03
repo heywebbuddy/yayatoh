@@ -4,7 +4,7 @@ import { and, eq } from 'drizzle-orm';
 import { addons, eventAddons } from './schema.ts';
 
 /** Event add-ons modeled now so a price switches on later with no code change (P4-4, P5-11). */
-export const EVENT_ADDON_KEYS = ['conference_pack'] as const;
+export const EVENT_ADDON_KEYS = ['conference_pack', 'lead_retrieval'] as const;
 export type EventAddonKey = (typeof EVENT_ADDON_KEYS)[number];
 
 export interface EventAddon {
