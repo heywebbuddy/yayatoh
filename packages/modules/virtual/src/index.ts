@@ -99,6 +99,7 @@ export {
   zoomRegistrantTx,
   zoomReportWebinarsTx,
   zoomSetupQuery,
+  zoomWebinarPlanTx,
 } from './zoom.ts';
 export { zoomEventKey, zoomParticipantKey, zoomSegmentKey } from './zoom-keys.ts';
 // M6.10a: Zoom join/leave webhooks (verified on the raw body, deduplicated by provider event).

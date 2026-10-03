@@ -62,6 +62,7 @@ export {
   zoomFakeAttend,
   zoomFakeProvider,
   zoomFakeRegistrants,
+  zoomFakeWebinar,
 } from './connectors/zoom.ts';
 export * from './domain/mapping.ts';
 export * from './domain/sync.ts';
@@ -107,3 +108,11 @@ export {
   type RemoteRecord,
   type SyncIO,
 } from './sdk/connector.ts';
+// M6.10a: create a session's Zoom webinar from Yayatoh through the org's Zoom connection.
+export {
+  activeZoomConnectionTx,
+  createZoomWebinar,
+  recordCreatedZoomWebinarCommand,
+  ZoomWebinarPlanDto,
+  zoomWebinarPlanQuery,
+} from './zoom-webinars.ts';

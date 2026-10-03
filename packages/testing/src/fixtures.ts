@@ -376,7 +376,7 @@ import { connectDemo, fakeAuth } from './integrations.ts';
 import { catchUpTimeline } from './merge.ts';
 import { networkingFixture } from './networking.ts';
 import { ports, runBulk, submitRegistrationForm } from './ports.ts';
-import { virtualFixture } from './virtual.ts';
+import { virtualFixture, virtualV2Fixture } from './virtual.ts';
 
 export interface OrgFixture {
   readonly org: OrganizationDto;
@@ -2613,6 +2613,8 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   await virtualFixture(org.id, event.id);
   // M6.9b: a Zoom webinar with a registrant and attendance; a CE rule, certificate and award.
   await ceFixture(org.id, event.id);
+  // M6.10a: a verified Zoom join and leave on that webinar (zoom_participant_events).
+  await virtualV2Fixture(org.id);
   // M4.2b gala tables (isolation coverage): the fixture order's first ticket item recorded as a
   // purchased table, and a sponsor on a table of the event plan. Rows only: no second order and no
   // new tickets, so tests that count the fixture's orders and tickets are unchanged.

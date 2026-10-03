@@ -62,3 +62,33 @@ export async function virtualFixture(orgId: string, eventId: string): Promise<vo
     logSeq: 0,
   });
 }
+
+/**
+ * M6.10a rows for `virtual.zoom_participant_events` (isolation coverage): a join and a leave of the
+ * first Zoom registrant on the fixture's webinar (made by `ceFixture`), keyed like the webhook
+ * keys them. Rows only.
+ */
+export async function virtualV2Fixture(orgId: string): Promise<void> {
+  await withTenant(systemCtx(orgId), async (tx) => {
+    const [reg] = await tx.execute<{
+      event_id: string;
+      session_id: string;
+      webinar_link_id: string;
+      ticket_id: string;
+      email: string;
+    }>(sql`select event_id, session_id, webinar_link_id, ticket_id, email from virtual.zoom_registrants
+      order by created_at, id limit 1`);
+    if (!reg) throw new Error('fixture: no Zoom registrant for the webhook rows');
+    for (const [kind, at] of [
+      ['joined', '2026-01-01T10:00:00Z'],
+      ['left', '2026-01-01T10:50:00Z'],
+    ] as const)
+      await tx.execute(sql`insert into virtual.zoom_participant_events
+          (org_id, event_id, session_id, webinar_link_id, provider_event_id, kind, participant_key,
+           ticket_id, email, at)
+        values (${orgId}, ${reg.event_id}, ${reg.session_id}, ${reg.webinar_link_id},
+          encode(sha256(convert_to(${`${orgId}|${kind}`}, 'UTF8')), 'hex'), ${kind},
+          encode(sha256(convert_to(${`${orgId}|participant`}, 'UTF8')), 'hex'),
+          ${reg.ticket_id}, ${reg.email}, ${at}::timestamptz)`);
+  });
+}

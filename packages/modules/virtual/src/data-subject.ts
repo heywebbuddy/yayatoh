@@ -8,7 +8,7 @@ import {
   type SubjectErasure,
 } from '@yayatoh/platform';
 import { asc, eq, inArray, or, type SQL, sql } from 'drizzle-orm';
-import { watchMinutes, zoomAttendance, zoomRegistrants } from './schema.ts';
+import { watchMinutes, zoomAttendance, zoomParticipantEvents, zoomRegistrants } from './schema.ts';
 
 /** A person's watch time per session (their tickets), for the access document. */
 async function watchTimeTx(tx: TenantTx, ticketIds: readonly string[]) {
@@ -22,7 +22,7 @@ async function watchTimeTx(tx: TenantTx, ticketIds: readonly string[]) {
 
 /** M6.9b: Zoom rows about the person: by their address, or their tickets. */
 const byPerson = (
-  t: typeof zoomRegistrants | typeof zoomAttendance,
+  t: typeof zoomRegistrants | typeof zoomAttendance | typeof zoomParticipantEvents,
   s: { email: string; tickets: string[] },
 ): SQL =>
   (s.tickets.length ? or(eq(t.email, s.email), inArray(t.ticketId, s.tickets)) : eq(t.email, s.email)) as SQL;
@@ -33,7 +33,9 @@ const byPerson = (
  * ids and times, kept as the streaming meter (D24) and pointing at no one once ticketing redacts
  * the ticket. Zoom registrant rows (address and name) are deleted; Zoom attendance segments keep
  * their times (the CE evidence of the session's totals) without the address or the ticket.
- * Exported: minutes watched per session, Zoom registrations and attendance segments.
+ * M6.10a: Zoom join/leave webhook rows keep their times (the deduplication record) without the
+ * address or the ticket. Exported: minutes watched per session, Zoom registrations, attendance
+ * segments and joins/leaves.
  */
 export const virtualDataSubjects = defineDataSubjectContributor({
   module: 'virtual',
@@ -43,6 +45,7 @@ export const virtualDataSubjects = defineDataSubjectContributor({
     ),
     'virtual.zoom_registrants': DELETE,
     'virtual.zoom_attendance': REDACT,
+    'virtual.zoom_participant_events': REDACT,
   },
   async export(tx: TenantTx, s) {
     const who = { email: s.email, tickets: refsOf(s, 'ticket') };
@@ -66,11 +69,21 @@ export const virtualDataSubjects = defineDataSubjectContributor({
       .from(zoomAttendance)
       .where(byPerson(zoomAttendance, who))
       .orderBy(asc(zoomAttendance.joinedAt));
+    const joinsAndLeaves = await tx
+      .select({
+        sessionId: zoomParticipantEvents.sessionId,
+        kind: zoomParticipantEvents.kind,
+        at: zoomParticipantEvents.at,
+      })
+      .from(zoomParticipantEvents)
+      .where(byPerson(zoomParticipantEvents, who))
+      .orderBy(asc(zoomParticipantEvents.at));
     return {
       sections: {
         watchTime: await watchTimeTx(tx, who.tickets),
         zoomRegistrations: registrations,
         zoomAttendance: attended,
+        zoomJoinsAndLeaves: joinsAndLeaves,
       },
     };
   },
@@ -85,10 +98,16 @@ export const virtualDataSubjects = defineDataSubjectContributor({
       .set({ email: null, ticketId: null, updatedAt: ctx.now })
       .where(byPerson(zoomAttendance, who))
       .returning({ id: zoomAttendance.id });
+    const events = await tx
+      .update(zoomParticipantEvents)
+      .set({ email: null, ticketId: null, updatedAt: ctx.now })
+      .where(byPerson(zoomParticipantEvents, who))
+      .returning({ id: zoomParticipantEvents.id });
     return {
       erased: {
         ...(gone.length ? { 'virtual.zoom_registrants': gone.length } : {}),
         ...(redacted.length ? { 'virtual.zoom_attendance': redacted.length } : {}),
+        ...(events.length ? { 'virtual.zoom_participant_events': events.length } : {}),
       },
     };
   },

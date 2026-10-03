@@ -204,6 +204,38 @@ export async function linkZoomWebinarTx(
   return { ...(await reconcileZoomRegistrantsTx(tx, orgId, ev.id, ctx.now)), webinarId };
 }
 
+/**
+ * M6.10a: what creating a session's webinar at Zoom needs (the event's name and the session's
+ * title, its start, length and the event's time zone), and the webinar already linked, if any.
+ * Refuses an in-person event and a missing or draft session, like linking does.
+ */
+export async function zoomWebinarPlanTx(
+  tx: TenantTx,
+  eventId: string,
+  sessionId: string,
+): Promise<{
+  topic: string;
+  startsAt: Date;
+  durationMinutes: number;
+  timezone: string;
+  linkedWebinarId: string | null;
+}> {
+  const ev = await eventOrThrowTx(tx, eventId);
+  if (ev.attendanceMode === 'in_person')
+    throw new DomainError('invalid_state', 'This event is in person only', { reason: 'in_person_event' });
+  const s = (await sessionsOf(tx, ev.id)).find((x) => x.id === sessionId && !x.draft);
+  if (!s) throw new DomainError('not_found', 'Session not found', { field: 'sessionId' });
+  const [link] = await tx.select().from(zoomWebinars).where(eq(zoomWebinars.sessionId, s.id));
+  const minutes = Math.round((s.endsAt.getTime() - s.startsAt.getTime()) / 60_000);
+  return {
+    topic: `${s.title} · ${ev.name}`.slice(0, 200),
+    startsAt: s.startsAt,
+    durationMinutes: Math.min(1440, Math.max(1, minutes)),
+    timezone: ev.timezone,
+    linkedWebinarId: link?.webinarId ?? null,
+  };
+}
+
 /** The organizer types a webinar's id (M6.9b). */
 export const linkZoomWebinarCommand = tenantCommand({
   name: 'virtual.linkZoomWebinar',
