@@ -7,17 +7,7 @@ import {
 } from '@yayatoh/integrations';
 import { executeQuery, isDomainError } from '@yayatoh/kernel';
 import { roleCan } from '@yayatoh/tenancy';
-import {
-  Alert,
-  Breadcrumb,
-  Button,
-  buttonClass,
-  Card,
-  PageHeader,
-  SectionHeader,
-  Select,
-  Table,
-} from '@yayatoh/ui';
+import { Alert, Button, buttonClass, Card, PageHeader, SectionHeader, Select, Table } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
@@ -104,13 +94,6 @@ export default async function ConnectionPage({
   return (
     <>
       <PageHeader
-        breadcrumb={
-          <Breadcrumb
-            label={t('breadcrumb')}
-            link={Link}
-            items={[{ label: t('title'), href: `/o/${org}/integrations` }, { label: connector.name }]}
-          />
-        }
         title={connector.name}
         tag={<ConnectionPill status={c.status} />}
         description={t(`connectors.${connector.key}.description`)}

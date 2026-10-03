@@ -9,7 +9,7 @@ import {
   templateOverridesQuery,
 } from '@yayatoh/notifications';
 import { roleCan } from '@yayatoh/tenancy';
-import { Card, EmptyState, PageHeader, Select } from '@yayatoh/ui';
+import { buttonClass, Card, EmptyState, PageHeader, Select } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { TemplateEditor } from '@/components/template-editor.tsx';
@@ -87,7 +87,9 @@ export default async function EmailTemplatesPage({
       </form>
 
       <Card className="flex flex-col gap-4">
-        <h2 className="text-section">{t('editing', { kind: tk(kind), language: langName(lang) })}</h2>
+        <h2 id="template-editor" className="text-section">
+          {t('editing', { kind: tk(kind), language: langName(lang) })}
+        </h2>
         <TemplateEditor
           key={`${kind}:${lang}`}
           action={saveTemplateAction.bind(null, org, kind, lang)}
@@ -104,7 +106,15 @@ export default async function EmailTemplatesPage({
           {t('customized')}
         </h2>
         {overrides.length === 0 ? (
-          <EmptyState title={t('noneTitle')} description={t('noneDescription')} />
+          <EmptyState
+            title={t('noneTitle')}
+            description={t('noneDescription')}
+            action={
+              <Link href="#template-editor" className={buttonClass('secondary', 'md')}>
+                {t(canEdit ? 'noneAction' : 'noneActionViewer')}
+              </Link>
+            }
+          />
         ) : (
           <Card className="overflow-x-auto p-0">
             <table className="w-full text-start text-body">

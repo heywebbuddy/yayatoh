@@ -5,6 +5,7 @@ import { listVenuesQuery } from '@yayatoh/venues';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { EventWizard } from '@/components/event-wizard.tsx';
+import { HowItWorks } from '@/components/how-it-works.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
@@ -33,6 +34,7 @@ export default async function GuidedNewEventPage({
           </Link>
         }
       />
+      <HowItWorks topic="eventType" />
       <EventWizard
         action={guidedCreateAction.bind(null, org)}
         defaults={{ profile: data.profile, timezone: data.org.timezone }}

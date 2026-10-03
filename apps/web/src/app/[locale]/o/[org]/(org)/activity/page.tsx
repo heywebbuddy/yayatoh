@@ -55,7 +55,15 @@ export default async function ActivityPage({
     return (
       <>
         <PageHeader title={t('activity.title')} />
-        <EmptyState title={t('activity.noAccessTitle')} description={t('activity.noAccessDescription')} />
+        <EmptyState
+          title={t('activity.noAccessTitle')}
+          description={t('activity.noAccessDescription')}
+          action={
+            <Link href={`/o/${org}/team`} className={buttonClass('primary', 'md')}>
+              {t('activity.findOwner')}
+            </Link>
+          }
+        />
       </>
     );
   }
@@ -245,6 +253,17 @@ export default async function ActivityPage({
         <EmptyState
           title={t(filtered ? 'activity.emptyFilteredTitle' : 'activity.emptyTitle')}
           description={t('activity.emptyDescription')}
+          action={
+            filtered ? (
+              <Link href={base} className={buttonClass('secondary', 'md')}>
+                {t('activity.showAll')}
+              </Link>
+            ) : (
+              <Link href={`/o/${org}`} className={buttonClass('secondary', 'md')}>
+                {t('activity.toEvents')}
+              </Link>
+            )
+          }
         />
       ) : (
         <Table

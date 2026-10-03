@@ -113,7 +113,21 @@ export default async function SpeakersPage({
           {tp('speakerList', { count: program.speakers.length })}
         </h2>
         {program.speakers.length === 0 ? (
-          <EmptyState title={tp('emptySpeakersTitle')} description={tp('emptySpeakersDescription')} />
+          <EmptyState
+            title={tp('emptySpeakersTitle')}
+            description={canWrite ? tp('emptySpeakersDescription') : tp('emptySpeakersReadOnly')}
+            action={
+              canWrite ? (
+                <Link href="#adding-speaker-heading" className={buttonClass('primary', 'md')}>
+                  {tp('addFirstSpeaker')}
+                </Link>
+              ) : (
+                <Link href={`/o/${org}/e/${event}`} className={buttonClass('secondary', 'md')}>
+                  {tp('backToEvent')}
+                </Link>
+              )
+            }
+          />
         ) : (
           <ul className="flex list-none flex-col gap-3 p-0">
             {program.speakers.map((p) => (
@@ -177,9 +191,9 @@ export default async function SpeakersPage({
           </ul>
         )}
         {canWrite ? (
-          <section aria-labelledby="add-speaker-heading">
+          <section aria-labelledby="adding-speaker-heading">
             <Card size="panel" className="flex flex-col gap-3">
-              <h3 id="add-speaker-heading" className="text-section">
+              <h3 id="adding-speaker-heading" className="text-section">
                 {tp('addSpeaker')}
               </h3>
               <ProgramForm

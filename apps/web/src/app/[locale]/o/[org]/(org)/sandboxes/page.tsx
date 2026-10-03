@@ -1,6 +1,6 @@
 import { executeQuery } from '@yayatoh/kernel';
 import { listSandboxesQuery, MAX_SANDBOX_ORGS, roleCan } from '@yayatoh/tenancy';
-import { Button, Card, EmptyState, PageHeader, Table } from '@yayatoh/ui';
+import { Button, buttonClass, Card, EmptyState, PageHeader, Table } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { SandboxForm } from '@/components/sandbox-form.tsx';
 import { StepUpForm } from '@/components/step-up.tsx';
@@ -27,7 +27,15 @@ export default async function SandboxesPage({
     return (
       <>
         <PageHeader title={t('sandboxes.title')} description={t('sandboxes.subtitle')} />
-        <EmptyState title={t('sandboxes.noAccessTitle')} description={t('sandboxes.noAccessDescription')} />
+        <EmptyState
+          title={t('sandboxes.noAccessTitle')}
+          description={t('sandboxes.noAccessDescription')}
+          action={
+            <Link href={`/o/${org}/team`} className={buttonClass('primary', 'md')}>
+              {t('sandboxes.findOwner')}
+            </Link>
+          }
+        />
       </>
     );
   }
@@ -38,6 +46,11 @@ export default async function SandboxesPage({
         <EmptyState
           title={t('sandboxes.sandboxOfSandbox')}
           description={t('sandboxes.inSandboxDescription')}
+          action={
+            <Link href={`/o/${org}/api-keys`} className={buttonClass('primary', 'md')}>
+              {t('sandboxes.inSandboxAction')}
+            </Link>
+          }
         />
       </>
     );
@@ -56,9 +69,19 @@ export default async function SandboxesPage({
           <li>{t('sandboxes.factKeys')}</li>
         </ul>
       </Card>
-      <SandboxForm action={createSandboxAction.bind(null, org)} max={MAX_SANDBOX_ORGS} />
+      <div id="new-sandbox" className="flex flex-col">
+        <SandboxForm action={createSandboxAction.bind(null, org)} max={MAX_SANDBOX_ORGS} />
+      </div>
       {sandboxes.length === 0 ? (
-        <EmptyState title={t('sandboxes.emptyTitle')} description={t('sandboxes.emptyDescription')} />
+        <EmptyState
+          title={t('sandboxes.emptyTitle')}
+          description={t('sandboxes.emptyDescription')}
+          action={
+            <Link href="#new-sandbox" className={buttonClass('secondary', 'md')}>
+              {t('sandboxes.emptyAction')}
+            </Link>
+          }
+        />
       ) : (
         <Table
           caption={t('sandboxes.listTitle')}

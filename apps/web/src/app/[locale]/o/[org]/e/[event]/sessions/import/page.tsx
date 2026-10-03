@@ -34,7 +34,15 @@ export default async function AgendaImportPage({
     return (
       <>
         {header}
-        <EmptyState title={t('noAccessTitle')} description={t('noAccessDescription')} />
+        <EmptyState
+          title={t('noAccessTitle')}
+          description={t('noAccessDescription')}
+          action={
+            <Link href={`/o/${org}/e/${event}`} className={buttonClass('primary', 'md')}>
+              {t('backToEvent')}
+            </Link>
+          }
+        />
       </>
     );
   return (

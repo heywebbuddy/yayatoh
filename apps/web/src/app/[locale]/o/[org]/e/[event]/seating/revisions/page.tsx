@@ -141,7 +141,15 @@ export default async function RevisionsPage({
           }
         />
       ) : list.revisions.length === 0 ? (
-        <EmptyState title={t('none')} description={t('noneHint')} />
+        <EmptyState
+          title={t('none')}
+          description={t('noneHint')}
+          action={
+            <Link href={base} className={buttonClass('primary', 'md')}>
+              {tt('assign.toPlan')}
+            </Link>
+          }
+        />
       ) : (
         <>
           {sp.restored && /^\d+$/.test(sp.restored) ? (

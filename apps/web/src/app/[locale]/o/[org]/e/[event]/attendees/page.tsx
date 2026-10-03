@@ -726,9 +726,32 @@ export default async function AttendeesPage({
           <EmptyState
             title={t('attendees.emptyTitle', { term: title })}
             description={t('attendees.emptyDescription')}
+            action={
+              !demo && canWrite && data.modules.has('attendees') ? (
+                <Link href={`${base}/import`} className={buttonClass('primary', 'md')}>
+                  {t('attendees.emptyUpload')}
+                </Link>
+              ) : ticketing && opens('ticketsOrders') ? (
+                <Link href={`/o/${org}/e/${event}/tickets-orders`} className={buttonClass('primary', 'md')}>
+                  {t('attendees.toTicketsOrders')}
+                </Link>
+              ) : (
+                <Link href={`/o/${org}/e/${event}`} className={buttonClass('primary', 'md')}>
+                  {t('attendees.backToEvent')}
+                </Link>
+              )
+            }
           />
         ) : rows.length === 0 ? (
-          <EmptyState title={t('attendees.noMatches')} description={t('attendees.noMatchesHint')} />
+          <EmptyState
+            title={t('attendees.noMatches')}
+            description={t('attendees.noMatchesHint')}
+            action={
+              <Link href={base} className={buttonClass('primary', 'md')}>
+                {t('eventFilters.clear')}
+              </Link>
+            }
+          />
         ) : (
           <Table
             caption={title}
