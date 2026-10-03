@@ -78,11 +78,11 @@ export function SignInMethods({
           return (
             <li
               key={p}
-              className="flex flex-wrap items-center justify-between gap-3 border-t border-zinc-100 pt-3"
+              className="flex flex-wrap items-center justify-between gap-3 border-t border-line pt-3"
             >
               <div className="flex flex-col">
                 <span className="text-body">{t(`provider.${p}`)}</span>
-                <span className="text-caption text-zinc-600">
+                <span className="text-caption text-ink-2">
                   {row ? t('linkedOn', { date: row.linkedAt }) : t('notLinked')}
                 </span>
               </div>
@@ -132,18 +132,18 @@ export function TrustedDevices({
     <div className="flex flex-col gap-3">
       <div aria-live="polite">{done ? <Alert tone="info" title={done} /> : null}</div>
       {devices.length === 0 ? (
-        <p className="text-body text-zinc-600">{t('none')}</p>
+        <p className="text-body text-ink-2">{t('none')}</p>
       ) : (
         <>
           <ul className="flex list-none flex-col gap-3 p-0">
             {devices.map((d) => (
               <li
                 key={d.id}
-                className="flex flex-wrap items-center justify-between gap-3 border-t border-zinc-100 pt-3"
+                className="flex flex-wrap items-center justify-between gap-3 border-t border-line pt-3"
               >
                 <div className="flex flex-col">
                   <span className="text-body">{d.label}</span>
-                  <span className="text-caption text-zinc-600">
+                  <span className="text-caption text-ink-2">
                     {t('trustedOn', { date: d.createdAt })}
                     {' · '}
                     {d.lastUsedAt ? t('lastUsed', { date: d.lastUsedAt }) : t('neverUsed')}

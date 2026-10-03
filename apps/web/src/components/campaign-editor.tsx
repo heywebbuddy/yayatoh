@@ -25,8 +25,8 @@ export interface EditorEvent {
 const INITIAL: CampaignFormState = { ok: false, code: null };
 const ADDABLE = BLOCK_TYPES.filter((t) => t !== 'footer');
 const LOCALES = ['en', 'es', 'fr', 'de', 'it', 'pt', 'nl', 'ru', 'ar', 'hi', 'ja', 'zh-CN', 'zh-TW'] as const;
-const FIELD = 'min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body';
-const AREA = 'rounded-card border border-zinc-200 bg-white px-4 py-3 text-body';
+const FIELD = 'field';
+const AREA = 'rounded-card border border-line bg-surface px-4 py-3 text-body';
 
 function blankBlock(type: BlockType, id: string, eventId: string): Block {
   switch (type) {
@@ -120,7 +120,7 @@ export function CampaignEditor({
   const typeName = (type: BlockType) => t(`blockTypes.${type}`);
   const errorText = (path: string) =>
     err(path) ? (
-      <p id={`${path}-error`} className="text-caption text-pink-700">
+      <p id={`${path}-error`} className="text-caption text-danger">
         {t(`errors.${err(path)}`)}
       </p>
     ) : null;
@@ -149,7 +149,7 @@ export function CampaignEditor({
         ) : null}
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="name" className="text-caption text-zinc-600">
+            <label htmlFor="name" className="text-[13px] font-bold text-ink">
               {t('name')}
             </label>
             <input
@@ -163,7 +163,7 @@ export function CampaignEditor({
             {errorText('name')}
           </div>
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="campaign-locale" className="text-caption text-zinc-600">
+            <label htmlFor="campaign-locale" className="text-[13px] font-bold text-ink">
               {t('language')}
             </label>
             <select id="campaign-locale" name="locale" defaultValue={initial.locale} className={FIELD}>
@@ -176,7 +176,7 @@ export function CampaignEditor({
           </div>
         </div>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="subject" className="text-caption text-zinc-600">
+          <label htmlFor="subject" className="text-[13px] font-bold text-ink">
             {t('subject')}
           </label>
           <input
@@ -191,7 +191,7 @@ export function CampaignEditor({
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="preheader" className="text-caption text-zinc-600">
+            <label htmlFor="preheader" className="text-[13px] font-bold text-ink">
               {t('preheader')}
             </label>
             <input
@@ -205,7 +205,7 @@ export function CampaignEditor({
             {errorText('preheader')}
           </div>
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="font" className="text-caption text-zinc-600">
+            <label htmlFor="font" className="text-[13px] font-bold text-ink">
               {t('font')}
             </label>
             <select
@@ -224,7 +224,7 @@ export function CampaignEditor({
         </div>
         {channel !== 'email' ? (
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="smsBody" className="text-caption text-zinc-600">
+            <label htmlFor="smsBody" className="text-[13px] font-bold text-ink">
               {t('smsBody')}
             </label>
             <textarea
@@ -236,11 +236,11 @@ export function CampaignEditor({
               className={AREA}
               {...described('smsBody')}
             />
-            <p className="text-caption text-zinc-500">{t('smsHint')}</p>
+            <p className="text-caption text-ink-2">{t('smsHint')}</p>
             {errorText('smsBody')}
           </div>
         ) : null}
-        <p className="text-caption text-zinc-600">
+        <p className="text-caption text-ink-2">
           {t('mergeHelp', {
             fields: MERGE_FIELDS.map((f) => `{{${f}}}`).join(', '),
             example: '{{first_name|there}}',
@@ -254,17 +254,17 @@ export function CampaignEditor({
             const label = t('blockLabel', { n: i + 1, type: typeName(b.type) });
             return (
               <li key={b.id}>
-                <fieldset className="flex flex-col gap-3 rounded-card border border-zinc-200 p-4">
+                <fieldset className="flex flex-col gap-3 rounded-card border border-line p-4">
                   <legend
                     id={id('legend')}
                     tabIndex={-1}
-                    className="px-1 text-caption font-medium text-zinc-700 focus:outline-2"
+                    className="px-1 text-caption font-medium text-ink-2 focus:outline-2"
                   >
                     {label}
                   </legend>
                   {b.type === 'heading' || b.type === 'text' ? (
                     <div className="flex flex-col gap-1.5">
-                      <label htmlFor={id('text')} className="text-caption text-zinc-600">
+                      <label htmlFor={id('text')} className="text-[13px] font-bold text-ink">
                         {b.type === 'heading' ? t('headingText') : t('bodyText')}
                       </label>
                       {b.type === 'heading' ? (
@@ -293,7 +293,7 @@ export function CampaignEditor({
                   {b.type === 'image' ? (
                     <>
                       <div className="flex flex-col gap-1.5">
-                        <label htmlFor={id('src')} className="text-caption text-zinc-600">
+                        <label htmlFor={id('src')} className="text-[13px] font-bold text-ink">
                           {t('imageUrl')}
                         </label>
                         <input
@@ -307,7 +307,7 @@ export function CampaignEditor({
                         {errorText(p('src'))}
                       </div>
                       <div className="flex flex-col gap-1.5">
-                        <label htmlFor={id('alt')} className="text-caption text-zinc-600">
+                        <label htmlFor={id('alt')} className="text-[13px] font-bold text-ink">
                           {t('imageAlt')}
                         </label>
                         <input
@@ -324,7 +324,7 @@ export function CampaignEditor({
                   ) : null}
                   {b.type === 'button' ? (
                     <div className="flex flex-col gap-1.5">
-                      <label htmlFor={id('label')} className="text-caption text-zinc-600">
+                      <label htmlFor={id('label')} className="text-[13px] font-bold text-ink">
                         {t('buttonLabel')}
                       </label>
                       <input
@@ -340,7 +340,7 @@ export function CampaignEditor({
                   ) : null}
                   {b.type === 'button' || b.type === 'eventCard' ? (
                     <div className="flex flex-col gap-1.5">
-                      <label htmlFor={id('event')} className="text-caption text-zinc-600">
+                      <label htmlFor={id('event')} className="text-[13px] font-bold text-ink">
                         {b.type === 'button' ? t('buttonEvent') : t('cardEvent')}
                       </label>
                       <select
@@ -357,13 +357,13 @@ export function CampaignEditor({
                           </option>
                         ))}
                       </select>
-                      <p className="text-caption text-zinc-500">{t('trackedHint')}</p>
+                      <p className="text-caption text-ink-2">{t('trackedHint')}</p>
                       {errorText(p('eventId'))}
                     </div>
                   ) : null}
                   {b.type === 'button' ? (
                     <div className="flex flex-col gap-1.5">
-                      <label htmlFor={id('path')} className="text-caption text-zinc-600">
+                      <label htmlFor={id('path')} className="text-[13px] font-bold text-ink">
                         {t('buttonPath')}
                       </label>
                       <input
@@ -379,12 +379,12 @@ export function CampaignEditor({
                     </div>
                   ) : null}
                   {b.type === 'divider' ? (
-                    <p className="text-caption text-zinc-500">{t('dividerHint')}</p>
+                    <p className="text-caption text-ink-2">{t('dividerHint')}</p>
                   ) : null}
                   {b.type === 'footer' ? (
                     <>
                       <div className="flex flex-col gap-1.5">
-                        <label htmlFor={id('address')} className="text-caption text-zinc-600">
+                        <label htmlFor={id('address')} className="text-[13px] font-bold text-ink">
                           {t('postalAddress')}
                         </label>
                         <input
@@ -398,7 +398,7 @@ export function CampaignEditor({
                         {errorText(p('postalAddress'))}
                       </div>
                       <div className="flex flex-col gap-1.5">
-                        <label htmlFor={id('note')} className="text-caption text-zinc-600">
+                        <label htmlFor={id('note')} className="text-[13px] font-bold text-ink">
                           {t('footerNote')}
                         </label>
                         <input
@@ -409,7 +409,7 @@ export function CampaignEditor({
                           className={FIELD}
                         />
                       </div>
-                      <p className="text-caption text-zinc-500">{t('footerHint')}</p>
+                      <p className="text-caption text-ink-2">{t('footerHint')}</p>
                     </>
                   ) : (
                     <div className="flex flex-wrap gap-2">
@@ -453,7 +453,7 @@ export function CampaignEditor({
         </ol>
         <div className="flex flex-wrap items-end gap-2">
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="campaign-add-type" className="text-caption text-zinc-600">
+            <label htmlFor="campaign-add-type" className="text-[13px] font-bold text-ink">
               {t('blockType')}
             </label>
             <select
@@ -498,16 +498,14 @@ export function CampaignEditor({
             {t('refreshPreview')}
           </Button>
         </div>
-        <div role="status" aria-live="polite" className="text-caption text-zinc-600">
+        <div role="status" aria-live="polite" className="text-caption text-ink-2">
           {previewing ? t('previewing') : shown && !shown.ok ? t('errors.previewFailed') : null}
         </div>
         {shown?.ok && shown.src ? (
           <>
-            <p className="text-caption text-zinc-600">
-              {t('previewSubject', { subject: shown.subject ?? '' })}
-            </p>
+            <p className="text-caption text-ink-2">{t('previewSubject', { subject: shown.subject ?? '' })}</p>
             {shown.sms ? (
-              <p className="whitespace-pre-line rounded-card border border-zinc-200 bg-zinc-50 px-4 py-3 text-body">
+              <p className="whitespace-pre-line rounded-card border border-line bg-surface-2 px-4 py-3 text-body">
                 {shown.sms}
               </p>
             ) : null}
@@ -518,7 +516,7 @@ export function CampaignEditor({
               sandbox=""
               data-frame={frame}
               className={cx(
-                'h-[560px] rounded-card border border-zinc-200 bg-white',
+                'h-[560px] rounded-card border border-line bg-surface',
                 frame === 'mobile' ? 'w-full max-w-[375px]' : 'w-full',
               )}
             />

@@ -3,6 +3,7 @@ import { generateTotpSecret, secretKey, setupKey, totp } from '@yayatoh/auth/tot
 import { createEventCommand, transitionEventCommand } from '@yayatoh/events';
 import { createCtx, executeCommand } from '@yayatoh/kernel';
 import { catchUpListings, updateSiteSettingsCommand } from '@yayatoh/marketplace';
+import { applyAccountEventCommand, recordPayoutAccountCommand } from '@yayatoh/payments';
 import {
   AGREEMENT_DOCUMENTS,
   acceptAgreementCommand,
@@ -31,6 +32,9 @@ import { devAuthEnabled } from '@/server/session.ts';
  * - `event=published` (with `org=new`): the org accepts the terms, gets a refund policy, lists on
  *   the marketplace with its tenant site on, and publishes one event with a free and a paid pass
  *   (its slug comes back as `eventSlug`), already projected into the listings.
+ * - `profile=<key>` (with `event=published`): the event's profile (M4.8a: `gala` shows Donations).
+ * - `payouts=active` (with `org=new`): a fake connected account, fully enabled (gifts and direct
+ *   charges, M4.8a), as if onboarding had finished.
  */
 export async function POST(req: NextRequest) {
   const devPassword = process.env.DEV_PERSONA_PASSWORD;
@@ -62,7 +66,14 @@ export async function POST(req: NextRequest) {
       ports,
     );
     orgSlug = org.slug;
-    if (form.get('event') === 'published') eventSlug = await publishedEvent(org.id, user.id, stamp);
+    if (form.get('event') === 'published')
+      eventSlug = await publishedEvent(
+        org.id,
+        user.id,
+        stamp,
+        String(form.get('profile') ?? '') || undefined,
+      );
+    if (form.get('payouts') === 'active') await activePayouts(org.id, user.id);
   }
   for (const j of form.getAll('join')) {
     const [slug = '', role = ''] = String(j).split(':');
@@ -114,7 +125,12 @@ export async function POST(req: NextRequest) {
 }
 
 /** A public, published event with a free and a paid pass in a fresh org (see `event=published`). */
-async function publishedEvent(orgId: string, userId: string, stamp: string): Promise<string> {
+async function publishedEvent(
+  orgId: string,
+  userId: string,
+  stamp: string,
+  profile?: string,
+): Promise<string> {
   const ctx = createCtx({ orgId, actor: { type: 'user', userId }, stepUpAt: new Date() });
   for (const document of AGREEMENT_DOCUMENTS)
     await executeCommand(
@@ -141,6 +157,7 @@ async function publishedEvent(orgId: string, userId: string, stamp: string): Pro
       endsAt: new Date(starts.getTime() + 3 * 3_600_000).toISOString(),
       city: 'Boston',
       country: 'US',
+      ...(profile ? { profile } : {}),
     },
     ctx,
     ports,
@@ -160,4 +177,35 @@ async function publishedEvent(orgId: string, userId: string, stamp: string): Pro
   await executeCommand(transitionEventCommand, { eventId: event.id, transition: 'publish' }, ctx, ports);
   await catchUpListings(orgId);
   return event.slug;
+}
+
+/** A fake connected account that finished onboarding (see `payouts=active`). */
+async function activePayouts(orgId: string, userId: string) {
+  const ctx = createCtx({ orgId, actor: { type: 'user', userId }, stepUpAt: new Date() });
+  const { accountId } = await executeCommand(
+    recordPayoutAccountCommand,
+    { provider: 'fake', accountId: `fakeacct_${orgId.replace(/-/g, '').slice(-16)}`, country: 'US' },
+    ctx,
+    ports,
+  );
+  await executeCommand(
+    applyAccountEventCommand,
+    {
+      provider: 'fake',
+      id: `fakeevt_dev_${orgId}`,
+      type: 'account.updated',
+      orgId,
+      account: {
+        accountId,
+        chargesEnabled: true,
+        payoutsEnabled: true,
+        detailsSubmitted: true,
+        requirementsDue: [],
+        country: 'US',
+        defaultCurrency: 'usd',
+      },
+    },
+    createCtx({ orgId, actor: { type: 'system', name: 'dev.test-user' } }),
+    ports,
+  );
 }

@@ -38,10 +38,12 @@ export default async function EventsPage({ params, searchParams }: Props) {
   const t = await getTranslations('market');
   const sp = parseSearchParams(await searchParams);
   return (
-    <div className="min-h-dvh bg-white">
+    <div className="min-h-dvh bg-surface">
       <SiteHeader />
       <main id="main" className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 pb-8 md:px-6">
-        <h1 className="pt-6 text-[40px] leading-none font-light tracking-[-0.045em]">{t('events.title')}</h1>
+        <h1 className="pt-6 text-[40px] leading-none font-extrabold tracking-[-0.045em]">
+          {t('events.title')}
+        </h1>
         <MarketplaceResults locale={locale} params={sp} path="/events" />
       </main>
       <SiteFooter />

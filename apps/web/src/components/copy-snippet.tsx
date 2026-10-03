@@ -11,7 +11,7 @@ export function CopySnippet({ label, code }: { label: string; code: string }) {
   const [copied, setCopied] = useState(false);
   return (
     <div className="flex flex-col gap-2">
-      <label htmlFor={id} className="text-caption text-zinc-600">
+      <label htmlFor={id} className="text-[13px] font-bold text-ink">
         {label}
       </label>
       <textarea
@@ -21,7 +21,7 @@ export function CopySnippet({ label, code }: { label: string; code: string }) {
         value={code}
         dir="ltr"
         onFocus={(e) => e.currentTarget.select()}
-        className="rounded-card border border-zinc-200 bg-zinc-50 px-4 py-3 font-mono text-caption"
+        className="rounded-card border border-line bg-surface-2 px-4 py-3 font-mono text-caption"
       />
       <div className="flex items-center gap-3">
         <Button
@@ -36,7 +36,7 @@ export function CopySnippet({ label, code }: { label: string; code: string }) {
           {t('copy')}
           <span className="sr-only"> {label}</span>
         </Button>
-        <span aria-live="polite" className="text-caption text-zinc-600">
+        <span aria-live="polite" className="text-caption text-ink-2">
           {copied ? t('copied') : ''}
         </span>
       </div>

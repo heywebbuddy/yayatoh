@@ -11,7 +11,7 @@ export function SignalBanner({ count }: { count: number }) {
   return (
     <div
       data-testid="signal-banner"
-      className="flex flex-col gap-1 rounded-card border-2 border-pink-700 bg-pink-50 px-4 py-3 text-pink-700"
+      className="flex flex-col gap-1 rounded-card border-2 border-danger bg-danger-soft px-4 py-3 text-danger"
     >
       <p className="text-body font-medium">
         <StatusDot status="danger" label={t('title', { count })} />
