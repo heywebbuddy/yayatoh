@@ -18,7 +18,7 @@ import {
 } from './domain/sync.ts';
 import { newState, sha256 } from './hash.ts';
 import { connections, fieldMappings, syncCursors, syncErrors, syncRuns } from './schema.ts';
-import type { ConnectorDefinition } from './sdk/connector.ts';
+import { type ConnectorDefinition, isImporter } from './sdk/connector.ts';
 
 /**
  * Connections (M6.4a): connect through the `IntegrationAuth` port (begin → the provider's consent
@@ -349,6 +349,8 @@ export const completeConnectCommand = tenantCommand({
     const connector = requireConnector(c.connector);
     await requireConnectorEntitlementTx(tx, connector);
     if (c.status !== 'pending') throw new DomainError('invalid_state', 'Not waiting for a connect');
+    // M6.4b: an importer waits for someone to preview and start the import.
+    const importer = isImporter(connector);
     if (
       input.state !== null &&
       (c.stateHash !== sha256(input.state) || !c.stateExpiresAt || c.stateExpiresAt <= ctx.now)
@@ -364,14 +366,15 @@ export const completeConnectCommand = tenantCommand({
         stateExpiresAt: null,
         connectedBy: ctx.actor.type === 'user' ? ctx.actor.userId : null,
         connectedAt: ctx.now,
-        nextSyncAt: ctx.now,
+        nextSyncAt: importer ? null : ctx.now,
         consecutiveFailures: 0,
         updatedAt: ctx.now,
       })
       .where(eq(connections.id, c.id));
     await seedMappingsTx(tx, ctx, c.id, connector);
     // The first sync, as soon as the scheduler sees it.
-    await tx.insert(syncRuns).values({ orgId, connectionId: c.id, trigger: 'schedule', status: 'queued' });
+    if (!importer)
+      await tx.insert(syncRuns).values({ orgId, connectionId: c.id, trigger: 'schedule', status: 'queued' });
     emit({
       type: 'integrations.connection_connected',
       version: 1,
@@ -440,7 +443,12 @@ export const setConnectionPausedCommand = tenantCommand({
       .set(
         input.paused
           ? { status: 'paused', pausedAt: ctx.now, nextSyncAt: null, updatedAt: ctx.now }
-          : { status: 'active', pausedAt: null, nextSyncAt: ctx.now, updatedAt: ctx.now },
+          : {
+              status: 'active',
+              pausedAt: null,
+              nextSyncAt: isImporter(connectorByKey(c.connector)) ? null : ctx.now,
+              updatedAt: ctx.now,
+            },
       )
       .where(eq(connections.id, c.id))
       .returning();
@@ -472,6 +480,8 @@ export const setSyncIntervalCommand = tenantCommand({
     const c = await connectionTx(tx, input.connectionId, true);
     if (c.status === 'revoked' || c.status === 'failed')
       throw new DomainError('invalid_state', 'This connection has ended');
+    if (isImporter(connectorByKey(c.connector)))
+      throw new DomainError('invalid_state', 'An import runs only when you start it', { reason: 'importer' });
     const next = c.lastSyncAt ? new Date(c.lastSyncAt.getTime() + input.minutes * 60_000) : ctx.now;
     await tx
       .update(connections)

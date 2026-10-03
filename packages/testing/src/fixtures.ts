@@ -18,8 +18,10 @@ import {
   staffRequestCommand,
 } from '@yayatoh/assistance';
 import {
+  addGuestCommand,
   attendeeImportBulk,
   attendeeLabelBulk,
+  setAttendeeLabelsCommand,
   stageImportCommand,
   validateImportCommand,
 } from '@yayatoh/attendees';
@@ -158,7 +160,14 @@ import {
   updatePartyGuestCommand,
   validateGuestImportCommand,
 } from '@yayatoh/guests';
-import { runSync } from '@yayatoh/integrations';
+import {
+  fakeIntegrations,
+  linkEventSheet,
+  runSync,
+  sheetLinksQuery,
+  sheetsRemoteEdit,
+  sheetsRemoteRows,
+} from '@yayatoh/integrations';
 import { type Ctx, createCtx, executeCommand, executeQuery, uuidv7 } from '@yayatoh/kernel';
 import {
   attributeOrderCommand,
@@ -326,7 +335,7 @@ import {
 import { createVenueCommand, submitQuoteRequestCommand } from '@yayatoh/venues';
 import { createEndpointCommand } from '@yayatoh/webhooks';
 import { sql } from 'drizzle-orm';
-import { connectDemo, fakeAuth } from './integrations.ts';
+import { connectConnector, connectDemo, fakeAuth } from './integrations.ts';
 import { catchUpTimeline } from './merge.ts';
 import { ports, runBulk, submitRegistrationForm } from './ports.ts';
 
@@ -2614,6 +2623,32 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   // mappings, cursors, a run, record links and the demo's broken record in the errors inbox).
   const demo = await connectDemo(ctx());
   await runSync(org.id, demo.connectionId, { auth: fakeAuth }, ports);
+  // M6.4b: Google Sheets connected, the event's attendee list linked to a sheet and synced (a
+  // sheet link, row links), then a cell edited in the sheet while the attendee changed here later:
+  // the next sync keeps ours and puts the sheet's value in the inbox (a conflict and its values).
+  const sheetGuest = await executeCommand(
+    addGuestCommand,
+    { eventId: event.id, name: 'Sheet Guest', email: `sheet.guest.${org.id.slice(-8)}@fixture.test` },
+    ctx(),
+    ports,
+  );
+  const sheets = await connectConnector(ctx(), 'google_sheets');
+  await linkEventSheet(ctx(), { auth: fakeAuth }, ports, { connectionId: sheets.connectionId, eventId: event.id });
+  await runSync(org.id, sheets.connectionId, { auth: fakeAuth }, ports);
+  const [sheetLink] = await executeQuery(sheetLinksQuery, { connectionId: sheets.connectionId }, ctx(), ports);
+  const sheetAccount = fakeIntegrations.account(sheets.authConnectionId);
+  const guestRow = sheetAccount && sheetLink
+    ? sheetsRemoteRows(sheetAccount, sheetLink.spreadsheetId).find((r) => r.values.email === sheetGuest.email)
+    : undefined;
+  if (!sheetAccount || !sheetLink || !guestRow) throw new Error('fixture: the sheet did not fill');
+  sheetsRemoteEdit(sheetAccount, sheetLink.spreadsheetId, guestRow.rowId, { name: 'Sheet Guest (sheet)' }, new Date(Date.now() - 60_000));
+  await executeCommand(
+    setAttendeeLabelsCommand,
+    { eventId: event.id, attendeeIds: [sheetGuest.id], add: ['vip'] },
+    ctx(),
+    ports,
+  );
+  await runSync(org.id, sheets.connectionId, { auth: fakeAuth }, ports, { force: true });
   return {
     org,
     ownerId,

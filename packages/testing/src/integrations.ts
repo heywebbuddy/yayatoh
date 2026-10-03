@@ -1,6 +1,7 @@
 import {
   beginConnectCommand,
   completeConnectCommand,
+  connectorByKey,
   demoFakeProvider,
   fakeAuthForConnectors,
   fakeIntegrations,
@@ -17,23 +18,29 @@ export const fakeAuth: IntegrationAuth = fakeAuthForConnectors();
  * screen's Allow, resolve through the port, complete (default mappings, first sync queued).
  */
 export async function connectDemo(ctx: Ctx): Promise<{ connectionId: string; authConnectionId: string }> {
+  return connectConnector(ctx, 'demo');
+}
+
+/** Connect any connector through its fake provider (M6.4b: `eventbrite`, `google_sheets`). */
+export async function connectConnector(
+  ctx: Ctx,
+  key: string,
+): Promise<{ connectionId: string; authConnectionId: string }> {
   const orgId = requireOrg(ctx);
-  const { connectionId, state } = await executeCommand(
-    beginConnectCommand,
-    { connector: 'demo' },
-    ctx,
-    ports,
-  );
+  const def = connectorByKey(key);
+  if (!def?.fake) throw new Error(`no fake for connector ${key}`);
+  const providerConfigKey = def.providerConfigKey;
+  const { connectionId, state } = await executeCommand(beginConnectCommand, { connector: key }, ctx, ports);
   await fakeAuth.beginConnect({
     orgId,
     connectionId,
-    providerConfigKey: 'demo',
+    providerConfigKey,
     scopes: [],
     state,
     callbackUrl: '/callback',
   });
-  fakeIntegrations.approve({ orgId, connectionId, providerConfigKey: 'demo' }, demoFakeProvider);
-  const resolved = await fakeAuth.resolve({ orgId, connectionId, providerConfigKey: 'demo' });
+  fakeIntegrations.approve({ orgId, connectionId, providerConfigKey }, key === 'demo' ? demoFakeProvider : def.fake);
+  const resolved = await fakeAuth.resolve({ orgId, connectionId, providerConfigKey });
   if (!resolved) throw new Error('fake connect did not resolve');
   await executeCommand(
     completeConnectCommand,

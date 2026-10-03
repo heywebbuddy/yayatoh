@@ -24,7 +24,7 @@ export {
   twoOrgs,
   userCtx,
 } from './fixtures.ts';
-export { connectDemo, fakeAuth } from './integrations.ts';
+export { connectConnector, connectDemo, fakeAuth } from './integrations.ts';
 export { quietDevice, revokeDevice } from './live.ts';
 export {
   bareOrg,

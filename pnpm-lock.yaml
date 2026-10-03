@@ -1912,6 +1912,9 @@ importers:
 
   packages/modules/integrations:
     dependencies:
+      '@yayatoh/attendees':
+        specifier: workspace:*
+        version: link:../attendees
       '@yayatoh/billing':
         specifier: workspace:*
         version: link:../billing
@@ -1924,12 +1927,21 @@ importers:
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../../db
+      '@yayatoh/events':
+        specifier: workspace:*
+        version: link:../events
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../kernel
+      '@yayatoh/orders':
+        specifier: workspace:*
+        version: link:../orders
       '@yayatoh/platform':
         specifier: workspace:*
         version: link:../../platform
+      '@yayatoh/ticketing':
+        specifier: workspace:*
+        version: link:../ticketing
       drizzle-orm:
         specifier: 'catalog:'
         version: 0.45.3(@opentelemetry/api@1.9.0)(kysely@0.29.6)(pg@8.23.0)(postgres@3.4.9)

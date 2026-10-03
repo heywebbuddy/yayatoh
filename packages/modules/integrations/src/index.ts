@@ -99,3 +99,55 @@ export {
   type RemoteRecord,
   type SyncIO,
 } from './sdk/connector.ts';
+// M6.4b: the Eventbrite importer and Google Sheets live sync.
+export { linkedLocalIdTx } from './connectors/links.ts';
+export {
+  EVENTBRITE,
+  eventbriteConnector,
+  eventbriteOrganization,
+} from './connectors/eventbrite/index.ts';
+export {
+  EB_EVENTS_PAGE,
+  EB_ORDERS_PAGE,
+  eventbriteFakeProvider,
+  eventbriteRemoteRefund,
+  eventbriteRemoteRename,
+  eventbriteRequests,
+} from './connectors/eventbrite/fake.ts';
+export { EB_EVENTS, EB_ORDERS, EB_ORGANIZATION, EVENTBRITE_FIXTURE_COUNTS } from './connectors/eventbrite/fixture.ts';
+export {
+  alreadyImportedQuery,
+  eventbritePreview,
+  ImportPreviewDto,
+  ImportResultDto,
+  importPreviewSerializer,
+  importResultQuery,
+  importTargetQuery,
+} from './connectors/eventbrite/preview.ts';
+export {
+  GOOGLE_SHEETS,
+  googleSheetsConnector,
+  rowRecordId,
+  SHEET_COLUMNS,
+  type SheetScope,
+} from './connectors/google-sheets/index.ts';
+export {
+  googleSheetsFakeProvider,
+  type SheetRow,
+  sheetsRemoteAdd,
+  sheetsRemoteDelete,
+  sheetsRemoteEdit,
+  sheetsRemoteList,
+  sheetsRemoteRows,
+} from './connectors/google-sheets/fake.ts';
+export {
+  linkEventSheet,
+  linkSheetCommand,
+  SheetLinkDto,
+  sheetLinksQuery,
+  sheetLinksSerializer,
+  sheetLinkTargetQuery,
+  sheetUrl,
+  unlinkSheetCommand,
+} from './connectors/google-sheets/links.ts';
+export { isImporter, type WriteMeta } from './sdk/connector.ts';

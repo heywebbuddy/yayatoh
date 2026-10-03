@@ -415,3 +415,15 @@ export {
   waitlistRef,
   waitlistToken,
 } from './waitlist.ts';
+// M6.4b: orders imported from another platform (the Eventbrite importer).
+export {
+  IMPORT_SOURCES,
+  IMPORTED_STATUSES,
+  type ImportedOrderInput,
+  ImportedOrdersSummaryDto,
+  type ImportSource,
+  importedOrderIdTx,
+  importedOrdersSummaryTx,
+  importOrderTx,
+  ORDER_IMPORTED_EVENT,
+} from './imported.ts';

@@ -168,3 +168,5 @@ export {
   walletPassSync,
   walletSerial,
 } from './wallet.ts';
+// M6.4b: ticket counts of imported orders.
+export { ticketCountsForOrdersTx } from './order-ticket-counts.ts';

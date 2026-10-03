@@ -20,6 +20,7 @@ import {
   REVOKE_REASONS,
   RUN_STATUSES,
   RUN_TRIGGERS,
+  SHEET_LINK_STATUSES,
 } from './domain/sync.ts';
 
 export const integrationsSchema = pgSchema('integrations');
@@ -287,5 +288,78 @@ export const syncErrors = tenantTable(
     check('sync_errors_external_check', sql`external_id is null or length(external_id) between 1 and 255`),
     check('sync_errors_counts_check', sql`attempts between 0 and 1000 and occurrences between 1 and 1000000`),
     check('sync_errors_resolved_check', sql`(status = 'open') = (resolved_at is null)`),
+  ],
+);
+
+/**
+ * M6.4b: the losing side of a last-writer conflict, per field, for the errors inbox (its row is a
+ * `conflict` step). The inbox row itself keeps codes only; the values a person needs to settle the
+ * conflict live here, org-scoped, and go when the row is resolved or dismissed.
+ */
+export const syncConflicts = tenantTable(
+  integrationsSchema,
+  'sync_conflicts',
+  {
+    errorId: uuid('error_id').notNull(),
+    connectionId: uuid('connection_id').notNull(),
+    field: text('field').notNull(),
+    /** The value that won (now on both sides once the run finishes). */
+    kept: text('kept').notNull(),
+    /** The value that lost (overwritten). */
+    lost: text('lost').notNull(),
+  },
+  (t) => [
+    uniqueIndex('sync_conflicts_org_error_field_key').on(t.orgId, t.errorId, t.field),
+    index('sync_conflicts_org_connection_idx').on(t.orgId, t.connectionId),
+    foreignKey({
+      name: 'sync_conflicts_error_fk',
+      columns: [t.orgId, t.errorId],
+      foreignColumns: [syncErrors.orgId, syncErrors.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'sync_conflicts_connection_fk',
+      columns: [t.orgId, t.connectionId],
+      foreignColumns: [connections.orgId, connections.id],
+    }).onDelete('cascade'),
+    check('sync_conflicts_field_check', sql`field ~ '^[a-z][a-z0-9_]{0,62}$'`),
+    check('sync_conflicts_values_check', sql`length(kept) <= 1000 and length(lost) <= 1000`),
+  ],
+);
+
+/**
+ * M6.4b: an event's attendee list linked to a spreadsheet through a Google Sheets connection.
+ * One active link per event and connection; unlinking keeps the row as history (the sheet stays
+ * at Google, nothing syncs). `(org_id, event_id)` references `events.events` (hand-written FK).
+ */
+export const sheetLinks = tenantTable(
+  integrationsSchema,
+  'sheet_links',
+  {
+    connectionId: uuid('connection_id').notNull(),
+    eventId: uuid('event_id').notNull(),
+    /** The spreadsheet's id at Google (not a secret: it is in the sheet's URL). */
+    spreadsheetId: text('spreadsheet_id').notNull(),
+    title: text('title').notNull(),
+    status: text('status').notNull().default('active'),
+    linkedBy: uuid('linked_by'),
+    unlinkedAt: timestamp('unlinked_at', { withTimezone: true, mode: 'date' }),
+  },
+  (t) => [
+    uniqueIndex('sheet_links_org_connection_event_active_key')
+      .on(t.orgId, t.connectionId, t.eventId)
+      .where(sql`status = 'active'`),
+    uniqueIndex('sheet_links_org_spreadsheet_active_key')
+      .on(t.orgId, t.spreadsheetId)
+      .where(sql`status = 'active'`),
+    index('sheet_links_org_event_idx').on(t.orgId, t.eventId),
+    foreignKey({
+      name: 'sheet_links_connection_fk',
+      columns: [t.orgId, t.connectionId],
+      foreignColumns: [connections.orgId, connections.id],
+    }).onDelete('cascade'),
+    check('sheet_links_status_check', inList('status', SHEET_LINK_STATUSES)),
+    check('sheet_links_unlinked_check', sql`(status = 'unlinked') = (unlinked_at is not null)`),
+    check('sheet_links_spreadsheet_check', sql`spreadsheet_id ~ '^[A-Za-z0-9_-]{1,128}$'`),
+    check('sheet_links_title_check', sql`length(title) between 1 and 200`),
   ],
 );
