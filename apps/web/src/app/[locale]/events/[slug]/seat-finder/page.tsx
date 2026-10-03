@@ -61,15 +61,15 @@ export default async function SeatFinderPage({
   const ticket = (sp.ticket ?? '').slice(0, 200);
   const helpCheck = ticket ? await checkHelpTicket(slug, ticket) : null;
   const help = (
-    <section aria-labelledby="need-help" className="flex flex-col gap-2 border-t border-zinc-200 pt-5">
+    <section aria-labelledby="need-help" className="flex flex-col gap-2 border-t border-line pt-5">
       <h2 id="need-help" className="text-section">
         {t('assistance.guest.needHelp')}
       </h2>
       {!ticket ? (
-        <p className="text-body text-zinc-600">{t('assistance.guest.needTicketLink')}</p>
+        <p className="text-body text-ink-2">{t('assistance.guest.needTicketLink')}</p>
       ) : helpCheck?.valid ? (
         <>
-          <p className="text-body text-zinc-600">{t('assistance.guest.needHelpHint')}</p>
+          <p className="text-body text-ink-2">{t('assistance.guest.needHelpHint')}</p>
           <Link
             href={`/events/${slug}/seat-finder/help?ticket=${encodeURIComponent(ticket)}`}
             className={buttonClass('primary', 'md', 'self-start')}
@@ -126,7 +126,7 @@ export default async function SeatFinderPage({
       {header}
       {dates.length > 1 ? (
         <nav aria-label={t('seatingDates.finderLabel')} className="flex flex-col gap-1.5">
-          <p className="text-caption text-zinc-600">{t('seatingDates.finderIntro')}</p>
+          <p className="text-caption text-ink-2">{t('seatingDates.finderIntro')}</p>
           <ul className="flex list-none flex-wrap gap-1.5">
             {dates.map((d) => {
               const on = date?.id === d.id;
@@ -135,7 +135,7 @@ export default async function SeatFinderPage({
                   <Link
                     href={`/events/${slug}/seat-finder?date=${d.id}`}
                     aria-current={on ? 'page' : undefined}
-                    className={`inline-flex min-h-9 items-center rounded-pill border px-3.5 text-[13px] ${on ? 'border-ink bg-ink text-white' : 'border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50'}`}
+                    className={`inline-flex min-h-9 items-center rounded-pill border px-3.5 text-[13px] ${on ? 'border-ink bg-tag text-white' : 'border-line bg-surface text-ink-2 hover:bg-surface-2'}`}
                   >
                     {day.format(d.startsAt)}
                   </Link>
@@ -157,7 +157,7 @@ export default async function SeatFinderPage({
         reset={resetFinderAction.bind(null, slug)}
       />
       {help}
-      <Link href={`/events/${slug}`} className="self-start text-caption text-zinc-600 underline">
+      <Link href={`/events/${slug}`} className="self-start text-caption text-ink-2 underline">
         {t('seatFinder.toEvent')}
       </Link>
     </main>

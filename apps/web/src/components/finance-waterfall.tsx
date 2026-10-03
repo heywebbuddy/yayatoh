@@ -20,25 +20,18 @@ export async function FinanceWaterfall({ report, locale }: { report: FinanceRepo
     <Card size="panel" className="flex flex-col gap-4">
       <div className="flex flex-col gap-1">
         <h2 className="text-section">{t('finance.title')}</h2>
-        <p className="max-w-prose text-body text-zinc-600">{t('finance.description')}</p>
+        <p className="max-w-prose text-body text-ink-2">{t('finance.description')}</p>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full border-collapse text-body">
           <caption className="sr-only">{t('finance.caption')}</caption>
           <thead>
-            <tr className="border-b border-zinc-200">
-              <th
-                scope="col"
-                className="px-3 py-2 text-start font-mono text-label font-normal uppercase text-zinc-500"
-              >
+            <tr className="border-b border-line">
+              <th scope="col" className="px-3 py-2 text-start text-label uppercase text-ink-2">
                 {t('finance.line')}
               </th>
               {report.currencies.map((c) => (
-                <th
-                  key={c}
-                  scope="col"
-                  className="px-3 py-2 text-end font-mono text-label font-normal uppercase text-zinc-500"
-                >
+                <th key={c} scope="col" className="px-3 py-2 text-end text-label uppercase text-ink-2">
                   {c}
                 </th>
               ))}
@@ -49,13 +42,11 @@ export async function FinanceWaterfall({ report, locale }: { report: FinanceRepo
               <tr
                 key={l.key}
                 className={
-                  l.key === 'finance.net'
-                    ? 'border-t-2 border-zinc-900 font-medium'
-                    : 'border-b border-zinc-100'
+                  l.key === 'finance.net' ? 'border-t-2 border-ink font-medium' : 'border-b border-line'
                 }
               >
                 <th scope="row" className="px-3 py-2.5 text-start font-normal">
-                  <span aria-hidden="true" className="inline-block w-4 text-zinc-500">
+                  <span aria-hidden="true" className="inline-block w-4 text-ink-2">
                     {l.sign}
                   </span>
                   {t(`metric.${l.key}`)}

@@ -24,7 +24,9 @@ export function BoothMap({ booths, label }: { booths: readonly MapBooth[]; label
       viewBox={`0 0 ${doc.width} ${doc.height}`}
       role="img"
       aria-label={label}
-      className="h-auto w-full rounded-card border border-zinc-200 bg-zinc-50"
+      // Floor plans are drawn on light "paper" in both modes, like a printed plan (ADR 0022).
+      data-theme="light"
+      className="h-auto w-full rounded-card border border-line bg-surface-2"
       preserveAspectRatio="xMidYMid meet"
     >
       {booths.map((b) => {
@@ -38,7 +40,7 @@ export function BoothMap({ booths, label }: { booths: readonly MapBooth[]; label
               height={b.height}
               rx={12}
               strokeWidth={6}
-              className={b.taken ? 'fill-accent-100 stroke-accent-700' : 'fill-white stroke-zinc-400'}
+              className={b.taken ? 'fill-primary-soft stroke-primary' : 'fill-surface stroke-line-strong'}
             />
             <text
               x={b.x + b.width / 2}
@@ -46,7 +48,7 @@ export function BoothMap({ booths, label }: { booths: readonly MapBooth[]; label
               fontSize={size}
               textAnchor="middle"
               dominantBaseline="central"
-              className="fill-zinc-900 font-medium"
+              className="fill-ink font-extrabold"
             >
               {b.number}
             </text>

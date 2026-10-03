@@ -2,18 +2,26 @@ import { ASSISTANCE_CHANNEL, assigneesQuery, queueQuery, type RequestDto } from 
 import { getUsersByIds } from '@yayatoh/auth';
 import { executeQuery } from '@yayatoh/kernel';
 import { realtimeChannelName } from '@yayatoh/platform';
-import { Card, EmptyState, PageHeader, StatusDot } from '@yayatoh/ui';
+import { Alert, Card, EmptyState, PageHeader, StatCard, StatusPill, Tabs, tabClass } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { AssistanceLive, RequestActions } from '@/components/assistance-queue.tsx';
 import { SlaTimer } from '@/components/assistance-sla.tsx';
+import { Crumbs } from '@/components/crumbs.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { realtimeUrl } from '@/lib/realtime-url.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import { assistanceAction } from './actions.ts';
 
-const PRIORITY_DOT = { urgent: 'danger', high: 'warning', normal: 'neutral' } as const;
+const PRIORITY_TONE = { urgent: 'danger', high: 'waiting', normal: 'neutral' } as const;
+const STATE_TONE = {
+  new: 'waiting',
+  assigned: 'info',
+  in_progress: 'brand',
+  resolved: 'success',
+  cancelled: 'neutral',
+} as const;
 
 /**
  * The event's help queue (M3.3b): guests' "Need help" requests from the seat finder and door
@@ -34,10 +42,19 @@ export default async function AssistancePage({
   const { data, event: ev, can } = await loadEvent(org, event, 'assistance');
   if (!data.modules.has('checkin')) notFound();
   const t = await getTranslations('assistance');
+  const crumbs = (
+    <Crumbs
+      items={[
+        { label: data.org.name, href: `/o/${org}` },
+        { label: ev.name, href: `/o/${org}/e/${event}` },
+        { label: t('pageTitle') },
+      ]}
+    />
+  );
   if (!can('assistance:read'))
     return (
       <>
-        <PageHeader title={t('pageTitle')} />
+        <PageHeader breadcrumb={crumbs} title={t('pageTitle')} />
         <EmptyState title={t('noAccessTitle')} description={t('noAccess')} />
       </>
     );
@@ -89,23 +106,36 @@ export default async function AssistancePage({
 
   return (
     <>
-      <PageHeader title={t('pageTitle')} description={t('description', { event: ev.name })} />
+      <PageHeader
+        breadcrumb={crumbs}
+        title={t('pageTitle')}
+        description={t('description', { event: ev.name })}
+      />
       <AssistanceLive url={realtimeUrl(realtimeChannelName(ASSISTANCE_CHANNEL, data.org.id, ev.id))} />
-      <nav aria-label={t('statusLabel')} className="flex flex-wrap gap-2">
+      {status === 'open' ? (
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4" data-testid="assistance-stats">
+          <StatCard label={t('stats.open')} value={requests.length} />
+          <StatCard
+            label={t('stats.urgent')}
+            value={requests.filter((r) => r.priority === 'urgent').length}
+          />
+          <StatCard label={t('stats.waiting')} value={requests.filter((r) => r.state === 'new').length} />
+          <StatCard label={t('stats.unassigned')} value={requests.filter((r) => !r.assignee).length} />
+        </div>
+      ) : null}
+      <Tabs label={t('statusLabel')} className="self-start">
         {(['open', 'closed'] as const).map((s) => (
           <Link
             key={s}
             href={s === 'open' ? base : `${base}?status=closed`}
             aria-current={s === status ? 'page' : undefined}
-            className={`inline-flex min-h-10 items-center rounded-pill border px-4 text-body ${
-              s === status ? 'border-zinc-900 bg-zinc-900 text-white' : 'border-zinc-200 bg-white'
-            }`}
+            className={tabClass(s === status)}
           >
             {t(`tab.${s}`)}
           </Link>
         ))}
-      </nav>
-      {!canManage ? <p className="text-body text-zinc-600">{t('readOnly')}</p> : null}
+      </Tabs>
+      {!canManage ? <Alert tone="info" title={t('readOnly')} /> : null}
       {requests.length === 0 ? (
         <EmptyState
           title={status === 'open' ? t('empty.openTitle') : t('empty.closedTitle')}
@@ -124,10 +154,12 @@ export default async function AssistancePage({
               <li key={r.id} data-request={r.number}>
                 <Card size="panel" className="flex flex-col gap-3">
                   <div className="flex flex-wrap items-center justify-between gap-2">
-                    <h2 className="text-section">{title}</h2>
-                    <span className="flex flex-wrap items-center gap-3 text-caption">
-                      <StatusDot status={PRIORITY_DOT[r.priority]} label={t(`priority.${r.priority}`)} />
-                      <span data-testid="request-state">{t(`state.${r.state}`)}</span>
+                    <h2 className="m-0 text-card text-ink">{title}</h2>
+                    <span className="flex flex-wrap items-center gap-2 text-caption">
+                      <StatusPill tone={PRIORITY_TONE[r.priority]} label={t(`priority.${r.priority}`)} />
+                      <span data-testid="request-state" className="inline-flex">
+                        <StatusPill tone={STATE_TONE[r.state]} label={t(`state.${r.state}`)} />
+                      </span>
                       <SlaTimer
                         dueAt={r.dueAt.toISOString()}
                         running={r.state === 'new'}
@@ -135,26 +167,31 @@ export default async function AssistancePage({
                       />
                     </span>
                   </div>
-                  <p className="text-caption text-zinc-600">
+                  <p className="m-0 text-caption text-ink-2 tabular-nums">
                     {[
                       t(`source.${r.source}`),
                       t('askedAt', { time: when.format(r.createdAt) }),
                       assigneeText(r),
                     ].join(' · ')}
                   </p>
-                  {r.guest ? <p className="text-body">{t('guestLine', r.guest)}</p> : null}
-                  {where.length ? <p className="text-body">{where.join(' · ')}</p> : null}
-                  {r.note ? (
-                    <blockquote className="border-s-2 border-zinc-200 ps-3 text-body">{r.note}</blockquote>
+                  {r.guest ? (
+                    <p className="m-0 text-body font-bold text-ink">{t('guestLine', r.guest)}</p>
                   ) : null}
-                  <details className="text-caption text-zinc-700">
-                    <summary className="min-h-6 cursor-pointer">
+                  {where.length ? <p className="m-0 text-body text-ink">{where.join(' · ')}</p> : null}
+                  {r.note ? (
+                    <blockquote className="m-0 rounded-tile border-s-4 border-primary bg-surface-2 px-4 py-3 text-body text-ink">
+                      {r.note}
+                    </blockquote>
+                  ) : null}
+                  <details className="text-caption text-ink-2">
+                    <summary className="min-h-6 cursor-pointer font-bold text-primary-ink">
                       {t('activityTitle', { count: r.activity.length })}
                     </summary>
-                    <ol className="mt-2 flex list-none flex-col gap-1 p-0">
+                    <ol className="mt-2 flex list-none flex-col gap-1.5 border-s-2 border-line p-0 ps-3">
                       {r.activity.map((a, i) => (
                         <li key={`${r.id}-${i}`}>
-                          {when.format(a.at)} · {activityText(a)}
+                          <span className="font-bold text-ink tabular-nums">{when.format(a.at)}</span> ·{' '}
+                          {activityText(a)}
                         </li>
                       ))}
                     </ol>

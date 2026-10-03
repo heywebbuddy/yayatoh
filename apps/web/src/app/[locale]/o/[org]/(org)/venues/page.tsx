@@ -78,7 +78,7 @@ export default async function VenuesPage({
       )}
       <Link
         href={showArchived ? `/o/${org}/venues` : `/o/${org}/venues?archived=1`}
-        className="self-start text-caption text-zinc-600 underline underline-offset-2"
+        className="self-start text-caption text-ink-2 underline underline-offset-2"
       >
         {showArchived ? t('hideArchived') : t('showArchived')}
       </Link>
@@ -96,7 +96,7 @@ export default async function VenuesPage({
           </Card>
         </section>
       ) : (
-        <p className="text-body text-zinc-500">{t('viewerNotice')}</p>
+        <p className="text-body text-ink-2">{t('viewerNotice')}</p>
       )}
     </>
   );

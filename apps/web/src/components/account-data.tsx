@@ -23,8 +23,8 @@ export function AccountExport() {
       <h2 id="data-heading" className="text-section">
         {t('security.data.title')}
       </h2>
-      <p className="text-body text-zinc-600">{t('security.data.explain')}</p>
-      <ul className="flex list-disc flex-col gap-1 ps-5 text-body text-zinc-600">
+      <p className="text-body text-ink-2">{t('security.data.explain')}</p>
+      <ul className="flex list-disc flex-col gap-1 ps-5 text-body text-ink-2">
         <li>{t('security.data.includes')}</li>
         <li>{t('security.data.excludes')}</li>
       </ul>
@@ -67,11 +67,11 @@ export function AccountDelete({ email, blockers }: { email: string; blockers: re
         ? t('security.delete.confirmMismatch')
         : undefined;
   return (
-    <Card role="region" aria-labelledby="delete-heading" className="flex flex-col gap-3 border-pink-700">
+    <Card role="region" aria-labelledby="delete-heading" className="flex flex-col gap-3 border-danger">
       <h2 id="delete-heading" className="text-section">
         {t('security.delete.title')}
       </h2>
-      <ul className="flex list-disc flex-col gap-1 ps-5 text-body text-zinc-600">
+      <ul className="flex list-disc flex-col gap-1 ps-5 text-body text-ink-2">
         <li>{t('security.delete.signOut')}</li>
         <li>{t('security.delete.teams')}</li>
         <li>{t('security.delete.orders')}</li>

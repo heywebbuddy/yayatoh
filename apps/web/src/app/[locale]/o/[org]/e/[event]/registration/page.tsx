@@ -177,8 +177,8 @@ export default async function RegistrationPage({
       >
         {canWrite ? tf('openBuilder') : tf('openReadOnly')}
       </Link>
-      {canWrite ? null : <p className="text-body text-zinc-500">{t('viewerNotice')}</p>}
-      <p className="text-caption text-zinc-600">
+      {canWrite ? null : <p className="text-body text-ink-2">{t('viewerNotice')}</p>}
+      <p className="text-caption text-ink-2">
         {setup.pack.active
           ? t('packActive', { registrants: setup.pack.quotas.registrants ?? 0 })
           : t('packInactive')}
@@ -204,15 +204,15 @@ export default async function RegistrationPage({
           {t('types')}
         </h2>
         {setup.types.length === 0 ? (
-          <p className="text-body text-zinc-500">{t('noTypes')}</p>
+          <p className="text-body text-ink-2">{t('noTypes')}</p>
         ) : (
           <ul className="flex list-none flex-col gap-3 p-0">
             {setup.types.map((x) => (
               <li key={x.id}>
                 <Card className="flex flex-col gap-2">
                   <h3 className="text-body font-medium">{x.name}</h3>
-                  <p className="text-caption text-zinc-600">{eligibilitySummary(x)}</p>
-                  <p className="text-caption text-zinc-600">
+                  <p className="text-caption text-ink-2">{eligibilitySummary(x)}</p>
+                  <p className="text-caption text-ink-2">
                     {x.capacity === null
                       ? t('takenUnlimited', { taken: x.quantityHeld + x.quantitySold })
                       : t('taken', { taken: x.quantityHeld + x.quantitySold, capacity: x.capacity })}
@@ -222,7 +222,7 @@ export default async function RegistrationPage({
                   </p>
                   {canWrite ? (
                     <details>
-                      <summary className="min-h-6 cursor-pointer text-caption text-zinc-600">
+                      <summary className="min-h-6 cursor-pointer text-caption text-ink-2">
                         {t('editNamed', { name: x.name })}
                       </summary>
                       <div className="flex flex-col gap-3 pt-3">
@@ -275,17 +275,17 @@ export default async function RegistrationPage({
           {t('items')}
         </h2>
         {setup.items.length === 0 ? (
-          <p className="text-body text-zinc-500">{t('noItems')}</p>
+          <p className="text-body text-ink-2">{t('noItems')}</p>
         ) : (
           <ul className="flex list-none flex-col gap-3 p-0">
             {setup.items.map((x) => (
               <li key={x.id}>
                 <Card className="flex flex-col gap-2">
                   <h3 className="text-body font-medium">{x.name}</h3>
-                  <p className="text-caption text-zinc-600">{t(`kind.${x.kind}`)}</p>
+                  <p className="text-caption text-ink-2">{t(`kind.${x.kind}`)}</p>
                   {canWrite ? (
                     <details>
-                      <summary className="min-h-6 cursor-pointer text-caption text-zinc-600">
+                      <summary className="min-h-6 cursor-pointer text-caption text-ink-2">
                         {t('editNamed', { name: x.name })}
                       </summary>
                       <div className="flex flex-col gap-3 pt-3">
@@ -338,23 +338,23 @@ export default async function RegistrationPage({
           <h2 id="matrix-heading" className="text-section">
             {t('matrix')}
           </h2>
-          <p className="text-body text-zinc-600">{t('matrixHint')}</p>
+          <p className="text-body text-ink-2">{t('matrixHint')}</p>
           <section
             // biome-ignore lint/a11y/noNoninteractiveTabindex: a scrollable region must be reachable by keyboard (axe scrollable-region-focusable)
             tabIndex={0}
             aria-label={t('matrixCaption')}
             // `relative`: absolutely positioned sr-only labels are clipped by the scroller too.
-            className="relative overflow-x-auto rounded-card border border-zinc-200 bg-white"
+            className="relative overflow-x-auto rounded-card border border-line bg-surface"
           >
             <table className="w-full border-collapse text-start">
               <caption className="sr-only">{t('matrixCaption')}</caption>
               <thead>
                 <tr>
-                  <th scope="col" className="p-3 text-start text-caption text-zinc-600">
+                  <th scope="col" className="p-3 text-start text-caption text-ink-2">
                     {t('typeColumn')}
                   </th>
                   {setup.items.map((i) => (
-                    <th key={i.id} scope="col" className="p-3 text-start text-caption text-zinc-600">
+                    <th key={i.id} scope="col" className="p-3 text-start text-caption text-ink-2">
                       {i.name}
                     </th>
                   ))}
@@ -362,7 +362,7 @@ export default async function RegistrationPage({
               </thead>
               <tbody>
                 {setup.types.map((x) => (
-                  <tr key={x.id} className="border-t border-zinc-100 align-top">
+                  <tr key={x.id} className="border-t border-line align-top">
                     <th scope="row" className="p-3 text-start text-body font-medium">
                       {x.name}
                     </th>
@@ -379,7 +379,7 @@ export default async function RegistrationPage({
                             disableAction={disableCellAction.bind(null, org, event, x.id, i.id)}
                           />
                           {cell ? (
-                            <p className="pt-1 text-caption text-zinc-500">
+                            <p className="pt-1 text-caption text-ink-2">
                               {t('cellSold', {
                                 count: cell.quantitySold,
                                 allIn: formatMoney(money(cell.allInMinor, setup.currency), locale),
