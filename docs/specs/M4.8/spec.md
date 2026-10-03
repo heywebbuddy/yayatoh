@@ -426,3 +426,6 @@ Behind `donations`. Collection of the sponsor's pledge arrives with M4.8e.
 
 ### 14. Build notes (2026-10-03)
 Built on the build branch + `merge/next-3g` + `merge/next-3h` + `agent/m4.8c` (unmerged; the pledges changes depend on its migration landing first).
+- Gate: lint, check:modules, typecheck 59/59, unit 2,716 passed (new: `matches.test.ts` 9), integration 1,524 passed (new: `matching-gifts.int.test.ts` 14). After the last merges of `agent/m4.8c` and `merge/next-3g`: matching-gifts, donations, paddle-raise, receipts, isolation, canary, impersonation and freeze integration files 87/87. e2e on all three projects: `matching-gifts.spec.ts` 15/15; with `donations` and `receipts` 57/57; with M4.8c's `paddle-raise.spec.ts` 27/27.
+- `merge/next-3h`'s newest commit (c1b7d889, the Command Center campaigns tile) conflicts with `merge/next-3g`'s fix of the same tile in `packages/modules/command-center/src/widgets.ts` (not this increment's file); that merge was left to the merge session.
+- The paddle-raise console's matches refresh when the console channel publishes (match, pledge and paddle writes); a gift paid online shows on the next page load. M4.8d's screen can publish on gift outcomes too.
