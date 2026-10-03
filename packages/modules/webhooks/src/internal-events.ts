@@ -36,6 +36,8 @@ export const INTERNAL_EVENTS: Readonly<Record<string, InternalReason>> = {
   'checkin.duplicate_offline@1': 'security',
   'checkin.fraud_signal@1': 'security',
   'cms.contact_requested@1': 'personal',
+  // U10: a visitor wrote through an org's contact page (their message; members are notified).
+  'cms.org_contact_received@1': 'personal',
   'cms.entry_created@1': 'content',
   'cms.entry_deleted@1': 'content',
   'cms.help_article_created@1': 'content',

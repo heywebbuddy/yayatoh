@@ -369,6 +369,15 @@ export const KINDS = {
     audience: SALES_TEAM,
     params: ['name', 'eventName', 'count', 'amountMinor', 'currency'],
   },
+  // U10: a visitor wrote through the org's contact page (its site). The message team hears at once;
+  // the email carries the visitor's name, address and an excerpt (the full text is in the console).
+  'cms.contact_message': {
+    category: 'messages',
+    channels: ['in_app', 'email'],
+    urgent: true,
+    audience: ['owner', 'admin', 'manager', 'marketing'],
+    params: ['name', 'email', 'body'],
+  },
   'messaging.contact_replied': {
     category: 'messages',
     channels: ['in_app', 'email', 'push'],

@@ -1365,6 +1365,253 @@ exports[`renderMessage: every kind in all 13 locales > campaigns.test · zh-TW 1
 }
 `;
 
+exports[`renderMessage: every kind in all 13 locales > cms.contact_message · ar 1`] = `
+{
+  "subject": "رسالة جديدة من Amina Diallo عبر صفحة التواصل",
+  "text": "رسالة جديدة من Amina Diallo عبر صفحة التواصل
+
+مرحبًا Amina Diallo،
+
+كتب إليك Amina Diallo (amina@example.com) عبر صفحة التواصل في موقعك:
+
+Hello! Do you offer group rates for twelve people at the spring gala?
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+إلغاء الاشتراك: https://app.yayatoh.test/unsubscribe/sample
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > cms.contact_message · de 1`] = `
+{
+  "subject": "Neue Nachricht von Amina Diallo über Ihre Kontaktseite",
+  "text": "Neue Nachricht von Amina Diallo über Ihre Kontaktseite
+
+Hallo Amina Diallo,
+
+Amina Diallo (amina@example.com) hat Ihnen über die Kontaktseite Ihrer Website geschrieben:
+
+Hello! Do you offer group rates for twelve people at the spring gala?
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Abmelden: https://app.yayatoh.test/unsubscribe/sample
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > cms.contact_message · en 1`] = `
+{
+  "subject": "New message from Amina Diallo through your contact page",
+  "text": "New message from Amina Diallo through your contact page
+
+Hi Amina Diallo,
+
+Amina Diallo (amina@example.com) wrote to you through the contact page on your site:
+
+Hello! Do you offer group rates for twelve people at the spring gala?
+
+--
+Sent by Lakeside Events with Yayatoh.
+Unsubscribe: https://app.yayatoh.test/unsubscribe/sample
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > cms.contact_message · es 1`] = `
+{
+  "subject": "Nuevo mensaje de Amina Diallo desde tu página de contacto",
+  "text": "Nuevo mensaje de Amina Diallo desde tu página de contacto
+
+Hola, Amina Diallo:
+
+Amina Diallo (amina@example.com) te escribió desde la página de contacto de tu sitio:
+
+Hello! Do you offer group rates for twelve people at the spring gala?
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Cancelar suscripción: https://app.yayatoh.test/unsubscribe/sample
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > cms.contact_message · fr 1`] = `
+{
+  "subject": "Nouveau message de Amina Diallo via votre page de contact",
+  "text": "Nouveau message de Amina Diallo via votre page de contact
+
+Bonjour Amina Diallo,
+
+Amina Diallo (amina@example.com) vous a écrit via la page de contact de votre site :
+
+Hello! Do you offer group rates for twelve people at the spring gala?
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Se désabonner: https://app.yayatoh.test/unsubscribe/sample
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > cms.contact_message · hi 1`] = `
+{
+  "subject": "आपके संपर्क पेज से Amina Diallo का नया संदेश",
+  "text": "आपके संपर्क पेज से Amina Diallo का नया संदेश
+
+नमस्ते Amina Diallo,
+
+Amina Diallo (amina@example.com) ने आपकी साइट के संपर्क पेज से आपको लिखा है:
+
+Hello! Do you offer group rates for twelve people at the spring gala?
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+सदस्यता छोड़ें: https://app.yayatoh.test/unsubscribe/sample
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > cms.contact_message · it 1`] = `
+{
+  "subject": "Nuovo messaggio da Amina Diallo dalla tua pagina contatti",
+  "text": "Nuovo messaggio da Amina Diallo dalla tua pagina contatti
+
+Ciao Amina Diallo,
+
+Amina Diallo (amina@example.com) ti ha scritto dalla pagina contatti del tuo sito:
+
+Hello! Do you offer group rates for twelve people at the spring gala?
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Annulla iscrizione: https://app.yayatoh.test/unsubscribe/sample
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > cms.contact_message · ja 1`] = `
+{
+  "subject": "お問い合わせページから Amina Diallo さんの新しいメッセージ",
+  "text": "お問い合わせページから Amina Diallo さんの新しいメッセージ
+
+Amina Diallo 様
+
+Amina Diallo さん（amina@example.com）がサイトのお問い合わせページからメッセージを送りました:
+
+Hello! Do you offer group rates for twelve people at the spring gala?
+
+--
+Lakeside Events が Yayatoh から送信しました。
+配信停止: https://app.yayatoh.test/unsubscribe/sample
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > cms.contact_message · nl 1`] = `
+{
+  "subject": "Nieuw bericht van Amina Diallo via je contactpagina",
+  "text": "Nieuw bericht van Amina Diallo via je contactpagina
+
+Hoi Amina Diallo,
+
+Amina Diallo (amina@example.com) schreef je via de contactpagina van je site:
+
+Hello! Do you offer group rates for twelve people at the spring gala?
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Afmelden: https://app.yayatoh.test/unsubscribe/sample
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > cms.contact_message · pt 1`] = `
+{
+  "subject": "Nova mensagem de Amina Diallo pela sua página de contato",
+  "text": "Nova mensagem de Amina Diallo pela sua página de contato
+
+Olá, Amina Diallo!
+
+Amina Diallo (amina@example.com) escreveu para você pela página de contato do seu site:
+
+Hello! Do you offer group rates for twelve people at the spring gala?
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Cancelar inscrição: https://app.yayatoh.test/unsubscribe/sample
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > cms.contact_message · ru 1`] = `
+{
+  "subject": "Новое сообщение от Amina Diallo со страницы контактов",
+  "text": "Новое сообщение от Amina Diallo со страницы контактов
+
+Здравствуйте, Amina Diallo!
+
+Amina Diallo (amina@example.com) написал(а) вам через страницу контактов на вашем сайте:
+
+Hello! Do you offer group rates for twelve people at the spring gala?
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Отписаться: https://app.yayatoh.test/unsubscribe/sample
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > cms.contact_message · zh-CN 1`] = `
+{
+  "subject": "Amina Diallo 通过联系页面发来新消息",
+  "text": "Amina Diallo 通过联系页面发来新消息
+
+Amina Diallo，您好：
+
+Amina Diallo（amina@example.com）通过你网站的联系页面给你发了消息：
+
+Hello! Do you offer group rates for twelve people at the spring gala?
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+退订: https://app.yayatoh.test/unsubscribe/sample
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > cms.contact_message · zh-TW 1`] = `
+{
+  "subject": "Amina Diallo 透過聯絡頁面傳來新訊息",
+  "text": "Amina Diallo 透過聯絡頁面傳來新訊息
+
+Amina Diallo，您好：
+
+Amina Diallo（amina@example.com）透過你網站的聯絡頁面傳了訊息給你：
+
+Hello! Do you offer group rates for twelve people at the spring gala?
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+取消訂閱: https://app.yayatoh.test/unsubscribe/sample
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
 exports[`renderMessage: every kind in all 13 locales > donations.pledge-invoice · ar 1`] = `
 {
   "subject": "تعهّدك لـ Lakeside Events: يُرجى الدفع عبر الإنترنت",

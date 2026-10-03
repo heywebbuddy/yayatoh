@@ -83,6 +83,10 @@
       "subject": "新订单：{name}",
       "intro": "{name} 购买了 {count, plural, other {# 张}} {eventName} 门票（{amount}）。"
     },
+    "cms.contact_message": {
+      "subject": "{name} 通过联系页面发来新消息",
+      "intro": "{name}（{email}）通过你网站的联系页面给你发了消息："
+    },
     "messaging.contact_replied": {
       "subject": "来自 {name} 的新消息",
       "intro": "{name} 就 {eventName} 给您发了消息。"

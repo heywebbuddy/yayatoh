@@ -83,6 +83,10 @@
       "subject": "新訂單：{name}",
       "intro": "{name} 購買了 {count, plural, other {# 張}} {eventName} 票券（{amount}）。"
     },
+    "cms.contact_message": {
+      "subject": "{name} 透過聯絡頁面傳來新訊息",
+      "intro": "{name}（{email}）透過你網站的聯絡頁面傳了訊息給你："
+    },
     "messaging.contact_replied": {
       "subject": "來自 {name} 的新訊息",
       "intro": "{name} 就 {eventName} 傳訊息給您。"

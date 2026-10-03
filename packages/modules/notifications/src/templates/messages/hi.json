@@ -83,6 +83,10 @@
       "subject": "नया ऑर्डर: {name}",
       "intro": "{name} ने {eventName} के लिए {count, plural, one {# टिकट} other {# टिकट}} खरीदे ({amount})।"
     },
+    "cms.contact_message": {
+      "subject": "आपके संपर्क पेज से {name} का नया संदेश",
+      "intro": "{name} ({email}) ने आपकी साइट के संपर्क पेज से आपको लिखा है:"
+    },
     "messaging.contact_replied": {
       "subject": "{name} का नया संदेश",
       "intro": "{name} ने आपको {eventName} के बारे में लिखा।"

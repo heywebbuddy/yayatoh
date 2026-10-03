@@ -13,6 +13,7 @@ import {
   networkChatSignals,
   staffAlertsSubscriber,
 } from '@yayatoh/checkin';
+import { orgContactNotifier } from '@yayatoh/cms';
 import { deviceBoardPublisher, publishMetricsChangedTx } from '@yayatoh/command-center';
 import {
   giftOutcomesSubscriber,
@@ -131,6 +132,8 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     announcementMailer({ notifier, appOrigin }),
     threadReplyMailer({ notifier, appOrigin }),
     contactWroteNotifier({ notifier }),
+    // U10: messages through the org's contact page reach its members.
+    orgContactNotifier({ notifier }),
     releaseCancelledSeats(),
     payoutDestinationMailer({ notifier, appOrigin }),
     impersonationNotice({ notifier, appOrigin }),

@@ -1,3 +1,4 @@
+import { orgContactNotifier } from '@yayatoh/cms';
 import 'server-only';
 import { alertEvaluator, evaluateOrgNow, watchQuietDevices } from '@yayatoh/alerts';
 import { attendeeMessageMailer } from '@yayatoh/attendees';
@@ -128,6 +129,8 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     announcementMailer({ notifier, appOrigin }),
     threadReplyMailer({ notifier, appOrigin }),
     contactWroteNotifier({ notifier }),
+    // U10: messages through the org's contact page reach its members.
+    orgContactNotifier({ notifier }),
     payoutDestinationMailer({ notifier, appOrigin }),
     impersonationNotice({ notifier, appOrigin }),
     orgStatusNotice({ notifier, appOrigin }),

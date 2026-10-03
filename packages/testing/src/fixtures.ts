@@ -74,11 +74,13 @@ import {
   createHelpArticleCommand,
   createHelpCategoryCommand,
   createSiteSectionCommand,
+  setContactPageCommand,
   setEntryStatusCommand,
   setHelpArticleStatusCommand,
   setSiteSectionStatusCommand,
   submitContactRequestCommand,
   submitHelpFeedbackCommand,
+  submitOrgContactCommand,
 } from '@yayatoh/cms';
 import {
   createDisplayLinkCommand,
@@ -1658,6 +1660,25 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     setEmailIdentityCommand,
     { fromName: name, replyTo: `team@${slug}.example` },
     ctx(),
+    ports,
+  );
+  // U10: the org contact page (on) and one visitor message through it.
+  await executeCommand(
+    setContactPageCommand,
+    { enabled: true, intro: `Questions for ${name}?` },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    submitOrgContactCommand,
+    {
+      submissionKey: uuidv7(),
+      name: 'Vera Visitor',
+      email: `vera@${slug}.example`,
+      message: 'Do you have step-free access at the venue?',
+      consent: true,
+    },
+    createCtx({ orgId: org.id }),
     ports,
   );
   // U10: an image uploaded to the media library, reused in the event's gallery (no new files).

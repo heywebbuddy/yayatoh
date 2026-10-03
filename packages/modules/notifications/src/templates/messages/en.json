@@ -83,6 +83,10 @@
       "subject": "New order: {name}",
       "intro": "{name} bought {count, plural, one {# ticket} other {# tickets}} for {eventName} ({amount})."
     },
+    "cms.contact_message": {
+      "subject": "New message from {name} through your contact page",
+      "intro": "{name} ({email}) wrote to you through the contact page on your site:"
+    },
     "messaging.contact_replied": {
       "subject": "New message from {name}",
       "intro": "{name} wrote to you about {eventName}."

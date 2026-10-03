@@ -33,6 +33,7 @@
     "@yayatoh/billing": "workspace:*",
     "@yayatoh/campaigns": "workspace:*",
     "@yayatoh/checkin": "workspace:*",
+    "@yayatoh/cms": "workspace:*",
     "@yayatoh/command-center": "workspace:*",
     "@yayatoh/crm": "workspace:*",
     "@yayatoh/db": "workspace:*",
