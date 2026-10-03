@@ -11,6 +11,7 @@ Events, their lifecycle and event-scoped roles. Owns Postgres schema `events`.
 - **Dates (M1.4b):** `occurrences` are the dates of a multi-date event (`scheduled` or `cancelled`, optional capacity). With any, the event's `starts_at`/`ends_at` are kept equal to the span of its scheduled dates (`syncEventSpanTx`). At most 366 scheduled dates; no two scheduled dates start at the same instant. Dates are cancelled, never deleted.
 - Recurrence (`domain/recurrence.ts`) is expanded in the event's wall-clock time with `zonedTimeToUtc`, so times stay put across DST; "this and following" keeps each date's local day. Rules are not stored.
 - **Series (M1.4b):** global slugs (`/series/{slug}`); an event is in at most one series (`series_events`). Public reads only through `events.public_series` / `events.public_series_events` (active orgs, public upcoming events, allowlisted columns); public dates only through `events.public_occurrences` (sold out yes/no, never capacity numbers).
+- **Series ↔ events (U7):** `events.createEventInSeries` creates the event and joins (or creates) its series in one transaction; a taken series address is a `conflict` on the `series` field. `seriesDetailQuery` (by slug) lists a series' events of any status; `eventSeriesQuery` names an event's series. The public event page links its series through `publicEventSeries(target)` (the target from `pageTarget`, read under that org's RLS, slug and name only).
 
 
 **M1.4c/d content and access**
