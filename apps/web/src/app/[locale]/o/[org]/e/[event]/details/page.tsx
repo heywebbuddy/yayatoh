@@ -1,4 +1,4 @@
-import { eventDetailsQuery, shortLinksQuery } from '@yayatoh/events';
+import { eventDetailsQuery, orgCategoriesQuery, orgTagsQuery, shortLinksQuery } from '@yayatoh/events';
 import { executeQuery } from '@yayatoh/kernel';
 import { Button, Card, PageHeader } from '@yayatoh/ui';
 import { listVenuesQuery } from '@yayatoh/venues';
@@ -19,11 +19,18 @@ export default async function EventDetailsPage({
   const { data, event: ev, can } = await loadEvent(org, event, 'details');
   const t = await getTranslations('details');
   const canWrite = can('events:write');
-  const [details, venues, links] = await Promise.all([
+  const [details, venues, links, categories, tags] = await Promise.all([
     executeQuery(eventDetailsQuery, { eventId: ev.id }, data.ctx, ports),
     executeQuery(listVenuesQuery, { eventId: ev.id }, data.ctx, ports),
     executeQuery(shortLinksQuery, { eventId: ev.id }, data.ctx, ports),
+    executeQuery(orgCategoriesQuery, { includeHidden: true }, data.ctx, ports),
+    executeQuery(orgTagsQuery, {}, data.ctx, ports),
   ]);
+  // U8: hidden categories leave the picker, except the one this event already has.
+  const te = await getTranslations();
+  const categoryChoices = categories
+    .filter((c) => !c.hidden || c.ref === details.categoryRef)
+    .map((c) => ({ ref: c.ref, label: c.name ?? te(`categories.${c.platformKey}`), hidden: c.hidden }));
   // The picked venue stays listed even if it was archived since.
   const options =
     details.venueId && !venues.some((v) => v.id === details.venueId)
@@ -43,6 +50,9 @@ export default async function EventDetailsPage({
           details={details}
           visibility={ev.visibility}
           venues={options}
+          categories={categoryChoices}
+          orgTags={tags.map((x) => x.tag)}
+          manageCategoriesHref={canWrite && can('org:update') ? `/o/${org}/settings/categories` : null}
           disabled={!canWrite}
         />
         {canWrite && venues.length === 0 ? (

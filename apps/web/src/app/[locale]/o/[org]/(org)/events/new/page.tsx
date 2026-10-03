@@ -5,6 +5,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { CreateEventForm } from '@/components/create-event-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { loadConsole } from '@/server/console.ts';
+import { pickerProfiles } from '@/server/profile-picker.ts';
 import { createEventAction } from './actions.ts';
 
 export default async function NewEventPage({ params }: { params: Promise<{ locale: string; org: string }> }) {
@@ -32,6 +33,7 @@ export default async function NewEventPage({ params }: { params: Promise<{ local
       <CreateEventForm
         action={createEventAction.bind(null, org)}
         defaults={{ profile: data.profile, timezone: data.org.timezone }}
+        profiles={await pickerProfiles(data.modules)}
       />
     </>
   );

@@ -8,6 +8,7 @@ import { EventWizard } from '@/components/event-wizard.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
+import { pickerProfiles } from '@/server/profile-picker.ts';
 import { guidedCreateAction } from '../actions.ts';
 
 /** The three-step event wizard (M1.4f). The one-page form stays at `/events/new`. */
@@ -39,6 +40,7 @@ export default async function GuidedNewEventPage({
         venues={venues.map((v) => ({ id: v.id, name: v.name, city: v.city }))}
         currency={data.org.currency}
         ticketing={data.modules.has('ticketing')}
+        profiles={await pickerProfiles(data.modules)}
       />
     </>
   );

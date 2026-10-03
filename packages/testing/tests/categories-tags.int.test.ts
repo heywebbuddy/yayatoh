@@ -1,5 +1,4 @@
 import { withoutTenant } from '@yayatoh/db';
-import { databaseAuditSink, setPlatformAuditSink, withPlatformReader } from '@yayatoh/db/platform';
 import { closePools } from '@yayatoh/db/testing';
 import {
   addOrgCategoryCommand,
@@ -45,7 +44,6 @@ const categories = (o: OrgFixture, includeHidden = false) =>
   executeQuery(orgCategoriesQuery, { includeHidden }, o.ctx(), ports);
 
 beforeAll(async () => {
-  setPlatformAuditSink(databaseAuditSink);
   ({ a, b } = await twoOrgs());
 });
 afterAll(closePools);
@@ -74,54 +72,6 @@ describe('org categories (U8)', () => {
     const stored = await executeQuery(orgCategoriesQuery, {}, ctx, ports);
     expect(stored.map((c) => c.ref)).toEqual([...defaults.map((d) => d.key), added.id]);
     expect(stored.every((c) => c.id !== null)).toBe(true);
-  });
-
-  it('staff decide the defaults a new org starts with; orgs with a stored list keep theirs', async () => {
-    const actor = `staff:${uuidv7()}`;
-    const before = await withoutTenant((tx) =>
-      tx.execute<{ key: string }>(
-        sql`select key from events.platform_categories where in_defaults order by position, key`,
-      ),
-    );
-    const save = (keys: string[]) =>
-      withPlatformReader(
-        { actor, reason: 'test: platform default categories' },
-        (tx) =>
-          tx.execute(
-            sql`select events.set_platform_default_categories(array(select jsonb_array_elements_text(${JSON.stringify(keys)}::jsonb)), ${actor})`,
-          ),
-        { callsWritingFunctions: true },
-      );
-    const aBefore = (await categories(a, true)).map((c) => c.ref);
-    try {
-      await save(['technology', 'music']);
-      const ownerId = uuidv7();
-      const org = await createOrganization(
-        userCtx(ownerId),
-        { slug: `staffd-${tag}`, name: 'Staff Defaults' },
-        ports,
-      );
-      const list = await executeQuery(orgCategoriesQuery, {}, userCtx(ownerId, org.id), ports);
-      expect(list.map((c) => c.ref)).toEqual(['technology', 'music']);
-      expect((await categories(a, true)).map((c) => c.ref)).toEqual(aBefore);
-      // The function refuses an empty list, unknown keys, duplicates and non-staff actors.
-      await expect(save([])).rejects.toThrow();
-      await expect(save(['music', 'music'])).rejects.toThrow();
-      await expect(save(['karaoke'])).rejects.toThrow();
-      await expect(
-        withPlatformReader(
-          { actor, reason: 'test' },
-          (tx) => tx.execute(sql`select events.set_platform_default_categories(array['music'], 'system:x')`),
-          { callsWritingFunctions: true },
-        ),
-      ).rejects.toThrow();
-      // app_user can read the list but never write it.
-      await expect(
-        withoutTenant((tx) => tx.execute(sql`update events.platform_categories set in_defaults = false`)),
-      ).rejects.toThrow();
-    } finally {
-      await save(before.map((d) => d.key));
-    }
   });
 
   it('add, rename, hide, show and move; names are validated and unique per org', async () => {

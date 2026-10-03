@@ -1539,7 +1539,8 @@
     "activityLink": "Journal d’activité",
     "privacyLink": "Demandes de confidentialité",
     "charityLink": "Profil caritatif",
-    "planLink": "Offre et modules"
+    "planLink": "Offre et modules",
+    "categoriesLink": "Catégories d’événements"
   },
   "legal": {
     "platform": "Yayatoh",
@@ -3120,7 +3121,7 @@
     },
     "attendanceHint": "Pour les événements en ligne et hybrides, ajoutez le lien de connexion sous Accès. Seuls les détenteurs de billets le voient.",
     "tags": "Mots-clés",
-    "tagsHint": "Séparez les mots-clés par des virgules. 10 au maximum, de 40 caractères chacun au plus.",
+    "tagsHint": "Saisissez un tag et appuyez sur Entrée, ou choisissez-en un déjà utilisé. Jusqu’à 10, de 40 caractères maximum chacun.",
     "tagErrors": {
       "too_many_tags": "Utilisez 10 mots-clés au maximum.",
       "tag_too_long": "Chaque mot-clé peut contenir 40 caractères au maximum."
@@ -3152,7 +3153,10 @@
       "unlisted": "Non répertorié (lien uniquement)",
       "private": "Privé (code d’accès)"
     },
-    "visibilityHint": "Les événements non répertoriés ne sont accessibles que par leur lien. Les événements privés nécessitent un code d’accès qui débloque la page de l’événement."
+    "visibilityHint": "Les événements non répertoriés ne sont accessibles que par leur lien. Les événements privés nécessitent un code d’accès qui débloque la page de l’événement.",
+    "hiddenCategory": "{name} (masquée)",
+    "categoryHiddenHint": "Cette catégorie est masquée : l’événement la garde, mais elle n’est plus proposée pour d’autres événements.",
+    "manageCategories": "Gérer les catégories"
   },
   "directory": {
     "title": "Annuaire des lieux",
@@ -3832,7 +3836,12 @@
     "help": "Aide",
     "helpCenter": "Centre d'aide",
     "contact": "Nous contacter",
-    "status": "État des systèmes"
+    "status": "État des systèmes",
+    "tags": {
+      "label": "Filtrer par tag",
+      "all": "Tous les événements",
+      "tagLabel": "{tag}, {count, plural, one {# événement} other {# événements}}"
+    }
   },
   "widget": {
     "title": "Billets : {event}",
@@ -12328,5 +12337,65 @@
     "tooLate": "Choisissez une date jusqu’au {date}",
     "timeZoneNote": "Heures en {zone}",
     "selected": "Sélectionné"
+  },
+  "orgCategories": {
+    "breadcrumb": "Fil d’Ariane",
+    "title": "Catégories d’événements",
+    "description": "Classez vos événements à votre façon. Chaque catégorie correspond aussi à une catégorie de la marketplace, pour que vos événements restent faciles à trouver.",
+    "howTitle": "Comment ça marche",
+    "howMarketplace": "Votre liste commence avec les catégories de la plateforme. Renommez-les, ajoutez les vôtres et rangez-les dans l’ordre voulu.",
+    "howHidden": "Masquez une catégorie que vous n’utilisez plus : elle quitte les listes de choix, mais les événements qui l’ont la gardent.",
+    "howTags": "Besoin de plus de précision ? Ajoutez des tags libres à un événement sur sa page Détails et filtrez avec.",
+    "addTitle": "Ajouter une catégorie",
+    "listTitle": "Vos catégories ({visible} visibles sur {count})",
+    "name": "Nom de la catégorie",
+    "nameHint": "Jusqu’à {max} caractères.",
+    "marketplace": "Catégorie de la marketplace",
+    "marketplaceHint": "Où ces événements apparaissent quand on parcourt la marketplace.",
+    "added": "Catégorie ajoutée.",
+    "add": "Ajouter la catégorie",
+    "hidden": "Masquée",
+    "mapsTo": "Marketplace : {marketplace}",
+    "events": "{count, plural, one {# événement} other {# événements}}",
+    "moveUp": "Monter {name}",
+    "moveDown": "Descendre {name}",
+    "rename": "Renommer",
+    "renameLabel": "Renommer {name}",
+    "hide": "Masquer",
+    "show": "Afficher",
+    "hideLabel": "Masquer {name}",
+    "showLabel": "Afficher {name}",
+    "newName": "Nouveau nom pour {name}",
+    "saveName": "Enregistrer le nom",
+    "cancel": "Annuler",
+    "done": {
+      "hide": "Masquée. Les événements qui l’ont la gardent.",
+      "show": "De nouveau proposée dans les listes de choix.",
+      "up": "Montée.",
+      "down": "Descendue.",
+      "rename": "Renommée."
+    },
+    "errors": {
+      "name_required": "Saisissez un nom.",
+      "name_too_long": "Utilisez au maximum {max} caractères.",
+      "name_taken": "Vous avez déjà une catégorie de ce nom.",
+      "too_many": "Vous avez atteint le nombre maximal de catégories. Masquez-en ou renommez-en une plutôt.",
+      "last_visible": "Gardez au moins une catégorie visible."
+    }
+  },
+  "profilePicker": {
+    "question": "Quel genre d’événement ?",
+    "summaryLabel": "Ce que comprend un événement de type {kind}",
+    "includes": "Comprend",
+    "labelsHint": "Le genre décide des sections de l’événement. Vos catégories et tags se règlent sur la page Détails de l’événement.",
+    "descriptions": {
+      "conference": "Sessions, intervenants, sponsors et exposants, avec inscription et badges.",
+      "gala": "Un dîner sur billets avec tables, sponsors et dons.",
+      "concert": "Billets et fans pour un spectacle ou une date de tournée.",
+      "wedding": "Invités, réponses, placement et un site pour les invités.",
+      "community": "Membres, inscriptions et messages pour un groupe ou une cause.",
+      "agency": "Des événements organisés pour vos clients, avec marketing et rapports.",
+      "other": "Billets, participants et enregistrement pour tout le reste."
+    }
   }
 }
