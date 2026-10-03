@@ -176,7 +176,9 @@ test.describe('virtual v2 (M6.10a)', () => {
     const panel = zoomCard(page, 'Closing panel');
     await expect(panel.getByLabel('Zoom webinar ID')).toHaveValue(/^[0-9]{11}$/);
     await expect(panel.getByText('Created here')).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Create a Zoom webinar for Closing panel' })).toHaveCount(0);
+    await expect(page.getByRole('button', { name: 'Create a Zoom webinar for Closing panel' })).toHaveCount(
+      0,
+    );
     // Ana (online access) is registered; Ben's in-person day pass is not.
     await expect(panel.getByTestId('zoom-counts')).toHaveText('Registrants: 1 · Attended: 0');
     await expectAccessibleBothModes(page);
@@ -230,11 +232,9 @@ test.describe('virtual v2 (M6.10a)', () => {
     await signIn(page);
     await setUp(page, f);
     // Lakeside has no Zoom connection: the card says so and links to connect it.
-    await expect(page.getByText("Zoom isn't connected")).toBeVisible();
-    await expect(page.getByRole('link', { name: 'Connect Zoom' })).toBeVisible();
-    await expect(
-      page.getByRole('button', { name: 'Create a Zoom webinar for Closing panel' }),
-    ).toBeDisabled();
+    await expect(page.getByText('Zoom is not connected.')).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Connect Zoom in Integrations' })).toBeVisible();
+    await expect(page.getByRole('button', { name: /Create a Zoom webinar for/ })).toHaveCount(0);
     await expectAccessible(page);
 
     const v = await guest(browser);

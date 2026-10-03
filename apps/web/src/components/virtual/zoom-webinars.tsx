@@ -14,29 +14,33 @@ type Act = (prev: typeof INITIAL_FORM_STATE) => Promise<typeof INITIAL_FORM_STAT
  */
 export function CreateWebinarButton({
   title,
-  disabled,
+  linked,
   create,
 }: {
   title: string;
-  disabled: boolean;
+  /** The session has a webinar now: no button, but the outcome stays announced. */
+  linked: boolean;
   create: Act;
 }) {
   const t = useTranslations('virtual.setup');
   const [state, action, pending] = useActionState(create, INITIAL_FORM_STATE);
+  if (linked && !state.ok && !state.code) return null;
   return (
-    <div className="flex flex-col gap-2">
-      <div>
-        <Button
-          type="button"
-          size="sm"
-          variant="secondary"
-          disabled={pending || disabled}
-          aria-label={t('createWebinarLabel', { title })}
-          onClick={() => startTransition(() => action())}
-        >
-          {t('createWebinar')}
-        </Button>
-      </div>
+    <div className="mb-3 flex flex-col gap-2">
+      {linked ? null : (
+        <div>
+          <Button
+            type="button"
+            size="sm"
+            variant="secondary"
+            disabled={pending}
+            aria-label={t('createWebinarLabel', { title })}
+            onClick={() => startTransition(() => action())}
+          >
+            {t('createWebinar')}
+          </Button>
+        </div>
+      )}
       <Outcome state={state} saved={t('webinarCreated', { title })} />
     </div>
   );

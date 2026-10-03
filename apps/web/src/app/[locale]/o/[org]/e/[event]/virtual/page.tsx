@@ -290,14 +290,12 @@ export default async function VirtualPage({ params }: Params) {
                       )}
                     </div>
                     {/* M6.10a: or let Yayatoh create the webinar through the Zoom connection. */}
-                    {canEdit && !s.webinarId && zoomConnected ? (
-                      <div className="mb-3">
-                        <CreateWebinarButton
-                          title={s.title}
-                          disabled={false}
-                          create={createZoomWebinarAction.bind(null, org, event, s.sessionId)}
-                        />
-                      </div>
+                    {canEdit && zoomConnected ? (
+                      <CreateWebinarButton
+                        title={s.title}
+                        linked={s.webinarId !== null}
+                        create={createZoomWebinarAction.bind(null, org, event, s.sessionId)}
+                      />
                     ) : null}
                     <ZoomWebinarForm
                       title={s.title}
