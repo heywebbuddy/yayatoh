@@ -15226,7 +15226,8 @@
         "in_person": "僅實體",
         "virtual": "僅線上",
         "both": "實體與線上"
-      }
+      },
+      "addTicketTypes": "前往票券"
     },
     "errors": {
       "in_person_event": "這個活動為實體舉辦。請先選擇「線上」或「實體與線上並行」。",

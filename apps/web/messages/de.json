@@ -15226,7 +15226,8 @@
         "in_person": "Nur vor Ort",
         "virtual": "Nur online",
         "both": "Vor Ort und online"
-      }
+      },
+      "addTicketTypes": "Zu den Tickets"
     },
     "errors": {
       "in_person_event": "Diese Veranstaltung findet vor Ort statt. Wählen Sie zuerst Online oder Hybrid.",

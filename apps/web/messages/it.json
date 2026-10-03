@@ -15226,7 +15226,8 @@
         "in_person": "Solo in presenza",
         "virtual": "Solo online",
         "both": "In presenza e online"
-      }
+      },
+      "addTicketTypes": "Vai ai biglietti"
     },
     "errors": {
       "in_person_event": "Questo evento è in presenza. Scegli prima Online o Ibrido.",

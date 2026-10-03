@@ -15226,7 +15226,8 @@
         "in_person": "仅线下",
         "virtual": "仅线上",
         "both": "线下和线上"
-      }
+      },
+      "addTicketTypes": "前往门票"
     },
     "errors": {
       "in_person_event": "这个活动是线下举办。请先选择“线上”或“线上线下结合”。",

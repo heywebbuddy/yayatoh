@@ -15226,7 +15226,8 @@
         "in_person": "Présentiel uniquement",
         "virtual": "En ligne uniquement",
         "both": "Présentiel et en ligne"
-      }
+      },
+      "addTicketTypes": "Aller aux billets"
     },
     "errors": {
       "in_person_event": "Cet événement est en présentiel. Choisissez d’abord En ligne ou Hybride.",

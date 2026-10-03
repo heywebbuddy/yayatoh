@@ -15226,7 +15226,8 @@
         "in_person": "Alleen op locatie",
         "virtual": "Alleen online",
         "both": "Op locatie en online"
-      }
+      },
+      "addTicketTypes": "Naar tickets"
     },
     "errors": {
       "in_person_event": "Dit evenement is op locatie. Kies eerst Online of Hybride.",

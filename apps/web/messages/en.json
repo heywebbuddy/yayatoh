@@ -15226,7 +15226,8 @@
         "in_person": "In person only",
         "virtual": "Online only",
         "both": "In person and online"
-      }
+      },
+      "addTicketTypes": "Go to tickets"
     },
     "errors": {
       "in_person_event": "This event is in person. Choose Online or Hybrid first.",

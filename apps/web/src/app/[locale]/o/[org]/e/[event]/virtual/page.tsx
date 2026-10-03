@@ -100,7 +100,16 @@ export default async function VirtualPage({ params }: Params) {
         {!streaming ? (
           <Alert tone="info" title={t('inPersonNote')} />
         ) : setup.ticketTypes.length === 0 ? (
-          <EmptyState icon={<Ticket />} title={t('noTicketTypes')} description={t('noTicketTypesHint')} />
+          <EmptyState
+            icon={<Ticket />}
+            title={t('noTicketTypes')}
+            description={t('noTicketTypesHint')}
+            action={
+              <Link href={`/o/${org}/e/${event}/tickets-orders`} className={buttonClass('secondary')}>
+                {t('addTicketTypes')}
+              </Link>
+            }
+          />
         ) : (
           <ul className="m-0 flex list-none flex-col gap-4 p-0">
             {setup.ticketTypes.map((tt) => (

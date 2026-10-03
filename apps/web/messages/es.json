@@ -15226,7 +15226,8 @@
         "in_person": "Solo presencial",
         "virtual": "Solo en línea",
         "both": "Presencial y en línea"
-      }
+      },
+      "addTicketTypes": "Ir a entradas"
     },
     "errors": {
       "in_person_event": "Este evento es presencial. Elige primero En línea o Híbrido.",
