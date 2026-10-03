@@ -35,9 +35,10 @@ export const ASSIGNABLE_BLOCKS = ['channel', 'ada', 'group'] as const;
 export const MAX_GROUP_LABEL = 40;
 /**
  * Seating rules (M1.7f): `ada_reserved` keeps accessible seats back until some days before the
- * event; `max_per_order_seats` caps the seats in one order.
+ * event; `max_per_order_seats` caps the seats in one order. M6.11a: `ada_companion` sells
+ * companion seats only with an accessible seat.
  */
-export const SEATING_RULE_KINDS = ['ada_reserved', 'max_per_order_seats'] as const;
+export const SEATING_RULE_KINDS = ['ada_reserved', 'max_per_order_seats', 'ada_companion'] as const;
 /** Decision D18: rules warn by default; `enforce` refuses (staff may override, audited). */
 export const RULE_SEVERITIES = ['warn', 'enforce'] as const;
 
@@ -321,4 +322,39 @@ export const tableSponsors = tenantTable(
       sql`logo_url is null or (length(logo_url) <= 300 and logo_url ~ '^/media/[0-9a-f-]{36}/[0-9a-f-]{36}/[A-Za-z0-9._-]+$')`,
     ),
   ],
+);
+/**
+ * Best available (M6.11a): whether buyers and the box office may ask for "best available"
+ * instead of choosing seats, and the organizer's section scores (`{ sectionId: 0–100 }`, higher
+ * is better; sections without a score rank by distance to the stage). One row per event; every
+ * chart of the event uses it (seat and section ids repeat across charts).
+ */
+export const selectionSettings = tenantTable(
+  seatingSchema,
+  'selection_settings',
+  {
+    eventId: uuid('event_id').notNull(),
+    bestAvailable: boolean('best_available').notNull().default(false),
+    sectionScores: jsonb('section_scores').notNull().default(sql`'{}'::jsonb`),
+  },
+  (t) => [
+    uniqueIndex('selection_settings_org_event_key').on(t.orgId, t.eventId),
+    check('selection_settings_scores_check', sql`jsonb_typeof(section_scores) = 'object'`),
+  ],
+);
+
+/**
+ * Companion seats (M6.11a): seats the organizer keeps next to accessible seats for the people
+ * who come with a wheelchair user. With the `ada_companion` rule they are sold only with an
+ * accessible seat. Per event (seat ids repeat across an event's charts, so a date's own chart
+ * keeps them).
+ */
+export const companionSeats = tenantTable(
+  seatingSchema,
+  'companion_seats',
+  {
+    eventId: uuid('event_id').notNull(),
+    seatUuid: uuid('seat_uuid').notNull(),
+  },
+  (t) => [uniqueIndex('companion_seats_org_event_seat_key').on(t.orgId, t.eventId, t.seatUuid)],
 );

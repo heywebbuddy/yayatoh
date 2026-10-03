@@ -4,12 +4,9 @@ import { Alert, Button } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { type FormEvent, startTransition, useActionState, useEffect, useRef, useState } from 'react';
 import type { BoxOfficeState } from '@/app/[locale]/o/[org]/e/[event]/tickets-orders/actions.ts';
-import {
-  type SeatChoice,
-  type SeatMapView,
-  SeatPicker,
-  type SeatStreamSource,
-} from '@/components/seat-picker.tsx';
+import type { BestSeatsActions } from '@/components/best-available.tsx';
+import type { SeatChoice, SeatMapView, SeatStreamSource } from '@/components/seat-picker.tsx';
+import { SeatSelection } from '@/components/seat-selection.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
 
@@ -31,6 +28,8 @@ export function BoxOfficeForm({
   seatStream = null,
   prices = {},
   timeZone,
+  bestSeats = null,
+  advancedSeating = false,
 }: {
   /** Multi-date events (M1.4b): the date being sold. */
   dates?: readonly { id: string; label: string }[];
@@ -43,6 +42,10 @@ export function BoxOfficeForm({
   /** Ticket type id → its all-in price label (seat list). */
   prices?: Readonly<Record<string, string>>;
   timeZone?: string;
+  /** M6.11a: best available at the door (when the organizer offers it). */
+  bestSeats?: BestSeatsActions | null;
+  /** M6.11a: the org has advanced seating (the accessible-seat statement, companion seats). */
+  advancedSeating?: boolean;
 }) {
   const t = useTranslations('boxOffice');
   const te = useTranslations();
@@ -77,19 +80,23 @@ export function BoxOfficeForm({
           ? t('soldOut')
           : state.reason === 'seats_taken'
             ? t('seatsTaken')
-            : state.reason === 'seat_rule'
-              ? t('seatRule')
-              : state.reason === 'seats_not_on_sale' || state.reason === 'seat_not_on_sale'
-                ? t('notOnSale')
-                : state.reason === 'choose_date'
-                  ? t('chooseDate')
-                  : state.reason === 'date_sold_out'
-                    ? t('dateSoldOut')
-                    : state.reason === 'wrong_date'
-                      ? t('wrongDate')
-                      : state.reason === 'date_cancelled' || state.reason === 'date_passed'
-                        ? t('dateUnavailable')
-                        : te(errorMessageKey(state.code));
+            : state.reason === 'find_seats'
+              ? te('checkout.best.findFirst')
+              : state.reason === 'seat_hold_expired'
+                ? te('checkout.best.expired')
+                : state.reason === 'seat_rule'
+                  ? t('seatRule')
+                  : state.reason === 'seats_not_on_sale' || state.reason === 'seat_not_on_sale'
+                    ? t('notOnSale')
+                    : state.reason === 'choose_date'
+                      ? t('chooseDate')
+                      : state.reason === 'date_sold_out'
+                        ? t('dateSoldOut')
+                        : state.reason === 'wrong_date'
+                          ? t('wrongDate')
+                          : state.reason === 'date_cancelled' || state.reason === 'date_passed'
+                            ? t('dateUnavailable')
+                            : te(errorMessageKey(state.code));
   const standing = passes.filter((p) => !p.seated);
   return (
     <form ref={form} onSubmit={onSubmit} className="flex flex-col gap-4">
@@ -135,15 +142,21 @@ export function BoxOfficeForm({
       </fieldset>
       {seatMap ? (
         <div className="rounded-card border border-line p-4">
-          <SeatPicker
+          <SeatSelection
             key={round}
             map={seatMap}
             prices={prices}
+            levels={passes.filter((p) => p.seated)}
             max={50}
             stream={seatStream}
             context="box_office"
-            timeZone={timeZone}
+            best={bestSeats}
+            ada={advancedSeating}
+            occurrenceId={() =>
+              (form.current?.elements.namedItem('occurrenceId') as HTMLSelectElement | null)?.value || null
+            }
             onChoice={setChoice}
+            {...(timeZone ? { timeZone } : {})}
           />
         </div>
       ) : null}

@@ -928,9 +928,15 @@
         "capReached": "Mehr geht in einer Bestellung nicht: {max} Plätze.",
         "adaChosen": "{count, plural, one {{seats} ist ein barrierefreier Platz} other {{seats} sind barrierefreie Plätze}}, reserviert für Gäste, die {count, plural, one {ihn} other {sie}} brauchen. Bitte nur bei Bedarf wählen.",
         "overCap": "{count} Plätze gewählt: Der Veranstalter bittet um höchstens {max} pro Bestellung.",
-        "keptUntil": "Zurückgehalten bis {date}"
+        "keptUntil": "Zurückgehalten bis {date}",
+        "companionWarn": "Begleitplätze sind für Gäste, die mit einem Rollstuhlnutzer kommen: bis zu {max} je barrierefreiem Platz.",
+        "companionEnforced": "Begleitplätze gibt es nur zusammen mit einem barrierefreien Platz: bis zu {max} je barrierefreiem Platz.",
+        "companionChosen": "Begleitplätze ohne barrierefreien Platz: {seats}. Sie sind für Gäste, die mit einem Rollstuhlnutzer kommen (bis zu {max} je barrierefreiem Platz).",
+        "companionRefused": "Begleitplätze ohne barrierefreien Platz: {seats}. Sie werden nur zusammen mit einem barrierefreien Platz verkauft (bis zu {max} je Platz): Füge einen hinzu oder wähle andere Plätze.",
+        "adaEnforcedBest": "Barrierefreie Plätze sind bis {date} für Gäste reserviert, die sie brauchen. Wenn du einen brauchst, kreuze „Jemand in meiner Gruppe nutzt einen Rollstuhl“ an und nutze „Bester Platz“."
       },
-      "groupSummary": "{group} — {free} von {total} frei{chosen, plural, =0 {} other { · # gewählt}}"
+      "groupSummary": "{group} — {free} von {total} frei{chosen, plural, =0 {} other { · # gewählt}}",
+      "companion": "Begleitplatz"
     },
     "seatRuleCap": "Das sind mehr Plätze, als eine Bestellung haben darf. Bitte wähle weniger.",
     "seatRuleAda": "Barrierefreie Plätze sind vorerst für Gäste reserviert, die sie brauchen. Bitte wähle andere Plätze.",
@@ -940,7 +946,39 @@
     "orgUnavailable": "Dieser Veranstalter verkauft gerade keine Tickets. Bereits gekaufte Tickets bleiben gültig.",
     "riskBlocked": "Diese Bestellung können wir nicht annehmen. Bitte wende dich an den Veranstalter.",
     "creditInvalid": "Dieser Guthabencode ist ungültig oder wurde bereits eingelöst.",
-    "creditNotApplicable": "Dieses Guthaben kann für diese Tickets nicht verwendet werden."
+    "creditNotApplicable": "Dieses Guthaben kann für diese Tickets nicht verwendet werden.",
+    "seatRuleCompanion": "Begleitplätze gibt es nur zusammen mit einem barrierefreien Platz. Wähle zusätzlich einen barrierefreien Platz oder andere Plätze.",
+    "best": {
+      "title": "Bester Platz",
+      "modeLegend": "Wie möchtest du deine Plätze wählen?",
+      "mode": {
+        "best": "Bester Platz: Wir finden die besten Plätze nebeneinander",
+        "pick": "Plätze selbst wählen"
+      },
+      "need": "Jemand in meiner Gruppe nutzt einen Rollstuhl und braucht einen barrierefreien Platz",
+      "needStaff": "Die Person braucht einen rollstuhlgerechten Platz",
+      "needHint": "Barrierefreie Plätze und die Begleitplätze daneben sind für Gäste reserviert, die sie brauchen.",
+      "price": "Preis",
+      "onePrice": "Preis: {price}",
+      "quantity": "Anzahl der Plätze",
+      "find": "Plätze finden",
+      "findAgain": "Erneut suchen",
+      "accessibleHint": "Wir suchen einen rollstuhlgerechten Platz mit Begleitplätzen daneben.",
+      "together": "{count, plural, one {Dein Platz:} other {# Plätze nebeneinander:}}",
+      "split": "Wir konnten deine Gruppe von {count} nicht zusammen setzen, deine Plätze liegen an verschiedenen Stellen (Gruppen: {pieces}). Du kannst deine Plätze stattdessen selbst wählen.",
+      "seatsLabel": "Deine Plätze",
+      "seatAccessible": "{seat} (rollstuhlgerecht)",
+      "seatCompanion": "{seat} (Begleitplatz)",
+      "heldFor": "{minutes} Minuten für dich reserviert, während du bezahlst.",
+      "clear": "Diese Plätze freigeben",
+      "notEnough": "Nicht genug freie Plätze zu diesem Preis für {count}. Versuche weniger Plätze oder einen anderen Preis, oder wähle deine Plätze selbst.",
+      "noAccessible": "Zu diesem Preis ist kein rollstuhlgerechter Platz frei. Versuche einen anderen Preis oder wende dich an den Veranstalter.",
+      "taken": "Diese Plätze wurden gerade vergeben. Bitte versuche es erneut.",
+      "ruleRefused": "Die Sitzplatzregeln des Veranstalters erlauben diese Auswahl nicht.",
+      "off": "„Bester Platz“ wird für diese Veranstaltung nicht mehr angeboten. Wähle deine Plätze stattdessen selbst.",
+      "findFirst": "Finde zuerst deine Plätze: Wähle die Anzahl und drücke dann „Plätze finden“.",
+      "expired": "Deine Plätze waren 10 Minuten reserviert und wurden freigegeben. Bitte suche erneut."
+    }
   },
   "fakePay": {
     "eyebrow": "Testzahlung",
@@ -1985,7 +2023,8 @@
       "plan": "Plan",
       "assign": "Gäste platzieren",
       "finder": "Platzfinder",
-      "rules": "Regeln"
+      "rules": "Regeln",
+      "selection": "Bester Platz"
     },
     "assign": {
       "title": "Gäste platzieren",
@@ -2122,7 +2161,8 @@
       "none": "Keine Regeln: Käufer können jeden freien Platz wählen.",
       "summary": {
         "ada": "Barrierefreie Plätze für Gäste mit Bedarf reserviert bis {days, plural, =0 {zum Beginn} one {# Tag vor der Veranstaltung} other {# Tage vor der Veranstaltung}} ({date}) · {severity}",
-        "cap": "Höchstens {max, plural, one {# Platz} other {# Plätze}} pro Bestellung · {severity}"
+        "cap": "Höchstens {max, plural, one {# Platz} other {# Plätze}} pro Bestellung · {severity}",
+        "companion": "Begleitplätze nur zusammen mit einem barrierefreien Platz, bis zu {max} je Platz · {severity}"
       },
       "severityShort": {
         "warn": "warnt",
@@ -2155,7 +2195,14 @@
       },
       "save": "Regeln speichern",
       "saved": "Sitzregeln gespeichert.",
-      "fixErrors": "Bitte korrigiere das markierte Feld."
+      "fixErrors": "Bitte korrigiere das markierte Feld.",
+      "companion": {
+        "title": "Begleitplätze",
+        "on": "Begleitplätze nur zusammen mit einem barrierefreien Platz verkaufen",
+        "max": "Begleitplätze je barrierefreiem Platz",
+        "maxHint": "Von 1 bis 3. Sie werden zusammen mit den barrierefreien Plätzen freigegeben.",
+        "maxError": "Gib eine ganze Zahl von 1 bis 3 ein."
+      }
     },
     "groups": {
       "title": "Gruppenblöcke",
@@ -2184,6 +2231,42 @@
         "forbidden": "Du kannst die Gruppen sehen, aber nicht ändern.",
         "noMembers": "Noch niemand auf der Liste hat das Label {label}."
       }
+    },
+    "selection": {
+      "title": "Bester Platz und Begleitplätze",
+      "description": "Lass Käufer und die Abendkasse die besten Plätze anfragen, statt sie selbst zu wählen, und halte Begleitplätze neben barrierefreien Plätzen frei.",
+      "noPlan": "Diese Veranstaltung hat noch keinen Sitzplan. Erstelle zuerst einen und richte dann hier „Bester Platz“ ein.",
+      "readOnly": "Du kannst diese Einstellungen sehen, aber nicht ändern.",
+      "bestTitle": "Bester Platz",
+      "bestOn": "„Bester Platz“ für Käufer und die Abendkasse anbieten",
+      "bestHint": "Käufer geben an, wie viele Plätze zu welchem Preis sie möchten, und erhalten die besten freien Plätze nebeneinander. Sie können ihre Plätze weiterhin selbst wählen.",
+      "scoresTitle": "Bereichswertungen",
+      "scoresHint": "Von 0 bis 100: Höhere Wertungen werden zuerst angeboten. Lass einen Bereich leer, um ihn nach seiner Entfernung zur Bühne zu ordnen.",
+      "scoreLabel": "Wertung für {section}",
+      "scoreError": "Gib eine ganze Zahl von 0 bis 100 ein oder lass das Feld leer.",
+      "noSections": "Dieser Plan hat keine Bereiche: Plätze werden nach ihrer Entfernung zur Bühne geordnet, dann nach Reihe und nach ihrer Lage zur Mitte.",
+      "saveBest": "„Bester Platz“ speichern",
+      "savedBest": "Einstellungen für „Bester Platz“ gespeichert.",
+      "fixErrors": "Bitte korrigiere das markierte Feld.",
+      "bestOnSummary": "„Bester Platz“ wird Käufern und der Abendkasse angeboten.",
+      "bestOffSummary": "„Bester Platz“ ist aus: Käufer wählen ihre Plätze selbst.",
+      "companionsTitle": "Begleitplätze",
+      "companionsDescription": "Begleitplätze liegen neben barrierefreien Plätzen, für Personen, die mit einem Rollstuhlnutzer kommen.",
+      "rulesLink": "Die Regel für Begleitplätze legst du im Tab „Regeln“ fest",
+      "noAccessible": "Dieser Plan hat noch keine barrierefreien Plätze. Markiere sie im Plan und wähle dann hier die Begleitplätze.",
+      "suggest": "Plätze neben barrierefreien Plätzen ankreuzen",
+      "group": {
+        "row": "Reihe {label}",
+        "table": "Tisch {label}"
+      },
+      "seatAccessible": "Platz {seat} · barrierefrei",
+      "seatCompanion": "Platz {seat}",
+      "suggested": "neben einem barrierefreien Platz",
+      "saveCompanions": "Begleitplätze speichern",
+      "savedCompanions": "Begleitplätze gespeichert: {count}.",
+      "companionError": "Ein Begleitplatz muss in einer Reihe oder an einem Tisch mit einem barrierefreien Platz liegen und darf selbst kein barrierefreier Platz sein.",
+      "companionList": "Begleitplätze ({count}): {seats}",
+      "companionNone": "Noch keine Begleitplätze."
     }
   },
   "venueMap": {

@@ -4,9 +4,11 @@ import { Alert, Button, buttonClass, Card, cx, Input } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { type FormEvent, startTransition, useActionState, useState } from 'react';
 import type { CheckoutState } from '@/app/[locale]/events/[slug]/actions.ts';
+import type { BestSeatsActions } from '@/components/best-available.tsx';
 import { CheckoutQuestions, type QuestionView } from '@/components/checkout-questions.tsx';
 import { GuestCodeFields } from '@/components/guest-code-fields.tsx';
-import { type SeatMapView, SeatPicker, type SeatStreamSource } from '@/components/seat-picker.tsx';
+import type { SeatMapView, SeatStreamSource } from '@/components/seat-picker.tsx';
+import { SeatSelection } from '@/components/seat-selection.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { useCssomStyle } from '@/lib/cssom-style.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
@@ -46,6 +48,8 @@ export function CheckoutForm({
   occurrenceId = null,
   seatStream = null,
   timeZone,
+  bestSeats = null,
+  advancedSeating = false,
 }: {
   /** Multi-date events (M1.4b): the date chosen on the page, posted with the order. */
   occurrenceId?: string | null;
@@ -56,6 +60,10 @@ export function CheckoutForm({
   seatStream?: SeatStreamSource | null;
   /** The event's timezone (seating rule dates). */
   timeZone?: string;
+  /** M6.11a: best available's actions (when the organizer offers it). */
+  bestSeats?: BestSeatsActions | null;
+  /** M6.11a: the org has advanced seating (the accessible-seat statement, companion seats). */
+  advancedSeating?: boolean;
   organizer: string;
   /** Organizer brand colour and its readable text colour (brand kit); default styling when absent. */
   brand?: { background: string; text: string } | null;
@@ -96,35 +104,48 @@ export function CheckoutForm({
           ? t('checkout.seatsTaken')
           : state.reason === 'choose_seats'
             ? t('checkout.chooseSeats')
-            : state.reason === 'seat_rule'
-              ? t(state.rule === 'max_per_order_seats' ? 'checkout.seatRuleCap' : 'checkout.seatRuleAda')
-              : state.reason === 'sold_out'
-                ? t('checkout.soldOut')
-                : state.reason === 'empty'
-                  ? t('checkout.chooseTickets')
-                  : state.reason === 'promo_invalid'
-                    ? t('checkout.promoInvalid')
-                    : state.reason === 'credit_invalid'
-                      ? t('checkout.creditInvalid')
-                      : state.reason === 'credit_not_applicable'
-                        ? t('checkout.creditNotApplicable')
-                        : state.reason === 'donation_amount'
-                          ? t('checkout.donationTooLow')
-                          : state.reason === 'form_invalid'
-                            ? t('checkout.questionsInvalid')
-                            : state.reason === 'choose_date'
-                              ? t('checkout.chooseDate')
-                              : state.reason === 'date_sold_out'
-                                ? t('checkout.dateSoldOut')
-                                : ['date_cancelled', 'date_passed', 'wrong_date'].includes(state.reason ?? '')
-                                  ? t('checkout.dateUnavailable')
-                                  : state.reason === 'checkout_paused'
-                                    ? t('publicEvent.salesPausedTitle')
-                                    : state.reason === 'risk_blocked'
-                                      ? t('checkout.riskBlocked')
-                                      : state.reason === 'org_suspended' || state.reason === 'org_terminated'
-                                        ? t('checkout.orgUnavailable')
-                                        : t(errorMessageKey(state.code));
+            : state.reason === 'find_seats'
+              ? t('checkout.best.findFirst')
+              : state.reason === 'seat_hold_expired'
+                ? t('checkout.best.expired')
+                : state.reason === 'seat_rule'
+                  ? t(
+                      state.rule === 'max_per_order_seats'
+                        ? 'checkout.seatRuleCap'
+                        : state.rule === 'ada_companion'
+                          ? 'checkout.seatRuleCompanion'
+                          : 'checkout.seatRuleAda',
+                    )
+                  : state.reason === 'sold_out'
+                    ? t('checkout.soldOut')
+                    : state.reason === 'empty'
+                      ? t('checkout.chooseTickets')
+                      : state.reason === 'promo_invalid'
+                        ? t('checkout.promoInvalid')
+                        : state.reason === 'credit_invalid'
+                          ? t('checkout.creditInvalid')
+                          : state.reason === 'credit_not_applicable'
+                            ? t('checkout.creditNotApplicable')
+                            : state.reason === 'donation_amount'
+                              ? t('checkout.donationTooLow')
+                              : state.reason === 'form_invalid'
+                                ? t('checkout.questionsInvalid')
+                                : state.reason === 'choose_date'
+                                  ? t('checkout.chooseDate')
+                                  : state.reason === 'date_sold_out'
+                                    ? t('checkout.dateSoldOut')
+                                    : ['date_cancelled', 'date_passed', 'wrong_date'].includes(
+                                          state.reason ?? '',
+                                        )
+                                      ? t('checkout.dateUnavailable')
+                                      : state.reason === 'checkout_paused'
+                                        ? t('publicEvent.salesPausedTitle')
+                                        : state.reason === 'risk_blocked'
+                                          ? t('checkout.riskBlocked')
+                                          : state.reason === 'org_suspended' ||
+                                              state.reason === 'org_terminated'
+                                            ? t('checkout.orgUnavailable')
+                                            : t(errorMessageKey(state.code));
   return (
     <form action={formAction} onSubmit={onSubmit} className="@container flex min-w-0 flex-1 flex-col gap-4">
       {occurrenceId ? <input type="hidden" name="occurrenceId" value={occurrenceId} /> : null}
@@ -250,7 +271,20 @@ export function CheckoutForm({
       </ul>
       {buyable && seatMap ? (
         <Card tone="muted">
-          <SeatPicker map={seatMap} prices={prices} stream={seatStream} timeZone={timeZone} />
+          <SeatSelection
+            map={seatMap}
+            prices={prices}
+            levels={passes.flatMap((p) =>
+              p.id && p.availability === 'available' && seatedTypes.has(p.id)
+                ? [{ id: p.id, label: `${p.name} · ${p.priceLabel}` }]
+                : [],
+            )}
+            stream={seatStream}
+            best={bestSeats}
+            ada={advancedSeating}
+            occurrenceId={() => occurrenceId}
+            {...(timeZone ? { timeZone } : {})}
+          />
         </Card>
       ) : null}
       {buyable && questions.length > 0 ? (

@@ -10,6 +10,29 @@ export {
   seatsOccupiedTx,
   unassignSeatsCommand,
 } from './assignments.ts';
+// M6.11a: best available and the ADA engine (companion seats).
+export {
+  adoptSeatHoldTx,
+  BEST_AVAILABLE_HOLD_MINUTES,
+  BestAvailableHoldDto,
+  companionSeatsTx,
+  companionSuggestions,
+  HeldSeatDto,
+  holdBestAvailableCommand,
+  holdBestAvailableStaffCommand,
+  holdBestAvailableTx,
+  holdIdForToken,
+  MAX_BEST_AVAILABLE,
+  MAX_COMPANION_SEATS,
+  MAX_SECTION_SCORE,
+  releaseBestAvailableCommand,
+  SelectionPageDto,
+  SelectionSettingsDto,
+  selectionPageQuery,
+  selectionSettingsTx,
+  setCompanionSeatsCommand,
+  setSelectionSettingsCommand,
+} from './best-available.ts';
 export { BulkAssignTarget, seatAssignAction, seatAssignBulk } from './bulk-assign.ts';
 export { type ChartKey, publicDoc } from './chart.ts';
 export { instantiateSeatingTx, SeatingSnapshot, seatingSnapshotTx } from './copy.ts';
@@ -20,6 +43,14 @@ export {
   assignSeatState,
   pickSeats,
 } from './domain/assign.ts';
+export {
+  type BestAvailableFailure,
+  type BestAvailablePick,
+  type BestAvailableRequest,
+  bestAvailable,
+  isTogether,
+  type PlanSeat,
+} from './domain/best-available.ts';
 export {
   BULK_ASSIGN_FAILURES,
   BULK_ASSIGN_WARNINGS,
@@ -41,6 +72,7 @@ export {
 } from './domain/live.ts';
 export {
   activeAdaRule,
+  activeCompanionRule,
   adaReleaseAt,
   blockingHits,
   evaluateSeatRules,
@@ -116,6 +148,7 @@ export { seatedAttendeeIdsTx } from './participation.ts';
 export { privateColumns } from './private-columns.ts';
 export {
   checkSeatRulesTx,
+  MAX_COMPANIONS_PER_ACCESSIBLE,
   MAX_RELEASE_DAYS,
   MAX_SEATS_PER_ORDER,
   RuleHitDto,

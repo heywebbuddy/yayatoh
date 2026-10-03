@@ -928,9 +928,15 @@
         "capReached": "這是單筆訂單的上限：{max} 個座位。",
         "adaChosen": "{count, plural, other {{seats} 是無障礙座位，為有需要的賓客保留。請僅在需要時選擇。}}",
         "overCap": "已選 {count} 個座位：主辦單位要求每筆訂單最多 {max} 個。",
-        "keptUntil": "保留至 {date}"
+        "keptUntil": "保留至 {date}",
+        "companionWarn": "陪同座位供與輪椅使用者同行的賓客使用：每個無障礙座位最多 {max} 個。",
+        "companionEnforced": "陪同座位僅與無障礙座位一起販售：每個無障礙座位最多 {max} 個。",
+        "companionChosen": "沒有無障礙座位的陪同座位：{seats}。它們供與輪椅使用者同行的賓客使用（每個無障礙座位最多 {max} 個）。",
+        "companionRefused": "沒有無障礙座位的陪同座位：{seats}。陪同座位僅與無障礙座位一起販售（每個最多 {max} 個）：請加入一個無障礙座位，或選擇其他座位。",
+        "adaEnforcedBest": "無障礙座位保留給有需要的賓客，直到 {date}。如果你需要，請勾選「我的同行者中有人使用輪椅」，並使用最佳可選座位。"
       },
-      "groupSummary": "{group} — {total} 個中 {free} 個空位{chosen, plural, =0 {} other { · 已選 #}}"
+      "groupSummary": "{group} — {total} 個中 {free} 個空位{chosen, plural, =0 {} other { · 已選 #}}",
+      "companion": "陪同座位"
     },
     "seatRuleCap": "超出了單筆訂單可選的座位數，請減少選擇。",
     "seatRuleAda": "無障礙座位目前為有需要的賓客保留，請選擇其他座位。",
@@ -940,7 +946,39 @@
     "orgUnavailable": "該主辦方目前未在售票。已購買的票券仍然有效。",
     "riskBlocked": "我們無法接受此訂單。請聯絡主辦單位。",
     "creditInvalid": "此商店餘額代碼無效或已用完。",
-    "creditNotApplicable": "此商店餘額不能用於這些票券。"
+    "creditNotApplicable": "此商店餘額不能用於這些票券。",
+    "seatRuleCompanion": "陪同座位僅與無障礙座位一起販售。請同時選擇一個無障礙座位，或選擇其他座位。",
+    "best": {
+      "title": "最佳可選座位",
+      "modeLegend": "你想如何選位？",
+      "mode": {
+        "best": "最佳可選座位：我們為你找到相鄰的最佳座位",
+        "pick": "自行選位"
+      },
+      "need": "我的同行者中有人使用輪椅，需要無障礙座位",
+      "needStaff": "購票者需要輪椅無障礙座位",
+      "needHint": "無障礙座位及其旁邊的陪同座位保留給有需要的賓客。",
+      "price": "價格",
+      "onePrice": "價格：{price}",
+      "quantity": "座位數量",
+      "find": "尋找座位",
+      "findAgain": "重新尋找",
+      "accessibleHint": "我們會尋找一個輪椅無障礙座位，並在旁邊安排陪同座位。",
+      "together": "{count, plural, other {# 個相鄰座位：}}",
+      "split": "無法讓你們 {count} 人坐在一起，因此座位分在不同位置（分組數：{pieces}）。你也可以自行選位。",
+      "seatsLabel": "你的座位",
+      "seatAccessible": "{seat}（輪椅無障礙）",
+      "seatCompanion": "{seat}（陪同座位）",
+      "heldFor": "在你付款期間為你保留 {minutes} 分鐘。",
+      "clear": "釋出這些座位",
+      "notEnough": "此價格下沒有足夠的空位供 {count} 人使用。請減少座位數、換個價格，或自行選位。",
+      "noAccessible": "此價格下沒有空的輪椅無障礙座位。請換個價格，或聯絡主辦單位。",
+      "taken": "這些座位剛剛被選走了。請再試一次。",
+      "ruleRefused": "主辦單位的座位規則不允許這樣選擇。",
+      "off": "此活動已不再提供最佳可選座位。請自行選位。",
+      "findFirst": "請先尋找座位：選擇數量，然後點選「尋找座位」。",
+      "expired": "你的座位已保留 10 分鐘，現已釋出。請重新尋找。"
+    }
   },
   "fakePay": {
     "eyebrow": "測試付款",
@@ -1985,7 +2023,8 @@
       "plan": "座位圖",
       "assign": "安排賓客",
       "finder": "座位查詢",
-      "rules": "規則"
+      "rules": "規則",
+      "selection": "最佳可選座位"
     },
     "assign": {
       "title": "安排賓客",
@@ -2122,7 +2161,8 @@
       "none": "無規則：購票者可選擇任何空位。",
       "summary": {
         "ada": "無障礙座位為有需要的賓客保留至{days, plural, =0 {活動開始} other {活動前 # 天}}（{date}）· {severity}",
-        "cap": "每筆訂單最多 {max, plural, other {# 個座位}} · {severity}"
+        "cap": "每筆訂單最多 {max, plural, other {# 個座位}} · {severity}",
+        "companion": "陪同座位僅與無障礙座位一起販售，每個最多 {max} 個 · {severity}"
       },
       "severityShort": {
         "warn": "提醒",
@@ -2155,7 +2195,14 @@
       },
       "save": "儲存規則",
       "saved": "座位規則已儲存。",
-      "fixErrors": "請修改標出的欄位。"
+      "fixErrors": "請修改標出的欄位。",
+      "companion": {
+        "title": "陪同座位",
+        "on": "陪同座位僅與無障礙座位一起販售",
+        "max": "每個無障礙座位的陪同座位數",
+        "maxHint": "1 到 3。會與無障礙座位一起開放給所有人。",
+        "maxError": "請輸入 1 到 3 的整數。"
+      }
     },
     "groups": {
       "title": "團體座位區",
@@ -2184,6 +2231,42 @@
         "forbidden": "你可以查看團體，但不能變更。",
         "noMembers": "名單中還沒有人帶有標籤 {label}。"
       }
+    },
+    "selection": {
+      "title": "最佳可選座位與陪同座位",
+      "description": "讓購票者和售票處直接要求最佳座位而不必自己挑選，並在無障礙座位旁保留陪同座位。",
+      "noPlan": "此活動還沒有座位圖。請先建立座位圖，再在這裡設定最佳可選座位。",
+      "readOnly": "你可以檢視這些設定，但不能變更。",
+      "bestTitle": "最佳可選座位",
+      "bestOn": "向購票者和售票處提供「最佳可選座位」",
+      "bestHint": "購票者選擇座位數量和價格，即可取得相鄰的最佳空位。他們也仍可自行選位。",
+      "scoresTitle": "區域評分",
+      "scoresHint": "0 到 100：評分越高越先提供。留空的區域依與舞台的距離排序。",
+      "scoreLabel": "{section} 的評分",
+      "scoreError": "請輸入 0 到 100 的整數，或留空。",
+      "noSections": "此座位圖沒有區域：座位依與舞台的距離排序，再依排別和靠近中間的程度排序。",
+      "saveBest": "儲存最佳可選座位",
+      "savedBest": "最佳可選座位設定已儲存。",
+      "fixErrors": "請修改標出的欄位。",
+      "bestOnSummary": "已向購票者和售票處提供最佳可選座位。",
+      "bestOffSummary": "最佳可選座位已關閉：購票者自行選位。",
+      "companionsTitle": "陪同座位",
+      "companionsDescription": "陪同座位位於無障礙座位旁，供與輪椅使用者同行的人使用。",
+      "rulesLink": "在「規則」分頁設定陪同座位規則",
+      "noAccessible": "此座位圖還沒有無障礙座位。請先在座位圖中標出，再在這裡選擇陪同座位。",
+      "suggest": "勾選無障礙座位旁的座位",
+      "group": {
+        "row": "{label} 排",
+        "table": "{label} 號桌"
+      },
+      "seatAccessible": "{seat} 號座 · 無障礙",
+      "seatCompanion": "{seat} 號座",
+      "suggested": "在無障礙座位旁",
+      "saveCompanions": "儲存陪同座位",
+      "savedCompanions": "已儲存陪同座位：{count} 個。",
+      "companionError": "陪同座位必須與無障礙座位在同一排或同一桌，且本身不能是無障礙座位。",
+      "companionList": "陪同座位（{count} 個）：{seats}",
+      "companionNone": "還沒有陪同座位。"
     }
   },
   "venueMap": {

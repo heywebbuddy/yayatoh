@@ -13,6 +13,7 @@ import {
 } from '@yayatoh/payments';
 import { keyVault, tenantCommand } from '@yayatoh/platform';
 import {
+  adoptSeatHoldTx,
   checkSeatRulesTx,
   extendSeatHoldTx,
   heldSeatsTx,
@@ -174,14 +175,29 @@ export async function startCheckoutTx(
   if (input.items.some((i) => seatedTypes.has(i.ticketTypeId)))
     throw new DomainError('validation_failed', 'Choose seats for this ticket', { reason: 'choose_seats' });
   const seatItems = new Map<string, number>();
-  if (input.seats.length) {
-    const held = await holdSeatsTx(tx, ctx, {
-      eventId: event.id,
-      occurrenceId: input.occurrenceId ?? null,
-      seatUuids: input.seats,
-      holdId: orderId,
-      expiresAt,
+  if (input.seatHold && input.seats.length)
+    throw new DomainError('validation_failed', 'Choose seats or best available, not both', {
+      reason: 'choose_seats',
     });
+  let seatIds: readonly string[] = input.seats;
+  if (input.seats.length || input.seatHold) {
+    // M6.11a: seats best available already holds for this buyer move to the order's hold.
+    const held = input.seatHold
+      ? await adoptSeatHoldTx(tx, ctx, {
+          eventId: event.id,
+          occurrenceId: input.occurrenceId ?? null,
+          token: input.seatHold,
+          holdId: orderId,
+          expiresAt,
+        })
+      : await holdSeatsTx(tx, ctx, {
+          eventId: event.id,
+          occurrenceId: input.occurrenceId ?? null,
+          seatUuids: input.seats,
+          holdId: orderId,
+          expiresAt,
+        });
+    seatIds = held.map((s) => s.seatUuid);
     for (const s of held) {
       if (!s.ticketTypeId)
         throw new DomainError('validation_failed', 'That seat is not on sale', {
@@ -194,8 +210,9 @@ export async function startCheckoutTx(
     await checkSeatRulesTx(tx, ctx, {
       eventId: event.id,
       occurrenceId: input.occurrenceId ?? null,
-      seatUuids: input.seats,
+      seatUuids: seatIds,
       context: 'checkout',
+      accessibleNeed: input.accessibleNeed,
     });
   }
   const wanted = [
@@ -209,7 +226,7 @@ export async function startCheckoutTx(
         token: input.waitlistToken,
         eventId: event.id,
         items: wanted,
-        seats: input.seats,
+        seats: [...seatIds],
         occurrenceId: input.occurrenceId,
         email: input.buyer.email,
         now: ctx.now,
@@ -270,7 +287,7 @@ export async function startCheckoutTx(
       id: orderId,
       orgId,
       eventId: event.id,
-      seatUuids: [...new Set(input.seats)],
+      seatUuids: [...new Set(seatIds)],
       occurrenceId,
       status: 'reserved',
       buyerEmail: input.buyer.email,
@@ -389,7 +406,13 @@ export const startCheckoutCommand = tenantCommand({
     action: 'order.checkout',
     targetType: 'order',
     targetId: r.order.id,
-    data: { eventId: input.eventId, totalMinor: r.order.totalMinor, items: input.items.length },
+    data: {
+      eventId: input.eventId,
+      totalMinor: r.order.totalMinor,
+      items: input.items.length,
+      ...(input.seatHold ? { bestAvailable: true } : {}),
+      ...(input.accessibleNeed ? { accessibleNeed: true } : {}),
+    },
   }),
 });
 

@@ -834,6 +834,13 @@
       "when": 1791021707283,
       "tag": "0118_chilly_grandmaster",
       "breakpoints": true
+    },
+    {
+      "idx": 119,
+      "version": "7",
+      "when": 1791021733484,
+      "tag": "0119_shocking_husk",
+      "breakpoints": true
     }
   ]
 }

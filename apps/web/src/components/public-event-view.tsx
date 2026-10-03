@@ -26,7 +26,9 @@ import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import {
   checkoutAction,
+  findBestSeatsAction,
   redeemAccessCodeAction,
+  releaseBestSeatsAction,
   requestHolderLinkAction,
 } from '@/app/[locale]/events/[slug]/actions.ts';
 import { AccessCodeEntry } from '@/components/access-code-entry.tsx';
@@ -48,6 +50,7 @@ import { formatEventDateRange, formatNumber } from '@/lib/format.ts';
 import { refundPolicyLines } from '@/lib/refund-policy-text.ts';
 import { aggregateRatingJsonLd, eventJsonLd, jsonLdScript } from '@/lib/seo/jsonld.ts';
 import { localizedPath } from '@/lib/seo/urls.ts';
+import { hasAdvancedSeating } from '@/server/advanced-seating.ts';
 import { publicDemoOverlay } from '@/server/demo.ts';
 import { cachedExhibitorMap } from '@/server/exhibitor-map.ts';
 import { cachedReviews } from '@/server/public-data.ts';
@@ -164,8 +167,10 @@ export async function PublicEventView({
     return n ? [{ id: p.id, name: p.name, ...taxNoticeText(n, locale) }] : [];
   });
   // Per-date charts (M1.7g): the chosen date's own chart when it has one, else the event plan.
+  // M6.11a: best available and companion seats come with advanced seating.
+  const advancedSeating = target ? await hasAdvancedSeating(target.orgId) : false;
   const seatMap = target
-    ? await publicSeatMap(target.orgId, target.eventId, { occurrenceId: chosen?.id ?? null })
+    ? await publicSeatMap(target.orgId, target.eventId, { occurrenceId: chosen?.id ?? null, advancedSeating })
     : null;
   // M3.10a: passes whose remaining stock is kept for their waitlist read as sold out, and sold-out
   // passes (not seated, not choose-your-amount, not code-unlocked) offer "Join the waitlist".
@@ -344,6 +349,15 @@ export async function PublicEventView({
               : null
           }
           timeZone={ev.timezone}
+          advancedSeating={advancedSeating}
+          bestSeats={
+            seatMap?.bestAvailable
+              ? {
+                  find: findBestSeatsAction.bind(null, slug),
+                  release: releaseBestSeatsAction.bind(null, slug),
+                }
+              : null
+          }
           action={checkoutAction.bind(null, slug)}
         />
       )}

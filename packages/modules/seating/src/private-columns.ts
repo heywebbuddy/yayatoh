@@ -20,4 +20,6 @@ export const privateColumns = columnPrivacy('seating', {
   sub_event_charts: { doc: internal(), checksum: 'vocab' },
   // M4.2b hosted tables: guests see the sponsor once the host publishes it (seat finder, map).
   table_sponsors: { sponsor_name: 'public', logo_url: 'public' },
+  // M6.11a: the organizer's section scores rank best available; never shown to buyers.
+  selection_settings: { section_scores: internal() },
 });
