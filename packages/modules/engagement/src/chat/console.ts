@@ -119,7 +119,8 @@ export const chatConsoleQuery = tenantQuery({
         id: m.id,
         from: nameOfSide(c, m.sender as ChatSide),
         byReported: m.sender === reported,
-        body: clipExcerpt(m.body),
+        // A removed message stays out of the console too (it is kept for Yayatoh's review).
+        body: m.removedAt ? '' : clipExcerpt(m.body),
         removed: m.removedAt !== null,
         at: m.createdAt,
       }));

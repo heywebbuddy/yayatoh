@@ -67,7 +67,8 @@ export async function chatReportsForReviewTx(
       createdAt: new Date(r.created_at),
       excerpt: (r.excerpt ?? []).map((m) => ({
         from: m.sender === r.reporter ? 'reporter' : 'reported',
-        text: m.removed ? '' : clipExcerpt(m.body),
+        // Staff see a removed message's text too (flagged): they review what was reported.
+        text: clipExcerpt(m.body),
         removed: m.removed,
         at: new Date(m.at),
       })),

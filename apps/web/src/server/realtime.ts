@@ -4,6 +4,7 @@ import { ASSISTANCE_CHANNEL } from '@yayatoh/assistance';
 import { checkinFactsTx, deviceContext } from '@yayatoh/checkin';
 import { type TenantTx, withTenant } from '@yayatoh/db';
 import {
+  CHAT_REALTIME_CHANNELS,
   ENGAGEMENT_REALTIME_CHANNELS,
   moderationSnapshotTx,
   publicSnapshotTx,
@@ -69,6 +70,9 @@ export const REALTIME_CHANNELS = createRealtimeRegistry([
   ASSISTANCE_CHANNEL,
   // M5.7a: live polls and Q&A, one session each.
   ...ENGAGEMENT_REALTIME_CHANNELS,
+  // M5.8b: chat inboxes (attendees, exhibitors). Registered so they resolve; only their own
+  // stream routes attach them (`inboxStreamResponse`), the generic attach refuses them.
+  ...CHAT_REALTIME_CHANNELS,
 ]);
 
 /** Stream (re)connections per caller and channel per minute. */
@@ -375,6 +379,30 @@ export async function seatStreamResponse(
     req,
     { ok: true, channel, as: opts.kind === 'public' ? 'public' : 'member', who: opts.who ?? 'anonymous' },
     { rateBucket: `seat-stream:${opts.eventId}:${streamKey(opts.who)}` },
+  );
+}
+
+/**
+ * A chat inbox stream (M5.8b): the route proved who the caller is and worked out their own inbox
+ * (`own`); a `channel` the browser names must be exactly that inbox (403 otherwise: another
+ * person's, another event's or another org's inbox is never attached). Same stream, limits and
+ * resumption as every channel.
+ */
+export async function inboxStreamResponse(
+  req: Request,
+  own: string | null,
+  who: string,
+  allowed: (own: string | null, requested: string) => boolean,
+): Promise<Response> {
+  if (!own) return new Response(null, { status: 404 });
+  const requested = new URL(req.url).searchParams.get('channel');
+  if (requested !== null && !allowed(own, requested)) return new Response(null, { status: 403 });
+  const channel = REALTIME_CHANNELS.resolve(own);
+  if (!channel) return new Response(null, { status: 404 });
+  return realtimeStreamResponse(
+    req,
+    { ok: true, channel, as: 'member', who },
+    { rateBucket: `chat-stream:${channel.inboxId ?? ''}:${streamKey(who)}` },
   );
 }
 

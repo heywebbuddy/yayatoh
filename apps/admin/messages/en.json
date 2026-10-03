@@ -507,7 +507,42 @@
       "open": "No open reports",
       "closed": "No reviewed reports yet"
     },
-    "emptyDescription": "Reports from organizers and contacts show up here."
+    "emptyDescription": "Reports from organizers and contacts show up here.",
+    "chat": {
+      "title": "Networking chat reports",
+      "description": "1:1 chats at events that attendees or exhibitors reported. The organizer handles each report at the event too; review it here for Yayatoh.",
+      "heading": "{org} · {kind} · {reason}",
+      "meta": "Reported by the {reporter} · {at} UTC · Organizer: {moderation} ·",
+      "kind": {
+        "direct": "Attendee chat",
+        "booth": "Booth chat"
+      },
+      "reporter": {
+        "attendee": "attendee",
+        "exhibitor": "exhibitor"
+      },
+      "reasons": {
+        "spam": "Spam or unwanted selling",
+        "harassment": "Harassment",
+        "inappropriate": "Inappropriate content",
+        "fake": "Fake profile",
+        "other": "Something else"
+      },
+      "moderation": {
+        "open": "not handled yet",
+        "actioned": "acted on",
+        "dismissed": "dismissed"
+      },
+      "from": {
+        "reporter": "Reporter",
+        "reported": "Reported side"
+      },
+      "removed": "removed by the organizer",
+      "empty": {
+        "open": "No open chat reports",
+        "closed": "No reviewed chat reports yet"
+      }
+    }
   },
   "people": {
     "metaTitle": "Privacy requests · Yayatoh staff",

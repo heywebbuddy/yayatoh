@@ -56,7 +56,13 @@ export async function settingsAction(
   return run(org, event, (eventId, ctx) =>
     executeCommand(
       updateNetworkSettingsCommand,
-      { eventId, enabled: on.includes('enabled'), meetingsEnabled: on.includes('meetings') },
+      {
+        eventId,
+        enabled: on.includes('enabled'),
+        meetingsEnabled: on.includes('meetings'),
+        // M5.8b: chat between connections and meeting parties, and booth chat.
+        chatEnabled: on.includes('chat'),
+      },
       ctx,
       ports,
     ),
