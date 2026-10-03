@@ -1,11 +1,16 @@
 import type { ConnectorDefinition } from '../sdk/connector.ts';
 import { demoConnector } from './demo.ts';
+import { salesforceConnector } from './salesforce/index.ts';
 
 /**
  * Every connector (M6.4a). M6.4b–d append theirs here (Eventbrite, Google Sheets, Zapier, Slack,
  * Mailchimp, HubSpot, Klaviyo), in the order of decision P6-4.
  */
-export const CONNECTORS: readonly ConnectorDefinition[] = [demoConnector];
+export const CONNECTORS: readonly ConnectorDefinition[] = [
+  demoConnector,
+  // M6.5b.
+  salesforceConnector,
+];
 
 export function connectorByKey(key: string): ConnectorDefinition | null {
   return CONNECTORS.find((c) => c.key === key) ?? null;

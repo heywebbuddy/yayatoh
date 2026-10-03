@@ -19,6 +19,17 @@ export {
   upsertContactsTx,
   upsertContactTx,
 } from './contacts.ts';
+// M6.5b: contacts, consent and participation for CRM connectors (Salesforce).
+export {
+  type CrmConsentRow,
+  type CrmParticipationRow,
+  type CrmPersonRow,
+  consentedContactsChangedTx,
+  contactsWithConsentTx,
+  crmParticipationRowsTx,
+  withdrawEmailMarketingTx,
+  writeCrmPersonTx,
+} from './crm-connector-sync.ts';
 export { crmDataSubjects } from './data-subject.ts';
 export { consentRegivenSinceTx, contactDsarTx, eraseContactDsarTx, unlinkContactUserTx } from './dsar.ts';
 export { contactForAccountTx, replaceEventEngagementTx } from './engagement.ts';
