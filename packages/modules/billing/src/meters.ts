@@ -147,16 +147,17 @@ export const usageSummaryQuery = tenantQuery({
   permission: 'billing:read',
   handler: async ({ input, ctx, tx }) => {
     const tz = input.timeZone;
+    const now = ctx.now.toISOString();
     const [bounds] = await tx.execute<{
       month: string;
       start: string | Date;
       end: string | Date;
       from: string | Date;
     }>(
-      sql`select to_char(${ctx.now}::timestamptz at time zone ${tz}, 'YYYY-MM') as month,
-            date_trunc('month', ${ctx.now}::timestamptz at time zone ${tz}) at time zone ${tz} as start,
-            (date_trunc('month', ${ctx.now}::timestamptz at time zone ${tz}) + interval '1 month') at time zone ${tz} as end,
-            (date_trunc('month', ${ctx.now}::timestamptz at time zone ${tz}) - make_interval(months => ${input.months})) at time zone ${tz} as from`,
+      sql`select to_char(${now}::timestamptz at time zone ${tz}, 'YYYY-MM') as month,
+            date_trunc('month', ${now}::timestamptz at time zone ${tz}) at time zone ${tz} as start,
+            (date_trunc('month', ${now}::timestamptz at time zone ${tz}) + interval '1 month') at time zone ${tz} as end,
+            (date_trunc('month', ${now}::timestamptz at time zone ${tz}) - make_interval(months => ${input.months})) at time zone ${tz} as from`,
     );
     if (!bounds) throw new Error('usage bounds');
     const rows = await tx.execute<{
@@ -168,7 +169,7 @@ export const usageSummaryQuery = tenantQuery({
       sql`select to_char(occurred_at at time zone ${tz}, 'YYYY-MM') as month, meter,
             sum(quantity)::bigint as quantity, count(*)::int as records
           from billing.usage_records
-          where occurred_at >= ${new Date(bounds.from)} and occurred_at < ${new Date(bounds.end)}
+          where occurred_at >= ${new Date(bounds.from).toISOString()}::timestamptz and occurred_at < ${new Date(bounds.end).toISOString()}::timestamptz
             ${input.meter ? sql`and meter = ${input.meter}` : sql``}
           group by 1, 2`,
     );
