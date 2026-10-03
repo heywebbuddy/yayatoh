@@ -10,6 +10,7 @@ import {
   sessionChannelOpen,
 } from '@yayatoh/engagement';
 import { findEventTx, isPublicEvent } from '@yayatoh/events';
+import { GUESTS_CHANNEL } from '@yayatoh/guests';
 import { createCtx } from '@yayatoh/kernel';
 import {
   ablyRealtimePublisher,
@@ -38,6 +39,7 @@ import {
 } from '@yayatoh/platform';
 import {
   createSeatFeed,
+  GUEST_SEATS_CHANNEL,
   listenForSeatChanges,
   SEAT_STATES_CHANNEL,
   SEATS_CHANNEL,
@@ -69,6 +71,9 @@ export const REALTIME_CHANNELS = createRealtimeRegistry([
   ASSISTANCE_CHANNEL,
   // M5.7a: live polls and Q&A, one session each.
   ...ENGAGEMENT_REALTIME_CHANNELS,
+  // M4.3a: the guest seating editor follows the guest list and the guests' places.
+  GUESTS_CHANNEL,
+  GUEST_SEATS_CHANNEL,
 ]);
 
 /** Stream (re)connections per caller and channel per minute. */
