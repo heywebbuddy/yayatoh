@@ -195,7 +195,7 @@ test.describe('kiosk self-print (M5.5c)', () => {
     await expect(k.locator('[data-kiosk-result]')).toHaveText(/You're checked in\. Enjoy!/);
     await expect(k.getByRole('heading', { name: 'Check your details' })).toBeFocused();
     await expect(k.locator('[data-kiosk-name]')).toHaveText(ada.name);
-    await expect(k.getByText('Delegate', { exact: true })).toBeVisible();
+    await expect(k.locator('[data-kiosk-print] dd').filter({ hasText: 'Delegate' })).toBeVisible();
     await expect(k.getByText(ada.email)).toHaveCount(0);
     await expect(codeField(k)).toHaveCount(0);
     for (const label of ['Print my badge', "Something's wrong", 'Not me']) {
@@ -242,7 +242,7 @@ test.describe('kiosk self-print (M5.5c)', () => {
     // Bo has no ticket with them: the email code, keyboard only, with its validation.
     await useEmail.focus();
     await k.keyboard.press('Enter');
-    const email = k.getByLabel('Your email');
+    const email = k.getByRole('textbox', { name: 'Your email' });
     await expect(email).toBeFocused();
     await k.keyboard.press('Enter');
     await expect(k.getByText('Enter your email address, like name@example.com.')).toBeVisible();
@@ -250,7 +250,7 @@ test.describe('kiosk self-print (M5.5c)', () => {
     await expectAccessible(k);
     await email.fill(bo.email);
     await k.keyboard.press('Enter');
-    const code = k.getByLabel('6-digit code');
+    const code = k.getByRole('textbox', { name: '6-digit code' });
     await expect(code).toBeFocused();
     await expect(k.getByText(`If ${bo.email} has a ticket for this event`, { exact: false })).toBeVisible();
     const sent = (await (
@@ -274,7 +274,7 @@ test.describe('kiosk self-print (M5.5c)', () => {
 
     // An address with nothing here gets the same answer (no enumeration).
     await useEmail.click();
-    await k.getByLabel('Your email').fill(`nobody+${s}@example.test`);
+    await k.getByRole('textbox', { name: 'Your email' }).fill(`nobody+${s}@example.test`);
     await k.getByRole('button', { name: 'Email me a code' }).click();
     await expect(
       k.getByText(`If nobody+${s}@example.test has a ticket for this event`, { exact: false }),

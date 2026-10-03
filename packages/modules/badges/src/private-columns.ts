@@ -42,6 +42,8 @@ export const privateColumns = columnPrivacy('badges', {
   // M5.5c kiosk self-print: challenges keep only the code's HMAC (settings have no text columns).
   kiosk_challenges: {
     outcome: 'vocab',
-    code_hash: secret(),
+    code_hash: secret('none', {
+      why: 'CHECK requires a 43-char base64url HMAC; never in a response (kiosk-print.int.test)',
+    }),
   },
 });

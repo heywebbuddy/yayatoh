@@ -236,7 +236,8 @@ export default async function PrintingPage({
           {kiosk.enabled ? (
             <span className="text-caption text-ink-2">
               {tp('kiosk.printsTo', {
-                printer: printing.printers.find((p) => p.id === kiosk.printerId)?.name ?? tp('deviceDialog'),
+                printer:
+                  printing.printers.find((p) => p.id === kiosk.printerId)?.name ?? tp('kiosk.ownDialog'),
               })}
               {' · '}
               {kiosk.emailCodes ? tp('kiosk.emailOn') : tp('kiosk.emailOff')}
