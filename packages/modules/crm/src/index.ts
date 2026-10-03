@@ -123,6 +123,12 @@ export {
 } from './stats/queries.ts';
 export { RFM_KEYS, type RfmKey } from './stats/rfm.ts';
 export {
+  type ContactSyncRow,
+  contactSyncRowTx,
+  contactsChangedSinceTx,
+  writeSyncedContactTx,
+} from './sync.ts';
+export {
   CONSENT_TERM_KEYS,
   CONSENT_TERMS,
   type ConsentTerm,

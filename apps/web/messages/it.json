@@ -347,7 +347,8 @@
     "assistance": "Richieste di aiuto",
     "marketingAnalytics": "Analisi di marketing",
     "badges": "Badge",
-    "orgAnalytics": "Analisi"
+    "orgAnalytics": "Analisi",
+    "integrations": "Integrazioni"
   },
   "vocab": {
     "attendee": "Partecipante",
@@ -12055,5 +12056,258 @@
       "cancelled": "Annullata"
     },
     "runProgress": "{events, plural, one {# evento controllato} many {# eventi controllati} other {# eventi controllati}}, {written, plural, one {# aggiornato} many {# aggiornati} other {# aggiornati}}"
+  },
+  "integrations": {
+    "title": "Integrazioni",
+    "description": "Collega gli strumenti che usi già. Contatti e record restano allineati in entrambe le direzioni e ti avvisiamo quando qualcosa va controllato.",
+    "tabsLabel": "Sezioni delle integrazioni",
+    "tabs": {
+      "connections": "Connessioni",
+      "errors": "Errori"
+    },
+    "cancelled": "La connessione è stata annullata.",
+    "offTitle": "Le integrazioni non sono ancora attive qui",
+    "offDescription": "Le connessioni richiedono il servizio integrazioni, che su questo sito non è ancora configurato. Rivolgiti all’amministrazione della piattaforma.",
+    "noneTitle": "Ancora nessuna integrazione da collegare",
+    "noneDescription": "Le nuove integrazioni compariranno in questa pagina non appena saranno disponibili.",
+    "connectors": {
+      "demo": {
+        "description": "Un’app contatti di prova per provare le integrazioni: i contatti si sincronizzano in entrambe le direzioni con il tuo CRM. Solo negli ambienti di test."
+      }
+    },
+    "sandboxBadge": "Prova",
+    "account": "Account",
+    "lastSync": "Ultima sincronizzazione",
+    "never": "Mai",
+    "openErrors": "Errori aperti",
+    "openErrorCount": "{count, plural, one {# record da controllare} other {# record da controllare}}",
+    "noErrors": "Nessuno",
+    "notInPlan": "Non incluso nel tuo piano",
+    "manage": "Gestisci",
+    "manageNamed": "Gestisci {name}",
+    "connect": "Collega",
+    "connectNamed": "Collega {name}",
+    "reconnect": "Ricollega",
+    "reconnectNamed": "Ricollega {name}",
+    "readOnly": "Solo proprietari e amministratori possono collegare o modificare le integrazioni.",
+    "breadcrumb": "Percorso di navigazione",
+    "objects": {
+      "contacts": "Contatti"
+    },
+    "fields": {
+      "email": "Email",
+      "name": "Nome"
+    },
+    "status": {
+      "none": "Non collegata",
+      "pending": "In attesa di approvazione",
+      "active": "Collegata",
+      "paused": "In pausa",
+      "revoked": "Scollegata",
+      "failed": "Connessione non riuscita"
+    },
+    "runStatus": {
+      "queued": "In coda",
+      "running": "In corso",
+      "succeeded": "Sincronizzata",
+      "partial": "Sincronizzata con errori",
+      "failed": "Non riuscita",
+      "cancelled": "Annullata"
+    },
+    "errorsFeedback": {
+      "unavailable": "Questa integrazione non è disponibile qui.",
+      "provider_unavailable": "Impossibile raggiungere il fornitore. Riprova tra qualche minuto.",
+      "not_approved": "Il fornitore non ha ancora confermato la connessione. Completa lì il collegamento, poi controlla di nuovo.",
+      "denied": "La connessione non è stata approvata, quindi non è stato collegato nulla.",
+      "expired": "Il link di collegamento è scaduto. Ricomincia con Collega.",
+      "validation_failed": "Alcuni dati vanno corretti.",
+      "forbidden": "Non hai accesso a questa sezione.",
+      "module_not_enabled": "Le integrazioni non sono incluse nel tuo piano.",
+      "not_found": "Non l’abbiamo trovato.",
+      "conflict": "Questa integrazione è già collegata.",
+      "invalid_state": "Non è possibile farlo adesso.",
+      "impersonation_blocked": "Lo staff che agisce come membro non può collegare integrazioni.",
+      "read_only_freeze": "Le modifiche sono sospese durante la manutenzione programmata. Riprova al termine.",
+      "internal": "Si è verificato un problema da parte nostra."
+    },
+    "detail": {
+      "title": "Integrazione",
+      "syncNow": "Sincronizza ora",
+      "syncing": "Sincronizzazione in arrivo",
+      "connected": "{name} è collegata. La prima sincronizzazione parte a breve.",
+      "sync": {
+        "queued": "Sincronizzazione avviata. Aggiorna tra poco per vedere il risultato.",
+        "already": "C’è già una sincronizzazione in arrivo."
+      },
+      "done": {
+        "paused": "La sincronizzazione è in pausa.",
+        "resumed": "La sincronizzazione è di nuovo attiva.",
+        "interval": "Frequenza di sincronizzazione salvata.",
+        "disconnected": "Scollegata. Non si sincronizza più nulla e l’accesso è stato revocato presso il fornitore."
+      },
+      "revoked": {
+        "user": "Scollegata il {when}.",
+        "provider": "Il fornitore non accetta più questa connessione dal {when}, quindi la sincronizzazione si è fermata. Ricollegala per continuare."
+      },
+      "pending": "In attesa che la connessione venga approvata presso il fornitore.",
+      "checkConnection": "Controlla connessione",
+      "cancelConnect": "Annulla",
+      "confirmDisconnect": "Scollegare {name}?",
+      "confirmDisconnectBody": "La sincronizzazione si ferma subito e l’accesso di Yayatoh viene revocato presso il fornitore. I record già sincronizzati restano dove sono.",
+      "disconnect": "Scollega",
+      "keep": "Mantieni collegata",
+      "statusTitle": "Stato",
+      "connectedAt": "Collegata",
+      "nextSync": "Prossima sincronizzazione",
+      "interval": "Sincronizza ogni",
+      "saveInterval": "Salva frequenza",
+      "pause": "Metti in pausa",
+      "resume": "Riprendi la sincronizzazione",
+      "intervals": {
+        "15": "15 minuti",
+        "60": "Ora",
+        "360": "6 ore",
+        "1440": "Giorno"
+      }
+    },
+    "mapping": {
+      "sectionTitle": "Mappatura dei campi",
+      "sectionHelp": "Scegli quale campo compila quale. Ogni salvataggio crea una nuova versione, usata dalla prossima sincronizzazione.",
+      "title": {
+        "pull": "Verso Yayatoh",
+        "push": "Verso il fornitore"
+      },
+      "help": {
+        "pull": "I campi del fornitore compilano quelli di Yayatoh.",
+        "push": "I campi di Yayatoh compilano quelli del fornitore."
+      },
+      "version": "Versione {version}",
+      "saved": "Mappatura salvata come versione {version}. La prossima sincronizzazione la usa.",
+      "invalid": "Questa mappatura non può ancora essere salvata. Controlla i campi segnalati.",
+      "required": "obbligatorio",
+      "source": "Proviene da",
+      "transform": "Trasforma",
+      "default": "Se vuoto, usa",
+      "notMapped": "— Non mappato —",
+      "transforms": {
+        "none": "Lascia invariato",
+        "trim": "Togli gli spazi",
+        "lowercase": "minuscolo",
+        "uppercase": "MAIUSCOLO",
+        "title_case": "Iniziali Maiuscole",
+        "first_word": "Prima parola",
+        "last_word": "Ultima parola",
+        "to_number": "Numero",
+        "to_boolean": "Sì o no",
+        "to_date": "Data"
+      },
+      "save": {
+        "pull": "Salva mappatura di importazione",
+        "push": "Salva mappatura di esportazione"
+      },
+      "issue": {
+        "missing_required": "Scegli da dove proviene {field}: è obbligatorio.",
+        "unknown_source": "Questo campo non esiste presso il fornitore.",
+        "unknown_target": "{field} non può essere compilato.",
+        "duplicate_target": "{field} viene compilato due volte.",
+        "other": "Controlla questo campo."
+      }
+    },
+    "runs": {
+      "title": "Sincronizzazioni recenti",
+      "caption": "Sincronizzazioni recenti di questa integrazione",
+      "empty": "Ancora nessuna sincronizzazione. La prima parte poco dopo il collegamento.",
+      "when": "Inizio",
+      "trigger": "Avviata da",
+      "status": "Esito",
+      "pulled": "In entrata",
+      "pushed": "In uscita",
+      "skipped": "Invariati",
+      "failed": "Errori",
+      "error": "Problema",
+      "triggers": {
+        "manual": "Sincronizza ora",
+        "schedule": "Pianificazione",
+        "retry": "Nuovo tentativo"
+      }
+    },
+    "codes": {
+      "auth_revoked": "Il fornitore non accetta più questa connessione",
+      "invalid_token": "Il fornitore non accetta più questa connessione",
+      "auth_failed": "Il fornitore ha rifiutato la connessione",
+      "invalid_value": "Un valore non è adatto al suo campo",
+      "missing_required": "Un campo obbligatorio è vuoto",
+      "transform_failed": "Non è stato possibile convertire un valore",
+      "duplicate_record": "Due record puntano allo stesso contatto",
+      "write_failed": "Impossibile salvare in Yayatoh",
+      "push_failed": "Impossibile inviare al fornitore",
+      "network": "Il fornitore non era raggiungibile",
+      "lease_expired": "La sincronizzazione si è interrotta in modo imprevisto",
+      "disconnected": "Interrotta dallo scollegamento",
+      "paused": "Interrotta dalla pausa",
+      "sync_failed": "La sincronizzazione non è riuscita",
+      "unknown_connector": "Questa integrazione non è più disponibile",
+      "other": "Errore ({code})"
+    },
+    "inbox": {
+      "title": "Errori di integrazione",
+      "description": "Record che non è stato possibile sincronizzare, raggruppati per causa. Vengono ritentati automaticamente per un po’. Correggi il record alla fonte e poi Riprova, oppure ignora ciò che non ti serve.",
+      "retried": "{count, plural, =0 {Niente da ritentare: quelle connessioni non sono attive.} one {# record verrà ritentato alla prossima sincronizzazione.} other {# record verranno ritentati alla prossima sincronizzazione.}}",
+      "dismissed": "{count, plural, one {# record ignorato.} other {# record ignorati.}}",
+      "filterLabel": "Mostra errori",
+      "status": {
+        "open": "Aperti",
+        "resolved": "Risolti",
+        "dismissed": "Ignorati"
+      },
+      "empty": {
+        "open": "Nessun errore aperto",
+        "resolved": "Ancora nulla di risolto",
+        "dismissed": "Nulla di ignorato"
+      },
+      "emptyOpenHelp": "È tutto sincronizzato. Se un record non si sincronizza, compare qui con il passo successivo.",
+      "backToConnections": "Vai alle connessioni",
+      "groupTitle": "{connector}: {step} · {count, plural, one {# record} other {# record}}",
+      "steps": {
+        "auth": "Connessione",
+        "pull": "Lettura dal fornitore",
+        "map": "Mappatura",
+        "write": "Salvataggio in Yayatoh",
+        "push": "Invio al fornitore"
+      },
+      "field": "Campo: {field}",
+      "lastSeen": "Visto l’ultima volta {when}",
+      "retryAll": "Riprova tutti",
+      "retryAllNamed": "Riprova tutti: {group}",
+      "dismissAll": "Ignora tutti",
+      "dismissAllNamed": "Ignora tutti: {group}",
+      "recordsCaption": "Record: {group}",
+      "record": "Record",
+      "object": "Cosa",
+      "objectDirection": "{object} ({direction})",
+      "directions": {
+        "pull": "in entrata",
+        "push": "in uscita"
+      },
+      "wholeConnection": "Intera connessione",
+      "attempts": "Tentativi",
+      "nextRetry": "Prossimo tentativo automatico",
+      "closedAt": "Chiuso",
+      "manualRetry": "In attesa di te",
+      "actions": "Azioni",
+      "retry": "Riprova",
+      "retryNamed": "Riprova {record}",
+      "dismiss": "Ignora",
+      "dismissNamed": "Ignora {record}",
+      "more": "{count, plural, one {Altro # record non mostrato.} other {Altri # record non mostrati.}}"
+    },
+    "fakeConsent": {
+      "title": "Consenso di prova",
+      "eyebrow": "Fornitore di prova",
+      "heading": "Collegare {name} a Yayatoh?",
+      "body": "{name} è un fornitore di prova. Se consenti, Yayatoh potrà leggere e scrivere quanto segue per tuo conto:",
+      "allow": "Consenti",
+      "deny": "Rifiuta"
+    }
   }
 }

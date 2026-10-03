@@ -347,7 +347,8 @@
     "assistance": "Demandes d’aide",
     "marketingAnalytics": "Analyses marketing",
     "badges": "Badges",
-    "orgAnalytics": "Analyses"
+    "orgAnalytics": "Analyses",
+    "integrations": "Intégrations"
   },
   "vocab": {
     "attendee": "Participant",
@@ -12055,5 +12056,258 @@
       "cancelled": "Annulée"
     },
     "runProgress": "{events, plural, one {# événement vérifié} many {# événements vérifiés} other {# événements vérifiés}}, {written, plural, one {# mis à jour} many {# mis à jour} other {# mis à jour}}"
+  },
+  "integrations": {
+    "title": "Intégrations",
+    "description": "Connectez les outils que vous utilisez déjà. Contacts et fiches restent synchronisés dans les deux sens, et vous êtes prévenu quand quelque chose demande votre attention.",
+    "tabsLabel": "Sections des intégrations",
+    "tabs": {
+      "connections": "Connexions",
+      "errors": "Erreurs"
+    },
+    "cancelled": "La connexion a été annulée.",
+    "offTitle": "Les intégrations ne sont pas encore activées ici",
+    "offDescription": "Les connexions nécessitent le service d’intégrations, qui n’est pas encore configuré sur ce site. Adressez-vous à l’administration de la plateforme.",
+    "noneTitle": "Aucune intégration à connecter pour l’instant",
+    "noneDescription": "Les nouvelles intégrations apparaîtront sur cette page dès qu’elles seront disponibles.",
+    "connectors": {
+      "demo": {
+        "description": "Une appli de contacts de test pour essayer les intégrations : les contacts se synchronisent dans les deux sens avec votre CRM. Environnements de test uniquement."
+      }
+    },
+    "sandboxBadge": "Test",
+    "account": "Compte",
+    "lastSync": "Dernière synchro",
+    "never": "Jamais",
+    "openErrors": "Erreurs ouvertes",
+    "openErrorCount": "{count, plural, one {# fiche à vérifier} other {# fiches à vérifier}}",
+    "noErrors": "Aucune",
+    "notInPlan": "Pas inclus dans votre offre",
+    "manage": "Gérer",
+    "manageNamed": "Gérer {name}",
+    "connect": "Connecter",
+    "connectNamed": "Connecter {name}",
+    "reconnect": "Reconnecter",
+    "reconnectNamed": "Reconnecter {name}",
+    "readOnly": "Seuls les propriétaires et les admins peuvent connecter ou modifier des intégrations.",
+    "breadcrumb": "Fil d’Ariane",
+    "objects": {
+      "contacts": "Contacts"
+    },
+    "fields": {
+      "email": "E-mail",
+      "name": "Nom"
+    },
+    "status": {
+      "none": "Non connectée",
+      "pending": "En attente d’autorisation",
+      "active": "Connectée",
+      "paused": "En pause",
+      "revoked": "Déconnectée",
+      "failed": "Échec de la connexion"
+    },
+    "runStatus": {
+      "queued": "En file d’attente",
+      "running": "En cours",
+      "succeeded": "Synchronisée",
+      "partial": "Synchronisée avec erreurs",
+      "failed": "Échec",
+      "cancelled": "Annulée"
+    },
+    "errorsFeedback": {
+      "unavailable": "Cette intégration n’est pas disponible ici.",
+      "provider_unavailable": "Le fournisseur est injoignable. Réessayez dans quelques minutes.",
+      "not_approved": "Le fournisseur n’a pas encore confirmé la connexion. Terminez-la chez lui, puis vérifiez à nouveau.",
+      "denied": "La connexion n’a pas été autorisée : rien n’a été connecté.",
+      "expired": "Ce lien de connexion a expiré. Recommencez avec Connecter.",
+      "validation_failed": "Certaines informations sont à corriger.",
+      "forbidden": "Vous n’avez pas accès à ceci.",
+      "module_not_enabled": "Les intégrations ne sont pas incluses dans votre offre.",
+      "not_found": "Introuvable.",
+      "conflict": "Cette intégration est déjà connectée.",
+      "invalid_state": "Ce n’est pas possible pour le moment.",
+      "impersonation_blocked": "Le personnel agissant en tant que membre ne peut pas connecter d’intégrations.",
+      "read_only_freeze": "Les modifications sont suspendues pendant la maintenance planifiée. Réessayez ensuite.",
+      "internal": "Un problème est survenu de notre côté."
+    },
+    "detail": {
+      "title": "Intégration",
+      "syncNow": "Synchroniser",
+      "syncing": "Synchro en cours d’envoi",
+      "connected": "{name} est connectée. La première synchro commence bientôt.",
+      "sync": {
+        "queued": "Synchro lancée. Actualisez dans un instant pour voir le résultat.",
+        "already": "Une synchro est déjà en route."
+      },
+      "done": {
+        "paused": "La synchronisation est en pause.",
+        "resumed": "La synchronisation a repris.",
+        "interval": "Fréquence de synchro enregistrée.",
+        "disconnected": "Déconnectée. Plus rien n’est synchronisé et l’accès a été révoqué chez le fournisseur."
+      },
+      "revoked": {
+        "user": "Déconnectée le {when}.",
+        "provider": "Le fournisseur n’accepte plus cette connexion depuis le {when}, la synchro s’est donc arrêtée. Reconnectez-la pour continuer."
+      },
+      "pending": "En attente de l’autorisation de la connexion chez le fournisseur.",
+      "checkConnection": "Vérifier la connexion",
+      "cancelConnect": "Annuler",
+      "confirmDisconnect": "Déconnecter {name} ?",
+      "confirmDisconnectBody": "La synchro s’arrête aussitôt et l’accès de Yayatoh est révoqué chez le fournisseur. Les fiches déjà synchronisées restent en place.",
+      "disconnect": "Déconnecter",
+      "keep": "Garder connectée",
+      "statusTitle": "État",
+      "connectedAt": "Connectée",
+      "nextSync": "Prochaine synchro",
+      "interval": "Synchroniser toutes les",
+      "saveInterval": "Enregistrer la fréquence",
+      "pause": "Mettre en pause",
+      "resume": "Reprendre la synchro",
+      "intervals": {
+        "15": "15 minutes",
+        "60": "Heure",
+        "360": "6 heures",
+        "1440": "Jour"
+      }
+    },
+    "mapping": {
+      "sectionTitle": "Correspondance des champs",
+      "sectionHelp": "Choisissez quel champ remplit lequel. Chaque enregistrement crée une nouvelle version, utilisée par la prochaine synchro.",
+      "title": {
+        "pull": "Vers Yayatoh",
+        "push": "Vers le fournisseur"
+      },
+      "help": {
+        "pull": "Les champs du fournisseur remplissent ceux de Yayatoh.",
+        "push": "Les champs de Yayatoh remplissent ceux du fournisseur."
+      },
+      "version": "Version {version}",
+      "saved": "Correspondance enregistrée en version {version}. La prochaine synchro l’utilise.",
+      "invalid": "Cette correspondance ne peut pas encore être enregistrée. Vérifiez les champs signalés.",
+      "required": "obligatoire",
+      "source": "Provient de",
+      "transform": "Transformer",
+      "default": "Si vide, utiliser",
+      "notMapped": "— Non associé —",
+      "transforms": {
+        "none": "Tel quel",
+        "trim": "Retirer les espaces",
+        "lowercase": "minuscules",
+        "uppercase": "MAJUSCULES",
+        "title_case": "Majuscule En Début De Mot",
+        "first_word": "Premier mot",
+        "last_word": "Dernier mot",
+        "to_number": "Nombre",
+        "to_boolean": "Oui ou non",
+        "to_date": "Date"
+      },
+      "save": {
+        "pull": "Enregistrer l’import",
+        "push": "Enregistrer l’export"
+      },
+      "issue": {
+        "missing_required": "Choisissez d’où vient {field} : ce champ est obligatoire.",
+        "unknown_source": "Ce champ n’existe pas chez le fournisseur.",
+        "unknown_target": "{field} ne peut pas être rempli.",
+        "duplicate_target": "{field} est rempli deux fois.",
+        "other": "Vérifiez ce champ."
+      }
+    },
+    "runs": {
+      "title": "Synchros récentes",
+      "caption": "Synchros récentes de cette intégration",
+      "empty": "Aucune synchro pour l’instant. La première démarre peu après la connexion.",
+      "when": "Début",
+      "trigger": "Lancée par",
+      "status": "Résultat",
+      "pulled": "Entrées",
+      "pushed": "Sorties",
+      "skipped": "Inchangées",
+      "failed": "Erreurs",
+      "error": "Problème",
+      "triggers": {
+        "manual": "Synchroniser",
+        "schedule": "Planification",
+        "retry": "Nouvel essai"
+      }
+    },
+    "codes": {
+      "auth_revoked": "Le fournisseur n’accepte plus cette connexion",
+      "invalid_token": "Le fournisseur n’accepte plus cette connexion",
+      "auth_failed": "Le fournisseur a refusé la connexion",
+      "invalid_value": "Une valeur ne correspond pas à son champ",
+      "missing_required": "Un champ obligatoire est vide",
+      "transform_failed": "Une valeur n’a pas pu être convertie",
+      "duplicate_record": "Deux fiches pointent vers le même contact",
+      "write_failed": "Impossible d’enregistrer dans Yayatoh",
+      "push_failed": "Impossible d’envoyer au fournisseur",
+      "network": "Le fournisseur était injoignable",
+      "lease_expired": "La synchro s’est arrêtée de façon inattendue",
+      "disconnected": "Arrêtée par la déconnexion",
+      "paused": "Arrêtée par la mise en pause",
+      "sync_failed": "La synchro a échoué",
+      "unknown_connector": "Cette intégration n’est plus disponible",
+      "other": "Erreur ({code})"
+    },
+    "inbox": {
+      "title": "Erreurs d’intégration",
+      "description": "Les fiches qui n’ont pas pu être synchronisées, regroupées par cause. Elles sont réessayées automatiquement pendant un temps. Corrigez une fiche à sa source puis Réessayez, ou ignorez ce dont vous n’avez pas besoin.",
+      "retried": "{count, plural, =0 {Rien à réessayer : ces connexions ne sont pas actives.} one {# fiche sera réessayée à la prochaine synchro.} other {# fiches seront réessayées à la prochaine synchro.}}",
+      "dismissed": "{count, plural, one {# fiche ignorée.} other {# fiches ignorées.}}",
+      "filterLabel": "Afficher les erreurs",
+      "status": {
+        "open": "Ouvertes",
+        "resolved": "Résolues",
+        "dismissed": "Ignorées"
+      },
+      "empty": {
+        "open": "Aucune erreur ouverte",
+        "resolved": "Rien de résolu pour l’instant",
+        "dismissed": "Rien d’ignoré"
+      },
+      "emptyOpenHelp": "Tout est synchronisé. Si une fiche ne peut pas l’être, elle apparaîtra ici avec la marche à suivre.",
+      "backToConnections": "Aller aux connexions",
+      "groupTitle": "{connector} : {step} · {count, plural, one {# fiche} other {# fiches}}",
+      "steps": {
+        "auth": "Connexion",
+        "pull": "Lecture chez le fournisseur",
+        "map": "Correspondance",
+        "write": "Enregistrement dans Yayatoh",
+        "push": "Envoi au fournisseur"
+      },
+      "field": "Champ : {field}",
+      "lastSeen": "Vu pour la dernière fois {when}",
+      "retryAll": "Tout réessayer",
+      "retryAllNamed": "Tout réessayer : {group}",
+      "dismissAll": "Tout ignorer",
+      "dismissAllNamed": "Tout ignorer : {group}",
+      "recordsCaption": "Fiches : {group}",
+      "record": "Fiche",
+      "object": "Quoi",
+      "objectDirection": "{object} ({direction})",
+      "directions": {
+        "pull": "entrée",
+        "push": "sortie"
+      },
+      "wholeConnection": "Toute la connexion",
+      "attempts": "Essais",
+      "nextRetry": "Prochain essai automatique",
+      "closedAt": "Fermée",
+      "manualRetry": "En attente de vous",
+      "actions": "Actions",
+      "retry": "Réessayer",
+      "retryNamed": "Réessayer {record}",
+      "dismiss": "Ignorer",
+      "dismissNamed": "Ignorer {record}",
+      "more": "{count, plural, one {# autre fiche non affichée.} other {# autres fiches non affichées.}}"
+    },
+    "fakeConsent": {
+      "title": "Autorisation de test",
+      "eyebrow": "Fournisseur de test",
+      "heading": "Connecter {name} à Yayatoh ?",
+      "body": "{name} est un fournisseur de test. Si vous autorisez, Yayatoh pourra lire et écrire ce qui suit en votre nom :",
+      "allow": "Autoriser",
+      "deny": "Refuser"
+    }
   }
 }

@@ -347,7 +347,8 @@
     "assistance": "求助請求",
     "marketingAnalytics": "行銷分析",
     "badges": "名牌",
-    "orgAnalytics": "數據分析"
+    "orgAnalytics": "數據分析",
+    "integrations": "整合"
   },
   "vocab": {
     "attendee": "參加者",
@@ -12055,5 +12056,258 @@
       "cancelled": "已取消"
     },
     "runProgress": "{events, plural, other {已檢查 # 個活動}}，{written, plural, other {已更新 # 個}}"
+  },
+  "integrations": {
+    "title": "整合",
+    "description": "串接你已在使用的工具。聯絡人和記錄會雙向保持一致，有需要處理的情況時會通知你。",
+    "tabsLabel": "整合區塊",
+    "tabs": {
+      "connections": "連線",
+      "errors": "錯誤"
+    },
+    "cancelled": "已取消連線。",
+    "offTitle": "這裡尚未開啟整合功能",
+    "offDescription": "連線需要整合服務，而本網站尚未設定。請聯絡平台管理員。",
+    "noneTitle": "目前沒有可串接的整合",
+    "noneDescription": "新的整合一推出，就會顯示在此頁面。",
+    "connectors": {
+      "demo": {
+        "description": "用來試用整合的測試聯絡人應用程式：聯絡人會與你的 CRM 雙向同步。僅限測試環境。"
+      }
+    },
+    "sandboxBadge": "測試",
+    "account": "帳戶",
+    "lastSync": "上次同步",
+    "never": "從未",
+    "openErrors": "未解決的錯誤",
+    "openErrorCount": "{count, plural, other {# 筆記錄需要處理}}",
+    "noErrors": "無",
+    "notInPlan": "不在你的方案內",
+    "manage": "管理",
+    "manageNamed": "管理 {name}",
+    "connect": "串接",
+    "connectNamed": "串接 {name}",
+    "reconnect": "重新串接",
+    "reconnectNamed": "重新串接 {name}",
+    "readOnly": "只有擁有者和管理員可以串接或變更整合。",
+    "breadcrumb": "導覽路徑",
+    "objects": {
+      "contacts": "聯絡人"
+    },
+    "fields": {
+      "email": "電子郵件",
+      "name": "姓名"
+    },
+    "status": {
+      "none": "未串接",
+      "pending": "等待授權",
+      "active": "已串接",
+      "paused": "已暫停",
+      "revoked": "已中斷",
+      "failed": "串接失敗"
+    },
+    "runStatus": {
+      "queued": "排隊中",
+      "running": "進行中",
+      "succeeded": "已同步",
+      "partial": "已同步（有錯誤）",
+      "failed": "失敗",
+      "cancelled": "已取消"
+    },
+    "errorsFeedback": {
+      "unavailable": "這裡無法使用此整合。",
+      "provider_unavailable": "無法連上服務商。請幾分鐘後再試。",
+      "not_approved": "服務商尚未確認連線。請在對方完成串接後再檢查一次。",
+      "denied": "連線未獲授權，因此沒有串接任何項目。",
+      "expired": "這個串接連結已過期。請重新點選「串接」開始。",
+      "validation_failed": "有些資訊需要修正。",
+      "forbidden": "你沒有存取權限。",
+      "module_not_enabled": "你的方案不包含整合功能。",
+      "not_found": "找不到相關內容。",
+      "conflict": "此整合已經串接。",
+      "invalid_state": "現在無法執行此操作。",
+      "impersonation_blocked": "以成員身分操作的員工無法串接整合。",
+      "read_only_freeze": "排定維護期間暫停變更。請在維護結束後再試。",
+      "internal": "我們這邊出了點問題。"
+    },
+    "detail": {
+      "title": "整合",
+      "syncNow": "立即同步",
+      "syncing": "同步即將開始",
+      "connected": "{name} 已串接。首次同步即將開始。",
+      "sync": {
+        "queued": "同步已開始。稍後重新整理即可查看結果。",
+        "already": "已有一次同步正在進行。"
+      },
+      "done": {
+        "paused": "同步已暫停。",
+        "resumed": "同步已恢復。",
+        "interval": "同步排程已儲存。",
+        "disconnected": "已中斷連線。不再同步任何內容，並已在服務商端撤銷存取權限。"
+      },
+      "revoked": {
+        "user": "已於 {when} 中斷連線。",
+        "provider": "服務商自 {when} 起不再接受此連線，因此同步已停止。請重新串接以繼續。"
+      },
+      "pending": "正在等待服務商授權此連線。",
+      "checkConnection": "檢查連線",
+      "cancelConnect": "取消",
+      "confirmDisconnect": "要中斷 {name} 的連線嗎？",
+      "confirmDisconnectBody": "同步會立即停止，並在服務商端撤銷 Yayatoh 的存取權限。已同步的記錄維持不變。",
+      "disconnect": "中斷連線",
+      "keep": "保持連線",
+      "statusTitle": "狀態",
+      "connectedAt": "串接時間",
+      "nextSync": "下次同步",
+      "interval": "同步頻率",
+      "saveInterval": "儲存排程",
+      "pause": "暫停同步",
+      "resume": "恢復同步",
+      "intervals": {
+        "15": "每 15 分鐘",
+        "60": "每小時",
+        "360": "每 6 小時",
+        "1440": "每天"
+      }
+    },
+    "mapping": {
+      "sectionTitle": "欄位對應",
+      "sectionHelp": "選擇由哪個欄位填入哪個欄位。每次儲存都會產生新版本，下次同步時使用。",
+      "title": {
+        "pull": "匯入 Yayatoh",
+        "push": "匯出至服務商"
+      },
+      "help": {
+        "pull": "以服務商的欄位填入 Yayatoh 的欄位。",
+        "push": "以 Yayatoh 的欄位填入服務商的欄位。"
+      },
+      "version": "版本 {version}",
+      "saved": "對應已儲存為版本 {version}。下次同步時使用。",
+      "invalid": "此對應暫時無法儲存。請檢查下方標示的欄位。",
+      "required": "必填",
+      "source": "來源",
+      "transform": "轉換",
+      "default": "空白時使用",
+      "notMapped": "— 未對應 —",
+      "transforms": {
+        "none": "維持原樣",
+        "trim": "去除空白",
+        "lowercase": "小寫",
+        "uppercase": "大寫",
+        "title_case": "每個字首大寫",
+        "first_word": "第一個字",
+        "last_word": "最後一個字",
+        "to_number": "數字",
+        "to_boolean": "是或否",
+        "to_date": "日期"
+      },
+      "save": {
+        "pull": "儲存匯入對應",
+        "push": "儲存匯出對應"
+      },
+      "issue": {
+        "missing_required": "請選擇 {field} 的來源：此項必填。",
+        "unknown_source": "服務商沒有這個欄位。",
+        "unknown_target": "無法填入 {field}。",
+        "duplicate_target": "{field} 被填入兩次。",
+        "other": "請檢查此欄位。"
+      }
+    },
+    "runs": {
+      "title": "最近的同步",
+      "caption": "此整合最近的同步",
+      "empty": "還沒有同步紀錄。串接後不久就會開始首次同步。",
+      "when": "開始時間",
+      "trigger": "發起方",
+      "status": "結果",
+      "pulled": "匯入",
+      "pushed": "匯出",
+      "skipped": "未變更",
+      "failed": "錯誤",
+      "error": "問題",
+      "triggers": {
+        "manual": "立即同步",
+        "schedule": "排程",
+        "retry": "重試"
+      }
+    },
+    "codes": {
+      "auth_revoked": "服務商不再接受此連線",
+      "invalid_token": "服務商不再接受此連線",
+      "auth_failed": "服務商拒絕了連線",
+      "invalid_value": "某個值不符合其欄位",
+      "missing_required": "必填欄位是空的",
+      "transform_failed": "某個值無法轉換",
+      "duplicate_record": "兩筆記錄指向同一位聯絡人",
+      "write_failed": "無法儲存到 Yayatoh",
+      "push_failed": "無法傳送到服務商",
+      "network": "無法連上服務商",
+      "lease_expired": "同步意外停止",
+      "disconnected": "因中斷連線而停止",
+      "paused": "因暫停而停止",
+      "sync_failed": "同步失敗",
+      "unknown_connector": "此整合已無法使用",
+      "other": "錯誤（{code}）"
+    },
+    "inbox": {
+      "title": "整合錯誤",
+      "description": "無法同步的記錄，依原因分組。系統會在一段時間內自動重試。請在來源端修正記錄後點選「重試」，或略過不需要的記錄。",
+      "retried": "{count, plural, =0 {沒有可重試的項目：這些連線目前未啟用。} other {# 筆記錄將在下次同步時重試。}}",
+      "dismissed": "{count, plural, other {已略過 # 筆記錄。}}",
+      "filterLabel": "顯示錯誤",
+      "status": {
+        "open": "未解決",
+        "resolved": "已解決",
+        "dismissed": "已略過"
+      },
+      "empty": {
+        "open": "沒有未解決的錯誤",
+        "resolved": "目前沒有已解決的錯誤",
+        "dismissed": "目前沒有已略過的錯誤"
+      },
+      "emptyOpenHelp": "全部都已同步。若有記錄無法同步，會連同下一步顯示在這裡。",
+      "backToConnections": "前往連線",
+      "groupTitle": "{connector}：{step} · {count, plural, other {# 筆記錄}}",
+      "steps": {
+        "auth": "連線",
+        "pull": "從服務商讀取",
+        "map": "欄位對應",
+        "write": "儲存到 Yayatoh",
+        "push": "傳送到服務商"
+      },
+      "field": "欄位：{field}",
+      "lastSeen": "最近一次出現：{when}",
+      "retryAll": "全部重試",
+      "retryAllNamed": "全部重試：{group}",
+      "dismissAll": "全部略過",
+      "dismissAllNamed": "全部略過：{group}",
+      "recordsCaption": "記錄：{group}",
+      "record": "記錄",
+      "object": "類型",
+      "objectDirection": "{object}（{direction}）",
+      "directions": {
+        "pull": "匯入",
+        "push": "匯出"
+      },
+      "wholeConnection": "整個連線",
+      "attempts": "嘗試次數",
+      "nextRetry": "下次自動重試",
+      "closedAt": "關閉時間",
+      "manualRetry": "等待你處理",
+      "actions": "操作",
+      "retry": "重試",
+      "retryNamed": "重試 {record}",
+      "dismiss": "略過",
+      "dismissNamed": "略過 {record}",
+      "more": "{count, plural, other {另有 # 筆記錄未顯示。}}"
+    },
+    "fakeConsent": {
+      "title": "測試授權",
+      "eyebrow": "測試服務商",
+      "heading": "要將 {name} 串接到 Yayatoh 嗎？",
+      "body": "{name} 是測試服務商。允許後，Yayatoh 可代表你讀取和寫入以下內容：",
+      "allow": "允許",
+      "deny": "拒絕"
+    }
   }
 }

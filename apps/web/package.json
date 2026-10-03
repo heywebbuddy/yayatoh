@@ -41,6 +41,7 @@
     "@yayatoh/floorplan": "workspace:*",
     "@yayatoh/forms": "workspace:*",
     "@yayatoh/guests": "workspace:*",
+    "@yayatoh/integrations": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
     "@yayatoh/marketing": "workspace:*",
     "@yayatoh/marketplace": "workspace:*",

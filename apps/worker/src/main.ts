@@ -16,6 +16,7 @@ import { DEVICE_WATCHDOG_MS, runDeviceWatchdog } from './device-watchdog.ts';
 import { domainRecheckJob } from './domains.ts';
 import { enqueueDuplicateScans } from './duplicates.ts';
 import { endExpiredImpersonations } from './impersonations.ts';
+import { enqueueSyncWork } from './integrations.ts';
 import { enqueueJourneyWork } from './journeys.ts';
 import { enqueueDueMassRefunds, massRefundJob } from './mass-refunds.ts';
 import {
@@ -204,6 +205,18 @@ setInterval(() => {
       queueingScans = false;
     });
 }, 5 * 60_000).unref();
+// Integration syncs (M6.4a): queue a job for each connection with work every 5 s (leader only);
+// the exclusive queue keeps one job per connection.
+let queueingSyncs = false;
+setInterval(() => {
+  if (!release || stopping || queueingSyncs) return;
+  queueingSyncs = true;
+  enqueueSyncWork(boss)
+    .catch((err) => console.error('integrations', err))
+    .finally(() => {
+      queueingSyncs = false;
+    });
+}, 5_000).unref();
 // Badge batch PDFs (M5.5a): queue a job for each unfinished batch every 3 s (leader only); the
 // exclusive queue keeps one job per batch.
 let queueingBadges = false;

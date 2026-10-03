@@ -158,6 +158,7 @@ import {
   updatePartyGuestCommand,
   validateGuestImportCommand,
 } from '@yayatoh/guests';
+import { runSync } from '@yayatoh/integrations';
 import { type Ctx, createCtx, executeCommand, executeQuery, uuidv7 } from '@yayatoh/kernel';
 import {
   attributeOrderCommand,
@@ -325,6 +326,7 @@ import {
 import { createVenueCommand, submitQuoteRequestCommand } from '@yayatoh/venues';
 import { createEndpointCommand } from '@yayatoh/webhooks';
 import { sql } from 'drizzle-orm';
+import { connectDemo, fakeAuth } from './integrations.ts';
 import { catchUpTimeline } from './merge.ts';
 import { ports, runBulk, submitRegistrationForm } from './ports.ts';
 
@@ -2548,6 +2550,9 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   await executeCommand(
     mergeContactsCommand,
     { sourceContactId: twins.two, targetContactId: twins.one },
+    ctx(),
+    ports,
+  );
   // M6.3b: one webhook endpoint (fake publisher), so webhooks.endpoints has rows for both orgs.
   await executeCommand(
     createEndpointCommand,
@@ -2605,6 +2610,10 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     systemCtx(org.id),
     ports,
   );
+  // M6.4a: the demo connector connected through the fake port and synced once (a connection, its
+  // mappings, cursors, a run, record links and the demo's broken record in the errors inbox).
+  const demo = await connectDemo(ctx());
+  await runSync(org.id, demo.connectionId, { auth: fakeAuth }, ports);
   return {
     org,
     ownerId,

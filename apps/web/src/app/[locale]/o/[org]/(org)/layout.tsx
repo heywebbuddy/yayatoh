@@ -45,6 +45,8 @@ const ORG_NAV: readonly NavItem[] = [
   { key: 'messagingHealth', path: 'messaging', group: 'build', module: 'messaging', icon: 'gauge' },
   { key: 'sendingSetup', path: 'sending', group: 'build', module: 'core', icon: 'send' },
   { key: 'apiKeys', path: 'api-keys', group: 'build', module: 'core', icon: 'key' },
+  // M6.4a: connectors, field mapping, sync history and the errors inbox.
+  { key: 'integrations', path: 'integrations', group: 'build', module: 'integrations', icon: 'link' },
   { key: 'activity', path: 'activity', group: 'build', module: 'core', icon: 'history' },
   { key: 'privacy', path: 'privacy', group: 'build', module: 'core', icon: 'shield' },
 ];
@@ -69,6 +71,7 @@ const NEEDS: Readonly<Record<string, string>> = {
   finance: 'finance:read',
   activity: 'audit:read',
   privacy: 'privacy:manage',
+  integrations: 'integrations:read',
 };
 
 export default async function OrgLayout({

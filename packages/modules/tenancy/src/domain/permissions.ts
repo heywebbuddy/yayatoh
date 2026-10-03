@@ -86,6 +86,13 @@ export const PERMISSIONS = [
   'sandbox:manage',
   /** Webhook endpoints, their signing secrets, test sends and replays (M6.3b). Owners and admins. */
   'webhooks:manage',
+  /** See the org's integrations: connections, sync history, mappings and the errors inbox (M6.4a). */
+  'integrations:read',
+  /**
+   * Connect, map, sync, pause and disconnect third-party integrations, and work the errors inbox
+   * (M6.4a). Org data leaves through them: owners and admins only.
+   */
+  'integrations:manage',
 ] as const;
 export type Permission = (typeof PERMISSIONS)[number];
 
@@ -123,6 +130,7 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'assistance:manage',
     'tables:read',
     'tables:write',
+    'integrations:read',
   ],
   finance: [
     'org:read',

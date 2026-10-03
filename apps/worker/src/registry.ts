@@ -70,6 +70,7 @@ import { configureWebhooks, webhookPublisherFromEnv, webhookPublisherSubscriber 
 import { z } from 'zod';
 import { contactStatsJob } from './contact-stats.ts';
 import { duplicateScanJob } from './duplicates.ts';
+import { syncJob } from './integrations.ts';
 import { defineJob } from './jobs.ts';
 import { journeyJob } from './journeys.ts';
 
@@ -81,7 +82,8 @@ export const heartbeat = defineJob({
 });
 
 /** Composition root for jobs and event subscribers. Modules register theirs here as they land. */
-export const JOBS = [heartbeat, journeyJob(), duplicateScanJob(), contactStatsJob()] as const;
+// M6.4a: integration syncs (the fake port in dev/CI; off in production until Nango is configured).
+export const JOBS = [heartbeat, journeyJob(), duplicateScanJob(), contactStatsJob(), syncJob()] as const;
 export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] {
   const secret = env.APP_TOKEN_SECRET;
   const appOrigin = env.NEXT_PUBLIC_APP_ORIGIN;

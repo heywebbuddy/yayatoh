@@ -39,6 +39,7 @@
     "@yayatoh/events": "workspace:*",
     "@yayatoh/forms": "workspace:*",
     "@yayatoh/guests": "workspace:*",
+    "@yayatoh/integrations": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
     "@yayatoh/marketplace": "workspace:*",
     "@yayatoh/media": "workspace:*",

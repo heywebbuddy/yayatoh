@@ -347,7 +347,8 @@
     "assistance": "Hulpvragen",
     "marketingAnalytics": "Marketinganalyse",
     "badges": "Badges",
-    "orgAnalytics": "Analyses"
+    "orgAnalytics": "Analyses",
+    "integrations": "Integraties"
   },
   "vocab": {
     "attendee": "Deelnemer",
@@ -12055,5 +12056,258 @@
       "cancelled": "Geannuleerd"
     },
     "runProgress": "{events, plural, one {# evenement gecontroleerd} other {# evenementen gecontroleerd}}, {written, plural, one {# bijgewerkt} other {# bijgewerkt}}"
+  },
+  "integrations": {
+    "title": "Integraties",
+    "description": "Koppel de tools die je al gebruikt. Contacten en records blijven in beide richtingen gelijk, en je hoort het als er iets bekeken moet worden.",
+    "tabsLabel": "Onderdelen van integraties",
+    "tabs": {
+      "connections": "Koppelingen",
+      "errors": "Fouten"
+    },
+    "cancelled": "De koppeling is geannuleerd.",
+    "offTitle": "Integraties staan hier nog niet aan",
+    "offDescription": "Koppelingen hebben de integratiedienst nodig, die op deze site nog niet is ingesteld. Vraag het platformbeheer.",
+    "noneTitle": "Nog geen integraties om te koppelen",
+    "noneDescription": "Nieuwe integraties verschijnen op deze pagina zodra ze beschikbaar zijn.",
+    "connectors": {
+      "demo": {
+        "description": "Een test-app met contacten om integraties uit te proberen: contacten synchroniseren in beide richtingen met je CRM. Alleen in testomgevingen."
+      }
+    },
+    "sandboxBadge": "Test",
+    "account": "Account",
+    "lastSync": "Laatste synchronisatie",
+    "never": "Nooit",
+    "openErrors": "Openstaande fouten",
+    "openErrorCount": "{count, plural, one {# record moet bekeken worden} other {# records moeten bekeken worden}}",
+    "noErrors": "Geen",
+    "notInPlan": "Niet in je abonnement",
+    "manage": "Beheren",
+    "manageNamed": "{name} beheren",
+    "connect": "Koppelen",
+    "connectNamed": "{name} koppelen",
+    "reconnect": "Opnieuw koppelen",
+    "reconnectNamed": "{name} opnieuw koppelen",
+    "readOnly": "Alleen eigenaren en beheerders kunnen integraties koppelen of wijzigen.",
+    "breadcrumb": "Kruimelpad",
+    "objects": {
+      "contacts": "Contacten"
+    },
+    "fields": {
+      "email": "E-mail",
+      "name": "Naam"
+    },
+    "status": {
+      "none": "Niet gekoppeld",
+      "pending": "Wacht op goedkeuring",
+      "active": "Gekoppeld",
+      "paused": "Gepauzeerd",
+      "revoked": "Ontkoppeld",
+      "failed": "Koppelen mislukt"
+    },
+    "runStatus": {
+      "queued": "In de wachtrij",
+      "running": "Bezig",
+      "succeeded": "Gesynchroniseerd",
+      "partial": "Gesynchroniseerd met fouten",
+      "failed": "Mislukt",
+      "cancelled": "Geannuleerd"
+    },
+    "errorsFeedback": {
+      "unavailable": "Deze integratie is hier niet beschikbaar.",
+      "provider_unavailable": "De aanbieder is niet bereikbaar. Probeer het over een paar minuten opnieuw.",
+      "not_approved": "De aanbieder heeft de koppeling nog niet bevestigd. Rond het koppelen daar af en controleer dan opnieuw.",
+      "denied": "De koppeling is niet goedgekeurd, dus er is niets gekoppeld.",
+      "expired": "Deze koppellink is verlopen. Begin opnieuw met Koppelen.",
+      "validation_failed": "Sommige gegevens moeten worden aangepast.",
+      "forbidden": "Je hebt hier geen toegang toe.",
+      "module_not_enabled": "Integraties zitten niet in je abonnement.",
+      "not_found": "Dat konden we niet vinden.",
+      "conflict": "Deze integratie is al gekoppeld.",
+      "invalid_state": "Dat kan nu niet.",
+      "impersonation_blocked": "Medewerkers die als lid optreden, kunnen geen integraties koppelen.",
+      "read_only_freeze": "Wijzigingen zijn gepauzeerd tijdens gepland onderhoud. Probeer het daarna opnieuw.",
+      "internal": "Er ging bij ons iets mis."
+    },
+    "detail": {
+      "title": "Integratie",
+      "syncNow": "Nu synchroniseren",
+      "syncing": "Synchronisatie onderweg",
+      "connected": "{name} is gekoppeld. De eerste synchronisatie start zo.",
+      "sync": {
+        "queued": "Synchronisatie gestart. Vernieuw zo meteen om het resultaat te zien.",
+        "already": "Er is al een synchronisatie onderweg."
+      },
+      "done": {
+        "paused": "Synchroniseren is gepauzeerd.",
+        "resumed": "Synchroniseren staat weer aan.",
+        "interval": "Synchronisatieschema opgeslagen.",
+        "disconnected": "Ontkoppeld. Er wordt niets meer gesynchroniseerd en de toegang is bij de aanbieder ingetrokken."
+      },
+      "revoked": {
+        "user": "Ontkoppeld op {when}.",
+        "provider": "De aanbieder accepteert deze koppeling sinds {when} niet meer, dus het synchroniseren is gestopt. Koppel opnieuw om verder te gaan."
+      },
+      "pending": "Wachten tot de koppeling bij de aanbieder is goedgekeurd.",
+      "checkConnection": "Koppeling controleren",
+      "cancelConnect": "Annuleren",
+      "confirmDisconnect": "{name} ontkoppelen?",
+      "confirmDisconnectBody": "Het synchroniseren stopt meteen en de toegang van Yayatoh wordt bij de aanbieder ingetrokken. Al gesynchroniseerde records blijven waar ze zijn.",
+      "disconnect": "Ontkoppelen",
+      "keep": "Gekoppeld laten",
+      "statusTitle": "Status",
+      "connectedAt": "Gekoppeld",
+      "nextSync": "Volgende synchronisatie",
+      "interval": "Synchroniseer elke",
+      "saveInterval": "Schema opslaan",
+      "pause": "Synchroniseren pauzeren",
+      "resume": "Synchroniseren hervatten",
+      "intervals": {
+        "15": "15 minuten",
+        "60": "Uur",
+        "360": "6 uur",
+        "1440": "Dag"
+      }
+    },
+    "mapping": {
+      "sectionTitle": "Veldkoppeling",
+      "sectionHelp": "Kies welk veld welk veld vult. Elke keer opslaan maakt een nieuwe versie, die de volgende synchronisatie gebruikt.",
+      "title": {
+        "pull": "Naar Yayatoh",
+        "push": "Naar de aanbieder"
+      },
+      "help": {
+        "pull": "De velden van de aanbieder vullen de velden van Yayatoh.",
+        "push": "De velden van Yayatoh vullen de velden van de aanbieder."
+      },
+      "version": "Versie {version}",
+      "saved": "Veldkoppeling opgeslagen als versie {version}. De volgende synchronisatie gebruikt die.",
+      "invalid": "Deze veldkoppeling kan nog niet worden opgeslagen. Controleer de gemarkeerde velden.",
+      "required": "verplicht",
+      "source": "Komt uit",
+      "transform": "Aanpassen",
+      "default": "Indien leeg, gebruik",
+      "notMapped": "— Niet gekoppeld —",
+      "transforms": {
+        "none": "Ongewijzigd",
+        "trim": "Spaties weghalen",
+        "lowercase": "kleine letters",
+        "uppercase": "HOOFDLETTERS",
+        "title_case": "Elk Woord Met Hoofdletter",
+        "first_word": "Eerste woord",
+        "last_word": "Laatste woord",
+        "to_number": "Getal",
+        "to_boolean": "Ja of nee",
+        "to_date": "Datum"
+      },
+      "save": {
+        "pull": "Importkoppeling opslaan",
+        "push": "Exportkoppeling opslaan"
+      },
+      "issue": {
+        "missing_required": "Kies waar {field} vandaan komt: het is verplicht.",
+        "unknown_source": "Dat veld bestaat niet bij de aanbieder.",
+        "unknown_target": "{field} kan niet worden gevuld.",
+        "duplicate_target": "{field} wordt twee keer gevuld.",
+        "other": "Controleer dit veld."
+      }
+    },
+    "runs": {
+      "title": "Recente synchronisaties",
+      "caption": "Recente synchronisaties van deze integratie",
+      "empty": "Nog geen synchronisaties. De eerste start kort na het koppelen.",
+      "when": "Gestart",
+      "trigger": "Gestart door",
+      "status": "Resultaat",
+      "pulled": "In",
+      "pushed": "Uit",
+      "skipped": "Ongewijzigd",
+      "failed": "Fouten",
+      "error": "Probleem",
+      "triggers": {
+        "manual": "Nu synchroniseren",
+        "schedule": "Schema",
+        "retry": "Nieuwe poging"
+      }
+    },
+    "codes": {
+      "auth_revoked": "De aanbieder accepteert deze koppeling niet meer",
+      "invalid_token": "De aanbieder accepteert deze koppeling niet meer",
+      "auth_failed": "De aanbieder weigerde de koppeling",
+      "invalid_value": "Een waarde past niet in het veld",
+      "missing_required": "Een verplicht veld is leeg",
+      "transform_failed": "Een waarde kon niet worden omgezet",
+      "duplicate_record": "Twee records verwijzen naar hetzelfde contact",
+      "write_failed": "Kon niet worden opgeslagen in Yayatoh",
+      "push_failed": "Kon niet naar de aanbieder worden gestuurd",
+      "network": "De aanbieder was niet bereikbaar",
+      "lease_expired": "De synchronisatie stopte onverwacht",
+      "disconnected": "Gestopt door ontkoppelen",
+      "paused": "Gestopt door pauzeren",
+      "sync_failed": "De synchronisatie is mislukt",
+      "unknown_connector": "Deze integratie is niet meer beschikbaar",
+      "other": "Fout ({code})"
+    },
+    "inbox": {
+      "title": "Integratiefouten",
+      "description": "Records die niet konden synchroniseren, gegroepeerd per oorzaak. Ze worden een tijdje automatisch opnieuw geprobeerd. Herstel een record bij de bron en kies Opnieuw proberen, of negeer wat je niet nodig hebt.",
+      "retried": "{count, plural, =0 {Niets om opnieuw te proberen: die koppelingen zijn niet actief.} one {# record wordt bij de volgende synchronisatie opnieuw geprobeerd.} other {# records worden bij de volgende synchronisatie opnieuw geprobeerd.}}",
+      "dismissed": "{count, plural, one {# record genegeerd.} other {# records genegeerd.}}",
+      "filterLabel": "Fouten tonen",
+      "status": {
+        "open": "Open",
+        "resolved": "Opgelost",
+        "dismissed": "Genegeerd"
+      },
+      "empty": {
+        "open": "Geen openstaande fouten",
+        "resolved": "Nog niets opgelost",
+        "dismissed": "Niets genegeerd"
+      },
+      "emptyOpenHelp": "Alles is gesynchroniseerd. Als een record niet kan synchroniseren, verschijnt het hier met de volgende stap.",
+      "backToConnections": "Naar de koppelingen",
+      "groupTitle": "{connector}: {step} · {count, plural, one {# record} other {# records}}",
+      "steps": {
+        "auth": "Koppeling",
+        "pull": "Lezen bij de aanbieder",
+        "map": "Veldkoppeling",
+        "write": "Opslaan in Yayatoh",
+        "push": "Versturen naar de aanbieder"
+      },
+      "field": "Veld: {field}",
+      "lastSeen": "Laatst gezien {when}",
+      "retryAll": "Alles opnieuw proberen",
+      "retryAllNamed": "Alles opnieuw proberen: {group}",
+      "dismissAll": "Alles negeren",
+      "dismissAllNamed": "Alles negeren: {group}",
+      "recordsCaption": "Records: {group}",
+      "record": "Record",
+      "object": "Wat",
+      "objectDirection": "{object} ({direction})",
+      "directions": {
+        "pull": "in",
+        "push": "uit"
+      },
+      "wholeConnection": "Hele koppeling",
+      "attempts": "Pogingen",
+      "nextRetry": "Volgende automatische poging",
+      "closedAt": "Gesloten",
+      "manualRetry": "Wacht op jou",
+      "actions": "Acties",
+      "retry": "Opnieuw proberen",
+      "retryNamed": "{record} opnieuw proberen",
+      "dismiss": "Negeren",
+      "dismissNamed": "{record} negeren",
+      "more": "{count, plural, one {Nog # record niet getoond.} other {Nog # records niet getoond.}}"
+    },
+    "fakeConsent": {
+      "title": "Testtoestemming",
+      "eyebrow": "Testaanbieder",
+      "heading": "{name} koppelen aan Yayatoh?",
+      "body": "{name} is een testaanbieder. Als je toestaat, mag Yayatoh namens jou het volgende lezen en schrijven:",
+      "allow": "Toestaan",
+      "deny": "Weigeren"
+    }
   }
 }

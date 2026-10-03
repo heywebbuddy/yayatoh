@@ -347,7 +347,8 @@
     "assistance": "求助请求",
     "marketingAnalytics": "营销分析",
     "badges": "胸卡",
-    "orgAnalytics": "数据分析"
+    "orgAnalytics": "数据分析",
+    "integrations": "集成"
   },
   "vocab": {
     "attendee": "参会者",
@@ -12055,5 +12056,258 @@
       "cancelled": "已取消"
     },
     "runProgress": "{events, plural, other {已检查 # 个活动}}，{written, plural, other {已更新 # 个}}"
+  },
+  "integrations": {
+    "title": "集成",
+    "description": "连接你已在使用的工具。联系人和记录在双向保持同步，有需要处理的情况时会通知你。",
+    "tabsLabel": "集成分区",
+    "tabs": {
+      "connections": "连接",
+      "errors": "错误"
+    },
+    "cancelled": "连接已取消。",
+    "offTitle": "此处尚未开启集成",
+    "offDescription": "连接需要集成服务，而本站点尚未配置。请联系平台管理员。",
+    "noneTitle": "暂时没有可连接的集成",
+    "noneDescription": "新的集成一旦可用，就会显示在此页面。",
+    "connectors": {
+      "demo": {
+        "description": "用于试用集成的测试联系人应用：联系人与你的 CRM 双向同步。仅限测试环境。"
+      }
+    },
+    "sandboxBadge": "测试",
+    "account": "账户",
+    "lastSync": "上次同步",
+    "never": "从未",
+    "openErrors": "未解决的错误",
+    "openErrorCount": "{count, plural, other {# 条记录需要处理}}",
+    "noErrors": "无",
+    "notInPlan": "不在你的套餐内",
+    "manage": "管理",
+    "manageNamed": "管理 {name}",
+    "connect": "连接",
+    "connectNamed": "连接 {name}",
+    "reconnect": "重新连接",
+    "reconnectNamed": "重新连接 {name}",
+    "readOnly": "只有所有者和管理员可以连接或更改集成。",
+    "breadcrumb": "面包屑导航",
+    "objects": {
+      "contacts": "联系人"
+    },
+    "fields": {
+      "email": "电子邮件",
+      "name": "姓名"
+    },
+    "status": {
+      "none": "未连接",
+      "pending": "等待授权",
+      "active": "已连接",
+      "paused": "已暂停",
+      "revoked": "已断开",
+      "failed": "连接失败"
+    },
+    "runStatus": {
+      "queued": "排队中",
+      "running": "进行中",
+      "succeeded": "已同步",
+      "partial": "已同步（有错误）",
+      "failed": "失败",
+      "cancelled": "已取消"
+    },
+    "errorsFeedback": {
+      "unavailable": "此集成在这里不可用。",
+      "provider_unavailable": "无法连接到服务商。请几分钟后再试。",
+      "not_approved": "服务商尚未确认连接。请在对方完成连接后再检查。",
+      "denied": "连接未获授权，因此没有连接任何内容。",
+      "expired": "该连接链接已过期。请重新点击“连接”开始。",
+      "validation_failed": "有些信息需要修改。",
+      "forbidden": "你没有访问权限。",
+      "module_not_enabled": "你的套餐不包含集成。",
+      "not_found": "未找到相关内容。",
+      "conflict": "此集成已连接。",
+      "invalid_state": "现在无法执行此操作。",
+      "impersonation_blocked": "以成员身份操作的员工无法连接集成。",
+      "read_only_freeze": "计划维护期间暂停更改。请在维护结束后再试。",
+      "internal": "我们这边出了点问题。"
+    },
+    "detail": {
+      "title": "集成",
+      "syncNow": "立即同步",
+      "syncing": "同步即将开始",
+      "connected": "{name} 已连接。首次同步即将开始。",
+      "sync": {
+        "queued": "同步已开始。稍后刷新即可查看结果。",
+        "already": "已有一次同步正在进行。"
+      },
+      "done": {
+        "paused": "同步已暂停。",
+        "resumed": "同步已恢复。",
+        "interval": "同步计划已保存。",
+        "disconnected": "已断开。不再同步任何内容，并已在服务商处撤销访问权限。"
+      },
+      "revoked": {
+        "user": "已于 {when} 断开。",
+        "provider": "服务商自 {when} 起不再接受此连接，因此同步已停止。请重新连接以继续。"
+      },
+      "pending": "正在等待服务商授权此连接。",
+      "checkConnection": "检查连接",
+      "cancelConnect": "取消",
+      "confirmDisconnect": "要断开 {name} 吗？",
+      "confirmDisconnectBody": "同步会立即停止，并在服务商处撤销 Yayatoh 的访问权限。已同步的记录保持不变。",
+      "disconnect": "断开",
+      "keep": "保持连接",
+      "statusTitle": "状态",
+      "connectedAt": "连接时间",
+      "nextSync": "下次同步",
+      "interval": "同步频率",
+      "saveInterval": "保存计划",
+      "pause": "暂停同步",
+      "resume": "恢复同步",
+      "intervals": {
+        "15": "每 15 分钟",
+        "60": "每小时",
+        "360": "每 6 小时",
+        "1440": "每天"
+      }
+    },
+    "mapping": {
+      "sectionTitle": "字段映射",
+      "sectionHelp": "选择由哪个字段填充哪个字段。每次保存都会生成新版本，下次同步时使用。",
+      "title": {
+        "pull": "导入 Yayatoh",
+        "push": "导出到服务商"
+      },
+      "help": {
+        "pull": "用服务商的字段填充 Yayatoh 的字段。",
+        "push": "用 Yayatoh 的字段填充服务商的字段。"
+      },
+      "version": "版本 {version}",
+      "saved": "映射已保存为版本 {version}。下次同步时使用。",
+      "invalid": "此映射暂时无法保存。请检查下面标出的字段。",
+      "required": "必填",
+      "source": "来源",
+      "transform": "转换",
+      "default": "为空时使用",
+      "notMapped": "— 未映射 —",
+      "transforms": {
+        "none": "保持不变",
+        "trim": "去除空格",
+        "lowercase": "小写",
+        "uppercase": "大写",
+        "title_case": "单词首字母大写",
+        "first_word": "第一个词",
+        "last_word": "最后一个词",
+        "to_number": "数字",
+        "to_boolean": "是或否",
+        "to_date": "日期"
+      },
+      "save": {
+        "pull": "保存导入映射",
+        "push": "保存导出映射"
+      },
+      "issue": {
+        "missing_required": "请选择 {field} 的来源：此项必填。",
+        "unknown_source": "服务商没有这个字段。",
+        "unknown_target": "无法填充 {field}。",
+        "duplicate_target": "{field} 被填充了两次。",
+        "other": "请检查此字段。"
+      }
+    },
+    "runs": {
+      "title": "最近的同步",
+      "caption": "此集成最近的同步",
+      "empty": "还没有同步。连接后不久就会开始首次同步。",
+      "when": "开始时间",
+      "trigger": "发起方",
+      "status": "结果",
+      "pulled": "导入",
+      "pushed": "导出",
+      "skipped": "未变化",
+      "failed": "错误",
+      "error": "问题",
+      "triggers": {
+        "manual": "立即同步",
+        "schedule": "计划",
+        "retry": "重试"
+      }
+    },
+    "codes": {
+      "auth_revoked": "服务商不再接受此连接",
+      "invalid_token": "服务商不再接受此连接",
+      "auth_failed": "服务商拒绝了连接",
+      "invalid_value": "某个值不符合其字段",
+      "missing_required": "必填字段为空",
+      "transform_failed": "某个值无法转换",
+      "duplicate_record": "两条记录指向同一个联系人",
+      "write_failed": "无法保存到 Yayatoh",
+      "push_failed": "无法发送到服务商",
+      "network": "无法连接到服务商",
+      "lease_expired": "同步意外停止",
+      "disconnected": "因断开而停止",
+      "paused": "因暂停而停止",
+      "sync_failed": "同步失败",
+      "unknown_connector": "此集成已不可用",
+      "other": "错误（{code}）"
+    },
+    "inbox": {
+      "title": "集成错误",
+      "description": "无法同步的记录，按原因分组。系统会在一段时间内自动重试。请在来源处修正记录后点击“重试”，或忽略不需要的记录。",
+      "retried": "{count, plural, =0 {没有可重试的内容：这些连接未处于活动状态。} other {# 条记录将在下次同步时重试。}}",
+      "dismissed": "{count, plural, other {已忽略 # 条记录。}}",
+      "filterLabel": "显示错误",
+      "status": {
+        "open": "未解决",
+        "resolved": "已解决",
+        "dismissed": "已忽略"
+      },
+      "empty": {
+        "open": "没有未解决的错误",
+        "resolved": "暂无已解决的错误",
+        "dismissed": "暂无已忽略的错误"
+      },
+      "emptyOpenHelp": "全部已同步。如果有记录无法同步，会连同下一步操作显示在这里。",
+      "backToConnections": "前往连接",
+      "groupTitle": "{connector}：{step} · {count, plural, other {# 条记录}}",
+      "steps": {
+        "auth": "连接",
+        "pull": "从服务商读取",
+        "map": "映射",
+        "write": "保存到 Yayatoh",
+        "push": "发送到服务商"
+      },
+      "field": "字段：{field}",
+      "lastSeen": "最近出现于 {when}",
+      "retryAll": "全部重试",
+      "retryAllNamed": "全部重试：{group}",
+      "dismissAll": "全部忽略",
+      "dismissAllNamed": "全部忽略：{group}",
+      "recordsCaption": "记录：{group}",
+      "record": "记录",
+      "object": "类型",
+      "objectDirection": "{object}（{direction}）",
+      "directions": {
+        "pull": "导入",
+        "push": "导出"
+      },
+      "wholeConnection": "整个连接",
+      "attempts": "尝试次数",
+      "nextRetry": "下次自动重试",
+      "closedAt": "关闭时间",
+      "manualRetry": "等待你处理",
+      "actions": "操作",
+      "retry": "重试",
+      "retryNamed": "重试 {record}",
+      "dismiss": "忽略",
+      "dismissNamed": "忽略 {record}",
+      "more": "{count, plural, other {另有 # 条记录未显示。}}"
+    },
+    "fakeConsent": {
+      "title": "测试授权",
+      "eyebrow": "测试服务商",
+      "heading": "要将 {name} 连接到 Yayatoh 吗？",
+      "body": "{name} 是测试服务商。允许后，Yayatoh 可以代表你读取和写入以下内容：",
+      "allow": "允许",
+      "deny": "拒绝"
+    }
   }
 }

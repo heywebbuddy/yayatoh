@@ -347,7 +347,8 @@
     "assistance": "Help requests",
     "marketingAnalytics": "Marketing analytics",
     "badges": "Badges",
-    "orgAnalytics": "Analytics"
+    "orgAnalytics": "Analytics",
+    "integrations": "Integrations"
   },
   "vocab": {
     "attendee": "Attendee",
@@ -12055,5 +12056,258 @@
       "cancelled": "Cancelled"
     },
     "runProgress": "{events, plural, one {# event checked} other {# events checked}}, {written, plural, one {# updated} other {# updated}}"
+  },
+  "integrations": {
+    "title": "Integrations",
+    "description": "Connect the tools you already use. Contacts and records stay in step both ways, and you hear about anything that needs a look.",
+    "tabsLabel": "Integrations sections",
+    "tabs": {
+      "connections": "Connections",
+      "errors": "Errors"
+    },
+    "cancelled": "The connection was cancelled.",
+    "offTitle": "Integrations aren't switched on here yet",
+    "offDescription": "Connections need the integrations service, which isn't set up on this site yet. Ask your platform administrator.",
+    "noneTitle": "No integrations to connect yet",
+    "noneDescription": "New integrations appear on this page as they become available.",
+    "connectors": {
+      "demo": {
+        "description": "A sandbox contacts app for trying integrations: contacts sync both ways with your CRM. Test environments only."
+      }
+    },
+    "sandboxBadge": "Sandbox",
+    "account": "Account",
+    "lastSync": "Last sync",
+    "never": "Never",
+    "openErrors": "Open errors",
+    "openErrorCount": "{count, plural, one {# record needs a look} other {# records need a look}}",
+    "noErrors": "None",
+    "notInPlan": "Not in your plan",
+    "manage": "Manage",
+    "manageNamed": "Manage {name}",
+    "connect": "Connect",
+    "connectNamed": "Connect {name}",
+    "reconnect": "Reconnect",
+    "reconnectNamed": "Reconnect {name}",
+    "readOnly": "Only owners and admins can connect or change integrations.",
+    "breadcrumb": "Breadcrumb",
+    "objects": {
+      "contacts": "Contacts"
+    },
+    "fields": {
+      "email": "Email",
+      "name": "Name"
+    },
+    "status": {
+      "none": "Not connected",
+      "pending": "Waiting for approval",
+      "active": "Connected",
+      "paused": "Paused",
+      "revoked": "Disconnected",
+      "failed": "Connection failed"
+    },
+    "runStatus": {
+      "queued": "Queued",
+      "running": "Running",
+      "succeeded": "Synced",
+      "partial": "Synced with errors",
+      "failed": "Failed",
+      "cancelled": "Cancelled"
+    },
+    "errorsFeedback": {
+      "unavailable": "This integration isn't available here.",
+      "provider_unavailable": "The provider couldn't be reached. Try again in a few minutes.",
+      "not_approved": "The provider hasn't confirmed the connection yet. Finish connecting there, then check again.",
+      "denied": "The connection wasn't approved, so nothing was connected.",
+      "expired": "That connect link has expired. Start again with Connect.",
+      "validation_failed": "Some details need fixing.",
+      "forbidden": "You don't have access to this.",
+      "module_not_enabled": "Integrations aren't in your plan.",
+      "not_found": "We couldn't find that.",
+      "conflict": "This integration is already connected.",
+      "invalid_state": "That can't be done right now.",
+      "impersonation_blocked": "Staff acting as a member can't connect integrations.",
+      "read_only_freeze": "Changes are paused during scheduled maintenance. Try again when it ends.",
+      "internal": "Something went wrong on our side."
+    },
+    "detail": {
+      "title": "Integration",
+      "syncNow": "Sync now",
+      "syncing": "Sync on its way",
+      "connected": "{name} is connected. The first sync starts shortly.",
+      "sync": {
+        "queued": "Sync started. Refresh in a moment to see the result.",
+        "already": "A sync is already on its way."
+      },
+      "done": {
+        "paused": "Syncing is paused.",
+        "resumed": "Syncing is back on.",
+        "interval": "Sync schedule saved.",
+        "disconnected": "Disconnected. Nothing syncs any more and access was revoked at the provider."
+      },
+      "revoked": {
+        "user": "Disconnected on {when}.",
+        "provider": "The provider stopped accepting this connection on {when}, so syncing stopped. Reconnect to carry on."
+      },
+      "pending": "Waiting for the connection to be approved at the provider.",
+      "checkConnection": "Check connection",
+      "cancelConnect": "Cancel",
+      "confirmDisconnect": "Disconnect {name}?",
+      "confirmDisconnectBody": "Syncing stops at once and Yayatoh's access is revoked at the provider. Records already synced stay where they are.",
+      "disconnect": "Disconnect",
+      "keep": "Keep connected",
+      "statusTitle": "Status",
+      "connectedAt": "Connected",
+      "nextSync": "Next sync",
+      "interval": "Sync every",
+      "saveInterval": "Save schedule",
+      "pause": "Pause syncing",
+      "resume": "Resume syncing",
+      "intervals": {
+        "15": "15 minutes",
+        "60": "Hour",
+        "360": "6 hours",
+        "1440": "Day"
+      }
+    },
+    "mapping": {
+      "sectionTitle": "Field mapping",
+      "sectionHelp": "Choose which field fills which. Each save keeps a new version, and the next sync uses it.",
+      "title": {
+        "pull": "Into Yayatoh",
+        "push": "Out to the provider"
+      },
+      "help": {
+        "pull": "The provider's fields fill Yayatoh's fields.",
+        "push": "Yayatoh's fields fill the provider's fields."
+      },
+      "version": "Version {version}",
+      "saved": "Mapping saved as version {version}. The next sync uses it.",
+      "invalid": "This mapping can't be saved yet. Check the fields marked below.",
+      "required": "required",
+      "source": "Comes from",
+      "transform": "Change",
+      "default": "If empty, use",
+      "notMapped": "— Not mapped —",
+      "transforms": {
+        "none": "Keep as is",
+        "trim": "Trim spaces",
+        "lowercase": "lowercase",
+        "uppercase": "UPPERCASE",
+        "title_case": "Title Case",
+        "first_word": "First word",
+        "last_word": "Last word",
+        "to_number": "Number",
+        "to_boolean": "Yes or no",
+        "to_date": "Date"
+      },
+      "save": {
+        "pull": "Save import mapping",
+        "push": "Save export mapping"
+      },
+      "issue": {
+        "missing_required": "Choose where {field} comes from: it's required.",
+        "unknown_source": "That field doesn't exist at the provider.",
+        "unknown_target": "{field} can't be filled.",
+        "duplicate_target": "{field} is filled twice.",
+        "other": "Check this field."
+      }
+    },
+    "runs": {
+      "title": "Recent syncs",
+      "caption": "Recent syncs of this integration",
+      "empty": "No syncs yet. The first one starts shortly after connecting.",
+      "when": "Started",
+      "trigger": "Started by",
+      "status": "Result",
+      "pulled": "In",
+      "pushed": "Out",
+      "skipped": "Unchanged",
+      "failed": "Errors",
+      "error": "Problem",
+      "triggers": {
+        "manual": "Sync now",
+        "schedule": "Schedule",
+        "retry": "Retry"
+      }
+    },
+    "codes": {
+      "auth_revoked": "The provider no longer accepts this connection",
+      "invalid_token": "The provider no longer accepts this connection",
+      "auth_failed": "The provider refused the connection",
+      "invalid_value": "A value doesn't fit its field",
+      "missing_required": "A required field is empty",
+      "transform_failed": "A value couldn't be converted",
+      "duplicate_record": "Two records point to the same contact",
+      "write_failed": "Couldn't be saved in Yayatoh",
+      "push_failed": "Couldn't be sent to the provider",
+      "network": "The provider couldn't be reached",
+      "lease_expired": "The sync stopped unexpectedly",
+      "disconnected": "Stopped by disconnecting",
+      "paused": "Stopped by pausing",
+      "sync_failed": "The sync failed",
+      "unknown_connector": "This integration is no longer available",
+      "other": "Error ({code})"
+    },
+    "inbox": {
+      "title": "Integration errors",
+      "description": "Records that couldn't sync, grouped by what went wrong. They're retried automatically for a while. Fix a record where it came from, then Retry, or Dismiss what you don't need.",
+      "retried": "{count, plural, =0 {Nothing to retry: those connections aren't active.} one {# record will be retried on the next sync.} other {# records will be retried on the next sync.}}",
+      "dismissed": "{count, plural, one {# record dismissed.} other {# records dismissed.}}",
+      "filterLabel": "Show errors",
+      "status": {
+        "open": "Open",
+        "resolved": "Resolved",
+        "dismissed": "Dismissed"
+      },
+      "empty": {
+        "open": "No open errors",
+        "resolved": "Nothing resolved yet",
+        "dismissed": "Nothing dismissed"
+      },
+      "emptyOpenHelp": "Everything synced. When a record can't sync, it shows up here with what to do next.",
+      "backToConnections": "Go to connections",
+      "groupTitle": "{connector}: {step} · {count, plural, one {# record} other {# records}}",
+      "steps": {
+        "auth": "Connection",
+        "pull": "Reading from the provider",
+        "map": "Mapping",
+        "write": "Saving in Yayatoh",
+        "push": "Sending to the provider"
+      },
+      "field": "Field: {field}",
+      "lastSeen": "Last seen {when}",
+      "retryAll": "Retry all",
+      "retryAllNamed": "Retry all: {group}",
+      "dismissAll": "Dismiss all",
+      "dismissAllNamed": "Dismiss all: {group}",
+      "recordsCaption": "Records: {group}",
+      "record": "Record",
+      "object": "What",
+      "objectDirection": "{object} ({direction})",
+      "directions": {
+        "pull": "in",
+        "push": "out"
+      },
+      "wholeConnection": "Whole connection",
+      "attempts": "Attempts",
+      "nextRetry": "Next automatic retry",
+      "closedAt": "Closed",
+      "manualRetry": "Waiting for you",
+      "actions": "Actions",
+      "retry": "Retry",
+      "retryNamed": "Retry {record}",
+      "dismiss": "Dismiss",
+      "dismissNamed": "Dismiss {record}",
+      "more": "{count, plural, one {# more record not shown.} other {# more records not shown.}}"
+    },
+    "fakeConsent": {
+      "title": "Sandbox consent",
+      "eyebrow": "Sandbox provider",
+      "heading": "Connect {name} to Yayatoh?",
+      "body": "{name} is a test provider. Allowing lets Yayatoh read and write the following on your behalf:",
+      "allow": "Allow",
+      "deny": "Deny"
+    }
   }
 }
