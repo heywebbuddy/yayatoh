@@ -568,3 +568,9 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **The A–Z board shows names publicly at the venue** (seated guests who haven't declined, as the host wrote them, with their table). It runs only on a device the host starts as the board. Say if you want first name + initial instead.
 - [ ] **Day-of needs the check-in module.** The wedding nav's Day-of item requires `checkin`, which isn't among the wedding profile's default modules; orgs with check-in (all current plans) see it. Say if weddings should get `checkin` by default.
 
+
+## M4.6a — social Command Center pack (2026-10-03, pending owner)
+- [ ] **"Not responded" counts guests, not households:** a guest invited to a sub-event who hasn't answered every one of their invitations. Guests invited to nothing (never asked) and gala table seat holders (coming by ticket) are not counted. The alert also says how many households (`parties`). Confirm.
+- [ ] **RSVP pending levels:** warning from RSVP deadline −7 days, critical from −1 day, and it stays critical after the deadline until the event starts (so late answers keep being chased). No deadline set: no alert (the widget still shows the count). Confirm, or say if it should stop at the deadline.
+- [ ] **Guests without a table** (not declined, on a guest floor plan) alert in the last 7 days before the event (critical in the last day and while it runs). **Missing meals** (attending guests without a meal, events with a menu) alert in the last 7 days. Both thresholds are ours; say if you want other windows.
+- [ ] **Door staff see guest names** on the Command Center's guest seating and arrivals widgets (the same names they see on the Scan PWA's guest check-in); RSVP chasing and meals stay with hosts and planners (`guests:read`). Dietary and accessibility needs show as counts only, for everyone. Confirm.
