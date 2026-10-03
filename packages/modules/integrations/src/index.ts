@@ -155,3 +155,10 @@ export {
   slackPanelSerializer,
 } from './slack/settings.ts';
 export { ALERT_NOTIFIED_EVENT, AlertNotifiedPayload, slackAlertsSubscriber } from './slack/subscriber.ts';
+export {
+  ZAPIER_ACTIONS,
+  ZAPIER_EVENT_PICKER,
+  ZAPIER_SCOPES,
+  ZAPIER_TRIGGERS,
+  type ZapierPart,
+} from './zapier.ts';
