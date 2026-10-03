@@ -1,5 +1,13 @@
 import { expect, type Page, test } from '@playwright/test';
-import { expectAccessible, expectAccessibleBothModes, newUser, signIn } from './helpers.ts';
+import {
+  expectAccessible,
+  expectAccessibleBothModes,
+  expectPicked,
+  newUser,
+  pickOption,
+  signIn,
+  stepOption,
+} from './helpers.ts';
 
 /**
  * M6.4a integrations framework, through the real UI against the fake IntegrationAuth port:
@@ -73,7 +81,7 @@ test.describe('integrations (M6.4a)', () => {
     // Mapping: a required target left unmapped is refused inline…
     const pull = pullForm(page);
     await expect(page.getByText('Version 1').first()).toBeVisible();
-    await pull.getByRole('group', { name: /Email/ }).getByLabel('Comes from').selectOption('');
+    await pickOption(pull.getByRole('group', { name: /Email/ }).getByLabel('Comes from'), '');
     await pull.getByRole('button', { name: 'Save import mapping' }).click();
     await expect(
       page.getByText("This mapping can't be saved yet. Check the fields marked below."),
@@ -81,16 +89,17 @@ test.describe('integrations (M6.4a)', () => {
     await expect(pull.getByText("Choose where Email comes from: it's required.")).toBeVisible();
     await expectAccessible(page);
     // …and a valid one is saved as the next version and survives a reload.
-    await pull.getByRole('group', { name: /Email/ }).getByLabel('Comes from').selectOption('email_address');
+    await pickOption(pull.getByRole('group', { name: /Email/ }).getByLabel('Comes from'), 'email_address');
     const name = pull.getByRole('group', { name: 'Name' });
-    await name.getByLabel('Comes from').selectOption('company');
-    await name.getByLabel('Change').selectOption('uppercase');
+    await pickOption(name.getByLabel('Comes from'), 'company');
+    await pickOption(name.getByLabel('Change'), 'uppercase');
     await name.getByLabel('If empty, use').fill('NO COMPANY');
     await pull.getByRole('button', { name: 'Save import mapping' }).click();
     await expect(page.getByText('Mapping saved as version 2. The next sync uses it.')).toBeVisible();
     await page.reload();
     await expect(page.getByText('Version 2', { exact: true })).toBeVisible();
-    await expect(pullForm(page).getByRole('group', { name: 'Name' }).getByLabel('Comes from')).toHaveValue(
+    await expectPicked(
+      pullForm(page).getByRole('group', { name: 'Name' }).getByLabel('Comes from'),
       'company',
     );
     await expect(pullForm(page).getByRole('group', { name: 'Name' }).getByLabel('If empty, use')).toHaveValue(
@@ -204,8 +213,7 @@ test.describe('integrations (M6.4a)', () => {
     await expect(page.getByText('Syncing is back on.')).toBeVisible();
     // The interval select and its save, by keyboard.
     const interval = page.getByLabel('Sync every');
-    await interval.focus();
-    await page.keyboard.press('ArrowDown');
+    await stepOption(interval);
     await page.getByRole('button', { name: 'Save schedule' }).focus();
     await page.keyboard.press('Enter');
     await expect(page.getByText('Sync schedule saved.')).toBeVisible();

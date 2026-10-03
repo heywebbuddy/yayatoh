@@ -1,9 +1,10 @@
 import { executeQuery, utcToZonedInput } from '@yayatoh/kernel';
 import { cfpOverviewQuery, MAX_CFP_QUESTIONS } from '@yayatoh/program';
-import { Alert, Card, EmptyState } from '@yayatoh/ui';
+import { Alert, buttonClass, Card, EmptyState } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { ActionButtonForm } from '@/components/portal-admin-forms.tsx';
 import { ProgramForm } from '@/components/program-form.tsx';
+import { Link } from '@/i18n/navigation.ts';
 import { ports } from '@/server/ports.ts';
 import { loadProgramPage } from '@/server/program.ts';
 import { addQuestionAction, removeQuestionAction, saveCfpAction } from '../actions.ts';
@@ -127,7 +128,21 @@ export default async function CfpSettingsPage({
         </h2>
         <p className="text-caption text-ink-2">{t('questionsHint')}</p>
         {view.questions.length === 0 ? (
-          <EmptyState title={t('noQuestionsTitle')} description={t('noQuestionsDescription')} />
+          <EmptyState
+            title={t('noQuestionsTitle')}
+            description={t('noQuestionsDescription')}
+            action={
+              canWrite ? (
+                <a href="#new-question" className={buttonClass('primary', 'md')}>
+                  {t('addQuestion')}
+                </a>
+              ) : (
+                <Link href={`/o/${org}/e/${event}/speakers/cfp`} className={buttonClass('secondary', 'md')}>
+                  {t('submissionsHeading')}
+                </Link>
+              )
+            }
+          />
         ) : (
           <ul className="m-0 flex list-none flex-col divide-y divide-line rounded-card border border-line bg-surface p-0 glass">
             {view.questions.map((q) => (
@@ -154,7 +169,9 @@ export default async function CfpSettingsPage({
         )}
         {canWrite && view.questions.length < MAX_CFP_QUESTIONS ? (
           <Card size="panel" className="flex flex-col gap-3">
-            <h3 className="text-section">{t('addQuestion')}</h3>
+            <h3 id="new-question" className="text-section">
+              {t('addQuestion')}
+            </h3>
             <ProgramForm
               action={addQuestionAction.bind(null, org, event)}
               idPrefix="cfp-question"

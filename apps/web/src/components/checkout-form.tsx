@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, buttonClass, Card, cx, Input } from '@yayatoh/ui';
+import { Alert, Button, buttonClass, Card, cx, Input, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { type FormEvent, startTransition, useActionState, useState } from 'react';
 import type { CheckoutState } from '@/app/[locale]/events/[slug]/actions.ts';
@@ -206,7 +206,7 @@ export function CheckoutForm({
                           {t('checkout.quantity')}
                           <span className="sr-only"> — {p.name}</span>
                         </label>
-                        <select
+                        <Select
                           id={`qty-${p.id}`}
                           name={`qty:${p.id}`}
                           defaultValue="0"
@@ -217,7 +217,7 @@ export function CheckoutForm({
                               {n}
                             </option>
                           ))}
-                        </select>
+                        </Select>
                       </div>
                       {p.isDonation ? (
                         <div className="flex flex-col gap-1">

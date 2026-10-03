@@ -1,7 +1,7 @@
 import { executeQuery, isDomainError } from '@yayatoh/kernel';
 import { finderPosterQuery } from '@yayatoh/seating';
 import { roleCan } from '@yayatoh/tenancy';
-import { EmptyState } from '@yayatoh/ui';
+import { buttonClass, EmptyState } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
@@ -68,7 +68,18 @@ export default async function SeatPosterPage({
         <p className="text-body text-ink-2">{t('subtitle')}</p>
       </header>
       {poster.people.length === 0 ? (
-        <EmptyState title={t('emptyTitle')} description={t('emptyDescription')} />
+        <EmptyState
+          title={t('emptyTitle')}
+          description={t('emptyDescription')}
+          action={
+            <Link
+              href={`/o/${org}/e/${event}/seating`}
+              className={buttonClass('primary', 'md', 'print:hidden')}
+            >
+              {t('toPlan')}
+            </Link>
+          }
+        />
       ) : (
         <div className="columns-1 gap-8 sm:columns-2">
           {[...groups].map(([letter, people]) => (

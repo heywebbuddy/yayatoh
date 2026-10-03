@@ -139,7 +139,21 @@ export default async function PrintingPage({
           {sp.printerError ? <Alert title={t(errorMessageKey(sp.printerError))} /> : null}
         </div>
         {printing.printers.length === 0 ? (
-          <EmptyState title={tp('noPrintersTitle')} description={tp('noPrintersDescription')} />
+          <EmptyState
+            title={tp('noPrintersTitle')}
+            description={tp('noPrintersDescription')}
+            action={
+              canWrite ? (
+                <a href="#new-printer-heading" className={buttonClass('primary', 'md')}>
+                  {tp('addPrinter')}
+                </a>
+              ) : (
+                <Link href={`/o/${org}/e/${event}`} className={buttonClass('secondary', 'md')}>
+                  {t('emptyActions.eventHome')}
+                </Link>
+              )
+            }
+          />
         ) : (
           <ul className="flex list-none flex-col gap-3 p-0">
             {printing.printers.map((p) => (
@@ -307,7 +321,15 @@ export default async function PrintingPage({
           ))}
         </nav>
         {log.entries.length === 0 ? (
-          <EmptyState title={tp('logEmptyTitle')} description={tp('logEmptyDescription')} />
+          <EmptyState
+            title={tp('logEmptyTitle')}
+            description={tp('logEmptyDescription')}
+            action={
+              <a href="#printers-heading" className={buttonClass('secondary', 'md')}>
+                {tp('printers')}
+              </a>
+            }
+          />
         ) : (
           <Table
             caption={tp('logCaption')}

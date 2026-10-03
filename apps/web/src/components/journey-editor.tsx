@@ -12,7 +12,7 @@ import {
   WAIT_ANCHORS,
   type WaitAnchor,
 } from '@yayatoh/automations/client';
-import { Alert, Button, Input } from '@yayatoh/ui';
+import { Alert, Button, Input, TimePicker, Select as UiSelect } from '@yayatoh/ui';
 import { useLocale, useTranslations } from 'next-intl';
 import { useActionState, useEffect, useId, useState } from 'react';
 import type { JourneyFormState } from '@/app/[locale]/o/[org]/(org)/journeys/actions.ts';
@@ -47,18 +47,18 @@ function Select({
       <label htmlFor={id} className="text-[13px] font-bold text-ink">
         {label}
       </label>
-      <select
+      <UiSelect
         id={id}
         name={name}
         className={`${SELECT} ${error ? 'border-danger' : ''}`}
         value={onChange ? value : undefined}
         defaultValue={onChange ? undefined : value}
-        onChange={onChange ? (e) => onChange(e.target.value) : undefined}
+        onValueChange={onChange}
         aria-invalid={error ? true : undefined}
         aria-describedby={error ? `${id}-error` : undefined}
       >
         {children}
-      </select>
+      </UiSelect>
       {error ? (
         <p id={`${id}-error`} className="text-caption text-danger">
           {error}
@@ -441,13 +441,12 @@ export function StepsEditor({
                     value={d.minutes}
                     onChange={(e) => set(d.key, { minutes: clampInt(e.target.value, 59) })}
                   />
-                  <Input
+                  <TimePicker
                     id={id('at')}
-                    type="time"
                     label={t('editor.atTime')}
                     hint={t('editor.atTimeHint')}
                     value={d.atTime}
-                    onChange={(e) => set(d.key, { atTime: e.target.value })}
+                    onValueChange={(v) => set(d.key, { atTime: v })}
                   />
                 </div>
                 <div className="grid gap-3 sm:grid-cols-2">

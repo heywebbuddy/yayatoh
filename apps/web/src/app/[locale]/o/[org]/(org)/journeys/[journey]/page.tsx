@@ -199,7 +199,21 @@ export default async function JourneyPage({
           </form>
         </search>
         {runs.rows.length === 0 ? (
-          <EmptyState title={q ? t('history.emptySearch', { q }) : t('history.empty')} />
+          <EmptyState
+            title={q ? t('history.emptySearch', { q }) : t('history.empty')}
+            description={t('history.emptyDescription')}
+            action={
+              q ? (
+                <Link href={base} className={buttonClass('secondary', 'md')}>
+                  {t('history.showEveryone')}
+                </Link>
+              ) : (
+                <Link href="#steps-heading" className={buttonClass('secondary', 'md')}>
+                  {t('history.reviewSteps')}
+                </Link>
+              )
+            }
+          />
         ) : (
           <Table
             caption={t('history.caption')}

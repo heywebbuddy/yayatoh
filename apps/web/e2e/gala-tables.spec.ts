@@ -3,6 +3,7 @@ import {
   continueToPayment,
   expectAccessible,
   expectAccessibleBothModes,
+  pickOption,
   signIn,
   WEDDING,
   WEDDING_OWNER,
@@ -38,7 +39,7 @@ async function buyTable(browser: Browser, slug: string, ticket: string, buyer: s
   await expect(
     guest.getByText('Seats 4 guests. After paying, you name them with your table’s link.'),
   ).toBeVisible();
-  await guest.getByLabel(`Quantity — ${ticket}`).selectOption('1');
+  await pickOption(guest.getByLabel(`Quantity — ${ticket}`), '1');
   await guest.getByLabel('Full name').fill(buyer);
   await guest.getByLabel('Email for your tickets').fill(emailOf(buyer));
   await continueToPayment(guest, emailOf(buyer));
@@ -238,8 +239,7 @@ test.describe('gala tables and sponsors (M4.2b)', () => {
       await page.goto(`${base}/seating/assign`);
       await page.getByRole('checkbox', { name: who }).check();
       const item = page.getByLabel('Table or row');
-      const option = item.locator('option', { hasText: new RegExp(`^${table} — `) });
-      await item.selectOption({ label: (await option.textContent()) ?? '' });
+      await pickOption(item, { label: new RegExp(`^${table} — `) });
       await page.getByRole('button', { name: 'Seat them' }).click();
       await expect(page.getByRole('region', { name: table, exact: true })).toContainText(who);
     }

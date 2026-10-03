@@ -766,6 +766,18 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **DSAR for batch 3h tables** (written at the merge): donations gifts, receipts and year-end statements and order invoices are kept under the 7-year tax hold with the donor's/buyer's details replaced; registrants are redacted in place, type-member addresses deleted; pending collector submissions deleted; live Q&A questions signed with the person's full name are deleted if never approved, else anonymised. Confirm.
 - [ ] **Promoter channel links during coexistence:** `/events/{slug}?channel=CODE` belongs to the `events.page` route; on a legacy host it reaches the new app only once that route is moved.
 
+## U1 — form controls (2026-10-03, pending owner)
+- [ ] **Built with these defaults; say if any should change:**
+  - **Type-ahead on a closed dropdown chooses straight away**, as the browser's own select did (the keyboard paths and habits stay the same). To search, open the list (Enter, ↓ or a click); lists of more than 8 options open with a search box.
+  - **Event time zone in the create-event wizard** is now the full IANA list, grouped by region with the current offset, instead of the 13 zones the wizard offered. Values are unchanged (IANA names).
+  - **Arabic digits in the date and time pickers:** dates and times show Arabic-Indic digits (٠٥/١١/٢٠٢٦) in Arabic, as the U1 spec asks. The rest of the app still formats numbers with Western digits in Arabic (the CLDR default); say if you want one rule everywhere.
+  - **Typed dates** use the reader's locale order (11/05/2026 in English, 05.11.2026 in German). ISO (2026-11-05) always works too.
+
+## U2 — console navigation and guidance (2026-10-03, pending owner)
+- [ ] **Where pages sit in the grouped sidebar** (`apps/web/src/lib/org-nav.ts`): Analytics, Coupons, Refund requests, Disputes and Charity profile under Money; Support macros next to Messages under Audience & marketing; Plan & billing, Sending setup, Messaging limits, Webhooks, Integrations, Sandboxes, Activity, Privacy requests and your own Notifications under Settings; Email templates and Domains under Site & content. Sections start open; each member's collapsed sections are remembered per browser (a cookie, no account column). Confirm or move items.
+- [ ] **Nav visibility now follows page permissions**: a viewer no longer sees Settings, Domains, Public site, Payouts or API keys in the sidebar (those pages only showed a refusal or empty figures to them); the scanner (door) role sees Home and Notifications, and Home now points them to the Scan app. Confirm.
+- [ ] **"Read the guide" links** search the help center (`/help/search?q=…`). When the help team writes articles for domains, templates, series, payouts, sending, event types and promo codes, the links can point to them directly (`lib/help-topics.ts`).
+
 ## M4.6a — social Command Center pack (2026-10-03, pending owner)
 - [ ] **"Not responded" counts guests, not households:** a guest invited to a sub-event who hasn't answered every one of their invitations. Guests invited to nothing (never asked) and gala table seat holders (coming by ticket) are not counted. The alert also says how many households (`parties`). Confirm.
 - [ ] **RSVP pending levels:** warning from RSVP deadline −7 days, critical from −1 day, and it stays critical after the deadline until the event starts (so late answers keep being chased). No deadline set: no alert (the widget still shows the count). Confirm, or say if it should stop at the deadline.

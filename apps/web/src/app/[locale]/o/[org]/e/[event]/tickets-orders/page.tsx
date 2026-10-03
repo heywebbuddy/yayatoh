@@ -4,7 +4,7 @@ import { currencyExponent, executeQuery, formatMoney, money } from '@yayatoh/ker
 import { checkoutSettingsQuery, listOrdersQuery, refundPolicyQuery } from '@yayatoh/orders';
 import { dateChartsQuery, publicSeatMap } from '@yayatoh/seating';
 import { listPromoCodesQuery, listTicketTypesQuery } from '@yayatoh/ticketing';
-import { Button, Card, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
+import { Button, buttonClass, Card, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { BoxOfficeForm } from '@/components/box-office-form.tsx';
 import { CheckoutVerificationForm } from '@/components/checkout-verification-form.tsx';
@@ -149,7 +149,24 @@ export default async function TicketsPage({
         </p>
       ) : null}
       {types.length === 0 ? (
-        <EmptyState title={t('tickets.emptyTitle')} description={t('tickets.emptyDescription')} />
+        <EmptyState
+          title={t('tickets.emptyTitle')}
+          description={t('tickets.emptyDescription')}
+          action={
+            canWrite ? (
+              <Link
+                href={`/o/${org}/e/${event}/tickets-orders#new-ticket-type`}
+                className={buttonClass('primary', 'md')}
+              >
+                {t('tickets.emptyAction')}
+              </Link>
+            ) : (
+              <Link href={`/o/${org}/e/${event}`} className={buttonClass('secondary', 'md')}>
+                {t('emptyActions.eventHome')}
+              </Link>
+            )
+          }
+        />
       ) : (
         <Table
           caption={t('tickets.caption')}
@@ -381,7 +398,15 @@ export default async function TicketsPage({
             {t('orders.title')}
           </h2>
           {orders.length === 0 ? (
-            <EmptyState title={t('orders.emptyTitle')} description={t('orders.emptyDescription')} />
+            <EmptyState
+              title={t('orders.emptyTitle')}
+              description={t('orders.emptyDescription')}
+              action={
+                <Link href={`/events/${event}`} className={buttonClass('secondary', 'md')}>
+                  {t('orders.emptyAction')}
+                </Link>
+              }
+            />
           ) : (
             <Table
               caption={t('orders.title')}
@@ -452,7 +477,24 @@ export default async function TicketsPage({
           {t('questions.title')}
         </h2>
         {fields.length === 0 ? (
-          <EmptyState title={t('questions.emptyTitle')} description={t('questions.emptyDescription')} />
+          <EmptyState
+            title={t('questions.emptyTitle')}
+            description={t('questions.emptyDescription')}
+            action={
+              canWrite ? (
+                <Link
+                  href={`/o/${org}/e/${event}/tickets-orders#new-question`}
+                  className={buttonClass('primary', 'md')}
+                >
+                  {t('questions.emptyAction')}
+                </Link>
+              ) : (
+                <Link href={`/o/${org}/e/${event}`} className={buttonClass('secondary', 'md')}>
+                  {t('emptyActions.eventHome')}
+                </Link>
+              )
+            }
+          />
         ) : (
           <ol className="flex list-none flex-col divide-y divide-line rounded-card border border-line p-0">
             {fields.map((f, i) => (
@@ -510,7 +552,7 @@ export default async function TicketsPage({
           </ol>
         )}
         {canWrite ? (
-          <Card className="flex flex-col gap-3">
+          <Card id="new-question" className="flex scroll-mt-6 flex-col gap-3">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <h3 className="text-section">{t('questions.addTitle')}</h3>
               <form action={addGuestCountsAction.bind(null, org, event)}>
@@ -564,12 +606,29 @@ export default async function TicketsPage({
           ) : null}
         </Card>
       </section>
-      <section aria-labelledby="promo-heading" className="flex flex-col gap-3">
+      <section id="promo-codes" aria-labelledby="promo-heading" className="flex scroll-mt-6 flex-col gap-3">
         <h2 id="promo-heading" className="text-section">
           {t('promo.title')}
         </h2>
         {promos.length === 0 ? (
-          <EmptyState title={t('promo.emptyTitle')} description={t('promo.emptyDescription')} />
+          <EmptyState
+            title={t('promo.emptyTitle')}
+            description={t('promo.emptyDescription')}
+            action={
+              canWrite ? (
+                <Link
+                  href={`/o/${org}/e/${event}/tickets-orders#new-promo-code`}
+                  className={buttonClass('primary', 'md')}
+                >
+                  {t('promo.emptyAction')}
+                </Link>
+              ) : (
+                <Link href={`/o/${org}/e/${event}`} className={buttonClass('secondary', 'md')}>
+                  {t('emptyActions.eventHome')}
+                </Link>
+              )
+            }
+          />
         ) : (
           <Table
             caption={t('promo.title')}
@@ -632,14 +691,14 @@ export default async function TicketsPage({
           />
         )}
         {canWrite ? (
-          <Card className="flex flex-col gap-3">
+          <Card id="new-promo-code" className="flex scroll-mt-6 flex-col gap-3">
             <h3 className="text-section">{t('promo.addTitle')}</h3>
             <PromoCodeForm currency={ev.currency} action={createPromoCodeAction.bind(null, org, event)} />
           </Card>
         ) : null}
       </section>
       {canWrite ? (
-        <Card className="flex flex-col gap-3">
+        <Card id="new-ticket-type" className="flex scroll-mt-6 flex-col gap-3">
           <h2 className="text-section">{t('tickets.addTitle')}</h2>
           <TicketTypeForm
             currency={ev.currency}

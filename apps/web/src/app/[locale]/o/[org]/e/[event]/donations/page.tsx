@@ -401,6 +401,20 @@ export default async function DonationsPage({
             icon={<HandHeart strokeWidth={2} />}
             title={t('emptyCampaignsTitle')}
             description={canWrite ? t('emptyCampaignsDescription') : t('emptyCampaignsViewer')}
+            action={
+              canWrite ? (
+                <Link
+                  href={`/o/${org}/e/${event}/donations#adding-campaign`}
+                  className={buttonClass('primary', 'md')}
+                >
+                  {t('emptyCampaignsAction')}
+                </Link>
+              ) : (
+                <Link href={`/o/${org}/e/${event}`} className={buttonClass('primary', 'md')}>
+                  {t('backToEvent')}
+                </Link>
+              )
+            }
           />
         ) : (
           <ol className="m-0 flex list-none flex-col gap-4 p-0">
@@ -521,9 +535,9 @@ export default async function DonationsPage({
           </ol>
         )}
         {canWrite ? (
-          <section aria-labelledby="add-campaign-heading">
+          <section id="adding-campaign" aria-labelledby="adding-campaign-heading">
             <Card size="panel" className="flex flex-col gap-4">
-              <CardHeader as="h3" id="add-campaign-heading" title={t('addCampaign')} />
+              <CardHeader as="h3" id="adding-campaign-heading" title={t('addCampaign')} />
               <ProgramForm
                 action={createCampaignAction.bind(null, org, event)}
                 fields={campaignFields()}
@@ -587,7 +601,25 @@ export default async function DonationsPage({
           </section>
         ) : null}
         {view.gifts.length === 0 ? (
-          <EmptyState icon={<Gift strokeWidth={2} />} title={t('noGifts')} />
+          <EmptyState
+            icon={<Gift strokeWidth={2} />}
+            title={t('noGifts')}
+            description={t('noGiftsDescription')}
+            action={
+              view.connected && openCampaigns.length > 0 && ev.status === 'published' ? (
+                <Link href={giving} className={buttonClass('primary', 'md')}>
+                  {t('shareGivingPage')}
+                </Link>
+              ) : (
+                <Link
+                  href={`/o/${org}/e/${event}/donations#campaigns-heading`}
+                  className={buttonClass('primary', 'md')}
+                >
+                  {t('toCampaigns')}
+                </Link>
+              )
+            }
+          />
         ) : (
           <Table<HostGiftDto>
             caption={t('giftsCaption')}

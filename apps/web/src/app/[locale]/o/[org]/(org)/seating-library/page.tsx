@@ -6,7 +6,6 @@ import { Alert, Button, buttonClass, Card, EmptyState, PageHeader } from '@yayat
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { RenameLayoutForm, StartEventForm } from '@/components/seating-library.tsx';
 import { Link } from '@/i18n/navigation.ts';
-import { zonesWith } from '@/lib/zones.ts';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import { deleteLayoutAction, renameLayoutAction, startEventFromLayoutAction } from './actions.ts';
@@ -65,7 +64,6 @@ export default async function SeatingLibraryPage({
                   key={chosen ?? 'first'}
                   layouts={layouts}
                   profiles={profiles}
-                  zones={zonesWith(data.org.timezone)}
                   defaults={{
                     layoutId: chosen ?? layouts[0]?.id ?? '',
                     profile: profiles.includes(data.profile as never) ? data.profile : (profiles[0] ?? ''),

@@ -34,7 +34,24 @@
     "breadcrumb": "Ruta de navegación",
     "closeMenu": "Cerrar menú",
     "eventSections": "Secciones del evento",
-    "allEvents": "Eventos"
+    "allEvents": "Eventos",
+    "sections": {
+      "events": "Eventos",
+      "audience": "Audiencia y marketing",
+      "money": "Dinero",
+      "site": "Sitio y contenido",
+      "settings": "Configuración"
+    },
+    "create": {
+      "label": "Crear",
+      "event": "Evento",
+      "series": "Serie",
+      "template": "Plantilla",
+      "venue": "Lugar",
+      "coupon": "Cupón",
+      "page": "Página o entrada de blog"
+    },
+    "help": "Ayuda"
   },
   "notifications": {
     "open": "Notificaciones",
@@ -293,7 +310,9 @@
       "bounced": "Rebotado: la dirección no existe",
       "soft_bounced": "Rebotado por ahora (buzón lleno o no disponible)",
       "complained": "El destinatario lo marcó como spam"
-    }
+    },
+    "emptyAction": "Elegir sobre qué recibes avisos",
+    "choosePreferences": "Elegir sobre qué recibir avisos"
   },
   "nav": {
     "home": "Inicio",
@@ -357,7 +376,14 @@
     "marketingAnalytics": "Analítica de marketing",
     "badges": "Credenciales",
     "orgAnalytics": "Analítica",
-    "integrations": "Integraciones"
+    "integrations": "Integraciones",
+    "seatingLibrary": "Biblioteca de asientos",
+    "coupons": "Cupones",
+    "charity": "Perfil benéfico",
+    "plan": "Plan y facturación",
+    "webhooks": "Webhooks",
+    "sandboxes": "Entornos de prueba",
+    "notifications": "Notificaciones"
   },
   "vocab": {
     "attendee": "Asistente",
@@ -417,7 +443,11 @@
     "seriesFilter": "Filtrar eventos por serie",
     "allEvents": "Todos los eventos",
     "seriesEmptyTitle": "Aún no hay eventos en {name}",
-    "seriesEmptyDescription": "Añade un evento a esta serie desde su página Fechas."
+    "seriesEmptyDescription": "Añade un evento a esta serie desde su página Fechas.",
+    "showEveryEvent": "Ver cada evento",
+    "doorTitle": "El escaneo se hace en la app de escaneo",
+    "doorDescription": "Tu función es revisar entradas en la puerta. Abre la app de escaneo en este dispositivo para empezar.",
+    "openScan": "Abrir la app de escaneo"
   },
   "team": {
     "subtitle": "{count, plural, one {# miembro} other {# miembros}}",
@@ -462,7 +492,8 @@
     "readiness": "Preparación del evento",
     "readinessPercent": "{value} % listo",
     "noSalesTitle": "Aún no hay ventas",
-    "noSalesDescription": "Las inscripciones, las ventas y los asientos aparecerán aquí cuando las entradas estén a la venta."
+    "noSalesDescription": "Las inscripciones, las ventas y los asientos aparecerán aquí cuando las entradas estén a la venta.",
+    "toTicketsOrders": "Ir a Entradas y pedidos"
   },
   "kpi": {
     "registrations": "Inscripciones",
@@ -579,7 +610,10 @@
     "anyDistribution": "Cualquier distribución",
     "distributionFilter": {
       "pending": "Pendiente de transferir"
-    }
+    },
+    "emptyUpload": "Subir una lista desde un archivo CSV",
+    "toTicketsOrders": "Ir a Entradas y pedidos",
+    "backToEvent": "Volver al resumen del evento"
   },
   "attendeeStatus": {
     "paid": "Pagado",
@@ -618,7 +652,8 @@
   },
   "section": {
     "comingTitle": "Esta sección está en construcción",
-    "comingDescription": "Llegará en una fase posterior. Tu navegación ya refleja tu plan y tu tipo de evento."
+    "comingDescription": "Llegará en una fase posterior. Tu navegación ya refleja tu plan y tu tipo de evento.",
+    "backToEvent": "Volver al resumen del evento"
   },
   "publicEvent": {
     "nav": "Evento",
@@ -797,7 +832,8 @@
   },
   "orgPicker": {
     "emptyTitle": "Aún no perteneces a ninguna organización",
-    "emptyDescription": "Pide a un propietario que te invite o espera tu correo de invitación."
+    "emptyDescription": "Pide a un propietario que te invite o espera tu correo de invitación.",
+    "myTickets": "Ir a mis entradas"
   },
   "invite": {
     "eyebrow": "Invitación",
@@ -893,7 +929,8 @@
     "validDatesHint": "Sin marcar: se vende para todas las fechas.",
     "dates": "Fechas",
     "allDates": "Todas las fechas",
-    "someDates": "{count, plural, one {# fecha} other {# fechas}}"
+    "someDates": "{count, plural, one {# fecha} other {# fechas}}",
+    "emptyAction": "Configurar entradas"
   },
   "checkout": {
     "quantity": "Cantidad",
@@ -1071,7 +1108,8 @@
     "buyer": "Comprador",
     "items": "Entradas",
     "total": "Total",
-    "status": "Estado"
+    "status": "Estado",
+    "emptyAction": "Abrir la página del evento"
   },
   "promo": {
     "title": "Códigos promocionales",
@@ -1098,7 +1136,8 @@
     "resumeCode": "Reanudar {code}",
     "addTitle": "Añadir un código promocional",
     "add": "Añadir código",
-    "added": "Código promocional añadido."
+    "added": "Código promocional añadido.",
+    "emptyAction": "Crear un código"
   },
   "questions": {
     "title": "Preguntas del pago",
@@ -1133,7 +1172,8 @@
     "moveUp": "Subir {label}",
     "moveDown": "Bajar {label}",
     "remove": "Eliminar {label}",
-    "answers": "Respuestas"
+    "answers": "Respuestas",
+    "emptyAction": "Escribir una pregunta"
   },
   "checkin": {
     "title": "Check-in",
@@ -1183,7 +1223,9 @@
     "overrideNote": "Motivo para dejar pasar",
     "overrideHint": "Se guarda en el registro de actividad con tu nombre, p. ej. «OC aprobada, pago en camino».",
     "overrideSubmit": "Dejar pasar igualmente",
-    "overrideNoteRequired": "Indica un motivo (al menos 3 caracteres) para dejar pasar con saldo pendiente."
+    "overrideNoteRequired": "Indica un motivo (al menos 3 caracteres) para dejar pasar con saldo pendiente.",
+    "backToEvent": "Volver al evento",
+    "scanFirst": "Escanear la primera entrada"
   },
   "checkinLive": {
     "state": {
@@ -1296,7 +1338,8 @@
     "attendees": "Personas",
     "orders": "Pedidos",
     "ticketCode": "Entrada {code}",
-    "orderRef": "Ref. {ref}"
+    "orderRef": "Ref. {ref}",
+    "browseEvents": "Explorar tus eventos"
   },
   "bulk": {
     "formLabel": "Acciones masivas",
@@ -1442,7 +1485,8 @@
       "too_many_columns": "El archivo tiene más de 50 columnas.",
       "cell_too_long": "Una celda tiene más de 1000 caracteres.",
       "unterminated_quote": "El archivo tiene unas comillas sin cerrar, así que no se puede leer como CSV."
-    }
+    },
+    "backToEvent": "Volver al resumen del evento"
   },
   "distribution": {
     "title": "Enviar esta entrada",
@@ -1563,7 +1607,8 @@
     "activityLink": "Registro de actividad",
     "privacyLink": "Solicitudes de privacidad",
     "charityLink": "Perfil benéfico",
-    "planLink": "Plan y módulos"
+    "planLink": "Plan y módulos",
+    "findOwner": "Buscar un propietario o administrador"
   },
   "legal": {
     "platform": "Yayatoh",
@@ -2586,7 +2631,10 @@
       "seatNumbersHint": "Números de asiento de las filas y mesas elegidas, p. ej. 1-4, 9. Déjalo vacío para todos sus asientos.",
       "allot": "Asignar asientos",
       "allotted": "{count, plural, =0 {No cambió ningún asiento.} one {# asiento asignado.} other {# asientos asignados.}}",
-      "freed": "{count, plural, =0 {Ningún asiento estaba en un canal.} one {# asiento vuelve a estar abierto a todos los canales.} other {# asientos vuelven a estar abiertos a todos los canales.}}"
+      "freed": "{count, plural, =0 {Ningún asiento estaba en un canal.} one {# asiento vuelve a estar abierto a todos los canales.} other {# asientos vuelven a estar abiertos a todos los canales.}}",
+      "emptyReadOnly": "Los canales aparecen aquí cuando un editor los añade.",
+      "addFirst": "Añadir el primer canal",
+      "noSeatsHint": "Añade filas o mesas en el plano y asigna aquí sus asientos."
     },
     "revisions": {
       "title": "Revisiones del plano",
@@ -2889,7 +2937,8 @@
         "channel": "Canal",
         "bookedAt": "Reservada el",
         "paidAt": "Pagada el"
-      }
+      },
+      "showAll": "Mostrar todas las reservas"
     },
     "org": {
       "title": "Ventas",
@@ -2914,8 +2963,13 @@
       "byEvent": "Ventas por evento",
       "event": "Evento",
       "emptyTitle": "No hay ventas en este periodo",
-      "emptyDescription": "Elige un periodo más largo o comparte la página de un evento para empezar a vender."
-    }
+      "emptyDescription": "Elige un periodo más largo o comparte la página de un evento para empezar a vender.",
+      "toEvents": "Ver tus eventos",
+      "showAllTime": "Mostrar todo el periodo"
+    },
+    "backToEvent": "Volver al resumen del evento",
+    "toTicketsOrders": "Ir a Entradas y pedidos",
+    "toSalesReport": "Abrir el resumen de ventas"
   },
   "activity": {
     "title": "Actividad",
@@ -2964,7 +3018,10 @@
     },
     "pagination": "Páginas de actividad",
     "newest": "Más recientes",
-    "older": "Entradas anteriores"
+    "older": "Entradas anteriores",
+    "findOwner": "Buscar un propietario o administrador",
+    "showAll": "Ver toda la actividad",
+    "toEvents": "Ir a tus eventos"
   },
   "privacy": {
     "title": "Solicitudes de privacidad",
@@ -2981,7 +3038,8 @@
     "result": {
       "title": "Lo que esta organización tiene sobre {email}",
       "noneTitle": "No se encontró nada para este correo",
-      "noneDescription": "Ningún registro de esta organización usa esta dirección. Aun así, puedes abrir una solicitud para responder formalmente a la persona."
+      "noneDescription": "Ningún registro de esta organización usa esta dirección. Aun así, puedes abrir una solicitud para responder formalmente a la persona.",
+      "searchAgain": "Buscar otra dirección"
     },
     "errors": {
       "invalidEmail": "Introduce un correo electrónico válido.",
@@ -3052,7 +3110,8 @@
       "due": "Vence",
       "overdue": "Vencida",
       "action": "Acción",
-      "review": "Revisar"
+      "review": "Revisar",
+      "emptyAction": "Buscar a alguien por correo"
     },
     "closed": {
       "title": "Solicitudes cerradas",
@@ -3089,7 +3148,8 @@
       "holdings": {
         "title": "Lo que tiene esta organización",
         "empty": "No se guarda nada sobre esta persona",
-        "emptyHint": "Aun así puedes resolver la solicitud: la persona recibe una respuesta formal de que no se guarda nada."
+        "emptyHint": "Aun así puedes resolver la solicitud: la persona recibe una respuesta formal de que no se guarda nada.",
+        "emptyAction": "Responder a la solicitud"
       },
       "export": {
         "title": "Enviarle una copia",
@@ -3161,7 +3221,8 @@
       "digest": "SHA-256 del comprobante",
       "signature": "Firma (base64)",
       "footer": "Emitido por Yayatoh para {org}. La firma cubre los datos del comprobante; compruébala con la clave pública de abajo."
-    }
+    },
+    "findOwner": "Buscar un propietario o administrador"
   },
   "privacyNotice": {
     "eyebrow": "Yayatoh",
@@ -3340,9 +3401,13 @@
       "eventDate": "Fecha del evento",
       "guests": "Invitados",
       "markHandled": "Marcar como atendida",
-      "markNew": "Marcar como nueva"
+      "markNew": "Marcar como nueva",
+      "openPublic": "Abrir la página pública del recinto",
+      "editListing": "Editar la ficha del directorio"
     },
-    "layoutLibrary": "Biblioteca de planos"
+    "layoutLibrary": "Biblioteca de planos",
+    "emptyAction": "Añade tu primer recinto",
+    "emptyViewerAction": "Explorar el directorio de recintos"
   },
   "details": {
     "title": "Detalles del evento",
@@ -3497,7 +3562,9 @@
     "sectionAdded": "Sección añadida.",
     "sectionSaved": "Sección guardada.",
     "addSection": "Añadir sección",
-    "saveSection": "Guardar sección"
+    "saveSection": "Guardar sección",
+    "emptyAction": "Añade tu primera sección",
+    "backToEvent": "Volver al resumen del evento"
   },
   "dates": {
     "title": "Fechas",
@@ -3596,7 +3663,8 @@
       "event_finished": "Las fechas de un evento terminado o cancelado no se pueden cambiar.",
       "cancelled": "Una fecha cancelada no se puede cambiar.",
       "invalid_count": "Introduce un número de fechas del 1 al 366."
-    }
+    },
+    "backToEvent": "Volver al resumen del evento"
   },
   "copy": {
     "title": "Duplicar y plantilla",
@@ -3618,7 +3686,8 @@
     "openTemplates": "Abrir plantillas",
     "saveTemplate": "Guardar plantilla",
     "nameTaken": "Ese nombre ya está en uso. Elige otro.",
-    "invalid": "Revisa este valor."
+    "invalid": "Revisa este valor.",
+    "backToEvent": "Volver al resumen del evento"
   },
   "series": {
     "title": "Series",
@@ -3639,7 +3708,8 @@
     "create": "Crear serie",
     "created": "Serie creada.",
     "slugTaken": "Ya existe una serie con este nombre. Prueba con uno algo distinto.",
-    "nameInvalid": "Introduce un nombre de 2 a 160 caracteres."
+    "nameInvalid": "Introduce un nombre de 2 a 160 caracteres.",
+    "startFirst": "Crea tu primera serie"
   },
   "templates": {
     "title": "Plantillas",
@@ -3651,7 +3721,8 @@
     "deleteFor": "Eliminar la plantilla {name}",
     "use": "Crear un evento a partir de {name}",
     "timezone": "Horas en {timezone}.",
-    "createEvent": "Crear evento"
+    "createEvent": "Crear evento",
+    "pickEvent": "Elige un evento para guardar"
   },
   "publicSeries": {
     "eyebrow": "Una serie de {org}",
@@ -3767,7 +3838,9 @@
     "unpublish": "Despublicar {title}",
     "pinOne": "Fijar {title}",
     "unpinOne": "Desfijar {title}",
-    "delete": "Eliminar {title}"
+    "delete": "Eliminar {title}",
+    "emptyAction": "Escribe tu primer anuncio",
+    "toSections": "Leer las secciones de la página"
   },
   "holder": {
     "joinTitle": "Unirse en línea",
@@ -3794,7 +3867,8 @@
     "title": "Acceso",
     "subtitle": "Información privada para quienes tienen entrada, el enlace para unirse en línea y los códigos de acceso.",
     "viewerTitle": "Solo los editores pueden ver esto",
-    "viewerDescription": "La información privada y los códigos de acceso solo se muestran a quienes pueden editar el evento."
+    "viewerDescription": "La información privada y los códigos de acceso solo se muestran a quienes pueden editar el evento.",
+    "backToEvent": "Volver al resumen del evento"
   },
   "privateInfo": {
     "heading": "Información privada",
@@ -3849,7 +3923,8 @@
     "new": "Nuevo código de acceso",
     "create": "Crear código",
     "created": "Código de acceso creado.",
-    "unlockLink": "Los invitados abren {url} e introducen su código."
+    "unlockLink": "Los invitados abren {url} e introducen su código.",
+    "emptyAction": "Crea tu primer código"
   },
   "conversation": {
     "inboxTitle": "Mensajes",
@@ -3902,7 +3977,9 @@
       "blocked": "Esta conversación está bloqueada.",
       "blocked_by_contact": "Esta persona bloqueó los mensajes de tu organización.",
       "you_blocked": "Desbloquea al organizador para escribirle."
-    }
+    },
+    "emptyAction": "Ir a tus eventos",
+    "showAll": "Ver todas las conversaciones"
   },
   "apiKeys": {
     "title": "Claves de API",
@@ -4110,7 +4187,8 @@
       "copy": "Copiar fragmento",
       "copied": "Copiado.",
       "emptyTitle": "Aún no hay eventos públicos",
-      "emptyDescription": "Publica un evento para obtener su fragmento del widget."
+      "emptyDescription": "Publica un evento para obtener su fragmento del widget.",
+      "toEvents": "Ir a tus eventos"
     },
     "navPages": {
       "title": "Navegación del sitio",
@@ -4150,7 +4228,8 @@
     "resolveNote": "¿Por qué se resuelve {reference}?",
     "noteTooShort": "Escribe una nota de al menos 3 caracteres.",
     "alreadyResolved": "Alguien ya resolvió esta diferencia.",
-    "resolve": "Resolver"
+    "resolve": "Resolver",
+    "emptyAction": "Ver las comprobaciones diarias"
   },
   "risk": {
     "flagged": "Marcado en el pago",
@@ -4219,7 +4298,9 @@
     "customized": "Correos personalizados",
     "noneTitle": "Aún no hay correos personalizados",
     "noneDescription": "Todos los correos usan el texto predeterminado de Yayatoh.",
-    "changed": "Modificado"
+    "changed": "Modificado",
+    "noneAction": "Personalizar un correo",
+    "noneActionViewer": "Leer el texto predeterminado"
   },
   "setupGuide": {
     "title": "Guía de configuración",
@@ -4357,7 +4438,15 @@
       "outside_event": "Esta sesión está fuera del inicio y el fin del evento."
     },
     "photoAfterSave": "Puedes añadir una foto después de guardar al ponente.",
-    "logoAfterSave": "Puedes añadir un logotipo después de guardar."
+    "logoAfterSave": "Puedes añadir un logotipo después de guardar.",
+    "emptyExhibitorsAction": "Añade tu primer expositor",
+    "backToEvent": "Volver al evento",
+    "emptySessionsReadOnly": "Las sesiones aparecen aquí cuando un editor las añade.",
+    "addFirstSession": "Añadir la primera sesión",
+    "emptySpeakersReadOnly": "Los ponentes aparecen aquí cuando un editor los añade.",
+    "addFirstSpeaker": "Añadir el primer ponente",
+    "emptyTiersReadOnly": "Los niveles de patrocinio y sus patrocinadores aparecen aquí cuando un editor los añade.",
+    "addFirstTier": "Añadir el primer nivel"
   },
   "aiDraft": {
     "title": "Redactar con IA",
@@ -4569,7 +4658,10 @@
     "readOnly": "Solo propietarios y administradores pueden cambiar el personal de acceso.",
     "byCheckpoint": "Personal de acceso por punto de control",
     "nobody": "Nadie asignado",
-    "manage": "Gestionar personal de acceso"
+    "manage": "Gestionar personal de acceso",
+    "emptyReadOnly": "El personal de acceso aparece aquí cuando un propietario o administrador lo añade.",
+    "addFirst": "Añadir el primer miembro del personal de acceso",
+    "openCheckin": "Abrir la pantalla de check-in"
   },
   "signals": {
     "title": "Señales de fraude",
@@ -4613,7 +4705,9 @@
       "save": "Guardar reglas",
       "saved": "Reglas guardadas.",
       "current": "Marca un dispositivo con más de {rate} escaneos por minuto y una entrada que se mueve a más de {kmh} km/h entre puntos de control."
-    }
+    },
+    "showAll": "Mostrar todas las señales",
+    "reviewDetection": "Revisar los ajustes de detección"
   },
   "security": {
     "metaTitle": "Seguridad de la cuenta",
@@ -4898,7 +4992,11 @@
       "survey_exists": "Esta encuesta ya existe.",
       "messaging_paused": "El soporte de Yayatoh ha pausado los mensajes de tu organización.",
       "form_invalid": "Una de las preguntas no es válida."
-    }
+    },
+    "sendFirst": "Enviarla a los asistentes",
+    "questionsEmptyReadOnly": "Las preguntas aparecen aquí cuando un editor las añade.",
+    "addFirstQuestion": "Añadir la primera pregunta",
+    "browseSurveys": "Ver otras encuestas"
   },
   "survey": {
     "metaTitle": "Encuesta",
@@ -4997,7 +5095,8 @@
     "emptyDescription": "Asigna asientos en el plano y luego imprime esta lista para la entrada.",
     "tableSeat": "Mesa {item} · Asiento {seat}",
     "rowSeat": "Fila {item} · Asiento {seat}",
-    "unseated": "{count, plural, one {# invitado aún no tiene asiento y no aparece en el cartel.} other {# invitados aún no tienen asiento y no aparecen en el cartel.}}"
+    "unseated": "{count, plural, one {# invitado aún no tiene asiento y no aparece en el cartel.} other {# invitados aún no tienen asiento y no aparecen en el cartel.}}",
+    "toPlan": "Ir al plano de asientos"
   },
   "webPush": {
     "title": "Notificaciones push",
@@ -5161,7 +5260,10 @@
       "body": "Desaparece de tu sitio al instante. No se puede deshacer.",
       "confirm": "Sí, eliminar",
       "cancel": "Cancelar"
-    }
+    },
+    "emptyActionPost": "Escribe tu primera entrada",
+    "emptyActionPage": "Escribe tu primera página",
+    "findOwner": "Buscar un propietario o administrador"
   },
   "cmsPublic": {
     "blog": "Blog",
@@ -5221,7 +5323,10 @@
       "reasonError": "Indica un motivo (de 3 a 300 caracteres).",
       "hide": "Ocultar reseña",
       "unhide": "Mostrar reseña",
-      "dismissReports": "Descartar denuncias"
+      "dismissReports": "Descartar denuncias",
+      "showAll": "Mostrar todas las reseñas",
+      "seeOrders": "Ver entradas y pedidos",
+      "backToEvent": "Volver al evento"
     },
     "form": {
       "rating": "Tu valoración",
@@ -5849,7 +5954,10 @@
     },
     "peopleLink": "Personas",
     "duplicatesLink": "Posibles duplicados",
-    "insights": "Información de contactos"
+    "insights": "Información de contactos",
+    "emptyAction": "Elegir una plantilla",
+    "emptyViewer": "Aquí aparecen las audiencias que tu equipo guarda para las campañas.",
+    "findOwner": "Buscar un propietario o administrador"
   },
   "refundOps": {
     "timeline": {
@@ -5952,7 +6060,16 @@
         "succeeded": "reembolsada",
         "failed": "reembolso fallido"
       },
-      "age": "{days, plural, =0 {{hours, plural, one {# hora} other {# horas}}} one {# día} other {# días}}"
+      "age": "{days, plural, =0 {{hours, plural, one {# hora} other {# horas}}} one {# día} other {# días}}",
+      "emptyHint": {
+        "open": "Los compradores piden reembolsos desde la página de su pedido. Sus solicitudes esperan aquí tu respuesta.",
+        "approved": "Las solicitudes que apruebas aparecen aquí con el estado del reembolso.",
+        "declined": "Las solicitudes que rechazas aparecen aquí."
+      },
+      "emptyAction": {
+        "open": "Ver solicitudes aprobadas",
+        "other": "Volver a las solicitudes abiertas"
+      }
     },
     "buyer": {
       "title": "Reembolso",
@@ -6168,7 +6285,9 @@
         "offerHours": "Introduce entre 0,25 y 168 horas.",
         "not_enough_stock": "No hay suficientes entradas libres para esta oferta.",
         "not_on_sale": "Este pase o fecha no está a la venta."
-      }
+      },
+      "viewEventPage": "Ver la página del evento",
+      "backToEvent": "Volver al evento"
     }
   },
   "pricingPage": {
@@ -6413,7 +6532,11 @@
     "categorySlugHint": "Déjelo vacío para generarla a partir del nombre. No se puede cambiar después.",
     "translations": "Nombre en otros idiomas",
     "translationsError": "Revise los nombres traducidos.",
-    "categoryHasArticles": "Primero mueva o elimine los artículos de esta categoría."
+    "categoryHasArticles": "Primero mueva o elimine los artículos de esta categoría.",
+    "emptyViewer": "Los artículos aparecen aquí cuando tu equipo los escribe.",
+    "emptyNeedsCategoryAction": "Añade primero una categoría",
+    "emptyArticlesAction": "Escribe el primer artículo",
+    "emptyCategoriesAction": "Añade la primera categoría"
   },
   "siteConsole": {
     "title": "Sitio de marketing",
@@ -6465,7 +6588,8 @@
       "partnership": "Alianzas",
       "other": "Otro"
     },
-    "markHandled": "Marcar como atendida"
+    "markHandled": "Marcar como atendida",
+    "noRequestsAction": "Abrir la página de contacto"
   },
   "parties": {
     "subtitle": "Grupos (parejas, familias, hogares) y los invitados de cada uno. Los datos de dieta, accesibilidad y dirección son privados para tu equipo.",
@@ -6626,7 +6750,10 @@
       "plusOneMoves": "Un acompañante se mueve con el invitado que lo trae."
     },
     "email": "Correo electrónico",
-    "phone": "Teléfono"
+    "phone": "Teléfono",
+    "emptyAction": "Añade tu primer grupo",
+    "backToEvent": "Volver al resumen del evento",
+    "showAll": "Mostrar todos los grupos"
   },
   "eventRoles": {
     "co_host": "Coanfitrión",
@@ -6643,14 +6770,18 @@
     "inviteTitle": "Invitar a este evento",
     "emptyTitle": "Aún no hay coanfitriones ni planificadores",
     "emptyDescription": "Invita a alguien por correo. Solo tendrá acceso a este evento.",
-    "revokeFor": "Retirar la invitación de {email}"
+    "revokeFor": "Retirar la invitación de {email}",
+    "emptyReadOnly": "Los coanfitriones y organizadores aparecen aquí cuando un propietario, administrador o coanfitrión los invita.",
+    "inviteFirst": "Invitar a alguien",
+    "backToEvent": "Volver al evento"
   },
   "myEvents": {
     "title": "Tus eventos",
     "description": "Los eventos en los que colaboras en {org}.",
     "emptyTitle": "No hay eventos por ahora",
     "emptyDescription": "Cuando alguien te invite a un evento, aparecerá aquí.",
-    "open": "Abrir {name}"
+    "open": "Abrir {name}",
+    "myTickets": "Ir a mis entradas"
   },
   "starters": {
     "title": "Plantillas de inicio",
@@ -6740,7 +6871,8 @@
     "overviewTruncated": "Se muestran los primeros {shown} de {total} eventos (primero en vivo).",
     "overviewEmpty": {
       "title": "Nada que vigilar ahora mismo",
-      "description": "Los eventos aparecen aquí mientras se planifican, el mismo día y durante una semana después."
+      "description": "Los eventos aparecen aquí mientras se planifican, el mismo día y durante una semana después.",
+      "action": "Ir a tus eventos"
     },
     "columns": {
       "event": "Evento",
@@ -6804,7 +6936,9 @@
     "unavailable": "No se pudo cargar este widget.",
     "noAccess": {
       "title": "Tu rol no tiene centro de mando",
-      "description": "Pide acceso a este evento a un propietario o administrador."
+      "description": "Pide acceso a este evento a un propietario o administrador.",
+      "action": "Buscar un propietario o administrador",
+      "backToEvent": "Volver al resumen del evento"
     },
     "empty": {
       "title": "No hay widgets visibles",
@@ -7146,7 +7280,8 @@
       "revokeLabel": "Desactivar {label}",
       "readOnly": "Solo lectura",
       "statusOn": "Activo",
-      "statusOff": "Desactivado"
+      "statusOff": "Desactivado",
+      "emptyAction": "Crear un enlace de pantalla"
     }
   },
   "alerts": {
@@ -7169,7 +7304,10 @@
       "activeTitle": "No hay alertas ahora",
       "activeDescription": "Cuando algo necesite atención en uno de tus eventos, aparecerá aquí y se avisará a tu equipo.",
       "resolvedTitle": "Todavía no hay alertas resueltas",
-      "resolvedDescription": "Las alertas se resuelven solas cuando se soluciona el problema."
+      "resolvedDescription": "Las alertas se resuelven solas cuando se soluciona el problema.",
+      "allEventsAction": "Ver alertas de cada evento",
+      "settingsAction": "Elegir quién recibe las alertas",
+      "currentAction": "Ver las alertas actuales"
     },
     "severity": {
       "info": "Info",
@@ -7782,7 +7920,10 @@
       "test_too_many": "Escribe hasta 5 direcciones.",
       "test_invalid_email": "Revisa las direcciones de correo.",
       "unknown": "Algo salió mal."
-    }
+    },
+    "emptyAction": "Nombra tu primera campaña",
+    "emptyViewer": "Aquí aparecen las campañas que crea tu equipo, con su audiencia y resultados.",
+    "findOwner": "Buscar un propietario o administrador"
   },
   "journeys": {
     "title": "Recorridos",
@@ -7976,7 +8117,10 @@
         "active": "En curso",
         "completed": "Completado",
         "cancelled": "Cancelado"
-      }
+      },
+      "emptyDescription": "Las personas aparecen aquí cuando el disparador las añade a este recorrido mientras está activo.",
+      "showEveryone": "Ver a todos",
+      "reviewSteps": "Revisar los pasos"
     },
     "run": {
       "metaTitle": "Historial del recorrido",
@@ -8173,7 +8317,8 @@
       "update": "Guardar cambios",
       "create": "Crear macro",
       "archive": "Archivar {name}",
-      "archived": "Macro archivada."
+      "archived": "Macro archivada.",
+      "noneAction": "Escribe tu primera macro"
     },
     "holder": {
       "title": "Transferir esta entrada",
@@ -8243,7 +8388,15 @@
       "noDeadline": "Sin plazo",
       "overdue": "Plazo vencido",
       "hoursLeft": "{hours, plural, =0 {Queda menos de una hora} one {Queda # hora} other {Quedan # horas}}",
-      "daysLeft": "{days, plural, one {Queda # día} other {Quedan # días}}"
+      "daysLeft": "{days, plural, one {Queda # día} other {Quedan # días}}",
+      "emptyHint": {
+        "open": "Cuando el banco de un comprador abre un contracargo sobre uno de tus pedidos, aparece aquí con su plazo para presentar pruebas.",
+        "closed": "Las disputas pasan aquí cuando se ganan, se pierden o se retiran."
+      },
+      "emptyAction": {
+        "open": "Ver disputas cerradas",
+        "closed": "Volver a las disputas abiertas"
+      }
     },
     "claim": {
       "intro": "{from} está transfiriendo esta entrada a {to}. Reclámala con el correo al que se envió: obtienes tu propio código QR y el anterior deja de funcionar.",
@@ -8681,7 +8834,13 @@
         "same_person": "Escribe a otra persona.",
         "not_confirmed": "Solo se pueden sustituir inscritos confirmados.",
         "too_many": "Un evento puede tener hasta 50 plantillas."
-      }
+      },
+      "clearFilters": "Borrar filtros",
+      "openSetup": "Abrir la configuración de inscripción",
+      "showWaiting": "Mostrar solicitudes en espera",
+      "noTemplatesHint": "Guarda los motivos que envías a menudo y elige uno al aprobar o rechazar.",
+      "writeFirstTemplate": "Escribir la primera plantilla",
+      "backToEvent": "Volver al evento"
     },
     "rules": {
       "title": "Solicitudes, invitados y cambios de nombre",
@@ -8912,7 +9071,9 @@
     "submittedTitle": "Gracias, ya estás inscrito",
     "submittedDescription": "Gracias, {name}. Tus respuestas se enviaron al organizador.",
     "expiredTitle": "Este enlace ha caducado",
-    "expiredDescription": "Los enlaces para continuar una inscripción funcionan 14 días después del último guardado. Vuelve a empezar desde la página del evento."
+    "expiredDescription": "Los enlaces para continuar una inscripción funcionan 14 días después del último guardado. Vuelve a empezar desde la página del evento.",
+    "emptyReadOnly": "Las páginas del formulario aparecen aquí cuando un editor las añade.",
+    "addFirstPage": "Añadir la primera página"
   },
   "agenda": {
     "publishing": {
@@ -9053,7 +9214,8 @@
         "cell_too_long": "Una celda es demasiado larga.",
         "unterminated_quote": "Un valor entre comillas nunca se cierra. Revisa las comillas del archivo.",
         "missing_columns": "El archivo necesita las columnas title, starts y ends."
-      }
+      },
+      "backToEvent": "Volver al evento"
     }
   },
   "guestImport": {
@@ -9304,7 +9466,11 @@
       "not_invited": "Este invitado no está invitado a ese subevento.",
       "sub_event_has_chart": "Ya tiene su propio plano.",
       "no_chart": "Aún no hay un plano que copiar. Crea el plano del evento en la página Asientos o elige un plano guardado."
-    }
+    },
+    "emptyAction": "Añade tu primer subevento",
+    "backToEvent": "Volver al resumen del evento",
+    "matrixToSubEvents": "Ir a los subeventos",
+    "matrixAddGuests": "Añadir invitados a la lista"
   },
   "donations": {
     "console": {
@@ -9405,7 +9571,12 @@
       },
       "receiptsTitle": "Recibos fiscales",
       "receiptsBody": "Los donantes reciben un recibo por correo por cada pago. Fija valores justos de mercado para las entradas de la gala y consulta todos los recibos.",
-      "receiptsLink": "Abrir recibos fiscales"
+      "receiptsLink": "Abrir recibos fiscales",
+      "emptyCampaignsAction": "Inicia tu primera campaña",
+      "backToEvent": "Volver al resumen del evento",
+      "noGiftsDescription": "Las donaciones pagadas aparecen aquí con el nombre que eligió cada donante, el importe y la campaña.",
+      "shareGivingPage": "Compartir la página de donaciones",
+      "toCampaigns": "Revisa tus campañas"
     },
     "give": {
       "metaTitle": "Donar",
@@ -9546,7 +9717,9 @@
         "ticket": "Entradas"
       },
       "notDeductible": "No deducible",
-      "pdf": "Descargar {number}"
+      "pdf": "Descargar {number}",
+      "addTicketTypes": "Añadir tipos de entrada",
+      "backToEvent": "Volver al resumen del evento"
     },
     "raiseCard": {
       "cardTitle": "Subasta de paletas",
@@ -10463,7 +10636,9 @@
       "pastDue": "La fecha de vencimiento debe ser futura.",
       "agreementText": "Un acuerdo necesita un texto.",
       "tooMany": "Este evento ya tiene el máximo de tareas permitidas (50)."
-    }
+    },
+    "emptyReadOnly": "Las tareas para ponentes aparecen aquí cuando un editor las crea.",
+    "createFirst": "Crear la primera tarea"
   },
   "exhibitorPortal": {
     "eyebrow": "Portal de expositores",
@@ -10650,7 +10825,9 @@
       "shared_booth": "El stand {booth} lo comparten {count} expositores.",
       "several_booths": "{exhibitor} está en más de un stand.",
       "category_mismatch": "{exhibitor} está en el stand {booth}, cuya categoría ({category}) no es una de las suyas."
-    }
+    },
+    "emptyAction": "Añade tu primer stand",
+    "emptyViewer": "Los organizadores aún no han colocado ningún stand."
   },
   "exhibitorMap": {
     "pageTitle": "Mapa de expositores",
@@ -10720,7 +10897,9 @@
       "openTitle": "No hay solicitudes de ayuda abiertas",
       "openDescription": "Las nuevas solicitudes de asistentes y del personal de acceso aparecen aquí al llegar.",
       "closedTitle": "Aún no hay nada cerrado",
-      "closedDescription": "Aquí se muestran las solicitudes resueltas y canceladas."
+      "closedDescription": "Aquí se muestran las solicitudes resueltas y canceladas.",
+      "toCommandCenter": "Abrir el Centro de mando",
+      "showOpen": "Mostrar solicitudes abiertas"
     },
     "title": "#{number} · {reason}",
     "number": "#{number}",
@@ -10893,7 +11072,8 @@
       "urgent": "Urgentes",
       "waiting": "Esperando a alguien",
       "unassigned": "Sin asignar"
-    }
+    },
+    "backToEvent": "Volver al resumen del evento"
   },
   "marketingAnalytics": {
     "title": "Analítica de marketing",
@@ -11196,7 +11376,9 @@
     "overrideNote": "Motivo para imprimir",
     "overrideHint": "Se guarda en el registro de actividad con tu nombre.",
     "printAnyway": "Imprimir igualmente",
-    "overrideNoteRequired": "Indica un motivo (al menos 3 caracteres)."
+    "overrideNoteRequired": "Indica un motivo (al menos 3 caracteres).",
+    "emptyAction": "Crea tu primera plantilla",
+    "backToEvent": "Volver al resumen del evento"
   },
   "invoices": {
     "status": {
@@ -11375,7 +11557,10 @@
     "submit": "Enviar para verificación",
     "saveAndReview": "Guardar y enviar a revisión",
     "saved": "Guardado. Yayatoh lo revisará.",
-    "viewerNotice": "Solo los propietarios y administradores pueden cambiar el perfil benéfico."
+    "viewerNotice": "Solo los propietarios y administradores pueden cambiar el perfil benéfico.",
+    "seePlan": "Ver tu plan",
+    "findOwner": "Buscar un propietario o administrador",
+    "addDetails": "Añadir los datos benéficos"
   },
   "rsvp": {
     "metaTitle": "Tu confirmación",
@@ -11664,7 +11849,9 @@
     "submittedValue": "Enviado",
     "nothingToMerge": "No hay nada nuevo que tomar: al combinar se cierra el envío.",
     "mergeSubmit": "Combinar con {party}",
-    "merged": "Combinado."
+    "merged": "Combinado.",
+    "shareLink": "Compartir tu enlace de recogida",
+    "setUpLink": "Configurar el enlace de recogida"
   },
   "invitations": {
     "link": "Invitaciones: enviar por correo y SMS",
@@ -11927,7 +12114,10 @@
       "count": "Preguntas mostradas: {shown} de {total}",
       "none": "Este invitado no ve ninguna pregunta.",
       "label": "Preguntas que ve este invitado"
-    }
+    },
+    "emptyDescription": "Las preguntas que añadas aparecen en el formulario de respuesta de cada invitado, como el menú o peticiones de canciones.",
+    "emptyAction": "Añade tu primera pregunta",
+    "emptyViewerAction": "Ver la vista previa del formulario"
   },
   "rsvpAnswers": {
     "link": "Respuestas de RSVP",
@@ -12136,7 +12326,13 @@
         "offStage": "Encuesta retirada de pantalla.",
         "deleted": "Encuesta eliminada.",
         "rotated": "Nuevo enlace de pantalla grande listo. Los antiguos ya no funcionan."
-      }
+      },
+      "shareAudienceLink": "Compartir el enlace para el público",
+      "reviewWaiting": "Revisar las preguntas en espera",
+      "checkSettings": "Revisar los ajustes de preguntas",
+      "noPollsViewer": "Las encuestas aparecen aquí cuando un editor las añade.",
+      "createFirstPoll": "Crear la primera encuesta",
+      "howToJoin": "Ver cómo se unen los asistentes"
     },
     "presenter": {
       "metaTitle": "Vista de ponente",
@@ -14210,7 +14406,8 @@
       "label": "Buscar por nombre, correo o empresa",
       "submit": "Buscar",
       "noneTitle": "Nadie coincide",
-      "noneDescription": "Ningún nombre, correo ni empresa contiene «{q}». Prueba con una búsqueda más corta."
+      "noneDescription": "Ningún nombre, correo ni empresa contiene «{q}». Prueba con una búsqueda más corta.",
+      "clear": "Borrar la búsqueda"
     },
     "emptyTitle": "Aún no hay personas",
     "emptyDescription": "Las personas aparecen aquí cuando compran entradas, se registran o se añaden a una lista de invitados.",
@@ -14273,7 +14470,9 @@
       "emptyTitle": "Aún no hay nada",
       "emptyDescription": "Los pedidos, accesos, campañas, mensajes y encuestas aparecen aquí a medida que ocurren.",
       "listLabel": "Cronología de {name}",
-      "older": "Anteriores"
+      "older": "Anteriores",
+      "showEverything": "Ver todo",
+      "backToPeople": "Volver a todas las personas"
     },
     "kinds": {
       "order_paid": "Pedido pagado",
@@ -14352,7 +14551,8 @@
       "errors": {
         "noneSelected": "Selecciona al menos una pareja para fusionar.",
         "tooMany": "Selecciona como máximo 50 parejas a la vez."
-      }
+      },
+      "toPeople": "Ver a todas las personas"
     },
     "reasons": {
       "email": "Mismo correo electrónico",
@@ -14388,7 +14588,8 @@
       "withdrawn": "Dado de baja",
       "unknown_legacy": "Desconocido (importado)",
       "none": "Sin consentimiento"
-    }
+    },
+    "toEvents": "Ir a tus eventos"
   },
   "contactStats": {
     "title": "Contacto",
@@ -14543,7 +14744,10 @@
     "deleteNamed": "Eliminar la sandbox {name}",
     "deleteWarning": "Se cierra para siempre: sus páginas dejan de estar en línea y sus miembros y claves pierden el acceso.",
     "deleteConfirm": "Eliminar para siempre",
-    "deleteConfirmNamed": "Eliminar para siempre la sandbox {name}"
+    "deleteConfirmNamed": "Eliminar para siempre la sandbox {name}",
+    "findOwner": "Buscar un propietario o administrador",
+    "inSandboxAction": "Probar la API en este sandbox",
+    "emptyAction": "Configura tu primer sandbox"
   },
   "webhooks": {
     "title": "Webhooks",
@@ -14677,7 +14881,8 @@
       "succeeded": "Entregado",
       "failed": "Fallido",
       "at": "Hora"
-    }
+    },
+    "emptyAction": "Añade tu primer endpoint"
   },
   "developers": {
     "brand": "Yayatoh para desarrolladores",
@@ -14846,7 +15051,8 @@
       "advanced_seating": "Asientos avanzados",
       "ai_seating": "Asientos con IA",
       "analytics_pro": "Analítica avanzada"
-    }
+    },
+    "findOwner": "Buscar un propietario o administrador"
   },
   "billingPortal": {
     "eyebrow": "Facturación de prueba",
@@ -15223,7 +15429,8 @@
       "body": "{name} es un proveedor de prueba. Si lo permites, Yayatoh podrá leer y escribir lo siguiente en tu nombre:",
       "allow": "Permitir",
       "deny": "Denegar"
-    }
+    },
+    "webhooksAction": "Configurar un webhook"
   },
   "kioskPrint": {
     "useEmail": "¿No tienes tu entrada? Usa tu correo",
@@ -15273,5 +15480,101 @@
     "readyTitle": "Tu credencial está lista para imprimir",
     "readyHint": "Ábrela, elige Imprimir y recógela en la impresora.",
     "openBadge": "Abrir mi credencial para imprimir"
+  },
+  "formControls": {
+    "search": "Buscar",
+    "noResults": "Sin resultados",
+    "loading": "Cargando…",
+    "remove": "Quitar {label}",
+    "create": "Crear «{query}»",
+    "clear": "Borrar",
+    "chooseDate": "Elegir una fecha",
+    "chooseTime": "Elegir una hora",
+    "previousMonth": "Mes anterior",
+    "nextMonth": "Mes siguiente",
+    "today": "Hoy",
+    "invalidDate": "Escribe una fecha como {example}",
+    "invalidTime": "Escribe una hora como {example}",
+    "tooEarly": "Elige una fecha a partir del {date}",
+    "tooLate": "Elige una fecha hasta el {date}",
+    "timeZoneNote": "Horas en {zone}",
+    "selected": "Seleccionado"
+  },
+  "emptyActions": {
+    "seeEvents": "Ver tus eventos",
+    "eventHome": "Ir al inicio del evento",
+    "clearSearch": "Borrar la búsqueda"
+  },
+  "coupons": {
+    "title": "Cupones",
+    "description": "Los códigos promocionales dan un descuento al pagar. Cada código pertenece a un evento: elige el evento para ver o añadir sus códigos.",
+    "emptyTitle": "No hay eventos para añadir códigos",
+    "emptyDescription": "Los códigos promocionales están en la página Entradas y pedidos de cada evento. Crea primero un evento y luego añade sus códigos.",
+    "emptyAction": "Crear un evento",
+    "caption": "Eventos y sus códigos promocionales",
+    "event": "Evento",
+    "when": "Fecha",
+    "status": "Estado",
+    "codes": "Códigos promocionales",
+    "manage": "Gestionar códigos",
+    "view": "Ver códigos",
+    "manageFor": "Códigos promocionales de {name}"
+  },
+  "howItWorks": {
+    "docLink": "Leer la guía",
+    "hide": "Ocultar",
+    "show": "Mostrar",
+    "domains": {
+      "title": "Cómo funcionan los dominios propios",
+      "intro": "Muestra tus páginas de eventos en tu propia dirección (por ejemplo tickets.tumarca.com) en lugar de un enlace de Yayatoh. Tu dirección de Yayatoh sigue funcionando.",
+      "step1": "Añade un dominio que sea tuyo. Te pediremos que confirmes que eres tú.",
+      "step2": "Copia los registros DNS que mostramos en la configuración de tu proveedor de dominio.",
+      "step3": "Comprobamos los registros automáticamente. Puede tardar hasta un día.",
+      "step4": "Una vez verificado, configuramos el certificado de seguridad (HTTPS) y el dominio se activa."
+    },
+    "templates": {
+      "title": "Cómo funcionan las plantillas",
+      "intro": "Una plantilla guarda la configuración de un evento (entradas, preguntas, secciones y contenido de la página) para que tu próximo evento empiece listo. Los eventos creados desde una plantilla son borradores sin ventas.",
+      "step1": "Abre un evento configurado como te gusta.",
+      "step2": "Elige Duplicar y plantilla y guárdalo como plantilla.",
+      "step3": "Vuelve aquí para crear eventos nuevos a partir de ella, o empieza con una plantilla inicial abajo."
+    },
+    "series": {
+      "title": "Cómo funcionan las series",
+      "intro": "Una serie agrupa eventos relacionados (una gira, una temporada, un festival) en una página pública que muestra las próximas fechas.",
+      "step1": "Crea la serie con un nombre y una descripción breve.",
+      "step2": "Abre la página Fechas de cada evento y añádelo a la serie.",
+      "step3": "Comparte la página pública de la serie. Se actualiza al añadir eventos."
+    },
+    "payouts": {
+      "title": "Cómo funcionan los pagos",
+      "intro": "El dinero de las entradas llega a tu banco en pagos. Conecta una cuenta de cobro una vez; las cifras de abajo muestran qué está en camino y cuándo.",
+      "step1": "Conecta tu cuenta de cobro y verifica los datos de tu negocio.",
+      "step2": "Vende entradas. Cada venta, menos comisiones y reembolsos, se suma a tu saldo.",
+      "step3": "Según tu cuenta, el dinero se paga mientras vendes o después del evento, con una pequeña reserva para reembolsos y disputas.",
+      "step4": "Cada pago se envía a tu banco y aparece aquí con su fecha e importe."
+    },
+    "sending": {
+      "title": "Cómo funciona el envío de correos",
+      "intro": "Los correos a tus compradores e invitados se envían desde Yayatoh por defecto. Verifica tu propio dominio para que salgan de tu dirección y lleguen a la bandeja de entrada.",
+      "step1": "Añade tu dominio de envío (por ejemplo mail.tumarca.com).",
+      "step2": "Copia los registros DNS que mostramos en la configuración de tu proveedor de dominio.",
+      "step3": "Comprueba los registros aquí. La verificación suele tardar unos minutos.",
+      "step4": "Una vez verificado, tus correos se envían desde tu propio dominio."
+    },
+    "eventType": {
+      "title": "Tipos de evento y categorías",
+      "intro": "El tipo de evento decide qué secciones tiene: una boda tiene invitados, confirmaciones y asientos; una conferencia tiene sesiones, ponentes y acreditaciones. La categoría ayuda a encontrar eventos públicos.",
+      "step1": "Elige el tipo más parecido a tu evento al crearlo.",
+      "step2": "Elige una categoría y añade etiquetas en la página Detalles del evento.",
+      "step3": "¿No estás seguro? Elige Otro: tiene las secciones habituales y puedes añadir detalles después."
+    },
+    "coupons": {
+      "title": "Cómo funcionan los códigos promocionales",
+      "intro": "Un código promocional descuenta un porcentaje o un importe del precio de cada entrada, antes de comisiones. Cada código pertenece a un evento.",
+      "step1": "Elige el evento abajo y abre sus códigos promocionales.",
+      "step2": "Añade un código con su descuento y, si quieres, un límite y fechas.",
+      "step3": "Comparte el código. Los compradores lo introducen al pagar y se cuenta cada uso."
+    }
   }
 }

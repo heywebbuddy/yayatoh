@@ -4,6 +4,7 @@ import { roleCan } from '@yayatoh/tenancy';
 import {
   Alert,
   Button,
+  buttonClass,
   Card,
   CardHeader,
   CardLabel,
@@ -15,6 +16,7 @@ import {
   Tag,
 } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { Link } from '@/i18n/navigation.ts';
 import { testBillingSecret } from '@/server/billing.ts';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
@@ -55,7 +57,15 @@ export default async function PlanPage({
     return (
       <>
         <PageHeader title={t('title')} description={t('subtitle')} />
-        <EmptyState title={t('noAccessTitle')} description={t('noAccessDescription')} />
+        <EmptyState
+          title={t('noAccessTitle')}
+          description={t('noAccessDescription')}
+          action={
+            <Link href={`/o/${org}/team`} className={buttonClass('primary', 'md')}>
+              {t('findOwner')}
+            </Link>
+          }
+        />
       </>
     );
   }

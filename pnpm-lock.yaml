@@ -2410,9 +2410,6 @@ importers:
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../../db
-      '@yayatoh/engagement':
-        specifier: workspace:*
-        version: link:../engagement
       '@yayatoh/events':
         specifier: workspace:*
         version: link:../events

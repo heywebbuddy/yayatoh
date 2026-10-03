@@ -1,7 +1,7 @@
 import { executeQuery } from '@yayatoh/kernel';
 import { type DsarRequestDto, requestsQuery } from '@yayatoh/privacy';
 import { roleCan } from '@yayatoh/tenancy';
-import { EmptyState, PageHeader, SectionHeader, StatusPill, Table } from '@yayatoh/ui';
+import { buttonClass, EmptyState, PageHeader, SectionHeader, StatusPill, Table } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { PrivacyConsole } from '@/components/privacy-console.tsx';
 import { Link } from '@/i18n/navigation.ts';
@@ -22,7 +22,15 @@ export default async function PrivacyPage({ params }: { params: Promise<{ locale
     return (
       <>
         <PageHeader title={t('privacy.title')} />
-        <EmptyState title={t('privacy.noAccessTitle')} description={t('privacy.noAccessDescription')} />
+        <EmptyState
+          title={t('privacy.noAccessTitle')}
+          description={t('privacy.noAccessDescription')}
+          action={
+            <Link href={`/o/${org}/team`} className={buttonClass('primary', 'md')}>
+              {t('privacy.findOwner')}
+            </Link>
+          }
+        />
       </>
     );
   }
@@ -56,7 +64,15 @@ export default async function PrivacyPage({ params }: { params: Promise<{ locale
       <section aria-labelledby="dsar-open" className="flex flex-col gap-3">
         <SectionHeader id="dsar-open" title={t('privacy.queue.title')} count={open.length} />
         {open.length === 0 ? (
-          <EmptyState title={t('privacy.queue.emptyTitle')} description={t('privacy.queue.empty')} />
+          <EmptyState
+            title={t('privacy.queue.emptyTitle')}
+            description={t('privacy.queue.empty')}
+            action={
+              <Link href="#email" className={buttonClass('secondary', 'md')}>
+                {t('privacy.queue.emptyAction')}
+              </Link>
+            }
+          />
         ) : (
           <Table
             caption={t('privacy.queue.caption')}

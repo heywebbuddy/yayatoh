@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button } from '@yayatoh/ui';
+import { Alert, Button, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState, useEffect, useId, useRef } from 'react';
 import type { DoorStaffFormState } from '@/app/[locale]/o/[org]/e/[event]/onsite/staff/actions.ts';
@@ -49,7 +49,7 @@ export function DoorStaffForm({
           <label htmlFor={`${id}-member`} className="text-[13px] font-bold text-ink">
             {t('doorStaff.member')}
           </label>
-          <select
+          <Select
             id={`${id}-member`}
             name="userId"
             defaultValue=""
@@ -62,7 +62,7 @@ export function DoorStaffForm({
                 {m.name}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
       )}
       <fieldset className="flex flex-col gap-2">

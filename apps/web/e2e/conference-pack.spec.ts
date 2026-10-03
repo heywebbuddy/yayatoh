@@ -3,7 +3,7 @@ import { closePools } from '@yayatoh/db';
 import { localKeyVault, setKeyVault } from '@yayatoh/platform';
 import { resolveOrgSlug } from '@yayatoh/tenancy';
 import { type ConferenceScenario, conferenceScenario } from '@yayatoh/testing';
-import { expectAccessibleBothModes, newUser } from './helpers.ts';
+import { expectAccessibleBothModes, newUser, pickOption } from './helpers.ts';
 
 /**
  * M5.9a conference Command Center pack: the acceptance on the real board ("3 sessions are over
@@ -246,7 +246,7 @@ async function doorStaff(page: Page, browser: Browser, slug: string, base: strin
   await newUser(door, { join: [`${slug}:viewer`], name });
   await page.goto(`${base}/onsite/staff`);
   const add = page.getByRole('region', { name: 'Add door staff' });
-  await add.getByLabel('Team member').selectOption({ label: name });
+  await pickOption(add.getByLabel('Team member'), { label: name });
   await add.getByRole('button', { name: 'Add door staff' }).click();
   await expect(add.getByRole('status')).toHaveText('Saved.');
   return door;
