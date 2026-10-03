@@ -55,6 +55,15 @@ async function orgWithPeople(page: Page) {
   return { slug, orgId: org.orgId, people, audience, segmentId };
 }
 
+/** Sync now from the connection page (a manual run), then run it (what the worker does). */
+async function syncNow(page: Page, org: string) {
+  await page.getByRole('button', { name: 'Sync now' }).focus();
+  await page.keyboard.press('Enter');
+  await expect(page.getByText('Sync started. Refresh in a moment to see the result.')).toBeVisible();
+  await runSyncs(page, org);
+  await page.reload();
+}
+
 async function runSyncs(page: Page, org: string) {
   const res = await page.request.post('/api/dev/integrations/run', { form: { org } });
   expect(res.ok()).toBe(true);
@@ -143,8 +152,7 @@ test.describe('marketing integrations (M6.4d)', () => {
 
     // Amina unsubscribes in Mailchimp: the next sync withdraws her consent here, with Mailchimp as source.
     await atProvider(page, connection, 'unsubscribe', people.amina, 'mc_list_events');
-    await runSyncs(page, slug);
-    await page.reload();
+    await syncNow(page, slug);
     const row = changesTable(page, 'Mailchimp').getByRole('row').filter({ hasText: people.amina });
     await expect(row).toContainText('Amina Diallo');
     await expect(row).toContainText('Unsubscribed');
@@ -174,8 +182,8 @@ test.describe('marketing integrations (M6.4d)', () => {
 
     await runSyncs(page, slug);
     await atProvider(page, connection, 'complain', people.bo, 'KlList02');
-    await runSyncs(page, slug);
     await page.reload();
+    await syncNow(page, slug);
     const table = changesTable(page, 'Klaviyo');
     await expect(table.getByRole('row').filter({ hasText: people.bo })).toContainText('Spam complaint');
     await expect(table).toContainText('bounced.before@kl-remote.test');
@@ -204,8 +212,7 @@ test.describe('marketing integrations (M6.4d)', () => {
     const table = changesTable(page, 'HubSpot');
     await expect(table).toContainText('opted.out@hs-remote.test');
     await atProvider(page, connection, 'unsubscribe', people.amina);
-    await runSyncs(page, slug);
-    await page.reload();
+    await syncNow(page, slug);
     await expect(table.getByRole('row').filter({ hasText: people.amina })).toContainText(
       'Consent withdrawn · Suppressed',
     );

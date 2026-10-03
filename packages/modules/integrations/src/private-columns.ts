@@ -39,6 +39,7 @@ export const privateColumns = columnPrivacy('integrations', {
     status: 'vocab',
   },
   // M6.4d
-  audience_syncs: { list_id: internal(), list_name: internal() },
+  // The provider's list id is a code by CHECK (letters, digits, _ and -).
+  audience_syncs: { list_id: internal('code'), list_name: internal() },
   consent_changes: { change: 'vocab', external_id: internal(), remote_version: internal() },
 });
