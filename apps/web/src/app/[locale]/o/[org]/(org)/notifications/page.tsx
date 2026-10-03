@@ -1,4 +1,4 @@
-import { Button, Card, cx, EmptyState, PageHeader } from '@yayatoh/ui';
+import { Button, buttonClass, Card, cx, EmptyState, PageHeader } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { z } from 'zod';
@@ -57,7 +57,15 @@ export default async function NotificationsPage({
         {view.unread === 0 ? t('allRead') : t('unreadAnnouncement', { count: view.unread })}
       </p>
       {view.items.length === 0 ? (
-        <EmptyState title={t('emptyTitle')} description={t('emptyDescription')} />
+        <EmptyState
+          title={t('emptyTitle')}
+          description={t('emptyDescription')}
+          action={
+            <Link href={`/o/${org}/notifications/preferences`} className={buttonClass('primary', 'md')}>
+              {t('emptyAction')}
+            </Link>
+          }
+        />
       ) : (
         <Card className="p-2">
           <ul className="flex list-none flex-col p-0">

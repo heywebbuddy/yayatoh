@@ -13,7 +13,7 @@ import {
   ruleFromLogic,
   ruleToLogic,
 } from '@yayatoh/forms/ui';
-import { Alert, Button, Card, EmptyState, FieldMessage, IconButton, Input, Select } from '@yayatoh/ui';
+import { Alert, Button, buttonClass, Card, EmptyState, FieldMessage, IconButton, Input, Select } from '@yayatoh/ui';
 import { ArrowDown, ArrowUp } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { startTransition, useActionState, useEffect, useId, useRef, useState } from 'react';
@@ -204,7 +204,21 @@ export function QuestionsBuilder({
           {t('questionsTitle')}
         </h2>
         {questions.length === 0 ? (
-          <EmptyState title={t('empty')} />
+          <EmptyState
+            title={t('empty')}
+            description={t('emptyDescription')}
+            action={
+              canWrite ? (
+                <Button type="button" onClick={() => setEditing('new')}>
+                  {t('emptyAction')}
+                </Button>
+              ) : (
+                <a href="#rq-preview" className={buttonClass('primary', 'md')}>
+                  {t('emptyViewerAction')}
+                </a>
+              )
+            }
+          />
         ) : (
           <ol aria-label={t('questionsTitle')} className="m-0 flex list-none flex-col gap-2.5 p-0">
             {questions.map((q, i) => (
