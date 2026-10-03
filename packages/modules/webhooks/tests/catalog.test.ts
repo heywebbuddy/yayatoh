@@ -175,6 +175,20 @@ describe('thin payloads (D21)', () => {
     }
   });
 
+  it('accepts every way the orders module says an order was paid (batch 3i: M5.1d invoices)', () => {
+    const paid = entryForSource('order.paid@1') as CatalogEntry;
+    const dir = join(ROOT, 'packages/modules/orders/src');
+    const emitted = new Set<string>();
+    for (const f of sourceFiles(dir)) {
+      const s = readFileSync(f, 'utf8');
+      for (const m of s.matchAll(/type: 'order\.paid',[\s\S]{0,400}?via: '([a-z_]+)'/g))
+        emitted.add(m[1] as string);
+    }
+    expect([...emitted].sort()).toEqual(expect.arrayContaining(['box_office', 'free', 'invoice']));
+    for (const via of [...emitted, 'fake', 'stripe'])
+      expect(() => toPublicData(paid, { ...(paid.example as object), via }), via).not.toThrow();
+  });
+
   it('refuses a payload whose published fields carry free text instead of sending it', () => {
     const paid = entryForSource('order.paid@1') as CatalogEntry;
     expect(() => toPublicData(paid, { ...(paid.example as object), via: CANARY.email })).toThrow();
