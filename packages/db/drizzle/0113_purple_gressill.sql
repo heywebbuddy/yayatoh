@@ -189,7 +189,8 @@ CREATE POLICY "field_mappings_tenant_isolation" ON "integrations"."field_mapping
 CREATE POLICY "record_links_tenant_isolation" ON "integrations"."record_links" AS PERMISSIVE FOR ALL TO "app_user" USING (org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)) WITH CHECK (org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid));--> statement-breakpoint
 CREATE POLICY "sync_cursors_tenant_isolation" ON "integrations"."sync_cursors" AS PERMISSIVE FOR ALL TO "app_user" USING (org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)) WITH CHECK (org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid));--> statement-breakpoint
 CREATE POLICY "sync_errors_tenant_isolation" ON "integrations"."sync_errors" AS PERMISSIVE FOR ALL TO "app_user" USING (org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)) WITH CHECK (org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid));--> statement-breakpoint
-CREATE POLICY "sync_runs_tenant_isolation" ON "integrations"."sync_runs" AS PERMISSIVE FOR ALL TO "app_user" USING (org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)) WITH CHECK (org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid));--> statement-breakpoint
+CREATE POLICY "sync_runs_tenant_isolation" ON "integrations"."sync_runs" AS PERMISSIVE FOR ALL TO "app_user" USING (org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid)) WITH CHECK (org_id = (SELECT NULLIF(current_setting('app.org_id', true), '')::uuid));
+--> statement-breakpoint
 -- hand-written: begin (M6.4a integrations framework)
 -- P6-13: every plan gets the `integrations` module key (free within quotas in beta); the
 -- connectors are still behind the `IntegrationAuth` port (fake in dev/CI, off in production

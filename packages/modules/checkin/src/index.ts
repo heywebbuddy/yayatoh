@@ -4,6 +4,8 @@ export {
   deviceLabelsTx,
   queueStaffPushTx,
 } from './assistance-support.ts';
+// M5.1d: admit a ticket whose invoice still has a balance (audited staff override).
+export { admitBalanceDueCommand } from './balance-override.ts';
 export {
   CheckpointDto,
   createCheckpointCommand,
@@ -16,6 +18,7 @@ export {
   DEVICE_ONLINE_WINDOW_MS,
   DeviceDto,
   deviceContext,
+  deviceEventIdTx,
   deviceHealthTx,
   deviceIdOf,
   deviceManifestQuery,

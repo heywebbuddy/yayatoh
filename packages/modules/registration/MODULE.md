@@ -1,12 +1,14 @@
 # registration (tier 5)
 
 Registration types and admission items (M5.1a; layout in ADR 0021). Owns Postgres schema `registration`:
-`registration_types`, `admission_items`, `type_items` (the matrix cells) and `capacity_claims`. Later increments
+`registration_types`, `admission_items`, `type_items` (the matrix cells), `capacity_claims` and (M5.1c)
+`registrants`, `type_members` (auto-approve member lists) and `reason_templates`. Later increments
 add registrations, approvals, groups, invoices (M5.1c/d) and session enrollments (M5.2b) here.
 
 **Invariants**
 - **One inventory.** A registration type × admission item cell is exactly one ticket type, created by
-  `registration.setCell` with `managed_by = 'registration'` (hidden, one per order). Orders, tickets, refunds,
+  `registration.setCell` with `managed_by = 'registration'` (hidden; up to 20 per order since M5.1c, one per
+  named registrant of a group, each registrant still picking each item once). Orders, tickets, refunds,
   check-in, badges and reports see ordinary tickets. Ticketing refuses to quote, edit or archive a managed pass for
   anyone but registration, so the public checkout, the box office, access codes and `/v1` can't sell or change it.
   Disabling a cell archives its pass and the cell; enabling it again makes a new cell (old tickets still count).
@@ -40,3 +42,64 @@ add registrations, approvals, groups, invoices (M5.1c/d) and session enrollments
 - **Events:** `registration.type.{created,updated,archived}@1`, `registration.item.{created,updated,archived}@1`,
   `registration.cell.{enabled,disabled}@1` (ids and keys only), `registration.type.over_capacity@1`.
 - **`RegistrationTypeRef`** (id, key, name) is the stable reference for other modules (M5.1b form paths, badges).
+
+**M5.1c: approval, groups and +1**
+- **Registrants** are one named person each: `pending` (applied) → `approved` → `confirmed`, or `denied`; a public,
+  group or +1 checkout makes `reserved` registrants of its order, `confirmed` when it is paid (each with one of the
+  order's admission tickets, named for them; `registration.registrants` subscriber) or `cancelled` when it lapses.
+  An approved applicant whose order lapses stays approved (order cleared) and may pay again.
+- **Apply-to-attend** (`approval = 'manual'` on the type): `registration.apply` makes a pending application with no
+  order: **nobody is charged before approval**. The public checkout, groups and the waitlist refuse approval types
+  (`approval_required`). Auto-approval on applying: an address at an auto-approve domain (subdomains match), else on
+  the type's member list (CSV or an audience snapshot taken by the app). A free selection is confirmed on approval;
+  a paid one is paid from the applicant's signed link (`registration.payApproved`, which returns the open order of
+  an earlier attempt instead of a second one).
+- **Capacity on approval:** approved places count against the type's room like open waitlist offers
+  (`typeDemandTx().approved`; public room, offer room and the capacity floor subtract them). Approval locks the
+  registrant, then the type row, so concurrent approvals never pass the capacity. Every path locks registrant →
+  type, and multi-type checkouts lock types in id order.
+- **Decisions** (`registration.decide`, bulk `registration.decide` action = `registration.startDecide`): deciding
+  what is already decided changes nothing (no second email); bulk runs 50 per chunk, each registrant in its own
+  savepoint (a full type fails alone with its code); a crash replays only the uncommitted chunk. Approval and denial
+  emails (`registration.approved` / `registration.denied`, dedupe per decision time) carry the reason (typed or a
+  reason template).
+- **Groups:** one payer, up to 20 named registrants each with a type and pass, one order; capacity claimed per type
+  (`capacity_claims` unique per order and type). **Substitution** until the type's cut-off
+  (`substitution_cutoff_hours` before the start) by the payer (group link) or the organizer: the ticket is reissued
+  (new signed code and short code, the old ones stop), so exactly one credential stays valid; the attendee moves.
+  A domain rule binds the new person. Audited (`registration.substitute`).
+- **+1:** a type of `kind = 'guest'` is never sold directly or listed publicly; a confirmed host adds guests from
+  their own link (up to `guests_per_host`), paid by the host in its own order, linked by `host_registrant_id`.
+- **Events:** `registration.registrant.{applied,approved,denied,confirmed,substituted}@1` (ids only).
+
+**Session enrollment and waitlists (M5.2b)** — `src/enrollment.ts`, pure rules in `src/domain/enrollment.ts`:
+- **A registrant is their admission ticket** (`registrant_id` → `ticketing.tickets`; one per registrant since M5.1a, so an
+  M5.1c substitution keeps the enrollments). The attendee's credential is the order's manage link (`myScheduleQuery`,
+  `enrollSessionCommand`, `dropSessionCommand`, `acceptSessionOfferCommand`; `public:enrollment`).
+- **Availability by admission item** (`item_sessions`): an `admission` item listing nothing gives every session; a listing
+  gives only those; an `add_on` gives only what it lists. A registrant's items are their pass and the order's add-ons.
+- **Atomic claim**: every decision runs under the session's counter row lock (`lockEnrollableSessionTx`, program) and a
+  per-registrant advisory lock; places move only through program's `claimSessionPlaceTx` / `releaseSessionPlaceTx`, whose
+  CHECK (`enrolled <= capacity`) is the last line of defence. Sessions are locked in id order (no deadlocks on swaps).
+- **Conflicts**: a pick-one group allows one pick (program's `session_group_picks` is the DB guard); overlapping sessions
+  (half-open) are refused with the session in the way (`conflict`, reason `overlap` / `one_per_group`), replaced on
+  request (`choice: 'replace'`), or kept both only when neither has a capacity (P5-9, `keep_both`).
+- **The line** (`session_enrollments.status = 'waiting'`, FIFO by `(position_at, id)`): a full session's line is joined
+  only without conflicts and until the close. A free place belongs to the line first (enrolling promotes before it
+  decides). Promotion (`planPromotion`) re-checks each person (still registered, still given the session, no overlap or
+  group pick) and passes over for good (`skipped`, with the reason) whoever no longer fits, so it never loops. Per event
+  (`enrollment_settings`, default `auto`): `auto` enrols at once; `offer` holds the place as an offer for `offer_minutes`
+  (never past the close), accepted from the schedule; the sweeper expires lapsed offers.
+- **P5-9 close**: promotion stops 24 h before the session starts (`promotionOpen`); then a free place goes to whoever
+  enrols first, and the line takes nobody new (`waitlist_closed`). "Promote now" is refused after the close.
+- **Organizer** (`events:write`): `setEnrollmentSettingsCommand`, `setItemSessionsCommand`, `promoteSessionNowCommand`;
+  `enrollmentOverviewQuery` (`events:read`): per session places, waiting, offered, the close time.
+- **Workers**: `sweepEnrollmentsCommand` (`platform:registration.sweep`, every 30 s after the waitlist sweeper);
+  `registrationEnrollment()` ends a cancelled or refunded registrant's sessions (`tickets.cancelled@1`,
+  `order.refunded@1`) and promotes; `enrollmentMailer` emails promotions (`registration.session-enrolled`,
+  `registration.session-offer`). Event: `registration.session.promoted@1` (`{ eventId, sessionId, enrollmentId,
+  registrantId, status, offer }`).
+- Entitlement `registration` for every command and query.
+
+**M5.1d: pay later by invoice**
+- Per type (`pay_later`, `po_number` off/optional/required; `registration.setPayLater`, `events:write`); never for approval or +1 types. `registration.startCheckout` with `payLater` checks the type and the PO rule (`pay_later_off`, `po_required`), then invoices the order in the same transaction (`issueInvoiceTx`): the place counts as sold and the registrant is confirmed at once; the balance is the invoice's business. `order.voided@1` releases the claim and cancels the registrant.

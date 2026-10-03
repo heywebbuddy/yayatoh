@@ -17,7 +17,8 @@ export type StaffAction =
   | 'openSignup'
   | 'incidents'
   | 'frontDoor'
-  | 'maintenance';
+  | 'maintenance'
+  | 'charities';
 
 /**
  * What each staff role may do in the console (roadmap §8 M1.3; owner-approved staff only).
@@ -37,6 +38,8 @@ export type StaffAction =
  *   every visitor of yayatoh.com or abc.yayatoh.com gets, so only admins do it (with a step-up).
  *   Every staff member can see the route table and its counters (pending owner).
  * - `maintenance` (M2.5a): the read-only freeze stops every organizer's writes: admins only.
+ * - `charities` (M4.8b): verify or reject charity profiles against the IRS exempt-organization
+ *   list (what makes an org's receipts tax-deductible): admins and support (pending owner).
  */
 const CAN: Readonly<Record<StaffRole, readonly StaffAction[]>> = {
   admin: [
@@ -56,8 +59,9 @@ const CAN: Readonly<Record<StaffRole, readonly StaffAction[]>> = {
     'incidents',
     'frontDoor',
     'maintenance',
+    'charities',
   ],
-  support: ['view', 'suspend', 'reports', 'signupCodes', 'privacy', 'messaging', 'incidents'],
+  support: ['view', 'suspend', 'reports', 'signupCodes', 'privacy', 'messaging', 'incidents', 'charities'],
   finance: ['view', 'payouts', 'fees', 'quotas'],
 };
 

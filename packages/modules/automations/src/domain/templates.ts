@@ -6,7 +6,7 @@ import type { JourneyTrigger, StepInput } from './journey.ts';
  * no copy. The vision journey (roadmap M3.7):
  * purchase → confirmation · T−7 d reminder · T−24 h SMS/WhatsApp · event-day push · post-event survey.
  */
-export const TEMPLATE_KEYS = ['vision'] as const;
+export const TEMPLATE_KEYS = ['vision', 'invoice_reminders'] as const;
 export type TemplateKey = (typeof TEMPLATE_KEYS)[number];
 
 /** The message steps of the vision journey, in order (each needs a subject and body). */
@@ -44,6 +44,32 @@ export function visionTemplate(copy: TemplateCopy): JourneyTemplate {
         ...copy.eventDay,
       },
       { anchor: 'event_end', offsetDays: 1, offsetMinutes: 0, atTime: '10:00', action: 'survey' },
+    ],
+  };
+}
+
+/** M5.1d: the invoice reminder journey's messages (P5-5: 7 days before, on, 7 days after due). */
+export const INVOICE_REMINDER_MESSAGES = ['before', 'due', 'overdue'] as const;
+export type InvoiceReminderMessage = (typeof INVOICE_REMINDER_MESSAGES)[number];
+
+export type InvoiceReminderCopy = Readonly<
+  Record<InvoiceReminderMessage, { readonly subject: string; readonly body: string }>
+>;
+
+/**
+ * Invoice reminders (M5.1d, P5-5): when a pay-later invoice is issued, three emails at 09:00 in
+ * the event's timezone: 7 days before it is due, on the due date and 7 days after. Paying (or the
+ * organizer voiding it) ends the run, so nobody is reminded of an invoice they settled; steps
+ * whose time has passed when the invoice is issued are skipped. Never cancels a registration.
+ */
+export function invoiceRemindersTemplate(copy: InvoiceReminderCopy): JourneyTemplate {
+  const at = { anchor: 'invoice_due', offsetMinutes: 0, atTime: '09:00', action: 'email' } as const;
+  return {
+    trigger: 'invoice_issued',
+    steps: [
+      { ...at, offsetDays: -7, ...copy.before },
+      { ...at, offsetDays: 0, ...copy.due },
+      { ...at, offsetDays: 7, ...copy.overdue },
     ],
   };
 }

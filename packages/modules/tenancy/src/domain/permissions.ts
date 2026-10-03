@@ -24,6 +24,11 @@ export const PERMISSIONS = [
   'attendees:write',
   /** Download attendee lists (CSV). Contact data leaving the platform: narrower than read. */
   'attendees:export',
+  /**
+   * Include private answers (dietary, accessibility, private RSVP questions; P4-3) in a guest
+   * answers export (M4.1e). Owners and admins; co-hosts on their event (`attendees:*`).
+   */
+  'attendees:export_private',
   'contacts:read',
   'finance:read',
   /** Resolve reconciliation differences (M1.6e). */
@@ -71,6 +76,10 @@ export const PERMISSIONS = [
   'assistance:read',
   /** Take, assign, start, resolve and cancel help requests, and add notes (M3.3b). */
   'assistance:manage',
+  /** See a gala's purchased tables, their buyers and named guests (M4.2b Tables & Sponsors). */
+  'tables:read',
+  /** Name a purchased table's guests by hand and send naming reminders (M4.2b). */
+  'tables:write',
   /** See the org's integrations: connections, sync history, mappings and the errors inbox (M6.4a). */
   'integrations:read',
   /**
@@ -112,6 +121,8 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'alerts:manage',
     'assistance:read',
     'assistance:manage',
+    'tables:read',
+    'tables:write',
     'integrations:read',
   ],
   finance: [
@@ -154,6 +165,8 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'alerts:manage',
     'assistance:read',
     'assistance:manage',
+    'tables:read',
+    'tables:write',
   ],
   scanner: ['org:read', 'checkin:scan', 'assistance:read', 'assistance:manage'],
   viewer: [
@@ -166,6 +179,7 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'marketing:read',
     'event_team:read',
     'assistance:read',
+    'tables:read',
   ],
   /**
    * M4.2a: someone who works on specific events only (a co-host or planner invited to one event).
@@ -246,6 +260,8 @@ export const EVENT_ROLE_PERMISSIONS: Readonly<Record<string, readonly string[]>>
     'messages:send',
     'assistance:read',
     'assistance:manage',
+    'tables:read',
+    'tables:write',
   ],
   door_staff: ['events:read', 'checkin:scan', 'assistance:read', 'assistance:manage'],
   session_scanner: ['checkin:scan'],

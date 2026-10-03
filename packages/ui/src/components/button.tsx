@@ -33,7 +33,8 @@ export function buttonClass(
 ): string {
   return cx(
     'inline-flex items-center justify-center gap-2 font-bold leading-none whitespace-nowrap select-none',
-    'transition-[background-color,border-color,box-shadow,opacity,transform] duration-150 ease-out',
+    // No opacity transition: a button re-enabled after an action is at full contrast at once.
+    'transition-[background-color,border-color,box-shadow,transform] duration-150 ease-out',
     'active:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50',
     '[&_svg]:size-[18px] [&_svg]:shrink-0',
     VARIANT[variant],

@@ -1,7 +1,7 @@
 import { Avatar, buttonClass, Card, Label, PageHeader } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { initialsOf, PERSONAS } from '@/server/personas.ts';
+import { adminSignInUrl, initialsOf, PERSONAS } from '@/server/personas.ts';
 import { devAuthEnabled } from '@/server/session.ts';
 
 export default async function DevLogin({ params }: { params: Promise<{ locale: string }> }) {
@@ -19,21 +19,32 @@ export default async function DevLogin({ params }: { params: Promise<{ locale: s
       <ul className="grid list-none grid-cols-1 gap-3 p-0 sm:grid-cols-2">
         {PERSONAS.map((p) => (
           <li key={p.email}>
-            <Card className="flex items-center gap-3">
+            <Card className="flex items-center gap-3" data-persona={p.email}>
               <Avatar initials={initialsOf(p.name)} label={p.name} />
               <div className="flex min-w-0 flex-1 flex-col">
                 <span>{p.name}</span>
                 <span className="text-caption text-ink-2">
-                  {t(`roles.${p.role}`)} · {p.orgSlug}
+                  {p.kind === 'newcomer'
+                    ? t('devLogin.newcomer')
+                    : p.kind === 'staff'
+                      ? t('devLogin.staff')
+                      : `${t(`roles.${p.role}`)} · ${p.orgSlug}`}
                 </span>
               </div>
-              <form action="/api/dev/login" method="post">
-                <input type="hidden" name="email" value={p.email} />
-                <input type="hidden" name="locale" value={locale} />
-                <button type="submit" className={buttonClass('primary', 'sm')}>
-                  {t('devLogin.signIn')}
-                </button>
-              </form>
+              {p.kind === 'staff' ? (
+                // Staff work in the admin console (its own sign-in), never in an org here.
+                <a href={adminSignInUrl()} className={buttonClass('secondary', 'sm')}>
+                  {t('devLogin.openAdmin')}
+                </a>
+              ) : (
+                <form action="/api/dev/login" method="post">
+                  <input type="hidden" name="email" value={p.email} />
+                  <input type="hidden" name="locale" value={locale} />
+                  <button type="submit" className={buttonClass('primary', 'sm')}>
+                    {t('devLogin.signIn')}
+                  </button>
+                </form>
+              )}
             </Card>
           </li>
         ))}

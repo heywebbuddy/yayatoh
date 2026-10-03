@@ -3175,7 +3175,9 @@
           "expired",
           "cancelled",
           "partially_refunded",
-          "refunded"
+          "refunded",
+          "awaiting_invoice",
+          "void"
         ]
       },
       "OrderDetail": {
@@ -3532,7 +3534,8 @@
           "provisional",
           "granted",
           "no_access",
-          "wrong_checkpoint"
+          "wrong_checkpoint",
+          "balance_due"
         ]
       },
       "ScanRequest": {

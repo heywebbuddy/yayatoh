@@ -1,3 +1,5 @@
+import { publicTaxNotices, taxNoticeText } from '@yayatoh/donations';
+import { liveSessionIds } from '@yayatoh/engagement';
 import {
   accessTarget,
   checkoutTarget,
@@ -127,6 +129,12 @@ export async function PublicEventView({
         await publicProgramMedia(contentTarget.orgId, contentTarget.eventId, { privateOk: unlockedPrivate }),
       )
     : {};
+  // M5.7a: sessions with live polls and Q&A link to their participant page (public events only).
+  const publicTarget = await checkoutTarget(slug);
+  const liveSessions =
+    publicTarget && fullProgram.sessions.length > 0
+      ? await liveSessionIds(publicTarget.orgId, publicTarget.eventId)
+      : [];
   // M5.4a: the exhibitor map page exists once the event has booths.
   const exhibitorMap =
     contentTarget && fullProgram.exhibitors.length > 0
@@ -148,6 +156,13 @@ export async function PublicEventView({
   const orgProfile = target ? await publicOrgProfile(target.orgId) : null;
   // The event's refund policy (M1.6e), in the buyer's words, before they buy.
   const refundPolicy = target ? await publicRefundPolicy(target.orgId, target.eventId) : null;
+  // M4.8b: a verified charity's passes over $75 with a fair-market value show the quid-pro-quo
+  // notice before purchase (the wording is the donations module's legal-copy template).
+  const taxNotices = target ? await publicTaxNotices(target.orgId, target.eventId) : new Map();
+  const taxLines = real.flatMap((p) => {
+    const n = taxNotices.get(p.id);
+    return n ? [{ id: p.id, name: p.name, ...taxNoticeText(n, locale) }] : [];
+  });
   // Per-date charts (M1.7g): the chosen date's own chart when it has one, else the event plan.
   const seatMap = target
     ? await publicSeatMap(target.orgId, target.eventId, { occurrenceId: chosen?.id ?? null })
@@ -194,6 +209,7 @@ export async function PublicEventView({
           earlyEndsAt: p.earlyEndsAt,
           isDonation: p.isDonation,
           accessDates: p.accessDates,
+          tableSize: p.tableSize,
         }))
       : (demo?.passes ?? []).map((p) => ({
           ...p,
@@ -207,6 +223,7 @@ export async function PublicEventView({
           earlyEndsAt: null,
           isDonation: false,
           accessDates: [],
+          tableSize: null,
         }));
   const ev = {
     ...pub,
@@ -237,6 +254,24 @@ export async function PublicEventView({
           {t('publicEvent.choosePass')}
         </h2>
         <p className="m-0 text-body text-ink-2">{t('publicEvent.allIn', { org: ev.organizerName })}</p>
+        {taxLines.length > 0 ? (
+          // M4.8b: a verified charity's quid-pro-quo notice before purchase.
+          <section
+            aria-labelledby="tax-notice-heading"
+            className="flex flex-col gap-2 rounded-tile border border-line bg-surface-2 p-4"
+          >
+            <h3 id="tax-notice-heading" className="m-0 text-[15px] font-extrabold text-ink">
+              {taxLines[0]?.title}
+            </h3>
+            <ul className="m-0 flex list-none flex-col gap-2 p-0">
+              {taxLines.map((n) => (
+                <li key={n.id} className="text-caption text-ink-2">
+                  <span className="font-bold text-ink">{n.name}:</span> {n.text}
+                </li>
+              ))}
+            </ul>
+          </section>
+        ) : null}
         {registrationOpen ? (
           <Link href={`/events/${slug}/register`} className={buttonClass('primary', 'md', 'self-start')}>
             {t('publicEvent.register')}
@@ -417,7 +452,7 @@ export async function PublicEventView({
   const navLink =
     'inline-flex min-h-10 items-center rounded-[10px] px-3 text-body font-bold text-ink-2 hover:bg-surface-3 hover:text-ink';
   const chip =
-    'inline-flex min-h-8 items-center gap-2 rounded-pill border border-white/30 bg-white/15 px-3 text-[13px] font-bold';
+    'inline-flex min-h-8 items-center gap-2 rounded-pill border border-white/30 bg-surface/15 px-3 text-[13px] font-bold';
   return (
     <div className="min-h-dvh">
       {ev.visibility === 'public' ? (
@@ -472,7 +507,7 @@ export async function PublicEventView({
               <>
                 <div
                   aria-hidden="true"
-                  className="pointer-events-none absolute end-[6%] -top-20 -z-10 h-[460px] w-[180px] rotate-[32deg] rounded-full bg-white/45 blur-[34px]"
+                  className="pointer-events-none absolute end-[6%] -top-20 -z-10 h-[460px] w-[180px] rotate-[32deg] rounded-full bg-surface/45 blur-[34px]"
                 />
                 <div
                   aria-hidden="true"
@@ -480,7 +515,7 @@ export async function PublicEventView({
                 />
                 <div
                   aria-hidden="true"
-                  className="pointer-events-none absolute end-40 bottom-28 -z-10 hidden h-[140px] w-[200px] -rotate-[16deg] rounded-[40px] border border-white/40 bg-white/15 backdrop-blur-sm md:block"
+                  className="pointer-events-none absolute end-40 bottom-28 -z-10 hidden h-[140px] w-[200px] -rotate-[16deg] rounded-[40px] border border-white/40 bg-surface/15 backdrop-blur-sm md:block"
                 />
               </>
             )}
@@ -627,6 +662,7 @@ export async function PublicEventView({
                 locale={locale}
                 timeZone={ev.timezone}
                 images={programImages}
+                liveSessions={liveSessions}
                 exhibitorMap={exhibitorMap}
               />
 
