@@ -97,10 +97,11 @@ describe('ticket PDF template', () => {
     expect(seen?.get('files')).toBeInstanceOf(Blob);
   });
 
-  it('the adapter retries once after a timeout or 5xx, then gives up', async () => {
+  it('the adapter retries after a timeout or 5xx (with a pause), then gives up', async () => {
     let calls = 0;
     const flaky = gotenbergRenderer({
       url: 'http://g:3000',
+      retryDelaysMs: [0, 0],
       fetch: (async () => {
         calls++;
         if (calls === 1) return new Response('busy', { status: 503 });
@@ -112,13 +113,14 @@ describe('ticket PDF template', () => {
     let down = 0;
     const dead = gotenbergRenderer({
       url: 'http://g:3000',
+      retryDelaysMs: [0, 0],
       fetch: (async () => {
         down++;
         return new Response('nope', { status: 500 });
       }) as unknown as typeof fetch,
     });
     await expect(dead.render({ html: '' })).rejects.toThrow(/gotenberg: 500/);
-    expect(down).toBe(2);
+    expect(down).toBe(3);
     const bad = gotenbergRenderer({
       url: 'http://g:3000',
       fetch: (async () => new Response('bad html', { status: 400 })) as unknown as typeof fetch,

@@ -30,28 +30,6 @@ export async function consumeEvent(subscriber: Subscriber, event: PublishedEvent
 }
 
 /**
- * Which of these events each consumer has already handled (`${consumer}|${eventId}`), in one read.
- * The dev drain (e2e, batch 3g merge) re-reads an org's recent events on every call and used to
- * open one transaction per event and subscriber just to find them handled; under the full e2e
- * suite that made each drain of the shared org take 15 s or more. Callers still hand the rest to
- * `consumeEvent`, which stays the exactly-once guard.
- */
-export async function processedPairsTx(
-  tx: TenantTx,
-  consumers: readonly string[],
-  eventIds: readonly string[],
-): Promise<ReadonlySet<string>> {
-  if (consumers.length === 0 || eventIds.length === 0) return new Set();
-  const rows = await tx
-    .select({ consumer: processedEvents.consumer, eventId: processedEvents.eventId })
-    .from(processedEvents)
-    .where(
-      and(inArray(processedEvents.consumer, [...consumers]), inArray(processedEvents.eventId, [...eventIds])),
-    );
-  return new Set(rows.map((r) => `${r.consumer}|${r.eventId}`));
-}
-
-/**
  * The relay's job payload has no write time, and the replay flag is always read from the outbox
  * row itself (an event handed over without it is still treated as history).
  */
