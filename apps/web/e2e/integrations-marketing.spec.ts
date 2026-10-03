@@ -95,7 +95,8 @@ async function connect(page: Page, org: string, name: string): Promise<string> {
   return id as string;
 }
 
-const changesTable = (page: Page, name: string) => page.getByRole('table', { name: `Consent changes from ${name}` });
+const changesTable = (page: Page, name: string) =>
+  page.getByRole('table', { name: `Consent changes from ${name}` });
 
 async function openAs(browser: Browser, opts: Parameters<typeof newUser>[1]) {
   const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 } });
@@ -173,7 +174,9 @@ test.describe('marketing integrations (M6.4d)', () => {
     await expect(page.getByText('Klaviyo is connected. The first sync starts shortly.')).toBeVisible();
     const connection = /\/integrations\/([0-9a-f-]{36})/.exec(page.url())?.[1] as string;
 
-    await pickWithKeyboard(page.getByLabel('Who is sent'), { label: 'Everyone with email marketing consent' });
+    await pickWithKeyboard(page.getByLabel('Who is sent'), {
+      label: 'Everyone with email marketing consent',
+    });
     await pickWithKeyboard(page.getByLabel('Klaviyo list'), { label: 'VIP' });
     await page.getByRole('button', { name: 'Save audience' }).focus();
     await page.keyboard.press('Enter');
@@ -202,7 +205,9 @@ test.describe('marketing integrations (M6.4d)', () => {
     await expect(page.getByRole('heading', { name: 'Contacts: Into Yayatoh' })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Contacts: Out to the provider' })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Marketing events: Out to the provider' })).toBeVisible();
-    await expect(page.getByRole('heading', { name: 'Registrations and attendance: Out to the provider' })).toBeVisible();
+    await expect(
+      page.getByRole('heading', { name: 'Registrations and attendance: Out to the provider' }),
+    ).toBeVisible();
     // No audience picker: HubSpot sends every contact with consent.
     await expect(page.getByLabel('Who is sent')).toHaveCount(0);
     await expectAccessibleBothModes(page);
@@ -220,7 +225,10 @@ test.describe('marketing integrations (M6.4d)', () => {
     await expect(table).not.toContainText(people.cy);
   });
 
-  test('a deleted audience is flagged; managers read only; viewers are refused', async ({ page, browser }) => {
+  test('a deleted audience is flagged; managers read only; viewers are refused', async ({
+    page,
+    browser,
+  }) => {
     const { slug, orgId, audience, segmentId } = await orgWithPeople(page);
     const connection = await connect(page, slug, 'Mailchimp');
     await pickOption(page.getByLabel('Who is sent'), { label: audience });
