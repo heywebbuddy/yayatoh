@@ -84,6 +84,8 @@ export {
   sessionFillTx,
   sponsorTierCountsTx,
 } from './conference-facts.ts';
+// M6.5b: sponsors and their deals for CRM connectors (Salesforce opportunities).
+export { type CrmSponsorRow, crmSponsorRowsTx } from './crm-sponsor-rows.ts';
 export { programDataSubjects } from './data-subject.ts';
 export {
   ADMISSIONS,

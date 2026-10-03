@@ -109,9 +109,32 @@ export {
   unlinkSheetCommand,
 } from './connectors/google-sheets/links.ts';
 export { CONNECTORS, connectorByKey, offeredConnectors } from './connectors/index.ts';
-export { slackConnector } from './connectors/slack.ts';
 // M6.4b: the Eventbrite importer and Google Sheets live sync.
 export { linkedLocalIdTx } from './connectors/links.ts';
+// M6.5b: Salesforce (contacts and leads, campaign members per event, sponsor opportunities).
+export {
+  SALESFORCE_BAD_RECORD,
+  SALESFORCE_SEED,
+  SF_HUMAN_USER,
+  SF_INTEGRATION_USER,
+  type SfRecord,
+  salesforceFakeProvider,
+  salesforceRemoteEdit,
+  salesforceRemoteRecords,
+} from './connectors/salesforce/fake.ts';
+export { salesforceConnector } from './connectors/salesforce/index.ts';
+export {
+  campaignStatus,
+  dateIn,
+  joinName,
+  NO_LAST_NAME,
+  opportunityStage,
+  SALESFORCE,
+  SF_EXTERNAL_ID,
+  type SObject,
+  splitName,
+} from './connectors/salesforce/objects.ts';
+export { slackConnector } from './connectors/slack.ts';
 export { integrationsDataSubjects } from './data-subject.ts';
 export * from './domain/mapping.ts';
 export * from './domain/sync.ts';
@@ -143,6 +166,7 @@ export {
   openErrorCountQuery,
   retryErrorsCommand,
 } from './errors.ts';
+export { linkedCountsQuery } from './linked.ts';
 export { mappingVersionsQuery, saveMappingCommand } from './mappings.ts';
 export { privateColumns } from './private-columns.ts';
 export {

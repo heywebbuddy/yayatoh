@@ -40,6 +40,8 @@ export {
   shortLinksQuery,
 } from './commands/short-links.ts';
 export { EventSettingsSnapshot, eventSettingsTx, insertEventCopyTx } from './copy.ts';
+// M6.5b: events for CRM connectors (Salesforce campaigns).
+export { type CrmEventRow, crmEventRowsTx } from './crm-event-rows.ts';
 export { eventsDataSubjects } from './data-subject.ts';
 export {
   ACCESS_ATTEMPT_WINDOW_MS,

@@ -15206,6 +15206,9 @@
       },
       "google_sheets": {
         "description": "Tieni l’elenco dei partecipanti di un evento in un foglio Google. Le modifiche da entrambe le parti si sincronizzano."
+      },
+      "salesforce": {
+        "description": "Mantieni Salesforce allineato: contatti e lead in entrambe le direzioni, una campagna per ogni evento con le persone iscritte e registrate all’ingresso, e i tuoi sponsor come opportunità. Vengono inviate solo le persone che hanno accettato il marketing."
       }
     },
     "sandboxBadge": "Prova",
@@ -15229,7 +15232,11 @@
       "events": "Eventi",
       "ticket_classes": "Tipi di biglietto",
       "orders": "Ordini",
-      "attendees": "Partecipanti"
+      "attendees": "Partecipanti",
+      "leads": "Lead",
+      "campaigns": "Campagne",
+      "campaign_members": "Membri della campagna",
+      "sponsor_opportunities": "Opportunità di sponsorizzazione"
     },
     "fields": {
       "email": "Email",
@@ -15254,7 +15261,21 @@
       "subtotal_minor": "Totale biglietti (in centesimi)",
       "total_minor": "Totale ordine (in centesimi)",
       "placed_at": "Ordinato il",
-      "labels": "Etichette"
+      "labels": "Etichette",
+      "first_name": "Nome",
+      "last_name": "Cognome",
+      "company": "Azienda",
+      "title": "Ruolo",
+      "phone": "Telefono",
+      "lead_source": "Origine del lead",
+      "start_date": "Data di inizio",
+      "end_date": "Data di fine",
+      "stage": "Fase",
+      "stage_name": "Fase",
+      "close_date": "Data di chiusura",
+      "amount": "Importo",
+      "tier": "Livello di sponsorizzazione",
+      "currency_iso_code": "Codice valuta"
     },
     "status": {
       "none": "Non collegata",
@@ -15722,6 +15743,14 @@
       "confirmUnlink": "Scollegare il foglio di {event}?",
       "confirmUnlinkBody": "Non si sincronizza più nulla. Il foglio resta nel tuo Google Drive con il suo contenuto e tutti restano nell’elenco di Yayatoh.",
       "keep": "Mantieni collegato"
+    },
+    "linked": {
+      "title": "Record collegati",
+      "description": "Ciò che questa integrazione mantiene allineato finora, per tipo di record.",
+      "caption": "Record collegati per tipo",
+      "object": "Tipo",
+      "count": "Record",
+      "empty": "Ancora nulla di collegato. I record si collegano man mano che si sincronizzano."
     }
   },
   "kioskPrint": {

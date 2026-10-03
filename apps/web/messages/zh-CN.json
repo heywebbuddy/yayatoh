@@ -15206,6 +15206,9 @@
       },
       "google_sheets": {
         "description": "在 Google 表格中维护活动的参会者名单。任一处的修改都会双向同步。"
+      },
+      "salesforce": {
+        "description": "让 Salesforce 保持同步：联系人和潜在客户双向同步，每场活动一个营销活动并包含已报名和已签到的人，赞助商作为业务机会。只发送同意接收营销信息的人。"
       }
     },
     "sandboxBadge": "测试",
@@ -15229,7 +15232,11 @@
       "events": "活动",
       "ticket_classes": "票种",
       "orders": "订单",
-      "attendees": "参会者"
+      "attendees": "参会者",
+      "leads": "潜在客户",
+      "campaigns": "营销活动",
+      "campaign_members": "营销活动成员",
+      "sponsor_opportunities": "赞助业务机会"
     },
     "fields": {
       "email": "电子邮件",
@@ -15254,7 +15261,21 @@
       "subtotal_minor": "票款合计（以分计）",
       "total_minor": "订单合计（以分计）",
       "placed_at": "下单时间",
-      "labels": "标签"
+      "labels": "标签",
+      "first_name": "名",
+      "last_name": "姓",
+      "company": "公司",
+      "title": "职位",
+      "phone": "电话",
+      "lead_source": "潜在客户来源",
+      "start_date": "开始日期",
+      "end_date": "结束日期",
+      "stage": "阶段",
+      "stage_name": "阶段",
+      "close_date": "预计成交日期",
+      "amount": "金额",
+      "tier": "赞助级别",
+      "currency_iso_code": "货币代码"
     },
     "status": {
       "none": "未连接",
@@ -15722,6 +15743,14 @@
       "confirmUnlink": "取消关联 {event} 的表格？",
       "confirmUnlinkBody": "之后不再同步。表格及其内容保留在你的 Google 云端硬盘中，所有人仍在 Yayatoh 名单中。",
       "keep": "保持关联"
+    },
+    "linked": {
+      "title": "已关联的记录",
+      "description": "此集成目前保持同步的内容，按记录类型。",
+      "caption": "按类型的已关联记录",
+      "object": "类型",
+      "count": "记录",
+      "empty": "尚未关联任何内容。记录会在同步时关联。"
     }
   },
   "kioskPrint": {

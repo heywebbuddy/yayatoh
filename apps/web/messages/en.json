@@ -15206,6 +15206,9 @@
       },
       "google_sheets": {
         "description": "Keep an event's attendee list in a Google Sheet. Edits in either place sync both ways."
+      },
+      "salesforce": {
+        "description": "Keep Salesforce in step: contacts and leads both ways, a campaign for each event with the people registered and checked in, and your sponsors as opportunities. Only people who agreed to marketing are sent."
       }
     },
     "sandboxBadge": "Sandbox",
@@ -15229,7 +15232,11 @@
       "events": "Events",
       "ticket_classes": "Ticket types",
       "orders": "Orders",
-      "attendees": "Attendees"
+      "attendees": "Attendees",
+      "leads": "Leads",
+      "campaigns": "Campaigns",
+      "campaign_members": "Campaign members",
+      "sponsor_opportunities": "Sponsor opportunities"
     },
     "fields": {
       "email": "Email",
@@ -15254,7 +15261,21 @@
       "subtotal_minor": "Ticket total (in cents)",
       "total_minor": "Order total (in cents)",
       "placed_at": "Ordered on",
-      "labels": "Labels"
+      "labels": "Labels",
+      "first_name": "First name",
+      "last_name": "Last name",
+      "company": "Company",
+      "title": "Job title",
+      "phone": "Phone",
+      "lead_source": "Lead source",
+      "start_date": "Start date",
+      "end_date": "End date",
+      "stage": "Stage",
+      "stage_name": "Stage",
+      "close_date": "Close date",
+      "amount": "Amount",
+      "tier": "Sponsor tier",
+      "currency_iso_code": "Currency code"
     },
     "status": {
       "none": "Not connected",
@@ -15722,6 +15743,14 @@
       "confirmUnlink": "Unlink the sheet of {event}?",
       "confirmUnlinkBody": "Nothing syncs with it any more. The sheet stays in your Google Drive with what it holds, and everyone stays on the list in Yayatoh.",
       "keep": "Keep linked"
+    },
+    "linked": {
+      "title": "Linked records",
+      "description": "What this integration keeps in step so far, by kind of record.",
+      "caption": "Linked records by kind",
+      "object": "Kind",
+      "count": "Records",
+      "empty": "Nothing linked yet. Records are linked as they sync."
     }
   },
   "kioskPrint": {

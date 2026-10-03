@@ -3,6 +3,7 @@ import {
   connectorByKey,
   GOOGLE_SHEETS,
   isImporter,
+  linkedCountsQuery,
   mappingFields,
   openErrorCountQuery,
   SYNC_INTERVALS,
@@ -28,8 +29,8 @@ import {
 } from '../actions.ts';
 import { ConnectionPill, codeText, ERROR_CODES, IntegrationTabs, RunPill } from '../parts.tsx';
 import { MappingForm } from './mapping-form.tsx';
-import { SlackPanel } from './slack-panel.tsx';
 import { SheetsSection } from './sheets-section.tsx';
+import { SlackPanel } from './slack-panel.tsx';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('integrations');
@@ -72,6 +73,8 @@ export default async function ConnectionPage({
     throw err;
   });
   const { open } = await executeQuery(openErrorCountQuery, {}, data.ctx, ports);
+  // M6.5b: what the connection keeps in step so far, per object.
+  const linked = await executeQuery(linkedCountsQuery, { connectionId }, data.ctx, ports);
   const sp = await searchParams;
   const t = await getTranslations('integrations');
   const tErr = await getTranslations('integrations.errorsFeedback');
@@ -295,6 +298,7 @@ export default async function ConnectionPage({
                   key={`${o.key}-${direction}`}
                   direction={direction}
                   objectType={o.key}
+                  objectLabel={connector.objects.length > 1 ? t(`objects.${o.key}`) : undefined}
                   version={current?.version ?? null}
                   rules={current?.rules ?? o[direction]?.defaultMapping ?? []}
                   sources={sources}
@@ -307,6 +311,32 @@ export default async function ConnectionPage({
           )}
         </section>
       ) : null}
+      {notifies ? null : (
+        <section aria-labelledby="linked-heading" className="flex flex-col gap-3">
+          <SectionHeader
+            id="linked-heading"
+            title={t('linked.title')}
+            description={t('linked.description')}
+          />
+          <Table
+            caption={t('linked.caption')}
+            rowKey={(r) => r.key}
+            rows={
+              linked.objects.length
+                ? connector.objects.map((o) => ({
+                    key: o.key,
+                    count: linked.objects.find((x) => x.objectType === o.key)?.count ?? 0,
+                  }))
+                : []
+            }
+            empty={t('linked.empty')}
+            columns={[
+              { key: 'object', header: t('linked.object'), cell: (r) => t(`objects.${r.key}`) },
+              { key: 'count', header: t('linked.count'), cell: (r) => r.count, align: 'end' },
+            ]}
+          />
+        </section>
+      )}
       {notifies ? null : (
         <section aria-labelledby="runs-heading" className="flex flex-col gap-3">
           <SectionHeader id="runs-heading" title={t('runs.title')} count={detail.runs.length} />

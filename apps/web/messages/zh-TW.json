@@ -15206,6 +15206,9 @@
       },
       "google_sheets": {
         "description": "在 Google 試算表中維護活動的參加者名單。任一處的修改都會雙向同步。"
+      },
+      "salesforce": {
+        "description": "讓 Salesforce 保持同步：聯絡人和潛在客戶雙向同步，每場活動一個行銷活動並包含已報名和已報到的人，贊助商作為商機。只會傳送同意接收行銷訊息的人。"
       }
     },
     "sandboxBadge": "測試",
@@ -15229,7 +15232,11 @@
       "events": "活動",
       "ticket_classes": "票種",
       "orders": "訂單",
-      "attendees": "參加者"
+      "attendees": "參加者",
+      "leads": "潛在客戶",
+      "campaigns": "行銷活動",
+      "campaign_members": "行銷活動成員",
+      "sponsor_opportunities": "贊助商機"
     },
     "fields": {
       "email": "電子郵件",
@@ -15254,7 +15261,21 @@
       "subtotal_minor": "票款合計（以分計）",
       "total_minor": "訂單合計（以分計）",
       "placed_at": "下單時間",
-      "labels": "標籤"
+      "labels": "標籤",
+      "first_name": "名",
+      "last_name": "姓",
+      "company": "公司",
+      "title": "職稱",
+      "phone": "電話",
+      "lead_source": "潛在客戶來源",
+      "start_date": "開始日期",
+      "end_date": "結束日期",
+      "stage": "階段",
+      "stage_name": "階段",
+      "close_date": "結案日期",
+      "amount": "金額",
+      "tier": "贊助等級",
+      "currency_iso_code": "貨幣代碼"
     },
     "status": {
       "none": "未串接",
@@ -15722,6 +15743,14 @@
       "confirmUnlink": "取消連結 {event} 的試算表？",
       "confirmUnlinkBody": "之後不再同步。試算表及其內容保留在你的 Google 雲端硬碟中，所有人仍在 Yayatoh 名單中。",
       "keep": "保持連結"
+    },
+    "linked": {
+      "title": "已連結的記錄",
+      "description": "此整合目前保持同步的內容，依記錄類型。",
+      "caption": "依類型的已連結記錄",
+      "object": "類型",
+      "count": "記錄",
+      "empty": "尚未連結任何內容。記錄會在同步時連結。"
     }
   },
   "kioskPrint": {

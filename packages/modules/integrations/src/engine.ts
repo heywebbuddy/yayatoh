@@ -1134,7 +1134,17 @@ async function pushObject(
     const p = await withTenant(ctx, (tx) =>
       push.changes(tx, cursor, PUSH_PAGE, { connectionId, scope: io.scope }),
     );
-    if (p.records.length === 0) break;
+    if (p.records.length === 0) {
+      // M6.5b: a page that filtered every record out (consent, links) still moves the cursor on.
+      if (p.cursor !== null && p.cursor !== cursor)
+        await executeCommand(
+          pushPageCommand,
+          { runId, objectType: object.key, results: [], cursor: p.cursor },
+          ctx,
+          ports,
+        );
+      break;
+    }
     await sendAll(p.records, [], p.cursor);
     if (!p.hasMore || p.cursor === null) break;
     cursor = p.cursor;

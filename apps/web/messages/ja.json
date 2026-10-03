@@ -15206,6 +15206,9 @@
       },
       "google_sheets": {
         "description": "イベントの参加者リストを Google スプレッドシートで管理します。どちらで編集しても双方向に同期します。"
+      },
+      "salesforce": {
+        "description": "Salesforce と同期を保ちます。取引先責任者とリードは双方向、イベントごとに登録者とチェックイン済みの人を含むキャンペーンを作成し、スポンサーは商談として送ります。送信されるのはマーケティングに同意した人だけです。"
       }
     },
     "sandboxBadge": "テスト",
@@ -15229,7 +15232,11 @@
       "events": "イベント",
       "ticket_classes": "チケット種別",
       "orders": "注文",
-      "attendees": "参加者"
+      "attendees": "参加者",
+      "leads": "リード",
+      "campaigns": "キャンペーン",
+      "campaign_members": "キャンペーンメンバー",
+      "sponsor_opportunities": "スポンサー商談"
     },
     "fields": {
       "email": "メール",
@@ -15254,7 +15261,21 @@
       "subtotal_minor": "チケット合計（最小通貨単位）",
       "total_minor": "注文合計（最小通貨単位）",
       "placed_at": "注文日",
-      "labels": "ラベル"
+      "labels": "ラベル",
+      "first_name": "名",
+      "last_name": "姓",
+      "company": "会社",
+      "title": "役職",
+      "phone": "電話",
+      "lead_source": "リードソース",
+      "start_date": "開始日",
+      "end_date": "終了日",
+      "stage": "フェーズ",
+      "stage_name": "フェーズ",
+      "close_date": "完了予定日",
+      "amount": "金額",
+      "tier": "スポンサーランク",
+      "currency_iso_code": "通貨コード"
     },
     "status": {
       "none": "未接続",
@@ -15722,6 +15743,14 @@
       "confirmUnlink": "{event} のシートの連携を解除しますか？",
       "confirmUnlinkBody": "今後は何も同期されません。シートは内容ごと Google ドライブに残り、Yayatoh のリストにも全員が残ります。",
       "keep": "連携を続ける"
+    },
+    "linked": {
+      "title": "リンク済みのレコード",
+      "description": "この連携がこれまでに同期を保っているもの（レコードの種類別）。",
+      "caption": "種類別のリンク済みレコード",
+      "object": "種類",
+      "count": "レコード",
+      "empty": "まだリンクはありません。同期するとレコードがリンクされます。"
     }
   },
   "kioskPrint": {

@@ -15206,6 +15206,9 @@
       },
       "google_sheets": {
         "description": "Houd de deelnemerslijst van een evenement bij in een Google-spreadsheet. Wijzigingen aan beide kanten worden in twee richtingen gesynchroniseerd."
+      },
+      "salesforce": {
+        "description": "Houd Salesforce bij: contacten en leads in beide richtingen, een campagne per evenement met de ingeschreven en ingecheckte mensen, en je sponsors als opportunities. Alleen mensen die met marketing hebben ingestemd worden verstuurd."
       }
     },
     "sandboxBadge": "Test",
@@ -15229,7 +15232,11 @@
       "events": "Evenementen",
       "ticket_classes": "Tickettypes",
       "orders": "Bestellingen",
-      "attendees": "Deelnemers"
+      "attendees": "Deelnemers",
+      "leads": "Leads",
+      "campaigns": "Campagnes",
+      "campaign_members": "Campagneleden",
+      "sponsor_opportunities": "Sponsor-opportunities"
     },
     "fields": {
       "email": "E-mail",
@@ -15254,7 +15261,21 @@
       "subtotal_minor": "Tickettotaal (in centen)",
       "total_minor": "Besteltotaal (in centen)",
       "placed_at": "Besteld op",
-      "labels": "Labels"
+      "labels": "Labels",
+      "first_name": "Voornaam",
+      "last_name": "Achternaam",
+      "company": "Bedrijf",
+      "title": "Functie",
+      "phone": "Telefoon",
+      "lead_source": "Leadbron",
+      "start_date": "Startdatum",
+      "end_date": "Einddatum",
+      "stage": "Fase",
+      "stage_name": "Fase",
+      "close_date": "Sluitdatum",
+      "amount": "Bedrag",
+      "tier": "Sponsorniveau",
+      "currency_iso_code": "Valutacode"
     },
     "status": {
       "none": "Niet gekoppeld",
@@ -15722,6 +15743,14 @@
       "confirmUnlink": "De spreadsheet van {event} ontkoppelen?",
       "confirmUnlinkBody": "Er wordt niets meer mee gesynchroniseerd. De spreadsheet blijft met de inhoud in je Google Drive en iedereen blijft op de lijst in Yayatoh.",
       "keep": "Gekoppeld laten"
+    },
+    "linked": {
+      "title": "Gekoppelde records",
+      "description": "Wat deze integratie tot nu toe bijhoudt, per soort record.",
+      "caption": "Gekoppelde records per soort",
+      "object": "Soort",
+      "count": "Records",
+      "empty": "Nog niets gekoppeld. Records worden gekoppeld zodra ze synchroniseren."
     }
   },
   "kioskPrint": {

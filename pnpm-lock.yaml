@@ -2109,6 +2109,9 @@ importers:
       '@yayatoh/platform':
         specifier: workspace:*
         version: link:../../platform
+      '@yayatoh/program':
+        specifier: workspace:*
+        version: link:../program
       '@yayatoh/tenancy':
         specifier: workspace:*
         version: link:../tenancy

@@ -15206,6 +15206,9 @@
       },
       "google_sheets": {
         "description": "Führe die Teilnehmerliste einer Veranstaltung in einer Google-Tabelle. Änderungen auf beiden Seiten werden in beide Richtungen synchronisiert."
+      },
+      "salesforce": {
+        "description": "Halten Sie Salesforce auf dem gleichen Stand: Kontakte und Leads in beide Richtungen, eine Kampagne pro Veranstaltung mit den angemeldeten und eingecheckten Personen und Ihre Sponsoren als Opportunities. Gesendet werden nur Personen, die Marketing zugestimmt haben."
       }
     },
     "sandboxBadge": "Sandbox",
@@ -15229,7 +15232,11 @@
       "events": "Veranstaltungen",
       "ticket_classes": "Ticketarten",
       "orders": "Bestellungen",
-      "attendees": "Teilnehmende"
+      "attendees": "Teilnehmende",
+      "leads": "Leads",
+      "campaigns": "Kampagnen",
+      "campaign_members": "Kampagnenmitglieder",
+      "sponsor_opportunities": "Sponsoren-Opportunities"
     },
     "fields": {
       "email": "E-Mail",
@@ -15254,7 +15261,21 @@
       "subtotal_minor": "Ticketsumme (in Cent)",
       "total_minor": "Bestellsumme (in Cent)",
       "placed_at": "Bestellt am",
-      "labels": "Labels"
+      "labels": "Labels",
+      "first_name": "Vorname",
+      "last_name": "Nachname",
+      "company": "Firma",
+      "title": "Position",
+      "phone": "Telefon",
+      "lead_source": "Lead-Quelle",
+      "start_date": "Startdatum",
+      "end_date": "Enddatum",
+      "stage": "Phase",
+      "stage_name": "Phase",
+      "close_date": "Abschlussdatum",
+      "amount": "Betrag",
+      "tier": "Sponsorenstufe",
+      "currency_iso_code": "Währungscode"
     },
     "status": {
       "none": "Nicht verbunden",
@@ -15722,6 +15743,14 @@
       "confirmUnlink": "Tabelle von {event} trennen?",
       "confirmUnlinkBody": "Danach wird nichts mehr damit synchronisiert. Die Tabelle bleibt mit ihrem Inhalt in deinem Google Drive, und alle bleiben auf der Liste in Yayatoh.",
       "keep": "Verknüpft lassen"
+    },
+    "linked": {
+      "title": "Verknüpfte Datensätze",
+      "description": "Was diese Integration bisher abgleicht, nach Art des Datensatzes.",
+      "caption": "Verknüpfte Datensätze nach Art",
+      "object": "Art",
+      "count": "Datensätze",
+      "empty": "Noch nichts verknüpft. Datensätze werden beim Synchronisieren verknüpft."
     }
   },
   "kioskPrint": {

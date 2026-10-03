@@ -808,3 +808,10 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **Unattended kiosks need PrintNode for silent printing.** On the print-dialog path the attendee taps "Open my badge to print" and prints from the PDF (AirPrint). Confirm, or plan PrintNode (Stage 2) for unattended kiosks.
 - [ ] **Email codes** go only to the ticket holder's own address; an address with several tickets at the event, or a registration still waiting, is sent to the desk. Confirm.
 - [ ] **Kiosk email wording** (`badges.kiosk-code`, 13 locales; label `legal-copy`).
+
+## M6.5b — Salesforce (2026-10-03, pending owner)
+- [ ] **Salesforce setup (UNVERIFIED against a real org):** register a Connected App (scopes `api refresh_token`), add it to Nango as the `salesforce` integration, and create a custom text field `Yayatoh_Id__c` (External ID, unique, 36 characters) on Contact, Lead, Campaign, CampaignMember and Opportunity. Use a dedicated integration user: its edits are how the sync recognises its own writes.
+- [ ] **New people go out as Leads.** A person Salesforce already has as a Contact is updated there; everyone else from Yayatoh becomes a Lead (Company `[not provided]` unless mapped). Confirm, or ask for "new people become Contacts".
+- [ ] **Consent rule:** only people whose email marketing consent is granted (and who aren't unsubscribed) are pushed, and only their campaign memberships. B2B organizers may want "everyone on the guest list" under legitimate interest; that would be a per-org setting. Confirm.
+- [ ] **Opt-outs:** a Salesforce email opt-out withdraws the person's marketing consent in Yayatoh. A withdrawal in Yayatoh is *not* sent to Salesforce (it would mean sending a non-consenting person's data). Say if you want `HasOptedOutOfEmail` set there instead.
+- [ ] **Sponsor opportunities:** stage from the deal (active → Closed Won, pending → Negotiation/Review, cancelled → Closed Lost, none → Prospecting); amount in the deal's currency as a decimal; no Account is created for the sponsor. Confirm the stages, and whether sponsors should become Accounts.

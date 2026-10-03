@@ -73,6 +73,8 @@ export {
   rsvpQuestionsScenario,
   standardRsvpQuestions,
 } from './rsvp-questions.ts';
+// M6.5b: connect the Salesforce connector against its fake org.
+export { connectSalesforce } from './salesforce.ts';
 export {
   SOCIAL_FIXTURE,
   type SocialPackParty,

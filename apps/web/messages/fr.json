@@ -15206,6 +15206,9 @@
       },
       "google_sheets": {
         "description": "Gardez la liste des participants d’un événement dans une feuille Google. Les modifications des deux côtés se synchronisent."
+      },
+      "salesforce": {
+        "description": "Gardez Salesforce à jour : contacts et pistes dans les deux sens, une campagne par événement avec les personnes inscrites et enregistrées à l’entrée, et vos sponsors comme opportunités. Seules les personnes ayant accepté le marketing sont envoyées."
       }
     },
     "sandboxBadge": "Test",
@@ -15229,7 +15232,11 @@
       "events": "Événements",
       "ticket_classes": "Types de billets",
       "orders": "Commandes",
-      "attendees": "Participants"
+      "attendees": "Participants",
+      "leads": "Pistes",
+      "campaigns": "Campagnes",
+      "campaign_members": "Membres de campagne",
+      "sponsor_opportunities": "Opportunités de sponsoring"
     },
     "fields": {
       "email": "E-mail",
@@ -15254,7 +15261,21 @@
       "subtotal_minor": "Total des billets (en centimes)",
       "total_minor": "Total de la commande (en centimes)",
       "placed_at": "Commandé le",
-      "labels": "Étiquettes"
+      "labels": "Étiquettes",
+      "first_name": "Prénom",
+      "last_name": "Nom",
+      "company": "Entreprise",
+      "title": "Fonction",
+      "phone": "Téléphone",
+      "lead_source": "Origine de la piste",
+      "start_date": "Date de début",
+      "end_date": "Date de fin",
+      "stage": "Étape",
+      "stage_name": "Étape",
+      "close_date": "Date de clôture",
+      "amount": "Montant",
+      "tier": "Niveau de sponsoring",
+      "currency_iso_code": "Code de devise"
     },
     "status": {
       "none": "Non connectée",
@@ -15722,6 +15743,14 @@
       "confirmUnlink": "Dissocier la feuille de {event} ?",
       "confirmUnlinkBody": "Plus rien ne s’y synchronise. La feuille reste dans votre Google Drive avec son contenu, et tout le monde reste sur la liste dans Yayatoh.",
       "keep": "Garder liée"
+    },
+    "linked": {
+      "title": "Enregistrements liés",
+      "description": "Ce que cette intégration synchronise jusqu’ici, par type d’enregistrement.",
+      "caption": "Enregistrements liés par type",
+      "object": "Type",
+      "count": "Enregistrements",
+      "empty": "Rien n’est encore lié. Les enregistrements sont liés au fil des synchronisations."
     }
   },
   "kioskPrint": {

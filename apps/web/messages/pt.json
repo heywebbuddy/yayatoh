@@ -15206,6 +15206,9 @@
       },
       "google_sheets": {
         "description": "Mantenha a lista de participantes de um evento em uma planilha Google. Edições em qualquer lado sincronizam nos dois sentidos."
+      },
+      "salesforce": {
+        "description": "Mantenha o Salesforce em sincronia: contatos e leads nos dois sentidos, uma campanha por evento com as pessoas inscritas e com check-in feito, e seus patrocinadores como oportunidades. Só são enviadas pessoas que aceitaram receber marketing."
       }
     },
     "sandboxBadge": "Teste",
@@ -15229,7 +15232,11 @@
       "events": "Eventos",
       "ticket_classes": "Tipos de ingresso",
       "orders": "Pedidos",
-      "attendees": "Participantes"
+      "attendees": "Participantes",
+      "leads": "Leads",
+      "campaigns": "Campanhas",
+      "campaign_members": "Membros da campanha",
+      "sponsor_opportunities": "Oportunidades de patrocínio"
     },
     "fields": {
       "email": "E-mail",
@@ -15254,7 +15261,21 @@
       "subtotal_minor": "Total dos ingressos (em centavos)",
       "total_minor": "Total do pedido (em centavos)",
       "placed_at": "Pedido em",
-      "labels": "Etiquetas"
+      "labels": "Etiquetas",
+      "first_name": "Nome",
+      "last_name": "Sobrenome",
+      "company": "Empresa",
+      "title": "Cargo",
+      "phone": "Telefone",
+      "lead_source": "Origem do lead",
+      "start_date": "Data de início",
+      "end_date": "Data de término",
+      "stage": "Fase",
+      "stage_name": "Fase",
+      "close_date": "Data de fechamento",
+      "amount": "Valor",
+      "tier": "Nível de patrocínio",
+      "currency_iso_code": "Código da moeda"
     },
     "status": {
       "none": "Não conectada",
@@ -15722,6 +15743,14 @@
       "confirmUnlink": "Desvincular a planilha de {event}?",
       "confirmUnlinkBody": "Nada mais sincroniza com ela. A planilha fica no seu Google Drive com o que tem, e todos continuam na lista do Yayatoh.",
       "keep": "Manter vinculada"
+    },
+    "linked": {
+      "title": "Registros vinculados",
+      "description": "O que esta integração mantém em sincronia até agora, por tipo de registro.",
+      "caption": "Registros vinculados por tipo",
+      "object": "Tipo",
+      "count": "Registros",
+      "empty": "Nada vinculado ainda. Os registros são vinculados à medida que sincronizam."
     }
   },
   "kioskPrint": {

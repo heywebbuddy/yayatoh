@@ -2,6 +2,7 @@ import type { ConnectorDefinition } from '../sdk/connector.ts';
 import { demoConnector } from './demo.ts';
 import { eventbriteConnector } from './eventbrite/index.ts';
 import { googleSheetsConnector } from './google-sheets/index.ts';
+import { salesforceConnector } from './salesforce/index.ts';
 import { slackConnector } from './slack.ts';
 
 /**
@@ -15,6 +16,8 @@ export const CONNECTORS: readonly ConnectorDefinition[] = [
   googleSheetsConnector,
   // M6.4c
   slackConnector,
+  // M6.5b.
+  salesforceConnector,
 ];
 
 export function connectorByKey(key: string): ConnectorDefinition | null {
