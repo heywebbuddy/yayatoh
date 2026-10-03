@@ -246,3 +246,12 @@ Hand-written block: `surveys.sends.sends_source_check` widened to `'prompt'` (dr
 | AC7 | Fed to audiences: the engagement condition (validation, bound SQL, scope) finds the fixture attendee at ≥ 21 and not at ≥ 22 | `packages/modules/crm/tests/segments.test.ts` ("engagement condition"); `engagement-score.int.test.ts` ("the engagement condition finds…"); e2e (builder: 1 person at ≥ 7, 0 at ≥ 8) |
 | AC8 | Permissions and isolation (scores need `attendees:read`; another org's event `not_found`; fixture rows for both orgs in all three tables) | `engagement-score.int.test.ts`; `isolation.int.test.ts` (fixture rows) |
 | AC9 | E2E on all three projects: keyboard only, `expectAccessible` light and dark, Arabic RTL (scores page, participant prompt), viewer read-only, a lower role refused (no link, 404) | `apps/web/e2e/engagement-score.spec.ts` (3 tests × 3 projects) |
+
+### 7. Gate results (2026-10-03, on m0.5-foundation + merge/next-3g + merge/next-3h)
+- `pnpm lint`, `pnpm check:modules`: clean. Typecheck (`turbo run typecheck --concurrency=2`): 59/59.
+- Unit: 200 files, 2,700 tests (2 failures at first: the console route sweep needed the new
+  `engagement` route registered under the `sessions` section; fixed, 139/139 in that file).
+- Integration (from zero, incl. isolation): 165 files, 1,515 tests passed;
+  `engagement-score.int.test.ts`: 15.
+- E2E (375/768/1280, `--workers=2`): `engagement-score.spec.ts` 9/9; related `engagement`,
+  `surveys`, `audiences`, `enrollment`, `agenda`, `program`: 93 passed.
