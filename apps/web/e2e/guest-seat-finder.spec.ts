@@ -99,7 +99,7 @@ test.describe('guest seat finder (M4.4a)', () => {
   }) => {
     const closed = await scenario({ finder: null });
     await page.goto(seatPage(closed.garcia.token));
-    await expect(page.getByRole('heading', { name: "Seating isn't ready yet" })).toBeVisible();
+    await expect(page.getByText("Seating isn't ready yet", { exact: true })).toBeVisible();
     await expect(page.getByRole('main')).not.toContainText('Table 1');
     await expect(page.getByRole('main')).not.toContainText('Mei Chen');
     await expectAccessibleBothModes(page);
@@ -110,7 +110,7 @@ test.describe('guest seat finder (M4.4a)', () => {
 
     const unseated = await scenario({ finder: 'code', seat: false });
     await page.goto(seatPage(unseated.garcia.token));
-    await expect(page.getByRole('heading', { name: "Your table isn't set yet" })).toBeVisible();
+    await expect(page.getByText("Your table isn't set yet", { exact: true })).toBeVisible();
     await expect(page.locator('[data-highlight-item]')).toHaveCount(0);
     await expectAccessible(page);
 
@@ -203,17 +203,19 @@ test.describe('guest seat finder (M4.4a)', () => {
     expect(tries).toBeLessThanOrEqual(7);
     await expectAccessible(page);
     await passHumanCheck(page);
-    await page.getByLabel('PIN from your invitation').fill(s.garcia.pin);
+    await page.getByLabel('PIN from your invitation').fill(s.chen.pin);
     await page.getByLabel('Full name').fill('Mei Chen');
     await submit(page, find);
-    await expect(page.getByTestId('pin-result')).toContainText('Table 1');
+    const result = page.getByTestId('pin-result');
+    await expect(result).toContainText('Table 1');
+    await expect(result).toContainText('1 of your party sits here');
     await expectNoGuestNames(page);
   });
 
   test("the host's party page shows the permanent seat-page QR code; settings offer PIN mode; viewers see neither", async ({
     page,
   }) => {
-    const s = await scenario({ finder: null });
+    const s = await scenario({ finder: null, publish: true });
     await signIn(page);
     const base = `${ORG}/e/${s.eventSlug}`;
     await page.goto(`${base}/guests/rsvp/${s.garcia.id}`);
