@@ -7,7 +7,17 @@ import {
 import { executeQuery } from '@yayatoh/kernel';
 import { qrPath } from '@yayatoh/pdf';
 import { isProfileKey, navIncludes, navLabelKey, PROFILES } from '@yayatoh/platform';
-import { Alert, Button, buttonClass, Card, CardHeader, EmptyState, PageHeader, Select, StatusPill } from '@yayatoh/ui';
+import {
+  Alert,
+  Button,
+  buttonClass,
+  Card,
+  CardHeader,
+  EmptyState,
+  PageHeader,
+  Select,
+  StatusPill,
+} from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { PrintButton } from '@/components/print-button.tsx';

@@ -13,7 +13,17 @@ import {
   ruleFromLogic,
   ruleToLogic,
 } from '@yayatoh/forms/ui';
-import { Alert, Button, buttonClass, Card, EmptyState, FieldMessage, IconButton, Input, Select } from '@yayatoh/ui';
+import {
+  Alert,
+  Button,
+  buttonClass,
+  Card,
+  EmptyState,
+  FieldMessage,
+  IconButton,
+  Input,
+  Select,
+} from '@yayatoh/ui';
 import { ArrowDown, ArrowUp } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { startTransition, useActionState, useEffect, useId, useRef, useState } from 'react';
