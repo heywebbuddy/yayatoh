@@ -76,6 +76,8 @@ export {
   planAssignment,
   staffAllowance,
 } from './domain/exhibitors.ts';
+// M5.6b: lead capture checks the person's license against the allowance.
+export { type LeadSeatStanding, leadSeatStanding } from './domain/lead-seat.ts';
 export {
   changeDiff,
   changedValues,
@@ -151,6 +153,7 @@ export {
   reserveLeadLicensesTx,
   saveLeadLicenseSettingsCommand,
 } from './lead-licenses.ts';
+export { exhibitorNamesTx, leadSeatStandingTx } from './lead-seat.ts';
 export {
   createExhibitorCommand,
   createSpeakerCommand,

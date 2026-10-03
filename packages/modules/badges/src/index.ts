@@ -4,6 +4,7 @@ export {
   BatchDto,
   type BatchRunDeps,
   type BatchSlice,
+  badgeCompanyTitleTx,
   badgeTicketsQuery,
   batchFileByLink,
   batchFileKey,

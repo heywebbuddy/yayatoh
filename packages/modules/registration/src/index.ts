@@ -35,7 +35,6 @@ export {
   StartRegistrationInput,
   startRegistrationCommand,
 } from './checkout.ts';
-export * from './domain/approval.ts';
 // M5.4b: sponsor comp registration codes.
 export {
   compCode,
@@ -44,6 +43,7 @@ export {
   sponsorCompCodes,
   sponsorCompUsageQuery,
 } from './comp-codes.ts';
+export * from './domain/approval.ts';
 export * from './domain/capacity.ts';
 export * from './domain/eligibility.ts';
 // M5.2b: session enrollment and the session waitlist.
@@ -81,6 +81,8 @@ export {
   substituteByPayerCommand,
   substituteRegistrantCommand,
 } from './groups.ts';
+// M5.6b: a registrant's company and job title for lead capture.
+export { registrantProfilesByTicketTx } from './lead-person.ts';
 export { decisionDedupeKey, decisionMailer, registrantLifecycle } from './lifecycle.ts';
 // M5.1d: pay later by invoice per type (P5-5).
 export {

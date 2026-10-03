@@ -17,6 +17,7 @@ import { privateColumns as engagement } from '@yayatoh/engagement';
 import { privateColumns as events } from '@yayatoh/events';
 import { privateColumns as forms } from '@yayatoh/forms';
 import { privateColumns as guests } from '@yayatoh/guests';
+import { privateColumns as leads } from '@yayatoh/leads';
 import { privateColumns as marketing } from '@yayatoh/marketing';
 import { privateColumns as marketplace } from '@yayatoh/marketplace';
 import { privateColumns as media } from '@yayatoh/media';
@@ -58,6 +59,7 @@ export const COLUMN_PRIVACY: readonly SchemaPrivacy[] = [
   crm,
   engagement,
   donations,
+  leads,
   events,
   forms,
   guests,

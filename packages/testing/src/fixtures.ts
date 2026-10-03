@@ -68,6 +68,7 @@ import {
   saveWidgetLayoutCommand,
   setModeOverrideCommand,
 } from '@yayatoh/command-center';
+import { recordTermConsentTx } from '@yayatoh/crm';
 import { withTenant } from '@yayatoh/db';
 import {
   createCampaignCommand as createGivingCampaignCommand,
@@ -146,6 +147,12 @@ import {
   validateGuestImportCommand,
 } from '@yayatoh/guests';
 import { type Ctx, createCtx, executeCommand, executeQuery, uuidv7 } from '@yayatoh/kernel';
+import {
+  acceptLeadTermsCommand,
+  LEAD_TERMS_VERSION,
+  saveLeadSettingsCommand,
+  syncLeadScansCommand,
+} from '@yayatoh/leads';
 import {
   attributeOrderCommand,
   createTrackedLinkCommand,
@@ -1690,6 +1697,49 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     exhibitorCtx,
     ports,
   );
+  // M5.6b lead retrieval: the admin accepts the lead terms, sets qualifiers, and captures the
+  // fixture's first ticket at the event (every leads table gets a row).
+  const atEvent = portalCtx(exhibitorPrincipal, 'en', event.startsAt);
+  // The holder agreed to share their email with exhibitors (P5-8), so the lead carries one.
+  await withTenant(systemCtx(org.id), async (tx) => {
+    const [h] = await tx.execute<{ holder_email: string }>(
+      sql`select holder_email from ticketing.tickets where id = ${issued?.id ?? ''}`,
+    );
+    await recordTermConsentTx(tx, systemCtx(org.id), {
+      email: h?.holder_email ?? '',
+      name: null,
+      term: 'exhibitor_email_sharing',
+      version: 1,
+      evidence: 'fixture:registration_form',
+    });
+  });
+  await executeCommand(acceptLeadTermsCommand, { version: LEAD_TERMS_VERSION }, atEvent, ports);
+  await executeCommand(
+    saveLeadSettingsCommand,
+    { qualifiers: ['Budget', 'Demo'], teamVisibility: false },
+    atEvent,
+    ports,
+  );
+  const leadSync = await executeCommand(
+    syncLeadScansCommand,
+    {
+      scans: [
+        {
+          scanId: `fixture-lead-${slug}`,
+          code: issued?.short_code ?? '',
+          capturedAt: event.startsAt,
+          offline: true,
+          rating: 'hot',
+          qualifiers: ['Demo'],
+          notes: 'Wants a demo',
+        },
+      ],
+    },
+    atEvent,
+    ports,
+  );
+  if (leadSync.results[0]?.status !== 'captured' || !leadSync.results[0].lead?.email)
+    throw new Error('fixture: lead not captured with its email');
   // M5.2a: agenda model v2 on the weekly event (so the launch event's agenda stays live): a
   // session type, a pick-one group with an optional workshop in it, one claimed place and one
   // group pick, a speaker with an email (the CSV import's match key), and a published agenda.
