@@ -107,33 +107,65 @@ describe('brand kits', () => {
   it('marketing creates, renames and deletes kits; one default; names unique per org', async () => {
     const kit = await executeCommand(
       saveBrandKitCommand,
-      { name: 'Gala voice', voice: 'Elegant', tone: 'formal', keywords: 'gala, evening, gala', avoid: 'cheap\nfree', isDefault: true },
+      {
+        name: 'Gala voice',
+        voice: 'Elegant',
+        tone: 'formal',
+        keywords: 'gala, evening, gala',
+        avoid: 'cheap\nfree',
+        isDefault: true,
+      },
       marketer,
       ports,
     );
-    expect(kit).toMatchObject({ name: 'Gala voice', tone: 'formal', keywords: ['gala', 'evening'], avoid: ['cheap', 'free'], isDefault: true });
+    expect(kit).toMatchObject({
+      name: 'Gala voice',
+      tone: 'formal',
+      keywords: ['gala', 'evening'],
+      avoid: ['cheap', 'free'],
+      isDefault: true,
+    });
     const kits = await executeQuery(listBrandKitsQuery, {}, marketer, ports);
     expect(kits[0]?.id).toBe(kit.id);
     // The fixture's default lost its flag: one default only.
     expect(kits.filter((k) => k.isDefault)).toHaveLength(1);
-    expect(await codeOf(executeCommand(saveBrandKitCommand, { name: 'GALA VOICE' }, marketer, ports))).toBe('conflict');
-    const renamed = await executeCommand(saveBrandKitCommand, { kitId: kit.id, name: 'Gala voice 2', tone: 'playful' }, marketer, ports);
-    expect(renamed).toMatchObject({ id: kit.id, name: 'Gala voice 2', tone: 'playful', isDefault: false });
-    expect(await codeOf(executeCommand(saveBrandKitCommand, { name: 'x', keywords: 'y'.repeat(41) }, marketer, ports))).toBe(
-      'validation_failed',
+    expect(await codeOf(executeCommand(saveBrandKitCommand, { name: 'GALA VOICE' }, marketer, ports))).toBe(
+      'conflict',
     );
-    expect(await codeOf(executeCommand(deleteBrandKitCommand, { kitId: kit.id }, marketer, ports))).toBe('ok');
-    expect(await codeOf(executeCommand(deleteBrandKitCommand, { kitId: kit.id }, marketer, ports))).toBe('not_found');
+    const renamed = await executeCommand(
+      saveBrandKitCommand,
+      { kitId: kit.id, name: 'Gala voice 2', tone: 'playful' },
+      marketer,
+      ports,
+    );
+    expect(renamed).toMatchObject({ id: kit.id, name: 'Gala voice 2', tone: 'playful', isDefault: false });
+    expect(
+      await codeOf(
+        executeCommand(saveBrandKitCommand, { name: 'x', keywords: 'y'.repeat(41) }, marketer, ports),
+      ),
+    ).toBe('validation_failed');
+    expect(await codeOf(executeCommand(deleteBrandKitCommand, { kitId: kit.id }, marketer, ports))).toBe(
+      'ok',
+    );
+    expect(await codeOf(executeCommand(deleteBrandKitCommand, { kitId: kit.id }, marketer, ports))).toBe(
+      'not_found',
+    );
   });
 
   it('viewers and finance read nothing they may not change; other orgs see nothing', async () => {
     const viewer = userCtx(a.viewerId, a.org.id);
-    expect(await codeOf(executeCommand(saveBrandKitCommand, { name: 'Nope' }, viewer, ports))).toBe('forbidden');
-    expect(await codeOf(executeCommand(saveBrandKitCommand, { name: 'Nope' }, finance, ports))).toBe('forbidden');
+    expect(await codeOf(executeCommand(saveBrandKitCommand, { name: 'Nope' }, viewer, ports))).toBe(
+      'forbidden',
+    );
+    expect(await codeOf(executeCommand(saveBrandKitCommand, { name: 'Nope' }, finance, ports))).toBe(
+      'forbidden',
+    );
     const mine = await executeQuery(listBrandKitsQuery, {}, a.ctx(), ports);
     const theirs = await executeQuery(listBrandKitsQuery, {}, b.ctx(), ports);
     expect(theirs.map((k) => k.id)).not.toContain(mine[0]?.id);
-    expect(await codeOf(executeCommand(deleteBrandKitCommand, { kitId: mine[0]?.id ?? '' }, b.ctx(), ports))).toBe('not_found');
+    expect(
+      await codeOf(executeCommand(deleteBrandKitCommand, { kitId: mine[0]?.id ?? '' }, b.ctx(), ports)),
+    ).toBe('not_found');
   });
 });
 
@@ -156,7 +188,9 @@ describe('drafting v2', () => {
     expect(res.draft.paragraphs[0]).toContain('Early-bird ends Friday');
     // Org B's kit id is unknown here.
     const bKit = (await executeQuery(listBrandKitsQuery, {}, b.ctx(), ports))[0];
-    expect(await codeOf(draftCampaign(marketer, ports, fakeDrafter, { brandKitId: bKit?.id ?? null }))).toBe('not_found');
+    expect(await codeOf(draftCampaign(marketer, ports, fakeDrafter, { brandKitId: bKit?.id ?? null }))).toBe(
+      'not_found',
+    );
   });
 
   it('who may draft what', async () => {
@@ -165,14 +199,23 @@ describe('drafting v2', () => {
     expect(await codeOf(draftCampaign(finance, ports, fakeDrafter, {}))).toBe('forbidden');
     expect(await codeOf(draftPage(marketer, ports, fakeDrafter, { brief: 'About us' }))).toBe('ok');
     expect(await codeOf(draftPage(finance, ports, fakeDrafter, {}))).toBe('forbidden');
-    expect(await codeOf(draftAgenda(marketer, ports, fakeDrafter, { eventId: a.event.id }))).toBe('forbidden');
-    expect(await codeOf(suggestAudience(viewer, ports, fakeDrafter, { brief: 'Everyone' }))).toBe('forbidden');
+    expect(await codeOf(draftAgenda(marketer, ports, fakeDrafter, { eventId: a.event.id }))).toBe(
+      'forbidden',
+    );
+    expect(await codeOf(suggestAudience(viewer, ports, fakeDrafter, { brief: 'Everyone' }))).toBe(
+      'forbidden',
+    );
     expect(await codeOf(draftCampaign(marketer, ports, null, {}))).toBe('invalid_state:ai_unavailable');
-    expect(await codeOf(draftCampaign(marketer, ports, fakeDrafter, { brief: 'x'.repeat(1001) }))).toBe('validation_failed');
+    expect(await codeOf(draftCampaign(marketer, ports, fakeDrafter, { brief: 'x'.repeat(1001) }))).toBe(
+      'validation_failed',
+    );
   });
 
   it('drafts a page and agenda sessions inside the event, in its time zone', async () => {
-    const page = await draftPage(a.ctx(), ports, fakeDrafter, { brief: 'Visiting the lake', tone: 'inspiring' });
+    const page = await draftPage(a.ctx(), ports, fakeDrafter, {
+      brief: 'Visiting the lake',
+      tone: 'inspiring',
+    });
     expect(page.draft.title).toBe('Visiting the lake');
     expect(page.draft.body).toContain(a.org.name);
     const agenda = await draftAgenda(a.ctx(), ports, fakeDrafter, {
@@ -182,7 +225,8 @@ describe('drafting v2', () => {
     });
     expect(agenda.sessions.map((s) => s.title)).toEqual(['Welcome', 'Keynote', 'Workshops']);
     expect(agenda.sessions[0]?.startsAt.getTime()).toBe(a.event.startsAt.getTime());
-    expect(agenda.sessions[1]!.startsAt.getTime() - agenda.sessions[0]!.startsAt.getTime()).toBe(3_600_000);
+    const [first, second] = agenda.sessions;
+    expect((second?.startsAt.getTime() ?? 0) - (first?.startsAt.getTime() ?? 0)).toBe(3_600_000);
     for (const s of agenda.sessions) {
       expect(s.endsAt.getTime() - s.startsAt.getTime()).toBe(45 * 60_000);
       expect(s.endsAt.getTime()).toBeLessThanOrEqual(a.event.endsAt.getTime());
@@ -190,13 +234,20 @@ describe('drafting v2', () => {
   });
 
   it('suggests an audience as a valid segment of the org, sized like the builder sizes it', async () => {
-    const s = await suggestAudience(marketer, ports, fakeDrafter, { brief: `People who attended ${a.event.name}` });
+    const s = await suggestAudience(marketer, ports, fakeDrafter, {
+      brief: `People who attended ${a.event.name}`,
+    });
     expect(s.definition.root.conditions[0]).toMatchObject({
       type: 'participation',
       scope: { kind: 'event', eventId: a.event.id },
       checkedIn: true,
     });
-    const preview = await executeQuery(previewAudienceQuery, { definition: s.definition, limit: 1 }, marketer, ports);
+    const preview = await executeQuery(
+      previewAudienceQuery,
+      { definition: s.definition, limit: 1 },
+      marketer,
+      ports,
+    );
     expect(s.count).toBe(preview.count);
     expect(s.explanation).toContain(a.event.name);
   });
@@ -244,22 +295,42 @@ async function freshEvent(f: OrgFixture, n: number): Promise<Ev> {
     await executeCommand(addGuestCommand, { eventId: ev.id, name: `Guest ${i}`, email }, f.ctx(), ports);
     emails.push(email);
   }
-  await executeCommand(updateNetworkSettingsCommand, { eventId: ev.id, enabled: true, meetingsEnabled: true }, f.ctx(), ports);
+  await executeCommand(
+    updateNetworkSettingsCommand,
+    { eventId: ev.id, enabled: true, meetingsEnabled: true },
+    f.ctx(),
+    ports,
+  );
   return { id: ev.id, emails };
 }
 
-const INTERESTS = ['Data, AI, Analytics', 'AI, Data science', 'Gardening, Pottery', 'Data, AI, Startups', 'Pottery, Ceramics'];
+const INTERESTS = [
+  'Data, AI, Analytics',
+  'AI, Data science',
+  'Gardening, Pottery',
+  'Data, AI, Startups',
+  'Pottery, Ceramics',
+];
 const pub = (f: OrgFixture) => createCtx({ orgId: f.org.id });
 const optIn = (f: OrgFixture, ev: Ev, i: number, interests = INTERESTS[i] ?? '') =>
   executeCommand(
     optInCommand,
-    { eventId: ev.id, email: ev.emails[i], displayName: `Person ${i}`, headline: null, company: null, interests, consent: true },
+    {
+      eventId: ev.id,
+      email: ev.emails[i],
+      displayName: `Person ${i}`,
+      headline: null,
+      company: null,
+      interests,
+      consent: true,
+    },
     pub(f),
     ports,
   );
 const matches = (f: OrgFixture, ev: Ev, i: number) =>
   executeQuery(suggestedMatchesQuery, { eventId: ev.id, email: ev.emails[i], limit: 10 }, pub(f), ports);
-const names = async (f: OrgFixture, ev: Ev, i: number) => (await matches(f, ev, i)).matches.map((m) => m.displayName);
+const names = async (f: OrgFixture, ev: Ev, i: number) =>
+  (await matches(f, ev, i)).matches.map((m) => m.displayName);
 const embeddedCount = (f: OrgFixture, ev: Ev) =>
   withTenant(systemCtx(f.org.id), async (tx) => {
     const [r] = await tx.execute<{ n: number }>(
@@ -282,18 +353,29 @@ describe('matchmaking (opted-in profiles only)', () => {
     // Only the four listed profiles' public fields were sent: never names or addresses.
     expect(spy.seen.join('\n')).not.toMatch(/Person|example\.test/);
     expect(await embeddedCount(a, ev)).toBe(4);
-    expect(await executeQuery(matchmakingStatusQuery, { eventId: ev.id }, a.ctx(), ports)).toEqual({ listed: 4, embedded: 4 });
+    expect(await executeQuery(matchmakingStatusQuery, { eventId: ev.id }, a.ctx(), ports)).toEqual({
+      listed: 4,
+      embedded: 4,
+    });
     const m = await matches(a, ev, 0);
     expect(m.ready).toBe(true);
-    expect(m.matches.map((x) => x.displayName).slice(0, 2).sort()).toEqual(['Person 1', 'Person 3']);
+    expect(
+      m.matches
+        .map((x) => x.displayName)
+        .slice(0, 2)
+        .sort(),
+    ).toEqual(['Person 1', 'Person 3']);
     expect(m.matches.at(-1)?.displayName).toBe('Person 2');
     expect(m.matches[0]?.shared.length).toBeGreaterThan(0);
-    expect(m.matches[0]!.score).toBeGreaterThan(m.matches.at(-1)!.score);
+    expect(m.matches[0]?.score ?? 0).toBeGreaterThan(m.matches.at(-1)?.score ?? 100);
     const everyone = m.matches.map((x) => x.displayName);
     expect(everyone).not.toContain('Person 4');
     expect(everyone).not.toContain('Person 5');
     // Nothing new: a second refresh costs nothing.
-    expect(await refreshMatchmaking(a.ctx(), ports, spy, { eventId: ev.id })).toMatchObject({ embedded: 0, calls: 0 });
+    expect(await refreshMatchmaking(a.ctx(), ports, spy, { eventId: ev.id })).toMatchObject({
+      embedded: 0,
+      calls: 0,
+    });
     // Not opted in: no suggestions at all.
     expect(await codeOf(matches(a, ev, 4))).toBe('invalid_state:not_opted_in');
   });
@@ -322,7 +404,12 @@ describe('matchmaking (opted-in profiles only)', () => {
     expect((await matches(a, ev, 3)).ready).toBe(false);
     // Blocked either way: never suggested.
     const p2 = (await matches(a, ev, 0)).matches.find((x) => x.displayName === 'Person 2');
-    await executeCommand(blockPersonCommand, { eventId: ev.id, email: ev.emails[0], personId: p2?.id ?? '' }, pub(a), ports);
+    await executeCommand(
+      blockPersonCommand,
+      { eventId: ev.id, email: ev.emails[0], personId: p2?.id ?? '' },
+      pub(a),
+      ports,
+    );
     expect(await names(a, ev, 0)).not.toContain('Person 2');
     expect(await names(a, ev, 2)).not.toContain('Person 0');
     // Hidden by the organizer after a report: gone from everyone's suggestions, embedding dropped.
@@ -334,12 +421,21 @@ describe('matchmaking (opted-in profiles only)', () => {
       ports,
     );
     const [report] = await withTenant(systemCtx(a.org.id), (tx) =>
-      tx.execute<{ id: string }>(sql`select id from engagement.network_reports where reported_id = ${p4?.id ?? ''}`),
+      tx.execute<{ id: string }>(
+        sql`select id from engagement.network_reports where reported_id = ${p4?.id ?? ''}`,
+      ),
     );
-    await executeCommand(resolveReportCommand, { eventId: ev.id, reportId: report?.id ?? '', action: 'hide' }, a.ctx(), ports);
+    await executeCommand(
+      resolveReportCommand,
+      { eventId: ev.id, reportId: report?.id ?? '', action: 'hide' },
+      a.ctx(),
+      ports,
+    );
     expect(await names(a, ev, 0)).not.toContain('Person 4');
     const left = await withTenant(systemCtx(a.org.id), (tx) =>
-      tx.execute<{ n: number }>(sql`select count(*)::int as n from engagement.network_embeddings where profile_id = ${p4?.id ?? ''}`),
+      tx.execute<{ n: number }>(
+        sql`select count(*)::int as n from engagement.network_embeddings where profile_id = ${p4?.id ?? ''}`,
+      ),
     );
     expect(left[0]?.n).toBe(0);
   });
@@ -347,9 +443,16 @@ describe('matchmaking (opted-in profiles only)', () => {
   it('only the event organizer may refresh; a viewer may read the status', async () => {
     const ev = await freshEvent(a, 2);
     const viewer = userCtx(a.viewerId, a.org.id);
-    expect(await codeOf(refreshMatchmaking(viewer, ports, fakeDrafter, { eventId: ev.id }))).toBe('forbidden');
-    expect(await codeOf(refreshMatchmaking(marketer, ports, fakeDrafter, { eventId: ev.id }))).toBe('forbidden');
-    expect(await executeQuery(matchmakingStatusQuery, { eventId: ev.id }, viewer, ports)).toEqual({ listed: 0, embedded: 0 });
+    expect(await codeOf(refreshMatchmaking(viewer, ports, fakeDrafter, { eventId: ev.id }))).toBe(
+      'forbidden',
+    );
+    expect(await codeOf(refreshMatchmaking(marketer, ports, fakeDrafter, { eventId: ev.id }))).toBe(
+      'forbidden',
+    );
+    expect(await executeQuery(matchmakingStatusQuery, { eventId: ev.id }, viewer, ports)).toEqual({
+      listed: 0,
+      embedded: 0,
+    });
   });
 });
 
@@ -369,11 +472,14 @@ describe('isolation: no prompt or embedding crosses orgs', () => {
     await suggestAudience(a.ctx(), ports, spy, { brief: 'Everyone' });
     const all = spy.seen.join('\n');
     expect(all).toContain('Alpha secret');
-    for (const leak of [b.org.name, b.event.name, b.event.id, 'Bravo secret', evB.id]) expect(all).not.toContain(leak);
+    for (const leak of [b.org.name, b.event.name, b.event.id, 'Bravo secret', evB.id])
+      expect(all).not.toContain(leak);
     // B can't refresh or read A's event; A's embeddings are invisible under B's tenant.
     expect(await codeOf(refreshMatchmaking(b.ctx(), ports, spy, { eventId: evA.id }))).toBe('not_found');
     const seenByB = await withTenant(systemCtx(b.org.id), (tx) =>
-      tx.execute<{ n: number }>(sql`select count(*)::int as n from engagement.network_embeddings where event_id = ${evA.id}`),
+      tx.execute<{ n: number }>(
+        sql`select count(*)::int as n from engagement.network_embeddings where event_id = ${evA.id}`,
+      ),
     );
     expect(seenByB[0]?.n).toBe(0);
     await refreshMatchmaking(b.ctx(), ports, fakeDrafter, { eventId: evB.id });
@@ -382,9 +488,11 @@ describe('isolation: no prompt or embedding crosses orgs', () => {
     const aIds = new Set((await matches(a, evA, 0)).matches.map((m) => m.id));
     for (const m of bNames) expect(aIds.has(m.id)).toBe(false);
     // An A attendee's address means nothing at B's event.
-    expect(await codeOf(executeQuery(suggestedMatchesQuery, { eventId: evB.id, email: evA.emails[0] ?? '' }, pub(b), ports))).toBe(
-      'forbidden:not_attendee',
-    );
+    expect(
+      await codeOf(
+        executeQuery(suggestedMatchesQuery, { eventId: evB.id, email: evA.emails[0] ?? '' }, pub(b), ports),
+      ),
+    ).toBe('forbidden:not_attendee');
   });
 });
 

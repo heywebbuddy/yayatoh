@@ -380,7 +380,8 @@
     "plan": "プランと請求",
     "webhooks": "Webhook",
     "sandboxes": "サンドボックス",
-    "notifications": "通知"
+    "notifications": "通知",
+    "brandKits": "ブランドキット"
   },
   "vocab": {
     "attendee": "参加者",
@@ -4460,7 +4461,20 @@
     "emptySpeakersReadOnly": "編集者が追加すると、ここに登壇者が表示されます。",
     "addFirstSpeaker": "最初の登壇者を追加",
     "emptyTiersReadOnly": "編集者が追加すると、ここにスポンサーランクとスポンサーが表示されます。",
-    "addFirstTier": "最初のランクを追加"
+    "addFirstTier": "最初のランクを追加",
+    "ai": {
+      "title": "AIでプログラムを下書き",
+      "explainer": "イベントの日程内でセッション案を提案します。追加するものを選ぶと通常のセッションになり、編集できます。プログラムは公開するまで非公開のままです。",
+      "brief": "テーマやセッションのアイデア",
+      "briefHint": "例:ようこそ、気候に関する基調講演、パネル、ワークショップ。テーマはカンマで区切ってください。",
+      "count": "セッション数",
+      "pick": "追加するセッション",
+      "session": "{title} — {start}〜{end}",
+      "add": "{count, plural, =0 {セッションを追加} other {#件のセッションを追加}}",
+      "added": "{count, plural, other {#件のセッション}}をプログラムに追加しました。",
+      "discard": "破棄",
+      "discarded": "提案を破棄しました。何も追加されていません。"
+    }
   },
   "aiDraft": {
     "title": "AIで下書き",
@@ -5277,7 +5291,15 @@
     },
     "emptyActionPost": "最初の投稿を書く",
     "emptyActionPage": "最初のページを書く",
-    "findOwner": "オーナーまたは管理者を探す"
+    "findOwner": "オーナーまたは管理者を探す",
+    "ai": {
+      "title": "AIで下書き",
+      "explainer": "選んだトーンとブランドの声で、ページの最初の下書きを作成します。残すと未公開の下書きが作成され、通常どおり編集できます。",
+      "brief": "ページで扱う内容は?",
+      "create": "これを下書きとして作成",
+      "discard": "破棄",
+      "discarded": "下書きを破棄しました。何も保存されていません。"
+    }
   },
   "cmsPublic": {
     "blog": "ブログ",
@@ -5971,7 +5993,21 @@
     "insights": "連絡先インサイト",
     "emptyAction": "テンプレートを選ぶ",
     "emptyViewer": "チームがキャンペーン用に保存したオーディエンスがここに表示されます。",
-    "findOwner": "オーナーまたは管理者を探す"
+    "findOwner": "オーナーまたは管理者を探す",
+    "ai": {
+      "title": "AIでオーディエンスを提案",
+      "explainer": "届けたい相手を説明してください。提案はビルダーと同じルールを使います。ビルダーで確認して保存してください。",
+      "brief": "誰に届けたいですか?",
+      "briefHint": "例:ガラに登録したがチェックインしなかった人。情報としてのみ使われます。",
+      "suggest": "オーディエンスを提案",
+      "count": "{count, plural, =0 {まだ該当者はいません} other {#人が該当}}",
+      "rules": "{count, plural, other {#件のルール}} — ビルダーで確認してください。",
+      "review": "ビルダーで確認",
+      "discard": "破棄",
+      "discarded": "提案を破棄しました。",
+      "reviewNotice": "AIによる提案です。このオーディエンスを保存する前に、すべてのルールを確認してください。",
+      "invalidSuggestion": "この提案を開けませんでした。空のオーディエンスから始めてください。"
+    }
   },
   "refundOps": {
     "timeline": {
@@ -7885,7 +7921,17 @@
     },
     "emptyAction": "最初のキャンペーンに名前を付ける",
     "emptyViewer": "チームが作成したキャンペーンが、オーディエンスと結果とともにここに表示されます。",
-    "findOwner": "オーナーまたは管理者を探す"
+    "findOwner": "オーナーまたは管理者を探す",
+    "ai": {
+      "title": "AIで下書き",
+      "explainer": "選んだトーンとブランドの声で、件名と本文の最初の下書きを作成します。エディターに入るので、編集して保存してください。送信するまで何も送られません。",
+      "brief": "このメールの内容は?",
+      "button": "ボタン:{label}",
+      "apply": "この下書きを使う",
+      "applied": "下書きをエディターに入れました。確認してから保存してください。",
+      "discard": "破棄",
+      "discarded": "下書きを破棄しました。何も変更されていません。"
+    }
   },
   "journeys": {
     "title": "ジャーニー",
@@ -15128,7 +15174,25 @@
         "restored": "{name} は再びチャットを受け付けられます。"
       }
     },
-    "unreadChats": "{count, plural, other {未読メッセージのあるチャット # 件}}"
+    "unreadChats": "{count, plural, other {未読メッセージのあるチャット # 件}}",
+    "matchmaking": {
+      "title": "おすすめの出会い",
+      "explainer": "ネットワーキングに参加した参加者には、プロフィールが近い人が表示されます。本人が公開を選んだ内容だけを使い、参加をやめた人はすぐに除外されます。",
+      "status": "名簿の{listed, plural, other {#人}}のうち{embedded}人のおすすめが準備済みです。",
+      "unavailable": "このサイトではAIが有効になっていないため、おすすめを準備できません。",
+      "refresh": "{count, plural, other {おすすめを更新(#人が待機中)}}",
+      "upToDate": "おすすめは最新です",
+      "done": "{count, plural, =0 {更新するものはありません。} other {さらに#人のおすすめを準備しました。}}",
+      "donePartial": "{count, plural, other {#人を更新}}しました。あと{pending}人が待機中です。もう一度更新して完了してください。"
+    },
+    "suggested": {
+      "title": "あなたへのおすすめ",
+      "none": "まだおすすめはありません。参加者が増えたらまた確認してください。",
+      "why": "あなたとプロフィールが近い人です。ネットワーキングに参加した人だけが表示されます。",
+      "listLabel": "おすすめの人",
+      "score": "一致度 {score}%",
+      "shared": "共通の関心:{interests}"
+    }
   },
   "chat": {
     "metaTitle": "チャット",
@@ -15370,5 +15434,71 @@
     "readOnlyTitle": "この組織は読み取り専用です",
     "readOnlyBody": "サブスクリプションの支払いに失敗しました。何も削除されていません。閲覧、エクスポート、チケットのスキャンはできますが、お支払いまで変更は停止しています。",
     "action": "プランと請求"
+  },
+  "aiCompose": {
+    "credits": "今月の残りAIクレジット：{balance, plural, =0 {なし} other {#}}(無料枠：{allowance})。",
+    "unavailableTitle": "AI下書きは有効になっていません",
+    "unavailableDescription": "このサイトにはまだAIプロバイダーが設定されていません。",
+    "outOfCreditsTitle": "AIクレジットを使い切りました",
+    "outOfCredits": "今月のAIクレジットを使い切りました。翌月1日に回復します。引き続きご自身で入力することもできます。",
+    "rateLimited": "短時間にAIへのリクエストが多すぎます。{minutes, plural, other {#分}}後にもう一度お試しください。",
+    "tone": "トーン",
+    "tones": {
+      "friendly": "親しみやすい",
+      "formal": "フォーマル",
+      "playful": "遊び心のある",
+      "urgent": "緊急",
+      "inspiring": "前向き"
+    },
+    "brandKit": "ブランドキット",
+    "noBrandKit": "ブランドキットなし",
+    "noBrandKitsHint": "サイト → ブランドキットでキットを追加すると、どの下書きもあなたらしい言葉になります。",
+    "event": "イベントについて(任意)",
+    "noEvent": "特定のイベントなし",
+    "briefHint": "何を誰に伝えたいか。情報としてのみ使われ、指示としては扱われません。",
+    "briefRequired": "希望する内容を数語で入力してください。",
+    "draft": "AIで下書き",
+    "drafting": "下書き中…",
+    "previewTitle": "AIの下書き",
+    "previewNote": "使う前に確認してください。ご自身で操作するまで、保存・送信・公開は行われません。",
+    "errors": {
+      "ai_unavailable": "現在AIを利用できません。クレジットは返却されました。後でもう一度お試しください。",
+      "ai_output": "AIの結果を使用できませんでした。クレジットは返却されました。別の言い方でお試しください。"
+    }
+  },
+  "brandKits": {
+    "title": "ブランドキット",
+    "description": "キャンペーン、ページ、プログラムのAI下書きが従う声です。話し方、使う言葉、避ける言葉を決めます。",
+    "readOnly": "ブランドキットは閲覧のみ可能です。変更はオーナーかマーケティング担当に依頼してください。",
+    "emptyTitle": "ブランドキットはまだありません",
+    "emptyDescription": "追加すると、AIの下書きがあなたらしい言葉になります。",
+    "emptyViewer": "まだ誰もブランドキットを追加していません。",
+    "emptyAction": "ブランドキットを追加",
+    "listTitle": "{count, plural, other {#件のブランドキット}}",
+    "default": "既定",
+    "keywordsShown": "使う言葉:{words}",
+    "avoidShown": "避ける言葉:{words}",
+    "edit": "{name}を編集",
+    "newTitle": "新しいブランドキット",
+    "name": "名前",
+    "tone": "既定のトーン",
+    "voice": "ブランドの声",
+    "voiceHint": "あなたの話し方を1〜2文で(例:温かく、地域に根ざし、押し付けがましくない)。",
+    "keywords": "使う言葉",
+    "avoid": "避ける言葉",
+    "termsHint": "言葉はカンマで区切ってください(最大12個)。",
+    "makeDefault": "このキットを既定にする",
+    "saved": "ブランドキットを保存しました。",
+    "created": "ブランドキットを追加しました。",
+    "save": "変更を保存",
+    "create": "ブランドキットを追加",
+    "delete": "削除",
+    "deleteNamed": "{name}を削除",
+    "errors": {
+      "name": "1〜60文字の名前を入力してください。",
+      "nameTaken": "同じ名前のブランドキットがすでにあります。",
+      "terms": "言葉は最大12個、各40文字以内にしてください。",
+      "voice": "ブランドの声は600文字未満にしてください。"
+    }
   }
 }

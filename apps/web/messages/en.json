@@ -380,7 +380,8 @@
     "plan": "Plan & billing",
     "webhooks": "Webhooks",
     "sandboxes": "Sandboxes",
-    "notifications": "Notifications"
+    "notifications": "Notifications",
+    "brandKits": "Brand kits"
   },
   "vocab": {
     "attendee": "Attendee",
@@ -4460,7 +4461,20 @@
     "emptySpeakersReadOnly": "Speakers appear here once an editor adds them.",
     "addFirstSpeaker": "Add the first speaker",
     "emptyTiersReadOnly": "Sponsor tiers and their sponsors appear here once an editor adds them.",
-    "addFirstTier": "Add the first tier"
+    "addFirstTier": "Add the first tier",
+    "ai": {
+      "title": "Draft an agenda with AI",
+      "explainer": "Get proposed sessions inside the event's dates. Pick the ones to add; they become normal sessions you can edit, and the agenda stays unpublished until you publish it.",
+      "brief": "Topics or session ideas",
+      "briefHint": "For example: welcome, keynote on climate, panel, workshops. Separate topics with commas.",
+      "count": "How many sessions",
+      "pick": "Sessions to add",
+      "session": "{title} — {start} to {end}",
+      "add": "{count, plural, =0 {Add sessions} one {Add # session} other {Add # sessions}}",
+      "added": "{count, plural, one {# session added} other {# sessions added}} to the agenda.",
+      "discard": "Discard",
+      "discarded": "Proposals discarded. Nothing was added."
+    }
   },
   "aiDraft": {
     "title": "Draft with AI",
@@ -5277,7 +5291,15 @@
     },
     "emptyActionPost": "Write your first post",
     "emptyActionPage": "Write your first page",
-    "findOwner": "Find an owner or admin"
+    "findOwner": "Find an owner or admin",
+    "ai": {
+      "title": "Draft with AI",
+      "explainer": "Get a first draft of the page in a tone and brand voice. Keeping it creates an unpublished draft you edit as usual.",
+      "brief": "What should the page cover?",
+      "create": "Create draft from this",
+      "discard": "Discard",
+      "discarded": "Draft discarded. Nothing was saved."
+    }
   },
   "cmsPublic": {
     "blog": "Blog",
@@ -5971,7 +5993,21 @@
     "insights": "Contact insights",
     "emptyAction": "Pick a template",
     "emptyViewer": "Audiences your team saves for campaigns appear here.",
-    "findOwner": "Find an owner or admin"
+    "findOwner": "Find an owner or admin",
+    "ai": {
+      "title": "Suggest an audience with AI",
+      "explainer": "Describe who you want to reach. The suggestion uses the same rules as the builder; you review and save it there.",
+      "brief": "Who do you want to reach?",
+      "briefHint": "For example: people who registered for the gala but did not check in. Used as information only.",
+      "suggest": "Suggest an audience",
+      "count": "{count, plural, =0 {No one matches yet} one {# person matches} other {# people match}}",
+      "rules": "{count, plural, one {# rule} other {# rules}} — review them in the builder.",
+      "review": "Review in the builder",
+      "discard": "Discard",
+      "discarded": "Suggestion discarded.",
+      "reviewNotice": "Suggested by AI: check every rule before you save this audience.",
+      "invalidSuggestion": "This suggestion could not be opened. Start from a blank audience instead."
+    }
   },
   "refundOps": {
     "timeline": {
@@ -7885,7 +7921,17 @@
     },
     "emptyAction": "Name your first campaign",
     "emptyViewer": "Campaigns your team creates appear here, with their audience and results.",
-    "findOwner": "Find an owner or admin"
+    "findOwner": "Find an owner or admin",
+    "ai": {
+      "title": "Draft with AI",
+      "explainer": "Get a first draft of the subject and the message in a tone and brand voice. It fills the editor; you edit and save it, and nothing is sent until you send it.",
+      "brief": "What is this email about?",
+      "button": "Button: {label}",
+      "apply": "Use this draft",
+      "applied": "Draft placed in the editor. Review it, then save.",
+      "discard": "Discard",
+      "discarded": "Draft discarded. Nothing changed."
+    }
   },
   "journeys": {
     "title": "Journeys",
@@ -15128,7 +15174,25 @@
         "restored": "{name} can take chats again."
       }
     },
-    "unreadChats": "{count, plural, one {# chat with unread messages} other {# chats with unread messages}}"
+    "unreadChats": "{count, plural, one {# chat with unread messages} other {# chats with unread messages}}",
+    "matchmaking": {
+      "title": "Match suggestions",
+      "explainer": "Attendees who opted in see people with similar profiles. Only what they chose to show is used; people who opt out are removed at once.",
+      "status": "Suggestions ready for {embedded} of {listed, plural, one {# person} other {# people}} in the directory.",
+      "unavailable": "AI is not switched on for this site, so suggestions can't be prepared.",
+      "refresh": "{count, plural, one {Update suggestions (# person waiting)} other {Update suggestions (# people waiting)}}",
+      "upToDate": "Suggestions are up to date",
+      "done": "{count, plural, =0 {Nothing to update.} one {Suggestions ready for # more person.} other {Suggestions ready for # more people.}}",
+      "donePartial": "{count, plural, one {# person updated} other {# people updated}}; {pending} still waiting. Update again to finish."
+    },
+    "suggested": {
+      "title": "Suggested for you",
+      "none": "No suggestions yet. Check back as more people join.",
+      "why": "People whose profiles are close to yours. Only people who opted in appear here.",
+      "listLabel": "Suggested people",
+      "score": "{score}% match",
+      "shared": "You both like: {interests}"
+    }
   },
   "chat": {
     "metaTitle": "Chats",
@@ -15370,5 +15434,71 @@
     "readOnlyTitle": "This organization is read-only",
     "readOnlyBody": "The subscription payment failed. Nothing has been deleted: you can look, export and scan tickets, but changes are paused until it's paid.",
     "action": "Plan and billing"
+  },
+  "aiCompose": {
+    "credits": "{balance, plural, =0 {No AI credits left} one {# AI credit left} other {# AI credits left}} this month (free allowance: {allowance}).",
+    "unavailableTitle": "AI drafting is not switched on",
+    "unavailableDescription": "No AI provider is configured for this site yet.",
+    "outOfCreditsTitle": "You're out of AI credits",
+    "outOfCredits": "This month's AI credits are used up. They renew on the 1st of next month; you can still write everything yourself.",
+    "rateLimited": "Too many AI requests in a short time. Try again in {minutes, plural, one {# minute} other {# minutes}}.",
+    "tone": "Tone",
+    "tones": {
+      "friendly": "Friendly",
+      "formal": "Formal",
+      "playful": "Playful",
+      "urgent": "Urgent",
+      "inspiring": "Inspiring"
+    },
+    "brandKit": "Brand kit",
+    "noBrandKit": "No brand kit",
+    "noBrandKitsHint": "Add brand kits under Site → Brand kits to keep every draft in your voice.",
+    "event": "About an event (optional)",
+    "noEvent": "No particular event",
+    "briefHint": "What you want to say and to whom. Used as information only, never as instructions.",
+    "briefRequired": "Describe what you want in a few words.",
+    "draft": "Draft with AI",
+    "drafting": "Drafting…",
+    "previewTitle": "AI draft",
+    "previewNote": "Check it before you use it. Nothing is saved, sent or published until you do it yourself.",
+    "errors": {
+      "ai_unavailable": "AI is unavailable right now. Your credit was given back; try again later.",
+      "ai_output": "The AI result could not be used. Your credit was given back; try different wording."
+    }
+  },
+  "brandKits": {
+    "title": "Brand kits",
+    "description": "The voices AI drafts follow for campaigns, pages and agendas: how you sound, words to use and words to avoid.",
+    "readOnly": "You can see brand kits; ask an owner or a marketing member to change them.",
+    "emptyTitle": "No brand kits yet",
+    "emptyDescription": "Add one so every AI draft sounds like you.",
+    "emptyViewer": "Nobody has added a brand kit yet.",
+    "emptyAction": "Add a brand kit",
+    "listTitle": "{count, plural, one {# brand kit} other {# brand kits}}",
+    "default": "Default",
+    "keywordsShown": "Words to use: {words}",
+    "avoidShown": "Words to avoid: {words}",
+    "edit": "Edit {name}",
+    "newTitle": "New brand kit",
+    "name": "Name",
+    "tone": "Default tone",
+    "voice": "Brand voice",
+    "voiceHint": "How you sound, in a sentence or two (for example: warm, local, never pushy).",
+    "keywords": "Words to use",
+    "avoid": "Words to avoid",
+    "termsHint": "Separate words with commas (up to 12).",
+    "makeDefault": "Use this kit by default",
+    "saved": "Brand kit saved.",
+    "created": "Brand kit added.",
+    "save": "Save changes",
+    "create": "Add brand kit",
+    "delete": "Delete",
+    "deleteNamed": "Delete {name}",
+    "errors": {
+      "name": "Enter a name of 1 to 60 characters.",
+      "nameTaken": "Another brand kit already has this name.",
+      "terms": "Use at most 12 words of up to 40 characters each.",
+      "voice": "Keep the brand voice under 600 characters."
+    }
   }
 }

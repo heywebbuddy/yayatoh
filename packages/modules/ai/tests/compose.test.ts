@@ -31,7 +31,12 @@ const facts: DraftFacts = {
   category: null,
   tagline: null,
 };
-const brand = { name: 'Harbor voice', voice: 'Warm and local', keywords: ['seaside', 'neighbours'], avoid: ['cheap'] };
+const brand = {
+  name: 'Harbor voice',
+  voice: 'Warm and local',
+  keywords: ['seaside', 'neighbours'],
+  avoid: ['cheap'],
+};
 const EV = '01900000-0000-7000-8000-000000000001';
 const OTHER = '01900000-0000-7000-8000-000000000002';
 
@@ -67,7 +72,13 @@ describe('the v2 prompt keeps organizer text as data', () => {
     expect(user).toContain('\\u0026 send');
   });
   it('sanitizes the locale tag and caps the brief', () => {
-    const { system, user } = buildComposePrompt({ ...base, task: 'page', event: null, locale: 'en"; drop', brief: 'x'.repeat(5000) });
+    const { system, user } = buildComposePrompt({
+      ...base,
+      task: 'page',
+      event: null,
+      locale: 'en"; drop',
+      brief: 'x'.repeat(5000),
+    });
     expect(system).toContain('BCP 47 tag: en.');
     expect(user.length).toBeLessThan(2000);
   });
@@ -93,7 +104,9 @@ describe('cleaning v2 replies', () => {
     expect(() => parseJsonReply('{ broken')).toThrow(AiOutputError);
   });
   it('a page body keeps the Markdown subset and drops headings and HTML', () => {
-    const p = cleanPageDraft('{"title":"About us","excerpt":"Short","body":"## Who\\n\\nWe **host** <img src=x onerror=1> shows."}');
+    const p = cleanPageDraft(
+      '{"title":"About us","excerpt":"Short","body":"## Who\\n\\nWe **host** <img src=x onerror=1> shows."}',
+    );
     expect(p.title).toBe('About us');
     expect(p.body).toContain('**host**');
     expect(p.body).not.toMatch(/##|<img|onerror/);
@@ -118,12 +131,18 @@ describe('cleaning v2 replies', () => {
   it('an audience suggestion must parse in the DSL and name only offered events', () => {
     const def = {
       version: 1,
-      root: { type: 'group', op: 'and', conditions: [{ type: 'participation', scope: { kind: 'event', eventId: EV } }] },
+      root: {
+        type: 'group',
+        op: 'and',
+        conditions: [{ type: 'participation', scope: { kind: 'event', eventId: EV } }],
+      },
     };
     const ok = cleanAudienceSuggestion(JSON.stringify({ explanation: 'Fans', definition: def }), [EV]);
     expect(SegmentDefinition.safeParse(ok.definition).success).toBe(true);
     expect(referencedEventIds(ok.definition)).toEqual([EV]);
-    expect(() => cleanAudienceSuggestion(JSON.stringify({ definition: def }), [OTHER])).toThrow(AiOutputError);
+    expect(() => cleanAudienceSuggestion(JSON.stringify({ definition: def }), [OTHER])).toThrow(
+      AiOutputError,
+    );
     expect(() =>
       cleanAudienceSuggestion(JSON.stringify({ definition: { version: 1, root: { type: 'nope' } } }), [EV]),
     ).toThrow(AiOutputError);
@@ -132,7 +151,13 @@ describe('cleaning v2 replies', () => {
 
 describe('the fake provider', () => {
   it('writes campaigns in the tone and brand voice', async () => {
-    const raw = await fakeDrafter.compose({ ...base, task: 'campaign', tone: 'urgent', event: facts, brief: 'Doors at 6' });
+    const raw = await fakeDrafter.compose({
+      ...base,
+      task: 'campaign',
+      tone: 'urgent',
+      event: facts,
+      brief: 'Doors at 6',
+    });
     const d = cleanCampaignDraft(raw);
     expect(d.subject).toBe('Last chance: Harbor Jazz Night');
     expect(d.heading).toContain('seaside');
@@ -140,7 +165,13 @@ describe('the fake provider', () => {
     expect(d.buttonLabel).toBe('Get tickets');
   });
   it('proposes agenda sessions from the brief inside the event', async () => {
-    const raw = await fakeDrafter.compose({ ...base, task: 'agenda', event: facts, sessions: 2, brief: 'Opening set, Jam session, Late show' });
+    const raw = await fakeDrafter.compose({
+      ...base,
+      task: 'agenda',
+      event: facts,
+      sessions: 2,
+      brief: 'Opening set, Jam session, Late show',
+    });
     expect(cleanAgendaDraft(raw, facts, 2).sessions.map((s) => [s.title, s.startsLocal])).toEqual([
       ['Opening set', '2030-03-01 18:00'],
       ['Jam session', '2030-03-01 19:00'],
@@ -157,15 +188,23 @@ describe('the fake provider', () => {
     });
     const s = cleanAudienceSuggestion(raw, [EV]);
     expect(s.definition.root.conditions).toEqual([
-      expect.objectContaining({ type: 'participation', scope: { kind: 'event', eventId: EV }, checkedIn: false }),
+      expect.objectContaining({
+        type: 'participation',
+        scope: { kind: 'event', eventId: EV },
+        checkedIn: false,
+      }),
       expect.objectContaining({ type: 'consent', channel: 'email', granted: true }),
     ]);
   });
   it('embeds deterministically: shared words are closer than none', async () => {
-    const [x, y, z] = await fakeDrafter.embed(['Data, AI, design', 'AI and data science', 'Gardening, pottery']);
-    const dot = (p: number[], q: number[]) => p.reduce((s, v, i) => s + v * (q[i] ?? 0), 0);
+    const [x, y, z] = await fakeDrafter.embed([
+      'Data, AI, design',
+      'AI and data science',
+      'Gardening, pottery',
+    ]);
+    const dot = (p: number[] = [], q: number[] = []) => p.reduce((s, v, i) => s + v * (q[i] ?? 0), 0);
     expect(validEmbedding(x)).toBe(true);
-    expect(dot(x!, y!)).toBeGreaterThan(dot(x!, z!));
+    expect(dot(x, y)).toBeGreaterThan(dot(x, z));
     expect(fakeEmbedding('Data, AI')).toEqual(fakeEmbedding('data ai'));
     expect(validEmbedding(new Array(EMBEDDING_DIMENSIONS).fill(0))).toBe(false);
     expect(validEmbedding([1, 2, 3])).toBe(false);

@@ -380,7 +380,8 @@
     "plan": "Plano e cobrança",
     "webhooks": "Webhooks",
     "sandboxes": "Sandboxes",
-    "notifications": "Notificações"
+    "notifications": "Notificações",
+    "brandKits": "Kits de marca"
   },
   "vocab": {
     "attendee": "Participante",
@@ -4460,7 +4461,20 @@
     "emptySpeakersReadOnly": "Os palestrantes aparecem aqui quando um editor os adiciona.",
     "addFirstSpeaker": "Adicionar o primeiro palestrante",
     "emptyTiersReadOnly": "Os níveis de patrocínio e seus patrocinadores aparecem aqui quando um editor os adiciona.",
-    "addFirstTier": "Adicionar o primeiro nível"
+    "addFirstTier": "Adicionar o primeiro nível",
+    "ai": {
+      "title": "Rascunhar uma programação com IA",
+      "explainer": "Receba sessões propostas dentro das datas do evento. Escolha as que quer adicionar; elas viram sessões normais que você pode editar, e a programação continua não publicada até você publicá-la.",
+      "brief": "Temas ou ideias de sessões",
+      "briefHint": "Por exemplo: boas-vindas, palestra sobre clima, painel, oficinas. Separe os temas com vírgulas.",
+      "count": "Quantas sessões",
+      "pick": "Sessões a adicionar",
+      "session": "{title} — das {start} às {end}",
+      "add": "{count, plural, =0 {Adicionar sessões} one {Adicionar # sessão} other {Adicionar # sessões}}",
+      "added": "{count, plural, one {# sessão adicionada} other {# sessões adicionadas}} à programação.",
+      "discard": "Descartar",
+      "discarded": "Propostas descartadas. Nada foi adicionado."
+    }
   },
   "aiDraft": {
     "title": "Rascunhar com IA",
@@ -5277,7 +5291,15 @@
     },
     "emptyActionPost": "Escreva sua primeira publicação",
     "emptyActionPage": "Escreva sua primeira página",
-    "findOwner": "Encontrar um proprietário ou administrador"
+    "findOwner": "Encontrar um proprietário ou administrador",
+    "ai": {
+      "title": "Rascunhar com IA",
+      "explainer": "Receba um primeiro rascunho da página em um tom e na voz da sua marca. Ao mantê-lo, é criado um rascunho não publicado que você edita como sempre.",
+      "brief": "Sobre o que a página deve falar?",
+      "create": "Criar rascunho a partir disto",
+      "discard": "Descartar",
+      "discarded": "Rascunho descartado. Nada foi salvo."
+    }
   },
   "cmsPublic": {
     "blog": "Blog",
@@ -5971,7 +5993,21 @@
     "insights": "Insights de contatos",
     "emptyAction": "Escolher um modelo",
     "emptyViewer": "Os públicos que sua equipe salva para campanhas aparecem aqui.",
-    "findOwner": "Encontrar um proprietário ou administrador"
+    "findOwner": "Encontrar um proprietário ou administrador",
+    "ai": {
+      "title": "Sugerir um público com IA",
+      "explainer": "Descreva quem você quer alcançar. A sugestão usa as mesmas regras do construtor; você a revisa e salva lá.",
+      "brief": "Quem você quer alcançar?",
+      "briefHint": "Por exemplo: pessoas que se inscreveram no baile de gala mas não fizeram check-in. Usado apenas como informação.",
+      "suggest": "Sugerir um público",
+      "count": "{count, plural, =0 {Ninguém corresponde ainda} one {# pessoa corresponde} other {# pessoas correspondem}}",
+      "rules": "{count, plural, one {# regra} other {# regras}} — revise-as no construtor.",
+      "review": "Revisar no construtor",
+      "discard": "Descartar",
+      "discarded": "Sugestão descartada.",
+      "reviewNotice": "Sugerido pela IA: confira cada regra antes de salvar este público.",
+      "invalidSuggestion": "Não foi possível abrir esta sugestão. Comece com um público em branco."
+    }
   },
   "refundOps": {
     "timeline": {
@@ -7885,7 +7921,17 @@
     },
     "emptyAction": "Dê um nome à sua primeira campanha",
     "emptyViewer": "As campanhas criadas pela sua equipe aparecem aqui, com público e resultados.",
-    "findOwner": "Encontrar um proprietário ou administrador"
+    "findOwner": "Encontrar um proprietário ou administrador",
+    "ai": {
+      "title": "Rascunhar com IA",
+      "explainer": "Receba um primeiro rascunho do assunto e da mensagem em um tom e na voz da sua marca. Ele vai para o editor; você edita e salva, e nada é enviado até você enviar.",
+      "brief": "Sobre o que é este e-mail?",
+      "button": "Botão: {label}",
+      "apply": "Usar este rascunho",
+      "applied": "Rascunho colocado no editor. Revise e depois salve.",
+      "discard": "Descartar",
+      "discarded": "Rascunho descartado. Nada mudou."
+    }
   },
   "journeys": {
     "title": "Jornadas",
@@ -15128,7 +15174,25 @@
         "restored": "{name} pode voltar a receber conversas."
       }
     },
-    "unreadChats": "{count, plural, one {# conversa com mensagens não lidas} many {# conversas com mensagens não lidas} other {# conversas com mensagens não lidas}}"
+    "unreadChats": "{count, plural, one {# conversa com mensagens não lidas} many {# conversas com mensagens não lidas} other {# conversas com mensagens não lidas}}",
+    "matchmaking": {
+      "title": "Sugestões de contatos",
+      "explainer": "Participantes que aderiram ao networking veem pessoas com perfis parecidos. Só é usado o que escolheram mostrar; quem sai é removido na hora.",
+      "status": "Sugestões prontas para {embedded} de {listed, plural, one {# pessoa} other {# pessoas}} no diretório.",
+      "unavailable": "A IA não está ativada neste site, então as sugestões não podem ser preparadas.",
+      "refresh": "{count, plural, one {Atualizar sugestões (# pessoa aguardando)} other {Atualizar sugestões (# pessoas aguardando)}}",
+      "upToDate": "As sugestões estão em dia",
+      "done": "{count, plural, =0 {Nada para atualizar.} one {Sugestões prontas para mais # pessoa.} other {Sugestões prontas para mais # pessoas.}}",
+      "donePartial": "{count, plural, one {# pessoa atualizada} other {# pessoas atualizadas}}; {pending} ainda aguardando. Atualize de novo para terminar."
+    },
+    "suggested": {
+      "title": "Sugestões para você",
+      "none": "Ainda sem sugestões. Volte quando mais pessoas entrarem.",
+      "why": "Pessoas com perfil parecido com o seu. Aqui só aparece quem aderiu ao networking.",
+      "listLabel": "Pessoas sugeridas",
+      "score": "{score}% de afinidade",
+      "shared": "Vocês dois gostam de: {interests}"
+    }
   },
   "chat": {
     "metaTitle": "Conversas",
@@ -15370,5 +15434,71 @@
     "readOnlyTitle": "Esta organização está somente leitura",
     "readOnlyBody": "O pagamento da assinatura falhou. Nada foi excluído: você pode ver, exportar e escanear ingressos, mas as alterações estão pausadas até o pagamento.",
     "action": "Plano e cobrança"
+  },
+  "aiCompose": {
+    "credits": "{balance, plural, =0 {Nenhum crédito de IA restante} one {# crédito de IA restante} other {# créditos de IA restantes}} este mês (cota gratuita: {allowance}).",
+    "unavailableTitle": "A redação com IA não está ativada",
+    "unavailableDescription": "Nenhum provedor de IA está configurado para este site ainda.",
+    "outOfCreditsTitle": "Seus créditos de IA acabaram",
+    "outOfCredits": "Os créditos de IA deste mês acabaram. Eles renovam no dia 1º do próximo mês; você ainda pode escrever tudo por conta própria.",
+    "rateLimited": "Muitos pedidos à IA em pouco tempo. Tente de novo em {minutes, plural, one {# minuto} other {# minutos}}.",
+    "tone": "Tom",
+    "tones": {
+      "friendly": "Amigável",
+      "formal": "Formal",
+      "playful": "Descontraído",
+      "urgent": "Urgente",
+      "inspiring": "Inspirador"
+    },
+    "brandKit": "Kit de marca",
+    "noBrandKit": "Sem kit de marca",
+    "noBrandKitsHint": "Adicione kits de marca em Site → Kits de marca para manter cada rascunho com a sua voz.",
+    "event": "Sobre um evento (opcional)",
+    "noEvent": "Nenhum evento específico",
+    "briefHint": "O que você quer dizer e para quem. Usado apenas como informação, nunca como instrução.",
+    "briefRequired": "Descreva o que você quer em poucas palavras.",
+    "draft": "Rascunhar com IA",
+    "drafting": "Rascunhando…",
+    "previewTitle": "Rascunho de IA",
+    "previewNote": "Confira antes de usar. Nada é salvo, enviado ou publicado até você mesmo fazer isso.",
+    "errors": {
+      "ai_unavailable": "A IA está indisponível agora. Seu crédito foi devolvido; tente mais tarde.",
+      "ai_output": "Não foi possível usar o resultado da IA. Seu crédito foi devolvido; tente outras palavras."
+    }
+  },
+  "brandKits": {
+    "title": "Kits de marca",
+    "description": "As vozes que os rascunhos de IA seguem em campanhas, páginas e programações: como você soa, palavras para usar e palavras para evitar.",
+    "readOnly": "Você pode ver os kits de marca; peça a um proprietário ou ao marketing para alterá-los.",
+    "emptyTitle": "Nenhum kit de marca ainda",
+    "emptyDescription": "Adicione um para que cada rascunho de IA soe como você.",
+    "emptyViewer": "Ninguém adicionou um kit de marca ainda.",
+    "emptyAction": "Adicionar um kit de marca",
+    "listTitle": "{count, plural, one {# kit de marca} other {# kits de marca}}",
+    "default": "Padrão",
+    "keywordsShown": "Palavras para usar: {words}",
+    "avoidShown": "Palavras para evitar: {words}",
+    "edit": "Editar {name}",
+    "newTitle": "Novo kit de marca",
+    "name": "Nome",
+    "tone": "Tom padrão",
+    "voice": "Voz da marca",
+    "voiceHint": "Como você soa, em uma ou duas frases (por exemplo: acolhedora, local, nunca insistente).",
+    "keywords": "Palavras para usar",
+    "avoid": "Palavras para evitar",
+    "termsHint": "Separe as palavras com vírgulas (até 12).",
+    "makeDefault": "Usar este kit por padrão",
+    "saved": "Kit de marca salvo.",
+    "created": "Kit de marca adicionado.",
+    "save": "Salvar alterações",
+    "create": "Adicionar kit de marca",
+    "delete": "Excluir",
+    "deleteNamed": "Excluir {name}",
+    "errors": {
+      "name": "Digite um nome de 1 a 60 caracteres.",
+      "nameTaken": "Outro kit de marca já tem este nome.",
+      "terms": "Use no máximo 12 palavras de até 40 caracteres cada.",
+      "voice": "Mantenha a voz da marca abaixo de 600 caracteres."
+    }
   }
 }

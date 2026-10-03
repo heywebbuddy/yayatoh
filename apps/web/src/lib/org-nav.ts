@@ -105,6 +105,8 @@ export const ORG_SECTIONS: readonly OrgNavSection[] = [
     items: [
       { key: 'publicSite', path: 'site', icon: 'store', module: 'core', needs: 'org:update' },
       { key: 'siteContent', path: 'content', icon: 'file-text', module: 'core', needs: 'marketing:read' },
+      // M6.12b: the brand voices AI drafts follow (campaigns, pages, agendas).
+      { key: 'brandKits', path: 'brand-kits', icon: 'palette', module: 'ai', needs: 'marketing:read' },
       { key: 'domains', path: 'domains', icon: 'globe', module: 'core', needs: 'org:update' },
       { key: 'emails', path: 'emails', icon: 'mail-check', module: 'core', needs: 'org:update' },
       {

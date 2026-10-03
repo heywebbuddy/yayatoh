@@ -380,7 +380,8 @@
     "plan": "方案與帳單",
     "webhooks": "Webhook",
     "sandboxes": "沙盒",
-    "notifications": "通知"
+    "notifications": "通知",
+    "brandKits": "品牌套件"
   },
   "vocab": {
     "attendee": "參加者",
@@ -4460,7 +4461,20 @@
     "emptySpeakersReadOnly": "編輯新增後，講者會顯示在這裡。",
     "addFirstSpeaker": "新增第一位講者",
     "emptyTiersReadOnly": "編輯新增後，贊助等級及其贊助商會顯示在這裡。",
-    "addFirstTier": "新增第一個等級"
+    "addFirstTier": "新增第一個等級",
+    "ai": {
+      "title": "用 AI 起草議程",
+      "explainer": "在活動日期內產生建議的場次。選擇要新增的場次後,它們會成為可編輯的一般場次;在你發布之前議程維持未發布。",
+      "brief": "主題或場次構想",
+      "briefHint": "例如:歡迎致詞、氣候主題演講、座談、工作坊。用逗號分隔主題。",
+      "count": "場次數量",
+      "pick": "要新增的場次",
+      "session": "{title} — {start} 至 {end}",
+      "add": "{count, plural, =0 {新增場次} other {新增 # 個場次}}",
+      "added": "已將 {count, plural, other {# 個場次}}新增到議程。",
+      "discard": "捨棄",
+      "discarded": "已捨棄建議,未新增任何內容。"
+    }
   },
   "aiDraft": {
     "title": "用 AI 起草",
@@ -5277,7 +5291,15 @@
     },
     "emptyActionPost": "撰寫第一篇文章",
     "emptyActionPage": "撰寫第一個頁面",
-    "findOwner": "尋找擁有者或管理員"
+    "findOwner": "尋找擁有者或管理員",
+    "ai": {
+      "title": "用 AI 起草",
+      "explainer": "依所選語氣與品牌風格產生頁面初稿。保留後會建立一份未發布的草稿,你可以照常編輯。",
+      "brief": "頁面應涵蓋哪些內容?",
+      "create": "據此建立草稿",
+      "discard": "捨棄",
+      "discarded": "已捨棄草稿,未儲存任何內容。"
+    }
   },
   "cmsPublic": {
     "blog": "部落格",
@@ -5971,7 +5993,21 @@
     "insights": "聯絡人洞察",
     "emptyAction": "選擇範本",
     "emptyViewer": "你的團隊為行銷活動儲存的受眾會顯示在這裡。",
-    "findOwner": "尋找擁有者或管理員"
+    "findOwner": "尋找擁有者或管理員",
+    "ai": {
+      "title": "用 AI 推薦受眾",
+      "explainer": "描述你想觸及的族群。推薦使用與建構器相同的規則;你在建構器中檢查並儲存。",
+      "brief": "你想觸及哪些人?",
+      "briefHint": "例如:報名了晚宴但沒有報到的人。僅作為資訊使用。",
+      "suggest": "推薦受眾",
+      "count": "{count, plural, =0 {暫無符合的人} other {# 人符合}}",
+      "rules": "{count, plural, other {# 條規則}} — 請在建構器中檢查。",
+      "review": "在建構器中檢查",
+      "discard": "捨棄",
+      "discarded": "已捨棄推薦。",
+      "reviewNotice": "由 AI 推薦:儲存此受眾前請檢查每條規則。",
+      "invalidSuggestion": "無法開啟此推薦。請從空白受眾開始。"
+    }
   },
   "refundOps": {
     "timeline": {
@@ -7885,7 +7921,17 @@
     },
     "emptyAction": "為第一個行銷活動命名",
     "emptyViewer": "你的團隊建立的行銷活動會連同受眾和成果顯示在這裡。",
-    "findOwner": "尋找擁有者或管理員"
+    "findOwner": "尋找擁有者或管理員",
+    "ai": {
+      "title": "用 AI 起草",
+      "explainer": "依所選語氣與品牌風格產生主旨與內文的初稿。初稿會放入編輯器,由你修改並儲存;在你傳送之前不會寄出任何內容。",
+      "brief": "這封郵件是關於什麼的?",
+      "button": "按鈕:{label}",
+      "apply": "使用此草稿",
+      "applied": "草稿已放入編輯器。請檢查後儲存。",
+      "discard": "捨棄",
+      "discarded": "已捨棄草稿,沒有任何變更。"
+    }
   },
   "journeys": {
     "title": "旅程",
@@ -15128,7 +15174,25 @@
         "restored": "{name} 可以重新接受聊天了。"
       }
     },
-    "unreadChats": "{count, plural, other {# 個聊天有未讀訊息}}"
+    "unreadChats": "{count, plural, other {# 個聊天有未讀訊息}}",
+    "matchmaking": {
+      "title": "配對推薦",
+      "explainer": "加入社交功能的參加者會看到資料相近的人。只使用他們選擇公開的內容;退出的人會立即被移除。",
+      "status": "名錄中 {listed, plural, other {# 人}}裡已有 {embedded} 人的推薦準備就緒。",
+      "unavailable": "此網站未開啟 AI,無法準備推薦。",
+      "refresh": "{count, plural, other {更新推薦(# 人等待中)}}",
+      "upToDate": "推薦已是最新",
+      "done": "{count, plural, =0 {沒有需要更新的內容。} other {又為 # 人準備好推薦。}}",
+      "donePartial": "已更新 {count, plural, other {# 人}};還有 {pending} 人等待中。請再次更新以完成。"
+    },
+    "suggested": {
+      "title": "為你推薦",
+      "none": "暫無推薦。等更多人加入後再來看看。",
+      "why": "與你資料相近的人。這裡只顯示加入社交功能的人。",
+      "listLabel": "推薦的人",
+      "score": "符合度 {score}%",
+      "shared": "你們都喜歡:{interests}"
+    }
   },
   "chat": {
     "metaTitle": "聊天",
@@ -15370,5 +15434,71 @@
     "readOnlyTitle": "此組織為唯讀",
     "readOnlyBody": "訂閱付款失敗。沒有刪除任何內容：你可以檢視、匯出和掃描票券，但在付款前變更已暫停。",
     "action": "方案與帳單"
+  },
+  "aiCompose": {
+    "credits": "本月剩餘 AI 額度:{balance, plural, =0 {無} other {#}}(免費額度:{allowance})。",
+    "unavailableTitle": "AI 起草未開啟",
+    "unavailableDescription": "此網站尚未設定 AI 服務商。",
+    "outOfCreditsTitle": "AI 額度已用完",
+    "outOfCredits": "本月的 AI 額度已用完,將於下月 1 日恢復;你仍可以自己撰寫所有內容。",
+    "rateLimited": "短時間內 AI 請求過多。請在 {minutes, plural, other {# 分鐘}}後重試。",
+    "tone": "語氣",
+    "tones": {
+      "friendly": "親切",
+      "formal": "正式",
+      "playful": "活潑",
+      "urgent": "緊迫",
+      "inspiring": "激勵人心"
+    },
+    "brandKit": "品牌套件",
+    "noBrandKit": "不使用品牌套件",
+    "noBrandKitsHint": "在 網站 → 品牌套件 中新增品牌套件,讓每份草稿都保持你的風格。",
+    "event": "關於某個活動(選填)",
+    "noEvent": "不指定活動",
+    "briefHint": "你想說什麼、對誰說。僅作為資訊使用,絕不作為指令。",
+    "briefRequired": "請用幾個詞描述你的需求。",
+    "draft": "用 AI 起草",
+    "drafting": "正在起草…",
+    "previewTitle": "AI 草稿",
+    "previewNote": "使用前請檢查。在你親自操作之前,不會儲存、傳送或發布任何內容。",
+    "errors": {
+      "ai_unavailable": "AI 暫時無法使用。額度已退還,請稍後再試。",
+      "ai_output": "無法使用 AI 的結果。額度已退還,請換個說法再試。"
+    }
+  },
+  "brandKits": {
+    "title": "品牌套件",
+    "description": "AI 為行銷活動、頁面和議程起草時遵循的風格:你的說話方式、要用的詞和要避免的詞。",
+    "readOnly": "你可以檢視品牌套件;如需修改,請聯絡擁有者或行銷人員。",
+    "emptyTitle": "還沒有品牌套件",
+    "emptyDescription": "新增一個,讓每份 AI 草稿都像你寫的。",
+    "emptyViewer": "還沒有人新增品牌套件。",
+    "emptyAction": "新增品牌套件",
+    "listTitle": "{count, plural, other {# 個品牌套件}}",
+    "default": "預設",
+    "keywordsShown": "要用的詞:{words}",
+    "avoidShown": "要避免的詞:{words}",
+    "edit": "編輯{name}",
+    "newTitle": "新增品牌套件",
+    "name": "名稱",
+    "tone": "預設語氣",
+    "voice": "品牌風格",
+    "voiceHint": "用一兩句話描述你的風格(例如:溫暖、在地、從不強迫推銷)。",
+    "keywords": "要用的詞",
+    "avoid": "要避免的詞",
+    "termsHint": "用逗號分隔(最多 12 個)。",
+    "makeDefault": "預設使用此套件",
+    "saved": "品牌套件已儲存。",
+    "created": "品牌套件已新增。",
+    "save": "儲存變更",
+    "create": "新增品牌套件",
+    "delete": "刪除",
+    "deleteNamed": "刪除{name}",
+    "errors": {
+      "name": "請輸入 1 至 60 個字元的名稱。",
+      "nameTaken": "已有同名的品牌套件。",
+      "terms": "最多 12 個詞,每個不超過 40 個字元。",
+      "voice": "品牌風格須少於 600 個字元。"
+    }
   }
 }

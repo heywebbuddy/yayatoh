@@ -19,7 +19,6 @@ import {
   type AiPurpose,
   type CreditState,
   DRAFT_KINDS,
-  type DraftKind,
   debit,
   effectiveBalance,
   FREE_MONTHLY_CREDITS,

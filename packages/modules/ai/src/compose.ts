@@ -93,7 +93,11 @@ const requireDrafter = (d: AiDrafter | null): AiDrafter => {
 const local = (d: Date, tz: string) => utcToZonedInput(d, tz).replace('T', ' ');
 
 /** The event's facts as a draft sees them (events:read). */
-export async function eventFacts(ctx: Ctx, ports: CommandPorts<TenantTx>, eventId: string): Promise<DraftFacts> {
+export async function eventFacts(
+  ctx: Ctx,
+  ports: CommandPorts<TenantTx>,
+  eventId: string,
+): Promise<DraftFacts> {
   const ev = await executeQuery(getEventQuery, { eventId }, ctx, ports);
   const details = await executeQuery(eventDetailsQuery, { eventId }, ctx, ports);
   return {
@@ -111,7 +115,10 @@ export async function eventFacts(ctx: Ctx, ports: CommandPorts<TenantTx>, eventI
 }
 
 /** The org's name and the chosen brand kit (the kit must be this org's: RLS scopes the read). */
-async function orgAndBrand(ctx: Ctx, kitId: string | null): Promise<{ orgName: string; brand: BrandVoice | null }> {
+async function orgAndBrand(
+  ctx: Ctx,
+  kitId: string | null,
+): Promise<{ orgName: string; brand: BrandVoice | null }> {
   return withTenant(ctx, async (tx) => {
     const org = await organizationBrandTx(tx, requireOrg(ctx));
     const brand = kitId ? await brandVoiceTx(tx, kitId) : null;
@@ -139,7 +146,15 @@ export async function draftCampaign(
     async () =>
       cleanCampaignDraft(
         await withTimeout(
-          ai.compose({ task: 'campaign', locale: input.locale, tone: input.tone, brand, orgName, brief: input.brief, event }),
+          ai.compose({
+            task: 'campaign',
+            locale: input.locale,
+            tone: input.tone,
+            brand,
+            orgName,
+            brief: input.brief,
+            event,
+          }),
         ),
       ),
   );
@@ -165,7 +180,15 @@ export async function draftPage(
     async () =>
       cleanPageDraft(
         await withTimeout(
-          ai.compose({ task: 'page', locale: input.locale, tone: input.tone, brand, orgName, brief: input.brief, event }),
+          ai.compose({
+            task: 'page',
+            locale: input.locale,
+            tone: input.tone,
+            brand,
+            orgName,
+            brief: input.brief,
+            event,
+          }),
         ),
       ),
   );

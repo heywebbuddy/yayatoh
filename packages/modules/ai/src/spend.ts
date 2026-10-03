@@ -4,9 +4,9 @@ import { type CommandPorts, type Ctx, DomainError, executeCommand, requireOrg } 
 import { tenantCommand } from '@yayatoh/platform';
 import { z } from 'zod';
 import { append, creditUsageEvent, lockedAccount, refundTx } from './credits.ts';
-import { type AiPurpose, debit } from './domain/ledger.ts';
 import { AiOutputError } from './domain/compose.ts';
 import { DraftOutputError } from './domain/drafts.ts';
+import { type AiPurpose, debit } from './domain/ledger.ts';
 import { AiUnavailableError } from './drafter.ts';
 
 /**
@@ -110,11 +110,21 @@ export async function chargedCall<T>(
   call: () => Promise<T>,
 ): Promise<{ value: T; balance: number }> {
   // The purposes are checked by each pair's input schema.
-  const spent = await executeCommand(pair.spend as typeof messagingCredits.spend, spendInput as never, ctx, ports);
+  const spent = await executeCommand(
+    pair.spend as typeof messagingCredits.spend,
+    spendInput as never,
+    ctx,
+    ports,
+  );
   try {
     return { value: await call(), balance: spent.balance };
   } catch (err) {
-    await executeCommand(pair.refund as typeof messagingCredits.refund, { debitId: spent.debitId }, ctx, ports);
+    await executeCommand(
+      pair.refund as typeof messagingCredits.refund,
+      { debitId: spent.debitId },
+      ctx,
+      ports,
+    );
     if (err instanceof AiOutputError || err instanceof DraftOutputError)
       throw new DomainError('invalid_state', 'The AI result could not be used', { reason: 'ai_output' });
     if (err instanceof AiUnavailableError)

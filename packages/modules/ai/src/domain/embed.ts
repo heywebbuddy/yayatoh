@@ -46,7 +46,8 @@ export function fakeEmbedding(text: string): number[] {
     .filter((w) => w.length > 1 && !STOP.has(w));
   for (const w of words) {
     const h = fnv(w);
-    v[h % EMBEDDING_DIMENSIONS]! += (h & 0x100) === 0 ? 1 : -1;
+    const i = h % EMBEDDING_DIMENSIONS;
+    v[i] = (v[i] ?? 0) + ((h & 0x100) === 0 ? 1 : -1);
   }
   if (words.length === 0) v[0] = 1;
   return normalize(v);

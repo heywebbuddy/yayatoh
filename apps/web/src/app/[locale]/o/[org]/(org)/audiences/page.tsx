@@ -5,10 +5,13 @@ import { buttonClass, Card, EmptyState, PageHeader, Table } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { AudienceAiPanel } from '@/components/audience-ai-panel.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatNumber } from '@/lib/format.ts';
+import { aiComposeSetup } from '@/server/ai-compose.ts';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
+import { suggestAudienceAction } from './actions.ts';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('audiences');
@@ -28,6 +31,8 @@ export default async function AudiencesPage({
   const t = await getTranslations('audiences');
   const canSave = roleCan(data.role, 'messages:send');
   const segments = await executeQuery(listSegmentsQuery, {}, data.ctx, ports);
+  // M6.12b: AI audience suggestions for those who may save audiences.
+  const ai = canSave && data.modules.has('ai') ? await aiComposeSetup(data.ctx) : null;
   const when = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeZone: data.org.timezone });
   return (
     <>
@@ -103,6 +108,17 @@ export default async function AudiencesPage({
           ]}
         />
       )}
+      {ai ? (
+        <Card>
+          <section aria-labelledby="audience-ai-heading" className="flex flex-col gap-3">
+            <h2 id="audience-ai-heading" className="text-section">
+              {t('ai.title')}
+            </h2>
+            <p className="text-body text-ink-2">{t('ai.explainer')}</p>
+            <AudienceAiPanel org={org} setup={ai} suggest={suggestAudienceAction.bind(null, org)} />
+          </section>
+        </Card>
+      ) : null}
       {canSave ? (
         <section aria-labelledby="templates-heading" className="flex flex-col gap-3">
           <h2 id="templates-heading" className="text-section">

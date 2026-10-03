@@ -37,14 +37,26 @@ const Terms = z
     for (const p of parts) {
       if (!p || seen.has(p.toLowerCase())) continue;
       if (p.length > BRAND_TERM_MAX) {
-        c.addIssue({ code: 'too_big', maximum: BRAND_TERM_MAX, origin: 'string', inclusive: true, message: 'term' });
+        c.addIssue({
+          code: 'too_big',
+          maximum: BRAND_TERM_MAX,
+          origin: 'string',
+          inclusive: true,
+          message: 'term',
+        });
         return z.NEVER;
       }
       seen.add(p.toLowerCase());
       out.push(p);
     }
     if (out.length > BRAND_TERMS_MAX) {
-      c.addIssue({ code: 'too_big', maximum: BRAND_TERMS_MAX, origin: 'array', inclusive: true, message: 'terms' });
+      c.addIssue({
+        code: 'too_big',
+        maximum: BRAND_TERMS_MAX,
+        origin: 'array',
+        inclusive: true,
+        message: 'terms',
+      });
       return z.NEVER;
     }
     return out;
@@ -93,7 +105,10 @@ export const saveBrandKitCommand = tenantCommand({
   handler: async ({ input, ctx, tx }) => {
     const orgId = requireOrg(ctx);
     if (input.kitId) {
-      const [own] = await tx.select({ id: brandKits.id }).from(brandKits).where(eq(brandKits.id, input.kitId));
+      const [own] = await tx
+        .select({ id: brandKits.id })
+        .from(brandKits)
+        .where(eq(brandKits.id, input.kitId));
       if (!own) throw new DomainError('not_found');
     } else {
       const [{ n } = { n: 0 }] = await tx.select({ n: sql<number>`count(*)::int` }).from(brandKits);
@@ -149,7 +164,10 @@ export const deleteBrandKitCommand = tenantCommand({
   entitlement: 'ai',
   permission: 'marketing:write',
   handler: async ({ input, tx }) => {
-    const rows = await tx.delete(brandKits).where(eq(brandKits.id, input.kitId)).returning({ id: brandKits.id });
+    const rows = await tx
+      .delete(brandKits)
+      .where(eq(brandKits.id, input.kitId))
+      .returning({ id: brandKits.id });
     if (rows.length === 0) throw new DomainError('not_found');
     return { deleted: true };
   },

@@ -109,7 +109,10 @@ function fakeCompose(req: ComposeRequest): unknown {
     case 'agenda': {
       const start = req.event.startsLocal;
       const topics = brief
-        ? brief.split(/[,;\n]+/).map((t) => t.trim()).filter(Boolean)
+        ? brief
+            .split(/[,;\n]+/)
+            .map((t) => t.trim())
+            .filter(Boolean)
         : ['Welcome', 'Keynote', 'Panel'];
       const sessions = [];
       let at = start;
@@ -134,7 +137,8 @@ function fakeCompose(req: ComposeRequest): unknown {
         scope: event ? { kind: 'event', eventId: event.id } : { kind: 'any' },
         ...(noShow ? { checkedIn: false } : /attend|came|check/.test(lower) ? { checkedIn: true } : {}),
       });
-      if (/email|newsletter|subscrib/.test(lower)) conditions.push({ type: 'consent', channel: 'email', granted: true });
+      if (/email|newsletter|subscrib/.test(lower))
+        conditions.push({ type: 'consent', channel: 'email', granted: true });
       return {
         explanation: event
           ? `People who registered for ${event.name}${noShow ? ' but did not check in' : ''}.`

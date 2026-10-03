@@ -380,7 +380,8 @@
     "plan": "Forfait et facturation",
     "webhooks": "Webhooks",
     "sandboxes": "Bacs à sable",
-    "notifications": "Notifications"
+    "notifications": "Notifications",
+    "brandKits": "Kits de marque"
   },
   "vocab": {
     "attendee": "Participant",
@@ -4460,7 +4461,20 @@
     "emptySpeakersReadOnly": "Les intervenants apparaissent ici dès qu'un éditeur les ajoute.",
     "addFirstSpeaker": "Ajouter le premier intervenant",
     "emptyTiersReadOnly": "Les niveaux de sponsoring et leurs sponsors apparaissent ici dès qu'un éditeur les ajoute.",
-    "addFirstTier": "Ajouter le premier niveau"
+    "addFirstTier": "Ajouter le premier niveau",
+    "ai": {
+      "title": "Rédiger un programme avec l'IA",
+      "explainer": "Obtenez des sessions proposées dans les dates de l'événement. Choisissez celles à ajouter ; elles deviennent des sessions normales que vous pouvez modifier, et le programme reste non publié jusqu'à ce que vous le publiiez.",
+      "brief": "Thèmes ou idées de sessions",
+      "briefHint": "Par exemple : accueil, conférence sur le climat, table ronde, ateliers. Séparez les thèmes par des virgules.",
+      "count": "Nombre de sessions",
+      "pick": "Sessions à ajouter",
+      "session": "{title} — de {start} à {end}",
+      "add": "{count, plural, =0 {Ajouter des sessions} one {Ajouter # session} other {Ajouter # sessions}}",
+      "added": "{count, plural, one {# session ajoutée} other {# sessions ajoutées}} au programme.",
+      "discard": "Ignorer",
+      "discarded": "Propositions ignorées. Rien n'a été ajouté."
+    }
   },
   "aiDraft": {
     "title": "Rédiger avec l'IA",
@@ -5277,7 +5291,15 @@
     },
     "emptyActionPost": "Rédiger votre premier article",
     "emptyActionPage": "Rédiger votre première page",
-    "findOwner": "Trouver un propriétaire ou un admin"
+    "findOwner": "Trouver un propriétaire ou un admin",
+    "ai": {
+      "title": "Rédiger avec l'IA",
+      "explainer": "Obtenez un premier jet de la page, dans un ton et la voix de votre marque. Le conserver crée un brouillon non publié que vous modifiez comme d'habitude.",
+      "brief": "Que doit couvrir la page ?",
+      "create": "Créer un brouillon à partir de ceci",
+      "discard": "Ignorer",
+      "discarded": "Brouillon ignoré. Rien n'a été enregistré."
+    }
   },
   "cmsPublic": {
     "blog": "Blog",
@@ -5971,7 +5993,21 @@
     "insights": "Aperçu des contacts",
     "emptyAction": "Choisir un modèle",
     "emptyViewer": "Les audiences que votre équipe enregistre pour les campagnes apparaissent ici.",
-    "findOwner": "Trouver un propriétaire ou un admin"
+    "findOwner": "Trouver un propriétaire ou un admin",
+    "ai": {
+      "title": "Suggérer une audience avec l'IA",
+      "explainer": "Décrivez qui vous voulez toucher. La suggestion utilise les mêmes règles que le constructeur ; vous la vérifiez et l'enregistrez là-bas.",
+      "brief": "Qui voulez-vous toucher ?",
+      "briefHint": "Par exemple : les personnes inscrites au gala qui ne se sont pas présentées. Utilisé comme information uniquement.",
+      "suggest": "Suggérer une audience",
+      "count": "{count, plural, =0 {Personne ne correspond pour l'instant} one {# personne correspond} other {# personnes correspondent}}",
+      "rules": "{count, plural, one {# règle} other {# règles}} : vérifiez-les dans le constructeur.",
+      "review": "Vérifier dans le constructeur",
+      "discard": "Ignorer",
+      "discarded": "Suggestion ignorée.",
+      "reviewNotice": "Suggérée par l'IA : vérifiez chaque règle avant d'enregistrer cette audience.",
+      "invalidSuggestion": "Impossible d'ouvrir cette suggestion. Partez d'une audience vide."
+    }
   },
   "refundOps": {
     "timeline": {
@@ -7885,7 +7921,17 @@
     },
     "emptyAction": "Nommer votre première campagne",
     "emptyViewer": "Les campagnes créées par votre équipe apparaissent ici, avec leur audience et leurs résultats.",
-    "findOwner": "Trouver un propriétaire ou un admin"
+    "findOwner": "Trouver un propriétaire ou un admin",
+    "ai": {
+      "title": "Rédiger avec l'IA",
+      "explainer": "Obtenez un premier jet de l'objet et du message, dans un ton et la voix de votre marque. Il remplit l'éditeur ; vous le modifiez et l'enregistrez, et rien n'est envoyé avant que vous l'envoyiez.",
+      "brief": "De quoi parle cet e-mail ?",
+      "button": "Bouton : {label}",
+      "apply": "Utiliser ce brouillon",
+      "applied": "Brouillon placé dans l'éditeur. Relisez-le, puis enregistrez.",
+      "discard": "Ignorer",
+      "discarded": "Brouillon ignoré. Rien n'a changé."
+    }
   },
   "journeys": {
     "title": "Parcours",
@@ -15128,7 +15174,25 @@
         "restored": "{name} peut de nouveau recevoir des messages."
       }
     },
-    "unreadChats": "{count, plural, one {# discussion avec des messages non lus} many {# discussions avec des messages non lus} other {# discussions avec des messages non lus}}"
+    "unreadChats": "{count, plural, one {# discussion avec des messages non lus} many {# discussions avec des messages non lus} other {# discussions avec des messages non lus}}",
+    "matchmaking": {
+      "title": "Suggestions de contacts",
+      "explainer": "Les participants inscrits au réseautage voient des personnes au profil proche. Seul ce qu'ils ont choisi de montrer est utilisé ; qui se désinscrit disparaît aussitôt.",
+      "status": "Suggestions prêtes pour {embedded} sur {listed, plural, one {# personne} other {# personnes}} de l'annuaire.",
+      "unavailable": "L'IA n'est pas activée sur ce site : les suggestions ne peuvent pas être préparées.",
+      "refresh": "{count, plural, one {Mettre à jour les suggestions (# personne en attente)} other {Mettre à jour les suggestions (# personnes en attente)}}",
+      "upToDate": "Les suggestions sont à jour",
+      "done": "{count, plural, =0 {Rien à mettre à jour.} one {Suggestions prêtes pour # personne de plus.} other {Suggestions prêtes pour # personnes de plus.}}",
+      "donePartial": "{count, plural, one {# personne mise à jour} other {# personnes mises à jour}} ; {pending} encore en attente. Relancez la mise à jour pour terminer."
+    },
+    "suggested": {
+      "title": "Suggestions pour vous",
+      "none": "Pas encore de suggestions. Revenez quand d'autres personnes auront rejoint.",
+      "why": "Des personnes dont le profil est proche du vôtre. Seules les personnes inscrites au réseautage apparaissent ici.",
+      "listLabel": "Personnes suggérées",
+      "score": "{score} % de correspondance",
+      "shared": "Vous aimez tous les deux : {interests}"
+    }
   },
   "chat": {
     "metaTitle": "Messages",
@@ -15370,5 +15434,71 @@
     "readOnlyTitle": "Cette organisation est en lecture seule",
     "readOnlyBody": "Le paiement de l'abonnement a échoué. Rien n'a été supprimé : vous pouvez consulter, exporter et scanner les billets, mais les modifications sont suspendues jusqu'au paiement.",
     "action": "Formule et facturation"
+  },
+  "aiCompose": {
+    "credits": "{balance, plural, =0 {Plus aucun crédit IA} one {# crédit IA restant} other {# crédits IA restants}} ce mois-ci (quota gratuit : {allowance}).",
+    "unavailableTitle": "La rédaction par IA n'est pas activée",
+    "unavailableDescription": "Aucun fournisseur d'IA n'est encore configuré pour ce site.",
+    "outOfCreditsTitle": "Vous n'avez plus de crédits IA",
+    "outOfCredits": "Les crédits IA de ce mois sont épuisés. Ils se renouvellent le 1er du mois prochain ; vous pouvez toujours tout écrire vous-même.",
+    "rateLimited": "Trop de demandes à l'IA en peu de temps. Réessayez dans {minutes, plural, one {# minute} other {# minutes}}.",
+    "tone": "Ton",
+    "tones": {
+      "friendly": "Chaleureux",
+      "formal": "Formel",
+      "playful": "Ludique",
+      "urgent": "Urgent",
+      "inspiring": "Inspirant"
+    },
+    "brandKit": "Kit de marque",
+    "noBrandKit": "Aucun kit de marque",
+    "noBrandKitsHint": "Ajoutez des kits de marque dans Site → Kits de marque pour que chaque brouillon garde votre voix.",
+    "event": "À propos d'un événement (facultatif)",
+    "noEvent": "Aucun événement en particulier",
+    "briefHint": "Ce que vous voulez dire et à qui. Utilisé comme information uniquement, jamais comme instruction.",
+    "briefRequired": "Décrivez ce que vous voulez en quelques mots.",
+    "draft": "Rédiger avec l'IA",
+    "drafting": "Rédaction…",
+    "previewTitle": "Brouillon IA",
+    "previewNote": "Vérifiez-le avant de l'utiliser. Rien n'est enregistré, envoyé ni publié tant que vous ne le faites pas vous-même.",
+    "errors": {
+      "ai_unavailable": "L'IA est indisponible pour le moment. Votre crédit a été rendu ; réessayez plus tard.",
+      "ai_output": "Le résultat de l'IA est inutilisable. Votre crédit a été rendu ; essayez une autre formulation."
+    }
+  },
+  "brandKits": {
+    "title": "Kits de marque",
+    "description": "Les voix que suivent les brouillons IA pour les campagnes, les pages et les programmes : votre ton, les mots à utiliser et ceux à éviter.",
+    "readOnly": "Vous pouvez voir les kits de marque ; demandez à un propriétaire ou au marketing de les modifier.",
+    "emptyTitle": "Aucun kit de marque pour l'instant",
+    "emptyDescription": "Ajoutez-en un pour que chaque brouillon IA vous ressemble.",
+    "emptyViewer": "Personne n'a encore ajouté de kit de marque.",
+    "emptyAction": "Ajouter un kit de marque",
+    "listTitle": "{count, plural, one {# kit de marque} other {# kits de marque}}",
+    "default": "Par défaut",
+    "keywordsShown": "Mots à utiliser : {words}",
+    "avoidShown": "Mots à éviter : {words}",
+    "edit": "Modifier {name}",
+    "newTitle": "Nouveau kit de marque",
+    "name": "Nom",
+    "tone": "Ton par défaut",
+    "voice": "Voix de la marque",
+    "voiceHint": "Votre façon de parler, en une ou deux phrases (par exemple : chaleureuse, locale, jamais insistante).",
+    "keywords": "Mots à utiliser",
+    "avoid": "Mots à éviter",
+    "termsHint": "Séparez les mots par des virgules (12 au maximum).",
+    "makeDefault": "Utiliser ce kit par défaut",
+    "saved": "Kit de marque enregistré.",
+    "created": "Kit de marque ajouté.",
+    "save": "Enregistrer les modifications",
+    "create": "Ajouter le kit de marque",
+    "delete": "Supprimer",
+    "deleteNamed": "Supprimer {name}",
+    "errors": {
+      "name": "Saisissez un nom de 1 à 60 caractères.",
+      "nameTaken": "Un autre kit de marque porte déjà ce nom.",
+      "terms": "Utilisez au plus 12 mots de 40 caractères maximum chacun.",
+      "voice": "La voix de la marque doit faire moins de 600 caractères."
+    }
   }
 }

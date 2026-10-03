@@ -17,7 +17,9 @@ import { activeProfilesTx, blockedWithTx, listed, memberOf, type ProfileRow, vie
  */
 
 /** The text a profile is embedded from: its public fields, never the name or the email. */
-export function profileEmbeddingText(p: Pick<ProfileRow, 'headline' | 'company' | 'bio' | 'interests'>): string {
+export function profileEmbeddingText(
+  p: Pick<ProfileRow, 'headline' | 'company' | 'bio' | 'interests'>,
+): string {
   return [p.headline, p.company, p.interests.join(', '), p.bio].filter((x) => x && x.length > 0).join('\n');
 }
 
@@ -51,7 +53,10 @@ export const pendingEmbeddingsQuery = tenantQuery({
       .from(networkProfiles)
       .leftJoin(
         networkEmbeddings,
-        and(eq(networkEmbeddings.orgId, networkProfiles.orgId), eq(networkEmbeddings.profileId, networkProfiles.id)),
+        and(
+          eq(networkEmbeddings.orgId, networkProfiles.orgId),
+          eq(networkEmbeddings.profileId, networkProfiles.id),
+        ),
       )
       .where(and(listedWhere(input.eventId), isNull(networkEmbeddings.id)))
       .orderBy(asc(networkProfiles.optedInAt), asc(networkProfiles.id));
@@ -81,7 +86,10 @@ export const storeEmbeddingsCommand = tenantCommand({
   input: z.object({
     eventId: z.uuid(),
     model: z.string().trim().min(1).max(80),
-    items: z.array(z.object({ profileId: z.uuid(), embedding: Embedding })).min(1).max(MATCH_BATCH),
+    items: z
+      .array(z.object({ profileId: z.uuid(), embedding: Embedding }))
+      .min(1)
+      .max(MATCH_BATCH),
   }),
   output: z.object({ stored: z.int(), skipped: z.int() }),
   entitlement: 'sessions',
@@ -147,7 +155,10 @@ export const matchmakingStatusQuery = tenantQuery({
       .from(networkProfiles)
       .leftJoin(
         networkEmbeddings,
-        and(eq(networkEmbeddings.orgId, networkProfiles.orgId), eq(networkEmbeddings.profileId, networkProfiles.id)),
+        and(
+          eq(networkEmbeddings.orgId, networkProfiles.orgId),
+          eq(networkEmbeddings.profileId, networkProfiles.id),
+        ),
       )
       .where(listedWhere(input.eventId));
     return { listed: row?.listed ?? 0, embedded: row?.embedded ?? 0 };
@@ -205,7 +216,9 @@ export const suggestedMatchesQuery = tenantQuery({
     const ids = candidates.filter((c) => !blocked.has(c.id)).map((c) => c.id);
     if (ids.length === 0) return { ready: true, matches: [] };
     const rows = await tx.select().from(networkProfiles).where(inArray(networkProfiles.id, ids));
-    const active = new Map((await activeProfilesTx(tx, input.eventId, rows)).filter(listed).map((p) => [p.id, p]));
+    const active = new Map(
+      (await activeProfilesTx(tx, input.eventId, rows)).filter(listed).map((p) => [p.id, p]),
+    );
     const rel = await relationsTx(tx, me.id, [...active.keys()]);
     const myInterests = new Set(me.interests.map((i) => i.toLowerCase()));
     const matches: MatchDto[] = [];

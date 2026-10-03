@@ -1,5 +1,6 @@
 'use server';
 
+import { type CampaignDraftDto, draftCampaign } from '@yayatoh/ai';
 import {
   AudienceChoice,
   CampaignContent,
@@ -21,7 +22,10 @@ import { storeEmailPreviewCommand } from '@yayatoh/notifications';
 import { revalidatePath } from 'next/cache';
 import { getLocale } from 'next-intl/server';
 import { redirect } from '@/i18n/navigation.ts';
+import type { AiComposeResult } from '@/lib/ai-compose.ts';
 import { linkOrigin } from '@/lib/tracked-links.ts';
+import { aiDrafter } from '@/server/ai.ts';
+import { aiCall, composeArgs } from '@/server/ai-compose.ts';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 
@@ -323,4 +327,24 @@ export async function deleteCampaignAction(org: string, campaignId: string): Pro
   await executeCommand(deleteCampaignCommand, { campaignId }, data.ctx, ports);
   revalidate(org);
   redirect({ href: `/o/${org}/campaigns`, locale: await getLocale() });
+}
+
+/**
+ * M6.12b: draft the campaign's copy with AI (a preview the editor applies; nothing is saved or
+ * sent). The ai module spends the credit and checks `messages:send`.
+ */
+export async function draftCampaignAiAction(
+  org: string,
+  campaignId: string,
+  values: unknown,
+): Promise<AiComposeResult<CampaignDraftDto>> {
+  const data = await loadConsole(org);
+  const v = composeArgs(values);
+  return aiCall(
+    { orgId: data.org.id, userId: data.session.userId, key: `campaign:${campaignId}` },
+    async () => {
+      const res = await draftCampaign(data.ctx, ports, aiDrafter(), { ...v, locale: await getLocale() });
+      return { value: res.draft, balance: res.balance };
+    },
+  );
 }

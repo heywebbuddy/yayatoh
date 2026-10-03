@@ -380,7 +380,8 @@
     "plan": "Abonnement & facturatie",
     "webhooks": "Webhooks",
     "sandboxes": "Sandboxes",
-    "notifications": "Meldingen"
+    "notifications": "Meldingen",
+    "brandKits": "Merkkits"
   },
   "vocab": {
     "attendee": "Deelnemer",
@@ -4460,7 +4461,20 @@
     "emptySpeakersReadOnly": "Sprekers verschijnen hier zodra een redacteur ze toevoegt.",
     "addFirstSpeaker": "Eerste spreker toevoegen",
     "emptyTiersReadOnly": "Sponsorniveaus en hun sponsors verschijnen hier zodra een redacteur ze toevoegt.",
-    "addFirstTier": "Eerste niveau toevoegen"
+    "addFirstTier": "Eerste niveau toevoegen",
+    "ai": {
+      "title": "Programma schrijven met AI",
+      "explainer": "Krijg voorgestelde sessies binnen de data van het evenement. Kies welke je toevoegt; het worden gewone sessies die je kunt bewerken, en het programma blijft ongepubliceerd tot je het publiceert.",
+      "brief": "Onderwerpen of sessie-ideeën",
+      "briefHint": "Bijvoorbeeld: welkom, keynote over klimaat, panel, workshops. Scheid onderwerpen met komma's.",
+      "count": "Hoeveel sessies",
+      "pick": "Toe te voegen sessies",
+      "session": "{title} — {start} tot {end}",
+      "add": "{count, plural, =0 {Sessies toevoegen} one {# sessie toevoegen} other {# sessies toevoegen}}",
+      "added": "{count, plural, one {# sessie} other {# sessies}} toegevoegd aan het programma.",
+      "discard": "Weggooien",
+      "discarded": "Voorstellen weggegooid. Er is niets toegevoegd."
+    }
   },
   "aiDraft": {
     "title": "Schrijven met AI",
@@ -5277,7 +5291,15 @@
     },
     "emptyActionPost": "Schrijf je eerste bericht",
     "emptyActionPage": "Schrijf je eerste pagina",
-    "findOwner": "Zoek een eigenaar of beheerder"
+    "findOwner": "Zoek een eigenaar of beheerder",
+    "ai": {
+      "title": "Schrijven met AI",
+      "explainer": "Krijg een eerste concept van de pagina in een toon en jouw merkstem. Bewaren maakt een niet-gepubliceerd concept dat je zoals altijd bewerkt.",
+      "brief": "Waar moet de pagina over gaan?",
+      "create": "Concept hiervan maken",
+      "discard": "Weggooien",
+      "discarded": "Concept weggegooid. Er is niets opgeslagen."
+    }
   },
   "cmsPublic": {
     "blog": "Blog",
@@ -5971,7 +5993,21 @@
     "insights": "Contactinzichten",
     "emptyAction": "Kies een sjabloon",
     "emptyViewer": "Doelgroepen die je team voor campagnes opslaat, verschijnen hier.",
-    "findOwner": "Zoek een eigenaar of beheerder"
+    "findOwner": "Zoek een eigenaar of beheerder",
+    "ai": {
+      "title": "Doelgroep voorstellen met AI",
+      "explainer": "Beschrijf wie je wilt bereiken. Het voorstel gebruikt dezelfde regels als de bouwer; daar controleer en bewaar je het.",
+      "brief": "Wie wil je bereiken?",
+      "briefHint": "Bijvoorbeeld: mensen die zich voor het gala aanmeldden maar niet incheckten. Alleen gebruikt als informatie.",
+      "suggest": "Doelgroep voorstellen",
+      "count": "{count, plural, =0 {Nog niemand komt overeen} one {# persoon komt overeen} other {# personen komen overeen}}",
+      "rules": "{count, plural, one {# regel} other {# regels}} — controleer ze in de bouwer.",
+      "review": "Controleren in de bouwer",
+      "discard": "Weggooien",
+      "discarded": "Voorstel weggegooid.",
+      "reviewNotice": "Voorgesteld door AI: controleer elke regel voordat je deze doelgroep bewaart.",
+      "invalidSuggestion": "Dit voorstel kon niet worden geopend. Begin met een lege doelgroep."
+    }
   },
   "refundOps": {
     "timeline": {
@@ -7885,7 +7921,17 @@
     },
     "emptyAction": "Geef je eerste campagne een naam",
     "emptyViewer": "Campagnes die je team maakt, verschijnen hier met hun doelgroep en resultaten.",
-    "findOwner": "Zoek een eigenaar of beheerder"
+    "findOwner": "Zoek een eigenaar of beheerder",
+    "ai": {
+      "title": "Schrijven met AI",
+      "explainer": "Krijg een eerste concept van onderwerp en bericht in een toon en jouw merkstem. Het komt in de editor; jij bewerkt en bewaart het, en er wordt niets verstuurd tot jij het verstuurt.",
+      "brief": "Waar gaat deze e-mail over?",
+      "button": "Knop: {label}",
+      "apply": "Dit concept gebruiken",
+      "applied": "Concept in de editor gezet. Controleer het en sla het daarna op.",
+      "discard": "Weggooien",
+      "discarded": "Concept weggegooid. Er is niets veranderd."
+    }
   },
   "journeys": {
     "title": "Journeys",
@@ -15128,7 +15174,25 @@
         "restored": "{name} kan weer chats aannemen."
       }
     },
-    "unreadChats": "{count, plural, one {# chat met ongelezen berichten} other {# chats met ongelezen berichten}}"
+    "unreadChats": "{count, plural, one {# chat met ongelezen berichten} other {# chats met ongelezen berichten}}",
+    "matchmaking": {
+      "title": "Contactsuggesties",
+      "explainer": "Deelnemers die meedoen aan netwerken zien mensen met vergelijkbare profielen. Alleen wat ze wilden tonen wordt gebruikt; wie zich afmeldt, verdwijnt meteen.",
+      "status": "Suggesties klaar voor {embedded} van {listed, plural, one {# persoon} other {# personen}} in de lijst.",
+      "unavailable": "AI staat niet aan voor deze site, dus suggesties kunnen niet worden voorbereid.",
+      "refresh": "{count, plural, one {Suggesties bijwerken (# persoon wacht)} other {Suggesties bijwerken (# personen wachten)}}",
+      "upToDate": "Suggesties zijn bijgewerkt",
+      "done": "{count, plural, =0 {Niets bij te werken.} one {Suggesties klaar voor nog # persoon.} other {Suggesties klaar voor nog # personen.}}",
+      "donePartial": "{count, plural, one {# persoon bijgewerkt} other {# personen bijgewerkt}}; {pending} wachten nog. Werk opnieuw bij om af te ronden."
+    },
+    "suggested": {
+      "title": "Voorgesteld voor jou",
+      "none": "Nog geen suggesties. Kom terug als er meer mensen meedoen.",
+      "why": "Mensen met een profiel dat op het jouwe lijkt. Hier verschijnen alleen mensen die meedoen aan netwerken.",
+      "listLabel": "Voorgestelde personen",
+      "score": "{score}% overeenkomst",
+      "shared": "Jullie houden allebei van: {interests}"
+    }
   },
   "chat": {
     "metaTitle": "Chats",
@@ -15370,5 +15434,71 @@
     "readOnlyTitle": "Deze organisatie is alleen-lezen",
     "readOnlyBody": "De abonnementsbetaling is mislukt. Er is niets verwijderd: je kunt bekijken, exporteren en tickets scannen, maar wijzigingen staan stil tot er betaald is.",
     "action": "Abonnement en facturatie"
+  },
+  "aiCompose": {
+    "credits": "{balance, plural, =0 {Geen AI-credits meer} one {Nog # AI-credit} other {Nog # AI-credits}} deze maand (gratis tegoed: {allowance}).",
+    "unavailableTitle": "Schrijven met AI staat niet aan",
+    "unavailableDescription": "Voor deze site is nog geen AI-aanbieder ingesteld.",
+    "outOfCreditsTitle": "Je AI-credits zijn op",
+    "outOfCredits": "De AI-credits van deze maand zijn op. Ze worden op de 1e van volgende maand vernieuwd; je kunt alles nog steeds zelf schrijven.",
+    "rateLimited": "Te veel AI-verzoeken in korte tijd. Probeer het over {minutes, plural, one {# minuut} other {# minuten}} opnieuw.",
+    "tone": "Toon",
+    "tones": {
+      "friendly": "Vriendelijk",
+      "formal": "Formeel",
+      "playful": "Speels",
+      "urgent": "Dringend",
+      "inspiring": "Inspirerend"
+    },
+    "brandKit": "Merkkit",
+    "noBrandKit": "Geen merkkit",
+    "noBrandKitsHint": "Voeg merkkits toe onder Site → Merkkits zodat elk concept in jouw stem is.",
+    "event": "Over een evenement (optioneel)",
+    "noEvent": "Geen specifiek evenement",
+    "briefHint": "Wat je wilt zeggen en tegen wie. Alleen gebruikt als informatie, nooit als instructie.",
+    "briefRequired": "Beschrijf in een paar woorden wat je wilt.",
+    "draft": "Schrijven met AI",
+    "drafting": "Bezig met schrijven…",
+    "previewTitle": "AI-concept",
+    "previewNote": "Controleer het voordat je het gebruikt. Niets wordt opgeslagen, verstuurd of gepubliceerd tot je dat zelf doet.",
+    "errors": {
+      "ai_unavailable": "AI is nu niet beschikbaar. Je credit is teruggegeven; probeer het later opnieuw.",
+      "ai_output": "Het AI-resultaat was niet bruikbaar. Je credit is teruggegeven; probeer andere woorden."
+    }
+  },
+  "brandKits": {
+    "title": "Merkkits",
+    "description": "De stemmen die AI-concepten volgen voor campagnes, pagina's en programma's: hoe je klinkt, welke woorden je gebruikt en welke je vermijdt.",
+    "readOnly": "Je kunt merkkits bekijken; vraag een eigenaar of marketing om ze te wijzigen.",
+    "emptyTitle": "Nog geen merkkits",
+    "emptyDescription": "Voeg er een toe zodat elk AI-concept als jou klinkt.",
+    "emptyViewer": "Niemand heeft nog een merkkit toegevoegd.",
+    "emptyAction": "Merkkit toevoegen",
+    "listTitle": "{count, plural, one {# merkkit} other {# merkkits}}",
+    "default": "Standaard",
+    "keywordsShown": "Woorden om te gebruiken: {words}",
+    "avoidShown": "Woorden om te vermijden: {words}",
+    "edit": "{name} bewerken",
+    "newTitle": "Nieuwe merkkit",
+    "name": "Naam",
+    "tone": "Standaardtoon",
+    "voice": "Merkstem",
+    "voiceHint": "Hoe je klinkt, in een of twee zinnen (bijvoorbeeld: warm, lokaal, nooit opdringerig).",
+    "keywords": "Woorden om te gebruiken",
+    "avoid": "Woorden om te vermijden",
+    "termsHint": "Scheid woorden met komma's (maximaal 12).",
+    "makeDefault": "Deze kit standaard gebruiken",
+    "saved": "Merkkit opgeslagen.",
+    "created": "Merkkit toegevoegd.",
+    "save": "Wijzigingen opslaan",
+    "create": "Merkkit toevoegen",
+    "delete": "Verwijderen",
+    "deleteNamed": "{name} verwijderen",
+    "errors": {
+      "name": "Vul een naam in van 1 tot 60 tekens.",
+      "nameTaken": "Een andere merkkit heeft al deze naam.",
+      "terms": "Gebruik hoogstens 12 woorden van elk maximaal 40 tekens.",
+      "voice": "Houd de merkstem onder de 600 tekens."
+    }
   }
 }

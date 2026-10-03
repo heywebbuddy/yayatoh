@@ -380,7 +380,8 @@
     "plan": "Tarif & Abrechnung",
     "webhooks": "Webhooks",
     "sandboxes": "Sandboxes",
-    "notifications": "Benachrichtigungen"
+    "notifications": "Benachrichtigungen",
+    "brandKits": "Marken-Kits"
   },
   "vocab": {
     "attendee": "Teilnehmer",
@@ -4460,7 +4461,20 @@
     "emptySpeakersReadOnly": "Sprecher erscheinen hier, sobald jemand mit Bearbeitungsrechten sie hinzufügt.",
     "addFirstSpeaker": "Ersten Sprecher hinzufügen",
     "emptyTiersReadOnly": "Sponsorenstufen und ihre Sponsoren erscheinen hier, sobald jemand mit Bearbeitungsrechten sie hinzufügt.",
-    "addFirstTier": "Erste Stufe hinzufügen"
+    "addFirstTier": "Erste Stufe hinzufügen",
+    "ai": {
+      "title": "Programm mit KI entwerfen",
+      "explainer": "Erhalte Vorschläge für Sessions innerhalb der Veranstaltungsdaten. Wähle die aus, die du hinzufügen willst; sie werden normale Sessions, die du bearbeiten kannst, und das Programm bleibt unveröffentlicht, bis du es veröffentlichst.",
+      "brief": "Themen oder Session-Ideen",
+      "briefHint": "Zum Beispiel: Begrüßung, Keynote zum Klima, Podium, Workshops. Trenne Themen mit Kommas.",
+      "count": "Wie viele Sessions",
+      "pick": "Hinzuzufügende Sessions",
+      "session": "{title} — {start} bis {end}",
+      "add": "{count, plural, =0 {Sessions hinzufügen} one {# Session hinzufügen} other {# Sessions hinzufügen}}",
+      "added": "{count, plural, one {# Session} other {# Sessions}} zum Programm hinzugefügt.",
+      "discard": "Verwerfen",
+      "discarded": "Vorschläge verworfen. Nichts wurde hinzugefügt."
+    }
   },
   "aiDraft": {
     "title": "Mit KI entwerfen",
@@ -5277,7 +5291,15 @@
     },
     "emptyActionPost": "Ersten Beitrag schreiben",
     "emptyActionPage": "Erste Seite schreiben",
-    "findOwner": "Inhaber oder Admin finden"
+    "findOwner": "Inhaber oder Admin finden",
+    "ai": {
+      "title": "Mit KI entwerfen",
+      "explainer": "Erhalte einen ersten Entwurf der Seite in einem Tonfall und deiner Markenstimme. Wenn du ihn behältst, entsteht ein unveröffentlichter Entwurf, den du wie gewohnt bearbeitest.",
+      "brief": "Worum soll es auf der Seite gehen?",
+      "create": "Entwurf daraus erstellen",
+      "discard": "Verwerfen",
+      "discarded": "Entwurf verworfen. Nichts wurde gespeichert."
+    }
   },
   "cmsPublic": {
     "blog": "Blog",
@@ -5971,7 +5993,21 @@
     "insights": "Kontakt-Einblicke",
     "emptyAction": "Vorlage wählen",
     "emptyViewer": "Hier erscheinen die Zielgruppen, die dein Team für Kampagnen speichert.",
-    "findOwner": "Inhaber oder Admin finden"
+    "findOwner": "Inhaber oder Admin finden",
+    "ai": {
+      "title": "Zielgruppe mit KI vorschlagen",
+      "explainer": "Beschreibe, wen du erreichen willst. Der Vorschlag nutzt dieselben Regeln wie der Builder; dort prüfst und speicherst du ihn.",
+      "brief": "Wen möchtest du erreichen?",
+      "briefHint": "Zum Beispiel: Personen, die sich für die Gala angemeldet, aber nicht eingecheckt haben. Wird nur als Information genutzt.",
+      "suggest": "Zielgruppe vorschlagen",
+      "count": "{count, plural, =0 {Noch niemand passt} one {# Person passt} other {# Personen passen}}",
+      "rules": "{count, plural, one {# Regel} other {# Regeln}} – prüfe sie im Builder.",
+      "review": "Im Builder prüfen",
+      "discard": "Verwerfen",
+      "discarded": "Vorschlag verworfen.",
+      "reviewNotice": "Von der KI vorgeschlagen: Prüfe jede Regel, bevor du diese Zielgruppe speicherst.",
+      "invalidSuggestion": "Dieser Vorschlag konnte nicht geöffnet werden. Beginne stattdessen mit einer leeren Zielgruppe."
+    }
   },
   "refundOps": {
     "timeline": {
@@ -7885,7 +7921,17 @@
     },
     "emptyAction": "Erste Kampagne benennen",
     "emptyViewer": "Hier erscheinen die Kampagnen deines Teams mit Zielgruppe und Ergebnissen.",
-    "findOwner": "Inhaber oder Admin finden"
+    "findOwner": "Inhaber oder Admin finden",
+    "ai": {
+      "title": "Mit KI entwerfen",
+      "explainer": "Erhalte einen ersten Entwurf für Betreff und Nachricht in einem Tonfall und deiner Markenstimme. Er landet im Editor; du bearbeitest und speicherst ihn, und nichts wird gesendet, bevor du es sendest.",
+      "brief": "Worum geht es in dieser E-Mail?",
+      "button": "Schaltfläche: {label}",
+      "apply": "Diesen Entwurf verwenden",
+      "applied": "Entwurf in den Editor übernommen. Prüfe ihn und speichere dann.",
+      "discard": "Verwerfen",
+      "discarded": "Entwurf verworfen. Nichts wurde geändert."
+    }
   },
   "journeys": {
     "title": "Journeys",
@@ -15128,7 +15174,25 @@
         "restored": "{name} kann wieder Chats annehmen."
       }
     },
-    "unreadChats": "{count, plural, one {# Chat mit ungelesenen Nachrichten} other {# Chats mit ungelesenen Nachrichten}}"
+    "unreadChats": "{count, plural, one {# Chat mit ungelesenen Nachrichten} other {# Chats mit ungelesenen Nachrichten}}",
+    "matchmaking": {
+      "title": "Kontaktvorschläge",
+      "explainer": "Teilnehmende, die beim Networking mitmachen, sehen Personen mit ähnlichen Profilen. Genutzt wird nur, was sie zeigen wollten; wer sich abmeldet, verschwindet sofort.",
+      "status": "Vorschläge bereit für {embedded} von {listed, plural, one {# Person} other {# Personen}} im Verzeichnis.",
+      "unavailable": "Die KI ist für diese Website nicht eingeschaltet, daher können keine Vorschläge vorbereitet werden.",
+      "refresh": "{count, plural, one {Vorschläge aktualisieren (# Person wartet)} other {Vorschläge aktualisieren (# Personen warten)}}",
+      "upToDate": "Die Vorschläge sind aktuell",
+      "done": "{count, plural, =0 {Nichts zu aktualisieren.} one {Vorschläge für # weitere Person bereit.} other {Vorschläge für # weitere Personen bereit.}}",
+      "donePartial": "{count, plural, one {# Person aktualisiert} other {# Personen aktualisiert}}; {pending} warten noch. Aktualisiere erneut, um fertig zu werden."
+    },
+    "suggested": {
+      "title": "Vorschläge für dich",
+      "none": "Noch keine Vorschläge. Schau wieder vorbei, wenn mehr Leute dabei sind.",
+      "why": "Personen mit einem ähnlichen Profil wie deinem. Hier erscheinen nur Personen, die beim Networking mitmachen.",
+      "listLabel": "Vorgeschlagene Personen",
+      "score": "{score} % Übereinstimmung",
+      "shared": "Ihr mögt beide: {interests}"
+    }
   },
   "chat": {
     "metaTitle": "Chats",
@@ -15370,5 +15434,71 @@
     "readOnlyTitle": "Diese Organisation ist schreibgeschützt",
     "readOnlyBody": "Die Abonnementzahlung ist fehlgeschlagen. Nichts wurde gelöscht: Sie können ansehen, exportieren und Tickets scannen, aber Änderungen sind bis zur Zahlung pausiert.",
     "action": "Plan und Abrechnung"
+  },
+  "aiCompose": {
+    "credits": "{balance, plural, =0 {Keine KI-Credits mehr} one {Noch # KI-Credit} other {Noch # KI-Credits}} in diesem Monat (Gratiskontingent: {allowance}).",
+    "unavailableTitle": "KI-Entwürfe sind nicht eingeschaltet",
+    "unavailableDescription": "Für diese Website ist noch kein KI-Anbieter eingerichtet.",
+    "outOfCreditsTitle": "Keine KI-Credits mehr",
+    "outOfCredits": "Die KI-Credits dieses Monats sind aufgebraucht. Sie erneuern sich am 1. des nächsten Monats; du kannst weiterhin alles selbst schreiben.",
+    "rateLimited": "Zu viele KI-Anfragen in kurzer Zeit. Versuche es in {minutes, plural, one {# Minute} other {# Minuten}} erneut.",
+    "tone": "Tonfall",
+    "tones": {
+      "friendly": "Freundlich",
+      "formal": "Förmlich",
+      "playful": "Verspielt",
+      "urgent": "Dringend",
+      "inspiring": "Inspirierend"
+    },
+    "brandKit": "Marken-Kit",
+    "noBrandKit": "Kein Marken-Kit",
+    "noBrandKitsHint": "Lege unter Website → Marken-Kits Kits an, damit jeder Entwurf nach dir klingt.",
+    "event": "Zu einer Veranstaltung (optional)",
+    "noEvent": "Keine bestimmte Veranstaltung",
+    "briefHint": "Was du sagen willst und zu wem. Wird nur als Information genutzt, nie als Anweisung.",
+    "briefRequired": "Beschreibe in wenigen Worten, was du möchtest.",
+    "draft": "Mit KI entwerfen",
+    "drafting": "Entwurf wird erstellt…",
+    "previewTitle": "KI-Entwurf",
+    "previewNote": "Prüfe ihn vor der Verwendung. Nichts wird gespeichert, gesendet oder veröffentlicht, bis du es selbst tust.",
+    "errors": {
+      "ai_unavailable": "Die KI ist gerade nicht verfügbar. Dein Credit wurde erstattet; versuche es später erneut.",
+      "ai_output": "Das KI-Ergebnis war nicht verwendbar. Dein Credit wurde erstattet; versuche eine andere Formulierung."
+    }
+  },
+  "brandKits": {
+    "title": "Marken-Kits",
+    "description": "Die Stimmen, denen KI-Entwürfe für Kampagnen, Seiten und Programme folgen: wie du klingst, welche Wörter du nutzt und welche du vermeidest.",
+    "readOnly": "Du kannst Marken-Kits ansehen; bitte eine Inhaberin oder das Marketing, sie zu ändern.",
+    "emptyTitle": "Noch keine Marken-Kits",
+    "emptyDescription": "Lege eins an, damit jeder KI-Entwurf nach dir klingt.",
+    "emptyViewer": "Noch niemand hat ein Marken-Kit angelegt.",
+    "emptyAction": "Marken-Kit hinzufügen",
+    "listTitle": "{count, plural, one {# Marken-Kit} other {# Marken-Kits}}",
+    "default": "Standard",
+    "keywordsShown": "Zu verwendende Wörter: {words}",
+    "avoidShown": "Zu vermeidende Wörter: {words}",
+    "edit": "{name} bearbeiten",
+    "newTitle": "Neues Marken-Kit",
+    "name": "Name",
+    "tone": "Standard-Tonfall",
+    "voice": "Markenstimme",
+    "voiceHint": "Wie du klingst, in ein oder zwei Sätzen (zum Beispiel: herzlich, lokal, nie aufdringlich).",
+    "keywords": "Zu verwendende Wörter",
+    "avoid": "Zu vermeidende Wörter",
+    "termsHint": "Trenne Wörter mit Kommas (bis zu 12).",
+    "makeDefault": "Dieses Kit standardmäßig verwenden",
+    "saved": "Marken-Kit gespeichert.",
+    "created": "Marken-Kit hinzugefügt.",
+    "save": "Änderungen speichern",
+    "create": "Marken-Kit hinzufügen",
+    "delete": "Löschen",
+    "deleteNamed": "{name} löschen",
+    "errors": {
+      "name": "Gib einen Namen mit 1 bis 60 Zeichen ein.",
+      "nameTaken": "Ein anderes Marken-Kit hat bereits diesen Namen.",
+      "terms": "Verwende höchstens 12 Wörter mit je bis zu 40 Zeichen.",
+      "voice": "Die Markenstimme muss unter 600 Zeichen bleiben."
+    }
   }
 }

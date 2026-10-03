@@ -1,4 +1,9 @@
-import { LOCATION_KINDS, MAX_LOCATION_CAPACITY, networkConsoleQuery } from '@yayatoh/engagement';
+import {
+  LOCATION_KINDS,
+  MAX_LOCATION_CAPACITY,
+  matchmakingStatusQuery,
+  networkConsoleQuery,
+} from '@yayatoh/engagement';
 import { executeQuery, utcToZonedInput } from '@yayatoh/kernel';
 import { navIncludes } from '@yayatoh/platform';
 import { Button, Card, EmptyState, PageHeader, StatCard, StatusPill } from '@yayatoh/ui';
@@ -7,9 +12,11 @@ import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Crumbs } from '@/components/crumbs.tsx';
 import { slotLabel } from '@/components/networking/format.ts';
+import { MatchmakingCard } from '@/components/networking/matchmaking-card.tsx';
 import { ActionButton, NetworkToasts } from '@/components/networking/network-forms.tsx';
 import { ProgramForm } from '@/components/program-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
+import { aiDrafter } from '@/server/ai.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import {
@@ -17,6 +24,7 @@ import {
   deleteLocationAction,
   deleteSlotAction,
   enableAction,
+  refreshMatchmakingAction,
   resolveReportAction,
   restoreAction,
   saveLocationAction,
@@ -47,6 +55,11 @@ export default async function NetworkingConsolePage({ params }: Params) {
   const tr = await getTranslations();
   const c = await executeQuery(networkConsoleQuery, { eventId: ev.id }, data.ctx, ports);
   const tz = ev.timezone;
+  // M6.12b: matchmaking (AI embeddings of opted-in profiles), when the org has the AI module.
+  const matchmaking =
+    c.settings.enabled && data.modules.has('ai')
+      ? await executeQuery(matchmakingStatusQuery, { eventId: ev.id }, data.ctx, ports)
+      : null;
   const crumbs = (
     <Crumbs
       items={[
@@ -146,6 +159,20 @@ export default async function NetworkingConsolePage({ params }: Params) {
         </Card>
       ) : null}
 
+      {matchmaking ? (
+        <Card className="flex flex-col gap-3" aria-labelledby="net-matchmaking">
+          <h2 id="net-matchmaking" className="text-section">
+            {tr('networking.matchmaking.title')}
+          </h2>
+          <MatchmakingCard
+            listed={matchmaking.listed}
+            embedded={matchmaking.embedded}
+            enabled={aiDrafter() !== null}
+            canWrite={canWrite}
+            refresh={refreshMatchmakingAction.bind(null, org, event)}
+          />
+        </Card>
+      ) : null}
       <section aria-labelledby="net-locations" className="flex flex-col gap-3">
         <h2 id="net-locations" className="text-section">
           {t('locations')}

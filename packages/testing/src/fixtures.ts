@@ -1951,7 +1951,14 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   // M6.12b: a brand kit (isolation coverage of ai.brand_kits).
   await executeCommand(
     saveBrandKitCommand,
-    { name: `${name} voice`, voice: 'Warm, local, never pushy.', tone: 'friendly', keywords: 'community, lakeside', avoid: 'cheap', isDefault: true },
+    {
+      name: `${name} voice`,
+      voice: 'Warm, local, never pushy.',
+      tone: 'friendly',
+      keywords: 'community, lakeside',
+      avoid: 'cheap',
+      isDefault: true,
+    },
     ctx(),
     ports,
   );

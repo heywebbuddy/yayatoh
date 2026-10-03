@@ -380,7 +380,8 @@
     "plan": "Piano e fatturazione",
     "webhooks": "Webhook",
     "sandboxes": "Sandbox",
-    "notifications": "Notifiche"
+    "notifications": "Notifiche",
+    "brandKits": "Kit del brand"
   },
   "vocab": {
     "attendee": "Partecipante",
@@ -4460,7 +4461,20 @@
     "emptySpeakersReadOnly": "I relatori compaiono qui quando un editor li aggiunge.",
     "addFirstSpeaker": "Aggiungi il primo relatore",
     "emptyTiersReadOnly": "I livelli di sponsorizzazione e i loro sponsor compaiono qui quando un editor li aggiunge.",
-    "addFirstTier": "Aggiungi il primo livello"
+    "addFirstTier": "Aggiungi il primo livello",
+    "ai": {
+      "title": "Scrivi un programma con l'IA",
+      "explainer": "Ottieni sessioni proposte entro le date dell'evento. Scegli quelle da aggiungere; diventano sessioni normali che puoi modificare, e il programma resta non pubblicato finché non lo pubblichi.",
+      "brief": "Temi o idee per le sessioni",
+      "briefHint": "Per esempio: benvenuto, keynote sul clima, tavola rotonda, workshop. Separa i temi con virgole.",
+      "count": "Quante sessioni",
+      "pick": "Sessioni da aggiungere",
+      "session": "{title} — dalle {start} alle {end}",
+      "add": "{count, plural, =0 {Aggiungi sessioni} one {Aggiungi # sessione} other {Aggiungi # sessioni}}",
+      "added": "{count, plural, one {# sessione aggiunta} other {# sessioni aggiunte}} al programma.",
+      "discard": "Scarta",
+      "discarded": "Proposte scartate. Non è stato aggiunto nulla."
+    }
   },
   "aiDraft": {
     "title": "Scrivi con l'IA",
@@ -5277,7 +5291,15 @@
     },
     "emptyActionPost": "Scrivi il primo articolo",
     "emptyActionPage": "Scrivi la prima pagina",
-    "findOwner": "Trova un proprietario o un amministratore"
+    "findOwner": "Trova un proprietario o un amministratore",
+    "ai": {
+      "title": "Scrivi con l'IA",
+      "explainer": "Ottieni una prima bozza della pagina con un tono e la voce del tuo brand. Tenerla crea una bozza non pubblicata che modifichi come sempre.",
+      "brief": "Di cosa deve parlare la pagina?",
+      "create": "Crea una bozza da questo",
+      "discard": "Scarta",
+      "discarded": "Bozza scartata. Non è stato salvato nulla."
+    }
   },
   "cmsPublic": {
     "blog": "Blog",
@@ -5971,7 +5993,21 @@
     "insights": "Approfondimenti contatti",
     "emptyAction": "Scegli un modello",
     "emptyViewer": "Qui compaiono i pubblici che il tuo team salva per le campagne.",
-    "findOwner": "Trova un proprietario o un amministratore"
+    "findOwner": "Trova un proprietario o un amministratore",
+    "ai": {
+      "title": "Suggerisci un pubblico con l'IA",
+      "explainer": "Descrivi chi vuoi raggiungere. Il suggerimento usa le stesse regole del builder; lo controlli e lo salvi lì.",
+      "brief": "Chi vuoi raggiungere?",
+      "briefHint": "Per esempio: chi si è iscritto al gala ma non ha fatto il check-in. Usato solo come informazione.",
+      "suggest": "Suggerisci un pubblico",
+      "count": "{count, plural, =0 {Ancora nessuna corrispondenza} one {# persona corrisponde} other {# persone corrispondono}}",
+      "rules": "{count, plural, one {# regola} other {# regole}}: controllale nel builder.",
+      "review": "Controlla nel builder",
+      "discard": "Scarta",
+      "discarded": "Suggerimento scartato.",
+      "reviewNotice": "Suggerito dall'IA: controlla ogni regola prima di salvare questo pubblico.",
+      "invalidSuggestion": "Impossibile aprire questo suggerimento. Parti da un pubblico vuoto."
+    }
   },
   "refundOps": {
     "timeline": {
@@ -7885,7 +7921,17 @@
     },
     "emptyAction": "Dai un nome alla prima campagna",
     "emptyViewer": "Qui compaiono le campagne create dal tuo team, con pubblico e risultati.",
-    "findOwner": "Trova un proprietario o un amministratore"
+    "findOwner": "Trova un proprietario o un amministratore",
+    "ai": {
+      "title": "Scrivi con l'IA",
+      "explainer": "Ottieni una prima bozza di oggetto e messaggio con un tono e la voce del tuo brand. Va nell'editor; tu la modifichi e la salvi, e nulla viene inviato finché non lo invii.",
+      "brief": "Di cosa parla questa email?",
+      "button": "Pulsante: {label}",
+      "apply": "Usa questa bozza",
+      "applied": "Bozza inserita nell'editor. Controllala e poi salva.",
+      "discard": "Scarta",
+      "discarded": "Bozza scartata. Non è cambiato nulla."
+    }
   },
   "journeys": {
     "title": "Percorsi",
@@ -15128,7 +15174,25 @@
         "restored": "{name} può di nuovo ricevere chat."
       }
     },
-    "unreadChats": "{count, plural, one {# chat con messaggi non letti} other {# chat con messaggi non letti}}"
+    "unreadChats": "{count, plural, one {# chat con messaggi non letti} other {# chat con messaggi non letti}}",
+    "matchmaking": {
+      "title": "Suggerimenti di contatti",
+      "explainer": "I partecipanti che hanno aderito al networking vedono persone con profili simili. Si usa solo ciò che hanno scelto di mostrare; chi si ritira sparisce subito.",
+      "status": "Suggerimenti pronti per {embedded} su {listed, plural, one {# persona} other {# persone}} nell'elenco.",
+      "unavailable": "L'IA non è attiva su questo sito, quindi non si possono preparare suggerimenti.",
+      "refresh": "{count, plural, one {Aggiorna i suggerimenti (# persona in attesa)} other {Aggiorna i suggerimenti (# persone in attesa)}}",
+      "upToDate": "I suggerimenti sono aggiornati",
+      "done": "{count, plural, =0 {Niente da aggiornare.} one {Suggerimenti pronti per # persona in più.} other {Suggerimenti pronti per # persone in più.}}",
+      "donePartial": "{count, plural, one {# persona aggiornata} other {# persone aggiornate}}; {pending} ancora in attesa. Aggiorna di nuovo per finire."
+    },
+    "suggested": {
+      "title": "Suggeriti per te",
+      "none": "Ancora nessun suggerimento. Torna quando si saranno unite più persone.",
+      "why": "Persone con un profilo vicino al tuo. Qui compare solo chi ha aderito al networking.",
+      "listLabel": "Persone suggerite",
+      "score": "Corrispondenza del {score}%",
+      "shared": "Vi piace a entrambi: {interests}"
+    }
   },
   "chat": {
     "metaTitle": "Chat",
@@ -15370,5 +15434,71 @@
     "readOnlyTitle": "Questa organizzazione è in sola lettura",
     "readOnlyBody": "Il pagamento dell'abbonamento non è riuscito. Non è stato eliminato nulla: puoi vedere, esportare e scansionare biglietti, ma le modifiche sono sospese fino al pagamento.",
     "action": "Piano e fatturazione"
+  },
+  "aiCompose": {
+    "credits": "{balance, plural, =0 {Nessun credito IA rimasto} one {# credito IA rimasto} other {# crediti IA rimasti}} questo mese (quota gratuita: {allowance}).",
+    "unavailableTitle": "La scrittura con IA non è attiva",
+    "unavailableDescription": "Per questo sito non è ancora configurato un fornitore di IA.",
+    "outOfCreditsTitle": "Hai esaurito i crediti IA",
+    "outOfCredits": "I crediti IA di questo mese sono esauriti. Si rinnovano il 1° del mese prossimo; puoi comunque scrivere tutto da te.",
+    "rateLimited": "Troppe richieste all'IA in poco tempo. Riprova tra {minutes, plural, one {# minuto} other {# minuti}}.",
+    "tone": "Tono",
+    "tones": {
+      "friendly": "Cordiale",
+      "formal": "Formale",
+      "playful": "Giocoso",
+      "urgent": "Urgente",
+      "inspiring": "Ispirante"
+    },
+    "brandKit": "Kit del brand",
+    "noBrandKit": "Nessun kit del brand",
+    "noBrandKitsHint": "Aggiungi kit del brand in Sito → Kit del brand perché ogni bozza abbia la tua voce.",
+    "event": "Su un evento (facoltativo)",
+    "noEvent": "Nessun evento in particolare",
+    "briefHint": "Cosa vuoi dire e a chi. Usato solo come informazione, mai come istruzione.",
+    "briefRequired": "Descrivi in poche parole cosa vuoi.",
+    "draft": "Scrivi con l'IA",
+    "drafting": "Scrittura in corso…",
+    "previewTitle": "Bozza IA",
+    "previewNote": "Controllala prima di usarla. Niente viene salvato, inviato o pubblicato finché non lo fai tu.",
+    "errors": {
+      "ai_unavailable": "L'IA non è disponibile ora. Il credito ti è stato restituito; riprova più tardi.",
+      "ai_output": "Il risultato dell'IA non era utilizzabile. Il credito ti è stato restituito; prova a riformulare."
+    }
+  },
+  "brandKits": {
+    "title": "Kit del brand",
+    "description": "Le voci che le bozze IA seguono per campagne, pagine e programmi: come suoni, parole da usare e parole da evitare.",
+    "readOnly": "Puoi vedere i kit del brand; chiedi a un titolare o al marketing di modificarli.",
+    "emptyTitle": "Ancora nessun kit del brand",
+    "emptyDescription": "Aggiungine uno perché ogni bozza IA suoni come te.",
+    "emptyViewer": "Nessuno ha ancora aggiunto un kit del brand.",
+    "emptyAction": "Aggiungi un kit del brand",
+    "listTitle": "{count, plural, one {# kit del brand} other {# kit del brand}}",
+    "default": "Predefinito",
+    "keywordsShown": "Parole da usare: {words}",
+    "avoidShown": "Parole da evitare: {words}",
+    "edit": "Modifica {name}",
+    "newTitle": "Nuovo kit del brand",
+    "name": "Nome",
+    "tone": "Tono predefinito",
+    "voice": "Voce del brand",
+    "voiceHint": "Come suoni, in una o due frasi (per esempio: calorosa, locale, mai insistente).",
+    "keywords": "Parole da usare",
+    "avoid": "Parole da evitare",
+    "termsHint": "Separa le parole con virgole (fino a 12).",
+    "makeDefault": "Usa questo kit come predefinito",
+    "saved": "Kit del brand salvato.",
+    "created": "Kit del brand aggiunto.",
+    "save": "Salva le modifiche",
+    "create": "Aggiungi kit del brand",
+    "delete": "Elimina",
+    "deleteNamed": "Elimina {name}",
+    "errors": {
+      "name": "Inserisci un nome da 1 a 60 caratteri.",
+      "nameTaken": "Un altro kit del brand ha già questo nome.",
+      "terms": "Usa al massimo 12 parole di massimo 40 caratteri ciascuna.",
+      "voice": "La voce del brand deve restare sotto i 600 caratteri."
+    }
   }
 }

@@ -1,7 +1,7 @@
-import { markdownToPlainText, sanitizeMarkdown } from '@yayatoh/events';
 import { SegmentDefinition } from '@yayatoh/crm/client';
+import { markdownToPlainText, sanitizeMarkdown } from '@yayatoh/events';
 import { z } from 'zod';
-import { dataBlock, type DraftFacts } from './drafts.ts';
+import { type DraftFacts, dataBlock } from './drafts.ts';
 import type { ComposeTask } from './ledger.ts';
 import { AGENDA_MAX_SESSIONS, MAX_BRIEF_LENGTH, TONES, type Tone } from './tones.ts';
 
@@ -15,7 +15,6 @@ export { AGENDA_MAX_SESSIONS, MAX_BRIEF_LENGTH };
  * and cleaned here. A result is only ever a preview: the organizer edits it and saves through the
  * feature's own commands. Nothing is sent, published or saved by AI.
  */
-
 
 /** The brand kit as the prompt sees it (no ids, nothing private). */
 export interface BrandVoice {
@@ -139,7 +138,12 @@ function cut(s: string, max: number): string {
 }
 
 const plain = (s: string, max: number) =>
-  cut(markdownToPlainText(sanitizeMarkdown(stripTags(s), 8000)).replace(/[ \t]+/g, ' ').trim(), max);
+  cut(
+    markdownToPlainText(sanitizeMarkdown(stripTags(s), 8000))
+      .replace(/[ \t]+/g, ' ')
+      .trim(),
+    max,
+  );
 
 export const CampaignDraftDto = z.object({
   subject: z.string().min(1).max(150),
@@ -165,7 +169,9 @@ export const AgendaSessionDraftDto = z.object({
   minutes: z.number().int().min(10).max(240),
 });
 export type AgendaSessionDraftDto = z.infer<typeof AgendaSessionDraftDto>;
-export const AgendaDraftDto = z.object({ sessions: z.array(AgendaSessionDraftDto).min(1).max(AGENDA_MAX_SESSIONS) });
+export const AgendaDraftDto = z.object({
+  sessions: z.array(AgendaSessionDraftDto).min(1).max(AGENDA_MAX_SESSIONS),
+});
 export type AgendaDraftDto = z.infer<typeof AgendaDraftDto>;
 
 export const AudienceSuggestionDto = z.object({
@@ -220,7 +226,12 @@ export function cleanPageDraft(raw: string): PageDraftDto {
 
 const RawAgenda = z.object({
   sessions: z.array(
-    z.object({ title: z.string(), description: z.string().optional().default(''), startsLocal: z.string(), minutes: z.number() }),
+    z.object({
+      title: z.string(),
+      description: z.string().optional().default(''),
+      startsLocal: z.string(),
+      minutes: z.number(),
+    }),
   ),
 });
 
@@ -241,7 +252,12 @@ export function cleanAgendaDraft(
   let lastEnd = '';
   for (const s of sorted) {
     const minutes = Math.round(s.minutes);
-    const item = { title: oneLine(s.title, 120), description: plain(s.description, 600), startsLocal: s.startsLocal.trim(), minutes };
+    const item = {
+      title: oneLine(s.title, 120),
+      description: plain(s.description, 600),
+      startsLocal: s.startsLocal.trim(),
+      minutes,
+    };
     const ok = AgendaSessionDraftDto.safeParse(item);
     if (!ok.success) continue;
     const end = addMinutesLocal(ok.data.startsLocal, minutes);
@@ -259,7 +275,8 @@ export function cleanAgendaDraft(
 export function addMinutesLocal(local: string, minutes: number): string | null {
   const m = /^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2})$/.exec(local);
   if (!m) return null;
-  const d = new Date(Date.UTC(+m[1]!, +m[2]! - 1, +m[3]!, +m[4]!, +m[5]! + minutes));
+  const [y, mo, day, h, mi] = m.slice(1).map(Number) as [number, number, number, number, number];
+  const d = new Date(Date.UTC(y, mo - 1, day, h, mi + minutes));
   if (Number.isNaN(d.getTime())) return null;
   return d.toISOString().slice(0, 16).replace('T', ' ');
 }
@@ -282,7 +299,10 @@ export function referencedEventIds(def: SegmentDefinition): string[] {
  * Clean an audience suggestion: the definition must parse in the segment DSL and reference only
  * the org's events that were offered (a model can't smuggle in another org's id).
  */
-export function cleanAudienceSuggestion(raw: string, allowedEventIds: readonly string[]): AudienceSuggestionDto {
+export function cleanAudienceSuggestion(
+  raw: string,
+  allowedEventIds: readonly string[],
+): AudienceSuggestionDto {
   const json = parseJsonReply(raw) as { explanation?: unknown; definition?: unknown };
   const def = SegmentDefinition.safeParse(json.definition);
   if (!def.success) throw new AiOutputError('segment definition');

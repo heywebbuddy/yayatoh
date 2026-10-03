@@ -1,8 +1,8 @@
 import { tenantTable } from '@yayatoh/db';
 import { sql } from 'drizzle-orm';
 import { boolean, check, index, integer, pgSchema, text, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
-import { TONES } from './domain/tones.ts';
 import { AI_PURPOSES, CREDIT_ENTRY_KINDS } from './domain/ledger.ts';
+import { TONES } from './domain/tones.ts';
 
 export const aiSchema = pgSchema('ai');
 
@@ -78,14 +78,8 @@ export const brandKits = tenantTable(
     name: text('name').notNull(),
     voice: text('voice').notNull().default(''),
     tone: text('tone').notNull().default('friendly'),
-    keywords: text('keywords')
-      .array()
-      .notNull()
-      .default(sql`'{}'::text[]`),
-    avoid: text('avoid')
-      .array()
-      .notNull()
-      .default(sql`'{}'::text[]`),
+    keywords: text('keywords').array().notNull().default(sql`'{}'::text[]`),
+    avoid: text('avoid').array().notNull().default(sql`'{}'::text[]`),
     isDefault: boolean('is_default').notNull().default(false),
     createdBy: text('created_by'),
   },

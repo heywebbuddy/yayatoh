@@ -1,5 +1,6 @@
 'use server';
 
+import { draftPage, PageDraftDto as PageDraft, type PageDraftDto } from '@yayatoh/ai';
 import {
   createEntryCommand,
   deleteEntryCommand,
@@ -9,9 +10,13 @@ import {
 } from '@yayatoh/cms';
 import { executeCommand } from '@yayatoh/kernel';
 import { revalidatePath, updateTag } from 'next/cache';
+import { getLocale } from 'next-intl/server';
 import { redirect } from '@/i18n/navigation.ts';
+import type { AiComposeResult } from '@/lib/ai-compose.ts';
 import { orgChangeTags } from '@/lib/cache-keys.ts';
 import type { FormState } from '@/lib/form-state.ts';
+import { aiDrafter } from '@/server/ai.ts';
+import { aiCall, composeArgs } from '@/server/ai-compose.ts';
 import { loadConsole } from '@/server/console.ts';
 import { failure, success } from '@/server/form.ts';
 import { ports } from '@/server/ports.ts';
@@ -118,4 +123,49 @@ export async function deleteEntryAction(
     href: `/o/${org}/content?kind=${kind === 'page' ? 'page' : 'post'}&deleted=1`,
     locale: data.ctx.locale ?? 'en',
   });
+}
+
+/** M6.12b: draft a page or post with AI (a preview; nothing is saved until "Create draft"). */
+export async function draftPageAiAction(
+  org: string,
+  values: unknown,
+): Promise<AiComposeResult<PageDraftDto>> {
+  const data = await loadConsole(org);
+  const v = composeArgs(values);
+  return aiCall({ orgId: data.org.id, userId: data.session.userId, key: 'page' }, async () => {
+    const res = await draftPage(data.ctx, ports, aiDrafter(), { ...v, locale: await getLocale() });
+    return { value: res.draft, balance: res.balance };
+  });
+}
+
+/**
+ * M6.12b: keep an AI draft as a new **draft** entry (never published) and open it in the editor,
+ * where the organizer edits it like any other.
+ */
+export async function createFromAiDraftAction(org: string, kind: string, draft: unknown): Promise<FormState> {
+  const data = await loadConsole(org);
+  const d = PageDraft.safeParse(draft);
+  if (!d.success) return { ok: false, code: 'validation_failed', fields: ['body'] };
+  let id: string;
+  try {
+    const row = await executeCommand(
+      createEntryCommand,
+      {
+        title: d.data.title,
+        excerpt: d.data.excerpt,
+        body: d.data.body,
+        seoTitle: '',
+        seoDescription: '',
+        kind: EntryKind.parse(kind),
+        authorName: data.session.name || null,
+      },
+      data.ctx,
+      ports,
+    );
+    id = row.id;
+  } catch (err) {
+    return failure(err);
+  }
+  revalidatePath(`/o/${org}/content`);
+  return redirect({ href: `/o/${org}/content/${id}?created=1`, locale: data.ctx.locale ?? 'en' });
 }

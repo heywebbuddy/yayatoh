@@ -204,7 +204,6 @@ export {
   voteCommand,
 } from './participate.ts';
 export { privateColumns } from './private-columns.ts';
-export { NETWORK_EMBEDDING_DIMENSIONS } from './schema.ts';
 export { ENGAGEMENT_REALTIME_CHANNELS, LIVE_CHANNEL, MODERATION_CHANNEL } from './realtime.ts';
 export {
   ANONYMOUS_IDENTITY,
@@ -221,6 +220,7 @@ export {
   type LocationKind,
   MEETING_STATES,
   type MeetingState,
+  NETWORK_EMBEDDING_DIMENSIONS,
   POLL_KINDS,
   POLL_STATES,
   type PollKind,

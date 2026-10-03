@@ -1,5 +1,6 @@
 'use server';
 
+import { suggestAudience } from '@yayatoh/ai';
 import {
   AUDIENCE_EXPORT_COLUMNS,
   type AudiencePreviewDto,
@@ -14,7 +15,11 @@ import { executeCommand, executeQuery, isDomainError } from '@yayatoh/kernel';
 import { listTicketTypesQuery } from '@yayatoh/ticketing';
 import { revalidatePath } from 'next/cache';
 import { getLocale, getTranslations } from 'next-intl/server';
+import type { AudienceSuggestion } from '@/components/audience-ai-panel.tsx';
 import { redirect } from '@/i18n/navigation.ts';
+import type { AiComposeResult } from '@/lib/ai-compose.ts';
+import { aiDrafter } from '@/server/ai.ts';
+import { aiCall } from '@/server/ai-compose.ts';
 import { runBulkInline } from '@/server/bulk.ts';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
@@ -137,4 +142,22 @@ export async function exportAudienceAction(org: string, segmentId: string): Prom
   await runBulkInline(data.org.id, operationId);
   redirect({ href: `/o/${org}/audiences/${segmentId}?export=${operationId}`, locale: await getLocale() });
   return { code: null };
+}
+
+/** M6.12b: suggest an audience with AI (a segment to review in the builder; nothing is saved). */
+export async function suggestAudienceAction(
+  org: string,
+  brief: unknown,
+): Promise<AiComposeResult<AudienceSuggestion>> {
+  const data = await loadConsole(org);
+  return aiCall({ orgId: data.org.id, userId: data.session.userId, key: 'audience' }, async () => {
+    const res = await suggestAudience(data.ctx, ports, aiDrafter(), {
+      brief: typeof brief === 'string' ? brief : '',
+      locale: await getLocale(),
+    });
+    return {
+      value: { explanation: res.explanation, definition: res.definition, count: res.count },
+      balance: res.balance,
+    };
+  });
 }

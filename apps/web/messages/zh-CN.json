@@ -380,7 +380,8 @@
     "plan": "套餐与账单",
     "webhooks": "Webhook",
     "sandboxes": "沙盒",
-    "notifications": "通知"
+    "notifications": "通知",
+    "brandKits": "品牌套件"
   },
   "vocab": {
     "attendee": "参会者",
@@ -4460,7 +4461,20 @@
     "emptySpeakersReadOnly": "编辑添加后，演讲者会显示在这里。",
     "addFirstSpeaker": "添加第一位演讲者",
     "emptyTiersReadOnly": "编辑添加后，赞助级别及其赞助商会显示在这里。",
-    "addFirstTier": "添加第一个级别"
+    "addFirstTier": "添加第一个级别",
+    "ai": {
+      "title": "用 AI 起草议程",
+      "explainer": "在活动日期内生成建议的场次。选择要添加的场次后,它们会成为可编辑的普通场次;在你发布之前议程保持未发布状态。",
+      "brief": "主题或场次想法",
+      "briefHint": "例如:欢迎致辞、气候主题演讲、圆桌讨论、工作坊。用逗号分隔主题。",
+      "count": "场次数量",
+      "pick": "要添加的场次",
+      "session": "{title} — {start} 至 {end}",
+      "add": "{count, plural, =0 {添加场次} other {添加 # 个场次}}",
+      "added": "已将 {count, plural, other {# 个场次}}添加到议程。",
+      "discard": "放弃",
+      "discarded": "已放弃建议,未添加任何内容。"
+    }
   },
   "aiDraft": {
     "title": "用 AI 起草",
@@ -5277,7 +5291,15 @@
     },
     "emptyActionPost": "撰写第一篇文章",
     "emptyActionPage": "撰写第一个页面",
-    "findOwner": "查找所有者或管理员"
+    "findOwner": "查找所有者或管理员",
+    "ai": {
+      "title": "用 AI 起草",
+      "explainer": "按所选语气和品牌风格生成页面初稿。保留后会创建一份未发布的草稿,你可以照常编辑。",
+      "brief": "页面应涵盖哪些内容?",
+      "create": "据此创建草稿",
+      "discard": "放弃",
+      "discarded": "已放弃草稿,未保存任何内容。"
+    }
   },
   "cmsPublic": {
     "blog": "博客",
@@ -5971,7 +5993,21 @@
     "insights": "联系人洞察",
     "emptyAction": "选择模板",
     "emptyViewer": "你的团队为营销活动保存的受众会显示在这里。",
-    "findOwner": "查找所有者或管理员"
+    "findOwner": "查找所有者或管理员",
+    "ai": {
+      "title": "用 AI 推荐受众",
+      "explainer": "描述你想触达的人群。推荐使用与构建器相同的规则;你在构建器中检查并保存。",
+      "brief": "你想触达哪些人?",
+      "briefHint": "例如:报名了晚宴但没有签到的人。仅作为信息使用。",
+      "suggest": "推荐受众",
+      "count": "{count, plural, =0 {暂无匹配的人} other {# 人匹配}}",
+      "rules": "{count, plural, other {# 条规则}} — 请在构建器中检查。",
+      "review": "在构建器中检查",
+      "discard": "放弃",
+      "discarded": "已放弃推荐。",
+      "reviewNotice": "由 AI 推荐:保存此受众前请检查每条规则。",
+      "invalidSuggestion": "无法打开此推荐。请从空白受众开始。"
+    }
   },
   "refundOps": {
     "timeline": {
@@ -7885,7 +7921,17 @@
     },
     "emptyAction": "为第一个营销活动命名",
     "emptyViewer": "你的团队创建的营销活动会连同受众和结果显示在这里。",
-    "findOwner": "查找所有者或管理员"
+    "findOwner": "查找所有者或管理员",
+    "ai": {
+      "title": "用 AI 起草",
+      "explainer": "按所选语气和品牌风格生成主题与正文的初稿。初稿会放入编辑器,由你修改并保存;在你发送之前不会发出任何内容。",
+      "brief": "这封邮件是关于什么的?",
+      "button": "按钮:{label}",
+      "apply": "使用此草稿",
+      "applied": "草稿已放入编辑器。请检查后保存。",
+      "discard": "放弃",
+      "discarded": "已放弃草稿,没有任何更改。"
+    }
   },
   "journeys": {
     "title": "旅程",
@@ -15128,7 +15174,25 @@
         "restored": "{name} 可以重新接受聊天了。"
       }
     },
-    "unreadChats": "{count, plural, other {# 个聊天有未读消息}}"
+    "unreadChats": "{count, plural, other {# 个聊天有未读消息}}",
+    "matchmaking": {
+      "title": "配对推荐",
+      "explainer": "加入社交功能的参会者会看到资料相近的人。只使用他们选择公开的内容;退出的人会立即被移除。",
+      "status": "目录中 {listed, plural, other {# 人}}里已有 {embedded} 人的推荐准备就绪。",
+      "unavailable": "此站点未开启 AI,无法准备推荐。",
+      "refresh": "{count, plural, other {更新推荐(# 人等待中)}}",
+      "upToDate": "推荐已是最新",
+      "done": "{count, plural, =0 {没有需要更新的内容。} other {又为 # 人准备好了推荐。}}",
+      "donePartial": "已更新 {count, plural, other {# 人}};还有 {pending} 人等待中。请再次更新以完成。"
+    },
+    "suggested": {
+      "title": "为你推荐",
+      "none": "暂无推荐。等更多人加入后再来看看。",
+      "why": "与你资料相近的人。这里只显示加入社交功能的人。",
+      "listLabel": "推荐的人",
+      "score": "匹配度 {score}%",
+      "shared": "你们都喜欢:{interests}"
+    }
   },
   "chat": {
     "metaTitle": "聊天",
@@ -15370,5 +15434,71 @@
     "readOnlyTitle": "此组织为只读",
     "readOnlyBody": "订阅付款失败。没有删除任何内容：你可以查看、导出和扫描门票，但在付款前更改已暂停。",
     "action": "套餐与账单"
+  },
+  "aiCompose": {
+    "credits": "本月剩余 AI 额度:{balance, plural, =0 {无} other {#}}(免费额度:{allowance})。",
+    "unavailableTitle": "AI 起草未开启",
+    "unavailableDescription": "此站点尚未配置 AI 服务商。",
+    "outOfCreditsTitle": "AI 额度已用完",
+    "outOfCredits": "本月的 AI 额度已用完,将于下月 1 日恢复;你仍可以自己撰写所有内容。",
+    "rateLimited": "短时间内 AI 请求过多。请在 {minutes, plural, other {# 分钟}}后重试。",
+    "tone": "语气",
+    "tones": {
+      "friendly": "亲切",
+      "formal": "正式",
+      "playful": "活泼",
+      "urgent": "紧迫",
+      "inspiring": "鼓舞人心"
+    },
+    "brandKit": "品牌套件",
+    "noBrandKit": "不使用品牌套件",
+    "noBrandKitsHint": "在 站点 → 品牌套件 中添加品牌套件,让每份草稿都保持你的风格。",
+    "event": "关于某个活动(可选)",
+    "noEvent": "不指定活动",
+    "briefHint": "你想说什么、对谁说。仅作为信息使用,绝不作为指令。",
+    "briefRequired": "请用几个词描述你的需求。",
+    "draft": "用 AI 起草",
+    "drafting": "正在起草…",
+    "previewTitle": "AI 草稿",
+    "previewNote": "使用前请检查。在你亲自操作之前,不会保存、发送或发布任何内容。",
+    "errors": {
+      "ai_unavailable": "AI 暂时不可用。额度已退还,请稍后再试。",
+      "ai_output": "无法使用 AI 的结果。额度已退还,请换个说法再试。"
+    }
+  },
+  "brandKits": {
+    "title": "品牌套件",
+    "description": "AI 为营销活动、页面和议程起草时遵循的风格:你的说话方式、要用的词和要避免的词。",
+    "readOnly": "你可以查看品牌套件;如需修改,请联系所有者或市场人员。",
+    "emptyTitle": "还没有品牌套件",
+    "emptyDescription": "添加一个,让每份 AI 草稿都像你写的。",
+    "emptyViewer": "还没有人添加品牌套件。",
+    "emptyAction": "添加品牌套件",
+    "listTitle": "{count, plural, other {# 个品牌套件}}",
+    "default": "默认",
+    "keywordsShown": "要用的词:{words}",
+    "avoidShown": "要避免的词:{words}",
+    "edit": "编辑{name}",
+    "newTitle": "新建品牌套件",
+    "name": "名称",
+    "tone": "默认语气",
+    "voice": "品牌风格",
+    "voiceHint": "用一两句话描述你的风格(例如:温暖、本地、从不强推)。",
+    "keywords": "要用的词",
+    "avoid": "要避免的词",
+    "termsHint": "用逗号分隔(最多 12 个)。",
+    "makeDefault": "默认使用此套件",
+    "saved": "品牌套件已保存。",
+    "created": "品牌套件已添加。",
+    "save": "保存更改",
+    "create": "添加品牌套件",
+    "delete": "删除",
+    "deleteNamed": "删除{name}",
+    "errors": {
+      "name": "请输入 1 至 60 个字符的名称。",
+      "nameTaken": "已有同名的品牌套件。",
+      "terms": "最多 12 个词,每个不超过 40 个字符。",
+      "voice": "品牌风格须少于 600 个字符。"
+    }
   }
 }
