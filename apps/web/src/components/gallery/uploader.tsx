@@ -4,7 +4,7 @@ import { GALLERY_ACCEPT, NAME_MAX } from '@yayatoh/gallery/client';
 import { Alert, Button, Input } from '@yayatoh/ui';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { type FormEvent, useId, useRef, useState } from 'react';
+import { type FormEvent, type ReactNode, useId, useRef, useState } from 'react';
 import { type DoneResult, type SlotResult, UPLOAD_REASONS } from './types.ts';
 
 type Row = {
@@ -28,6 +28,7 @@ export function GalleryUploader({
   askName,
   defaultName,
   idPrefix,
+  notice,
 }: {
   request: (meta: { bytes: number; caption: string | null; name: string | null }) => Promise<SlotResult>;
   complete: (itemId: string) => Promise<DoneResult>;
@@ -36,6 +37,11 @@ export function GalleryUploader({
   askName: boolean;
   defaultName?: string | null;
   idPrefix: string;
+  /**
+   * Shown instead of the fields when nothing more can be shared (the gallery is full, the guest's
+   * quota is used). The uploader stays mounted, so what happened to each file stays on screen.
+   */
+  notice?: ReactNode;
 }) {
   const t = useTranslations('gallery.uploader');
   const te = useTranslations('errors');
@@ -131,7 +137,8 @@ export function GalleryUploader({
 
   return (
     <form ref={formRef} onSubmit={onSubmit} className="flex flex-col gap-4" noValidate>
-      {askName ? (
+      {notice && !busy ? notice : null}
+      {notice && !busy ? null : askName ? (
         <Input
           id={id('name')}
           name="name"
@@ -144,36 +151,46 @@ export function GalleryUploader({
           error={nameError ?? undefined}
         />
       ) : null}
-      <div className="flex flex-col gap-1.5">
-        <label htmlFor={id('photos')} className="text-[13px] font-bold text-ink">
-          {t('photos')}
-        </label>
-        <input
-          id={id('photos')}
-          name="photos"
-          type="file"
-          multiple
-          accept={GALLERY_ACCEPT.join(',')}
-          aria-invalid={fileError ? true : undefined}
-          aria-describedby={fileError ? `${uid}-file-error` : `${uid}-file-hint`}
-          className="field min-h-11 py-2"
-        />
-        {fileError ? (
-          <p id={`${uid}-file-error`} className="text-caption text-danger">
-            {fileError}
-          </p>
-        ) : (
-          <p id={`${uid}-file-hint`} className="text-caption text-ink-2">
-            {t('photosHint', { mb: Math.round(maxBytes / 1024 / 1024) })}
-          </p>
-        )}
-      </div>
-      <Input id={id('caption')} name="caption" label={t('caption')} hint={t('captionHint')} maxLength={280} />
-      <div>
-        <Button type="submit" loading={busy}>
-          {busy ? t('uploading') : t('submit')}
-        </Button>
-      </div>
+      {notice && !busy ? null : (
+        <>
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor={id('photos')} className="text-[13px] font-bold text-ink">
+              {t('photos')}
+            </label>
+            <input
+              id={id('photos')}
+              name="photos"
+              type="file"
+              multiple
+              accept={GALLERY_ACCEPT.join(',')}
+              aria-invalid={fileError ? true : undefined}
+              aria-describedby={fileError ? `${uid}-file-error` : `${uid}-file-hint`}
+              className="field min-h-11 py-2"
+            />
+            {fileError ? (
+              <p id={`${uid}-file-error`} className="text-caption text-danger">
+                {fileError}
+              </p>
+            ) : (
+              <p id={`${uid}-file-hint`} className="text-caption text-ink-2">
+                {t('photosHint', { mb: Math.round(maxBytes / 1024 / 1024) })}
+              </p>
+            )}
+          </div>
+          <Input
+            id={id('caption')}
+            name="caption"
+            label={t('caption')}
+            hint={t('captionHint')}
+            maxLength={280}
+          />
+          <div>
+            <Button type="submit" loading={busy}>
+              {busy ? t('uploading') : t('submit')}
+            </Button>
+          </div>
+        </>
+      )}
       <section aria-labelledby={`${uid}-status`} className={rows.length ? 'flex flex-col gap-2' : 'sr-only'}>
         <h3 id={`${uid}-status`} ref={statusRef} tabIndex={-1} className="m-0 text-body font-bold text-ink">
           {rows.length === 0

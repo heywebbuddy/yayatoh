@@ -12,8 +12,8 @@ export const privateColumns = columnPrivacy('gallery', {
   settings: { moderation: 'vocab' },
   uploaders: {
     kind: 'vocab',
-    display_name: personal(),
-    user_id: internal(),
+    display_name: personal(undefined, { where: "kind = 'guest'" }),
+    user_id: internal(undefined, { where: "kind = 'host'" }),
   },
   items: {
     kind: 'vocab',

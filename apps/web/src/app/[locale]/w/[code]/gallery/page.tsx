@@ -157,24 +157,25 @@ export default async function GuestGalleryPage({
               quota: num.format(view.quota.quotaBytes / MB),
             })}
           </p>
-          {view.eventFull ? (
-            <Alert tone="warning" title={t('fullTitle')}>
-              {t('fullBody')}
-            </Alert>
-          ) : quotaLeft <= 0 ? (
-            <Alert tone="info" title={t('quotaReachedTitle')}>
-              {t('quotaReachedBody')}
-            </Alert>
-          ) : (
-            <GalleryUploader
-              request={requestGuestUploadAction.bind(null, code)}
-              complete={completeGuestUploadAction.bind(null, code)}
-              maxBytes={view.maxUploadBytes}
-              askName
-              defaultName={view.myName}
-              idPrefix="guest-upload"
-            />
-          )}
+          <GalleryUploader
+            request={requestGuestUploadAction.bind(null, code)}
+            complete={completeGuestUploadAction.bind(null, code)}
+            maxBytes={view.maxUploadBytes}
+            askName
+            defaultName={view.myName}
+            idPrefix="guest-upload"
+            notice={
+              view.eventFull ? (
+                <Alert tone="warning" title={t('fullTitle')}>
+                  {t('fullBody')}
+                </Alert>
+              ) : quotaLeft <= 0 ? (
+                <Alert tone="info" title={t('quotaReachedTitle')}>
+                  {t('quotaReachedBody')}
+                </Alert>
+              ) : null
+            }
+          />
           <p className="m-0 text-caption text-ink-2">{t('privacyNote')}</p>
         </Card>
       </section>

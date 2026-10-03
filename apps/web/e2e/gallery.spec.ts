@@ -80,6 +80,9 @@ async function guestPhoto(g: G, name: string, caption: string, approve = false) 
   return r;
 }
 
+/** The guest page's uploader form. */
+const share = (page: Page) => page.locator('form', { has: page.locator('#guest-upload-photos') });
+
 const console_ = (g: { eventSlug: string }) => `${ORG}/e/${g.eventSlug}/gallery`;
 
 async function submit(page: Page, button: Locator) {
@@ -103,7 +106,7 @@ test.describe('gallery: the host (M4.5b)', () => {
     await page.goto(console_(g));
     await expect(page.getByRole('heading', { name: 'Gallery', level: 1 })).toBeVisible();
     await expect(
-      page.getByRole('region', { name: 'Gallery' }).getByText('Off', { exact: true }),
+      page.getByRole('region', { name: 'Gallery' }).locator('[data-status="neutral"]', { hasText: 'Off' }),
     ).toBeVisible();
     await expect(page.getByText('Nothing is waiting')).toBeVisible();
     await expect(page.getByText('No photos yet')).toBeVisible();
@@ -115,7 +118,7 @@ test.describe('gallery: the host (M4.5b)', () => {
 
     await page.getByLabel('Gallery for guests').selectOption('on');
     await page.getByLabel('Storage for this event (MB)').fill('0');
-    await page.getByLabel('Photos and links per guest').fill('abc');
+    await page.getByLabel('Photos and links per guest').fill('0');
     await submit(page, page.getByRole('button', { name: 'Save gallery settings' }));
     await expect(page.getByText('Enter a whole number of at least 1.').first()).toBeVisible();
     await expect(page.getByLabel('Storage for this event (MB)')).toHaveAttribute('aria-invalid', 'true');
@@ -131,7 +134,7 @@ test.describe('gallery: the host (M4.5b)', () => {
     await expect(page.getByLabel('Guest photos')).toHaveValue('auto');
     await expect(page.getByLabel('Storage for this event (MB)')).toHaveValue('200');
     await expect(page.getByTestId('gallery-usage')).toHaveText('0 MB of 200 MB used');
-    await expect(page.getByText("Address for guests (behind the website's password)")).toBeVisible();
+    await expect(page.getByText("Address for guests (behind the website's password)").first()).toBeVisible();
     await expect(page.getByText('Guest photos are published at once, so nothing waits here.')).toBeVisible();
   });
 
@@ -141,7 +144,7 @@ test.describe('gallery: the host (M4.5b)', () => {
     const g = await withGallery();
     await signIn(page);
     await page.goto(console_(g));
-    const upload = page.getByRole('region', { name: 'Add your photos' });
+    const upload = page.locator('form', { has: page.locator('#gallery-host-upload-photos') });
     await upload.getByRole('button', { name: 'Share photos' }).click();
     await expect(upload.getByText('Choose at least one photo.')).toBeVisible();
 
@@ -151,7 +154,9 @@ test.describe('gallery: the host (M4.5b)', () => {
       buffer: Buffer.from(fakeHeic(new Uint8Array(await jpeg(800, 600, 40)))),
     };
     const junk = { name: 'notes.jpg', mimeType: 'image/jpeg', buffer: Buffer.from('not a photo at all') };
-    await upload.getByLabel('Photos').setInputFiles([await file('first-dance.jpg'), heic, junk]);
+    await upload
+      .getByLabel('Photos', { exact: true })
+      .setInputFiles([await file('first-dance.jpg'), heic, junk]);
     await upload.getByLabel('Caption (optional)').fill('First dance');
     await upload.getByRole('button', { name: 'Share photos' }).click();
     await expect(upload.getByText('2 photos shared, 1 could not be shared.')).toBeVisible({
@@ -248,8 +253,8 @@ test.describe('the per-event storage cap is enforced (acceptance)', () => {
       'aria-valuenow',
       String(used),
     );
-    const upload = page.getByRole('region', { name: 'Add your photos' });
-    await upload.getByLabel('Photos').setInputFiles([await file()]);
+    const upload = page.locator('form', { has: page.locator('#gallery-host-upload-photos') });
+    await upload.getByLabel('Photos', { exact: true }).setInputFiles([await file()]);
     await upload.getByRole('button', { name: 'Share photos' }).click();
     await expect(
       upload.getByText('The gallery is full: the event has used all of its photo storage.'),
@@ -267,8 +272,10 @@ test.describe('the per-event storage cap is enforced (acceptance)', () => {
     // Room for a tiny bit more than now, but not for a photo.
     await enableGallery(await system(), g.eventId, { moderation: 'auto', capBytes: used + 2_000 });
     await page.reload();
-    await page.getByLabel('Your name').fill('Late Guest');
-    await page.getByLabel('Photos').setInputFiles([await file('big.jpg', 1600, 1200)]);
+    await share(page).getByLabel('Your name').fill('Late Guest');
+    await share(page)
+      .getByLabel('Photos', { exact: true })
+      .setInputFiles([await file('big.jpg', 1600, 1200)]);
     await page.getByRole('button', { name: 'Share photos' }).click();
     await expect(
       page.getByText('The gallery is full: the event has used all of its photo storage.'),
@@ -300,13 +307,15 @@ test.describe('gallery: guests (M4.5b)', () => {
     await expectAccessibleBothModes(page);
 
     // A name is needed first.
-    await page.getByLabel('Photos').setInputFiles([await file()]);
+    await share(page)
+      .getByLabel('Photos', { exact: true })
+      .setInputFiles([await file()]);
     await page.getByRole('button', { name: 'Share photos' }).click();
     await expect(page.getByText('Enter your name before sharing.')).toBeVisible();
-    await expect(page.getByLabel('Your name')).toBeFocused();
+    await expect(share(page).getByLabel('Your name')).toBeFocused();
 
-    await page.getByLabel('Your name').fill('Lea');
-    await page.getByLabel('Caption (optional)').fill('Sunset');
+    await share(page).getByLabel('Your name').fill('Lea');
+    await share(page).getByLabel('Caption (optional)').fill('Sunset');
     await page.getByRole('button', { name: 'Share photos' }).click();
     await expect(page.getByText('waiting for the hosts to approve it')).toBeVisible({ timeout: 30_000 });
     await expect(page.getByText('The hosts approve photos before everyone sees them.')).toBeVisible();
@@ -315,7 +324,7 @@ test.describe('gallery: guests (M4.5b)', () => {
     await expectAccessibleBothModes(page);
 
     await page.reload();
-    await expect(page.getByLabel('Your name')).toHaveValue('Lea');
+    await expect(share(page).getByLabel('Your name')).toHaveValue('Lea');
     await expect(page.getByRole('heading', { name: 'Your photos (1)', level: 2 })).toBeVisible();
     await submit(page, page.getByRole('button', { name: 'Take back: Sunset' }));
     await expect(page.getByRole('heading', { name: /Your photos/ })).toHaveCount(0);
@@ -341,8 +350,10 @@ test.describe('gallery: guests (M4.5b)', () => {
   }) => {
     const g = await withGallery({ guestQuotaItems: 1, moderation: 'auto' });
     await unlockGallery(page, g);
-    await page.getByLabel('Your name').fill('Pia');
-    await page.getByLabel('Photos').setInputFiles([await file(), await file('second.jpg')]);
+    await share(page).getByLabel('Your name').fill('Pia');
+    await share(page)
+      .getByLabel('Photos', { exact: true })
+      .setInputFiles([await file(), await file('second.jpg')]);
     await page.getByRole('button', { name: 'Share photos' }).click();
     await expect(page.getByText('You have shared as many photos as one guest can.')).toBeVisible({
       timeout: 30_000,

@@ -321,8 +321,10 @@ const publishedRowsTx = (tx: TenantTx, eventId: string, photosOnly = false, limi
 /* ---------------------------------------------------------------------- photo processing ---- */
 
 class PhotoRefused extends Error {
-  constructor(readonly reason: Refusal) {
+  readonly reason: Refusal;
+  constructor(reason: Refusal) {
     super(reason);
+    this.reason = reason;
   }
 }
 
