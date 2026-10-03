@@ -13052,6 +13052,9 @@
     "connectors": {
       "demo": {
         "description": "Eine Sandbox-Kontakte-App zum Ausprobieren: Kontakte werden in beide Richtungen mit deinem CRM abgeglichen. Nur in Testumgebungen."
+      },
+      "salesforce": {
+        "description": "Halten Sie Salesforce auf dem gleichen Stand: Kontakte und Leads in beide Richtungen, eine Kampagne pro Veranstaltung mit den angemeldeten und eingecheckten Personen und Ihre Sponsoren als Opportunities. Gesendet werden nur Personen, die Marketing zugestimmt haben."
       }
     },
     "sandboxBadge": "Sandbox",
@@ -13071,11 +13074,32 @@
     "readOnly": "Nur Inhaber und Admins können Integrationen verbinden oder ändern.",
     "breadcrumb": "Brotkrümelnavigation",
     "objects": {
-      "contacts": "Kontakte"
+      "contacts": "Kontakte",
+      "leads": "Leads",
+      "campaigns": "Kampagnen",
+      "campaign_members": "Kampagnenmitglieder",
+      "sponsor_opportunities": "Sponsoren-Opportunities"
     },
     "fields": {
       "email": "E-Mail",
-      "name": "Name"
+      "name": "Name",
+      "first_name": "Vorname",
+      "last_name": "Nachname",
+      "company": "Firma",
+      "title": "Position",
+      "phone": "Telefon",
+      "lead_source": "Lead-Quelle",
+      "start_date": "Startdatum",
+      "end_date": "Enddatum",
+      "status": "Status",
+      "description": "Beschreibung",
+      "stage": "Phase",
+      "stage_name": "Phase",
+      "close_date": "Abschlussdatum",
+      "amount": "Betrag",
+      "tier": "Sponsorenstufe",
+      "currency": "Währung",
+      "currency_iso_code": "Währungscode"
     },
     "status": {
       "none": "Nicht verbunden",
@@ -13288,7 +13312,15 @@
       "allow": "Zulassen",
       "deny": "Ablehnen"
     },
-    "webhooksAction": "Webhook einrichten"
+    "webhooksAction": "Webhook einrichten",
+    "linked": {
+      "title": "Verknüpfte Datensätze",
+      "description": "Was diese Integration bisher abgleicht, nach Art des Datensatzes.",
+      "caption": "Verknüpfte Datensätze nach Art",
+      "object": "Art",
+      "count": "Datensätze",
+      "empty": "Noch nichts verknüpft. Datensätze werden beim Synchronisieren verknüpft."
+    }
   },
   "emptyActions": {
     "seeEvents": "Ihre Veranstaltungen ansehen",

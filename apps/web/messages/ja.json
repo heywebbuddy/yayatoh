@@ -13052,6 +13052,9 @@
     "connectors": {
       "demo": {
         "description": "連携を試すためのテスト用連絡先アプリです。連絡先が CRM と双方向に同期されます。テスト環境のみ。"
+      },
+      "salesforce": {
+        "description": "Salesforce と同期を保ちます。取引先責任者とリードは双方向、イベントごとに登録者とチェックイン済みの人を含むキャンペーンを作成し、スポンサーは商談として送ります。送信されるのはマーケティングに同意した人だけです。"
       }
     },
     "sandboxBadge": "テスト",
@@ -13071,11 +13074,32 @@
     "readOnly": "連携の接続や変更ができるのはオーナーと管理者だけです。",
     "breadcrumb": "パンくずリスト",
     "objects": {
-      "contacts": "連絡先"
+      "contacts": "連絡先",
+      "leads": "リード",
+      "campaigns": "キャンペーン",
+      "campaign_members": "キャンペーンメンバー",
+      "sponsor_opportunities": "スポンサー商談"
     },
     "fields": {
       "email": "メール",
-      "name": "名前"
+      "name": "名前",
+      "first_name": "名",
+      "last_name": "姓",
+      "company": "会社",
+      "title": "役職",
+      "phone": "電話",
+      "lead_source": "リードソース",
+      "start_date": "開始日",
+      "end_date": "終了日",
+      "status": "状況",
+      "description": "説明",
+      "stage": "フェーズ",
+      "stage_name": "フェーズ",
+      "close_date": "完了予定日",
+      "amount": "金額",
+      "tier": "スポンサーランク",
+      "currency": "通貨",
+      "currency_iso_code": "通貨コード"
     },
     "status": {
       "none": "未接続",
@@ -13288,7 +13312,15 @@
       "allow": "許可",
       "deny": "拒否"
     },
-    "webhooksAction": "Webhook を設定"
+    "webhooksAction": "Webhook を設定",
+    "linked": {
+      "title": "リンク済みのレコード",
+      "description": "この連携がこれまでに同期を保っているもの（レコードの種類別）。",
+      "caption": "種類別のリンク済みレコード",
+      "object": "種類",
+      "count": "レコード",
+      "empty": "まだリンクはありません。同期するとレコードがリンクされます。"
+    }
   },
   "emptyActions": {
     "seeEvents": "イベントを見る",

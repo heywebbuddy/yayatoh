@@ -13052,6 +13052,9 @@
     "connectors": {
       "demo": {
         "description": "A sandbox contacts app for trying integrations: contacts sync both ways with your CRM. Test environments only."
+      },
+      "salesforce": {
+        "description": "Keep Salesforce in step: contacts and leads both ways, a campaign for each event with the people registered and checked in, and your sponsors as opportunities. Only people who agreed to marketing are sent."
       }
     },
     "sandboxBadge": "Sandbox",
@@ -13071,11 +13074,32 @@
     "readOnly": "Only owners and admins can connect or change integrations.",
     "breadcrumb": "Breadcrumb",
     "objects": {
-      "contacts": "Contacts"
+      "contacts": "Contacts",
+      "leads": "Leads",
+      "campaigns": "Campaigns",
+      "campaign_members": "Campaign members",
+      "sponsor_opportunities": "Sponsor opportunities"
     },
     "fields": {
       "email": "Email",
-      "name": "Name"
+      "name": "Name",
+      "first_name": "First name",
+      "last_name": "Last name",
+      "company": "Company",
+      "title": "Job title",
+      "phone": "Phone",
+      "lead_source": "Lead source",
+      "start_date": "Start date",
+      "end_date": "End date",
+      "status": "Status",
+      "description": "Description",
+      "stage": "Stage",
+      "stage_name": "Stage",
+      "close_date": "Close date",
+      "amount": "Amount",
+      "tier": "Sponsor tier",
+      "currency": "Currency",
+      "currency_iso_code": "Currency code"
     },
     "status": {
       "none": "Not connected",
@@ -13288,7 +13312,15 @@
       "allow": "Allow",
       "deny": "Deny"
     },
-    "webhooksAction": "Set up a webhook"
+    "webhooksAction": "Set up a webhook",
+    "linked": {
+      "title": "Linked records",
+      "description": "What this integration keeps in step so far, by kind of record.",
+      "caption": "Linked records by kind",
+      "object": "Kind",
+      "count": "Records",
+      "empty": "Nothing linked yet. Records are linked as they sync."
+    }
   },
   "emptyActions": {
     "seeEvents": "See your events",

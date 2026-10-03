@@ -13052,6 +13052,9 @@
     "connectors": {
       "demo": {
         "description": "用于试用集成的测试联系人应用：联系人与你的 CRM 双向同步。仅限测试环境。"
+      },
+      "salesforce": {
+        "description": "让 Salesforce 保持同步：联系人和潜在客户双向同步，每场活动一个营销活动并包含已报名和已签到的人，赞助商作为业务机会。只发送同意接收营销信息的人。"
       }
     },
     "sandboxBadge": "测试",
@@ -13071,11 +13074,32 @@
     "readOnly": "只有所有者和管理员可以连接或更改集成。",
     "breadcrumb": "面包屑导航",
     "objects": {
-      "contacts": "联系人"
+      "contacts": "联系人",
+      "leads": "潜在客户",
+      "campaigns": "营销活动",
+      "campaign_members": "营销活动成员",
+      "sponsor_opportunities": "赞助业务机会"
     },
     "fields": {
       "email": "电子邮件",
-      "name": "姓名"
+      "name": "姓名",
+      "first_name": "名",
+      "last_name": "姓",
+      "company": "公司",
+      "title": "职位",
+      "phone": "电话",
+      "lead_source": "潜在客户来源",
+      "start_date": "开始日期",
+      "end_date": "结束日期",
+      "status": "状态",
+      "description": "描述",
+      "stage": "阶段",
+      "stage_name": "阶段",
+      "close_date": "预计成交日期",
+      "amount": "金额",
+      "tier": "赞助级别",
+      "currency": "货币",
+      "currency_iso_code": "货币代码"
     },
     "status": {
       "none": "未连接",
@@ -13288,7 +13312,15 @@
       "allow": "允许",
       "deny": "拒绝"
     },
-    "webhooksAction": "设置 Webhook"
+    "webhooksAction": "设置 Webhook",
+    "linked": {
+      "title": "已关联的记录",
+      "description": "此集成目前保持同步的内容，按记录类型。",
+      "caption": "按类型的已关联记录",
+      "object": "类型",
+      "count": "记录",
+      "empty": "尚未关联任何内容。记录会在同步时关联。"
+    }
   },
   "emptyActions": {
     "seeEvents": "查看你的活动",

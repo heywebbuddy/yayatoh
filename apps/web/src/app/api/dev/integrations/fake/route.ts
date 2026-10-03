@@ -1,4 +1,11 @@
-import { DEMO_BAD_RECORD, demoRemoteUpdate, fakeIntegrations } from '@yayatoh/integrations';
+import {
+  DEMO_BAD_RECORD,
+  demoRemoteUpdate,
+  fakeIntegrations,
+  SALESFORCE,
+  SALESFORCE_BAD_RECORD,
+  salesforceRemoteEdit,
+} from '@yayatoh/integrations';
 import { type NextRequest, NextResponse } from 'next/server';
 import { integrationAuth } from '@/server/integrations.ts';
 import { devAuthEnabled } from '@/server/session.ts';
@@ -19,6 +26,11 @@ export async function POST(req: NextRequest) {
   const account = UUID.test(connectionId) ? fakeIntegrations.accountFor(connectionId) : null;
   if (!account) return NextResponse.json({ error: 'unknown_connection' }, { status: 404 });
   if (action === 'revoke') fakeIntegrations.revokeAtProvider(account.authConnectionId);
+  // M6.5b: the fake Salesforce org's contact without an email gets one.
+  else if (action === 'fix' && account.providerConfigKey === SALESFORCE)
+    salesforceRemoteEdit(account, 'Contact', SALESFORCE_BAD_RECORD, {
+      Email: `fixed.${connectionId.slice(-8)}@sf-remote.test`,
+    });
   else if (action === 'fix')
     demoRemoteUpdate(account, DEMO_BAD_RECORD, {
       email_address: `fixed.${connectionId.slice(-8)}@demo-remote.test`,

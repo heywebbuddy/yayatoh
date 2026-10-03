@@ -407,7 +407,7 @@ export function GuestSeatingEditor({
               id="gs-search"
               type="search"
               value={query}
-              onValueChange={(v) => setQuery(v)}
+              onChange={(e) => setQuery(e.currentTarget.value)}
               className={field}
             />
           </div>

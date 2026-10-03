@@ -13052,6 +13052,9 @@
     "connectors": {
       "demo": {
         "description": "用來試用整合的測試聯絡人應用程式：聯絡人會與你的 CRM 雙向同步。僅限測試環境。"
+      },
+      "salesforce": {
+        "description": "讓 Salesforce 保持同步：聯絡人和潛在客戶雙向同步，每場活動一個行銷活動並包含已報名和已報到的人，贊助商作為商機。只會傳送同意接收行銷訊息的人。"
       }
     },
     "sandboxBadge": "測試",
@@ -13071,11 +13074,32 @@
     "readOnly": "只有擁有者和管理員可以串接或變更整合。",
     "breadcrumb": "導覽路徑",
     "objects": {
-      "contacts": "聯絡人"
+      "contacts": "聯絡人",
+      "leads": "潛在客戶",
+      "campaigns": "行銷活動",
+      "campaign_members": "行銷活動成員",
+      "sponsor_opportunities": "贊助商機"
     },
     "fields": {
       "email": "電子郵件",
-      "name": "姓名"
+      "name": "姓名",
+      "first_name": "名",
+      "last_name": "姓",
+      "company": "公司",
+      "title": "職稱",
+      "phone": "電話",
+      "lead_source": "潛在客戶來源",
+      "start_date": "開始日期",
+      "end_date": "結束日期",
+      "status": "狀態",
+      "description": "描述",
+      "stage": "階段",
+      "stage_name": "階段",
+      "close_date": "結案日期",
+      "amount": "金額",
+      "tier": "贊助等級",
+      "currency": "貨幣",
+      "currency_iso_code": "貨幣代碼"
     },
     "status": {
       "none": "未串接",
@@ -13288,7 +13312,15 @@
       "allow": "允許",
       "deny": "拒絕"
     },
-    "webhooksAction": "設定 Webhook"
+    "webhooksAction": "設定 Webhook",
+    "linked": {
+      "title": "已連結的記錄",
+      "description": "此整合目前保持同步的內容，依記錄類型。",
+      "caption": "依類型的已連結記錄",
+      "object": "類型",
+      "count": "記錄",
+      "empty": "尚未連結任何內容。記錄會在同步時連結。"
+    }
   },
   "emptyActions": {
     "seeEvents": "查看你的活動",

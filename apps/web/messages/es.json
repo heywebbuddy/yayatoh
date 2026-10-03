@@ -13052,6 +13052,9 @@
     "connectors": {
       "demo": {
         "description": "Una app de contactos de prueba para probar integraciones: los contactos se sincronizan en ambos sentidos con tu CRM. Solo en entornos de prueba."
+      },
+      "salesforce": {
+        "description": "Mantén Salesforce al día: contactos y clientes potenciales en ambos sentidos, una campaña por evento con las personas inscritas y registradas a la entrada, y tus patrocinadores como oportunidades. Solo se envían las personas que aceptaron recibir marketing."
       }
     },
     "sandboxBadge": "Pruebas",
@@ -13071,11 +13074,32 @@
     "readOnly": "Solo propietarios y administradores pueden conectar o cambiar integraciones.",
     "breadcrumb": "Ruta de navegación",
     "objects": {
-      "contacts": "Contactos"
+      "contacts": "Contactos",
+      "leads": "Clientes potenciales",
+      "campaigns": "Campañas",
+      "campaign_members": "Miembros de campaña",
+      "sponsor_opportunities": "Oportunidades de patrocinio"
     },
     "fields": {
       "email": "Correo electrónico",
-      "name": "Nombre"
+      "name": "Nombre",
+      "first_name": "Nombre",
+      "last_name": "Apellido",
+      "company": "Empresa",
+      "title": "Cargo",
+      "phone": "Teléfono",
+      "lead_source": "Origen del cliente potencial",
+      "start_date": "Fecha de inicio",
+      "end_date": "Fecha de fin",
+      "status": "Estado",
+      "description": "Descripción",
+      "stage": "Etapa",
+      "stage_name": "Etapa",
+      "close_date": "Fecha de cierre",
+      "amount": "Importe",
+      "tier": "Nivel de patrocinio",
+      "currency": "Moneda",
+      "currency_iso_code": "Código de moneda"
     },
     "status": {
       "none": "Sin conectar",
@@ -13288,7 +13312,15 @@
       "allow": "Permitir",
       "deny": "Denegar"
     },
-    "webhooksAction": "Configurar un webhook"
+    "webhooksAction": "Configurar un webhook",
+    "linked": {
+      "title": "Registros vinculados",
+      "description": "Lo que esta integración mantiene sincronizado hasta ahora, por tipo de registro.",
+      "caption": "Registros vinculados por tipo",
+      "object": "Tipo",
+      "count": "Registros",
+      "empty": "Aún no hay nada vinculado. Los registros se vinculan al sincronizar."
+    }
   },
   "emptyActions": {
     "seeEvents": "Ver tus eventos",

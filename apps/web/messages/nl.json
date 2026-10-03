@@ -13052,6 +13052,9 @@
     "connectors": {
       "demo": {
         "description": "Een test-app met contacten om integraties uit te proberen: contacten synchroniseren in beide richtingen met je CRM. Alleen in testomgevingen."
+      },
+      "salesforce": {
+        "description": "Houd Salesforce bij: contacten en leads in beide richtingen, een campagne per evenement met de ingeschreven en ingecheckte mensen, en je sponsors als opportunities. Alleen mensen die met marketing hebben ingestemd worden verstuurd."
       }
     },
     "sandboxBadge": "Test",
@@ -13071,11 +13074,32 @@
     "readOnly": "Alleen eigenaren en beheerders kunnen integraties koppelen of wijzigen.",
     "breadcrumb": "Kruimelpad",
     "objects": {
-      "contacts": "Contacten"
+      "contacts": "Contacten",
+      "leads": "Leads",
+      "campaigns": "Campagnes",
+      "campaign_members": "Campagneleden",
+      "sponsor_opportunities": "Sponsor-opportunities"
     },
     "fields": {
       "email": "E-mail",
-      "name": "Naam"
+      "name": "Naam",
+      "first_name": "Voornaam",
+      "last_name": "Achternaam",
+      "company": "Bedrijf",
+      "title": "Functie",
+      "phone": "Telefoon",
+      "lead_source": "Leadbron",
+      "start_date": "Startdatum",
+      "end_date": "Einddatum",
+      "status": "Status",
+      "description": "Beschrijving",
+      "stage": "Fase",
+      "stage_name": "Fase",
+      "close_date": "Sluitdatum",
+      "amount": "Bedrag",
+      "tier": "Sponsorniveau",
+      "currency": "Valuta",
+      "currency_iso_code": "Valutacode"
     },
     "status": {
       "none": "Niet gekoppeld",
@@ -13288,7 +13312,15 @@
       "allow": "Toestaan",
       "deny": "Weigeren"
     },
-    "webhooksAction": "Een webhook instellen"
+    "webhooksAction": "Een webhook instellen",
+    "linked": {
+      "title": "Gekoppelde records",
+      "description": "Wat deze integratie tot nu toe bijhoudt, per soort record.",
+      "caption": "Gekoppelde records per soort",
+      "object": "Soort",
+      "count": "Records",
+      "empty": "Nog niets gekoppeld. Records worden gekoppeld zodra ze synchroniseren."
+    }
   },
   "emptyActions": {
     "seeEvents": "Je evenementen bekijken",

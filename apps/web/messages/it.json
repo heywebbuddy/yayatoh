@@ -13052,6 +13052,9 @@
     "connectors": {
       "demo": {
         "description": "Un’app contatti di prova per provare le integrazioni: i contatti si sincronizzano in entrambe le direzioni con il tuo CRM. Solo negli ambienti di test."
+      },
+      "salesforce": {
+        "description": "Mantieni Salesforce allineato: contatti e lead in entrambe le direzioni, una campagna per ogni evento con le persone iscritte e registrate all’ingresso, e i tuoi sponsor come opportunità. Vengono inviate solo le persone che hanno accettato il marketing."
       }
     },
     "sandboxBadge": "Prova",
@@ -13071,11 +13074,32 @@
     "readOnly": "Solo proprietari e amministratori possono collegare o modificare le integrazioni.",
     "breadcrumb": "Percorso di navigazione",
     "objects": {
-      "contacts": "Contatti"
+      "contacts": "Contatti",
+      "leads": "Lead",
+      "campaigns": "Campagne",
+      "campaign_members": "Membri della campagna",
+      "sponsor_opportunities": "Opportunità di sponsorizzazione"
     },
     "fields": {
       "email": "Email",
-      "name": "Nome"
+      "name": "Nome",
+      "first_name": "Nome",
+      "last_name": "Cognome",
+      "company": "Azienda",
+      "title": "Ruolo",
+      "phone": "Telefono",
+      "lead_source": "Origine del lead",
+      "start_date": "Data di inizio",
+      "end_date": "Data di fine",
+      "status": "Stato",
+      "description": "Descrizione",
+      "stage": "Fase",
+      "stage_name": "Fase",
+      "close_date": "Data di chiusura",
+      "amount": "Importo",
+      "tier": "Livello di sponsorizzazione",
+      "currency": "Valuta",
+      "currency_iso_code": "Codice valuta"
     },
     "status": {
       "none": "Non collegata",
@@ -13288,7 +13312,15 @@
       "allow": "Consenti",
       "deny": "Rifiuta"
     },
-    "webhooksAction": "Configura un webhook"
+    "webhooksAction": "Configura un webhook",
+    "linked": {
+      "title": "Record collegati",
+      "description": "Ciò che questa integrazione mantiene allineato finora, per tipo di record.",
+      "caption": "Record collegati per tipo",
+      "object": "Tipo",
+      "count": "Record",
+      "empty": "Ancora nulla di collegato. I record si collegano man mano che si sincronizzano."
+    }
   },
   "emptyActions": {
     "seeEvents": "Vedi i tuoi eventi",

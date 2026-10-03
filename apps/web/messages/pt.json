@@ -13052,6 +13052,9 @@
     "connectors": {
       "demo": {
         "description": "Um app de contatos de teste para experimentar integrações: os contatos são sincronizados nos dois sentidos com o seu CRM. Somente em ambientes de teste."
+      },
+      "salesforce": {
+        "description": "Mantenha o Salesforce em sincronia: contatos e leads nos dois sentidos, uma campanha por evento com as pessoas inscritas e com check-in feito, e seus patrocinadores como oportunidades. Só são enviadas pessoas que aceitaram receber marketing."
       }
     },
     "sandboxBadge": "Teste",
@@ -13071,11 +13074,32 @@
     "readOnly": "Somente proprietários e administradores podem conectar ou alterar integrações.",
     "breadcrumb": "Trilha de navegação",
     "objects": {
-      "contacts": "Contatos"
+      "contacts": "Contatos",
+      "leads": "Leads",
+      "campaigns": "Campanhas",
+      "campaign_members": "Membros da campanha",
+      "sponsor_opportunities": "Oportunidades de patrocínio"
     },
     "fields": {
       "email": "E-mail",
-      "name": "Nome"
+      "name": "Nome",
+      "first_name": "Nome",
+      "last_name": "Sobrenome",
+      "company": "Empresa",
+      "title": "Cargo",
+      "phone": "Telefone",
+      "lead_source": "Origem do lead",
+      "start_date": "Data de início",
+      "end_date": "Data de término",
+      "status": "Status",
+      "description": "Descrição",
+      "stage": "Fase",
+      "stage_name": "Fase",
+      "close_date": "Data de fechamento",
+      "amount": "Valor",
+      "tier": "Nível de patrocínio",
+      "currency": "Moeda",
+      "currency_iso_code": "Código da moeda"
     },
     "status": {
       "none": "Não conectada",
@@ -13288,7 +13312,15 @@
       "allow": "Permitir",
       "deny": "Negar"
     },
-    "webhooksAction": "Configurar um webhook"
+    "webhooksAction": "Configurar um webhook",
+    "linked": {
+      "title": "Registros vinculados",
+      "description": "O que esta integração mantém em sincronia até agora, por tipo de registro.",
+      "caption": "Registros vinculados por tipo",
+      "object": "Tipo",
+      "count": "Registros",
+      "empty": "Nada vinculado ainda. Os registros são vinculados à medida que sincronizam."
+    }
   },
   "emptyActions": {
     "seeEvents": "Ver seus eventos",

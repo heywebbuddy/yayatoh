@@ -13052,6 +13052,9 @@
     "connectors": {
       "demo": {
         "description": "Une appli de contacts de test pour essayer les intégrations : les contacts se synchronisent dans les deux sens avec votre CRM. Environnements de test uniquement."
+      },
+      "salesforce": {
+        "description": "Gardez Salesforce à jour : contacts et pistes dans les deux sens, une campagne par événement avec les personnes inscrites et enregistrées à l’entrée, et vos sponsors comme opportunités. Seules les personnes ayant accepté le marketing sont envoyées."
       }
     },
     "sandboxBadge": "Test",
@@ -13071,11 +13074,32 @@
     "readOnly": "Seuls les propriétaires et les admins peuvent connecter ou modifier des intégrations.",
     "breadcrumb": "Fil d’Ariane",
     "objects": {
-      "contacts": "Contacts"
+      "contacts": "Contacts",
+      "leads": "Pistes",
+      "campaigns": "Campagnes",
+      "campaign_members": "Membres de campagne",
+      "sponsor_opportunities": "Opportunités de sponsoring"
     },
     "fields": {
       "email": "E-mail",
-      "name": "Nom"
+      "name": "Nom",
+      "first_name": "Prénom",
+      "last_name": "Nom",
+      "company": "Entreprise",
+      "title": "Fonction",
+      "phone": "Téléphone",
+      "lead_source": "Origine de la piste",
+      "start_date": "Date de début",
+      "end_date": "Date de fin",
+      "status": "Statut",
+      "description": "Description",
+      "stage": "Étape",
+      "stage_name": "Étape",
+      "close_date": "Date de clôture",
+      "amount": "Montant",
+      "tier": "Niveau de sponsoring",
+      "currency": "Devise",
+      "currency_iso_code": "Code de devise"
     },
     "status": {
       "none": "Non connectée",
@@ -13288,7 +13312,15 @@
       "allow": "Autoriser",
       "deny": "Refuser"
     },
-    "webhooksAction": "Configurer un webhook"
+    "webhooksAction": "Configurer un webhook",
+    "linked": {
+      "title": "Enregistrements liés",
+      "description": "Ce que cette intégration synchronise jusqu’ici, par type d’enregistrement.",
+      "caption": "Enregistrements liés par type",
+      "object": "Type",
+      "count": "Enregistrements",
+      "empty": "Rien n’est encore lié. Les enregistrements sont liés au fil des synchronisations."
+    }
   },
   "emptyActions": {
     "seeEvents": "Voir vos événements",
