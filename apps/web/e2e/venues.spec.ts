@@ -45,6 +45,8 @@ async function addTags(page: Page, tags: readonly string[]) {
     await box.fill(t);
     await box.press('Enter');
   }
+  // The list stays open for the next tag; Escape closes it (it would cover the Save button).
+  await box.press('Escape');
 }
 const chosenTags = (page: Page) =>
   page
