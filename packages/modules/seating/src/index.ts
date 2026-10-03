@@ -77,6 +77,16 @@ export {
   planChunk,
   planUndo,
 } from './domain/bulk-assign.ts';
+export {
+  type ChannelRef,
+  channelHolds,
+  normalizeChannelCode,
+  SALE_VIAS,
+  type SaleVia,
+  saleChannel,
+  seatNumberList,
+  sellableThrough,
+} from './domain/channels.ts';
 // M4.4a guest seat finder: the party's page (link), PIN mode and the `PartyCredentials` port.
 export { type FinderGuest, type FinderParty, partyOnChart } from './domain/guest-finder.ts';
 // M4.3a guest seating: parties and guests at tables (the OccupantDirectory port, guests side).
@@ -91,16 +101,6 @@ export {
   type VipWarning,
   vipWarning,
 } from './domain/guest-seating.ts';
-export {
-  type ChannelRef,
-  channelHolds,
-  normalizeChannelCode,
-  SALE_VIAS,
-  type SaleVia,
-  saleChannel,
-  seatNumberList,
-  sellableThrough,
-} from './domain/channels.ts';
 export {
   availabilityLists,
   coalesceAvailability,

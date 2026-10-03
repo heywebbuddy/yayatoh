@@ -1,5 +1,5 @@
 import { expect, type Locator, type Page, test } from '@playwright/test';
-import { expectAccessible, expectAccessibleBothModes, signIn } from './helpers.ts';
+import { expectAccessible, expectAccessibleBothModes, pickOption, signIn } from './helpers.ts';
 import { quickPlan } from './seating-helpers.ts';
 
 /**
@@ -27,8 +27,8 @@ function chicagoDate(days: number): string {
 async function createWedding(page: Page, name: string): Promise<string> {
   await page.goto(`${ORG}/events/new`);
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Event type').selectOption('wedding');
-  await page.getByLabel('Time zone').selectOption(TZ);
+  await pickOption(page.getByLabel('Event type'), 'wedding');
+  await pickOption(page.getByLabel('Time zone'), TZ);
   await page.getByLabel('Starts', { exact: true }).fill(`${chicagoDate(60)}T16:00`);
   await page.getByLabel('Ends', { exact: true }).fill(`${chicagoDate(60)}T23:00`);
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -132,10 +132,9 @@ test.describe('guest seating editor (M4.3a)', () => {
     await page.keyboard.press('Space');
     await expect(page.getByText('2 guests selected')).toBeVisible();
     await page.getByLabel('Table or row', { exact: true }).first().focus();
-    await page
-      .getByLabel('Table or row', { exact: true })
-      .first()
-      .selectOption({ label: 'Table 1 — 4 of 4 free' });
+    await pickOption(page.getByLabel('Table or row', { exact: true }).first(), {
+      label: 'Table 1 — 4 of 4 free',
+    });
     await page.getByRole('button', { name: 'Seat selected guests' }).focus();
     await page.keyboard.press('Enter');
     await expect(page.getByText('Seated 2 guests at Table 1.')).toBeVisible();
@@ -149,10 +148,9 @@ test.describe('guest seating editor (M4.3a)', () => {
     // Chen (3) doesn't fit at Table 1 (2 free): warned before sending, refused if sent anyway.
     await page.getByRole('checkbox', { name: 'Select everyone in Chen' }).focus();
     await page.keyboard.press('Space');
-    await page
-      .getByLabel('Table or row', { exact: true })
-      .first()
-      .selectOption({ label: 'Table 1 — 2 of 4 free' });
+    await pickOption(page.getByLabel('Table or row', { exact: true }).first(), {
+      label: 'Table 1 — 2 of 4 free',
+    });
     await expect(page.getByText("Can't fit: 3 guests selected, 2 seats free at Table 1.")).toBeVisible();
     await page.getByRole('button', { name: 'Seat selected guests' }).focus();
     await page.keyboard.press('Enter');
@@ -162,10 +160,9 @@ test.describe('guest seating editor (M4.3a)', () => {
     await expect(page.getByRole('heading', { name: 'Unseated (3)' })).toBeVisible();
     await expectAccessible(page);
     // Table 2 has room.
-    await page
-      .getByLabel('Table or row', { exact: true })
-      .first()
-      .selectOption({ label: 'Table 2 — 4 of 4 free' });
+    await pickOption(page.getByLabel('Table or row', { exact: true }).first(), {
+      label: 'Table 2 — 4 of 4 free',
+    });
     await page.getByRole('button', { name: 'Seat selected guests' }).focus();
     await page.keyboard.press('Enter');
     await expect(page.getByText('Seated 3 guests at Table 2.')).toBeVisible();
@@ -178,7 +175,7 @@ test.describe('guest seating editor (M4.3a)', () => {
     await page.keyboard.press('Enter');
     const move = page.getByRole('form', { name: 'Move Mei X' });
     await expect(move.getByLabel('Table or row')).toBeFocused();
-    await move.getByLabel('Table or row').selectOption({ label: 'Table 1 — 2 of 4 free' });
+    await pickOption(move.getByLabel('Table or row'), { label: 'Table 1 — 2 of 4 free' });
     await move.getByRole('button', { name: 'Move' }).focus();
     await page.keyboard.press('Enter');
     await expect(page.getByText('Moved Mei X to Table 1.')).toBeVisible();
@@ -227,10 +224,9 @@ test.describe('guest seating editor (M4.3a)', () => {
     // Seating from the other tab shows here too.
     await other.goto(`${base}/seating/guests`);
     await other.getByRole('checkbox', { name: 'Select everyone in Rossi' }).check();
-    await other
-      .getByLabel('Table or row', { exact: true })
-      .first()
-      .selectOption({ label: 'Table 2 — 4 of 4 free' });
+    await pickOption(other.getByLabel('Table or row', { exact: true }).first(), {
+      label: 'Table 2 — 4 of 4 free',
+    });
     await other.getByRole('button', { name: 'Seat selected guests' }).click();
     await expect(other.getByText('Seated 2 guests at Table 2.')).toBeVisible();
     await expect(page.getByText('Everyone has a seat.')).toBeVisible({ timeout: 10_000 });
@@ -249,7 +245,7 @@ test.describe('guest seating editor (M4.3a)', () => {
     await openEditor(page, base);
 
     // Mark Table 2 as a VIP zone.
-    await page.getByLabel('Table to show').selectOption({ label: 'Table 2 — 4 of 4 free' });
+    await pickOption(page.getByLabel('Table to show'), { label: 'Table 2 — 4 of 4 free' });
     await details(page, 'Table 2').getByRole('checkbox', { name: 'VIP zone' }).check();
     await expect(page.getByText('Table 2 is now a VIP zone.')).toBeVisible();
     await expect(page.getByLabel('Table or row', { exact: true }).first()).toContainText(
@@ -257,15 +253,14 @@ test.describe('guest seating editor (M4.3a)', () => {
     );
 
     // The bride's side as one group: filter, tick both parties, seat them together.
-    await page.getByLabel('Side').selectOption('Bride');
+    await pickOption(page.getByLabel('Side'), 'Bride');
     await expect(queueParty(page, 'Chen')).toHaveCount(0);
     await page.getByRole('checkbox', { name: 'Select everyone in Garcia' }).check();
     await page.getByRole('checkbox', { name: 'Select everyone in Patel' }).check();
     await expect(page.getByText('4 guests selected')).toBeVisible();
-    await page
-      .getByLabel('Table or row', { exact: true })
-      .first()
-      .selectOption({ label: 'Table 1 — 4 of 4 free' });
+    await pickOption(page.getByLabel('Table or row', { exact: true }).first(), {
+      label: 'Table 1 — 4 of 4 free',
+    });
     await page.getByRole('button', { name: 'Seat selected guests' }).click();
     // Seated, with the VIP warning for Garcia outside the VIP zone.
     await expect(page.getByText('Seated 4 guests at Table 1.')).toBeVisible();
@@ -273,12 +268,11 @@ test.describe('guest seating editor (M4.3a)', () => {
     await expect(details(page, 'Table 1')).toContainText('Garcia is a VIP party outside a VIP zone.');
 
     // Chen (not VIP) in the VIP zone: seated with a warning.
-    await page.getByLabel('Side').selectOption('');
+    await pickOption(page.getByLabel('Side'), '');
     await page.getByRole('checkbox', { name: 'Select everyone in Chen' }).check();
-    await page
-      .getByLabel('Table or row', { exact: true })
-      .first()
-      .selectOption({ label: 'Table 2 — 4 of 4 free · VIP zone' });
+    await pickOption(page.getByLabel('Table or row', { exact: true }).first(), {
+      label: 'Table 2 — 4 of 4 free · VIP zone',
+    });
     await page.getByRole('button', { name: 'Seat selected guests' }).click();
     await expect(page.getByText('Table 2 is a VIP zone, and Chen is not a VIP party.')).toBeVisible();
     await expect(details(page, 'Table 2')).toContainText('Chen is not a VIP party but sits in a VIP zone.');
@@ -383,7 +377,7 @@ test.describe('guest seating editor (M4.3a)', () => {
     await expect(page.getByRole('heading', { name: 'إجلاس الضيوف', level: 1 })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'بلا مقعد (1)' })).toBeVisible();
     await page.getByRole('checkbox', { name: 'تحديد كل من في Haddad' }).check();
-    await page.getByLabel('طاولة أو صف', { exact: true }).first().selectOption({ index: 1 });
+    await pickOption(page.getByLabel('طاولة أو صف', { exact: true }).first(), { index: 1 });
     await page.getByRole('button', { name: 'إجلاس الضيوف المحدّدين' }).click();
     await expect(page.getByText('أُجلِس ضيف واحد على الطاولة 1.')).toBeVisible();
     await expectAccessibleBothModes(page);
