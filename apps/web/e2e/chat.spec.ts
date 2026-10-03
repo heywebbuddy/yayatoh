@@ -117,15 +117,25 @@ const tab = (p: Page, name: string) =>
 const people = (p: Page) => p.getByRole('list', { name: 'People' });
 
 /** Ask to connect from the directory and accept on the other side. */
-async function connect(a: Page, b: Page, aName: string, bName: string) {
-  await a.reload();
+async function connect(conf: Conf, a: Page, b: Page, aName: string, bName: string) {
+  await a.goto(conf.network);
   await people(a).getByRole('link', { name: bName }).click();
   await a.getByRole('button', { name: 'Send connection request' }).click();
   await expect(a.getByText(`Request sent to ${bName}.`)).toBeVisible();
-  await tab(b, 'Connections').click();
+  await b.goto(`${conf.network}/connections`);
   await b.getByRole('button', { name: `Accept the request from ${aName}` }).click();
   await expect(b.getByText(`You're now connected with ${aName}.`)).toBeVisible();
 }
+
+/** Open the Chats tab and wait for its page. */
+async function chats(p: Page) {
+  await tab(p, 'Chats').click();
+  await expect(p.getByRole('heading', { name: 'Chats', level: 1 })).toBeVisible();
+}
+
+/** A conversation's link in the chat list (the person's or the booth's name). */
+const chatLink = (p: Page, name: string) =>
+  p.getByRole('region', { name: 'Your chats' }).getByRole('link', { name: new RegExp(`^${name}`) });
 
 const log = (p: Page, name: string) => p.getByRole('log', { name: `Messages with ${name}` });
 
@@ -166,8 +176,7 @@ test.describe('networking chat (M5.8b)', () => {
       await optIn(p, n);
 
     // The Chats tab: nothing yet, with what to do next.
-    await tab(a, 'Chats').click();
-    await expect(a.getByRole('heading', { name: 'Chats', level: 1 })).toBeVisible();
+    await chats(a);
     await expect(a.getByText('No chats yet')).toBeVisible();
     await expect(a.getByRole('link', { name: 'Go to your connections' })).toBeVisible();
     await expect(a.getByText('No exhibitor is taking chats right now.')).toBeVisible();
@@ -186,14 +195,14 @@ test.describe('networking chat (M5.8b)', () => {
     await expectAccessible(a);
 
     // Connected: Ben opens the chat from Ana's profile, Ana from her connections.
-    await connect(a, b, ana, ben);
+    await connect(conf, a, b, ana, ben);
     await b.goto(conf.network);
     await people(b).getByRole('link', { name: ana }).click();
     await b.getByRole('link', { name: `Send ${ana} a message` }).click();
     await expect(b.getByRole('heading', { name: `Chat with ${ana}`, level: 1 })).toBeVisible();
     await expect(b.getByText(`No messages yet. Say hello to ${ana}.`)).toBeVisible();
     await live(b);
-    await tab(a, 'Connections').click();
+    await a.goto(`${conf.network}/connections`);
     await a.getByRole('link', { name: `Message ${ben}` }).click();
     await expect(a.getByRole('heading', { name: `Chat with ${ben}`, level: 1 })).toBeVisible();
     await live(a);
@@ -227,7 +236,7 @@ test.describe('networking chat (M5.8b)', () => {
 
     // Unread: Ben's chat list counts Ana's chat once she writes, live.
     await b.goto(`${conf.network}/chat`);
-    await expect(b.getByRole('link', { name: ana })).toBeVisible();
+    await expect(chatLink(b, ana)).toBeVisible();
     await a.getByRole('textbox', { name: 'Message' }).fill('One more thing');
     await a.getByRole('button', { name: 'Send' }).click();
     await expect(log(a, ben).getByText('One more thing')).toBeVisible();
@@ -235,7 +244,7 @@ test.describe('networking chat (M5.8b)', () => {
     await expect(tab(b, 'Chats')).toContainText('1');
     await expect(b.getByText('One more thing')).toBeVisible();
     await expectAccessibleBothModes(b);
-    await b.getByRole('link', { name: ana }).click();
+    await chatLink(b, ana).click();
     await expect(log(b, ana).getByText('One more thing')).toBeVisible();
     await b.goto(`${conf.network}/chat`);
     await expect(b.getByText('1 unread message')).toHaveCount(0);
@@ -268,14 +277,15 @@ test.describe('networking chat (M5.8b)', () => {
     if (!a || !b) throw new Error('attendees');
     await optIn(a, ana);
     await optIn(b, ben);
-    await connect(a, b, ana, ben);
-    await tab(a, 'Connections').click();
+    await connect(conf, a, b, ana, ben);
+    await a.goto(`${conf.network}/connections`);
     await a.getByRole('link', { name: `Message ${ben}` }).click();
+    await live(a);
     await a.getByRole('textbox', { name: 'Message' }).fill('Buy my course today');
     await a.getByRole('button', { name: 'Send' }).click();
     await expect(log(a, ben).getByText('Buy my course today')).toBeVisible();
-    await tab(b, 'Chats').click();
-    await b.getByRole('link', { name: ana }).click();
+    await chats(b);
+    await chatLink(b, ana).click();
     await expect(log(b, ana).getByText('Buy my course today')).toBeVisible();
 
     // Ben reports the chat: a reason is needed, then it blocks Ana too.
@@ -288,7 +298,7 @@ test.describe('networking chat (M5.8b)', () => {
     await b.getByRole('button', { name: `Report ${ana}` }).click();
     await expect(b).toHaveURL(/\/network\/chat\?notice=reported$/);
     await expect(b.getByText('Thanks for telling us.', { exact: false })).toBeVisible();
-    await expect(b.getByRole('link', { name: ana })).toHaveCount(0);
+    await expect(chatLink(b, ana)).toHaveCount(0);
 
     // Ana's open page: her next message is refused, and nothing reaches Ben.
     await a.getByRole('textbox', { name: 'Message' }).fill('Hello??');
@@ -375,10 +385,10 @@ test.describe('networking chat (M5.8b)', () => {
 
     // Off by default: the portal says so; the attendee sees no booth to chat with.
     const boothChat = x.getByRole('region', { name: 'Booth chat' });
-    await expect(boothChat.getByText('Not taking chats')).toBeVisible();
+    await expect(boothChat.getByText('Not taking chats', { exact: true })).toBeVisible();
     const a = await attendee(browser, conf, emailOf(ana));
     await optIn(a, ana);
-    await tab(a, 'Chats').click();
+    await chats(a);
     await expect(a.getByText('No exhibitor is taking chats right now.')).toBeVisible();
 
     // The admin turns it on from the keyboard.
@@ -388,7 +398,7 @@ test.describe('networking chat (M5.8b)', () => {
     await expectAccessibleBothModes(x);
     await x.getByRole('button', { name: 'Take chats at our booth' }).focus();
     await x.keyboard.press('Enter');
-    await expect(x.getByText('Taking chats')).toBeVisible();
+    await expect(x.getByText('Taking chats', { exact: true })).toBeVisible();
     await expect(x.getByText('When visitors write to your booth, their messages appear here.')).toBeVisible();
 
     // Ana finds the booth and writes; the booth's open inbox shows her at once.
@@ -413,7 +423,7 @@ test.describe('networking chat (M5.8b)', () => {
 
     // The booth blocks Ana: her messages stop; unblocking lets her write again.
     await x.getByText(`Block or report ${ana}`).click();
-    await x.getByRole('button', { name: `Block ${ana}` }).click();
+    await x.getByRole('button', { name: `Block ${ana}`, exact: true }).click();
     await expect(x.getByText(`You blocked ${ana}. Unblock them below to answer.`)).toBeVisible();
     await a.getByRole('textbox', { name: 'Message' }).fill('Hello?');
     await a.getByRole('button', { name: 'Send' }).click();
@@ -446,17 +456,17 @@ test.describe('networking chat (M5.8b)', () => {
     await expect(chat.getByText(acme, { exact: true })).toBeVisible();
     // Both sides see the removed message as removed.
     await a.goto(`${conf.network}/chat`);
-    await a.getByRole('link', { name: acme }).click();
+    await chatLink(a, acme).click();
     await expect(log(a, acme).getByText('Message removed by the organizer')).toBeVisible();
     await expect(log(a, acme).getByText('We do, in 3 days.')).toHaveCount(0);
     await x.goto('/event-portal/chat');
     await expect(x.getByText('The organizer suspended your booth chat after a report.')).toBeVisible();
-    await expect(x.getByText('Not taking chats')).toBeVisible();
+    await expect(x.getByText('Not taking chats', { exact: true })).toBeVisible();
     // Lifted: the booth takes chats again.
     await chat.getByRole('button', { name: `Lift the suspension of ${acme}'s booth chat` }).click();
     await expect(page.getByText(`${acme} can take chats again.`)).toBeVisible();
     await x.reload();
-    await expect(x.getByText('Taking chats')).toBeVisible();
+    await expect(x.getByText('Taking chats', { exact: true })).toBeVisible();
 
     // Arabic, right to left (the portal's booth chat).
     await x.goto('/ar/event-portal/chat');

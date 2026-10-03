@@ -90,8 +90,9 @@ export function ChatThread({
       const m = data as Wire | null;
       if (!m) return;
       if (!conversationId) {
-        // The first message of a new chat: the page learns its conversation by re-reading.
-        if (m.fromMe) router.refresh();
+        // No conversation yet: this may be its first message (from either side). The inbox
+        // carries every chat of the viewer, so re-read the page to find out.
+        router.refresh();
         return;
       }
       if (m.conversationId !== conversationId) return;
@@ -136,39 +137,38 @@ export function ChatThread({
       {messages.length === 0 ? (
         <p className="text-body text-ink-2">{t('noMessages', { name: otherName })}</p>
       ) : null}
-      <ol
-        role="log"
-        aria-live="polite"
-        aria-label={t('logLabel', { name: otherName })}
-        className="m-0 flex list-none flex-col gap-2 p-0"
-      >
-        {messages.map((m, i) => {
-          const at = new Date(m.at);
-          const prev = messages[i - 1];
-          const newDay = !prev || day.format(new Date(prev.at)) !== day.format(at);
-          return (
-            <li key={m.id} className="flex flex-col gap-2" data-chat-message={m.fromMe ? 'mine' : 'theirs'}>
-              {newDay ? <p className="self-center text-caption text-ink-2">{day.format(at)}</p> : null}
-              <div
-                className={cx(
-                  'flex max-w-[85%] flex-col gap-1 rounded-card px-3.5 py-2.5',
-                  m.fromMe ? 'self-end bg-primary-soft text-primary-ink' : 'self-start bg-surface-3 text-ink',
-                )}
-              >
-                <span className="sr-only">{m.fromMe ? t('you') : otherName}: </span>
-                {m.removed ? (
-                  <span className="text-body italic text-ink-2">{t('removed')}</span>
-                ) : (
-                  <span className="text-body whitespace-pre-wrap break-words">{m.body}</span>
-                )}
-                <time dateTime={m.at} className="self-end text-caption tabular-nums opacity-80">
-                  {time.format(at)}
-                </time>
-              </div>
-            </li>
-          );
-        })}
-      </ol>
+      <div role="log" aria-live="polite" aria-label={t('logLabel', { name: otherName })}>
+        <ol className="m-0 flex list-none flex-col gap-2 p-0">
+          {messages.map((m, i) => {
+            const at = new Date(m.at);
+            const prev = messages[i - 1];
+            const newDay = !prev || day.format(new Date(prev.at)) !== day.format(at);
+            return (
+              <li key={m.id} className="flex flex-col gap-2" data-chat-message={m.fromMe ? 'mine' : 'theirs'}>
+                {newDay ? <p className="self-center text-caption text-ink-2">{day.format(at)}</p> : null}
+                <div
+                  className={cx(
+                    'flex max-w-[85%] flex-col gap-1 rounded-card px-3.5 py-2.5',
+                    m.fromMe
+                      ? 'self-end bg-primary-soft text-primary-ink'
+                      : 'self-start bg-surface-3 text-ink',
+                  )}
+                >
+                  <span className="sr-only">{m.fromMe ? t('you') : otherName}: </span>
+                  {m.removed ? (
+                    <span className="text-body italic text-ink-2">{t('removed')}</span>
+                  ) : (
+                    <span className="text-body whitespace-pre-wrap break-words">{m.body}</span>
+                  )}
+                  <time dateTime={m.at} className="self-end text-caption tabular-nums">
+                    {time.format(at)}
+                  </time>
+                </div>
+              </li>
+            );
+          })}
+        </ol>
+      </div>
       {closed ? (
         <div className="rounded-card border border-line bg-surface p-4 text-body text-ink-2">{closed}</div>
       ) : (

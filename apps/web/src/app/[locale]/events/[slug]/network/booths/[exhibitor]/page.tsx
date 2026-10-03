@@ -2,9 +2,10 @@ import {
   attendeeChatChannel,
   boothThreadQuery,
   type ChatThreadDto,
+  markChatReadCommand,
   REPORT_REASONS,
 } from '@yayatoh/engagement';
-import { executeQuery, isDomainError } from '@yayatoh/kernel';
+import { executeCommand, executeQuery, isDomainError } from '@yayatoh/kernel';
 import { ArrowLeft } from 'lucide-react';
 import type { Metadata } from 'next';
 import { notFound, redirect } from 'next/navigation';
@@ -55,6 +56,9 @@ export default async function BoothChatPage({ params }: Params) {
   }
   const booth = chat.booth;
   if (!booth) notFound();
+  // Opening a conversation reads it (the unread counts).
+  if (chat.conversationId && chat.messages.some((m) => !m.fromMe))
+    await executeCommand(markChatReadCommand, { ...p.at, conversationId: chat.conversationId }, p.ctx, ports);
   const channel = await attendeeChatChannel(p.target.orgId, p.target.eventId, p.at.email);
   const chats = getPathname({ href: networkPath(slug, '/chat'), locale });
   return (

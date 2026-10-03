@@ -2,9 +2,10 @@ import {
   attendeeChatChannel,
   type ChatThreadDto,
   chatThreadQuery,
+  markChatReadCommand,
   REPORT_REASONS,
 } from '@yayatoh/engagement';
-import { executeQuery, isDomainError } from '@yayatoh/kernel';
+import { executeCommand, executeQuery, isDomainError } from '@yayatoh/kernel';
 import { Avatar, avatarTone, buttonClass } from '@yayatoh/ui';
 import { ArrowLeft } from 'lucide-react';
 import type { Metadata } from 'next';
@@ -53,6 +54,9 @@ export default async function DirectChatPage({ params }: Params) {
   }
   const who = chat.person;
   if (!who) notFound();
+  // Opening a conversation reads it (the unread counts).
+  if (chat.conversationId && chat.messages.some((m) => !m.fromMe))
+    await executeCommand(markChatReadCommand, { ...p.at, conversationId: chat.conversationId }, p.ctx, ports);
   const channel = await attendeeChatChannel(p.target.orgId, p.target.eventId, p.at.email);
   const chats = getPathname({ href: networkPath(slug, '/chat'), locale });
   const directory = getPathname({ href: networkPath(slug), locale });

@@ -2,9 +2,10 @@ import {
   type BoothThreadDto,
   boothChatThreadQuery,
   exhibitorChatChannel,
+  markBoothReadCommand,
   REPORT_REASONS,
 } from '@yayatoh/engagement';
-import { executeQuery, isDomainError } from '@yayatoh/kernel';
+import { executeCommand, executeQuery, isDomainError } from '@yayatoh/kernel';
 import { exhibitorPortalQuery } from '@yayatoh/program';
 import { Label, PageHeader } from '@yayatoh/ui';
 import { ArrowLeft } from 'lucide-react';
@@ -53,6 +54,9 @@ export default async function BoothChatThreadPage({ params }: Params) {
     if (isDomainError(err) && err.code === 'not_found') notFound();
     throw err;
   }
+  // Opening a conversation reads it (the unread counts).
+  if (chat.messages.some((m) => !m.fromMe))
+    await executeCommand(markBoothReadCommand, { conversationId: chat.id }, ctx, ports);
   const [view, channel] = await Promise.all([
     executeQuery(exhibitorPortalQuery, {}, ctx, ports),
     exhibitorChatChannel(ctx),
