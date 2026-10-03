@@ -11,7 +11,12 @@ import { billingEntitlements } from '@yayatoh/billing';
 import { campaignsContactOwner } from '@yayatoh/campaigns';
 import { checkinContactOwner, setSessionAccessSource } from '@yayatoh/checkin';
 import { recordTermConsentTx, registerContactReferenceOwners } from '@yayatoh/crm';
-import { employerExportAction, giftsExportAction } from '@yayatoh/donations';
+import {
+  donorCsvExportAction,
+  donorXlsxExportAction,
+  employerExportAction,
+  giftsExportAction,
+} from '@yayatoh/donations';
 import { engagementContactOwner } from '@yayatoh/engagement';
 import { eventRolesOf } from '@yayatoh/events';
 import { submitRegistrationFormCommand } from '@yayatoh/forms';
@@ -98,6 +103,8 @@ export const BULK_ACTIONS = [
   rsvpAnswersPrivateExportAction,
   giftsExportAction,
   employerExportAction,
+  donorCsvExportAction,
+  donorXlsxExportAction,
 ] as const;
 export const bulkStep = bulkStepCommand(BULK_ACTIONS);
 export const runBulk = (orgId: string, operationId: string, budgetMs?: number) =>

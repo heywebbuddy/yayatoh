@@ -1,7 +1,7 @@
 # Spec: M4.8 — Gala donations
 
 - **Milestone:** M4.8 (Phase 4 plan `docs/plans/phase-4.md` §6, decisions P4-9 to P4-17, approved 2026-09-28; Wave B)
-- **Status:** M4.8a and M4.8b built (2026-10-02), M4.8c and M4.8d built (2026-10-03); M4.8e–g to follow
+- **Status:** M4.8a and M4.8b built (2026-10-02), M4.8c–M4.8g built (2026-10-03)
 - **Risk tags (M4.8b):** `db-migration`, `payments`, `tenancy`, `legal-copy`
 - **Risk tags:** `db-migration`, `payments`, `tenancy`
 - **Related ADRs:** 0005 (hybrid funds flow and ledger), 0014 (public output allowlists), 0018 (tokens only), 0021 (module layout)
@@ -649,3 +649,117 @@ Built on the build branch + `merge/next-3g` + `merge/next-3h` + `agent/m4.8c` (u
 - Gate: lint, check:modules, typecheck 59/59, unit 2,716 passed (new: `matches.test.ts` 9), integration 1,524 passed (new: `matching-gifts.int.test.ts` 14). After the last merges of `agent/m4.8c` and `merge/next-3g`: matching-gifts, donations, paddle-raise, receipts, isolation, canary, impersonation and freeze integration files 87/87. e2e on all three projects: `matching-gifts.spec.ts` 15/15; with `donations` and `receipts` 57/57; with M4.8c's `paddle-raise.spec.ts` 27/27.
 - `merge/next-3h`'s newest commit (c1b7d889, the Command Center campaigns tile) conflicts with `merge/next-3g`'s fix of the same tile in `packages/modules/command-center/src/widgets.ts` (not this increment's file); that merge was left to the merge session.
 - The paddle-raise console's matches refresh when the console channel publishes (match, pledge and paddle writes); a gift paid online shows on the next page load. M4.8d's screen can publish on gift outcomes too.
+
+## M4.8g — reporting, exports and reconciliation (done)
+
+### 1. Goal and users
+After the gala the charity's finance people (owners, admins, finance members; co-hosts read) need to know what was raised and how, which pledges came in, which were written off, who gave (with the anonymous flag), a file their donor CRM imports as is, and proof that every gift in Yayatoh's ledger is in their Stripe account and reached the bank.
+
+### 2. References
+`docs/plans/phase-4.md` §6, row M4.8g (D, extends M1.6e reconciliation), P4-9 (organizer_mor direct charges), P4-10 (no platform fee), P4-12, P4-13 (anonymity), P4-17; M1.6e (`payments/reconciliation.ts`); M4.8a–f; CLAUDE.md (tenancy, allowlists, commands, money, time).
+
+### 3. Scope
+**In:**
+- **Memo entries (payments):** a gift is a direct charge on the charity's connected account with application fee 0, so it never posted a journal (`postSaleTx` posts nothing at 0). Each paid gift now gets a memo-only journal (`kind = 'donation_memo'`, key `donation:<orderId>`, memo `{grossMinor, currency, connectedAccountId, fundsFlow}`) and each refund of a gift one more (`donation_refund_memo`, key `donation_refund:<refundId>`), written by the new `payments.post_memo` SECURITY DEFINER function (memo kinds only, org-checked, idempotent per key, no postings). Balances and the platform reconciliation (M1.6e) are unchanged.
+- **Connected account on the payment port (additive):** `listConnectedBalanceTransactions({connectedAccountId, from, to})` (charges, refunds, payouts; gross, the provider's fee, net, the payout each was paid out in) and `listPayouts`. The fake records direct charges (webhook naming the account), refunds and saved-card charges on the account with Stripe's US nonprofit fee (2.2% + 30¢) and makes daily payouts (UTC day D, created D+1, arriving D+3); Stripe lists `balance_transactions` and `payouts` on the account (`Stripe-Account`), attributing charges by their metadata and payouts by `balance_transactions?payout=`.
+- **Report** (`/o/{org}/e/{event}/donations/report`, `donations.report`, `finance:read`): every line of money of the event — paid gifts (online, QR, or a paddle pledge paid by card or pay link) less their refunds, pledges paid offline, and paid lines of donation ticket types — totalled per currency (received by card, offline, ticket donations, raised; covered fees and refunds; pledged / collected (card, link, offline) / written off / open; matched by sponsors), per source, per level (gifts given at it; paddle pledges called at it, never a paid pledge twice), per match, per donor (by email; flagged anonymous if any gift was), plus the ledger check: the memo entries and the provider as the last reconciliation saw it ("Matches to the cent" / "Differs by …").
+- **Donor CRM exports** (CSV and Excel): one row per gift, offline payment and donation ticket line (fully refunded gifts left out), in four layouts — generic (the requester's language), Salesforce NPSP Data Import, Bloomerang, Little Green Light (each CRM's own column names, split first/last names, `TRUE`/`FALSE`) — each keeping the anonymous flag. Bulk exports (`donations.donorsCsv`, `donations.donorsXlsx`): `finance:read`, a fresh step-up, audited, refused while staff act as a member; read in the event's tenant only. Excel files are written by M4.3b's XLSX writer in `@yayatoh/csv` (inline strings, never formulas; bold frozen header; amounts as numbers).
+- **Reconciliation** (`/o/{org}/e/{event}/donations/reconciliation`, like M1.6e): "Reconcile now" (`finance:reconcile`) asks the provider for the movements and payouts of every connected account the event's gifts were charged on, from a week before the first gift to a day ahead, keeps the event's charges and refunds (`order:<gift order>`, `refund:<gift refund>`), and compares them per reference and currency with the memo entries. Differences (`missing_at_provider`, `missing_in_ledger`, `amount_mismatch`) are kept per reference: opened, updated, `cleared` when both sides agree again; finance resolves one with a note (stays resolved while its amounts don't change). The run keeps per-currency totals (ledger, provider, provider fees, not paid out yet) and the payouts that carried the event's gifts (whole payout, the event's gross, fees, net, count).
+- **Campaign totals net refunds:** the campaign's "raised" (Donations tab, giving page, screen) now subtracts refunds, the covered fee first (the M4.8f owner note "until M4.8g").
+- **UI:** a "Report and exports" card on the Donations tab (finance roles), the two pages (design v2 components: PageHeader, StatCard, Table with phone stacking, StatusPill, Badge, EmptyState, Alert), a dev route `/api/dev/donations/provider` (dev/CI, fake only: age the account's movements, add drift).
+
+**Later / not yet:**
+- A scheduled reconciliation (the worker runs M1.6e hourly; donations reconcile on demand now).
+- Ticket donations are reported from paid and partly refunded orders at the line's paid price; a partial refund of a mixed ticket order is not split per line. They are reconciled by M1.6e (ticket orders), not here.
+- Gifts paid before this increment have no memo entry: a reconciliation lists them as `missing_in_ledger` until a backfill (one script, owner-approved, when it's needed on real data).
+- The sponsor's match pledge is reported per match but is not collected by M4.8e's flow (the sponsor is not a guest with a card or pay link).
+- Disputes on gifts (Stripe `dispute` movements) are listed as provider movements without a ledger memo.
+- CRM layouts follow each CRM's documented import columns; the owner should confirm them with the charities' own CRM admins (owner inbox).
+
+### 4. `touches:`
+```yaml
+touches:
+  - packages/modules/payments/src/{port.ts,fake.ts,stripe.ts,memo-ledger.ts,index.ts}   # additive port methods; memo journals
+  - packages/modules/payments/tests/connected-balance.test.ts
+  - packages/modules/orders/src/{donation-orders.ts,commands/refunds.ts,donation-ticket-facts.ts,index.ts}
+  - packages/modules/donations/src/{domain/report.ts,domain/reconcile.ts,domain/crm.ts,report.ts,report-dto.ts,report-export.ts,reconciliation.ts,schema-reconciliation.ts}  # new
+  - packages/modules/donations/src/{index.ts,private-columns.ts,campaigns.ts,pledge-collection.ts}, MODULE.md
+  - packages/modules/donations/tests/report.test.ts
+  - packages/db/drizzle/0130_green_loa.sql (+ meta)   # renumber at merge
+  - packages/testing/src/{fixtures.ts,ports.ts}, tests/{donations-report,donations,pledge-collection}.int.test.ts
+  - apps/worker/src/bulk.ts
+  - apps/web/src/app/[locale]/o/[org]/e/[event]/donations/{page.tsx,report/**,reconciliation/**}
+  - apps/web/src/app/[locale]/checkout/fake/{page.tsx,actions.ts}   # the fake page names the connected account
+  - apps/web/src/app/api/dev/donations/provider/route.ts
+  - apps/web/src/server/bulk.ts
+  - apps/web/messages/*.json   # donations.report.*, donations.recon.*
+  - apps/web/e2e/donations-report.spec.ts
+```
+
+### 5. Data model
+| Table | Change | Notes |
+|---|---|---|
+| `donations.recon_runs` | new | event; provider; ledger/provider/item counts; `totals` jsonb (per currency: ledger, provider, fees, not paid out; parsed by `ReconTotals`); `ran_by` |
+| `donations.recon_items` | new | event, run; kind; reference (`order:`/`refund:`); currency; ledger and provider sums; status `open/resolved/cleared`; note (3–500, required when resolved); unique per org, event, reference and currency |
+| `donations.recon_payouts` | new | run, event; payout id, status, amount, currency, arrival date, created at; the event's donation gross, fees and count; unique per run and payout |
+| `payments.journal_entries` | rows only | memo journals `donation_memo` / `donation_refund_memo` (no postings) |
+
+**RLS notes:**
+- [x] Three new tables through `tenantTable()` (ENABLE + FORCE RLS, NULLIF policy, org-leading indexes, org-scoped uniques, composite FKs to the run and, hand-written, to `events.events`).
+- [x] Fixture rows for both orgs (`donationReconRows`: one run over the fixture gift order with a `missing_in_ledger` difference and a payout).
+- [x] Every text/jsonb column declared in `private-columns.ts` (references, payout ids, totals, notes and actors internal).
+
+**Migration:** `0130_green_loa.sql` (renumber at merge), additive. Hand-written block: (1) `recon_runs_event_fk`, `recon_items_event_fk`, `recon_payouts_event_fk` (→ `events.events`, cascade); (2) `payments.post_memo(uuid, text, text, text, uuid, timestamptz, jsonb, uuid)` SECURITY DEFINER (`search_path = pg_catalog`), owned by `ledger_writer` (with the `GRANT CREATE` / `REVOKE CREATE ON SCHEMA payments` dance post_journal uses), `REVOKE ALL … FROM PUBLIC`, `GRANT EXECUTE … TO app_user`.
+Generated after batch 3j's `0129_conference_alert_rules` (`drizzle-kit generate` shows no changes afterwards).
+
+### 6. API diff
+None on `/v1`. The `PaymentProvider` port gains `listConnectedBalanceTransactions` and `listPayouts` (internal). The fake's signed webhook may name `connectedAccountId` (stripped before the app sees the event).
+
+### 7. Events
+None new. Audit: `donations.reconcile`, `donations.reconcile_resolve`, `bulk.start` for the exports.
+
+### 8. Entitlements and flags
+`donations`. Permissions: `finance:read` (report, reconciliation view, exports), `finance:reconcile` (run, resolve).
+
+### 9. ELT impact
+None.
+
+### 10. Acceptance criteria
+| ID | Given / When / Then | Test |
+|---|---|---|
+| AC-M4.8g-01 | **The fixture gala's report totals equal the ledger memo entries and the provider's balance transactions to the cent** (online and QR gifts, a covered fee, a partial refund, a card-paid pledge; offline and ticket donations reported apart) | int `donations-report.int.test.ts` ("acceptance: the totals equal…"); e2e `donations-report.spec.ts` ("report totals, the ledger check…") |
+| AC-M4.8g-02 | **Exports never include donors of the other org** | int "CSV, generic layout…", "Excel…" (the other org's gift never appears); e2e (export journey) |
+| AC-M4.8g-03 | Per source (online, QR, paddle, ticket), per level, per match, per donor; pledged vs collected vs written off vs open | unit `donations/tests/report.test.ts`; int "totals per currency…", "per source, per level…" |
+| AC-M4.8g-04 | CRM layouts (generic localized, Salesforce NPSP, Bloomerang, Little Green Light) keep the anonymous flag; CSV and XLSX; never a formula | unit `report.test.ts` (and M4.3b's `csv/tests/xlsx-write.test.ts`); int CSV/Excel tests; e2e (step-up, both files) |
+| AC-M4.8g-05 | Reconciliation lists differences like M1.6e (missing at provider, missing in ledger, amount mismatch), resolves with a note, clears when both sides agree | unit (`reconcileDonations`, `nextItemStatus`); int "lists a missing provider charge…"; e2e (drift, empty note error, resolved, persisted) |
+| AC-M4.8g-06 | Payouts: which payouts carried the gifts; what is not paid out yet | unit (fake payouts, Stripe adapter); int "shows the payouts…"; e2e (aged movements, "Paid") |
+| AC-M4.8g-07 | Memo entries only through `payments.post_memo` (memo kinds, own org, once per key); no postings for gifts | int "memo entries are written only…"; `donations.int.test.ts` (memo, no postings) |
+| AC-M4.8g-08 | Permissions: viewers refused (hidden card, refused pages and commands); exports need a fresh step-up; finance only reconciles | int (report, exports, reconcile, resolve); e2e (viewer) |
+| AC-M4.8g-09 | Isolation: every new table covered; another org can neither read nor reconcile this event | `isolation.int.test.ts`, `canary.int.test.ts` (fixture `donationReconRows`); int "finance only; refuses another org's event…" |
+| AC-M4.8g-10 | Empty states, success messages, keyboard only, axe light and dark, Arabic RTL | e2e throughout |
+
+### 11. Security and privacy
+- Report and exports name donors: `finance:read` only; the report payload is an allowlist (no order, payment, account ids or tribute notes); exports are step-up bulk operations, audited, refused during impersonation.
+- The provider's data is fetched server-side (`reconcileEventDonations`) and never sent by a browser; references, payout ids and notes are internal columns.
+- Anonymous donors stay flagged in every layout (the charity sees who gave, P4-13).
+
+### 12. Performance budget
+The report reads the event's paid gifts, refunds, pledges, collections, matches and donation ticket lines once (indexed by event); a reconciliation lists at most 10,000 movements per run.
+
+### 13. Rollout
+Behind `donations`. Live Stripe needs the owner's account (connected-account listing is written against the pinned API version and tested with the fake Stripe API).
+
+### 14. Build notes (2026-10-03)
+Base: build branch (batch 3h, design v2) + `agent/m4.8c`–`f`, then `merge/next-3j` before the final gate (its resolutions of the four donations branches, its migration numbering 0113–0129 and M4.3b's XLSX writer were taken; this increment's own XLSX writer was dropped for M4.3b's). This increment's migration is `0130_green_loa.sql`. Merged again before the final gate: `merge/next-3j` (1294fe0b) and the build branch (dfbf5e28).
+- Gate (2026-10-03): lint (one warning, `apps/web/messages/hi.json` over Biome's 1 MiB limit, already on `merge/next-3j`), check:modules ok, typecheck 60/60 (concurrency 2), unit 3,097 passed (229 files), contracts:check ok. Integration, whole suite on the 3j merge: 1,775 passed and 2 failed, both from batch 3j and fixed here (`pledge-collection.int.test.ts` counted the fixture's new match pledge, the same fix 3j then pushed; `audit.int.test.ts`'s tamper test builds two org fixtures, ~18 s each since 3j, so it gets 120 s); after the last merges the changed and isolation files pass (pledge-collection, door-scope, donations-report, isolation, canary: 56/56). e2e on 375/768/1280: `donations-report.spec.ts` 9/9; with `donations`, `matching-gifts`, `giving-screen`, `pledge-collection`, `reconciliation` (M1.6e) and `checkout` (the fake payment page changed): all pass; the Scan PWA check-in test of `pledge-collection` failed identically on a clean `merge/next-3j` and passes after 3j's fix (38c6dff7).
+
+### 15. Demo checklist
+- [ ] A connected gala: give two gifts on the giving page (one anonymous), refund part of one from its order page.
+- [ ] Donations → **Open the report**: totals, by source/level/donor (Anonymous badge), the ledger check "Not reconciled yet".
+- [ ] **Reconciliation** → **Reconcile now**: "Everything matches"; back on the report "Matches to the cent".
+- [ ] `POST /api/dev/donations/provider` `op=drift`: reconcile, see "Amounts differ", resolve it with a note.
+- [ ] `op=age`: reconcile, see the payouts ("Paid").
+- [ ] Export donors for Salesforce (CSV) and generic (Excel): confirm it's you, download both.
+
+### 16. Owner tasks
+`docs/owner-inbox.md` → M4.8g.
