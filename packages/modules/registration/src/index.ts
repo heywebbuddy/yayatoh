@@ -113,6 +113,13 @@ export {
   REGISTRANT_STATUSES,
   TYPE_KINDS,
 } from './schema.ts';
+// M5.6a: session doors (check-in's SessionAccessSource, composed at the roots).
+export {
+  enrolledTicketIdsTx,
+  registrationSessionAccess,
+  sessionAccessTx,
+  type TicketSessionAccess,
+} from './session-access.ts';
 export {
   archiveAdmissionItemCommand,
   archiveRegistrationTypeCommand,

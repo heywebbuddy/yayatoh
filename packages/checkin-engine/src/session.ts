@@ -64,7 +64,12 @@ export function sessionGateResult(i: {
     if (a ? !a.registrant || (i.rule.enrollmentRequired && !a.enrolled) : i.rule.enrollmentRequired)
       return GATE_RESULT.enrollment;
   }
-  if (!waived.has('admission_level') && a && a.sessionIds !== null && !a.sessionIds.includes(i.rule.sessionId))
+  if (
+    !waived.has('admission_level') &&
+    a &&
+    a.sessionIds !== null &&
+    !a.sessionIds.includes(i.rule.sessionId)
+  )
     return GATE_RESULT.admission_level;
   if (!waived.has('capacity') && i.rule.capacity !== null && i.occupied >= i.rule.capacity)
     return GATE_RESULT.capacity;

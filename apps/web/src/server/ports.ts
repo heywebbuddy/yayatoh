@@ -1,6 +1,8 @@
 import { billingEntitlements } from '@yayatoh/billing';
+import { setSessionAccessSource } from '@yayatoh/checkin';
 import { eventRolesOf } from '@yayatoh/events';
 import { createCommandPorts, localKeyVault, setKeyVault } from '@yayatoh/platform';
+import { registrationSessionAccess } from '@yayatoh/registration';
 import { createOrgAuthorizer, orgStatusGate } from '@yayatoh/tenancy';
 
 /** Composition root for the web transport (Server Actions / RSC). Same ports as /v1. */
@@ -14,3 +16,7 @@ export const ports = createCommandPorts({
 // AWS KMS arrives with the owner's AWS account; until then dev/preview/CI use the local vault.
 const localKms = process.env.LOCAL_KMS_KEY;
 if (localKms) setKeyVault(localKeyVault(localKms));
+
+// M5.6a: session doors learn registrations and enrollments from the registration module
+// (a higher tier than check-in, so it is plugged in here).
+setSessionAccessSource(registrationSessionAccess);

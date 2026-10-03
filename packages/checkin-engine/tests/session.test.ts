@@ -39,7 +39,9 @@ describe('session gates (M5.6a)', () => {
 
   it('refuses in order: enrollment, admission level, capacity', () => {
     expect(sessionGateResult({ rule, access: { ...ok, enrolled: false }, occupied: 0 })).toBe('not_enrolled');
-    expect(sessionGateResult({ rule, access: { ...ok, registrant: false }, occupied: 9 })).toBe('not_enrolled');
+    expect(sessionGateResult({ rule, access: { ...ok, registrant: false }, occupied: 9 })).toBe(
+      'not_enrolled',
+    );
     expect(sessionGateResult({ rule, access: { ...ok, sessionIds: ['s2'] }, occupied: 9 })).toBe(
       'admission_level',
     );

@@ -268,8 +268,7 @@ async function sessionVerdict(
   if (!gate || gate.sessionId !== sessionId) return { ...r, verdict: 'invalid' };
   if (r.verdict !== 'admit' && r.verdict !== 'provisional') return r;
   const key = r.ticketId ? inRoomKey(r.ticketId, sessionId) : '';
-  if (direction === 'out')
-    return { ...r, verdict: state.inRoom?.has(key) ? 'scanned_out' : 'not_in_room' };
+  if (direction === 'out') return { ...r, verdict: state.inRoom?.has(key) ? 'scanned_out' : 'not_in_room' };
   if (state.inRoom?.has(key)) return { ...r, verdict: 'duplicate' };
   const access: SessionAccessFacts | null = r.row
     ? {
