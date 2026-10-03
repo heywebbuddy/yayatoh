@@ -489,3 +489,9 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] After the 24 h close, a place that frees up goes to whoever enrols first from their schedule and the waitlist takes nobody new (until M5.6's door line). Confirm, or keep the line open without promotion.
 - [ ] "Keep both" for overlapping sessions is offered only when neither session has a capacity (P5-9 as written). Confirm.
 - [ ] A registrant is their admission ticket; in a group order (M5.1c) the order's add-ons give their sessions to every registrant of that order. Confirm or ask for per-person add-ons.
+
+## M5.7a — live polls and Q&A (2026-10-02, pending owner)
+- [ ] **Who may take part:** anyone with the link, on **published events that are not private**, without an account (one vote per browser or account). Private events and "ticket holders only" are not supported yet. Confirm, or ask for holder-only participation.
+- [ ] **Anonymous questions:** allowed by default; the name behind an anonymous question is **not kept** by default ("Nobody sees them"); organizers can switch a session to "Moderators can see them" (askers are told). Confirm the defaults.
+- [ ] **Limits:** 5 questions per person per session per 10 minutes, 300 characters a question, 50 polls and 2,000 questions per session, word clouds keep 300 distinct words. Big-screen links never expire on their own (organizers replace them to revoke). Confirm or adjust.
+- [ ] **Questions and tallies are kept with the event** (no separate retention yet; only an optional typed name is personal). Decide a retention period if wanted.

@@ -1,0 +1,16 @@
+# engagement (tier 5)
+
+Live polls and moderated Q&A per program session (M5.7a). Owns Postgres schema `engagement`. Sessions come from `program` (tier 3), events from `events` (tier 2); both are read through their exports, and the composite foreign keys to `events.events` and `program.sessions` are hand-written in the migration (cascade on delete).
+
+**Invariants**
+- A session takes part only once an organizer turns live engagement on (`session_settings` row, `enableLive`). Until then its participant page, channels and display link are a 404.
+- **Server-authoritative polls**: single choice, multiple choice (up to `max_choices`), rating (1…`rating_scale`), word cloud (normalized words, at most `MAX_WORDS` distinct; counts only). States move forward only: draft → open → closed. "Show results" is a separate switch. Ballots (`poll_ballots`) keep no choice; only `poll_tallies` and `polls.ballots` move.
+- **One vote per person per poll**: the unique `(org_id, poll_id, participant_key)` decides under concurrency, inside a transaction holding the poll row (so no vote lands after it closed). A second ballot is `conflict` / `already_voted`.
+- **Participants are never stored by identity.** `participant_key` is an HMAC (app token secret) of the signed-in user's id or the device cookie (`yy_did`), scoped to the session (`participantKey`), so keys can't be linked across sessions.
+- **Moderated Q&A**: every question starts `pending`; moderators approve, dismiss, mark answered (and back), and pin one approved question. One upvote per participant per approved question. At most `QUESTION_RATE` questions per participant per session per 10 minutes (`rate_limited`), `MAX_QUESTIONS_PER_SESSION` per session.
+- **Unapproved questions never reach public payloads**: public DTOs (`PublicQuestionDto`, `PublicLiveStateDto`) and the `session.live` channel carry approved questions only; a question that stops being approved is removed from screens (`question-removed`). Pending and dismissed bodies are `personal` in `private-columns.ts` (canary-seeded).
+- **Anonymous questions**: the audience never sees a name. The name is kept only when the session's policy is `moderators`; switching to `hidden` erases the names already kept.
+- **Realtime** over the M3.1b publisher, session-scoped channels `org:{org}:event:{event}:session:{session}:live` (public: approved questions and shown results; the signed display link) and `…:moderation` (members with `events:read`). Every message is the full allowlisted shape; snapshots (`publicSnapshotTx`, `moderationSnapshotTx`) make a reconnecting screen whole.
+- **Big-screen link**: `signDisplayToken` (`{org}~{session}~{version}~{hmac}`); `displaySession` checks the signature and the session's current `display_version` through `engagement.display_target` (SECURITY DEFINER, live orgs only, ids and version only). `rotateDisplayLink` revokes every earlier link.
+- Entitlement `sessions`. Organizer writes need `events:write`, the console reads `events:read`, the audience `public:engagement` (published, non-private events only). `deletePoll` is a `delete` command (refused while impersonating).
+- Events emitted: `engagement.vote_cast@1` (`{ eventId, sessionId, pollId }`) and `engagement.question_asked@1` (`{ eventId, sessionId, questionId }`), for M5.7b engagement scores. No participant data.

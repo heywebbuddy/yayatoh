@@ -13,6 +13,7 @@ import * as commandCenter from '@yayatoh/command-center';
 import * as crm from '@yayatoh/crm';
 import { withTenant } from '@yayatoh/db';
 import { closePools } from '@yayatoh/db/testing';
+import * as engagement from '@yayatoh/engagement';
 import * as events from '@yayatoh/events';
 import * as forms from '@yayatoh/forms';
 import * as guests from '@yayatoh/guests';
@@ -94,6 +95,7 @@ const MODULES = {
   checkin,
   cms,
   crm,
+  engagement,
   events,
   forms,
   marketplace,
@@ -222,6 +224,8 @@ describe('impersonation: the pipeline refuses money, export and delete (M1.2e)',
         'media.removeSpeakerPhoto',
         'media.removeExhibitorLogo',
         'media.removeSponsorLogo',
+        // Live polls (M5.7a).
+        'engagement.deletePoll',
         'program.deleteSession',
         'cms.deleteEntry',
         // Account erasure's per-org part (M1.14e; run by the platform, never as a member).

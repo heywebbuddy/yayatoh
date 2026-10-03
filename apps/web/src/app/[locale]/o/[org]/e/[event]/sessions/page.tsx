@@ -1,3 +1,4 @@
+import { liveSessionsQuery } from '@yayatoh/engagement';
 import { listOccurrencesQuery } from '@yayatoh/events';
 import { executeQuery, utcToZonedInput } from '@yayatoh/kernel';
 import { agendaQuery, groupByDay, type SessionDto } from '@yayatoh/program';
@@ -46,6 +47,9 @@ export default async function SessionsPage({
   // M5.2a: agenda v2 (types, included/optional, groups, capacity counter, publishing).
   const agenda = await executeQuery(agendaQuery, { eventId: ev.id }, data.ctx, ports);
   const agendaMessages = await agendaWarningMessages(agenda.warnings, program, agenda);
+  // M5.7a: sessions with live polls and Q&A on.
+  const live = new Set(await executeQuery(liveSessionsQuery, { eventId: ev.id }, data.ctx, ports));
+  const tl = await getTranslations('engagement.moderator');
   const tz = ev.timezone;
   const time = new Intl.DateTimeFormat(locale, { timeZone: tz, hour: 'numeric', minute: '2-digit' });
   const dayLabel = new Intl.DateTimeFormat(locale, {
@@ -239,10 +243,18 @@ export default async function SessionsPage({
                           </span>
                           <h4 className="text-body font-medium">{s.title}</h4>
                           {mine.length > 0 ? <Label>{tp('conflictLabel')}</Label> : null}
+                          {live.has(s.id) ? <Label>{tl('liveLabel')}</Label> : null}
                         </div>
                         <p className="text-caption text-ink-2">
                           {[room, track, people.join(', ')].filter(Boolean).join(' · ') || tp('noDetails')}
                         </p>
+                        <Link
+                          href={`/o/${org}/e/${event}/sessions/${s.id}/live`}
+                          aria-label={tl('openFor', { title: s.title })}
+                          className="inline-flex min-h-6 items-center self-start text-caption underline underline-offset-2"
+                        >
+                          {tl('title')}
+                        </Link>
                         <SessionAgendaLine
                           details={agenda.sessions.find((d) => d.sessionId === s.id)}
                           agenda={agenda}
