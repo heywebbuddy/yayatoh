@@ -2,6 +2,7 @@ import {
   Armchair,
   Award,
   Bell,
+  BellRing,
   Building2,
   Calendar,
   CalendarCheck,
@@ -9,7 +10,9 @@ import {
   ChartLine,
   ClipboardList,
   Copy,
+  CreditCard,
   FileText,
+  FlaskConical,
   Gauge,
   Globe,
   Heart,
@@ -43,6 +46,7 @@ import {
   Store,
   Ticket,
   Undo2,
+  Webhook,
   Users,
   Workflow,
   Zap,
@@ -96,6 +100,10 @@ const ICONS: Record<string, LucideIcon> = {
   'shield-alert': ShieldAlert,
   zap: Zap,
   'id-card': IdCard,
+  'credit-card': CreditCard,
+  flask: FlaskConical,
+  'bell-ring': BellRing,
+  webhook: Webhook,
 };
 
 export function Icon({ name, className = 'size-4' }: { name: string; className?: string }) {
