@@ -8887,7 +8887,9 @@
         "not_connected": "As doações online não estão abertas para este evento.",
         "campaign_closed": "Esta campanha foi encerrada.",
         "risk_blocked": "Não pudemos aceitar esta doação. Tente mais tarde ou fale com o anfitrião."
-      }
+      },
+      "showOnScreen": "Agradecer meu nome na tela da sala",
+      "showOnScreenHint": "Desativado por padrão. Seu nome aparece como você escolheu acima; o valor da doação, nunca."
     },
     "thanks": {
       "metaTitle": "Obrigado",
@@ -8969,7 +8971,8 @@
       "cardBody": "Dê números de raquete aos convidados, chame os níveis pelo console, deixe os observadores registrarem as raquetes erguidas no celular e confirme as promessas.",
       "openConsole": "Abrir o console",
       "openSpotter": "Registrar raquetes",
-      "openPaddles": "Números de raquete"
+      "openPaddles": "Números de raquete",
+      "openScreen": "Tela ao vivo"
     },
     "paddles": {
       "title": "Números de raquete",
@@ -9152,6 +9155,77 @@
       "confirmedOne": "Raquete {number} confirmada como promessa.",
       "voided": "Raquete {number} posta de lado.",
       "voidedPledge": "Raquete {number} posta de lado e a promessa cancelada."
+    },
+    "screen": {
+      "metaTitle": "Tela de doações",
+      "totalLabel": "Arrecadado até agora",
+      "progressLabel": "Progresso rumo à meta",
+      "progressText": "{total} de {goal}",
+      "goal": "{percent}% da meta de {goal}",
+      "goalReached": "Meta alcançada!",
+      "gifts": "{count, plural, =0 {Seja o primeiro a doar} one {# doação} other {# doações}}",
+      "calling": "Nível em andamento",
+      "callingLevel": "{amount} · {name}",
+      "paddles": "{count, plural, =0 {Levante sua plaquinha!} one {# plaquinha levantada} other {# plaquinhas levantadas}}",
+      "thanksTitle": "Obrigado",
+      "thanksEmpty": "Cada doação conta. Obrigado!",
+      "scanToGive": "Escaneie para doar",
+      "qrLabel": "Código QR para a página de doações: {url}",
+      "sideLabel": "Como doar, e agradecimentos",
+      "replacedTitle": "O link desta tela foi substituído",
+      "replacedBody": "Peça o novo link ao anfitrião."
+    },
+    "screenPage": {
+      "title": "Tela ao vivo",
+      "subtitle": "Um termômetro para os projetores da sala: a meta, o total, o nível em andamento e o agradecimento a quem pediu para ser citado.",
+      "setupTitle": "Configurar a tela",
+      "setupBody": "Escolha a campanha que o termômetro acompanha. O código QR dela abre a página de doações dessa campanha.",
+      "settingsTitle": "Configurações da tela",
+      "campaign": "Campanha",
+      "campaignHint": "O termômetro acompanha esta campanha: doações pagas mais as plaquinhas levantadas nos seus níveis.",
+      "chooseCampaign": "Escolha uma campanha",
+      "campaignClosed": "{name} (encerrada)",
+      "showNames": "Agradecer pelo nome",
+      "showNamesHint": "Só são citados os doadores que marcaram “Agradecer meu nome na tela”, como escolheram aparecer. Quem tem plaquinha nunca é citado. Desativado: só totais.",
+      "setUp": "Configurar a tela",
+      "save": "Salvar",
+      "saved": "Tela salva. As telas abertas são atualizadas na hora.",
+      "rotated": "Link substituído. As telas com o link antigo pararam; abra o novo link no projetor.",
+      "noCampaignsTitle": "Adicione uma campanha primeiro",
+      "noCampaignsBody": "A tela mostra a meta e o total de uma campanha. Crie uma na aba Doações.",
+      "openDonations": "Abrir Doações",
+      "notSetUp": "A tela ainda não foi configurada.",
+      "viewerNotice": "Você pode acompanhar a tela aqui. Peça a alguém que pode editar o evento para configurá-la ou compartilhar o link.",
+      "linkTitle": "Link da tela",
+      "linkBody": "Abra este link no computador ligado ao projetor. Não é preciso entrar, então compartilhe-o só com sua equipe técnica.",
+      "linkLabel": "Link da tela",
+      "copy": "Copiar link",
+      "copied": "Link copiado.",
+      "openScreen": "Abrir a tela",
+      "openContrast": "Abrir em alto contraste",
+      "openStill": "Abrir com movimento reduzido",
+      "rotate": "Substituir o link",
+      "rotateHint": "As telas abertas com o link antigo param na hora.",
+      "givingTitle": "Doar por QR",
+      "givingOpen": "O código QR da tela abre a página de doações de {campaign}. As doações feitas pelo celular entram no total ao vivo.",
+      "givingClosed": "Ainda sem código QR: a página aceita doações quando o Stripe está conectado, o evento está publicado e a campanha está aberta.",
+      "previewTitle": "Prévia",
+      "cardsLink": "Imprimir cartões de mesa",
+      "errors": {
+        "campaign": "Escolha uma campanha deste evento."
+      },
+      "rotateConfirm": "Substituir (as telas com o link antigo param)"
+    },
+    "screenCards": {
+      "title": "Cartões de mesa",
+      "subtitle": "Imprima e coloque um em cada mesa. Os convidados escaneiam o código para doar pelo celular.",
+      "print": "Imprimir",
+      "sheetLabel": "Cartões de mesa",
+      "cardTitle": "Escaneie para doar",
+      "cardBody": "Doe para {campaign} pelo celular. Sua doação entra no total da tela.",
+      "qrLabel": "Código QR para a página de doações: {url}",
+      "noScreenTitle": "Configure a tela primeiro",
+      "noScreenBody": "Os cartões abrem a campanha que a tela acompanha."
     }
   },
   "galaTables": {

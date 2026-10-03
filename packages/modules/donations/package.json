@@ -10,7 +10,8 @@
     ".": "./src/index.ts",
     "./giving": "./src/domain/giving.ts",
     "./paddles": "./src/domain/paddles.ts",
-    "./paddle-queue": "./src/domain/paddle-queue.ts"
+    "./paddle-queue": "./src/domain/paddle-queue.ts",
+    "./screen": "./src/domain/screen.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"

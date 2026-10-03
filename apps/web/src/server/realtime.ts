@@ -3,7 +3,13 @@ import { createHash } from 'node:crypto';
 import { ASSISTANCE_CHANNEL } from '@yayatoh/assistance';
 import { checkinFactsTx, deviceContext } from '@yayatoh/checkin';
 import { type TenantTx, withTenant } from '@yayatoh/db';
-import { consoleLiveTx, PADDLE_REALTIME_CHANNELS, spotterStateTx } from '@yayatoh/donations';
+import {
+  consoleLiveTx,
+  GIVING_SCREEN_CHANNEL,
+  PADDLE_REALTIME_CHANNELS,
+  screenSnapshotTx,
+  spotterStateTx,
+} from '@yayatoh/donations';
 import {
   ENGAGEMENT_REALTIME_CHANNELS,
   moderationSnapshotTx,
@@ -80,6 +86,8 @@ export const REALTIME_CHANNELS = createRealtimeRegistry([
   GALLERY_CHANNEL,
   // M4.8c: the paddle raise's spotters (level and paddle numbers) and console (totals).
   ...PADDLE_REALTIME_CHANNELS,
+  // M4.8d: the room's giving screen (thermometer; its projector streams through a signed link).
+  GIVING_SCREEN_CHANNEL,
 ]);
 
 /** Stream (re)connections per caller and channel per minute. */
@@ -162,6 +170,8 @@ const SNAPSHOTS: Record<string, (tx: TenantTx, channel: ResolvedChannel) => Prom
     const event = await findEventTx(tx, c.eventId ?? '');
     return consoleLiveTx(tx, c.eventId ?? '', event?.currency ?? 'USD');
   },
+  // M4.8d: a giving screen (re)connecting gets the whole thermometer.
+  'event.giving-screen': (tx, c) => screenSnapshotTx(tx, c.eventId ?? ''),
 };
 
 /** Session channels (M5.7a) name a real session of their event with live engagement on. */

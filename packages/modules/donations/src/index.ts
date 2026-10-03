@@ -19,6 +19,8 @@ export {
   saveCharityProfileCommand,
   verifyCharityCommand,
 } from './charity.ts';
+// M4.8d live giving screen: the thermometer for the room's projectors (signed link, realtime
+// channel, reconnect snapshot), QR-to-give, names only for donors who opted in (P4-13).
 export {
   CAMPAIGN_STATUSES,
   type CampaignStatus,
@@ -27,7 +29,9 @@ export {
   DEFAULT_PROCESSING_FEE,
   DISPLAY_AS,
   type DisplayAs,
+  GIFT_SOURCES,
   GIFT_STATUSES,
+  type GiftSource,
   type GiftStatus,
   giftAmountProblem,
   type ProcessingFeeRule,
@@ -70,6 +74,14 @@ export {
   taxYearOf,
   ticketReceiptAmounts,
 } from './domain/receipts.ts';
+export {
+  givingQrQuery,
+  QR_PLACES,
+  type QrPlace,
+  SCREEN_THANKS_MAX,
+  screenName,
+  thermometer,
+} from './domain/screen.ts';
 export {
   CampaignDto,
   DonationsConsoleDto,
@@ -179,3 +191,20 @@ export {
   yearEndStatementsCommand,
 } from './receipts.ts';
 export { giftRetentionCommand, LAPSED_GIFT_DAYS, redactLapsedGiftsTx } from './retention.ts';
+export {
+  displayScreen,
+  type PublicScreen,
+  publicScreen,
+  rotateScreenLinkCommand,
+  saveScreenCommand,
+  screenSettingsQuery,
+  screenSnapshotTx,
+} from './screen.ts';
+export {
+  EMPTY_SCREEN,
+  GIVING_SCREEN_CHANNEL,
+  SaveScreenInput,
+  ScreenSettingsDto,
+  ScreenStateDto,
+} from './screen-dto.ts';
+export { type ScreenClaim, signScreenToken, verifyScreenToken } from './screen-link.ts';

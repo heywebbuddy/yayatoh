@@ -1,7 +1,7 @@
 # Spec: M4.8 — Gala donations
 
 - **Milestone:** M4.8 (Phase 4 plan `docs/plans/phase-4.md` §6, decisions P4-9 to P4-17, approved 2026-09-28; Wave B)
-- **Status:** M4.8a and M4.8b built (2026-10-02); M4.8c–g to follow
+- **Status:** M4.8a and M4.8b built (2026-10-02), M4.8c and M4.8d built (2026-10-03); M4.8e–g to follow
 - **Risk tags (M4.8b):** `db-migration`, `payments`, `tenancy`, `legal-copy`
 - **Risk tags:** `db-migration`, `payments`, `tenancy`
 - **Related ADRs:** 0005 (hybrid funds flow and ledger), 0014 (public output allowlists), 0018 (tokens only), 0021 (module layout)
@@ -362,3 +362,115 @@ Base: build branch + `merge/next-3g` + `agent/design-v2` + `merge/next-3h` (whic
 
 ### 16. Owner tasks
 `docs/owner-inbox.md` → M4.8c: paddles for individual-ticket buyers; spotters' roles (scanner role and the Scan PWA).
+
+## M4.8d — live giving screen and QR-to-give (done)
+
+### 1. Goal and users
+The room's thermometer during a gala's fund-a-need: a projector shows the goal, the total climbing as paddles go up and phones give, how many gifts, the level the auctioneer is calling, and thanks to donors who asked to be named. A QR code on the screen and on table cards opens the giving page, so gifts from phones join the total live. Users: the host and AV team (screen link), the auctioneer, guests in the room (screen, phones), co-hosts and viewers (preview).
+
+### 2. References
+- **Plan:** `docs/plans/phase-4.md` §6, row M4.8d; P4-13 (screens show totals by default, names only with the donor's opt-in), P4-15 (QR-to-give now, no SMS keyword), P4-9 (the QR code only while the org can take gifts online).
+- **Builds on:** M4.8a (campaigns, the giving page, gift outcomes), M4.8c (calls, spotters' entries, the console channel), M3.1b (realtime log channels, SSE with resume and snapshots), M5.7a (signed big-screen links, the screen's high-contrast and reduced-motion modes).
+
+### 3. Scope
+**In:**
+- **Screen settings** (`/o/{org}/e/{event}/donations/screen`, linked from the Donations tab's paddle-raise card): the campaign the thermometer follows (its QR code opens that campaign's giving page) and "Thank donors by name" (on by default; off shows totals only). One screen per event (`donations.screens`). `orders:read` opens the page and watches a live preview; `events:write` sets it up, sees the projector's link (copy, open, open in high contrast, open with reduced motion) and replaces it (a second, deliberate step: a native disclosure, then "Replace it").
+- **The projector** (`/{locale?}/giving-screen/{token}`, no sign-in): the token is `{orgId}~{eventId}~{version}~{HMAC}` under the app token secret (like M5.7a); the org and event come from the signature and `donations.screen_target` (SECURITY DEFINER, live orgs only) answers the current version, so a forged, edited or replaced link and a suspended org's link are 404s. Always dark (ADR 0022); the total in big tabular type; the thermometer (a `progressbar` with the total and goal as text; its fill's exact width is set through the CSSOM, the strict CSP allows no style attributes); "{percent}% of the {goal} goal", "Goal reached!"; the gift count (paid gifts plus counted paddles); the level being called with its paddle count ("Raise your paddle!", "3 paddles raised"); the QR code (black on white in every mode) when the giving page takes gifts; the thank-you list. **High contrast** (white on black) and **reduced motion** (no fill animation, no pulsing live dot) are toggles (buttons with `aria-pressed`, keyboard-operable), start from `?contrast=high` / `?motion=reduced`, and follow the system's `prefers-contrast` / `prefers-reduced-motion`. Full screen button.
+- **Live over the realtime publisher:** channel `event.giving-screen` (M3.1b log channel, `orders:read` for members' previews; the projector streams through `/api/donations/screen/{token}`, which checks the signed link, then the same SSE as every channel: Last-Event-ID resume, rate and stream limits). Every message carries the whole allowlisted state (`ScreenStateDto`), and a (re)connecting screen gets it as the **snapshot**, so a dropped screen is whole again either way. Published inside the writing transaction by: every paddle-raise write (arm, record, undo, close, confirm, set aside: `publishConsoleStateTx` now also publishes the screen), a gift becoming paid (`donations.gift-outcomes`), a campaign edit, and saving the screen. Replacing the link publishes `link {version}`: open screens on an older version stop ("This screen link was replaced").
+- **The total:** the campaign's paid gifts (gift amounts, without the fee cover) plus the paddles counted at its levels (recorded or confirmed; duplicates, set-aside entries and withdrawn arms never), in the campaign's currency. Confirming pledges doesn't change it (the entries already counted).
+- **Names (P4-13):** the giving page gains "Thank me by name on the screen in the room" (off by default; hidden when the donor gives anonymously; `gifts.show_on_screen`, with a CHECK that an anonymous gift never carries it). The screen shows the newest 8 paid gifts' names that opted in, as the donor chose to appear (`screenName`: full or first name), and nothing for everyone else. Paddle holders are never named (a pledge carries no consent). No email, no per-gift amount, no tribute, no holder ever reaches a screen payload.
+- **QR-to-give:** the screen's and the table cards' QR codes open `/events/{slug}/give?c={campaign}&via=screen|table`; the giving page keeps `via` across its campaign chips and records the gift's `source` as `qr` (`GIFT_SOURCES` widened, CHECK replaced NOT VALID then validated). Shown only while the giving page takes gifts: a connected account (P4-9), a published event (`checkout_target`) and an open campaign; otherwise the screen runs without a QR code and the host page says why. **Table cards** (`…/donations/screen/cards`): a printable sheet of four cards (event, "Scan to give", the QR code, the campaign, the address), print button, page chrome hidden when printed.
+
+**Later / not yet:**
+- The active match ("Every gift doubled up to $25,000"): M4.8f adds matches; the screen's DTO and component get a `match` block then.
+- Shout-outs as they happen (an animated "Thank you, Ada!"), per-table cards with table names, a screen per campaign (one per event now), a screen that cycles campaigns.
+- Pledges paid later (M4.8e) must not be counted twice when their payments arrive.
+- Text-to-give (P4-15, waits for the 10DLC campaign).
+
+### 4. `touches:`
+```yaml
+touches:
+  - packages/modules/donations/src/{domain/screen.ts,screen-link.ts,screen-dto.ts,screen-live.ts,screen.ts,schema-screens.ts}  # new files
+  - packages/modules/donations/src/{schema.ts (gifts.show_on_screen + CHECK),domain/giving.ts (GIFT_SOURCES + qr),dto.ts (StartGiftInput.showOnScreen/source),gifts.ts (store them; publish on paid),campaigns.ts (publish on edit),paddle-live.ts (publish with the console),index.ts}, package.json (./screen export)
+  - packages/modules/donations/tests/screen.test.ts
+  - packages/db/drizzle/0114_long_fat_cobra.sql (+ meta)   # renumbered at merge
+  - packages/testing/src/fixtures.ts                       # screenRows
+  - packages/testing/tests/giving-screen.int.test.ts
+  - apps/web/src/server/realtime.ts                        # the channel + its snapshot
+  - apps/web/src/app/api/donations/screen/[token]/route.ts
+  - apps/web/src/app/[locale]/giving-screen/[token]/page.tsx
+  - apps/web/src/components/donations/giving-screen.tsx
+  - apps/web/src/app/[locale]/o/[org]/e/[event]/donations/{page.tsx,screen/**}
+  - apps/web/src/app/[locale]/events/[slug]/give/{page.tsx,actions.ts,give-form.tsx}
+  - apps/web/messages/*.json                               # donations.{screen,screenPage,screenCards}, give.showOnScreen*, raiseCard.openScreen
+  - apps/web/e2e/{giving-screen.spec.ts,donations.spec.ts (keyboard path)}
+```
+
+### 5. Data model
+| Table | Change | Notes |
+|---|---|---|
+| `donations.screens` | new | event (unique per org), campaign (cascade), `show_names` (default true), `version` (≥ 1; the link's) |
+| `donations.gifts` | + `show_on_screen boolean not null default false` | CHECK `gifts_show_on_screen_check` (never with `display_as = 'anonymous'`); `gifts_source_check` widened to `online`, `qr` |
+
+**RLS notes:**
+- [x] `screens` uses `tenantTable()` (ENABLE + FORCE RLS, NULLIF policy, org-leading indexes, org-scoped unique, composite FK to `campaigns`).
+- [x] Fixture rows for both orgs (`screenRows`: the fixture campaign's screen).
+- [x] No text columns on `screens` (nothing to declare in `private-columns.ts`); `gifts.show_on_screen` is a boolean.
+
+**Migration:** `0114_long_fat_cobra.sql` (to be renumbered), additive only. Hand-written blocks: (1) `gifts_show_on_screen_check` added `NOT VALID` then `VALIDATE CONSTRAINT`; (2) `gifts_source_check` re-added `NOT VALID` then validated (drizzle drops and re-adds it); (3) `screens_event_fk` (→ `events.events`, cascade) and the `donations.screen_target(uuid, uuid)` SECURITY DEFINER function (version only, live orgs), `REVOKE ALL … FROM PUBLIC`, `GRANT EXECUTE … TO app_user`.
+
+### 6. API diff
+None on `/v1`. Web: `GET /api/donations/screen/{token}` (SSE, signed link), the page `/giving-screen/{token}`.
+
+### 7. Events
+None on the outbox. Realtime messages on `event.giving-screen`: `state` (the whole `ScreenStateDto`), `link {version}`, plus the stream's `snapshot`.
+
+### 8. Entitlements and flags
+`donations` (commands, query, channel). Permissions: `orders:read` (screen page, preview, channel), `events:write` (set up, link, replace). The read-only freeze refuses the writes. Audit: `donations.screen.save` (campaign, names setting), `donations.screen.rotate` (version); never a donor.
+
+### 9. ELT impact
+None (no legacy equivalent).
+
+### 10. Acceptance criteria
+| ID | Given / When / Then | Test |
+|---|---|---|
+| AC-M4.8d-01 | **A gift made on a phone moves the thermometer within 3 s p95** | int `giving-screen.int.test.ts` ("20 phone gifts each reach a listening screen…": payment applied → realtime log → LISTEN fan-out → a subscribed hub, p95 < 3 s); e2e `giving-screen.spec.ts` ("a gift made on a phone…": the projector shows the new total ≤ 3 s after the thank-you page, three gifts) |
+| AC-M4.8d-02 | **Screens never show an unconsented name** (fixture with mixed consents: opted-in full and first names, a full name and a first name without opt-in, an anonymous donor who ticked the box, an unpaid opted-in gift, paddle pledges) | int "acceptance: with mixed consents…" (the page payload, the snapshot and every realtime message scanned); unit `screen.test.ts` (`screenName`, the DTO allowlist); e2e "a gift made on a phone…" (page HTML scanned; the anonymous donor has no box) |
+| AC-M4.8d-03 | The total is paid gifts (without fee cover) plus counted paddles; pending gifts, duplicates, undo and set-aside don't count; confirming doesn't double it | int "totals paid gifts…"; e2e "the level being called…" |
+| AC-M4.8d-04 | The level being called and its paddles appear live; a campaign edit reaches the screen | int "totals…", "a campaign edit…"; e2e "the level being called…" |
+| AC-M4.8d-05 | Signed link: forged, edited, another org's, replaced and suspended-org links refused; an open screen stops when the link is replaced | int "a link opens its screen…"; unit token tests; e2e "the level being called…" (replace), "table cards…" (forged page and stream) |
+| AC-M4.8d-06 | Reconnect: a screen that lost its stream catches up (snapshot) | e2e "the level being called…" (offline, streams dropped, level closed meanwhile) |
+| AC-M4.8d-07 | QR-to-give opens the campaign's giving page from the screen and table cards and records `qr`; no QR code for an unconnected org | int "totals…" (source); e2e "a gift made on a phone…", "table cards…", "an org without a connected account…" |
+| AC-M4.8d-08 | Reduced motion and high contrast, from the link and by keyboard | e2e "the level being called…" |
+| AC-M4.8d-09 | Permissions: viewers watch without settings or link; lower roles refused; only `events:write` sets up and replaces | int "events:write sets it up…"; e2e "table cards…" (viewer, scanner 404) |
+| AC-M4.8d-10 | Isolation: another org can't set up, read or open this org's screen; every new table covered | int "isolation"; `isolation.int.test.ts` (fixture rows) |
+| AC-M4.8d-11 | Validation, success messages, persistence, empty states | e2e "a gift made on a phone…" (no campaign, saved, reload), "table cards…" (cards before setup) |
+| AC-M4.8d-12 | Accessibility: axe light and dark on every new screen and state; Arabic RTL of the console page and the screen | e2e (`expectAccessibleBothModes` / `expectAccessible` throughout; "table cards…" Arabic) |
+
+### 11. Security and privacy
+- The projector's payloads are the allowlisted `ScreenStateDto` only (parsed again by the channel's schema on publish and on send). Names only with the donor's opt-in (P4-13), never for an anonymous gift (also a CHECK), never a paddle holder.
+- The link is a bearer credential for totals and opted-in names: no sign-in, signed per org and event, replaceable, refused for suspended orgs; the stream is rate-limited per link like M5.7a's. Pages are `noindex`, `referrer: no-referrer`.
+- The tenant comes from the signed token (display) or the path (console), never a header.
+
+### 12. Performance budget
+A screen state is five indexed reads (screen, campaign, gift sum, paddle sum by campaign, open call) plus the newest names; it is recomputed per write in the writer's transaction (the console already recomputes its own). The p95 test measures payment → screen at well under a second locally; in production the gift reaches the screen when the donor's phone lands on the thank-you page (which applies the outcome) or the worker's relay delivers it, whichever comes first.
+
+### 13. Rollout
+Behind the `donations` entitlement. Works for unconnected orgs (paddles only, no QR code).
+
+### 14. Build notes (2026-10-03)
+Base: build branch + `merge/next-3g` + `merge/next-3h` (design v2, M4.8a/b) + `agent/m4.8c`. One merge conflict (`command-center/src/widgets.ts`, batch 3g vs 3h: kept the build branch's `days:` call, which already fixes the same day-range bug).
+- The screen is composed from `@yayatoh/ui` (Card, StatusPill, Button, Alert, Select, Checkbox, Input, PageHeader, SectionHeader, EmptyState) and the M5.7a screen's patterns (`StreamBadge`, toggles). Local compositions: `components/donations/giving-screen.tsx` (the thermometer screen and preview), `screen-form.tsx`, `screen-link.tsx`, `cards/print-button.tsx`; the replace-link control reuses M4.8c's `RaiseActionButton`.
+- Gate (2026-10-03): lint, check:modules, typecheck 59/59 (concurrency 2), unit 2,717 passed (201 files), integration 1,519 passed (166 files). e2e on 375/768/1280: `giving-screen.spec.ts` 12/12; related `donations.spec.ts`, `paddle-raise.spec.ts`, `realtime.spec.ts` 48/48 (after making M4.8a's keyboard test name its checkbox); `canary-crawl.spec.ts`, `security.spec.ts` 106 passed (14 skipped by project).
+
+### 15. Demo checklist
+- [ ] As a gala's owner (connected Stripe, published event): Donations → add a campaign with a $1,000 level → **Live screen** → choose the campaign → Set up the screen.
+- [ ] Open the screen link on a second browser (the projector); try **High contrast** and **Reduced motion**.
+- [ ] Scan the QR code with a phone (or open its address), give $1,000 with "Show my full name" and **Thank me by name on the screen**, pay on the test page: the screen climbs and thanks you within seconds.
+- [ ] Give again without the box: the total moves, no name. Give anonymously: no box at all.
+- [ ] Call the level on the paddle-raise console; record a paddle from **Spot paddles**: the screen shows "Now calling" and the paddle.
+- [ ] **Print table cards**; scan one: the giving page opens.
+- [ ] **Replace the link**: the open screen says it was replaced; the old link is gone.
+
+### 16. Owner tasks
+`docs/owner-inbox.md` → M4.8d: what the total counts, names on screen, the link, QR-to-give and table cards.
