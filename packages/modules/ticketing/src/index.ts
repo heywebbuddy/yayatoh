@@ -103,6 +103,8 @@ export {
   occurrenceSalesQuery,
   validForOccurrence,
 } from './occurrences.ts';
+// M6.4b: ticket counts of imported orders.
+export { ticketCountsForOrdersTx } from './order-ticket-counts.ts';
 export { orderTicketIdsTx, ticketFactsTx } from './participation.ts';
 // M5.1d: tickets sold on an invoice with a balance due.
 export { paymentDueTicketIdsTx, setOrderPaymentDueTx } from './payment-due.ts';
@@ -168,5 +170,3 @@ export {
   walletPassSync,
   walletSerial,
 } from './wallet.ts';
-// M6.4b: ticket counts of imported orders.
-export { ticketCountsForOrdersTx } from './order-ticket-counts.ts';

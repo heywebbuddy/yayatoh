@@ -96,6 +96,9 @@ export default async function IntegrationErrorsPage({
             const name = connectorByKey(g.connector)?.name ?? g.connector;
             const id = `group-${g.connectionId}-${g.step}-${g.code}-${g.field ?? 'none'}`;
             const ids = g.errors.map((e) => e.id);
+            // M6.4b: a decided conflict or a deleted row is not something Retry fixes.
+            const retryIds = g.errors.filter((e) => e.retryable).map((e) => e.id);
+            const conflict = g.step === 'conflict';
             const title = t('inbox.groupTitle', {
               connector: name,
               step: t(`inbox.steps.${g.step}`),
@@ -113,25 +116,30 @@ export default async function IntegrationErrorsPage({
                         {codeText(t, g.code)}
                         {g.field ? ` · ${t('inbox.field', { field: g.field })}` : ''}
                       </p>
+                      {t.has(`inbox.help.${g.code}`) ? (
+                        <p className="m-0 text-body">{t(`inbox.help.${g.code}`)}</p>
+                      ) : null}
                       <p className="m-0 text-caption text-ink-2">
                         {t('inbox.lastSeen', { when: when.format(g.lastSeenAt) })}
                       </p>
                     </div>
                     {canManage ? (
                       <div className="flex flex-wrap gap-2">
-                        <form action={retryErrorsAction.bind(null, org)}>
-                          {ids.map((e) => (
-                            <input key={e} type="hidden" name="error" value={e} />
-                          ))}
-                          <Button
-                            type="submit"
-                            variant="secondary"
-                            size="sm"
-                            aria-label={t('inbox.retryAllNamed', { group: title })}
-                          >
-                            {t('inbox.retryAll')}
-                          </Button>
-                        </form>
+                        {retryIds.length ? (
+                          <form action={retryErrorsAction.bind(null, org)}>
+                            {retryIds.map((e) => (
+                              <input key={e} type="hidden" name="error" value={e} />
+                            ))}
+                            <Button
+                              type="submit"
+                              variant="secondary"
+                              size="sm"
+                              aria-label={t('inbox.retryAllNamed', { group: title })}
+                            >
+                              {t('inbox.retryAll')}
+                            </Button>
+                          </form>
+                        ) : null}
                         <form action={dismissErrorsAction.bind(null, org)}>
                           {ids.map((e) => (
                             <input key={e} type="hidden" name="error" value={e} />
@@ -174,7 +182,39 @@ export default async function IntegrationErrorsPage({
                               })
                             : '—',
                       },
-                      { key: 'attempts', header: t('inbox.attempts'), align: 'end', cell: (e) => e.attempts },
+                      ...(conflict
+                        ? [
+                            {
+                              key: 'values',
+                              header: t('inbox.values'),
+                              cell: (e: (typeof g.errors)[number]) =>
+                                e.conflict.length ? (
+                                  <ul className="m-0 flex list-none flex-col gap-1 p-0">
+                                    {e.conflict.map((v) => (
+                                      <li key={v.field}>
+                                        {t('inbox.keptLost', {
+                                          field: t.has(`fields.${v.field}`)
+                                            ? t(`fields.${v.field}`)
+                                            : v.field,
+                                          kept: v.kept || '—',
+                                          lost: v.lost || '—',
+                                        })}
+                                      </li>
+                                    ))}
+                                  </ul>
+                                ) : (
+                                  '—'
+                                ),
+                            },
+                          ]
+                        : [
+                            {
+                              key: 'attempts',
+                              header: t('inbox.attempts'),
+                              align: 'end' as const,
+                              cell: (e: (typeof g.errors)[number]) => e.attempts,
+                            },
+                          ]),
                       {
                         key: 'next',
                         header: status === 'open' ? t('inbox.nextRetry') : t('inbox.closedAt'),
@@ -182,7 +222,9 @@ export default async function IntegrationErrorsPage({
                           status === 'open'
                             ? e.nextRetryAt
                               ? when.format(e.nextRetryAt)
-                              : t('inbox.manualRetry')
+                              : e.retryable
+                                ? t('inbox.manualRetry')
+                                : t('inbox.yourCall')
                             : e.resolvedAt
                               ? when.format(e.resolvedAt)
                               : '—',
@@ -197,17 +239,19 @@ export default async function IntegrationErrorsPage({
                                 const record = e.externalId ?? e.localId ?? t('inbox.wholeConnection');
                                 return (
                                   <div className="flex flex-wrap justify-end gap-2">
-                                    <form action={retryErrorsAction.bind(null, org)}>
-                                      <input type="hidden" name="error" value={e.id} />
-                                      <Button
-                                        type="submit"
-                                        variant="secondary"
-                                        size="sm"
-                                        aria-label={t('inbox.retryNamed', { record })}
-                                      >
-                                        {t('inbox.retry')}
-                                      </Button>
-                                    </form>
+                                    {e.retryable ? (
+                                      <form action={retryErrorsAction.bind(null, org)}>
+                                        <input type="hidden" name="error" value={e.id} />
+                                        <Button
+                                          type="submit"
+                                          variant="secondary"
+                                          size="sm"
+                                          aria-label={t('inbox.retryNamed', { record })}
+                                        >
+                                          {t('inbox.retry')}
+                                        </Button>
+                                      </form>
+                                    ) : null}
                                     <form action={dismissErrorsAction.bind(null, org)}>
                                       <input type="hidden" name="error" value={e.id} />
                                       <Button

@@ -4,7 +4,13 @@ import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { and, desc, eq, inArray } from 'drizzle-orm';
 import { z } from 'zod';
 import { MAPPING_DIRECTIONS } from './domain/mapping.ts';
-import { ACTIVE_RUN_STATUSES, ERROR_STATUSES, ERROR_STEPS, REMOTE_DELETED, retryable } from './domain/sync.ts';
+import {
+  ACTIVE_RUN_STATUSES,
+  ERROR_STATUSES,
+  ERROR_STEPS,
+  REMOTE_DELETED,
+  retryable,
+} from './domain/sync.ts';
 import { connections, recordLinks, syncConflicts, syncErrors, syncRuns } from './schema.ts';
 
 /**
@@ -125,7 +131,10 @@ export const listErrorGroupsQuery = tenantQuery({
         .orderBy(syncConflicts.field);
       const byError = new Map<string, ErrorDto['conflict'][number][]>();
       for (const v of values)
-        byError.set(v.errorId, [...(byError.get(v.errorId) ?? []), { field: v.field, kept: v.kept, lost: v.lost }]);
+        byError.set(v.errorId, [
+          ...(byError.get(v.errorId) ?? []),
+          { field: v.field, kept: v.kept, lost: v.lost },
+        ]);
       for (const g of groups.values())
         g.errors = g.errors.map((e) => (byError.has(e.id) ? { ...e, conflict: byError.get(e.id) ?? [] } : e));
     }

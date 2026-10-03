@@ -39,7 +39,10 @@ export async function connectConnector(
     state,
     callbackUrl: '/callback',
   });
-  fakeIntegrations.approve({ orgId, connectionId, providerConfigKey }, key === 'demo' ? demoFakeProvider : def.fake);
+  fakeIntegrations.approve(
+    { orgId, connectionId, providerConfigKey },
+    key === 'demo' ? demoFakeProvider : def.fake,
+  );
   const resolved = await fakeAuth.resolve({ orgId, connectionId, providerConfigKey });
   if (!resolved) throw new Error('fake connect did not resolve');
   await executeCommand(

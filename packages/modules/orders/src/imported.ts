@@ -2,7 +2,7 @@ import { randomBytes } from 'node:crypto';
 import { upsertContactTx } from '@yayatoh/crm';
 import type { TenantTx } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
-import { type Ctx, type DomainEvent, DomainError, requireOrg, uuidv7 } from '@yayatoh/kernel';
+import { type Ctx, DomainError, type DomainEvent, requireOrg, uuidv7 } from '@yayatoh/kernel';
 import { keyVault } from '@yayatoh/platform';
 import {
   holdInventoryTx,
@@ -14,7 +14,7 @@ import {
   ticketTypeStockTx,
   voidTicketsTx,
 } from '@yayatoh/ticketing';
-import { and, eq, inArray, sql } from 'drizzle-orm';
+import { and, eq, inArray } from 'drizzle-orm';
 import { z } from 'zod';
 import { hashManageToken } from './commands/checkout.ts';
 import { orderItems, orders } from './schema.ts';
@@ -236,7 +236,7 @@ async function updateImportedTx(
   input: z.output<typeof ImportedOrderInput>,
 ): Promise<void> {
   const [order] = await tx.select().from(orders).where(eq(orders.id, orderId)).for('update');
-  if (!order || order.createdVia !== 'import')
+  if (order?.createdVia !== 'import')
     throw new DomainError('conflict', 'This order was not imported', { reason: 'not_imported' });
   const tickets = (await ticketsForOrderTx(tx, orderId)).sort((x, y) => x.serial - y.serial);
   const items = await tx.select().from(orderItems).where(eq(orderItems.orderId, orderId));
@@ -299,7 +299,8 @@ export async function importedOrdersSummaryTx(
   source: ImportSource,
   eventIds?: readonly string[],
 ): Promise<ImportedOrdersSummaryDto> {
-  if (eventIds && eventIds.length === 0) return { orders: 0, paidOrders: 0, tickets: 0, activeTickets: 0, revenue: [] };
+  if (eventIds && eventIds.length === 0)
+    return { orders: 0, paidOrders: 0, tickets: 0, activeTickets: 0, revenue: [] };
   const scope = and(
     eq(orders.provider, source),
     eq(orders.createdVia, 'import'),

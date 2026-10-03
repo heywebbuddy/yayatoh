@@ -1,8 +1,8 @@
 import {
+  type AttendeeSyncRow,
   addGuestCommand,
   attendeeSyncRowTx,
   attendeesChangedSinceTx,
-  type AttendeeSyncRow,
   reassignAttendeeTx,
   setAttendeeLabelsCommand,
 } from '@yayatoh/attendees';
@@ -119,7 +119,8 @@ async function eventOfSheetTx(tx: TenantTx, connectionId: string, spreadsheetId:
         eq(sheetLinks.status, 'active'),
       ),
     );
-  if (!link) throw new DomainError('not_found', 'This sheet is not linked any more', { reason: 'not_linked' });
+  if (!link)
+    throw new DomainError('not_found', 'This sheet is not linked any more', { reason: 'not_linked' });
   return link.eventId;
 }
 
@@ -172,7 +173,8 @@ const SendResult = z.object({ rowId: z.string().regex(/^[A-Za-z0-9_-]{1,64}$/), 
 export const googleSheetsConnector = defineConnector({
   key: GOOGLE_SHEETS,
   name: 'Google Sheets',
-  providerConfigKey: 'google-sheet',
+  // The integration's id at Nango (the owner names it so when configuring Google there).
+  providerConfigKey: 'google_sheets',
   scopes: ['https://www.googleapis.com/auth/drive.file'],
   entitlement: 'integrations',
   availability: 'general',
@@ -205,7 +207,8 @@ export const googleSheetsConnector = defineConnector({
         async list(io) {
           const records: RemoteRecord[] = [];
           for (const link of linksOf(io.scope))
-            for (const r of await readRows(io, link.spreadsheetId)) records.push(rowRecord(link.spreadsheetId, r));
+            for (const r of await readRows(io, link.spreadsheetId))
+              records.push(rowRecord(link.spreadsheetId, r));
           // The whole set, every run: there is no change feed on a sheet.
           return { records, cursor: null, hasMore: false };
         },
@@ -240,7 +243,8 @@ export const googleSheetsConnector = defineConnector({
         async send(io, input) {
           const eventId = input.local.fields.event_id;
           const link = linksOf(io.scope).find((l) => l.eventId === eventId);
-          if (!link) throw new DomainError('invalid_state', 'The event has no linked sheet', { reason: 'not_linked' });
+          if (!link)
+            throw new DomainError('invalid_state', 'The event has no linked sheet', { reason: 'not_linked' });
           const where = input.externalId ? splitId(input.externalId) : null;
           const update = where && where.spreadsheetId === link.spreadsheetId ? where.rowId : null;
           const res = await io.client.request({

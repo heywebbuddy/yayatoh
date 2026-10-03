@@ -1926,7 +1926,8 @@
     "dateSoldOut": "此场次剩余门票不足。",
     "wrongDate": "其中一种门票不在此场次出售。",
     "dateUnavailable": "此场次已停止售票。",
-    "seatChannel": "其中部分座位为其他销售渠道（赞助商、推广方或线上销售）保留。请选择其他座位。"
+    "seatChannel": "其中部分座位为其他销售渠道（赞助商、推广方或线上销售）保留。请选择其他座位。",
+    "imported": "从 {source} 导入 · 订单 {reference}"
   },
   "seating": {
     "title": "座位",
@@ -12073,6 +12074,12 @@
     "connectors": {
       "demo": {
         "description": "用于试用集成的测试联系人应用：联系人与你的 CRM 双向同步。仅限测试环境。"
+      },
+      "eventbrite": {
+        "description": "从 Eventbrite 迁移活动、票种、订单和参会者。先预览，再导入；随时可再次运行以获取更改。"
+      },
+      "google_sheets": {
+        "description": "在 Google 表格中维护活动的参会者名单。任一处的修改都会双向同步。"
       }
     },
     "sandboxBadge": "测试",
@@ -12092,11 +12099,36 @@
     "readOnly": "只有所有者和管理员可以连接或更改集成。",
     "breadcrumb": "面包屑导航",
     "objects": {
-      "contacts": "联系人"
+      "contacts": "联系人",
+      "events": "活动",
+      "ticket_classes": "票种",
+      "orders": "订单",
+      "attendees": "参会者"
     },
     "fields": {
       "email": "电子邮件",
-      "name": "姓名"
+      "name": "姓名",
+      "tagline": "标语",
+      "starts_at": "开始",
+      "ends_at": "结束",
+      "timezone": "时区",
+      "currency": "货币",
+      "venue_name": "场地",
+      "city": "城市",
+      "country": "国家/地区",
+      "description": "描述",
+      "price_minor": "价格（以分计）",
+      "quantity_total": "数量",
+      "hidden": "隐藏",
+      "sales_start_at": "开售时间",
+      "sales_end_at": "停售时间",
+      "buyer_email": "买家邮箱",
+      "buyer_name": "买家姓名",
+      "status": "状态",
+      "subtotal_minor": "票款合计（以分计）",
+      "total_minor": "订单合计（以分计）",
+      "placed_at": "下单时间",
+      "labels": "标签"
     },
     "status": {
       "none": "未连接",
@@ -12143,7 +12175,9 @@
         "paused": "同步已暂停。",
         "resumed": "同步已恢复。",
         "interval": "同步计划已保存。",
-        "disconnected": "已断开。不再同步任何内容，并已在服务商处撤销访问权限。"
+        "disconnected": "已断开。不再同步任何内容，并已在服务商处撤销访问权限。",
+        "linked": "已创建并关联表格。下次同步时填入内容。",
+        "unlinked": "已取消关联表格。之后不再同步；表格保留在你的 Google 云端硬盘中。"
       },
       "revoked": {
         "user": "已于 {when} 断开。",
@@ -12247,7 +12281,13 @@
       "paused": "因暂停而停止",
       "sync_failed": "同步失败",
       "unknown_connector": "此集成已不可用",
-      "other": "错误（{code}）"
+      "other": "错误（{code}）",
+      "remote_deleted": "已在表格中删除",
+      "conflict_kept_yayatoh": "两处都有修改：保留了 Yayatoh 的修改",
+      "conflict_kept_remote": "两处都有修改：保留了服务方的修改",
+      "conflict": "与 Yayatoh 中已有的记录冲突",
+      "not_found": "所需的内容还不在这里",
+      "validation_failed": "Yayatoh 未接受"
     },
     "inbox": {
       "title": "集成错误",
@@ -12273,7 +12313,8 @@
         "pull": "从服务商读取",
         "map": "映射",
         "write": "保存到 Yayatoh",
-        "push": "发送到服务商"
+        "push": "发送到服务商",
+        "conflict": "两处都有修改"
       },
       "field": "字段：{field}",
       "lastSeen": "最近出现于 {when}",
@@ -12299,7 +12340,15 @@
       "retryNamed": "重试 {record}",
       "dismiss": "忽略",
       "dismissNamed": "忽略 {record}",
-      "more": "{count, plural, other {另有 # 条记录未显示。}}"
+      "more": "{count, plural, other {另有 # 条记录未显示。}}",
+      "values": "值",
+      "keptLost": "{field}：保留“{kept}”，丢弃“{lost}”",
+      "yourCall": "需要你来决定",
+      "help": {
+        "remote_deleted": "该行已在表格中删除。Yayatoh 名单中没有删除任何人。忽略即表示接受：参会者仍保留在这里，不再与该行关联。",
+        "conflict_kept_yayatoh": "自上次同步以来，该记录在两处都有修改。保留并发送了较晚的 Yayatoh 修改；下方服务方的值已被覆盖。",
+        "conflict_kept_remote": "自上次同步以来，该记录在两处都有修改。保留了较晚的服务方修改；下方 Yayatoh 的值已被覆盖。"
+      }
     },
     "fakeConsent": {
       "title": "测试授权",
@@ -12307,7 +12356,97 @@
       "heading": "要将 {name} 连接到 Yayatoh 吗？",
       "body": "{name} 是测试服务商。允许后，Yayatoh 可以代表你读取和写入以下内容：",
       "allow": "允许",
-      "deny": "拒绝"
+      "deny": "拒绝",
+      "bodyNoScopes": "{name} 是测试服务方。允许后，Yayatoh 可代表你读取账户数据。"
+    },
+    "import": {
+      "open": "打开导入",
+      "connectedDetail": "{name} 已连接。打开导入以预览将迁移的内容。",
+      "noRuns": "还没有导入。打开导入以预览并开始。",
+      "title": "从 Eventbrite 导入",
+      "crumb": "导入",
+      "description": "迁移活动、票种、订单和参会者。开始导入前不会写入任何内容，再次运行只会获取更改。",
+      "connected": "Eventbrite 已连接。确认将迁移的内容后再导入。",
+      "started": "导入已开始，在后台运行：稍后刷新即可查看结果。",
+      "alreadyRunning": "已有导入正在运行。",
+      "stepsLabel": "导入步骤",
+      "steps": {
+        "connect": "连接",
+        "preview": "预览",
+        "import": "导入",
+        "result": "结果"
+      },
+      "notActive": "此连接未启用。重新连接后再导入。",
+      "backToConnection": "前往连接",
+      "preview": {
+        "title": "预览",
+        "help": "你的 Eventbrite 账户当前的内容，以及其中在这里属于新内容的数量。尚未写入任何内容。",
+        "readOnly": "只有所有者和管理员可以预览并开始导入。",
+        "caption": "导入将迁移的内容",
+        "what": "项目",
+        "inEventbrite": "Eventbrite 中",
+        "new": "这里新增",
+        "noEmails": "导入的订单会标记为已导入：不会向任何人收费，也不会发送收据或电子票邮件。"
+      },
+      "what": {
+        "events": "活动",
+        "ticketTypes": "票种",
+        "orders": "订单",
+        "attendees": "参会者",
+        "revenue": "收入",
+        "refunded": "已退款订单"
+      },
+      "refundedOrders": "{count, plural, =0 {无} other {# 个订单，以已退款导入，不计收入}}",
+      "noRevenue": "无",
+      "importing": "正在导入…",
+      "importNew": "{count, plural, other {导入 # 条新记录}}",
+      "importAgain": "再次导入以获取更改",
+      "result": {
+        "title": "结果",
+        "none": "尚未导入任何内容。",
+        "finished": "完成于 {when}",
+        "inProgress": "进行中",
+        "refresh": "刷新",
+        "counts": "导入或更新 {pulled} · 未变 {skipped} · 出错 {failed}",
+        "seeErrors": "查看需要处理的内容",
+        "caption": "Yayatoh 当前来自 Eventbrite 的内容",
+        "inYayatoh": "Yayatoh 中",
+        "ordersValue": "{count}（已付 {paid}）",
+        "attendeesValue": "{count}（有效 {active}）",
+        "goToEvents": "前往活动"
+      }
+    },
+    "sheets": {
+      "title": "已关联的活动",
+      "help": "每个已关联活动的参会者名单都与各自的 Google 表格同步。表格中的修改会在下次同步时进入 Yayatoh；删除一行不会移除任何人。",
+      "linkTitle": "关联活动",
+      "event": "活动",
+      "pickEvent": "选择活动",
+      "chooseEvent": "选择要将参会者放入表格的活动。",
+      "link": "创建表格并关联",
+      "linking": "正在创建表格…",
+      "linkHelp": "会在你的 Google 云端硬盘中按字段映射的列创建新表格。",
+      "alreadyLinked": "该活动已有表格。",
+      "allLinked": "每个活动都有表格。",
+      "noEvents": "请先创建活动，再关联其参会者名单。",
+      "emptyTitle": "尚未关联活动",
+      "emptyHelp": "在上方选择活动即可创建其表格。",
+      "emptyReadOnly": "所有者或管理员可在此关联活动的参会者名单。",
+      "caption": "已关联 Google 表格的活动",
+      "sheet": "表格",
+      "openNamed": "在 Google 表格中打开 {title}",
+      "linkedOn": "关联于",
+      "status": "状态",
+      "statuses": {
+        "active": "同步中",
+        "unlinked": "已取消关联"
+      },
+      "actions": "操作",
+      "unlink": "取消关联",
+      "unlinkNamed": "取消关联 {event}",
+      "confirmUnlink": "取消关联 {event} 的表格？",
+      "confirmUnlinkBody": "之后不再同步。表格及其内容保留在你的 Google 云端硬盘中，所有人仍在 Yayatoh 名单中。",
+      "keep": "保持关联"
     }
   },
   "formControls": {

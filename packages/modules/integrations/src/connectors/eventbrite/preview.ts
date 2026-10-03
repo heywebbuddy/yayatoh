@@ -6,7 +6,7 @@ import { tenantQuery } from '@yayatoh/platform';
 import { and, desc, eq, inArray } from 'drizzle-orm';
 import { z } from 'zod';
 import type { IntegrationAuth } from '../../auth/port.ts';
-import { RUN_STATUSES, originStamp } from '../../domain/sync.ts';
+import { originStamp, RUN_STATUSES } from '../../domain/sync.ts';
 import { connections, recordLinks, syncRuns } from '../../schema.ts';
 import type { RemoteRecord, SyncIO } from '../../sdk/connector.ts';
 import { linkedCountsTx } from '../links.ts';
@@ -80,7 +80,10 @@ export const alreadyImportedQuery = tenantQuery({
 });
 
 async function readAll(
-  list: (io: SyncIO, cursor: string | null) => Promise<{ records: readonly RemoteRecord[]; cursor: string | null; hasMore: boolean }>,
+  list: (
+    io: SyncIO,
+    cursor: string | null,
+  ) => Promise<{ records: readonly RemoteRecord[]; cursor: string | null; hasMore: boolean }>,
   io: SyncIO,
 ): Promise<RemoteRecord[]> {
   const out: RemoteRecord[] = [];
@@ -201,7 +204,12 @@ export const importResultQuery = tenantQuery({
         connections,
         and(eq(connections.orgId, recordLinks.orgId), eq(connections.id, recordLinks.connectionId)),
       )
-      .where(and(eq(connections.connector, EVENTBRITE), inArray(recordLinks.objectType, ['events', 'ticket_classes'])));
+      .where(
+        and(
+          eq(connections.connector, EVENTBRITE),
+          inArray(recordLinks.objectType, ['events', 'ticket_classes']),
+        ),
+      );
     const events = new Set(links.filter((l) => l.objectType === 'events').map((l) => l.localId));
     const types = new Set(links.filter((l) => l.objectType === 'ticket_classes').map((l) => l.localId));
     const orders = await importedOrdersSummaryTx(tx, 'eventbrite');

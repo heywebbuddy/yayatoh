@@ -1,3 +1,4 @@
+import type { TenantTx } from '@yayatoh/db';
 import {
   CreateEventInput,
   createEventCommand,
@@ -15,7 +16,6 @@ import {
   UpdateTicketTypeInput,
   updateTicketTypeTx,
 } from '@yayatoh/ticketing';
-import type { TenantTx } from '@yayatoh/db';
 import { z } from 'zod';
 import { fieldsHash } from '../../hash.ts';
 import {
@@ -200,10 +200,7 @@ async function listOrders(io: SyncIO, raw: string | null): Promise<Page<RemoteRe
   });
   const body = res.body as { orders?: EbOrder[]; pagination?: EbPagination };
   const records = flat((body.orders ?? []).map(orderRecord));
-  const high = records.reduce<string | null>(
-    (h, r) => (r.version > (h ?? '') ? r.version : h),
-    cursor.h,
-  );
+  const high = records.reduce<string | null>((h, r) => (r.version > (h ?? '') ? r.version : h), cursor.h);
   const next =
     body.pagination?.has_more_items && typeof body.pagination.continuation === 'string'
       ? body.pagination.continuation
@@ -212,7 +209,9 @@ async function listOrders(io: SyncIO, raw: string | null): Promise<Page<RemoteRe
     records,
     hasMore: next !== null,
     // Done: the next run asks for orders changed after the newest one seen.
-    cursor: JSON.stringify(next ? { s: cursor.s, c: next, h: high } : { s: high ?? cursor.s, c: null, h: null }),
+    cursor: JSON.stringify(
+      next ? { s: cursor.s, c: next, h: high } : { s: high ?? cursor.s, c: null, h: null },
+    ),
   };
 }
 
@@ -330,7 +329,9 @@ async function writeOrder(
   const eventId = await parentOrMissing(tx, meta, 'events', meta.record.fields.event_id);
   const parsed = z.array(Attendee).min(1).safeParse(meta.record.fields.attendees);
   if (!parsed.success)
-    throw new DomainError('validation_failed', 'The order has no readable attendees', { reason: 'attendees' });
+    throw new DomainError('validation_failed', 'The order has no readable attendees', {
+      reason: 'attendees',
+    });
   const types = new Map<string, string>();
   for (const a of parsed.data)
     if (!types.has(a.ticket_class_id))
@@ -340,7 +341,10 @@ async function writeOrder(
   if (!Number.isInteger(subtotal) || !Number.isInteger(total) || total < subtotal || subtotal < 0)
     throw new DomainError('validation_failed', 'The order totals do not add up', { reason: 'totals' });
   const event = await findEventTx(tx, eventId);
-  const buyer = { email: String(values.buyer_email ?? ''), name: String(values.buyer_name ?? '').slice(0, 120) };
+  const buyer = {
+    email: String(values.buyer_email ?? ''),
+    name: String(values.buyer_name ?? '').slice(0, 120),
+  };
   const source = String(values.status ?? 'placed');
   const live = parsed.data.filter((a) => !a.cancelled && !a.refunded).length;
   const status =
@@ -471,7 +475,10 @@ export const eventbriteConnector = defineConnector({
         ],
         async list(io, raw) {
           const { events, next } = await listEvents(io, parseCursor(raw));
-          return fullReadPage(flat(events.flatMap((e) => (e.ticket_classes ?? []).map(ticketClassRecord))), next);
+          return fullReadPage(
+            flat(events.flatMap((e) => (e.ticket_classes ?? []).map(ticketClassRecord))),
+            next,
+          );
         },
         async get(io, externalId) {
           for (let c: string | null = null, n = 0; n < 50; n++) {

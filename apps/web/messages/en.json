@@ -1926,7 +1926,8 @@
     "dateSoldOut": "Not enough tickets left for this date.",
     "wrongDate": "One of these tickets isn't sold for this date.",
     "dateUnavailable": "This date is no longer on sale.",
-    "seatChannel": "Some of those seats are kept for another sales channel (a sponsor, a promoter or online sales). Choose other seats."
+    "seatChannel": "Some of those seats are kept for another sales channel (a sponsor, a promoter or online sales). Choose other seats.",
+    "imported": "Imported from {source} · order {reference}"
   },
   "seating": {
     "title": "Seating",
@@ -12073,6 +12074,12 @@
     "connectors": {
       "demo": {
         "description": "A sandbox contacts app for trying integrations: contacts sync both ways with your CRM. Test environments only."
+      },
+      "eventbrite": {
+        "description": "Bring your events, ticket types, orders and attendees over from Eventbrite. Preview first, then import; run it again any time to pick up changes."
+      },
+      "google_sheets": {
+        "description": "Keep an event's attendee list in a Google Sheet. Edits in either place sync both ways."
       }
     },
     "sandboxBadge": "Sandbox",
@@ -12092,11 +12099,36 @@
     "readOnly": "Only owners and admins can connect or change integrations.",
     "breadcrumb": "Breadcrumb",
     "objects": {
-      "contacts": "Contacts"
+      "contacts": "Contacts",
+      "events": "Events",
+      "ticket_classes": "Ticket types",
+      "orders": "Orders",
+      "attendees": "Attendees"
     },
     "fields": {
       "email": "Email",
-      "name": "Name"
+      "name": "Name",
+      "tagline": "Tagline",
+      "starts_at": "Starts",
+      "ends_at": "Ends",
+      "timezone": "Time zone",
+      "currency": "Currency",
+      "venue_name": "Venue",
+      "city": "City",
+      "country": "Country",
+      "description": "Description",
+      "price_minor": "Price (in cents)",
+      "quantity_total": "Quantity",
+      "hidden": "Hidden",
+      "sales_start_at": "Sales start",
+      "sales_end_at": "Sales end",
+      "buyer_email": "Buyer email",
+      "buyer_name": "Buyer name",
+      "status": "Status",
+      "subtotal_minor": "Ticket total (in cents)",
+      "total_minor": "Order total (in cents)",
+      "placed_at": "Ordered on",
+      "labels": "Labels"
     },
     "status": {
       "none": "Not connected",
@@ -12143,7 +12175,9 @@
         "paused": "Syncing is paused.",
         "resumed": "Syncing is back on.",
         "interval": "Sync schedule saved.",
-        "disconnected": "Disconnected. Nothing syncs any more and access was revoked at the provider."
+        "disconnected": "Disconnected. Nothing syncs any more and access was revoked at the provider.",
+        "linked": "Sheet created and linked. It fills on the next sync.",
+        "unlinked": "Sheet unlinked. Nothing syncs with it any more; it stays in your Google Drive."
       },
       "revoked": {
         "user": "Disconnected on {when}.",
@@ -12247,7 +12281,13 @@
       "paused": "Stopped by pausing",
       "sync_failed": "The sync failed",
       "unknown_connector": "This integration is no longer available",
-      "other": "Error ({code})"
+      "other": "Error ({code})",
+      "remote_deleted": "Deleted in the sheet",
+      "conflict_kept_yayatoh": "Changed in both places: Yayatoh's change was kept",
+      "conflict_kept_remote": "Changed in both places: the provider's change was kept",
+      "conflict": "Clashes with a record already in Yayatoh",
+      "not_found": "Something it needs isn't here yet",
+      "validation_failed": "Yayatoh didn't accept it"
     },
     "inbox": {
       "title": "Integration errors",
@@ -12273,7 +12313,8 @@
         "pull": "Reading from the provider",
         "map": "Mapping",
         "write": "Saving in Yayatoh",
-        "push": "Sending to the provider"
+        "push": "Sending to the provider",
+        "conflict": "Changed in both places"
       },
       "field": "Field: {field}",
       "lastSeen": "Last seen {when}",
@@ -12299,7 +12340,15 @@
       "retryNamed": "Retry {record}",
       "dismiss": "Dismiss",
       "dismissNamed": "Dismiss {record}",
-      "more": "{count, plural, one {# more record not shown.} other {# more records not shown.}}"
+      "more": "{count, plural, one {# more record not shown.} other {# more records not shown.}}",
+      "values": "Values",
+      "keptLost": "{field}: kept “{kept}”, lost “{lost}”",
+      "yourCall": "Needs your decision",
+      "help": {
+        "remote_deleted": "The row was deleted in the sheet. Nobody was removed from the list in Yayatoh. Dismiss to accept it: the attendee stays here and is no longer tied to that row.",
+        "conflict_kept_yayatoh": "This record changed in both places since the last sync. The later change, made in Yayatoh, was kept and sent out; the provider's value below was overwritten.",
+        "conflict_kept_remote": "This record changed in both places since the last sync. The later change, made at the provider, was kept; Yayatoh's value below was overwritten."
+      }
     },
     "fakeConsent": {
       "title": "Sandbox consent",
@@ -12307,7 +12356,97 @@
       "heading": "Connect {name} to Yayatoh?",
       "body": "{name} is a test provider. Allowing lets Yayatoh read and write the following on your behalf:",
       "allow": "Allow",
-      "deny": "Deny"
+      "deny": "Deny",
+      "bodyNoScopes": "{name} is a test provider. Allowing lets Yayatoh read your account's data on your behalf."
+    },
+    "import": {
+      "open": "Open import",
+      "connectedDetail": "{name} is connected. Open the import to preview what will come over.",
+      "noRuns": "No imports yet. Open the import to preview and start one.",
+      "title": "Import from Eventbrite",
+      "crumb": "Import",
+      "description": "Bring events, ticket types, orders and attendees over. Nothing is written until you start the import, and running it again only picks up changes.",
+      "connected": "Eventbrite is connected. Check what will come over, then import.",
+      "started": "Import started. It runs in the background: refresh in a moment to see the result.",
+      "alreadyRunning": "An import is already running.",
+      "stepsLabel": "Import steps",
+      "steps": {
+        "connect": "Connect",
+        "preview": "Preview",
+        "import": "Import",
+        "result": "Result"
+      },
+      "notActive": "This connection isn't active. Reconnect it to import.",
+      "backToConnection": "Go to the connection",
+      "preview": {
+        "title": "Preview",
+        "help": "What your Eventbrite account holds now, and how much of it is new here. Nothing is written yet.",
+        "readOnly": "Only owners and admins can preview and start an import.",
+        "caption": "What the import brings over",
+        "what": "What",
+        "inEventbrite": "In Eventbrite",
+        "new": "New here",
+        "noEmails": "Imported orders are marked as imported: nobody is charged and no receipts or ticket emails go out."
+      },
+      "what": {
+        "events": "Events",
+        "ticketTypes": "Ticket types",
+        "orders": "Orders",
+        "attendees": "Attendees",
+        "revenue": "Revenue",
+        "refunded": "Refunded orders"
+      },
+      "refundedOrders": "{count, plural, =0 {None} one {# order, imported as refunded with no revenue} other {# orders, imported as refunded with no revenue}}",
+      "noRevenue": "None",
+      "importing": "Import running…",
+      "importNew": "{count, plural, one {Import # new record} other {Import # new records}}",
+      "importAgain": "Import again to pick up changes",
+      "result": {
+        "title": "Result",
+        "none": "Nothing imported yet.",
+        "finished": "Finished {when}",
+        "inProgress": "In progress",
+        "refresh": "Refresh",
+        "counts": "{pulled} imported or updated · {skipped} unchanged · {failed} with errors",
+        "seeErrors": "See what needs a look",
+        "caption": "What Yayatoh holds from Eventbrite now",
+        "inYayatoh": "In Yayatoh",
+        "ordersValue": "{count} ({paid} paid)",
+        "attendeesValue": "{count} ({active} active)",
+        "goToEvents": "Go to events"
+      }
+    },
+    "sheets": {
+      "title": "Linked events",
+      "help": "Each linked event's attendee list syncs with its own Google Sheet. Sheet edits come into Yayatoh on the next sync; deleting a row never removes anyone.",
+      "linkTitle": "Link an event",
+      "event": "Event",
+      "pickEvent": "Choose an event",
+      "chooseEvent": "Choose the event whose attendees go in the sheet.",
+      "link": "Create sheet and link",
+      "linking": "Creating the sheet…",
+      "linkHelp": "A new sheet is created in your Google Drive with the columns from the field mapping.",
+      "alreadyLinked": "That event already has a sheet.",
+      "allLinked": "Every event has a sheet.",
+      "noEvents": "Create an event first, then link its attendee list.",
+      "emptyTitle": "No events linked yet",
+      "emptyHelp": "Choose an event above to create its sheet.",
+      "emptyReadOnly": "An owner or admin can link an event's attendee list here.",
+      "caption": "Events linked to Google Sheets",
+      "sheet": "Sheet",
+      "openNamed": "Open {title} in Google Sheets",
+      "linkedOn": "Linked",
+      "status": "Status",
+      "statuses": {
+        "active": "Syncing",
+        "unlinked": "Unlinked"
+      },
+      "actions": "Actions",
+      "unlink": "Unlink",
+      "unlinkNamed": "Unlink {event}",
+      "confirmUnlink": "Unlink the sheet of {event}?",
+      "confirmUnlinkBody": "Nothing syncs with it any more. The sheet stays in your Google Drive with what it holds, and everyone stays on the list in Yayatoh.",
+      "keep": "Keep linked"
     }
   },
   "formControls": {

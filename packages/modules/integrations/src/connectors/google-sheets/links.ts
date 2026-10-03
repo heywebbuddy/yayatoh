@@ -40,7 +40,8 @@ export const SheetLinkDto = z.object({
 export type SheetLinkDto = z.infer<typeof SheetLinkDto>;
 export const sheetLinksSerializer = defineSerializer('integrations.sheetLinks', z.array(SheetLinkDto));
 
-export const sheetUrl = (spreadsheetId: string) => `https://docs.google.com/spreadsheets/d/${spreadsheetId}/edit`;
+export const sheetUrl = (spreadsheetId: string) =>
+  `https://docs.google.com/spreadsheets/d/${spreadsheetId}/edit`;
 
 async function sheetsConnectionTx(tx: TenantTx, connectionId: string, active = true) {
   const [c] = await tx.select().from(connections).where(eq(connections.id, connectionId)).for('update');
@@ -65,7 +66,8 @@ export const sheetLinksQuery = tenantQuery({
       .orderBy(sheetLinks.status, desc(sheetLinks.createdAt))
       .limit(200);
     const names = new Map<string, string>();
-    for (const id of new Set(rows.map((r) => r.eventId))) names.set(id, (await findEventTx(tx, id))?.name ?? '');
+    for (const id of new Set(rows.map((r) => r.eventId)))
+      names.set(id, (await findEventTx(tx, id))?.name ?? '');
     return rows.map((r) => ({
       id: r.id,
       eventId: r.eventId,
@@ -108,17 +110,24 @@ export const sheetLinkTargetQuery = tenantQuery({
           eq(sheetLinks.status, 'active'),
         ),
       );
-    if (linked) throw new DomainError('conflict', 'This event already has a sheet', { reason: 'already_linked' });
+    if (linked)
+      throw new DomainError('conflict', 'This event already has a sheet', { reason: 'already_linked' });
     // Columns from the field mapping in force (push: Yayatoh field → column).
     const push = (await currentMappingsTx(tx, c.id)).find(
       (m) => m.objectType === 'attendees' && m.direction === 'push',
     );
-    const keys = (push?.rules ?? googleSheetsConnector.objects[0]?.push?.defaultMapping ?? []).map((r) => r.target);
+    const keys = (push?.rules ?? googleSheetsConnector.objects[0]?.push?.defaultMapping ?? []).map(
+      (r) => r.target,
+    );
     const headers = SHEET_COLUMNS.filter((col) => keys.includes(col.key)).map((col) => ({
       key: col.key,
       label: col.label,
     }));
-    return { authConnectionId: c.authConnectionId, title: `${event.name} · attendees`.slice(0, 200), headers };
+    return {
+      authConnectionId: c.authConnectionId,
+      title: `${event.name} · attendees`.slice(0, 200),
+      headers,
+    };
   },
 });
 
@@ -145,9 +154,14 @@ export const linkSheetCommand = tenantCommand({
       .select({ id: sheetLinks.id })
       .from(sheetLinks)
       .where(
-        and(eq(sheetLinks.connectionId, c.id), eq(sheetLinks.eventId, event.id), eq(sheetLinks.status, 'active')),
+        and(
+          eq(sheetLinks.connectionId, c.id),
+          eq(sheetLinks.eventId, event.id),
+          eq(sheetLinks.status, 'active'),
+        ),
       );
-    if (linked) throw new DomainError('conflict', 'This event already has a sheet', { reason: 'already_linked' });
+    if (linked)
+      throw new DomainError('conflict', 'This event already has a sheet', { reason: 'already_linked' });
     const [link] = await tx
       .insert(sheetLinks)
       .values({
@@ -244,7 +258,11 @@ export const unlinkSheetCommand = tenantCommand({
       .update(syncErrors)
       .set({ status: 'resolved', nextRetryAt: null, resolvedAt: ctx.now, updatedAt: ctx.now })
       .where(
-        and(eq(syncErrors.connectionId, c.id), eq(syncErrors.status, 'open'), like(syncErrors.externalId, prefix)),
+        and(
+          eq(syncErrors.connectionId, c.id),
+          eq(syncErrors.status, 'open'),
+          like(syncErrors.externalId, prefix),
+        ),
       );
     emit({
       type: 'integrations.sheet_unlinked',

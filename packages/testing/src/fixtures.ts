@@ -2633,15 +2633,32 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ports,
   );
   const sheets = await connectConnector(ctx(), 'google_sheets');
-  await linkEventSheet(ctx(), { auth: fakeAuth }, ports, { connectionId: sheets.connectionId, eventId: event.id });
+  await linkEventSheet(ctx(), { auth: fakeAuth }, ports, {
+    connectionId: sheets.connectionId,
+    eventId: event.id,
+  });
   await runSync(org.id, sheets.connectionId, { auth: fakeAuth }, ports);
-  const [sheetLink] = await executeQuery(sheetLinksQuery, { connectionId: sheets.connectionId }, ctx(), ports);
+  const [sheetLink] = await executeQuery(
+    sheetLinksQuery,
+    { connectionId: sheets.connectionId },
+    ctx(),
+    ports,
+  );
   const sheetAccount = fakeIntegrations.account(sheets.authConnectionId);
-  const guestRow = sheetAccount && sheetLink
-    ? sheetsRemoteRows(sheetAccount, sheetLink.spreadsheetId).find((r) => r.values.email === sheetGuest.email)
-    : undefined;
+  const guestRow =
+    sheetAccount && sheetLink
+      ? sheetsRemoteRows(sheetAccount, sheetLink.spreadsheetId).find(
+          (r) => r.values.email === sheetGuest.email,
+        )
+      : undefined;
   if (!sheetAccount || !sheetLink || !guestRow) throw new Error('fixture: the sheet did not fill');
-  sheetsRemoteEdit(sheetAccount, sheetLink.spreadsheetId, guestRow.rowId, { name: 'Sheet Guest (sheet)' }, new Date(Date.now() - 60_000));
+  sheetsRemoteEdit(
+    sheetAccount,
+    sheetLink.spreadsheetId,
+    guestRow.rowId,
+    { name: 'Sheet Guest (sheet)' },
+    new Date(Date.now() - 60_000),
+  );
   await executeCommand(
     setAttendeeLabelsCommand,
     { eventId: event.id, attendeeIds: [sheetGuest.id], add: ['vip'] },

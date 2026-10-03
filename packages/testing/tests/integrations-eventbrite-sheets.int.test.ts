@@ -1,7 +1,7 @@
-import { listAttendeesQuery } from '@yayatoh/attendees';
+import { addGuestCommand, listAttendeesQuery, setAttendeeLabelsCommand } from '@yayatoh/attendees';
 import { withTenant } from '@yayatoh/db';
 import { type AdminSql, adminClient, closePools } from '@yayatoh/db/testing';
-import { getEventQuery } from '@yayatoh/events';
+import { createEventCommand, getEventQuery } from '@yayatoh/events';
 import {
   connectionDetailQuery,
   disconnectCommand,
@@ -30,12 +30,18 @@ import {
   unlinkSheetCommand,
 } from '@yayatoh/integrations';
 import { type Ctx, DomainError, executeCommand, executeQuery, uuidv7 } from '@yayatoh/kernel';
-import { addGuestCommand, setAttendeeLabelsCommand } from '@yayatoh/attendees';
-import { createEventCommand } from '@yayatoh/events';
 import { sql } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { findCanaries } from '../src/canary/index.ts';
-import { bareOrg, connectConnector, fakeAuth, type OrgFixture, ports, twoOrgs, userCtx } from '../src/index.ts';
+import {
+  bareOrg,
+  connectConnector,
+  fakeAuth,
+  type OrgFixture,
+  ports,
+  twoOrgs,
+  userCtx,
+} from '../src/index.ts';
 
 /**
  * M6.4b on real Postgres against the recorded fakes: the Eventbrite importer (dry-run preview,
@@ -79,7 +85,8 @@ const account = (authConnectionId: string) => {
   if (!acc) throw new Error('no fake account');
   return acc;
 };
-const run = (orgId: string, connectionId: string) => runSync(orgId, connectionId, deps, ports, { force: true });
+const run = (orgId: string, connectionId: string) =>
+  runSync(orgId, connectionId, deps, ports, { force: true });
 const q = <T>(ctx: Ctx, query: ReturnType<typeof sql>) =>
   withTenant(ctx, async (tx) => (await tx.execute(query)) as unknown as T[]);
 const groups = (ctx: Ctx, status: 'open' | 'resolved' | 'dismissed' = 'open') =>
@@ -102,8 +109,17 @@ describe('Eventbrite importer', () => {
   it('connecting queues nothing and schedules nothing: an import waits to be started', async () => {
     const o = await fresh();
     const eb = await connectEventbrite(o.ctx());
-    const detail = await executeQuery(connectionDetailQuery, { connectionId: eb.connectionId }, o.ctx(), ports);
-    expect(detail.connection).toMatchObject({ status: 'active', nextSyncAt: null, accountLabel: expect.stringContaining('Eventbrite') });
+    const detail = await executeQuery(
+      connectionDetailQuery,
+      { connectionId: eb.connectionId },
+      o.ctx(),
+      ports,
+    );
+    expect(detail.connection).toMatchObject({
+      status: 'active',
+      nextSyncAt: null,
+      accountLabel: expect.stringContaining('Eventbrite'),
+    });
     expect(detail.runs).toEqual([]);
     expect(detail.mappings.map((m) => `${m.objectType}:${m.direction}`).sort()).toEqual([
       'events:pull',
@@ -140,7 +156,12 @@ describe('Eventbrite importer', () => {
       sql`select (select count(*)::int from events.events) as events, (select count(*)::int from orders.orders) as orders`,
     );
     expect(counts).toEqual({ events: 0, orders: 0 });
-    const detail = await executeQuery(connectionDetailQuery, { connectionId: eb.connectionId }, o.ctx(), ports);
+    const detail = await executeQuery(
+      connectionDetailQuery,
+      { connectionId: eb.connectionId },
+      o.ctx(),
+      ports,
+    );
     expect(detail.runs).toEqual([]);
   });
 
@@ -159,7 +180,14 @@ describe('Eventbrite importer', () => {
       revenue: EVENTBRITE_FIXTURE_COUNTS.revenue,
     });
     // The same numbers straight from the tables.
-    const [t] = await q<{ events: number; types: number; orders: number; attendees: number; usd: string; eur: string }>(
+    const [t] = await q<{
+      events: number;
+      types: number;
+      orders: number;
+      attendees: number;
+      usd: string;
+      eur: string;
+    }>(
       o.ctx(),
       sql`select (select count(*)::int from events.events) as events,
                  (select count(*)::int from ticketing.ticket_types) as types,
@@ -170,7 +198,13 @@ describe('Eventbrite importer', () => {
     );
     expect(t).toEqual({ events: 3, types: 6, orders: 9, attendees: 15, usd: '55259', eur: '8980' });
     // Times are instants with the event's IANA zone; money in minor units.
-    const [jazz] = await q<{ id: string; timezone: string; starts_at: Date; status: string; currency: string }>(
+    const [jazz] = await q<{
+      id: string;
+      timezone: string;
+      starts_at: Date;
+      status: string;
+      currency: string;
+    }>(
       o.ctx(),
       sql`select id, timezone, starts_at, status, currency from events.events where name = 'Summer Jazz Night'`,
     );
@@ -180,17 +214,40 @@ describe('Eventbrite importer', () => {
       o.ctx(),
       sql`select name, price_minor::text, visibility, quantity_sold from ticketing.ticket_types order by name`,
     );
-    expect(types).toContainEqual({ name: 'VIP lounge', price_minor: '6000', visibility: 'public', quantity_sold: 1 });
-    expect(types).toContainEqual({ name: 'Supporter', price_minor: '4000', visibility: 'hidden', quantity_sold: 1 });
+    expect(types).toContainEqual({
+      name: 'VIP lounge',
+      price_minor: '6000',
+      visibility: 'public',
+      quantity_sold: 1,
+    });
+    expect(types).toContainEqual({
+      name: 'Supporter',
+      price_minor: '4000',
+      visibility: 'hidden',
+      quantity_sold: 1,
+    });
     // The refunded order took no place.
-    expect(types).toContainEqual({ name: 'General admission', price_minor: '2500', visibility: 'public', quantity_sold: 3 });
+    expect(types).toContainEqual({
+      name: 'General admission',
+      price_minor: '2500',
+      visibility: 'public',
+      quantity_sold: 3,
+    });
     // Each attendee is named as on Eventbrite (not the buyer).
     const holders = await q<{ name: string; email: string; status: string }>(
       o.ctx(),
       sql`select holder_name as name, holder_email as email, status from ticketing.tickets order by holder_name`,
     );
-    expect(holders).toContainEqual({ name: 'Charles Babbage', email: 'charles@eb-buyers.test', status: 'active' });
-    expect(holders).toContainEqual({ name: 'Edsger Dijkstra', email: 'edsger@eb-buyers.test', status: 'void' });
+    expect(holders).toContainEqual({
+      name: 'Charles Babbage',
+      email: 'charles@eb-buyers.test',
+      status: 'active',
+    });
+    expect(holders).toContainEqual({
+      name: 'Edsger Dijkstra',
+      email: 'edsger@eb-buyers.test',
+      status: 'void',
+    });
   });
 
   it('imported orders are marked imported and never pay or email', async () => {
@@ -209,8 +266,14 @@ describe('Eventbrite importer', () => {
       sql`select id, created_via, collected_by, provider, provider_payment_id, status, total_minor::text, subtotal_minor::text from orders.orders order by provider_payment_id`,
     );
     expect(orders).toHaveLength(9);
-    for (const x of orders) expect(x).toMatchObject({ created_via: 'import', collected_by: 'organizer', provider: 'eventbrite' });
-    expect(orders[0]).toMatchObject({ provider_payment_id: '5550001', status: 'paid', subtotal_minor: '5000', total_minor: '5674' });
+    for (const x of orders)
+      expect(x).toMatchObject({ created_via: 'import', collected_by: 'organizer', provider: 'eventbrite' });
+    expect(orders[0]).toMatchObject({
+      provider_payment_id: '5550001',
+      status: 'paid',
+      subtotal_minor: '5000',
+      total_minor: '5674',
+    });
     expect(orders[3]).toMatchObject({ provider_payment_id: '5550004', status: 'refunded' });
     const ids = orders.map((x) => x.id);
     const events = await admin<{ type: string; n: number }[]>`
@@ -219,7 +282,9 @@ describe('Eventbrite importer', () => {
     // No `order.paid` (the tickets email, receipts, journeys and the payment ledger follow it).
     expect(events).toEqual([{ type: 'order.imported', n: 9 }]);
     const [ledger] = await admin<{ n: number }[]>`
-      select count(*)::int as n from payments.ledger_entries where org_id = ${o.orgId}`.catch(() => [{ n: 0 }]);
+      select count(*)::int as n from payments.ledger_entries where org_id = ${o.orgId}`.catch(() => [
+      { n: 0 },
+    ]);
     expect(ledger?.n ?? 0).toBe(0);
     const [mail] = await admin<{ n: number }[]>`
       select count(*)::int as n from notifications.messages where org_id = ${o.orgId}`;
@@ -326,7 +391,10 @@ describe('Eventbrite importer', () => {
 async function sheetsOrg() {
   const o = await importedOrg();
   const sheets = await connectConnector(o.ctx(), 'google_sheets');
-  const [jazz] = await q<{ id: string }>(o.ctx(), sql`select id from events.events where name = 'Summer Jazz Night'`);
+  const [jazz] = await q<{ id: string }>(
+    o.ctx(),
+    sql`select id from events.events where name = 'Summer Jazz Night'`,
+  );
   if (!jazz) throw new Error('no event');
   return { ...o, sheets, eventId: jazz.id, acc: account(sheets.authConnectionId) };
 }
@@ -340,12 +408,29 @@ const attendeeRows = (ctx: Ctx, eventId: string) =>
 describe('Google Sheets live sync', () => {
   it('links an event: a new sheet with the mapping columns, filled with the attendee list', async () => {
     const o = await sheetsOrg();
-    const { linkId } = await linkEventSheet(o.ctx(), deps, ports, { connectionId: o.sheets.connectionId, eventId: o.eventId });
-    const [link] = await executeQuery(sheetLinksQuery, { connectionId: o.sheets.connectionId }, o.ctx(), ports);
-    expect(link).toMatchObject({ id: linkId, eventId: o.eventId, eventName: 'Summer Jazz Night', status: 'active' });
+    const { linkId } = await linkEventSheet(o.ctx(), deps, ports, {
+      connectionId: o.sheets.connectionId,
+      eventId: o.eventId,
+    });
+    const [link] = await executeQuery(
+      sheetLinksQuery,
+      { connectionId: o.sheets.connectionId },
+      o.ctx(),
+      ports,
+    );
+    expect(link).toMatchObject({
+      id: linkId,
+      eventId: o.eventId,
+      eventName: 'Summer Jazz Night',
+      status: 'active',
+    });
     expect(link?.url).toBe(`https://docs.google.com/spreadsheets/d/${link?.spreadsheetId}/edit`);
     expect(sheetsRemoteList(o.acc)).toEqual([
-      { id: link?.spreadsheetId, title: 'Summer Jazz Night · attendees', headers: ['Name', 'Email', 'Labels', 'Status'] },
+      {
+        id: link?.spreadsheetId,
+        title: 'Summer Jazz Night · attendees',
+        headers: ['Name', 'Email', 'Labels', 'Status'],
+      },
     ]);
     // The link queued a sync; the push fills the sheet.
     const r = await runSync(o.orgId, o.sheets.connectionId, deps, ports);
@@ -371,14 +456,24 @@ describe('Google Sheets live sync', () => {
     const o = await sheetsOrg();
     await linkEventSheet(o.ctx(), deps, ports, { connectionId: o.sheets.connectionId, eventId: o.eventId });
     await run(o.orgId, o.sheets.connectionId);
-    const [link] = await executeQuery(sheetLinksQuery, { connectionId: o.sheets.connectionId }, o.ctx(), ports);
+    const [link] = await executeQuery(
+      sheetLinksQuery,
+      { connectionId: o.sheets.connectionId },
+      o.ctx(),
+      ports,
+    );
     const sid = link?.spreadsheetId as string;
     const before = sheetsRemoteRows(o.acc, sid);
     const people = await attendeeRows(o.ctx(), o.eventId);
     // Replayed twice: nothing moves either way.
     for (let i = 0; i < 2; i++) {
       await run(o.orgId, o.sheets.connectionId);
-      const d = await executeQuery(connectionDetailQuery, { connectionId: o.sheets.connectionId }, o.ctx(), ports);
+      const d = await executeQuery(
+        connectionDetailQuery,
+        { connectionId: o.sheets.connectionId },
+        o.ctx(),
+        ports,
+      );
       expect(d.runs[0]).toMatchObject({ status: 'succeeded', pulled: 0, pushed: 0, failed: 0 });
     }
     expect(sheetsRemoteRows(o.acc, sid)).toEqual(before);
@@ -397,7 +492,10 @@ describe('Google Sheets live sync', () => {
       labels: ['press', 'vip'],
       source: 'ticket',
     });
-    expect(after.find((p) => p.email === 'walk.in@sheet.test')).toMatchObject({ name: 'Walk-in Guest', source: 'guest' });
+    expect(after.find((p) => p.email === 'walk.in@sheet.test')).toMatchObject({
+      name: 'Walk-in Guest',
+      source: 'guest',
+    });
     const [ticket] = await q<{ holder_name: string }>(
       o.ctx(),
       sql`select holder_name from ticketing.tickets where holder_email = 'charles@eb-buyers.test'`,
@@ -428,7 +526,12 @@ describe('Google Sheets live sync', () => {
     const o = await sheetsOrg();
     await linkEventSheet(o.ctx(), deps, ports, { connectionId: o.sheets.connectionId, eventId: o.eventId });
     await run(o.orgId, o.sheets.connectionId);
-    const [link] = await executeQuery(sheetLinksQuery, { connectionId: o.sheets.connectionId }, o.ctx(), ports);
+    const [link] = await executeQuery(
+      sheetLinksQuery,
+      { connectionId: o.sheets.connectionId },
+      o.ctx(),
+      ports,
+    );
     const people = await attendeeRows(o.ctx(), o.eventId);
     sheetsRemoteAdd(o.acc, link?.spreadsheetId as string, { name: 'Ada again', email: 'ada@eb-buyers.test' });
     await run(o.orgId, o.sheets.connectionId);
@@ -441,7 +544,12 @@ describe('Google Sheets live sync', () => {
     const o = await sheetsOrg();
     await linkEventSheet(o.ctx(), deps, ports, { connectionId: o.sheets.connectionId, eventId: o.eventId });
     await run(o.orgId, o.sheets.connectionId);
-    const [link] = await executeQuery(sheetLinksQuery, { connectionId: o.sheets.connectionId }, o.ctx(), ports);
+    const [link] = await executeQuery(
+      sheetLinksQuery,
+      { connectionId: o.sheets.connectionId },
+      o.ctx(),
+      ports,
+    );
     const sid = link?.spreadsheetId as string;
     const people = await attendeeRows(o.ctx(), o.eventId);
     const grace = sheetsRemoteRows(o.acc, sid).find((r) => r.values.email === 'grace@eb-buyers.test');
@@ -459,7 +567,12 @@ describe('Google Sheets live sync', () => {
       retryable: false,
     });
     // Retry does not apply to it; Dismiss accepts the deletion and the flag stays gone.
-    const retried = await executeCommand(retryErrorsCommand, { errorIds: [row?.id as string] }, o.ctx(), ports);
+    const retried = await executeCommand(
+      retryErrorsCommand,
+      { errorIds: [row?.id as string] },
+      o.ctx(),
+      ports,
+    );
     expect(retried).toMatchObject({ retried: 0, skipped: 1 });
     await executeCommand(dismissErrorsCommand, { errorIds: [row?.id as string] }, o.ctx(), ports);
     await run(o.orgId, o.sheets.connectionId);
@@ -471,18 +584,45 @@ describe('Google Sheets live sync', () => {
     const o = await sheetsOrg();
     await linkEventSheet(o.ctx(), deps, ports, { connectionId: o.sheets.connectionId, eventId: o.eventId });
     await run(o.orgId, o.sheets.connectionId);
-    const [link] = await executeQuery(sheetLinksQuery, { connectionId: o.sheets.connectionId }, o.ctx(), ports);
+    const [link] = await executeQuery(
+      sheetLinksQuery,
+      { connectionId: o.sheets.connectionId },
+      o.ctx(),
+      ports,
+    );
     const sid = link?.spreadsheetId as string;
     const rows = sheetsRemoteRows(o.acc, sid);
     const people = await attendeeRows(o.ctx(), o.eventId);
     const joan = people.find((p) => p.email === 'joan@eb-buyers.test');
     const hedy = people.find((p) => p.email === 'hedy@eb-buyers.test');
     // Joan: the sheet changed first, Yayatoh later → Yayatoh's value is kept.
-    sheetsRemoteEdit(o.acc, sid, rows.find((r) => r.values.email === joan?.email)?.rowId as string, { labels: 'from-sheet' }, new Date(Date.now() - 120_000));
-    await executeCommand(setAttendeeLabelsCommand, { eventId: o.eventId, attendeeIds: [joan?.id as string], add: ['from-yayatoh'] }, o.ctx(), ports);
+    sheetsRemoteEdit(
+      o.acc,
+      sid,
+      rows.find((r) => r.values.email === joan?.email)?.rowId as string,
+      { labels: 'from-sheet' },
+      new Date(Date.now() - 120_000),
+    );
+    await executeCommand(
+      setAttendeeLabelsCommand,
+      { eventId: o.eventId, attendeeIds: [joan?.id as string], add: ['from-yayatoh'] },
+      o.ctx(),
+      ports,
+    );
     // Hedy: Yayatoh changed first, the sheet later → the sheet's value is kept.
-    await executeCommand(setAttendeeLabelsCommand, { eventId: o.eventId, attendeeIds: [hedy?.id as string], add: ['ours'] }, o.ctx(), ports);
-    sheetsRemoteEdit(o.acc, sid, rows.find((r) => r.values.email === hedy?.email)?.rowId as string, { labels: 'theirs' }, new Date(Date.now() + 120_000));
+    await executeCommand(
+      setAttendeeLabelsCommand,
+      { eventId: o.eventId, attendeeIds: [hedy?.id as string], add: ['ours'] },
+      o.ctx(),
+      ports,
+    );
+    sheetsRemoteEdit(
+      o.acc,
+      sid,
+      rows.find((r) => r.values.email === hedy?.email)?.rowId as string,
+      { labels: 'theirs' },
+      new Date(Date.now() + 120_000),
+    );
     await run(o.orgId, o.sheets.connectionId);
     const after = await attendeeRows(o.ctx(), o.eventId);
     expect(after.find((p) => p.id === joan?.id)?.labels).toEqual(['from-yayatoh']);
@@ -506,7 +646,10 @@ describe('Google Sheets live sync', () => {
     await run(o.orgId, o.sheets.connectionId);
     expect((await groups(o.ctx())).filter((g) => g.step === 'conflict').map((g) => g.count)).toEqual([1, 1]);
     await executeCommand(dismissErrorsCommand, { errorIds: [kept?.errors[0]?.id as string] }, o.ctx(), ports);
-    const [left] = await q<{ n: number }>(o.ctx(), sql`select count(*)::int as n from integrations.sync_conflicts`);
+    const [left] = await q<{ n: number }>(
+      o.ctx(),
+      sql`select count(*)::int as n from integrations.sync_conflicts`,
+    );
     expect(left?.n).toBe(1);
   });
 
@@ -514,18 +657,38 @@ describe('Google Sheets live sync', () => {
     const o = await sheetsOrg();
     await linkEventSheet(o.ctx(), deps, ports, { connectionId: o.sheets.connectionId, eventId: o.eventId });
     await run(o.orgId, o.sheets.connectionId);
-    const [link] = await executeQuery(sheetLinksQuery, { connectionId: o.sheets.connectionId }, o.ctx(), ports);
+    const [link] = await executeQuery(
+      sheetLinksQuery,
+      { connectionId: o.sheets.connectionId },
+      o.ctx(),
+      ports,
+    );
     const sid = link?.spreadsheetId as string;
     const people = await attendeeRows(o.ctx(), o.eventId);
     // Someone who is not a member of the org.
     const viewer = userCtx(uuidv7(), o.orgId);
     await expectError(
-      executeCommand(unlinkSheetCommand, { connectionId: o.sheets.connectionId, linkId: link?.id as string }, viewer, ports),
+      executeCommand(
+        unlinkSheetCommand,
+        { connectionId: o.sheets.connectionId, linkId: link?.id as string },
+        viewer,
+        ports,
+      ),
       'forbidden',
     );
-    await executeCommand(unlinkSheetCommand, { connectionId: o.sheets.connectionId, linkId: link?.id as string }, o.ctx(), ports);
+    await executeCommand(
+      unlinkSheetCommand,
+      { connectionId: o.sheets.connectionId, linkId: link?.id as string },
+      o.ctx(),
+      ports,
+    );
     await expectError(
-      executeCommand(unlinkSheetCommand, { connectionId: o.sheets.connectionId, linkId: link?.id as string }, o.ctx(), ports),
+      executeCommand(
+        unlinkSheetCommand,
+        { connectionId: o.sheets.connectionId, linkId: link?.id as string },
+        o.ctx(),
+        ports,
+      ),
       'invalid_state',
     );
     sheetsRemoteDelete(o.acc, sid, sheetsRemoteRows(o.acc, sid)[0]?.rowId as string);
@@ -535,7 +698,12 @@ describe('Google Sheets live sync', () => {
     expect(await groups(o.ctx())).toEqual([]);
     await linkEventSheet(o.ctx(), deps, ports, { connectionId: o.sheets.connectionId, eventId: o.eventId });
     await run(o.orgId, o.sheets.connectionId);
-    const links = await executeQuery(sheetLinksQuery, { connectionId: o.sheets.connectionId }, o.ctx(), ports);
+    const links = await executeQuery(
+      sheetLinksQuery,
+      { connectionId: o.sheets.connectionId },
+      o.ctx(),
+      ports,
+    );
     expect(links.map((l) => l.status)).toEqual(['active', 'unlinked']);
     expect(links[0]?.spreadsheetId).not.toBe(sid);
     expect(sheetsRemoteRows(o.acc, links[0]?.spreadsheetId as string)).toHaveLength(people.length);
@@ -571,7 +739,12 @@ describe('Google Sheets live sync', () => {
       ),
       'not_found',
     );
-    await executeCommand(addGuestCommand, { eventId: other.id, name: 'Only Guest', email: `only.${tag}@guest.test` }, a.ctx(), ports);
+    await executeCommand(
+      addGuestCommand,
+      { eventId: other.id, name: 'Only Guest', email: `only.${tag}@guest.test` },
+      a.ctx(),
+      ports,
+    );
     await linkEventSheet(a.ctx(), deps, ports, { connectionId: sheets?.id as string, eventId: other.id });
     expect((await run(a.org.id, sheets?.id as string)).runStatus).toBe('succeeded');
     const list = await executeQuery(listAttendeesQuery, { eventId: other.id }, a.ctx(), ports);

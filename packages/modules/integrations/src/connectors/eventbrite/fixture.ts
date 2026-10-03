@@ -233,17 +233,33 @@ function order(
 }
 
 export const EB_ORDERS: readonly EbOrder[] = [
-  order('5550001', '710001', '2026-06-01T14:05:00Z', { name: 'Ada Lovelace', email: 'ada@eb-buyers.test' }, (o) => [
-    att(o, 1, '9100011', 'Ada Lovelace', 'ada@eb-buyers.test', 337),
-    att(o, 2, '9100011', 'Charles Babbage', 'charles@eb-buyers.test', 337),
-  ]),
-  order('5550002', '710001', '2026-06-03T09:30:00Z', { name: 'Grace Hopper', email: 'grace@eb-buyers.test' }, (o) => [
-    att(o, 1, '9100012', 'Grace Hopper', 'grace@eb-buyers.test', 512),
-  ]),
-  order('5550003', '710001', '2026-06-10T18:45:00Z', { name: 'Alan Turing', email: 'alan@eb-buyers.test' }, (o) => [
-    att(o, 1, '9100011', 'Alan Turing', 'alan@eb-buyers.test', 337),
-    att(o, 2, '9100013', 'Joan Clarke', 'joan@eb-buyers.test', 0),
-  ]),
+  order(
+    '5550001',
+    '710001',
+    '2026-06-01T14:05:00Z',
+    { name: 'Ada Lovelace', email: 'ada@eb-buyers.test' },
+    (o) => [
+      att(o, 1, '9100011', 'Ada Lovelace', 'ada@eb-buyers.test', 337),
+      att(o, 2, '9100011', 'Charles Babbage', 'charles@eb-buyers.test', 337),
+    ],
+  ),
+  order(
+    '5550002',
+    '710001',
+    '2026-06-03T09:30:00Z',
+    { name: 'Grace Hopper', email: 'grace@eb-buyers.test' },
+    (o) => [att(o, 1, '9100012', 'Grace Hopper', 'grace@eb-buyers.test', 512)],
+  ),
+  order(
+    '5550003',
+    '710001',
+    '2026-06-10T18:45:00Z',
+    { name: 'Alan Turing', email: 'alan@eb-buyers.test' },
+    (o) => [
+      att(o, 1, '9100011', 'Alan Turing', 'alan@eb-buyers.test', 337),
+      att(o, 2, '9100013', 'Joan Clarke', 'joan@eb-buyers.test', 0),
+    ],
+  ),
   // Refunded at Eventbrite: imported as refunded, its ticket void, no revenue.
   order(
     '5550004',
@@ -253,25 +269,51 @@ export const EB_ORDERS: readonly EbOrder[] = [
     (o) => [att(o, 1, '9100011', 'Edsger Dijkstra', 'edsger@eb-buyers.test', 337, { refunded: true })],
     'refunded',
   ),
-  order('5550005', '710002', '2026-09-20T07:15:00Z', { name: 'Emmy Noether', email: 'emmy@eb-buyers.test' }, (o) => [
-    att(o, 1, '9100021', 'Emmy Noether', 'emmy@eb-buyers.test', 110),
-    att(o, 2, '9100021', 'Lise Meitner', 'lise@eb-buyers.test', 110),
-    att(o, 3, '9100021', 'Otto Hahn', 'otto@eb-buyers.test', 110),
-  ]),
-  order('5550006', '710002', '2026-09-22T16:40:00Z', { name: 'Marie Curie', email: 'marie@eb-buyers.test' }, (o) => [
-    att(o, 1, '9100022', 'Marie Curie', 'marie@eb-buyers.test', 0),
-  ]),
-  order('5550007', '710003', '2026-09-25T20:10:00Z', { name: 'Katherine Johnson', email: 'katherine@eb-buyers.test' }, (o) => [
-    att(o, 1, '9100031', 'Katherine Johnson', 'katherine@eb-buyers.test', 912),
-    att(o, 2, '9100031', 'Dorothy Vaughan', 'dorothy@eb-buyers.test', 912),
-  ]),
-  order('5550008', '710003', '2026-09-27T13:20:00Z', { name: 'Mary Jackson', email: 'mary@eb-buyers.test' }, (o) => [
-    att(o, 1, '9100031', 'Mary Jackson', 'mary@eb-buyers.test', 912),
-  ]),
-  order('5550009', '710001', '2026-07-01T08:00:00Z', { name: 'Hedy Lamarr', email: 'hedy@eb-buyers.test' }, (o) => [
-    att(o, 1, '9100013', 'Hedy Lamarr', 'hedy@eb-buyers.test', 0),
-    att(o, 2, '9100013', 'George Antheil', 'george@eb-buyers.test', 0),
-  ]),
+  order(
+    '5550005',
+    '710002',
+    '2026-09-20T07:15:00Z',
+    { name: 'Emmy Noether', email: 'emmy@eb-buyers.test' },
+    (o) => [
+      att(o, 1, '9100021', 'Emmy Noether', 'emmy@eb-buyers.test', 110),
+      att(o, 2, '9100021', 'Lise Meitner', 'lise@eb-buyers.test', 110),
+      att(o, 3, '9100021', 'Otto Hahn', 'otto@eb-buyers.test', 110),
+    ],
+  ),
+  order(
+    '5550006',
+    '710002',
+    '2026-09-22T16:40:00Z',
+    { name: 'Marie Curie', email: 'marie@eb-buyers.test' },
+    (o) => [att(o, 1, '9100022', 'Marie Curie', 'marie@eb-buyers.test', 0)],
+  ),
+  order(
+    '5550007',
+    '710003',
+    '2026-09-25T20:10:00Z',
+    { name: 'Katherine Johnson', email: 'katherine@eb-buyers.test' },
+    (o) => [
+      att(o, 1, '9100031', 'Katherine Johnson', 'katherine@eb-buyers.test', 912),
+      att(o, 2, '9100031', 'Dorothy Vaughan', 'dorothy@eb-buyers.test', 912),
+    ],
+  ),
+  order(
+    '5550008',
+    '710003',
+    '2026-09-27T13:20:00Z',
+    { name: 'Mary Jackson', email: 'mary@eb-buyers.test' },
+    (o) => [att(o, 1, '9100031', 'Mary Jackson', 'mary@eb-buyers.test', 912)],
+  ),
+  order(
+    '5550009',
+    '710001',
+    '2026-07-01T08:00:00Z',
+    { name: 'Hedy Lamarr', email: 'hedy@eb-buyers.test' },
+    (o) => [
+      att(o, 1, '9100013', 'Hedy Lamarr', 'hedy@eb-buyers.test', 0),
+      att(o, 2, '9100013', 'George Antheil', 'george@eb-buyers.test', 0),
+    ],
+  ),
 ];
 
 /**

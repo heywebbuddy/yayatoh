@@ -42,10 +42,17 @@ const data = (a: FakeAccount) => a.data as SheetsData;
 
 const cell = (v: unknown) => (v === null || v === undefined ? '' : String(v).slice(0, 1000));
 
-function writeRow(s: Spreadsheet, row: SheetRow | null, values: unknown, origin: unknown, now: Date): SheetRow {
+function writeRow(
+  s: Spreadsheet,
+  row: SheetRow | null,
+  values: unknown,
+  origin: unknown,
+  now: Date,
+): SheetRow {
   const clean: Record<string, string> = {};
-  for (const h of s.headers) if (values && typeof values === 'object' && h.key in values)
-    clean[h.key] = cell((values as Record<string, unknown>)[h.key]);
+  for (const h of s.headers)
+    if (values && typeof values === 'object' && h.key in values)
+      clean[h.key] = cell((values as Record<string, unknown>)[h.key]);
   const r: SheetRow = row ?? { rowId: `r${s.nextRow++}`, rev: 0, updatedAt: '', origin: null, values: {} };
   r.values = { ...r.values, ...clean };
   r.rev += 1;
@@ -70,7 +77,10 @@ export const googleSheetsFakeProvider: FakeProvider = {
       const body = (req.body ?? {}) as { properties?: { title?: unknown }; headers?: unknown };
       const headers = Array.isArray(body.headers)
         ? body.headers
-            .filter((h): h is { key: string; label: string } => typeof h?.key === 'string' && typeof h?.label === 'string')
+            .filter(
+              (h): h is { key: string; label: string } =>
+                typeof h?.key === 'string' && typeof h?.label === 'string',
+            )
             .slice(0, 50)
         : [];
       const id = `fakesheet_${crypto.randomUUID().replace(/-/g, '').slice(0, 20)}`;
@@ -81,14 +91,18 @@ export const googleSheetsFakeProvider: FakeProvider = {
         rows: [],
         nextRow: 1,
       });
-      return remember({ spreadsheetId: id, spreadsheetUrl: `https://docs.google.com/spreadsheets/d/${id}/edit` }, 201);
+      return remember(
+        { spreadsheetId: id, spreadsheetUrl: `https://docs.google.com/spreadsheets/d/${id}/edit` },
+        201,
+      );
     }
     const m = /^\/v4\/spreadsheets\/([A-Za-z0-9_-]+)\/rows(?:\/([A-Za-z0-9_-]+))?$/.exec(req.path);
     const s = m ? d.sheets.find((x) => x.id === m[1]) : undefined;
     if (!m || !s) return { status: 404, body: { error: { code: 404, status: 'NOT_FOUND' } } };
     const rowId = m[2];
     const now = new Date();
-    if (req.method === 'GET' && !rowId) return { status: 200, body: { headers: s.headers, rows: structuredClone(s.rows) } };
+    if (req.method === 'GET' && !rowId)
+      return { status: 200, body: { headers: s.headers, rows: structuredClone(s.rows) } };
     const body = (req.body ?? {}) as { values?: unknown; origin?: unknown };
     if (req.method === 'POST' && !rowId) {
       const r = writeRow(s, null, body.values, body.origin, now);
@@ -105,7 +119,7 @@ export const googleSheetsFakeProvider: FakeProvider = {
 };
 
 function sheet(a: FakeAccount, spreadsheetId: string): Spreadsheet | null {
-  return data(a).sheets.find((s) => s.id === spreadsheetId) ?? null;
+  return (data(a).sheets ?? []).find((s) => s.id === spreadsheetId) ?? null;
 }
 
 /** Dev control and tests: the sheet's rows as the organizer sees them. */
@@ -115,7 +129,11 @@ export function sheetsRemoteRows(a: FakeAccount, spreadsheetId: string): SheetRo
 
 /** Dev control and tests: the account's spreadsheets (ids and titles). */
 export function sheetsRemoteList(a: FakeAccount): { id: string; title: string; headers: string[] }[] {
-  return data(a).sheets.map((s) => ({ id: s.id, title: s.title, headers: s.headers.map((h) => h.label) }));
+  return (data(a).sheets ?? []).map((s) => ({
+    id: s.id,
+    title: s.title,
+    headers: s.headers.map((h) => h.label),
+  }));
 }
 
 /** The organizer edits cells of a row in the sheet (no origin stamp: a person did it). */

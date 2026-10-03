@@ -1926,7 +1926,8 @@
     "dateSoldOut": "Er zijn niet genoeg tickets meer voor deze datum.",
     "wrongDate": "Een van deze tickets wordt niet voor deze datum verkocht.",
     "dateUnavailable": "Deze datum is niet meer te koop.",
-    "seatChannel": "Sommige van die plaatsen zijn gereserveerd voor een ander verkoopkanaal (een sponsor, een promotor of de onlineverkoop). Kies andere plaatsen."
+    "seatChannel": "Sommige van die plaatsen zijn gereserveerd voor een ander verkoopkanaal (een sponsor, een promotor of de onlineverkoop). Kies andere plaatsen.",
+    "imported": "Geïmporteerd uit {source} · bestelling {reference}"
   },
   "seating": {
     "title": "Zitplaatsen",
@@ -12073,6 +12074,12 @@
     "connectors": {
       "demo": {
         "description": "Een test-app met contacten om integraties uit te proberen: contacten synchroniseren in beide richtingen met je CRM. Alleen in testomgevingen."
+      },
+      "eventbrite": {
+        "description": "Haal je evenementen, tickettypes, bestellingen en deelnemers over van Eventbrite. Eerst een voorbeeld, dan importeren; voer het op elk moment opnieuw uit voor wijzigingen."
+      },
+      "google_sheets": {
+        "description": "Houd de deelnemerslijst van een evenement bij in een Google-spreadsheet. Wijzigingen aan beide kanten worden in twee richtingen gesynchroniseerd."
       }
     },
     "sandboxBadge": "Test",
@@ -12092,11 +12099,36 @@
     "readOnly": "Alleen eigenaren en beheerders kunnen integraties koppelen of wijzigen.",
     "breadcrumb": "Kruimelpad",
     "objects": {
-      "contacts": "Contacten"
+      "contacts": "Contacten",
+      "events": "Evenementen",
+      "ticket_classes": "Tickettypes",
+      "orders": "Bestellingen",
+      "attendees": "Deelnemers"
     },
     "fields": {
       "email": "E-mail",
-      "name": "Naam"
+      "name": "Naam",
+      "tagline": "Slogan",
+      "starts_at": "Begint",
+      "ends_at": "Eindigt",
+      "timezone": "Tijdzone",
+      "currency": "Valuta",
+      "venue_name": "Locatie",
+      "city": "Plaats",
+      "country": "Land",
+      "description": "Beschrijving",
+      "price_minor": "Prijs (in centen)",
+      "quantity_total": "Aantal",
+      "hidden": "Verborgen",
+      "sales_start_at": "Verkoop start",
+      "sales_end_at": "Verkoop einde",
+      "buyer_email": "E-mail koper",
+      "buyer_name": "Naam koper",
+      "status": "Status",
+      "subtotal_minor": "Tickettotaal (in centen)",
+      "total_minor": "Besteltotaal (in centen)",
+      "placed_at": "Besteld op",
+      "labels": "Labels"
     },
     "status": {
       "none": "Niet gekoppeld",
@@ -12143,7 +12175,9 @@
         "paused": "Synchroniseren is gepauzeerd.",
         "resumed": "Synchroniseren staat weer aan.",
         "interval": "Synchronisatieschema opgeslagen.",
-        "disconnected": "Ontkoppeld. Er wordt niets meer gesynchroniseerd en de toegang is bij de aanbieder ingetrokken."
+        "disconnected": "Ontkoppeld. Er wordt niets meer gesynchroniseerd en de toegang is bij de aanbieder ingetrokken.",
+        "linked": "Spreadsheet gemaakt en gekoppeld. Hij wordt gevuld bij de volgende synchronisatie.",
+        "unlinked": "Spreadsheet ontkoppeld. Er wordt niets meer mee gesynchroniseerd; hij blijft in je Google Drive."
       },
       "revoked": {
         "user": "Ontkoppeld op {when}.",
@@ -12247,7 +12281,13 @@
       "paused": "Gestopt door pauzeren",
       "sync_failed": "De synchronisatie is mislukt",
       "unknown_connector": "Deze integratie is niet meer beschikbaar",
-      "other": "Fout ({code})"
+      "other": "Fout ({code})",
+      "remote_deleted": "Verwijderd in de spreadsheet",
+      "conflict_kept_yayatoh": "Op beide plekken gewijzigd: de wijziging in Yayatoh is behouden",
+      "conflict_kept_remote": "Op beide plekken gewijzigd: de wijziging bij de aanbieder is behouden",
+      "conflict": "Botst met een record dat al in Yayatoh staat",
+      "not_found": "Iets wat nodig is, ontbreekt nog",
+      "validation_failed": "Yayatoh heeft het niet geaccepteerd"
     },
     "inbox": {
       "title": "Integratiefouten",
@@ -12273,7 +12313,8 @@
         "pull": "Lezen bij de aanbieder",
         "map": "Veldkoppeling",
         "write": "Opslaan in Yayatoh",
-        "push": "Versturen naar de aanbieder"
+        "push": "Versturen naar de aanbieder",
+        "conflict": "Op beide plekken gewijzigd"
       },
       "field": "Veld: {field}",
       "lastSeen": "Laatst gezien {when}",
@@ -12299,7 +12340,15 @@
       "retryNamed": "{record} opnieuw proberen",
       "dismiss": "Negeren",
       "dismissNamed": "{record} negeren",
-      "more": "{count, plural, one {Nog # record niet getoond.} other {Nog # records niet getoond.}}"
+      "more": "{count, plural, one {Nog # record niet getoond.} other {Nog # records niet getoond.}}",
+      "values": "Waarden",
+      "keptLost": "{field}: behouden “{kept}”, verloren “{lost}”",
+      "yourCall": "Wacht op je beslissing",
+      "help": {
+        "remote_deleted": "De rij is in de spreadsheet verwijderd. Niemand is uit de lijst in Yayatoh gehaald. Negeer de melding om dat te accepteren: de deelnemer blijft hier en is niet meer aan die rij gekoppeld.",
+        "conflict_kept_yayatoh": "Dit record is sinds de laatste synchronisatie op beide plekken gewijzigd. De latere wijziging, in Yayatoh, is behouden en verzonden; de waarde bij de aanbieder hieronder is overschreven.",
+        "conflict_kept_remote": "Dit record is sinds de laatste synchronisatie op beide plekken gewijzigd. De latere wijziging, bij de aanbieder, is behouden; de waarde in Yayatoh hieronder is overschreven."
+      }
     },
     "fakeConsent": {
       "title": "Testtoestemming",
@@ -12307,7 +12356,97 @@
       "heading": "{name} koppelen aan Yayatoh?",
       "body": "{name} is een testaanbieder. Als je toestaat, mag Yayatoh namens jou het volgende lezen en schrijven:",
       "allow": "Toestaan",
-      "deny": "Weigeren"
+      "deny": "Weigeren",
+      "bodyNoScopes": "{name} is een testaanbieder. Als je toestaat, kan Yayatoh namens jou de gegevens van je account lezen."
+    },
+    "import": {
+      "open": "Import openen",
+      "connectedDetail": "{name} is gekoppeld. Open de import om te zien wat er wordt overgehaald.",
+      "noRuns": "Nog geen imports. Open de import voor een voorbeeld en start er een.",
+      "title": "Importeren uit Eventbrite",
+      "crumb": "Import",
+      "description": "Haal evenementen, tickettypes, bestellingen en deelnemers over. Er wordt niets geschreven tot je de import start, en opnieuw uitvoeren haalt alleen wijzigingen op.",
+      "connected": "Eventbrite is gekoppeld. Controleer wat er wordt overgehaald en importeer dan.",
+      "started": "Import gestart. Hij loopt op de achtergrond: vernieuw zo meteen om het resultaat te zien.",
+      "alreadyRunning": "Er loopt al een import.",
+      "stepsLabel": "Importstappen",
+      "steps": {
+        "connect": "Koppelen",
+        "preview": "Voorbeeld",
+        "import": "Importeren",
+        "result": "Resultaat"
+      },
+      "notActive": "Deze koppeling is niet actief. Koppel opnieuw om te importeren.",
+      "backToConnection": "Naar de koppeling",
+      "preview": {
+        "title": "Voorbeeld",
+        "help": "Wat je Eventbrite-account nu bevat en hoeveel daarvan hier nieuw is. Er wordt nog niets geschreven.",
+        "readOnly": "Alleen eigenaren en beheerders kunnen een voorbeeld zien en een import starten.",
+        "caption": "Wat de import overhaalt",
+        "what": "Wat",
+        "inEventbrite": "In Eventbrite",
+        "new": "Hier nieuw",
+        "noEmails": "Geïmporteerde bestellingen zijn gemarkeerd als geïmporteerd: niemand betaalt iets en er gaan geen bonnen of ticketmails uit."
+      },
+      "what": {
+        "events": "Evenementen",
+        "ticketTypes": "Tickettypes",
+        "orders": "Bestellingen",
+        "attendees": "Deelnemers",
+        "revenue": "Omzet",
+        "refunded": "Terugbetaalde bestellingen"
+      },
+      "refundedOrders": "{count, plural, =0 {Geen} one {# bestelling, geïmporteerd als terugbetaald, zonder omzet} other {# bestellingen, geïmporteerd als terugbetaald, zonder omzet}}",
+      "noRevenue": "Geen",
+      "importing": "Import loopt…",
+      "importNew": "{count, plural, one {# nieuw record importeren} other {# nieuwe records importeren}}",
+      "importAgain": "Opnieuw importeren voor wijzigingen",
+      "result": {
+        "title": "Resultaat",
+        "none": "Nog niets geïmporteerd.",
+        "finished": "Klaar op {when}",
+        "inProgress": "Bezig",
+        "refresh": "Vernieuwen",
+        "counts": "{pulled} geïmporteerd of bijgewerkt · {skipped} ongewijzigd · {failed} met fouten",
+        "seeErrors": "Bekijk wat aandacht nodig heeft",
+        "caption": "Wat Yayatoh nu uit Eventbrite bevat",
+        "inYayatoh": "In Yayatoh",
+        "ordersValue": "{count} ({paid} betaald)",
+        "attendeesValue": "{count} ({active} actief)",
+        "goToEvents": "Naar evenementen"
+      }
+    },
+    "sheets": {
+      "title": "Gekoppelde evenementen",
+      "help": "De deelnemerslijst van elk gekoppeld evenement synchroniseert met een eigen Google-spreadsheet. Wijzigingen in de spreadsheet komen bij de volgende synchronisatie in Yayatoh; een rij verwijderen haalt nooit iemand weg.",
+      "linkTitle": "Evenement koppelen",
+      "event": "Evenement",
+      "pickEvent": "Kies een evenement",
+      "chooseEvent": "Kies het evenement waarvan de deelnemers in de spreadsheet komen.",
+      "link": "Spreadsheet maken en koppelen",
+      "linking": "Spreadsheet wordt gemaakt…",
+      "linkHelp": "Er wordt een nieuwe spreadsheet in je Google Drive gemaakt met de kolommen uit de veldtoewijzing.",
+      "alreadyLinked": "Dat evenement heeft al een spreadsheet.",
+      "allLinked": "Elk evenement heeft een spreadsheet.",
+      "noEvents": "Maak eerst een evenement en koppel dan de deelnemerslijst.",
+      "emptyTitle": "Nog geen evenementen gekoppeld",
+      "emptyHelp": "Kies hierboven een evenement om de spreadsheet te maken.",
+      "emptyReadOnly": "Een eigenaar of beheerder kan hier de deelnemerslijst van een evenement koppelen.",
+      "caption": "Evenementen gekoppeld aan Google Spreadsheets",
+      "sheet": "Spreadsheet",
+      "openNamed": "{title} openen in Google Spreadsheets",
+      "linkedOn": "Gekoppeld",
+      "status": "Status",
+      "statuses": {
+        "active": "Synchroniseert",
+        "unlinked": "Ontkoppeld"
+      },
+      "actions": "Acties",
+      "unlink": "Ontkoppelen",
+      "unlinkNamed": "{event} ontkoppelen",
+      "confirmUnlink": "De spreadsheet van {event} ontkoppelen?",
+      "confirmUnlinkBody": "Er wordt niets meer mee gesynchroniseerd. De spreadsheet blijft met de inhoud in je Google Drive en iedereen blijft op de lijst in Yayatoh.",
+      "keep": "Gekoppeld laten"
     }
   },
   "formControls": {

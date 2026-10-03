@@ -1926,7 +1926,8 @@
     "dateSoldOut": "此場次剩餘門票不足。",
     "wrongDate": "其中一種門票不在此場次販售。",
     "dateUnavailable": "此場次已停止售票。",
-    "seatChannel": "其中部分座位保留給其他銷售通路（贊助商、推廣方或線上銷售）。請選擇其他座位。"
+    "seatChannel": "其中部分座位保留給其他銷售通路（贊助商、推廣方或線上銷售）。請選擇其他座位。",
+    "imported": "從 {source} 匯入 · 訂單 {reference}"
   },
   "seating": {
     "title": "座位",
@@ -12073,6 +12074,12 @@
     "connectors": {
       "demo": {
         "description": "用來試用整合的測試聯絡人應用程式：聯絡人會與你的 CRM 雙向同步。僅限測試環境。"
+      },
+      "eventbrite": {
+        "description": "從 Eventbrite 移轉活動、票種、訂單和參加者。先預覽，再匯入；隨時可再次執行以取得變更。"
+      },
+      "google_sheets": {
+        "description": "在 Google 試算表中維護活動的參加者名單。任一處的修改都會雙向同步。"
       }
     },
     "sandboxBadge": "測試",
@@ -12092,11 +12099,36 @@
     "readOnly": "只有擁有者和管理員可以串接或變更整合。",
     "breadcrumb": "導覽路徑",
     "objects": {
-      "contacts": "聯絡人"
+      "contacts": "聯絡人",
+      "events": "活動",
+      "ticket_classes": "票種",
+      "orders": "訂單",
+      "attendees": "參加者"
     },
     "fields": {
       "email": "電子郵件",
-      "name": "姓名"
+      "name": "姓名",
+      "tagline": "標語",
+      "starts_at": "開始",
+      "ends_at": "結束",
+      "timezone": "時區",
+      "currency": "貨幣",
+      "venue_name": "場地",
+      "city": "城市",
+      "country": "國家/地區",
+      "description": "描述",
+      "price_minor": "價格（以分計）",
+      "quantity_total": "數量",
+      "hidden": "隱藏",
+      "sales_start_at": "開賣時間",
+      "sales_end_at": "停售時間",
+      "buyer_email": "買家電子郵件",
+      "buyer_name": "買家姓名",
+      "status": "狀態",
+      "subtotal_minor": "票款合計（以分計）",
+      "total_minor": "訂單合計（以分計）",
+      "placed_at": "下單時間",
+      "labels": "標籤"
     },
     "status": {
       "none": "未串接",
@@ -12143,7 +12175,9 @@
         "paused": "同步已暫停。",
         "resumed": "同步已恢復。",
         "interval": "同步排程已儲存。",
-        "disconnected": "已中斷連線。不再同步任何內容，並已在服務商端撤銷存取權限。"
+        "disconnected": "已中斷連線。不再同步任何內容，並已在服務商端撤銷存取權限。",
+        "linked": "已建立並連結試算表。下次同步時填入內容。",
+        "unlinked": "已取消連結試算表。之後不再同步；試算表保留在你的 Google 雲端硬碟中。"
       },
       "revoked": {
         "user": "已於 {when} 中斷連線。",
@@ -12247,7 +12281,13 @@
       "paused": "因暫停而停止",
       "sync_failed": "同步失敗",
       "unknown_connector": "此整合已無法使用",
-      "other": "錯誤（{code}）"
+      "other": "錯誤（{code}）",
+      "remote_deleted": "已在試算表中刪除",
+      "conflict_kept_yayatoh": "兩處都有修改：保留了 Yayatoh 的修改",
+      "conflict_kept_remote": "兩處都有修改：保留了服務方的修改",
+      "conflict": "與 Yayatoh 中已有的紀錄衝突",
+      "not_found": "所需的內容還不在這裡",
+      "validation_failed": "Yayatoh 未接受"
     },
     "inbox": {
       "title": "整合錯誤",
@@ -12273,7 +12313,8 @@
         "pull": "從服務商讀取",
         "map": "欄位對應",
         "write": "儲存到 Yayatoh",
-        "push": "傳送到服務商"
+        "push": "傳送到服務商",
+        "conflict": "兩處都有修改"
       },
       "field": "欄位：{field}",
       "lastSeen": "最近一次出現：{when}",
@@ -12299,7 +12340,15 @@
       "retryNamed": "重試 {record}",
       "dismiss": "略過",
       "dismissNamed": "略過 {record}",
-      "more": "{count, plural, other {另有 # 筆記錄未顯示。}}"
+      "more": "{count, plural, other {另有 # 筆記錄未顯示。}}",
+      "values": "值",
+      "keptLost": "{field}：保留「{kept}」，捨棄「{lost}」",
+      "yourCall": "需要你來決定",
+      "help": {
+        "remote_deleted": "該列已在試算表中刪除。Yayatoh 名單中沒有刪除任何人。忽略即表示接受：參加者仍保留在這裡，不再與該列關聯。",
+        "conflict_kept_yayatoh": "自上次同步以來，該紀錄在兩處都有修改。保留並傳送了較晚的 Yayatoh 修改；下方服務方的值已被覆寫。",
+        "conflict_kept_remote": "自上次同步以來，該紀錄在兩處都有修改。保留了較晚的服務方修改；下方 Yayatoh 的值已被覆寫。"
+      }
     },
     "fakeConsent": {
       "title": "測試授權",
@@ -12307,7 +12356,97 @@
       "heading": "要將 {name} 串接到 Yayatoh 嗎？",
       "body": "{name} 是測試服務商。允許後，Yayatoh 可代表你讀取和寫入以下內容：",
       "allow": "允許",
-      "deny": "拒絕"
+      "deny": "拒絕",
+      "bodyNoScopes": "{name} 是測試服務方。允許後，Yayatoh 可代表你讀取帳戶資料。"
+    },
+    "import": {
+      "open": "開啟匯入",
+      "connectedDetail": "{name} 已連線。開啟匯入以預覽將移轉的內容。",
+      "noRuns": "還沒有匯入。開啟匯入以預覽並開始。",
+      "title": "從 Eventbrite 匯入",
+      "crumb": "匯入",
+      "description": "移轉活動、票種、訂單和參加者。開始匯入前不會寫入任何內容，再次執行只會取得變更。",
+      "connected": "Eventbrite 已連線。確認將移轉的內容後再匯入。",
+      "started": "匯入已開始，在背景執行：稍後重新整理即可查看結果。",
+      "alreadyRunning": "已有匯入正在執行。",
+      "stepsLabel": "匯入步驟",
+      "steps": {
+        "connect": "連線",
+        "preview": "預覽",
+        "import": "匯入",
+        "result": "結果"
+      },
+      "notActive": "此連線未啟用。重新連線後再匯入。",
+      "backToConnection": "前往連線",
+      "preview": {
+        "title": "預覽",
+        "help": "你的 Eventbrite 帳戶目前的內容，以及其中在這裡屬於新內容的數量。尚未寫入任何內容。",
+        "readOnly": "只有擁有者和管理員可以預覽並開始匯入。",
+        "caption": "匯入將移轉的內容",
+        "what": "項目",
+        "inEventbrite": "Eventbrite 中",
+        "new": "這裡新增",
+        "noEmails": "匯入的訂單會標記為已匯入：不會向任何人收費，也不會寄送收據或電子票郵件。"
+      },
+      "what": {
+        "events": "活動",
+        "ticketTypes": "票種",
+        "orders": "訂單",
+        "attendees": "參加者",
+        "revenue": "營收",
+        "refunded": "已退款訂單"
+      },
+      "refundedOrders": "{count, plural, =0 {無} other {# 筆訂單，以已退款匯入，不計營收}}",
+      "noRevenue": "無",
+      "importing": "正在匯入…",
+      "importNew": "{count, plural, other {匯入 # 筆新紀錄}}",
+      "importAgain": "再次匯入以取得變更",
+      "result": {
+        "title": "結果",
+        "none": "尚未匯入任何內容。",
+        "finished": "完成於 {when}",
+        "inProgress": "進行中",
+        "refresh": "重新整理",
+        "counts": "匯入或更新 {pulled} · 未變 {skipped} · 出錯 {failed}",
+        "seeErrors": "查看需要處理的內容",
+        "caption": "Yayatoh 目前來自 Eventbrite 的內容",
+        "inYayatoh": "Yayatoh 中",
+        "ordersValue": "{count}（已付 {paid}）",
+        "attendeesValue": "{count}（有效 {active}）",
+        "goToEvents": "前往活動"
+      }
+    },
+    "sheets": {
+      "title": "已連結的活動",
+      "help": "每個已連結活動的參加者名單都與各自的 Google 試算表同步。試算表中的修改會在下次同步時進入 Yayatoh；刪除一列不會移除任何人。",
+      "linkTitle": "連結活動",
+      "event": "活動",
+      "pickEvent": "選擇活動",
+      "chooseEvent": "選擇要將參加者放入試算表的活動。",
+      "link": "建立試算表並連結",
+      "linking": "正在建立試算表…",
+      "linkHelp": "會在你的 Google 雲端硬碟中依欄位對應的欄建立新試算表。",
+      "alreadyLinked": "該活動已有試算表。",
+      "allLinked": "每個活動都有試算表。",
+      "noEvents": "請先建立活動，再連結其參加者名單。",
+      "emptyTitle": "尚未連結活動",
+      "emptyHelp": "在上方選擇活動即可建立其試算表。",
+      "emptyReadOnly": "擁有者或管理員可在此連結活動的參加者名單。",
+      "caption": "已連結 Google 試算表的活動",
+      "sheet": "試算表",
+      "openNamed": "在 Google 試算表中開啟 {title}",
+      "linkedOn": "連結於",
+      "status": "狀態",
+      "statuses": {
+        "active": "同步中",
+        "unlinked": "已取消連結"
+      },
+      "actions": "操作",
+      "unlink": "取消連結",
+      "unlinkNamed": "取消連結 {event}",
+      "confirmUnlink": "取消連結 {event} 的試算表？",
+      "confirmUnlinkBody": "之後不再同步。試算表及其內容保留在你的 Google 雲端硬碟中，所有人仍在 Yayatoh 名單中。",
+      "keep": "保持連結"
     }
   },
   "formControls": {

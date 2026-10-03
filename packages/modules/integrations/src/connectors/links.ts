@@ -29,7 +29,9 @@ export async function linkedLocalIdTx(
       ),
     )
     .orderBy(
-      desc(sql`${recordLinks.connectionId} = ${preferConnectionId ?? '00000000-0000-0000-0000-000000000000'}::uuid`),
+      desc(
+        sql`${recordLinks.connectionId} = ${preferConnectionId ?? '00000000-0000-0000-0000-000000000000'}::uuid`,
+      ),
       desc(recordLinks.updatedAt),
     )
     .limit(1);

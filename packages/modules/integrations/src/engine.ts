@@ -195,22 +195,22 @@ async function recordErrorTx(tx: TenantTx, ctx: Ctx, e: ErrorInput): Promise<str
   const [row] = await tx
     .insert(syncErrors)
     .values({
-    orgId,
-    connectionId: e.connectionId,
-    runId: e.runId,
-    step: e.step,
-    objectType: e.objectType,
-    direction: e.direction,
-    externalId: e.externalId,
-    localId: e.localId,
-    recordKey: e.recordKey,
-    code: code(e.code),
-    field: e.field,
-    attempts: 1,
-    nextRetryAt: retryable ? recordRetryAt(1, ctx.now) : null,
-    firstSeenAt: ctx.now,
-    lastSeenAt: ctx.now,
-  })
+      orgId,
+      connectionId: e.connectionId,
+      runId: e.runId,
+      step: e.step,
+      objectType: e.objectType,
+      direction: e.direction,
+      externalId: e.externalId,
+      localId: e.localId,
+      recordKey: e.recordKey,
+      code: code(e.code),
+      field: e.field,
+      attempts: 1,
+      nextRetryAt: retryable ? recordRetryAt(1, ctx.now) : null,
+      firstSeenAt: ctx.now,
+      lastSeenAt: ctx.now,
+    })
     .returning({ id: syncErrors.id });
   if (!row) throw new DomainError('internal');
   return row.id;
@@ -1131,7 +1131,9 @@ async function pushObject(
   }
   let cursor = await cursorOf(ctx, connectionId, object.key, 'push');
   for (let page = 0; page < MAX_PAGES; page++) {
-    const p = await withTenant(ctx, (tx) => push.changes(tx, cursor, PUSH_PAGE, { connectionId, scope: io.scope }));
+    const p = await withTenant(ctx, (tx) =>
+      push.changes(tx, cursor, PUSH_PAGE, { connectionId, scope: io.scope }),
+    );
     if (p.records.length === 0) break;
     await sendAll(p.records, [], p.cursor);
     if (!p.hasMore || p.cursor === null) break;

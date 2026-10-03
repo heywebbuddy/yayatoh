@@ -50,7 +50,11 @@ function page<T>(list: readonly T[], size: number, continuation: string | undefi
 
 export const eventbriteFakeProvider: FakeProvider = {
   accountLabel: `${EB_ORGANIZATION.name} (sandbox)`,
-  seed: (): EbData => ({ events: structuredClone([...EB_EVENTS]), orders: structuredClone([...EB_ORDERS]), pages: 0 }),
+  seed: (): EbData => ({
+    events: structuredClone([...EB_EVENTS]),
+    orders: structuredClone([...EB_ORDERS]),
+    pages: 0,
+  }),
   handle(account, req: ProviderRequest): ProviderResponse {
     const d = data(account);
     if (req.method !== 'GET') return { status: 405, body: { error: 'METHOD_NOT_ALLOWED' } };
@@ -60,7 +64,13 @@ export const eventbriteFakeProvider: FakeProvider = {
         status: 200,
         body: {
           organizations: [EB_ORGANIZATION],
-          pagination: { object_count: 1, page_number: 1, page_size: 50, page_count: 1, has_more_items: false },
+          pagination: {
+            object_count: 1,
+            page_number: 1,
+            page_size: 50,
+            page_count: 1,
+            has_more_items: false,
+          },
         },
       };
     const m = /^\/v3\/organizations\/(\d+)\/(events|orders)\/$/.exec(req.path);

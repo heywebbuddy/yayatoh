@@ -205,15 +205,21 @@ export default async function OrderPage({
           />
           <span className="font-mono tabular-nums">{fmt(order.totalMinor)}</span>
           <span className="text-caption text-ink-2">
-            {order.collectedBy === 'organizer'
-              ? [
-                  t('boxOffice.collected'),
-                  order.paymentMethod ? t(`boxOffice.method.${order.paymentMethod}`) : null,
-                  order.paymentReference,
-                ]
-                  .filter(Boolean)
-                  .join(' · ')
-              : t(`refunds.soldBy.${order.fundsFlow}`)}
+            {order.createdVia === 'import'
+              ? // M6.4b: imported from another platform (the money was taken there).
+                t('boxOffice.imported', {
+                  source: order.paymentReference?.startsWith('eventbrite:') ? 'Eventbrite' : '—',
+                  reference: order.paymentReference?.split(':')[1] ?? '—',
+                })
+              : order.collectedBy === 'organizer'
+                ? [
+                    t('boxOffice.collected'),
+                    order.paymentMethod ? t(`boxOffice.method.${order.paymentMethod}`) : null,
+                    order.paymentReference,
+                  ]
+                    .filter(Boolean)
+                    .join(' · ')
+                : t(`refunds.soldBy.${order.fundsFlow}`)}
           </span>
         </div>
         <p className="text-caption text-ink-2">
