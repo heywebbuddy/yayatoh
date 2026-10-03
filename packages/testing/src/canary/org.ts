@@ -65,6 +65,8 @@ export interface CanaryOrg {
   readonly exports: readonly CanaryFile[];
   /** Outbound messages captured through the fake transports after the fill. */
   readonly outbound: readonly { readonly channel: string; readonly payload: string }[];
+  /** Where the captured pushes went (device endpoint tokens), apart from their content. */
+  readonly pushAddresses: readonly string[];
   /** Private columns filled (id → rows written). */
   readonly filled: Readonly<Record<string, number>>;
 }
@@ -125,7 +127,7 @@ export async function canaryOrg(o: {
     ports,
   );
   const exports = await generateExports(orgId, ctx, event.id, slug);
-  const outbound = await sendOutbound(orgId, ctx, event.id);
+  const { outbound, pushAddresses } = await sendOutbound(orgId, ctx, event.id);
   return {
     orgId,
     slug,
@@ -136,6 +138,7 @@ export async function canaryOrg(o: {
     deviceToken,
     exports,
     outbound,
+    pushAddresses,
     filled,
   };
 }
@@ -484,9 +487,16 @@ async function sendOutbound(orgId: string, ctx: () => ReturnType<typeof userCtx>
     appOrigin: 'https://app.yayatoh.test',
     ignoreQuietHours: true,
   });
-  return [
+  const outbound = [
     ...mem.emails.map((m) => ({ channel: 'email', payload: JSON.stringify(m) })),
     ...mem.sms.map((m) => ({ channel: 'sms', payload: JSON.stringify(m) })),
-    ...mem.pushes.map((m) => ({ channel: 'push', payload: JSON.stringify(m) })),
+    // A push's address (the device's endpoint token and keys) is where it goes, as an email's
+    // `to` is: checked apart (`pushAddresses`). The message itself is everything else (M5.9a: the
+    // canary's first alert push, an overdue invoice routed to the owner by push).
+    ...mem.pushes.map(({ token: _token, keys: _keys, ...m }) => ({
+      channel: 'push',
+      payload: JSON.stringify(m),
+    })),
   ];
+  return { outbound, pushAddresses: mem.pushes.map((m) => m.token) };
 }

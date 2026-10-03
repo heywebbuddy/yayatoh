@@ -123,4 +123,10 @@ describe('canaryOrg (roadmap §9 canary fixture)', () => {
     );
     expect(formatLeaks(leaks)).toBe('no canary leaks');
   });
+
+  it('pushes go only to the org devices: their address is the only token they carry', () => {
+    // Every push the fill caused is addressed to one of the org's canary device tokens.
+    for (const to of canary.pushAddresses)
+      expect(findCanaries(to).map((h) => h.column)).toEqual(['notifications.push_tokens.token']);
+  });
 });
