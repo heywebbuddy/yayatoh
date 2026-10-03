@@ -4030,7 +4030,8 @@
       "attendees_write": "Alterar participantes e reenviar ingressos",
       "checkin_scan": "Escanear ingressos",
       "contacts_write": "Adicionar contatos",
-      "webhooks_subscribe": "Assinar hooks de automação (gatilhos do Zapier)"
+      "webhooks_subscribe": "Assinar hooks de automação (gatilhos do Zapier)",
+      "webhooks_manage": "Adicionar e remover endpoints de webhook (gatilhos do Make e do n8n)"
     },
     "expiry": "Expira",
     "expiryHint": "Uma chave que expira deve ser rotacionada antes. Mais curto é mais seguro.",
@@ -12508,6 +12509,36 @@
       "waitlist_closed": "{title} está lotada e a lista de espera fechou 24 horas antes da sessão.",
       "offer_ended": "A oferta para {title} terminou.",
       "full": "{title} acabou de lotar. Tente de novo para entrar na lista de espera."
+    },
+    "calendar": {
+      "title": "Google Agenda",
+      "off": "Mantenha esta programação no seu Google Agenda. Sessões que você adiciona ou remove, e qualquer mudança de horário ou sala, são atualizadas sozinhas.",
+      "privacy": "Só adicionamos ao seu calendário as sessões deste evento. Nunca lemos seus outros compromissos.",
+      "connect": "Adicionar ao Google Agenda",
+      "reconnect": "Conectar de novo",
+      "pending": "Aguardando a confirmação do Google. Se você fechou aquela janela, conecte de novo.",
+      "active": "{count, plural, =0 {Sincronizando com o seu Google Agenda. Ainda não há sessões.} one {Sincronizando com o seu Google Agenda: há # sessão.} other {Sincronizando com o seu Google Agenda: há # sessões.}}",
+      "lastSync": "Última atualização: {when}",
+      "neverSynced": "A primeira atualização está a caminho.",
+      "syncNow": "Atualizar agora",
+      "syncing": "Atualização a caminho",
+      "stop": "Parar de sincronizar",
+      "stopped": "A sincronização está desligada. As sessões que já estão no seu calendário continuam lá.",
+      "revokedByGoogle": "O Google não aceita mais esta conexão, então as atualizações pararam. Conecte de novo para continuar.",
+      "done": {
+        "queued": "Atualização a caminho. Seu calendário muda em instantes.",
+        "already": "Já há uma atualização a caminho.",
+        "stopped": "Sincronização interrompida. As sessões que já estão no seu calendário continuam lá."
+      },
+      "notice": {
+        "connected": "Conectado. Suas sessões aparecem no seu Google Agenda em instantes.",
+        "denied": "O Google Agenda não foi conectado.",
+        "expired": "Esse link de conexão expirou. Tente de novo.",
+        "unavailable": "A sincronização da agenda não está disponível para este evento.",
+        "provider_unavailable": "Não foi possível falar com o Google. Tente de novo em instantes.",
+        "rate_limited": "Tentativas demais. Aguarde alguns minutos e tente de novo.",
+        "conflict": "Seu calendário já está conectado."
+      }
     }
   },
   "guestSeats": {
@@ -15209,6 +15240,9 @@
       },
       "salesforce": {
         "description": "Mantenha o Salesforce em sincronia: contatos e leads nos dois sentidos, uma campanha por evento com as pessoas inscritas e com check-in feito, e seus patrocinadores como oportunidades. Só são enviadas pessoas que aceitaram receber marketing."
+      },
+      "google_calendar": {
+        "description": "Todas as sessões dos seus eventos ativos em um Google Agenda, sempre atualizadas: sessões remarcadas acompanham e as canceladas saem. Os horários aparecem no fuso horário de cada evento."
       }
     },
     "sandboxBadge": "Teste",
@@ -15236,7 +15270,8 @@
       "leads": "Leads",
       "campaigns": "Campanhas",
       "campaign_members": "Membros da campanha",
-      "sponsor_opportunities": "Oportunidades de patrocínio"
+      "sponsor_opportunities": "Oportunidades de patrocínio",
+      "sessions": "Sessões"
     },
     "fields": {
       "email": "E-mail",
@@ -15265,7 +15300,7 @@
       "first_name": "Nome",
       "last_name": "Sobrenome",
       "company": "Empresa",
-      "title": "Cargo",
+      "title": "Título",
       "phone": "Telefone",
       "lead_source": "Origem do lead",
       "start_date": "Data de início",
@@ -15275,7 +15310,10 @@
       "close_date": "Data de fechamento",
       "amount": "Valor",
       "tier": "Nível de patrocínio",
-      "currency_iso_code": "Código da moeda"
+      "currency_iso_code": "Código da moeda",
+      "event_name": "Evento",
+      "room": "Sala",
+      "time_zone": "Fuso horário"
     },
     "status": {
       "none": "Não conectada",
@@ -15434,7 +15472,8 @@
       "conflict_kept_remote": "Alterado nos dois lados: a alteração do provedor foi mantida",
       "conflict": "Conflita com um registro que já está no Yayatoh",
       "not_found": "Algo de que precisa ainda não está aqui",
-      "validation_failed": "O Yayatoh não aceitou"
+      "validation_failed": "O Yayatoh não aceitou",
+      "remove_failed": "Não foi possível remover no provedor"
     },
     "inbox": {
       "title": "Erros de integração",

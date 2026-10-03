@@ -4030,7 +4030,8 @@
       "attendees_write": "Change attendees and resend tickets",
       "checkin_scan": "Scan tickets",
       "contacts_write": "Add contacts",
-      "webhooks_subscribe": "Subscribe automation hooks (Zapier triggers)"
+      "webhooks_subscribe": "Subscribe automation hooks (Zapier triggers)",
+      "webhooks_manage": "Add and remove webhook endpoints (Make and n8n triggers)"
     },
     "expiry": "Expires",
     "expiryHint": "An expiring key must be rotated before it ends. Shorter is safer.",
@@ -12508,6 +12509,36 @@
       "waitlist_closed": "{title} is full and its waitlist closed 24 hours before the session.",
       "offer_ended": "The offer for {title} has ended.",
       "full": "{title} just filled up. Try again to join the waitlist."
+    },
+    "calendar": {
+      "title": "Google Calendar",
+      "off": "Keep this schedule in your Google Calendar. Sessions you add or drop, and any change of time or room, follow on their own.",
+      "privacy": "We only add this event's sessions to your calendar. We never read your other events.",
+      "connect": "Add to Google Calendar",
+      "reconnect": "Connect again",
+      "pending": "Waiting for Google to confirm. If you closed that window, connect again.",
+      "active": "{count, plural, =0 {Syncing to your Google Calendar. No sessions on it yet.} one {Syncing to your Google Calendar: # session is on it.} other {Syncing to your Google Calendar: # sessions are on it.}}",
+      "lastSync": "Last updated {when}",
+      "neverSynced": "The first update is on its way.",
+      "syncNow": "Update now",
+      "syncing": "Update on its way",
+      "stop": "Stop syncing",
+      "stopped": "Syncing is off. Sessions already in your calendar stay there.",
+      "revokedByGoogle": "Google no longer accepts this connection, so updates stopped. Connect again to carry on.",
+      "done": {
+        "queued": "Update on its way. Your calendar changes in a moment.",
+        "already": "An update is already on its way.",
+        "stopped": "Syncing stopped. Sessions already in your calendar stay there."
+      },
+      "notice": {
+        "connected": "Connected. Your sessions appear in your Google Calendar in a moment.",
+        "denied": "Google Calendar wasn't connected.",
+        "expired": "That connect link expired. Try again.",
+        "unavailable": "Calendar sync isn't available for this event.",
+        "provider_unavailable": "Google couldn't be reached. Try again in a moment.",
+        "rate_limited": "Too many tries. Wait a few minutes and try again.",
+        "conflict": "Your calendar is already connected."
+      }
     }
   },
   "guestSeats": {
@@ -15209,6 +15240,9 @@
       },
       "salesforce": {
         "description": "Keep Salesforce in step: contacts and leads both ways, a campaign for each event with the people registered and checked in, and your sponsors as opportunities. Only people who agreed to marketing are sent."
+      },
+      "google_calendar": {
+        "description": "Every session of your live events on a Google Calendar, kept up to date: moved sessions move and cancelled ones come off. Times show in each event's time zone."
       }
     },
     "sandboxBadge": "Sandbox",
@@ -15236,7 +15270,8 @@
       "leads": "Leads",
       "campaigns": "Campaigns",
       "campaign_members": "Campaign members",
-      "sponsor_opportunities": "Sponsor opportunities"
+      "sponsor_opportunities": "Sponsor opportunities",
+      "sessions": "Sessions"
     },
     "fields": {
       "email": "Email",
@@ -15265,7 +15300,7 @@
       "first_name": "First name",
       "last_name": "Last name",
       "company": "Company",
-      "title": "Job title",
+      "title": "Title",
       "phone": "Phone",
       "lead_source": "Lead source",
       "start_date": "Start date",
@@ -15275,7 +15310,10 @@
       "close_date": "Close date",
       "amount": "Amount",
       "tier": "Sponsor tier",
-      "currency_iso_code": "Currency code"
+      "currency_iso_code": "Currency code",
+      "event_name": "Event",
+      "room": "Room",
+      "time_zone": "Time zone"
     },
     "status": {
       "none": "Not connected",
@@ -15434,7 +15472,8 @@
       "conflict_kept_remote": "Changed in both places: the provider's change was kept",
       "conflict": "Clashes with a record already in Yayatoh",
       "not_found": "Something it needs isn't here yet",
-      "validation_failed": "Yayatoh didn't accept it"
+      "validation_failed": "Yayatoh didn't accept it",
+      "remove_failed": "Couldn't be removed at the provider"
     },
     "inbox": {
       "title": "Integration errors",

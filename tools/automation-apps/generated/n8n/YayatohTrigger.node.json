@@ -1,0 +1,255 @@
+{
+  "description": {
+    "displayName": "Yayatoh Trigger",
+    "name": "yayatohTrigger",
+    "icon": "file:yayatoh.svg",
+    "group": [
+      "trigger"
+    ],
+    "version": 1,
+    "subtitle": "={{$parameter[\"events\"].join(\", \")}}",
+    "description": "Starts the workflow when Yayatoh sends a webhook (generated from /v1 0.2.0).",
+    "defaults": {
+      "name": "Yayatoh Trigger"
+    },
+    "inputs": [],
+    "outputs": [
+      "main"
+    ],
+    "credentials": [
+      {
+        "name": "yayatohApi",
+        "required": true
+      }
+    ],
+    "webhooks": [
+      {
+        "name": "default",
+        "httpMethod": "POST",
+        "responseMode": "onReceived",
+        "path": "webhook"
+      }
+    ],
+    "properties": [
+      {
+        "displayName": "Events",
+        "name": "events",
+        "type": "multiOptions",
+        "required": true,
+        "default": [],
+        "options": [
+          {
+            "name": "An event was archived",
+            "value": "event.archived",
+            "description": "It is hidden from lists; its data is kept. `from` and `to` are the event’s status before and after."
+          },
+          {
+            "name": "An event was cancelled",
+            "value": "event.cancelled",
+            "description": "Refunds follow the organizer’s policy (`order.refunded` per order). `from` and `to` are the event’s status before and after."
+          },
+          {
+            "name": "An event was marked as completed",
+            "value": "event.completed",
+            "description": "It is over; reports are final. `from` and `to` are the event’s status before and after."
+          },
+          {
+            "name": "An event was created (new, duplicated or from a template)",
+            "value": "event.created",
+            "description": "The event starts as a draft. `profile` is its kind (concert, gala, conference…)."
+          },
+          {
+            "name": "One date of a recurring event was cancelled",
+            "value": "event.occurrence_cancelled",
+            "description": "`startsAt` is when the cancelled date was due to start."
+          },
+          {
+            "name": "An event was postponed",
+            "value": "event.postponed",
+            "description": "The date is to be announced; ticket holders keep their tickets. `from` and `to` are the event’s status before and after."
+          },
+          {
+            "name": "An event was published",
+            "value": "event.published",
+            "description": "It is on sale and visible according to its visibility. `from` and `to` are the event’s status before and after."
+          },
+          {
+            "name": "A postponed event has a new date",
+            "value": "event.rescheduled",
+            "description": "Read the event for its new `startsAt`. `from` and `to` are the event’s status before and after."
+          },
+          {
+            "name": "An event was taken offline",
+            "value": "event.unpublished",
+            "description": "It went back to draft; its page and sales are closed. `from` and `to` are the event’s status before and after."
+          },
+          {
+            "name": "An event’s details changed",
+            "value": "event.updated",
+            "description": "`fields` names what changed (for example `startsAt`); read the event for the new values."
+          },
+          {
+            "name": "A registration form was submitted",
+            "value": "form.registration_submitted",
+            "description": "The answers are never in the payload; they stay in the console. `formVersion` is the form version answered."
+          },
+          {
+            "name": "A dispute was decided",
+            "value": "order.dispute_closed",
+            "description": "A lost dispute cancels the order’s live tickets."
+          },
+          {
+            "name": "A buyer disputed a payment (chargeback)",
+            "value": "order.disputed",
+            "description": "Evidence can be submitted from the console before the provider’s deadline."
+          },
+          {
+            "name": "An unpaid order expired and released its tickets",
+            "value": "order.expired",
+            "description": "The checkout hold ran out before payment; the held tickets went back on sale."
+          },
+          {
+            "name": "An order was paid and its tickets issued",
+            "value": "order.paid",
+            "description": "Sent once per order when payment completes (online, at the box office, by invoice, or a free order). `via` says how it was paid. Read the order and its tickets with `GET /v1/orgs/{org}/orders/{orderId}`."
+          },
+          {
+            "name": "A payment attempt for an order failed",
+            "value": "order.payment_failed",
+            "description": "The buyer can try again until the order expires."
+          },
+          {
+            "name": "All or part of an order was refunded",
+            "value": "order.refunded",
+            "description": "Sent for each refund. `fully` is true when nothing is left to refund; `tickets` counts the tickets the refund cancelled."
+          },
+          {
+            "name": "An event’s agenda was published",
+            "value": "program.agenda_published",
+            "description": "`agendaVersion` increases with each publish; read the agenda from the public content API."
+          },
+          {
+            "name": "An attendee rated an event",
+            "value": "review.submitted",
+            "description": "`rating` is 1 to 5. The review text is not in the payload."
+          },
+          {
+            "name": "A survey was answered",
+            "value": "survey.responded",
+            "description": "The answers stay in the console; the payload says which survey and invitation."
+          },
+          {
+            "name": "A ticket type was archived",
+            "value": "ticket_type.archived",
+            "description": "It is no longer sold; tickets already issued stay valid."
+          },
+          {
+            "name": "A ticket type was added to an event",
+            "value": "ticket_type.created",
+            "description": "Read it with `GET /v1/orgs/{org}/events/{eventId}/ticket-types`."
+          },
+          {
+            "name": "A ticket type changed",
+            "value": "ticket_type.updated",
+            "description": "`fields` names what changed (for example `priceMinor`)."
+          },
+          {
+            "name": "A scan was undone",
+            "value": "ticket.admission_undone",
+            "description": "Door staff reversed an admission (a mistaken scan); the ticket can be scanned again."
+          },
+          {
+            "name": "A ticket was scanned in",
+            "value": "ticket.admitted",
+            "description": "`day` is the event day in the event’s time zone. `offline` is true when a door device scanned without a connection and synced later."
+          },
+          {
+            "name": "A distributed ticket was claimed by its guest",
+            "value": "ticket.claimed",
+            "description": "Sent when someone opens a claim link and takes the ticket."
+          },
+          {
+            "name": "A ticket moved to a new holder",
+            "value": "ticket.transferred",
+            "description": "The previous QR code stops working; `rev` is the ticket’s new revision. The new holder’s details are not in the payload."
+          },
+          {
+            "name": "Tickets were cancelled in bulk",
+            "value": "tickets.cancelled",
+            "description": "One message per bulk cancellation (`operationId`) or per voided invoice (`orderId`: M5.1d pay later), with the ids of the tickets it voided. Exactly one of `operationId` and `orderId` is present."
+          },
+          {
+            "name": "Someone joined an event’s waitlist",
+            "value": "waitlist.joined",
+            "description": "Who joined is not in the payload."
+          },
+          {
+            "name": "A waitlist entry was offered a place",
+            "value": "waitlist.offered",
+            "description": "`offer` counts the offers this entry has had (1 for the first)."
+          }
+        ]
+      }
+    ]
+  },
+  "yayatoh": {
+    "api": "0.2.0",
+    "eventTypes": [
+      "event.archived",
+      "event.cancelled",
+      "event.completed",
+      "event.created",
+      "event.occurrence_cancelled",
+      "event.postponed",
+      "event.published",
+      "event.rescheduled",
+      "event.unpublished",
+      "event.updated",
+      "form.registration_submitted",
+      "order.dispute_closed",
+      "order.disputed",
+      "order.expired",
+      "order.paid",
+      "order.payment_failed",
+      "order.refunded",
+      "program.agenda_published",
+      "review.submitted",
+      "survey.responded",
+      "ticket_type.archived",
+      "ticket_type.created",
+      "ticket_type.updated",
+      "ticket.admission_undone",
+      "ticket.admitted",
+      "ticket.claimed",
+      "ticket.transferred",
+      "tickets.cancelled",
+      "waitlist.joined",
+      "waitlist.offered"
+    ],
+    "subscription": {
+      "scope": "webhooks:manage",
+      "create": {
+        "method": "POST",
+        "url": "/webhook-endpoints",
+        "body": {
+          "url": "={{$webhookUrl}}",
+          "description": "n8n",
+          "eventTypes": "={{$parameter[\"events\"]}}"
+        },
+        "idField": "id",
+        "operation": {
+          "method": "POST",
+          "path": "/v1/orgs/{org}/webhook-endpoints"
+        }
+      },
+      "delete": {
+        "method": "DELETE",
+        "url": "/webhook-endpoints/{id}",
+        "operation": {
+          "method": "DELETE",
+          "path": "/v1/orgs/{org}/webhook-endpoints/{endpointId}"
+        }
+      }
+    }
+  }
+}

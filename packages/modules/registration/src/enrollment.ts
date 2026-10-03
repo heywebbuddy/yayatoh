@@ -1039,3 +1039,41 @@ export async function enrollmentsOfRegistrantTx(tx: TenantTx, registrantId: stri
 export async function registrantsOfLinkTx(tx: TenantTx, token: string) {
   return (await orderRegistrantsTx(tx, token)).registrants;
 }
+
+/**
+ * M6.5c: a registrant's personal schedule for calendar push (integrations): the sessions their
+ * items include plus the optional ones they are enrolled in (not waitlists or open offers). Null
+ * when the registrant is gone (cancelled or refunded ticket): their calendar entries are removed.
+ */
+export async function calendarScheduleTx(
+  tx: TenantTx,
+  registrantId: string,
+): Promise<{ readonly eventId: string; readonly sessionIds: readonly string[] } | null> {
+  const r = await registrantByIdTx(tx, registrantId);
+  if (!r) return null;
+  const all = await enrollableSessionsTx(tx, r.eventId);
+  const available = await availableTx(
+    tx,
+    r,
+    all.map((s) => s.sessionId),
+  );
+  const enrolled = new Set(
+    (await liveEntriesTx(tx, r.id)).filter((e) => e.status === 'enrolled').map((e) => e.sessionId),
+  );
+  return {
+    eventId: r.eventId,
+    sessionIds: all
+      .filter((s) => available.has(s.sessionId) && (s.admission === 'included' || enrolled.has(s.sessionId)))
+      .map((s) => s.sessionId),
+  };
+}
+
+/** M6.5c: one registrant of a manage link (its order's), or `not_found` like a wrong link. */
+export async function linkRegistrantTx(
+  tx: TenantTx,
+  token: string,
+  registrantId: string,
+): Promise<{ readonly registrantId: string; readonly eventId: string }> {
+  const r = await registrantOfLinkTx(tx, token, registrantId);
+  return { registrantId: r.id, eventId: r.eventId };
+}

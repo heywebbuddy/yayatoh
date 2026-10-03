@@ -2112,6 +2112,9 @@ importers:
       '@yayatoh/program':
         specifier: workspace:*
         version: link:../program
+      '@yayatoh/registration':
+        specifier: workspace:*
+        version: link:../registration
       '@yayatoh/tenancy':
         specifier: workspace:*
         version: link:../tenancy
@@ -3306,6 +3309,46 @@ importers:
       react-dom:
         specifier: 'catalog:'
         version: 19.3.0(react@19.3.0)
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  tools/automation-apps:
+    dependencies:
+      zod:
+        specifier: 'catalog:'
+        version: 4.6.5
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.19.0
+      '@yayatoh/api-v1':
+        specifier: workspace:*
+        version: link:../../packages/api-v1
+      '@yayatoh/auth':
+        specifier: workspace:*
+        version: link:../../packages/auth
+      '@yayatoh/config':
+        specifier: workspace:*
+        version: link:../../packages/config
+      '@yayatoh/db':
+        specifier: workspace:*
+        version: link:../../packages/db
+      '@yayatoh/kernel':
+        specifier: workspace:*
+        version: link:../../packages/kernel
+      '@yayatoh/payments':
+        specifier: workspace:*
+        version: link:../../packages/modules/payments
+      '@yayatoh/tenancy':
+        specifier: workspace:*
+        version: link:../../packages/modules/tenancy
+      '@yayatoh/testing':
+        specifier: workspace:*
+        version: link:../../packages/testing
+      hono:
+        specifier: 'catalog:'
+        version: 4.13.9
       typescript:
         specifier: 'catalog:'
         version: 6.0.3

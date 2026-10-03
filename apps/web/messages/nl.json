@@ -4030,7 +4030,8 @@
       "attendees_write": "Deelnemers wijzigen en tickets opnieuw versturen",
       "checkin_scan": "Tickets scannen",
       "contacts_write": "Contacten toevoegen",
-      "webhooks_subscribe": "Automatiseringshooks abonneren (Zapier-triggers)"
+      "webhooks_subscribe": "Automatiseringshooks abonneren (Zapier-triggers)",
+      "webhooks_manage": "Webhook-endpoints toevoegen en verwijderen (Make- en n8n-triggers)"
     },
     "expiry": "Verloopt",
     "expiryHint": "Een sleutel die verloopt moet je vóór die tijd roteren. Korter is veiliger.",
@@ -12508,6 +12509,36 @@
       "waitlist_closed": "{title} is vol en de wachtlijst sloot 24 uur voor de sessie.",
       "offer_ended": "Het aanbod voor {title} is afgelopen.",
       "full": "{title} is net vol. Probeer het opnieuw om op de wachtlijst te komen."
+    },
+    "calendar": {
+      "title": "Google Agenda",
+      "off": "Houd dit programma bij in je Google Agenda. Sessies die je toevoegt of schrapt, en elke wijziging van tijd of zaal, volgen vanzelf.",
+      "privacy": "We zetten alleen de sessies van dit evenement in je agenda. Je andere afspraken lezen we nooit.",
+      "connect": "Toevoegen aan Google Agenda",
+      "reconnect": "Opnieuw koppelen",
+      "pending": "Wachten op bevestiging van Google. Heb je dat venster gesloten, koppel dan opnieuw.",
+      "active": "{count, plural, =0 {Synchroniseert met je Google Agenda. Er staan nog geen sessies in.} one {Synchroniseert met je Google Agenda: er staat # sessie in.} other {Synchroniseert met je Google Agenda: er staan # sessies in.}}",
+      "lastSync": "Laatst bijgewerkt {when}",
+      "neverSynced": "De eerste update is onderweg.",
+      "syncNow": "Nu bijwerken",
+      "syncing": "Update onderweg",
+      "stop": "Synchronisatie stoppen",
+      "stopped": "Synchronisatie staat uit. Sessies die al in je agenda staan, blijven daar.",
+      "revokedByGoogle": "Google accepteert deze koppeling niet meer, dus de updates zijn gestopt. Koppel opnieuw om verder te gaan.",
+      "done": {
+        "queued": "Update onderweg. Je agenda verandert zo.",
+        "already": "Er is al een update onderweg.",
+        "stopped": "Synchronisatie gestopt. Sessies die al in je agenda staan, blijven daar."
+      },
+      "notice": {
+        "connected": "Gekoppeld. Je sessies verschijnen zo in je Google Agenda.",
+        "denied": "Google Agenda is niet gekoppeld.",
+        "expired": "Die koppellink is verlopen. Probeer het opnieuw.",
+        "unavailable": "Agendasynchronisatie is niet beschikbaar voor dit evenement.",
+        "provider_unavailable": "Google was niet bereikbaar. Probeer het zo opnieuw.",
+        "rate_limited": "Te veel pogingen. Wacht een paar minuten en probeer het opnieuw.",
+        "conflict": "Je agenda is al gekoppeld."
+      }
     }
   },
   "guestSeats": {
@@ -15209,6 +15240,9 @@
       },
       "salesforce": {
         "description": "Houd Salesforce bij: contacten en leads in beide richtingen, een campagne per evenement met de ingeschreven en ingecheckte mensen, en je sponsors als opportunities. Alleen mensen die met marketing hebben ingestemd worden verstuurd."
+      },
+      "google_calendar": {
+        "description": "Elke sessie van je lopende evenementen in een Google Agenda, altijd bijgewerkt: verplaatste sessies verhuizen mee en geannuleerde verdwijnen. Tijden staan in de tijdzone van elk evenement."
       }
     },
     "sandboxBadge": "Test",
@@ -15236,7 +15270,8 @@
       "leads": "Leads",
       "campaigns": "Campagnes",
       "campaign_members": "Campagneleden",
-      "sponsor_opportunities": "Sponsor-opportunities"
+      "sponsor_opportunities": "Sponsor-opportunities",
+      "sessions": "Sessies"
     },
     "fields": {
       "email": "E-mail",
@@ -15265,7 +15300,7 @@
       "first_name": "Voornaam",
       "last_name": "Achternaam",
       "company": "Bedrijf",
-      "title": "Functie",
+      "title": "Titel",
       "phone": "Telefoon",
       "lead_source": "Leadbron",
       "start_date": "Startdatum",
@@ -15275,7 +15310,10 @@
       "close_date": "Sluitdatum",
       "amount": "Bedrag",
       "tier": "Sponsorniveau",
-      "currency_iso_code": "Valutacode"
+      "currency_iso_code": "Valutacode",
+      "event_name": "Evenement",
+      "room": "Zaal",
+      "time_zone": "Tijdzone"
     },
     "status": {
       "none": "Niet gekoppeld",
@@ -15434,7 +15472,8 @@
       "conflict_kept_remote": "Op beide plekken gewijzigd: de wijziging bij de aanbieder is behouden",
       "conflict": "Botst met een record dat al in Yayatoh staat",
       "not_found": "Iets wat nodig is, ontbreekt nog",
-      "validation_failed": "Yayatoh heeft het niet geaccepteerd"
+      "validation_failed": "Yayatoh heeft het niet geaccepteerd",
+      "remove_failed": "Kon niet worden verwijderd bij de aanbieder"
     },
     "inbox": {
       "title": "Integratiefouten",

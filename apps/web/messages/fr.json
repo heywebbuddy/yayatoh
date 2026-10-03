@@ -4030,7 +4030,8 @@
       "attendees_write": "Modifier les participants et renvoyer les billets",
       "checkin_scan": "Scanner les billets",
       "contacts_write": "Ajouter des contacts",
-      "webhooks_subscribe": "Abonner des hooks d’automatisation (déclencheurs Zapier)"
+      "webhooks_subscribe": "Abonner des hooks d’automatisation (déclencheurs Zapier)",
+      "webhooks_manage": "Ajouter et supprimer des points de terminaison webhook (déclencheurs Make et n8n)"
     },
     "expiry": "Expire",
     "expiryHint": "Une clé qui expire doit être renouvelée avant. Plus court, c’est plus sûr.",
@@ -12508,6 +12509,36 @@
       "waitlist_closed": "{title} est complète et sa liste d'attente a fermé 24 heures avant la session.",
       "offer_ended": "L'offre pour {title} est terminée.",
       "full": "{title} vient d'être complète. Réessayez pour rejoindre la liste d'attente."
+    },
+    "calendar": {
+      "title": "Google Agenda",
+      "off": "Gardez ce programme dans votre Google Agenda. Les sessions que vous ajoutez ou retirez, et tout changement d’horaire ou de salle, suivent automatiquement.",
+      "privacy": "Nous ajoutons uniquement les sessions de cet événement à votre agenda. Nous ne lisons jamais vos autres événements.",
+      "connect": "Ajouter à Google Agenda",
+      "reconnect": "Se reconnecter",
+      "pending": "En attente de la confirmation de Google. Si vous avez fermé cette fenêtre, reconnectez-vous.",
+      "active": "{count, plural, =0 {Synchronisation avec votre Google Agenda. Aucune session pour l’instant.} one {Synchronisation avec votre Google Agenda : # session y figure.} other {Synchronisation avec votre Google Agenda : # sessions y figurent.}}",
+      "lastSync": "Dernière mise à jour : {when}",
+      "neverSynced": "La première mise à jour est en cours.",
+      "syncNow": "Mettre à jour maintenant",
+      "syncing": "Mise à jour en cours",
+      "stop": "Arrêter la synchronisation",
+      "stopped": "La synchronisation est désactivée. Les sessions déjà dans votre agenda y restent.",
+      "revokedByGoogle": "Google n’accepte plus cette connexion, les mises à jour se sont donc arrêtées. Reconnectez-vous pour continuer.",
+      "done": {
+        "queued": "Mise à jour en cours. Votre agenda change dans un instant.",
+        "already": "Une mise à jour est déjà en cours.",
+        "stopped": "Synchronisation arrêtée. Les sessions déjà dans votre agenda y restent."
+      },
+      "notice": {
+        "connected": "Connecté. Vos sessions apparaîtront dans votre Google Agenda dans un instant.",
+        "denied": "Google Agenda n’a pas été connecté.",
+        "expired": "Ce lien de connexion a expiré. Réessayez.",
+        "unavailable": "La synchronisation de l’agenda n’est pas disponible pour cet événement.",
+        "provider_unavailable": "Google est injoignable. Réessayez dans un instant.",
+        "rate_limited": "Trop de tentatives. Patientez quelques minutes, puis réessayez.",
+        "conflict": "Votre agenda est déjà connecté."
+      }
     }
   },
   "guestSeats": {
@@ -15209,6 +15240,9 @@
       },
       "salesforce": {
         "description": "Gardez Salesforce à jour : contacts et pistes dans les deux sens, une campagne par événement avec les personnes inscrites et enregistrées à l’entrée, et vos sponsors comme opportunités. Seules les personnes ayant accepté le marketing sont envoyées."
+      },
+      "google_calendar": {
+        "description": "Chaque session de vos événements en cours dans un Google Agenda, toujours à jour : les sessions déplacées suivent et les sessions annulées disparaissent. Les horaires s'affichent dans le fuseau horaire de chaque événement."
       }
     },
     "sandboxBadge": "Test",
@@ -15236,7 +15270,8 @@
       "leads": "Pistes",
       "campaigns": "Campagnes",
       "campaign_members": "Membres de campagne",
-      "sponsor_opportunities": "Opportunités de sponsoring"
+      "sponsor_opportunities": "Opportunités de sponsoring",
+      "sessions": "Sessions"
     },
     "fields": {
       "email": "E-mail",
@@ -15265,7 +15300,7 @@
       "first_name": "Prénom",
       "last_name": "Nom",
       "company": "Entreprise",
-      "title": "Fonction",
+      "title": "Titre",
       "phone": "Téléphone",
       "lead_source": "Origine de la piste",
       "start_date": "Date de début",
@@ -15275,7 +15310,10 @@
       "close_date": "Date de clôture",
       "amount": "Montant",
       "tier": "Niveau de sponsoring",
-      "currency_iso_code": "Code de devise"
+      "currency_iso_code": "Code de devise",
+      "event_name": "Événement",
+      "room": "Salle",
+      "time_zone": "Fuseau horaire"
     },
     "status": {
       "none": "Non connectée",
@@ -15434,7 +15472,8 @@
       "conflict_kept_remote": "Modifié des deux côtés : la modification du fournisseur a été conservée",
       "conflict": "Entre en conflit avec un enregistrement déjà dans Yayatoh",
       "not_found": "Un élément nécessaire n’est pas encore là",
-      "validation_failed": "Yayatoh ne l’a pas accepté"
+      "validation_failed": "Yayatoh ne l’a pas accepté",
+      "remove_failed": "Impossible de supprimer chez le fournisseur"
     },
     "inbox": {
       "title": "Erreurs d’intégration",

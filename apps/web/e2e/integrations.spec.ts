@@ -60,7 +60,7 @@ test.describe('integrations (M6.4a)', () => {
     // (On phones the nav sits in the menu drawer, so look for the link itself.)
     expect(await page.locator(`a[href="/o/${org}/integrations"]`).count()).toBeGreaterThan(0);
     await expect(page.getByRole('heading', { name: 'Demo CRM' })).toBeVisible();
-    // M6.4b and M6.4c added more connectors: look inside the demo's card.
+    // M6.4b, M6.4c and M6.5c added more connectors: look inside the demo's own card.
     await expect(
       page
         .getByRole('listitem')

@@ -4030,7 +4030,8 @@
       "attendees_write": "修改参会者并重新发送门票",
       "checkin_scan": "扫描门票",
       "contacts_write": "添加联系人",
-      "webhooks_subscribe": "订阅自动化钩子（Zapier 触发器）"
+      "webhooks_subscribe": "订阅自动化钩子（Zapier 触发器）",
+      "webhooks_manage": "添加和删除 Webhook 端点（Make 和 n8n 触发器）"
     },
     "expiry": "过期时间",
     "expiryHint": "会过期的密钥必须在到期前轮换。有效期越短越安全。",
@@ -12508,6 +12509,36 @@
       "waitlist_closed": "{title} 已满，候补名单已在场次开始前 24 小时关闭。",
       "offer_ended": "{title} 的邀请已结束。",
       "full": "{title} 刚刚满员。再试一次即可加入候补名单。"
+    },
+    "calendar": {
+      "title": "Google 日历",
+      "off": "把这份日程放进您的 Google 日历。您添加或取消的场次，以及时间或会场的任何变动，都会自动同步。",
+      "privacy": "我们只会把本活动的场次加入您的日历，绝不读取您的其他日程。",
+      "connect": "添加到 Google 日历",
+      "reconnect": "重新连接",
+      "pending": "正在等待 Google 确认。如果您关闭了那个窗口，请重新连接。",
+      "active": "{count, plural, =0 {正在与您的 Google 日历同步，暂时还没有场次。} other {正在与您的 Google 日历同步：已有 # 个场次。}}",
+      "lastSync": "上次更新：{when}",
+      "neverSynced": "首次更新正在进行。",
+      "syncNow": "立即更新",
+      "syncing": "正在更新",
+      "stop": "停止同步",
+      "stopped": "同步已关闭。已在日历中的场次会保留。",
+      "revokedByGoogle": "Google 不再接受此连接，因此更新已停止。请重新连接以继续。",
+      "done": {
+        "queued": "正在更新，日历稍后就会变化。",
+        "already": "已有更新正在进行。",
+        "stopped": "已停止同步。已在日历中的场次会保留。"
+      },
+      "notice": {
+        "connected": "已连接。您的场次稍后会出现在 Google 日历中。",
+        "denied": "未连接 Google 日历。",
+        "expired": "该连接链接已过期，请重试。",
+        "unavailable": "此活动不支持日历同步。",
+        "provider_unavailable": "无法连接 Google，请稍后重试。",
+        "rate_limited": "尝试次数过多，请等几分钟后再试。",
+        "conflict": "您的日历已连接。"
+      }
     }
   },
   "guestSeats": {
@@ -15209,6 +15240,9 @@
       },
       "salesforce": {
         "description": "让 Salesforce 保持同步：联系人和潜在客户双向同步，每场活动一个营销活动并包含已报名和已签到的人，赞助商作为业务机会。只发送同意接收营销信息的人。"
+      },
+      "google_calendar": {
+        "description": "将进行中活动的每个场次同步到 Google 日历并保持最新：调整的场次会随之移动，取消的场次会被移除。时间按各活动的时区显示。"
       }
     },
     "sandboxBadge": "测试",
@@ -15236,7 +15270,8 @@
       "leads": "潜在客户",
       "campaigns": "营销活动",
       "campaign_members": "营销活动成员",
-      "sponsor_opportunities": "赞助业务机会"
+      "sponsor_opportunities": "赞助业务机会",
+      "sessions": "场次"
     },
     "fields": {
       "email": "电子邮件",
@@ -15265,7 +15300,7 @@
       "first_name": "名",
       "last_name": "姓",
       "company": "公司",
-      "title": "职位",
+      "title": "标题",
       "phone": "电话",
       "lead_source": "潜在客户来源",
       "start_date": "开始日期",
@@ -15275,7 +15310,10 @@
       "close_date": "预计成交日期",
       "amount": "金额",
       "tier": "赞助级别",
-      "currency_iso_code": "货币代码"
+      "currency_iso_code": "货币代码",
+      "event_name": "活动",
+      "room": "会场",
+      "time_zone": "时区"
     },
     "status": {
       "none": "未连接",
@@ -15434,7 +15472,8 @@
       "conflict_kept_remote": "两处都有修改：保留了服务方的修改",
       "conflict": "与 Yayatoh 中已有的记录冲突",
       "not_found": "所需的内容还不在这里",
-      "validation_failed": "Yayatoh 未接受"
+      "validation_failed": "Yayatoh 未接受",
+      "remove_failed": "无法在服务方处删除"
     },
     "inbox": {
       "title": "集成错误",

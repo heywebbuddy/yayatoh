@@ -16,6 +16,7 @@ import { bulkRoutes } from './routes/bulk.ts';
 import { contentRoutes } from './routes/content.ts';
 import { docsRoutes } from './routes/docs.ts';
 import { health } from './routes/health.ts';
+import { hookRoutes } from './routes/hooks.ts';
 import { keyRoutes } from './routes/key.ts';
 import { orgRoutes } from './routes/org.ts';
 import { publicRoutes } from './routes/public.ts';
@@ -72,7 +73,7 @@ const API_TAGS = [
   {
     name: 'webhooks',
     description:
-      'Messages your webhook endpoints receive (Settings → Webhooks): thin payloads of ids and facts, signed with Standard Webhooks.',
+      'Messages your webhook endpoints receive (Settings → Webhooks): thin payloads of ids and facts, signed with Standard Webhooks. Endpoints can also be added and removed over /v1 (REST hooks for Make and n8n).',
   },
 ];
 
@@ -310,6 +311,8 @@ export function createV1(deps: V1Deps) {
   v1.route('/', salesRoutes(deps, limiter, credentialKey));
   v1.route('/', automationRoutes(deps));
   v1.route('/', bulkRoutes(deps));
+  // M6.5c: webhook subscriptions (Make and n8n instant triggers).
+  v1.route('/', hookRoutes(deps));
   v1.route('/', scannerRoutes(deps.ports));
   v1.route('/', docsRoutes(basePath));
 

@@ -34,6 +34,8 @@ export {
   saveBoothCommand,
   unassignBoothCommand,
 } from './booths.ts';
+// M6.5c: calendar push (integrations) reads placed sessions through these.
+export { type CalendarSession, calendarSessionsByIdTx, calendarSessionsPageTx } from './calendar.ts';
 // M5.3b: call for papers.
 export {
   addCfpQuestionCommand,

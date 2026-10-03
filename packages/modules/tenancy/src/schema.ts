@@ -321,6 +321,11 @@ export const API_KEY_SCOPES = [
   'contacts:write',
   /** M6.4c: subscribe and unsubscribe REST hooks (/v1 `hooks`, Zapier triggers). */
   'webhooks:subscribe',
+  /**
+   * M6.5c: add and remove the org's webhook endpoints over /v1 (Make and n8n instant triggers
+   * subscribe themselves). Never the signing secrets, test sends or replays (console only).
+   */
+  'webhooks:manage',
 ] as const;
 export type ApiKeyScope = (typeof API_KEY_SCOPES)[number];
 

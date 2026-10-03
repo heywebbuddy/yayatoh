@@ -46,6 +46,7 @@ import {
   isImporter,
   type LocalRecord,
   type ObjectDefinition,
+  type PushScope,
   type RemoteRecord,
   type SyncIO,
 } from './sdk/connector.ts';
@@ -110,6 +111,19 @@ const pullKey = (objectType: string, externalId: string) => `${objectType}:remot
 const localKey = (objectType: string, localId: string) => `${objectType}:local:${localId}`;
 /** Connection-level errors (a whole run's failure) use this record key. */
 const CONNECTION_KEY = '-';
+
+/** Whose records a connection's push reads (M6.5c: a registrant's personal connection). */
+const scopeOf = (
+  c: { id: string; registrantId: string | null; eventId: string | null },
+  now: Date,
+  loaded: Readonly<Record<string, unknown>> = {},
+): PushScope => ({
+  connectionId: c.id,
+  registrantId: c.registrantId,
+  eventId: c.eventId,
+  now,
+  scope: loaded,
+});
 
 const runEnded = () => new DomainError('invalid_state', 'The run has ended', { reason: 'run_ended' });
 
@@ -317,6 +331,8 @@ export const claimRunCommand = tenantCommand({
     runId: z.uuid().nullable(),
     connector: z.string(),
     authConnectionId: z.string().nullable(),
+    registrantId: z.uuid().nullable(),
+    eventId: z.uuid().nullable(),
   }),
   entitlement: 'integrations',
   permission: SYNC_PERMISSION,
@@ -333,6 +349,8 @@ export const claimRunCommand = tenantCommand({
       runId,
       connector: c.connector,
       authConnectionId: c.authConnectionId,
+      registrantId: c.registrantId,
+      eventId: c.eventId,
     });
     const active = await tx
       .select()
@@ -445,6 +463,7 @@ export function pullPageCommand(connector: ConnectorDefinition) {
       if (!object?.pull || connection.connector !== connector.key)
         throw new DomainError('not_found', 'Unknown object');
       const pull = object.pull;
+      const scope = scopeOf(connection, ctx.now);
       const rules = await rulesTx(tx, connection.id, object, 'pull');
       const origin = originStamp(connection.id);
       const counts = { pulled: 0, skipped: 0, failed: 0 };
@@ -467,7 +486,7 @@ export function pullPageCommand(connector: ConnectorDefinition) {
               eq(recordLinks.externalId, record.id),
             ),
           );
-        const local = link && object.push ? await object.push.read(tx, link.localId) : null;
+        const local = link && object.push ? await object.push.read(tx, link.localId, scope) : null;
         const localHash = local ? fieldsHash(local.fields) : null;
         const decision = decidePull(
           record,
@@ -522,7 +541,7 @@ export function pullPageCommand(connector: ConnectorDefinition) {
               record,
               emit,
             });
-            const after = object.push ? await object.push.read(sp, localId) : null;
+            const after = object.push ? await object.push.read(sp, localId, scope) : null;
             const values = {
               localId,
               remoteVersion: record.version,
@@ -676,6 +695,8 @@ const PushResult = z.discriminatedUnion('outcome', [
       .nullable(),
   }),
   z.object({ outcome: z.literal('gone'), localId: z.uuid() }),
+  // M6.5c: a reconciling push deleted the provider record of a record it no longer wants.
+  z.object({ outcome: z.literal('removed'), localId: z.uuid(), externalId: z.string().min(1).max(255) }),
 ]);
 type PushResult = z.infer<typeof PushResult>;
 
@@ -700,7 +721,19 @@ export const pushPageCommand = tenantCommand({
       const key = localKey(input.objectType, r.localId);
       if (r.outcome === 'skipped') counts.skipped += 1;
       else if (r.outcome === 'gone') resolved.push(key);
-      else if (r.outcome === 'failed') {
+      else if (r.outcome === 'removed') {
+        await tx
+          .delete(recordLinks)
+          .where(
+            and(
+              eq(recordLinks.connectionId, connection.id),
+              eq(recordLinks.objectType, input.objectType),
+              eq(recordLinks.externalId, r.externalId),
+            ),
+          );
+        resolved.push(key);
+        counts.pushed += 1;
+      } else if (r.outcome === 'failed') {
         await recordErrorTx(tx, ctx, {
           connectionId: connection.id,
           runId: run.id,
@@ -1045,6 +1078,7 @@ async function pushObject(
   io: SyncIO,
   runId: string,
   connectionId: string,
+  scope: PushScope,
 ) {
   const push = object.push;
   if (!push) return;
@@ -1121,7 +1155,7 @@ async function pushObject(
   if (due.length) {
     const ids = due.flatMap((d) => (d.localId ? [d.localId] : []));
     const locals = await withTenant(ctx, async (tx) =>
-      Promise.all(ids.map(async (id) => ({ id, record: await push.read(tx, id) }))),
+      Promise.all(ids.map(async (id) => ({ id, record: await push.read(tx, id, scope) }))),
     );
     await sendAll(
       locals.flatMap((l) => (l.record ? [l.record] : [])),
@@ -1129,14 +1163,17 @@ async function pushObject(
       null,
     );
   }
-  let cursor = await cursorOf(ctx, connectionId, object.key, 'push');
+  const stored = await cursorOf(ctx, connectionId, object.key, 'push');
+  // A reconciling side stores '' once a pass is complete: the next pass starts from the beginning.
+  let cursor = push.reconcile && stored === '' ? null : stored;
+  // A pass that ran out of records past a stored cursor still has to go back to the start.
+  let rewind = false;
   for (let page = 0; page < MAX_PAGES; page++) {
-    const p = await withTenant(ctx, (tx) =>
-      push.changes(tx, cursor, PUSH_PAGE, { connectionId, scope: io.scope }),
-    );
+    const p = await withTenant(ctx, (tx) => push.changes(tx, cursor, PUSH_PAGE, scope));
     if (p.records.length === 0) {
+      rewind = cursor !== null;
       // M6.5b: a page that filtered every record out (consent, links) still moves the cursor on.
-      if (p.cursor !== null && p.cursor !== cursor)
+      if (!push.reconcile && p.cursor !== null && p.cursor !== cursor)
         await executeCommand(
           pushPageCommand,
           { runId, objectType: object.key, results: [], cursor: p.cursor },
@@ -1145,10 +1182,76 @@ async function pushObject(
         );
       break;
     }
-    await sendAll(p.records, [], p.cursor);
-    if (!p.hasMore || p.cursor === null) break;
+    const last = !p.hasMore || p.cursor === null;
+    await sendAll(p.records, [], push.reconcile && last ? '' : p.cursor);
+    if (last) break;
     cursor = p.cursor;
   }
+  if (!push.reconcile) return;
+  if (rewind)
+    await executeCommand(
+      pushPageCommand,
+      { runId, objectType: object.key, results: [], cursor: '' },
+      ctx,
+      ports,
+    );
+  await removeUnwanted(ctx, ports, object, io, runId, connectionId, scope);
+}
+
+/** Linked records looked at per run by a reconciling push's removal sweep. */
+export const REMOVE_SWEEP = 500;
+
+/**
+ * M6.5c: a reconciling push deletes the provider records of linked records it no longer wants
+ * (`read` answers null: the session was deleted, made a draft, its event cancelled, or it left
+ * the registrant's schedule). Each removal is idempotent (a record already gone is fine); a
+ * failure stays with the record in the errors inbox and the link is kept, so the next run tries
+ * again.
+ */
+async function removeUnwanted(
+  ctx: Ctx,
+  ports: CommandPorts<TenantTx>,
+  object: ObjectDefinition,
+  io: SyncIO,
+  runId: string,
+  connectionId: string,
+  scope: PushScope,
+) {
+  const push = object.push;
+  if (!push?.remove) return;
+  const unwanted = await withTenant(ctx, async (tx) => {
+    const links = await tx
+      .select({ localId: recordLinks.localId, externalId: recordLinks.externalId })
+      .from(recordLinks)
+      .where(and(eq(recordLinks.connectionId, connectionId), eq(recordLinks.objectType, object.key)))
+      .orderBy(recordLinks.lastSyncedAt)
+      .limit(REMOVE_SWEEP);
+    const out: { localId: string; externalId: string }[] = [];
+    for (const l of links) if (!(await push.read(tx, l.localId, scope))) out.push(l);
+    return out;
+  });
+  if (unwanted.length === 0) return;
+  const results: PushResult[] = [];
+  for (const u of unwanted) {
+    try {
+      await push.remove?.(io, {
+        externalId: u.externalId,
+        idempotencyKey: pushKey(connectionId, object.key, u.localId, 'remove'),
+      });
+      results.push({ outcome: 'removed', localId: u.localId, externalId: u.externalId });
+    } catch (err) {
+      if (isProviderError(err) && err.auth) throw new RunStop('push', err);
+      results.push({
+        outcome: 'failed',
+        localId: u.localId,
+        externalId: u.externalId,
+        step: 'push',
+        code: isProviderError(err) ? err.code : 'remove_failed',
+        field: null,
+      });
+    }
+  }
+  await executeCommand(pushPageCommand, { runId, objectType: object.key, results, cursor: null }, ctx, ports);
 }
 
 /**
@@ -1169,6 +1272,8 @@ export async function runSync(
     runId: string | null;
     connector: string;
     authConnectionId: string | null;
+    registrantId: string | null;
+    eventId: string | null;
   };
   try {
     claim = await executeCommand(claimRunCommand, { connectionId, force: opts.force ?? false }, ctx, ports);
@@ -1209,15 +1314,25 @@ export async function runSync(
   try {
     if ((await deps.auth.check(ref)) === 'revoked')
       return finish('failed', { errorCode: 'auth_revoked', revoked: true });
-    const scope = connector.loadScope
+    const loaded = connector.loadScope
       ? await withTenant(ctx, (tx) => connector.loadScope?.(tx, connectionId) ?? Promise.resolve({}))
       : {};
-    const io: SyncIO = { client: deps.auth.client(ref), origin: originStamp(connectionId), now, scope };
+    const io: SyncIO = {
+      client: deps.auth.client(ref),
+      origin: originStamp(connectionId),
+      now,
+      scope: loaded,
+    };
     if (connector.health) await connector.health(io);
+    const scope = scopeOf(
+      { id: connectionId, registrantId: claim.registrantId, eventId: claim.eventId },
+      now,
+      loaded,
+    );
     for (const object of connector.objects) {
       await pullObject(ctx, ports, connector, object, io, runId, connectionId);
       try {
-        await pushObject(ctx, ports, object, io, runId, connectionId);
+        await pushObject(ctx, ports, object, io, runId, connectionId, scope);
       } catch (err) {
         throw isProviderError(err) ? new RunStop('push', err) : err;
       }

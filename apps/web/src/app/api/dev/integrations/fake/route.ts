@@ -2,6 +2,7 @@ import {
   DEMO_BAD_RECORD,
   demoRemoteUpdate,
   eventbriteRemoteRefund,
+  fakeCalendarAllEvents,
   fakeIntegrations,
   fakeSlackMessages,
   SALESFORCE,
@@ -29,9 +30,10 @@ function accountOf(connectionId: string) {
  * Dev/CI only (M6.4a, M6.4b): act at the fake provider for one of our connections, as the
  * organizer would in the provider's own app — `revoke` our access, `fix` the demo's broken record,
  * `eb-refund` an Eventbrite order, or edit the linked Google Sheet (`sheet-edit`, `sheet-add`,
- * `sheet-delete`; rows are found by their Email cell) — or (M6.4c) read what a fake Slack channel
- * received (`slack-messages`: channel and text only). 404 unless dev auth is on and the port is
- * the fake.
+ * `sheet-delete`; rows are found by their Email cell) — or read what a fake Slack channel
+ * received (M6.4c `slack-messages`: channel and text only) or a fake Google Calendar's entries
+ * (M6.5c `calendar`: titles, times, zones, status and how many writes each had). 404 unless dev
+ * auth is on and the port is the fake.
  */
 export async function POST(req: NextRequest) {
   if (!enabled()) return new NextResponse(null, { status: 404 });
@@ -44,6 +46,16 @@ export async function POST(req: NextRequest) {
   if (action === 'slack-messages' && account.providerConfigKey === 'slack')
     return NextResponse.json({
       messages: fakeSlackMessages(account).map((m) => ({ channel: m.channel, text: m.text })),
+    });
+  if (action === 'calendar')
+    return NextResponse.json({
+      events: fakeCalendarAllEvents(account).map((e) => ({
+        summary: e.summary,
+        status: e.status,
+        start: e.start,
+        end: e.end,
+        writes: e.writes,
+      })),
     });
   if (action === 'revoke') fakeIntegrations.revokeAtProvider(account.authConnectionId);
   // M6.5b: the fake Salesforce org's contact without an email gets one.

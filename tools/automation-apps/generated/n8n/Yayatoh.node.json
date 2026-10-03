@@ -1,0 +1,3201 @@
+{
+  "description": {
+    "displayName": "Yayatoh",
+    "name": "yayatoh",
+    "icon": "file:yayatoh.svg",
+    "group": [
+      "transform"
+    ],
+    "version": 1,
+    "subtitle": "={{$parameter[\"operation\"]}}",
+    "description": "Events, orders, attendees and check-in from Yayatoh (generated from /v1 0.2.0).",
+    "defaults": {
+      "name": "Yayatoh"
+    },
+    "inputs": [
+      "main"
+    ],
+    "outputs": [
+      "main"
+    ],
+    "credentials": [
+      {
+        "name": "yayatohApi",
+        "required": true
+      }
+    ],
+    "requestDefaults": {
+      "baseURL": "={{$credentials.baseUrl}}/v1/orgs/{{$credentials.org}}",
+      "headers": {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      }
+    },
+    "properties": [
+      {
+        "displayName": "Resource",
+        "name": "resource",
+        "type": "options",
+        "noDataExpression": true,
+        "options": [
+          {
+            "name": "Bulk actions",
+            "value": "bulk_actions"
+          },
+          {
+            "name": "Check in",
+            "value": "check_in"
+          },
+          {
+            "name": "Events",
+            "value": "events"
+          },
+          {
+            "name": "Ticket types",
+            "value": "ticket_types"
+          },
+          {
+            "name": "Event content",
+            "value": "event_content"
+          },
+          {
+            "name": "Attendees",
+            "value": "attendees"
+          },
+          {
+            "name": "Orders",
+            "value": "orders"
+          },
+          {
+            "name": "Venues",
+            "value": "venues"
+          }
+        ],
+        "default": "bulk_actions"
+      },
+      {
+        "displayName": "Operation",
+        "name": "operation",
+        "type": "options",
+        "noDataExpression": true,
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "bulk_actions"
+            ]
+          }
+        },
+        "options": [
+          {
+            "name": "Seat many attendees at once",
+            "value": "bulkAssignSeats",
+            "action": "Seat many attendees at once",
+            "description": "Select attendees by `ids` (all must belong to the event, else 404) or by a list `filter`, resolved once when the operation starts (at most 50,000). Retrying with the same Idempotency-Key returns the same operation; another body with that key is 422. Seats them at a table or row, in a section, in the best available seats or in their group's block, in plan order. Per-person failures: `not_enough_seats`, `seated_by_ticket`, `attendee_cancelled`, `not_found`; a kept-back accessible seat is a warning (`ada_kept_back`). Undo within 10 minutes puts everyone back. Needs the events:write scope.",
+            "routing": {
+              "request": {
+                "method": "POST",
+                "url": "=/events/{{ encodeURIComponent($parameter[\"eventId\"]) }}/bulk/seat-assignments",
+                "headers": {
+                  "Idempotency-Key": "={{ $execution.id + \"-\" + $itemIndex }}"
+                }
+              }
+            }
+          },
+          {
+            "name": "Cancel tickets without a refund",
+            "value": "bulkCancelTickets",
+            "action": "Cancel tickets without a refund",
+            "description": "Voids the named attendees’ tickets (scanners reject them), cancels the attendees and returns their places and seats to sale. No money moves: refunds stay per order. It cannot be undone, so only explicit `ids` are accepted, never a filter. Needs the orders:refund scope.",
+            "routing": {
+              "request": {
+                "method": "POST",
+                "url": "=/events/{{ encodeURIComponent($parameter[\"eventId\"]) }}/bulk/ticket-cancellations",
+                "headers": {
+                  "Idempotency-Key": "={{ $execution.id + \"-\" + $itemIndex }}"
+                }
+              }
+            }
+          },
+          {
+            "name": "Email many attendees about the event",
+            "value": "bulkEmailAttendees",
+            "action": "Email many attendees about the event",
+            "description": "Select attendees by `ids` (all must belong to the event, else 404) or by a list `filter`, resolved once when the operation starts (at most 50,000). Retrying with the same Idempotency-Key returns the same operation; another body with that key is 422. One email per attending person; the others fail `not_attending`. Refused while messaging is paused for the organization. Needs the attendees:write scope.",
+            "routing": {
+              "request": {
+                "method": "POST",
+                "url": "=/events/{{ encodeURIComponent($parameter[\"eventId\"]) }}/bulk/emails",
+                "headers": {
+                  "Idempotency-Key": "={{ $execution.id + \"-\" + $itemIndex }}"
+                }
+              }
+            }
+          },
+          {
+            "name": "Add or remove labels on many attendees",
+            "value": "bulkLabelAttendees",
+            "action": "Add or remove labels on many attendees",
+            "description": "Select attendees by `ids` (all must belong to the event, else 404) or by a list `filter`, resolved once when the operation starts (at most 50,000). Retrying with the same Idempotency-Key returns the same operation; another body with that key is 422. Removal wins over addition; an attendee carries at most 20 labels (`too_many_labels`). Undo within 10 minutes restores each attendee's previous labels. Needs the attendees:write scope.",
+            "routing": {
+              "request": {
+                "method": "POST",
+                "url": "=/events/{{ encodeURIComponent($parameter[\"eventId\"]) }}/bulk/labels",
+                "headers": {
+                  "Idempotency-Key": "={{ $execution.id + \"-\" + $itemIndex }}"
+                }
+              }
+            }
+          },
+          {
+            "name": "Email attendees their tickets again",
+            "value": "bulkResendTickets",
+            "action": "Email attendees their tickets again",
+            "description": "Select attendees by `ids` (all must belong to the event, else 404) or by a list `filter`, resolved once when the operation starts (at most 50,000). Retrying with the same Idempotency-Key returns the same operation; another body with that key is 422. Each ticket holder gets one email with a fresh link to their tickets. Guests without a ticket fail `no_ticket`; void tickets fail `ticket_void`. Needs the attendees:write scope.",
+            "routing": {
+              "request": {
+                "method": "POST",
+                "url": "=/events/{{ encodeURIComponent($parameter[\"eventId\"]) }}/bulk/ticket-resends",
+                "headers": {
+                  "Idempotency-Key": "={{ $execution.id + \"-\" + $itemIndex }}"
+                }
+              }
+            }
+          }
+        ],
+        "default": "bulkAssignSeats"
+      },
+      {
+        "displayName": "Event id",
+        "name": "eventId",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "description": "The event id",
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "bulk_actions"
+            ],
+            "operation": [
+              "bulkAssignSeats"
+            ]
+          }
+        }
+      },
+      {
+        "displayName": "Selection",
+        "name": "selection",
+        "type": "json",
+        "default": "{}",
+        "required": true,
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "bulk_actions"
+            ],
+            "operation": [
+              "bulkAssignSeats"
+            ]
+          }
+        },
+        "routing": {
+          "send": {
+            "type": "body",
+            "property": "selection",
+            "value": "={{ typeof $value === \"string\" ? JSON.parse($value) : $value }}"
+          }
+        }
+      },
+      {
+        "displayName": "Target",
+        "name": "target",
+        "type": "json",
+        "default": "{}",
+        "required": true,
+        "description": "A table or row (`item`), a section, the best available seats, or a group’s block.",
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "bulk_actions"
+            ],
+            "operation": [
+              "bulkAssignSeats"
+            ]
+          }
+        },
+        "routing": {
+          "send": {
+            "type": "body",
+            "property": "target",
+            "value": "={{ typeof $value === \"string\" ? JSON.parse($value) : $value }}"
+          }
+        }
+      },
+      {
+        "displayName": "Additional Fields",
+        "name": "additionalFields",
+        "type": "collection",
+        "placeholder": "Add Field",
+        "default": {},
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "bulk_actions"
+            ],
+            "operation": [
+              "bulkAssignSeats"
+            ]
+          }
+        },
+        "options": [
+          {
+            "displayName": "Override rules",
+            "name": "overrideRules",
+            "type": "boolean",
+            "default": false,
+            "description": "Use accessible seats an enforced rule keeps back (audited).",
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "overrideRules",
+                "value": "={{ $value }}"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "displayName": "Event id",
+        "name": "eventId",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "description": "The event id",
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "bulk_actions"
+            ],
+            "operation": [
+              "bulkCancelTickets"
+            ]
+          }
+        }
+      },
+      {
+        "displayName": "Selection",
+        "name": "selection",
+        "type": "json",
+        "default": "{}",
+        "required": true,
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "bulk_actions"
+            ],
+            "operation": [
+              "bulkCancelTickets"
+            ]
+          }
+        },
+        "routing": {
+          "send": {
+            "type": "body",
+            "property": "selection",
+            "value": "={{ typeof $value === \"string\" ? JSON.parse($value) : $value }}"
+          }
+        }
+      },
+      {
+        "displayName": "Event id",
+        "name": "eventId",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "description": "The event id",
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "bulk_actions"
+            ],
+            "operation": [
+              "bulkEmailAttendees"
+            ]
+          }
+        }
+      },
+      {
+        "displayName": "Selection",
+        "name": "selection",
+        "type": "json",
+        "default": "{}",
+        "required": true,
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "bulk_actions"
+            ],
+            "operation": [
+              "bulkEmailAttendees"
+            ]
+          }
+        },
+        "routing": {
+          "send": {
+            "type": "body",
+            "property": "selection",
+            "value": "={{ typeof $value === \"string\" ? JSON.parse($value) : $value }}"
+          }
+        }
+      },
+      {
+        "displayName": "Subject",
+        "name": "subject",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "bulk_actions"
+            ],
+            "operation": [
+              "bulkEmailAttendees"
+            ]
+          }
+        },
+        "routing": {
+          "send": {
+            "type": "body",
+            "property": "subject",
+            "value": "={{ $value }}"
+          }
+        }
+      },
+      {
+        "displayName": "Body",
+        "name": "body",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "description": "Plain text.",
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "bulk_actions"
+            ],
+            "operation": [
+              "bulkEmailAttendees"
+            ]
+          }
+        },
+        "routing": {
+          "send": {
+            "type": "body",
+            "property": "body",
+            "value": "={{ $value }}"
+          }
+        }
+      },
+      {
+        "displayName": "Event id",
+        "name": "eventId",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "description": "The event id",
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "bulk_actions"
+            ],
+            "operation": [
+              "bulkLabelAttendees"
+            ]
+          }
+        }
+      },
+      {
+        "displayName": "Selection",
+        "name": "selection",
+        "type": "json",
+        "default": "{}",
+        "required": true,
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "bulk_actions"
+            ],
+            "operation": [
+              "bulkLabelAttendees"
+            ]
+          }
+        },
+        "routing": {
+          "send": {
+            "type": "body",
+            "property": "selection",
+            "value": "={{ typeof $value === \"string\" ? JSON.parse($value) : $value }}"
+          }
+        }
+      },
+      {
+        "displayName": "Additional Fields",
+        "name": "additionalFields",
+        "type": "collection",
+        "placeholder": "Add Field",
+        "default": {},
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "bulk_actions"
+            ],
+            "operation": [
+              "bulkLabelAttendees"
+            ]
+          }
+        },
+        "options": [
+          {
+            "displayName": "Add",
+            "name": "add",
+            "type": "string",
+            "default": "",
+            "hint": "Comma-separated",
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "add",
+                "value": "={{ String($value).split(\",\").map((s) => s.trim()).filter(Boolean) }}"
+              }
+            }
+          },
+          {
+            "displayName": "Remove",
+            "name": "remove",
+            "type": "string",
+            "default": "",
+            "hint": "Comma-separated",
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "remove",
+                "value": "={{ String($value).split(\",\").map((s) => s.trim()).filter(Boolean) }}"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "displayName": "Event id",
+        "name": "eventId",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "description": "The event id",
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "bulk_actions"
+            ],
+            "operation": [
+              "bulkResendTickets"
+            ]
+          }
+        }
+      },
+      {
+        "displayName": "Selection",
+        "name": "selection",
+        "type": "json",
+        "default": "{}",
+        "required": true,
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "bulk_actions"
+            ],
+            "operation": [
+              "bulkResendTickets"
+            ]
+          }
+        },
+        "routing": {
+          "send": {
+            "type": "body",
+            "property": "selection",
+            "value": "={{ typeof $value === \"string\" ? JSON.parse($value) : $value }}"
+          }
+        }
+      },
+      {
+        "displayName": "Operation",
+        "name": "operation",
+        "type": "options",
+        "noDataExpression": true,
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "check_in"
+            ]
+          }
+        },
+        "options": [
+          {
+            "name": "Scan a ticket online and get the door verdict",
+            "value": "checkInTicket",
+            "action": "Scan a ticket online and get the door verdict",
+            "description": "The same engine as the Scan PWA. Retrying with the same Idempotency-Key returns the first verdict instead of a duplicate. Needs the checkin:scan scope.",
+            "routing": {
+              "request": {
+                "method": "POST",
+                "url": "=/events/{{ encodeURIComponent($parameter[\"eventId\"]) }}/checkins",
+                "headers": {
+                  "Idempotency-Key": "={{ $execution.id + \"-\" + $itemIndex }}"
+                }
+              }
+            }
+          }
+        ],
+        "default": "checkInTicket"
+      },
+      {
+        "displayName": "Event id",
+        "name": "eventId",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "description": "The event id",
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "check_in"
+            ],
+            "operation": [
+              "checkInTicket"
+            ]
+          }
+        }
+      },
+      {
+        "displayName": "Code",
+        "name": "code",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "description": "The QR payload (`yy1…`) or the printed short code.",
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "check_in"
+            ],
+            "operation": [
+              "checkInTicket"
+            ]
+          }
+        },
+        "routing": {
+          "send": {
+            "type": "body",
+            "property": "code",
+            "value": "={{ $value }}"
+          }
+        }
+      },
+      {
+        "displayName": "Additional Fields",
+        "name": "additionalFields",
+        "type": "collection",
+        "placeholder": "Add Field",
+        "default": {},
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "check_in"
+            ],
+            "operation": [
+              "checkInTicket"
+            ]
+          }
+        },
+        "options": [
+          {
+            "displayName": "Checkpoint id",
+            "name": "checkpointId",
+            "type": "string",
+            "default": "",
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "checkpointId",
+                "value": "={{ $value }}"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "displayName": "Operation",
+        "name": "operation",
+        "type": "options",
+        "noDataExpression": true,
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "events"
+            ]
+          }
+        },
+        "options": [
+          {
+            "name": "Create a draft event",
+            "value": "createEvent",
+            "action": "Create a draft event",
+            "description": "Creates a draft event. Times are instants; `timezone` is how they render. Needs an `Idempotency-Key`. Needs the events:write scope.",
+            "routing": {
+              "request": {
+                "method": "POST",
+                "url": "=/events",
+                "headers": {
+                  "Idempotency-Key": "={{ $execution.id + \"-\" + $itemIndex }}"
+                }
+              }
+            }
+          },
+          {
+            "name": "One event",
+            "value": "getEvent",
+            "action": "One event",
+            "description": "One event of the organization; another org’s event is a 404. Needs the events:read scope.",
+            "routing": {
+              "request": {
+                "method": "GET",
+                "url": "=/events/{{ encodeURIComponent($parameter[\"eventId\"]) }}"
+              }
+            }
+          },
+          {
+            "name": "Events by start time",
+            "value": "listEvents",
+            "action": "Events by start time",
+            "description": "The organization’s events by start time, every status and visibility. Needs the events:read scope.",
+            "routing": {
+              "request": {
+                "method": "GET",
+                "url": "=/events"
+              },
+              "output": {
+                "postReceive": [
+                  {
+                    "type": "rootProperty",
+                    "properties": {
+                      "property": "data"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "Publish a draft event",
+            "value": "publishEvent",
+            "action": "Publish a draft event",
+            "description": "Publishes a draft event (lifecycle `draft → published`). Needs an `Idempotency-Key`. Needs the events:write scope.",
+            "routing": {
+              "request": {
+                "method": "POST",
+                "url": "=/events/{{ encodeURIComponent($parameter[\"eventId\"]) }}/publish",
+                "headers": {
+                  "Idempotency-Key": "={{ $execution.id + \"-\" + $itemIndex }}"
+                }
+              }
+            }
+          },
+          {
+            "name": "Change an event",
+            "value": "updateEvent",
+            "action": "Change an event",
+            "description": "Changes the fields given; the slug is frozen once published. Needs an `Idempotency-Key`. Needs the events:write scope.",
+            "routing": {
+              "request": {
+                "method": "PATCH",
+                "url": "=/events/{{ encodeURIComponent($parameter[\"eventId\"]) }}",
+                "headers": {
+                  "Idempotency-Key": "={{ $execution.id + \"-\" + $itemIndex }}"
+                }
+              }
+            }
+          }
+        ],
+        "default": "createEvent"
+      },
+      {
+        "displayName": "Name",
+        "name": "name",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "events"
+            ],
+            "operation": [
+              "createEvent"
+            ]
+          }
+        },
+        "routing": {
+          "send": {
+            "type": "body",
+            "property": "name",
+            "value": "={{ $value }}"
+          }
+        }
+      },
+      {
+        "displayName": "Timezone",
+        "name": "timezone",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "events"
+            ],
+            "operation": [
+              "createEvent"
+            ]
+          }
+        },
+        "routing": {
+          "send": {
+            "type": "body",
+            "property": "timezone",
+            "value": "={{ $value }}"
+          }
+        }
+      },
+      {
+        "displayName": "Starts at",
+        "name": "startsAt",
+        "type": "dateTime",
+        "default": "",
+        "required": true,
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "events"
+            ],
+            "operation": [
+              "createEvent"
+            ]
+          }
+        },
+        "routing": {
+          "send": {
+            "type": "body",
+            "property": "startsAt",
+            "value": "={{ $value }}"
+          }
+        }
+      },
+      {
+        "displayName": "Ends at",
+        "name": "endsAt",
+        "type": "dateTime",
+        "default": "",
+        "required": true,
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "events"
+            ],
+            "operation": [
+              "createEvent"
+            ]
+          }
+        },
+        "routing": {
+          "send": {
+            "type": "body",
+            "property": "endsAt",
+            "value": "={{ $value }}"
+          }
+        }
+      },
+      {
+        "displayName": "Additional Fields",
+        "name": "additionalFields",
+        "type": "collection",
+        "placeholder": "Add Field",
+        "default": {},
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "events"
+            ],
+            "operation": [
+              "createEvent"
+            ]
+          }
+        },
+        "options": [
+          {
+            "displayName": "Tagline",
+            "name": "tagline",
+            "type": "string",
+            "default": "",
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "tagline",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "Profile",
+            "name": "profile",
+            "type": "options",
+            "default": "wedding",
+            "options": [
+              {
+                "name": "Wedding",
+                "value": "wedding"
+              },
+              {
+                "name": "Gala",
+                "value": "gala"
+              },
+              {
+                "name": "Concert",
+                "value": "concert"
+              },
+              {
+                "name": "Conference",
+                "value": "conference"
+              },
+              {
+                "name": "Community",
+                "value": "community"
+              },
+              {
+                "name": "Agency",
+                "value": "agency"
+              },
+              {
+                "name": "Other",
+                "value": "other"
+              }
+            ],
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "profile",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "Visibility",
+            "name": "visibility",
+            "type": "options",
+            "default": "public",
+            "options": [
+              {
+                "name": "Public",
+                "value": "public"
+              },
+              {
+                "name": "Unlisted",
+                "value": "unlisted"
+              },
+              {
+                "name": "Private",
+                "value": "private"
+              }
+            ],
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "visibility",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "Venue name",
+            "name": "venueName",
+            "type": "string",
+            "default": "",
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "venueName",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "City",
+            "name": "city",
+            "type": "string",
+            "default": "",
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "city",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "Country",
+            "name": "country",
+            "type": "string",
+            "default": "",
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "country",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "Currency",
+            "name": "currency",
+            "type": "string",
+            "default": "",
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "currency",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "Slug",
+            "name": "slug",
+            "type": "string",
+            "default": "",
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "slug",
+                "value": "={{ $value }}"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "displayName": "Event id",
+        "name": "eventId",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "description": "The event id",
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "events"
+            ],
+            "operation": [
+              "getEvent"
+            ]
+          }
+        }
+      },
+      {
+        "displayName": "Additional Fields",
+        "name": "additionalFields",
+        "type": "collection",
+        "placeholder": "Add Field",
+        "default": {},
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "events"
+            ],
+            "operation": [
+              "listEvents"
+            ]
+          }
+        },
+        "options": [
+          {
+            "displayName": "Limit",
+            "name": "limit",
+            "type": "number",
+            "default": 0,
+            "description": "Page size (1–100).",
+            "routing": {
+              "send": {
+                "type": "query",
+                "property": "limit",
+                "value": "={{ $value }}"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "displayName": "Event id",
+        "name": "eventId",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "description": "The event id",
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "events"
+            ],
+            "operation": [
+              "publishEvent"
+            ]
+          }
+        }
+      },
+      {
+        "displayName": "Event id",
+        "name": "eventId",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "description": "The event id",
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "events"
+            ],
+            "operation": [
+              "updateEvent"
+            ]
+          }
+        }
+      },
+      {
+        "displayName": "Additional Fields",
+        "name": "additionalFields",
+        "type": "collection",
+        "placeholder": "Add Field",
+        "default": {},
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "events"
+            ],
+            "operation": [
+              "updateEvent"
+            ]
+          }
+        },
+        "options": [
+          {
+            "displayName": "Name",
+            "name": "name",
+            "type": "string",
+            "default": "",
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "name",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "Tagline",
+            "name": "tagline",
+            "type": "string",
+            "default": "",
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "tagline",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "Profile",
+            "name": "profile",
+            "type": "options",
+            "default": "wedding",
+            "options": [
+              {
+                "name": "Wedding",
+                "value": "wedding"
+              },
+              {
+                "name": "Gala",
+                "value": "gala"
+              },
+              {
+                "name": "Concert",
+                "value": "concert"
+              },
+              {
+                "name": "Conference",
+                "value": "conference"
+              },
+              {
+                "name": "Community",
+                "value": "community"
+              },
+              {
+                "name": "Agency",
+                "value": "agency"
+              },
+              {
+                "name": "Other",
+                "value": "other"
+              }
+            ],
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "profile",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "Visibility",
+            "name": "visibility",
+            "type": "options",
+            "default": "public",
+            "options": [
+              {
+                "name": "Public",
+                "value": "public"
+              },
+              {
+                "name": "Unlisted",
+                "value": "unlisted"
+              },
+              {
+                "name": "Private",
+                "value": "private"
+              }
+            ],
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "visibility",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "Timezone",
+            "name": "timezone",
+            "type": "string",
+            "default": "",
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "timezone",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "Starts at",
+            "name": "startsAt",
+            "type": "dateTime",
+            "default": "",
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "startsAt",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "Ends at",
+            "name": "endsAt",
+            "type": "dateTime",
+            "default": "",
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "endsAt",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "Venue name",
+            "name": "venueName",
+            "type": "string",
+            "default": "",
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "venueName",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "City",
+            "name": "city",
+            "type": "string",
+            "default": "",
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "city",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "Country",
+            "name": "country",
+            "type": "string",
+            "default": "",
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "country",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "Currency",
+            "name": "currency",
+            "type": "string",
+            "default": "",
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "currency",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "Slug",
+            "name": "slug",
+            "type": "string",
+            "default": "",
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "slug",
+                "value": "={{ $value }}"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "displayName": "Operation",
+        "name": "operation",
+        "type": "options",
+        "noDataExpression": true,
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "ticket_types"
+            ]
+          }
+        },
+        "options": [
+          {
+            "name": "Add a ticket type",
+            "value": "createTicketType",
+            "action": "Add a ticket type",
+            "description": "Adds a ticket type (prices in minor units). Needs an `Idempotency-Key`. Needs the events:write scope.",
+            "routing": {
+              "request": {
+                "method": "POST",
+                "url": "=/events/{{ encodeURIComponent($parameter[\"eventId\"]) }}/ticket-types",
+                "headers": {
+                  "Idempotency-Key": "={{ $execution.id + \"-\" + $itemIndex }}"
+                }
+              }
+            }
+          },
+          {
+            "name": "The event’s ticket types",
+            "value": "listTicketTypes",
+            "action": "The event’s ticket types",
+            "description": "Every ticket type of the event in display order, with sold and held counts. Needs the events:read scope.",
+            "routing": {
+              "request": {
+                "method": "GET",
+                "url": "=/events/{{ encodeURIComponent($parameter[\"eventId\"]) }}/ticket-types"
+              },
+              "output": {
+                "postReceive": [
+                  {
+                    "type": "rootProperty",
+                    "properties": {
+                      "property": "data"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "Change a ticket type",
+            "value": "updateTicketType",
+            "action": "Change a ticket type",
+            "description": "Changes the fields given. Needs an `Idempotency-Key`. Needs the events:write scope.",
+            "routing": {
+              "request": {
+                "method": "PATCH",
+                "url": "=/ticket-types/{{ encodeURIComponent($parameter[\"ticketTypeId\"]) }}",
+                "headers": {
+                  "Idempotency-Key": "={{ $execution.id + \"-\" + $itemIndex }}"
+                }
+              }
+            }
+          }
+        ],
+        "default": "createTicketType"
+      },
+      {
+        "displayName": "Event id",
+        "name": "eventId",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "description": "The event id",
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "ticket_types"
+            ],
+            "operation": [
+              "createTicketType"
+            ]
+          }
+        }
+      },
+      {
+        "displayName": "Name",
+        "name": "name",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "ticket_types"
+            ],
+            "operation": [
+              "createTicketType"
+            ]
+          }
+        },
+        "routing": {
+          "send": {
+            "type": "body",
+            "property": "name",
+            "value": "={{ $value }}"
+          }
+        }
+      },
+      {
+        "displayName": "Price minor",
+        "name": "priceMinor",
+        "type": "number",
+        "default": 0,
+        "required": true,
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "ticket_types"
+            ],
+            "operation": [
+              "createTicketType"
+            ]
+          }
+        },
+        "routing": {
+          "send": {
+            "type": "body",
+            "property": "priceMinor",
+            "value": "={{ $value }}"
+          }
+        }
+      },
+      {
+        "displayName": "Quantity total",
+        "name": "quantityTotal",
+        "type": "number",
+        "default": 0,
+        "required": true,
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "ticket_types"
+            ],
+            "operation": [
+              "createTicketType"
+            ]
+          }
+        },
+        "routing": {
+          "send": {
+            "type": "body",
+            "property": "quantityTotal",
+            "value": "={{ $value }}"
+          }
+        }
+      },
+      {
+        "displayName": "Additional Fields",
+        "name": "additionalFields",
+        "type": "collection",
+        "placeholder": "Add Field",
+        "default": {},
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "ticket_types"
+            ],
+            "operation": [
+              "createTicketType"
+            ]
+          }
+        },
+        "options": [
+          {
+            "displayName": "Description",
+            "name": "description",
+            "type": "string",
+            "default": "",
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "description",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "Fee mode",
+            "name": "feeMode",
+            "type": "options",
+            "default": "pass_on",
+            "options": [
+              {
+                "name": "Pass on",
+                "value": "pass_on"
+              },
+              {
+                "name": "Absorb",
+                "value": "absorb"
+              }
+            ],
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "feeMode",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "Min per order",
+            "name": "minPerOrder",
+            "type": "number",
+            "default": 0,
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "minPerOrder",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "Max per order",
+            "name": "maxPerOrder",
+            "type": "number",
+            "default": 0,
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "maxPerOrder",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "Sales start at",
+            "name": "salesStartAt",
+            "type": "dateTime",
+            "default": "",
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "salesStartAt",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "Sales end at",
+            "name": "salesEndAt",
+            "type": "dateTime",
+            "default": "",
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "salesEndAt",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "Visibility",
+            "name": "visibility",
+            "type": "options",
+            "default": "public",
+            "options": [
+              {
+                "name": "Public",
+                "value": "public"
+              },
+              {
+                "name": "Hidden",
+                "value": "hidden"
+              }
+            ],
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "visibility",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "Sort order",
+            "name": "sortOrder",
+            "type": "number",
+            "default": 0,
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "sortOrder",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "Early price minor",
+            "name": "earlyPriceMinor",
+            "type": "number",
+            "default": 0,
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "earlyPriceMinor",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "Early ends at",
+            "name": "earlyEndsAt",
+            "type": "dateTime",
+            "default": "",
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "earlyEndsAt",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "Is donation",
+            "name": "isDonation",
+            "type": "boolean",
+            "default": false,
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "isDonation",
+                "value": "={{ $value }}"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "displayName": "Event id",
+        "name": "eventId",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "description": "The event id",
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "ticket_types"
+            ],
+            "operation": [
+              "listTicketTypes"
+            ]
+          }
+        }
+      },
+      {
+        "displayName": "Ticket type id",
+        "name": "ticketTypeId",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "description": "The ticket type id",
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "ticket_types"
+            ],
+            "operation": [
+              "updateTicketType"
+            ]
+          }
+        }
+      },
+      {
+        "displayName": "Additional Fields",
+        "name": "additionalFields",
+        "type": "collection",
+        "placeholder": "Add Field",
+        "default": {},
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "ticket_types"
+            ],
+            "operation": [
+              "updateTicketType"
+            ]
+          }
+        },
+        "options": [
+          {
+            "displayName": "Name",
+            "name": "name",
+            "type": "string",
+            "default": "",
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "name",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "Description",
+            "name": "description",
+            "type": "string",
+            "default": "",
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "description",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "Price minor",
+            "name": "priceMinor",
+            "type": "number",
+            "default": 0,
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "priceMinor",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "Fee mode",
+            "name": "feeMode",
+            "type": "options",
+            "default": "pass_on",
+            "options": [
+              {
+                "name": "Pass on",
+                "value": "pass_on"
+              },
+              {
+                "name": "Absorb",
+                "value": "absorb"
+              }
+            ],
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "feeMode",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "Quantity total",
+            "name": "quantityTotal",
+            "type": "number",
+            "default": 0,
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "quantityTotal",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "Min per order",
+            "name": "minPerOrder",
+            "type": "number",
+            "default": 0,
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "minPerOrder",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "Max per order",
+            "name": "maxPerOrder",
+            "type": "number",
+            "default": 0,
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "maxPerOrder",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "Sales start at",
+            "name": "salesStartAt",
+            "type": "dateTime",
+            "default": "",
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "salesStartAt",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "Sales end at",
+            "name": "salesEndAt",
+            "type": "dateTime",
+            "default": "",
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "salesEndAt",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "Visibility",
+            "name": "visibility",
+            "type": "options",
+            "default": "public",
+            "options": [
+              {
+                "name": "Public",
+                "value": "public"
+              },
+              {
+                "name": "Hidden",
+                "value": "hidden"
+              }
+            ],
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "visibility",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "Sort order",
+            "name": "sortOrder",
+            "type": "number",
+            "default": 0,
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "sortOrder",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "Early price minor",
+            "name": "earlyPriceMinor",
+            "type": "number",
+            "default": 0,
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "earlyPriceMinor",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "Early ends at",
+            "name": "earlyEndsAt",
+            "type": "dateTime",
+            "default": "",
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "earlyEndsAt",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "Is donation",
+            "name": "isDonation",
+            "type": "boolean",
+            "default": false,
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "isDonation",
+                "value": "={{ $value }}"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "displayName": "Operation",
+        "name": "operation",
+        "type": "options",
+        "noDataExpression": true,
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "event_content"
+            ]
+          }
+        },
+        "options": [
+          {
+            "name": "An event’s agenda",
+            "value": "getEventAgenda",
+            "action": "An event’s agenda",
+            "description": "Tracks, rooms and sessions grouped by day in the event’s timezone, with ids and capacities. Needs the events:read scope.",
+            "routing": {
+              "request": {
+                "method": "GET",
+                "url": "=/events/{{ encodeURIComponent($parameter[\"eventId\"]) }}/agenda"
+              }
+            }
+          },
+          {
+            "name": "One speaker",
+            "value": "getEventSpeaker",
+            "action": "One speaker",
+            "description": "A speaker and the sessions they speak in. Needs the events:read scope.",
+            "routing": {
+              "request": {
+                "method": "GET",
+                "url": "=/events/{{ encodeURIComponent($parameter[\"eventId\"]) }}/speakers/{{ encodeURIComponent($parameter[\"speakerId\"]) }}"
+              }
+            }
+          },
+          {
+            "name": "An event’s announcements",
+            "value": "listEventAnnouncements",
+            "action": "An event’s announcements",
+            "description": "Every announcement, newest first: drafts (`publishedAt` null) and both audiences. Needs the events:read scope.",
+            "routing": {
+              "request": {
+                "method": "GET",
+                "url": "=/events/{{ encodeURIComponent($parameter[\"eventId\"]) }}/announcements"
+              },
+              "output": {
+                "postReceive": [
+                  {
+                    "type": "rootProperty",
+                    "properties": {
+                      "property": "data"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "An event’s dates",
+            "value": "listEventDates",
+            "action": "An event’s dates",
+            "description": "The dates of a multi-date event in start order, with capacities. Needs the events:read scope.",
+            "routing": {
+              "request": {
+                "method": "GET",
+                "url": "=/events/{{ encodeURIComponent($parameter[\"eventId\"]) }}/dates"
+              },
+              "output": {
+                "postReceive": [
+                  {
+                    "type": "rootProperty",
+                    "properties": {
+                      "property": "data"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "An event’s exhibitors",
+            "value": "listEventExhibitors",
+            "action": "An event’s exhibitors",
+            "description": "Exhibitors by name. Needs the events:read scope.",
+            "routing": {
+              "request": {
+                "method": "GET",
+                "url": "=/events/{{ encodeURIComponent($parameter[\"eventId\"]) }}/exhibitors"
+              },
+              "output": {
+                "postReceive": [
+                  {
+                    "type": "rootProperty",
+                    "properties": {
+                      "property": "data"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "An event’s content sections",
+            "value": "listEventSections",
+            "action": "An event’s content sections",
+            "description": "Every content section in page order, hidden ones included (`visible`). Needs the events:read scope.",
+            "routing": {
+              "request": {
+                "method": "GET",
+                "url": "=/events/{{ encodeURIComponent($parameter[\"eventId\"]) }}/sections"
+              },
+              "output": {
+                "postReceive": [
+                  {
+                    "type": "rootProperty",
+                    "properties": {
+                      "property": "data"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "An event’s speakers",
+            "value": "listEventSpeakers",
+            "action": "An event’s speakers",
+            "description": "Speakers by name. Needs the events:read scope.",
+            "routing": {
+              "request": {
+                "method": "GET",
+                "url": "=/events/{{ encodeURIComponent($parameter[\"eventId\"]) }}/speakers"
+              },
+              "output": {
+                "postReceive": [
+                  {
+                    "type": "rootProperty",
+                    "properties": {
+                      "property": "data"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "An event’s sponsor tiers",
+            "value": "listEventSponsors",
+            "action": "An event’s sponsor tiers",
+            "description": "Every sponsor tier in display order (empty ones included) with its sponsors. Needs the events:read scope.",
+            "routing": {
+              "request": {
+                "method": "GET",
+                "url": "=/events/{{ encodeURIComponent($parameter[\"eventId\"]) }}/sponsors"
+              },
+              "output": {
+                "postReceive": [
+                  {
+                    "type": "rootProperty",
+                    "properties": {
+                      "property": "data"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "default": "getEventAgenda"
+      },
+      {
+        "displayName": "Event id",
+        "name": "eventId",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "description": "The event id",
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "event_content"
+            ],
+            "operation": [
+              "getEventAgenda"
+            ]
+          }
+        }
+      },
+      {
+        "displayName": "Additional Fields",
+        "name": "additionalFields",
+        "type": "collection",
+        "placeholder": "Add Field",
+        "default": {},
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "event_content"
+            ],
+            "operation": [
+              "getEventAgenda"
+            ]
+          }
+        },
+        "options": [
+          {
+            "displayName": "Date id",
+            "name": "dateId",
+            "type": "string",
+            "default": "",
+            "description": "Only this date’s sessions (and those on no date), for multi-date events.",
+            "routing": {
+              "send": {
+                "type": "query",
+                "property": "dateId",
+                "value": "={{ $value }}"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "displayName": "Event id",
+        "name": "eventId",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "description": "The event id",
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "event_content"
+            ],
+            "operation": [
+              "getEventSpeaker"
+            ]
+          }
+        }
+      },
+      {
+        "displayName": "Speaker id",
+        "name": "speakerId",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "description": "The speaker id",
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "event_content"
+            ],
+            "operation": [
+              "getEventSpeaker"
+            ]
+          }
+        }
+      },
+      {
+        "displayName": "Event id",
+        "name": "eventId",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "description": "The event id",
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "event_content"
+            ],
+            "operation": [
+              "listEventAnnouncements"
+            ]
+          }
+        }
+      },
+      {
+        "displayName": "Additional Fields",
+        "name": "additionalFields",
+        "type": "collection",
+        "placeholder": "Add Field",
+        "default": {},
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "event_content"
+            ],
+            "operation": [
+              "listEventAnnouncements"
+            ]
+          }
+        },
+        "options": [
+          {
+            "displayName": "Limit",
+            "name": "limit",
+            "type": "number",
+            "default": 0,
+            "description": "Page size (1–100).",
+            "routing": {
+              "send": {
+                "type": "query",
+                "property": "limit",
+                "value": "={{ $value }}"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "displayName": "Event id",
+        "name": "eventId",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "description": "The event id",
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "event_content"
+            ],
+            "operation": [
+              "listEventDates"
+            ]
+          }
+        }
+      },
+      {
+        "displayName": "Additional Fields",
+        "name": "additionalFields",
+        "type": "collection",
+        "placeholder": "Add Field",
+        "default": {},
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "event_content"
+            ],
+            "operation": [
+              "listEventDates"
+            ]
+          }
+        },
+        "options": [
+          {
+            "displayName": "Limit",
+            "name": "limit",
+            "type": "number",
+            "default": 0,
+            "description": "Page size (1–100).",
+            "routing": {
+              "send": {
+                "type": "query",
+                "property": "limit",
+                "value": "={{ $value }}"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "displayName": "Event id",
+        "name": "eventId",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "description": "The event id",
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "event_content"
+            ],
+            "operation": [
+              "listEventExhibitors"
+            ]
+          }
+        }
+      },
+      {
+        "displayName": "Additional Fields",
+        "name": "additionalFields",
+        "type": "collection",
+        "placeholder": "Add Field",
+        "default": {},
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "event_content"
+            ],
+            "operation": [
+              "listEventExhibitors"
+            ]
+          }
+        },
+        "options": [
+          {
+            "displayName": "Limit",
+            "name": "limit",
+            "type": "number",
+            "default": 0,
+            "description": "Page size (1–100).",
+            "routing": {
+              "send": {
+                "type": "query",
+                "property": "limit",
+                "value": "={{ $value }}"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "displayName": "Event id",
+        "name": "eventId",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "description": "The event id",
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "event_content"
+            ],
+            "operation": [
+              "listEventSections"
+            ]
+          }
+        }
+      },
+      {
+        "displayName": "Event id",
+        "name": "eventId",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "description": "The event id",
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "event_content"
+            ],
+            "operation": [
+              "listEventSpeakers"
+            ]
+          }
+        }
+      },
+      {
+        "displayName": "Additional Fields",
+        "name": "additionalFields",
+        "type": "collection",
+        "placeholder": "Add Field",
+        "default": {},
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "event_content"
+            ],
+            "operation": [
+              "listEventSpeakers"
+            ]
+          }
+        },
+        "options": [
+          {
+            "displayName": "Limit",
+            "name": "limit",
+            "type": "number",
+            "default": 0,
+            "description": "Page size (1–100).",
+            "routing": {
+              "send": {
+                "type": "query",
+                "property": "limit",
+                "value": "={{ $value }}"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "displayName": "Event id",
+        "name": "eventId",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "description": "The event id",
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "event_content"
+            ],
+            "operation": [
+              "listEventSponsors"
+            ]
+          }
+        }
+      },
+      {
+        "displayName": "Operation",
+        "name": "operation",
+        "type": "options",
+        "noDataExpression": true,
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "attendees"
+            ]
+          }
+        },
+        "options": [
+          {
+            "name": "One attendee",
+            "value": "getEventAttendee",
+            "action": "One attendee",
+            "description": "One attendee of the event. Needs the attendees:read scope.",
+            "routing": {
+              "request": {
+                "method": "GET",
+                "url": "=/events/{{ encodeURIComponent($parameter[\"eventId\"]) }}/attendees/{{ encodeURIComponent($parameter[\"attendeeId\"]) }}"
+              }
+            }
+          },
+          {
+            "name": "The event’s attendees, newest first",
+            "value": "listEventAttendees",
+            "action": "The event’s attendees, newest first",
+            "description": "The event’s attendees, newest first, optionally filtered by a search term or status. Needs the attendees:read scope.",
+            "routing": {
+              "request": {
+                "method": "GET",
+                "url": "=/events/{{ encodeURIComponent($parameter[\"eventId\"]) }}/attendees"
+              },
+              "output": {
+                "postReceive": [
+                  {
+                    "type": "rootProperty",
+                    "properties": {
+                      "property": "data"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "Search attendees across events by name or email",
+            "value": "searchAttendees",
+            "action": "Search attendees across events by name or email",
+            "description": "Attendees across the organization’s events matching a name or email. Limited to 60 per minute. Needs the attendees:read scope.",
+            "routing": {
+              "request": {
+                "method": "GET",
+                "url": "=/attendees/search"
+              },
+              "output": {
+                "postReceive": [
+                  {
+                    "type": "rootProperty",
+                    "properties": {
+                      "property": "data"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "default": "getEventAttendee"
+      },
+      {
+        "displayName": "Event id",
+        "name": "eventId",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "description": "The event id",
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "attendees"
+            ],
+            "operation": [
+              "getEventAttendee"
+            ]
+          }
+        }
+      },
+      {
+        "displayName": "Attendee id",
+        "name": "attendeeId",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "description": "The attendee id",
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "attendees"
+            ],
+            "operation": [
+              "getEventAttendee"
+            ]
+          }
+        }
+      },
+      {
+        "displayName": "Event id",
+        "name": "eventId",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "description": "The event id",
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "attendees"
+            ],
+            "operation": [
+              "listEventAttendees"
+            ]
+          }
+        }
+      },
+      {
+        "displayName": "Additional Fields",
+        "name": "additionalFields",
+        "type": "collection",
+        "placeholder": "Add Field",
+        "default": {},
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "attendees"
+            ],
+            "operation": [
+              "listEventAttendees"
+            ]
+          }
+        },
+        "options": [
+          {
+            "displayName": "Limit",
+            "name": "limit",
+            "type": "number",
+            "default": 0,
+            "description": "Page size (1–100).",
+            "routing": {
+              "send": {
+                "type": "query",
+                "property": "limit",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "Search",
+            "name": "search",
+            "type": "string",
+            "default": "",
+            "description": "Name or email contains",
+            "routing": {
+              "send": {
+                "type": "query",
+                "property": "search",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "Status",
+            "name": "status",
+            "type": "options",
+            "default": "active",
+            "description": "Only attendees with this status",
+            "options": [
+              {
+                "name": "Active",
+                "value": "active"
+              },
+              {
+                "name": "Cancelled",
+                "value": "cancelled"
+              }
+            ],
+            "routing": {
+              "send": {
+                "type": "query",
+                "property": "status",
+                "value": "={{ $value }}"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "displayName": "Q",
+        "name": "q",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "description": "Part of a name or email (2+ characters)",
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "attendees"
+            ],
+            "operation": [
+              "searchAttendees"
+            ]
+          }
+        },
+        "routing": {
+          "send": {
+            "type": "query",
+            "property": "q",
+            "value": "={{ $value }}"
+          }
+        }
+      },
+      {
+        "displayName": "Additional Fields",
+        "name": "additionalFields",
+        "type": "collection",
+        "placeholder": "Add Field",
+        "default": {},
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "attendees"
+            ],
+            "operation": [
+              "searchAttendees"
+            ]
+          }
+        },
+        "options": [
+          {
+            "displayName": "Limit",
+            "name": "limit",
+            "type": "number",
+            "default": 0,
+            "description": "Most hits to return (1–50)",
+            "routing": {
+              "send": {
+                "type": "query",
+                "property": "limit",
+                "value": "={{ $value }}"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "displayName": "Operation",
+        "name": "operation",
+        "type": "options",
+        "noDataExpression": true,
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "orders"
+            ]
+          }
+        },
+        "options": [
+          {
+            "name": "One order with its tickets",
+            "value": "getOrder",
+            "action": "One order with its tickets",
+            "description": "One order with its line items and tickets. Needs the orders:read scope.",
+            "routing": {
+              "request": {
+                "method": "GET",
+                "url": "=/orders/{{ encodeURIComponent($parameter[\"orderId\"]) }}"
+              }
+            }
+          },
+          {
+            "name": "The event’s orders, newest first",
+            "value": "listEventOrders",
+            "action": "The event’s orders, newest first",
+            "description": "The event’s orders, newest first, without payment-provider internals. Needs the orders:read scope.",
+            "routing": {
+              "request": {
+                "method": "GET",
+                "url": "=/events/{{ encodeURIComponent($parameter[\"eventId\"]) }}/orders"
+              },
+              "output": {
+                "postReceive": [
+                  {
+                    "type": "rootProperty",
+                    "properties": {
+                      "property": "data"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "Refund tickets or an amount under the refund policy",
+            "value": "refundOrder",
+            "action": "Refund tickets or an amount under the refund policy",
+            "description": "Refunds whole tickets or an amount under the event’s refund policy, through the payment provider. Needs an `Idempotency-Key`; a retry returns the first result. Needs the orders:refund scope.",
+            "routing": {
+              "request": {
+                "method": "POST",
+                "url": "=/orders/{{ encodeURIComponent($parameter[\"orderId\"]) }}/refunds",
+                "headers": {
+                  "Idempotency-Key": "={{ $execution.id + \"-\" + $itemIndex }}"
+                }
+              }
+            }
+          }
+        ],
+        "default": "getOrder"
+      },
+      {
+        "displayName": "Order id",
+        "name": "orderId",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "description": "The order id",
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "orders"
+            ],
+            "operation": [
+              "getOrder"
+            ]
+          }
+        }
+      },
+      {
+        "displayName": "Event id",
+        "name": "eventId",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "description": "The event id",
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "orders"
+            ],
+            "operation": [
+              "listEventOrders"
+            ]
+          }
+        }
+      },
+      {
+        "displayName": "Additional Fields",
+        "name": "additionalFields",
+        "type": "collection",
+        "placeholder": "Add Field",
+        "default": {},
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "orders"
+            ],
+            "operation": [
+              "listEventOrders"
+            ]
+          }
+        },
+        "options": [
+          {
+            "displayName": "Limit",
+            "name": "limit",
+            "type": "number",
+            "default": 0,
+            "description": "Page size (1–100).",
+            "routing": {
+              "send": {
+                "type": "query",
+                "property": "limit",
+                "value": "={{ $value }}"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "displayName": "Order id",
+        "name": "orderId",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "description": "The order id",
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "orders"
+            ],
+            "operation": [
+              "refundOrder"
+            ]
+          }
+        }
+      },
+      {
+        "displayName": "Reason",
+        "name": "reason",
+        "type": "options",
+        "default": "requested_by_customer",
+        "required": true,
+        "options": [
+          {
+            "name": "Requested by customer",
+            "value": "requested_by_customer"
+          },
+          {
+            "name": "Event cancelled",
+            "value": "event_cancelled"
+          },
+          {
+            "name": "Event postponed",
+            "value": "event_postponed"
+          },
+          {
+            "name": "Duplicate",
+            "value": "duplicate"
+          },
+          {
+            "name": "Fraudulent",
+            "value": "fraudulent"
+          },
+          {
+            "name": "Goodwill",
+            "value": "goodwill"
+          }
+        ],
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "orders"
+            ],
+            "operation": [
+              "refundOrder"
+            ]
+          }
+        },
+        "routing": {
+          "send": {
+            "type": "body",
+            "property": "reason",
+            "value": "={{ $value }}"
+          }
+        }
+      },
+      {
+        "displayName": "Additional Fields",
+        "name": "additionalFields",
+        "type": "collection",
+        "placeholder": "Add Field",
+        "default": {},
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "orders"
+            ],
+            "operation": [
+              "refundOrder"
+            ]
+          }
+        },
+        "options": [
+          {
+            "displayName": "Ticket ids",
+            "name": "ticketIds",
+            "type": "string",
+            "default": "",
+            "hint": "Comma-separated",
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "ticketIds",
+                "value": "={{ String($value).split(\",\").map((s) => s.trim()).filter(Boolean) }}"
+              }
+            }
+          },
+          {
+            "displayName": "Amount minor",
+            "name": "amountMinor",
+            "type": "number",
+            "default": 0,
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "amountMinor",
+                "value": "={{ $value }}"
+              }
+            }
+          },
+          {
+            "displayName": "Note",
+            "name": "note",
+            "type": "string",
+            "default": "",
+            "routing": {
+              "send": {
+                "type": "body",
+                "property": "note",
+                "value": "={{ $value }}"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "displayName": "Operation",
+        "name": "operation",
+        "type": "options",
+        "noDataExpression": true,
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "venues"
+            ]
+          }
+        },
+        "options": [
+          {
+            "name": "One venue",
+            "value": "getVenue",
+            "action": "One venue",
+            "description": "A saved venue. Needs the events:read scope.",
+            "routing": {
+              "request": {
+                "method": "GET",
+                "url": "=/venues/{{ encodeURIComponent($parameter[\"venueId\"]) }}"
+              }
+            }
+          },
+          {
+            "name": "The organization’s venues",
+            "value": "listVenues",
+            "action": "The organization’s venues",
+            "description": "Saved venues by name, archived ones included (`archivedAt`). Needs the events:read scope.",
+            "routing": {
+              "request": {
+                "method": "GET",
+                "url": "=/venues"
+              },
+              "output": {
+                "postReceive": [
+                  {
+                    "type": "rootProperty",
+                    "properties": {
+                      "property": "data"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "default": "getVenue"
+      },
+      {
+        "displayName": "Venue id",
+        "name": "venueId",
+        "type": "string",
+        "default": "",
+        "required": true,
+        "description": "The venue id",
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "venues"
+            ],
+            "operation": [
+              "getVenue"
+            ]
+          }
+        }
+      },
+      {
+        "displayName": "Additional Fields",
+        "name": "additionalFields",
+        "type": "collection",
+        "placeholder": "Add Field",
+        "default": {},
+        "displayOptions": {
+          "show": {
+            "resource": [
+              "venues"
+            ],
+            "operation": [
+              "listVenues"
+            ]
+          }
+        },
+        "options": [
+          {
+            "displayName": "Limit",
+            "name": "limit",
+            "type": "number",
+            "default": 0,
+            "description": "Page size (1–100).",
+            "routing": {
+              "send": {
+                "type": "query",
+                "property": "limit",
+                "value": "={{ $value }}"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "yayatoh": {
+    "api": "0.2.0",
+    "operations": {
+      "bulkAssignSeats": {
+        "method": "POST",
+        "path": "/v1/orgs/{org}/events/{eventId}/bulk/seat-assignments",
+        "scope": "events:write",
+        "resource": "bulk_actions"
+      },
+      "bulkCancelTickets": {
+        "method": "POST",
+        "path": "/v1/orgs/{org}/events/{eventId}/bulk/ticket-cancellations",
+        "scope": "orders:refund",
+        "resource": "bulk_actions"
+      },
+      "bulkEmailAttendees": {
+        "method": "POST",
+        "path": "/v1/orgs/{org}/events/{eventId}/bulk/emails",
+        "scope": "attendees:write",
+        "resource": "bulk_actions"
+      },
+      "bulkLabelAttendees": {
+        "method": "POST",
+        "path": "/v1/orgs/{org}/events/{eventId}/bulk/labels",
+        "scope": "attendees:write",
+        "resource": "bulk_actions"
+      },
+      "bulkResendTickets": {
+        "method": "POST",
+        "path": "/v1/orgs/{org}/events/{eventId}/bulk/ticket-resends",
+        "scope": "attendees:write",
+        "resource": "bulk_actions"
+      },
+      "checkInTicket": {
+        "method": "POST",
+        "path": "/v1/orgs/{org}/events/{eventId}/checkins",
+        "scope": "checkin:scan",
+        "resource": "check_in"
+      },
+      "createEvent": {
+        "method": "POST",
+        "path": "/v1/orgs/{org}/events",
+        "scope": "events:write",
+        "resource": "events"
+      },
+      "createTicketType": {
+        "method": "POST",
+        "path": "/v1/orgs/{org}/events/{eventId}/ticket-types",
+        "scope": "events:write",
+        "resource": "ticket_types"
+      },
+      "getEvent": {
+        "method": "GET",
+        "path": "/v1/orgs/{org}/events/{eventId}",
+        "scope": "events:read",
+        "resource": "events"
+      },
+      "getEventAgenda": {
+        "method": "GET",
+        "path": "/v1/orgs/{org}/events/{eventId}/agenda",
+        "scope": "events:read",
+        "resource": "event_content"
+      },
+      "getEventAttendee": {
+        "method": "GET",
+        "path": "/v1/orgs/{org}/events/{eventId}/attendees/{attendeeId}",
+        "scope": "attendees:read",
+        "resource": "attendees"
+      },
+      "getEventSpeaker": {
+        "method": "GET",
+        "path": "/v1/orgs/{org}/events/{eventId}/speakers/{speakerId}",
+        "scope": "events:read",
+        "resource": "event_content"
+      },
+      "getOrder": {
+        "method": "GET",
+        "path": "/v1/orgs/{org}/orders/{orderId}",
+        "scope": "orders:read",
+        "resource": "orders"
+      },
+      "getVenue": {
+        "method": "GET",
+        "path": "/v1/orgs/{org}/venues/{venueId}",
+        "scope": "events:read",
+        "resource": "venues"
+      },
+      "listEventAnnouncements": {
+        "method": "GET",
+        "path": "/v1/orgs/{org}/events/{eventId}/announcements",
+        "scope": "events:read",
+        "resource": "event_content"
+      },
+      "listEventAttendees": {
+        "method": "GET",
+        "path": "/v1/orgs/{org}/events/{eventId}/attendees",
+        "scope": "attendees:read",
+        "resource": "attendees"
+      },
+      "listEventDates": {
+        "method": "GET",
+        "path": "/v1/orgs/{org}/events/{eventId}/dates",
+        "scope": "events:read",
+        "resource": "event_content"
+      },
+      "listEventExhibitors": {
+        "method": "GET",
+        "path": "/v1/orgs/{org}/events/{eventId}/exhibitors",
+        "scope": "events:read",
+        "resource": "event_content"
+      },
+      "listEventOrders": {
+        "method": "GET",
+        "path": "/v1/orgs/{org}/events/{eventId}/orders",
+        "scope": "orders:read",
+        "resource": "orders"
+      },
+      "listEvents": {
+        "method": "GET",
+        "path": "/v1/orgs/{org}/events",
+        "scope": "events:read",
+        "resource": "events"
+      },
+      "listEventSections": {
+        "method": "GET",
+        "path": "/v1/orgs/{org}/events/{eventId}/sections",
+        "scope": "events:read",
+        "resource": "event_content"
+      },
+      "listEventSpeakers": {
+        "method": "GET",
+        "path": "/v1/orgs/{org}/events/{eventId}/speakers",
+        "scope": "events:read",
+        "resource": "event_content"
+      },
+      "listEventSponsors": {
+        "method": "GET",
+        "path": "/v1/orgs/{org}/events/{eventId}/sponsors",
+        "scope": "events:read",
+        "resource": "event_content"
+      },
+      "listTicketTypes": {
+        "method": "GET",
+        "path": "/v1/orgs/{org}/events/{eventId}/ticket-types",
+        "scope": "events:read",
+        "resource": "ticket_types"
+      },
+      "listVenues": {
+        "method": "GET",
+        "path": "/v1/orgs/{org}/venues",
+        "scope": "events:read",
+        "resource": "venues"
+      },
+      "publishEvent": {
+        "method": "POST",
+        "path": "/v1/orgs/{org}/events/{eventId}/publish",
+        "scope": "events:write",
+        "resource": "events"
+      },
+      "refundOrder": {
+        "method": "POST",
+        "path": "/v1/orgs/{org}/orders/{orderId}/refunds",
+        "scope": "orders:refund",
+        "resource": "orders"
+      },
+      "searchAttendees": {
+        "method": "GET",
+        "path": "/v1/orgs/{org}/attendees/search",
+        "scope": "attendees:read",
+        "resource": "attendees"
+      },
+      "updateEvent": {
+        "method": "PATCH",
+        "path": "/v1/orgs/{org}/events/{eventId}",
+        "scope": "events:write",
+        "resource": "events"
+      },
+      "updateTicketType": {
+        "method": "PATCH",
+        "path": "/v1/orgs/{org}/ticket-types/{ticketTypeId}",
+        "scope": "events:write",
+        "resource": "ticket_types"
+      }
+    }
+  }
+}
