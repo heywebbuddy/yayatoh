@@ -156,3 +156,29 @@ export const listingModeration = tenantTable(
     check('listing_moderation_reason_check', sql`length(reason) between 1 and 500`),
   ],
 );
+
+/** M6.14b: the longest promoted placement, in days (priced later; no charging in beta). */
+export const MAX_PROMOTION_DAYS = 30;
+
+/**
+ * M6.14b promoted placements: an org promotes one of its marketplace listings in search for a
+ * window (`starts_at`..`ends_at`, at most `MAX_PROMOTION_DAYS`); `ended_at` ends it early. One row
+ * per event (promoting again replaces the window). Search reads active ones through the SECURITY
+ * DEFINER `marketplace.promoted_slugs(now)` and always labels them as promoted. Hand-written FK:
+ * `(org_id, event_id)` → events.events.
+ */
+export const promotions = tenantTable(
+  marketplaceSchema,
+  'promotions',
+  {
+    eventId: uuid('event_id').notNull(),
+    startsAt: ts('starts_at').notNull(),
+    endsAt: ts('ends_at').notNull(),
+    endedAt: ts('ended_at'),
+  },
+  (t) => [
+    uniqueIndex('promotions_org_event_key').on(t.orgId, t.eventId),
+    index('promotions_org_ends_at_idx').on(t.orgId, t.endsAt),
+    check('promotions_window_check', sql`ends_at > starts_at and ends_at <= starts_at + interval '30 days'`),
+  ],
+);

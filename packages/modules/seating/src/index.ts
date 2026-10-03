@@ -376,3 +376,16 @@ export {
   setTableSponsorCommand,
   TableSponsorDto,
 } from './table-sponsors.ts';
+// M6.14b venue portal: shared plans (copy-on-use) and the venue's view of their use.
+export {
+  SharedLayoutDto,
+  sharedLayoutsQuery,
+  sharedLayoutUsesTx,
+  shareLayoutCommand,
+  unshareLayoutCommand,
+  useSharedLayoutCommand,
+  VenueLayoutUseDto,
+  VenuePortalDto,
+  VenuePortalLayoutDto,
+  venuePortalQuery,
+} from './venue-sharing.ts';

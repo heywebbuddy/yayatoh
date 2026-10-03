@@ -130,6 +130,15 @@ export {
   suspensionHistoryQuery,
   suspensionsQuery,
 } from './commands/suspensions.ts';
+// M6.14b venue portal: the venue's partner organizers (`venue_partner`).
+export {
+  addVenuePartnerCommand,
+  isVenuePartnerTx,
+  removeVenuePartnerCommand,
+  VenuePartnerDto,
+  venuePartnersQuery,
+  venuePartnersTx,
+} from './commands/venue-partners.ts';
 export { tenancyDataSubjects } from './data-subject.ts';
 export { AGREEMENT_DOCUMENTS, type AgreementDocument, PLATFORM_AGREEMENTS } from './domain/agreements.ts';
 export { signInvitation } from './domain/invitation-token.ts';

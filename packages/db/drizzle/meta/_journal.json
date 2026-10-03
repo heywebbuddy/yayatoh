@@ -988,6 +988,13 @@
       "when": 1791064743211,
       "tag": "0140_perpetual_vindicator",
       "breakpoints": true
+    },
+    {
+      "idx": 141,
+      "version": "7",
+      "when": 1791066517079,
+      "tag": "0141_striped_serpent_society",
+      "breakpoints": true
     }
   ]
 }

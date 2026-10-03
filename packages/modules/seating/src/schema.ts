@@ -546,3 +546,51 @@ export const vipTables = tenantTable(
   },
   (t) => [uniqueIndex('vip_tables_org_event_item_key').on(t.orgId, t.eventId, t.itemId)],
 );
+
+/**
+ * M6.14b venue portal: a library plan this org (the venue) shares with a partner organizer (an
+ * active `venue_partner` relationship in tenancy). Unsharing deletes the row. Organizers read
+ * shared plans only through the SECURITY DEFINER functions `seating.partner_shared_layouts()` and
+ * `seating.partner_shared_layout_doc(id)`, which check the share and the partnership on every call,
+ * so a revoke applies on the next request. Hand-written FK: `partner_org_id` → organizations.
+ */
+export const layoutShares = tenantTable(
+  seatingSchema,
+  'layout_shares',
+  {
+    layoutId: uuid('layout_id').notNull(),
+    partnerOrgId: uuid('partner_org_id').notNull(),
+  },
+  (t) => [
+    uniqueIndex('layout_shares_org_layout_partner_key').on(t.orgId, t.layoutId, t.partnerOrgId),
+    index('layout_shares_org_partner_idx').on(t.orgId, t.partnerOrgId),
+    check('layout_shares_not_self', sql`partner_org_id <> org_id`),
+    foreignKey({
+      name: 'layout_shares_layout_fk',
+      columns: [t.orgId, t.layoutId],
+      foreignColumns: [layouts.orgId, layouts.id],
+    }).onDelete('cascade'),
+  ],
+);
+
+/**
+ * M6.14b: an event of this org (the organizer) whose plan is a copy of a venue's shared plan
+ * (copy-on-use: the event keeps its own copy and revisions; the venue's later edits never reach
+ * it). One per event; replacing the plan with one of the org's own removes it. The venue sees its
+ * uses only through `seating.venue_layout_uses()` (allowlisted columns). Hand-written FKs:
+ * `(org_id, event_id)` → events.events, `(venue_org_id, venue_layout_id)` → seating.layouts.
+ */
+export const sharedLayoutUses = tenantTable(
+  seatingSchema,
+  'shared_layout_uses',
+  {
+    eventId: uuid('event_id').notNull(),
+    venueOrgId: uuid('venue_org_id').notNull(),
+    venueLayoutId: uuid('venue_layout_id').notNull(),
+  },
+  (t) => [
+    uniqueIndex('shared_layout_uses_org_event_key').on(t.orgId, t.eventId),
+    index('shared_layout_uses_org_venue_idx').on(t.orgId, t.venueOrgId),
+    check('shared_layout_uses_not_self', sql`venue_org_id <> org_id`),
+  ],
+);

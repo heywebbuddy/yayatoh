@@ -2667,6 +2667,9 @@ importers:
       '@yayatoh/platform':
         specifier: workspace:*
         version: link:../../platform
+      '@yayatoh/tenancy':
+        specifier: workspace:*
+        version: link:../tenancy
       '@yayatoh/ui':
         specifier: workspace:*
         version: link:../../ui

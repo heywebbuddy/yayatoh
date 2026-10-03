@@ -7,6 +7,17 @@ export {
   moderateListingCommand,
   moderationQueueTx,
 } from './commands/moderation.ts';
+// M6.14b: promoted placements in search (flagged; priced later, nothing charged).
+export {
+  endPromotionCommand,
+  PROMOTION_STATES,
+  PromotableListingDto,
+  type PromotionState,
+  promotedPlacementsEnabled,
+  promoteListingCommand,
+  promotionState,
+  promotionsQuery,
+} from './commands/promotions.ts';
 export { addLegacyRedirectCommand, LegacyRedirectDto, LegacyRedirectInput } from './commands/redirects.ts';
 export { siteSettingsQuery, updateSiteSettingsCommand } from './commands/settings.ts';
 export { frameAncestors, MAX_EMBED_ORIGINS, normalizeOrigin } from './domain/embed.ts';
@@ -53,7 +64,7 @@ export {
   sitemapListings,
   widgetOrigins,
 } from './queries.ts';
-export { LISTED_STATUSES, REDIRECT_MATCHES, REDIRECT_STATUSES } from './schema.ts';
+export { LISTED_STATUSES, MAX_PROMOTION_DAYS, REDIRECT_MATCHES, REDIRECT_STATUSES } from './schema.ts';
 export {
   docIdFor,
   INDEXED_FIELDS,
@@ -117,6 +128,7 @@ export {
   SORT_FIELDS,
   type Sort,
 } from './search/port.ts';
+export { PROMOTED_SLOTS, promotedPlacements, promotedSlugs } from './search/promoted.ts';
 export {
   cityCenters,
   type GeoPoint,

@@ -1652,6 +1652,39 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
       insert into platform.metric_timeseries (org_id, metric, bucket, currency, value, source)
       values (${org.id}, 'sales.gross', '2025-01-01', 'USD', 5000, 'legacy')`);
   });
+  // M6.14b venues: the org and its affiliate partner both ways (`venue_partner`). The org shares
+  // its 'Main room' plan with the affiliate; the affiliate shares a plan of its own that the org's
+  // event used (copy-on-use record); the event is promoted on the marketplace for a week.
+  await withTenant(systemCtx(org.id), async (tx) => {
+    await tx.execute(
+      sql`insert into tenancy.org_relationships (org_id, child_org_id, kind, source) values (${org.id}, ${affiliate.id}, 'venue_partner', 'fixture')`,
+    );
+    await tx.execute(
+      sql`insert into seating.layout_shares (org_id, layout_id, partner_org_id) values (${org.id}, ${layout.id}, ${affiliate.id})`,
+    );
+    await tx.execute(sql`
+      insert into marketplace.promotions (org_id, event_id, starts_at, ends_at)
+      values (${org.id}, ${event.id}, now() - interval '1 hour', now() + interval '7 days')`);
+  });
+  const venueLayout = await withTenant(systemCtx(affiliate.id), async (tx) => {
+    await tx.execute(
+      sql`insert into tenancy.org_relationships (org_id, child_org_id, kind, source) values (${affiliate.id}, ${org.id}, 'venue_partner', 'fixture')`,
+    );
+    const [l] = await tx.execute<{ id: string }>(sql`
+      insert into seating.layouts (org_id, name, doc, checksum, seat_count)
+      values (${affiliate.id}, ${`${name} Affiliate hall`}, ${JSON.stringify(plan)}::jsonb, 'fixture', 4)
+      returning id`);
+    if (!l) throw new Error('fixture: no venue layout');
+    await tx.execute(
+      sql`insert into seating.layout_shares (org_id, layout_id, partner_org_id) values (${affiliate.id}, ${l.id}, ${org.id})`,
+    );
+    return l.id;
+  });
+  await withTenant(systemCtx(org.id), (tx) =>
+    tx.execute(
+      sql`insert into seating.shared_layout_uses (org_id, event_id, venue_org_id, venue_layout_id) values (${org.id}, ${event.id}, ${affiliate.id}, ${venueLayout})`,
+    ),
+  );
   // Media (M1.4e): an event cover and the org logo (assets, variants, blobs in the dev store),
   // and a quota override row.
   await uploadMedia(
