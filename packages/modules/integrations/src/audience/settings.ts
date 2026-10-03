@@ -147,6 +147,8 @@ export const saveAudienceSyncCommand = tenantCommand({
   output: z.object({ listChanged: z.boolean() }),
   entitlement: 'integrations',
   permission: 'integrations:manage',
+  // Choosing who is sent to a third party sends personal data out: never while staff act as a member.
+  category: 'export',
   handler: async ({ input, ctx, tx }) => {
     const orgId = requireOrg(ctx);
     const c = await connectionTx(tx, input.connectionId, true);

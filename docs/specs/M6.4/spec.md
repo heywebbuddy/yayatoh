@@ -130,3 +130,86 @@ retries and an inbox.
 tables with RLS/FORCE and policies (generated). Hand-written (between the markers): every plan gets
 the `integrations` module key; `integrations.connections_with_sync_work(integer)` (SECURITY DEFINER,
 ids only) granted to `platform_reader`.
+
+## M6.4d — Mailchimp, HubSpot and Klaviyo (done)
+
+### 1. Goal and users
+Organizers who already run their email marketing in Mailchimp, Klaviyo or HubSpot keep using it,
+with Yayatoh as the source of consent: an audience (or everyone with consent) is pushed as a list,
+and unsubscribes, bounces and complaints come back as suppressions here. HubSpot users get their
+contacts both ways and their events as HubSpot marketing events with registration and attendance.
+Decision P6-4 (order: Mailchimp and HubSpot, then Klaviyo), P6-13 (behind the `integrations` key;
+fakes in dev and CI).
+
+### 2. What was built
+- **Connectors** on M6.4a's SDK (`packages/modules/integrations/src/connectors/{mailchimp,klaviyo,hubspot}`),
+  each with a fake whose responses follow the vendor's documented shapes
+  (`tests/fixtures/{mailchimp,klaviyo,hubspot}.json`, the parsers are tested against both).
+  - **Mailchimp / Klaviyo** (`defineListConnector`, one object `members`, both ways): the push
+    sends the audience's members with merge fields (mapping: email, first/last name, company,
+    phone); the pull reads the list's changes (Mailchimp `since_last_changed`, Klaviyo
+    `greater-than(updated,…)`) and applies only consent changes: `unsubscribed`, `cleaned`
+    (hard bounce), `complained` (Klaviyo spam complaint).
+  - **HubSpot**: `contacts` both ways (search by `lastmodifieddate`, batch upsert by email, the
+    `yayatoh_origin` property as the loop-guard stamp; opt-outs through the communication
+    preferences API, `hs_email_optout` is never written), `marketing_events` (every event that is
+    not a draft, keyed by our event id as `externalEventId`; cancellations sent once the event is
+    there) and `event_attendance` (`register`, `attend`, `cancel` per contact and pushed event).
+- **Consent rules first** (`audience/consent.ts`, pure): `subscriptionStatus` (express email
+  marketing consent and no marketing unsubscribe, no address suppression, no erasure since the
+  consent → `subscribed`; any no → `unsubscribed`; nothing either way → `none`), `memberStatus`
+  (lists) and `hubspotContactAction`. A contact that is not `subscribed` and not already at the
+  provider is **never sent**; one already there gets the unsubscribe (lists) or the opt-out
+  (HubSpot); a list member who leaves the audience is archived, not unsubscribed. The status comes
+  from the sources of truth (crm ledger, notifications suppressions, platform erased addresses),
+  never from the field mapping, and `send` refuses to create a non-subscriber (defence in depth).
+  Attendance goes out only for contacts with consent.
+- **Inbound** (`audience/inbound.ts`): an unsubscribe withdraws email marketing consent in the crm
+  ledger (evidence `integration:<connector>:<connection>`) and puts the address on the marketing
+  unsubscribe list with the provider as `source` (`mailchimp`, `klaviyo`, `hubspot`); a cleaned
+  address is an address suppression `hard_bounce`, a complaint both. An unknown person becomes a
+  contact without consent. Each change is recorded once in `integrations.consent_changes` (unique
+  per connection, provider record and version). Consent is never granted from a provider.
+- **Both ways in one run:** the engine pulls before it pushes, so a run applies the provider's
+  unsubscribes, then sends Yayatoh's. Pulled records are linked before the engine reads them back,
+  so a change that came in is never sent back.
+- **Settings** (`integrations.audience_syncs`): the audience (a saved segment, or everyone with
+  consent) and the provider list, chosen from the provider's own lists (`providerLists`, through
+  the port). A new list starts the members over; a deleted segment pauses new subscribers and is
+  flagged. Command `integrations.saveAudienceSync` (`integrations:manage`, category `export`).
+- **Console** (connection page): Audience (picker for owners/admins, read-only summary for
+  managers, empty state), the consent rule, "What syncs with HubSpot", and "Consent changes from
+  {provider}" (who, what happened there, what changed here, when). Mapping editors name the
+  object when a connector has several. Dev route actions `unsubscribe`, `clean`, `complain`.
+- **SDK additions** (the same text as M6.4b's, so the merge is clean): `loadScope` / `io.scope`,
+  `changes(…, meta)`, `send({ …, local })`, `write(…, meta)`.
+- **crm / events / notifications** (new files, appended exports): `contactsConsentTx`,
+  `withdrawEmailMarketingTx`, `setSyncedContactCompanyTx`, `participationsAfterTx`;
+  `eventsForSyncAfterTx`; `suppressFromIntegrationTx`, `suppressAddressFromIntegrationTx`
+  (suppression sources widened). Contact merges move `consent_changes` (`integrationsContactOwner`).
+
+**Later / Not yet:**
+- Propagating a DSAR erasure to the providers (the `ErasureConnectorHook` from M6.1c): today an
+  erased contact is unsubscribed (lists) or opted out (HubSpot), not deleted there.
+- Re-subscribing someone who unsubscribed at the provider: Mailchimp refuses it through the API
+  (the record lands in the errors inbox); they re-subscribe through the provider's own form.
+- SMS (Klaviyo SMS consent), Mailchimp tags and groups, HubSpot custom properties and lists,
+  HubSpot marketing event participation webhooks; batch endpoints for large audiences.
+- The walk over the audience is per run (2 000 records a run, unchanged ones skipped by hash);
+  very large audiences would want the providers' batch APIs.
+
+### 3. Acceptance
+| Criterion | Test |
+|---|---|
+| An unsubscribed contact is never pushed (property test over random consent states) | `modules/integrations/tests/marketing.test.ts` › "property: … never pushed as a subscriber" (5 000 random states over the rules); `packages/testing/tests/integrations-marketing.int.test.ts` › "property: over random consent states, an unsubscribed contact is never pushed" (4 rounds of random grants, withdrawals, legacy, unsubscribes, bounces against the Mailchimp fake) |
+| Consent changes propagate both ways; an external unsubscribe becomes a suppression with its source | int › "consent changes propagate both ways within one run" (Mailchimp), Klaviyo and HubSpot tests (complaint, opt-out); e2e "an unsubscribe comes back" |
+| Replays write once | int › "…replays write nothing" (Mailchimp), HubSpot "replays write once" (no provider writes, no ledger rows) |
+| Isolation | int › "only integration managers choose the audience; other orgs see nothing"; isolation suite (fixture rows for both orgs in `audience_syncs` and `consent_changes`) |
+| All three against recorded fakes in CI | `marketing.test.ts` › "recorded response samples" (fixtures), every int test runs on the fakes |
+| E2E: connect each (fake), map fields, sync a segment, see an unsubscribe come back; keyboard only, axe both themes, RTL | `apps/web/e2e/integrations-marketing.spec.ts` (5 tests × 3 viewports) |
+
+### 4. Migration
+`packages/db/drizzle/0140_lush_pandemic.sql` (renumbered at merge): `integrations.audience_syncs`
+and `integrations.consent_changes` (RLS/FORCE, policies, org-leading indexes, composite FKs to
+connections). Hand-written: the widened `notifications.suppressions_source_check` added NOT VALID
+then validated; `consent_changes_contact_fk` → `crm.contacts (org_id, id)` on delete cascade.

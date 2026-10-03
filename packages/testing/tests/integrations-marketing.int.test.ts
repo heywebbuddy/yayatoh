@@ -602,6 +602,14 @@ describe('permissions, isolation and merges', () => {
         ports,
       ),
     ).rejects.toMatchObject({ code: 'forbidden' });
+    await expect(
+      executeCommand(
+        saveAudienceSyncCommand,
+        { connectionId, segmentId: null, listId: 'KlList01', listName: 'Newsletter' },
+        a.ctx({ impersonatedBy: { staffUserId: uuidv7(), impersonationId: uuidv7() } }),
+        ports,
+      ),
+    ).rejects.toMatchObject({ code: 'impersonation_blocked' });
     await expect(executeQuery(consentChangesQuery, { connectionId }, viewer, ports)).rejects.toMatchObject({
       code: 'forbidden',
     });

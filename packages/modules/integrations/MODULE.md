@@ -54,3 +54,17 @@ Slack, Mailchimp, HubSpot, Klaviyo) with `defineConnector` in `src/connectors/` 
   queues `integrations.sync` (exclusive per connection); the dev drain (`/api/dev/integrations/run`)
   runs `runDueSyncs`. Events: `integrations.connection_connected@1`,
   `integrations.connection_revoked@1`, `integrations.sync_completed@1` (ids, codes and counts).
+
+**M6.4d — Mailchimp, Klaviyo, HubSpot** (`src/audience/`, `src/connectors/{mailchimp,klaviyo,hubspot}`)
+- **Consent first** (`audience/consent.ts`): only `subscribed` contacts (express email marketing
+  consent; no unsubscribe, address suppression or erasure since) are ever created at a provider;
+  contacts already there get the unsubscribe / opt-out; list members who leave the audience are
+  archived. The status is computed from the crm ledger, notifications suppressions and platform
+  erased addresses (`audience/state.ts`), never from the mapping; `send` refuses a non-subscriber.
+- **Inbound** (`audience/inbound.ts`): unsubscribe → consent withdrawn (evidence
+  `integration:<connector>:<connection>`) + marketing suppression with the provider as `source`;
+  cleaned → address suppression `hard_bounce`; complaint → both. Never a grant. Recorded once per
+  provider record and version in `consent_changes` (merges move it: `integrationsContactOwner`).
+- `audience_syncs`: one per Mailchimp/Klaviyo connection (segment or everyone with consent, the
+  provider list); `saveAudienceSync` is an `export` command. Pulled records are linked before the
+  engine reads them back (`linkPulledTx`), so a change that came in is never sent back.
