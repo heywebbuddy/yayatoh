@@ -28,7 +28,8 @@ export const LIST_CONNECTORS = ['mailchimp', 'klaviyo'] as const;
 export const isListConnector = (key: string) => (LIST_CONNECTORS as readonly string[]).includes(key);
 /** Connectors whose pulls report consent changes (the history on the connection page). */
 export const MARKETING_CONNECTORS = ['mailchimp', 'klaviyo', 'hubspot'] as const;
-export const isMarketingConnector = (key: string) => (MARKETING_CONNECTORS as readonly string[]).includes(key);
+export const isMarketingConnector = (key: string) =>
+  (MARKETING_CONNECTORS as readonly string[]).includes(key);
 
 const ListId = z.string().regex(/^[A-Za-z0-9_-]{1,100}$/);
 
@@ -41,7 +42,10 @@ export const AudienceSyncDto = z.object({
   updatedAt: z.date(),
 });
 export type AudienceSyncDto = z.infer<typeof AudienceSyncDto>;
-export const audienceSyncSerializer = defineSerializer('integrations.audienceSync', AudienceSyncDto.nullable());
+export const audienceSyncSerializer = defineSerializer(
+  'integrations.audienceSync',
+  AudienceSyncDto.nullable(),
+);
 
 export const ConsentChangeDto = z.object({
   id: z.uuid(),
@@ -68,7 +72,10 @@ export const audienceSyncQuery = tenantQuery({
   entitlement: 'integrations',
   permission: 'integrations:read',
   handler: async ({ input, tx }) => {
-    const [row] = await tx.select().from(audienceSyncs).where(eq(audienceSyncs.connectionId, input.connectionId));
+    const [row] = await tx
+      .select()
+      .from(audienceSyncs)
+      .where(eq(audienceSyncs.connectionId, input.connectionId));
     if (!row) return null;
     let segmentMissing = false;
     if (row.segmentId)
@@ -144,7 +151,9 @@ export const saveAudienceSyncCommand = tenantCommand({
     const orgId = requireOrg(ctx);
     const c = await connectionTx(tx, input.connectionId, true);
     if (!isListConnector(c.connector))
-      throw new DomainError('invalid_state', 'This connector has no audience', { reason: 'not_a_list_connector' });
+      throw new DomainError('invalid_state', 'This connector has no audience', {
+        reason: 'not_a_list_connector',
+      });
     if (c.status !== 'active' && c.status !== 'paused')
       throw new DomainError('invalid_state', 'Only a live connection can be set up', { reason: 'not_live' });
     if (input.segmentId)

@@ -1,6 +1,7 @@
 import { tenantTable } from '@yayatoh/db';
 import { sql } from 'drizzle-orm';
 import {
+  boolean,
   check,
   foreignKey,
   index,
@@ -9,7 +10,6 @@ import {
   pgSchema,
   text,
   timestamp,
-  boolean,
   uniqueIndex,
   uuid,
 } from 'drizzle-orm/pg-core';

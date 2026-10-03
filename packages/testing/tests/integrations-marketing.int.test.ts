@@ -70,7 +70,11 @@ async function people(ctx: Ctx, list: readonly Person[]): Promise<Map<string, st
   const ids = new Map<string, string>();
   await withTenant(ctx, async (tx) => {
     for (const p of list) {
-      const { id } = await upsertContactTx(tx, ctx, { email: p.email, name: p.name ?? null, source: 'checkout' });
+      const { id } = await upsertContactTx(tx, ctx, {
+        email: p.email,
+        name: p.name ?? null,
+        source: 'checkout',
+      });
       ids.set(p.email, id);
       if (p.consent)
         await recordConsentTx(tx, ctx, {
@@ -190,17 +194,27 @@ describe('Mailchimp: push an audience as a list, pull consent changes back', () 
       [e('ada')]: 'subscribed',
       [e('ben')]: 'subscribed',
     });
-    const ada = mailchimpRemoteMembers(account(authConnectionId), list).find((m) => m.email_address === e('ada'));
+    const ada = mailchimpRemoteMembers(account(authConnectionId), list).find(
+      (m) => m.email_address === e('ada'),
+    );
     expect(ada?.merge_fields).toEqual({ FNAME: 'Ada', LNAME: 'Lovelace' });
     // The person who unsubscribed in Mailchimp before is suppressed here, with Mailchimp as source.
     expect(await consentOf(ctx, MAILCHIMP_SEED_UNSUBSCRIBED)).toMatchObject({
       status: 'withdrawn',
       evidence: `integration:mailchimp:${connectionId}`,
     });
-    expect(await suppressionOf(ctx, MAILCHIMP_SEED_UNSUBSCRIBED)).toEqual({ unsubscribe: 'mailchimp', address: null });
+    expect(await suppressionOf(ctx, MAILCHIMP_SEED_UNSUBSCRIBED)).toEqual({
+      unsubscribe: 'mailchimp',
+      address: null,
+    });
     const history = await executeQuery(consentChangesQuery, { connectionId }, ctx, ports);
     expect(history).toMatchObject([
-      { change: 'unsubscribed', email: MAILCHIMP_SEED_UNSUBSCRIBED, consentWithdrawn: true, suppressed: true },
+      {
+        change: 'unsubscribed',
+        email: MAILCHIMP_SEED_UNSUBSCRIBED,
+        consentWithdrawn: true,
+        suppressed: true,
+      },
     ]);
     // A replay writes once: nothing is sent, nothing is applied again.
     const before = { writes: writes(authConnectionId), ledger: await ledgerCount(ctx) };
@@ -266,14 +280,21 @@ describe('Mailchimp: push an audience as a list, pull consent changes back', () 
       ports,
     );
     await sync(org.orgId, connectionId);
-    expect(membersOf(authConnectionId, list)).toMatchObject({ [e('sms')]: 'subscribed', [e('mail')]: 'subscribed' });
+    expect(membersOf(authConnectionId, list)).toMatchObject({
+      [e('sms')]: 'subscribed',
+      [e('mail')]: 'subscribed',
+    });
     const segment = await executeCommand(
       saveSegmentCommand,
       {
         name: `Texts too ${tag}`,
         definition: {
           version: 1,
-          root: { type: 'group', op: 'and', conditions: [{ type: 'consent', channel: 'sms', granted: true }] },
+          root: {
+            type: 'group',
+            op: 'and',
+            conditions: [{ type: 'consent', channel: 'sms', granted: true }],
+          },
         },
       },
       ctx,
@@ -378,7 +399,8 @@ describe('Mailchimp: push an audience as a list, pull consent changes back', () 
               evidence: 'prop',
             });
           else if (r < 0.7) await suppressEmailTx(tx, requireOrg(ctx), email, 'marketing', 'page');
-          else if (r < 0.74) await suppressAddressFromIntegrationTx(tx, requireOrg(ctx), email, 'hard_bounce');
+          else if (r < 0.74)
+            await suppressAddressFromIntegrationTx(tx, requireOrg(ctx), email, 'hard_bounce');
         }
       });
       const allowed = await eligible();
@@ -393,7 +415,9 @@ describe('Mailchimp: push an audience as a list, pull consent changes back', () 
         if (remote[email]) expect(everEligible.has(email)).toBe(true);
       }
       // Every write this round went to an address that was on the list or may receive now.
-      const sent = account(authConnectionId).log.slice(log).filter((l) => l.method === 'PUT');
+      const sent = account(authConnectionId)
+        .log.slice(log)
+        .filter((l) => l.method === 'PUT');
       expect(sent.length).toBeLessThanOrEqual(emails.length);
     }
   }, 120_000);
@@ -425,12 +449,20 @@ describe('Klaviyo: lists and suppressions', () => {
           p.attributes.subscriptions.email.marketing.consent,
         ]),
       );
-    expect(status()).toEqual({ [KLAVIYO_SEED_BOUNCED]: 'SUBSCRIBED', [e('kim')]: 'SUBSCRIBED', [e('lou')]: 'SUBSCRIBED' });
+    expect(status()).toEqual({
+      [KLAVIYO_SEED_BOUNCED]: 'SUBSCRIBED',
+      [e('kim')]: 'SUBSCRIBED',
+      [e('lou')]: 'SUBSCRIBED',
+    });
     expect(
-      klaviyoRemoteMembers(account(authConnectionId), list).find((p) => p.attributes.email === e('kim'))?.attributes,
+      klaviyoRemoteMembers(account(authConnectionId), list).find((p) => p.attributes.email === e('kim'))
+        ?.attributes,
     ).toMatchObject({ first_name: 'Kim', last_name: 'Lee' });
     // The profile Klaviyo had suppressed for a hard bounce is suppressed here too.
-    expect(await suppressionOf(ctx, KLAVIYO_SEED_BOUNCED)).toEqual({ unsubscribe: null, address: 'hard_bounce' });
+    expect(await suppressionOf(ctx, KLAVIYO_SEED_BOUNCED)).toEqual({
+      unsubscribe: null,
+      address: 'hard_bounce',
+    });
     klaviyoRemoteSet(account(authConnectionId), list, e('kim'), 'complained');
     await withdraw(ctx, ids.get(e('lou')) as string);
     await sync(org.orgId, connectionId);
@@ -468,7 +500,12 @@ describe('HubSpot: contacts both ways, marketing events and attendance', () => {
     await executeCommand(transitionEventCommand, { eventId: event.id, transition: 'publish' }, ctx, ports);
     const draft = await executeCommand(
       createEventCommand,
-      { name: `Draft ${tag}`, timezone: 'UTC', startsAt: '2030-07-01T10:00:00Z', endsAt: '2030-07-01T12:00:00Z' },
+      {
+        name: `Draft ${tag}`,
+        timezone: 'UTC',
+        startsAt: '2030-07-01T10:00:00Z',
+        endsAt: '2030-07-01T12:00:00Z',
+      },
       ctx,
       ports,
     );
@@ -485,14 +522,25 @@ describe('HubSpot: contacts both ways, marketing events and attendance', () => {
     const run = await sync(org.orgId, connectionId);
     expect(run.runStatus).toBe('succeeded');
     const remote = () =>
-      Object.fromEntries(hubspotRemoteContacts(account(authConnectionId)).map((c) => [c.properties.email, c.properties]));
+      Object.fromEntries(
+        hubspotRemoteContacts(account(authConnectionId)).map((c) => [c.properties.email, c.properties]),
+      );
     // Consented contacts were created; Jon (no consent) and Kai (unsubscribed) never reach HubSpot.
-    expect(Object.keys(remote()).sort()).toEqual([HUBSPOT_SEED_CONTACT, HUBSPOT_SEED_OPTED_OUT, e('hal'), e('ivy')].sort());
-    expect(remote()[e('hal')]).toMatchObject({ firstname: 'Hal', lastname: 'Jordan', yayatoh_origin: `yayatoh:${connectionId}` });
+    expect(Object.keys(remote()).sort()).toEqual(
+      [HUBSPOT_SEED_CONTACT, HUBSPOT_SEED_OPTED_OUT, e('hal'), e('ivy')].sort(),
+    );
+    expect(remote()[e('hal')]).toMatchObject({
+      firstname: 'Hal',
+      lastname: 'Jordan',
+      yayatoh_origin: `yayatoh:${connectionId}`,
+    });
     // HubSpot's contacts came in without consent; its opt-out became a suppression with its source.
     expect(await consentOf(ctx, HUBSPOT_SEED_CONTACT)).toEqual({ status: null, evidence: null });
     expect(await consentOf(ctx, HUBSPOT_SEED_OPTED_OUT)).toMatchObject({ status: 'withdrawn' });
-    expect(await suppressionOf(ctx, HUBSPOT_SEED_OPTED_OUT)).toEqual({ unsubscribe: 'hubspot', address: null });
+    expect(await suppressionOf(ctx, HUBSPOT_SEED_OPTED_OUT)).toEqual({
+      unsubscribe: 'hubspot',
+      address: null,
+    });
     const [company] = await withTenant(ctx, (tx) =>
       tx.execute<{ company: string | null }>(
         sql`select company from crm.contacts where email_norm = ${HUBSPOT_SEED_CONTACT}`,
@@ -504,7 +552,9 @@ describe('HubSpot: contacts both ways, marketing events and attendance', () => {
     expect(events.map((x) => x.externalEventId)).toEqual([event.id]);
     expect(events[0]?.properties).toMatchObject({ eventName: `Spring Gala ${tag}`, eventCancelled: false });
     expect(events.some((x) => x.externalEventId === draft.id)).toBe(false);
-    expect(Object.fromEntries(Object.entries(events[0]?.attendance ?? {}).map(([k, v]) => [k, v.state]))).toEqual({
+    expect(
+      Object.fromEntries(Object.entries(events[0]?.attendance ?? {}).map(([k, v]) => [k, v.state])),
+    ).toEqual({
       [e('hal')]: 'attend',
       [e('ivy')]: 'register',
     });
@@ -519,11 +569,17 @@ describe('HubSpot: contacts both ways, marketing events and attendance', () => {
     await withdraw(ctx, ids.get(e('ivy')) as string);
     await admin`update crm.event_participation set registered = false, updated_at = now()
       where org_id = ${org.orgId} and contact_id = ${ids.get(e('ivy')) as string}`;
-    await executeCommand(transitionEventCommand, { eventId: event.id, transition: 'cancel' }, ctx, ports).catch(
-      () => null,
-    );
+    await executeCommand(
+      transitionEventCommand,
+      { eventId: event.id, transition: 'cancel' },
+      ctx,
+      ports,
+    ).catch(() => null);
     await sync(org.orgId, connectionId);
-    expect(await consentOf(ctx, e('hal'))).toMatchObject({ status: 'withdrawn', evidence: `integration:hubspot:${connectionId}` });
+    expect(await consentOf(ctx, e('hal'))).toMatchObject({
+      status: 'withdrawn',
+      evidence: `integration:hubspot:${connectionId}`,
+    });
     expect(await suppressionOf(ctx, e('hal'))).toEqual({ unsubscribe: 'hubspot', address: null });
     expect(remote()[e('ivy')]).toMatchObject({ hs_email_optout: 'true' });
     // Ivy no longer consents: her attendance is not touched again (consent first).
@@ -579,7 +635,12 @@ describe('permissions, isolation and merges', () => {
       ),
     ).rejects.toMatchObject({ code: 'validation_failed' });
     await expect(
-      executeCommand(saveAudienceSyncCommand, { connectionId, segmentId: uuidv7(), listId: 'KlList01', listName: 'x' }, ctxA, ports),
+      executeCommand(
+        saveAudienceSyncCommand,
+        { connectionId, segmentId: uuidv7(), listId: 'KlList01', listName: 'x' },
+        ctxA,
+        ports,
+      ),
     ).rejects.toMatchObject({ code: 'validation_failed' });
     // The fixture's connection rows exist in both orgs and RLS keeps them apart.
     for (const f of [a, b]) {

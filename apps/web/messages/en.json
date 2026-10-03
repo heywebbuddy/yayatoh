@@ -13052,6 +13052,15 @@
     "connectors": {
       "demo": {
         "description": "A sandbox contacts app for trying integrations: contacts sync both ways with your CRM. Test environments only."
+      },
+      "mailchimp": {
+        "description": "Send an audience to a Mailchimp audience list with merge fields. Unsubscribes and bounced addresses come back as consent changes."
+      },
+      "hubspot": {
+        "description": "Sync contacts both ways, and send your events to HubSpot as marketing events with registrations and check-ins."
+      },
+      "klaviyo": {
+        "description": "Send an audience to a Klaviyo list. Unsubscribes, bounces and spam complaints come back as consent changes."
       }
     },
     "sandboxBadge": "Sandbox",
@@ -13071,11 +13080,25 @@
     "readOnly": "Only owners and admins can connect or change integrations.",
     "breadcrumb": "Breadcrumb",
     "objects": {
-      "contacts": "Contacts"
+      "contacts": "Contacts",
+      "members": "List members",
+      "marketing_events": "Marketing events",
+      "event_attendance": "Registrations and attendance"
     },
     "fields": {
       "email": "Email",
-      "name": "Name"
+      "name": "Name",
+      "first_name": "First name",
+      "last_name": "Last name",
+      "company": "Company",
+      "phone": "Phone",
+      "subscription": "Subscription change",
+      "email_opt_out": "Opted out of email",
+      "starts_at": "Starts",
+      "ends_at": "Ends",
+      "timezone": "Time zone",
+      "venue": "Venue",
+      "cancelled": "Cancelled"
     },
     "status": {
       "none": "Not connected",
@@ -13288,7 +13311,59 @@
       "allow": "Allow",
       "deny": "Deny"
     },
-    "webhooksAction": "Set up a webhook"
+    "webhooksAction": "Set up a webhook",
+    "marketing": {
+      "consentRule": "Consent comes first: only contacts with email marketing consent are sent, and an unsubscribe or a bounce always wins. When someone unsubscribes here, the next sync unsubscribes them there too.",
+      "audience": {
+        "title": "Audience",
+        "help": "Choose who is sent to {name} and which list they join.",
+        "saved": "Audience saved. The next sync sends it.",
+        "segmentMissing": "The saved audience was deleted, so no one new is sent. Choose another audience.",
+        "segment": "Who is sent",
+        "list": "{name} list",
+        "everyone": "Everyone with email marketing consent",
+        "savedSegment": "A saved audience",
+        "emptyTitle": "No audience chosen yet",
+        "emptyManage": "Choose who to send and the {name} list they join. Nothing is sent until you save.",
+        "emptyRead": "An owner or admin chooses who is sent. Nothing is sent until then.",
+        "formLabel": "Choose the audience and list",
+        "save": "Save audience",
+        "feedback": {
+          "list_required": "Choose a list.",
+          "provider_unavailable": "The lists couldn't be loaded from the provider. Try again in a few minutes.",
+          "validation_failed": "That audience no longer exists. Choose another one.",
+          "forbidden": "You don't have access to this.",
+          "invalid_state": "This connection can't be set up right now.",
+          "not_found": "We couldn't find that.",
+          "read_only_freeze": "Changes are paused during scheduled maintenance. Try again when it ends.",
+          "internal": "Something went wrong on our side."
+        }
+      },
+      "hubspot": {
+        "title": "What syncs with HubSpot",
+        "contacts": "Contacts sync both ways with the field mapping below. Contacts from HubSpot never arrive with consent; an opt-out in HubSpot unsubscribes them here.",
+        "events": "Every published event becomes a HubSpot marketing event, and a cancellation is sent too.",
+        "attendance": "Registrations, check-ins and cancellations are sent for contacts with email marketing consent."
+      },
+      "changes": {
+        "title": "Consent changes from {name}",
+        "help": "Unsubscribes, bounced addresses and complaints that came back from {name}, and what they changed here.",
+        "caption": "Consent changes from {name}",
+        "empty": "Nothing has come back from {name} yet.",
+        "who": "Contact",
+        "change": "In the provider",
+        "applied": "Changed here",
+        "when": "When",
+        "withdrawn": "Consent withdrawn",
+        "suppressed": "Suppressed",
+        "already": "Already up to date",
+        "kinds": {
+          "unsubscribed": "Unsubscribed",
+          "cleaned": "Address bounced",
+          "complained": "Spam complaint"
+        }
+      }
+    }
   },
   "guestSeats": {
     "placeAt": {

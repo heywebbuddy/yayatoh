@@ -13052,6 +13052,15 @@
     "connectors": {
       "demo": {
         "description": "連携を試すためのテスト用連絡先アプリです。連絡先が CRM と双方向に同期されます。テスト環境のみ。"
+      },
+      "mailchimp": {
+        "description": "オーディエンスをマージフィールド付きで Mailchimp のリストに送ります。配信停止と不達アドレスは同意の変更として戻ってきます。"
+      },
+      "hubspot": {
+        "description": "連絡先を双方向に同期し、イベントを申込とチェックイン付きのマーケティングイベントとして HubSpot に送ります。"
+      },
+      "klaviyo": {
+        "description": "オーディエンスを Klaviyo のリストに送ります。配信停止、バウンス、迷惑メール報告は同意の変更として戻ってきます。"
       }
     },
     "sandboxBadge": "テスト",
@@ -13071,11 +13080,25 @@
     "readOnly": "連携の接続や変更ができるのはオーナーと管理者だけです。",
     "breadcrumb": "パンくずリスト",
     "objects": {
-      "contacts": "連絡先"
+      "contacts": "連絡先",
+      "members": "リストのメンバー",
+      "marketing_events": "マーケティングイベント",
+      "event_attendance": "申込と出席"
     },
     "fields": {
       "email": "メール",
-      "name": "名前"
+      "name": "名前",
+      "first_name": "名",
+      "last_name": "姓",
+      "company": "会社",
+      "phone": "電話",
+      "subscription": "購読の変更",
+      "email_opt_out": "メール配信停止",
+      "starts_at": "開始",
+      "ends_at": "終了",
+      "timezone": "タイムゾーン",
+      "venue": "会場",
+      "cancelled": "中止"
     },
     "status": {
       "none": "未接続",
@@ -13288,7 +13311,59 @@
       "allow": "許可",
       "deny": "拒否"
     },
-    "webhooksAction": "Webhook を設定"
+    "webhooksAction": "Webhook を設定",
+    "marketing": {
+      "consentRule": "同意が最優先です。マーケティングメールに同意した連絡先だけが送られ、配信停止やバウンスが常に優先されます。ここで配信停止した人は、次の同期で先方でも配信停止になります。",
+      "audience": {
+        "title": "オーディエンス",
+        "help": "{name} に送る人と、追加するリストを選びます。",
+        "saved": "オーディエンスを保存しました。次の同期で送られます。",
+        "segmentMissing": "保存したオーディエンスが削除されたため、新しい人は送られません。別のオーディエンスを選んでください。",
+        "segment": "送る人",
+        "list": "{name} のリスト",
+        "everyone": "マーケティングメールに同意したすべての人",
+        "savedSegment": "保存したオーディエンス",
+        "emptyTitle": "オーディエンスがまだ選ばれていません",
+        "emptyManage": "送る人と、追加する {name} のリストを選んでください。保存するまで何も送られません。",
+        "emptyRead": "オーナーまたは管理者が送る人を選びます。それまで何も送られません。",
+        "formLabel": "オーディエンスとリストを選ぶ",
+        "save": "オーディエンスを保存",
+        "feedback": {
+          "list_required": "リストを選んでください。",
+          "provider_unavailable": "プロバイダーからリストを読み込めませんでした。数分後にもう一度お試しください。",
+          "validation_failed": "そのオーディエンスはもうありません。別のものを選んでください。",
+          "forbidden": "このページにアクセスする権限がありません。",
+          "invalid_state": "この接続は今は設定できません。",
+          "not_found": "見つかりませんでした。",
+          "read_only_freeze": "定期メンテナンス中は変更を停止しています。終了後にもう一度お試しください。",
+          "internal": "こちら側で問題が発生しました。"
+        }
+      },
+      "hubspot": {
+        "title": "HubSpot と同期する内容",
+        "contacts": "連絡先は下のフィールド対応で双方向に同期します。HubSpot から来た連絡先に同意が付くことはなく、HubSpot での配信停止はここでも配信停止になります。",
+        "events": "公開したイベントはすべて HubSpot のマーケティングイベントになり、中止も送られます。",
+        "attendance": "マーケティングメールに同意した連絡先について、申込、チェックイン、キャンセルが送られます。"
+      },
+      "changes": {
+        "title": "{name} からの同意の変更",
+        "help": "{name} から戻ってきた配信停止、不達アドレス、苦情と、それによってここで変わったこと。",
+        "caption": "{name} からの同意の変更",
+        "empty": "{name} からはまだ何も戻ってきていません。",
+        "who": "連絡先",
+        "change": "プロバイダー側",
+        "applied": "ここでの変更",
+        "when": "日時",
+        "withdrawn": "同意を撤回",
+        "suppressed": "配信停止",
+        "already": "変更なし",
+        "kinds": {
+          "unsubscribed": "配信停止",
+          "cleaned": "アドレス不達",
+          "complained": "迷惑メール報告"
+        }
+      }
+    }
   },
   "guestSeats": {
     "placeAt": {

@@ -13052,6 +13052,15 @@
     "connectors": {
       "demo": {
         "description": "Een test-app met contacten om integraties uit te proberen: contacten synchroniseren in beide richtingen met je CRM. Alleen in testomgevingen."
+      },
+      "mailchimp": {
+        "description": "Stuur een doelgroep naar een Mailchimp-lijst met merge-velden. Afmeldingen en onbestelbare adressen komen terug als toestemmingswijzigingen."
+      },
+      "hubspot": {
+        "description": "Synchroniseer contacten in beide richtingen en stuur je evenementen naar HubSpot als marketingevenementen met inschrijvingen en check-ins."
+      },
+      "klaviyo": {
+        "description": "Stuur een doelgroep naar een Klaviyo-lijst. Afmeldingen, bounces en spamklachten komen terug als toestemmingswijzigingen."
       }
     },
     "sandboxBadge": "Test",
@@ -13071,11 +13080,25 @@
     "readOnly": "Alleen eigenaren en beheerders kunnen integraties koppelen of wijzigen.",
     "breadcrumb": "Kruimelpad",
     "objects": {
-      "contacts": "Contacten"
+      "contacts": "Contacten",
+      "members": "Lijstleden",
+      "marketing_events": "Marketingevenementen",
+      "event_attendance": "Inschrijvingen en aanwezigheid"
     },
     "fields": {
       "email": "E-mail",
-      "name": "Naam"
+      "name": "Naam",
+      "first_name": "Voornaam",
+      "last_name": "Achternaam",
+      "company": "Bedrijf",
+      "phone": "Telefoon",
+      "subscription": "Abonnementswijziging",
+      "email_opt_out": "Afgemeld voor e-mail",
+      "starts_at": "Begint",
+      "ends_at": "Eindigt",
+      "timezone": "Tijdzone",
+      "venue": "Locatie",
+      "cancelled": "Geannuleerd"
     },
     "status": {
       "none": "Niet gekoppeld",
@@ -13288,7 +13311,59 @@
       "allow": "Toestaan",
       "deny": "Weigeren"
     },
-    "webhooksAction": "Een webhook instellen"
+    "webhooksAction": "Een webhook instellen",
+    "marketing": {
+      "consentRule": "Toestemming eerst: alleen contacten met toestemming voor marketingmail worden verstuurd, en een afmelding of bounce gaat altijd voor. Meldt iemand zich hier af, dan meldt de volgende synchronisatie diegene daar ook af.",
+      "audience": {
+        "title": "Doelgroep",
+        "help": "Kies wie naar {name} gaat en bij welke lijst ze komen.",
+        "saved": "Doelgroep opgeslagen. De volgende synchronisatie verstuurt hem.",
+        "segmentMissing": "De opgeslagen doelgroep is verwijderd, dus er wordt niemand nieuw verstuurd. Kies een andere doelgroep.",
+        "segment": "Wie wordt verstuurd",
+        "list": "{name}-lijst",
+        "everyone": "Iedereen met toestemming voor marketingmail",
+        "savedSegment": "Een opgeslagen doelgroep",
+        "emptyTitle": "Nog geen doelgroep gekozen",
+        "emptyManage": "Kies wie je verstuurt en bij welke {name}-lijst ze komen. Er wordt niets verstuurd tot je opslaat.",
+        "emptyRead": "Een eigenaar of beheerder kiest wie wordt verstuurd. Tot dan wordt er niets verstuurd.",
+        "formLabel": "Kies de doelgroep en lijst",
+        "save": "Doelgroep opslaan",
+        "feedback": {
+          "list_required": "Kies een lijst.",
+          "provider_unavailable": "De lijsten konden niet bij de aanbieder worden geladen. Probeer het over een paar minuten opnieuw.",
+          "validation_failed": "Die doelgroep bestaat niet meer. Kies een andere.",
+          "forbidden": "Je hebt hier geen toegang toe.",
+          "invalid_state": "Deze koppeling kan nu niet worden ingesteld.",
+          "not_found": "We konden dat niet vinden.",
+          "read_only_freeze": "Wijzigingen zijn gepauzeerd tijdens gepland onderhoud. Probeer het opnieuw als het klaar is.",
+          "internal": "Er ging bij ons iets mis."
+        }
+      },
+      "hubspot": {
+        "title": "Wat met HubSpot synchroniseert",
+        "contacts": "Contacten synchroniseren in beide richtingen met de veldkoppeling hieronder. Contacten uit HubSpot komen nooit met toestemming binnen; een afmelding in HubSpot meldt ze hier af.",
+        "events": "Elk gepubliceerd evenement wordt een HubSpot-marketingevenement, en een annulering wordt ook verstuurd.",
+        "attendance": "Inschrijvingen, check-ins en annuleringen worden verstuurd voor contacten met toestemming voor marketingmail."
+      },
+      "changes": {
+        "title": "Toestemmingswijzigingen van {name}",
+        "help": "Afmeldingen, onbestelbare adressen en klachten die terugkwamen van {name}, en wat ze hier hebben veranderd.",
+        "caption": "Toestemmingswijzigingen van {name}",
+        "empty": "Er is nog niets teruggekomen van {name}.",
+        "who": "Contact",
+        "change": "Bij de aanbieder",
+        "applied": "Hier gewijzigd",
+        "when": "Wanneer",
+        "withdrawn": "Toestemming ingetrokken",
+        "suppressed": "Geblokkeerd",
+        "already": "Al bijgewerkt",
+        "kinds": {
+          "unsubscribed": "Afgemeld",
+          "cleaned": "Adres onbestelbaar",
+          "complained": "Spamklacht"
+        }
+      }
+    }
   },
   "guestSeats": {
     "placeAt": {

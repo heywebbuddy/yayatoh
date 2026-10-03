@@ -116,8 +116,7 @@ async function membersOfTx(
   scope: ListScope,
   contactIds: readonly string[],
 ): Promise<LocalRecord[]> {
-  const where =
-    scope.listId && scope.orgId ? await audienceWhereTx(tx, scope.orgId, scope.segmentId) : null;
+  const where = scope.listId && scope.orgId ? await audienceWhereTx(tx, scope.orgId, scope.segmentId) : null;
   const [states, linked, audience] = await Promise.all([
     contactStatesTx(tx, contactIds),
     linkedAmongTx(tx, connectionId, MEMBERS, contactIds),
@@ -196,8 +195,7 @@ export function defineListConnector(def: {
           async write(tx, ctx, values, localId, meta) {
             const change = String(values.subscription);
             // Only consent changes come back; anything else is not ours to apply (never a grant).
-            if (!INBOUND_CHANGES.includes(change as InboundChange))
-              throw new Error('Not a consent change');
+            if (!INBOUND_CHANGES.includes(change as InboundChange)) throw new Error('Not a consent change');
             const contactId = await applyInboundChangeTx(tx, ctx, {
               connector: def.key,
               connectionId: meta.connectionId,

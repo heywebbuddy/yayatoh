@@ -13052,6 +13052,15 @@
     "connectors": {
       "demo": {
         "description": "Una app de contactos de prueba para probar integraciones: los contactos se sincronizan en ambos sentidos con tu CRM. Solo en entornos de prueba."
+      },
+      "mailchimp": {
+        "description": "Envía una audiencia a una lista de Mailchimp con campos de combinación. Las bajas y las direcciones rebotadas vuelven como cambios de consentimiento."
+      },
+      "hubspot": {
+        "description": "Sincroniza contactos en ambos sentidos y envía tus eventos a HubSpot como eventos de marketing con inscripciones y registros de entrada."
+      },
+      "klaviyo": {
+        "description": "Envía una audiencia a una lista de Klaviyo. Las bajas, los rebotes y las quejas por spam vuelven como cambios de consentimiento."
       }
     },
     "sandboxBadge": "Pruebas",
@@ -13071,11 +13080,25 @@
     "readOnly": "Solo propietarios y administradores pueden conectar o cambiar integraciones.",
     "breadcrumb": "Ruta de navegación",
     "objects": {
-      "contacts": "Contactos"
+      "contacts": "Contactos",
+      "members": "Miembros de la lista",
+      "marketing_events": "Eventos de marketing",
+      "event_attendance": "Inscripciones y asistencia"
     },
     "fields": {
       "email": "Correo electrónico",
-      "name": "Nombre"
+      "name": "Nombre",
+      "first_name": "Nombre",
+      "last_name": "Apellido",
+      "company": "Empresa",
+      "phone": "Teléfono",
+      "subscription": "Cambio de suscripción",
+      "email_opt_out": "Baja del correo",
+      "starts_at": "Inicio",
+      "ends_at": "Fin",
+      "timezone": "Zona horaria",
+      "venue": "Lugar",
+      "cancelled": "Cancelado"
     },
     "status": {
       "none": "Sin conectar",
@@ -13288,7 +13311,59 @@
       "allow": "Permitir",
       "deny": "Denegar"
     },
-    "webhooksAction": "Configurar un webhook"
+    "webhooksAction": "Configurar un webhook",
+    "marketing": {
+      "consentRule": "Primero el consentimiento: solo se envían contactos con consentimiento para correos de marketing, y una baja o un rebote siempre prevalece. Cuando alguien se da de baja aquí, la siguiente sincronización también lo da de baja allí.",
+      "audience": {
+        "title": "Audiencia",
+        "help": "Elige a quién se envía a {name} y a qué lista se une.",
+        "saved": "Audiencia guardada. La siguiente sincronización la envía.",
+        "segmentMissing": "La audiencia guardada se eliminó, así que no se envía a nadie nuevo. Elige otra audiencia.",
+        "segment": "A quién se envía",
+        "list": "Lista de {name}",
+        "everyone": "Todos con consentimiento para correos de marketing",
+        "savedSegment": "Una audiencia guardada",
+        "emptyTitle": "Aún no hay audiencia",
+        "emptyManage": "Elige a quién enviar y la lista de {name} a la que se unen. No se envía nada hasta que guardes.",
+        "emptyRead": "Un propietario o administrador elige a quién se envía. Hasta entonces no se envía nada.",
+        "formLabel": "Elige la audiencia y la lista",
+        "save": "Guardar audiencia",
+        "feedback": {
+          "list_required": "Elige una lista.",
+          "provider_unavailable": "No se pudieron cargar las listas del proveedor. Inténtalo de nuevo en unos minutos.",
+          "validation_failed": "Esa audiencia ya no existe. Elige otra.",
+          "forbidden": "No tienes acceso a esto.",
+          "invalid_state": "Esta conexión no se puede configurar ahora.",
+          "not_found": "No encontramos eso.",
+          "read_only_freeze": "Los cambios están en pausa durante el mantenimiento programado. Inténtalo cuando termine.",
+          "internal": "Algo salió mal por nuestra parte."
+        }
+      },
+      "hubspot": {
+        "title": "Qué se sincroniza con HubSpot",
+        "contacts": "Los contactos se sincronizan en ambos sentidos con la asignación de campos de abajo. Los contactos de HubSpot nunca llegan con consentimiento; una baja en HubSpot los da de baja aquí.",
+        "events": "Cada evento publicado se convierte en un evento de marketing de HubSpot, y también se envía una cancelación.",
+        "attendance": "Las inscripciones, los registros de entrada y las cancelaciones se envían para contactos con consentimiento para correos de marketing."
+      },
+      "changes": {
+        "title": "Cambios de consentimiento de {name}",
+        "help": "Bajas, direcciones rebotadas y quejas que volvieron de {name}, y lo que cambiaron aquí.",
+        "caption": "Cambios de consentimiento de {name}",
+        "empty": "Aún no ha vuelto nada de {name}.",
+        "who": "Contacto",
+        "change": "En el proveedor",
+        "applied": "Cambiado aquí",
+        "when": "Cuándo",
+        "withdrawn": "Consentimiento retirado",
+        "suppressed": "Bloqueado",
+        "already": "Ya estaba al día",
+        "kinds": {
+          "unsubscribed": "Dado de baja",
+          "cleaned": "Dirección rebotada",
+          "complained": "Queja por spam"
+        }
+      }
+    }
   },
   "guestSeats": {
     "placeAt": {

@@ -64,7 +64,14 @@ function profileFor(d: KlaviyoData, email: string): KlaviyoProfile {
   let p = d.profiles.find((x) => x.email === norm);
   if (!p) {
     d.seq += 1;
-    p = { id: `01KLPROF${String(d.seq).padStart(6, '0')}`, email: norm, attributes: {}, consent: 'NEVER_SUBSCRIBED', suppression: null, updated: '' };
+    p = {
+      id: `01KLPROF${String(d.seq).padStart(6, '0')}`,
+      email: norm,
+      attributes: {},
+      consent: 'NEVER_SUBSCRIBED',
+      suppression: null,
+      updated: '',
+    };
     d.profiles.push(p);
   }
   return p;
@@ -122,7 +129,10 @@ export const klaviyoFakeProvider: FakeProvider = {
     if (req.method === 'GET' && req.path === '/api/lists')
       return {
         status: 200,
-        body: { data: d.lists.map((l) => ({ type: 'list', id: l.id, attributes: { name: l.name } })), links: { next: null } },
+        body: {
+          data: d.lists.map((l) => ({ type: 'list', id: l.id, attributes: { name: l.name } })),
+          links: { next: null },
+        },
       };
     const listProfiles = /^\/api\/lists\/([A-Za-z0-9]+)\/profiles$/.exec(req.path);
     if (req.method === 'GET' && listProfiles) {
@@ -161,14 +171,13 @@ export const klaviyoFakeProvider: FakeProvider = {
       return r;
     };
     if (req.method === 'POST' && req.path === '/api/profile-import') {
-      const a = ((req.body as { data?: { attributes?: Record<string, unknown> } })?.data?.attributes ?? {}) as Record<
-        string,
-        unknown
-      >;
+      const a = ((req.body as { data?: { attributes?: Record<string, unknown> } })?.data?.attributes ??
+        {}) as Record<string, unknown>;
       if (typeof a.email !== 'string' || !/^[^@\s]+@[^@\s]+$/.test(a.email))
         return { status: 400, body: { errors: [{ status: '400', code: 'invalid' }] } };
       const p = profileFor(d, a.email);
-      for (const [k, v] of Object.entries(a)) if (ATTRS.has(k) && v !== null && v !== undefined) p.attributes[k] = v;
+      for (const [k, v] of Object.entries(a))
+        if (ATTRS.has(k) && v !== null && v !== undefined) p.attributes[k] = v;
       p.updated = tick(d);
       return remember({ status: 200, body: { data: view(p) } });
     }

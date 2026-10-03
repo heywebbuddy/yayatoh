@@ -13052,6 +13052,15 @@
     "connectors": {
       "demo": {
         "description": "用于试用集成的测试联系人应用：联系人与你的 CRM 双向同步。仅限测试环境。"
+      },
+      "mailchimp": {
+        "description": "将受众连同合并字段发送到 Mailchimp 列表。退订和退信地址会作为同意变更返回。"
+      },
+      "hubspot": {
+        "description": "双向同步联系人，并将你的活动作为营销活动发送到 HubSpot，包含报名和签到。"
+      },
+      "klaviyo": {
+        "description": "将受众发送到 Klaviyo 列表。退订、退信和垃圾邮件投诉会作为同意变更返回。"
       }
     },
     "sandboxBadge": "测试",
@@ -13071,11 +13080,25 @@
     "readOnly": "只有所有者和管理员可以连接或更改集成。",
     "breadcrumb": "面包屑导航",
     "objects": {
-      "contacts": "联系人"
+      "contacts": "联系人",
+      "members": "列表成员",
+      "marketing_events": "营销活动",
+      "event_attendance": "报名与出席"
     },
     "fields": {
       "email": "电子邮件",
-      "name": "姓名"
+      "name": "姓名",
+      "first_name": "名",
+      "last_name": "姓",
+      "company": "公司",
+      "phone": "电话",
+      "subscription": "订阅变更",
+      "email_opt_out": "已退订邮件",
+      "starts_at": "开始",
+      "ends_at": "结束",
+      "timezone": "时区",
+      "venue": "场地",
+      "cancelled": "已取消"
     },
     "status": {
       "none": "未连接",
@@ -13288,7 +13311,59 @@
       "allow": "允许",
       "deny": "拒绝"
     },
-    "webhooksAction": "设置 Webhook"
+    "webhooksAction": "设置 Webhook",
+    "marketing": {
+      "consentRule": "同意优先：只发送同意接收营销邮件的联系人，退订或退信始终优先。有人在这里退订后，下一次同步也会在对方那里将其退订。",
+      "audience": {
+        "title": "受众",
+        "help": "选择发送到 {name} 的人员以及他们加入的列表。",
+        "saved": "受众已保存。下一次同步会发送。",
+        "segmentMissing": "已保存的受众已被删除，因此不会发送新人员。请选择其他受众。",
+        "segment": "发送对象",
+        "list": "{name} 列表",
+        "everyone": "所有同意接收营销邮件的人",
+        "savedSegment": "已保存的受众",
+        "emptyTitle": "尚未选择受众",
+        "emptyManage": "选择要发送的人员和他们加入的 {name} 列表。保存前不会发送任何内容。",
+        "emptyRead": "由所有者或管理员选择发送对象。在此之前不会发送任何内容。",
+        "formLabel": "选择受众和列表",
+        "save": "保存受众",
+        "feedback": {
+          "list_required": "请选择一个列表。",
+          "provider_unavailable": "无法从服务商加载列表。请几分钟后重试。",
+          "validation_failed": "该受众已不存在。请选择其他受众。",
+          "forbidden": "你无权访问此内容。",
+          "invalid_state": "目前无法设置此连接。",
+          "not_found": "找不到该内容。",
+          "read_only_freeze": "计划维护期间暂停更改。维护结束后请重试。",
+          "internal": "我们这边出了点问题。"
+        }
+      },
+      "hubspot": {
+        "title": "与 HubSpot 同步的内容",
+        "contacts": "联系人按下方的字段映射双向同步。来自 HubSpot 的联系人永远不会带着同意进入；在 HubSpot 退订会在这里将其退订。",
+        "events": "每个已发布的活动都会成为 HubSpot 营销活动，取消也会同步发送。",
+        "attendance": "为同意接收营销邮件的联系人发送报名、签到和取消。"
+      },
+      "changes": {
+        "title": "来自 {name} 的同意变更",
+        "help": "从 {name} 返回的退订、退信地址和投诉，以及它们在这里造成的变更。",
+        "caption": "来自 {name} 的同意变更",
+        "empty": "{name} 还没有返回任何内容。",
+        "who": "联系人",
+        "change": "在服务商处",
+        "applied": "在这里的变更",
+        "when": "时间",
+        "withdrawn": "已撤回同意",
+        "suppressed": "已屏蔽",
+        "already": "已是最新",
+        "kinds": {
+          "unsubscribed": "已退订",
+          "cleaned": "地址退信",
+          "complained": "垃圾邮件投诉"
+        }
+      }
+    }
   },
   "guestSeats": {
     "placeAt": {

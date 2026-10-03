@@ -5,7 +5,12 @@
       {
         "type": "list",
         "id": "Y6nRLr",
-        "attributes": { "name": "Newsletter", "created": "2026-01-01T00:00:00+00:00", "updated": "2026-01-02T00:00:00+00:00", "opt_in_process": "single_opt_in" },
+        "attributes": {
+          "name": "Newsletter",
+          "created": "2026-01-01T00:00:00+00:00",
+          "updated": "2026-01-02T00:00:00+00:00",
+          "opt_in_process": "single_opt_in"
+        },
         "links": { "self": "https://a.klaviyo.com/api/lists/Y6nRLr/" }
       }
     ],

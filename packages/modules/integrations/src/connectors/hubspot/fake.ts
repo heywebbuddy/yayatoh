@@ -97,8 +97,18 @@ export const hubspotFakeProvider: FakeProvider = {
   accountLabel: 'HubSpot (sandbox portal)',
   seed: (): HubspotData => {
     const d: HubspotData = { clock: 0, seq: 0, contacts: [], events: [], keys: {} };
-    newContact(d, { email: HUBSPOT_SEED_CONTACT, firstname: 'Only', lastname: 'Hubspot', company: 'Remote Co' });
-    newContact(d, { email: HUBSPOT_SEED_OPTED_OUT, firstname: 'Opted', lastname: 'Out', hs_email_optout: 'true' });
+    newContact(d, {
+      email: HUBSPOT_SEED_CONTACT,
+      firstname: 'Only',
+      lastname: 'Hubspot',
+      company: 'Remote Co',
+    });
+    newContact(d, {
+      email: HUBSPOT_SEED_OPTED_OUT,
+      firstname: 'Opted',
+      lastname: 'Out',
+      hs_email_optout: 'true',
+    });
     return d;
   },
   handle(account, req: ProviderRequest): ProviderResponse {
@@ -114,14 +124,20 @@ export const hubspotFakeProvider: FakeProvider = {
         filterGroups?: { filters?: { propertyName?: string; operator?: string; value?: string }[] }[];
         limit?: number;
       };
-      const since = Number(body.filterGroups?.[0]?.filters?.find((f) => f.propertyName === 'lastmodifieddate')?.value ?? 0);
+      const since = Number(
+        body.filterGroups?.[0]?.filters?.find((f) => f.propertyName === 'lastmodifieddate')?.value ?? 0,
+      );
       const limit = Math.min(100, Math.max(1, Number(body.limit ?? 100)));
       const changed = d.contacts.filter((c) => c.updated > since).sort((a, b) => a.updated - b.updated);
       return { status: 200, body: { total: changed.length, results: changed.slice(0, limit).map(view) } };
     }
     if (req.method === 'POST' && req.path === '/crm/v3/objects/contacts/batch/upsert') {
-      const inputs = ((req.body as { inputs?: { idProperty?: unknown; id?: unknown; properties?: Record<string, unknown> }[] })
-        ?.inputs ?? []);
+      const inputs =
+        (
+          req.body as {
+            inputs?: { idProperty?: unknown; id?: unknown; properties?: Record<string, unknown> }[];
+          }
+        )?.inputs ?? [];
       const results = [];
       for (const i of inputs) {
         const email = typeof i.id === 'string' ? i.id : '';
@@ -144,7 +160,10 @@ export const hubspotFakeProvider: FakeProvider = {
     if (one) {
       const c = one[1] ? d.contacts.find((x) => x.id === one[1]) : undefined;
       if (req.method === 'GET') return c ? { status: 200, body: view(c) } : err(404, 'OBJECT_NOT_FOUND');
-      const props = ((req.body as { properties?: Record<string, unknown> })?.properties ?? {}) as Record<string, unknown>;
+      const props = ((req.body as { properties?: Record<string, unknown> })?.properties ?? {}) as Record<
+        string,
+        unknown
+      >;
       const clean = Object.fromEntries(
         Object.entries(props)
           .filter(([k, v]) => PROPS.has(k) && (typeof v === 'string' || v === null))
@@ -170,7 +189,10 @@ export const hubspotFakeProvider: FakeProvider = {
       c.properties.hs_email_optout = 'true';
       c.properties.yayatoh_origin = String((req.body as { origin?: unknown })?.origin ?? '') || null;
       c.updated = tick(d);
-      return remember({ status: 200, body: { recipient: email, subscriptionId: 'marketing', status: 'NOT_SUBSCRIBED' } });
+      return remember({
+        status: 200,
+        body: { recipient: email, subscriptionId: 'marketing', status: 'NOT_SUBSCRIBED' },
+      });
     }
     const ev = /^\/marketing\/v3\/marketing-events\/events(?:\/([A-Za-z0-9_-]+))?$/.exec(req.path);
     if (ev) {
@@ -198,9 +220,10 @@ export const hubspotFakeProvider: FakeProvider = {
       }
       if (req.method === 'GET') return { status: 200, body: { objectId: e.objectId, ...e.properties } };
     }
-    const att = /^\/marketing\/v3\/marketing-events\/attendance\/([A-Za-z0-9_-]+)\/(register|attend|cancel)\/email-create$/.exec(
-      req.path,
-    );
+    const att =
+      /^\/marketing\/v3\/marketing-events\/attendance\/([A-Za-z0-9_-]+)\/(register|attend|cancel)\/email-create$/.exec(
+        req.path,
+      );
     if (req.method === 'POST' && att) {
       const e = d.events.find((x) => x.externalEventId === att[1]);
       if (!e) return err(404, 'OBJECT_NOT_FOUND');
@@ -211,7 +234,9 @@ export const hubspotFakeProvider: FakeProvider = {
       for (const email of inputs) e.attendance[email] = { state: att[2] as 'register', at };
       return remember({
         status: 200,
-        body: { results: inputs.map((email) => ({ email, vid: byEmail(d, email)?.id ?? null, at: iso(at) })) },
+        body: {
+          results: inputs.map((email) => ({ email, vid: byEmail(d, email)?.id ?? null, at: iso(at) })),
+        },
       });
     }
     return err(404, 'NOT_FOUND');

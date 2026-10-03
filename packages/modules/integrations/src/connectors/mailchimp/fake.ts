@@ -60,7 +60,8 @@ export function mailchimpRemoteSet(
   status: MailchimpMember['status'],
 ): MailchimpMember {
   const d = data(a);
-  const list = (d.members[listId] ??= []);
+  const list = d.members[listId] ?? [];
+  d.members[listId] = list;
   const id = subscriberHash(email);
   let m = list.find((x) => x.id === id);
   if (!m) {
@@ -126,7 +127,11 @@ export const mailchimpFakeProvider: FakeProvider = {
         .sort((a, b) => a.last_changed.localeCompare(b.last_changed));
       return {
         status: 200,
-        body: { members: changed.slice(0, count).map((x) => view(listId, x)), list_id: listId, total_items: changed.length },
+        body: {
+          members: changed.slice(0, count).map((x) => view(listId, x)),
+          list_id: listId,
+          total_items: changed.length,
+        },
       };
     }
     const member = hash ? list.find((x) => x.id === hash) : undefined;
@@ -146,11 +151,17 @@ export const mailchimpFakeProvider: FakeProvider = {
       const email = typeof body.email_address === 'string' ? body.email_address : '';
       if (!/^[^@\s]+@[^@\s]+$/.test(email))
         return { status: 400, body: { title: 'Invalid Resource', status: 400 } };
-      const status = (member ? body.status : (body.status_if_new ?? body.status)) as MailchimpMember['status'];
+      const status = (
+        member ? body.status : (body.status_if_new ?? body.status)
+      ) as MailchimpMember['status'];
       if (!['subscribed', 'unsubscribed', 'pending'].includes(String(status ?? member?.status)))
         return { status: 400, body: { title: 'Invalid Resource', status: 400 } };
       // An unsubscribed or cleaned member can't be re-subscribed through the API.
-      if (member && status === 'subscribed' && (member.status === 'unsubscribed' || member.status === 'cleaned'))
+      if (
+        member &&
+        status === 'subscribed' &&
+        (member.status === 'unsubscribed' || member.status === 'cleaned')
+      )
         return { status: 400, body: { title: 'Member In Compliance State', status: 400 } };
       const fields = Object.fromEntries(
         Object.entries(body.merge_fields ?? {}).filter(([k, v]) => MERGE.has(k) && v !== undefined),

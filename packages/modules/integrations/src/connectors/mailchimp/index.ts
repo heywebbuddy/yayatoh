@@ -57,7 +57,9 @@ export const mailchimpApi: ListApi = {
       },
     });
     const body = res.body as { members?: unknown[]; total_items?: unknown };
-    const records = (body.members ?? []).map(parseMailchimpMember).filter((r): r is RemoteRecord => r !== null);
+    const records = (body.members ?? [])
+      .map(parseMailchimpMember)
+      .filter((r): r is RemoteRecord => r !== null);
     const last = records[records.length - 1];
     return {
       records,

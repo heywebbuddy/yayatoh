@@ -76,7 +76,11 @@ export async function contactsConsentTx(
 }
 
 /** Contact ids after `afterId` in id order (merged-away ones left out), one page. */
-export async function contactIdsAfterTx(tx: TenantTx, afterId: string | null, limit: number): Promise<string[]> {
+export async function contactIdsAfterTx(
+  tx: TenantTx,
+  afterId: string | null,
+  limit: number,
+): Promise<string[]> {
   const rows = await tx.execute<{ id: string }>(sql`
     select id from crm.contacts
     where merged_into is null ${afterId ? sql`and id > ${afterId}::uuid` : sql``}

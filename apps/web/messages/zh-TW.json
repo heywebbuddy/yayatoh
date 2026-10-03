@@ -13052,6 +13052,15 @@
     "connectors": {
       "demo": {
         "description": "用來試用整合的測試聯絡人應用程式：聯絡人會與你的 CRM 雙向同步。僅限測試環境。"
+      },
+      "mailchimp": {
+        "description": "將受眾連同合併欄位傳送到 Mailchimp 名單。取消訂閱和退信地址會以同意變更的形式傳回。"
+      },
+      "hubspot": {
+        "description": "雙向同步聯絡人，並將你的活動以行銷活動的形式傳送到 HubSpot，包含報名與報到。"
+      },
+      "klaviyo": {
+        "description": "將受眾傳送到 Klaviyo 名單。取消訂閱、退信和垃圾郵件檢舉會以同意變更的形式傳回。"
       }
     },
     "sandboxBadge": "測試",
@@ -13071,11 +13080,25 @@
     "readOnly": "只有擁有者和管理員可以串接或變更整合。",
     "breadcrumb": "導覽路徑",
     "objects": {
-      "contacts": "聯絡人"
+      "contacts": "聯絡人",
+      "members": "名單成員",
+      "marketing_events": "行銷活動",
+      "event_attendance": "報名與出席"
     },
     "fields": {
       "email": "電子郵件",
-      "name": "姓名"
+      "name": "姓名",
+      "first_name": "名字",
+      "last_name": "姓氏",
+      "company": "公司",
+      "phone": "電話",
+      "subscription": "訂閱變更",
+      "email_opt_out": "已取消訂閱郵件",
+      "starts_at": "開始",
+      "ends_at": "結束",
+      "timezone": "時區",
+      "venue": "場地",
+      "cancelled": "已取消"
     },
     "status": {
       "none": "未串接",
@@ -13288,7 +13311,59 @@
       "allow": "允許",
       "deny": "拒絕"
     },
-    "webhooksAction": "設定 Webhook"
+    "webhooksAction": "設定 Webhook",
+    "marketing": {
+      "consentRule": "同意優先：只傳送同意接收行銷郵件的聯絡人，取消訂閱或退信一律優先。有人在這裡取消訂閱後，下一次同步也會在對方那裡將其取消訂閱。",
+      "audience": {
+        "title": "受眾",
+        "help": "選擇要傳送到 {name} 的人以及他們加入的名單。",
+        "saved": "已儲存受眾。下一次同步會傳送。",
+        "segmentMissing": "已儲存的受眾已被刪除，因此不會傳送新的人。請選擇其他受眾。",
+        "segment": "傳送對象",
+        "list": "{name} 名單",
+        "everyone": "所有同意接收行銷郵件的人",
+        "savedSegment": "已儲存的受眾",
+        "emptyTitle": "尚未選擇受眾",
+        "emptyManage": "選擇要傳送的人以及他們加入的 {name} 名單。儲存之前不會傳送任何內容。",
+        "emptyRead": "由擁有者或管理員選擇傳送對象。在此之前不會傳送任何內容。",
+        "formLabel": "選擇受眾和名單",
+        "save": "儲存受眾",
+        "feedback": {
+          "list_required": "請選擇名單。",
+          "provider_unavailable": "無法從服務商載入名單。請幾分鐘後再試。",
+          "validation_failed": "該受眾已不存在。請選擇其他受眾。",
+          "forbidden": "你沒有權限存取此內容。",
+          "invalid_state": "目前無法設定此連線。",
+          "not_found": "找不到該內容。",
+          "read_only_freeze": "排定維護期間暫停變更。維護結束後請再試一次。",
+          "internal": "我們這邊發生問題。"
+        }
+      },
+      "hubspot": {
+        "title": "與 HubSpot 同步的內容",
+        "contacts": "聯絡人依下方的欄位對應雙向同步。來自 HubSpot 的聯絡人永遠不會帶著同意進入；在 HubSpot 取消訂閱會在這裡將其取消訂閱。",
+        "events": "每個已發布的活動都會成為 HubSpot 行銷活動，取消也會一併傳送。",
+        "attendance": "會為同意接收行銷郵件的聯絡人傳送報名、報到和取消。"
+      },
+      "changes": {
+        "title": "來自 {name} 的同意變更",
+        "help": "從 {name} 傳回的取消訂閱、退信地址和檢舉，以及它們在這裡造成的變更。",
+        "caption": "來自 {name} 的同意變更",
+        "empty": "{name} 尚未傳回任何內容。",
+        "who": "聯絡人",
+        "change": "在服務商處",
+        "applied": "在這裡的變更",
+        "when": "時間",
+        "withdrawn": "已撤回同意",
+        "suppressed": "已封鎖",
+        "already": "已是最新",
+        "kinds": {
+          "unsubscribed": "已取消訂閱",
+          "cleaned": "地址退信",
+          "complained": "垃圾郵件檢舉"
+        }
+      }
+    }
   },
   "guestSeats": {
     "placeAt": {

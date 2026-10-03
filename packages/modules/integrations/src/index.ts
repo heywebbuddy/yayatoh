@@ -1,3 +1,22 @@
+// M6.4d: Mailchimp, Klaviyo and HubSpot (consent-first audience and contact sync).
+export * from './audience/consent.ts';
+export { type ListApi, MEMBERS, type ProviderList } from './audience/list-connector.ts';
+export {
+  AudienceSyncDto,
+  audienceSyncQuery,
+  audienceSyncSerializer,
+  CONSENT_CHANGES_SHOWN,
+  ConsentChangeDto,
+  consentChangesQuery,
+  consentChangesSerializer,
+  isListConnector,
+  isMarketingConnector,
+  LIST_CONNECTORS,
+  MARKETING_CONNECTORS,
+  providerLists,
+  saveAudienceSyncCommand,
+} from './audience/settings.ts';
+export { type ContactState, contactStatesTx } from './audience/state.ts';
 export {
   FAKE_ACCESS_TOKEN,
   FAKE_REFRESH_TOKEN,
@@ -54,7 +73,40 @@ export {
   demoRemoteRecords,
   demoRemoteUpdate,
 } from './connectors/demo.ts';
+export {
+  HUBSPOT_SEED_CONTACT,
+  HUBSPOT_SEED_OPTED_OUT,
+  hubspotFakeProvider,
+  hubspotRemoteContacts,
+  hubspotRemoteEdit,
+  hubspotRemoteEvents,
+  hubspotRemoteOptOut,
+} from './connectors/hubspot/fake.ts';
+export { hubspotConnector, parseHubspotContact } from './connectors/hubspot/index.ts';
 export { CONNECTORS, connectorByKey, offeredConnectors } from './connectors/index.ts';
+export {
+  KLAVIYO_LISTS,
+  KLAVIYO_SEED_BOUNCED,
+  klaviyoFakeProvider,
+  klaviyoRemoteMembers,
+  klaviyoRemoteSet,
+} from './connectors/klaviyo/fake.ts';
+export {
+  klaviyoApi,
+  klaviyoConnector,
+  klaviyoStatus,
+  parseKlaviyoProfile,
+} from './connectors/klaviyo/index.ts';
+export {
+  MAILCHIMP_LISTS,
+  MAILCHIMP_SEED_UNSUBSCRIBED,
+  mailchimpFakeProvider,
+  mailchimpRemoteMembers,
+  mailchimpRemoteSet,
+  subscriberHash,
+} from './connectors/mailchimp/fake.ts';
+export { mailchimpApi, mailchimpConnector, parseMailchimpMember } from './connectors/mailchimp/index.ts';
+export { integrationsContactOwner } from './contact-merge.ts';
 export * from './domain/mapping.ts';
 export * from './domain/sync.ts';
 export {
@@ -100,50 +152,3 @@ export {
   type SyncIO,
   type WriteMeta,
 } from './sdk/connector.ts';
-// M6.4d: Mailchimp, Klaviyo and HubSpot (consent-first audience and contact sync).
-export * from './audience/consent.ts';
-export { type ListApi, MEMBERS, type ProviderList } from './audience/list-connector.ts';
-export {
-  AudienceSyncDto,
-  audienceSyncQuery,
-  audienceSyncSerializer,
-  CONSENT_CHANGES_SHOWN,
-  ConsentChangeDto,
-  consentChangesQuery,
-  consentChangesSerializer,
-  isListConnector,
-  isMarketingConnector,
-  LIST_CONNECTORS,
-  MARKETING_CONNECTORS,
-  providerLists,
-  saveAudienceSyncCommand,
-} from './audience/settings.ts';
-export { type ContactState, contactStatesTx } from './audience/state.ts';
-export { hubspotConnector, parseHubspotContact } from './connectors/hubspot/index.ts';
-export {
-  HUBSPOT_SEED_CONTACT,
-  HUBSPOT_SEED_OPTED_OUT,
-  hubspotFakeProvider,
-  hubspotRemoteContacts,
-  hubspotRemoteEdit,
-  hubspotRemoteEvents,
-  hubspotRemoteOptOut,
-} from './connectors/hubspot/fake.ts';
-export { klaviyoApi, klaviyoConnector, klaviyoStatus, parseKlaviyoProfile } from './connectors/klaviyo/index.ts';
-export {
-  KLAVIYO_LISTS,
-  KLAVIYO_SEED_BOUNCED,
-  klaviyoFakeProvider,
-  klaviyoRemoteMembers,
-  klaviyoRemoteSet,
-} from './connectors/klaviyo/fake.ts';
-export { mailchimpApi, mailchimpConnector, parseMailchimpMember } from './connectors/mailchimp/index.ts';
-export {
-  MAILCHIMP_LISTS,
-  MAILCHIMP_SEED_UNSUBSCRIBED,
-  mailchimpFakeProvider,
-  mailchimpRemoteMembers,
-  mailchimpRemoteSet,
-  subscriberHash,
-} from './connectors/mailchimp/fake.ts';
-export { integrationsContactOwner } from './contact-merge.ts';

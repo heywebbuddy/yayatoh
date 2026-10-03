@@ -82,6 +82,8 @@ export {
   orderMessagesQuery,
   sendTestNotificationCommand,
 } from './inbox.ts';
+// M6.4d: unsubscribes and cleaned addresses reported by connected marketing tools.
+export { suppressAddressFromIntegrationTx, suppressFromIntegrationTx } from './integration-suppressions.ts';
 export {
   type Category,
   defaultPreference,
@@ -498,5 +500,3 @@ export {
   ingestInboundKeywords,
   type WebhookOutcome,
 } from './webhooks.ts';
-// M6.4d: unsubscribes and cleaned addresses reported by connected marketing tools.
-export { suppressAddressFromIntegrationTx, suppressFromIntegrationTx } from './integration-suppressions.ts';

@@ -13052,6 +13052,15 @@
     "connectors": {
       "demo": {
         "description": "Eine Sandbox-Kontakte-App zum Ausprobieren: Kontakte werden in beide Richtungen mit deinem CRM abgeglichen. Nur in Testumgebungen."
+      },
+      "mailchimp": {
+        "description": "Senden Sie eine Zielgruppe mit Merge-Feldern an eine Mailchimp-Liste. Abmeldungen und unzustellbare Adressen kommen als Einwilligungsänderungen zurück."
+      },
+      "hubspot": {
+        "description": "Kontakte in beide Richtungen synchronisieren und Ihre Veranstaltungen als Marketing-Events mit Anmeldungen und Check-ins an HubSpot senden."
+      },
+      "klaviyo": {
+        "description": "Senden Sie eine Zielgruppe an eine Klaviyo-Liste. Abmeldungen, Bounces und Spam-Beschwerden kommen als Einwilligungsänderungen zurück."
       }
     },
     "sandboxBadge": "Sandbox",
@@ -13071,11 +13080,25 @@
     "readOnly": "Nur Inhaber und Admins können Integrationen verbinden oder ändern.",
     "breadcrumb": "Brotkrümelnavigation",
     "objects": {
-      "contacts": "Kontakte"
+      "contacts": "Kontakte",
+      "members": "Listenmitglieder",
+      "marketing_events": "Marketing-Events",
+      "event_attendance": "Anmeldungen und Teilnahme"
     },
     "fields": {
       "email": "E-Mail",
-      "name": "Name"
+      "name": "Name",
+      "first_name": "Vorname",
+      "last_name": "Nachname",
+      "company": "Firma",
+      "phone": "Telefon",
+      "subscription": "Abo-Änderung",
+      "email_opt_out": "E-Mail abgemeldet",
+      "starts_at": "Beginn",
+      "ends_at": "Ende",
+      "timezone": "Zeitzone",
+      "venue": "Veranstaltungsort",
+      "cancelled": "Abgesagt"
     },
     "status": {
       "none": "Nicht verbunden",
@@ -13288,7 +13311,59 @@
       "allow": "Zulassen",
       "deny": "Ablehnen"
     },
-    "webhooksAction": "Webhook einrichten"
+    "webhooksAction": "Webhook einrichten",
+    "marketing": {
+      "consentRule": "Einwilligung zuerst: Nur Kontakte mit Einwilligung in Marketing-E-Mails werden gesendet, und eine Abmeldung oder ein Bounce hat immer Vorrang. Wer sich hier abmeldet, wird bei der nächsten Synchronisierung auch dort abgemeldet.",
+      "audience": {
+        "title": "Zielgruppe",
+        "help": "Wählen Sie, wer an {name} gesendet wird und welcher Liste die Personen beitreten.",
+        "saved": "Zielgruppe gespeichert. Die nächste Synchronisierung sendet sie.",
+        "segmentMissing": "Die gespeicherte Zielgruppe wurde gelöscht, daher wird niemand Neues gesendet. Wählen Sie eine andere Zielgruppe.",
+        "segment": "Wer gesendet wird",
+        "list": "{name}-Liste",
+        "everyone": "Alle mit Einwilligung in Marketing-E-Mails",
+        "savedSegment": "Eine gespeicherte Zielgruppe",
+        "emptyTitle": "Noch keine Zielgruppe gewählt",
+        "emptyManage": "Wählen Sie, wer gesendet wird und welcher {name}-Liste die Personen beitreten. Bis zum Speichern wird nichts gesendet.",
+        "emptyRead": "Inhaber oder Admins wählen, wer gesendet wird. Bis dahin wird nichts gesendet.",
+        "formLabel": "Zielgruppe und Liste wählen",
+        "save": "Zielgruppe speichern",
+        "feedback": {
+          "list_required": "Wählen Sie eine Liste.",
+          "provider_unavailable": "Die Listen konnten nicht vom Anbieter geladen werden. Versuchen Sie es in ein paar Minuten erneut.",
+          "validation_failed": "Diese Zielgruppe gibt es nicht mehr. Wählen Sie eine andere.",
+          "forbidden": "Sie haben keinen Zugriff darauf.",
+          "invalid_state": "Diese Verbindung kann gerade nicht eingerichtet werden.",
+          "not_found": "Das konnten wir nicht finden.",
+          "read_only_freeze": "Änderungen sind während der geplanten Wartung pausiert. Versuchen Sie es nach deren Ende erneut.",
+          "internal": "Bei uns ist etwas schiefgelaufen."
+        }
+      },
+      "hubspot": {
+        "title": "Was mit HubSpot synchronisiert wird",
+        "contacts": "Kontakte werden mit der Feldzuordnung unten in beide Richtungen synchronisiert. Kontakte aus HubSpot kommen nie mit Einwilligung an; eine Abmeldung in HubSpot meldet sie hier ab.",
+        "events": "Jede veröffentlichte Veranstaltung wird zu einem HubSpot-Marketing-Event, und auch eine Absage wird gesendet.",
+        "attendance": "Anmeldungen, Check-ins und Stornierungen werden für Kontakte mit Einwilligung in Marketing-E-Mails gesendet."
+      },
+      "changes": {
+        "title": "Einwilligungsänderungen von {name}",
+        "help": "Abmeldungen, unzustellbare Adressen und Beschwerden, die von {name} zurückkamen, und was sie hier geändert haben.",
+        "caption": "Einwilligungsänderungen von {name}",
+        "empty": "Von {name} ist noch nichts zurückgekommen.",
+        "who": "Kontakt",
+        "change": "Beim Anbieter",
+        "applied": "Hier geändert",
+        "when": "Wann",
+        "withdrawn": "Einwilligung widerrufen",
+        "suppressed": "Gesperrt",
+        "already": "Bereits aktuell",
+        "kinds": {
+          "unsubscribed": "Abgemeldet",
+          "cleaned": "Adresse unzustellbar",
+          "complained": "Spam-Beschwerde"
+        }
+      }
+    }
   },
   "guestSeats": {
     "placeAt": {

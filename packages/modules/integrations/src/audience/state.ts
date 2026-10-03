@@ -64,7 +64,9 @@ export async function liveConnectionIdTx(tx: TenantTx, connector: string): Promi
   const [c] = await tx
     .select({ id: connections.id })
     .from(connections)
-    .where(and(eq(connections.connector, connector), inArray(connections.status, ['pending', 'active', 'paused'])))
+    .where(
+      and(eq(connections.connector, connector), inArray(connections.status, ['pending', 'active', 'paused'])),
+    )
     .limit(1);
   return c?.id ?? null;
 }

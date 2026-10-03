@@ -52,28 +52,36 @@ function randomFacts(next: () => number): ConsentFacts {
     erased: next() < 0.1,
   };
 }
-const mayReceive = (f: ConsentFacts) => f.consent === 'granted' && !f.unsubscribed && !f.suppressed && !f.erased;
+const mayReceive = (f: ConsentFacts) =>
+  f.consent === 'granted' && !f.unsubscribed && !f.suppressed && !f.erased;
 
 describe('consent rules', () => {
   it('only express consent without any suppression is subscribed; suppressions win', () => {
-    expect(subscriptionStatus({ consent: 'granted', unsubscribed: false, suppressed: false, erased: false })).toBe(
-      'subscribed',
-    );
-    expect(subscriptionStatus({ consent: 'granted', unsubscribed: true, suppressed: false, erased: false })).toBe(
-      'unsubscribed',
-    );
-    expect(subscriptionStatus({ consent: 'granted', unsubscribed: false, suppressed: true, erased: false })).toBe(
-      'unsubscribed',
-    );
-    expect(subscriptionStatus({ consent: 'granted', unsubscribed: false, suppressed: false, erased: true })).toBe(
-      'unsubscribed',
-    );
-    expect(subscriptionStatus({ consent: 'withdrawn', unsubscribed: false, suppressed: false, erased: false })).toBe(
-      'unsubscribed',
-    );
-    expect(subscriptionStatus({ consent: null, unsubscribed: false, suppressed: false, erased: false })).toBe('none');
     expect(
-      subscriptionStatus({ consent: 'unknown_legacy', unsubscribed: false, suppressed: false, erased: false }),
+      subscriptionStatus({ consent: 'granted', unsubscribed: false, suppressed: false, erased: false }),
+    ).toBe('subscribed');
+    expect(
+      subscriptionStatus({ consent: 'granted', unsubscribed: true, suppressed: false, erased: false }),
+    ).toBe('unsubscribed');
+    expect(
+      subscriptionStatus({ consent: 'granted', unsubscribed: false, suppressed: true, erased: false }),
+    ).toBe('unsubscribed');
+    expect(
+      subscriptionStatus({ consent: 'granted', unsubscribed: false, suppressed: false, erased: true }),
+    ).toBe('unsubscribed');
+    expect(
+      subscriptionStatus({ consent: 'withdrawn', unsubscribed: false, suppressed: false, erased: false }),
+    ).toBe('unsubscribed');
+    expect(subscriptionStatus({ consent: null, unsubscribed: false, suppressed: false, erased: false })).toBe(
+      'none',
+    );
+    expect(
+      subscriptionStatus({
+        consent: 'unknown_legacy',
+        unsubscribed: false,
+        suppressed: false,
+        erased: false,
+      }),
     ).toBe('none');
   });
 
@@ -127,7 +135,12 @@ describe('recorded response samples', () => {
     expect(unsub).toMatchObject({
       id: '7a3c2b1f0e9d8c7b6a5f4e3d2c1b0a99',
       version: '2026-03-04T10:11:12+00:00',
-      fields: { email_address: 'unsub.person@example.test', status: 'unsubscribed', fname: 'Unsub', lname: 'Person' },
+      fields: {
+        email_address: 'unsub.person@example.test',
+        status: 'unsubscribed',
+        fname: 'Unsub',
+        lname: 'Person',
+      },
     });
     expect(cleaned?.fields.status).toBe('cleaned');
     expect(subscriberHash('  Ada@Example.TEST ')).toBe(subscriberHash('ada@example.test'));
@@ -137,9 +150,14 @@ describe('recorded response samples', () => {
   it('Klaviyo profiles parse; suppressions and unsubscribes become consent changes', () => {
     const f = fixture('klaviyo') as { profiles: { data: unknown[] } };
     const [unsub, complained] = f.profiles.data.map(parseKlaviyoProfile);
-    expect(unsub?.fields).toMatchObject({ email: 'unsub.person@example.test', consent_status: 'unsubscribed' });
+    expect(unsub?.fields).toMatchObject({
+      email: 'unsub.person@example.test',
+      consent_status: 'unsubscribed',
+    });
     expect(complained?.fields.consent_status).toBe('complained');
-    expect(klaviyoStatus({ consent: 'SUBSCRIBED', suppression: [{ reason: 'HARD_BOUNCE' }] })).toBe('cleaned');
+    expect(klaviyoStatus({ consent: 'SUBSCRIBED', suppression: [{ reason: 'HARD_BOUNCE' }] })).toBe(
+      'cleaned',
+    );
     expect(klaviyoStatus({ consent: 'SUBSCRIBED', suppression: [{ reason: 'USER_SUPPRESSED' }] })).toBe(
       'unsubscribed',
     );
@@ -168,10 +186,15 @@ describe('recorded response samples', () => {
       values: { email: 'unsub.person@example.test', subscription: 'unsubscribed' },
     });
     const hs = hubspotConnector.objects[0];
-    const h = parseHubspotContact((fixture('hubspot') as { search: { results: unknown[] } }).search.results[0]);
+    const h = parseHubspotContact(
+      (fixture('hubspot') as { search: { results: unknown[] } }).search.results[0],
+    );
     if (!hs?.pull || !h) throw new Error('no pull');
     const mapped = applyMapping(h.fields, hs.pull.defaultMapping, hs.localFields);
-    expect(mapped).toMatchObject({ ok: true, values: { email: 'opted.out@example.test', email_opt_out: true } });
+    expect(mapped).toMatchObject({
+      ok: true,
+      values: { email: 'opted.out@example.test', email_opt_out: true },
+    });
   });
 
   it('every new connector is listed with valid default mappings and a fake', () => {
@@ -184,7 +207,11 @@ describe('recorded response samples', () => {
         if (o.push) expect(validateMapping(o.push.defaultMapping, o.localFields, o.remoteFields)).toEqual([]);
       }
     }
-    expect(hubspotConnector.objects.map((o) => o.key)).toEqual(['contacts', 'marketing_events', 'event_attendance']);
+    expect(hubspotConnector.objects.map((o) => o.key)).toEqual([
+      'contacts',
+      'marketing_events',
+      'event_attendance',
+    ]);
     expect(klaviyoConnector.objects.map((o) => o.key)).toEqual(['members']);
   });
 });
@@ -240,7 +267,10 @@ describe('fakes', () => {
     const statuses = (page.body as { members: { email_address: string; status: string }[] }).members.map(
       (m) => `${m.email_address}:${m.status}`,
     );
-    expect(statuses).toEqual([`${MAILCHIMP_SEED_UNSUBSCRIBED}:unsubscribed`, 'new@mc-remote.test:unsubscribed']);
+    expect(statuses).toEqual([
+      `${MAILCHIMP_SEED_UNSUBSCRIBED}:unsubscribed`,
+      'new@mc-remote.test:unsubscribed',
+    ]);
   });
 
   it('Klaviyo: a hard-bounced profile stays suppressed when subscribed again', () => {
@@ -272,7 +302,13 @@ describe('fakes', () => {
         method: 'POST',
         path: '/crm/v3/objects/contacts/batch/upsert',
         body: {
-          inputs: [{ idProperty: 'email', id: 'p@hs.test', properties: { email: 'p@hs.test', hs_email_optout: 'true' } }],
+          inputs: [
+            {
+              idProperty: 'email',
+              id: 'p@hs.test',
+              properties: { email: 'p@hs.test', hs_email_optout: 'true' },
+            },
+          ],
         },
       },
       't',
@@ -281,10 +317,18 @@ describe('fakes', () => {
     expect(c?.fields.hs_email_optout).toBe('false');
     hubspotFakeProvider.handle(
       a,
-      { method: 'POST', path: '/communication-preferences/v3/unsubscribe', body: { emailAddress: 'p@hs.test' } },
+      {
+        method: 'POST',
+        path: '/communication-preferences/v3/unsubscribe',
+        body: { emailAddress: 'p@hs.test' },
+      },
       't',
     );
-    const after = hubspotFakeProvider.handle(a, { method: 'GET', path: `/crm/v3/objects/contacts/${c?.id}` }, 't');
+    const after = hubspotFakeProvider.handle(
+      a,
+      { method: 'GET', path: `/crm/v3/objects/contacts/${c?.id}` },
+      't',
+    );
     expect(parseHubspotContact(after.body)?.fields.hs_email_optout).toBe('true');
   });
 });

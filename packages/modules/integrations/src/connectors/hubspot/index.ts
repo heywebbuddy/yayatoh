@@ -6,8 +6,8 @@ import {
   writeSyncedContactTx,
 } from '@yayatoh/crm';
 import type { TenantTx } from '@yayatoh/db';
-import { requireOrg } from '@yayatoh/kernel';
 import { type EventSyncRow, eventForSyncTx, eventsForSyncAfterTx } from '@yayatoh/events';
+import { requireOrg } from '@yayatoh/kernel';
 import { and, eq, inArray } from 'drizzle-orm';
 import { hubspotContactAction } from '../../audience/consent.ts';
 import { applyInboundChangeTx } from '../../audience/inbound.ts';
@@ -200,10 +200,11 @@ async function attendanceRecordsTx(
   known: ReadonlyMap<string, ParticipationSyncRow>,
 ): Promise<LocalRecord[]> {
   const rows = new Map(known);
-  for (const id of ids) if (!rows.has(id)) {
-    const r = await participationByIdTx(tx, id);
-    if (r) rows.set(id, r);
-  }
+  for (const id of ids)
+    if (!rows.has(id)) {
+      const r = await participationByIdTx(tx, id);
+      if (r) rows.set(id, r);
+    }
   const links = ids.length
     ? await tx
         .select({ localId: recordLinks.localId, externalId: recordLinks.externalId })
@@ -233,7 +234,7 @@ async function attendanceRecordsTx(
   for (const p of pairs) {
     const c = states.get(p.contactId);
     // Consent first: attendance is sent only for contacts with email marketing consent.
-    if (!c || c.status !== 'subscribed') continue;
+    if (c?.status !== 'subscribed') continue;
     const state = p.row?.checkedIn ? 'attend' : p.row?.registered ? 'register' : 'cancel';
     if (state === 'cancel' && !linkOf.has(p.id)) continue;
     out.push({
@@ -324,7 +325,9 @@ export const hubspotConnector = defineConnector({
             },
           });
           const body = res.body as { results?: unknown[]; total?: unknown };
-          const records = (body.results ?? []).map(parseHubspotContact).filter((r): r is RemoteRecord => r !== null);
+          const records = (body.results ?? [])
+            .map(parseHubspotContact)
+            .filter((r): r is RemoteRecord => r !== null);
           const last = records[records.length - 1];
           return {
             records,
@@ -336,7 +339,8 @@ export const hubspotConnector = defineConnector({
         async write(tx, ctx, values, localId, meta) {
           const email = String(values.email);
           const name =
-            str(values.name) ?? ([str(values.first_name), str(values.last_name)].filter(Boolean).join(' ') || null);
+            str(values.name) ??
+            ([str(values.first_name), str(values.last_name)].filter(Boolean).join(' ') || null);
           const contactId = await writeSyncedContactTx(tx, ctx, { contactId: localId, email, name });
           await setSyncedContactCompanyTx(tx, ctx, contactId, str(values.company));
           // An opt-out in HubSpot withdraws consent here; an opt-in never grants it.
@@ -489,7 +493,8 @@ export const hubspotConnector = defineConnector({
         },
         async send(io, input) {
           const body: Record<string, unknown> = {};
-          for (const [k, v] of Object.entries(input.values)) if (v !== null && v !== undefined) body[camel(k)] = v;
+          for (const [k, v] of Object.entries(input.values))
+            if (v !== null && v !== undefined) body[camel(k)] = v;
           const query = { externalAccountId: HUBSPOT_ACCOUNT };
           const res = input.externalId
             ? await io.client.request({
@@ -507,7 +512,10 @@ export const hubspotConnector = defineConnector({
                 idempotencyKey: input.idempotencyKey,
               });
           const out = res.body as { updated?: unknown; objectId?: unknown };
-          return { externalId: input.local.id, version: String(out.updated ?? out.objectId ?? input.idempotencyKey) };
+          return {
+            externalId: input.local.id,
+            version: String(out.updated ?? out.objectId ?? input.idempotencyKey),
+          };
         },
       },
     },
@@ -541,18 +549,27 @@ export const hubspotConnector = defineConnector({
           return (await attendanceRecordsTx(tx, connectionId, [localId], new Map()))[0] ?? null;
         },
         async send(io, input) {
-          const { event_id: eventId, contact_id: contactId, state } = input.local.fields as Record<string, string>;
+          const {
+            event_id: eventId,
+            contact_id: contactId,
+            state,
+          } = input.local.fields as Record<string, string>;
           if (!eventId || !contactId || !['register', 'attend', 'cancel'].includes(String(state)))
             throw new Error('Not an attendance record');
           const res = await io.client.request({
             method: 'POST',
             path: `/marketing/v3/marketing-events/attendance/${eventId}/${state}/email-create`,
             query: { externalAccountId: HUBSPOT_ACCOUNT },
-            body: { inputs: [{ email: String(input.values.email), interactionDateTime: io.now.toISOString() }] },
+            body: {
+              inputs: [{ email: String(input.values.email), interactionDateTime: io.now.toISOString() }],
+            },
             idempotencyKey: input.idempotencyKey,
           });
           const at = (res.body as { results?: { at?: unknown }[] }).results?.[0]?.at;
-          return { externalId: attendanceKey(eventId, contactId), version: `${state}:${String(at ?? io.now.toISOString())}` };
+          return {
+            externalId: attendanceKey(eventId, contactId),
+            version: `${state}:${String(at ?? io.now.toISOString())}`,
+          };
         },
       },
     },

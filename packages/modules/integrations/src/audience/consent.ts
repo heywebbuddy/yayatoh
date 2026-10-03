@@ -70,4 +70,8 @@ export function hubspotContactAction(input: {
 
 /** What a provider told us about a person, as a consent change here (never a grant). */
 export type InboundChange = 'unsubscribed' | 'cleaned' | 'complained';
-export const INBOUND_CHANGES = ['unsubscribed', 'cleaned', 'complained'] as const satisfies readonly InboundChange[];
+export const INBOUND_CHANGES = [
+  'unsubscribed',
+  'cleaned',
+  'complained',
+] as const satisfies readonly InboundChange[];

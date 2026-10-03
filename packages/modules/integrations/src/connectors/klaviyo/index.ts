@@ -31,7 +31,9 @@ export function parseKlaviyoProfile(raw: unknown): RemoteRecord | null {
   if (!p || typeof p.id !== 'string' || !a || typeof a.email !== 'string') return null;
   const updated = typeof a.updated === 'string' ? a.updated : null;
   const at = updated ? new Date(updated) : null;
-  const subs = a.subscriptions as { email?: { marketing?: { consent?: unknown; suppression?: unknown } } } | undefined;
+  const subs = a.subscriptions as
+    | { email?: { marketing?: { consent?: unknown; suppression?: unknown } } }
+    | undefined;
   return {
     id: p.id,
     version: updated ?? 'unknown',
@@ -53,9 +55,14 @@ const notFound = (err: unknown) => (err as { status?: number }).status === 404;
 export const klaviyoApi: ListApi = {
   async lists(io) {
     const res = await io.client.request({ method: 'GET', path: '/api/lists' });
-    const lists = ((res.body as { data?: unknown[] }).data ?? []) as { id?: unknown; attributes?: { name?: unknown } }[];
+    const lists = ((res.body as { data?: unknown[] }).data ?? []) as {
+      id?: unknown;
+      attributes?: { name?: unknown };
+    }[];
     return lists.flatMap((l) =>
-      typeof l.id === 'string' && typeof l.attributes?.name === 'string' ? [{ id: l.id, name: l.attributes.name }] : [],
+      typeof l.id === 'string' && typeof l.attributes?.name === 'string'
+        ? [{ id: l.id, name: l.attributes.name }]
+        : [],
     );
   },
   async changes(io, listId, cursor) {
@@ -77,8 +84,15 @@ export const klaviyoApi: ListApi = {
   async member(io, _listId, externalId) {
     try {
       return parseKlaviyoProfile(
-        ((await io.client.request({ method: 'GET', path: `/api/profiles/${externalId}`, query: SUBSCRIPTIONS }))
-          .body as { data?: unknown }).data,
+        (
+          (
+            await io.client.request({
+              method: 'GET',
+              path: `/api/profiles/${externalId}`,
+              query: SUBSCRIPTIONS,
+            })
+          ).body as { data?: unknown }
+        ).data,
       );
     } catch (err) {
       if (notFound(err)) return null;

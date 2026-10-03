@@ -1,6 +1,7 @@
 import {
   connectionDetailQuery,
   connectorByKey,
+  isMarketingConnector,
   mappingFields,
   openErrorCountQuery,
   SYNC_INTERVALS,
@@ -26,6 +27,7 @@ import {
 } from '../actions.ts';
 import { ConnectionPill, codeText, ERROR_CODES, IntegrationTabs, RunPill } from '../parts.tsx';
 import { MappingForm } from './mapping-form.tsx';
+import { MarketingSection } from './marketing-section.tsx';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('integrations');
@@ -49,6 +51,8 @@ export default async function ConnectionPage({
     sync?: string;
     connected?: string;
     confirm?: string;
+    /** M6.4d: the audience form's outcome. */
+    audience?: string;
   }>;
 }) {
   const { locale, org, connection: connectionId } = await params;
@@ -230,6 +234,20 @@ export default async function ConnectionPage({
           ) : null}
         </Card>
       </section>
+      {isMarketingConnector(connector.key) && (live || c.status === 'revoked') ? (
+        <MarketingSection
+          org={org}
+          connector={connector.key}
+          name={connector.name}
+          connectionId={c.id}
+          ctx={data.ctx}
+          locale={locale}
+          timezone={data.org.timezone}
+          canManage={canManage}
+          active={c.status === 'active'}
+          feedback={sp.audience ?? null}
+        />
+      ) : null}
       {live || detail.mappings.length ? (
         <section aria-labelledby="mapping-heading" className="flex flex-col gap-3">
           <SectionHeader
@@ -249,6 +267,7 @@ export default async function ConnectionPage({
                   key={`${o.key}-${direction}`}
                   direction={direction}
                   objectType={o.key}
+                  objectLabel={connector.objects.length > 1 ? t(`objects.${o.key}`) : undefined}
                   version={current?.version ?? null}
                   rules={current?.rules ?? o[direction]?.defaultMapping ?? []}
                   sources={sources}

@@ -13052,6 +13052,15 @@
     "connectors": {
       "demo": {
         "description": "Um app de contatos de teste para experimentar integrações: os contatos são sincronizados nos dois sentidos com o seu CRM. Somente em ambientes de teste."
+      },
+      "mailchimp": {
+        "description": "Envie um público para uma lista do Mailchimp com campos de mesclagem. Descadastros e endereços com falha voltam como mudanças de consentimento."
+      },
+      "hubspot": {
+        "description": "Sincronize contatos nos dois sentidos e envie seus eventos ao HubSpot como eventos de marketing, com inscrições e check-ins."
+      },
+      "klaviyo": {
+        "description": "Envie um público para uma lista do Klaviyo. Descadastros, devoluções e denúncias de spam voltam como mudanças de consentimento."
       }
     },
     "sandboxBadge": "Teste",
@@ -13071,11 +13080,25 @@
     "readOnly": "Somente proprietários e administradores podem conectar ou alterar integrações.",
     "breadcrumb": "Trilha de navegação",
     "objects": {
-      "contacts": "Contatos"
+      "contacts": "Contatos",
+      "members": "Membros da lista",
+      "marketing_events": "Eventos de marketing",
+      "event_attendance": "Inscrições e presença"
     },
     "fields": {
       "email": "E-mail",
-      "name": "Nome"
+      "name": "Nome",
+      "first_name": "Nome",
+      "last_name": "Sobrenome",
+      "company": "Empresa",
+      "phone": "Telefone",
+      "subscription": "Mudança de inscrição",
+      "email_opt_out": "Descadastrado do e-mail",
+      "starts_at": "Início",
+      "ends_at": "Fim",
+      "timezone": "Fuso horário",
+      "venue": "Local",
+      "cancelled": "Cancelado"
     },
     "status": {
       "none": "Não conectada",
@@ -13288,7 +13311,59 @@
       "allow": "Permitir",
       "deny": "Negar"
     },
-    "webhooksAction": "Configurar um webhook"
+    "webhooksAction": "Configurar um webhook",
+    "marketing": {
+      "consentRule": "Consentimento primeiro: só são enviados contatos com consentimento para e-mails de marketing, e um descadastro ou uma devolução sempre prevalece. Quando alguém se descadastra aqui, a próxima sincronização também o descadastra lá.",
+      "audience": {
+        "title": "Público",
+        "help": "Escolha quem é enviado para {name} e em qual lista entra.",
+        "saved": "Público salvo. A próxima sincronização o envia.",
+        "segmentMissing": "O público salvo foi excluído, então ninguém novo é enviado. Escolha outro público.",
+        "segment": "Quem é enviado",
+        "list": "Lista do {name}",
+        "everyone": "Todos com consentimento para e-mails de marketing",
+        "savedSegment": "Um público salvo",
+        "emptyTitle": "Nenhum público escolhido",
+        "emptyManage": "Escolha quem enviar e a lista do {name} em que entram. Nada é enviado até você salvar.",
+        "emptyRead": "Um proprietário ou administrador escolhe quem é enviado. Até lá, nada é enviado.",
+        "formLabel": "Escolha o público e a lista",
+        "save": "Salvar público",
+        "feedback": {
+          "list_required": "Escolha uma lista.",
+          "provider_unavailable": "Não foi possível carregar as listas do provedor. Tente de novo em alguns minutos.",
+          "validation_failed": "Esse público não existe mais. Escolha outro.",
+          "forbidden": "Você não tem acesso a isso.",
+          "invalid_state": "Esta conexão não pode ser configurada agora.",
+          "not_found": "Não encontramos isso.",
+          "read_only_freeze": "As alterações estão pausadas durante a manutenção programada. Tente de novo quando terminar.",
+          "internal": "Algo deu errado do nosso lado."
+        }
+      },
+      "hubspot": {
+        "title": "O que sincroniza com o HubSpot",
+        "contacts": "Os contatos sincronizam nos dois sentidos com o mapeamento de campos abaixo. Contatos do HubSpot nunca chegam com consentimento; um descadastro no HubSpot os descadastra aqui.",
+        "events": "Cada evento publicado vira um evento de marketing do HubSpot, e um cancelamento também é enviado.",
+        "attendance": "Inscrições, check-ins e cancelamentos são enviados para contatos com consentimento para e-mails de marketing."
+      },
+      "changes": {
+        "title": "Mudanças de consentimento do {name}",
+        "help": "Descadastros, endereços com falha e denúncias que voltaram do {name}, e o que mudaram aqui.",
+        "caption": "Mudanças de consentimento do {name}",
+        "empty": "Nada voltou do {name} ainda.",
+        "who": "Contato",
+        "change": "No provedor",
+        "applied": "Mudou aqui",
+        "when": "Quando",
+        "withdrawn": "Consentimento retirado",
+        "suppressed": "Bloqueado",
+        "already": "Já estava atualizado",
+        "kinds": {
+          "unsubscribed": "Descadastrado",
+          "cleaned": "Endereço com falha",
+          "complained": "Denúncia de spam"
+        }
+      }
+    }
   },
   "guestSeats": {
     "placeAt": {

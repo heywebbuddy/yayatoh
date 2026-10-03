@@ -13052,6 +13052,15 @@
     "connectors": {
       "demo": {
         "description": "Une appli de contacts de test pour essayer les intégrations : les contacts se synchronisent dans les deux sens avec votre CRM. Environnements de test uniquement."
+      },
+      "mailchimp": {
+        "description": "Envoyez une audience vers une liste Mailchimp avec des champs de fusion. Les désinscriptions et les adresses en échec reviennent comme changements de consentement."
+      },
+      "hubspot": {
+        "description": "Synchronisez les contacts dans les deux sens et envoyez vos événements à HubSpot comme événements marketing, avec inscriptions et enregistrements."
+      },
+      "klaviyo": {
+        "description": "Envoyez une audience vers une liste Klaviyo. Les désinscriptions, les rebonds et les plaintes pour spam reviennent comme changements de consentement."
       }
     },
     "sandboxBadge": "Test",
@@ -13071,11 +13080,25 @@
     "readOnly": "Seuls les propriétaires et les admins peuvent connecter ou modifier des intégrations.",
     "breadcrumb": "Fil d’Ariane",
     "objects": {
-      "contacts": "Contacts"
+      "contacts": "Contacts",
+      "members": "Membres de la liste",
+      "marketing_events": "Événements marketing",
+      "event_attendance": "Inscriptions et présence"
     },
     "fields": {
       "email": "E-mail",
-      "name": "Nom"
+      "name": "Nom",
+      "first_name": "Prénom",
+      "last_name": "Nom",
+      "company": "Entreprise",
+      "phone": "Téléphone",
+      "subscription": "Changement d’abonnement",
+      "email_opt_out": "Désinscrit des e-mails",
+      "starts_at": "Début",
+      "ends_at": "Fin",
+      "timezone": "Fuseau horaire",
+      "venue": "Lieu",
+      "cancelled": "Annulé"
     },
     "status": {
       "none": "Non connectée",
@@ -13288,7 +13311,59 @@
       "allow": "Autoriser",
       "deny": "Refuser"
     },
-    "webhooksAction": "Configurer un webhook"
+    "webhooksAction": "Configurer un webhook",
+    "marketing": {
+      "consentRule": "Le consentement d’abord : seuls les contacts ayant consenti aux e-mails marketing sont envoyés, et une désinscription ou un rebond l’emporte toujours. Quand quelqu’un se désinscrit ici, la synchronisation suivante le désinscrit aussi là-bas.",
+      "audience": {
+        "title": "Audience",
+        "help": "Choisissez qui est envoyé à {name} et la liste rejointe.",
+        "saved": "Audience enregistrée. La prochaine synchronisation l’envoie.",
+        "segmentMissing": "L’audience enregistrée a été supprimée : personne de nouveau n’est envoyé. Choisissez une autre audience.",
+        "segment": "Qui est envoyé",
+        "list": "Liste {name}",
+        "everyone": "Toutes les personnes ayant consenti aux e-mails marketing",
+        "savedSegment": "Une audience enregistrée",
+        "emptyTitle": "Aucune audience choisie",
+        "emptyManage": "Choisissez qui envoyer et la liste {name} rejointe. Rien n’est envoyé avant l’enregistrement.",
+        "emptyRead": "Un propriétaire ou un administrateur choisit qui est envoyé. Rien n’est envoyé d’ici là.",
+        "formLabel": "Choisir l’audience et la liste",
+        "save": "Enregistrer l’audience",
+        "feedback": {
+          "list_required": "Choisissez une liste.",
+          "provider_unavailable": "Les listes n’ont pas pu être chargées depuis le fournisseur. Réessayez dans quelques minutes.",
+          "validation_failed": "Cette audience n’existe plus. Choisissez-en une autre.",
+          "forbidden": "Vous n’y avez pas accès.",
+          "invalid_state": "Cette connexion ne peut pas être configurée pour le moment.",
+          "not_found": "Introuvable.",
+          "read_only_freeze": "Les modifications sont suspendues pendant la maintenance planifiée. Réessayez à la fin.",
+          "internal": "Un problème est survenu de notre côté."
+        }
+      },
+      "hubspot": {
+        "title": "Ce qui se synchronise avec HubSpot",
+        "contacts": "Les contacts se synchronisent dans les deux sens avec la correspondance des champs ci-dessous. Les contacts venant de HubSpot n’arrivent jamais avec un consentement ; une désinscription dans HubSpot les désinscrit ici.",
+        "events": "Chaque événement publié devient un événement marketing HubSpot, et une annulation est aussi envoyée.",
+        "attendance": "Les inscriptions, enregistrements et annulations sont envoyés pour les contacts ayant consenti aux e-mails marketing."
+      },
+      "changes": {
+        "title": "Changements de consentement de {name}",
+        "help": "Désinscriptions, adresses en échec et plaintes revenues de {name}, et ce qu’elles ont changé ici.",
+        "caption": "Changements de consentement de {name}",
+        "empty": "Rien n’est encore revenu de {name}.",
+        "who": "Contact",
+        "change": "Chez le fournisseur",
+        "applied": "Changé ici",
+        "when": "Quand",
+        "withdrawn": "Consentement retiré",
+        "suppressed": "Bloqué",
+        "already": "Déjà à jour",
+        "kinds": {
+          "unsubscribed": "Désinscrit",
+          "cleaned": "Adresse en échec",
+          "complained": "Plainte pour spam"
+        }
+      }
+    }
   },
   "guestSeats": {
     "placeAt": {
