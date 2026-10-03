@@ -74,7 +74,7 @@ Plan row: uploads by guests and the host through a signed link, straight to stor
 - **Console** `/o/{org}/e/{event}/gallery` (replaces the placeholder; `gallery` is no longer a placeholder section): status, storage meter against the cap, settings form, the guest address, host uploader, video link form, waiting-for-approval queue and the published grid. Viewers read only. Warns when the guest site isn't published.
 - **Guest page** `/w/{code}/gallery`: the gate (comes back to the gallery), closed state, uploader with name (first time), caption and per-file results, quota line, full/quota-reached notices instead of the fields, video link form, "your photos" with state and take back, the published grid. The guest site shows "See and share photos" while the gallery is on.
 - **Abuse:** new M1.14 policy `galleryUpload` (120 per device per hour, 240 per anonymous address, 5,000 per site, IP ceiling 2,000).
-- **Messages:** `gallery.*` (190 keys) and `guestSite.galleryLink` in all 13 locales.
+- **Messages:** `gallery.*` (169 keys) and `guestSite.galleryLink` in all 13 locales.
 
 **Later / not yet:**
 - A worker sweep for expired slots across all orgs (today they are swept per event when a new slot is handed out; they never count once expired).
@@ -94,3 +94,5 @@ Plan row: uploads by guests and the host through a signed link, straight to stor
 | AC6 | Video links only; Stream stub behind the port | `gallery.test.ts`, `gallery.int.test.ts` ("video links only") |
 | AC7 | Guest gate, signed file URLs, isolation, viewer read-only, impersonation, freeze | `gallery.int.test.ts`, isolation suite (fixture rows), `gallery.spec.ts` (viewers, guests) |
 | AC8 | Keyboard only, axe light and dark, Arabic RTL, 13 locales | `gallery.spec.ts`, `apps/web/tests/messages.test.ts` |
+
+**Gate (M4.5b, 2026-10-03, build branch + merge/next-3g + merge/next-3h + agent/m4.5a):** lint and check:modules clean; typecheck 60/60; unit 2734 passed; integration 1532 of 1532 (two media orphan-file checks were updated to count gallery files as referenced, then passed with the gallery tests, 50/50). e2e on all three projects: `gallery.spec.ts` 33/33; related `guest-site.spec.ts`, `media.spec.ts`, `program-media.spec.ts`, `realtime.spec.ts`, `canary-crawl.spec.ts`: 107 passed, 16 skipped (skips are in those specs by design).
