@@ -110,7 +110,8 @@ const TICKET = '0192f1a4-7c3e-7d51-9a2b-3c4d5e6f7a83';
 const OTHER = '0192f1a4-7c3e-7d51-9a2b-3c4d5e6f7a84';
 const WHEN = '2030-03-01T23:04:11.000Z';
 
-export const PAYMENT_VIA = ['free', 'box_office', 'fake', 'stripe'] as const;
+/** How an order was paid; `invoice` (M5.1d pay later: the invoice was paid in full) added at the batch 3i merge. */
+export const PAYMENT_VIA = ['free', 'box_office', 'fake', 'stripe', 'invoice'] as const;
 export const DISPUTE_OUTCOMES = ['won', 'lost'] as const;
 /** Event statuses (events module); a new status is an additive enum value (announced ahead). */
 export const EVENT_STATUSES = [
@@ -187,7 +188,7 @@ export const EVENT_CATALOG = [
     group: 'orders',
     summary: 'An order was paid and its tickets issued.',
     description:
-      'Sent once per order when payment completes (online, at the box office, or a free order). `via` says how it was paid. Read the order and its tickets with `GET /v1/orgs/{org}/orders/{orderId}`.',
+      'Sent once per order when payment completes (online, at the box office, by invoice, or a free order). `via` says how it was paid. Read the order and its tickets with `GET /v1/orgs/{org}/orders/{orderId}`.',
     source: 'order.paid@1',
     schemaName: 'WebhookOrderPaidV1',
     schema: z.object({
@@ -279,10 +280,20 @@ export const EVENT_CATALOG = [
     version: 1,
     group: 'tickets',
     summary: 'Tickets were cancelled in bulk.',
-    description: 'One message per bulk cancellation, with the ids of the tickets it voided.',
+    description:
+      'One message per bulk cancellation (`operationId`) or per voided invoice (`orderId`: M5.1d pay later), with the ids of the tickets it voided. Exactly one of `operationId` and `orderId` is present.',
     source: 'tickets.cancelled@1',
     schemaName: 'WebhookTicketsCancelledV1',
-    schema: z.object({ operationId: id(), eventId: id(), ticketIds: z.array(id()).max(1000) }),
+    schema: z
+      .object({
+        operationId: id().optional(),
+        orderId: id().optional(),
+        eventId: id(),
+        ticketIds: z.array(id()).max(1000),
+      })
+      .refine((v) => (v.operationId === undefined) !== (v.orderId === undefined), {
+        message: 'exactly one of operationId and orderId',
+      }),
     example: { operationId: OTHER, eventId: EVENT, ticketIds: [TICKET] },
   }),
   entry({
