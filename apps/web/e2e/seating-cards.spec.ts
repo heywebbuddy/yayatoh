@@ -78,8 +78,7 @@ async function seatParty(page: Page, base: string, party: string, table: string)
   await page.getByRole('checkbox', { name: `Select everyone in ${party}` }).focus();
   await page.keyboard.press('Space');
   const chooser = page.getByLabel('Table or row', { exact: true }).first();
-  const option = chooser.locator('option', { hasText: `${table} — ` });
-  await pickOption(chooser, { label: (await option.textContent()) ?? '' });
+  await pickOption(chooser, { label: new RegExp(`^${table} — `) });
   await page.getByRole('button', { name: 'Seat selected guests' }).focus();
   await page.keyboard.press('Enter');
   await expect(page.getByText(new RegExp(`Seated \\d guests? at ${table}\\.`))).toBeVisible();
