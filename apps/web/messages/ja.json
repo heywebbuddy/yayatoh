@@ -15227,17 +15227,57 @@
         "virtual": "オンラインのみ",
         "both": "会場とオンライン"
       },
-      "addTicketTypes": "チケットへ"
+      "addTicketTypes": "チケットへ",
+      "provider": "動画プロバイダー",
+      "providerFor": "{title}の動画プロバイダー",
+      "switchProvider": "プロバイダーを切り替え",
+      "switchProviderLabel": "{title}の動画プロバイダーを切り替え",
+      "providerSwitched": "{title}は{provider}で配信中です。視聴者のアクセス権と視聴時間は引き継がれます。",
+      "providerSame": "{title}はすでに{provider}で配信中です。",
+      "useBackup": "バックアップのインジェストを使う",
+      "useBackupLabel": "{title}にバックアップのインジェストを使う",
+      "usePrimary": "メインのインジェストを使う",
+      "usePrimaryLabel": "{title}にメインのインジェストを使う",
+      "backupOn": "{title}はバックアップのインジェストを使用中です。エンコーダーをバックアップサーバーに向けてください。",
+      "primaryOn": "{title}はメインのインジェストに戻りました。",
+      "backupPill": "バックアップのインジェスト",
+      "backupIngestUrl": "サーバー（バックアップのインジェスト）",
+      "zoomTitle": "Zoomウェビナー",
+      "zoomHint": "セッションをZoomウェビナーとして配信します。オンラインでのアクセス権を持つ参加者は自動で登録され、入室と退室が出席として記録されます。",
+      "zoomNotConnected": "Zoomが接続されていません",
+      "zoomNotConnectedHint": "ここからウェビナーを作成するには、Zoomアカウントを接続してください。",
+      "connectZoom": "Zoomを接続",
+      "webinar": "ウェビナー",
+      "noWebinar": "ウェビナーなし",
+      "webinarCreatedPill": "ここで作成",
+      "webinarLinkedPill": "リンク済み",
+      "registrants": "登録者",
+      "attendees": "出席者",
+      "createWebinar": "Zoomウェビナーを作成",
+      "createWebinarLabel": "{title}のZoomウェビナーを作成",
+      "webinarCreated": "{title}のZoomウェビナーを作成しました。",
+      "providerName": {
+        "fake": "Mux（テスト）",
+        "mux": "Mux",
+        "fake_cloudflare": "Cloudflare Stream（テスト）",
+        "cloudflare": "Cloudflare Stream"
+      }
     },
     "errors": {
       "in_person_event": "このイベントは会場開催です。先に「オンライン」または「ハイブリッド」を選んでください。",
       "video_off": "ここではまだ配信を利用できません。",
       "in_person_only": "このチケットは会場参加専用です。",
       "stream_off": "この配信はオフになっています。",
-      "provider_changed": "動画プロバイダーが変わりました。この配信をもう一度設定してください。",
+      "provider_changed": "配信が別のプロバイダーに移りました。もう一度視聴を始めてください。",
       "views_per_hour": "試行回数が多すぎます。数分待ってからもう一度お試しください。",
       "invalid_token": "この視聴リンクは期限切れです。もう一度視聴を始めてください。",
-      "ticket_void": "このチケットはもう有効ではありません。"
+      "ticket_void": "このチケットはもう有効ではありません。",
+      "provider_unavailable": "この動画プロバイダーはここでは利用できません。",
+      "no_backup_ingest": "このプロバイダーにはバックアップのインジェストがありません。",
+      "zoom_not_connected": "先にZoomを接続してください。",
+      "zoom_failed": "Zoomでウェビナーを作成できませんでした。もう一度試すか、Zoomの接続を確認してください。",
+      "integrations_off": "連携機能はまだここでは利用できません。",
+      "webinar_taken": "そのウェビナーはすでに別のセッションで使われています。"
     },
     "watch": {
       "metaTitle": "オンラインで視聴",
@@ -15274,8 +15314,10 @@
         "ticket_void": "このチケットはもう有効ではありません。",
         "video_off": "現在、配信を利用できません。",
         "not_found": "このセッションは現在配信されていません。",
-        "generic": "問題が発生しました。もう一度お試しください。"
-      }
+        "generic": "問題が発生しました。もう一度お試しください。",
+        "provider_unavailable": "この配信の動画プロバイダーは現在利用できません。"
+      },
+      "moved": "配信が別のプロバイダーに移りました。視聴は続いています。"
     }
   },
   "formControls": {

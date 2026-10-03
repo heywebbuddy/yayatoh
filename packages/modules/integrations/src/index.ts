@@ -114,5 +114,6 @@ export {
   createZoomWebinar,
   recordCreatedZoomWebinarCommand,
   ZoomWebinarPlanDto,
+  zoomConnectedQuery,
   zoomWebinarPlanQuery,
 } from './zoom-webinars.ts';

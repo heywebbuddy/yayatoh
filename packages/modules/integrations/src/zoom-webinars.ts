@@ -73,6 +73,19 @@ export const zoomWebinarPlanQuery = tenantQuery({
   },
 });
 
+/**
+ * Whether the org has an active Zoom connection (the stream setup page offers "Create a Zoom
+ * webinar" then, else a link to connect Zoom). Readable by anyone who reads the event.
+ */
+export const zoomConnectedQuery = tenantQuery({
+  name: 'integrations.zoomConnected',
+  input: z.object({}),
+  output: z.object({ connected: z.boolean() }),
+  entitlement: 'integrations',
+  permission: 'events:read',
+  handler: async ({ tx }) => ({ connected: (await activeZoomConnectionTx(tx)) !== null }),
+});
+
 /** Step 3: link the webinar Zoom just created (only `createZoomWebinar` calls it). */
 export const recordCreatedZoomWebinarCommand = tenantCommand({
   name: 'integrations.recordCreatedZoomWebinar',

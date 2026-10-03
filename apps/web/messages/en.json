@@ -15227,17 +15227,57 @@
         "virtual": "Online only",
         "both": "In person and online"
       },
-      "addTicketTypes": "Go to tickets"
+      "addTicketTypes": "Go to tickets",
+      "provider": "Video provider",
+      "providerFor": "Video provider for {title}",
+      "switchProvider": "Switch provider",
+      "switchProviderLabel": "Switch the video provider for {title}",
+      "providerSwitched": "{title} now streams on {provider}. Viewers keep their access and watch time.",
+      "providerSame": "{title} already streams on {provider}.",
+      "useBackup": "Use backup ingest",
+      "useBackupLabel": "Use the backup ingest for {title}",
+      "usePrimary": "Use primary ingest",
+      "usePrimaryLabel": "Use the primary ingest for {title}",
+      "backupOn": "{title} now uses the backup ingest. Point your encoder at the backup server.",
+      "primaryOn": "{title} is back on the primary ingest.",
+      "backupPill": "Backup ingest",
+      "backupIngestUrl": "Server (backup ingest)",
+      "zoomTitle": "Zoom webinars",
+      "zoomHint": "Deliver a session as a Zoom webinar. Holders with online access are registered automatically, and their joins and leaves count as attendance.",
+      "zoomNotConnected": "Zoom isn't connected",
+      "zoomNotConnectedHint": "Connect your Zoom account to create webinars from here.",
+      "connectZoom": "Connect Zoom",
+      "webinar": "Webinar",
+      "noWebinar": "No webinar",
+      "webinarCreatedPill": "Created here",
+      "webinarLinkedPill": "Linked",
+      "registrants": "Registrants",
+      "attendees": "Attendees",
+      "createWebinar": "Create Zoom webinar",
+      "createWebinarLabel": "Create a Zoom webinar for {title}",
+      "webinarCreated": "Zoom webinar created for {title}.",
+      "providerName": {
+        "fake": "Mux (test)",
+        "mux": "Mux",
+        "fake_cloudflare": "Cloudflare Stream (test)",
+        "cloudflare": "Cloudflare Stream"
+      }
     },
     "errors": {
       "in_person_event": "This event is in person. Choose Online or Hybrid first.",
       "video_off": "Streaming isn't available here yet.",
       "in_person_only": "This ticket is for in-person attendance only.",
       "stream_off": "This stream is turned off.",
-      "provider_changed": "The video provider changed. Set up this stream again.",
+      "provider_changed": "The stream moved to another provider. Start watching again.",
       "views_per_hour": "Too many tries. Wait a few minutes and try again.",
       "invalid_token": "This viewing link has expired. Start watching again.",
-      "ticket_void": "This ticket is no longer valid."
+      "ticket_void": "This ticket is no longer valid.",
+      "provider_unavailable": "This video provider isn't available here.",
+      "no_backup_ingest": "This provider has no backup ingest.",
+      "zoom_not_connected": "Connect Zoom first.",
+      "zoom_failed": "Zoom didn't create the webinar. Try again, or check the Zoom connection.",
+      "integrations_off": "Integrations aren't available here yet.",
+      "webinar_taken": "That webinar is already used by another session."
     },
     "watch": {
       "metaTitle": "Watch online",
@@ -15274,8 +15314,10 @@
         "ticket_void": "This ticket is no longer valid.",
         "video_off": "Streaming isn't available right now.",
         "not_found": "This session isn't streaming right now.",
-        "generic": "Something went wrong. Try again."
-      }
+        "generic": "Something went wrong. Try again.",
+        "provider_unavailable": "This stream's video provider isn't available right now."
+      },
+      "moved": "The stream moved to another provider. You're still watching."
     }
   },
   "formControls": {

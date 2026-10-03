@@ -15227,17 +15227,57 @@
         "virtual": "Solo online",
         "both": "In presenza e online"
       },
-      "addTicketTypes": "Vai ai biglietti"
+      "addTicketTypes": "Vai ai biglietti",
+      "provider": "Provider video",
+      "providerFor": "Provider video per {title}",
+      "switchProvider": "Cambia provider",
+      "switchProviderLabel": "Cambia il provider video per {title}",
+      "providerSwitched": "{title} ora è trasmesso con {provider}. Gli spettatori mantengono accesso e tempo di visione.",
+      "providerSame": "{title} è già trasmesso con {provider}.",
+      "useBackup": "Usa l’ingest di backup",
+      "useBackupLabel": "Usa l’ingest di backup per {title}",
+      "usePrimary": "Usa l’ingest principale",
+      "usePrimaryLabel": "Usa l’ingest principale per {title}",
+      "backupOn": "{title} ora usa l’ingest di backup. Punta l’encoder sul server di backup.",
+      "primaryOn": "{title} è tornato sull’ingest principale.",
+      "backupPill": "Ingest di backup",
+      "backupIngestUrl": "Server (ingest di backup)",
+      "zoomTitle": "Webinar Zoom",
+      "zoomHint": "Offri una sessione come webinar Zoom. I titolari con accesso online vengono registrati automaticamente, e i loro ingressi e uscite contano come presenza.",
+      "zoomNotConnected": "Zoom non è collegato",
+      "zoomNotConnectedHint": "Collega il tuo account Zoom per creare webinar da qui.",
+      "connectZoom": "Collega Zoom",
+      "webinar": "Webinar",
+      "noWebinar": "Nessun webinar",
+      "webinarCreatedPill": "Creato qui",
+      "webinarLinkedPill": "Collegato",
+      "registrants": "Iscritti",
+      "attendees": "Partecipanti",
+      "createWebinar": "Crea webinar Zoom",
+      "createWebinarLabel": "Crea un webinar Zoom per {title}",
+      "webinarCreated": "Webinar Zoom creato per {title}.",
+      "providerName": {
+        "fake": "Mux (test)",
+        "mux": "Mux",
+        "fake_cloudflare": "Cloudflare Stream (test)",
+        "cloudflare": "Cloudflare Stream"
+      }
     },
     "errors": {
       "in_person_event": "Questo evento è in presenza. Scegli prima Online o Ibrido.",
       "video_off": "Lo streaming non è ancora disponibile qui.",
       "in_person_only": "Questo biglietto vale solo per la partecipazione in presenza.",
       "stream_off": "Questa diretta è disattivata.",
-      "provider_changed": "Il fornitore video è cambiato. Configura di nuovo questa diretta.",
+      "provider_changed": "La trasmissione è passata a un altro provider. Riprendi la visione.",
       "views_per_hour": "Troppi tentativi. Attendi qualche minuto e riprova.",
       "invalid_token": "Questo link di visione è scaduto. Ricomincia a guardare.",
-      "ticket_void": "Questo biglietto non è più valido."
+      "ticket_void": "Questo biglietto non è più valido.",
+      "provider_unavailable": "Questo provider video non è disponibile qui.",
+      "no_backup_ingest": "Questo provider non ha un ingest di backup.",
+      "zoom_not_connected": "Collega prima Zoom.",
+      "zoom_failed": "Zoom non ha creato il webinar. Riprova o controlla il collegamento con Zoom.",
+      "integrations_off": "Le integrazioni non sono ancora disponibili qui.",
+      "webinar_taken": "Quel webinar è già usato da un’altra sessione."
     },
     "watch": {
       "metaTitle": "Guarda online",
@@ -15274,8 +15314,10 @@
         "ticket_void": "Questo biglietto non è più valido.",
         "video_off": "Lo streaming non è disponibile al momento.",
         "not_found": "Questa sessione non è in diretta al momento.",
-        "generic": "Qualcosa è andato storto. Riprova."
-      }
+        "generic": "Qualcosa è andato storto. Riprova.",
+        "provider_unavailable": "Il provider video di questa trasmissione non è disponibile al momento."
+      },
+      "moved": "La trasmissione è passata a un altro provider. Stai ancora guardando."
     }
   },
   "formControls": {

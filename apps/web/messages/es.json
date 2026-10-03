@@ -15227,17 +15227,57 @@
         "virtual": "Solo en línea",
         "both": "Presencial y en línea"
       },
-      "addTicketTypes": "Ir a entradas"
+      "addTicketTypes": "Ir a entradas",
+      "provider": "Proveedor de video",
+      "providerFor": "Proveedor de video de {title}",
+      "switchProvider": "Cambiar proveedor",
+      "switchProviderLabel": "Cambiar el proveedor de video de {title}",
+      "providerSwitched": "{title} ahora se transmite con {provider}. Los espectadores conservan su acceso y su tiempo de visualización.",
+      "providerSame": "{title} ya se transmite con {provider}.",
+      "useBackup": "Usar ingesta de respaldo",
+      "useBackupLabel": "Usar la ingesta de respaldo de {title}",
+      "usePrimary": "Usar ingesta principal",
+      "usePrimaryLabel": "Usar la ingesta principal de {title}",
+      "backupOn": "{title} usa ahora la ingesta de respaldo. Apunta tu codificador al servidor de respaldo.",
+      "primaryOn": "{title} volvió a la ingesta principal.",
+      "backupPill": "Ingesta de respaldo",
+      "backupIngestUrl": "Servidor (ingesta de respaldo)",
+      "zoomTitle": "Seminarios web de Zoom",
+      "zoomHint": "Ofrece una sesión como seminario web de Zoom. Los titulares con acceso en línea se registran automáticamente, y sus entradas y salidas cuentan como asistencia.",
+      "zoomNotConnected": "Zoom no está conectado",
+      "zoomNotConnectedHint": "Conecta tu cuenta de Zoom para crear seminarios web desde aquí.",
+      "connectZoom": "Conectar Zoom",
+      "webinar": "Seminario web",
+      "noWebinar": "Sin seminario web",
+      "webinarCreatedPill": "Creado aquí",
+      "webinarLinkedPill": "Vinculado",
+      "registrants": "Registrados",
+      "attendees": "Asistentes",
+      "createWebinar": "Crear seminario web de Zoom",
+      "createWebinarLabel": "Crear un seminario web de Zoom para {title}",
+      "webinarCreated": "Seminario web de Zoom creado para {title}.",
+      "providerName": {
+        "fake": "Mux (prueba)",
+        "mux": "Mux",
+        "fake_cloudflare": "Cloudflare Stream (prueba)",
+        "cloudflare": "Cloudflare Stream"
+      }
     },
     "errors": {
       "in_person_event": "Este evento es presencial. Elige primero En línea o Híbrido.",
       "video_off": "La transmisión aún no está disponible aquí.",
       "in_person_only": "Esta entrada es solo para asistencia presencial.",
       "stream_off": "Esta transmisión está desactivada.",
-      "provider_changed": "Cambió el proveedor de video. Vuelve a configurar esta transmisión.",
+      "provider_changed": "La transmisión pasó a otro proveedor. Vuelve a empezar a verla.",
       "views_per_hour": "Demasiados intentos. Espera unos minutos y vuelve a intentarlo.",
       "invalid_token": "Este enlace de reproducción caducó. Vuelve a empezar a ver.",
-      "ticket_void": "Esta entrada ya no es válida."
+      "ticket_void": "Esta entrada ya no es válida.",
+      "provider_unavailable": "Este proveedor de video no está disponible aquí.",
+      "no_backup_ingest": "Este proveedor no tiene ingesta de respaldo.",
+      "zoom_not_connected": "Conecta Zoom primero.",
+      "zoom_failed": "Zoom no creó el seminario web. Vuelve a intentarlo o revisa la conexión con Zoom.",
+      "integrations_off": "Las integraciones aún no están disponibles aquí.",
+      "webinar_taken": "Ese seminario web ya lo usa otra sesión."
     },
     "watch": {
       "metaTitle": "Ver en línea",
@@ -15274,8 +15314,10 @@
         "ticket_void": "Esta entrada ya no es válida.",
         "video_off": "La transmisión no está disponible en este momento.",
         "not_found": "Esta sesión no se está transmitiendo ahora.",
-        "generic": "Algo salió mal. Vuelve a intentarlo."
-      }
+        "generic": "Algo salió mal. Vuelve a intentarlo.",
+        "provider_unavailable": "El proveedor de video de esta transmisión no está disponible ahora."
+      },
+      "moved": "La transmisión pasó a otro proveedor. Sigues viéndola."
     }
   },
   "formControls": {

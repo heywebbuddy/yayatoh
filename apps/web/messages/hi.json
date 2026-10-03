@@ -15227,17 +15227,57 @@
         "virtual": "केवल ऑनलाइन",
         "both": "व्यक्तिगत रूप से और ऑनलाइन"
       },
-      "addTicketTypes": "टिकटों पर जाएँ"
+      "addTicketTypes": "टिकटों पर जाएँ",
+      "provider": "वीडियो प्रदाता",
+      "providerFor": "{title} के लिए वीडियो प्रदाता",
+      "switchProvider": "प्रदाता बदलें",
+      "switchProviderLabel": "{title} के लिए वीडियो प्रदाता बदलें",
+      "providerSwitched": "{title} अब {provider} पर स्ट्रीम हो रहा है। दर्शकों की पहुँच और देखने का समय बना रहता है।",
+      "providerSame": "{title} पहले से {provider} पर स्ट्रीम हो रहा है।",
+      "useBackup": "बैकअप इनजेस्ट इस्तेमाल करें",
+      "useBackupLabel": "{title} के लिए बैकअप इनजेस्ट इस्तेमाल करें",
+      "usePrimary": "प्राथमिक इनजेस्ट इस्तेमाल करें",
+      "usePrimaryLabel": "{title} के लिए प्राथमिक इनजेस्ट इस्तेमाल करें",
+      "backupOn": "{title} अब बैकअप इनजेस्ट इस्तेमाल कर रहा है। अपने एनकोडर को बैकअप सर्वर पर लगाएँ।",
+      "primaryOn": "{title} फिर से प्राथमिक इनजेस्ट पर है।",
+      "backupPill": "बैकअप इनजेस्ट",
+      "backupIngestUrl": "सर्वर (बैकअप इनजेस्ट)",
+      "zoomTitle": "Zoom वेबिनार",
+      "zoomHint": "किसी सत्र को Zoom वेबिनार के रूप में चलाएँ। ऑनलाइन पहुँच वाले धारक अपने-आप पंजीकृत होते हैं, और उनका जुड़ना और छोड़ना उपस्थिति में गिना जाता है।",
+      "zoomNotConnected": "Zoom कनेक्ट नहीं है",
+      "zoomNotConnectedHint": "यहाँ से वेबिनार बनाने के लिए अपना Zoom खाता कनेक्ट करें।",
+      "connectZoom": "Zoom कनेक्ट करें",
+      "webinar": "वेबिनार",
+      "noWebinar": "कोई वेबिनार नहीं",
+      "webinarCreatedPill": "यहाँ बनाया गया",
+      "webinarLinkedPill": "जुड़ा हुआ",
+      "registrants": "पंजीकृत",
+      "attendees": "उपस्थित",
+      "createWebinar": "Zoom वेबिनार बनाएँ",
+      "createWebinarLabel": "{title} के लिए Zoom वेबिनार बनाएँ",
+      "webinarCreated": "{title} के लिए Zoom वेबिनार बनाया गया।",
+      "providerName": {
+        "fake": "Mux (परीक्षण)",
+        "mux": "Mux",
+        "fake_cloudflare": "Cloudflare Stream (परीक्षण)",
+        "cloudflare": "Cloudflare Stream"
+      }
     },
     "errors": {
       "in_person_event": "यह इवेंट व्यक्तिगत रूप से है। पहले ऑनलाइन या हाइब्रिड चुनें।",
       "video_off": "यहाँ स्ट्रीमिंग अभी उपलब्ध नहीं है।",
       "in_person_only": "यह टिकट केवल व्यक्तिगत उपस्थिति के लिए है।",
       "stream_off": "यह स्ट्रीम बंद है।",
-      "provider_changed": "वीडियो प्रदाता बदल गया है। इस स्ट्रीम को फिर से सेट करें।",
+      "provider_changed": "स्ट्रीम दूसरे प्रदाता पर चली गई। फिर से देखना शुरू करें।",
       "views_per_hour": "बहुत अधिक प्रयास। कुछ मिनट रुककर फिर कोशिश करें।",
       "invalid_token": "यह देखने का लिंक समाप्त हो गया है। फिर से देखना शुरू करें।",
-      "ticket_void": "यह टिकट अब मान्य नहीं है।"
+      "ticket_void": "यह टिकट अब मान्य नहीं है।",
+      "provider_unavailable": "यह वीडियो प्रदाता यहाँ उपलब्ध नहीं है।",
+      "no_backup_ingest": "इस प्रदाता के पास बैकअप इनजेस्ट नहीं है।",
+      "zoom_not_connected": "पहले Zoom कनेक्ट करें।",
+      "zoom_failed": "Zoom ने वेबिनार नहीं बनाया। फिर से कोशिश करें या Zoom कनेक्शन जाँचें।",
+      "integrations_off": "इंटीग्रेशन अभी यहाँ उपलब्ध नहीं हैं।",
+      "webinar_taken": "वह वेबिनार पहले से किसी दूसरे सत्र में इस्तेमाल हो रहा है।"
     },
     "watch": {
       "metaTitle": "ऑनलाइन देखें",
@@ -15274,8 +15314,10 @@
         "ticket_void": "यह टिकट अब मान्य नहीं है।",
         "video_off": "स्ट्रीमिंग अभी उपलब्ध नहीं है।",
         "not_found": "यह सत्र अभी स्ट्रीम नहीं हो रहा।",
-        "generic": "कुछ गलत हो गया। फिर से कोशिश करें।"
-      }
+        "generic": "कुछ गलत हो गया। फिर से कोशिश करें।",
+        "provider_unavailable": "इस स्ट्रीम का वीडियो प्रदाता अभी उपलब्ध नहीं है।"
+      },
+      "moved": "स्ट्रीम दूसरे प्रदाता पर चली गई। आप अब भी देख रहे हैं।"
     }
   },
   "formControls": {

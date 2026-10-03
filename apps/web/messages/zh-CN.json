@@ -15227,17 +15227,57 @@
         "virtual": "仅线上",
         "both": "线下和线上"
       },
-      "addTicketTypes": "前往门票"
+      "addTicketTypes": "前往门票",
+      "provider": "视频服务商",
+      "providerFor": "{title} 的视频服务商",
+      "switchProvider": "切换服务商",
+      "switchProviderLabel": "切换 {title} 的视频服务商",
+      "providerSwitched": "{title} 现在通过 {provider} 直播。观众保留访问权限和观看时长。",
+      "providerSame": "{title} 已在通过 {provider} 直播。",
+      "useBackup": "使用备用推流地址",
+      "useBackupLabel": "为 {title} 使用备用推流地址",
+      "usePrimary": "使用主推流地址",
+      "usePrimaryLabel": "为 {title} 使用主推流地址",
+      "backupOn": "{title} 现在使用备用推流地址。请将编码器指向备用服务器。",
+      "primaryOn": "{title} 已切回主推流地址。",
+      "backupPill": "备用推流",
+      "backupIngestUrl": "服务器（备用推流）",
+      "zoomTitle": "Zoom 网络研讨会",
+      "zoomHint": "以 Zoom 网络研讨会的形式进行场次。拥有线上权限的持票人会自动报名，其加入和离开会计入出席。",
+      "zoomNotConnected": "尚未连接 Zoom",
+      "zoomNotConnectedHint": "连接你的 Zoom 账号即可在此创建网络研讨会。",
+      "connectZoom": "连接 Zoom",
+      "webinar": "网络研讨会",
+      "noWebinar": "无网络研讨会",
+      "webinarCreatedPill": "在此创建",
+      "webinarLinkedPill": "已关联",
+      "registrants": "报名人数",
+      "attendees": "出席人数",
+      "createWebinar": "创建 Zoom 网络研讨会",
+      "createWebinarLabel": "为 {title} 创建 Zoom 网络研讨会",
+      "webinarCreated": "已为 {title} 创建 Zoom 网络研讨会。",
+      "providerName": {
+        "fake": "Mux（测试）",
+        "mux": "Mux",
+        "fake_cloudflare": "Cloudflare Stream（测试）",
+        "cloudflare": "Cloudflare Stream"
+      }
     },
     "errors": {
       "in_person_event": "这个活动是线下举办。请先选择“线上”或“线上线下结合”。",
       "video_off": "此处暂不支持直播。",
       "in_person_only": "这张门票仅限线下参加。",
       "stream_off": "这个直播已关闭。",
-      "provider_changed": "视频服务商已更换。请重新设置这个直播。",
+      "provider_changed": "直播已转到其他服务商。请重新开始观看。",
       "views_per_hour": "尝试次数过多。请等几分钟后再试。",
       "invalid_token": "这个观看链接已过期。请重新开始观看。",
-      "ticket_void": "这张门票已失效。"
+      "ticket_void": "这张门票已失效。",
+      "provider_unavailable": "此视频服务商在这里不可用。",
+      "no_backup_ingest": "此服务商没有备用推流地址。",
+      "zoom_not_connected": "请先连接 Zoom。",
+      "zoom_failed": "Zoom 未能创建网络研讨会。请重试，或检查 Zoom 连接。",
+      "integrations_off": "此处暂不支持集成。",
+      "webinar_taken": "该网络研讨会已被其他场次使用。"
     },
     "watch": {
       "metaTitle": "在线观看",
@@ -15274,8 +15314,10 @@
         "ticket_void": "这张门票已失效。",
         "video_off": "目前无法直播。",
         "not_found": "这个分会场目前没有直播。",
-        "generic": "出了点问题。请再试一次。"
-      }
+        "generic": "出了点问题。请再试一次。",
+        "provider_unavailable": "此直播的视频服务商目前不可用。"
+      },
+      "moved": "直播已转到其他服务商。你仍在观看。"
     }
   },
   "formControls": {

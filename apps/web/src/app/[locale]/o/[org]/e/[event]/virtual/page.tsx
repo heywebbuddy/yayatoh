@@ -1,22 +1,27 @@
 import { virtualCheckpointsQuery } from '@yayatoh/checkin';
+import { zoomConnectedQuery } from '@yayatoh/integrations';
 import { executeQuery, isDomainError } from '@yayatoh/kernel';
 import { Alert, buttonClass, Card, EmptyState, PageHeader, StatCard, StatusPill, Table } from '@yayatoh/ui';
-import { virtualSetupQuery } from '@yayatoh/virtual';
-import { CalendarClock, Ticket } from 'lucide-react';
+import { virtualSetupQuery, zoomSetupQuery } from '@yayatoh/virtual';
+import { CalendarClock, Ticket, Video } from 'lucide-react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Crumbs } from '@/components/crumbs.tsx';
 import { AccessForm, DeliveryForm, StreamControls } from '@/components/virtual/stream-setup.tsx';
+import { CreateWebinarButton } from '@/components/virtual/zoom-webinars.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import {
   createStreamAction,
+  createZoomWebinarAction,
   revealStreamKeyAction,
   setAccessAction,
   setDeliveryAction,
+  setIngestAction,
   setStreamEnabledAction,
+  switchProviderAction,
 } from './actions.ts';
 
 type Params = { params: Promise<{ locale: string; org: string; event: string }> };
@@ -47,6 +52,16 @@ export default async function VirtualPage({ params }: Params) {
       })
     : [];
   const checkedIn = new Map(checkpoints.map((c) => [c.sessionId, c.checkedIn]));
+  // M6.10a: Zoom webinars per session, and whether the org's Zoom connection is active.
+  const zoom = await executeQuery(zoomSetupQuery, { eventId: ev.id }, data.ctx, ports);
+  const zoomConnected = data.modules.has('integrations')
+    ? (
+        await executeQuery(zoomConnectedQuery, {}, data.ctx, ports).catch((err) => {
+          if (isDomainError(err)) return { connected: false };
+          throw err;
+        })
+      ).connected
+    : false;
   const canEdit = can('events:write');
   const streaming = setup.deliveryMode !== 'in_person';
   const canStream = streaming && setup.provider !== null;
@@ -78,7 +93,7 @@ export default async function VirtualPage({ params }: Params) {
         <Alert tone="warning" title={t('providerOff')}>
           {t('providerOffHint')}
         </Alert>
-      ) : setup.provider === 'fake' ? (
+      ) : setup.providers[0]?.sandbox ? (
         <Alert tone="info" title={t('fakeProvider')} />
       ) : null}
       {!canEdit ? <Alert tone="info" title={t('readOnly')} /> : null}
@@ -162,10 +177,20 @@ export default async function VirtualPage({ params }: Params) {
                 cell: (s) =>
                   !s.stream ? (
                     <StatusPill tone="neutral" label={t('streamNone')} />
-                  ) : s.stream.enabled ? (
-                    <StatusPill tone="success" label={t('streamOn')} />
                   ) : (
-                    <StatusPill tone="waiting" label={t('streamOff')} />
+                    <span className="flex flex-col items-start gap-1">
+                      {s.stream.enabled ? (
+                        <StatusPill tone="success" label={t('streamOn')} />
+                      ) : (
+                        <StatusPill tone="waiting" label={t('streamOff')} />
+                      )}
+                      <span className="text-caption text-ink-2" data-testid="stream-provider">
+                        {t(`providerName.${s.stream.provider}`)}
+                      </span>
+                      {s.stream.activeIngest === 'backup' ? (
+                        <StatusPill tone="waiting" label={t('backupPill')} />
+                      ) : null}
+                    </span>
                   ),
               },
               { key: 'viewers', header: t('viewers'), align: 'end', cell: (s) => nf.format(s.viewers) },
@@ -188,7 +213,19 @@ export default async function VirtualPage({ params }: Params) {
                           enabled={s.stream?.enabled ?? false}
                           canEdit={canEdit}
                           canStream={canStream}
+                          providers={setup.providers.map((p) => ({ name: p.name }))}
+                          provider={s.stream?.provider ?? null}
+                          hasBackup={s.stream?.hasBackup ?? false}
+                          activeIngest={s.stream?.activeIngest ?? 'primary'}
                           create={createStreamAction.bind(null, org, event, s.sessionId)}
+                          switchProvider={switchProviderAction.bind(null, org, event, s.sessionId)}
+                          setIngest={setIngestAction.bind(
+                            null,
+                            org,
+                            event,
+                            s.sessionId,
+                            s.stream?.activeIngest === 'backup' ? 'primary' : 'backup',
+                          )}
                           toggle={setStreamEnabledAction.bind(
                             null,
                             org,
@@ -209,6 +246,80 @@ export default async function VirtualPage({ params }: Params) {
           <p className="m-0 text-caption text-ink-2">{t('inPersonNote')}</p>
         ) : null}
       </div>
+      {streaming && zoom.sessions.length > 0 ? (
+        <Card>
+          <h2 className="m-0 mb-1 text-section">{t('zoomTitle')}</h2>
+          <p className="mt-0 mb-3 text-caption text-ink-2">{t('zoomHint')}</p>
+          {!zoomConnected ? (
+            <EmptyState
+              icon={<Video />}
+              title={t('zoomNotConnected')}
+              description={t('zoomNotConnectedHint')}
+              action={
+                data.modules.has('integrations') && can('integrations:manage') ? (
+                  <Link href={`/o/${org}/integrations`} className={buttonClass('secondary')}>
+                    {t('connectZoom')}
+                  </Link>
+                ) : undefined
+              }
+            />
+          ) : null}
+          <Table
+            caption={t('zoomTitle')}
+            rowKey={(s) => s.sessionId}
+            rows={zoom.sessions}
+            stackOnPhone
+            columns={[
+              {
+                key: 'title',
+                header: t('session'),
+                cell: (s) => <span className="font-medium">{s.title}</span>,
+              },
+              {
+                key: 'webinar',
+                header: t('webinar'),
+                cell: (s) =>
+                  s.webinarId ? (
+                    <span className="flex flex-col items-start gap-1">
+                      <span className="font-mono" data-testid="webinar-id">
+                        {s.webinarId}
+                      </span>
+                      <StatusPill
+                        tone={s.created ? 'success' : 'neutral'}
+                        label={t(s.created ? 'webinarCreatedPill' : 'webinarLinkedPill')}
+                      />
+                    </span>
+                  ) : (
+                    <StatusPill tone="neutral" label={t('noWebinar')} />
+                  ),
+              },
+              {
+                key: 'registrants',
+                header: t('registrants'),
+                align: 'end',
+                cell: (s) => nf.format(s.registrants),
+              },
+              { key: 'attendees', header: t('attendees'), align: 'end', cell: (s) => nf.format(s.attendees) },
+              ...(canEdit
+                ? [
+                    {
+                      key: 'actions',
+                      header: t('actions'),
+                      cell: (s: (typeof zoom.sessions)[number]) =>
+                        s.webinarId ? null : (
+                          <CreateWebinarButton
+                            title={s.title}
+                            disabled={!zoomConnected}
+                            create={createZoomWebinarAction.bind(null, org, event, s.sessionId)}
+                          />
+                        ),
+                    },
+                  ]
+                : []),
+            ]}
+          />
+        </Card>
+      ) : null}
     </>
   );
 }

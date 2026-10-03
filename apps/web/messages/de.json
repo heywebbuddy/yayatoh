@@ -15227,17 +15227,57 @@
         "virtual": "Nur online",
         "both": "Vor Ort und online"
       },
-      "addTicketTypes": "Zu den Tickets"
+      "addTicketTypes": "Zu den Tickets",
+      "provider": "Videoanbieter",
+      "providerFor": "Videoanbieter für {title}",
+      "switchProvider": "Anbieter wechseln",
+      "switchProviderLabel": "Videoanbieter für {title} wechseln",
+      "providerSwitched": "{title} wird jetzt über {provider} gestreamt. Zuschauer behalten Zugang und Zuschauzeit.",
+      "providerSame": "{title} wird bereits über {provider} gestreamt.",
+      "useBackup": "Backup-Ingest verwenden",
+      "useBackupLabel": "Backup-Ingest für {title} verwenden",
+      "usePrimary": "Primären Ingest verwenden",
+      "usePrimaryLabel": "Primären Ingest für {title} verwenden",
+      "backupOn": "{title} nutzt jetzt den Backup-Ingest. Richten Sie Ihren Encoder auf den Backup-Server aus.",
+      "primaryOn": "{title} nutzt wieder den primären Ingest.",
+      "backupPill": "Backup-Ingest",
+      "backupIngestUrl": "Server (Backup-Ingest)",
+      "zoomTitle": "Zoom-Webinare",
+      "zoomHint": "Bieten Sie eine Session als Zoom-Webinar an. Inhaber mit Online-Zugang werden automatisch registriert, und ihr Beitreten und Verlassen zählt als Teilnahme.",
+      "zoomNotConnected": "Zoom ist nicht verbunden",
+      "zoomNotConnectedHint": "Verbinden Sie Ihr Zoom-Konto, um Webinare von hier aus zu erstellen.",
+      "connectZoom": "Zoom verbinden",
+      "webinar": "Webinar",
+      "noWebinar": "Kein Webinar",
+      "webinarCreatedPill": "Hier erstellt",
+      "webinarLinkedPill": "Verknüpft",
+      "registrants": "Registrierte",
+      "attendees": "Teilnehmende",
+      "createWebinar": "Zoom-Webinar erstellen",
+      "createWebinarLabel": "Zoom-Webinar für {title} erstellen",
+      "webinarCreated": "Zoom-Webinar für {title} erstellt.",
+      "providerName": {
+        "fake": "Mux (Test)",
+        "mux": "Mux",
+        "fake_cloudflare": "Cloudflare Stream (Test)",
+        "cloudflare": "Cloudflare Stream"
+      }
     },
     "errors": {
       "in_person_event": "Diese Veranstaltung findet vor Ort statt. Wählen Sie zuerst Online oder Hybrid.",
       "video_off": "Streaming ist hier noch nicht verfügbar.",
       "in_person_only": "Dieses Ticket gilt nur für die Teilnahme vor Ort.",
       "stream_off": "Dieser Stream ist ausgeschaltet.",
-      "provider_changed": "Der Videoanbieter hat gewechselt. Richten Sie diesen Stream erneut ein.",
+      "provider_changed": "Der Stream ist zu einem anderen Anbieter gewechselt. Starten Sie die Wiedergabe erneut.",
       "views_per_hour": "Zu viele Versuche. Warten Sie ein paar Minuten und versuchen Sie es erneut.",
       "invalid_token": "Dieser Zuschauer-Link ist abgelaufen. Starten Sie die Wiedergabe erneut.",
-      "ticket_void": "Dieses Ticket ist nicht mehr gültig."
+      "ticket_void": "Dieses Ticket ist nicht mehr gültig.",
+      "provider_unavailable": "Dieser Videoanbieter ist hier nicht verfügbar.",
+      "no_backup_ingest": "Dieser Anbieter hat keinen Backup-Ingest.",
+      "zoom_not_connected": "Verbinden Sie zuerst Zoom.",
+      "zoom_failed": "Zoom hat das Webinar nicht erstellt. Versuchen Sie es erneut oder prüfen Sie die Zoom-Verbindung.",
+      "integrations_off": "Integrationen sind hier noch nicht verfügbar.",
+      "webinar_taken": "Dieses Webinar wird bereits von einer anderen Session verwendet."
     },
     "watch": {
       "metaTitle": "Online ansehen",
@@ -15274,8 +15314,10 @@
         "ticket_void": "Dieses Ticket ist nicht mehr gültig.",
         "video_off": "Streaming ist gerade nicht verfügbar.",
         "not_found": "Diese Session wird gerade nicht gestreamt.",
-        "generic": "Etwas ist schiefgelaufen. Versuchen Sie es erneut."
-      }
+        "generic": "Etwas ist schiefgelaufen. Versuchen Sie es erneut.",
+        "provider_unavailable": "Der Videoanbieter dieses Streams ist gerade nicht verfügbar."
+      },
+      "moved": "Der Stream ist zu einem anderen Anbieter gewechselt. Sie schauen weiter."
     }
   },
   "formControls": {

@@ -15227,17 +15227,57 @@
         "virtual": "Alleen online",
         "both": "Op locatie en online"
       },
-      "addTicketTypes": "Naar tickets"
+      "addTicketTypes": "Naar tickets",
+      "provider": "Videoprovider",
+      "providerFor": "Videoprovider voor {title}",
+      "switchProvider": "Provider wisselen",
+      "switchProviderLabel": "Videoprovider voor {title} wisselen",
+      "providerSwitched": "{title} streamt nu via {provider}. Kijkers houden hun toegang en kijktijd.",
+      "providerSame": "{title} streamt al via {provider}.",
+      "useBackup": "Back-up-ingest gebruiken",
+      "useBackupLabel": "Back-up-ingest voor {title} gebruiken",
+      "usePrimary": "Primaire ingest gebruiken",
+      "usePrimaryLabel": "Primaire ingest voor {title} gebruiken",
+      "backupOn": "{title} gebruikt nu de back-up-ingest. Richt je encoder op de back-upserver.",
+      "primaryOn": "{title} gebruikt weer de primaire ingest.",
+      "backupPill": "Back-up-ingest",
+      "backupIngestUrl": "Server (back-up-ingest)",
+      "zoomTitle": "Zoom-webinars",
+      "zoomHint": "Bied een sessie aan als Zoom-webinar. Houders met online toegang worden automatisch geregistreerd, en hun binnenkomen en vertrekken telt als aanwezigheid.",
+      "zoomNotConnected": "Zoom is niet gekoppeld",
+      "zoomNotConnectedHint": "Koppel je Zoom-account om hier webinars te maken.",
+      "connectZoom": "Zoom koppelen",
+      "webinar": "Webinar",
+      "noWebinar": "Geen webinar",
+      "webinarCreatedPill": "Hier gemaakt",
+      "webinarLinkedPill": "Gekoppeld",
+      "registrants": "Geregistreerden",
+      "attendees": "Aanwezigen",
+      "createWebinar": "Zoom-webinar maken",
+      "createWebinarLabel": "Zoom-webinar maken voor {title}",
+      "webinarCreated": "Zoom-webinar gemaakt voor {title}.",
+      "providerName": {
+        "fake": "Mux (test)",
+        "mux": "Mux",
+        "fake_cloudflare": "Cloudflare Stream (test)",
+        "cloudflare": "Cloudflare Stream"
+      }
     },
     "errors": {
       "in_person_event": "Dit evenement is op locatie. Kies eerst Online of Hybride.",
       "video_off": "Streaming is hier nog niet beschikbaar.",
       "in_person_only": "Dit ticket geldt alleen voor deelname op locatie.",
       "stream_off": "Deze stream staat uit.",
-      "provider_changed": "De videoprovider is veranderd. Stel deze stream opnieuw in.",
+      "provider_changed": "De stream is naar een andere provider verhuisd. Begin opnieuw met kijken.",
       "views_per_hour": "Te veel pogingen. Wacht een paar minuten en probeer het opnieuw.",
       "invalid_token": "Deze kijklink is verlopen. Begin opnieuw met kijken.",
-      "ticket_void": "Dit ticket is niet meer geldig."
+      "ticket_void": "Dit ticket is niet meer geldig.",
+      "provider_unavailable": "Deze videoprovider is hier niet beschikbaar.",
+      "no_backup_ingest": "Deze provider heeft geen back-up-ingest.",
+      "zoom_not_connected": "Koppel eerst Zoom.",
+      "zoom_failed": "Zoom heeft het webinar niet gemaakt. Probeer het opnieuw of controleer de Zoom-koppeling.",
+      "integrations_off": "Integraties zijn hier nog niet beschikbaar.",
+      "webinar_taken": "Dat webinar wordt al door een andere sessie gebruikt."
     },
     "watch": {
       "metaTitle": "Online kijken",
@@ -15274,8 +15314,10 @@
         "ticket_void": "Dit ticket is niet meer geldig.",
         "video_off": "Streaming is nu niet beschikbaar.",
         "not_found": "Deze sessie wordt nu niet gestreamd.",
-        "generic": "Er ging iets mis. Probeer het opnieuw."
-      }
+        "generic": "Er ging iets mis. Probeer het opnieuw.",
+        "provider_unavailable": "De videoprovider van deze stream is nu niet beschikbaar."
+      },
+      "moved": "De stream is naar een andere provider verhuisd. Je kijkt nog steeds."
     }
   },
   "formControls": {

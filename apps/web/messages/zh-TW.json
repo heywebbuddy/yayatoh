@@ -15227,17 +15227,57 @@
         "virtual": "僅線上",
         "both": "實體與線上"
       },
-      "addTicketTypes": "前往票券"
+      "addTicketTypes": "前往票券",
+      "provider": "影片服務商",
+      "providerFor": "{title} 的影片服務商",
+      "switchProvider": "切換服務商",
+      "switchProviderLabel": "切換 {title} 的影片服務商",
+      "providerSwitched": "{title} 現在透過 {provider} 直播。觀眾保留存取權限與觀看時間。",
+      "providerSame": "{title} 已透過 {provider} 直播。",
+      "useBackup": "使用備用推流位址",
+      "useBackupLabel": "為 {title} 使用備用推流位址",
+      "usePrimary": "使用主要推流位址",
+      "usePrimaryLabel": "為 {title} 使用主要推流位址",
+      "backupOn": "{title} 現在使用備用推流位址。請將編碼器指向備用伺服器。",
+      "primaryOn": "{title} 已切回主要推流位址。",
+      "backupPill": "備用推流",
+      "backupIngestUrl": "伺服器（備用推流）",
+      "zoomTitle": "Zoom 網路研討會",
+      "zoomHint": "以 Zoom 網路研討會的形式進行場次。擁有線上權限的持票人會自動報名，其加入與離開會計入出席。",
+      "zoomNotConnected": "尚未連結 Zoom",
+      "zoomNotConnectedHint": "連結你的 Zoom 帳號即可在此建立網路研討會。",
+      "connectZoom": "連結 Zoom",
+      "webinar": "網路研討會",
+      "noWebinar": "無網路研討會",
+      "webinarCreatedPill": "在此建立",
+      "webinarLinkedPill": "已連結",
+      "registrants": "報名人數",
+      "attendees": "出席人數",
+      "createWebinar": "建立 Zoom 網路研討會",
+      "createWebinarLabel": "為 {title} 建立 Zoom 網路研討會",
+      "webinarCreated": "已為 {title} 建立 Zoom 網路研討會。",
+      "providerName": {
+        "fake": "Mux（測試）",
+        "mux": "Mux",
+        "fake_cloudflare": "Cloudflare Stream（測試）",
+        "cloudflare": "Cloudflare Stream"
+      }
     },
     "errors": {
       "in_person_event": "這個活動為實體舉辦。請先選擇「線上」或「實體與線上並行」。",
       "video_off": "此處尚不支援直播。",
       "in_person_only": "這張票券僅限實體參加。",
       "stream_off": "這個直播已關閉。",
-      "provider_changed": "影音服務商已更換。請重新設定這個直播。",
+      "provider_changed": "直播已轉到其他服務商。請重新開始觀看。",
       "views_per_hour": "嘗試次數過多。請等幾分鐘後再試。",
       "invalid_token": "這個觀看連結已過期。請重新開始觀看。",
-      "ticket_void": "這張票券已失效。"
+      "ticket_void": "這張票券已失效。",
+      "provider_unavailable": "此影片服務商在這裡無法使用。",
+      "no_backup_ingest": "此服務商沒有備用推流位址。",
+      "zoom_not_connected": "請先連結 Zoom。",
+      "zoom_failed": "Zoom 未能建立網路研討會。請重試，或檢查 Zoom 連結。",
+      "integrations_off": "此處尚不支援整合。",
+      "webinar_taken": "該網路研討會已被其他場次使用。"
     },
     "watch": {
       "metaTitle": "線上觀看",
@@ -15274,8 +15314,10 @@
         "ticket_void": "這張票券已失效。",
         "video_off": "目前無法直播。",
         "not_found": "這個場次目前沒有直播。",
-        "generic": "發生問題。請再試一次。"
-      }
+        "generic": "發生問題。請再試一次。",
+        "provider_unavailable": "此直播的影片服務商目前無法使用。"
+      },
+      "moved": "直播已轉到其他服務商。你仍在觀看。"
     }
   },
   "formControls": {

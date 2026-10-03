@@ -15227,17 +15227,57 @@
         "virtual": "عبر الإنترنت فقط",
         "both": "حضوري وعبر الإنترنت"
       },
-      "addTicketTypes": "الانتقال إلى التذاكر"
+      "addTicketTypes": "الانتقال إلى التذاكر",
+      "provider": "مزوّد الفيديو",
+      "providerFor": "مزوّد الفيديو لـ {title}",
+      "switchProvider": "تبديل المزوّد",
+      "switchProviderLabel": "تبديل مزوّد الفيديو لـ {title}",
+      "providerSwitched": "يُبث {title} الآن عبر {provider}. يحتفظ المشاهدون بإمكانية الوصول ووقت المشاهدة.",
+      "providerSame": "يُبث {title} بالفعل عبر {provider}.",
+      "useBackup": "استخدام الإدخال الاحتياطي",
+      "useBackupLabel": "استخدام الإدخال الاحتياطي لـ {title}",
+      "usePrimary": "استخدام الإدخال الأساسي",
+      "usePrimaryLabel": "استخدام الإدخال الأساسي لـ {title}",
+      "backupOn": "يستخدم {title} الآن الإدخال الاحتياطي. وجّه برنامج الترميز إلى الخادم الاحتياطي.",
+      "primaryOn": "عاد {title} إلى الإدخال الأساسي.",
+      "backupPill": "إدخال احتياطي",
+      "backupIngestUrl": "الخادم (إدخال احتياطي)",
+      "zoomTitle": "ندوات Zoom عبر الويب",
+      "zoomHint": "قدّم جلسة كندوة Zoom عبر الويب. يُسجَّل حاملو التذاكر ذات الوصول عبر الإنترنت تلقائيًا، ويُحتسب انضمامهم ومغادرتهم حضورًا.",
+      "zoomNotConnected": "Zoom غير متصل",
+      "zoomNotConnectedHint": "اربط حساب Zoom لإنشاء ندوات عبر الويب من هنا.",
+      "connectZoom": "ربط Zoom",
+      "webinar": "الندوة",
+      "noWebinar": "لا توجد ندوة",
+      "webinarCreatedPill": "أُنشئت هنا",
+      "webinarLinkedPill": "مرتبطة",
+      "registrants": "المسجّلون",
+      "attendees": "الحاضرون",
+      "createWebinar": "إنشاء ندوة Zoom",
+      "createWebinarLabel": "إنشاء ندوة Zoom لـ {title}",
+      "webinarCreated": "أُنشئت ندوة Zoom لـ {title}.",
+      "providerName": {
+        "fake": "Mux (تجريبي)",
+        "mux": "Mux",
+        "fake_cloudflare": "Cloudflare Stream (تجريبي)",
+        "cloudflare": "Cloudflare Stream"
+      }
     },
     "errors": {
       "in_person_event": "هذه الفعالية حضورية. اختر أولًا عبر الإنترنت أو مختلطة.",
       "video_off": "البث غير متاح هنا بعد.",
       "in_person_only": "هذه التذكرة للحضور الشخصي فقط.",
       "stream_off": "هذا البث متوقف.",
-      "provider_changed": "تغيّر مزوّد الفيديو. اضبط هذا البث مرة أخرى.",
+      "provider_changed": "انتقل البث إلى مزوّد آخر. ابدأ المشاهدة من جديد.",
       "views_per_hour": "محاولات كثيرة جدًا. انتظر بضع دقائق ثم حاول مرة أخرى.",
       "invalid_token": "انتهت صلاحية رابط المشاهدة هذا. ابدأ المشاهدة من جديد.",
-      "ticket_void": "هذه التذكرة لم تعد صالحة."
+      "ticket_void": "هذه التذكرة لم تعد صالحة.",
+      "provider_unavailable": "مزوّد الفيديو هذا غير متاح هنا.",
+      "no_backup_ingest": "لا يوفّر هذا المزوّد إدخالًا احتياطيًا.",
+      "zoom_not_connected": "اربط Zoom أولًا.",
+      "zoom_failed": "لم يُنشئ Zoom الندوة. حاول مرة أخرى أو تحقّق من اتصال Zoom.",
+      "integrations_off": "التكاملات غير متاحة هنا بعد.",
+      "webinar_taken": "هذه الندوة مستخدمة بالفعل في جلسة أخرى."
     },
     "watch": {
       "metaTitle": "المشاهدة عبر الإنترنت",
@@ -15274,8 +15314,10 @@
         "ticket_void": "هذه التذكرة لم تعد صالحة.",
         "video_off": "البث غير متاح الآن.",
         "not_found": "هذه الجلسة لا تُبث الآن.",
-        "generic": "حدث خطأ ما. حاول مرة أخرى."
-      }
+        "generic": "حدث خطأ ما. حاول مرة أخرى.",
+        "provider_unavailable": "مزوّد الفيديو لهذا البث غير متاح الآن."
+      },
+      "moved": "انتقل البث إلى مزوّد آخر. ما زلت تشاهد."
     }
   },
   "formControls": {

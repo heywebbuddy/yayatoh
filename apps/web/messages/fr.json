@@ -15227,17 +15227,57 @@
         "virtual": "En ligne uniquement",
         "both": "Présentiel et en ligne"
       },
-      "addTicketTypes": "Aller aux billets"
+      "addTicketTypes": "Aller aux billets",
+      "provider": "Fournisseur vidéo",
+      "providerFor": "Fournisseur vidéo pour {title}",
+      "switchProvider": "Changer de fournisseur",
+      "switchProviderLabel": "Changer le fournisseur vidéo pour {title}",
+      "providerSwitched": "{title} est maintenant diffusé via {provider}. Les spectateurs gardent leur accès et leur temps de visionnage.",
+      "providerSame": "{title} est déjà diffusé via {provider}.",
+      "useBackup": "Utiliser l’ingest de secours",
+      "useBackupLabel": "Utiliser l’ingest de secours pour {title}",
+      "usePrimary": "Utiliser l’ingest principal",
+      "usePrimaryLabel": "Utiliser l’ingest principal pour {title}",
+      "backupOn": "{title} utilise maintenant l’ingest de secours. Dirigez votre encodeur vers le serveur de secours.",
+      "primaryOn": "{title} est revenu sur l’ingest principal.",
+      "backupPill": "Ingest de secours",
+      "backupIngestUrl": "Serveur (ingest de secours)",
+      "zoomTitle": "Webinaires Zoom",
+      "zoomHint": "Proposez une session en webinaire Zoom. Les détenteurs d’un accès en ligne sont inscrits automatiquement, et leurs arrivées et départs comptent comme présence.",
+      "zoomNotConnected": "Zoom n’est pas connecté",
+      "zoomNotConnectedHint": "Connectez votre compte Zoom pour créer des webinaires depuis cette page.",
+      "connectZoom": "Connecter Zoom",
+      "webinar": "Webinaire",
+      "noWebinar": "Aucun webinaire",
+      "webinarCreatedPill": "Créé ici",
+      "webinarLinkedPill": "Associé",
+      "registrants": "Inscrits",
+      "attendees": "Participants",
+      "createWebinar": "Créer un webinaire Zoom",
+      "createWebinarLabel": "Créer un webinaire Zoom pour {title}",
+      "webinarCreated": "Webinaire Zoom créé pour {title}.",
+      "providerName": {
+        "fake": "Mux (test)",
+        "mux": "Mux",
+        "fake_cloudflare": "Cloudflare Stream (test)",
+        "cloudflare": "Cloudflare Stream"
+      }
     },
     "errors": {
       "in_person_event": "Cet événement est en présentiel. Choisissez d’abord En ligne ou Hybride.",
       "video_off": "La diffusion n’est pas encore disponible ici.",
       "in_person_only": "Ce billet est réservé à la participation sur place.",
       "stream_off": "Ce direct est désactivé.",
-      "provider_changed": "Le fournisseur vidéo a changé. Configurez à nouveau ce direct.",
+      "provider_changed": "La diffusion est passée chez un autre fournisseur. Relancez le visionnage.",
       "views_per_hour": "Trop de tentatives. Patientez quelques minutes et réessayez.",
       "invalid_token": "Ce lien de lecture a expiré. Relancez la lecture.",
-      "ticket_void": "Ce billet n’est plus valide."
+      "ticket_void": "Ce billet n’est plus valide.",
+      "provider_unavailable": "Ce fournisseur vidéo n’est pas disponible ici.",
+      "no_backup_ingest": "Ce fournisseur n’a pas d’ingest de secours.",
+      "zoom_not_connected": "Connectez d’abord Zoom.",
+      "zoom_failed": "Zoom n’a pas créé le webinaire. Réessayez ou vérifiez la connexion Zoom.",
+      "integrations_off": "Les intégrations ne sont pas encore disponibles ici.",
+      "webinar_taken": "Ce webinaire est déjà utilisé par une autre session."
     },
     "watch": {
       "metaTitle": "Regarder en ligne",
@@ -15274,8 +15314,10 @@
         "ticket_void": "Ce billet n’est plus valide.",
         "video_off": "La diffusion n’est pas disponible pour le moment.",
         "not_found": "Cette session n’est pas diffusée pour le moment.",
-        "generic": "Une erreur est survenue. Réessayez."
-      }
+        "generic": "Une erreur est survenue. Réessayez.",
+        "provider_unavailable": "Le fournisseur vidéo de cette diffusion n’est pas disponible pour le moment."
+      },
+      "moved": "La diffusion est passée chez un autre fournisseur. Vous regardez toujours."
     }
   },
   "formControls": {

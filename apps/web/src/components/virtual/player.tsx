@@ -21,6 +21,7 @@ const REASONS = new Set([
   'invalid_token',
   'ticket_void',
   'video_off',
+  'provider_unavailable',
 ]);
 
 /**
@@ -50,6 +51,8 @@ export function VirtualPlayer({
   const [problem, setProblem] = useState<string | null>(null);
   const [minutes, setMinutes] = useState(initialMinutes);
   const [playback, setPlayback] = useState<PlaybackState | null>(null);
+  /** M6.10a: the organizer moved the stream to another provider and the player followed. */
+  const [moved, setMoved] = useState(false);
   const seq = useRef(0);
   const timer = useRef<ReturnType<typeof setInterval> | null>(null);
   const live = useRef<PlaybackState | null>(null);
@@ -75,7 +78,7 @@ export function VirtualPlayer({
       fail(p.code, p.reason);
       return false;
     }
-    if (p.provider === 'fake') {
+    if (p.sandbox) {
       const res = await fetch(p.playbackUrl, { cache: 'no-store' }).catch(() => null);
       if (!res?.ok) {
         fail('forbidden', 'invalid_token');
@@ -88,27 +91,37 @@ export function VirtualPlayer({
     return true;
   }, [start, fail]);
 
-  const beat = useCallback(async () => {
-    const p = live.current;
-    if (!p?.token) return;
-    if (p.expiresAt && new Date(p.expiresAt).getTime() - Date.now() < RENEW_MS && !(await open())) return;
-    const token = live.current?.token;
-    seq.current += 1;
-    const res = await fetch(heartbeatUrl, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ token, seq: seq.current }),
-      cache: 'no-store',
-    }).catch(() => null);
-    if (!res) return; // offline for a moment: the next beat tries again
-    const body = (await res.json().catch(() => null)) as {
-      minutes?: number;
-      code?: string;
-      reason?: string;
-    } | null;
-    if (res.ok && typeof body?.minutes === 'number') setMinutes(body.minutes);
-    else if (!res.ok) fail(body?.code ?? null, body?.reason ?? null);
-  }, [heartbeatUrl, open, fail]);
+  const beat = useCallback(
+    async (retried = false): Promise<void> => {
+      const p = live.current;
+      if (!p?.token) return;
+      if (p.expiresAt && new Date(p.expiresAt).getTime() - Date.now() < RENEW_MS && !(await open())) return;
+      const token = live.current?.token;
+      seq.current += 1;
+      const res = await fetch(heartbeatUrl, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ token, seq: seq.current }),
+        cache: 'no-store',
+      }).catch(() => null);
+      if (!res) return; // offline for a moment: the next beat tries again
+      const body = (await res.json().catch(() => null)) as {
+        minutes?: number;
+        code?: string;
+        reason?: string;
+      } | null;
+      if (res.ok && typeof body?.minutes === 'number') setMinutes(body.minutes);
+      else if (!res.ok && body?.reason === 'provider_changed') {
+        // M6.10a: the stream moved to another provider. The ticket keeps its access and minutes:
+        // start a new viewing there and beat again at once (that minute counts at the new provider).
+        if (!retried && (await open())) {
+          setMoved(true);
+          await beat(true);
+        } else if (retried) fail('invalid_state', 'provider_unavailable');
+      } else if (!res.ok) fail(body?.code ?? null, body?.reason ?? null);
+    },
+    [heartbeatUrl, open, fail],
+  );
 
   const play = async () => {
     setProblem(null);
@@ -150,7 +163,7 @@ export function VirtualPlayer({
           {t('heading')}
         </h2>
         <div className="flex aspect-video w-full flex-col items-center justify-center gap-3 rounded-panel border border-line bg-surface-2 p-4 text-center">
-          {phase === 'playing' && playback?.provider === 'mux' && playback.playbackUrl ? (
+          {phase === 'playing' && playback && !playback.sandbox && playback.playbackUrl ? (
             // biome-ignore lint/a11y/useMediaCaption: live streams carry the provider's own captions track when the organizer adds one
             <video
               className="size-full rounded-tile"
@@ -191,6 +204,9 @@ export function VirtualPlayer({
         <p className="m-0 text-body text-ink" aria-live="polite" data-testid="watched-minutes">
           {t('watched', { count: minutes })}
         </p>
+        <div aria-live="polite">
+          {moved && phase === 'playing' ? <Alert tone="info" title={t('moved')} /> : null}
+        </div>
         <div aria-live="assertive">{problem ? <Alert title={t(`errors.${problem}`)} /> : null}</div>
       </section>
     </main>
