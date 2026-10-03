@@ -7,7 +7,7 @@ import { errorMessageKey } from '@/lib/errors.ts';
 import { type FormState, INITIAL_FORM_STATE } from '@/lib/form-state.ts';
 import { useStepUpActionState } from './step-up.tsx';
 
-const field = 'min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body';
+const field = 'field';
 
 /**
  * Answer a buyer's refund request (M3.10b): approve (the tickets they asked for, or an amount) or
@@ -69,7 +69,7 @@ export function RefundRequestPanel({
         </fieldset>
         {mode === 'amount' ? (
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="request-amount" className="text-caption text-zinc-600">
+            <label htmlFor="request-amount" className="text-[13px] font-bold text-ink">
               {t('amount', { currency })}
             </label>
             <input
@@ -94,7 +94,7 @@ export function RefundRequestPanel({
       <form action={declineAction} className="flex flex-1 flex-col gap-3">
         <h3 className="text-section">{t('declineLegend')}</h3>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="request-decline-reason" className="text-caption text-zinc-600">
+          <label htmlFor="request-decline-reason" className="text-[13px] font-bold text-ink">
             {t('reason')}
           </label>
           <textarea
@@ -106,9 +106,9 @@ export function RefundRequestPanel({
             rows={3}
             aria-invalid={declined.fields?.includes('reason') || undefined}
             aria-describedby="request-decline-hint"
-            className="rounded-card border border-zinc-200 bg-white px-4 py-2 text-body"
+            className="rounded-card border border-line bg-surface px-4 py-2 text-body"
           />
-          <p id="request-decline-hint" className="text-caption text-zinc-500">
+          <p id="request-decline-hint" className="text-caption text-ink-2">
             {t('reasonHint')}
           </p>
         </div>
@@ -135,7 +135,7 @@ export function OrderNoteForm({
   const [state, formAction, pending] = useActionState(action, INITIAL_FORM_STATE);
   return (
     <form key={state.stamp ?? 0} action={formAction} className="flex flex-col gap-2">
-      <label htmlFor="order-note" className="text-caption text-zinc-600">
+      <label htmlFor="order-note" className="text-[13px] font-bold text-ink">
         {t('label')}
       </label>
       <textarea
@@ -146,9 +146,9 @@ export function OrderNoteForm({
         rows={2}
         aria-describedby="order-note-hint"
         aria-invalid={state.fields?.includes('body') || undefined}
-        className="rounded-card border border-zinc-200 bg-white px-4 py-2 text-body"
+        className="rounded-card border border-line bg-surface px-4 py-2 text-body"
       />
-      <p id="order-note-hint" className="text-caption text-zinc-500">
+      <p id="order-note-hint" className="text-caption text-ink-2">
         {t('hint')}
       </p>
       <div aria-live="polite">

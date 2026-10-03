@@ -1,6 +1,4 @@
 import { RTL_LOCALES } from '@yayatoh/contracts';
-import { GeistMono } from 'geist/font/mono';
-import { GeistSans } from 'geist/font/sans';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { connection } from 'next/server';
@@ -9,6 +7,8 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { MaintenanceBanner } from '@/components/maintenance-banner.tsx';
 import { routing } from '@/i18n/routing.ts';
+import { fontVariables } from '@/lib/fonts.ts';
+import { currentTheme } from '@/server/theme.ts';
 import '../globals.css';
 
 export function generateStaticParams() {
@@ -39,9 +39,12 @@ export default async function LocaleLayout({
   if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
   const dir = RTL_LOCALES.has(locale) ? 'rtl' : 'ltr';
+  // ADR 0022: light by default; the person's choice comes from a cookie read here, so the first
+  // HTML already carries it (no flash). "system" is resolved by CSS.
+  const theme = await currentTheme();
   return (
-    <html lang={locale} dir={dir} className={`${GeistSans.variable} ${GeistMono.variable}`}>
-      <body className="min-h-dvh bg-zinc-50 text-zinc-900 antialiased">
+    <html lang={locale} dir={dir} data-theme={theme} className={fontVariables}>
+      <body className="min-h-dvh bg-page text-ink antialiased">
         {/* Platform-wide read-only freeze (M2.5a): on every page, public ones included. */}
         <MaintenanceBanner locale={locale} />
         <NextIntlClientProvider>{children}</NextIntlClientProvider>

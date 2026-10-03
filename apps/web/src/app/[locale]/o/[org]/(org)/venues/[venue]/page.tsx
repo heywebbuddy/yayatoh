@@ -50,7 +50,7 @@ export default async function VenuePage({
     <>
       <PageHeader
         eyebrow={
-          <Link href={`/o/${org}/venues`} className="text-caption text-zinc-600 underline underline-offset-2">
+          <Link href={`/o/${org}/venues`} className="text-caption text-ink-2 underline underline-offset-2">
             {t('back')}
           </Link>
         }
@@ -92,7 +92,7 @@ export default async function VenuePage({
           {t('quotes.title')}
         </h2>
         {quotes === null ? (
-          <p className="text-body text-zinc-500">{t('quotes.viewerNotice')}</p>
+          <p className="text-body text-ink-2">{t('quotes.viewerNotice')}</p>
         ) : quotes.length === 0 ? (
           <EmptyState
             title={t('quotes.emptyTitle')}
@@ -110,13 +110,13 @@ export default async function VenuePage({
                       label={t(`quotes.status.${q.status}`)}
                     />
                   </div>
-                  <p className="text-caption text-zinc-500">
+                  <p className="text-caption text-ink-2">
                     <a href={`mailto:${q.email}`} className="underline underline-offset-2">
                       {q.email}
                     </a>
                     {q.phone ? ` · ${q.phone}` : ''} · {when.format(q.createdAt)}
                   </p>
-                  <dl className="flex flex-wrap gap-x-6 gap-y-1 text-caption text-zinc-600">
+                  <dl className="flex flex-wrap gap-x-6 gap-y-1 text-caption text-ink-2">
                     {q.eventDate ? (
                       <div className="flex gap-1">
                         <dt>{t('quotes.eventDate')}:</dt>

@@ -46,14 +46,14 @@ export default async function NotificationsPage({
             </form>
             <Link
               href={`/o/${org}/notifications/preferences`}
-              className="flex min-h-10 items-center rounded-pill border border-zinc-200 bg-white px-4 text-body"
+              className="flex min-h-10 items-center rounded-pill border border-line bg-surface px-4 text-body"
             >
               {t('settings')}
             </Link>
           </div>
         }
       />
-      <p role="status" className="text-body text-zinc-600">
+      <p role="status" className="text-body text-ink-2">
         {view.unread === 0 ? t('allRead') : t('unreadAnnouncement', { count: view.unread })}
       </p>
       {view.items.length === 0 ? (
@@ -65,13 +65,13 @@ export default async function NotificationsPage({
               <li
                 key={i.id}
                 className={cx(
-                  'flex flex-wrap items-center gap-3 rounded-[14px] px-3 py-2.5',
-                  !i.read && 'bg-zinc-50',
+                  'flex flex-wrap items-center gap-3 rounded-control px-3 py-2.5',
+                  !i.read && 'bg-surface-2',
                 )}
               >
                 <span
                   aria-hidden="true"
-                  className={cx('size-2 shrink-0 rounded-pill', i.read ? 'bg-transparent' : 'bg-accent-900')}
+                  className={cx('size-2 shrink-0 rounded-pill', i.read ? 'bg-transparent' : 'bg-primary')}
                 />
                 <div className="flex min-w-0 flex-1 flex-col">
                   {i.href ? (
@@ -81,7 +81,7 @@ export default async function NotificationsPage({
                   ) : (
                     <span className="text-body">{i.title}</span>
                   )}
-                  <span className="text-caption text-zinc-500">
+                  <span className="text-caption text-ink-2">
                     {i.read ? i.when : `${t('unread')} · ${i.when}`}
                   </span>
                 </div>

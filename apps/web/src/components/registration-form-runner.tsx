@@ -9,9 +9,9 @@ import type { RespondState } from '@/app/[locale]/registration-form/[token]/acti
 import { errorMessageKey } from '@/lib/errors.ts';
 import { keepValues } from '@/lib/keep-values.ts';
 
-const CONTROL = 'min-h-10 w-full rounded-pill border bg-white px-4 text-body text-zinc-900';
-const AREA = 'w-full rounded-card border bg-white px-4 py-2.5 text-body text-zinc-900';
-const CAPTION = 'text-caption text-zinc-600';
+const CONTROL = 'field w-full';
+const AREA = 'w-full rounded-card border bg-surface px-4 py-2.5 text-body text-ink';
+const CAPTION = 'text-caption text-ink-2';
 
 /**
  * The page key the person last saw in this tab: when the page changes (Continue, Back, submit),
@@ -67,12 +67,12 @@ export function RegistrationStartForm({
         <legend className="mb-1 text-section">{t('typeLegend')}</legend>
         {types.map((ty) => (
           <label key={ty.id} className="flex min-h-6 items-center gap-2.5 text-body">
-            <input type="radio" name="type" value={ty.id} required className="size-5 accent-ink" />
+            <input type="radio" name="type" value={ty.id} required className="size-5 accent-primary" />
             {ty.name}
           </label>
         ))}
         {err('type') ? (
-          <p id={`${id}-type-error`} className="text-caption text-pink-700">
+          <p id={`${id}-type-error`} className="text-caption text-danger">
             {err('type')}
           </p>
         ) : null}
@@ -167,14 +167,14 @@ export function RegistrationFormRunner({
           max={steps}
           value={step}
           aria-labelledby={`${id}-progress`}
-          className="h-2 w-full overflow-hidden rounded-pill accent-ink"
+          className="h-2 w-full overflow-hidden rounded-pill accent-primary"
         />
       </div>
       <div className="flex flex-col gap-1">
         <h2 id={`${id}-title`} ref={heading} tabIndex={-1} className="text-section outline-none">
           {page.title}
         </h2>
-        {page.description ? <p className="text-body text-zinc-600">{page.description}</p> : null}
+        {page.description ? <p className="text-body text-ink-2">{page.description}</p> : null}
       </div>
       <div ref={summary} tabIndex={-1} aria-live="polite" className="outline-none">
         {state.code ? (
@@ -202,7 +202,7 @@ export function RegistrationFormRunner({
           const label = (
             <>
               {f.label}
-              {f.required ? <span className="text-zinc-500"> {t('requiredMark')}</span> : null}
+              {f.required ? <span className="text-ink-2"> {t('requiredMark')}</span> : null}
             </>
           );
           const common = {
@@ -211,16 +211,16 @@ export function RegistrationFormRunner({
             'aria-describedby': described || undefined,
           } as const;
           const help = f.help ? (
-            <p id={`${fid}-help`} className="text-caption text-zinc-500">
+            <p id={`${fid}-help`} className="text-caption text-ink-2">
               {f.help}
             </p>
           ) : null;
           const error = err ? (
-            <p id={`${fid}-error`} className="text-caption text-pink-700">
+            <p id={`${fid}-error`} className="text-caption text-danger">
               {err}
             </p>
           ) : null;
-          const border = err ? 'border-pink-700' : 'border-zinc-200';
+          const border = err ? 'field-invalid' : '';
           let control: React.ReactNode;
           switch (f.type) {
             case 'checkbox':
@@ -233,7 +233,7 @@ export function RegistrationFormRunner({
                     name={f.key}
                     checked={vals[f.key] === true}
                     onChange={(e) => set(f.key, e.target.checked)}
-                    className="mt-0.5 size-5 shrink-0 accent-ink"
+                    className="mt-0.5 size-5 shrink-0 accent-primary"
                   />
                   <span>{f.type === 'consent' ? (consentTexts[f.key] ?? f.label) : label}</span>
                 </label>
@@ -257,7 +257,7 @@ export function RegistrationFormRunner({
                             e.target.checked ? [...chosen, o.value] : chosen.filter((v) => v !== o.value),
                           )
                         }
-                        className="size-5 accent-ink"
+                        className="size-5 accent-primary"
                       />
                       {o.label}
                     </label>

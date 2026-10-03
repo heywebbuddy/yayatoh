@@ -87,7 +87,7 @@ export default async function AlertSettingsPage({
       {canSeeRouting ? (
         <Card className="flex flex-col gap-3">
           <h2 className="text-section">{t('alerts.settings.routing.title')}</h2>
-          <p className="text-caption text-zinc-600">{t('alerts.settings.routing.description')}</p>
+          <p className="text-caption text-ink-2">{t('alerts.settings.routing.description')}</p>
           <AlertRoutingForm
             rows={rows}
             editable={roleCan(data.role, 'members:manage')}
@@ -98,9 +98,9 @@ export default async function AlertSettingsPage({
       {canTarget ? (
         <Card className="flex flex-col gap-3">
           <h2 className="text-section">{t('alerts.settings.targets.title')}</h2>
-          <p className="text-caption text-zinc-600">{t('alerts.settings.targets.description')}</p>
+          <p className="text-caption text-ink-2">{t('alerts.settings.targets.description')}</p>
           {targets.length === 0 ? (
-            <p className="text-body text-zinc-600">{t('alerts.settings.targets.none')}</p>
+            <p className="text-body text-ink-2">{t('alerts.settings.targets.none')}</p>
           ) : (
             targets.map(({ event, tickets }) => (
               <SalesTargetForm

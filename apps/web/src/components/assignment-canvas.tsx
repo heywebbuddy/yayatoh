@@ -2,19 +2,19 @@
 
 import { type FloorplanDoc, placedSeats } from '@yayatoh/floorplan';
 import type { AssignSeatState } from '@yayatoh/seating';
-import { color, status as statusColor } from '@yayatoh/ui';
+import { paper } from '@yayatoh/ui';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Circle, Group, Layer, Rect, Stage, Text } from 'react-konva';
 
 const SEAT_R = 22;
 
 const fill: Record<AssignSeatState, string> = {
-  free: color.white,
-  assigned: color.accent[900],
-  sold: color.zinc[700],
-  held: statusColor.warning,
-  reserved: color.zinc[200],
-  blocked: statusColor.danger,
+  free: paper.free,
+  assigned: paper.selected,
+  sold: paper.sold,
+  held: paper.held,
+  reserved: paper.floor,
+  blocked: paper.blocked,
 };
 
 /**
@@ -47,7 +47,7 @@ export default function AssignmentCanvas({
   const seats = useMemo(() => placedSeats(doc), [doc]);
   const scale = width / doc.width;
   return (
-    <div ref={box} className="w-full overflow-hidden rounded-card border border-zinc-200 bg-zinc-50">
+    <div ref={box} className="w-full overflow-hidden rounded-card border border-line bg-surface-2">
       <Stage
         width={width}
         height={Math.max(160, doc.height * scale)}
@@ -59,24 +59,18 @@ export default function AssignmentCanvas({
           <Rect
             width={doc.width}
             height={doc.height}
-            fill={color.white}
-            stroke={color.zinc[300]}
+            fill={paper.free}
+            stroke={paper.taken}
             strokeWidth={4}
           />
           {doc.items.map((item) => {
             const on = highlight?.itemId === item.id && !highlight.seatId;
-            const stroke = on ? color.accent[900] : color.zinc[400];
+            const stroke = on ? paper.selected : paper.outline;
             if (item.kind === 'object')
               return (
                 <Group key={item.id} x={item.x} y={item.y} rotation={item.rotation}>
-                  <Rect width={item.width} height={item.height} fill={color.zinc[200]} cornerRadius={12} />
-                  <Text
-                    text={item.label || item.objectType}
-                    x={16}
-                    y={16}
-                    fontSize={48}
-                    fill={color.zinc[700]}
-                  />
+                  <Rect width={item.width} height={item.height} fill={paper.floor} cornerRadius={12} />
+                  <Text text={item.label || item.objectType} x={16} y={16} fontSize={48} fill={paper.sold} />
                 </Group>
               );
             const last = item.seats.at(-1);
@@ -86,7 +80,7 @@ export default function AssignmentCanvas({
                   item.shape === 'round' ? (
                     <Circle
                       radius={item.width / 2}
-                      fill={color.zinc[100]}
+                      fill={paper.floor}
                       stroke={stroke}
                       strokeWidth={on ? 10 : 3}
                     />
@@ -96,7 +90,7 @@ export default function AssignmentCanvas({
                       y={-item.height / 2}
                       width={item.width}
                       height={item.height}
-                      fill={color.zinc[100]}
+                      fill={paper.floor}
                       stroke={stroke}
                       strokeWidth={on ? 10 : 3}
                     />
@@ -119,7 +113,7 @@ export default function AssignmentCanvas({
                   width={item.kind === 'row' ? 70 : 120}
                   align={item.kind === 'row' ? 'right' : 'center'}
                   fontSize={40}
-                  fill={color.ink}
+                  fill={paper.label}
                 />
                 {item.kind === 'table' ? (
                   <Text
@@ -129,7 +123,7 @@ export default function AssignmentCanvas({
                     width={120}
                     align="center"
                     fontSize={32}
-                    fill={color.zinc[600]}
+                    fill={paper.muted}
                   />
                 ) : null}
               </Group>
@@ -144,7 +138,7 @@ export default function AssignmentCanvas({
                 y={s.y}
                 radius={on ? SEAT_R + 6 : SEAT_R}
                 fill={fill[seatState[s.seatId] ?? 'free']}
-                stroke={on ? color.ink : s.accessible ? color.accent[900] : color.zinc[500]}
+                stroke={on ? paper.label : s.accessible ? paper.selected : paper.outline}
                 strokeWidth={on ? 8 : s.accessible ? 6 : 2}
                 perfectDrawEnabled={false}
               />

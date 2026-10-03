@@ -28,7 +28,7 @@ const AssignmentCanvas = dynamic(() => import('./assignment-canvas.tsx'), { ssr:
 /** The queue shows this many names at once; search finds the rest. */
 const SHOWN = 200;
 const DRAG_TYPE = 'application/x-yayatoh-attendees';
-const field = 'min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body';
+const field = 'field';
 
 type Feedback = { tone: 'info' | 'danger'; text: string } | null;
 type Target = { itemId: string; seatId: string | null };
@@ -337,28 +337,30 @@ export function SeatAssignments({
 
   return (
     <div className="flex flex-col gap-6">
-      <p className="text-body text-zinc-600">
-        {t('assign.summary', { seated: view.seatedCount, unseated: view.unseated.length })}
-      </p>
-      {canWrite ? null : <p className="text-caption text-zinc-600">{t('assign.readOnly')}</p>}
-      {ada ? (
-        <p className="text-caption text-zinc-600">
-          {t(ada.severity === 'enforce' ? 'assign.adaEnforcedNote' : 'assign.adaNote', {
-            date: when(ada.releaseAt),
-          })}
+      <div className="flex flex-col gap-2">
+        <p className="text-body text-ink-2">
+          {t('assign.summary', { seated: view.seatedCount, unseated: view.unseated.length })}
         </p>
-      ) : null}
-      <div aria-live="polite" aria-atomic="true">
-        {feedback ? <Alert tone={feedback.tone} title={feedback.text} /> : null}
+        {canWrite ? null : <p className="text-caption text-ink-2">{t('assign.readOnly')}</p>}
+        {ada ? (
+          <p className="text-caption text-ink-2">
+            {t(ada.severity === 'enforce' ? 'assign.adaEnforcedNote' : 'assign.adaNote', {
+              date: when(ada.releaseAt),
+            })}
+          </p>
+        ) : null}
+        <div aria-live="polite" aria-atomic="true">
+          {feedback ? <Alert tone={feedback.tone} title={feedback.text} /> : null}
+        </div>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,20rem)_minmax(0,1fr)]">
         <section aria-labelledby="queue-heading" className="flex min-w-0 flex-col gap-3">
-          <h2 id="queue-heading" className="text-section">
+          <h2 id="queue-heading" className="m-0 text-card">
             {t('assign.queue.title', { count: view.unseated.length })}
           </h2>
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="queue-search" className="text-caption text-zinc-600">
+            <label htmlFor="queue-search" className="text-[13px] font-bold text-ink">
               {t('assign.queue.search')}
             </label>
             <input
@@ -371,7 +373,7 @@ export function SeatAssignments({
           </div>
           {canWrite && view.unseated.length ? (
             <div className="flex flex-wrap items-center gap-2">
-              <p role="status" className="text-caption text-zinc-600">
+              <p role="status" className="text-caption text-ink-2">
                 {t('assign.queue.selected', { count: selected.size })}
               </p>
               <Button
@@ -390,9 +392,9 @@ export function SeatAssignments({
             </div>
           ) : null}
           {view.unseated.length === 0 ? (
-            <p className="text-body text-zinc-600">{t('assign.queue.empty')}</p>
+            <p className="text-body text-ink-2">{t('assign.queue.empty')}</p>
           ) : matching.length === 0 ? (
-            <p className="text-body text-zinc-600">{t('assign.queue.noMatch', { q: query.trim() })}</p>
+            <p className="text-body text-ink-2">{t('assign.queue.noMatch', { q: query.trim() })}</p>
           ) : (
             <ul
               aria-label={t('assign.queue.list')}
@@ -407,7 +409,7 @@ export function SeatAssignments({
                     dragged.current = null;
                     setHover(null);
                   }}
-                  className={`flex min-h-10 items-center gap-2 rounded-pill border px-3 ${selected.has(p.id) ? 'border-ink bg-zinc-100' : 'border-zinc-200 bg-white'} ${canWrite ? 'cursor-grab' : ''}`}
+                  className={`flex min-h-10 items-center gap-2 rounded-pill border px-3 ${selected.has(p.id) ? 'border-ink bg-surface-3' : 'border-line bg-surface'} ${canWrite ? 'cursor-grab' : ''}`}
                 >
                   {canWrite ? (
                     <input
@@ -420,14 +422,14 @@ export function SeatAssignments({
                   ) : null}
                   <label htmlFor={canWrite ? `q-${p.id}` : undefined} className="flex min-w-0 flex-col py-1">
                     <span className="truncate text-body">{p.name}</span>
-                    <span className="truncate text-caption text-zinc-600">{p.email}</span>
+                    <span className="truncate text-caption text-ink-2">{p.email}</span>
                   </label>
                 </li>
               ))}
             </ul>
           )}
           {matching.length > SHOWN ? (
-            <p className="text-caption text-zinc-600">
+            <p className="text-caption text-ink-2">
               {t('assign.queue.more', { shown: SHOWN, total: matching.length })}
             </p>
           ) : null}
@@ -436,13 +438,13 @@ export function SeatAssignments({
             <form
               onSubmit={onSubmit}
               aria-labelledby="seat-form-heading"
-              className="flex flex-col gap-3 rounded-card border border-zinc-200 bg-white p-4"
+              className="flex flex-col gap-3 rounded-card border border-line bg-surface p-4"
             >
               <h3 id="seat-form-heading" className="text-body font-medium">
                 {t('assign.form.title')}
               </h3>
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="assign-item" className="text-caption text-zinc-600">
+                <label htmlFor="assign-item" className="text-[13px] font-bold text-ink">
                   {t('assign.form.item')}
                 </label>
                 <select
@@ -464,7 +466,7 @@ export function SeatAssignments({
                 </select>
               </div>
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="assign-seat" className="text-caption text-zinc-600">
+                <label htmlFor="assign-seat" className="text-[13px] font-bold text-ink">
                   {t('assign.form.seat')}
                 </label>
                 <select
@@ -504,10 +506,10 @@ export function SeatAssignments({
         </section>
 
         <section aria-labelledby="plan-heading" className="flex min-w-0 flex-col gap-3">
-          <h2 id="plan-heading" className="text-section">
+          <h2 id="plan-heading" className="m-0 text-card">
             {t('assign.canvas.title')}
           </h2>
-          <p id="plan-hint" className="text-caption text-zinc-600">
+          <p id="plan-hint" className="text-caption text-ink-2">
             {canWrite ? t('assign.canvas.hint') : t('assign.canvas.readOnlyHint')}
           </p>
           {/* A drop target for pointer users; the queue, the form and "Move to…" do the same by keyboard. */}
@@ -529,12 +531,12 @@ export function SeatAssignments({
           >
             <AssignmentCanvas doc={doc} seatState={seatState} occupancy={occupancy} highlight={hover} />
           </div>
-          <ul className="flex list-none flex-wrap gap-x-4 gap-y-1 text-caption text-zinc-600">
+          <ul className="flex list-none flex-wrap gap-x-4 gap-y-1 text-caption text-ink-2">
             {(['free', 'assigned', 'sold', 'held', 'reserved', 'blocked'] as const).map((s) => (
               <li key={s} className="flex items-center gap-1.5">
                 <span
                   aria-hidden="true"
-                  className={`inline-block size-3 rounded-pill border border-zinc-500 ${LEGEND[s]}`}
+                  className={`inline-block size-3 rounded-pill border border-line-strong ${LEGEND[s]}`}
                 />
                 {t(`assign.state.${s}`)}
               </li>
@@ -544,7 +546,7 @@ export function SeatAssignments({
       </div>
 
       <section aria-labelledby="tables-heading" className="flex flex-col gap-3">
-        <h2 id="tables-heading" className="text-section">
+        <h2 id="tables-heading" className="m-0 text-card">
           {t('assign.tables.title')}
         </h2>
         <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
@@ -557,7 +559,7 @@ export function SeatAssignments({
                   <h3 id={headingId} className="text-body font-medium">
                     {itemName(i)}
                   </h3>
-                  <p className="text-caption text-zinc-600">
+                  <p className="text-caption text-ink-2">
                     {t('assign.tables.count', { taken: taken(i), capacity: i.capacity, free: i.free })}
                   </p>
                   {people.length ? (
@@ -590,7 +592,7 @@ export function SeatAssignments({
                             <div className="flex min-h-8 flex-wrap items-center gap-2 text-body">
                               <span className="min-w-0 flex-1">
                                 <span className="block truncate">{p.name}</span>
-                                <span className="block text-caption text-zinc-500">
+                                <span className="block text-caption text-ink-2">
                                   {p.byTicket ? t('assign.tables.byTicket', { seat: p.seat }) : p.seat}
                                 </span>
                               </span>
@@ -639,12 +641,12 @@ export function SeatAssignments({
                               <form
                                 onSubmit={onMove}
                                 aria-label={t('assign.move.title', { name: p.name })}
-                                className="flex flex-col gap-2 rounded-card border border-zinc-200 bg-zinc-50 p-3"
+                                className="flex flex-col gap-2 rounded-card border border-line bg-surface-2 p-3"
                               >
                                 <div className="flex flex-col gap-1">
                                   <label
                                     htmlFor={`move-item-${p.attendeeId}`}
-                                    className="text-caption text-zinc-600"
+                                    className="text-[13px] font-bold text-ink"
                                   >
                                     {t('assign.form.item')}
                                   </label>
@@ -677,7 +679,7 @@ export function SeatAssignments({
                                 <div className="flex flex-col gap-1">
                                   <label
                                     htmlFor={`move-seat-${p.attendeeId}`}
-                                    className="text-caption text-zinc-600"
+                                    className="text-[13px] font-bold text-ink"
                                   >
                                     {t('assign.form.seat')}
                                   </label>
@@ -731,7 +733,7 @@ export function SeatAssignments({
                       })}
                     </ul>
                   ) : (
-                    <p className="text-caption text-zinc-500">{t('assign.tables.empty')}</p>
+                    <p className="text-caption text-ink-2">{t('assign.tables.empty')}</p>
                   )}
                 </section>
               </Card>
@@ -744,10 +746,10 @@ export function SeatAssignments({
 }
 
 const LEGEND: Record<AssignSeatState, string> = {
-  free: 'bg-white',
-  assigned: 'bg-accent-900',
-  sold: 'bg-zinc-700',
-  held: 'bg-accent-700',
-  reserved: 'bg-zinc-200',
-  blocked: 'bg-pink-700',
+  free: 'bg-surface',
+  assigned: 'bg-primary',
+  sold: 'bg-tag',
+  held: 'bg-warning-dot',
+  reserved: 'bg-line',
+  blocked: 'bg-danger',
 };

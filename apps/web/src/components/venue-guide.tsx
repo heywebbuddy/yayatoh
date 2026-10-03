@@ -27,7 +27,7 @@ export function VenueGuide({
       <Heading id="venue-guide-heading" className="text-section">
         {t('guide')}
       </Heading>
-      <p className="text-caption text-zinc-600">{t('guideHint')}</p>
+      <p className="text-caption text-ink-2">{t('guideHint')}</p>
       <ul
         aria-labelledby="venue-guide-heading"
         className="grid list-none gap-x-6 gap-y-1.5 p-0 sm:grid-cols-2"
@@ -36,31 +36,31 @@ export function VenueGuide({
           const area = t(`area.${mapArea(doc, itemCenter(item))}`);
           if (item.kind === 'object')
             return (
-              <li key={item.id} className="flex flex-col border-b border-zinc-100 py-1.5">
-                <span className="text-body text-zinc-900">
+              <li key={item.id} className="flex flex-col border-b border-line py-1.5">
+                <span className="text-body text-ink">
                   {item.label && item.label !== t(`object.${item.objectType}`)
                     ? t('named', { type: t(`object.${item.objectType}`), label: item.label })
                     : t(`object.${item.objectType}`)}
                 </span>
-                <span className="text-caption text-zinc-600">{area}</span>
+                <span className="text-caption text-ink-2">{area}</span>
               </li>
             );
           const yours = item.seats.filter((s) => mine.has(s.id));
           return (
             <li
               key={item.id}
-              className={`flex flex-col border-b border-zinc-100 py-1.5 ${yours.length ? 'font-medium' : ''}`}
+              className={`flex flex-col border-b border-line py-1.5 ${yours.length ? 'font-medium' : ''}`}
             >
-              <span className="text-body text-zinc-900">
+              <span className="text-body text-ink">
                 {t(item.kind, { label: item.label })}
-                <span className="text-caption font-normal text-zinc-600">
+                <span className="text-caption font-normal text-ink-2">
                   {' · '}
                   {t('seats', { count: item.seats.length })}
                 </span>
               </span>
-              <span className="text-caption text-zinc-600">{area}</span>
+              <span className="text-caption text-ink-2">{area}</span>
               {yours.length ? (
-                <span className="text-caption text-accent-text">
+                <span className="text-caption text-primary-ink">
                   {t('yours', { count: yours.length, seats: yours.map((s) => s.label).join(', ') })}
                 </span>
               ) : null}

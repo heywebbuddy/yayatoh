@@ -83,7 +83,7 @@ export default async function AudiencesPage({
               <Card key={k}>
                 <div className="flex h-full flex-col gap-2">
                   <h3 className="text-body font-medium">{t(`templates.${k}.name`)}</h3>
-                  <p className="text-caption text-zinc-500">{t(`templates.${k}.description`)}</p>
+                  <p className="text-caption text-ink-2">{t(`templates.${k}.description`)}</p>
                   <Link
                     href={`/o/${org}/audiences/new?template=${k}`}
                     className={`${buttonClass('secondary', 'sm')} mt-auto self-start`}
