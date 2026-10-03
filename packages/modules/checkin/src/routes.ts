@@ -1,4 +1,5 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi';
+import { SESSION_GATES } from '@yayatoh/checkin-engine';
 import { ProblemDto } from '@yayatoh/contracts';
 import type { TenantTx } from '@yayatoh/db';
 import { type CommandPorts, type Ctx, DomainError, executeCommand, executeQuery } from '@yayatoh/kernel';
@@ -13,6 +14,7 @@ import {
 } from './devices.ts';
 import { scanTicketCommand } from './scan.ts';
 import { SCAN_RESULTS } from './schema.ts';
+import { admitSessionOverrideCommand } from './session-checkin.ts';
 
 type Env = { Variables: { device: Ctx } };
 
@@ -66,6 +68,9 @@ const manifest = createRoute({
   },
 });
 
+/** M5.6a: session doors scan people in or out. */
+const ScanDirection = z.enum(['in', 'out']).openapi('ScanDirection');
+
 const ScanBatchBody = z.object({
   eventId: z.uuid(),
   scans: z
@@ -77,6 +82,9 @@ const ScanBatchBody = z.object({
         clockOffsetMs: z.int(),
         verdict: z.string(),
         checkpointId: z.uuid().optional(),
+        direction: ScanDirection.optional().openapi({
+          description: 'Session doors (M5.6a): scanning people in (default) or out.',
+        }),
       }),
     )
     .min(1)
@@ -168,6 +176,9 @@ const CheckinBody = z.object({
   eventId: z.uuid(),
   code: z.string().min(1).max(400),
   checkpointId: z.uuid().optional(),
+  direction: ScanDirection.optional().openapi({
+    description: 'Session doors (M5.6a): scanning people in (default) or out.',
+  }),
 });
 /** The door verdict (a named /v1 schema; `@yayatoh/api-v1` reuses it). */
 export const ScanResult = z.enum(SCAN_RESULTS).openapi('ScanResult');
@@ -184,6 +195,38 @@ const CheckinVerdict = z.object({
     .nullable(),
   admissionId: z.uuid().nullable(),
   firstAdmittedAt: z.iso.datetime({ offset: true }).nullable(),
+});
+
+const SessionOverrideBody = z.object({
+  eventId: z.uuid(),
+  checkpointId: z.uuid().openapi({ description: 'The session door.' }),
+  code: z.string().min(1).max(400),
+  gates: z
+    .array(z.enum(SESSION_GATES).openapi('SessionGate'))
+    .min(1)
+    .max(SESSION_GATES.length)
+    .openapi({ description: 'The gates to waive (only those actually refusing are waived).' }),
+  reason: z.string().min(3).max(300).openapi({ description: 'Why staff let them in (audited).' }),
+});
+
+const sessionOverride = createRoute({
+  method: 'post',
+  path: '/checkins/session-override',
+  operationId: 'overrideSessionGate',
+  tags: ['scanner'],
+  summary: 'Let someone into a session past a refusing gate, with a reason (audited)',
+  description:
+    'Session doors (M5.6a): waives the named gates (`enrollment`, `admission_level`, `capacity`) when they are the ones refusing; every other rule still applies. Audited with the reason. Device token only.',
+  security,
+  request: { body: { content: { 'application/json': { schema: SessionOverrideBody } }, required: true } },
+  responses: {
+    200: { description: 'The verdict', content: { 'application/json': { schema: CheckinVerdict } } },
+    409: {
+      description: 'Nothing to override, or the ticket cannot be let in',
+      content: { 'application/problem+json': { schema: ProblemDto } },
+    },
+    ...problems,
+  },
 });
 
 const checkin = createRoute({
@@ -232,6 +275,7 @@ export function scannerRoutes(ports: CommandPorts<TenantTx>) {
   scanner.use('/scans/*', authenticate);
   scanner.use('/devices/*', authenticate);
   scanner.use('/checkins', authenticate);
+  scanner.use('/checkins/*', authenticate);
 
   return scanner
     .openapi(manifest, async (c) => {
@@ -272,6 +316,18 @@ export function scannerRoutes(ports: CommandPorts<TenantTx>) {
       const v = await executeCommand(
         scanTicketCommand,
         { ...c.req.valid('json'), clientScanId: c.req.valid('header')['idempotency-key'] },
+        c.get('device'),
+        ports,
+      );
+      return c.json(
+        CheckinVerdict.parse({ ...v, firstAdmittedAt: v.firstAdmittedAt?.toISOString() ?? null }),
+        200,
+      );
+    })
+    .openapi(sessionOverride, async (c) => {
+      const v = await executeCommand(
+        admitSessionOverrideCommand,
+        c.req.valid('json'),
         c.get('device'),
         ports,
       );

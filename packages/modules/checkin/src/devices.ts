@@ -11,6 +11,7 @@ import {
   OK_RESULTS,
   ruleResult,
   SCOPE_TAG,
+  type SignedSessionGate,
   scopeMessage,
   zoneAllows,
 } from '@yayatoh/checkin-engine';
@@ -31,6 +32,7 @@ import { and, eq, gte, isNull, lte, sql } from 'drizzle-orm';
 import { checkpointsTx, raiseSignalTx, TWO_ENTRANCES_WINDOW_MS } from './checkpoints.ts';
 import { withOccurrenceTx } from './occurrence.ts';
 import { admissions, CHECKPOINT_KINDS, devices, type ScanResult, scans } from './schema.ts';
+import { occupiedTx, sessionAccessSource, sessionDoorTx, sessionScanTx } from './session-doors.ts';
 import { checkVelocityTx, openHighSignalCountTx } from './signals.ts';
 import { deviceScanScopeTx, scopeAllowsCheckpoint } from './staff.ts';
 
@@ -291,6 +293,14 @@ const ManifestRowDto = z.object({
    * (case-sensitive, domain-separated; offline scanning, M2.2c/M1.9e).
    */
   legacyCodes: z.array(z.string()).optional(),
+  /** M5.6a (v3, when the device has session doors): what the pass may do at sessions. */
+  sessionAccess: z
+    .object({
+      registrant: z.boolean(),
+      /** The sessions the pass gives; null = every session. */
+      sessionIds: z.array(z.uuid()).nullable(),
+    })
+    .optional(),
 });
 
 export const ManifestPageDto = z.object({
@@ -313,8 +323,23 @@ export const ManifestPageDto = z.object({
         name: z.string(),
         kind: z.enum(CHECKPOINT_KINDS).openapi('CheckpointKind'),
         ticketTypeIds: z.array(z.uuid()),
+        /** M5.6a: a session door's program session. */
+        sessionId: z.uuid().nullable().optional(),
       }),
     ),
+    /** M5.6a (v3): the sessions behind the device's session doors (title, times, room count). */
+    sessions: z
+      .array(
+        z.object({
+          checkpointId: z.uuid(),
+          sessionId: z.uuid(),
+          title: z.string(),
+          startsAt: z.string(),
+          endsAt: z.string(),
+          occupied: z.int(),
+        }),
+      )
+      .optional(),
     occurrences: z.array(
       z.object({
         id: z.uuid(),
@@ -330,6 +355,19 @@ export const ManifestPageDto = z.object({
       eventId: z.uuid(),
       deviceId: z.uuid(),
       checkpointIds: z.array(z.uuid()).nullable(),
+      /** M5.6a (v3): each session door's gates, signed with the scope. */
+      sessionGates: z
+        .array(
+          z.object({
+            checkpointId: z.uuid(),
+            sessionId: z.uuid(),
+            capacity: z.int().nullable(),
+            enrollmentRequired: z.boolean(),
+            /** Tickets holding a place (sessions that need an enrollment). */
+            enrolled: z.array(z.uuid()),
+          }),
+        )
+        .optional(),
       signature: z.string(),
     }),
   }),
@@ -345,8 +383,14 @@ async function signedScope(
   eventId: string,
   deviceId: string,
   scope: ReadonlySet<string> | null,
+  sessionGates?: SignedSessionGate[],
 ): Promise<NonNullable<ManifestHeader['scope']>> {
-  const base = { eventId, deviceId, checkpointIds: scope === null ? null : [...scope].sort() };
+  const base = {
+    eventId,
+    deviceId,
+    checkpointIds: scope === null ? null : [...scope].sort(),
+    ...(sessionGates ? { sessionGates } : {}),
+  };
   return { ...base, signature: await signForScannersTx(tx, orgId, SCOPE_TAG, scopeMessage(base)) };
 }
 
@@ -397,8 +441,43 @@ export const deviceManifestQuery = tenantQuery({
       decodeCursor(input.cursor, input.overlap),
       input.limit,
     );
+    // M5.6a: the device's session doors, their signed gates and each pass's session access.
+    const cps = (await checkpointsTx(tx, event.id)).filter((c) => scopeAllowsCheckpoint(scope, c.id));
+    const doors = [];
+    for (const c of cps.filter((x) => x.kind === 'session')) {
+      const door = await sessionDoorTx(tx, c);
+      if (door) doors.push(door);
+    }
+    const hasDoors = cps.some((c) => c.kind === 'session');
+    const sessionGates: SignedSessionGate[] = [];
+    const sessions: NonNullable<ManifestHeader['sessions']>[number][] = [];
+    for (const d of doors) {
+      sessionGates.push({
+        checkpointId: d.checkpoint.id,
+        ...d.rule,
+        enrolled: d.rule.enrollmentRequired
+          ? await sessionAccessSource().enrolledTicketIdsTx(tx, d.session.sessionId)
+          : [],
+      });
+      sessions.push({
+        checkpointId: d.checkpoint.id,
+        sessionId: d.session.sessionId,
+        title: d.session.title,
+        startsAt: d.session.startsAt.toISOString(),
+        endsAt: d.session.endsAt.toISOString(),
+        occupied: await occupiedTx(tx, d.session.sessionId),
+      });
+    }
+    const access = hasDoors
+      ? await sessionAccessSource().accessTx(
+          tx,
+          event.id,
+          page.map((t) => t.id),
+        )
+      : null;
     const rows: ManifestRow[] = [];
     for (const t of page) {
+      const a = access?.get(t.id);
       rows.push({
         ticketId: t.id,
         shortCode: t.shortCode,
@@ -413,6 +492,14 @@ export const deviceManifestQuery = tenantQuery({
         issuedAt: t.createdAt.toISOString(),
         ...(t.legacyCodes.length
           ? { legacyCodes: await Promise.all(t.legacyCodes.map((c) => legacyPayloadHash(salt, c))) }
+          : {}),
+        ...(access
+          ? {
+              sessionAccess: {
+                registrant: a?.registrant ?? false,
+                sessionIds: a ? (a.sessionIds === null ? null : [...a.sessionIds]) : [],
+              },
+            }
           : {}),
       });
     }
@@ -431,14 +518,14 @@ export const deviceManifestQuery = tenantQuery({
       salt,
       serverTime: ctx.now.toISOString(),
       unknownPolicy: 'provisional',
-      checkpoints: (await checkpointsTx(tx, event.id))
-        .filter((c) => scopeAllowsCheckpoint(scope, c.id))
-        .map((c) => ({
-          id: c.id,
-          name: c.name,
-          kind: c.kind as 'entrance' | 'zone',
-          ticketTypeIds: c.ticketTypeIds,
-        })),
+      checkpoints: cps.map((c) => ({
+        id: c.id,
+        name: c.name,
+        kind: c.kind as 'entrance' | 'zone' | 'session',
+        ticketTypeIds: c.ticketTypeIds,
+        ...(c.kind === 'session' ? { sessionId: c.sessionId } : {}),
+      })),
+      ...(hasDoors ? { sessions } : {}),
       occurrences: (await occurrencesOfEventTx(tx, event.id)).map((o) => ({
         id: o.id,
         startsAt: o.startsAt.toISOString(),
@@ -446,7 +533,14 @@ export const deviceManifestQuery = tenantQuery({
         status: o.status,
       })),
       version: MANIFEST_VERSION,
-      scope: await signedScope(tx, requireOrg(ctx), event.id, deviceId, scope),
+      scope: await signedScope(
+        tx,
+        requireOrg(ctx),
+        event.id,
+        deviceId,
+        scope,
+        hasDoors ? sessionGates : undefined,
+      ),
     };
     return {
       header,
@@ -471,6 +565,13 @@ const DEVICE_VERDICTS = [
   'granted',
   'no_access',
   'wrong_checkpoint',
+  // M5.6a session doors.
+  'entered',
+  'scanned_out',
+  'not_in_room',
+  'not_enrolled',
+  'admission_level',
+  'capacity',
 ] as const;
 
 export const SyncResultDto = z.object({
@@ -507,6 +608,8 @@ export const syncScansCommand = tenantCommand({
           verdict: z.enum(DEVICE_VERDICTS),
           /** The checkpoint the device was scanning at, if any. */
           checkpointId: z.uuid().optional(),
+          /** M5.6a session doors: scanning people in (default) or out. */
+          direction: z.enum(['in', 'out']).optional(),
         }),
       )
       .min(1)
@@ -576,7 +679,26 @@ export const syncScansCommand = tenantCommand({
           : ruleResult({ now: at, event, ticket: await withOccurrenceTx(tx, ticket) });
       let result: ScanResult = rule === 'ok' ? 'admitted' : rule;
       let admissionId: string | null = null;
-      if (rule === 'ok' && ticket && checkpoint?.kind === 'zone') {
+      if (rule === 'ok' && checkpoint?.kind === 'session') {
+        // M5.6a: a session door records attendance; the device's room count stands (offline).
+        const door = ticket ? await sessionDoorTx(tx, checkpoint) : null;
+        result =
+          door && ticket
+            ? (
+                await sessionScanTx(tx, emit, {
+                  orgId,
+                  door,
+                  ticket,
+                  at,
+                  direction: s.direction ?? 'in',
+                  deviceId,
+                  scannedBy: null,
+                  offline: true,
+                  deviceVerdict: s.verdict,
+                })
+              ).result
+            : 'invalid';
+      } else if (rule === 'ok' && ticket && checkpoint?.kind === 'zone') {
         result = zoneAllows(checkpoint, ticket.ticketTypeId) ? 'granted' : 'no_access';
       } else if (rule === 'ok' && ticket) {
         const day = eventDay(at, event.timezone);
@@ -751,9 +873,7 @@ export const syncScansCommand = tenantCommand({
         ticketIds: okTickets,
       });
     // The live feed (M3.3a): one ping per synced batch that stored scans nobody was let in by.
-    const refused = results.filter(
-      (r) => r.stored && !['admitted', 'granted', 'provisional'].includes(r.result),
-    ).length;
+    const refused = results.filter((r) => r.stored && !OK_RESULTS.has(r.result)).length;
     if (refused > 0)
       await publishRealtimeTx(tx, orgId, CHECKINS_CHANNEL, {
         eventId: event.id,

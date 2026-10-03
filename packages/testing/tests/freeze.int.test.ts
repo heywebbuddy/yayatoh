@@ -185,6 +185,8 @@ describe('read-only freeze (M2.5a)', () => {
     expect([...ALLOWED].sort()).toEqual([
       // M5.1d: admitting a ticket with a balance due (an audited override) is a door action too.
       'checkin.admitBalanceDue',
+      // M5.6a: letting someone into a session past a gate (an audited override) is a door action.
+      'checkin.admitSessionOverride',
       'checkin.heartbeat',
       'checkin.scanTicket',
       'checkin.syncScans',

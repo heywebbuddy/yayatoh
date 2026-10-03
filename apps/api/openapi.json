@@ -3535,7 +3535,13 @@
           "granted",
           "no_access",
           "wrong_checkpoint",
-          "balance_due"
+          "balance_due",
+          "entered",
+          "scanned_out",
+          "not_in_room",
+          "not_enrolled",
+          "admission_level",
+          "capacity"
         ]
       },
       "ScanRequest": {
@@ -3945,7 +3951,8 @@
         "type": "string",
         "enum": [
           "entrance",
-          "zone"
+          "zone",
+          "session"
         ]
       },
       "ManifestDateStatus": {
@@ -3969,6 +3976,22 @@
           "false"
         ],
         "description": "`true` re-reads the last page’s rows as well (after a crash mid-page)."
+      },
+      "ScanDirection": {
+        "type": "string",
+        "enum": [
+          "in",
+          "out"
+        ],
+        "description": "Session doors (M5.6a): scanning people in (default) or out."
+      },
+      "SessionGate": {
+        "type": "string",
+        "enum": [
+          "enrollment",
+          "admission_level",
+          "capacity"
+        ]
       }
     },
     "parameters": {}
@@ -10154,6 +10177,13 @@
                                   "type": "string",
                                   "format": "uuid"
                                 }
+                              },
+                              "sessionId": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ],
+                                "format": "uuid"
                               }
                             },
                             "required": [
@@ -10161,6 +10191,42 @@
                               "name",
                               "kind",
                               "ticketTypeIds"
+                            ]
+                          }
+                        },
+                        "sessions": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "checkpointId": {
+                                "type": "string",
+                                "format": "uuid"
+                              },
+                              "sessionId": {
+                                "type": "string",
+                                "format": "uuid"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "startsAt": {
+                                "type": "string"
+                              },
+                              "endsAt": {
+                                "type": "string"
+                              },
+                              "occupied": {
+                                "type": "integer"
+                              }
+                            },
+                            "required": [
+                              "checkpointId",
+                              "sessionId",
+                              "title",
+                              "startsAt",
+                              "endsAt",
+                              "occupied"
                             ]
                           }
                         },
@@ -10213,6 +10279,45 @@
                               "items": {
                                 "type": "string",
                                 "format": "uuid"
+                              }
+                            },
+                            "sessionGates": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "checkpointId": {
+                                    "type": "string",
+                                    "format": "uuid"
+                                  },
+                                  "sessionId": {
+                                    "type": "string",
+                                    "format": "uuid"
+                                  },
+                                  "capacity": {
+                                    "type": [
+                                      "integer",
+                                      "null"
+                                    ]
+                                  },
+                                  "enrollmentRequired": {
+                                    "type": "boolean"
+                                  },
+                                  "enrolled": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string",
+                                      "format": "uuid"
+                                    }
+                                  }
+                                },
+                                "required": [
+                                  "checkpointId",
+                                  "sessionId",
+                                  "capacity",
+                                  "enrollmentRequired",
+                                  "enrolled"
+                                ]
                               }
                             },
                             "signature": {
@@ -10303,6 +10408,28 @@
                             "items": {
                               "type": "string"
                             }
+                          },
+                          "sessionAccess": {
+                            "type": "object",
+                            "properties": {
+                              "registrant": {
+                                "type": "boolean"
+                              },
+                              "sessionIds": {
+                                "type": [
+                                  "array",
+                                  "null"
+                                ],
+                                "items": {
+                                  "type": "string",
+                                  "format": "uuid"
+                                }
+                              }
+                            },
+                            "required": [
+                              "registrant",
+                              "sessionIds"
+                            ]
                           }
                         },
                         "required": [
@@ -10505,6 +10632,9 @@
                         "checkpointId": {
                           "type": "string",
                           "format": "uuid"
+                        },
+                        "direction": {
+                          "$ref": "#/components/schemas/ScanDirection"
                         }
                       },
                       "required": [
@@ -10929,6 +11059,9 @@
                   "checkpointId": {
                     "type": "string",
                     "format": "uuid"
+                  },
+                  "direction": {
+                    "$ref": "#/components/schemas/ScanDirection"
                   }
                 },
                 "required": [
@@ -11043,6 +11176,246 @@
           },
           "404": {
             "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "integer"
+                    },
+                    "code": {
+                      "type": "string"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "details": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "code"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/checkins/session-override": {
+      "post": {
+        "operationId": "overrideSessionGate",
+        "tags": [
+          "scanner"
+        ],
+        "summary": "Let someone into a session past a refusing gate, with a reason (audited)",
+        "description": "Session doors (M5.6a): waives the named gates (`enrollment`, `admission_level`, `capacity`) when they are the ones refusing; every other rule still applies. Audited with the reason. Device token only.",
+        "security": [
+          {
+            "deviceToken": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "eventId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "checkpointId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "The session door."
+                  },
+                  "code": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 400
+                  },
+                  "gates": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/SessionGate"
+                    },
+                    "minItems": 1,
+                    "maxItems": 3,
+                    "description": "The gates to waive (only those actually refusing are waived)."
+                  },
+                  "reason": {
+                    "type": "string",
+                    "minLength": 3,
+                    "maxLength": 300,
+                    "description": "Why staff let them in (audited)."
+                  }
+                },
+                "required": [
+                  "eventId",
+                  "checkpointId",
+                  "code",
+                  "gates",
+                  "reason"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The verdict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": {
+                      "$ref": "#/components/schemas/ScanResult"
+                    },
+                    "ticket": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "properties": {
+                        "holderName": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "typeName": {
+                          "type": "string"
+                        },
+                        "serial": {
+                          "type": "integer"
+                        },
+                        "shortCode": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "holderName",
+                        "typeName",
+                        "serial",
+                        "shortCode"
+                      ]
+                    },
+                    "admissionId": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "uuid"
+                    },
+                    "firstAdmittedAt": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "date-time"
+                    }
+                  },
+                  "required": [
+                    "result",
+                    "ticket",
+                    "admissionId",
+                    "firstAdmittedAt"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or unknown device token",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "integer"
+                    },
+                    "code": {
+                      "type": "string"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "details": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "code"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "integer"
+                    },
+                    "code": {
+                      "type": "string"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "details": {
+                      "type": "object",
+                      "additionalProperties": {}
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "code"
+                  ]
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Nothing to override, or the ticket cannot be let in",
             "content": {
               "application/problem+json": {
                 "schema": {
