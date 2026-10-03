@@ -1,4 +1,5 @@
 import { privateColumns as agency } from '@yayatoh/agency';
+import { privateColumns as agencyOps } from '@yayatoh/agency-ops';
 import { privateColumns as ai } from '@yayatoh/ai';
 import { privateColumns as alerts } from '@yayatoh/alerts';
 import { privateColumns as analytics } from '@yayatoh/analytics';
@@ -50,6 +51,8 @@ import { privateColumns as webhooks } from '@yayatoh/webhooks';
 export const COLUMN_PRIVACY: readonly SchemaPrivacy[] = [
   // M6.7a: the agency's client and event snapshots.
   agency,
+  // M6.8b: agency v2 operations (published copies, fan-outs, detachments).
+  agencyOps,
   ai,
   alerts,
   analytics,

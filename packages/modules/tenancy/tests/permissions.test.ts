@@ -156,3 +156,23 @@ describe('event roles: co-host and planner (M4.2a, P4-8)', () => {
     ]);
   });
 });
+
+describe('agency v2 roles (M6.8b)', () => {
+  it('staff roles are capped under the grant’s role', async () => {
+    const { cappedAgencyRole } = await import('../src/commands/agency-staff.ts');
+    expect(cappedAgencyRole('manager', 'viewer')).toBe('viewer');
+    expect(cappedAgencyRole('marketing', 'manager')).toBe('marketing');
+    expect(cappedAgencyRole('viewer', 'marketing')).toBe('viewer');
+    expect(cappedAgencyRole('manager', 'manager')).toBe('manager');
+  });
+
+  it('agency:manage and agency:campaigns never apply through a grant', () => {
+    for (const role of ['agency_manager', 'agency_marketing', 'agency_viewer_finance'] as const) {
+      expect(roleCan(role, 'agency:manage')).toBe(false);
+      expect(roleCan(role, 'agency:campaigns')).toBe(false);
+    }
+    expect(roleCan('manager', 'agency:manage')).toBe(true);
+    expect(roleCan('marketing', 'agency:campaigns')).toBe(true);
+    expect(roleCan('marketing', 'agency:manage')).toBe(false);
+  });
+});

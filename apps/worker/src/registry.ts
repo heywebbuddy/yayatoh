@@ -1,4 +1,5 @@
 import { agencySnapshotSubscriber } from '@yayatoh/agency';
+import { agencyDetachSubscriber } from '@yayatoh/agency-ops';
 import { alertEvaluator, connectedConferenceSources } from '@yayatoh/alerts';
 import { warehouseFromEnv, warehouseIngestor } from '@yayatoh/analytics';
 import { attendeeMessageMailer } from '@yayatoh/attendees';
@@ -215,6 +216,8 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     pledgeMailer({ notifier, appOrigin }),
     // M6.7a: a client's grant snapshots it for its agency at once (and a revoke removes it).
     agencySnapshotSubscriber,
+    // M6.8b: a detached client is marked on its agency's side (publications, pending fan-outs).
+    agencyDetachSubscriber,
   ];
 }
 

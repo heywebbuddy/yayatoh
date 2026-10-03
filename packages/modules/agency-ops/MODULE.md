@@ -21,7 +21,7 @@ the tiers.
   agency's handover (`agency:manage` + step-up, then the same command as a system actor of the
   client) delete nothing of the client's: they revoke the grant and every team place and day-of
   pass under it, and clear the links back to the agency's originals. Event
-  `agency_ops.client_detached@1` marks the agency's side (subscriber `agency_ops.detached`).
+  `agency_ops.client_detached@1` marks the agency's side (subscriber `agency-ops.detached`).
 - **Team and day-of grants** are client-owned rows in `tenancy.agency_staff_grants`, read per
   request by `tenancy.agency_access()`; the agency writes them under the client's tenant only after
   checking its live grant; the agency reads them back through `tenancy.agency_staff_of_agency()`.

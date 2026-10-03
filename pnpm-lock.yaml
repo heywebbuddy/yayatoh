@@ -447,6 +447,9 @@ importers:
       '@yayatoh/agency':
         specifier: workspace:*
         version: link:../../packages/modules/agency
+      '@yayatoh/agency-ops':
+        specifier: workspace:*
+        version: link:../../packages/modules/agency-ops
       '@yayatoh/ai':
         specifier: workspace:*
         version: link:../../packages/modules/ai
@@ -685,6 +688,9 @@ importers:
       '@yayatoh/agency':
         specifier: workspace:*
         version: link:../../packages/modules/agency
+      '@yayatoh/agency-ops':
+        specifier: workspace:*
+        version: link:../../packages/modules/agency-ops
       '@yayatoh/alerts':
         specifier: workspace:*
         version: link:../../packages/modules/alerts
@@ -3108,6 +3114,9 @@ importers:
       '@yayatoh/agency':
         specifier: workspace:*
         version: link:../modules/agency
+      '@yayatoh/agency-ops':
+        specifier: workspace:*
+        version: link:../modules/agency-ops
       '@yayatoh/ai':
         specifier: workspace:*
         version: link:../modules/ai

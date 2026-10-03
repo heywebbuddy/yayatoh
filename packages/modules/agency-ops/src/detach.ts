@@ -12,7 +12,7 @@ import { existingTemplateIdsTx } from '@yayatoh/templates';
 import { liveAgencyGrantTx, revokeAgencyGrantTx, revokeAllAgencyStaffTx } from '@yayatoh/tenancy';
 import { and, desc, eq, isNull, sql } from 'drizzle-orm';
 import { z } from 'zod';
-import { liveClientTx, requireAgencyV2Tx, userOf } from './common.ts';
+import { liveClientTx, requireAgencyOrgTx, requireAgencyV2Tx, userOf } from './common.ts';
 import {
   brandKits,
   DETACH_INITIATORS,
@@ -128,8 +128,8 @@ export const prepareHandoverCommand = tenantCommand({
   entitlement: 'agency',
   permission: 'agency:manage',
   stepUp: true,
-  handler: async ({ input, tx }) => {
-    await requireAgencyV2Tx(tx);
+  handler: async ({ input, ctx, tx }) => {
+    await requireAgencyOrgTx(tx, ctx);
     const g = await liveClientTx(tx, input.clientOrgId);
     return { grantId: g.grantId };
   },
@@ -167,7 +167,7 @@ const DetachedPayload = z.object({
  * `detached` on the agency's side (in the agency's tenant).
  */
 export const agencyDetachSubscriber = defineSubscriber({
-  name: 'agency_ops.detached',
+  name: 'agency-ops.detached',
   events: ['agency_ops.client_detached@1'],
   handle: async (_tx, event) => {
     const p = DetachedPayload.safeParse(event.payload);
@@ -175,7 +175,7 @@ export const agencyDetachSubscriber = defineSubscriber({
     const now = new Date();
     const agencyCtx = createCtx({
       orgId: p.data.agencyOrgId,
-      actor: { type: 'system', name: 'agency_ops.detached' },
+      actor: { type: 'system', name: 'agency-ops.detached' },
       now,
     });
     await withTenant(agencyCtx, async (atx) => {

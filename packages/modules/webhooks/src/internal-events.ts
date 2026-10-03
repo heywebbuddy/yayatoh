@@ -16,6 +16,12 @@
 export type InternalReason = 'personal' | 'security' | 'workflow' | 'platform' | 'content' | 'later';
 
 export const INTERNAL_EVENTS: Readonly<Record<string, InternalReason>> = {
+  // M6.8b: a client detached from (or was handed over by) its agency.
+  'agency_ops.client_detached@1': 'platform',
+  // M6.7a: agency access grants (the org's own team and access settings).
+  'tenancy.agency_grant_changed@1': 'platform',
+  'tenancy.agency_grant_created@1': 'platform',
+  'tenancy.agency_grant_revoked@1': 'platform',
   'announcement.sent@1': 'later',
   'assistance.requested@1': 'personal',
   'assistance.updated@1': 'personal',

@@ -66,7 +66,7 @@ export {
   rotateApiKeyCommand,
 } from './commands/api-keys.ts';
 // M6.8b: applying a brand kit received from an agency.
-export { setBrandColorTx } from './commands/brand.ts';
+export { organizationKindTx, setBrandColorTx } from './commands/brand.ts';
 export {
   addDomainCommand,
   DomainDto,

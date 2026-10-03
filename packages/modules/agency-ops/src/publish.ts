@@ -21,6 +21,7 @@ import {
   actingAgency,
   agencyNameTx,
   liveClientsTx,
+  requireAgencyOrgTx,
   requireAgencyV2Tx,
   userOf,
   viaGrantCtx,
@@ -80,7 +81,7 @@ export const setTemplatePrivacyCommand = tenantCommand({
   entitlement: 'agency',
   permission: 'agency:manage',
   handler: async ({ input, ctx, tx }) => {
-    await requireAgencyV2Tx(tx);
+    await requireAgencyOrgTx(tx, ctx);
     if (!(await templateContentTx(tx, input.templateId)))
       throw new DomainError('not_found', 'Template not found', { field: 'templateId' });
     const parts = [...new Set(input.privateParts)];
@@ -137,7 +138,7 @@ export const saveBrandKitCommand = tenantCommand({
   entitlement: 'agency',
   permission: 'agency:manage',
   handler: async ({ input, ctx, tx }) => {
-    await requireAgencyV2Tx(tx);
+    await requireAgencyOrgTx(tx, ctx);
     const values = { name: input.name, brandColor: input.brandColor, privateNotes: input.privateNotes };
     try {
       if (input.kitId) {
@@ -193,8 +194,8 @@ export const agencyLibraryQuery = tenantQuery({
   output: AgencyLibraryDto,
   entitlement: 'agency',
   permission: 'agency:read',
-  handler: async ({ tx }) => {
-    await requireAgencyV2Tx(tx);
+  handler: async ({ ctx, tx }) => {
+    await requireAgencyOrgTx(tx, ctx);
     const settings = await tx.select().from(templateSettings);
     const kits = await tx
       .select()
@@ -239,7 +240,7 @@ export const prepareTemplatePublishQuery = tenantQuery({
   entitlement: 'agency',
   permission: 'agency:manage',
   handler: async ({ input, ctx, tx }) => {
-    await requireAgencyV2Tx(tx);
+    await requireAgencyOrgTx(tx, ctx);
     const content = await templateContentTx(tx, input.templateId);
     if (!content) throw new DomainError('not_found', 'Template not found', { field: 'templateId' });
     const [settings] = await tx
@@ -379,9 +380,12 @@ export const recordPublicationsCommand = tenantCommand({
   }),
 });
 
+/** Outcomes worth keeping: clients the agency holds (or held) a grant from, never unknown ids. */
+const recordable = (results: readonly PublishResultDto[], missing: readonly string[]) =>
+  results.filter((r) => !missing.includes(r.clientOrgId));
+
 async function publishEach(
   ctx: Ctx,
-  ports: CommandPorts<TenantTx>,
   targets: readonly { clientOrgId: string; grantId: string }[],
   missing: readonly string[],
   send: (clientCtx: Ctx) => Promise<unknown>,
@@ -413,7 +417,7 @@ export async function publishTemplate(
   ports: CommandPorts<TenantTx>,
 ): Promise<PublishResultDto[]> {
   const p = await executeQuery(prepareTemplatePublishQuery, input, ctx, ports);
-  const results = await publishEach(ctx, ports, p.targets, p.missing, (clientCtx) =>
+  const results = await publishEach(ctx, p.targets, p.missing, (clientCtx) =>
     executeCommand(
       receiveTemplateCommand,
       {
@@ -429,7 +433,7 @@ export async function publishTemplate(
   );
   await executeCommand(
     recordPublicationsCommand,
-    { kind: 'template', sourceId: input.templateId, results },
+    { kind: 'template', sourceId: input.templateId, results: recordable(results, p.missing) },
     ctx,
     ports,
   );
@@ -452,7 +456,7 @@ export const prepareBrandKitPublishQuery = tenantQuery({
   entitlement: 'agency',
   permission: 'agency:manage',
   handler: async ({ input, ctx, tx }) => {
-    await requireAgencyV2Tx(tx);
+    await requireAgencyOrgTx(tx, ctx);
     const [kit] = await tx
       .select()
       .from(brandKits)
@@ -543,7 +547,7 @@ export async function publishBrandKit(
   ports: CommandPorts<TenantTx>,
 ): Promise<PublishResultDto[]> {
   const p = await executeQuery(prepareBrandKitPublishQuery, input, ctx, ports);
-  const results = await publishEach(ctx, ports, p.targets, p.missing, (clientCtx) =>
+  const results = await publishEach(ctx, p.targets, p.missing, (clientCtx) =>
     executeCommand(
       receiveBrandKitCommand,
       { sourceId: input.kitId, name: p.name, brandColor: p.brandColor, suffix: p.suffix },
@@ -553,7 +557,7 @@ export async function publishBrandKit(
   );
   await executeCommand(
     recordPublicationsCommand,
-    { kind: 'brand_kit', sourceId: input.kitId, results },
+    { kind: 'brand_kit', sourceId: input.kitId, results: recordable(results, p.missing) },
     ctx,
     ports,
   );

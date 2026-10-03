@@ -23,6 +23,7 @@ import {
   actingAgency,
   agencyNameTx,
   liveClientsTx,
+  requireAgencyOrgTx,
   requireAgencyV2Tx,
   userOf,
   viaGrantCtx,
@@ -82,6 +83,7 @@ const Started = z.object({
   fanoutId: z.uuid(),
   agencyName: z.string(),
   targets: z.array(z.object({ clientOrgId: z.uuid(), grantId: z.uuid() })),
+  missing: z.array(z.uuid()),
 });
 
 /** Agency side: record the fan-out and one pending target per client with a live grant. */
@@ -92,7 +94,7 @@ export const createFanoutCommand = tenantCommand({
   entitlement: 'agency',
   permission: 'agency:campaigns',
   handler: async ({ input, ctx, tx }) => {
-    await requireAgencyV2Tx(tx);
+    await requireAgencyOrgTx(tx, ctx);
     const orgId = requireOrg(ctx);
     const live = await liveClientsTx(tx);
     const ids = [...new Set(input.clientOrgIds)];
@@ -110,15 +112,14 @@ export const createFanoutCommand = tenantCommand({
       })
       .returning();
     if (!f) throw new DomainError('internal');
-    await tx.insert(fanoutTargets).values(
-      ids.map((clientOrgId) => ({
-        orgId,
-        fanoutId: f.id,
-        clientOrgId,
-        status: live.has(clientOrgId) ? ('pending' as const) : ('failed' as const),
-        errorCode: live.has(clientOrgId) ? null : 'not_found',
-      })),
-    );
+    // One target per client with a live grant; ids without one are refused (and not stored).
+    const targets = ids.filter((id) => live.has(id));
+    if (targets.length > 0)
+      await tx
+        .insert(fanoutTargets)
+        .values(
+          targets.map((clientOrgId) => ({ orgId, fanoutId: f.id, clientOrgId, status: 'pending' as const })),
+        );
     return {
       fanoutId: f.id,
       agencyName: await agencyNameTx(tx, orgId),
@@ -126,6 +127,7 @@ export const createFanoutCommand = tenantCommand({
         const g = live.get(id);
         return g ? [{ clientOrgId: id, grantId: g.grantId }] : [];
       }),
+      missing: ids.filter((id) => !live.has(id)),
     };
   },
   audit: (input, r) => ({
@@ -299,7 +301,12 @@ export async function fanOutCampaign(
 ): Promise<{ fanoutId: string; targets: FanoutTargetDto[] }> {
   const parsed = FanoutInput.parse(input);
   const started = await executeCommand(createFanoutCommand, parsed, ctx, ports);
-  const targets: FanoutTargetDto[] = [];
+  const targets: FanoutTargetDto[] = started.missing.map((clientOrgId) => ({
+    clientOrgId,
+    status: 'failed',
+    clientCampaignId: null,
+    errorCode: 'not_found',
+  }));
   for (const t of started.targets) {
     const outcome = await fanOutToClient(ctx, ports, started.fanoutId, started.agencyName, parsed, t);
     await executeCommand(recordFanoutTargetCommand, { ...outcome, fanoutId: started.fanoutId }, ctx, ports);
@@ -315,8 +322,8 @@ export const agencyFanoutsQuery = tenantQuery({
   output: z.array(FanoutDto),
   entitlement: 'agency',
   permission: 'agency:read',
-  handler: async ({ tx }) => {
-    await requireAgencyV2Tx(tx);
+  handler: async ({ ctx, tx }) => {
+    await requireAgencyOrgTx(tx, ctx);
     const rows = await tx.select().from(fanouts).orderBy(desc(fanouts.createdAt)).limit(50);
     if (rows.length === 0) return [];
     const targets = await tx

@@ -4,6 +4,7 @@ import {
   type AgencyClientGrant,
   agencyClientGrantsTx,
   organizationBrandTx,
+  organizationKindTx,
   platformFlagTx,
 } from '@yayatoh/tenancy';
 
@@ -14,6 +15,13 @@ import {
 export async function requireAgencyV2Tx(tx: TenantTx): Promise<void> {
   if (!(await platformFlagTx(tx, 'agency_v2')))
     throw new DomainError('module_not_enabled', 'Agency v2 is not switched on', { module: 'agency_v2' });
+}
+
+/** Agency-side commands run only in an agency org (any other org: refused), with v2 switched on. */
+export async function requireAgencyOrgTx(tx: TenantTx, ctx: Ctx): Promise<void> {
+  await requireAgencyV2Tx(tx);
+  if ((await organizationKindTx(tx, requireOrg(ctx))) !== 'agency')
+    throw new DomainError('forbidden', 'Only an agency can do this');
 }
 
 /** Is agency v2 switched on (pages and nav)? */

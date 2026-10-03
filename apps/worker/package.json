@@ -20,10 +20,12 @@
     "billing:sync-catalog": "node scripts/billing-sync-catalog.ts",
     "contact-stats": "node scripts/contact-stats.ts",
     "irs-exempt-list": "node scripts/irs-exempt-list.ts",
-    "printnode": "node scripts/printnode.ts"
+    "printnode": "node scripts/printnode.ts",
+    "agency-v2": "node scripts/agency-v2.ts"
   },
   "dependencies": {
     "@yayatoh/agency": "workspace:*",
+    "@yayatoh/agency-ops": "workspace:*",
     "@yayatoh/alerts": "workspace:*",
     "@yayatoh/analytics": "workspace:*",
     "@yayatoh/attendees": "workspace:*",

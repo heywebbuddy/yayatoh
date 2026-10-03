@@ -11,7 +11,7 @@ import {
   revokeAgencyStaffGrantTx,
 } from '@yayatoh/tenancy';
 import { z } from 'zod';
-import { clientSystemCtx, liveClientTx, requireAgencyV2Tx, userOf } from './common.ts';
+import { clientSystemCtx, liveClientTx, requireAgencyOrgTx, requireAgencyV2Tx, userOf } from './common.ts';
 import { dayOfWindow } from './domain.ts';
 
 /**
@@ -56,7 +56,7 @@ export const assignStaffCommand = tenantCommand({
   entitlement: 'agency',
   permission: 'agency:manage',
   handler: async ({ input, ctx, tx }) => {
-    await requireAgencyV2Tx(tx);
+    await requireAgencyOrgTx(tx, ctx);
     const by = userOf(ctx);
     const grant = await liveClientTx(tx, input.clientOrgId);
     // The person must belong to this agency; a standing team member can't be a collaborator.
@@ -117,7 +117,7 @@ export const revokeStaffCommand = tenantCommand({
   entitlement: 'agency',
   permission: 'agency:manage',
   handler: async ({ input, ctx, tx }) => {
-    await requireAgencyV2Tx(tx);
+    await requireAgencyOrgTx(tx, ctx);
     const by = userOf(ctx);
     const agencyOrgId = requireOrg(ctx);
     // Revoking stays possible while the grant is live; after a detach the client's rows are revoked already.
@@ -142,8 +142,8 @@ export const agencyStaffQuery = tenantQuery({
   output: z.array(AgencyStaffDto),
   entitlement: 'agency',
   permission: 'agency:read',
-  handler: async ({ tx }) => {
-    await requireAgencyV2Tx(tx);
+  handler: async ({ ctx, tx }) => {
+    await requireAgencyOrgTx(tx, ctx);
     return agencyStaffOfAgencyTx(tx);
   },
 });

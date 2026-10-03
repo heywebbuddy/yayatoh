@@ -31,3 +31,12 @@ export async function setBrandColorTx(
     payload: { orgId, fields: ['brandColor'] },
   });
 }
+
+/** The current org's kind (`organizer`, `agency`, …), or null (M6.8b: agency-only commands). */
+export async function organizationKindTx(tx: TenantTx, orgId: string): Promise<string | null> {
+  const [row] = await tx
+    .select({ kind: organizations.kind })
+    .from(organizations)
+    .where(eq(organizations.id, orgId));
+  return row?.kind ?? null;
+}
