@@ -92,7 +92,11 @@ export default async function VenuePage({
       <Card size="panel">
         <MediaUploader org={org} slot="photo" ticket={photos.ticket} items={photos.items} />
       </Card>
-      <section id="venue-details" aria-labelledby="venue-details-heading" className="flex scroll-mt-6 flex-col gap-3">
+      <section
+        id="venue-details"
+        aria-labelledby="venue-details-heading"
+        className="flex scroll-mt-6 flex-col gap-3"
+      >
         <h2 id="venue-details-heading" className="text-section">
           {t('detailsTitle')}
         </h2>
