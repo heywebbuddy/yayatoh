@@ -9196,7 +9196,8 @@
       "alreadyAssigned": "その審査員はすでに割り当て済みです。",
       "decided": "この提案はすでに採否が決まっています。",
       "tooManySessions": "イベントのセッション数が上限に達しています。"
-    }
+    },
+    "emailedNotice": "提案の登壇者全員に採否をメールでお知らせしました。"
   },
   "cfpPublic": {
     "metaTitle": "講演募集",

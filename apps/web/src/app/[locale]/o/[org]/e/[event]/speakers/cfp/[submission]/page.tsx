@@ -202,6 +202,7 @@ export default async function CfpSubmissionPage({
                 date: s.decidedAt ? formatMoment(s.decidedAt, locale, tz) : '—',
               })}
             </p>
+            <p className="m-0 text-caption text-ink-2">{t('emailedNotice')}</p>
             {s.decisionNote ? (
               <p className="m-0 text-body text-ink-2">{t('noteSent', { note: s.decisionNote })}</p>
             ) : null}

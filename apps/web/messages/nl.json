@@ -9196,7 +9196,8 @@
       "alreadyAssigned": "Die beoordelaar is al toegewezen.",
       "decided": "Over dit voorstel is al besloten.",
       "tooManySessions": "Het evenement heeft het maximumaantal sessies."
-    }
+    },
+    "emailedNotice": "Elke spreker van het voorstel heeft het besluit per e-mail ontvangen."
   },
   "cfpPublic": {
     "metaTitle": "Call for papers",

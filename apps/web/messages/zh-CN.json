@@ -9196,7 +9196,8 @@
       "alreadyAssigned": "该评审已分配。",
       "decided": "此提案已有决定。",
       "tooManySessions": "活动场次已达上限。"
-    }
+    },
+    "emailedNotice": "已通过邮件将决定告知提案中的每位演讲者。"
   },
   "cfpPublic": {
     "metaTitle": "征稿",

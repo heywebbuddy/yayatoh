@@ -9196,7 +9196,8 @@
       "alreadyAssigned": "Dieser Gutachter ist bereits zugewiesen.",
       "decided": "Über diesen Vorschlag wurde bereits entschieden.",
       "tooManySessions": "Die Veranstaltung hat die maximale Anzahl an Sessions."
-    }
+    },
+    "emailedNotice": "Jede Person des Vorschlags hat die Entscheidung per E-Mail erhalten."
   },
   "cfpPublic": {
     "metaTitle": "Call for Papers",

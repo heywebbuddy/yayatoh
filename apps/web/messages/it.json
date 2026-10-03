@@ -9196,7 +9196,8 @@
       "alreadyAssigned": "Questo revisore è già assegnato.",
       "decided": "Su questa proposta è già stata presa una decisione.",
       "tooManySessions": "L’evento ha già il numero massimo di sessioni."
-    }
+    },
+    "emailedNotice": "Ogni relatore della proposta ha ricevuto la decisione via email."
   },
   "cfpPublic": {
     "metaTitle": "Call for papers",

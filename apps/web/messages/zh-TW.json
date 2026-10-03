@@ -9196,7 +9196,8 @@
       "alreadyAssigned": "該審查員已指派。",
       "decided": "此提案已有決定。",
       "tooManySessions": "活動場次已達上限。"
-    }
+    },
+    "emailedNotice": "已以電子郵件將決定通知提案中的每位講者。"
   },
   "cfpPublic": {
     "metaTitle": "徵稿",

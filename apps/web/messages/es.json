@@ -9196,7 +9196,8 @@
       "alreadyAssigned": "Ese revisor ya está asignado.",
       "decided": "Esta propuesta ya tiene decisión.",
       "tooManySessions": "El evento ya tiene el número máximo de sesiones."
-    }
+    },
+    "emailedNotice": "Se envió la decisión por correo a cada ponente de la propuesta."
   },
   "cfpPublic": {
     "metaTitle": "Convocatoria de ponencias",

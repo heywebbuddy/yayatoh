@@ -9196,7 +9196,8 @@
       "alreadyAssigned": "Esse avaliador já está atribuído.",
       "decided": "Esta proposta já tem decisão.",
       "tooManySessions": "O evento já tem o número máximo de sessões."
-    }
+    },
+    "emailedNotice": "Cada palestrante da proposta recebeu a decisão por e-mail."
   },
   "cfpPublic": {
     "metaTitle": "Chamada de trabalhos",

@@ -9196,7 +9196,8 @@
       "alreadyAssigned": "Ce relecteur est déjà attribué.",
       "decided": "Cette proposition a déjà fait l’objet d’une décision.",
       "tooManySessions": "L’événement a atteint le nombre maximal de sessions."
-    }
+    },
+    "emailedNotice": "Chaque intervenant de la proposition a reçu la décision par e-mail."
   },
   "cfpPublic": {
     "metaTitle": "Appel à communications",

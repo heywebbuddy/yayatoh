@@ -9196,7 +9196,8 @@
       "alreadyAssigned": "That reviewer is already assigned.",
       "decided": "This proposal was already decided.",
       "tooManySessions": "The event has the maximum number of sessions."
-    }
+    },
+    "emailedNotice": "Every speaker on the proposal was emailed the decision."
   },
   "cfpPublic": {
     "metaTitle": "Call for papers",
