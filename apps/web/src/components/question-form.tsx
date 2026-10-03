@@ -1,7 +1,7 @@
 'use client';
 
 import { FIELD_TYPES } from '@yayatoh/forms/ui';
-import { Alert, Button, Input } from '@yayatoh/ui';
+import { Alert, Button, Input, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState, useEffect, useRef, useState } from 'react';
 import type { TicketFormState } from '@/app/[locale]/o/[org]/e/[event]/tickets-orders/actions.ts';
@@ -30,11 +30,11 @@ export function QuestionForm({
         <label htmlFor="question-type" className="text-[13px] font-bold text-ink">
           {t('questions.type')}
         </label>
-        <select
+        <Select
           id="question-type"
           name="type"
           value={type}
-          onChange={(e) => setType(e.target.value)}
+          onValueChange={(v) => setType(v)}
           className="field"
         >
           {FIELD_TYPES.map((ft) => (
@@ -42,7 +42,7 @@ export function QuestionForm({
               {t(`questions.types.${ft}`)}
             </option>
           ))}
-        </select>
+        </Select>
       </div>
       {choice ? (
         <div className="flex flex-col gap-1.5 md:col-span-2">

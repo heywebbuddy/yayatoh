@@ -30,7 +30,15 @@ export async function MyTeamEvents({
         description={t('myEvents.description', { org: data.org.name })}
       />
       {events.length === 0 ? (
-        <EmptyState title={t('myEvents.emptyTitle')} description={t('myEvents.emptyDescription')} />
+        <EmptyState
+          title={t('myEvents.emptyTitle')}
+          description={t('myEvents.emptyDescription')}
+          action={
+            <Link href="/my-tickets" className={buttonClass('primary', 'md')}>
+              {t('myEvents.myTickets')}
+            </Link>
+          }
+        />
       ) : (
         <ul
           aria-label={t('myEvents.title')}

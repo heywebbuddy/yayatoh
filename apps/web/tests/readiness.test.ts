@@ -129,20 +129,26 @@ describe('profile checklists (M4.2a)', () => {
   it('items for features not built yet are "coming soon", link to their placeholder and never count', () => {
     const rules = readinessRules(wedding);
     const soon = rules.filter((r) => r.comingSoon).map((r) => [r.key, r.path]);
-    // Guests are built (M4.1a, batch 3c merge): that item counts; RSVP and the guest site are not.
-    expect(soon).toEqual([
-      ['rsvpDeadlineSet', 'rsvp'],
-      ['guestSitePublished', 'website'],
-    ]);
+    // Guests (M4.1a) and the guest site (M4.5a) are built: those items count; RSVP is not.
+    expect(soon).toEqual([['rsvpDeadlineSet', 'rsvp']]);
     for (const [, path] of soon) expect(PLACEHOLDER_SECTIONS).toContain(path);
-    // 2 of the 8 counted rules done (name + dates): coming-soon items don't drag it down.
-    expect(readinessPercent(rules)).toBe(25);
+    // 2 of the 9 counted rules done (name + dates): coming-soon items don't drag it down.
+    expect(readinessPercent(rules)).toBe(22);
     const planned = readinessRules({ ...wedding, floorPlan: true });
     expect(planned.find((r) => r.key === 'floorPlanChosen')).toMatchObject({ done: true, path: 'seating' });
-    expect(readinessPercent(planned)).toBe(38);
+    expect(readinessPercent(planned)).toBe(33);
     const guests = readinessRules({ ...wedding, floorPlan: true, guests: 2 });
     expect(guests.find((r) => r.key === 'guestsAdded')).toMatchObject({ done: true, path: 'guests' });
-    expect(readinessPercent(guests)).toBe(50);
+    expect(readinessPercent(guests)).toBe(44);
+    // M4.5a: a published guest website ticks its item.
+    expect(guests.find((r) => r.key === 'guestSitePublished')).toMatchObject({
+      done: false,
+      path: 'website',
+    });
+    const site = readinessRules({ ...wedding, floorPlan: true, guests: 2, guestSite: true });
+    expect(site.find((r) => r.key === 'guestSitePublished')).toMatchObject({ done: true, path: 'website' });
+    expect(site.find((r) => r.key === 'guestSitePublished')?.comingSoon).toBeUndefined();
+    expect(readinessPercent(site)).toBe(56);
   });
 
   it('a gala asks for tables and sponsors (M4.2b: a table ticket), tickets and a floor plan', () => {

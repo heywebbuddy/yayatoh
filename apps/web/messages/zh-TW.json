@@ -34,7 +34,24 @@
     "breadcrumb": "麵包屑導覽",
     "closeMenu": "關閉選單",
     "eventSections": "活動區塊",
-    "allEvents": "活動"
+    "allEvents": "活動",
+    "sections": {
+      "events": "活動",
+      "audience": "受眾與行銷",
+      "money": "資金",
+      "site": "網站與內容",
+      "settings": "設定"
+    },
+    "create": {
+      "label": "建立",
+      "event": "活動",
+      "series": "系列",
+      "template": "範本",
+      "venue": "場地",
+      "coupon": "優惠券",
+      "page": "頁面或部落格文章"
+    },
+    "help": "說明"
   },
   "notifications": {
     "open": "通知",
@@ -76,9 +93,9 @@
         "org-status": "{status, select, suspended {Yayatoh 已暫停此組織} reactivated {此組織已恢復上線} other {Yayatoh 已關閉此組織}}"
       },
       "alerts": {
-        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords} 位參加者沒有座位}}} undistributed {{count, plural, other {{countWords} 張已購票券尚未分發}}} paymentsFailed {{count, plural, other {{countWords} 筆付款失敗}}} paymentsStuck {{count, plural, other {{countWords} 筆付款卡住了}}} refundSurge {{count, plural, other {過去一小時內有 {countWords} 筆退款}}} devicesOffline {{count, plural, other {{countWords} 台報到裝置離線}}} devicesLowBattery {{count, plural, other {{countWords} 台報到裝置電量不足}}} devicesBacklog {{count, plural, other {{countWords} 台報到裝置有待同步的掃描}}} capacityNear {場地已滿 {count}%} capacityFull {場地已額滿（{count}%）} sellOut {已售出 {count}% 的票券} salesPace {票券銷售達到目標進度的 {count}%} readiness {{count, plural, other {{countWords} 個設定步驟阻礙了此活動}}} domain {{count, plural, other {{countWords} 個自訂網域有問題}}} payoutsPastDue {{count, plural, other {收款帳戶有 {countWords} 項要求已逾期}}} deliverability {電子郵件送達率需要注意} automationFailed {{count, plural, other {今天有 {countWords} 則訊息或批次操作失敗}}} assistanceOverdue {{count, plural, other {{countWords} 個求助請求等待過久}}} campaignFailed {{count, plural, other {今天有 {countWords} 次行銷活動傳送失敗}}} disputeDeadline {{count, plural, other {有 {countWords} 起爭議需要盡快提交證據}}} other {警示}}",
-        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords} 位參加者沒有座位}}} undistributed {{count, plural, other {{countWords} 張已購票券尚未分發}}} paymentsFailed {{count, plural, other {{countWords} 筆付款失敗}}} paymentsStuck {{count, plural, other {{countWords} 筆付款卡住了}}} refundSurge {{count, plural, other {過去一小時內有 {countWords} 筆退款}}} devicesOffline {{count, plural, other {{countWords} 台報到裝置離線}}} devicesLowBattery {{count, plural, other {{countWords} 台報到裝置電量不足}}} devicesBacklog {{count, plural, other {{countWords} 台報到裝置有待同步的掃描}}} capacityNear {場地已滿 {count}%} capacityFull {場地已額滿（{count}%）} sellOut {已售出 {count}% 的票券} salesPace {票券銷售達到目標進度的 {count}%} readiness {{count, plural, other {{countWords} 個設定步驟阻礙了此活動}}} domain {{count, plural, other {{countWords} 個自訂網域有問題}}} payoutsPastDue {{count, plural, other {收款帳戶有 {countWords} 項要求已逾期}}} deliverability {電子郵件送達率需要注意} automationFailed {{count, plural, other {今天有 {countWords} 則訊息或批次操作失敗}}} assistanceOverdue {{count, plural, other {{countWords} 個求助請求等待過久}}} campaignFailed {{count, plural, other {今天有 {countWords} 次行銷活動傳送失敗}}} disputeDeadline {{count, plural, other {有 {countWords} 起爭議需要盡快提交證據}}} other {警示}}",
-        "alert-urgent-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords} 位參加者沒有座位}}} undistributed {{count, plural, other {{countWords} 張已購票券尚未分發}}} paymentsFailed {{count, plural, other {{countWords} 筆付款失敗}}} paymentsStuck {{count, plural, other {{countWords} 筆付款卡住了}}} refundSurge {{count, plural, other {過去一小時內有 {countWords} 筆退款}}} devicesOffline {{count, plural, other {{countWords} 台報到裝置離線}}} devicesLowBattery {{count, plural, other {{countWords} 台報到裝置電量不足}}} devicesBacklog {{count, plural, other {{countWords} 台報到裝置有待同步的掃描}}} capacityNear {場地已滿 {count}%} capacityFull {場地已額滿（{count}%）} sellOut {已售出 {count}% 的票券} salesPace {票券銷售達到目標進度的 {count}%} readiness {{count, plural, other {{countWords} 個設定步驟阻礙了此活動}}} domain {{count, plural, other {{countWords} 個自訂網域有問題}}} payoutsPastDue {{count, plural, other {收款帳戶有 {countWords} 項要求已逾期}}} deliverability {電子郵件送達率需要注意} automationFailed {{count, plural, other {今天有 {countWords} 則訊息或批次操作失敗}}} assistanceOverdue {{count, plural, other {{countWords} 個求助請求等待過久}}} campaignFailed {{count, plural, other {今天有 {countWords} 次行銷活動傳送失敗}}} disputeDeadline {{count, plural, other {有 {countWords} 起爭議需要盡快提交證據}}} other {警示}}"
+        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords} 位參加者沒有座位}}} undistributed {{count, plural, other {{countWords} 張已購票券尚未分發}}} paymentsFailed {{count, plural, other {{countWords} 筆付款失敗}}} paymentsStuck {{count, plural, other {{countWords} 筆付款卡住了}}} refundSurge {{count, plural, other {過去一小時內有 {countWords} 筆退款}}} devicesOffline {{count, plural, other {{countWords} 台報到裝置離線}}} devicesLowBattery {{count, plural, other {{countWords} 台報到裝置電量不足}}} devicesBacklog {{count, plural, other {{countWords} 台報到裝置有待同步的掃描}}} capacityNear {場地已滿 {count}%} capacityFull {場地已額滿（{count}%）} sellOut {已售出 {count}% 的票券} salesPace {票券銷售達到目標進度的 {count}%} readiness {{count, plural, other {{countWords} 個設定步驟阻礙了此活動}}} domain {{count, plural, other {{countWords} 個自訂網域有問題}}} payoutsPastDue {{count, plural, other {收款帳戶有 {countWords} 項要求已逾期}}} deliverability {電子郵件送達率需要注意} automationFailed {{count, plural, other {今天有 {countWords} 則訊息或批次操作失敗}}} assistanceOverdue {{count, plural, other {{countWords} 個求助請求等待過久}}} campaignFailed {{count, plural, other {今天有 {countWords} 次行銷活動傳送失敗}}} disputeDeadline {{count, plural, other {有 {countWords} 起爭議需要盡快提交證據}}} pledgesUnpaid {{count, plural, other {活動結束 14 天後仍有 {countWords} 筆認捐未付款}}} other {警示}}",
+        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords} 位參加者沒有座位}}} undistributed {{count, plural, other {{countWords} 張已購票券尚未分發}}} paymentsFailed {{count, plural, other {{countWords} 筆付款失敗}}} paymentsStuck {{count, plural, other {{countWords} 筆付款卡住了}}} refundSurge {{count, plural, other {過去一小時內有 {countWords} 筆退款}}} devicesOffline {{count, plural, other {{countWords} 台報到裝置離線}}} devicesLowBattery {{count, plural, other {{countWords} 台報到裝置電量不足}}} devicesBacklog {{count, plural, other {{countWords} 台報到裝置有待同步的掃描}}} capacityNear {場地已滿 {count}%} capacityFull {場地已額滿（{count}%）} sellOut {已售出 {count}% 的票券} salesPace {票券銷售達到目標進度的 {count}%} readiness {{count, plural, other {{countWords} 個設定步驟阻礙了此活動}}} domain {{count, plural, other {{countWords} 個自訂網域有問題}}} payoutsPastDue {{count, plural, other {收款帳戶有 {countWords} 項要求已逾期}}} deliverability {電子郵件送達率需要注意} automationFailed {{count, plural, other {今天有 {countWords} 則訊息或批次操作失敗}}} assistanceOverdue {{count, plural, other {{countWords} 個求助請求等待過久}}} campaignFailed {{count, plural, other {今天有 {countWords} 次行銷活動傳送失敗}}} disputeDeadline {{count, plural, other {有 {countWords} 起爭議需要盡快提交證據}}} pledgesUnpaid {{count, plural, other {活動結束 14 天後仍有 {countWords} 筆認捐未付款}}} other {警示}}",
+        "alert-urgent-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords} 位參加者沒有座位}}} undistributed {{count, plural, other {{countWords} 張已購票券尚未分發}}} paymentsFailed {{count, plural, other {{countWords} 筆付款失敗}}} paymentsStuck {{count, plural, other {{countWords} 筆付款卡住了}}} refundSurge {{count, plural, other {過去一小時內有 {countWords} 筆退款}}} devicesOffline {{count, plural, other {{countWords} 台報到裝置離線}}} devicesLowBattery {{count, plural, other {{countWords} 台報到裝置電量不足}}} devicesBacklog {{count, plural, other {{countWords} 台報到裝置有待同步的掃描}}} capacityNear {場地已滿 {count}%} capacityFull {場地已額滿（{count}%）} sellOut {已售出 {count}% 的票券} salesPace {票券銷售達到目標進度的 {count}%} readiness {{count, plural, other {{countWords} 個設定步驟阻礙了此活動}}} domain {{count, plural, other {{countWords} 個自訂網域有問題}}} payoutsPastDue {{count, plural, other {收款帳戶有 {countWords} 項要求已逾期}}} deliverability {電子郵件送達率需要注意} automationFailed {{count, plural, other {今天有 {countWords} 則訊息或批次操作失敗}}} assistanceOverdue {{count, plural, other {{countWords} 個求助請求等待過久}}} campaignFailed {{count, plural, other {今天有 {countWords} 次行銷活動傳送失敗}}} disputeDeadline {{count, plural, other {有 {countWords} 起爭議需要盡快提交證據}}} pledgesUnpaid {{count, plural, other {活動結束 14 天後仍有 {countWords} 筆認捐未付款}}} other {警示}}"
       }
     },
     "kinds": {
@@ -177,11 +194,17 @@
         "sign-in": "入口網站登入驗證碼"
       },
       "program": {
-        "task-reminder": "任務提醒"
+        "task-reminder": "任務提醒",
+        "cfp-received": "已收到提案",
+        "cfp-accepted": "提案已接受",
+        "cfp-rejected": "提案未獲選"
       },
       "donations": {
         "receipt": "捐款收據",
-        "year-end-statement": "年度捐款明細"
+        "year-end-statement": "年度捐款明細",
+        "pledge-summary": "認捐摘要",
+        "pledge-invoice": "認捐帳單",
+        "pledge-reminder": "認捐提醒"
       },
       "guests": {
         "invitation": "婚禮邀請",
@@ -284,7 +307,9 @@
       "bounced": "退信：地址不存在",
       "soft_bounced": "暫時退信（信箱已滿或無法使用）",
       "complained": "收件人標為垃圾郵件"
-    }
+    },
+    "emptyAction": "選擇接收哪些通知",
+    "choosePreferences": "選擇接收哪些提醒"
   },
   "nav": {
     "home": "首頁",
@@ -348,7 +373,14 @@
     "marketingAnalytics": "行銷分析",
     "badges": "名牌",
     "orgAnalytics": "數據分析",
-    "integrations": "整合"
+    "integrations": "整合",
+    "seatingLibrary": "座位庫",
+    "coupons": "優惠券",
+    "charity": "慈善檔案",
+    "plan": "方案與帳單",
+    "webhooks": "Webhook",
+    "sandboxes": "沙盒",
+    "notifications": "通知"
   },
   "vocab": {
     "attendee": "參加者",
@@ -408,7 +440,11 @@
     "seriesFilter": "依系列篩選活動",
     "allEvents": "全部活動",
     "seriesEmptyTitle": "{name} 中還沒有活動",
-    "seriesEmptyDescription": "可在活動的「場次」頁面將其加入此系列。"
+    "seriesEmptyDescription": "可在活動的「場次」頁面將其加入此系列。",
+    "showEveryEvent": "顯示每個活動",
+    "doorTitle": "掃碼在掃碼應用程式中進行",
+    "doorDescription": "你的角色是在入口驗票。在此裝置上開啟掃碼應用程式即可開始。",
+    "openScan": "開啟掃碼應用程式"
   },
   "team": {
     "subtitle": "{count, plural, other {# 位成員}}",
@@ -453,7 +489,8 @@
     "readiness": "活動準備狀態",
     "readinessPercent": "已完成 {value}%",
     "noSalesTitle": "尚無銷售",
-    "noSalesDescription": "票券開賣後，報名、銷售與座位情況將顯示在這裡。"
+    "noSalesDescription": "票券開賣後，報名、銷售與座位情況將顯示在這裡。",
+    "toTicketsOrders": "前往票券與訂單"
   },
   "kpi": {
     "registrations": "報名數",
@@ -570,7 +607,10 @@
     "anyDistribution": "任何分發狀態",
     "distributionFilter": {
       "pending": "等待轉交"
-    }
+    },
+    "emptyUpload": "從 CSV 檔案上傳名單",
+    "toTicketsOrders": "前往票券與訂單",
+    "backToEvent": "返回活動概覽"
   },
   "attendeeStatus": {
     "paid": "已付款",
@@ -609,7 +649,8 @@
   },
   "section": {
     "comingTitle": "此區域正在建置中",
-    "comingDescription": "此功能將於後續里程碑推出。你的導覽已依據你的方案與活動類型調整。"
+    "comingDescription": "此功能將於後續里程碑推出。你的導覽已依據你的方案與活動類型調整。",
+    "backToEvent": "返回活動概覽"
   },
   "publicEvent": {
     "nav": "活動",
@@ -788,7 +829,8 @@
   },
   "orgPicker": {
     "emptyTitle": "你尚未加入任何組織",
-    "emptyDescription": "請擁有者邀請你，或等候邀請電子郵件。"
+    "emptyDescription": "請擁有者邀請你，或等候邀請電子郵件。",
+    "myTickets": "前往我的票券"
   },
   "invite": {
     "eyebrow": "邀請",
@@ -884,7 +926,8 @@
     "validDatesHint": "不勾選則適用於所有場次。",
     "dates": "場次",
     "allDates": "所有場次",
-    "someDates": "{count, plural, other {# 個場次}}"
+    "someDates": "{count, plural, other {# 個場次}}",
+    "emptyAction": "設定票券"
   },
   "checkout": {
     "quantity": "數量",
@@ -984,14 +1027,23 @@
     "seatChannel": "其中部分座位保留給其他銷售通路。請選擇其他座位。",
     "channelInvalid": "此銷售碼不適用於本活動。請不帶銷售碼重新開啟活動頁面，或詢問給你連結的人。",
     "channelNotice": "你正透過 {name} 購買：保留給 {name} 的座位也向你開放。",
-    "channelLinkInvalid": "此銷售連結不適用於本活動。你仍可從向所有人開放的座位中選擇。"
+    "channelLinkInvalid": "此銷售連結不適用於本活動。你仍可從向所有人開放的座位中選擇。",
+    "saveCardForGiving": "為今晚的捐贈儲存我的信用卡（在下一頁完成；未經您在那裡同意，不會儲存任何資訊）"
   },
   "fakePay": {
     "eyebrow": "測試付款",
     "title": "支付訂單",
     "description": "這是測試付款頁面，不會產生真實扣款。",
     "pay": "立即付款（測試）",
-    "decline": "模擬信用卡遭拒"
+    "decline": "模擬信用卡遭拒",
+    "setupTitle": "測試信用卡設置",
+    "setupDescription": "代替支付服務商的安全信用卡表單。不會儲存真實的信用卡。",
+    "testCard": "測試信用卡",
+    "card4242": "4242 · 始終扣款成功",
+    "card0002": "0002 · 始終被拒",
+    "card9995": "9995 · 首次扣款被拒",
+    "saveCard": "儲存信用卡（測試）",
+    "failSetup": "模擬設置失敗"
   },
   "order": {
     "eyebrow": "你的訂單",
@@ -1053,7 +1105,8 @@
     "buyer": "買家",
     "items": "票券",
     "total": "總計",
-    "status": "狀態"
+    "status": "狀態",
+    "emptyAction": "開啟活動頁面"
   },
   "promo": {
     "title": "優惠碼",
@@ -1080,7 +1133,8 @@
     "resumeCode": "恢復{code}",
     "addTitle": "新增優惠碼",
     "add": "新增優惠碼",
-    "added": "已新增優惠碼。"
+    "added": "已新增優惠碼。",
+    "emptyAction": "建立代碼"
   },
   "questions": {
     "title": "結帳問題",
@@ -1115,7 +1169,8 @@
     "moveUp": "上移{label}",
     "moveDown": "下移{label}",
     "remove": "移除{label}",
-    "answers": "回答"
+    "answers": "回答",
+    "emptyAction": "撰寫問題"
   },
   "checkin": {
     "title": "報到",
@@ -1148,7 +1203,13 @@
       "no_access": "此通行證不包含該區域",
       "wrong_checkpoint": "不是你的檢查點",
       "wrong_date": "此門票適用於其他場次",
-      "balance_due": "發票尚有餘額未付"
+      "balance_due": "發票尚有餘額未付",
+      "entered": "已入場 — 祝你聽講愉快",
+      "scanned_out": "已離開場次",
+      "not_in_room": "未在此場次報到",
+      "not_enrolled": "未報名此場次",
+      "admission_level": "此通行證不包含此場次",
+      "capacity": "會場已滿"
     },
     "alertsTitle": "{count, plural, other {離線期間有 # 張票被重複放行}}",
     "alertsHint": "兩台掃描裝置在同步前放行了同一張票。請在入口核查這些賓客。",
@@ -1159,7 +1220,9 @@
     "overrideNote": "放行原因",
     "overrideHint": "將與你的姓名一起儲存在活動紀錄中，例如「採購單已核准，款項處理中」。",
     "overrideSubmit": "仍然放行",
-    "overrideNoteRequired": "請填寫原因（至少 3 個字元）才能在餘額未付時放行。"
+    "overrideNoteRequired": "請填寫原因（至少 3 個字元）才能在餘額未付時放行。",
+    "backToEvent": "返回活動",
+    "scanFirst": "掃描第一張票"
   },
   "checkinLive": {
     "state": {
@@ -1272,7 +1335,8 @@
     "attendees": "人員",
     "orders": "訂單",
     "ticketCode": "票券 {code}",
-    "orderRef": "訂單編號 {ref}"
+    "orderRef": "訂單編號 {ref}",
+    "browseEvents": "瀏覽你的活動"
   },
   "bulk": {
     "formLabel": "批次操作",
@@ -1418,7 +1482,8 @@
       "too_many_columns": "檔案超過 50 欄。",
       "cell_too_long": "有儲存格超過 1,000 個字元。",
       "unterminated_quote": "檔案中有未閉合的引號，無法作為 CSV 讀取。"
-    }
+    },
+    "backToEvent": "返回活動概覽"
   },
   "distribution": {
     "title": "傳送這張票",
@@ -1539,7 +1604,8 @@
     "activityLink": "活動紀錄",
     "privacyLink": "隱私請求",
     "charityLink": "慈善機構資料",
-    "planLink": "方案和模組"
+    "planLink": "方案和模組",
+    "findOwner": "尋找擁有者或管理員"
   },
   "legal": {
     "platform": "Yayatoh",
@@ -2035,7 +2101,9 @@
       "rules": "規則",
       "selection": "最佳可選座位",
       "channels": "通路",
-      "revisions": "版本"
+      "revisions": "版本",
+      "guests": "安排賓客座位",
+      "cards": "桌卡與匯出"
     },
     "assign": {
       "title": "安排賓客",
@@ -2126,7 +2194,8 @@
       "modeNow": "查詢方式：{mode}",
       "modeShort": {
         "code": "電子郵件驗證碼",
-        "name": "全名"
+        "name": "全名",
+        "pin": "全名和喜帖上的 PIN"
       },
       "notPublic": "活動尚未發布（或為私人活動），賓客暫時無法開啟座位查詢。",
       "settingsTitle": "賓客",
@@ -2137,11 +2206,13 @@
       "mode": "賓客如何查詢座位",
       "modeOption": {
         "code": "透過寄到電子郵件的驗證碼（建議）",
-        "name": "輸入全名，立即查看"
+        "name": "輸入全名，立即查看",
+        "pin": "透過全名和喜帖上印的 PIN"
       },
       "modeHint": {
         "code": "只有能讀取賓客電子郵件的人才能看到其座位，也沒有人能知道名單上有誰。",
-        "name": "入場更快，但任何知道賓客全名的人都能看到其座位。"
+        "name": "入場更快，但任何知道賓客全名的人都能看到其座位。",
+        "pin": "賓客輸入全名和其所屬群組喜帖上印的 6 位數 PIN。他們只會看到自己的桌位，絕不會看到任何人的姓名，也沒人能查出誰在名單上。"
       },
       "readOnly": "你可以查看這些設定，但無法修改。",
       "shareTitle": "分享",
@@ -2149,7 +2220,10 @@
       "openPublic": "開啟座位查詢",
       "poster": "列印座位查詢海報",
       "closedNote": "座位查詢已關閉。掃描海報的賓客會被提示稍後再來。",
-      "namePoster": "列印姓名名單海報"
+      "namePoster": "列印姓名名單海報",
+      "partyLinksTitle": "各群組連結",
+      "partyLinksHint": "每個群組喜帖上的連結和 QR 碼也能開啟該群組專屬的桌位頁面：場地圖上的桌位以及同桌的人。將他們換到別桌時，QR 碼保持不變。",
+      "partyLinksAction": "各群組連結和 QR 碼"
     },
     "map": {
       "zoomIn": "放大",
@@ -2353,7 +2427,10 @@
       "seatNumbersHint": "所選排和桌中的座位號碼，例如 1-4, 9。留白則包括其全部座位。",
       "allot": "分配座位",
       "allotted": "{count, plural, =0 {沒有座位變更。} other {已分配 # 個座位。}}",
-      "freed": "{count, plural, =0 {沒有座位屬於任何通路。} other {# 個座位重新向所有通路開放。}}"
+      "freed": "{count, plural, =0 {沒有座位屬於任何通路。} other {# 個座位重新向所有通路開放。}}",
+      "emptyReadOnly": "編輯新增後，通路會顯示在這裡。",
+      "addFirst": "新增第一個通路",
+      "noSeatsHint": "先在座位圖中新增排或桌，再在這裡分配座位。"
     },
     "revisions": {
       "title": "座位圖版本",
@@ -2408,6 +2485,207 @@
       "isCurrent": "這就是目前的座位圖。",
       "restore": "還原版本 {number}",
       "restoredNotice": "已還原版本 {number}。目前的座位圖為版本 {now}。"
+    },
+    "guestSeating": {
+      "title": "安排賓客座位",
+      "description": "將各組賓客安排到桌位。從待排隊列把一組拖到平面圖上，或勾選賓客、選擇桌子並按「安排所選賓客」——拖曳能做的事，鍵盤都能做。",
+      "chart": {
+        "label": "座位安排",
+        "event": "整個活動"
+      },
+      "noPlan": "{chart}還沒有座位圖",
+      "noPlanHint": "請先建立座位圖（桌子或排），再在這裡安排賓客。",
+      "toPlan": "前往座位圖",
+      "noGuests": "還沒有需要安排的賓客",
+      "noGuestsHint": "在「賓客」頁面新增各組賓客（或邀請他們參加這一環節），然後在這裡安排座位。",
+      "toGuests": "前往賓客",
+      "summary": "已安排 {seated} · 待安排 {unseated}",
+      "readOnly": "你可以查看座位安排，但不能修改。",
+      "declinedSeated": "{count, plural, other {# 位已婉拒的賓客仍在座位上。}}請在桌位詳情中移除。",
+      "live": {
+        "live": "即時",
+        "connecting": "正在連線…",
+        "offline": "離線，正在重新連線"
+      },
+      "vip": "VIP",
+      "queue": {
+        "title": "待安排（{count}）",
+        "search": "搜尋各組和賓客",
+        "status": "回覆",
+        "statusAll": "全部回覆",
+        "side": "方",
+        "sideAll": "全部",
+        "list": "待安排的各組賓客",
+        "selectParty": "選取{party}的所有人",
+        "toSeat": "{count, plural, other {待安排 # 位}}",
+        "selected": "{count, plural, =0 {未選取} other {已選 # 位賓客}}",
+        "clear": "清除選取",
+        "empty": "每個人都有座位了。",
+        "noMatch": "沒有符合篩選條件的組。"
+      },
+      "status": {
+        "attending": "出席",
+        "pending": "等待回覆",
+        "declined": "已婉拒"
+      },
+      "guest": {
+        "guestOf": "{name}的同伴",
+        "meal": "餐點：{meal}",
+        "noMeal": "未選餐點",
+        "child": "兒童",
+        "infant": "嬰兒"
+      },
+      "form": {
+        "title": "安排所選賓客",
+        "table": "桌子或排",
+        "choose": "選擇桌子或排",
+        "option": "{place} — 空 {free}/{capacity}",
+        "optionVip": "{place} — 空 {free}/{capacity} · VIP 區",
+        "cantFit": "坐不下：已選 {asked, plural, other {# 位賓客}}，{place}{fits, plural, =0 {沒有空位} other {只有 # 個空位}}。",
+        "submit": "安排所選賓客",
+        "submitting": "正在安排…"
+      },
+      "place": {
+        "table": "{label} 號桌",
+        "row": "{label} 排"
+      },
+      "map": {
+        "title": "平面圖",
+        "hint": "把一組拖到桌子上即可安排。點選桌子查看誰坐在那裡。",
+        "readOnlyHint": "點選桌子查看誰坐在那裡。",
+        "dropHere": "放到{place}：空 {free}",
+        "dropCantFit": "{place}坐不下：{count, plural, other {# 位賓客}}，空 {free}",
+        "guests": "賓客",
+        "tickets": "持票人",
+        "vip": "VIP 區"
+      },
+      "details": {
+        "title": "桌位詳情",
+        "choose": "要查看的桌子",
+        "none": "此座位圖沒有桌子或排。",
+        "counts": "已坐 {seated} · 空 {free}/{capacity}",
+        "tickets": "{count, plural, other {# 個座位已被門票佔用}}",
+        "sponsor": "贊助：{name}",
+        "vipZone": "VIP 區",
+        "vipFromPlan": "位於座位圖的 VIP 區域",
+        "warnings": "請檢查此桌",
+        "warnDeclined": "{name}已婉拒，但仍在座位上。",
+        "warnVipOutside": "{party}是 VIP 組，但不在 VIP 區。",
+        "warnNotVip": "{party}不是 VIP 組，卻坐在 VIP 區。",
+        "meals": "餐點",
+        "mealCount": "{meal}：{count}",
+        "noMeal": "未選擇",
+        "empty": "這裡還沒有人。請從待排隊列安排一組。",
+        "unseatParty": "移除{party}",
+        "move": "移到…",
+        "moveLabel": "把{name}移到另一桌",
+        "unseat": "移除",
+        "unseatLabel": "移除{name}",
+        "moveTo": "移動{name}",
+        "moveSubmit": "移動",
+        "cancel": "取消"
+      },
+      "done": {
+        "seated": "已在{place}安排 {count, plural, other {# 位賓客}}。",
+        "moved": "已將{name}移到{place}。",
+        "unseated": "{count, plural, other {# 位賓客}}已回到待排隊列。",
+        "vipOn": "{place}現在是 VIP 區。",
+        "vipOff": "{place}不再是 VIP 區。"
+      },
+      "warnings": {
+        "vip_outside": "{party}是 VIP 組，而{place}不是 VIP 區。",
+        "not_vip_inside": "{place}是 VIP 區，而{party}不是 VIP 組。"
+      },
+      "errors": {
+        "forbidden": "你可以查看座位安排，但不能修改。",
+        "cantFit": "坐不下：{asked, plural, other {# 位賓客}}需要座位，而那裡{fits, plural, =0 {沒有空位} other {只有 # 個空位}}。",
+        "declined": "這位賓客已婉拒。只能安排未婉拒的賓客。",
+        "unknown": "這位賓客已不在名單上。頁面將重新整理。",
+        "noPlan": "這裡還沒有座位圖。",
+        "noGuests": "請至少選擇一位賓客。",
+        "noPlace": "請選擇桌子或排。",
+        "dropMiss": "請把這組放到桌子或排上。"
+      }
+    },
+    "cards": {
+      "title": "桌卡與匯出",
+      "description": "列印座位卡、引座卡和桌號卡，並下載依桌排列的座位表和給外燴的餐點數量。",
+      "print": {
+        "heading": "列印卡片",
+        "kind": "卡片類型",
+        "paper": "紙張尺寸",
+        "language": "卡片語言",
+        "submit": "下載 PDF",
+        "started": "正在產生 PDF，稍後即會下載。",
+        "toSeat": "安排賓客入座",
+        "empty": {
+          "place": "還沒有賓客入座，因此沒有可列印的座位卡。請先安排賓客入座。",
+          "escort": "還沒有賓客入座，因此沒有可列印的引座卡。請先安排賓客入座。",
+          "table": "此平面圖還沒有桌子或排，因此沒有可列印的桌號卡。"
+        }
+      },
+      "kinds": {
+        "place": "座位卡",
+        "escort": "引座卡",
+        "table": "桌號卡"
+      },
+      "hints": {
+        "place": "{count, plural, =0 {尚無卡片} other {# 張}}：每位已入座賓客一張，對摺立卡",
+        "escort": "{count, plural, =0 {尚無卡片} other {# 張}}：每桌每組賓客一張，放在入口",
+        "table": "{count, plural, =0 {尚無卡片} other {# 張}}：每桌一張，整頁對摺"
+      },
+      "papers": {
+        "a4": "A4",
+        "letter": "美式 Letter",
+        "a5": "A5",
+        "legal": "美式 Legal"
+      },
+      "exports": {
+        "heading": "匯出",
+        "chart": "依桌座位表",
+        "chartHint": "每位賓客一列：桌號、組別、年齡、餐點和回覆。",
+        "meals": "外燴餐點數量",
+        "mealsHint": "每桌餐點數量，含兒童、嬰兒和合計。不計已婉拒的賓客。",
+        "csv": "CSV",
+        "xlsx": "Excel (XLSX)",
+        "download": "以 {format} 格式下載{name}",
+        "note": "匯出操作會記錄在稽核日誌中。"
+      },
+      "doc": {
+        "title": {
+          "place": "座位卡",
+          "escort": "引座卡",
+          "table": "桌號卡"
+        },
+        "yourTable": "您的桌號",
+        "guestOf": "{name} 的同伴",
+        "hostedBy": "由 {name} 贊助"
+      },
+      "file": {
+        "place": "桌號",
+        "guest": "賓客",
+        "party": "組別",
+        "age": "年齡",
+        "meal": "餐點",
+        "reply": "回覆",
+        "ageClass": {
+          "adult": "成人",
+          "child": "兒童",
+          "infant": "嬰兒"
+        },
+        "status": {
+          "attending": "出席",
+          "pending": "待回覆",
+          "declined": "婉拒"
+        },
+        "notSeated": "未入座",
+        "notChosen": "未選擇",
+        "children": "兒童",
+        "infants": "嬰兒",
+        "total": "合計",
+        "sheetChart": "座位表",
+        "sheetMeals": "餐點數量"
+      }
     }
   },
   "venueMap": {
@@ -2447,7 +2725,11 @@
       "bottom": "地圖下方",
       "bottom-right": "地圖右下方"
     },
-    "yours": "{count, plural, other {你的座位：{seats}}}"
+    "yours": "{count, plural, other {你的座位：{seats}}}",
+    "yourPlace": {
+      "table": "您的桌位",
+      "row": "您的排"
+    }
   },
   "seatFinder": {
     "eyebrow": "座位查詢",
@@ -2498,9 +2780,15 @@
       "challengeUnavailable": "此裝置的查詢次數過多。請稍候一分鐘再試。",
       "closed": "此活動的座位查詢未開放。",
       "internal": "我們這邊發生了問題。",
-      "rateLimited": "索取驗證碼次數過多。請在 {minutes, plural, other {# 分鐘}}後再試。"
+      "rateLimited": "索取驗證碼次數過多。請在 {minutes, plural, other {# 分鐘}}後再試。",
+      "noMatch": "找不到符合此姓名和 PIN 的桌位。請對照喜帖確認，或詢問主人。",
+      "invalidPin": "請輸入喜帖上的 6 位數 PIN。",
+      "pinRateLimited": "此裝置查詢次數過多。請在 {minutes, plural, other {# 分鐘}}後再試。"
     },
-    "hostedBy": "贊助商：{sponsor}"
+    "hostedBy": "贊助商：{sponsor}",
+    "pinIntro": "請輸入與喜帖上相同的全名，以及喜帖上印的 6 位數 PIN。",
+    "pin": "喜帖上的 PIN",
+    "findByPin": "查詢我的桌位"
   },
   "seatFinderPoster": {
     "pageTitle": "座位查詢海報",
@@ -2513,7 +2801,8 @@
     "step2Code": "輸入你的電子郵件，我們會寄驗證碼給你。",
     "step2Name": "輸入你的全名。",
     "step3": "在場地地圖上查看你的桌號與座位。",
-    "orVisit": "或前往"
+    "orVisit": "或前往",
+    "step2Pin": "輸入您的全名和喜帖上的 PIN。"
   },
   "reports": {
     "title": "分析",
@@ -2645,7 +2934,8 @@
         "channel": "通路",
         "bookedAt": "預訂時間",
         "paidAt": "付款時間"
-      }
+      },
+      "showAll": "顯示所有預訂"
     },
     "org": {
       "title": "銷售",
@@ -2670,8 +2960,13 @@
       "byEvent": "依活動銷售",
       "event": "活動",
       "emptyTitle": "此期間沒有銷售",
-      "emptyDescription": "請選擇更長的期間，或分享活動頁面開始售票。"
-    }
+      "emptyDescription": "請選擇更長的期間，或分享活動頁面開始售票。",
+      "toEvents": "查看你的活動",
+      "showAllTime": "顯示全部時間"
+    },
+    "backToEvent": "返回活動概覽",
+    "toTicketsOrders": "前往票券與訂單",
+    "toSalesReport": "開啟銷售概覽"
   },
   "activity": {
     "title": "活動",
@@ -2720,7 +3015,10 @@
     },
     "pagination": "活動分頁",
     "newest": "最新",
-    "older": "更早的紀錄"
+    "older": "更早的紀錄",
+    "findOwner": "尋找擁有者或管理員",
+    "showAll": "顯示全部動態",
+    "toEvents": "前往你的活動"
   },
   "privacy": {
     "title": "隱私請求",
@@ -2737,7 +3035,8 @@
     "result": {
       "title": "此組織持有的關於 {email} 的資料",
       "noneTitle": "找不到此電子郵件的資料",
-      "noneDescription": "此組織中沒有任何紀錄使用該地址。您仍可建立請求，向此人作出正式答覆。"
+      "noneDescription": "此組織中沒有任何紀錄使用該地址。您仍可建立請求，向此人作出正式答覆。",
+      "searchAgain": "搜尋其他地址"
     },
     "errors": {
       "invalidEmail": "請輸入有效的電子郵件地址。",
@@ -2808,7 +3107,8 @@
       "due": "期限",
       "overdue": "已逾期",
       "action": "操作",
-      "review": "查看"
+      "review": "查看",
+      "emptyAction": "依電子郵件查找某人"
     },
     "closed": {
       "title": "已關閉的請求",
@@ -2845,7 +3145,8 @@
       "holdings": {
         "title": "此組織持有的資料",
         "empty": "沒有持有關於此人的任何資料",
-        "emptyHint": "您仍可完成請求：此人將收到未持有任何資料的正式答覆。"
+        "emptyHint": "您仍可完成請求：此人將收到未持有任何資料的正式答覆。",
+        "emptyAction": "回覆請求"
       },
       "export": {
         "title": "傳送副本給此人",
@@ -2917,7 +3218,24 @@
       "digest": "收據 SHA-256",
       "signature": "簽章（base64）",
       "footer": "由 Yayatoh 代表 {org} 核發。簽章涵蓋收據資料；請使用下方的公開金鑰驗證。"
-    }
+    },
+    "categories": {
+      "contacts": "聯絡人紀錄",
+      "consents": "同意紀錄",
+      "orders": "訂單",
+      "paidOrders": "已付款訂單（為會計保留）",
+      "tickets": "票券",
+      "activeTickets": "有效票券",
+      "claims": "票券轉讓連結",
+      "holderLinks": "票券存取連結",
+      "attendees": "賓客名單項目",
+      "answers": "結帳時的回答",
+      "admissions": "報到",
+      "invitations": "團隊邀請",
+      "networkProfiles": "社交名片",
+      "chatMessages": "已傳送的聊天訊息"
+    },
+    "findOwner": "尋找擁有者或管理員"
   },
   "privacyNotice": {
     "eyebrow": "Yayatoh",
@@ -3096,9 +3414,13 @@
       "eventDate": "活動日期",
       "guests": "賓客人數",
       "markHandled": "標示為已處理",
-      "markNew": "標示為新請求"
+      "markNew": "標示為新請求",
+      "openPublic": "開啟場地公開頁面",
+      "editListing": "編輯目錄資訊"
     },
-    "layoutLibrary": "座位圖庫"
+    "layoutLibrary": "座位圖庫",
+    "emptyAction": "新增第一個場地",
+    "emptyViewerAction": "瀏覽場地目錄"
   },
   "details": {
     "title": "活動詳細資料",
@@ -3253,7 +3575,9 @@
     "sectionAdded": "已新增區塊。",
     "sectionSaved": "已儲存區塊。",
     "addSection": "新增區塊",
-    "saveSection": "儲存區塊"
+    "saveSection": "儲存區塊",
+    "emptyAction": "新增第一個區塊",
+    "backToEvent": "返回活動概覽"
   },
   "dates": {
     "title": "場次",
@@ -3352,7 +3676,8 @@
       "event_finished": "已結束或已取消活動的場次無法變更。",
       "cancelled": "已取消的場次無法變更。",
       "invalid_count": "請輸入 1 到 366 之間的場次數。"
-    }
+    },
+    "backToEvent": "返回活動概覽"
   },
   "copy": {
     "title": "複製與範本",
@@ -3374,7 +3699,8 @@
     "openTemplates": "開啟範本",
     "saveTemplate": "儲存範本",
     "nameTaken": "此名稱已被使用，請換一個。",
-    "invalid": "請檢查此值。"
+    "invalid": "請檢查此值。",
+    "backToEvent": "返回活動概覽"
   },
   "series": {
     "title": "系列",
@@ -3395,7 +3721,8 @@
     "create": "建立系列",
     "created": "系列已建立。",
     "slugTaken": "已有同名系列，請換一個稍有不同的名稱。",
-    "nameInvalid": "請輸入 2 到 160 個字元的名稱。"
+    "nameInvalid": "請輸入 2 到 160 個字元的名稱。",
+    "startFirst": "建立第一個系列"
   },
   "templates": {
     "title": "範本",
@@ -3407,7 +3734,8 @@
     "deleteFor": "刪除範本 {name}",
     "use": "用 {name} 建立活動",
     "timezone": "時間為 {timezone}。",
-    "createEvent": "建立活動"
+    "createEvent": "建立活動",
+    "pickEvent": "選擇要儲存的活動"
   },
   "publicSeries": {
     "eyebrow": "{org} 的系列",
@@ -3523,7 +3851,9 @@
     "unpublish": "取消發布{title}",
     "pinOne": "置頂{title}",
     "unpinOne": "取消置頂{title}",
-    "delete": "刪除{title}"
+    "delete": "刪除{title}",
+    "emptyAction": "撰寫第一則公告",
+    "toSections": "查看頁面區塊"
   },
   "holder": {
     "joinTitle": "線上參加",
@@ -3550,7 +3880,8 @@
     "title": "存取權限",
     "subtitle": "持票人專屬資訊、線上參加連結與存取碼。",
     "viewerTitle": "僅編輯者可查看",
-    "viewerDescription": "私人資訊與存取碼只會顯示給可編輯活動的成員。"
+    "viewerDescription": "私人資訊與存取碼只會顯示給可編輯活動的成員。",
+    "backToEvent": "返回活動概覽"
   },
   "privateInfo": {
     "heading": "私人資訊",
@@ -3605,7 +3936,8 @@
     "new": "新增存取碼",
     "create": "建立存取碼",
     "created": "已建立存取碼。",
-    "unlockLink": "受邀賓客開啟 {url} 並輸入存取碼。"
+    "unlockLink": "受邀賓客開啟 {url} 並輸入存取碼。",
+    "emptyAction": "建立第一個代碼"
   },
   "conversation": {
     "inboxTitle": "訊息",
@@ -3658,7 +3990,9 @@
       "blocked": "此對話已被封鎖。",
       "blocked_by_contact": "此人已封鎖您組織的訊息。",
       "you_blocked": "解除封鎖主辦單位後才能寫信。"
-    }
+    },
+    "emptyAction": "前往你的活動",
+    "showAll": "顯示所有對話"
   },
   "apiKeys": {
     "title": "API 金鑰",
@@ -3866,7 +4200,8 @@
       "copy": "複製程式碼",
       "copied": "已複製。",
       "emptyTitle": "目前沒有公開活動",
-      "emptyDescription": "發布活動即可取得小工具程式碼。"
+      "emptyDescription": "發布活動即可取得小工具程式碼。",
+      "toEvents": "前往你的活動"
     },
     "navPages": {
       "title": "網站導覽",
@@ -3906,7 +4241,8 @@
     "resolveNote": "{reference} 為什麼已處理？",
     "noteTooShort": "請填寫至少 3 個字元的備註。",
     "alreadyResolved": "已有人處理了此差異。",
-    "resolve": "處理"
+    "resolve": "處理",
+    "emptyAction": "查看每日核對"
   },
   "risk": {
     "flagged": "結帳時被標記",
@@ -3975,7 +4311,9 @@
     "customized": "已自訂的郵件",
     "noneTitle": "尚無自訂的郵件",
     "noneDescription": "所有郵件都使用 Yayatoh 的預設文案。",
-    "changed": "修改時間"
+    "changed": "修改時間",
+    "noneAction": "自訂一封郵件",
+    "noneActionViewer": "閱讀預設文案"
   },
   "setupGuide": {
     "title": "設定指南",
@@ -4113,7 +4451,15 @@
       "outside_event": "此環節不在活動的開始和結束時間之內。"
     },
     "photoAfterSave": "儲存講者後即可新增照片。",
-    "logoAfterSave": "儲存後即可新增標誌。"
+    "logoAfterSave": "儲存後即可新增標誌。",
+    "emptyExhibitorsAction": "新增第一個參展商",
+    "backToEvent": "返回活動",
+    "emptySessionsReadOnly": "編輯新增後，場次會顯示在這裡。",
+    "addFirstSession": "新增第一個場次",
+    "emptySpeakersReadOnly": "編輯新增後，講者會顯示在這裡。",
+    "addFirstSpeaker": "新增第一位講者",
+    "emptyTiersReadOnly": "編輯新增後，贊助等級及其贊助商會顯示在這裡。",
+    "addFirstTier": "新增第一個等級"
   },
   "aiDraft": {
     "title": "用 AI 起草",
@@ -4325,7 +4671,10 @@
     "readOnly": "只有擁有者和管理員可以變更入口工作人員。",
     "byCheckpoint": "依檢查點劃分的入口工作人員",
     "nobody": "未分配",
-    "manage": "管理入口工作人員"
+    "manage": "管理入口工作人員",
+    "emptyReadOnly": "擁有者或管理員新增後，入口工作人員會顯示在這裡。",
+    "addFirst": "新增第一位入口工作人員",
+    "openCheckin": "開啟報到畫面"
   },
   "signals": {
     "title": "詐欺訊號",
@@ -4369,7 +4718,9 @@
       "save": "儲存規則",
       "saved": "規則已儲存。",
       "current": "標記每分鐘掃描超過 {rate} 次的裝置,以及在檢查點之間移動快於每小時 {kmh} 公里的票券。"
-    }
+    },
+    "showAll": "顯示全部訊號",
+    "reviewDetection": "查看偵測設定"
   },
   "security": {
     "metaTitle": "帳戶安全",
@@ -4654,7 +5005,11 @@
       "survey_exists": "此問卷已存在。",
       "messaging_paused": "Yayatoh 支援團隊已暫停你所屬組織的訊息傳送。",
       "form_invalid": "有一個問題無效。"
-    }
+    },
+    "sendFirst": "傳送給參加者",
+    "questionsEmptyReadOnly": "編輯新增問題後，問題會顯示在這裡。",
+    "addFirstQuestion": "新增第一個問題",
+    "browseSurveys": "瀏覽其他問卷"
   },
   "survey": {
     "metaTitle": "問卷",
@@ -4753,7 +5108,8 @@
     "emptyDescription": "在座位圖上為賓客安排座位，再列印此名單放在入口。",
     "tableSeat": "第 {item} 桌 · {seat} 號座",
     "rowSeat": "第 {item} 排 · {seat} 號座",
-    "unseated": "{count, plural, other {# 位賓客尚未安排座位，未列入海報。}}"
+    "unseated": "{count, plural, other {# 位賓客尚未安排座位，未列入海報。}}",
+    "toPlan": "前往座位圖"
   },
   "webPush": {
     "title": "推播通知",
@@ -4917,7 +5273,10 @@
       "body": "它會立即從你的網站消失，且無法復原。",
       "confirm": "確認刪除",
       "cancel": "取消"
-    }
+    },
+    "emptyActionPost": "撰寫第一篇文章",
+    "emptyActionPage": "撰寫第一個頁面",
+    "findOwner": "尋找擁有者或管理員"
   },
   "cmsPublic": {
     "blog": "部落格",
@@ -4977,7 +5336,10 @@
       "reasonError": "請填寫原因（3 到 300 個字元）。",
       "hide": "隱藏評價",
       "unhide": "顯示評價",
-      "dismissReports": "駁回檢舉"
+      "dismissReports": "駁回檢舉",
+      "showAll": "顯示全部評價",
+      "seeOrders": "查看票券與訂單",
+      "backToEvent": "返回活動"
     },
     "form": {
       "rating": "你的評分",
@@ -5475,7 +5837,8 @@
         "totals": "累計資料",
         "seen": "首次或最近出現",
         "stats": "聯絡人統計",
-        "ltv": "終身價值"
+        "ltv": "終身價值",
+        "engagement": "參與度分數"
       },
       "did": "規則",
       "didYes": "是",
@@ -5545,7 +5908,8 @@
         "rfmMonetary": "RFM 金額（五分位）"
       },
       "valuePercent": "百分比",
-      "quintile": "五分位（1–5）"
+      "quintile": "五分位（1–5）",
+      "engagementScore": "分數"
     },
     "scopes": {
       "any": "任意活動",
@@ -5603,7 +5967,10 @@
     },
     "peopleLink": "人員",
     "duplicatesLink": "可能的重複",
-    "insights": "聯絡人洞察"
+    "insights": "聯絡人洞察",
+    "emptyAction": "選擇範本",
+    "emptyViewer": "你的團隊為行銷活動儲存的受眾會顯示在這裡。",
+    "findOwner": "尋找擁有者或管理員"
   },
   "refundOps": {
     "timeline": {
@@ -5706,7 +6073,16 @@
         "succeeded": "已退款",
         "failed": "退款失敗"
       },
-      "age": "{days, plural, =0 {{hours, plural, other {# 小時}}} other {# 天}}"
+      "age": "{days, plural, =0 {{hours, plural, other {# 小時}}} other {# 天}}",
+      "emptyHint": {
+        "open": "買家在訂單頁面申請退款，他們的請求會在這裡等待你的回覆。",
+        "approved": "你核准的請求會連同退款狀態顯示在這裡。",
+        "declined": "你拒絕的請求會顯示在這裡。"
+      },
+      "emptyAction": {
+        "open": "查看已核准的請求",
+        "other": "返回待處理的請求"
+      }
     },
     "buyer": {
       "title": "退款",
@@ -5922,7 +6298,9 @@
         "offerHours": "請輸入 0.25 到 168 小時之間的值。",
         "not_enough_stock": "空餘票券不足，無法發出此邀請。",
         "not_on_sale": "此通行證或場次未在販售。"
-      }
+      },
+      "viewEventPage": "查看活動頁面",
+      "backToEvent": "返回活動"
     }
   },
   "pricingPage": {
@@ -6167,7 +6545,11 @@
     "categorySlugHint": "留空即根據名稱自動產生。之後無法變更。",
     "translations": "其他語言的名稱",
     "translationsError": "請檢查翻譯後的名稱。",
-    "categoryHasArticles": "請先移動或刪除此類別中的文章。"
+    "categoryHasArticles": "請先移動或刪除此類別中的文章。",
+    "emptyViewer": "你的團隊撰寫文章後會顯示在這裡。",
+    "emptyNeedsCategoryAction": "先新增分類",
+    "emptyArticlesAction": "撰寫第一篇文章",
+    "emptyCategoriesAction": "新增第一個分類"
   },
   "siteConsole": {
     "title": "行銷網站",
@@ -6219,7 +6601,8 @@
       "partnership": "合作夥伴",
       "other": "其他"
     },
-    "markHandled": "標示為已處理"
+    "markHandled": "標示為已處理",
+    "noRequestsAction": "開啟聯絡頁面"
   },
   "parties": {
     "subtitle": "賓客組（情侶、家庭、住戶）及每組的賓客。飲食、無障礙需求和地址僅對你的團隊可見。",
@@ -6380,7 +6763,10 @@
       "plusOneMoves": "同伴會隨帶他來的賓客一起移動。"
     },
     "email": "電子郵件",
-    "phone": "電話"
+    "phone": "電話",
+    "emptyAction": "新增第一組賓客",
+    "backToEvent": "返回活動概覽",
+    "showAll": "顯示所有賓客組"
   },
   "eventRoles": {
     "co_host": "共同主辦人",
@@ -6397,14 +6783,18 @@
     "inviteTitle": "邀請加入此活動",
     "emptyTitle": "還沒有共同主辦人或策劃人",
     "emptyDescription": "透過電子郵件邀請他人。對方只能存取這個活動。",
-    "revokeFor": "撤回寄給 {email} 的邀請"
+    "revokeFor": "撤回寄給 {email} 的邀請",
+    "emptyReadOnly": "擁有者、管理員或共同主辦人邀請後，共同主辦人和企劃人員會顯示在這裡。",
+    "inviteFirst": "邀請他人",
+    "backToEvent": "返回活動"
   },
   "myEvents": {
     "title": "您的活動",
     "description": "您在 {org} 協助的活動。",
     "emptyTitle": "目前沒有活動",
     "emptyDescription": "有人邀請您參加活動後，它會顯示在這裡。",
-    "open": "開啟 {name}"
+    "open": "開啟 {name}",
+    "myTickets": "前往我的票券"
   },
   "starters": {
     "title": "入門範本",
@@ -6494,7 +6884,8 @@
     "overviewTruncated": "顯示 {total} 個活動中的前 {shown} 個（進行中的在前）。",
     "overviewEmpty": {
       "title": "目前沒有需要關注的活動",
-      "description": "活動在籌備期間、活動當天及之後一週內顯示在這裡。"
+      "description": "活動在籌備期間、活動當天及之後一週內顯示在這裡。",
+      "action": "前往你的活動"
     },
     "columns": {
       "event": "活動",
@@ -6558,7 +6949,9 @@
     "unavailable": "無法載入此小工具。",
     "noAccess": {
       "title": "你的角色沒有指揮中心",
-      "description": "請向擁有者或管理員申請此活動的存取權限。"
+      "description": "請向擁有者或管理員申請此活動的存取權限。",
+      "action": "尋找擁有者或管理員",
+      "backToEvent": "返回活動概覽"
     },
     "empty": {
       "title": "沒有顯示任何小工具",
@@ -6768,6 +7161,67 @@
         "window": "過去 {days} 天 {sent, plural, other {# 封郵件}}",
         "over": "超過門檻：{domains, plural, other {# 個寄件網域}}，{campaigns, plural, other {# 個活動}}",
         "open": "開啟電子郵件送達率"
+      },
+      "sessionLevel": {
+        "none": "不限名額",
+        "ok": "低於 {near}%",
+        "near": "接近滿額（{near}% 或以上）",
+        "over": "已滿"
+      },
+      "sessionAttendance": {
+        "title": "場次會議室",
+        "running": "{count, plural, other {# 個場次進行中}}",
+        "nearlyFull": "{count, plural, other {# 個接近滿額}}",
+        "kiosks": "{count, plural, other {# 台自助機離線}}",
+        "none": "現在及未來一小時內沒有場次。場次入口在場次報到頁面設定。",
+        "table": "目前及接下來的場次",
+        "session": "場次",
+        "in": "在場",
+        "capacity": "名額",
+        "status": "狀態",
+        "until": "至 {time}",
+        "starts": "{time} 開始",
+        "meter": "{title}：已用名額",
+        "more": "{count, plural, other {另有 # 個}}",
+        "open": "開啟場次報到"
+      },
+      "sessionFill": {
+        "title": "場次名額",
+        "none": "還沒有限定名額的場次。為場次設定容量後即可在此查看。",
+        "nearlyFull": "{count, plural, other {{limited} 個場次中有 # 個已達 {near}% 或以上}}",
+        "full": "{count, plural, other {# 個已滿}}",
+        "waiting": "{count, plural, other {# 人候補}}",
+        "longLines": "{count, plural, other {# 個候補名單超過 {max} 人}}",
+        "roomsTooSmall": "{count, plural, other {# 個會議室太小}}",
+        "table": "名額最滿的場次",
+        "session": "場次",
+        "enrolled": "已占名額",
+        "waitingHeader": "候補",
+        "status": "狀態",
+        "roomSmall": "會議室太小",
+        "ofCapacity": "{enrolled} / {capacity}",
+        "open": "開啟場次報名"
+      },
+      "exhibitorActivity": {
+        "title": "參展商",
+        "none": "還沒有參展商。新增後即可在此查看攤位人員和潛在客戶。",
+        "add": "新增參展商",
+        "staffed": "{total} 家參展商中有 {staffed} 家已有攤位人員",
+        "people": "{count, plural, other {已邀請 # 人}}",
+        "leads": "{count, plural, other {# 個潛在客戶}}",
+        "withoutLeads": "{count, plural, other {# 家參展商沒有潛在客戶}}",
+        "leadsPending": "開啟潛在客戶收集後，數量會顯示在這裡。",
+        "top": "潛在客戶最多",
+        "open": "開啟參展商入口"
+      },
+      "sponsorActivity": {
+        "title": "贊助商",
+        "none": "還沒有贊助商。新增贊助方案和贊助商後即可在此查看交付情況。",
+        "add": "新增贊助商",
+        "total": "{count, plural, other {# 家贊助商}}",
+        "overdue": "{count, plural, other {# 項交付已逾期}}",
+        "deliverablesPending": "開啟贊助方案後，交付事項會顯示在這裡。",
+        "open": "開啟贊助商"
       }
     },
     "openScanner": "開啟掃描器",
@@ -6793,7 +7247,8 @@
       "revokeLabel": "停用 {label}",
       "readOnly": "唯讀",
       "statusOn": "已開啟",
-      "statusOff": "已關閉"
+      "statusOff": "已關閉",
+      "emptyAction": "建立螢幕連結"
     }
   },
   "alerts": {
@@ -6816,7 +7271,10 @@
       "activeTitle": "目前沒有警示",
       "activeDescription": "當你的某個活動需要注意時，會顯示在這裡並通知你的團隊。",
       "resolvedTitle": "還沒有已解決的警示",
-      "resolvedDescription": "問題解決後，警示會自動變為已解決。"
+      "resolvedDescription": "問題解決後，警示會自動變為已解決。",
+      "allEventsAction": "顯示每個活動的提醒",
+      "settingsAction": "選擇誰接收提醒",
+      "currentAction": "顯示目前提醒"
     },
     "severity": {
       "info": "資訊",
@@ -6885,7 +7343,18 @@
       "automationFailed": "開啟訊息狀態",
       "campaignFailed": "開啟行銷活動",
       "disputeDeadline": "開啟爭議佇列",
-      "assistanceOverdue": "開啟求助請求"
+      "assistanceOverdue": "開啟求助請求",
+      "pledgesUnpaid": "開啟認捐",
+      "sessionsNearCapacity": "開啟場次",
+      "sessionWaitlists": "開啟場次報名",
+      "roomsTooSmall": "開啟場次",
+      "exhibitorsNoLeads": "開啟參展商",
+      "exhibitorsNoStaff": "開啟參展商入口",
+      "speakerTasksOverdue": "開啟講者任務",
+      "deliverablesOverdue": "開啟贊助商",
+      "printersKiosksOffline": "開啟現場設定",
+      "approvalBacklog": "開啟申請",
+      "invoicesOverdue": "開啟發票"
     },
     "rules": {
       "unseated": "{count, plural, other {{countWords} 位參加者沒有座位}}",
@@ -6907,7 +7376,18 @@
       "automationFailed": "{count, plural, other {今天有 {countWords} 則訊息或批次操作失敗}}",
       "campaignFailed": "{count, plural, other {今天有 {countWords} 次行銷活動傳送失敗}}",
       "disputeDeadline": "{count, plural, other {有 {countWords} 起爭議需要盡快提交證據}}",
-      "assistanceOverdue": "{count, plural, other {{countWords} 個求助請求等待過久}}"
+      "assistanceOverdue": "{count, plural, other {{countWords} 個求助請求等待過久}}",
+      "pledgesUnpaid": "{count, plural, other {活動結束 14 天後仍有 {countWords} 筆認捐未付款}}",
+      "sessionsNearCapacity": "{count, plural, other {{countWords}個場次已超過容量的 95 %}}",
+      "sessionWaitlists": "{count, plural, other {{countWords}個場次的候補名單過長}}",
+      "roomsTooSmall": "{count, plural, other {{countWords}個場次的已占名額超過了會議室座位數}}",
+      "exhibitorsNoLeads": "{count, plural, other {{countWords}家參展商還沒有潛在客戶}}",
+      "exhibitorsNoStaff": "{count, plural, other {{countWords}家參展商尚未邀請攤位人員}}",
+      "speakerTasksOverdue": "{count, plural, other {{countWords}項講者任務已逾期}}",
+      "deliverablesOverdue": "{count, plural, other {{countWords}項贊助交付已逾期}}",
+      "printersKiosksOffline": "{count, plural, other {{countWords}台識別證印表機或自助機已離線}}",
+      "approvalBacklog": "{count, plural, other {{countWords}份申請正在等待審核}}",
+      "invoicesOverdue": "{count, plural, other {{countWords}張發票已逾期}}"
     },
     "widget": {
       "title": "警示",
@@ -6954,7 +7434,8 @@
       "door": "入場與裝置",
       "sales": "銷售",
       "setup": "設定與網域",
-      "messaging": "訊息"
+      "messaging": "訊息",
+      "conference": "場次、參展商與贊助商"
     },
     "channels": {
       "in_app": "應用程式內",
@@ -7060,7 +7541,12 @@
     "claimOff": "停止裝置警示",
     "claimOnDone": "裝置警示將傳送到此手機。",
     "claimOffDone": "此手機已停止接收裝置警示。",
-    "claimNeedsPush": "請先在此裝置的「工作人員」中開啟警示。"
+    "claimNeedsPush": "請先在此裝置的「工作人員」中開啟警示。",
+    "kioskKind": "{label} 的自助機畫面",
+    "kindTickets": "憑票報到",
+    "kindGuests": "依姓名為賓客報到",
+    "kindBoard": "桌位指示螢幕（A–Z）",
+    "boardStarted": "{label} 現在顯示桌位指示螢幕。"
   },
   "scanKiosk": {
     "welcome": "歡迎參加 {event}",
@@ -7395,7 +7881,10 @@
       "test_too_many": "最多輸入 5 個地址。",
       "test_invalid_email": "請檢查電子郵件地址。",
       "unknown": "發生問題。"
-    }
+    },
+    "emptyAction": "為第一個行銷活動命名",
+    "emptyViewer": "你的團隊建立的行銷活動會連同受眾和成果顯示在這裡。",
+    "findOwner": "尋找擁有者或管理員"
   },
   "journeys": {
     "title": "旅程",
@@ -7589,7 +8078,10 @@
         "active": "進行中",
         "completed": "已完成",
         "cancelled": "已取消"
-      }
+      },
+      "emptyDescription": "旅程開啟期間，觸發條件將人加入後，他們會顯示在這裡。",
+      "showEveryone": "顯示所有人",
+      "reviewSteps": "檢視步驟"
     },
     "run": {
       "metaTitle": "旅程紀錄",
@@ -7786,7 +8278,8 @@
       "update": "儲存變更",
       "create": "建立巨集",
       "archive": "封存 {name}",
-      "archived": "已封存巨集。"
+      "archived": "已封存巨集。",
+      "noneAction": "撰寫第一個巨集"
     },
     "holder": {
       "title": "轉讓這張票券",
@@ -7856,7 +8349,15 @@
       "noDeadline": "無截止時間",
       "overdue": "已過截止時間",
       "hoursLeft": "{hours, plural, =0 {剩不到 1 小時} other {剩 # 小時}}",
-      "daysLeft": "{days, plural, other {剩 # 天}}"
+      "daysLeft": "{days, plural, other {剩 # 天}}",
+      "emptyHint": {
+        "open": "當買家的銀行對你的訂單提出退單時，它會連同舉證截止時間顯示在這裡。",
+        "closed": "爭議在勝訴、敗訴或撤回後會移到這裡。"
+      },
+      "emptyAction": {
+        "open": "查看已結束的爭議",
+        "closed": "返回未結爭議"
+      }
     },
     "claim": {
       "intro": "{from} 正在將這張票券轉讓給 {to}。請用收到票券的電子郵件地址領取:你會取得自己的 QR 碼,原本的 QR 碼隨即失效。",
@@ -8294,7 +8795,13 @@
         "same_person": "請輸入其他人。",
         "not_confirmed": "只有已確認的報名者才能更換。",
         "too_many": "一個活動最多 50 個範本。"
-      }
+      },
+      "clearFilters": "清除篩選",
+      "openSetup": "開啟報名設定",
+      "showWaiting": "顯示待處理的申請",
+      "noTemplatesHint": "儲存常用的理由，核准或拒絕時直接選用。",
+      "writeFirstTemplate": "撰寫第一個範本",
+      "backToEvent": "返回活動"
     },
     "rules": {
       "title": "申請、來賓與姓名更換",
@@ -8525,7 +9032,9 @@
     "submittedTitle": "謝謝，你已完成報名",
     "submittedDescription": "謝謝，{name}。你的回答已傳送給主辦方。",
     "expiredTitle": "此連結已過期",
-    "expiredDescription": "繼續報名的連結在最後一次儲存後 14 天內有效。請從活動頁面重新開始。"
+    "expiredDescription": "繼續報名的連結在最後一次儲存後 14 天內有效。請從活動頁面重新開始。",
+    "emptyReadOnly": "編輯新增後，表單頁面會顯示在這裡。",
+    "addFirstPage": "新增第一頁"
   },
   "agenda": {
     "publishing": {
@@ -8666,7 +9175,8 @@
         "cell_too_long": "某個儲存格太長。",
         "unterminated_quote": "某個加引號的值沒有結束。請檢查檔案中的引號。",
         "missing_columns": "檔案需要 title、starts 和 ends 欄位。"
-      }
+      },
+      "backToEvent": "返回活動"
     }
   },
   "guestImport": {
@@ -8917,7 +9427,11 @@
       "not_invited": "此賓客未受邀參加該分場活動。",
       "sub_event_has_chart": "它已有專用座位圖。",
       "no_chart": "尚無可複製的座位圖。請在座位頁面建立活動座位圖，或選擇已儲存的平面圖。"
-    }
+    },
+    "emptyAction": "新增第一個子活動",
+    "backToEvent": "返回活動概覽",
+    "matrixToSubEvents": "前往子活動",
+    "matrixAddGuests": "向名單新增賓客"
   },
   "donations": {
     "console": {
@@ -9018,7 +9532,12 @@
       },
       "receiptsTitle": "抵稅收據",
       "receiptsBody": "每筆付款後，捐款人都會透過電子郵件收到一張收據。為晚宴門票設定公平市場價值，並查看所有收據。",
-      "receiptsLink": "開啟抵稅收據"
+      "receiptsLink": "開啟抵稅收據",
+      "emptyCampaignsAction": "發起第一個募款活動",
+      "backToEvent": "返回活動概覽",
+      "noGiftsDescription": "已付款的捐款會顯示在這裡，包括捐款人選擇的名稱、金額和募款活動。",
+      "shareGivingPage": "分享捐款頁面",
+      "toCampaigns": "查看你的募款活動"
     },
     "give": {
       "metaTitle": "捐款",
@@ -9082,7 +9601,9 @@
         "not_connected": "此活動未開放線上捐款。",
         "campaign_closed": "此募款活動已關閉。",
         "risk_blocked": "我們無法接受這筆捐款。請稍後再試或聯絡主辦方。"
-      }
+      },
+      "showOnScreen": "在會場大螢幕上具名感謝我",
+      "showOnScreenHint": "預設關閉。您的姓名依上方的選擇顯示;捐款金額從不顯示。"
     },
     "thanks": {
       "metaTitle": "謝謝",
@@ -9157,7 +9678,371 @@
         "ticket": "門票"
       },
       "notDeductible": "不可抵稅",
-      "pdf": "下載 {number}"
+      "pdf": "下載 {number}",
+      "addTicketTypes": "新增票種",
+      "backToEvent": "返回活動概覽"
+    },
+    "raiseCard": {
+      "cardTitle": "舉牌募款",
+      "cardBody": "為賓客分配號碼牌，從控制台叫出捐贈檔位，讓觀察員在手機上記錄舉起的號碼牌，並確認認捐。",
+      "openConsole": "開啟控制台",
+      "openSpotter": "記錄號碼牌",
+      "openPaddles": "號碼牌",
+      "openScreen": "現場大螢幕",
+      "openPledges": "認捐與收款"
+    },
+    "paddles": {
+      "title": "號碼牌",
+      "subtitle": "每位可以認捐的賓客或團體都持有一個帶編號的號碼牌。觀察員只記錄號碼，從不記錄姓名。",
+      "openConsole": "開啟控制台",
+      "viewerNotice": "你可以檢視號碼牌。如需分配或收回，請聯絡主辦者。",
+      "noGuestsTitle": "還沒有賓客",
+      "noGuestsDescription": "請先新增團體和賓客，然後在這裡分配號碼牌。",
+      "openGuests": "開啟賓客",
+      "openTables": "開啟桌位與贊助商",
+      "bulkTitle": "批次分配號碼牌",
+      "bulkBody": "號碼按桌依序分配給所有尚未持有號碼牌的人。",
+      "bulkSubmit": "分配號碼牌",
+      "bulkDone": "號碼牌已分配。",
+      "scope": "對象",
+      "scopeAll": "所有賓客或團體",
+      "scopeTables": "{count, plural, other {僅已購桌位（# 桌）}}",
+      "per": "每個號碼牌對應",
+      "perGuest": "每位賓客",
+      "perParty": "每個團體或桌",
+      "startAt": "起始號碼（選填）",
+      "startAtHint": "留空：從 {number} 開始。",
+      "oneTitle": "分配一個號碼牌",
+      "oneBody": "在報到處：選擇賓客並遞上下一個號碼牌。",
+      "oneSubmit": "分配號碼牌",
+      "oneDone": "號碼牌已分配。",
+      "holder": "賓客或團體",
+      "holderChoose": "選擇領取人",
+      "holderGuest": "{name} · {party}",
+      "holderTable": "桌：{name}",
+      "holderParty": "團體：{name}",
+      "number": "號碼牌號碼（選填）",
+      "numberHint": "留空：下一個空閒號碼（{number}）。",
+      "listTitle": "號碼牌",
+      "listCount": "{count, plural, other {已分配 # 個}}",
+      "emptyTitle": "還沒有分配號碼牌",
+      "emptyDescription": "在上方批次或逐一分配號碼牌。",
+      "emptyViewer": "主辦者會在募款前分配號碼牌。",
+      "columns": {
+        "number": "號碼牌",
+        "holder": "持有人",
+        "party": "團體或桌",
+        "entries": "記錄次數",
+        "actions": "操作"
+      },
+      "partyPaddle": "{name}（整個團體）",
+      "release": "收回號碼牌 {number}",
+      "released": "號碼牌已收回。",
+      "errors": {
+        "holder": "請選擇賓客或團體。",
+        "number": "請輸入 1 到 99999 之間的號碼牌號碼。",
+        "numberTaken": "該號碼已分配。",
+        "hasPaddle": "對方已有號碼牌。",
+        "tooMany": "空閒號碼不足，請嘗試更小的起始號碼。",
+        "nobodyLeft": "該範圍內的所有人都已有號碼牌。",
+        "hasEntries": "該號碼牌已在募款中被記錄，無法收回。"
+      }
+    },
+    "raise": {
+      "title": "舉牌募款",
+      "subtitle": "叫出一個檔位，看著號碼牌湧入，結束後進入下一個。「撤銷」可撤回上一步。",
+      "openReview": "{count, plural, =0 {審核} other {審核（# 項待查）}}",
+      "openSpotter": "觀察員檢視",
+      "viewerNotice": "你可以觀看募款。如需操作控制台，請聯絡主辦者。",
+      "noPaddlesTitle": "還沒有分配號碼牌",
+      "noPaddlesBody": "觀察員只能記錄賓客持有的號碼。",
+      "openPaddles": "分配號碼牌",
+      "controls": "控制台",
+      "close": "結束 {name}",
+      "undo": "撤銷上一步",
+      "noLevelsTitle": "還沒有捐贈檔位",
+      "noLevelsDescription": "請在「捐贈」分頁新增帶檔位的活動；控制台依由高到低的順序叫出。",
+      "openDonations": "開啟捐贈",
+      "armTitle": "叫出檔位",
+      "armBody": "選擇拍賣師現在叫出的檔位。觀察員的手機會立即顯示。",
+      "arm": "叫出 {amount} · {name}",
+      "callsTitle": "已叫出的檔位",
+      "noCalls": "還沒有叫出任何檔位。",
+      "columns": {
+        "level": "檔位",
+        "status": "狀態",
+        "paddles": "號碼牌",
+        "total": "合計",
+        "duplicates": "待查"
+      },
+      "levelLine": "{amount} · {name}",
+      "statusOpen": "進行中",
+      "statusClosed": "已結束",
+      "nowCalling": "目前檔位",
+      "noneCalling": "目前沒有叫出檔位",
+      "noneCallingBody": "叫出一個檔位後，觀察員即可記錄。",
+      "stream": {
+        "connecting": "連線中",
+        "live": "即時",
+        "offline": "重新連線中"
+      },
+      "levelRunning": "{count, plural, =0 {尚無號碼牌 · {total}} other {# 個號碼牌 · {total}}}",
+      "duplicatesToCheck": "{count, plural, other {# 個重複待記錄員核對}}",
+      "totalRaised": "舉牌籌得",
+      "paddlesRaised": "已記錄號碼牌",
+      "pledged": "已確認認捐",
+      "toReview": "待審核",
+      "armed": "檔位已叫出。",
+      "closed": "檔位已結束。",
+      "undoneEntry": "號碼牌 {number} 已擱置。",
+      "undoneArm": "{level} 已撤回。",
+      "undoneClose": "{level} 已重新開啟。",
+      "errors": {
+        "call_open": "請先結束目前檔位。",
+        "not_open": "該檔位已不在進行中。",
+        "nothing_to_undo": "沒有可撤銷的操作。"
+      }
+    },
+    "spot": {
+      "title": "記錄號碼牌",
+      "subtitle": "輸入每個舉起的號碼牌號碼，然後按 Enter。斷線時記錄會儲存在本機，稍後自動傳送。",
+      "calling": "目前檔位",
+      "online": "線上",
+      "connecting": "連線中",
+      "offline": "離線 — 正在儲存到本機",
+      "levelLine": "{amount} · {name}",
+      "waiting": "等待主持人叫出檔位",
+      "formLabel": "記錄號碼牌",
+      "numberLabel": "號碼牌號碼",
+      "numberHint": "只輸入數字，然後按 Enter。",
+      "record": "記錄號碼牌",
+      "queued": "號碼牌 {number} 已記錄。",
+      "pending": "{count, plural, other {# 筆記錄等待傳送}}",
+      "allSent": "全部已傳送。",
+      "sendNow": "立即傳送",
+      "recent": "你最近的記錄",
+      "noneYet": "還沒有記錄。",
+      "paddle": "號碼牌 {number}",
+      "outcome": {
+        "waiting": "等待傳送",
+        "recorded": "已記錄",
+        "duplicate": "已記錄過 — 已提交記錄員核對",
+        "confirmed": "認捐已確認",
+        "voided": "已擱置"
+      },
+      "refused": {
+        "paddle_unknown": "已拒絕：不是本活動的號碼牌",
+        "call_unknown": "已拒絕：找不到檔位",
+        "call_withdrawn": "已拒絕：該檔位已撤回"
+      },
+      "errors": {
+        "number": "請輸入 1 到 99999 之間的號碼牌號碼。",
+        "noLevel": "目前沒有叫出檔位，請等待主持人。",
+        "unknown": "號碼牌 {number} 未在本活動中分配，請核對號碼。"
+      }
+    },
+    "review": {
+      "title": "審核認捐",
+      "subtitle": "將已記錄的號碼牌轉為已確認的認捐。重複項等待你決定；錯誤項請擱置。",
+      "viewerNotice": "你可以檢視審核。如需確認認捐，請聯絡主辦者。",
+      "pledges": "認捐",
+      "emptyTitle": "暫無待審核內容",
+      "emptyDescription": "控制台叫出檔位後會顯示在這裡。",
+      "callSummary": "{count, plural, =0 {無號碼牌} other {# 個號碼牌}} · {total} · 已確認 {confirmed} · 待查 {duplicates}",
+      "confirmAll": "{count, plural, other {確認 # 個已記錄號碼牌}}",
+      "noEntries": "該檔位沒有記錄號碼牌。",
+      "entriesCaption": "{level} 記錄的號碼牌",
+      "columns": {
+        "paddle": "號碼牌",
+        "holder": "持有人",
+        "status": "狀態",
+        "recorded": "記錄時間",
+        "actions": "操作"
+      },
+      "holderGone": "號碼牌已收回",
+      "status": {
+        "recorded": "已記錄",
+        "duplicate": "重複",
+        "confirmed": "認捐",
+        "voided": "已擱置"
+      },
+      "confirmOne": "確認號碼牌 {number}",
+      "void": "擱置號碼牌 {number}",
+      "confirmedCount": "{count, plural, =0 {沒有需要確認的號碼牌。} other {已確認 # 筆認捐。}}",
+      "confirmedOne": "號碼牌 {number} 已確認為認捐。",
+      "voided": "號碼牌 {number} 已擱置。",
+      "voidedPledge": "號碼牌 {number} 已擱置，其認捐已取消。"
+    },
+    "screen": {
+      "metaTitle": "捐款大螢幕",
+      "totalLabel": "目前已募得",
+      "progressLabel": "目標進度",
+      "progressText": "{total} / {goal}",
+      "goal": "已達 {goal} 目標的 {percent}%",
+      "goalReached": "目標達成!",
+      "gifts": "{count, plural, =0 {成為第一位捐款人} other {# 筆捐款}}",
+      "calling": "目前級距",
+      "callingLevel": "{amount} · {name}",
+      "paddles": "{count, plural, =0 {請舉起您的號牌!} other {已舉牌 # 次}}",
+      "thanksTitle": "感謝您",
+      "thanksEmpty": "每一筆捐款都很重要。謝謝!",
+      "scanToGive": "掃碼捐款",
+      "qrLabel": "捐款頁面 QR 碼:{url}",
+      "sideLabel": "如何捐款,以及我們的感謝",
+      "replacedTitle": "此大螢幕連結已被更換",
+      "replacedBody": "請向主辦單位索取新連結。"
+    },
+    "screenPage": {
+      "title": "現場大螢幕",
+      "subtitle": "為會場投影準備的募款溫度計:目標、總額、目前級距,以及對希望具名的捐款人的感謝。",
+      "setupTitle": "設定大螢幕",
+      "setupBody": "選擇溫度計追蹤的募款活動。其 QR 碼會開啟該活動的捐款頁面。",
+      "settingsTitle": "大螢幕設定",
+      "campaign": "募款活動",
+      "campaignHint": "溫度計追蹤此活動:已付款的捐款加上各級距舉起的號牌。",
+      "chooseCampaign": "選擇募款活動",
+      "campaignClosed": "{name}(已關閉)",
+      "showNames": "以姓名感謝捐款人",
+      "showNamesHint": "只顯示勾選「在大螢幕上具名感謝我」的捐款人,並依其選擇的方式顯示。號牌持有人從不顯示姓名。關閉:只顯示總額。",
+      "setUp": "設定大螢幕",
+      "save": "儲存",
+      "saved": "大螢幕已儲存。已開啟的大螢幕會立即更新。",
+      "rotated": "連結已更換。舊連結上的大螢幕已停止;請在投影電腦上開啟新連結。",
+      "noCampaignsTitle": "請先新增募款活動",
+      "noCampaignsBody": "大螢幕顯示募款活動的目標和總額。請在「捐款」分頁中建立。",
+      "openDonations": "開啟捐款",
+      "notSetUp": "大螢幕尚未設定。",
+      "viewerNotice": "您可以在此檢視大螢幕。請讓能編輯活動的人進行設定或分享連結。",
+      "linkTitle": "大螢幕連結",
+      "linkBody": "在連接投影機的電腦上開啟此連結。無需登入,因此只與您的影音團隊分享。",
+      "linkLabel": "大螢幕連結",
+      "copy": "複製連結",
+      "copied": "連結已複製。",
+      "openScreen": "開啟大螢幕",
+      "openContrast": "以高對比開啟",
+      "openStill": "以減少動態開啟",
+      "rotate": "更換連結",
+      "rotateHint": "使用舊連結開啟的大螢幕會立即停止。",
+      "givingTitle": "掃碼捐款",
+      "givingOpen": "大螢幕上的 QR 碼會開啟 {campaign} 的捐款頁面。手機捐款會即時計入總額。",
+      "givingClosed": "尚無 QR 碼:連結 Stripe、發布活動並開放募款後,捐款頁面才會接受捐款。",
+      "previewTitle": "預覽",
+      "cardsLink": "列印桌卡",
+      "errors": {
+        "campaign": "請選擇本活動的募款活動。"
+      },
+      "rotateConfirm": "立即更換(舊連結上的大螢幕將停止)"
+    },
+    "screenCards": {
+      "title": "桌卡",
+      "subtitle": "列印後在每張桌上放一張。賓客掃碼即可用手機捐款。",
+      "print": "列印",
+      "sheetLabel": "桌卡",
+      "cardTitle": "掃碼捐款",
+      "cardBody": "用手機為 {campaign} 捐款。您的捐款會計入大螢幕上的總額。",
+      "qrLabel": "捐款頁面 QR 碼:{url}",
+      "noScreenTitle": "請先設定大螢幕",
+      "noScreenBody": "桌卡開啟的是大螢幕追蹤的募款活動。"
+    },
+    "matches": {
+      "title": "配捐",
+      "subtitle": "讓贊助方在一段時間內為捐款配捐，直到上限；並匯出雇主會為其捐款配捐的捐贈者名單。",
+      "noAccessTitle": "你無法查看配捐",
+      "noAccessDescription": "請向擁有者或管理員申請訂單存取權限。",
+      "viewerNotice": "你可以查看配捐挑戰。如需新增、結束或取消，請聯絡主辦人。",
+      "listTitle": "配捐挑戰",
+      "emptyTitle": "還沒有配捐挑戰",
+      "emptyDescription": "在下方新增贊助方的配捐：其時段內每筆確認的捐款都計入。",
+      "emptyViewer": "主辦人會在這裡新增贊助方的配捐。",
+      "noCampaignsTitle": "請先新增募款活動",
+      "noCampaignsDescription": "配捐針對一個募款活動的捐款。請在「捐款」分頁建立募款活動。",
+      "backToDonations": "前往捐款",
+      "headline": "{ratio, select, r50 {每筆捐款配捐 50%，上限 {cap}} r100 {每筆捐款加倍，上限 {cap}} r200 {每筆捐款變三倍，上限 {cap}} r300 {每筆捐款變四倍，上限 {cap}} other {每筆捐款配捐 {percent}%，上限 {cap}}}",
+      "sponsorShown": "螢幕顯示為 {name}",
+      "sponsorHidden": "螢幕顯示為一位慷慨的贊助方",
+      "thanksTo": "感謝 {name}。",
+      "thanksAnonymous": "感謝一位慷慨的贊助方。",
+      "window": "{campaign} · {start} 至 {end}",
+      "progress": "已配捐 {matched}，上限 {cap}",
+      "progressLabel": "{name} 的配捐",
+      "basis": "{count, plural, other {# 筆確認的捐款}} · 時段內捐款 {eligible}",
+      "remaining": "再捐 {amount} 即可達到全額配捐",
+      "reached": "已達到全額配捐。",
+      "publicProgress": "目前已配捐 {matched}。",
+      "phase": {
+        "scheduled": "已排定",
+        "live": "進行中",
+        "ended": "時段已結束"
+      },
+      "status": {
+        "closed": "已結束",
+        "cancelled": "已取消"
+      },
+      "pledgeRecorded": "贊助方承諾：{amount}",
+      "pledgeCancelled": "贊助方承諾已取消：所配捐的捐款已退款。",
+      "pledgeNone": "沒有產生配捐，因此未記錄承諾。",
+      "close": "結束 {name} 的配捐並記錄承諾",
+      "closed": "配捐已結束",
+      "cancel": "取消 {name} 的配捐",
+      "cancelled": "配捐已取消",
+      "addTitle": "新增配捐",
+      "addBody": "時段內已付款的線上捐款和已確認的舉牌認捐都計入，扣除退款。結束配捐時，依達到的金額記錄贊助方的承諾。",
+      "add": "新增配捐",
+      "added": "配捐已新增",
+      "fields": {
+        "campaign": "募款活動",
+        "sponsorName": "贊助方",
+        "sponsorNameHint": "支付配捐的一方。僅你的團隊可見。",
+        "sponsorEmail": "贊助方電子郵件",
+        "sponsorEmailHint": "選填。僅你的團隊可見。",
+        "publicName": "螢幕顯示名稱",
+        "publicNameHint": "選填。贊助方在會場螢幕和捐款頁面上的顯示方式。留空則顯示「一位慷慨的贊助方」。",
+        "ratio": "比例",
+        "cap": "上限（{currency}）",
+        "capHint": "贊助方最多出資的金額。",
+        "startsAt": "開始",
+        "endsAt": "結束",
+        "timeHint": "使用活動所在時區（{zone}）。"
+      },
+      "ratios": {
+        "r50": "50%（每筆捐款的一半）",
+        "r100": "1:1（每筆捐款加倍）",
+        "r200": "2:1（每筆捐款變三倍）",
+        "r300": "3:1（每筆捐款變四倍）"
+      },
+      "errors": {
+        "campaign": "請選擇募款活動。",
+        "sponsorName": "請輸入贊助方名稱（最多 120 個字元）。",
+        "sponsorEmail": "請輸入有效的電子郵件地址。",
+        "publicName": "最多 120 個字元。",
+        "ratio": "請選擇比例。",
+        "cap": "請輸入 1.00 至 10,000,000.00 之間的上限。",
+        "startsAt": "請輸入開始日期和時間。",
+        "endsAt": "請輸入結束日期和時間。",
+        "window": "配捐的結束時間必須晚於開始時間。",
+        "tooMany": "一個募款活動最多有 20 個配捐。",
+        "notStarted": "此配捐尚未開始，請改為取消。",
+        "closed": "此配捐已結束。",
+        "cancelled": "此配捐已取消。"
+      },
+      "employerTitle": "雇主配捐",
+      "employerBody": "{count, plural, other {# 筆已付款的捐款填寫了雇主。}}許多雇主會為員工的捐款配捐：匯出名單，向每家雇主提出申請。",
+      "employerAsk": "請聯絡擁有者或管理員匯出名單。",
+      "employerEmptyTitle": "還沒有人填寫雇主",
+      "employerEmptyDescription": "捐贈者可以在捐款頁面填寫雇主。付款後，他們的捐款會顯示在這裡。",
+      "employerExport": "匯出雇主名單",
+      "exportTitle": "雇主配捐名單",
+      "exportError": "匯出未開始：{reason}",
+      "csv": {
+        "employer": "雇主",
+        "donor": "捐贈者",
+        "email": "電子郵件",
+        "date": "日期",
+        "campaign": "募款活動",
+        "amount": "金額"
+      },
+      "cardLink": "開啟配捐",
+      "cardBody": "讓贊助方在一段時間內將捐款加倍直到上限，並匯出捐贈者的雇主以申請配捐。"
     }
   },
   "galaTables": {
@@ -9343,7 +10228,8 @@
       "speaker": "講者",
       "exhibitor_admin": "參展商管理員",
       "exhibitor_staff": "參展商工作人員",
-      "sponsor_contact": "贊助商聯絡人"
+      "sponsor_contact": "贊助商聯絡人",
+      "cfp_reviewer": "提案審查員"
     },
     "errors": {
       "noFile": "請先選擇檔案。",
@@ -9498,7 +10384,9 @@
       "pastDue": "期限必須是未來的時間。",
       "agreementText": "同意書需要填寫內容。",
       "tooMany": "此活動的任務數已達上限（50 項）。"
-    }
+    },
+    "emptyReadOnly": "編輯建立後，講者任務會顯示在這裡。",
+    "createFirst": "建立第一個任務"
   },
   "exhibitorPortal": {
     "eyebrow": "參展商入口",
@@ -9624,7 +10512,8 @@
     "ownAllowanceHint": "留空即使用活動的設定。",
     "errors": {
       "allowance": "請輸入 0 到 500 之間的整數。"
-    }
+    },
+    "licensesLink": "名單蒐集授權"
   },
   "booths": {
     "breadcrumb": "導覽路徑",
@@ -9684,7 +10573,9 @@
       "shared_booth": "攤位 {booth} 由 {count} 個參展商共用。",
       "several_booths": "{exhibitor} 位於多個攤位。",
       "category_mismatch": "{exhibitor} 位於攤位 {booth}，但此攤位的類別（{category}）不屬於其類別。"
-    }
+    },
+    "emptyAction": "新增第一個攤位",
+    "emptyViewer": "主辦方尚未放置任何攤位。"
   },
   "exhibitorMap": {
     "pageTitle": "參展商地圖",
@@ -9754,7 +10645,9 @@
       "openTitle": "沒有未關閉的求助請求",
       "openDescription": "來賓和入口工作人員的新請求一到就會顯示在這裡。",
       "closedTitle": "還沒有已關閉的請求",
-      "closedDescription": "已解決和已取消的請求顯示在這裡。"
+      "closedDescription": "已解決和已取消的請求顯示在這裡。",
+      "toCommandCenter": "開啟指揮中心",
+      "showOpen": "顯示待處理請求"
     },
     "title": "#{number} · {reason}",
     "number": "#{number}",
@@ -9927,7 +10820,8 @@
       "urgent": "緊急",
       "waiting": "等待處理",
       "unassigned": "未指派"
-    }
+    },
+    "backToEvent": "返回活動概覽"
   },
   "marketingAnalytics": {
     "title": "行銷分析",
@@ -10230,7 +11124,9 @@
     "overrideNote": "列印原因",
     "overrideHint": "將與你的姓名一起儲存在活動紀錄中。",
     "printAnyway": "仍然列印",
-    "overrideNoteRequired": "請填寫原因（至少 3 個字元）。"
+    "overrideNoteRequired": "請填寫原因（至少 3 個字元）。",
+    "emptyAction": "建立第一個範本",
+    "backToEvent": "返回活動概覽"
   },
   "invoices": {
     "status": {
@@ -10409,7 +11305,10 @@
     "submit": "送出核實",
     "saveAndReview": "儲存並送出審核",
     "saved": "已儲存。Yayatoh 將進行審核。",
-    "viewerNotice": "只有擁有者和管理員可以修改慈善機構資料。"
+    "viewerNotice": "只有擁有者和管理員可以修改慈善機構資料。",
+    "seePlan": "查看你的方案",
+    "findOwner": "尋找擁有者或管理員",
+    "addDetails": "新增慈善機構資料"
   },
   "rsvp": {
     "metaTitle": "您的回覆",
@@ -10460,7 +11359,10 @@
     },
     "questionsTitle": "幾個問題",
     "questionsHint": "主人想多了解一些情況。標為私密的回答只有主人看得到。",
-    "questionsFor": "給 {name} 的問題"
+    "questionsFor": "給 {name} 的問題",
+    "seatTitle": "查詢您的桌位",
+    "seatHint": "查看您在場地圖上的座位以及同桌的人。",
+    "seatLink": "顯示我的桌位"
   },
   "rsvpFind": {
     "metaTitle": "查詢您的喜帖",
@@ -10570,7 +11472,15 @@
     "reopenFor": "為 {party} 重新開放回覆",
     "createLinkFor": "為 {party} 建立回覆連結",
     "copy": "複製連結",
-    "copied": "連結已複製。"
+    "copied": "連結已複製。",
+    "seatTitle": "桌位頁面 QR 碼",
+    "seatHint": "此 QR 碼會開啟 {party} 的桌位頁面：場地圖上的桌位以及同桌的人。將他們換到別桌時它保持不變，因此可以印在引導卡或席位卡上。",
+    "seatQrLabel": "{party} 桌位頁面的 QR 碼",
+    "seatLinkLabel": "{party} 桌位頁面的連結",
+    "seatClosed": "開啟座位查詢（座位 → 座位查詢）後，賓客即可看到自己的桌位。",
+    "seatScan": "掃描查詢您的桌位",
+    "hubLinkLabel": "{party} 的賓客頁面連結",
+    "hubLinkHint": "這組賓客專屬的頁面，包含回覆、流程、座位與門票，賓客可以加入主畫面。它與回覆連結使用同一把金鑰：重設連結會同時關閉兩者。"
   },
   "collector": {
     "metaTitle": "分享您的聯絡方式",
@@ -10687,7 +11597,9 @@
     "submittedValue": "提交的",
     "nothingToMerge": "沒有新內容可取：合併會關閉此提交。",
     "mergeSubmit": "合併到{party}",
-    "merged": "已合併。"
+    "merged": "已合併。",
+    "shareLink": "分享收集連結",
+    "setUpLink": "設定收集連結"
   },
   "invitations": {
     "link": "邀請：透過電子郵件和簡訊傳送",
@@ -10950,7 +11862,10 @@
       "count": "顯示的問題：{shown} / {total}",
       "none": "這位賓客看不到任何問題。",
       "label": "這位賓客看到的問題"
-    }
+    },
+    "emptyDescription": "你新增的問題會出現在每位賓客的回覆表單中，例如餐點選擇或點歌。",
+    "emptyAction": "新增第一個問題",
+    "emptyViewerAction": "查看回覆表單預覽"
   },
   "rsvpAnswers": {
     "link": "回覆的回答",
@@ -11159,7 +12074,13 @@
         "offStage": "投票已從大螢幕移除。",
         "deleted": "投票已刪除。",
         "rotated": "新的大螢幕連結已產生，舊連結已失效。"
-      }
+      },
+      "shareAudienceLink": "分享觀眾連結",
+      "reviewWaiting": "審核待處理的問題",
+      "checkSettings": "查看問答設定",
+      "noPollsViewer": "編輯新增後，投票會顯示在這裡。",
+      "createFirstPoll": "建立第一個投票",
+      "howToJoin": "查看參加者如何加入"
     },
     "presenter": {
       "metaTitle": "講者檢視",
@@ -11179,6 +12100,54 @@
       "topQuestions": "熱門問題",
       "noQuestions": "還沒有問題。",
       "join": "用手機參與"
+    },
+    "scores": {
+      "link": "參與度分數",
+      "title": "參與度分數",
+      "description": "誰在 {event} 參與最多，以及每場議程的狀況。",
+      "back": "返回議程",
+      "engaged": "參與的出席者",
+      "average": "平均分數",
+      "attendeesTitle": "參與度最高的出席者",
+      "emptyTitle": "尚無參與",
+      "emptyHint": "出席者報到、在即時投票中投票、提問、填寫意見問卷及報名議程後，分數就會出現。",
+      "attendee": "出席者",
+      "score": "分數",
+      "breakdown": "計入項目",
+      "countOf": "{kind} × {count}",
+      "sessionsTitle": "議程",
+      "session": "議程",
+      "participants": "參與者",
+      "noSessions": "此活動尚無議程。",
+      "weightsTitle": "分數權重",
+      "formula": "分數 = 每類分值 × 出席者完成的次數。報到每個活動只計一次。權重適用於貴組織的所有活動。",
+      "customWeights": "貴組織的權重",
+      "defaultWeights": "預設權重",
+      "weightInvalid": "請輸入 0 到 100 的整數。",
+      "saveWeights": "儲存權重",
+      "resetWeights": "使用預設權重",
+      "weightsReadOnly": "只有擁有者和管理員可以變更權重。",
+      "weightsSaved": "權重已儲存，所有分數已重新計算。",
+      "weightsReset": "已恢復預設權重，所有分數已重新計算。",
+      "kinds": {
+        "check_in": "報到",
+        "poll_vote": "投票",
+        "question": "提問",
+        "feedback": "意見",
+        "enrollment": "議程報名"
+      }
+    },
+    "feedback": {
+      "heading": "這場議程如何？",
+      "give": "提供意見",
+      "answered": "謝謝，我們已收到您的意見。",
+      "signInHint": "請使用報名時的電子郵件登入以提供意見。",
+      "signIn": "登入",
+      "errors": {
+        "already_answered": "您已對這場議程提供過意見。",
+        "expired": "您的意見連結已過期。",
+        "other": "這場議程無法提供意見。"
+      }
     }
   },
   "enrollment": {
@@ -11295,7 +12264,8 @@
       "label": "依姓名、電子郵件或公司搜尋",
       "submit": "搜尋",
       "noneTitle": "沒有符合的人",
-      "noneDescription": "沒有任何姓名、電子郵件或公司包含「{q}」。請嘗試較短的關鍵字。"
+      "noneDescription": "沒有任何姓名、電子郵件或公司包含「{q}」。請嘗試較短的關鍵字。",
+      "clear": "清除搜尋"
     },
     "emptyTitle": "還沒有人員",
     "emptyDescription": "有人購票、報名或被加入賓客名單後，會出現在這裡。",
@@ -11358,7 +12328,9 @@
       "emptyTitle": "這裡還沒有內容",
       "emptyDescription": "訂單、報到、行銷活動、訊息和問卷發生後會出現在這裡。",
       "listLabel": "{name} 的時間軸",
-      "older": "更早"
+      "older": "更早",
+      "showEverything": "顯示全部",
+      "backToPeople": "返回所有人"
     },
     "kinds": {
       "order_paid": "訂單已付款",
@@ -11437,7 +12409,8 @@
       "errors": {
         "noneSelected": "請至少選取一組進行合併。",
         "tooMany": "每次最多選取 50 組。"
-      }
+      },
+      "toPeople": "查看所有人"
     },
     "reasons": {
       "email": "相同電子郵件地址",
@@ -11473,7 +12446,8 @@
       "withdrawn": "已取消訂閱",
       "unknown_legacy": "未知（匯入）",
       "none": "無同意"
-    }
+    },
+    "toEvents": "前往你的活動"
   },
   "contactStats": {
     "title": "聯絡人",
@@ -11628,7 +12602,10 @@
     "deleteNamed": "刪除沙盒 {name}",
     "deleteWarning": "沙盒將永久關閉：頁面下線，成員和金鑰失去存取權。",
     "deleteConfirm": "永久刪除",
-    "deleteConfirmNamed": "永久刪除沙盒 {name}"
+    "deleteConfirmNamed": "永久刪除沙盒 {name}",
+    "findOwner": "尋找擁有者或管理員",
+    "inSandboxAction": "在此沙盒中試用 API",
+    "emptyAction": "設定第一個沙盒"
   },
   "webhooks": {
     "title": "Webhook",
@@ -11762,7 +12739,8 @@
       "succeeded": "已送達",
       "failed": "失敗",
       "at": "時間"
-    }
+    },
+    "emptyAction": "新增第一個端點"
   },
   "developers": {
     "brand": "Yayatoh 開發者",
@@ -11931,7 +12909,8 @@
       "advanced_seating": "進階座位",
       "ai_seating": "AI 排座",
       "analytics_pro": "進階分析"
-    }
+    },
+    "findOwner": "尋找擁有者或管理員"
   },
   "billingPortal": {
     "eyebrow": "測試計費",
@@ -12308,6 +13287,1974 @@
       "body": "{name} 是測試服務商。允許後，Yayatoh 可代表你讀取和寫入以下內容：",
       "allow": "允許",
       "deny": "拒絕"
+    },
+    "webhooksAction": "設定 Webhook"
+  },
+  "guestSeats": {
+    "placeAt": {
+      "table": "{item} 號桌",
+      "row": "第 {item} 排"
+    },
+    "wholeEvent": "座位安排",
+    "resultTitle": "{count, plural, other {您的桌位}}",
+    "partyCount": "{count, plural, other {您群組中有 # 人坐在這裡}}",
+    "noTableTitle": "您的桌位尚未確定",
+    "noTable": "主人仍在安排座位。請在接近活動日時再來查看，或詢問主人。",
+    "unseatedCount": "{count, plural, other {您群組中有 # 人尚未安排桌位。}}",
+    "again": "查詢其他人",
+    "mapTitle": "場地圖",
+    "mapFor": "場地圖：{name}"
+  },
+  "partySeats": {
+    "metaTitle": "您的桌位",
+    "title": "{party} 的座位",
+    "intro": "您在場地圖上的桌位，以及與您同桌的人。",
+    "closedTitle": "座位安排尚未就緒",
+    "closed": "主人尚未公布座位安排。請保留此頁面或喜帖上的 QR 碼：公布後這裡會顯示您的桌位。",
+    "noChartsTitle": "您的桌位尚未確定",
+    "noCharts": "主人仍在安排座位。桌位一確定，此頁面就會顯示。",
+    "yourParty": "您群組中的人",
+    "tablemates": {
+      "table": "同桌的還有",
+      "row": "同排的還有"
+    },
+    "noTablemates": "這裡暫時沒有其他人。",
+    "unseated": "尚未安排座位：{names}",
+    "guestOf": "{name} 的同伴",
+    "keep": "此頁面一律顯示您目前的桌位：即使主人調整了您的座位，喜帖上的連結和 QR 碼也不會改變。",
+    "toRsvp": "返回您的回覆",
+    "saveCard": "為今晚的捐贈儲存信用卡"
+  },
+  "scanGuests": {
+    "view": "賓客",
+    "title": "賓客報到",
+    "arrivedOf": "已到 {arrived} / {expected}",
+    "searchLabel": "賓客或團體名稱",
+    "searchHint": "輸入姓名的一部分，或在下方選擇標籤。",
+    "labels": "標籤",
+    "startHint": "搜尋賓客或團體，或選擇一個標籤列出其賓客。",
+    "noMatchTitle": "沒有符合的賓客",
+    "noMatchDescription": "請檢查拼寫、嘗試團體名稱或取消一個標籤。",
+    "noListTitle": "此裝置上沒有賓客名單",
+    "noListDescription": "此活動尚無賓客，或此裝置尚未下載。請連上網路一次以下載名單。",
+    "results": "符合的賓客",
+    "checkInParty": "為 {party} 的所有人報到（{count}）",
+    "checkInGuest": "為 {name} 報到",
+    "checkIn": "報到",
+    "checkedInAt": "{name} 已報到。{place}。",
+    "checkedInNoPlace": "{name} 已報到。尚未安排桌位。",
+    "checkedInMany": "已報到賓客：{count}",
+    "arrivedAt": "{time} 抵達",
+    "declined": "不出席",
+    "noPlace": "尚未安排桌位",
+    "guestOf": "{name} 的同伴",
+    "placeTable": "{label} 號桌",
+    "placeRow": "第 {label} 排",
+    "placeOnChart": "{chart}：{place}",
+    "cardQrLabel": "儲存信用卡以供今晚捐款的 QR 碼",
+    "cardTitle": "要儲存信用卡以供今晚捐款嗎？",
+    "cardBody": "請賓客用自己的手機掃描。除非賓客在手機上同意，否則不會儲存任何資料。"
+  },
+  "scanGuestKiosk": {
+    "welcome": "歡迎來到 {event}",
+    "subtitle": "查詢您的桌位並報到",
+    "nameLabel": "請輸入您的姓名",
+    "nameHint": "與喜帖上的一致。",
+    "find": "查詢我的桌位",
+    "hello": "歡迎，{name}！",
+    "welcomeBack": "歡迎回來，{name}！",
+    "yourPlace": "您的桌位：{places}",
+    "noPlace": "您的桌位尚未安排。請洽詢工作人員。",
+    "checkedIn": "報到成功，祝您愉快！",
+    "alreadyIn": "您已經報到過了。",
+    "noMatch": "找不到這個姓名。請檢查拼寫或洽詢工作人員。",
+    "seeStaff": "請洽詢工作人員。"
+  },
+  "scanBoard": {
+    "title": "查詢您的桌位",
+    "empty": "賓客安排座位後，桌位會顯示在這裡。",
+    "pageOf": "第 {page} 頁，共 {total} 頁",
+    "pause": "暫停",
+    "resume": "繼續",
+    "next": "下一頁"
+  },
+  "dayOf": {
+    "description": "誰已到場、誰還需要桌位，以及給廚房的餐點數量。",
+    "setUpKiosk": "設定自助機或指示螢幕",
+    "noAccessTitle": "您無法查看賓客名單",
+    "noAccessDescription": "請向主辦人申請存取此活動賓客的權限。",
+    "arrived": "已到場",
+    "arrivedOf": "已到 {arrived} / 預計 {expected}",
+    "notArrived": "尚未到場",
+    "unseated": "沒有桌位",
+    "declined": "不出席",
+    "findTitle": "為賓客報到",
+    "searchLabel": "賓客或團體名稱",
+    "search": "搜尋",
+    "noMatchTitle": "沒有符合的賓客",
+    "noMatchDescription": "請檢查拼寫或嘗試團體名稱。",
+    "matches": "符合的賓客",
+    "arrivedAt": "{time} 抵達",
+    "declinedOne": "不出席",
+    "checkIn": "報到",
+    "checkInGuest": "為 {name} 報到",
+    "checkedIn": "{name} 已報到。",
+    "arrivalsTitle": "到場紀錄",
+    "noArrivalsTitle": "還沒有人到場",
+    "noArrivalsDescription": "透過掃描裝置、賓客自助機或此處報到的賓客，抵達時會出現在此清單中。",
+    "colTime": "時間",
+    "colGuest": "賓客",
+    "colParty": "團體",
+    "colPlace": "桌位",
+    "colHow": "報到方式",
+    "colActions": "動作",
+    "sourceScanner": "掃描裝置",
+    "sourceKiosk": "賓客自助機",
+    "sourceHost": "主辦人",
+    "undo": "復原",
+    "undoGuest": "復原 {name} 的報到",
+    "undone": "已復原報到。",
+    "unseatedTitle": "沒有桌位的賓客",
+    "noChartTitle": "尚無平面圖",
+    "noChartDescription": "請在「座位」中選擇平面圖，然後為賓客安排桌位。",
+    "toSeating": "前往座位",
+    "allSeatedTitle": "每個人都有桌位",
+    "allSeatedDescription": "所有未婉拒的賓客都已安排座位。",
+    "attending": "出席",
+    "noAnswer": "未回覆",
+    "here": "已到場",
+    "seatThem": "安排座位",
+    "mealsTitle": "餐點",
+    "mealsHint": "已確認出席的賓客，依所選餐點。",
+    "noMealsTitle": "尚無可統計的餐點",
+    "noMealsDescription": "賓客確認出席後會統計餐點。",
+    "colMeal": "餐點",
+    "colGuests": "賓客",
+    "colArrived": "已到場",
+    "noMeal": "尚未選擇",
+    "kiosksTitle": "賓客自助機與桌位指示螢幕",
+    "kiosksHint": "將平板或電視新增為裝置，在其上開啟設定連結，然後選擇顯示內容。即使場地網路中斷，兩者都能繼續運作；工作人員以 PIN 退出。",
+    "noDevicesTitle": "尚無裝置",
+    "noDevicesDescription": "請在下方新增裝置，然後在平板或電視上開啟設定連結。",
+    "online": "上線",
+    "offline": "離線",
+    "kindTickets": "憑票報到",
+    "kindGuests": "賓客自助機",
+    "kindBoard": "桌位指示螢幕（A–Z）",
+    "kioskKind": "{device} 的畫面",
+    "kioskPin": "{device} 的工作人員 PIN",
+    "pinHint": "4 到 8 位數字。工作人員輸入它以退出畫面。",
+    "pinInvalid": "請輸入 4 到 8 位數字的 PIN。",
+    "kioskStart": "開始",
+    "kioskStarted": "{device} 將在幾秒內切換。",
+    "kioskStop": "停止",
+    "kioskStopDevice": "停止 {device} 上的自助機",
+    "kioskStopped": "{device} 已恢復掃描。",
+    "placeTable": "{label} 號桌",
+    "placeRow": "第 {label} 排",
+    "placeOnChart": "{chart}：{place}",
+    "noPlace": "尚未安排桌位",
+    "guestOf": "{name} 的同伴"
+  },
+  "guestSiteHost": {
+    "subtitle": "為賓客準備的頁面：歡迎詞、流程、交通住宿、禮物清單以及常見問題解答。受密碼保護，從不被列出或收錄。",
+    "open": "開啟網站",
+    "viewerNotice": "你可以在這裡檢視網站。只有主人和規劃師可以修改。",
+    "statusTitle": "你的網站",
+    "published": "已發布",
+    "draft": "草稿",
+    "publishedNote": "於 {date} 發布。賓客透過下方網址和密碼開啟。",
+    "draftNote": "尚未發布。發布之前賓客無法開啟。",
+    "needsPassword": "請先設定密碼：沒有密碼無法發布網站。",
+    "address": "網站網址",
+    "privacyNote": "從不出現在市集或搜尋引擎中。賓客的姓名、回覆和聯絡方式絕不會顯示在上面。",
+    "publish": "發布網站",
+    "unpublish": "下線網站",
+    "publishedDone": "已發布。請把網址和密碼分享給賓客。",
+    "unpublishedDone": "網站已下線。",
+    "passwordTitle": "密碼",
+    "passwordSet": "已設定",
+    "passwordMissing": "未設定",
+    "passwordIntro": "請印在喜帖上。賓客在每台裝置上輸入一次；不分大小寫。設定新密碼後，用舊密碼進入的人都會被擋在門外。",
+    "savePassword": "儲存密碼",
+    "passwordSaved": "密碼已儲存。",
+    "detailsTitle": "標題和歡迎詞",
+    "saveDetails": "儲存標題和歡迎詞",
+    "detailsSaved": "已儲存。",
+    "blocksTitle": "{count, plural, =0 {區塊} other {# 個區塊}}",
+    "emptyTitle": "還沒有區塊",
+    "emptyWrite": "在下方新增第一個區塊：先寫歡迎詞，再加上流程、交通和常見問題。",
+    "emptyRead": "主人還沒有新增區塊。",
+    "kindLabel": "{kind} · 第 {n} 個區塊",
+    "noSubEvents": "請在賓客頁面新增子活動（儀式、晚宴……）來填入流程。",
+    "saveBlock": "儲存「{name}」",
+    "blockSaved": "區塊已儲存。",
+    "moveUp": "上移「{name}」",
+    "moveDown": "下移「{name}」",
+    "moved": "已移動。",
+    "removeBlock": "移除「{name}」",
+    "removed": "區塊已移除。",
+    "addTitle": "新增區塊",
+    "addBlock": "新增區塊",
+    "blockAdded": "區塊已新增。請在上方填寫。",
+    "subEventEveryone": "{name}（全員受邀）",
+    "kinds": {
+      "text": "文字",
+      "program": "流程",
+      "travel": "交通住宿",
+      "registry": "禮物清單",
+      "faq": "常見問題"
+    },
+    "show": {
+      "everyone": "全員受邀的子活動",
+      "chosen": "僅我勾選的子活動"
+    },
+    "fields": {
+      "heading": "標題",
+      "headingHint": "選填。",
+      "body": "內文",
+      "bodyHint": "段落、**粗體**、*斜體*、清單和連結。",
+      "show": "顯示哪些子活動",
+      "showHint": "只邀請部分賓客的子活動（如彩排晚宴）只有勾選後才會顯示。",
+      "subEvents": "顯示的子活動",
+      "urlHint": "以 https:// 開頭的完整連結。",
+      "password": "密碼",
+      "newPassword": "新密碼",
+      "passwordHint": "至少 {min} 個字元。",
+      "title": "標題",
+      "intro": "歡迎詞（選填）",
+      "language": "你書寫所用的語言",
+      "languageHint": "賓客可以把頁面按鈕切換成自己的語言；你寫的內容保持原樣。",
+      "kind": "區塊類型",
+      "kindHint": "流程會列出子活動及其時間。"
+    },
+    "item": {
+      "travel": {
+        "title": "地點 {n}：名稱",
+        "details": "地點 {n}：詳情",
+        "url": "地點 {n}：網站"
+      },
+      "registry": {
+        "label": "禮物清單 {n}：名稱",
+        "url": "禮物清單 {n}：連結"
+      },
+      "faq": {
+        "question": "問題 {n}",
+        "answer": "回答 {n}"
+      }
+    },
+    "errors": {
+      "title": "請為網站填寫標題。",
+      "password": "請輸入密碼。",
+      "required": "請填寫此欄。",
+      "tooShort": "至少使用 {min} 個字元。",
+      "tooLong": "最多使用 72 個字元。",
+      "passwordRequired": "發布前請設定密碼。",
+      "tooManyBlocks": "一個網站最多有 {max} 個區塊。",
+      "httpsOnly": "請使用以 https:// 開頭的完整連結。",
+      "subEvents": "請選擇本活動的子活動。"
+    }
+  },
+  "guestSite": {
+    "metaTitle": "賓客網站",
+    "gateTitle": "此網站為私密網站",
+    "gateIntro": "請輸入喜帖上的密碼查看詳情。",
+    "formLabel": "開啟網站",
+    "password": "密碼",
+    "passwordHint": "密碼在你的喜帖上，不分大小寫。",
+    "submit": "開啟網站",
+    "challengeTitle": "還差一步",
+    "challengeHint": "請確認你是真人，然後再試一次。",
+    "errors": {
+      "empty": "請輸入密碼。",
+      "wrong": "密碼不正確。請核對喜帖後再試一次。",
+      "challengeFailed": "驗證未通過，請再試一次。",
+      "rateLimited": "{minutes, plural, other {嘗試次數過多。請在 # 分鐘後再試。}}",
+      "closed": "此網站目前無法存取。"
+    },
+    "languages": "語言",
+    "onThisPage": "本頁內容",
+    "empty": "主人仍在準備此頁面。",
+    "headings": {
+      "text": "介紹",
+      "program": "流程",
+      "travel": "交通住宿",
+      "registry": "禮物清單",
+      "faq": "問題"
+    },
+    "visit": "{name} 的網站",
+    "newTab": "（在新分頁中開啟）",
+    "galleryLink": "查看及分享相片"
+  },
+  "gallery": {
+    "uploader": {
+      "name": "你的名字",
+      "nameHint": "會顯示在你的相片旁，讓主人知道是誰分享的。",
+      "nameRequired": "分享前請輸入你的名字。",
+      "chooseFirst": "請至少選擇一張相片。",
+      "photos": "相片",
+      "photosHint": "手機裡的 JPEG、PNG、WebP、AVIF 或 HEIC 相片，每張不超過 {mb} MB。",
+      "caption": "說明（選填）",
+      "captionHint": "會加到你這次分享的每張相片上。",
+      "submit": "分享相片",
+      "uploading": "分享中…",
+      "statusTitle": "上傳狀態",
+      "statusBusy": "正在分享相片：已完成 {done}/{total}",
+      "statusDone": "{done, plural, =0 {沒有分享相片} other {已分享 # 張相片}}{failed, plural, =0 {。} other {，# 張無法分享。}}",
+      "state": {
+        "waiting": "等待中",
+        "uploading": "分享中…",
+        "published": "已在相簿中",
+        "pending": "等待主人審核"
+      },
+      "heldNotice": "相片經主人審核後才會對所有人顯示。",
+      "errors": {
+        "event_cap": "相簿已滿：本活動的相片儲存空間已全部用完。",
+        "event_items": "相簿相片數量已達上限。",
+        "guest_bytes": "你已用完分配給你的相簿儲存空間。",
+        "guest_items": "你分享的相片已達每位賓客的上限。",
+        "too_large": "此檔案超過 {mb} MB。",
+        "size_mismatch": "傳送過程中檔案有所變更，請再試一次。",
+        "unsupported_type": "此檔案不是可用的相片格式（JPEG、PNG、WebP、AVIF 或 HEIC）。",
+        "undecodable": "無法讀取這張相片，檔案可能已損毀。",
+        "too_many_pixels": "這張相片的像素過多。",
+        "heic_unsupported": "無法轉換這張 HEIC 相片，請試著以 JPEG 格式分享。",
+        "expired": "上傳時間過長，請再試一次。",
+        "upload_missing": "相片未能送達，請再試一次。",
+        "locked": "請先輸入網站密碼。",
+        "gallery_closed": "相簿已關閉。",
+        "rate_limited": "此裝置上傳次數過多，請稍後再試。",
+        "network": "網路連線中斷，請再試一次。"
+      }
+    },
+    "slideshow": {
+      "title": "即時幻燈片",
+      "hostIntro": "適用於現場螢幕：新相片一發布就會顯示。",
+      "guestIntro": "新相片一發布就會顯示。",
+      "backToGallery": "返回相簿",
+      "backToGuestGallery": "返回相片",
+      "roleDescription": "幻燈片",
+      "controls": "幻燈片控制項",
+      "previous": "上一張",
+      "next": "下一張",
+      "pause": "暫停",
+      "play": "播放",
+      "fullscreen": "全螢幕",
+      "keys": "按鍵：左右方向鍵切換相片，空白鍵暫停或播放。",
+      "paused": "幻燈片已暫停",
+      "playing": "幻燈片播放中",
+      "position": "第 {n} 張，共 {total} 張",
+      "none": "還沒有相片",
+      "arrived": "新增了 {count, plural, other {# 張相片}}",
+      "alt": "第 {n} 張相片，共 {total} 張",
+      "altBy": "{name} 拍攝的相片，第 {n} 張，共 {total} 張",
+      "by": "來自 {name}",
+      "byHosts": "來自主人",
+      "emptyTitle": "還沒有相片",
+      "emptyDescription": "相片一發布就會顯示在這裡。",
+      "stream": {
+        "connecting": "連線中",
+        "live": "直播中",
+        "offline": "重新連線中"
+      }
+    },
+    "host": {
+      "subtitle": "賓客和你分享的相片與影片連結，集中在一個私人相簿和即時幻燈片中。",
+      "openSlideshow": "開啟幻燈片",
+      "viewerNotice": "你可以查看相簿，但無法修改。",
+      "siteNeededTitle": "賓客需透過你的賓客網站進入相簿，請先發布網站。",
+      "siteNeededLink": "前往網站",
+      "statusTitle": "相簿",
+      "on": "開",
+      "off": "關",
+      "usage": "已使用 {used}/{cap}",
+      "usageLabel": "已使用的儲存空間",
+      "counts": "{published, plural, other {已發布 # 項}} · {pending, plural, other {# 項待審核}}",
+      "fullTitle": "相簿已滿",
+      "fullBody": "在你刪除部分相片或提高上限之前，任何人都無法新增相片。",
+      "guestAddress": "賓客專用網址（需輸入網站密碼）",
+      "privacyNote": "只有知道網站密碼的人才能看到相簿。相簿不會被搜尋引擎收錄，也不會公開列出。",
+      "gb": "{n} GB",
+      "mb": "{n} MB",
+      "fields": {
+        "enabled": "賓客相簿",
+        "moderation": "賓客相片",
+        "moderationHint": "你自己的相片一律立即顯示。",
+        "cap": "本活動儲存空間（MB）",
+        "capHint": "目前最多 {max} MB。",
+        "guestBytes": "每位賓客儲存空間（MB）",
+        "guestBytesHint": "目前最多 {max} MB。",
+        "guestItems": "每位賓客可分享的相片和連結數",
+        "guestItemsHint": "目前最多 {max} 項。",
+        "videoUrl": "YouTube 或 Vimeo 連結",
+        "videoUrlHint": "貼上影片頁面的網址。",
+        "caption": "說明（選填）"
+      },
+      "enabledOn": "開：賓客可以查看及分享相片",
+      "enabledOff": "關",
+      "moderation": {
+        "hold": "等我審核後再發布",
+        "auto": "立即發布"
+      },
+      "saveSettings": "儲存相簿設定",
+      "settingsSaved": "相簿設定已儲存。",
+      "uploadTitle": "新增你的相片",
+      "uploadIntro": "你的相片會立即發布，並顯示在幻燈片中。",
+      "videoTitle": "新增影片連結",
+      "videoIntro": "影片以 YouTube 或 Vimeo 連結的形式加入，相簿不會儲存影片檔案。",
+      "videoIntroStream": "新增 YouTube 或 Vimeo 連結。",
+      "addVideo": "新增影片連結",
+      "videoAdded": "已新增影片連結。",
+      "pendingTitle": "待審核（{count}）",
+      "approveAll": "全部核准（{count}）",
+      "approve": "核准：{name}",
+      "reject": "拒絕：{name}",
+      "approved": "已核准。",
+      "rejected": "已拒絕並刪除。",
+      "pendingEmptyTitle": "沒有待審核的項目",
+      "pendingEmptyHold": "賓客分享的相片會顯示在這裡，直到你核准為止。",
+      "pendingEmptyAuto": "賓客相片會立即發布，所以這裡沒有待審核的項目。",
+      "publishedTitle": "相簿中（{count}）",
+      "publishedEmptyTitle": "還沒有相片",
+      "publishedEmptyWrite": "在上方新增你的第一批相片，或分享賓客專用網址，讓賓客新增他們的相片。",
+      "publishedEmptyRead": "已發布的相片和影片連結會顯示在這裡。",
+      "remove": "移除：{name}",
+      "removed": "已移除。",
+      "photo": "相片",
+      "photoBy": "{name} 拍攝的相片",
+      "photoByHosts": "主人分享的相片",
+      "by": "來自 {name}",
+      "byHosts": "來自主人",
+      "watchOn": {
+        "youtube": "在 YouTube 上觀看",
+        "vimeo": "在 Vimeo 上觀看"
+      },
+      "provider": {
+        "youtube": "YouTube",
+        "vimeo": "Vimeo"
+      },
+      "errors": {
+        "number": "請輸入大於或等於 1 的整數。",
+        "videoLink": "請貼上 YouTube 或 Vimeo 連結。",
+        "caption": "說明請少於 280 個字元。",
+        "eventItems": "相簿項目數量已達上限。",
+        "eventCap": "相簿已滿。"
+      }
+    },
+    "guest": {
+      "metaTitle": "相片",
+      "title": "相片",
+      "backToSite": "返回網站",
+      "gateIntro": "輸入喜帖上的密碼，即可查看及分享相片。",
+      "closedTitle": "相簿尚未開放",
+      "closedDescription": "主人還沒有開放相簿，請稍後再回來看看。",
+      "introHold": "與主人分享你的相片。主人核准後，相片會顯示在這裡。",
+      "introAuto": "分享你的相片：相片會立即顯示在這裡和幻燈片中。",
+      "openSlideshow": "觀看幻燈片",
+      "shareTitle": "分享你的相片",
+      "quota": "你已分享 {items}/{quotaItems} 項（{used}/{quota} MB）。",
+      "fullTitle": "相簿已滿",
+      "fullBody": "目前無法再新增相片。",
+      "quotaReachedTitle": "你已達到分享上限",
+      "quotaReachedBody": "謝謝！在下方收回一張相片，就能再分享一張。",
+      "privacyNote": "只有知道網站密碼的賓客才能看到這些相片。每張相片的位置和相機資訊都已移除。",
+      "videoTitle": "分享影片連結",
+      "videoIntro": "先把影片上傳到 YouTube 或 Vimeo，再將連結貼到這裡。",
+      "videoUrl": "YouTube 或 Vimeo 連結",
+      "videoUrlHint": "貼上影片頁面的網址。",
+      "addVideo": "分享連結",
+      "videoHeld": "謝謝！主人核准後，連結就會顯示。",
+      "videoAdded": "謝謝！連結已加入相簿。",
+      "mineTitle": "你的相片（{count}）",
+      "statePublished": "已在相簿中",
+      "statePending": "等待審核",
+      "takeBack": "收回：{name}",
+      "takenBack": "已收回。",
+      "publishedTitle": "相簿",
+      "emptyTitle": "還沒有相片",
+      "emptyDescription": "成為第一個分享相片的人吧。",
+      "photo": "相片",
+      "photoBy": "{name} 拍攝的相片",
+      "photoByHosts": "主人分享的相片",
+      "watchOn": {
+        "youtube": "在 YouTube 上觀看",
+        "vimeo": "在 Vimeo 上觀看"
+      },
+      "errors": {
+        "videoLink": "請貼上 YouTube 或 Vimeo 連結。"
+      }
+    }
+  },
+  "hub": {
+    "metaTitle": "您的賓客頁面",
+    "title": "歡迎，{party}",
+    "expiredTitle": "此連結已過期",
+    "expired": "請向主人索取新的連結。",
+    "sectionsLabel": "本頁內容",
+    "upNext": "接下來",
+    "happeningNow": "正在進行",
+    "rsvpTitle": "回覆",
+    "rsvpResponded": "已回覆",
+    "rsvpWaiting": "等待您的回覆",
+    "rsvpClosed": "回覆已截止",
+    "rsvpCounts": "{attending, plural, other {# 人出席}} · {declined, plural, other {# 人無法出席}} · {awaiting, plural, other {# 人待回覆}}",
+    "rsvpDeadline": "請於 {deadline} 前回覆。",
+    "rsvpAnsweredOn": "您已於 {date} 回覆。",
+    "rsvpLocked": "回覆截止時間已過。如需修改回覆，請聯絡主人。",
+    "rsvpAnswer": "回覆邀請",
+    "rsvpChange": "修改回覆",
+    "rsvpView": "查看您的回覆",
+    "programTitle": "流程",
+    "programLabel": "您受邀參加的慶典環節",
+    "programEmptyTitle": "尚無流程",
+    "programEmpty": "主人還沒有新增邀請你們參加的環節。請稍後再來查看。",
+    "chipNow": "進行中",
+    "chipDone": "已結束",
+    "chipGoing": "{count, plural, other {# 人出席}}",
+    "chipNoAnswer": "尚未回覆",
+    "seatsTitle": "您的座位",
+    "seatsHiddenTitle": "座位安排尚未公布",
+    "seatsHidden": "主人公布座位安排後，您的桌號會顯示在這裡。",
+    "seatsNoneTitle": "您的同行賓客尚無座位",
+    "seatsNone": "主人仍在安排座位。請在接近日期時再來查看。",
+    "rowLine": "第 {table} 排 · {seat} 號座",
+    "tableLine": "第 {table} 桌 · {seat} 號座",
+    "sponsoredBy": "由 {sponsor} 贊助",
+    "unseated": "{count, plural, other {您的同行賓客中有 # 人還沒有座位。}}",
+    "ticketsTitle": "門票",
+    "ticketsNoneTitle": "無需門票",
+    "ticketsNone": "憑邀請即可入場。如果主人寄送門票給您，會顯示在這裡。",
+    "ticketQr": "{name} 的門票 QR 碼",
+    "ticketCode": "代碼 {code}",
+    "keepTitle": "隨時開啟此頁面",
+    "keepIntro": "無需安裝應用程式。將此頁面加入主畫面，或把票券儲存到手機錢包。",
+    "install": "加入主畫面",
+    "installed": "此頁面已在您的主畫面上。",
+    "installHelp": "iPhone 或 iPad：點選「分享」，再選「加入主畫面」。Android：開啟瀏覽器選單，再選「新增至主畫面」或「安裝應用程式」。",
+    "installDone": "已加入主畫面。",
+    "offline": "您目前離線。這是儲存在手機上的副本，恢復連線後會自動更新。",
+    "walletApple": "加入 Apple 錢包",
+    "walletGoogle": "儲存到 Google 錢包",
+    "walletHint": "票券會顯示時間與地點，座位公布後也會顯示您的座位。",
+    "website": "開啟主人的網站",
+    "privacy": "此頁面僅供您的同行賓客使用。請勿分享連結。",
+    "pass": {
+      "party": "同行",
+      "when": "時間",
+      "place": "地點",
+      "seats": "座位"
+    },
+    "openHub": "開啟您的賓客頁面：流程、座位和門票"
+  },
+  "savedCard": {
+    "metaTitle": "為今晚儲存信用卡",
+    "title": "為今晚的捐贈儲存信用卡",
+    "intro": "在您自己的手機上儲存一次信用卡，整個晚上即可一鍵捐贈。現在不會扣款。",
+    "introParty": "致 {party}：在您自己的手機上儲存一次信用卡，整個晚上即可一鍵捐贈。您的認捐將在第二天早上扣款。現在不會扣款。",
+    "unavailableTitle": "暫不支援儲存信用卡",
+    "unavailableBody": "本活動目前不接受線上捐贈。您仍可在現場捐贈。",
+    "formLabel": "儲存信用卡",
+    "formTitle": "您的資訊",
+    "name": "姓名",
+    "email": "電子郵件",
+    "emailHint": "認捐摘要和收據將發送到此電子郵件。",
+    "consentLabel": "我授權為今晚儲存這張信用卡",
+    "consent": "{org} 可將此卡儲存在其支付服務商處，且僅可就我在 {event} 選擇的捐款和作出的認捐扣款。認捐將在活動次日早上扣款，扣款前我會收到摘要。此卡將在活動結束 30 天後刪除，我也可以隨時在本頁刪除。",
+    "privacy": "您的信用卡資訊直接發送給支付服務商。我們從不查看或儲存您的卡號。",
+    "save": "儲存我的信用卡",
+    "saving": "正在打開安全的信用卡表單…",
+    "savedTitle": "您的信用卡已為今晚儲存",
+    "savedBody": "尾號 {last4} 的 {brand} 已可在本活動中一鍵捐贈。",
+    "card": "信用卡",
+    "giveNow": "立即捐贈",
+    "remove": "刪除我的信用卡",
+    "removeHint": "刪除後將取消所有尚未進行的扣款；認捐仍可透過連結支付。",
+    "removed": "您的信用卡已刪除，不會再被扣款。",
+    "pending": "我們正在與支付服務商確認您的信用卡。請稍後重新整理。",
+    "failed": "無法儲存您的信用卡。請重試或使用其他信用卡。",
+    "fromCheckout": "謝謝，您的訂單已完成。票券將透過電子郵件發送。",
+    "oneTapTitle": "用已儲存的信用卡捐贈",
+    "oneTapBody": "一鍵即從尾號 {last4} 的 {brand} 扣款，隨後會立即顯示確認。",
+    "oneTapFailed": "這筆捐贈未能完成。請重試，或使用下方表單。",
+    "oneTapGive": "捐贈 {amount} · {name}",
+    "manageCard": "管理我儲存的信用卡",
+    "errors": {
+      "name": "請輸入您的姓名。",
+      "email": "請輸入有效的電子郵件。",
+      "consent": "請勾選此框以授權儲存您的信用卡。",
+      "event_over": "本活動已結束，無法再儲存信用卡。",
+      "not_connected": "本活動目前不接受線上捐贈。",
+      "link": "此連結已失效。請向主辦方索取新連結。"
+    }
+  },
+  "pledgePay": {
+    "metaTitle": "您的認捐",
+    "title": "您認捐的 {amount}",
+    "subtitle": "{level} · {campaign}。感謝您的慷慨。",
+    "stateTitle": "状態",
+    "status": {
+      "scheduled": "已安排信用卡扣款",
+      "charging": "正在扣款",
+      "invoiced": "等待付款",
+      "paid": "已付款",
+      "paid_offline": "已付款",
+      "written_off": "已關閉"
+    },
+    "card": "信用卡",
+    "cardScheduled": "我們將於 {when} 從尾號 {last4} 的 {brand} 扣款。",
+    "charging": "正在從您的信用卡扣款。請稍後重新整理。",
+    "due": "請在 {date} 前付款。",
+    "thanks": "已全額付款。謝謝！收據將透過電子郵件發送。",
+    "closed": "此認捐已關閉，無需再付款。",
+    "payNow": "立即支付 {amount}",
+    "payAnotherWay": "立即以其他方式支付 {amount}",
+    "anotherWayHint": "現在付款將取消信用卡扣款。想用另一張卡？現在就用它付款。",
+    "errors": {
+      "charging": "正在從您的信用卡扣款，因此未發起此次付款。",
+      "settled": "此認捐已結清。",
+      "no_email": "請輸入您的電子郵件以付款。",
+      "rate_limited": "尝試次數過多。請等待一分鐘後重試。",
+      "not_connected": "目前無法線上付款。請向主辦方询問付款方式。",
+      "generic": "出了點問題。請重試。",
+      "email": "請輸入有效的電子郵件。"
+    },
+    "email": "接收收據的電子郵件",
+    "emailHint": "收據將寄送到此電子郵件。"
+  },
+  "pledges": {
+    "title": "認捐",
+    "subtitle": "舉牌認捐中的每筆認捐及其收款情況。",
+    "viewerNotice": "您可以查看認捐。財務角色負責結束當晚、登記付款和沖銷認捐。",
+    "pledged": "認捐总額",
+    "paid": "已付款",
+    "owed": "尚欠",
+    "writtenOffTotal": "已沖銷",
+    "cardsSaved": "已儲存的信用卡",
+    "emptyTitle": "暫無認捐",
+    "emptyDescription": "記录員在舉牌認捐中確認號牌後，認捐會顯示在這裡。",
+    "closeTitle": "{count, plural, other {待發送認捐 # 筆}}",
+    "closeBody": "結束當晚後，每位捐贈者都會收到摘要。已儲存信用卡的認捐將於明天 09:00（活動時區）扣款；其他認捐會收到 30 天內到期的付款連結，並在付款前收到提醒。",
+    "close": "結束當晚並發送摘要",
+    "closed": "摘要已發送：{cards, plural, other {# 筆認捐將從已儲存的信用卡扣款}}，{invoices, plural, other {# 筆認捐已收到付款連結}}。",
+    "caption": "認捐及其收款",
+    "columns": {
+      "paddle": "號牌",
+      "holder": "捐贈者",
+      "level": "級別",
+      "amount": "金額",
+      "status": "状態",
+      "detail": "詳情",
+      "actions": "操作"
+    },
+    "status": {
+      "open": "未發送",
+      "scheduled": "已安排信用卡扣款",
+      "charging": "正在扣款",
+      "invoiced": "已發送付款連結",
+      "paid": "已付款",
+      "paid_offline": "線下已付款",
+      "written_off": "已沖銷"
+    },
+    "cardLabel": "{brand} ·{last4}",
+    "card": "信用卡",
+    "detail": {
+      "open": "等待結束當晚。",
+      "scheduled": "{card}，{when}",
+      "charging": "{card}，正在扣款",
+      "invoiced": "到期日 {date}。",
+      "declined": "{count, plural, other {信用卡被拒 # 次。}}",
+      "noEmail": "没有登記電子郵件：請自行分享付款連結。",
+      "paidCard": "已從 {card} 扣款",
+      "paidLink": "已透過連結付款"
+    },
+    "methods": {
+      "check": "支票",
+      "wire": "電匯",
+      "stock": "股票",
+      "daf": "捐贈者建議基金",
+      "cash": "現金",
+      "other": "其他"
+    },
+    "recordPayment": "登記付款",
+    "method": "付款方式",
+    "chooseMethod": "請選擇…",
+    "reference": "參考號（可選）",
+    "receivedOn": "收款日期",
+    "noteOptional": "備註（可選）",
+    "recordSubmit": "登記號牌 {paddle} 的付款",
+    "recorded": "付款已登記。提醒和信用卡扣款已停止。",
+    "writeOff": "沖銷",
+    "writeOffNote": "沖銷原因",
+    "writeOffSubmit": "沖銷號牌 {paddle} 的認捐",
+    "writtenOff": "已沖銷 {amount} 的認捐。",
+    "errors": {
+      "charging": "正在從信用卡扣款。請几分鐘後重試。",
+      "settled": "此認捐已結清。",
+      "future": "日期不能是將來。",
+      "method": "請選擇付款方式。",
+      "receivedOn": "請輸入收款日期。",
+      "note": "請寫明沖銷原因。",
+      "generic": "出了點問題。請重試。"
+    },
+    "qr": {
+      "label": "為今晚的捐贈儲存信用卡的QR 碼",
+      "checkinTitle": "簽到時儲存信用卡",
+      "checkinBody": "賓客簽到後向其出示此QR 碼：他們可在自己的手機上儲存信用卡，今晚一鍵捐贈。",
+      "tableTitle": "在餐桌上儲存信用卡",
+      "tableBody": "將此QR 碼印在桌卡上：賓客可在自己的手機上儲存信用卡，用於一鍵捐贈和認捐。"
+    },
+    "payLink": "號牌 {paddle} 的付款連結"
+  },
+  "cfp": {
+    "title": "徵稿",
+    "subtitle": "收集演講提案，請審查員評分，然後做出決定。獲接受的演講會成為草稿場次。",
+    "sectionsLabel": "徵稿區塊",
+    "tabs": {
+      "submissions": "提案",
+      "reviewers": "審查員",
+      "settings": "設定"
+    },
+    "status": {
+      "draft": "尚未開放",
+      "open": "開放中",
+      "closed": "已截止"
+    },
+    "viewerNotice": "你可以檢視徵稿，但只有編輯者可以變更。",
+    "openPublicForm": "開啟公開表單",
+    "setUp": "設定徵稿",
+    "submissionsHeading": "提案",
+    "emptyTitle": "尚無提案",
+    "emptyOpen": "分享公開表單的連結；收到的提案會顯示在這裡。",
+    "emptyDraft": "先在設定中開放徵稿，再分享公開表單的連結。",
+    "tableCaption": "送交徵稿的提案",
+    "colTitle": "標題",
+    "colSpeaker": "講者",
+    "colLength": "長度",
+    "colTrack": "議程軌",
+    "colReviews": "審查",
+    "colScore": "評分",
+    "colStatus": "狀態",
+    "colSubmitted": "送出時間",
+    "minutes": "{count} 分鐘",
+    "reviewsOf": "{done}/{total}",
+    "decision": {
+      "submitted": "待決定",
+      "accepted": "已接受",
+      "rejected": "未獲選"
+    },
+    "settingsHeading": "徵稿設定",
+    "save": "儲存徵稿",
+    "saved": "已儲存。",
+    "statusLabel": "狀態",
+    "statusHint": "開放中：公開表單接受提案；已截止：頁面保留但不再接受提案。",
+    "statusOption": {
+      "draft": "尚未開放（隱藏）",
+      "open": "開放徵稿",
+      "closed": "已截止"
+    },
+    "closesAtLabel": "截止時間（選填）",
+    "closesAtHint": "使用活動所在時區（{zone}）。截止後表單不再接受提案。",
+    "durationsLabel": "講者可選擇的場次長度",
+    "maxCoSpeakersLabel": "每份提案允許的共同講者人數",
+    "blindLabel": "匿名審查",
+    "blindOption": "對審查員隱藏提交者（姓名、共同講者及你所提問題的回答）",
+    "introLabel": "公開表單的介紹",
+    "introHint": "你在尋找什麼、主題，以及講者需要知道的事項。",
+    "yes": "是",
+    "no": "否",
+    "questionsHeading": "額外問題",
+    "questionsHint": "在公開表單中位於演講和講者資料之後。變更問題不會改變已送出的回答。",
+    "noQuestionsTitle": "沒有額外問題",
+    "noQuestionsDescription": "如需標題、摘要、長度和講者資料以外的內容，請新增問題。",
+    "questionType": {
+      "short_text": "簡答",
+      "long_text": "段落",
+      "select": "單選",
+      "multi_select": "複選",
+      "checkbox": "核取方塊",
+      "number": "數字"
+    },
+    "required": "必填",
+    "removeQuestion": "移除「{label}」",
+    "questionRemoved": "問題已移除。",
+    "addQuestion": "新增問題",
+    "questionAdded": "問題已新增。",
+    "questionTypeLabel": "回答類型",
+    "questionLabel": "問題",
+    "optionsLabel": "選項",
+    "optionsHint": "選擇題：每行一個選項，至少兩個。",
+    "requiredLabel": "回答",
+    "requiredOption": "必填",
+    "colReviewer": "審查員",
+    "colEmail": "電子郵件",
+    "colAccess": "存取權",
+    "colProgress": "已審查",
+    "colActions": "操作",
+    "access": {
+      "invited": "已邀請",
+      "active": "已登入",
+      "revoked": "存取已終止",
+      "expired": "已過期",
+      "none": "無存取權"
+    },
+    "revoke": "終止 {name} 的存取權",
+    "revoked": "存取已終止。",
+    "reviewersHeading": "審查員",
+    "reviewersHint": "審查員會收到入口網站的邀請郵件，只能看到你指派給他們的提案。",
+    "noReviewersTitle": "尚無審查員",
+    "noReviewersDescription": "在下方以電子郵件邀請審查員，再指派提案給他們。",
+    "reviewersCaption": "徵稿審查員",
+    "addReviewer": "邀請審查員",
+    "inviteReviewer": "傳送邀請",
+    "reviewerInvited": "邀請已傳送。",
+    "reviewerName": "姓名",
+    "reviewerEmail": "電子郵件",
+    "submittedOn": "送出於 {date}",
+    "abstractHeading": "摘要",
+    "speakersHeading": "講者",
+    "coSpeakersList": "共同講者：{names}",
+    "reviewsHeading": "審查（平均 {score}）",
+    "noReviewsTitle": "尚未指派審查員",
+    "noReviewsAssign": "在下方指派審查員；評分和意見會顯示在這裡。",
+    "noReviewsDescription": "尚未請任何人審查此提案。",
+    "notReviewed": "尚未審查",
+    "scoreOf": "{score}/5",
+    "unassign": "移除 {name}",
+    "unassigned": "審查員已移除。",
+    "assignHeading": "指派審查員",
+    "assign": "指派",
+    "assigned": "審查員已指派。",
+    "reviewerLabel": "審查員",
+    "allAssigned": "所有審查員都已指派。",
+    "addReviewersLink": "邀請更多審查員",
+    "decisionHeading": "決定",
+    "decisionHint": "接受後會新增講者和一個草稿場次，由你排入議程。無論結果如何，提案中的每位講者都會收到郵件。",
+    "accept": "接受",
+    "reject": "不錄取",
+    "noteLabel": "給講者的留言（選填，會寫進郵件）",
+    "decided": "決定已儲存，並已通知講者。",
+    "undecided": "尚未決定。",
+    "acceptedOn": "於 {date} 接受。",
+    "rejectedOn": "於 {date} 決定不錄取。",
+    "noteSent": "已傳送留言：{note}",
+    "placeSessionLink": "將場次排入議程",
+    "draftSession": "草稿",
+    "draftSessionHint": "來自徵稿：在你設定時間並加入議程之前不會公開。",
+    "placeSession": "將「{title}」加入議程",
+    "placed": "已加入議程。",
+    "errors": {
+      "closesAt": "請輸入有效的日期和時間。",
+      "pastDeadline": "截止時間已過：請選擇較晚的時間來開放徵稿。",
+      "durations": "請至少選擇一種場次長度。",
+      "questionLabel": "請填寫問題。",
+      "options": "請至少填寫兩個選項，每行一個。",
+      "tooManyQuestions": "已達 20 個問題的上限。",
+      "reviewerName": "請輸入審查員姓名。",
+      "email": "請輸入有效的電子郵件地址。",
+      "eventOver": "活動已結束，無法再傳送邀請。",
+      "tooManyReviewers": "已達 100 位審查員的上限。",
+      "reviewer": "請選擇審查員。",
+      "alreadyAssigned": "該審查員已指派。",
+      "decided": "此提案已有決定。",
+      "tooManySessions": "活動場次已達上限。"
+    },
+    "emailedNotice": "已以電子郵件將決定通知提案中的每位講者。"
+  },
+  "cfpPublic": {
+    "metaTitle": "徵稿",
+    "title": "徵稿",
+    "deadline": "請在 {date}（{zone}）前送出提案。",
+    "closedTitle": "本次徵稿已截止",
+    "closedDescription": "已不再接受提案。感謝你的關注。",
+    "backToEvent": "返回活動",
+    "thanksTitle": "謝謝，你的提案已送出",
+    "thanksBody": "我們已寄送確認信給你。主辦單位會以電子郵件通知結果。",
+    "optional": "（選填）",
+    "formLabel": "提案",
+    "talkHeading": "你的演講",
+    "talkTitle": "標題",
+    "abstract": "摘要",
+    "length": "長度",
+    "minutes": "{count} 分鐘",
+    "track": "議程軌",
+    "noTrack": "無偏好",
+    "youHeading": "關於你",
+    "name": "你的姓名",
+    "email": "你的電子郵件",
+    "emailHint": "確認信和結果會寄到這裡。",
+    "jobTitle": "職稱",
+    "company": "公司或機構",
+    "bio": "簡介",
+    "coHeading": "共同講者",
+    "coHint": "最多 {count} 人可以與你一起演講。若單獨演講，請留空。",
+    "coName": "共同講者 {n}：姓名",
+    "coEmail": "共同講者 {n}：電子郵件",
+    "moreHeading": "還有幾個問題",
+    "submit": "送出我的提案",
+    "errors": {
+      "title": "請為演講填寫標題。",
+      "abstract": "請描述你的演講。",
+      "speakerName": "請輸入你的姓名。",
+      "speakerEmail": "請輸入有效的電子郵件地址。",
+      "coName": "請輸入共同講者的姓名。",
+      "coEmail": "請輸入共同講者的電子郵件地址。",
+      "coDuplicate": "每位講者需要使用自己的電子郵件地址。",
+      "question": "請回答此問題。",
+      "durationMinutes": "請從提供的長度中選擇一個。",
+      "trackId": "請從清單中選擇議程軌。",
+      "rateLimited": "送出次數過多，請在 {minutes} 分鐘後再試。",
+      "reasons": {
+        "duplicate": "你已送出相同標題的提案。",
+        "closed": "本次徵稿已截止。",
+        "past_deadline": "截止時間已過。"
+      }
+    }
+  },
+  "cfpReview": {
+    "portalTitle": "提案審查",
+    "reviewTitle": "審查提案",
+    "welcome": "你好，{name}",
+    "intro": "請為指派給你的每份提案評 1 到 5 分，並為主辦單位寫下意見。",
+    "introBlind": "本次為匿名審查：你看得到演講內容，但看不到提交者。請為每份提案評 1 到 5 分，並為主辦單位寫下意見。",
+    "signedInAs": "目前登入：{email}。",
+    "assignedHeading": "待審查：{count}",
+    "noneTitle": "尚未指派",
+    "noneDescription": "主辦單位指派提案給你後會顯示在這裡。",
+    "minutes": "{count} 分鐘",
+    "statusDecided": "已決定",
+    "statusTodo": "待審查",
+    "statusScored": "你的評分：{score}",
+    "back": "返回我的提案",
+    "blindNotice": "匿名審查：講者的姓名與資料已隱藏。",
+    "abstractHeading": "摘要",
+    "speakersHeading": "講者",
+    "coSpeakers": "共同講者：{names}",
+    "yourReview": "你的審查",
+    "decided": "主辦單位已做出決定，審查已關閉。",
+    "decidedWithScore": "主辦單位已做出決定；你的評分為 {score}/5。",
+    "scoreLabel": "評分",
+    "scoreOption": "{n}/5",
+    "scoreHint": "1 = 較弱，5 = 優秀。",
+    "commentLabel": "意見（選填）",
+    "commentHint": "只有主辦單位會看到。",
+    "saved": "審查已儲存。",
+    "submit": "儲存我的審查",
+    "update": "更新我的審查",
+    "errors": {
+      "score": "請選擇 1 到 5 分。",
+      "decided": "主辦單位已對此提案做出決定。"
+    }
+  },
+  "sponsorship": {
+    "subnav": "贊助商頁面",
+    "packagesLink": "方案與贊助商",
+    "deliverablesLink": "交付事項",
+    "packagesTitle": "贊助方案",
+    "packagesSubtitle": "設定每個方案的價格與內容，然後授予贊助商，或讓贊助商在入口網站購買。",
+    "packagesHeading": "方案",
+    "noTiersTitle": "尚無方案",
+    "noTiersDescription": "每個贊助等級就是一個方案。請在「贊助商」頁面新增等級，再於此設定條件。",
+    "sponsorsHeading": "贊助商（{count}）",
+    "noSponsorsTitle": "尚無贊助商",
+    "noSponsorsDescription": "請先在「贊助商」頁面新增贊助商。",
+    "status": {
+      "noTerms": "尚未設定條件",
+      "soldOut": "已售完",
+      "onSale": "販售中",
+      "notSold": "僅由你授予"
+    },
+    "noPrice": "無價格",
+    "holdersUnlimited": "持有者：{holders} · 不限數量",
+    "holdersOf": "持有者：{holders} / {quantity} · 剩餘：{left}",
+    "templatesSummary": "每位持有者的交付事項：{count}",
+    "noTermsDescription": "設定此方案的價格與內容。",
+    "editPackage": "編輯 {name} 方案",
+    "savePackage": "儲存方案",
+    "packageSaved": "方案已儲存。",
+    "price": "價格（{currency}）",
+    "priceHint": "若贊助商不在線上購買，請留空。",
+    "quantity": "販售數量",
+    "quantityHint": "留空表示不限數量。",
+    "selling": "販售",
+    "onSale": "贊助商可在入口網站購買",
+    "allowances": {
+      "compRegistrations": "免費報名",
+      "exhibitorBadges": "參展商識別證",
+      "leadLicenses": "名單蒐集授權",
+      "sessionSlots": "議程時段",
+      "logoPlacements": "標誌露出位置"
+    },
+    "placements": {
+      "website": "網站",
+      "agenda": "議程",
+      "badges": "識別證",
+      "signage": "指示牌",
+      "stage": "舞台",
+      "emails": "電子郵件"
+    },
+    "none": "無",
+    "description": "說明",
+    "templates": "每位持有者的交付事項",
+    "templatesHint": "每行一項：標題 | sponsor 或 organizer | 活動前幾天。例如：寄送標誌檔案 | sponsor | 21",
+    "grantActive": "{name} 方案",
+    "grantPending": "等待付款",
+    "grantNone": "無方案",
+    "boughtFor": "線上購買，{price}",
+    "grantedByOrganizer": "由你授予",
+    "compCode": "免費報名代碼：",
+    "compCodePending": "建立中…",
+    "cancelPackage": "取消 {name} 的方案",
+    "grantPackage": "授予方案",
+    "packageGranted": "方案已授予。",
+    "packageFor": "{name} 的方案",
+    "note": "備註",
+    "noteHint": "供團隊參考，例如「已匯款」。",
+    "setTermsFirst": "請先在上方設定方案條件再授予。",
+    "exhibitsAs": "參展身分",
+    "noExhibitor": "無參展商",
+    "saveExhibitor": "儲存參展商",
+    "exhibitorSaved": "參展商已儲存。",
+    "exhibitorFor": "{name} 的參展商",
+    "exhibitorHint": "取得方案中的參展商識別證與名單蒐集授權。",
+    "sessionSlots": "已用議程時段：{used} / {slots}",
+    "removeSession": "移除 {title}",
+    "assignSession": "新增議程",
+    "sessionAssigned": "議程已新增。",
+    "sessionFor": "{name} 贊助的議程",
+    "contacts": "聯絡人（{count}）",
+    "contactStatus": {
+      "pending": "已邀請",
+      "active": "已登入"
+    },
+    "resendTo": "重新寄送給 {email}",
+    "revokeContact": "移除 {email}",
+    "noContacts": "尚無聯絡人。",
+    "inviteContactTo": "邀請 {name} 的聯絡人",
+    "sendInvite": "寄送邀請",
+    "inviteSent": "邀請已寄出。",
+    "contactEmail": "電子郵件",
+    "deliverablesSummary": "交付事項：待辦 {open} · 已完成 {done} · 已逾期 {overdue}",
+    "deliverablesTitle": "贊助商交付事項",
+    "deliverablesSubtitle": "每位贊助商應提交與應取得的內容及期限。期限於活動時區（{timezone}）的午夜截止。",
+    "overdueHeading": "已逾期（{count}）",
+    "noOverdue": "沒有逾期事項。",
+    "overdueList": "逾期交付事項",
+    "allDeliverables": "所有交付事項（{count}）",
+    "noDeliverablesTitle": "尚無交付事項",
+    "noDeliverablesDescription": "在下方新增一項，或在方案中設定交付事項，讓每位持有者都取得。",
+    "addDeliverable": "新增交付事項",
+    "deliverableAdded": "交付事項已新增。",
+    "sponsor": "贊助商",
+    "deliverableTitle": "需交付的內容",
+    "owner": "由誰交付",
+    "owners": {
+      "sponsor": "贊助商",
+      "organizer": "主辦單位"
+    },
+    "ownerName": "負責人",
+    "ownerNameHint": "選填，例如「Maya，行銷部」。",
+    "dueDate": "截止日期",
+    "dueDateHint": "於 {timezone} 當天結束前截止。",
+    "statusDone": "已完成",
+    "statusOverdue": "已逾期",
+    "statusOpen": "待辦",
+    "due": "截止 {date}",
+    "reopen": "重新開啟 {title}",
+    "markDone": "將 {title} 標為已完成",
+    "deleteDeliverable": "刪除 {title}",
+    "errors": {
+      "price": "請輸入價格，例如 5000 或 5000.00。",
+      "priceRequired": "販售中的方案需要設定價格。",
+      "quantity": "請輸入 1 到 999 的數字，或留空。",
+      "allowance": "請輸入 0 到 500 的數字。",
+      "slots": "請輸入 0 到 20 的數字。",
+      "templates": "每行一項：標題 | sponsor 或 organizer | 活動前幾天。",
+      "description": "最多 1000 個字元。",
+      "tier": "請選擇方案。",
+      "soldOut": "此方案已售完。",
+      "alreadyGranted": "此贊助商已持有方案。",
+      "purchasePending": "有一筆購買正在等待付款。",
+      "noTerms": "請先設定此方案的條件。",
+      "exhibitor": "請選擇本活動的參展商。",
+      "exhibitorTaken": "另一位贊助商已以此參展商身分參展。",
+      "session": "請選擇議程。",
+      "slotsUsed": "此方案的議程時段已全部用完。",
+      "sessionTaken": "另一位贊助商已贊助此議程。",
+      "noSlot": "此贊助商的方案沒有議程時段。",
+      "email": "請輸入電子郵件地址。",
+      "alreadyInvited": "此地址已受邀。",
+      "tooManyContacts": "每位贊助商最多 10 位聯絡人。",
+      "eventOver": "活動已結束。",
+      "sponsor": "請選擇贊助商。",
+      "title": "請輸入需交付的內容（最多 120 個字元）。",
+      "owner": "請選擇由誰交付。",
+      "ownerName": "最多 80 個字元。",
+      "dueDate": "請輸入有效日期。",
+      "tooManyDeliverables": "每位贊助商最多 100 項交付事項。"
+    }
+  },
+  "sponsorPortal": {
+    "title": "贊助商入口網站",
+    "eyebrow": "贊助商入口網站",
+    "signedInAs": "已使用 {email} 登入。",
+    "eventDates": "{start} – {end}",
+    "paidTitle": "謝謝。你的 {name} 方案已生效。",
+    "packageHeading": "你的方案",
+    "active": "已生效",
+    "paid": "已付款：{price}",
+    "granted": "由主辦單位授予",
+    "allowance": {
+      "compRegistrations": "免費報名：{count}",
+      "exhibitorBadges": "參展商識別證：{count}",
+      "leadLicenses": "名單蒐集授權：{count}",
+      "sessionSlots": "議程時段：{count}",
+      "logo": "你的標誌露出於：{places}",
+      "noLogo": "無標誌露出位置"
+    },
+    "placements": {
+      "website": "網站",
+      "agenda": "議程",
+      "badges": "識別證",
+      "signage": "指示牌",
+      "stage": "舞台",
+      "emails": "電子郵件"
+    },
+    "compHeading": "免費報名",
+    "compCode": "你的代碼：",
+    "compHint": "分享給你的來賓：他們報名時在代碼欄輸入，通行證即免費。",
+    "compUsed": "已使用：{used} / {allowance}",
+    "compPending": "代碼建立中，請稍後重新整理。",
+    "exhibitorLinked": "參展商識別證與名單蒐集授權歸屬 {name}。",
+    "exhibitorMissing": "請向主辦單位確認由哪個參展商取得你的識別證與名單蒐集授權。",
+    "sessionsHeading": "贊助議程：{used} / {slots}",
+    "noSessions": "主辦單位將新增你的贊助議程。",
+    "pendingTitle": "等待你的付款",
+    "pendingDescription": "請在付款頁面完成付款。收到款項後方案即生效。",
+    "noPackageTitle": "尚無方案",
+    "noPackageDescription": "主辦單位會新增你的方案，或在此提供可購買的方案。",
+    "chooseIntro": "請選擇方案，下一頁付款。",
+    "soldOut": "已售完",
+    "buy": "以 {price} 購買 {name}",
+    "redirecting": "正在開啟付款頁面…",
+    "deliverablesHeading": "交付事項（待辦：{count}）",
+    "noDeliverablesTitle": "目前沒有待交付事項",
+    "noDeliverablesDescription": "主辦單位向你提出需求時，會連同截止日期顯示在這裡。",
+    "ownerYou": "由你交付",
+    "ownerOrganizer": "由主辦單位交付",
+    "due": "截止 {date}",
+    "done": "已完成",
+    "overdue": "已逾期",
+    "open": "待辦",
+    "reopen": "重新開啟 {title}",
+    "markDone": "將 {title} 標為已完成",
+    "errors": {
+      "soldOut": "此方案已售完。",
+      "alreadyGranted": "你已持有方案。",
+      "purchasePending": "已有一筆購買正在等待付款。"
+    }
+  },
+  "leadLicenses": {
+    "title": "名單蒐集授權",
+    "subtitle": "每個授權是參展商分配給一個人的掃描席位。設定包含的數量與額外授權的價格。",
+    "settingsHeading": "每個參展商的授權",
+    "settingsSummary": "每個參展商包含：{included}。",
+    "notForSale": "額外授權不販售。",
+    "forSale": "額外授權：每個 {price}。",
+    "save": "儲存",
+    "saved": "已儲存。",
+    "included": "每個參展商包含的授權",
+    "includedHint": "0 到 50。贊助方案會另外增加。",
+    "price": "額外授權價格（{currency}）",
+    "priceHint": "留空表示不販售額外授權。",
+    "exhibitorsHeading": "參展商（{count}）",
+    "emptyDescription": "新增參展商後即可為其分配名單蒐集授權。",
+    "licensesLine": "使用中的授權：{used} / {allowance}（包含 {included} · 方案 {packages} · 購買 {purchased}）",
+    "badgesLine": "工作人員識別證：{base} + 贊助方案 {packages}",
+    "portalHeading": "名單蒐集授權",
+    "paidTitle": "謝謝。你的額外授權可以分配了。",
+    "portalSummary": "使用中的授權：{used} / {allowance}",
+    "portalBreakdown": "包含：{included} · 來自贊助方案：{packages} · 購買：{purchased}",
+    "youHaveOne": "你有一個名單蒐集授權。",
+    "youHaveNone": "你沒有名單蒐集授權，請向管理員申請。",
+    "licensed": "已分配授權",
+    "notLicensed": "無授權",
+    "takeBack": "收回 {email} 的授權",
+    "give": "為 {email} 分配授權",
+    "given": "授權已分配。",
+    "pendingTitle": "一筆額外授權購買正在等待付款。",
+    "buyHeading": "購買額外授權",
+    "buyHint": "每個 {price}，付給主辦單位。下一頁付款。",
+    "orderName": "名單蒐集授權",
+    "quantity": "數量",
+    "buy": "購買授權",
+    "redirecting": "正在開啟付款頁面…",
+    "errors": {
+      "included": "請輸入 0 到 50 的數字。",
+      "price": "請輸入價格，例如 250 或 250.00，或留空。",
+      "used": "所有授權都在使用中。請收回一個或購買更多。",
+      "already": "此人已有授權。",
+      "quantity": "請輸入 1 到 100 的數字。",
+      "tooMany": "購買的授權將超過 100 個。",
+      "notForSale": "額外授權不販售。",
+      "pending": "已有一筆購買正在等待付款。"
+    }
+  },
+  "badgePrinting": {
+    "title": "印表機與列印紀錄",
+    "subtitle": "新增此活動的名牌印表機，讓每個服務台的列印站保持連線，並查看每張名牌的列印或重印情形及原因。",
+    "printers": "印表機",
+    "stationHint": "請在每台印表機旁的電腦上保持開啟一個列印站。90 秒內沒有訊號的印表機會顯示為離線。",
+    "noPrintersTitle": "尚無印表機",
+    "noPrintersDescription": "為每個服務台新增一台印表機。在此之前，名牌會透過你所用裝置的列印對話框列印。",
+    "addPrinter": "新增印表機",
+    "printerName": "印表機名稱",
+    "connection": "列印方式",
+    "adapters": {
+      "browser": "服務台電腦或 iPad 上的列印對話框（AirPrint 或任何印表機）",
+      "printnode": "PrintNode（不需列印對話框）"
+    },
+    "adapterShort": {
+      "browser": "列印對話框",
+      "printnode": "PrintNode"
+    },
+    "printnodeId": "PrintNode 印表機編號",
+    "printnodeIdHint": "此印表機在你的 PrintNode 帳戶中的編號。",
+    "printnodeNumber": "PrintNode 編號 {id}",
+    "printnodeOffHint": "印表機會透過服務台裝置的列印對話框列印。如需不經對話框列印（PrintNode），請聯絡支援團隊為你的組織開通 PrintNode 帳戶。",
+    "printerAdded": "已新增印表機。",
+    "archive": "封存 {name}",
+    "archived": "已封存印表機。",
+    "status": {
+      "unknown": "尚未連線",
+      "online": "線上",
+      "offline": "離線"
+    },
+    "lastSeen": "最後訊號：{time}",
+    "neverSeen": "尚無訊號",
+    "offlineSince": "自 {time} 起離線",
+    "openStation": "開啟列印站：{name}",
+    "log": "列印紀錄",
+    "counts": "{prints, plural, other {首次列印 # 次}} · {reprints, plural, other {重印 # 次}}",
+    "filterLabel": "顯示",
+    "filters": {
+      "all": "全部",
+      "print": "首次列印",
+      "reprint": "重印"
+    },
+    "logEmptyTitle": "尚未列印任何內容",
+    "logEmptyDescription": "在服務台或從參加者個人資料列印的名牌會顯示在這裡，並附上每次重印的原因。",
+    "logCaption": "已列印和重印的名牌，最新的在前",
+    "columns": {
+      "when": "時間",
+      "who": "名牌",
+      "what": "列印",
+      "reason": "原因",
+      "printer": "印表機",
+      "status": "狀態"
+    },
+    "kinds": {
+      "print": "首次列印",
+      "reprint": "重印"
+    },
+    "reasons": {
+      "first_print": "首次列印",
+      "damaged": "損壞",
+      "lost": "遺失",
+      "details_changed": "資料變更",
+      "misprint": "列印錯誤",
+      "printer_problem": "印表機故障",
+      "other": "其他"
+    },
+    "jobStatus": {
+      "queued": "傳送中",
+      "sent": "已傳送",
+      "failed": "失敗"
+    },
+    "failedHint": "列印失敗不計入：再次列印該名牌仍算是首次列印。",
+    "voided": "票券已取消",
+    "deviceDialog": "此裝置上的列印對話框",
+    "stationTitle": "列印站：{name}",
+    "stationIntro": "請在連接 {name} 的電腦上保持此頁面開啟。它每 30 秒通知 Yayatoh 印表機正在使用中；若頁面關閉或離線達 90 秒，印表機會顯示為離線。",
+    "stationConnecting": "正在連線…",
+    "stationLive": "已於 {time} 傳送訊號。",
+    "stationProblem": "未連線",
+    "stationError": "無法連線至 Yayatoh。將於 30 秒後重試。",
+    "stationArchived": "此印表機已封存。請關閉此頁面。",
+    "stationNotBrowser": "PrintNode 會自行回報此印表機的狀態，不需要列印站。",
+    "recentJobs": "{name} 的近期列印",
+    "noJobsYet": "此印表機尚未列印任何內容。",
+    "findBadge": "尋找要列印的名牌",
+    "badgeHeading": "名牌",
+    "printTitle": "列印名牌：{name}",
+    "noBadge": "此票券沒有名牌（可能已取消）。",
+    "neverPrinted": "尚未列印。",
+    "printedTimes": "{count, plural, other {已列印 # 次}}，最近一次：{time}。",
+    "printer": "印表機",
+    "noPrintersHint": "此活動尚無印表機：名牌將以 PDF 開啟，透過此裝置的列印對話框列印。",
+    "reason": "為什麼要重印？",
+    "reasonPlaceholder": "選擇原因",
+    "note": "備註",
+    "noteHint": "選擇「其他」時必填。最多 200 個字元。",
+    "print": "為 {name} 列印名牌",
+    "reprint": "為 {name} 重印名牌",
+    "printDialogReady": "已記錄。請開啟名牌 PDF，以實際大小（100%）列印。",
+    "openPdf": "開啟 {name} 的名牌 PDF",
+    "printSent": "名牌已傳送至 {printer}。",
+    "printFailed": "無法傳送名牌（{code}）。請重試或選擇其他印表機。",
+    "history": "列印歷程",
+    "noTemplate": "此票種尚無名牌範本。請在「名牌」頁面建立一個。",
+    "printBadgeFor": "為 {name} 列印名牌",
+    "deskHint": "服務台使用：尋找持票人並列印其名牌。每次列印和重印都會連同原因記錄下來。",
+    "errors": {
+      "name": "請為印表機命名（最多 60 個字元）。",
+      "nameTaken": "此活動已有同名的印表機。",
+      "printnode_off": "你的組織尚未開通 PrintNode。",
+      "printnode_id_required": "請輸入印表機的 PrintNode 編號。",
+      "printnodePrinterId": "PrintNode 編號須為整數。",
+      "too_many_printers": "此活動的印表機已達上限（50 台）。請先封存一台。",
+      "archived": "該印表機已封存。請選擇其他印表機。",
+      "printerId": "請選擇印表機。",
+      "reason_required": "請選擇重印此名牌的原因。",
+      "note_required": "選擇「其他」時，請簡要說明原因。",
+      "note": "備註不得超過 200 個字元。"
+    }
+  },
+  "sessionCheckin": {
+    "title": "場次報到",
+    "description": "單一場次的入口：誰可以進入（已註冊並報名、通行證的入場等級、會場容量），掃描入場與離場，以及在會場的停留時間。",
+    "back": "返回報到",
+    "backToSessions": "返回場次報到",
+    "manage": "場次報到",
+    "sessionDoor": "場次入口",
+    "doors": "場次入口",
+    "emptyTitle": "尚無場次入口",
+    "emptyManage": "在下方為場次新增入口；掃描人員之後在入口畫面或掃描 App 中選擇它。",
+    "emptyScan": "主辦單位會在這裡新增場次入口；之後在入口畫面選擇一個。",
+    "full": "會場已滿",
+    "enrollmentRequired": "需要報名",
+    "inRoom": "目前在場",
+    "ofCapacity": "{count} / {capacity}",
+    "attended": "到場人數",
+    "overrides": "破例放行",
+    "avgDwell": "平均停留時間",
+    "minutes": "{count} 分鐘",
+    "selfOn": "自助報到傳單已開啟 · 透過傳單報到：{count}",
+    "selfOff": "自助報到傳單已關閉",
+    "printFlyer": "列印傳單",
+    "printFlyerFor": "列印 {name} 的自助報到傳單",
+    "turnOn": "開啟傳單",
+    "turnOnFor": "開啟 {name} 的自助報到傳單",
+    "turnOff": "關閉傳單",
+    "turnOffFor": "關閉 {name} 的自助報到傳單",
+    "setUp": "新增場次入口",
+    "addTitle": "新場次入口",
+    "noSessionsTitle": "尚無場次",
+    "noSessionsDescription": "請先在議程中新增場次，再為每個需要報到的場次新增入口。",
+    "openProgram": "開啟議程",
+    "doorName": "入口名稱",
+    "doorNameHint": "掃描人員看到的名稱，例如「2 號廳 — 工作坊入口」。",
+    "session": "場次",
+    "chooseSession": "選擇場次",
+    "capacity": "會場可容納人數（選填）",
+    "capacityHint": "留空則使用議程中會場的容量。",
+    "selfCheckin": "自助報到傳單",
+    "selfCheckinHint": "參加者掃描印出傳單上的 QR 碼來記錄出席。僅記錄出席，不會放行任何人。",
+    "add": "新增場次入口",
+    "added": "已新增場次入口。",
+    "nameRequired": "請為入口命名。",
+    "nameTaken": "已有同名的檢查點。",
+    "sessionRequired": "請選擇此入口對應的場次。",
+    "direction": "掃描",
+    "scanIn": "入場",
+    "scanOut": "離場",
+    "dwell": "在場 {minutes} 分鐘",
+    "gateHint": {
+      "enrollment": "需要已註冊，並已報名此場次。",
+      "admission_level": "其通行證不包含此場次。",
+      "capacity": "會場已無法再容納更多人。"
+    },
+    "overrideLabel": "仍然放行",
+    "overrideReason": "原因（記錄在稽核日誌中）",
+    "overrideHint": "至少 3 個字元，例如「講者的貴賓」。",
+    "overrideSubmit": "仍然放行",
+    "overrideOffline": "破例放行需要連線。",
+    "overrideFailed": "無法放行，請再試一次。",
+    "nothingToOverride": "無需破例：可以進入。",
+    "roomCount": "在場：{count} / {capacity}",
+    "roomCountOpen": "在場：{count}",
+    "flyerTitle": "自助報到傳單",
+    "flyerOffTitle": "傳單已關閉",
+    "flyerOffDescription": "請先開啟此入口的自助報到傳單。",
+    "print": "列印",
+    "flyerQr": "報到 {title} 的 QR 碼",
+    "flyerCall": "掃描以報到",
+    "flyerHint": "開啟相機掃描 QR 碼，然後輸入門票或識別證上的代碼。",
+    "reasonRequired": "請填寫放行原因（至少 3 個字元）。"
+  },
+  "selfCheckin": {
+    "metaTitle": "場次報到",
+    "intro": "讓主辦單位知道你已到場：輸入門票或識別證上印的代碼。",
+    "codeLabel": "門票或識別證代碼",
+    "codeHint": "8 位英文字母與數字，例如 K7M2QX9P。",
+    "submit": "報到",
+    "codeRequired": "請輸入門票或識別證上的代碼。",
+    "notFound": "找不到此活動中使用該代碼的門票。",
+    "rateLimited": "嘗試次數過多，請在 {minutes} 分鐘後再試。",
+    "entered": "報到成功",
+    "already": "你已報到",
+    "enjoy": "祝你聽講愉快。",
+    "closedTitle": "報到尚未開放",
+    "closedDescription": "自助報到在場次開始前 30 分鐘開放，場次結束時關閉。",
+    "goneTitle": "此傳單已失效",
+    "goneDescription": "請向場次工作人員尋求協助。"
+  },
+  "networking": {
+    "metaTitle": "交流",
+    "title": "認識其他參加者",
+    "publicLink": "交流",
+    "close": "關閉",
+    "backToEvent": "返回 {event}",
+    "sections": "交流區塊",
+    "waitingCount": "{count, plural, other {# 個等待你回覆}}",
+    "tabs": {
+      "people": "參加者",
+      "connections": "聯絡人",
+      "meetings": "會面",
+      "profile": "我的檔案",
+      "chats": "聊天"
+    },
+    "signIn": {
+      "intro": "看看還有誰會來、建立聯繫並預約簡短會面。這裡只顯示選擇參與的人。",
+      "heading": "確認電子郵件以開始",
+      "how": "請使用你報名時的電子郵件。我們會寄送 6 位數驗證碼。"
+    },
+    "notAttendee": {
+      "title": "找不到此電子郵件的報名紀錄",
+      "description": "交流功能開放給本活動的報名者。請使用票券上的電子郵件登入。",
+      "switch": "使用其他電子郵件"
+    },
+    "optIn": {
+      "intro": "在你開啟之前，交流功能對你是關閉的。",
+      "offTitle": "你不在名錄中",
+      "offDescription": "這裡沒有人能看到你或聯絡你。請在下方建立檔案以加入。",
+      "heading": "建立你的交流檔案",
+      "privacy": "只有本活動中同樣加入的其他參加者能看到你的檔案。你的電子郵件絕不會顯示。你可以隨時退出。",
+      "submit": "加入交流",
+      "done": "你已加入。你的檔案現在對已加入的其他參加者可見。",
+      "hiddenTitle": "主辦單位已隱藏你的檔案",
+      "hiddenDescription": "收到檢舉後，主辦單位已將你的檔案從本活動的交流中移除。如認為有誤，請聯絡主辦單位。"
+    },
+    "profile": {
+      "metaTitle": "我的交流檔案",
+      "title": "我的檔案",
+      "intro": "這是加入交流的其他參加者看到的內容。",
+      "editHeading": "你的檔案",
+      "displayName": "顯示名稱",
+      "displayNameHint": "你的名字或大家熟知的稱呼。",
+      "headline": "職稱",
+      "company": "公司",
+      "bio": "自我介紹",
+      "bioHint": "簡單介紹你的工作或想聊的話題（最多 500 個字元）。",
+      "interests": "興趣",
+      "interestsHint": "以逗號分隔，例如：設計, 資料, 招募。",
+      "consentLegend": "你的同意",
+      "consent": "向本活動中同樣加入交流的其他參加者顯示我的檔案。",
+      "displayNameRequired": "請輸入顯示名稱。",
+      "consentRequired": "勾選此方塊以加入交流。",
+      "tooLong": "最多 80 個字元。",
+      "bioTooLong": "最多 500 個字元。",
+      "save": "儲存檔案",
+      "saved": "檔案已儲存。",
+      "blockedHeading": "你封鎖的人",
+      "noBlocked": "你還沒有封鎖任何人。",
+      "unblock": "解除封鎖",
+      "unblockName": "解除封鎖 {name}",
+      "unblocked": "已解除封鎖 {name}。",
+      "leaveHeading": "退出交流",
+      "leaveHelp": "你的檔案會立即從名錄中消失。待處理的請求會被撤回，之後的會面會被取消。你之後可以重新加入。",
+      "leave": "退出交流"
+    },
+    "people": {
+      "intro": "這裡的每個人都選擇了可以被找到。可依姓名、職稱、公司或興趣搜尋。",
+      "search": "搜尋參加者",
+      "searchHint": "姓名、職稱、公司或興趣。",
+      "searchButton": "搜尋",
+      "count": "{count, plural, =0 {還沒有其他人加入} other {# 人}}",
+      "resultsFor": "{count, plural, =0 {沒有人符合「{q}」} other {# 人符合「{q}」}}",
+      "noMatchTitle": "沒有人符合「{q}」",
+      "noMatchDescription": "試試更短的字詞，或換一個興趣或公司。",
+      "clearSearch": "顯示所有人",
+      "emptyTitle": "還沒有其他人加入",
+      "emptyDescription": "有人加入交流後會顯示在這裡。活動接近時再來看看。",
+      "listLabel": "參加者",
+      "interests": "興趣",
+      "pages": "參加者分頁",
+      "pageOf": "第 {page} 頁，共 {pages} 頁",
+      "previous": "上一頁",
+      "next": "下一頁"
+    },
+    "status": {
+      "pendingOut": "已送出請求",
+      "pendingIn": "想與你建立聯繫",
+      "connected": "已建立聯繫"
+    },
+    "notice": {
+      "blocked": "已封鎖。你們在交流中將不再看到彼此。",
+      "reported": "感謝告知。主辦單位會審核你的檢舉，你們將不再看到彼此。"
+    },
+    "person": {
+      "metaTitle": "參加者檔案",
+      "connectHeading": "建立聯繫",
+      "note": "留言（選填）",
+      "noteHint": "最多 300 個字元，僅對方可見。",
+      "connect": "送出聯繫請求",
+      "requestSent": "已向 {name} 送出請求。",
+      "wantsToConnect": "{name} 想與你建立聯繫。",
+      "connectedHelp": "你和 {name} 已建立聯繫。",
+      "meetHeading": "預約會面",
+      "meetHelp": "選擇時段和地點。時間為活動所在時區（{timezone}）。",
+      "noSlots": "主辦單位尚未開放會面時段。",
+      "slot": "時段",
+      "chooseSlot": "選擇時段",
+      "slotRequired": "請選擇時段。",
+      "place": "地點",
+      "choosePlace": "選擇地點",
+      "placeRequired": "請選擇地點。",
+      "requestMeeting": "送出會面請求",
+      "meetingSent": "已向 {name} 送出會面請求。",
+      "message": "傳訊息給 {name}"
+    },
+    "kind": {
+      "booth": "攤位",
+      "meeting_point": "會面點"
+    },
+    "reasons": {
+      "spam": "垃圾訊息或騷擾推銷",
+      "harassment": "騷擾",
+      "inappropriate": "不當內容",
+      "fake": "假冒檔案",
+      "other": "其他"
+    },
+    "safety": {
+      "summary": "封鎖或檢舉 {name}",
+      "blockHelp": "你們在交流中將不再看到彼此。你們之間的請求會被撤回，之後的會面會被取消。{name} 不會收到通知。",
+      "block": "封鎖 {name}",
+      "reportHelp": "告訴主辦單位發生了什麼事。檢舉也會封鎖此人。",
+      "reason": "原因",
+      "chooseReason": "選擇原因",
+      "reasonRequired": "請選擇原因。",
+      "details": "發生了什麼事",
+      "detailsHint": "選擇「其他」時必填。最多 500 個字元，僅主辦單位可見。",
+      "detailsRequired": "請告訴我們發生了什麼事。",
+      "report": "檢舉 {name}"
+    },
+    "connections": {
+      "metaTitle": "我的聯絡人",
+      "title": "聯絡人",
+      "emptyTitle": "還沒有聯絡人",
+      "emptyDescription": "在名錄中找到感興趣的人，並向他們送出聯繫請求。",
+      "browse": "瀏覽參加者",
+      "incoming": "給你的請求",
+      "noIncoming": "沒有等待你回覆的請求。",
+      "outgoing": "你送出的請求",
+      "noOutgoing": "沒有等待回覆的請求。",
+      "connected": "你的聯絡人",
+      "noConnected": "還沒有聯絡人。",
+      "accept": "接受",
+      "acceptFrom": "接受 {name} 的請求",
+      "accepted": "你已與 {name} 建立聯繫。",
+      "decline": "拒絕",
+      "declineFrom": "拒絕 {name} 的請求",
+      "declined": "已拒絕請求。",
+      "withdraw": "撤回請求",
+      "withdrawTo": "撤回給 {name} 的請求",
+      "withdrawn": "已撤回請求。",
+      "remove": "移除",
+      "removeName": "移除與 {name} 的聯繫",
+      "removed": "已移除聯絡人。",
+      "message": "傳訊息",
+      "messageTo": "傳訊息給 {name}"
+    },
+    "meetings": {
+      "metaTitle": "我的會面",
+      "title": "會面",
+      "intro": "時間為活動所在時區（{timezone}）。",
+      "emptyTitle": "還沒有會面",
+      "emptyDescription": "在名錄中開啟某人的檔案即可預約會面。",
+      "incoming": "給你的會面請求",
+      "noIncoming": "沒有等待你回覆的會面請求。",
+      "outgoing": "你送出的會面請求",
+      "noOutgoing": "沒有等待回覆的會面請求。",
+      "upcoming": "你的會面",
+      "noUpcoming": "還沒有確定的會面。",
+      "place": "地點：{place}",
+      "placeTable": "地點：{place}，{table} 號桌",
+      "accept": "接受",
+      "acceptFrom": "接受與 {name} 的會面",
+      "accepted": "與 {name} 的會面已確認。",
+      "decline": "拒絕",
+      "declineFrom": "拒絕與 {name} 的會面",
+      "declined": "已拒絕會面。",
+      "withdraw": "撤回請求",
+      "withdrawTo": "撤回給 {name} 的會面請求",
+      "withdrawn": "已撤回會面請求。",
+      "confirmed": "已確認",
+      "addToCalendar": "加入行事曆",
+      "addToCalendarWith": "將與 {name} 的會面加入行事曆",
+      "cancel": "取消會面",
+      "cancelWith": "取消與 {name} 的會面",
+      "cancelled": "已取消會面。"
+    },
+    "ics": {
+      "summary": "與 {name} 會面",
+      "placeTable": "{place}，{table} 號桌",
+      "description": "{event} 交流會面，地點：{place}。"
+    },
+    "errors": {
+      "not_opted_in": "請先加入交流。",
+      "hidden": "主辦單位已隱藏你的檔案。",
+      "not_attendee": "此電子郵件沒有本活動的報名紀錄。",
+      "connected": "你們已經建立聯繫。",
+      "already_requested": "你已經送出過請求。",
+      "declined": "對方拒絕了你先前的請求。",
+      "too_many": "等待回覆的請求太多。請先等待一些回覆。",
+      "not_pending": "此請求已有回覆。",
+      "meetings_off": "主辦單位已關閉會面功能。",
+      "location_full": "該地點在此時段已額滿。請選擇其他地點或時間。",
+      "busy": "你在此時段已有會面。",
+      "person_busy": "對方在此時段已有會面。",
+      "past": "該時段已經開始。請選擇較晚的時段。",
+      "unknown": "此選項已無法使用。請重新整理頁面。",
+      "in_use": "仍有會面在使用。請先取消它們。",
+      "resolved": "此檢舉已處理。"
+    },
+    "console": {
+      "link": "交流",
+      "title": "交流",
+      "description": "讓參加者互相找到彼此、建立聯繫，並在攤位和會面點預約會面。只有本人選擇後才會參與。",
+      "openAttendeePage": "開啟參加者頁面",
+      "viewerNotice": "你可以檢視交流設定。如需變更，請聯絡管理員。",
+      "offTitle": "交流已關閉",
+      "offDescription": "開啟後，參加者可以使用名錄、聯繫請求和會面。在本人選擇之前不會顯示任何人。",
+      "offViewer": "管理員可以為本活動開啟交流。",
+      "enable": "開啟交流",
+      "stats": {
+        "optedIn": "名錄中的人數",
+        "connections": "聯絡人",
+        "meetings": "已預約會面"
+      },
+      "settings": "設定",
+      "switches": "本活動的交流",
+      "enabledLabel": "交流已開啟（名錄和聯絡人）",
+      "meetingsLabel": "參加者可以預約會面",
+      "saveSettings": "儲存設定",
+      "settingsSaved": "設定已儲存。",
+      "locations": "會面地點",
+      "locationsHelp": "參加者會面的攤位和會面點。容量是指該處同時可進行的會面數量。",
+      "noLocations": "還沒有地點。請在下方新增。",
+      "capacityShort": "{count, plural, other {同時 # 場會面}}",
+      "bookedShort": "{count, plural, =0 {尚無預約} other {已預約 # 場}}",
+      "delete": "刪除",
+      "deleteLocation": "刪除 {name}",
+      "locationDeleted": "地點已刪除。",
+      "editLocation": "編輯 {name}",
+      "saveLocation": "儲存地點",
+      "locationSaved": "地點已儲存。",
+      "locationName": "名稱",
+      "locationNameHint": "例如：12 號攤位，或咖啡區旁的會面點 A。",
+      "locationKind": "類型",
+      "capacity": "容量",
+      "capacityHint": "同時進行的會面（桌數），1 到 50。",
+      "addLocation": "新增地點",
+      "locationAdded": "地點已新增。",
+      "slots": "時段",
+      "slotsHelp": "會面在這些時段中預約。時間為活動所在時區（{timezone}）。",
+      "noSlots": "還沒有時段。請在下方新增。",
+      "deleteSlot": "刪除時段 {slot}",
+      "slotDeleted": "時段已刪除。",
+      "addSlots": "新增時段",
+      "slotsAdded": "時段已新增。",
+      "slotsFrom": "從",
+      "slotsTo": "到",
+      "slotMinutes": "每個時段的長度（分鐘）",
+      "slotMinutesHint": "時段首尾相連，每個 5 到 240 分鐘。",
+      "timeHint": "活動所在時區（{timezone}）。",
+      "reports": "檢舉",
+      "noReports": "沒有待審核的檢舉。",
+      "openReports": "待審核的檢舉",
+      "reportTitle": "{reporter} 檢舉了 {reported}",
+      "hide": "隱藏檔案",
+      "hideName": "在交流中隱藏 {name}",
+      "hidden": "已在交流中隱藏 {name}。",
+      "dismiss": "駁回",
+      "dismissReport": "駁回關於 {name} 的檢舉",
+      "dismissed": "檢舉已駁回。",
+      "closedReports": "{count, plural, other {# 則已處理的檢舉}}",
+      "status": {
+        "open": "待處理",
+        "hidden": "已隱藏",
+        "dismissed": "已駁回"
+      },
+      "hiddenPeople": "已隱藏的人",
+      "noHidden": "沒有被隱藏的人。",
+      "restore": "恢復",
+      "restoreName": "在交流中恢復 {name}",
+      "restored": "{name} 已恢復到交流中。",
+      "errors": {
+        "name": "請輸入名稱。",
+        "nameTaken": "已有同名地點。",
+        "capacity": "請輸入 1 到 {max} 的容量。",
+        "capacityBelowBooked": "此地點已預約的會面更多。請先取消一些。",
+        "startsAt": "請輸入時段開始時間。",
+        "endsAt": "請輸入晚於開始的結束時間。",
+        "minutes": "請輸入 5 到 240 分鐘的長度。",
+        "outsideEvent": "時段必須在活動的日期和時間範圍內。",
+        "tooShort": "開始與結束之間的時間短於一個時段。",
+        "overlap": "這些時段與現有時段重疊。",
+        "tooMany": "超出本活動的上限。請先刪除一些。"
+      },
+      "chatLabel": "聯絡人和會面對象之間的聊天，以及與參展商在攤位上的聊天",
+      "chat": {
+        "heading": "聊天",
+        "on": "參加者可以與聯絡人、會面對象以及接受聊天的參展商聊天。你只會看到被檢舉的對話。",
+        "off": "聊天已關閉。請在上方設定中開啟。",
+        "stats": {
+          "conversations": "對話",
+          "messagesToday": "過去 24 小時的訊息",
+          "openReports": "待處理的聊天檢舉",
+          "booths": "接受聊天的攤位"
+        },
+        "reports": "聊天檢舉",
+        "noReports": "沒有需要審核的聊天檢舉。",
+        "openReports": "待處理的聊天檢舉",
+        "reportTitle": "{reporter} 檢舉了與 {reported} 的聊天",
+        "reportTitleBooth": "{reporter} 檢舉了與 {reported} 的攤位聊天",
+        "excerpt": "檢舉前的最新訊息",
+        "removedMessage": "訊息已移除",
+        "remove": "移除",
+        "removeFrom": "移除 {name} 在 {time} 傳送的訊息",
+        "removed": "訊息已移除，雙方都不會再看到。",
+        "hide": "在交流中隱藏",
+        "hideName": "在交流中隱藏 {name}",
+        "hidden": "已在交流中隱藏 {name}。",
+        "suspend": "暫停攤位聊天",
+        "suspendName": "暫停 {name} 的攤位聊天",
+        "suspended": "{name} 的攤位聊天已暫停。",
+        "dismiss": "駁回",
+        "dismissReport": "駁回關於 {name} 的檢舉",
+        "dismissed": "檢舉已駁回。",
+        "closedReports": "{count, plural, other {# 則已處理的聊天檢舉}}",
+        "moderation": {
+          "open": "待處理",
+          "actioned": "已處理",
+          "dismissed": "已駁回"
+        },
+        "suspendedBooths": "已暫停的攤位聊天",
+        "noSuspended": "沒有被暫停的攤位聊天。",
+        "restore": "解除暫停",
+        "restoreName": "解除 {name} 攤位聊天的暫停",
+        "restored": "{name} 可以重新接受聊天了。"
+      }
+    },
+    "unreadChats": "{count, plural, other {# 個聊天有未讀訊息}}"
+  },
+  "chat": {
+    "metaTitle": "聊天",
+    "title": "聊天",
+    "description": "與聯絡人、會面對象以及攤位上的參展商的訊息。",
+    "conversationsHeading": "你的聊天",
+    "emptyTitle": "還沒有聊天",
+    "emptyDescription": "成為聯絡人或約定會面後，你就可以傳訊息給對方。打開一位聯絡人開始聊天。",
+    "toConnections": "前往聯絡人",
+    "unread": "{count, plural, other {# 則未讀訊息}}",
+    "boothLabel": "攤位 {numbers}",
+    "lastRemoved": "訊息已移除",
+    "lastFromMe": "你：{body}",
+    "lastFromBooth": "你的攤位：{body}",
+    "boothsHeading": "與參展商聊天",
+    "boothsHelp": "這些參展商在攤位上回答問題。",
+    "noBooths": "目前沒有參展商接受聊天。",
+    "chatWithBooth": "與 {name} 聊天",
+    "openBooth": "聊天",
+    "notice": {
+      "reported": "感謝告知。主辦單位和 Yayatoh 會進行審核，對方將無法再傳訊息給你。",
+      "blocked": "已封鎖。你們在交流中將不再看到彼此。"
+    },
+    "closed": {
+      "chat_off": "主辦單位已關閉本活動的聊天。",
+      "not_connected": "成為聯絡人或約定會面後，你才能傳訊息給 {name}。",
+      "booth_closed": "{name} 目前不接受聊天。",
+      "blocked": "此聊天已被封鎖。",
+      "blockedByMe": "你已封鎖此攤位的聊天。在下方解除封鎖後即可再次傳送。"
+    },
+    "threadMetaTitle": "聊天",
+    "threadTitle": "與 {name} 的聊天",
+    "backToChats": "所有聊天",
+    "viewProfile": "{name} 的檔案",
+    "noMessages": "還沒有訊息。跟 {name} 打聲招呼吧。",
+    "logLabel": "與 {name} 的訊息",
+    "you": "你",
+    "removed": "主辦單位移除了這則訊息",
+    "messageLabel": "訊息",
+    "messageHint": "按 Enter 傳送，Shift+Enter 換行。最多 2,000 個字元。",
+    "send": "傳送",
+    "live": "新訊息一到就會顯示在這裡。",
+    "connecting": "連線中…",
+    "reconnecting": "重新連線中… 恢復連線後會顯示新訊息。",
+    "errors": {
+      "not_connected": "你只能傳訊息給聯絡人或已約定會面的人。",
+      "chat_off": "主辦單位已關閉本活動的聊天。",
+      "booth_closed": "這位參展商目前不接受聊天。",
+      "blocked": "此聊天已被封鎖。",
+      "not_found": "此人已無法聊天。",
+      "too_fast": "你傳送訊息太快了。請等一分鐘再試。",
+      "hourly_limit": "你這一小時傳送的訊息太多了。請稍後再試。",
+      "too_many_new_chats": "你這一小時發起的新聊天太多了。請稍後再試。",
+      "awaiting_reply": "請等對方回覆後再繼續傳送。",
+      "required": "請先輸入訊息。",
+      "too_long": "訊息最多 2,000 個字元。",
+      "already_removed": "這則訊息已被移除。"
+    },
+    "safety": {
+      "summary": "封鎖或檢舉 {name}",
+      "block": "封鎖 {name}",
+      "unblock": "解除封鎖 {name}",
+      "unblockHelp": "你們可以在此聊天中重新互傳訊息。",
+      "blockBoothHelp": "{name} 將無法回覆你，你也無法傳訊息給對方。你可以稍後解除封鎖。",
+      "blockVisitorHelp": "{name} 將無法再傳訊息給你的攤位。你可以稍後解除封鎖。",
+      "report": "檢舉並封鎖 {name}",
+      "reportHelp": "告訴主辦單位發生了什麼事。Yayatoh 也會審核聊天檢舉。檢舉也會封鎖此聊天。",
+      "reason": "原因",
+      "chooseReason": "選擇原因",
+      "reasonRequired": "請選擇原因。",
+      "details": "發生了什麼事",
+      "detailsHint": "選擇「其他」時必填。最多 500 個字元。",
+      "detailsRequired": "請告訴我們發生了什麼事。"
+    },
+    "portal": {
+      "title": "攤位聊天",
+      "description": "加入交流的參加者可以傳訊息給你的攤位。攤位團隊共用這個收件匣。",
+      "back": "返回 {name}",
+      "backToChats": "所有攤位聊天",
+      "on": "正在接受聊天",
+      "off": "不接受聊天",
+      "suspended": "收到檢舉後，主辦單位已暫停你的攤位聊天。",
+      "eventOff": "本活動的聊天已關閉。",
+      "notAtBooth": "你有公開的攤位後，訪客才能找到你的攤位聊天。",
+      "turnOn": "在我們的攤位接受聊天",
+      "turnOff": "停止接受聊天",
+      "adminOnly": "只有參展商管理員可以開啟或關閉攤位聊天。",
+      "conversations": "訪客的聊天",
+      "emptyTitle": "還沒有聊天",
+      "emptyDescription": "訪客傳訊息給你的攤位後，會顯示在這裡。",
+      "emptyOff": "開啟攤位聊天，訪客才能傳訊息給你。",
+      "blocked": "已封鎖",
+      "unreadChats": "{count, plural, =0 {沒有未讀聊天} other {# 個聊天有未讀訊息}}",
+      "open": "打開攤位聊天",
+      "closedBlockedByMe": "你已封鎖 {name}。在下方解除封鎖後即可回覆。",
+      "closed": {
+        "chat_off": "本活動的聊天已關閉。",
+        "booth_closed": "你的攤位不接受聊天。開啟攤位聊天後即可回覆。",
+        "blocked": "{name} 已封鎖你的攤位聊天。",
+        "not_connected": "此聊天已關閉。"
+      },
+      "reported": "謝謝。主辦單位和 Yayatoh 會審核你的檢舉；這位訪客已無法再傳訊息給你的攤位。"
+    }
+  },
+  "formControls": {
+    "search": "搜尋",
+    "noResults": "沒有相符項目",
+    "loading": "載入中…",
+    "remove": "移除{label}",
+    "create": "建立「{query}」",
+    "clear": "清除",
+    "chooseDate": "選擇日期",
+    "chooseTime": "選擇時間",
+    "previousMonth": "上個月",
+    "nextMonth": "下個月",
+    "today": "今天",
+    "invalidDate": "請輸入日期，例如 {example}",
+    "invalidTime": "請輸入時間，例如 {example}",
+    "tooEarly": "請選擇 {date} 或之後的日期",
+    "tooLate": "請選擇 {date} 或之前的日期",
+    "timeZoneNote": "{zone} 時間",
+    "selected": "已選取"
+  },
+  "emptyActions": {
+    "seeEvents": "查看你的活動",
+    "eventHome": "前往活動首頁",
+    "clearSearch": "清除搜尋"
+  },
+  "coupons": {
+    "title": "優惠券",
+    "description": "優惠代碼在結帳時為買家提供折扣。每個代碼屬於一個活動：選擇活動即可查看或新增代碼。",
+    "emptyTitle": "沒有可新增代碼的活動",
+    "emptyDescription": "優惠代碼位於活動的「票券與訂單」頁面。請先建立活動，再新增代碼。",
+    "emptyAction": "建立活動",
+    "caption": "活動及其優惠代碼",
+    "event": "活動",
+    "when": "日期",
+    "status": "狀態",
+    "codes": "優惠代碼",
+    "manage": "管理代碼",
+    "view": "查看代碼",
+    "manageFor": "{name} 的優惠代碼"
+  },
+  "howItWorks": {
+    "docLink": "閱讀指南",
+    "hide": "隱藏",
+    "show": "顯示",
+    "domains": {
+      "title": "自訂網域如何運作",
+      "intro": "在你自己的網址（例如 tickets.yourbrand.com）展示活動頁面，而不是 Yayatoh 連結。你的 Yayatoh 網址也會繼續有效。",
+      "step1": "新增你擁有的網域。我們會請你確認身分。",
+      "step2": "將我們顯示的 DNS 記錄複製到網域服務商的設定中。",
+      "step3": "我們會自動檢查記錄，最多可能需要一天。",
+      "step4": "驗證通過後，我們會設定安全憑證（HTTPS），網域隨即上線。"
+    },
+    "templates": {
+      "title": "範本如何運作",
+      "intro": "範本會儲存活動的設定（票券、問題、區塊與頁面內容），讓下一個活動一開始就準備就緒。由範本建立的活動是沒有銷售紀錄的草稿。",
+      "step1": "開啟一個已按你的需要設定好的活動。",
+      "step2": "選擇「複製與範本」，然後將其儲存為範本。",
+      "step3": "回到這裡即可用它建立新活動，或從下方的入門範本開始。"
+    },
+    "series": {
+      "title": "系列如何運作",
+      "intro": "系列將相關活動（巡演、季度、節慶）匯集到一個公開頁面，列出即將到來的日期。",
+      "step1": "以名稱和簡短描述建立系列。",
+      "step2": "開啟每個活動的「日期」頁面，將其加入系列。",
+      "step3": "分享系列的公開頁面，新增活動後會自動更新。"
+    },
+    "payouts": {
+      "title": "撥款如何運作",
+      "intro": "票券收入以撥款形式匯入你的銀行帳戶。只需連結一次收款帳戶，下方數字會顯示即將入帳的金額與時間。",
+      "step1": "連結你的收款帳戶並驗證你的商業資訊。",
+      "step2": "銷售票券。每筆銷售扣除費用與退款後計入你的餘額。",
+      "step3": "依你的帳戶類型，款項會隨銷售或於活動結束後撥付，並保留少量準備金用於退款與爭議。",
+      "step4": "每筆撥款都會匯入你的銀行，並在此顯示日期與金額。"
+    },
+    "sending": {
+      "title": "郵件寄送如何運作",
+      "intro": "寄給買家與來賓的郵件預設由 Yayatoh 寄出。驗證你自己的網域，讓郵件來自你的地址並順利進入收件匣。",
+      "step1": "新增你的寄件網域（例如 mail.yourbrand.com）。",
+      "step2": "將我們顯示的 DNS 記錄複製到網域服務商的設定中。",
+      "step3": "在此檢查記錄，驗證通常只需幾分鐘。",
+      "step4": "驗證通過後，你的郵件將從你自己的網域寄出。"
+    },
+    "eventType": {
+      "title": "活動類型與分類",
+      "intro": "活動類型決定活動包含哪些區塊：婚禮有賓客、回覆與座位；會議有議程、講者與名牌。分類幫助大家找到公開活動。",
+      "step1": "建立活動時，選擇最接近的類型。",
+      "step2": "在活動的「詳細資料」頁面選擇分類並新增標籤。",
+      "step3": "不確定？選擇「其他」：它包含常用區塊，詳細資料可以稍後新增。"
+    },
+    "coupons": {
+      "title": "優惠代碼如何運作",
+      "intro": "優惠代碼會在收費前按比例或金額減免每張票券的價格。每個代碼屬於一個活動。",
+      "step1": "在下方選擇活動並開啟其優惠代碼。",
+      "step2": "新增代碼及折扣，也可以設定次數上限與日期。",
+      "step3": "分享代碼。買家在結帳時輸入，每次使用都會被記錄。"
     }
   }
 }

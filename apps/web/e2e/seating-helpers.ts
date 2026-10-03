@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
-import { continueToPayment } from './helpers.ts';
+import { continueToPayment, pickOption } from './helpers.ts';
 
 /** A unique name per test and viewport project (projects run in parallel on one database). */
 export const unique = (what: string) => `${what} ${Date.now()} ${test.info().project.name.split('-')[0]}`;
@@ -12,7 +12,7 @@ export async function createGala(
 ) {
   await page.goto('/o/lakeside-events/events/new');
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Event type').selectOption('gala');
+  await pickOption(page.getByLabel('Event type'), 'gala');
   await page.getByLabel('Starts', { exact: true }).fill(starts);
   await page.getByLabel('Ends', { exact: true }).fill(ends);
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -62,7 +62,7 @@ export async function priceAllAndPublish(page: Page, base: string, ticketType: s
   await boxes.evaluateAll((els) => {
     for (const el of els) if (!(el as HTMLInputElement).checked) (el as HTMLInputElement).click();
   });
-  await prices.getByLabel('Sells as').selectOption({ label: ticketType });
+  await pickOption(prices.getByLabel('Sells as'), { label: ticketType });
   await prices.getByRole('button', { name: 'Set price' }).click();
   await expect(prices.getByText('Prices updated.')).toBeVisible();
   await page.getByRole('button', { name: 'Put seats on sale' }).click();

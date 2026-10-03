@@ -1,7 +1,7 @@
 'use client';
 
 import { EVENT_MODES, type EventMode } from '@yayatoh/command-center/client';
-import { Button, Card, Label, StatusPill } from '@yayatoh/ui';
+import { Button, Card, Label, Select, StatusPill } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState, useId } from 'react';
 import { errorMessageKey } from '@/lib/errors.ts';
@@ -78,14 +78,14 @@ export function ModePanel({
             <label htmlFor={id} className="text-[13px] font-bold text-ink">
               {t('override.label')}
             </label>
-            <select id={id} name="mode" defaultValue={mode.override ?? 'auto'} className="field">
+            <Select id={id} name="mode" defaultValue={mode.override ?? 'auto'} className="field">
               <option value="auto">{t('override.automatic', { mode: t(`mode.${mode.computed}`) })}</option>
               {EVENT_MODES.map((m) => (
                 <option key={m} value={m}>
                   {t(`mode.${m}`)}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
           <Button type="submit" variant="secondary" disabled={pending}>
             {t('override.submit')}

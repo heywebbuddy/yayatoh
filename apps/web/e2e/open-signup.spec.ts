@@ -5,6 +5,7 @@ import {
   lastEmailedCode,
   ownClientIp,
   passHumanCheck,
+  pickOption,
   withOpenSignup,
 } from './helpers.ts';
 
@@ -159,7 +160,7 @@ async function setUpTwoFactor(page: Page) {
 async function createDraftEvent(page: Page, slug: string, name: string) {
   await page.goto(`/o/${slug}/events/new`);
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Event type').selectOption('concert');
+  await pickOption(page.getByLabel('Event type'), 'concert');
   await page.getByLabel('Starts', { exact: true }).fill('2031-05-01T19:00');
   await page.getByLabel('Ends', { exact: true }).fill('2031-05-01T23:00');
   await page.getByRole('button', { name: 'Create draft' }).click();

@@ -1,6 +1,6 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
 import { signFakeDisputeWebhook } from '@yayatoh/payments';
-import { continueToPayment, expectAccessible, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, pickOption, signIn } from './helpers.ts';
 
 /**
  * M3.10c support tools in the browser: an organizer transfers a ticket and the recipient claims it
@@ -34,7 +34,7 @@ const stampOf = () => `${Date.now()}${test.info().project.name.slice(0, 1)}`;
 async function eventWithPass(page: Page, name: string, pass: string, price: string, startH: number) {
   await page.goto(`/o/${ORG}/events/new`);
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Time zone').selectOption('America/Chicago');
+  await pickOption(page.getByLabel('Time zone'), 'America/Chicago');
   await page.getByLabel('Starts', { exact: true }).fill(chicago(startH));
   await page.getByLabel('Ends', { exact: true }).fill(chicago(startH + 4));
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -61,7 +61,7 @@ async function buy(
 ) {
   const guest = await (await browser.newContext()).newPage();
   await guest.goto(`/events/${slug}`);
-  await guest.getByLabel(`Quantity — ${pass}`).selectOption(String(opts.quantity ?? 1));
+  await pickOption(guest.getByLabel(`Quantity — ${pass}`), String(opts.quantity ?? 1));
   await guest.getByLabel('Full name').fill(buyer);
   await guest.getByLabel('Email for your tickets').fill(email);
   if (opts.code) await guest.getByLabel('Promo code').fill(opts.code);
@@ -358,7 +358,7 @@ test.describe('support tools (M3.10c)', () => {
     // Spent: it no longer works.
     const third = await (await browser.newContext()).newPage();
     await third.goto(`/events/${slug}`);
-    await third.getByLabel(`Quantity — ${pass}`).selectOption('1');
+    await pickOption(third.getByLabel(`Quantity — ${pass}`), '1');
     await third.getByLabel('Full name').fill(buyer);
     await third.getByLabel('Email for your tickets').fill(email);
     await third.getByLabel('Promo code').fill(code);
@@ -386,7 +386,7 @@ test.describe('support tools (M3.10c)', () => {
     const { slug } = await eventWithPass(page, `Disputes ${stamp}`, pass, '25', 240);
     const guest = await (await browser.newContext()).newPage();
     await guest.goto(`/events/${slug}`);
-    await guest.getByLabel(`Quantity — ${pass}`).selectOption('1');
+    await pickOption(guest.getByLabel(`Quantity — ${pass}`), '1');
     await guest.getByLabel('Full name').fill(buyer);
     await guest.getByLabel('Email for your tickets').fill(`dara+${stamp}@example.test`);
     await continueToPayment(guest, `dara+${stamp}@example.test`);
@@ -497,7 +497,7 @@ test.describe('support tools (M3.10c)', () => {
     // Run it on the order: the preview shows the filled reply.
     await openOrder(page, base, buyer);
     const run = page.getByRole('region', { name: 'Run a macro' });
-    await run.getByLabel('Macro', { exact: true }).selectOption({ label: name });
+    await pickOption(run.getByLabel('Macro', { exact: true }), { label: name });
     await expect(run.getByText(`Hi ${buyer}, we sent your 2 tickets again.`)).toBeVisible();
     await expect(run.getByText('Does: Email the buyer · Add a team note · Resend the tickets')).toBeVisible();
     await run.getByRole('button', { name: 'Run macro' }).focus();

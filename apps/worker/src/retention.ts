@@ -1,6 +1,7 @@
 import { billingEntitlements } from '@yayatoh/billing';
 import { withPlatformReader } from '@yayatoh/db/platform';
 import { giftRetentionCommand } from '@yayatoh/donations';
+import { chatRetentionCommand } from '@yayatoh/engagement';
 import { purgeGuestImportsCommand } from '@yayatoh/guests';
 import { createCtx, executeCommand } from '@yayatoh/kernel';
 import { createCommandPorts, purgeRateLimits } from '@yayatoh/platform';
@@ -62,6 +63,8 @@ export async function runRetention(
       await executeCommand(purgeGuestImportsCommand, {}, ctx, ports);
       // Gifts that never got paid (M4.8a) lose their donor after 30 days, like their orders.
       await executeCommand(giftRetentionCommand, {}, ctx, ports);
+      // Networking chat (M5.8b, D11): conversations of events that ended 24 months ago go.
+      await executeCommand(chatRetentionCommand, {}, ctx, ports);
     } catch (err) {
       failed++;
       console.error(JSON.stringify({ job: 'retention', org: org_id, error: String(err) }));

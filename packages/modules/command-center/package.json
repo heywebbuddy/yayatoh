@@ -24,6 +24,7 @@
     "@yayatoh/marketing": "workspace:*",
     "@yayatoh/platform": "workspace:*",
     "@yayatoh/program": "workspace:*",
+    "@yayatoh/registration": "workspace:*",
     "@yayatoh/reports": "workspace:*",
     "@yayatoh/seating": "workspace:*",
     "@yayatoh/tenancy": "workspace:*",

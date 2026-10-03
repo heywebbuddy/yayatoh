@@ -83,3 +83,35 @@ Migration `0076_true_thunderbolt.sql` (renumbered at merge): schema `badges`, fi
 | Viewer previews but every write refused (commands, direct URLs, hidden controls) | `packages/testing/tests/badges.int.test.ts`, `apps/web/e2e/badges.spec.ts` |
 | Design a 4×3 fold-over template by keyboard only, assign it to a ticket type, batch PDF sorted by company, download it; axe on every screen; Arabic RTL | `apps/web/e2e/badges.spec.ts` |
 | Badges nav only for the conference profile, behind the `badges` key | `packages/platform/tests/profiles.test.ts`, `apps/web/e2e/badges.spec.ts` |
+
+## M5.5b — printing and print log (done)
+
+### 1. Goal and users
+Desk staff (box office, managers) print and reprint badges onsite, from the attendee's profile or the desk's badge search, on the event's printers; organizers see every print and reprint with its reason and know when a printer goes quiet. Plan row M5.5b and decision P5-2 (`docs/plans/phase-5.md`).
+
+### 2. What was built
+- **`BadgePrinter` port** (`packages/modules/badges/src/printer-port.ts`): `browserPrinter` (Stage 1: the desk's print dialog, AirPrint or any printer; a hand-off, no states) and `printNodePrinter` (Stage 2: REST, one platform integrator account, each org a child account addressed by its creator reference = the org id, the job id as `X-Idempotency-Key`). Dev and CI always use `fakePrintNode()`; the real adapter only with `BADGE_PRINTER_PROVIDER=printnode` and `PRINTNODE_API_KEY`. Zebra Browser Print is deferred (P5-2).
+- **Printers per event** (`badges.printers`): name (unique per event among live printers), adapter, PrintNode printer number, `status` `unknown → online → offline`, last heartbeat, offline moment; archived, never deleted. PrintNode printers need PrintNode switched on for the org (`badges.print_settings`, platform staff: `pnpm --filter @yayatoh/worker printnode -- --org <slug> --on`).
+- **Print jobs = the print log** (`badges.print_jobs`): one row per print or reprint of one badge, idempotent per request key. Kind is decided by the server (any earlier job that did not fail makes it a reprint); a reprint needs a reason (`damaged`, `lost`, `details_changed`, `misprint`, `printer_problem`, `other` + note), a first print is `first_print`. Browser jobs are `sent` at once and their PDF opens for 30 minutes (`/badges/jobs/{id}/pdf`); PrintNode jobs are `queued`, rendered and handed over, then `sent` or `failed` with a code. A failed job is logged but never counts. Two desks printing the same badge at once are serialized (advisory lock), so one of them is the reprint.
+- **Heartbeat and offline event:** a print station page (`/badges/printing/{printer}`) beats every 30 s for browser printers; the worker polls PrintNode every 30 s for PrintNode printers. The worker's watchdog (every 5 s, leader) turns an online printer silent for 90 s offline once and emits `badges.printer_offline@1` (`{orgId, eventId, printerId, adapter, lastSeenAt, offlineAt}`); coming back emits `badges.printer_online@1`. Orgs are found through SECURITY DEFINER functions (org ids only, platform_reader, audited). The alert rule lands with M5.9a.
+- **UI:** Badges page → "Printers and print log" (printers with status pills, add/archive, station links; the log with counts and First print/Reprint filters); the desk print page (`/badges/print/{ticket}`); the attendee profile's **Badge** panel (onsite print and reprint). The M5.5a one-badge PDF route (`/badges/ticket/{id}`) is replaced by the logged print flow, so no badge prints outside the log.
+- Dev route `/api/dev/printers` (dev auth only): watchdog with the clock ahead, PrintNode poll, PrintNode switch, fake printer states.
+
+### 3. Later / not yet
+- Sending a batch PDF to a PrintNode printer, and counting batch badges as printed (a batch PDF is a download, already audited; it is not in the print log) — pending owner.
+- PrintNode printer discovery (pick from the account's printers instead of typing the number).
+- Retrying `queued` PrintNode jobs left by a crash between logging and hand-over (they stay `queued` in the log; printing again is a first print only if none counted).
+- Kiosk self-print (M5.5c) uses `startPrintJobCommand` with `source: 'kiosk'`; the "printer offline" alert rule (M5.9a) subscribes to `badges.printer_offline@1`.
+
+### 4. Acceptance
+| Criterion | Test |
+|---|---|
+| Every print and reprint is in the log with its reason (first print logged as `first_print`; reprint without reason, `other` without note refused; idempotent; failed jobs logged but not counted) | `packages/testing/tests/badge-printing.int.test.ts`, `apps/web/e2e/badge-printing.spec.ts` |
+| A printer silent for 90 s emits one offline event (89 s none; 90 s one; later ticks, two runners and reruns none; back online then silent again: a second) | `packages/modules/badges/tests/printing.test.ts`, `packages/testing/tests/badge-printing.int.test.ts`, `apps/worker/tests/printers.int.test.ts` |
+| `BadgePrinter` port: browser hand-off, PrintNode REST mapping (stubbed fetch), fake PrintNode (idempotency, states, refusals), real adapter only with an explicit switch | `packages/modules/badges/tests/printing.test.ts` |
+| PrintNode jobs handed over once; refused/unavailable → failed with a code; poll records online printers; per-org switch is staff-only | `packages/testing/tests/badge-printing.int.test.ts`, `apps/worker/tests/printers.int.test.ts` |
+| Printers per event: unique names, archive, PrintNode needs the switch and a number | `packages/testing/tests/badge-printing.int.test.ts`, `apps/web/e2e/badge-printing.spec.ts` |
+| Onsite reprint from the attendee page; desk print page; job PDF only for the job's 30 minutes | `apps/web/e2e/badge-printing.spec.ts`, `packages/testing/tests/badge-printing.int.test.ts` |
+| Permissions: viewers read the log only (hidden controls, 404 station and print pages, 403 job PDF, commands refused); watchdog/report are platform steps | `packages/testing/tests/badge-printing.int.test.ts`, `apps/web/e2e/badge-printing.spec.ts` |
+| Isolation: rows for both orgs in every new table; foreign org refused | `packages/testing/src/fixtures.ts`, `packages/testing/tests/isolation.int.test.ts`, `badge-printing.int.test.ts` |
+| Keyboard only, axe light and dark on every new screen, Arabic RTL | `apps/web/e2e/badge-printing.spec.ts` |
