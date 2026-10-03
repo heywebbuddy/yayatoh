@@ -1978,7 +1978,8 @@
       "plan": "Plan",
       "assign": "Assign guests",
       "finder": "Seat finder",
-      "rules": "Rules"
+      "rules": "Rules",
+      "guests": "Seat guests"
     },
     "assign": {
       "title": "Assign guests",
@@ -2069,7 +2070,8 @@
       "modeNow": "Look-up: {mode}",
       "modeShort": {
         "code": "email code",
-        "name": "full name"
+        "name": "full name",
+        "pin": "full name and invitation PIN"
       },
       "notPublic": "The event isn't published (or is private), so guests can't open the seat finder yet.",
       "settingsTitle": "Guests",
@@ -2080,11 +2082,13 @@
       "mode": "How guests look up their seat",
       "modeOption": {
         "code": "With a code sent to their email (recommended)",
-        "name": "Instantly, by full name"
+        "name": "Instantly, by full name",
+        "pin": "By full name and the PIN on their invitation"
       },
       "modeHint": {
         "code": "Only someone who can read the guest's email sees their seat, and no one can find out who is on the list.",
-        "name": "Faster at the door, but anyone who knows a guest's full name can see where they sit."
+        "name": "Faster at the door, but anyone who knows a guest's full name can see where they sit.",
+        "pin": "Guests type their full name and the 6-digit PIN printed on their party's invitation. They see their table, never anyone's name, and no one can find out who is on the list."
       },
       "readOnly": "You can see these settings but not change them.",
       "shareTitle": "Share it",
@@ -2092,7 +2096,10 @@
       "openPublic": "Open the seat finder",
       "poster": "Print seat-finder poster",
       "closedNote": "The seat finder is closed. Guests who scan the poster are asked to check back later.",
-      "namePoster": "Print name list poster"
+      "namePoster": "Print name list poster",
+      "partyLinksTitle": "Party links",
+      "partyLinksHint": "Each party's invitation link and QR code also opens their own seat page: their table on the venue map and who sits with them. The QR code stays the same when you move them to another table.",
+      "partyLinksAction": "Party links and QR codes"
     },
     "map": {
       "zoomIn": "Zoom in",
@@ -2177,6 +2184,127 @@
         "forbidden": "You can see the groups but not change them.",
         "noMembers": "No one on the list has the label {label} yet."
       }
+    },
+    "guestSeating": {
+      "title": "Seat guests",
+      "description": "Seat parties at tables. Drag a party from the queue onto the map, or tick guests, choose a table and press Seat selected guests — the keyboard does everything dragging does.",
+      "chart": {
+        "label": "Seating for",
+        "event": "Whole event"
+      },
+      "noPlan": "{chart} has no seating plan yet",
+      "noPlanHint": "Create the plan (tables or rows) first, then seat your guests here.",
+      "toPlan": "Go to the plan",
+      "noGuests": "No guests to seat yet",
+      "noGuestsHint": "Add parties on the Guests page (or invite them to this part of the day), then seat them here.",
+      "toGuests": "Go to Guests",
+      "summary": "{seated} seated · {unseated} to seat",
+      "readOnly": "You can see the seating but not change it.",
+      "declinedSeated": "{count, plural, one {# guest who declined is still seated.} other {# guests who declined are still seated.}} Unseat them in the table details.",
+      "live": {
+        "live": "Live",
+        "connecting": "Connecting…",
+        "offline": "Offline, reconnecting"
+      },
+      "vip": "VIP",
+      "queue": {
+        "title": "Unseated ({count})",
+        "search": "Search parties and guests",
+        "status": "Reply",
+        "statusAll": "All replies",
+        "side": "Side",
+        "sideAll": "All sides",
+        "list": "Parties still to seat",
+        "selectParty": "Select everyone in {party}",
+        "toSeat": "{count, plural, one {# to seat} other {# to seat}}",
+        "selected": "{count, plural, =0 {No one selected} one {# guest selected} other {# guests selected}}",
+        "clear": "Clear selection",
+        "empty": "Everyone has a seat.",
+        "noMatch": "No party matches these filters."
+      },
+      "status": {
+        "attending": "Attending",
+        "pending": "Awaiting reply",
+        "declined": "Declined"
+      },
+      "guest": {
+        "guestOf": "Guest of {name}",
+        "meal": "Meal: {meal}",
+        "noMeal": "No meal chosen",
+        "child": "Child",
+        "infant": "Infant"
+      },
+      "form": {
+        "title": "Seat the selected guests",
+        "table": "Table or row",
+        "choose": "Choose a table or row",
+        "option": "{place} — {free} of {capacity} free",
+        "optionVip": "{place} — {free} of {capacity} free · VIP zone",
+        "cantFit": "Can't fit: {asked, plural, one {# guest} other {# guests}} selected, {fits, plural, =0 {no seats} one {# seat} other {# seats}} free at {place}.",
+        "submit": "Seat selected guests",
+        "submitting": "Seating…"
+      },
+      "place": {
+        "table": "Table {label}",
+        "row": "Row {label}"
+      },
+      "map": {
+        "title": "Map",
+        "hint": "Drag a party onto a table to seat it. Click a table to see who sits there.",
+        "readOnlyHint": "Click a table to see who sits there.",
+        "dropHere": "Drop on {place}: {free} free",
+        "dropCantFit": "Can't fit at {place}: {count, plural, one {# guest} other {# guests}}, {free} free",
+        "guests": "Guests",
+        "tickets": "Ticket holders",
+        "vip": "VIP zone"
+      },
+      "details": {
+        "title": "Table details",
+        "choose": "Table to show",
+        "none": "This chart has no tables or rows.",
+        "counts": "{seated} seated · {free} of {capacity} free",
+        "tickets": "{count, plural, one {# seat held by a ticket} other {# seats held by tickets}}",
+        "sponsor": "Hosted by {name}",
+        "vipZone": "VIP zone",
+        "vipFromPlan": "In a VIP section of the plan",
+        "warnings": "Check this table",
+        "warnDeclined": "{name} declined and is still seated.",
+        "warnVipOutside": "{party} is a VIP party outside a VIP zone.",
+        "warnNotVip": "{party} is not a VIP party but sits in a VIP zone.",
+        "meals": "Meals",
+        "mealCount": "{meal}: {count}",
+        "noMeal": "Not chosen",
+        "empty": "No one sits here yet. Seat a party from the queue.",
+        "unseatParty": "Unseat {party}",
+        "move": "Move to…",
+        "moveLabel": "Move {name} to another table",
+        "unseat": "Unseat",
+        "unseatLabel": "Unseat {name}",
+        "moveTo": "Move {name}",
+        "moveSubmit": "Move",
+        "cancel": "Cancel"
+      },
+      "done": {
+        "seated": "Seated {count, plural, one {# guest} other {# guests}} at {place}.",
+        "moved": "Moved {name} to {place}.",
+        "unseated": "{count, plural, one {# guest is} other {# guests are}} back in the queue.",
+        "vipOn": "{place} is now a VIP zone.",
+        "vipOff": "{place} is no longer a VIP zone."
+      },
+      "warnings": {
+        "vip_outside": "{party} is a VIP party, and {place} is not a VIP zone.",
+        "not_vip_inside": "{place} is a VIP zone, and {party} is not a VIP party."
+      },
+      "errors": {
+        "forbidden": "You can see the seating but not change it.",
+        "cantFit": "Can't fit: {asked, plural, one {# guest needs} other {# guests need}} a seat, and {fits, plural, =0 {no seats are} one {only # seat is} other {only # seats are}} free there.",
+        "declined": "That guest declined. Only guests who haven't declined can be seated.",
+        "unknown": "That guest is no longer on this list. The page will refresh.",
+        "noPlan": "There is no seating plan for this yet.",
+        "noGuests": "Choose at least one guest to seat.",
+        "noPlace": "Choose a table or row.",
+        "dropMiss": "Drop a party onto a table or a row."
+      }
     }
   },
   "venueMap": {
@@ -2216,7 +2344,11 @@
       "bottom": "Bottom of the map",
       "bottom-right": "Bottom right of the map"
     },
-    "yours": "{count, plural, one {Your seat: {seats}} other {Your seats: {seats}}}"
+    "yours": "{count, plural, one {Your seat: {seats}} other {Your seats: {seats}}}",
+    "yourPlace": {
+      "table": "Your table",
+      "row": "Your row"
+    }
   },
   "seatFinder": {
     "eyebrow": "Seat finder",
@@ -2267,9 +2399,15 @@
       "challengeUnavailable": "Too many lookups from this device. Please wait a minute and try again.",
       "closed": "The seat finder isn't open for this event.",
       "internal": "Something went wrong on our side.",
-      "rateLimited": "Too many codes asked for. Try again in {minutes, plural, one {# minute} other {# minutes}}."
+      "rateLimited": "Too many codes asked for. Try again in {minutes, plural, one {# minute} other {# minutes}}.",
+      "noMatch": "We couldn't find a table with that name and PIN. Check both against your invitation, or ask a host.",
+      "invalidPin": "Enter the 6-digit PIN from your invitation.",
+      "pinRateLimited": "Too many lookups from this device. Try again in {minutes, plural, one {# minute} other {# minutes}}."
     },
-    "hostedBy": "Hosted by {sponsor}"
+    "hostedBy": "Hosted by {sponsor}",
+    "pinIntro": "Enter your full name as it appears on your invitation and the 6-digit PIN printed on it.",
+    "pin": "PIN from your invitation",
+    "findByPin": "Find my table"
   },
   "seatFinderPoster": {
     "pageTitle": "Seat-finder poster",
@@ -2282,7 +2420,8 @@
     "step2Code": "Enter your email — we'll send you a code.",
     "step2Name": "Enter your full name.",
     "step3": "See your table and seat on the venue map.",
-    "orVisit": "Or go to"
+    "orVisit": "Or go to",
+    "step2Pin": "Enter your full name and the PIN on your invitation."
   },
   "reports": {
     "title": "Analysis",
@@ -10229,7 +10368,10 @@
     },
     "questionsTitle": "A few questions",
     "questionsHint": "The hosts would like to know a little more. Answers marked private are seen only by the hosts.",
-    "questionsFor": "Questions for {name}"
+    "questionsFor": "Questions for {name}",
+    "seatTitle": "Find your table",
+    "seatHint": "See where you sit on the venue map and who's at your table.",
+    "seatLink": "Show my table"
   },
   "rsvpFind": {
     "metaTitle": "Find your invitation",
@@ -10339,7 +10481,13 @@
     "reopenFor": "Reopen RSVP for {party}",
     "createLinkFor": "Create the RSVP link for {party}",
     "copy": "Copy link",
-    "copied": "Link copied."
+    "copied": "Link copied.",
+    "seatTitle": "Seat page QR code",
+    "seatHint": "This QR code opens {party}'s own seat page: their table on the venue map and who sits with them. It stays the same when you move them to another table, so you can print it on escort or place cards.",
+    "seatQrLabel": "QR code to {party}'s seat page",
+    "seatLinkLabel": "Seat page link for {party}",
+    "seatClosed": "Guests see their table once you open the seat finder (Seating → Seat finder).",
+    "seatScan": "Scan to find your table"
   },
   "collector": {
     "metaTitle": "Share your contact details",
@@ -11054,5 +11202,39 @@
       "offer_ended": "The offer for {title} has ended.",
       "full": "{title} just filled up. Try again to join the waitlist."
     }
+  },
+  "guestSeats": {
+    "placeAt": {
+      "table": "Table {item}",
+      "row": "Row {item}"
+    },
+    "wholeEvent": "Seating",
+    "resultTitle": "{count, plural, one {Your table} other {Your tables}}",
+    "partyCount": "{count, plural, one {# of your party sits here} other {# of your party sit here}}",
+    "noTableTitle": "Your table isn't set yet",
+    "noTable": "The hosts are still working on the seating. Check back closer to the day, or ask a host.",
+    "unseatedCount": "{count, plural, one {# person in your party doesn't have a table yet.} other {# people in your party don't have a table yet.}}",
+    "again": "Look up someone else",
+    "mapTitle": "Venue map",
+    "mapFor": "Venue map: {name}"
+  },
+  "partySeats": {
+    "metaTitle": "Your table",
+    "title": "Where {party} sits",
+    "intro": "Your table on the venue map, and who sits with you.",
+    "closedTitle": "Seating isn't ready yet",
+    "closed": "The hosts haven’t shared the seating yet. Keep this page, or the QR code on your invitation: it will show your table once they do.",
+    "noChartsTitle": "Your table isn't set yet",
+    "noCharts": "The hosts are still working on the seating. This page will show your table as soon as it is set.",
+    "yourParty": "From your party",
+    "tablemates": {
+      "table": "Also at this table",
+      "row": "Also in this row"
+    },
+    "noTablemates": "No one else is seated here yet.",
+    "unseated": "Not seated yet: {names}",
+    "guestOf": "Guest of {name}",
+    "keep": "This page always shows your current table: the link and the QR code on your invitation never change when the hosts move you.",
+    "toRsvp": "Back to your RSVP"
   }
 }

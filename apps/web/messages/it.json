@@ -1978,7 +1978,8 @@
       "plan": "Piantina",
       "assign": "Assegna ospiti",
       "finder": "Trova posto",
-      "rules": "Regole"
+      "rules": "Regole",
+      "guests": "Disponi gli ospiti"
     },
     "assign": {
       "title": "Assegna ospiti",
@@ -2069,7 +2070,8 @@
       "modeNow": "Ricerca: {mode}",
       "modeShort": {
         "code": "codice via email",
-        "name": "nome completo"
+        "name": "nome completo",
+        "pin": "nome completo e PIN dell’invito"
       },
       "notPublic": "L'evento non è pubblicato (o è privato), quindi gli invitati non possono ancora aprire la ricerca del posto.",
       "settingsTitle": "Invitati",
@@ -2080,11 +2082,13 @@
       "mode": "Come gli invitati cercano il loro posto",
       "modeOption": {
         "code": "Con un codice inviato alla loro email (consigliato)",
-        "name": "Subito, con il nome completo"
+        "name": "Subito, con il nome completo",
+        "pin": "Con nome completo e il PIN del loro invito"
       },
       "modeHint": {
         "code": "Solo chi legge l'email dell'invitato vede il suo posto, e nessuno può scoprire chi è in lista.",
-        "name": "Più veloce all'ingresso, ma chiunque conosca il nome completo di un invitato può vedere dove siede."
+        "name": "Più veloce all'ingresso, ma chiunque conosca il nome completo di un invitato può vedere dove siede.",
+        "pin": "Gli ospiti inseriscono il nome completo e il PIN di 6 cifre stampato sull’invito del loro gruppo. Vedono il loro tavolo, mai il nome di qualcuno, e nessuno può scoprire chi è in lista."
       },
       "readOnly": "Puoi vedere queste impostazioni ma non modificarle.",
       "shareTitle": "Condividi",
@@ -2092,7 +2096,10 @@
       "openPublic": "Apri la ricerca del posto",
       "poster": "Stampa il poster per trovare il posto",
       "closedNote": "La ricerca del posto è chiusa. Chi scansiona il poster verrà invitato a tornare più tardi.",
-      "namePoster": "Stampa il cartellone con i nomi"
+      "namePoster": "Stampa il cartellone con i nomi",
+      "partyLinksTitle": "Link dei gruppi",
+      "partyLinksHint": "Il link e il codice QR dell’invito di ogni gruppo aprono anche la sua pagina del tavolo: il tavolo sulla mappa e chi siede con loro. Il codice QR resta lo stesso quando li sposti a un altro tavolo.",
+      "partyLinksAction": "Link e codici QR dei gruppi"
     },
     "map": {
       "zoomIn": "Ingrandisci",
@@ -2177,6 +2184,127 @@
         "forbidden": "Puoi vedere i gruppi ma non modificarli.",
         "noMembers": "Nessuno nella lista ha ancora l’etichetta {label}."
       }
+    },
+    "guestSeating": {
+      "title": "Disponi gli ospiti",
+      "description": "Disponi i gruppi ai tavoli. Trascina un gruppo dalla coda sulla mappa, oppure seleziona gli ospiti, scegli un tavolo e premi «Fai sedere i selezionati»: la tastiera fa tutto ciò che fa il trascinamento.",
+      "chart": {
+        "label": "Disposizione per",
+        "event": "Intero evento"
+      },
+      "noPlan": "{chart} non ha ancora una piantina dei posti",
+      "noPlanHint": "Crea prima la piantina (tavoli o file), poi disponi qui i tuoi ospiti.",
+      "toPlan": "Vai alla piantina",
+      "noGuests": "Ancora nessun ospite da disporre",
+      "noGuestsHint": "Aggiungi gruppi nella pagina Ospiti (o invitali a questo momento della giornata), poi disponili qui.",
+      "toGuests": "Vai agli ospiti",
+      "summary": "{seated} seduti · {unseated} da sistemare",
+      "readOnly": "Puoi vedere la disposizione, ma non modificarla.",
+      "declinedSeated": "{count, plural, one {# ospite che ha declinato è ancora seduto.} other {# ospiti che hanno declinato sono ancora seduti.}} Toglili nei dettagli del tavolo.",
+      "live": {
+        "live": "In diretta",
+        "connecting": "Connessione…",
+        "offline": "Offline, riconnessione"
+      },
+      "vip": "VIP",
+      "queue": {
+        "title": "Senza posto ({count})",
+        "search": "Cerca gruppi e ospiti",
+        "status": "Risposta",
+        "statusAll": "Tutte le risposte",
+        "side": "Lato",
+        "sideAll": "Tutti i lati",
+        "list": "Gruppi da sistemare",
+        "selectParty": "Seleziona tutti in {party}",
+        "toSeat": "{count, plural, one {# da sistemare} other {# da sistemare}}",
+        "selected": "{count, plural, =0 {Nessuno selezionato} one {# ospite selezionato} other {# ospiti selezionati}}",
+        "clear": "Annulla selezione",
+        "empty": "Tutti hanno un posto.",
+        "noMatch": "Nessun gruppo corrisponde a questi filtri."
+      },
+      "status": {
+        "attending": "Presente",
+        "pending": "In attesa di risposta",
+        "declined": "Ha declinato"
+      },
+      "guest": {
+        "guestOf": "Accompagnatore di {name}",
+        "meal": "Pasto: {meal}",
+        "noMeal": "Nessun pasto scelto",
+        "child": "Bambino",
+        "infant": "Neonato"
+      },
+      "form": {
+        "title": "Fai sedere gli ospiti selezionati",
+        "table": "Tavolo o fila",
+        "choose": "Scegli un tavolo o una fila",
+        "option": "{place} — {free} di {capacity} liberi",
+        "optionVip": "{place} — {free} di {capacity} liberi · zona VIP",
+        "cantFit": "Non c’è posto: {asked, plural, one {# ospite selezionato} other {# ospiti selezionati}}, {fits, plural, =0 {nessun posto libero} one {# posto libero} other {# posti liberi}} a {place}.",
+        "submit": "Fai sedere i selezionati",
+        "submitting": "Sistemazione…"
+      },
+      "place": {
+        "table": "Tavolo {label}",
+        "row": "Fila {label}"
+      },
+      "map": {
+        "title": "Mappa",
+        "hint": "Trascina un gruppo su un tavolo per farlo sedere. Fai clic su un tavolo per vedere chi è seduto.",
+        "readOnlyHint": "Fai clic su un tavolo per vedere chi è seduto.",
+        "dropHere": "Rilascia su {place}: {free} liberi",
+        "dropCantFit": "Non c’è posto a {place}: {count, plural, one {# ospite} other {# ospiti}}, {free} liberi",
+        "guests": "Ospiti",
+        "tickets": "Titolari di biglietto",
+        "vip": "Zona VIP"
+      },
+      "details": {
+        "title": "Dettagli del tavolo",
+        "choose": "Tavolo da mostrare",
+        "none": "Questa piantina non ha tavoli né file.",
+        "counts": "{seated} seduti · {free} di {capacity} liberi",
+        "tickets": "{count, plural, one {# posto occupato da un biglietto} other {# posti occupati da biglietti}}",
+        "sponsor": "Offerto da {name}",
+        "vipZone": "Zona VIP",
+        "vipFromPlan": "In una sezione VIP della piantina",
+        "warnings": "Controlla questo tavolo",
+        "warnDeclined": "{name} ha declinato ed è ancora seduto.",
+        "warnVipOutside": "{party} è un gruppo VIP fuori da una zona VIP.",
+        "warnNotVip": "{party} non è un gruppo VIP ma siede in una zona VIP.",
+        "meals": "Pasti",
+        "mealCount": "{meal}: {count}",
+        "noMeal": "Non scelto",
+        "empty": "Qui non siede ancora nessuno. Fai sedere un gruppo dalla coda.",
+        "unseatParty": "Togli {party}",
+        "move": "Sposta a…",
+        "moveLabel": "Sposta {name} a un altro tavolo",
+        "unseat": "Togli",
+        "unseatLabel": "Togli {name}",
+        "moveTo": "Sposta {name}",
+        "moveSubmit": "Sposta",
+        "cancel": "Annulla"
+      },
+      "done": {
+        "seated": "{count, plural, one {# ospite sistemato} other {# ospiti sistemati}} a {place}.",
+        "moved": "{name} spostato a {place}.",
+        "unseated": "{count, plural, one {# ospite è tornato} other {# ospiti sono tornati}} in coda.",
+        "vipOn": "{place} ora è una zona VIP.",
+        "vipOff": "{place} non è più una zona VIP."
+      },
+      "warnings": {
+        "vip_outside": "{party} è un gruppo VIP e {place} non è una zona VIP.",
+        "not_vip_inside": "{place} è una zona VIP e {party} non è un gruppo VIP."
+      },
+      "errors": {
+        "forbidden": "Puoi vedere la disposizione, ma non modificarla.",
+        "cantFit": "Non c’è posto: {asked, plural, one {# ospite ha} other {# ospiti hanno}} bisogno di un posto e lì {fits, plural, =0 {non ci sono posti liberi} one {c’è solo # posto libero} other {ci sono solo # posti liberi}}.",
+        "declined": "Questo ospite ha declinato. Si possono sistemare solo gli ospiti che non hanno declinato.",
+        "unknown": "Questo ospite non è più nell’elenco. La pagina verrà aggiornata.",
+        "noPlan": "Non c’è ancora una piantina per questo.",
+        "noGuests": "Scegli almeno un ospite.",
+        "noPlace": "Scegli un tavolo o una fila.",
+        "dropMiss": "Rilascia il gruppo su un tavolo o una fila."
+      }
     }
   },
   "venueMap": {
@@ -2216,7 +2344,11 @@
       "bottom": "In basso sulla mappa",
       "bottom-right": "In basso a destra sulla mappa"
     },
-    "yours": "{count, plural, one {Il tuo posto: {seats}} other {I tuoi posti: {seats}}}"
+    "yours": "{count, plural, one {Il tuo posto: {seats}} other {I tuoi posti: {seats}}}",
+    "yourPlace": {
+      "table": "Il tuo tavolo",
+      "row": "La tua fila"
+    }
   },
   "seatFinder": {
     "eyebrow": "Trova posto",
@@ -2267,9 +2399,15 @@
       "challengeUnavailable": "Troppe ricerche da questo dispositivo. Attendi un minuto e riprova.",
       "closed": "La ricerca del posto non è aperta per questo evento.",
       "internal": "Si è verificato un problema da parte nostra.",
-      "rateLimited": "Troppi codici richiesti. Riprova tra {minutes, plural, one {# minuto} other {# minuti}}."
+      "rateLimited": "Troppi codici richiesti. Riprova tra {minutes, plural, one {# minuto} other {# minuti}}.",
+      "noMatch": "Non abbiamo trovato un tavolo con quel nome e quel PIN. Controlla entrambi sull’invito o chiedi a un padrone di casa.",
+      "invalidPin": "Inserisci il PIN di 6 cifre del tuo invito.",
+      "pinRateLimited": "Troppe ricerche da questo dispositivo. Riprova tra {minutes, plural, one {# minuto} other {# minuti}}."
     },
-    "hostedBy": "Offerto da {sponsor}"
+    "hostedBy": "Offerto da {sponsor}",
+    "pinIntro": "Inserisci il tuo nome completo come appare sull’invito e il PIN di 6 cifre stampato sopra.",
+    "pin": "PIN del tuo invito",
+    "findByPin": "Trova il mio tavolo"
   },
   "seatFinderPoster": {
     "pageTitle": "Poster per trovare il posto",
@@ -2282,7 +2420,8 @@
     "step2Code": "Inserisci la tua email: ti invieremo un codice.",
     "step2Name": "Inserisci il tuo nome completo.",
     "step3": "Guarda il tuo tavolo e il tuo posto sulla mappa.",
-    "orVisit": "Oppure vai su"
+    "orVisit": "Oppure vai su",
+    "step2Pin": "Inserisci il tuo nome completo e il PIN del tuo invito."
   },
   "reports": {
     "title": "Analisi",
@@ -10229,7 +10368,10 @@
     },
     "questionsTitle": "Qualche domanda",
     "questionsHint": "Gli ospitanti vorrebbero sapere qualcosa in più. Le risposte indicate come private le vedono solo gli ospitanti.",
-    "questionsFor": "Domande per {name}"
+    "questionsFor": "Domande per {name}",
+    "seatTitle": "Trova il tuo tavolo",
+    "seatHint": "Guarda dove siedi sulla mappa e chi è al tuo tavolo.",
+    "seatLink": "Mostra il mio tavolo"
   },
   "rsvpFind": {
     "metaTitle": "Trova il tuo invito",
@@ -10339,7 +10481,13 @@
     "reopenFor": "Riapri la risposta di {party}",
     "createLinkFor": "Crea il link per rispondere di {party}",
     "copy": "Copia il link",
-    "copied": "Link copiato."
+    "copied": "Link copiato.",
+    "seatTitle": "Codice QR della pagina del tavolo",
+    "seatHint": "Questo codice QR apre la pagina del tavolo di {party}: il tavolo sulla mappa e chi siede con loro. Resta lo stesso quando li sposti a un altro tavolo, quindi puoi stamparlo su tableau o segnaposto.",
+    "seatQrLabel": "Codice QR della pagina del tavolo di {party}",
+    "seatLinkLabel": "Link della pagina del tavolo di {party}",
+    "seatClosed": "Gli ospiti vedranno il loro tavolo quando aprirai la ricerca posti (Posti → Ricerca posti).",
+    "seatScan": "Scansiona per trovare il tuo tavolo"
   },
   "collector": {
     "metaTitle": "Condividi i tuoi contatti",
@@ -11054,5 +11202,39 @@
       "offer_ended": "L'offerta per {title} è scaduta.",
       "full": "{title} si è appena riempita. Riprova per entrare in lista d'attesa."
     }
+  },
+  "guestSeats": {
+    "placeAt": {
+      "table": "Tavolo {item}",
+      "row": "Fila {item}"
+    },
+    "wholeEvent": "Disposizione dei tavoli",
+    "resultTitle": "{count, plural, one {Il tuo tavolo} other {I tuoi tavoli}}",
+    "partyCount": "{count, plural, one {# persona del tuo gruppo siede qui} other {# persone del tuo gruppo siedono qui}}",
+    "noTableTitle": "Il tuo tavolo non è ancora assegnato",
+    "noTable": "I padroni di casa stanno ancora organizzando i tavoli. Ricontrolla più vicino al giorno o chiedi a un padrone di casa.",
+    "unseatedCount": "{count, plural, one {# persona del tuo gruppo non ha ancora un tavolo.} other {# persone del tuo gruppo non hanno ancora un tavolo.}}",
+    "again": "Cerca un’altra persona",
+    "mapTitle": "Mappa del luogo",
+    "mapFor": "Mappa del luogo: {name}"
+  },
+  "partySeats": {
+    "metaTitle": "Il tuo tavolo",
+    "title": "Dove siede {party}",
+    "intro": "Il tuo tavolo sulla mappa del luogo e chi siede con te.",
+    "closedTitle": "I tavoli non sono ancora pronti",
+    "closed": "I padroni di casa non hanno ancora condiviso la disposizione dei tavoli. Conserva questa pagina o il codice QR del tuo invito: mostrerà il tuo tavolo appena lo faranno.",
+    "noChartsTitle": "Il tuo tavolo non è ancora assegnato",
+    "noCharts": "I padroni di casa stanno ancora organizzando i tavoli. Questa pagina mostrerà il tuo tavolo appena sarà assegnato.",
+    "yourParty": "Del tuo gruppo",
+    "tablemates": {
+      "table": "Anche a questo tavolo",
+      "row": "Anche in questa fila"
+    },
+    "noTablemates": "Nessun altro è ancora seduto qui.",
+    "unseated": "Ancora senza posto: {names}",
+    "guestOf": "Ospite di {name}",
+    "keep": "Questa pagina mostra sempre il tuo tavolo attuale: il link e il codice QR del tuo invito non cambiano quando i padroni di casa ti spostano.",
+    "toRsvp": "Torna alla tua risposta"
   }
 }

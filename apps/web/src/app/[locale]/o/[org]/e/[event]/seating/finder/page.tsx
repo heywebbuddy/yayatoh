@@ -14,6 +14,8 @@ import { finderSettingsAction } from '../actions.ts';
 /**
  * Seat finder (M1.7e): open the venue map and seat finder to guests, choose how they look up
  * their seat (an emailed code, or instantly by full name), and print the poster for the door.
+ * M4.4a: with the guests module, a third way (full name + the party's invitation PIN, labels only)
+ * and a pointer to the party links, whose QR codes open each party's own seat page.
  */
 export default async function SeatFinderSettingsPage({
   params,
@@ -35,10 +37,12 @@ export default async function SeatFinderSettingsPage({
   const canWrite = can('seating:write');
   const origin = (process.env.BETTER_AUTH_URL ?? 'http://localhost:3000').replace(/\/$/, '');
   const publicPath = `/events/${ev.slug}/seat-finder`;
+  const guests = data.modules.has('guests');
+  const modes = guests ? (['code', 'name', 'pin'] as const) : (['code', 'name'] as const);
   return (
     <>
       <PageHeader title={t('finder.title')} description={t('finder.description')} />
-      <SeatingTabs base={base} active="finder" finder />
+      <SeatingTabs base={base} active="finder" finder guests={data.modules.has('guests')} />
       {!settings ? (
         <EmptyState
           title={t('finder.noPlan')}
@@ -91,7 +95,7 @@ export default async function SeatFinderSettingsPage({
                   </div>
                   <fieldset className="flex flex-col gap-2">
                     <legend className="mb-1 text-[13px] font-bold text-ink">{t('finder.mode')}</legend>
-                    {(['code', 'name'] as const).map((m) => (
+                    {modes.map((m) => (
                       <div key={m} className="flex flex-col gap-0.5">
                         <label className="flex min-h-6 items-center gap-2 text-body">
                           <input
@@ -146,6 +150,23 @@ export default async function SeatFinderSettingsPage({
               )}
             </Card>
           </section>
+
+          {guests ? (
+            <section aria-labelledby="finder-parties" className="flex flex-col gap-3">
+              <h2 id="finder-parties" className="text-section">
+                {t('finder.partyLinksTitle')}
+              </h2>
+              <Card className="flex flex-col gap-3">
+                <p className="text-body text-ink-2">{t('finder.partyLinksHint')}</p>
+                <Link
+                  href={`/o/${org}/e/${event}/guests/rsvp`}
+                  className={buttonClass('secondary', 'sm', 'self-start')}
+                >
+                  {t('finder.partyLinksAction')}
+                </Link>
+              </Card>
+            </section>
+          ) : null}
         </>
       )}
     </>

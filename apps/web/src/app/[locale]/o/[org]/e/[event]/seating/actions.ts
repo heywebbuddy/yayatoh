@@ -328,7 +328,7 @@ export async function finderSettingsAction(
       {
         eventId: ev.id,
         publicMap: form.get('publicMap') === 'on',
-        mode: form.get('mode') === 'name' ? 'name' : 'code',
+        mode: form.get('mode') === 'name' ? 'name' : form.get('mode') === 'pin' ? 'pin' : 'code',
       },
       data.ctx,
       ports,
