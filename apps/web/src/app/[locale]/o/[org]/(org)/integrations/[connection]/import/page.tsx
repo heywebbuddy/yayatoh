@@ -278,7 +278,7 @@ export default async function ImportPage({
                 { key: 'value', header: t('result.inYayatoh'), align: 'end', cell: (r) => r.value },
               ]}
             />
-            <Link href={`/o/${org}/events`} className="self-start underline underline-offset-2">
+            <Link href={`/o/${org}`} className="self-start underline underline-offset-2">
               {t('result.goToEvents')}
             </Link>
           </Card>
