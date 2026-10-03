@@ -17,6 +17,7 @@ import { and, asc, eq, inArray, isNull, lt, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { checkpointsTx } from './checkpoints.ts';
 import { deviceIdOf } from './device-actor.ts';
+import { deviceStateEventTx } from './live.ts';
 import {
   admissions,
   devices,
@@ -402,6 +403,7 @@ export const revokeDeviceCommand = tenantCommand({
   handler: async ({ input, ctx, tx, emit }) => {
     const d = await actionableDeviceTx(tx, input.deviceId, input.eventId);
     await tx.update(devices).set({ revokedAt: ctx.now, updatedAt: ctx.now }).where(eq(devices.id, d.id));
+    await deviceStateEventTx(tx, ctx, d.id, 'revoked');
     const orgId = requireOrg(ctx);
     emit(deviceChanged(orgId, d.id));
     await publishRealtimeTx(tx, orgId, DEVICES_CHANNEL, {
@@ -638,9 +640,11 @@ export const StaffPushInput = z.object({
     auth: z.string().regex(/^[A-Za-z0-9_-]{22}$/),
   }),
   locale: z.string().regex(/^[a-z]{2}(-[A-Z]{2})?$/),
-  copy: z.object(
-    Object.fromEntries(STAFF_ALERT_KINDS.map((k) => [k, Copy])) as Record<StaffAlertKind, typeof Copy>,
-  ),
+  copy: z.object({
+    ...(Object.fromEntries(STAFF_ALERT_KINDS.map((k) => [k, Copy])) as Record<StaffAlertKind, typeof Copy>),
+    // M3.3b: help requests. Optional, so a PWA installed before it still subscribes.
+    assistance: Copy.optional(),
+  }),
 });
 
 /**

@@ -50,6 +50,8 @@ const SECTION_OF: Record<string, string> = {
   cancel: 'home',
   // Batch 3d merge: M3.2a's Command Center (every profile).
   'command-center': 'commandCenter',
+  // M3.3b: the help queue (every profile with check-in).
+  assistance: 'assistance',
   // Batch 3e merge: M5.1a's Registration page and M5.1b's form builder (the Registration item).
   registration: 'registration',
   'registration-form': 'registration',
