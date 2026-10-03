@@ -205,6 +205,8 @@ export {
   payDonationOrderTx,
   startDonationOrderTx,
 } from './donation-orders.ts';
+// M4.8g: ticket donations in the donations reports.
+export { type DonationTicketLine, donationTicketLinesTx } from './donation-ticket-facts.ts';
 export {
   buyerOrdersDsarTx,
   buyerOrgs,

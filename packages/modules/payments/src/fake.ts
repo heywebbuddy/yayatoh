@@ -3,9 +3,11 @@ import type {
   AccountEvent,
   BalanceTransaction,
   ChargeSavedCardResult,
+  ConnectedBalanceTransaction,
   CreatePaymentInput,
   DisputeEvent,
   PaymentProvider,
+  Payout,
   ProviderEvent,
   SetupEvent,
   WebhookEvent,
@@ -18,16 +20,79 @@ import type {
 export interface FakeBalanceStore {
   add(t: BalanceTransaction): void;
   list(from: Date, to: Date): readonly BalanceTransaction[];
+  /** M4.8g: what a connected account's own balance saw (direct charges, refunds). */
+  addConnected?(accountId: string, t: FakeConnectedTransaction): void;
+  listConnected?(accountId: string): readonly FakeConnectedTransaction[];
 }
+
+/** A connected account's movement before payouts are worked out (they follow from the clock). */
+export type FakeConnectedTransaction = Omit<ConnectedBalanceTransaction, 'payoutId'>;
 
 export function memoryBalanceStore(): FakeBalanceStore {
   const rows = new Map<string, BalanceTransaction>();
+  const connected = new Map<string, Map<string, FakeConnectedTransaction>>();
   return {
     add: (t) => {
       rows.set(t.id, t);
     },
     list: (from, to) => [...rows.values()].filter((t) => t.occurredAt >= from && t.occurredAt < to),
+    addConnected: (accountId, t) => {
+      const m = connected.get(accountId) ?? new Map<string, FakeConnectedTransaction>();
+      m.set(t.id, t);
+      connected.set(accountId, m);
+    },
+    listConnected: (accountId) => [...(connected.get(accountId)?.values() ?? [])],
   };
+}
+
+/**
+ * The fake's processing fee on a connected account's charge: Stripe's US nonprofit rate (2.2% +
+ * 30¢), rounded half up. Refunds return no fee (as Stripe).
+ */
+export const fakeProcessingFee = (amountMinor: number) =>
+  amountMinor > 0 ? Math.round((amountMinor * 22) / 1000) + 30 : 0;
+
+const DAY_MS = 86_400_000;
+const utcDay = (d: Date) => d.toISOString().slice(0, 10);
+
+/**
+ * The fake's daily automatic payouts (M4.8g): a connected account's movements of UTC day D are paid
+ * out together, created at the start of D+1 and arriving on D+3 (paid from then on). A day whose
+ * net is not positive has no payout (its movements wait, unpaid out). Pure: from the movements and
+ * the clock.
+ */
+export function fakePayouts(
+  accountId: string,
+  txns: readonly FakeConnectedTransaction[],
+  now: Date,
+  idOf: (key: string) => string,
+): { payouts: Payout[]; payoutOf: Map<string, string> } {
+  const byDay = new Map<string, FakeConnectedTransaction[]>();
+  for (const t of txns) {
+    const key = `${utcDay(t.occurredAt)}|${t.currency}`;
+    byDay.set(key, [...(byDay.get(key) ?? []), t]);
+  }
+  const payouts: Payout[] = [];
+  const payoutOf = new Map<string, string>();
+  for (const [key, list] of [...byDay.entries()].sort(([a], [b]) => a.localeCompare(b))) {
+    const [day = '', currency = ''] = key.split('|');
+    const createdAt = new Date(Date.parse(`${day}T00:00:00Z`) + DAY_MS);
+    if (createdAt > now) continue;
+    const net = list.reduce((n, t) => n + t.netMinor, 0);
+    if (net <= 0) continue;
+    const arrival = new Date(createdAt.getTime() + 2 * DAY_MS);
+    const id = `fakepo_${idOf(`po:${accountId}:${key}`)}`;
+    payouts.push({
+      id,
+      amountMinor: net,
+      currency,
+      status: arrival <= now ? 'paid' : 'in_transit',
+      createdAt,
+      arrivalDate: utcDay(arrival),
+    });
+    for (const t of list) payoutOf.set(t.id, id);
+  }
+  return { payouts, payoutOf };
 }
 
 /** One store per process (the web's dev tools and its fake provider share it). */
@@ -102,6 +167,29 @@ export function fakePaymentProvider(opts: {
         reference,
       });
   };
+  // M4.8g: a movement on the organizer's own (connected) account.
+  const recordConnected = (
+    accountId: string,
+    id: string,
+    kind: ConnectedBalanceTransaction['kind'],
+    amountMinor: number,
+    currency: string,
+    reference: string | null,
+  ) => {
+    if (amountMinor === 0) return;
+    const feeMinor = kind === 'charge' ? fakeProcessingFee(amountMinor) : 0;
+    opts.store?.addConnected?.(accountId, {
+      id: `fakebt_${id}`,
+      kind,
+      amountMinor,
+      feeMinor,
+      netMinor: amountMinor - feeMinor,
+      currency,
+      occurredAt: now(),
+      reference,
+    });
+  };
+  const connectedOf = (accountId: string) => opts.store?.listConnected?.(accountId) ?? null;
   return {
     name: 'fake',
     async createPayment(i: CreatePaymentInput) {
@@ -138,7 +226,15 @@ export function fakePaymentProvider(opts: {
       if (status === 'succeeded') {
         const org = i.orgId ?? null;
         // organizer_mor: the refund is on the organizer's account; the platform returns its fee part.
-        if (i.connectedAccountId)
+        if (i.connectedAccountId) {
+          recordConnected(
+            i.connectedAccountId,
+            refundId,
+            'refund',
+            -i.amount.amount,
+            i.amount.currency,
+            i.idempotencyKey,
+          );
           record(
             refundId,
             'application_fee_refund',
@@ -147,7 +243,7 @@ export function fakePaymentProvider(opts: {
             org,
             i.idempotencyKey,
           );
-        else record(refundId, 'refund', -i.amount.amount, i.amount.currency, org, i.idempotencyKey);
+        } else record(refundId, 'refund', -i.amount.amount, i.amount.currency, org, i.idempotencyKey);
       }
       return { refundId, status };
     },
@@ -208,6 +304,15 @@ export function fakePaymentProvider(opts: {
         ? { providerPaymentId, status: 'declined', declineCode: 'card_declined' }
         : { providerPaymentId, status: 'succeeded' };
       cards.charges.set(i.idempotencyKey, out);
+      if (!declined)
+        recordConnected(
+          i.connectedAccountId,
+          providerPaymentId,
+          'charge',
+          i.amount.amount,
+          i.amount.currency,
+          `order:${i.orderId}`,
+        );
       return out;
     },
     async detachSavedCard(i) {
@@ -215,6 +320,21 @@ export function fakePaymentProvider(opts: {
     },
     async listBalanceTransactions(i) {
       return opts.store ? opts.store.list(i.from, i.to) : null;
+    },
+    async listConnectedBalanceTransactions(i) {
+      const all = connectedOf(i.connectedAccountId);
+      if (!all) return null;
+      const { payoutOf } = fakePayouts(i.connectedAccountId, all, now(), (k) => mac(k, 16));
+      return all
+        .filter((t) => t.occurredAt >= i.from && t.occurredAt < i.to)
+        .map((t) => ({ ...t, payoutId: payoutOf.get(t.id) ?? null }));
+    },
+    async listPayouts(i) {
+      const all = connectedOf(i.connectedAccountId);
+      if (!all) return null;
+      return fakePayouts(i.connectedAccountId, all, now(), (k) => mac(k, 16)).payouts.filter(
+        (p) => p.createdAt >= i.from && p.createdAt < i.to,
+      );
     },
     async registerPaymentMethodDomain(i) {
       const key = `pmd:${i.hostname}:${i.accountId ?? 'platform'}`;
@@ -235,8 +355,21 @@ export function fakePaymentProvider(opts: {
       const a = Buffer.from(sig);
       const b = Buffer.from(expected);
       if (a.length !== b.length || !timingSafeEqual(a, b)) throw new Error('invalid fake webhook signature');
-      const e = JSON.parse(rawBody) as WebhookEvent & { applicationFeeMinor?: number };
+      const e = JSON.parse(rawBody) as WebhookEvent & {
+        applicationFeeMinor?: number;
+        connectedAccountId?: string;
+      };
       if (e.type === 'payment.succeeded') {
+        // M4.8g: a direct charge's gross lands on the organizer's connected account.
+        if (e.connectedAccountId)
+          recordConnected(
+            e.connectedAccountId,
+            e.id,
+            'charge',
+            e.amountMinor,
+            e.currency,
+            `order:${e.orderId}`,
+          );
         // organizer_mor: the platform balance only receives the application fee.
         const fee = e.applicationFeeMinor;
         record(
@@ -248,7 +381,7 @@ export function fakePaymentProvider(opts: {
           `order:${e.orderId}`,
         );
       }
-      const { applicationFeeMinor: _fee, ...event } = e;
+      const { applicationFeeMinor: _fee, connectedAccountId: _acct, ...event } = e;
       return { ...event, provider: 'fake' } as WebhookEvent;
     },
   };
@@ -261,6 +394,8 @@ export function signFakeWebhook(
     id?: string;
     /** organizer_mor: the application fee the platform received (reconciliation). */
     applicationFeeMinor?: number;
+    /** organizer_mor: the connected account the charge landed on (M4.8g reconciliation). */
+    connectedAccountId?: string;
   },
 ): { body: string; signature: string } {
   const body = JSON.stringify({ id: e.id ?? `fakeevt_${randomUUID()}`, ...e, provider: 'fake' });

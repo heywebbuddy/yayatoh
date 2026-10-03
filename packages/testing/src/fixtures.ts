@@ -80,6 +80,7 @@ import {
   createMatchCommand,
   issueReceiptTx,
   paddleConsoleQuery,
+  recordDonationReconciliationCommand,
   recordPaddlesCommand,
   saveCharityProfileCommand,
   saveScreenCommand,
@@ -2452,6 +2453,7 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   await screenRows(event.id, ctx);
   await pledgeCollectionRows(org.id, event.id, party.id);
   await matchRows(org.id, event.id, ctx);
+  await donationReconRows(org.id, event.id, ctx);
   return {
     org,
     ownerId,
@@ -2778,4 +2780,50 @@ export async function twoOrgs(suffix = uuidv7().slice(-8)) {
   const a = await createOrgFixture(`alpha-${suffix}`, 'Alpha Events');
   const b = await createOrgFixture(`bravo-${suffix}`, 'Bravo Weddings');
   return { a, b };
+}
+
+/**
+ * M4.8g donations reconciliation (isolation coverage of runs, differences and payouts): one run
+ * over the fixture's lapsed gift order, which the provider says it charged (the ledger has no memo
+ * for it: a `missing_in_ledger` difference) and paid out.
+ */
+async function donationReconRows(orgId: string, eventId: string, ctx: (o?: Partial<Ctx>) => Ctx) {
+  const [gift] = await withTenant(systemCtx(orgId), (tx) =>
+    tx.execute<{ order_id: string }>(
+      sql`select order_id from donations.gifts where event_id = ${eventId} limit 1`,
+    ),
+  );
+  if (!gift) throw new Error('fixture: no gift to reconcile');
+  const at = new Date(Date.now() - 2 * 86_400_000);
+  await executeCommand(
+    recordDonationReconciliationCommand,
+    {
+      eventId,
+      provider: 'fake',
+      movements: [
+        {
+          id: `fakebt_fixture_${orgId}`,
+          kind: 'charge',
+          amountMinor: 1_000,
+          feeMinor: 52,
+          currency: 'USD',
+          occurredAt: at,
+          reference: `order:${gift.order_id}`,
+          payoutId: 'fakepo_fixture',
+        },
+      ],
+      payouts: [
+        {
+          id: 'fakepo_fixture',
+          amountMinor: 948,
+          currency: 'USD',
+          status: 'paid',
+          createdAt: at,
+          arrivalDate: new Date(at.getTime() + 2 * 86_400_000).toISOString().slice(0, 10),
+        },
+      ],
+    },
+    ctx(),
+    ports,
+  );
 }

@@ -41,8 +41,11 @@ export {
   FAKE_TEST_CARDS,
   type FakeBalanceStore,
   type FakeCardStore,
+  type FakeConnectedTransaction,
   type FakeTestCard,
   fakePaymentProvider,
+  fakePayouts,
+  fakeProcessingFee,
   memoryBalanceStore,
   processFakeBalanceStore,
   processFakeCardStore,
@@ -66,6 +69,15 @@ export {
   postTransferReversalTx,
   refundJournalTotalsTx,
 } from './ledger.ts';
+// M4.8g: memo-only journals for gifts on the charity's connected account.
+export {
+  MEMO_JOURNAL_KINDS,
+  type MemoEntry,
+  type MemoJournalKind,
+  memoEntriesTx,
+  postDonationMemoTx,
+  postDonationRefundMemoTx,
+} from './memo-ledger.ts';
 export type {
   AccountEvent,
   BalanceTransaction,
@@ -73,6 +85,8 @@ export type {
   ChargeSavedCardInput,
   ChargeSavedCardResult,
   ConnectAccountState,
+  ConnectedBalanceTransaction,
+  ConnectedTransactionKind,
   CreateCardSetupInput,
   CreatePaymentInput,
   CreatePaymentResult,
@@ -80,6 +94,8 @@ export type {
   FundsFlow,
   IgnoredEvent,
   PaymentProvider,
+  Payout,
+  PayoutStatus,
   ProviderEvent,
   RefundInput,
   SetupEvent,
@@ -87,10 +103,12 @@ export type {
 } from './port.ts';
 export {
   BALANCE_TRANSACTION_KINDS,
+  CONNECTED_TRANSACTION_KINDS,
   isAccountEvent,
   isDisputeEvent,
   isIgnoredEvent,
   isSetupEvent,
+  PAYOUT_STATUSES,
 } from './port.ts';
 export { privateColumns } from './private-columns.ts';
 export {

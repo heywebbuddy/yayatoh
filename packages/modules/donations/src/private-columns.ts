@@ -144,4 +144,24 @@ export const privateColumns = columnPrivacy('donations', {
   gift_refunds: {
     currency: 'vocab',
   },
+  // M4.8g reconciliation: references are our own order and refund ids (`order:<id>`); the
+  // provider's payout ids and the finance note are internal (the host's finance views only).
+  recon_runs: {
+    provider: 'vocab',
+    totals: internal(),
+    ran_by: internal(),
+  },
+  recon_items: {
+    kind: 'vocab',
+    reference: internal(),
+    currency: 'vocab',
+    status: 'vocab',
+    resolution_note: internal(),
+    resolved_by: internal(),
+  },
+  recon_payouts: {
+    payout_id: internal(),
+    status: 'vocab',
+    currency: 'vocab',
+  },
 });
