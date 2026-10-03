@@ -45,7 +45,7 @@ import { realtimeUrl } from '@/lib/realtime-url.ts';
 import { conferenceSources } from './conference-sources.ts';
 import { devAuthEnabled } from './dev.ts';
 import { ports } from './ports.ts';
-import { getSession } from './session.ts';
+import { getSession, sessionOpensOrg } from './session.ts';
 
 /**
  * The web app's Command Center (M3.2a): the widget registry as composed here (the M3.2b alert
@@ -251,7 +251,7 @@ async function asMember(
   if (!session) return { status: 401, body: { error: 'unauthenticated' } };
   const resolved = await resolveOrgSlug(orgSlug);
   const imp = session.impersonation;
-  if (!resolved || (imp && imp.orgId !== resolved.orgId))
+  if (!resolved || !sessionOpensOrg(session, resolved.orgId))
     return { status: 404, body: { error: 'not_found' } };
   const base = createCtx({
     orgId: resolved.orgId,

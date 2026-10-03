@@ -576,6 +576,9 @@ importers:
       '@yayatoh/seating':
         specifier: workspace:*
         version: link:../../packages/modules/seating
+      '@yayatoh/sso':
+        specifier: workspace:*
+        version: link:../../packages/modules/sso
       '@yayatoh/surveys':
         specifier: workspace:*
         version: link:../../packages/modules/surveys

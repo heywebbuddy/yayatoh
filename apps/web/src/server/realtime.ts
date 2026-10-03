@@ -57,7 +57,7 @@ import {
 } from '@yayatoh/seating';
 import { memberRole } from '@yayatoh/tenancy';
 import { ports } from './ports.ts';
-import { getSession } from './session.ts';
+import { getSession, sessionOpensOrg } from './session.ts';
 
 /**
  * Realtime for the web app (M3.1b): one registry of channels, one in-process hub, one Postgres
@@ -284,7 +284,8 @@ export async function authorizeRealtime(
       identified = true;
       who = `user:${session.userId}`;
       const userCtx = createCtx({ orgId: channel.orgId, actor: { type: 'user', userId: session.userId } });
-      const member = (await memberRole(userCtx)) !== null;
+      // M6.5a: an SSO session is a member of its own org only.
+      const member = sessionOpensOrg(session, channel.orgId) && (await memberRole(userCtx)) !== null;
       ctx = userCtx;
       decision = await decideRealtimeAccess(channel, {
         memberOrgId: member ? channel.orgId : null,

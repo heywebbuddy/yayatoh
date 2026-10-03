@@ -16,7 +16,7 @@ import { getLocale } from 'next-intl/server';
 import type { z } from 'zod';
 import { ports } from './ports.ts';
 import { supervisorView } from './scan-staff.ts';
-import { getSession } from './session.ts';
+import { getSession, sessionOpensOrg } from './session.ts';
 
 /**
  * Supervisor mode in the Scan PWA (M3.4a). Two credentials meet here: the device token picks the
@@ -31,6 +31,8 @@ async function supervisorCtx(token: string): Promise<Ctx | 'signed_out' | 'forbi
   if (!session) return 'signed_out';
   // Staff acting as a member (impersonation) never supervise a door from a device.
   if (session.impersonation) return 'forbidden';
+  // M6.5a: an SSO session acts in its own org only.
+  if (!sessionOpensOrg(session, dc.ctx.orgId)) return 'forbidden';
   const ctx = createCtx({
     orgId: dc.ctx.orgId,
     actor: { type: 'user', userId: session.userId },

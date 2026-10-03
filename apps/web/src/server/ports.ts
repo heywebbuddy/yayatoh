@@ -19,10 +19,12 @@ import {
 import { defaultResolver } from '@yayatoh/platform/ssrf';
 import { registrationSessionAccess } from '@yayatoh/registration';
 import { setOccupantDirectory, setPartyCredentials } from '@yayatoh/seating';
+import { configureSso, ssoRuntimeFromEnv } from '@yayatoh/sso';
 import { surveysContactOwner } from '@yayatoh/surveys';
 import { createOrgAuthorizer, orgStatusGate } from '@yayatoh/tenancy';
 import { configureWebhooks, fakeResolver, webhookPublisherFromEnv } from '@yayatoh/webhooks';
 import { DATA_SUBJECT_CONTRIBUTORS } from './data-subjects.ts';
+import { fakeIdpSeed } from './sso-seed.ts';
 
 /** Composition root for the web transport (Server Actions / RSC). Same ports as /v1. */
 export const ports = createCommandPorts({
@@ -62,6 +64,15 @@ configureWebhooks({
   publisher: webhookPublisher,
   resolver: webhookPublisher?.name === 'fake' ? fakeResolver : defaultResolver,
 });
+
+// M6.5a: single sign-on and SCIM: the fake IdP, DNS and metadata (dev, preview, CI) or real DNS
+// and metadata with no IdP adapter (production, until the owner's IdP test tenant: SSO is off).
+configureSso(
+  ssoRuntimeFromEnv(process.env, {
+    seed: fakeIdpSeed(),
+    idpUrl: `${process.env.BETTER_AUTH_URL ?? 'http://localhost:3000'}/auth/sso/fake`,
+  }),
+);
 
 // M4.3a: seating reaches the guest list through its OccupantDirectory port (same tier).
 setOccupantDirectory(guestsOccupantDirectory);

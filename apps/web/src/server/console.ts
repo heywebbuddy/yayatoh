@@ -4,6 +4,7 @@ import { type EventDto, eventRolesOf, getEventBySlugQuery, teamEventBySlugQuery 
 import { createCtx, executeQuery, isDomainError } from '@yayatoh/kernel';
 import { listMediaQuery } from '@yayatoh/media';
 import { isProfileKey, type ProfileKey, profileOpensSection } from '@yayatoh/platform';
+import { ssoRequiredFor } from '@yayatoh/sso';
 import {
   eventRoleCan,
   eventRolesOpenSection,
@@ -19,7 +20,7 @@ import { getLocale } from 'next-intl/server';
 import { cache } from 'react';
 import { redirect } from '@/i18n/navigation.ts';
 import { ports } from './ports.ts';
-import { getSession } from './session.ts';
+import { getSession, sessionOpensOrg, sessionOrgScope } from './session.ts';
 
 /**
  * Everything the console needs for one org, loaded once per request. The org comes from the
@@ -36,12 +37,20 @@ export const loadConsoleBase = cache(async (orgSlug: string) => {
   const allOrgs = await myOrganizations(session.userId);
   // Staff acting as a member (M1.2e) see only the org they started from; their own sign-in asked
   // for the second step, so the member's set-up requirement doesn't apply to them.
-  const orgs = imp ? allOrgs.filter((o) => o.orgId === imp.orgId) : allOrgs;
+  // M6.5a: a session from an org's single sign-on opens that org only.
+  const scope = sessionOrgScope(session);
+  const orgs = scope ? allOrgs.filter((o) => o.orgId === scope) : allOrgs;
   if (!imp && !session.twoFactorEnabled && orgs.some((o) => roleRequiresTwoFactor(o.role)))
     return redirect({ href: '/account/security?required=1', locale });
   const resolved = await resolveOrgSlug(orgSlug);
   if (!resolved) notFound();
   if (imp && resolved.orgId !== imp.orgId) notFound();
+  // Another org than the one whose IdP signed this session in: sign in again to open it.
+  if (!sessionOpensOrg(session, resolved.orgId))
+    return redirect({
+      href: `/sign-in?${new URLSearchParams({ next: `/o/${orgSlug}`, sso: 'other_org' })}`,
+      locale,
+    });
   const ctx = createCtx({
     orgId: resolved.orgId,
     actor: { type: 'user', userId: session.userId },
@@ -52,6 +61,13 @@ export const loadConsoleBase = cache(async (orgSlug: string) => {
   const role = await memberRole(ctx);
   // A closed org (M1.3f) stays open to its owners only, read-only, so they can take their data out.
   if (!role || (resolved.status === 'terminated' && role !== 'owner')) notFound();
+  // M6.5a: the org requires its single sign-on for this member's address (owners are exempt).
+  if (
+    !imp &&
+    session.ssoOrgId !== resolved.orgId &&
+    (await ssoRequiredFor({ orgId: resolved.orgId, userId: session.userId, email: session.email }))
+  )
+    return redirect({ href: '/sign-in/sso?error=sso_required', locale });
   const [org, modules, logos] = await Promise.all([
     executeQuery(getOrganizationQuery, {}, ctx, ports),
     effectiveModules(ctx),

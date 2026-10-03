@@ -149,6 +149,8 @@ export const ORG_SECTIONS: readonly OrgNavSection[] = [
         module: 'integrations',
         needs: 'integrations:read',
       },
+      // M6.5a: the identity provider, verified domains and SCIM provisioning.
+      { key: 'sso', path: 'sso', icon: 'lock', module: 'enterprise', needs: 'sso:manage' },
       { key: 'sandboxes', path: 'sandboxes', icon: 'flask', module: 'core', needs: 'sandbox:manage' },
       { key: 'activity', path: 'activity', icon: 'history', module: 'core', needs: 'audit:read' },
       { key: 'privacy', path: 'privacy', icon: 'shield', module: 'core', needs: 'privacy:manage' },
