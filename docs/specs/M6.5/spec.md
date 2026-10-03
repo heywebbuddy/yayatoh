@@ -1,7 +1,7 @@
 # Spec: M6.5 — Enterprise integrations
 
 - **Milestone:** M6.5 (roadmap §10 Phase 6; Phase 6 plan `docs/plans/phase-6.md`, decisions P6-1, P6-4, P6-13)
-- **Status:** M6.5b built (2026-10-03), on the M6.4a integrations framework, behind the `integrations` module key and the `IntegrationAuth` port (fake in dev and CI; Nango's `salesforce` integration in production once the owner registers the Connected App).
+- **Status:** M6.5b built (2026-10-03; gate: lint, check:modules, typecheck 63/63, unit 3453/3453, integration 1939/1939 in 203 files, e2e salesforce + integrations 33/33 on three viewports), on the M6.4a integrations framework, behind the `integrations` module key and the `IntegrationAuth` port (fake in dev and CI; Nango's `salesforce` integration in production once the owner registers the Connected App).
 - **Risk tags:** `tenancy` (cross-module reads), none for money (amounts are read, never charged)
 - **Related ADRs:** 0008 (outbox), 0018/0022 (tokens, design v2)
 
