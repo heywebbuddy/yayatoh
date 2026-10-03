@@ -982,7 +982,7 @@ export async function purgeExpiredGalleryUploads(orgId: string, eventId: string 
 /** Run a gallery command whose result names storage to purge, then purge it (after commit). */
 export async function runGalleryCommand<I, O extends { purge: string[] }, R>(
   command: Command<I, O, R, TenantTx>,
-  input: I,
+  input: unknown,
   ctx: Ctx,
   ports: CommandPorts<TenantTx>,
 ): Promise<O> {

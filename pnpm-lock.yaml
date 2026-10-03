@@ -507,6 +507,9 @@ importers:
       '@yayatoh/forms':
         specifier: workspace:*
         version: link:../../packages/modules/forms
+      '@yayatoh/gallery':
+        specifier: workspace:*
+        version: link:../../packages/modules/gallery
       '@yayatoh/guests':
         specifier: workspace:*
         version: link:../../packages/modules/guests
@@ -640,6 +643,9 @@ importers:
       '@yayatoh/testing':
         specifier: workspace:*
         version: link:../../packages/testing
+      sharp:
+        specifier: 0.35.4
+        version: 0.35.4(@types/node@24.19.0)
       tailwindcss:
         specifier: 'catalog:'
         version: 4.3.3

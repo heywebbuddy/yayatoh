@@ -400,6 +400,18 @@ export const RATE_LIMIT_POLICIES = {
     identity: { limit: 300, windowMs: 15 * MIN },
     ipCeiling: { limit: 300, windowMs: 10 * MIN },
   },
+  /**
+   * M4.5b: guests' gallery uploads and video links (one per upload slot). Generous per device (a
+   * guest shares a whole evening's photos), and per address across devices (a venue's guests
+   * share one Wi-Fi address); identity = the site's address. The cap and quotas bound storage;
+   * this bounds the request rate.
+   */
+  galleryUpload: {
+    device: { limit: 120, windowMs: 60 * MIN },
+    anonymousIp: { limit: 240, windowMs: 60 * MIN },
+    identity: { limit: 5_000, windowMs: 60 * MIN },
+    ipCeiling: { limit: 2_000, windowMs: 60 * MIN },
+  },
 } as const satisfies Record<string, RateLimitPolicy>;
 
 export type RateLimitPolicyName = keyof typeof RATE_LIMIT_POLICIES;

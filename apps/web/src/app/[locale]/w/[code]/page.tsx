@@ -1,4 +1,5 @@
 import { LOCALES } from '@yayatoh/contracts';
+import { guestSlideshowOpen } from '@yayatoh/gallery';
 import { guestSiteTarget, type PublicSiteBlockDto, publicGuestSiteQuery } from '@yayatoh/guests';
 import { createCtx, executeQuery, isDomainError } from '@yayatoh/kernel';
 import { Label, PageHeader } from '@yayatoh/ui';
@@ -89,6 +90,10 @@ export default async function GuestSitePage({
       </main>
     );
 
+  // M4.5b: the photo gallery, when the hosts turned it on.
+  const galleryOpen =
+    (await ports.entitlements.has(createCtx({ orgId: target.orgId }), 'gallery')) &&
+    (await guestSlideshowOpen(target.orgId, target.eventId, await siteAccess(code)));
   const when = (start: Date, end: Date) =>
     new Intl.DateTimeFormat(locale, {
       timeZone: view.timezone,
@@ -116,6 +121,16 @@ export default async function GuestSitePage({
           description={view.intro ?? undefined}
         />
       </div>
+      {galleryOpen ? (
+        <p className="m-0">
+          <Link
+            href={`/w/${code}/gallery`}
+            className="inline-flex min-h-11 items-center rounded-pill border border-line bg-surface px-4 text-body font-bold text-ink"
+          >
+            {t('galleryLink')}
+          </Link>
+        </p>
+      ) : null}
       {named.length > 1 ? (
         <nav aria-label={t('onThisPage')}>
           <ul className="m-0 flex list-none flex-wrap gap-2 p-0" lang={view.contentLocale} dir="auto">

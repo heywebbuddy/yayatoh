@@ -57,7 +57,6 @@ export interface ReadinessRule {
  */
 export const PLACEHOLDER_SECTIONS = [
   'rsvp',
-  'gallery',
   'messages',
   'day-of',
   'branding',
