@@ -10,6 +10,7 @@ export { type CanaryAdmin, type CanaryFile, type CanaryOrg, canaryOrg } from './
 export {
   createOrgFixture,
   EXPORT_PARAMS,
+  FIXTURE_SITE_PASSWORD,
   type OrgFixture,
   staleCtx,
   systemCtx,
@@ -26,6 +27,7 @@ export {
 } from './marketing.ts';
 export { BULK_ACTIONS, bulkStep, ports, runBulk, submitRegistrationForm } from './ports.ts';
 export { type RsvpParty, type RsvpScenario, rsvpScenario } from './rsvp.ts';
+export { GUEST_SITE_PASSWORD, type GuestSiteScenario, guestSiteScenario } from './guest-site.ts';
 export {
   type RsvpQuestionsScenario,
   rsvpQuestionsScenario,
