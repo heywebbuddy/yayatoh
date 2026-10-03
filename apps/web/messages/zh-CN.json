@@ -76,9 +76,9 @@
         "org-status": "{status, select, suspended {Yayatoh 已暂停此组织} reactivated {此组织已恢复上线} other {Yayatoh 已关闭此组织}}"
       },
       "alerts": {
-        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords} 位参会者没有座位}}} undistributed {{count, plural, other {{countWords} 张已购门票尚未分发}}} paymentsFailed {{count, plural, other {{countWords} 笔付款失败}}} paymentsStuck {{count, plural, other {{countWords} 笔付款卡住了}}} refundSurge {{count, plural, other {过去一小时内有 {countWords} 笔退款}}} devicesOffline {{count, plural, other {{countWords} 台签到设备离线}}} devicesLowBattery {{count, plural, other {{countWords} 台签到设备电量不足}}} devicesBacklog {{count, plural, other {{countWords} 台签到设备有待同步的扫描}}} capacityNear {场地已满 {count}%} capacityFull {场地已满员（{count}%）} sellOut {已售出 {count}% 的门票} salesPace {门票销售达到目标进度的 {count}%} readiness {{count, plural, other {{countWords} 个设置步骤阻碍了此活动}}} domain {{count, plural, other {{countWords} 个自定义域名有问题}}} payoutsPastDue {{count, plural, other {收款账户有 {countWords} 项要求已逾期}}} deliverability {电子邮件送达率需要关注} automationFailed {{count, plural, other {今天有 {countWords} 条消息或批量操作失败}}} assistanceOverdue {{count, plural, other {{countWords} 个求助请求等待过久}}} campaignFailed {{count, plural, other {今天有 {countWords} 次营销活动发送失败}}} disputeDeadline {{count, plural, other {有 {countWords} 起争议需要尽快提交证据}}} other {提醒}}",
-        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords} 位参会者没有座位}}} undistributed {{count, plural, other {{countWords} 张已购门票尚未分发}}} paymentsFailed {{count, plural, other {{countWords} 笔付款失败}}} paymentsStuck {{count, plural, other {{countWords} 笔付款卡住了}}} refundSurge {{count, plural, other {过去一小时内有 {countWords} 笔退款}}} devicesOffline {{count, plural, other {{countWords} 台签到设备离线}}} devicesLowBattery {{count, plural, other {{countWords} 台签到设备电量不足}}} devicesBacklog {{count, plural, other {{countWords} 台签到设备有待同步的扫描}}} capacityNear {场地已满 {count}%} capacityFull {场地已满员（{count}%）} sellOut {已售出 {count}% 的门票} salesPace {门票销售达到目标进度的 {count}%} readiness {{count, plural, other {{countWords} 个设置步骤阻碍了此活动}}} domain {{count, plural, other {{countWords} 个自定义域名有问题}}} payoutsPastDue {{count, plural, other {收款账户有 {countWords} 项要求已逾期}}} deliverability {电子邮件送达率需要关注} automationFailed {{count, plural, other {今天有 {countWords} 条消息或批量操作失败}}} assistanceOverdue {{count, plural, other {{countWords} 个求助请求等待过久}}} campaignFailed {{count, plural, other {今天有 {countWords} 次营销活动发送失败}}} disputeDeadline {{count, plural, other {有 {countWords} 起争议需要尽快提交证据}}} other {提醒}}",
-        "alert-urgent-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords} 位参会者没有座位}}} undistributed {{count, plural, other {{countWords} 张已购门票尚未分发}}} paymentsFailed {{count, plural, other {{countWords} 笔付款失败}}} paymentsStuck {{count, plural, other {{countWords} 笔付款卡住了}}} refundSurge {{count, plural, other {过去一小时内有 {countWords} 笔退款}}} devicesOffline {{count, plural, other {{countWords} 台签到设备离线}}} devicesLowBattery {{count, plural, other {{countWords} 台签到设备电量不足}}} devicesBacklog {{count, plural, other {{countWords} 台签到设备有待同步的扫描}}} capacityNear {场地已满 {count}%} capacityFull {场地已满员（{count}%）} sellOut {已售出 {count}% 的门票} salesPace {门票销售达到目标进度的 {count}%} readiness {{count, plural, other {{countWords} 个设置步骤阻碍了此活动}}} domain {{count, plural, other {{countWords} 个自定义域名有问题}}} payoutsPastDue {{count, plural, other {收款账户有 {countWords} 项要求已逾期}}} deliverability {电子邮件送达率需要关注} automationFailed {{count, plural, other {今天有 {countWords} 条消息或批量操作失败}}} assistanceOverdue {{count, plural, other {{countWords} 个求助请求等待过久}}} campaignFailed {{count, plural, other {今天有 {countWords} 次营销活动发送失败}}} disputeDeadline {{count, plural, other {有 {countWords} 起争议需要尽快提交证据}}} other {提醒}}"
+        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords} 位参会者没有座位}}} undistributed {{count, plural, other {{countWords} 张已购门票尚未分发}}} paymentsFailed {{count, plural, other {{countWords} 笔付款失败}}} paymentsStuck {{count, plural, other {{countWords} 笔付款卡住了}}} refundSurge {{count, plural, other {过去一小时内有 {countWords} 笔退款}}} devicesOffline {{count, plural, other {{countWords} 台签到设备离线}}} devicesLowBattery {{count, plural, other {{countWords} 台签到设备电量不足}}} devicesBacklog {{count, plural, other {{countWords} 台签到设备有待同步的扫描}}} capacityNear {场地已满 {count}%} capacityFull {场地已满员（{count}%）} sellOut {已售出 {count}% 的门票} salesPace {门票销售达到目标进度的 {count}%} readiness {{count, plural, other {{countWords} 个设置步骤阻碍了此活动}}} domain {{count, plural, other {{countWords} 个自定义域名有问题}}} payoutsPastDue {{count, plural, other {收款账户有 {countWords} 项要求已逾期}}} deliverability {电子邮件送达率需要关注} automationFailed {{count, plural, other {今天有 {countWords} 条消息或批量操作失败}}} assistanceOverdue {{count, plural, other {{countWords} 个求助请求等待过久}}} campaignFailed {{count, plural, other {今天有 {countWords} 次营销活动发送失败}}} disputeDeadline {{count, plural, other {有 {countWords} 起争议需要尽快提交证据}}} pledgesUnpaid {{count, plural, other {活动结束 14 天后仍有 {countWords} 笔认捐未付款}}} other {提醒}}",
+        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords} 位参会者没有座位}}} undistributed {{count, plural, other {{countWords} 张已购门票尚未分发}}} paymentsFailed {{count, plural, other {{countWords} 笔付款失败}}} paymentsStuck {{count, plural, other {{countWords} 笔付款卡住了}}} refundSurge {{count, plural, other {过去一小时内有 {countWords} 笔退款}}} devicesOffline {{count, plural, other {{countWords} 台签到设备离线}}} devicesLowBattery {{count, plural, other {{countWords} 台签到设备电量不足}}} devicesBacklog {{count, plural, other {{countWords} 台签到设备有待同步的扫描}}} capacityNear {场地已满 {count}%} capacityFull {场地已满员（{count}%）} sellOut {已售出 {count}% 的门票} salesPace {门票销售达到目标进度的 {count}%} readiness {{count, plural, other {{countWords} 个设置步骤阻碍了此活动}}} domain {{count, plural, other {{countWords} 个自定义域名有问题}}} payoutsPastDue {{count, plural, other {收款账户有 {countWords} 项要求已逾期}}} deliverability {电子邮件送达率需要关注} automationFailed {{count, plural, other {今天有 {countWords} 条消息或批量操作失败}}} assistanceOverdue {{count, plural, other {{countWords} 个求助请求等待过久}}} campaignFailed {{count, plural, other {今天有 {countWords} 次营销活动发送失败}}} disputeDeadline {{count, plural, other {有 {countWords} 起争议需要尽快提交证据}}} pledgesUnpaid {{count, plural, other {活动结束 14 天后仍有 {countWords} 笔认捐未付款}}} other {提醒}}",
+        "alert-urgent-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, other {{countWords} 位参会者没有座位}}} undistributed {{count, plural, other {{countWords} 张已购门票尚未分发}}} paymentsFailed {{count, plural, other {{countWords} 笔付款失败}}} paymentsStuck {{count, plural, other {{countWords} 笔付款卡住了}}} refundSurge {{count, plural, other {过去一小时内有 {countWords} 笔退款}}} devicesOffline {{count, plural, other {{countWords} 台签到设备离线}}} devicesLowBattery {{count, plural, other {{countWords} 台签到设备电量不足}}} devicesBacklog {{count, plural, other {{countWords} 台签到设备有待同步的扫描}}} capacityNear {场地已满 {count}%} capacityFull {场地已满员（{count}%）} sellOut {已售出 {count}% 的门票} salesPace {门票销售达到目标进度的 {count}%} readiness {{count, plural, other {{countWords} 个设置步骤阻碍了此活动}}} domain {{count, plural, other {{countWords} 个自定义域名有问题}}} payoutsPastDue {{count, plural, other {收款账户有 {countWords} 项要求已逾期}}} deliverability {电子邮件送达率需要关注} automationFailed {{count, plural, other {今天有 {countWords} 条消息或批量操作失败}}} assistanceOverdue {{count, plural, other {{countWords} 个求助请求等待过久}}} campaignFailed {{count, plural, other {今天有 {countWords} 次营销活动发送失败}}} disputeDeadline {{count, plural, other {有 {countWords} 起争议需要尽快提交证据}}} pledgesUnpaid {{count, plural, other {活动结束 14 天后仍有 {countWords} 笔认捐未付款}}} other {提醒}}"
       }
     },
     "kinds": {
@@ -181,7 +181,10 @@
       },
       "donations": {
         "receipt": "捐赠收据",
-        "year-end-statement": "年度捐赠明细"
+        "year-end-statement": "年度捐赠明细",
+        "pledge-summary": "认捐摘要",
+        "pledge-invoice": "认捐账单",
+        "pledge-reminder": "认捐提醒"
       },
       "guests": {
         "invitation": "婚礼邀请",
@@ -935,14 +938,23 @@
     "orgUnavailable": "该主办方目前未在售票。已购买的门票仍然有效。",
     "riskBlocked": "我们无法接受此订单。请联系主办方。",
     "creditInvalid": "该店铺余额代码无效或已用完。",
-    "creditNotApplicable": "该店铺余额不能用于这些门票。"
+    "creditNotApplicable": "该店铺余额不能用于这些门票。",
+    "saveCardForGiving": "为今晚的捐赠保存我的银行卡（在下一页完成；未经您在那里同意，不会保存任何信息）"
   },
   "fakePay": {
     "eyebrow": "测试付款",
     "title": "支付订单",
     "description": "这是测试付款页面，不会产生真实扣款。",
     "pay": "立即付款（测试）",
-    "decline": "模拟银行卡被拒"
+    "decline": "模拟银行卡被拒",
+    "setupTitle": "测试银行卡设置",
+    "setupDescription": "代替支付服务商的安全银行卡表单。不会保存真实的银行卡。",
+    "testCard": "测试银行卡",
+    "card4242": "4242 · 始终扣款成功",
+    "card0002": "0002 · 始终被拒",
+    "card9995": "9995 · 首次扣款被拒",
+    "saveCard": "保存银行卡（测试）",
+    "failSetup": "模拟设置失败"
   },
   "order": {
     "eyebrow": "你的订单",
@@ -1978,7 +1990,8 @@
       "plan": "座位图",
       "assign": "安排宾客",
       "finder": "座位查询",
-      "rules": "规则"
+      "rules": "规则",
+      "guests": "安排宾客座位"
     },
     "assign": {
       "title": "安排宾客",
@@ -2069,7 +2082,8 @@
       "modeNow": "查询方式：{mode}",
       "modeShort": {
         "code": "邮箱验证码",
-        "name": "全名"
+        "name": "全名",
+        "pin": "全名和请柬上的 PIN"
       },
       "notPublic": "活动尚未发布（或为私密活动），宾客暂时无法打开座位查询。",
       "settingsTitle": "宾客",
@@ -2080,11 +2094,13 @@
       "mode": "宾客如何查找座位",
       "modeOption": {
         "code": "通过发送到邮箱的验证码（推荐）",
-        "name": "输入全名，立即查看"
+        "name": "输入全名，立即查看",
+        "pin": "通过全名和请柬上印的 PIN"
       },
       "modeHint": {
         "code": "只有能读取宾客邮件的人才能看到其座位，也没有人能知道名单上有谁。",
-        "name": "入场更快，但任何知道宾客全名的人都能看到其座位。"
+        "name": "入场更快，但任何知道宾客全名的人都能看到其座位。",
+        "pin": "宾客输入全名和其所在组请柬上印的 6 位 PIN。他们只能看到自己的桌位，绝不会看到任何人的姓名，也没人能查出谁在名单上。"
       },
       "readOnly": "你可以查看这些设置，但不能修改。",
       "shareTitle": "分享",
@@ -2092,7 +2108,10 @@
       "openPublic": "打开座位查询",
       "poster": "打印座位查询海报",
       "closedNote": "座位查询已关闭。扫描海报的宾客会被提示稍后再来。",
-      "namePoster": "打印姓名列表海报"
+      "namePoster": "打印姓名列表海报",
+      "partyLinksTitle": "各组链接",
+      "partyLinksHint": "每组请柬上的链接和二维码也能打开该组自己的桌位页面：场地图上的桌位以及同桌的人。把他们换到别的桌时，二维码保持不变。",
+      "partyLinksAction": "各组链接和二维码"
     },
     "map": {
       "zoomIn": "放大",
@@ -2177,6 +2196,127 @@
         "forbidden": "你可以查看团体，但不能更改。",
         "noMembers": "名单中还没有人带有标签 {label}。"
       }
+    },
+    "guestSeating": {
+      "title": "安排宾客座位",
+      "description": "将各组宾客安排到桌位。从待排队列把一组拖到平面图上，或勾选宾客、选择桌子并按“安排所选宾客”——拖动能做的事，键盘都能做。",
+      "chart": {
+        "label": "座位安排",
+        "event": "整个活动"
+      },
+      "noPlan": "{chart}还没有座位图",
+      "noPlanHint": "请先创建座位图（桌子或排），再在这里安排宾客。",
+      "toPlan": "前往座位图",
+      "noGuests": "还没有需要安排的宾客",
+      "noGuestsHint": "在“宾客”页面添加各组宾客（或邀请他们参加这一环节），然后在这里安排座位。",
+      "toGuests": "前往宾客",
+      "summary": "已安排 {seated} · 待安排 {unseated}",
+      "readOnly": "你可以查看座位安排，但不能修改。",
+      "declinedSeated": "{count, plural, other {# 位已婉拒的宾客仍在座位上。}}请在桌位详情中移除。",
+      "live": {
+        "live": "实时",
+        "connecting": "正在连接…",
+        "offline": "离线，正在重连"
+      },
+      "vip": "VIP",
+      "queue": {
+        "title": "待安排（{count}）",
+        "search": "搜索各组和宾客",
+        "status": "回复",
+        "statusAll": "全部回复",
+        "side": "方",
+        "sideAll": "全部",
+        "list": "待安排的各组宾客",
+        "selectParty": "选中{party}的所有人",
+        "toSeat": "{count, plural, other {待安排 # 位}}",
+        "selected": "{count, plural, =0 {未选择} other {已选 # 位宾客}}",
+        "clear": "清除选择",
+        "empty": "每个人都有座位了。",
+        "noMatch": "没有符合筛选条件的组。"
+      },
+      "status": {
+        "attending": "出席",
+        "pending": "等待回复",
+        "declined": "已婉拒"
+      },
+      "guest": {
+        "guestOf": "{name}的同伴",
+        "meal": "餐食：{meal}",
+        "noMeal": "未选餐食",
+        "child": "儿童",
+        "infant": "婴儿"
+      },
+      "form": {
+        "title": "安排所选宾客",
+        "table": "桌子或排",
+        "choose": "选择桌子或排",
+        "option": "{place} — 空 {free}/{capacity}",
+        "optionVip": "{place} — 空 {free}/{capacity} · VIP 区",
+        "cantFit": "坐不下：已选 {asked, plural, other {# 位宾客}}，{place}{fits, plural, =0 {没有空位} other {只有 # 个空位}}。",
+        "submit": "安排所选宾客",
+        "submitting": "正在安排…"
+      },
+      "place": {
+        "table": "{label} 号桌",
+        "row": "{label} 排"
+      },
+      "map": {
+        "title": "平面图",
+        "hint": "把一组拖到桌子上即可安排。点击桌子查看谁坐在那里。",
+        "readOnlyHint": "点击桌子查看谁坐在那里。",
+        "dropHere": "放到{place}：空 {free}",
+        "dropCantFit": "{place}坐不下：{count, plural, other {# 位宾客}}，空 {free}",
+        "guests": "宾客",
+        "tickets": "持票人",
+        "vip": "VIP 区"
+      },
+      "details": {
+        "title": "桌位详情",
+        "choose": "要查看的桌子",
+        "none": "此座位图没有桌子或排。",
+        "counts": "已坐 {seated} · 空 {free}/{capacity}",
+        "tickets": "{count, plural, other {# 个座位已被门票占用}}",
+        "sponsor": "赞助：{name}",
+        "vipZone": "VIP 区",
+        "vipFromPlan": "位于座位图的 VIP 区域",
+        "warnings": "请检查此桌",
+        "warnDeclined": "{name}已婉拒，但仍在座位上。",
+        "warnVipOutside": "{party}是 VIP 组，但不在 VIP 区。",
+        "warnNotVip": "{party}不是 VIP 组，却坐在 VIP 区。",
+        "meals": "餐食",
+        "mealCount": "{meal}：{count}",
+        "noMeal": "未选择",
+        "empty": "这里还没有人。请从待排队列安排一组。",
+        "unseatParty": "移除{party}",
+        "move": "移到…",
+        "moveLabel": "把{name}移到另一桌",
+        "unseat": "移除",
+        "unseatLabel": "移除{name}",
+        "moveTo": "移动{name}",
+        "moveSubmit": "移动",
+        "cancel": "取消"
+      },
+      "done": {
+        "seated": "已在{place}安排 {count, plural, other {# 位宾客}}。",
+        "moved": "已将{name}移到{place}。",
+        "unseated": "{count, plural, other {# 位宾客}}已回到待排队列。",
+        "vipOn": "{place}现在是 VIP 区。",
+        "vipOff": "{place}不再是 VIP 区。"
+      },
+      "warnings": {
+        "vip_outside": "{party}是 VIP 组，而{place}不是 VIP 区。",
+        "not_vip_inside": "{place}是 VIP 区，而{party}不是 VIP 组。"
+      },
+      "errors": {
+        "forbidden": "你可以查看座位安排，但不能修改。",
+        "cantFit": "坐不下：{asked, plural, other {# 位宾客}}需要座位，而那里{fits, plural, =0 {没有空位} other {只有 # 个空位}}。",
+        "declined": "这位宾客已婉拒。只能安排未婉拒的宾客。",
+        "unknown": "这位宾客已不在名单上。页面将刷新。",
+        "noPlan": "这里还没有座位图。",
+        "noGuests": "请至少选择一位宾客。",
+        "noPlace": "请选择桌子或排。",
+        "dropMiss": "请把这组放到桌子或排上。"
+      }
     }
   },
   "venueMap": {
@@ -2216,7 +2356,11 @@
       "bottom": "地图下方",
       "bottom-right": "地图右下方"
     },
-    "yours": "{count, plural, other {你的座位：{seats}}}"
+    "yours": "{count, plural, other {你的座位：{seats}}}",
+    "yourPlace": {
+      "table": "您的桌位",
+      "row": "您的排"
+    }
   },
   "seatFinder": {
     "eyebrow": "座位查询",
@@ -2267,9 +2411,15 @@
       "challengeUnavailable": "此设备的查询次数过多。请稍等一分钟后重试。",
       "closed": "此活动的座位查询未开放。",
       "internal": "我们这边出了点问题。",
-      "rateLimited": "请求验证码次数过多。请在 {minutes, plural, other {# 分钟}}后重试。"
+      "rateLimited": "请求验证码次数过多。请在 {minutes, plural, other {# 分钟}}后重试。",
+      "noMatch": "没有找到与该姓名和 PIN 匹配的桌位。请对照请柬核对，或询问主人。",
+      "invalidPin": "请输入请柬上的 6 位 PIN。",
+      "pinRateLimited": "此设备查询次数过多。请在 {minutes, plural, other {# 分钟}}后重试。"
     },
-    "hostedBy": "赞助商：{sponsor}"
+    "hostedBy": "赞助商：{sponsor}",
+    "pinIntro": "请输入与请柬上一致的全名，以及请柬上印的 6 位 PIN。",
+    "pin": "请柬上的 PIN",
+    "findByPin": "查找我的桌位"
   },
   "seatFinderPoster": {
     "pageTitle": "座位查询海报",
@@ -2282,7 +2432,8 @@
     "step2Code": "输入你的邮箱，我们会发送验证码给你。",
     "step2Name": "输入你的全名。",
     "step3": "在场地地图上查看你的桌号和座位。",
-    "orVisit": "或访问"
+    "orVisit": "或访问",
+    "step2Pin": "输入您的全名和请柬上的 PIN。"
   },
   "reports": {
     "title": "分析",
@@ -6465,7 +6616,8 @@
       "automationFailed": "打开消息健康状况",
       "campaignFailed": "打开营销活动",
       "disputeDeadline": "打开争议队列",
-      "assistanceOverdue": "打开求助请求"
+      "assistanceOverdue": "打开求助请求",
+      "pledgesUnpaid": "打开认捐"
     },
     "rules": {
       "unseated": "{count, plural, other {{countWords} 位参会者没有座位}}",
@@ -6487,7 +6639,8 @@
       "automationFailed": "{count, plural, other {今天有 {countWords} 条消息或批量操作失败}}",
       "campaignFailed": "{count, plural, other {今天有 {countWords} 次营销活动发送失败}}",
       "disputeDeadline": "{count, plural, other {有 {countWords} 起争议需要尽快提交证据}}",
-      "assistanceOverdue": "{count, plural, other {{countWords} 个求助请求等待过久}}"
+      "assistanceOverdue": "{count, plural, other {{countWords} 个求助请求等待过久}}",
+      "pledgesUnpaid": "{count, plural, other {活动结束 14 天后仍有 {countWords} 笔认捐未付款}}"
     },
     "widget": {
       "title": "提醒",
@@ -8747,7 +8900,8 @@
       "openConsole": "打开控制台",
       "openSpotter": "记录号码牌",
       "openPaddles": "号码牌",
-      "openScreen": "现场大屏"
+      "openScreen": "现场大屏",
+      "openPledges": "认捐与收款"
     },
     "paddles": {
       "title": "号码牌",
@@ -10303,7 +10457,10 @@
     },
     "questionsTitle": "几个问题",
     "questionsHint": "主人想多了解一些情况。标为私密的回答只有主人能看到。",
-    "questionsFor": "给 {name} 的问题"
+    "questionsFor": "给 {name} 的问题",
+    "seatTitle": "查找您的桌位",
+    "seatHint": "查看您在场地图上的座位以及同桌的人。",
+    "seatLink": "显示我的桌位"
   },
   "rsvpFind": {
     "metaTitle": "查找您的请柬",
@@ -10413,7 +10570,13 @@
     "reopenFor": "为 {party} 重新开放回复",
     "createLinkFor": "为 {party} 创建回复链接",
     "copy": "复制链接",
-    "copied": "链接已复制。"
+    "copied": "链接已复制。",
+    "seatTitle": "桌位页面二维码",
+    "seatHint": "此二维码打开 {party} 的桌位页面：场地图上的桌位以及同桌的人。把他们换到别的桌时它保持不变，因此可以印在引座卡或席位卡上。",
+    "seatQrLabel": "{party} 桌位页面的二维码",
+    "seatLinkLabel": "{party} 桌位页面的链接",
+    "seatClosed": "打开座位查找（座位 → 座位查找）后，宾客即可看到自己的桌位。",
+    "seatScan": "扫码查找您的桌位"
   },
   "collector": {
     "metaTitle": "分享您的联系方式",
@@ -11128,5 +11291,199 @@
       "offer_ended": "{title} 的邀请已结束。",
       "full": "{title} 刚刚满员。再试一次即可加入候补名单。"
     }
+  },
+  "guestSeats": {
+    "placeAt": {
+      "table": "{item} 号桌",
+      "row": "第 {item} 排"
+    },
+    "wholeEvent": "座位安排",
+    "resultTitle": "{count, plural, other {您的桌位}}",
+    "partyCount": "{count, plural, other {您组中有 # 人坐在这里}}",
+    "noTableTitle": "您的桌位尚未确定",
+    "noTable": "主人仍在安排座位。请临近活动日再来查看，或询问主人。",
+    "unseatedCount": "{count, plural, other {您组中有 # 人尚未安排桌位。}}",
+    "again": "查找其他人",
+    "mapTitle": "场地图",
+    "mapFor": "场地图：{name}"
+  },
+  "partySeats": {
+    "metaTitle": "您的桌位",
+    "title": "{party} 的座位",
+    "intro": "您在场地图上的桌位，以及与您同桌的人。",
+    "closedTitle": "座位安排尚未就绪",
+    "closed": "主人尚未公布座位安排。请保留此页面或请柬上的二维码：公布后这里会显示您的桌位。",
+    "noChartsTitle": "您的桌位尚未确定",
+    "noCharts": "主人仍在安排座位。桌位一确定，此页面就会显示。",
+    "yourParty": "您组中的人",
+    "tablemates": {
+      "table": "同桌的还有",
+      "row": "同排的还有"
+    },
+    "noTablemates": "这里暂时没有其他人。",
+    "unseated": "尚未安排座位：{names}",
+    "guestOf": "{name} 的同伴",
+    "keep": "此页面始终显示您当前的桌位：即使主人调整了您的座位，请柬上的链接和二维码也不会变。",
+    "toRsvp": "返回您的回复",
+    "saveCard": "为今晚的捐赠保存银行卡"
+  },
+  "savedCard": {
+    "metaTitle": "为今晚保存银行卡",
+    "title": "为今晚的捐赠保存银行卡",
+    "intro": "在您自己的手机上保存一次银行卡，整个晚上即可一键捐赠。现在不会扣款。",
+    "introParty": "致 {party}：在您自己的手机上保存一次银行卡，整个晚上即可一键捐赠。您的认捐将在第二天早上扣款。现在不会扣款。",
+    "unavailableTitle": "暂不支持保存银行卡",
+    "unavailableBody": "本活动目前不接受在线捐赠。您仍可在现场捐赠。",
+    "formLabel": "保存银行卡",
+    "formTitle": "您的信息",
+    "name": "姓名",
+    "email": "电子邮箱",
+    "emailHint": "认捐摘要和收据将发送到此邮箱。",
+    "consentLabel": "我授权为今晚保存这张银行卡",
+    "consent": "{org} 可将此卡保存在其支付服务商处，且仅可就我在 {event} 选择的捐款和作出的认捐扣款。认捐将在活动次日早上扣款，扣款前我会收到摘要。此卡将在活动结束 30 天后删除，我也可以随时在本页删除。",
+    "privacy": "您的银行卡信息直接发送给支付服务商。我们从不查看或保存您的卡号。",
+    "save": "保存我的银行卡",
+    "saving": "正在打开安全的银行卡表单…",
+    "savedTitle": "您的银行卡已为今晚保存",
+    "savedBody": "尾号 {last4} 的 {brand} 已可在本活动中一键捐赠。",
+    "card": "银行卡",
+    "giveNow": "立即捐赠",
+    "remove": "删除我的银行卡",
+    "removeHint": "删除后将取消所有尚未进行的扣款；认捐仍可通过链接支付。",
+    "removed": "您的银行卡已删除，不会再被扣款。",
+    "pending": "我们正在与支付服务商确认您的银行卡。请稍后刷新。",
+    "failed": "无法保存您的银行卡。请重试或使用其他银行卡。",
+    "fromCheckout": "谢谢，您的订单已完成。门票将通过电子邮件发送。",
+    "oneTapTitle": "用已保存的银行卡捐赠",
+    "oneTapBody": "一键即从尾号 {last4} 的 {brand} 扣款，随后会立即显示确认。",
+    "oneTapFailed": "这笔捐赠未能完成。请重试，或使用下方表单。",
+    "oneTapGive": "捐赠 {amount} · {name}",
+    "manageCard": "管理我保存的银行卡",
+    "errors": {
+      "name": "请输入您的姓名。",
+      "email": "请输入有效的电子邮箱。",
+      "consent": "请勾选此框以授权保存您的银行卡。",
+      "event_over": "本活动已结束，无法再保存银行卡。",
+      "not_connected": "本活动目前不接受在线捐赠。",
+      "link": "此链接已失效。请向主办方索取新链接。"
+    }
+  },
+  "pledgePay": {
+    "metaTitle": "您的认捐",
+    "title": "您认捐的 {amount}",
+    "subtitle": "{level} · {campaign}。感谢您的慷慨。",
+    "stateTitle": "状态",
+    "status": {
+      "scheduled": "已安排银行卡扣款",
+      "charging": "正在扣款",
+      "invoiced": "等待付款",
+      "paid": "已付款",
+      "paid_offline": "已付款",
+      "written_off": "已关闭"
+    },
+    "card": "银行卡",
+    "cardScheduled": "我们将于 {when} 从尾号 {last4} 的 {brand} 扣款。",
+    "charging": "正在从您的银行卡扣款。请稍后刷新。",
+    "due": "请在 {date} 前付款。",
+    "thanks": "已全额付款。谢谢！收据将通过电子邮件发送。",
+    "closed": "此认捐已关闭，无需再付款。",
+    "payNow": "立即支付 {amount}",
+    "payAnotherWay": "立即以其他方式支付 {amount}",
+    "anotherWayHint": "现在付款将取消银行卡扣款。想用另一张卡？现在就用它付款。",
+    "errors": {
+      "charging": "正在从您的银行卡扣款，因此未发起此次付款。",
+      "settled": "此认捐已结清。",
+      "no_email": "请输入您的电子邮箱以付款。",
+      "rate_limited": "尝试次数过多。请等待一分钟后重试。",
+      "not_connected": "目前无法在线付款。请向主办方询问付款方式。",
+      "generic": "出了点问题。请重试。",
+      "email": "请输入有效的电子邮箱。"
+    },
+    "email": "接收收据的电子邮箱",
+    "emailHint": "收据将发送到此邮箱。"
+  },
+  "pledges": {
+    "title": "认捐",
+    "subtitle": "举牌认捐中的每笔认捐及其收款情况。",
+    "viewerNotice": "您可以查看认捐。财务角色负责结束当晚、登记付款和核销认捐。",
+    "pledged": "认捐总额",
+    "paid": "已付款",
+    "owed": "尚欠",
+    "writtenOffTotal": "已核销",
+    "cardsSaved": "已保存的银行卡",
+    "emptyTitle": "暂无认捐",
+    "emptyDescription": "记录员在举牌认捐中确认号牌后，认捐会显示在这里。",
+    "closeTitle": "{count, plural, other {待发送认捐 # 笔}}",
+    "closeBody": "结束当晚后，每位捐赠者都会收到摘要。已保存银行卡的认捐将于明天 09:00（活动时区）扣款；其他认捐会收到 30 天内到期的付款链接，并在付款前收到提醒。",
+    "close": "结束当晚并发送摘要",
+    "closed": "摘要已发送：{cards, plural, other {# 笔认捐将从已保存的银行卡扣款}}，{invoices, plural, other {# 笔认捐已收到付款链接}}。",
+    "caption": "认捐及其收款",
+    "columns": {
+      "paddle": "号牌",
+      "holder": "捐赠者",
+      "level": "级别",
+      "amount": "金额",
+      "status": "状态",
+      "detail": "详情",
+      "actions": "操作"
+    },
+    "status": {
+      "open": "未发送",
+      "scheduled": "已安排银行卡扣款",
+      "charging": "正在扣款",
+      "invoiced": "已发送付款链接",
+      "paid": "已付款",
+      "paid_offline": "线下已付款",
+      "written_off": "已核销"
+    },
+    "cardLabel": "{brand} ·{last4}",
+    "card": "银行卡",
+    "detail": {
+      "open": "等待结束当晚。",
+      "scheduled": "{card}，{when}",
+      "charging": "{card}，正在扣款",
+      "invoiced": "到期日 {date}。",
+      "declined": "{count, plural, other {银行卡被拒 # 次。}}",
+      "noEmail": "没有登记邮箱：请自行分享付款链接。",
+      "paidCard": "已从 {card} 扣款",
+      "paidLink": "已通过链接付款"
+    },
+    "methods": {
+      "check": "支票",
+      "wire": "电汇",
+      "stock": "股票",
+      "daf": "捐赠者建议基金",
+      "cash": "现金",
+      "other": "其他"
+    },
+    "recordPayment": "登记付款",
+    "method": "付款方式",
+    "chooseMethod": "请选择…",
+    "reference": "参考号（可选）",
+    "receivedOn": "收款日期",
+    "noteOptional": "备注（可选）",
+    "recordSubmit": "登记号牌 {paddle} 的付款",
+    "recorded": "付款已登记。提醒和银行卡扣款已停止。",
+    "writeOff": "核销",
+    "writeOffNote": "核销原因",
+    "writeOffSubmit": "核销号牌 {paddle} 的认捐",
+    "writtenOff": "已核销 {amount} 的认捐。",
+    "errors": {
+      "charging": "正在从银行卡扣款。请几分钟后重试。",
+      "settled": "此认捐已结清。",
+      "future": "日期不能是将来。",
+      "method": "请选择付款方式。",
+      "receivedOn": "请输入收款日期。",
+      "note": "请写明核销原因。",
+      "generic": "出了点问题。请重试。"
+    },
+    "qr": {
+      "label": "为今晚的捐赠保存银行卡的二维码",
+      "checkinTitle": "签到时保存银行卡",
+      "checkinBody": "宾客签到后向其出示此二维码：他们可在自己的手机上保存银行卡，今晚一键捐赠。",
+      "tableTitle": "在餐桌上保存银行卡",
+      "tableBody": "将此二维码印在桌卡上：宾客可在自己的手机上保存银行卡，用于一键捐赠和认捐。"
+    },
+    "payLink": "号牌 {paddle} 的付款链接"
   }
 }

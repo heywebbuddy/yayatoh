@@ -10,7 +10,13 @@ import {
   staffAlertsSubscriber,
 } from '@yayatoh/checkin';
 import { deviceBoardPublisher, publishMetricsChangedTx } from '@yayatoh/command-center';
-import { giftOutcomesSubscriber, receiptIssuer, statementMailer } from '@yayatoh/donations';
+import {
+  giftOutcomesSubscriber,
+  pledgeMailer,
+  pledgeOutcomesSubscriber,
+  receiptIssuer,
+  statementMailer,
+} from '@yayatoh/donations';
 import { findEventTx, portalInviteMailer } from '@yayatoh/events';
 import { registrationResumeMailer } from '@yayatoh/forms';
 import { invitationMailer as guestInvitationMailer } from '@yayatoh/guests';
@@ -161,6 +167,9 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     // M4.8b: a receipt per paid gift or charity-ticket order, and year-end statements, to the donor.
     receiptIssuer({ notifier, appOrigin }),
     statementMailer({ notifier, appOrigin }),
+    // M4.8e: pledge payments settle their pledges; the donor's summary, invoice and reminders.
+    pledgeOutcomesSubscriber,
+    pledgeMailer({ notifier, appOrigin }),
   ];
 }
 

@@ -193,7 +193,11 @@ export {
   paddleHoldersTx,
   paddleHolderTx,
 } from './paddle-holders.ts';
+// M4.8e: where a paddle holder's pledge messages go.
+export { paddleHolderContactTx } from './pledge-contact.ts';
 export { privateColumns } from './private-columns.ts';
+// M4.3a guest seating: the guest list's live channel and seating's OccupantDirectory.
+export { GUESTS_CHANNEL, MAX_PARTY_MESSAGES, publishGuestChangesTx } from './realtime.ts';
 export {
   createRsvpLinksCommand,
   findRsvpByNameCommand,
@@ -271,6 +275,17 @@ export {
   SUB_EVENT_KINDS,
   type SubEventKind,
 } from './schema.ts';
+// M4.4a: the guest seat finder's party credentials (seating's `PartyCredentials` port).
+export { guestsPartyCredentials } from './seat-finder-party.ts';
+export {
+  guestsOccupantDirectory,
+  type SeatingOccupant,
+  type SeatingOccupantParty,
+  type SeatingStatus,
+  seatingOccupantsTx,
+  seatingSubEventsTx,
+  wholeEventStatus,
+} from './seating-occupants.ts';
 export {
   CreateSubEventInput,
   createSubEventCommand,

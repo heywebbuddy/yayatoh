@@ -1,4 +1,4 @@
-import { columnPrivacy, internal, personal } from '@yayatoh/db';
+import { columnPrivacy, internal, personal, secret } from '@yayatoh/db';
 
 /**
  * Column privacy of the `donations` schema (roadmap §9 canary leak test; see `columnPrivacy` in
@@ -97,5 +97,39 @@ export const privateColumns = columnPrivacy('donations', {
     currency: 'vocab',
     status: 'vocab',
     source: 'vocab',
+  },
+  // M4.8e cards on file and pledge collection. The provider's references are secret (never in a
+  // response, export or message); what the guest typed and the card's display details (brand,
+  // last four) are personal: the card's owner sees them through a signed link, the host in the
+  // console, the donor in their own summary. Host notes and offline references are internal.
+  saved_cards: {
+    name: personal(),
+    email: personal('email'),
+    source: 'vocab',
+    status: 'vocab',
+    provider: 'vocab',
+    connected_account_id: secret(),
+    provider_setup_id: secret(),
+    customer_id: secret(),
+    payment_method_id: secret(),
+    brand: personal(),
+    last4: personal(),
+    consent_version: 'vocab',
+    locale: 'vocab',
+  },
+  pledge_collections: {
+    currency: 'vocab',
+    donor_name: personal(),
+    donor_email: personal('email'),
+    locale: 'vocab',
+    status: 'vocab',
+    offline_method: 'vocab',
+    offline_reference: internal(),
+    note: internal(),
+  },
+  pledge_attempts: {
+    kind: 'vocab',
+    status: 'vocab',
+    decline_code: 'vocab',
   },
 });

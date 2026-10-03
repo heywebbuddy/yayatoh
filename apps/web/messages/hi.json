@@ -76,9 +76,9 @@
         "org-status": "{status, select, suspended {Yayatoh ने इस संगठन को निलंबित किया} reactivated {यह संगठन फिर से ऑनलाइन है} other {Yayatoh ने इस संगठन को बंद किया}}"
       },
       "alerts": {
-        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {{countWords} उपस्थित व्यक्ति के पास सीट नहीं है} other {{countWords} उपस्थित लोगों के पास सीट नहीं है}}} undistributed {{count, plural, one {{countWords} खरीदा गया टिकट वितरित नहीं हुआ है} other {{countWords} खरीदे गए टिकट वितरित नहीं हुए हैं}}} paymentsFailed {{count, plural, one {{countWords} भुगतान विफल रहा} other {{countWords} भुगतान विफल रहे}}} paymentsStuck {{count, plural, one {{countWords} भुगतान अटका हुआ है} other {{countWords} भुगतान अटके हुए हैं}}} refundSurge {{count, plural, one {{countWords} रिफ़ंड पिछले घंटे में} other {{countWords} रिफ़ंड पिछले घंटे में}}} devicesOffline {{count, plural, one {{countWords} चेक-इन डिवाइस ऑफ़लाइन है} other {{countWords} चेक-इन डिवाइस ऑफ़लाइन हैं}}} devicesLowBattery {{count, plural, one {{countWords} चेक-इन डिवाइस की बैटरी कम है} other {{countWords} चेक-इन डिवाइसों की बैटरी कम है}}} devicesBacklog {{count, plural, one {{countWords} चेक-इन डिवाइस पर स्कैन सिंक होने की प्रतीक्षा में हैं} other {{countWords} चेक-इन डिवाइसों पर स्कैन सिंक होने की प्रतीक्षा में हैं}}} capacityNear {स्थल {count}% भर चुका है} capacityFull {स्थल पूरी तरह भर गया है ({count}%)} sellOut {{count}% टिकट बिक चुके हैं} salesPace {टिकट बिक्री लक्ष्य गति के {count}% पर है} readiness {{count, plural, one {{countWords} सेटअप चरण इस इवेंट को रोक रहा है} other {{countWords} सेटअप चरण इस इवेंट को रोक रहे हैं}}} domain {{count, plural, one {{countWords} कस्टम डोमेन में समस्या है} other {{countWords} कस्टम डोमेन में समस्या है}}} payoutsPastDue {{count, plural, one {{countWords} भुगतान खाता आवश्यकता की समय-सीमा निकल चुकी है} other {{countWords} भुगतान खाता आवश्यकताओं की समय-सीमा निकल चुकी है}}} deliverability {ईमेल डिलीवरी पर ध्यान देने की ज़रूरत है} automationFailed {{count, plural, one {{countWords} संदेश या बल्क कार्रवाई आज विफल रही} other {{countWords} संदेश या बल्क कार्रवाइयाँ आज विफल रहीं}}} assistanceOverdue {{count, plural, one {{countWords} सहायता अनुरोध बहुत देर से प्रतीक्षा में है} other {{countWords} सहायता अनुरोध बहुत देर से प्रतीक्षा में हैं}}} campaignFailed {{count, plural, one {{countWords} अभियान भेजना आज विफल रहा} other {{countWords} अभियान भेजना आज विफल रहे}}} disputeDeadline {{count, plural, one {{countWords} विवाद के लिए जल्द ही सबूत चाहिए} other {{countWords} विवादों के लिए जल्द ही सबूत चाहिए}}} other {अलर्ट}}",
-        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {{countWords} उपस्थित व्यक्ति के पास सीट नहीं है} other {{countWords} उपस्थित लोगों के पास सीट नहीं है}}} undistributed {{count, plural, one {{countWords} खरीदा गया टिकट वितरित नहीं हुआ है} other {{countWords} खरीदे गए टिकट वितरित नहीं हुए हैं}}} paymentsFailed {{count, plural, one {{countWords} भुगतान विफल रहा} other {{countWords} भुगतान विफल रहे}}} paymentsStuck {{count, plural, one {{countWords} भुगतान अटका हुआ है} other {{countWords} भुगतान अटके हुए हैं}}} refundSurge {{count, plural, one {{countWords} रिफ़ंड पिछले घंटे में} other {{countWords} रिफ़ंड पिछले घंटे में}}} devicesOffline {{count, plural, one {{countWords} चेक-इन डिवाइस ऑफ़लाइन है} other {{countWords} चेक-इन डिवाइस ऑफ़लाइन हैं}}} devicesLowBattery {{count, plural, one {{countWords} चेक-इन डिवाइस की बैटरी कम है} other {{countWords} चेक-इन डिवाइसों की बैटरी कम है}}} devicesBacklog {{count, plural, one {{countWords} चेक-इन डिवाइस पर स्कैन सिंक होने की प्रतीक्षा में हैं} other {{countWords} चेक-इन डिवाइसों पर स्कैन सिंक होने की प्रतीक्षा में हैं}}} capacityNear {स्थल {count}% भर चुका है} capacityFull {स्थल पूरी तरह भर गया है ({count}%)} sellOut {{count}% टिकट बिक चुके हैं} salesPace {टिकट बिक्री लक्ष्य गति के {count}% पर है} readiness {{count, plural, one {{countWords} सेटअप चरण इस इवेंट को रोक रहा है} other {{countWords} सेटअप चरण इस इवेंट को रोक रहे हैं}}} domain {{count, plural, one {{countWords} कस्टम डोमेन में समस्या है} other {{countWords} कस्टम डोमेन में समस्या है}}} payoutsPastDue {{count, plural, one {{countWords} भुगतान खाता आवश्यकता की समय-सीमा निकल चुकी है} other {{countWords} भुगतान खाता आवश्यकताओं की समय-सीमा निकल चुकी है}}} deliverability {ईमेल डिलीवरी पर ध्यान देने की ज़रूरत है} automationFailed {{count, plural, one {{countWords} संदेश या बल्क कार्रवाई आज विफल रही} other {{countWords} संदेश या बल्क कार्रवाइयाँ आज विफल रहीं}}} assistanceOverdue {{count, plural, one {{countWords} सहायता अनुरोध बहुत देर से प्रतीक्षा में है} other {{countWords} सहायता अनुरोध बहुत देर से प्रतीक्षा में हैं}}} campaignFailed {{count, plural, one {{countWords} अभियान भेजना आज विफल रहा} other {{countWords} अभियान भेजना आज विफल रहे}}} disputeDeadline {{count, plural, one {{countWords} विवाद के लिए जल्द ही सबूत चाहिए} other {{countWords} विवादों के लिए जल्द ही सबूत चाहिए}}} other {अलर्ट}}",
-        "alert-urgent-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {{countWords} उपस्थित व्यक्ति के पास सीट नहीं है} other {{countWords} उपस्थित लोगों के पास सीट नहीं है}}} undistributed {{count, plural, one {{countWords} खरीदा गया टिकट वितरित नहीं हुआ है} other {{countWords} खरीदे गए टिकट वितरित नहीं हुए हैं}}} paymentsFailed {{count, plural, one {{countWords} भुगतान विफल रहा} other {{countWords} भुगतान विफल रहे}}} paymentsStuck {{count, plural, one {{countWords} भुगतान अटका हुआ है} other {{countWords} भुगतान अटके हुए हैं}}} refundSurge {{count, plural, one {{countWords} रिफ़ंड पिछले घंटे में} other {{countWords} रिफ़ंड पिछले घंटे में}}} devicesOffline {{count, plural, one {{countWords} चेक-इन डिवाइस ऑफ़लाइन है} other {{countWords} चेक-इन डिवाइस ऑफ़लाइन हैं}}} devicesLowBattery {{count, plural, one {{countWords} चेक-इन डिवाइस की बैटरी कम है} other {{countWords} चेक-इन डिवाइसों की बैटरी कम है}}} devicesBacklog {{count, plural, one {{countWords} चेक-इन डिवाइस पर स्कैन सिंक होने की प्रतीक्षा में हैं} other {{countWords} चेक-इन डिवाइसों पर स्कैन सिंक होने की प्रतीक्षा में हैं}}} capacityNear {स्थल {count}% भर चुका है} capacityFull {स्थल पूरी तरह भर गया है ({count}%)} sellOut {{count}% टिकट बिक चुके हैं} salesPace {टिकट बिक्री लक्ष्य गति के {count}% पर है} readiness {{count, plural, one {{countWords} सेटअप चरण इस इवेंट को रोक रहा है} other {{countWords} सेटअप चरण इस इवेंट को रोक रहे हैं}}} domain {{count, plural, one {{countWords} कस्टम डोमेन में समस्या है} other {{countWords} कस्टम डोमेन में समस्या है}}} payoutsPastDue {{count, plural, one {{countWords} भुगतान खाता आवश्यकता की समय-सीमा निकल चुकी है} other {{countWords} भुगतान खाता आवश्यकताओं की समय-सीमा निकल चुकी है}}} deliverability {ईमेल डिलीवरी पर ध्यान देने की ज़रूरत है} automationFailed {{count, plural, one {{countWords} संदेश या बल्क कार्रवाई आज विफल रही} other {{countWords} संदेश या बल्क कार्रवाइयाँ आज विफल रहीं}}} assistanceOverdue {{count, plural, one {{countWords} सहायता अनुरोध बहुत देर से प्रतीक्षा में है} other {{countWords} सहायता अनुरोध बहुत देर से प्रतीक्षा में हैं}}} campaignFailed {{count, plural, one {{countWords} अभियान भेजना आज विफल रहा} other {{countWords} अभियान भेजना आज विफल रहे}}} disputeDeadline {{count, plural, one {{countWords} विवाद के लिए जल्द ही सबूत चाहिए} other {{countWords} विवादों के लिए जल्द ही सबूत चाहिए}}} other {अलर्ट}}"
+        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {{countWords} उपस्थित व्यक्ति के पास सीट नहीं है} other {{countWords} उपस्थित लोगों के पास सीट नहीं है}}} undistributed {{count, plural, one {{countWords} खरीदा गया टिकट वितरित नहीं हुआ है} other {{countWords} खरीदे गए टिकट वितरित नहीं हुए हैं}}} paymentsFailed {{count, plural, one {{countWords} भुगतान विफल रहा} other {{countWords} भुगतान विफल रहे}}} paymentsStuck {{count, plural, one {{countWords} भुगतान अटका हुआ है} other {{countWords} भुगतान अटके हुए हैं}}} refundSurge {{count, plural, one {{countWords} रिफ़ंड पिछले घंटे में} other {{countWords} रिफ़ंड पिछले घंटे में}}} devicesOffline {{count, plural, one {{countWords} चेक-इन डिवाइस ऑफ़लाइन है} other {{countWords} चेक-इन डिवाइस ऑफ़लाइन हैं}}} devicesLowBattery {{count, plural, one {{countWords} चेक-इन डिवाइस की बैटरी कम है} other {{countWords} चेक-इन डिवाइसों की बैटरी कम है}}} devicesBacklog {{count, plural, one {{countWords} चेक-इन डिवाइस पर स्कैन सिंक होने की प्रतीक्षा में हैं} other {{countWords} चेक-इन डिवाइसों पर स्कैन सिंक होने की प्रतीक्षा में हैं}}} capacityNear {स्थल {count}% भर चुका है} capacityFull {स्थल पूरी तरह भर गया है ({count}%)} sellOut {{count}% टिकट बिक चुके हैं} salesPace {टिकट बिक्री लक्ष्य गति के {count}% पर है} readiness {{count, plural, one {{countWords} सेटअप चरण इस इवेंट को रोक रहा है} other {{countWords} सेटअप चरण इस इवेंट को रोक रहे हैं}}} domain {{count, plural, one {{countWords} कस्टम डोमेन में समस्या है} other {{countWords} कस्टम डोमेन में समस्या है}}} payoutsPastDue {{count, plural, one {{countWords} भुगतान खाता आवश्यकता की समय-सीमा निकल चुकी है} other {{countWords} भुगतान खाता आवश्यकताओं की समय-सीमा निकल चुकी है}}} deliverability {ईमेल डिलीवरी पर ध्यान देने की ज़रूरत है} automationFailed {{count, plural, one {{countWords} संदेश या बल्क कार्रवाई आज विफल रही} other {{countWords} संदेश या बल्क कार्रवाइयाँ आज विफल रहीं}}} assistanceOverdue {{count, plural, one {{countWords} सहायता अनुरोध बहुत देर से प्रतीक्षा में है} other {{countWords} सहायता अनुरोध बहुत देर से प्रतीक्षा में हैं}}} campaignFailed {{count, plural, one {{countWords} अभियान भेजना आज विफल रहा} other {{countWords} अभियान भेजना आज विफल रहे}}} disputeDeadline {{count, plural, one {{countWords} विवाद के लिए जल्द ही सबूत चाहिए} other {{countWords} विवादों के लिए जल्द ही सबूत चाहिए}}} pledgesUnpaid {{count, plural, one {{countWords} संकल्प कार्यक्रम के 14 दिन बाद भी बकाया है} other {{countWords} संकल्प कार्यक्रम के 14 दिन बाद भी बकाया हैं}}} other {अलर्ट}}",
+        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {{countWords} उपस्थित व्यक्ति के पास सीट नहीं है} other {{countWords} उपस्थित लोगों के पास सीट नहीं है}}} undistributed {{count, plural, one {{countWords} खरीदा गया टिकट वितरित नहीं हुआ है} other {{countWords} खरीदे गए टिकट वितरित नहीं हुए हैं}}} paymentsFailed {{count, plural, one {{countWords} भुगतान विफल रहा} other {{countWords} भुगतान विफल रहे}}} paymentsStuck {{count, plural, one {{countWords} भुगतान अटका हुआ है} other {{countWords} भुगतान अटके हुए हैं}}} refundSurge {{count, plural, one {{countWords} रिफ़ंड पिछले घंटे में} other {{countWords} रिफ़ंड पिछले घंटे में}}} devicesOffline {{count, plural, one {{countWords} चेक-इन डिवाइस ऑफ़लाइन है} other {{countWords} चेक-इन डिवाइस ऑफ़लाइन हैं}}} devicesLowBattery {{count, plural, one {{countWords} चेक-इन डिवाइस की बैटरी कम है} other {{countWords} चेक-इन डिवाइसों की बैटरी कम है}}} devicesBacklog {{count, plural, one {{countWords} चेक-इन डिवाइस पर स्कैन सिंक होने की प्रतीक्षा में हैं} other {{countWords} चेक-इन डिवाइसों पर स्कैन सिंक होने की प्रतीक्षा में हैं}}} capacityNear {स्थल {count}% भर चुका है} capacityFull {स्थल पूरी तरह भर गया है ({count}%)} sellOut {{count}% टिकट बिक चुके हैं} salesPace {टिकट बिक्री लक्ष्य गति के {count}% पर है} readiness {{count, plural, one {{countWords} सेटअप चरण इस इवेंट को रोक रहा है} other {{countWords} सेटअप चरण इस इवेंट को रोक रहे हैं}}} domain {{count, plural, one {{countWords} कस्टम डोमेन में समस्या है} other {{countWords} कस्टम डोमेन में समस्या है}}} payoutsPastDue {{count, plural, one {{countWords} भुगतान खाता आवश्यकता की समय-सीमा निकल चुकी है} other {{countWords} भुगतान खाता आवश्यकताओं की समय-सीमा निकल चुकी है}}} deliverability {ईमेल डिलीवरी पर ध्यान देने की ज़रूरत है} automationFailed {{count, plural, one {{countWords} संदेश या बल्क कार्रवाई आज विफल रही} other {{countWords} संदेश या बल्क कार्रवाइयाँ आज विफल रहीं}}} assistanceOverdue {{count, plural, one {{countWords} सहायता अनुरोध बहुत देर से प्रतीक्षा में है} other {{countWords} सहायता अनुरोध बहुत देर से प्रतीक्षा में हैं}}} campaignFailed {{count, plural, one {{countWords} अभियान भेजना आज विफल रहा} other {{countWords} अभियान भेजना आज विफल रहे}}} disputeDeadline {{count, plural, one {{countWords} विवाद के लिए जल्द ही सबूत चाहिए} other {{countWords} विवादों के लिए जल्द ही सबूत चाहिए}}} pledgesUnpaid {{count, plural, one {{countWords} संकल्प कार्यक्रम के 14 दिन बाद भी बकाया है} other {{countWords} संकल्प कार्यक्रम के 14 दिन बाद भी बकाया हैं}}} other {अलर्ट}}",
+        "alert-urgent-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {{countWords} उपस्थित व्यक्ति के पास सीट नहीं है} other {{countWords} उपस्थित लोगों के पास सीट नहीं है}}} undistributed {{count, plural, one {{countWords} खरीदा गया टिकट वितरित नहीं हुआ है} other {{countWords} खरीदे गए टिकट वितरित नहीं हुए हैं}}} paymentsFailed {{count, plural, one {{countWords} भुगतान विफल रहा} other {{countWords} भुगतान विफल रहे}}} paymentsStuck {{count, plural, one {{countWords} भुगतान अटका हुआ है} other {{countWords} भुगतान अटके हुए हैं}}} refundSurge {{count, plural, one {{countWords} रिफ़ंड पिछले घंटे में} other {{countWords} रिफ़ंड पिछले घंटे में}}} devicesOffline {{count, plural, one {{countWords} चेक-इन डिवाइस ऑफ़लाइन है} other {{countWords} चेक-इन डिवाइस ऑफ़लाइन हैं}}} devicesLowBattery {{count, plural, one {{countWords} चेक-इन डिवाइस की बैटरी कम है} other {{countWords} चेक-इन डिवाइसों की बैटरी कम है}}} devicesBacklog {{count, plural, one {{countWords} चेक-इन डिवाइस पर स्कैन सिंक होने की प्रतीक्षा में हैं} other {{countWords} चेक-इन डिवाइसों पर स्कैन सिंक होने की प्रतीक्षा में हैं}}} capacityNear {स्थल {count}% भर चुका है} capacityFull {स्थल पूरी तरह भर गया है ({count}%)} sellOut {{count}% टिकट बिक चुके हैं} salesPace {टिकट बिक्री लक्ष्य गति के {count}% पर है} readiness {{count, plural, one {{countWords} सेटअप चरण इस इवेंट को रोक रहा है} other {{countWords} सेटअप चरण इस इवेंट को रोक रहे हैं}}} domain {{count, plural, one {{countWords} कस्टम डोमेन में समस्या है} other {{countWords} कस्टम डोमेन में समस्या है}}} payoutsPastDue {{count, plural, one {{countWords} भुगतान खाता आवश्यकता की समय-सीमा निकल चुकी है} other {{countWords} भुगतान खाता आवश्यकताओं की समय-सीमा निकल चुकी है}}} deliverability {ईमेल डिलीवरी पर ध्यान देने की ज़रूरत है} automationFailed {{count, plural, one {{countWords} संदेश या बल्क कार्रवाई आज विफल रही} other {{countWords} संदेश या बल्क कार्रवाइयाँ आज विफल रहीं}}} assistanceOverdue {{count, plural, one {{countWords} सहायता अनुरोध बहुत देर से प्रतीक्षा में है} other {{countWords} सहायता अनुरोध बहुत देर से प्रतीक्षा में हैं}}} campaignFailed {{count, plural, one {{countWords} अभियान भेजना आज विफल रहा} other {{countWords} अभियान भेजना आज विफल रहे}}} disputeDeadline {{count, plural, one {{countWords} विवाद के लिए जल्द ही सबूत चाहिए} other {{countWords} विवादों के लिए जल्द ही सबूत चाहिए}}} pledgesUnpaid {{count, plural, one {{countWords} संकल्प कार्यक्रम के 14 दिन बाद भी बकाया है} other {{countWords} संकल्प कार्यक्रम के 14 दिन बाद भी बकाया हैं}}} other {अलर्ट}}"
       }
     },
     "kinds": {
@@ -181,7 +181,10 @@
       },
       "donations": {
         "receipt": "दान रसीद",
-        "year-end-statement": "वार्षिक दान विवरण"
+        "year-end-statement": "वार्षिक दान विवरण",
+        "pledge-summary": "संकल्प का सारांश",
+        "pledge-invoice": "संकल्प का बिल",
+        "pledge-reminder": "संकल्प का रिमाइंडर"
       },
       "guests": {
         "invitation": "विवाह निमंत्रण",
@@ -935,14 +938,23 @@
     "orgUnavailable": "यह आयोजक अभी टिकट नहीं बेच रहा है। पहले से खरीदे गए टिकट मान्य रहते हैं।",
     "riskBlocked": "हम यह ऑर्डर नहीं ले सके। कृपया आयोजक से संपर्क करें।",
     "creditInvalid": "यह स्टोर क्रेडिट कोड मान्य नहीं है या इस्तेमाल हो चुका है।",
-    "creditNotApplicable": "यह स्टोर क्रेडिट इन टिकटों पर इस्तेमाल नहीं हो सकता।"
+    "creditNotApplicable": "यह स्टोर क्रेडिट इन टिकटों पर इस्तेमाल नहीं हो सकता।",
+    "saveCardForGiving": "आज रात के दान के लिए मेरा कार्ड सहेजें (यह अगले पेज पर होगा; वहाँ आपकी सहमति के बिना कुछ नहीं सहेजा जाता)"
   },
   "fakePay": {
     "eyebrow": "टेस्ट भुगतान",
     "title": "अपने ऑर्डर का भुगतान करें",
     "description": "यह एक टेस्ट भुगतान पेज है। कोई असली पैसा नहीं कटता।",
     "pay": "अभी भुगतान करें (टेस्ट)",
-    "decline": "अस्वीकृत कार्ड का सिमुलेशन करें"
+    "decline": "अस्वीकृत कार्ड का सिमुलेशन करें",
+    "setupTitle": "टेस्ट कार्ड सेटअप",
+    "setupDescription": "भुगतान प्रदाता के सुरक्षित कार्ड फ़ॉर्म की जगह। कोई असली कार्ड नहीं सहेजा जाता।",
+    "testCard": "टेस्ट कार्ड",
+    "card4242": "4242 · हमेशा शुल्क लिया जाता है",
+    "card0002": "0002 · हमेशा अस्वीकृत",
+    "card9995": "9995 · पहला शुल्क अस्वीकृत करता है",
+    "saveCard": "कार्ड सहेजें (टेस्ट)",
+    "failSetup": "असफल सेटअप का अनुकरण करें"
   },
   "order": {
     "eyebrow": "आपका ऑर्डर",
@@ -1978,7 +1990,8 @@
       "plan": "प्लान",
       "assign": "मेहमानों को बैठाएँ",
       "finder": "सीट खोजें",
-      "rules": "नियम"
+      "rules": "नियम",
+      "guests": "मेहमानों को बैठाएँ"
     },
     "assign": {
       "title": "मेहमानों को बैठाएँ",
@@ -2069,7 +2082,8 @@
       "modeNow": "खोज: {mode}",
       "modeShort": {
         "code": "ईमेल कोड",
-        "name": "पूरा नाम"
+        "name": "पूरा नाम",
+        "pin": "पूरा नाम और निमंत्रण का PIN"
       },
       "notPublic": "इवेंट प्रकाशित नहीं है (या निजी है), इसलिए मेहमान अभी सीट खोज नहीं खोल सकते।",
       "settingsTitle": "मेहमान",
@@ -2080,11 +2094,13 @@
       "mode": "मेहमान अपनी सीट कैसे खोजें",
       "modeOption": {
         "code": "उनके ईमेल पर भेजे गए कोड से (सुझाया गया)",
-        "name": "तुरंत, पूरे नाम से"
+        "name": "तुरंत, पूरे नाम से",
+        "pin": "पूरे नाम और उनके निमंत्रण पर छपे PIN से"
       },
       "modeHint": {
         "code": "सिर्फ़ वही व्यक्ति मेहमान की सीट देख सकता है जो उसका ईमेल पढ़ सकता है, और कोई यह पता नहीं कर सकता कि सूची में कौन है।",
-        "name": "दरवाज़े पर तेज़, लेकिन जो भी किसी मेहमान का पूरा नाम जानता है वह देख सकता है कि वह कहाँ बैठा है।"
+        "name": "दरवाज़े पर तेज़, लेकिन जो भी किसी मेहमान का पूरा नाम जानता है वह देख सकता है कि वह कहाँ बैठा है।",
+        "pin": "मेहमान अपना पूरा नाम और अपने समूह के निमंत्रण पर छपा 6 अंकों का PIN लिखते हैं। उन्हें अपनी टेबल दिखती है, कभी किसी का नाम नहीं, और कोई यह पता नहीं लगा सकता कि सूची में कौन है।"
       },
       "readOnly": "आप ये सेटिंग देख सकते हैं, पर बदल नहीं सकते।",
       "shareTitle": "साझा करें",
@@ -2092,7 +2108,10 @@
       "openPublic": "सीट खोज खोलें",
       "poster": "सीट खोज पोस्टर प्रिंट करें",
       "closedNote": "सीट खोज बंद है। पोस्टर स्कैन करने वालों से बाद में आने को कहा जाएगा।",
-      "namePoster": "नाम सूची पोस्टर प्रिंट करें"
+      "namePoster": "नाम सूची पोस्टर प्रिंट करें",
+      "partyLinksTitle": "समूहों के लिंक",
+      "partyLinksHint": "हर समूह के निमंत्रण का लिंक और QR कोड उनका अपना टेबल पेज भी खोलता है: नक्शे पर उनकी टेबल और उनके साथ कौन बैठा है। उन्हें दूसरी टेबल पर ले जाने पर भी QR कोड वही रहता है।",
+      "partyLinksAction": "समूहों के लिंक और QR कोड"
     },
     "map": {
       "zoomIn": "ज़ूम इन",
@@ -2177,6 +2196,127 @@
         "forbidden": "आप समूह देख सकते हैं, पर बदल नहीं सकते।",
         "noMembers": "सूची में अभी किसी के पास {label} लेबल नहीं है।"
       }
+    },
+    "guestSeating": {
+      "title": "मेहमानों को बैठाएँ",
+      "description": "परिवारों को मेज़ों पर बैठाएँ। कतार से किसी परिवार को नक्शे पर खींचें, या मेहमानों पर निशान लगाएँ, मेज़ चुनें और “चुने हुए मेहमानों को बैठाएँ” दबाएँ — कीबोर्ड वह सब करता है जो खींचना करता है।",
+      "chart": {
+        "label": "बैठक व्यवस्था",
+        "event": "पूरा कार्यक्रम"
+      },
+      "noPlan": "{chart} के लिए अभी बैठक योजना नहीं है",
+      "noPlanHint": "पहले योजना (मेज़ें या पंक्तियाँ) बनाएँ, फिर यहाँ अपने मेहमानों को बैठाएँ।",
+      "toPlan": "योजना पर जाएँ",
+      "noGuests": "अभी बैठाने के लिए कोई मेहमान नहीं",
+      "noGuestsHint": "मेहमान पेज पर परिवार जोड़ें (या उन्हें दिन के इस हिस्से में आमंत्रित करें), फिर यहाँ बैठाएँ।",
+      "toGuests": "मेहमानों पर जाएँ",
+      "summary": "{seated} बैठे · {unseated} बाकी",
+      "readOnly": "आप बैठक व्यवस्था देख सकते हैं, पर बदल नहीं सकते।",
+      "declinedSeated": "{count, plural, one {मना करने वाला # मेहमान अभी भी बैठा है।} other {मना करने वाले # मेहमान अभी भी बैठे हैं।}} मेज़ के विवरण में उन्हें हटाएँ।",
+      "live": {
+        "live": "लाइव",
+        "connecting": "जुड़ रहा है…",
+        "offline": "ऑफ़लाइन, फिर से जुड़ रहा है"
+      },
+      "vip": "VIP",
+      "queue": {
+        "title": "बिना जगह ({count})",
+        "search": "परिवार और मेहमान खोजें",
+        "status": "जवाब",
+        "statusAll": "सभी जवाब",
+        "side": "पक्ष",
+        "sideAll": "सभी पक्ष",
+        "list": "बैठाने के लिए बाकी परिवार",
+        "selectParty": "{party} में सभी को चुनें",
+        "toSeat": "{count, plural, one {# बाकी} other {# बाकी}}",
+        "selected": "{count, plural, =0 {कोई नहीं चुना} one {# मेहमान चुना} other {# मेहमान चुने}}",
+        "clear": "चुनाव हटाएँ",
+        "empty": "सबको जगह मिल गई है।",
+        "noMatch": "इन फ़िल्टरों से कोई परिवार मेल नहीं खाता।"
+      },
+      "status": {
+        "attending": "आ रहे हैं",
+        "pending": "जवाब का इंतज़ार",
+        "declined": "मना किया"
+      },
+      "guest": {
+        "guestOf": "{name} के साथी",
+        "meal": "भोजन: {meal}",
+        "noMeal": "भोजन नहीं चुना",
+        "child": "बच्चा",
+        "infant": "शिशु"
+      },
+      "form": {
+        "title": "चुने हुए मेहमानों को बैठाएँ",
+        "table": "मेज़ या पंक्ति",
+        "choose": "मेज़ या पंक्ति चुनें",
+        "option": "{place} — {capacity} में से {free} खाली",
+        "optionVip": "{place} — {capacity} में से {free} खाली · VIP क्षेत्र",
+        "cantFit": "जगह नहीं: {asked, plural, one {# मेहमान चुना} other {# मेहमान चुने}}, {place} पर {fits, plural, =0 {कोई सीट खाली नहीं} one {# सीट खाली} other {# सीटें खाली}}।",
+        "submit": "चुने हुए मेहमानों को बैठाएँ",
+        "submitting": "बैठा रहे हैं…"
+      },
+      "place": {
+        "table": "मेज़ {label}",
+        "row": "पंक्ति {label}"
+      },
+      "map": {
+        "title": "नक्शा",
+        "hint": "बैठाने के लिए परिवार को मेज़ पर खींचें। कौन बैठा है देखने के लिए मेज़ पर क्लिक करें।",
+        "readOnlyHint": "कौन बैठा है देखने के लिए मेज़ पर क्लिक करें।",
+        "dropHere": "{place} पर छोड़ें: {free} खाली",
+        "dropCantFit": "{place} पर जगह नहीं: {count, plural, one {# मेहमान} other {# मेहमान}}, {free} खाली",
+        "guests": "मेहमान",
+        "tickets": "टिकट धारक",
+        "vip": "VIP क्षेत्र"
+      },
+      "details": {
+        "title": "मेज़ का विवरण",
+        "choose": "दिखाने के लिए मेज़",
+        "none": "इस योजना में कोई मेज़ या पंक्ति नहीं है।",
+        "counts": "{seated} बैठे · {capacity} में से {free} खाली",
+        "tickets": "{count, plural, one {# सीट टिकट से भरी} other {# सीटें टिकटों से भरी}}",
+        "sponsor": "मेज़बान: {name}",
+        "vipZone": "VIP क्षेत्र",
+        "vipFromPlan": "योजना के VIP हिस्से में",
+        "warnings": "इस मेज़ को जाँचें",
+        "warnDeclined": "{name} ने मना किया है और अभी भी बैठे हैं।",
+        "warnVipOutside": "{party} VIP परिवार है, पर VIP क्षेत्र से बाहर है।",
+        "warnNotVip": "{party} VIP परिवार नहीं है, पर VIP क्षेत्र में बैठा है।",
+        "meals": "भोजन",
+        "mealCount": "{meal}: {count}",
+        "noMeal": "नहीं चुना",
+        "empty": "यहाँ अभी कोई नहीं बैठा। कतार से किसी परिवार को बैठाएँ।",
+        "unseatParty": "{party} को हटाएँ",
+        "move": "यहाँ ले जाएँ…",
+        "moveLabel": "{name} को दूसरी मेज़ पर ले जाएँ",
+        "unseat": "हटाएँ",
+        "unseatLabel": "{name} को हटाएँ",
+        "moveTo": "{name} को ले जाएँ",
+        "moveSubmit": "ले जाएँ",
+        "cancel": "रद्द करें"
+      },
+      "done": {
+        "seated": "{place} पर {count, plural, one {# मेहमान बैठाया} other {# मेहमान बैठाए}}।",
+        "moved": "{name} को {place} पर ले गए।",
+        "unseated": "{count, plural, one {# मेहमान} other {# मेहमान}} वापस कतार में।",
+        "vipOn": "{place} अब VIP क्षेत्र है।",
+        "vipOff": "{place} अब VIP क्षेत्र नहीं है।"
+      },
+      "warnings": {
+        "vip_outside": "{party} VIP परिवार है और {place} VIP क्षेत्र नहीं है।",
+        "not_vip_inside": "{place} VIP क्षेत्र है और {party} VIP परिवार नहीं है।"
+      },
+      "errors": {
+        "forbidden": "आप बैठक व्यवस्था देख सकते हैं, पर बदल नहीं सकते।",
+        "cantFit": "जगह नहीं: {asked, plural, one {# मेहमान को} other {# मेहमानों को}} सीट चाहिए, और वहाँ {fits, plural, =0 {कोई सीट खाली नहीं है} one {केवल # सीट खाली है} other {केवल # सीटें खाली हैं}}।",
+        "declined": "इस मेहमान ने मना किया है। केवल मना न करने वाले मेहमानों को बैठाया जा सकता है।",
+        "unknown": "यह मेहमान अब सूची में नहीं है। पेज ताज़ा होगा।",
+        "noPlan": "इसके लिए अभी बैठक योजना नहीं है।",
+        "noGuests": "कम से कम एक मेहमान चुनें।",
+        "noPlace": "मेज़ या पंक्ति चुनें।",
+        "dropMiss": "परिवार को किसी मेज़ या पंक्ति पर छोड़ें।"
+      }
     }
   },
   "venueMap": {
@@ -2216,7 +2356,11 @@
       "bottom": "नक्शे में नीचे",
       "bottom-right": "नक्शे में नीचे दाईं ओर"
     },
-    "yours": "{count, plural, one {आपकी सीट: {seats}} other {आपकी सीटें: {seats}}}"
+    "yours": "{count, plural, one {आपकी सीट: {seats}} other {आपकी सीटें: {seats}}}",
+    "yourPlace": {
+      "table": "आपकी टेबल",
+      "row": "आपकी पंक्ति"
+    }
   },
   "seatFinder": {
     "eyebrow": "सीट खोजें",
@@ -2267,9 +2411,15 @@
       "challengeUnavailable": "इस डिवाइस से बहुत ज़्यादा खोज हुई है। एक मिनट रुककर फिर कोशिश करें।",
       "closed": "इस इवेंट के लिए सीट खोज खुली नहीं है।",
       "internal": "हमारी ओर से कुछ गड़बड़ हो गई।",
-      "rateLimited": "बहुत सारे कोड माँगे गए। {minutes, plural, one {# मिनट} other {# मिनट}} बाद फिर से कोशिश करें।"
+      "rateLimited": "बहुत सारे कोड माँगे गए। {minutes, plural, one {# मिनट} other {# मिनट}} बाद फिर से कोशिश करें।",
+      "noMatch": "इस नाम और PIN से कोई टेबल नहीं मिली। दोनों को अपने निमंत्रण से मिलाएँ, या किसी मेज़बान से पूछें।",
+      "invalidPin": "अपने निमंत्रण का 6 अंकों का PIN लिखें।",
+      "pinRateLimited": "इस डिवाइस से बहुत ज़्यादा खोजें हुईं। {minutes, plural, one {# मिनट} other {# मिनट}} बाद फिर कोशिश करें।"
     },
-    "hostedBy": "{sponsor} द्वारा प्रायोजित"
+    "hostedBy": "{sponsor} द्वारा प्रायोजित",
+    "pinIntro": "अपना पूरा नाम वैसे ही लिखें जैसे निमंत्रण पर है, और उस पर छपा 6 अंकों का PIN।",
+    "pin": "आपके निमंत्रण का PIN",
+    "findByPin": "मेरी टेबल खोजें"
   },
   "seatFinderPoster": {
     "pageTitle": "सीट खोज पोस्टर",
@@ -2282,7 +2432,8 @@
     "step2Code": "अपना ईमेल लिखें — हम आपको एक कोड भेजेंगे।",
     "step2Name": "अपना पूरा नाम लिखें।",
     "step3": "स्थल के नक्शे पर अपनी टेबल और सीट देखें।",
-    "orVisit": "या यहाँ जाएँ"
+    "orVisit": "या यहाँ जाएँ",
+    "step2Pin": "अपना पूरा नाम और निमंत्रण का PIN लिखें।"
   },
   "reports": {
     "title": "विश्लेषण",
@@ -6465,7 +6616,8 @@
       "automationFailed": "मैसेजिंग स्थिति खोलें",
       "campaignFailed": "अभियान खोलें",
       "disputeDeadline": "विवाद खोलें",
-      "assistanceOverdue": "सहायता अनुरोध खोलें"
+      "assistanceOverdue": "सहायता अनुरोध खोलें",
+      "pledgesUnpaid": "संकल्प खोलें"
     },
     "rules": {
       "unseated": "{count, plural, one {{countWords} उपस्थित व्यक्ति के पास सीट नहीं है} other {{countWords} उपस्थित लोगों के पास सीट नहीं है}}",
@@ -6487,7 +6639,8 @@
       "automationFailed": "{count, plural, one {{countWords} संदेश या बल्क कार्रवाई आज विफल रही} other {{countWords} संदेश या बल्क कार्रवाइयाँ आज विफल रहीं}}",
       "campaignFailed": "{count, plural, one {{countWords} अभियान भेजना आज विफल रहा} other {{countWords} अभियान भेजना आज विफल रहे}}",
       "disputeDeadline": "{count, plural, one {{countWords} विवाद के लिए जल्द ही सबूत चाहिए} other {{countWords} विवादों के लिए जल्द ही सबूत चाहिए}}",
-      "assistanceOverdue": "{count, plural, one {{countWords} सहायता अनुरोध बहुत देर से प्रतीक्षा में है} other {{countWords} सहायता अनुरोध बहुत देर से प्रतीक्षा में हैं}}"
+      "assistanceOverdue": "{count, plural, one {{countWords} सहायता अनुरोध बहुत देर से प्रतीक्षा में है} other {{countWords} सहायता अनुरोध बहुत देर से प्रतीक्षा में हैं}}",
+      "pledgesUnpaid": "{count, plural, one {{countWords} संकल्प कार्यक्रम के 14 दिन बाद भी बकाया है} other {{countWords} संकल्प कार्यक्रम के 14 दिन बाद भी बकाया हैं}}"
     },
     "widget": {
       "title": "अलर्ट",
@@ -8747,7 +8900,8 @@
       "openConsole": "कंसोल खोलें",
       "openSpotter": "पैडल दर्ज करें",
       "openPaddles": "पैडल नंबर",
-      "openScreen": "लाइव स्क्रीन"
+      "openScreen": "लाइव स्क्रीन",
+      "openPledges": "संकल्प और वसूली"
     },
     "paddles": {
       "title": "पैडल नंबर",
@@ -10303,7 +10457,10 @@
     },
     "questionsTitle": "कुछ सवाल",
     "questionsHint": "मेज़बान थोड़ा और जानना चाहते हैं। निजी चिह्नित जवाब केवल मेज़बान देखते हैं।",
-    "questionsFor": "{name} के लिए सवाल"
+    "questionsFor": "{name} के लिए सवाल",
+    "seatTitle": "अपनी टेबल खोजें",
+    "seatHint": "नक्शे पर देखें कि आप कहाँ बैठे हैं और आपकी टेबल पर कौन है।",
+    "seatLink": "मेरी टेबल दिखाएँ"
   },
   "rsvpFind": {
     "metaTitle": "अपना निमंत्रण खोजें",
@@ -10413,7 +10570,13 @@
     "reopenFor": "{party} का जवाब दोबारा खोलें",
     "createLinkFor": "{party} के लिए जवाब का लिंक बनाएँ",
     "copy": "लिंक कॉपी करें",
-    "copied": "लिंक कॉपी हो गया।"
+    "copied": "लिंक कॉपी हो गया।",
+    "seatTitle": "टेबल पेज का QR कोड",
+    "seatHint": "यह QR कोड {party} का टेबल पेज खोलता है: नक्शे पर उनकी टेबल और उनके साथ कौन बैठा है। उन्हें दूसरी टेबल पर ले जाने पर भी यह वही रहता है, इसलिए आप इसे एस्कॉर्ट या प्लेस कार्ड पर छाप सकते हैं।",
+    "seatQrLabel": "{party} के टेबल पेज का QR कोड",
+    "seatLinkLabel": "{party} के टेबल पेज का लिंक",
+    "seatClosed": "सीट फ़ाइंडर खोलने पर (सीटिंग → सीट फ़ाइंडर) मेहमानों को उनकी टेबल दिखेगी।",
+    "seatScan": "अपनी टेबल खोजने के लिए स्कैन करें"
   },
   "collector": {
     "metaTitle": "अपनी संपर्क जानकारी साझा करें",
@@ -11128,5 +11291,199 @@
       "offer_ended": "{title} का प्रस्ताव खत्म हो गया है।",
       "full": "{title} अभी-अभी भर गया। प्रतीक्षा सूची में जुड़ने के लिए फिर से कोशिश करें।"
     }
+  },
+  "guestSeats": {
+    "placeAt": {
+      "table": "टेबल {item}",
+      "row": "पंक्ति {item}"
+    },
+    "wholeEvent": "बैठक व्यवस्था",
+    "resultTitle": "{count, plural, one {आपकी टेबल} other {आपकी टेबलें}}",
+    "partyCount": "{count, plural, one {आपके समूह का # व्यक्ति यहाँ बैठा है} other {आपके समूह के # लोग यहाँ बैठे हैं}}",
+    "noTableTitle": "आपकी टेबल अभी तय नहीं हुई है",
+    "noTable": "मेज़बान अभी बैठक व्यवस्था पर काम कर रहे हैं। समारोह के करीब फिर देखें, या किसी मेज़बान से पूछें।",
+    "unseatedCount": "{count, plural, one {आपके समूह के # व्यक्ति को अभी टेबल नहीं मिली है।} other {आपके समूह के # लोगों को अभी टेबल नहीं मिली है।}}",
+    "again": "किसी और को खोजें",
+    "mapTitle": "स्थल का नक्शा",
+    "mapFor": "स्थल का नक्शा: {name}"
+  },
+  "partySeats": {
+    "metaTitle": "आपकी टेबल",
+    "title": "{party} कहाँ बैठे हैं",
+    "intro": "स्थल के नक्शे पर आपकी टेबल, और आपके साथ कौन बैठा है।",
+    "closedTitle": "बैठक व्यवस्था अभी तैयार नहीं है",
+    "closed": "मेज़बानों ने अभी बैठक व्यवस्था साझा नहीं की है। यह पेज या अपने निमंत्रण का QR कोड संभालकर रखें: साझा होते ही यहाँ आपकी टेबल दिखेगी।",
+    "noChartsTitle": "आपकी टेबल अभी तय नहीं हुई है",
+    "noCharts": "मेज़बान अभी बैठक व्यवस्था पर काम कर रहे हैं। टेबल तय होते ही यह पेज उसे दिखाएगा।",
+    "yourParty": "आपके समूह से",
+    "tablemates": {
+      "table": "इस टेबल पर और भी",
+      "row": "इस पंक्ति में और भी"
+    },
+    "noTablemates": "यहाँ अभी कोई और नहीं बैठा है।",
+    "unseated": "अभी बिना जगह: {names}",
+    "guestOf": "{name} के मेहमान",
+    "keep": "यह पेज हमेशा आपकी मौजूदा टेबल दिखाता है: मेज़बान आपको कहीं और बैठाएँ तब भी आपके निमंत्रण का लिंक और QR कोड नहीं बदलते।",
+    "toRsvp": "अपने जवाब पर वापस जाएँ",
+    "saveCard": "आज रात के दान के लिए कार्ड सहेजें"
+  },
+  "savedCard": {
+    "metaTitle": "आज रात के लिए कार्ड सहेजें",
+    "title": "आज रात के दान के लिए कार्ड सहेजें",
+    "intro": "अपने फ़ोन पर एक बार कार्ड सहेजें, फिर शाम भर एक टैप में दान करें। अभी कुछ भी नहीं लिया जाएगा।",
+    "introParty": "{party} के लिए: अपने फ़ोन पर एक बार कार्ड सहेजें, फिर शाम भर एक टैप में दान करें। आपके संकल्पों की राशि अगली सुबह ली जाती है। अभी कुछ भी नहीं लिया जाएगा।",
+    "unavailableTitle": "कार्ड सहेजना उपलब्ध नहीं है",
+    "unavailableBody": "यह कार्यक्रम अभी ऑनलाइन दान नहीं ले रहा है। आप कार्यक्रम में दान कर सकते हैं।",
+    "formLabel": "कार्ड सहेजें",
+    "formTitle": "आपका विवरण",
+    "name": "पूरा नाम",
+    "email": "ईमेल",
+    "emailHint": "आपके संकल्पों का सारांश और रसीदें यहाँ आएँगी।",
+    "consentLabel": "मैं आज रात के लिए यह कार्ड सहेजने की अनुमति देता/देती हूँ",
+    "consent": "{org} इस कार्ड को अपने भुगतान प्रदाता के पास सहेज सकता है और इससे केवल वे दान ले सकता है जो मैं चुनूँ और वे संकल्प जो मैं {event} में करूँ। संकल्पों की राशि कार्यक्रम के अगले दिन सुबह ली जाती है; उससे पहले मुझे सारांश मिलता है। कार्ड कार्यक्रम के 30 दिन बाद हटा दिया जाता है, और मैं इसे इस पेज पर कभी भी हटा सकता/सकती हूँ।",
+    "privacy": "आपके कार्ड का विवरण सीधे भुगतान प्रदाता को जाता है। हम आपका कार्ड नंबर कभी नहीं देखते या रखते।",
+    "save": "मेरा कार्ड सहेजें",
+    "saving": "सुरक्षित कार्ड फ़ॉर्म खुल रहा है…",
+    "savedTitle": "आपका कार्ड आज रात के लिए सहेजा गया है",
+    "savedBody": "{last4} पर समाप्त होने वाला {brand} इस कार्यक्रम में एक टैप में दान के लिए तैयार है।",
+    "card": "कार्ड",
+    "giveNow": "अभी दान करें",
+    "remove": "मेरा कार्ड हटाएँ",
+    "removeHint": "हटाने से वह हर शुल्क रद्द हो जाता है जो अभी तक नहीं लिया गया; संकल्प आप लिंक से चुका सकते हैं।",
+    "removed": "आपका कार्ड हटा दिया गया। उससे कुछ नहीं लिया जाएगा।",
+    "pending": "हम भुगतान प्रदाता के साथ आपके कार्ड की पुष्टि कर रहे हैं। थोड़ी देर में पेज रीफ़्रेश करें।",
+    "failed": "आपका कार्ड सहेजा नहीं जा सका। फिर से कोशिश करें या कोई दूसरा कार्ड इस्तेमाल करें।",
+    "fromCheckout": "धन्यवाद, आपका ऑर्डर पूरा हुआ। आपके टिकट ईमेल से आ रहे हैं।",
+    "oneTapTitle": "सहेजे गए कार्ड से दान करें",
+    "oneTapBody": "एक टैप से {last4} पर समाप्त होने वाले {brand} से राशि ली जाती है। तुरंत बाद आपको पुष्टि दिखेगी।",
+    "oneTapFailed": "यह दान पूरा नहीं हुआ। फिर से कोशिश करें या नीचे दिया फ़ॉर्म इस्तेमाल करें।",
+    "oneTapGive": "{amount} दान करें · {name}",
+    "manageCard": "मेरा सहेजा गया कार्ड प्रबंधित करें",
+    "errors": {
+      "name": "अपना पूरा नाम लिखें।",
+      "email": "एक मान्य ईमेल पता लिखें।",
+      "consent": "कार्ड सहेजने की अनुमति देने के लिए बॉक्स पर टिक करें।",
+      "event_over": "यह कार्यक्रम समाप्त हो गया है, इसलिए अब इसके लिए कार्ड नहीं सहेजे जा सकते।",
+      "not_connected": "यह कार्यक्रम अभी ऑनलाइन दान नहीं ले रहा है।",
+      "link": "यह लिंक अब मान्य नहीं है। मेज़बान से नया लिंक माँगें।"
+    }
+  },
+  "pledgePay": {
+    "metaTitle": "आपका संकल्प",
+    "title": "{amount} का आपका संकल्प",
+    "subtitle": "{level} · {campaign}। आपकी उदारता के लिए धन्यवाद।",
+    "stateTitle": "स्थिति",
+    "status": {
+      "scheduled": "कार्ड से शुल्क निर्धारित",
+      "charging": "शुल्क लिया जा रहा है",
+      "invoiced": "भुगतान की प्रतीक्षा",
+      "paid": "भुगतान हो गया",
+      "paid_offline": "भुगतान हो गया",
+      "written_off": "बंद"
+    },
+    "card": "कार्ड",
+    "cardScheduled": "हम {when} को {last4} पर समाप्त होने वाले {brand} से राशि लेंगे।",
+    "charging": "आपके कार्ड से अभी राशि ली जा रही है। थोड़ी देर में पेज रीफ़्रेश करें।",
+    "due": "कृपया {date} तक भुगतान करें।",
+    "thanks": "पूरा भुगतान हो गया। धन्यवाद! आपकी रसीद ईमेल से आ रही है।",
+    "closed": "यह संकल्प बंद है। अब कुछ भी बकाया नहीं है।",
+    "payNow": "अभी {amount} चुकाएँ",
+    "payAnotherWay": "अभी {amount} किसी और तरीके से चुकाएँ",
+    "anotherWayHint": "अभी भुगतान करने से कार्ड का शुल्क रद्द हो जाता है। कोई दूसरा कार्ड इस्तेमाल करना है? अभी उससे भुगतान करें।",
+    "errors": {
+      "charging": "आपके कार्ड से अभी राशि ली जा रही है, इसलिए यह भुगतान शुरू नहीं हुआ।",
+      "settled": "यह संकल्प पहले ही चुका दिया गया है।",
+      "no_email": "भुगतान के लिए अपना ईमेल लिखें।",
+      "rate_limited": "बहुत ज़्यादा कोशिशें। एक मिनट रुककर फिर से कोशिश करें।",
+      "not_connected": "ऑनलाइन भुगतान अभी उपलब्ध नहीं है। मेज़बान से भुगतान का तरीका पूछें।",
+      "generic": "कुछ गलत हो गया। फिर से कोशिश करें।",
+      "email": "एक मान्य ईमेल पता लिखें।"
+    },
+    "email": "आपकी रसीद के लिए ईमेल",
+    "emailHint": "हम रसीद यहाँ भेजते हैं।"
+  },
+  "pledges": {
+    "title": "संकल्प",
+    "subtitle": "पैडल नीलामी का हर संकल्प और उसकी वसूली कैसे हो रही है।",
+    "viewerNotice": "आप संकल्प देख सकते हैं। वित्त भूमिकाएँ शाम बंद करती हैं, भुगतान दर्ज करती हैं और संकल्प बट्टे खाते में डालती हैं।",
+    "pledged": "संकल्पित",
+    "paid": "चुकाया गया",
+    "owed": "बकाया",
+    "writtenOffTotal": "बट्टे खाते में",
+    "cardsSaved": "सहेजे गए कार्ड",
+    "emptyTitle": "अभी कोई संकल्प नहीं",
+    "emptyDescription": "जब रिकॉर्डर पैडल नीलामी में पैडल की पुष्टि करता है, तब संकल्प यहाँ दिखते हैं।",
+    "closeTitle": "{count, plural, one {भेजने के लिए # संकल्प} other {भेजने के लिए # संकल्प}}",
+    "closeBody": "शाम बंद करने पर हर दानदाता को सारांश मिलता है। सहेजे गए कार्ड वाले संकल्पों की राशि कल सुबह 09:00 बजे कार्यक्रम के समय क्षेत्र में ली जाती है; बाकी को 30 दिन में देय भुगतान लिंक मिलता है, और भुगतान तक रिमाइंडर।",
+    "close": "शाम बंद करें और सारांश भेजें",
+    "closed": "सारांश भेजे गए: {cards, plural, one {# संकल्प सहेजे गए कार्ड से लिया जाएगा} other {# संकल्प सहेजे गए कार्डों से लिए जाएँगे}} और {invoices, plural, one {# संकल्प को भुगतान लिंक मिला} other {# संकल्पों को भुगतान लिंक मिले}}।",
+    "caption": "संकल्प और उनकी वसूली",
+    "columns": {
+      "paddle": "पैडल",
+      "holder": "दानदाता",
+      "level": "स्तर",
+      "amount": "राशि",
+      "status": "स्थिति",
+      "detail": "विवरण",
+      "actions": "कार्रवाइयाँ"
+    },
+    "status": {
+      "open": "नहीं भेजा गया",
+      "scheduled": "कार्ड से शुल्क निर्धारित",
+      "charging": "शुल्क लिया जा रहा है",
+      "invoiced": "भुगतान लिंक भेजा गया",
+      "paid": "भुगतान हो गया",
+      "paid_offline": "ऑफ़लाइन भुगतान",
+      "written_off": "बट्टे खाते में"
+    },
+    "cardLabel": "{brand} ·{last4}",
+    "card": "कार्ड",
+    "detail": {
+      "open": "शाम बंद होने की प्रतीक्षा।",
+      "scheduled": "{card}, {when}",
+      "charging": "{card}, शुल्क जारी",
+      "invoiced": "देय तिथि {date}।",
+      "declined": "{count, plural, one {कार्ड # बार अस्वीकृत हुआ।} other {कार्ड # बार अस्वीकृत हुआ।}}",
+      "noEmail": "कोई ईमेल दर्ज नहीं: भुगतान लिंक स्वयं साझा करें।",
+      "paidCard": "{card} से लिया गया",
+      "paidLink": "लिंक से भुगतान हुआ"
+    },
+    "methods": {
+      "check": "चेक",
+      "wire": "वायर ट्रांसफ़र",
+      "stock": "शेयर",
+      "daf": "दानदाता-सलाहित निधि",
+      "cash": "नकद",
+      "other": "अन्य"
+    },
+    "recordPayment": "भुगतान दर्ज करें",
+    "method": "भुगतान का तरीका",
+    "chooseMethod": "चुनें…",
+    "reference": "संदर्भ (वैकल्पिक)",
+    "receivedOn": "प्राप्ति की तारीख",
+    "noteOptional": "नोट (वैकल्पिक)",
+    "recordSubmit": "पैडल {paddle} का भुगतान दर्ज करें",
+    "recorded": "भुगतान दर्ज हुआ। रिमाइंडर और कोई भी कार्ड शुल्क रोक दिए गए।",
+    "writeOff": "बट्टे खाते में डालें",
+    "writeOffNote": "बट्टे खाते में डालने का कारण",
+    "writeOffSubmit": "पैडल {paddle} का संकल्प बट्टे खाते में डालें",
+    "writtenOff": "{amount} का संकल्प बट्टे खाते में डाला गया।",
+    "errors": {
+      "charging": "कार्ड से अभी राशि ली जा रही है। कुछ मिनट बाद फिर से कोशिश करें।",
+      "settled": "यह संकल्प पहले ही चुका दिया गया है।",
+      "future": "तारीख भविष्य की नहीं हो सकती।",
+      "method": "भुगतान का तरीका चुनें।",
+      "receivedOn": "प्राप्ति की तारीख लिखें।",
+      "note": "लिखें कि संकल्प बट्टे खाते में क्यों डाला जा रहा है।",
+      "generic": "कुछ गलत हो गया। फिर से कोशिश करें।"
+    },
+    "qr": {
+      "label": "आज रात के दान के लिए कार्ड सहेजने का QR कोड",
+      "checkinTitle": "चेक-इन पर कार्ड सहेजना",
+      "checkinBody": "मेहमानों के चेक-इन के बाद उन्हें यह कोड दिखाएँ: वे अपने फ़ोन पर कार्ड सहेजकर आज रात एक टैप में दान कर सकते हैं।",
+      "tableTitle": "टेबल पर कार्ड सहेजना",
+      "tableBody": "इस कोड को टेबल कार्ड पर छापें: मेहमान अपने फ़ोन पर कार्ड सहेजकर एक टैप में दान और संकल्प कर सकते हैं।"
+    },
+    "payLink": "पैडल {paddle} का भुगतान लिंक"
   }
 }

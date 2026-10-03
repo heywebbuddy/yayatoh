@@ -76,9 +76,9 @@
         "org-status": "{status, select, suspended {Yayatoh suspended this organization} reactivated {This organization is back online} other {Yayatoh closed this organization}}"
       },
       "alerts": {
-        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {{countWords} attendee does not have a seat} other {{countWords} attendees do not have seats}}} undistributed {{count, plural, one {{countWords} purchased ticket has not been distributed} other {{countWords} purchased tickets have not been distributed}}} paymentsFailed {{count, plural, one {{countWords} payment failed} other {{countWords} payments failed}}} paymentsStuck {{count, plural, one {{countWords} payment is stuck} other {{countWords} payments are stuck}}} refundSurge {{count, plural, one {{countWords} refund in the last hour} other {{countWords} refunds in the last hour}}} devicesOffline {{count, plural, one {{countWords} check-in device is offline} other {{countWords} check-in devices are offline}}} devicesLowBattery {{count, plural, one {{countWords} check-in device is low on battery} other {{countWords} check-in devices are low on battery}}} devicesBacklog {{count, plural, one {{countWords} check-in device has scans waiting to sync} other {{countWords} check-in devices have scans waiting to sync}}} capacityNear {The venue is {count}% full} capacityFull {The venue is at capacity ({count}% full)} sellOut {{count}% of tickets are sold} salesPace {Ticket sales are at {count}% of the target pace} readiness {{count, plural, one {{countWords} setup step is blocking this event} other {{countWords} setup steps are blocking this event}}} domain {{count, plural, one {{countWords} custom domain has a problem} other {{countWords} custom domains have a problem}}} payoutsPastDue {{count, plural, one {{countWords} payout account requirement is past due} other {{countWords} payout account requirements are past due}}} deliverability {Email deliverability needs attention} automationFailed {{count, plural, one {{countWords} message or bulk action failed today} other {{countWords} messages or bulk actions failed today}}} assistanceOverdue {{count, plural, one {{countWords} help request has waited too long} other {{countWords} help requests have waited too long}}} campaignFailed {{count, plural, one {{countWords} campaign send failed today} other {{countWords} campaign sends failed today}}} disputeDeadline {{count, plural, one {{countWords} dispute needs evidence soon} other {{countWords} disputes need evidence soon}}} other {Alert}}",
-        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {{countWords} attendee does not have a seat} other {{countWords} attendees do not have seats}}} undistributed {{count, plural, one {{countWords} purchased ticket has not been distributed} other {{countWords} purchased tickets have not been distributed}}} paymentsFailed {{count, plural, one {{countWords} payment failed} other {{countWords} payments failed}}} paymentsStuck {{count, plural, one {{countWords} payment is stuck} other {{countWords} payments are stuck}}} refundSurge {{count, plural, one {{countWords} refund in the last hour} other {{countWords} refunds in the last hour}}} devicesOffline {{count, plural, one {{countWords} check-in device is offline} other {{countWords} check-in devices are offline}}} devicesLowBattery {{count, plural, one {{countWords} check-in device is low on battery} other {{countWords} check-in devices are low on battery}}} devicesBacklog {{count, plural, one {{countWords} check-in device has scans waiting to sync} other {{countWords} check-in devices have scans waiting to sync}}} capacityNear {The venue is {count}% full} capacityFull {The venue is at capacity ({count}% full)} sellOut {{count}% of tickets are sold} salesPace {Ticket sales are at {count}% of the target pace} readiness {{count, plural, one {{countWords} setup step is blocking this event} other {{countWords} setup steps are blocking this event}}} domain {{count, plural, one {{countWords} custom domain has a problem} other {{countWords} custom domains have a problem}}} payoutsPastDue {{count, plural, one {{countWords} payout account requirement is past due} other {{countWords} payout account requirements are past due}}} deliverability {Email deliverability needs attention} automationFailed {{count, plural, one {{countWords} message or bulk action failed today} other {{countWords} messages or bulk actions failed today}}} assistanceOverdue {{count, plural, one {{countWords} help request has waited too long} other {{countWords} help requests have waited too long}}} campaignFailed {{count, plural, one {{countWords} campaign send failed today} other {{countWords} campaign sends failed today}}} disputeDeadline {{count, plural, one {{countWords} dispute needs evidence soon} other {{countWords} disputes need evidence soon}}} other {Alert}}",
-        "alert-urgent-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {{countWords} attendee does not have a seat} other {{countWords} attendees do not have seats}}} undistributed {{count, plural, one {{countWords} purchased ticket has not been distributed} other {{countWords} purchased tickets have not been distributed}}} paymentsFailed {{count, plural, one {{countWords} payment failed} other {{countWords} payments failed}}} paymentsStuck {{count, plural, one {{countWords} payment is stuck} other {{countWords} payments are stuck}}} refundSurge {{count, plural, one {{countWords} refund in the last hour} other {{countWords} refunds in the last hour}}} devicesOffline {{count, plural, one {{countWords} check-in device is offline} other {{countWords} check-in devices are offline}}} devicesLowBattery {{count, plural, one {{countWords} check-in device is low on battery} other {{countWords} check-in devices are low on battery}}} devicesBacklog {{count, plural, one {{countWords} check-in device has scans waiting to sync} other {{countWords} check-in devices have scans waiting to sync}}} capacityNear {The venue is {count}% full} capacityFull {The venue is at capacity ({count}% full)} sellOut {{count}% of tickets are sold} salesPace {Ticket sales are at {count}% of the target pace} readiness {{count, plural, one {{countWords} setup step is blocking this event} other {{countWords} setup steps are blocking this event}}} domain {{count, plural, one {{countWords} custom domain has a problem} other {{countWords} custom domains have a problem}}} payoutsPastDue {{count, plural, one {{countWords} payout account requirement is past due} other {{countWords} payout account requirements are past due}}} deliverability {Email deliverability needs attention} automationFailed {{count, plural, one {{countWords} message or bulk action failed today} other {{countWords} messages or bulk actions failed today}}} assistanceOverdue {{count, plural, one {{countWords} help request has waited too long} other {{countWords} help requests have waited too long}}} campaignFailed {{count, plural, one {{countWords} campaign send failed today} other {{countWords} campaign sends failed today}}} disputeDeadline {{count, plural, one {{countWords} dispute needs evidence soon} other {{countWords} disputes need evidence soon}}} other {Alert}}"
+        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {{countWords} attendee does not have a seat} other {{countWords} attendees do not have seats}}} undistributed {{count, plural, one {{countWords} purchased ticket has not been distributed} other {{countWords} purchased tickets have not been distributed}}} paymentsFailed {{count, plural, one {{countWords} payment failed} other {{countWords} payments failed}}} paymentsStuck {{count, plural, one {{countWords} payment is stuck} other {{countWords} payments are stuck}}} refundSurge {{count, plural, one {{countWords} refund in the last hour} other {{countWords} refunds in the last hour}}} devicesOffline {{count, plural, one {{countWords} check-in device is offline} other {{countWords} check-in devices are offline}}} devicesLowBattery {{count, plural, one {{countWords} check-in device is low on battery} other {{countWords} check-in devices are low on battery}}} devicesBacklog {{count, plural, one {{countWords} check-in device has scans waiting to sync} other {{countWords} check-in devices have scans waiting to sync}}} capacityNear {The venue is {count}% full} capacityFull {The venue is at capacity ({count}% full)} sellOut {{count}% of tickets are sold} salesPace {Ticket sales are at {count}% of the target pace} readiness {{count, plural, one {{countWords} setup step is blocking this event} other {{countWords} setup steps are blocking this event}}} domain {{count, plural, one {{countWords} custom domain has a problem} other {{countWords} custom domains have a problem}}} payoutsPastDue {{count, plural, one {{countWords} payout account requirement is past due} other {{countWords} payout account requirements are past due}}} deliverability {Email deliverability needs attention} automationFailed {{count, plural, one {{countWords} message or bulk action failed today} other {{countWords} messages or bulk actions failed today}}} assistanceOverdue {{count, plural, one {{countWords} help request has waited too long} other {{countWords} help requests have waited too long}}} campaignFailed {{count, plural, one {{countWords} campaign send failed today} other {{countWords} campaign sends failed today}}} disputeDeadline {{count, plural, one {{countWords} dispute needs evidence soon} other {{countWords} disputes need evidence soon}}} pledgesUnpaid {{count, plural, one {{countWords} pledge is still unpaid 14 days after the event} other {{countWords} pledges are still unpaid 14 days after the event}}} other {Alert}}",
+        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {{countWords} attendee does not have a seat} other {{countWords} attendees do not have seats}}} undistributed {{count, plural, one {{countWords} purchased ticket has not been distributed} other {{countWords} purchased tickets have not been distributed}}} paymentsFailed {{count, plural, one {{countWords} payment failed} other {{countWords} payments failed}}} paymentsStuck {{count, plural, one {{countWords} payment is stuck} other {{countWords} payments are stuck}}} refundSurge {{count, plural, one {{countWords} refund in the last hour} other {{countWords} refunds in the last hour}}} devicesOffline {{count, plural, one {{countWords} check-in device is offline} other {{countWords} check-in devices are offline}}} devicesLowBattery {{count, plural, one {{countWords} check-in device is low on battery} other {{countWords} check-in devices are low on battery}}} devicesBacklog {{count, plural, one {{countWords} check-in device has scans waiting to sync} other {{countWords} check-in devices have scans waiting to sync}}} capacityNear {The venue is {count}% full} capacityFull {The venue is at capacity ({count}% full)} sellOut {{count}% of tickets are sold} salesPace {Ticket sales are at {count}% of the target pace} readiness {{count, plural, one {{countWords} setup step is blocking this event} other {{countWords} setup steps are blocking this event}}} domain {{count, plural, one {{countWords} custom domain has a problem} other {{countWords} custom domains have a problem}}} payoutsPastDue {{count, plural, one {{countWords} payout account requirement is past due} other {{countWords} payout account requirements are past due}}} deliverability {Email deliverability needs attention} automationFailed {{count, plural, one {{countWords} message or bulk action failed today} other {{countWords} messages or bulk actions failed today}}} assistanceOverdue {{count, plural, one {{countWords} help request has waited too long} other {{countWords} help requests have waited too long}}} campaignFailed {{count, plural, one {{countWords} campaign send failed today} other {{countWords} campaign sends failed today}}} disputeDeadline {{count, plural, one {{countWords} dispute needs evidence soon} other {{countWords} disputes need evidence soon}}} pledgesUnpaid {{count, plural, one {{countWords} pledge is still unpaid 14 days after the event} other {{countWords} pledges are still unpaid 14 days after the event}}} other {Alert}}",
+        "alert-urgent-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {{countWords} attendee does not have a seat} other {{countWords} attendees do not have seats}}} undistributed {{count, plural, one {{countWords} purchased ticket has not been distributed} other {{countWords} purchased tickets have not been distributed}}} paymentsFailed {{count, plural, one {{countWords} payment failed} other {{countWords} payments failed}}} paymentsStuck {{count, plural, one {{countWords} payment is stuck} other {{countWords} payments are stuck}}} refundSurge {{count, plural, one {{countWords} refund in the last hour} other {{countWords} refunds in the last hour}}} devicesOffline {{count, plural, one {{countWords} check-in device is offline} other {{countWords} check-in devices are offline}}} devicesLowBattery {{count, plural, one {{countWords} check-in device is low on battery} other {{countWords} check-in devices are low on battery}}} devicesBacklog {{count, plural, one {{countWords} check-in device has scans waiting to sync} other {{countWords} check-in devices have scans waiting to sync}}} capacityNear {The venue is {count}% full} capacityFull {The venue is at capacity ({count}% full)} sellOut {{count}% of tickets are sold} salesPace {Ticket sales are at {count}% of the target pace} readiness {{count, plural, one {{countWords} setup step is blocking this event} other {{countWords} setup steps are blocking this event}}} domain {{count, plural, one {{countWords} custom domain has a problem} other {{countWords} custom domains have a problem}}} payoutsPastDue {{count, plural, one {{countWords} payout account requirement is past due} other {{countWords} payout account requirements are past due}}} deliverability {Email deliverability needs attention} automationFailed {{count, plural, one {{countWords} message or bulk action failed today} other {{countWords} messages or bulk actions failed today}}} assistanceOverdue {{count, plural, one {{countWords} help request has waited too long} other {{countWords} help requests have waited too long}}} campaignFailed {{count, plural, one {{countWords} campaign send failed today} other {{countWords} campaign sends failed today}}} disputeDeadline {{count, plural, one {{countWords} dispute needs evidence soon} other {{countWords} disputes need evidence soon}}} pledgesUnpaid {{count, plural, one {{countWords} pledge is still unpaid 14 days after the event} other {{countWords} pledges are still unpaid 14 days after the event}}} other {Alert}}"
       }
     },
     "kinds": {
@@ -181,7 +181,10 @@
       },
       "donations": {
         "receipt": "Donation receipt",
-        "year-end-statement": "Year-end giving statement"
+        "year-end-statement": "Year-end giving statement",
+        "pledge-summary": "Pledge summary",
+        "pledge-invoice": "Pledge invoice",
+        "pledge-reminder": "Pledge reminder"
       },
       "guests": {
         "invitation": "Wedding invitation",
@@ -935,14 +938,23 @@
     "orgUnavailable": "This organizer isn't selling tickets right now. Tickets already bought stay valid.",
     "riskBlocked": "We couldn’t take this order. Please contact the organizer.",
     "creditInvalid": "That store credit code isn't valid or has been spent.",
-    "creditNotApplicable": "That store credit can't be used on these tickets."
+    "creditNotApplicable": "That store credit can't be used on these tickets.",
+    "saveCardForGiving": "Save my card for tonight's giving (you'll do it on the next page; nothing is saved unless you agree there)"
   },
   "fakePay": {
     "eyebrow": "Test payment",
     "title": "Pay for your order",
     "description": "This is a test payment page. No real money moves.",
     "pay": "Pay now (test)",
-    "decline": "Simulate a declined card"
+    "decline": "Simulate a declined card",
+    "setupTitle": "Test card setup",
+    "setupDescription": "Stand-in for the payment provider's secure card form. No real card is saved.",
+    "testCard": "Test card",
+    "card4242": "4242 · always charges",
+    "card0002": "0002 · always declines",
+    "card9995": "9995 · declines the first charge",
+    "saveCard": "Save card (test)",
+    "failSetup": "Simulate a failed setup"
   },
   "order": {
     "eyebrow": "Your order",
@@ -1978,7 +1990,8 @@
       "plan": "Plan",
       "assign": "Assign guests",
       "finder": "Seat finder",
-      "rules": "Rules"
+      "rules": "Rules",
+      "guests": "Seat guests"
     },
     "assign": {
       "title": "Assign guests",
@@ -2069,7 +2082,8 @@
       "modeNow": "Look-up: {mode}",
       "modeShort": {
         "code": "email code",
-        "name": "full name"
+        "name": "full name",
+        "pin": "full name and invitation PIN"
       },
       "notPublic": "The event isn't published (or is private), so guests can't open the seat finder yet.",
       "settingsTitle": "Guests",
@@ -2080,11 +2094,13 @@
       "mode": "How guests look up their seat",
       "modeOption": {
         "code": "With a code sent to their email (recommended)",
-        "name": "Instantly, by full name"
+        "name": "Instantly, by full name",
+        "pin": "By full name and the PIN on their invitation"
       },
       "modeHint": {
         "code": "Only someone who can read the guest's email sees their seat, and no one can find out who is on the list.",
-        "name": "Faster at the door, but anyone who knows a guest's full name can see where they sit."
+        "name": "Faster at the door, but anyone who knows a guest's full name can see where they sit.",
+        "pin": "Guests type their full name and the 6-digit PIN printed on their party's invitation. They see their table, never anyone's name, and no one can find out who is on the list."
       },
       "readOnly": "You can see these settings but not change them.",
       "shareTitle": "Share it",
@@ -2092,7 +2108,10 @@
       "openPublic": "Open the seat finder",
       "poster": "Print seat-finder poster",
       "closedNote": "The seat finder is closed. Guests who scan the poster are asked to check back later.",
-      "namePoster": "Print name list poster"
+      "namePoster": "Print name list poster",
+      "partyLinksTitle": "Party links",
+      "partyLinksHint": "Each party's invitation link and QR code also opens their own seat page: their table on the venue map and who sits with them. The QR code stays the same when you move them to another table.",
+      "partyLinksAction": "Party links and QR codes"
     },
     "map": {
       "zoomIn": "Zoom in",
@@ -2177,6 +2196,127 @@
         "forbidden": "You can see the groups but not change them.",
         "noMembers": "No one on the list has the label {label} yet."
       }
+    },
+    "guestSeating": {
+      "title": "Seat guests",
+      "description": "Seat parties at tables. Drag a party from the queue onto the map, or tick guests, choose a table and press Seat selected guests — the keyboard does everything dragging does.",
+      "chart": {
+        "label": "Seating for",
+        "event": "Whole event"
+      },
+      "noPlan": "{chart} has no seating plan yet",
+      "noPlanHint": "Create the plan (tables or rows) first, then seat your guests here.",
+      "toPlan": "Go to the plan",
+      "noGuests": "No guests to seat yet",
+      "noGuestsHint": "Add parties on the Guests page (or invite them to this part of the day), then seat them here.",
+      "toGuests": "Go to Guests",
+      "summary": "{seated} seated · {unseated} to seat",
+      "readOnly": "You can see the seating but not change it.",
+      "declinedSeated": "{count, plural, one {# guest who declined is still seated.} other {# guests who declined are still seated.}} Unseat them in the table details.",
+      "live": {
+        "live": "Live",
+        "connecting": "Connecting…",
+        "offline": "Offline, reconnecting"
+      },
+      "vip": "VIP",
+      "queue": {
+        "title": "Unseated ({count})",
+        "search": "Search parties and guests",
+        "status": "Reply",
+        "statusAll": "All replies",
+        "side": "Side",
+        "sideAll": "All sides",
+        "list": "Parties still to seat",
+        "selectParty": "Select everyone in {party}",
+        "toSeat": "{count, plural, one {# to seat} other {# to seat}}",
+        "selected": "{count, plural, =0 {No one selected} one {# guest selected} other {# guests selected}}",
+        "clear": "Clear selection",
+        "empty": "Everyone has a seat.",
+        "noMatch": "No party matches these filters."
+      },
+      "status": {
+        "attending": "Attending",
+        "pending": "Awaiting reply",
+        "declined": "Declined"
+      },
+      "guest": {
+        "guestOf": "Guest of {name}",
+        "meal": "Meal: {meal}",
+        "noMeal": "No meal chosen",
+        "child": "Child",
+        "infant": "Infant"
+      },
+      "form": {
+        "title": "Seat the selected guests",
+        "table": "Table or row",
+        "choose": "Choose a table or row",
+        "option": "{place} — {free} of {capacity} free",
+        "optionVip": "{place} — {free} of {capacity} free · VIP zone",
+        "cantFit": "Can't fit: {asked, plural, one {# guest} other {# guests}} selected, {fits, plural, =0 {no seats} one {# seat} other {# seats}} free at {place}.",
+        "submit": "Seat selected guests",
+        "submitting": "Seating…"
+      },
+      "place": {
+        "table": "Table {label}",
+        "row": "Row {label}"
+      },
+      "map": {
+        "title": "Map",
+        "hint": "Drag a party onto a table to seat it. Click a table to see who sits there.",
+        "readOnlyHint": "Click a table to see who sits there.",
+        "dropHere": "Drop on {place}: {free} free",
+        "dropCantFit": "Can't fit at {place}: {count, plural, one {# guest} other {# guests}}, {free} free",
+        "guests": "Guests",
+        "tickets": "Ticket holders",
+        "vip": "VIP zone"
+      },
+      "details": {
+        "title": "Table details",
+        "choose": "Table to show",
+        "none": "This chart has no tables or rows.",
+        "counts": "{seated} seated · {free} of {capacity} free",
+        "tickets": "{count, plural, one {# seat held by a ticket} other {# seats held by tickets}}",
+        "sponsor": "Hosted by {name}",
+        "vipZone": "VIP zone",
+        "vipFromPlan": "In a VIP section of the plan",
+        "warnings": "Check this table",
+        "warnDeclined": "{name} declined and is still seated.",
+        "warnVipOutside": "{party} is a VIP party outside a VIP zone.",
+        "warnNotVip": "{party} is not a VIP party but sits in a VIP zone.",
+        "meals": "Meals",
+        "mealCount": "{meal}: {count}",
+        "noMeal": "Not chosen",
+        "empty": "No one sits here yet. Seat a party from the queue.",
+        "unseatParty": "Unseat {party}",
+        "move": "Move to…",
+        "moveLabel": "Move {name} to another table",
+        "unseat": "Unseat",
+        "unseatLabel": "Unseat {name}",
+        "moveTo": "Move {name}",
+        "moveSubmit": "Move",
+        "cancel": "Cancel"
+      },
+      "done": {
+        "seated": "Seated {count, plural, one {# guest} other {# guests}} at {place}.",
+        "moved": "Moved {name} to {place}.",
+        "unseated": "{count, plural, one {# guest is} other {# guests are}} back in the queue.",
+        "vipOn": "{place} is now a VIP zone.",
+        "vipOff": "{place} is no longer a VIP zone."
+      },
+      "warnings": {
+        "vip_outside": "{party} is a VIP party, and {place} is not a VIP zone.",
+        "not_vip_inside": "{place} is a VIP zone, and {party} is not a VIP party."
+      },
+      "errors": {
+        "forbidden": "You can see the seating but not change it.",
+        "cantFit": "Can't fit: {asked, plural, one {# guest needs} other {# guests need}} a seat, and {fits, plural, =0 {no seats are} one {only # seat is} other {only # seats are}} free there.",
+        "declined": "That guest declined. Only guests who haven't declined can be seated.",
+        "unknown": "That guest is no longer on this list. The page will refresh.",
+        "noPlan": "There is no seating plan for this yet.",
+        "noGuests": "Choose at least one guest to seat.",
+        "noPlace": "Choose a table or row.",
+        "dropMiss": "Drop a party onto a table or a row."
+      }
     }
   },
   "venueMap": {
@@ -2216,7 +2356,11 @@
       "bottom": "Bottom of the map",
       "bottom-right": "Bottom right of the map"
     },
-    "yours": "{count, plural, one {Your seat: {seats}} other {Your seats: {seats}}}"
+    "yours": "{count, plural, one {Your seat: {seats}} other {Your seats: {seats}}}",
+    "yourPlace": {
+      "table": "Your table",
+      "row": "Your row"
+    }
   },
   "seatFinder": {
     "eyebrow": "Seat finder",
@@ -2267,9 +2411,15 @@
       "challengeUnavailable": "Too many lookups from this device. Please wait a minute and try again.",
       "closed": "The seat finder isn't open for this event.",
       "internal": "Something went wrong on our side.",
-      "rateLimited": "Too many codes asked for. Try again in {minutes, plural, one {# minute} other {# minutes}}."
+      "rateLimited": "Too many codes asked for. Try again in {minutes, plural, one {# minute} other {# minutes}}.",
+      "noMatch": "We couldn't find a table with that name and PIN. Check both against your invitation, or ask a host.",
+      "invalidPin": "Enter the 6-digit PIN from your invitation.",
+      "pinRateLimited": "Too many lookups from this device. Try again in {minutes, plural, one {# minute} other {# minutes}}."
     },
-    "hostedBy": "Hosted by {sponsor}"
+    "hostedBy": "Hosted by {sponsor}",
+    "pinIntro": "Enter your full name as it appears on your invitation and the 6-digit PIN printed on it.",
+    "pin": "PIN from your invitation",
+    "findByPin": "Find my table"
   },
   "seatFinderPoster": {
     "pageTitle": "Seat-finder poster",
@@ -2282,7 +2432,8 @@
     "step2Code": "Enter your email — we'll send you a code.",
     "step2Name": "Enter your full name.",
     "step3": "See your table and seat on the venue map.",
-    "orVisit": "Or go to"
+    "orVisit": "Or go to",
+    "step2Pin": "Enter your full name and the PIN on your invitation."
   },
   "reports": {
     "title": "Analysis",
@@ -6465,7 +6616,8 @@
       "automationFailed": "Open messaging health",
       "campaignFailed": "Open campaigns",
       "disputeDeadline": "Open the dispute queue",
-      "assistanceOverdue": "Open the help queue"
+      "assistanceOverdue": "Open the help queue",
+      "pledgesUnpaid": "Open the pledges"
     },
     "rules": {
       "unseated": "{count, plural, one {{countWords} attendee does not have a seat} other {{countWords} attendees do not have seats}}",
@@ -6487,7 +6639,8 @@
       "automationFailed": "{count, plural, one {{countWords} message or bulk action failed today} other {{countWords} messages or bulk actions failed today}}",
       "campaignFailed": "{count, plural, one {{countWords} campaign send failed today} other {{countWords} campaign sends failed today}}",
       "disputeDeadline": "{count, plural, one {{countWords} dispute needs evidence soon} other {{countWords} disputes need evidence soon}}",
-      "assistanceOverdue": "{count, plural, one {{countWords} help request has waited too long} other {{countWords} help requests have waited too long}}"
+      "assistanceOverdue": "{count, plural, one {{countWords} help request has waited too long} other {{countWords} help requests have waited too long}}",
+      "pledgesUnpaid": "{count, plural, one {{countWords} pledge is still unpaid 14 days after the event} other {{countWords} pledges are still unpaid 14 days after the event}}"
     },
     "widget": {
       "title": "Alerts",
@@ -8747,7 +8900,8 @@
       "openConsole": "Open the console",
       "openSpotter": "Spot paddles",
       "openPaddles": "Paddle numbers",
-      "openScreen": "Live screen"
+      "openScreen": "Live screen",
+      "openPledges": "Pledges and collection"
     },
     "paddles": {
       "title": "Paddle numbers",
@@ -10303,7 +10457,10 @@
     },
     "questionsTitle": "A few questions",
     "questionsHint": "The hosts would like to know a little more. Answers marked private are seen only by the hosts.",
-    "questionsFor": "Questions for {name}"
+    "questionsFor": "Questions for {name}",
+    "seatTitle": "Find your table",
+    "seatHint": "See where you sit on the venue map and who's at your table.",
+    "seatLink": "Show my table"
   },
   "rsvpFind": {
     "metaTitle": "Find your invitation",
@@ -10413,7 +10570,13 @@
     "reopenFor": "Reopen RSVP for {party}",
     "createLinkFor": "Create the RSVP link for {party}",
     "copy": "Copy link",
-    "copied": "Link copied."
+    "copied": "Link copied.",
+    "seatTitle": "Seat page QR code",
+    "seatHint": "This QR code opens {party}'s own seat page: their table on the venue map and who sits with them. It stays the same when you move them to another table, so you can print it on escort or place cards.",
+    "seatQrLabel": "QR code to {party}'s seat page",
+    "seatLinkLabel": "Seat page link for {party}",
+    "seatClosed": "Guests see their table once you open the seat finder (Seating → Seat finder).",
+    "seatScan": "Scan to find your table"
   },
   "collector": {
     "metaTitle": "Share your contact details",
@@ -11128,5 +11291,199 @@
       "offer_ended": "The offer for {title} has ended.",
       "full": "{title} just filled up. Try again to join the waitlist."
     }
+  },
+  "guestSeats": {
+    "placeAt": {
+      "table": "Table {item}",
+      "row": "Row {item}"
+    },
+    "wholeEvent": "Seating",
+    "resultTitle": "{count, plural, one {Your table} other {Your tables}}",
+    "partyCount": "{count, plural, one {# of your party sits here} other {# of your party sit here}}",
+    "noTableTitle": "Your table isn't set yet",
+    "noTable": "The hosts are still working on the seating. Check back closer to the day, or ask a host.",
+    "unseatedCount": "{count, plural, one {# person in your party doesn't have a table yet.} other {# people in your party don't have a table yet.}}",
+    "again": "Look up someone else",
+    "mapTitle": "Venue map",
+    "mapFor": "Venue map: {name}"
+  },
+  "partySeats": {
+    "metaTitle": "Your table",
+    "title": "Where {party} sits",
+    "intro": "Your table on the venue map, and who sits with you.",
+    "closedTitle": "Seating isn't ready yet",
+    "closed": "The hosts haven’t shared the seating yet. Keep this page, or the QR code on your invitation: it will show your table once they do.",
+    "noChartsTitle": "Your table isn't set yet",
+    "noCharts": "The hosts are still working on the seating. This page will show your table as soon as it is set.",
+    "yourParty": "From your party",
+    "tablemates": {
+      "table": "Also at this table",
+      "row": "Also in this row"
+    },
+    "noTablemates": "No one else is seated here yet.",
+    "unseated": "Not seated yet: {names}",
+    "guestOf": "Guest of {name}",
+    "keep": "This page always shows your current table: the link and the QR code on your invitation never change when the hosts move you.",
+    "toRsvp": "Back to your RSVP",
+    "saveCard": "Save a card for tonight's giving"
+  },
+  "savedCard": {
+    "metaTitle": "Save a card for tonight",
+    "title": "Save a card for tonight's giving",
+    "intro": "Save your card once on your own phone, then give with one tap during the evening. Nothing is charged now.",
+    "introParty": "For {party}: save your card once on your own phone, then give with one tap during the evening. Pledges you make are charged to it the next morning. Nothing is charged now.",
+    "unavailableTitle": "Card saving isn't open",
+    "unavailableBody": "This event isn't taking gifts online right now. You can still give at the event.",
+    "formLabel": "Save a card",
+    "formTitle": "Your details",
+    "name": "Full name",
+    "email": "Email",
+    "emailHint": "Your pledge summary and receipts go here.",
+    "consentLabel": "I authorize saving this card for tonight",
+    "consent": "{org} may save this card with its payment provider and charge it only for gifts I choose and pledges I make at {event}. Pledges are charged the morning after the event; I get a summary first. The card is removed 30 days after the event, and I can remove it at any time on this page.",
+    "privacy": "Your card details go straight to the payment provider. We never see or store your card number.",
+    "save": "Save my card",
+    "saving": "Opening the secure card form…",
+    "savedTitle": "Your card is saved for tonight",
+    "savedBody": "{brand} ending {last4} is ready for one-tap giving at this event.",
+    "card": "Card",
+    "giveNow": "Give now",
+    "remove": "Remove my card",
+    "removeHint": "Removing it cancels any charge not made yet; you can still pay pledges by link.",
+    "removed": "Your card was removed. It won't be charged.",
+    "pending": "We're confirming your card with the payment provider. Refresh in a moment.",
+    "failed": "Your card couldn't be saved. Try again or use another card.",
+    "fromCheckout": "Thanks, your order is complete. Your tickets are on their way by email.",
+    "oneTapTitle": "Give with your saved card",
+    "oneTapBody": "One tap charges {brand} ending {last4}. You'll see a confirmation right after.",
+    "oneTapFailed": "That gift didn't go through. Try again, or use the form below.",
+    "oneTapGive": "Give {amount} · {name}",
+    "manageCard": "Manage my saved card",
+    "errors": {
+      "name": "Enter your full name.",
+      "email": "Enter a valid email address.",
+      "consent": "Tick the box to authorize saving your card.",
+      "event_over": "This event is over, so cards can't be saved for it any more.",
+      "not_connected": "This event isn't taking gifts online right now.",
+      "link": "This link isn't valid any more. Ask the host for a new one."
+    }
+  },
+  "pledgePay": {
+    "metaTitle": "Your pledge",
+    "title": "Your pledge of {amount}",
+    "subtitle": "{level} · {campaign}. Thank you for your generosity.",
+    "stateTitle": "Status",
+    "status": {
+      "scheduled": "Card charge scheduled",
+      "charging": "Being charged",
+      "invoiced": "Waiting for payment",
+      "paid": "Paid",
+      "paid_offline": "Paid",
+      "written_off": "Closed"
+    },
+    "card": "Card",
+    "cardScheduled": "We'll charge {brand} ending {last4} on {when}.",
+    "charging": "Your card is being charged right now. Refresh in a moment.",
+    "due": "Please pay by {date}.",
+    "thanks": "Paid in full. Thank you! Your receipt is on its way by email.",
+    "closed": "This pledge is closed. Nothing more is owed.",
+    "payNow": "Pay {amount} now",
+    "payAnotherWay": "Pay {amount} now another way",
+    "anotherWayHint": "Paying now cancels the card charge. Want to use another card? Pay now with it instead.",
+    "errors": {
+      "charging": "Your card is being charged right now, so this payment wasn't started.",
+      "settled": "This pledge is already settled.",
+      "no_email": "Enter your email to pay.",
+      "rate_limited": "Too many tries. Wait a minute and try again.",
+      "not_connected": "Online payment isn't available right now. Ask the host how to pay.",
+      "generic": "Something went wrong. Try again.",
+      "email": "Enter a valid email address."
+    },
+    "email": "Email for your receipt",
+    "emailHint": "We send the receipt here."
+  },
+  "pledges": {
+    "title": "Pledges",
+    "subtitle": "Every pledge from the paddle raise and how it's being collected.",
+    "viewerNotice": "You can see the pledges. Finance roles close the night, record payments and write pledges off.",
+    "pledged": "Pledged",
+    "paid": "Paid",
+    "owed": "Still owed",
+    "writtenOffTotal": "Written off",
+    "cardsSaved": "Cards saved",
+    "emptyTitle": "No pledges yet",
+    "emptyDescription": "Pledges appear here once the recorder confirms paddles in the paddle raise.",
+    "closeTitle": "{count, plural, one {# pledge to send} other {# pledges to send}}",
+    "closeBody": "Closing the night sends each donor a summary. Pledges with a saved card are charged at 09:00 tomorrow in the event's time zone; the others get a pay link due in 30 days, with reminders until paid.",
+    "close": "Close the night and send summaries",
+    "closed": "Summaries sent: {cards, plural, one {# pledge will be charged to a saved card} other {# pledges will be charged to saved cards}} and {invoices, plural, one {# pledge got a pay link} other {# pledges got pay links}}.",
+    "caption": "Pledges and their collection",
+    "columns": {
+      "paddle": "Paddle",
+      "holder": "Donor",
+      "level": "Level",
+      "amount": "Amount",
+      "status": "Status",
+      "detail": "Details",
+      "actions": "Actions"
+    },
+    "status": {
+      "open": "Not sent",
+      "scheduled": "Card charge scheduled",
+      "charging": "Charging",
+      "invoiced": "Pay link sent",
+      "paid": "Paid",
+      "paid_offline": "Paid offline",
+      "written_off": "Written off"
+    },
+    "cardLabel": "{brand} ·{last4}",
+    "card": "Card",
+    "detail": {
+      "open": "Waiting for the night to be closed.",
+      "scheduled": "{card} on {when}",
+      "charging": "{card}, charge in progress",
+      "invoiced": "Due {date}.",
+      "declined": "{count, plural, one {Card declined once.} other {Card declined # times.}}",
+      "noEmail": "No email on file: share the pay link yourself.",
+      "paidCard": "Charged to {card}",
+      "paidLink": "Paid by link"
+    },
+    "methods": {
+      "check": "Check",
+      "wire": "Wire transfer",
+      "stock": "Stock",
+      "daf": "Donor-advised fund",
+      "cash": "Cash",
+      "other": "Other"
+    },
+    "recordPayment": "Record a payment",
+    "method": "How it was paid",
+    "chooseMethod": "Choose…",
+    "reference": "Reference (optional)",
+    "receivedOn": "Received on",
+    "noteOptional": "Note (optional)",
+    "recordSubmit": "Record payment for paddle {paddle}",
+    "recorded": "Payment recorded. Reminders and any card charge stopped.",
+    "writeOff": "Write off",
+    "writeOffNote": "Why it's written off",
+    "writeOffSubmit": "Write off paddle {paddle}'s pledge",
+    "writtenOff": "Pledge of {amount} written off.",
+    "errors": {
+      "charging": "The card is being charged right now. Try again in a few minutes.",
+      "settled": "This pledge is already settled.",
+      "future": "The date can't be in the future.",
+      "method": "Choose how it was paid.",
+      "receivedOn": "Enter the date it was received.",
+      "note": "Write why the pledge is written off.",
+      "generic": "Something went wrong. Try again."
+    },
+    "qr": {
+      "label": "QR code to save a card for tonight's giving",
+      "checkinTitle": "Card saving at check-in",
+      "checkinBody": "Show guests this code after they check in: they save a card on their own phone for one-tap giving tonight.",
+      "tableTitle": "Card saving on the tables",
+      "tableBody": "Print this code on table cards: guests save a card on their own phone for one-tap giving and pledges."
+    },
+    "payLink": "Pay link for paddle {paddle}"
   }
 }

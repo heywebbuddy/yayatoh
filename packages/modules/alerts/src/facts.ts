@@ -1,6 +1,7 @@
 import { assistanceOverdueTx } from '@yayatoh/assistance';
 import { checkinFactsTx, deviceHealthTx } from '@yayatoh/checkin';
 import type { TenantTx } from '@yayatoh/db';
+import { unpaidPledgeFactsTx } from '@yayatoh/donations';
 import { type EventDto, findEventTx } from '@yayatoh/events';
 import { deliverabilityBreakdownTx, deliverabilityFactsTx } from '@yayatoh/notifications';
 import { paymentAlertFactsTx } from '@yayatoh/orders';
@@ -27,7 +28,7 @@ export async function eventFactsTx(
   if (!event) return null;
   const mode = eventMode(now, event.startsAt, event.endsAt);
   const around = mode === 'live' || mode === 'pre_show';
-  const [unseated, dist, pay, devices, types, admitted, [target], help] = await Promise.all([
+  const [unseated, dist, pay, devices, types, admitted, [target], help, pledged] = await Promise.all([
     unseatedAttendeesTx(tx, eventId),
     undistributedTicketsTx(tx, eventId),
     paymentAlertFactsTx(tx, eventId, now, {
@@ -45,6 +46,7 @@ export async function eventFactsTx(
     mode === 'live' ? checkinFactsTx(tx, { eventId }).then((c) => c.tickets) : Promise.resolve(0),
     tx.select({ tickets: salesTargets.tickets }).from(salesTargets).where(eq(salesTargets.eventId, eventId)),
     assistanceOverdueTx(tx, eventId, now),
+    unpaidPledgeFactsTx(tx, eventId, now),
   ]);
   const live = types.filter((t) => !t.archived);
   return {
@@ -70,6 +72,8 @@ export async function eventFactsTx(
       ticketTypes: live.length,
       assistanceOverdue: help.overdue,
       assistanceUrgent: help.urgent,
+      unpaidPledges: pledged.count,
+      unpaidPledgesMinor: pledged.amountMinor,
     },
   };
 }

@@ -11,7 +11,8 @@
     "./giving": "./src/domain/giving.ts",
     "./paddles": "./src/domain/paddles.ts",
     "./paddle-queue": "./src/domain/paddle-queue.ts",
-    "./screen": "./src/domain/screen.ts"
+    "./screen": "./src/domain/screen.ts",
+    "./collection": "./src/domain/collection.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"
@@ -31,7 +32,9 @@
     "@yayatoh/ui": "workspace:*",
     "drizzle-orm": "catalog:",
     "intl-messageformat": "11.2.15",
-    "zod": "catalog:"
+    "zod": "catalog:",
+    "@yayatoh/notifications": "workspace:*",
+    "@yayatoh/payments": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "catalog:",

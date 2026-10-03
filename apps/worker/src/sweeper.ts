@@ -1,8 +1,9 @@
 import { billingEntitlements } from '@yayatoh/billing';
 import { withPlatformReader } from '@yayatoh/db/platform';
+import { collectPledges } from '@yayatoh/donations';
 import { createCtx, executeCommand } from '@yayatoh/kernel';
 import { expireOrdersCommand, sweepWaitlistsCommand } from '@yayatoh/orders';
-import { alertDisputeDeadlinesCommand } from '@yayatoh/payments';
+import { alertDisputeDeadlinesCommand, type PaymentProvider } from '@yayatoh/payments';
 import { createCommandPorts, localKeyVault, setKeyVault } from '@yayatoh/platform';
 import { sweepEnrollmentsCommand } from '@yayatoh/registration';
 import { orgAuthorizer, orgStatusGate } from '@yayatoh/tenancy';
@@ -109,6 +110,41 @@ export async function sweepEnrollments(): Promise<{ expired: number; promoted: n
       total.promoted += r.promoted;
     } catch (err) {
       console.error('enrollment sweeper', org_id, err);
+    }
+  }
+  return total;
+}
+
+/**
+ * Pledge collection (M4.8e, P4-12), every 5 minutes: orgs with a saved-card charge due (or a
+ * claimed one to replay) or a saved card past its 30 days (platform_reader, audited), then each
+ * org's run under its RLS: off-session charges under each order's key (replays never charge
+ * twice), declines retried once then invoiced, expired cards removed from the customer.
+ */
+export async function collectDuePledges(provider: PaymentProvider) {
+  const orgs = await withPlatformReader(
+    {
+      actor: 'system:pledge-collection',
+      reason: 'find orgs with pledge charges due or saved cards to remove',
+    },
+    (tx) =>
+      tx.execute<{ org_id: string }>(sql`
+        select org_id from donations.pledge_collections
+        where status in ('scheduled', 'charging') and charge_at <= now()
+        union
+        select org_id from donations.saved_cards where status = 'active' and remove_after <= now()
+        limit 500`),
+  );
+  const total = { charged: 0, declined: 0, invoiced: 0, cardsRemoved: 0 };
+  for (const { org_id } of orgs) {
+    try {
+      const r = await collectPledges(org_id, { provider, ports });
+      total.charged += r.charged;
+      total.declined += r.declined;
+      total.invoiced += r.invoiced;
+      total.cardsRemoved += r.cardsRemoved;
+    } catch (err) {
+      console.error('pledge collection', org_id, err);
     }
   }
   return total;

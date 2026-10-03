@@ -40,7 +40,12 @@ export default async function SeatingRulesPage({
   return (
     <>
       <PageHeader title={t('rules.title')} description={t('rules.description')} />
-      <SeatingTabs base={base} active="rules" finder={data.modules.has('seat_finder')} />
+      <SeatingTabs
+        base={base}
+        active="rules"
+        finder={data.modules.has('seat_finder')}
+        guests={data.modules.has('guests')}
+      />
       {!hasPlan ? (
         <EmptyState
           title={t('rules.noPlan')}

@@ -17,6 +17,7 @@ import {
   sessionChannelOpen,
 } from '@yayatoh/engagement';
 import { findEventTx, isPublicEvent } from '@yayatoh/events';
+import { GUESTS_CHANNEL } from '@yayatoh/guests';
 import { createCtx } from '@yayatoh/kernel';
 import {
   ablyRealtimePublisher,
@@ -45,6 +46,7 @@ import {
 } from '@yayatoh/platform';
 import {
   createSeatFeed,
+  GUEST_SEATS_CHANNEL,
   listenForSeatChanges,
   SEAT_STATES_CHANNEL,
   SEATS_CHANNEL,
@@ -80,6 +82,9 @@ export const REALTIME_CHANNELS = createRealtimeRegistry([
   ...PADDLE_REALTIME_CHANNELS,
   // M4.8d: the room's giving screen (thermometer; its projector streams through a signed link).
   GIVING_SCREEN_CHANNEL,
+  // M4.3a: the guest seating editor follows the guest list and the guests' places.
+  GUESTS_CHANNEL,
+  GUEST_SEATS_CHANNEL,
 ]);
 
 /** Stream (re)connections per caller and channel per minute. */

@@ -76,9 +76,9 @@
         "org-status": "{status, select, suspended {Yayatoh ha sospeso questa organizzazione} reactivated {Questa organizzazione è di nuovo online} other {Yayatoh ha chiuso questa organizzazione}}"
       },
       "alerts": {
-        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {Un partecipante non ha un posto} other {{countWords} partecipanti non hanno un posto}}} undistributed {{count, plural, one {Un biglietto acquistato non è stato distribuito} other {{countWords} biglietti acquistati non sono stati distribuiti}}} paymentsFailed {{count, plural, one {Un pagamento non è riuscito} other {{countWords} pagamenti non sono riusciti}}} paymentsStuck {{count, plural, one {Un pagamento è bloccato} other {{countWords} pagamenti sono bloccati}}} refundSurge {{count, plural, one {Un rimborso nell’ultima ora} other {{countWords} rimborsi nell’ultima ora}}} devicesOffline {{count, plural, one {Un dispositivo di check-in è offline} other {{countWords} dispositivi di check-in sono offline}}} devicesLowBattery {{count, plural, one {Un dispositivo di check-in ha la batteria scarica} other {{countWords} dispositivi di check-in hanno la batteria scarica}}} devicesBacklog {{count, plural, one {Un dispositivo di check-in ha scansioni in attesa di sincronizzazione} other {{countWords} dispositivi di check-in hanno scansioni in attesa di sincronizzazione}}} capacityNear {La sede è piena al {count}%} capacityFull {La sede è al completo ({count}%)} sellOut {Il {count}% dei biglietti è venduto} salesPace {Le vendite dei biglietti sono al {count}% del ritmo previsto} readiness {{count, plural, one {Un passaggio di configurazione blocca questo evento} other {{countWords} passaggi di configurazione bloccano questo evento}}} domain {{count, plural, one {Un dominio personalizzato ha un problema} other {{countWords} domini personalizzati hanno un problema}}} payoutsPastDue {{count, plural, one {Un requisito dell’account di pagamento è scaduto} other {{countWords} requisiti dell’account di pagamento sono scaduti}}} deliverability {Il recapito delle email richiede attenzione} automationFailed {{count, plural, one {Un messaggio o un’azione di massa non è riuscito oggi} other {{countWords} messaggi o azioni di massa non sono riusciti oggi}}} assistanceOverdue {{count, plural, one {{countWords} richiesta di aiuto aspetta da troppo} other {{countWords} richieste di aiuto aspettano da troppo}}} campaignFailed {{count, plural, one {Un invio di campagna non è riuscito oggi} other {{countWords} invii di campagna non sono riusciti oggi}}} disputeDeadline {{count, plural, one {Una contestazione richiede presto delle prove} other {{countWords} contestazioni richiedono presto delle prove}}} other {Avviso}}",
-        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {Un partecipante non ha un posto} other {{countWords} partecipanti non hanno un posto}}} undistributed {{count, plural, one {Un biglietto acquistato non è stato distribuito} other {{countWords} biglietti acquistati non sono stati distribuiti}}} paymentsFailed {{count, plural, one {Un pagamento non è riuscito} other {{countWords} pagamenti non sono riusciti}}} paymentsStuck {{count, plural, one {Un pagamento è bloccato} other {{countWords} pagamenti sono bloccati}}} refundSurge {{count, plural, one {Un rimborso nell’ultima ora} other {{countWords} rimborsi nell’ultima ora}}} devicesOffline {{count, plural, one {Un dispositivo di check-in è offline} other {{countWords} dispositivi di check-in sono offline}}} devicesLowBattery {{count, plural, one {Un dispositivo di check-in ha la batteria scarica} other {{countWords} dispositivi di check-in hanno la batteria scarica}}} devicesBacklog {{count, plural, one {Un dispositivo di check-in ha scansioni in attesa di sincronizzazione} other {{countWords} dispositivi di check-in hanno scansioni in attesa di sincronizzazione}}} capacityNear {La sede è piena al {count}%} capacityFull {La sede è al completo ({count}%)} sellOut {Il {count}% dei biglietti è venduto} salesPace {Le vendite dei biglietti sono al {count}% del ritmo previsto} readiness {{count, plural, one {Un passaggio di configurazione blocca questo evento} other {{countWords} passaggi di configurazione bloccano questo evento}}} domain {{count, plural, one {Un dominio personalizzato ha un problema} other {{countWords} domini personalizzati hanno un problema}}} payoutsPastDue {{count, plural, one {Un requisito dell’account di pagamento è scaduto} other {{countWords} requisiti dell’account di pagamento sono scaduti}}} deliverability {Il recapito delle email richiede attenzione} automationFailed {{count, plural, one {Un messaggio o un’azione di massa non è riuscito oggi} other {{countWords} messaggi o azioni di massa non sono riusciti oggi}}} assistanceOverdue {{count, plural, one {{countWords} richiesta di aiuto aspetta da troppo} other {{countWords} richieste di aiuto aspettano da troppo}}} campaignFailed {{count, plural, one {Un invio di campagna non è riuscito oggi} other {{countWords} invii di campagna non sono riusciti oggi}}} disputeDeadline {{count, plural, one {Una contestazione richiede presto delle prove} other {{countWords} contestazioni richiedono presto delle prove}}} other {Avviso}}",
-        "alert-urgent-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {Un partecipante non ha un posto} other {{countWords} partecipanti non hanno un posto}}} undistributed {{count, plural, one {Un biglietto acquistato non è stato distribuito} other {{countWords} biglietti acquistati non sono stati distribuiti}}} paymentsFailed {{count, plural, one {Un pagamento non è riuscito} other {{countWords} pagamenti non sono riusciti}}} paymentsStuck {{count, plural, one {Un pagamento è bloccato} other {{countWords} pagamenti sono bloccati}}} refundSurge {{count, plural, one {Un rimborso nell’ultima ora} other {{countWords} rimborsi nell’ultima ora}}} devicesOffline {{count, plural, one {Un dispositivo di check-in è offline} other {{countWords} dispositivi di check-in sono offline}}} devicesLowBattery {{count, plural, one {Un dispositivo di check-in ha la batteria scarica} other {{countWords} dispositivi di check-in hanno la batteria scarica}}} devicesBacklog {{count, plural, one {Un dispositivo di check-in ha scansioni in attesa di sincronizzazione} other {{countWords} dispositivi di check-in hanno scansioni in attesa di sincronizzazione}}} capacityNear {La sede è piena al {count}%} capacityFull {La sede è al completo ({count}%)} sellOut {Il {count}% dei biglietti è venduto} salesPace {Le vendite dei biglietti sono al {count}% del ritmo previsto} readiness {{count, plural, one {Un passaggio di configurazione blocca questo evento} other {{countWords} passaggi di configurazione bloccano questo evento}}} domain {{count, plural, one {Un dominio personalizzato ha un problema} other {{countWords} domini personalizzati hanno un problema}}} payoutsPastDue {{count, plural, one {Un requisito dell’account di pagamento è scaduto} other {{countWords} requisiti dell’account di pagamento sono scaduti}}} deliverability {Il recapito delle email richiede attenzione} automationFailed {{count, plural, one {Un messaggio o un’azione di massa non è riuscito oggi} other {{countWords} messaggi o azioni di massa non sono riusciti oggi}}} assistanceOverdue {{count, plural, one {{countWords} richiesta di aiuto aspetta da troppo} other {{countWords} richieste di aiuto aspettano da troppo}}} campaignFailed {{count, plural, one {Un invio di campagna non è riuscito oggi} other {{countWords} invii di campagna non sono riusciti oggi}}} disputeDeadline {{count, plural, one {Una contestazione richiede presto delle prove} other {{countWords} contestazioni richiedono presto delle prove}}} other {Avviso}}"
+        "alert": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {Un partecipante non ha un posto} other {{countWords} partecipanti non hanno un posto}}} undistributed {{count, plural, one {Un biglietto acquistato non è stato distribuito} other {{countWords} biglietti acquistati non sono stati distribuiti}}} paymentsFailed {{count, plural, one {Un pagamento non è riuscito} other {{countWords} pagamenti non sono riusciti}}} paymentsStuck {{count, plural, one {Un pagamento è bloccato} other {{countWords} pagamenti sono bloccati}}} refundSurge {{count, plural, one {Un rimborso nell’ultima ora} other {{countWords} rimborsi nell’ultima ora}}} devicesOffline {{count, plural, one {Un dispositivo di check-in è offline} other {{countWords} dispositivi di check-in sono offline}}} devicesLowBattery {{count, plural, one {Un dispositivo di check-in ha la batteria scarica} other {{countWords} dispositivi di check-in hanno la batteria scarica}}} devicesBacklog {{count, plural, one {Un dispositivo di check-in ha scansioni in attesa di sincronizzazione} other {{countWords} dispositivi di check-in hanno scansioni in attesa di sincronizzazione}}} capacityNear {La sede è piena al {count}%} capacityFull {La sede è al completo ({count}%)} sellOut {Il {count}% dei biglietti è venduto} salesPace {Le vendite dei biglietti sono al {count}% del ritmo previsto} readiness {{count, plural, one {Un passaggio di configurazione blocca questo evento} other {{countWords} passaggi di configurazione bloccano questo evento}}} domain {{count, plural, one {Un dominio personalizzato ha un problema} other {{countWords} domini personalizzati hanno un problema}}} payoutsPastDue {{count, plural, one {Un requisito dell’account di pagamento è scaduto} other {{countWords} requisiti dell’account di pagamento sono scaduti}}} deliverability {Il recapito delle email richiede attenzione} automationFailed {{count, plural, one {Un messaggio o un’azione di massa non è riuscito oggi} other {{countWords} messaggi o azioni di massa non sono riusciti oggi}}} assistanceOverdue {{count, plural, one {{countWords} richiesta di aiuto aspetta da troppo} other {{countWords} richieste di aiuto aspettano da troppo}}} campaignFailed {{count, plural, one {Un invio di campagna non è riuscito oggi} other {{countWords} invii di campagna non sono riusciti oggi}}} disputeDeadline {{count, plural, one {Una contestazione richiede presto delle prove} other {{countWords} contestazioni richiedono presto delle prove}}} pledgesUnpaid {{count, plural, one {Un impegno non è ancora pagato 14 giorni dopo l’evento} other {{countWords} impegni non sono ancora pagati 14 giorni dopo l’evento}}} other {Avviso}}",
+        "alert-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {Un partecipante non ha un posto} other {{countWords} partecipanti non hanno un posto}}} undistributed {{count, plural, one {Un biglietto acquistato non è stato distribuito} other {{countWords} biglietti acquistati non sono stati distribuiti}}} paymentsFailed {{count, plural, one {Un pagamento non è riuscito} other {{countWords} pagamenti non sono riusciti}}} paymentsStuck {{count, plural, one {Un pagamento è bloccato} other {{countWords} pagamenti sono bloccati}}} refundSurge {{count, plural, one {Un rimborso nell’ultima ora} other {{countWords} rimborsi nell’ultima ora}}} devicesOffline {{count, plural, one {Un dispositivo di check-in è offline} other {{countWords} dispositivi di check-in sono offline}}} devicesLowBattery {{count, plural, one {Un dispositivo di check-in ha la batteria scarica} other {{countWords} dispositivi di check-in hanno la batteria scarica}}} devicesBacklog {{count, plural, one {Un dispositivo di check-in ha scansioni in attesa di sincronizzazione} other {{countWords} dispositivi di check-in hanno scansioni in attesa di sincronizzazione}}} capacityNear {La sede è piena al {count}%} capacityFull {La sede è al completo ({count}%)} sellOut {Il {count}% dei biglietti è venduto} salesPace {Le vendite dei biglietti sono al {count}% del ritmo previsto} readiness {{count, plural, one {Un passaggio di configurazione blocca questo evento} other {{countWords} passaggi di configurazione bloccano questo evento}}} domain {{count, plural, one {Un dominio personalizzato ha un problema} other {{countWords} domini personalizzati hanno un problema}}} payoutsPastDue {{count, plural, one {Un requisito dell’account di pagamento è scaduto} other {{countWords} requisiti dell’account di pagamento sono scaduti}}} deliverability {Il recapito delle email richiede attenzione} automationFailed {{count, plural, one {Un messaggio o un’azione di massa non è riuscito oggi} other {{countWords} messaggi o azioni di massa non sono riusciti oggi}}} assistanceOverdue {{count, plural, one {{countWords} richiesta di aiuto aspetta da troppo} other {{countWords} richieste di aiuto aspettano da troppo}}} campaignFailed {{count, plural, one {Un invio di campagna non è riuscito oggi} other {{countWords} invii di campagna non sono riusciti oggi}}} disputeDeadline {{count, plural, one {Una contestazione richiede presto delle prove} other {{countWords} contestazioni richiedono presto delle prove}}} pledgesUnpaid {{count, plural, one {Un impegno non è ancora pagato 14 giorni dopo l’evento} other {{countWords} impegni non sono ancora pagati 14 giorni dopo l’evento}}} other {Avviso}}",
+        "alert-urgent-text": "{eventName, select, none {} other {{eventName}: }}{rule, select, unseated {{count, plural, one {Un partecipante non ha un posto} other {{countWords} partecipanti non hanno un posto}}} undistributed {{count, plural, one {Un biglietto acquistato non è stato distribuito} other {{countWords} biglietti acquistati non sono stati distribuiti}}} paymentsFailed {{count, plural, one {Un pagamento non è riuscito} other {{countWords} pagamenti non sono riusciti}}} paymentsStuck {{count, plural, one {Un pagamento è bloccato} other {{countWords} pagamenti sono bloccati}}} refundSurge {{count, plural, one {Un rimborso nell’ultima ora} other {{countWords} rimborsi nell’ultima ora}}} devicesOffline {{count, plural, one {Un dispositivo di check-in è offline} other {{countWords} dispositivi di check-in sono offline}}} devicesLowBattery {{count, plural, one {Un dispositivo di check-in ha la batteria scarica} other {{countWords} dispositivi di check-in hanno la batteria scarica}}} devicesBacklog {{count, plural, one {Un dispositivo di check-in ha scansioni in attesa di sincronizzazione} other {{countWords} dispositivi di check-in hanno scansioni in attesa di sincronizzazione}}} capacityNear {La sede è piena al {count}%} capacityFull {La sede è al completo ({count}%)} sellOut {Il {count}% dei biglietti è venduto} salesPace {Le vendite dei biglietti sono al {count}% del ritmo previsto} readiness {{count, plural, one {Un passaggio di configurazione blocca questo evento} other {{countWords} passaggi di configurazione bloccano questo evento}}} domain {{count, plural, one {Un dominio personalizzato ha un problema} other {{countWords} domini personalizzati hanno un problema}}} payoutsPastDue {{count, plural, one {Un requisito dell’account di pagamento è scaduto} other {{countWords} requisiti dell’account di pagamento sono scaduti}}} deliverability {Il recapito delle email richiede attenzione} automationFailed {{count, plural, one {Un messaggio o un’azione di massa non è riuscito oggi} other {{countWords} messaggi o azioni di massa non sono riusciti oggi}}} assistanceOverdue {{count, plural, one {{countWords} richiesta di aiuto aspetta da troppo} other {{countWords} richieste di aiuto aspettano da troppo}}} campaignFailed {{count, plural, one {Un invio di campagna non è riuscito oggi} other {{countWords} invii di campagna non sono riusciti oggi}}} disputeDeadline {{count, plural, one {Una contestazione richiede presto delle prove} other {{countWords} contestazioni richiedono presto delle prove}}} pledgesUnpaid {{count, plural, one {Un impegno non è ancora pagato 14 giorni dopo l’evento} other {{countWords} impegni non sono ancora pagati 14 giorni dopo l’evento}}} other {Avviso}}"
       }
     },
     "kinds": {
@@ -181,7 +181,10 @@
       },
       "donations": {
         "receipt": "Ricevuta di donazione",
-        "year-end-statement": "Riepilogo annuale delle donazioni"
+        "year-end-statement": "Riepilogo annuale delle donazioni",
+        "pledge-summary": "Riepilogo dell’impegno",
+        "pledge-invoice": "Fattura dell’impegno",
+        "pledge-reminder": "Promemoria dell’impegno"
       },
       "guests": {
         "invitation": "Invito di nozze",
@@ -935,14 +938,23 @@
     "orgUnavailable": "Questo organizzatore non sta vendendo biglietti in questo momento. I biglietti già acquistati restano validi.",
     "riskBlocked": "Non possiamo accettare questo ordine. Contatta l’organizzatore.",
     "creditInvalid": "Questo codice credito negozio non è valido o è già stato usato.",
-    "creditNotApplicable": "Questo credito negozio non può essere usato per questi biglietti."
+    "creditNotApplicable": "Questo credito negozio non può essere usato per questi biglietti.",
+    "saveCardForGiving": "Salva la mia carta per le donazioni di stasera (lo farai nella pagina successiva; non si salva nulla senza il tuo consenso lì)"
   },
   "fakePay": {
     "eyebrow": "Pagamento di prova",
     "title": "Paga il tuo ordine",
     "description": "Questa è una pagina di pagamento di prova. Non viene addebitato denaro reale.",
     "pay": "Paga ora (prova)",
-    "decline": "Simula una carta rifiutata"
+    "decline": "Simula una carta rifiutata",
+    "setupTitle": "Configurazione carta di prova",
+    "setupDescription": "Sostituisce il modulo sicuro della carta del fornitore di pagamenti. Non viene salvata alcuna carta reale.",
+    "testCard": "Carta di prova",
+    "card4242": "4242 · addebito sempre riuscito",
+    "card0002": "0002 · sempre rifiutata",
+    "card9995": "9995 · rifiuta il primo addebito",
+    "saveCard": "Salva carta (prova)",
+    "failSetup": "Simula una configurazione non riuscita"
   },
   "order": {
     "eyebrow": "Il tuo ordine",
@@ -1978,7 +1990,8 @@
       "plan": "Piantina",
       "assign": "Assegna ospiti",
       "finder": "Trova posto",
-      "rules": "Regole"
+      "rules": "Regole",
+      "guests": "Disponi gli ospiti"
     },
     "assign": {
       "title": "Assegna ospiti",
@@ -2069,7 +2082,8 @@
       "modeNow": "Ricerca: {mode}",
       "modeShort": {
         "code": "codice via email",
-        "name": "nome completo"
+        "name": "nome completo",
+        "pin": "nome completo e PIN dell’invito"
       },
       "notPublic": "L'evento non è pubblicato (o è privato), quindi gli invitati non possono ancora aprire la ricerca del posto.",
       "settingsTitle": "Invitati",
@@ -2080,11 +2094,13 @@
       "mode": "Come gli invitati cercano il loro posto",
       "modeOption": {
         "code": "Con un codice inviato alla loro email (consigliato)",
-        "name": "Subito, con il nome completo"
+        "name": "Subito, con il nome completo",
+        "pin": "Con nome completo e il PIN del loro invito"
       },
       "modeHint": {
         "code": "Solo chi legge l'email dell'invitato vede il suo posto, e nessuno può scoprire chi è in lista.",
-        "name": "Più veloce all'ingresso, ma chiunque conosca il nome completo di un invitato può vedere dove siede."
+        "name": "Più veloce all'ingresso, ma chiunque conosca il nome completo di un invitato può vedere dove siede.",
+        "pin": "Gli ospiti inseriscono il nome completo e il PIN di 6 cifre stampato sull’invito del loro gruppo. Vedono il loro tavolo, mai il nome di qualcuno, e nessuno può scoprire chi è in lista."
       },
       "readOnly": "Puoi vedere queste impostazioni ma non modificarle.",
       "shareTitle": "Condividi",
@@ -2092,7 +2108,10 @@
       "openPublic": "Apri la ricerca del posto",
       "poster": "Stampa il poster per trovare il posto",
       "closedNote": "La ricerca del posto è chiusa. Chi scansiona il poster verrà invitato a tornare più tardi.",
-      "namePoster": "Stampa il cartellone con i nomi"
+      "namePoster": "Stampa il cartellone con i nomi",
+      "partyLinksTitle": "Link dei gruppi",
+      "partyLinksHint": "Il link e il codice QR dell’invito di ogni gruppo aprono anche la sua pagina del tavolo: il tavolo sulla mappa e chi siede con loro. Il codice QR resta lo stesso quando li sposti a un altro tavolo.",
+      "partyLinksAction": "Link e codici QR dei gruppi"
     },
     "map": {
       "zoomIn": "Ingrandisci",
@@ -2177,6 +2196,127 @@
         "forbidden": "Puoi vedere i gruppi ma non modificarli.",
         "noMembers": "Nessuno nella lista ha ancora l’etichetta {label}."
       }
+    },
+    "guestSeating": {
+      "title": "Disponi gli ospiti",
+      "description": "Disponi i gruppi ai tavoli. Trascina un gruppo dalla coda sulla mappa, oppure seleziona gli ospiti, scegli un tavolo e premi «Fai sedere i selezionati»: la tastiera fa tutto ciò che fa il trascinamento.",
+      "chart": {
+        "label": "Disposizione per",
+        "event": "Intero evento"
+      },
+      "noPlan": "{chart} non ha ancora una piantina dei posti",
+      "noPlanHint": "Crea prima la piantina (tavoli o file), poi disponi qui i tuoi ospiti.",
+      "toPlan": "Vai alla piantina",
+      "noGuests": "Ancora nessun ospite da disporre",
+      "noGuestsHint": "Aggiungi gruppi nella pagina Ospiti (o invitali a questo momento della giornata), poi disponili qui.",
+      "toGuests": "Vai agli ospiti",
+      "summary": "{seated} seduti · {unseated} da sistemare",
+      "readOnly": "Puoi vedere la disposizione, ma non modificarla.",
+      "declinedSeated": "{count, plural, one {# ospite che ha declinato è ancora seduto.} other {# ospiti che hanno declinato sono ancora seduti.}} Toglili nei dettagli del tavolo.",
+      "live": {
+        "live": "In diretta",
+        "connecting": "Connessione…",
+        "offline": "Offline, riconnessione"
+      },
+      "vip": "VIP",
+      "queue": {
+        "title": "Senza posto ({count})",
+        "search": "Cerca gruppi e ospiti",
+        "status": "Risposta",
+        "statusAll": "Tutte le risposte",
+        "side": "Lato",
+        "sideAll": "Tutti i lati",
+        "list": "Gruppi da sistemare",
+        "selectParty": "Seleziona tutti in {party}",
+        "toSeat": "{count, plural, one {# da sistemare} other {# da sistemare}}",
+        "selected": "{count, plural, =0 {Nessuno selezionato} one {# ospite selezionato} other {# ospiti selezionati}}",
+        "clear": "Annulla selezione",
+        "empty": "Tutti hanno un posto.",
+        "noMatch": "Nessun gruppo corrisponde a questi filtri."
+      },
+      "status": {
+        "attending": "Presente",
+        "pending": "In attesa di risposta",
+        "declined": "Ha declinato"
+      },
+      "guest": {
+        "guestOf": "Accompagnatore di {name}",
+        "meal": "Pasto: {meal}",
+        "noMeal": "Nessun pasto scelto",
+        "child": "Bambino",
+        "infant": "Neonato"
+      },
+      "form": {
+        "title": "Fai sedere gli ospiti selezionati",
+        "table": "Tavolo o fila",
+        "choose": "Scegli un tavolo o una fila",
+        "option": "{place} — {free} di {capacity} liberi",
+        "optionVip": "{place} — {free} di {capacity} liberi · zona VIP",
+        "cantFit": "Non c’è posto: {asked, plural, one {# ospite selezionato} other {# ospiti selezionati}}, {fits, plural, =0 {nessun posto libero} one {# posto libero} other {# posti liberi}} a {place}.",
+        "submit": "Fai sedere i selezionati",
+        "submitting": "Sistemazione…"
+      },
+      "place": {
+        "table": "Tavolo {label}",
+        "row": "Fila {label}"
+      },
+      "map": {
+        "title": "Mappa",
+        "hint": "Trascina un gruppo su un tavolo per farlo sedere. Fai clic su un tavolo per vedere chi è seduto.",
+        "readOnlyHint": "Fai clic su un tavolo per vedere chi è seduto.",
+        "dropHere": "Rilascia su {place}: {free} liberi",
+        "dropCantFit": "Non c’è posto a {place}: {count, plural, one {# ospite} other {# ospiti}}, {free} liberi",
+        "guests": "Ospiti",
+        "tickets": "Titolari di biglietto",
+        "vip": "Zona VIP"
+      },
+      "details": {
+        "title": "Dettagli del tavolo",
+        "choose": "Tavolo da mostrare",
+        "none": "Questa piantina non ha tavoli né file.",
+        "counts": "{seated} seduti · {free} di {capacity} liberi",
+        "tickets": "{count, plural, one {# posto occupato da un biglietto} other {# posti occupati da biglietti}}",
+        "sponsor": "Offerto da {name}",
+        "vipZone": "Zona VIP",
+        "vipFromPlan": "In una sezione VIP della piantina",
+        "warnings": "Controlla questo tavolo",
+        "warnDeclined": "{name} ha declinato ed è ancora seduto.",
+        "warnVipOutside": "{party} è un gruppo VIP fuori da una zona VIP.",
+        "warnNotVip": "{party} non è un gruppo VIP ma siede in una zona VIP.",
+        "meals": "Pasti",
+        "mealCount": "{meal}: {count}",
+        "noMeal": "Non scelto",
+        "empty": "Qui non siede ancora nessuno. Fai sedere un gruppo dalla coda.",
+        "unseatParty": "Togli {party}",
+        "move": "Sposta a…",
+        "moveLabel": "Sposta {name} a un altro tavolo",
+        "unseat": "Togli",
+        "unseatLabel": "Togli {name}",
+        "moveTo": "Sposta {name}",
+        "moveSubmit": "Sposta",
+        "cancel": "Annulla"
+      },
+      "done": {
+        "seated": "{count, plural, one {# ospite sistemato} other {# ospiti sistemati}} a {place}.",
+        "moved": "{name} spostato a {place}.",
+        "unseated": "{count, plural, one {# ospite è tornato} other {# ospiti sono tornati}} in coda.",
+        "vipOn": "{place} ora è una zona VIP.",
+        "vipOff": "{place} non è più una zona VIP."
+      },
+      "warnings": {
+        "vip_outside": "{party} è un gruppo VIP e {place} non è una zona VIP.",
+        "not_vip_inside": "{place} è una zona VIP e {party} non è un gruppo VIP."
+      },
+      "errors": {
+        "forbidden": "Puoi vedere la disposizione, ma non modificarla.",
+        "cantFit": "Non c’è posto: {asked, plural, one {# ospite ha} other {# ospiti hanno}} bisogno di un posto e lì {fits, plural, =0 {non ci sono posti liberi} one {c’è solo # posto libero} other {ci sono solo # posti liberi}}.",
+        "declined": "Questo ospite ha declinato. Si possono sistemare solo gli ospiti che non hanno declinato.",
+        "unknown": "Questo ospite non è più nell’elenco. La pagina verrà aggiornata.",
+        "noPlan": "Non c’è ancora una piantina per questo.",
+        "noGuests": "Scegli almeno un ospite.",
+        "noPlace": "Scegli un tavolo o una fila.",
+        "dropMiss": "Rilascia il gruppo su un tavolo o una fila."
+      }
     }
   },
   "venueMap": {
@@ -2216,7 +2356,11 @@
       "bottom": "In basso sulla mappa",
       "bottom-right": "In basso a destra sulla mappa"
     },
-    "yours": "{count, plural, one {Il tuo posto: {seats}} other {I tuoi posti: {seats}}}"
+    "yours": "{count, plural, one {Il tuo posto: {seats}} other {I tuoi posti: {seats}}}",
+    "yourPlace": {
+      "table": "Il tuo tavolo",
+      "row": "La tua fila"
+    }
   },
   "seatFinder": {
     "eyebrow": "Trova posto",
@@ -2267,9 +2411,15 @@
       "challengeUnavailable": "Troppe ricerche da questo dispositivo. Attendi un minuto e riprova.",
       "closed": "La ricerca del posto non è aperta per questo evento.",
       "internal": "Si è verificato un problema da parte nostra.",
-      "rateLimited": "Troppi codici richiesti. Riprova tra {minutes, plural, one {# minuto} other {# minuti}}."
+      "rateLimited": "Troppi codici richiesti. Riprova tra {minutes, plural, one {# minuto} other {# minuti}}.",
+      "noMatch": "Non abbiamo trovato un tavolo con quel nome e quel PIN. Controlla entrambi sull’invito o chiedi a un padrone di casa.",
+      "invalidPin": "Inserisci il PIN di 6 cifre del tuo invito.",
+      "pinRateLimited": "Troppe ricerche da questo dispositivo. Riprova tra {minutes, plural, one {# minuto} other {# minuti}}."
     },
-    "hostedBy": "Offerto da {sponsor}"
+    "hostedBy": "Offerto da {sponsor}",
+    "pinIntro": "Inserisci il tuo nome completo come appare sull’invito e il PIN di 6 cifre stampato sopra.",
+    "pin": "PIN del tuo invito",
+    "findByPin": "Trova il mio tavolo"
   },
   "seatFinderPoster": {
     "pageTitle": "Poster per trovare il posto",
@@ -2282,7 +2432,8 @@
     "step2Code": "Inserisci la tua email: ti invieremo un codice.",
     "step2Name": "Inserisci il tuo nome completo.",
     "step3": "Guarda il tuo tavolo e il tuo posto sulla mappa.",
-    "orVisit": "Oppure vai su"
+    "orVisit": "Oppure vai su",
+    "step2Pin": "Inserisci il tuo nome completo e il PIN del tuo invito."
   },
   "reports": {
     "title": "Analisi",
@@ -6465,7 +6616,8 @@
       "automationFailed": "Apri lo stato dei messaggi",
       "campaignFailed": "Apri le campagne",
       "disputeDeadline": "Apri le contestazioni",
-      "assistanceOverdue": "Apri le richieste di aiuto"
+      "assistanceOverdue": "Apri le richieste di aiuto",
+      "pledgesUnpaid": "Apri gli impegni"
     },
     "rules": {
       "unseated": "{count, plural, one {Un partecipante non ha un posto} other {{countWords} partecipanti non hanno un posto}}",
@@ -6487,7 +6639,8 @@
       "automationFailed": "{count, plural, one {Un messaggio o un’azione di massa non è riuscito oggi} other {{countWords} messaggi o azioni di massa non sono riusciti oggi}}",
       "campaignFailed": "{count, plural, one {Un invio di campagna non è riuscito oggi} other {{countWords} invii di campagna non sono riusciti oggi}}",
       "disputeDeadline": "{count, plural, one {Una contestazione richiede presto delle prove} other {{countWords} contestazioni richiedono presto delle prove}}",
-      "assistanceOverdue": "{count, plural, one {{countWords} richiesta di aiuto aspetta da troppo} other {{countWords} richieste di aiuto aspettano da troppo}}"
+      "assistanceOverdue": "{count, plural, one {{countWords} richiesta di aiuto aspetta da troppo} other {{countWords} richieste di aiuto aspettano da troppo}}",
+      "pledgesUnpaid": "{count, plural, one {Un impegno non è ancora pagato 14 giorni dopo l’evento} other {{countWords} impegni non sono ancora pagati 14 giorni dopo l’evento}}"
     },
     "widget": {
       "title": "Avvisi",
@@ -8747,7 +8900,8 @@
       "openConsole": "Apri la console",
       "openSpotter": "Registra palette",
       "openPaddles": "Numeri di paletta",
-      "openScreen": "Schermo dal vivo"
+      "openScreen": "Schermo dal vivo",
+      "openPledges": "Impegni e incasso"
     },
     "paddles": {
       "title": "Numeri di paletta",
@@ -10303,7 +10457,10 @@
     },
     "questionsTitle": "Qualche domanda",
     "questionsHint": "Gli ospitanti vorrebbero sapere qualcosa in più. Le risposte indicate come private le vedono solo gli ospitanti.",
-    "questionsFor": "Domande per {name}"
+    "questionsFor": "Domande per {name}",
+    "seatTitle": "Trova il tuo tavolo",
+    "seatHint": "Guarda dove siedi sulla mappa e chi è al tuo tavolo.",
+    "seatLink": "Mostra il mio tavolo"
   },
   "rsvpFind": {
     "metaTitle": "Trova il tuo invito",
@@ -10413,7 +10570,13 @@
     "reopenFor": "Riapri la risposta di {party}",
     "createLinkFor": "Crea il link per rispondere di {party}",
     "copy": "Copia il link",
-    "copied": "Link copiato."
+    "copied": "Link copiato.",
+    "seatTitle": "Codice QR della pagina del tavolo",
+    "seatHint": "Questo codice QR apre la pagina del tavolo di {party}: il tavolo sulla mappa e chi siede con loro. Resta lo stesso quando li sposti a un altro tavolo, quindi puoi stamparlo su tableau o segnaposto.",
+    "seatQrLabel": "Codice QR della pagina del tavolo di {party}",
+    "seatLinkLabel": "Link della pagina del tavolo di {party}",
+    "seatClosed": "Gli ospiti vedranno il loro tavolo quando aprirai la ricerca posti (Posti → Ricerca posti).",
+    "seatScan": "Scansiona per trovare il tuo tavolo"
   },
   "collector": {
     "metaTitle": "Condividi i tuoi contatti",
@@ -11128,5 +11291,199 @@
       "offer_ended": "L'offerta per {title} è scaduta.",
       "full": "{title} si è appena riempita. Riprova per entrare in lista d'attesa."
     }
+  },
+  "guestSeats": {
+    "placeAt": {
+      "table": "Tavolo {item}",
+      "row": "Fila {item}"
+    },
+    "wholeEvent": "Disposizione dei tavoli",
+    "resultTitle": "{count, plural, one {Il tuo tavolo} other {I tuoi tavoli}}",
+    "partyCount": "{count, plural, one {# persona del tuo gruppo siede qui} other {# persone del tuo gruppo siedono qui}}",
+    "noTableTitle": "Il tuo tavolo non è ancora assegnato",
+    "noTable": "I padroni di casa stanno ancora organizzando i tavoli. Ricontrolla più vicino al giorno o chiedi a un padrone di casa.",
+    "unseatedCount": "{count, plural, one {# persona del tuo gruppo non ha ancora un tavolo.} other {# persone del tuo gruppo non hanno ancora un tavolo.}}",
+    "again": "Cerca un’altra persona",
+    "mapTitle": "Mappa del luogo",
+    "mapFor": "Mappa del luogo: {name}"
+  },
+  "partySeats": {
+    "metaTitle": "Il tuo tavolo",
+    "title": "Dove siede {party}",
+    "intro": "Il tuo tavolo sulla mappa del luogo e chi siede con te.",
+    "closedTitle": "I tavoli non sono ancora pronti",
+    "closed": "I padroni di casa non hanno ancora condiviso la disposizione dei tavoli. Conserva questa pagina o il codice QR del tuo invito: mostrerà il tuo tavolo appena lo faranno.",
+    "noChartsTitle": "Il tuo tavolo non è ancora assegnato",
+    "noCharts": "I padroni di casa stanno ancora organizzando i tavoli. Questa pagina mostrerà il tuo tavolo appena sarà assegnato.",
+    "yourParty": "Del tuo gruppo",
+    "tablemates": {
+      "table": "Anche a questo tavolo",
+      "row": "Anche in questa fila"
+    },
+    "noTablemates": "Nessun altro è ancora seduto qui.",
+    "unseated": "Ancora senza posto: {names}",
+    "guestOf": "Ospite di {name}",
+    "keep": "Questa pagina mostra sempre il tuo tavolo attuale: il link e il codice QR del tuo invito non cambiano quando i padroni di casa ti spostano.",
+    "toRsvp": "Torna alla tua risposta",
+    "saveCard": "Salva una carta per le donazioni di stasera"
+  },
+  "savedCard": {
+    "metaTitle": "Salva una carta per stasera",
+    "title": "Salva una carta per le donazioni di stasera",
+    "intro": "Salva la tua carta una volta sul tuo telefono e dona con un tocco durante la serata. Ora non viene addebitato nulla.",
+    "introParty": "Per {party}: salva la tua carta una volta sul tuo telefono e dona con un tocco durante la serata. Gli impegni che prendi vengono addebitati la mattina dopo. Ora non viene addebitato nulla.",
+    "unavailableTitle": "Il salvataggio della carta non è aperto",
+    "unavailableBody": "Questo evento al momento non accetta donazioni online. Puoi comunque donare all’evento.",
+    "formLabel": "Salva una carta",
+    "formTitle": "I tuoi dati",
+    "name": "Nome e cognome",
+    "email": "Email",
+    "emailHint": "Qui ricevi il riepilogo dei tuoi impegni e le ricevute.",
+    "consentLabel": "Autorizzo il salvataggio di questa carta per stasera",
+    "consent": "{org} può salvare questa carta presso il suo fornitore di pagamenti e addebitarla solo per le donazioni che scelgo e gli impegni che prendo a {event}. Gli impegni vengono addebitati la mattina dopo l’evento; prima ricevo un riepilogo. La carta viene rimossa 30 giorni dopo l’evento e posso rimuoverla in qualsiasi momento da questa pagina.",
+    "privacy": "I dati della carta vanno direttamente al fornitore di pagamenti. Non vediamo né conserviamo mai il numero della tua carta.",
+    "save": "Salva la mia carta",
+    "saving": "Apertura del modulo sicuro della carta…",
+    "savedTitle": "La tua carta è salvata per stasera",
+    "savedBody": "La {brand} che termina con {last4} è pronta per donare con un tocco a questo evento.",
+    "card": "Carta",
+    "giveNow": "Dona ora",
+    "remove": "Rimuovi la mia carta",
+    "removeHint": "Rimuoverla annulla ogni addebito non ancora effettuato; puoi comunque pagare gli impegni tramite link.",
+    "removed": "La tua carta è stata rimossa. Non verrà addebitata.",
+    "pending": "Stiamo confermando la tua carta con il fornitore di pagamenti. Aggiorna tra un attimo.",
+    "failed": "Non è stato possibile salvare la tua carta. Riprova o usa un’altra carta.",
+    "fromCheckout": "Grazie, il tuo ordine è completo. I biglietti arrivano via email.",
+    "oneTapTitle": "Dona con la carta salvata",
+    "oneTapBody": "Un tocco addebita la {brand} che termina con {last4}. Subito dopo vedrai una conferma.",
+    "oneTapFailed": "Questa donazione non è andata a buon fine. Riprova o usa il modulo qui sotto.",
+    "oneTapGive": "Dona {amount} · {name}",
+    "manageCard": "Gestisci la mia carta salvata",
+    "errors": {
+      "name": "Inserisci nome e cognome.",
+      "email": "Inserisci un indirizzo email valido.",
+      "consent": "Seleziona la casella per autorizzare il salvataggio della carta.",
+      "event_over": "Questo evento è terminato: non è più possibile salvare carte.",
+      "not_connected": "Questo evento al momento non accetta donazioni online.",
+      "link": "Questo link non è più valido. Chiedine uno nuovo all’organizzatore."
+    }
+  },
+  "pledgePay": {
+    "metaTitle": "Il tuo impegno",
+    "title": "Il tuo impegno di {amount}",
+    "subtitle": "{level} · {campaign}. Grazie per la tua generosità.",
+    "stateTitle": "Stato",
+    "status": {
+      "scheduled": "Addebito su carta programmato",
+      "charging": "Addebito in corso",
+      "invoiced": "In attesa di pagamento",
+      "paid": "Pagato",
+      "paid_offline": "Pagato",
+      "written_off": "Chiuso"
+    },
+    "card": "Carta",
+    "cardScheduled": "Addebiteremo la {brand} che termina con {last4} il {when}.",
+    "charging": "Stiamo addebitando la tua carta proprio ora. Aggiorna tra un attimo.",
+    "due": "Paga entro il {date}.",
+    "thanks": "Pagato per intero. Grazie! La ricevuta arriva via email.",
+    "closed": "Questo impegno è chiuso. Non è dovuto altro.",
+    "payNow": "Paga {amount} ora",
+    "payAnotherWay": "Paga {amount} ora in un altro modo",
+    "anotherWayHint": "Pagando ora annulli l’addebito sulla carta. Vuoi usare un’altra carta? Paga ora con quella.",
+    "errors": {
+      "charging": "Stiamo addebitando la tua carta proprio ora, quindi questo pagamento non è stato avviato.",
+      "settled": "Questo impegno è già saldato.",
+      "no_email": "Inserisci la tua email per pagare.",
+      "rate_limited": "Troppi tentativi. Attendi un minuto e riprova.",
+      "not_connected": "Il pagamento online non è disponibile ora. Chiedi all’organizzatore come pagare.",
+      "generic": "Qualcosa è andato storto. Riprova.",
+      "email": "Inserisci un indirizzo email valido."
+    },
+    "email": "Email per la ricevuta",
+    "emailHint": "Ti inviamo la ricevuta qui."
+  },
+  "pledges": {
+    "title": "Impegni",
+    "subtitle": "Ogni impegno dell’asta con palette e come viene incassato.",
+    "viewerNotice": "Puoi vedere gli impegni. I ruoli finanza chiudono la serata, registrano i pagamenti e stralciano gli impegni.",
+    "pledged": "Promesso",
+    "paid": "Pagato",
+    "owed": "Ancora dovuto",
+    "writtenOffTotal": "Stralciato",
+    "cardsSaved": "Carte salvate",
+    "emptyTitle": "Ancora nessun impegno",
+    "emptyDescription": "Gli impegni compaiono qui quando chi registra conferma le palette nell’asta.",
+    "closeTitle": "{count, plural, one {# impegno da inviare} other {# impegni da inviare}}",
+    "closeBody": "Chiudendo la serata ogni donatore riceve un riepilogo. Gli impegni con una carta salvata vengono addebitati domani alle 09:00 nel fuso orario dell’evento; gli altri ricevono un link di pagamento con scadenza a 30 giorni e promemoria fino al pagamento.",
+    "close": "Chiudi la serata e invia i riepiloghi",
+    "closed": "Riepiloghi inviati: {cards, plural, one {# impegno sarà addebitato su una carta salvata} other {# impegni saranno addebitati su carte salvate}} e {invoices, plural, one {# impegno ha ricevuto un link di pagamento} other {# impegni hanno ricevuto link di pagamento}}.",
+    "caption": "Impegni e incasso",
+    "columns": {
+      "paddle": "Paletta",
+      "holder": "Donatore",
+      "level": "Livello",
+      "amount": "Importo",
+      "status": "Stato",
+      "detail": "Dettagli",
+      "actions": "Azioni"
+    },
+    "status": {
+      "open": "Non inviato",
+      "scheduled": "Addebito su carta programmato",
+      "charging": "Addebito in corso",
+      "invoiced": "Link di pagamento inviato",
+      "paid": "Pagato",
+      "paid_offline": "Pagato offline",
+      "written_off": "Stralciato"
+    },
+    "cardLabel": "{brand} ·{last4}",
+    "card": "Carta",
+    "detail": {
+      "open": "In attesa della chiusura della serata.",
+      "scheduled": "{card} il {when}",
+      "charging": "{card}, addebito in corso",
+      "invoiced": "Scadenza {date}.",
+      "declined": "{count, plural, one {Carta rifiutata una volta.} other {Carta rifiutata # volte.}}",
+      "noEmail": "Nessuna email registrata: condividi tu il link di pagamento.",
+      "paidCard": "Addebitato su {card}",
+      "paidLink": "Pagato tramite link"
+    },
+    "methods": {
+      "check": "Assegno",
+      "wire": "Bonifico",
+      "stock": "Azioni",
+      "daf": "Fondo consigliato dal donatore",
+      "cash": "Contanti",
+      "other": "Altro"
+    },
+    "recordPayment": "Registra un pagamento",
+    "method": "Modalità di pagamento",
+    "chooseMethod": "Scegli…",
+    "reference": "Riferimento (facoltativo)",
+    "receivedOn": "Ricevuto il",
+    "noteOptional": "Nota (facoltativa)",
+    "recordSubmit": "Registra il pagamento della paletta {paddle}",
+    "recorded": "Pagamento registrato. Promemoria ed eventuale addebito sulla carta sono stati fermati.",
+    "writeOff": "Stralcia",
+    "writeOffNote": "Motivo dello stralcio",
+    "writeOffSubmit": "Stralcia l’impegno della paletta {paddle}",
+    "writtenOff": "Impegno di {amount} stralciato.",
+    "errors": {
+      "charging": "La carta è in fase di addebito. Riprova tra qualche minuto.",
+      "settled": "Questo impegno è già saldato.",
+      "future": "La data non può essere nel futuro.",
+      "method": "Scegli la modalità di pagamento.",
+      "receivedOn": "Inserisci la data di ricezione.",
+      "note": "Scrivi perché l’impegno viene stralciato.",
+      "generic": "Qualcosa è andato storto. Riprova."
+    },
+    "qr": {
+      "label": "Codice QR per salvare una carta per le donazioni di stasera",
+      "checkinTitle": "Salvataggio carta al check-in",
+      "checkinBody": "Mostra questo codice agli ospiti dopo il check-in: salvano una carta sul proprio telefono per donare con un tocco stasera.",
+      "tableTitle": "Salvataggio carta sui tavoli",
+      "tableBody": "Stampa questo codice sui segnatavolo: gli ospiti salvano una carta sul proprio telefono per donare con un tocco e per i loro impegni."
+    },
+    "payLink": "Link di pagamento della paletta {paddle}"
   }
 }
