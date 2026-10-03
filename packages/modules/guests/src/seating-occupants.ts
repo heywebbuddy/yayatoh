@@ -68,11 +68,7 @@ export async function seatingOccupantsTx(
 ): Promise<SeatingOccupantParty[]> {
   const [facts, partyRows] = await Promise.all([
     rsvpFactsTx(tx, eventId, null),
-    tx
-      .select()
-      .from(parties)
-      .where(eq(parties.eventId, eventId))
-      .orderBy(asc(parties.name), asc(parties.id)),
+    tx.select().from(parties).where(eq(parties.eventId, eventId)).orderBy(asc(parties.name), asc(parties.id)),
   ]);
   const byId = new Map(facts.guestRows.map((g) => [g.id, g]));
   const answer = (subId: string, guestId: string) => facts.responses.get(subId)?.get(guestId) ?? null;

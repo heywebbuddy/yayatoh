@@ -5,7 +5,13 @@ import { defineRealtimeChannel, publishRealtimeTx, tenantCommand, tenantQuery } 
 import { and, eq, inArray, isNull, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { onChart } from './chart.ts';
-import { fitAt, OCCUPANT_STATUSES, type OccupantStatus, VIP_WARNINGS, vipWarning } from './domain/guest-seating.ts';
+import {
+  fitAt,
+  OCCUPANT_STATUSES,
+  type OccupantStatus,
+  VIP_WARNINGS,
+  vipWarning,
+} from './domain/guest-seating.ts';
 import { eventLayoutTx } from './layouts.ts';
 import { eventSeats, guestSeats, subEventCharts, tableSponsors, vipTables } from './schema.ts';
 import { resolveSubEventChartTx, SUB_EVENT_CHART_SOURCES } from './sub-event-charts.ts';
@@ -199,7 +205,10 @@ async function seatedTx(tx: TenantTx, eventId: string, subEventId: string | null
 }
 
 async function vipItemsTx(tx: TenantTx, eventId: string): Promise<Set<string>> {
-  const rows = await tx.select({ itemId: vipTables.itemId }).from(vipTables).where(eq(vipTables.eventId, eventId));
+  const rows = await tx
+    .select({ itemId: vipTables.itemId })
+    .from(vipTables)
+    .where(eq(vipTables.eventId, eventId));
   return new Set(rows.map((r) => r.itemId));
 }
 
@@ -362,7 +371,9 @@ export const guestSeatingQuery = tenantQuery({
 
 /** One host at a time per chart: capacity is checked and written under this lock. */
 const lockChartTx = (tx: TenantTx, eventId: string, subEventId: string | null) =>
-  tx.execute(sql`select pg_advisory_xact_lock(hashtextextended(${`guest-seats:${eventId}:${subEventId ?? 'plan'}`}, 0))`);
+  tx.execute(
+    sql`select pg_advisory_xact_lock(hashtextextended(${`guest-seats:${eventId}:${subEventId ?? 'plan'}`}, 0))`,
+  );
 
 export const MAX_GUESTS_PER_SEATING = 200;
 
@@ -403,7 +414,8 @@ export const seatGuestsCommand = tenantCommand({
     const ids = [...new Set(input.guestIds)];
     for (const id of ids) {
       const k = v.known.get(id);
-      if (!k) throw new DomainError('not_found', 'Guest not found', { field: 'guestIds', reason: 'unknown_guest' });
+      if (!k)
+        throw new DomainError('not_found', 'Guest not found', { field: 'guestIds', reason: 'unknown_guest' });
       if (k.guest.status === 'declined')
         throw new DomainError('invalid_state', 'This guest declined', { reason: 'declined', guestId: id });
     }
@@ -465,7 +477,12 @@ export const unseatGuestsCommand = tenantCommand({
     await lockChartTx(tx, input.eventId, input.subEventId);
     const gone = await tx
       .delete(guestSeats)
-      .where(and(onContext(input.eventId, input.subEventId), inArray(guestSeats.guestId, [...new Set(input.guestIds)])))
+      .where(
+        and(
+          onContext(input.eventId, input.subEventId),
+          inArray(guestSeats.guestId, [...new Set(input.guestIds)]),
+        ),
+      )
       .returning({ itemId: guestSeats.itemId });
     if (gone.length)
       await publishSeatsTx(

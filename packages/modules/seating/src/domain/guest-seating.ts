@@ -39,7 +39,11 @@ export type FitResult =
  * Whether `guestIds` fit at `place`: guests already there don't need a seat again; everyone
  * else needs one. All or nothing.
  */
-export function fitAt(place: PlaceLike, seated: readonly SeatedLike[], guestIds: readonly string[]): FitResult {
+export function fitAt(
+  place: PlaceLike,
+  seated: readonly SeatedLike[],
+  guestIds: readonly string[],
+): FitResult {
   const here = new Set(seated.filter((s) => s.itemId === place.itemId).map((s) => s.guestId));
   const moving = [...new Set(guestIds)].filter((id) => !here.has(id));
   const free = freeSeats(place, seated);
