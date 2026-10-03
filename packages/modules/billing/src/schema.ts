@@ -307,9 +307,6 @@ export const billingProviderEvents = tenantTable(
  * M6.6b — meters, plan changes and dunning.
  * --------------------------------------------------------------------------------------------- */
 
-/** Meters (P6-7): messaging per channel (D16), AI credits (D12) and Scan PWA devices. */
-export const METERS = ['email', 'sms', 'whatsapp', 'ai_credits', 'devices'] as const;
-
 /**
  * Usage the org's outbox events recorded, one row per (source event, meter): an event delivered
  * twice, or replayed, never counts twice. `reported_at` is set once the billing provider's meter
@@ -331,13 +328,8 @@ export const usageRecords = tenantTable(
   (t) => [
     uniqueIndex('usage_records_org_event_meter_key').on(t.orgId, t.sourceEventId, t.meter),
     index('usage_records_org_occurred_idx').on(t.orgId, t.occurredAt),
-    index('usage_records_org_unreported_idx')
-      .on(t.orgId, t.createdAt)
-      .where(sql`reported_at is null`),
-    check(
-      'usage_records_meter_check',
-      sql`meter in ('email', 'sms', 'whatsapp', 'ai_credits', 'devices')`,
-    ),
+    index('usage_records_org_unreported_idx').on(t.orgId, t.createdAt).where(sql`reported_at is null`),
+    check('usage_records_meter_check', sql`meter in ('email', 'sms', 'whatsapp', 'ai_credits', 'devices')`),
     check('usage_records_quantity_check', sql`quantity <> 0 and quantity between -1000000 and 1000000`),
     check('usage_records_attempts_check', sql`report_attempts >= 0`),
   ],

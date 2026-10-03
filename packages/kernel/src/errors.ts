@@ -21,6 +21,12 @@ export const ERROR_STATUS = {
    * write is refused until it ends; reads, offline check-in scans and public pages keep working.
    */
   read_only_freeze: 503,
+  /**
+   * The org is read-only after a failed subscription renewal (M6.6b dunning): its members' and API
+   * keys' writes are refused until it pays; reads, exports and the door keep working, nothing is
+   * deleted.
+   */
+  read_only_billing: 402,
 } as const;
 
 export type ErrorCode = keyof typeof ERROR_STATUS;

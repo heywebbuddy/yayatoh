@@ -16,6 +16,9 @@ export const problems = {
 };
 export const writeProblems = {
   ...problems,
+  402: p(
+    'The organization is read-only until its subscription is paid (`read_only_billing`): nothing was changed',
+  ),
   409: p('Conflict, invalid state, or the same Idempotency-Key is in flight'),
   422: p('The Idempotency-Key was used with a different request (`idempotency_key_reused`)'),
   503: p(

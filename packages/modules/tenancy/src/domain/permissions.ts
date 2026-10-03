@@ -80,6 +80,11 @@ export const PERMISSIONS = [
   'tables:read',
   /** Name a purchased table's guests by hand and send naming reminders (M4.2b). */
   'tables:write',
+  /**
+   * Change the org's subscription plan and pay a failed renewal (M6.6b). Owners and admins; finance
+   * sees the plan and usage (`billing:read`) but doesn't change it.
+   */
+  'billing:manage',
 ] as const;
 export type Permission = (typeof PERMISSIONS)[number];
 
