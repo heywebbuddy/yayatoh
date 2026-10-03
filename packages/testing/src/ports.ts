@@ -119,7 +119,7 @@ export const CONTACT_REFERENCE_OWNERS = [
   surveysContactOwner,
   campaignsContactOwner,
   automationsContactOwner,
-  participationContactOwner,
   engagementContactOwner,
+  participationContactOwner,
 ] as const;
 registerContactReferenceOwners(CONTACT_REFERENCE_OWNERS);

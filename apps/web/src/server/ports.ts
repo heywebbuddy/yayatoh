@@ -50,8 +50,8 @@ registerContactReferenceOwners([
   surveysContactOwner,
   campaignsContactOwner,
   automationsContactOwner,
-  participationContactOwner,
   engagementContactOwner,
+  participationContactOwner,
 ]);
 // M6.3b: outbound webhooks through Svix, or the fake (dev, preview, CI) until the owner's account.
 const webhookPublisher = webhookPublisherFromEnv(

@@ -25,9 +25,6 @@ Source: `docs/plans/ux-review-1.md` (approved 2026-10-03), review point 11 (medi
 - **Spam:** M1.14 rate limits (`orgContact`: device, IP, the sender's address at this org), a honeypot field, a signed fill-time stamp (under 2 s or forged: dropped silently; stale after 6 h), the human check.
 - **No address exposed:** the page shows the org's name and its line only; replies go from the organizer's own mail. The canary crawl now visits both contact URLs of the canary org (whose Reply-To is a canary).
 
-### Also in this increment
-- `engagement` gets a contact-merge owner (`engagementContactOwner`): batch 3j added `engagement.engagement_events.contact_id` and `engagement.network_profiles.contact_id` after M6.1a required an owner for every contact column, so every integration fixture's merge refused (`owners_missing`) on the 3u base.
-
 ## Not yet / later
 - Choosing library images inside CMS pages and blog posts (CMS entries have no images yet; M1.4g's cover hook).
 - Bulk upload and folders/tags in the library; search by alt text.

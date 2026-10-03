@@ -53,8 +53,10 @@ export {
   UpdateSettingsInput,
   updateSettingsCommand,
 } from './commands.ts';
+// M6.1a contact merges (batch 3u merge): the engagement log and networking profiles move.
 export { engagementContactOwner } from './contact-merge.ts';
-// M6.1c: data-subject requests (questions signed with the person's full name).
+// M6.1c: data-subject requests (questions signed with the person's full name; networking and
+// chat, M5.8a/b, wired at the batch 3u merge).
 export { engagementDataSubjects } from './data-subject.ts';
 export {
   BOOTH_PER_MINUTE,
@@ -170,8 +172,6 @@ export {
   UpdateNetworkSettingsInput,
   updateNetworkSettingsCommand,
 } from './networking/console.ts';
-// Batch 3j merge: networking and chat in data-subject requests (read and erased by privacy, tier 6).
-export { eraseNetworkingDsarTx, networkingDsarTx } from './networking/dsar.ts';
 export * from './networking/dto.ts';
 export { networkingEvent, networkingOpen } from './networking/public.ts';
 export {
