@@ -103,6 +103,7 @@ import {
   voteCommand,
 } from '@yayatoh/engagement';
 import {
+  addOrgCategoryCommand,
   addRecurringOccurrencesCommand,
   addSectionCommand,
   assignEventRoleCommand,
@@ -1464,6 +1465,13 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   await executeCommand(
     setEventDetailsCommand,
     { eventId: event.id, venueId: venue.id, category: 'community', tags: ['Fixture', 'Isolation'] },
+    ctx(),
+    ports,
+  );
+  // U8: the org's own category list (seeded from the platform defaults above) and a custom one.
+  await executeCommand(
+    addOrgCategoryCommand,
+    { name: `${name} Specials`, platformKey: 'other' },
     ctx(),
     ports,
   );

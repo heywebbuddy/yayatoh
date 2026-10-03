@@ -1,4 +1,15 @@
 export {
+  addOrgCategoryCommand,
+  ensureOrgCategoriesTx,
+  moveOrgCategoryCommand,
+  OrgCategoryDto,
+  orgCategoriesQuery,
+  platformDefaultKeysTx,
+  renameOrgCategoryCommand,
+  resolveCategoryTx,
+  setOrgCategoryHiddenCommand,
+} from './categories.ts';
+export {
   accessGrant,
   accessGrantTx,
   CreateAccessCodeInput,
@@ -23,6 +34,8 @@ export {
 } from './commands/content.ts';
 export {
   eventDetailsQuery,
+  eventLabelsQuery,
+  eventTagsTx,
   orgTagsQuery,
   searchEventsQuery,
   setEventDetailsCommand,
@@ -68,6 +81,15 @@ export {
   safeHref,
   sanitizeMarkdown,
 } from './domain/markdown.ts';
+export {
+  CategoryNameError,
+  categoryRef,
+  isPlatformKey,
+  MAX_CATEGORY_NAME,
+  MAX_ORG_CATEGORIES,
+  moveInOrder,
+  normalizeCategoryName,
+} from './domain/org-categories.ts';
 export {
   checkPortalAccount,
   checkPortalCode,

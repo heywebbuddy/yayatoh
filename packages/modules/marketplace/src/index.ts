@@ -33,6 +33,7 @@ export {
   listingCities,
   matchLegacyRedirect,
   orgListings,
+  orgListingTags,
   type PublicOrganizer,
   publicOrganizer,
   publicOrganizerById,

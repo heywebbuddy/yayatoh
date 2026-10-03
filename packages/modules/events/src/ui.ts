@@ -4,8 +4,11 @@ export {
   type AttendanceMode,
   EVENT_CATEGORIES,
   type EventCategory,
+  MAX_TAG_LENGTH,
   MAX_TAGS_PER_EVENT,
+  tagKey,
 } from './domain/categories.ts';
 export { ANNOUNCEMENT_AUDIENCES, SECTION_KINDS, type SectionKind } from './domain/content-kinds.ts';
 export { type MdBlock, type MdInline, parseMarkdown } from './domain/markdown.ts';
+export { isPlatformKey, MAX_CATEGORY_NAME } from './domain/org-categories.ts';
 export { vanityProblem } from './domain/short-code.ts';

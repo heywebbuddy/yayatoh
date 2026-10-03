@@ -35,6 +35,8 @@ export const GLOBAL_TABLES: Readonly<Record<string, string>> = {
     'Plan prices by provider lookup key (M6.6a; placeholders switched off until D22); written by migrations and billing.apply_catalog (platform_reader); app_user: SELECT.',
   'billing.features':
     "The billing provider's Entitlement Features mirrored per module key (M6.6a); written by migrations and billing.apply_catalog (platform_reader); app_user: SELECT.",
+  'events.platform_categories':
+    "U8: the platform's default event category list (order, in or out of the defaults); seeded by migrations, changed by staff only through the SECURITY DEFINER events.set_platform_default_categories (platform_reader); app_user: SELECT.",
   'platform.signup_codes':
     'Invite-only signup codes (hashed); no app_user privileges, only SECURITY DEFINER check/claim and staff-only create.',
   'platform.flags':
