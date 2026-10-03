@@ -5070,7 +5070,8 @@
         "consent": "Consenso marketing",
         "label": "Etichetta",
         "totals": "Totali complessivi",
-        "seen": "Visto per la prima o l'ultima volta"
+        "seen": "Visto per la prima o l'ultima volta",
+        "engagement": "Punteggio di coinvolgimento"
       },
       "did": "Regola",
       "didYes": "Sì",
@@ -5128,7 +5129,8 @@
       "event": "Evento",
       "editionOf": "Edizione precedente a",
       "series": "Serie",
-      "noSeries": "Nessuna serie"
+      "noSeries": "Nessuna serie",
+      "engagementScore": "Punteggio"
     },
     "scopes": {
       "any": "Qualsiasi evento",
@@ -10759,6 +10761,54 @@
       "topQuestions": "Domande principali",
       "noQuestions": "Ancora nessuna domanda.",
       "join": "Partecipa dal tuo telefono"
+    },
+    "scores": {
+      "link": "Punteggi di coinvolgimento",
+      "title": "Punteggi di coinvolgimento",
+      "description": "Chi ha partecipato di più a {event} e com'è andata ogni sessione.",
+      "back": "Torna alle sessioni",
+      "engaged": "Partecipanti coinvolti",
+      "average": "Punteggio medio",
+      "attendeesTitle": "Partecipanti più coinvolti",
+      "emptyTitle": "Ancora nessun coinvolgimento",
+      "emptyHint": "I punteggi compaiono quando i partecipanti fanno il check-in, votano nei sondaggi dal vivo, fanno domande, rispondono ai sondaggi di feedback e si iscrivono alle sessioni.",
+      "attendee": "Partecipante",
+      "score": "Punteggio",
+      "breakdown": "Cosa ha contato",
+      "countOf": "{kind} × {count}",
+      "sessionsTitle": "Sessioni",
+      "session": "Sessione",
+      "participants": "Partecipanti",
+      "noSessions": "Questo evento non ha ancora sessioni.",
+      "weightsTitle": "Pesi del punteggio",
+      "formula": "Punteggio = i punti di ogni tipo × quante volte la persona l'ha fatto. Il check-in conta una volta per evento. I pesi valgono per tutti gli eventi della tua organizzazione.",
+      "customWeights": "Pesi della tua organizzazione",
+      "defaultWeights": "Pesi predefiniti",
+      "weightInvalid": "Inserisci un numero intero da 0 a 100.",
+      "saveWeights": "Salva i pesi",
+      "resetWeights": "Usa i pesi predefiniti",
+      "weightsReadOnly": "Solo proprietari e amministratori possono cambiare i pesi.",
+      "weightsSaved": "Pesi salvati. Tutti i punteggi sono stati ricalcolati.",
+      "weightsReset": "Pesi predefiniti ripristinati. Tutti i punteggi sono stati ricalcolati.",
+      "kinds": {
+        "check_in": "Check-in",
+        "poll_vote": "Voto nel sondaggio",
+        "question": "Domanda",
+        "feedback": "Feedback",
+        "enrollment": "Iscrizione alla sessione"
+      }
+    },
+    "feedback": {
+      "heading": "Com'è andata questa sessione?",
+      "give": "Lascia un feedback",
+      "answered": "Grazie, abbiamo ricevuto il tuo feedback.",
+      "signInHint": "Accedi con l'email con cui ti sei registrato per lasciare un feedback.",
+      "signIn": "Accedi",
+      "errors": {
+        "already_answered": "Hai già lasciato un feedback per questa sessione.",
+        "expired": "Il tuo link per il feedback è scaduto.",
+        "other": "Il feedback non è disponibile per questa sessione."
+      }
     }
   },
   "enrollment": {

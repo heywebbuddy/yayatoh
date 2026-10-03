@@ -5070,7 +5070,8 @@
         "consent": "Marketing consent",
         "label": "Label",
         "totals": "Lifetime totals",
-        "seen": "First or last seen"
+        "seen": "First or last seen",
+        "engagement": "Engagement score"
       },
       "did": "Rule",
       "didYes": "Did",
@@ -5128,7 +5129,8 @@
       "event": "Event",
       "editionOf": "Edition before",
       "series": "Series",
-      "noSeries": "No series yet"
+      "noSeries": "No series yet",
+      "engagementScore": "Score"
     },
     "scopes": {
       "any": "Any event",
@@ -10759,6 +10761,54 @@
       "topQuestions": "Top questions",
       "noQuestions": "No questions yet.",
       "join": "Join on your phone"
+    },
+    "scores": {
+      "link": "Engagement scores",
+      "title": "Engagement scores",
+      "description": "Who took part most in {event}, and how each session went.",
+      "back": "Back to sessions",
+      "engaged": "Engaged attendees",
+      "average": "Average score",
+      "attendeesTitle": "Most engaged attendees",
+      "emptyTitle": "No engagement yet",
+      "emptyHint": "Scores appear as attendees check in, vote in live polls, ask questions, answer feedback surveys and enroll in sessions.",
+      "attendee": "Attendee",
+      "score": "Score",
+      "breakdown": "What counted",
+      "countOf": "{kind} × {count}",
+      "sessionsTitle": "Sessions",
+      "session": "Session",
+      "participants": "Participants",
+      "noSessions": "This event has no sessions yet.",
+      "weightsTitle": "Score weights",
+      "formula": "Score = the points for each kind × how many times the attendee did it. A check-in counts once per event. The weights apply to every event of your organization.",
+      "customWeights": "Your organization's weights",
+      "defaultWeights": "Default weights",
+      "weightInvalid": "Enter a whole number from 0 to 100.",
+      "saveWeights": "Save weights",
+      "resetWeights": "Use default weights",
+      "weightsReadOnly": "Only owners and admins can change the weights.",
+      "weightsSaved": "Weights saved. Every score was recalculated.",
+      "weightsReset": "Default weights restored. Every score was recalculated.",
+      "kinds": {
+        "check_in": "Check-in",
+        "poll_vote": "Poll vote",
+        "question": "Question",
+        "feedback": "Feedback",
+        "enrollment": "Session enrollment"
+      }
+    },
+    "feedback": {
+      "heading": "How was this session?",
+      "give": "Give feedback",
+      "answered": "Thanks, your feedback is in.",
+      "signInHint": "Sign in with the email you registered with to give feedback.",
+      "signIn": "Sign in",
+      "errors": {
+        "already_answered": "You have already given feedback for this session.",
+        "expired": "Your feedback link has expired.",
+        "other": "Feedback isn't available for this session."
+      }
     }
   },
   "enrollment": {

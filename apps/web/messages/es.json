@@ -5070,7 +5070,8 @@
         "consent": "Consentimiento de marketing",
         "label": "Etiqueta",
         "totals": "Totales históricos",
-        "seen": "Visto por primera o última vez"
+        "seen": "Visto por primera o última vez",
+        "engagement": "Puntuación de participación"
       },
       "did": "Regla",
       "didYes": "Sí",
@@ -5128,7 +5129,8 @@
       "event": "Evento",
       "editionOf": "Edición anterior a",
       "series": "Serie",
-      "noSeries": "Aún no hay series"
+      "noSeries": "Aún no hay series",
+      "engagementScore": "Puntuación"
     },
     "scopes": {
       "any": "Cualquier evento",
@@ -10759,6 +10761,54 @@
       "topQuestions": "Preguntas destacadas",
       "noQuestions": "Aún no hay preguntas.",
       "join": "Participa desde tu móvil"
+    },
+    "scores": {
+      "link": "Puntuaciones de participación",
+      "title": "Puntuaciones de participación",
+      "description": "Quién participó más en {event} y cómo fue cada sesión.",
+      "back": "Volver a las sesiones",
+      "engaged": "Asistentes que participaron",
+      "average": "Puntuación media",
+      "attendeesTitle": "Asistentes más participativos",
+      "emptyTitle": "Aún no hay participación",
+      "emptyHint": "Las puntuaciones aparecen cuando los asistentes hacen check-in, votan en encuestas en vivo, hacen preguntas, responden encuestas de opinión y se inscriben en sesiones.",
+      "attendee": "Asistente",
+      "score": "Puntuación",
+      "breakdown": "Qué contó",
+      "countOf": "{kind} × {count}",
+      "sessionsTitle": "Sesiones",
+      "session": "Sesión",
+      "participants": "Participantes",
+      "noSessions": "Este evento aún no tiene sesiones.",
+      "weightsTitle": "Ponderaciones",
+      "formula": "Puntuación = los puntos de cada tipo × cuántas veces lo hizo la persona. El check-in cuenta una vez por evento. Las ponderaciones se aplican a todos los eventos de tu organización.",
+      "customWeights": "Ponderaciones de tu organización",
+      "defaultWeights": "Ponderaciones predeterminadas",
+      "weightInvalid": "Introduce un número entero de 0 a 100.",
+      "saveWeights": "Guardar ponderaciones",
+      "resetWeights": "Usar las predeterminadas",
+      "weightsReadOnly": "Solo los propietarios y administradores pueden cambiar las ponderaciones.",
+      "weightsSaved": "Ponderaciones guardadas. Se recalcularon todas las puntuaciones.",
+      "weightsReset": "Ponderaciones predeterminadas restauradas. Se recalcularon todas las puntuaciones.",
+      "kinds": {
+        "check_in": "Check-in",
+        "poll_vote": "Voto en encuesta",
+        "question": "Pregunta",
+        "feedback": "Opinión",
+        "enrollment": "Inscripción en sesión"
+      }
+    },
+    "feedback": {
+      "heading": "¿Qué tal esta sesión?",
+      "give": "Dar tu opinión",
+      "answered": "Gracias, recibimos tu opinión.",
+      "signInHint": "Inicia sesión con el correo con el que te registraste para dar tu opinión.",
+      "signIn": "Iniciar sesión",
+      "errors": {
+        "already_answered": "Ya diste tu opinión sobre esta sesión.",
+        "expired": "Tu enlace para opinar ha caducado.",
+        "other": "No se puede opinar sobre esta sesión."
+      }
     }
   },
   "enrollment": {

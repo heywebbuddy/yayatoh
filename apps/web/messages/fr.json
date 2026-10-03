@@ -5070,7 +5070,8 @@
         "consent": "Consentement marketing",
         "label": "Étiquette",
         "totals": "Totaux cumulés",
-        "seen": "Vu pour la première ou dernière fois"
+        "seen": "Vu pour la première ou dernière fois",
+        "engagement": "Score d'engagement"
       },
       "did": "Règle",
       "didYes": "Oui",
@@ -5128,7 +5129,8 @@
       "event": "Événement",
       "editionOf": "Édition précédant",
       "series": "Série",
-      "noSeries": "Aucune série"
+      "noSeries": "Aucune série",
+      "engagementScore": "Score"
     },
     "scopes": {
       "any": "N'importe quel événement",
@@ -10759,6 +10761,54 @@
       "topQuestions": "Questions les plus soutenues",
       "noQuestions": "Pas encore de questions.",
       "join": "Participez depuis votre téléphone"
+    },
+    "scores": {
+      "link": "Scores d'engagement",
+      "title": "Scores d'engagement",
+      "description": "Qui a le plus participé à {event}, et comment s'est passée chaque session.",
+      "back": "Retour aux sessions",
+      "engaged": "Participants engagés",
+      "average": "Score moyen",
+      "attendeesTitle": "Participants les plus engagés",
+      "emptyTitle": "Aucun engagement pour l'instant",
+      "emptyHint": "Les scores apparaissent quand les participants s'enregistrent, votent aux sondages en direct, posent des questions, répondent aux enquêtes de satisfaction et s'inscrivent aux sessions.",
+      "attendee": "Participant",
+      "score": "Score",
+      "breakdown": "Ce qui a compté",
+      "countOf": "{kind} × {count}",
+      "sessionsTitle": "Sessions",
+      "session": "Session",
+      "participants": "Participants",
+      "noSessions": "Cet événement n'a pas encore de session.",
+      "weightsTitle": "Pondérations",
+      "formula": "Score = les points de chaque type × le nombre de fois où la personne l'a fait. Un enregistrement compte une fois par événement. Les pondérations s'appliquent à tous les événements de votre organisation.",
+      "customWeights": "Pondérations de votre organisation",
+      "defaultWeights": "Pondérations par défaut",
+      "weightInvalid": "Saisissez un nombre entier de 0 à 100.",
+      "saveWeights": "Enregistrer les pondérations",
+      "resetWeights": "Utiliser les pondérations par défaut",
+      "weightsReadOnly": "Seuls les propriétaires et les admins peuvent modifier les pondérations.",
+      "weightsSaved": "Pondérations enregistrées. Tous les scores ont été recalculés.",
+      "weightsReset": "Pondérations par défaut rétablies. Tous les scores ont été recalculés.",
+      "kinds": {
+        "check_in": "Enregistrement",
+        "poll_vote": "Vote",
+        "question": "Question",
+        "feedback": "Avis",
+        "enrollment": "Inscription à une session"
+      }
+    },
+    "feedback": {
+      "heading": "Comment était cette session ?",
+      "give": "Donner mon avis",
+      "answered": "Merci, votre avis a bien été reçu.",
+      "signInHint": "Connectez-vous avec l'e-mail utilisé pour l'inscription pour donner votre avis.",
+      "signIn": "Se connecter",
+      "errors": {
+        "already_answered": "Vous avez déjà donné votre avis sur cette session.",
+        "expired": "Votre lien pour donner votre avis a expiré.",
+        "other": "Il n'est pas possible de donner un avis sur cette session."
+      }
     }
   },
   "enrollment": {

@@ -1,4 +1,4 @@
-import { ENGAGEMENT_KINDS, type EngagementKind } from '../schema.ts';
+import { ENGAGEMENT_KINDS, type EngagementKind } from './kinds.ts';
 
 /**
  * The engagement score (M5.7b), pure. For one attendee at one event:

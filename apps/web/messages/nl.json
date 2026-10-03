@@ -5070,7 +5070,8 @@
         "consent": "Marketingtoestemming",
         "label": "Label",
         "totals": "Totalen",
-        "seen": "Eerst of laatst gezien"
+        "seen": "Eerst of laatst gezien",
+        "engagement": "Betrokkenheidsscore"
       },
       "did": "Regel",
       "didYes": "Wel",
@@ -5128,7 +5129,8 @@
       "event": "Evenement",
       "editionOf": "Editie vóór",
       "series": "Reeks",
-      "noSeries": "Nog geen reeksen"
+      "noSeries": "Nog geen reeksen",
+      "engagementScore": "Score"
     },
     "scopes": {
       "any": "Elk evenement",
@@ -10759,6 +10761,54 @@
       "topQuestions": "Topvragen",
       "noQuestions": "Nog geen vragen.",
       "join": "Doe mee op je telefoon"
+    },
+    "scores": {
+      "link": "Betrokkenheidsscores",
+      "title": "Betrokkenheidsscores",
+      "description": "Wie het meest meedeed aan {event} en hoe elke sessie ging.",
+      "back": "Terug naar sessies",
+      "engaged": "Betrokken deelnemers",
+      "average": "Gemiddelde score",
+      "attendeesTitle": "Meest betrokken deelnemers",
+      "emptyTitle": "Nog geen betrokkenheid",
+      "emptyHint": "Scores verschijnen zodra deelnemers inchecken, stemmen in live polls, vragen stellen, feedbackenquêtes invullen en zich inschrijven voor sessies.",
+      "attendee": "Deelnemer",
+      "score": "Score",
+      "breakdown": "Wat telde",
+      "countOf": "{kind} × {count}",
+      "sessionsTitle": "Sessies",
+      "session": "Sessie",
+      "participants": "Deelnemers",
+      "noSessions": "Dit evenement heeft nog geen sessies.",
+      "weightsTitle": "Weging",
+      "formula": "Score = de punten per soort × hoe vaak de deelnemer het deed. Een check-in telt één keer per evenement. De weging geldt voor alle evenementen van je organisatie.",
+      "customWeights": "Weging van je organisatie",
+      "defaultWeights": "Standaardweging",
+      "weightInvalid": "Vul een geheel getal van 0 tot 100 in.",
+      "saveWeights": "Weging opslaan",
+      "resetWeights": "Standaardweging gebruiken",
+      "weightsReadOnly": "Alleen eigenaren en beheerders kunnen de weging wijzigen.",
+      "weightsSaved": "Weging opgeslagen. Alle scores zijn opnieuw berekend.",
+      "weightsReset": "Standaardweging hersteld. Alle scores zijn opnieuw berekend.",
+      "kinds": {
+        "check_in": "Check-in",
+        "poll_vote": "Stem in poll",
+        "question": "Vraag",
+        "feedback": "Feedback",
+        "enrollment": "Inschrijving voor sessie"
+      }
+    },
+    "feedback": {
+      "heading": "Hoe was deze sessie?",
+      "give": "Feedback geven",
+      "answered": "Bedankt, je feedback is ontvangen.",
+      "signInHint": "Log in met het e-mailadres waarmee je je hebt ingeschreven om feedback te geven.",
+      "signIn": "Inloggen",
+      "errors": {
+        "already_answered": "Je hebt al feedback gegeven voor deze sessie.",
+        "expired": "Je feedbacklink is verlopen.",
+        "other": "Feedback is niet beschikbaar voor deze sessie."
+      }
     }
   },
   "enrollment": {
