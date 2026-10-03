@@ -23,6 +23,8 @@ import {
   FAKE_DELIVERY_SIGNATURE_HEADER,
   fakeDeliverySecret,
   handleProviderWebhook,
+  releaseDevDeliveryEvent,
+  settleDevDeliveryEvents,
   takeDevDeliveryEvents,
   withWebPush,
 } from '@yayatoh/notifications';
@@ -39,7 +41,13 @@ import {
   waitlistMailer,
 } from '@yayatoh/orders';
 import { payoutDestinationMailer } from '@yayatoh/payments';
-import { consumeEvent, recentEventsTx, type Subscriber, subscribes } from '@yayatoh/platform';
+import {
+  consumeEvent,
+  processedPairsTx,
+  recentEventsTx,
+  type Subscriber,
+  subscribes,
+} from '@yayatoh/platform';
 import { taskReminderMailer } from '@yayatoh/program';
 import { registrationCapacity } from '@yayatoh/registration';
 import { surveyMailer } from '@yayatoh/surveys';
@@ -144,10 +152,24 @@ export async function drainOrgMessages(
   // until a pass consumes nothing new (bounded).
   let journeySteps = 0;
   for (let pass = 0; pass < 4; pass++) {
-    const events = await withTenant(ctx, (tx) => recentEventsTx(tx, orgId, types, 6 * 3600_000));
+    const { events, done } = await withTenant(ctx, async (tx) => {
+      const recent = await recentEventsTx(tx, orgId, types, 6 * 3600_000);
+      return {
+        events: recent,
+        done: await processedPairsTx(
+          tx,
+          recent.map((e) => e.id),
+        ),
+      };
+    });
     let fresh = 0;
     for (const event of events) {
-      for (const s of subs) if (subscribes(s, event) && (await consumeEvent(s, event))) fresh += 1;
+      // Pairs handled before are skipped in bulk: in the shared e2e org a transaction per
+      // (event, subscriber) pair made one drain outlast its caller's 30 s (batch 3f merge).
+      // consumeEvent still guards the rest (a concurrent drain or worker never double-applies).
+      for (const s of subs)
+        if (subscribes(s, event) && !done.has(`${s.name} ${event.id}`) && (await consumeEvent(s, event)))
+          fresh += 1;
     }
     consumed += fresh;
     // Journey steps due now (M3.7a; the worker's `automations.run-due` job): they queue messages
@@ -156,9 +178,10 @@ export async function drainOrgMessages(
     journeySteps += steps.done + steps.skipped + steps.failed;
     if (fresh === 0 && steps.done === 0) break;
   }
-  // The live device watchdog (M3.3a), as the worker would run it now: it evaluates what it marks
-  // quiet unless the org-wide pass follows anyway.
-  await watchQuietDevices(orgId, { notifier }, { evaluate: !opts.sweep });
+  // The live device watchdog (M3.3a), as the worker would run it now. Unless the org-wide pass
+  // follows anyway, it evaluates the events the quiet devices were working at (not every event of
+  // the org: in the shared e2e org that slowed every drain, batch 3g merge).
+  await watchQuietDevices(orgId, { notifier }, { evaluate: opts.sweep ? false : 'devices' });
   // The alert engine's scheduled pass (M3.2b), as the worker's sweep would run it now: only when
   // asked (`sweep`). The alerts evaluator above already re-evaluates what the drained events
   // touched; the org-wide pass re-checks every upcoming event and re-notifies unacknowledged
@@ -192,18 +215,26 @@ export async function drainOrgMessages(
   // The fake provider's reports go through the same webhook pipeline (verified, deduplicated,
   // counted in provider health) as a real provider's.
   const adapter = webhookAdapter('email', 'fake');
-  if (adapter)
+  if (adapter) {
     for (const d of takeDevDeliveryEvents()) {
-      const out = await handleProviderWebhook(
-        adapter,
-        {
-          rawBody: d.body,
-          headers: new Headers({ [FAKE_DELIVERY_SIGNATURE_HEADER]: d.signature }),
-          url: `${appOrigin}/api/webhooks/email/fake`,
-        },
-        ports,
-      );
-      reports += out.result?.recorded ?? 0;
+      try {
+        const out = await handleProviderWebhook(
+          adapter,
+          {
+            rawBody: d.body,
+            headers: new Headers({ [FAKE_DELIVERY_SIGNATURE_HEADER]: d.signature }),
+            url: `${appOrigin}/api/webhooks/email/fake`,
+          },
+          ports,
+        );
+        reports += out.result?.recorded ?? 0;
+      } finally {
+        releaseDevDeliveryEvent(d.claimed);
+      }
     }
+    // A drain running at the same time may have taken this drain's reports: wait until they are
+    // recorded (batch 3g merge; messaging-followups.spec.ts read a bounce before it was).
+    await settleDevDeliveryEvents();
+  }
   return { consumed, journeySteps, sent, reports };
 }

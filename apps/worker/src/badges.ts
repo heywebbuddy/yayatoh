@@ -42,13 +42,29 @@ export function badgeBatchJob(renderer: PdfRenderer, opts: { budgetMs?: number }
   });
 }
 
-/** Unfinished badge batches of every org (platform_reader, audited), for the leader's tick. */
-export async function dueBadgeBatches(limit = 50): Promise<{ orgId: string; batchId: string }[]> {
+/**
+ * Unfinished badge batches (platform_reader, audited), for the leader's tick: of every org, or
+ * only of `onlyOrgs` (tests). The org filter is part of the query, so the limit applies to the
+ * orgs asked for (filtering after it would starve them behind other orgs' older batches).
+ */
+export async function dueBadgeBatches(
+  limit = 50,
+  onlyOrgs?: ReadonlySet<string>,
+): Promise<{ orgId: string; batchId: string }[]> {
+  const orgs = onlyOrgs ? [...onlyOrgs] : null;
+  if (orgs?.length === 0) return [];
   const rows = await withPlatformReader(
     { actor: 'system:badge-batches', reason: 'find unfinished badge batches' },
     (tx) =>
       tx.execute<{ org_id: string; id: string }>(
-        sql`select org_id, id from badges.batches where status in ('queued', 'running') order by created_at limit ${limit}`,
+        sql`select org_id, id from badges.batches where status in ('queued', 'running')${
+          orgs
+            ? sql` and org_id in (${sql.join(
+                orgs.map((o) => sql`${o}::uuid`),
+                sql`, `,
+              )})`
+            : sql``
+        } order by created_at limit ${limit}`,
       ),
   );
   return rows.map((r) => ({ orgId: r.org_id, batchId: r.id }));
@@ -63,7 +79,7 @@ export async function enqueueDueBadgeBatches(
   /** Tests: only these orgs (other test files' batches are left alone). */
   onlyOrgs?: ReadonlySet<string>,
 ): Promise<number> {
-  const due = (await dueBadgeBatches()).filter((d) => !onlyOrgs || onlyOrgs.has(d.orgId));
+  const due = await dueBadgeBatches(50, onlyOrgs);
   let queued = 0;
   for (const d of due) if (await boss.send(BADGE_BATCH_JOB, d, { singletonKey: d.batchId })) queued += 1;
   return queued;

@@ -7561,7 +7561,6 @@
     "publicLink": "Si compila su",
     "publicLinkText": "il modulo di registrazione pubblico",
     "openBuilder": "Modifica il modulo di registrazione",
-    "viewBuilder": "Visualizza il modulo di registrazione",
     "pagesTitle": "Pagine",
     "emptyTitle": "Ancora nessuna pagina",
     "emptyDescription": "Aggiungi una prima pagina, poi le sue domande. Le pagine possono essere limitate a tipi di registrazione o mostrate solo dopo certe risposte.",
@@ -7713,7 +7712,8 @@
     "submittedTitle": "Grazie, sei registrato",
     "submittedDescription": "Grazie, {name}. Le tue risposte sono state inviate all’organizzatore.",
     "expiredTitle": "Questo link è scaduto",
-    "expiredDescription": "I link per continuare una registrazione funzionano per 14 giorni dall’ultimo salvataggio. Ricomincia dalla pagina dell’evento."
+    "expiredDescription": "I link per continuare una registrazione funzionano per 14 giorni dall’ultimo salvataggio. Ricomincia dalla pagina dell’evento.",
+    "openReadOnly": "Vedi il modulo di registrazione"
   },
   "agenda": {
     "publishing": {
@@ -8393,7 +8393,8 @@
       "already_invited": "Questo indirizzo è già stato invitato.",
       "allowance_reached": "{allowance, plural, one {L'unico posto staff è occupato} many {Tutti i # posti staff sono occupati} other {Tutti i # posti staff sono occupati}}. Revoca un invito per liberare un posto o chiedine altri all'organizzatore.",
       "event_over": "L'evento è terminato, quindi non è possibile invitare altre persone."
-    }
+    },
+    "email": "Email"
   },
   "exhibitorAdmin": {
     "subnav": "Pagine espositori",

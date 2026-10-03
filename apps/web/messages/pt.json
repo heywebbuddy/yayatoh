@@ -7561,7 +7561,6 @@
     "publicLink": "É preenchido em",
     "publicLinkText": "o formulário de inscrição público",
     "openBuilder": "Editar o formulário de inscrição",
-    "viewBuilder": "Ver o formulário de inscrição",
     "pagesTitle": "Páginas",
     "emptyTitle": "Ainda não há páginas",
     "emptyDescription": "Adicione uma primeira página e depois as perguntas. As páginas podem ser limitadas a tipos de inscrição ou aparecer só depois de certas respostas.",
@@ -7713,7 +7712,8 @@
     "submittedTitle": "Obrigado, sua inscrição está feita",
     "submittedDescription": "Obrigado, {name}. Suas respostas foram enviadas ao organizador.",
     "expiredTitle": "Este link expirou",
-    "expiredDescription": "Links para continuar uma inscrição funcionam por 14 dias após o último salvamento. Comece de novo pela página do evento."
+    "expiredDescription": "Links para continuar uma inscrição funcionam por 14 dias após o último salvamento. Comece de novo pela página do evento.",
+    "openReadOnly": "Ver o formulário de inscrição"
   },
   "agenda": {
     "publishing": {
@@ -8393,7 +8393,8 @@
       "already_invited": "Esse endereço já foi convidado.",
       "allowance_reached": "{allowance, plural, one {A # vaga de equipe está ocupada} many {Todas as # vagas de equipe estão ocupadas} other {Todas as # vagas de equipe estão ocupadas}}. Revogue um convite para liberar uma vaga ou peça mais ao organizador.",
       "event_over": "Este evento já terminou, então não é possível convidar mais ninguém."
-    }
+    },
+    "email": "E-mail"
   },
   "exhibitorAdmin": {
     "subnav": "Páginas de expositores",

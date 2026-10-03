@@ -7561,7 +7561,6 @@
     "publicLink": "On le remplit sur",
     "publicLinkText": "le formulaire d’inscription public",
     "openBuilder": "Modifier le formulaire d’inscription",
-    "viewBuilder": "Voir le formulaire d’inscription",
     "pagesTitle": "Pages",
     "emptyTitle": "Aucune page pour l’instant",
     "emptyDescription": "Ajoutez une première page, puis ses questions. Les pages peuvent être limitées à des types d’inscription ou n’apparaître qu’après certaines réponses.",
@@ -7713,7 +7712,8 @@
     "submittedTitle": "Merci, vous êtes inscrit·e",
     "submittedDescription": "Merci, {name}. Vos réponses ont été envoyées à l’organisateur.",
     "expiredTitle": "Ce lien a expiré",
-    "expiredDescription": "Les liens pour reprendre une inscription fonctionnent 14 jours après le dernier enregistrement. Recommencez depuis la page de l’événement."
+    "expiredDescription": "Les liens pour reprendre une inscription fonctionnent 14 jours après le dernier enregistrement. Recommencez depuis la page de l’événement.",
+    "openReadOnly": "Voir le formulaire d’inscription"
   },
   "agenda": {
     "publishing": {
@@ -8393,7 +8393,8 @@
       "already_invited": "Cette adresse est déjà invitée.",
       "allowance_reached": "{allowance, plural, one {La # place pour le personnel est prise} many {Les # places pour le personnel sont prises} other {Les # places pour le personnel sont prises}}. Révoquez une invitation pour libérer une place, ou demandez-en davantage à l’organisateur.",
       "event_over": "Cet événement est terminé : personne d’autre ne peut être invité."
-    }
+    },
+    "email": "E-mail"
   },
   "exhibitorAdmin": {
     "subnav": "Pages exposants",

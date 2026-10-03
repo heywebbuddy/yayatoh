@@ -1,4 +1,4 @@
-import { DEVICE_ONLINE_WINDOW_MS, markQuietDevicesTx } from '@yayatoh/checkin';
+import { DEVICE_ONLINE_WINDOW_MS, deviceEventIdTx, markQuietDevicesTx } from '@yayatoh/checkin';
 import { type TenantTx, withTenant } from '@yayatoh/db';
 import { findEventTx, upcomingEventIdsTx } from '@yayatoh/events';
 import { type Ctx, createCtx } from '@yayatoh/kernel';
@@ -84,6 +84,12 @@ export async function alertTargetsTx(
 ): Promise<{ eventIds: string[]; org: boolean }> {
   const p = event.payload;
   if (event.type.startsWith('device.')) {
+    // A device working at an event: that event (batch 3g merge). Re-evaluating every live and
+    // pre-show event of the org on each heartbeat cost ~1.6 s per heartbeat with 129 such events
+    // (the shared e2e org) and stalled every drain behind it; the scheduled sweep (30 s) and the
+    // device watchdog refresh the org's other events.
+    const own = await deviceEventIdTx(tx, event.aggregateId);
+    if (own) return { eventIds: [own], org: false };
     const ids = await upcomingEventIdsTx(
       tx,
       new Date(now.getTime() - 2 * 3_600_000),
@@ -214,12 +220,22 @@ export async function evaluateOrgNow(
 export async function watchQuietDevices(
   orgId: string,
   deps: AlertDeps,
-  /** `evaluate: false` when the caller evaluates the org right after anyway (the dev drain). */
-  opts: { now?: Date; evaluate?: boolean } = {},
+  /**
+   * `evaluate: false` when the caller evaluates the org right after anyway; `'devices'` (the dev
+   * drain, batch 3g merge) evaluates only the events the quiet devices were working at, not every
+   * upcoming event of the org (in the shared e2e org that made every drain slow).
+   */
+  opts: { now?: Date; evaluate?: boolean | 'devices' } = {},
 ): Promise<{ quiet: number; changes: AlertChange[] }> {
   const base: Ctx = createCtx({ orgId, actor: { type: 'system', name: 'alerts.device-watchdog' } });
   const ctx: Ctx = opts.now ? { ...base, now: opts.now } : base;
   const quiet = await withTenant(ctx, (tx) => markQuietDevicesTx(tx, ctx, DEVICE_ONLINE_WINDOW_MS));
   if (quiet.length === 0 || opts.evaluate === false) return { quiet: quiet.length, changes: [] };
+  if (opts.evaluate === 'devices') {
+    const changes: AlertChange[] = [];
+    for (const id of new Set(quiet.flatMap((q) => (q.eventId ? [q.eventId] : []))))
+      changes.push(...(await withTenant(ctx, (tx) => evaluateEventAlertsTx(tx, ctx, id, deps, ctx.now))));
+    return { quiet: quiet.length, changes };
+  }
   return { quiet: quiet.length, changes: await evaluateOrgNow(orgId, deps, { now: ctx.now, full: false }) };
 }

@@ -31,6 +31,12 @@ Phase 5 plan (`docs/plans/phase-5.md`, approved 2026-09-29), Wave 1; decisions P
 - Proposed session times or rooms (organizer-only), CFP (M5.3b), journeys (M3.7a).
 - Mailpit: the repo's dev mailbox (`/api/dev/mailbox`, `/api/dev/last-code`) receives the emails in dev/CI, as for every other email; Mailpit is not wired.
 
+### Merge notes (batch 3f)
+- M5.4a's exhibitor admins and staff use this portal sign-in (one flow for every portal role): `events.portal_accounts` with subject kind `exhibitor`; `/event-portal` renders the exhibitor portal for an exhibitor principal. The tenancy authorizer also grants `portal:exhibitor` to both exhibitor roles.
+- New: an event's shareable sign-in page `/event-portal/sign-in/{orgId~eventId~mac}` (`portalSiteToken`, `resendPortalInvitations`) emails a live invitation again to the address typed (M1.14 `guestCode`, scope `portal`; same answer for anyone). The signed-out page no longer names a role ("Sign in to the portal").
+- Front door: `/event-portal` is a platform prefix (never forwarded to legacy).
+- Speaker and exhibitor principals cannot reach each other's portals: `packages/testing/tests/exhibitor-portal.int.test.ts`.
+
 ### Acceptance (M5.3a)
 | ID | Criterion | Test |
 |---|---|---|

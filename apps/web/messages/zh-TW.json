@@ -7561,7 +7561,6 @@
     "publicLink": "填寫地址：",
     "publicLinkText": "公開報名表",
     "openBuilder": "編輯報名表",
-    "viewBuilder": "查看報名表",
     "pagesTitle": "頁面",
     "emptyTitle": "還沒有頁面",
     "emptyDescription": "先新增第一個頁面，再新增問題。頁面可以限定於某些報名類型，或只在特定回答後顯示。",
@@ -7713,7 +7712,8 @@
     "submittedTitle": "謝謝，你已完成報名",
     "submittedDescription": "謝謝，{name}。你的回答已傳送給主辦方。",
     "expiredTitle": "此連結已過期",
-    "expiredDescription": "繼續報名的連結在最後一次儲存後 14 天內有效。請從活動頁面重新開始。"
+    "expiredDescription": "繼續報名的連結在最後一次儲存後 14 天內有效。請從活動頁面重新開始。",
+    "openReadOnly": "查看報名表單"
   },
   "agenda": {
     "publishing": {
@@ -8393,7 +8393,8 @@
       "already_invited": "此地址已受邀。",
       "allowance_reached": "{allowance, plural, other {全部 # 個工作人員名額}}皆已佔用。請撤銷一個邀請以釋出名額，或向主辦單位申請更多名額。",
       "event_over": "此活動已結束，無法再邀請其他人。"
-    }
+    },
+    "email": "電子郵件"
   },
   "exhibitorAdmin": {
     "subnav": "參展商頁面",

@@ -7561,7 +7561,6 @@
     "publicLink": "Invullen gebeurt via",
     "publicLinkText": "het openbare registratieformulier",
     "openBuilder": "Registratieformulier bewerken",
-    "viewBuilder": "Registratieformulier bekijken",
     "pagesTitle": "Pagina's",
     "emptyTitle": "Nog geen pagina's",
     "emptyDescription": "Voeg een eerste pagina toe en daarna de vragen. Pagina's kunnen beperkt worden tot registratietypes of pas verschijnen na bepaalde antwoorden.",
@@ -7713,7 +7712,8 @@
     "submittedTitle": "Bedankt, je bent geregistreerd",
     "submittedDescription": "Bedankt, {name}. Je antwoorden zijn naar de organisator gestuurd.",
     "expiredTitle": "Deze link is verlopen",
-    "expiredDescription": "Links om een registratie voort te zetten werken 14 dagen na de laatste opslag. Begin opnieuw via de evenementpagina."
+    "expiredDescription": "Links om een registratie voort te zetten werken 14 dagen na de laatste opslag. Begin opnieuw via de evenementpagina.",
+    "openReadOnly": "Het registratieformulier bekijken"
   },
   "agenda": {
     "publishing": {
@@ -8393,7 +8393,8 @@
       "already_invited": "Dat adres is al uitgenodigd.",
       "allowance_reached": "{allowance, plural, one {De # medewerkersplaats is bezet} other {Alle # medewerkersplaatsen zijn bezet}}. Trek een uitnodiging in om een plaats vrij te maken, of vraag de organisator om meer.",
       "event_over": "Dit evenement is voorbij, dus er kan niemand meer worden uitgenodigd."
-    }
+    },
+    "email": "E-mail"
   },
   "exhibitorAdmin": {
     "subnav": "Exposantenpagina's",
