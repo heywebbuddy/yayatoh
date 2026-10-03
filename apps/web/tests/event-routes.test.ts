@@ -63,6 +63,8 @@ const SECTION_OF: Record<string, string> = {
   badges: 'badges',
   // M4.8a: the Donations tab (gala and community profiles) replaces its placeholder.
   donations: 'donations',
+  // M4.5a: the guest website (no longer a placeholder).
+  website: 'website',
 };
 
 describe('event console route sweep (M4.2a)', () => {

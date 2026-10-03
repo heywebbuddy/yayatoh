@@ -11261,5 +11261,134 @@
     "placeOnChart": "{chart}: {place}",
     "noPlace": "Nessun tavolo per ora",
     "guestOf": "Ospite di {name}"
+  },
+  "guestSiteHost": {
+    "subtitle": "Una pagina per i tuoi ospiti: il tuo benvenuto, il programma, il viaggio, la lista nozze e le risposte alle loro domande. Protetta da password; mai elencata né indicizzata.",
+    "open": "Apri il sito",
+    "viewerNotice": "Puoi vedere il sito qui. Solo gli ospitanti e i planner possono modificarlo.",
+    "statusTitle": "Il tuo sito",
+    "published": "Pubblicato",
+    "draft": "Bozza",
+    "publishedNote": "Pubblicato il {date}. Gli ospiti lo aprono con l’indirizzo qui sotto e la password.",
+    "draftNote": "Non ancora pubblicato. Gli ospiti non possono aprirlo finché non lo pubblichi.",
+    "needsPassword": "Imposta prima una password: senza, il sito non può essere pubblicato.",
+    "address": "Indirizzo del sito",
+    "privacyNote": "Mai elencato nel marketplace né nei motori di ricerca. Nomi, risposte e contatti degli ospiti non vi compaiono mai.",
+    "publish": "Pubblica il sito",
+    "unpublish": "Metti il sito offline",
+    "publishedDone": "Pubblicato. Condividi l’indirizzo e la password con i tuoi ospiti.",
+    "unpublishedDone": "Il sito è offline.",
+    "passwordTitle": "Password",
+    "passwordSet": "Impostata",
+    "passwordMissing": "Non impostata",
+    "passwordIntro": "Stampala sugli inviti. Gli ospiti la digitano una volta per dispositivo; le maiuscole non contano. Una nuova password esclude chi ha usato la precedente.",
+    "savePassword": "Salva la password",
+    "passwordSaved": "Password salvata.",
+    "detailsTitle": "Titolo e benvenuto",
+    "saveDetails": "Salva titolo e benvenuto",
+    "detailsSaved": "Salvato.",
+    "blocksTitle": "{count, plural, =0 {Sezioni} one {# sezione} other {# sezioni}}",
+    "emptyTitle": "Nessuna sezione",
+    "emptyWrite": "Aggiungi qui sotto la prima sezione: inizia con un benvenuto, poi il programma, il viaggio e le FAQ.",
+    "emptyRead": "Gli ospitanti non hanno ancora aggiunto sezioni.",
+    "kindLabel": "{kind} · sezione {n}",
+    "noSubEvents": "Aggiungi i momenti dell’evento (cerimonia, ricevimento…) nella pagina degli ospiti per riempire il programma.",
+    "saveBlock": "Salva «{name}»",
+    "blockSaved": "Sezione salvata.",
+    "moveUp": "Sposta su «{name}»",
+    "moveDown": "Sposta giù «{name}»",
+    "moved": "Spostata.",
+    "removeBlock": "Rimuovi «{name}»",
+    "removed": "Sezione rimossa.",
+    "addTitle": "Aggiungi una sezione",
+    "addBlock": "Aggiungi la sezione",
+    "blockAdded": "Sezione aggiunta. Compilala qui sopra.",
+    "subEventEveryone": "{name} (sono invitati tutti)",
+    "kinds": {
+      "text": "Testo",
+      "program": "Programma",
+      "travel": "Viaggio",
+      "registry": "Lista nozze",
+      "faq": "FAQ"
+    },
+    "show": {
+      "everyone": "Momenti a cui sono invitati tutti",
+      "chosen": "Solo i momenti che spunto"
+    },
+    "fields": {
+      "heading": "Titolo della sezione",
+      "headingHint": "Facoltativo.",
+      "body": "Testo",
+      "bodyHint": "Paragrafi, **grassetto**, *corsivo*, elenchi e link.",
+      "show": "Quali momenti",
+      "showHint": "Un momento riservato ad alcuni ospiti (una cena di prova) compare solo se lo spunti.",
+      "subEvents": "Momenti da mostrare",
+      "urlHint": "Un link completo che inizia con https://.",
+      "password": "Password",
+      "newPassword": "Nuova password",
+      "passwordHint": "Almeno {min} caratteri.",
+      "title": "Titolo",
+      "intro": "Testo di benvenuto (facoltativo)",
+      "language": "Lingua in cui scrivi",
+      "languageHint": "Gli ospiti possono passare i pulsanti della pagina alla loro lingua; le tue parole restano come le hai scritte.",
+      "kind": "Tipo di sezione",
+      "kindHint": "Il programma elenca i momenti con i loro orari."
+    },
+    "item": {
+      "travel": {
+        "title": "Luogo {n}: nome",
+        "details": "Luogo {n}: dettagli",
+        "url": "Luogo {n}: sito web"
+      },
+      "registry": {
+        "label": "Lista {n}: nome",
+        "url": "Lista {n}: link"
+      },
+      "faq": {
+        "question": "Domanda {n}",
+        "answer": "Risposta {n}"
+      }
+    },
+    "errors": {
+      "title": "Dai un titolo al sito.",
+      "password": "Inserisci una password.",
+      "required": "Compila questo campo.",
+      "tooShort": "Usa almeno {min} caratteri.",
+      "tooLong": "Usa al massimo 72 caratteri.",
+      "passwordRequired": "Imposta una password prima di pubblicare.",
+      "tooManyBlocks": "Un sito può avere fino a {max} sezioni.",
+      "httpsOnly": "Usa un link completo che inizia con https://.",
+      "subEvents": "Scegli momenti di questo evento."
+    }
+  },
+  "guestSite": {
+    "metaTitle": "Sito per gli ospiti",
+    "gateTitle": "Questo sito è privato",
+    "gateIntro": "Inserisci la password del tuo invito per vedere i dettagli.",
+    "formLabel": "Apri il sito",
+    "password": "Password",
+    "passwordHint": "È sul tuo invito. Le maiuscole non contano.",
+    "submit": "Apri il sito",
+    "challengeTitle": "Ancora un passaggio",
+    "challengeHint": "Conferma di essere una persona, poi riprova.",
+    "errors": {
+      "empty": "Inserisci la password.",
+      "wrong": "La password non corrisponde. Controlla l’invito e riprova.",
+      "challengeFailed": "Il controllo non è riuscito. Riprova.",
+      "rateLimited": "{minutes, plural, one {Troppi tentativi. Riprova tra # minuto.} other {Troppi tentativi. Riprova tra # minuti.}}",
+      "closed": "Questo sito non è disponibile al momento."
+    },
+    "languages": "Lingue",
+    "onThisPage": "In questa pagina",
+    "empty": "Gli ospitanti stanno ancora preparando questa pagina.",
+    "headings": {
+      "text": "Informazioni",
+      "program": "Programma",
+      "travel": "Viaggio",
+      "registry": "Lista nozze",
+      "faq": "Domande"
+    },
+    "visit": "Sito di {name}",
+    "newTab": "(si apre in una nuova scheda)"
   }
 }

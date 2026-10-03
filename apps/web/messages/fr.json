@@ -11261,5 +11261,134 @@
     "placeOnChart": "{chart} : {place}",
     "noPlace": "Pas encore de table",
     "guestOf": "Invité de {name}"
+  },
+  "guestSiteHost": {
+    "subtitle": "Une page pour vos invités : votre mot d’accueil, le programme, le voyage, la liste de cadeaux et les réponses à leurs questions. Protégée par un mot de passe ; jamais listée ni indexée.",
+    "open": "Ouvrir le site",
+    "viewerNotice": "Vous pouvez consulter le site ici. Seuls les hôtes et les organisateurs peuvent le modifier.",
+    "statusTitle": "Votre site",
+    "published": "Publié",
+    "draft": "Brouillon",
+    "publishedNote": "Publié le {date}. Les invités l’ouvrent avec l’adresse ci-dessous et le mot de passe.",
+    "draftNote": "Pas encore publié. Les invités ne peuvent pas l’ouvrir tant que vous ne l’avez pas publié.",
+    "needsPassword": "Définissez d’abord un mot de passe : le site ne peut pas être publié sans.",
+    "address": "Adresse du site",
+    "privacyNote": "Jamais listé sur la place de marché ni dans les moteurs de recherche. Les noms, réponses et coordonnées des invités n’y apparaissent jamais.",
+    "publish": "Publier le site",
+    "unpublish": "Mettre le site hors ligne",
+    "publishedDone": "Publié. Partagez l’adresse et le mot de passe avec vos invités.",
+    "unpublishedDone": "Le site est hors ligne.",
+    "passwordTitle": "Mot de passe",
+    "passwordSet": "Défini",
+    "passwordMissing": "Non défini",
+    "passwordIntro": "Imprimez-le sur vos invitations. Les invités le saisissent une fois par appareil ; les majuscules ne comptent pas. Un nouveau mot de passe bloque tous ceux qui ont utilisé l’ancien.",
+    "savePassword": "Enregistrer le mot de passe",
+    "passwordSaved": "Mot de passe enregistré.",
+    "detailsTitle": "Titre et accueil",
+    "saveDetails": "Enregistrer le titre et l’accueil",
+    "detailsSaved": "Enregistré.",
+    "blocksTitle": "{count, plural, =0 {Sections} one {# section} many {# sections} other {# sections}}",
+    "emptyTitle": "Aucune section pour l’instant",
+    "emptyWrite": "Ajoutez votre première section ci-dessous : commencez par un mot d’accueil, puis le programme, le voyage et la FAQ.",
+    "emptyRead": "Les hôtes n’ont encore ajouté aucune section.",
+    "kindLabel": "{kind} · section {n}",
+    "noSubEvents": "Ajoutez des sous-événements (cérémonie, réception…) sur la page des invités pour remplir le programme.",
+    "saveBlock": "Enregistrer « {name} »",
+    "blockSaved": "Section enregistrée.",
+    "moveUp": "Monter « {name} »",
+    "moveDown": "Descendre « {name} »",
+    "moved": "Déplacée.",
+    "removeBlock": "Retirer « {name} »",
+    "removed": "Section retirée.",
+    "addTitle": "Ajouter une section",
+    "addBlock": "Ajouter la section",
+    "blockAdded": "Section ajoutée. Complétez-la ci-dessus.",
+    "subEventEveryone": "{name} (tout le monde est invité)",
+    "kinds": {
+      "text": "Texte",
+      "program": "Programme",
+      "travel": "Voyage",
+      "registry": "Liste de cadeaux",
+      "faq": "FAQ"
+    },
+    "show": {
+      "everyone": "Sous-événements où tout le monde est invité",
+      "chosen": "Seulement les sous-événements cochés"
+    },
+    "fields": {
+      "heading": "Titre de section",
+      "headingHint": "Facultatif.",
+      "body": "Texte",
+      "bodyHint": "Paragraphes, **gras**, *italique*, listes et liens.",
+      "show": "Quels sous-événements",
+      "showHint": "Un sous-événement réservé à certains invités (un dîner de répétition) n’apparaît que si vous le cochez.",
+      "subEvents": "Sous-événements affichés",
+      "urlHint": "Un lien complet commençant par https://.",
+      "password": "Mot de passe",
+      "newPassword": "Nouveau mot de passe",
+      "passwordHint": "Au moins {min} caractères.",
+      "title": "Titre",
+      "intro": "Mot d’accueil (facultatif)",
+      "language": "Langue dans laquelle vous écrivez",
+      "languageHint": "Les invités peuvent afficher les boutons dans leur langue ; vos mots restent tels que vous les avez écrits.",
+      "kind": "Type de section",
+      "kindHint": "Le programme liste vos sous-événements avec leurs horaires."
+    },
+    "item": {
+      "travel": {
+        "title": "Lieu {n} : nom",
+        "details": "Lieu {n} : détails",
+        "url": "Lieu {n} : site web"
+      },
+      "registry": {
+        "label": "Liste {n} : nom",
+        "url": "Liste {n} : lien"
+      },
+      "faq": {
+        "question": "Question {n}",
+        "answer": "Réponse {n}"
+      }
+    },
+    "errors": {
+      "title": "Donnez un titre au site.",
+      "password": "Saisissez un mot de passe.",
+      "required": "Remplissez ce champ.",
+      "tooShort": "Utilisez au moins {min} caractères.",
+      "tooLong": "Utilisez 72 caractères au maximum.",
+      "passwordRequired": "Définissez un mot de passe avant de publier.",
+      "tooManyBlocks": "Un site peut avoir jusqu’à {max} sections.",
+      "httpsOnly": "Utilisez un lien complet commençant par https://.",
+      "subEvents": "Choisissez des sous-événements de cet événement."
+    }
+  },
+  "guestSite": {
+    "metaTitle": "Site des invités",
+    "gateTitle": "Ce site est privé",
+    "gateIntro": "Saisissez le mot de passe de votre invitation pour voir les détails.",
+    "formLabel": "Ouvrir le site",
+    "password": "Mot de passe",
+    "passwordHint": "Il figure sur votre invitation. Les majuscules ne comptent pas.",
+    "submit": "Ouvrir le site",
+    "challengeTitle": "Encore une étape",
+    "challengeHint": "Confirmez que vous êtes une personne, puis réessayez.",
+    "errors": {
+      "empty": "Saisissez le mot de passe.",
+      "wrong": "Ce mot de passe ne correspond pas. Vérifiez votre invitation et réessayez.",
+      "challengeFailed": "La vérification a échoué. Réessayez.",
+      "rateLimited": "{minutes, plural, one {Trop de tentatives. Réessayez dans # minute.} many {Trop de tentatives. Réessayez dans # minutes.} other {Trop de tentatives. Réessayez dans # minutes.}}",
+      "closed": "Ce site n’est pas disponible pour le moment."
+    },
+    "languages": "Langues",
+    "onThisPage": "Sur cette page",
+    "empty": "Les hôtes préparent encore cette page.",
+    "headings": {
+      "text": "À propos",
+      "program": "Programme",
+      "travel": "Voyage",
+      "registry": "Liste de cadeaux",
+      "faq": "Questions"
+    },
+    "visit": "Site web de {name}",
+    "newTab": "(s’ouvre dans un nouvel onglet)"
   }
 }

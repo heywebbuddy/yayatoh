@@ -30,6 +30,8 @@ export const PRIVATE_PATHS = [
   '/tickets',
   // M3.3a: TV display links.
   '/tv/',
+  // M4.5a: guest websites (password-protected, never indexed: P4-3c).
+  '/w/',
 ];
 
 /**

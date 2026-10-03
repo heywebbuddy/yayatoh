@@ -119,6 +119,7 @@ import {
   startRegistrationFormCommand,
 } from '@yayatoh/forms';
 import {
+  addGuestSiteBlockCommand,
   addPartyGuestCommand,
   addPlusOneCommand,
   collectorQueueQuery,
@@ -131,18 +132,23 @@ import {
   markRsvpViewedCommand,
   moveGuestCommand,
   partyRsvpQuery,
+  publishGuestSiteCommand,
   publishRsvpQuestionsCommand,
   readGuestTable,
   recordSubEventResponseCommand,
   rejectSubmissionCommand,
+  type SiteBlockKind,
+  saveGuestSiteCommand,
   saveMenuOptionCommand,
   setCollectorCommand,
+  setGuestSitePasswordCommand,
   setInvitationsCommand,
   setInvitationTemplateCommand,
   setPartyLocaleCommand,
   setRsvpSettingsCommand,
   stageGuestImportCommand,
   submitContactCommand,
+  updateGuestSiteBlockCommand,
   updatePartyGuestCommand,
   validateGuestImportCommand,
 } from '@yayatoh/guests';
@@ -2456,6 +2462,9 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     tx.execute(sql`insert into guests.invite_messages (org_id, event_id, party_id, kind, channel, dedupe_key, locale)
       values (${org.id}, ${event.id}, ${party.id}, 'invitation', 'email', ${`guests-invite:${party.id}:${uuidv7()}`}, 'es')`),
   );
+  // M4.5a: the guest website, published behind a password, with one block of each kind
+  // (isolation coverage of `sites` and `site_blocks`; the canary crawl unlocks it).
+  await guestSiteRows(event.id, ctx);
   await donationRows(org.id, event.id, slug, ctx);
   await receiptRows(org.id, event.id, ga.id, checkout.order.id, ctx);
   return {
@@ -2666,4 +2675,36 @@ export async function twoOrgs(suffix = uuidv7().slice(-8)) {
   const a = await createOrgFixture(`alpha-${suffix}`, 'Alpha Events');
   const b = await createOrgFixture(`bravo-${suffix}`, 'Bravo Weddings');
   return { a, b };
+}
+
+/** The fixture's guest website password (the canary crawl unlocks the site with it). */
+export const FIXTURE_SITE_PASSWORD = 'fixture site pass';
+
+/** M4.5a: the fixture event's guest website, one block of each kind, published. */
+async function guestSiteRows(eventId: string, ctx: () => Ctx) {
+  const ev = { eventId };
+  await executeCommand(
+    saveGuestSiteCommand,
+    { ...ev, title: 'Fixture guest site', intro: 'Welcome, guests.', contentLocale: 'en' },
+    ctx(),
+    ports,
+  );
+  const blocks: [SiteBlockKind, string, unknown][] = [
+    ['text', 'Welcome', { body: 'See you **soon**.' }],
+    ['program', 'Program', { show: 'everyone', subEventIds: [] }],
+    ['travel', 'Travel', { items: [{ title: 'Fixture Inn', details: 'Near the venue.', url: null }] }],
+    ['registry', 'Registry', { items: [{ label: 'Gift list', url: 'https://gifts.example.test/fixture' }] }],
+    ['faq', 'FAQ', { items: [{ question: 'Parking?', answer: 'On site.' }] }],
+  ];
+  for (const [kind, heading, content] of blocks) {
+    const b = await executeCommand(addGuestSiteBlockCommand, { ...ev, kind }, ctx(), ports);
+    await executeCommand(
+      updateGuestSiteBlockCommand,
+      { ...ev, blockId: b.id, heading, content },
+      ctx(),
+      ports,
+    );
+  }
+  await executeCommand(setGuestSitePasswordCommand, { ...ev, password: FIXTURE_SITE_PASSWORD }, ctx(), ports);
+  await executeCommand(publishGuestSiteCommand, { ...ev, published: true }, ctx(), ports);
 }

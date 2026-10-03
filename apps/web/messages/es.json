@@ -11261,5 +11261,134 @@
     "placeOnChart": "{chart}: {place}",
     "noPlace": "Aún sin mesa",
     "guestOf": "Acompañante de {name}"
+  },
+  "guestSiteHost": {
+    "subtitle": "Una página para tus invitados: tu bienvenida, el programa, el viaje, la lista de regalos y respuestas a sus preguntas. Protegida con contraseña; nunca se lista ni se indexa.",
+    "open": "Abrir el sitio web",
+    "viewerNotice": "Puedes ver el sitio web aquí. Solo los anfitriones y organizadores pueden cambiarlo.",
+    "statusTitle": "Tu sitio web",
+    "published": "Publicado",
+    "draft": "Borrador",
+    "publishedNote": "Publicado el {date}. Los invitados lo abren con la dirección de abajo y la contraseña.",
+    "draftNote": "Aún no está publicado. Los invitados no pueden abrirlo hasta que lo publiques.",
+    "needsPassword": "Primero define una contraseña: el sitio web no se puede publicar sin ella.",
+    "address": "Dirección del sitio web",
+    "privacyNote": "Nunca aparece en el marketplace ni en los buscadores. Los nombres, respuestas y datos de contacto de los invitados nunca se muestran.",
+    "publish": "Publicar el sitio web",
+    "unpublish": "Desconectar el sitio web",
+    "publishedDone": "Publicado. Comparte la dirección y la contraseña con tus invitados.",
+    "unpublishedDone": "El sitio web está desconectado.",
+    "passwordTitle": "Contraseña",
+    "passwordSet": "Definida",
+    "passwordMissing": "Sin definir",
+    "passwordIntro": "Imprímela en tus invitaciones. Los invitados la escriben una vez en cada dispositivo; las mayúsculas no importan. Una contraseña nueva deja fuera a quienes usaron la anterior.",
+    "savePassword": "Guardar la contraseña",
+    "passwordSaved": "Contraseña guardada.",
+    "detailsTitle": "Título y bienvenida",
+    "saveDetails": "Guardar el título y la bienvenida",
+    "detailsSaved": "Guardado.",
+    "blocksTitle": "{count, plural, =0 {Secciones} one {# sección} other {# secciones}}",
+    "emptyTitle": "Aún no hay secciones",
+    "emptyWrite": "Añade tu primera sección abajo: empieza con una bienvenida y luego el programa, el viaje y las preguntas frecuentes.",
+    "emptyRead": "Los anfitriones aún no han añadido secciones.",
+    "kindLabel": "{kind} · sección {n}",
+    "noSubEvents": "Añade subeventos (ceremonia, banquete…) en la página de invitados para llenar el programa.",
+    "saveBlock": "Guardar «{name}»",
+    "blockSaved": "Sección guardada.",
+    "moveUp": "Subir «{name}»",
+    "moveDown": "Bajar «{name}»",
+    "moved": "Movida.",
+    "removeBlock": "Quitar «{name}»",
+    "removed": "Sección quitada.",
+    "addTitle": "Añadir una sección",
+    "addBlock": "Añadir la sección",
+    "blockAdded": "Sección añadida. Complétala arriba.",
+    "subEventEveryone": "{name} (todos están invitados)",
+    "kinds": {
+      "text": "Texto",
+      "program": "Programa",
+      "travel": "Viaje",
+      "registry": "Lista de regalos",
+      "faq": "Preguntas frecuentes"
+    },
+    "show": {
+      "everyone": "Subeventos a los que todos están invitados",
+      "chosen": "Solo los subeventos que marque"
+    },
+    "fields": {
+      "heading": "Encabezado",
+      "headingHint": "Opcional.",
+      "body": "Texto",
+      "bodyHint": "Párrafos, **negrita**, *cursiva*, listas y enlaces.",
+      "show": "Qué subeventos",
+      "showHint": "Un subevento al que solo algunos están invitados (una cena de ensayo) solo aparece si lo marcas.",
+      "subEvents": "Subeventos que se muestran",
+      "urlHint": "Un enlace completo que empiece por https://.",
+      "password": "Contraseña",
+      "newPassword": "Nueva contraseña",
+      "passwordHint": "Al menos {min} caracteres.",
+      "title": "Título",
+      "intro": "Texto de bienvenida (opcional)",
+      "language": "Idioma en el que escribes",
+      "languageHint": "Los invitados pueden cambiar los botones de la página a su idioma; tus palabras se quedan como las escribiste.",
+      "kind": "Tipo de sección",
+      "kindHint": "El programa muestra tus subeventos con sus horarios."
+    },
+    "item": {
+      "travel": {
+        "title": "Lugar {n}: nombre",
+        "details": "Lugar {n}: detalles",
+        "url": "Lugar {n}: sitio web"
+      },
+      "registry": {
+        "label": "Lista {n}: nombre",
+        "url": "Lista {n}: enlace"
+      },
+      "faq": {
+        "question": "Pregunta {n}",
+        "answer": "Respuesta {n}"
+      }
+    },
+    "errors": {
+      "title": "Ponle un título al sitio web.",
+      "password": "Escribe una contraseña.",
+      "required": "Completa este campo.",
+      "tooShort": "Usa al menos {min} caracteres.",
+      "tooLong": "Usa como máximo 72 caracteres.",
+      "passwordRequired": "Define una contraseña antes de publicar.",
+      "tooManyBlocks": "Un sitio web puede tener hasta {max} secciones.",
+      "httpsOnly": "Usa un enlace completo que empiece por https://.",
+      "subEvents": "Elige subeventos de este evento."
+    }
+  },
+  "guestSite": {
+    "metaTitle": "Sitio web para invitados",
+    "gateTitle": "Este sitio web es privado",
+    "gateIntro": "Escribe la contraseña de tu invitación para ver los detalles.",
+    "formLabel": "Abrir el sitio web",
+    "password": "Contraseña",
+    "passwordHint": "Está en tu invitación. Las mayúsculas no importan.",
+    "submit": "Abrir el sitio web",
+    "challengeTitle": "Un paso más",
+    "challengeHint": "Confirma que eres una persona y vuelve a intentarlo.",
+    "errors": {
+      "empty": "Escribe la contraseña.",
+      "wrong": "Esa contraseña no coincide. Revisa tu invitación y vuelve a intentarlo.",
+      "challengeFailed": "La comprobación no se superó. Vuelve a intentarlo.",
+      "rateLimited": "{minutes, plural, one {Demasiados intentos. Vuelve a intentarlo dentro de # minuto.} other {Demasiados intentos. Vuelve a intentarlo dentro de # minutos.}}",
+      "closed": "Este sitio web no está disponible ahora."
+    },
+    "languages": "Idiomas",
+    "onThisPage": "En esta página",
+    "empty": "Los anfitriones aún están preparando esta página.",
+    "headings": {
+      "text": "Información",
+      "program": "Programa",
+      "travel": "Viaje",
+      "registry": "Lista de regalos",
+      "faq": "Preguntas"
+    },
+    "visit": "Sitio web de {name}",
+    "newTab": "(se abre en una pestaña nueva)"
   }
 }

@@ -32,6 +32,8 @@ export interface ReadinessFacts {
   readonly floorPlan?: boolean;
   /** M4.1a: guests on the event's guest list (placeholder plus-ones included). */
   readonly guests?: number;
+  /** M4.5a: the event's guest website is published. */
+  readonly guestSite?: boolean;
   /** M4.2b: table ticket types of the event (a gala sells its tables). */
   readonly tableTickets?: number;
   readonly now: Date;
@@ -55,7 +57,6 @@ export interface ReadinessRule {
  */
 export const PLACEHOLDER_SECTIONS = [
   'rsvp',
-  'website',
   'gallery',
   'messages',
   'branding',
@@ -68,7 +69,7 @@ const PROFILE_ITEMS: Readonly<Record<string, { path: string; done: (f: Readiness
   guestsAdded: { path: 'guests', done: (f) => (f.guests ?? 0) > 0 },
   rsvpDeadlineSet: { path: 'rsvp', done: () => false },
   floorPlanChosen: { path: 'seating', done: (f) => f.floorPlan === true },
-  guestSitePublished: { path: 'website', done: () => false },
+  guestSitePublished: { path: 'website', done: (f) => f.guestSite === true },
   tablesSponsors: { path: 'tables-sponsors', done: (f) => (f.tableTickets ?? 0) > 0 },
 };
 

@@ -11261,5 +11261,134 @@
     "placeOnChart": "{chart}: {place}",
     "noPlace": "No table yet",
     "guestOf": "Guest of {name}"
+  },
+  "guestSiteHost": {
+    "subtitle": "A page for your guests: your welcome, the program, travel, registry and answers to their questions. Protected by a password; never listed or indexed.",
+    "open": "Open the website",
+    "viewerNotice": "You can see the website here. Only hosts and planners can change it.",
+    "statusTitle": "Your website",
+    "published": "Published",
+    "draft": "Draft",
+    "publishedNote": "Published on {date}. Guests open it with the address below and the password.",
+    "draftNote": "Not published yet. Guests can’t open it until you publish it.",
+    "needsPassword": "Set a password first: the website can’t be published without one.",
+    "address": "Website address",
+    "privacyNote": "Never listed on the marketplace or in search engines. Guests’ names, answers and contact details never appear on it.",
+    "publish": "Publish the website",
+    "unpublish": "Take the website offline",
+    "publishedDone": "Published. Share the address and the password with your guests.",
+    "unpublishedDone": "The website is offline.",
+    "passwordTitle": "Password",
+    "passwordSet": "Set",
+    "passwordMissing": "Not set",
+    "passwordIntro": "Print it on your invitations. Guests type it once on each device; capitals don’t matter. A new password locks out everyone who used the old one.",
+    "savePassword": "Save the password",
+    "passwordSaved": "Password saved.",
+    "detailsTitle": "Title and welcome",
+    "saveDetails": "Save the title and welcome",
+    "detailsSaved": "Saved.",
+    "blocksTitle": "{count, plural, =0 {Sections} one {# section} other {# sections}}",
+    "emptyTitle": "No sections yet",
+    "emptyWrite": "Add your first section below: start with a welcome, then the program, travel and FAQ.",
+    "emptyRead": "The hosts haven’t added any sections yet.",
+    "kindLabel": "{kind} · section {n}",
+    "noSubEvents": "Add sub-events (ceremony, reception…) on the guests page to fill the program.",
+    "saveBlock": "Save “{name}”",
+    "blockSaved": "Section saved.",
+    "moveUp": "Move “{name}” up",
+    "moveDown": "Move “{name}” down",
+    "moved": "Moved.",
+    "removeBlock": "Remove “{name}”",
+    "removed": "Section removed.",
+    "addTitle": "Add a section",
+    "addBlock": "Add the section",
+    "blockAdded": "Section added. Fill it in above.",
+    "subEventEveryone": "{name} (everyone is invited)",
+    "kinds": {
+      "text": "Text",
+      "program": "Program",
+      "travel": "Travel",
+      "registry": "Registry",
+      "faq": "FAQ"
+    },
+    "show": {
+      "everyone": "Sub-events everyone is invited to",
+      "chosen": "Only the sub-events I tick"
+    },
+    "fields": {
+      "heading": "Heading",
+      "headingHint": "Optional.",
+      "body": "Text",
+      "bodyHint": "Paragraphs, **bold**, *italics*, lists and links.",
+      "show": "Which sub-events",
+      "showHint": "A sub-event only some guests are invited to (a rehearsal dinner) appears only if you tick it.",
+      "subEvents": "Sub-events to show",
+      "urlHint": "A full link starting with https://.",
+      "password": "Password",
+      "newPassword": "New password",
+      "passwordHint": "At least {min} characters.",
+      "title": "Title",
+      "intro": "Welcome text (optional)",
+      "language": "Language you write in",
+      "languageHint": "Guests can switch the page’s buttons to their language; your words stay as you wrote them.",
+      "kind": "Kind of section",
+      "kindHint": "The program lists your sub-events with their times."
+    },
+    "item": {
+      "travel": {
+        "title": "Place {n}: name",
+        "details": "Place {n}: details",
+        "url": "Place {n}: website"
+      },
+      "registry": {
+        "label": "Registry {n}: name",
+        "url": "Registry {n}: link"
+      },
+      "faq": {
+        "question": "Question {n}",
+        "answer": "Answer {n}"
+      }
+    },
+    "errors": {
+      "title": "Give the website a title.",
+      "password": "Enter a password.",
+      "required": "Fill this in.",
+      "tooShort": "Use at least {min} characters.",
+      "tooLong": "Use at most 72 characters.",
+      "passwordRequired": "Set a password before publishing.",
+      "tooManyBlocks": "A website can have up to {max} sections.",
+      "httpsOnly": "Use a full link starting with https://.",
+      "subEvents": "Choose sub-events of this event."
+    }
+  },
+  "guestSite": {
+    "metaTitle": "Guest website",
+    "gateTitle": "This website is private",
+    "gateIntro": "Enter the password from your invitation to see the details.",
+    "formLabel": "Open the website",
+    "password": "Password",
+    "passwordHint": "It’s on your invitation. Capitals don’t matter.",
+    "submit": "Open the website",
+    "challengeTitle": "One more step",
+    "challengeHint": "Please confirm you’re a person, then try again.",
+    "errors": {
+      "empty": "Enter the password.",
+      "wrong": "That password doesn’t match. Check your invitation and try again.",
+      "challengeFailed": "The check didn’t pass. Please try again.",
+      "rateLimited": "{minutes, plural, one {Too many tries. Please try again in # minute.} other {Too many tries. Please try again in # minutes.}}",
+      "closed": "This website isn’t available right now."
+    },
+    "languages": "Languages",
+    "onThisPage": "On this page",
+    "empty": "The hosts are still preparing this page.",
+    "headings": {
+      "text": "About",
+      "program": "Program",
+      "travel": "Travel",
+      "registry": "Registry",
+      "faq": "Questions"
+    },
+    "visit": "Website of {name}",
+    "newTab": "(opens in a new tab)"
   }
 }

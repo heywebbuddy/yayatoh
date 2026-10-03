@@ -10,6 +10,7 @@ export { type CanaryAdmin, type CanaryFile, type CanaryOrg, canaryOrg } from './
 export {
   createOrgFixture,
   EXPORT_PARAMS,
+  FIXTURE_SITE_PASSWORD,
   type OrgFixture,
   staleCtx,
   systemCtx,
@@ -18,6 +19,7 @@ export {
 } from './fixtures.ts';
 export { type GuestCheckinScenario, guestCheckinScenario } from './guest-checkin.ts';
 export { type GuestSeatScenario, guestSeatScenario } from './guest-seat-finder.ts';
+export { GUEST_SITE_PASSWORD, type GuestSiteScenario, guestSiteScenario } from './guest-site.ts';
 export { quietDevice, revokeDevice } from './live.ts';
 export {
   bareOrg,

@@ -11261,5 +11261,134 @@
     "placeOnChart": "{chart}: {place}",
     "noPlace": "Noch kein Tisch",
     "guestOf": "Gast von {name}"
+  },
+  "guestSiteHost": {
+    "subtitle": "Eine Seite für eure Gäste: eure Begrüßung, das Programm, Anreise, Wunschliste und Antworten auf ihre Fragen. Mit Passwort geschützt; nie gelistet oder indexiert.",
+    "open": "Website öffnen",
+    "viewerNotice": "Du kannst die Website hier ansehen. Nur Gastgeber und Planer können sie ändern.",
+    "statusTitle": "Eure Website",
+    "published": "Veröffentlicht",
+    "draft": "Entwurf",
+    "publishedNote": "Veröffentlicht am {date}. Gäste öffnen sie mit der Adresse unten und dem Passwort.",
+    "draftNote": "Noch nicht veröffentlicht. Gäste können sie erst öffnen, wenn du sie veröffentlichst.",
+    "needsPassword": "Lege zuerst ein Passwort fest: Ohne Passwort kann die Website nicht veröffentlicht werden.",
+    "address": "Adresse der Website",
+    "privacyNote": "Nie auf dem Marktplatz oder in Suchmaschinen gelistet. Namen, Antworten und Kontaktdaten der Gäste erscheinen dort nie.",
+    "publish": "Website veröffentlichen",
+    "unpublish": "Website offline nehmen",
+    "publishedDone": "Veröffentlicht. Teile die Adresse und das Passwort mit deinen Gästen.",
+    "unpublishedDone": "Die Website ist offline.",
+    "passwordTitle": "Passwort",
+    "passwordSet": "Festgelegt",
+    "passwordMissing": "Nicht festgelegt",
+    "passwordIntro": "Druck es auf eure Einladungen. Gäste geben es einmal pro Gerät ein; Groß- und Kleinschreibung spielt keine Rolle. Ein neues Passwort sperrt alle aus, die das alte benutzt haben.",
+    "savePassword": "Passwort speichern",
+    "passwordSaved": "Passwort gespeichert.",
+    "detailsTitle": "Titel und Begrüßung",
+    "saveDetails": "Titel und Begrüßung speichern",
+    "detailsSaved": "Gespeichert.",
+    "blocksTitle": "{count, plural, =0 {Abschnitte} one {# Abschnitt} other {# Abschnitte}}",
+    "emptyTitle": "Noch keine Abschnitte",
+    "emptyWrite": "Füge unten deinen ersten Abschnitt hinzu: zuerst eine Begrüßung, dann Programm, Anreise und FAQ.",
+    "emptyRead": "Die Gastgeber haben noch keine Abschnitte hinzugefügt.",
+    "kindLabel": "{kind} · Abschnitt {n}",
+    "noSubEvents": "Füge auf der Gästeseite Programmpunkte (Trauung, Feier …) hinzu, um das Programm zu füllen.",
+    "saveBlock": "„{name}“ speichern",
+    "blockSaved": "Abschnitt gespeichert.",
+    "moveUp": "„{name}“ nach oben",
+    "moveDown": "„{name}“ nach unten",
+    "moved": "Verschoben.",
+    "removeBlock": "„{name}“ entfernen",
+    "removed": "Abschnitt entfernt.",
+    "addTitle": "Abschnitt hinzufügen",
+    "addBlock": "Abschnitt hinzufügen",
+    "blockAdded": "Abschnitt hinzugefügt. Fülle ihn oben aus.",
+    "subEventEveryone": "{name} (alle sind eingeladen)",
+    "kinds": {
+      "text": "Text",
+      "program": "Programm",
+      "travel": "Anreise",
+      "registry": "Wunschliste",
+      "faq": "FAQ"
+    },
+    "show": {
+      "everyone": "Programmpunkte, zu denen alle eingeladen sind",
+      "chosen": "Nur die Programmpunkte, die ich ankreuze"
+    },
+    "fields": {
+      "heading": "Überschrift",
+      "headingHint": "Optional.",
+      "body": "Text",
+      "bodyHint": "Absätze, **fett**, *kursiv*, Listen und Links.",
+      "show": "Welche Programmpunkte",
+      "showHint": "Ein Programmpunkt nur für einige Gäste (ein Probeessen) erscheint nur, wenn du ihn ankreuzt.",
+      "subEvents": "Angezeigte Programmpunkte",
+      "urlHint": "Ein vollständiger Link, der mit https:// beginnt.",
+      "password": "Passwort",
+      "newPassword": "Neues Passwort",
+      "passwordHint": "Mindestens {min} Zeichen.",
+      "title": "Titel",
+      "intro": "Begrüßungstext (optional)",
+      "language": "Sprache, in der du schreibst",
+      "languageHint": "Gäste können die Schaltflächen der Seite in ihre Sprache umstellen; deine Worte bleiben, wie du sie geschrieben hast.",
+      "kind": "Art des Abschnitts",
+      "kindHint": "Das Programm listet eure Programmpunkte mit ihren Zeiten."
+    },
+    "item": {
+      "travel": {
+        "title": "Ort {n}: Name",
+        "details": "Ort {n}: Details",
+        "url": "Ort {n}: Website"
+      },
+      "registry": {
+        "label": "Wunschliste {n}: Name",
+        "url": "Wunschliste {n}: Link"
+      },
+      "faq": {
+        "question": "Frage {n}",
+        "answer": "Antwort {n}"
+      }
+    },
+    "errors": {
+      "title": "Gib der Website einen Titel.",
+      "password": "Gib ein Passwort ein.",
+      "required": "Bitte ausfüllen.",
+      "tooShort": "Verwende mindestens {min} Zeichen.",
+      "tooLong": "Verwende höchstens 72 Zeichen.",
+      "passwordRequired": "Lege vor dem Veröffentlichen ein Passwort fest.",
+      "tooManyBlocks": "Eine Website kann bis zu {max} Abschnitte haben.",
+      "httpsOnly": "Verwende einen vollständigen Link, der mit https:// beginnt.",
+      "subEvents": "Wähle Programmpunkte dieser Veranstaltung."
+    }
+  },
+  "guestSite": {
+    "metaTitle": "Website für Gäste",
+    "gateTitle": "Diese Website ist privat",
+    "gateIntro": "Gib das Passwort aus deiner Einladung ein, um die Details zu sehen.",
+    "formLabel": "Website öffnen",
+    "password": "Passwort",
+    "passwordHint": "Es steht auf deiner Einladung. Groß- und Kleinschreibung spielt keine Rolle.",
+    "submit": "Website öffnen",
+    "challengeTitle": "Noch ein Schritt",
+    "challengeHint": "Bitte bestätige, dass du ein Mensch bist, und versuche es erneut.",
+    "errors": {
+      "empty": "Gib das Passwort ein.",
+      "wrong": "Das Passwort stimmt nicht. Prüfe deine Einladung und versuche es erneut.",
+      "challengeFailed": "Die Prüfung ist fehlgeschlagen. Bitte versuche es erneut.",
+      "rateLimited": "{minutes, plural, one {Zu viele Versuche. Bitte versuche es in # Minute erneut.} other {Zu viele Versuche. Bitte versuche es in # Minuten erneut.}}",
+      "closed": "Diese Website ist gerade nicht verfügbar."
+    },
+    "languages": "Sprachen",
+    "onThisPage": "Auf dieser Seite",
+    "empty": "Die Gastgeber bereiten diese Seite noch vor.",
+    "headings": {
+      "text": "Über uns",
+      "program": "Programm",
+      "travel": "Anreise",
+      "registry": "Wunschliste",
+      "faq": "Fragen"
+    },
+    "visit": "Website von {name}",
+    "newTab": "(öffnet in einem neuen Tab)"
   }
 }

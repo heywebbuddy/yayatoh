@@ -11261,5 +11261,134 @@
     "placeOnChart": "{chart}: {place}",
     "noPlace": "Ainda sem mesa",
     "guestOf": "Acompanhante de {name}"
+  },
+  "guestSiteHost": {
+    "subtitle": "Uma página para os seus convidados: as boas-vindas, o programa, a viagem, a lista de presentes e respostas às perguntas deles. Protegida por senha; nunca listada nem indexada.",
+    "open": "Abrir o site",
+    "viewerNotice": "Você pode ver o site aqui. Só os anfitriões e organizadores podem alterá-lo.",
+    "statusTitle": "O seu site",
+    "published": "Publicado",
+    "draft": "Rascunho",
+    "publishedNote": "Publicado em {date}. Os convidados abrem-no com o endereço abaixo e a senha.",
+    "draftNote": "Ainda não publicado. Os convidados não podem abri-lo até você publicá-lo.",
+    "needsPassword": "Defina primeiro uma senha: o site não pode ser publicado sem ela.",
+    "address": "Endereço do site",
+    "privacyNote": "Nunca aparece no marketplace nem nos motores de busca. Nomes, respostas e contactos dos convidados nunca aparecem nele.",
+    "publish": "Publicar o site",
+    "unpublish": "Tirar o site do ar",
+    "publishedDone": "Publicado. Partilhe o endereço e a senha com os seus convidados.",
+    "unpublishedDone": "O site está fora do ar.",
+    "passwordTitle": "Senha",
+    "passwordSet": "Definida",
+    "passwordMissing": "Não definida",
+    "passwordIntro": "Imprima-a nos convites. Os convidados digitam-na uma vez em cada dispositivo; maiúsculas não importam. Uma nova senha bloqueia quem usou a anterior.",
+    "savePassword": "Guardar a senha",
+    "passwordSaved": "Senha guardada.",
+    "detailsTitle": "Título e boas-vindas",
+    "saveDetails": "Guardar título e boas-vindas",
+    "detailsSaved": "Guardado.",
+    "blocksTitle": "{count, plural, =0 {Secções} one {# secção} other {# secções}}",
+    "emptyTitle": "Ainda não há secções",
+    "emptyWrite": "Adicione abaixo a primeira secção: comece pelas boas-vindas, depois o programa, a viagem e as perguntas frequentes.",
+    "emptyRead": "Os anfitriões ainda não adicionaram secções.",
+    "kindLabel": "{kind} · secção {n}",
+    "noSubEvents": "Adicione momentos (cerimónia, receção…) na página de convidados para preencher o programa.",
+    "saveBlock": "Guardar “{name}”",
+    "blockSaved": "Secção guardada.",
+    "moveUp": "Subir “{name}”",
+    "moveDown": "Descer “{name}”",
+    "moved": "Movida.",
+    "removeBlock": "Remover “{name}”",
+    "removed": "Secção removida.",
+    "addTitle": "Adicionar uma secção",
+    "addBlock": "Adicionar a secção",
+    "blockAdded": "Secção adicionada. Preencha-a acima.",
+    "subEventEveryone": "{name} (todos estão convidados)",
+    "kinds": {
+      "text": "Texto",
+      "program": "Programa",
+      "travel": "Viagem",
+      "registry": "Lista de presentes",
+      "faq": "Perguntas frequentes"
+    },
+    "show": {
+      "everyone": "Momentos para os quais todos estão convidados",
+      "chosen": "Só os momentos que eu marcar"
+    },
+    "fields": {
+      "heading": "Título da secção",
+      "headingHint": "Opcional.",
+      "body": "Texto",
+      "bodyHint": "Parágrafos, **negrito**, *itálico*, listas e links.",
+      "show": "Que momentos",
+      "showHint": "Um momento só para alguns convidados (um jantar de ensaio) só aparece se o marcar.",
+      "subEvents": "Momentos a mostrar",
+      "urlHint": "Um link completo começado por https://.",
+      "password": "Senha",
+      "newPassword": "Nova senha",
+      "passwordHint": "Pelo menos {min} caracteres.",
+      "title": "Título",
+      "intro": "Texto de boas-vindas (opcional)",
+      "language": "Idioma em que escreve",
+      "languageHint": "Os convidados podem mudar os botões da página para o idioma deles; as suas palavras ficam como as escreveu.",
+      "kind": "Tipo de secção",
+      "kindHint": "O programa lista os seus momentos com os horários."
+    },
+    "item": {
+      "travel": {
+        "title": "Local {n}: nome",
+        "details": "Local {n}: detalhes",
+        "url": "Local {n}: site"
+      },
+      "registry": {
+        "label": "Lista {n}: nome",
+        "url": "Lista {n}: link"
+      },
+      "faq": {
+        "question": "Pergunta {n}",
+        "answer": "Resposta {n}"
+      }
+    },
+    "errors": {
+      "title": "Dê um título ao site.",
+      "password": "Digite uma senha.",
+      "required": "Preencha este campo.",
+      "tooShort": "Use pelo menos {min} caracteres.",
+      "tooLong": "Use no máximo 72 caracteres.",
+      "passwordRequired": "Defina uma senha antes de publicar.",
+      "tooManyBlocks": "Um site pode ter até {max} secções.",
+      "httpsOnly": "Use um link completo começado por https://.",
+      "subEvents": "Escolha momentos deste evento."
+    }
+  },
+  "guestSite": {
+    "metaTitle": "Site dos convidados",
+    "gateTitle": "Este site é privado",
+    "gateIntro": "Digite a senha do seu convite para ver os detalhes.",
+    "formLabel": "Abrir o site",
+    "password": "Senha",
+    "passwordHint": "Está no seu convite. Maiúsculas não importam.",
+    "submit": "Abrir o site",
+    "challengeTitle": "Só mais um passo",
+    "challengeHint": "Confirme que é uma pessoa e tente de novo.",
+    "errors": {
+      "empty": "Digite a senha.",
+      "wrong": "Essa senha não confere. Verifique o seu convite e tente de novo.",
+      "challengeFailed": "A verificação falhou. Tente de novo.",
+      "rateLimited": "{minutes, plural, one {Tentativas demais. Tente de novo em # minuto.} other {Tentativas demais. Tente de novo em # minutos.}}",
+      "closed": "Este site não está disponível agora."
+    },
+    "languages": "Idiomas",
+    "onThisPage": "Nesta página",
+    "empty": "Os anfitriões ainda estão a preparar esta página.",
+    "headings": {
+      "text": "Sobre",
+      "program": "Programa",
+      "travel": "Viagem",
+      "registry": "Lista de presentes",
+      "faq": "Perguntas"
+    },
+    "visit": "Site de {name}",
+    "newTab": "(abre num novo separador)"
   }
 }

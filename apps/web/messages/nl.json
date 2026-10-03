@@ -11261,5 +11261,134 @@
     "placeOnChart": "{chart}: {place}",
     "noPlace": "Nog geen tafel",
     "guestOf": "Gast van {name}"
+  },
+  "guestSiteHost": {
+    "subtitle": "Een pagina voor je gasten: je welkomstwoord, het programma, reisinformatie, de cadeaulijst en antwoorden op hun vragen. Beveiligd met een wachtwoord; nooit vermeld of geïndexeerd.",
+    "open": "Website openen",
+    "viewerNotice": "Je kunt de website hier bekijken. Alleen gastheren en planners kunnen hem wijzigen.",
+    "statusTitle": "Jullie website",
+    "published": "Gepubliceerd",
+    "draft": "Concept",
+    "publishedNote": "Gepubliceerd op {date}. Gasten openen hem met het adres hieronder en het wachtwoord.",
+    "draftNote": "Nog niet gepubliceerd. Gasten kunnen hem pas openen als je hem publiceert.",
+    "needsPassword": "Stel eerst een wachtwoord in: zonder wachtwoord kan de website niet worden gepubliceerd.",
+    "address": "Adres van de website",
+    "privacyNote": "Nooit vermeld op de marktplaats of in zoekmachines. Namen, antwoorden en contactgegevens van gasten staan er nooit op.",
+    "publish": "Website publiceren",
+    "unpublish": "Website offline halen",
+    "publishedDone": "Gepubliceerd. Deel het adres en het wachtwoord met je gasten.",
+    "unpublishedDone": "De website is offline.",
+    "passwordTitle": "Wachtwoord",
+    "passwordSet": "Ingesteld",
+    "passwordMissing": "Niet ingesteld",
+    "passwordIntro": "Druk het af op je uitnodigingen. Gasten typen het één keer per apparaat; hoofdletters maken niet uit. Een nieuw wachtwoord sluit iedereen buiten die het oude gebruikte.",
+    "savePassword": "Wachtwoord opslaan",
+    "passwordSaved": "Wachtwoord opgeslagen.",
+    "detailsTitle": "Titel en welkomstwoord",
+    "saveDetails": "Titel en welkomstwoord opslaan",
+    "detailsSaved": "Opgeslagen.",
+    "blocksTitle": "{count, plural, =0 {Onderdelen} one {# onderdeel} other {# onderdelen}}",
+    "emptyTitle": "Nog geen onderdelen",
+    "emptyWrite": "Voeg hieronder je eerste onderdeel toe: begin met een welkomstwoord, dan het programma, reisinformatie en veelgestelde vragen.",
+    "emptyRead": "De gastheren hebben nog geen onderdelen toegevoegd.",
+    "kindLabel": "{kind} · onderdeel {n}",
+    "noSubEvents": "Voeg op de gastenpagina programmaonderdelen toe (ceremonie, receptie…) om het programma te vullen.",
+    "saveBlock": "‘{name}’ opslaan",
+    "blockSaved": "Onderdeel opgeslagen.",
+    "moveUp": "‘{name}’ omhoog",
+    "moveDown": "‘{name}’ omlaag",
+    "moved": "Verplaatst.",
+    "removeBlock": "‘{name}’ verwijderen",
+    "removed": "Onderdeel verwijderd.",
+    "addTitle": "Onderdeel toevoegen",
+    "addBlock": "Onderdeel toevoegen",
+    "blockAdded": "Onderdeel toegevoegd. Vul het hierboven in.",
+    "subEventEveryone": "{name} (iedereen is uitgenodigd)",
+    "kinds": {
+      "text": "Tekst",
+      "program": "Programma",
+      "travel": "Reis",
+      "registry": "Cadeaulijst",
+      "faq": "Veelgestelde vragen"
+    },
+    "show": {
+      "everyone": "Programmaonderdelen waarvoor iedereen is uitgenodigd",
+      "chosen": "Alleen de onderdelen die ik aanvink"
+    },
+    "fields": {
+      "heading": "Kop",
+      "headingHint": "Optioneel.",
+      "body": "Tekst",
+      "bodyHint": "Alinea’s, **vet**, *cursief*, lijsten en links.",
+      "show": "Welke onderdelen",
+      "showHint": "Een onderdeel voor een deel van de gasten (een repetitiediner) verschijnt alleen als je het aanvinkt.",
+      "subEvents": "Getoonde onderdelen",
+      "urlHint": "Een volledige link die begint met https://.",
+      "password": "Wachtwoord",
+      "newPassword": "Nieuw wachtwoord",
+      "passwordHint": "Minstens {min} tekens.",
+      "title": "Titel",
+      "intro": "Welkomsttekst (optioneel)",
+      "language": "Taal waarin je schrijft",
+      "languageHint": "Gasten kunnen de knoppen van de pagina in hun eigen taal zetten; jouw woorden blijven zoals je ze schreef.",
+      "kind": "Soort onderdeel",
+      "kindHint": "Het programma toont je programmaonderdelen met hun tijden."
+    },
+    "item": {
+      "travel": {
+        "title": "Plaats {n}: naam",
+        "details": "Plaats {n}: details",
+        "url": "Plaats {n}: website"
+      },
+      "registry": {
+        "label": "Cadeaulijst {n}: naam",
+        "url": "Cadeaulijst {n}: link"
+      },
+      "faq": {
+        "question": "Vraag {n}",
+        "answer": "Antwoord {n}"
+      }
+    },
+    "errors": {
+      "title": "Geef de website een titel.",
+      "password": "Voer een wachtwoord in.",
+      "required": "Vul dit in.",
+      "tooShort": "Gebruik minstens {min} tekens.",
+      "tooLong": "Gebruik hoogstens 72 tekens.",
+      "passwordRequired": "Stel een wachtwoord in voordat je publiceert.",
+      "tooManyBlocks": "Een website kan tot {max} onderdelen hebben.",
+      "httpsOnly": "Gebruik een volledige link die begint met https://.",
+      "subEvents": "Kies programmaonderdelen van dit evenement."
+    }
+  },
+  "guestSite": {
+    "metaTitle": "Website voor gasten",
+    "gateTitle": "Deze website is privé",
+    "gateIntro": "Voer het wachtwoord van je uitnodiging in om de details te zien.",
+    "formLabel": "Website openen",
+    "password": "Wachtwoord",
+    "passwordHint": "Het staat op je uitnodiging. Hoofdletters maken niet uit.",
+    "submit": "Website openen",
+    "challengeTitle": "Nog één stap",
+    "challengeHint": "Bevestig dat je een persoon bent en probeer het opnieuw.",
+    "errors": {
+      "empty": "Voer het wachtwoord in.",
+      "wrong": "Dat wachtwoord klopt niet. Kijk op je uitnodiging en probeer het opnieuw.",
+      "challengeFailed": "De controle is mislukt. Probeer het opnieuw.",
+      "rateLimited": "{minutes, plural, one {Te veel pogingen. Probeer het over # minuut opnieuw.} other {Te veel pogingen. Probeer het over # minuten opnieuw.}}",
+      "closed": "Deze website is nu niet beschikbaar."
+    },
+    "languages": "Talen",
+    "onThisPage": "Op deze pagina",
+    "empty": "De gastheren zijn deze pagina nog aan het voorbereiden.",
+    "headings": {
+      "text": "Over ons",
+      "program": "Programma",
+      "travel": "Reis",
+      "registry": "Cadeaulijst",
+      "faq": "Vragen"
+    },
+    "visit": "Website van {name}",
+    "newTab": "(opent in een nieuw tabblad)"
   }
 }
