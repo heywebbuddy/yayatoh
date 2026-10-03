@@ -74,3 +74,9 @@ export {
   standardRsvpQuestions,
 } from './rsvp-questions.ts';
 export { warehouseScenario } from './warehouse.ts';
+export {
+  SOCIAL_FIXTURE,
+  type SocialPackParty,
+  type SocialPackScenario,
+  socialPackScenario,
+} from './social-pack.ts';

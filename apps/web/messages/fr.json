@@ -7072,6 +7072,52 @@
         "overdue": "{count, plural, one {# livrable en retard} other {# livrables en retard}}",
         "deliverablesPending": "Les livrables apparaîtront ici une fois les formules de sponsoring activées.",
         "open": "Ouvrir les sponsors"
+      },
+      "rsvp": {
+        "title": "Réponses",
+        "allAnswered": "Tous les invités ont répondu.",
+        "noneInvited": "Personne n’est encore invité à une étape.",
+        "responded": "{responded} invités sur {invited} ont répondu",
+        "meter": "Réponses reçues",
+        "parties": "Foyers sans réponse : {count}",
+        "notSent": "Invitation pas encore envoyée : {count}",
+        "deadline": "Date limite de réponse : {date}",
+        "noDeadline": "Aucune date limite de réponse",
+        "open": "Ouvrir les réponses"
+      },
+      "guestSeating": {
+        "title": "Plan de table",
+        "noChart": "Pas encore de plan de salle pour les invités. Choisissez-en un dans Placement.",
+        "noGuests": "Aucun invité à placer pour l’instant.",
+        "allSeated": "Chaque invité qui n’a pas décliné a une table.",
+        "seated": "{seated} invités sur {guests} ont une table",
+        "listLabel": "Invités sans table",
+        "guestOf": "Invité de {name}",
+        "more": "+{count} autres",
+        "open": "Placer les invités"
+      },
+      "meals": {
+        "title": "Repas et régimes",
+        "attending": "Présents : {count}",
+        "noneAttending": "Les repas sont comptés quand les invités disent oui.",
+        "caption": "Repas des invités présents",
+        "colMeal": "Repas",
+        "colGuests": "Invités",
+        "other": "Autre choix",
+        "none": "Aucun repas choisi",
+        "dietary": "Régimes alimentaires : {count}",
+        "accessibility": "Besoins d’accessibilité : {count}",
+        "open": "Ouvrir les réponses RSVP"
+      },
+      "arrivals": {
+        "title": "Arrivées des invités",
+        "arrivedOf": "{arrived} invités attendus sur {expected} sont arrivés",
+        "notArrived": "Pas encore là : {count}",
+        "none": "Personne n’est encore arrivé.",
+        "noExpected": "Aucun invité attendu pour l’instant.",
+        "recent": "Dernières arrivées",
+        "guestOf": "Invité de {name}",
+        "open": "Ouvrir la vue du jour J"
       }
     },
     "openScanner": "Ouvrir le scanner",
@@ -7200,7 +7246,10 @@
       "deliverablesOverdue": "Ouvrir les sponsors",
       "printersKiosksOffline": "Ouvrir la configuration sur place",
       "approvalBacklog": "Ouvrir les candidatures",
-      "invoicesOverdue": "Ouvrir les factures"
+      "invoicesOverdue": "Ouvrir les factures",
+      "rsvpPending": "Ouvrir les réponses",
+      "guestsUnseated": "Placer les invités",
+      "mealsMissing": "Ouvrir les réponses RSVP"
     },
     "rules": {
       "unseated": "{count, plural, one {Un participant n’a pas de place} other {{countWords} participants n’ont pas de place}}",
@@ -7233,7 +7282,10 @@
       "deliverablesOverdue": "{count, plural, one {{countWords} livrable de sponsor est en retard} other {{countWords} livrables de sponsors sont en retard}}",
       "printersKiosksOffline": "{count, plural, one {{countWords} imprimante de badges ou borne est hors ligne} other {{countWords} imprimantes de badges ou bornes sont hors ligne}}",
       "approvalBacklog": "{count, plural, one {{countWords} candidature attend une décision} other {{countWords} candidatures attendent une décision}}",
-      "invoicesOverdue": "{count, plural, one {{countWords} facture est en retard} other {{countWords} factures sont en retard}}"
+      "invoicesOverdue": "{count, plural, one {{countWords} facture est en retard} other {{countWords} factures sont en retard}}",
+      "rsvpPending": "{count, plural, one {Un invité n’a pas répondu à l’invitation} other {{countWords} invités n’ont pas répondu à l’invitation}}",
+      "guestsUnseated": "{count, plural, one {Un invité n’a pas de table} other {{countWords} invités n’ont pas de table}}",
+      "mealsMissing": "{count, plural, one {Un invité présent n’a pas choisi de repas} other {{countWords} invités présents n’ont pas choisi de repas}}"
     },
     "widget": {
       "title": "Alertes",

@@ -7072,6 +7072,52 @@
         "overdue": "{count, plural, one {# डिलिवरेबल विलंबित} other {# डिलिवरेबल विलंबित}}",
         "deliverablesPending": "प्रायोजक पैकेज चालू होने पर डिलिवरेबल यहाँ दिखेंगे।",
         "open": "प्रायोजक खोलें"
+      },
+      "rsvp": {
+        "title": "RSVP",
+        "allAnswered": "सभी आमंत्रित मेहमानों ने जवाब दे दिया है।",
+        "noneInvited": "अभी तक किसी को किसी उप-कार्यक्रम में आमंत्रित नहीं किया गया है।",
+        "responded": "{invited} आमंत्रित मेहमानों में से {responded} ने जवाब दिया है",
+        "meter": "मिले जवाब",
+        "parties": "जवाब बाकी वाले परिवार: {count}",
+        "notSent": "निमंत्रण अभी नहीं भेजा गया: {count}",
+        "deadline": "RSVP की अंतिम तिथि: {date}",
+        "noDeadline": "RSVP की कोई अंतिम तिथि तय नहीं",
+        "open": "RSVP खोलें"
+      },
+      "guestSeating": {
+        "title": "मेहमानों की बैठक",
+        "noChart": "मेहमानों के लिए अभी कोई फ़्लोर प्लान नहीं है। सीटिंग में एक चुनें।",
+        "noGuests": "अभी बैठाने के लिए कोई मेहमान नहीं।",
+        "allSeated": "मना न करने वाले हर मेहमान के पास टेबल है।",
+        "seated": "{guests} मेहमानों में से {seated} के पास टेबल है",
+        "listLabel": "बिना टेबल वाले मेहमान",
+        "guestOf": "{name} के मेहमान",
+        "more": "+{count} और",
+        "open": "मेहमानों को बैठाएँ"
+      },
+      "meals": {
+        "title": "भोजन और आहार ज़रूरतें",
+        "attending": "आ रहे हैं: {count}",
+        "noneAttending": "मेहमानों के हाँ कहने पर भोजन गिना जाता है।",
+        "caption": "आने वाले मेहमानों का भोजन",
+        "colMeal": "भोजन",
+        "colGuests": "मेहमान",
+        "other": "अन्य विकल्प",
+        "none": "भोजन नहीं चुना",
+        "dietary": "आहार संबंधी ज़रूरतें: {count}",
+        "accessibility": "सुलभता ज़रूरतें: {count}",
+        "open": "RSVP जवाब खोलें"
+      },
+      "arrivals": {
+        "title": "मेहमानों का आगमन",
+        "arrivedOf": "{expected} अपेक्षित मेहमानों में से {arrived} आ चुके हैं",
+        "notArrived": "अभी नहीं आए: {count}",
+        "none": "अभी तक कोई नहीं आया है।",
+        "noExpected": "अभी कोई मेहमान अपेक्षित नहीं है।",
+        "recent": "हाल में आए",
+        "guestOf": "{name} के मेहमान",
+        "open": "आज का दृश्य खोलें"
       }
     },
     "openScanner": "स्कैनर खोलें",
@@ -7200,7 +7246,10 @@
       "deliverablesOverdue": "प्रायोजक खोलें",
       "printersKiosksOffline": "ऑनसाइट सेटअप खोलें",
       "approvalBacklog": "आवेदन खोलें",
-      "invoicesOverdue": "चालान खोलें"
+      "invoicesOverdue": "चालान खोलें",
+      "rsvpPending": "RSVP खोलें",
+      "guestsUnseated": "मेहमानों को बैठाएँ",
+      "mealsMissing": "RSVP जवाब खोलें"
     },
     "rules": {
       "unseated": "{count, plural, one {{countWords} उपस्थित व्यक्ति के पास सीट नहीं है} other {{countWords} उपस्थित लोगों के पास सीट नहीं है}}",
@@ -7233,7 +7282,10 @@
       "deliverablesOverdue": "{count, plural, one {{countWords} प्रायोजक डिलिवरेबल की समय-सीमा निकल गई है} other {{countWords} प्रायोजक डिलिवरेबल की समय-सीमा निकल गई है}}",
       "printersKiosksOffline": "{count, plural, one {{countWords} बैज प्रिंटर या कियोस्क ऑफ़लाइन है} other {{countWords} बैज प्रिंटर या कियोस्क ऑफ़लाइन हैं}}",
       "approvalBacklog": "{count, plural, one {{countWords} आवेदन निर्णय की प्रतीक्षा में है} other {{countWords} आवेदन निर्णय की प्रतीक्षा में हैं}}",
-      "invoicesOverdue": "{count, plural, one {{countWords} चालान की नियत तारीख निकल गई है} other {{countWords} चालानों की नियत तारीख निकल गई है}}"
+      "invoicesOverdue": "{count, plural, one {{countWords} चालान की नियत तारीख निकल गई है} other {{countWords} चालानों की नियत तारीख निकल गई है}}",
+      "rsvpPending": "{count, plural, one {{countWords} मेहमान ने RSVP का जवाब नहीं दिया है} other {{countWords} मेहमानों ने RSVP का जवाब नहीं दिया है}}",
+      "guestsUnseated": "{count, plural, one {{countWords} मेहमान के पास टेबल नहीं है} other {{countWords} मेहमानों के पास टेबल नहीं है}}",
+      "mealsMissing": "{count, plural, one {{countWords} आने वाले मेहमान ने भोजन नहीं चुना है} other {{countWords} आने वाले मेहमानों ने भोजन नहीं चुना है}}"
     },
     "widget": {
       "title": "अलर्ट",

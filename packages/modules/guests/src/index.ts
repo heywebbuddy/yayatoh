@@ -136,6 +136,15 @@ export {
   siteAccessToken,
   siteAccessValid,
 } from './domain/site.ts';
+// M4.6a social Command Center pack: RSVP, meal and dietary counts (counts only).
+export {
+  type MealOption,
+  type MealTally,
+  mealTally,
+  type RsvpPendingCounts,
+  rsvpPendingCounts,
+  type SocialGuest,
+} from './domain/social.ts';
 export * from './dto.ts';
 export {
   addPartyGuestCommand,
@@ -352,6 +361,13 @@ export {
 } from './site.ts';
 // M4.5b: the gallery behind the guest site (in the gallery module's transactions).
 export { guestSiteAccessTx, guestSiteCodeTx } from './site-access.ts';
+export {
+  type MealDietaryCounts,
+  mealDietaryCountsTx,
+  rsvpDeadlineEventIdsTx,
+  type SocialFacts,
+  socialFactsTx,
+} from './social-facts.ts';
 export {
   CreateSubEventInput,
   createSubEventCommand,

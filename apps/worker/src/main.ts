@@ -3,10 +3,12 @@ import { warehouseFromEnv } from '@yayatoh/analytics';
 import { printNodeFromEnv } from '@yayatoh/badges';
 import { billingEnabled, billingProviderFromEnv } from '@yayatoh/billing';
 import { setPlatformAuditSink, tryAcquireLeadership } from '@yayatoh/db/platform';
+import { guestsOccupantDirectory } from '@yayatoh/guests';
 import { createNotifier } from '@yayatoh/notifications';
 import { fakePaymentProvider } from '@yayatoh/payments';
 import { gotenbergRenderer } from '@yayatoh/pdf';
 import { purgeRealtimeMessages } from '@yayatoh/platform';
+import { setOccupantDirectory } from '@yayatoh/seating';
 import { fakeDomainProvider } from '@yayatoh/tenancy';
 import { sweepAlerts } from './alerts.ts';
 import { badgeBatchJob, enqueueDueBadgeBatches } from './badges.ts';
@@ -46,6 +48,10 @@ import {
 import { backfillJob, enqueueDueBackfills } from './warehouse.ts';
 import { startWorker } from './worker.ts';
 import { runYearEndStatements } from './year-end.ts';
+
+// M4.6a: the alert engine counts guests without a table through seating's guest plan, which
+// reaches the guest list through its OccupantDirectory port (M4.3a; same tier as guests).
+setOccupantDirectory(guestsOccupantDirectory);
 
 const connectionString = process.env.JOBS_DATABASE_URL;
 if (!connectionString) throw new Error('JOBS_DATABASE_URL is not set (see .env.example)');

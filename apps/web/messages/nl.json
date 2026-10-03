@@ -7072,6 +7072,52 @@
         "overdue": "{count, plural, one {# levering te laat} other {# leveringen te laat}}",
         "deliverablesPending": "Leveringen verschijnen hier zodra sponsorpakketten aan staan.",
         "open": "Sponsors openen"
+      },
+      "rsvp": {
+        "title": "Reacties",
+        "allAnswered": "Iedereen die is uitgenodigd heeft gereageerd.",
+        "noneInvited": "Er is nog niemand uitgenodigd voor een onderdeel.",
+        "responded": "{responded} van {invited} uitgenodigde gasten hebben gereageerd",
+        "meter": "Ontvangen reacties",
+        "parties": "Huishoudens zonder reactie: {count}",
+        "notSent": "Uitnodiging nog niet verstuurd: {count}",
+        "deadline": "Reageren kan tot: {date}",
+        "noDeadline": "Geen reactietermijn ingesteld",
+        "open": "Reacties openen"
+      },
+      "guestSeating": {
+        "title": "Tafelindeling",
+        "noChart": "Nog geen plattegrond voor gasten. Kies er een bij Plaatsen.",
+        "noGuests": "Nog geen gasten om te plaatsen.",
+        "allSeated": "Elke gast die niet heeft afgezegd, heeft een tafel.",
+        "seated": "{seated} van {guests} gasten hebben een tafel",
+        "listLabel": "Gasten zonder tafel",
+        "guestOf": "Gast van {name}",
+        "more": "+{count} meer",
+        "open": "Gasten plaatsen"
+      },
+      "meals": {
+        "title": "Maaltijden en dieetwensen",
+        "attending": "Aanwezig: {count}",
+        "noneAttending": "Maaltijden worden geteld zodra gasten ja zeggen.",
+        "caption": "Maaltijden van aanwezige gasten",
+        "colMeal": "Maaltijd",
+        "colGuests": "Gasten",
+        "other": "Andere keuze",
+        "none": "Geen maaltijd gekozen",
+        "dietary": "Dieetwensen: {count}",
+        "accessibility": "Toegankelijkheidsbehoeften: {count}",
+        "open": "RSVP-antwoorden openen"
+      },
+      "arrivals": {
+        "title": "Aankomst van gasten",
+        "arrivedOf": "{arrived} van {expected} verwachte gasten zijn er",
+        "notArrived": "Nog niet hier: {count}",
+        "none": "Er is nog niemand aangekomen.",
+        "noExpected": "Er worden nog geen gasten verwacht.",
+        "recent": "Laatst aangekomen",
+        "guestOf": "Gast van {name}",
+        "open": "Dagoverzicht openen"
       }
     },
     "openScanner": "Scanner openen",
@@ -7200,7 +7246,10 @@
       "deliverablesOverdue": "Sponsors openen",
       "printersKiosksOffline": "Instellingen ter plaatse openen",
       "approvalBacklog": "Aanvragen openen",
-      "invoicesOverdue": "Facturen openen"
+      "invoicesOverdue": "Facturen openen",
+      "rsvpPending": "Reacties openen",
+      "guestsUnseated": "Gasten plaatsen",
+      "mealsMissing": "RSVP-antwoorden openen"
     },
     "rules": {
       "unseated": "{count, plural, one {Eén deelnemer heeft geen plaats} other {{countWords} deelnemers hebben geen plaats}}",
@@ -7233,7 +7282,10 @@
       "deliverablesOverdue": "{count, plural, one {{countWords} sponsorlevering is te laat} other {{countWords} sponsorleveringen zijn te laat}}",
       "printersKiosksOffline": "{count, plural, one {{countWords} badgeprinter of kiosk is offline} other {{countWords} badgeprinters of kiosken zijn offline}}",
       "approvalBacklog": "{count, plural, one {{countWords} aanvraag wacht op een besluit} other {{countWords} aanvragen wachten op een besluit}}",
-      "invoicesOverdue": "{count, plural, one {{countWords} factuur is te laat} other {{countWords} facturen zijn te laat}}"
+      "invoicesOverdue": "{count, plural, one {{countWords} factuur is te laat} other {{countWords} facturen zijn te laat}}",
+      "rsvpPending": "{count, plural, one {Eén gast heeft nog niet gereageerd op de uitnodiging} other {{countWords} gasten hebben nog niet gereageerd op de uitnodiging}}",
+      "guestsUnseated": "{count, plural, one {Eén gast heeft geen tafel} other {{countWords} gasten hebben geen tafel}}",
+      "mealsMissing": "{count, plural, one {Eén aanwezige gast heeft geen maaltijd gekozen} other {{countWords} aanwezige gasten hebben geen maaltijd gekozen}}"
     },
     "widget": {
       "title": "Meldingen",

@@ -7072,6 +7072,52 @@
         "overdue": "{count, plural, one {# consegna scaduta} other {# consegne scadute}}",
         "deliverablesPending": "Le consegne compariranno qui quando i pacchetti sponsor saranno attivi.",
         "open": "Apri gli sponsor"
+      },
+      "rsvp": {
+        "title": "Risposte",
+        "allAnswered": "Tutti gli invitati hanno risposto.",
+        "noneInvited": "Nessuno è ancora invitato a un momento dell’evento.",
+        "responded": "{responded} invitati su {invited} hanno risposto",
+        "meter": "Risposte ricevute",
+        "parties": "Nuclei senza risposta: {count}",
+        "notSent": "Invito non ancora inviato: {count}",
+        "deadline": "Scadenza risposte: {date}",
+        "noDeadline": "Nessuna scadenza per le risposte",
+        "open": "Apri le risposte"
+      },
+      "guestSeating": {
+        "title": "Tavoli degli invitati",
+        "noChart": "Ancora nessuna piantina per gli invitati. Scegline una in Posti.",
+        "noGuests": "Ancora nessun invitato da sistemare.",
+        "allSeated": "Ogni invitato che non ha declinato ha un tavolo.",
+        "seated": "{seated} invitati su {guests} hanno un tavolo",
+        "listLabel": "Invitati senza tavolo",
+        "guestOf": "Accompagnatore di {name}",
+        "more": "+{count} altri",
+        "open": "Assegna i tavoli"
+      },
+      "meals": {
+        "title": "Pasti ed esigenze alimentari",
+        "attending": "Presenti: {count}",
+        "noneAttending": "I pasti si contano quando gli invitati confermano.",
+        "caption": "Pasti degli invitati presenti",
+        "colMeal": "Pasto",
+        "colGuests": "Invitati",
+        "other": "Altra scelta",
+        "none": "Nessun pasto scelto",
+        "dietary": "Esigenze alimentari: {count}",
+        "accessibility": "Esigenze di accessibilità: {count}",
+        "open": "Apri le risposte RSVP"
+      },
+      "arrivals": {
+        "title": "Arrivi degli invitati",
+        "arrivedOf": "Sono arrivati {arrived} invitati attesi su {expected}",
+        "notArrived": "Non ancora arrivati: {count}",
+        "none": "Non è ancora arrivato nessuno.",
+        "noExpected": "Ancora nessun invitato atteso.",
+        "recent": "Ultimi arrivi",
+        "guestOf": "Accompagnatore di {name}",
+        "open": "Apri la vista del giorno"
       }
     },
     "openScanner": "Apri scanner",
@@ -7200,7 +7246,10 @@
       "deliverablesOverdue": "Apri gli sponsor",
       "printersKiosksOffline": "Apri la configurazione in loco",
       "approvalBacklog": "Apri le candidature",
-      "invoicesOverdue": "Apri le fatture"
+      "invoicesOverdue": "Apri le fatture",
+      "rsvpPending": "Apri le risposte",
+      "guestsUnseated": "Assegna i tavoli",
+      "mealsMissing": "Apri le risposte RSVP"
     },
     "rules": {
       "unseated": "{count, plural, one {Un partecipante non ha un posto} other {{countWords} partecipanti non hanno un posto}}",
@@ -7233,7 +7282,10 @@
       "deliverablesOverdue": "{count, plural, one {{countWords} consegna dello sponsor è scaduta} other {{countWords} consegne degli sponsor sono scadute}}",
       "printersKiosksOffline": "{count, plural, one {{countWords} stampante di badge o chiosco è offline} other {{countWords} stampanti di badge o chioschi sono offline}}",
       "approvalBacklog": "{count, plural, one {{countWords} candidatura attende una decisione} other {{countWords} candidature attendono una decisione}}",
-      "invoicesOverdue": "{count, plural, one {{countWords} fattura è scaduta} other {{countWords} fatture sono scadute}}"
+      "invoicesOverdue": "{count, plural, one {{countWords} fattura è scaduta} other {{countWords} fatture sono scadute}}",
+      "rsvpPending": "{count, plural, one {Un invitato non ha risposto all’invito} other {{countWords} invitati non hanno risposto all’invito}}",
+      "guestsUnseated": "{count, plural, one {Un invitato non ha un tavolo} other {{countWords} invitati non hanno un tavolo}}",
+      "mealsMissing": "{count, plural, one {Un invitato presente non ha scelto il pasto} other {{countWords} invitati presenti non hanno scelto il pasto}}"
     },
     "widget": {
       "title": "Avvisi",

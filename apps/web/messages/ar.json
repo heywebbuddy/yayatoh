@@ -7072,6 +7072,52 @@
         "overdue": "{count, plural, zero {لا التزامات متأخرة} one {التزام واحد متأخر} two {التزامان متأخران} few {# التزامات متأخرة} many {# التزامًا متأخرًا} other {# التزام متأخر}}",
         "deliverablesPending": "تظهر الالتزامات هنا عند تفعيل باقات الرعاية.",
         "open": "افتح الرعاة"
+      },
+      "rsvp": {
+        "title": "الردود على الدعوة",
+        "allAnswered": "ردّ جميع المدعوين.",
+        "noneInvited": "لم تتم دعوة أي شخص إلى فقرة بعد.",
+        "responded": "ردّ {responded} من {invited} من الضيوف المدعوين",
+        "meter": "الردود المستلمة",
+        "parties": "عائلات لم تردّ: {count}",
+        "notSent": "لم تُرسل الدعوة بعد: {count}",
+        "deadline": "آخر موعد للرد: {date}",
+        "noDeadline": "لم يُحدَّد آخر موعد للرد",
+        "open": "افتح الردود"
+      },
+      "guestSeating": {
+        "title": "جلوس الضيوف",
+        "noChart": "لا يوجد مخطط قاعة للضيوف بعد. اختر واحدًا في المقاعد.",
+        "noGuests": "لا يوجد ضيوف لإجلاسهم بعد.",
+        "allSeated": "لكل ضيف لم يعتذر طاولة.",
+        "seated": "لدى {seated} من {guests} ضيفًا طاولة",
+        "listLabel": "ضيوف بلا طاولة",
+        "guestOf": "مرافق {name}",
+        "more": "+{count} آخرون",
+        "open": "أجلِس الضيوف"
+      },
+      "meals": {
+        "title": "الوجبات والاحتياجات الغذائية",
+        "attending": "الحاضرون: {count}",
+        "noneAttending": "تُحسب الوجبات عندما يؤكد الضيوف حضورهم.",
+        "caption": "وجبات الضيوف الحاضرين",
+        "colMeal": "الوجبة",
+        "colGuests": "الضيوف",
+        "other": "اختيار آخر",
+        "none": "لم تُختر وجبة",
+        "dietary": "احتياجات غذائية: {count}",
+        "accessibility": "احتياجات الوصول: {count}",
+        "open": "افتح إجابات الدعوة"
+      },
+      "arrivals": {
+        "title": "وصول الضيوف",
+        "arrivedOf": "وصل {arrived} من {expected} من الضيوف المتوقعين",
+        "notArrived": "لم يصلوا بعد: {count}",
+        "none": "لم يصل أحد بعد.",
+        "noExpected": "لا يُتوقع حضور ضيوف بعد.",
+        "recent": "آخر الواصلين",
+        "guestOf": "مرافق {name}",
+        "open": "افتح عرض يوم الحفل"
       }
     },
     "openScanner": "فتح الماسح",
@@ -7200,7 +7246,10 @@
       "deliverablesOverdue": "افتح الرعاة",
       "printersKiosksOffline": "افتح إعداد الموقع",
       "approvalBacklog": "افتح الطلبات",
-      "invoicesOverdue": "افتح الفواتير"
+      "invoicesOverdue": "افتح الفواتير",
+      "rsvpPending": "افتح الردود",
+      "guestsUnseated": "أجلِس الضيوف",
+      "mealsMissing": "افتح إجابات الدعوة"
     },
     "rules": {
       "unseated": "{count, plural, zero {لا يوجد حاضرون بلا مقاعد} one {حاضر واحد ليس لديه مقعد} two {حاضران ليس لديهما مقعد} few {{countWords} حاضرين ليس لديهم مقاعد} many {{countWords} حاضرًا ليس لديهم مقاعد} other {{countWords} حاضر ليس لديهم مقاعد}}",
@@ -7233,7 +7282,10 @@
       "deliverablesOverdue": "{count, plural, zero {لا توجد التزامات رعاة متأخرة} one {التزام راعٍ واحد متأخر} two {التزاما رعاة متأخران} few {{countWords} التزامات رعاة متأخرة} many {{countWords} التزامًا للرعاة متأخرًا} other {{countWords} التزام رعاة متأخر}}",
       "printersKiosksOffline": "{count, plural, zero {لا توجد طابعات شارات أو أكشاك غير متصلة} one {طابعة شارات أو كشك واحد غير متصل} two {جهازان (طابعات شارات أو أكشاك) غير متصلين} few {{countWords} طابعات شارات أو أكشاك غير متصلة} many {{countWords} طابعة شارات أو كشكًا غير متصل} other {{countWords} طابعة شارات أو كشك غير متصل}}",
       "approvalBacklog": "{count, plural, zero {لا توجد طلبات تنتظر قرارًا} one {طلب واحد ينتظر قرارًا} two {طلبان ينتظران قرارًا} few {{countWords} طلبات تنتظر قرارًا} many {{countWords} طلبًا ينتظر قرارًا} other {{countWords} طلب ينتظر قرارًا}}",
-      "invoicesOverdue": "{count, plural, zero {لا توجد فواتير متأخرة} one {فاتورة واحدة متأخرة} two {فاتورتان متأخرتان} few {{countWords} فواتير متأخرة} many {{countWords} فاتورة متأخرة} other {{countWords} فاتورة متأخرة}}"
+      "invoicesOverdue": "{count, plural, zero {لا توجد فواتير متأخرة} one {فاتورة واحدة متأخرة} two {فاتورتان متأخرتان} few {{countWords} فواتير متأخرة} many {{countWords} فاتورة متأخرة} other {{countWords} فاتورة متأخرة}}",
+      "rsvpPending": "{count, plural, zero {لا يوجد ضيوف لم يردّوا على الدعوة} one {ضيف واحد لم يردّ على الدعوة} two {ضيفان لم يردّا على الدعوة} few {{countWords} ضيوف لم يردّوا على الدعوة} many {{countWords} ضيفًا لم يردّوا على الدعوة} other {{countWords} ضيف لم يردّوا على الدعوة}}",
+      "guestsUnseated": "{count, plural, zero {لا يوجد ضيوف بلا طاولة} one {ضيف واحد بلا طاولة} two {ضيفان بلا طاولة} few {{countWords} ضيوف بلا طاولة} many {{countWords} ضيفًا بلا طاولة} other {{countWords} ضيف بلا طاولة}}",
+      "mealsMissing": "{count, plural, zero {لا يوجد ضيوف حاضرون بلا وجبة} one {ضيف حاضر واحد لم يختر وجبة} two {ضيفان حاضران لم يختارا وجبة} few {{countWords} ضيوف حاضرين لم يختاروا وجبة} many {{countWords} ضيفًا حاضرًا لم يختاروا وجبة} other {{countWords} ضيف حاضر لم يختاروا وجبة}}"
     },
     "widget": {
       "title": "التنبيهات",

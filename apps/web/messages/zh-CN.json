@@ -7072,6 +7072,52 @@
         "overdue": "{count, plural, other {# 项交付已逾期}}",
         "deliverablesPending": "开启赞助方案后，交付事项会显示在这里。",
         "open": "打开赞助商"
+      },
+      "rsvp": {
+        "title": "出席回复",
+        "allAnswered": "所有受邀宾客都已回复。",
+        "noneInvited": "尚未邀请任何人参加分场活动。",
+        "responded": "{invited} 位受邀宾客中已有 {responded} 位回复",
+        "meter": "已收到的回复",
+        "parties": "未回复的家庭：{count}",
+        "notSent": "尚未发送邀请：{count}",
+        "deadline": "回复截止：{date}",
+        "noDeadline": "未设置回复截止日期",
+        "open": "打开回复"
+      },
+      "guestSeating": {
+        "title": "宾客座位",
+        "noChart": "还没有宾客平面图。请在座位中选择一个。",
+        "noGuests": "暂时没有需要安排座位的宾客。",
+        "allSeated": "每位未婉拒的宾客都有桌位。",
+        "seated": "{guests} 位宾客中有 {seated} 位已有桌位",
+        "listLabel": "没有桌位的宾客",
+        "guestOf": "{name} 的同伴",
+        "more": "另外 {count} 位",
+        "open": "安排宾客座位"
+      },
+      "meals": {
+        "title": "餐点与饮食需求",
+        "attending": "出席：{count}",
+        "noneAttending": "宾客确认出席后才会统计餐点。",
+        "caption": "出席宾客的餐点",
+        "colMeal": "餐点",
+        "colGuests": "宾客",
+        "other": "其他选择",
+        "none": "未选择餐点",
+        "dietary": "饮食需求：{count}",
+        "accessibility": "无障碍需求：{count}",
+        "open": "打开回复详情"
+      },
+      "arrivals": {
+        "title": "宾客到场",
+        "arrivedOf": "{expected} 位预期宾客中已到 {arrived} 位",
+        "notArrived": "尚未到场：{count}",
+        "none": "还没有人到场。",
+        "noExpected": "暂无预期到场的宾客。",
+        "recent": "最近到场",
+        "guestOf": "{name} 的同伴",
+        "open": "打开当天视图"
       }
     },
     "openScanner": "打开扫码器",
@@ -7200,7 +7246,10 @@
       "deliverablesOverdue": "打开赞助商",
       "printersKiosksOffline": "打开现场设置",
       "approvalBacklog": "打开申请",
-      "invoicesOverdue": "打开发票"
+      "invoicesOverdue": "打开发票",
+      "rsvpPending": "打开回复",
+      "guestsUnseated": "安排宾客座位",
+      "mealsMissing": "打开回复详情"
     },
     "rules": {
       "unseated": "{count, plural, other {{countWords} 位参会者没有座位}}",
@@ -7233,7 +7282,10 @@
       "deliverablesOverdue": "{count, plural, other {{countWords}项赞助交付已逾期}}",
       "printersKiosksOffline": "{count, plural, other {{countWords}台胸卡打印机或自助机已离线}}",
       "approvalBacklog": "{count, plural, other {{countWords}份申请正在等待审核}}",
-      "invoicesOverdue": "{count, plural, other {{countWords}张发票已逾期}}"
+      "invoicesOverdue": "{count, plural, other {{countWords}张发票已逾期}}",
+      "rsvpPending": "{count, plural, other {{countWords} 位宾客尚未回复出席邀请}}",
+      "guestsUnseated": "{count, plural, other {{countWords} 位宾客没有桌位}}",
+      "mealsMissing": "{count, plural, other {{countWords} 位出席宾客尚未选择餐点}}"
     },
     "widget": {
       "title": "提醒",

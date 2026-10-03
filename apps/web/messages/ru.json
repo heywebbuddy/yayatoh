@@ -7072,6 +7072,52 @@
         "overdue": "{count, plural, one {# обязательство просрочено} few {# обязательства просрочены} many {# обязательств просрочено} other {# обязательства просрочены}}",
         "deliverablesPending": "Обязательства появятся здесь, когда включатся спонсорские пакеты.",
         "open": "Открыть спонсоров"
+      },
+      "rsvp": {
+        "title": "Ответы гостей",
+        "allAnswered": "Все приглашённые ответили.",
+        "noneInvited": "Пока никто не приглашён ни на одну часть события.",
+        "responded": "Ответили {responded} из {invited} приглашённых",
+        "meter": "Полученные ответы",
+        "parties": "Семьи без ответа: {count}",
+        "notSent": "Приглашение ещё не отправлено: {count}",
+        "deadline": "Ответить до: {date}",
+        "noDeadline": "Срок ответа не задан",
+        "open": "Открыть ответы"
+      },
+      "guestSeating": {
+        "title": "Рассадка гостей",
+        "noChart": "Плана зала для гостей пока нет. Выберите его в разделе «Рассадка».",
+        "noGuests": "Пока некого рассаживать.",
+        "allSeated": "У каждого гостя, который не отказался, есть стол.",
+        "seated": "Стол есть у {seated} из {guests} гостей",
+        "listLabel": "Гости без стола",
+        "guestOf": "Гость {name}",
+        "more": "Ещё {count}",
+        "open": "Рассадить гостей"
+      },
+      "meals": {
+        "title": "Блюда и питание",
+        "attending": "Придут: {count}",
+        "noneAttending": "Блюда считаются, когда гости отвечают «да».",
+        "caption": "Блюда гостей, которые придут",
+        "colMeal": "Блюдо",
+        "colGuests": "Гости",
+        "other": "Другой выбор",
+        "none": "Блюдо не выбрано",
+        "dietary": "Особое питание: {count}",
+        "accessibility": "Нужна доступность: {count}",
+        "open": "Открыть ответы на приглашение"
+      },
+      "arrivals": {
+        "title": "Прибытие гостей",
+        "arrivedOf": "Пришли {arrived} из {expected} ожидаемых гостей",
+        "notArrived": "Ещё не пришли: {count}",
+        "none": "Пока никто не пришёл.",
+        "noExpected": "Гостей пока не ждут.",
+        "recent": "Недавно пришли",
+        "guestOf": "Гость {name}",
+        "open": "Открыть день события"
       }
     },
     "openScanner": "Открыть сканер",
@@ -7200,7 +7246,10 @@
       "deliverablesOverdue": "Открыть спонсоров",
       "printersKiosksOffline": "Открыть настройки на площадке",
       "approvalBacklog": "Открыть заявки",
-      "invoicesOverdue": "Открыть счета"
+      "invoicesOverdue": "Открыть счета",
+      "rsvpPending": "Открыть ответы",
+      "guestsUnseated": "Рассадить гостей",
+      "mealsMissing": "Открыть ответы на приглашение"
     },
     "rules": {
       "unseated": "{count, plural, one {{countWords} участник без места} few {{countWords} участника без мест} many {{countWords} участников без мест} other {{countWords} участника без мест}}",
@@ -7233,7 +7282,10 @@
       "deliverablesOverdue": "{count, plural, one {{countWords} обязательство спонсора просрочено} few {{countWords} обязательства спонсоров просрочены} many {{countWords} обязательств спонсоров просрочено} other {{countWords} обязательства спонсоров просрочены}}",
       "printersKiosksOffline": "{count, plural, one {{countWords} принтер бейджей или киоск не в сети} few {{countWords} принтера бейджей или киоска не в сети} many {{countWords} принтеров бейджей или киосков не в сети} other {{countWords} принтера бейджей или киоска не в сети}}",
       "approvalBacklog": "{count, plural, one {{countWords} заявка ждёт решения} few {{countWords} заявки ждут решения} many {{countWords} заявок ждут решения} other {{countWords} заявки ждут решения}}",
-      "invoicesOverdue": "{count, plural, one {{countWords} счёт просрочен} few {{countWords} счёта просрочены} many {{countWords} счетов просрочено} other {{countWords} счёта просрочены}}"
+      "invoicesOverdue": "{count, plural, one {{countWords} счёт просрочен} few {{countWords} счёта просрочены} many {{countWords} счетов просрочено} other {{countWords} счёта просрочены}}",
+      "rsvpPending": "{count, plural, one {{countWords} гость не ответил на приглашение} few {{countWords} гостя не ответили на приглашение} many {{countWords} гостей не ответили на приглашение} other {{countWords} гостя не ответили на приглашение}}",
+      "guestsUnseated": "{count, plural, one {{countWords} гость без стола} few {{countWords} гостя без стола} many {{countWords} гостей без стола} other {{countWords} гостя без стола}}",
+      "mealsMissing": "{count, plural, one {{countWords} гость, который придёт, не выбрал блюдо} few {{countWords} гостя, которые придут, не выбрали блюдо} many {{countWords} гостей, которые придут, не выбрали блюдо} other {{countWords} гостя, которые придут, не выбрали блюдо}}"
     },
     "widget": {
       "title": "Оповещения",

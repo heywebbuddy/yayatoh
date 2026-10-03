@@ -7072,6 +7072,52 @@
         "overdue": "{count, plural, one {# entrega atrasada} other {# entregas atrasadas}}",
         "deliverablesPending": "As entregas aparecem aqui quando os pacotes de patrocínio estiverem ativos.",
         "open": "Abrir patrocinadores"
+      },
+      "rsvp": {
+        "title": "Confirmações",
+        "allAnswered": "Todos os convidados responderam.",
+        "noneInvited": "Ninguém foi convidado para um subevento ainda.",
+        "responded": "{responded} de {invited} convidados responderam",
+        "meter": "Respostas recebidas",
+        "parties": "Grupos sem resposta: {count}",
+        "notSent": "Convite ainda não enviado: {count}",
+        "deadline": "Prazo de resposta: {date}",
+        "noDeadline": "Sem prazo de resposta definido",
+        "open": "Abrir as respostas"
+      },
+      "guestSeating": {
+        "title": "Mesas dos convidados",
+        "noChart": "Ainda não há planta para os convidados. Escolha uma em Lugares.",
+        "noGuests": "Ainda não há convidados para sentar.",
+        "allSeated": "Todo convidado que não recusou tem mesa.",
+        "seated": "{seated} de {guests} convidados têm mesa",
+        "listLabel": "Convidados sem mesa",
+        "guestOf": "Acompanhante de {name}",
+        "more": "+{count} outros",
+        "open": "Sentar os convidados"
+      },
+      "meals": {
+        "title": "Refeições e restrições",
+        "attending": "Confirmados: {count}",
+        "noneAttending": "As refeições são contadas quando os convidados confirmam.",
+        "caption": "Refeições dos convidados confirmados",
+        "colMeal": "Refeição",
+        "colGuests": "Convidados",
+        "other": "Outra escolha",
+        "none": "Sem refeição escolhida",
+        "dietary": "Restrições alimentares: {count}",
+        "accessibility": "Necessidades de acessibilidade: {count}",
+        "open": "Abrir as respostas RSVP"
+      },
+      "arrivals": {
+        "title": "Chegadas dos convidados",
+        "arrivedOf": "{arrived} de {expected} convidados esperados chegaram",
+        "notArrived": "Ainda não chegaram: {count}",
+        "none": "Ninguém chegou ainda.",
+        "noExpected": "Nenhum convidado esperado ainda.",
+        "recent": "Últimas chegadas",
+        "guestOf": "Acompanhante de {name}",
+        "open": "Abrir a visão do dia"
       }
     },
     "openScanner": "Abrir leitor",
@@ -7200,7 +7246,10 @@
       "deliverablesOverdue": "Abrir patrocinadores",
       "printersKiosksOffline": "Abrir a configuração no local",
       "approvalBacklog": "Abrir inscrições",
-      "invoicesOverdue": "Abrir faturas"
+      "invoicesOverdue": "Abrir faturas",
+      "rsvpPending": "Abrir as respostas",
+      "guestsUnseated": "Sentar os convidados",
+      "mealsMissing": "Abrir as respostas RSVP"
     },
     "rules": {
       "unseated": "{count, plural, one {{countWords} participante não tem lugar} other {{countWords} participantes não têm lugar}}",
@@ -7233,7 +7282,10 @@
       "deliverablesOverdue": "{count, plural, one {{countWords} entrega de patrocinador está atrasada} other {{countWords} entregas de patrocinadores estão atrasadas}}",
       "printersKiosksOffline": "{count, plural, one {{countWords} impressora de crachás ou quiosque está offline} other {{countWords} impressoras de crachás ou quiosques estão offline}}",
       "approvalBacklog": "{count, plural, one {{countWords} inscrição aguarda uma decisão} other {{countWords} inscrições aguardam uma decisão}}",
-      "invoicesOverdue": "{count, plural, one {{countWords} fatura está vencida} other {{countWords} faturas estão vencidas}}"
+      "invoicesOverdue": "{count, plural, one {{countWords} fatura está vencida} other {{countWords} faturas estão vencidas}}",
+      "rsvpPending": "{count, plural, one {{countWords} convidado não respondeu ao convite} other {{countWords} convidados não responderam ao convite}}",
+      "guestsUnseated": "{count, plural, one {{countWords} convidado não tem mesa} other {{countWords} convidados não têm mesa}}",
+      "mealsMissing": "{count, plural, one {{countWords} convidado confirmado não escolheu a refeição} other {{countWords} convidados confirmados não escolheram a refeição}}"
     },
     "widget": {
       "title": "Alertas",
