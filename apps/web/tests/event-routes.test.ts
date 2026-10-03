@@ -61,6 +61,8 @@ const SECTION_OF: Record<string, string> = {
   badges: 'badges',
   // M4.8a: the Donations tab (gala and community profiles) replaces its placeholder.
   donations: 'donations',
+  // M5.8a: networking is reached from Sessions and opens with it.
+  networking: 'sessions',
 };
 
 describe('event console route sweep (M4.2a)', () => {
