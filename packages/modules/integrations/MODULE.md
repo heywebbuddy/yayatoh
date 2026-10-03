@@ -54,3 +54,16 @@ Slack, Mailchimp, HubSpot, Klaviyo) with `defineConnector` in `src/connectors/` 
   queues `integrations.sync` (exclusive per connection); the dev drain (`/api/dev/integrations/run`)
   runs `runDueSyncs`. Events: `integrations.connection_connected@1`,
   `integrations.connection_revoked@1`, `integrations.sync_completed@1` (ids, codes and counts).
+- **Reconciling push (M6.5c):** a `PushSide` with `reconcile` lists every record it wants on each
+  pass (its cursor goes back to the start after the last page); unchanged ones are skipped by the
+  link hash, and linked records `read` no longer returns are deleted at the provider with
+  `remove` (`removed` outcome; the link goes). Calendars use it.
+- **Personal connections (M6.5c):** `audience: 'registrant'` connectors (`google_calendar_personal`)
+  belong to one registrant (`registrant_id` + `event_id`); the live slot is per (org, connector,
+  registrant). They are made from "My schedule" with the order's manage link (`personal.ts`,
+  `public:calendar` commands that re-check the registrant), never listed, offered or opened in the
+  console, and store no account label. `PushScope` tells `changes`/`read` whose records to push.
+- **Google Calendar (M6.5c):** `google_calendar` (the org's sessions) and
+  `google_calendar_personal` (a registrant's schedule) push sessions as entries in the event's
+  IANA zone under stable ids (a lost create answer is a 409, then an update); the fake Calendar
+  API (`googleCalendarFakeProvider`) backs dev and CI.
