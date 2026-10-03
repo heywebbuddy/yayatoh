@@ -4,6 +4,8 @@ export {
   sendAccountNotice,
   userPreferencesTx,
 } from './account-data.ts';
+// M6.1a: contact merges move this module's references (ADR 0023).
+export { notificationsContactOwner } from './contact-merge.ts';
 export {
   CAMPAIGN_DEDUPE_PREFIX,
   campaignDedupeKey,

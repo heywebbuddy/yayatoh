@@ -5183,7 +5183,9 @@
         "unknown_legacy": "Sconosciuto (importato)",
         "none": "Non dato"
       }
-    }
+    },
+    "peopleLink": "Persone",
+    "duplicatesLink": "Possibili duplicati"
   },
   "refundOps": {
     "timeline": {
@@ -10864,6 +10866,195 @@
       "waitlist_closed": "{title} è al completo e la sua lista d'attesa si è chiusa 24 ore prima della sessione.",
       "offer_ended": "L'offerta per {title} è scaduta.",
       "full": "{title} si è appena riempita. Riprova per entrare in lista d'attesa."
+    }
+  },
+  "people": {
+    "title": "Persone",
+    "audiences": "Pubblici",
+    "description": "Tutte le persone di cui la tua organizzazione ha una scheda, dalle più recenti. Apri una persona per vedere tutta la sua storia.",
+    "duplicatesLink": "Possibili duplicati",
+    "search": {
+      "label": "Cerca per nome, email o azienda",
+      "submit": "Cerca",
+      "noneTitle": "Nessun risultato",
+      "noneDescription": "Nessun nome, email o azienda contiene «{q}». Prova una ricerca più breve."
+    },
+    "emptyTitle": "Ancora nessuna persona",
+    "emptyDescription": "Le persone compaiono qui quando acquistano biglietti, si registrano o vengono aggiunte a una lista ospiti.",
+    "caption": "Persone",
+    "columns": {
+      "name": "Nome",
+      "email": "Email",
+      "company": "Azienda",
+      "added": "Aggiunta"
+    },
+    "next": "Pagina successiva",
+    "person": {
+      "title": "Persona",
+      "details": "Dati",
+      "mergedHere": "Quella scheda è stata unita a questa."
+    },
+    "fields": {
+      "name": "Nome",
+      "email": "Email",
+      "phone": "Telefono",
+      "company": "Azienda",
+      "added": "Aggiunta",
+      "emailConsent": "Email di marketing",
+      "smsConsent": "SMS di marketing",
+      "history": "Storico",
+      "empty": "Non indicato"
+    },
+    "merges": {
+      "title": "Schede unite",
+      "line": "{who} unita il {when}.",
+      "moved": "{moved, plural, =0 {Nulla è stato spostato.} one {# elemento spostato.} other {# elementi spostati.}}",
+      "undoneOn": "Annullata il {when}.",
+      "undoUntil": "Si può annullare fino al {when}.",
+      "erased": "una scheda cancellata"
+    },
+    "undo": {
+      "submit": "Annulla unione",
+      "submitFor": "Annulla l’unione di {who}",
+      "done": "Unione annullata. Le due schede sono di nuovo separate, esattamente come prima.",
+      "openOther": "Apri l’altra scheda",
+      "errors": {
+        "expired": "Questa unione ha più di 30 giorni e non si può più annullare.",
+        "blocked": "Questa scheda è stata poi unita a un’altra. Annulla prima quell’unione.",
+        "erased": "Una di queste schede è stata cancellata, quindi l’unione non si può più annullare.",
+        "undone": "Questa unione è già stata annullata."
+      }
+    },
+    "errors": {
+      "forbidden": "Il tuo ruolo non può unire persone. Chiedi a un proprietario, un amministratore o un manager."
+    },
+    "timeline": {
+      "title": "Cronologia",
+      "kind": "Cosa",
+      "allKinds": "Tutto",
+      "event": "Evento",
+      "allEvents": "Tutti gli eventi",
+      "filter": "Filtra",
+      "noMatchTitle": "Nulla corrisponde a questi filtri",
+      "noMatchDescription": "Scegli «Tutto» o «Tutti gli eventi» per vedere di più.",
+      "emptyTitle": "Ancora nulla",
+      "emptyDescription": "Ordini, ingressi, campagne, messaggi e sondaggi compaiono qui man mano che accadono.",
+      "listLabel": "Cronologia di {name}",
+      "older": "Precedenti"
+    },
+    "kinds": {
+      "order_paid": "Ordine pagato",
+      "order_refunded": "Rimborso",
+      "checked_in": "Ingresso registrato",
+      "session_attended": "Ha partecipato a una sessione",
+      "campaign_sent": "Campagna inviata",
+      "campaign_opened": "Ha aperto una campagna",
+      "campaign_clicked": "Ha cliccato una campagna",
+      "message_in": "Ti ha scritto",
+      "message_out": "Hai risposto",
+      "donation": "Donazione",
+      "rsvp": "Risposta all’invito",
+      "survey_sent": "Sondaggio inviato",
+      "survey_responded": "Ha risposto a un sondaggio"
+    },
+    "merge": {
+      "done": "Schede unite. Puoi annullare per 30 giorni da questa pagina.",
+      "submit": "Unisci schede",
+      "hint": "Ordini, biglietti, ingressi, messaggi e storico passano alla scheda che resta. Un’unione si può annullare per 30 giorni.",
+      "errors": {
+        "alreadyMerged": "Una di queste schede è stata unita o modificata da quando hai aperto la pagina. Torna all’elenco.",
+        "erased": "Una di queste schede è stata cancellata e non si può unire.",
+        "unavailable": "Al momento non è possibile unire. Riprova più tardi.",
+        "keep": "Scegli quale scheda resta."
+      }
+    },
+    "duplicates": {
+      "title": "Possibili duplicati",
+      "description": "Persone forse registrate due volte: stessa email, stesso telefono o nome simile nella stessa azienda.",
+      "scan": "Cerca duplicati",
+      "lastScan": "Ultimo controllo: {when}. I nuovi contatti vengono controllati automaticamente ogni pochi minuti.",
+      "neverScanned": "Non ancora controllato.",
+      "scanned": "{count, plural, =0 {Nessun possibile duplicato trovato.} one {Trovato # possibile duplicato.} other {Trovati # possibili duplicati.}}",
+      "dismissedDone": "Segnato come persone diverse. Questa coppia non verrà più proposta.",
+      "bulkDone": "{count, plural, =0 {Nulla è stato unito.} one {# coppia unita. Ogni unione si può annullare per 30 giorni.} other {# coppie unite. Ogni unione si può annullare per 30 giorni.}}",
+      "statusNav": "Filtra per stato",
+      "status": {
+        "open": "Aperti ({count})",
+        "dismissed": "Non duplicati",
+        "merged": "Uniti"
+      },
+      "caption": {
+        "open": "Possibili duplicati da verificare",
+        "dismissed": "Coppie segnate come persone diverse",
+        "merged": "Coppie unite"
+      },
+      "empty": {
+        "open": {
+          "title": "Nessun possibile duplicato",
+          "description": "Scegli «Cerca duplicati» per controllare tutti ora. I nuovi contatti vengono controllati automaticamente."
+        },
+        "dismissed": {
+          "title": "Nulla scartato",
+          "description": "Qui compaiono le coppie che segni come persone diverse."
+        },
+        "merged": {
+          "title": "Ancora nessuna unione",
+          "description": "Qui compaiono le coppie che unisci. Annulla un’unione dalla pagina della persona."
+        }
+      },
+      "select": "Seleziona",
+      "selectPair": "Seleziona {pair}",
+      "pair": "{a} e {b}",
+      "columns": {
+        "people": "Persone",
+        "confidence": "Affidabilità",
+        "reasons": "Perché",
+        "review": "Verifica"
+      },
+      "score": "{score}%",
+      "review": "Verifica",
+      "reviewPair": "Verifica {pair}",
+      "mergeSelected": "Unisci selezionati",
+      "mergeSelectedHint": "Mantiene la scheda più vecchia di ogni coppia e i dati più recenti. Ti verrà chiesto di confermare la tua identità.",
+      "errors": {
+        "noneSelected": "Seleziona almeno una coppia da unire.",
+        "tooMany": "Seleziona al massimo 50 coppie alla volta."
+      }
+    },
+    "reasons": {
+      "email": "Stesso indirizzo email",
+      "phone": "Stesso numero di telefono",
+      "name_company": "Nome simile nella stessa azienda"
+    },
+    "compare": {
+      "title": "Verifica possibile duplicato",
+      "description": "Affidabilità {score}%: {reasons}.",
+      "resolved": "Questa coppia è già stata gestita.",
+      "record": "Scheda {n}",
+      "older": "(più vecchia)",
+      "entries": "{count, plural, =0 {Nessuna voce} one {# voce} other {# voci}}",
+      "openTimeline": "Apri la cronologia della {record}",
+      "consentTitle": "Consenso dopo l’unione",
+      "consentEmail": "Email di marketing: {status}",
+      "consentSms": "SMS di marketing: {status}",
+      "consentRule": "Vince la scelta più restrittiva: se una delle schede si è disiscritta, anche la scheda unita lo è.",
+      "keepLegend": "Quale scheda resta",
+      "keepHint": "L’altra scheda viene unita a questa. Il suo indirizzo email porta ancora a questa persona.",
+      "keepOption": "{record} ({email})",
+      "fieldLegend": {
+        "name": "Nome",
+        "email": "Email",
+        "phone": "Telefono",
+        "company": "Azienda"
+      },
+      "fieldOption": "{record}: {value}",
+      "dismiss": "Non è la stessa persona"
+    },
+    "consent": {
+      "granted": "Iscritto",
+      "withdrawn": "Disiscritto",
+      "unknown_legacy": "Sconosciuto (importato)",
+      "none": "Nessun consenso"
     }
   }
 }

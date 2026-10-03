@@ -24,7 +24,22 @@ export {
   marketingScenario,
   seedEmails,
 } from './marketing.ts';
-export { BULK_ACTIONS, bulkStep, ports, runBulk, submitRegistrationForm } from './ports.ts';
+export {
+  catchUpTimeline,
+  MERGE_EDITIONS,
+  type MergePerson,
+  type MergeScenario,
+  mergeScenario,
+  TIMELINE_SUBSCRIBERS,
+} from './merge.ts';
+export {
+  BULK_ACTIONS,
+  bulkStep,
+  CONTACT_REFERENCE_OWNERS,
+  ports,
+  runBulk,
+  submitRegistrationForm,
+} from './ports.ts';
 export { type RsvpParty, type RsvpScenario, rsvpScenario } from './rsvp.ts';
 export {
   type RsvpQuestionsScenario,

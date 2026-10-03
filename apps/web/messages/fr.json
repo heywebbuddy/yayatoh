@@ -5183,7 +5183,9 @@
         "unknown_legacy": "Inconnu (importé)",
         "none": "Non donné"
       }
-    }
+    },
+    "peopleLink": "Personnes",
+    "duplicatesLink": "Doublons possibles"
   },
   "refundOps": {
     "timeline": {
@@ -10864,6 +10866,195 @@
       "waitlist_closed": "{title} est complète et sa liste d'attente a fermé 24 heures avant la session.",
       "offer_ended": "L'offre pour {title} est terminée.",
       "full": "{title} vient d'être complète. Réessayez pour rejoindre la liste d'attente."
+    }
+  },
+  "people": {
+    "title": "Personnes",
+    "audiences": "Audiences",
+    "description": "Toutes les personnes dont votre organisation a une fiche, les plus récentes d’abord. Ouvrez une personne pour voir tout son historique.",
+    "duplicatesLink": "Doublons possibles",
+    "search": {
+      "label": "Rechercher par nom, e-mail ou entreprise",
+      "submit": "Rechercher",
+      "noneTitle": "Aucun résultat",
+      "noneDescription": "Aucun nom, e-mail ou entreprise ne contient « {q} ». Essayez une recherche plus courte."
+    },
+    "emptyTitle": "Aucune personne pour l’instant",
+    "emptyDescription": "Les personnes apparaissent ici quand elles achètent des billets, s’inscrivent ou sont ajoutées à une liste d’invités.",
+    "caption": "Personnes",
+    "columns": {
+      "name": "Nom",
+      "email": "E-mail",
+      "company": "Entreprise",
+      "added": "Ajoutée le"
+    },
+    "next": "Page suivante",
+    "person": {
+      "title": "Personne",
+      "details": "Coordonnées",
+      "mergedHere": "Cette fiche a été fusionnée avec celle-ci."
+    },
+    "fields": {
+      "name": "Nom",
+      "email": "E-mail",
+      "phone": "Téléphone",
+      "company": "Entreprise",
+      "added": "Ajoutée le",
+      "emailConsent": "E-mails marketing",
+      "smsConsent": "SMS marketing",
+      "history": "Historique",
+      "empty": "Non renseigné"
+    },
+    "merges": {
+      "title": "Fiches fusionnées",
+      "line": "{who} fusionnée le {when}.",
+      "moved": "{moved, plural, =0 {Rien n’a été déplacé.} one {# élément déplacé.} other {# éléments déplacés.}}",
+      "undoneOn": "Annulée le {when}.",
+      "undoUntil": "Annulable jusqu’au {when}.",
+      "erased": "une fiche effacée"
+    },
+    "undo": {
+      "submit": "Annuler la fusion",
+      "submitFor": "Annuler la fusion de {who}",
+      "done": "Fusion annulée. Les deux fiches sont de nouveau séparées, exactement comme avant.",
+      "openOther": "Ouvrir l’autre fiche",
+      "errors": {
+        "expired": "Cette fusion date de plus de 30 jours et ne peut plus être annulée.",
+        "blocked": "Cette fiche a depuis été fusionnée avec une autre. Annulez d’abord cette fusion.",
+        "erased": "L’une de ces fiches a été effacée : la fusion ne peut plus être annulée.",
+        "undone": "Cette fusion a déjà été annulée."
+      }
+    },
+    "errors": {
+      "forbidden": "Votre rôle ne permet pas de fusionner des personnes. Demandez à un propriétaire, un administrateur ou un responsable."
+    },
+    "timeline": {
+      "title": "Historique",
+      "kind": "Quoi",
+      "allKinds": "Tout",
+      "event": "Événement",
+      "allEvents": "Tous les événements",
+      "filter": "Filtrer",
+      "noMatchTitle": "Rien ne correspond à ces filtres",
+      "noMatchDescription": "Choisissez « Tout » ou « Tous les événements » pour en voir plus.",
+      "emptyTitle": "Rien pour l’instant",
+      "emptyDescription": "Les commandes, entrées, campagnes, messages et enquêtes apparaissent ici au fur et à mesure.",
+      "listLabel": "Historique de {name}",
+      "older": "Plus anciens"
+    },
+    "kinds": {
+      "order_paid": "Commande payée",
+      "order_refunded": "Remboursement",
+      "checked_in": "Entrée enregistrée",
+      "session_attended": "A assisté à une session",
+      "campaign_sent": "Campagne envoyée",
+      "campaign_opened": "A ouvert une campagne",
+      "campaign_clicked": "A cliqué sur une campagne",
+      "message_in": "Vous a écrit",
+      "message_out": "Vous avez répondu",
+      "donation": "Don",
+      "rsvp": "Réponse à l’invitation",
+      "survey_sent": "Enquête envoyée",
+      "survey_responded": "A répondu à une enquête"
+    },
+    "merge": {
+      "done": "Fiches fusionnées. Vous pouvez annuler pendant 30 jours depuis cette page.",
+      "submit": "Fusionner les fiches",
+      "hint": "Commandes, billets, entrées, messages et historique passent sur la fiche conservée. Une fusion peut être annulée pendant 30 jours.",
+      "errors": {
+        "alreadyMerged": "L’une de ces fiches a été fusionnée ou modifiée depuis l’ouverture de cette page. Revenez à la liste.",
+        "erased": "L’une de ces fiches a été effacée et ne peut pas être fusionnée.",
+        "unavailable": "La fusion n’est pas disponible pour le moment. Réessayez plus tard.",
+        "keep": "Choisissez la fiche à conserver."
+      }
+    },
+    "duplicates": {
+      "title": "Doublons possibles",
+      "description": "Des personnes peut-être enregistrées deux fois : même e-mail, même téléphone ou nom proche dans la même entreprise.",
+      "scan": "Rechercher des doublons",
+      "lastScan": "Dernière vérification : {when}. Les nouveaux contacts sont vérifiés automatiquement toutes les quelques minutes.",
+      "neverScanned": "Pas encore vérifié.",
+      "scanned": "{count, plural, =0 {Aucun doublon possible trouvé.} one {# doublon possible trouvé.} other {# doublons possibles trouvés.}}",
+      "dismissedDone": "Marqué comme personnes différentes. Cette paire ne sera plus proposée.",
+      "bulkDone": "{count, plural, =0 {Rien n’a été fusionné.} one {# paire fusionnée. Chaque fusion peut être annulée pendant 30 jours.} other {# paires fusionnées. Chaque fusion peut être annulée pendant 30 jours.}}",
+      "statusNav": "Filtrer par statut",
+      "status": {
+        "open": "À traiter ({count})",
+        "dismissed": "Pas des doublons",
+        "merged": "Fusionnés"
+      },
+      "caption": {
+        "open": "Doublons possibles à vérifier",
+        "dismissed": "Paires marquées comme personnes différentes",
+        "merged": "Paires fusionnées"
+      },
+      "empty": {
+        "open": {
+          "title": "Aucun doublon possible",
+          "description": "Choisissez « Rechercher des doublons » pour vérifier tout le monde maintenant. Les nouveaux contacts sont vérifiés automatiquement."
+        },
+        "dismissed": {
+          "title": "Rien d’écarté",
+          "description": "Les paires marquées comme personnes différentes apparaissent ici."
+        },
+        "merged": {
+          "title": "Aucune fusion pour l’instant",
+          "description": "Les paires fusionnées apparaissent ici. Annulez une fusion depuis la page de la personne."
+        }
+      },
+      "select": "Sélectionner",
+      "selectPair": "Sélectionner {pair}",
+      "pair": "{a} et {b}",
+      "columns": {
+        "people": "Personnes",
+        "confidence": "Confiance",
+        "reasons": "Pourquoi",
+        "review": "Vérifier"
+      },
+      "score": "{score} %",
+      "review": "Vérifier",
+      "reviewPair": "Vérifier {pair}",
+      "mergeSelected": "Fusionner la sélection",
+      "mergeSelectedHint": "Conserve la fiche la plus ancienne de chaque paire et les informations les plus récentes. Il vous sera demandé de confirmer votre identité.",
+      "errors": {
+        "noneSelected": "Sélectionnez au moins une paire à fusionner.",
+        "tooMany": "Sélectionnez au plus 50 paires à la fois."
+      }
+    },
+    "reasons": {
+      "email": "Même adresse e-mail",
+      "phone": "Même numéro de téléphone",
+      "name_company": "Nom proche dans la même entreprise"
+    },
+    "compare": {
+      "title": "Vérifier un doublon possible",
+      "description": "Confiance de {score} % : {reasons}.",
+      "resolved": "Cette paire a déjà été traitée.",
+      "record": "Fiche {n}",
+      "older": "(plus ancienne)",
+      "entries": "{count, plural, =0 {Aucune entrée} one {# entrée} other {# entrées}}",
+      "openTimeline": "Ouvrir l’historique de la {record}",
+      "consentTitle": "Consentement après fusion",
+      "consentEmail": "E-mails marketing : {status}",
+      "consentSms": "SMS marketing : {status}",
+      "consentRule": "Le choix le plus strict l’emporte : si l’une des fiches s’est désinscrite, la fiche fusionnée l’est aussi.",
+      "keepLegend": "Fiche à conserver",
+      "keepHint": "L’autre fiche y est fusionnée. Son adresse e-mail mène toujours à cette personne.",
+      "keepOption": "{record} ({email})",
+      "fieldLegend": {
+        "name": "Nom",
+        "email": "E-mail",
+        "phone": "Téléphone",
+        "company": "Entreprise"
+      },
+      "fieldOption": "{record} : {value}",
+      "dismiss": "Pas la même personne"
+    },
+    "consent": {
+      "granted": "Inscrit",
+      "withdrawn": "Désinscrit",
+      "unknown_legacy": "Inconnu (importé)",
+      "none": "Aucun consentement"
     }
   }
 }

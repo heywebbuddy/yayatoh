@@ -30,6 +30,8 @@ export const PERMISSIONS = [
    */
   'attendees:export_private',
   'contacts:read',
+  /** Merge duplicate contacts and undo merges (M6.1a): moves orders, tickets and history. */
+  'contacts:merge',
   'finance:read',
   /** Resolve reconciliation differences (M1.6e). */
   'finance:reconcile',
@@ -104,6 +106,7 @@ export const ROLE_PERMISSIONS: Readonly<Record<OrgRole, readonly Permission[]>> 
     'guests:write',
     'attendees:export',
     'contacts:read',
+    'contacts:merge',
     'marketing:read',
     'marketing:write',
     'checkin:scan',

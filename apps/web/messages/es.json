@@ -5183,7 +5183,9 @@
         "unknown_legacy": "Desconocido (importado)",
         "none": "No otorgado"
       }
-    }
+    },
+    "peopleLink": "Personas",
+    "duplicatesLink": "Posibles duplicados"
   },
   "refundOps": {
     "timeline": {
@@ -10864,6 +10866,195 @@
       "waitlist_closed": "{title} está completa y su lista de espera se cerró 24 horas antes de la sesión.",
       "offer_ended": "La oferta para {title} terminó.",
       "full": "{title} se acaba de llenar. Vuelve a intentarlo para unirte a la lista de espera."
+    }
+  },
+  "people": {
+    "title": "Personas",
+    "audiences": "Audiencias",
+    "description": "Todas las personas de las que tu organización tiene un registro, las más recientes primero. Abre a alguien para ver todo su historial.",
+    "duplicatesLink": "Posibles duplicados",
+    "search": {
+      "label": "Buscar por nombre, correo o empresa",
+      "submit": "Buscar",
+      "noneTitle": "Nadie coincide",
+      "noneDescription": "Ningún nombre, correo ni empresa contiene «{q}». Prueba con una búsqueda más corta."
+    },
+    "emptyTitle": "Aún no hay personas",
+    "emptyDescription": "Las personas aparecen aquí cuando compran entradas, se registran o se añaden a una lista de invitados.",
+    "caption": "Personas",
+    "columns": {
+      "name": "Nombre",
+      "email": "Correo",
+      "company": "Empresa",
+      "added": "Añadida"
+    },
+    "next": "Página siguiente",
+    "person": {
+      "title": "Persona",
+      "details": "Datos",
+      "mergedHere": "Ese registro se fusionó con este."
+    },
+    "fields": {
+      "name": "Nombre",
+      "email": "Correo",
+      "phone": "Teléfono",
+      "company": "Empresa",
+      "added": "Añadida",
+      "emailConsent": "Correo de marketing",
+      "smsConsent": "SMS de marketing",
+      "history": "Historial",
+      "empty": "Sin indicar"
+    },
+    "merges": {
+      "title": "Registros fusionados",
+      "line": "{who} fusionado el {when}.",
+      "moved": "{moved, plural, =0 {No se movió nada.} one {Se movió # elemento.} other {Se movieron # elementos.}}",
+      "undoneOn": "Deshecho el {when}.",
+      "undoUntil": "Se puede deshacer hasta el {when}.",
+      "erased": "un registro borrado"
+    },
+    "undo": {
+      "submit": "Deshacer fusión",
+      "submitFor": "Deshacer la fusión de {who}",
+      "done": "Fusión deshecha. Los dos registros vuelven a estar separados, exactamente como antes.",
+      "openOther": "Abrir el otro registro",
+      "errors": {
+        "expired": "Esta fusión tiene más de 30 días y ya no se puede deshacer.",
+        "blocked": "Este registro se fusionó después con otro. Deshaz primero esa fusión.",
+        "erased": "Uno de estos registros se borró, así que la fusión ya no se puede deshacer.",
+        "undone": "Esta fusión ya se deshizo."
+      }
+    },
+    "errors": {
+      "forbidden": "Tu rol no puede fusionar personas. Pídeselo a una persona propietaria, administradora o gerente."
+    },
+    "timeline": {
+      "title": "Cronología",
+      "kind": "Qué",
+      "allKinds": "Todo",
+      "event": "Evento",
+      "allEvents": "Todos los eventos",
+      "filter": "Filtrar",
+      "noMatchTitle": "Nada coincide con estos filtros",
+      "noMatchDescription": "Elige «Todo» o «Todos los eventos» para ver más.",
+      "emptyTitle": "Aún no hay nada",
+      "emptyDescription": "Los pedidos, accesos, campañas, mensajes y encuestas aparecen aquí a medida que ocurren.",
+      "listLabel": "Cronología de {name}",
+      "older": "Anteriores"
+    },
+    "kinds": {
+      "order_paid": "Pedido pagado",
+      "order_refunded": "Reembolso",
+      "checked_in": "Acceso registrado",
+      "session_attended": "Asistió a una sesión",
+      "campaign_sent": "Campaña enviada",
+      "campaign_opened": "Abrió una campaña",
+      "campaign_clicked": "Hizo clic en una campaña",
+      "message_in": "Te escribió",
+      "message_out": "Respondiste",
+      "donation": "Donativo",
+      "rsvp": "Confirmación de asistencia",
+      "survey_sent": "Encuesta enviada",
+      "survey_responded": "Respondió una encuesta"
+    },
+    "merge": {
+      "done": "Registros fusionados. Puedes deshacerlo durante 30 días desde esta página.",
+      "submit": "Fusionar registros",
+      "hint": "Los pedidos, entradas, accesos, mensajes e historial pasan al registro que se conserva. Puedes deshacer una fusión durante 30 días.",
+      "errors": {
+        "alreadyMerged": "Uno de estos registros se fusionó o cambió desde que abriste esta página. Vuelve a la lista.",
+        "erased": "Uno de estos registros se borró y no se puede fusionar.",
+        "unavailable": "Ahora no se puede fusionar. Inténtalo más tarde.",
+        "keep": "Elige qué registro se conserva."
+      }
+    },
+    "duplicates": {
+      "title": "Posibles duplicados",
+      "description": "Personas que quizá figuran dos veces: el mismo correo, el mismo teléfono o un nombre parecido en la misma empresa.",
+      "scan": "Buscar duplicados",
+      "lastScan": "Última comprobación: {when}. Los contactos nuevos se comprueban automáticamente cada pocos minutos.",
+      "neverScanned": "Aún sin comprobar.",
+      "scanned": "{count, plural, =0 {No se encontraron posibles duplicados.} one {Se encontró # posible duplicado.} other {Se encontraron # posibles duplicados.}}",
+      "dismissedDone": "Marcado como personas distintas. Esta pareja no se volverá a sugerir.",
+      "bulkDone": "{count, plural, =0 {No se fusionó nada.} one {Se fusionó # pareja. Cada fusión se puede deshacer durante 30 días.} other {Se fusionaron # parejas. Cada fusión se puede deshacer durante 30 días.}}",
+      "statusNav": "Filtrar por estado",
+      "status": {
+        "open": "Abiertos ({count})",
+        "dismissed": "No duplicados",
+        "merged": "Fusionados"
+      },
+      "caption": {
+        "open": "Posibles duplicados por revisar",
+        "dismissed": "Parejas marcadas como personas distintas",
+        "merged": "Parejas fusionadas"
+      },
+      "empty": {
+        "open": {
+          "title": "No hay posibles duplicados",
+          "description": "Elige «Buscar duplicados» para comprobar a todos ahora. Los contactos nuevos se comprueban automáticamente."
+        },
+        "dismissed": {
+          "title": "Nada descartado",
+          "description": "Aquí aparecen las parejas que marques como personas distintas."
+        },
+        "merged": {
+          "title": "Aún no hay fusiones",
+          "description": "Aquí aparecen las parejas que fusiones. Deshaz una fusión desde la página de la persona."
+        }
+      },
+      "select": "Seleccionar",
+      "selectPair": "Seleccionar {pair}",
+      "pair": "{a} y {b}",
+      "columns": {
+        "people": "Personas",
+        "confidence": "Confianza",
+        "reasons": "Por qué",
+        "review": "Revisar"
+      },
+      "score": "{score} %",
+      "review": "Revisar",
+      "reviewPair": "Revisar {pair}",
+      "mergeSelected": "Fusionar selección",
+      "mergeSelectedHint": "Conserva el registro más antiguo de cada pareja y los datos más recientes. Se te pedirá confirmar que eres tú.",
+      "errors": {
+        "noneSelected": "Selecciona al menos una pareja para fusionar.",
+        "tooMany": "Selecciona como máximo 50 parejas a la vez."
+      }
+    },
+    "reasons": {
+      "email": "Mismo correo electrónico",
+      "phone": "Mismo teléfono",
+      "name_company": "Nombre parecido en la misma empresa"
+    },
+    "compare": {
+      "title": "Revisar posible duplicado",
+      "description": "{score} % de confianza: {reasons}.",
+      "resolved": "Esta pareja ya está resuelta.",
+      "record": "Registro {n}",
+      "older": "(más antiguo)",
+      "entries": "{count, plural, =0 {Sin entradas} one {# entrada} other {# entradas}}",
+      "openTimeline": "Abrir la cronología del {record}",
+      "consentTitle": "Consentimiento tras la fusión",
+      "consentEmail": "Correo de marketing: {status}",
+      "consentSms": "SMS de marketing: {status}",
+      "consentRule": "Gana la opción más estricta: si cualquiera de los registros se dio de baja, el registro fusionado queda dado de baja.",
+      "keepLegend": "Qué registro se conserva",
+      "keepHint": "El otro registro se fusiona con él. Su correo sigue llevando a esta persona.",
+      "keepOption": "{record} ({email})",
+      "fieldLegend": {
+        "name": "Nombre",
+        "email": "Correo",
+        "phone": "Teléfono",
+        "company": "Empresa"
+      },
+      "fieldOption": "{record}: {value}",
+      "dismiss": "No es la misma persona"
+    },
+    "consent": {
+      "granted": "Suscrito",
+      "withdrawn": "Dado de baja",
+      "unknown_legacy": "Desconocido (importado)",
+      "none": "Sin consentimiento"
     }
   }
 }

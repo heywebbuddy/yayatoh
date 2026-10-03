@@ -10,6 +10,7 @@ import { runDueBulkOperations } from './bulk.ts';
 import { bossRelease, campaignReleaseJob, campaignTick } from './campaigns.ts';
 import { DEVICE_WATCHDOG_MS, runDeviceWatchdog } from './device-watchdog.ts';
 import { domainRecheckJob } from './domains.ts';
+import { enqueueDuplicateScans } from './duplicates.ts';
 import { endExpiredImpersonations } from './impersonations.ts';
 import { enqueueJourneyWork } from './journeys.ts';
 import { enqueueDueMassRefunds, massRefundJob } from './mass-refunds.ts';
@@ -172,6 +173,18 @@ setInterval(() => {
       queueingJourneys = false;
     });
 }, 5_000).unref();
+// Duplicate detection (M6.1a): an incremental scan for each org with new or changed contacts,
+// every 5 minutes (leader only); the exclusive queue keeps one job per org.
+let queueingScans = false;
+setInterval(() => {
+  if (!release || stopping || queueingScans) return;
+  queueingScans = true;
+  enqueueDuplicateScans(boss)
+    .catch((err) => console.error('duplicates', err))
+    .finally(() => {
+      queueingScans = false;
+    });
+}, 5 * 60_000).unref();
 // Badge batch PDFs (M5.5a): queue a job for each unfinished batch every 3 s (leader only); the
 // exclusive queue keeps one job per batch.
 let queueingBadges = false;

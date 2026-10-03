@@ -5183,7 +5183,9 @@
         "unknown_legacy": "未知（匯入）",
         "none": "未同意"
       }
-    }
+    },
+    "peopleLink": "人員",
+    "duplicatesLink": "可能的重複"
   },
   "refundOps": {
     "timeline": {
@@ -10864,6 +10866,195 @@
       "waitlist_closed": "{title} 已滿，候補名單已在場次開始前 24 小時關閉。",
       "offer_ended": "{title} 的邀請已結束。",
       "full": "{title} 剛剛額滿。再試一次即可加入候補名單。"
+    }
+  },
+  "people": {
+    "title": "人員",
+    "audiences": "受眾",
+    "description": "貴組織有紀錄的所有人，最新的在前。開啟某人即可查看其完整歷史。",
+    "duplicatesLink": "可能的重複",
+    "search": {
+      "label": "依姓名、電子郵件或公司搜尋",
+      "submit": "搜尋",
+      "noneTitle": "沒有符合的人",
+      "noneDescription": "沒有任何姓名、電子郵件或公司包含「{q}」。請嘗試較短的關鍵字。"
+    },
+    "emptyTitle": "還沒有人員",
+    "emptyDescription": "有人購票、報名或被加入賓客名單後，會出現在這裡。",
+    "caption": "人員",
+    "columns": {
+      "name": "姓名",
+      "email": "電子郵件",
+      "company": "公司",
+      "added": "新增時間"
+    },
+    "next": "下一頁",
+    "person": {
+      "title": "人員",
+      "details": "詳細資料",
+      "mergedHere": "那筆紀錄已合併到這筆紀錄。"
+    },
+    "fields": {
+      "name": "姓名",
+      "email": "電子郵件",
+      "phone": "電話",
+      "company": "公司",
+      "added": "新增時間",
+      "emailConsent": "行銷郵件",
+      "smsConsent": "行銷簡訊",
+      "history": "歷史",
+      "empty": "未填寫"
+    },
+    "merges": {
+      "title": "已合併的紀錄",
+      "line": "已於 {when} 合併 {who}。",
+      "moved": "{moved, plural, =0 {未移動任何內容。} other {已移動 # 項。}}",
+      "undoneOn": "已於 {when} 復原。",
+      "undoUntil": "可在 {when} 前復原。",
+      "erased": "一筆已刪除的紀錄"
+    },
+    "undo": {
+      "submit": "復原合併",
+      "submitFor": "復原對 {who} 的合併",
+      "done": "已復原合併。兩筆紀錄已恢復為分開狀態，與之前完全相同。",
+      "openOther": "開啟另一筆紀錄",
+      "errors": {
+        "expired": "此合併已超過 30 天，無法再復原。",
+        "blocked": "此紀錄之後又被合併到另一筆紀錄。請先復原那次合併。",
+        "erased": "其中一筆紀錄已被刪除，因此無法再復原合併。",
+        "undone": "此合併已被復原。"
+      }
+    },
+    "errors": {
+      "forbidden": "你的角色無法合併人員。請聯絡擁有者、管理員或經理。"
+    },
+    "timeline": {
+      "title": "時間軸",
+      "kind": "類型",
+      "allKinds": "全部",
+      "event": "活動",
+      "allEvents": "所有活動",
+      "filter": "篩選",
+      "noMatchTitle": "沒有符合這些篩選條件的內容",
+      "noMatchDescription": "選擇「全部」或「所有活動」以查看更多。",
+      "emptyTitle": "這裡還沒有內容",
+      "emptyDescription": "訂單、報到、行銷活動、訊息和問卷發生後會出現在這裡。",
+      "listLabel": "{name} 的時間軸",
+      "older": "更早"
+    },
+    "kinds": {
+      "order_paid": "訂單已付款",
+      "order_refunded": "退款",
+      "checked_in": "已報到",
+      "session_attended": "參加了一場分會",
+      "campaign_sent": "行銷活動已寄出",
+      "campaign_opened": "開啟了行銷活動",
+      "campaign_clicked": "點擊了行銷活動",
+      "message_in": "傳訊息給你",
+      "message_out": "你已回覆",
+      "donation": "捐款",
+      "rsvp": "回覆邀請",
+      "survey_sent": "問卷已寄出",
+      "survey_responded": "回答了問卷"
+    },
+    "merge": {
+      "done": "紀錄已合併。你可以在 30 天內於此頁面復原。",
+      "submit": "合併紀錄",
+      "hint": "訂單、票券、報到、訊息和歷史會轉到保留的紀錄。合併可在 30 天內復原。",
+      "errors": {
+        "alreadyMerged": "自你開啟此頁面後，其中一筆紀錄已被合併或變更。請返回清單。",
+        "erased": "其中一筆紀錄已被刪除，無法合併。",
+        "unavailable": "目前無法合併，請稍後再試。",
+        "keep": "請選擇保留哪筆紀錄。"
+      }
+    },
+    "duplicates": {
+      "title": "可能的重複",
+      "description": "可能被記錄了兩次的人：相同電子郵件、相同電話，或同一公司的相似姓名。",
+      "scan": "尋找重複",
+      "lastScan": "上次檢查：{when}。新聯絡人每隔幾分鐘會自動檢查。",
+      "neverScanned": "尚未檢查。",
+      "scanned": "{count, plural, =0 {未發現可能的重複。} other {發現 # 個可能的重複。}}",
+      "dismissedDone": "已標記為不是同一人。此組合不會再被建議。",
+      "bulkDone": "{count, plural, =0 {未合併任何內容。} other {已合併 # 組。每次合併皆可在 30 天內復原。}}",
+      "statusNav": "依狀態篩選",
+      "status": {
+        "open": "待處理（{count}）",
+        "dismissed": "非重複",
+        "merged": "已合併"
+      },
+      "caption": {
+        "open": "待審核的可能重複",
+        "dismissed": "標記為不是同一人的組合",
+        "merged": "已合併的組合"
+      },
+      "empty": {
+        "open": {
+          "title": "沒有可能的重複",
+          "description": "選擇「尋找重複」立即檢查所有人。新聯絡人會自動檢查。"
+        },
+        "dismissed": {
+          "title": "沒有已排除的",
+          "description": "你標記為不是同一人的組合會顯示在這裡。"
+        },
+        "merged": {
+          "title": "還沒有合併",
+          "description": "你合併的組合會顯示在這裡。可在該人員頁面復原合併。"
+        }
+      },
+      "select": "選取",
+      "selectPair": "選取 {pair}",
+      "pair": "{a} 和 {b}",
+      "columns": {
+        "people": "人員",
+        "confidence": "可信度",
+        "reasons": "原因",
+        "review": "審核"
+      },
+      "score": "{score}%",
+      "review": "審核",
+      "reviewPair": "審核 {pair}",
+      "mergeSelected": "合併所選",
+      "mergeSelectedHint": "保留每組中較早的紀錄和最新的資訊。系統會要求你確認身分。",
+      "errors": {
+        "noneSelected": "請至少選取一組進行合併。",
+        "tooMany": "每次最多選取 50 組。"
+      }
+    },
+    "reasons": {
+      "email": "相同電子郵件地址",
+      "phone": "相同電話號碼",
+      "name_company": "同一公司的相似姓名"
+    },
+    "compare": {
+      "title": "審核可能的重複",
+      "description": "可信度 {score}%：{reasons}。",
+      "resolved": "此組合已處理。",
+      "record": "紀錄 {n}",
+      "older": "（較早）",
+      "entries": "{count, plural, =0 {無項目} other {# 項}}",
+      "openTimeline": "開啟{record}的時間軸",
+      "consentTitle": "合併後的同意狀態",
+      "consentEmail": "行銷郵件：{status}",
+      "consentSms": "行銷簡訊：{status}",
+      "consentRule": "以最嚴格的選擇為準：只要任一紀錄已取消訂閱，合併後的紀錄即為取消訂閱。",
+      "keepLegend": "保留哪筆紀錄",
+      "keepHint": "另一筆紀錄會合併到這裡。其電子郵件地址仍能找到此人。",
+      "keepOption": "{record}（{email}）",
+      "fieldLegend": {
+        "name": "姓名",
+        "email": "電子郵件",
+        "phone": "電話",
+        "company": "公司"
+      },
+      "fieldOption": "{record}：{value}",
+      "dismiss": "不是同一人"
+    },
+    "consent": {
+      "granted": "已訂閱",
+      "withdrawn": "已取消訂閱",
+      "unknown_legacy": "未知（匯入）",
+      "none": "無同意"
     }
   }
 }

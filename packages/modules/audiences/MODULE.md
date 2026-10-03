@@ -25,3 +25,9 @@ segment DSL and its SQL compiler belong to `crm`, which it calls down the tiers.
 - **Export** is the platform bulk-export path (`audiences.contactsCsv`): step-up, `bulk.start` audit,
   impersonation category `export`, allowlisted CSV columns; permission `attendees:export`.
 - Templates are pure (`./client`): they fill the builder with ordinary definitions.
+- **M6.1a.** `personTimelineQuery` (`contacts:read`) pages the crm timeline projection and names its
+  events through the events module (a lookup, not a join). `participationContactOwner` is the
+  `projections`-phase contact reference owner: after every module moved its rows in a merge (or an
+  undo), it recomputes both records' participation at every event either took part in, in the same
+  transaction.
+

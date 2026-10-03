@@ -11,6 +11,8 @@ export {
   setAudienceCommand,
 } from './campaigns.ts';
 export * from './client.ts';
+// M6.1a: contact merges move this module's references (ADR 0023).
+export { campaignsContactOwner } from './contact-merge.ts';
 export { type CampaignBrand, renderCampaign } from './domain/render.ts';
 export {
   type Allocation,
@@ -46,3 +48,5 @@ export {
   finalizableCampaignsTx,
   runOrgCampaigns,
 } from './tick.ts';
+// M6.1a: the person timeline's facts from this module (crm projection).
+export { campaignsTimeline } from './timeline.ts';

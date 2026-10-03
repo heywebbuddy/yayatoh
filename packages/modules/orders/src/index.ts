@@ -123,6 +123,8 @@ export {
   saveSupportMacroCommand,
   supportMacrosQuery,
 } from './commands/support-macros.ts';
+// M6.1a: contact merges move this module's references (ADR 0023).
+export { ordersContactOwner } from './contact-merge.ts';
 export {
   creditableMinor,
   creditNoteAmount,
@@ -371,6 +373,8 @@ export {
   tableNamingMailer,
   tableNamingPath,
 } from './tables.ts';
+// M6.1a: the person timeline's facts from this module (crm projection).
+export { ordersTimeline } from './timeline.ts';
 export {
   declineWaitlistOfferCommand,
   eraseWaitlistDsarTx,
