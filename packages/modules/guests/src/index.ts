@@ -193,6 +193,8 @@ export {
   paddleHoldersTx,
   paddleHolderTx,
 } from './paddle-holders.ts';
+// M4.8e: where a paddle holder's pledge messages go.
+export { paddleHolderContactTx } from './pledge-contact.ts';
 export { privateColumns } from './private-columns.ts';
 // M4.3a guest seating: the guest list's live channel and seating's OccupantDirectory.
 export { GUESTS_CHANNEL, MAX_PARTY_MESSAGES, publishGuestChangesTx } from './realtime.ts';
@@ -304,5 +306,3 @@ export {
   tablePartiesTx,
   tablePartyTx,
 } from './tables.ts';
-// M4.8e: where a paddle holder's pledge messages go.
-export { paddleHolderContactTx } from './pledge-contact.ts';
