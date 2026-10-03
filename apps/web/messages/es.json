@@ -11168,5 +11168,100 @@
         "tooMany": "Es más de lo que admite este evento. Elimina algunas primero."
       }
     }
+  },
+  "conferenceHub": {
+    "metaTitle": "Espacio del congreso",
+    "eyebrow": "Tu espacio del congreso",
+    "for": "Para {name}",
+    "whose": "Espacio de quién",
+    "orderLink": "Abrir mi espacio del congreso",
+    "orderLinkHint": "Agenda, tu horario, tu acreditación y tu calendario, en el móvil.",
+    "noRegistrantTitle": "No hay inscripción en este pedido",
+    "noRegistrantDescription": "El espacio del congreso pertenece a una inscripción. Abre el pedido con el que te inscribiste.",
+    "backToOrder": "Volver a mi pedido",
+    "offline": "No tienes conexión. Esta es la copia guardada en tu móvil.",
+    "privateLink": "Esta página es privada: cualquiera con su enlace puede verla y cambiar tu horario. No la compartas.",
+    "tabs": {
+      "label": "Secciones del espacio",
+      "today": "Hoy",
+      "schedule": "Mi horario",
+      "agenda": "Agenda",
+      "badge": "Acreditación"
+    },
+    "today": {
+      "now": "Ahora mismo",
+      "next": "A continuación",
+      "fromSchedule": "Según tu horario.",
+      "fromAgenda": "Según la agenda. Marca sesiones con una estrella para hacerla tuya.",
+      "nothingNow": "No hay nada ahora mismo.",
+      "nothingNextTitle": "Nada próximamente",
+      "nothingNextDescription": "Explora la agenda para marcar sesiones e inscribirte en las opcionales.",
+      "openAgenda": "Abrir la agenda",
+      "pollsAndQa": "Encuestas y preguntas",
+      "more": "Tus herramientas",
+      "badgeTitle": "Tu acreditación",
+      "badgeDescription": "Muestra el código QR en la entrada y en el registro de las sesiones.",
+      "showBadge": "Mostrar mi acreditación",
+      "networkingTitle": "Networking",
+      "networkingDescription": "Encuentra a otros asistentes, conecta y reserva reuniones.",
+      "openNetworking": "Abrir networking",
+      "calendarTitle": "Tu calendario",
+      "calendarDescription": "Añade tu horario al calendario del móvil. Se actualiza cuando las sesiones cambian de hora.",
+      "openCalendar": "Añadir a mi calendario"
+    },
+    "summary": "Inscripciones: {enrolled} · Favoritas: {favorites} · Solapamientos: {conflicts}",
+    "agendaIntro": "Marca las sesiones a las que quieres ir. Las sesiones opcionales requieren inscripción.",
+    "conflict": "Se solapa con {titles}",
+    "emptyScheduleTitle": "Tu horario está vacío",
+    "emptyScheduleDescription": "Marca sesiones en la agenda o inscríbete en las opcionales y aparecerán aquí.",
+    "emptyAgendaTitle": "Todavía no hay sesiones",
+    "emptyAgendaDescription": "El organizador aún no ha añadido sesiones para tu inscripción. Vuelve pronto.",
+    "favorite": {
+      "star": "Marcar",
+      "starred": "Marcada",
+      "starNamed": "Marcar {title}",
+      "unstarNamed": "Quitar la estrella de {title}",
+      "pill": "Favorita",
+      "added": "{title} está en tu horario.",
+      "removed": "{title} ya no está en tu horario.",
+      "replaced": "Marcada. Favoritas solapadas eliminadas: {count}.",
+      "tooMany": "Has marcado el máximo de sesiones permitido. Quita una estrella primero.",
+      "conflictTitle": "Se solapa con tu horario",
+      "conflictEnrolled": "{title} (inscrito)",
+      "conflictFavorite": "{title} (marcada)",
+      "keepBoth": "Mantener ambas",
+      "replace": "Reemplazar",
+      "cancel": "Cancelar"
+    },
+    "calendar": {
+      "title": "Calendario suscrito",
+      "description": "Suscríbete una vez: tu aplicación de calendario actualiza el enlace, así que si una sesión cambia de hora, también cambia en tu calendario. Las sesiones con inscripción aparecen como confirmadas y las marcadas como provisionales.",
+      "subscribe": "Suscribirme en mi calendario",
+      "download": "Descargar .ics",
+      "linkLabel": "Enlace del calendario (privado)",
+      "copy": "Copiar enlace",
+      "copied": "Enlace copiado.",
+      "replace": "Reemplazar el enlace",
+      "replaceConfirmTitle": "¿Reemplazar el enlace del calendario?",
+      "replaceConfirmBody": "El enlace actual deja de funcionar al instante en todos los calendarios que lo usan. Vuelve a suscribirte con el nuevo enlace.",
+      "replaceConfirm": "Reemplazar el enlace",
+      "cancel": "Cancelar",
+      "replaced": "Hecho. El enlace anterior ya no funciona: suscríbete con el nuevo."
+    },
+    "install": {
+      "title": "Tenlo en tu móvil",
+      "button": "Añadir a la pantalla de inicio",
+      "installed": "Este espacio está en tu pantalla de inicio.",
+      "done": "Añadido a tu pantalla de inicio.",
+      "help": "En iPhone o iPad: toca Compartir y luego Añadir a pantalla de inicio. En Android: abre el menú del navegador y elige Instalar aplicación o Añadir a pantalla de inicio."
+    },
+    "badge": {
+      "title": "Tu acreditación",
+      "qrLabel": "Código QR de la acreditación de {name}",
+      "shortCode": "Código",
+      "hint": "Sube el brillo de la pantalla en la entrada.",
+      "noneTitle": "Aún no hay acreditación",
+      "noneDescription": "Tu acreditación aparecerá aquí cuando se confirme tu inscripción."
+    }
   }
 }

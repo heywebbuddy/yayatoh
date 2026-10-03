@@ -11168,5 +11168,100 @@
         "tooMany": "このイベントの上限を超えています。先にいくつか削除してください。"
       }
     }
+  },
+  "conferenceHub": {
+    "metaTitle": "カンファレンスハブ",
+    "eyebrow": "あなたのカンファレンスハブ",
+    "for": "{name} さん",
+    "whose": "誰のハブか",
+    "orderLink": "カンファレンスハブを開く",
+    "orderLinkHint": "プログラム、マイスケジュール、バッジ、カレンダーをスマートフォンで。",
+    "noRegistrantTitle": "この注文には登録がありません",
+    "noRegistrantDescription": "カンファレンスハブは登録に紐づいています。登録に使った注文を開いてください。",
+    "backToOrder": "注文に戻る",
+    "offline": "オフラインです。スマートフォンに保存されたコピーを表示しています。",
+    "privateLink": "このページは非公開です。リンクを知っている人は誰でも閲覧し、スケジュールを変更できます。共有しないでください。",
+    "tabs": {
+      "label": "ハブのセクション",
+      "today": "今日",
+      "schedule": "マイスケジュール",
+      "agenda": "プログラム",
+      "badge": "バッジ"
+    },
+    "today": {
+      "now": "開催中",
+      "next": "次のセッション",
+      "fromSchedule": "あなたのスケジュールより。",
+      "fromAgenda": "プログラムより。セッションにスターを付けて自分用にしましょう。",
+      "nothingNow": "現在開催中のものはありません。",
+      "nothingNextTitle": "まもなく始まるものはありません",
+      "nothingNextDescription": "プログラムを見て、セッションにスターを付けたり任意セッションに申し込んだりしましょう。",
+      "openAgenda": "プログラムを開く",
+      "pollsAndQa": "投票と質問",
+      "more": "ツール",
+      "badgeTitle": "あなたのバッジ",
+      "badgeDescription": "入場時とセッションのチェックイン時にQRコードを提示してください。",
+      "showBadge": "バッジを表示",
+      "networkingTitle": "ネットワーキング",
+      "networkingDescription": "他の参加者を探してつながり、ミーティングを予約できます。",
+      "openNetworking": "ネットワーキングを開く",
+      "calendarTitle": "カレンダー",
+      "calendarDescription": "スケジュールをスマートフォンのカレンダーに追加します。セッションの時間が変わると更新されます。",
+      "openCalendar": "カレンダーに追加"
+    },
+    "summary": "申込済み: {enrolled} · お気に入り: {favorites} · 重複: {conflicts}",
+    "agendaIntro": "参加したいセッションにスターを付けましょう。任意セッションは申し込みが必要です。",
+    "conflict": "{titles} と重複",
+    "emptyScheduleTitle": "スケジュールは空です",
+    "emptyScheduleDescription": "プログラムでセッションにスターを付けるか、任意セッションに申し込むと、ここに表示されます。",
+    "emptyAgendaTitle": "まだセッションがありません",
+    "emptyAgendaDescription": "主催者はまだあなたの登録向けのセッションを追加していません。後でもう一度確認してください。",
+    "favorite": {
+      "star": "スターを付ける",
+      "starred": "スター済み",
+      "starNamed": "{title} にスターを付ける",
+      "unstarNamed": "{title} のスターを外す",
+      "pill": "お気に入り",
+      "added": "{title} をスケジュールに追加しました。",
+      "removed": "{title} をスケジュールから外しました。",
+      "replaced": "スターを付けました。重複していたお気に入りを外しました: {count}",
+      "tooMany": "スターを付けられる上限に達しました。先にどれかのスターを外してください。",
+      "conflictTitle": "スケジュールと重複しています",
+      "conflictEnrolled": "{title}（申込済み）",
+      "conflictFavorite": "{title}（スター済み）",
+      "keepBoth": "両方残す",
+      "replace": "置き換える",
+      "cancel": "キャンセル"
+    },
+    "calendar": {
+      "title": "カレンダーフィード",
+      "description": "一度登録するだけで、カレンダーアプリがフィードを更新するので、セッションの時間が変わればカレンダーでも変わります。申込済みのセッションは確定、スターを付けたものは仮として表示されます。",
+      "subscribe": "カレンダーで購読",
+      "download": ".ics をダウンロード",
+      "linkLabel": "フィードのリンク（非公開）",
+      "copy": "リンクをコピー",
+      "copied": "リンクをコピーしました。",
+      "replace": "リンクを変更",
+      "replaceConfirmTitle": "カレンダーのリンクを変更しますか？",
+      "replaceConfirmBody": "現在のリンクは、それを使っているすべてのカレンダーですぐに使えなくなります。新しいリンクで購読し直してください。",
+      "replaceConfirm": "リンクを変更",
+      "cancel": "キャンセル",
+      "replaced": "完了しました。古いリンクは使えません。新しいリンクで購読してください。"
+    },
+    "install": {
+      "title": "スマートフォンに保存",
+      "button": "ホーム画面に追加",
+      "installed": "このハブはホーム画面にあります。",
+      "done": "ホーム画面に追加しました。",
+      "help": "iPhone・iPad: 共有をタップし、ホーム画面に追加を選びます。Android: ブラウザのメニューを開き、アプリをインストールまたはホーム画面に追加を選びます。"
+    },
+    "badge": {
+      "title": "あなたのバッジ",
+      "qrLabel": "{name} さんのバッジのQRコード",
+      "shortCode": "コード",
+      "hint": "入場時は画面の明るさを上げてください。",
+      "noneTitle": "まだバッジがありません",
+      "noneDescription": "登録が確定すると、ここにバッジが表示されます。"
+    }
   }
 }

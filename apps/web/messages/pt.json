@@ -11168,5 +11168,100 @@
         "tooMany": "É mais do que este evento comporta. Exclua alguns primeiro."
       }
     }
+  },
+  "conferenceHub": {
+    "metaTitle": "Espaço do congresso",
+    "eyebrow": "O seu espaço do congresso",
+    "for": "Para {name}",
+    "whose": "Espaço de quem",
+    "orderLink": "Abrir o meu espaço do congresso",
+    "orderLinkHint": "Programa, a sua agenda, o seu crachá e o calendário, no telemóvel.",
+    "noRegistrantTitle": "Nenhuma inscrição neste pedido",
+    "noRegistrantDescription": "O espaço do congresso pertence a uma inscrição. Abra o pedido com que se inscreveu.",
+    "backToOrder": "Voltar ao meu pedido",
+    "offline": "Está offline. Esta é a cópia guardada no seu telemóvel.",
+    "privateLink": "Esta página é privada: quem tiver o link pode vê-la e alterar a sua agenda. Não a partilhe.",
+    "tabs": {
+      "label": "Secções do espaço",
+      "today": "Hoje",
+      "schedule": "A minha agenda",
+      "agenda": "Programa",
+      "badge": "Crachá"
+    },
+    "today": {
+      "now": "A decorrer",
+      "next": "A seguir",
+      "fromSchedule": "Da sua agenda.",
+      "fromAgenda": "Do programa. Marque sessões com uma estrela para o tornar seu.",
+      "nothingNow": "Nada a decorrer neste momento.",
+      "nothingNextTitle": "Nada para breve",
+      "nothingNextDescription": "Veja o programa para marcar sessões e inscrever-se nas opcionais.",
+      "openAgenda": "Abrir o programa",
+      "pollsAndQa": "Sondagens e perguntas",
+      "more": "As suas ferramentas",
+      "badgeTitle": "O seu crachá",
+      "badgeDescription": "Mostre o código QR à entrada e no check-in das sessões.",
+      "showBadge": "Mostrar o meu crachá",
+      "networkingTitle": "Networking",
+      "networkingDescription": "Encontre outros participantes, ligue-se e marque reuniões.",
+      "openNetworking": "Abrir networking",
+      "calendarTitle": "O seu calendário",
+      "calendarDescription": "Adicione a sua agenda ao calendário do telemóvel. Atualiza-se quando as sessões mudam de hora.",
+      "openCalendar": "Adicionar ao meu calendário"
+    },
+    "summary": "Inscrições: {enrolled} · Favoritos: {favorites} · Sobreposições: {conflicts}",
+    "agendaIntro": "Marque as sessões a que quer assistir. As sessões opcionais exigem inscrição.",
+    "conflict": "Sobrepõe-se a {titles}",
+    "emptyScheduleTitle": "A sua agenda está vazia",
+    "emptyScheduleDescription": "Marque sessões no programa, ou inscreva-se nas opcionais, e elas aparecem aqui.",
+    "emptyAgendaTitle": "Ainda não há sessões",
+    "emptyAgendaDescription": "O organizador ainda não adicionou sessões para a sua inscrição. Volte em breve.",
+    "favorite": {
+      "star": "Marcar",
+      "starred": "Marcada",
+      "starNamed": "Marcar {title}",
+      "unstarNamed": "Retirar a estrela de {title}",
+      "pill": "Favorito",
+      "added": "{title} está na sua agenda.",
+      "removed": "{title} já não está na sua agenda.",
+      "replaced": "Marcada. Favoritos sobrepostos removidos: {count}.",
+      "tooMany": "Marcou o número máximo de sessões. Retire primeiro uma estrela.",
+      "conflictTitle": "Sobrepõe-se à sua agenda",
+      "conflictEnrolled": "{title} (inscrito)",
+      "conflictFavorite": "{title} (marcada)",
+      "keepBoth": "Manter ambas",
+      "replace": "Substituir",
+      "cancel": "Cancelar"
+    },
+    "calendar": {
+      "title": "Feed do calendário",
+      "description": "Subscreva uma vez: a sua app de calendário atualiza o feed, por isso uma sessão que muda de hora muda também no seu calendário. As sessões com inscrição aparecem como confirmadas e as marcadas como provisórias.",
+      "subscribe": "Subscrever no meu calendário",
+      "download": "Transferir .ics",
+      "linkLabel": "Link do feed (privado)",
+      "copy": "Copiar link",
+      "copied": "Link copiado.",
+      "replace": "Substituir o link",
+      "replaceConfirmTitle": "Substituir o link do calendário?",
+      "replaceConfirmBody": "O link atual deixa de funcionar de imediato em todos os calendários que o usam. Subscreva de novo com o novo link.",
+      "replaceConfirm": "Substituir o link",
+      "cancel": "Cancelar",
+      "replaced": "Feito. O link antigo já não funciona: subscreva com o novo."
+    },
+    "install": {
+      "title": "Guarde-o no telemóvel",
+      "button": "Adicionar ao ecrã principal",
+      "installed": "Este espaço está no seu ecrã principal.",
+      "done": "Adicionado ao ecrã principal.",
+      "help": "No iPhone ou iPad: toque em Partilhar e depois em Adicionar ao ecrã principal. No Android: abra o menu do navegador e escolha Instalar app ou Adicionar ao ecrã principal."
+    },
+    "badge": {
+      "title": "O seu crachá",
+      "qrLabel": "Código QR do crachá de {name}",
+      "shortCode": "Código",
+      "hint": "Aumente o brilho do ecrã à entrada.",
+      "noneTitle": "Ainda sem crachá",
+      "noneDescription": "O seu crachá aparece aqui quando a inscrição for confirmada."
+    }
   }
 }

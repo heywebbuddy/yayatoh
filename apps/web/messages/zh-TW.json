@@ -11168,5 +11168,100 @@
         "tooMany": "超出本活動的上限。請先刪除一些。"
       }
     }
+  },
+  "conferenceHub": {
+    "metaTitle": "會議中心",
+    "eyebrow": "你的會議中心",
+    "for": "{name} 的會議中心",
+    "whose": "誰的會議中心",
+    "orderLink": "開啟我的會議中心",
+    "orderLinkHint": "議程、你的行程、名牌和行事曆，都在手機上。",
+    "noRegistrantTitle": "此訂單中沒有報名",
+    "noRegistrantDescription": "會議中心屬於一筆報名。請開啟你報名時的訂單。",
+    "backToOrder": "返回我的訂單",
+    "offline": "你目前離線。這是儲存在手機上的副本。",
+    "privateLink": "此頁面為私人頁面：任何擁有連結的人都能查看並變更你的行程。請勿分享。",
+    "tabs": {
+      "label": "會議中心區塊",
+      "today": "今天",
+      "schedule": "我的行程",
+      "agenda": "議程",
+      "badge": "名牌"
+    },
+    "today": {
+      "now": "正在進行",
+      "next": "接下來",
+      "fromSchedule": "來自你的行程。",
+      "fromAgenda": "來自議程。為場次加上星號，打造你自己的行程。",
+      "nothingNow": "目前沒有進行中的場次。",
+      "nothingNextTitle": "近期沒有安排",
+      "nothingNextDescription": "瀏覽議程，為場次加上星號並報名選修場次。",
+      "openAgenda": "開啟議程",
+      "pollsAndQa": "投票與問答",
+      "more": "你的工具",
+      "badgeTitle": "你的名牌",
+      "badgeDescription": "在入口與場次報到時出示 QR 碼。",
+      "showBadge": "顯示我的名牌",
+      "networkingTitle": "交流",
+      "networkingDescription": "尋找其他與會者，建立聯繫並預約會面。",
+      "openNetworking": "開啟交流",
+      "calendarTitle": "你的行事曆",
+      "calendarDescription": "將你的行程加入手機行事曆。場次時間變動時會自動更新。",
+      "openCalendar": "加入我的行事曆"
+    },
+    "summary": "已報名：{enrolled} · 收藏：{favorites} · 時間衝突：{conflicts}",
+    "agendaIntro": "為想參加的場次加上星號。選修場次需要報名。",
+    "conflict": "與 {titles} 時間衝突",
+    "emptyScheduleTitle": "你的行程是空的",
+    "emptyScheduleDescription": "在議程中為場次加上星號，或報名選修場次，它們就會顯示在這裡。",
+    "emptyAgendaTitle": "尚無場次",
+    "emptyAgendaDescription": "主辦單位尚未為你的報名新增場次。請稍後再來查看。",
+    "favorite": {
+      "star": "加星號",
+      "starred": "已加星號",
+      "starNamed": "為 {title} 加上星號",
+      "unstarNamed": "移除 {title} 的星號",
+      "pill": "收藏",
+      "added": "{title} 已加入你的行程。",
+      "removed": "{title} 已從你的行程移除。",
+      "replaced": "已加上星號。已移除衝突的收藏：{count}。",
+      "tooMany": "收藏的場次已達上限。請先移除一個星號。",
+      "conflictTitle": "與你的行程時間衝突",
+      "conflictEnrolled": "{title}（已報名）",
+      "conflictFavorite": "{title}（已收藏）",
+      "keepBoth": "兩者都保留",
+      "replace": "取代",
+      "cancel": "取消"
+    },
+    "calendar": {
+      "title": "行事曆訂閱",
+      "description": "只要訂閱一次：行事曆 App 會重新整理訂閱，場次時間變動時你的行事曆也會跟著變動。已報名的場次顯示為已確認，加上星號的顯示為暫定。",
+      "subscribe": "在我的行事曆中訂閱",
+      "download": "下載 .ics",
+      "linkLabel": "訂閱連結（私人）",
+      "copy": "複製連結",
+      "copied": "已複製連結。",
+      "replace": "更換連結",
+      "replaceConfirmTitle": "要更換行事曆連結嗎？",
+      "replaceConfirmBody": "目前的連結會立即在所有使用它的行事曆中失效。請用新連結重新訂閱。",
+      "replaceConfirm": "更換連結",
+      "cancel": "取消",
+      "replaced": "完成。舊連結已失效：請用新連結訂閱。"
+    },
+    "install": {
+      "title": "保存在手機上",
+      "button": "加入主畫面",
+      "installed": "此會議中心已在你的主畫面上。",
+      "done": "已加入主畫面。",
+      "help": "iPhone 或 iPad：點一下「分享」，再選「加入主畫面」。Android：開啟瀏覽器選單，再選「安裝應用程式」或「加到主畫面」。"
+    },
+    "badge": {
+      "title": "你的名牌",
+      "qrLabel": "{name} 的名牌 QR 碼",
+      "shortCode": "代碼",
+      "hint": "在入口請調高螢幕亮度。",
+      "noneTitle": "尚無名牌",
+      "noneDescription": "報名確認後，你的名牌會顯示在這裡。"
+    }
   }
 }

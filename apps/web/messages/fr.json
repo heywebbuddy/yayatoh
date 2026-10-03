@@ -11168,5 +11168,100 @@
         "tooMany": "C’est plus que ce que cet événement peut contenir. Supprimez-en d’abord."
       }
     }
+  },
+  "conferenceHub": {
+    "metaTitle": "Espace conférence",
+    "eyebrow": "Votre espace conférence",
+    "for": "Pour {name}",
+    "whose": "Espace de qui",
+    "orderLink": "Ouvrir mon espace conférence",
+    "orderLinkHint": "Programme, votre planning, votre badge et votre agenda, sur votre téléphone.",
+    "noRegistrantTitle": "Aucune inscription dans cette commande",
+    "noRegistrantDescription": "L'espace conférence est lié à une inscription. Ouvrez la commande de votre inscription.",
+    "backToOrder": "Retour à ma commande",
+    "offline": "Vous êtes hors ligne. Ceci est la copie enregistrée sur votre téléphone.",
+    "privateLink": "Cette page est privée : toute personne ayant son lien peut la voir et modifier votre planning. Ne la partagez pas.",
+    "tabs": {
+      "label": "Sections de l'espace",
+      "today": "Aujourd'hui",
+      "schedule": "Mon planning",
+      "agenda": "Programme",
+      "badge": "Badge"
+    },
+    "today": {
+      "now": "En ce moment",
+      "next": "Ensuite",
+      "fromSchedule": "D'après votre planning.",
+      "fromAgenda": "D'après le programme. Ajoutez des sessions en favori pour le personnaliser.",
+      "nothingNow": "Rien en ce moment.",
+      "nothingNextTitle": "Rien de prévu prochainement",
+      "nothingNextDescription": "Parcourez le programme pour ajouter des favoris et vous inscrire aux sessions optionnelles.",
+      "openAgenda": "Ouvrir le programme",
+      "pollsAndQa": "Sondages et questions",
+      "more": "Vos outils",
+      "badgeTitle": "Votre badge",
+      "badgeDescription": "Présentez le QR code à l'entrée et à l'accueil des sessions.",
+      "showBadge": "Afficher mon badge",
+      "networkingTitle": "Networking",
+      "networkingDescription": "Trouvez d'autres participants, connectez-vous et réservez des rendez-vous.",
+      "openNetworking": "Ouvrir le networking",
+      "calendarTitle": "Votre agenda",
+      "calendarDescription": "Ajoutez votre planning à l'agenda de votre téléphone. Il se met à jour quand une session est déplacée.",
+      "openCalendar": "Ajouter à mon agenda"
+    },
+    "summary": "Inscriptions : {enrolled} · Favoris : {favorites} · Chevauchements : {conflicts}",
+    "agendaIntro": "Ajoutez en favori les sessions qui vous intéressent. Les sessions optionnelles demandent une inscription.",
+    "conflict": "Chevauche {titles}",
+    "emptyScheduleTitle": "Votre planning est vide",
+    "emptyScheduleDescription": "Ajoutez des sessions en favori dans le programme, ou inscrivez-vous aux sessions optionnelles : elles apparaîtront ici.",
+    "emptyAgendaTitle": "Pas encore de sessions",
+    "emptyAgendaDescription": "L'organisateur n'a pas encore ajouté de sessions pour votre inscription. Revenez bientôt.",
+    "favorite": {
+      "star": "Favori",
+      "starred": "En favori",
+      "starNamed": "Ajouter {title} aux favoris",
+      "unstarNamed": "Retirer {title} des favoris",
+      "pill": "Favori",
+      "added": "{title} est dans votre planning.",
+      "removed": "{title} n'est plus dans votre planning.",
+      "replaced": "Ajouté en favori. Favoris en chevauchement retirés : {count}.",
+      "tooMany": "Vous avez atteint le nombre maximal de favoris. Retirez-en un d'abord.",
+      "conflictTitle": "Cela chevauche votre planning",
+      "conflictEnrolled": "{title} (inscrit)",
+      "conflictFavorite": "{title} (favori)",
+      "keepBoth": "Garder les deux",
+      "replace": "Remplacer",
+      "cancel": "Annuler"
+    },
+    "calendar": {
+      "title": "Flux d'agenda",
+      "description": "Abonnez-vous une fois : votre application d'agenda actualise le flux, donc une session déplacée se déplace aussi dans votre agenda. Les sessions où vous êtes inscrit apparaissent comme confirmées, les favoris comme provisoires.",
+      "subscribe": "M'abonner dans mon agenda",
+      "download": "Télécharger le .ics",
+      "linkLabel": "Lien du flux (privé)",
+      "copy": "Copier le lien",
+      "copied": "Lien copié.",
+      "replace": "Remplacer le lien",
+      "replaceConfirmTitle": "Remplacer le lien d'agenda ?",
+      "replaceConfirmBody": "Le lien actuel cesse de fonctionner immédiatement, dans tous les agendas qui l'utilisent. Abonnez-vous à nouveau avec le nouveau lien.",
+      "replaceConfirm": "Remplacer le lien",
+      "cancel": "Annuler",
+      "replaced": "C'est fait. L'ancien lien ne fonctionne plus : abonnez-vous avec le nouveau."
+    },
+    "install": {
+      "title": "Gardez-le sur votre téléphone",
+      "button": "Ajouter à l'écran d'accueil",
+      "installed": "Cet espace est sur votre écran d'accueil.",
+      "done": "Ajouté à votre écran d'accueil.",
+      "help": "Sur iPhone ou iPad : touchez Partager, puis Sur l'écran d'accueil. Sur Android : ouvrez le menu du navigateur, puis Installer l'application ou Ajouter à l'écran d'accueil."
+    },
+    "badge": {
+      "title": "Votre badge",
+      "qrLabel": "QR code du badge de {name}",
+      "shortCode": "Code",
+      "hint": "Augmentez la luminosité de l'écran à l'entrée.",
+      "noneTitle": "Pas encore de badge",
+      "noneDescription": "Votre badge apparaîtra ici une fois votre inscription confirmée."
+    }
   }
 }
