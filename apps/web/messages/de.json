@@ -325,7 +325,8 @@
     "supportMacros": "Support-Makros",
     "assistance": "Hilfeanfragen",
     "marketingAnalytics": "Marketing-Analysen",
-    "badges": "Badges"
+    "badges": "Badges",
+    "integrations": "Integrationen"
   },
   "vocab": {
     "attendee": "Teilnehmer",
@@ -9039,5 +9040,258 @@
       "questionNotAllowed": "Diese Frage kann nicht auf Badges gedruckt werden."
     },
     "elements": "Elemente auf dieser Seite"
+  },
+  "integrations": {
+    "title": "Integrationen",
+    "description": "Verbinde die Tools, die du schon nutzt. Kontakte und Datensätze bleiben in beide Richtungen abgeglichen, und du erfährst, wenn etwas geprüft werden muss.",
+    "tabsLabel": "Bereiche der Integrationen",
+    "tabs": {
+      "connections": "Verbindungen",
+      "errors": "Fehler"
+    },
+    "cancelled": "Die Verbindung wurde abgebrochen.",
+    "offTitle": "Integrationen sind hier noch nicht eingeschaltet",
+    "offDescription": "Verbindungen brauchen den Integrationsdienst, der auf dieser Website noch nicht eingerichtet ist. Wende dich an die Plattformverwaltung.",
+    "noneTitle": "Noch keine Integrationen verfügbar",
+    "noneDescription": "Neue Integrationen erscheinen auf dieser Seite, sobald sie verfügbar sind.",
+    "connectors": {
+      "demo": {
+        "description": "Eine Sandbox-Kontakte-App zum Ausprobieren: Kontakte werden in beide Richtungen mit deinem CRM abgeglichen. Nur in Testumgebungen."
+      }
+    },
+    "sandboxBadge": "Sandbox",
+    "account": "Konto",
+    "lastSync": "Letzter Abgleich",
+    "never": "Nie",
+    "openErrors": "Offene Fehler",
+    "openErrorCount": "{count, plural, one {# Datensatz muss geprüft werden} other {# Datensätze müssen geprüft werden}}",
+    "noErrors": "Keine",
+    "notInPlan": "Nicht in deinem Tarif",
+    "manage": "Verwalten",
+    "manageNamed": "{name} verwalten",
+    "connect": "Verbinden",
+    "connectNamed": "{name} verbinden",
+    "reconnect": "Neu verbinden",
+    "reconnectNamed": "{name} neu verbinden",
+    "readOnly": "Nur Inhaber und Admins können Integrationen verbinden oder ändern.",
+    "breadcrumb": "Brotkrümelnavigation",
+    "objects": {
+      "contacts": "Kontakte"
+    },
+    "fields": {
+      "email": "E-Mail",
+      "name": "Name"
+    },
+    "status": {
+      "none": "Nicht verbunden",
+      "pending": "Wartet auf Zustimmung",
+      "active": "Verbunden",
+      "paused": "Pausiert",
+      "revoked": "Getrennt",
+      "failed": "Verbindung fehlgeschlagen"
+    },
+    "runStatus": {
+      "queued": "In der Warteschlange",
+      "running": "Läuft",
+      "succeeded": "Abgeglichen",
+      "partial": "Abgeglichen mit Fehlern",
+      "failed": "Fehlgeschlagen",
+      "cancelled": "Abgebrochen"
+    },
+    "errorsFeedback": {
+      "unavailable": "Diese Integration ist hier nicht verfügbar.",
+      "provider_unavailable": "Der Anbieter ist nicht erreichbar. Versuche es in ein paar Minuten erneut.",
+      "not_approved": "Der Anbieter hat die Verbindung noch nicht bestätigt. Schließe das Verbinden dort ab und prüfe dann erneut.",
+      "denied": "Die Verbindung wurde nicht genehmigt, daher wurde nichts verbunden.",
+      "expired": "Dieser Verbindungslink ist abgelaufen. Beginne erneut mit „Verbinden“.",
+      "validation_failed": "Einige Angaben müssen korrigiert werden.",
+      "forbidden": "Du hast keinen Zugriff darauf.",
+      "module_not_enabled": "Integrationen sind nicht in deinem Tarif enthalten.",
+      "not_found": "Das konnten wir nicht finden.",
+      "conflict": "Diese Integration ist bereits verbunden.",
+      "invalid_state": "Das ist gerade nicht möglich.",
+      "impersonation_blocked": "Mitarbeitende, die als Mitglied handeln, können keine Integrationen verbinden.",
+      "read_only_freeze": "Änderungen sind während der geplanten Wartung pausiert. Versuche es danach erneut.",
+      "internal": "Bei uns ist etwas schiefgelaufen."
+    },
+    "detail": {
+      "title": "Integration",
+      "syncNow": "Jetzt abgleichen",
+      "syncing": "Abgleich unterwegs",
+      "connected": "{name} ist verbunden. Der erste Abgleich startet in Kürze.",
+      "sync": {
+        "queued": "Abgleich gestartet. Aktualisiere gleich, um das Ergebnis zu sehen.",
+        "already": "Ein Abgleich ist bereits unterwegs."
+      },
+      "done": {
+        "paused": "Der Abgleich ist pausiert.",
+        "resumed": "Der Abgleich läuft wieder.",
+        "interval": "Abgleichsplan gespeichert.",
+        "disconnected": "Getrennt. Es wird nichts mehr abgeglichen und der Zugriff wurde beim Anbieter widerrufen."
+      },
+      "revoked": {
+        "user": "Getrennt am {when}.",
+        "provider": "Der Anbieter akzeptiert diese Verbindung seit {when} nicht mehr, daher wurde der Abgleich gestoppt. Verbinde neu, um fortzufahren."
+      },
+      "pending": "Warten darauf, dass die Verbindung beim Anbieter genehmigt wird.",
+      "checkConnection": "Verbindung prüfen",
+      "cancelConnect": "Abbrechen",
+      "confirmDisconnect": "{name} trennen?",
+      "confirmDisconnectBody": "Der Abgleich stoppt sofort und der Zugriff von Yayatoh wird beim Anbieter widerrufen. Bereits abgeglichene Datensätze bleiben, wo sie sind.",
+      "disconnect": "Trennen",
+      "keep": "Verbunden lassen",
+      "statusTitle": "Status",
+      "connectedAt": "Verbunden",
+      "nextSync": "Nächster Abgleich",
+      "interval": "Abgleichen alle",
+      "saveInterval": "Plan speichern",
+      "pause": "Abgleich pausieren",
+      "resume": "Abgleich fortsetzen",
+      "intervals": {
+        "15": "15 Minuten",
+        "60": "Stunde",
+        "360": "6 Stunden",
+        "1440": "Tag"
+      }
+    },
+    "mapping": {
+      "sectionTitle": "Feldzuordnung",
+      "sectionHelp": "Lege fest, welches Feld welches füllt. Jedes Speichern legt eine neue Version an, die der nächste Abgleich verwendet.",
+      "title": {
+        "pull": "Nach Yayatoh",
+        "push": "Zum Anbieter"
+      },
+      "help": {
+        "pull": "Die Felder des Anbieters füllen die Felder von Yayatoh.",
+        "push": "Die Felder von Yayatoh füllen die Felder des Anbieters."
+      },
+      "version": "Version {version}",
+      "saved": "Zuordnung als Version {version} gespeichert. Der nächste Abgleich verwendet sie.",
+      "invalid": "Diese Zuordnung kann noch nicht gespeichert werden. Prüfe die markierten Felder.",
+      "required": "Pflichtfeld",
+      "source": "Kommt aus",
+      "transform": "Ändern",
+      "default": "Wenn leer, verwende",
+      "notMapped": "— Nicht zugeordnet —",
+      "transforms": {
+        "none": "Unverändert",
+        "trim": "Leerzeichen entfernen",
+        "lowercase": "kleinbuchstaben",
+        "uppercase": "GROSSBUCHSTABEN",
+        "title_case": "Wortanfänge Groß",
+        "first_word": "Erstes Wort",
+        "last_word": "Letztes Wort",
+        "to_number": "Zahl",
+        "to_boolean": "Ja oder nein",
+        "to_date": "Datum"
+      },
+      "save": {
+        "pull": "Import-Zuordnung speichern",
+        "push": "Export-Zuordnung speichern"
+      },
+      "issue": {
+        "missing_required": "Wähle, woher {field} kommt: Das Feld ist Pflicht.",
+        "unknown_source": "Dieses Feld gibt es beim Anbieter nicht.",
+        "unknown_target": "{field} kann nicht gefüllt werden.",
+        "duplicate_target": "{field} wird doppelt gefüllt.",
+        "other": "Prüfe dieses Feld."
+      }
+    },
+    "runs": {
+      "title": "Letzte Abgleiche",
+      "caption": "Letzte Abgleiche dieser Integration",
+      "empty": "Noch keine Abgleiche. Der erste startet kurz nach dem Verbinden.",
+      "when": "Gestartet",
+      "trigger": "Ausgelöst durch",
+      "status": "Ergebnis",
+      "pulled": "Rein",
+      "pushed": "Raus",
+      "skipped": "Unverändert",
+      "failed": "Fehler",
+      "error": "Problem",
+      "triggers": {
+        "manual": "Jetzt abgleichen",
+        "schedule": "Zeitplan",
+        "retry": "Wiederholung"
+      }
+    },
+    "codes": {
+      "auth_revoked": "Der Anbieter akzeptiert diese Verbindung nicht mehr",
+      "invalid_token": "Der Anbieter akzeptiert diese Verbindung nicht mehr",
+      "auth_failed": "Der Anbieter hat die Verbindung abgelehnt",
+      "invalid_value": "Ein Wert passt nicht zu seinem Feld",
+      "missing_required": "Ein Pflichtfeld ist leer",
+      "transform_failed": "Ein Wert konnte nicht umgewandelt werden",
+      "duplicate_record": "Zwei Datensätze verweisen auf denselben Kontakt",
+      "write_failed": "Konnte in Yayatoh nicht gespeichert werden",
+      "push_failed": "Konnte nicht an den Anbieter gesendet werden",
+      "network": "Der Anbieter war nicht erreichbar",
+      "lease_expired": "Der Abgleich wurde unerwartet beendet",
+      "disconnected": "Durch Trennen gestoppt",
+      "paused": "Durch Pausieren gestoppt",
+      "sync_failed": "Der Abgleich ist fehlgeschlagen",
+      "unknown_connector": "Diese Integration ist nicht mehr verfügbar",
+      "other": "Fehler ({code})"
+    },
+    "inbox": {
+      "title": "Integrationsfehler",
+      "description": "Datensätze, die nicht abgeglichen werden konnten, gruppiert nach Ursache. Sie werden eine Weile automatisch wiederholt. Korrigiere einen Datensatz an seiner Quelle und tippe dann auf „Wiederholen“ oder verwirf, was du nicht brauchst.",
+      "retried": "{count, plural, =0 {Nichts zu wiederholen: Diese Verbindungen sind nicht aktiv.} one {# Datensatz wird beim nächsten Abgleich wiederholt.} other {# Datensätze werden beim nächsten Abgleich wiederholt.}}",
+      "dismissed": "{count, plural, one {# Datensatz verworfen.} other {# Datensätze verworfen.}}",
+      "filterLabel": "Fehler anzeigen",
+      "status": {
+        "open": "Offen",
+        "resolved": "Behoben",
+        "dismissed": "Verworfen"
+      },
+      "empty": {
+        "open": "Keine offenen Fehler",
+        "resolved": "Noch nichts behoben",
+        "dismissed": "Nichts verworfen"
+      },
+      "emptyOpenHelp": "Alles ist abgeglichen. Wenn ein Datensatz nicht abgeglichen werden kann, erscheint er hier mit dem nächsten Schritt.",
+      "backToConnections": "Zu den Verbindungen",
+      "groupTitle": "{connector}: {step} · {count, plural, one {# Datensatz} other {# Datensätze}}",
+      "steps": {
+        "auth": "Verbindung",
+        "pull": "Lesen beim Anbieter",
+        "map": "Zuordnung",
+        "write": "Speichern in Yayatoh",
+        "push": "Senden an den Anbieter"
+      },
+      "field": "Feld: {field}",
+      "lastSeen": "Zuletzt gesehen {when}",
+      "retryAll": "Alle wiederholen",
+      "retryAllNamed": "Alle wiederholen: {group}",
+      "dismissAll": "Alle verwerfen",
+      "dismissAllNamed": "Alle verwerfen: {group}",
+      "recordsCaption": "Datensätze: {group}",
+      "record": "Datensatz",
+      "object": "Was",
+      "objectDirection": "{object} ({direction})",
+      "directions": {
+        "pull": "rein",
+        "push": "raus"
+      },
+      "wholeConnection": "Ganze Verbindung",
+      "attempts": "Versuche",
+      "nextRetry": "Nächste automatische Wiederholung",
+      "closedAt": "Geschlossen",
+      "manualRetry": "Wartet auf dich",
+      "actions": "Aktionen",
+      "retry": "Wiederholen",
+      "retryNamed": "{record} wiederholen",
+      "dismiss": "Verwerfen",
+      "dismissNamed": "{record} verwerfen",
+      "more": "{count, plural, one {# weiterer Datensatz nicht angezeigt.} other {# weitere Datensätze nicht angezeigt.}}"
+    },
+    "fakeConsent": {
+      "title": "Sandbox-Zustimmung",
+      "eyebrow": "Sandbox-Anbieter",
+      "heading": "{name} mit Yayatoh verbinden?",
+      "body": "{name} ist ein Testanbieter. Wenn du zustimmst, darf Yayatoh in deinem Namen Folgendes lesen und schreiben:",
+      "allow": "Zulassen",
+      "deny": "Ablehnen"
+    }
   }
 }

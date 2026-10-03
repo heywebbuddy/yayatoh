@@ -501,6 +501,9 @@ importers:
       '@yayatoh/guests':
         specifier: workspace:*
         version: link:../../packages/modules/guests
+      '@yayatoh/integrations':
+        specifier: workspace:*
+        version: link:../../packages/modules/integrations
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../packages/kernel

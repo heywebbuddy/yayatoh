@@ -325,7 +325,8 @@
     "supportMacros": "サポートマクロ",
     "assistance": "ヘルプ依頼",
     "marketingAnalytics": "マーケティング分析",
-    "badges": "バッジ"
+    "badges": "バッジ",
+    "integrations": "連携"
   },
   "vocab": {
     "attendee": "参加者",
@@ -9039,5 +9040,258 @@
       "questionNotAllowed": "この質問はバッジに印刷できません。"
     },
     "elements": "この面の要素"
+  },
+  "integrations": {
+    "title": "連携",
+    "description": "すでに使っているツールをつなぎましょう。連絡先やレコードは双方向で同期され、確認が必要なときはお知らせします。",
+    "tabsLabel": "連携のセクション",
+    "tabs": {
+      "connections": "接続",
+      "errors": "エラー"
+    },
+    "cancelled": "接続をキャンセルしました。",
+    "offTitle": "このサイトでは連携がまだ有効になっていません",
+    "offDescription": "接続には連携サービスが必要ですが、このサイトではまだ設定されていません。プラットフォーム管理者にお問い合わせください。",
+    "noneTitle": "接続できる連携はまだありません",
+    "noneDescription": "新しい連携は利用可能になるとこのページに表示されます。",
+    "connectors": {
+      "demo": {
+        "description": "連携を試すためのテスト用連絡先アプリです。連絡先が CRM と双方向に同期されます。テスト環境のみ。"
+      }
+    },
+    "sandboxBadge": "テスト",
+    "account": "アカウント",
+    "lastSync": "前回の同期",
+    "never": "なし",
+    "openErrors": "未解決のエラー",
+    "openErrorCount": "{count, plural, other {確認が必要なレコード # 件}}",
+    "noErrors": "なし",
+    "notInPlan": "ご契約のプランに含まれていません",
+    "manage": "管理",
+    "manageNamed": "{name} を管理",
+    "connect": "接続",
+    "connectNamed": "{name} を接続",
+    "reconnect": "再接続",
+    "reconnectNamed": "{name} を再接続",
+    "readOnly": "連携の接続や変更ができるのはオーナーと管理者だけです。",
+    "breadcrumb": "パンくずリスト",
+    "objects": {
+      "contacts": "連絡先"
+    },
+    "fields": {
+      "email": "メール",
+      "name": "名前"
+    },
+    "status": {
+      "none": "未接続",
+      "pending": "承認待ち",
+      "active": "接続済み",
+      "paused": "一時停止中",
+      "revoked": "切断済み",
+      "failed": "接続に失敗"
+    },
+    "runStatus": {
+      "queued": "待機中",
+      "running": "実行中",
+      "succeeded": "同期済み",
+      "partial": "エラーありで同期",
+      "failed": "失敗",
+      "cancelled": "キャンセル"
+    },
+    "errorsFeedback": {
+      "unavailable": "この連携はここでは利用できません。",
+      "provider_unavailable": "プロバイダーに接続できませんでした。数分後にもう一度お試しください。",
+      "not_approved": "プロバイダーがまだ接続を確認していません。先方で接続を完了してから、もう一度確認してください。",
+      "denied": "接続が承認されなかったため、何も接続されていません。",
+      "expired": "接続リンクの有効期限が切れました。「接続」からやり直してください。",
+      "validation_failed": "修正が必要な項目があります。",
+      "forbidden": "アクセス権がありません。",
+      "module_not_enabled": "連携はご契約のプランに含まれていません。",
+      "not_found": "見つかりませんでした。",
+      "conflict": "この連携はすでに接続されています。",
+      "invalid_state": "今はその操作ができません。",
+      "impersonation_blocked": "メンバーとして操作中のスタッフは連携を接続できません。",
+      "read_only_freeze": "定期メンテナンス中は変更できません。終了後にもう一度お試しください。",
+      "internal": "こちらで問題が発生しました。"
+    },
+    "detail": {
+      "title": "連携",
+      "syncNow": "今すぐ同期",
+      "syncing": "同期を準備中",
+      "connected": "{name} を接続しました。まもなく最初の同期が始まります。",
+      "sync": {
+        "queued": "同期を開始しました。少ししてから更新すると結果が表示されます。",
+        "already": "同期はすでに進行中です。"
+      },
+      "done": {
+        "paused": "同期を一時停止しました。",
+        "resumed": "同期を再開しました。",
+        "interval": "同期スケジュールを保存しました。",
+        "disconnected": "切断しました。今後は何も同期されず、プロバイダー側のアクセスも取り消しました。"
+      },
+      "revoked": {
+        "user": "{when} に切断しました。",
+        "provider": "{when} にプロバイダーがこの接続の受け付けを停止したため、同期を止めました。続けるには再接続してください。"
+      },
+      "pending": "プロバイダーでの接続の承認を待っています。",
+      "checkConnection": "接続を確認",
+      "cancelConnect": "キャンセル",
+      "confirmDisconnect": "{name} を切断しますか？",
+      "confirmDisconnectBody": "同期はすぐに止まり、プロバイダー側の Yayatoh のアクセスが取り消されます。同期済みのレコードはそのまま残ります。",
+      "disconnect": "切断",
+      "keep": "接続を維持",
+      "statusTitle": "ステータス",
+      "connectedAt": "接続日時",
+      "nextSync": "次回の同期",
+      "interval": "同期の間隔",
+      "saveInterval": "スケジュールを保存",
+      "pause": "同期を一時停止",
+      "resume": "同期を再開",
+      "intervals": {
+        "15": "15 分",
+        "60": "1 時間",
+        "360": "6 時間",
+        "1440": "1 日"
+      }
+    },
+    "mapping": {
+      "sectionTitle": "フィールドの対応付け",
+      "sectionHelp": "どのフィールドでどのフィールドを埋めるかを選びます。保存するたびに新しいバージョンができ、次回の同期で使われます。",
+      "title": {
+        "pull": "Yayatoh へ",
+        "push": "プロバイダーへ"
+      },
+      "help": {
+        "pull": "プロバイダーのフィールドで Yayatoh のフィールドを埋めます。",
+        "push": "Yayatoh のフィールドでプロバイダーのフィールドを埋めます。"
+      },
+      "version": "バージョン {version}",
+      "saved": "対応付けをバージョン {version} として保存しました。次回の同期で使われます。",
+      "invalid": "この対応付けはまだ保存できません。印の付いたフィールドを確認してください。",
+      "required": "必須",
+      "source": "取得元",
+      "transform": "変換",
+      "default": "空の場合の値",
+      "notMapped": "— 対応付けなし —",
+      "transforms": {
+        "none": "そのまま",
+        "trim": "空白を削除",
+        "lowercase": "小文字",
+        "uppercase": "大文字",
+        "title_case": "単語の先頭を大文字",
+        "first_word": "最初の単語",
+        "last_word": "最後の単語",
+        "to_number": "数値",
+        "to_boolean": "はい／いいえ",
+        "to_date": "日付"
+      },
+      "save": {
+        "pull": "取り込みの対応付けを保存",
+        "push": "書き出しの対応付けを保存"
+      },
+      "issue": {
+        "missing_required": "{field} の取得元を選んでください（必須）。",
+        "unknown_source": "そのフィールドはプロバイダーにありません。",
+        "unknown_target": "{field} は設定できません。",
+        "duplicate_target": "{field} が 2 回設定されています。",
+        "other": "このフィールドを確認してください。"
+      }
+    },
+    "runs": {
+      "title": "最近の同期",
+      "caption": "この連携の最近の同期",
+      "empty": "まだ同期はありません。接続後まもなく最初の同期が始まります。",
+      "when": "開始",
+      "trigger": "開始元",
+      "status": "結果",
+      "pulled": "取り込み",
+      "pushed": "書き出し",
+      "skipped": "変更なし",
+      "failed": "エラー",
+      "error": "問題",
+      "triggers": {
+        "manual": "今すぐ同期",
+        "schedule": "スケジュール",
+        "retry": "再試行"
+      }
+    },
+    "codes": {
+      "auth_revoked": "プロバイダーがこの接続を受け付けなくなりました",
+      "invalid_token": "プロバイダーがこの接続を受け付けなくなりました",
+      "auth_failed": "プロバイダーが接続を拒否しました",
+      "invalid_value": "値がフィールドに合いません",
+      "missing_required": "必須フィールドが空です",
+      "transform_failed": "値を変換できませんでした",
+      "duplicate_record": "2 件のレコードが同じ連絡先を指しています",
+      "write_failed": "Yayatoh に保存できませんでした",
+      "push_failed": "プロバイダーに送信できませんでした",
+      "network": "プロバイダーに接続できませんでした",
+      "lease_expired": "同期が予期せず停止しました",
+      "disconnected": "切断により停止",
+      "paused": "一時停止により停止",
+      "sync_failed": "同期に失敗しました",
+      "unknown_connector": "この連携は利用できなくなりました",
+      "other": "エラー（{code}）"
+    },
+    "inbox": {
+      "title": "連携エラー",
+      "description": "同期できなかったレコードを原因別にまとめています。しばらくは自動で再試行されます。取得元でレコードを修正してから再試行するか、不要なものは非表示にしてください。",
+      "retried": "{count, plural, =0 {再試行するものはありません。これらの接続は有効ではありません。} other {# 件のレコードを次回の同期で再試行します。}}",
+      "dismissed": "{count, plural, other {# 件のレコードを非表示にしました。}}",
+      "filterLabel": "エラーを表示",
+      "status": {
+        "open": "未解決",
+        "resolved": "解決済み",
+        "dismissed": "非表示"
+      },
+      "empty": {
+        "open": "未解決のエラーはありません",
+        "resolved": "解決済みのものはまだありません",
+        "dismissed": "非表示のものはありません"
+      },
+      "emptyOpenHelp": "すべて同期済みです。同期できないレコードがあれば、次の手順とともにここに表示されます。",
+      "backToConnections": "接続へ移動",
+      "groupTitle": "{connector}：{step} · {count, plural, other {# 件}}",
+      "steps": {
+        "auth": "接続",
+        "pull": "プロバイダーからの読み取り",
+        "map": "対応付け",
+        "write": "Yayatoh への保存",
+        "push": "プロバイダーへの送信"
+      },
+      "field": "フィールド：{field}",
+      "lastSeen": "最終確認 {when}",
+      "retryAll": "すべて再試行",
+      "retryAllNamed": "すべて再試行：{group}",
+      "dismissAll": "すべて非表示",
+      "dismissAllNamed": "すべて非表示：{group}",
+      "recordsCaption": "レコード：{group}",
+      "record": "レコード",
+      "object": "種類",
+      "objectDirection": "{object}（{direction}）",
+      "directions": {
+        "pull": "取り込み",
+        "push": "書き出し"
+      },
+      "wholeConnection": "接続全体",
+      "attempts": "試行回数",
+      "nextRetry": "次回の自動再試行",
+      "closedAt": "終了",
+      "manualRetry": "対応待ち",
+      "actions": "操作",
+      "retry": "再試行",
+      "retryNamed": "{record} を再試行",
+      "dismiss": "非表示",
+      "dismissNamed": "{record} を非表示",
+      "more": "{count, plural, other {ほかに # 件のレコードは表示されていません。}}"
+    },
+    "fakeConsent": {
+      "title": "テスト用の同意",
+      "eyebrow": "テスト用プロバイダー",
+      "heading": "{name} を Yayatoh に接続しますか？",
+      "body": "{name} はテスト用のプロバイダーです。許可すると、Yayatoh があなたに代わって次の内容を読み書きできるようになります。",
+      "allow": "許可",
+      "deny": "拒否"
+    }
   }
 }

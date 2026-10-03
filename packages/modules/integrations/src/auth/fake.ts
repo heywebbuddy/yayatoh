@@ -153,6 +153,7 @@ export function fakeIntegrationAuth(providers: (key: string) => FakeProvider | n
     provider: 'fake',
     async beginConnect(input) {
       const q = new URLSearchParams({
+        org: input.orgId,
         connection: input.connectionId,
         provider: input.providerConfigKey,
         state: input.state,
