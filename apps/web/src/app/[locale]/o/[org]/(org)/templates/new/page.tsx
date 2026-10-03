@@ -1,6 +1,6 @@
 import { PROFILE_KEYS } from '@yayatoh/platform';
 import { roleCan } from '@yayatoh/tenancy';
-import { Breadcrumb, Card, EmptyState, PageHeader, Stepper } from '@yayatoh/ui';
+import { Breadcrumb, buttonClass, Card, EmptyState, PageHeader, Stepper } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { NewTemplateForm } from '@/components/template-builder.tsx';
 import { Link } from '@/i18n/navigation.ts';
@@ -31,7 +31,15 @@ export default async function NewTemplatePage({
     return (
       <>
         <PageHeader breadcrumb={breadcrumb} title={t('templateBuilder.newTitle')} />
-        <EmptyState title={t('copy.noAccessTitle')} description={t('copy.noAccessDescription')} />
+        <EmptyState
+          title={t('copy.noAccessTitle')}
+          description={t('copy.noAccessDescription')}
+          action={
+            <Link href={`/o/${org}/templates`} className={buttonClass('secondary', 'md')}>
+              {t('templates.title')}
+            </Link>
+          }
+        />
       </>
     );
   // The "other" profile reads best last: the specific kinds first.

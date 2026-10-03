@@ -497,7 +497,7 @@ describe('U4 KPI row', () => {
       path: 'details',
       field: 'details-venue',
     });
-    expect(r.blocking.find((x) => x.key === 'ticketsCreated')?.field).toBe('add-ticket-type-heading');
+    expect(r.blocking.find((x) => x.key === 'ticketsCreated')?.field).toBe('new-ticket-type');
     expect(r.items.find((i) => i.key === 'detailsAdded')).toMatchObject({ done: true, field: null });
   });
 });

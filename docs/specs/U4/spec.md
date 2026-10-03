@@ -19,7 +19,7 @@ Source: `docs/plans/ux-review-1.md` (approved 2026-10-03), finding 10 ("Command 
 
 ### Readiness checklist with deep links
 - The readiness widget lists **every** counted item, done (ticked) or not, in two groups ("Needed to sell", "Recommended"), with "n of m done" under the ring.
-- Every open item links to the exact field or add form that fixes it: `READINESS_FIELDS` (`details#details-venue`, `content#tagline-heading`, `content#add-section-heading`, `dates#add-date-heading`, `tickets-orders#add-ticket-type-heading`, `sessions#new-session-title`, `speakers#new-speaker-name`, `guests#new-party`, `seating#quick-heading`, `tables-sponsors#sold-heading`, event home `#event-action-publish`). Rules carry `field`; the widget DTO adds `field` and `items` (additive). Two ids were added to pages: the add-ticket-type heading and the event home's action forms (`event-action-{action}`).
+- Every open item links to the exact field or add form that fixes it: `READINESS_FIELDS` (`details#details-venue`, `content#tagline-heading`, `content#adding-section-heading`, `dates#adding-date-heading`, `tickets-orders#new-ticket-type`, `sessions#new-session-title`, `speakers#new-speaker-name`, `guests#new-party`, `seating#quick-heading`, `tables-sponsors#sold-heading`, event home `#event-action-publish`). Rules carry `field`; the widget DTO adds `field` and `items` (additive). One id was added to pages: the event home's action forms (`event-action-{action}`).
 
 ### Alerts tile
 - Already the real M3.2b engine in the web registry; the empty state is no longer a bare line: "No open alerts." with a success dot, what the rules watch, and "See all alerts" (the org alert list filtered to the event). The list view links there too.
