@@ -19,6 +19,7 @@ export function CheckpointForm({
   const [kind, setKind] = useState<'entrance' | 'zone'>('entrance');
   const ref = useRef<HTMLFormElement>(null);
   const locationError = state.field === 'location' ? t('checkpoints.locationError') : undefined;
+  const capacityError = state.field === 'capacity' ? t('checkpoints.capacityError') : undefined;
   useEffect(() => {
     if (state.ok) {
       ref.current?.reset();
@@ -63,6 +64,13 @@ export function CheckpointForm({
           </div>
         </fieldset>
       ) : null}
+      <Input
+        name="capacity"
+        inputMode="numeric"
+        label={t('checkpoints.capacity')}
+        hint={t('checkpoints.capacityHint')}
+        error={capacityError}
+      />
       <fieldset className="grid grid-cols-1 gap-4 md:col-span-2 md:grid-cols-2">
         <legend className="text-caption text-zinc-600">{t('checkpoints.location')}</legend>
         <p className="text-caption text-zinc-500 md:col-span-2">{t('checkpoints.locationHint')}</p>
@@ -77,7 +85,9 @@ export function CheckpointForm({
       <div className="flex flex-col gap-2 md:col-span-2">
         <div aria-live="polite">
           {state.ok ? <Alert tone="info" title={t('checkpoints.added')} /> : null}
-          {state.code && state.field !== 'location' ? <Alert title={t(errorMessageKey(state.code))} /> : null}
+          {state.code && state.field !== 'location' && state.field !== 'capacity' ? (
+            <Alert title={t(errorMessageKey(state.code))} />
+          ) : null}
         </div>
         <Button type="submit" disabled={pending} className="self-start">
           {t('checkpoints.add')}

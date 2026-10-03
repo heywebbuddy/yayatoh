@@ -1,0 +1,162 @@
+{
+  "config": {
+    "version": "1.56.0"
+  },
+  "suites": [
+    {
+      "title": "settings.spec.ts",
+      "file": "settings.spec.ts",
+      "specs": [
+        {
+          "title": "saves the org name",
+          "file": "settings.spec.ts",
+          "tests": [
+            {
+              "projectName": "desktop-1280",
+              "status": "expected",
+              "results": [
+                {
+                  "status": "passed",
+                  "attachments": [
+                    {
+                      "name": "axe-summary",
+                      "contentType": "application/json",
+                      "body": "eyJwYXNzZXMiOiBbeyJpZCI6ICJkb2N1bWVudC10aXRsZSIsICJ0YWdzIjogWyJjYXQudGV4dC1hbHRlcm5hdGl2ZXMiLCAid2NhZzJhIiwgIndjYWcyNDIiXSwgIm5vZGVzIjogMX0sIHsiaWQiOiAiaHRtbC1oYXMtbGFuZyIsICJ0YWdzIjogWyJjYXQubGFuZ3VhZ2UiLCAid2NhZzJhIiwgIndjYWczMTEiXSwgIm5vZGVzIjogMX0sIHsiaWQiOiAiY29sb3ItY29udHJhc3QiLCAidGFncyI6IFsiY2F0LmNvbG9yIiwgIndjYWcyYWEiLCAid2NhZzE0MyJdLCAibm9kZXMiOiAxMn0sIHsiaWQiOiAidGFyZ2V0LXNpemUiLCAidGFncyI6IFsiY2F0LnNlbnNvcnktYW5kLXZpc3VhbC1jdWVzIiwgIndjYWcyMmFhIiwgIndjYWcyNTgiXSwgIm5vZGVzIjogMzB9LCB7ImlkIjogImltYWdlLWFsdCIsICJ0YWdzIjogWyJjYXQudGV4dC1hbHRlcm5hdGl2ZXMiLCAid2NhZzJhIiwgIndjYWcxMTEiXSwgIm5vZGVzIjogM31dLCAidmlvbGF0aW9ucyI6IFtdLCAiaW5jb21wbGV0ZSI6IFtdfQ=="
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "projectName": "mobile-375",
+              "status": "expected",
+              "results": [
+                {
+                  "status": "passed",
+                  "attachments": [
+                    {
+                      "name": "axe-summary",
+                      "contentType": "application/json",
+                      "body": "eyJwYXNzZXMiOiBbeyJpZCI6ICJkb2N1bWVudC10aXRsZSIsICJ0YWdzIjogWyJjYXQudGV4dC1hbHRlcm5hdGl2ZXMiLCAid2NhZzJhIiwgIndjYWcyNDIiXSwgIm5vZGVzIjogMX0sIHsiaWQiOiAiaHRtbC1oYXMtbGFuZyIsICJ0YWdzIjogWyJjYXQubGFuZ3VhZ2UiLCAid2NhZzJhIiwgIndjYWczMTEiXSwgIm5vZGVzIjogMX0sIHsiaWQiOiAidGFyZ2V0LXNpemUiLCAidGFncyI6IFsiY2F0LnNlbnNvcnktYW5kLXZpc3VhbC1jdWVzIiwgIndjYWcyMmFhIiwgIndjYWcyNTgiXSwgIm5vZGVzIjogMzB9LCB7ImlkIjogImltYWdlLWFsdCIsICJ0YWdzIjogWyJjYXQudGV4dC1hbHRlcm5hdGl2ZXMiLCAid2NhZzJhIiwgIndjYWcxMTEiXSwgIm5vZGVzIjogM31dLCAidmlvbGF0aW9ucyI6IFt7ImlkIjogImNvbG9yLWNvbnRyYXN0IiwgInRhZ3MiOiBbImNhdC5jb2xvciIsICJ3Y2FnMmFhIiwgIndjYWcxNDMiXSwgImltcGFjdCI6ICJzZXJpb3VzIiwgIm5vZGVzIjogMn1dLCAiaW5jb21wbGV0ZSI6IFtdfQ=="
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "title": "keyboard only: edit and save the settings",
+          "file": "settings.spec.ts",
+          "tests": [
+            {
+              "projectName": "desktop-1280",
+              "status": "expected",
+              "results": [
+                {
+                  "status": "passed",
+                  "attachments": [
+                    {
+                      "name": "axe-summary",
+                      "contentType": "application/json",
+                      "body": "eyJwYXNzZXMiOiBbeyJpZCI6ICJkb2N1bWVudC10aXRsZSIsICJ0YWdzIjogWyJjYXQudGV4dC1hbHRlcm5hdGl2ZXMiLCAid2NhZzJhIiwgIndjYWcyNDIiXSwgIm5vZGVzIjogMX0sIHsiaWQiOiAiaHRtbC1oYXMtbGFuZyIsICJ0YWdzIjogWyJjYXQubGFuZ3VhZ2UiLCAid2NhZzJhIiwgIndjYWczMTEiXSwgIm5vZGVzIjogMX1dLCAidmlvbGF0aW9ucyI6IFtdLCAiaW5jb21wbGV0ZSI6IFtdfQ=="
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "projectName": "tablet-768",
+              "status": "unexpected",
+              "results": [
+                {
+                  "status": "failed",
+                  "attachments": [
+                    {
+                      "name": "axe-summary",
+                      "contentType": "application/json",
+                      "body": "eyJwYXNzZXMiOiBbeyJpZCI6ICJkb2N1bWVudC10aXRsZSIsICJ0YWdzIjogWyJjYXQudGV4dC1hbHRlcm5hdGl2ZXMiLCAid2NhZzJhIiwgIndjYWcyNDIiXSwgIm5vZGVzIjogMX0sIHsiaWQiOiAiaHRtbC1oYXMtbGFuZyIsICJ0YWdzIjogWyJjYXQubGFuZ3VhZ2UiLCAid2NhZzJhIiwgIndjYWczMTEiXSwgIm5vZGVzIjogMX1dLCAidmlvbGF0aW9ucyI6IFtdLCAiaW5jb21wbGV0ZSI6IFtdfQ=="
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "suites": [
+        {
+          "title": "Arabic",
+          "file": "settings.spec.ts",
+          "specs": [
+            {
+              "title": "the settings page renders right to left",
+              "file": "settings.spec.ts",
+              "tests": [
+                {
+                  "projectName": "desktop-1280",
+                  "status": "expected",
+                  "results": [
+                    {
+                      "status": "passed",
+                      "attachments": [
+                        {
+                          "name": "axe-summary",
+                          "contentType": "application/json",
+                          "body": "eyJwYXNzZXMiOiBbeyJpZCI6ICJkb2N1bWVudC10aXRsZSIsICJ0YWdzIjogWyJjYXQudGV4dC1hbHRlcm5hdGl2ZXMiLCAid2NhZzJhIiwgIndjYWcyNDIiXSwgIm5vZGVzIjogMX0sIHsiaWQiOiAiaHRtbC1oYXMtbGFuZyIsICJ0YWdzIjogWyJjYXQubGFuZ3VhZ2UiLCAid2NhZzJhIiwgIndjYWczMTEiXSwgIm5vZGVzIjogMX0sIHsiaWQiOiAidmFsaWQtbGFuZyIsICJ0YWdzIjogWyJjYXQubGFuZ3VhZ2UiLCAid2NhZzJhYSIsICJ3Y2FnMzEyIl0sICJub2RlcyI6IDF9XSwgInZpb2xhdGlvbnMiOiBbXSwgImluY29tcGxldGUiOiBbXX0="
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/tmp/trace.zip"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "program.spec.ts",
+      "file": "program.spec.ts",
+      "specs": [
+        {
+          "title": "sessions: reorder by keyboard and by drag",
+          "file": "program.spec.ts",
+          "tests": [
+            {
+              "projectName": "desktop-1280",
+              "status": "expected",
+              "results": [
+                {
+                  "status": "passed",
+                  "attachments": [
+                    {
+                      "name": "axe-summary",
+                      "contentType": "application/json",
+                      "body": "eyJwYXNzZXMiOiBbeyJpZCI6ICJkb2N1bWVudC10aXRsZSIsICJ0YWdzIjogWyJjYXQudGV4dC1hbHRlcm5hdGl2ZXMiLCAid2NhZzJhIiwgIndjYWcyNDIiXSwgIm5vZGVzIjogMX0sIHsiaWQiOiAiaHRtbC1oYXMtbGFuZyIsICJ0YWdzIjogWyJjYXQubGFuZ3VhZ2UiLCAid2NhZzJhIiwgIndjYWczMTEiXSwgIm5vZGVzIjogMX1dLCAidmlvbGF0aW9ucyI6IFt7ImlkIjogInJlZ2lvbiIsICJ0YWdzIjogWyJjYXQua2V5Ym9hcmQiLCAiYmVzdC1wcmFjdGljZSJdLCAiaW1wYWN0IjogIm1vZGVyYXRlIiwgIm5vZGVzIjogMX0sIHsiaWQiOiAibGluay1pbi10ZXh0LWJsb2NrIiwgInRhZ3MiOiBbImNhdC5jb2xvciIsICJ3Y2FnMmEiLCAid2NhZzE0MSJdLCAiaW1wYWN0IjogIm1pbm9yIiwgIm5vZGVzIjogMX1dLCAiaW5jb21wbGV0ZSI6IFtdfQ=="
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "projectName": "mobile-375",
+              "status": "skipped",
+              "results": [
+                {
+                  "status": "skipped",
+                  "attachments": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

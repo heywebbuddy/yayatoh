@@ -159,7 +159,11 @@ export default async function MessagingLimitsPage({
         />
       </section>
 
-      <section aria-labelledby="suppressions-heading" className="flex flex-col gap-3">
+      <section
+        id="suppressions"
+        aria-labelledby="suppressions-heading"
+        className="flex scroll-mt-20 flex-col gap-3"
+      >
         <h2 id="suppressions-heading" className="text-section">
           {t('suppressionsTitle')}
         </h2>

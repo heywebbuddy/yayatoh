@@ -187,14 +187,22 @@ export const PLATFORM_PREFIXES: readonly string[] = [
   '/r',
   '/waitlist',
   '/registration-form',
+  // Batch 3f: the portal (M5.3a/M5.4a: invitations, sign-in codes and magic links, the event's
+  // sign-in page, the speaker and exhibitor portals).
+  '/event-portal',
+  // Batch 3g merge: M3.3a's TV display links (a venue screen opens `/tv/{token}`, no session).
+  '/tv',
 ];
 
 /**
  * New-app pages under paths legacy owns (`/events/{slug}/…`): never forwarded either. Batch 3e
- * merge: the registration pages of M5.1a and M5.1b, and the M3.10a waitlist join page.
+ * merge: the registration pages of M5.1a and M5.1b, and the M3.10a waitlist join page. Batch 3f
+ * merge: the M5.4a public exhibitor map. Batch 3g merge: the seat finder and M3.3b's guest help
+ * pages under it (`seat-finder/help`, and a request's status page `seat-finder/help/{token}`).
  */
 export const PLATFORM_PATTERNS: readonly RegExp[] = [
-  /^\/events\/[^/]+\/(register|registration-form|waitlist)$/,
+  /^\/events\/[^/]+\/(register|registration-form|waitlist|exhibitors)$/,
+  /^\/events\/[^/]+\/seat-finder(\/help(\/[^/]+)?)?$/,
 ];
 export const PLATFORM_FILES: ReadonlySet<string> = new Set([
   '/widget.js',

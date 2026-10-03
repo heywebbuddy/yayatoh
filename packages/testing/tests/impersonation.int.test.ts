@@ -1,8 +1,10 @@
 import * as ai from '@yayatoh/ai';
 import * as alerts from '@yayatoh/alerts';
+import * as assistance from '@yayatoh/assistance';
 import * as attendees from '@yayatoh/attendees';
 import * as audiences from '@yayatoh/audiences';
 import * as automations from '@yayatoh/automations';
+import * as badges from '@yayatoh/badges';
 import * as billing from '@yayatoh/billing';
 import * as campaigns from '@yayatoh/campaigns';
 import * as checkin from '@yayatoh/checkin';
@@ -76,8 +78,12 @@ const MODULES = {
   // Batch 3e merge: the modules of batches 3b–3e (alerts, audiences, Command Center, guests,
   // marketing; campaigns, journeys and registration), so their commands carry categories too.
   alerts,
+  // Batch 3g merge: M3.3b's guest assistance queue (M3.3a grew checkin and the Command Center).
+  assistance,
   audiences,
   automations,
+  // Batch 3f merge: M5.5a badges (M5.3a and M5.4a grew events, program and media).
+  badges,
   campaigns,
   commandCenter,
   guests,

@@ -84,12 +84,15 @@ export async function ProgramSections({
   locale,
   timeZone,
   images = {},
+  exhibitorMap = false,
 }: {
   program: PublicProgramDto;
   slug: string;
   locale: string;
   timeZone: string;
   images?: ProgramImages;
+  /** M5.4a: the event has booths, so the exhibitor map page exists. */
+  exhibitorMap?: boolean;
 }) {
   const t = await getTranslations('publicEvent');
   const ta = await getTranslations('agenda');
@@ -185,6 +188,14 @@ export async function ProgramSections({
           <h2 id="exhibitors-heading" className={h2}>
             {t('exhibitors')}
           </h2>
+          {exhibitorMap ? (
+            <Link
+              href={`/events/${slug}/exhibitors`}
+              className="inline-flex min-h-6 items-center self-start text-body underline underline-offset-2"
+            >
+              {t('exhibitorMap')}
+            </Link>
+          ) : null}
           <ul className="grid list-none grid-cols-1 gap-3 p-0 sm:grid-cols-2 xl:grid-cols-3">
             {program.exhibitors.map((x) => (
               <li key={x.id} className="flex flex-col gap-1 rounded-card border border-zinc-200 p-4">

@@ -150,7 +150,7 @@ interface StoreArgs {
  * the files to the store and the rows, and (for a replacement) delete the old rows. The old files
  * are purged by the caller after commit (`uploadMedia`).
  */
-async function storeUploadTx(
+export async function storeUploadTx(
   a: StoreArgs,
 ): Promise<{ asset: MediaAssetDto; replacedAssetId: string | null }> {
   const orgId = requireOrg(a.ctx);
@@ -473,6 +473,27 @@ function programImageCommands<K extends ProgramImageOwner>(kind: K) {
   return { upload, remove, updateAlt };
 }
 
+/**
+ * M5.3a: store an approved portal photo as a program image (the speaker-photo subscriber), in
+ * the subscriber's transaction and with the same pipeline and checks as an organizer upload.
+ */
+export function storeProgramImageTx(
+  tx: TenantTx,
+  ctx: Ctx,
+  emit: (e: DomainEvent) => void,
+  a: { kind: ProgramImageOwner; ownerId: string; assetId: string; file: Uint8Array; alt: string },
+): Promise<{ asset: MediaAssetDto; replacedAssetId: string | null }> {
+  return storeUploadTx({
+    tx,
+    ctx,
+    emit,
+    ownerType: a.kind,
+    ownerId: a.ownerId,
+    slot: PROGRAM_IMAGES[a.kind].slot,
+    input: { assetId: a.assetId, file: a.file, alt: a.alt, decorative: false, replaceAssetId: null },
+  });
+}
+
 /** Upload, remove and alt-text commands per program kind (speaker photo, exhibitor/sponsor logo). */
 export const programImageCommand = {
   speaker: programImageCommands('speaker'),
@@ -580,7 +601,7 @@ export async function uploadProgramImage(
   );
 }
 
-async function runUpload(
+export async function runUpload(
   ctx: Ctx,
   run: (assetId: string) => Promise<UploadResultDto>,
 ): Promise<UploadResultDto> {
