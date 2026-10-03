@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { eventsCsv, feesCsv, MONEY_CSV_COLUMNS, overviewCsv, payoutCsv } from '../src/money-csv.ts';
 import type { FeesReportDto, MoneyOverviewDto, PayoutDetailDto } from '../src/money.ts';
+import { eventsCsv, feesCsv, MONEY_CSV_COLUMNS, overviewCsv, payoutCsv } from '../src/money-csv.ts';
 
 const headers = <V extends keyof typeof MONEY_CSV_COLUMNS>(v: V) =>
   Object.fromEntries(MONEY_CSV_COLUMNS[v].map((c) => [c, c.toUpperCase()])) as Record<
@@ -16,7 +16,10 @@ describe('money CSV exports (U5)', () => {
           currency: 'USD',
           buckets: [{ start: '2026-11-02', grossMinor: 16650, refundsMinor: 5000, feesMinor: 1650 }],
         },
-        { currency: 'JPY', buckets: [{ start: '2026-11-02', grossMinor: 1200, refundsMinor: 0, feesMinor: 0 }] },
+        {
+          currency: 'JPY',
+          buckets: [{ start: '2026-11-02', grossMinor: 1200, refundsMinor: 0, feesMinor: 0 }],
+        },
       ],
     } as unknown as MoneyOverviewDto;
     expect(overviewCsv(o, headers('overview'))).toBe(

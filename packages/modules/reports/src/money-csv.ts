@@ -18,7 +18,7 @@ import type {
 export const MONEY_CSV_COLUMNS = {
   overview: ['period', 'currency', 'gross', 'refunds', 'fees'],
   events: ['event', 'currency', 'orders', 'tickets', 'gross', 'refunds', 'disputesLost', 'fees', 'net'],
-  payouts: ['date', 'status', 'event', 'currency', 'released', 'reserve', 'netted', 'amount', 'releaseAt'],
+  payouts: ['date', 'status', 'event', 'currency', 'released', 'reserve', 'netted', 'amount'],
   payout: ['date', 'type', 'order', 'buyer', 'currency', 'gross', 'fee', 'organizer'],
   fees: ['date', 'order', 'event', 'currency', 'total', 'fee', 'feeRefunded'],
 } as const;
@@ -102,7 +102,6 @@ export function payoutsCsv(
       decimal(x.reserveMinor, x.currency),
       '',
       decimal(x.expectedMinor, x.currency),
-      '',
     ]);
   for (const x of d.pending)
     out += csvRow([
@@ -114,7 +113,6 @@ export function payoutsCsv(
       '',
       '',
       decimal(x.amountMinor, x.currency),
-      '',
     ]);
   for (const x of d.past)
     out += csvRow([
@@ -126,7 +124,6 @@ export function payoutsCsv(
       decimal(x.reserveMinor, x.currency),
       decimal(x.nettedMinor, x.currency),
       decimal(x.amountMinor, x.currency),
-      '',
     ]);
   return out;
 }
