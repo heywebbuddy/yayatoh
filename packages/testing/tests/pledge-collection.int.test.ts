@@ -828,8 +828,8 @@ describe('tenant isolation', () => {
         ports,
       ),
     ).rejects.toMatchObject({ code: 'not_found' });
-    // B's own page lists B's paddle pledges only (its fixture pledge; the fixture's sponsor match
-    // pledge, M4.8f, is not collected here).
+    // B's own page lists B's paddle pledges only (its fixture pledge). Batch 3j merge: the fixture
+    // also holds M4.8f's sponsor match pledge, which closing the night does not collect.
     const view = await executeQuery(pledgeCollectionQuery, { eventId: b.event.id }, b.ctx(), ports);
     const [own] = await q<{ n: number }>(
       b,

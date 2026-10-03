@@ -435,7 +435,6 @@ export const deviceManifestQuery = tenantQuery({
     const scope = await deviceScanScopeTx(tx, deviceId, event.id, ctx.now);
     if (scope !== null && scope.size === 0)
       throw new DomainError('forbidden', 'This device is not assigned to this event');
-    const keys = await publicKeysTx(tx);
     const salt = `yy-manifest:${event.id}`;
     const page = await manifestTicketsTx(
       tx,
@@ -506,6 +505,18 @@ export const deviceManifestQuery = tenantQuery({
       });
     }
     const last = page.at(-1);
+    // Sign the scope before reading the keys: an org's first signing key is made on first use (a
+    // guest-only wedding or gala that has issued no ticket yet), and the header must carry the key
+    // that signed its scope or the device refuses the manifest (batch 3j merge, M4.4b).
+    const signed = await signedScope(
+      tx,
+      requireOrg(ctx),
+      event.id,
+      deviceId,
+      scope,
+      hasDoors ? sessionGates : undefined,
+    );
+    const keys = await publicKeysTx(tx);
     const header: ManifestHeader = {
       event: {
         id: event.id,
@@ -535,14 +546,7 @@ export const deviceManifestQuery = tenantQuery({
         status: o.status,
       })),
       version: MANIFEST_VERSION,
-      scope: await signedScope(
-        tx,
-        requireOrg(ctx),
-        event.id,
-        deviceId,
-        scope,
-        hasDoors ? sessionGates : undefined,
-      ),
+      scope: signed,
     };
     return {
       header,
