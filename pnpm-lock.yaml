@@ -1679,6 +1679,9 @@ importers:
 
   packages/modules/engagement:
     dependencies:
+      '@yayatoh/attendees':
+        specifier: workspace:*
+        version: link:../attendees
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../../db

@@ -172,6 +172,10 @@ export default async function SessionsPage({
         actions={
           isPublic || canWrite ? (
             <div className="flex flex-wrap items-center gap-3">
+              {/* M5.8a: networking (directory, connections, meetings). */}
+              <Link href={`/o/${org}/e/${event}/networking`} className={buttonClass('secondary')}>
+                {t('networking.console.link')}
+              </Link>
               {canWrite ? (
                 <Link href={`/o/${org}/e/${event}/sessions/import`} className={buttonClass('secondary')}>
                   {t('agenda.import.link')}
