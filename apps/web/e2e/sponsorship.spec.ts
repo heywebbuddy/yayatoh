@@ -4,6 +4,7 @@ import {
   expectAccessibleBothModes,
   lastEmailedCode,
   ownClientIp,
+  pickOption,
   signIn,
 } from './helpers.ts';
 
@@ -34,8 +35,8 @@ const at = (days: number, hhmm: string) => `${chicagoDate(days)}T${hhmm}`;
 async function conference(page: Page, name: string, sponsors: string[], exhibitor?: string) {
   await page.goto(`${ORG}/events/new`);
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Event type').selectOption('conference');
-  await page.getByLabel('Time zone').selectOption(TZ);
+  await pickOption(page.getByLabel('Event type'), 'conference');
+  await pickOption(page.getByLabel('Time zone'), TZ);
   await page.getByLabel('Starts', { exact: true }).fill(at(40, '09:00'));
   await page.getByLabel('Ends', { exact: true }).fill(at(42, '18:00'));
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -182,7 +183,7 @@ test.describe('sponsor packages and deliverables (M5.4b)', () => {
 
     // The exhibitor it exhibits as, and a contact.
     const acme2 = card(page, `Acme ${s}`);
-    await acme2.getByLabel(`Exhibitor for Acme ${s}`).selectOption({ label: `Acme Booth ${s}` });
+    await pickOption(acme2.getByLabel(`Exhibitor for Acme ${s}`), { label: `Acme Booth ${s}` });
     await acme2.getByRole('button', { name: 'Save exhibitor' }).click();
     await expect(acme2.getByText('Exhibitor saved.')).toBeVisible();
     await acme2.getByText(`Invite a contact to Acme ${s}`).click();
@@ -241,7 +242,7 @@ test.describe('sponsor packages and deliverables (M5.4b)', () => {
       [`Ad copy ${s}`, 7, 'Sponsor'],
     ] as const) {
       await add.getByLabel('What is due').fill(title);
-      await add.getByLabel('Who delivers it').selectOption({ label: owner });
+      await pickOption(add.getByLabel('Who delivers it'), { label: owner });
       await add.getByLabel('Due date').fill(chicagoDate(days));
       await add.getByRole('button', { name: 'Add deliverable' }).click();
       await expect(add.getByText('Deliverable added.')).toBeVisible();

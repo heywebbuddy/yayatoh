@@ -1,6 +1,6 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
 import { AggregateRatingSchema } from '../src/lib/seo/jsonld.ts';
-import { continueToPayment, expectAccessible, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, pickOption, signIn } from './helpers.ts';
 
 const VIEWER = 'jordan@lakeside.test';
 const ORG = '/o/lakeside-events';
@@ -26,7 +26,7 @@ const stamp = () => `${Date.now()}${test.info().project.name.replace(/\D/g, '')}
 async function createEvent(page: Page, name: string, startMin: number, endMin: number) {
   await page.goto(`${ORG}/events/new`);
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Time zone').selectOption('America/Chicago');
+  await pickOption(page.getByLabel('Time zone'), 'America/Chicago');
   await page.getByLabel('Starts', { exact: true }).fill(chicago(startMin));
   await page.getByLabel('Ends', { exact: true }).fill(chicago(endMin));
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -47,7 +47,7 @@ async function createEvent(page: Page, name: string, startMin: number, endMin: n
 async function buy(browser: Browser, slug: string, name: string): Promise<Page> {
   const guest = await (await browser.newContext()).newPage();
   await guest.goto(`/events/${slug}`);
-  await guest.getByLabel('Quantity — Entry').selectOption('1');
+  await pickOption(guest.getByLabel('Quantity — Entry'), '1');
   await guest.getByLabel('Full name').fill(name);
   const email = `${name.replace(/\W+/g, '.').toLowerCase()}@example.test`;
   await guest.getByLabel('Email for your tickets').fill(email);
@@ -152,7 +152,7 @@ test.describe('event reviews (M1.4g)', () => {
     const caraItem = reviews.getByRole('listitem').filter({ hasText: 'Fine.' });
     await caraItem.getByRole('button', { name: /^Report/ }).click();
     await expect(caraItem.getByLabel('Why are you reporting it?')).toBeFocused();
-    await caraItem.getByLabel('Why are you reporting it?').selectOption('off_topic');
+    await pickOption(caraItem.getByLabel('Why are you reporting it?'), 'off_topic');
     await caraItem.getByRole('button', { name: 'Send report' }).click();
     await expect(caraItem.getByText('Thanks. The organizer will look at it.')).toBeVisible();
     await expectAccessible(pub);

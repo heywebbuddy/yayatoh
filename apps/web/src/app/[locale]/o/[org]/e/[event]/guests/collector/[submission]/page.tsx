@@ -1,7 +1,7 @@
 import { collectorMergePreviewQuery, guestListQuery, MERGE_FIELDS } from '@yayatoh/guests';
 import { executeQuery, isDomainError } from '@yayatoh/kernel';
 import { isProfileKey, navIncludes, navLabelKey, PROFILES } from '@yayatoh/platform';
-import { Button, buttonClass, Card, EmptyState, PageHeader, Table } from '@yayatoh/ui';
+import { Button, buttonClass, Card, EmptyState, PageHeader, Select, Table } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { type FieldSpec, ProgramForm } from '@/components/program-form.tsx';
@@ -141,13 +141,13 @@ export default async function MergeSubmissionPage({
               <label htmlFor="merge-party" className="text-[13px] font-bold text-ink">
                 {t('mergeInto')}
               </label>
-              <select id="merge-party" name="party" defaultValue={preview.party.id} className="field pe-9">
+              <Select id="merge-party" name="party" defaultValue={preview.party.id} className="field pe-9">
                 {list.partyOptions.map((p) => (
                   <option key={p.id} value={p.id}>
                     {p.name}
                   </option>
                 ))}
-              </select>
+              </Select>
             </div>
             <Button type="submit" variant="secondary">
               {t('switchParty')}

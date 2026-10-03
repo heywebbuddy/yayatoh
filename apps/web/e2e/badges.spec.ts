@@ -1,6 +1,13 @@
 import { readFileSync } from 'node:fs';
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import { continueToPayment, expectAccessible, OPEN_HOUSE, signIn } from './helpers.ts';
+import {
+  continueToPayment,
+  expectAccessible,
+  expectPicked,
+  OPEN_HOUSE,
+  pickOption,
+  signIn,
+} from './helpers.ts';
 
 /**
  * M5.5a badges: a conference organizer designs a 4×3 fold-over template by keyboard only, assigns
@@ -20,8 +27,8 @@ const day = (n: number) => {
 async function createConference(page: Page, name: string) {
   await page.goto(`${ORG}/events/new`);
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Event type').selectOption('conference');
-  await page.getByLabel('Time zone').selectOption(TZ);
+  await pickOption(page.getByLabel('Event type'), 'conference');
+  await pickOption(page.getByLabel('Time zone'), TZ);
   await page.getByLabel('Starts', { exact: true }).fill(`${day(40)}T09:00`);
   await page.getByLabel('Ends', { exact: true }).fill(`${day(41)}T18:00`);
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -43,7 +50,7 @@ async function addFreeTicketType(page: Page, base: string, name: string) {
 
 async function addQuestion(page: Page, label: string) {
   await page.getByLabel('Question', { exact: true }).fill(label);
-  await page.getByLabel('Answer type').selectOption('short_text');
+  await pickOption(page.getByLabel('Answer type'), 'short_text');
   await page.getByRole('button', { name: 'Add question' }).click();
   await expect(page.getByRole('listitem').filter({ hasText: label })).toBeVisible();
 }
@@ -58,7 +65,7 @@ async function register(
   const guest = await (await browser.newContext()).newPage();
   const email = `${who.name.split(' ')[0]?.toLowerCase()}+${Date.now()}@example.test`;
   await guest.goto(`/events/${slug}`);
-  await guest.getByLabel(`Quantity — ${type}`).selectOption('1');
+  await pickOption(guest.getByLabel(`Quantity — ${type}`), '1');
   await guest.getByLabel(/^Company/).fill(who.company);
   await guest.getByLabel(/^Job title/).fill(who.title);
   await guest.getByLabel('Full name').fill(who.name);
@@ -103,7 +110,7 @@ test.describe('badges (M5.5a)', () => {
     await create.getByRole('button', { name: 'Create template' }).click();
     await expect(create.getByText('Enter a template name (up to 80 characters).')).toBeVisible();
     await create.getByLabel('Template name').fill('Attendee badge');
-    await create.getByLabel('Badge size').selectOption('fold_4x3');
+    await pickOption(create.getByLabel('Badge size'), 'fold_4x3');
     await create.getByRole('button', { name: 'Create template' }).click();
 
     // The designer, by keyboard only.
@@ -140,10 +147,10 @@ test.describe('badges (M5.5a)', () => {
     await page.getByRole('radio', { name: 'Front' }).focus();
     await page.keyboard.press('Space');
     // Ribbons by ticket type (token colours) and where company and job title come from.
-    await page.getByLabel('Ribbon colour for Speaker').selectOption('orange');
+    await pickOption(page.getByLabel('Ribbon colour for Speaker'), 'orange');
     await page.getByLabel('Ribbon text for Speaker').fill('SPEAKER');
-    await page.getByLabel('Company comes from').selectOption({ label: 'Company' });
-    await page.getByLabel('Job title comes from').selectOption({ label: 'Job title' });
+    await pickOption(page.getByLabel('Company comes from'), { label: 'Company' });
+    await pickOption(page.getByLabel('Job title comes from'), { label: 'Job title' });
     // The live preview in Arabic: mirrored, sample Arabic names (shaped by the browser).
     const onBadge = page.locator('[data-element="first"]');
     const firstBox = await onBadge.boundingBox();
@@ -165,7 +172,7 @@ test.describe('badges (M5.5a)', () => {
     await page.getByRole('button', { name: /^First name: / }).focus();
     await expect(page.getByLabel('From the left (mm)')).toHaveValue('10');
     await expect(page.getByText('Version 2', { exact: true })).toBeVisible();
-    await expect(page.getByLabel('Company comes from')).toHaveValue('company');
+    await expectPicked(page.getByLabel('Company comes from'), 'company');
 
     // A duplicate name is refused.
     await page.goto(`${base}/badges`);
@@ -175,11 +182,11 @@ test.describe('badges (M5.5a)', () => {
 
     // Assign the template to the Speaker ticket type.
     const assign = page.getByRole('region', { name: 'Templates by ticket type' });
-    await assign.getByLabel('Template for Speaker').selectOption({ label: 'Attendee badge' });
+    await pickOption(assign.getByLabel('Template for Speaker'), { label: 'Attendee badge' });
     await assign.getByRole('button', { name: 'Save for Speaker' }).click();
     await expect(assign.getByText('Saved.')).toBeVisible();
     await page.reload();
-    await expect(assign.getByLabel('Template for Speaker')).toHaveValue(/[0-9a-f-]{36}/);
+    await expectPicked(assign.getByLabel('Template for Speaker'), /[0-9a-f-]{36}/);
 
     // A batch PDF sorted by company, then downloaded through its signed link.
     const batch = page.getByRole('region', { name: 'Batch PDF' });

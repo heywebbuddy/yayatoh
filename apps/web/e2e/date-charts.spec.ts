@@ -1,5 +1,5 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import { continueToPayment, expectAccessible, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, pickOption, signIn } from './helpers.ts';
 import {
   addTicketType,
   createGala,
@@ -160,7 +160,7 @@ test.describe('per-date seating charts (M1.7g)', () => {
     await seatBox(page, 'Table 2 · 4').check();
     await box.getByLabel("Buyer's name").fill(`Door ${Date.now()}`);
     await box.getByLabel(/Buyer's email/).fill(`door.${Date.now()}@example.test`);
-    await box.getByLabel('Paid by').selectOption('cash');
+    await pickOption(box.getByLabel('Paid by'), 'cash');
     await box.getByRole('button', { name: 'Record sale' }).click();
     await expect(box.getByText(/^Sale recorded with 1 seat/)).toBeVisible();
     await expect(seatBox(page, 'Table 2 · 4')).toBeDisabled();

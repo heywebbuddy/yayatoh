@@ -5,6 +5,7 @@ import {
   confirmStepUp,
   expectAccessibleBothModes,
   newUser,
+  pickOption,
   stepUpDialog,
 } from './helpers.ts';
 
@@ -143,7 +144,7 @@ test.describe('matching gifts (M4.8f)', () => {
     await page.goto(`/o/${g.org}/e/${g.slug}/tickets-orders`);
     await page.getByRole('link', { name: 'Maya Major' }).click();
     const refund = page.getByRole('region', { name: 'Refund' });
-    await refund.getByLabel('Reason').selectOption('requested_by_customer');
+    await pickOption(refund.getByLabel('Reason'), 'requested_by_customer');
     await refund.getByLabel('An amount (tickets stay valid)').check();
     await refund.getByLabel('Amount (USD)').fill('1000');
     await refund.getByRole('button', { name: 'Refund' }).click();
@@ -214,7 +215,7 @@ test.describe('matching gifts (M4.8f)', () => {
     await expectAccessibleBothModes(page);
     // A future window: scheduled, no Close until it starts; a 2:1 ratio; no public name.
     await form.getByLabel('Ends').fill('2031-05-01T23:00');
-    await form.getByLabel('Ratio').selectOption('200');
+    await pickOption(form.getByLabel('Ratio'), '200');
     await add.click();
     await expect(form.getByText('Match added')).toBeVisible();
     const card = matchCard(page, 'Checks Co');

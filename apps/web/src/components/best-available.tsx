@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button } from '@yayatoh/ui';
+import { Alert, Button, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useEffect, useId, useState, useTransition } from 'react';
 import { errorMessageKey } from '@/lib/errors.ts';
@@ -133,18 +133,13 @@ export function BestAvailablePanel({
             <label htmlFor={`${id}-level`} className="text-caption text-ink-2">
               {t('price')}
             </label>
-            <select
-              id={`${id}-level`}
-              value={level}
-              onChange={(e) => setLevel(e.currentTarget.value)}
-              className={field}
-            >
+            <Select id={`${id}-level`} value={level} onValueChange={(v) => setLevel(v)} className={field}>
               {levels.map((l) => (
                 <option key={l.id} value={l.id}>
                   {l.label}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
         ) : levels[0] ? (
           <p className="text-body">{t('onePrice', { price: levels[0].label })}</p>
@@ -153,10 +148,10 @@ export function BestAvailablePanel({
           <label htmlFor={`${id}-qty`} className="text-caption text-ink-2">
             {t('quantity')}
           </label>
-          <select
+          <Select
             id={`${id}-qty`}
             value={quantity}
-            onChange={(e) => setQuantity(Number(e.currentTarget.value))}
+            onValueChange={(v) => setQuantity(Number(v))}
             className={`${field} w-24`}
           >
             {Array.from({ length: max }, (_, n) => (
@@ -164,7 +159,7 @@ export function BestAvailablePanel({
                 {n + 1}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
         <Button type="button" variant="secondary" onClick={find} disabled={pending || !level}>
           {hold ? t('findAgain') : t('find')}

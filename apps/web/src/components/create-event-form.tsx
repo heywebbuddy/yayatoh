@@ -1,27 +1,12 @@
 'use client';
 
-import { Alert, Button, Card, Input } from '@yayatoh/ui';
+import { Alert, Button, Card, DateTimePicker, Input, Select, TimeZonePicker } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState, useState } from 'react';
 import type { CreateEventState } from '@/app/[locale]/o/[org]/(org)/events/new/actions.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
 
 const PROFILES = ['conference', 'gala', 'concert', 'wedding', 'community', 'agency', 'other'] as const;
-const ZONES = [
-  'America/New_York',
-  'America/Chicago',
-  'America/Denver',
-  'America/Los_Angeles',
-  'America/Toronto',
-  'Europe/London',
-  'Europe/Paris',
-  'Africa/Lagos',
-  'Africa/Accra',
-  'Asia/Dubai',
-  'Asia/Kolkata',
-  'Asia/Tokyo',
-  'Australia/Sydney',
-] as const;
 
 export function CreateEventForm({
   action,
@@ -34,9 +19,6 @@ export function CreateEventForm({
   const [state, formAction, pending] = useActionState(action, { code: null });
   // One key per form: a double submit returns the same event instead of "name already taken".
   const [requestKey] = useState(() => `create-event:${crypto.randomUUID()}`);
-  const zones = ZONES.includes(defaults.timezone as (typeof ZONES)[number])
-    ? ZONES
-    : [defaults.timezone, ...ZONES];
   const selectClass = 'field';
   return (
     <Card size="panel" className="max-w-2xl">
@@ -51,34 +33,32 @@ export function CreateEventForm({
             <label htmlFor="profile" className="text-[13px] font-bold text-ink">
               {t('newEvent.profile')}
             </label>
-            <select id="profile" name="profile" defaultValue={defaults.profile} className={selectClass}>
+            <Select id="profile" name="profile" defaultValue={defaults.profile} className={selectClass}>
               {PROFILES.map((p) => (
                 <option key={p} value={p}>
                   {t(`profiles.${p}`)}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
           <div className="flex flex-col gap-1.5">
             <label htmlFor="timezone" className="text-[13px] font-bold text-ink">
               {t('newEvent.timezone')}
             </label>
-            <select id="timezone" name="timezone" defaultValue={defaults.timezone} className={selectClass}>
-              {zones.map((z) => (
-                <option key={z} value={z}>
-                  {z.replace(/_/g, ' ')}
-                </option>
-              ))}
-            </select>
+            <TimeZonePicker
+              id="timezone"
+              name="timezone"
+              defaultValue={defaults.timezone}
+              className={selectClass}
+            />
           </div>
-          <Input
+          <DateTimePicker
             name="startsAt"
-            type="datetime-local"
             required
             label={t('newEvent.startsAt')}
             hint={t('newEvent.localTimeHint')}
           />
-          <Input name="endsAt" type="datetime-local" required label={t('newEvent.endsAt')} />
+          <DateTimePicker name="endsAt" required label={t('newEvent.endsAt')} />
           <Input name="venueName" maxLength={160} label={t('newEvent.venue')} />
           <Input name="city" maxLength={120} label={t('newEvent.city')} />
         </div>

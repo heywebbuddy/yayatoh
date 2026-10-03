@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, Card } from '@yayatoh/ui';
+import { Alert, Button, Card, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState } from 'react';
 import type { SendTestState } from '@/app/[locale]/o/[org]/(org)/webhooks/actions.ts';
@@ -25,7 +25,7 @@ export function TestSend({
           <label htmlFor="test-event-type" className="text-caption text-ink-2">
             {t('testEventType')}
           </label>
-          <select
+          <Select
             id="test-event-type"
             name="eventType"
             defaultValue="webhook.test"
@@ -37,7 +37,7 @@ export function TestSend({
                 {type}
               </option>
             ))}
-          </select>
+          </Select>
           <p id="test-event-type-hint" className="text-caption text-ink-2">
             {t('testHint')}
           </p>
