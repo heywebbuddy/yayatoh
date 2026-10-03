@@ -90,7 +90,6 @@ export function ChatSafety({
                 defaultValue=""
                 aria-invalid={reasonError ? true : undefined}
                 aria-describedby={reasonError ? `${id}-reason-error` : undefined}
-                className="field"
               >
                 <option value="">{t('safety.chooseReason')}</option>
                 {reasons.map((r) => (

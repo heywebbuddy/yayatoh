@@ -174,7 +174,6 @@ export function CfpForm({
             defaultValue={String(call.durations[0] ?? '')}
             aria-invalid={errorFor('durationMinutes') ? true : undefined}
             aria-describedby={describe('cfp-durationMinutes', errorFor('durationMinutes'))}
-            className="field"
           >
             {call.durations.map((m) => (
               <option key={m} value={m}>
@@ -194,7 +193,6 @@ export function CfpForm({
               name="trackId"
               defaultValue=""
               aria-invalid={errorFor('trackId') ? true : undefined}
-              className="field"
             >
               <option value="">{t('noTrack')}</option>
               {call.tracks.map((x) => (

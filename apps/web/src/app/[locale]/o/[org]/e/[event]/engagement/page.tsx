@@ -71,7 +71,16 @@ export default async function EngagementPage({ params }: Params) {
       <div className="flex flex-col gap-3">
         <h2 className="text-section">{t('attendeesTitle')}</h2>
         {r.attendees.length === 0 ? (
-          <EmptyState icon={<Sparkles />} title={t('emptyTitle')} description={t('emptyHint')} />
+          <EmptyState
+            icon={<Sparkles />}
+            title={t('emptyTitle')}
+            description={t('emptyHint')}
+            action={
+              <a href="#weights-heading" className={buttonClass('secondary', 'md')}>
+                {t('weightsTitle')}
+              </a>
+            }
+          />
         ) : (
           <Table
             caption={t('attendeesTitle')}

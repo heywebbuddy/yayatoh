@@ -416,12 +416,7 @@ export function GuestSeatingEditor({
               <label htmlFor="gs-status" className="text-[13px] font-bold text-ink">
                 {t('queue.status')}
               </label>
-              <Select
-                id="gs-status"
-                value={status}
-                onValueChange={(v) => setStatus(v as StatusFilter)}
-                className={field}
-              >
+              <Select id="gs-status" value={status} onValueChange={(v) => setStatus(v as StatusFilter)}>
                 <option value="all">{t('queue.statusAll')}</option>
                 <option value="attending">{t('status.attending')}</option>
                 <option value="pending">{t('status.pending')}</option>
@@ -432,7 +427,7 @@ export function GuestSeatingEditor({
                 <label htmlFor="gs-side" className="text-[13px] font-bold text-ink">
                   {t('queue.side')}
                 </label>
-                <Select id="gs-side" value={side} onValueChange={(v) => setSide(v)} className={field}>
+                <Select id="gs-side" value={side} onValueChange={(v) => setSide(v)}>
                   <option value="">{t('queue.sideAll')}</option>
                   {sides.map((s) => (
                     <option key={s} value={s}>
@@ -547,7 +542,6 @@ export function GuestSeatingEditor({
                   id="gs-target"
                   value={target}
                   onValueChange={(v) => setTarget(v)}
-                  className={field}
                   aria-describedby={cantFit ? 'gs-cant-fit' : undefined}
                 >
                   <option value="">{t('form.choose')}</option>
@@ -637,7 +631,6 @@ export function GuestSeatingEditor({
                 setDetail(v);
                 setMoving(null);
               }}
-              className={field}
             >
               {places.map((p) => (
                 <option key={p.itemId} value={p.itemId}>
@@ -800,7 +793,6 @@ export function GuestSeatingEditor({
                                     id={`gs-move-${g.id}`}
                                     value={moving.itemId}
                                     onValueChange={(v) => setMoving({ ...moving, itemId: v })}
-                                    className={field}
                                   >
                                     <option value="">{t('form.choose')}</option>
                                     {places

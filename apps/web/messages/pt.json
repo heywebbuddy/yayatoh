@@ -13322,82 +13322,6 @@
       "empty": "Nada vinculado ainda. Os registros são vinculados à medida que sincronizam."
     }
   },
-  "emptyActions": {
-    "seeEvents": "Ver seus eventos",
-    "eventHome": "Ir para o início do evento"
-  },
-  "coupons": {
-    "title": "Cupons",
-    "description": "Códigos promocionais dão desconto no checkout. Cada código pertence a um evento: escolha o evento para ver ou adicionar seus códigos.",
-    "emptyTitle": "Nenhum evento para adicionar códigos",
-    "emptyDescription": "Os códigos promocionais ficam na página Ingressos e pedidos do evento. Crie um evento primeiro e depois adicione os códigos.",
-    "emptyAction": "Criar um evento",
-    "caption": "Eventos e seus códigos promocionais",
-    "event": "Evento",
-    "when": "Data",
-    "status": "Status",
-    "codes": "Códigos promocionais",
-    "manage": "Gerenciar códigos",
-    "view": "Ver códigos",
-    "manageFor": "Códigos promocionais de {name}"
-  },
-  "howItWorks": {
-    "docLink": "Ler o guia",
-    "hide": "Ocultar",
-    "show": "Mostrar",
-    "domains": {
-      "title": "Como funcionam os domínios próprios",
-      "intro": "Mostre as páginas dos seus eventos no seu próprio endereço (por exemplo ingressos.suamarca.com) em vez de um link Yayatoh. Seu endereço Yayatoh continua funcionando.",
-      "step1": "Adicione um domínio seu. Pediremos que você confirme sua identidade.",
-      "step2": "Copie os registros DNS exibidos para as configurações do seu provedor de domínio.",
-      "step3": "Verificamos os registros automaticamente. Pode levar até um dia.",
-      "step4": "Depois de verificado, configuramos o certificado de segurança (HTTPS) e o domínio entra no ar."
-    },
-    "templates": {
-      "title": "Como funcionam os modelos",
-      "intro": "Um modelo salva a configuração de um evento (ingressos, perguntas, seções e conteúdo da página) para que o próximo comece pronto. Eventos criados a partir de um modelo são rascunhos sem vendas.",
-      "step1": "Abra um evento configurado do jeito que você gosta.",
-      "step2": "Escolha Duplicar e modelo e salve como modelo.",
-      "step3": "Volte aqui para criar novos eventos a partir dele ou comece com um modelo inicial abaixo."
-    },
-    "series": {
-      "title": "Como funcionam as séries",
-      "intro": "Uma série agrupa eventos relacionados (uma turnê, uma temporada, um festival) em uma página pública com as próximas datas.",
-      "step1": "Crie a série com um nome e uma breve descrição.",
-      "step2": "Abra a página Datas de cada evento e adicione-o à série.",
-      "step3": "Compartilhe a página pública da série. Ela é atualizada quando você adiciona eventos."
-    },
-    "payouts": {
-      "title": "Como funcionam os repasses",
-      "intro": "O dinheiro dos ingressos chega ao seu banco em repasses. Conecte uma conta de recebimento uma vez; os números abaixo mostram o que está a caminho e quando.",
-      "step1": "Conecte sua conta de recebimento e verifique os dados da sua empresa.",
-      "step2": "Venda ingressos. Cada venda, descontadas taxas e reembolsos, soma ao seu saldo.",
-      "step3": "Dependendo da sua conta, o dinheiro é repassado conforme você vende ou após o evento, com uma pequena reserva para reembolsos e contestações.",
-      "step4": "Cada repasse é enviado ao seu banco e aparece aqui com data e valor."
-    },
-    "sending": {
-      "title": "Como funciona o envio de e-mails",
-      "intro": "Os e-mails para compradores e convidados saem do Yayatoh por padrão. Verifique seu próprio domínio para que saiam do seu endereço e cheguem à caixa de entrada.",
-      "step1": "Adicione seu domínio de envio (por exemplo mail.suamarca.com).",
-      "step2": "Copie os registros DNS exibidos para as configurações do seu provedor de domínio.",
-      "step3": "Verifique os registros aqui. A verificação costuma levar poucos minutos.",
-      "step4": "Depois de verificado, seus e-mails saem do seu próprio domínio."
-    },
-    "eventType": {
-      "title": "Tipos de evento e categorias",
-      "intro": "O tipo de evento define as seções: um casamento tem convidados, RSVP e assentos; uma conferência tem sessões, palestrantes e crachás. A categoria ajuda as pessoas a encontrar eventos públicos.",
-      "step1": "Escolha o tipo mais próximo do seu evento ao criá-lo.",
-      "step2": "Escolha uma categoria e adicione tags na página Detalhes do evento.",
-      "step3": "Não tem certeza? Escolha Outro: ele tem as seções comuns e você pode adicionar detalhes depois."
-    },
-    "coupons": {
-      "title": "Como funcionam os códigos promocionais",
-      "intro": "Um código promocional desconta uma porcentagem ou um valor do preço de cada ingresso, antes das taxas. Cada código pertence a um evento.",
-      "step1": "Escolha o evento abaixo e abra seus códigos promocionais.",
-      "step2": "Adicione um código com o desconto e, se quiser, um limite e datas.",
-      "step3": "Compartilhe o código. Os compradores o inserem no checkout e cada uso é contado."
-    }
-  },
   "guestSeats": {
     "placeAt": {
       "table": "Mesa {item}",
@@ -15287,5 +15211,82 @@
     "tooLate": "Escolha uma data até {date}",
     "timeZoneNote": "Horários em {zone}",
     "selected": "Selecionado"
+  },
+  "emptyActions": {
+    "seeEvents": "Ver seus eventos",
+    "eventHome": "Ir para o início do evento",
+    "clearSearch": "Limpar a pesquisa"
+  },
+  "coupons": {
+    "title": "Cupons",
+    "description": "Códigos promocionais dão desconto no checkout. Cada código pertence a um evento: escolha o evento para ver ou adicionar seus códigos.",
+    "emptyTitle": "Nenhum evento para adicionar códigos",
+    "emptyDescription": "Os códigos promocionais ficam na página Ingressos e pedidos do evento. Crie um evento primeiro e depois adicione os códigos.",
+    "emptyAction": "Criar um evento",
+    "caption": "Eventos e seus códigos promocionais",
+    "event": "Evento",
+    "when": "Data",
+    "status": "Status",
+    "codes": "Códigos promocionais",
+    "manage": "Gerenciar códigos",
+    "view": "Ver códigos",
+    "manageFor": "Códigos promocionais de {name}"
+  },
+  "howItWorks": {
+    "docLink": "Ler o guia",
+    "hide": "Ocultar",
+    "show": "Mostrar",
+    "domains": {
+      "title": "Como funcionam os domínios próprios",
+      "intro": "Mostre as páginas dos seus eventos no seu próprio endereço (por exemplo ingressos.suamarca.com) em vez de um link Yayatoh. Seu endereço Yayatoh continua funcionando.",
+      "step1": "Adicione um domínio seu. Pediremos que você confirme sua identidade.",
+      "step2": "Copie os registros DNS exibidos para as configurações do seu provedor de domínio.",
+      "step3": "Verificamos os registros automaticamente. Pode levar até um dia.",
+      "step4": "Depois de verificado, configuramos o certificado de segurança (HTTPS) e o domínio entra no ar."
+    },
+    "templates": {
+      "title": "Como funcionam os modelos",
+      "intro": "Um modelo salva a configuração de um evento (ingressos, perguntas, seções e conteúdo da página) para que o próximo comece pronto. Eventos criados a partir de um modelo são rascunhos sem vendas.",
+      "step1": "Abra um evento configurado do jeito que você gosta.",
+      "step2": "Escolha Duplicar e modelo e salve como modelo.",
+      "step3": "Volte aqui para criar novos eventos a partir dele ou comece com um modelo inicial abaixo."
+    },
+    "series": {
+      "title": "Como funcionam as séries",
+      "intro": "Uma série agrupa eventos relacionados (uma turnê, uma temporada, um festival) em uma página pública com as próximas datas.",
+      "step1": "Crie a série com um nome e uma breve descrição.",
+      "step2": "Abra a página Datas de cada evento e adicione-o à série.",
+      "step3": "Compartilhe a página pública da série. Ela é atualizada quando você adiciona eventos."
+    },
+    "payouts": {
+      "title": "Como funcionam os repasses",
+      "intro": "O dinheiro dos ingressos chega ao seu banco em repasses. Conecte uma conta de recebimento uma vez; os números abaixo mostram o que está a caminho e quando.",
+      "step1": "Conecte sua conta de recebimento e verifique os dados da sua empresa.",
+      "step2": "Venda ingressos. Cada venda, descontadas taxas e reembolsos, soma ao seu saldo.",
+      "step3": "Dependendo da sua conta, o dinheiro é repassado conforme você vende ou após o evento, com uma pequena reserva para reembolsos e contestações.",
+      "step4": "Cada repasse é enviado ao seu banco e aparece aqui com data e valor."
+    },
+    "sending": {
+      "title": "Como funciona o envio de e-mails",
+      "intro": "Os e-mails para compradores e convidados saem do Yayatoh por padrão. Verifique seu próprio domínio para que saiam do seu endereço e cheguem à caixa de entrada.",
+      "step1": "Adicione seu domínio de envio (por exemplo mail.suamarca.com).",
+      "step2": "Copie os registros DNS exibidos para as configurações do seu provedor de domínio.",
+      "step3": "Verifique os registros aqui. A verificação costuma levar poucos minutos.",
+      "step4": "Depois de verificado, seus e-mails saem do seu próprio domínio."
+    },
+    "eventType": {
+      "title": "Tipos de evento e categorias",
+      "intro": "O tipo de evento define as seções: um casamento tem convidados, RSVP e assentos; uma conferência tem sessões, palestrantes e crachás. A categoria ajuda as pessoas a encontrar eventos públicos.",
+      "step1": "Escolha o tipo mais próximo do seu evento ao criá-lo.",
+      "step2": "Escolha uma categoria e adicione tags na página Detalhes do evento.",
+      "step3": "Não tem certeza? Escolha Outro: ele tem as seções comuns e você pode adicionar detalhes depois."
+    },
+    "coupons": {
+      "title": "Como funcionam os códigos promocionais",
+      "intro": "Um código promocional desconta uma porcentagem ou um valor do preço de cada ingresso, antes das taxas. Cada código pertence a um evento.",
+      "step1": "Escolha o evento abaixo e abra seus códigos promocionais.",
+      "step2": "Adicione um código com o desconto e, se quiser, um limite e datas.",
+      "step3": "Compartilhe o código. Os compradores o inserem no checkout e cada uso é contado."
+    }
   }
 }

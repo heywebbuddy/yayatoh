@@ -13322,82 +13322,6 @@
       "empty": "Aún no hay nada vinculado. Los registros se vinculan al sincronizar."
     }
   },
-  "emptyActions": {
-    "seeEvents": "Ver tus eventos",
-    "eventHome": "Ir al inicio del evento"
-  },
-  "coupons": {
-    "title": "Cupones",
-    "description": "Los códigos promocionales dan un descuento al pagar. Cada código pertenece a un evento: elige el evento para ver o añadir sus códigos.",
-    "emptyTitle": "No hay eventos para añadir códigos",
-    "emptyDescription": "Los códigos promocionales están en la página Entradas y pedidos de cada evento. Crea primero un evento y luego añade sus códigos.",
-    "emptyAction": "Crear un evento",
-    "caption": "Eventos y sus códigos promocionales",
-    "event": "Evento",
-    "when": "Fecha",
-    "status": "Estado",
-    "codes": "Códigos promocionales",
-    "manage": "Gestionar códigos",
-    "view": "Ver códigos",
-    "manageFor": "Códigos promocionales de {name}"
-  },
-  "howItWorks": {
-    "docLink": "Leer la guía",
-    "hide": "Ocultar",
-    "show": "Mostrar",
-    "domains": {
-      "title": "Cómo funcionan los dominios propios",
-      "intro": "Muestra tus páginas de eventos en tu propia dirección (por ejemplo tickets.tumarca.com) en lugar de un enlace de Yayatoh. Tu dirección de Yayatoh sigue funcionando.",
-      "step1": "Añade un dominio que sea tuyo. Te pediremos que confirmes que eres tú.",
-      "step2": "Copia los registros DNS que mostramos en la configuración de tu proveedor de dominio.",
-      "step3": "Comprobamos los registros automáticamente. Puede tardar hasta un día.",
-      "step4": "Una vez verificado, configuramos el certificado de seguridad (HTTPS) y el dominio se activa."
-    },
-    "templates": {
-      "title": "Cómo funcionan las plantillas",
-      "intro": "Una plantilla guarda la configuración de un evento (entradas, preguntas, secciones y contenido de la página) para que tu próximo evento empiece listo. Los eventos creados desde una plantilla son borradores sin ventas.",
-      "step1": "Abre un evento configurado como te gusta.",
-      "step2": "Elige Duplicar y plantilla y guárdalo como plantilla.",
-      "step3": "Vuelve aquí para crear eventos nuevos a partir de ella, o empieza con una plantilla inicial abajo."
-    },
-    "series": {
-      "title": "Cómo funcionan las series",
-      "intro": "Una serie agrupa eventos relacionados (una gira, una temporada, un festival) en una página pública que muestra las próximas fechas.",
-      "step1": "Crea la serie con un nombre y una descripción breve.",
-      "step2": "Abre la página Fechas de cada evento y añádelo a la serie.",
-      "step3": "Comparte la página pública de la serie. Se actualiza al añadir eventos."
-    },
-    "payouts": {
-      "title": "Cómo funcionan los pagos",
-      "intro": "El dinero de las entradas llega a tu banco en pagos. Conecta una cuenta de cobro una vez; las cifras de abajo muestran qué está en camino y cuándo.",
-      "step1": "Conecta tu cuenta de cobro y verifica los datos de tu negocio.",
-      "step2": "Vende entradas. Cada venta, menos comisiones y reembolsos, se suma a tu saldo.",
-      "step3": "Según tu cuenta, el dinero se paga mientras vendes o después del evento, con una pequeña reserva para reembolsos y disputas.",
-      "step4": "Cada pago se envía a tu banco y aparece aquí con su fecha e importe."
-    },
-    "sending": {
-      "title": "Cómo funciona el envío de correos",
-      "intro": "Los correos a tus compradores e invitados se envían desde Yayatoh por defecto. Verifica tu propio dominio para que salgan de tu dirección y lleguen a la bandeja de entrada.",
-      "step1": "Añade tu dominio de envío (por ejemplo mail.tumarca.com).",
-      "step2": "Copia los registros DNS que mostramos en la configuración de tu proveedor de dominio.",
-      "step3": "Comprueba los registros aquí. La verificación suele tardar unos minutos.",
-      "step4": "Una vez verificado, tus correos se envían desde tu propio dominio."
-    },
-    "eventType": {
-      "title": "Tipos de evento y categorías",
-      "intro": "El tipo de evento decide qué secciones tiene: una boda tiene invitados, confirmaciones y asientos; una conferencia tiene sesiones, ponentes y acreditaciones. La categoría ayuda a encontrar eventos públicos.",
-      "step1": "Elige el tipo más parecido a tu evento al crearlo.",
-      "step2": "Elige una categoría y añade etiquetas en la página Detalles del evento.",
-      "step3": "¿No estás seguro? Elige Otro: tiene las secciones habituales y puedes añadir detalles después."
-    },
-    "coupons": {
-      "title": "Cómo funcionan los códigos promocionales",
-      "intro": "Un código promocional descuenta un porcentaje o un importe del precio de cada entrada, antes de comisiones. Cada código pertenece a un evento.",
-      "step1": "Elige el evento abajo y abre sus códigos promocionales.",
-      "step2": "Añade un código con su descuento y, si quieres, un límite y fechas.",
-      "step3": "Comparte el código. Los compradores lo introducen al pagar y se cuenta cada uso."
-    }
-  },
   "guestSeats": {
     "placeAt": {
       "table": "Mesa {item}",
@@ -15287,5 +15211,82 @@
     "tooLate": "Elige una fecha hasta el {date}",
     "timeZoneNote": "Horas en {zone}",
     "selected": "Seleccionado"
+  },
+  "emptyActions": {
+    "seeEvents": "Ver tus eventos",
+    "eventHome": "Ir al inicio del evento",
+    "clearSearch": "Borrar la búsqueda"
+  },
+  "coupons": {
+    "title": "Cupones",
+    "description": "Los códigos promocionales dan un descuento al pagar. Cada código pertenece a un evento: elige el evento para ver o añadir sus códigos.",
+    "emptyTitle": "No hay eventos para añadir códigos",
+    "emptyDescription": "Los códigos promocionales están en la página Entradas y pedidos de cada evento. Crea primero un evento y luego añade sus códigos.",
+    "emptyAction": "Crear un evento",
+    "caption": "Eventos y sus códigos promocionales",
+    "event": "Evento",
+    "when": "Fecha",
+    "status": "Estado",
+    "codes": "Códigos promocionales",
+    "manage": "Gestionar códigos",
+    "view": "Ver códigos",
+    "manageFor": "Códigos promocionales de {name}"
+  },
+  "howItWorks": {
+    "docLink": "Leer la guía",
+    "hide": "Ocultar",
+    "show": "Mostrar",
+    "domains": {
+      "title": "Cómo funcionan los dominios propios",
+      "intro": "Muestra tus páginas de eventos en tu propia dirección (por ejemplo tickets.tumarca.com) en lugar de un enlace de Yayatoh. Tu dirección de Yayatoh sigue funcionando.",
+      "step1": "Añade un dominio que sea tuyo. Te pediremos que confirmes que eres tú.",
+      "step2": "Copia los registros DNS que mostramos en la configuración de tu proveedor de dominio.",
+      "step3": "Comprobamos los registros automáticamente. Puede tardar hasta un día.",
+      "step4": "Una vez verificado, configuramos el certificado de seguridad (HTTPS) y el dominio se activa."
+    },
+    "templates": {
+      "title": "Cómo funcionan las plantillas",
+      "intro": "Una plantilla guarda la configuración de un evento (entradas, preguntas, secciones y contenido de la página) para que tu próximo evento empiece listo. Los eventos creados desde una plantilla son borradores sin ventas.",
+      "step1": "Abre un evento configurado como te gusta.",
+      "step2": "Elige Duplicar y plantilla y guárdalo como plantilla.",
+      "step3": "Vuelve aquí para crear eventos nuevos a partir de ella, o empieza con una plantilla inicial abajo."
+    },
+    "series": {
+      "title": "Cómo funcionan las series",
+      "intro": "Una serie agrupa eventos relacionados (una gira, una temporada, un festival) en una página pública que muestra las próximas fechas.",
+      "step1": "Crea la serie con un nombre y una descripción breve.",
+      "step2": "Abre la página Fechas de cada evento y añádelo a la serie.",
+      "step3": "Comparte la página pública de la serie. Se actualiza al añadir eventos."
+    },
+    "payouts": {
+      "title": "Cómo funcionan los pagos",
+      "intro": "El dinero de las entradas llega a tu banco en pagos. Conecta una cuenta de cobro una vez; las cifras de abajo muestran qué está en camino y cuándo.",
+      "step1": "Conecta tu cuenta de cobro y verifica los datos de tu negocio.",
+      "step2": "Vende entradas. Cada venta, menos comisiones y reembolsos, se suma a tu saldo.",
+      "step3": "Según tu cuenta, el dinero se paga mientras vendes o después del evento, con una pequeña reserva para reembolsos y disputas.",
+      "step4": "Cada pago se envía a tu banco y aparece aquí con su fecha e importe."
+    },
+    "sending": {
+      "title": "Cómo funciona el envío de correos",
+      "intro": "Los correos a tus compradores e invitados se envían desde Yayatoh por defecto. Verifica tu propio dominio para que salgan de tu dirección y lleguen a la bandeja de entrada.",
+      "step1": "Añade tu dominio de envío (por ejemplo mail.tumarca.com).",
+      "step2": "Copia los registros DNS que mostramos en la configuración de tu proveedor de dominio.",
+      "step3": "Comprueba los registros aquí. La verificación suele tardar unos minutos.",
+      "step4": "Una vez verificado, tus correos se envían desde tu propio dominio."
+    },
+    "eventType": {
+      "title": "Tipos de evento y categorías",
+      "intro": "El tipo de evento decide qué secciones tiene: una boda tiene invitados, confirmaciones y asientos; una conferencia tiene sesiones, ponentes y acreditaciones. La categoría ayuda a encontrar eventos públicos.",
+      "step1": "Elige el tipo más parecido a tu evento al crearlo.",
+      "step2": "Elige una categoría y añade etiquetas en la página Detalles del evento.",
+      "step3": "¿No estás seguro? Elige Otro: tiene las secciones habituales y puedes añadir detalles después."
+    },
+    "coupons": {
+      "title": "Cómo funcionan los códigos promocionales",
+      "intro": "Un código promocional descuenta un porcentaje o un importe del precio de cada entrada, antes de comisiones. Cada código pertenece a un evento.",
+      "step1": "Elige el evento abajo y abre sus códigos promocionales.",
+      "step2": "Añade un código con su descuento y, si quieres, un límite y fechas.",
+      "step3": "Comparte el código. Los compradores lo introducen al pagar y se cuenta cada uso."
+    }
   }
 }

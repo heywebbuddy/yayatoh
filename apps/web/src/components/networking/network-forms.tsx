@@ -198,7 +198,6 @@ export function MeetingRequestForm({
           defaultValue=""
           aria-invalid={slotError ? true : undefined}
           aria-describedby={describedBy(`${id}-slot`, slotError, null)}
-          className="field"
         >
           <option value="">{t('person.chooseSlot')}</option>
           {slots.map((s) => (
@@ -215,7 +214,6 @@ export function MeetingRequestForm({
           defaultValue=""
           aria-invalid={placeError ? true : undefined}
           aria-describedby={describedBy(`${id}-place`, placeError, null)}
-          className="field"
         >
           <option value="">{t('person.choosePlace')}</option>
           {locations.map((s) => (
@@ -309,7 +307,6 @@ export function SafetyForms({
               defaultValue=""
               aria-invalid={reasonError ? true : undefined}
               aria-describedby={describedBy(`${id}-reason`, reasonError, null)}
-              className="field"
             >
               <option value="">{t('safety.chooseReason')}</option>
               {reasons.map((r) => (

@@ -40,11 +40,6 @@ async function press(control: Locator) {
   await control.press('Enter');
 }
 
-/** The session picker's "Small room talk" option (its label carries the time and room). */
-async function talkOption(page: Page): Promise<string> {
-  return (await page.locator('option', { hasText: 'Small room talk' }).first().getAttribute('value')) ?? '';
-}
-
 async function guest(browser: Browser) {
   return (await browser.newContext()).newPage();
 }
@@ -71,7 +66,7 @@ test.describe('session check-in (M5.6a)', () => {
     await press(add);
     await expect(page.getByText('Choose the session this door is for.')).toBeVisible();
     await page.getByLabel('Session', { exact: true }).focus();
-    await pickOption(page.getByLabel('Session', { exact: true }), await talkOption(page));
+    await pickOption(page.getByLabel('Session', { exact: true }), { label: 'Small room talk' });
     await page.getByLabel('People the room holds (optional)').fill('lots');
     await press(add);
     await expect(
@@ -92,7 +87,7 @@ test.describe('session check-in (M5.6a)', () => {
 
     // The same name again is refused with its own message.
     await page.getByLabel('Door name').fill('Room S door');
-    await pickOption(page.getByLabel('Session', { exact: true }), await talkOption(page));
+    await pickOption(page.getByLabel('Session', { exact: true }), { label: 'Small room talk' });
     await press(add);
     await expect(page.getByText('A checkpoint with this name already exists.')).toBeVisible();
 

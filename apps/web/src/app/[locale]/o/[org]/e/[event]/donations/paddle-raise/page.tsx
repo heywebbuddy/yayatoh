@@ -161,7 +161,15 @@ export default async function PaddleRaisePage({
         <section aria-labelledby="calls-heading" className="flex flex-col gap-4">
           <SectionHeader id="calls-heading" title={t('callsTitle')} />
           {view.calls.length === 0 ? (
-            <EmptyState icon={<Gavel strokeWidth={2} />} title={t('noCalls')} />
+            <EmptyState
+              icon={<Gavel strokeWidth={2} />}
+              title={t('noCalls')}
+              action={
+                <a href="#controls-heading" className={buttonClass('primary', 'md')}>
+                  {t('controls')}
+                </a>
+              }
+            />
           ) : (
             <Table<CallDto>
               caption={t('callsTitle')}

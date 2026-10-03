@@ -105,7 +105,7 @@ export function KioskStartForm({ action, device }: { action: Action; device: str
         <label htmlFor={`${id}-kind`} className="text-[13px] font-bold text-ink">
           {t('kioskKind', { device })}
         </label>
-        <Select id={`${id}-kind`} name="kind" defaultValue="guests" className="field">
+        <Select id={`${id}-kind`} name="kind" defaultValue="guests">
           <option value="guests">{t('kindGuests')}</option>
           <option value="board">{t('kindBoard')}</option>
         </Select>

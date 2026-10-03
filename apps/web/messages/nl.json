@@ -13322,82 +13322,6 @@
       "empty": "Nog niets gekoppeld. Records worden gekoppeld zodra ze synchroniseren."
     }
   },
-  "emptyActions": {
-    "seeEvents": "Je evenementen bekijken",
-    "eventHome": "Naar de evenementstartpagina"
-  },
-  "coupons": {
-    "title": "Kortingscodes",
-    "description": "Kortingscodes geven kopers korting bij het afrekenen. Elke code hoort bij één evenement: kies het evenement om de codes te bekijken of toe te voegen.",
-    "emptyTitle": "Geen evenementen om codes aan toe te voegen",
-    "emptyDescription": "Kortingscodes staan op de pagina Tickets & bestellingen van een evenement. Maak eerst een evenement en voeg dan de codes toe.",
-    "emptyAction": "Een evenement maken",
-    "caption": "Evenementen en hun kortingscodes",
-    "event": "Evenement",
-    "when": "Datum",
-    "status": "Status",
-    "codes": "Kortingscodes",
-    "manage": "Codes beheren",
-    "view": "Codes bekijken",
-    "manageFor": "Kortingscodes voor {name}"
-  },
-  "howItWorks": {
-    "docLink": "Lees de handleiding",
-    "hide": "Verbergen",
-    "show": "Tonen",
-    "domains": {
-      "title": "Zo werken eigen domeinen",
-      "intro": "Toon je evenementpagina’s op je eigen adres (bijvoorbeeld tickets.jouwmerk.nl) in plaats van een Yayatoh-link. Je Yayatoh-adres blijft ook werken.",
-      "step1": "Voeg een domein toe dat van jou is. We vragen je te bevestigen dat jij het bent.",
-      "step2": "Kopieer de getoonde DNS-records naar de instellingen van je domeinprovider.",
-      "step3": "We controleren de records automatisch. Dat kan tot een dag duren.",
-      "step4": "Na verificatie richten we het beveiligingscertificaat (HTTPS) in en gaat het domein live."
-    },
-    "templates": {
-      "title": "Zo werken sjablonen",
-      "intro": "Een sjabloon bewaart de opzet van een evenement (tickets, vragen, onderdelen en pagina-inhoud), zodat je volgende evenement klaar start. Evenementen uit een sjabloon zijn concepten zonder verkopen.",
-      "step1": "Open een evenement dat is ingericht zoals je wilt.",
-      "step2": "Kies Dupliceren & sjabloon en sla het op als sjabloon.",
-      "step3": "Kom hier terug om er nieuwe evenementen mee te maken, of begin hieronder met een startsjabloon."
-    },
-    "series": {
-      "title": "Zo werken reeksen",
-      "intro": "Een reeks bundelt verwante evenementen (een tour, een seizoen, een festival) op één openbare pagina met de komende data.",
-      "step1": "Maak de reeks met een naam en een korte beschrijving.",
-      "step2": "Open bij elk evenement de pagina Data en voeg het toe aan de reeks.",
-      "step3": "Deel de openbare pagina van de reeks. Die wordt bijgewerkt als je evenementen toevoegt."
-    },
-    "payouts": {
-      "title": "Zo werken uitbetalingen",
-      "intro": "Ticketgeld komt via uitbetalingen op je bankrekening. Koppel één keer een uitbetalingsrekening; de cijfers hieronder tonen wat eraan komt en wanneer.",
-      "step1": "Koppel je uitbetalingsrekening en verifieer je bedrijfsgegevens.",
-      "step2": "Verkoop tickets. Elke verkoop, min kosten en terugbetalingen, komt bij je saldo.",
-      "step3": "Afhankelijk van je account wordt het geld uitbetaald terwijl je verkoopt of na het evenement, met een kleine reserve voor terugbetalingen en geschillen.",
-      "step4": "Elke uitbetaling gaat naar je bank en staat hier met datum en bedrag."
-    },
-    "sending": {
-      "title": "Zo werkt het versturen van e-mail",
-      "intro": "E-mails aan je kopers en gasten worden standaard vanuit Yayatoh verstuurd. Verifieer je eigen domein zodat ze van jouw adres komen en in de inbox belanden.",
-      "step1": "Voeg je verzenddomein toe (bijvoorbeeld mail.jouwmerk.nl).",
-      "step2": "Kopieer de getoonde DNS-records naar de instellingen van je domeinprovider.",
-      "step3": "Controleer de records hier. Verificatie duurt meestal een paar minuten.",
-      "step4": "Na verificatie worden je e-mails vanaf je eigen domein verstuurd."
-    },
-    "eventType": {
-      "title": "Soorten evenementen en categorieën",
-      "intro": "Het soort evenement bepaalt welke onderdelen het heeft: een bruiloft krijgt gasten, RSVP en tafelindeling; een congres krijgt sessies, sprekers en badges. De categorie helpt mensen openbare evenementen te vinden.",
-      "step1": "Kies bij het aanmaken het soort dat het best bij je evenement past.",
-      "step2": "Kies een categorie en voeg tags toe op de pagina Details van het evenement.",
-      "step3": "Twijfel je? Kies Overig: dat heeft de gebruikelijke onderdelen, en details voeg je later toe."
-    },
-    "coupons": {
-      "title": "Zo werken kortingscodes",
-      "intro": "Een kortingscode haalt een percentage of bedrag van de ticketprijs af, vóór kosten. Elke code hoort bij één evenement.",
-      "step1": "Kies hieronder het evenement en open de kortingscodes.",
-      "step2": "Voeg een code toe met de korting en eventueel een limiet en data.",
-      "step3": "Deel de code. Kopers vullen hem in bij het afrekenen en elk gebruik wordt geteld."
-    }
-  },
   "guestSeats": {
     "placeAt": {
       "table": "Tafel {item}",
@@ -15287,5 +15211,82 @@
     "tooLate": "Kies een datum op of voor {date}",
     "timeZoneNote": "Tijden in {zone}",
     "selected": "Geselecteerd"
+  },
+  "emptyActions": {
+    "seeEvents": "Je evenementen bekijken",
+    "eventHome": "Naar de evenementstartpagina",
+    "clearSearch": "Zoekopdracht wissen"
+  },
+  "coupons": {
+    "title": "Kortingscodes",
+    "description": "Kortingscodes geven kopers korting bij het afrekenen. Elke code hoort bij één evenement: kies het evenement om de codes te bekijken of toe te voegen.",
+    "emptyTitle": "Geen evenementen om codes aan toe te voegen",
+    "emptyDescription": "Kortingscodes staan op de pagina Tickets & bestellingen van een evenement. Maak eerst een evenement en voeg dan de codes toe.",
+    "emptyAction": "Een evenement maken",
+    "caption": "Evenementen en hun kortingscodes",
+    "event": "Evenement",
+    "when": "Datum",
+    "status": "Status",
+    "codes": "Kortingscodes",
+    "manage": "Codes beheren",
+    "view": "Codes bekijken",
+    "manageFor": "Kortingscodes voor {name}"
+  },
+  "howItWorks": {
+    "docLink": "Lees de handleiding",
+    "hide": "Verbergen",
+    "show": "Tonen",
+    "domains": {
+      "title": "Zo werken eigen domeinen",
+      "intro": "Toon je evenementpagina’s op je eigen adres (bijvoorbeeld tickets.jouwmerk.nl) in plaats van een Yayatoh-link. Je Yayatoh-adres blijft ook werken.",
+      "step1": "Voeg een domein toe dat van jou is. We vragen je te bevestigen dat jij het bent.",
+      "step2": "Kopieer de getoonde DNS-records naar de instellingen van je domeinprovider.",
+      "step3": "We controleren de records automatisch. Dat kan tot een dag duren.",
+      "step4": "Na verificatie richten we het beveiligingscertificaat (HTTPS) in en gaat het domein live."
+    },
+    "templates": {
+      "title": "Zo werken sjablonen",
+      "intro": "Een sjabloon bewaart de opzet van een evenement (tickets, vragen, onderdelen en pagina-inhoud), zodat je volgende evenement klaar start. Evenementen uit een sjabloon zijn concepten zonder verkopen.",
+      "step1": "Open een evenement dat is ingericht zoals je wilt.",
+      "step2": "Kies Dupliceren & sjabloon en sla het op als sjabloon.",
+      "step3": "Kom hier terug om er nieuwe evenementen mee te maken, of begin hieronder met een startsjabloon."
+    },
+    "series": {
+      "title": "Zo werken reeksen",
+      "intro": "Een reeks bundelt verwante evenementen (een tour, een seizoen, een festival) op één openbare pagina met de komende data.",
+      "step1": "Maak de reeks met een naam en een korte beschrijving.",
+      "step2": "Open bij elk evenement de pagina Data en voeg het toe aan de reeks.",
+      "step3": "Deel de openbare pagina van de reeks. Die wordt bijgewerkt als je evenementen toevoegt."
+    },
+    "payouts": {
+      "title": "Zo werken uitbetalingen",
+      "intro": "Ticketgeld komt via uitbetalingen op je bankrekening. Koppel één keer een uitbetalingsrekening; de cijfers hieronder tonen wat eraan komt en wanneer.",
+      "step1": "Koppel je uitbetalingsrekening en verifieer je bedrijfsgegevens.",
+      "step2": "Verkoop tickets. Elke verkoop, min kosten en terugbetalingen, komt bij je saldo.",
+      "step3": "Afhankelijk van je account wordt het geld uitbetaald terwijl je verkoopt of na het evenement, met een kleine reserve voor terugbetalingen en geschillen.",
+      "step4": "Elke uitbetaling gaat naar je bank en staat hier met datum en bedrag."
+    },
+    "sending": {
+      "title": "Zo werkt het versturen van e-mail",
+      "intro": "E-mails aan je kopers en gasten worden standaard vanuit Yayatoh verstuurd. Verifieer je eigen domein zodat ze van jouw adres komen en in de inbox belanden.",
+      "step1": "Voeg je verzenddomein toe (bijvoorbeeld mail.jouwmerk.nl).",
+      "step2": "Kopieer de getoonde DNS-records naar de instellingen van je domeinprovider.",
+      "step3": "Controleer de records hier. Verificatie duurt meestal een paar minuten.",
+      "step4": "Na verificatie worden je e-mails vanaf je eigen domein verstuurd."
+    },
+    "eventType": {
+      "title": "Soorten evenementen en categorieën",
+      "intro": "Het soort evenement bepaalt welke onderdelen het heeft: een bruiloft krijgt gasten, RSVP en tafelindeling; een congres krijgt sessies, sprekers en badges. De categorie helpt mensen openbare evenementen te vinden.",
+      "step1": "Kies bij het aanmaken het soort dat het best bij je evenement past.",
+      "step2": "Kies een categorie en voeg tags toe op de pagina Details van het evenement.",
+      "step3": "Twijfel je? Kies Overig: dat heeft de gebruikelijke onderdelen, en details voeg je later toe."
+    },
+    "coupons": {
+      "title": "Zo werken kortingscodes",
+      "intro": "Een kortingscode haalt een percentage of bedrag van de ticketprijs af, vóór kosten. Elke code hoort bij één evenement.",
+      "step1": "Kies hieronder het evenement en open de kortingscodes.",
+      "step2": "Voeg een code toe met de korting en eventueel een limiet en data.",
+      "step3": "Deel de code. Kopers vullen hem in bij het afrekenen en elk gebruik wordt geteld."
+    }
   }
 }

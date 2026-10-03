@@ -94,7 +94,15 @@ export default async function CfpSubmissionsPage({
           {t('submissionsHeading')}
         </h2>
         {view.submissions.length === 0 ? (
-          <EmptyState title={t('emptyTitle')} description={isPublic ? t('emptyOpen') : t('emptyDraft')} />
+          <EmptyState
+            title={t('emptyTitle')}
+            description={isPublic ? t('emptyOpen') : t('emptyDraft')}
+            action={
+              <Link href={`${base}/settings`} className={buttonClass('secondary', 'md')}>
+                {t('settingsHeading')}
+              </Link>
+            }
+          />
         ) : (
           <Table
             caption={t('tableCaption')}

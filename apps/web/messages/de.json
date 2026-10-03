@@ -13322,82 +13322,6 @@
       "empty": "Noch nichts verknüpft. Datensätze werden beim Synchronisieren verknüpft."
     }
   },
-  "emptyActions": {
-    "seeEvents": "Ihre Veranstaltungen ansehen",
-    "eventHome": "Zur Startseite der Veranstaltung"
-  },
-  "coupons": {
-    "title": "Gutscheine",
-    "description": "Aktionscodes geben Käufern beim Bezahlen einen Rabatt. Jeder Code gehört zu einer Veranstaltung: Wählen Sie die Veranstaltung, um ihre Codes anzusehen oder hinzuzufügen.",
-    "emptyTitle": "Keine Veranstaltungen für Codes",
-    "emptyDescription": "Aktionscodes stehen auf der Seite „Tickets & Bestellungen“ einer Veranstaltung. Erstellen Sie zuerst eine Veranstaltung und fügen Sie dann ihre Codes hinzu.",
-    "emptyAction": "Veranstaltung erstellen",
-    "caption": "Veranstaltungen und ihre Aktionscodes",
-    "event": "Veranstaltung",
-    "when": "Datum",
-    "status": "Status",
-    "codes": "Aktionscodes",
-    "manage": "Codes verwalten",
-    "view": "Codes ansehen",
-    "manageFor": "Aktionscodes für {name}"
-  },
-  "howItWorks": {
-    "docLink": "Anleitung lesen",
-    "hide": "Ausblenden",
-    "show": "Anzeigen",
-    "domains": {
-      "title": "So funktionieren eigene Domains",
-      "intro": "Zeigen Sie Ihre Veranstaltungsseiten unter Ihrer eigenen Adresse (z. B. tickets.ihremarke.de) statt unter einem Yayatoh-Link. Ihre Yayatoh-Adresse funktioniert weiterhin.",
-      "step1": "Fügen Sie eine Domain hinzu, die Ihnen gehört. Wir bitten Sie, Ihre Identität zu bestätigen.",
-      "step2": "Übertragen Sie die angezeigten DNS-Einträge in die Einstellungen Ihres Domain-Anbieters.",
-      "step3": "Wir prüfen die Einträge automatisch. Das kann bis zu einem Tag dauern.",
-      "step4": "Nach der Prüfung richten wir das Sicherheitszertifikat (HTTPS) ein und die Domain geht live."
-    },
-    "templates": {
-      "title": "So funktionieren Vorlagen",
-      "intro": "Eine Vorlage speichert die Einrichtung einer Veranstaltung (Tickets, Fragen, Bereiche und Seiteninhalte), damit Ihre nächste Veranstaltung fertig startet. Aus Vorlagen erstellte Veranstaltungen sind Entwürfe ohne Verkäufe.",
-      "step1": "Öffnen Sie eine Veranstaltung, die so eingerichtet ist, wie Sie es möchten.",
-      "step2": "Wählen Sie „Duplizieren & Vorlage“ und speichern Sie sie als Vorlage.",
-      "step3": "Erstellen Sie hier neue Veranstaltungen daraus oder beginnen Sie unten mit einer Startvorlage."
-    },
-    "series": {
-      "title": "So funktionieren Reihen",
-      "intro": "Eine Reihe fasst zusammengehörige Veranstaltungen (eine Tour, eine Saison, ein Festival) auf einer öffentlichen Seite mit den kommenden Terminen zusammen.",
-      "step1": "Legen Sie die Reihe mit Namen und kurzer Beschreibung an.",
-      "step2": "Öffnen Sie bei jeder Veranstaltung die Seite „Termine“ und fügen Sie sie der Reihe hinzu.",
-      "step3": "Teilen Sie die öffentliche Seite der Reihe. Sie aktualisiert sich, wenn Sie Veranstaltungen hinzufügen."
-    },
-    "payouts": {
-      "title": "So funktionieren Auszahlungen",
-      "intro": "Ticketgeld erreicht Ihre Bank über Auszahlungen. Verbinden Sie einmal ein Auszahlungskonto; die Zahlen unten zeigen, was unterwegs ist und wann.",
-      "step1": "Verbinden Sie Ihr Auszahlungskonto und bestätigen Sie Ihre Unternehmensdaten.",
-      "step2": "Verkaufen Sie Tickets. Jeder Verkauf abzüglich Gebühren und Erstattungen erhöht Ihr Guthaben.",
-      "step3": "Je nach Konto wird das Geld beim Verkauf oder nach der Veranstaltung ausgezahlt; eine kleine Reserve wird für Erstattungen und Rückbuchungen einbehalten.",
-      "step4": "Jede Auszahlung geht an Ihre Bank und erscheint hier mit Datum und Betrag."
-    },
-    "sending": {
-      "title": "So funktioniert der E-Mail-Versand",
-      "intro": "E-Mails an Ihre Käufer und Gäste werden standardmäßig von Yayatoh gesendet. Bestätigen Sie Ihre eigene Domain, damit sie von Ihrer Adresse kommen und im Posteingang landen.",
-      "step1": "Fügen Sie Ihre Versanddomain hinzu (z. B. mail.ihremarke.de).",
-      "step2": "Übertragen Sie die angezeigten DNS-Einträge in die Einstellungen Ihres Domain-Anbieters.",
-      "step3": "Prüfen Sie die Einträge hier. Die Bestätigung dauert meist nur wenige Minuten.",
-      "step4": "Nach der Bestätigung werden Ihre E-Mails von Ihrer eigenen Domain gesendet."
-    },
-    "eventType": {
-      "title": "Veranstaltungsarten und Kategorien",
-      "intro": "Die Veranstaltungsart bestimmt die Bereiche: Eine Hochzeit hat Gäste, Zusagen und Sitzplätze, eine Konferenz Sessions, Speaker und Badges. Die Kategorie hilft, öffentliche Veranstaltungen zu finden.",
-      "step1": "Wählen Sie beim Erstellen die Art, die Ihrer Veranstaltung am nächsten kommt.",
-      "step2": "Wählen Sie auf der Seite „Details“ eine Kategorie und fügen Sie Schlagwörter hinzu.",
-      "step3": "Unsicher? Wählen Sie „Sonstiges“: Es enthält die üblichen Bereiche, Details ergänzen Sie später."
-    },
-    "coupons": {
-      "title": "So funktionieren Aktionscodes",
-      "intro": "Ein Aktionscode zieht einen Prozentsatz oder Betrag vom Ticketpreis vor Gebühren ab. Jeder Code gehört zu einer Veranstaltung.",
-      "step1": "Wählen Sie unten die Veranstaltung und öffnen Sie ihre Aktionscodes.",
-      "step2": "Fügen Sie einen Code mit Rabatt hinzu, auf Wunsch mit Limit und Zeitraum.",
-      "step3": "Teilen Sie den Code. Käufer geben ihn beim Bezahlen ein, und jede Nutzung wird gezählt."
-    }
-  },
   "guestSeats": {
     "placeAt": {
       "table": "Tisch {item}",
@@ -15287,5 +15211,82 @@
     "tooLate": "Wähle ein Datum bis {date}",
     "timeZoneNote": "Zeiten in {zone}",
     "selected": "Ausgewählt"
+  },
+  "emptyActions": {
+    "seeEvents": "Ihre Veranstaltungen ansehen",
+    "eventHome": "Zur Startseite der Veranstaltung",
+    "clearSearch": "Suche zurücksetzen"
+  },
+  "coupons": {
+    "title": "Gutscheine",
+    "description": "Aktionscodes geben Käufern beim Bezahlen einen Rabatt. Jeder Code gehört zu einer Veranstaltung: Wählen Sie die Veranstaltung, um ihre Codes anzusehen oder hinzuzufügen.",
+    "emptyTitle": "Keine Veranstaltungen für Codes",
+    "emptyDescription": "Aktionscodes stehen auf der Seite „Tickets & Bestellungen“ einer Veranstaltung. Erstellen Sie zuerst eine Veranstaltung und fügen Sie dann ihre Codes hinzu.",
+    "emptyAction": "Veranstaltung erstellen",
+    "caption": "Veranstaltungen und ihre Aktionscodes",
+    "event": "Veranstaltung",
+    "when": "Datum",
+    "status": "Status",
+    "codes": "Aktionscodes",
+    "manage": "Codes verwalten",
+    "view": "Codes ansehen",
+    "manageFor": "Aktionscodes für {name}"
+  },
+  "howItWorks": {
+    "docLink": "Anleitung lesen",
+    "hide": "Ausblenden",
+    "show": "Anzeigen",
+    "domains": {
+      "title": "So funktionieren eigene Domains",
+      "intro": "Zeigen Sie Ihre Veranstaltungsseiten unter Ihrer eigenen Adresse (z. B. tickets.ihremarke.de) statt unter einem Yayatoh-Link. Ihre Yayatoh-Adresse funktioniert weiterhin.",
+      "step1": "Fügen Sie eine Domain hinzu, die Ihnen gehört. Wir bitten Sie, Ihre Identität zu bestätigen.",
+      "step2": "Übertragen Sie die angezeigten DNS-Einträge in die Einstellungen Ihres Domain-Anbieters.",
+      "step3": "Wir prüfen die Einträge automatisch. Das kann bis zu einem Tag dauern.",
+      "step4": "Nach der Prüfung richten wir das Sicherheitszertifikat (HTTPS) ein und die Domain geht live."
+    },
+    "templates": {
+      "title": "So funktionieren Vorlagen",
+      "intro": "Eine Vorlage speichert die Einrichtung einer Veranstaltung (Tickets, Fragen, Bereiche und Seiteninhalte), damit Ihre nächste Veranstaltung fertig startet. Aus Vorlagen erstellte Veranstaltungen sind Entwürfe ohne Verkäufe.",
+      "step1": "Öffnen Sie eine Veranstaltung, die so eingerichtet ist, wie Sie es möchten.",
+      "step2": "Wählen Sie „Duplizieren & Vorlage“ und speichern Sie sie als Vorlage.",
+      "step3": "Erstellen Sie hier neue Veranstaltungen daraus oder beginnen Sie unten mit einer Startvorlage."
+    },
+    "series": {
+      "title": "So funktionieren Reihen",
+      "intro": "Eine Reihe fasst zusammengehörige Veranstaltungen (eine Tour, eine Saison, ein Festival) auf einer öffentlichen Seite mit den kommenden Terminen zusammen.",
+      "step1": "Legen Sie die Reihe mit Namen und kurzer Beschreibung an.",
+      "step2": "Öffnen Sie bei jeder Veranstaltung die Seite „Termine“ und fügen Sie sie der Reihe hinzu.",
+      "step3": "Teilen Sie die öffentliche Seite der Reihe. Sie aktualisiert sich, wenn Sie Veranstaltungen hinzufügen."
+    },
+    "payouts": {
+      "title": "So funktionieren Auszahlungen",
+      "intro": "Ticketgeld erreicht Ihre Bank über Auszahlungen. Verbinden Sie einmal ein Auszahlungskonto; die Zahlen unten zeigen, was unterwegs ist und wann.",
+      "step1": "Verbinden Sie Ihr Auszahlungskonto und bestätigen Sie Ihre Unternehmensdaten.",
+      "step2": "Verkaufen Sie Tickets. Jeder Verkauf abzüglich Gebühren und Erstattungen erhöht Ihr Guthaben.",
+      "step3": "Je nach Konto wird das Geld beim Verkauf oder nach der Veranstaltung ausgezahlt; eine kleine Reserve wird für Erstattungen und Rückbuchungen einbehalten.",
+      "step4": "Jede Auszahlung geht an Ihre Bank und erscheint hier mit Datum und Betrag."
+    },
+    "sending": {
+      "title": "So funktioniert der E-Mail-Versand",
+      "intro": "E-Mails an Ihre Käufer und Gäste werden standardmäßig von Yayatoh gesendet. Bestätigen Sie Ihre eigene Domain, damit sie von Ihrer Adresse kommen und im Posteingang landen.",
+      "step1": "Fügen Sie Ihre Versanddomain hinzu (z. B. mail.ihremarke.de).",
+      "step2": "Übertragen Sie die angezeigten DNS-Einträge in die Einstellungen Ihres Domain-Anbieters.",
+      "step3": "Prüfen Sie die Einträge hier. Die Bestätigung dauert meist nur wenige Minuten.",
+      "step4": "Nach der Bestätigung werden Ihre E-Mails von Ihrer eigenen Domain gesendet."
+    },
+    "eventType": {
+      "title": "Veranstaltungsarten und Kategorien",
+      "intro": "Die Veranstaltungsart bestimmt die Bereiche: Eine Hochzeit hat Gäste, Zusagen und Sitzplätze, eine Konferenz Sessions, Speaker und Badges. Die Kategorie hilft, öffentliche Veranstaltungen zu finden.",
+      "step1": "Wählen Sie beim Erstellen die Art, die Ihrer Veranstaltung am nächsten kommt.",
+      "step2": "Wählen Sie auf der Seite „Details“ eine Kategorie und fügen Sie Schlagwörter hinzu.",
+      "step3": "Unsicher? Wählen Sie „Sonstiges“: Es enthält die üblichen Bereiche, Details ergänzen Sie später."
+    },
+    "coupons": {
+      "title": "So funktionieren Aktionscodes",
+      "intro": "Ein Aktionscode zieht einen Prozentsatz oder Betrag vom Ticketpreis vor Gebühren ab. Jeder Code gehört zu einer Veranstaltung.",
+      "step1": "Wählen Sie unten die Veranstaltung und öffnen Sie ihre Aktionscodes.",
+      "step2": "Fügen Sie einen Code mit Rabatt hinzu, auf Wunsch mit Limit und Zeitraum.",
+      "step3": "Teilen Sie den Code. Käufer geben ihn beim Bezahlen ein, und jede Nutzung wird gezählt."
+    }
   }
 }

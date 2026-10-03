@@ -221,7 +221,7 @@ test.describe('conference Command Center pack (M5.9a)', () => {
     const sponsors = page.getByTestId('cc-widget-sponsorActivity');
     await expect(sponsors).toContainText('No sponsors yet.');
     await expectAccessibleBothModes(page);
-    // With exhibitors but no lead source for the event: the tile says leads are not on yet.
+    // With exhibitors but no lead source for the event (M5.6b is not built): leads are not on yet.
     const org = await resolveOrgSlug(owner.orgSlug as string);
     if (!org) throw new Error('no org');
     const s = await conferenceScenario(org.orgId, { withoutFakes: true });
@@ -229,7 +229,10 @@ test.describe('conference Command Center pack (M5.9a)', () => {
     await expect(page.getByTestId('cc-exhibitor-activity')).toContainText(
       'Lead counts appear here once lead retrieval is on.',
     );
-    await expect(page.getByTestId('cc-sponsor-activity')).toContainText(
+    // Batch 3j merge: sponsor deliverables (M5.4b) are connected now: the tile counts the event's
+    // real ones (none overdue here) instead of saying the source is off.
+    await expect(page.getByTestId('cc-sponsor-activity')).toContainText('0 deliverables overdue');
+    await expect(page.getByTestId('cc-sponsor-activity')).not.toContainText(
       'Deliverables appear here once sponsor packages are on.',
     );
     await expect(alertsTile(page).getByText(LEADS_ALERT)).toHaveCount(0);

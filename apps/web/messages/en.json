@@ -13322,82 +13322,6 @@
       "empty": "Nothing linked yet. Records are linked as they sync."
     }
   },
-  "emptyActions": {
-    "seeEvents": "See your events",
-    "eventHome": "Go to the event home"
-  },
-  "coupons": {
-    "title": "Coupons",
-    "description": "Promo codes give buyers a discount at checkout. Each code belongs to one event: pick the event to see or add its codes.",
-    "emptyTitle": "No events to add codes to",
-    "emptyDescription": "Promo codes live on an event's Tickets & orders page. Create an event first, then add its codes.",
-    "emptyAction": "Create an event",
-    "caption": "Events and their promo codes",
-    "event": "Event",
-    "when": "Date",
-    "status": "Status",
-    "codes": "Promo codes",
-    "manage": "Manage codes",
-    "view": "View codes",
-    "manageFor": "Promo codes for {name}"
-  },
-  "howItWorks": {
-    "docLink": "Read the guide",
-    "hide": "Hide",
-    "show": "Show",
-    "domains": {
-      "title": "How custom domains work",
-      "intro": "Show your event pages on your own address (for example tickets.yourbrand.com) instead of a Yayatoh link. Your Yayatoh address keeps working too.",
-      "step1": "Add a domain you own. We'll ask you to confirm it's you.",
-      "step2": "Copy the DNS records we show into your domain provider's settings.",
-      "step3": "We check the records automatically. It can take up to a day.",
-      "step4": "Once verified, we set up the security certificate (HTTPS) and the domain goes live."
-    },
-    "templates": {
-      "title": "How templates work",
-      "intro": "A template saves an event's setup (tickets, questions, sections and page content) so your next event starts ready. Events made from a template are drafts with no sales.",
-      "step1": "Open an event that's set up the way you like.",
-      "step2": "Choose Duplicate & template, then save it as a template.",
-      "step3": "Come back here to create new events from it, or start from a starter template below."
-    },
-    "series": {
-      "title": "How series work",
-      "intro": "A series groups related events (a tour, a season, a festival) under one public page that lists the upcoming dates.",
-      "step1": "Create the series with a name and a short description.",
-      "step2": "Open each event's Dates page and add it to the series.",
-      "step3": "Share the series' public page. It updates as you add events."
-    },
-    "payouts": {
-      "title": "How payouts work",
-      "intro": "Ticket money reaches your bank in payouts. Connect a payout account once; the figures below show what is on its way and when.",
-      "step1": "Connect your payout account and verify your business details.",
-      "step2": "Sell tickets. Each sale, less fees and refunds, adds to your balance.",
-      "step3": "Depending on your account, money is paid out as you sell or after the event, with a small reserve held for refunds and disputes.",
-      "step4": "Each payout is sent to your bank and listed here with its date and amount."
-    },
-    "sending": {
-      "title": "How email sending works",
-      "intro": "Emails to your buyers and guests go out from Yayatoh by default. Verify your own domain so they come from your address and reach the inbox.",
-      "step1": "Add your sending domain (for example mail.yourbrand.com).",
-      "step2": "Copy the DNS records we show into your domain provider's settings.",
-      "step3": "Check the records here. Verification usually takes a few minutes.",
-      "step4": "Once verified, your emails are sent from your own domain."
-    },
-    "eventType": {
-      "title": "Event types and categories",
-      "intro": "The event type decides which sections an event has: a wedding gets guests, RSVP and seating; a conference gets sessions, speakers and badges. The category helps people find public events.",
-      "step1": "Pick the type closest to your event when you create it.",
-      "step2": "Choose a category and add tags on the event's Details page.",
-      "step3": "Not sure? Choose Other: it has the common sections, and you can add details later."
-    },
-    "coupons": {
-      "title": "How promo codes work",
-      "intro": "A promo code takes a percentage or an amount off each ticket's price, before fees. Each code belongs to one event.",
-      "step1": "Pick the event below and open its promo codes.",
-      "step2": "Add a code with its discount and, if you like, a limit and dates.",
-      "step3": "Share the code. Buyers enter it at checkout and each use is counted."
-    }
-  },
   "guestSeats": {
     "placeAt": {
       "table": "Table {item}",
@@ -15287,5 +15211,82 @@
     "tooLate": "Choose a date on or before {date}",
     "timeZoneNote": "Times in {zone}",
     "selected": "Selected"
+  },
+  "emptyActions": {
+    "seeEvents": "See your events",
+    "eventHome": "Go to the event home",
+    "clearSearch": "Clear the search"
+  },
+  "coupons": {
+    "title": "Coupons",
+    "description": "Promo codes give buyers a discount at checkout. Each code belongs to one event: pick the event to see or add its codes.",
+    "emptyTitle": "No events to add codes to",
+    "emptyDescription": "Promo codes live on an event's Tickets & orders page. Create an event first, then add its codes.",
+    "emptyAction": "Create an event",
+    "caption": "Events and their promo codes",
+    "event": "Event",
+    "when": "Date",
+    "status": "Status",
+    "codes": "Promo codes",
+    "manage": "Manage codes",
+    "view": "View codes",
+    "manageFor": "Promo codes for {name}"
+  },
+  "howItWorks": {
+    "docLink": "Read the guide",
+    "hide": "Hide",
+    "show": "Show",
+    "domains": {
+      "title": "How custom domains work",
+      "intro": "Show your event pages on your own address (for example tickets.yourbrand.com) instead of a Yayatoh link. Your Yayatoh address keeps working too.",
+      "step1": "Add a domain you own. We'll ask you to confirm it's you.",
+      "step2": "Copy the DNS records we show into your domain provider's settings.",
+      "step3": "We check the records automatically. It can take up to a day.",
+      "step4": "Once verified, we set up the security certificate (HTTPS) and the domain goes live."
+    },
+    "templates": {
+      "title": "How templates work",
+      "intro": "A template saves an event's setup (tickets, questions, sections and page content) so your next event starts ready. Events made from a template are drafts with no sales.",
+      "step1": "Open an event that's set up the way you like.",
+      "step2": "Choose Duplicate & template, then save it as a template.",
+      "step3": "Come back here to create new events from it, or start from a starter template below."
+    },
+    "series": {
+      "title": "How series work",
+      "intro": "A series groups related events (a tour, a season, a festival) under one public page that lists the upcoming dates.",
+      "step1": "Create the series with a name and a short description.",
+      "step2": "Open each event's Dates page and add it to the series.",
+      "step3": "Share the series' public page. It updates as you add events."
+    },
+    "payouts": {
+      "title": "How payouts work",
+      "intro": "Ticket money reaches your bank in payouts. Connect a payout account once; the figures below show what is on its way and when.",
+      "step1": "Connect your payout account and verify your business details.",
+      "step2": "Sell tickets. Each sale, less fees and refunds, adds to your balance.",
+      "step3": "Depending on your account, money is paid out as you sell or after the event, with a small reserve held for refunds and disputes.",
+      "step4": "Each payout is sent to your bank and listed here with its date and amount."
+    },
+    "sending": {
+      "title": "How email sending works",
+      "intro": "Emails to your buyers and guests go out from Yayatoh by default. Verify your own domain so they come from your address and reach the inbox.",
+      "step1": "Add your sending domain (for example mail.yourbrand.com).",
+      "step2": "Copy the DNS records we show into your domain provider's settings.",
+      "step3": "Check the records here. Verification usually takes a few minutes.",
+      "step4": "Once verified, your emails are sent from your own domain."
+    },
+    "eventType": {
+      "title": "Event types and categories",
+      "intro": "The event type decides which sections an event has: a wedding gets guests, RSVP and seating; a conference gets sessions, speakers and badges. The category helps people find public events.",
+      "step1": "Pick the type closest to your event when you create it.",
+      "step2": "Choose a category and add tags on the event's Details page.",
+      "step3": "Not sure? Choose Other: it has the common sections, and you can add details later."
+    },
+    "coupons": {
+      "title": "How promo codes work",
+      "intro": "A promo code takes a percentage or an amount off each ticket's price, before fees. Each code belongs to one event.",
+      "step1": "Pick the event below and open its promo codes.",
+      "step2": "Add a code with its discount and, if you like, a limit and dates.",
+      "step3": "Share the code. Buyers enter it at checkout and each use is counted."
+    }
   }
 }

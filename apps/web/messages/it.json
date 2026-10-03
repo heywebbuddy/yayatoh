@@ -13322,82 +13322,6 @@
       "empty": "Ancora nulla di collegato. I record si collegano man mano che si sincronizzano."
     }
   },
-  "emptyActions": {
-    "seeEvents": "Vedi i tuoi eventi",
-    "eventHome": "Vai alla home dell’evento"
-  },
-  "coupons": {
-    "title": "Coupon",
-    "description": "I codici promozionali danno uno sconto al pagamento. Ogni codice appartiene a un evento: scegli l’evento per vederne o aggiungerne i codici.",
-    "emptyTitle": "Nessun evento a cui aggiungere codici",
-    "emptyDescription": "I codici promozionali si trovano nella pagina Biglietti e ordini dell’evento. Crea prima un evento, poi aggiungi i codici.",
-    "emptyAction": "Crea un evento",
-    "caption": "Eventi e relativi codici promozionali",
-    "event": "Evento",
-    "when": "Data",
-    "status": "Stato",
-    "codes": "Codici promozionali",
-    "manage": "Gestisci codici",
-    "view": "Vedi codici",
-    "manageFor": "Codici promozionali di {name}"
-  },
-  "howItWorks": {
-    "docLink": "Leggi la guida",
-    "hide": "Nascondi",
-    "show": "Mostra",
-    "domains": {
-      "title": "Come funzionano i domini personalizzati",
-      "intro": "Mostra le pagine dei tuoi eventi sul tuo indirizzo (ad esempio biglietti.tuomarchio.it) invece che su un link Yayatoh. Anche il tuo indirizzo Yayatoh continua a funzionare.",
-      "step1": "Aggiungi un dominio di tua proprietà. Ti chiederemo di confermare la tua identità.",
-      "step2": "Copia i record DNS che mostriamo nelle impostazioni del tuo provider di dominio.",
-      "step3": "Controlliamo i record automaticamente. Può richiedere fino a un giorno.",
-      "step4": "Una volta verificato, configuriamo il certificato di sicurezza (HTTPS) e il dominio va online."
-    },
-    "templates": {
-      "title": "Come funzionano i modelli",
-      "intro": "Un modello salva la configurazione di un evento (biglietti, domande, sezioni e contenuti della pagina) così il prossimo evento parte già pronto. Gli eventi creati da un modello sono bozze senza vendite.",
-      "step1": "Apri un evento configurato come preferisci.",
-      "step2": "Scegli Duplica e modello, poi salvalo come modello.",
-      "step3": "Torna qui per creare nuovi eventi dal modello, oppure parti da un modello iniziale qui sotto."
-    },
-    "series": {
-      "title": "Come funzionano le serie",
-      "intro": "Una serie raggruppa eventi correlati (un tour, una stagione, un festival) in un’unica pagina pubblica con le prossime date.",
-      "step1": "Crea la serie con un nome e una breve descrizione.",
-      "step2": "Apri la pagina Date di ogni evento e aggiungilo alla serie.",
-      "step3": "Condividi la pagina pubblica della serie. Si aggiorna quando aggiungi eventi."
-    },
-    "payouts": {
-      "title": "Come funzionano i pagamenti",
-      "intro": "I soldi dei biglietti arrivano in banca tramite pagamenti. Collega una volta un conto di accredito; le cifre qui sotto mostrano cosa è in arrivo e quando.",
-      "step1": "Collega il conto di accredito e verifica i dati della tua attività.",
-      "step2": "Vendi biglietti. Ogni vendita, al netto di commissioni e rimborsi, si aggiunge al tuo saldo.",
-      "step3": "A seconda del conto, il denaro viene pagato man mano che vendi o dopo l’evento, con una piccola riserva per rimborsi e contestazioni.",
-      "step4": "Ogni pagamento viene inviato alla tua banca e appare qui con data e importo."
-    },
-    "sending": {
-      "title": "Come funziona l’invio delle email",
-      "intro": "Le email ad acquirenti e ospiti partono da Yayatoh per impostazione predefinita. Verifica il tuo dominio perché arrivino dal tuo indirizzo e nella posta in arrivo.",
-      "step1": "Aggiungi il dominio di invio (ad esempio mail.tuomarchio.it).",
-      "step2": "Copia i record DNS che mostriamo nelle impostazioni del tuo provider di dominio.",
-      "step3": "Controlla i record qui. La verifica di solito richiede pochi minuti.",
-      "step4": "Una volta verificato, le tue email partono dal tuo dominio."
-    },
-    "eventType": {
-      "title": "Tipi di evento e categorie",
-      "intro": "Il tipo di evento decide quali sezioni ha: un matrimonio ha ospiti, RSVP e posti; una conferenza ha sessioni, relatori e badge. La categoria aiuta a trovare gli eventi pubblici.",
-      "step1": "Scegli il tipo più vicino al tuo evento quando lo crei.",
-      "step2": "Scegli una categoria e aggiungi tag nella pagina Dettagli dell’evento.",
-      "step3": "Non sei sicuro? Scegli Altro: ha le sezioni comuni e puoi aggiungere i dettagli in seguito."
-    },
-    "coupons": {
-      "title": "Come funzionano i codici promozionali",
-      "intro": "Un codice promozionale toglie una percentuale o un importo dal prezzo di ogni biglietto, prima delle commissioni. Ogni codice appartiene a un evento.",
-      "step1": "Scegli l’evento qui sotto e apri i suoi codici promozionali.",
-      "step2": "Aggiungi un codice con lo sconto e, se vuoi, un limite e delle date.",
-      "step3": "Condividi il codice. Gli acquirenti lo inseriscono al pagamento e ogni utilizzo viene contato."
-    }
-  },
   "guestSeats": {
     "placeAt": {
       "table": "Tavolo {item}",
@@ -15287,5 +15211,82 @@
     "tooLate": "Scegli una data entro il {date}",
     "timeZoneNote": "Orari in {zone}",
     "selected": "Selezionato"
+  },
+  "emptyActions": {
+    "seeEvents": "Vedi i tuoi eventi",
+    "eventHome": "Vai alla home dell’evento",
+    "clearSearch": "Cancella la ricerca"
+  },
+  "coupons": {
+    "title": "Coupon",
+    "description": "I codici promozionali danno uno sconto al pagamento. Ogni codice appartiene a un evento: scegli l’evento per vederne o aggiungerne i codici.",
+    "emptyTitle": "Nessun evento a cui aggiungere codici",
+    "emptyDescription": "I codici promozionali si trovano nella pagina Biglietti e ordini dell’evento. Crea prima un evento, poi aggiungi i codici.",
+    "emptyAction": "Crea un evento",
+    "caption": "Eventi e relativi codici promozionali",
+    "event": "Evento",
+    "when": "Data",
+    "status": "Stato",
+    "codes": "Codici promozionali",
+    "manage": "Gestisci codici",
+    "view": "Vedi codici",
+    "manageFor": "Codici promozionali di {name}"
+  },
+  "howItWorks": {
+    "docLink": "Leggi la guida",
+    "hide": "Nascondi",
+    "show": "Mostra",
+    "domains": {
+      "title": "Come funzionano i domini personalizzati",
+      "intro": "Mostra le pagine dei tuoi eventi sul tuo indirizzo (ad esempio biglietti.tuomarchio.it) invece che su un link Yayatoh. Anche il tuo indirizzo Yayatoh continua a funzionare.",
+      "step1": "Aggiungi un dominio di tua proprietà. Ti chiederemo di confermare la tua identità.",
+      "step2": "Copia i record DNS che mostriamo nelle impostazioni del tuo provider di dominio.",
+      "step3": "Controlliamo i record automaticamente. Può richiedere fino a un giorno.",
+      "step4": "Una volta verificato, configuriamo il certificato di sicurezza (HTTPS) e il dominio va online."
+    },
+    "templates": {
+      "title": "Come funzionano i modelli",
+      "intro": "Un modello salva la configurazione di un evento (biglietti, domande, sezioni e contenuti della pagina) così il prossimo evento parte già pronto. Gli eventi creati da un modello sono bozze senza vendite.",
+      "step1": "Apri un evento configurato come preferisci.",
+      "step2": "Scegli Duplica e modello, poi salvalo come modello.",
+      "step3": "Torna qui per creare nuovi eventi dal modello, oppure parti da un modello iniziale qui sotto."
+    },
+    "series": {
+      "title": "Come funzionano le serie",
+      "intro": "Una serie raggruppa eventi correlati (un tour, una stagione, un festival) in un’unica pagina pubblica con le prossime date.",
+      "step1": "Crea la serie con un nome e una breve descrizione.",
+      "step2": "Apri la pagina Date di ogni evento e aggiungilo alla serie.",
+      "step3": "Condividi la pagina pubblica della serie. Si aggiorna quando aggiungi eventi."
+    },
+    "payouts": {
+      "title": "Come funzionano i pagamenti",
+      "intro": "I soldi dei biglietti arrivano in banca tramite pagamenti. Collega una volta un conto di accredito; le cifre qui sotto mostrano cosa è in arrivo e quando.",
+      "step1": "Collega il conto di accredito e verifica i dati della tua attività.",
+      "step2": "Vendi biglietti. Ogni vendita, al netto di commissioni e rimborsi, si aggiunge al tuo saldo.",
+      "step3": "A seconda del conto, il denaro viene pagato man mano che vendi o dopo l’evento, con una piccola riserva per rimborsi e contestazioni.",
+      "step4": "Ogni pagamento viene inviato alla tua banca e appare qui con data e importo."
+    },
+    "sending": {
+      "title": "Come funziona l’invio delle email",
+      "intro": "Le email ad acquirenti e ospiti partono da Yayatoh per impostazione predefinita. Verifica il tuo dominio perché arrivino dal tuo indirizzo e nella posta in arrivo.",
+      "step1": "Aggiungi il dominio di invio (ad esempio mail.tuomarchio.it).",
+      "step2": "Copia i record DNS che mostriamo nelle impostazioni del tuo provider di dominio.",
+      "step3": "Controlla i record qui. La verifica di solito richiede pochi minuti.",
+      "step4": "Una volta verificato, le tue email partono dal tuo dominio."
+    },
+    "eventType": {
+      "title": "Tipi di evento e categorie",
+      "intro": "Il tipo di evento decide quali sezioni ha: un matrimonio ha ospiti, RSVP e posti; una conferenza ha sessioni, relatori e badge. La categoria aiuta a trovare gli eventi pubblici.",
+      "step1": "Scegli il tipo più vicino al tuo evento quando lo crei.",
+      "step2": "Scegli una categoria e aggiungi tag nella pagina Dettagli dell’evento.",
+      "step3": "Non sei sicuro? Scegli Altro: ha le sezioni comuni e puoi aggiungere i dettagli in seguito."
+    },
+    "coupons": {
+      "title": "Come funzionano i codici promozionali",
+      "intro": "Un codice promozionale toglie una percentuale o un importo dal prezzo di ogni biglietto, prima delle commissioni. Ogni codice appartiene a un evento.",
+      "step1": "Scegli l’evento qui sotto e apri i suoi codici promozionali.",
+      "step2": "Aggiungi un codice con lo sconto e, se vuoi, un limite e delle date.",
+      "step3": "Condividi il codice. Gli acquirenti lo inseriscono al pagamento e ogni utilizzo viene contato."
+    }
   }
 }

@@ -381,7 +381,6 @@ function DeviceCard({
                 name="kind"
                 value={kind}
                 onValueChange={(v) => setKind(v as KioskKind)}
-                className="field"
               >
                 <option value="tickets">{t('kindTickets')}</option>
                 <option value="guests">{t('kindGuests')}</option>
