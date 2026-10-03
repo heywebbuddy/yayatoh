@@ -48,7 +48,9 @@ export async function GET(
     return go('expired');
   }
   const fail = async (calendar: string) => {
-    await executeCommand(failPersonalCalendarCommand, { ...link, connectionId }, ctx, ports).catch(() => undefined);
+    await executeCommand(failPersonalCalendarCommand, { ...link, connectionId }, ctx, ports).catch(
+      () => undefined,
+    );
     return go(calendar);
   };
   if (url.searchParams.get('error')) return fail('denied');

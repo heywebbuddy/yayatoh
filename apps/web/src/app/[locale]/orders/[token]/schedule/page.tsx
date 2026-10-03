@@ -8,8 +8,8 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { ScheduleSessionActions } from '@/components/my-schedule.tsx';
 import { CalendarControls } from '@/components/schedule-calendar.tsx';
 import { Link } from '@/i18n/navigation.ts';
-import { ports } from '@/server/ports.ts';
 import { integrationAuth } from '@/server/integrations.ts';
+import { ports } from '@/server/ports.ts';
 import { scheduleAction } from './actions.ts';
 import { calendarAction, connectCalendarAction } from './calendar-actions.ts';
 
@@ -84,12 +84,15 @@ export default async function MySchedulePage({
   // M6.5c: personal Google Calendar push (hidden where integrations are off or not in the plan).
   const calendar: PersonalCalendarDto | null =
     me && integrationAuth()
-      ? await executeQuery(personalCalendarQuery, { token, registrantId: me.id }, createCtx({ orgId }), ports).catch(
-          (err) => {
-            if (isDomainError(err)) return null;
-            throw err;
-          },
-        )
+      ? await executeQuery(
+          personalCalendarQuery,
+          { token, registrantId: me.id },
+          createCtx({ orgId }),
+          ports,
+        ).catch((err) => {
+          if (isDomainError(err)) return null;
+          throw err;
+        })
       : null;
   const count = (states: readonly MySessionDto['state'][]) =>
     data.sessions.filter((s) => states.includes(s.state)).length;
@@ -222,7 +225,11 @@ async function CalendarPanel({
   timezone: string;
 }) {
   const t = await getTranslations('mySchedule.calendar');
-  const when = new Intl.DateTimeFormat(locale, { timeZone: timezone, dateStyle: 'medium', timeStyle: 'short' });
+  const when = new Intl.DateTimeFormat(locale, {
+    timeZone: timezone,
+    dateStyle: 'medium',
+    timeStyle: 'short',
+  });
   const tone = notice && notice in NOTICE_TONE ? NOTICE_TONE[notice as keyof typeof NOTICE_TONE] : null;
   const connect = (label: string) => (
     <form action={connectCalendarAction.bind(null, token, registrantId)}>
@@ -241,9 +248,14 @@ async function CalendarPanel({
         <>
           <p className="m-0 text-body text-ink">{t('active', { count: calendar.entries })}</p>
           <p className="m-0 text-caption text-ink-2 tabular-nums">
-            {calendar.lastSyncAt ? t('lastSync', { when: when.format(calendar.lastSyncAt) }) : t('neverSynced')}
+            {calendar.lastSyncAt
+              ? t('lastSync', { when: when.format(calendar.lastSyncAt) })
+              : t('neverSynced')}
           </p>
-          <CalendarControls action={calendarAction.bind(null, token, registrantId)} syncing={calendar.syncing} />
+          <CalendarControls
+            action={calendarAction.bind(null, token, registrantId)}
+            syncing={calendar.syncing}
+          />
         </>
       ) : calendar.state === 'revoked' ? (
         <>

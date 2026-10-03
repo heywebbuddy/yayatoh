@@ -167,7 +167,7 @@ describe('Make and n8n actions stay inside their key (M6.5c)', () => {
     });
     expect(JSON.stringify(created.body)).not.toMatch(/whsec_/);
     const listed = await send('GET', url, manage);
-    expect((listed.body?.data as { id: string }[]).map((e) => e.id)).toContain(created.body?.id);
+    expect(((listed.body?.data ?? []) as { id: string }[]).map((e) => e.id)).toContain(created.body?.id);
     expect((await send('POST', url, await key(a, ['events:read']), body)).status).toBe(403);
     expect((await send('GET', url, await key(a, ['events:read']))).status).toBe(403);
     expect((await send('POST', url, await key(b, ['webhooks:manage']), body)).status).toBe(404);

@@ -38,7 +38,11 @@ async function schedulePath(token: string, registrantId: string, q: Record<strin
 }
 
 /** "Add to Google Calendar": a pending connection, then off to the consent screen. */
-export async function connectCalendarAction(token: string, registrantId: string, _form?: FormData): Promise<void> {
+export async function connectCalendarAction(
+  token: string,
+  registrantId: string,
+  _form?: FormData,
+): Promise<void> {
   const back = async (calendar: string) => redirect(await schedulePath(token, registrantId, { calendar }));
   if (!UUID.test(registrantId)) return back('not_found');
   const limit = await limitAction('sessionEnrollment', { identity: `order:${token}`, scope: 'calendar' });
@@ -83,7 +87,8 @@ export async function calendarAction(
   form: FormData,
 ): Promise<CalendarActionState> {
   const intent = String(form.get('intent') ?? '');
-  if (!UUID.test(registrantId) || (intent !== 'sync' && intent !== 'stop')) return { ok: false, code: 'not_found' };
+  if (!UUID.test(registrantId) || (intent !== 'sync' && intent !== 'stop'))
+    return { ok: false, code: 'not_found' };
   const limit = await limitAction('sessionEnrollment', { identity: `order:${token}`, scope: 'calendar' });
   if (!limit.allowed) return { ok: false, code: 'rate_limited' };
   const orgId = await manageTokenOrg(token);

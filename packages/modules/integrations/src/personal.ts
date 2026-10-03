@@ -97,7 +97,8 @@ export const personalCalendarQuery = tenantQuery({
         state === 'off' ? null : ((live?.lastSyncStatus as PersonalCalendarDto['lastSyncStatus']) ?? null),
       entries: state === 'active' || state === 'paused' ? (entries?.n ?? 0) : 0,
       syncing: Boolean(busy),
-      revokedBy: state === 'revoked' ? ((live?.revokeReason as PersonalCalendarDto['revokedBy']) ?? null) : null,
+      revokedBy:
+        state === 'revoked' ? ((live?.revokeReason as PersonalCalendarDto['revokedBy']) ?? null) : null,
     });
   },
 });
