@@ -90,27 +90,31 @@ export async function eventFactsTx(
   const mode = eventMode(now, event.startsAt, event.endsAt);
   const around = mode === 'live' || mode === 'pre_show';
   const active = mode !== 'wrap' && ['draft', 'published', 'postponed'].includes(event.status);
-  const [unseated, dist, pay, devices, types, admitted, [target], help, pledged, conference] = await Promise.all([
-    unseatedAttendeesTx(tx, eventId),
-    undistributedTicketsTx(tx, eventId),
-    paymentAlertFactsTx(tx, eventId, now, {
-      stuckAfterMs: THRESHOLDS.stuckAfterMs,
-      refundWindowMs: THRESHOLDS.refundWindowMs,
-    }),
-    around
-      ? deviceHealthTx(tx, now, {
-          inUseWindowMs: THRESHOLDS.deviceInUseMs,
-          lowBatteryPct: THRESHOLDS.lowBatteryPct,
-          backlogScans: THRESHOLDS.backlogScans,
-        })
-      : Promise.resolve({ offline: 0, lowBattery: 0, backlog: 0 }),
-    ticketTypeStatsTx(tx, eventId),
-    mode === 'live' ? checkinFactsTx(tx, { eventId }).then((c) => c.tickets) : Promise.resolve(0),
-    tx.select({ tickets: salesTargets.tickets }).from(salesTargets).where(eq(salesTargets.eventId, eventId)),
-    assistanceOverdueTx(tx, eventId, now),
-    unpaidPledgeFactsTx(tx, eventId, now),
-    active ? conferenceFactsTx(tx, event, now, sources) : Promise.resolve(undefined),
-  ]);
+  const [unseated, dist, pay, devices, types, admitted, [target], help, pledged, conference] =
+    await Promise.all([
+      unseatedAttendeesTx(tx, eventId),
+      undistributedTicketsTx(tx, eventId),
+      paymentAlertFactsTx(tx, eventId, now, {
+        stuckAfterMs: THRESHOLDS.stuckAfterMs,
+        refundWindowMs: THRESHOLDS.refundWindowMs,
+      }),
+      around
+        ? deviceHealthTx(tx, now, {
+            inUseWindowMs: THRESHOLDS.deviceInUseMs,
+            lowBatteryPct: THRESHOLDS.lowBatteryPct,
+            backlogScans: THRESHOLDS.backlogScans,
+          })
+        : Promise.resolve({ offline: 0, lowBattery: 0, backlog: 0 }),
+      ticketTypeStatsTx(tx, eventId),
+      mode === 'live' ? checkinFactsTx(tx, { eventId }).then((c) => c.tickets) : Promise.resolve(0),
+      tx
+        .select({ tickets: salesTargets.tickets })
+        .from(salesTargets)
+        .where(eq(salesTargets.eventId, eventId)),
+      assistanceOverdueTx(tx, eventId, now),
+      unpaidPledgeFactsTx(tx, eventId, now),
+      active ? conferenceFactsTx(tx, event, now, sources) : Promise.resolve(undefined),
+    ]);
   const live = types.filter((t) => !t.archived);
   return {
     event,

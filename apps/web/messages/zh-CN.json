@@ -2761,7 +2761,9 @@
       "attendees": "宾客名单条目",
       "answers": "结账时的回答",
       "admissions": "签到",
-      "invitations": "团队邀请"
+      "invitations": "团队邀请",
+      "networkProfiles": "社交名片",
+      "chatMessages": "已发送的聊天消息"
     },
     "export": {
       "title": "导出其数据",

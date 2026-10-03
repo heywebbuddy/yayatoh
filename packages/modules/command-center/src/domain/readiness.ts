@@ -55,13 +55,7 @@ export interface ReadinessRule {
  * builds one removes it here and gives its checklist item a real fact. `apps/web/tests/readiness`
  * checks the list against the routes on disk.
  */
-export const PLACEHOLDER_SECTIONS = [
-  'rsvp',
-  'messages',
-  'branding',
-  'communications',
-  'libraries',
-] as const;
+export const PLACEHOLDER_SECTIONS = ['rsvp', 'messages', 'branding', 'communications', 'libraries'] as const;
 
 /** Profile checklist items (M4.2a): each names the page that fixes it and, once built, its fact. */
 const PROFILE_ITEMS: Readonly<Record<string, { path: string; done: (f: ReadinessFacts) => boolean }>> = {

@@ -2761,7 +2761,9 @@
       "attendees": "Gästelisteneinträge",
       "answers": "Antworten beim Checkout",
       "admissions": "Check-ins",
-      "invitations": "Team-Einladungen"
+      "invitations": "Team-Einladungen",
+      "networkProfiles": "Networking-Profile",
+      "chatMessages": "Gesendete Chatnachrichten"
     },
     "export": {
       "title": "Daten exportieren",

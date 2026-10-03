@@ -3,8 +3,8 @@ import { setSessionAccessSource } from '@yayatoh/checkin';
 import { eventRolesOf } from '@yayatoh/events';
 import { guestsOccupantDirectory, guestsPartyCredentials } from '@yayatoh/guests';
 import { createCommandPorts, localKeyVault, setKeyVault } from '@yayatoh/platform';
-import { setOccupantDirectory, setPartyCredentials } from '@yayatoh/seating';
 import { registrationSessionAccess } from '@yayatoh/registration';
+import { setOccupantDirectory, setPartyCredentials } from '@yayatoh/seating';
 import { createOrgAuthorizer, orgStatusGate } from '@yayatoh/tenancy';
 
 /** Composition root for the web transport (Server Actions / RSC). Same ports as /v1. */

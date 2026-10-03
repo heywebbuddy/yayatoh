@@ -2761,7 +2761,9 @@
       "attendees": "Vermeldingen op gastenlijsten",
       "answers": "Antwoorden bij het afrekenen",
       "admissions": "Check-ins",
-      "invitations": "Teamuitnodigingen"
+      "invitations": "Teamuitnodigingen",
+      "networkProfiles": "Netwerkprofielen",
+      "chatMessages": "Verzonden chatberichten"
     },
     "export": {
       "title": "Gegevens exporteren",

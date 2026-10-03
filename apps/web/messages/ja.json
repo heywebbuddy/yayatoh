@@ -2761,7 +2761,9 @@
       "attendees": "ゲストリストの登録",
       "answers": "購入時の回答",
       "admissions": "チェックイン",
-      "invitations": "チームへの招待"
+      "invitations": "チームへの招待",
+      "networkProfiles": "ネットワーキングのプロフィール",
+      "chatMessages": "送信したチャットメッセージ"
     },
     "export": {
       "title": "データをエクスポート",

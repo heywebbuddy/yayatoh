@@ -2761,7 +2761,9 @@
       "attendees": "अतिथि सूची प्रविष्टियाँ",
       "answers": "चेकआउट उत्तर",
       "admissions": "चेक-इन",
-      "invitations": "टीम आमंत्रण"
+      "invitations": "टीम आमंत्रण",
+      "networkProfiles": "नेटवर्किंग प्रोफ़ाइल",
+      "chatMessages": "भेजे गए चैट संदेश"
     },
     "export": {
       "title": "उनका डेटा निर्यात करें",

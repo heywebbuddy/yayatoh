@@ -29,7 +29,13 @@ export const SUBJECT_TYPES = ['event', 'survey'] as const;
  * filling a registration form (`forms.respondents`, M5.1b). `guest`: one guest answering an event's
  * RSVP questions (M4.1e; an id of the guests module, which owns the guest).
  */
-export const RESPONDENT_TYPES = ['order', 'survey_invitation', 'form_respondent', 'guest', 'cfp_submission'] as const;
+export const RESPONDENT_TYPES = [
+  'order',
+  'survey_invitation',
+  'form_respondent',
+  'guest',
+  'cfp_submission',
+] as const;
 
 /** One form per (kind, subject), e.g. an event's checkout questions or a survey's questions. */
 export const forms = tenantTable(

@@ -257,23 +257,6 @@ export {
 } from './receipts.ts';
 export { giftRetentionCommand, LAPSED_GIFT_DAYS, redactLapsedGiftsTx } from './retention.ts';
 export {
-  displayScreen,
-  type PublicScreen,
-  publicScreen,
-  rotateScreenLinkCommand,
-  saveScreenCommand,
-  screenSettingsQuery,
-  screenSnapshotTx,
-} from './screen.ts';
-export {
-  EMPTY_SCREEN,
-  GIVING_SCREEN_CHANNEL,
-  SaveScreenInput,
-  ScreenSettingsDto,
-  ScreenStateDto,
-} from './screen-dto.ts';
-export { type ScreenClaim, signScreenToken, verifyScreenToken } from './screen-link.ts';
-export {
   applyCardSetupCommand,
   attachCardSetupCommand,
   CardChargeDto,
@@ -290,3 +273,20 @@ export {
   savedCardView,
   startCardSetupCommand,
 } from './saved-cards.ts';
+export {
+  displayScreen,
+  type PublicScreen,
+  publicScreen,
+  rotateScreenLinkCommand,
+  saveScreenCommand,
+  screenSettingsQuery,
+  screenSnapshotTx,
+} from './screen.ts';
+export {
+  EMPTY_SCREEN,
+  GIVING_SCREEN_CHANNEL,
+  SaveScreenInput,
+  ScreenSettingsDto,
+  ScreenStateDto,
+} from './screen-dto.ts';
+export { type ScreenClaim, signScreenToken, verifyScreenToken } from './screen-link.ts';

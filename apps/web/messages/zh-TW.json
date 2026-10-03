@@ -2761,7 +2761,9 @@
       "attendees": "賓客名單項目",
       "answers": "結帳時的回答",
       "admissions": "報到",
-      "invitations": "團隊邀請"
+      "invitations": "團隊邀請",
+      "networkProfiles": "社交名片",
+      "chatMessages": "已傳送的聊天訊息"
     },
     "export": {
       "title": "匯出其資料",

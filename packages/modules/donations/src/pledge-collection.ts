@@ -148,7 +148,8 @@ async function unclosedPledgesTx(tx: TenantTx, eventId: string, pledgeIds?: read
     .select({
       id: pledges.id,
       campaignId: pledges.campaignId,
-      paddleNumber: pledges.paddleNumber,
+      // Paddle pledges only (the filter below), so the number is always set.
+      paddleNumber: sql<number>`${pledges.paddleNumber}`,
       guestId: pledges.guestId,
       partyId: pledges.partyId,
       amountMinor: pledges.amountMinor,
@@ -159,6 +160,8 @@ async function unclosedPledgesTx(tx: TenantTx, eventId: string, pledgeIds?: read
       and(
         eq(pledges.eventId, eventId),
         eq(pledges.status, 'confirmed'),
+        // Batch 3j merge: a sponsor's match pledge (M4.8f, no paddle holder) is not collected here.
+        eq(pledges.source, 'paddle'),
         sql`not exists (select 1 from ${pledgeCollections} where ${pledgeCollections.pledgeId} = ${pledges.id})`,
         pledgeIds ? inArray(pledges.id, [...pledgeIds]) : undefined,
       ),
@@ -877,7 +880,8 @@ export const pledgeCollectionQuery = tenantQuery({
     const rows = await tx
       .select({
         pledgeId: pledges.id,
-        paddleNumber: pledges.paddleNumber,
+        // Paddle pledges only (the inner join on their call), so the number is always set.
+        paddleNumber: sql<number>`${pledges.paddleNumber}`,
         guestId: pledges.guestId,
         partyId: pledges.partyId,
         levelName: paddleCalls.levelName,
@@ -891,7 +895,9 @@ export const pledgeCollectionQuery = tenantQuery({
       .innerJoin(paddleCalls, eq(paddleCalls.id, pledges.callId))
       .leftJoin(pledgeCollections, eq(pledgeCollections.pledgeId, pledges.id))
       .leftJoin(savedCards, eq(savedCards.id, pledgeCollections.savedCardId))
-      .where(and(eq(pledges.eventId, event.id), eq(pledges.status, 'confirmed')))
+      .where(
+        and(eq(pledges.eventId, event.id), eq(pledges.status, 'confirmed'), eq(pledges.source, 'paddle')),
+      )
       .orderBy(asc(pledges.paddleNumber), asc(pledges.confirmedAt));
     const names = await paddleHolderNamesTx(tx, {
       guestIds: rows.flatMap((r) => (r.guestId ? [r.guestId] : [])),
@@ -976,6 +982,7 @@ export async function unpaidPledgeFactsTx(
       and(
         eq(pledges.eventId, eventId),
         eq(pledges.status, 'confirmed'),
+        eq(pledges.source, 'paddle'),
         or(isNull(pledgeCollections.id), inArray(pledgeCollections.status, [...OPEN_COLLECTION_STATUSES])),
       ),
     );
@@ -994,6 +1001,7 @@ export async function unpaidPledgeEventIdsTx(tx: TenantTx, now: Date): Promise<s
     .where(
       and(
         eq(pledges.status, 'confirmed'),
+        eq(pledges.source, 'paddle'),
         or(isNull(pledgeCollections.id), inArray(pledgeCollections.status, [...OPEN_COLLECTION_STATUSES])),
       ),
     )

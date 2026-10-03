@@ -2761,7 +2761,9 @@
       "attendees": "Entradas em listas de convidados",
       "answers": "Respostas no pagamento",
       "admissions": "Entradas registadas",
-      "invitations": "Convites de equipa"
+      "invitations": "Convites de equipa",
+      "networkProfiles": "Perfis de networking",
+      "chatMessages": "Mensagens de chat enviadas"
     },
     "export": {
       "title": "Exportar os dados",

@@ -167,6 +167,8 @@ export {
   UpdateNetworkSettingsInput,
   updateNetworkSettingsCommand,
 } from './networking/console.ts';
+// Batch 3j merge: networking and chat in data-subject requests (read and erased by privacy, tier 6).
+export { eraseNetworkingDsarTx, networkingDsarTx } from './networking/dsar.ts';
 export * from './networking/dto.ts';
 export { networkingEvent, networkingOpen } from './networking/public.ts';
 export {
@@ -195,12 +197,12 @@ export {
   type ChatKind,
   CONNECTION_STATES,
   type ConnectionState,
+  ENGAGEMENT_KINDS,
+  type EngagementKind,
   LOCATION_KINDS,
   type LocationKind,
   MEETING_STATES,
   type MeetingState,
-  ENGAGEMENT_KINDS,
-  type EngagementKind,
   POLL_KINDS,
   POLL_STATES,
   type PollKind,

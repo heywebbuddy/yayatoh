@@ -2761,7 +2761,9 @@
       "attendees": "إدخالات قائمة الضيوف",
       "answers": "إجابات الدفع",
       "admissions": "تسجيلات الدخول",
-      "invitations": "دعوات الفريق"
+      "invitations": "دعوات الفريق",
+      "networkProfiles": "ملفات التواصل المهني",
+      "chatMessages": "رسائل الدردشة المرسلة"
     },
     "export": {
       "title": "تصدير بياناته",

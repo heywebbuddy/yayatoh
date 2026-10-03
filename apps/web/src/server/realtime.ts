@@ -18,8 +18,8 @@ import {
   sessionChannelOpen,
 } from '@yayatoh/engagement';
 import { findEventTx, isPublicEvent } from '@yayatoh/events';
-import { GUESTS_CHANNEL } from '@yayatoh/guests';
 import { GALLERY_CHANNEL } from '@yayatoh/gallery';
+import { GUESTS_CHANNEL } from '@yayatoh/guests';
 import { createCtx } from '@yayatoh/kernel';
 import {
   ablyRealtimePublisher,

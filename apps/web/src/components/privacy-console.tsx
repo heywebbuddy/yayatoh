@@ -20,6 +20,8 @@ const CATEGORIES = [
   'answers',
   'admissions',
   'invitations',
+  'networkProfiles',
+  'chatMessages',
 ] as const;
 
 /**
