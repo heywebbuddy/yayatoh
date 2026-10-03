@@ -355,6 +355,21 @@ export function useStepUpActionState<S>(action: (prev: S, form: FormData) => Pro
   // States are plain objects, never promises: Awaited<S> is S.
   type Reducer = (prev: Awaited<S>, form: FormData) => Promise<Awaited<S>>;
   const [state, formAction, pending] = useActionState(wrapped as unknown as Reducer, initial as Awaited<S>);
+  // React resets a form after its action; when the action answered with a code (the dialog was
+  // cancelled, or refused) the form keeps what was typed and picked instead. The reset event is
+  // stopped before any control hears it, so custom controls (U1 Select, pickers) keep their
+  // values too. The refill below stays as the fallback for anything reset another way.
+  useEffect(() => {
+    const form = formRef.current;
+    if (!form) return;
+    const keep = (e: Event) => {
+      if (!refillWith.current) return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+    };
+    form.addEventListener('reset', keep, { capture: true });
+    return () => form.removeEventListener('reset', keep, { capture: true });
+  }, []);
   useEffect(() => {
     const fd = refillWith.current;
     if (!fd || !formRef.current || !state) return;

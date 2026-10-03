@@ -625,3 +625,7 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
   - **Event time zone in the create-event wizard** is now the full IANA list, grouped by region with the current offset, instead of the 13 zones the wizard offered. Values are unchanged (IANA names).
   - **Arabic digits in the date and time pickers:** dates and times show Arabic-Indic digits (٠٥/١١/٢٠٢٦) in Arabic, as the U1 spec asks. The rest of the app still formats numbers with Western digits in Arabic (the CLDR default); say if you want one rule everywhere.
   - **Typed dates** use the reader's locale order (11/05/2026 in English, 05.11.2026 in German). ISO (2026-11-05) always works too.
+
+## U3 — review bugs (2026-10-03, pending owner)
+- **Demo personas confirm step-up without a code (dev and preview only).** Reviewers sign in with one click on `/dev/login`, so they never had the persona's authenticator, and every sensitive action (adding a domain, refunds, exports) ended on "Please confirm it's you". The confirm dialog now offers "Continue without a code (demo account)" to seeded personas only, and only when `YAYATOH_DEV_AUTH=1` outside production (the same switch as the persona list). It runs the real, audited step-up with the persona's dev secret. Say if previews should keep asking for a code instead.
+- **Domains:** the connect wizard is provider-agnostic. Real DNS checks and certificates arrive with the Vercel Domains adapter (your Vercel account, already listed above).
