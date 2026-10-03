@@ -2071,7 +2071,8 @@
       "modeNow": "查詢方式：{mode}",
       "modeShort": {
         "code": "電子郵件驗證碼",
-        "name": "全名"
+        "name": "全名",
+        "pin": "全名和喜帖上的 PIN"
       },
       "notPublic": "活動尚未發布（或為私人活動），賓客暫時無法開啟座位查詢。",
       "settingsTitle": "賓客",
@@ -2082,11 +2083,13 @@
       "mode": "賓客如何查詢座位",
       "modeOption": {
         "code": "透過寄到電子郵件的驗證碼（建議）",
-        "name": "輸入全名，立即查看"
+        "name": "輸入全名，立即查看",
+        "pin": "透過全名和喜帖上印的 PIN"
       },
       "modeHint": {
         "code": "只有能讀取賓客電子郵件的人才能看到其座位，也沒有人能知道名單上有誰。",
-        "name": "入場更快，但任何知道賓客全名的人都能看到其座位。"
+        "name": "入場更快，但任何知道賓客全名的人都能看到其座位。",
+        "pin": "賓客輸入全名和其所屬群組喜帖上印的 6 位數 PIN。他們只會看到自己的桌位，絕不會看到任何人的姓名，也沒人能查出誰在名單上。"
       },
       "readOnly": "你可以查看這些設定，但無法修改。",
       "shareTitle": "分享",
@@ -2094,7 +2097,10 @@
       "openPublic": "開啟座位查詢",
       "poster": "列印座位查詢海報",
       "closedNote": "座位查詢已關閉。掃描海報的賓客會被提示稍後再來。",
-      "namePoster": "列印姓名名單海報"
+      "namePoster": "列印姓名名單海報",
+      "partyLinksTitle": "各群組連結",
+      "partyLinksHint": "每個群組喜帖上的連結和 QR 碼也能開啟該群組專屬的桌位頁面：場地圖上的桌位以及同桌的人。將他們換到別桌時，QR 碼保持不變。",
+      "partyLinksAction": "各群組連結和 QR 碼"
     },
     "map": {
       "zoomIn": "放大",
@@ -2419,7 +2425,11 @@
       "bottom": "地圖下方",
       "bottom-right": "地圖右下方"
     },
-    "yours": "{count, plural, other {你的座位：{seats}}}"
+    "yours": "{count, plural, other {你的座位：{seats}}}",
+    "yourPlace": {
+      "table": "您的桌位",
+      "row": "您的排"
+    }
   },
   "seatFinder": {
     "eyebrow": "座位查詢",
@@ -2470,9 +2480,15 @@
       "challengeUnavailable": "此裝置的查詢次數過多。請稍候一分鐘再試。",
       "closed": "此活動的座位查詢未開放。",
       "internal": "我們這邊發生了問題。",
-      "rateLimited": "索取驗證碼次數過多。請在 {minutes, plural, other {# 分鐘}}後再試。"
+      "rateLimited": "索取驗證碼次數過多。請在 {minutes, plural, other {# 分鐘}}後再試。",
+      "noMatch": "找不到符合此姓名和 PIN 的桌位。請對照喜帖確認，或詢問主人。",
+      "invalidPin": "請輸入喜帖上的 6 位數 PIN。",
+      "pinRateLimited": "此裝置查詢次數過多。請在 {minutes, plural, other {# 分鐘}}後再試。"
     },
-    "hostedBy": "贊助商：{sponsor}"
+    "hostedBy": "贊助商：{sponsor}",
+    "pinIntro": "請輸入與喜帖上相同的全名，以及喜帖上印的 6 位數 PIN。",
+    "pin": "喜帖上的 PIN",
+    "findByPin": "查詢我的桌位"
   },
   "seatFinderPoster": {
     "pageTitle": "座位查詢海報",
@@ -2485,7 +2501,8 @@
     "step2Code": "輸入你的電子郵件，我們會寄驗證碼給你。",
     "step2Name": "輸入你的全名。",
     "step3": "在場地地圖上查看你的桌號與座位。",
-    "orVisit": "或前往"
+    "orVisit": "或前往",
+    "step2Pin": "輸入您的全名和喜帖上的 PIN。"
   },
   "reports": {
     "title": "分析",
@@ -10243,7 +10260,10 @@
     },
     "questionsTitle": "幾個問題",
     "questionsHint": "主人想多了解一些情況。標為私密的回答只有主人看得到。",
-    "questionsFor": "給 {name} 的問題"
+    "questionsFor": "給 {name} 的問題",
+    "seatTitle": "查詢您的桌位",
+    "seatHint": "查看您在場地圖上的座位以及同桌的人。",
+    "seatLink": "顯示我的桌位"
   },
   "rsvpFind": {
     "metaTitle": "查詢您的喜帖",
@@ -10353,7 +10373,13 @@
     "reopenFor": "為 {party} 重新開放回覆",
     "createLinkFor": "為 {party} 建立回覆連結",
     "copy": "複製連結",
-    "copied": "連結已複製。"
+    "copied": "連結已複製。",
+    "seatTitle": "桌位頁面 QR 碼",
+    "seatHint": "此 QR 碼會開啟 {party} 的桌位頁面：場地圖上的桌位以及同桌的人。將他們換到別桌時它保持不變，因此可以印在引導卡或席位卡上。",
+    "seatQrLabel": "{party} 桌位頁面的 QR 碼",
+    "seatLinkLabel": "{party} 桌位頁面的連結",
+    "seatClosed": "開啟座位查詢（座位 → 座位查詢）後，賓客即可看到自己的桌位。",
+    "seatScan": "掃描查詢您的桌位"
   },
   "collector": {
     "metaTitle": "分享您的聯絡方式",
@@ -11068,5 +11094,39 @@
       "offer_ended": "{title} 的邀請已結束。",
       "full": "{title} 剛剛額滿。再試一次即可加入候補名單。"
     }
+  },
+  "guestSeats": {
+    "placeAt": {
+      "table": "{item} 號桌",
+      "row": "第 {item} 排"
+    },
+    "wholeEvent": "座位安排",
+    "resultTitle": "{count, plural, other {您的桌位}}",
+    "partyCount": "{count, plural, other {您群組中有 # 人坐在這裡}}",
+    "noTableTitle": "您的桌位尚未確定",
+    "noTable": "主人仍在安排座位。請在接近活動日時再來查看，或詢問主人。",
+    "unseatedCount": "{count, plural, other {您群組中有 # 人尚未安排桌位。}}",
+    "again": "查詢其他人",
+    "mapTitle": "場地圖",
+    "mapFor": "場地圖：{name}"
+  },
+  "partySeats": {
+    "metaTitle": "您的桌位",
+    "title": "{party} 的座位",
+    "intro": "您在場地圖上的桌位，以及與您同桌的人。",
+    "closedTitle": "座位安排尚未就緒",
+    "closed": "主人尚未公布座位安排。請保留此頁面或喜帖上的 QR 碼：公布後這裡會顯示您的桌位。",
+    "noChartsTitle": "您的桌位尚未確定",
+    "noCharts": "主人仍在安排座位。桌位一確定，此頁面就會顯示。",
+    "yourParty": "您群組中的人",
+    "tablemates": {
+      "table": "同桌的還有",
+      "row": "同排的還有"
+    },
+    "noTablemates": "這裡暫時沒有其他人。",
+    "unseated": "尚未安排座位：{names}",
+    "guestOf": "{name} 的同伴",
+    "keep": "此頁面一律顯示您目前的桌位：即使主人調整了您的座位，喜帖上的連結和 QR 碼也不會改變。",
+    "toRsvp": "返回您的回覆"
   }
 }

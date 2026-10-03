@@ -9,6 +9,7 @@ import { submitRegistrationFormCommand } from '@yayatoh/forms';
 import {
   guestImportAction,
   guestsOccupantDirectory,
+  guestsPartyCredentials,
   rsvpAnswersExportAction,
   rsvpAnswersPrivateExportAction,
 } from '@yayatoh/guests';
@@ -24,7 +25,7 @@ import {
 import { dsarExportAction } from '@yayatoh/privacy';
 import { registrationDecideAction } from '@yayatoh/registration';
 import { attendeeExportAction, bookingsExportAction } from '@yayatoh/reports';
-import { seatAssignAction, setOccupantDirectory } from '@yayatoh/seating';
+import { seatAssignAction, setOccupantDirectory, setPartyCredentials } from '@yayatoh/seating';
 import { surveyExportAction } from '@yayatoh/surveys';
 import { createOrgAuthorizer, orgStatusGate } from '@yayatoh/tenancy';
 import { ticketResendAction } from '@yayatoh/ticketing';
@@ -42,6 +43,8 @@ export const ports = createCommandPorts({
 setKeyVault(localKeyVault(process.env.LOCAL_KMS_KEY ?? randomBytes(32).toString('hex')));
 // M4.3a: guest seating reads the guest list through seating's OccupantDirectory port.
 setOccupantDirectory(guestsOccupantDirectory);
+// M4.4a: the guest seat finder's party links and PINs (seating's PartyCredentials port).
+setPartyCredentials(guestsPartyCredentials);
 
 /** The bulk actions the apps register, and the step command built from them. */
 export const BULK_ACTIONS = [

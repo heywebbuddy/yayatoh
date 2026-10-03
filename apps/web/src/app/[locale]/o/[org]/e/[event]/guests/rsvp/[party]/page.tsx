@@ -1,7 +1,8 @@
 import { guestListQuery, type PartyRsvpDetailDto, partyRsvpQuery, rsvpOverviewQuery } from '@yayatoh/guests';
-import { executeQuery } from '@yayatoh/kernel';
+import { executeQuery, isDomainError } from '@yayatoh/kernel';
 import { qrPath } from '@yayatoh/pdf';
 import { isProfileKey, navIncludes, navLabelKey, PROFILES } from '@yayatoh/platform';
+import { finderSettingsQuery } from '@yayatoh/seating';
 import { Card, CardHeader, PageHeader, StatusPill } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
@@ -19,7 +20,7 @@ import {
   resetRsvpPinAction,
 } from '../actions.ts';
 import { CopyLink } from '../copy-link.tsx';
-import { rsvpFindUrl, rsvpUrl } from '../links.ts';
+import { partySeatUrl, rsvpFindUrl, rsvpUrl } from '../links.ts';
 import { GuestsCrumbs } from '../nav.tsx';
 
 const UUID = /^[0-9a-f-]{36}$/;
@@ -66,6 +67,17 @@ export default async function PartyRsvpPage({
       : null;
   const url = detail?.token ? rsvpUrl(detail.token) : null;
   const qr = url ? qrPath(url) : null;
+  // M4.4a: the party's seat page, from the same link (its QR never changes as the party moves).
+  const seatUrl = detail?.token && data.modules.has('seat_finder') ? partySeatUrl(detail.token) : null;
+  const seatQr = seatUrl ? qrPath(seatUrl) : null;
+  const finderOpen = seatUrl
+    ? await executeQuery(finderSettingsQuery, { eventId: ev.id }, data.ctx, ports)
+        .then((s) => s?.publicMap ?? false)
+        .catch((err) => {
+          if (isDomainError(err)) return false;
+          throw err;
+        })
+    : false;
   const findUrl = ov.settings.nameLookup && detail?.lookupCode ? rsvpFindUrl(detail.lookupCode) : null;
   const act = (action: typeof resetRsvpPinAction, id: string, label: string, done: string, hint?: string) => (
     <div className="flex flex-col gap-2 border-b border-line pb-4 last:border-0 last:pb-0">
@@ -259,6 +271,39 @@ export default async function PartyRsvpPage({
             </Card>
           </section>
         </div>
+      ) : null}
+      {seatUrl && seatQr ? (
+        <section aria-labelledby="party-seat-heading" className="flex flex-col gap-3 print:hidden">
+          <h2 id="party-seat-heading" className="m-0 text-section text-ink">
+            {t('seatTitle')}
+          </h2>
+          <Card size="panel" className="grid items-start gap-5 sm:grid-cols-[minmax(0,1fr)_12rem]">
+            <div className="flex min-w-0 flex-col gap-3">
+              <p className="m-0 text-body text-ink-2">{t('seatHint', { party: name })}</p>
+              <CopyLink label={t('seatLinkLabel', { party: name })} url={seatUrl} />
+              {finderOpen ? null : (
+                <p className="m-0 text-caption text-ink-2" data-testid="party-seat-closed">
+                  {t('seatClosed')}
+                </p>
+              )}
+            </div>
+            <div data-theme="light" className="flex flex-col items-center gap-2 rounded-tile bg-white p-3">
+              <svg
+                role="img"
+                aria-label={t('seatQrLabel', { party: name })}
+                data-testid="party-seat-qr"
+                data-url={seatUrl}
+                viewBox={`0 0 ${seatQr.size} ${seatQr.size}`}
+                shapeRendering="crispEdges"
+                className="aspect-square w-full max-w-44 text-black"
+              >
+                <rect width={seatQr.size} height={seatQr.size} className="fill-white" />
+                <path d={seatQr.d} fill="currentColor" />
+              </svg>
+              <p className="m-0 text-caption font-bold text-black">{t('seatScan')}</p>
+            </div>
+          </Card>
+        </section>
       ) : null}
     </>
   );

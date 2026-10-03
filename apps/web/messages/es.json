@@ -2071,7 +2071,8 @@
       "modeNow": "Búsqueda: {mode}",
       "modeShort": {
         "code": "código por correo",
-        "name": "nombre completo"
+        "name": "nombre completo",
+        "pin": "nombre completo y PIN de la invitación"
       },
       "notPublic": "El evento no está publicado (o es privado), así que los invitados aún no pueden abrir el buscador.",
       "settingsTitle": "Invitados",
@@ -2082,11 +2083,13 @@
       "mode": "Cómo buscan los invitados su asiento",
       "modeOption": {
         "code": "Con un código enviado a su correo (recomendado)",
-        "name": "Al instante, por nombre completo"
+        "name": "Al instante, por nombre completo",
+        "pin": "Por nombre completo y el PIN de su invitación"
       },
       "modeHint": {
         "code": "Solo quien puede leer el correo del invitado ve su asiento, y nadie puede averiguar quién está en la lista.",
-        "name": "Más rápido en la entrada, pero cualquiera que sepa el nombre completo de un invitado puede ver dónde se sienta."
+        "name": "Más rápido en la entrada, pero cualquiera que sepa el nombre completo de un invitado puede ver dónde se sienta.",
+        "pin": "Los invitados escriben su nombre completo y el PIN de 6 dígitos impreso en la invitación de su grupo. Ven su mesa, nunca el nombre de nadie, y nadie puede averiguar quién está en la lista."
       },
       "readOnly": "Puedes ver estos ajustes, pero no cambiarlos.",
       "shareTitle": "Compártelo",
@@ -2094,7 +2097,10 @@
       "openPublic": "Abrir el buscador de asientos",
       "poster": "Imprimir cartel del buscador",
       "closedNote": "El buscador de asientos está cerrado. A quien escanee el cartel se le pedirá que vuelva más tarde.",
-      "namePoster": "Imprimir cartel con la lista de nombres"
+      "namePoster": "Imprimir cartel con la lista de nombres",
+      "partyLinksTitle": "Enlaces de los grupos",
+      "partyLinksHint": "El enlace y el código QR de la invitación de cada grupo también abren su propia página de mesa: su mesa en el plano y quién se sienta con ellos. El código QR no cambia cuando los mueves a otra mesa.",
+      "partyLinksAction": "Enlaces y códigos QR de los grupos"
     },
     "map": {
       "zoomIn": "Acercar",
@@ -2419,7 +2425,11 @@
       "bottom": "Abajo en el plano",
       "bottom-right": "Abajo a la derecha del plano"
     },
-    "yours": "{count, plural, one {Tu asiento: {seats}} other {Tus asientos: {seats}}}"
+    "yours": "{count, plural, one {Tu asiento: {seats}} other {Tus asientos: {seats}}}",
+    "yourPlace": {
+      "table": "Tu mesa",
+      "row": "Tu fila"
+    }
   },
   "seatFinder": {
     "eyebrow": "Buscador de asientos",
@@ -2470,9 +2480,15 @@
       "challengeUnavailable": "Demasiadas búsquedas desde este dispositivo. Espera un minuto e inténtalo de nuevo.",
       "closed": "El buscador de asientos no está abierto para este evento.",
       "internal": "Algo ha fallado por nuestra parte.",
-      "rateLimited": "Se pidieron demasiados códigos. Inténtalo de nuevo en {minutes, plural, one {# minuto} other {# minutos}}."
+      "rateLimited": "Se pidieron demasiados códigos. Inténtalo de nuevo en {minutes, plural, one {# minuto} other {# minutos}}.",
+      "noMatch": "No encontramos una mesa con ese nombre y PIN. Compara ambos con tu invitación o pregunta a un anfitrión.",
+      "invalidPin": "Escribe el PIN de 6 dígitos de tu invitación.",
+      "pinRateLimited": "Demasiadas búsquedas desde este dispositivo. Inténtalo de nuevo en {minutes, plural, one {# minuto} other {# minutos}}."
     },
-    "hostedBy": "Patrocinada por {sponsor}"
+    "hostedBy": "Patrocinada por {sponsor}",
+    "pinIntro": "Escribe tu nombre completo tal como aparece en tu invitación y el PIN de 6 dígitos impreso en ella.",
+    "pin": "PIN de tu invitación",
+    "findByPin": "Buscar mi mesa"
   },
   "seatFinderPoster": {
     "pageTitle": "Cartel del buscador de asientos",
@@ -2485,7 +2501,8 @@
     "step2Code": "Escribe tu correo y te enviaremos un código.",
     "step2Name": "Escribe tu nombre completo.",
     "step3": "Mira tu mesa y tu asiento en el plano.",
-    "orVisit": "O entra en"
+    "orVisit": "O entra en",
+    "step2Pin": "Escribe tu nombre completo y el PIN de tu invitación."
   },
   "reports": {
     "title": "Análisis",
@@ -10243,7 +10260,10 @@
     },
     "questionsTitle": "Algunas preguntas",
     "questionsHint": "Los anfitriones quieren saber un poco más. Las respuestas marcadas como privadas solo las ven los anfitriones.",
-    "questionsFor": "Preguntas para {name}"
+    "questionsFor": "Preguntas para {name}",
+    "seatTitle": "Encuentra tu mesa",
+    "seatHint": "Mira dónde te sientas en el plano y quién está en tu mesa.",
+    "seatLink": "Ver mi mesa"
   },
   "rsvpFind": {
     "metaTitle": "Encuentra tu invitación",
@@ -10353,7 +10373,13 @@
     "reopenFor": "Reabrir la confirmación de {party}",
     "createLinkFor": "Crear el enlace de confirmación de {party}",
     "copy": "Copiar enlace",
-    "copied": "Enlace copiado."
+    "copied": "Enlace copiado.",
+    "seatTitle": "Código QR de la página de mesa",
+    "seatHint": "Este código QR abre la página de mesa de {party}: su mesa en el plano y quién se sienta con ellos. No cambia cuando los mueves a otra mesa, así que puedes imprimirlo en tarjetas de mesa o de ubicación.",
+    "seatQrLabel": "Código QR de la página de mesa de {party}",
+    "seatLinkLabel": "Enlace de la página de mesa de {party}",
+    "seatClosed": "Los invitados verán su mesa cuando abras el buscador de asientos (Asientos → Buscador de asientos).",
+    "seatScan": "Escanea para encontrar tu mesa"
   },
   "collector": {
     "metaTitle": "Comparte tus datos de contacto",
@@ -11068,5 +11094,39 @@
       "offer_ended": "La oferta para {title} terminó.",
       "full": "{title} se acaba de llenar. Vuelve a intentarlo para unirte a la lista de espera."
     }
+  },
+  "guestSeats": {
+    "placeAt": {
+      "table": "Mesa {item}",
+      "row": "Fila {item}"
+    },
+    "wholeEvent": "Distribución de mesas",
+    "resultTitle": "{count, plural, one {Tu mesa} other {Tus mesas}}",
+    "partyCount": "{count, plural, one {# persona de tu grupo se sienta aquí} other {# personas de tu grupo se sientan aquí}}",
+    "noTableTitle": "Tu mesa aún no está asignada",
+    "noTable": "Los anfitriones todavía están organizando las mesas. Vuelve más cerca del día o pregunta a un anfitrión.",
+    "unseatedCount": "{count, plural, one {# persona de tu grupo aún no tiene mesa.} other {# personas de tu grupo aún no tienen mesa.}}",
+    "again": "Buscar a otra persona",
+    "mapTitle": "Plano del lugar",
+    "mapFor": "Plano del lugar: {name}"
+  },
+  "partySeats": {
+    "metaTitle": "Tu mesa",
+    "title": "Dónde se sienta {party}",
+    "intro": "Tu mesa en el plano del lugar y quién se sienta contigo.",
+    "closedTitle": "Las mesas aún no están listas",
+    "closed": "Los anfitriones todavía no han compartido la distribución de mesas. Guarda esta página o el código QR de tu invitación: mostrará tu mesa en cuanto lo hagan.",
+    "noChartsTitle": "Tu mesa aún no está asignada",
+    "noCharts": "Los anfitriones todavía están organizando las mesas. Esta página mostrará tu mesa en cuanto esté asignada.",
+    "yourParty": "De tu grupo",
+    "tablemates": {
+      "table": "También en esta mesa",
+      "row": "También en esta fila"
+    },
+    "noTablemates": "Nadie más está sentado aquí todavía.",
+    "unseated": "Aún sin asiento: {names}",
+    "guestOf": "Invitado de {name}",
+    "keep": "Esta página siempre muestra tu mesa actual: el enlace y el código QR de tu invitación no cambian cuando los anfitriones te mueven.",
+    "toRsvp": "Volver a tu respuesta"
   }
 }

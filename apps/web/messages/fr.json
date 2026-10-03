@@ -2071,7 +2071,8 @@
       "modeNow": "Recherche : {mode}",
       "modeShort": {
         "code": "code par e-mail",
-        "name": "nom complet"
+        "name": "nom complet",
+        "pin": "nom complet et code PIN de l’invitation"
       },
       "notPublic": "L'événement n'est pas publié (ou est privé) : les invités ne peuvent pas encore ouvrir la recherche de place.",
       "settingsTitle": "Invités",
@@ -2082,11 +2083,13 @@
       "mode": "Comment les invités cherchent leur place",
       "modeOption": {
         "code": "Avec un code envoyé par e-mail (recommandé)",
-        "name": "Immédiatement, par nom complet"
+        "name": "Immédiatement, par nom complet",
+        "pin": "Par nom complet et le code PIN de leur invitation"
       },
       "modeHint": {
         "code": "Seule une personne qui lit les e-mails de l'invité voit sa place, et personne ne peut savoir qui est sur la liste.",
-        "name": "Plus rapide à l'entrée, mais quiconque connaît le nom complet d'un invité peut voir où il est assis."
+        "name": "Plus rapide à l'entrée, mais quiconque connaît le nom complet d'un invité peut voir où il est assis.",
+        "pin": "Les invités saisissent leur nom complet et le code PIN à 6 chiffres imprimé sur l’invitation de leur groupe. Ils voient leur table, jamais le nom de quelqu’un, et personne ne peut savoir qui figure sur la liste."
       },
       "readOnly": "Vous pouvez voir ces réglages, mais pas les modifier.",
       "shareTitle": "Partager",
@@ -2094,7 +2097,10 @@
       "openPublic": "Ouvrir la recherche de place",
       "poster": "Imprimer l'affiche",
       "closedNote": "La recherche de place est fermée. Les invités qui scannent l'affiche sont invités à revenir plus tard.",
-      "namePoster": "Imprimer l'affiche des noms"
+      "namePoster": "Imprimer l'affiche des noms",
+      "partyLinksTitle": "Liens des groupes",
+      "partyLinksHint": "Le lien et le code QR de l’invitation de chaque groupe ouvrent aussi sa propre page de table : sa table sur le plan et qui est assis avec lui. Le code QR ne change pas quand vous le déplacez à une autre table.",
+      "partyLinksAction": "Liens et codes QR des groupes"
     },
     "map": {
       "zoomIn": "Zoom avant",
@@ -2419,7 +2425,11 @@
       "bottom": "En bas du plan",
       "bottom-right": "En bas à droite du plan"
     },
-    "yours": "{count, plural, one {Votre place : {seats}} other {Vos places : {seats}}}"
+    "yours": "{count, plural, one {Votre place : {seats}} other {Vos places : {seats}}}",
+    "yourPlace": {
+      "table": "Votre table",
+      "row": "Votre rangée"
+    }
   },
   "seatFinder": {
     "eyebrow": "Trouver sa place",
@@ -2470,9 +2480,15 @@
       "challengeUnavailable": "Trop de recherches depuis cet appareil. Patientez une minute puis réessayez.",
       "closed": "La recherche de place n'est pas ouverte pour cet événement.",
       "internal": "Un problème est survenu de notre côté.",
-      "rateLimited": "Trop de codes demandés. Réessayez dans {minutes, plural, one {# minute} other {# minutes}}."
+      "rateLimited": "Trop de codes demandés. Réessayez dans {minutes, plural, one {# minute} other {# minutes}}.",
+      "noMatch": "Nous n’avons trouvé aucune table pour ce nom et ce code PIN. Vérifiez-les sur votre invitation ou demandez à un hôte.",
+      "invalidPin": "Saisissez le code PIN à 6 chiffres de votre invitation.",
+      "pinRateLimited": "Trop de recherches depuis cet appareil. Réessayez dans {minutes, plural, one {# minute} other {# minutes}}."
     },
-    "hostedBy": "Table offerte par {sponsor}"
+    "hostedBy": "Table offerte par {sponsor}",
+    "pinIntro": "Saisissez votre nom complet tel qu’il figure sur votre invitation et le code PIN à 6 chiffres qui y est imprimé.",
+    "pin": "Code PIN de votre invitation",
+    "findByPin": "Trouver ma table"
   },
   "seatFinderPoster": {
     "pageTitle": "Affiche « Trouver sa place »",
@@ -2485,7 +2501,8 @@
     "step2Code": "Saisissez votre e-mail : nous vous enverrons un code.",
     "step2Name": "Saisissez votre nom complet.",
     "step3": "Voyez votre table et votre place sur le plan.",
-    "orVisit": "Ou rendez-vous sur"
+    "orVisit": "Ou rendez-vous sur",
+    "step2Pin": "Saisissez votre nom complet et le code PIN de votre invitation."
   },
   "reports": {
     "title": "Analyse",
@@ -10243,7 +10260,10 @@
     },
     "questionsTitle": "Quelques questions",
     "questionsHint": "Les hôtes aimeraient en savoir un peu plus. Les réponses indiquées comme privées ne sont vues que par les hôtes.",
-    "questionsFor": "Questions pour {name}"
+    "questionsFor": "Questions pour {name}",
+    "seatTitle": "Trouvez votre table",
+    "seatHint": "Voyez où vous êtes assis sur le plan et qui est à votre table.",
+    "seatLink": "Voir ma table"
   },
   "rsvpFind": {
     "metaTitle": "Retrouver votre invitation",
@@ -10353,7 +10373,13 @@
     "reopenFor": "Rouvrir la réponse de {party}",
     "createLinkFor": "Créer le lien de réponse de {party}",
     "copy": "Copier le lien",
-    "copied": "Lien copié."
+    "copied": "Lien copié.",
+    "seatTitle": "Code QR de la page de table",
+    "seatHint": "Ce code QR ouvre la page de table de {party} : sa table sur le plan et qui est assis avec lui. Il ne change pas quand vous le déplacez, vous pouvez donc l’imprimer sur des cartes d’accueil ou des marque-places.",
+    "seatQrLabel": "Code QR de la page de table de {party}",
+    "seatLinkLabel": "Lien de la page de table de {party}",
+    "seatClosed": "Les invités verront leur table quand vous ouvrirez le localisateur de places (Placement → Localisateur de places).",
+    "seatScan": "Scannez pour trouver votre table"
   },
   "collector": {
     "metaTitle": "Transmettez vos coordonnées",
@@ -11068,5 +11094,39 @@
       "offer_ended": "L'offre pour {title} est terminée.",
       "full": "{title} vient d'être complète. Réessayez pour rejoindre la liste d'attente."
     }
+  },
+  "guestSeats": {
+    "placeAt": {
+      "table": "Table {item}",
+      "row": "Rangée {item}"
+    },
+    "wholeEvent": "Plan de table",
+    "resultTitle": "{count, plural, one {Votre table} other {Vos tables}}",
+    "partyCount": "{count, plural, one {# personne de votre groupe est assise ici} other {# personnes de votre groupe sont assises ici}}",
+    "noTableTitle": "Votre table n’est pas encore attribuée",
+    "noTable": "Les hôtes préparent encore le plan de table. Revenez à l’approche du jour J ou demandez à un hôte.",
+    "unseatedCount": "{count, plural, one {# personne de votre groupe n’a pas encore de table.} other {# personnes de votre groupe n’ont pas encore de table.}}",
+    "again": "Chercher quelqu’un d’autre",
+    "mapTitle": "Plan du lieu",
+    "mapFor": "Plan du lieu : {name}"
+  },
+  "partySeats": {
+    "metaTitle": "Votre table",
+    "title": "Où est assis {party}",
+    "intro": "Votre table sur le plan du lieu, et qui est assis avec vous.",
+    "closedTitle": "Le plan de table n’est pas encore prêt",
+    "closed": "Les hôtes n’ont pas encore partagé le plan de table. Gardez cette page, ou le code QR de votre invitation : elle affichera votre table dès qu’ils l’auront fait.",
+    "noChartsTitle": "Votre table n’est pas encore attribuée",
+    "noCharts": "Les hôtes préparent encore le plan de table. Cette page affichera votre table dès qu’elle sera attribuée.",
+    "yourParty": "De votre groupe",
+    "tablemates": {
+      "table": "Aussi à cette table",
+      "row": "Aussi dans cette rangée"
+    },
+    "noTablemates": "Personne d’autre n’est encore placé ici.",
+    "unseated": "Pas encore placé(s) : {names}",
+    "guestOf": "Invité de {name}",
+    "keep": "Cette page affiche toujours votre table actuelle : le lien et le code QR de votre invitation ne changent pas quand les hôtes vous déplacent.",
+    "toRsvp": "Retour à votre réponse"
   }
 }
