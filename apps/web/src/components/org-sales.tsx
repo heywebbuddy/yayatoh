@@ -1,7 +1,7 @@
 import { executeQuery } from '@yayatoh/kernel';
 import { orgFinanceQuery, orgReportQuery } from '@yayatoh/reports';
 import { roleCan } from '@yayatoh/tenancy';
-import { Button, buttonClass, DatePicker, EmptyState, Input, Select, Table } from '@yayatoh/ui';
+import { Button, buttonClass, DatePicker, EmptyState, Select, Table } from '@yayatoh/ui';
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/navigation.ts';
 import { formatNumber } from '@/lib/format.ts';
