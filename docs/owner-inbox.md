@@ -282,6 +282,13 @@ Start the slow reviews early. Everything is built against fakes meanwhile; each 
   - **Revisions kept:** the newest 100 per chart; every save is one (the editor autosaves, so a long editing session makes many).
   - **PDF floor plans** are turned into an image in the organizer's browser (pdf.js, no server-side PDF parsing) and stored like any upload (4 MB, re-encoded).
   - The **layout library** is per org (no sharing between orgs or venues yet: that is the M6.14 venue portal).
+- [ ] **M6.14b venues — tenancy change, needs your approval before main; defaults to confirm (pending owner, 2026-10-03)** (labels: `db-migration`, `tenancy`):
+  - **Who is a venue.** Any org with `advanced_seating` gets the Venue portal (free in beta, P6-13); it is not limited to orgs of kind `venue`. Say if it should be.
+  - **Partners are added by the venue alone**, by the organizer's address (`/o/{slug}`). The organizer doesn't accept first: a partnership only gives them read access to plans the venue chooses to share. Owners and admins manage partners and sharing (`org:update`); everyone with events access reads the portal.
+  - **What the venue sees of an organizer's event** once the organizer uses a shared plan: its name, start (in the event's time zone), status and the organizer's name, for any status including drafts. The organizer is told this before using the plan. Nothing else (no sales, no seats, no attendees).
+  - **Copy-on-use.** The event gets its own copy of the plan; the venue's later edits never reach it, and its revisions are its own. The venue's floor plan image is not copied (images are only served from the org that owns them).
+  - **Revoking.** Unsharing a plan stops new uses on the next request; events that already use it keep their copy and stay visible to the venue. Removing a partner (a detach, not a delete) hides their events from the venue and withdraws every share at once; adding them again restores the shares.
+  - **Promoted placements**: an org with `marketing:write` promotes a marketplace listing for 7, 14 or 30 days (max 30). Up to **2** promoted listings that match the visitor's search show above the results on page 1, always labelled "Promoted". Free in beta (no charge, no cap per org yet); flag `PROMOTED_PLACEMENTS` (off in production until you switch it on). Pricing and any staff review of promotions are later.
 
 ## Phase 4 (weddings and galas)
 - [ ] **M4.1a guest list: defaults pending owner** (labels: `db-migration`, `tenancy`). Built with these defaults; say if any should change:

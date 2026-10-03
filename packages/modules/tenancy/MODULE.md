@@ -16,3 +16,4 @@ Organizations and memberships. Owns Postgres schema `tenancy`.
 - **Event teams (M4.2a, P4-8):** `EVENT_ROLE_PERMISSIONS` lists what each event role adds for one event (exact permissions or `module:*` wildcards); `eventRoleCan` never grants `platform:`, `payouts:`, `billing:`, `members:`, `api_keys:`, `audit:`, `privacy:` or `org:` permissions. The `collaborator` org role (only `org:read`) is given only by accepting an event invitation (`invitations.event_id` + `event_role`, same token rules); `GRANTABLE_ORG_ROLES` leaves it out. `EVENT_ROLE_SECTIONS` lists the console sections a team role opens.
 
 **Public surface:** `.` (commands, queries, authorizer, DTOs), `./testing` (fixtures).
+- **Venue partners (M6.14b):** a venue adds partner organizers by slug (`venue_partner` in `org_relationships`, parent = venue); removing sets `detached_at`. Names reach the venue only through `tenancy.venue_partners()` (slug and name).

@@ -20,3 +20,4 @@ settings and the legacy URL map. Owns Postgres schema `marketplace`.
   step-up (M1.2c). Removing origins and the other site settings do not.
 - `legacy_redirects` rows are written only with the platform permission
   `platform:redirects.manage` (migration tooling); `(host, source)` is globally unique on purpose.
+- **Promoted placements (M6.14b, flag `PROMOTED_PLACEMENTS`):** `promotions` (one per event, 1–30 days, only marketplace listings, never weddings). Search reads running ones through the SECURITY DEFINER `promoted_slugs(now)` and shows at most `PROMOTED_SLOTS` that match the visitor's query and filters, page 1 only, hydrated from the public read model and always labelled as promoted. Nothing is charged.
