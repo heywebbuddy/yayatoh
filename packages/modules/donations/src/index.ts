@@ -19,6 +19,8 @@ export {
   saveCharityProfileCommand,
   verifyCharityCommand,
 } from './charity.ts';
+// M6.5d: online giving per day and currency (accounting summaries).
+export { type DonationDayTotals, donationDailyTotalsTx } from './daily-totals.ts';
 // M6.1c: data-subject requests (export and erasure) for gifts, receipts and statements.
 export { donationsDataSubjects } from './data-subject.ts';
 // M4.8e: cards on file and pledge collection.
@@ -292,5 +294,3 @@ export {
   ScreenStateDto,
 } from './screen-dto.ts';
 export { type ScreenClaim, signScreenToken, verifyScreenToken } from './screen-link.ts';
-// M6.5d: online giving per day and currency (accounting summaries).
-export { type DonationDayTotals, donationDailyTotalsTx } from './daily-totals.ts';
