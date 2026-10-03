@@ -23,7 +23,21 @@ const TONE = {
   no_access: 'border-danger bg-danger-soft text-danger',
   wrong_checkpoint: 'border-danger bg-danger-soft text-danger',
   balance_due: 'border-warning bg-warning-soft text-warning',
+  // M5.6a session doors.
+  entered: 'border-success bg-success-soft text-success',
+  scanned_out: 'border-success bg-success-soft text-success',
+  not_in_room: 'border-warning bg-warning-soft text-warning',
+  not_enrolled: 'border-danger bg-danger-soft text-danger',
+  admission_level: 'border-danger bg-danger-soft text-danger',
+  capacity: 'border-warning bg-warning-soft text-warning',
 } as const;
+
+/** M5.6a: the gate behind a session door's refusal (staff may override it, with a reason). */
+const GATE_OF: Partial<Record<keyof typeof TONE, 'enrollment' | 'admission_level' | 'capacity'>> = {
+  not_enrolled: 'enrollment',
+  admission_level: 'admission_level',
+  capacity: 'capacity',
+};
 
 const newScanId = () => `web:${crypto.randomUUID()}`;
 /** The door screen's presence ping (the check-in module's `PRESENCE_PING_MS`). */
@@ -44,8 +58,8 @@ export function Scanner({
   /** M3.3a staff presence: where to tell the Command Center this member is at the doors. */
   presenceUrl?: string;
   timeZone: string;
-  /** Live entrances and zones; the choice stays put between scans. */
-  checkpoints: readonly { id: string; name: string }[];
+  /** Live entrances, zones and session doors; the choice stays put between scans. */
+  checkpoints: readonly { id: string; name: string; kind?: string }[];
   /** Checkpoint-scoped door staff: only their checkpoints, no "whole event"; they must pick one. */
   scoped?: boolean;
 }) {
@@ -53,6 +67,10 @@ export function Scanner({
   const [state, formAction, pending] = useActionState(action, { kind: 'idle' });
   const [checkpointId, setCheckpointId] = useState('');
   const stand = checkpoints.some((c) => c.id === checkpointId) ? checkpointId : '';
+  const sessionDoor = checkpoints.find((c) => c.id === stand)?.kind === 'session';
+  const [direction, setDirection] = useState<'in' | 'out'>('in');
+  /** Gates already waived for the person on screen (an override may meet the next gate). */
+  const [waived, setWaived] = useState<string[]>([]);
   const [scanId, setScanId] = useState(newScanId);
   const input = useRef<HTMLInputElement>(null);
   // While the door screen is open, report presence soon, every 30 s and when the entrance changes.
@@ -74,6 +92,9 @@ export function Scanner({
   }, [presenceUrl, stand]);
   useEffect(() => {
     if (state.kind === 'idle') return;
+    // A refusal right after an override keeps what was waived; anything else starts afresh.
+    if (state.kind !== 'outcome' || !state.override || !GATE_OF[state.outcome.result]) setWaived([]);
+    else setWaived(state.override);
     setScanId(newScanId());
     if (input.current) {
       input.current.value = '';
@@ -108,9 +129,32 @@ export function Scanner({
           </Select>
         </div>
       ) : null}
+      {sessionDoor ? (
+        <fieldset className="flex flex-col gap-1.5 self-start">
+          <legend className="text-[13px] font-bold text-ink">{t('sessionCheckin.direction')}</legend>
+          <div className="flex gap-2">
+            {(['in', 'out'] as const).map((d) => (
+              <label
+                key={d}
+                className="flex min-h-11 cursor-pointer items-center gap-2 rounded-pill border border-line-strong bg-surface px-4 has-[:checked]:border-primary has-[:checked]:bg-primary-soft"
+              >
+                <input
+                  type="radio"
+                  name="scan-direction"
+                  value={d}
+                  checked={direction === d}
+                  onChange={() => setDirection(d)}
+                />
+                {t(d === 'in' ? 'sessionCheckin.scanIn' : 'sessionCheckin.scanOut')}
+              </label>
+            ))}
+          </div>
+        </fieldset>
+      ) : null}
       <form action={formAction} className="flex flex-wrap items-end gap-3">
         <input type="hidden" name="scanId" value={scanId} />
         <input type="hidden" name="checkpointId" value={stand} />
+        {sessionDoor ? <input type="hidden" name="direction" value={direction} /> : null}
         <div className="flex min-w-0 flex-1 flex-col gap-1.5">
           <label htmlFor="scan-code" className="text-[13px] font-bold text-ink">
             {t('checkin.codeLabel')}
@@ -166,6 +210,14 @@ export function Scanner({
                 {t('checkin.firstAt', { time: time(state.outcome.firstAdmittedAt) })}
               </p>
             ) : null}
+            {typeof state.outcome.dwellMs === 'number' ? (
+              <p className="text-body">
+                {t('sessionCheckin.dwell', { minutes: Math.round(state.outcome.dwellMs / 60_000) })}
+              </p>
+            ) : null}
+            {GATE_OF[state.outcome.result] ? (
+              <p className="text-body">{t(`sessionCheckin.gateHint.${GATE_OF[state.outcome.result]}`)}</p>
+            ) : null}
             <SignalBanner count={state.outcome.openSignals} />
             {state.outcome.result === 'balance_due' ? (
               <p className="text-body">{t('checkin.balanceDueHint')}</p>
@@ -176,7 +228,11 @@ export function Scanner({
             <p className="text-body">
               {state.code === 'override_note'
                 ? t('checkin.overrideNoteRequired')
-                : t(errorMessageKey(state.code))}
+                : state.code === 'session_reason'
+                  ? t('sessionCheckin.reasonRequired')
+                  : state.code === 'nothing_to_override'
+                    ? t('sessionCheckin.nothingToOverride')
+                    : t(errorMessageKey(state.code))}
             </p>
           </div>
         ) : null}
@@ -211,6 +267,45 @@ export function Scanner({
           </div>
           <Button type="submit" variant="secondary" disabled={pending} className="self-start">
             {t('checkin.overrideSubmit')}
+          </Button>
+        </form>
+      ) : null}
+      {/* M5.6a: a session door's gate refused; staff may let them in anyway, with a reason (audited). */}
+      {state.kind === 'outcome' && GATE_OF[state.outcome.result] && state.outcome.ticket ? (
+        <form
+          action={formAction}
+          noValidate
+          aria-label={t('sessionCheckin.overrideLabel')}
+          className="flex flex-col gap-3 rounded-panel border border-line p-4"
+        >
+          <input type="hidden" name="intent" value="session_override" />
+          <input type="hidden" name="code" value={state.outcome.ticket.shortCode} />
+          <input type="hidden" name="checkpointId" value={stand} />
+          <input
+            type="hidden"
+            name="gates"
+            value={[...new Set([...waived, GATE_OF[state.outcome.result] ?? ''])].join(',')}
+          />
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="scan-session-reason" className="text-caption text-ink-2">
+              {t('sessionCheckin.overrideReason')}
+            </label>
+            <input
+              id="scan-session-reason"
+              name="note"
+              required
+              minLength={3}
+              maxLength={300}
+              autoComplete="off"
+              aria-describedby="scan-session-reason-hint"
+              className="min-h-10 w-full rounded-pill border border-line-strong bg-surface px-4 text-body"
+            />
+            <p id="scan-session-reason-hint" className="text-caption text-ink-2">
+              {t('sessionCheckin.overrideHint')}
+            </p>
+          </div>
+          <Button type="submit" variant="secondary" disabled={pending} className="self-start">
+            {t('sessionCheckin.overrideSubmit')}
           </Button>
         </form>
       ) : null}

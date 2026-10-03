@@ -22,4 +22,21 @@ export const privateColumns = columnPrivacy('badges', {
     file_key: internal('none', { why: 'a media-store key checked by its format; never in a response' }),
     error_code: 'vocab',
   },
+  printers: {
+    name: internal(),
+    adapter: 'vocab',
+    status: 'vocab',
+  },
+  print_jobs: {
+    adapter: 'vocab',
+    kind: 'vocab',
+    reason: 'vocab',
+    note: internal(),
+    status: 'vocab',
+    source: 'vocab',
+    locale: 'vocab',
+    request_key: internal(),
+    provider_job_id: internal(),
+    error_code: 'vocab',
+  },
 });

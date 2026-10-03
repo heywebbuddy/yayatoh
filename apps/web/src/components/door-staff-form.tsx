@@ -18,7 +18,7 @@ export function DoorStaffForm({
   selected = [],
 }: {
   action: (prev: DoorStaffFormState, form: FormData) => Promise<DoorStaffFormState>;
-  checkpoints: readonly { id: string; name: string; kind: 'entrance' | 'zone' }[];
+  checkpoints: readonly { id: string; name: string; kind: 'entrance' | 'zone' | 'session' }[];
   /** Add mode: the members to choose from. */
   members?: readonly { id: string; name: string }[];
   /** Edit mode: the member being edited. */
@@ -85,7 +85,13 @@ export function DoorStaffForm({
                 />
                 {c.name}
                 <span className="text-caption text-ink-2">
-                  ({c.kind === 'entrance' ? t('checkpoints.entrance') : t('checkpoints.zone')})
+                  (
+                  {c.kind === 'entrance'
+                    ? t('checkpoints.entrance')
+                    : c.kind === 'session'
+                      ? t('sessionCheckin.sessionDoor')
+                      : t('checkpoints.zone')}
+                  )
                 </span>
               </label>
             ))}

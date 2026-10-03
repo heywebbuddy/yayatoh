@@ -8,6 +8,7 @@ import {
   attendeeLabelsQuery,
   getAttendeeQuery,
 } from '@yayatoh/attendees';
+import { printingSetupQuery } from '@yayatoh/badges';
 import { contactStatsQuery, contactValueQuery } from '@yayatoh/crm';
 import { executeQuery, formatMoney, isDomainError, money } from '@yayatoh/kernel';
 import { ticketCancelBulk } from '@yayatoh/orders';
@@ -50,6 +51,7 @@ import {
 import { X } from 'lucide-react';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { AutoRefresh } from '@/components/auto-refresh.tsx';
+import { BadgePrintPanel } from '@/components/badge-print-panel.tsx';
 import { BulkFields, type SeatTarget } from '@/components/bulk-fields.tsx';
 import { ClaimLinkForm } from '@/components/claim-link-form.tsx';
 import { ContactStatsHeader } from '@/components/contact-stats.tsx';
@@ -142,6 +144,7 @@ export default async function AttendeesPage({
     opk?: string;
     batch?: string;
     bulkError?: string;
+    printed?: string;
   }>;
 }) {
   const { locale, org, event } = await params;
@@ -156,7 +159,7 @@ export default async function AttendeesPage({
   const distribution = oneOf(DISTRIBUTION_FILTERS, sp.distribution);
   const page = Math.max(1, Math.min(10_000, Number.parseInt(sp.page ?? '1', 10) || 1));
   setRequestLocale(locale);
-  const { data, event: real, can } = await loadEvent(org, event, 'attendees');
+  const { data, event: real, can, opens } = await loadEvent(org, event, 'attendees');
   const t = await getTranslations();
   const profile = isProfileKey(real.profile) ? real.profile : 'other';
   const needle = q.trim().toLowerCase();
@@ -383,6 +386,11 @@ export default async function AttendeesPage({
   const timelineValue =
     timeline && roleCan(data.role, 'finance:read')
       ? await executeQuery(contactValueQuery, { contactId: timeline.contactId }, data.ctx, ports)
+      : null;
+  // M5.5b onsite reprint: the badge panel, where the event prints badges and the member works the desk.
+  const badgePrinting =
+    hasReal && selectedTicketId && canWrite && opens('badges') && data.modules.has('badges')
+      ? await executeQuery(printingSetupQuery, { eventId: real.id }, data.ctx, ports)
       : null;
   const when = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeZone: real.timezone });
   const filtered = Boolean(
@@ -912,6 +920,20 @@ export default async function AttendeesPage({
                   submitLabel={t('distribution.create')}
                 />
               </section>
+            ) : null}
+            {badgePrinting && selectedTicketId && selectedRecord ? (
+              <BadgePrintPanel
+                org={org}
+                event={event}
+                eventId={real.id}
+                ticketId={selectedTicketId}
+                timeZone={real.timezone}
+                ctx={data.ctx}
+                printing={badgePrinting}
+                back={{ to: 'attendee', attendeeId: selectedRecord.id }}
+                printedJobId={sp.printed && /^[0-9a-f-]{36}$/.test(sp.printed) ? sp.printed : undefined}
+                headingId="badge-heading"
+              />
             ) : null}
             {timeline && timeline.items.length > 0 ? (
               <section aria-labelledby="history-heading" className="flex flex-col gap-2">

@@ -9,7 +9,7 @@ import {
 } from './dto.ts';
 import { unlistedExhibitorIdsTx } from './exhibitor-portal.ts';
 import { exhibitorsOf, speakersOf, sponsorsOf, sponsorTiersOf } from './people.ts';
-import { currentPublicSessionsTx, servedPublicSessionsTx } from './public-session.ts';
+import { currentPublicSessionsTx, draftOnlySpeakerIdsTx, servedPublicSessionsTx } from './public-session.ts';
 
 /**
  * The public program of an event that has a public page. Callers resolve the target first
@@ -21,7 +21,9 @@ export async function publicProgram(target: EventTarget): Promise<PublicProgramD
     const eventId = target.eventId;
     // M5.2a: a published agenda serves its snapshot; a draft serves no sessions.
     const sessions = await servedPublicSessionsTx(tx, eventId, () => currentPublicSessionsTx(tx, eventId));
-    const people = await speakersOf(tx, eventId);
+    // M5.3b: a speaker whose only sessions are drafts (an accepted proposal) is not announced yet.
+    const unannounced = await draftOnlySpeakerIdsTx(tx, eventId);
+    const people = (await speakersOf(tx, eventId)).filter((p) => !unannounced.has(p.id));
     // M5.4a: exhibitors the organizer unlisted never reach the public page.
     const unlisted = await unlistedExhibitorIdsTx(tx, eventId);
     const exhibitorList = (await exhibitorsOf(tx, eventId)).filter((x) => !unlisted.has(x.id));

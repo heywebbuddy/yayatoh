@@ -121,6 +121,7 @@ export default async function RevisionsPage({
         active="revisions"
         finder={data.modules.has('seat_finder')}
         selection
+        guests={data.modules.has('guests')}
         date={dateId}
       />
       <SeatingDatePicker

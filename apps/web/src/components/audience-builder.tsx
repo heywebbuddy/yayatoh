@@ -77,6 +77,8 @@ function newCondition(type: ConditionType, events: readonly BuilderEvent[], curr
       return { type, metric: 'engagement', op: 'gte', value: 50 };
     case 'ltv':
       return { type, currency, op: 'gt', amountMinor: 0 };
+    case 'engagement':
+      return { type, scope: eventScope, op: 'gte', value: 10 };
   }
 }
 
@@ -854,6 +856,29 @@ function ConditionEditor({ node, path, ...p }: EditorProps & { node: Draft; path
                 value={Number(node.amountMinor) / 100}
                 onChange={(e) =>
                   put({ amountMinor: Math.max(0, Math.round(Number(e.target.value || 0) * 100)) })
+                }
+              />,
+            )}
+          </>
+        ) : null}
+        {node.type === 'engagement' ? (
+          <>
+            {scope ? <ScopeEditor scope={scope} put={(s) => put({ scope: s })} {...p} /> : null}
+            {field(
+              t('comparison'),
+              select(String(node.op), ops, (v) => put({ op: v })),
+            )}
+            {field(
+              t('engagementScore'),
+              <input
+                type="number"
+                min={0}
+                max={1_000_000}
+                step={1}
+                className={SELECT}
+                value={Number(node.value)}
+                onChange={(e) =>
+                  put({ value: Math.min(1_000_000, Math.max(0, Math.floor(Number(e.target.value || 0)))) })
                 }
               />,
             )}

@@ -11,6 +11,7 @@ import { donationsDataSubjects } from '@yayatoh/donations';
 import { engagementDataSubjects } from '@yayatoh/engagement';
 import { eventsDataSubjects } from '@yayatoh/events';
 import { formsDataSubjects } from '@yayatoh/forms';
+import { galleryDataSubjects } from '@yayatoh/gallery';
 import { guestsDataSubjects } from '@yayatoh/guests';
 import { integrationsDataSubjects } from '@yayatoh/integrations';
 import { marketingDataSubjects } from '@yayatoh/marketing';
@@ -63,6 +64,7 @@ export const DATA_SUBJECT_CONTRIBUTORS = [
   integrationsDataSubjects,
   donationsDataSubjects,
   engagementDataSubjects,
+  galleryDataSubjects,
   badgesDataSubjects,
   automationsDataSubjects,
   campaignsDataSubjects,

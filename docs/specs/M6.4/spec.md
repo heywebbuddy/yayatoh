@@ -242,7 +242,7 @@ scopes. Fixture org rows for `sheet_links` and `sync_conflicts` (a linked sheet 
 | E2E keyboard only, axe both themes, RTL, viewer refused | e2e › "keyboard only…", "renders right-to-left in Arabic", "a viewer cannot open the import wizard"; `expectAccessibleBothModes` on the wizard, Sheets section and inbox |
 
 ### 6. Migration
-`packages/db/drizzle/0123_silly_maverick.sql` (renumbered at merge): `integrations.sheet_links`
+`packages/db/drizzle/0140_uneven_lilandra.sql` (renumbered at merge): `integrations.sheet_links`
 and `integrations.sync_conflicts` (RLS/FORCE, policies, org-leading indexes, composite FKs;
 generated). Hand-written: the widened `sync_errors_step_check` (adds `conflict`) added `NOT VALID`
 then validated; `sheet_links_event_fk` → `events.events (org_id, id)`.

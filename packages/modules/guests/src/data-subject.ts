@@ -5,6 +5,7 @@ import {
   defineDataSubjectContributor,
   ERASED_NAME,
   keyVault,
+  notSubject,
   REDACT,
   refsOf,
   type SubjectErasure,
@@ -141,6 +142,8 @@ export const guestsDataSubjects = defineDataSubjectContributor({
     'guests.import_rows': REDACT,
     'guests.import_batches': REDACT,
     'guests.collector_submissions': DELETE,
+    'guests.sites': notSubject("the host's own guest website copy (title and welcome text)"),
+    'guests.site_blocks': notSubject("the host's own guest website sections (story, schedule, travel)"),
   },
   async resolve(tx, s): Promise<SubjectRefs> {
     const ids = await guestIdsTx(tx, s);

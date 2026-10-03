@@ -443,10 +443,10 @@ describe('media: quota and deletion', () => {
         ),
       ).rejects.toMatchObject({ code: 'conflict', details: { reason: 'quota_exceeded' } });
       // The failed upload left no files behind. (M5.3a portal files are referenced by media.portal_files,
-      // M6.1c data-subject archives by privacy.dsar_requests.)
+      // M6.1c data-subject archives by privacy.dsar_requests, M4.5b gallery photos by gallery.variants.)
       const [orphans] = await withTenant(systemCtx(a.org.id), (tx) =>
         tx.execute<{ n: number }>(
-          sql`select count(*)::int as n from media.blobs b where not exists (select 1 from media.variants v where b.key = v.org_id::text || '/' || v.asset_id::text || '/' || v.file_name) and not exists (select 1 from media.portal_files f where f.storage_key = b.key) and not exists (select 1 from privacy.dsar_requests r where r.export_key = b.key)`,
+          sql`select count(*)::int as n from media.blobs b where not exists (select 1 from media.variants v where b.key = v.org_id::text || '/' || v.asset_id::text || '/' || v.file_name) and not exists (select 1 from media.portal_files f where f.storage_key = b.key) and not exists (select 1 from privacy.dsar_requests r where r.export_key = b.key) and not exists (select 1 from gallery.variants g where b.key = g.org_id::text || '/' || g.item_id::text || '/' || g.file_name)`,
         ),
       );
       expect(orphans?.n).toBe(0);

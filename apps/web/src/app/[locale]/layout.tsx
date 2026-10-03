@@ -1,14 +1,16 @@
 import { RTL_LOCALES } from '@yayatoh/contracts';
 import { UI_STRING_KEYS, UiLocaleProvider } from '@yayatoh/ui';
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { connection } from 'next/server';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
-import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { MaintenanceBanner } from '@/components/maintenance-banner.tsx';
 import { routing } from '@/i18n/routing.ts';
 import { fontVariables } from '@/lib/fonts.ts';
+import { INTL_SCOPE_HEADER, scopedMessages } from '@/lib/intl-scope.ts';
 import { currentTheme } from '@/server/theme.ts';
 import '../globals.css';
 
@@ -46,12 +48,14 @@ export default async function LocaleLayout({
   // The words the form controls say themselves (U1), with the locale for dates and digits.
   const tf = await getTranslations({ locale, namespace: 'formControls' });
   const uiStrings = Object.fromEntries(UI_STRING_KEYS.map((k) => [k, tf.raw(k) as string]));
+  // M4.7a: a scoped page (proxy.ts) sends its client components only the namespaces it needs.
+  const messages = scopedMessages(await getMessages(), (await headers()).get(INTL_SCOPE_HEADER));
   return (
     <html lang={locale} dir={dir} data-theme={theme} className={fontVariables}>
       <body className="min-h-dvh bg-page text-ink antialiased">
         {/* Platform-wide read-only freeze (M2.5a): on every page, public ones included. */}
         <MaintenanceBanner locale={locale} />
-        <NextIntlClientProvider>
+        <NextIntlClientProvider {...(messages ? { messages } : {})}>
           <UiLocaleProvider locale={locale} strings={uiStrings}>
             {children}
           </UiLocaleProvider>

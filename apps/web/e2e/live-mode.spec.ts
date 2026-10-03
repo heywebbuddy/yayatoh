@@ -137,6 +137,8 @@ test.describe('Command Center live mode (M3.3a)', () => {
     expect(await shown(page)).toEqual([
       'checkins',
       'alerts',
+      // M5.9a (these are conferences): session rooms live; session fill, exhibitors and sponsors.
+      'sessionAttendance',
       'liveFeed',
       'checkinSpeed',
       'capacity',
@@ -146,6 +148,9 @@ test.describe('Command Center live mode (M3.3a)', () => {
       'staffPresence',
       'assistance',
       'seatFill',
+      'sessionFill',
+      'exhibitorActivity',
+      'sponsorActivity',
       'sales',
       'tickets',
       'timeline',
@@ -404,6 +409,7 @@ test.describe('Command Center live mode (M3.3a)', () => {
       'devices',
       'seatFill',
       'alerts',
+      'sessionAttendance',
       'liveFeed',
       'checkinSpeed',
       'capacity',
