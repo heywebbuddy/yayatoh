@@ -3963,7 +3963,8 @@
       "orders_refund": "Rimborsare gli ordini",
       "attendees_read": "Leggere i partecipanti",
       "attendees_write": "Modificare i partecipanti e reinviare i biglietti",
-      "checkin_scan": "Scansionare i biglietti"
+      "checkin_scan": "Scansionare i biglietti",
+      "webhooks_manage": "Aggiungere e rimuovere endpoint webhook (trigger di Make e n8n)"
     },
     "expiry": "Scade",
     "expiryHint": "Una chiave che scade va ruotata prima. Più breve è più sicuro.",
@@ -12057,6 +12058,36 @@
       "waitlist_closed": "{title} è al completo e la sua lista d'attesa si è chiusa 24 ore prima della sessione.",
       "offer_ended": "L'offerta per {title} è scaduta.",
       "full": "{title} si è appena riempita. Riprova per entrare in lista d'attesa."
+    },
+    "calendar": {
+      "title": "Google Calendar",
+      "off": "Tieni questo programma nel tuo Google Calendar. Le sessioni che aggiungi o togli, e ogni cambio di orario o sala, si aggiornano da sole.",
+      "privacy": "Aggiungiamo al tuo calendario solo le sessioni di questo evento. Non leggiamo mai gli altri tuoi eventi.",
+      "connect": "Aggiungi a Google Calendar",
+      "reconnect": "Collega di nuovo",
+      "pending": "In attesa della conferma di Google. Se hai chiuso quella finestra, collega di nuovo.",
+      "active": "{count, plural, =0 {Sincronizzazione con il tuo Google Calendar. Ancora nessuna sessione.} one {Sincronizzazione con il tuo Google Calendar: c’è # sessione.} other {Sincronizzazione con il tuo Google Calendar: ci sono # sessioni.}}",
+      "lastSync": "Ultimo aggiornamento: {when}",
+      "neverSynced": "Il primo aggiornamento è in arrivo.",
+      "syncNow": "Aggiorna ora",
+      "syncing": "Aggiornamento in arrivo",
+      "stop": "Interrompi la sincronizzazione",
+      "stopped": "La sincronizzazione è disattivata. Le sessioni già nel tuo calendario restano lì.",
+      "revokedByGoogle": "Google non accetta più questo collegamento, quindi gli aggiornamenti si sono fermati. Collega di nuovo per continuare.",
+      "done": {
+        "queued": "Aggiornamento in arrivo. Il tuo calendario cambierà tra un momento.",
+        "already": "Un aggiornamento è già in arrivo.",
+        "stopped": "Sincronizzazione interrotta. Le sessioni già nel tuo calendario restano lì."
+      },
+      "notice": {
+        "connected": "Collegato. Le tue sessioni compariranno nel tuo Google Calendar tra un momento.",
+        "denied": "Google Calendar non è stato collegato.",
+        "expired": "Quel link di collegamento è scaduto. Riprova.",
+        "unavailable": "La sincronizzazione del calendario non è disponibile per questo evento.",
+        "provider_unavailable": "Impossibile raggiungere Google. Riprova tra un momento.",
+        "rate_limited": "Troppi tentativi. Attendi qualche minuto e riprova.",
+        "conflict": "Il tuo calendario è già collegato."
+      }
     }
   },
   "people": {
@@ -12846,6 +12877,9 @@
     "connectors": {
       "demo": {
         "description": "Un’app contatti di prova per provare le integrazioni: i contatti si sincronizzano in entrambe le direzioni con il tuo CRM. Solo negli ambienti di test."
+      },
+      "google_calendar": {
+        "description": "Ogni sessione dei tuoi eventi attivi in un Google Calendar, sempre aggiornata: le sessioni spostate si spostano e quelle annullate spariscono. Gli orari sono nel fuso orario di ogni evento."
       }
     },
     "sandboxBadge": "Prova",
@@ -12865,11 +12899,19 @@
     "readOnly": "Solo proprietari e amministratori possono collegare o modificare le integrazioni.",
     "breadcrumb": "Percorso di navigazione",
     "objects": {
-      "contacts": "Contatti"
+      "contacts": "Contatti",
+      "sessions": "Sessioni"
     },
     "fields": {
       "email": "Email",
-      "name": "Nome"
+      "name": "Nome",
+      "title": "Titolo",
+      "description": "Descrizione",
+      "event_name": "Evento",
+      "room": "Sala",
+      "starts_at": "Inizio",
+      "ends_at": "Fine",
+      "time_zone": "Fuso orario"
     },
     "status": {
       "none": "Non collegata",
@@ -13020,7 +13062,8 @@
       "paused": "Interrotta dalla pausa",
       "sync_failed": "La sincronizzazione non è riuscita",
       "unknown_connector": "Questa integrazione non è più disponibile",
-      "other": "Errore ({code})"
+      "other": "Errore ({code})",
+      "remove_failed": "Impossibile rimuoverlo presso il provider"
     },
     "inbox": {
       "title": "Errori di integrazione",

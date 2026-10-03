@@ -3963,7 +3963,8 @@
       "orders_refund": "Bestellungen erstatten",
       "attendees_read": "Teilnehmende lesen",
       "attendees_write": "Teilnehmende ändern und Tickets erneut senden",
-      "checkin_scan": "Tickets scannen"
+      "checkin_scan": "Tickets scannen",
+      "webhooks_manage": "Webhook-Endpunkte hinzufügen und entfernen (Make- und n8n-Trigger)"
     },
     "expiry": "Läuft ab",
     "expiryHint": "Ein ablaufender Schlüssel muss vorher rotiert werden. Kürzer ist sicherer.",
@@ -12057,6 +12058,36 @@
       "waitlist_closed": "{title} ist ausgebucht und die Warteliste wurde 24 Stunden vor der Session geschlossen.",
       "offer_ended": "Das Angebot für {title} ist abgelaufen.",
       "full": "{title} ist gerade voll geworden. Versuche es erneut, um auf die Warteliste zu kommen."
+    },
+    "calendar": {
+      "title": "Google Kalender",
+      "off": "Halten Sie diesen Ablauf in Ihrem Google Kalender. Sessions, die Sie hinzufügen oder abwählen, und jede Änderung von Zeit oder Raum werden automatisch übernommen.",
+      "privacy": "Wir fügen Ihrem Kalender nur die Sessions dieser Veranstaltung hinzu. Ihre anderen Termine lesen wir nie.",
+      "connect": "Zu Google Kalender hinzufügen",
+      "reconnect": "Erneut verbinden",
+      "pending": "Wir warten auf die Bestätigung von Google. Falls Sie das Fenster geschlossen haben, verbinden Sie erneut.",
+      "active": "{count, plural, =0 {Wird mit Ihrem Google Kalender synchronisiert. Noch keine Sessions darin.} one {Wird mit Ihrem Google Kalender synchronisiert: # Session ist darin.} other {Wird mit Ihrem Google Kalender synchronisiert: # Sessions sind darin.}}",
+      "lastSync": "Zuletzt aktualisiert {when}",
+      "neverSynced": "Die erste Aktualisierung ist unterwegs.",
+      "syncNow": "Jetzt aktualisieren",
+      "syncing": "Aktualisierung unterwegs",
+      "stop": "Synchronisierung beenden",
+      "stopped": "Die Synchronisierung ist aus. Sessions, die schon in Ihrem Kalender sind, bleiben dort.",
+      "revokedByGoogle": "Google akzeptiert diese Verbindung nicht mehr, daher wurden die Aktualisierungen beendet. Verbinden Sie erneut, um fortzufahren.",
+      "done": {
+        "queued": "Aktualisierung unterwegs. Ihr Kalender ändert sich gleich.",
+        "already": "Eine Aktualisierung ist bereits unterwegs.",
+        "stopped": "Synchronisierung beendet. Sessions, die schon in Ihrem Kalender sind, bleiben dort."
+      },
+      "notice": {
+        "connected": "Verbunden. Ihre Sessions erscheinen gleich in Ihrem Google Kalender.",
+        "denied": "Google Kalender wurde nicht verbunden.",
+        "expired": "Dieser Verbindungslink ist abgelaufen. Versuchen Sie es erneut.",
+        "unavailable": "Die Kalendersynchronisierung ist für diese Veranstaltung nicht verfügbar.",
+        "provider_unavailable": "Google war nicht erreichbar. Versuchen Sie es gleich noch einmal.",
+        "rate_limited": "Zu viele Versuche. Warten Sie ein paar Minuten und versuchen Sie es erneut.",
+        "conflict": "Ihr Kalender ist bereits verbunden."
+      }
     }
   },
   "people": {
@@ -12846,6 +12877,9 @@
     "connectors": {
       "demo": {
         "description": "Eine Sandbox-Kontakte-App zum Ausprobieren: Kontakte werden in beide Richtungen mit deinem CRM abgeglichen. Nur in Testumgebungen."
+      },
+      "google_calendar": {
+        "description": "Jede Session Ihrer laufenden Veranstaltungen in einem Google Kalender, immer aktuell: verschobene Sessions wandern mit, abgesagte verschwinden. Zeiten erscheinen in der Zeitzone der jeweiligen Veranstaltung."
       }
     },
     "sandboxBadge": "Sandbox",
@@ -12865,11 +12899,19 @@
     "readOnly": "Nur Inhaber und Admins können Integrationen verbinden oder ändern.",
     "breadcrumb": "Brotkrümelnavigation",
     "objects": {
-      "contacts": "Kontakte"
+      "contacts": "Kontakte",
+      "sessions": "Sessions"
     },
     "fields": {
       "email": "E-Mail",
-      "name": "Name"
+      "name": "Name",
+      "title": "Titel",
+      "description": "Beschreibung",
+      "event_name": "Veranstaltung",
+      "room": "Raum",
+      "starts_at": "Beginn",
+      "ends_at": "Ende",
+      "time_zone": "Zeitzone"
     },
     "status": {
       "none": "Nicht verbunden",
@@ -13020,7 +13062,8 @@
       "paused": "Durch Pausieren gestoppt",
       "sync_failed": "Der Abgleich ist fehlgeschlagen",
       "unknown_connector": "Diese Integration ist nicht mehr verfügbar",
-      "other": "Fehler ({code})"
+      "other": "Fehler ({code})",
+      "remove_failed": "Konnte beim Anbieter nicht entfernt werden"
     },
     "inbox": {
       "title": "Integrationsfehler",

@@ -7,7 +7,7 @@ import { and, desc, eq, gt, inArray, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { CONNECT_STATE_TTL_MS, cancelActiveRunsTx, initialInterval, seedMappingsTx } from './connections.ts';
 import { googleCalendarPersonalConnector } from './connectors/google-calendar.ts';
-import { LIVE_STATUSES, RUN_STATUSES } from './domain/sync.ts';
+import { LIVE_STATUSES, REVOKE_REASONS, RUN_STATUSES } from './domain/sync.ts';
 import { newState, sha256 } from './hash.ts';
 import { connections, recordLinks, syncRuns } from './schema.ts';
 
@@ -35,6 +35,8 @@ export const PersonalCalendarDto = z.object({
   entries: z.int(),
   /** Whether a sync is queued or running. */
   syncing: z.boolean(),
+  /** Who ended a revoked one: they stopped it (`user`), or Google refused it (`provider`). */
+  revokedBy: z.enum(REVOKE_REASONS).nullable(),
 });
 export type PersonalCalendarDto = z.infer<typeof PersonalCalendarDto>;
 export const personalCalendarSerializer = defineSerializer(
@@ -95,6 +97,7 @@ export const personalCalendarQuery = tenantQuery({
         state === 'off' ? null : ((live?.lastSyncStatus as PersonalCalendarDto['lastSyncStatus']) ?? null),
       entries: state === 'active' || state === 'paused' ? (entries?.n ?? 0) : 0,
       syncing: Boolean(busy),
+      revokedBy: state === 'revoked' ? ((live?.revokeReason as PersonalCalendarDto['revokedBy']) ?? null) : null,
     });
   },
 });

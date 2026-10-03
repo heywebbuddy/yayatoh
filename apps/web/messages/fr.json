@@ -3963,7 +3963,8 @@
       "orders_refund": "Rembourser les commandes",
       "attendees_read": "Lire les participants",
       "attendees_write": "Modifier les participants et renvoyer les billets",
-      "checkin_scan": "Scanner les billets"
+      "checkin_scan": "Scanner les billets",
+      "webhooks_manage": "Ajouter et supprimer des points de terminaison webhook (déclencheurs Make et n8n)"
     },
     "expiry": "Expire",
     "expiryHint": "Une clé qui expire doit être renouvelée avant. Plus court, c’est plus sûr.",
@@ -12057,6 +12058,36 @@
       "waitlist_closed": "{title} est complète et sa liste d'attente a fermé 24 heures avant la session.",
       "offer_ended": "L'offre pour {title} est terminée.",
       "full": "{title} vient d'être complète. Réessayez pour rejoindre la liste d'attente."
+    },
+    "calendar": {
+      "title": "Google Agenda",
+      "off": "Gardez ce programme dans votre Google Agenda. Les sessions que vous ajoutez ou retirez, et tout changement d’horaire ou de salle, suivent automatiquement.",
+      "privacy": "Nous ajoutons uniquement les sessions de cet événement à votre agenda. Nous ne lisons jamais vos autres événements.",
+      "connect": "Ajouter à Google Agenda",
+      "reconnect": "Se reconnecter",
+      "pending": "En attente de la confirmation de Google. Si vous avez fermé cette fenêtre, reconnectez-vous.",
+      "active": "{count, plural, =0 {Synchronisation avec votre Google Agenda. Aucune session pour l’instant.} one {Synchronisation avec votre Google Agenda : # session y figure.} other {Synchronisation avec votre Google Agenda : # sessions y figurent.}}",
+      "lastSync": "Dernière mise à jour : {when}",
+      "neverSynced": "La première mise à jour est en cours.",
+      "syncNow": "Mettre à jour maintenant",
+      "syncing": "Mise à jour en cours",
+      "stop": "Arrêter la synchronisation",
+      "stopped": "La synchronisation est désactivée. Les sessions déjà dans votre agenda y restent.",
+      "revokedByGoogle": "Google n’accepte plus cette connexion, les mises à jour se sont donc arrêtées. Reconnectez-vous pour continuer.",
+      "done": {
+        "queued": "Mise à jour en cours. Votre agenda change dans un instant.",
+        "already": "Une mise à jour est déjà en cours.",
+        "stopped": "Synchronisation arrêtée. Les sessions déjà dans votre agenda y restent."
+      },
+      "notice": {
+        "connected": "Connecté. Vos sessions apparaîtront dans votre Google Agenda dans un instant.",
+        "denied": "Google Agenda n’a pas été connecté.",
+        "expired": "Ce lien de connexion a expiré. Réessayez.",
+        "unavailable": "La synchronisation de l’agenda n’est pas disponible pour cet événement.",
+        "provider_unavailable": "Google est injoignable. Réessayez dans un instant.",
+        "rate_limited": "Trop de tentatives. Patientez quelques minutes, puis réessayez.",
+        "conflict": "Votre agenda est déjà connecté."
+      }
     }
   },
   "people": {
@@ -12846,6 +12877,9 @@
     "connectors": {
       "demo": {
         "description": "Une appli de contacts de test pour essayer les intégrations : les contacts se synchronisent dans les deux sens avec votre CRM. Environnements de test uniquement."
+      },
+      "google_calendar": {
+        "description": "Chaque session de vos événements en cours dans un Google Agenda, toujours à jour : les sessions déplacées suivent et les sessions annulées disparaissent. Les horaires s'affichent dans le fuseau horaire de chaque événement."
       }
     },
     "sandboxBadge": "Test",
@@ -12865,11 +12899,19 @@
     "readOnly": "Seuls les propriétaires et les admins peuvent connecter ou modifier des intégrations.",
     "breadcrumb": "Fil d’Ariane",
     "objects": {
-      "contacts": "Contacts"
+      "contacts": "Contacts",
+      "sessions": "Sessions"
     },
     "fields": {
       "email": "E-mail",
-      "name": "Nom"
+      "name": "Nom",
+      "title": "Titre",
+      "description": "Description",
+      "event_name": "Événement",
+      "room": "Salle",
+      "starts_at": "Début",
+      "ends_at": "Fin",
+      "time_zone": "Fuseau horaire"
     },
     "status": {
       "none": "Non connectée",
@@ -13020,7 +13062,8 @@
       "paused": "Arrêtée par la mise en pause",
       "sync_failed": "La synchro a échoué",
       "unknown_connector": "Cette intégration n’est plus disponible",
-      "other": "Erreur ({code})"
+      "other": "Erreur ({code})",
+      "remove_failed": "Impossible de supprimer chez le fournisseur"
     },
     "inbox": {
       "title": "Erreurs d’intégration",

@@ -1,13 +1,17 @@
+import { type PersonalCalendarDto, personalCalendarQuery } from '@yayatoh/integrations';
 import { createCtx, executeQuery, isDomainError } from '@yayatoh/kernel';
 import { manageTokenOrg } from '@yayatoh/orders';
 import { type MySessionDto, myScheduleQuery } from '@yayatoh/registration';
-import { EmptyState, filterChipClass, Label, PageHeader, StatusPill } from '@yayatoh/ui';
+import { Alert, Button, EmptyState, filterChipClass, Label, PageHeader, StatusPill } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { ScheduleSessionActions } from '@/components/my-schedule.tsx';
+import { CalendarControls } from '@/components/schedule-calendar.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { ports } from '@/server/ports.ts';
+import { integrationAuth } from '@/server/integrations.ts';
 import { scheduleAction } from './actions.ts';
+import { calendarAction, connectCalendarAction } from './calendar-actions.ts';
 
 const TONE = {
   included: 'brand',
@@ -36,10 +40,10 @@ export default async function MySchedulePage({
   searchParams,
 }: {
   params: Promise<{ locale: string; token: string }>;
-  searchParams: Promise<{ registrant?: string }>;
+  searchParams: Promise<{ registrant?: string; calendar?: string }>;
 }) {
   const { locale, token } = await params;
-  const { registrant } = await searchParams;
+  const { registrant, calendar: calendarNotice } = await searchParams;
   setRequestLocale(locale);
   const orgId = await manageTokenOrg(token);
   if (!orgId) notFound();
@@ -77,6 +81,16 @@ export default async function MySchedulePage({
     days.set(k, [...(days.get(k) ?? []), s]);
   }
   const me = data.registrants.find((r) => r.id === data.registrantId);
+  // M6.5c: personal Google Calendar push (hidden where integrations are off or not in the plan).
+  const calendar: PersonalCalendarDto | null =
+    me && integrationAuth()
+      ? await executeQuery(personalCalendarQuery, { token, registrantId: me.id }, createCtx({ orgId }), ports).catch(
+          (err) => {
+            if (isDomainError(err)) return null;
+            throw err;
+          },
+        )
+      : null;
   const count = (states: readonly MySessionDto['state'][]) =>
     data.sessions.filter((s) => states.includes(s.state)).length;
   const stateLabel = (s: MySessionDto) =>
@@ -128,6 +142,16 @@ export default async function MySchedulePage({
               waiting: count(['waiting', 'offered']),
             })}
           </p>
+          {calendar && me ? (
+            <CalendarPanel
+              token={token}
+              registrantId={me.id}
+              calendar={calendar}
+              notice={calendarNotice ?? null}
+              locale={locale}
+              timezone={data.timezone}
+            />
+          ) : null}
           {[...days].map(([label, list]) => (
             <section key={label} aria-label={label} className="flex flex-col gap-3">
               <h2 className="m-0 text-section text-ink">{label}</h2>
@@ -164,5 +188,82 @@ export default async function MySchedulePage({
         </>
       )}
     </main>
+  );
+}
+
+const NOTICE_TONE = {
+  connected: 'success',
+  denied: 'info',
+  expired: 'warning',
+  unavailable: 'warning',
+  provider_unavailable: 'warning',
+  rate_limited: 'warning',
+  conflict: 'info',
+} as const;
+
+/**
+ * M6.5c: keep this schedule in the registrant's own Google Calendar. Off: what it does and the
+ * one button; connected: how many sessions are on it, the last update, update now and stop;
+ * stopped by Google: connect again. Notices from the consent round trip arrive as `?calendar=`.
+ */
+async function CalendarPanel({
+  token,
+  registrantId,
+  calendar,
+  notice,
+  locale,
+  timezone,
+}: {
+  token: string;
+  registrantId: string;
+  calendar: PersonalCalendarDto;
+  notice: string | null;
+  locale: string;
+  timezone: string;
+}) {
+  const t = await getTranslations('mySchedule.calendar');
+  const when = new Intl.DateTimeFormat(locale, { timeZone: timezone, dateStyle: 'medium', timeStyle: 'short' });
+  const tone = notice && notice in NOTICE_TONE ? NOTICE_TONE[notice as keyof typeof NOTICE_TONE] : null;
+  const connect = (label: string) => (
+    <form action={connectCalendarAction.bind(null, token, registrantId)}>
+      <Button type="submit" size="lg">
+        {label}
+      </Button>
+    </form>
+  );
+  return (
+    <section id="calendar" aria-labelledby="calendar-heading" className={panel}>
+      <h2 id="calendar-heading" className="m-0 text-section text-ink">
+        {t('title')}
+      </h2>
+      {tone ? <Alert tone={tone} title={t(`notice.${notice as keyof typeof NOTICE_TONE}`)} /> : null}
+      {calendar.state === 'active' || calendar.state === 'paused' ? (
+        <>
+          <p className="m-0 text-body text-ink">{t('active', { count: calendar.entries })}</p>
+          <p className="m-0 text-caption text-ink-2 tabular-nums">
+            {calendar.lastSyncAt ? t('lastSync', { when: when.format(calendar.lastSyncAt) }) : t('neverSynced')}
+          </p>
+          <CalendarControls action={calendarAction.bind(null, token, registrantId)} syncing={calendar.syncing} />
+        </>
+      ) : calendar.state === 'revoked' ? (
+        <>
+          <p className="m-0 text-body text-ink">
+            {calendar.revokedBy === 'provider' ? t('revokedByGoogle') : t('stopped')}
+          </p>
+          {connect(t('reconnect'))}
+        </>
+      ) : calendar.state === 'pending' ? (
+        <>
+          <p className="m-0 text-body text-ink">{t('pending')}</p>
+          {connect(t('reconnect'))}
+        </>
+      ) : (
+        <>
+          <p className="m-0 text-body text-ink">{t('off')}</p>
+          <p className="m-0 text-caption text-ink-2">{t('privacy')}</p>
+          {connect(t('connect'))}
+        </>
+      )}
+    </section>
   );
 }

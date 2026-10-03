@@ -3963,7 +3963,8 @@
       "orders_refund": "订单退款",
       "attendees_read": "读取参会者",
       "attendees_write": "修改参会者并重新发送门票",
-      "checkin_scan": "扫描门票"
+      "checkin_scan": "扫描门票",
+      "webhooks_manage": "添加和删除 Webhook 端点（Make 和 n8n 触发器）"
     },
     "expiry": "过期时间",
     "expiryHint": "会过期的密钥必须在到期前轮换。有效期越短越安全。",
@@ -12057,6 +12058,36 @@
       "waitlist_closed": "{title} 已满，候补名单已在场次开始前 24 小时关闭。",
       "offer_ended": "{title} 的邀请已结束。",
       "full": "{title} 刚刚满员。再试一次即可加入候补名单。"
+    },
+    "calendar": {
+      "title": "Google 日历",
+      "off": "把这份日程放进您的 Google 日历。您添加或取消的场次，以及时间或会场的任何变动，都会自动同步。",
+      "privacy": "我们只会把本活动的场次加入您的日历，绝不读取您的其他日程。",
+      "connect": "添加到 Google 日历",
+      "reconnect": "重新连接",
+      "pending": "正在等待 Google 确认。如果您关闭了那个窗口，请重新连接。",
+      "active": "{count, plural, =0 {正在与您的 Google 日历同步，暂时还没有场次。} other {正在与您的 Google 日历同步：已有 # 个场次。}}",
+      "lastSync": "上次更新：{when}",
+      "neverSynced": "首次更新正在进行。",
+      "syncNow": "立即更新",
+      "syncing": "正在更新",
+      "stop": "停止同步",
+      "stopped": "同步已关闭。已在日历中的场次会保留。",
+      "revokedByGoogle": "Google 不再接受此连接，因此更新已停止。请重新连接以继续。",
+      "done": {
+        "queued": "正在更新，日历稍后就会变化。",
+        "already": "已有更新正在进行。",
+        "stopped": "已停止同步。已在日历中的场次会保留。"
+      },
+      "notice": {
+        "connected": "已连接。您的场次稍后会出现在 Google 日历中。",
+        "denied": "未连接 Google 日历。",
+        "expired": "该连接链接已过期，请重试。",
+        "unavailable": "此活动不支持日历同步。",
+        "provider_unavailable": "无法连接 Google，请稍后重试。",
+        "rate_limited": "尝试次数过多，请等几分钟后再试。",
+        "conflict": "您的日历已连接。"
+      }
     }
   },
   "people": {
@@ -12846,6 +12877,9 @@
     "connectors": {
       "demo": {
         "description": "用于试用集成的测试联系人应用：联系人与你的 CRM 双向同步。仅限测试环境。"
+      },
+      "google_calendar": {
+        "description": "将进行中活动的每个场次同步到 Google 日历并保持最新：调整的场次会随之移动，取消的场次会被移除。时间按各活动的时区显示。"
       }
     },
     "sandboxBadge": "测试",
@@ -12865,11 +12899,19 @@
     "readOnly": "只有所有者和管理员可以连接或更改集成。",
     "breadcrumb": "面包屑导航",
     "objects": {
-      "contacts": "联系人"
+      "contacts": "联系人",
+      "sessions": "场次"
     },
     "fields": {
       "email": "电子邮件",
-      "name": "姓名"
+      "name": "姓名",
+      "title": "标题",
+      "description": "描述",
+      "event_name": "活动",
+      "room": "会场",
+      "starts_at": "开始",
+      "ends_at": "结束",
+      "time_zone": "时区"
     },
     "status": {
       "none": "未连接",
@@ -13020,7 +13062,8 @@
       "paused": "因暂停而停止",
       "sync_failed": "同步失败",
       "unknown_connector": "此集成已不可用",
-      "other": "错误（{code}）"
+      "other": "错误（{code}）",
+      "remove_failed": "无法在服务方处删除"
     },
     "inbox": {
       "title": "集成错误",

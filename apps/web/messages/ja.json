@@ -3963,7 +3963,8 @@
       "orders_refund": "注文の返金",
       "attendees_read": "参加者の閲覧",
       "attendees_write": "参加者の変更とチケットの再送",
-      "checkin_scan": "チケットのスキャン"
+      "checkin_scan": "チケットのスキャン",
+      "webhooks_manage": "Webhook エンドポイントの追加と削除（Make と n8n のトリガー）"
     },
     "expiry": "有効期限",
     "expiryHint": "期限のあるキーは期限前にローテーションが必要です。短いほど安全です。",
@@ -12057,6 +12058,36 @@
       "waitlist_closed": "{title}は満席で、キャンセル待ちはセッションの24時間前に終了しました。",
       "offer_ended": "{title}の案内は期限切れです。",
       "full": "{title}はちょうど満席になりました。もう一度お試しいただくとキャンセル待ちに登録できます。"
+    },
+    "calendar": {
+      "title": "Google カレンダー",
+      "off": "このスケジュールを Google カレンダーに入れておけます。追加・取り消したセッションや、時間・会場の変更は自動で反映されます。",
+      "privacy": "カレンダーに追加するのはこのイベントのセッションだけです。ほかの予定を読むことはありません。",
+      "connect": "Google カレンダーに追加",
+      "reconnect": "もう一度接続",
+      "pending": "Google の確認を待っています。そのウィンドウを閉じた場合は、もう一度接続してください。",
+      "active": "{count, plural, =0 {Google カレンダーと同期中です。まだセッションはありません。} other {Google カレンダーと同期中です：# 件のセッションがあります。}}",
+      "lastSync": "最終更新：{when}",
+      "neverSynced": "最初の更新を準備しています。",
+      "syncNow": "今すぐ更新",
+      "syncing": "更新中",
+      "stop": "同期を停止",
+      "stopped": "同期はオフです。すでにカレンダーにあるセッションはそのまま残ります。",
+      "revokedByGoogle": "Google がこの接続を受け付けなくなったため、更新が止まりました。続けるにはもう一度接続してください。",
+      "done": {
+        "queued": "更新を開始しました。まもなくカレンダーに反映されます。",
+        "already": "すでに更新中です。",
+        "stopped": "同期を停止しました。すでにカレンダーにあるセッションはそのまま残ります。"
+      },
+      "notice": {
+        "connected": "接続しました。まもなく Google カレンダーにセッションが表示されます。",
+        "denied": "Google カレンダーは接続されませんでした。",
+        "expired": "接続リンクの有効期限が切れました。もう一度お試しください。",
+        "unavailable": "このイベントではカレンダー同期を利用できません。",
+        "provider_unavailable": "Google に接続できませんでした。しばらくしてからもう一度お試しください。",
+        "rate_limited": "試行回数が多すぎます。数分待ってからもう一度お試しください。",
+        "conflict": "カレンダーはすでに接続されています。"
+      }
     }
   },
   "people": {
@@ -12846,6 +12877,9 @@
     "connectors": {
       "demo": {
         "description": "連携を試すためのテスト用連絡先アプリです。連絡先が CRM と双方向に同期されます。テスト環境のみ。"
+      },
+      "google_calendar": {
+        "description": "開催中のイベントのすべてのセッションを Google カレンダーに常に最新の状態で表示します。移動したセッションは移動し、中止したセッションは削除されます。時刻は各イベントのタイムゾーンで表示されます。"
       }
     },
     "sandboxBadge": "テスト",
@@ -12865,11 +12899,19 @@
     "readOnly": "連携の接続や変更ができるのはオーナーと管理者だけです。",
     "breadcrumb": "パンくずリスト",
     "objects": {
-      "contacts": "連絡先"
+      "contacts": "連絡先",
+      "sessions": "セッション"
     },
     "fields": {
       "email": "メール",
-      "name": "名前"
+      "name": "名前",
+      "title": "タイトル",
+      "description": "説明",
+      "event_name": "イベント",
+      "room": "会場",
+      "starts_at": "開始",
+      "ends_at": "終了",
+      "time_zone": "タイムゾーン"
     },
     "status": {
       "none": "未接続",
@@ -13020,7 +13062,8 @@
       "paused": "一時停止により停止",
       "sync_failed": "同期に失敗しました",
       "unknown_connector": "この連携は利用できなくなりました",
-      "other": "エラー（{code}）"
+      "other": "エラー（{code}）",
+      "remove_failed": "プロバイダーで削除できませんでした"
     },
     "inbox": {
       "title": "連携エラー",
