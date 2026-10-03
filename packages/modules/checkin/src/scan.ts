@@ -49,7 +49,7 @@ export const ScanOutcomeDto = z.object({
 });
 export type ScanOutcomeDto = z.infer<typeof ScanOutcomeDto>;
 
-async function resolveCode(
+export async function resolveCode(
   tx: TenantTx,
   raw: string,
 ): Promise<{ kind: 'yy1' | 'short' | 'legacy' | 'unknown'; ticket: ScannableTicket | null }> {
@@ -68,7 +68,7 @@ async function resolveCode(
   return { kind: 'unknown', ticket: null };
 }
 
-const summary = (t: ScannableTicket | null) =>
+export const summary = (t: ScannableTicket | null) =>
   t ? { holderName: t.holderName, typeName: t.typeName, serial: t.serial, shortCode: t.shortCode } : null;
 
 export const scanTicketCommand = tenantCommand({
@@ -124,6 +124,13 @@ export const scanTicketCommand = tenantCommand({
     if (verdict === 'ok' && ticket && checkpoint?.kind === 'zone') {
       // Zones admit nobody to the event; they only check the pass includes the zone.
       result = zoneAllows(checkpoint, ticket.ticketTypeId) ? 'granted' : 'no_access';
+    } else if (
+      verdict === 'ok' &&
+      ticket?.paymentDue &&
+      !(await liveAdmissionTx(tx, ticket.id, eventDay(ctx.now, event.timezone)))
+    ) {
+      // M5.1d: the invoice still has a balance. Nobody is admitted; staff may override (audited).
+      result = 'balance_due';
     } else if (verdict === 'ok' && ticket) {
       const day = eventDay(ctx.now, event.timezone);
       const [adm] = await tx
@@ -258,6 +265,15 @@ export const scanTicketCommand = tenantCommand({
     data: { result: r?.result, checkpointId: input.checkpointId ?? null },
   }),
 });
+
+/** The ticket's live admission on an event day, if any. */
+export async function liveAdmissionTx(tx: TenantTx, ticketId: string, day: string) {
+  const [live] = await tx
+    .select()
+    .from(admissions)
+    .where(and(eq(admissions.ticketId, ticketId), eq(admissions.day, day), isNull(admissions.undoneAt)));
+  return live ?? null;
+}
 
 export const undoAdmissionCommand = tenantCommand({
   name: 'checkin.undoAdmission',

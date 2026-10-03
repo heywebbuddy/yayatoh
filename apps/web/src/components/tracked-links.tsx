@@ -152,7 +152,7 @@ export function CopyLinkButton({ url, name }: { url: string; name: string }) {
         {t('copy')}
         <span className="sr-only"> {name}</span>
       </Button>
-      <span aria-live="polite" className="text-caption text-zinc-600">
+      <span aria-live="polite" className="text-caption text-ink-2">
         {copied ? t('copied') : ''}
       </span>
     </span>

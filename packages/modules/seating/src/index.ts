@@ -173,3 +173,13 @@ export {
   type SubEventRef,
   subEventChartsQuery,
 } from './sub-event-charts.ts';
+// M4.2b hosted tables: sponsors on the plan's tables.
+export {
+  PlanTableDto,
+  PublicTableSponsorDto,
+  planTablesQuery,
+  removeTableSponsorCommand,
+  SetTableSponsorInput,
+  setTableSponsorCommand,
+  TableSponsorDto,
+} from './table-sponsors.ts';

@@ -183,16 +183,14 @@ export function MediaUploader({
         <Heading id={headingId} className="text-section">
           {title ?? t(`title.${key}`)}
         </Heading>
-        <p className="text-body text-zinc-500">{t(`hint.${key}`, { max: GALLERY_MAX })}</p>
+        <p className="text-body text-ink-2">{t(`hint.${key}`, { max: GALLERY_MAX })}</p>
         {multiple ? (
-          <p className="text-caption text-zinc-500">
-            {t('count', { count: items.length, max: GALLERY_MAX })}
-          </p>
+          <p className="text-caption text-ink-2">{t('count', { count: items.length, max: GALLERY_MAX })}</p>
         ) : null}
       </div>
 
       {items.length === 0 ? (
-        <p className="rounded-card border border-dashed border-zinc-200 px-4 py-6 text-body text-zinc-500">
+        <p className="rounded-card border border-dashed border-line px-4 py-6 text-body text-ink-2">
           {t(`empty.${key}`)}
         </p>
       ) : (
@@ -220,15 +218,13 @@ export function MediaUploader({
       )}
 
       {ticket === null ? (
-        <p className="text-body text-zinc-500">
-          {t(family === 'logo' ? 'viewerNoticeLogo' : 'viewerNotice')}
-        </p>
+        <p className="text-body text-ink-2">{t(family === 'logo' ? 'viewerNoticeLogo' : 'viewerNotice')}</p>
       ) : (
         <form
           noValidate
           onSubmit={onSubmit}
           aria-labelledby={`${id}-form-heading`}
-          className="flex flex-col gap-3 rounded-card border border-zinc-200 bg-white p-4"
+          className="flex flex-col gap-3 rounded-card border border-line bg-surface p-4"
         >
           <p id={`${id}-form-heading`} className="font-medium">
             {replacing
@@ -238,7 +234,7 @@ export function MediaUploader({
                 : t('addTitle')}
           </p>
           {full ? (
-            <p className="text-body text-zinc-600">{t('errors.slot_full', { max: GALLERY_MAX })}</p>
+            <p className="text-body text-ink-2">{t('errors.slot_full', { max: GALLERY_MAX })}</p>
           ) : null}
           <fieldset
             onDragOver={(e) => {
@@ -249,10 +245,10 @@ export function MediaUploader({
             onDrop={onDrop}
             className={cx(
               'flex flex-col gap-2 rounded-card border border-dashed px-4 py-4',
-              dragging ? 'border-zinc-900 bg-zinc-50' : 'border-zinc-300',
+              dragging ? 'border-ink bg-surface-2' : 'border-line-strong',
             )}
           >
-            <label htmlFor={`${id}-file`} className="text-caption text-zinc-600">
+            <label htmlFor={`${id}-file`} className="text-[13px] font-bold text-ink">
               {t('file')}
             </label>
             <input
@@ -267,22 +263,20 @@ export function MediaUploader({
                 setFileName(e.currentTarget.files?.[0]?.name ?? null);
                 setError(null);
               }}
-              className="min-h-10 w-full min-w-0 text-body file:me-3 file:min-h-8 file:rounded-pill file:border file:border-zinc-300 file:bg-white file:px-4 file:text-body"
+              className="min-h-10 w-full min-w-0 text-body file:me-3 file:min-h-8 file:rounded-pill file:border file:border-line-strong file:bg-surface file:px-4 file:text-body"
             />
-            <p id={`${id}-file-hint`} className="text-caption text-zinc-500">
+            <p id={`${id}-file-hint`} className="text-caption text-ink-2">
               {t('formats', { size })} {t('dropHint')}
             </p>
-            {fileName ? (
-              <p className="text-caption text-zinc-600">{t('chosen', { name: fileName })}</p>
-            ) : null}
+            {fileName ? <p className="text-caption text-ink-2">{t('chosen', { name: fileName })}</p> : null}
             {fileError ? (
-              <p id={`${id}-file-error`} className="text-caption text-pink-700">
+              <p id={`${id}-file-error`} className="text-caption text-danger">
                 {fileError}
               </p>
             ) : null}
           </fieldset>
           <div className="flex flex-col gap-1.5">
-            <label htmlFor={`${id}-alt`} className="text-caption text-zinc-600">
+            <label htmlFor={`${id}-alt`} className="text-[13px] font-bold text-ink">
               {t('alt')}
             </label>
             <input
@@ -298,17 +292,14 @@ export function MediaUploader({
               }}
               aria-invalid={altError ? true : undefined}
               aria-describedby={altError ? `${id}-alt-error` : `${id}-alt-hint`}
-              className={cx(
-                'min-h-10 w-full rounded-pill border bg-white px-4 text-body text-zinc-900 outline-none focus-visible:border-zinc-900 disabled:bg-zinc-50',
-                altError ? 'border-pink-700' : 'border-zinc-200',
-              )}
+              className={cx('field w-full', altError ? 'field-invalid' : '')}
             />
             {altError ? (
-              <p id={`${id}-alt-error`} className="text-caption text-pink-700">
+              <p id={`${id}-alt-error`} className="text-caption text-danger">
                 {altError}
               </p>
             ) : (
-              <p id={`${id}-alt-hint`} className="text-caption text-zinc-500">
+              <p id={`${id}-alt-hint`} className="text-caption text-ink-2">
                 {t('altHint')}
               </p>
             )}
@@ -353,7 +344,7 @@ export function MediaUploader({
           {progress !== null && progress < 100 ? (
             <progress value={progress} max={100} aria-label={t('progress')} className="h-2 w-full" />
           ) : null}
-          <p role="status" className="text-caption text-zinc-600">
+          <p role="status" className="text-caption text-ink-2">
             {status}
           </p>
         </form>
@@ -396,15 +387,15 @@ function MediaItemCard({
   }, [altState]);
   const altBad = !altState.ok && (altState.fields ?? []).includes('alt');
   return (
-    <li className="flex flex-col gap-2 rounded-card border border-zinc-200 bg-white p-3">
+    <li className="flex flex-col gap-2 rounded-card border border-line bg-surface p-3">
       <img
         src={item.preview}
         alt={item.decorative ? '' : (item.alt ?? '')}
         width={item.width}
         height={item.height}
-        className="aspect-video w-full rounded-card bg-zinc-50 object-contain"
+        className="aspect-video w-full rounded-card bg-surface-2 object-contain"
       />
-      <p className="text-caption text-zinc-600">
+      <p className="text-caption text-ink-2">
         {item.decorative ? <span className="me-1 font-medium">{t('decorativeBadge')}</span> : null}
         {item.alt ?? ''}
       </p>
@@ -468,7 +459,7 @@ function MediaItemCard({
               </Button>
             </form>
           </details>
-          <p role="status" className="text-caption text-zinc-600">
+          <p role="status" className="text-caption text-ink-2">
             {altState.ok ? t('altSaved') : ''}
           </p>
         </>

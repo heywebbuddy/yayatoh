@@ -4,15 +4,30 @@ import {
   type GuestDto,
   guestListQuery,
   type HistoryEntryDto,
+  PARTY_RSVP_STATES,
   type PartyWithGuestsDto,
   partyHistoryQuery,
+  rsvpLinksQuery,
+  rsvpOverviewQuery,
 } from '@yayatoh/guests';
 import { executeQuery } from '@yayatoh/kernel';
 import { isProfileKey, navIncludes, navLabelKey, PROFILES } from '@yayatoh/platform';
-import { buttonClass, Card, EmptyState, PageHeader } from '@yayatoh/ui';
+import { Avatar, AvatarStack, buttonClass, Card, EmptyState, PageHeader, Pagination, Tag } from '@yayatoh/ui';
+import {
+  CalendarDays,
+  ClipboardList,
+  Contact,
+  Download,
+  ListChecks,
+  MailCheck,
+  Plus,
+  Search as SearchIcon,
+  Send,
+} from 'lucide-react';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import type { ReactNode } from 'react';
+import { Crumbs } from '@/components/crumbs.tsx';
 import { type FieldSpec, ProgramForm } from '@/components/program-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatNumber } from '@/lib/format.ts';
@@ -28,17 +43,27 @@ import {
   updateGuestAction,
   updatePartyAction,
 } from './actions.ts';
+import { PartyRsvp } from './party-rsvp.tsx';
+import { rsvpUrl } from './rsvp/links.ts';
 
 const PAGE_SIZE = 50;
 const UUID = /^[0-9a-f-]{36}$/;
 
-type Search = { q?: string; side?: string; tag?: string; vip?: string; page?: string; history?: string };
+type Search = {
+  q?: string;
+  side?: string;
+  tag?: string;
+  vip?: string;
+  page?: string;
+  history?: string;
+  rsvp?: string;
+};
 
 /** A disclosure whose content is a named region (so its forms can be found by name). */
 function Disclosure({ summary, children }: { summary: string; children: ReactNode }) {
   return (
     <details className="group">
-      <summary className="min-h-6 cursor-pointer py-0.5 text-caption text-zinc-600 underline-offset-2 hover:underline">
+      <summary className="inline-flex min-h-8 cursor-pointer items-center rounded-[10px] px-2 text-caption font-bold text-primary-ink hover:bg-surface-3">
         {summary}
       </summary>
       <section aria-label={summary} className="flex flex-col gap-3 pt-3">
@@ -48,7 +73,14 @@ function Disclosure({ summary, children }: { summary: string; children: ReactNod
   );
 }
 
-const pill = 'rounded-pill px-2 py-px text-caption';
+const pill = 'rounded-pill px-2.5 py-0.5 text-caption font-bold';
+const initials = (name: string) =>
+  name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((w) => w[0]?.toUpperCase() ?? '')
+    .join('') || '?';
 
 /**
  * Guests (M4.1a): the parties (households) of a wedding or gala and the guests in each, with
@@ -78,7 +110,9 @@ export default async function GuestsPage({
   const tag = (sp.tag ?? '').trim().slice(0, 40);
   const vip = sp.vip === 'yes' ? true : sp.vip === 'no' ? false : undefined;
   const page = Math.max(1, Math.min(1000, Number.parseInt(sp.page ?? '1', 10) || 1));
-  const filtered = !!(q || side || tag || vip !== undefined);
+  // M4.1d: parties at one RSVP step.
+  const rsvp = PARTY_RSVP_STATES.find((s) => s === sp.rsvp);
+  const filtered = !!(q || side || tag || vip !== undefined || rsvp);
   const list = await executeQuery(
     guestListQuery,
     {
@@ -87,12 +121,23 @@ export default async function GuestsPage({
       side: side || undefined,
       tag: tag || undefined,
       vip,
+      rsvp,
       limit: PAGE_SIZE,
       offset: (page - 1) * PAGE_SIZE,
     },
     data.ctx,
     ports,
   );
+  const listed = list.parties.map((p) => p.id);
+  const [rsvpOverview, rsvpLinks] = await Promise.all([
+    executeQuery(rsvpOverviewQuery, { eventId: ev.id, partyIds: listed }, data.ctx, ports),
+    canWrite && listed.length
+      ? executeQuery(rsvpLinksQuery, { eventId: ev.id, partyIds: listed }, data.ctx, ports)
+      : Promise.resolve([]),
+  ]);
+  const rsvpOf = new Map(rsvpOverview.parties.map((r) => [r.partyId, r]));
+  const linkOf = new Map(rsvpLinks.map((l) => [l.partyId, rsvpUrl(l.token)]));
+  const rsvpSubName = new Map(rsvpOverview.subEvents.map((s) => [s.id, s.name]));
   const historyFor = sp.history && UUID.test(sp.history) ? sp.history : null;
   const history: HistoryEntryDto[] =
     historyFor && list.parties.some((p) => p.id === historyFor)
@@ -282,7 +327,7 @@ export default async function GuestsPage({
   ];
   const filterHref = (over: Partial<Search>) => {
     const u = new URLSearchParams();
-    const merged = { q, side, tag, vip: sp.vip ?? '', page: '', ...over };
+    const merged = { q, side, tag, vip: sp.vip ?? '', rsvp: rsvp ?? '', page: '', ...over };
     for (const [k, v] of Object.entries(merged)) if (v) u.set(k, String(v));
     const s = u.toString();
     return `/o/${org}/e/${event}/guests${s ? `?${s}` : ''}`;
@@ -312,413 +357,485 @@ export default async function GuestsPage({
   return (
     <>
       <PageHeader
+        breadcrumb={
+          <Crumbs
+            items={[
+              { label: data.org.name, href: `/o/${org}` },
+              { label: ev.name, href: `/o/${org}/e/${event}` },
+              { label: t(navLabelKey(profile, nav)) },
+            ]}
+          />
+        }
         title={t(navLabelKey(profile, nav))}
+        tag={<Tag>{t(`profiles.${profile}`)}</Tag>}
         description={tp('subtitle')}
         actions={
           canWrite ? (
-            <Link href={`/o/${org}/e/${event}/guests/import`} className={buttonClass('secondary')}>
-              {t('guestImport.importLink')}
-            </Link>
-          ) : null
+            <>
+              <Link href={`/o/${org}/e/${event}/guests/import`} className={buttonClass('secondary')}>
+                <Download aria-hidden="true" strokeWidth={2} />
+                {t('guestImport.importLink')}
+              </Link>
+              <a href="#new-party" className={buttonClass('primary')}>
+                <Plus aria-hidden="true" strokeWidth={2.4} />
+                {tp('addParty')}
+              </a>
+            </>
+          ) : undefined
         }
       />
-      <Link
-        href={`/o/${org}/e/${event}/guests/sub-events`}
-        className="min-h-6 self-start py-1 text-caption underline"
-      >
-        {t('subEvents.link')}
-      </Link>
-      {canWrite ? null : <p className="text-body text-zinc-500">{tp('viewerNotice')}</p>}
+      <nav aria-label={t(navLabelKey(profile, nav))} className="flex flex-wrap gap-2">
+        {(
+          [
+            ['sub-events', 'subEvents.link', CalendarDays],
+            ['rsvp', 'rsvpHost.link', MailCheck],
+            ['questions', 'rsvpQuestions.link', ListChecks],
+            ['answers', 'rsvpAnswers.link', ClipboardList],
+            ['invitations', 'invitations.link', Send],
+            ['collector', 'collectorHost.link', Contact],
+          ] as const
+        ).map(([path, key, Icon]) => (
+          <Link
+            key={path}
+            href={`/o/${org}/e/${event}/guests/${path}`}
+            className="inline-flex min-h-9 max-w-full items-center gap-2 rounded-pill border border-line bg-surface px-3.5 py-1.5 text-[13px] font-bold text-ink glass transition-colors duration-150 hover:border-line-strong hover:bg-surface-2 [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:text-primary-ink"
+          >
+            <Icon aria-hidden="true" strokeWidth={2} />
+            {t(key)}
+          </Link>
+        ))}
+      </nav>
+      {canWrite ? null : <p className="text-body text-ink-2">{tp('viewerNotice')}</p>}
 
       <section aria-labelledby="guest-counts-heading" className="flex flex-col gap-3">
-        <h2 id="guest-counts-heading" className="text-section">
+        <h2 id="guest-counts-heading" className="sr-only">
           {tp('summary')}
         </h2>
-        <dl className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-          {counts.map(([label, value]) => (
-            <Card key={label} className="flex flex-col gap-1">
-              <dt className="text-caption text-zinc-600">{label}</dt>
-              <dd className="text-section tabular-nums">{n(value)}</dd>
+        <dl className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-6">
+          {counts.map(([label, value], i) => (
+            <Card
+              key={label}
+              className={`flex flex-col gap-1.5 ${i === 0 ? 'bg-success-soft' : i === counts.length - 1 && value > 0 ? 'bg-warning-soft' : ''}`}
+            >
+              <dt className="text-[13px] font-bold text-ink-2">{label}</dt>
+              <dd className="m-0 text-[30px] leading-none font-extrabold tracking-[-0.04em] text-ink tabular-nums">
+                {n(value)}
+              </dd>
             </Card>
           ))}
         </dl>
         {list.counts.vipParties ? (
-          <p className="text-caption text-zinc-600">{tp('vipCount', { count: list.counts.vipParties })}</p>
+          <p className="text-caption text-ink-2">{tp('vipCount', { count: list.counts.vipParties })}</p>
         ) : null}
       </section>
 
-      {canWrite ? (
-        <section aria-labelledby="add-party-heading">
-          <Card size="panel" className="flex flex-col gap-3">
-            <h2 id="add-party-heading" className="text-section">
-              {tp('addParty')}
-            </h2>
-            <p className="text-caption text-zinc-600">{tp('addPartyHint')}</p>
-            <ProgramForm
-              action={createPartyAction.bind(null, org, event)}
-              fields={partyFields()}
-              idPrefix="new-party"
-              submitLabel={tp('addParty')}
-              successLabel={tp('partyAdded')}
-              errors={errors}
-              reset
+      <div className="grid items-start gap-5 xl:grid-cols-[minmax(0,1fr)_380px]">
+        <section aria-labelledby="parties-heading" className="flex min-w-0 flex-col gap-3.5">
+          <h2 id="parties-heading" className="m-0 text-card">
+            {tp('parties')}
+          </h2>
+          {list.counts.parties > 0 ? (
+            <search aria-label={tp('filters')}>
+              <form
+                // Remount on navigation: uncontrolled fields would keep the previous filters' values.
+                key={`${q}|${side}|${tag}|${sp.vip ?? ''}|${rsvp ?? ''}`}
+                method="get"
+                className="flex flex-wrap items-end gap-3 rounded-card border border-line bg-surface p-4 glass"
+              >
+                <div className="flex min-w-48 flex-1 flex-col gap-1.5">
+                  <label htmlFor="guest-search" className="text-[13px] font-bold text-ink">
+                    {tp('search')}
+                  </label>
+                  <span className="relative flex">
+                    <SearchIcon
+                      aria-hidden="true"
+                      className="pointer-events-none absolute start-3.5 top-1/2 size-4 -translate-y-1/2 text-ink-2"
+                      strokeWidth={2}
+                    />
+                    <input
+                      id="guest-search"
+                      name="q"
+                      type="search"
+                      defaultValue={q}
+                      maxLength={100}
+                      className="field w-full ps-10"
+                    />
+                  </span>
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label htmlFor="guest-side" className="text-[13px] font-bold text-ink">
+                    {tp('side')}
+                  </label>
+                  <select id="guest-side" name="side" defaultValue={side} className="field">
+                    <option value="">{tp('anySide')}</option>
+                    {list.sides.map((s) => (
+                      <option key={s} value={s}>
+                        {s}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label htmlFor="guest-tag" className="text-[13px] font-bold text-ink">
+                    {tp('tag')}
+                  </label>
+                  <select id="guest-tag" name="tag" defaultValue={tag} className="field">
+                    <option value="">{tp('anyTag')}</option>
+                    {list.tags.map((s) => (
+                      <option key={s} value={s}>
+                        {s}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label htmlFor="guest-vip" className="text-[13px] font-bold text-ink">
+                    {tp('vip')}
+                  </label>
+                  <select
+                    id="guest-vip"
+                    name="vip"
+                    defaultValue={sp.vip === 'yes' || sp.vip === 'no' ? sp.vip : ''}
+                    className="field"
+                  >
+                    <option value="">{tp('vipAny')}</option>
+                    <option value="yes">{tp('vipOnly')}</option>
+                    <option value="no">{tp('vipNot')}</option>
+                  </select>
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label htmlFor="guest-rsvp" className="text-[13px] font-bold text-ink">
+                    {t('rsvpHost.filter')}
+                  </label>
+                  <select id="guest-rsvp" name="rsvp" defaultValue={rsvp ?? ''} className="field">
+                    <option value="">{t('rsvpHost.filterAny')}</option>
+                    {PARTY_RSVP_STATES.map((s) => (
+                      <option key={s} value={s}>
+                        {t(`rsvpHost.states.${s}`)}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <button type="submit" className={buttonClass('secondary')}>
+                  {tp('apply')}
+                </button>
+                {filtered ? (
+                  <Link href={`/o/${org}/e/${event}/guests`} className="min-h-6 py-2 text-caption underline">
+                    {tp('clear')}
+                  </Link>
+                ) : null}
+              </form>
+            </search>
+          ) : null}
+          {list.counts.parties > 0 ? (
+            <p role="status" className="text-caption text-ink-2">
+              {filtered ? tp('matching', { count: list.total }) : tp('showing', { count: list.total })}
+            </p>
+          ) : null}
+
+          {list.counts.parties === 0 ? (
+            <EmptyState
+              title={tp('emptyTitle')}
+              description={canWrite ? tp('emptyDescription') : tp('emptyViewer')}
             />
-          </Card>
-        </section>
-      ) : null}
-
-      <section aria-labelledby="parties-heading" className="flex flex-col gap-3">
-        <h2 id="parties-heading" className="text-section">
-          {tp('parties')}
-        </h2>
-        {list.counts.parties > 0 ? (
-          <search aria-label={tp('filters')}>
-            <form
-              // Remount on navigation: uncontrolled fields would keep the previous filters' values.
-              key={`${q}|${side}|${tag}|${sp.vip ?? ''}`}
-              method="get"
-              className="flex flex-wrap items-end gap-3"
-            >
-              <div className="flex min-w-48 flex-1 flex-col gap-1.5">
-                <label htmlFor="guest-search" className="text-caption text-zinc-600">
-                  {tp('search')}
-                </label>
-                <input
-                  id="guest-search"
-                  name="q"
-                  type="search"
-                  defaultValue={q}
-                  maxLength={100}
-                  className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
-                />
-              </div>
-              <div className="flex flex-col gap-1.5">
-                <label htmlFor="guest-side" className="text-caption text-zinc-600">
-                  {tp('side')}
-                </label>
-                <select
-                  id="guest-side"
-                  name="side"
-                  defaultValue={side}
-                  className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
-                >
-                  <option value="">{tp('anySide')}</option>
-                  {list.sides.map((s) => (
-                    <option key={s} value={s}>
-                      {s}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="flex flex-col gap-1.5">
-                <label htmlFor="guest-tag" className="text-caption text-zinc-600">
-                  {tp('tag')}
-                </label>
-                <select
-                  id="guest-tag"
-                  name="tag"
-                  defaultValue={tag}
-                  className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
-                >
-                  <option value="">{tp('anyTag')}</option>
-                  {list.tags.map((s) => (
-                    <option key={s} value={s}>
-                      {s}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="flex flex-col gap-1.5">
-                <label htmlFor="guest-vip" className="text-caption text-zinc-600">
-                  {tp('vip')}
-                </label>
-                <select
-                  id="guest-vip"
-                  name="vip"
-                  defaultValue={sp.vip === 'yes' || sp.vip === 'no' ? sp.vip : ''}
-                  className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
-                >
-                  <option value="">{tp('vipAny')}</option>
-                  <option value="yes">{tp('vipOnly')}</option>
-                  <option value="no">{tp('vipNot')}</option>
-                </select>
-              </div>
-              <button type="submit" className={buttonClass('secondary')}>
-                {tp('apply')}
-              </button>
-              {filtered ? (
-                <Link href={`/o/${org}/e/${event}/guests`} className="min-h-6 py-2 text-caption underline">
-                  {tp('clear')}
-                </Link>
-              ) : null}
-            </form>
-          </search>
-        ) : null}
-        {list.counts.parties > 0 ? (
-          <p role="status" className="text-caption text-zinc-600">
-            {filtered ? tp('matching', { count: list.total }) : tp('showing', { count: list.total })}
-          </p>
-        ) : null}
-
-        {list.counts.parties === 0 ? (
-          <EmptyState
-            title={tp('emptyTitle')}
-            description={canWrite ? tp('emptyDescription') : tp('emptyViewer')}
-          />
-        ) : list.parties.length === 0 ? (
-          <EmptyState title={tp('noMatchTitle')} description={tp('noMatchDescription')} />
-        ) : (
-          <ol className="flex list-none flex-col gap-3 p-0">
-            {list.parties.map((p) => {
-              const moveTargets = list.partyOptions.filter((o) => o.id !== p.id);
-              return (
-                <li key={p.id} id={`party-${p.id}`}>
-                  <Card className="flex flex-col gap-3">
-                    <section aria-labelledby={`party-${p.id}-name`} className="flex flex-col gap-3">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <h3 id={`party-${p.id}-name`} className="text-body font-medium">
-                          {p.name}
-                        </h3>
-                        {p.vip ? (
-                          <span className={`${pill} bg-accent-50 text-accent-text`}>{tp('vip')}</span>
-                        ) : null}
-                        {p.side ? (
-                          <span className={`${pill} bg-zinc-100 text-zinc-700`}>
-                            {tp('sideValue', { side: p.side })}
+          ) : list.parties.length === 0 ? (
+            <EmptyState title={tp('noMatchTitle')} description={tp('noMatchDescription')} />
+          ) : (
+            <ol className="flex list-none flex-col gap-3 p-0">
+              {list.parties.map((p) => {
+                const moveTargets = list.partyOptions.filter((o) => o.id !== p.id);
+                return (
+                  <li key={p.id} id={`party-${p.id}`}>
+                    <Card className="flex flex-col gap-3">
+                      <section aria-labelledby={`party-${p.id}-name`} className="flex flex-col gap-3">
+                        <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+                          {p.guests.length ? (
+                            <AvatarStack
+                              people={p.guests.map((g) => ({
+                                name: nameOf(g),
+                                initials: initials(nameOf(g)),
+                              }))}
+                              label={tp('guestsOf', { party: p.name })}
+                              size={38}
+                            />
+                          ) : null}
+                          <h3
+                            id={`party-${p.id}-name`}
+                            className="m-0 text-[16px] font-extrabold tracking-[-0.01em]"
+                          >
+                            {p.name}
+                          </h3>
+                          {p.vip ? (
+                            <span className={`${pill} bg-brand-soft text-brand-ink`}>{tp('vip')}</span>
+                          ) : null}
+                          {p.side ? (
+                            <span className={`${pill} bg-surface-3 text-ink-2`}>
+                              {tp('sideValue', { side: p.side })}
+                            </span>
+                          ) : null}
+                          <span className="text-caption text-ink-2">
+                            {tp('guestCount', { count: p.guests.length })}
                           </span>
-                        ) : null}
-                        <span className="text-caption text-zinc-600">
-                          {tp('guestCount', { count: p.guests.length })}
-                        </span>
-                      </div>
-                      {p.envelopeName ? (
-                        <p className="text-caption text-zinc-600">
-                          {tp('envelopeValue', { name: p.envelopeName })}
-                        </p>
-                      ) : null}
-                      {p.tags.length ? (
-                        <ul aria-label={tp('tags')} className="flex list-none flex-wrap gap-1.5 p-0">
-                          {p.tags.map((x) => (
-                            <li key={x} className={`${pill} bg-zinc-100 text-zinc-700`}>
-                              {x}
-                            </li>
-                          ))}
-                        </ul>
-                      ) : null}
-                      {p.notes ? (
-                        <p className="text-caption whitespace-pre-line text-zinc-600">{p.notes}</p>
-                      ) : null}
-                      {p.guests.length === 0 ? (
-                        <p className="text-caption text-zinc-600">{tp('noGuestsInParty')}</p>
-                      ) : (
-                        <ul
-                          aria-label={tp('guestsOf', { party: p.name })}
-                          className="flex list-none flex-col gap-2 p-0"
-                        >
-                          {p.guests.map((g) => {
-                            const name = nameOf(g);
-                            const unnamed = !g.firstName;
-                            const hasPlusOne = p.guests.some((x) => x.hostGuestId === g.id);
-                            return (
-                              <li
-                                key={g.id}
-                                className="flex flex-col gap-1 border-t border-zinc-100 pt-2 ps-0 data-[plus=true]:ps-6"
-                                data-plus={g.kind === 'plus_one'}
-                              >
-                                <span className="flex flex-wrap items-center gap-2">
-                                  <span className="text-body">{name}</span>
-                                  {g.isPrimary ? (
-                                    <span className={`${pill} bg-zinc-100 text-zinc-700`}>
-                                      {tp('primary')}
-                                    </span>
-                                  ) : null}
-                                  {g.ageClass !== 'adult' ? (
-                                    <span className={`${pill} bg-zinc-100 text-zinc-700`}>
-                                      {tp(`ages.${g.ageClass}`)}
-                                    </span>
-                                  ) : null}
-                                  {g.kind === 'plus_one' ? (
-                                    <span className={`${pill} bg-accent-50 text-accent-text`}>
-                                      {unnamed ? tp('plusOnePending') : tp('plusOne')}
-                                    </span>
-                                  ) : null}
-                                </span>
-                                {g.meal || g.dietary || g.accessibility || g.address || g.email || g.phone ? (
-                                  <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 text-caption text-zinc-600">
-                                    {(
-                                      [
-                                        ['meal', g.meal],
-                                        ['dietary', g.dietary],
-                                        ['accessibility', g.accessibility],
-                                        ['address', g.address],
-                                        ['email', g.email],
-                                        ['phone', g.phone],
-                                      ] as const
-                                    ).map(([k, v]) =>
-                                      v ? (
-                                        <div key={k} className="contents">
-                                          <dt>{tp(k)}</dt>
-                                          <dd className="whitespace-pre-line text-zinc-800">{v}</dd>
-                                        </div>
-                                      ) : null,
-                                    )}
-                                  </dl>
-                                ) : null}
-                                {canWrite ? (
-                                  <Disclosure summary={tp('editNamed', { name })}>
-                                    <ProgramForm
-                                      action={updateGuestAction.bind(null, org, event, g.id)}
-                                      fields={guestFields(g, g.kind === 'plus_one')}
-                                      idPrefix={`guest-${g.id}`}
-                                      submitLabel={tp('save')}
-                                      successLabel={tp('saved')}
-                                      errors={errors}
-                                    />
-                                    {g.kind === 'guest' && !hasPlusOne ? (
-                                      <ProgramForm
-                                        action={addPlusOneAction.bind(null, org, event, g.id)}
-                                        fields={[]}
-                                        idPrefix={`plus-${g.id}`}
-                                        submitLabel={tp('addPlusOneFor', { name })}
-                                        successLabel={tp('plusOneAdded')}
-                                        errors={errors}
-                                      />
-                                    ) : null}
-                                    {g.kind === 'guest' && moveTargets.length ? (
-                                      <ProgramForm
-                                        action={moveGuestAction.bind(null, org, event, g.id)}
-                                        fields={[
-                                          {
-                                            kind: 'select',
-                                            name: 'toPartyId',
-                                            label: tp('moveTo', { name }),
-                                            hint: hasPlusOne ? tp('moveHintPlusOne') : undefined,
-                                            options: [
-                                              { value: '', label: tp('choosePartyOption') },
-                                              ...moveTargets.map((o) => ({ value: o.id, label: o.name })),
-                                            ],
-                                          },
-                                        ]}
-                                        idPrefix={`move-${g.id}`}
-                                        submitLabel={tp('move')}
-                                        successLabel={tp('moved')}
-                                        errors={errors}
-                                      />
-                                    ) : null}
-                                    <ProgramForm
-                                      action={removeGuestAction.bind(null, org, event, g.id)}
-                                      fields={[]}
-                                      idPrefix={`remove-${g.id}`}
-                                      submitLabel={
-                                        hasPlusOne
-                                          ? tp('removeWithPlusOne', { name })
-                                          : tp('removeNamed', { name })
-                                      }
-                                      successLabel={tp('removed')}
-                                      errors={errors}
-                                    />
-                                  </Disclosure>
-                                ) : null}
-                              </li>
-                            );
-                          })}
-                        </ul>
-                      )}
-                      {canWrite ? (
-                        <div className="flex flex-col gap-2">
-                          <Disclosure summary={tp('addGuestTo', { party: p.name })}>
-                            <ProgramForm
-                              action={addGuestAction.bind(null, org, event, p.id)}
-                              fields={guestFields()}
-                              idPrefix={`add-${p.id}`}
-                              submitLabel={tp('addGuest')}
-                              successLabel={tp('guestAdded')}
-                              errors={errors}
-                              reset
-                            />
-                          </Disclosure>
-                          <Disclosure summary={tp('editNamed', { name: p.name })}>
-                            <ProgramForm
-                              action={updatePartyAction.bind(null, org, event, p.id)}
-                              fields={partyFields(p)}
-                              idPrefix={`party-${p.id}-edit`}
-                              submitLabel={tp('save')}
-                              successLabel={tp('saved')}
-                              errors={errors}
-                            />
-                            <ProgramForm
-                              action={removePartyAction.bind(null, org, event, p.id)}
-                              fields={[]}
-                              idPrefix={`party-${p.id}-remove`}
-                              submitLabel={tp('removeParty', { name: p.name, count: p.guests.length })}
-                              successLabel={tp('removed')}
-                              errors={errors}
-                            />
-                          </Disclosure>
                         </div>
-                      ) : null}
-                      {historyFor === p.id ? (
-                        <section aria-labelledby={`history-${p.id}`} className="flex flex-col gap-2">
-                          <h4 id={`history-${p.id}`} className="text-caption font-medium text-zinc-700">
-                            {tp('historyOf', { party: p.name })}
-                          </h4>
-                          <ol className="flex list-none flex-col gap-1 p-0">
-                            {history.map((h) => {
-                              const g = h.guestId ? everyGuest.get(h.guestId) : undefined;
+                        {p.envelopeName ? (
+                          <p className="text-caption text-ink-2">
+                            {tp('envelopeValue', { name: p.envelopeName })}
+                          </p>
+                        ) : null}
+                        {p.tags.length ? (
+                          <ul aria-label={tp('tags')} className="flex list-none flex-wrap gap-1.5 p-0">
+                            {p.tags.map((x) => (
+                              <li key={x} className={`${pill} bg-surface-3 text-ink-2`}>
+                                {x}
+                              </li>
+                            ))}
+                          </ul>
+                        ) : null}
+                        {p.notes ? (
+                          <p className="text-caption whitespace-pre-line text-ink-2">{p.notes}</p>
+                        ) : null}
+                        {p.guests.length === 0 ? (
+                          <p className="text-caption text-ink-2">{tp('noGuestsInParty')}</p>
+                        ) : (
+                          <ul
+                            aria-label={tp('guestsOf', { party: p.name })}
+                            className="flex list-none flex-col gap-2 p-0"
+                          >
+                            {p.guests.map((g) => {
+                              const name = nameOf(g);
+                              const unnamed = !g.firstName;
+                              const hasPlusOne = p.guests.some((x) => x.hostGuestId === g.id);
                               return (
-                                <li key={h.id} className="text-caption text-zinc-600">
-                                  {tp(`actions.${h.action}`)}
-                                  {g ? ` · ${nameOf(g)}` : ''} · {tp(`sources.${h.source}`)} ·{' '}
-                                  {actorLabel(h.actor)} ·{' '}
-                                  <time dateTime={h.at.toISOString()}>{when(h.at)}</time>
+                                <li
+                                  key={g.id}
+                                  className="flex flex-col gap-1.5 rounded-tile border border-line bg-surface-2 p-3 data-[plus=true]:ms-6"
+                                  data-plus={g.kind === 'plus_one'}
+                                >
+                                  <span className="flex flex-wrap items-center gap-2">
+                                    <Avatar initials={initials(name)} label={name} size={28} decorative />
+                                    <span className="text-body font-semibold">{name}</span>
+                                    {g.isPrimary ? (
+                                      <span className={`${pill} bg-surface-3 text-ink-2`}>
+                                        {tp('primary')}
+                                      </span>
+                                    ) : null}
+                                    {g.ageClass !== 'adult' ? (
+                                      <span className={`${pill} bg-surface-3 text-ink-2`}>
+                                        {tp(`ages.${g.ageClass}`)}
+                                      </span>
+                                    ) : null}
+                                    {g.kind === 'plus_one' ? (
+                                      <span className={`${pill} bg-primary-soft text-primary-ink`}>
+                                        {unnamed ? tp('plusOnePending') : tp('plusOne')}
+                                      </span>
+                                    ) : null}
+                                  </span>
+                                  {g.meal ||
+                                  g.dietary ||
+                                  g.accessibility ||
+                                  g.address ||
+                                  g.email ||
+                                  g.phone ? (
+                                    <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 text-caption text-ink-2">
+                                      {(
+                                        [
+                                          ['meal', g.meal],
+                                          ['dietary', g.dietary],
+                                          ['accessibility', g.accessibility],
+                                          ['address', g.address],
+                                          ['email', g.email],
+                                          ['phone', g.phone],
+                                        ] as const
+                                      ).map(([k, v]) =>
+                                        v ? (
+                                          <div key={k} className="contents">
+                                            <dt>{tp(k)}</dt>
+                                            <dd className="whitespace-pre-line text-ink">{v}</dd>
+                                          </div>
+                                        ) : null,
+                                      )}
+                                    </dl>
+                                  ) : null}
+                                  {canWrite ? (
+                                    <Disclosure summary={tp('editNamed', { name })}>
+                                      <ProgramForm
+                                        action={updateGuestAction.bind(null, org, event, g.id)}
+                                        fields={guestFields(g, g.kind === 'plus_one')}
+                                        idPrefix={`guest-${g.id}`}
+                                        submitLabel={tp('save')}
+                                        successLabel={tp('saved')}
+                                        errors={errors}
+                                      />
+                                      {g.kind === 'guest' && !hasPlusOne ? (
+                                        <ProgramForm
+                                          action={addPlusOneAction.bind(null, org, event, g.id)}
+                                          fields={[]}
+                                          idPrefix={`plus-${g.id}`}
+                                          submitLabel={tp('addPlusOneFor', { name })}
+                                          successLabel={tp('plusOneAdded')}
+                                          errors={errors}
+                                        />
+                                      ) : null}
+                                      {g.kind === 'guest' && moveTargets.length ? (
+                                        <ProgramForm
+                                          action={moveGuestAction.bind(null, org, event, g.id)}
+                                          fields={[
+                                            {
+                                              kind: 'select',
+                                              name: 'toPartyId',
+                                              label: tp('moveTo', { name }),
+                                              hint: hasPlusOne ? tp('moveHintPlusOne') : undefined,
+                                              options: [
+                                                { value: '', label: tp('choosePartyOption') },
+                                                ...moveTargets.map((o) => ({ value: o.id, label: o.name })),
+                                              ],
+                                            },
+                                          ]}
+                                          idPrefix={`move-${g.id}`}
+                                          submitLabel={tp('move')}
+                                          successLabel={tp('moved')}
+                                          errors={errors}
+                                        />
+                                      ) : null}
+                                      <ProgramForm
+                                        action={removeGuestAction.bind(null, org, event, g.id)}
+                                        fields={[]}
+                                        idPrefix={`remove-${g.id}`}
+                                        submitLabel={
+                                          hasPlusOne
+                                            ? tp('removeWithPlusOne', { name })
+                                            : tp('removeNamed', { name })
+                                        }
+                                        successLabel={tp('removed')}
+                                        errors={errors}
+                                      />
+                                    </Disclosure>
+                                  ) : null}
                                 </li>
                               );
                             })}
-                          </ol>
+                          </ul>
+                        )}
+                        {canWrite ? (
+                          <div className="flex flex-col gap-2">
+                            <Disclosure summary={tp('addGuestTo', { party: p.name })}>
+                              <ProgramForm
+                                action={addGuestAction.bind(null, org, event, p.id)}
+                                fields={guestFields()}
+                                idPrefix={`add-${p.id}`}
+                                submitLabel={tp('addGuest')}
+                                successLabel={tp('guestAdded')}
+                                errors={errors}
+                                reset
+                              />
+                            </Disclosure>
+                            <Disclosure summary={tp('editNamed', { name: p.name })}>
+                              <ProgramForm
+                                action={updatePartyAction.bind(null, org, event, p.id)}
+                                fields={partyFields(p)}
+                                idPrefix={`party-${p.id}-edit`}
+                                submitLabel={tp('save')}
+                                successLabel={tp('saved')}
+                                errors={errors}
+                              />
+                              <ProgramForm
+                                action={removePartyAction.bind(null, org, event, p.id)}
+                                fields={[]}
+                                idPrefix={`party-${p.id}-remove`}
+                                submitLabel={tp('removeParty', { name: p.name, count: p.guests.length })}
+                                successLabel={tp('removed')}
+                                errors={errors}
+                              />
+                            </Disclosure>
+                          </div>
+                        ) : null}
+                        <PartyRsvp
+                          org={org}
+                          event={event}
+                          party={p}
+                          summary={rsvpOf.get(p.id)}
+                          url={linkOf.get(p.id) ?? null}
+                          canWrite={canWrite}
+                          locked={rsvpOverview.locked}
+                          subName={rsvpSubName}
+                        />
+                        {historyFor === p.id ? (
+                          <section aria-labelledby={`history-${p.id}`} className="flex flex-col gap-2">
+                            <h4 id={`history-${p.id}`} className="text-caption font-medium text-ink-2">
+                              {tp('historyOf', { party: p.name })}
+                            </h4>
+                            <ol className="flex list-none flex-col gap-1 p-0">
+                              {history.map((h) => {
+                                const g = h.guestId ? everyGuest.get(h.guestId) : undefined;
+                                return (
+                                  <li key={h.id} className="text-caption text-ink-2">
+                                    {tp(`actions.${h.action}`)}
+                                    {g ? ` · ${nameOf(g)}` : ''} · {tp(`sources.${h.source}`)} ·{' '}
+                                    {actorLabel(h.actor)} ·{' '}
+                                    <time dateTime={h.at.toISOString()}>{when(h.at)}</time>
+                                  </li>
+                                );
+                              })}
+                            </ol>
+                            <Link
+                              href={filterHref({ page: page > 1 ? String(page) : '' })}
+                              className="min-h-6 self-start py-1 text-caption underline"
+                            >
+                              {tp('hideHistory')}
+                            </Link>
+                          </section>
+                        ) : (
                           <Link
-                            href={filterHref({ page: page > 1 ? String(page) : '' })}
+                            href={`${filterHref({ page: page > 1 ? String(page) : '', history: p.id })}#party-${p.id}`}
                             className="min-h-6 self-start py-1 text-caption underline"
                           >
-                            {tp('hideHistory')}
+                            {tp('showHistory', { party: p.name })}
                           </Link>
-                        </section>
-                      ) : (
-                        <Link
-                          href={`${filterHref({ page: page > 1 ? String(page) : '', history: p.id })}#party-${p.id}`}
-                          className="min-h-6 self-start py-1 text-caption underline"
-                        >
-                          {tp('showHistory', { party: p.name })}
-                        </Link>
-                      )}
-                    </section>
-                  </Card>
-                </li>
-              );
-            })}
-          </ol>
-        )}
-        {pages > 1 ? (
-          <nav aria-label={tp('pagination')} className="flex items-center gap-3">
-            {page > 1 ? (
-              <Link
-                href={filterHref({ page: String(page - 1) })}
-                className="min-h-6 py-1 text-caption underline"
-              >
-                {tp('previous')}
-              </Link>
-            ) : null}
-            <span className="text-caption text-zinc-600">{tp('pageOf', { page, pages })}</span>
-            {page < pages ? (
-              <Link
-                href={filterHref({ page: String(page + 1) })}
-                className="min-h-6 py-1 text-caption underline"
-              >
-                {tp('next')}
-              </Link>
-            ) : null}
-          </nav>
+                        )}
+                      </section>
+                    </Card>
+                  </li>
+                );
+              })}
+            </ol>
+          )}
+          {pages > 1 ? (
+            <Pagination
+              label={tp('pagination')}
+              link={Link}
+              previous={{
+                href: page > 1 ? filterHref({ page: String(page - 1) }) : null,
+                label: tp('previous'),
+              }}
+              next={{ href: page < pages ? filterHref({ page: String(page + 1) }) : null, label: tp('next') }}
+              status={tp('pageOf', { page, pages })}
+            />
+          ) : null}
+        </section>
+        {canWrite ? (
+          <section
+            id="new-party"
+            aria-labelledby="add-party-heading"
+            className="scroll-mt-4 xl:sticky xl:top-4"
+          >
+            <Card size="panel" className="flex scroll-mt-4 flex-col gap-3">
+              <h2 id="add-party-heading" className="m-0 text-card">
+                {tp('addParty')}
+              </h2>
+              <p className="text-caption text-ink-2">{tp('addPartyHint')}</p>
+              <ProgramForm
+                action={createPartyAction.bind(null, org, event)}
+                fields={partyFields()}
+                idPrefix="new-party"
+                submitLabel={tp('addParty')}
+                successLabel={tp('partyAdded')}
+                errors={errors}
+                reset
+              />
+            </Card>
+          </section>
         ) : null}
-      </section>
+      </div>
     </>
   );
 }

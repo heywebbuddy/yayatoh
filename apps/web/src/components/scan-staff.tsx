@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button } from '@yayatoh/ui';
+import { Alert, Button, SkeletonCard } from '@yayatoh/ui';
 import { useFormatter, useLocale, useTranslations } from 'next-intl';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { ScanClient, StaffView } from '@/scan/client.ts';
@@ -78,10 +78,10 @@ export function StaffPanel({
     return () => window.clearInterval(id);
   }, [load]);
 
-  if (loading) return <p className="text-body text-zinc-600">{t('loading')}</p>;
+  if (loading) return <SkeletonCard label={t('loading')} />;
   if (!data)
     return (
-      <p className="text-body text-zinc-600" data-testid="staff-empty">
+      <p className="text-body text-ink-2" data-testid="staff-empty">
         {t('noData')}
       </p>
     );
@@ -91,7 +91,7 @@ export function StaffPanel({
 
   return (
     <div className="flex flex-col gap-6">
-      <p className="flex flex-wrap gap-x-3 text-caption text-zinc-600" data-testid="staff-updated">
+      <p className="flex flex-wrap gap-x-3 text-caption text-ink-2" data-testid="staff-updated">
         <span>
           {t('lastUpdated', { time: format.dateTime(new Date(data.fetchedAt), { timeStyle: 'medium' }) })}
         </span>
@@ -143,14 +143,14 @@ export function StaffPanel({
           {t('alertsTitle')}
         </h2>
         {view.alerts.length === 0 ? (
-          <p className="text-body text-zinc-600">{t('noAlerts')}</p>
+          <p className="text-body text-ink-2">{t('noAlerts')}</p>
         ) : (
           <ul className="flex list-none flex-col gap-2 p-0" aria-label={t('alertsTitle')}>
             {view.alerts.map((a) => (
               <li
                 key={a.key}
                 data-alert={a.kind}
-                className={`rounded-card border-2 px-4 py-3 text-body ${a.severity === 'critical' ? 'border-pink-700 bg-pink-50 text-pink-700' : 'border-accent-700 bg-accent-50 text-accent-text'}`}
+                className={`rounded-card border-2 px-4 py-3 text-body ${a.severity === 'critical' ? 'border-danger bg-danger-soft text-danger' : 'border-primary bg-primary-soft text-primary-ink'}`}
               >
                 {t(`alert.${COPY_KEY[a.kind]}`, {
                   label: a.deviceLabel ?? '',
@@ -169,9 +169,9 @@ export function StaffPanel({
           {t('devicesTitle')}
         </h2>
         {view.devices.length === 0 ? (
-          <p className="text-body text-zinc-600">{t('noDevices')}</p>
+          <p className="text-body text-ink-2">{t('noDevices')}</p>
         ) : (
-          <ul className="flex list-none flex-col divide-y divide-zinc-100 p-0" aria-label={t('devicesTitle')}>
+          <ul className="flex list-none flex-col divide-y divide-line p-0" aria-label={t('devicesTitle')}>
             {view.devices.map((d) => (
               <li key={d.id} data-device={d.label} className="flex flex-col gap-0.5 py-2">
                 <span className="text-body font-medium">
@@ -179,8 +179,8 @@ export function StaffPanel({
                   {d.self ? ` · ${t('thisDevice')}` : ''}
                   {d.mode === 'kiosk' ? ` · ${t('kiosk')}` : ''}
                 </span>
-                <span className="flex flex-wrap gap-x-3 text-caption text-zinc-600">
-                  <span className={d.online ? 'text-green-900' : 'text-pink-700'}>
+                <span className="flex flex-wrap gap-x-3 text-caption text-ink-2">
+                  <span className={d.online ? 'text-success' : 'text-danger'}>
                     {d.online ? t('online') : t('offline')}
                   </span>
                   <span>{d.lastSeenAt ? t('lastSeen', { time: time(d.lastSeenAt) }) : t('neverSeen')}</span>
@@ -325,7 +325,7 @@ function StaffPushControl({ client, publicKey }: { client: ScanClient; publicKey
       <h2 id="staff-push" className="text-section">
         {t('pushTitle')}
       </h2>
-      <p className="text-body text-zinc-600">{t('pushHint')}</p>
+      <p className="text-body text-ink-2">{t('pushHint')}</p>
       <p className="text-body font-medium" data-testid="staff-push-status">
         {explain}
       </p>
