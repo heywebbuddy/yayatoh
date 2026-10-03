@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { continueToPayment, expectAccessible, OPEN_HOUSE, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, OPEN_HOUSE, pickOption, signIn } from './helpers.ts';
 
 test.describe('early-bird, donation and multi-day passes', () => {
   test.use({ viewport: { width: 1280, height: 900 } });
@@ -44,7 +44,7 @@ test.describe('early-bird, donation and multi-day passes', () => {
     );
     await expectAccessible(guest);
 
-    await guest.getByLabel(`Quantity — Supporter ${stamp}`).selectOption('1');
+    await pickOption(guest.getByLabel(`Quantity — Supporter ${stamp}`), '1');
     await guest.getByLabel(`Your amount — Supporter ${stamp} (at least $5)`).fill('2');
     await guest.getByLabel('Full name').fill(`Ada ${stamp}`);
     await guest.getByLabel('Email for your tickets').fill(`ada+${stamp}@example.test`);
@@ -53,7 +53,7 @@ test.describe('early-bird, donation and multi-day passes', () => {
       'Enter an amount at or above the minimum',
     );
 
-    await guest.getByLabel(`Quantity — Supporter ${stamp}`).selectOption('1');
+    await pickOption(guest.getByLabel(`Quantity — Supporter ${stamp}`), '1');
     await guest.getByLabel(`Your amount — Supporter ${stamp} (at least $5)`).fill('12.50');
     await guest.getByLabel('Full name').fill(`Ada ${stamp}`);
     await guest.getByLabel('Email for your tickets').fill(`ada+${stamp}@example.test`);

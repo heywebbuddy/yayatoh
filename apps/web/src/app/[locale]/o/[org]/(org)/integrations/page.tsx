@@ -64,9 +64,25 @@ export default async function IntegrationsPage({
         {sp.cancelled ? <Alert tone="info" title={t('cancelled')} /> : null}
       </div>
       {!auth ? (
-        <EmptyState title={t('offTitle')} description={t('offDescription')} />
+        <EmptyState
+          title={t('offTitle')}
+          description={t('offDescription')}
+          action={
+            <Link href={`/o/${org}/webhooks`} className={buttonClass('primary', 'md')}>
+              {t('webhooksAction')}
+            </Link>
+          }
+        />
       ) : connectors.length === 0 ? (
-        <EmptyState title={t('noneTitle')} description={t('noneDescription')} />
+        <EmptyState
+          title={t('noneTitle')}
+          description={t('noneDescription')}
+          action={
+            <Link href={`/o/${org}/webhooks`} className={buttonClass('primary', 'md')}>
+              {t('webhooksAction')}
+            </Link>
+          }
+        />
       ) : (
         <ul className="m-0 grid list-none gap-4 p-0 md:grid-cols-2">
           {connectors.map((c) => {

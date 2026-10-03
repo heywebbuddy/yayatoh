@@ -29,3 +29,4 @@ Org-scoped contacts and the consent ledger. Owns Postgres schema `crm`.
   Money (lifetime value, the monetary quintile) leaves only through `finance:read` queries;
   `contactStats`/`orgContactStats` never carry an amount. The `ltv` and `rfmMonetary` segment
   conditions are money conditions (`usesMoneyConditions`).
+- `event_engagement` (M5.7b): each contact's engagement score per event, written only by the `engagement` module through `replaceEventEngagementTx` (crm never computes it); composite FKs to `crm.contacts` and `events.events` (hand-written), cascade. The segment condition `engagement` sums it over the events in scope. `contactForAccountTx` finds the contact behind a signed-in account (link, else email; never a merged contact).

@@ -30,7 +30,17 @@ export async function EventKpis({
   if (ctx.orgId) await applyUnpublishedMetricEvents(ctx.orgId);
   const r = await executeQuery(eventKpisQuery, { eventId }, ctx, ports);
   if (!r.hasSales)
-    return <EmptyState title={t('dashboard.noSalesTitle')} description={t('dashboard.noSalesDescription')} />;
+    return (
+      <EmptyState
+        title={t('dashboard.noSalesTitle')}
+        description={t('dashboard.noSalesDescription')}
+        action={
+          <Link href={`${base}/tickets-orders`} className={buttonClass('primary', 'md')}>
+            {t('dashboard.toTicketsOrders')}
+          </Link>
+        }
+      />
+    );
   const f = finance ? await executeQuery(eventFinanceKpisQuery, { eventId }, ctx, ports) : null;
   const m = r.metrics;
   const n = (v: number) => formatNumber(v, locale);

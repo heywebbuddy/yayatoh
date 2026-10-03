@@ -1,6 +1,20 @@
 export { type CallerScope, callerScopeTx, orgScopeTx } from './access.ts';
 export * from './client.ts';
 export { resetWidgetLayoutCommand, saveWidgetLayoutCommand, setModeOverrideCommand } from './commands.ts';
+// M5.9a conference pack.
+export {
+  ATTENDANCE_AHEAD_MS,
+  ExhibitorActivityWidgetDto,
+  type ExhibitorLeads,
+  exhibitorActivityWidget,
+  type OverdueDeliverables,
+  SessionAttendanceWidgetDto,
+  SessionFillWidgetDto,
+  SponsorActivityWidgetDto,
+  sessionAttendanceWidget,
+  sessionFillWidget,
+  sponsorActivityWidget,
+} from './conference-widgets.ts';
 export {
   createDisplayLinkCommand,
   DisplayLinkDto,

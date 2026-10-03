@@ -1,4 +1,6 @@
+import { connectedConferenceSources } from '@yayatoh/alerts';
 import { warehouseFromEnv } from '@yayatoh/analytics';
+import { printNodeFromEnv } from '@yayatoh/badges';
 import { billingEnabled, billingProviderFromEnv } from '@yayatoh/billing';
 import { setPlatformAuditSink, tryAcquireLeadership } from '@yayatoh/db/platform';
 import { createNotifier } from '@yayatoh/notifications';
@@ -27,6 +29,7 @@ import {
   userLocales,
   workerTransports,
 } from './notifications.ts';
+import { PRINTER_WATCHDOG_MS, PRINTNODE_POLL_MS, pollPrintNode, runPrinterWatchdog } from './printers.ts';
 import { runReconciliation } from './reconciliation.ts';
 import { JOBS, subscribers } from './registry.ts';
 import { relayOnce } from './relay.ts';
@@ -34,6 +37,7 @@ import { runRetention } from './retention.ts';
 import { runSettlements } from './settlements.ts';
 import {
   alertDisputeDeadlines,
+  collectDuePledges,
   summarizeApiKeyUsage,
   sweepEnrollments,
   sweepExpiredHolds,
@@ -168,6 +172,23 @@ setInterval(() => {
     });
 }, 10 * 60_000).unref();
 
+// Pledge collection (M4.8e): saved-card charges due the morning after the night is closed,
+// one retry after a decline, expired cards removed; every 5 minutes (leader only).
+let collecting = false;
+setInterval(() => {
+  if (!payments || !release || stopping || collecting) return;
+  collecting = true;
+  collectDuePledges(payments)
+    .then((r) => {
+      if (r.charged || r.declined || r.invoiced || r.cardsRemoved)
+        console.info(JSON.stringify({ job: 'pledge-collection', ...r }));
+    })
+    .catch((err) => console.error('pledge collection', err))
+    .finally(() => {
+      collecting = false;
+    });
+}, 5 * 60_000).unref();
+
 // Mass refunds (M3.10b): queue a batch job for each running run every 3 s (leader only); the
 // exclusive queue keeps one job per run, and a paused run is simply not queued.
 let queueingRefunds = false;
@@ -239,6 +260,34 @@ const queueContactStats = () => {
 };
 setTimeout(queueContactStats, 2 * 60_000).unref();
 setInterval(queueContactStats, 24 * 3_600_000).unref();
+
+// Badge printers (M5.5b): every 5 s the leader turns printers silent for 90 s offline (one
+// `badges.printer_offline@1` each); every 30 s it asks PrintNode (the fake in dev and CI) which of
+// its printers are online.
+let watchingPrinters = false;
+setInterval(() => {
+  if (!release || stopping || watchingPrinters) return;
+  watchingPrinters = true;
+  runPrinterWatchdog()
+    .then((r) => {
+      if (r.offline) console.info(JSON.stringify({ job: 'badges.printer-watchdog', ...r }));
+    })
+    .catch((err) => console.error('printer watchdog', err))
+    .finally(() => {
+      watchingPrinters = false;
+    });
+}, PRINTER_WATCHDOG_MS).unref();
+const printNode = printNodeFromEnv();
+let pollingPrintNode = false;
+setInterval(() => {
+  if (!printNode || !release || stopping || pollingPrintNode) return;
+  pollingPrintNode = true;
+  pollPrintNode(printNode)
+    .catch((err) => console.error('printnode poll', err))
+    .finally(() => {
+      pollingPrintNode = false;
+    });
+}, PRINTNODE_POLL_MS).unref();
 
 // Daily reconciliation (M1.6e): the previous UTC day, hourly attempts (idempotent per org and
 // day, so only the first run of a day does work), leader only. The fake provider without a
@@ -372,7 +421,8 @@ setTimeout(stateYearEnd, 15 * 60_000).unref();
 setInterval(stateYearEnd, 24 * 3_600_000).unref();
 
 // Alert engine (M3.2b): live and pre-show events every 30 s, everything else every 5 minutes (leader only).
-const alertDeps = { notifier: createNotifier() };
+// Batch 3j merge: M5.9a's conference pack reads sponsor deliverables and badge printers.
+const alertDeps = { notifier: createNotifier(), conference: connectedConferenceSources };
 let sweepingAlerts = false;
 let alertTicks = 0;
 setInterval(() => {

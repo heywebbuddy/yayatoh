@@ -2,10 +2,12 @@ import { createHmac, randomUUID, timingSafeEqual } from 'node:crypto';
 import type {
   AccountEvent,
   BalanceTransaction,
+  ChargeSavedCardResult,
   CreatePaymentInput,
   DisputeEvent,
   PaymentProvider,
   ProviderEvent,
+  SetupEvent,
   WebhookEvent,
 } from './port.ts';
 
@@ -36,6 +38,32 @@ export function processFakeBalanceStore(): FakeBalanceStore {
 }
 
 /**
+ * The fake's memory of off-session charges (M4.8e): one answer per idempotency key, as Stripe
+ * keeps it, and the "declines once" test cards it has already declined. One per process.
+ */
+export interface FakeCardStore {
+  readonly charges: Map<string, ChargeSavedCardResult>;
+  readonly declinedOnce: Set<string>;
+}
+
+export function processFakeCardStore(): FakeCardStore {
+  const g = globalThis as { __yayatohFakeCards?: FakeCardStore };
+  g.__yayatohFakeCards ??= { charges: new Map(), declinedOnce: new Set() };
+  return g.__yayatohFakeCards;
+}
+
+/**
+ * The fake hosted card step's test cards (M4.8e): what the payment method id encodes. `4242`
+ * always charges; `0002` always declines; `9995` declines its first charge, then charges.
+ */
+export const FAKE_TEST_CARDS = {
+  '4242': { prefix: 'fakepm_ok_', brand: 'visa' },
+  '0002': { prefix: 'fakepm_decline_', brand: 'visa' },
+  '9995': { prefix: 'fakepm_declineonce_', brand: 'mastercard' },
+} as const;
+export type FakeTestCard = keyof typeof FAKE_TEST_CARDS;
+
+/**
  * Fake provider for dev, preview and CI (no Stripe account yet — owner inbox). Payments are
  * "completed" on a hosted fake page that posts an HMAC-signed webhook, so the real webhook path
  * (raw-body verification, dedupe, fulfilment) is exercised end to end.
@@ -44,6 +72,8 @@ export function fakePaymentProvider(opts: {
   secret: string;
   appOrigin: string;
   store?: FakeBalanceStore;
+  /** Off-session charges answered so far (default: the process's). */
+  cards?: FakeCardStore;
   /** Tests: the clock stamped on balance transactions. */
   now?: () => Date;
 }): PaymentProvider {
@@ -51,6 +81,8 @@ export function fakePaymentProvider(opts: {
     throw new Error('The fake payment provider is not allowed in production');
   if (opts.secret.length < 32) throw new Error('fake provider secret must be ≥32 chars');
   const now = opts.now ?? (() => new Date());
+  const cards = opts.cards ?? processFakeCardStore();
+  const mac = (v: string, n: number) => createHmac('sha256', opts.secret).update(v).digest('hex').slice(0, n);
   const record = (
     id: string,
     kind: BalanceTransaction['kind'],
@@ -147,6 +179,40 @@ export function fakePaymentProvider(opts: {
       if (i.packet && i.packet.bytes.byteLength > 4_500_000) return { status: 'failed' };
       return { status: i.summary.trim() ? 'submitted' : 'failed' };
     },
+    async createCardSetup(i) {
+      const providerSetupId = `fakeseti_${mac(`seti:${i.idempotencyKey}`, 24)}`;
+      const params = new URLSearchParams({
+        seti: providerSetupId,
+        org: i.orgId,
+        ref: i.reference,
+        acct: i.connectedAccountId,
+        email: i.email,
+        desc: i.description,
+        return: i.returnUrl,
+      });
+      return { providerSetupId, redirectUrl: `${opts.appOrigin}/checkout/fake/setup?${params}` };
+    },
+    async chargeSavedCard(i) {
+      if (i.amount.amount <= 0) throw new Error('charge amount must be positive');
+      if (!i.paymentMethodId.startsWith('fakepm_')) throw new Error('not a fake payment method');
+      // Like Stripe's idempotency: the same key answers the same, and never charges again.
+      const seen = cards.charges.get(i.idempotencyKey);
+      if (seen) return seen;
+      const providerPaymentId = `fakepi_${mac(i.idempotencyKey, 24)}`;
+      let declined = i.paymentMethodId.startsWith('fakepm_decline_');
+      if (i.paymentMethodId.startsWith('fakepm_declineonce_') && !cards.declinedOnce.has(i.paymentMethodId)) {
+        cards.declinedOnce.add(i.paymentMethodId);
+        declined = true;
+      }
+      const out: ChargeSavedCardResult = declined
+        ? { providerPaymentId, status: 'declined', declineCode: 'card_declined' }
+        : { providerPaymentId, status: 'succeeded' };
+      cards.charges.set(i.idempotencyKey, out);
+      return out;
+    },
+    async detachSavedCard(i) {
+      return { status: i.paymentMethodId.startsWith('fakepm_') ? 'detached' : 'gone' };
+    },
     async listBalanceTransactions(i) {
       return opts.store ? opts.store.list(i.from, i.to) : null;
     },
@@ -221,5 +287,52 @@ export function signFakeDisputeWebhook(
   e: Omit<DisputeEvent, 'provider' | 'id'> & { id?: string },
 ): { body: string; signature: string } {
   const body = JSON.stringify({ id: e.id ?? `fakeevt_${randomUUID()}`, ...e, provider: 'fake' });
+  return { body, signature: createHmac('sha256', secret).update(body).digest('hex') };
+}
+
+/**
+ * Build and sign a fake card-setup webhook (the fake hosted card step and tests). The test card
+ * decides the payment method (`FAKE_TEST_CARDS`); the customer is one per account and email.
+ */
+export function signFakeSetupWebhook(
+  secret: string,
+  e: {
+    id?: string;
+    orgId: string;
+    reference: string;
+    providerSetupId: string;
+    connectedAccountId: string;
+    email: string;
+    outcome: 'succeeded' | 'failed';
+    card?: FakeTestCard;
+  },
+): { body: string; signature: string } {
+  const mac = (v: string, n: number) => createHmac('sha256', secret).update(v).digest('hex').slice(0, n);
+  const card = FAKE_TEST_CARDS[e.card ?? '4242'];
+  const event: SetupEvent =
+    e.outcome === 'succeeded'
+      ? {
+          provider: 'fake',
+          id: e.id ?? `fakeevt_${randomUUID()}`,
+          type: 'setup.succeeded',
+          orgId: e.orgId,
+          reference: e.reference,
+          providerSetupId: e.providerSetupId,
+          customerId: `fakecus_${mac(`cus:${e.connectedAccountId}:${e.email.toLowerCase()}`, 16)}`,
+          paymentMethodId: `${card.prefix}${mac(`pm:${e.providerSetupId}`, 16)}`,
+          brand: card.brand,
+          last4: e.card ?? '4242',
+          expMonth: 12,
+          expYear: 2030,
+        }
+      : {
+          provider: 'fake',
+          id: e.id ?? `fakeevt_${randomUUID()}`,
+          type: 'setup.failed',
+          orgId: e.orgId,
+          reference: e.reference,
+          providerSetupId: e.providerSetupId,
+        };
+  const body = JSON.stringify(event);
   return { body, signature: createHmac('sha256', secret).update(body).digest('hex') };
 }

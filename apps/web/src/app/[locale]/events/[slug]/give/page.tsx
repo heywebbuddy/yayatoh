@@ -1,16 +1,18 @@
 import { randomUUID } from 'node:crypto';
-import { catchUpGifts, publicGiving } from '@yayatoh/donations';
+import { catchUpGifts, publicGiving, QR_PLACES, savedCardView } from '@yayatoh/donations';
 import { checkoutTarget, publicEventBySlug } from '@yayatoh/events';
 import { formatMoney, money } from '@yayatoh/kernel';
-import { buttonClass, EmptyState, Label, ProgressBar } from '@yayatoh/ui';
+import { Alert, buttonClass, EmptyState, Label, ProgressBar } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/navigation.ts';
 import { pageLocale } from '@/server/locale.ts';
+import { deviceCardToken } from '@/server/saved-card.ts';
 import { giveAction } from './actions.ts';
 import { GiveForm } from './give-form.tsx';
 import { GiveFrame, GiveHero } from './give-frame.tsx';
+import { OneTap } from './one-tap.tsx';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('donations.give');
@@ -19,7 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 type Params = {
   params: Promise<{ locale: string; slug: string }>;
-  searchParams: Promise<{ c?: string }>;
+  searchParams: Promise<{ c?: string; via?: string; tap?: string }>;
 };
 
 const UUID = /^[0-9a-f-]{36}$/;
@@ -36,9 +38,16 @@ export default async function GivePage({ params, searchParams }: Params) {
   const ev = target ? await publicEventBySlug(slug) : null;
   if (!target || !ev) notFound();
   const t = await getTranslations('donations.give');
+  const tm = await getTranslations('donations.matches');
   await catchUpGifts(target.orgId);
   const giving = await publicGiving(target.orgId, target.eventId);
-  const { c } = await searchParams;
+  const { c, via, tap } = await searchParams;
+  // M4.8d: opened from a QR code on the room's screen or a table card (the gift is a QR gift).
+  const qr = (QR_PLACES as readonly string[]).includes(via ?? '') ? `&via=${via}` : '';
+  // M4.8e: the card this device saved for this event (P4-14), for one-tap gifts.
+  const cardToken = await deviceCardToken(target.eventId);
+  const saved = cardToken ? await savedCardView(target.orgId, cardToken) : null;
+  const card = saved?.status === 'active' && saved.eventId === target.eventId ? saved : null;
   const campaign =
     (c && UUID.test(c) ? giving.campaigns.find((x) => x.id === c) : undefined) ?? giving.campaigns[0] ?? null;
   const fmt = (minor: number, currency: string) => formatMoney(money(minor, currency), locale);
@@ -81,12 +90,33 @@ export default async function GivePage({ params, searchParams }: Params) {
         <EmptyState title={t('noCampaignTitle')} description={t('noCampaignBody')} />
       ) : (
         <>
+          {/* M4.8f: a sponsor's running challenge match on this campaign (P4-17). */}
+          {campaign.matches
+            .filter((m) => m.phase === 'live')
+            .map((m) => (
+              <Alert
+                key={m.id}
+                tone="success"
+                title={tm('headline', {
+                  ratio: `r${m.ratioPercent}`,
+                  percent: new Intl.NumberFormat(locale).format(m.ratioPercent),
+                  cap: fmt(m.capMinor, m.currency),
+                })}
+              >
+                <p className="m-0" data-testid="match-banner">
+                  {m.publicName ? tm('thanksTo', { name: m.publicName }) : tm('thanksAnonymous')}{' '}
+                  {m.remainingMinor > 0
+                    ? tm('publicProgress', { matched: fmt(m.matchedMinor, m.currency) })
+                    : tm('reached')}
+                </p>
+              </Alert>
+            ))}
           {giving.campaigns.length > 1 ? (
             <nav aria-label={t('campaignsNav')} className="flex flex-wrap gap-2">
               {giving.campaigns.map((x) => (
                 <Link
                   key={x.id}
-                  href={`/events/${slug}/give?c=${x.id}`}
+                  href={`/events/${slug}/give?c=${x.id}${qr}`}
                   aria-current={x.id === campaign.id ? 'page' : undefined}
                   className={chip}
                 >
@@ -95,10 +125,13 @@ export default async function GivePage({ params, searchParams }: Params) {
               ))}
             </nav>
           ) : null}
+          {card && campaign.levels.length ? (
+            <OneTap slug={slug} campaign={campaign} card={card} locale={locale} failed={tap === 'failed'} />
+          ) : null}
           <GiveForm
             key={campaign.id}
             campaign={campaign}
-            action={giveAction.bind(null, slug, campaign.id, randomUUID())}
+            action={giveAction.bind(null, slug, campaign.id, randomUUID(), qr ? 'qr' : 'online')}
           />
         </>
       )}

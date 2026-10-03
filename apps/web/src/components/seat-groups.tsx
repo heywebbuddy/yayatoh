@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button } from '@yayatoh/ui';
+import { Alert, Button, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { startTransition, useActionState } from 'react';
 import type { GroupState } from '@/app/[locale]/o/[org]/e/[event]/seating/actions.ts';
@@ -163,7 +163,7 @@ export function SeatGroups({
             <label htmlFor="group-item" className="text-[13px] font-bold text-ink">
               {t('groups.form.item')}
             </label>
-            <select
+            <Select
               id="group-item"
               name="itemId"
               defaultValue=""
@@ -176,7 +176,7 @@ export function SeatGroups({
                   {t('assign.form.option', { item: itemName(i), free: i.free, capacity: i.capacity })}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
           <div className="flex flex-col gap-1.5">
             <label htmlFor="group-count" className="text-[13px] font-bold text-ink">

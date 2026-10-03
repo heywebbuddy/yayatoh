@@ -1365,6 +1365,747 @@ exports[`renderMessage: every kind in all 13 locales > campaigns.test · zh-TW 1
 }
 `;
 
+exports[`renderMessage: every kind in all 13 locales > donations.pledge-invoice · ar 1`] = `
+{
+  "subject": "تعهّدك لـ Lakeside Events: يُرجى الدفع عبر الإنترنت",
+  "text": "تعهّدك لـ Lakeside Events: يُرجى الدفع عبر الإنترنت
+
+مرحبًا Amina Diallo،
+
+تعذّر علينا خصم مبلغ تعهّدك البالغ ‏1,000.00 US$ في Harbor Arts Gala من بطاقتك. يُرجى الدفع عبر الإنترنت قبل June 1, 2027.
+
+دفع تعهّدي: https://app.yayatoh.test/events/harbor-gala/pledge/sample
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.pledge-invoice · de 1`] = `
+{
+  "subject": "Ihre Zusage an Lakeside Events: Bitte online bezahlen",
+  "text": "Ihre Zusage an Lakeside Events: Bitte online bezahlen
+
+Hallo Amina Diallo,
+
+Wir konnten Ihre Karte für Ihre Zusage über 1.000,00 $ bei Harbor Arts Gala nicht belasten. Bitte zahlen Sie bis June 1, 2027 online.
+
+Meine Zusage bezahlen: https://app.yayatoh.test/events/harbor-gala/pledge/sample
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.pledge-invoice · en 1`] = `
+{
+  "subject": "Your pledge to Lakeside Events: please pay online",
+  "text": "Your pledge to Lakeside Events: please pay online
+
+Hi Amina Diallo,
+
+We couldn't charge your card for your pledge of $1,000.00 at Harbor Arts Gala. Please pay online by June 1, 2027.
+
+Pay my pledge: https://app.yayatoh.test/events/harbor-gala/pledge/sample
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.pledge-invoice · es 1`] = `
+{
+  "subject": "Tu compromiso con Lakeside Events: paga en línea",
+  "text": "Tu compromiso con Lakeside Events: paga en línea
+
+Hola, Amina Diallo:
+
+No pudimos cargar tu tarjeta por tu compromiso de 1000,00 US$ en Harbor Arts Gala. Paga en línea antes del June 1, 2027.
+
+Pagar mi compromiso: https://app.yayatoh.test/events/harbor-gala/pledge/sample
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.pledge-invoice · fr 1`] = `
+{
+  "subject": "Votre promesse de don à Lakeside Events : merci de payer en ligne",
+  "text": "Votre promesse de don à Lakeside Events : merci de payer en ligne
+
+Bonjour Amina Diallo,
+
+Nous n'avons pas pu débiter votre carte pour votre promesse de 1 000,00 $US lors de Harbor Arts Gala. Merci de payer en ligne avant le June 1, 2027.
+
+Payer ma promesse: https://app.yayatoh.test/events/harbor-gala/pledge/sample
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.pledge-invoice · hi 1`] = `
+{
+  "subject": "Lakeside Events को आपका संकल्प: कृपया ऑनलाइन भुगतान करें",
+  "text": "Lakeside Events को आपका संकल्प: कृपया ऑनलाइन भुगतान करें
+
+नमस्ते Amina Diallo,
+
+Harbor Arts Gala में $1,000.00 के आपके संकल्प के लिए हम आपके कार्ड से राशि नहीं ले सके। कृपया June 1, 2027 तक ऑनलाइन भुगतान करें।
+
+मेरा संकल्प चुकाएँ: https://app.yayatoh.test/events/harbor-gala/pledge/sample
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.pledge-invoice · it 1`] = `
+{
+  "subject": "Il tuo impegno con Lakeside Events: paga online",
+  "text": "Il tuo impegno con Lakeside Events: paga online
+
+Ciao Amina Diallo,
+
+Non siamo riusciti ad addebitare la tua carta per il tuo impegno di 1000,00 USD a Harbor Arts Gala. Paga online entro il June 1, 2027.
+
+Paga il mio impegno: https://app.yayatoh.test/events/harbor-gala/pledge/sample
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.pledge-invoice · ja 1`] = `
+{
+  "subject": "Lakeside Eventsへのご寄付のお約束：オンラインでのお支払いをお願いします",
+  "text": "Lakeside Eventsへのご寄付のお約束：オンラインでのお支払いをお願いします
+
+Amina Diallo 様
+
+Harbor Arts Galaでの$1,000.00のお約束について、カードへの請求ができませんでした。June 1, 2027までにオンラインでお支払いください。
+
+お約束の金額を支払う: https://app.yayatoh.test/events/harbor-gala/pledge/sample
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.pledge-invoice · nl 1`] = `
+{
+  "subject": "Je toezegging aan Lakeside Events: betaal online",
+  "text": "Je toezegging aan Lakeside Events: betaal online
+
+Hoi Amina Diallo,
+
+We konden je kaart niet belasten voor je toezegging van US$ 1.000,00 bij Harbor Arts Gala. Betaal vóór June 1, 2027 online.
+
+Mijn toezegging betalen: https://app.yayatoh.test/events/harbor-gala/pledge/sample
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.pledge-invoice · pt 1`] = `
+{
+  "subject": "Seu compromisso com Lakeside Events: pague on-line",
+  "text": "Seu compromisso com Lakeside Events: pague on-line
+
+Olá, Amina Diallo!
+
+Não conseguimos cobrar seu cartão pelo compromisso de US$ 1.000,00 em Harbor Arts Gala. Pague on-line até June 1, 2027.
+
+Pagar meu compromisso: https://app.yayatoh.test/events/harbor-gala/pledge/sample
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.pledge-invoice · ru 1`] = `
+{
+  "subject": "Ваше обещание пожертвования для Lakeside Events: оплатите онлайн",
+  "text": "Ваше обещание пожертвования для Lakeside Events: оплатите онлайн
+
+Здравствуйте, Amina Diallo!
+
+Нам не удалось списать с вашей карты сумму обещания 1 000,00 $ на Harbor Arts Gala. Оплатите онлайн до June 1, 2027.
+
+Оплатить обещание: https://app.yayatoh.test/events/harbor-gala/pledge/sample
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.pledge-invoice · zh-CN 1`] = `
+{
+  "subject": "您对 Lakeside Events 的认捐：请在线付款",
+  "text": "您对 Lakeside Events 的认捐：请在线付款
+
+Amina Diallo，您好：
+
+我们未能从您的银行卡扣取您在 Harbor Arts Gala 认捐的 US$1,000.00。请在 June 1, 2027 前在线付款。
+
+支付我的认捐: https://app.yayatoh.test/events/harbor-gala/pledge/sample
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.pledge-invoice · zh-TW 1`] = `
+{
+  "subject": "您對 Lakeside Events 的認捐：請線上付款",
+  "text": "您對 Lakeside Events 的認捐：請線上付款
+
+Amina Diallo，您好：
+
+我們無法從您的信用卡扣取您在 Harbor Arts Gala 認捐的 US$1,000.00。請在 June 1, 2027 前線上付款。
+
+支付我的認捐: https://app.yayatoh.test/events/harbor-gala/pledge/sample
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.pledge-reminder · ar 1`] = `
+{
+  "subject": "تذكير: تعهّدك بمبلغ ‏1,000.00 US$ لـ Lakeside Events",
+  "text": "تذكير: تعهّدك بمبلغ ‏1,000.00 US$ لـ Lakeside Events
+
+مرحبًا Amina Diallo،
+
+شكرًا مجددًا على تعهّدك بمبلغ ‏1,000.00 US$ في Harbor Arts Gala. موعد استحقاقه June 1, 2027. إذا كنت قد دفعت بالفعل، فتجاهل هذه الرسالة.
+
+دفع تعهّدي: https://app.yayatoh.test/events/harbor-gala/pledge/sample
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.pledge-reminder · de 1`] = `
+{
+  "subject": "Erinnerung: Ihre Zusage über 1.000,00 $ an Lakeside Events",
+  "text": "Erinnerung: Ihre Zusage über 1.000,00 $ an Lakeside Events
+
+Hallo Amina Diallo,
+
+Nochmals vielen Dank für Ihre Zusage über 1.000,00 $ bei Harbor Arts Gala. Sie ist am June 1, 2027 fällig. Wenn Sie bereits bezahlt haben, ignorieren Sie diese E-Mail bitte.
+
+Meine Zusage bezahlen: https://app.yayatoh.test/events/harbor-gala/pledge/sample
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.pledge-reminder · en 1`] = `
+{
+  "subject": "Reminder: your pledge of $1,000.00 to Lakeside Events",
+  "text": "Reminder: your pledge of $1,000.00 to Lakeside Events
+
+Hi Amina Diallo,
+
+Thank you again for your pledge of $1,000.00 at Harbor Arts Gala. It is due on June 1, 2027. If you have already paid, please ignore this email.
+
+Pay my pledge: https://app.yayatoh.test/events/harbor-gala/pledge/sample
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.pledge-reminder · es 1`] = `
+{
+  "subject": "Recordatorio: tu compromiso de 1000,00 US$ con Lakeside Events",
+  "text": "Recordatorio: tu compromiso de 1000,00 US$ con Lakeside Events
+
+Hola, Amina Diallo:
+
+Gracias de nuevo por tu compromiso de 1000,00 US$ en Harbor Arts Gala. Vence el June 1, 2027. Si ya pagaste, ignora este correo.
+
+Pagar mi compromiso: https://app.yayatoh.test/events/harbor-gala/pledge/sample
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.pledge-reminder · fr 1`] = `
+{
+  "subject": "Rappel : votre promesse de 1 000,00 $US à Lakeside Events",
+  "text": "Rappel : votre promesse de 1 000,00 $US à Lakeside Events
+
+Bonjour Amina Diallo,
+
+Merci encore pour votre promesse de 1 000,00 $US lors de Harbor Arts Gala. Elle est due le June 1, 2027. Si vous avez déjà payé, ignorez cet e-mail.
+
+Payer ma promesse: https://app.yayatoh.test/events/harbor-gala/pledge/sample
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.pledge-reminder · hi 1`] = `
+{
+  "subject": "याद दिलाना: Lakeside Events को $1,000.00 का आपका संकल्प",
+  "text": "याद दिलाना: Lakeside Events को $1,000.00 का आपका संकल्प
+
+नमस्ते Amina Diallo,
+
+Harbor Arts Gala में $1,000.00 के संकल्प के लिए फिर से धन्यवाद। इसकी नियत तारीख June 1, 2027 है। अगर आप भुगतान कर चुके हैं, तो इस ईमेल को अनदेखा करें।
+
+मेरा संकल्प चुकाएँ: https://app.yayatoh.test/events/harbor-gala/pledge/sample
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.pledge-reminder · it 1`] = `
+{
+  "subject": "Promemoria: il tuo impegno di 1000,00 USD con Lakeside Events",
+  "text": "Promemoria: il tuo impegno di 1000,00 USD con Lakeside Events
+
+Ciao Amina Diallo,
+
+Grazie ancora per il tuo impegno di 1000,00 USD a Harbor Arts Gala. La scadenza è il June 1, 2027. Se hai già pagato, ignora questa email.
+
+Paga il mio impegno: https://app.yayatoh.test/events/harbor-gala/pledge/sample
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.pledge-reminder · ja 1`] = `
+{
+  "subject": "リマインダー：Lakeside Eventsへの$1,000.00のお約束",
+  "text": "リマインダー：Lakeside Eventsへの$1,000.00のお約束
+
+Amina Diallo 様
+
+Harbor Arts Galaでの$1,000.00のお約束に改めて感謝いたします。お支払い期限はJune 1, 2027です。お支払い済みの場合は、このメールは無視してください。
+
+お約束の金額を支払う: https://app.yayatoh.test/events/harbor-gala/pledge/sample
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.pledge-reminder · nl 1`] = `
+{
+  "subject": "Herinnering: je toezegging van US$ 1.000,00 aan Lakeside Events",
+  "text": "Herinnering: je toezegging van US$ 1.000,00 aan Lakeside Events
+
+Hoi Amina Diallo,
+
+Nogmaals bedankt voor je toezegging van US$ 1.000,00 bij Harbor Arts Gala. Die vervalt op June 1, 2027. Heb je al betaald, negeer deze e-mail dan.
+
+Mijn toezegging betalen: https://app.yayatoh.test/events/harbor-gala/pledge/sample
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.pledge-reminder · pt 1`] = `
+{
+  "subject": "Lembrete: seu compromisso de US$ 1.000,00 com Lakeside Events",
+  "text": "Lembrete: seu compromisso de US$ 1.000,00 com Lakeside Events
+
+Olá, Amina Diallo!
+
+Obrigado de novo pelo compromisso de US$ 1.000,00 em Harbor Arts Gala. O vencimento é June 1, 2027. Se você já pagou, ignore este e-mail.
+
+Pagar meu compromisso: https://app.yayatoh.test/events/harbor-gala/pledge/sample
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.pledge-reminder · ru 1`] = `
+{
+  "subject": "Напоминание: ваше обещание 1 000,00 $ для Lakeside Events",
+  "text": "Напоминание: ваше обещание 1 000,00 $ для Lakeside Events
+
+Здравствуйте, Amina Diallo!
+
+Ещё раз спасибо за обещание пожертвовать 1 000,00 $ на Harbor Arts Gala. Срок оплаты — June 1, 2027. Если вы уже оплатили, просто проигнорируйте это письмо.
+
+Оплатить обещание: https://app.yayatoh.test/events/harbor-gala/pledge/sample
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.pledge-reminder · zh-CN 1`] = `
+{
+  "subject": "提醒：您对 Lakeside Events 认捐的 US$1,000.00",
+  "text": "提醒：您对 Lakeside Events 认捐的 US$1,000.00
+
+Amina Diallo，您好：
+
+再次感谢您在 Harbor Arts Gala 认捐 US$1,000.00。付款截止日期为 June 1, 2027。如果您已付款，请忽略此邮件。
+
+支付我的认捐: https://app.yayatoh.test/events/harbor-gala/pledge/sample
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.pledge-reminder · zh-TW 1`] = `
+{
+  "subject": "提醒：您對 Lakeside Events 認捐的 US$1,000.00",
+  "text": "提醒：您對 Lakeside Events 認捐的 US$1,000.00
+
+Amina Diallo，您好：
+
+再次感謝您在 Harbor Arts Gala 認捐 US$1,000.00。付款期限為 June 1, 2027。如果您已付款，請忽略此郵件。
+
+支付我的認捐: https://app.yayatoh.test/events/harbor-gala/pledge/sample
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.pledge-summary · ar 1`] = `
+{
+  "subject": "تعهّدك لـ Lakeside Events: سنخصم المبلغ من بطاقتك غدًا",
+  "text": "تعهّدك لـ Lakeside Events: سنخصم المبلغ من بطاقتك غدًا
+
+مرحبًا Amina Diallo،
+
+شكرًا على تعهّدك بمبلغ ‏1,500.00 US$ في Harbor Arts Gala. سنخصم المبلغ من بطاقتك (visa 4242) في Sunday, May 2, 2027 at 9:00 AM. لاستخدام بطاقة أخرى أو الدفع بطريقة أخرى، استخدم الزر أدناه قبل ذلك.
+
+Gold: $1,000.00
+Silver: $500.00
+
+{mode, select, card {تغيير البطاقة أو الدفع بطريقة أخرى} other {دفع تعهّدي}}: https://app.yayatoh.test/events/harbor-gala/pledge/sample
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.pledge-summary · de 1`] = `
+{
+  "subject": "Ihre Zusage an Lakeside Events: Ihre Karte wird morgen belastet",
+  "text": "Ihre Zusage an Lakeside Events: Ihre Karte wird morgen belastet
+
+Hallo Amina Diallo,
+
+Vielen Dank für Ihre Zusage über 1.500,00 $ bei Harbor Arts Gala. Wir belasten Ihre Karte (visa 4242) am Sunday, May 2, 2027 at 9:00 AM. Wenn Sie eine andere Karte nutzen oder anders zahlen möchten, verwenden Sie vorher die Schaltfläche unten.
+
+Gold: $1,000.00
+Silver: $500.00
+
+{mode, select, card {Karte ändern oder anders zahlen} other {Meine Zusage bezahlen}}: https://app.yayatoh.test/events/harbor-gala/pledge/sample
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.pledge-summary · en 1`] = `
+{
+  "subject": "Your pledge to Lakeside Events: your card will be charged tomorrow",
+  "text": "Your pledge to Lakeside Events: your card will be charged tomorrow
+
+Hi Amina Diallo,
+
+Thank you for pledging $1,500.00 at Harbor Arts Gala. We will charge your card (visa 4242) on Sunday, May 2, 2027 at 9:00 AM. To use another card or pay another way, use the button below before then.
+
+Gold: $1,000.00
+Silver: $500.00
+
+{mode, select, card {Change the card or pay another way} other {Pay my pledge}}: https://app.yayatoh.test/events/harbor-gala/pledge/sample
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.pledge-summary · es 1`] = `
+{
+  "subject": "Tu compromiso con Lakeside Events: mañana cargaremos tu tarjeta",
+  "text": "Tu compromiso con Lakeside Events: mañana cargaremos tu tarjeta
+
+Hola, Amina Diallo:
+
+Gracias por comprometerte con 1500,00 US$ en Harbor Arts Gala. Cargaremos tu tarjeta (visa 4242) el Sunday, May 2, 2027 at 9:00 AM. Si quieres usar otra tarjeta o pagar de otra forma, usa el botón de abajo antes de esa fecha.
+
+Gold: $1,000.00
+Silver: $500.00
+
+{mode, select, card {Cambiar la tarjeta o pagar de otra forma} other {Pagar mi compromiso}}: https://app.yayatoh.test/events/harbor-gala/pledge/sample
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.pledge-summary · fr 1`] = `
+{
+  "subject": "Votre promesse de don à Lakeside Events : votre carte sera débitée demain",
+  "text": "Votre promesse de don à Lakeside Events : votre carte sera débitée demain
+
+Bonjour Amina Diallo,
+
+Merci pour votre promesse de 1 500,00 $US lors de Harbor Arts Gala. Nous débiterons votre carte (visa 4242) le Sunday, May 2, 2027 at 9:00 AM. Pour utiliser une autre carte ou payer autrement, utilisez le bouton ci-dessous avant cette date.
+
+Gold: $1,000.00
+Silver: $500.00
+
+{mode, select, card {Changer de carte ou payer autrement} other {Payer ma promesse}}: https://app.yayatoh.test/events/harbor-gala/pledge/sample
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.pledge-summary · hi 1`] = `
+{
+  "subject": "Lakeside Events को आपका संकल्प: कल आपके कार्ड से राशि ली जाएगी",
+  "text": "Lakeside Events को आपका संकल्प: कल आपके कार्ड से राशि ली जाएगी
+
+नमस्ते Amina Diallo,
+
+Harbor Arts Gala में $1,500.00 के संकल्प के लिए धन्यवाद। हम Sunday, May 2, 2027 at 9:00 AM को आपके कार्ड (visa 4242) से राशि लेंगे। कोई दूसरा कार्ड इस्तेमाल करने या किसी और तरीके से भुगतान करने के लिए, उससे पहले नीचे दिए बटन का उपयोग करें।
+
+Gold: $1,000.00
+Silver: $500.00
+
+{mode, select, card {कार्ड बदलें या दूसरे तरीके से भुगतान करें} other {मेरा संकल्प चुकाएँ}}: https://app.yayatoh.test/events/harbor-gala/pledge/sample
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.pledge-summary · it 1`] = `
+{
+  "subject": "Il tuo impegno con Lakeside Events: domani addebiteremo la tua carta",
+  "text": "Il tuo impegno con Lakeside Events: domani addebiteremo la tua carta
+
+Ciao Amina Diallo,
+
+Grazie per il tuo impegno di 1500,00 USD a Harbor Arts Gala. Addebiteremo la tua carta (visa 4242) il Sunday, May 2, 2027 at 9:00 AM. Per usare un'altra carta o pagare in altro modo, usa il pulsante qui sotto prima di allora.
+
+Gold: $1,000.00
+Silver: $500.00
+
+{mode, select, card {Cambia carta o paga in altro modo} other {Paga il mio impegno}}: https://app.yayatoh.test/events/harbor-gala/pledge/sample
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.pledge-summary · ja 1`] = `
+{
+  "subject": "Lakeside Eventsへのご寄付のお約束：明日カードに請求します",
+  "text": "Lakeside Eventsへのご寄付のお約束：明日カードに請求します
+
+Amina Diallo 様
+
+Harbor Arts Galaでの$1,500.00のお約束をありがとうございます。Sunday, May 2, 2027 at 9:00 AMにカード（visa 4242）へ請求します。別のカードや別の方法でお支払いの場合は、それまでに下のボタンをご利用ください。
+
+Gold: $1,000.00
+Silver: $500.00
+
+{mode, select, card {カードを変更、または別の方法で支払う} other {お約束の金額を支払う}}: https://app.yayatoh.test/events/harbor-gala/pledge/sample
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.pledge-summary · nl 1`] = `
+{
+  "subject": "Je toezegging aan Lakeside Events: je kaart wordt morgen belast",
+  "text": "Je toezegging aan Lakeside Events: je kaart wordt morgen belast
+
+Hoi Amina Diallo,
+
+Bedankt voor je toezegging van US$ 1.500,00 bij Harbor Arts Gala. We belasten je kaart (visa 4242) op Sunday, May 2, 2027 at 9:00 AM. Wil je een andere kaart gebruiken of anders betalen, gebruik dan vóór die tijd de knop hieronder.
+
+Gold: $1,000.00
+Silver: $500.00
+
+{mode, select, card {Kaart wijzigen of anders betalen} other {Mijn toezegging betalen}}: https://app.yayatoh.test/events/harbor-gala/pledge/sample
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.pledge-summary · pt 1`] = `
+{
+  "subject": "Seu compromisso com Lakeside Events: seu cartão será cobrado amanhã",
+  "text": "Seu compromisso com Lakeside Events: seu cartão será cobrado amanhã
+
+Olá, Amina Diallo!
+
+Obrigado pelo compromisso de US$ 1.500,00 em Harbor Arts Gala. Vamos cobrar seu cartão (visa 4242) em Sunday, May 2, 2027 at 9:00 AM. Para usar outro cartão ou pagar de outra forma, use o botão abaixo antes disso.
+
+Gold: $1,000.00
+Silver: $500.00
+
+{mode, select, card {Trocar o cartão ou pagar de outra forma} other {Pagar meu compromisso}}: https://app.yayatoh.test/events/harbor-gala/pledge/sample
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.pledge-summary · ru 1`] = `
+{
+  "subject": "Ваше обещание пожертвования для Lakeside Events: завтра мы спишем средства с карты",
+  "text": "Ваше обещание пожертвования для Lakeside Events: завтра мы спишем средства с карты
+
+Здравствуйте, Amina Diallo!
+
+Спасибо за обещание пожертвовать 1 500,00 $ на Harbor Arts Gala. Мы спишем сумму с вашей карты (visa 4242) Sunday, May 2, 2027 at 9:00 AM. Чтобы использовать другую карту или оплатить иначе, воспользуйтесь кнопкой ниже до этого времени.
+
+Gold: $1,000.00
+Silver: $500.00
+
+{mode, select, card {Сменить карту или оплатить иначе} other {Оплатить обещание}}: https://app.yayatoh.test/events/harbor-gala/pledge/sample
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.pledge-summary · zh-CN 1`] = `
+{
+  "subject": "您对 Lakeside Events 的认捐：明天将从您的银行卡扣款",
+  "text": "您对 Lakeside Events 的认捐：明天将从您的银行卡扣款
+
+Amina Diallo，您好：
+
+感谢您在 Harbor Arts Gala 认捐 US$1,500.00。我们将于 Sunday, May 2, 2027 at 9:00 AM 从您的银行卡（visa 4242）扣款。如需更换银行卡或改用其他方式付款，请在此之前使用下方按钮。
+
+Gold: $1,000.00
+Silver: $500.00
+
+{mode, select, card {更换银行卡或改用其他方式付款} other {支付我的认捐}}: https://app.yayatoh.test/events/harbor-gala/pledge/sample
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > donations.pledge-summary · zh-TW 1`] = `
+{
+  "subject": "您對 Lakeside Events 的認捐：明天將從您的信用卡扣款",
+  "text": "您對 Lakeside Events 的認捐：明天將從您的信用卡扣款
+
+Amina Diallo，您好：
+
+感謝您在 Harbor Arts Gala 認捐 US$1,500.00。我們將於 Sunday, May 2, 2027 at 9:00 AM 從您的信用卡（visa 4242）扣款。如需更換信用卡或改用其他方式付款，請在此之前使用下方按鈕。
+
+Gold: $1,000.00
+Silver: $500.00
+
+{mode, select, card {更換信用卡或改用其他方式付款} other {支付我的認捐}}: https://app.yayatoh.test/events/harbor-gala/pledge/sample
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
 exports[`renderMessage: every kind in all 13 locales > donations.receipt · ar 1`] = `
 {
   "subject": "إيصال تبرّعك من Lakeside Events",
@@ -9716,6 +10457,630 @@ exports[`renderMessage: every kind in all 13 locales > privacy.request-code · z
 您好：
 
 輸入 305117 以確認您向 Lakeside Events 提出的請求：刪除您的個人資料。驗證碼僅能使用一次，10 分鐘後失效。如果這不是您的請求，請忽略此郵件：沒有驗證碼不會發生任何事。
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-accepted · ar 1`] = `
+{
+  "subject": "تم قبول مقترحك «Designing for trust»",
+  "text": "تم قبول مقترحك «Designing for trust»
+
+مرحبًا،
+
+أخبار سارة: قبلت Lakeside Events «Designing for trust» في Midwest Leadership Summit. سيرسل إليك المنظمون موعد جلستك قريبًا. ملاحظة من المنظمين: We would love a 30-minute version.
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-accepted · de 1`] = `
+{
+  "subject": "Ihr Vorschlag „Designing for trust“ wurde angenommen",
+  "text": "Ihr Vorschlag „Designing for trust“ wurde angenommen
+
+Hallo,
+
+Gute Nachrichten: Lakeside Events hat „Designing for trust“ für Midwest Leadership Summit angenommen. Die Veranstalter teilen Ihnen bald die Zeit Ihrer Session mit. Hinweis der Veranstalter: We would love a 30-minute version.
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-accepted · en 1`] = `
+{
+  "subject": "Your proposal “Designing for trust” was accepted",
+  "text": "Your proposal “Designing for trust” was accepted
+
+Hello,
+
+Good news: Lakeside Events accepted “Designing for trust” for Midwest Leadership Summit. The organizers will share your session time soon. Note from the organizers: We would love a 30-minute version.
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-accepted · es 1`] = `
+{
+  "subject": "Tu propuesta «Designing for trust» ha sido aceptada",
+  "text": "Tu propuesta «Designing for trust» ha sido aceptada
+
+Hola:
+
+Buenas noticias: Lakeside Events ha aceptado «Designing for trust» para Midwest Leadership Summit. Los organizadores compartirán pronto el horario de tu sesión. Nota de los organizadores: We would love a 30-minute version.
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-accepted · fr 1`] = `
+{
+  "subject": "Votre proposition « Designing for trust » est acceptée",
+  "text": "Votre proposition « Designing for trust » est acceptée
+
+Bonjour,
+
+Bonne nouvelle : Lakeside Events a accepté « Designing for trust » pour Midwest Leadership Summit. Les organisateurs vous communiqueront bientôt l’horaire de votre session. Message des organisateurs : We would love a 30-minute version.
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-accepted · hi 1`] = `
+{
+  "subject": "आपका प्रस्ताव “Designing for trust” स्वीकार कर लिया गया है",
+  "text": "आपका प्रस्ताव “Designing for trust” स्वीकार कर लिया गया है
+
+नमस्ते,
+
+अच्छी खबर: Lakeside Events ने Midwest Leadership Summit के लिए “Designing for trust” स्वीकार कर लिया है। आयोजक जल्द ही आपके सत्र का समय बताएँगे। आयोजकों का संदेश: We would love a 30-minute version.
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-accepted · it 1`] = `
+{
+  "subject": "La tua proposta «Designing for trust» è stata accettata",
+  "text": "La tua proposta «Designing for trust» è stata accettata
+
+Ciao,
+
+Buone notizie: Lakeside Events ha accettato «Designing for trust» per Midwest Leadership Summit. Gli organizzatori condivideranno presto l’orario della tua sessione. Nota degli organizzatori: We would love a 30-minute version.
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-accepted · ja 1`] = `
+{
+  "subject": "ご提案「Designing for trust」が採択されました",
+  "text": "ご提案「Designing for trust」が採択されました
+
+こんにちは。
+
+うれしいお知らせです。Lakeside EventsはMidwest Leadership Summitで「Designing for trust」を採択しました。セッションの日時は主催者から近日中にお知らせします。 主催者からのメッセージ：We would love a 30-minute version.
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-accepted · nl 1`] = `
+{
+  "subject": "Je voorstel ‘Designing for trust’ is geaccepteerd",
+  "text": "Je voorstel ‘Designing for trust’ is geaccepteerd
+
+Hallo,
+
+Goed nieuws: Lakeside Events heeft ‘Designing for trust’ voor Midwest Leadership Summit geaccepteerd. De organisatoren laten je binnenkort weten wanneer je sessie is. Bericht van de organisatoren: We would love a 30-minute version.
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-accepted · pt 1`] = `
+{
+  "subject": "Sua proposta “Designing for trust” foi aceita",
+  "text": "Sua proposta “Designing for trust” foi aceita
+
+Olá!
+
+Boa notícia: Lakeside Events aceitou “Designing for trust” para Midwest Leadership Summit. Os organizadores vão compartilhar o horário da sua sessão em breve. Nota dos organizadores: We would love a 30-minute version.
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-accepted · ru 1`] = `
+{
+  "subject": "Ваша заявка «Designing for trust» принята",
+  "text": "Ваша заявка «Designing for trust» принята
+
+Здравствуйте!
+
+Хорошие новости: Lakeside Events принимает «Designing for trust» на Midwest Leadership Summit. Организаторы скоро сообщат время вашего выступления. Комментарий организаторов: We would love a 30-minute version.
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-accepted · zh-CN 1`] = `
+{
+  "subject": "您的提案“Designing for trust”已被接受",
+  "text": "您的提案“Designing for trust”已被接受
+
+您好：
+
+好消息：Lakeside Events 已接受您为 Midwest Leadership Summit 提交的“Designing for trust”。主办方将很快告知您的场次时间。 主办方留言：We would love a 30-minute version.
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-accepted · zh-TW 1`] = `
+{
+  "subject": "您的提案「Designing for trust」已獲接受",
+  "text": "您的提案「Designing for trust」已獲接受
+
+您好：
+
+好消息：Lakeside Events 已接受您為 Midwest Leadership Summit 提交的「Designing for trust」。主辦單位將盡快告知您的場次時間。 主辦單位留言：We would love a 30-minute version.
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-received · ar 1`] = `
+{
+  "subject": "استلمنا مقترحك «Designing for trust»",
+  "text": "استلمنا مقترحك «Designing for trust»
+
+مرحبًا،
+
+شكرًا لتقديمك «Designing for trust» إلى Midwest Leadership Summit. ستراجعه Lakeside Events وترسل إليك القرار بالبريد الإلكتروني.
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-received · de 1`] = `
+{
+  "subject": "Wir haben Ihren Vorschlag „Designing for trust“ erhalten",
+  "text": "Wir haben Ihren Vorschlag „Designing for trust“ erhalten
+
+Hallo,
+
+Danke für Ihren Vorschlag „Designing for trust“ für Midwest Leadership Summit. Lakeside Events prüft ihn und schickt Ihnen die Entscheidung per E-Mail.
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-received · en 1`] = `
+{
+  "subject": "We received your proposal “Designing for trust”",
+  "text": "We received your proposal “Designing for trust”
+
+Hello,
+
+Thank you for proposing “Designing for trust” for Midwest Leadership Summit. Lakeside Events will review it and email you the decision.
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-received · es 1`] = `
+{
+  "subject": "Hemos recibido tu propuesta «Designing for trust»",
+  "text": "Hemos recibido tu propuesta «Designing for trust»
+
+Hola:
+
+Gracias por proponer «Designing for trust» para Midwest Leadership Summit. Lakeside Events la revisará y te enviará la decisión por correo.
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-received · fr 1`] = `
+{
+  "subject": "Nous avons bien reçu votre proposition « Designing for trust »",
+  "text": "Nous avons bien reçu votre proposition « Designing for trust »
+
+Bonjour,
+
+Merci d’avoir proposé « Designing for trust » pour Midwest Leadership Summit. Lakeside Events va l’examiner et vous enverra sa décision par e-mail.
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-received · hi 1`] = `
+{
+  "subject": "हमें आपका प्रस्ताव “Designing for trust” मिल गया है",
+  "text": "हमें आपका प्रस्ताव “Designing for trust” मिल गया है
+
+नमस्ते,
+
+Midwest Leadership Summit के लिए “Designing for trust” प्रस्तावित करने के लिए धन्यवाद। Lakeside Events इसकी समीक्षा करेगा और निर्णय आपको ईमेल करेगा।
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-received · it 1`] = `
+{
+  "subject": "Abbiamo ricevuto la tua proposta «Designing for trust»",
+  "text": "Abbiamo ricevuto la tua proposta «Designing for trust»
+
+Ciao,
+
+Grazie per aver proposto «Designing for trust» per Midwest Leadership Summit. Lakeside Events la valuterà e ti invierà la decisione via email.
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-received · ja 1`] = `
+{
+  "subject": "ご提案「Designing for trust」を受け付けました",
+  "text": "ご提案「Designing for trust」を受け付けました
+
+こんにちは。
+
+Midwest Leadership Summitへの「Designing for trust」のご提案ありがとうございます。Lakeside Eventsが審査し、結果をメールでお知らせします。
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-received · nl 1`] = `
+{
+  "subject": "We hebben je voorstel ‘Designing for trust’ ontvangen",
+  "text": "We hebben je voorstel ‘Designing for trust’ ontvangen
+
+Hallo,
+
+Bedankt voor je voorstel ‘Designing for trust’ voor Midwest Leadership Summit. Lakeside Events beoordeelt het en mailt je het besluit.
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-received · pt 1`] = `
+{
+  "subject": "Recebemos sua proposta “Designing for trust”",
+  "text": "Recebemos sua proposta “Designing for trust”
+
+Olá!
+
+Obrigado por propor “Designing for trust” para Midwest Leadership Summit. Lakeside Events vai analisá-la e enviará a decisão por e-mail.
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-received · ru 1`] = `
+{
+  "subject": "Мы получили вашу заявку «Designing for trust»",
+  "text": "Мы получили вашу заявку «Designing for trust»
+
+Здравствуйте!
+
+Спасибо за заявку «Designing for trust» на Midwest Leadership Summit. Lakeside Events рассмотрит её и сообщит решение по электронной почте.
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-received · zh-CN 1`] = `
+{
+  "subject": "我们已收到您的提案“Designing for trust”",
+  "text": "我们已收到您的提案“Designing for trust”
+
+您好：
+
+感谢您为 Midwest Leadership Summit 提交“Designing for trust”。Lakeside Events 将进行评审，并通过电子邮件告知结果。
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-received · zh-TW 1`] = `
+{
+  "subject": "我們已收到您的提案「Designing for trust」",
+  "text": "我們已收到您的提案「Designing for trust」
+
+您好：
+
+感謝您為 Midwest Leadership Summit 提交「Designing for trust」。Lakeside Events 將進行審查，並以電子郵件通知結果。
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-rejected · ar 1`] = `
+{
+  "subject": "بخصوص مقترحك «Designing for trust»",
+  "text": "بخصوص مقترحك «Designing for trust»
+
+مرحبًا،
+
+شكرًا لتقديمك «Designing for trust» إلى Midwest Leadership Summit. لم تتمكن Lakeside Events من إدراجه في البرنامج هذه المرة.
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-rejected · de 1`] = `
+{
+  "subject": "Zu Ihrem Vorschlag „Designing for trust“",
+  "text": "Zu Ihrem Vorschlag „Designing for trust“
+
+Hallo,
+
+Danke für Ihren Vorschlag „Designing for trust“ für Midwest Leadership Summit. Lakeside Events konnte ihn diesmal leider nicht ins Programm aufnehmen.
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-rejected · en 1`] = `
+{
+  "subject": "About your proposal “Designing for trust”",
+  "text": "About your proposal “Designing for trust”
+
+Hello,
+
+Thank you for proposing “Designing for trust” for Midwest Leadership Summit. Lakeside Events could not include it in the program this time.
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-rejected · es 1`] = `
+{
+  "subject": "Sobre tu propuesta «Designing for trust»",
+  "text": "Sobre tu propuesta «Designing for trust»
+
+Hola:
+
+Gracias por proponer «Designing for trust» para Midwest Leadership Summit. Lakeside Events no ha podido incluirla en el programa esta vez.
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-rejected · fr 1`] = `
+{
+  "subject": "À propos de votre proposition « Designing for trust »",
+  "text": "À propos de votre proposition « Designing for trust »
+
+Bonjour,
+
+Merci d’avoir proposé « Designing for trust » pour Midwest Leadership Summit. Lakeside Events n’a pas pu l’inclure au programme cette fois-ci.
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-rejected · hi 1`] = `
+{
+  "subject": "आपके प्रस्ताव “Designing for trust” के बारे में",
+  "text": "आपके प्रस्ताव “Designing for trust” के बारे में
+
+नमस्ते,
+
+Midwest Leadership Summit के लिए “Designing for trust” प्रस्तावित करने के लिए धन्यवाद। इस बार Lakeside Events इसे कार्यक्रम में शामिल नहीं कर सका।
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-rejected · it 1`] = `
+{
+  "subject": "Sulla tua proposta «Designing for trust»",
+  "text": "Sulla tua proposta «Designing for trust»
+
+Ciao,
+
+Grazie per aver proposto «Designing for trust» per Midwest Leadership Summit. Questa volta Lakeside Events non ha potuto includerla nel programma.
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-rejected · ja 1`] = `
+{
+  "subject": "ご提案「Designing for trust」について",
+  "text": "ご提案「Designing for trust」について
+
+こんにちは。
+
+Midwest Leadership Summitへの「Designing for trust」のご提案ありがとうございます。今回、Lakeside Eventsはプログラムに含めることができませんでした。
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-rejected · nl 1`] = `
+{
+  "subject": "Over je voorstel ‘Designing for trust’",
+  "text": "Over je voorstel ‘Designing for trust’
+
+Hallo,
+
+Bedankt voor je voorstel ‘Designing for trust’ voor Midwest Leadership Summit. Lakeside Events kon het deze keer niet in het programma opnemen.
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-rejected · pt 1`] = `
+{
+  "subject": "Sobre sua proposta “Designing for trust”",
+  "text": "Sobre sua proposta “Designing for trust”
+
+Olá!
+
+Obrigado por propor “Designing for trust” para Midwest Leadership Summit. Desta vez, Lakeside Events não pôde incluí-la na programação.
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-rejected · ru 1`] = `
+{
+  "subject": "О вашей заявке «Designing for trust»",
+  "text": "О вашей заявке «Designing for trust»
+
+Здравствуйте!
+
+Спасибо за заявку «Designing for trust» на Midwest Leadership Summit. В этот раз Lakeside Events не смогли включить её в программу.
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-rejected · zh-CN 1`] = `
+{
+  "subject": "关于您的提案“Designing for trust”",
+  "text": "关于您的提案“Designing for trust”
+
+您好：
+
+感谢您为 Midwest Leadership Summit 提交“Designing for trust”。很遗憾，Lakeside Events 本次未能将其纳入议程。
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > program.cfp-rejected · zh-TW 1`] = `
+{
+  "subject": "關於您的提案「Designing for trust」",
+  "text": "關於您的提案「Designing for trust」
+
+您好：
+
+感謝您為 Midwest Leadership Summit 提交「Designing for trust」。很遺憾，Lakeside Events 這次未能將其納入議程。
 
 --
 由 Lakeside Events 透過 Yayatoh 寄送。

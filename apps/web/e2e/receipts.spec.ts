@@ -1,5 +1,11 @@
 import { type BrowserContext, expect, type Page, test } from '@playwright/test';
-import { expectAccessible, expectAccessibleBothModes, expectHtmlAccessible, newUser } from './helpers.ts';
+import {
+  expectAccessible,
+  expectAccessibleBothModes,
+  expectHtmlAccessible,
+  newUser,
+  pickOption,
+} from './helpers.ts';
 
 // Batch 3h merge: axe runs in light and dark on every screen now (twice the checks), so these long
 // journeys get more than the default 30 s.
@@ -129,7 +135,7 @@ test.describe('charity profile and receipts (M4.8b)', () => {
   }) => {
     const g = await gala(page);
     await page.goto(`/o/${g.org}/settings`);
-    await page.getByRole('link', { name: 'Charity profile' }).click();
+    await page.locator('#main').getByRole('link', { name: 'Charity profile' }).click();
     await expect(page.getByRole('heading', { name: 'Charity profile', level: 1 })).toBeVisible();
     await expect(page.getByText('No charity profile yet')).toBeVisible();
     await expectAccessibleBothModes(page);
@@ -143,14 +149,14 @@ test.describe('charity profile and receipts (M4.8b)', () => {
     await submit.click();
     await expect(page.getByText('Enter a valid 9-digit EIN, for example 12-3456789.')).toBeVisible();
     await page.getByLabel('EIN', { exact: true }).fill('234567891');
-    await page.getByLabel('Tax-exempt status').selectOption('fiscal_sponsor');
+    await pickOption(page.getByLabel('Tax-exempt status'), 'fiscal_sponsor');
     await submit.click();
     await expect(page.getByText('Enter the fiscal sponsor’s legal name.')).toBeVisible();
     await page.getByLabel('Fiscal sponsor’s legal name').fill('Good Cause Fiscal Sponsor Inc');
     await page.getByLabel('Fiscal sponsor’s EIN').fill('34-56');
     await submit.click();
     await expect(page.getByText('Enter the fiscal sponsor’s 9-digit EIN.')).toBeVisible();
-    await page.getByLabel('Tax-exempt status').selectOption('501c3');
+    await pickOption(page.getByLabel('Tax-exempt status'), '501c3');
     await page.getByLabel('Fiscal sponsor’s legal name').fill('');
     await page.getByLabel('Fiscal sponsor’s EIN').fill('');
     await page.getByLabel('Mailing address (optional)').fill('1 Pier Way, Boston, MA 02110');
@@ -306,7 +312,7 @@ test.describe('charity profile and receipts (M4.8b)', () => {
     const ctx = await browser.newContext();
     const guest = await ctx.newPage();
     await guest.goto(`/events/${g.slug}`);
-    await guest.getByLabel('Quantity — Gala dinner').selectOption('1');
+    await pickOption(guest.getByLabel('Quantity — Gala dinner'), '1');
     await guest.getByLabel('Full name').fill('Ada Lovelace');
     await guest.getByLabel('Email for your tickets').fill(email);
     await guest.getByRole('button', { name: 'Continue to payment' }).click();

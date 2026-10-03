@@ -9,9 +9,11 @@ import {
   COMMAND_CENTER_WIDGETS,
   campaignsWidget,
   defineWidget,
+  exhibitorActivityWidget,
   type FeedAlert,
   isWidgetKey,
   liveFeedWidget,
+  sponsorActivityWidget,
   staffPresenceWidget,
   WIDGET_META,
   type WidgetChannel,
@@ -40,6 +42,7 @@ import {
 } from '@yayatoh/tenancy';
 import { cookies } from 'next/headers';
 import { realtimeUrl } from '@/lib/realtime-url.ts';
+import { conferenceSources } from './conference-sources.ts';
 import { devAuthEnabled } from './dev.ts';
 import { ports } from './ports.ts';
 import { getSession } from './session.ts';
@@ -56,6 +59,9 @@ export const WIDGETS: WidgetRegistry = [
   staffPresenceWidget(memberNames),
   // Batch 3g merge: M3.8b's campaigns tile names messaging campaigns from M3.6b (same tier).
   campaignsWidget(campaignNamesTx),
+  // M5.9a: leads (M5.6b) and sponsor deliverables (M5.4b) through their ports (a dev fake today).
+  exhibitorActivityWidget(conferenceSources()?.exhibitorLeads ?? null),
+  sponsorActivityWidget(conferenceSources()?.overdueDeliverables ?? null),
 ].reduce(withWidget, COMMAND_CENTER_WIDGETS);
 
 /**
