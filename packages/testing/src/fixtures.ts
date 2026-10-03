@@ -26,9 +26,13 @@ import { catchUpParticipation, saveSegmentCommand, templateDefinition } from '@y
 import { createJourneyCommand, journeyTriggers, setJourneyEnabledCommand } from '@yayatoh/automations';
 import {
   assignTemplateCommand,
+  createPrinterCommand,
   createTemplateCommand,
+  printerHeartbeatCommand,
   runBadgeBatch,
+  setPrintNodeCommand,
   startBatchCommand,
+  startPrintJobCommand,
 } from '@yayatoh/badges';
 import { setEntitlementOverrideCommand, setFeeOverrideCommand } from '@yayatoh/billing';
 import {
@@ -255,6 +259,7 @@ import {
   updateOrganizationCommand,
 } from '@yayatoh/tenancy';
 import {
+  badgeTicketsTx,
   createClaimLinksCommand,
   createPromoCodeCommand,
   createTicketTypeCommand,
@@ -592,6 +597,40 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     badgeBatch.id,
     { maxChunks: 1 },
   );
+  // M5.5b printing: the print settings row (PrintNode off), a station printer heard from, and one
+  // badge printed and reprinted (the print log).
+  await executeCommand(setPrintNodeCommand, { enabled: false }, systemCtx(org.id), ports);
+  const badgePrinter = await executeCommand(
+    createPrinterCommand,
+    { eventId: event.id, name: 'Fixture desk', adapter: 'browser' },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    printerHeartbeatCommand,
+    { eventId: event.id, printerId: badgePrinter.id },
+    ctx(),
+    ports,
+  );
+  const [badgeTicket] = await withTenant(ctx(), (tx) => badgeTicketsTx(tx, { eventId: event.id }));
+  if (badgeTicket)
+    for (const [n, reason] of [
+      [1, null],
+      [2, 'damaged'],
+    ] as const)
+      await executeCommand(
+        startPrintJobCommand,
+        {
+          eventId: event.id,
+          ticketId: badgeTicket.id,
+          printerId: badgePrinter.id,
+          reason,
+          note: n === 2 ? 'Fixture reprint' : null,
+          requestKey: `fixture-print-${n}-${slug}`,
+        },
+        ctx(),
+        ports,
+      );
   // A dispute on the paid order, opened (hold) and won (hold undone): isolation coverage.
   for (const [type, outcome] of [
     ['dispute.created', undefined],

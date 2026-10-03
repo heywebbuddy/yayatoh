@@ -91,19 +91,19 @@ ALTER TABLE "badges"."print_jobs" ADD CONSTRAINT "print_jobs_event_fk" FOREIGN K
 --> statement-breakpoint
 ALTER TABLE "badges"."print_jobs" ADD CONSTRAINT "print_jobs_ticket_fk" FOREIGN KEY ("org_id","ticket_id") REFERENCES "ticketing"."tickets"("org_id","id") ON DELETE cascade;
 --> statement-breakpoint
--- The worker's printer watchdog (M5.5b): orgs with an online printer silent for the window.
--- Org ids only.
-CREATE FUNCTION badges.orgs_with_quiet_printers(p_window_ms integer)
+-- The worker's printer watchdog (M5.5b): orgs with an online printer silent for the window at
+-- p_now. Org ids only.
+CREATE FUNCTION badges.orgs_with_quiet_printers(p_now timestamptz, p_window_ms integer)
 RETURNS TABLE (org_id uuid)
 LANGUAGE sql STABLE SECURITY DEFINER SET search_path = pg_catalog AS $$
   SELECT DISTINCT p.org_id FROM badges.printers p
   WHERE p.status = 'online' AND p.archived_at IS NULL
-    AND p.last_seen_at <= now() - make_interval(secs => p_window_ms / 1000.0)
+    AND p.last_seen_at <= p_now - make_interval(secs => p_window_ms / 1000.0)
 $$;
 --> statement-breakpoint
-REVOKE ALL ON FUNCTION badges.orgs_with_quiet_printers(integer) FROM PUBLIC;
+REVOKE ALL ON FUNCTION badges.orgs_with_quiet_printers(timestamptz, integer) FROM PUBLIC;
 --> statement-breakpoint
-GRANT EXECUTE ON FUNCTION badges.orgs_with_quiet_printers(integer) TO platform_reader;
+GRANT EXECUTE ON FUNCTION badges.orgs_with_quiet_printers(timestamptz, integer) TO platform_reader;
 --> statement-breakpoint
 -- The worker's PrintNode poll (M5.5b): orgs with PrintNode switched on and a PrintNode printer.
 -- Org ids only.
