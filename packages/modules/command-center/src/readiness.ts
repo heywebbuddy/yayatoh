@@ -1,6 +1,6 @@
 import type { TenantTx } from '@yayatoh/db';
 import { type EventDto, eventDetailsQuery, eventSectionsQuery, listOccurrencesQuery } from '@yayatoh/events';
-import { guestCountQuery } from '@yayatoh/guests';
+import { guestCountQuery, guestSitePublishedQuery } from '@yayatoh/guests';
 import type { Ctx } from '@yayatoh/kernel';
 import { composeNav, PROFILES, type ProfileKey } from '@yayatoh/platform';
 import { programCountsQuery } from '@yayatoh/program';
@@ -38,6 +38,11 @@ export async function readinessRulesTx(
     checklist.includes('guestsAdded') && scope.modules.has('guests')
       ? await guestCountQuery.handler({ input, ctx, tx })
       : null;
+  // M4.5a: the guest website's checklist item.
+  const site =
+    checklist.includes('guestSitePublished') && scope.modules.has('website')
+      ? await guestSitePublishedQuery.handler({ input, ctx, tx })
+      : null;
   return readinessRules({
     name: ev.name,
     status: ev.status,
@@ -56,6 +61,7 @@ export async function readinessRulesTx(
     checklist,
     floorPlan: seating !== null,
     guests: guestList?.guests ?? 0,
+    guestSite: site?.published ?? false,
     // M4.2b: table tickets on sale (the gala's "tables & sponsors" item).
     tableTickets: tickets.filter((t) => t.tableSize !== null && t.archivedAt === null).length,
     now: ctx.now,

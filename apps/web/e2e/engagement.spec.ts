@@ -1,5 +1,5 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import { expectAccessible, expectAccessibleBothModes, signIn } from './helpers.ts';
+import { expectAccessible, expectAccessibleBothModes, pickOption, signIn } from './helpers.ts';
 
 /**
  * M5.7a — live polls and moderated Q&A per session: the moderator console, the participant page
@@ -36,8 +36,8 @@ async function liveSession(page: Page, label: string, opts: { enable?: boolean }
   const s = stamp();
   await page.goto(`${ORG}/events/new`);
   await page.getByLabel('Event name', { exact: true }).fill(`${label} ${s}`);
-  await page.getByLabel('Event type').selectOption('conference');
-  await page.getByLabel('Time zone').selectOption(TZ);
+  await pickOption(page.getByLabel('Event type'), 'conference');
+  await pickOption(page.getByLabel('Time zone'), TZ);
   await page.getByLabel('Starts', { exact: true }).fill(at(40, '09:00'));
   await page.getByLabel('Ends', { exact: true }).fill(at(40, '18:00'));
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -76,7 +76,7 @@ async function guest(browser: Browser): Promise<Page> {
 
 async function addPoll(page: Page, kind: string, question: string, options: string[] = []) {
   const form = page.getByRole('region', { name: 'New poll' });
-  await form.getByLabel('Type').selectOption({ label: kind });
+  await pickOption(form.getByLabel('Type'), { label: kind });
   await form.getByLabel('Question', { exact: true }).fill(question);
   if (options.length) await form.getByLabel('Options').fill(options.join('\n'));
   await form.getByRole('button', { name: 'Add poll' }).click();
@@ -306,9 +306,9 @@ test.describe('live polls and Q&A (M5.7a)', () => {
 
     // Policy "moderators can see them": the moderator sees the name, the audience still doesn't.
     const settings = page.getByRole('region', { name: 'Settings' });
-    await settings
-      .getByLabel('Names behind anonymous questions')
-      .selectOption({ label: 'Moderators can see them' });
+    await pickOption(settings.getByLabel('Names behind anonymous questions'), {
+      label: 'Moderators can see them',
+    });
     await settings.getByRole('button', { name: 'Save settings' }).click();
     await expect(settings.getByText('Settings saved.')).toBeVisible();
     await phone.reload();

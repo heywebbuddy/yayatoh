@@ -246,6 +246,25 @@ function promoted(e: EntryRow, status: 'enrolled' | 'offered', offer: number): D
   };
 }
 
+/**
+ * `registration.session.enrollment_changed@1` (M5.7b engagement scores): a registrant took a
+ * session place themselves (`enrolled`: direct, or an accepted offer) or gave it up (`dropped`).
+ * Promotions from the line are `registration.session.promoted@1`.
+ */
+function enrollmentChanged(
+  orgId: string,
+  e: { eventId: string; sessionId: string; registrantId: string },
+  status: 'enrolled' | 'dropped',
+): DomainEvent {
+  return {
+    type: 'registration.session.enrollment_changed',
+    version: 1,
+    aggregateType: 'session',
+    aggregateId: e.sessionId,
+    payload: { orgId, eventId: e.eventId, sessionId: e.sessionId, registrantId: e.registrantId, status },
+  };
+}
+
 /** Hold a place for an entry: the atomic claim, then the pick-one group pick. */
 async function holdPlaceTx(tx: TenantTx, ctx: Ctx, s: EnrollableSession, registrantId: string) {
   await claimSessionPlaceTx(tx, s.sessionId);
@@ -532,6 +551,7 @@ export async function enrollTx(
     enrolledAt: ctx.now,
     picked,
   });
+  emit(enrollmentChanged(orgId, { eventId: r.eventId, sessionId, registrantId: r.id }, 'enrolled'));
   for (const id of d.replace) {
     const s = await lockEnrollableSessionTx(tx, id);
     if (s) await promoteLockedTx(tx, ctx, emit, s, 'auto');
@@ -583,6 +603,7 @@ export async function dropTx(
   if (!e) throw new DomainError('not_found');
   const status = e.status === 'waiting' ? 'left' : e.status === 'offered' ? 'declined' : 'dropped';
   await endEntryTx(tx, e, s, status, ctx.now);
+  if (status === 'dropped') emit(enrollmentChanged(requireOrg(ctx), e, 'dropped'));
   if (status !== 'left')
     await promoteLockedTx(tx, ctx, emit, (await lockEnrollableSessionTx(tx, sessionId)) ?? s, 'auto');
   return { status };
@@ -595,7 +616,7 @@ export const acceptSessionOfferCommand = tenantCommand({
   output: EnrollResultDto,
   entitlement: 'registration',
   permission: 'public:enrollment',
-  handler: async ({ input, ctx, tx }) => {
+  handler: async ({ input, ctx, tx, emit }) => {
     const r = await registrantOfLinkTx(tx, input.token, input.registrantId);
     const s = await lockEnrollableSessionTx(tx, input.sessionId);
     if (!s) throw new DomainError('not_found');
@@ -624,6 +645,7 @@ export const acceptSessionOfferCommand = tenantCommand({
         updatedAt: ctx.now,
       })
       .where(eq(sessionEnrollments.id, e.id));
+    emit(enrollmentChanged(requireOrg(ctx), e, 'enrolled'));
     return { status: 'enrolled', position: null, replaced: [] };
   },
   audit: (input) => ({

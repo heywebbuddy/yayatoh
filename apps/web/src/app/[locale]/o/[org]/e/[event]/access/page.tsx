@@ -1,10 +1,11 @@
 import { eventDetailsQuery, listAccessCodesQuery, privateInfoQuery } from '@yayatoh/events';
 import { executeQuery } from '@yayatoh/kernel';
 import { listTicketTypesQuery } from '@yayatoh/ticketing';
-import { Button, Card, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
+import { Button, buttonClass, Card, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { AccessCodeForm } from '@/components/access-code-form.tsx';
 import { PrivateInfoForm } from '@/components/private-info-form.tsx';
+import { Link } from '@/i18n/navigation.ts';
 import { formatNumber } from '@/lib/format.ts';
 import { profileT } from '@/lib/profile-copy.ts';
 import { loadEvent } from '@/server/console.ts';
@@ -29,7 +30,15 @@ export default async function AccessPage({
     return (
       <>
         {title}
-        <EmptyState title={t('access.viewerTitle')} description={t('access.viewerDescription')} />
+        <EmptyState
+          title={t('access.viewerTitle')}
+          description={t('access.viewerDescription')}
+          action={
+            <Link href={`/o/${org}/e/${event}`} className={buttonClass('primary', 'md')}>
+              {t('access.backToEvent')}
+            </Link>
+          }
+        />
       </>
     );
   const codesEnabled = data.modules.has('access_codes');
@@ -79,7 +88,18 @@ export default async function AccessPage({
             </p>
           ) : null}
           {codes.length === 0 ? (
-            <EmptyState title={t('accessCodes.emptyTitle')} description={t('accessCodes.emptyDescription')} />
+            <EmptyState
+              title={t('accessCodes.emptyTitle')}
+              description={t('accessCodes.emptyDescription')}
+              action={
+                <Link
+                  href={`/o/${org}/e/${event}/access#new-access-code`}
+                  className={buttonClass('primary', 'md')}
+                >
+                  {t('accessCodes.emptyAction')}
+                </Link>
+              }
+            />
           ) : (
             <Table
               caption={t('accessCodes.caption')}
@@ -142,7 +162,7 @@ export default async function AccessPage({
               ]}
             />
           )}
-          <Card size="panel" className="flex flex-col gap-3">
+          <Card size="panel" id="new-access-code" className="flex flex-col gap-3">
             <h3 className="text-section">{t('accessCodes.new')}</h3>
             <AccessCodeForm
               action={createAccessCodeAction.bind(null, org, event)}

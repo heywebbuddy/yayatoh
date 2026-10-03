@@ -3,7 +3,14 @@ import { createRequire } from 'node:module';
 import { dirname, join } from 'node:path';
 import { type BrowserContext, expect, type Page, test } from '@playwright/test';
 import { prepareZXingModule, readBarcodes } from 'zxing-wasm/reader';
-import { continueToPayment, expectAccessible, signIn, WEDDING, WEDDING_OWNER } from './helpers.ts';
+import {
+  continueToPayment,
+  expectAccessible,
+  pickOption,
+  signIn,
+  WEDDING,
+  WEDDING_OWNER,
+} from './helpers.ts';
 
 const VIEWER = 'jordan@lakeside.test';
 
@@ -15,7 +22,7 @@ const emailOf = (name: string) => `${name.toLowerCase().replace(/\W+/g, '.')}@ex
 async function createGala(page: Page, name: string) {
   await page.goto('/o/lakeside-events/events/new');
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Event type').selectOption('gala');
+  await pickOption(page.getByLabel('Event type'), 'gala');
   await page.getByLabel('Starts', { exact: true }).fill('2027-12-04T18:00');
   await page.getByLabel('Ends', { exact: true }).fill('2027-12-04T23:00');
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -56,9 +63,8 @@ async function seat(page: Page, base: string, who: string, table: string, seatLa
   await page.goto(`${base}/seating/assign`);
   await page.getByRole('checkbox', { name: who }).check();
   const item = page.getByLabel('Table or row');
-  const option = item.locator('option', { hasText: new RegExp(`^${table} — `) });
-  await item.selectOption({ label: (await option.textContent()) ?? '' });
-  if (seatLabel) await page.getByLabel('Seat', { exact: true }).selectOption({ label: seatLabel });
+  await pickOption(item, { label: new RegExp(`^${table} — `) });
+  if (seatLabel) await pickOption(page.getByLabel('Seat', { exact: true }), { label: seatLabel });
   await page.getByRole('button', { name: 'Seat them' }).click();
   await expect(page.getByRole('region', { name: table, exact: true })).toContainText(who);
 }
@@ -110,7 +116,7 @@ test.describe('venue map and seat finder (M1.7e)', () => {
     const { base, slug } = await createGala(page, name);
     await createPlan(page, base, 2, 4);
     // An entrance, added and placed with the editor's list (the keyboard path).
-    await page.getByLabel('Object', { exact: true }).selectOption('entrance');
+    await pickOption(page.getByLabel('Object', { exact: true }), 'entrance');
     await page.getByRole('button', { name: 'Add object' }).click();
     const label = page.getByLabel('Label of Entrance');
     await label.fill('Garden doors');
@@ -356,7 +362,7 @@ test.describe('venue map and seat finder (M1.7e)', () => {
     await createPlan(page, base, 1, 4);
     const prices = page.getByRole('region', { name: 'Prices' });
     await prices.getByRole('checkbox', { name: 'Table 1' }).check();
-    await prices.getByLabel('Sells as').selectOption({ label: 'Table seat' });
+    await pickOption(prices.getByLabel('Sells as'), { label: 'Table seat' });
     await prices.getByRole('button', { name: 'Set price' }).click();
     await expect(prices.getByText('Prices updated.')).toBeVisible();
     await page.getByRole('button', { name: 'Put seats on sale' }).click();

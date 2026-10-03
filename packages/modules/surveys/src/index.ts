@@ -15,6 +15,12 @@ export {
 } from './domain/report.ts';
 export { SURVEY_EXPORT_COLUMNS, surveyExportAction, surveyExportBulk } from './export.ts';
 export { privateColumns } from './private-columns.ts';
+export {
+  FEEDBACK_PROMPT_STATES,
+  type FeedbackPromptState,
+  feedbackPromptQuery,
+  openFeedbackCommand,
+} from './prompt.ts';
 export { SEND_AUDIENCES, SEND_SOURCES, type SendAudience, SURVEY_KINDS, type SurveyKind } from './schema.ts';
 export {
   answeredEventSurveyTx,

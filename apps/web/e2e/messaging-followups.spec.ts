@@ -1,6 +1,6 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
 import { fakeDeliverySecret, signFakeDeliveryEvents } from '@yayatoh/notifications';
-import { continueToPayment, expectAccessible, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, expectPicked, pickOption, signIn } from './helpers.ts';
 
 /**
  * M1.10d: CSP-safe email previews, the template editor, reminders that follow a reschedule,
@@ -74,7 +74,7 @@ const logTime = (d: Date) =>
 async function createEvent(page: Page, name: string) {
   await page.goto('/o/lakeside-events/events/new');
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Time zone').selectOption(TZ);
+  await pickOption(page.getByLabel('Time zone'), TZ);
   await page.getByLabel('Starts', { exact: true }).fill('2027-05-05T19:00');
   await page.getByLabel('Ends', { exact: true }).fill('2027-05-05T22:00');
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -101,7 +101,7 @@ async function buy(browser: Browser, slug: string, pass: string, who: string, em
     await guest.getByRole('link', { name: date }).click();
     await expect(guest).toHaveURL(/\?date=/);
   }
-  await guest.getByLabel(`Quantity — ${pass}`).selectOption('1');
+  await pickOption(guest.getByLabel(`Quantity — ${pass}`), '1');
   await guest.getByLabel('Full name').fill(who);
   await guest.getByLabel('Email for your tickets').fill(email);
   await continueToPayment(guest, email);
@@ -275,8 +275,8 @@ test.describe('email template editor', () => {
     await expectAccessible(page);
 
     // Keyboard: choose the kind and language, then Enter on the Open button.
-    await page.getByLabel('Email', { exact: true }).selectOption('orders.refund');
-    await page.getByLabel('Language', { exact: true }).selectOption(lang);
+    await pickOption(page.getByLabel('Email', { exact: true }), 'orders.refund');
+    await pickOption(page.getByLabel('Language', { exact: true }), lang);
     await page.getByRole('button', { name: 'Open' }).focus();
     await page.keyboard.press('Enter');
     await expect(page).toHaveURL(new RegExp(`kind=orders.refund&lang=${lang}`));
@@ -522,12 +522,12 @@ test.describe('member email language', () => {
     await page.getByRole('button', { name: 'Save settings' }).click();
     await expect(page.getByText('Your notification settings are saved.')).toBeVisible();
     // Keyboard: choose the language and save with Enter on the button.
-    await page.getByLabel('Language for emails about your organizations').selectOption('es');
+    await pickOption(page.getByLabel('Language for emails about your organizations'), 'es');
     await page.getByRole('button', { name: 'Save language' }).focus();
     await page.keyboard.press('Enter');
     await expect(page.getByText('Language saved.')).toBeVisible();
     await page.reload();
-    await expect(page.getByLabel('Language for emails about your organizations')).toHaveValue('es');
+    await expectPicked(page.getByLabel('Language for emails about your organizations'), 'es');
 
     // A sale in Harbor Arts: Lee's alert email is in Spanish.
     await page.goto('/o/harbor-arts/events/new');

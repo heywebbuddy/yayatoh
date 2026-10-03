@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, Checkbox, Input } from '@yayatoh/ui';
+import { Alert, Button, Checkbox, Input, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState, useEffect, useRef } from 'react';
 import { errorMessageKey } from '@/lib/errors.ts';
@@ -229,7 +229,7 @@ export function SponsorForm({
             <label htmlFor={`${idPrefix}-logo`} className="text-[13px] font-bold text-ink">
               {t('logo')}
             </label>
-            <select
+            <Select
               id={`${idPrefix}-logo`}
               name="logoUrl"
               defaultValue={sponsor?.logoUrl ?? ''}
@@ -242,7 +242,7 @@ export function SponsorForm({
                   {l.label}
                 </option>
               ))}
-            </select>
+            </Select>
             <p id={`${idPrefix}-logo-hint`} className="text-caption text-ink-2">
               {t('logoHint')}
             </p>

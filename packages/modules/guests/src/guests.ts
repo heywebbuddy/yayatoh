@@ -24,6 +24,7 @@ import {
   PartyDto,
   partySerializer,
 } from './dto.ts';
+import { publishGuestChangesTx } from './realtime.ts';
 import { rsvpStateCondition } from './rsvp-filter.ts';
 import {
   AGE_CLASSES,
@@ -210,6 +211,8 @@ export async function recordHistoryTx(tx: TenantTx, ctx: Ctx, entries: readonly 
       detail: e.detail ?? {},
     })),
   );
+  // M4.3a: the seating editor's queue follows the guest list live.
+  await publishGuestChangesTx(tx, orgId, entries, ctx.now);
 }
 
 /**

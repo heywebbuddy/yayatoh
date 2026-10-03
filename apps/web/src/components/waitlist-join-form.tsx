@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, Card, Input } from '@yayatoh/ui';
+import { Alert, Button, Card, Input, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { type FormEvent, startTransition, useActionState, useEffect, useRef, useState } from 'react';
 import type { WaitlistJoinState } from '@/app/[locale]/events/[slug]/waitlist/actions.ts';
@@ -132,7 +132,7 @@ export function WaitlistJoinForm({
           <label htmlFor="waitlist-quantity" className="text-[13px] font-bold text-ink">
             {t('quantity')}
           </label>
-          <select
+          <Select
             id="waitlist-quantity"
             name="quantity"
             key={chosen?.id}
@@ -145,7 +145,7 @@ export function WaitlistJoinForm({
                 {n}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
         <div className="flex flex-col gap-4 md:flex-row">
           <div className="flex-1">

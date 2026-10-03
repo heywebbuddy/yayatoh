@@ -9,6 +9,7 @@ import { roleCan } from '@yayatoh/tenancy';
 import { Alert, Button, Card, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { HowItWorks } from '@/components/how-it-works.tsx';
 import { SendingDomainForm } from '@/components/sending-domain-form.tsx';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
@@ -70,6 +71,7 @@ export default async function SendingSetupPage({
   return (
     <>
       <PageHeader title={t('title')} description={t('description')} />
+      <HowItWorks topic="sending" />
       {outcome ? (
         <Alert
           tone={outcome === 'forbidden' || outcome === 'error' ? 'danger' : 'info'}

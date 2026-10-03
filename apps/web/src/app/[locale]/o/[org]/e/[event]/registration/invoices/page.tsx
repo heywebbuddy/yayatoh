@@ -68,7 +68,18 @@ export default async function InvoicesPage({
         ))}
       </Tabs>
       {rows.length === 0 && filter === 'all' ? (
-        <EmptyState title={t('list.emptyTitle')} description={t('list.emptyDescription')} />
+        <EmptyState
+          title={t('list.emptyTitle')}
+          description={t('list.emptyDescription')}
+          action={
+            <Link
+              href={`/o/${org}/e/${event}/registration#pay-later-heading`}
+              className={buttonClass('primary', 'md')}
+            >
+              {t('list.backToSetup')}
+            </Link>
+          }
+        />
       ) : rows.length === 0 ? (
         <EmptyState
           title={t('list.emptyFiltered')}

@@ -1,5 +1,5 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import { continueToPayment, expectAccessible, signIn } from './helpers.ts';
+import { continueToPayment, expectAccessible, pickOption, signIn } from './helpers.ts';
 
 const VIEWER = 'jordan@lakeside.test';
 
@@ -21,7 +21,7 @@ function chicago(offsetH: number): string {
 async function eventWithTickets(page: Page, browser: Browser, name: string, count: number) {
   await page.goto('/o/lakeside-events/events/new');
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Time zone').selectOption('America/Chicago');
+  await pickOption(page.getByLabel('Time zone'), 'America/Chicago');
   await page.getByLabel('Starts', { exact: true }).fill(chicago(-1));
   await page.getByLabel('Ends', { exact: true }).fill(chicago(3));
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -37,7 +37,7 @@ async function eventWithTickets(page: Page, browser: Browser, name: string, coun
   await expect(page.getByRole('row').filter({ hasText: 'Door pass' })).toBeVisible();
   const guest = await (await browser.newContext()).newPage();
   await guest.goto(`/events/${base.split('/').pop()}`);
-  await guest.getByLabel('Quantity — Door pass').selectOption(String(count));
+  await pickOption(guest.getByLabel('Quantity — Door pass'), String(count));
   await guest.getByLabel('Full name').fill(`Guest ${name}`);
   const email = `guest+${Date.now()}@example.test`;
   await guest.getByLabel('Email for your tickets').fill(email);

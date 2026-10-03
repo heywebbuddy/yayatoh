@@ -1,7 +1,7 @@
 import { getUserLocale, USER_LOCALES } from '@yayatoh/auth';
 import { executeQuery } from '@yayatoh/kernel';
 import { myPreferencesQuery } from '@yayatoh/notifications';
-import { Card, PageHeader } from '@yayatoh/ui';
+import { Card, PageHeader, Select } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { MemberPushSection } from '@/components/member-push-section.tsx';
@@ -52,7 +52,7 @@ export default async function PreferencesPage({
               <label htmlFor="email-language" className="text-[13px] font-bold text-ink">
                 {t('language.label')}
               </label>
-              <select
+              <Select
                 id="email-language"
                 name="locale"
                 defaultValue={emailLocale}
@@ -64,7 +64,7 @@ export default async function PreferencesPage({
                     {new Intl.DisplayNames([l], { type: 'language' }).of(l) ?? l}
                   </option>
                 ))}
-              </select>
+              </Select>
               <p id="email-language-hint" className="text-caption text-ink-2">
                 {t('language.hint')}
               </p>

@@ -26,6 +26,8 @@ export const SessionDto = z.object({
   trackId: z.uuid().nullable(),
   capacity: z.number().int().nullable(),
   speakerIds: z.array(z.uuid()),
+  /** M5.3b: an accepted proposal not yet on the agenda (never public). */
+  draft: z.boolean(),
 });
 export type SessionDto = z.infer<typeof SessionDto>;
 
