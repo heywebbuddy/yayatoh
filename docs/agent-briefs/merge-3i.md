@@ -20,6 +20,11 @@ The orchestrator lists the final set in your launch prompt (only builders that r
 
 Each branch's last commit message is its report (migrations, hand edits, owner items): read it before merging. A branch without a report is not in your list. Stacked branches already contain their base; merge the base first anyway so conflicts are resolved once.
 
+**Known issues from the builders' reports (fix, never skip):**
+- M6.1c: after merging design v2, two e2e tests (including "Arabic (RTL): duplicates") fail on desktop-1280 only, because the v2 Table's sticky `<thead>` intercepts the click. Fix the table (pointer events / scroll margin) or the page, not the test.
+- M6.11b: its full integration run caught `seating.deleteChannel` missing from the impersonation sweep; confirm the fix is in and the sweep covers every new seating command.
+- The retention.int and badges.int full-suite timeouts should be gone after 3f and 3h; if either reappears, root-cause it.
+
 ## Merge procedure
 Follow the "Merge procedure (house rules)" section of `docs/agent-briefs/merge-3e.md` exactly:
 - renumber migrations on the chain so that `db:generate` shows no changes
