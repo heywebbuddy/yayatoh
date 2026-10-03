@@ -22,6 +22,8 @@ import type { Urgency } from './web-push.ts';
  */
 export interface OutboundEmail {
   readonly from: { readonly name: string; readonly address: string };
+  /** U10: where replies go (the org's "Email sending" setting); absent: replies go to the From. */
+  readonly replyTo?: string | null;
   readonly to: string;
   readonly subject: string;
   readonly html: string;

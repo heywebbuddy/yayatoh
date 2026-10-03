@@ -217,6 +217,7 @@ import {
   registerPushTokenCommand,
   sendTestNotificationCommand,
   setChannelSenderCommand,
+  setEmailIdentityCommand,
   setFrequencyCapsCommand,
   setMyPreferencesCommand,
   setQuotaLimitCommand,
@@ -1652,6 +1653,13 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ports,
   );
   await uploadLogo(ctx(), { alt: `${name} logo`, file: fixturePng('logo') }, ports);
+  // U10 "Email sending": the From name (the org's own name) and a Reply-To address.
+  await executeCommand(
+    setEmailIdentityCommand,
+    { fromName: name, replyTo: `team@${slug}.example` },
+    ctx(),
+    ports,
+  );
   // U10: an image uploaded to the media library, reused in the event's gallery (no new files).
   const libraryImage = await uploadMedia(
     ctx(),
