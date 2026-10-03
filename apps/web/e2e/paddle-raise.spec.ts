@@ -319,7 +319,9 @@ test.describe('paddle raise (M4.8c)', () => {
     await expect(level.getByRole('row').filter({ hasText: g.guests[1] ?? '' })).toContainText('Pledge');
     // A mistaken paddle: set aside, its pledge cancelled; it stays so after a reload.
     await level.getByRole('button', { name: 'Set aside paddle 101' }).click();
-    await expect(page.getByTestId('raise-answer')).toHaveText('Paddle 101 set aside and its pledge cancelled.');
+    await expect(page.getByTestId('raise-answer')).toHaveText(
+      'Paddle 101 set aside and its pledge cancelled.',
+    );
     await page.reload();
     await expect(
       page
