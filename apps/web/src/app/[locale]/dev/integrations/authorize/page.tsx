@@ -1,7 +1,7 @@
-import { connectorByKey, fakeIntegrations, safeReturnPath } from '@yayatoh/integrations';
+import { connectorByKey, safeReturnPath } from '@yayatoh/integrations';
 import { Button, Card, Label, PageHeader } from '@yayatoh/ui';
 import type { Metadata } from 'next';
-import { notFound, redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { integrationAuth } from '@/server/integrations.ts';
 import { devAuthEnabled } from '@/server/session.ts';
@@ -44,17 +44,6 @@ export default async function FakeConsentPage({
   if (!connector?.fake || !UUID.test(connectionId) || !UUID.test(orgId) || !state || !safeReturnPath(back))
     notFound();
   const t = await getTranslations('integrations.fakeConsent');
-  const answer = async (allow: boolean) => {
-    'use server';
-    if (!devAuthEnabled() || !connector.fake) notFound();
-    if (allow)
-      fakeIntegrations.approve(
-        { orgId, connectionId, providerConfigKey: connector.providerConfigKey },
-        connector.fake,
-      );
-    const q = new URLSearchParams({ state, ...(allow ? {} : { error: 'access_denied' }) });
-    redirect(`${back}?${q.toString()}`);
-  };
   return (
     <main id="main" className="mx-auto flex min-h-dvh max-w-lg flex-col justify-center gap-6 px-4 py-12">
       <PageHeader eyebrow={<Label>{t('eyebrow')}</Label>} title={t('heading', { name: connector.name })} />
@@ -67,18 +56,19 @@ export default async function FakeConsentPage({
             </li>
           ))}
         </ul>
-        <div className="flex flex-wrap gap-2">
-          <form action={answer.bind(null, true)}>
-            <Button type="submit" size="lg">
-              {t('allow')}
-            </Button>
-          </form>
-          <form action={answer.bind(null, false)}>
-            <Button type="submit" variant="secondary" size="lg">
-              {t('deny')}
-            </Button>
-          </form>
-        </div>
+        <form method="post" action="/api/dev/integrations/authorize" className="flex flex-wrap gap-2">
+          <input type="hidden" name="provider" value={connector.key} />
+          <input type="hidden" name="org" value={orgId} />
+          <input type="hidden" name="connection" value={connectionId} />
+          <input type="hidden" name="state" value={state} />
+          <input type="hidden" name="return" value={back} />
+          <Button type="submit" name="answer" value="allow" size="lg">
+            {t('allow')}
+          </Button>
+          <Button type="submit" name="answer" value="deny" variant="secondary" size="lg">
+            {t('deny')}
+          </Button>
+        </form>
       </Card>
     </main>
   );

@@ -822,11 +822,12 @@ async function cursorOf(ctx: Ctx, connectionId: string, objectType: string, dire
 
 /** Thrown to stop a run where it is: the step it failed at and the code. */
 class RunStop extends Error {
-  constructor(
-    readonly step: 'pull' | 'push',
-    readonly reason: unknown,
-  ) {
+  readonly step: 'pull' | 'push';
+  readonly reason: unknown;
+  constructor(step: 'pull' | 'push', reason: unknown) {
     super('run stopped');
+    this.step = step;
+    this.reason = reason;
   }
 }
 

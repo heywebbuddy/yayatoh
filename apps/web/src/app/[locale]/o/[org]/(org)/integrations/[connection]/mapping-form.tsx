@@ -3,7 +3,7 @@
 import { type FieldSpec, type MappingRule, TRANSFORMS } from '@yayatoh/integrations/client';
 import { Alert, Button, Card, Input, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
-import { useActionState } from 'react';
+import { useActionState, useState } from 'react';
 import type { MappingState } from '../actions.ts';
 
 /**
@@ -34,7 +34,15 @@ export function MappingForm({
   const tField = useTranslations('integrations.fields');
   const [state, formAction, pending] = useActionState(action, { status: 'idle' } as MappingState);
   const label = (f: FieldSpec) => (tField.has(f.key) ? tField(f.key) : f.label);
-  const byTarget = new Map(rules.map((r) => [r.target, r]));
+  // Controlled rows: a refused save keeps what was chosen (the form is never reset under the user).
+  const [rows, setRows] = useState(() =>
+    targets.map((target) => {
+      const r = rules.find((x) => x.target === target.key);
+      return { source: r?.source ?? '', transform: r?.transform ?? 'none', default: r?.default ?? '' };
+    }),
+  );
+  const setRow = (i: number, patch: Partial<(typeof rows)[number]>) =>
+    setRows((all) => all.map((r, j) => (j === i ? { ...r, ...patch } : r)));
   const targetLabel = (key: string) => {
     const f = targets.find((x) => x.key === key) ?? sources.find((x) => x.key === key);
     return f ? label(f) : key;
@@ -45,8 +53,7 @@ export function MappingForm({
     const field = issue.field ? targetLabel(issue.field) : '';
     return t.has(`issue.${issue.code}`) ? t(`issue.${issue.code}`, { field }) : t('issue.other', { field });
   };
-  const general =
-    state.status === 'error' && (state.issues?.some((x) => x.index === null) || !state.issues?.length);
+  const general = state.status === 'error';
   const id = (part: string, i: number) => `${objectType}-${direction}-${part}-${i}`;
   const headingId = `${objectType}-${direction}-mapping`;
   return (
@@ -67,7 +74,7 @@ export function MappingForm({
       <form action={formAction} noValidate aria-labelledby={headingId} className="flex flex-col gap-4">
         <input type="hidden" name="rows" value={targets.length} />
         {targets.map((target, i) => {
-          const rule = byTarget.get(target.key);
+          const row = rows[i] ?? { source: '', transform: 'none', default: '' };
           const error = rowError(i);
           return (
             <fieldset
@@ -77,7 +84,7 @@ export function MappingForm({
             >
               <legend className="px-1 text-[13px] font-bold text-ink">
                 {label(target)}
-                {target.required ? <span className="ms-1 text-ink-2">({t('required')})</span> : null}
+                {target.required ? <span className="text-ink-2"> ({t('required')})</span> : null}
               </legend>
               <input type="hidden" name={`target.${i}`} value={target.key} />
               <input type="hidden" name={`row.${target.key}`} value={i} />
@@ -85,7 +92,8 @@ export function MappingForm({
                 id={id('source', i)}
                 name={`source.${i}`}
                 label={t('source')}
-                defaultValue={rule?.source ?? ''}
+                value={row.source}
+                onChange={(e) => setRow(i, { source: e.target.value })}
                 error={error}
               >
                 <option value="">{t('notMapped')}</option>
@@ -99,7 +107,8 @@ export function MappingForm({
                 id={id('transform', i)}
                 name={`transform.${i}`}
                 label={t('transform')}
-                defaultValue={rule?.transform ?? 'none'}
+                value={row.transform}
+                onChange={(e) => setRow(i, { transform: e.target.value as MappingRule['transform'] })}
               >
                 {TRANSFORMS.map((x) => (
                   <option key={x} value={x}>
@@ -113,7 +122,8 @@ export function MappingForm({
                 label={t('default')}
                 maxLength={200}
                 autoComplete="off"
-                defaultValue={rule?.default ?? ''}
+                value={row.default}
+                onChange={(e) => setRow(i, { default: e.target.value })}
               />
             </fieldset>
           );
