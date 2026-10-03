@@ -47,6 +47,14 @@ export const ORG_SECTIONS: readonly OrgNavSection[] = [
         module: 'seating',
         needs: 'events:read',
       },
+      // M6.14b: a venue's partners, the plans it shares with them and the events that use them.
+      {
+        key: 'venuePortal',
+        path: 'venue-portal',
+        icon: 'building',
+        module: 'advanced_seating',
+        needs: 'events:read',
+      },
     ],
   },
   {
@@ -106,6 +114,8 @@ export const ORG_SECTIONS: readonly OrgNavSection[] = [
       { key: 'publicSite', path: 'site', icon: 'store', module: 'core', needs: 'org:update' },
       { key: 'siteContent', path: 'content', icon: 'file-text', module: 'core', needs: 'marketing:read' },
       { key: 'domains', path: 'domains', icon: 'globe', module: 'core', needs: 'org:update' },
+      // M6.14b: promoted placements in marketplace search (flagged; priced later).
+      { key: 'promotions', path: 'promotions', icon: 'megaphone', module: 'core', needs: 'marketing:read' },
       { key: 'emails', path: 'emails', icon: 'mail-check', module: 'core', needs: 'org:update' },
       {
         key: 'helpCenter',

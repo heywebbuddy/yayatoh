@@ -380,7 +380,9 @@
     "plan": "Abonnement & facturatie",
     "webhooks": "Webhooks",
     "sandboxes": "Sandboxes",
-    "notifications": "Meldingen"
+    "notifications": "Meldingen",
+    "venuePortal": "Locatieportaal",
+    "promotions": "Promoties"
   },
   "vocab": {
     "attendee": "Deelnemer",
@@ -4213,7 +4215,10 @@
       "popularHeading": "Populaire evenementen",
       "emptyDescription": "Probeer een andere datum, plaats of prijs, vergroot de afstand of wis de filters.",
       "openSearch": "Zoeken op plaats, categorie en prijs",
-      "similarLink": "Vergelijkbare evenementen vinden"
+      "similarLink": "Vergelijkbare evenementen vinden",
+      "promotedHeading": "Gepromoot",
+      "promotedNote": "Organisatoren promoten deze evenementen. Ze passen bij je zoekopdracht.",
+      "promoted": "Gepromoot"
     }
   },
   "widget": {
@@ -13011,7 +13016,29 @@
     "startFrom": "Een evenement ermee starten",
     "startFromNamed": "Een evenement starten met {name}",
     "delete": "Verwijderen",
-    "deleteNamed": "{name} verwijderen"
+    "deleteNamed": "{name} verwijderen",
+    "shared": {
+      "title": "Gedeeld door locaties",
+      "description": "Plattegronden die je partnerlocaties met je delen. Gebruik kopieert hem naar je evenement, dat zijn eigen kopie houdt.",
+      "from": "Van {venue}",
+      "option": "{name} · {venue} · {seats, plural, one {# stoel} other {# stoelen}}",
+      "plan": "Gedeelde plattegrond",
+      "event": "Evenement",
+      "chooseEvent": "Kies een evenement",
+      "privacy": "De locatie ziet de naam, datum en status van dit evenement.",
+      "use": "Gebruiken voor dit evenement",
+      "used": "{event} gebruikt nu de plattegrond van {venue}.",
+      "openSeating": "Open de zitplaatsen van {event}",
+      "noEventsTitle": "Geen komend evenement om hem voor te gebruiken",
+      "noEventsDescription": "Maak een evenement en kom terug om het deze plattegrond te geven.",
+      "createEvent": "Evenement maken",
+      "errors": {
+        "layoutId": "Kies een gedeelde plattegrond.",
+        "eventId": "Kies een evenement.",
+        "seats_in_use": "Stoelen van dit evenement zijn vastgehouden of verkocht, dus de plattegrond kan niet worden vervangen.",
+        "layout_locked": "De plattegrond van dit evenement is vergrendeld omdat er stoelen zijn verkocht."
+      }
+    }
   },
   "warehouse": {
     "title": "Analyses",
@@ -15303,6 +15330,115 @@
       "step1": "Kies hieronder het evenement en open de kortingscodes.",
       "step2": "Voeg een code toe met de korting en eventueel een limiet en data.",
       "step3": "Deel de code. Kopers vullen hem in bij het afrekenen en elk gebruik wordt geteld."
+    }
+  },
+  "venuePortal": {
+    "title": "Locatieportaal",
+    "description": "Deel je zaalplattegronden met de organisatoren met wie je werkt en zie de evenementen die ze gebruiken.",
+    "spaces": "Je locaties",
+    "offTitle": "Het locatieportaal zit niet in je abonnement",
+    "offDescription": "Plattegronden delen met partnerorganisatoren hoort bij geavanceerde zitplaatsen.",
+    "offAction": "Bekijk je abonnement",
+    "viewerNotice": "Je kunt het portaal bekijken. Eigenaren en beheerders kiezen partners en wat er gedeeld wordt.",
+    "partnersTitle": "Partnerorganisatoren",
+    "partnersDescription": "Alleen partners kunnen je plattegronden krijgen. Een partner verwijderen trekt alle met hem gedeelde plattegronden in.",
+    "partnersEmptyTitle": "Nog geen partners",
+    "partnersEmptyDescription": "Voeg een organisator toe via zijn Yayatoh-adres om plattegronden met hem te delen.",
+    "partnersEmptyViewer": "Vraag een eigenaar of beheerder om je organisatoren toe te voegen.",
+    "findOwner": "Zie wie kan helpen",
+    "partnersCaption": "Partnerorganisatoren",
+    "partnerName": "Organisator",
+    "partnerAddress": "Adres",
+    "partnerSince": "Partner sinds",
+    "actions": "Acties",
+    "remove": "Verwijderen",
+    "removeNamed": "{name} als partner verwijderen",
+    "addPartner": "Partner toevoegen",
+    "addPartnerSubmit": "Partner toevoegen",
+    "partnerSlug": "Adres van de organisator",
+    "partnerSlugHint": "Het deel na /o/ in de link van hun pagina, bijvoorbeeld lakeside-events.",
+    "added": "{slug} is nu partner. Deel hieronder een plattegrond.",
+    "errors": {
+      "not_found": "Geen organisator heeft dat adres. Controleer de link die je kreeg.",
+      "self": "Dat is je eigen organisatie.",
+      "invalid": "Vul een adres in: kleine letters, cijfers en koppeltekens."
+    },
+    "plansTitle": "Je plattegronden",
+    "plansDescription": "Plattegronden uit je bibliotheek. Organisatoren krijgen een eigen kopie als ze er een gebruiken; je latere wijzigingen bereiken hun evenementen nooit.",
+    "plansEmptyTitle": "Nog geen plattegronden om te delen",
+    "plansEmptyDescription": "Bewaar eerst een plattegrond in je bibliotheek en deel hem dan hier.",
+    "toLibrary": "Open de plattegrondbibliotheek",
+    "seats": "{count, plural, one {# stoel} other {# stoelen}}",
+    "usedBy": "{count, plural, =0 {Nog door geen partnerevenement gebruikt} one {Gebruikt door # partnerevenement} other {Gebruikt door # partnerevenementen}}",
+    "sharedWith": "Gedeeld met {names}",
+    "private": "Niet gedeeld",
+    "share": "Delen met {name}",
+    "unshare": "Niet meer delen met {name}",
+    "shareNamed": "{plan} delen met {name}",
+    "unshareNamed": "{plan} niet meer delen met {name}",
+    "usesTitle": "Evenementen die je plattegronden gebruiken",
+    "usesDescription": "Je ziet naam, datum, status en organisator van elk evenement, verder niets.",
+    "usesEmptyTitle": "Nog geen partnerevenement gebruikt je plattegronden",
+    "usesEmptyDescription": "Zodra een partner een gedeelde plattegrond gebruikt, verschijnt het evenement hier.",
+    "toPlans": "Een plattegrond delen",
+    "usesCaption": "Partnerevenementen met je plattegronden",
+    "event": "Evenement",
+    "organizer": "Organisator",
+    "when": "Begint",
+    "status": "Status",
+    "plan": "Plattegrond",
+    "eventStatus": {
+      "draft": "Concept",
+      "published": "Gepubliceerd",
+      "postponed": "Uitgesteld",
+      "cancelled": "Geannuleerd",
+      "completed": "Afgelopen",
+      "archived": "Gearchiveerd"
+    },
+    "done": {
+      "shared": "Plattegrond gedeeld. Je partner kan hem nu gebruiken.",
+      "unshared": "Delen gestopt. Evenementen die de plattegrond al gebruiken houden hun kopie.",
+      "removed": "Partner verwijderd. Die ziet je plattegronden niet meer."
+    }
+  },
+  "promotions": {
+    "title": "Promoties",
+    "description": "Promoot je evenementen in de zoekfunctie van de marktplaats. Een gepromoot evenement staat boven passende resultaten, gemarkeerd als gepromoot.",
+    "free": "Promoties zijn gratis tijdens de bèta; prijzen volgen later.",
+    "offTitle": "Promoties zijn nog niet beschikbaar",
+    "offDescription": "Gepromote plaatsingen in de zoekfunctie staan voorlopig uit.",
+    "toSite": "Open de instellingen van je openbare site",
+    "viewerNotice": "Je kunt promoties bekijken. Marketingrollen starten en stoppen ze.",
+    "emptyTitle": "Geen evenementen op de marktplaats",
+    "emptyDescription": "Publiceer een openbaar evenement en zet het op de marktplaats om het te promoten.",
+    "caption": "Je openbare evenementen",
+    "event": "Evenement",
+    "starts": "Begint",
+    "state": "Promotie",
+    "actions": "Acties",
+    "notListed": "Niet op de marktplaats",
+    "listFirst": "Zet het eerst op de marktplaats",
+    "activeUntil": "Gepromoot tot {date}",
+    "states": {
+      "none": "Niet gepromoot",
+      "scheduled": "Gepland",
+      "active": "Gepromoot",
+      "ended": "Beëindigd"
+    },
+    "days": "{count, plural, one {# dag} other {# dagen}}",
+    "daysNamed": "Hoe lang {name} promoten",
+    "promote": "Promoten",
+    "promoteNamed": "{name} promoten",
+    "end": "Promotie beëindigen",
+    "endNamed": "Promotie van {name} beëindigen",
+    "done": {
+      "promoted": "Promotie gestart. Het evenement staat nu als gepromoot in passende zoekopdrachten.",
+      "ended": "Promotie beëindigd."
+    },
+    "errors": {
+      "days": "Kies hoeveel dagen.",
+      "not_listed": "Alleen evenementen op de marktplaats kunnen worden gepromoot.",
+      "failed": "De promotie kon niet starten. Probeer het opnieuw."
     }
   }
 }

@@ -380,7 +380,9 @@
     "plan": "Piano e fatturazione",
     "webhooks": "Webhook",
     "sandboxes": "Sandbox",
-    "notifications": "Notifiche"
+    "notifications": "Notifiche",
+    "venuePortal": "Portale della location",
+    "promotions": "Promozioni"
   },
   "vocab": {
     "attendee": "Partecipante",
@@ -4213,7 +4215,10 @@
       "popularHeading": "Eventi popolari",
       "emptyDescription": "Prova un'altra data, luogo o prezzo, allarga la distanza o cancella i filtri.",
       "openSearch": "Cerca per luogo, categoria e prezzo",
-      "similarLink": "Trova eventi simili"
+      "similarLink": "Trova eventi simili",
+      "promotedHeading": "Promosso",
+      "promotedNote": "Gli organizzatori promuovono questi eventi. Corrispondono alla tua ricerca.",
+      "promoted": "Promosso"
     }
   },
   "widget": {
@@ -13011,7 +13016,29 @@
     "startFrom": "Crea un evento da questa",
     "startFromNamed": "Crea un evento da {name}",
     "delete": "Rimuovi",
-    "deleteNamed": "Rimuovi {name}"
+    "deleteNamed": "Rimuovi {name}",
+    "shared": {
+      "title": "Condivise dalle location",
+      "description": "Piantine che le tue location partner condividono con te. Usarne una la copia nel tuo evento, che mantiene la propria copia.",
+      "from": "Da {venue}",
+      "option": "{name} · {venue} · {seats, plural, one {# posto} other {# posti}}",
+      "plan": "Piantina condivisa",
+      "event": "Evento",
+      "chooseEvent": "Scegli un evento",
+      "privacy": "La location vedrà nome, data e stato di questo evento.",
+      "use": "Usa per questo evento",
+      "used": "{event} ora usa la piantina di {venue}.",
+      "openSeating": "Apri i posti di {event}",
+      "noEventsTitle": "Nessun evento in arrivo per usarla",
+      "noEventsDescription": "Crea un evento, poi torna per assegnargli questa piantina.",
+      "createEvent": "Crea un evento",
+      "errors": {
+        "layoutId": "Scegli una piantina condivisa.",
+        "eventId": "Scegli un evento.",
+        "seats_in_use": "Alcuni posti di questo evento sono bloccati o venduti, quindi la piantina non può essere sostituita.",
+        "layout_locked": "La piantina di questo evento è bloccata perché sono stati venduti posti."
+      }
+    }
   },
   "warehouse": {
     "title": "Analisi",
@@ -15303,6 +15330,115 @@
       "step1": "Scegli l’evento qui sotto e apri i suoi codici promozionali.",
       "step2": "Aggiungi un codice con lo sconto e, se vuoi, un limite e delle date.",
       "step3": "Condividi il codice. Gli acquirenti lo inseriscono al pagamento e ogni utilizzo viene contato."
+    }
+  },
+  "venuePortal": {
+    "title": "Portale della location",
+    "description": "Condividi le tue piantine con gli organizzatori con cui lavori e vedi gli eventi che le usano.",
+    "spaces": "Le tue location",
+    "offTitle": "Il portale della location non è nel tuo piano",
+    "offDescription": "Condividere piantine con organizzatori partner fa parte dei posti avanzati.",
+    "offAction": "Vedi il tuo piano",
+    "viewerNotice": "Puoi vedere il portale. Proprietari e amministratori scelgono partner e condivisioni.",
+    "partnersTitle": "Organizzatori partner",
+    "partnersDescription": "Solo i partner possono ricevere le tue piantine. Rimuovere un partner ritira tutte le piantine condivise con lui.",
+    "partnersEmptyTitle": "Ancora nessun partner",
+    "partnersEmptyDescription": "Aggiungi un organizzatore con il suo indirizzo Yayatoh per condividere piantine con lui.",
+    "partnersEmptyViewer": "Chiedi a un proprietario o amministratore di aggiungere i tuoi organizzatori.",
+    "findOwner": "Vedi chi può aiutare",
+    "partnersCaption": "Organizzatori partner",
+    "partnerName": "Organizzatore",
+    "partnerAddress": "Indirizzo",
+    "partnerSince": "Partner dal",
+    "actions": "Azioni",
+    "remove": "Rimuovi",
+    "removeNamed": "Rimuovi {name} dai partner",
+    "addPartner": "Aggiungi un partner",
+    "addPartnerSubmit": "Aggiungi partner",
+    "partnerSlug": "Indirizzo dell'organizzatore",
+    "partnerSlugHint": "La parte dopo /o/ nel link della sua pagina, per esempio lakeside-events.",
+    "added": "{slug} ora è un partner. Condividi una piantina qui sotto.",
+    "errors": {
+      "not_found": "Nessun organizzatore ha questo indirizzo. Controlla il link ricevuto.",
+      "self": "È la tua organizzazione.",
+      "invalid": "Inserisci un indirizzo: lettere minuscole, numeri e trattini."
+    },
+    "plansTitle": "Le tue piantine",
+    "plansDescription": "Piantine della tua libreria. Gli organizzatori ricevono una propria copia quando ne usano una; le tue modifiche successive non raggiungono mai i loro eventi.",
+    "plansEmptyTitle": "Ancora nessuna piantina da condividere",
+    "plansEmptyDescription": "Salva prima una piantina nella tua libreria, poi condividila qui.",
+    "toLibrary": "Apri la libreria delle piantine",
+    "seats": "{count, plural, one {# posto} other {# posti}}",
+    "usedBy": "{count, plural, =0 {Nessun evento partner la usa ancora} one {Usata da # evento partner} other {Usata da # eventi partner}}",
+    "sharedWith": "Condivisa con {names}",
+    "private": "Non condivisa",
+    "share": "Condividi con {name}",
+    "unshare": "Smetti di condividere con {name}",
+    "shareNamed": "Condividi {plan} con {name}",
+    "unshareNamed": "Smetti di condividere {plan} con {name}",
+    "usesTitle": "Eventi che usano le tue piantine",
+    "usesDescription": "Vedi nome, data, stato e organizzatore di ogni evento, nient'altro.",
+    "usesEmptyTitle": "Nessun evento partner usa ancora le tue piantine",
+    "usesEmptyDescription": "Quando un partner usa una piantina condivisa, il suo evento compare qui.",
+    "toPlans": "Condividi una piantina",
+    "usesCaption": "Eventi partner che usano le tue piantine",
+    "event": "Evento",
+    "organizer": "Organizzatore",
+    "when": "Inizio",
+    "status": "Stato",
+    "plan": "Piantina",
+    "eventStatus": {
+      "draft": "Bozza",
+      "published": "Pubblicato",
+      "postponed": "Rinviato",
+      "cancelled": "Annullato",
+      "completed": "Concluso",
+      "archived": "Archiviato"
+    },
+    "done": {
+      "shared": "Piantina condivisa. Il tuo partner può usarla ora.",
+      "unshared": "Condivisione interrotta. Gli eventi che già usano la piantina mantengono la loro copia.",
+      "removed": "Partner rimosso. Non vede più le tue piantine."
+    }
+  },
+  "promotions": {
+    "title": "Promozioni",
+    "description": "Promuovi i tuoi eventi nella ricerca del marketplace. Un evento promosso appare sopra i risultati corrispondenti, contrassegnato come promosso.",
+    "free": "Le promozioni sono gratuite durante la beta; i prezzi arriveranno più avanti.",
+    "offTitle": "Le promozioni non sono ancora disponibili",
+    "offDescription": "Le posizioni promosse nella ricerca sono disattivate per ora.",
+    "toSite": "Apri le impostazioni del tuo sito pubblico",
+    "viewerNotice": "Puoi vedere le promozioni. I ruoli marketing le avviano e le terminano.",
+    "emptyTitle": "Nessun evento sul marketplace",
+    "emptyDescription": "Pubblica un evento pubblico ed elencalo sul marketplace per promuoverlo.",
+    "caption": "I tuoi eventi pubblici",
+    "event": "Evento",
+    "starts": "Inizio",
+    "state": "Promozione",
+    "actions": "Azioni",
+    "notListed": "Non sul marketplace",
+    "listFirst": "Elencalo prima sul marketplace",
+    "activeUntil": "Promosso fino al {date}",
+    "states": {
+      "none": "Non promosso",
+      "scheduled": "Programmato",
+      "active": "Promosso",
+      "ended": "Terminato"
+    },
+    "days": "{count, plural, one {# giorno} other {# giorni}}",
+    "daysNamed": "Per quanto promuovere {name}",
+    "promote": "Promuovi",
+    "promoteNamed": "Promuovi {name}",
+    "end": "Termina promozione",
+    "endNamed": "Termina la promozione di {name}",
+    "done": {
+      "promoted": "Promozione avviata. L'evento appare come promosso nelle ricerche corrispondenti.",
+      "ended": "Promozione terminata."
+    },
+    "errors": {
+      "days": "Scegli quanti giorni.",
+      "not_listed": "Solo gli eventi sul marketplace possono essere promossi.",
+      "failed": "Impossibile avviare la promozione. Riprova."
     }
   }
 }

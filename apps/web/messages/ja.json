@@ -380,7 +380,9 @@
     "plan": "プランと請求",
     "webhooks": "Webhook",
     "sandboxes": "サンドボックス",
-    "notifications": "通知"
+    "notifications": "通知",
+    "venuePortal": "会場ポータル",
+    "promotions": "プロモーション"
   },
   "vocab": {
     "attendee": "参加者",
@@ -4213,7 +4215,10 @@
       "popularHeading": "人気のイベント",
       "emptyDescription": "別の日付、場所、料金を試すか、範囲を広げるか、絞り込みを解除してください。",
       "openSearch": "場所・カテゴリ・料金で検索",
-      "similarLink": "似たイベントを探す"
+      "similarLink": "似たイベントを探す",
+      "promotedHeading": "プロモーション",
+      "promotedNote": "主催者がプロモーションしているイベントです。検索条件に一致しています。",
+      "promoted": "プロモーション"
     }
   },
   "widget": {
@@ -13011,7 +13016,29 @@
     "startFrom": "これでイベントを作成",
     "startFromNamed": "{name} でイベントを作成",
     "delete": "削除",
-    "deleteNamed": "{name} を削除"
+    "deleteNamed": "{name} を削除",
+    "shared": {
+      "title": "会場から共有",
+      "description": "パートナー会場が共有している座席表です。使うとイベントにコピーされ、イベントは自分のコピーを保持します。",
+      "from": "{venue} から",
+      "option": "{name} · {venue} · {seats, plural, other {#席}}",
+      "plan": "共有された座席表",
+      "event": "イベント",
+      "chooseEvent": "イベントを選択",
+      "privacy": "会場にはこのイベントの名前・日時・ステータスが表示されます。",
+      "use": "このイベントに使う",
+      "used": "{event} は {venue} の座席表を使うようになりました。",
+      "openSeating": "{event} の座席を開く",
+      "noEventsTitle": "使える今後のイベントがありません",
+      "noEventsDescription": "イベントを作成してから戻り、この座席表を設定してください。",
+      "createEvent": "イベントを作成",
+      "errors": {
+        "layoutId": "共有された座席表を選んでください。",
+        "eventId": "イベントを選んでください。",
+        "seats_in_use": "このイベントの座席が確保済みまたは販売済みのため、座席表を置き換えられません。",
+        "layout_locked": "座席が販売済みのため、このイベントの座席表はロックされています。"
+      }
+    }
   },
   "warehouse": {
     "title": "アナリティクス",
@@ -15303,6 +15330,115 @@
       "step1": "下のイベントを選び、プロモコードを開きます。",
       "step2": "割引内容を指定してコードを追加します。必要に応じて上限と期間も設定できます。",
       "step3": "コードを共有しましょう。購入者が決済時に入力し、利用回数が記録されます。"
+    }
+  },
+  "venuePortal": {
+    "title": "会場ポータル",
+    "description": "取引のある主催者と座席表を共有し、それを使うイベントを確認できます。",
+    "spaces": "会場一覧",
+    "offTitle": "会場ポータルはご利用のプランに含まれていません",
+    "offDescription": "パートナー主催者との座席表共有は高度な座席機能に含まれます。",
+    "offAction": "プランを見る",
+    "viewerNotice": "ポータルを閲覧できます。パートナーと共有内容はオーナーと管理者が決めます。",
+    "partnersTitle": "パートナー主催者",
+    "partnersDescription": "座席表を提供できるのはパートナーだけです。パートナーを外すと、共有していた座席表はすべて取り消されます。",
+    "partnersEmptyTitle": "パートナーはまだいません",
+    "partnersEmptyDescription": "Yayatoh のアドレスで主催者を追加すると、座席表を共有できます。",
+    "partnersEmptyViewer": "オーナーまたは管理者に主催者の追加を依頼してください。",
+    "findOwner": "相談できる人を見る",
+    "partnersCaption": "パートナー主催者",
+    "partnerName": "主催者",
+    "partnerAddress": "アドレス",
+    "partnerSince": "パートナー開始日",
+    "actions": "操作",
+    "remove": "外す",
+    "removeNamed": "{name} をパートナーから外す",
+    "addPartner": "パートナーを追加",
+    "addPartnerSubmit": "パートナーを追加",
+    "partnerSlug": "主催者のアドレス",
+    "partnerSlugHint": "ページのリンクの /o/ の後ろの部分(例: lakeside-events)。",
+    "added": "{slug} がパートナーになりました。下で座席表を共有しましょう。",
+    "errors": {
+      "not_found": "このアドレスの主催者はいません。受け取ったリンクを確認してください。",
+      "self": "自分の組織です。",
+      "invalid": "アドレスを入力してください(英小文字・数字・ハイフン)。"
+    },
+    "plansTitle": "座席表",
+    "plansDescription": "ライブラリの座席表です。主催者は使うときに自分のコピーを受け取り、後からの変更が相手のイベントに反映されることはありません。",
+    "plansEmptyTitle": "共有できる座席表がありません",
+    "plansEmptyDescription": "まずライブラリに座席表を保存し、ここで共有してください。",
+    "toLibrary": "座席表ライブラリを開く",
+    "seats": "{count, plural, other {#席}}",
+    "usedBy": "{count, plural, =0 {まだパートナーのイベントで使われていません} other {# 件のパートナーイベントで使用中}}",
+    "sharedWith": "{names} と共有中",
+    "private": "未共有",
+    "share": "{name} と共有",
+    "unshare": "{name} との共有をやめる",
+    "shareNamed": "{plan} を {name} と共有",
+    "unshareNamed": "{plan} の {name} との共有をやめる",
+    "usesTitle": "座席表を使っているイベント",
+    "usesDescription": "各イベントの名前・日時・ステータス・主催者だけが表示されます。",
+    "usesEmptyTitle": "座席表を使っているパートナーイベントはまだありません",
+    "usesEmptyDescription": "パートナーが共有された座席表を使うと、そのイベントがここに表示されます。",
+    "toPlans": "座席表を共有",
+    "usesCaption": "座席表を使っているパートナーイベント",
+    "event": "イベント",
+    "organizer": "主催者",
+    "when": "開始",
+    "status": "ステータス",
+    "plan": "座席表",
+    "eventStatus": {
+      "draft": "下書き",
+      "published": "公開中",
+      "postponed": "延期",
+      "cancelled": "中止",
+      "completed": "終了",
+      "archived": "アーカイブ"
+    },
+    "done": {
+      "shared": "座席表を共有しました。パートナーはすぐに使えます。",
+      "unshared": "共有をやめました。すでに使っているイベントはコピーを保持します。",
+      "removed": "パートナーを外しました。座席表は表示されなくなります。"
+    }
+  },
+  "promotions": {
+    "title": "プロモーション",
+    "description": "マーケットプレイス検索でイベントをプロモーションします。プロモーション中のイベントは該当する結果の上に「プロモーション」と表示されます。",
+    "free": "ベータ期間中プロモーションは無料です。料金は後日決まります。",
+    "offTitle": "プロモーションはまだ利用できません",
+    "offDescription": "マーケットプレイス検索のプロモーション枠は現在オフです。",
+    "toSite": "公開サイトの設定を開く",
+    "viewerNotice": "プロモーションを閲覧できます。開始と終了はマーケティング担当が行います。",
+    "emptyTitle": "マーケットプレイスにイベントがありません",
+    "emptyDescription": "公開イベントを公開し、マーケットプレイスに掲載するとプロモーションできます。",
+    "caption": "公開イベント",
+    "event": "イベント",
+    "starts": "開始",
+    "state": "プロモーション",
+    "actions": "操作",
+    "notListed": "マーケットプレイス未掲載",
+    "listFirst": "まずマーケットプレイスに掲載してください",
+    "activeUntil": "{date} までプロモーション",
+    "states": {
+      "none": "プロモーションなし",
+      "scheduled": "予定",
+      "active": "プロモーション中",
+      "ended": "終了"
+    },
+    "days": "{count, plural, other {#日間}}",
+    "daysNamed": "{name} のプロモーション期間",
+    "promote": "プロモーション",
+    "promoteNamed": "{name} をプロモーション",
+    "end": "プロモーションを終了",
+    "endNamed": "{name} のプロモーションを終了",
+    "done": {
+      "promoted": "プロモーションを開始しました。該当する検索でプロモーションとして表示されます。",
+      "ended": "プロモーションを終了しました。"
+    },
+    "errors": {
+      "days": "日数を選んでください。",
+      "not_listed": "プロモーションできるのはマーケットプレイスのイベントだけです。",
+      "failed": "プロモーションを開始できませんでした。もう一度お試しください。"
     }
   }
 }

@@ -220,11 +220,14 @@ export async function SearchGrid({
   locale,
   label,
   empty,
+  badge,
 }: {
   items: readonly SearchListingDto[];
   locale: string;
   label: string;
   empty?: { title: string; description: string; action?: ReactNode };
+  /** M6.14b: a tag on every card (promoted placements are always labelled). */
+  badge?: string;
 }) {
   const t = await getTranslations('market.search');
   if (items.length === 0)
@@ -235,7 +238,10 @@ export async function SearchGrid({
   return (
     <ul aria-label={label} className="grid list-none grid-cols-1 gap-4 p-0 md:grid-cols-2 xl:grid-cols-3">
       {items.map((l) => (
-        <li key={l.slug} className="flex flex-col gap-1">
+        <li key={l.slug} className="flex flex-col gap-1" data-promoted={badge ? 'true' : undefined}>
+          {badge ? (
+            <span className="self-start rounded-tag bg-tag px-2 py-0.5 text-label text-tag-ink">{badge}</span>
+          ) : null}
           <ListingCard
             listing={l}
             cover={covers.get(l.slug) ?? null}

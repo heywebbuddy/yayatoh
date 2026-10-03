@@ -380,7 +380,9 @@
     "plan": "Plano e cobrança",
     "webhooks": "Webhooks",
     "sandboxes": "Sandboxes",
-    "notifications": "Notificações"
+    "notifications": "Notificações",
+    "venuePortal": "Portal do local",
+    "promotions": "Promoções"
   },
   "vocab": {
     "attendee": "Participante",
@@ -4213,7 +4215,10 @@
       "popularHeading": "Eventos populares",
       "emptyDescription": "Tente outra data, local ou preço, aumente a distância ou limpe os filtros.",
       "openSearch": "Pesquisar por local, categoria e preço",
-      "similarLink": "Encontrar eventos semelhantes"
+      "similarLink": "Encontrar eventos semelhantes",
+      "promotedHeading": "Promovido",
+      "promotedNote": "Os organizadores promovem estes eventos. Correspondem à sua pesquisa.",
+      "promoted": "Promovido"
     }
   },
   "widget": {
@@ -13011,7 +13016,29 @@
     "startFrom": "Criar um evento com ele",
     "startFromNamed": "Criar um evento com {name}",
     "delete": "Remover",
-    "deleteNamed": "Remover {name}"
+    "deleteNamed": "Remover {name}",
+    "shared": {
+      "title": "Partilhadas por locais",
+      "description": "Plantas que os seus locais parceiros partilham consigo. Usar uma copia-a para o seu evento, que mantém a sua própria cópia.",
+      "from": "De {venue}",
+      "option": "{name} · {venue} · {seats, plural, one {# lugar} other {# lugares}}",
+      "plan": "Planta partilhada",
+      "event": "Evento",
+      "chooseEvent": "Escolha um evento",
+      "privacy": "O local verá o nome, a data e o estado deste evento.",
+      "use": "Usar neste evento",
+      "used": "{event} usa agora a planta de {venue}.",
+      "openSeating": "Abrir os lugares de {event}",
+      "noEventsTitle": "Nenhum evento próximo para a usar",
+      "noEventsDescription": "Crie um evento e volte para lhe dar esta planta.",
+      "createEvent": "Criar um evento",
+      "errors": {
+        "layoutId": "Escolha uma planta partilhada.",
+        "eventId": "Escolha um evento.",
+        "seats_in_use": "Há lugares deste evento reservados ou vendidos, por isso a planta não pode ser substituída.",
+        "layout_locked": "A planta deste evento está bloqueada porque foram vendidos lugares."
+      }
+    }
   },
   "warehouse": {
     "title": "Análises",
@@ -15303,6 +15330,115 @@
       "step1": "Escolha o evento abaixo e abra seus códigos promocionais.",
       "step2": "Adicione um código com o desconto e, se quiser, um limite e datas.",
       "step3": "Compartilhe o código. Os compradores o inserem no checkout e cada uso é contado."
+    }
+  },
+  "venuePortal": {
+    "title": "Portal do local",
+    "description": "Partilhe as suas plantas com os organizadores com quem trabalha e veja os eventos que as usam.",
+    "spaces": "Os seus locais",
+    "offTitle": "O portal do local não está no seu plano",
+    "offDescription": "Partilhar plantas com organizadores parceiros faz parte dos lugares avançados.",
+    "offAction": "Ver o seu plano",
+    "viewerNotice": "Pode ver o portal. Proprietários e administradores escolhem parceiros e o que é partilhado.",
+    "partnersTitle": "Organizadores parceiros",
+    "partnersDescription": "Só os parceiros podem receber as suas plantas. Remover um parceiro retira todas as plantas partilhadas com ele.",
+    "partnersEmptyTitle": "Ainda sem parceiros",
+    "partnersEmptyDescription": "Adicione um organizador pelo endereço Yayatoh para partilhar plantas com ele.",
+    "partnersEmptyViewer": "Peça a um proprietário ou administrador para adicionar os seus organizadores.",
+    "findOwner": "Ver quem pode ajudar",
+    "partnersCaption": "Organizadores parceiros",
+    "partnerName": "Organizador",
+    "partnerAddress": "Endereço",
+    "partnerSince": "Parceiro desde",
+    "actions": "Ações",
+    "remove": "Remover",
+    "removeNamed": "Remover {name} como parceiro",
+    "addPartner": "Adicionar um parceiro",
+    "addPartnerSubmit": "Adicionar parceiro",
+    "partnerSlug": "Endereço do organizador",
+    "partnerSlugHint": "A parte depois de /o/ no link da página, por exemplo lakeside-events.",
+    "added": "{slug} é agora parceiro. Partilhe uma planta abaixo.",
+    "errors": {
+      "not_found": "Nenhum organizador tem esse endereço. Verifique o link que recebeu.",
+      "self": "Essa é a sua própria organização.",
+      "invalid": "Introduza um endereço: minúsculas, números e hífenes."
+    },
+    "plansTitle": "As suas plantas",
+    "plansDescription": "Plantas da sua biblioteca. Os organizadores recebem a sua própria cópia ao usar uma; as suas alterações posteriores nunca chegam aos eventos deles.",
+    "plansEmptyTitle": "Ainda sem plantas para partilhar",
+    "plansEmptyDescription": "Guarde primeiro uma planta na sua biblioteca e depois partilhe-a aqui.",
+    "toLibrary": "Abrir a biblioteca de plantas",
+    "seats": "{count, plural, one {# lugar} other {# lugares}}",
+    "usedBy": "{count, plural, =0 {Ainda não usada por um evento parceiro} one {Usada por # evento parceiro} other {Usada por # eventos parceiros}}",
+    "sharedWith": "Partilhada com {names}",
+    "private": "Não partilhada",
+    "share": "Partilhar com {name}",
+    "unshare": "Deixar de partilhar com {name}",
+    "shareNamed": "Partilhar {plan} com {name}",
+    "unshareNamed": "Deixar de partilhar {plan} com {name}",
+    "usesTitle": "Eventos que usam as suas plantas",
+    "usesDescription": "Vê o nome, a data, o estado e o organizador de cada evento, nada mais.",
+    "usesEmptyTitle": "Nenhum evento parceiro usa ainda as suas plantas",
+    "usesEmptyDescription": "Quando um parceiro usar uma planta partilhada, o evento dele aparece aqui.",
+    "toPlans": "Partilhar uma planta",
+    "usesCaption": "Eventos parceiros que usam as suas plantas",
+    "event": "Evento",
+    "organizer": "Organizador",
+    "when": "Início",
+    "status": "Estado",
+    "plan": "Planta",
+    "eventStatus": {
+      "draft": "Rascunho",
+      "published": "Publicado",
+      "postponed": "Adiado",
+      "cancelled": "Cancelado",
+      "completed": "Concluído",
+      "archived": "Arquivado"
+    },
+    "done": {
+      "shared": "Planta partilhada. O seu parceiro já a pode usar.",
+      "unshared": "Partilha terminada. Os eventos que já usam a planta mantêm a sua cópia.",
+      "removed": "Parceiro removido. Já não vê as suas plantas."
+    }
+  },
+  "promotions": {
+    "title": "Promoções",
+    "description": "Promova os seus eventos na pesquisa do marketplace. Um evento promovido aparece acima dos resultados correspondentes, assinalado como promovido.",
+    "free": "As promoções são gratuitas durante a beta; os preços chegam mais tarde.",
+    "offTitle": "As promoções ainda não estão disponíveis",
+    "offDescription": "As posições promovidas na pesquisa estão desligadas por agora.",
+    "toSite": "Abrir as definições do seu site público",
+    "viewerNotice": "Pode ver as promoções. As funções de marketing iniciam-nas e terminam-nas.",
+    "emptyTitle": "Sem eventos no marketplace",
+    "emptyDescription": "Publique um evento público e liste-o no marketplace para o promover.",
+    "caption": "Os seus eventos públicos",
+    "event": "Evento",
+    "starts": "Início",
+    "state": "Promoção",
+    "actions": "Ações",
+    "notListed": "Fora do marketplace",
+    "listFirst": "Liste-o primeiro no marketplace",
+    "activeUntil": "Promovido até {date}",
+    "states": {
+      "none": "Não promovido",
+      "scheduled": "Agendado",
+      "active": "Promovido",
+      "ended": "Terminado"
+    },
+    "days": "{count, plural, one {# dia} other {# dias}}",
+    "daysNamed": "Durante quanto tempo promover {name}",
+    "promote": "Promover",
+    "promoteNamed": "Promover {name}",
+    "end": "Terminar promoção",
+    "endNamed": "Terminar a promoção de {name}",
+    "done": {
+      "promoted": "Promoção iniciada. O evento aparece como promovido nas pesquisas correspondentes.",
+      "ended": "Promoção terminada."
+    },
+    "errors": {
+      "days": "Escolha quantos dias.",
+      "not_listed": "Só os eventos do marketplace podem ser promovidos.",
+      "failed": "Não foi possível iniciar a promoção. Tente novamente."
     }
   }
 }

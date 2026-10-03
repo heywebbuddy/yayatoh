@@ -7,7 +7,13 @@ import { SearchGrid, SearchV2Form, searchQueryOf } from '@/components/marketplac
 import { SiteFooter, SiteHeader } from '@/components/marketplace/site-chrome.tsx';
 import { Link, redirect } from '@/i18n/navigation.ts';
 import { pageLocale } from '@/server/locale.ts';
-import { cachedCityCenters, cachedPopular, cachedSearch, cachedSimilar } from '@/server/public-data.ts';
+import {
+  cachedCityCenters,
+  cachedPopular,
+  cachedPromoted,
+  cachedSearch,
+  cachedSimilar,
+} from '@/server/public-data.ts';
 import { requestHost } from '@/server/request-origin.ts';
 import { searchEnabled } from '@/server/search.ts';
 import { apexOrigin, publicMetadata } from '@/server/seo.ts';
@@ -50,11 +56,12 @@ export default async function SearchPage({ params, searchParams }: Props) {
     redirect({ href: p.q ? `/events?q=${encodeURIComponent(p.q)}` : '/events', locale });
   const t = await getTranslations('market.search');
   const tm = await getTranslations('market');
-  const [result, centers, popular, similar] = await Promise.all([
+  const [result, centers, popular, similar, promoted] = await Promise.all([
     cachedSearch(p),
     cachedCityCenters(),
     hasFilters(p) || p.like ? Promise.resolve([]) : cachedPopular(),
     p.like ? cachedSimilar(p.like) : Promise.resolve(null),
+    p.like ? Promise.resolve([]) : cachedPromoted(p),
   ]);
   const near = result.near
     ? t('nearHeading', {
@@ -111,6 +118,15 @@ export default async function SearchPage({ params, searchParams }: Props) {
               {t('popularHeading')}
             </h2>
             <SearchGrid items={popular} locale={locale} label={t('popularHeading')} />
+          </section>
+        ) : null}
+        {promoted.length > 0 ? (
+          <section aria-labelledby="promoted-heading" className="flex flex-col gap-4">
+            <h2 id="promoted-heading" className="text-[28px] font-extrabold tracking-[-0.03em]">
+              {t('promotedHeading')}
+            </h2>
+            <p className="text-caption text-ink-2">{t('promotedNote')}</p>
+            <SearchGrid items={promoted} locale={locale} label={t('promotedHeading')} badge={t('promoted')} />
           </section>
         ) : null}
         <section aria-labelledby="results-heading" className="flex flex-col gap-4">

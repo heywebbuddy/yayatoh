@@ -380,7 +380,9 @@
     "plan": "套餐与账单",
     "webhooks": "Webhook",
     "sandboxes": "沙盒",
-    "notifications": "通知"
+    "notifications": "通知",
+    "venuePortal": "场地门户",
+    "promotions": "推广"
   },
   "vocab": {
     "attendee": "参会者",
@@ -4213,7 +4215,10 @@
       "popularHeading": "热门活动",
       "emptyDescription": "试试其他日期、地点或价格，扩大范围，或清除筛选条件。",
       "openSearch": "按地点、类别和价格搜索",
-      "similarLink": "查找类似活动"
+      "similarLink": "查找类似活动",
+      "promotedHeading": "推广",
+      "promotedNote": "这些活动由主办方推广,且与你的搜索匹配。",
+      "promoted": "推广"
     }
   },
   "widget": {
@@ -13011,7 +13016,29 @@
     "startFrom": "用它创建活动",
     "startFromNamed": "用 {name} 创建活动",
     "delete": "删除",
-    "deleteNamed": "删除 {name}"
+    "deleteNamed": "删除 {name}",
+    "shared": {
+      "title": "场地共享",
+      "description": "合作场地与你共享的平面图。使用后会复制到你的活动中,活动保留自己的副本。",
+      "from": "来自 {venue}",
+      "option": "{name} · {venue} · {seats, plural, other {# 个座位}}",
+      "plan": "共享平面图",
+      "event": "活动",
+      "chooseEvent": "选择活动",
+      "privacy": "场地将看到此活动的名称、日期和状态。",
+      "use": "用于此活动",
+      "used": "{event} 现在使用来自 {venue} 的平面图。",
+      "openSeating": "打开 {event} 的座位",
+      "noEventsTitle": "没有可使用的即将举行的活动",
+      "noEventsDescription": "先创建活动,再回来为它设置此平面图。",
+      "createEvent": "创建活动",
+      "errors": {
+        "layoutId": "请选择共享平面图。",
+        "eventId": "请选择活动。",
+        "seats_in_use": "此活动有座位已被保留或售出,无法替换平面图。",
+        "layout_locked": "此活动已售出座位,平面图已锁定。"
+      }
+    }
   },
   "warehouse": {
     "title": "数据分析",
@@ -15303,6 +15330,115 @@
       "step1": "在下方选择活动并打开其促销代码。",
       "step2": "添加代码及折扣，也可以设置次数上限和日期。",
       "step3": "分享代码。买家在结账时输入，每次使用都会被记录。"
+    }
+  },
+  "venuePortal": {
+    "title": "场地门户",
+    "description": "与合作的主办方共享你的平面图,并查看使用这些平面图的活动。",
+    "spaces": "你的场地",
+    "offTitle": "你的套餐不含场地门户",
+    "offDescription": "与合作主办方共享平面图属于高级座位功能。",
+    "offAction": "查看套餐",
+    "viewerNotice": "你可以查看门户。合作方和共享内容由所有者和管理员决定。",
+    "partnersTitle": "合作主办方",
+    "partnersDescription": "只有合作方才能获得你的平面图。移除合作方会撤回与其共享的所有平面图。",
+    "partnersEmptyTitle": "还没有合作方",
+    "partnersEmptyDescription": "通过主办方的 Yayatoh 地址添加他们,即可共享平面图。",
+    "partnersEmptyViewer": "请所有者或管理员添加你合作的主办方。",
+    "findOwner": "查看谁能帮忙",
+    "partnersCaption": "合作主办方",
+    "partnerName": "主办方",
+    "partnerAddress": "地址",
+    "partnerSince": "合作起始",
+    "actions": "操作",
+    "remove": "移除",
+    "removeNamed": "移除合作方 {name}",
+    "addPartner": "添加合作方",
+    "addPartnerSubmit": "添加合作方",
+    "partnerSlug": "主办方地址",
+    "partnerSlugHint": "其页面链接中 /o/ 之后的部分,例如 lakeside-events。",
+    "added": "{slug} 已成为合作方。请在下方共享平面图。",
+    "errors": {
+      "not_found": "没有使用该地址的主办方。请检查对方给你的链接。",
+      "self": "这是你自己的组织。",
+      "invalid": "请输入地址:小写字母、数字和连字符。"
+    },
+    "plansTitle": "你的平面图",
+    "plansDescription": "来自你平面图库的平面图。主办方使用时会得到自己的副本;你之后的修改不会影响他们的活动。",
+    "plansEmptyTitle": "还没有可共享的平面图",
+    "plansEmptyDescription": "先把平面图保存到平面图库,再在这里共享。",
+    "toLibrary": "打开平面图库",
+    "seats": "{count, plural, other {# 个座位}}",
+    "usedBy": "{count, plural, =0 {尚无合作活动使用} other {# 个合作活动在使用}}",
+    "sharedWith": "已与 {names} 共享",
+    "private": "未共享",
+    "share": "与 {name} 共享",
+    "unshare": "停止与 {name} 共享",
+    "shareNamed": "将 {plan} 与 {name} 共享",
+    "unshareNamed": "停止将 {plan} 与 {name} 共享",
+    "usesTitle": "使用你平面图的活动",
+    "usesDescription": "你只能看到每个活动的名称、日期、状态和主办方。",
+    "usesEmptyTitle": "还没有合作活动使用你的平面图",
+    "usesEmptyDescription": "合作方使用共享的平面图后,其活动会显示在这里。",
+    "toPlans": "共享平面图",
+    "usesCaption": "使用你平面图的合作活动",
+    "event": "活动",
+    "organizer": "主办方",
+    "when": "开始时间",
+    "status": "状态",
+    "plan": "平面图",
+    "eventStatus": {
+      "draft": "草稿",
+      "published": "已发布",
+      "postponed": "已延期",
+      "cancelled": "已取消",
+      "completed": "已结束",
+      "archived": "已归档"
+    },
+    "done": {
+      "shared": "已共享平面图。合作方现在可以使用。",
+      "unshared": "已停止共享。已在使用的活动会保留其副本。",
+      "removed": "已移除合作方。对方不再能看到你的平面图。"
+    }
+  },
+  "promotions": {
+    "title": "推广",
+    "description": "在市场搜索中推广你的活动。推广的活动会显示在匹配结果上方,并标注为推广。",
+    "free": "测试期间推广免费,价格稍后公布。",
+    "offTitle": "推广暂不可用",
+    "offDescription": "市场搜索中的推广位目前已关闭。",
+    "toSite": "打开公开网站设置",
+    "viewerNotice": "你可以查看推广。营销角色负责开始和结束推广。",
+    "emptyTitle": "市场上没有活动",
+    "emptyDescription": "发布公开活动并上架到市场后即可推广。",
+    "caption": "你的公开活动",
+    "event": "活动",
+    "starts": "开始时间",
+    "state": "推广",
+    "actions": "操作",
+    "notListed": "未上架市场",
+    "listFirst": "请先上架到市场",
+    "activeUntil": "推广至 {date}",
+    "states": {
+      "none": "未推广",
+      "scheduled": "已排期",
+      "active": "推广中",
+      "ended": "已结束"
+    },
+    "days": "{count, plural, other {# 天}}",
+    "daysNamed": "{name} 的推广时长",
+    "promote": "推广",
+    "promoteNamed": "推广 {name}",
+    "end": "结束推广",
+    "endNamed": "结束 {name} 的推广",
+    "done": {
+      "promoted": "推广已开始。活动会在匹配的搜索中显示为推广。",
+      "ended": "推广已结束。"
+    },
+    "errors": {
+      "days": "请选择天数。",
+      "not_listed": "只有市场上的活动才能推广。",
+      "failed": "无法开始推广,请重试。"
     }
   }
 }

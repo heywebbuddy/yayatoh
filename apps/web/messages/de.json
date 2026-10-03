@@ -380,7 +380,9 @@
     "plan": "Tarif & Abrechnung",
     "webhooks": "Webhooks",
     "sandboxes": "Sandboxes",
-    "notifications": "Benachrichtigungen"
+    "notifications": "Benachrichtigungen",
+    "venuePortal": "Veranstaltungsort-Portal",
+    "promotions": "Hervorhebungen"
   },
   "vocab": {
     "attendee": "Teilnehmer",
@@ -4213,7 +4215,10 @@
       "popularHeading": "Beliebte Veranstaltungen",
       "emptyDescription": "Versuche ein anderes Datum, einen anderen Ort oder Preis, vergrößere den Umkreis oder setze die Filter zurück.",
       "openSearch": "Nach Ort, Kategorie und Preis suchen",
-      "similarLink": "Ähnliche Veranstaltungen finden"
+      "similarLink": "Ähnliche Veranstaltungen finden",
+      "promotedHeading": "Hervorgehoben",
+      "promotedNote": "Veranstalter heben diese Veranstaltungen hervor. Sie passen zu Ihrer Suche.",
+      "promoted": "Hervorgehoben"
     }
   },
   "widget": {
@@ -13011,7 +13016,29 @@
     "startFrom": "Veranstaltung damit anlegen",
     "startFromNamed": "Veranstaltung mit {name} anlegen",
     "delete": "Entfernen",
-    "deleteNamed": "{name} entfernen"
+    "deleteNamed": "{name} entfernen",
+    "shared": {
+      "title": "Von Veranstaltungsorten geteilt",
+      "description": "Pläne, die Ihre Partner-Veranstaltungsorte mit Ihnen teilen. Bei Nutzung wird der Plan in Ihre Veranstaltung kopiert; sie behält ihre eigene Kopie.",
+      "from": "Von {venue}",
+      "option": "{name} · {venue} · {seats, plural, one {# Platz} other {# Plätze}}",
+      "plan": "Geteilter Plan",
+      "event": "Veranstaltung",
+      "chooseEvent": "Veranstaltung wählen",
+      "privacy": "Der Veranstaltungsort sieht Name, Datum und Status dieser Veranstaltung.",
+      "use": "Für diese Veranstaltung nutzen",
+      "used": "{event} nutzt jetzt den Plan von {venue}.",
+      "openSeating": "Bestuhlung von {event} öffnen",
+      "noEventsTitle": "Keine kommende Veranstaltung dafür",
+      "noEventsDescription": "Erstellen Sie eine Veranstaltung und kommen Sie dann zurück, um ihr diesen Plan zu geben.",
+      "createEvent": "Veranstaltung erstellen",
+      "errors": {
+        "layoutId": "Wählen Sie einen geteilten Plan.",
+        "eventId": "Wählen Sie eine Veranstaltung.",
+        "seats_in_use": "Plätze dieser Veranstaltung sind reserviert oder verkauft, daher kann ihr Plan nicht ersetzt werden.",
+        "layout_locked": "Der Plan dieser Veranstaltung ist gesperrt, weil Plätze verkauft wurden."
+      }
+    }
   },
   "warehouse": {
     "title": "Analysen",
@@ -15303,6 +15330,115 @@
       "step1": "Wählen Sie unten die Veranstaltung und öffnen Sie ihre Aktionscodes.",
       "step2": "Fügen Sie einen Code mit Rabatt hinzu, auf Wunsch mit Limit und Zeitraum.",
       "step3": "Teilen Sie den Code. Käufer geben ihn beim Bezahlen ein, und jede Nutzung wird gezählt."
+    }
+  },
+  "venuePortal": {
+    "title": "Veranstaltungsort-Portal",
+    "description": "Teilen Sie Ihre Saalpläne mit den Veranstaltern, mit denen Sie arbeiten, und sehen Sie die Veranstaltungen, die sie nutzen.",
+    "spaces": "Ihre Veranstaltungsorte",
+    "offTitle": "Das Veranstaltungsort-Portal ist nicht in Ihrem Tarif",
+    "offDescription": "Das Teilen von Saalplänen mit Partnerveranstaltern gehört zur erweiterten Bestuhlung.",
+    "offAction": "Tarif ansehen",
+    "viewerNotice": "Sie können das Portal ansehen. Inhaber und Admins wählen Partner und Freigaben.",
+    "partnersTitle": "Partnerveranstalter",
+    "partnersDescription": "Nur Partnern können Ihre Pläne angeboten werden. Wenn Sie einen Partner entfernen, werden alle mit ihm geteilten Pläne zurückgezogen.",
+    "partnersEmptyTitle": "Noch keine Partner",
+    "partnersEmptyDescription": "Fügen Sie einen Veranstalter über seine Yayatoh-Adresse hinzu, um Pläne mit ihm zu teilen.",
+    "partnersEmptyViewer": "Bitten Sie einen Inhaber oder Admin, Ihre Veranstalter hinzuzufügen.",
+    "findOwner": "Sehen, wer helfen kann",
+    "partnersCaption": "Partnerveranstalter",
+    "partnerName": "Veranstalter",
+    "partnerAddress": "Adresse",
+    "partnerSince": "Partner seit",
+    "actions": "Aktionen",
+    "remove": "Entfernen",
+    "removeNamed": "{name} als Partner entfernen",
+    "addPartner": "Partner hinzufügen",
+    "addPartnerSubmit": "Partner hinzufügen",
+    "partnerSlug": "Adresse des Veranstalters",
+    "partnerSlugHint": "Der Teil nach /o/ im Link seiner Seite, zum Beispiel lakeside-events.",
+    "added": "{slug} ist jetzt Partner. Teilen Sie unten einen Plan.",
+    "errors": {
+      "not_found": "Kein Veranstalter hat diese Adresse. Prüfen Sie den Link, den Sie erhalten haben.",
+      "self": "Das ist Ihre eigene Organisation.",
+      "invalid": "Geben Sie eine Adresse ein: Kleinbuchstaben, Ziffern und Bindestriche."
+    },
+    "plansTitle": "Ihre Pläne",
+    "plansDescription": "Pläne aus Ihrer Saalplan-Bibliothek. Veranstalter erhalten bei Nutzung eine eigene Kopie; spätere Änderungen erreichen ihre Veranstaltungen nie.",
+    "plansEmptyTitle": "Noch keine Pläne zum Teilen",
+    "plansEmptyDescription": "Speichern Sie zuerst einen Saalplan in Ihrer Bibliothek und teilen Sie ihn dann hier.",
+    "toLibrary": "Saalplan-Bibliothek öffnen",
+    "seats": "{count, plural, one {# Platz} other {# Plätze}}",
+    "usedBy": "{count, plural, =0 {Noch von keiner Partnerveranstaltung genutzt} one {Von # Partnerveranstaltung genutzt} other {Von # Partnerveranstaltungen genutzt}}",
+    "sharedWith": "Geteilt mit {names}",
+    "private": "Nicht geteilt",
+    "share": "Mit {name} teilen",
+    "unshare": "Nicht mehr mit {name} teilen",
+    "shareNamed": "{plan} mit {name} teilen",
+    "unshareNamed": "{plan} nicht mehr mit {name} teilen",
+    "usesTitle": "Veranstaltungen mit Ihren Plänen",
+    "usesDescription": "Sie sehen Name, Datum, Status und Veranstalter jeder Veranstaltung, sonst nichts.",
+    "usesEmptyTitle": "Noch keine Partnerveranstaltung nutzt Ihre Pläne",
+    "usesEmptyDescription": "Sobald ein Partner einen geteilten Plan nutzt, erscheint seine Veranstaltung hier.",
+    "toPlans": "Einen Plan teilen",
+    "usesCaption": "Partnerveranstaltungen mit Ihren Plänen",
+    "event": "Veranstaltung",
+    "organizer": "Veranstalter",
+    "when": "Beginn",
+    "status": "Status",
+    "plan": "Plan",
+    "eventStatus": {
+      "draft": "Entwurf",
+      "published": "Veröffentlicht",
+      "postponed": "Verschoben",
+      "cancelled": "Abgesagt",
+      "completed": "Abgeschlossen",
+      "archived": "Archiviert"
+    },
+    "done": {
+      "shared": "Plan geteilt. Ihr Partner kann ihn jetzt nutzen.",
+      "unshared": "Teilen beendet. Veranstaltungen, die den Plan bereits nutzen, behalten ihre Kopie.",
+      "removed": "Partner entfernt. Er sieht Ihre Pläne nicht mehr."
+    }
+  },
+  "promotions": {
+    "title": "Hervorhebungen",
+    "description": "Heben Sie Ihre Veranstaltungen in der Marktplatz-Suche hervor. Eine hervorgehobene Veranstaltung erscheint über passenden Ergebnissen, als hervorgehoben gekennzeichnet.",
+    "free": "Hervorhebungen sind in der Beta kostenlos; Preise folgen später.",
+    "offTitle": "Hervorhebungen sind noch nicht verfügbar",
+    "offDescription": "Hervorgehobene Platzierungen in der Marktplatz-Suche sind derzeit ausgeschaltet.",
+    "toSite": "Einstellungen Ihrer öffentlichen Seite öffnen",
+    "viewerNotice": "Sie können Hervorhebungen ansehen. Marketing-Rollen starten und beenden sie.",
+    "emptyTitle": "Keine Veranstaltungen auf dem Marktplatz",
+    "emptyDescription": "Veröffentlichen Sie eine öffentliche Veranstaltung und listen Sie sie auf dem Marktplatz, um sie hervorzuheben.",
+    "caption": "Ihre öffentlichen Veranstaltungen",
+    "event": "Veranstaltung",
+    "starts": "Beginn",
+    "state": "Hervorhebung",
+    "actions": "Aktionen",
+    "notListed": "Nicht auf dem Marktplatz",
+    "listFirst": "Zuerst auf dem Marktplatz listen",
+    "activeUntil": "Hervorgehoben bis {date}",
+    "states": {
+      "none": "Nicht hervorgehoben",
+      "scheduled": "Geplant",
+      "active": "Hervorgehoben",
+      "ended": "Beendet"
+    },
+    "days": "{count, plural, one {# Tag} other {# Tage}}",
+    "daysNamed": "Wie lange {name} hervorheben",
+    "promote": "Hervorheben",
+    "promoteNamed": "{name} hervorheben",
+    "end": "Hervorhebung beenden",
+    "endNamed": "Hervorhebung von {name} beenden",
+    "done": {
+      "promoted": "Hervorhebung gestartet. Die Veranstaltung erscheint jetzt in passenden Suchen als hervorgehoben.",
+      "ended": "Hervorhebung beendet."
+    },
+    "errors": {
+      "days": "Wählen Sie, wie viele Tage.",
+      "not_listed": "Nur Veranstaltungen auf dem Marktplatz können hervorgehoben werden.",
+      "failed": "Die Hervorhebung konnte nicht gestartet werden. Bitte erneut versuchen."
     }
   }
 }

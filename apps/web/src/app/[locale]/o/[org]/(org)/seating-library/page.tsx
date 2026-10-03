@@ -1,14 +1,21 @@
+import { listEventsQuery } from '@yayatoh/events';
 import { executeQuery } from '@yayatoh/kernel';
 import { composeNav, PROFILE_KEYS } from '@yayatoh/platform';
-import { layoutLibraryQuery } from '@yayatoh/seating';
+import { layoutLibraryQuery, sharedLayoutsQuery } from '@yayatoh/seating';
 import { roleCan } from '@yayatoh/tenancy';
 import { Alert, Button, buttonClass, Card, EmptyState, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { RenameLayoutForm, StartEventForm } from '@/components/seating-library.tsx';
+import { UseSharedForm } from '@/components/venue-portal.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
-import { deleteLayoutAction, renameLayoutAction, startEventFromLayoutAction } from './actions.ts';
+import {
+  deleteLayoutAction,
+  renameLayoutAction,
+  startEventFromLayoutAction,
+  useSharedLayoutAction,
+} from './actions.ts';
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 
@@ -36,11 +43,68 @@ export default async function SeatingLibraryPage({
   // Profiles whose console has a seating page (given the org's modules).
   const profiles = PROFILE_KEYS.filter((p) => composeNav(p, data.modules).some((i) => i.path === 'seating'));
   const day = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeZone: data.org.timezone });
+  // M6.14b: plans venues share with this org, and the org's events to copy one into.
+  const shared = data.modules.has('advanced_seating')
+    ? await executeQuery(sharedLayoutsQuery, {}, data.ctx, ports)
+    : [];
+  const events =
+    shared.length > 0 && canWrite
+      ? (await executeQuery(listEventsQuery, {}, data.ctx, ports)).filter(
+          (e) => e.endsAt > data.ctx.now && !['cancelled', 'completed', 'archived'].includes(e.status),
+        )
+      : [];
+  const sharedSection =
+    shared.length > 0 ? (
+      <section aria-labelledby="shared-heading" className="flex flex-col gap-3">
+        <h2 id="shared-heading" className="text-section">
+          {t('shared.title')}
+        </h2>
+        <p className="text-body text-ink-2">{t('shared.description')}</p>
+        <ul className="grid list-none grid-cols-1 gap-3 p-0 lg:grid-cols-2">
+          {shared.map((s) => (
+            <li key={s.layoutId}>
+              <Card className="flex flex-col gap-1" data-testid="shared-layout">
+                <h3 className="text-body font-medium">{s.name}</h3>
+                <p className="text-caption text-ink-2">
+                  {t('shared.from', { venue: s.venueName })} · {t('seats', { count: s.seatCount })}
+                </p>
+              </Card>
+            </li>
+          ))}
+        </ul>
+        {canWrite ? (
+          events.length > 0 ? (
+            <Card>
+              <UseSharedForm
+                org={org}
+                plans={shared.map((s) => ({
+                  layoutId: s.layoutId,
+                  label: t('shared.option', { name: s.name, venue: s.venueName, seats: s.seatCount }),
+                }))}
+                events={events.map((e) => ({ id: e.id, name: e.name }))}
+                action={useSharedLayoutAction.bind(null, org)}
+              />
+            </Card>
+          ) : (
+            <EmptyState
+              title={t('shared.noEventsTitle')}
+              description={t('shared.noEventsDescription')}
+              action={
+                <Link href={`/o/${org}/events/new`} className={buttonClass('primary', 'md')}>
+                  {t('shared.createEvent')}
+                </Link>
+              }
+            />
+          )
+        ) : null}
+      </section>
+    ) : null;
   const chosen = sp.start && UUID.test(sp.start) && layouts.some((l) => l.id === sp.start) ? sp.start : null;
   return (
     <>
       <PageHeader title={t('title')} description={t('description')} />
       {sp.deleted ? <Alert tone="info" title={t('deleted')} /> : null}
+      {sharedSection}
       {layouts.length === 0 ? (
         <EmptyState
           title={t('emptyTitle')}

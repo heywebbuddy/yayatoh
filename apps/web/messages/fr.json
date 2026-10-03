@@ -380,7 +380,9 @@
     "plan": "Forfait et facturation",
     "webhooks": "Webhooks",
     "sandboxes": "Bacs à sable",
-    "notifications": "Notifications"
+    "notifications": "Notifications",
+    "venuePortal": "Portail du lieu",
+    "promotions": "Mises en avant"
   },
   "vocab": {
     "attendee": "Participant",
@@ -4213,7 +4215,10 @@
       "popularHeading": "Événements populaires",
       "emptyDescription": "Essayez une autre date, un autre lieu ou prix, élargissez la distance ou effacez les filtres.",
       "openSearch": "Rechercher par lieu, catégorie et prix",
-      "similarLink": "Trouver des événements similaires"
+      "similarLink": "Trouver des événements similaires",
+      "promotedHeading": "Sponsorisé",
+      "promotedNote": "Des organisateurs mettent ces événements en avant. Ils correspondent à votre recherche.",
+      "promoted": "Sponsorisé"
     }
   },
   "widget": {
@@ -13011,7 +13016,29 @@
     "startFrom": "Créer un événement avec ce plan",
     "startFromNamed": "Créer un événement avec {name}",
     "delete": "Supprimer",
-    "deleteNamed": "Supprimer {name}"
+    "deleteNamed": "Supprimer {name}",
+    "shared": {
+      "title": "Partagés par des lieux",
+      "description": "Les plans que vos lieux partenaires partagent avec vous. En utiliser un le copie dans votre événement, qui garde sa propre copie.",
+      "from": "De {venue}",
+      "option": "{name} · {venue} · {seats, plural, one {# place} many {# places} other {# places}}",
+      "plan": "Plan partagé",
+      "event": "Événement",
+      "chooseEvent": "Choisir un événement",
+      "privacy": "Le lieu verra le nom, la date et le statut de cet événement.",
+      "use": "Utiliser pour cet événement",
+      "used": "{event} utilise maintenant le plan de {venue}.",
+      "openSeating": "Ouvrir le placement de {event}",
+      "noEventsTitle": "Aucun événement à venir pour l'utiliser",
+      "noEventsDescription": "Créez un événement, puis revenez lui donner ce plan.",
+      "createEvent": "Créer un événement",
+      "errors": {
+        "layoutId": "Choisissez un plan partagé.",
+        "eventId": "Choisissez un événement.",
+        "seats_in_use": "Des places de cet événement sont réservées ou vendues : son plan ne peut pas être remplacé.",
+        "layout_locked": "Le plan de cet événement est verrouillé car des places ont été vendues."
+      }
+    }
   },
   "warehouse": {
     "title": "Analyses",
@@ -15303,6 +15330,115 @@
       "step1": "Choisissez l’événement ci-dessous et ouvrez ses codes promo.",
       "step2": "Ajoutez un code avec sa remise et, si vous le souhaitez, une limite et des dates.",
       "step3": "Partagez le code. Les acheteurs le saisissent au paiement et chaque utilisation est comptée."
+    }
+  },
+  "venuePortal": {
+    "title": "Portail du lieu",
+    "description": "Partagez vos plans de salle avec les organisateurs avec qui vous travaillez et voyez les événements qui les utilisent.",
+    "spaces": "Vos lieux",
+    "offTitle": "Le portail du lieu n'est pas inclus dans votre offre",
+    "offDescription": "Le partage de plans avec des organisateurs partenaires fait partie du placement avancé.",
+    "offAction": "Voir votre offre",
+    "viewerNotice": "Vous pouvez consulter le portail. Les propriétaires et administrateurs choisissent les partenaires et les partages.",
+    "partnersTitle": "Organisateurs partenaires",
+    "partnersDescription": "Seuls les partenaires peuvent recevoir vos plans. Retirer un partenaire retire tous les plans partagés avec lui.",
+    "partnersEmptyTitle": "Aucun partenaire pour l'instant",
+    "partnersEmptyDescription": "Ajoutez un organisateur avec son adresse Yayatoh pour partager des plans avec lui.",
+    "partnersEmptyViewer": "Demandez à un propriétaire ou administrateur d'ajouter vos organisateurs.",
+    "findOwner": "Voir qui peut aider",
+    "partnersCaption": "Organisateurs partenaires",
+    "partnerName": "Organisateur",
+    "partnerAddress": "Adresse",
+    "partnerSince": "Partenaire depuis",
+    "actions": "Actions",
+    "remove": "Retirer",
+    "removeNamed": "Retirer {name} des partenaires",
+    "addPartner": "Ajouter un partenaire",
+    "addPartnerSubmit": "Ajouter le partenaire",
+    "partnerSlug": "Adresse de l'organisateur",
+    "partnerSlugHint": "La partie après /o/ dans le lien de sa page, par exemple lakeside-events.",
+    "added": "{slug} est maintenant partenaire. Partagez-lui un plan ci-dessous.",
+    "errors": {
+      "not_found": "Aucun organisateur n'a cette adresse. Vérifiez le lien reçu.",
+      "self": "C'est votre propre organisation.",
+      "invalid": "Saisissez une adresse : lettres minuscules, chiffres et tirets."
+    },
+    "plansTitle": "Vos plans",
+    "plansDescription": "Les plans de votre bibliothèque. Un organisateur reçoit sa propre copie quand il en utilise un ; vos modifications ultérieures n'atteignent jamais ses événements.",
+    "plansEmptyTitle": "Aucun plan à partager",
+    "plansEmptyDescription": "Enregistrez d'abord un plan dans votre bibliothèque, puis partagez-le ici.",
+    "toLibrary": "Ouvrir la bibliothèque de plans",
+    "seats": "{count, plural, one {# place} many {# places} other {# places}}",
+    "usedBy": "{count, plural, =0 {Utilisé par aucun événement partenaire} one {Utilisé par # événement partenaire} many {Utilisé par # événements partenaires} other {Utilisé par # événements partenaires}}",
+    "sharedWith": "Partagé avec {names}",
+    "private": "Non partagé",
+    "share": "Partager avec {name}",
+    "unshare": "Ne plus partager avec {name}",
+    "shareNamed": "Partager {plan} avec {name}",
+    "unshareNamed": "Ne plus partager {plan} avec {name}",
+    "usesTitle": "Événements qui utilisent vos plans",
+    "usesDescription": "Vous voyez le nom, la date, le statut et l'organisateur de chaque événement, rien d'autre.",
+    "usesEmptyTitle": "Aucun événement partenaire n'utilise vos plans",
+    "usesEmptyDescription": "Quand un partenaire utilise un plan partagé, son événement apparaît ici.",
+    "toPlans": "Partager un plan",
+    "usesCaption": "Événements partenaires utilisant vos plans",
+    "event": "Événement",
+    "organizer": "Organisateur",
+    "when": "Début",
+    "status": "Statut",
+    "plan": "Plan",
+    "eventStatus": {
+      "draft": "Brouillon",
+      "published": "Publié",
+      "postponed": "Reporté",
+      "cancelled": "Annulé",
+      "completed": "Terminé",
+      "archived": "Archivé"
+    },
+    "done": {
+      "shared": "Plan partagé. Votre partenaire peut l'utiliser maintenant.",
+      "unshared": "Partage arrêté. Les événements qui utilisent déjà le plan gardent leur copie.",
+      "removed": "Partenaire retiré. Il ne voit plus vos plans."
+    }
+  },
+  "promotions": {
+    "title": "Mises en avant",
+    "description": "Mettez vos événements en avant dans la recherche de la place de marché. Un événement mis en avant apparaît au-dessus des résultats correspondants, signalé comme sponsorisé.",
+    "free": "Les mises en avant sont gratuites pendant la bêta ; les tarifs viendront plus tard.",
+    "offTitle": "Les mises en avant ne sont pas encore disponibles",
+    "offDescription": "Les emplacements sponsorisés dans la recherche sont désactivés pour le moment.",
+    "toSite": "Ouvrir les réglages de votre site public",
+    "viewerNotice": "Vous pouvez consulter les mises en avant. Les rôles marketing les lancent et les arrêtent.",
+    "emptyTitle": "Aucun événement sur la place de marché",
+    "emptyDescription": "Publiez un événement public et listez-le sur la place de marché pour le mettre en avant.",
+    "caption": "Vos événements publics",
+    "event": "Événement",
+    "starts": "Début",
+    "state": "Mise en avant",
+    "actions": "Actions",
+    "notListed": "Pas sur la place de marché",
+    "listFirst": "Listez-le d'abord sur la place de marché",
+    "activeUntil": "Mis en avant jusqu'au {date}",
+    "states": {
+      "none": "Non mis en avant",
+      "scheduled": "Programmé",
+      "active": "Mis en avant",
+      "ended": "Terminé"
+    },
+    "days": "{count, plural, one {# jour} many {# jours} other {# jours}}",
+    "daysNamed": "Durée de mise en avant de {name}",
+    "promote": "Mettre en avant",
+    "promoteNamed": "Mettre en avant {name}",
+    "end": "Arrêter la mise en avant",
+    "endNamed": "Arrêter la mise en avant de {name}",
+    "done": {
+      "promoted": "Mise en avant lancée. L'événement apparaît comme sponsorisé dans les recherches correspondantes.",
+      "ended": "Mise en avant arrêtée."
+    },
+    "errors": {
+      "days": "Choisissez le nombre de jours.",
+      "not_listed": "Seuls les événements de la place de marché peuvent être mis en avant.",
+      "failed": "La mise en avant n'a pas pu être lancée. Réessayez."
     }
   }
 }

@@ -380,7 +380,9 @@
     "plan": "Plan & billing",
     "webhooks": "Webhooks",
     "sandboxes": "Sandboxes",
-    "notifications": "Notifications"
+    "notifications": "Notifications",
+    "venuePortal": "Venue portal",
+    "promotions": "Promotions"
   },
   "vocab": {
     "attendee": "Attendee",
@@ -4213,7 +4215,10 @@
       "popularHeading": "Popular events",
       "emptyDescription": "Try another date, place or price, widen the distance, or clear the filters.",
       "openSearch": "Search by place, category and price",
-      "similarLink": "Find similar events"
+      "similarLink": "Find similar events",
+      "promotedHeading": "Promoted",
+      "promotedNote": "Organizers promote these events. They match your search.",
+      "promoted": "Promoted"
     }
   },
   "widget": {
@@ -13011,7 +13016,29 @@
     "startFrom": "Start an event from it",
     "startFromNamed": "Start an event from {name}",
     "delete": "Remove",
-    "deleteNamed": "Remove {name}"
+    "deleteNamed": "Remove {name}",
+    "shared": {
+      "title": "Shared by venues",
+      "description": "Plans your partner venues share with you. Using one copies it into your event; the event keeps its own copy.",
+      "from": "From {venue}",
+      "option": "{name} · {venue} · {seats, plural, one {# seat} other {# seats}}",
+      "plan": "Shared plan",
+      "event": "Event",
+      "chooseEvent": "Choose an event",
+      "privacy": "The venue will see this event's name, date and status.",
+      "use": "Use for this event",
+      "used": "{event} now uses the plan from {venue}.",
+      "openSeating": "Open the seating of {event}",
+      "noEventsTitle": "No upcoming event to use it for",
+      "noEventsDescription": "Create an event, then come back to give it this plan.",
+      "createEvent": "Create an event",
+      "errors": {
+        "layoutId": "Choose a shared plan.",
+        "eventId": "Choose an event.",
+        "seats_in_use": "Seats of this event are held or sold, so its plan can't be replaced.",
+        "layout_locked": "This event's plan is locked because seats have been sold."
+      }
+    }
   },
   "warehouse": {
     "title": "Analytics",
@@ -15303,6 +15330,115 @@
       "step1": "Pick the event below and open its promo codes.",
       "step2": "Add a code with its discount and, if you like, a limit and dates.",
       "step3": "Share the code. Buyers enter it at checkout and each use is counted."
+    }
+  },
+  "venuePortal": {
+    "title": "Venue portal",
+    "description": "Share your floor plans with the organizers you work with, and see the events that use them.",
+    "spaces": "Your venues",
+    "offTitle": "The venue portal isn't on your plan",
+    "offDescription": "Sharing floor plans with partner organizers comes with advanced seating.",
+    "offAction": "See your plan",
+    "viewerNotice": "You can view the portal. Owners and admins choose partners and what is shared.",
+    "partnersTitle": "Partner organizers",
+    "partnersDescription": "Only partners can be offered your plans. Removing a partner withdraws every plan you shared with them.",
+    "partnersEmptyTitle": "No partners yet",
+    "partnersEmptyDescription": "Add an organizer you work with by their Yayatoh address to share plans with them.",
+    "partnersEmptyViewer": "Ask an owner or admin to add the organizers you work with.",
+    "findOwner": "See who can help",
+    "partnersCaption": "Partner organizers",
+    "partnerName": "Organizer",
+    "partnerAddress": "Address",
+    "partnerSince": "Partner since",
+    "actions": "Actions",
+    "remove": "Remove",
+    "removeNamed": "Remove {name} as a partner",
+    "addPartner": "Add a partner",
+    "addPartnerSubmit": "Add partner",
+    "partnerSlug": "Organizer's address",
+    "partnerSlugHint": "The part after /o/ in their page's link, for example lakeside-events.",
+    "added": "{slug} is now a partner. Share a plan with them below.",
+    "errors": {
+      "not_found": "No organizer has that address. Check the link they gave you.",
+      "self": "That's your own organization.",
+      "invalid": "Enter an address: lowercase letters, numbers and hyphens."
+    },
+    "plansTitle": "Your plans",
+    "plansDescription": "Plans from your seating library. Organizers get their own copy when they use one; your later changes never reach their events.",
+    "plansEmptyTitle": "No plans to share yet",
+    "plansEmptyDescription": "Save a floor plan to your seating library first, then share it here.",
+    "toLibrary": "Open the seating library",
+    "seats": "{count, plural, one {# seat} other {# seats}}",
+    "usedBy": "{count, plural, =0 {Not used by a partner event yet} one {Used by # partner event} other {Used by # partner events}}",
+    "sharedWith": "Shared with {names}",
+    "private": "Not shared",
+    "share": "Share with {name}",
+    "unshare": "Stop sharing with {name}",
+    "shareNamed": "Share {plan} with {name}",
+    "unshareNamed": "Stop sharing {plan} with {name}",
+    "usesTitle": "Events using your plans",
+    "usesDescription": "You see each event's name, date, status and organizer, nothing else.",
+    "usesEmptyTitle": "No partner event uses your plans yet",
+    "usesEmptyDescription": "When a partner uses a plan you shared, their event appears here.",
+    "toPlans": "Share a plan",
+    "usesCaption": "Partner events using your plans",
+    "event": "Event",
+    "organizer": "Organizer",
+    "when": "Starts",
+    "status": "Status",
+    "plan": "Plan",
+    "eventStatus": {
+      "draft": "Draft",
+      "published": "Published",
+      "postponed": "Postponed",
+      "cancelled": "Cancelled",
+      "completed": "Completed",
+      "archived": "Archived"
+    },
+    "done": {
+      "shared": "Plan shared. Your partner can use it now.",
+      "unshared": "Sharing stopped. Events that already use the plan keep their copy.",
+      "removed": "Partner removed. They no longer see your plans."
+    }
+  },
+  "promotions": {
+    "title": "Promotions",
+    "description": "Promote your events in marketplace search. A promoted event shows above matching results, labelled as promoted.",
+    "free": "Promotions are free during the beta; pricing comes later.",
+    "offTitle": "Promotions aren't available yet",
+    "offDescription": "Promoted placements in marketplace search are switched off for now.",
+    "toSite": "Open your public site settings",
+    "viewerNotice": "You can view promotions. Marketing roles start and end them.",
+    "emptyTitle": "No events on the marketplace",
+    "emptyDescription": "Publish a public event and list it on the marketplace to promote it.",
+    "caption": "Your public events",
+    "event": "Event",
+    "starts": "Starts",
+    "state": "Promotion",
+    "actions": "Actions",
+    "notListed": "Not on the marketplace",
+    "listFirst": "List it on the marketplace first",
+    "activeUntil": "Promoted until {date}",
+    "states": {
+      "none": "Not promoted",
+      "scheduled": "Scheduled",
+      "active": "Promoted",
+      "ended": "Ended"
+    },
+    "days": "{count, plural, one {# day} other {# days}}",
+    "daysNamed": "How long to promote {name}",
+    "promote": "Promote",
+    "promoteNamed": "Promote {name}",
+    "end": "End promotion",
+    "endNamed": "End the promotion of {name}",
+    "done": {
+      "promoted": "Promotion started. The event now shows as promoted in matching searches.",
+      "ended": "Promotion ended."
+    },
+    "errors": {
+      "days": "Choose how many days to promote it.",
+      "not_listed": "Only events on the marketplace can be promoted.",
+      "failed": "The promotion couldn't be started. Try again."
     }
   }
 }

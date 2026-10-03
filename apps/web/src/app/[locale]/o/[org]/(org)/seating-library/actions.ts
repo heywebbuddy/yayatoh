@@ -1,9 +1,14 @@
 'use server';
 
-import { createEventCommand } from '@yayatoh/events';
-import { executeCommand, isDomainError, zonedTimeToUtc } from '@yayatoh/kernel';
+import { createEventCommand, getEventQuery } from '@yayatoh/events';
+import { executeCommand, executeQuery, isDomainError, zonedTimeToUtc } from '@yayatoh/kernel';
 import { composeNav, isProfileKey } from '@yayatoh/platform';
-import { deleteLayoutCommand, renameLayoutCommand, setEventLayoutCommand } from '@yayatoh/seating';
+import {
+  deleteLayoutCommand,
+  renameLayoutCommand,
+  setEventLayoutCommand,
+  useSharedLayoutCommand,
+} from '@yayatoh/seating';
 import { revalidatePath } from 'next/cache';
 import { getLocale } from 'next-intl/server';
 import { redirect } from '@/i18n/navigation.ts';
@@ -102,4 +107,48 @@ export async function deleteLayoutAction(org: string, id: string): Promise<void>
   await executeCommand(deleteLayoutCommand, { id }, data.ctx, ports);
   revalidatePath(`/o/${org}/seating-library`);
   return redirect({ href: `/o/${org}/seating-library?deleted=1`, locale: await getLocale() });
+}
+
+export type UseSharedState =
+  | { readonly kind: 'idle' }
+  | {
+      readonly kind: 'used';
+      readonly eventName: string;
+      readonly eventSlug: string;
+      readonly venueName: string;
+    }
+  | {
+      readonly kind: 'error';
+      readonly code: string;
+      readonly field?: 'layoutId' | 'eventId';
+      /** `seats_in_use`, `layout_locked`. */
+      readonly reason?: string;
+    };
+
+/**
+ * M6.14b: copy a venue's shared plan into one of the org's events (copy-on-use). The event keeps
+ * its own copy; the venue sees the event's name, date and status.
+ */
+export async function useSharedLayoutAction(
+  org: string,
+  _prev: UseSharedState,
+  form: FormData,
+): Promise<UseSharedState> {
+  const data = await loadConsole(org);
+  const layoutId = String(form.get('layoutId') ?? '');
+  const eventId = String(form.get('eventId') ?? '');
+  if (!UUID.test(layoutId)) return { kind: 'error', code: 'validation_failed', field: 'layoutId' };
+  if (!UUID.test(eventId)) return { kind: 'error', code: 'validation_failed', field: 'eventId' };
+  try {
+    const r = await executeCommand(useSharedLayoutCommand, { eventId, layoutId }, data.ctx, ports);
+    const event = await executeQuery(getEventQuery, { eventId }, data.ctx, ports);
+    revalidatePath(`/o/${org}/seating-library`);
+    return { kind: 'used', eventName: event.name, eventSlug: event.slug, venueName: r.venueName };
+  } catch (err) {
+    if (!isDomainError(err)) throw err;
+    const field = err.details?.field;
+    if (field === 'layoutId' || field === 'eventId') return { kind: 'error', code: err.code, field };
+    const reason = typeof err.details?.reason === 'string' ? err.details.reason : undefined;
+    return { kind: 'error', code: err.code, ...(reason ? { reason } : {}) };
+  }
 }

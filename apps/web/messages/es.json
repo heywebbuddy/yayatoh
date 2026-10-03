@@ -380,7 +380,9 @@
     "plan": "Plan y facturación",
     "webhooks": "Webhooks",
     "sandboxes": "Entornos de prueba",
-    "notifications": "Notificaciones"
+    "notifications": "Notificaciones",
+    "venuePortal": "Portal del recinto",
+    "promotions": "Promociones"
   },
   "vocab": {
     "attendee": "Asistente",
@@ -4213,7 +4215,10 @@
       "popularHeading": "Eventos populares",
       "emptyDescription": "Prueba otra fecha, lugar o precio, amplía la distancia o borra los filtros.",
       "openSearch": "Buscar por lugar, categoría y precio",
-      "similarLink": "Encontrar eventos similares"
+      "similarLink": "Encontrar eventos similares",
+      "promotedHeading": "Promocionado",
+      "promotedNote": "Los organizadores promocionan estos eventos. Coinciden con tu búsqueda.",
+      "promoted": "Promocionado"
     }
   },
   "widget": {
@@ -13011,7 +13016,29 @@
     "startFrom": "Crear un evento con él",
     "startFromNamed": "Crear un evento con {name}",
     "delete": "Eliminar",
-    "deleteNamed": "Eliminar {name}"
+    "deleteNamed": "Eliminar {name}",
+    "shared": {
+      "title": "Compartidos por recintos",
+      "description": "Planos que tus recintos socios comparten contigo. Usar uno lo copia en tu evento, que conserva su propia copia.",
+      "from": "De {venue}",
+      "option": "{name} · {venue} · {seats, plural, one {# asiento} other {# asientos}}",
+      "plan": "Plano compartido",
+      "event": "Evento",
+      "chooseEvent": "Elige un evento",
+      "privacy": "El recinto verá el nombre, la fecha y el estado de este evento.",
+      "use": "Usar para este evento",
+      "used": "{event} ahora usa el plano de {venue}.",
+      "openSeating": "Abrir los asientos de {event}",
+      "noEventsTitle": "No hay un próximo evento para usarlo",
+      "noEventsDescription": "Crea un evento y vuelve para darle este plano.",
+      "createEvent": "Crear un evento",
+      "errors": {
+        "layoutId": "Elige un plano compartido.",
+        "eventId": "Elige un evento.",
+        "seats_in_use": "Hay asientos de este evento retenidos o vendidos, así que su plano no se puede reemplazar.",
+        "layout_locked": "El plano de este evento está bloqueado porque se vendieron asientos."
+      }
+    }
   },
   "warehouse": {
     "title": "Analítica",
@@ -15303,6 +15330,115 @@
       "step1": "Elige el evento abajo y abre sus códigos promocionales.",
       "step2": "Añade un código con su descuento y, si quieres, un límite y fechas.",
       "step3": "Comparte el código. Los compradores lo introducen al pagar y se cuenta cada uso."
+    }
+  },
+  "venuePortal": {
+    "title": "Portal del recinto",
+    "description": "Comparte tus planos con los organizadores con los que trabajas y ve los eventos que los usan.",
+    "spaces": "Tus recintos",
+    "offTitle": "El portal del recinto no está en tu plan",
+    "offDescription": "Compartir planos con organizadores socios forma parte de los asientos avanzados.",
+    "offAction": "Ver tu plan",
+    "viewerNotice": "Puedes ver el portal. Los propietarios y administradores eligen socios y qué se comparte.",
+    "partnersTitle": "Organizadores socios",
+    "partnersDescription": "Solo los socios pueden recibir tus planos. Quitar un socio retira todos los planos compartidos con él.",
+    "partnersEmptyTitle": "Aún no hay socios",
+    "partnersEmptyDescription": "Añade a un organizador por su dirección de Yayatoh para compartir planos con él.",
+    "partnersEmptyViewer": "Pide a un propietario o administrador que añada a tus organizadores.",
+    "findOwner": "Ver quién puede ayudar",
+    "partnersCaption": "Organizadores socios",
+    "partnerName": "Organizador",
+    "partnerAddress": "Dirección",
+    "partnerSince": "Socio desde",
+    "actions": "Acciones",
+    "remove": "Quitar",
+    "removeNamed": "Quitar a {name} como socio",
+    "addPartner": "Añadir un socio",
+    "addPartnerSubmit": "Añadir socio",
+    "partnerSlug": "Dirección del organizador",
+    "partnerSlugHint": "La parte después de /o/ en el enlace de su página, por ejemplo lakeside-events.",
+    "added": "{slug} ya es socio. Comparte un plano con él abajo.",
+    "errors": {
+      "not_found": "Ningún organizador tiene esa dirección. Revisa el enlace que te dieron.",
+      "self": "Esa es tu propia organización.",
+      "invalid": "Escribe una dirección: minúsculas, números y guiones."
+    },
+    "plansTitle": "Tus planos",
+    "plansDescription": "Planos de tu biblioteca. Los organizadores reciben su propia copia al usarlos; tus cambios posteriores nunca llegan a sus eventos.",
+    "plansEmptyTitle": "Aún no hay planos para compartir",
+    "plansEmptyDescription": "Guarda primero un plano en tu biblioteca y luego compártelo aquí.",
+    "toLibrary": "Abrir la biblioteca de planos",
+    "seats": "{count, plural, one {# asiento} other {# asientos}}",
+    "usedBy": "{count, plural, =0 {Ningún evento socio lo usa aún} one {Lo usa # evento socio} other {Lo usan # eventos socios}}",
+    "sharedWith": "Compartido con {names}",
+    "private": "Sin compartir",
+    "share": "Compartir con {name}",
+    "unshare": "Dejar de compartir con {name}",
+    "shareNamed": "Compartir {plan} con {name}",
+    "unshareNamed": "Dejar de compartir {plan} con {name}",
+    "usesTitle": "Eventos que usan tus planos",
+    "usesDescription": "Ves el nombre, la fecha, el estado y el organizador de cada evento, nada más.",
+    "usesEmptyTitle": "Ningún evento socio usa tus planos aún",
+    "usesEmptyDescription": "Cuando un socio use un plano compartido, su evento aparecerá aquí.",
+    "toPlans": "Compartir un plano",
+    "usesCaption": "Eventos socios que usan tus planos",
+    "event": "Evento",
+    "organizer": "Organizador",
+    "when": "Comienza",
+    "status": "Estado",
+    "plan": "Plano",
+    "eventStatus": {
+      "draft": "Borrador",
+      "published": "Publicado",
+      "postponed": "Aplazado",
+      "cancelled": "Cancelado",
+      "completed": "Finalizado",
+      "archived": "Archivado"
+    },
+    "done": {
+      "shared": "Plano compartido. Tu socio ya puede usarlo.",
+      "unshared": "Ya no se comparte. Los eventos que ya usan el plano conservan su copia.",
+      "removed": "Socio quitado. Ya no ve tus planos."
+    }
+  },
+  "promotions": {
+    "title": "Promociones",
+    "description": "Promociona tus eventos en la búsqueda del marketplace. Un evento promocionado aparece sobre los resultados que coinciden, marcado como promocionado.",
+    "free": "Las promociones son gratis durante la beta; los precios llegarán después.",
+    "offTitle": "Las promociones aún no están disponibles",
+    "offDescription": "Las posiciones promocionadas en la búsqueda están desactivadas por ahora.",
+    "toSite": "Abrir los ajustes de tu sitio público",
+    "viewerNotice": "Puedes ver las promociones. Los roles de marketing las inician y terminan.",
+    "emptyTitle": "No hay eventos en el marketplace",
+    "emptyDescription": "Publica un evento público y lístalo en el marketplace para promocionarlo.",
+    "caption": "Tus eventos públicos",
+    "event": "Evento",
+    "starts": "Comienza",
+    "state": "Promoción",
+    "actions": "Acciones",
+    "notListed": "No está en el marketplace",
+    "listFirst": "Lístalo primero en el marketplace",
+    "activeUntil": "Promocionado hasta {date}",
+    "states": {
+      "none": "Sin promocionar",
+      "scheduled": "Programado",
+      "active": "Promocionado",
+      "ended": "Terminado"
+    },
+    "days": "{count, plural, one {# día} other {# días}}",
+    "daysNamed": "Cuánto tiempo promocionar {name}",
+    "promote": "Promocionar",
+    "promoteNamed": "Promocionar {name}",
+    "end": "Terminar promoción",
+    "endNamed": "Terminar la promoción de {name}",
+    "done": {
+      "promoted": "Promoción iniciada. El evento aparece como promocionado en las búsquedas que coinciden.",
+      "ended": "Promoción terminada."
+    },
+    "errors": {
+      "days": "Elige cuántos días.",
+      "not_listed": "Solo se pueden promocionar eventos del marketplace.",
+      "failed": "No se pudo iniciar la promoción. Inténtalo de nuevo."
     }
   }
 }

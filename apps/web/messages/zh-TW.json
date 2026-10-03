@@ -380,7 +380,9 @@
     "plan": "方案與帳單",
     "webhooks": "Webhook",
     "sandboxes": "沙盒",
-    "notifications": "通知"
+    "notifications": "通知",
+    "venuePortal": "場地入口",
+    "promotions": "推廣"
   },
   "vocab": {
     "attendee": "參加者",
@@ -4213,7 +4215,10 @@
       "popularHeading": "熱門活動",
       "emptyDescription": "試試其他日期、地點或價格，擴大範圍，或清除篩選條件。",
       "openSearch": "依地點、類別和價格搜尋",
-      "similarLink": "尋找類似活動"
+      "similarLink": "尋找類似活動",
+      "promotedHeading": "推廣",
+      "promotedNote": "這些活動由主辦單位推廣,且與你的搜尋相符。",
+      "promoted": "推廣"
     }
   },
   "widget": {
@@ -13011,7 +13016,29 @@
     "startFrom": "用它建立活動",
     "startFromNamed": "用 {name} 建立活動",
     "delete": "移除",
-    "deleteNamed": "移除 {name}"
+    "deleteNamed": "移除 {name}",
+    "shared": {
+      "title": "場地共用",
+      "description": "合作場地與你共用的平面圖。使用後會複製到你的活動,活動保留自己的副本。",
+      "from": "來自 {venue}",
+      "option": "{name} · {venue} · {seats, plural, other {# 個座位}}",
+      "plan": "共用平面圖",
+      "event": "活動",
+      "chooseEvent": "選擇活動",
+      "privacy": "場地將看到此活動的名稱、日期和狀態。",
+      "use": "用於此活動",
+      "used": "{event} 現在使用來自 {venue} 的平面圖。",
+      "openSeating": "開啟 {event} 的座位",
+      "noEventsTitle": "沒有可使用的近期活動",
+      "noEventsDescription": "先建立活動,再回來為它設定此平面圖。",
+      "createEvent": "建立活動",
+      "errors": {
+        "layoutId": "請選擇共用平面圖。",
+        "eventId": "請選擇活動。",
+        "seats_in_use": "此活動有座位已保留或售出,無法替換平面圖。",
+        "layout_locked": "此活動已售出座位,平面圖已鎖定。"
+      }
+    }
   },
   "warehouse": {
     "title": "數據分析",
@@ -15303,6 +15330,115 @@
       "step1": "在下方選擇活動並開啟其優惠代碼。",
       "step2": "新增代碼及折扣，也可以設定次數上限與日期。",
       "step3": "分享代碼。買家在結帳時輸入，每次使用都會被記錄。"
+    }
+  },
+  "venuePortal": {
+    "title": "場地入口",
+    "description": "與合作的主辦單位共用你的平面圖,並查看使用這些平面圖的活動。",
+    "spaces": "你的場地",
+    "offTitle": "你的方案不含場地入口",
+    "offDescription": "與合作主辦單位共用平面圖屬於進階座位功能。",
+    "offAction": "查看方案",
+    "viewerNotice": "你可以檢視入口。合作對象與共用內容由擁有者和管理員決定。",
+    "partnersTitle": "合作主辦單位",
+    "partnersDescription": "只有合作對象能取得你的平面圖。移除合作對象會撤回與其共用的所有平面圖。",
+    "partnersEmptyTitle": "尚無合作對象",
+    "partnersEmptyDescription": "以主辦單位的 Yayatoh 位址加入對方,即可共用平面圖。",
+    "partnersEmptyViewer": "請擁有者或管理員加入你合作的主辦單位。",
+    "findOwner": "看看誰能協助",
+    "partnersCaption": "合作主辦單位",
+    "partnerName": "主辦單位",
+    "partnerAddress": "位址",
+    "partnerSince": "合作起始",
+    "actions": "動作",
+    "remove": "移除",
+    "removeNamed": "移除合作對象 {name}",
+    "addPartner": "加入合作對象",
+    "addPartnerSubmit": "加入合作對象",
+    "partnerSlug": "主辦單位位址",
+    "partnerSlugHint": "對方頁面連結中 /o/ 之後的部分,例如 lakeside-events。",
+    "added": "{slug} 已成為合作對象。請在下方共用平面圖。",
+    "errors": {
+      "not_found": "沒有使用此位址的主辦單位。請檢查對方提供的連結。",
+      "self": "這是你自己的組織。",
+      "invalid": "請輸入位址:小寫英文字母、數字和連字號。"
+    },
+    "plansTitle": "你的平面圖",
+    "plansDescription": "來自你平面圖庫的平面圖。主辦單位使用時會取得自己的副本;你之後的修改不會影響他們的活動。",
+    "plansEmptyTitle": "尚無可共用的平面圖",
+    "plansEmptyDescription": "先將平面圖儲存到平面圖庫,再到這裡共用。",
+    "toLibrary": "開啟平面圖庫",
+    "seats": "{count, plural, other {# 個座位}}",
+    "usedBy": "{count, plural, =0 {尚無合作活動使用} other {# 個合作活動使用中}}",
+    "sharedWith": "已與 {names} 共用",
+    "private": "未共用",
+    "share": "與 {name} 共用",
+    "unshare": "停止與 {name} 共用",
+    "shareNamed": "將 {plan} 與 {name} 共用",
+    "unshareNamed": "停止將 {plan} 與 {name} 共用",
+    "usesTitle": "使用你平面圖的活動",
+    "usesDescription": "你只會看到每個活動的名稱、日期、狀態和主辦單位。",
+    "usesEmptyTitle": "尚無合作活動使用你的平面圖",
+    "usesEmptyDescription": "合作對象使用共用的平面圖後,其活動會顯示在這裡。",
+    "toPlans": "共用平面圖",
+    "usesCaption": "使用你平面圖的合作活動",
+    "event": "活動",
+    "organizer": "主辦單位",
+    "when": "開始時間",
+    "status": "狀態",
+    "plan": "平面圖",
+    "eventStatus": {
+      "draft": "草稿",
+      "published": "已發布",
+      "postponed": "已延期",
+      "cancelled": "已取消",
+      "completed": "已結束",
+      "archived": "已封存"
+    },
+    "done": {
+      "shared": "已共用平面圖。合作對象現在可以使用。",
+      "unshared": "已停止共用。已在使用的活動會保留其副本。",
+      "removed": "已移除合作對象。對方不再能看到你的平面圖。"
+    }
+  },
+  "promotions": {
+    "title": "推廣",
+    "description": "在市集搜尋中推廣你的活動。推廣的活動會顯示在相符結果上方,並標示為推廣。",
+    "free": "測試期間推廣免費,價格之後公布。",
+    "offTitle": "推廣尚未開放",
+    "offDescription": "市集搜尋中的推廣版位目前已關閉。",
+    "toSite": "開啟公開網站設定",
+    "viewerNotice": "你可以檢視推廣。行銷角色負責開始和結束推廣。",
+    "emptyTitle": "市集上沒有活動",
+    "emptyDescription": "發布公開活動並上架到市集後即可推廣。",
+    "caption": "你的公開活動",
+    "event": "活動",
+    "starts": "開始時間",
+    "state": "推廣",
+    "actions": "動作",
+    "notListed": "未上架市集",
+    "listFirst": "請先上架到市集",
+    "activeUntil": "推廣至 {date}",
+    "states": {
+      "none": "未推廣",
+      "scheduled": "已排程",
+      "active": "推廣中",
+      "ended": "已結束"
+    },
+    "days": "{count, plural, other {# 天}}",
+    "daysNamed": "{name} 的推廣時長",
+    "promote": "推廣",
+    "promoteNamed": "推廣 {name}",
+    "end": "結束推廣",
+    "endNamed": "結束 {name} 的推廣",
+    "done": {
+      "promoted": "推廣已開始。活動會在相符的搜尋中顯示為推廣。",
+      "ended": "推廣已結束。"
+    },
+    "errors": {
+      "days": "請選擇天數。",
+      "not_listed": "只有市集上的活動才能推廣。",
+      "failed": "無法開始推廣,請再試一次。"
     }
   }
 }
