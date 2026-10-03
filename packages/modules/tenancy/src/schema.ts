@@ -317,6 +317,11 @@ export const API_KEY_SCOPES = [
   /** Bulk attendee and ticket actions on /v1 (labels, email, resend tickets; M1.13d). */
   'attendees:write',
   'checkin:scan',
+  /**
+   * M6.5c: add and remove the org's webhook endpoints over /v1 (Make and n8n instant triggers
+   * subscribe themselves). Never the signing secrets, test sends or replays (console only).
+   */
+  'webhooks:manage',
 ] as const;
 export type ApiKeyScope = (typeof API_KEY_SCOPES)[number];
 

@@ -339,3 +339,5 @@ export {
   unassignSponsoredSessionCommand,
 } from './sponsor-packages.ts';
 export { sponsorPortalQuery } from './sponsor-portal.ts';
+// M6.5c: calendar push (integrations) reads placed sessions through these.
+export { type CalendarSession, calendarSessionsByIdTx, calendarSessionsPageTx } from './calendar.ts';

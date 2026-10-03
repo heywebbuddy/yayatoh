@@ -67,13 +67,41 @@ export interface PullSide {
   ): Promise<{ readonly localId: string }>;
 }
 
+/**
+ * Whose records a push reads (M6.5c). An org connection pushes the org's records; a registrant's
+ * personal connection (`audience: 'registrant'`) pushes only that registrant's (their schedule).
+ */
+export interface PushScope {
+  readonly connectionId: string;
+  /** The registrant of a personal connection; null for the org's connections. */
+  readonly registrantId: string | null;
+  /** The event of a personal connection; null for the org's connections. */
+  readonly eventId: string | null;
+  readonly now: Date;
+}
+
 export interface PushSide {
   /** Mapping offered when the connection is made (Yayatoh field → remote field). */
   readonly defaultMapping: readonly MappingRule[];
-  /** Yayatoh records changed after `cursor` (null: from the beginning), one page. */
-  changes(tx: TenantTx, cursor: string | null, limit: number): Promise<Page<LocalRecord>>;
-  /** One Yayatoh record (also used by the pull's loop guard); null when it is gone. */
-  read(tx: TenantTx, localId: string): Promise<LocalRecord | null>;
+  /**
+   * Yayatoh records changed after `cursor` (null: from the beginning), one page. A `reconcile`
+   * side lists every record it wants on the provider instead (the engine skips unchanged ones).
+   */
+  changes(tx: TenantTx, cursor: string | null, limit: number, scope: PushScope): Promise<Page<LocalRecord>>;
+  /**
+   * One Yayatoh record (also used by the pull's loop guard); null when it is gone. For a
+   * `reconcile` side, null also means "no longer wanted here": the engine removes it remotely.
+   */
+  read(tx: TenantTx, localId: string, scope: PushScope): Promise<LocalRecord | null>;
+  /**
+   * M6.5c, full reconciliation (calendars): each pass lists every wanted record from the start
+   * (the cursor goes back to the start after the last page), and linked records that `read` no
+   * longer returns are deleted at the provider with `remove`. Unchanged records are skipped by the
+   * link's hash, so a pass that finds nothing new makes no provider call.
+   */
+  readonly reconcile?: boolean;
+  /** Delete one provider record (reconcile sides). Idempotent: a record already gone is fine. */
+  remove?(io: SyncIO, input: { readonly externalId: string; readonly idempotencyKey: string }): Promise<void>;
   /**
    * Create (`externalId` null) or update one provider record. `idempotencyKey` is the same for the
    * same record and content, so a retried send is applied once.
@@ -84,6 +112,8 @@ export interface PushSide {
       readonly externalId: string | null;
       readonly values: Readonly<Record<string, unknown>>;
       readonly idempotencyKey: string;
+      /** Our record's id (M6.5c: calendars create entries under an id derived from it). */
+      readonly localId: string;
     },
   ): Promise<{ readonly externalId: string; readonly version: string }>;
 }
@@ -117,6 +147,14 @@ export interface ConnectorDefinition {
   readonly objects: readonly ObjectDefinition[];
   /** The connector's fake provider API for dev and CI. */
   readonly fake?: FakeProvider;
+  /**
+   * M6.5c: `org` (default) connections are the org's, made in the console by its admins;
+   * `registrant` connections are a registrant's own (personal calendar push from their schedule
+   * page), never listed in the console and made without an account.
+   */
+  readonly audience?: 'org' | 'registrant';
+  /** How often a new connection syncs (minutes, one of `SYNC_INTERVALS`); default 60. */
+  readonly defaultSyncIntervalMinutes?: number;
 }
 
 const CONNECTOR_KEY = /^[a-z][a-z0-9_]{1,39}$/;
@@ -131,6 +169,8 @@ export function defineConnector(def: ConnectorDefinition): ConnectorDefinition {
     if (seen.has(o.key)) throw new Error(`Connector ${def.key}: duplicate object ${o.key}`);
     seen.add(o.key);
     if (!o.pull && !o.push) throw new Error(`Connector ${def.key}.${o.key} neither pulls nor pushes`);
+    if (o.push?.reconcile && !o.push.remove)
+      throw new Error(`Connector ${def.key}.${o.key}: a reconciling push needs remove`);
     if (o.pull && validateMapping(o.pull.defaultMapping, o.remoteFields, o.localFields).length)
       throw new Error(`Connector ${def.key}.${o.key}: invalid default pull mapping`);
     if (o.push && validateMapping(o.push.defaultMapping, o.localFields, o.remoteFields).length)

@@ -57,11 +57,22 @@ export const connections = tenantTable(
     lastSyncAt: tsz('last_sync_at'),
     lastSyncStatus: text('last_sync_status'),
     consecutiveFailures: integer('consecutive_failures').notNull().default(0),
+    /**
+     * M6.5c: a registrant's own connection (personal calendar push, opted in from their schedule
+     * page): the admission ticket id the registration module calls the registrant, and its event.
+     * Null for the org's connections (the console lists only those).
+     */
+    registrantId: uuid('registrant_id'),
+    eventId: uuid('event_id'),
   },
   (t) => [
-    uniqueIndex('connections_org_connector_live_key')
-      .on(t.orgId, t.connector)
+    // One live connection per connector and org, and per registrant for personal ones (M6.5c).
+    uniqueIndex('connections_org_connector_subject_live_key')
+      .on(t.orgId, t.connector, sql`coalesce(registrant_id, '00000000-0000-0000-0000-000000000000'::uuid)`)
       .where(sql`status in ('pending', 'active', 'paused')`),
+    index('connections_org_registrant_idx')
+      .on(t.orgId, t.registrantId)
+      .where(sql`registrant_id is not null`),
     index('connections_org_created_idx').on(t.orgId, t.createdAt),
     index('connections_next_sync_idx').on(t.nextSyncAt, t.orgId).where(sql`status = 'active'`),
     check('connections_connector_check', sql`connector ~ '^[a-z][a-z0-9_]{1,39}$'`),
@@ -83,6 +94,7 @@ export const connections = tenantTable(
     ),
     check('connections_label_check', sql`account_label is null or length(account_label) <= 120`),
     check('connections_interval_check', sql`sync_interval_minutes between 5 and 10080`),
+    check('connections_subject_check', sql`(registrant_id is null) = (event_id is null)`),
     check('connections_failures_check', sql`consecutive_failures between 0 and 1000`),
     check(
       'connections_last_status_check',

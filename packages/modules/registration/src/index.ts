@@ -68,6 +68,8 @@ export {
   promoteSessionTx,
   type Registrant,
   registrantsOfLinkTx,
+  calendarScheduleTx,
+  linkRegistrantTx,
   registrationEnrollment,
   setEnrollmentSettingsCommand,
   setItemSessionsCommand,

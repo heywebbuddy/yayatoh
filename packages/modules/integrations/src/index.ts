@@ -54,7 +54,18 @@ export {
   demoRemoteRecords,
   demoRemoteUpdate,
 } from './connectors/demo.ts';
+export {
+  CALENDAR_ID,
+  calendarEventId,
+  type FakeCalendarEvent,
+  fakeCalendarAllEvents,
+  fakeCalendarEvents,
+  googleCalendarConnector,
+  googleCalendarFakeProvider,
+  googleCalendarPersonalConnector,
+} from './connectors/google-calendar.ts';
 export { CONNECTORS, connectorByKey, offeredConnectors } from './connectors/index.ts';
+export * from './domain/calendar.ts';
 export * from './domain/mapping.ts';
 export * from './domain/sync.ts';
 export {
@@ -66,6 +77,7 @@ export {
   PUSH_PAGE,
   pullPageCommand,
   pushPageCommand,
+  REMOVE_SWEEP,
   runDueSyncs,
   runSync,
   SYNC_ACTOR,
@@ -86,6 +98,18 @@ export {
   retryErrorsCommand,
 } from './errors.ts';
 export { mappingVersionsQuery, saveMappingCommand } from './mappings.ts';
+export {
+  beginPersonalCalendarCommand,
+  completePersonalCalendarCommand,
+  failPersonalCalendarCommand,
+  PERSONAL_CALENDAR_STATES,
+  PersonalCalendarDto,
+  pendingPersonalCalendarQuery,
+  personalCalendarQuery,
+  personalCalendarSerializer,
+  stopPersonalCalendarCommand,
+  syncPersonalCalendarCommand,
+} from './personal.ts';
 export { privateColumns } from './private-columns.ts';
 export {
   type ConnectorDefinition,
@@ -95,6 +119,7 @@ export {
   type ObjectDefinition,
   type Page,
   type PullSide,
+  type PushScope,
   type PushSide,
   type RemoteRecord,
   type SyncIO,
