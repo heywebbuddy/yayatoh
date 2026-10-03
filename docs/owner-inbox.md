@@ -482,3 +482,7 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **Dark primary fill.** `#7B5CFF` gives white button text 4.36:1; buttons use `#6C4CF2` (5.3:1) and `#7B5CFF` stays for glows, rings and the active sidebar tile. Confirm.
 - [ ] **CJK fonts** are not self-hosted (5–9 MB per face); Chinese and Japanese use Noto Sans JP/SC/TC when installed, then the platform face. Confirm, or approve per-locale font CSS.
 - [ ] **Required-field marker.** No asterisk on required labels (the browser announces "required"; errors say what is missing). Confirm or ask for "(optional)" markers on optional fields instead.
+
+## M6.4a — integrations framework (2026-10-03, pending owner)
+- [ ] **Nango (Cloud) account** (P6-4): create it, add each provider integration as M6.4b–d land (Eventbrite, Google, Zapier, Slack, Mailchimp, HubSpot, Klaviyo OAuth apps are yours to register), and put `NANGO_SECRET_KEY` (and `INTEGRATIONS_AUTH_PROVIDER=nango`) in Doppler. Until then integrations are off in production and run against the fake elsewhere. The adapter's endpoints (connect sessions, connection lookup by end user, proxy header forwarding) are UNVERIFIED against a real account.
+- [ ] Defaults to confirm: integrations are on every plan, free in beta (P6-13); syncs run hourly by default (15 min, 6 h and daily selectable); failed records retry after 1, 5, 15, 60 and 240 minutes, then wait for a person; only owners and admins connect (managers read).
