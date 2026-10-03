@@ -10,6 +10,7 @@ import {
 import { isModuleKey, tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { and, eq, inArray } from 'drizzle-orm';
 import { z } from 'zod';
+import { applyDunningTx } from './dunning.ts';
 import { DEFAULT_PLAN, effectiveModulesTx } from './entitlements.ts';
 import {
   BILLING_PROVIDERS,
@@ -123,6 +124,9 @@ export const applyBillingEventCommand = tenantCommand({
               set: { planKey, startedAt: ctx.now, updatedAt: ctx.now },
             });
       }
+      // M6.6b: a failed renewal starts the grace period; the provider giving up makes the org
+      // read-only; a payment clears it.
+      await applyDunningTx(tx, account, input, ctx.now, emit);
       emit({
         type: 'billing.subscription_changed',
         version: 1,

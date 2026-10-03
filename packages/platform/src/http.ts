@@ -15,6 +15,7 @@ const TITLES: Record<ErrorCode, string> = {
   rate_limited: 'Too many requests',
   internal: 'Internal error',
   read_only_freeze: 'Read-only maintenance',
+  read_only_billing: 'Read-only until the subscription is paid',
 };
 
 export interface Problem {

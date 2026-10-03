@@ -1,9 +1,14 @@
-import { type TenantTx, withoutTenant } from '@yayatoh/db';
+import { type TenantTx, withoutTenant, withTenant } from '@yayatoh/db';
 import { type CommandPorts, createCtx, executeCommand, isDomainError } from '@yayatoh/kernel';
 import { sql } from 'drizzle-orm';
 import { billingEnabled } from './provider/flag.ts';
-import type { BillingEvent, BillingProvider, BillingProviderName } from './provider/port.ts';
-import { applyBillingEventCommand } from './subscriptions.ts';
+import type {
+  BillingEvent,
+  BillingProvider,
+  BillingProviderName,
+  CurrentSubscription,
+} from './provider/port.ts';
+import { applyBillingEventCommand, subscriptionsTx } from './subscriptions.ts';
 
 export interface BillingWebhookResult {
   readonly status: number;
@@ -56,4 +61,28 @@ export async function processBillingWebhook(
     if (isDomainError(err)) return { status: err.status, body: { error: err.code }, verified: true };
     throw err;
   }
+}
+
+/**
+ * The live (or last) subscription of a provider customer, for the test billing portal's renewal
+ * buttons (development only): resolved like a webhook, read as the system for the org.
+ */
+export async function subscriptionOfCustomer(
+  provider: BillingProviderName,
+  customerId: string,
+): Promise<{ orgId: string; subscription: CurrentSubscription | null } | null> {
+  const orgId = await orgForCustomer(provider, customerId);
+  if (!orgId) return null;
+  const ctx = createCtx({ orgId, actor: { type: 'system', name: 'billing:portal' } });
+  const [sub] = await withTenant(ctx, (tx) => subscriptionsTx(tx));
+  return {
+    orgId,
+    subscription: sub
+      ? {
+          id: sub.providerSubscriptionId,
+          priceLookupKey: sub.priceLookupKey,
+          currentPeriodEnd: sub.currentPeriodEnd,
+        }
+      : null,
+  };
 }

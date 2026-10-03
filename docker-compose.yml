@@ -1,7 +1,8 @@
 # Local development services. Development uses masked snapshots only — never production data.
 services:
   postgres:
-    image: postgres:18
+    # Postgres 18 with the pgvector extension (M6.12b matchmaking embeddings).
+    image: pgvector/pgvector:pg18
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${LOCAL_POSTGRES_PASSWORD:-postgres}

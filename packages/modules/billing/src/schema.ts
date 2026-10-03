@@ -4,6 +4,7 @@ import {
   bigint,
   boolean,
   check,
+  index,
   integer,
   jsonb,
   pgSchema,
@@ -224,9 +225,28 @@ export const orgBilling = tenantTable(
     legacyFeesGrandfathered: boolean('legacy_fees_grandfathered').notNull().default(false),
     grandfatheredReason: text('grandfathered_reason'),
     entitlementsSyncedAt: timestamp('entitlements_synced_at', { withTimezone: true }),
+    /** M6.6b dunning: the renewal failed at this time (the provider's event time); null = paid up. */
+    dunningStartedAt: timestamp('dunning_started_at', { withTimezone: true }),
+    /** M6.6b: writes keep working until here; then the org is read-only until it pays. */
+    graceEndsAt: timestamp('grace_ends_at', { withTimezone: true }),
+    /** M6.6b: the provider gave up retrying (or the subscription ended unpaid): read-only now. */
+    readOnlyAt: timestamp('read_only_at', { withTimezone: true }),
+    /** M6.6b nonprofit discount: `verified_charity` (M4.8b profile) or `staff`; null = none. */
+    nonprofitDiscount: text('nonprofit_discount'),
+    /** M6.6b: when the discount last changed, and when the provider last received it. */
+    discountChangedAt: timestamp('discount_changed_at', { withTimezone: true }),
+    discountPushedAt: timestamp('discount_pushed_at', { withTimezone: true }),
   },
   (t) => [
     uniqueIndex('org_billing_org_key').on(t.orgId),
+    check(
+      'org_billing_nonprofit_discount_check',
+      sql`nonprofit_discount is null or nonprofit_discount in ('verified_charity', 'staff')`,
+    ),
+    check(
+      'org_billing_dunning_check',
+      sql`(dunning_started_at is null) = (grace_ends_at is null) and (read_only_at is null or dunning_started_at is not null)`,
+    ),
     check('org_billing_customer_check', sql`(provider is null) = (provider_customer_id is null)`),
     check('org_billing_provider_check', sql`provider is null or provider in ('fake', 'stripe')`),
     check(
@@ -289,5 +309,70 @@ export const billingProviderEvents = tenantTable(
   (t) => [
     uniqueIndex('provider_events_org_provider_event_key').on(t.orgId, t.provider, t.providerEventId),
     check('billing_provider_events_provider_check', sql`provider in ('fake', 'stripe')`),
+  ],
+);
+
+/* ------------------------------------------------------------------------------------------------
+ * M6.6b — meters, plan changes and dunning.
+ * --------------------------------------------------------------------------------------------- */
+
+/**
+ * Usage the org's outbox events recorded, one row per (source event, meter): an event delivered
+ * twice, or replayed, never counts twice. `reported_at` is set once the billing provider's meter
+ * accepted the row (its identifier is the row's id, so a retried report is deduplicated there too).
+ */
+export const usageRecords = tenantTable(
+  billing,
+  'usage_records',
+  {
+    meter: text('meter').notNull(),
+    /** Units: messages (SMS: segments), credits (a refund is negative), devices enrolled. */
+    quantity: integer('quantity').notNull(),
+    sourceEventId: uuid('source_event_id').notNull(),
+    sourceType: text('source_type').notNull(),
+    occurredAt: timestamp('occurred_at', { withTimezone: true }).notNull(),
+    reportedAt: timestamp('reported_at', { withTimezone: true }),
+    reportAttempts: integer('report_attempts').notNull().default(0),
+  },
+  (t) => [
+    uniqueIndex('usage_records_org_event_meter_key').on(t.orgId, t.sourceEventId, t.meter),
+    index('usage_records_org_occurred_idx').on(t.orgId, t.occurredAt),
+    index('usage_records_org_unreported_idx').on(t.orgId, t.createdAt).where(sql`reported_at is null`),
+    check('usage_records_meter_check', sql`meter in ('email', 'sms', 'whatsapp', 'ai_credits', 'devices')`),
+    check('usage_records_quantity_check', sql`quantity <> 0 and quantity between -1000000 and 1000000`),
+    check('usage_records_attempts_check', sql`report_attempts >= 0`),
+  ],
+);
+
+/**
+ * In-app plan changes (M6.6b): what the organizer confirmed after the proration preview. The
+ * provider's webhook, not this row, changes the subscription and the modules.
+ */
+export const planChanges = tenantTable(
+  billing,
+  'plan_changes',
+  {
+    fromPlanKey: text('from_plan_key'),
+    toPlanKey: text('to_plan_key').notNull(),
+    priceLookupKey: text('price_lookup_key').notNull(),
+    direction: text('direction').notNull(),
+    currency: text('currency').notNull(),
+    /** What the provider's preview said was due now (proration after discount, plus tax). */
+    amountDueMinor: bigint('amount_due_minor', { mode: 'number' }).notNull(),
+    taxMinor: bigint('tax_minor', { mode: 'number' }).notNull(),
+    discountMinor: bigint('discount_minor', { mode: 'number' }).notNull(),
+    /** Modules the change turns off (a downgrade), confirmed by the organizer first. */
+    removedModules: text('removed_modules').array().notNull().default(sql`'{}'::text[]`),
+    status: text('status').notNull().default('requested'),
+    requestedBy: text('requested_by').notNull(),
+    idempotencyKey: text('idempotency_key').notNull(),
+  },
+  (t) => [
+    uniqueIndex('plan_changes_org_idempotency_key').on(t.orgId, t.idempotencyKey),
+    index('plan_changes_org_created_idx').on(t.orgId, t.createdAt),
+    check('plan_changes_direction_check', sql`direction in ('upgrade', 'downgrade', 'switch', 'start')`),
+    check('plan_changes_status_check', sql`status in ('requested', 'submitted', 'failed')`),
+    check('plan_changes_currency_check', sql`currency ~ '^[A-Z]{3}$'`),
+    check('plan_changes_tax_check', sql`tax_minor >= 0 and discount_minor >= 0`),
   ],
 );

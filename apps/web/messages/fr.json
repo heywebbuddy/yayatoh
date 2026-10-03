@@ -757,7 +757,8 @@
     "reference": "Référence : {id}",
     "rateLimitedRetry": "Trop de tentatives. Réessayez dans {minutes, plural, one {# minute} other {# minutes}}.",
     "impersonation_blocked": "Un membre du personnel agissant en tant que membre ne peut pas faire cela : remboursements, versements, exports, suppressions et confirmations sont désactivés.",
-    "read_only_freeze": "Les modifications sont suspendues pendant la maintenance programmée. Rien n’a été enregistré ; réessayez à la fin."
+    "read_only_freeze": "Les modifications sont suspendues pendant la maintenance programmée. Rien n’a été enregistré ; réessayez à la fin.",
+    "read_only_billing": "Cette organisation est en lecture seule jusqu'au paiement de son abonnement. Rien n'a été enregistré ni supprimé."
   },
   "notFound": {
     "title": "Page introuvable",
@@ -12910,7 +12911,74 @@
       "ai_seating": "Placement par IA",
       "analytics_pro": "Analyses avancées"
     },
-    "findOwner": "Trouver un propriétaire ou un admin"
+    "findOwner": "Trouver un propriétaire ou un admin",
+    "usageLink": "Utilisation",
+    "renewalReceived": "Mise à jour du renouvellement reçue",
+    "dunning": {
+      "graceTitle": "Le paiement de votre abonnement n'a pas abouti",
+      "graceBody": "Tout fonctionne normalement jusqu'au {date}. Payez d'ici là pour continuer à modifier ; ensuite, l'organisation passe en lecture seule jusqu'au paiement.",
+      "readOnlyTitle": "Cette organisation est en lecture seule",
+      "readOnlyBody": "Le paiement de l'abonnement a échoué : les modifications sont suspendues. Rien n'a été supprimé : vous pouvez tout consulter, exporter vos données et scanner les billets à l'entrée. Payez pour rétablir les modifications immédiatement.",
+      "payNow": "Payer maintenant",
+      "askOwner": "Demandez à un propriétaire ou un administrateur de cette organisation de payer.",
+      "paidTitle": "Paiement reçu",
+      "paidBody": "Merci. Les modifications sont de nouveau possibles pour tous les membres de l'organisation.",
+      "declinedTitle": "Le paiement n'a pas abouti",
+      "declinedBody": "Rien n'a changé. Vérifiez la carte enregistrée auprès de votre fournisseur de facturation, puis réessayez.",
+      "payError": "Le paiement n'a pas pu démarrer. Réessayez dans un instant."
+    },
+    "change": {
+      "title": "Changer de formule",
+      "description": "Les montées et descentes de formule s'appliquent immédiatement. Vous payez ou êtes crédité uniquement pour le reste de la période de facturation.",
+      "discountCharity": "Votre profil d'association vérifié vous donne {percent} % de réduction sur toutes les formules.",
+      "discountStaff": "Votre organisation bénéficie d'une réduction associative de {percent} % sur toutes les formules.",
+      "legend": "Formules",
+      "offer": "{plan} : {price} {interval, select, year {par an} other {par mois}}",
+      "direction": {
+        "upgrade": "Montée",
+        "downgrade": "Descente",
+        "switch": "Changement",
+        "start": "Début"
+      },
+      "turnsOff": "{count, plural, one {Désactive # module} other {Désactive # modules}}",
+      "chooseError": "Choisissez une formule à prévisualiser.",
+      "preview": "Prévisualiser le changement",
+      "previewTitle": "Passer à {plan}",
+      "previewLead": {
+        "upgrade": "Vous montez en gamme. Voici ce que vous payez aujourd'hui pour le reste de la période de facturation.",
+        "downgrade": "Vous descendez en gamme. Le temps non utilisé de votre formule actuelle est crédité.",
+        "switch": "Vous changez pour une formule au même prix.",
+        "start": "Votre abonnement commence aujourd'hui."
+      },
+      "rows": {
+        "charge": "Nouvelle formule, reste de la période",
+        "credit": "Crédit pour le temps non utilisé",
+        "discount": "Réduction associative",
+        "tax": "Taxes",
+        "due": "À payer aujourd'hui"
+      },
+      "creditKept": "{amount} de crédit sont conservés pour vos prochaines factures.",
+      "nextRenewal": "Puis {amount} le {date}.",
+      "nextRenewalNoDate": "Puis {amount} par période.",
+      "taxNote": "Les taxes sont calculées par le fournisseur de facturation à partir des coordonnées de facturation de votre organisation.",
+      "removedTitle": "{count, plural, one {# module est désactivé} other {# modules sont désactivés}}",
+      "removedBody": "Leurs données sont conservées. Ils reviennent tels quels si vous passez à une formule qui les inclut.",
+      "confirmRemoved": "{count, plural, one {Je comprends que ce module est désactivé} other {Je comprends que ces modules sont désactivés}}",
+      "confirmError": "Confirmez les modules désactivés pour continuer.",
+      "confirm": "Confirmer le changement",
+      "cancel": "Garder ma formule",
+      "doneTitle": "Changement de formule envoyé",
+      "doneBody": "Votre fournisseur de facturation a confirmé le changement. Votre formule et vos modules sont à jour ci-dessous.",
+      "errorTitle": "La formule n'a pas été changée",
+      "errors": {
+        "billing_off": "La facturation n'est pas active pour cette organisation.",
+        "same_plan": "Vous avez déjà cette formule.",
+        "validation_failed": "Choisissez une formule proposée.",
+        "provider": "Le fournisseur de facturation n'a pas accepté le changement. Rien n'a été débité ; réessayez.",
+        "forbidden": "Seuls les propriétaires et administrateurs peuvent changer de formule.",
+        "other": "Une erreur s'est produite. Rien n'a changé."
+      }
+    }
   },
   "billingPortal": {
     "eyebrow": "Facturation de test",
@@ -12920,7 +12988,11 @@
     "switch": "Changer d’offre",
     "cancel": "Résilier l’abonnement",
     "back": "Revenir sans changement",
-    "chooseError": "Choisissez l’offre vers laquelle passer."
+    "chooseError": "Choisissez l’offre vers laquelle passer.",
+    "noSubscriptionError": "Ce client n'a pas encore d'abonnement. Choisissez d'abord une formule.",
+    "renewalLegend": "Renouvellement",
+    "failRenewal": "Faire échouer le paiement du renouvellement",
+    "stopRetrying": "Arrêter les nouvelles tentatives de paiement"
   },
   "seatingLibrary": {
     "title": "Bibliothèque de plans",
@@ -15256,5 +15328,47 @@
       "step2": "Ajoutez un code avec sa remise et, si vous le souhaitez, une limite et des dates.",
       "step3": "Partagez le code. Les acheteurs le saisissent au paiement et chaque utilisation est comptée."
     }
+  },
+  "billingUsage": {
+    "title": "Utilisation",
+    "subtitle": "Ce que votre organisation a utilisé, par compteur : messages, crédits d'IA et appareils de scan.",
+    "breadcrumb": "Fil d'Ariane",
+    "period": "Ce mois-ci : du {start} au {end} ({zone})",
+    "filterLabel": "Compteurs",
+    "allMeters": "Tous les compteurs",
+    "meter": {
+      "email": "E-mail",
+      "sms": "SMS",
+      "whatsapp": "WhatsApp",
+      "ai_credits": "Crédits d'IA",
+      "devices": "Appareils de scan"
+    },
+    "unit": {
+      "email": "{count, plural, one {# e-mail envoyé} other {# e-mails envoyés}}",
+      "sms": "{count, plural, one {# segment de SMS} other {# segments de SMS}}",
+      "whatsapp": "{count, plural, one {# message envoyé} other {# messages envoyés}}",
+      "ai_credits": "{count, plural, one {# crédit utilisé} other {# crédits utilisés}}",
+      "devices": "{count, plural, one {# appareil enregistré} other {# appareils enregistrés}}"
+    },
+    "reportingTitle": "L'utilisation est envoyée à votre fournisseur de facturation",
+    "reportingBody": "{count, plural, =0 {Tout a déjà été envoyé.} one {# enregistrement attend d'être envoyé.} other {# enregistrements attendent d'être envoyés.}}",
+    "countingTitle": "L'utilisation est comptée, rien n'est facturé",
+    "countingBody": "La facturation n'est pas active pour cette organisation : l'utilisation est seulement comptée ici.",
+    "currentTitle": "Ce mois-ci",
+    "currentDescription": "Compté dans le fuseau horaire de votre organisation.",
+    "historyTitle": "Mois précédents",
+    "historyDescription": "Les 12 derniers mois avec de l'utilisation.",
+    "emptyTitle": "Aucune utilisation pour l'instant",
+    "emptyBody": "L'utilisation apparaît ici quand vous envoyez des e-mails ou des SMS, rédigez avec l'IA ou enregistrez des appareils de scan.",
+    "historyEmpty": "Aucune utilisation les mois précédents.",
+    "month": "Mois"
+  },
+  "billingBanner": {
+    "label": "Facturation",
+    "graceTitle": "Le paiement de votre abonnement n'a pas abouti",
+    "graceBody": "Tout fonctionne jusqu'au {date}. Ensuite, l'organisation passe en lecture seule jusqu'au paiement.",
+    "readOnlyTitle": "Cette organisation est en lecture seule",
+    "readOnlyBody": "Le paiement de l'abonnement a échoué. Rien n'a été supprimé : vous pouvez consulter, exporter et scanner les billets, mais les modifications sont suspendues jusqu'au paiement.",
+    "action": "Formule et facturation"
   }
 }
