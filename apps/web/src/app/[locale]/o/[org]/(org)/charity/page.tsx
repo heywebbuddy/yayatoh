@@ -1,9 +1,11 @@
 import { type CharityProfileDto, charityProfileQuery } from '@yayatoh/donations';
 import { executeQuery, isDomainError } from '@yayatoh/kernel';
 import { roleCan } from '@yayatoh/tenancy';
-import { Alert, Card, EmptyState, PageHeader, StatusDot } from '@yayatoh/ui';
+import { Alert, Card, EmptyState, PageHeader, SectionHeader, StatusPill } from '@yayatoh/ui';
+import { BadgeCheck } from 'lucide-react';
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { Crumbs } from '@/components/crumbs.tsx';
 import { type FieldSpec, ProgramForm } from '@/components/program-form.tsx';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
@@ -25,6 +27,16 @@ export default async function CharityPage({ params }: { params: Promise<{ locale
   setRequestLocale(locale);
   const data = await loadConsole(org);
   const t = await getTranslations('charity');
+  const tn = await getTranslations('nav');
+  const crumbs = (
+    <Crumbs
+      items={[
+        { label: data.org.name, href: `/o/${org}` },
+        { label: tn('settings'), href: `/o/${org}/settings` },
+        { label: t('title') },
+      ]}
+    />
+  );
   let profile: CharityProfileDto | null;
   try {
     profile = await executeQuery(charityProfileQuery, {}, data.ctx, ports);
@@ -32,8 +44,12 @@ export default async function CharityPage({ params }: { params: Promise<{ locale
     if (isDomainError(err) && (err.code === 'module_not_enabled' || err.code === 'forbidden'))
       return (
         <>
-          <PageHeader title={t('title')} />
-          <EmptyState title={t('unavailableTitle')} description={t('unavailableDescription')} />
+          <PageHeader breadcrumb={crumbs} title={t('title')} />
+          <EmptyState
+            icon={<BadgeCheck strokeWidth={2} />}
+            title={t('unavailableTitle')}
+            description={t('unavailableDescription')}
+          />
         </>
       );
     throw err;
@@ -100,31 +116,28 @@ export default async function CharityPage({ params }: { params: Promise<{ locale
     sponsorEin: t('errors.sponsorEin'),
     address: t('errors.address'),
   };
+  const statusTone = { verified: 'success', rejected: 'danger', pending: 'waiting' } as const;
+  const term = 'text-caption font-bold text-ink-2';
+  const value = 'm-0 text-body text-ink';
   return (
     <>
-      <PageHeader title={t('title')} description={t('description')} />
-      <section aria-labelledby="charity-status" className="flex flex-col gap-3">
-        <h2 id="charity-status" className="text-section">
-          {t('statusTitle')}
-        </h2>
+      <PageHeader breadcrumb={crumbs} title={t('title')} description={t('description')} />
+      <section aria-labelledby="charity-status" className="flex flex-col gap-4">
+        <SectionHeader id="charity-status" title={t('statusTitle')} description={t('receiptsNote')} />
         {!profile ? (
           <EmptyState
+            icon={<BadgeCheck strokeWidth={2} />}
             title={t('emptyTitle')}
             description={canEdit ? t('emptyDescription') : t('emptyViewer')}
           />
         ) : (
-          <Card className="flex flex-col gap-2">
-            <StatusDot
-              status={
-                profile.status === 'verified'
-                  ? 'success'
-                  : profile.status === 'rejected'
-                    ? 'danger'
-                    : 'warning'
-              }
+          <Card size="panel" className="flex flex-col gap-3">
+            <StatusPill
+              tone={statusTone[profile.status]}
               label={t(`status.${profile.status}`)}
+              className="self-start"
             />
-            <p className="text-body text-ink-2">
+            <p className="m-0 text-body text-ink-2">
               {profile.status === 'verified'
                 ? t('verifiedBody', { at: profile.reviewedAt ? when.format(profile.reviewedAt) : '' })
                 : profile.status === 'rejected'
@@ -133,17 +146,14 @@ export default async function CharityPage({ params }: { params: Promise<{ locale
             </p>
             {profile.status === 'rejected' && profile.reviewNote ? (
               <Alert title={t('reviewNote')}>
-                <p>{profile.reviewNote}</p>
+                <p className="m-0">{profile.reviewNote}</p>
               </Alert>
             ) : null}
           </Card>
         )}
-        <p className="text-caption text-ink-2">{t('receiptsNote')}</p>
       </section>
-      <section aria-labelledby="charity-details" className="flex flex-col gap-3">
-        <h2 id="charity-details" className="text-section">
-          {t('detailsTitle')}
-        </h2>
+      <section aria-labelledby="charity-details" className="flex flex-col gap-4">
+        <SectionHeader id="charity-details" title={t('detailsTitle')} />
         {canEdit ? (
           <Card size="panel">
             <ProgramForm
@@ -155,29 +165,33 @@ export default async function CharityPage({ params }: { params: Promise<{ locale
               errors={errors}
             />
           </Card>
-        ) : profile ? (
-          <Card>
-            <dl className="grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-[auto_1fr]">
-              <dt className="text-caption text-ink-2">{t('legalName')}</dt>
-              <dd className="text-body">{profile.legalName}</dd>
-              <dt className="text-caption text-ink-2">{t('ein')}</dt>
-              <dd className="text-body">{profile.ein}</dd>
-              <dt className="text-caption text-ink-2">{t('exemptKind')}</dt>
-              <dd className="text-body">
-                {profile.exemptKind === '501c3' ? t('exempt501c3') : t('exemptSponsor')}
-              </dd>
-              {profile.sponsorName ? (
-                <>
-                  <dt className="text-caption text-ink-2">{t('sponsorName')}</dt>
-                  <dd className="text-body">
-                    {profile.sponsorName} · {profile.sponsorEin}
+        ) : (
+          <>
+            <Alert tone="info" title={t('viewerNotice')} />
+            {profile ? (
+              <Card size="panel">
+                <dl className="m-0 grid grid-cols-1 gap-x-8 gap-y-3 sm:grid-cols-[auto_1fr]">
+                  <dt className={term}>{t('legalName')}</dt>
+                  <dd className={value}>{profile.legalName}</dd>
+                  <dt className={term}>{t('ein')}</dt>
+                  <dd className={`${value} tabular-nums`}>{profile.ein}</dd>
+                  <dt className={term}>{t('exemptKind')}</dt>
+                  <dd className={value}>
+                    {profile.exemptKind === '501c3' ? t('exempt501c3') : t('exemptSponsor')}
                   </dd>
-                </>
-              ) : null}
-            </dl>
-            <p className="mt-3 text-caption text-ink-2">{t('viewerNotice')}</p>
-          </Card>
-        ) : null}
+                  {profile.sponsorName ? (
+                    <>
+                      <dt className={term}>{t('sponsorName')}</dt>
+                      <dd className={value}>
+                        {profile.sponsorName} · <span className="tabular-nums">{profile.sponsorEin}</span>
+                      </dd>
+                    </>
+                  ) : null}
+                </dl>
+              </Card>
+            ) : null}
+          </>
+        )}
       </section>
     </>
   );

@@ -68,7 +68,10 @@ function fieldValue(q: HouseholdQuestion, v: unknown): FieldValue | undefined {
 
 /** A choice as a large pill: 44 px tall, arrow keys move within the guest's pair. */
 const PILL =
-  'flex min-h-11 flex-1 cursor-pointer items-center justify-center rounded-pill border border-line bg-surface px-4 text-body text-ink has-[:checked]:border-ink has-[:checked]:bg-ink has-[:checked]:text-white has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-ink';
+  'flex min-h-11 flex-1 cursor-pointer items-center justify-center gap-2 rounded-pill border border-line-strong bg-surface-solid px-4 text-body font-bold text-ink transition-colors duration-150 hover:bg-surface-2 has-[:checked]:border-primary has-[:checked]:bg-primary has-[:checked]:text-on-primary has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-focus';
+/** The public pages' card (ADR 0022, as on the public event page). */
+const CARD =
+  'm-0 flex min-w-0 flex-col gap-4 rounded-panel border border-line bg-surface p-5 elevation-card glass';
 
 /**
  * One person answers for the whole household (M4.1d): each sub-event the party is invited to,
@@ -223,14 +226,18 @@ export function HouseholdForm({
       className="flex flex-col gap-6"
     >
       {plusOnes.length ? (
-        <section aria-labelledby="rsvp-plus-ones" className="flex flex-col gap-4">
-          <h2 id="rsvp-plus-ones" className="text-section">
-            {t('plusOnesTitle')}
-          </h2>
-          <p className="text-body text-ink-2">{t('plusOnesHint')}</p>
+        <section aria-labelledby="rsvp-plus-ones" className={CARD}>
+          <div className="flex flex-col gap-1">
+            <h2 id="rsvp-plus-ones" className="m-0 text-card text-ink">
+              {t('plusOnesTitle')}
+            </h2>
+            <p className="m-0 text-body text-ink-2">{t('plusOnesHint')}</p>
+          </div>
           {plusOnes.map((p) => (
-            <fieldset key={p.guestId} className="flex flex-col gap-3 border-0 p-0">
-              <legend className="mb-2 text-body font-medium">{t('plusOneOf', { name: p.hostName })}</legend>
+            <fieldset key={p.guestId} className="m-0 flex flex-col gap-3 border-0 p-0">
+              <legend className="mb-2 text-body font-bold text-ink">
+                {t('plusOneOf', { name: p.hostName })}
+              </legend>
               <Input
                 id={`p-${p.guestId}-first`}
                 name={`p:${p.guestId}:first`}
@@ -256,12 +263,9 @@ export function HouseholdForm({
       ) : null}
 
       {subEvents.map((s) => (
-        <fieldset
-          key={s.id}
-          className="flex flex-col gap-4 rounded-card border border-line bg-surface p-4 sm:p-6"
-        >
-          <legend className="float-start w-full text-section">{s.name}</legend>
-          <p className="text-caption text-ink-2">{s.when}</p>
+        <fieldset key={s.id} className={CARD}>
+          <legend className="float-start w-full text-card text-ink">{s.name}</legend>
+          <p className="m-0 -mt-2 text-caption font-semibold text-ink-2">{s.when}</p>
           {s.guestIds.map((guestId) => {
             const key = `${s.id}:${guestId}`;
             const name = nameOf.get(guestId) ?? '';
@@ -272,9 +276,9 @@ export function HouseholdForm({
                 key={key}
                 data-guest={guestId}
                 aria-invalid={bad ? true : undefined}
-                className="flex flex-col gap-2 border-0 border-t border-line p-0 pt-3"
+                className="m-0 flex flex-col gap-2 border-0 border-t border-line p-0 pt-3 aria-[invalid=true]:border-danger"
               >
-                <legend className="mb-2 text-body font-medium">
+                <legend className="mb-2 text-body font-bold text-ink">
                   {t('guestAt', { name, event: s.name })}
                 </legend>
                 <input type="hidden" name="expect" value={key} />
@@ -308,17 +312,15 @@ export function HouseholdForm({
 
       {asked.length ? (
         <section aria-labelledby="rsvp-questions" className="flex flex-col gap-4">
-          <h2 id="rsvp-questions" className="text-section">
-            {t('questionsTitle')}
-          </h2>
-          <p className="text-body text-ink-2">{t('questionsHint')}</p>
+          <div className="flex flex-col gap-1">
+            <h2 id="rsvp-questions" className="m-0 text-section text-ink">
+              {t('questionsTitle')}
+            </h2>
+            <p className="m-0 text-body text-ink-2">{t('questionsHint')}</p>
+          </div>
           {asked.map(({ g, shown }) => (
-            <fieldset
-              key={g.guestId}
-              data-questions-for={g.guestId}
-              className="flex flex-col gap-4 rounded-card border border-line bg-surface p-4 sm:p-6"
-            >
-              <legend className="float-start w-full text-section">
+            <fieldset key={g.guestId} data-questions-for={g.guestId} className={CARD}>
+              <legend className="float-start w-full text-card text-ink">
                 {t('questionsFor', { name: askedName(g.guestId) })}
               </legend>
               {shown.map((q) => (
@@ -348,7 +350,7 @@ export function HouseholdForm({
           </div>
         ) : null}
       </div>
-      <Button type="submit" disabled={pending} className="min-h-11 self-stretch sm:self-start">
+      <Button type="submit" size="lg" disabled={pending} className="self-stretch sm:self-start">
         {t('submit')}
       </Button>
     </form>

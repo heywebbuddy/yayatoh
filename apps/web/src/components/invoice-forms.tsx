@@ -6,8 +6,8 @@ import { useActionState } from 'react';
 import { errorMessageKey } from '@/lib/errors.ts';
 import { type FormState, INITIAL_FORM_STATE } from '@/lib/form-state.ts';
 
-const field = 'min-h-10 rounded-pill border border-line bg-surface px-4 text-body';
-const area = 'rounded-card border border-line bg-surface px-4 py-2 text-body';
+const area = 'field w-full py-3 leading-relaxed';
+const label = 'text-[13px] font-bold text-ink';
 
 type Action = (prev: FormState, form: FormData) => Promise<FormState>;
 
@@ -55,10 +55,12 @@ export function RecordInvoicePaymentForm({
       noValidate
     >
       <input type="hidden" name="key" value={requestKey} />
-      <p className="text-caption text-ink-2">{t('balance', { amount: balanceLabel })}</p>
+      <p className="m-0 text-body font-bold text-ink tabular-nums">
+        {t('balance', { amount: balanceLabel })}
+      </p>
       <div className="flex flex-wrap gap-3">
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="invoice-pay-amount" className="text-caption text-ink-2">
+          <label htmlFor="invoice-pay-amount" className={label}>
             {t('amount', { currency })}
           </label>
           <input
@@ -68,14 +70,14 @@ export function RecordInvoicePaymentForm({
             required
             defaultValue={balance}
             aria-invalid={bad('amount')}
-            className={`${field} w-40`}
+            className="field w-40"
           />
         </div>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="invoice-pay-method" className="text-caption text-ink-2">
+          <label htmlFor="invoice-pay-method" className={label}>
             {t('method')}
           </label>
-          <select id="invoice-pay-method" name="method" className={field} defaultValue="check">
+          <select id="invoice-pay-method" name="method" className="field" defaultValue="check">
             {(['check', 'wire', 'cash', 'other'] as const).map((m) => (
               <option key={m} value={m}>
                 {t(`methods.${m}`)}
@@ -84,7 +86,7 @@ export function RecordInvoicePaymentForm({
           </select>
         </div>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="invoice-pay-date" className="text-caption text-ink-2">
+          <label htmlFor="invoice-pay-date" className={label}>
             {t('receivedOn')}
           </label>
           <input
@@ -95,7 +97,7 @@ export function RecordInvoicePaymentForm({
             max={today}
             defaultValue={today}
             aria-invalid={bad('receivedOn')}
-            className={field}
+            className="field"
           />
         </div>
       </div>
@@ -108,13 +110,13 @@ export function RecordInvoicePaymentForm({
         hint={t('referenceHint')}
       />
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="invoice-pay-note" className="text-caption text-ink-2">
+        <label htmlFor="invoice-pay-note" className={label}>
           {t('note')}
         </label>
         <textarea id="invoice-pay-note" name="note" rows={2} maxLength={500} className={area} />
       </div>
       <div aria-live="polite" className="flex flex-col gap-2">
-        {state.ok ? <Alert tone="info" title={t('recorded')} /> : null}
+        {state.ok ? <Alert tone="success" title={t('recorded')} /> : null}
         {state.code ? <Alert title={message(state)} /> : null}
       </div>
       <Button type="submit" disabled={pending} className="self-start">
@@ -131,9 +133,9 @@ export function VoidInvoiceForm({ action }: { action: Action }) {
   const [state, formAction, pending] = useActionState(action, INITIAL_FORM_STATE);
   return (
     <form action={formAction} aria-label={t('label')} className="flex flex-col gap-3" noValidate>
-      <p className="text-caption text-ink-2">{t('hint')}</p>
+      <p className="m-0 text-body text-ink-2">{t('hint')}</p>
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="invoice-void-reason" className="text-caption text-ink-2">
+        <label htmlFor="invoice-void-reason" className={label}>
           {t('reason')}
         </label>
         <textarea
@@ -147,10 +149,10 @@ export function VoidInvoiceForm({ action }: { action: Action }) {
         />
       </div>
       <div aria-live="polite" className="flex flex-col gap-2">
-        {state.ok ? <Alert tone="info" title={t('done')} /> : null}
+        {state.ok ? <Alert tone="success" title={t('done')} /> : null}
         {state.code ? <Alert title={message(state)} /> : null}
       </div>
-      <Button type="submit" variant="secondary" disabled={pending} className="self-start">
+      <Button type="submit" variant="danger" disabled={pending} className="self-start">
         {t('submit')}
       </Button>
     </form>

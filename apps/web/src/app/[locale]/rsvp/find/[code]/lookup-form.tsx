@@ -50,7 +50,7 @@ export function RsvpLookupForm({
       }}
       noValidate
       aria-label={t('formLabel')}
-      className="flex flex-col gap-4"
+      className="flex flex-col gap-4 rounded-panel border border-line bg-surface p-5 elevation-card glass"
     >
       <Input
         id="rsvp-name"
@@ -62,7 +62,6 @@ export function RsvpLookupForm({
         autoComplete="name"
         maxLength={170}
         required
-        className="min-h-11"
         error={state.error === 'invalidName' ? t('errors.invalidName') : undefined}
       />
       <Input
@@ -74,13 +73,13 @@ export function RsvpLookupForm({
         autoComplete="off"
         maxLength={7}
         required
-        className="min-h-11 font-mono tracking-[0.3em]"
+        className="font-mono tracking-[0.3em]"
         error={state.error === 'invalidPin' ? t('errors.invalidPin') : undefined}
       />
       {state.challenge && challenge ? (
-        <fieldset className="flex flex-col gap-2 rounded-card border border-line p-4">
-          <legend className="px-1 text-body font-medium">{t('challengeTitle')}</legend>
-          <p className="text-caption text-ink-2">{t('challengeHint')}</p>
+        <fieldset className="m-0 flex flex-col gap-2 rounded-tile border border-line bg-surface-2 p-4">
+          <legend className="px-1 text-body font-bold text-ink">{t('challengeTitle')}</legend>
+          <p className="m-0 text-caption text-ink-2">{t('challengeHint')}</p>
           <HumanCheckField widget={challenge} />
         </fieldset>
       ) : null}
@@ -91,7 +90,7 @@ export function RsvpLookupForm({
           </div>
         ) : null}
       </div>
-      <Button type="submit" disabled={pending} className="min-h-11 self-stretch sm:self-start">
+      <Button type="submit" size="lg" disabled={pending} className="self-stretch sm:self-start">
         {t('submit')}
       </Button>
     </form>

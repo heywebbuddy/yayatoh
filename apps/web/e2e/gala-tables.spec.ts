@@ -1,5 +1,12 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import { continueToPayment, expectAccessible, signIn, WEDDING, WEDDING_OWNER } from './helpers.ts';
+import {
+  continueToPayment,
+  expectAccessible,
+  expectAccessibleBothModes,
+  signIn,
+  WEDDING,
+  WEDDING_OWNER,
+} from './helpers.ts';
 import { addGuests, createGala, publishEvent, quickPlan, unique } from './seating-helpers.ts';
 
 /**
@@ -65,7 +72,7 @@ test.describe('gala tables and sponsors (M4.2b)', () => {
     await expect(page.getByText('No tables sold yet')).toBeVisible();
     await expect(page.getByRole('link', { name: 'Add a table ticket on Tickets & Orders' })).toBeVisible();
     await expect(page.getByText('No floor plan yet')).toBeVisible();
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
     // The table ticket: a size out of range is refused, 4 is fine.
     await page.goto(`${base}/tickets-orders`);
     await page.getByLabel('Name', { exact: true }).fill('Too big');
@@ -87,7 +94,7 @@ test.describe('gala tables and sponsors (M4.2b)', () => {
     const link = guest.url();
     await expect(guest.getByRole('heading', { name: 'Name your guests', level: 1 })).toBeVisible();
     await expect(guest.getByText('4 names missing')).toBeVisible();
-    await expectAccessible(guest);
+    await expectAccessibleBothModes(guest);
 
     // Inline validation: a first name is required; a malformed email is refused.
     const f = nameForm(guest);
@@ -131,7 +138,7 @@ test.describe('gala tables and sponsors (M4.2b)', () => {
     await expect(
       guest.getByText(/^(We sent the link to your email\.|We just sent it\. Try again in a minute\.)$/),
     ).toBeVisible();
-    await expectAccessible(guest);
+    await expectAccessibleBothModes(guest);
 
     // A forged link is a 404.
     const forged = await guest.goto(link.replace(/~.*$/, '~forged'));
@@ -152,7 +159,7 @@ test.describe('gala tables and sponsors (M4.2b)', () => {
     await expect(card.getByText(`Ada Lovelace ${name}`)).toBeVisible();
     await expect(card.getByText(/^Ticket [A-Z0-9]+$/)).toHaveCount(4);
     await expect(card.getByText('Not named yet')).toHaveCount(2);
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
 
     // The host names a guest by hand (keyboard: open the disclosure, fill, Enter).
     const disclosure = page.getByText(`Name a guest at ${ticket} #1 · Acme ${name}`);
@@ -216,7 +223,7 @@ test.describe('gala tables and sponsors (M4.2b)', () => {
     await expect(page.locator('[data-plan-table="Table 1"]')).toContainText('Sponsored by Acme Corp');
     await expect(page.locator('[data-plan-table="Table 1"]')).toContainText('Shown to guests');
     await expect(page.locator('[data-plan-table="Table 2"]')).toContainText('Hidden from guests');
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
 
     // The seating editor shows both sponsors on their tables (the list beside the plan).
     await page.goto(`${base}/seating`);
@@ -277,7 +284,9 @@ test.describe('gala tables and sponsors (M4.2b)', () => {
     await expect(page.locator('[data-plan-table="Table 1"]')).toContainText('No sponsor yet');
     await expect(page.getByRole('button', { name: 'Save sponsor' })).toHaveCount(0);
     await expect(page.getByRole('button', { name: 'Send naming reminders' })).toHaveCount(0);
-    await expectAccessible(page);
+    // Batch 3h: the read-only notice says why.
+    await expect(page.getByText('You can see the tables and sponsors.', { exact: false })).toBeVisible();
+    await expectAccessibleBothModes(page);
     // A wedding's profile has no Tables & Sponsors: its URL is a 404.
     await signIn(page, WEDDING_OWNER);
     const res = await page.goto(`${WEDDING}/tables-sponsors`);
@@ -295,7 +304,7 @@ test.describe('gala tables and sponsors (M4.2b)', () => {
     await page.goto(`/ar${base}/tables-sponsors`);
     await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
     await expect(page.getByText('لم تُبع أي طاولة بعد')).toBeVisible();
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
     const guest = await buyTable(browser, base.split('/').pop() as string, ticket, `Rtl ${name}`);
     const href = await guest
       .getByRole('region', { name: 'Your tables' })
@@ -308,7 +317,7 @@ test.describe('gala tables and sponsors (M4.2b)', () => {
     await guest.getByLabel('الاسم الأول').fill('ليلى');
     await guest.getByRole('button', { name: 'إضافة الضيف' }).click();
     await expect(guest.getByText('أصبح لـ ليلى مقعد على الطاولة.')).toBeVisible();
-    await expectAccessible(guest);
+    await expectAccessibleBothModes(guest);
     await guest.context().close();
   });
 });

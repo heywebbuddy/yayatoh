@@ -10,10 +10,27 @@ import {
   registrationSetupQuery,
 } from '@yayatoh/registration';
 import { roleCan } from '@yayatoh/tenancy';
-import { Button, Card, EmptyState, PageHeader } from '@yayatoh/ui';
+import {
+  Alert,
+  Button,
+  Card,
+  CardHeader,
+  EmptyState,
+  PageHeader,
+  Pagination,
+  ProgressBar,
+  Radio,
+  SectionHeader,
+  StatusPill,
+  Table,
+  Tabs,
+  tabClass,
+} from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getFormatter, getTranslations, setRequestLocale } from 'next-intl/server';
+import type { ReactNode } from 'react';
 import { AutoRefresh } from '@/components/auto-refresh.tsx';
+import { Crumbs } from '@/components/crumbs.tsx';
 import { ProgramForm } from '@/components/program-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatNumber } from '@/lib/format.ts';
@@ -28,6 +45,19 @@ import {
 } from './actions.ts';
 
 const UUID = /^[0-9a-f-]{36}$/;
+
+/** A registrant's status as a StatusPill tone (dot + word). */
+const STATUS_TONE = {
+  pending: 'waiting',
+  approved: 'info',
+  confirmed: 'success',
+  reserved: 'brand',
+  denied: 'danger',
+  cancelled: 'neutral',
+} as const;
+
+const label = 'text-[13px] font-bold text-ink';
+const panel = 'flex flex-col gap-3 rounded-panel border border-line bg-surface p-6 elevation-card glass';
 
 type SearchParams = {
   status?: string;
@@ -59,6 +89,8 @@ export default async function ApplicationsPage({
   const profile = isProfileKey(ev.profile) ? ev.profile : 'other';
   if (!navIncludes(profile, data.modules, 'registration')) notFound();
   const t = await getTranslations('registration.queue');
+  const tv = await getTranslations('vocab');
+  const tc = await getTranslations('common');
   const format = await getFormatter();
   const canWrite = roleCan(data.role, 'events:write');
   const status = (QUEUE_STATUS_FILTERS as readonly string[]).includes(sp.status ?? '')
@@ -125,39 +157,63 @@ export default async function ApplicationsPage({
   for (const f of op?.failures ?? []) failureCounts.set(f.code, (failureCounts.get(f.code) ?? 0) + 1);
   const failures = [...failureCounts];
   const pages = Math.ceil(queue.total / 50);
-  const chip = (current: boolean) =>
-    `inline-flex min-h-8 items-center rounded-pill border px-3 text-caption ${current ? 'border-ink bg-tag text-white' : 'border-line bg-surface text-ink-2'}`;
   const decidable = detail && !detail.hostName && ['pending', 'approved', 'denied'].includes(detail.status);
+  type Row = (typeof queue.rows)[number];
+  const fact = (term: string, value: ReactNode, className?: string) => (
+    <div className="flex flex-col gap-0.5">
+      <dt className="text-[13px] font-bold text-ink-2">{term}</dt>
+      <dd className={`m-0 text-body text-ink ${className ?? ''}`}>{value}</dd>
+    </div>
+  );
+  const people = (list: readonly { id: string; name: string; status: Row['status'] }[]) => (
+    <ul className="m-0 flex list-none flex-col gap-1.5 p-0">
+      {list.map((g) => (
+        <li key={g.id} className="flex flex-wrap items-center gap-2 text-body">
+          <Link
+            href={query({ r: g.id })}
+            className="inline-flex min-h-6 items-center font-bold text-primary-ink underline-offset-2 hover:underline"
+          >
+            {g.name}
+          </Link>
+          <StatusPill tone={STATUS_TONE[g.status]} label={t(`status.${g.status}`)} />
+        </li>
+      ))}
+    </ul>
+  );
   return (
     <>
-      <PageHeader title={t('title')} description={t('subtitle')} />
-      <Link
-        href={`/o/${org}/e/${event}/registration`}
-        className="self-start text-body underline underline-offset-2"
-      >
-        {t('backToSetup')}
-      </Link>
-      {canWrite ? null : <p className="text-body text-ink-2">{t('viewerNotice')}</p>}
+      <PageHeader
+        breadcrumb={
+          <Crumbs
+            items={[
+              { label: data.org.name, href: `/o/${org}` },
+              { label: ev.name, href: `/o/${org}/e/${event}` },
+              { label: tv('registration'), href: `/o/${org}/e/${event}/registration` },
+              { label: t('title') },
+            ]}
+          />
+        }
+        title={t('title')}
+        description={t('subtitle')}
+      />
+      {canWrite ? null : <Alert tone="info" title={t('viewerNotice')} />}
 
       {op ? (
-        <section
-          aria-labelledby="bulk-status-heading"
-          className="flex flex-col gap-2 rounded-panel border border-line bg-surface px-5 py-4"
-        >
+        <section aria-labelledby="bulk-status-heading" className={panel}>
           {opActive ? <AutoRefresh seconds={2} /> : null}
-          <h2 id="bulk-status-heading" className="text-section">
+          <h2 id="bulk-status-heading" className="m-0 text-card text-ink">
             {t('bulkTitle')}
           </h2>
-          <progress
+          <ProgressBar
             value={op.processed}
             max={Math.max(1, op.total)}
-            aria-label={t('bulkProgress', {
+            label={t('bulkProgress', {
               processed: formatNumber(op.processed, locale),
               total: formatNumber(op.total, locale),
             })}
-            className="h-2 w-full accent-ink"
+            tone={op.status === 'failed' ? 'danger' : op.status === 'done' ? 'success' : 'primary'}
           />
-          <p className="text-body" role="status">
+          <p className="m-0 text-body font-bold text-ink" role="status">
             {op.status === 'done'
               ? t('bulkDone', { succeeded: op.succeeded, failed: op.failed })
               : op.status === 'failed'
@@ -165,7 +221,7 @@ export default async function ApplicationsPage({
                 : t('bulkRunning', { processed: op.processed, total: op.total })}
           </p>
           {failures.length ? (
-            <ul className="flex list-none flex-col gap-1 p-0 text-caption text-danger">
+            <ul className="m-0 flex list-none flex-col gap-1 p-0 text-caption font-semibold text-danger">
               {failures.map(([code, count]) => (
                 <li key={code}>
                   {t('bulkFailure', {
@@ -179,18 +235,18 @@ export default async function ApplicationsPage({
         </section>
       ) : null}
       {sp.bulkError ? (
-        <p role="alert" className="text-body text-danger">
-          {t.has(`bulkError.${sp.bulkError}`) ? t(`bulkError.${sp.bulkError}`) : t('bulkError.other')}
-        </p>
+        <Alert
+          title={t.has(`bulkError.${sp.bulkError}`) ? t(`bulkError.${sp.bulkError}`) : t('bulkError.other')}
+        />
       ) : null}
 
-      <nav aria-label={t('statusNav')} className="flex flex-wrap gap-2">
+      <Tabs label={t('statusNav')} className="self-start">
         {QUEUE_STATUS_FILTERS.map((s) => (
           <Link
             key={s}
             href={query({ status: s, page: null })}
             aria-current={s === status ? 'page' : undefined}
-            className={chip(s === status)}
+            className={tabClass(s === status)}
           >
             {t('statusCount', {
               status: t(`status.${s}`),
@@ -199,25 +255,22 @@ export default async function ApplicationsPage({
             })}
           </Link>
         ))}
-      </nav>
+      </Tabs>
 
       <form
         method="get"
         action={base}
         aria-label={t('filters')}
-        className="flex flex-col gap-3 md:flex-row md:items-end"
+        // Remount on navigation: uncontrolled fields would keep the previous filters' values.
+        key={`${typeId ?? ''}|${search}`}
+        className="flex flex-wrap items-end gap-3 rounded-card border border-line bg-surface p-4 glass"
       >
         <input type="hidden" name="status" value={status} />
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="queue-type" className="text-caption text-ink-2">
+          <label htmlFor="queue-type" className={label}>
             {t('type')}
           </label>
-          <select
-            id="queue-type"
-            name="type"
-            defaultValue={typeId ?? ''}
-            className="min-h-10 rounded-pill border border-line bg-surface px-4 text-body"
-          >
+          <select id="queue-type" name="type" defaultValue={typeId ?? ''} className="field">
             <option value="">{t('allTypes')}</option>
             {setup.types.map((x) => (
               <option key={x.id} value={x.id}>
@@ -226,8 +279,8 @@ export default async function ApplicationsPage({
             ))}
           </select>
         </div>
-        <div className="flex flex-1 flex-col gap-1.5">
-          <label htmlFor="queue-q" className="text-caption text-ink-2">
+        <div className="flex min-w-48 flex-1 flex-col gap-1.5">
+          <label htmlFor="queue-q" className={label}>
             {t('search')}
           </label>
           <input
@@ -235,122 +288,102 @@ export default async function ApplicationsPage({
             name="q"
             type="search"
             defaultValue={search}
-            className="min-h-10 rounded-pill border border-line bg-surface px-4 text-body"
+            maxLength={120}
+            className="field w-full"
           />
         </div>
-        <Button type="submit" variant="secondary" className="self-start md:self-end">
+        <Button type="submit" variant="secondary">
           {t('applyFilters')}
         </Button>
       </form>
 
       {detail ? (
-        <aside
-          aria-labelledby="detail-heading"
-          className="flex flex-col gap-3 rounded-panel border border-line bg-surface px-5 py-4"
-        >
-          <div className="flex flex-wrap items-start justify-between gap-2">
-            <h2 id="detail-heading" className="text-section">
-              {t('detailTitle', { name: detail.name })}
-            </h2>
-            <Link href={query({ r: null })} className="min-h-6 text-body underline underline-offset-2">
-              {t('closeDetail')}
-            </Link>
-          </div>
-          <dl className="grid grid-cols-1 gap-x-4 gap-y-1 text-body sm:grid-cols-[max-content_1fr]">
-            <dt className="text-ink-2">{t('field.email')}</dt>
-            <dd>{detail.email}</dd>
-            <dt className="text-ink-2">{t('field.registration')}</dt>
-            <dd>
-              {detail.typeName} · {detail.itemName}
-              {detail.addOns.length ? ` + ${detail.addOns.join(', ')}` : ''}
-            </dd>
-            <dt className="text-ink-2">{t('field.status')}</dt>
-            <dd>
-              {t(`status.${detail.status}`)}
-              {detail.decisionSource ? ` · ${t(`source.${detail.decisionSource}`)}` : ''}
-            </dd>
-            <dt className="text-ink-2">{t('field.applied')}</dt>
-            <dd>{format.dateTime(detail.createdAt, { dateStyle: 'medium', timeStyle: 'short' })}</dd>
-            {detail.company ? (
+        <aside aria-labelledby="detail-heading" className={`${panel} gap-4!`}>
+          <CardHeader
+            id="detail-heading"
+            title={t('detailTitle', { name: detail.name })}
+            actions={
+              <Link
+                href={query({ r: null })}
+                className="inline-flex min-h-8 items-center rounded-[10px] px-2 text-body font-bold text-primary-ink hover:bg-surface-3"
+              >
+                {t('closeDetail')}
+              </Link>
+            }
+          />
+          <dl className="m-0 grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
+            {fact(t('field.email'), detail.email, 'break-all')}
+            {fact(
+              t('field.registration'),
               <>
-                <dt className="text-ink-2">{t('field.company')}</dt>
-                <dd>{detail.company}</dd>
-              </>
-            ) : null}
-            {detail.jobTitle ? (
-              <>
-                <dt className="text-ink-2">{t('field.jobTitle')}</dt>
-                <dd>{detail.jobTitle}</dd>
-              </>
-            ) : null}
-            {detail.message ? (
-              <>
-                <dt className="text-ink-2">{t('field.message')}</dt>
-                <dd className="whitespace-pre-line">{detail.message}</dd>
-              </>
-            ) : null}
-            {detail.decisionReason ? (
-              <>
-                <dt className="text-ink-2">{t('field.reason')}</dt>
-                <dd className="whitespace-pre-line">{detail.decisionReason}</dd>
-              </>
-            ) : null}
-            {detail.hostName ? (
-              <>
-                <dt className="text-ink-2">{t('field.host')}</dt>
-                <dd>{detail.hostName}</dd>
-              </>
-            ) : null}
-            {detail.ticketShortCode ? (
-              <>
-                <dt className="text-ink-2">{t('field.ticket')}</dt>
-                <dd className="font-mono">{detail.ticketShortCode}</dd>
-              </>
-            ) : null}
-            {detail.substitutions > 0 ? (
-              <>
-                <dt className="text-ink-2">{t('field.substitutions')}</dt>
-                <dd>{detail.substitutions}</dd>
-              </>
-            ) : null}
+                {detail.typeName} · {detail.itemName}
+                {detail.addOns.length ? ` + ${detail.addOns.join(', ')}` : ''}
+              </>,
+            )}
+            {fact(
+              t('field.status'),
+              <span className="flex flex-wrap items-center gap-2">
+                <StatusPill tone={STATUS_TONE[detail.status]} label={t(`status.${detail.status}`)} />
+                {detail.decisionSource ? (
+                  <span className="text-caption text-ink-2">{t(`source.${detail.decisionSource}`)}</span>
+                ) : null}
+              </span>,
+            )}
+            {fact(
+              t('field.applied'),
+              format.dateTime(detail.createdAt, { dateStyle: 'medium', timeStyle: 'short' }),
+              'tabular-nums',
+            )}
+            {detail.company ? fact(t('field.company'), detail.company) : null}
+            {detail.jobTitle ? fact(t('field.jobTitle'), detail.jobTitle) : null}
+            {detail.hostName ? fact(t('field.host'), detail.hostName) : null}
+            {detail.ticketShortCode ? fact(t('field.ticket'), detail.ticketShortCode, 'font-mono') : null}
+            {detail.substitutions > 0
+              ? fact(t('field.substitutions'), detail.substitutions, 'tabular-nums')
+              : null}
           </dl>
+          {detail.message ? (
+            <section aria-labelledby="detail-message" className="flex flex-col gap-1.5">
+              <h3 id="detail-message" className="m-0 text-[13px] font-bold text-ink-2">
+                {t('field.message')}
+              </h3>
+              <blockquote className="m-0 whitespace-pre-line rounded-tile border-s-4 border-primary bg-surface-2 px-4 py-3 text-body text-ink">
+                {detail.message}
+              </blockquote>
+            </section>
+          ) : null}
+          {detail.decisionReason ? (
+            <section aria-labelledby="detail-reason" className="flex flex-col gap-1.5">
+              <h3 id="detail-reason" className="m-0 text-[13px] font-bold text-ink-2">
+                {t('field.reason')}
+              </h3>
+              <p className="m-0 whitespace-pre-line rounded-tile bg-surface-2 px-4 py-3 text-body text-ink">
+                {detail.decisionReason}
+              </p>
+            </section>
+          ) : null}
           {detail.group.length ? (
-            <section aria-labelledby="detail-group" className="flex flex-col gap-1">
-              <h3 id="detail-group" className="text-body font-medium">
+            <section aria-labelledby="detail-group" className="flex flex-col gap-1.5">
+              <h3 id="detail-group" className="m-0 text-body font-bold text-ink">
                 {t('groupTitle')}
               </h3>
-              <ul className="flex flex-col gap-1 ps-5">
-                {detail.group.map((g) => (
-                  <li key={g.id} className="list-disc text-body">
-                    <Link href={query({ r: g.id })} className="underline underline-offset-2">
-                      {g.name}
-                    </Link>{' '}
-                    · {t(`status.${g.status}`)}
-                  </li>
-                ))}
-              </ul>
+              {people(detail.group)}
             </section>
           ) : null}
           {detail.guests.length ? (
-            <section aria-labelledby="detail-guests" className="flex flex-col gap-1">
-              <h3 id="detail-guests" className="text-body font-medium">
+            <section aria-labelledby="detail-guests" className="flex flex-col gap-1.5">
+              <h3 id="detail-guests" className="m-0 text-body font-bold text-ink">
                 {t('guestsTitle')}
               </h3>
-              <ul className="flex flex-col gap-1 ps-5">
-                {detail.guests.map((g) => (
-                  <li key={g.id} className="list-disc text-body">
-                    <Link href={query({ r: g.id })} className="underline underline-offset-2">
-                      {g.name}
-                    </Link>{' '}
-                    · {t(`status.${g.status}`)}
-                  </li>
-                ))}
-              </ul>
+              {people(detail.guests)}
             </section>
           ) : null}
           {canWrite && decidable ? (
-            <section aria-labelledby="decide-heading" className="flex flex-col gap-2">
-              <h3 id="decide-heading" className="text-body font-medium">
+            <section
+              aria-labelledby="decide-heading"
+              className="flex flex-col gap-3 border-t border-line pt-4"
+            >
+              <h3 id="decide-heading" className="m-0 text-body font-bold text-ink">
                 {t('decideTitle')}
               </h3>
               <ProgramForm
@@ -385,12 +418,12 @@ export default async function ApplicationsPage({
             </section>
           ) : null}
           {canWrite && detail.status === 'confirmed' ? (
-            <details>
-              <summary className="min-h-6 cursor-pointer text-body underline underline-offset-2">
+            <details className="border-t border-line pt-3">
+              <summary className="inline-flex min-h-8 cursor-pointer items-center rounded-[10px] px-2 text-body font-bold text-primary-ink hover:bg-surface-3">
                 {t('substituteTitle')}
               </summary>
               <div className="flex flex-col gap-2 pt-3">
-                <p className="text-caption text-ink-2">
+                <p className="m-0 text-caption text-ink-2">
                   {t('substituteHint', {
                     until: format.dateTime(detail.substitutionClosesAt, {
                       dateStyle: 'medium',
@@ -417,12 +450,10 @@ export default async function ApplicationsPage({
       ) : null}
 
       {queue.rows.length === 0 ? (
-        <Card>
-          <EmptyState
-            title={t(`empty.${status === 'pending' ? 'pending' : 'other'}`)}
-            description={t(`emptyHint.${status === 'pending' ? 'pending' : 'other'}`)}
-          />
-        </Card>
+        <EmptyState
+          title={t(`empty.${status === 'pending' ? 'pending' : 'other'}`)}
+          description={t(`emptyHint.${status === 'pending' ? 'pending' : 'other'}`)}
+        />
       ) : (
         <form
           action={bulkDecideAction.bind(null, org, event)}
@@ -431,101 +462,105 @@ export default async function ApplicationsPage({
         >
           <input type="hidden" name="f_status" value={status} />
           <input type="hidden" name="f_type" value={typeId ?? ''} />
-          <p className="text-caption text-ink-2" role="status">
+          <p className="m-0 text-caption text-ink-2" role="status">
             {t('showing', { count: queue.total })}
           </p>
-          <ul className="flex list-none flex-col gap-2 p-0" aria-label={t('listLabel')}>
-            {queue.rows.map((r) => (
-              <li key={r.id}>
-                <Card className="flex flex-row items-start gap-3">
-                  {canWrite ? (
-                    <input
-                      type="checkbox"
-                      name="ids"
-                      value={r.id}
-                      aria-label={t('select', { name: r.name })}
-                      className="mt-1 size-6 shrink-0"
-                    />
-                  ) : null}
-                  <div className="flex min-w-0 flex-col gap-0.5">
+          <Table<Row>
+            caption={t('listLabel')}
+            rows={queue.rows}
+            rowKey={(r) => r.id}
+            stackOnPhone
+            select={
+              canWrite
+                ? { name: 'ids', header: tc('select'), label: (r) => t('select', { name: r.name }) }
+                : undefined
+            }
+            columns={[
+              {
+                key: 'name',
+                header: t('search'),
+                cell: (r) => (
+                  <span className="flex min-w-0 flex-col items-start gap-0.5 text-start">
                     <Link
                       href={query({ r: r.id, page: page ? String(page) : null })}
-                      className="min-h-6 text-body font-medium underline underline-offset-2"
+                      aria-current={detail?.id === r.id ? 'true' : undefined}
+                      className="inline-flex min-h-6 items-center font-bold text-primary-ink underline-offset-2 hover:underline"
                     >
                       {r.name}
                     </Link>
                     <span className="break-all text-caption text-ink-2">{r.email}</span>
-                    <span className="text-caption text-ink-2">
-                      {r.typeName} · {r.itemName} · {t(`status.${r.status}`)}
-                      {r.hostName ? ` · ${t('guestOf', { name: r.hostName })}` : ''}
+                  </span>
+                ),
+              },
+              {
+                key: 'registration',
+                header: t('field.registration'),
+                cell: (r) => (
+                  <span className="flex flex-col gap-0.5">
+                    <span>
+                      {r.typeName} · {r.itemName}
                     </span>
-                  </div>
-                </Card>
-              </li>
-            ))}
-          </ul>
+                    {r.hostName ? (
+                      <span className="text-caption text-ink-2">{t('guestOf', { name: r.hostName })}</span>
+                    ) : null}
+                  </span>
+                ),
+              },
+              {
+                key: 'status',
+                header: t('field.status'),
+                cell: (r) => <StatusPill tone={STATUS_TONE[r.status]} label={t(`status.${r.status}`)} />,
+              },
+            ]}
+          />
           {pages > 1 ? (
-            <nav aria-label={t('pages')} className="flex flex-wrap gap-2">
-              {page > 0 ? (
-                <Link href={query({ page: String(page - 1) })} className="underline underline-offset-2">
-                  {t('previous')}
-                </Link>
-              ) : null}
-              <span className="text-caption text-ink-2">{t('pageOf', { page: page + 1, pages })}</span>
-              {page + 1 < pages ? (
-                <Link href={query({ page: String(page + 1) })} className="underline underline-offset-2">
-                  {t('next')}
-                </Link>
-              ) : null}
-            </nav>
+            <Pagination
+              label={t('pages')}
+              link={Link}
+              previous={{ href: page > 0 ? query({ page: String(page - 1) }) : null, label: t('previous') }}
+              next={{ href: page + 1 < pages ? query({ page: String(page + 1) }) : null, label: t('next') }}
+              status={t('pageOf', { page: page + 1, pages })}
+            />
           ) : null}
           {canWrite && (status === 'pending' || status === 'approved' || status === 'denied') ? (
-            <Card size="panel" className="flex flex-col gap-3">
-              <h2 className="text-section">{t('bulkHeading')}</h2>
-              <fieldset className="flex flex-col gap-1">
-                <legend className="pb-1 text-caption text-ink-2">{t('scope')}</legend>
-                <label className="flex min-h-6 items-center gap-2 text-body">
-                  <input type="radio" name="scope" value="selected" defaultChecked className="size-5" />
-                  {t('scopeSelected')}
-                </label>
+            <Card size="panel" className="flex flex-col gap-4">
+              <CardHeader title={t('bulkHeading')} />
+              <fieldset className="m-0 flex min-w-0 flex-col border-0 p-0">
+                <legend className={`${label} pb-1`}>{t('scope')}</legend>
+                <Radio name="scope" value="selected" defaultChecked label={t('scopeSelected')} />
                 {status !== 'denied' ? (
-                  <label className="flex min-h-6 items-center gap-2 text-body">
-                    <input type="radio" name="scope" value="all" className="size-5" />
-                    {t('scopeAll', { count: queue.total, status: t(`status.${status}`) })}
-                  </label>
+                  <Radio
+                    name="scope"
+                    value="all"
+                    label={t('scopeAll', { count: queue.total, status: t(`status.${status}`) })}
+                  />
                 ) : null}
               </fieldset>
-              <div className="flex flex-col gap-1.5">
-                <label htmlFor="bulk-decision" className="text-caption text-ink-2">
-                  {t('decisionLabel')}
-                </label>
-                <select
-                  id="bulk-decision"
-                  name="decision"
-                  className="min-h-10 rounded-pill border border-line bg-surface px-4 text-body"
-                >
-                  <option value="approve">{t('decision.approve')}</option>
-                  <option value="deny">{t('decision.deny')}</option>
-                </select>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="flex flex-col gap-1.5">
+                  <label htmlFor="bulk-decision" className={label}>
+                    {t('decisionLabel')}
+                  </label>
+                  <select id="bulk-decision" name="decision" className="field w-full">
+                    <option value="approve">{t('decision.approve')}</option>
+                    <option value="deny">{t('decision.deny')}</option>
+                  </select>
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label htmlFor="bulk-template" className={label}>
+                    {t('template')}
+                  </label>
+                  <select id="bulk-template" name="templateId" className="field w-full">
+                    {allTemplates.map((o) => (
+                      <option key={o.value} value={o.value}>
+                        {o.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="bulk-template" className="text-caption text-ink-2">
-                  {t('template')}
-                </label>
-                <select
-                  id="bulk-template"
-                  name="templateId"
-                  className="min-h-10 rounded-pill border border-line bg-surface px-4 text-body"
-                >
-                  {allTemplates.map((o) => (
-                    <option key={o.value} value={o.value}>
-                      {o.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="flex flex-col gap-1.5">
-                <label htmlFor="bulk-reason" className="text-caption text-ink-2">
+                <label htmlFor="bulk-reason" className={label}>
                   {t('reason')}
                 </label>
                 <textarea
@@ -533,7 +568,7 @@ export default async function ApplicationsPage({
                   name="reason"
                   rows={2}
                   maxLength={1000}
-                  className="rounded-card border border-line bg-surface px-4 py-2 text-body"
+                  className="field w-full py-3 leading-relaxed"
                 />
               </div>
               <Button type="submit" className="self-start">
@@ -545,21 +580,22 @@ export default async function ApplicationsPage({
       )}
 
       <section aria-labelledby="templates-heading" className="flex flex-col gap-3">
-        <h2 id="templates-heading" className="text-section">
-          {t('templatesTitle')}
-        </h2>
-        <p className="text-body text-ink-2">{t('templatesHint')}</p>
+        <SectionHeader id="templates-heading" title={t('templatesTitle')} description={t('templatesHint')} />
         {approval.templates.length === 0 ? (
-          <p className="text-body text-ink-2">{t('noTemplates')}</p>
+          <EmptyState title={t('noTemplates')} />
         ) : (
-          <ul className="flex list-none flex-col gap-2 p-0">
+          <ul className="m-0 grid list-none grid-cols-1 gap-3 p-0 lg:grid-cols-2">
             {approval.templates.map((x) => (
-              <li key={x.id}>
-                <Card className="flex flex-col gap-2">
-                  <h3 className="text-body font-medium">
-                    {t(`decision.${x.decision}`)} · {x.label}
-                  </h3>
-                  <p className="whitespace-pre-line text-caption text-ink-2">{x.body}</p>
+              <li key={x.id} className="flex">
+                <Card className="flex w-full flex-col gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <StatusPill
+                      tone={x.decision === 'approve' ? 'success' : 'danger'}
+                      label={t(`decision.${x.decision}`)}
+                    />
+                    <h3 className="m-0 text-body font-bold text-ink">{x.label}</h3>
+                  </div>
+                  <p className="m-0 whitespace-pre-line text-body text-ink-2">{x.body}</p>
                   {canWrite ? (
                     <ProgramForm
                       action={removeTemplateAction.bind(null, org, event, x.id)}
@@ -577,7 +613,7 @@ export default async function ApplicationsPage({
         )}
         {canWrite ? (
           <Card size="panel" className="flex flex-col gap-3">
-            <h3 className="text-section">{t('addTemplate')}</h3>
+            <CardHeader as="h3" title={t('addTemplate')} />
             <ProgramForm
               action={saveTemplateAction.bind(null, org, event)}
               fields={[

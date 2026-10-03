@@ -2,7 +2,7 @@ import { expect, type Page, test } from '@playwright/test';
 import { closePools } from '@yayatoh/db';
 import { resolveOrgSlug } from '@yayatoh/tenancy';
 import { type RsvpQuestionsScenario, rsvpQuestionsScenario } from '@yayatoh/testing';
-import { ageSession, confirmStepUp, expectAccessible, personaCode, signIn } from './helpers.ts';
+import { ageSession, confirmStepUp, expectAccessibleBothModes, personaCode, signIn } from './helpers.ts';
 
 /**
  * M4.1e: RSVP questions. The host builds questions with conditions (live preview, menu with
@@ -76,7 +76,7 @@ test.describe('RSVP questions (M4.1e)', () => {
     const menu = page.getByRole('list', { name: 'Menu options' });
     await expect(menu.getByText('Contains shellfish')).toBeVisible();
     await expect(page.getByRole('button', { name: 'Publish questions' })).toBeDisabled();
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
 
     // Validation: no question text; a choice with no options.
     await page.getByRole('button', { name: 'Add a question' }).click();
@@ -89,7 +89,7 @@ test.describe('RSVP questions (M4.1e)', () => {
     await form.getByLabel('Answer type').selectOption({ label: 'One choice' });
     await form.getByRole('button', { name: 'Add question' }).click();
     await expect(form.getByText('Add at least one option, one per line.')).toBeVisible();
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
     await form.getByRole('button', { name: 'Cancel' }).click();
 
     await addQuestion(page, {
@@ -143,7 +143,7 @@ test.describe('RSVP questions (M4.1e)', () => {
     await preview.getByLabel('Attending', { exact: true }).uncheck();
     await expect(preview.getByText('Questions shown: 1 of 3')).toBeVisible();
     await expect(preview.getByLabel('Allergies or dietary needs')).toBeVisible();
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
 
     // Reordering is by buttons; a move that breaks nothing is allowed.
     await page.getByRole('button', { name: 'Move Ceremony: song request up' }).click();
@@ -198,7 +198,7 @@ test.describe('RSVP questions (M4.1e)', () => {
     ).toBeVisible();
     await page.getByRole('button', { name: `Remove Beef ${test.info().project.name}` }).click();
     await expect(menu.getByText('Gluten free')).toHaveCount(0);
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
   });
 
   test('a household of three answers, one declines: questions per guest, meal on the guest, counts update', async ({
@@ -228,7 +228,7 @@ test.describe('RSVP questions (M4.1e)', () => {
     await expect(ana.getByLabel('Ceremony: song request')).toHaveCount(0);
     await expect(luis.getByText('Contains shellfish')).toBeVisible();
     await expect(luis.getByText('Private: only the hosts see this.')).toBeVisible();
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
 
     // A required meal left empty is named and focused.
     await page.getByRole('button', { name: 'Send RSVP' }).click();
@@ -236,7 +236,7 @@ test.describe('RSVP questions (M4.1e)', () => {
       page.getByRole('alert').filter({ hasText: 'Please answer this question for Luis López.' }),
     ).toBeVisible();
     await expect(luis.getByRole('group', { name: 'Reception: meal choice (required)' })).toBeFocused();
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
 
     await luis.getByText('Fish', { exact: true }).click();
     await luis.getByLabel('Allergies or dietary needs').fill('No nuts, please');
@@ -272,7 +272,7 @@ test.describe('RSVP questions (M4.1e)', () => {
     await expect(counts.getByRole('row', { name: /Vegetarian/ })).toContainText('1');
     await expect(counts).toContainText('Reception · attending: 2');
     await expect(page.getByTestId('rsvp-responded')).toHaveText('Parties that answered: 1 of 2');
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
 
     // Luis switches to vegetarian: the counts follow.
     const guest = await page.context().browser()?.newContext();
@@ -308,7 +308,7 @@ test.describe('RSVP questions (M4.1e)', () => {
       'Party,Guest,Age,Ceremony,Reception,Meal,Ceremony: song request,Dietary needs,Accessibility needs',
     );
     expect(csv).toContain('Garcia,Luis López,Adult,No answer,No answer,,');
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
   });
 
   test('viewers see the questions and counts but cannot edit or export', async ({ page }) => {
@@ -326,7 +326,7 @@ test.describe('RSVP questions (M4.1e)', () => {
     await expect(
       page.getByRole('region', { name: 'Preview' }).getByText('Questions shown: 3 of 3'),
     ).toBeVisible();
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
     await page.goto(`${console_(s)}/answers`);
     await expect(page.getByText('Exporting needs a role that may export guest lists.')).toBeVisible();
     await expect(page.getByRole('button', { name: 'Export answers (CSV)' })).toHaveCount(0);
@@ -389,17 +389,17 @@ test.describe('RSVP questions (M4.1e)', () => {
     await expect(page.getByRole('group', { name: 'Reception: meal choice (مطلوب)' })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'بضعة أسئلة' })).toBeVisible();
     await expect(page.getByText('خاص: لا يراه إلا المضيفون.').first()).toBeVisible();
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
 
     await signIn(page);
     await page.goto(`/ar${console_(s)}/questions`);
     await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
     await expect(page.getByRole('heading', { name: 'أسئلة تأكيد الحضور', level: 1 })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'معاينة' })).toBeVisible();
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
     await page.goto(`/ar${console_(s)}/answers`);
     await expect(page.getByRole('heading', { name: 'إجابات تأكيد الحضور', level: 1 })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'عدد الوجبات' })).toBeVisible();
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
   });
 });

@@ -1,5 +1,5 @@
 import type { TypeRulesDto } from '@yayatoh/registration';
-import { Card } from '@yayatoh/ui';
+import { buttonClass, Card, SectionHeader } from '@yayatoh/ui';
 import { getTranslations } from 'next-intl/server';
 import { ProgramForm } from '@/components/program-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
@@ -37,16 +37,19 @@ export async function ApprovalRules({
   };
   return (
     <section aria-labelledby="rules-heading" className="flex flex-col gap-3">
-      <h2 id="rules-heading" className="text-section">
-        {t('title')}
-      </h2>
-      <p className="text-body text-ink-2">{t('hint')}</p>
-      <Link
-        href={`/o/${org}/e/${event}/registration/applications`}
-        className="self-start text-body underline underline-offset-2"
-      >
-        {t('openQueue')}
-      </Link>
+      <SectionHeader
+        id="rules-heading"
+        title={t('title')}
+        description={t('hint')}
+        actions={
+          <Link
+            href={`/o/${org}/e/${event}/registration/applications`}
+            className={buttonClass('secondary', 'sm')}
+          >
+            {t('openQueue')}
+          </Link>
+        }
+      />
       <ul className="flex list-none flex-col gap-3 p-0">
         {types.map((x) => {
           const r = rules.find((y) => y.registrationTypeId === x.id);
@@ -55,8 +58,8 @@ export async function ApprovalRules({
             <li key={x.id}>
               <Card className="flex flex-col gap-2">
                 {/* Not a heading: the types list above already heads each type by its name. */}
-                <p className="text-body font-medium">{x.name}</p>
-                <p className="text-caption text-ink-2">
+                <p className="m-0 text-body font-bold text-ink">{x.name}</p>
+                <p className="m-0 text-caption text-ink-2">
                   {r.kind === 'guest'
                     ? t('summaryGuest', { count: r.guestsPerHost })
                     : r.approval === 'manual'
@@ -69,11 +72,11 @@ export async function ApprovalRules({
                   {t('summaryCutoff', { hours: r.substitutionCutoffHours })}
                 </p>
                 {canWrite ? (
-                  <details>
-                    <summary className="min-h-6 cursor-pointer text-caption text-ink-2">
+                  <details className="border-t border-line pt-2">
+                    <summary className="inline-flex min-h-8 cursor-pointer items-center rounded-[10px] px-2 text-caption font-bold text-primary-ink hover:bg-surface-3">
                       {t('editNamed', { name: x.name })}
                     </summary>
-                    <div className="flex flex-col gap-4 pt-3">
+                    <div className="flex flex-col gap-5 pt-3">
                       <ProgramForm
                         action={setTypeRulesAction.bind(null, org, event, x.id)}
                         fields={[

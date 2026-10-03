@@ -2,9 +2,20 @@ import { executeQuery } from '@yayatoh/kernel';
 import { isProfileKey, navIncludes } from '@yayatoh/platform';
 import { enrollmentOverviewQuery } from '@yayatoh/registration';
 import { roleCan } from '@yayatoh/tenancy';
-import { Card, EmptyState, PageHeader, StatusDot } from '@yayatoh/ui';
+import {
+  Alert,
+  buttonClass,
+  Card,
+  CardHeader,
+  EmptyState,
+  PageHeader,
+  ProgressBar,
+  SectionHeader,
+  StatusPill,
+} from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { Crumbs } from '@/components/crumbs.tsx';
 import { type FieldSpec, ProgramForm } from '@/components/program-form.tsx';
 import { PromoteNow } from '@/components/promote-now.tsx';
 import { Link } from '@/i18n/navigation.ts';
@@ -32,6 +43,7 @@ export default async function EnrollmentPage({
   const canWrite = roleCan(data.role, 'events:write');
   const t = await getTranslations('enrollment');
   const tr = await getTranslations('registration');
+  const tv = await getTranslations('vocab');
   const when = new Intl.DateTimeFormat(locale, {
     timeZone: overview.timezone,
     weekday: 'short',
@@ -70,84 +82,102 @@ export default async function EnrollmentPage({
     value: s.sessionId,
     label: `${s.title} · ${when.format(s.startsAt)}`,
   }));
+  const summary =
+    'inline-flex min-h-8 cursor-pointer items-center rounded-[10px] px-2 text-caption font-bold text-primary-ink hover:bg-surface-3';
   return (
     <>
-      <PageHeader title={t('title')} description={t('subtitle')} />
-      <Link
-        href={`/o/${org}/e/${event}/registration`}
-        className="self-start text-body underline underline-offset-2"
-      >
-        {t('backToRegistration')}
-      </Link>
-      {canWrite ? null : <p className="text-body text-ink-2">{t('viewerNotice')}</p>}
+      <PageHeader
+        breadcrumb={
+          <Crumbs
+            items={[
+              { label: data.org.name, href: `/o/${org}` },
+              { label: ev.name, href: `/o/${org}/e/${event}` },
+              { label: tv('registration'), href: `/o/${org}/e/${event}/registration` },
+              { label: t('title') },
+            ]}
+          />
+        }
+        title={t('title')}
+        description={t('subtitle')}
+      />
+      {canWrite ? null : <Alert tone="info" title={t('viewerNotice')} />}
 
       <section aria-labelledby="enrollment-sessions-heading" className="flex flex-col gap-3">
-        <h2 id="enrollment-sessions-heading" className="text-section">
-          {t('sessions')}
-        </h2>
-        <p className="text-body text-ink-2">{t('closeRule')}</p>
+        <SectionHeader id="enrollment-sessions-heading" title={t('sessions')} description={t('closeRule')} />
         {optional.length === 0 ? (
-          <Card className="flex flex-col gap-3">
-            <EmptyState title={t('emptyTitle')} description={t('emptyDescription')} />
-            <Link
-              href={`/o/${org}/e/${event}/sessions`}
-              className="self-start text-body underline underline-offset-2"
-            >
-              {t('openSessions')}
-            </Link>
-          </Card>
+          <EmptyState
+            title={t('emptyTitle')}
+            description={t('emptyDescription')}
+            action={
+              <Link href={`/o/${org}/e/${event}/sessions`} className={buttonClass('secondary')}>
+                {t('openSessions')}
+              </Link>
+            }
+          />
         ) : (
-          <ul className="flex list-none flex-col gap-3 p-0">
-            {optional.map((s) => (
-              <li key={s.sessionId}>
-                <Card className="flex flex-col gap-2">
-                  <h3 className="text-body font-medium">{s.title}</h3>
-                  <p className="text-caption text-ink-2">
-                    {when.format(s.startsAt)}
-                    {s.roomName ? ` · ${s.roomName}` : ''}
-                    {s.groupName ? ` · ${t('group', { name: s.groupName })}` : ''}
-                  </p>
-                  <p className="text-body">
-                    {s.capacity === null
-                      ? t('placesUnlimited', { enrolled: s.enrolled })
-                      : t('places', { enrolled: s.enrolled, capacity: s.capacity })}
-                  </p>
-                  <p className="text-caption text-ink-2">
-                    {s.waiting + s.offered > 0
-                      ? t('waitlist', { waiting: s.waiting, offered: s.offered })
-                      : t('noWaitlist')}
-                  </p>
-                  <div className="flex flex-wrap gap-3">
-                    {s.enrollmentOpen ? null : <StatusDot status="neutral" label={t('enrollmentClosed')} />}
-                    {s.promotionOpen ? (
-                      <StatusDot
-                        status="info"
-                        label={t('closesAt', { when: when.format(s.promotionClosesAt) })}
+          <ul className="grid list-none grid-cols-1 gap-3 p-0 lg:grid-cols-2">
+            {optional.map((s) => {
+              const places =
+                s.capacity === null
+                  ? t('placesUnlimited', { enrolled: s.enrolled })
+                  : t('places', { enrolled: s.enrolled, capacity: s.capacity });
+              return (
+                <li key={s.sessionId} className="flex">
+                  <Card className="flex w-full flex-col gap-3">
+                    <div className="flex flex-col gap-1">
+                      <CardHeader as="h3" title={s.title} />
+                      <p className="m-0 text-caption text-ink-2 tabular-nums">
+                        {when.format(s.startsAt)}
+                        {s.roomName ? ` · ${s.roomName}` : ''}
+                        {s.groupName ? ` · ${t('group', { name: s.groupName })}` : ''}
+                      </p>
+                    </div>
+                    <div className="flex flex-col gap-1.5">
+                      <p className="m-0 text-body font-bold text-ink tabular-nums">{places}</p>
+                      {s.capacity !== null ? (
+                        <ProgressBar
+                          value={Math.min(s.enrolled, s.capacity)}
+                          max={s.capacity}
+                          label={places}
+                          tone={s.enrolled >= s.capacity ? 'warning' : 'primary'}
+                        />
+                      ) : null}
+                      <p className="m-0 text-caption text-ink-2 tabular-nums">
+                        {s.waiting + s.offered > 0
+                          ? t('waitlist', { waiting: s.waiting, offered: s.offered })
+                          : t('noWaitlist')}
+                      </p>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {s.enrollmentOpen ? null : <StatusPill tone="neutral" label={t('enrollmentClosed')} />}
+                      {s.promotionOpen ? (
+                        <StatusPill
+                          tone="info"
+                          label={t('closesAt', { when: when.format(s.promotionClosesAt) })}
+                        />
+                      ) : (
+                        <StatusPill tone="waiting" label={t('closed')} />
+                      )}
+                    </div>
+                    {canWrite && s.promotionOpen ? (
+                      <PromoteNow
+                        action={promoteNowAction.bind(null, org, event, s.sessionId)}
+                        title={s.title}
+                        waiting={s.waiting}
                       />
-                    ) : (
-                      <StatusDot status="warning" label={t('closed')} />
-                    )}
-                  </div>
-                  {canWrite && s.promotionOpen ? (
-                    <PromoteNow
-                      action={promoteNowAction.bind(null, org, event, s.sessionId)}
-                      title={s.title}
-                      waiting={s.waiting}
-                    />
-                  ) : null}
-                </Card>
-              </li>
-            ))}
+                    ) : null}
+                  </Card>
+                </li>
+              );
+            })}
           </ul>
         )}
       </section>
 
       <section aria-labelledby="enrollment-settings-heading" className="flex flex-col gap-3">
-        <h2 id="enrollment-settings-heading" className="text-section">
-          {t('settings')}
-        </h2>
-        {canWrite ? (
-          <Card size="panel" className="flex flex-col gap-3">
+        <SectionHeader id="enrollment-settings-heading" title={t('settings')} />
+        <Card size="panel" className="flex flex-col gap-3">
+          {canWrite ? (
             <ProgramForm
               action={saveEnrollmentSettingsAction.bind(null, org, event)}
               fields={settingsFields}
@@ -156,30 +186,34 @@ export default async function EnrollmentPage({
               successLabel={t('saved')}
               errors={errors}
             />
-          </Card>
-        ) : (
-          <p className="text-body">
-            {overview.settings.promotion === 'auto'
-              ? t('promotionAuto')
-              : t('offerSummary', { minutes: overview.settings.offerMinutes })}
-          </p>
-        )}
+          ) : (
+            <p className="m-0 text-body text-ink">
+              {overview.settings.promotion === 'auto'
+                ? t('promotionAuto')
+                : t('offerSummary', { minutes: overview.settings.offerMinutes })}
+            </p>
+          )}
+        </Card>
       </section>
 
       <section aria-labelledby="enrollment-items-heading" className="flex flex-col gap-3">
-        <h2 id="enrollment-items-heading" className="text-section">
-          {t('items')}
-        </h2>
-        <p className="text-body text-ink-2">{t('itemsHint')}</p>
+        <SectionHeader id="enrollment-items-heading" title={t('items')} description={t('itemsHint')} />
         {overview.items.length === 0 ? (
-          <p className="text-body text-ink-2">{tr('noItems')}</p>
+          <EmptyState
+            title={tr('noItems')}
+            action={
+              <Link href={`/o/${org}/e/${event}/registration`} className={buttonClass('secondary')}>
+                {t('backToRegistration')}
+              </Link>
+            }
+          />
         ) : (
           <ul className="flex list-none flex-col gap-3 p-0">
             {overview.items.map((i) => (
               <li key={i.admissionItemId}>
                 <Card className="flex flex-col gap-2">
-                  <h3 className="text-body font-medium">{i.name}</h3>
-                  <p className="text-caption text-ink-2">
+                  <CardHeader as="h3" title={i.name} />
+                  <p className="m-0 text-caption text-ink-2">
                     {tr(`kind.${i.kind}`)} ·{' '}
                     {i.all
                       ? t('allSessions')
@@ -188,10 +222,8 @@ export default async function EnrollmentPage({
                         : t('someSessions', { count: i.sessionIds.length })}
                   </p>
                   {canWrite && sessionOptions.length > 0 ? (
-                    <details>
-                      <summary className="min-h-6 cursor-pointer text-caption text-ink-2">
-                        {t('chooseSessions', { name: i.name })}
-                      </summary>
+                    <details className="border-t border-line pt-2">
+                      <summary className={summary}>{t('chooseSessions', { name: i.name })}</summary>
                       <div className="pt-3">
                         <ProgramForm
                           action={saveItemSessionsAction.bind(null, org, event, i.admissionItemId)}

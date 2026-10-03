@@ -3,7 +3,7 @@
 import type { PublicCampaignDto } from '@yayatoh/donations';
 import { processingFeeCover } from '@yayatoh/donations/giving';
 import { formatMoney, moneyFromDecimal } from '@yayatoh/kernel';
-import { Alert, Button, Input } from '@yayatoh/ui';
+import { Alert, Button, FieldMessage, Input, Select, Textarea } from '@yayatoh/ui';
 import { useLocale, useTranslations } from 'next-intl';
 import { type FormEvent, startTransition, useActionState, useEffect, useRef, useState } from 'react';
 import { errorMessageKey } from '@/lib/errors.ts';
@@ -11,10 +11,13 @@ import type { GiveState } from './actions.ts';
 
 type Action = (prev: GiveState, form: FormData) => Promise<GiveState>;
 
-/** Phone-first targets (44 px) for the public page. */
+/** Phone-first targets (44 px) for the public page; the chosen option gets a violet outline. */
 const option =
-  'flex min-h-11 cursor-pointer items-center gap-3 rounded-card border border-line bg-surface px-4 py-2 text-body has-[:checked]:border-ink';
-const control = 'min-h-11 w-full rounded-pill border bg-surface px-4 text-body';
+  'flex min-h-11 cursor-pointer items-center gap-3 rounded-tile border border-line bg-surface-2 px-4 py-3 text-body text-ink transition-colors duration-150 hover:border-line-strong has-[:checked]:border-primary has-[:checked]:ring-1 has-[:checked]:ring-primary';
+const choiceInput = 'size-5 shrink-0 cursor-pointer accent-primary';
+const legend = 'm-0 mb-3 p-0 text-card text-ink';
+/** The public cards of the v2 event page (give-frame.tsx; that module is server-only). */
+const giveCard = 'flex flex-col gap-4 rounded-panel border border-line bg-surface p-5 elevation-card glass';
 const fieldMessages = ['choice', 'amount', 'name', 'email', 'displayAs', 'tributeName'] as const;
 
 /**
@@ -77,192 +80,185 @@ export function GiveForm({ campaign, action }: { campaign: PublicCampaignDto; ac
   const amountError = fieldError('amount');
   const displayError = fieldError('displayAs');
   return (
-    <form ref={ref} onSubmit={submit} noValidate className="flex flex-col gap-6" aria-label={t('formLabel')}>
-      <fieldset
-        className="flex flex-col gap-2"
-        aria-describedby={choiceError ? 'choice-error' : undefined}
-        aria-invalid={choiceError ? true : undefined}
-      >
-        <legend className="pb-2 text-section">{t('chooseAmount')}</legend>
-        {campaign.levels.map((l) => (
-          <label key={l.id} className={option}>
+    <form ref={ref} onSubmit={submit} noValidate className="flex flex-col gap-5" aria-label={t('formLabel')}>
+      <div className={giveCard}>
+        <fieldset
+          className="m-0 flex min-w-0 flex-col gap-2.5 border-0 p-0"
+          aria-describedby={choiceError ? 'choice-error' : undefined}
+          aria-invalid={choiceError ? true : undefined}
+        >
+          <legend className={legend}>{t('chooseAmount')}</legend>
+          {campaign.levels.map((l) => (
+            <label key={l.id} className={option}>
+              <input
+                type="radio"
+                name="choice"
+                value={`level:${l.id}`}
+                checked={choice === `level:${l.id}`}
+                onChange={(e) => setChoice(e.target.value)}
+                className={choiceInput}
+              />
+              <span className="flex flex-col gap-0.5">
+                <span className="font-bold tabular-nums">
+                  {t('levelOption', { amount: fmt(l.amountMinor), name: l.name })}
+                </span>
+                {l.description ? <span className="text-caption text-ink-2">{l.description}</span> : null}
+              </span>
+            </label>
+          ))}
+          <label className={option}>
             <input
               type="radio"
               name="choice"
-              value={`level:${l.id}`}
-              checked={choice === `level:${l.id}`}
+              value="other"
+              checked={choice === 'other'}
               onChange={(e) => setChoice(e.target.value)}
-              className="size-5 shrink-0"
+              className={choiceInput}
             />
-            <span className="flex flex-col">
-              <span className="font-medium">
-                {t('levelOption', { amount: fmt(l.amountMinor), name: l.name })}
-              </span>
-              {l.description ? <span className="text-caption text-ink-2">{l.description}</span> : null}
-            </span>
+            <span className="font-bold">{campaign.levels.length ? t('otherAmount') : t('yourAmount')}</span>
           </label>
-        ))}
-        <label className={option}>
-          <input
-            type="radio"
-            name="choice"
-            value="other"
-            checked={choice === 'other'}
-            onChange={(e) => setChoice(e.target.value)}
-            className="size-5 shrink-0"
+          <FieldMessage id="choice" error={choiceError} />
+          <Input
+            id="give-amount"
+            name="amount"
+            label={t('amountLabel', { currency: campaign.currency })}
+            hint={t('amountHint', { min: fmt(campaign.minGiftMinor), max: fmt(campaign.maxGiftMinor) })}
+            error={amountError}
+            inputMode="decimal"
+            autoComplete="off"
+            value={own}
+            onChange={(e) => {
+              setOwn(e.target.value);
+              setChoice('other');
+            }}
           />
-          <span className="font-medium">{campaign.levels.length ? t('otherAmount') : t('yourAmount')}</span>
-        </label>
-        {choiceError ? (
-          <p id="choice-error" className="text-caption text-danger">
-            {choiceError}
-          </p>
-        ) : null}
-        <Input
-          id="give-amount"
-          name="amount"
-          label={t('amountLabel', { currency: campaign.currency })}
-          hint={t('amountHint', { min: fmt(campaign.minGiftMinor), max: fmt(campaign.maxGiftMinor) })}
-          error={amountError}
-          inputMode="decimal"
-          autoComplete="off"
-          value={own}
-          onChange={(e) => {
-            setOwn(e.target.value);
-            setChoice('other');
-          }}
-          className="min-h-11"
-        />
-      </fieldset>
+        </fieldset>
 
-      <div className="flex flex-col gap-2">
-        <label className={option}>
-          <input
-            type="checkbox"
-            name="coverFee"
-            checked={cover}
-            onChange={(e) => setCover(e.target.checked)}
-            className="size-5 shrink-0"
-          />
-          <span>{fee > 0 ? t('coverFeeAmount', { fee: fmt(fee) }) : t('coverFee')}</span>
-        </label>
-        <p className="text-body" aria-live="polite">
-          {total > 0 ? t('total', { total: fmt(total) }) : t('totalNone')}
-        </p>
+        <div className="flex flex-col gap-3 border-t border-line pt-4">
+          <label className={option}>
+            <input
+              type="checkbox"
+              name="coverFee"
+              checked={cover}
+              onChange={(e) => setCover(e.target.checked)}
+              className={choiceInput}
+            />
+            <span>{fee > 0 ? t('coverFeeAmount', { fee: fmt(fee) }) : t('coverFee')}</span>
+          </label>
+          <p
+            className={
+              total > 0
+                ? 'm-0 text-[22px] leading-tight font-extrabold tracking-[-0.02em] text-ink tabular-nums'
+                : 'm-0 text-body text-ink-2'
+            }
+            aria-live="polite"
+          >
+            {total > 0 ? t('total', { total: fmt(total) }) : t('totalNone')}
+          </p>
+        </div>
       </div>
 
-      <fieldset className="flex flex-col gap-4">
-        <legend className="pb-2 text-section">{t('aboutYou')}</legend>
-        <Input
-          id="give-name"
-          name="name"
-          label={t('name')}
-          autoComplete="name"
-          maxLength={120}
-          error={fieldError('name')}
-          className="min-h-11"
-        />
-        <Input
-          id="give-email"
-          name="email"
-          type="email"
-          label={t('email')}
-          hint={t('emailHint')}
-          autoComplete="email"
-          maxLength={254}
-          error={fieldError('email')}
-          className="min-h-11"
-        />
-        <Input
-          id="give-employer"
-          name="employer"
-          label={t('employer')}
-          hint={t('employerHint')}
-          autoComplete="organization"
-          maxLength={120}
-          className="min-h-11"
-        />
-      </fieldset>
+      <div className={giveCard}>
+        <fieldset className="m-0 flex min-w-0 flex-col gap-4 border-0 p-0">
+          <legend className={legend}>{t('aboutYou')}</legend>
+          <Input
+            id="give-name"
+            name="name"
+            label={t('name')}
+            autoComplete="name"
+            maxLength={120}
+            error={fieldError('name')}
+          />
+          <Input
+            id="give-email"
+            name="email"
+            type="email"
+            label={t('email')}
+            hint={t('emailHint')}
+            autoComplete="email"
+            maxLength={254}
+            error={fieldError('email')}
+          />
+          <Input
+            id="give-employer"
+            name="employer"
+            label={t('employer')}
+            hint={t('employerHint')}
+            autoComplete="organization"
+            maxLength={120}
+          />
+        </fieldset>
+      </div>
 
-      <fieldset
-        className="flex flex-col gap-2"
-        aria-describedby={displayError ? 'displayAs-error' : 'displayAs-hint'}
-        aria-invalid={displayError ? true : undefined}
-      >
-        <legend className="pb-2 text-section">{t('displayAs')}</legend>
-        <p id="displayAs-hint" className="text-caption text-ink-2">
-          {t('displayAsHint')}
-        </p>
-        {(['full_name', 'first_name', 'anonymous'] as const).map((v) => (
-          <label key={v} className={option}>
-            <input type="radio" name="displayAs" value={v} className="size-5 shrink-0" />
-            <span>{t(`display.${v}`)}</span>
-          </label>
-        ))}
-        {displayError ? (
-          <p id="displayAs-error" className="text-caption text-danger">
-            {displayError}
+      <div className={giveCard}>
+        <fieldset
+          className="m-0 flex min-w-0 flex-col gap-2.5 border-0 p-0"
+          aria-describedby={displayError ? 'displayAs-error' : 'displayAs-hint'}
+          aria-invalid={displayError ? true : undefined}
+        >
+          <legend className={legend}>{t('displayAs')}</legend>
+          <p id="displayAs-hint" className="m-0 text-caption text-ink-2">
+            {t('displayAsHint')}
           </p>
-        ) : null}
-      </fieldset>
+          {(['full_name', 'first_name', 'anonymous'] as const).map((v) => (
+            <label key={v} className={option}>
+              <input type="radio" name="displayAs" value={v} className={choiceInput} />
+              <span className="font-bold">{t(`display.${v}`)}</span>
+            </label>
+          ))}
+          <FieldMessage id="displayAs" error={displayError} />
+        </fieldset>
+      </div>
 
-      <fieldset className="flex flex-col gap-3">
-        <legend className="pb-2 text-section">{t('tribute')}</legend>
-        <div className="flex flex-col gap-1.5">
-          <label htmlFor="give-tribute" className="text-caption text-ink-2">
-            {t('tributeKind')}
-          </label>
-          <select
+      <div className={giveCard}>
+        <fieldset className="m-0 flex min-w-0 flex-col gap-4 border-0 p-0">
+          <legend className={legend}>{t('tribute')}</legend>
+          <Select
             id="give-tribute"
             name="tributeKind"
+            label={t('tributeKind')}
             value={tribute}
             onChange={(e) => setTribute(e.target.value)}
-            className={`${control} border-line`}
           >
             <option value="none">{t('tributeNone')}</option>
             <option value="honor">{t('tributeHonor')}</option>
             <option value="memory">{t('tributeMemory')}</option>
-          </select>
-        </div>
-        {tribute === 'none' ? null : (
-          <>
-            <Input
-              id="give-tribute-name"
-              name="tributeName"
-              label={tribute === 'memory' ? t('tributeNameMemory') : t('tributeNameHonor')}
-              maxLength={120}
-              error={fieldError('tributeName')}
-              className="min-h-11"
-            />
-            <Input
-              id="give-tribute-recipient"
-              name="tributeRecipient"
-              label={t('tributeRecipient')}
-              hint={t('tributeRecipientHint')}
-              maxLength={120}
-              className="min-h-11"
-            />
-            <div className="flex flex-col gap-1.5">
-              <label htmlFor="give-tribute-note" className="text-caption text-ink-2">
-                {t('tributeNote')}
-              </label>
-              <textarea
+          </Select>
+          {tribute === 'none' ? null : (
+            <>
+              <Input
+                id="give-tribute-name"
+                name="tributeName"
+                label={tribute === 'memory' ? t('tributeNameMemory') : t('tributeNameHonor')}
+                maxLength={120}
+                error={fieldError('tributeName')}
+              />
+              <Input
+                id="give-tribute-recipient"
+                name="tributeRecipient"
+                label={t('tributeRecipient')}
+                hint={t('tributeRecipientHint')}
+                maxLength={120}
+              />
+              <Textarea
                 id="give-tribute-note"
                 name="tributeNote"
+                label={t('tributeNote')}
                 rows={3}
                 maxLength={500}
-                className="rounded-card border border-line bg-surface px-4 py-2 text-body"
               />
-            </div>
-          </>
-        )}
-      </fieldset>
+            </>
+          )}
+        </fieldset>
+      </div>
 
       {general ? <Alert title={general} /> : null}
-      <Button type="submit" size="lg" className="w-full" disabled={pending}>
-        {total > 0 ? t('submitAmount', { total: fmt(total) }) : t('submit')}
-      </Button>
-      <p className="text-caption text-ink-2">{t('secureNote')}</p>
+      <div className="flex flex-col gap-3">
+        <Button type="submit" size="lg" className="w-full" disabled={pending} loading={pending}>
+          {total > 0 ? t('submitAmount', { total: fmt(total) }) : t('submit')}
+        </Button>
+        <p className="m-0 text-center text-caption text-ink-2">{t('secureNote')}</p>
+      </div>
     </form>
   );
 }

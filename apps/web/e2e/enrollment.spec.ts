@@ -1,5 +1,5 @@
 import { type Browser, expect, type Locator, type Page, test } from '@playwright/test';
-import { expectAccessible, signIn } from './helpers.ts';
+import { expectAccessibleBothModes, signIn } from './helpers.ts';
 
 /**
  * M5.2b session enrollment and waitlists. The attendee reaches "My schedule" from their order
@@ -60,7 +60,7 @@ test.describe('session enrollment and waitlists (M5.2b)', () => {
     await expect(card(page, 'Opening keynote')).toContainText('Included in your registration');
     await expect(card(page, 'Opening keynote').getByRole('button')).toHaveCount(0);
     await expect(page.getByText('1 included session · 0 enrolled · 0 waitlists')).toBeVisible();
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
 
     // Enrol in the data workshop.
     await press(page.getByRole('button', { name: 'Enrol in Data workshop' }));
@@ -76,7 +76,7 @@ test.describe('session enrollment and waitlists (M5.2b)', () => {
     ).toBeVisible();
     await expect(design.getByRole('button', { name: 'Replace Data workshop' })).toBeVisible();
     await expect(design.getByRole('button', { name: 'Keep both' })).toHaveCount(0);
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
 
     // Pick one: Track A, then Track B is refused (same group) and replaces Track A on request.
     await press(page.getByRole('button', { name: 'Enrol in Track A' }));
@@ -126,7 +126,7 @@ test.describe('session enrollment and waitlists (M5.2b)', () => {
       ),
     ).toBeVisible();
     await expect(data.getByText('Waitlist: number 1 in line')).toBeVisible();
-    await expectAccessible(other);
+    await expectAccessibleBothModes(other);
 
     // The first person drops: the second is enrolled at once (auto mode, the P5-9 default).
     await press(page.getByRole('button', { name: 'Drop Data workshop' }));
@@ -165,7 +165,7 @@ test.describe('session enrollment and waitlists (M5.2b)', () => {
     await expect(track).toContainText('Nobody on the waitlist');
     // Included sessions are not listed here.
     await expect(page.getByRole('heading', { name: 'Opening keynote' })).toHaveCount(0);
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
 
     // Promote now (the capacity was raised while someone waited).
     await press(page.getByRole('button', { name: 'Promote now: Bonus lab' }));
@@ -212,7 +212,7 @@ test.describe('session enrollment and waitlists (M5.2b)', () => {
         .getByRole('listitem')
         .filter({ has: page.getByRole('heading', { name: 'Day pass' }) }),
     ).toContainText('Gives 1 session');
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
   });
 
   test('organizer: an event without optional sessions shows what to do next', async ({ page }) => {
@@ -234,7 +234,7 @@ test.describe('session enrollment and waitlists (M5.2b)', () => {
       'href',
       `${base}/sessions`,
     );
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
   });
 
   test('viewer: reads the enrollment page; every organizer write is refused', async ({ page, browser }) => {
@@ -250,7 +250,7 @@ test.describe('session enrollment and waitlists (M5.2b)', () => {
     await expect(viewer.getByRole('button', { name: /^Promote now/ })).toHaveCount(0);
     await expect(viewer.getByRole('button', { name: /^Save / })).toHaveCount(0);
     await expect(viewer.getByText('Enrol the next person automatically')).toBeVisible();
-    await expectAccessible(viewer);
+    await expectAccessibleBothModes(viewer);
     await viewer.close();
 
     // The owner's open forms, submitted as the viewer: refused by the server.
@@ -276,11 +276,11 @@ test.describe('session enrollment and waitlists (M5.2b)', () => {
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
     await page.getByRole('button', { name: 'سجّلني في Data workshop' }).click();
     await expect(page.getByText('أنت مسجَّل في Data workshop.')).toBeVisible();
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
     await page.goto(`/ar${f.path}/registration/enrollment`);
     await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
     await expect(page.getByRole('heading', { name: 'التسجيل في الجلسات', level: 1 })).toBeVisible();
-    await expectAccessible(page);
+    await expectAccessibleBothModes(page);
   });
 
   test('a wrong link shows nothing', async ({ page }) => {

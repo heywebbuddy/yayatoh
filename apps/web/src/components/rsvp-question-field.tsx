@@ -1,7 +1,7 @@
 'use client';
 
 import type { RsvpQuestion } from '@yayatoh/forms/ui';
-import { Input } from '@yayatoh/ui';
+import { FieldMessage, Input } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 
 /** A question as the field needs it (the party's page gets no write-back target). */
@@ -19,10 +19,11 @@ export interface FieldMenuOption {
 /** What a field holds while someone types: text, a choice, choices, or a tick. */
 export type FieldValue = string | readonly string[] | boolean;
 
-/** A choice as a 44 px row (phone-first): the whole row is the target. */
+/** A choice as a 44 px row (phone-first): the whole row is the target; picked rows turn violet. */
 const ROW =
-  'flex min-h-11 cursor-pointer items-start gap-3 rounded-card border border-line bg-surface px-4 py-2.5 text-body has-[:checked]:border-ink has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-ink';
-const BOX = 'mt-0.5 size-5 shrink-0 accent-ink';
+  'flex min-h-11 cursor-pointer items-start gap-3 rounded-tile border border-line bg-surface-solid px-4 py-2.5 text-body text-ink transition-colors duration-150 hover:border-line-strong has-[:checked]:border-primary has-[:checked]:bg-primary-soft has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-focus';
+const BOX = 'mt-0.5 size-[18px] shrink-0 cursor-pointer accent-primary';
+const LABEL = 'text-[13px] font-bold text-ink';
 
 /**
  * One RSVP question (M4.1e), for one guest: native inputs only (radios for one choice and the
@@ -63,11 +64,8 @@ export function RsvpQuestionField({
       {notes.join(' ')}
     </p>
   ) : null;
-  const message = error ? (
-    <p id={errorId} className="text-caption text-danger">
-      {error}
-    </p>
-  ) : null;
+  // `${id}-error`: the id `describedBy` points at.
+  const message = error ? <FieldMessage id={id} error={error} /> : null;
   const text = typeof value === 'string' ? value : '';
 
   if (q.type === 'short_text' || q.type === 'number' || q.type === 'count')
@@ -96,7 +94,7 @@ export function RsvpQuestionField({
   if (q.type === 'long_text')
     return (
       <div className="flex flex-col gap-1.5" data-question={q.key}>
-        <label htmlFor={id} className="text-caption text-ink-2">
+        <label htmlFor={id} className={LABEL}>
           {label}
         </label>
         <textarea
@@ -108,7 +106,7 @@ export function RsvpQuestionField({
           maxLength={2000}
           aria-describedby={describedBy}
           aria-invalid={error ? true : undefined}
-          className={`rounded-card border bg-surface px-4 py-2.5 text-body ${error ? 'border-danger' : 'border-line'}`}
+          className="field w-full py-3 leading-relaxed"
         />
         {hint}
         {message}
@@ -130,7 +128,7 @@ export function RsvpQuestionField({
             aria-invalid={error ? true : undefined}
             className={BOX}
           />
-          <span>{label}</span>
+          <span className="font-semibold">{label}</span>
         </label>
         {hint}
         {message}
@@ -153,7 +151,7 @@ export function RsvpQuestionField({
       id={id}
       tabIndex={-1}
     >
-      <legend className="mb-1 text-caption text-ink-2">{label}</legend>
+      <legend className={`mb-1 ${LABEL}`}>{label}</legend>
       {choices.map((c) => (
         <label key={c.value} className={ROW}>
           <input
@@ -170,8 +168,8 @@ export function RsvpQuestionField({
             }}
             className={BOX}
           />
-          <span className="flex flex-col">
-            <span>{c.label}</span>
+          <span className="flex flex-col gap-0.5">
+            <span className="font-semibold">{c.label}</span>
             {c.notes ? <span className="text-caption text-ink-2">{c.notes}</span> : null}
           </span>
         </label>

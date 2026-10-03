@@ -8929,7 +8929,8 @@
       "sponsoredBy": "Gesponsord door {sponsor}",
       "shown": "Zichtbaar voor gasten",
       "hidden": "Verborgen voor gasten",
-      "noSponsor": "Nog geen sponsor"
+      "noSponsor": "Nog geen sponsor",
+      "viewerNotice": "Je kunt de tafels en sponsors bekijken. Vraag een eigenaar of medegastheer om gasten te benoemen of sponsors te wijzigen."
     },
     "public": {
       "metaTitle": "Geef uw gasten op",

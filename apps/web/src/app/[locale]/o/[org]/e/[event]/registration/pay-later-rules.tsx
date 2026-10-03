@@ -1,5 +1,5 @@
 import type { PayLaterRulesDto } from '@yayatoh/registration';
-import { Card } from '@yayatoh/ui';
+import { buttonClass, Card, SectionHeader, StatusPill } from '@yayatoh/ui';
 import { getTranslations } from 'next-intl/server';
 import { ProgramForm } from '@/components/program-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
@@ -31,16 +31,19 @@ export async function PayLaterRules({
   };
   return (
     <section aria-labelledby="pay-later-heading" className="flex flex-col gap-3">
-      <h2 id="pay-later-heading" className="text-section">
-        {t('title')}
-      </h2>
-      <p className="text-body text-ink-2">{t('hint')}</p>
-      <Link
-        href={`/o/${org}/e/${event}/registration/invoices`}
-        className="self-start text-body underline underline-offset-2"
-      >
-        {t('openInvoices')}
-      </Link>
+      <SectionHeader
+        id="pay-later-heading"
+        title={t('title')}
+        description={t('hint')}
+        actions={
+          <Link
+            href={`/o/${org}/e/${event}/registration/invoices`}
+            className={buttonClass('secondary', 'sm')}
+          >
+            {t('openInvoices')}
+          </Link>
+        }
+      />
       <ul className="flex list-none flex-col gap-3 p-0">
         {types.map((x) => {
           const r = rules.find((y) => y.registrationTypeId === x.id);
@@ -48,8 +51,16 @@ export async function PayLaterRules({
           return (
             <li key={x.id}>
               <Card className="flex flex-col gap-2">
-                <p className="text-body font-medium">{x.name}</p>
-                <p className="text-caption text-ink-2">
+                <div className="flex flex-wrap items-center gap-2">
+                  <p className="m-0 text-body font-bold text-ink">{x.name}</p>
+                  {r.eligible ? (
+                    <StatusPill
+                      tone={r.payLater ? 'success' : 'neutral'}
+                      label={r.payLater ? t('on') : t('off')}
+                    />
+                  ) : null}
+                </div>
+                <p className="m-0 text-caption text-ink-2">
                   {!r.eligible
                     ? t('summaryNotEligible')
                     : r.payLater
@@ -57,8 +68,8 @@ export async function PayLaterRules({
                       : t('summaryOff')}
                 </p>
                 {canWrite && r.eligible ? (
-                  <details>
-                    <summary className="min-h-6 cursor-pointer text-caption text-ink-2">
+                  <details className="border-t border-line pt-2">
+                    <summary className="inline-flex min-h-8 cursor-pointer items-center rounded-[10px] px-2 text-caption font-bold text-primary-ink hover:bg-surface-3">
                       {t('editNamed', { name: x.name })}
                     </summary>
                     <div className="pt-3">

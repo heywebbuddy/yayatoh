@@ -1,13 +1,13 @@
 import { rsvpQuestionsQuery, subEventsQuery } from '@yayatoh/guests';
 import { executeQuery } from '@yayatoh/kernel';
-import { isProfileKey, navIncludes, PROFILES } from '@yayatoh/platform';
-import { Card, PageHeader } from '@yayatoh/ui';
+import { isProfileKey, navIncludes, navLabelKey, PROFILES } from '@yayatoh/platform';
+import { Alert, Card, CardHeader, PageHeader } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { Link } from '@/i18n/navigation.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
+import { GuestsCrumbs, RsvpTabs } from '../rsvp/nav.tsx';
 import { publishQuestionsAction, removeMenuOptionAction, saveMenuOptionAction } from './actions.ts';
 import { MenuEditor } from './menu-editor.tsx';
 import { QuestionsBuilder } from './questions-builder.tsx';
@@ -33,32 +33,38 @@ export default async function RsvpQuestionsPage({
   const nav = PROFILES[profile].nav.find((i) => i.key === 'guests');
   if (!nav || !navIncludes(profile, data.modules, 'guests') || !can('guests:read')) notFound();
   const t = await getTranslations('rsvpQuestions');
+  const tr = await getTranslations();
   const canWrite = can('guests:write');
   const [q, subs] = await Promise.all([
     executeQuery(rsvpQuestionsQuery, { eventId: ev.id }, data.ctx, ports),
     executeQuery(subEventsQuery, { eventId: ev.id }, data.ctx, ports),
   ]);
-  const base = `/o/${org}/e/${event}/guests`;
 
   return (
     <>
-      <PageHeader title={t('title')} description={t('subtitle')} />
-      <nav aria-label={t('linksLabel')} className="flex flex-wrap gap-x-4">
-        <Link href={`${base}/rsvp`} className="min-h-6 py-1 text-caption underline">
-          {t('back')}
-        </Link>
-        <Link href={`${base}/answers`} className="min-h-6 py-1 text-caption underline">
-          {t('answersLink')}
-        </Link>
-      </nav>
-      {canWrite ? null : <p className="text-body text-ink-2">{t('viewerNotice')}</p>}
+      <PageHeader
+        breadcrumb={
+          <GuestsCrumbs
+            org={org}
+            event={event}
+            orgName={data.org.name}
+            eventName={ev.name}
+            guestsLabel={tr(navLabelKey(profile, nav))}
+            trail={[{ label: t('title') }]}
+          />
+        }
+        title={t('title')}
+        description={t('subtitle')}
+      />
+      <RsvpTabs org={org} event={event} current="questions" />
+      {canWrite ? null : <Alert tone="info" title={t('viewerNotice')} />}
 
       <section aria-labelledby="rq-menu" className="flex flex-col gap-3">
-        <h2 id="rq-menu" className="text-section">
-          {t('menu.title')}
-        </h2>
-        <p className="text-body text-ink-2">{t('menu.subtitle')}</p>
-        <Card>
+        <Card size="panel" className="flex flex-col gap-4">
+          <div className="flex flex-col gap-1">
+            <CardHeader id="rq-menu" title={t('menu.title')} />
+            <p className="m-0 text-body text-ink-2">{t('menu.subtitle')}</p>
+          </div>
           <MenuEditor
             options={q.menu}
             canWrite={canWrite}

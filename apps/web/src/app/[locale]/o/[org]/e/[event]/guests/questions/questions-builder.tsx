@@ -13,7 +13,8 @@ import {
   ruleFromLogic,
   ruleToLogic,
 } from '@yayatoh/forms/ui';
-import { Alert, Button, Card, Input } from '@yayatoh/ui';
+import { Alert, Button, Card, EmptyState, FieldMessage, IconButton, Input } from '@yayatoh/ui';
+import { ArrowDown, ArrowUp } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { startTransition, useActionState, useEffect, useId, useRef, useState } from 'react';
 import {
@@ -25,11 +26,13 @@ import {
 import { errorMessageKey } from '@/lib/errors.ts';
 import type { PublishState } from './actions.ts';
 
-const SELECT = 'min-h-10 w-full rounded-pill border border-line bg-surface px-4 text-body';
-const TEXTAREA = 'rounded-card border bg-surface px-4 py-2.5 text-body';
-const CAPTION = 'text-caption text-ink-2';
-const CHECK = 'flex min-h-6 items-center gap-2.5 text-body';
-const BOX = 'size-5 accent-ink';
+const SELECT = 'field w-full pe-9';
+const TEXTAREA = 'field w-full py-3 leading-relaxed';
+const CAPTION = 'm-0 text-caption text-ink-2';
+const LABEL = 'text-[13px] font-bold text-ink';
+const CHECK =
+  'flex min-h-11 cursor-pointer items-center gap-3 rounded-control text-body font-semibold text-ink has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-55';
+const BOX = 'size-[18px] shrink-0 cursor-pointer accent-primary';
 
 const CHOICE = new Set<RsvpFieldType>(['select', 'multi_select']);
 const TEXT = new Set<RsvpFieldType>(['short_text', 'long_text']);
@@ -197,21 +200,21 @@ export function QuestionsBuilder({
   return (
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
       <section aria-labelledby="rq-list" className="flex min-w-0 flex-col gap-3">
-        <h2 id="rq-list" className="text-section">
+        <h2 id="rq-list" className="m-0 text-section text-ink">
           {t('questionsTitle')}
         </h2>
         {questions.length === 0 ? (
-          <p className="text-body text-ink-2">{t('empty')}</p>
+          <EmptyState title={t('empty')} />
         ) : (
-          <ol aria-label={t('questionsTitle')} className="flex list-none flex-col gap-2 p-0">
+          <ol aria-label={t('questionsTitle')} className="m-0 flex list-none flex-col gap-2.5 p-0">
             {questions.map((q, i) => (
               <li
                 key={q.key}
-                className="flex flex-col gap-2 rounded-card border border-line bg-surface px-4 py-3"
+                className="flex flex-col gap-3 rounded-tile border border-line bg-surface px-4 py-3 elevation-card glass"
               >
                 <div className="flex flex-wrap items-start gap-2">
-                  <span className="flex min-w-0 flex-1 flex-col">
-                    <span className="text-body">{q.label}</span>
+                  <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+                    <span className="text-body font-bold text-ink">{q.label}</span>
                     <span className={CAPTION}>
                       {[
                         t(`types.${q.type}`),
@@ -227,26 +230,22 @@ export function QuestionsBuilder({
                   </span>
                   {canWrite ? (
                     <span className="flex flex-wrap gap-1">
-                      <Button
-                        type="button"
+                      <IconButton
                         variant="ghost"
                         size="sm"
                         disabled={i === 0}
-                        aria-label={t('moveUp', { label: q.label })}
+                        label={t('moveUp', { label: q.label })}
+                        icon={<ArrowUp aria-hidden="true" strokeWidth={2} />}
                         onClick={() => move(i, -1)}
-                      >
-                        ↑
-                      </Button>
-                      <Button
-                        type="button"
+                      />
+                      <IconButton
                         variant="ghost"
                         size="sm"
                         disabled={i === questions.length - 1}
-                        aria-label={t('moveDown', { label: q.label })}
+                        label={t('moveDown', { label: q.label })}
+                        icon={<ArrowDown aria-hidden="true" strokeWidth={2} />}
                         onClick={() => move(i, 1)}
-                      >
-                        ↓
-                      </Button>
+                      />
                       <Button
                         type="button"
                         variant="ghost"
@@ -293,7 +292,7 @@ export function QuestionsBuilder({
         {canWrite ? (
           editing === 'new' ? (
             <Card className="flex flex-col gap-3">
-              <h3 className="text-body font-medium">{t('addTitle')}</h3>
+              <h3 className="m-0 text-[16px] font-extrabold text-ink">{t('addTitle')}</h3>
               <QuestionEditor
                 key={`new-${questions.length}`}
                 initial={blank()}
@@ -347,7 +346,7 @@ export function QuestionsBuilder({
       </section>
 
       <section aria-labelledby="rq-preview" className="flex min-w-0 flex-col gap-3">
-        <h2 id="rq-preview" className="text-section">
+        <h2 id="rq-preview" className="m-0 text-section text-ink">
           {t('previewTitle')}
         </h2>
         <Preview questions={questions} subEvents={subEvents} menu={menu} />
@@ -455,12 +454,7 @@ function QuestionEditor({
   };
   const err = (k: string) => errors[k];
   const describedBy = (k: string) => (errors[k] ? `${id}-${k}-error` : undefined);
-  const message = (k: string) =>
-    errors[k] ? (
-      <p id={`${id}-${k}-error`} className="text-caption text-danger">
-        {errors[k]}
-      </p>
-    ) : null;
+  const message = (k: string) => (errors[k] ? <FieldMessage id={`${id}-${k}`} error={errors[k]} /> : null);
 
   return (
     <fieldset
@@ -484,7 +478,7 @@ function QuestionEditor({
         error={err('label')}
       />
       <div className="flex flex-col gap-1.5">
-        <label htmlFor={`${id}-type`} className={CAPTION}>
+        <label htmlFor={`${id}-type`} className={LABEL}>
           {t('field.type')}
         </label>
         <select
@@ -507,7 +501,7 @@ function QuestionEditor({
       </div>
       {CHOICE.has(d.type) ? (
         <div className="flex flex-col gap-1.5">
-          <label htmlFor={`${id}-options`} className={CAPTION}>
+          <label htmlFor={`${id}-options`} className={LABEL}>
             {t('field.options')}
           </label>
           <textarea
@@ -518,7 +512,7 @@ function QuestionEditor({
             onChange={(e) => set('options', e.target.value)}
             aria-invalid={err('options') ? true : undefined}
             aria-describedby={describedBy('options') ?? `${id}-options-hint`}
-            className={`${TEXTAREA} ${err('options') ? 'border-danger' : 'border-line'}`}
+            className={TEXTAREA}
           />
           {message('options') ?? (
             <p id={`${id}-options-hint`} className="text-caption text-ink-2">
@@ -535,7 +529,7 @@ function QuestionEditor({
         maxLength={300}
       />
       <div className="flex flex-col gap-1.5">
-        <label htmlFor={`${id}-scope`} className={CAPTION}>
+        <label htmlFor={`${id}-scope`} className={LABEL}>
           {t('field.scope')}
         </label>
         <select
@@ -554,7 +548,7 @@ function QuestionEditor({
       </div>
       {TEXT.has(d.type) ? (
         <div className="flex flex-col gap-1.5">
-          <label htmlFor={`${id}-binding`} className={CAPTION}>
+          <label htmlFor={`${id}-binding`} className={LABEL}>
             {t('field.binding')}
           </label>
           <select
@@ -576,8 +570,8 @@ function QuestionEditor({
           </p>
         </div>
       ) : null}
-      <fieldset className="flex flex-col gap-1">
-        <legend className={CAPTION}>{t('field.options2')}</legend>
+      <fieldset className="m-0 flex flex-col border-0 p-0">
+        <legend className={`${LABEL} pb-1`}>{t('field.options2')}</legend>
         <label className={CHECK}>
           <input
             type="checkbox"
@@ -598,8 +592,8 @@ function QuestionEditor({
           {t('field.private')}
         </label>
       </fieldset>
-      <fieldset className="flex flex-col gap-1">
-        <legend className={CAPTION}>{t('field.when')}</legend>
+      <fieldset className="m-0 flex flex-col border-0 p-0">
+        <legend className={`${LABEL} pb-1`}>{t('field.when')}</legend>
         {initial.when === 'custom' ? (
           <label className={CHECK}>
             <input
@@ -643,7 +637,7 @@ function QuestionEditor({
             {testable.length ? (
               <div className="grid grid-cols-1 gap-3 pt-2 md:grid-cols-2">
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor={`${id}-ans`} className={CAPTION}>
+                  <label htmlFor={`${id}-ans`} className={LABEL}>
                     {t('rule.answerQuestion')}
                   </label>
                   <select
@@ -676,7 +670,7 @@ function QuestionEditor({
                 </div>
                 {src && src.type !== 'checkbox' ? (
                   <div className="flex flex-col gap-1.5">
-                    <label htmlFor={`${id}-val`} className={CAPTION}>
+                    <label htmlFor={`${id}-val`} className={LABEL}>
                       {src.type === 'multi_select' ? t('rule.includes') : t('rule.is')}
                     </label>
                     <select
@@ -741,9 +735,9 @@ function Preview({
     { menu: menu.map((m) => ({ id: m.id, label: m.label })) },
   );
   return (
-    <Card className="flex flex-col gap-4">
-      <fieldset className="flex flex-col gap-2 rounded-card bg-surface-2 p-3">
-        <legend className={CAPTION}>{t('preview.guest')}</legend>
+    <Card size="panel" className="flex flex-col gap-4">
+      <fieldset className="m-0 flex flex-col gap-1 rounded-tile border border-line bg-surface-2 px-4 pt-1 pb-3">
+        <legend className={`${LABEL} px-1`}>{t('preview.guest')}</legend>
         <label className={CHECK}>
           <input
             type="checkbox"
@@ -763,7 +757,7 @@ function Preview({
           {t('preview.plusOne')}
         </label>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor={`${id}-age`} className={CAPTION}>
+          <label htmlFor={`${id}-age`} className={LABEL}>
             {t('preview.age')}
           </label>
           <select id={`${id}-age`} value={age} onChange={(e) => setAge(e.target.value)} className={SELECT}>
@@ -779,7 +773,7 @@ function Preview({
         {t('preview.count', { shown: shown.length, total: questions.length })}
       </p>
       {shown.length === 0 ? (
-        <p className="text-body text-ink-2">{t('preview.none')}</p>
+        <p className="m-0 text-body text-ink-2">{t('preview.none')}</p>
       ) : (
         <fieldset data-testid="rsvp-preview" className="flex min-w-0 flex-col gap-4 border-0 p-0">
           <legend className="sr-only">{t('preview.label')}</legend>

@@ -11,7 +11,7 @@ export function CopyLink({ label, url }: { label: string; url: string }) {
   const [copied, setCopied] = useState(false);
   return (
     <div className="flex flex-col gap-2">
-      <label htmlFor={id} className="text-caption text-ink-2">
+      <label htmlFor={id} className="text-[13px] font-bold text-ink">
         {label}
       </label>
       <input
@@ -20,7 +20,7 @@ export function CopyLink({ label, url }: { label: string; url: string }) {
         value={url}
         dir="ltr"
         onFocus={(e) => e.currentTarget.select()}
-        className="min-h-10 w-full rounded-pill border border-line bg-surface-2 px-4 font-mono text-caption"
+        className="field w-full font-mono text-caption"
       />
       <div className="flex items-center gap-3">
         <Button
@@ -35,7 +35,7 @@ export function CopyLink({ label, url }: { label: string; url: string }) {
           {t('copy')}
           <span className="sr-only"> {label}</span>
         </Button>
-        <span aria-live="polite" className="text-caption text-ink-2">
+        <span aria-live="polite" className="text-caption font-bold text-success">
           {copied ? t('copied') : ''}
         </span>
       </div>

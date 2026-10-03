@@ -7,10 +7,27 @@ import {
 } from '@yayatoh/donations';
 import { executeQuery, formatMoney, isDomainError, money } from '@yayatoh/kernel';
 import type { BulkOperationDto } from '@yayatoh/platform';
-import { Alert, Button, buttonClass, Card, EmptyState, PageHeader, Table } from '@yayatoh/ui';
+import {
+  Alert,
+  Button,
+  buttonClass,
+  Card,
+  CardHeader,
+  cardClass,
+  cx,
+  EmptyState,
+  PageHeader,
+  ProgressBar,
+  SectionHeader,
+  StatCard,
+  StatusPill,
+  Table,
+} from '@yayatoh/ui';
+import { ChevronDown, Gift, HandHeart } from 'lucide-react';
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { AutoRefresh } from '@/components/auto-refresh.tsx';
+import { Crumbs } from '@/components/crumbs.tsx';
 import { type FieldSpec, ProgramForm } from '@/components/program-form.tsx';
 import { StepUpForm } from '@/components/step-up.tsx';
 import { Link } from '@/i18n/navigation.ts';
@@ -56,6 +73,7 @@ export default async function DonationsPage({
   const t = await getTranslations('donations.console');
   const tn = await getTranslations('nav');
   const tb = await getTranslations('bulk');
+  const tg = await getTranslations('donations.give');
   const te = await getTranslations();
   const canWrite = can('events:write');
   const canExport = can('attendees:export');
@@ -165,123 +183,189 @@ export default async function DonationsPage({
   const campaignName = new Map(view.campaigns.map((c) => [c.id, c.name]));
   const giving = `/events/${ev.slug}/give`;
   const openCampaigns = view.campaigns.filter((c) => c.status === 'open');
+  // Totals of the event's own currency (campaigns take the event's currency).
+  const own = view.campaigns.filter((c) => c.currency === cur);
+  const sum = (pick: (c: CampaignDto) => number) => own.reduce((a, c) => a + pick(c), 0);
+  const raised = sum((c) => c.raisedMinor);
+  const goal = sum((c) => c.goalMinor);
+  const disclosure =
+    'inline-flex min-h-9 cursor-pointer list-none items-center gap-1.5 rounded-control text-[13px] font-bold text-primary-ink underline-offset-2 hover:underline [&::-webkit-details-marker]:hidden';
+  const chevron = (
+    <ChevronDown
+      aria-hidden="true"
+      className="size-4 shrink-0 transition-transform duration-150 group-open:rotate-180"
+      strokeWidth={2}
+    />
+  );
+  const crumbs = (
+    <Crumbs
+      items={[
+        { label: data.org.name, href: `/o/${org}` },
+        { label: ev.name, href: `/o/${org}/e/${event}` },
+        { label: tn('donations') },
+      ]}
+    />
+  );
   return (
     <>
-      <PageHeader title={tn('donations')} description={t('subtitle')} />
+      <PageHeader breadcrumb={crumbs} title={tn('donations')} description={t('subtitle')} />
       {view.connected ? null : (
-        <Alert tone="info" title={t('connectTitle')}>
-          <p>{t('connectBody')}</p>
+        <Alert tone="warning" title={t('connectTitle')}>
+          <p className="m-0">{t('connectBody')}</p>
           {can('payouts:manage') ? (
-            <Link href={`/o/${org}/payouts`} className={buttonClass('primary', 'sm', 'mt-2 inline-flex')}>
+            <Link href={`/o/${org}/payouts`} className={buttonClass('primary', 'sm', 'mt-3')}>
               {t('connectAction')}
             </Link>
           ) : (
-            <p className="mt-1">{t('connectAsk')}</p>
+            <p className="m-0 mt-1">{t('connectAsk')}</p>
           )}
         </Alert>
       )}
+      {canWrite ? null : <Alert tone="info" title={t('viewerNotice')} />}
+      {view.campaigns.length > 0 ? (
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4" data-testid="donations-stats">
+          <StatCard
+            label={tg('progressLabel')}
+            value={fmt(raised)}
+            progress={
+              goal > 0
+                ? { value: Math.min(raised, goal), max: goal, label: tg('progressLabel'), tone: 'success' }
+                : undefined
+            }
+          />
+          <StatCard
+            label={t('giftsCaption')}
+            value={n.format(view.campaigns.reduce((a, c) => a + c.giftCount, 0))}
+          />
+          <StatCard label={t('columns.feeCover')} value={fmt(sum((c) => c.feeCoverMinor))} />
+          <StatCard label={te('order.status.awaiting_payment')} value={n.format(view.pendingCount)} />
+        </div>
+      ) : null}
       {view.connected && openCampaigns.length > 0 ? (
         ev.status === 'published' ? (
-          <Card className="flex flex-col gap-2">
-            <h2 className="text-section">{t('givingPage')}</h2>
-            <p className="text-body text-ink-2">{t('givingPageBody')}</p>
-            <Link href={giving} className="self-start text-body underline underline-offset-2">
-              {t('openGivingPage')}
-            </Link>
+          <Card tone="feature" className="flex flex-col gap-3">
+            <CardHeader
+              title={t('givingPage')}
+              actions={
+                <Link href={giving} className={buttonClass('primary', 'md')}>
+                  {t('openGivingPage')}
+                </Link>
+              }
+            />
+            <p className="m-0 text-body text-ink-2">{t('givingPageBody')}</p>
           </Card>
         ) : (
-          <p className="text-body text-ink-2">{t('publishFirst')}</p>
+          <Alert tone="info" title={t('publishFirst')} />
         )
       ) : null}
-      {canWrite ? null : <p className="text-body text-ink-2">{t('viewerNotice')}</p>}
       {/* M4.8b: the charity profile's receipts, fair-market values and the receipts issued. */}
       {can('orders:read') ? (
-        <Card className="flex flex-col gap-2">
-          <h2 className="m-0 text-card">{t('receiptsTitle')}</h2>
+        <Card className="flex flex-col gap-3">
+          <CardHeader
+            title={t('receiptsTitle')}
+            actions={
+              <Link
+                href={`/o/${org}/e/${event}/donations/receipts`}
+                className={buttonClass('secondary', 'sm')}
+              >
+                {t('receiptsLink')}
+              </Link>
+            }
+          />
           <p className="m-0 text-body text-ink-2">{t('receiptsBody')}</p>
-          <Link
-            href={`/o/${org}/e/${event}/donations/receipts`}
-            className="inline-flex min-h-8 items-center self-start text-body font-bold text-primary-ink underline-offset-2 hover:underline"
-          >
-            {t('receiptsLink')}
-          </Link>
         </Card>
       ) : null}
 
-      <section aria-labelledby="campaigns-heading" className="flex flex-col gap-3">
-        <h2 id="campaigns-heading" className="text-section">
-          {t('campaigns')}
-        </h2>
+      <section aria-labelledby="campaigns-heading" className="flex flex-col gap-4">
+        <SectionHeader id="campaigns-heading" title={t('campaigns')} />
         {view.campaigns.length === 0 ? (
           <EmptyState
+            icon={<HandHeart strokeWidth={2} />}
             title={t('emptyCampaignsTitle')}
             description={canWrite ? t('emptyCampaignsDescription') : t('emptyCampaignsViewer')}
           />
         ) : (
-          <ol className="flex list-none flex-col gap-3 p-0">
+          <ol className="m-0 flex list-none flex-col gap-4 p-0">
             {view.campaigns.map((c) => (
               <li key={c.id}>
-                <Card className="flex flex-col gap-3">
-                  <div className="flex flex-wrap items-baseline justify-between gap-2">
-                    <h3 className="text-body font-medium">{c.name}</h3>
-                    <span className="text-caption text-ink-2">
-                      {c.status === 'open' ? t('statusOpen') : t('statusClosed')}
-                    </span>
-                  </div>
-                  {c.description ? <p className="text-body text-ink-2">{c.description}</p> : null}
-                  <p className="text-body">
-                    {t('raised', {
-                      raised: fmt(c.raisedMinor, c.currency),
-                      goal: fmt(c.goalMinor, c.currency),
-                      gifts: c.giftCount,
-                    })}
-                  </p>
-                  {c.feeCoverMinor > 0 ? (
-                    <p className="text-caption text-ink-2">
-                      {t('feesCovered', { amount: fmt(c.feeCoverMinor, c.currency) })}
+                <Card size="panel" className="flex flex-col gap-4">
+                  <CardHeader
+                    as="h3"
+                    title={c.name}
+                    actions={
+                      <StatusPill
+                        tone={c.status === 'open' ? 'success' : 'neutral'}
+                        label={c.status === 'open' ? t('statusOpen') : t('statusClosed')}
+                      />
+                    }
+                  />
+                  {c.description ? <p className="m-0 text-body text-ink-2">{c.description}</p> : null}
+                  <div className="flex flex-col gap-2">
+                    <p className="m-0 text-body font-bold text-ink tabular-nums">
+                      {t('raised', {
+                        raised: fmt(c.raisedMinor, c.currency),
+                        goal: fmt(c.goalMinor, c.currency),
+                        gifts: c.giftCount,
+                      })}
                     </p>
-                  ) : null}
-                  <p className="text-caption text-ink-2">
-                    {t('limits', {
-                      min: fmt(c.minGiftMinor, c.currency),
-                      max: fmt(c.maxGiftMinor, c.currency),
-                    })}
-                  </p>
-                  <h4 className="text-caption font-medium text-ink-2">{t('levels')}</h4>
-                  {c.levels.length === 0 ? (
-                    <p className="text-caption text-ink-2">{t('noLevels')}</p>
-                  ) : (
-                    <ul className="flex list-none flex-col gap-2 p-0">
-                      {c.levels.map((l) => (
-                        <li
-                          key={l.id}
-                          className="flex flex-wrap items-center justify-between gap-2 border-t border-line pt-2"
-                        >
-                          <span className="text-body">
-                            {t('levelLine', { amount: fmt(l.amountMinor, c.currency), name: l.name })}
-                            {l.description ? (
-                              <span className="block text-caption text-ink-2">{l.description}</span>
+                    <ProgressBar
+                      value={Math.min(c.raisedMinor, c.goalMinor)}
+                      max={c.goalMinor}
+                      label={tg('progressLabel')}
+                      tone="success"
+                    />
+                    {c.feeCoverMinor > 0 ? (
+                      <p className="m-0 text-caption text-ink-2">
+                        {t('feesCovered', { amount: fmt(c.feeCoverMinor, c.currency) })}
+                      </p>
+                    ) : null}
+                    <p className="m-0 text-caption text-ink-2">
+                      {t('limits', {
+                        min: fmt(c.minGiftMinor, c.currency),
+                        max: fmt(c.maxGiftMinor, c.currency),
+                      })}
+                    </p>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <h4 className="m-0 text-label text-ink-2 uppercase">{t('levels')}</h4>
+                    {c.levels.length === 0 ? (
+                      <p className="m-0 text-caption text-ink-2">{t('noLevels')}</p>
+                    ) : (
+                      <ul className="m-0 flex list-none flex-col divide-y divide-line rounded-tile border border-line bg-surface-2 p-0">
+                        {c.levels.map((l) => (
+                          <li
+                            key={l.id}
+                            className="flex flex-wrap items-center justify-between gap-3 px-4 py-3"
+                          >
+                            <span className="flex min-w-0 flex-col gap-0.5">
+                              <span className="text-body font-bold text-ink tabular-nums">
+                                {t('levelLine', { amount: fmt(l.amountMinor, c.currency), name: l.name })}
+                              </span>
+                              {l.description ? (
+                                <span className="text-caption text-ink-2">{l.description}</span>
+                              ) : null}
+                            </span>
+                            {canWrite ? (
+                              <ProgramForm
+                                action={deleteLevelAction.bind(null, org, event, l.id)}
+                                fields={[]}
+                                idPrefix={`level-${l.id}`}
+                                submitLabel={t('removeLevel', { name: l.name })}
+                                successLabel={t('levelRemoved')}
+                                errors={errors}
+                              />
                             ) : null}
-                          </span>
-                          {canWrite ? (
-                            <ProgramForm
-                              action={deleteLevelAction.bind(null, org, event, l.id)}
-                              fields={[]}
-                              idPrefix={`level-${l.id}`}
-                              submitLabel={t('removeLevel', { name: l.name })}
-                              successLabel={t('levelRemoved')}
-                              errors={errors}
-                            />
-                          ) : null}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
                   {canWrite ? (
-                    <>
-                      <details>
-                        <summary className="min-h-6 cursor-pointer text-caption text-ink-2">
+                    <div className="flex flex-col gap-1 border-t border-line pt-3">
+                      <details className="group">
+                        <summary className={disclosure}>
                           {t('addLevelTo', { name: c.name })}
+                          {chevron}
                         </summary>
                         <div className="pt-3">
                           <ProgramForm
@@ -295,9 +379,10 @@ export default async function DonationsPage({
                           />
                         </div>
                       </details>
-                      <details>
-                        <summary className="min-h-6 cursor-pointer text-caption text-ink-2">
+                      <details className="group">
+                        <summary className={disclosure}>
                           {t('editNamed', { name: c.name })}
+                          {chevron}
                         </summary>
                         <div className="pt-3">
                           <ProgramForm
@@ -310,7 +395,7 @@ export default async function DonationsPage({
                           />
                         </div>
                       </details>
-                    </>
+                    </div>
                   ) : null}
                 </Card>
               </li>
@@ -319,10 +404,8 @@ export default async function DonationsPage({
         )}
         {canWrite ? (
           <section aria-labelledby="add-campaign-heading">
-            <Card size="panel" className="flex flex-col gap-3">
-              <h3 id="add-campaign-heading" className="text-section">
-                {t('addCampaign')}
-              </h3>
+            <Card size="panel" className="flex flex-col gap-4">
+              <CardHeader as="h3" id="add-campaign-heading" title={t('addCampaign')} />
               <ProgramForm
                 action={createCampaignAction.bind(null, org, event)}
                 fields={campaignFields()}
@@ -337,67 +420,30 @@ export default async function DonationsPage({
         ) : null}
       </section>
 
-      <section aria-labelledby="gifts-heading" className="flex flex-col gap-3">
-        <h2 id="gifts-heading" className="text-section">
-          {t('gifts')}
-        </h2>
-        {view.pendingCount > 0 ? (
-          <p className="text-caption text-ink-2">{t('pending', { count: view.pendingCount })}</p>
-        ) : null}
-        <Table<HostGiftDto>
-          caption={t('giftsCaption')}
-          rows={view.gifts}
-          rowKey={(g) => g.id}
-          empty={t('noGifts')}
-          columns={[
-            { key: 'date', header: t('columns.date'), cell: (g) => when.format(g.paidAt ?? g.createdAt) },
-            { key: 'donor', header: t('columns.donor'), cell: (g) => g.shownName ?? t('anonymous') },
-            {
-              key: 'amount',
-              header: t('columns.amount'),
-              align: 'end',
-              mono: true,
-              cell: (g) => fmt(g.amountMinor, g.currency),
-            },
-            {
-              key: 'cover',
-              header: t('columns.feeCover'),
-              align: 'end',
-              mono: true,
-              cell: (g) => (g.feeCoverMinor > 0 ? fmt(g.feeCoverMinor, g.currency) : '—'),
-            },
-            {
-              key: 'campaign',
-              header: t('columns.campaign'),
-              cell: (g) => [campaignName.get(g.campaignId), g.levelName].filter(Boolean).join(' · '),
-            },
-            {
-              key: 'tribute',
-              header: t('columns.tribute'),
-              cell: (g) => (g.tribute ? t(`tributeLine.${g.tribute.kind}`, { name: g.tribute.name }) : '—'),
-            },
-          ]}
+      <section aria-labelledby="gifts-heading" className="flex flex-col gap-4">
+        <SectionHeader
+          id="gifts-heading"
+          title={t('gifts')}
+          actions={
+            canExport && view.gifts.length > 0 ? (
+              <StepUpForm action={exportGiftsAction.bind(null, org, event)} className="flex flex-wrap gap-3">
+                <Button type="submit" variant="secondary" size="sm">
+                  {t('export')}
+                </Button>
+              </StepUpForm>
+            ) : undefined
+          }
         />
-        {canExport && view.gifts.length > 0 ? (
-          <StepUpForm action={exportGiftsAction.bind(null, org, event)} className="flex flex-wrap gap-3">
-            <Button type="submit" variant="secondary" size="sm">
-              {t('export')}
-            </Button>
-          </StepUpForm>
-        ) : null}
         {sp.exportError ? (
           <Alert title={t('exportError', { reason: te(errorMessageKey(sp.exportError)) })} />
         ) : null}
         {op ? (
-          <section
-            aria-labelledby="export-heading"
-            className="flex flex-col gap-2 rounded-panel border border-line bg-surface px-5 py-4"
-          >
+          <section aria-labelledby="export-heading" className={cx(cardClass(), 'flex flex-col gap-3')}>
             {opActive ? <AutoRefresh seconds={2} /> : null}
-            <h3 id="export-heading" className="text-section">
+            <h3 id="export-heading" className="m-0 text-card text-ink">
               {t('exportTitle')}
             </h3>
-            <p className="text-body" role="status">
+            <p className="m-0 text-body text-ink" role="status">
               {op.status === 'done'
                 ? tb('exportDone', { succeeded: n.format(op.succeeded) })
                 : tb(`status.${op.status}`, {
@@ -408,6 +454,9 @@ export default async function DonationsPage({
                     undone: n.format(op.undone),
                   })}
             </p>
+            {opActive && op.total > 0 ? (
+              <ProgressBar value={op.processed} max={op.total} label={t('exportTitle')} />
+            ) : null}
             {op.status === 'done' && op.hasFile ? (
               <a
                 href={`${locale === 'en' ? '' : `/${locale}`}/o/${org}/e/${event}/donations/exports/${op.id}`}
@@ -419,6 +468,53 @@ export default async function DonationsPage({
             ) : null}
           </section>
         ) : null}
+        {view.gifts.length === 0 ? (
+          <EmptyState icon={<Gift strokeWidth={2} />} title={t('noGifts')} />
+        ) : (
+          <Table<HostGiftDto>
+            caption={t('giftsCaption')}
+            rows={view.gifts}
+            rowKey={(g) => g.id}
+            empty={t('noGifts')}
+            columns={[
+              { key: 'date', header: t('columns.date'), cell: (g) => when.format(g.paidAt ?? g.createdAt) },
+              {
+                key: 'donor',
+                header: t('columns.donor'),
+                cell: (g) =>
+                  g.shownName ? (
+                    <span className="font-bold text-ink">{g.shownName}</span>
+                  ) : (
+                    <span className="text-ink-2">{t('anonymous')}</span>
+                  ),
+              },
+              {
+                key: 'amount',
+                header: t('columns.amount'),
+                align: 'end',
+                mono: true,
+                cell: (g) => fmt(g.amountMinor, g.currency),
+              },
+              {
+                key: 'cover',
+                header: t('columns.feeCover'),
+                align: 'end',
+                mono: true,
+                cell: (g) => (g.feeCoverMinor > 0 ? fmt(g.feeCoverMinor, g.currency) : '—'),
+              },
+              {
+                key: 'campaign',
+                header: t('columns.campaign'),
+                cell: (g) => [campaignName.get(g.campaignId), g.levelName].filter(Boolean).join(' · '),
+              },
+              {
+                key: 'tribute',
+                header: t('columns.tribute'),
+                cell: (g) => (g.tribute ? t(`tributeLine.${g.tribute.kind}`, { name: g.tribute.name }) : '—'),
+              },
+            ]}
+          />
+        )}
       </section>
     </>
   );

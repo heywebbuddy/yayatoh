@@ -1,7 +1,7 @@
 import { createCtx, executeQuery, isDomainError } from '@yayatoh/kernel';
 import { manageTokenOrg } from '@yayatoh/orders';
 import { type MySessionDto, myScheduleQuery } from '@yayatoh/registration';
-import { Card, EmptyState, Label, PageHeader, StatusDot } from '@yayatoh/ui';
+import { EmptyState, filterChipClass, Label, PageHeader, StatusPill } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { ScheduleSessionActions } from '@/components/my-schedule.tsx';
@@ -9,17 +9,21 @@ import { Link } from '@/i18n/navigation.ts';
 import { ports } from '@/server/ports.ts';
 import { scheduleAction } from './actions.ts';
 
-const DOT = {
-  included: 'neutral',
+const TONE = {
+  included: 'brand',
   enrolled: 'success',
-  offered: 'warning',
+  offered: 'waiting',
   waiting: 'info',
   open: 'neutral',
-  full: 'warning',
+  full: 'waiting',
   waitlist_closed: 'neutral',
   closed: 'neutral',
   started: 'neutral',
 } as const;
+
+/** The public event page's card (ADR 0022). */
+const panel =
+  'flex flex-col gap-3 rounded-panel border border-line bg-surface p-5 elevation-card glass md:p-6';
 
 /**
  * "My schedule" (M5.2b), reached from the order page by its manage link (no account needed):
@@ -88,21 +92,27 @@ export default async function MySchedulePage({
         title={data.eventName}
         description={me ? t('for', { name: me.name }) : undefined}
       />
-      <Link href={`/orders/${token}`} className="self-start text-body underline underline-offset-2">
+      <Link
+        href={`/orders/${token}`}
+        className="inline-flex min-h-11 items-center self-start text-body text-ink-2 underline underline-offset-2 hover:text-ink"
+      >
         {t('backToOrder')}
       </Link>
       {data.registrants.length > 1 ? (
-        <nav aria-label={t('whose')} className="flex flex-wrap gap-3">
-          {data.registrants.map((r) => (
-            <Link
-              key={r.id}
-              href={`/orders/${token}/schedule?registrant=${r.id}`}
-              aria-current={r.id === data.registrantId ? 'page' : undefined}
-              className="inline-flex min-h-11 items-center text-body underline underline-offset-2"
-            >
-              {r.name}
-            </Link>
-          ))}
+        <nav aria-label={t('whose')}>
+          <ul className="m-0 flex list-none flex-wrap gap-2 p-0">
+            {data.registrants.map((r) => (
+              <li key={r.id}>
+                <Link
+                  href={`/orders/${token}/schedule?registrant=${r.id}`}
+                  aria-current={r.id === data.registrantId ? 'page' : undefined}
+                  className={`${filterChipClass(r.id === data.registrantId)} min-h-11! px-4! text-body! ${r.id === data.registrantId ? '' : 'bg-surface'}`}
+                >
+                  {r.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </nav>
       ) : null}
       {!me ? (
@@ -111,7 +121,7 @@ export default async function MySchedulePage({
         <EmptyState title={t('emptyTitle')} description={t('emptyDescription')} />
       ) : (
         <>
-          <p className="text-body text-ink-2">
+          <p className="m-0 rounded-tile border border-line bg-surface px-4 py-3 text-body font-bold text-ink tabular-nums glass">
             {t('summary', {
               included: count(['included']),
               enrolled: count(['enrolled']),
@@ -120,28 +130,32 @@ export default async function MySchedulePage({
           </p>
           {[...days].map(([label, list]) => (
             <section key={label} aria-label={label} className="flex flex-col gap-3">
-              <h2 className="text-section">{label}</h2>
-              <ul className="flex list-none flex-col gap-3 p-0">
+              <h2 className="m-0 text-section text-ink">{label}</h2>
+              <ul className="m-0 flex list-none flex-col gap-3 p-0">
                 {list.map((s) => (
-                  <li key={s.sessionId}>
-                    <Card className="flex flex-col gap-2">
-                      <h3 className="text-body font-medium">{s.title}</h3>
-                      <p className="text-caption text-ink-2">
+                  <li key={s.sessionId} className={panel}>
+                    <div className="flex flex-col gap-1">
+                      <h3 className="m-0 text-card text-ink">{s.title}</h3>
+                      <p className="m-0 text-caption text-ink-2 tabular-nums">
                         <span dir="ltr">
                           {time.format(s.startsAt)}–{time.format(s.endsAt)}
                         </span>
                         {s.roomName ? ` · ${s.roomName}` : ''}
                         {s.groupName ? ` · ${t('pickOne', { group: s.groupName })}` : ''}
                       </p>
-                      <StatusDot status={DOT[s.state]} label={stateLabel(s)} />
-                      {s.admission === 'optional' ? (
-                        <ScheduleSessionActions
-                          action={scheduleAction.bind(null, token, me.id, s.sessionId)}
-                          title={s.title}
-                          state={s.state}
-                        />
-                      ) : null}
-                    </Card>
+                    </div>
+                    <StatusPill
+                      tone={TONE[s.state]}
+                      label={stateLabel(s)}
+                      className="self-start whitespace-normal!"
+                    />
+                    {s.admission === 'optional' ? (
+                      <ScheduleSessionActions
+                        action={scheduleAction.bind(null, token, me.id, s.sessionId)}
+                        title={s.title}
+                        state={s.state}
+                      />
+                    ) : null}
                   </li>
                 ))}
               </ul>

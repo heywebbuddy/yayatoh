@@ -8929,7 +8929,8 @@
       "sponsoredBy": "Gesponsert von {sponsor}",
       "shown": "Für Gäste sichtbar",
       "hidden": "Für Gäste verborgen",
-      "noSponsor": "Noch kein Sponsor"
+      "noSponsor": "Noch kein Sponsor",
+      "viewerNotice": "Sie können die Tische und Sponsoren sehen. Bitten Sie einen Inhaber oder Co-Gastgeber, Gäste zu benennen oder Sponsoren zu ändern."
     },
     "public": {
       "metaTitle": "Gäste benennen",

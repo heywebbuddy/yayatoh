@@ -10,11 +10,25 @@ import {
   QUESTION_MAX_LENGTH,
   WORD_MAX_LENGTH,
 } from '@yayatoh/engagement/client';
-import { Alert, Button, Chip, EmptyState, Label, PageHeader } from '@yayatoh/ui';
+import {
+  Alert,
+  Avatar,
+  Button,
+  buttonClass,
+  Checkbox,
+  cx,
+  EmptyState,
+  fieldClass,
+  Label,
+  PageHeader,
+  StatusPill,
+} from '@yayatoh/ui';
+import { ArrowLeft, ChartColumn, MessageCircleQuestion, ThumbsUp } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useActionState, useEffect, useId, useRef, useState, useTransition } from 'react';
 import type { LiveActionState } from '@/app/[locale]/events/[slug]/live/[session]/actions.ts';
 import { Link } from '@/i18n/navigation.ts';
+import { initialsOf } from '@/lib/initials.ts';
 import { keepValues } from '@/lib/keep-values.ts';
 import { useLiveState } from './live-state.ts';
 import { PollResultsView } from './poll-results.tsx';
@@ -25,9 +39,15 @@ type Ask = (prev: LiveActionState, form: FormData) => Promise<LiveActionState>;
 type Upvote = (questionId: string) => Promise<LiveActionState>;
 
 const IDLE: LiveActionState = { ok: false, code: null };
-/** Public and phone pages: 44 px targets (the owner's UX bar). */
-const field = 'min-h-11 w-full rounded-card border border-line bg-surface px-4 py-2 text-body';
-const choiceRow = 'flex min-h-11 cursor-pointer items-center gap-3 rounded-card border border-line px-4 py-2';
+/** Public and phone pages: 44 px targets (the owner's UX bar); fields are the v2 `field`. */
+const field = fieldClass('md', 'w-full');
+/** An answer row: the whole row is the target; the chosen one is outlined in violet. */
+const choiceRow =
+  'flex min-h-11 cursor-pointer items-center gap-3 rounded-tile border border-line bg-surface px-4 py-2.5 text-body font-semibold text-ink transition-colors duration-150 hover:border-line-strong has-[:checked]:border-primary has-[:checked]:bg-primary-soft motion-reduce:transition-none';
+/** The public pages' card (v2 public event page): a glass panel. */
+const CARD = 'rounded-panel border border-line bg-surface p-5 elevation-card glass';
+const LABEL = 'text-[13px] font-bold text-ink';
+const ERROR = 'm-0 text-caption font-semibold text-danger';
 
 /**
  * The participant view (M5.7a): the poll on stage (or any open poll) to vote in, the Q&A form, and
@@ -71,7 +91,7 @@ export function ParticipantView({
   ];
   const questions = publicOrder(state.questions, state.stage.pinnedQuestionId);
   return (
-    <main id="main" className="mx-auto flex min-h-dvh w-full max-w-2xl flex-col gap-8 px-4 py-8 sm:px-6">
+    <main id="main" className="mx-auto flex min-h-dvh w-full max-w-2xl flex-col gap-8 px-4 py-10 sm:px-6">
       <PageHeader
         eyebrow={<Label>{eventName}</Label>}
         title={sessionTitle}
@@ -79,11 +99,15 @@ export function ParticipantView({
         actions={<StreamBadge state={stream} />}
       />
       <section aria-labelledby="live-polls-heading" className="flex flex-col gap-4">
-        <h2 id="live-polls-heading" className="text-section">
+        <h2 id="live-polls-heading" className="m-0 text-section text-ink">
           {t('participant.pollsHeading')}
         </h2>
         {polls.length === 0 ? (
-          <EmptyState title={t('participant.noPollTitle')} description={t('participant.noPoll')} />
+          <EmptyState
+            icon={<ChartColumn />}
+            title={t('participant.noPollTitle')}
+            description={t('participant.noPoll')}
+          />
         ) : (
           polls.map((p) => (
             <PollCard
@@ -97,7 +121,7 @@ export function ParticipantView({
         )}
       </section>
       <section aria-labelledby="live-qa-heading" className="flex flex-col gap-4">
-        <h2 id="live-qa-heading" className="text-section">
+        <h2 id="live-qa-heading" className="m-0 text-section text-ink">
           {t('participant.qaHeading')}
         </h2>
         {state.stage.qaOpen ? (
@@ -112,9 +136,13 @@ export function ParticipantView({
           <Alert tone="info" title={t('participant.qaClosed')} />
         )}
         {questions.length === 0 ? (
-          <EmptyState title={t('participant.noQuestionsTitle')} description={t('participant.noQuestions')} />
+          <EmptyState
+            icon={<MessageCircleQuestion />}
+            title={t('participant.noQuestionsTitle')}
+            description={t('participant.noQuestions')}
+          />
         ) : (
-          <ol className="flex list-none flex-col gap-3 p-0" aria-label={t('participant.questionsList')}>
+          <ol className="m-0 flex list-none flex-col gap-3 p-0" aria-label={t('participant.questionsList')}>
             {questions.map((q) => (
               <QuestionItem
                 key={q.id}
@@ -128,10 +156,8 @@ export function ParticipantView({
           </ol>
         )}
       </section>
-      <Link
-        href={eventHref}
-        className="inline-flex min-h-11 items-center self-start underline underline-offset-2"
-      >
+      <Link href={eventHref} className={buttonClass('secondary', 'md', 'self-start')}>
+        <ArrowLeft aria-hidden="true" className="rtl:-scale-x-100" />
         {t('participant.backToEvent')}
       </Link>
     </main>
@@ -191,16 +217,20 @@ function PollCard({
   return (
     <article
       aria-labelledby={`${id}-q`}
-      className="flex flex-col gap-4 rounded-card border border-line p-4 sm:p-5"
+      className={cx(CARD, 'flex flex-col gap-4')}
       data-poll={poll.question}
     >
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <Chip tone={poll.state === 'open' ? 'accent' : 'neutral'}>
-          {poll.state === 'open' ? t('pollState.open') : t('pollState.closed')}
-        </Chip>
-        <span className="text-caption text-ink-2">{t('votes', { count: poll.ballots })}</span>
+        <StatusPill
+          tone={poll.state === 'open' ? 'success' : 'neutral'}
+          label={poll.state === 'open' ? t('pollState.open') : t('pollState.closed')}
+          live={poll.state === 'open'}
+        />
+        <span className="text-caption font-bold text-ink-2 tabular-nums">
+          {t('votes', { count: poll.ballots })}
+        </span>
       </div>
-      <h3 id={`${id}-q`} className="text-[20px] font-medium">
+      <h3 id={`${id}-q`} className="m-0 text-card break-words text-ink">
         {poll.question}
       </h3>
       {poll.state === 'open' && !done ? (
@@ -231,7 +261,7 @@ function PollCard({
         >
           {poll.kind === 'word_cloud' ? (
             <div className="flex flex-col gap-1.5">
-              <label htmlFor={`${id}-word`} className="text-caption text-ink-2">
+              <label htmlFor={`${id}-word`} className={LABEL}>
                 {t('participant.yourWord')}
               </label>
               <input
@@ -246,12 +276,12 @@ function PollCard({
             </div>
           ) : (
             <fieldset
-              className="flex flex-col gap-2"
+              className="m-0 flex min-w-0 flex-col gap-2 border-0 p-0"
               aria-invalid={error ? true : undefined}
               aria-describedby={error ? errorId : `${id}-hint`}
             >
               <legend className="sr-only">{poll.question}</legend>
-              <p id={`${id}-hint`} className="text-caption text-ink-2">
+              <p id={`${id}-hint`} className="m-0 text-caption text-ink-2">
                 {poll.kind === 'multi'
                   ? t('participant.chooseUpTo', { count: poll.maxChoices })
                   : poll.kind === 'rating'
@@ -261,8 +291,8 @@ function PollCard({
               {poll.kind === 'rating' ? (
                 <div className="flex flex-wrap gap-2">
                   {Array.from({ length: poll.ratingScale ?? 5 }, (_, i) => String(i + 1)).map((v) => (
-                    <label key={v} className={`${choiceRow} min-w-11 justify-center font-medium`}>
-                      <input type="radio" name="rating" value={v} className="size-5" />
+                    <label key={v} className={cx(choiceRow, 'min-w-14 justify-center tabular-nums')}>
+                      <input type="radio" name="rating" value={v} className="size-5 accent-primary" />
                       {v}
                     </label>
                   ))}
@@ -274,36 +304,29 @@ function PollCard({
                       type={poll.kind === 'single' ? 'radio' : 'checkbox'}
                       name="option"
                       value={o.id}
-                      className="size-5 shrink-0"
+                      className="size-5 shrink-0 accent-primary"
                     />
-                    <span>{o.label}</span>
+                    <span className="min-w-0 break-words">{o.label}</span>
                   </label>
                 ))
               )}
             </fieldset>
           )}
           {error ? (
-            <p id={errorId} role="alert" className="text-caption text-danger">
+            <p id={errorId} role="alert" className={ERROR}>
               {error}
             </p>
           ) : null}
-          <Button type="submit" size="lg" disabled={pending} className="self-start">
+          <Button type="submit" disabled={pending} className="w-full sm:w-auto sm:self-start">
             {t('participant.vote')}
           </Button>
         </form>
       ) : null}
-      {done ? (
-        <p
-          role="status"
-          className="rounded-card border border-primary bg-primary-soft px-4 py-3 text-body text-primary-ink"
-        >
-          {t('participant.voted')}
-        </p>
-      ) : null}
+      {done ? <Alert tone="success" title={t('participant.voted')} /> : null}
       {poll.results ? (
         <PollResultsView kind={poll.kind} results={poll.results} labels={labels} />
       ) : done ? (
-        <p className="text-caption text-ink-2">{t('participant.resultsLater')}</p>
+        <p className="m-0 text-caption text-ink-2">{t('participant.resultsLater')}</p>
       ) : null}
     </article>
   );
@@ -352,7 +375,7 @@ function AskForm({
       action={action}
       noValidate
       aria-labelledby="ask-heading"
-      className="flex flex-col gap-3 rounded-card border border-line p-4 sm:p-5"
+      className={cx(CARD, 'flex flex-col gap-4')}
       onSubmit={(e) => {
         e.preventDefault();
         const f = new FormData(e.currentTarget);
@@ -365,11 +388,11 @@ function AskForm({
         if (!problem) keepValues(action)(e);
       }}
     >
-      <h3 id="ask-heading" className="text-body font-medium">
+      <h3 id="ask-heading" className="m-0 text-card text-ink">
         {t('participant.askHeading')}
       </h3>
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="ask-body" className="text-caption text-ink-2">
+        <label htmlFor="ask-body" className={LABEL}>
           {t('participant.yourQuestion')}
         </label>
         <textarea
@@ -377,23 +400,23 @@ function AskForm({
           name="body"
           rows={3}
           maxLength={QUESTION_MAX_LENGTH}
-          className={field}
+          className={cx(field, 'py-3 leading-relaxed')}
           onChange={(e) => setLength(e.currentTarget.value.length)}
           aria-invalid={bodyError ? true : undefined}
           aria-describedby={bodyError ? 'ask-body-error' : 'ask-body-count'}
         />
-        <p id="ask-body-count" className="text-caption text-ink-2">
+        <p id="ask-body-count" className="m-0 text-caption text-ink-2 tabular-nums">
           {t('participant.charactersLeft', { count: QUESTION_MAX_LENGTH - length })}
         </p>
         {bodyError ? (
-          <p id="ask-body-error" className="text-caption text-danger">
+          <p id="ask-body-error" className={ERROR}>
             {bodyError}
           </p>
         ) : null}
       </div>
       {anonymous && !namesToModerators ? null : (
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="ask-name" className="text-caption text-ink-2">
+          <label htmlFor="ask-name" className={LABEL}>
             {t('participant.yourName')}
           </label>
           <input
@@ -407,39 +430,29 @@ function AskForm({
             aria-describedby={nameError ? 'ask-name-error' : undefined}
           />
           {nameError ? (
-            <p id="ask-name-error" className="text-caption text-danger">
+            <p id="ask-name-error" className={ERROR}>
               {nameError}
             </p>
           ) : null}
         </div>
       )}
       {allowAnonymous ? (
-        <label className="flex min-h-11 cursor-pointer items-center gap-3">
-          <input
-            type="checkbox"
-            name="anonymous"
-            className="size-5"
-            checked={anonymous}
-            onChange={(e) => setAnonymous(e.currentTarget.checked)}
-          />
-          <span>{t('participant.anonymous')}</span>
-        </label>
+        <Checkbox
+          id="ask-anonymous"
+          name="anonymous"
+          checked={anonymous}
+          onChange={(e) => setAnonymous(e.currentTarget.checked)}
+          label={t('participant.anonymous')}
+        />
       ) : null}
       {anonymous ? (
-        <p className="text-caption text-ink-2">
+        <p className="m-0 text-caption text-ink-2">
           {namesToModerators ? t('participant.anonymousHintModerators') : t('participant.anonymousHint')}
         </p>
       ) : null}
       {formError ? <Alert title={formError} /> : null}
-      {state.ok || waiting > 0 ? (
-        <p
-          role="status"
-          className="rounded-card border border-primary bg-primary-soft px-4 py-3 text-body text-primary-ink"
-        >
-          {t('participant.sent')}
-        </p>
-      ) : null}
-      <Button type="submit" size="lg" disabled={pending} className="self-start">
+      {state.ok || waiting > 0 ? <Alert tone="success" title={t('participant.sent')} /> : null}
+      <Button type="submit" disabled={pending} className="w-full sm:w-auto sm:self-start">
         {t('participant.send')}
       </Button>
     </form>
@@ -464,17 +477,31 @@ function QuestionItem({
   const [busy, start] = useTransition();
   const [error, setError] = useState<string | null>(null);
   return (
-    <li className="flex flex-col gap-2 rounded-card border border-line p-4" data-question={q.body}>
-      <div className="flex flex-wrap gap-2">
-        {pinned ? <Chip>{t('onStage')}</Chip> : null}
-        {q.answered ? <Chip tone="neutral">{t('answered')}</Chip> : null}
-      </div>
-      <p className="text-body break-words">{q.body}</p>
+    <li
+      className={cx(
+        'flex flex-col gap-3 rounded-tile border border-line bg-surface p-4 glass',
+        pinned && 'border-primary',
+      )}
+      data-question={q.body}
+    >
+      {pinned || q.answered ? (
+        <div className="flex flex-wrap gap-2">
+          {pinned ? <StatusPill tone="brand" label={t('onStage')} live /> : null}
+          {q.answered ? <StatusPill tone="success" label={t('answered')} /> : null}
+        </div>
+      ) : null}
+      <p className="m-0 text-body font-semibold break-words text-ink">{q.body}</p>
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <span className="text-caption text-ink-2">{q.authorName ?? t('anonymous')}</span>
+        <span className="inline-flex min-w-0 items-center gap-2 text-caption font-semibold text-ink-2">
+          {q.authorName ? (
+            <Avatar initials={initialsOf(q.authorName)} label={q.authorName} size={28} decorative />
+          ) : null}
+          <span className="min-w-0 break-words">{q.authorName ?? t('anonymous')}</span>
+        </span>
         <Button
           variant="secondary"
-          size="lg"
+          icon={<ThumbsUp aria-hidden="true" />}
+          className="tabular-nums aria-pressed:border-primary aria-pressed:bg-primary-soft aria-pressed:text-primary-ink"
           aria-pressed={upvoted}
           disabled={upvoted || busy}
           onClick={() =>
@@ -489,7 +516,7 @@ function QuestionItem({
         </Button>
       </div>
       {error ? (
-        <p role="alert" className="text-caption text-danger">
+        <p role="alert" className={ERROR}>
           {error}
         </p>
       ) : null}

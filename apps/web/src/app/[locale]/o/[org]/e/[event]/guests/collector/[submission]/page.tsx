@@ -1,17 +1,17 @@
 import { collectorMergePreviewQuery, guestListQuery, MERGE_FIELDS } from '@yayatoh/guests';
 import { executeQuery, isDomainError } from '@yayatoh/kernel';
-import { isProfileKey, navIncludes, PROFILES } from '@yayatoh/platform';
-import { Button, Card, EmptyState, PageHeader } from '@yayatoh/ui';
+import { isProfileKey, navIncludes, navLabelKey, PROFILES } from '@yayatoh/platform';
+import { Button, buttonClass, Card, EmptyState, PageHeader, Table } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { type FieldSpec, ProgramForm } from '@/components/program-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
+import { GuestsCrumbs } from '../../rsvp/nav.tsx';
 import { mergeSubmissionAction } from '../actions.ts';
 
 const UUID = /^[0-9a-f-]{36}$/;
-const control = 'min-h-10 rounded-pill border border-line bg-surface px-4 text-body';
 
 /**
  * Merge a collector submission into an existing party (M4.1f), field by field: the party's
@@ -35,6 +35,7 @@ export default async function MergeSubmissionPage({
   const nav = PROFILES[profile].nav.find((i) => i.key === 'guests');
   if (!nav || !navIncludes(profile, data.modules, 'guests') || !can('guests:write')) notFound();
   const t = await getTranslations('collectorHost');
+  const tr = await getTranslations();
   const list = await executeQuery(guestListQuery, { eventId: ev.id, limit: 1 }, data.ctx, ports);
   const partyId = party && UUID.test(party) ? party : (list.partyOptions[0]?.id ?? null);
   const back = `/o/${org}/e/${event}/guests/collector`;
@@ -81,28 +82,66 @@ export default async function MergeSubmissionPage({
       });
   }
   const value = (v: string | null) => v ?? t('empty');
+  const people = s
+    ? s.members.map((m) => [m.firstName, m.lastName].filter(Boolean).join(' ')).join(', ')
+    : '';
+  const rows = [
+    ...MERGE_FIELDS.map((f) => ({
+      key: f as string,
+      label: t(`fields.${f}`),
+      party: value(preview?.current[f] ?? null),
+      sent: value(s?.[f] ?? null),
+    })),
+    { key: 'people', label: t('people'), party: t('empty'), sent: people },
+  ];
 
   return (
     <>
       <PageHeader
+        breadcrumb={
+          <GuestsCrumbs
+            org={org}
+            event={event}
+            orgName={data.org.name}
+            eventName={ev.name}
+            guestsLabel={tr(navLabelKey(profile, nav))}
+            trail={[{ label: t('title'), href: back }, ...(s?.household ? [{ label: s.household }] : [])]}
+          />
+        }
         title={t('mergeTitle', { household: s?.household ?? '' })}
         description={t('mergeSubtitle')}
       />
-      <Link href={back} className="min-h-6 self-start py-1 text-caption underline">
-        {t('backToQueue')}
-      </Link>
       {!preview || !s ? (
-        <EmptyState title={t('noParties')} description={t('noPartiesHint')} />
+        <EmptyState
+          title={t('noParties')}
+          description={t('noPartiesHint')}
+          action={
+            <Link href={back} className={buttonClass('secondary')}>
+              {t('backToQueue')}
+            </Link>
+          }
+        />
       ) : !pending ? (
-        <EmptyState title={t('alreadyDecided')} description={t('alreadyDecidedHint')} />
+        <EmptyState
+          title={t('alreadyDecided')}
+          description={t('alreadyDecidedHint')}
+          action={
+            <Link href={back} className={buttonClass('secondary')}>
+              {t('backToQueue')}
+            </Link>
+          }
+        />
       ) : (
         <>
-          <form method="get" className="flex flex-wrap items-end gap-2">
-            <div className="flex flex-col gap-1.5">
-              <label htmlFor="merge-party" className="text-caption text-ink-2">
+          <form
+            method="get"
+            className="flex flex-wrap items-end gap-3 rounded-card border border-line bg-surface p-4 glass"
+          >
+            <div className="flex min-w-48 flex-col gap-1.5">
+              <label htmlFor="merge-party" className="text-[13px] font-bold text-ink">
                 {t('mergeInto')}
               </label>
-              <select id="merge-party" name="party" defaultValue={preview.party.id} className={control}>
+              <select id="merge-party" name="party" defaultValue={preview.party.id} className="field pe-9">
                 {list.partyOptions.map((p) => (
                   <option key={p.id} value={p.id}>
                     {p.name}
@@ -115,49 +154,35 @@ export default async function MergeSubmissionPage({
             </Button>
           </form>
           <section aria-labelledby="merge-compare-heading" className="flex flex-col gap-3">
-            <h2 id="merge-compare-heading" className="text-section">
+            <h2 id="merge-compare-heading" className="m-0 text-section text-ink">
               {t('compareTitle', { party: preview.party.name })}
             </h2>
-            <Card className="overflow-x-auto">
-              <table className="w-full text-start text-caption">
-                <caption className="sr-only">{t('compareCaption', { party: preview.party.name })}</caption>
-                <thead>
-                  <tr className="text-ink-2">
-                    <th scope="col" className="py-1 pe-3 text-start font-medium">
-                      {t('field')}
-                    </th>
-                    <th scope="col" className="py-1 pe-3 text-start font-medium">
-                      {t('onParty')}
-                    </th>
-                    <th scope="col" className="py-1 text-start font-medium">
-                      {t('submittedValue')}
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {MERGE_FIELDS.map((f) => (
-                    <tr key={f} className="border-t border-line align-top">
-                      <th scope="row" className="py-1 pe-3 text-start font-medium">
-                        {t(`fields.${f}`)}
-                      </th>
-                      <td className="py-1 pe-3 whitespace-pre-line">{value(preview.current[f])}</td>
-                      <td className="py-1 whitespace-pre-line">{value(s[f])}</td>
-                    </tr>
-                  ))}
-                  <tr className="border-t border-line align-top">
-                    <th scope="row" className="py-1 pe-3 text-start font-medium">
-                      {t('people')}
-                    </th>
-                    <td className="py-1 pe-3">—</td>
-                    <td className="py-1">
-                      {s.members.map((m) => [m.firstName, m.lastName].filter(Boolean).join(' ')).join(', ')}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </Card>
+            <Table
+              caption={t('compareCaption', { party: preview.party.name })}
+              rowKey={(r) => r.key}
+              rows={rows}
+              columns={[
+                {
+                  key: 'field',
+                  header: t('field'),
+                  cell: (r) => <span className="font-bold text-ink">{r.label}</span>,
+                },
+                {
+                  key: 'party',
+                  header: t('onParty'),
+                  cell: (r) => <span className="whitespace-pre-line">{r.party}</span>,
+                },
+                {
+                  key: 'sent',
+                  header: t('submittedValue'),
+                  cell: (r) => <span className="whitespace-pre-line">{r.sent}</span>,
+                },
+              ]}
+            />
             <Card size="panel">
-              {fields.length === 0 ? <p className="pb-3 text-body">{t('nothingToMerge')}</p> : null}
+              {fields.length === 0 ? (
+                <p className="m-0 pb-3 text-body text-ink">{t('nothingToMerge')}</p>
+              ) : null}
               <ProgramForm
                 action={mergeSubmissionAction.bind(null, org, event, submission, preview.party.id)}
                 fields={fields}

@@ -8929,7 +8929,8 @@
       "sponsoredBy": "Patrocinada por {sponsor}",
       "shown": "Visible para los invitados",
       "hidden": "Oculto a los invitados",
-      "noSponsor": "Aún sin patrocinador"
+      "noSponsor": "Aún sin patrocinador",
+      "viewerNotice": "Puedes ver las mesas y los patrocinadores. Pide a un propietario o coanfitrión que nombre a los invitados o cambie los patrocinadores."
     },
     "public": {
       "metaTitle": "Nombra a tus invitados",

@@ -8929,7 +8929,8 @@
       "sponsoredBy": "赞助商：{sponsor}",
       "shown": "对宾客可见",
       "hidden": "对宾客隐藏",
-      "noSponsor": "尚无赞助商"
+      "noSponsor": "尚无赞助商",
+      "viewerNotice": "你可以查看餐桌和赞助商。如需填写宾客姓名或更改赞助商，请联系所有者或联合主办人。"
     },
     "public": {
       "metaTitle": "填写宾客姓名",

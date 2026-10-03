@@ -9,9 +9,10 @@ import {
   registrationSetupQuery,
 } from '@yayatoh/registration';
 import { roleCan } from '@yayatoh/tenancy';
-import { Card, EmptyState, PageHeader } from '@yayatoh/ui';
+import { Alert, buttonClass, Card, EmptyState, PageHeader } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { Crumbs } from '@/components/crumbs.tsx';
 import { type FieldSpec, ProgramForm } from '@/components/program-form.tsx';
 import { RegistrationCell } from '@/components/registration-cell.tsx';
 import { Link } from '@/i18n/navigation.ts';
@@ -181,41 +182,54 @@ export default async function RegistrationPage({
   const empty = setup.types.length === 0 && setup.items.length === 0;
   return (
     <>
-      <PageHeader title={tv('registration')} description={t('subtitle')} />
-      {/* M5.1b: the multi-page registration form for this event's types. */}
-      <Link
-        href={`/o/${org}/e/${event}/registration-form`}
-        className="self-start text-body underline underline-offset-2"
-      >
-        {canWrite ? tf('openBuilder') : tf('openReadOnly')}
-      </Link>
-      {/* M5.2b: session enrollment and waitlists. */}
-      <Link
-        href={`/o/${org}/e/${event}/registration/enrollment`}
-        className="self-start text-body underline underline-offset-2"
-      >
-        {t('openEnrollment')}
-      </Link>
-      {canWrite ? null : <p className="text-body text-ink-2">{t('viewerNotice')}</p>}
-      <p className="text-caption text-ink-2">
+      <PageHeader
+        breadcrumb={
+          <Crumbs
+            items={[
+              { label: data.org.name, href: `/o/${org}` },
+              { label: ev.name, href: `/o/${org}/e/${event}` },
+              { label: tv('registration') },
+            ]}
+          />
+        }
+        title={tv('registration')}
+        description={t('subtitle')}
+        actions={
+          <>
+            {/* M5.2b: session enrollment and waitlists. */}
+            <Link href={`/o/${org}/e/${event}/registration/enrollment`} className={buttonClass('secondary')}>
+              {t('openEnrollment')}
+            </Link>
+            {/* M5.1b: the multi-page registration form for this event's types. */}
+            <Link href={`/o/${org}/e/${event}/registration-form`} className={buttonClass('secondary')}>
+              {canWrite ? tf('openBuilder') : tf('openReadOnly')}
+            </Link>
+          </>
+        }
+      />
+      {canWrite ? null : <Alert tone="info" title={t('viewerNotice')} />}
+      <p className="m-0 text-caption text-ink-2">
         {setup.pack.active
           ? t('packActive', { registrants: setup.pack.quotas.registrants ?? 0 })
           : t('packInactive')}
       </p>
       {empty ? (
-        <Card className="flex flex-col gap-3">
-          <EmptyState title={t('emptyTitle')} description={t('emptyDescription')} />
-          {canWrite ? (
-            <ProgramForm
-              action={seedDefaultsAction.bind(null, org, event)}
-              fields={[]}
-              idPrefix="seed"
-              submitLabel={t('seedDefaults')}
-              successLabel={t('seeded')}
-              errors={errors}
-            />
-          ) : null}
-        </Card>
+        <EmptyState
+          title={t('emptyTitle')}
+          description={t('emptyDescription')}
+          action={
+            canWrite ? (
+              <ProgramForm
+                action={seedDefaultsAction.bind(null, org, event)}
+                fields={[]}
+                idPrefix="seed"
+                submitLabel={t('seedDefaults')}
+                successLabel={t('seeded')}
+                errors={errors}
+              />
+            ) : undefined
+          }
+        />
       ) : null}
 
       <section aria-labelledby="types-heading" className="flex flex-col gap-3">

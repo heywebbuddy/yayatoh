@@ -69,14 +69,19 @@ export function MenuEditor({
   return (
     <div className="flex flex-col gap-4">
       {options.length === 0 ? (
-        <p className="text-body text-ink-2">{t('menu.empty')}</p>
+        <p className="m-0 rounded-tile border border-dashed border-line-strong/50 px-4 py-6 text-center text-body text-ink-2">
+          {t('menu.empty')}
+        </p>
       ) : (
-        <ul aria-label={t('menu.listLabel')} className="flex list-none flex-col gap-2 p-0">
+        <ul aria-label={t('menu.listLabel')} className="m-0 flex list-none flex-col gap-2 p-0">
           {options.map((o) => (
-            <li key={o.id} className="flex flex-col gap-2 rounded-card border border-line px-4 py-3">
+            <li
+              key={o.id}
+              className="flex flex-col gap-2 rounded-tile border border-line bg-surface-2 px-4 py-3"
+            >
               <div className="flex flex-wrap items-start gap-3">
-                <span className="flex min-w-0 flex-1 flex-col">
-                  <span className="text-body">{o.label}</span>
+                <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+                  <span className="text-body font-bold text-ink">{o.label}</span>
                   {o.notes ? <span className="text-caption text-ink-2">{o.notes}</span> : null}
                 </span>
                 {canWrite && remove[o.id] ? (
@@ -84,8 +89,8 @@ export function MenuEditor({
                 ) : null}
               </div>
               {canWrite && save[o.id] ? (
-                <details className="rounded-card bg-surface-2 px-3 py-2">
-                  <summary className="min-h-6 cursor-pointer text-body">
+                <details>
+                  <summary className="inline-flex min-h-8 cursor-pointer items-center rounded-[10px] px-2 text-caption font-bold text-primary-ink hover:bg-surface-3">
                     {t('menu.edit', { label: o.label })}
                   </summary>
                   <div className="pt-3">
@@ -121,8 +126,8 @@ export function MenuEditor({
         </ul>
       )}
       {canWrite ? (
-        <div className="flex flex-col gap-2">
-          <h3 className="text-body font-medium">{t('menu.addTitle')}</h3>
+        <div className="flex flex-col gap-3 border-t border-line pt-4">
+          <h3 className="m-0 text-[16px] font-extrabold text-ink">{t('menu.addTitle')}</h3>
           <ProgramForm
             action={add}
             idPrefix="menu-new"

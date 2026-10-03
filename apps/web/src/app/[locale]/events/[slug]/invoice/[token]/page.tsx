@@ -2,11 +2,11 @@ import { randomUUID } from 'node:crypto';
 import { checkoutTarget, publicEventBySlug } from '@yayatoh/events';
 import { formatMoney, isDomainError, money } from '@yayatoh/kernel';
 import { type PublicInvoiceDto, publicInvoice } from '@yayatoh/orders';
-import { Alert, Card, Label, PageHeader, StatusDot } from '@yayatoh/ui';
+import { Alert, buttonClass, Label, PageHeader, StatusPill } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
-import { INVOICE_DOT } from '@/components/invoice-panel.tsx';
+import { INVOICE_TONE } from '@/components/invoice-panel.tsx';
 import { InvoicePayForm } from '@/components/invoice-pay-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { minorToDecimal } from '@/lib/minor-decimal.ts';
@@ -22,6 +22,10 @@ type Params = {
   params: Promise<{ locale: string; slug: string; token: string }>;
   searchParams: Promise<{ paid?: string }>;
 };
+
+/** The public event page's card (ADR 0022). */
+const panel =
+  'flex flex-col gap-4 rounded-panel border border-line bg-surface p-5 elevation-card glass md:p-6';
 
 const day = (locale: string, d: string) =>
   new Intl.DateTimeFormat(locale, { dateStyle: 'long', timeZone: 'UTC' }).format(new Date(`${d}T00:00:00Z`));
@@ -65,60 +69,65 @@ export default async function InvoicePage({ params, searchParams }: Params) {
       <PageHeader
         eyebrow={<Label>{ev.name}</Label>}
         title={t('public.title', { label: inv.label })}
+        tag={
+          <span className="flex flex-wrap items-center gap-2">
+            <StatusPill tone={INVOICE_TONE[inv.status]} label={t(`status.${inv.status}`)} />
+            {inv.overdue ? <StatusPill tone="danger" label={t('overdue')} /> : null}
+          </span>
+        }
         description={t(`public.lead.${inv.status}`, { name: inv.buyerName, due: day(locale, inv.dueOn) })}
       />
       {sp.paid === '1' ? (
         <div aria-live="polite">
-          <Alert tone="info" title={t('public.thanks')}>
+          <Alert tone="success" title={t('public.thanks')}>
             {inv.status === 'paid'
               ? t('public.thanksPaid')
               : t('public.thanksPart', { balance: fmt(inv.balanceMinor) })}
           </Alert>
         </div>
       ) : null}
-      <Card className="flex flex-col gap-4">
-        <div className="flex flex-wrap items-center gap-3">
-          <StatusDot status={INVOICE_DOT[inv.status]} label={t(`status.${inv.status}`)} />
-          {inv.overdue ? <StatusDot status="danger" label={t('overdue')} /> : null}
-        </div>
-        <dl className="grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-2">
+      <div className={panel}>
+        <dl className="m-0 grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
           {facts.map(([k, v]) => (
-            <div key={k} className="flex flex-col">
-              <dt className="text-caption text-ink-2">{k}</dt>
-              <dd className="m-0 text-body" dir="auto">
+            <div key={k} className="flex flex-col gap-0.5">
+              <dt className="text-[13px] font-bold text-ink-2">{k}</dt>
+              <dd className="m-0 text-body text-ink tabular-nums" dir="auto">
                 {v}
               </dd>
             </div>
           ))}
         </dl>
-        <section aria-labelledby="invoice-lines" className="flex flex-col gap-2">
-          <h2 id="invoice-lines" className="text-body font-medium">
+        <section aria-labelledby="invoice-lines" className="flex flex-col gap-2 border-t border-line pt-4">
+          <h2 id="invoice-lines" className="m-0 text-body font-bold text-ink">
             {t('public.items')}
           </h2>
-          <ul className="flex list-none flex-col divide-y divide-line p-0">
+          <ul className="m-0 flex list-none flex-col divide-y divide-line p-0">
             {inv.lines.map((l) => (
-              <li key={l.name} className="flex justify-between gap-4 py-2">
+              <li key={l.name} className="flex justify-between gap-4 py-2.5 text-body text-ink">
                 <span>
                   {l.quantity} × {l.name}
                 </span>
-                <span className="font-mono tabular-nums">{fmt(l.totalMinor)}</span>
+                <span className="font-bold tabular-nums">{fmt(l.totalMinor)}</span>
               </li>
             ))}
           </ul>
         </section>
         {inv.payments.length ? (
-          <section aria-labelledby="invoice-payments" className="flex flex-col gap-2">
-            <h2 id="invoice-payments" className="text-body font-medium">
+          <section
+            aria-labelledby="invoice-payments"
+            className="flex flex-col gap-2 border-t border-line pt-4"
+          >
+            <h2 id="invoice-payments" className="m-0 text-body font-bold text-ink">
               {t('panel.payments')}
             </h2>
-            <ul className="flex list-none flex-col divide-y divide-line p-0">
+            <ul className="m-0 flex list-none flex-col divide-y divide-line p-0">
               {inv.payments.map((p) => (
-                <li key={p.id} className="flex justify-between gap-4 py-2">
+                <li key={p.id} className="flex justify-between gap-4 py-2.5 text-body text-ink">
                   <span>
                     {t(`methods.${p.method}`)}
                     {p.receivedOn ? ` · ${day(locale, p.receivedOn)}` : ''}
                   </span>
-                  <span className="font-mono tabular-nums">{fmt(p.amountMinor)}</span>
+                  <span className="font-bold tabular-nums">{fmt(p.amountMinor)}</span>
                 </li>
               ))}
             </ul>
@@ -126,30 +135,32 @@ export default async function InvoicePage({ params, searchParams }: Params) {
         ) : null}
         <a
           href={`/events/${slug}/invoice/${token}/pdf?locale=${locale}`}
-          className="inline-flex min-h-11 items-center self-start text-body underline underline-offset-2"
+          className={buttonClass('secondary', 'md', 'self-start')}
         >
           {t('public.pdf')}
         </a>
-      </Card>
+      </div>
       {open ? (
-        <section aria-labelledby="invoice-pay">
-          <Card className="flex flex-col gap-3">
-            <h2 id="invoice-pay" className="text-section">
+        <section aria-labelledby="invoice-pay" className={panel}>
+          <div className="flex flex-col gap-1">
+            <h2 id="invoice-pay" className="m-0 text-section text-ink">
               {t('public.payTitle')}
             </h2>
-            <p className="text-body text-ink-2">{t('public.payHint', { balance: fmt(inv.balanceMinor) })}</p>
-            <InvoicePayForm
-              action={payInvoiceAction.bind(null, slug, token, inv.currency)}
-              currency={inv.currency}
-              balance={minorToDecimal(inv.balanceMinor, inv.currency)}
-              requestKey={randomUUID()}
-            />
-          </Card>
+            <p className="m-0 text-body text-ink-2">
+              {t('public.payHint', { balance: fmt(inv.balanceMinor) })}
+            </p>
+          </div>
+          <InvoicePayForm
+            action={payInvoiceAction.bind(null, slug, token, inv.currency)}
+            currency={inv.currency}
+            balance={minorToDecimal(inv.balanceMinor, inv.currency)}
+            requestKey={randomUUID()}
+          />
         </section>
       ) : null}
       <Link
         href={`/events/${slug}`}
-        className="inline-flex min-h-11 items-center self-start text-body underline underline-offset-2"
+        className="inline-flex min-h-11 items-center self-start text-body text-ink-2 underline underline-offset-2 hover:text-ink"
       >
         {t('public.backToEvent')}
       </Link>

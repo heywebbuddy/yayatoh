@@ -1,5 +1,5 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import { expectAccessible, lastEmailedCode, signIn } from './helpers.ts';
+import { expectAccessible, expectAccessibleBothModes, lastEmailedCode, signIn } from './helpers.ts';
 
 /**
  * M5.1d invoices, PO and pay later: the organizer turns on pay later with a required PO number for
@@ -127,13 +127,13 @@ test('the organizer turns on pay later with a required PO number, by keyboard', 
   await expect(card.getByText('Saved.')).toBeVisible();
   await page.reload();
   await expect(payLaterCard(page, 'Member')).toContainText('Pay later is on · PO number: required');
-  await expectAccessible(page);
+  await expectAccessibleBothModes(page);
 
   // No invoices yet: the list says what to do.
   await page.getByRole('link', { name: 'Open the invoices' }).click();
   await expect(page.getByRole('heading', { name: 'Invoices', level: 1 })).toBeVisible();
   await expect(page.getByText('No invoices yet')).toBeVisible();
-  await expectAccessible(page);
+  await expectAccessibleBothModes(page);
 });
 
 test('register with pay later and a PO, get the invoice and its PDF by email, pay half by link', async ({
@@ -168,7 +168,7 @@ test('register with pay later and a PO, get the invoice and its PDF by email, pa
   await expect(dd(page, 'Company')).toHaveText('Acme Corp');
   await expect(dd(page, 'Total')).toHaveText('$1,200.00');
   await expect(dd(page, 'Balance due')).toHaveText('$1,200.00');
-  await expectAccessible(page);
+  await expectAccessibleBothModes(page);
 
   // The invoice email (dev mailbox): its number, amount and the link to this page.
   let link = '';
@@ -212,7 +212,7 @@ test('register with pay later and a PO, get the invoice and its PDF by email, pa
   await expect(page.getByText('$600.00 is still due.')).toBeVisible();
   await expect(dd(page, 'Paid')).toHaveText('$600.00');
   await expect(page.getByText(/Card \(pay link\)/)).toBeVisible();
-  await expectAccessible(page);
+  await expectAccessibleBothModes(page);
   await page.close();
 });
 
@@ -224,7 +224,7 @@ test('the door refuses the ticket for the balance; staff admit it with a reason'
   const row = page.getByRole('row').filter({ hasText: 'Acme Corp' });
   await expect(row).toContainText(`PO PO-${s}`);
   await expect(row).toContainText('$600.00');
-  await expectAccessible(page);
+  await expectAccessibleBothModes(page);
   await row.getByRole('link', { name: /^INV-\d{5}$/ }).click();
   await expect(page).toHaveURL(/\/orders\/[0-9a-f-]{36}$/);
   orderPath = new URL(page.url()).pathname;
@@ -357,10 +357,10 @@ test('Arabic renders the invoice right-to-left', async ({ page }) => {
   await page.goto(`/ar${invoicePath}`);
   await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(/^الفاتورة INV-\d{5}$/);
-  await expectAccessible(page);
+  await expectAccessibleBothModes(page);
   await signIn(page);
   await page.goto(`/ar${base}/registration/invoices`);
   await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
   await expect(page.getByRole('heading', { name: 'الفواتير', level: 1 })).toBeVisible();
-  await expectAccessible(page);
+  await expectAccessibleBothModes(page);
 });

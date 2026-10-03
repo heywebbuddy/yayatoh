@@ -1,7 +1,7 @@
 import { guestListQuery, PARTY_RSVP_STATES, rsvpOverviewQuery } from '@yayatoh/guests';
 import { executeQuery, utcToZonedInput } from '@yayatoh/kernel';
-import { isProfileKey, navIncludes, PROFILES } from '@yayatoh/platform';
-import { Card, EmptyState, PageHeader } from '@yayatoh/ui';
+import { isProfileKey, navIncludes, navLabelKey, PROFILES } from '@yayatoh/platform';
+import { Alert, buttonClass, Card, EmptyState, PageHeader, StatCard, StatusPill } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { ProgramForm } from '@/components/program-form.tsx';
@@ -9,10 +9,10 @@ import { Link } from '@/i18n/navigation.ts';
 import { formatNumber } from '@/lib/format.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
+import { RSVP_STATE_TONE } from '../party-rsvp.tsx';
 import { createRsvpLinksAction, saveRsvpSettingsAction } from './actions.ts';
 import { rsvpFindUrl } from './links.ts';
-
-const pill = 'rounded-pill px-2 py-px text-caption';
+import { GuestsCrumbs, RsvpTabs } from './nav.tsx';
 
 /**
  * RSVP (M4.1d): the event's deadline and paper-fallback switch, how many parties are at each
@@ -31,8 +31,7 @@ export default async function RsvpHostPage({
   const nav = PROFILES[profile].nav.find((i) => i.key === 'guests');
   if (!nav || !navIncludes(profile, data.modules, 'guests') || !can('guests:read')) notFound();
   const t = await getTranslations('rsvpHost');
-  const tq = await getTranslations('rsvpQuestions');
-  const ta = await getTranslations('rsvpAnswers');
+  const tr = await getTranslations();
   const canWrite = can('guests:write');
   const [ov, list] = await Promise.all([
     executeQuery(rsvpOverviewQuery, { eventId: ev.id }, data.ctx, ports),
@@ -53,35 +52,39 @@ export default async function RsvpHostPage({
 
   return (
     <>
-      <PageHeader title={t('title')} description={t('subtitle')} />
-      <nav aria-label={tq('linksLabel')} className="flex flex-wrap gap-x-4">
-        <Link href={base} className="min-h-6 py-1 text-caption underline">
-          {t('back')}
-        </Link>
-        <Link href={`${base}/questions`} className="min-h-6 py-1 text-caption underline">
-          {tq('link')}
-        </Link>
-        <Link href={`${base}/answers`} className="min-h-6 py-1 text-caption underline">
-          {ta('link')}
-        </Link>
-      </nav>
-      {canWrite ? null : <p className="text-body text-ink-2">{t('viewerNotice')}</p>}
+      <PageHeader
+        breadcrumb={
+          <GuestsCrumbs
+            org={org}
+            event={event}
+            orgName={data.org.name}
+            eventName={ev.name}
+            guestsLabel={tr(navLabelKey(profile, nav))}
+            trail={[{ label: t('title') }]}
+          />
+        }
+        title={t('title')}
+        description={t('subtitle')}
+      />
+      <RsvpTabs org={org} event={event} current="rsvp" />
+      {canWrite ? null : <Alert tone="info" title={t('viewerNotice')} />}
 
       <section aria-labelledby="rsvp-states-heading" className="flex flex-col gap-3">
-        <h2 id="rsvp-states-heading" className="text-section">
+        <h2 id="rsvp-states-heading" className="m-0 text-section text-ink">
           {t('statesTitle')}
         </h2>
-        <dl className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
           {PARTY_RSVP_STATES.map((s) => (
-            <Card key={s} className="flex flex-col gap-1">
-              <dt className="text-caption text-ink-2">{t(`states.${s}`)}</dt>
-              <dd className="text-section tabular-nums">{n(ov.states[s] ?? 0)}</dd>
-            </Card>
+            <StatCard
+              key={s}
+              label={<StatusPill tone={RSVP_STATE_TONE[s]} label={t(`states.${s}`)} />}
+              value={n(ov.states[s] ?? 0)}
+            />
           ))}
-        </dl>
+        </div>
         {canWrite && withoutLink > 0 ? (
           <Card size="panel" className="flex flex-col gap-3">
-            <p className="text-body">{t('linksMissing', { count: withoutLink })}</p>
+            <p className="m-0 text-body text-ink">{t('linksMissing', { count: withoutLink })}</p>
             <ProgramForm
               action={createRsvpLinksAction.bind(null, org, event, null)}
               fields={[]}
@@ -95,17 +98,17 @@ export default async function RsvpHostPage({
       </section>
 
       <section aria-labelledby="rsvp-settings-heading" className="flex flex-col gap-3">
-        <h2 id="rsvp-settings-heading" className="text-section">
+        <h2 id="rsvp-settings-heading" className="m-0 text-section text-ink">
           {t('settingsTitle')}
         </h2>
         <Card size="panel" className="flex flex-col gap-3">
-          <p className="text-body">
+          <p className="m-0 text-body text-ink">
             {deadline ? t('deadlineIs', { deadline }) : t('noDeadline')}
             {ov.locked ? ` ${t('deadlinePassed')}` : ''}
           </p>
-          <p className="text-body">{ov.settings.nameLookup ? t('lookupOn') : t('lookupOff')}</p>
+          <p className="m-0 text-body text-ink">{ov.settings.nameLookup ? t('lookupOn') : t('lookupOff')}</p>
           {ov.settings.nameLookup && ov.settings.lookupCode ? (
-            <p className="text-caption text-ink-2">
+            <p className="m-0 text-caption text-ink-2">
               {t('lookupAddress')}{' '}
               <span data-testid="rsvp-find-url" dir="ltr" className="font-mono break-all text-ink">
                 {rsvpFindUrl(ov.settings.lookupCode)}
@@ -143,7 +146,7 @@ export default async function RsvpHostPage({
       </section>
 
       <section aria-labelledby="rsvp-parties-heading" className="flex flex-col gap-3">
-        <h2 id="rsvp-parties-heading" className="text-section">
+        <h2 id="rsvp-parties-heading" className="m-0 text-section text-ink">
           {t('partiesTitle')}
         </h2>
         {ov.subEvents.length === 0 ? (
@@ -151,30 +154,36 @@ export default async function RsvpHostPage({
             title={t('noSubEventsTitle')}
             description={t('noSubEvents')}
             action={
-              <Link href={`${base}/sub-events`} className="min-h-6 py-1 text-caption underline">
+              <Link href={`${base}/sub-events`} className={buttonClass('secondary')}>
                 {t('subEventsLink')}
               </Link>
             }
           />
         ) : null}
         {ov.parties.length === 0 ? (
-          <EmptyState title={t('noPartiesTitle')} description={t('noParties')} />
+          <EmptyState
+            title={t('noPartiesTitle')}
+            description={t('noParties')}
+            action={
+              <Link href={base} className={buttonClass('secondary')}>
+                {tr(navLabelKey(profile, nav))}
+              </Link>
+            }
+          />
         ) : (
-          <ul className="flex list-none flex-col gap-2 p-0">
+          <ul className="m-0 grid list-none grid-cols-1 gap-3 p-0 md:grid-cols-2">
             {ov.parties.map((p) => {
               const name = names.get(p.partyId) ?? '';
               return (
                 <li key={p.partyId}>
-                  <Card className="flex flex-col gap-2">
+                  <Card className="flex h-full flex-col gap-2.5">
                     <div className="flex flex-wrap items-center gap-2">
-                      <h3 className="text-body font-medium">{name}</h3>
-                      <span className={`${pill} bg-surface-3 text-ink-2`}>{t(`states.${p.state}`)}</span>
-                      {p.reopened ? (
-                        <span className={`${pill} bg-primary-soft text-primary-ink`}>{t('reopened')}</span>
-                      ) : null}
+                      <h3 className="m-0 grow text-[16px] font-extrabold text-ink">{name}</h3>
+                      <StatusPill tone={RSVP_STATE_TONE[p.state]} label={t(`states.${p.state}`)} />
+                      {p.reopened ? <StatusPill tone="brand" label={t('reopened')} /> : null}
                     </div>
                     {p.subEvents.length ? (
-                      <ul className="flex list-none flex-col gap-0.5 p-0 text-caption text-ink-2">
+                      <ul className="m-0 flex list-none flex-col gap-0.5 p-0 text-caption text-ink-2 tabular-nums">
                         {p.subEvents.map((s) => (
                           <li key={s.subEventId}>
                             {t('tally', {
@@ -187,11 +196,11 @@ export default async function RsvpHostPage({
                         ))}
                       </ul>
                     ) : (
-                      <p className="text-caption text-ink-2">{t('notInvited')}</p>
+                      <p className="m-0 text-caption text-ink-2">{t('notInvited')}</p>
                     )}
                     <Link
                       href={`${base}/rsvp/${p.partyId}`}
-                      className="min-h-6 self-start py-1 text-caption underline"
+                      className="mt-auto inline-flex min-h-8 items-center self-start rounded-[10px] text-caption font-bold text-primary-ink underline-offset-2 hover:underline"
                     >
                       {canWrite ? t('openParty', { party: name }) : t('viewParty', { party: name })}
                     </Link>
