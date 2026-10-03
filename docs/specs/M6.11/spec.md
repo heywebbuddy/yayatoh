@@ -257,3 +257,10 @@ Behind `advanced_seating` (free in beta). Rollback: remove channels (seats go ba
 
 ### 15. Owner tasks
 See `docs/owner-inbox.md` (M6.11b): defaults pending owner confirmation.
+
+### 16. Gate results (2026-10-03)
+- `pnpm lint`, `pnpm check:modules`: pass. Typecheck (`turbo --concurrency=2`): 57/57. Unit: 188 files, 2,392 tests pass (new: `channels.test.ts` 4, `revisions.test.ts` 5).
+- Integration: 154 files, 1,365 tests; 1,363 passed on the full run. Two failures, both re-run: `impersonation.int.test.ts` caught `seating.deleteChannel` without the `delete` category (fixed, passes); `apps/worker/tests/retention.int.test.ts` "runs every org…" hit its 30 s timeout under full-suite load (it sweeps every org in the test database) and passes on its own. New: `channels-layouts.int.test.ts` 11/11.
+- E2E (3 viewports, 2 workers): `channels-layouts.spec.ts` 12/12; with `seating`, `seated-checkout`, `best-available`, `box-office-seats`, `seating-underlay`, `seat-rules`, `seat-live`: 78/78; `venues`, `checkout`, `box-office`: 33/33.
+- Not merged here: `origin/agent/design-v2` (conflicts outside this increment's files: drizzle meta `0102_snapshot.json` and `_journal.json`, and the shared `checkout-form.tsx`, `seat-picker.tsx`, `seating-underlay.tsx`). The merge session takes it; the new screens use only `@yayatoh/ui` components and tokens.
+
