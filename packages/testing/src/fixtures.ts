@@ -8,6 +8,7 @@ import {
   setMyAlertPhoneCommand,
   setSalesTargetCommand,
 } from '@yayatoh/alerts';
+import { backfillOrgNow, catchUpWarehouse, postgresWarehouse } from '@yayatoh/analytics';
 import {
   assignCommand as assistanceAssignCommand,
   addNoteCommand as assistanceNoteCommand,
@@ -22,7 +23,12 @@ import {
   stageImportCommand,
   validateImportCommand,
 } from '@yayatoh/attendees';
-import { catchUpParticipation, saveSegmentCommand, templateDefinition } from '@yayatoh/audiences';
+import {
+  catchUpContactSignals,
+  catchUpParticipation,
+  saveSegmentCommand,
+  templateDefinition,
+} from '@yayatoh/audiences';
 import { createJourneyCommand, journeyTriggers, setJourneyEnabledCommand } from '@yayatoh/automations';
 import {
   assignTemplateCommand,
@@ -30,7 +36,13 @@ import {
   runBadgeBatch,
   startBatchCommand,
 } from '@yayatoh/badges';
-import { setEntitlementOverrideCommand, setFeeOverrideCommand } from '@yayatoh/billing';
+import {
+  applyBillingEventCommand,
+  linkBillingCustomerCommand,
+  setEntitlementOverrideCommand,
+  setFeeOverrideCommand,
+  setLegacyFeesCommand,
+} from '@yayatoh/billing';
 import {
   createCampaignCommand,
   runOrgCampaigns,
@@ -68,6 +80,7 @@ import {
   saveWidgetLayoutCommand,
   setModeOverrideCommand,
 } from '@yayatoh/command-center';
+import { mergeContactsCommand, recordTimelineTx, scanDuplicatesCommand, upsertContactTx } from '@yayatoh/crm';
 import { withTenant } from '@yayatoh/db';
 import {
   createCampaignCommand as createGivingCampaignCommand,
@@ -145,6 +158,7 @@ import {
   updatePartyGuestCommand,
   validateGuestImportCommand,
 } from '@yayatoh/guests';
+import { runSync } from '@yayatoh/integrations';
 import { type Ctx, createCtx, executeCommand, executeQuery, uuidv7 } from '@yayatoh/kernel';
 import {
   attributeOrderCommand,
@@ -210,10 +224,12 @@ import {
   catchUpSubscriber,
   consumeEvent,
   defineSubscriber,
+  emitEvents,
+  MODULE_KEYS,
   publishRealtimeTx,
   recentEventsTx,
 } from '@yayatoh/platform';
-import { dsarExportBulk } from '@yayatoh/privacy';
+import { exportSubjectCommand, openRequestCommand } from '@yayatoh/privacy';
 import {
   assignBoothCommand,
   claimSessionPlaceTx,
@@ -261,15 +277,19 @@ import {
 } from '@yayatoh/reports';
 import { reportReviewCommand, submitReviewCommand } from '@yayatoh/reviews';
 import {
+  allotSeatsCommand,
   assignSeatsCommand,
   giveSubEventOwnChartCommand,
   holdSeatsTx,
   publishEventLayoutCommand,
+  recordChannelOrderTx,
   requestFinderCodeCommand,
   saveLayoutCommand,
+  saveSeatChannelCommand,
   setEventLayoutCommand,
   setFinderSettingsCommand,
   setSeatingRulesCommand,
+  setSelectionSettingsCommand,
 } from '@yayatoh/seating';
 import {
   createSurveyCommand,
@@ -285,9 +305,12 @@ import {
   addMemberCommand,
   createApiKeyCommand,
   createOrganization,
+  createSandboxCommand,
+  deleteSandboxCommand,
   inviteMemberCommand,
   type OrganizationDto,
   PLATFORM_AGREEMENTS,
+  recordApiKeyUsage,
   revokeApiKeyCommand,
   setLegalPageCommand,
   setOrgStatusCommand,
@@ -301,7 +324,10 @@ import {
   requestHolderLinkCommand,
 } from '@yayatoh/ticketing';
 import { createVenueCommand, submitQuoteRequestCommand } from '@yayatoh/venues';
+import { createEndpointCommand } from '@yayatoh/webhooks';
 import { sql } from 'drizzle-orm';
+import { connectDemo, fakeAuth } from './integrations.ts';
+import { catchUpTimeline } from './merge.ts';
 import { ports, runBulk, submitRegistrationForm } from './ports.ts';
 
 export interface OrgFixture {
@@ -758,12 +784,18 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   );
   const door = await executeCommand(enrollDeviceCommand, { label: `Door ${slug}` }, ctx(), ports);
   // Org API keys: one live with every scope, one test key (M1.13d), one revoked (isolation coverage).
-  const { key: apiKey } = await executeCommand(
+  const { key: apiKey, id: apiKeyId } = await executeCommand(
     createApiKeyCommand,
     { name: `Fixture ${slug}`, scopes: [...API_KEY_SCOPES] },
     ctx(),
     ports,
   );
+  // M6.3a: one day of the key's usage, and a sandbox org linked to this org (isolation coverage).
+  await recordApiKeyUsage({ orgId: org.id, keyId: apiKeyId, status: 200 });
+  // Only the parent's link row (no sandbox org is provisioned, so fixtures add no org that
+  // org-wide jobs must walk), deleted again so the org's live sandbox count starts at zero.
+  const sandbox = await executeCommand(createSandboxCommand, { name: `Sandbox of ${name}` }, ctx(), ports);
+  await executeCommand(deleteSandboxCommand, { sandboxId: sandbox.id }, ctx(), ports);
   const { key: testKey } = await executeCommand(
     createApiKeyCommand,
     { name: `Sandbox ${slug}`, scopes: ['org:read', 'events:read'], mode: 'test' },
@@ -1054,6 +1086,46 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     },
     ctx(),
     ports,
+  );
+  // M6.11a: best available offered, and one companion seat (isolation coverage). The fixture's row
+  // has no accessible seat, so the companion row is written directly rather than by the command.
+  await executeCommand(
+    setSelectionSettingsCommand,
+    { eventId: event.id, bestAvailable: true, sectionScores: {} },
+    ctx(),
+    ports,
+  );
+  await withTenant(ctx(), (tx) =>
+    tx.execute(
+      sql`insert into seating.companion_seats (org_id, event_id, seat_uuid) values (${org.id}, ${event.id}, ${plan.items[0]?.seats[1]?.id ?? ''})`,
+    ),
+  );
+  // M6.11b: a promoter channel with the row's last seat allotted to it, and one order attributed
+  // to it (isolation coverage). The plan's saves above wrote its layout revisions.
+  const promoter = await executeCommand(
+    saveSeatChannelCommand,
+    {
+      eventId: event.id,
+      kind: 'promoter',
+      name: 'Fixture promoter',
+      code: `FIX-${slug.slice(-6).toUpperCase()}`,
+    },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    allotSeatsCommand,
+    { eventId: event.id, channelId: promoter.id, seatUuids: [plan.items[0]?.seats[3]?.id ?? ''] },
+    ctx(),
+    ports,
+  );
+  await withTenant(ctx(), (tx) =>
+    recordChannelOrderTx(tx, ctx(), {
+      eventId: event.id,
+      orderId: uuidv7(),
+      channelId: promoter.id,
+      seats: 1,
+    }),
   );
   // The public seat finder (M1.7e): opened, and that guest asks for a code (a code row and a
   // rate-limit counter, isolation coverage).
@@ -1440,17 +1512,21 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
       createCtx({ orgId: org.id }),
       ports,
     );
-  // A data-subject access request for the imported guest (M1.14c, isolation coverage).
+  // Data-subject requests (M1.14c, M6.1c; isolation coverage): the imported guest's access request,
+  // fulfilled (a signed archive in the media store), and an open erasure request (sealed address).
   const dsar = await executeCommand(
-    dsarExportBulk.start,
-    {
-      selection: { filter: { email: `imported-${slug}@example.test` } },
-      params: { email: `imported-${slug}@example.test`, orgName: name },
-    },
+    openRequestCommand,
+    { email: `imported-${slug}@example.test`, kind: 'access' },
     ctx(),
     ports,
   );
-  await runBulk(org.id, dsar.operationId);
+  await executeCommand(exportSubjectCommand, { requestId: dsar.requestId }, ctx(), ports);
+  await executeCommand(
+    openRequestCommand,
+    { email: `forget-me-${slug}@example.test`, kind: 'erasure' },
+    ctx(),
+    ports,
+  );
   // Legacy migration (M2.2b): a host_affiliate child org (its own owner) and one legacy statement.
   const affiliate = await createOrganization(
     userCtx(uuidv7()),
@@ -2146,6 +2222,30 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   // M3.6 audiences: the participation projector catches up on everything above (live rows and
   // profiles), and one saved audience (isolation coverage).
   await catchUpParticipation(org.id);
+  // M6.1b contact stats: a session attended and a campaign opened (the signals' outbox contracts),
+  // so `contact_signals` has rows; `contact_scores` follows from the projections above.
+  await withTenant(systemCtx(org.id), async (tx) => {
+    const [someone] = await tx.execute<{ id: string }>(sql`select id from crm.contacts order by id limit 1`);
+    if (!someone) return;
+    const ref = uuidv7();
+    await emitEvents(tx, systemCtx(org.id), [
+      {
+        type: 'session.attended',
+        version: 1,
+        aggregateType: 'session',
+        aggregateId: ref,
+        payload: { eventId: event.id, sessionId: ref, contactId: someone.id },
+      },
+      {
+        type: 'campaign.opened',
+        version: 1,
+        aggregateType: 'campaign',
+        aggregateId: ref,
+        payload: { campaignId: ref, contactId: someone.id },
+      },
+    ]);
+  });
+  await catchUpContactSignals(org.id);
   await executeCommand(
     saveSegmentCommand,
     {
@@ -2271,6 +2371,10 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   // analytics sink over this org's outbox, as the worker would.
   await catchUpMetrics(org.id);
   await catchUpSubscriber(analyticsForwarder(postgresAnalyticsSink), org.id);
+  // M6.2a: the analytics warehouse (Postgres rollups) over this org's outbox, as the worker would,
+  // then one backfill run (rows in every analytics table for the isolation suite).
+  await catchUpWarehouse(org.id);
+  await backfillOrgNow(org.id, postgresWarehouse);
   // M3.2b alert engine: the fixture event's unseated ticket holders raise an alert (evaluated as
   // the worker would, a day before the event), the owner acknowledges it; one routing row, the
   // owner's alert number and a sales target (isolation coverage of every alerts table).
@@ -2422,6 +2526,94 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
   );
   await donationRows(org.id, event.id, slug, ctx);
   await receiptRows(org.id, event.id, ga.id, checkout.order.id, ctx);
+  // M6.1a CRM merge and timeline: the person timeline catches up on the outbox above; two records
+  // of one mailbox are found by the duplicate scan and merged (isolation coverage of every table).
+  await catchUpTimeline(org.id);
+  const twins = await withTenant(systemCtx(org.id), async (tx) => {
+    const sys = systemCtx(org.id);
+    const one = await upsertContactTx(tx, sys, {
+      email: `twin.${slug}@example.test`,
+      name: 'Twin Fixture',
+      source: 'manual',
+    });
+    const two = await upsertContactTx(tx, sys, {
+      email: `twin.${slug}+b@example.test`,
+      name: 'Twin Fixture',
+      source: 'manual',
+    });
+    await recordTimelineTx(tx, sys, [
+      { contactId: two.id, kind: 'message_in', occurredAt: new Date(), sourceRef: uuidv7() },
+    ]);
+    return { one: one.id, two: two.id };
+  });
+  await executeCommand(scanDuplicatesCommand, { full: true }, ctx(), ports);
+  await executeCommand(
+    mergeContactsCommand,
+    { sourceContactId: twins.two, targetContactId: twins.one },
+    ctx(),
+    ports,
+  );
+  // M6.3b: one webhook endpoint (fake publisher), so webhooks.endpoints has rows for both orgs.
+  await executeCommand(
+    createEndpointCommand,
+    { url: `https://hooks.example.com/${slug}`, description: 'Fixture receiver', eventTypes: ['order.paid'] },
+    ctx(),
+    ports,
+  );
+  // M6.6a billing (isolation coverage of org_billing, subscriptions, org_entitlements and
+  // provider_events): legacy fees grandfathered, a fake billing customer, and a Pro subscription
+  // whose synced entitlements are every module key (so the org's modules match launch_standard
+  // even in a test that switches billing on).
+  await executeCommand(
+    setLegacyFeesCommand,
+    { grandfathered: true, note: 'fixture' },
+    systemCtx(org.id),
+    ports,
+  );
+  const billingCustomer = `fakecus_fixture_${org.id.slice(-12)}`;
+  await executeCommand(
+    linkBillingCustomerCommand,
+    { provider: 'fake', customerId: billingCustomer },
+    systemCtx(org.id),
+    ports,
+  );
+  const billedAt = new Date(Date.now() - 60_000);
+  await executeCommand(
+    applyBillingEventCommand,
+    {
+      kind: 'subscription',
+      provider: 'fake',
+      id: `fakeevt_fixture_sub_${org.id}`,
+      type: 'customer.subscription.created',
+      createdAt: billedAt,
+      customerId: billingCustomer,
+      subscriptionId: `fakesub_fixture_${org.id.slice(-12)}`,
+      status: 'active',
+      priceLookupKey: 'tier_pro_month_usd',
+      currentPeriodEnd: new Date(billedAt.getTime() + 30 * 86_400_000),
+      cancelAtPeriodEnd: false,
+    },
+    systemCtx(org.id),
+    ports,
+  );
+  await executeCommand(
+    applyBillingEventCommand,
+    {
+      kind: 'entitlements',
+      provider: 'fake',
+      id: `fakeevt_fixture_ent_${org.id}`,
+      type: 'entitlements.active_entitlement_summary.updated',
+      createdAt: billedAt,
+      customerId: billingCustomer,
+      features: [...MODULE_KEYS],
+    },
+    systemCtx(org.id),
+    ports,
+  );
+  // M6.4a: the demo connector connected through the fake port and synced once (a connection, its
+  // mappings, cursors, a run, record links and the demo's broken record in the errors inbox).
+  const demo = await connectDemo(ctx());
+  await runSync(org.id, demo.connectionId, { auth: fakeAuth }, ports);
   return {
     org,
     ownerId,

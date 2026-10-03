@@ -263,6 +263,13 @@ describe('T2 orgs', () => {
       >`select hostname, status from tenancy.org_domains where org_id = ${demo.id} and managed`,
     );
     expect(domain.hostname).toBe('lakeshore-jazz-society.yayatoh.events');
+    // M6.6a (P6-7): migrated organizers keep their legacy per-ticket fees.
+    const billing = await one(
+      sql()<
+        { legacy_fees_grandfathered: boolean; grandfathered_reason: string }[]
+      >`select legacy_fees_grandfathered, grandfathered_reason from billing.org_billing where org_id = ${demo.id}`,
+    );
+    expect(billing).toEqual({ legacy_fees_grandfathered: true, grandfathered_reason: 'legacy_migration' });
   });
 
   it('makes abc the parent ABC org owning abc.yayatoh.com, with every other abc organizer a host_affiliate child', async () => {

@@ -23,6 +23,7 @@ export {
   setAttributionWindowCommand,
 } from './attribution.ts';
 export * from './click.ts';
+export { marketingDataSubjects } from './data-subject.ts';
 export { DeliverabilityDto, deliverabilityReportQuery, deliverabilityReportTx } from './deliverability.ts';
 export {
   campaignKeyOf,

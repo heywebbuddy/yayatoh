@@ -1,3 +1,4 @@
+export { reviewsDataSubjects } from './data-subject.ts';
 export { REPORT_REASONS, REPORT_STATUSES, REVIEW_FILTERS, REVIEW_STATUSES } from './domain/constants.ts';
 export {
   type Eligibility,

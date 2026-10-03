@@ -19,6 +19,8 @@ export {
   saveCharityProfileCommand,
   verifyCharityCommand,
 } from './charity.ts';
+// M6.1c: data-subject requests (export and erasure) for gifts, receipts and statements.
+export { donationsDataSubjects } from './data-subject.ts';
 export {
   CAMPAIGN_STATUSES,
   type CampaignStatus,
