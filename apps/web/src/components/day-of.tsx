@@ -2,16 +2,52 @@
 
 import { Button } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
-import { useActionState, useId, useState } from 'react';
+import { createContext, type ReactNode, useActionState, useContext, useId, useState } from 'react';
 import type { DayOfState } from '@/app/[locale]/o/[org]/e/[event]/day-of/actions.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
 
 type Action = (prev: DayOfState, form: FormData) => Promise<DayOfState>;
 const IDLE: DayOfState = { ok: false, code: null };
 
+const Announce = createContext<(message: string) => void>(() => undefined);
+
 /**
- * One button that runs a day-of action (check in, undo, stop a kiosk) and says what happened
- * next to it, politely, so keyboard and screen reader users hear the result.
+ * The day-of page's success messages. A done action re-renders its row (the button becomes
+ * "Arrived", an undone arrival leaves the list), so the message lives here, above the page,
+ * where it survives the refresh and is read out politely.
+ */
+export function DayOfFeedback({ children }: { children: ReactNode }) {
+  const [message, setMessage] = useState<string | null>(null);
+  return (
+    <Announce.Provider value={setMessage}>
+      <div role="status" aria-live="polite" data-testid="day-of-feedback">
+        {message ? (
+          <p className="rounded-card border border-success bg-success-soft px-4 py-3 text-body font-semibold text-success">
+            {message}
+          </p>
+        ) : null}
+      </div>
+      {children}
+    </Announce.Provider>
+  );
+}
+
+/**
+ * The action, announcing `message` on the page once it succeeds. Announced from the action itself:
+ * the row that ran it may be gone (re-rendered) by the time React commits the result.
+ */
+function useAnnouncing(action: Action, message: string): Action {
+  const announce = useContext(Announce);
+  return async (prev, form) => {
+    const r = await action(prev, form);
+    if (r.ok) announce(message);
+    return r;
+  };
+}
+
+/**
+ * One button that runs a day-of action (check in, undo, stop a kiosk); success is announced by
+ * the page's feedback region, an error next to the button.
  */
 export function DayOfActionButton({
   action,
@@ -27,14 +63,13 @@ export function DayOfActionButton({
   variant?: 'primary' | 'secondary';
 }) {
   const tr = useTranslations();
-  const [state, formAction, pending] = useActionState(action, IDLE);
+  const [state, formAction, pending] = useActionState(useAnnouncing(action, done), IDLE);
   return (
     <form action={formAction} className="flex flex-wrap items-center gap-2">
       <Button type="submit" variant={variant} disabled={pending} aria-label={ariaLabel} className="min-h-11">
         {label}
       </Button>
-      <span role="status" className="text-caption">
-        {state.ok ? <span className="text-success">{done}</span> : null}
+      <span role="alert" className="text-caption">
         {!state.ok && state.code ? (
           <span className="text-danger">{tr(errorMessageKey(state.code))}</span>
         ) : null}
@@ -48,7 +83,10 @@ export function KioskStartForm({ action, device }: { action: Action; device: str
   const t = useTranslations('dayOf');
   const tr = useTranslations();
   const id = useId();
-  const [state, formAction, pending] = useActionState(action, IDLE);
+  const [state, formAction, pending] = useActionState(
+    useAnnouncing(action, t('kioskStarted', { device })),
+    IDLE,
+  );
   const [clientError, setClientError] = useState(false);
   const pinError = clientError || (!state.ok && state.field === 'pin');
   return (
@@ -93,8 +131,7 @@ export function KioskStartForm({ action, device }: { action: Action; device: str
       <Button type="submit" disabled={pending}>
         {t('kioskStart')}
       </Button>
-      <span role="status" className="basis-full text-caption">
-        {state.ok ? <span className="text-success">{t('kioskStarted', { device })}</span> : null}
+      <span role="alert" className="basis-full text-caption">
         {!state.ok && state.code && state.field !== 'pin' ? (
           <span className="text-danger">{tr(errorMessageKey(state.code))}</span>
         ) : null}
