@@ -191,3 +191,8 @@ Module keys `seating` and `guests` (like M4.3a). No flag.
 - [ ] Seating → Cards and exports: Place cards, A4 → Download PDF: two tent cards. Escort cards, US Letter, العربية → Download PDF: an Arabic escort card for Garcia.
 - [ ] Exports: Caterer meal counts → Excel (XLSX): Table 1 Beef 2; Not seated 1; Total 3.
 - [ ] Sign in as the viewer: the page prints cards; no Exports section.
+
+### Gate (M4.3b, 2026-10-03)
+- Base: `origin/m0.5-foundation-ey5gqp` + `origin/merge/next-3g` + `origin/merge/next-3h` + `origin/agent/m4.3a`; re-merged next-3g and next-3h before the gate (clean); design-v2 already contained.
+- `pnpm lint`, `pnpm check:modules`, typecheck 59/59 (`--concurrency=2`), unit 2726/2726 (204 files), integration 1520/1520 (167 files, golden card PDFs rendered by Gotenberg 8.37).
+- E2E at 375/768/1280 (`--workers=2`): `seating-cards` 9 passed; with `guest-seating`, `seating`, `seat-assignment`, `seat-rules`, `seat-finder`, `gala-tables`: 84 passed.
