@@ -38,14 +38,19 @@ export async function publicTicketTypes(
 ): Promise<PublicTicketTypeDto[]> {
   const unlocked = `{${(access.unlocked ?? []).filter((id) => /^[0-9a-f-]{36}$/i.test(id)).join(',')}}`;
   const privateOk = access.privateOk === true;
-  const [rows, dates] = await withoutTenant(async (tx) => [
+  const [rows, dates, tables] = await withoutTenant(async (tx) => [
     await tx.execute<Row>(
       sql`select * from ticketing.public_ticket_types_v3(${eventSlug}, ${unlocked}::uuid[], ${privateOk})`,
     ),
     await tx.execute<{ id: string; occurrence_ids: string[] }>(
       sql`select * from ticketing.public_ticket_type_occurrences_v2(${eventSlug}, ${unlocked}::uuid[], ${privateOk})`,
     ),
+    // M4.2b: seats per table of the event's table tickets.
+    await tx.execute<{ id: string; table_size: number }>(
+      sql`select * from ticketing.public_ticket_type_tables(${eventSlug}, ${unlocked}::uuid[], ${privateOk})`,
+    ),
   ]);
+  const tableSizes = new Map(tables.map((t) => [t.id, t.table_size]));
   const occurrenceIds = new Map(dates.map((d) => [d.id, d.occurrence_ids]));
   return rows.map((r) => {
     const allIn = (face: number) =>
@@ -88,6 +93,7 @@ export async function publicTicketTypes(
       minPerOrder: r.min_per_order,
       maxPerOrder: r.max_per_order,
       unlocked: r.unlocked,
+      tableSize: tableSizes.get(r.id) ?? null,
     });
   });
 }

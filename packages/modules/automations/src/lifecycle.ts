@@ -1,7 +1,8 @@
 import type { TenantTx } from '@yayatoh/db';
 import { findEventTx, findOccurrenceTx, seriesOfEventTx } from '@yayatoh/events';
+import { rsvpDeadlineTx } from '@yayatoh/guests';
 import { and, eq, inArray, or, type SQL, sql } from 'drizzle-orm';
-import type { JourneyTrigger, WaitAnchor } from './domain/journey.ts';
+import type { AnyAnchor, AnyTrigger } from './domain/journey.ts';
 import { type Anchors, planStep } from './domain/timing.ts';
 import { journeyRuns, journeySteps, journeys, scheduledActions } from './schema.ts';
 
@@ -14,6 +15,10 @@ import { journeyRuns, journeySteps, journeys, scheduledActions } from './schema.
 /** The key a step's work is done under, once per journey, step, event and person. */
 export const actionKey = (journeyId: string, stepId: string, eventId: string, contactId: string) =>
   `journey:${journeyId}:step:${stepId}:event:${eventId}:contact:${contactId}`;
+
+/** A party run's key (M4.1f): once per journey, step, event and party. */
+export const partyActionKey = (journeyId: string, stepId: string, eventId: string, partyId: string) =>
+  `journey:${journeyId}:step:${stepId}:event:${eventId}:party:${partyId}`;
 
 export interface EventAnchors extends Omit<Anchors, 'trigger'> {
   readonly eventName: string;
@@ -35,13 +40,15 @@ export async function eventAnchorsTx(
     eventStart: date?.startsAt ?? ev.startsAt,
     eventEnd: date?.endsAt ?? ev.endsAt,
     timeZone: ev.timezone,
+    // M4.1f: RSVP reminder steps count back from the deadline (guests, a lower tier).
+    rsvpDeadline: await rsvpDeadlineTx(tx, eventId),
     cancelled: ev.status === 'cancelled' || date?.status === 'cancelled',
     postponed: ev.status === 'postponed',
   };
 }
 
 /** Switched-on journeys for this event (its own, and its series') with this trigger. */
-export async function journeysForEventTx(tx: TenantTx, eventId: string, trigger: JourneyTrigger) {
+export async function journeysForEventTx(tx: TenantTx, eventId: string, trigger: AnyTrigger) {
   const seriesId = await seriesOfEventTx(tx, eventId);
   return tx
     .select()
@@ -61,10 +68,14 @@ export interface Enrollment {
   readonly journey: typeof journeys.$inferSelect;
   readonly eventId: string;
   readonly occurrenceId?: string | null;
-  readonly contactId: string;
+  /** The person, or (M4.1f system journeys) the party: exactly one. */
+  readonly contactId?: string | null;
+  readonly partyId?: string | null;
   readonly orderId?: string | null;
   readonly triggeredAt: Date;
   readonly locale?: string | null;
+  /** M5.1d: an invoice's due moment (`invoice_issued` runs; the `invoice_due` anchor). */
+  readonly dueAt?: Date | null;
 }
 
 const safeLocale = (l: string | null | undefined) => (l && /^[a-z]{2}(-[A-Z]{2})?$/.test(l) ? l : 'en');
@@ -82,6 +93,9 @@ export async function enrollTx(
   now: Date,
 ): Promise<string | null> {
   if (!e.journey.enabled) return null;
+  const contactId = e.contactId ?? null;
+  const partyId = contactId ? null : (e.partyId ?? null);
+  if (!contactId && !partyId) return null;
   const anchors = await eventAnchorsTx(tx, e.eventId, e.occurrenceId ?? null);
   if (!anchors || anchors.cancelled) return null;
   const [run] = await tx
@@ -91,11 +105,13 @@ export async function enrollTx(
       journeyId: e.journey.id,
       eventId: e.eventId,
       occurrenceId: e.occurrenceId ?? null,
-      contactId: e.contactId,
+      contactId,
+      partyId,
       orderId: e.orderId ?? null,
       trigger: e.journey.trigger,
       triggeredAt: e.triggeredAt,
       locale: safeLocale(e.locale),
+      dueAt: e.dueAt ?? null,
     })
     .onConflictDoNothing()
     .returning({ id: journeyRuns.id });
@@ -108,16 +124,17 @@ export async function enrollTx(
   let pending = 0;
   for (const s of steps) {
     const wait = {
-      anchor: s.anchor as WaitAnchor,
+      anchor: s.anchor as AnyAnchor,
       offsetDays: s.offsetDays,
       offsetMinutes: s.offsetMinutes,
       atTime: s.atTime,
     };
     // Postponed: the event has no date to plan from; its steps wait (`event_postponed`) until then.
+    // An invoice's due date doesn't move with the event (M5.1d).
     const plan =
-      anchors.postponed && wait.anchor !== 'trigger'
+      anchors.postponed && wait.anchor !== 'trigger' && wait.anchor !== 'invoice_due'
         ? null
-        : planStep(wait, { ...anchors, trigger: e.triggeredAt }, now, 'enroll');
+        : planStep(wait, { ...anchors, trigger: e.triggeredAt, invoiceDue: e.dueAt ?? null }, now, 'enroll');
     const at = plan && 'dueAt' in plan ? plan.dueAt : now;
     if (plan && 'dueAt' in plan) pending += 1;
     await tx
@@ -128,10 +145,13 @@ export async function enrollTx(
         journeyId: e.journey.id,
         stepId: s.id,
         eventId: e.eventId,
-        contactId: e.contactId,
+        contactId,
+        partyId,
         position: s.position,
         action: s.action,
-        idempotencyKey: actionKey(e.journey.id, s.id, e.eventId, e.contactId),
+        idempotencyKey: contactId
+          ? actionKey(e.journey.id, s.id, e.eventId, contactId)
+          : partyActionKey(e.journey.id, s.id, e.eventId, partyId as string),
         scheduledFor: at,
         dueAt: at,
         status: plan ? ('dueAt' in plan ? 'pending' : 'skipped') : 'cancelled',
@@ -249,7 +269,8 @@ export async function rescheduleEventTx(tx: TenantTx, eventId: string, now: Date
   const anchorsOf = new Map<string, EventAnchors | null>();
   const touched = new Set<string>();
   for (const { action, step, run } of rows) {
-    if (step.anchor === 'trigger') {
+    // Steps that wait from the trigger or an invoice's due date keep their time (M5.1d).
+    if (step.anchor === 'trigger' || step.anchor === 'invoice_due') {
       result.unchanged += 1;
       continue;
     }
@@ -274,7 +295,7 @@ export async function rescheduleEventTx(tx: TenantTx, eventId: string, now: Date
     }
     const plan = planStep(
       {
-        anchor: step.anchor as WaitAnchor,
+        anchor: step.anchor as AnyAnchor,
         offsetDays: step.offsetDays,
         offsetMinutes: step.offsetMinutes,
         atTime: step.atTime,
@@ -323,6 +344,10 @@ export async function rescheduleEventTx(tx: TenantTx, eventId: string, now: Date
 export function runsOfContactsWhere(eventId: string, contactIds: readonly string[]): SQL | undefined {
   return and(eq(journeyRuns.eventId, eventId), inArray(journeyRuns.contactId, [...contactIds]));
 }
+
+/** M4.1f: a party's runs at this event (its RSVP reminders). */
+export const runsOfParty = (eventId: string, partyId: string) =>
+  and(eq(journeyRuns.eventId, eventId), eq(journeyRuns.partyId, partyId));
 
 export const runsOfOrder = (orderId: string) => eq(journeyRuns.orderId, orderId);
 export const runsOfEvent = (eventId: string, occurrenceId?: string | null) =>

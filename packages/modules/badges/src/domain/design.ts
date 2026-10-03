@@ -1,4 +1,4 @@
-import { color } from '@yayatoh/ui/tokens';
+import { print } from '@yayatoh/ui/tokens';
 import { z } from 'zod';
 import { BADGE_SIZES, type BadgeSize, SIZES } from './sizes.ts';
 
@@ -34,19 +34,10 @@ export const TEXT_KINDS: readonly ElementKind[] = [
 ];
 
 /**
- * Ribbon colours: design tokens only (ADR 0018), each with the token text colour that reads on it
- * at ≥ 4.5:1 (checked in tests/design.test.ts).
+ * Ribbon colours: the print tokens of ADR 0022 (badges are always on white stock), each with the
+ * text colour that reads on it at ≥ 4.5:1 (checked in tests/domain.test.ts).
  */
-export const RIBBON_COLORS = {
-  ink: { fill: color.ink, text: color.white },
-  zinc: { fill: color.zinc[700], text: color.white },
-  orange: { fill: color.accent.text, text: color.white },
-  pink: { fill: color.pink[700], text: color.white },
-  green: { fill: color.green[500], text: color.ink },
-  yellow: { fill: color.yellow[500], text: color.ink },
-  peach: { fill: color.accent[500], text: color.ink },
-  grey: { fill: color.zinc[400], text: color.ink },
-} as const;
+export const RIBBON_COLORS = print.ribbon;
 export type RibbonColor = keyof typeof RIBBON_COLORS;
 export const RIBBON_COLOR_KEYS = Object.keys(RIBBON_COLORS) as RibbonColor[];
 

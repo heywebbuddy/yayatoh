@@ -10,12 +10,20 @@ import {
 } from '@yayatoh/checkin';
 import type { TenantTx } from '@yayatoh/db';
 import { listOccurrencesQuery } from '@yayatoh/events';
-import { type Ctx, DomainError, type Query, utcToZonedInput, zonedTimeToUtc } from '@yayatoh/kernel';
+import {
+  type Ctx,
+  DomainError,
+  type Query,
+  requireOrg,
+  utcToZonedInput,
+  zonedTimeToUtc,
+} from '@yayatoh/kernel';
 import { analyticsReportTx, deliverabilityReportTx } from '@yayatoh/marketing';
 import { navIncludes, tenantQuery } from '@yayatoh/platform';
 import { programQuery } from '@yayatoh/program';
 import { eventMetricsQuery, eventTimeseriesQuery, type ProjectedKey } from '@yayatoh/reports';
 import { seatFillTx } from '@yayatoh/seating';
+import { organizationDefaultsTx } from '@yayatoh/tenancy';
 import { z } from 'zod';
 import { type CallerScope, callerScopeTx } from './access.ts';
 import { computeEventMode, modeWindows } from './domain/modes.ts';

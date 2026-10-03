@@ -74,18 +74,18 @@ export default async function SearchPage({
           {title}
         </h2>
         <Card size="panel">
-          <ul className="flex list-none flex-col divide-y divide-zinc-100 p-0">
+          <ul className="flex list-none flex-col divide-y divide-line p-0">
             {items.map((i) => (
               <li key={i.key} className="py-2.5">
                 {i.href ? (
                   <Link href={i.href} className="flex flex-col underline-offset-2 hover:underline">
-                    <span className="text-zinc-900">{i.main}</span>
-                    <span className="text-caption text-zinc-500">{i.sub}</span>
+                    <span className="text-ink">{i.main}</span>
+                    <span className="text-caption text-ink-2">{i.sub}</span>
                   </Link>
                 ) : (
                   <span className="flex flex-col">
                     <span>{i.main}</span>
-                    <span className="text-caption text-zinc-500">{i.sub}</span>
+                    <span className="text-caption text-ink-2">{i.sub}</span>
                   </span>
                 )}
               </li>

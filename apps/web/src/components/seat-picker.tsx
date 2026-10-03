@@ -217,7 +217,7 @@ export function SeatPicker({
         <h3 id="seats-heading" className="text-section">
           {t('title')}
         </h3>
-        <p role="status" className="text-caption text-zinc-600">
+        <p role="status" className="text-caption text-ink-2">
           {t('selected', { count: selected.size })}
         </p>
         <Button
@@ -231,7 +231,7 @@ export function SeatPicker({
         </Button>
       </div>
       {ada || capMax ? (
-        <ul className="flex list-none flex-col gap-1 p-0 text-caption text-zinc-600">
+        <ul className="flex list-none flex-col gap-1 p-0 text-caption text-ink-2">
           {ada ? (
             <li>
               {ada.severity === 'enforce'
@@ -252,7 +252,7 @@ export function SeatPicker({
       <div aria-live="polite" className="flex flex-col gap-1">
         {notice ? (
           <p
-            className="rounded-card border border-zinc-200 bg-zinc-50 px-3 py-2 text-body"
+            className="rounded-card border border-line bg-surface-2 px-3 py-2 text-body"
             data-testid="seat-notice"
           >
             {notice}
@@ -261,7 +261,7 @@ export function SeatPicker({
         {warnings.map((w) => (
           <p
             key={w}
-            className="rounded-card border border-accent-700/40 bg-accent-50 px-3 py-2 text-body text-accent-text"
+            className="rounded-card border border-primary/40 bg-primary-soft px-3 py-2 text-body text-primary-ink"
           >
             {w}
           </p>
@@ -352,7 +352,7 @@ const SeatGroup = memo(
     const t = useTranslations('checkout.seats');
     return (
       <fieldset className="flex flex-col gap-1.5">
-        <legend className="text-caption text-zinc-600">
+        <legend className="text-[13px] font-bold text-ink">
           {t(`group.${group.kind}`, { label: group.label })}
         </legend>
         <div className="flex flex-wrap gap-x-4 gap-y-1.5">
@@ -363,7 +363,7 @@ const SeatGroup = memo(
             return (
               <label
                 key={id}
-                className={`flex min-h-6 items-center gap-2 text-body ${free ? '' : 'text-zinc-400'}`}
+                className={`flex min-h-6 items-center gap-2 text-body ${free ? '' : 'text-ink-3'}`}
               >
                 <input
                   type="checkbox"

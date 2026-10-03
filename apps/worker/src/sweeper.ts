@@ -4,6 +4,7 @@ import { createCtx, executeCommand } from '@yayatoh/kernel';
 import { expireOrdersCommand, sweepWaitlistsCommand } from '@yayatoh/orders';
 import { alertDisputeDeadlinesCommand } from '@yayatoh/payments';
 import { createCommandPorts, localKeyVault, setKeyVault } from '@yayatoh/platform';
+import { sweepEnrollmentsCommand } from '@yayatoh/registration';
 import { orgAuthorizer, orgStatusGate } from '@yayatoh/tenancy';
 import { sql } from 'drizzle-orm';
 
@@ -78,6 +79,36 @@ export async function alertDisputeDeadlines(): Promise<number> {
       total += (await executeCommand(alertDisputeDeadlinesCommand, {}, ctx, ports)).alerted;
     } catch (err) {
       console.error('dispute alerts', org_id, err);
+    }
+  }
+  return total;
+}
+
+/**
+ * Session enrollment sweeper (M5.2b), after the waitlist sweeper: lapsed session offers give their
+ * place back and sessions with free places promote their lines, per org under that org's RLS.
+ */
+export async function sweepEnrollments(): Promise<{ expired: number; promoted: number }> {
+  const orgs = await withPlatformReader(
+    { actor: 'system:sweeper', reason: 'find orgs with session offers to expire or lines to promote' },
+    (tx) =>
+      tx.execute<{ org_id: string }>(sql`
+        select distinct org_id from registration.session_enrollments
+        where status = 'waiting' or (status = 'offered' and offer_expires_at < now())
+        limit 100`),
+  );
+  const total = { expired: 0, promoted: 0 };
+  for (const { org_id } of orgs) {
+    const ctx = createCtx({
+      orgId: org_id,
+      actor: { type: 'system', name: 'registration.enrollment-sweeper' },
+    });
+    try {
+      const r = await executeCommand(sweepEnrollmentsCommand, { limit: 200 }, ctx, ports);
+      total.expired += r.expired;
+      total.promoted += r.promoted;
+    } catch (err) {
+      console.error('enrollment sweeper', org_id, err);
     }
   }
   return total;

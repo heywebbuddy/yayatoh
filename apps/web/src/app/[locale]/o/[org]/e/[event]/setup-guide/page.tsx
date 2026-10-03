@@ -29,7 +29,7 @@ export default async function SetupGuidePage({
       <Card size="panel" className="flex flex-col gap-4">
         <div className="flex items-center gap-4">
           <ProgressRing value={percent} label={t('dashboard.readinessPercent', { value: percent })} />
-          <p className="text-body text-zinc-600" aria-live="polite">
+          <p className="text-body text-ink-2" aria-live="polite">
             {left === 0 ? t('setupGuide.allDone') : t('setupGuide.left', { count: left })}
           </p>
         </div>
@@ -38,24 +38,24 @@ export default async function SetupGuidePage({
             <li
               key={r.key}
               data-rule={r.key}
-              className="flex flex-wrap items-center justify-between gap-3 rounded-card border border-zinc-200 px-4 py-3"
+              className="flex flex-wrap items-center justify-between gap-3 rounded-card border border-line px-4 py-3"
             >
               <span className="flex items-center gap-3">
                 <span
                   aria-hidden="true"
-                  className={`flex size-6 shrink-0 items-center justify-center rounded-full ${r.done ? 'bg-green-500 text-white' : 'border border-zinc-300'}`}
+                  className={`flex size-6 shrink-0 items-center justify-center rounded-full ${r.done ? 'bg-success-dot text-white' : 'border border-line-strong'}`}
                 >
                   {r.done ? <Check className="size-3.5" strokeWidth={2.5} /> : null}
                 </span>
                 <span className="flex flex-col">
-                  <span className={r.done ? 'text-body text-zinc-900' : 'text-body font-medium'}>
+                  <span className={r.done ? 'text-body text-ink' : 'text-body font-medium'}>
                     {t(`readiness.${r.key}`)}
                   </span>
-                  <span className="text-caption text-zinc-500">
+                  <span className="text-caption text-ink-2">
                     {r.done ? t('readiness.done') : t(`setupGuide.hint.${r.key}`)}
                   </span>
                   {r.comingSoon ? (
-                    <span data-coming-soon className="text-caption font-medium text-zinc-600">
+                    <span data-coming-soon className="text-caption font-medium text-ink-2">
                       {t('readiness.comingSoon')}
                     </span>
                   ) : null}
@@ -64,7 +64,7 @@ export default async function SetupGuidePage({
               {r.done ? null : (
                 <Link
                   href={r.path ? `${base}/${r.path}` : base}
-                  className="inline-flex min-h-10 items-center rounded-pill border border-zinc-200 px-4 text-caption"
+                  className="inline-flex min-h-10 items-center rounded-pill border border-line px-4 text-caption"
                 >
                   {t('setupGuide.fix', { rule: t(`readiness.${r.key}`) })}
                 </Link>

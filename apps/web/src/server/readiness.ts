@@ -51,6 +51,8 @@ export const loadReadiness = cache(async (orgSlug: string, eventSlug: string): P
     checklist,
     floorPlan: seating !== null,
     guests: guestList?.guests ?? 0,
+    // M4.2b: table tickets on sale (the gala's "tables & sponsors" item).
+    tableTickets: tickets.filter((t) => t.tableSize !== null && t.archivedAt === null).length,
     now,
   });
 });

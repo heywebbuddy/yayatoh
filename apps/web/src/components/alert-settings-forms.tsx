@@ -95,23 +95,19 @@ export function AlertRoutingForm({
       {rows.map((r) => (
         <fieldset
           key={r.role}
-          className="flex flex-col gap-2 rounded-card border border-zinc-200 p-4"
+          className="flex flex-col gap-2 rounded-card border border-line p-4"
           data-role={r.role}
         >
-          <legend className="px-1 text-body font-medium">{r.roleLabel}</legend>
+          <legend className="px-1 text-[13px] font-bold text-ink">{r.roleLabel}</legend>
           <div className="overflow-x-auto">
             <table className="w-full text-start text-body">
               <thead>
                 <tr>
-                  <th scope="col" className="py-1 pe-3 text-start text-caption font-normal text-zinc-600">
+                  <th scope="col" className="py-1 pe-3 text-start text-caption font-normal text-ink-2">
                     {t('group')}
                   </th>
                   {r.cells[0]?.channels.map((c) => (
-                    <th
-                      key={c.channel}
-                      scope="col"
-                      className="px-2 py-1 text-caption font-normal text-zinc-600"
-                    >
+                    <th key={c.channel} scope="col" className="px-2 py-1 text-caption font-normal text-ink-2">
                       {c.label}
                     </th>
                   ))}
@@ -119,7 +115,7 @@ export function AlertRoutingForm({
               </thead>
               <tbody>
                 {r.cells.map((cell) => (
-                  <tr key={cell.category} className="border-t border-zinc-100">
+                  <tr key={cell.category} className="border-t border-line">
                     <th scope="row" className="py-1 pe-3 text-start font-normal">
                       {cell.groupLabel}
                     </th>
@@ -136,7 +132,7 @@ export function AlertRoutingForm({
                             group: cell.groupLabel,
                             role: r.roleLabel,
                           })}
-                          className="size-6 accent-zinc-900"
+                          className="size-6 accent-primary"
                         />
                       </td>
                     ))}
@@ -154,7 +150,7 @@ export function AlertRoutingForm({
           </Button>
         </div>
       ) : (
-        <p className="text-caption text-zinc-600">{t('readOnly')}</p>
+        <p className="text-caption text-ink-2">{t('readOnly')}</p>
       )}
       <Outcome state={state} fieldError={false} />
     </form>

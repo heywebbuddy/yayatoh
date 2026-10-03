@@ -8,7 +8,8 @@ segment DSL and its SQL compiler belong to `crm`, which it calls down the tiers.
 **Invariants**
 - **Projector (`audiences.participation`).** Fed by the outbox: `order.paid`, `order.refunded`,
   `tickets.cancelled`, `ticket.admitted`, `ticket.admission_undone`, `attendee.cancelled`,
-  `attendees.changed`, `seating.assignments_changed` (all v1). Each names an event and people (or,
+  `attendees.changed`, `seating.assignments_changed`, `guests.rsvp_responded` (M4.1d; it sets the
+  row's `rsvp` on rows that exist for other reasons only, P4-3) (all v1). Each names an event and people (or,
   for a floor-plan edit, the whole event); their rows are recomputed from the sources (attendees,
   tickets, seat assignments, admissions, paid orders) and replaced, then their profiles are
   rebuilt. Exactly once per event (`processed_events`), idempotent besides, order-independent. It

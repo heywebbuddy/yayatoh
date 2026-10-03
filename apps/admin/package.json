@@ -11,10 +11,12 @@
     "e2e": "playwright test"
   },
   "dependencies": {
+    "@fontsource-variable/manrope": "5.3.0",
     "@yayatoh/auth": "workspace:*",
     "@yayatoh/billing": "workspace:*",
     "@yayatoh/contracts": "workspace:*",
     "@yayatoh/db": "workspace:*",
+    "@yayatoh/donations": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
     "@yayatoh/messaging": "workspace:*",
     "@yayatoh/notifications": "workspace:*",

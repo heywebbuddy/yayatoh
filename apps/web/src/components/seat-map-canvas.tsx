@@ -1,7 +1,7 @@
 'use client';
 
 import { type FloorplanDoc, hitTest, PUBLIC_UNDERLAY_OPACITY, placedSeats } from '@yayatoh/floorplan';
-import { color } from '@yayatoh/ui';
+import { paper } from '@yayatoh/ui';
 import type Konva from 'konva';
 import { useMemo, useRef } from 'react';
 import { Layer, Rect, Stage, Text } from 'react-konva';
@@ -10,10 +10,10 @@ import { type DotStyle, SeatDots } from './seat-dots.tsx';
 import { UnderlayImage } from './underlay-image.tsx';
 
 const SEAT_R = 24;
-const MINE: DotStyle = { fill: color.accent[900], stroke: color.accent[900], strokeWidth: 3 };
-const FREE: DotStyle = { fill: color.white, stroke: color.zinc[600], strokeWidth: 3 };
-const FREE_ACCESSIBLE: DotStyle = { fill: color.white, stroke: color.accent[900], strokeWidth: 6 };
-const TAKEN: DotStyle = { fill: color.zinc[300], stroke: color.zinc[300], strokeWidth: 3 };
+const MINE: DotStyle = { fill: paper.selected, stroke: paper.selected, strokeWidth: 3 };
+const FREE: DotStyle = { fill: paper.free, stroke: paper.muted, strokeWidth: 3 };
+const FREE_ACCESSIBLE: DotStyle = { fill: paper.free, stroke: paper.selected, strokeWidth: 6 };
+const TAKEN: DotStyle = { fill: paper.taken, stroke: paper.taken, strokeWidth: 3 };
 
 /**
  * The buyer's map: tap a free seat to choose it (the seat list beside it does the same, by
@@ -65,7 +65,7 @@ export default function SeatMapCanvas({
         // The organizer's floor plan image, shown faintly under the seats when they chose (M1.7g).
         data-underlay={doc.underlay ? doc.underlay.url : undefined}
         aria-hidden="true"
-        className="w-full overflow-hidden rounded-card border border-zinc-200"
+        className="w-full overflow-hidden rounded-card border border-line"
       >
         <Stage
           width={width}
@@ -82,7 +82,7 @@ export default function SeatMapCanvas({
           onTap={choose}
         >
           <Layer listening={false}>
-            <Rect width={doc.width} height={doc.height} fill={color.white} />
+            <Rect width={doc.width} height={doc.height} fill={paper.free} />
             {doc.underlay ? (
               <UnderlayImage underlay={doc.underlay} opacity={PUBLIC_UNDERLAY_OPACITY} />
             ) : null}
@@ -95,7 +95,7 @@ export default function SeatMapCanvas({
                   width={i.width}
                   height={i.height}
                   rotation={i.rotation}
-                  fill={color.zinc[200]}
+                  fill={paper.floor}
                   cornerRadius={12}
                 />
               ) : null,
@@ -108,7 +108,7 @@ export default function SeatMapCanvas({
                   y={i.y + 16}
                   text={i.label}
                   fontSize={48}
-                  fill={color.zinc[700]}
+                  fill={paper.sold}
                 />
               ) : null,
             )}

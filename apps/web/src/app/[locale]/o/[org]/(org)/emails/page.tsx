@@ -23,7 +23,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t('title') };
 }
 
-const field = 'min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body';
+const field = 'field';
 
 /**
  * Email templates (M1.10d): the org's own subject and opening paragraph per message kind and
@@ -58,7 +58,7 @@ export default async function EmailTemplatesPage({
       <PageHeader title={t('title')} description={t('description')} />
       <form method="get" className="flex flex-wrap items-end gap-3" aria-label={t('chooseLabel')}>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="template-kind" className="text-caption text-zinc-600">
+          <label htmlFor="template-kind" className="text-[13px] font-bold text-ink">
             {t('kind')}
           </label>
           <select id="template-kind" name="kind" defaultValue={kind} className={field}>
@@ -70,7 +70,7 @@ export default async function EmailTemplatesPage({
           </select>
         </div>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="template-lang" className="text-caption text-zinc-600">
+          <label htmlFor="template-lang" className="text-[13px] font-bold text-ink">
             {t('language')}
           </label>
           <select id="template-lang" name="lang" defaultValue={lang} className={field}>
@@ -81,10 +81,7 @@ export default async function EmailTemplatesPage({
             ))}
           </select>
         </div>
-        <button
-          type="submit"
-          className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
-        >
+        <button type="submit" className="field">
           {t('open')}
         </button>
       </form>
@@ -112,7 +109,7 @@ export default async function EmailTemplatesPage({
           <Card className="overflow-x-auto p-0">
             <table className="w-full text-start text-body">
               <thead>
-                <tr className="border-b border-zinc-200 text-caption text-zinc-600">
+                <tr className="border-b border-line text-caption text-ink-2">
                   <th scope="col" className="px-4 py-2 text-start font-normal">
                     {t('kind')}
                   </th>
@@ -126,7 +123,7 @@ export default async function EmailTemplatesPage({
               </thead>
               <tbody>
                 {overrides.map((o) => (
-                  <tr key={`${o.kind}:${o.locale}`} className="border-b border-zinc-100 last:border-0">
+                  <tr key={`${o.kind}:${o.locale}`} className="border-b border-line last:border-0">
                     <td className="px-4 py-2">
                       <Link
                         href={`/o/${org}/emails?kind=${encodeURIComponent(o.kind)}&lang=${o.locale}`}

@@ -99,23 +99,23 @@ export function SignupForm({
         hint={t('signup.slugHint', { slug: slug || '…' })}
       />
       <fieldset className="flex flex-col gap-2">
-        <legend className="mb-1 text-caption text-zinc-600">{t('signup.profile')}</legend>
+        <legend className="mb-1 text-[13px] font-bold text-ink">{t('signup.profile')}</legend>
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
           {PROFILES.map((p, i) => (
             <label
               key={p}
-              className="flex min-h-11 cursor-pointer items-start gap-2.5 rounded-card border border-zinc-200 bg-white p-3 has-[:checked]:border-ink"
+              className="flex min-h-11 cursor-pointer items-start gap-2.5 rounded-card border border-line bg-surface p-3 has-[:checked]:border-ink"
             >
               <input
                 type="radio"
                 name="profile"
                 value={p}
                 defaultChecked={i === 0}
-                className="mt-0.5 size-5 accent-ink"
+                className="mt-0.5 size-5 accent-primary"
               />
               <span className="flex flex-col">
                 <span className="text-body">{t(`profiles.${p}`)}</span>
-                <span className="text-caption text-zinc-500">{t(`signup.profileHint.${p}`)}</span>
+                <span className="text-caption text-ink-2">{t(`signup.profileHint.${p}`)}</span>
               </span>
             </label>
           ))}
@@ -127,7 +127,7 @@ export function SignupForm({
           name="terms"
           value="yes"
           required
-          className="mt-0.5 size-5 shrink-0 accent-ink"
+          className="mt-0.5 size-5 shrink-0 accent-primary"
         />
         <span>
           {t.rich('signup.terms', {

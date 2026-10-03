@@ -173,6 +173,11 @@ test.describe('venues, categories and tags (M1.4c)', () => {
     await filters.getByRole('button', { name: 'Filter' }).click();
     await expect(page.getByRole('heading', { name: `Loft Night ${s}` })).toHaveCount(0);
     await page.getByRole('link', { name: 'Clear filters' }).click();
+    await expect(page).toHaveURL(new RegExp(`${ORG}$`));
+    await expect(filters.getByLabel('Category')).toHaveValue('');
+    // Design v2: the list is paged (24 a page); the unfiltered list finds it by name.
+    await filters.getByLabel('Search by name').fill(`Loft Night ${s}`);
+    await filters.getByRole('button', { name: 'Filter' }).click();
     await expect(page.getByRole('heading', { name: `Loft Night ${s}` })).toBeVisible();
 
     // Published: the public page links the directory venue and shows the category.

@@ -35,9 +35,9 @@ export async function MaintenanceBanner({
     <section
       aria-label={t('label')}
       data-testid="maintenance-banner"
-      className="flex items-start gap-3 border-b border-accent-700 bg-accent-50 px-4 py-3 text-accent-text md:px-8"
+      className="flex items-start gap-3 border-b border-primary bg-primary-soft px-4 py-3 text-primary-ink md:px-8"
     >
-      <Wrench aria-hidden="true" className="mt-0.5 size-4 shrink-0" strokeWidth={1.6} />
+      <Wrench aria-hidden="true" className="mt-0.5 size-4 shrink-0" strokeWidth={2} />
       <div className="flex min-w-0 flex-col gap-0.5">
         <p className="text-body font-medium">{t('title')}</p>
         <p className="text-body">{until ? t('bodyUntil', { until }) : t('body')}</p>
