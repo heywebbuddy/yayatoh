@@ -47,7 +47,8 @@ export function kioskEmailOutcome(ownTickets: number, waitingRegistration: boole
 }
 
 /** A six-digit code from a random integer in [0, 1_000_000). */
-export const formatKioskCode = (n: number): string => String(Math.trunc(Math.abs(n)) % 1_000_000).padStart(6, '0');
+export const formatKioskCode = (n: number): string =>
+  String(Math.trunc(Math.abs(n)) % 1_000_000).padStart(6, '0');
 
 /** What a typed code looks like (digits only; spaces are ignored). */
 export const normalizeKioskCode = (code: string): string => code.replace(/\s+/g, '');
@@ -72,4 +73,5 @@ export function judgeKioskCode(
 }
 
 /** A conservative email shape check (the server decides; the kiosk only stops obvious typos). */
-export const isKioskEmail = (email: string): boolean => /^[^\s@]{1,64}@[^\s@]{1,190}\.[^\s@.]{2,}$/.test(email.trim());
+export const isKioskEmail = (email: string): boolean =>
+  /^[^\s@]{1,64}@[^\s@]{1,190}\.[^\s@.]{2,}$/.test(email.trim());

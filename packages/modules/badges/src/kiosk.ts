@@ -2,7 +2,13 @@ import { createHmac, randomInt, timingSafeEqual } from 'node:crypto';
 import { requireKioskDeviceTx } from '@yayatoh/checkin';
 import type { TenantTx } from '@yayatoh/db';
 import { type Ctx, DomainError, requireOrg, uuidv7 } from '@yayatoh/kernel';
-import { appTokenSecret, signLinkToken, tenantCommand, tenantQuery, verifyLinkToken } from '@yayatoh/platform';
+import {
+  appTokenSecret,
+  signLinkToken,
+  tenantCommand,
+  tenantQuery,
+  verifyLinkToken,
+} from '@yayatoh/platform';
 import {
   activeTicketIdForCodeTx,
   activeTicketShortCodeTx,
@@ -25,13 +31,7 @@ import {
   normalizeKioskCode,
 } from './domain/kiosk.ts';
 import { PRINT_PDF_TTL_MS } from './domain/printing.ts';
-import {
-  jobBadgeTx,
-  lockBadgePrintTx,
-  printerOfTx,
-  printNodeEnabledTx,
-  priorPrintsTx,
-} from './printing.ts';
+import { jobBadgeTx, lockBadgePrintTx, printerOfTx, printNodeEnabledTx, priorPrintsTx } from './printing.ts';
 import { kioskChallenges, kioskSettings, printers, printJobs } from './schema.ts';
 import { eventOfTx } from './templates.ts';
 
@@ -91,7 +91,10 @@ export const setKioskSettingsCommand = tenantCommand({
     if (input.printerId) {
       const p = await printerOfTx(tx, input.eventId, input.printerId);
       if (p.archivedAt)
-        throw new DomainError('invalid_state', 'Printer archived', { reason: 'archived', field: 'printerId' });
+        throw new DomainError('invalid_state', 'Printer archived', {
+          reason: 'archived',
+          field: 'printerId',
+        });
       if (p.adapter === 'printnode' && !(await printNodeEnabledTx(tx)))
         throw new DomainError('invalid_state', 'PrintNode is off', {
           reason: 'printnode_off',
@@ -221,7 +224,9 @@ export const kioskLookupQuery = tenantQuery({
 /* -------------------------------------------------------------------- emailed codes ---- */
 
 const codeHash = (challengeId: string, code: string) =>
-  createHmac('sha256', appTokenSecret()).update(`badges.kiosk-code:${challengeId}:${code}`).digest('base64url');
+  createHmac('sha256', appTokenSecret())
+    .update(`badges.kiosk-code:${challengeId}:${code}`)
+    .digest('base64url');
 
 /**
  * Something that knows whether an address has a registration still waiting at the event (an
@@ -230,12 +235,7 @@ const codeHash = (challengeId: string, code: string) =>
  */
 export type WaitingRegistrationLookup = (tx: TenantTx, eventId: string, email: string) => Promise<boolean>;
 
-const KioskEmail = z
-  .string()
-  .trim()
-  .toLowerCase()
-  .max(254)
-  .pipe(z.email());
+const KioskEmail = z.string().trim().toLowerCase().max(254).pipe(z.email());
 
 /**
  * "No ticket with you? Use your email": a six-digit code for the holder's own ticket. The answer is
@@ -281,16 +281,16 @@ export const kioskRequestCodeCommand = (waiting: WaitingRegistrationLookup) =>
       const code = formatKioskCode(randomInt(0, 1_000_000));
       const id = uuidv7();
       await tx.insert(kioskChallenges).values({
-          id,
-          orgId: requireOrg(ctx),
-          eventId: input.eventId,
-          deviceId: device.deviceId,
-          outcome,
-          ticketId: outcome === 'ticket' ? (own[0]?.id ?? null) : null,
-          // The HMAC binds the code to its challenge.
-          codeHash: codeHash(id, code),
-          expiresAt: new Date(ctx.now.getTime() + KIOSK_CODE_TTL_MS),
-        });
+        id,
+        orgId: requireOrg(ctx),
+        eventId: input.eventId,
+        deviceId: device.deviceId,
+        outcome,
+        ticketId: outcome === 'ticket' ? (own[0]?.id ?? null) : null,
+        // The HMAC binds the code to its challenge.
+        codeHash: codeHash(id, code),
+        expiresAt: new Date(ctx.now.getTime() + KIOSK_CODE_TTL_MS),
+      });
       return {
         challengeId: id,
         eventName: ev.name,

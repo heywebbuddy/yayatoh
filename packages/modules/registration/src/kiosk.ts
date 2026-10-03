@@ -7,7 +7,11 @@ import { registrants } from './schema.ts';
  * yet because it is still waiting (an application not yet decided, an approval not yet paid for,
  * a reservation not yet confirmed). The kiosk sends such a person to the desk.
  */
-export async function hasWaitingRegistrationTx(tx: TenantTx, eventId: string, email: string): Promise<boolean> {
+export async function hasWaitingRegistrationTx(
+  tx: TenantTx,
+  eventId: string,
+  email: string,
+): Promise<boolean> {
   const [r] = await tx
     .select({ id: registrants.id })
     .from(registrants)

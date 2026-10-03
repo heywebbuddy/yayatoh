@@ -1,9 +1,12 @@
 // M5.1d: print a badge with a balance due (audited override).
 export { OVERRIDE_MINUTES, overrideAllows, overrideBalanceDueCommand } from './balance-override.ts';
+// M5.5c kiosk self-print.
 export {
+  type BadgeDetails,
   BatchDto,
   type BatchRunDeps,
   type BatchSlice,
+  badgeDetailsTx,
   badgePrintableTx,
   badgeTicketsQuery,
   batchFileByLink,
@@ -24,6 +27,22 @@ export {
   storeBatchChunkCommand,
 } from './batches.ts';
 export * from './client.ts';
+export {
+  KioskBadgeDto,
+  KioskPrintDto,
+  KioskSettingsDto,
+  KioskSnapshotDto,
+  KioskVerifyDto,
+  kioskJobBadgeQuery,
+  kioskLookupQuery,
+  kioskPrintCommand,
+  kioskRequestCodeCommand,
+  kioskSettingsQuery,
+  kioskSnapshotQuery,
+  kioskVerifyCodeCommand,
+  setKioskSettingsCommand,
+  type WaitingRegistrationLookup,
+} from './kiosk.ts';
 export { LINK_TTL_MS, signBatchLink, verifyBatchLink } from './link.ts';
 export {
   type BadgePrinter,
@@ -82,21 +101,3 @@ export {
   setDefaultTemplateCommand,
   TemplateDto,
 } from './templates.ts';
-// M5.5c kiosk self-print.
-export { type BadgeDetails, badgeDetailsTx } from './batches.ts';
-export {
-  KioskBadgeDto,
-  KioskPrintDto,
-  KioskSettingsDto,
-  KioskSnapshotDto,
-  KioskVerifyDto,
-  kioskJobBadgeQuery,
-  kioskLookupQuery,
-  kioskPrintCommand,
-  kioskRequestCodeCommand,
-  kioskSettingsQuery,
-  kioskSnapshotQuery,
-  kioskVerifyCodeCommand,
-  setKioskSettingsCommand,
-  type WaitingRegistrationLookup,
-} from './kiosk.ts';

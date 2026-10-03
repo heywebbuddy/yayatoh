@@ -28,8 +28,10 @@ import {
   assignTemplateCommand,
   createPrinterCommand,
   createTemplateCommand,
+  kioskRequestCodeCommand,
   printerHeartbeatCommand,
   runBadgeBatch,
+  setKioskSettingsCommand,
   setPrintNodeCommand,
   startBatchCommand,
   startPrintJobCommand,
@@ -905,6 +907,14 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     startKioskCommand,
     { eventId: event.id, deviceId: door.deviceId, checkpointId: sideGate, pin: '2468' },
     ctx(),
+    ports,
+  );
+  // M5.5c kiosk self-print: the event's kiosk settings and one emailed kiosk code (isolation).
+  await executeCommand(setKioskSettingsCommand, { eventId: event.id, enabled: true }, ctx(), ports);
+  await executeCommand(
+    kioskRequestCodeCommand(async () => false),
+    { eventId: event.id, email: `kiosk@${slug}.test` },
+    createCtx({ orgId: org.id, actor: { type: 'system', name: `device:${door.deviceId}` } }),
     ports,
   );
   // Per-event velocity rule settings (M1.9d), for isolation coverage.
