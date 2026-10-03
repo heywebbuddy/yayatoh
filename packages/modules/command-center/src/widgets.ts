@@ -96,12 +96,21 @@ export function withWidget(registry: WidgetRegistry, def: AnyWidgetDef): WidgetR
 const iso = z.iso.datetime({ offset: true });
 const Count = z.int().min(0);
 
+const ReadinessLink = z.object({
+  key: z.string(),
+  path: z.string(),
+  /** U4: the field on that page that fixes it (`{path}#{field}`). */
+  field: z.string().nullable(),
+});
+
 export const ReadinessWidgetDto = z.object({
   score: z.int().min(0).max(100),
   done: Count,
   total: Count,
-  blocking: z.array(z.object({ key: z.string(), path: z.string() })),
-  todo: z.array(z.object({ key: z.string(), path: z.string() })),
+  blocking: z.array(ReadinessLink),
+  todo: z.array(ReadinessLink),
+  /** U4 checklist: every counted item in order, done or not ("coming soon" items left out). */
+  items: z.array(ReadinessLink.extend({ done: z.boolean(), blocking: z.boolean() })),
 });
 
 export const SalesWidgetDto = z.object({
@@ -282,13 +291,18 @@ export const readinessWidget = defineWidget(
   ReadinessWidgetDto,
   async ({ tx, ctx, scope }) => {
     const s = readinessScore(await readinessRulesTx(tx, ctx, scope));
-    const link = (r: { key: string; path: string }) => ({ key: r.key, path: r.path });
+    const link = (r: { key: string; path: string; field: string | null }) => ({
+      key: r.key,
+      path: r.path,
+      field: r.field,
+    });
     return {
       score: s.score,
       done: s.done,
       total: s.total,
       blocking: s.blocking.map(link),
       todo: s.todo.map(link),
+      items: s.items.map((r) => ({ ...link(r), done: r.done, blocking: r.blocking })),
     };
   },
 );

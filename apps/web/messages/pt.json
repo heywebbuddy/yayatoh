@@ -6633,13 +6633,16 @@
     "overviewTruncated": "Mostrando os primeiros {shown} de {total} eventos (ao vivo primeiro).",
     "overviewEmpty": {
       "title": "Nada para acompanhar agora",
-      "description": "Os eventos aparecem aqui durante o planejamento, no dia e por uma semana depois."
+      "description": "Os eventos aparecem aqui durante o planejamento, no dia e por uma semana depois.",
+      "action": "Ver todos os eventos"
     },
     "columns": {
       "event": "Evento",
       "mode": "Modo",
       "starts": "Início",
-      "readiness": "Preparação"
+      "readiness": "Preparação",
+      "sales": "Vendas",
+      "tickets": "Ingressos"
     },
     "manual": "Definido manualmente",
     "role": {
@@ -6708,9 +6711,10 @@
       "readiness": {
         "title": "Preparação",
         "score": "Preparação {score}%",
-        "blocking": "Bloqueante",
-        "todo": "Também a fazer",
-        "allDone": "Tudo pronto."
+        "allDone": "Tudo pronto.",
+        "count": "{done} de {total} concluídos",
+        "required": "Necessário para vender",
+        "recommended": "Recomendado"
       },
       "sales": {
         "title": "Vendas",
@@ -6757,7 +6761,9 @@
       "alerts": {
         "title": "Alertas",
         "pending": "Os alertas aparecerão aqui quando as regras de alerta forem ativadas.",
-        "none": "Nenhum alerta aberto."
+        "none": "Nenhum alerta aberto.",
+        "watching": "As regras de alerta acompanham vendas, pagamentos, dispositivos, capacidade e convidados, e aparecem aqui.",
+        "viewAll": "Ver todos os alertas"
       },
       "entrances": {
         "title": "Entradas"
@@ -6979,6 +6985,49 @@
       "readOnly": "Somente leitura",
       "statusOn": "Ativo",
       "statusOff": "Desativado"
+    },
+    "hero": {
+      "startsIn": "Começa em {duration}",
+      "endsIn": "Termina em {duration}",
+      "ended": "Terminou há {duration}",
+      "nextLabel": "Próximo passo",
+      "blocking": "Necessário antes de poder vender",
+      "next": {
+        "readiness": "Conclua: {item}",
+        "scanner": "Faça o check-in dos convidados na porta",
+        "publicPage": "Tudo pronto. Veja a página do evento como os convidados.",
+        "report": "Acabou. Veja como foi.",
+        "none": "Nada precisa de você agora."
+      },
+      "do": {
+        "alert": "Resolver",
+        "readiness": "Resolver agora",
+        "scanner": "Começar a ler",
+        "publicPage": "Ver página do evento",
+        "report": "Abrir o relatório"
+      }
+    },
+    "kpi": {
+      "title": "Números principais",
+      "sales": "Vendas",
+      "salesToday": "{amount} hoje",
+      "tickets": "Ingressos vendidos",
+      "ofCapacity": "de {capacity}",
+      "noCapacity": "Ainda não há ingressos à venda",
+      "checkins": "Check-in feito",
+      "ofValid": "de {valid} ingressos válidos",
+      "alerts": "Alertas abertos",
+      "allClear": "Tudo certo",
+      "needsYou": "Precisa de você",
+      "critical": "{count, plural, =0 {Nenhum crítico} one {# crítico} other {# críticos}}"
+    },
+    "soldOf": "{sold} de {capacity}",
+    "overviewCounts": "Eventos por modo",
+    "overviewGroup": {
+      "live": "Ao vivo ({count})",
+      "pre_show": "Pré-evento ({count})",
+      "planning": "Em planejamento ({count})",
+      "wrap": "Em encerramento ({count})"
     }
   },
   "alerts": {

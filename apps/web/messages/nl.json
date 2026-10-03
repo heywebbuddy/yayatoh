@@ -6633,13 +6633,16 @@
     "overviewTruncated": "De eerste {shown} van {total} evenementen (live eerst).",
     "overviewEmpty": {
       "title": "Nu niets te volgen",
-      "description": "Evenementen staan hier tijdens de planning, op de dag zelf en een week erna."
+      "description": "Evenementen staan hier tijdens de planning, op de dag zelf en een week erna.",
+      "action": "Alle events bekijken"
     },
     "columns": {
       "event": "Evenement",
       "mode": "Modus",
       "starts": "Begint",
-      "readiness": "Gereedheid"
+      "readiness": "Gereedheid",
+      "sales": "Verkoop",
+      "tickets": "Tickets"
     },
     "manual": "Handmatig ingesteld",
     "role": {
@@ -6708,9 +6711,10 @@
       "readiness": {
         "title": "Gereedheid",
         "score": "Gereedheid {score}%",
-        "blocking": "Blokkerend",
-        "todo": "Ook nog te doen",
-        "allDone": "Klaar om te beginnen."
+        "allDone": "Klaar om te beginnen.",
+        "count": "{done} van {total} klaar",
+        "required": "Nodig om te verkopen",
+        "recommended": "Aanbevolen"
       },
       "sales": {
         "title": "Verkoop",
@@ -6757,7 +6761,9 @@
       "alerts": {
         "title": "Meldingen",
         "pending": "Meldingen verschijnen hier zodra meldingsregels aan staan.",
-        "none": "Geen open meldingen."
+        "none": "Geen open meldingen.",
+        "watching": "Meldingsregels bewaken verkoop, betalingen, apparaten, capaciteit en gasten, en verschijnen hier.",
+        "viewAll": "Alle meldingen bekijken"
       },
       "entrances": {
         "title": "Ingangen"
@@ -6979,6 +6985,49 @@
       "readOnly": "Alleen lezen",
       "statusOn": "Aan",
       "statusOff": "Uit"
+    },
+    "hero": {
+      "startsIn": "Begint over {duration}",
+      "endsIn": "Eindigt over {duration}",
+      "ended": "{duration} geleden afgelopen",
+      "nextLabel": "Volgende stap",
+      "blocking": "Nodig voordat je kunt verkopen",
+      "next": {
+        "readiness": "Afronden: {item}",
+        "scanner": "Gasten inchecken bij de deur",
+        "publicPage": "Alles klaar. Bekijk de eventpagina zoals gasten die zien.",
+        "report": "Het is voorbij. Bekijk hoe het ging.",
+        "none": "Er is nu niets dat je aandacht nodig heeft."
+      },
+      "do": {
+        "alert": "Oplossen",
+        "readiness": "Nu regelen",
+        "scanner": "Begin met scannen",
+        "publicPage": "Eventpagina bekijken",
+        "report": "Rapport openen"
+      }
+    },
+    "kpi": {
+      "title": "Kerncijfers",
+      "sales": "Verkoop",
+      "salesToday": "{amount} vandaag",
+      "tickets": "Verkochte tickets",
+      "ofCapacity": "van {capacity}",
+      "noCapacity": "Nog geen tickets te koop",
+      "checkins": "Ingecheckt",
+      "ofValid": "van {valid} geldige tickets",
+      "alerts": "Open meldingen",
+      "allClear": "Alles in orde",
+      "needsYou": "Actie nodig",
+      "critical": "{count, plural, =0 {Geen kritiek} one {# kritiek} other {# kritiek}}"
+    },
+    "soldOf": "{sold} van {capacity}",
+    "overviewCounts": "Events per modus",
+    "overviewGroup": {
+      "live": "Live ({count})",
+      "pre_show": "Voorafgaand ({count})",
+      "planning": "In voorbereiding ({count})",
+      "wrap": "In afronding ({count})"
     }
   },
   "alerts": {

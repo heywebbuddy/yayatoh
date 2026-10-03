@@ -1,12 +1,24 @@
 'use client';
 
-import { moveWidget, type WidgetChannel, type WidgetKey } from '@yayatoh/command-center/client';
+import {
+  boardSpans,
+  type CcRole,
+  type HeroAlert,
+  type KpiKey,
+  moveWidget,
+  nextAction,
+  type WidgetChannel,
+  type WidgetKey,
+} from '@yayatoh/command-center/client';
 import { Button, Card, cx, Skeleton, SkeletonText, StatusDot } from '@yayatoh/ui';
 import { ArrowDown, ArrowUp, Eye, EyeOff, GripVertical } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { useCallback, useEffect, useRef, useState, useTransition } from 'react';
+import { type ReactNode, useCallback, useEffect, useRef, useState, useTransition } from 'react';
 import { useRealtime } from '@/lib/use-realtime.ts';
+import { type HeroLinks, HeroStrip } from './hero.tsx';
+import { KpiRow } from './kpis.tsx';
+import type { ModeView } from './mode-panel.tsx';
 import { WidgetBody } from './widgets.tsx';
 
 interface Slot {
@@ -28,7 +40,9 @@ const CHANNEL_EVENTS: Readonly<Record<WidgetChannel, readonly string[]>> = {
   'event.assistance': ['request', 'snapshot'],
 };
 const POLL_MS = 30_000;
-const SPAN: Record<Slot['size'], string> = { sm: '', md: 'md:col-span-2', lg: 'md:col-span-2 xl:col-span-3' };
+// U4 packing: spans per breakpoint from `boardSpans` (static class names so Tailwind sees them).
+const MD_SPAN: Record<number, string> = { 1: 'md:col-span-1', 2: 'md:col-span-2' };
+const XL_SPAN: Record<number, string> = { 1: 'xl:col-span-1', 2: 'xl:col-span-2', 3: 'xl:col-span-3' };
 const DOT = { live: 'success', connecting: 'warning', offline: 'neutral' } as const;
 
 /** Follows one channel; each message (after the first snapshot) calls `onChange`. */
@@ -61,11 +75,31 @@ function ChannelWatch({
   return null;
 }
 
+/** What the hero strip needs (U4): the mode, and what the member's role lets the next action use. */
+export interface HeroView {
+  readonly mode: ModeView;
+  readonly role: CcRole;
+  readonly canScan: boolean;
+  readonly revenue: boolean;
+  /** The readiness widget feeds the next action (roles and modes with readiness). */
+  readonly readiness: boolean;
+  /** The alerts widget feeds the next action. */
+  readonly alerts: boolean;
+}
+
+type ReadinessData = {
+  blocking: { key: string; path: string; field: string | null }[];
+  todo: { key: string; path: string; field: string | null }[];
+};
+
 /**
  * The Command Center board (M3.2a): the member's widgets for the current mode, kept current over
  * each widget's realtime channel (or every 30 s when the member can't follow it), and arranged by
  * the member: drag a widget by its handle, or use the Move up / Move down / Hide / Show buttons
  * (the keyboard alternative). Every change is saved at once for this member and this event.
+ * U4: above it the hero strip (countdown, mode, next action) and the KPI row, read from the same
+ * loaders and kept current the same way (even when their widgets are hidden); the grid packs with
+ * no empty cell at any width (`boardSpans`).
  */
 export function CommandCenterBoard({
   slots,
@@ -80,6 +114,10 @@ export function CommandCenterBoard({
   nextChangeAt,
   save,
   reset,
+  kpis,
+  hero,
+  links,
+  heroControls,
 }: {
   slots: readonly Slot[];
   channels: Readonly<Record<string, readonly WidgetChannel[]>>;
@@ -93,6 +131,11 @@ export function CommandCenterBoard({
   nextChangeAt: string | null;
   save: (order: string[], hidden: string[]) => Promise<LayoutResult>;
   reset: () => Promise<LayoutResult>;
+  kpis: readonly KpiKey[];
+  hero: HeroView;
+  links: HeroLinks;
+  /** The mode control (owners and staff who can edit the event). */
+  heroControls?: ReactNode;
 }) {
   const t = useTranslations('commandCenter');
   const router = useRouter();
@@ -143,7 +186,16 @@ export function CommandCenterBoard({
   // One re-read per burst of messages, per channel.
   const timers = useRef(new Map<string, ReturnType<typeof setTimeout>>());
   const visible = order.filter((k) => !hidden.has(k));
-  const visibleKey = visible.join(',');
+  // Re-read on change: the shown widgets, plus what the KPI row and the hero read.
+  const watched = [
+    ...new Set<WidgetKey>([
+      ...visible,
+      ...kpis,
+      ...(hero.readiness ? (['readiness'] as const) : []),
+      ...(hero.alerts ? (['alerts'] as const) : []),
+    ]),
+  ];
+  const visibleKey = watched.join(',');
   const changed = useCallback(
     (channel: WidgetChannel) => {
       if (timers.current.has(channel)) return;
@@ -254,7 +306,7 @@ export function CommandCenterBoard({
       if (r.ok) router.refresh();
     });
 
-  const followed = [...new Set(visible.flatMap((k) => (channels[k] ?? []).filter((c) => urls[c])))];
+  const followed = [...new Set(watched.flatMap((k) => (channels[k] ?? []).filter((c) => urls[c])))];
   const liveState =
     followed.length === 0
       ? 'polling'
@@ -268,7 +320,20 @@ export function CommandCenterBoard({
       setStreams((m) => (m[c] === s ? m : { ...m, [c]: s })),
     [],
   );
-  const ctx = { locale, timeZone, base };
+  const ctx = { locale, timeZone, base, alertsHref: links.alerts };
+  const spans = boardSpans(visible.map((k) => size.get(k) ?? 'sm'));
+  const alertList = hero.alerts
+    ? ((data.alerts as { alerts?: HeroAlert[] } | null | undefined)?.alerts ?? null)
+    : null;
+  const readiness = hero.readiness ? ((data.readiness as ReadinessData | null | undefined) ?? null) : null;
+  const action = nextAction({
+    mode: hero.mode.mode,
+    role: hero.role,
+    alerts: alertList,
+    readiness,
+    canScan: hero.canScan,
+    revenue: hero.revenue,
+  });
   const controls = (k: WidgetKey) => ({
     params: params[k] ?? {},
     setParams: (next: Params) => {
@@ -294,154 +359,179 @@ export function CommandCenterBoard({
   });
 
   return (
-    <section aria-labelledby="cc-widgets" className="flex flex-col gap-4">
-      {followed.map((c) => (
-        <ChannelWatch
-          key={c}
-          url={urls[c] as string}
-          events={CHANNEL_EVENTS[c]}
-          onChange={() => changed(c)}
-          onState={(s) => onState(c, s)}
-        />
-      ))}
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <h2 id="cc-widgets" className="text-card">
-          {t('widgets')}
-        </h2>
-        <div className="flex flex-wrap items-center gap-3">
-          <span data-testid="cc-live" data-live={liveState}>
-            <StatusDot
-              status={liveState === 'polling' ? 'info' : DOT[liveState]}
-              label={t(`live.${liveState}`)}
-              live={liveState === 'live'}
-            />
-          </span>
-          <Button
-            variant="secondary"
-            size="sm"
-            aria-pressed={customizing}
-            onClick={() => setCustomizing((v) => !v)}
-          >
-            {customizing ? t('done') : t('customize')}
-          </Button>
-          {customizing ? (
-            <Button variant="ghost" size="sm" onClick={resetLayout}>
-              {t('reset')}
-            </Button>
-          ) : null}
-        </div>
-      </div>
-      <p
-        role="status"
-        aria-live="polite"
-        className={cx('text-caption', failed ? 'text-danger' : 'text-ink-2')}
+    <>
+      <HeroStrip
+        mode={hero.mode}
+        timeZone={timeZone}
+        locale={locale}
+        serverNow={serverNow}
+        action={action}
+        links={links}
       >
-        {message}
-      </p>
-      {visible.length === 0 ? (
-        <Card className="text-center">
-          <p className="text-section">{t('empty.title')}</p>
-          <p className="text-body text-ink-2">{t('empty.description')}</p>
-        </Card>
-      ) : (
-        <ol
-          className="grid list-none grid-cols-1 gap-3.5 p-0 md:grid-cols-2 xl:grid-cols-3"
-          aria-label={t('widgets')}
-        >
-          {visible.map((k, i) => (
-            <li
-              key={k}
-              className={cx(SPAN[size.get(k) ?? 'sm'], dragging === k && 'opacity-60')}
-              data-testid={`cc-widget-${k}`}
-              onDragOver={customizing ? (e) => e.preventDefault() : undefined}
-              onDrop={customizing ? () => drop(k) : undefined}
+        {heroControls}
+      </HeroStrip>
+      <KpiRow keys={kpis} data={data} locale={locale} />
+      <section aria-labelledby="cc-widgets" className="flex flex-col gap-4">
+        {followed.map((c) => (
+          <ChannelWatch
+            key={c}
+            url={urls[c] as string}
+            events={CHANNEL_EVENTS[c]}
+            onChange={() => changed(c)}
+            onState={(s) => onState(c, s)}
+          />
+        ))}
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h2 id="cc-widgets" className="text-card">
+            {t('widgets')}
+          </h2>
+          <div className="flex flex-wrap items-center gap-3">
+            <span data-testid="cc-live" data-live={liveState}>
+              <StatusDot
+                status={liveState === 'polling' ? 'info' : DOT[liveState]}
+                label={t(`live.${liveState}`)}
+                live={liveState === 'live'}
+              />
+            </span>
+            <Button
+              variant="secondary"
+              size="sm"
+              aria-pressed={customizing}
+              onClick={() => setCustomizing((v) => !v)}
             >
-              <Card className="flex h-full flex-col gap-3">
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <h3 className="m-0 text-body font-bold tracking-normal text-ink-2">{title(k)}</h3>
-                  {customizing ? (
-                    <div className="flex items-center gap-1">
-                      <span
-                        draggable
-                        onDragStart={() => setDragging(k)}
-                        onDragEnd={() => setDragging(null)}
-                        className="inline-flex size-8 cursor-grab items-center justify-center rounded-[10px] text-ink-2 hover:bg-surface-3"
-                        title={t('drag', { widget: title(k) })}
-                        aria-hidden="true"
-                      >
-                        <GripVertical className="size-4" />
-                      </span>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        aria-label={t('moveUp', { widget: title(k) })}
-                        data-cc-focus={`${k}:up`}
-                        disabled={i === 0}
-                        onClick={() => move(k, -1)}
-                      >
-                        <ArrowUp aria-hidden="true" className="size-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        aria-label={t('moveDown', { widget: title(k) })}
-                        data-cc-focus={`${k}:down`}
-                        disabled={i === visible.length - 1}
-                        onClick={() => move(k, 1)}
-                      >
-                        <ArrowDown aria-hidden="true" className="size-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        aria-label={t('hide', { widget: title(k) })}
-                        data-cc-focus={`${k}:hide`}
-                        onClick={() => hide(k)}
-                      >
-                        <EyeOff aria-hidden="true" className="size-4" />
-                      </Button>
-                    </div>
-                  ) : null}
-                </div>
-                {data[k] === undefined ? (
-                  <div role="status" className="flex flex-col gap-3">
-                    <span className="sr-only">{t('loading')}</span>
-                    <Skeleton className="h-9 w-1/2" />
-                    <SkeletonText lines={2} />
-                  </div>
-                ) : data[k] === null ? (
-                  <p className="text-caption text-ink-2">{t('unavailable')}</p>
-                ) : (
-                  <WidgetBody widget={k} data={data[k]} ctx={ctx} controls={controls(k)} />
+              {customizing ? t('done') : t('customize')}
+            </Button>
+            {customizing ? (
+              <Button variant="ghost" size="sm" onClick={resetLayout}>
+                {t('reset')}
+              </Button>
+            ) : null}
+          </div>
+        </div>
+        <p
+          role="status"
+          aria-live="polite"
+          className={cx('text-caption', failed ? 'text-danger' : 'text-ink-2')}
+        >
+          {message}
+        </p>
+        {visible.length === 0 ? (
+          <Card className="text-center">
+            <p className="text-section">{t('empty.title')}</p>
+            <p className="text-body text-ink-2">{t('empty.description')}</p>
+          </Card>
+        ) : (
+          <ol
+            className="grid list-none grid-flow-row-dense grid-cols-1 gap-3.5 p-0 md:grid-cols-2 xl:grid-cols-3"
+            aria-label={t('widgets')}
+            data-testid="cc-grid"
+          >
+            {visible.map((k, i) => (
+              <li
+                key={k}
+                className={cx(
+                  'col-span-1',
+                  MD_SPAN[spans.md[i] ?? 1],
+                  XL_SPAN[spans.xl[i] ?? 1],
+                  dragging === k && 'opacity-60',
                 )}
-              </Card>
-            </li>
-          ))}
-        </ol>
-      )}
-      {customizing ? (
-        <section aria-labelledby="cc-hidden" className="flex flex-col gap-2">
-          <h3 id="cc-hidden" className="text-body font-medium">
-            {t('hiddenTitle')}
-          </h3>
-          {order.some((k) => hidden.has(k)) ? (
-            <ul className="flex list-none flex-wrap gap-2 p-0">
-              {order
-                .filter((k) => hidden.has(k))
-                .map((k) => (
-                  <li key={k}>
-                    <Button variant="secondary" size="sm" data-cc-focus={`${k}:show`} onClick={() => show(k)}>
-                      <Eye aria-hidden="true" className="size-4" />
-                      {t('show', { widget: title(k) })}
-                    </Button>
-                  </li>
-                ))}
-            </ul>
-          ) : (
-            <p className="text-caption text-ink-2">{t('hiddenNone')}</p>
-          )}
-        </section>
-      ) : null}
-    </section>
+                data-testid={`cc-widget-${k}`}
+                data-size={size.get(k)}
+                onDragOver={customizing ? (e) => e.preventDefault() : undefined}
+                onDrop={customizing ? () => drop(k) : undefined}
+              >
+                <Card className="flex h-full flex-col gap-3">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <h3 className="m-0 text-body font-bold tracking-normal text-ink-2">{title(k)}</h3>
+                    {customizing ? (
+                      <div className="flex items-center gap-1">
+                        <span
+                          draggable
+                          onDragStart={() => setDragging(k)}
+                          onDragEnd={() => setDragging(null)}
+                          className="inline-flex size-8 cursor-grab items-center justify-center rounded-[10px] text-ink-2 hover:bg-surface-3"
+                          title={t('drag', { widget: title(k) })}
+                          aria-hidden="true"
+                        >
+                          <GripVertical className="size-4" />
+                        </span>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          aria-label={t('moveUp', { widget: title(k) })}
+                          data-cc-focus={`${k}:up`}
+                          disabled={i === 0}
+                          onClick={() => move(k, -1)}
+                        >
+                          <ArrowUp aria-hidden="true" className="size-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          aria-label={t('moveDown', { widget: title(k) })}
+                          data-cc-focus={`${k}:down`}
+                          disabled={i === visible.length - 1}
+                          onClick={() => move(k, 1)}
+                        >
+                          <ArrowDown aria-hidden="true" className="size-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          aria-label={t('hide', { widget: title(k) })}
+                          data-cc-focus={`${k}:hide`}
+                          onClick={() => hide(k)}
+                        >
+                          <EyeOff aria-hidden="true" className="size-4" />
+                        </Button>
+                      </div>
+                    ) : null}
+                  </div>
+                  {data[k] === undefined ? (
+                    <div role="status" className="flex flex-col gap-3">
+                      <span className="sr-only">{t('loading')}</span>
+                      <Skeleton className="h-9 w-1/2" />
+                      <SkeletonText lines={2} />
+                    </div>
+                  ) : data[k] === null ? (
+                    <p className="text-caption text-ink-2">{t('unavailable')}</p>
+                  ) : (
+                    <WidgetBody widget={k} data={data[k]} ctx={ctx} controls={controls(k)} />
+                  )}
+                </Card>
+              </li>
+            ))}
+          </ol>
+        )}
+        {customizing ? (
+          <section aria-labelledby="cc-hidden" className="flex flex-col gap-2">
+            <h3 id="cc-hidden" className="text-body font-medium">
+              {t('hiddenTitle')}
+            </h3>
+            {order.some((k) => hidden.has(k)) ? (
+              <ul className="flex list-none flex-wrap gap-2 p-0">
+                {order
+                  .filter((k) => hidden.has(k))
+                  .map((k) => (
+                    <li key={k}>
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        data-cc-focus={`${k}:show`}
+                        onClick={() => show(k)}
+                      >
+                        <Eye aria-hidden="true" className="size-4" />
+                        {t('show', { widget: title(k) })}
+                      </Button>
+                    </li>
+                  ))}
+              </ul>
+            ) : (
+              <p className="text-caption text-ink-2">{t('hiddenNone')}</p>
+            )}
+          </section>
+        ) : null}
+      </section>
+    </>
   );
 }

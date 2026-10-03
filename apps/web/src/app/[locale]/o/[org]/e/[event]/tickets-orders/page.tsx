@@ -640,7 +640,9 @@ export default async function TicketsPage({
       </section>
       {canWrite ? (
         <Card className="flex flex-col gap-3">
-          <h2 className="text-section">{t('tickets.addTitle')}</h2>
+          <h2 id="add-ticket-type-heading" className="scroll-mt-4 text-section">
+            {t('tickets.addTitle')}
+          </h2>
           <TicketTypeForm
             currency={ev.currency}
             dates={dateOptions}

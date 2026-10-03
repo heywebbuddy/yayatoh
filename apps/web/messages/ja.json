@@ -6633,13 +6633,16 @@
     "overviewTruncated": "{total} 件中、最初の {shown} 件を表示（開催中を先頭）。",
     "overviewEmpty": {
       "title": "今は見守るものがありません",
-      "description": "イベントは計画中、当日、そして終了後1週間ここに表示されます。"
+      "description": "イベントは計画中、当日、そして終了後1週間ここに表示されます。",
+      "action": "すべてのイベントを見る"
     },
     "columns": {
       "event": "イベント",
       "mode": "モード",
       "starts": "開始",
-      "readiness": "準備状況"
+      "readiness": "準備状況",
+      "sales": "売上",
+      "tickets": "チケット"
     },
     "manual": "手動で設定",
     "role": {
@@ -6708,9 +6711,10 @@
       "readiness": {
         "title": "準備状況",
         "score": "準備状況 {score}%",
-        "blocking": "要対応",
-        "todo": "その他の作業",
-        "allDone": "準備完了です。"
+        "allDone": "準備完了です。",
+        "count": "{total} 件中 {done} 件完了",
+        "required": "販売に必要",
+        "recommended": "推奨"
       },
       "sales": {
         "title": "売上",
@@ -6757,7 +6761,9 @@
       "alerts": {
         "title": "アラート",
         "pending": "アラートルールが有効になると、ここにアラートが表示されます。",
-        "none": "未対応のアラートはありません。"
+        "none": "未対応のアラートはありません。",
+        "watching": "アラートルールが売上・支払い・端末・定員・ゲストを監視し、ここに表示します。",
+        "viewAll": "すべてのアラートを見る"
       },
       "entrances": {
         "title": "入口"
@@ -6979,6 +6985,49 @@
       "readOnly": "閲覧のみ",
       "statusOn": "有効",
       "statusOff": "停止"
+    },
+    "hero": {
+      "startsIn": "開始まで {duration}",
+      "endsIn": "終了まで {duration}",
+      "ended": "{duration}前に終了",
+      "nextLabel": "次のステップ",
+      "blocking": "販売前に必要です",
+      "next": {
+        "readiness": "未完了：{item}",
+        "scanner": "入口でゲストをチェックイン",
+        "publicPage": "準備完了です。ゲストと同じ目線でイベントページを確認しましょう。",
+        "report": "終了しました。結果を確認しましょう。",
+        "none": "今は対応が必要なことはありません。"
+      },
+      "do": {
+        "alert": "対応する",
+        "readiness": "今すぐ対応",
+        "scanner": "スキャンを開始",
+        "publicPage": "イベントページを見る",
+        "report": "レポートを開く"
+      }
+    },
+    "kpi": {
+      "title": "主要指標",
+      "sales": "売上",
+      "salesToday": "本日 {amount}",
+      "tickets": "販売済みチケット",
+      "ofCapacity": "{capacity} 枚中",
+      "noCapacity": "まだ販売中のチケットはありません",
+      "checkins": "チェックイン済み",
+      "ofValid": "有効なチケット {valid} 枚中",
+      "alerts": "未対応のアラート",
+      "allClear": "問題なし",
+      "needsYou": "要対応",
+      "critical": "{count, plural, =0 {重大なし} other {重大 #件}}"
+    },
+    "soldOf": "{capacity} 中 {sold}",
+    "overviewCounts": "モード別イベント",
+    "overviewGroup": {
+      "live": "開催中（{count}）",
+      "pre_show": "開催前日（{count}）",
+      "planning": "計画中（{count}）",
+      "wrap": "締めくくり（{count}）"
     }
   },
   "alerts": {

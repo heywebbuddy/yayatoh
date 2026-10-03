@@ -6633,13 +6633,16 @@
     "overviewTruncated": "Showing the first {shown} of {total} events (live first).",
     "overviewEmpty": {
       "title": "Nothing to watch right now",
-      "description": "Events show up here while they're being planned, on the day and for a week after."
+      "description": "Events show up here while they're being planned, on the day and for a week after.",
+      "action": "See all events"
     },
     "columns": {
       "event": "Event",
       "mode": "Mode",
       "starts": "Starts",
-      "readiness": "Readiness"
+      "readiness": "Readiness",
+      "sales": "Sales",
+      "tickets": "Tickets"
     },
     "manual": "Set by hand",
     "role": {
@@ -6708,9 +6711,10 @@
       "readiness": {
         "title": "Readiness",
         "score": "Readiness {score}%",
-        "blocking": "Blocking",
-        "todo": "Also to do",
-        "allDone": "Ready to go."
+        "allDone": "Ready to go.",
+        "count": "{done} of {total} done",
+        "required": "Needed to sell",
+        "recommended": "Recommended"
       },
       "sales": {
         "title": "Sales",
@@ -6757,7 +6761,9 @@
       "alerts": {
         "title": "Alerts",
         "pending": "Alerts will appear here once alert rules are switched on.",
-        "none": "No open alerts."
+        "none": "No open alerts.",
+        "watching": "Alert rules watch sales, payments, devices, capacity and guests, and show up here.",
+        "viewAll": "See all alerts"
       },
       "entrances": {
         "title": "Entrances"
@@ -6979,6 +6985,49 @@
       "readOnly": "Read-only",
       "statusOn": "On",
       "statusOff": "Off"
+    },
+    "hero": {
+      "startsIn": "Starts in {duration}",
+      "endsIn": "Ends in {duration}",
+      "ended": "Ended {duration} ago",
+      "nextLabel": "Next step",
+      "blocking": "Needed before you can sell",
+      "next": {
+        "readiness": "Finish: {item}",
+        "scanner": "Check guests in at the door",
+        "publicPage": "All set. See the event page as guests do.",
+        "report": "It’s over. See how it went.",
+        "none": "Nothing needs you right now."
+      },
+      "do": {
+        "alert": "Resolve",
+        "readiness": "Fix it now",
+        "scanner": "Start scanning",
+        "publicPage": "View event page",
+        "report": "Open the report"
+      }
+    },
+    "kpi": {
+      "title": "Key figures",
+      "sales": "Sales",
+      "salesToday": "{amount} today",
+      "tickets": "Tickets sold",
+      "ofCapacity": "of {capacity}",
+      "noCapacity": "No tickets on sale yet",
+      "checkins": "Checked in",
+      "ofValid": "of {valid} valid tickets",
+      "alerts": "Open alerts",
+      "allClear": "All clear",
+      "needsYou": "Needs you",
+      "critical": "{count, plural, =0 {None critical} one {# critical} other {# critical}}"
+    },
+    "soldOf": "{sold} of {capacity}",
+    "overviewCounts": "Events by mode",
+    "overviewGroup": {
+      "live": "Live ({count})",
+      "pre_show": "Pre-show ({count})",
+      "planning": "Being planned ({count})",
+      "wrap": "Wrapping up ({count})"
     }
   },
   "alerts": {

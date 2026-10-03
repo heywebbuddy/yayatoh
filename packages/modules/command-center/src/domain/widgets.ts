@@ -461,6 +461,21 @@ export function availableWidgets(
   );
 }
 
+/**
+ * The KPI row above the board (U4): sales, tickets sold of capacity, check-ins and open alerts,
+ * each only for members whose role, profile and modules allow the widget it comes from (the same
+ * rule as the widget's loader), so the door never gets the sales figure here either.
+ */
+export const KPI_KEYS = ['sales', 'tickets', 'checkins', 'alerts'] as const satisfies readonly WidgetKey[];
+export type KpiKey = (typeof KPI_KEYS)[number];
+
+export function kpiKeys(
+  registry: Readonly<Partial<Record<string, WidgetMeta>>>,
+  scope: WidgetScope,
+): KpiKey[] {
+  return KPI_KEYS.filter((k) => widgetAllowed(registry[k], scope));
+}
+
 /** A user's saved arrangement (per event): widget order and the widgets they hid. */
 export interface SavedLayout {
   readonly order: readonly string[];

@@ -6633,13 +6633,16 @@
     "overviewTruncated": "{total} में से पहले {shown} इवेंट (पहले लाइव)।",
     "overviewEmpty": {
       "title": "अभी देखने को कुछ नहीं",
-      "description": "इवेंट यहाँ योजना के दौरान, इवेंट के दिन और उसके एक हफ़्ते बाद तक दिखते हैं।"
+      "description": "इवेंट यहाँ योजना के दौरान, इवेंट के दिन और उसके एक हफ़्ते बाद तक दिखते हैं।",
+      "action": "सभी इवेंट देखें"
     },
     "columns": {
       "event": "इवेंट",
       "mode": "मोड",
       "starts": "शुरुआत",
-      "readiness": "तैयारी"
+      "readiness": "तैयारी",
+      "sales": "बिक्री",
+      "tickets": "टिकट"
     },
     "manual": "हाथ से सेट",
     "role": {
@@ -6708,9 +6711,10 @@
       "readiness": {
         "title": "तैयारी",
         "score": "तैयारी {score}%",
-        "blocking": "रुकावटें",
-        "todo": "और भी करना है",
-        "allDone": "सब तैयार है।"
+        "allDone": "सब तैयार है।",
+        "count": "{total} में से {done} पूरे",
+        "required": "बेचने के लिए ज़रूरी",
+        "recommended": "सुझाया गया"
       },
       "sales": {
         "title": "बिक्री",
@@ -6757,7 +6761,9 @@
       "alerts": {
         "title": "अलर्ट",
         "pending": "अलर्ट नियम चालू होने पर अलर्ट यहाँ दिखेंगे।",
-        "none": "कोई खुला अलर्ट नहीं।"
+        "none": "कोई खुला अलर्ट नहीं।",
+        "watching": "अलर्ट नियम बिक्री, भुगतान, डिवाइस, क्षमता और मेहमानों पर नज़र रखते हैं और यहाँ दिखते हैं।",
+        "viewAll": "सभी अलर्ट देखें"
       },
       "entrances": {
         "title": "प्रवेश द्वार"
@@ -6979,6 +6985,49 @@
       "readOnly": "केवल पढ़ने के लिए",
       "statusOn": "चालू",
       "statusOff": "बंद"
+    },
+    "hero": {
+      "startsIn": "{duration} में शुरू",
+      "endsIn": "{duration} में समाप्त",
+      "ended": "{duration} पहले समाप्त",
+      "nextLabel": "अगला कदम",
+      "blocking": "बेचने से पहले ज़रूरी",
+      "next": {
+        "readiness": "पूरा करें: {item}",
+        "scanner": "दरवाज़े पर मेहमानों को चेक-इन करें",
+        "publicPage": "सब तैयार है। इवेंट पेज को मेहमानों की तरह देखें।",
+        "report": "इवेंट समाप्त हो गया। देखें कैसा रहा।",
+        "none": "अभी आपकी ज़रूरत किसी चीज़ को नहीं है।"
+      },
+      "do": {
+        "alert": "हल करें",
+        "readiness": "अभी ठीक करें",
+        "scanner": "स्कैन शुरू करें",
+        "publicPage": "इवेंट पेज देखें",
+        "report": "रिपोर्ट खोलें"
+      }
+    },
+    "kpi": {
+      "title": "मुख्य आंकड़े",
+      "sales": "बिक्री",
+      "salesToday": "आज {amount}",
+      "tickets": "बिके टिकट",
+      "ofCapacity": "{capacity} में से",
+      "noCapacity": "अभी कोई टिकट बिक्री पर नहीं",
+      "checkins": "चेक-इन हुए",
+      "ofValid": "{valid} मान्य टिकटों में से",
+      "alerts": "खुले अलर्ट",
+      "allClear": "सब ठीक है",
+      "needsYou": "आपकी ज़रूरत है",
+      "critical": "{count, plural, =0 {कोई गंभीर नहीं} one {# गंभीर} other {# गंभीर}}"
+    },
+    "soldOf": "{capacity} में से {sold}",
+    "overviewCounts": "मोड के अनुसार इवेंट",
+    "overviewGroup": {
+      "live": "लाइव ({count})",
+      "pre_show": "प्री-शो ({count})",
+      "planning": "योजना में ({count})",
+      "wrap": "समापन में ({count})"
     }
   },
   "alerts": {

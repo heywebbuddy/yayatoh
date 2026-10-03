@@ -6633,13 +6633,16 @@
     "overviewTruncated": "顯示 {total} 個活動中的前 {shown} 個（進行中的在前）。",
     "overviewEmpty": {
       "title": "目前沒有需要關注的活動",
-      "description": "活動在籌備期間、活動當天及之後一週內顯示在這裡。"
+      "description": "活動在籌備期間、活動當天及之後一週內顯示在這裡。",
+      "action": "查看所有活動"
     },
     "columns": {
       "event": "活動",
       "mode": "模式",
       "starts": "開始時間",
-      "readiness": "準備度"
+      "readiness": "準備度",
+      "sales": "銷售額",
+      "tickets": "票券"
     },
     "manual": "手動設定",
     "role": {
@@ -6708,9 +6711,10 @@
       "readiness": {
         "title": "準備度",
         "score": "準備度 {score}%",
-        "blocking": "阻礙項目",
-        "todo": "其他待辦",
-        "allDone": "一切就緒。"
+        "allDone": "一切就緒。",
+        "count": "已完成 {done}/{total}",
+        "required": "開賣必需",
+        "recommended": "建議完成"
       },
       "sales": {
         "title": "銷售額",
@@ -6757,7 +6761,9 @@
       "alerts": {
         "title": "提醒",
         "pending": "啟用提醒規則後，提醒會顯示在這裡。",
-        "none": "沒有未處理的提醒。"
+        "none": "沒有未處理的提醒。",
+        "watching": "警示規則會監控銷售、付款、裝置、容量和來賓，並在此顯示。",
+        "viewAll": "查看所有警示"
       },
       "entrances": {
         "title": "入口"
@@ -6979,6 +6985,49 @@
       "readOnly": "唯讀",
       "statusOn": "已開啟",
       "statusOff": "已關閉"
+    },
+    "hero": {
+      "startsIn": "{duration}後開始",
+      "endsIn": "{duration}後結束",
+      "ended": "已於{duration}前結束",
+      "nextLabel": "下一步",
+      "blocking": "開賣前必須完成",
+      "next": {
+        "readiness": "待完成：{item}",
+        "scanner": "在門口為來賓報到",
+        "publicPage": "一切就緒。以來賓視角查看活動頁面。",
+        "report": "活動已結束。看看成效如何。",
+        "none": "目前沒有需要處理的事項。"
+      },
+      "do": {
+        "alert": "去處理",
+        "readiness": "立即完成",
+        "scanner": "開始掃描",
+        "publicPage": "查看活動頁面",
+        "report": "開啟報告"
+      }
+    },
+    "kpi": {
+      "title": "關鍵數據",
+      "sales": "銷售額",
+      "salesToday": "今日 {amount}",
+      "tickets": "已售票券",
+      "ofCapacity": "共 {capacity}",
+      "noCapacity": "尚無販售中的票券",
+      "checkins": "已報到",
+      "ofValid": "共 {valid} 張有效票券",
+      "alerts": "未處理警示",
+      "allClear": "一切正常",
+      "needsYou": "需要處理",
+      "critical": "{count, plural, =0 {無嚴重警示} other {# 個嚴重}}"
+    },
+    "soldOf": "{sold}/{capacity}",
+    "overviewCounts": "依模式分類的活動",
+    "overviewGroup": {
+      "live": "進行中（{count}）",
+      "pre_show": "開場前（{count}）",
+      "planning": "籌備中（{count}）",
+      "wrap": "收尾中（{count}）"
     }
   },
   "alerts": {

@@ -6633,13 +6633,16 @@
     "overviewTruncated": "显示 {total} 个活动中的前 {shown} 个（进行中的在前）。",
     "overviewEmpty": {
       "title": "目前没有需要关注的活动",
-      "description": "活动在筹备期间、活动当天及之后一周内显示在这里。"
+      "description": "活动在筹备期间、活动当天及之后一周内显示在这里。",
+      "action": "查看全部活动"
     },
     "columns": {
       "event": "活动",
       "mode": "模式",
       "starts": "开始时间",
-      "readiness": "准备度"
+      "readiness": "准备度",
+      "sales": "销售额",
+      "tickets": "门票"
     },
     "manual": "手动设置",
     "role": {
@@ -6708,9 +6711,10 @@
       "readiness": {
         "title": "准备度",
         "score": "准备度 {score}%",
-        "blocking": "阻碍项",
-        "todo": "其他待办",
-        "allDone": "一切就绪。"
+        "allDone": "一切就绪。",
+        "count": "已完成 {done}/{total}",
+        "required": "开售必需",
+        "recommended": "建议完成"
       },
       "sales": {
         "title": "销售额",
@@ -6757,7 +6761,9 @@
       "alerts": {
         "title": "提醒",
         "pending": "启用提醒规则后，提醒会显示在这里。",
-        "none": "没有未处理的提醒。"
+        "none": "没有未处理的提醒。",
+        "watching": "警报规则会监控销售、付款、设备、容量和来宾，并在此显示。",
+        "viewAll": "查看全部警报"
       },
       "entrances": {
         "title": "入口"
@@ -6979,6 +6985,49 @@
       "readOnly": "只读",
       "statusOn": "已开启",
       "statusOff": "已关闭"
+    },
+    "hero": {
+      "startsIn": "{duration}后开始",
+      "endsIn": "{duration}后结束",
+      "ended": "已于{duration}前结束",
+      "nextLabel": "下一步",
+      "blocking": "开售前必须完成",
+      "next": {
+        "readiness": "待完成：{item}",
+        "scanner": "在门口为来宾签到",
+        "publicPage": "一切就绪。以来宾视角查看活动页面。",
+        "report": "活动已结束。看看效果如何。",
+        "none": "目前没有需要处理的事项。"
+      },
+      "do": {
+        "alert": "去处理",
+        "readiness": "立即完成",
+        "scanner": "开始扫码",
+        "publicPage": "查看活动页面",
+        "report": "打开报告"
+      }
+    },
+    "kpi": {
+      "title": "关键数据",
+      "sales": "销售额",
+      "salesToday": "今日 {amount}",
+      "tickets": "已售门票",
+      "ofCapacity": "共 {capacity}",
+      "noCapacity": "尚无在售门票",
+      "checkins": "已签到",
+      "ofValid": "共 {valid} 张有效门票",
+      "alerts": "未处理警报",
+      "allClear": "一切正常",
+      "needsYou": "需要处理",
+      "critical": "{count, plural, =0 {无严重警报} other {# 个严重}}"
+    },
+    "soldOf": "{sold}/{capacity}",
+    "overviewCounts": "按模式分类的活动",
+    "overviewGroup": {
+      "live": "进行中（{count}）",
+      "pre_show": "开场前（{count}）",
+      "planning": "筹备中（{count}）",
+      "wrap": "收尾中（{count}）"
     }
   },
   "alerts": {
