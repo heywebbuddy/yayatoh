@@ -2199,6 +2199,18 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
       );
     }
   }
+  // M5.10a conference hub: a fixture ticket stars the event's first session and has replaced its
+  // calendar feed link once (version 2).
+  await withTenant(systemCtx(org.id), async (tx) => {
+    await tx.execute(sql`insert into registration.session_favorites (org_id, event_id, session_id, registrant_id)
+      select ${org.id}, ${event.id}, s.id, t.id
+      from program.sessions s, ticketing.tickets t
+      where s.event_id = ${event.id} and t.order_id = ${checkout.order.id}
+      order by s.starts_at, t.id limit 1`);
+    await tx.execute(sql`insert into registration.calendar_feeds (org_id, event_id, registrant_id, version)
+      select ${org.id}, ${event.id}, t.id, 2 from ticketing.tickets t
+      where t.order_id = ${checkout.order.id} order by t.id limit 1`);
+  });
   // M4.1a: a party with a named guest (sealed answers, linked to a guest-list entry), a child and
   // an unnamed plus-one; then an edit and a move, so every history action has rows.
   const party = await executeCommand(

@@ -27,3 +27,21 @@ describe('intl scopes (M4.7a)', () => {
     expect(scopedMessages(all, 'rsvp')).toBeUndefined();
   });
 });
+
+describe('intl scopes (M5.10a conference hub)', () => {
+  it('scopes the conference hub page only, not the order page, its schedule or the manifest', () => {
+    expect(intlScopeOf('/orders/tok/hub')).toBe('conferenceHub');
+    expect(intlScopeOf('/orders/tok/hub/')).toBe('conferenceHub');
+    for (const p of ['/orders/tok', '/orders/tok/schedule', '/orders/tok/hub/manifest', '/orders/hub'])
+      expect(intlScopeOf(p)).toBeNull();
+  });
+
+  it('keeps the hub, enrollment and error namespaces', () => {
+    const all = { conferenceHub: { a: '1' }, mySchedule: { b: '2' }, errors: { c: '3' }, other: { d: '4' } };
+    expect(scopedMessages(all, 'conferenceHub')).toEqual({
+      conferenceHub: { a: '1' },
+      mySchedule: { b: '2' },
+      errors: { c: '3' },
+    });
+  });
+});

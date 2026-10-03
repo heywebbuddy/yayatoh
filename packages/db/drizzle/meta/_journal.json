@@ -1009,6 +1009,13 @@
       "when": 1791061351601,
       "tag": "0143_regular_speed",
       "breakpoints": true
+    },
+    {
+      "idx": 144,
+      "version": "7",
+      "when": 1791062933028,
+      "tag": "0144_cold_expediter",
+      "breakpoints": true
     }
   ]
 }
