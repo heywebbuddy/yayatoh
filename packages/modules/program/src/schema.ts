@@ -2,6 +2,7 @@ import { tenantTable } from '@yayatoh/db';
 import { sql } from 'drizzle-orm';
 import {
   type AnyPgColumn,
+  bigint,
   boolean,
   check,
   foreignKey,
@@ -76,6 +77,11 @@ export const sessions = tenantTable(
     roomId: uuid('room_id'),
     trackId: uuid('track_id'),
     capacity: integer('capacity'),
+    /**
+     * M5.3b: a draft (an accepted call-for-papers proposal not yet scheduled) is the organizer's
+     * only: never on the public agenda, its snapshot or the /v1 agenda.
+     */
+    draft: boolean('draft').notNull().default(false),
   },
   (t) => [
     index('sessions_org_event_starts_idx').on(t.orgId, t.eventId, t.startsAt),
@@ -354,10 +360,18 @@ export const exhibitorSettings = tenantTable(
     eventId: uuid('event_id').notNull(),
     defaultStaffAllowance: integer('default_staff_allowance').notNull().default(5),
     approvalRequired: boolean('approval_required').notNull().default(false),
+    /** M5.4b (P5-4): lead licenses every exhibitor gets (default 1) and the price of each extra one (null: not sold). */
+    includedLeadLicenses: integer('included_lead_licenses').notNull().default(1),
+    leadLicensePriceMinor: bigint('lead_license_price_minor', { mode: 'number' }),
   },
   (t) => [
     uniqueIndex('exhibitor_settings_org_event_key').on(t.orgId, t.eventId),
     check('exhibitor_settings_allowance_check', sql`default_staff_allowance between 0 and 500`),
+    check('exhibitor_settings_lead_licenses_check', sql`included_lead_licenses between 0 and 50`),
+    check(
+      'exhibitor_settings_lead_price_check',
+      sql`lead_license_price_minor is null or lead_license_price_minor between 1 and 100000000`,
+    ),
   ],
 );
 

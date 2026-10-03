@@ -1,4 +1,4 @@
-import type { ColumnId } from './registry.ts';
+import { type ColumnId, privateColumnList } from './registry.ts';
 
 /**
  * What each org-scoped or door-scoped response may show of the org's own private data
@@ -52,10 +52,54 @@ export const DOOR_ALLOW: readonly ColumnId[] = [
 export const EXPORT_ALLOW = {
   attendees: [...ATTENDEE, 'ticketing.tickets.short_code'],
   bookings: ORDER,
-  // The access request is the person's own data (their guest record and organizer labels).
-  dsar: ATTENDEE,
+  // The access archive (M6.1c) is the person's own data from every module: their personal and holder
+  // values, plus the organizer's labels about them. Never a secret or another internal column.
+  dsar: [
+    ...privateColumnList()
+      .filter((c) => c.rule.class === 'personal' || c.rule.class === 'holder')
+      .map((c) => c.id),
+    'attendees.attendees.labels',
+    'crm.event_participation.labels',
+    'crm.contact_profile.labels',
+    // The wedding sub-events the guest is invited to: their RSVP page shows them the same names.
+    'guests.sub_events.name',
+  ],
   // The activity log for owners and admins: who did it and to what.
   audit: ['platform.audit_events.actor', 'platform.audit_events.target_id'],
   // An audience (M3.6a): the contact's name and email; counts, dates and consent codes only.
   audience: ['crm.contacts.name', 'crm.contacts.email'],
 } as const satisfies Record<string, readonly ColumnId[]>;
+
+/**
+ * M4.5a: a guest website once the visitor proved its password: the hosts' own content and the
+ * program (sub-event names and places, venues are public). Never a guest, a party, an answer or
+ * a contact detail (P4-3); the locked gate is a public page (no canary at all).
+ */
+export const GUEST_SITE_ALLOW: readonly ColumnId[] = [
+  'guests.sites.title',
+  'guests.sites.intro',
+  'guests.site_blocks.heading',
+  'guests.site_blocks.content',
+  'guests.sub_events.name',
+  'guests.sub_events.place',
+];
+
+/**
+ * Batch 3j merge: what a party's own pages (reached by its signed link: the guest hub M4.7a, the
+ * seat page M4.4a, the card page M4.8e) may show — the party's names and envelope, its guests'
+ * names (and, on the seat page, the host-typed names of tablemates, P4-3 d), their meal choices,
+ * the program they are invited to and the menu, and on the hub the party's own tickets (holder and
+ * short code, as on its order page). Never contacts, private answers, notes or tags.
+ */
+export const PARTY_ALLOW: readonly ColumnId[] = [
+  'guests.parties.name',
+  'guests.parties.envelope_name',
+  'guests.guests.first_name',
+  'guests.guests.last_name',
+  'guests.guests.meal',
+  'guests.sub_events.name',
+  'guests.sub_events.place',
+  'guests.menu_options.label',
+  'ticketing.tickets.holder_name',
+  'ticketing.tickets.short_code',
+];

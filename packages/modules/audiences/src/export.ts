@@ -5,6 +5,7 @@ import { bulkCommands, defineBulkAction, MAX_BULK_ITEMS } from '@yayatoh/platfor
 import { organizationDefaultsTx } from '@yayatoh/tenancy';
 import { sql } from 'drizzle-orm';
 import { z } from 'zod';
+import { assertMoneyConditionsAllowedForActorTx } from './money.ts';
 import { compileForOrgTx } from './scopes.ts';
 import { segmentDefinitionTx } from './segments.ts';
 
@@ -79,6 +80,7 @@ export const audienceExportAction = defineBulkAction({
     const f = sel.filter;
     if (!f) throw new DomainError('validation_failed', 'An audience is required');
     const def = 'segmentId' in f ? await segmentDefinitionTx(tx, f.segmentId) : f.definition;
+    await assertMoneyConditionsAllowedForActorTx(tx, def);
     const [org] = await tx.execute<{ org_id: string }>(
       // The tenant of this transaction (RLS context), never taken from input.
       sql`select current_setting('app.org_id') as org_id`,

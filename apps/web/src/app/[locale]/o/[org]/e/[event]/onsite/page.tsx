@@ -25,6 +25,7 @@ import { formatNumber } from '@/lib/format.ts';
 import { realtimeUrl } from '@/lib/realtime-url.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
+import { CardSavingQr } from '../donations/pledges/card-qr.tsx';
 import {
   checkpointArchivedAction,
   createCheckpointAction,
@@ -50,6 +51,12 @@ const DOT = {
   no_access: 'danger',
   wrong_checkpoint: 'danger',
   balance_due: 'warning',
+  entered: 'success',
+  scanned_out: 'success',
+  not_in_room: 'warning',
+  not_enrolled: 'danger',
+  admission_level: 'danger',
+  capacity: 'warning',
 } as const;
 
 /** Door check-in: HID scanners and manual entry, entrances and zones, devices and alerts. */
@@ -142,10 +149,14 @@ export default async function OnsitePage({
       <Scanner
         action={scanAction.bind(null, org, event)}
         timeZone={ev.timezone}
-        checkpoints={standable.map((c) => ({ id: c.id, name: c.name }))}
+        checkpoints={standable.map((c) => ({ id: c.id, name: c.name, kind: c.kind }))}
         scoped={scope.checkpointIds !== null}
         presenceUrl={`/api/command-center/${org}/${event}/presence`}
       />
+      {/* M4.8e: at a gala with an open campaign, the desk shows guests the card-saving QR code. */}
+      {data.modules.has('donations') ? (
+        <CardSavingQr orgId={data.org.id} eventId={ev.id} slug={ev.slug} source="checkin" />
+      ) : null}
       {status.signals.length > 0 ? (
         <section
           aria-labelledby="signals-heading"
@@ -263,6 +274,9 @@ export default async function OnsitePage({
             {t('checkpoints.title')}
           </h2>
           <p className="text-caption text-ink-2">{t('checkpoints.description')}</p>
+          <Link href={`${base}/sessions`} className={buttonClass('secondary', 'sm', 'self-start')}>
+            {t('sessionCheckin.manage')}
+          </Link>
           {checkpoints.length > 0 ? (
             <Card size="panel">
               <ul className="flex list-none flex-col divide-y divide-line p-0">
@@ -273,13 +287,15 @@ export default async function OnsitePage({
                       <span className="text-caption text-ink-2">
                         {c.archived
                           ? t('checkpoints.archived')
-                          : c.kind === 'entrance'
-                            ? t('checkpoints.entrance')
-                            : c.ticketTypeIds.length === 0
-                              ? t('checkpoints.zoneAll')
-                              : t('checkpoints.zoneFor', {
-                                  types: c.ticketTypeIds.map((id) => typeName.get(id) ?? '—').join(', '),
-                                })}
+                          : c.kind === 'session'
+                            ? t('sessionCheckin.sessionDoor')
+                            : c.kind === 'entrance'
+                              ? t('checkpoints.entrance')
+                              : c.ticketTypeIds.length === 0
+                                ? t('checkpoints.zoneAll')
+                                : t('checkpoints.zoneFor', {
+                                    types: c.ticketTypeIds.map((id) => typeName.get(id) ?? '—').join(', '),
+                                  })}
                         {c.capacity !== null ? ` · ${t('checkpoints.holds', { count: c.capacity })}` : ''}
                         {c.latitude !== null && c.longitude !== null
                           ? ` · ${t('checkpoints.located', { lat: c.latitude.toFixed(5), lng: c.longitude.toFixed(5) })}`

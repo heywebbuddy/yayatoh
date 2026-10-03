@@ -2,7 +2,7 @@ import { executeQuery } from '@yayatoh/kernel';
 import { composeNav, isProfileKey } from '@yayatoh/platform';
 import { eventSeatingQuery, listLayoutsQuery, planTablesQuery } from '@yayatoh/seating';
 import { listTicketTypesQuery } from '@yayatoh/ticketing';
-import { Button, Card, PageHeader, StatusDot } from '@yayatoh/ui';
+import { Alert, Button, Card, PageHeader, StatusDot } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { DateChartForm } from '@/components/date-chart-form.tsx';
@@ -11,6 +11,7 @@ import { SeatingDatePicker } from '@/components/seating-dates.tsx';
 import { SeatingEditor } from '@/components/seating-editor.tsx';
 import { SeatingTabs } from '@/components/seating-tabs.tsx';
 import { SettingsForm } from '@/components/settings-form.tsx';
+import { Link } from '@/i18n/navigation.ts';
 import { localizedPath } from '@/lib/seo/urls.ts';
 import { loadEvent } from '@/server/console.ts';
 import { mediaPanel } from '@/server/media.ts';
@@ -35,7 +36,7 @@ export default async function SeatingPage({
   searchParams,
 }: {
   params: Promise<{ locale: string; org: string; event: string }>;
-  searchParams: Promise<{ date?: string }>;
+  searchParams: Promise<{ date?: string; fromLibrary?: string }>;
 }) {
   const { locale, org, event } = await params;
   const sp = await searchParams;
@@ -192,7 +193,14 @@ export default async function SeatingPage({
   return (
     <>
       <PageHeader title={t('title')} description={t('description')} />
-      <SeatingTabs base={base} active="plan" finder={data.modules.has('seat_finder')} date={dateId} />
+      <SeatingTabs
+        base={base}
+        active="plan"
+        finder={data.modules.has('seat_finder')}
+        selection={data.modules.has('advanced_seating')}
+        guests={data.modules.has('guests')}
+        date={dateId}
+      />
       <SeatingDatePicker base={base} dates={dates} selected={dateId} timeZone={ev.timezone} locale={locale} />
       {date ? (
         <Card className="flex flex-col gap-3">
@@ -232,6 +240,8 @@ export default async function SeatingPage({
           ) : null}
         </Card>
         {seating.status === 'locked' ? <p className="text-caption text-ink-2">{t('lockedNote')}</p> : null}
+        {/* M6.11b: a new event started from the library lands here to price its seats. */}
+        {sp.fromLibrary ? <Alert tone="info" title={t('fromLibrary')} /> : null}
 
         <section aria-labelledby="editor-heading" className="flex flex-col gap-3">
           <h2 id="editor-heading" className="text-section">
@@ -291,6 +301,12 @@ export default async function SeatingPage({
           <h2 id="template-heading" className="text-section">
             {t('template.title')}
           </h2>
+          <p className="text-body text-ink-2">
+            {t('template.description')}{' '}
+            <Link href={`/o/${org}/seating-library`} className="underline underline-offset-2">
+              {t('template.library')}
+            </Link>
+          </p>
           <Card>
             <SettingsForm
               action={saveTemplateAction.bind(null, org, event, seating.doc)}

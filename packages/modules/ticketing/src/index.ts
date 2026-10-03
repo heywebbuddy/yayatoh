@@ -22,6 +22,7 @@ export {
   updateTicketTypeTx,
 } from './commands/ticket-types.ts';
 export { instantiateTicketTypesTx, TicketTypesSnapshot, ticketTypesSnapshotTx } from './copy.ts';
+export { ticketingDataSubjects } from './data-subject.ts';
 export {
   CLAIM_PURPOSE,
   claimContext,
@@ -102,7 +103,11 @@ export {
   occurrenceSalesQuery,
   validForOccurrence,
 } from './occurrences.ts';
+// M5.6a: a registrant's order (add-ons) for session doors.
+export { orderSiblingsTx } from './order-siblings.ts';
 export { orderTicketIdsTx, ticketFactsTx } from './participation.ts';
+// M4.7a: a party's active tickets for its guest hub (the app passes this reader to the guests module).
+export { partyTicketsTx } from './party-tickets.ts';
 // M5.1d: tickets sold on an invoice with a balance due.
 export { paymentDueTicketIdsTx, setOrderPaymentDueTx } from './payment-due.ts';
 export { privateColumns } from './private-columns.ts';

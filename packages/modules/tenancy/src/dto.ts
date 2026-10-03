@@ -21,6 +21,8 @@ export const OrganizationDto = z.object({
   country: z.string(),
   currency: z.string(),
   brandColor: z.string().nullable(),
+  /** M6.3a: a sandbox org (fake payments, never on the marketplace, a SANDBOX banner). */
+  sandbox: z.boolean(),
 });
 export type OrganizationDto = z.infer<typeof OrganizationDto>;
 export const organizationSerializer = defineSerializer('tenancy.organization', OrganizationDto);

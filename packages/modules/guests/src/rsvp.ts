@@ -545,7 +545,7 @@ export type PublicRsvpDto = z.infer<typeof PublicRsvpDto>;
 const Token = z.string().min(10).max(200);
 
 /** The party of a link (in the context's org), or `not_found` for any bad, reset or foreign link. */
-async function linkPartyTx(tx: TenantTx, token: string, lock = false) {
+export async function linkPartyTx(tx: TenantTx, token: string, lock = false) {
   const linkId = verifyLinkToken(RSVP_LINK_PURPOSE, token);
   if (!linkId) throw new DomainError('not_found', 'Unknown link', { reason: 'unknown_link' });
   const q = tx.select().from(partyRsvp).where(eq(partyRsvp.linkId, linkId));
@@ -787,6 +787,43 @@ export const submitRsvpCommand = tenantCommand({
 });
 
 /**
+ * The party behind an exact full name and its PIN (P4-2), or null. Every call does the same work
+ * whether the name is unknown, partial or the PIN wrong: every named guest of the event is read
+ * and compared in memory, and a PIN is always computed and compared (a dummy one on a miss). Used
+ * by the RSVP paper fallback and the seat finder's PIN mode (M4.4a).
+ */
+export async function matchPartyByNamePinTx(
+  tx: TenantTx,
+  eventId: string,
+  name: string,
+  rawPin: string,
+): Promise<PartyRsvpRow | null> {
+  const wanted = strictName(name);
+  const pin = normalizePin(rawPin) ?? '------';
+  // Every named guest of the event, compared in memory (≤ 3,000): the query is the same for
+  // every name, so its time doesn't depend on whether the name exists.
+  const named = await tx
+    .select({ partyId: guests.partyId, firstName: guests.firstName, lastName: guests.lastName })
+    .from(guests)
+    .where(eq(guests.eventId, eventId));
+  const partyIds = [...new Set(named.filter((g) => strictFullName(g) === wanted).map((g) => g.partyId))];
+  // Always the same second query (an id that matches nothing when no name did).
+  const rows = await tx
+    .select()
+    .from(partyRsvp)
+    .where(inArray(partyRsvp.partyId, partyIds.length ? partyIds : [NO_PARTY]));
+  let match: PartyRsvpRow | null = null;
+  // Compare against at least one PIN, a dummy when nothing matched, so a miss costs the same.
+  const candidates = rows.length ? rows : [null];
+  for (const r of candidates) {
+    const expected = Buffer.from(rsvpPinFor(r?.partyId ?? eventId, r?.pinVersion ?? 0));
+    const ok = timingSafeEqual(expected, Buffer.from(pin.padEnd(6, '-').slice(0, 6)));
+    if (ok && r && !match) match = r;
+  }
+  return match;
+}
+
+/**
  * The paper fallback (P4-2): the exact full name of a guest of the party (no partial or fuzzy
  * match) and the PIN printed on its invitation. The answer is the same whether the name is
  * unknown, only part of a name, or the PIN is wrong (`no_match`), and every attempt does the same
@@ -809,28 +846,7 @@ export const findRsvpByNameCommand = tenantCommand({
     if (!settings?.nameLookup)
       throw new DomainError('not_found', 'Name lookup is off for this event', { reason: 'lookup_off' });
     const ev = await eventOfTx(tx, input.eventId);
-    const wanted = strictName(input.name);
-    const pin = normalizePin(input.pin) ?? '------';
-    // Every named guest of the event, compared in memory (≤ 3,000): the query is the same for
-    // every name, so its time doesn't depend on whether the name exists.
-    const named = await tx
-      .select({ partyId: guests.partyId, firstName: guests.firstName, lastName: guests.lastName })
-      .from(guests)
-      .where(eq(guests.eventId, input.eventId));
-    const partyIds = [...new Set(named.filter((g) => strictFullName(g) === wanted).map((g) => g.partyId))];
-    // Always the same second query (an id that matches nothing when no name did).
-    const rows = await tx
-      .select()
-      .from(partyRsvp)
-      .where(inArray(partyRsvp.partyId, partyIds.length ? partyIds : [NO_PARTY]));
-    let match: PartyRsvpRow | null = null;
-    // Compare against at least one PIN, a dummy when nothing matched, so a miss costs the same.
-    const candidates = rows.length ? rows : [null];
-    for (const r of candidates) {
-      const expected = Buffer.from(rsvpPinFor(r?.partyId ?? input.eventId, r?.pinVersion ?? 0));
-      const ok = timingSafeEqual(expected, Buffer.from(pin.padEnd(6, '-').slice(0, 6)));
-      if (ok && r && !match) match = r;
-    }
+    const match = await matchPartyByNamePinTx(tx, input.eventId, input.name, input.pin);
     if (!match) return { status: 'no_match' as const, token: null };
     // Like the link itself: a link past its expiry is renewed for a guest who proves the PIN.
     if (match.linkExpiresAt.getTime() <= ctx.now.getTime())
