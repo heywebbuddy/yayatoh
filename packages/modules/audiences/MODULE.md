@@ -40,3 +40,6 @@ segment DSL and its SQL compiler belong to `crm`, which it calls down the tiers.
 - **Money conditions** (`ltv`, `rfmMonetary`) need the member's org role to hold `finance:read`
   for preview, save and export (`assertMoneyConditionsAllowedTx`; the export checks the
   transaction's actor). System actors (campaign sends) are not members and pass.
+- **Engagement (M5.7b).** The DSL's `engagement` condition reads `crm.event_engagement` (kept by
+  the `engagement` module): the sum of a contact's scores over the events in scope, compared with a
+  whole number. Its scope is resolved like every other condition's.

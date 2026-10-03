@@ -3,7 +3,7 @@ import { getRegistrationFormQuery, listJobTitlesQuery } from '@yayatoh/forms';
 import { executeQuery } from '@yayatoh/kernel';
 import { isProfileKey, navIncludes } from '@yayatoh/platform';
 import { roleCan } from '@yayatoh/tenancy';
-import { Card, EmptyState, PageHeader } from '@yayatoh/ui';
+import { buttonClass, Card, EmptyState, PageHeader } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
@@ -121,7 +121,21 @@ export default async function RegistrationFormPage({
           {t('pagesTitle')}
         </h2>
         {pages.length === 0 ? (
-          <EmptyState title={t('emptyTitle')} description={t('emptyDescription')} />
+          <EmptyState
+            title={t('emptyTitle')}
+            description={canWrite ? t('emptyDescription') : t('emptyReadOnly')}
+            action={
+              canWrite ? (
+                <Link href="#rf-add-page" className={buttonClass('primary', 'md')}>
+                  {t('addFirstPage')}
+                </Link>
+              ) : (
+                <Link href={`/o/${org}/e/${event}`} className={buttonClass('secondary', 'md')}>
+                  {t('backToEvent')}
+                </Link>
+              )
+            }
+          />
         ) : (
           <ol className="flex list-none flex-col gap-4 p-0">
             {pages.map((p, pi) => {
@@ -276,7 +290,9 @@ export default async function RegistrationFormPage({
         )}
         {canWrite ? (
           <Card className="flex flex-col gap-3">
-            <h3 className="text-section">{t('addPageTitle')}</h3>
+            <h3 id="rf-add-page" className="text-section">
+              {t('addPageTitle')}
+            </h3>
             <AddPageForm version={version} action={bind(addPageAction)} />
           </Card>
         ) : null}

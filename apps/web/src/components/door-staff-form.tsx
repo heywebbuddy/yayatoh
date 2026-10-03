@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button } from '@yayatoh/ui';
+import { Alert, Button, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState, useEffect, useId, useRef } from 'react';
 import type { DoorStaffFormState } from '@/app/[locale]/o/[org]/e/[event]/onsite/staff/actions.ts';
@@ -18,7 +18,7 @@ export function DoorStaffForm({
   selected = [],
 }: {
   action: (prev: DoorStaffFormState, form: FormData) => Promise<DoorStaffFormState>;
-  checkpoints: readonly { id: string; name: string; kind: 'entrance' | 'zone' }[];
+  checkpoints: readonly { id: string; name: string; kind: 'entrance' | 'zone' | 'session' }[];
   /** Add mode: the members to choose from. */
   members?: readonly { id: string; name: string }[];
   /** Edit mode: the member being edited. */
@@ -49,7 +49,7 @@ export function DoorStaffForm({
           <label htmlFor={`${id}-member`} className="text-[13px] font-bold text-ink">
             {t('doorStaff.member')}
           </label>
-          <select
+          <Select
             id={`${id}-member`}
             name="userId"
             defaultValue=""
@@ -62,7 +62,7 @@ export function DoorStaffForm({
                 {m.name}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
       )}
       <fieldset className="flex flex-col gap-2">
@@ -85,7 +85,13 @@ export function DoorStaffForm({
                 />
                 {c.name}
                 <span className="text-caption text-ink-2">
-                  ({c.kind === 'entrance' ? t('checkpoints.entrance') : t('checkpoints.zone')})
+                  (
+                  {c.kind === 'entrance'
+                    ? t('checkpoints.entrance')
+                    : c.kind === 'session'
+                      ? t('sessionCheckin.sessionDoor')
+                      : t('checkpoints.zone')}
+                  )
                 </span>
               </label>
             ))}

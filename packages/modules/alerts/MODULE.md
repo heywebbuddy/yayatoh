@@ -34,3 +34,4 @@ payments, notifications, platform); it reads them through their exported counts 
   and campaigns (`campaigns.send_failed@1`) are recorded once per outbox event as `signals` (kept 7
   days) and counted by the org rules; this module never imports them, and they never import it.
   Dispute deadlines (`payments`, a lower tier) are read as counts (`disputeDeadlineFactsTx`).
+- **Conference pack (M5.9a):** ten event rules (`evaluateConferenceRules`) read counts from program, registration, check-in and orders (`conferenceFactsTx`), and leads, sponsor deliverables and badge printers through `AlertDeps.conference` (`ConferenceSources`; a missing port or a `null` answer keeps the rule quiet). Group `conference`. Nothing fires once an event wraps.

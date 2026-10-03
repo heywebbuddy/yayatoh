@@ -1,6 +1,6 @@
 import { formatMoney, money } from '@yayatoh/kernel';
 import type { AnalyticsRowDto, FiguresDto } from '@yayatoh/marketing';
-import { BarChart, Button, ChartTable, StatCard, Table } from '@yayatoh/ui';
+import { BarChart, Button, ChartTable, DatePicker, StatCard, Table } from '@yayatoh/ui';
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/navigation.ts';
 
@@ -46,8 +46,7 @@ export async function RangeForm({
       <div className="flex flex-wrap items-end gap-3">
         <label className="flex flex-col gap-1.5 text-[13px] font-bold text-ink">
           {t('from')}
-          <input
-            type="date"
+          <DatePicker
             name="from"
             defaultValue={from}
             aria-invalid={error ? true : undefined}
@@ -57,8 +56,7 @@ export async function RangeForm({
         </label>
         <label className="flex flex-col gap-1.5 text-[13px] font-bold text-ink">
           {t('to')}
-          <input
-            type="date"
+          <DatePicker
             name="to"
             defaultValue={to}
             aria-invalid={error ? true : undefined}

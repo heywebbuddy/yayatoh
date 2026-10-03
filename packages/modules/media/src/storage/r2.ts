@@ -74,6 +74,46 @@ export function signV4(i: SignInput): Record<string, string> {
   return headers;
 }
 
+/**
+ * A presigned SigV4 URL (query-string auth, M4.5b): the browser sends the request itself, with
+ * only the signed headers (`host` plus `headers`). The payload is unsigned, so the exact
+ * `content-length` is signed instead: the store refuses any other size.
+ */
+export function presignV4(i: Omit<SignInput, 'payloadHash'> & { readonly expiresInSeconds: number }): URL {
+  const amzDate = i.now
+    .toISOString()
+    .replace(/[-:]/g, '')
+    .replace(/\.\d{3}/, '');
+  const day = amzDate.slice(0, 8);
+  const scope = `${day}/${i.region}/${i.service}/aws4_request`;
+  const headers: Record<string, string> = { host: i.url.host };
+  for (const [k, v] of Object.entries(i.headers)) headers[k.toLowerCase()] = v.trim().replace(/\s+/g, ' ');
+  const names = Object.keys(headers).sort();
+  const url = new URL(i.url);
+  url.searchParams.set('X-Amz-Algorithm', 'AWS4-HMAC-SHA256');
+  url.searchParams.set('X-Amz-Credential', `${i.accessKeyId}/${scope}`);
+  url.searchParams.set('X-Amz-Date', amzDate);
+  url.searchParams.set('X-Amz-Expires', String(i.expiresInSeconds));
+  url.searchParams.set('X-Amz-SignedHeaders', names.join(';'));
+  const query = [...url.searchParams.entries()]
+    .map(([k, v]) => [uriEncode(k, false), uriEncode(v, false)] as const)
+    .sort(([a, x], [b, y]) => (a === b ? (x < y ? -1 : 1) : a < b ? -1 : 1))
+    .map(([k, v]) => `${k}=${v}`)
+    .join('&');
+  const canonical = [
+    i.method,
+    uriEncode(decodeURIComponent(url.pathname), true),
+    query,
+    `${names.map((n) => `${n}:${headers[n]}`).join('\n')}\n`,
+    names.join(';'),
+    'UNSIGNED-PAYLOAD',
+  ].join('\n');
+  const toSign = ['AWS4-HMAC-SHA256', amzDate, scope, sha256Hex(canonical)].join('\n');
+  const key = hmac(hmac(hmac(hmac(`AWS4${i.secretAccessKey}`, day), i.region), i.service), 'aws4_request');
+  url.searchParams.set('X-Amz-Signature', createHmac('sha256', key).update(toSign).digest('hex'));
+  return url;
+}
+
 export function r2MediaStore(cfg: R2Config): MediaStore {
   const base = (cfg.endpoint ?? `https://${cfg.accountId}.r2.cloudflarestorage.com`).replace(/\/$/, '');
   const doFetch = cfg.fetch ?? fetch;
@@ -134,6 +174,22 @@ export function r2MediaStore(cfg: R2Config): MediaStore {
           ? (/<NextContinuationToken>([^<]+)<\/NextContinuationToken>/.exec(xml)?.[1] ?? null)
           : null;
       } while (token);
+    },
+    presignPut(orgId, key, opts) {
+      assertOrgKey(orgId, key);
+      const headers = { 'content-length': String(opts.bytes) };
+      const url = presignV4({
+        method: 'PUT',
+        url: new URL(`${base}/${cfg.bucket}${objectPath(key)}`),
+        headers,
+        accessKeyId: cfg.accessKeyId,
+        secretAccessKey: cfg.secretAccessKey,
+        region: 'auto',
+        service: 's3',
+        now: now(),
+        expiresInSeconds: opts.expiresInSeconds,
+      });
+      return { url: url.toString(), headers };
     },
   };
 }

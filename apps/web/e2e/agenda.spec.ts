@@ -1,5 +1,5 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import { expectAccessible, signIn } from './helpers.ts';
+import { expectAccessible, expectPicked, pickOption, signIn } from './helpers.ts';
 
 /**
  * M5.2a — agenda model v2: session types, included vs optional, pick-one groups, the room
@@ -32,8 +32,8 @@ async function noHorizontalScroll(page: Page) {
 async function createEvent(page: Page, name: string, opts: { publish?: boolean } = {}) {
   await page.goto(`${ORG}/events/new`);
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Event type').selectOption('conference');
-  await page.getByLabel('Time zone').selectOption(TZ);
+  await pickOption(page.getByLabel('Event type'), 'conference');
+  await pickOption(page.getByLabel('Time zone'), TZ);
   await page.getByLabel('Starts', { exact: true }).fill(at(40, '09:00'));
   await page.getByLabel('Ends', { exact: true }).fill(at(42, '18:00'));
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -54,7 +54,7 @@ async function addSession(
   await add.getByLabel('Session title').fill(s.title);
   await add.getByLabel('Session starts').fill(s.from);
   await add.getByLabel('Session ends').fill(s.to);
-  if (s.room) await add.getByLabel('Room', { exact: true }).selectOption({ label: s.room });
+  if (s.room) await pickOption(add.getByLabel('Room', { exact: true }), { label: s.room });
   if (s.capacity) await add.getByLabel('Capacity').fill(s.capacity);
   await add.getByRole('button', { name: 'Add session' }).click();
   await expect(add.getByText('Session added.')).toBeVisible();
@@ -143,12 +143,12 @@ test.describe('agenda v2 (M5.2a)', () => {
 
     // Included sessions can't join a group; optional ones can.
     let form = await agendaForm(page, 'Workshop A');
-    await form.getByLabel('Session type').selectOption({ label: 'Workshop' });
-    await form.getByLabel('Pick-one group').selectOption({ label: 'Morning pick' });
+    await pickOption(form.getByLabel('Session type'), { label: 'Workshop' });
+    await pickOption(form.getByLabel('Pick-one group'), { label: 'Morning pick' });
     await pressButton(page, form, 'Save agenda settings');
     await expect(form.getByText('Only optional sessions can join a pick-one group.')).toBeVisible();
     await expect(form.getByLabel('Pick-one group')).toHaveAttribute('aria-invalid', 'true');
-    await form.getByLabel('Admission').selectOption('optional');
+    await pickOption(form.getByLabel('Admission'), 'optional');
     await pressButton(page, form, 'Save agenda settings');
     await expect(form.getByText('Agenda settings saved.')).toBeVisible();
     // The room warning comes back with the save (the write still happened).
@@ -157,9 +157,9 @@ test.describe('agenda v2 (M5.2a)', () => {
 
     await page.reload();
     form = await agendaForm(page, 'Workshop B');
-    await form.getByLabel('Admission').selectOption('optional');
-    await form.getByLabel('Pick-one group').selectOption({ label: 'Morning pick' });
-    await form.getByLabel('Enrollment').selectOption('closed');
+    await pickOption(form.getByLabel('Admission'), 'optional');
+    await pickOption(form.getByLabel('Pick-one group'), { label: 'Morning pick' });
+    await pickOption(form.getByLabel('Enrollment'), 'closed');
     await pressButton(page, form, 'Save agenda settings');
     await expect(form.getByText('Agenda settings saved.')).toBeVisible();
 
@@ -175,8 +175,8 @@ test.describe('agenda v2 (M5.2a)', () => {
       '2 sessions: Workshop A, Workshop B',
     );
     form = await agendaForm(page, 'Workshop B');
-    await expect(form.getByLabel('Admission')).toHaveValue('optional');
-    await expect(form.getByLabel('Enrollment')).toHaveValue('closed');
+    await expectPicked(form.getByLabel('Admission'), 'optional');
+    await expectPicked(form.getByLabel('Enrollment'), 'closed');
     await expectAccessible(page);
     await noHorizontalScroll(page);
 
@@ -289,8 +289,8 @@ test.describe('agenda v2 (M5.2a)', () => {
     await pressButton(page, types, 'Add the standard types');
     await expect(types.getByRole('listitem').filter({ hasText: 'Keynote' })).toHaveCount(1);
     const form = await agendaForm(page, 'Opening');
-    await form.getByLabel('Session type').selectOption({ label: 'Keynote' });
-    await form.getByLabel('Admission').selectOption('optional');
+    await pickOption(form.getByLabel('Session type'), { label: 'Keynote' });
+    await pickOption(form.getByLabel('Admission'), 'optional');
     await pressButton(page, form, 'Save agenda settings');
     await expect(form.getByText('Agenda settings saved.')).toBeVisible();
 

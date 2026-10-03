@@ -47,6 +47,8 @@ export const EVENT_ROLES = [
   // M4.2a (P4-8): an event's co-host (the couple, the gala chair) and planner.
   'co_host',
   'planner',
+  // M5.3b: a call-for-papers reviewer (a portal account, P5-7): sees only assigned submissions.
+  'cfp_reviewer',
 ] as const;
 
 const inList = (col: string, values: readonly string[]) =>

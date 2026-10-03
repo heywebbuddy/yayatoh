@@ -2,7 +2,17 @@ import { ASSISTANCE_CHANNEL, assigneesQuery, queueQuery, type RequestDto } from 
 import { getUsersByIds } from '@yayatoh/auth';
 import { executeQuery } from '@yayatoh/kernel';
 import { realtimeChannelName } from '@yayatoh/platform';
-import { Alert, Card, EmptyState, PageHeader, StatCard, StatusPill, Tabs, tabClass } from '@yayatoh/ui';
+import {
+  Alert,
+  buttonClass,
+  Card,
+  EmptyState,
+  PageHeader,
+  StatCard,
+  StatusPill,
+  Tabs,
+  tabClass,
+} from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { AssistanceLive, RequestActions } from '@/components/assistance-queue.tsx';
@@ -39,7 +49,7 @@ export default async function AssistancePage({
 }) {
   const { locale, org, event } = await params;
   setRequestLocale(locale);
-  const { data, event: ev, can } = await loadEvent(org, event, 'assistance');
+  const { data, event: ev, can, opens } = await loadEvent(org, event, 'assistance');
   if (!data.modules.has('checkin')) notFound();
   const t = await getTranslations('assistance');
   const crumbs = (
@@ -55,7 +65,15 @@ export default async function AssistancePage({
     return (
       <>
         <PageHeader breadcrumb={crumbs} title={t('pageTitle')} />
-        <EmptyState title={t('noAccessTitle')} description={t('noAccess')} />
+        <EmptyState
+          title={t('noAccessTitle')}
+          description={t('noAccess')}
+          action={
+            <Link href={`/o/${org}/e/${event}`} className={buttonClass('primary', 'md')}>
+              {t('backToEvent')}
+            </Link>
+          }
+        />
       </>
     );
   const status = (await searchParams).status === 'closed' ? 'closed' : 'open';
@@ -140,6 +158,21 @@ export default async function AssistancePage({
         <EmptyState
           title={status === 'open' ? t('empty.openTitle') : t('empty.closedTitle')}
           description={status === 'open' ? t('empty.openDescription') : t('empty.closedDescription')}
+          action={
+            status === 'closed' ? (
+              <Link href={base} className={buttonClass('primary', 'md')}>
+                {t('empty.showOpen')}
+              </Link>
+            ) : opens('commandCenter') ? (
+              <Link href={`/o/${org}/e/${event}/command-center`} className={buttonClass('primary', 'md')}>
+                {t('empty.toCommandCenter')}
+              </Link>
+            ) : (
+              <Link href={`/o/${org}/e/${event}`} className={buttonClass('primary', 'md')}>
+                {t('backToEvent')}
+              </Link>
+            )
+          }
         />
       ) : (
         <ul className="flex list-none flex-col gap-4 p-0" aria-label={t(`tab.${status}`)}>

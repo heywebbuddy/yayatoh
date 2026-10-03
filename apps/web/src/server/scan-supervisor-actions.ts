@@ -81,6 +81,8 @@ export type SupervisorAction =
       readonly deviceId: string;
       readonly checkpointId: string | null;
       readonly pin: string;
+      /** M4.4b: ticket check-in (default), guest check-in by name, or the A–Z table board. */
+      readonly kind?: 'tickets' | 'guests' | 'board';
     }
   | { readonly action: 'alerts'; readonly eventId: string; readonly deviceId: string; readonly on: boolean };
 
@@ -112,7 +114,7 @@ export async function supervisorAction(
       case 'kiosk_start':
         await executeCommand(
           startKioskCommand,
-          { ...target, checkpointId: a.checkpointId, pin: a.pin },
+          { ...target, checkpointId: a.checkpointId, pin: a.pin, kind: a.kind ?? 'tickets' },
           ctx,
           ports,
         );

@@ -43,13 +43,21 @@ export {
 export {
   CONTENT_TYPES,
   FILE_NAME,
+  MAX_INPUT_PIXELS,
   MAX_UPLOAD_BYTES,
   STANDARD_WIDTHS,
   VARIANT_FORMATS,
   type VariantFormat,
+  variantFileName,
 } from './pipeline/plan.ts';
-export { MediaRejected, type RejectReason } from './pipeline/process.ts';
-export { ACCEPT_MIME, sniff } from './pipeline/sniff.ts';
+export {
+  MediaRejected,
+  type ProcessedImage,
+  type ProcessedVariant,
+  processImage,
+  type RejectReason,
+} from './pipeline/process.ts';
+export { ACCEPT_MIME, type SourceType, sniff } from './pipeline/sniff.ts';
 export { sanitizeSvg } from './pipeline/svg.ts';
 export {
   portalExhibitorLogoCommand,
@@ -77,7 +85,7 @@ export {
 export { mediaStore, mediaStoreFromEnv, setMediaStore } from './storage/config.ts';
 export type { MediaStore } from './storage/port.ts';
 export { postgresMediaStore } from './storage/postgres.ts';
-export { r2MediaStore } from './storage/r2.ts';
+export { presignV4, r2MediaStore } from './storage/r2.ts';
 export { catchUpErasedMedia, subjectErasedMediaCleaner } from './subject-erased.ts';
 export {
   signUploadTicket,
