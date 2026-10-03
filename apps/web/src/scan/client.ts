@@ -11,6 +11,7 @@ import {
   verifyManifestScope,
 } from '@yayatoh/checkin-engine';
 import { uuidv7 } from '@yayatoh/kernel';
+import { applyDoorVerdict, sessionOccupancy } from './session-door.ts';
 import {
   kvGet,
   kvSet,
@@ -51,7 +52,15 @@ export type ServerResult =
   | 'provisional'
   | 'granted'
   | 'no_access'
-  | 'wrong_checkpoint';
+  | 'wrong_checkpoint'
+  | 'balance_due'
+  // M5.6a session doors.
+  | 'entered'
+  | 'scanned_out'
+  | 'not_in_room'
+  | 'not_enrolled'
+  | 'admission_level'
+  | 'capacity';
 
 /** A sync the server refused for a reason the scanner should show (not just "offline"). */
 export class ScanSyncError extends Error {
@@ -62,6 +71,10 @@ export class ScanSyncError extends Error {
 
 export interface ScanOutcome {
   readonly scanId: string;
+  /** The code scanned (a session door's override sends it again). */
+  readonly code?: string;
+  /** M5.6a: the session door it was scanned at, if any. */
+  readonly sessionDoorId?: string | null;
   readonly verdict: OfflineVerdict;
   readonly holderName: string | null;
   readonly typeName: string | null;
@@ -172,6 +185,10 @@ export class ScanClient {
   /** Migrated tickets by their legacy QR payload hashes (M1.9e). */
   private byLegacy = new Map<string, ManifestRow>();
   private admitted = new Set<string>();
+  /** M5.6a: `inRoomKey(ticket, session)` of people this device let into a session and not out. */
+  private inRoom = new Set<string>();
+  /** M5.6a: at a session door, scanning people in or out. */
+  direction: 'in' | 'out' = 'in';
   /** server time − device time, measured at each sync (within the manifest request's round trip). */
   clockOffsetMs = 0;
   /** Where this device stands (an entrance or zone), or null for the whole event. */
@@ -245,6 +262,8 @@ export class ScanClient {
     // The admitted set is kept on its own (small, sealed): saving a scan never re-seals the list.
     const admitted = await kvGet<{ iv: Uint8Array; data: ArrayBuffer }>('admitted');
     if (admitted) this.admitted = new Set(await openJson<string[]>(this.config.token, admitted));
+    const inRoom = await kvGet<{ iv: Uint8Array; data: ArrayBuffer }>('inRoom');
+    if (inRoom) this.inRoom = new Set(await openJson<string[]>(this.config.token, inRoom));
     this.clockOffsetMs = (await kvGet<number>('clockOffsetMs')) ?? 0;
     this.checkpointId = (await kvGet<string | null>('checkpointId')) ?? null;
     this.kiosk = (await kvGet<KioskConfig | null>('kiosk')) ?? null;
@@ -268,6 +287,27 @@ export class ScanClient {
 
   private async persistAdmitted() {
     await kvSet('admitted', await sealJson(this.config.token, [...this.admitted]));
+  }
+
+  private async persistInRoom() {
+    await kvSet('inRoom', await sealJson(this.config.token, [...this.inRoom]));
+  }
+
+  /** M5.6a: the session behind the chosen checkpoint (a session door), or null. */
+  get sessionDoor(): { checkpointId: string; sessionId: string; title: string | null } | null {
+    const c = this.checkpoint;
+    if (c?.kind !== 'session' || !c.sessionId) return null;
+    const s = this.snapshot?.header.sessions?.find((x) => x.checkpointId === c.id);
+    return { checkpointId: c.id, sessionId: c.sessionId, title: s?.title ?? null };
+  }
+
+  /** M5.6a: the device's estimate of the chosen session room's count, and how many it holds. */
+  async roomCount(): Promise<{ occupied: number; capacity: number | null } | null> {
+    const door = this.sessionDoor;
+    if (!door || !this.snapshot) return null;
+    const occ = sessionOccupancy(this.snapshot.header, await queueAll());
+    const gate = this.snapshot.header.scope?.sessionGates?.find((g) => g.checkpointId === door.checkpointId);
+    return { occupied: occ.get(door.sessionId) ?? 0, capacity: gate?.capacity ?? null };
   }
 
   /** Pull manifest changes since the last sync (first page overlaps a minute). */
@@ -336,6 +376,7 @@ export class ScanClient {
   async scan(code: string): Promise<ScanOutcome> {
     if (!this.snapshot) throw new Error('No guest list yet — connect once to download it.');
     const now = new Date(Date.now() + this.clockOffsetMs);
+    const door = this.sessionDoor;
     const { verdict, ticketId, row } = await offlineVerdict(
       {
         header: this.snapshot.header,
@@ -344,15 +385,19 @@ export class ScanClient {
         byLegacyCode: this.byLegacy,
         admitted: this.admitted,
         lastSyncAt: new Date(this.snapshot.lastSyncAt),
+        inRoom: this.inRoom,
+        occupancy: door ? sessionOccupancy(this.snapshot.header, await queueAll()) : new Map(),
       },
       code,
       now,
       this.checkpoint?.id ?? null,
+      { direction: this.direction },
     );
-    if ((verdict === 'admit' || verdict === 'provisional') && ticketId) {
+    if ((verdict === 'admit' || verdict === 'provisional') && ticketId && !door) {
       this.admitted.add(admittedKey(ticketId, eventDay(now, this.snapshot.header.event.timezone)));
       await this.persistAdmitted();
     }
+    if (door && applyDoorVerdict(this.inRoom, verdict, ticketId, door.sessionId)) await this.persistInRoom();
     const scan: QueuedScan = {
       scanId: uuidv7(),
       code: code.trim(),
@@ -360,10 +405,13 @@ export class ScanClient {
       clockOffsetMs: this.clockOffsetMs,
       verdict,
       ...(this.checkpoint ? { checkpointId: this.checkpoint.id } : {}),
+      ...(door ? { direction: this.direction } : {}),
     };
     await queueAdd(scan);
     return {
       scanId: scan.scanId,
+      code: code.trim(),
+      sessionDoorId: door?.checkpointId ?? null,
       verdict,
       holderName: row?.holderName ?? null,
       typeName: row?.typeName ?? null,
@@ -398,6 +446,41 @@ export class ScanClient {
     }
     return out;
   });
+
+  /**
+   * M5.6a: let someone into a session past the gates that refused them, with a reason (audited).
+   * Online only; the answer is the server's. Returns the result, or an error code.
+   */
+  async sessionOverride(input: {
+    code: string;
+    checkpointId: string;
+    gates: readonly string[];
+    reason: string;
+  }): Promise<{ result: ServerResult } | { error: string }> {
+    let res: Response;
+    try {
+      res = await fetch('/api/v1/checkins/session-override', {
+        method: 'POST',
+        ...this.api,
+        body: JSON.stringify({ eventId: this.config.eventId, ...input }),
+      });
+    } catch {
+      return { error: 'offline' };
+    }
+    if (!res.ok) {
+      const p = (await res.json().catch(() => null)) as {
+        code?: string;
+        details?: { reason?: string };
+      } | null;
+      return { error: p?.details?.reason ?? p?.code ?? 'internal' };
+    }
+    const body = (await res.json()) as { result: ServerResult; ticket: { shortCode: string } | null };
+    const door = this.sessionDoor;
+    const row = body.ticket ? this.byShort.get(body.ticket.shortCode) : undefined;
+    if (door && row && applyDoorVerdict(this.inRoom, body.result, row.ticketId, door.sessionId))
+      await this.persistInRoom();
+    return { result: body.result };
+  }
 
   /**
    * Health every 30 s (and when a supervisor pokes this device): reports where it works and

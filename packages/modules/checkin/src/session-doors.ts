@@ -12,7 +12,10 @@ import { DomainError, type DomainEvent } from '@yayatoh/kernel';
 import { type SessionDoorFacts, sessionDoorFactsTx } from '@yayatoh/program';
 import type { ScannableTicket } from '@yayatoh/ticketing';
 import { and, eq, isNull, ne, sql } from 'drizzle-orm';
-import { type checkpoints, type ScanResult, sessionAttendance } from './schema.ts';
+import { type checkpoints, SCAN_RESULTS, type ScanResult, sessionAttendance } from './schema.ts';
+
+/** Device verdicts that let someone into the room. */
+const LET_IN: ReadonlySet<string> = new Set(['entered', 'provisional', 'admit']);
 
 type EmitFn = (event: DomainEvent) => void;
 type CheckpointRow = typeof checkpoints.$inferSelect;
@@ -199,9 +202,15 @@ export async function sessionScanTx(
     waived.push(gate);
     actuallyWaived.push(gate);
   }
-  // Offline: the device refused for a full room; that refusal stands (nobody went in).
-  if (verdict === 'ok' && offlineCapacity && i.deviceVerdict === 'capacity') verdict = 'capacity';
   if (verdict !== 'ok') return { ...none, result: verdict };
+  // Offline: a device that refused them (a full room, or a gate it saw differently) let nobody
+  // in, so no visit is recorded; its refusal stands.
+  if (offlineCapacity && !LET_IN.has(i.deviceVerdict ?? '')) {
+    const refused = (SCAN_RESULTS as readonly string[]).includes(i.deviceVerdict ?? '')
+      ? (i.deviceVerdict as ScanResult)
+      : 'invalid';
+    return { ...none, result: refused };
+  }
 
   const source = actuallyWaived.length > 0 ? 'override' : 'scan';
   const [row] = await tx

@@ -613,6 +613,20 @@ describe('offline session doors (manifest v3)', () => {
       ports,
     );
     expect(r.results.map((x) => x.result)).toEqual(['entered', 'entered', 'capacity']);
+    // A device that refused someone the server would let in (enrolled since the last manifest)
+    // let nobody in: no visit is recorded, its refusal stands.
+    const p4 = await registrant(c);
+    const r2 = await executeCommand(
+      syncScansCommand,
+      {
+        eventId: c.ev.id,
+        scans: [{ ...mk(p4, 'entered', 4), verdict: 'not_enrolled' as const }],
+      },
+      ctx(at(2)),
+      ports,
+    );
+    expect(r2.results.map((x) => x.result)).toEqual(['not_enrolled']);
+    expect((await visits(s.id)).map((v) => v.ticket_id)).toEqual([p1.id, p2.id]);
   });
 });
 
