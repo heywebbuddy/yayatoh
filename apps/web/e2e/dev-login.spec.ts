@@ -28,13 +28,19 @@ test.describe('dev sign-in personas', () => {
     await expectAccessibleBothModes(page);
   });
 
-  test('the newcomer signs in to the no-organization start, by keyboard', async ({ page }) => {
+  test('the newcomer signs in by keyboard (to the no-organization start on a fresh seed)', async ({
+    page,
+  }) => {
     await page.goto('/dev/login');
     const nia = page.locator('[data-persona="nia@newcomer.test"]');
     await nia.getByRole('button', { name: 'Sign in' }).focus();
     await page.keyboard.press('Enter');
-    await expect(page).toHaveURL(/\/o$/);
-    await expect(page.getByText("You're not in an organization yet", { exact: true })).toBeVisible();
+    // Signed in: the org picker. On a fresh seed she has no organization yet; signup.spec onboards
+    // her into one during the full suite, and then she lands in it instead.
+    await expect(page).toHaveURL(/\/o(\/[^/]+)?$/);
+    if (new URL(page.url()).pathname === '/o')
+      await expect(page.getByText("You're not in an organization yet", { exact: true })).toBeVisible();
+    else await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
   });
 
   test('the staff link is reachable by keyboard and the Arabic page labels both cards', async ({ page }) => {
