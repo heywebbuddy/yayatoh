@@ -947,7 +947,14 @@ export const blockedQuery = tenantQuery({
       .select({ id: networkProfiles.id, displayName: networkProfiles.displayName })
       .from(networkBlocks)
       .innerJoin(networkProfiles, eq(networkProfiles.id, networkBlocks.blockedId))
-      .where(eq(networkBlocks.blockerId, me.id))
+      .where(
+        and(
+          eq(networkBlocks.blockerId, me.id),
+          // Someone who left networking (opted out, hidden) is not shown even here; the block stays.
+          eq(networkProfiles.optedIn, true),
+          sql`${networkProfiles.hiddenAt} is null`,
+        ),
+      )
       .orderBy(sql`lower(${networkProfiles.displayName})`);
   },
 });
