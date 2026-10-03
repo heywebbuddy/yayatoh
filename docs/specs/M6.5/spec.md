@@ -1,7 +1,7 @@
 # Spec: M6.5 — enterprise identity and business integrations
 
 - **Milestone:** M6.5 (roadmap §10 Phase 6; Phase 6 plan `docs/plans/phase-6.md`, decisions P6-1, P6-5, P6-13)
-- **Status:** M6.5a built (2026-10-03), behind the `enterprise` module key and the `IdentityProviderPort` (fake IdP, fake DNS and fake metadata in dev/CI; off in production until the owner's IdP test tenant). M6.5b–d (Salesforce, calendars, accounting) are separate increments.
+- **Status:** M6.5a built (2026-10-03; local gate: lint, check:modules, typecheck 64/64, unit 3470/3470, integration 1950/1950; sso e2e 15/15 on three viewports), behind the `enterprise` module key and the `IdentityProviderPort` (fake IdP, fake DNS and fake metadata in dev/CI; off in production until the owner's IdP test tenant). M6.5b–d (Salesforce, calendars, accounting) are separate increments.
 - **Risk tags:** `auth`, `tenancy`, `db-migration` (owner approval needed before main)
 - **Related ADRs:** 0010 (identity per host), D14 (TOTP for admins and staff)
 
