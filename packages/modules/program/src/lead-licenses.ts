@@ -3,7 +3,7 @@ import type { TenantTx } from '@yayatoh/db';
 import { portalAccountsTx } from '@yayatoh/events';
 import { type Ctx, DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
-import { and, asc, eq, inArray, sql } from 'drizzle-orm';
+import { and, asc, eq, gt, inArray, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { staffAllowance } from './domain/exhibitors.ts';
 import {
@@ -177,7 +177,7 @@ export const portalLeadLicensesQuery = tenantQuery({
         and(
           eq(leadLicensePurchases.exhibitorId, exhibitor.id),
           eq(leadLicensePurchases.status, 'pending'),
-          sql`hold_until > ${ctx.now}`,
+          gt(leadLicensePurchases.holdUntil, ctx.now),
         ),
       );
     return portalLeadLicensesSerializer.serialize({
@@ -298,7 +298,7 @@ export async function reserveLeadLicensesTx(
       and(
         eq(leadLicensePurchases.exhibitorId, exhibitor.id),
         eq(leadLicensePurchases.status, 'pending'),
-        sql`hold_until > ${ctx.now}`,
+        gt(leadLicensePurchases.holdUntil, ctx.now),
       ),
     );
   if (live)

@@ -165,6 +165,7 @@ import {
   setCheckoutSettingsCommand,
   setRefundPolicyCommand,
   startCheckoutCommand,
+  startLeadLicenseCheckoutCommand,
   startRefundCommand,
 } from '@yayatoh/orders';
 import {
@@ -191,7 +192,15 @@ import {
   createSessionGroupCommand,
   createSessionTypeCommand,
   createSpeakerCommand,
+  addSponsorDeliverableCommand,
+  assignSponsoredSessionCommand,
   createSponsorCommand,
+  grantSponsorPackageCommand,
+  inviteSponsorContactCommand,
+  portalAssignLeadLicenseCommand,
+  saveLeadLicenseSettingsCommand,
+  saveSponsorPackageCommand,
+  setSponsorExhibitorCommand,
   createSponsorTierCommand,
   createTrackCommand,
   inviteExhibitorMemberCommand,
@@ -1481,7 +1490,7 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     { ownerId: speaker.id, alt: `Photo of ${name} Speaker`, file: fixturePng('logo') },
     ports,
   );
-  await executeCommand(
+  const keynote = await executeCommand(
     createSessionCommand,
     {
       eventId: event.id,
@@ -1562,10 +1571,88 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ctx(),
     ports,
   );
-  await executeCommand(
+  const sponsor = await executeCommand(
     createSponsorCommand,
     { eventId: event.id, tierId: tier.id, name: `${name} Sponsor` },
     ctx(),
+    ports,
+  );
+  // M5.4b: Gold's package terms (on sale, with a deliverable template), the sponsor exhibiting as
+  // the exhibitor, the package granted by the organizer (its deliverables and an extra one), a
+  // sponsored session, a sponsor contact; lead licenses for sale, an exhibitor admin's purchase
+  // waiting for payment (an add-on order) and a license held by the admin.
+  await executeCommand(
+    saveSponsorPackageCommand,
+    {
+      eventId: event.id,
+      tierId: tier.id,
+      description: 'Our top package.',
+      priceMinor: 500_000,
+      quantity: 3,
+      onSale: true,
+      compRegistrations: 5,
+      exhibitorBadges: 2,
+      leadLicenses: 2,
+      logoPlacements: ['website', 'stage'],
+      sessionSlots: 1,
+      deliverables: [{ title: 'Send logo files', owner: 'sponsor', daysBefore: 14 }],
+    },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    setSponsorExhibitorCommand,
+    { eventId: event.id, sponsorId: sponsor.id, exhibitorId: exhibitor.id },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    grantSponsorPackageCommand,
+    { eventId: event.id, sponsorId: sponsor.id, tierId: tier.id, note: 'Paid by wire' },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    addSponsorDeliverableCommand,
+    {
+      eventId: event.id,
+      sponsorId: sponsor.id,
+      title: 'Print the stage banner',
+      owner: 'organizer',
+      ownerName: 'Production team',
+      dueDate: new Date(event.startsAt.getTime() - 7 * 86_400_000).toISOString().slice(0, 10),
+    },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    assignSponsoredSessionCommand,
+    { eventId: event.id, sponsorId: sponsor.id, sessionId: keynote.session.id },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    inviteSponsorContactCommand,
+    { eventId: event.id, sponsorId: sponsor.id, email: `sponsor@${slug}.example` },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    saveLeadLicenseSettingsCommand,
+    { eventId: event.id, includedLeadLicenses: 1, leadLicensePriceMinor: 25_000 },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    startLeadLicenseCheckoutCommand,
+    { quantity: 2, locale: 'en' },
+    exhibitorCtx,
+    ports,
+  );
+  await executeCommand(
+    portalAssignLeadLicenseCommand,
+    { accountId: exhibitorInvite.member.id },
+    exhibitorCtx,
     ports,
   );
   // M5.2a: agenda model v2 on the weekly event (so the launch event's agenda stays live): a
