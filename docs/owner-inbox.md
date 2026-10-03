@@ -625,3 +625,11 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
   - **Event time zone in the create-event wizard** is now the full IANA list, grouped by region with the current offset, instead of the 13 zones the wizard offered. Values are unchanged (IANA names).
   - **Arabic digits in the date and time pickers:** dates and times show Arabic-Indic digits (٠٥/١١/٢٠٢٦) in Arabic, as the U1 spec asks. The rest of the app still formats numbers with Western digits in Arabic (the CLDR default); say if you want one rule everywhere.
   - **Typed dates** use the reader's locale order (11/05/2026 in English, 05.11.2026 in German). ISO (2026-11-05) always works too.
+
+## U8 — categories, tags and the event-type picker (2026-10-03, pending owner)
+- [ ] **Built with these defaults; say if any should change:**
+  - **Who manages org categories:** owners and admins (`org:update`, the Settings permission). Managers pick categories on events but don't change the list.
+  - **Who manages the platform defaults:** admins only (staff action `categories`). Staff choose and order the existing taxonomy keys; a new platform key needs a code change.
+  - **Defaults reach new orgs only:** an org's list is stored on its first change and never follows later staff changes.
+  - **Public event pages** still show the platform category label, not the org's own name (Later).
+

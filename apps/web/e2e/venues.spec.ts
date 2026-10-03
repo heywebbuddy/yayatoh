@@ -38,6 +38,19 @@ async function createVenue(page: Page, name: string, opts: { listed?: boolean; c
   return new URL(page.url()).pathname.replace(/^\/[a-z]{2}(-[A-Z]{2})?(?=\/o\/)/, '');
 }
 
+/** U8: add tags through the Tags combobox (type, Enter creates or picks). */
+async function addTags(page: Page, tags: readonly string[]) {
+  const box = page.getByRole('combobox', { name: 'Tags' });
+  for (const t of tags) {
+    await box.fill(t);
+    await box.press('Enter');
+  }
+}
+const chosenTags = (page: Page) =>
+  page
+    .locator('input[type="hidden"][name="tags"]')
+    .evaluateAll((els) => els.map((e) => (e as HTMLInputElement).value));
+
 /** Create and publish a public event through the UI; returns its console path and slug. */
 async function createEvent(page: Page, name: string) {
   await page.goto(`${ORG}/events/new`);
@@ -146,15 +159,19 @@ test.describe('venues, categories and tags (M1.4c)', () => {
     await expectAccessible(page);
     await pickOption(page.getByLabel('Venue'), { label: `${venue} · Chicago` });
     await pickOption(page.getByLabel('Category'), { label: 'Music' });
-    await page.getByLabel('Tags').fill(`${tag}, live, ${tag.toLowerCase()}`);
+    // U8: tags are a combobox (type, Enter); the same tag in another case is not added twice.
+    await addTags(page, [tag, 'live', tag.toLowerCase()]);
     await page.getByRole('button', { name: 'Save details' }).click();
     await expect(page.getByText('Details saved.')).toBeVisible();
     await page.reload();
     await expectPicked(page.getByLabel('Category'), 'music');
-    await expect(page.getByLabel('Tags')).toHaveValue(`${tag}, live`);
+    expect(await chosenTags(page)).toEqual([tag, 'live']);
 
     // Too many tags: a specific message on the field.
-    await page.getByLabel('Tags').fill(Array.from({ length: 11 }, (_, i) => `t${i}`).join(','));
+    await addTags(
+      page,
+      Array.from({ length: 9 }, (_, i) => `t${i}`),
+    );
     await page.getByRole('button', { name: 'Save details' }).click();
     await expect(page.getByText('Use at most 10 tags.')).toBeVisible();
     await expectAccessible(page);

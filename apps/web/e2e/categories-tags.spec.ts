@@ -66,8 +66,11 @@ test.describe('event categories (U8)', () => {
     await page.getByRole('link', { name: 'Event categories' }).click();
     await expect(page.getByRole('heading', { name: 'Event categories', level: 1 })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'How it works' })).toBeVisible();
-    // The platform defaults are the starting list.
-    await expect(page.getByRole('heading', { name: 'Your categories (16 shown of 16)' })).toBeVisible();
+    // The platform defaults (staff-managed) are the starting list, all shown.
+    const listHeading = page.getByRole('heading', { name: /^Your categories \(/ });
+    const start = Number(/\((\d+) shown of (\d+)\)/.exec(await listHeading.innerText())?.[2]);
+    await expect(listHeading).toHaveText(`Your categories (${start} shown of ${start})`);
+    expect(start).toBeGreaterThan(0);
     await expectAccessibleBothModes(page);
 
     // Validation: blank and taken names.
@@ -83,7 +86,7 @@ test.describe('event categories (U8)', () => {
     await expect(page.getByText('Category added.')).toBeVisible();
     await expect(page.getByLabel('Category name')).toHaveValue('');
     await expect(item(page, name)).toContainText('Marketplace: Food & drink');
-    await expect(page.getByRole('heading', { name: 'Your categories (17 shown of 17)' })).toBeVisible();
+    await expect(listHeading).toHaveText(`Your categories (${start + 1} shown of ${start + 1})`);
 
     await page.getByLabel('Category name').fill(name.toUpperCase());
     await page.getByRole('button', { name: 'Add category' }).click();
@@ -92,10 +95,11 @@ test.describe('event categories (U8)', () => {
 
     // Reorder with buttons: the new category (last) moves up one place.
     const headings = () => page.getByRole('listitem').getByRole('heading', { level: 3 }).allInnerTexts();
+    const lastDefault = ((await headings()).at(-2) ?? '').trim();
     await expect(page.getByRole('button', { name: `Move ${name} down` })).toBeDisabled();
     await page.getByRole('button', { name: `Move ${name} up` }).click();
     await expect(item(page, name)).toContainText('Moved up.');
-    expect((await headings()).slice(-2).map((h) => h.trim())).toEqual([name, 'Other']);
+    expect((await headings()).slice(-2).map((h) => h.trim())).toEqual([name, lastDefault]);
 
     // Rename a platform default: it keeps its marketplace mapping.
     await item(page, 'Music').getByRole('button', { name: 'Rename Music' }).click();
@@ -106,10 +110,10 @@ test.describe('event categories (U8)', () => {
     // Hide, then the event picker no longer offers it.
     await page.getByRole('button', { name: `Hide ${name}` }).click();
     await expect(item(page, name).getByText('Hidden', { exact: true })).toBeVisible();
-    await expect(page.getByRole('heading', { name: 'Your categories (16 shown of 17)' })).toBeVisible();
+    await expect(listHeading).toHaveText(`Your categories (${start} shown of ${start + 1})`);
     await page.reload();
     await expect(item(page, name).getByText('Hidden', { exact: true })).toBeVisible();
-    expect((await headings()).slice(-2).map((h) => h.trim())).toEqual([name, 'Other']);
+    expect((await headings()).slice(-2).map((h) => h.trim())).toEqual([name, lastDefault]);
 
     await page.goto(`${org}/e/${user.eventSlug}/details`);
     await inOptions(page.getByLabel('Category'), async (list) => {
