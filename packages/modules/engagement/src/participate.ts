@@ -11,6 +11,7 @@ import {
   QUESTION_RATE,
 } from './domain/questions.ts';
 import { PARTICIPANT_KEY, verifyDisplayToken } from './domain/tokens.ts';
+import { Account, recordLiveActivityTx } from './scores.ts';
 import type { ParticipantStateDto, PublicLiveStateDto, SettingsDto } from './dto.ts';
 import {
   type PollKind,
@@ -64,6 +65,8 @@ export const VoteInput = z.object({
   optionIds: z.array(z.string().max(4)).max(10).optional(),
   rating: z.int().optional(),
   word: z.string().max(200).optional(),
+  /** M5.7b: the signed-in account (from the web session, never a form), to score an attendee. */
+  account: Account.optional(),
 });
 
 /**
@@ -135,6 +138,12 @@ export const voteCommand = tenantCommand({
       .returning();
     if (!row) throw new DomainError('internal');
     await publishPollTx(tx, where(ctx, row), row);
+    await recordLiveActivityTx(tx, ctx, input.account, {
+      eventId: p.eventId,
+      sessionId: p.sessionId,
+      kind: 'poll_vote',
+      sourceRef: `poll:${p.id}`,
+    });
     emit({
       type: 'engagement.vote_cast',
       version: 1,
@@ -155,6 +164,8 @@ export const AskInput = z.object({
   body: z.string().trim().min(1).max(QUESTION_MAX_LENGTH),
   name: z.string().trim().max(NAME_MAX_LENGTH).optional(),
   anonymous: z.boolean().default(false),
+  /** M5.7b: the signed-in account (from the web session, never a form), to score an attendee. */
+  account: Account.optional(),
 });
 
 /**
@@ -216,6 +227,14 @@ export const askQuestionCommand = tenantCommand({
       .returning();
     if (!row) throw new DomainError('internal');
     await publishQuestionTx(tx, where(ctx, row), row, false);
+    // An anonymous question is never scored: nothing may tie a person to it (M5.7b).
+    if (!input.anonymous)
+      await recordLiveActivityTx(tx, ctx, input.account, {
+        eventId: row.eventId,
+        sessionId: row.sessionId,
+        kind: 'question',
+        sourceRef: `question:${row.id}`,
+      });
     emit({
       type: 'engagement.question_asked',
       version: 1,

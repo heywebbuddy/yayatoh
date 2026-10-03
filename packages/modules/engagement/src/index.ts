@@ -77,3 +77,35 @@ export {
   QUESTION_STATES,
   type QuestionState,
 } from './schema.ts';
+// M5.7b: engagement events and scores.
+export {
+  type Counts,
+  DEFAULT_WEIGHTS,
+  engagementScore,
+  MAX_WEIGHT,
+  normalizeCounts,
+  sessionScore,
+  type Weights,
+} from './domain/score.ts';
+export {
+  Account,
+  AttendeeScoreDto,
+  applyEngagementEventTx,
+  catchUpEngagement,
+  ENGAGEMENT_SOURCE_EVENTS,
+  type EngagementFact,
+  EventScoresDto,
+  engagementActivity,
+  eventScoresQuery,
+  forgetEngagementTx,
+  recordEngagementTx,
+  rescoreTx,
+  resetScoreWeightsCommand,
+  SCORES_SHOWN,
+  SessionScoreDto,
+  scoreWeightsQuery,
+  setScoreWeightsCommand,
+  WeightsDto,
+  weightsTx,
+} from './scores.ts';
+export { ENGAGEMENT_KINDS, type EngagementKind } from './schema.ts';

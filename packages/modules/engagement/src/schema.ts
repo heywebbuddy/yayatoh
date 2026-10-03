@@ -196,3 +196,64 @@ export const questionUpvotes = tenantTable(
     check('question_upvotes_participant_key_check', sql`char_length(participant_key) between 20 and 64`),
   ],
 );
+
+/**
+ * M5.7b: what counts toward engagement. `check_in`: admitted at the event's door; `poll_vote`: a
+ * ballot in a live poll; `question`: a question asked in a live session's Q&A; `feedback`: an
+ * answered survey (session feedback or post-event); `enrollment`: a place taken in an optional
+ * session.
+ */
+export const ENGAGEMENT_KINDS = ['check_in', 'poll_vote', 'question', 'feedback', 'enrollment'] as const;
+export type EngagementKind = (typeof ENGAGEMENT_KINDS)[number];
+
+/**
+ * M5.7b: one thing an attendee (a crm contact on the event's list) did. `source_ref` names what it
+ * was about (a ticket, poll, question, survey or session id) so the same thing never counts twice
+ * (unique per contact, kind and source). Anonymous questions are never logged, and nothing here
+ * holds a person's answers or choices.
+ * Composite FKs to `events.events`, `program.sessions` and `crm.contacts` are hand-written in the
+ * migration.
+ */
+export const engagementEvents = tenantTable(
+  engagementSchema,
+  'engagement_events',
+  {
+    eventId: uuid('event_id').notNull(),
+    contactId: uuid('contact_id').notNull(),
+    sessionId: uuid('session_id'),
+    kind: text('kind').notNull(),
+    sourceRef: text('source_ref').notNull(),
+    occurredAt: ts('occurred_at').notNull(),
+  },
+  (t) => [
+    uniqueIndex('engagement_events_org_contact_kind_source_key').on(t.orgId, t.contactId, t.kind, t.sourceRef),
+    index('engagement_events_org_event_contact_idx').on(t.orgId, t.eventId, t.contactId),
+    index('engagement_events_org_session_idx').on(t.orgId, t.sessionId).where(sql`session_id is not null`),
+    check(
+      'engagement_events_kind_check',
+      sql`kind in ('check_in', 'poll_vote', 'question', 'feedback', 'enrollment')`,
+    ),
+    check('engagement_events_source_ref_check', sql`char_length(source_ref) between 1 and 80`),
+  ],
+);
+
+/** M5.7b: the org's engagement weights (points per kind, 0–100). No row: the defaults. */
+export const scoreWeights = tenantTable(
+  engagementSchema,
+  'score_weights',
+  {
+    checkIn: integer('check_in').notNull(),
+    pollVote: integer('poll_vote').notNull(),
+    question: integer('question').notNull(),
+    feedback: integer('feedback').notNull(),
+    enrollment: integer('enrollment').notNull(),
+    updatedBy: uuid('updated_by'),
+  },
+  (t) => [
+    uniqueIndex('score_weights_org_key').on(t.orgId),
+    check(
+      'score_weights_range_check',
+      sql`check_in between 0 and 100 and poll_vote between 0 and 100 and question between 0 and 100 and feedback between 0 and 100 and enrollment between 0 and 100`,
+    ),
+  ],
+);

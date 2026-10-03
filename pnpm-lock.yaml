@@ -1679,6 +1679,12 @@ importers:
 
   packages/modules/engagement:
     dependencies:
+      '@yayatoh/attendees':
+        specifier: workspace:*
+        version: link:../attendees
+      '@yayatoh/crm':
+        specifier: workspace:*
+        version: link:../crm
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../../db
@@ -2452,6 +2458,9 @@ importers:
       '@yayatoh/checkin':
         specifier: workspace:*
         version: link:../checkin
+      '@yayatoh/crm':
+        specifier: workspace:*
+        version: link:../crm
       '@yayatoh/csv':
         specifier: workspace:*
         version: link:../../csv

@@ -19,6 +19,7 @@ export {
   upsertContactsTx,
   upsertContactTx,
 } from './contacts.ts';
+export { contactForAccountTx, replaceEventEngagementTx } from './engagement.ts';
 export { consentRegivenSinceTx, contactDsarTx, eraseContactDsarTx, unlinkContactUserTx } from './dsar.ts';
 export { privateColumns } from './private-columns.ts';
 export {
