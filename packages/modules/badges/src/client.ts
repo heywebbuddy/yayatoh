@@ -30,6 +30,34 @@ export {
   resizeBox,
 } from './domain/layout.ts';
 export { splitName, surnameSortKey } from './domain/names.ts';
+export {
+  comesOnline,
+  goesQuiet,
+  MAX_PRINT_NOTE,
+  MAX_PRINTERS_PER_EVENT,
+  offlineAt,
+  PRINT_JOB_STATUSES,
+  PRINT_KINDS,
+  PRINT_PDF_TTL_MS,
+  PRINT_REASONS,
+  PRINT_SOURCES,
+  PRINTER_ADAPTERS,
+  PRINTER_OFFLINE_AFTER_MS,
+  PRINTER_STATUSES,
+  type PrinterAdapter,
+  type PrinterPulse,
+  type PrinterStatus,
+  type PrintJobStatus,
+  type PrintKind,
+  type PrintReason,
+  type PrintSource,
+  printKindFor,
+  REPRINT_REASONS,
+  type ReasonProblem,
+  type ReprintReason,
+  reasonProblem,
+  STATION_HEARTBEAT_MS,
+} from './domain/printing.ts';
 export { pruneRibbons, ribbonFor } from './domain/ribbons.ts';
 export { BadgeRow, type BadgeSource, badgeRow, companyOf, placedKinds } from './domain/row.ts';
 export { SAMPLE_CODE, sampleRows } from './domain/samples.ts';
@@ -47,31 +75,3 @@ export {
 } from './domain/sizes.ts';
 export { BATCH_SORTS, type BatchSort, type SortableBadge, sortBadges } from './domain/sort.ts';
 export { charWidthEm, fitFontSize, textWidthMm } from './domain/text.ts';
-export {
-  comesOnline,
-  goesQuiet,
-  MAX_PRINT_NOTE,
-  MAX_PRINTERS_PER_EVENT,
-  offlineAt,
-  PRINT_JOB_STATUSES,
-  PRINT_KINDS,
-  PRINT_PDF_TTL_MS,
-  PRINT_REASONS,
-  PRINT_SOURCES,
-  PRINTER_ADAPTERS,
-  PRINTER_OFFLINE_AFTER_MS,
-  PRINTER_STATUSES,
-  type PrintJobStatus,
-  type PrintKind,
-  type PrintReason,
-  type PrinterAdapter,
-  type PrinterPulse,
-  type PrinterStatus,
-  type PrintSource,
-  printKindFor,
-  REPRINT_REASONS,
-  type ReasonProblem,
-  type ReprintReason,
-  reasonProblem,
-  STATION_HEARTBEAT_MS,
-} from './domain/printing.ts';

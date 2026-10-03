@@ -1,3 +1,4 @@
+import { printNodeFromEnv } from '@yayatoh/badges';
 import { setPlatformAuditSink, tryAcquireLeadership } from '@yayatoh/db/platform';
 import { createNotifier } from '@yayatoh/notifications';
 import { fakePaymentProvider } from '@yayatoh/payments';
@@ -21,6 +22,7 @@ import {
   userLocales,
   workerTransports,
 } from './notifications.ts';
+import { PRINTER_WATCHDOG_MS, PRINTNODE_POLL_MS, pollPrintNode, runPrinterWatchdog } from './printers.ts';
 import { runReconciliation } from './reconciliation.ts';
 import { JOBS, subscribers } from './registry.ts';
 import { relayOnce } from './relay.ts';
@@ -180,6 +182,34 @@ setInterval(() => {
       queueingBadges = false;
     });
 }, 3_000).unref();
+
+// Badge printers (M5.5b): every 5 s the leader turns printers silent for 90 s offline (one
+// `badges.printer_offline@1` each); every 30 s it asks PrintNode (the fake in dev and CI) which of
+// its printers are online.
+let watchingPrinters = false;
+setInterval(() => {
+  if (!release || stopping || watchingPrinters) return;
+  watchingPrinters = true;
+  runPrinterWatchdog()
+    .then((r) => {
+      if (r.offline) console.info(JSON.stringify({ job: 'badges.printer-watchdog', ...r }));
+    })
+    .catch((err) => console.error('printer watchdog', err))
+    .finally(() => {
+      watchingPrinters = false;
+    });
+}, PRINTER_WATCHDOG_MS).unref();
+const printNode = printNodeFromEnv();
+let pollingPrintNode = false;
+setInterval(() => {
+  if (!printNode || !release || stopping || pollingPrintNode) return;
+  pollingPrintNode = true;
+  pollPrintNode(printNode)
+    .catch((err) => console.error('printnode poll', err))
+    .finally(() => {
+      pollingPrintNode = false;
+    });
+}, PRINTNODE_POLL_MS).unref();
 
 // Daily reconciliation (M1.6e): the previous UTC day, hourly attempts (idempotent per org and
 // day, so only the first run of a day does work), leader only. The fake provider without a

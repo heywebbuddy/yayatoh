@@ -14,7 +14,6 @@ import {
   uniqueIndex,
   uuid,
 } from 'drizzle-orm/pg-core';
-import { BADGE_SIZES } from './domain/sizes.ts';
 import {
   MAX_PRINT_NOTE,
   PRINT_JOB_STATUSES,
@@ -24,6 +23,7 @@ import {
   PRINTER_ADAPTERS,
   PRINTER_STATUSES,
 } from './domain/printing.ts';
+import { BADGE_SIZES } from './domain/sizes.ts';
 import { BATCH_SORTS } from './domain/sort.ts';
 
 /**

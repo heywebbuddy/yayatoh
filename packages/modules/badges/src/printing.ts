@@ -87,8 +87,7 @@ export const PrinterDto = z.object({
 });
 export type PrinterDto = z.infer<typeof PrinterDto>;
 
-const printerDto = (p: PrinterRow): PrinterDto =>
-  PrinterDto.parse({ ...p, archived: p.archivedAt !== null });
+const printerDto = (p: PrinterRow): PrinterDto => PrinterDto.parse({ ...p, archived: p.archivedAt !== null });
 
 async function printNodeEnabledTx(tx: TenantTx): Promise<boolean> {
   const [s] = await tx.select({ on: printSettings.printnodeEnabled }).from(printSettings).limit(1);
@@ -217,7 +216,10 @@ export const printingSetupQuery = tenantQuery({
       .select()
       .from(printers)
       .where(
-        and(eq(printers.eventId, input.eventId), input.includeArchived ? undefined : isNull(printers.archivedAt)),
+        and(
+          eq(printers.eventId, input.eventId),
+          input.includeArchived ? undefined : isNull(printers.archivedAt),
+        ),
       )
       .orderBy(printers.createdAt);
     return { printers: rows.map(printerDto), printnodeEnabled: await printNodeEnabledTx(tx) };
@@ -253,7 +255,11 @@ export const setPrintNodeCommand = tenantCommand({
 
 /** Bring a printer (back) online at `now`; emits `badges.printer_online@1` on a change. */
 async function heardFromTx(tx: TenantTx, emit: (e: DomainEvent) => void, p: PrinterRow, now: Date) {
-  const changed = comesOnline({ status: p.status as never, lastSeenAt: p.lastSeenAt, archived: !!p.archivedAt });
+  const changed = comesOnline({
+    status: p.status as never,
+    lastSeenAt: p.lastSeenAt,
+    archived: !!p.archivedAt,
+  });
   await tx
     .update(printers)
     .set({ status: 'online', lastSeenAt: now, offlineAt: null, updatedAt: now })
@@ -347,7 +353,10 @@ export const markQuietPrintersCommand = tenantCommand({
       .for('update', { skipLocked: true });
     const offline: string[] = [];
     for (const p of rows) {
-      if (!p.lastSeenAt || !goesQuiet({ status: 'online', lastSeenAt: p.lastSeenAt, archived: false }, ctx.now))
+      if (
+        !p.lastSeenAt ||
+        !goesQuiet({ status: 'online', lastSeenAt: p.lastSeenAt, archived: false }, ctx.now)
+      )
         continue;
       const at = offlineAt(p.lastSeenAt);
       await tx
@@ -487,9 +496,14 @@ export const startPrintJobCommand = tenantCommand({
     if (printer?.archivedAt)
       throw new DomainError('invalid_state', 'Printer archived', { reason: 'archived', field: 'printerId' });
     if (printer?.adapter === 'printnode' && !(await printNodeEnabledTx(tx)))
-      throw new DomainError('invalid_state', 'PrintNode is off', { reason: 'printnode_off', field: 'printerId' });
+      throw new DomainError('invalid_state', 'PrintNode is off', {
+        reason: 'printnode_off',
+        field: 'printerId',
+      });
     // Two desks printing the same badge at once: one waits for the other, so one is the reprint.
-    await tx.execute(sql`select pg_advisory_xact_lock(hashtextextended(${`badges.print:${input.ticketId}`}, 0))`);
+    await tx.execute(
+      sql`select pg_advisory_xact_lock(hashtextextended(${`badges.print:${input.ticketId}`}, 0))`,
+    );
     const kind = printKindFor(await priorPrintsTx(tx, input.ticketId));
     const problem = reasonProblem(kind, input.reason, input.note);
     if (problem)
@@ -648,7 +662,12 @@ export async function sendPrintJob(deps: SendPrintDeps, ctx: Ctx, jobId: string)
     idempotencyKey: jobId,
   });
   return r.ok
-    ? executeCommand(recordPrintResultCommand, { jobId, ok: true, providerJobId: r.providerJobId }, ctx, deps.ports)
+    ? executeCommand(
+        recordPrintResultCommand,
+        { jobId, ok: true, providerJobId: r.providerJobId },
+        ctx,
+        deps.ports,
+      )
     : fail(r.code.replace(/[^a-z0-9_]/g, '_').slice(0, 40) || 'failed');
 }
 
@@ -759,4 +778,3 @@ export const badgePrintStateQuery = tenantQuery({
     };
   },
 });
-

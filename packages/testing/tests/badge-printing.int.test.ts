@@ -25,10 +25,10 @@ import { withTenant } from '@yayatoh/db';
 import { closePools } from '@yayatoh/db/testing';
 import { createEventCommand, type EventDto, transitionEventCommand } from '@yayatoh/events';
 import { type Ctx, createCtx, DomainError, executeCommand, executeQuery } from '@yayatoh/kernel';
+import { startCheckoutCommand } from '@yayatoh/orders';
 import type { PdfRenderer } from '@yayatoh/pdf';
 import { recentEventsTx } from '@yayatoh/platform';
 import { badgeTicketsTx, createTicketTypeCommand } from '@yayatoh/ticketing';
-import { startCheckoutCommand } from '@yayatoh/orders';
 import { sql } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { type OrgFixture, ports, systemCtx, twoOrgs, userCtx } from '../src/index.ts';
@@ -155,7 +155,12 @@ describe('printers per event', () => {
     );
     expect(p).toMatchObject({ name: 'Front desk', adapter: 'browser', status: 'unknown', lastSeenAt: null });
     await expectRefused(
-      executeCommand(createPrinterCommand, { eventId: ev.id, name: 'front DESK', adapter: 'browser' }, a.ctx(), ports),
+      executeCommand(
+        createPrinterCommand,
+        { eventId: ev.id, name: 'front DESK', adapter: 'browser' },
+        a.ctx(),
+        ports,
+      ),
       'conflict',
       'name_taken',
     );
@@ -167,7 +172,12 @@ describe('printers per event', () => {
       ports,
     );
     await expectRefused(
-      executeCommand(createPrinterCommand, { eventId: ev.id, name: 'Viewer desk', adapter: 'browser' }, viewer(), ports),
+      executeCommand(
+        createPrinterCommand,
+        { eventId: ev.id, name: 'Viewer desk', adapter: 'browser' },
+        viewer(),
+        ports,
+      ),
     );
     await expectRefused(
       executeCommand(createPrinterCommand, { eventId: ev.id, name: '', adapter: 'browser' }, a.ctx(), ports),
@@ -190,7 +200,12 @@ describe('printers per event', () => {
     await expectRefused(executeCommand(setPrintNodeCommand, { enabled: true }, a.ctx(), ports));
     await executeCommand(setPrintNodeCommand, { enabled: true }, systemCtx(a.org.id), ports);
     await expectRefused(
-      executeCommand(createPrinterCommand, { eventId: ev.id, name: 'Zebra 1', adapter: 'printnode' }, a.ctx(), ports),
+      executeCommand(
+        createPrinterCommand,
+        { eventId: ev.id, name: 'Zebra 1', adapter: 'printnode' },
+        a.ctx(),
+        ports,
+      ),
       'validation_failed',
       'printnode_id_required',
     );
@@ -216,13 +231,28 @@ describe('printers per event', () => {
     await expectRefused(
       executeCommand(archivePrinterCommand, { eventId: ev.id, printerId: p.id }, viewer(), ports),
     );
-    const archived = await executeCommand(archivePrinterCommand, { eventId: ev.id, printerId: p.id }, a.ctx(), ports);
+    const archived = await executeCommand(
+      archivePrinterCommand,
+      { eventId: ev.id, printerId: p.id },
+      a.ctx(),
+      ports,
+    );
     expect(archived.archived).toBe(true);
     const setup = await executeQuery(printingSetupQuery, { eventId: ev.id }, a.ctx(), ports);
     expect(setup.printers.find((x) => x.id === p.id)).toBeUndefined();
-    const all = await executeQuery(printingSetupQuery, { eventId: ev.id, includeArchived: true }, a.ctx(), ports);
+    const all = await executeQuery(
+      printingSetupQuery,
+      { eventId: ev.id, includeArchived: true },
+      a.ctx(),
+      ports,
+    );
     expect(all.printers.find((x) => x.id === p.id)?.archived).toBe(true);
-    await executeCommand(createPrinterCommand, { eventId: ev.id, name: 'Spare', adapter: 'browser' }, a.ctx(), ports);
+    await executeCommand(
+      createPrinterCommand,
+      { eventId: ev.id, name: 'Spare', adapter: 'browser' },
+      a.ctx(),
+      ports,
+    );
     const t = await ticketFor('Archie Vance');
     await expectRefused(print(a.ctx(), { ticketId: t, printerId: p.id }), 'invalid_state', 'archived');
   });
@@ -235,7 +265,12 @@ describe('print log: every print and reprint with its reason (acceptance)', () =
       (x) => x.name === 'Front desk',
     );
     const before = await executeQuery(badgePrintStateQuery, { eventId: ev.id, ticketId: t }, a.ctx(), ports);
-    expect(before).toMatchObject({ holderName: 'Ada Lovelace', prints: 0, nextKind: 'print', hasTemplate: true });
+    expect(before).toMatchObject({
+      holderName: 'Ada Lovelace',
+      prints: 0,
+      nextKind: 'print',
+      hasTemplate: true,
+    });
 
     const first = await print(a.ctx(), { ticketId: t, printerId: desk?.id, source: 'attendee_page' });
     expect(first).toMatchObject({
@@ -247,11 +282,19 @@ describe('print log: every print and reprint with its reason (acceptance)', () =
     });
     // A first print takes no reason.
     const t2 = await ticketFor('Grace Hopper');
-    await expectRefused(print(a.ctx(), { ticketId: t2, reason: 'damaged' }), 'validation_failed', 'reason_not_allowed');
+    await expectRefused(
+      print(a.ctx(), { ticketId: t2, reason: 'damaged' }),
+      'validation_failed',
+      'reason_not_allowed',
+    );
 
     // A reprint needs one.
     await expectRefused(print(a.ctx(), { ticketId: t }), 'validation_failed', 'reason_required');
-    await expectRefused(print(a.ctx(), { ticketId: t, reason: 'other' }), 'validation_failed', 'note_required');
+    await expectRefused(
+      print(a.ctx(), { ticketId: t, reason: 'other' }),
+      'validation_failed',
+      'note_required',
+    );
     const damaged = await print(a.ctx(), { ticketId: t, reason: 'damaged' });
     const other = await print(a.ctx(), { ticketId: t, reason: 'other', note: 'Coffee on the lanyard' });
     expect(damaged).toMatchObject({ kind: 'reprint', reason: 'damaged', printerId: null });
@@ -284,15 +327,13 @@ describe('print log: every print and reprint with its reason (acceptance)', () =
     const t = await ticketFor('Refused Rita');
     await expectRefused(print(viewer(), { ticketId: t }));
     await expectRefused(executeQuery(badgePrintStateQuery, { eventId: ev.id, ticketId: t }, viewer(), ports));
-    const elsewhere = (await executeQuery(printingSetupQuery, { eventId: other.id }, a.ctx(), ports)).printers[0];
+    const elsewhere = (await executeQuery(printingSetupQuery, { eventId: other.id }, a.ctx(), ports))
+      .printers[0];
     await expectRefused(print(a.ctx(), { ticketId: t, printerId: elsewhere?.id }), 'not_found');
     // Org B sees nothing of org A's event, tickets or log.
     await expectRefused(print(b.ctx(), { ticketId: t }), 'not_found');
     await expectRefused(executeQuery(printLogQuery, { eventId: ev.id }, b.ctx(), ports), 'not_found');
-    await expectRefused(
-      executeQuery(printingSetupQuery, { eventId: ev.id }, b.ctx(), ports),
-      'not_found',
-    );
+    await expectRefused(executeQuery(printingSetupQuery, { eventId: ev.id }, b.ctx(), ports), 'not_found');
     const own = await executeQuery(printLogQuery, { eventId: b.event.id }, b.ctx(), ports);
     expect(own.entries.every((e) => e.eventId === b.event.id)).toBe(true);
     // A voided ticket has no badge to print.
@@ -309,7 +350,11 @@ describe('print log: every print and reprint with its reason (acceptance)', () =
     expect(badge.html).toContain('Paper');
     expect(badge.title).toContain('Paper Trail');
     const later = a.ctx({ now: new Date(Date.now() + 31 * 60_000) });
-    await expectRefused(executeQuery(browserJobBadgeQuery, { jobId: job.id }, later, ports), 'not_found', 'expired');
+    await expectRefused(
+      executeQuery(browserJobBadgeQuery, { jobId: job.id }, later, ports),
+      'not_found',
+      'expired',
+    );
     await expectRefused(executeQuery(browserJobBadgeQuery, { jobId: job.id }, viewer(), ports));
     await expectRefused(executeQuery(browserJobBadgeQuery, { jobId: job.id }, b.ctx(), ports), 'not_found');
   });
@@ -351,7 +396,9 @@ describe('PrintNode jobs through the port (fake)', () => {
     );
     const t = await ticketFor('No Renderer');
     const j1: PrintJobDto = await print(a.ctx(), { ticketId: t, printerId: zebra?.id });
-    expect(await sendPrintJob({ ports, renderer: null, printNode: fakePrintNode() }, a.ctx(), j1.id)).toMatchObject({
+    expect(
+      await sendPrintJob({ ports, renderer: null, printNode: fakePrintNode() }, a.ctx(), j1.id),
+    ).toMatchObject({
       status: 'failed',
       errorCode: 'renderer_unavailable',
     });
@@ -380,7 +427,9 @@ describe('printer heartbeat and the offline event (acceptance)', () => {
       ports,
     );
     // Never heard from: no offline event, however long it stays silent.
-    expect(await watchQuietPrinters(a.org.id, ports, { now: new Date(Date.now() + 600_000) })).not.toContain(p.id);
+    expect(await watchQuietPrinters(a.org.id, ports, { now: new Date(Date.now() + 600_000) })).not.toContain(
+      p.id,
+    );
 
     const t0 = new Date();
     const hb = await executeCommand(
@@ -414,8 +463,18 @@ describe('printer heartbeat and the offline event (acceptance)', () => {
     });
 
     // Back online (one online event), then silent again: a second offline event.
-    await executeCommand(printerHeartbeatCommand, { eventId: ev.id, printerId: p.id }, a.ctx({ now: at(400_000) }), ports);
-    await executeCommand(printerHeartbeatCommand, { eventId: ev.id, printerId: p.id }, a.ctx({ now: at(420_000) }), ports);
+    await executeCommand(
+      printerHeartbeatCommand,
+      { eventId: ev.id, printerId: p.id },
+      a.ctx({ now: at(400_000) }),
+      ports,
+    );
+    await executeCommand(
+      printerHeartbeatCommand,
+      { eventId: ev.id, printerId: p.id },
+      a.ctx({ now: at(420_000) }),
+      ports,
+    );
     expect(await watchQuietPrinters(a.org.id, ports, { now: at(500_000) })).not.toContain(p.id);
     expect(await watchQuietPrinters(a.org.id, ports, { now: at(510_000) })).toContain(p.id);
     events = await printerEvents(p.id);
@@ -434,7 +493,9 @@ describe('printer heartbeat and the offline event (acceptance)', () => {
       a.ctx(),
       ports,
     );
-    await expectRefused(executeCommand(printerHeartbeatCommand, { eventId: ev.id, printerId: p.id }, viewer(), ports));
+    await expectRefused(
+      executeCommand(printerHeartbeatCommand, { eventId: ev.id, printerId: p.id }, viewer(), ports),
+    );
     await expectRefused(
       executeCommand(printerHeartbeatCommand, { eventId: b.event.id, printerId: p.id }, b.ctx(), ports),
       'not_found',
@@ -456,7 +517,12 @@ describe('printer heartbeat and the offline event (acceptance)', () => {
     // The watchdog and the PrintNode report are platform steps: an org member cannot run them.
     await expectRefused(executeCommand(markQuietPrintersCommand, {}, a.ctx(), ports));
     await expectRefused(
-      executeCommand(recordPrinterStatesCommand, { states: [{ printerId: p.id, state: 'online' }] }, a.ctx(), ports),
+      executeCommand(
+        recordPrinterStatesCommand,
+        { states: [{ printerId: p.id, state: 'online' }] },
+        a.ctx(),
+        ports,
+      ),
     );
   });
 
@@ -481,8 +547,12 @@ describe('printer heartbeat and the offline event (acceptance)', () => {
     // 60 s later PrintNode loses the first one too: 90 s after its last report it is offline, once.
     pn.setState(501, 'offline');
     await pollPrintNodePrinters(a.org.id, ports, pn, { now: new Date(t0.getTime() + 60_000) });
-    expect(await watchQuietPrinters(a.org.id, ports, { now: new Date(t0.getTime() + 89_999) })).not.toContain(up.id);
-    expect(await watchQuietPrinters(a.org.id, ports, { now: new Date(t0.getTime() + 90_000) })).toContain(up.id);
+    expect(await watchQuietPrinters(a.org.id, ports, { now: new Date(t0.getTime() + 89_999) })).not.toContain(
+      up.id,
+    );
+    expect(await watchQuietPrinters(a.org.id, ports, { now: new Date(t0.getTime() + 90_000) })).toContain(
+      up.id,
+    );
     expect((await printerEvents(up.id)).filter((e) => e.type === PRINTER_OFFLINE_EVENT)).toHaveLength(1);
     expect(await printerEvents(down.id)).toHaveLength(0);
   });

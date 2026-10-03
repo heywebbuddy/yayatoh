@@ -31,7 +31,8 @@ describe('print kinds and reasons (M5.5b)', () => {
     expect(reasonProblem('reprint', null, null)).toBe('reason_required');
     expect(reasonProblem('reprint', 'first_print', null)).toBe('reason_required');
     expect(reasonProblem('reprint', 'bogus', null)).toBe('reason_required');
-    for (const r of REPRINT_REASONS.filter((x) => x !== 'other')) expect(reasonProblem('reprint', r, null)).toBeNull();
+    for (const r of REPRINT_REASONS.filter((x) => x !== 'other'))
+      expect(reasonProblem('reprint', r, null)).toBeNull();
     expect(reasonProblem('reprint', 'other', null)).toBe('note_required');
     expect(reasonProblem('reprint', 'other', '   ')).toBe('note_required');
     expect(reasonProblem('reprint', 'other', 'Coffee spilled')).toBeNull();

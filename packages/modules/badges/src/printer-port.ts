@@ -140,7 +140,13 @@ export function fakePrintNode(): FakePrintNode {
       const prior = byKey.get(job.idempotencyKey);
       if (prior) return { ok: true, providerJobId: prior };
       const providerJobId = String(1000 + jobs.length + 1);
-      jobs.push({ id: providerJobId, orgId: job.orgId, printerId: id, title: job.title, bytes: job.pdf.byteLength });
+      jobs.push({
+        id: providerJobId,
+        orgId: job.orgId,
+        printerId: id,
+        title: job.title,
+        bytes: job.pdf.byteLength,
+      });
       byKey.set(job.idempotencyKey, providerJobId);
       return { ok: true, providerJobId };
     },

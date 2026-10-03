@@ -16,7 +16,8 @@
     "retention": "node scripts/retention.ts",
     "drill-tickets": "node scripts/drill-tickets.ts",
     "metrics:rebuild": "node scripts/metrics-rebuild.ts",
-    "audit-sample": "node scripts/audit-sample.ts"
+    "audit-sample": "node scripts/audit-sample.ts",
+    "printnode": "node scripts/printnode.ts"
   },
   "dependencies": {
     "@yayatoh/alerts": "workspace:*",
