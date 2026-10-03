@@ -1,0 +1,30 @@
+{
+  "severity": {
+    "info": "資訊",
+    "warning": "警告",
+    "critical": "嚴重"
+  },
+  "alert": {
+    "context": "{severity} · {where}",
+    "open": "在 Yayatoh 中開啟"
+  },
+  "test": {
+    "title": "來自 {org} 的測試提醒",
+    "body": "Slack 已連結。Yayatoh 的提醒和每日摘要將傳送到此頻道。"
+  },
+  "digest": {
+    "title": "每日摘要 · {org}",
+    "salesTitle": "銷售",
+    "sales": "{orders, plural, =0 {沒有新訂單} other {# 筆新訂單}} · {tickets, plural, other {# 張票}}",
+    "revenue": "營收：{amounts}",
+    "checkins": "{count, plural, =0 {沒有報到} other {# 次報到}}",
+    "eventLine": "{name}：{tickets, plural, other {# 張票}}",
+    "eventLineRevenue": "{name}：{tickets, plural, other {# 張票}} · {amounts}",
+    "moreEvents": "{count, plural, other {還有 # 場活動}}",
+    "todayTitle": "今天",
+    "todayEvent": "{name} · {time}",
+    "noEventsToday": "今天沒有活動。",
+    "open": "開啟儀表板"
+  },
+  "footer": "由 Yayatoh 傳送。可在 設定 → 整合 → Slack 中變更。"
+}

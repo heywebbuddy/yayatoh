@@ -1,6 +1,7 @@
 import { tenantTable } from '@yayatoh/db';
 import { sql } from 'drizzle-orm';
 import {
+  boolean,
   check,
   foreignKey,
   index,
@@ -287,5 +288,108 @@ export const syncErrors = tenantTable(
     check('sync_errors_external_check', sql`external_id is null or length(external_id) between 1 and 255`),
     check('sync_errors_counts_check', sql`attempts between 0 and 1000 and occurrences between 1 and 1000000`),
     check('sync_errors_resolved_check', sql`(status = 'open') = (resolved_at is null)`),
+  ],
+);
+
+/** M6.4c: what a Slack message is (the sender's dedupe scope). */
+export const SLACK_MESSAGE_KINDS = ['alert', 'digest', 'test'] as const;
+export const SLACK_MESSAGE_STATUSES = ['pending', 'sending', 'sent', 'failed', 'cancelled'] as const;
+export const SLACK_MIN_SEVERITIES = ['info', 'warning', 'critical'] as const;
+
+/**
+ * M6.4c: one Slack connection's channel and what goes there: alerts from the M3.2b engine (at or
+ * above a severity) and the daily digest at a local time in the org's time zone. Amounts appear in
+ * the digest only when the connection's owner, who has finance permission, opted in
+ * (`finance_opted_by`). `digest_next_at` is the next digest's instant (computed with the org's zone
+ * when saved and after each digest; the date it covers is the dedupe key, so DST never sends twice).
+ */
+export const slackSettings = tenantTable(
+  integrationsSchema,
+  'slack_settings',
+  {
+    connectionId: uuid('connection_id').notNull(),
+    channelId: text('channel_id'),
+    channelName: text('channel_name'),
+    alertsEnabled: boolean('alerts_enabled').notNull().default(true),
+    alertMinSeverity: text('alert_min_severity').notNull().default('warning'),
+    digestEnabled: boolean('digest_enabled').notNull().default(false),
+    /** `HH:MM`, wall-clock time in the org's time zone. */
+    digestTime: text('digest_time').notNull().default('08:00'),
+    digestNextAt: tsz('digest_next_at'),
+    includeFinance: boolean('include_finance').notNull().default(false),
+    financeOptedBy: uuid('finance_opted_by'),
+    updatedBy: uuid('updated_by'),
+  },
+  (t) => [
+    uniqueIndex('slack_settings_org_connection_key').on(t.orgId, t.connectionId),
+    index('slack_settings_digest_due_idx').on(t.digestNextAt, t.orgId).where(sql`digest_enabled`),
+    foreignKey({
+      name: 'slack_settings_connection_fk',
+      columns: [t.orgId, t.connectionId],
+      foreignColumns: [connections.orgId, connections.id],
+    }).onDelete('cascade'),
+    check('slack_settings_channel_check', sql`channel_id is null or channel_id ~ '^[CGD][A-Z0-9]{2,20}$'`),
+    check(
+      'slack_settings_channel_name_check',
+      sql`channel_name is null or length(channel_name) between 1 and 80`,
+    ),
+    check('slack_settings_severity_check', inList('alert_min_severity', SLACK_MIN_SEVERITIES)),
+    check('slack_settings_time_check', sql`digest_time ~ '^([01][0-9]|2[0-3]):[0-5][0-9]$'`),
+    check('slack_settings_finance_check', sql`not include_finance or finance_opted_by is not null`),
+    check('slack_settings_digest_check', sql`not digest_enabled or channel_id is not null`),
+  ],
+);
+
+/**
+ * M6.4c: every Slack message, sent or to send, unique per (connection, channel, kind, dedupe key):
+ * an alert's sending (`alert:<id>:<n>`), a digest's day (`digest:YYYY-MM-DD`) or a test. Claimed
+ * with a lease before the call, so retries and concurrent senders post once. The payload is ids,
+ * codes and counts (what to render), never personal data.
+ */
+export const slackMessages = tenantTable(
+  integrationsSchema,
+  'slack_messages',
+  {
+    connectionId: uuid('connection_id').notNull(),
+    channelId: text('channel_id').notNull(),
+    kind: text('kind').notNull(),
+    dedupeKey: text('dedupe_key').notNull(),
+    status: text('status').notNull().default('pending'),
+    payload: jsonb('payload').$type<Record<string, unknown>>().notNull(),
+    attempts: integer('attempts').notNull().default(0),
+    nextAttemptAt: tsz('next_attempt_at'),
+    leaseUntil: tsz('lease_until'),
+    sentAt: tsz('sent_at'),
+    /** Slack's message timestamp (its id in the channel). */
+    providerTs: text('provider_ts'),
+    errorCode: text('error_code'),
+    requestedBy: uuid('requested_by'),
+  },
+  (t) => [
+    uniqueIndex('slack_messages_org_dedupe_key').on(
+      t.orgId,
+      t.connectionId,
+      t.channelId,
+      t.kind,
+      t.dedupeKey,
+    ),
+    index('slack_messages_org_connection_created_idx').on(t.orgId, t.connectionId, t.createdAt),
+    index('slack_messages_due_idx')
+      .on(t.nextAttemptAt, t.orgId)
+      .where(sql`status in ('pending', 'sending', 'failed')`),
+    foreignKey({
+      name: 'slack_messages_connection_fk',
+      columns: [t.orgId, t.connectionId],
+      foreignColumns: [connections.orgId, connections.id],
+    }).onDelete('cascade'),
+    check('slack_messages_channel_check', sql`channel_id ~ '^[CGD][A-Z0-9]{2,20}$'`),
+    check('slack_messages_kind_check', inList('kind', SLACK_MESSAGE_KINDS)),
+    check('slack_messages_status_check', inList('status', SLACK_MESSAGE_STATUSES)),
+    check('slack_messages_dedupe_check', sql`dedupe_key ~ '^[a-z]+:[A-Za-z0-9:_-]{1,120}$'`),
+    check('slack_messages_payload_check', sql`jsonb_typeof(payload) = 'object'`),
+    check('slack_messages_attempts_check', sql`attempts between 0 and 100`),
+    check('slack_messages_sent_check', sql`(status = 'sent') = (sent_at is not null)`),
+    check('slack_messages_ts_check', sql`provider_ts is null or length(provider_ts) <= 40`),
+    check('slack_messages_error_check', sql`error_code is null or error_code ~ '^[a-z0-9_]{1,60}$'`),
   ],
 );

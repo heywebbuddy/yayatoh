@@ -1,6 +1,11 @@
 import { billingEntitlements } from '@yayatoh/billing';
 import { withPlatformReader } from '@yayatoh/db/platform';
-import { type IntegrationAuth, integrationAuthFromEnv, runSync } from '@yayatoh/integrations';
+import {
+  type IntegrationAuth,
+  integrationAuthFromEnv,
+  runSlackDispatch,
+  runSync,
+} from '@yayatoh/integrations';
 import { createCommandPorts } from '@yayatoh/platform';
 import { orgAuthorizer, orgStatusGate } from '@yayatoh/tenancy';
 import { sql } from 'drizzle-orm';
@@ -65,5 +70,66 @@ export async function enqueueSyncWork(
   for (const w of await connectionsWithSyncWork())
     if (!onlyOrgs || onlyOrgs.has(w.orgId))
       if (await boss.send(SYNC_JOB, w, { singletonKey: w.connectionId })) queued += 1;
+  return queued;
+}
+
+export const SLACK_JOB = 'integrations.slack';
+
+/**
+ * Slack messages (M6.4c): one org's pass of `runSlackDispatch` (queue due digests, claim due
+ * messages with a lease, check each connection through the port, post, record). Exclusive per
+ * org, on top of the messages' own claim, so two passes never post the same message. Logs carry
+ * ids and counts only.
+ */
+export function slackJob(
+  auth: IntegrationAuth | null = integrationAuthFromEnv(process.env),
+  appOrigin = process.env.NEXT_PUBLIC_APP_ORIGIN ?? 'http://localhost:3000',
+) {
+  return defineJob({
+    name: SLACK_JOB,
+    scope: 'tenant',
+    policy: 'exclusive',
+    retryLimit: 2,
+    payload: z.object({ orgId: z.uuid() }),
+    handler: async ({ orgId }) => {
+      if (!auth) return;
+      const r = await runSlackDispatch(orgId, { auth, appOrigin }, ports);
+      if (r.sent || r.failed || r.cancelled || r.revoked.length)
+        console.info(
+          JSON.stringify({
+            job: SLACK_JOB,
+            orgId,
+            queued: r.queued,
+            sent: r.sent,
+            failed: r.failed,
+            cancelled: r.cancelled,
+            revoked: r.revoked,
+          }),
+        );
+    },
+  });
+}
+
+/** Orgs with Slack work now: due messages or digests (platform_reader, audited). */
+export async function orgsWithSlackWork(limit = 200): Promise<string[]> {
+  const rows = await withPlatformReader(
+    { actor: 'system:integrations', reason: 'find orgs with due Slack messages' },
+    (tx) =>
+      tx.execute<{ org_id: string }>(sql`select org_id from integrations.orgs_with_slack_work(${limit})`),
+  );
+  return rows.map((r) => r.org_id);
+}
+
+/** Queue one Slack job per org with work (leader, every few seconds). */
+export async function enqueueSlackWork(
+  boss: Pick<PgBoss, 'send'>,
+  /** Tests: only these orgs. */
+  onlyOrgs?: ReadonlySet<string>,
+  limit = 200,
+): Promise<number> {
+  let queued = 0;
+  for (const orgId of await orgsWithSlackWork(limit))
+    if (!onlyOrgs || onlyOrgs.has(orgId))
+      if (await boss.send(SLACK_JOB, { orgId }, { singletonKey: orgId })) queued += 1;
   return queued;
 }

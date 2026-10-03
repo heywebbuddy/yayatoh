@@ -114,7 +114,18 @@ export interface ConnectorDefinition {
   readonly entitlement: ModuleKey;
   /** `fake_only`: offered only where the auth port is the fake (dev, CI, previews). */
   readonly availability: 'general' | 'fake_only';
+  /**
+   * `sync` (the default) moves records with the engine; `notifications` (M6.4c: Slack) only sends
+   * messages, so it has no objects: its runs are the connection's health check (a revoked
+   * connection is marked so in its next run) and its sender lives with the connector.
+   */
+  readonly purpose?: 'sync' | 'notifications';
   readonly objects: readonly ObjectDefinition[];
+  /**
+   * A cheap call that proves the connection still works at the provider (M6.4c), made by every
+   * run after the port's own check: a refusal (401/403) marks the connection revoked in that run.
+   */
+  readonly health?: (io: SyncIO) => Promise<void>;
   /** The connector's fake provider API for dev and CI. */
   readonly fake?: FakeProvider;
 }
@@ -124,7 +135,8 @@ const CONNECTOR_KEY = /^[a-z][a-z0-9_]{1,39}$/;
 /** Define a connector. Checks keys and that each side's default mapping is valid. */
 export function defineConnector(def: ConnectorDefinition): ConnectorDefinition {
   if (!CONNECTOR_KEY.test(def.key)) throw new Error(`Connector key must be snake_case: ${def.key}`);
-  if (def.objects.length === 0) throw new Error(`Connector ${def.key} has no objects`);
+  if (def.objects.length === 0 && def.purpose !== 'notifications')
+    throw new Error(`Connector ${def.key} has no objects`);
   const seen = new Set<string>();
   for (const o of def.objects) {
     if (!FIELD_KEY.test(o.key)) throw new Error(`Connector ${def.key}: bad object key ${o.key}`);

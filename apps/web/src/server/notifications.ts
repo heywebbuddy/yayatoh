@@ -19,6 +19,7 @@ import { engagementActivity } from '@yayatoh/engagement';
 import { findEventTx, portalInviteMailer } from '@yayatoh/events';
 import { registrationResumeMailer } from '@yayatoh/forms';
 import { invitationMailer as guestInvitationMailer } from '@yayatoh/guests';
+import { slackAlertsSubscriber } from '@yayatoh/integrations';
 import { createCtx } from '@yayatoh/kernel';
 import {
   announcementMailer,
@@ -150,6 +151,8 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     // M4.2b: a purchased table's claim link to its buyer.
     tableNamingMailer({ notifier, appOrigin }),
     alertEvaluator({ notifier, conference: conferenceSources() }),
+    // M6.4c: alerts it sent are queued for Slack channels (the Slack dispatch posts them).
+    slackAlertsSubscriber,
     // M3.7a: journeys enroll, follow date changes and cancellations (their steps run below).
     ...journeySubscribers(),
     // M5.1a: its offers (waitlist.offered) are mailed in the same drain.

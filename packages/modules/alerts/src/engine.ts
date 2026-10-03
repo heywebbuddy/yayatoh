@@ -2,7 +2,7 @@ import { onDutyStaffTx } from '@yayatoh/checkin';
 import type { TenantTx } from '@yayatoh/db';
 import type { EventDto } from '@yayatoh/events';
 import { type Ctx, requireOrg } from '@yayatoh/kernel';
-import { ALERTS_CHANNEL, type Notifier, publishRealtimeTx } from '@yayatoh/platform';
+import { ALERTS_CHANNEL, emitEvents, type Notifier, publishRealtimeTx } from '@yayatoh/platform';
 import { memberUserIdsTx, ORG_ROLES, roleCan } from '@yayatoh/tenancy';
 import { eq, sql } from 'drizzle-orm';
 import {
@@ -46,6 +46,8 @@ export const ALERT_KIND = 'alerts.alert';
 export const ALERT_TEXT_KIND = 'alerts.alert-text';
 /** M3.3a: a live-critical alert's text to on-duty staff, sent at once (no quiet hours). */
 export const ALERT_URGENT_TEXT_KIND = 'alerts.alert-urgent-text';
+/** M6.4c: an alert was sent to members (outbox, for same-tier consumers such as Slack). */
+export const ALERT_NOTIFIED_EVENT = 'alerts.alert_notified';
 
 /** The groups on-duty door staff (viewer or scanner org role) are escalated for: the door only. */
 const DOOR_ONLY_CATEGORIES: ReadonlySet<AlertCategory> = new Set(['door']);
@@ -270,6 +272,26 @@ async function reconcileTx(
         .returning();
       if (after) row = after;
       await historyTx(tx, orgId, row, 'notified', now);
+      // M6.4c: tell same-tier consumers (Slack) through the outbox: ids, the rule, the severity,
+      // the count and the org-relative page that fixes it; never a name or a person.
+      await emitEvents(tx, ctx, [
+        {
+          type: ALERT_NOTIFIED_EVENT,
+          version: 1,
+          aggregateType: 'alert',
+          aggregateId: row.id,
+          payload: {
+            orgId,
+            alertId: row.id,
+            rule: row.rule,
+            severity: row.severity,
+            count: row.count,
+            eventId: row.eventId,
+            notifyCount: row.notifyCount,
+            href: fixPath(row.rule as RuleKey, scope.event?.slug ?? null),
+          },
+        },
+      ]);
       notified = true;
     }
     await publishAlertTx(tx, orgId, row, now);

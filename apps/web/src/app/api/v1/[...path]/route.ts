@@ -24,3 +24,5 @@ const handle = (req: Request) => app.fetch(req);
 export const GET = handle;
 export const POST = handle;
 export const PATCH = handle;
+// M6.4c: `DELETE /v1/orgs/{org}/hooks/{hookId}` (Zapier unsubscribing a REST hook).
+export const DELETE = handle;

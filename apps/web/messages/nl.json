@@ -4027,7 +4027,9 @@
       "orders_refund": "Bestellingen terugbetalen",
       "attendees_read": "Deelnemers lezen",
       "attendees_write": "Deelnemers wijzigen en tickets opnieuw versturen",
-      "checkin_scan": "Tickets scannen"
+      "checkin_scan": "Tickets scannen",
+      "contacts_write": "Contacten toevoegen",
+      "webhooks_subscribe": "Automatiseringshooks abonneren (Zapier-triggers)"
     },
     "expiry": "Verloopt",
     "expiryHint": "Een sleutel die verloopt moet je vóór die tijd roteren. Korter is veiliger.",
@@ -15194,6 +15196,9 @@
     "connectors": {
       "demo": {
         "description": "Een test-app met contacten om integraties uit te proberen: contacten synchroniseren in beide richtingen met je CRM. Alleen in testomgevingen."
+      },
+      "slack": {
+        "description": "Meldingen en een dagelijks overzicht in een Slack-kanaal naar keuze. Berichten noemen evenementen, nooit e-mailadressen, telefoonnummers of bedragen, tenzij je dat aanzet."
       }
     },
     "sandboxBadge": "Test",
@@ -15430,7 +15435,155 @@
       "allow": "Toestaan",
       "deny": "Weigeren"
     },
-    "webhooksAction": "Een webhook instellen"
+    "webhooksAction": "Een webhook instellen",
+    "zapier": {
+      "title": "Zapier",
+      "cardDescription": "Start Zaps als bestellingen betaald worden, tickets worden ingecheckt of inschrijvingen binnenkomen, en schrijf mensen in of voeg contacten toe vanuit duizenden apps.",
+      "apiKeyBadge": "Gebruikt een API-sleutel",
+      "setUp": "Instellen",
+      "setUpNamed": "Zapier instellen",
+      "description": "Zapier koppelt met een van je API-sleutels. Geef de sleutel de rechten hieronder; de triggers die Zapier aanzet, staan hier.",
+      "createKey": "API-sleutel maken",
+      "reviewTitle": "De Yayatoh-app op Zapier wordt beoordeeld",
+      "reviewBody": "Tot Zapier hem publiceert, kan je accountteam je een uitnodigingslink sturen.",
+      "noApiAccess": "API-toegang hoort niet bij je abonnement, dus Zapier kan nog niet koppelen.",
+      "scopesTitle": "Rechten van de API-sleutel",
+      "scopesHelp": "Elke trigger en actie heeft een eigen recht nodig op de sleutel die je Zapier geeft.",
+      "allScopes": "Een sleutel met deze rechten dekt alles:",
+      "partsCaption": "Triggers en acties met het recht dat elk nodig heeft",
+      "part": "Trigger of actie",
+      "kind": "Soort",
+      "scope": "Recht",
+      "parts": {
+        "order_paid": "Bestelling betaald",
+        "ticket_admitted": "Ticket ingecheckt",
+        "registration_submitted": "Inschrijfformulier verstuurd",
+        "event_published": "Evenement gepubliceerd",
+        "create_registration": "Inschrijving maken",
+        "add_contact": "Contact toevoegen",
+        "check_in": "Ticket inchecken",
+        "event_list": "Evenementkiezer"
+      },
+      "kinds": {
+        "trigger": "Trigger",
+        "action": "Actie",
+        "picker": "Gebruikt door acties"
+      },
+      "keysTitle": "Je API-sleutels",
+      "keysHelp": "Actieve sleutels en of ze alle rechten dekken die Zapier nodig heeft.",
+      "noKeysTitle": "Nog geen actieve API-sleutels",
+      "noKeysDescription": "Maak een sleutel met de rechten hierboven en plak die in Zapier, samen met de korte naam van je organisatie.",
+      "keysCaption": "Actieve API-sleutels en hun dekking voor Zapier",
+      "keyName": "Sleutel",
+      "key": "Begint met",
+      "coverage": "Voor Zapier",
+      "ready": "Klaar voor Zapier",
+      "partial": "{count, plural, one {# recht ontbreekt} other {# rechten ontbreken}}",
+      "missing": "Ontbreekt: {scopes}",
+      "hooksTitle": "Actieve Zapier-triggers",
+      "hooksHelp": "Zaps die aan staan en luisteren. Zet je een Zap uit, dan verdwijnt de trigger hier.",
+      "hooksCaption": "Triggers waarop Zapier is geabonneerd",
+      "hooksEmpty": "Er luistert nog geen Zap. Zet een Zap aan die begint met een Yayatoh-trigger.",
+      "event": "Soort gebeurtenis",
+      "host": "Bezorgd bij",
+      "otherKey": "Een verwijderde sleutel",
+      "created": "Aangezet"
+    },
+    "slack": {
+      "title": "Slack",
+      "description": "Kies een kanaal voor meldingen en het dagelijkse overzicht. Berichten noemen evenementen en aantallen, nooit e-mailadressen of telefoonnummers.",
+      "settingsTitle": "Kanaal en berichten",
+      "saved": "Slack-instellingen opgeslagen.",
+      "invalid": "Sommige gegevens moeten worden verbeterd.",
+      "channel": "Kanaal",
+      "channelHint": "Je kunt alleen kanalen kiezen waarin de Yayatoh-app zit. Voeg de app in Slack eerst toe aan het kanaal.",
+      "channelPlaceholder": "Kies een kanaal",
+      "private": "privé",
+      "notInChannel": "app niet in kanaal",
+      "alerts": "Meldingen sturen",
+      "alertsHint": "Meldingen van je dashboard, zodra ze gebeuren.",
+      "severity": "Welke meldingen",
+      "severities": {
+        "info": "Alle meldingen",
+        "warning": "Waarschuwingen en kritieke meldingen",
+        "critical": "Alleen kritieke meldingen"
+      },
+      "digest": "Dagelijks overzicht sturen",
+      "digestHint": "De bestellingen, tickets en check-ins van gisteren, en de evenementen van vandaag.",
+      "digestTime": "Tijd van het overzicht",
+      "digestTimeHint": "Tijdzone van je organisatie ({zone}).",
+      "finance": "Bedragen in het overzicht opnemen",
+      "financeHint": "Alleen jij kunt dit aanzetten: jij hebt Slack gekoppeld en ziet de financiën. Iedereen in het kanaal ziet de bedragen.",
+      "noAmounts": "Het overzicht toont aantallen, geen bedragen. Alleen wie Slack koppelde en financiële toegang heeft, kan bedragen toevoegen.",
+      "save": "Slack-instellingen opslaan",
+      "fieldError": {
+        "invalid": "Controleer deze waarde.",
+        "channel": {
+          "required": "Kies een kanaal.",
+          "unknown": "Dat kanaal staat niet meer in de werkruimte. Kies een ander.",
+          "not_in_channel": "De Yayatoh-app zit niet in dat kanaal. Voeg hem toe in Slack en kies het dan."
+        },
+        "digestTime": {
+          "required": "Kies een tijd voor het overzicht.",
+          "invalid": "Vul een tijd in zoals 08:00."
+        },
+        "severity": {
+          "invalid": "Kies welke meldingen je wilt sturen."
+        },
+        "finance": {
+          "finance_owner_only": "Alleen wie Slack koppelde en financiële toegang heeft, kan bedragen toevoegen."
+        }
+      },
+      "error": {
+        "unavailable": "Slack is hier niet beschikbaar.",
+        "provider_unavailable": "Slack is niet bereikbaar. Probeer het over een paar minuten opnieuw.",
+        "validation_failed": "Sommige gegevens moeten worden verbeterd.",
+        "forbidden": "Je hebt hier geen toegang toe.",
+        "module_not_enabled": "Integraties horen niet bij je abonnement.",
+        "not_found": "Dat hebben we niet gevonden.",
+        "invalid_state": "Dat kan nu niet.",
+        "no_channel": "Kies eerst een kanaal en sla op.",
+        "auth_revoked": "Slack accepteert deze koppeling niet meer. Koppel Slack opnieuw.",
+        "connection_inactive": "Niet verstuurd: de koppeling is gepauzeerd of verbroken.",
+        "send_failed": "Het bericht kon niet worden verstuurd. Het wordt opnieuw geprobeerd.",
+        "not_in_channel": "De Yayatoh-app zit niet in dat kanaal. Voeg hem toe in Slack en probeer het opnieuw.",
+        "channel_not_found": "Dat kanaal bestaat niet meer. Kies een ander.",
+        "pii_blocked": "Niet verstuurd: het zou persoonsgegevens bevatten.",
+        "render_failed": "Het bericht kon niet worden voorbereid. Het wordt opnieuw geprobeerd.",
+        "nothing_to_send": "Er valt niets meer te versturen.",
+        "impersonation_blocked": "Medewerkers die als lid handelen, kunnen dit niet wijzigen.",
+        "read_only_freeze": "Wijzigingen zijn gepauzeerd tijdens gepland onderhoud. Probeer het daarna opnieuw.",
+        "internal": "Er ging bij ons iets mis.",
+        "other": "Niet verstuurd ({code})."
+      },
+      "testSent": "Testmelding verstuurd naar #{channel}.",
+      "channelsFailed": "De kanaallijst van Slack kon niet worden geladen. Probeer het over een paar minuten opnieuw.",
+      "inactive": "Instellingen zijn beschikbaar zolang Slack gekoppeld en actief is.",
+      "previewTitle": "Testmelding voor #{channel}",
+      "previewHelp": "Dit ziet het kanaal.",
+      "nextDigest": "Volgende overzicht: {when}",
+      "sendTest": "Testmelding sturen",
+      "messagesTitle": "Recente Slack-berichten",
+      "messagesEmpty": "Nog niets verstuurd.",
+      "messages": {
+        "when": "Wanneer",
+        "kind": "Bericht",
+        "status": "Status",
+        "detail": "Details"
+      },
+      "kinds": {
+        "alert": "Melding",
+        "digest": "Dagelijks overzicht",
+        "test": "Testmelding"
+      },
+      "statuses": {
+        "pending": "Wacht",
+        "sending": "Wordt verstuurd",
+        "sent": "Verstuurd",
+        "failed": "Mislukt",
+        "cancelled": "Niet verstuurd"
+      }
+    }
   },
   "kioskPrint": {
     "useEmail": "Ticket niet bij je? Gebruik je e-mail",

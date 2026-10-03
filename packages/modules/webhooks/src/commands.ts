@@ -55,7 +55,7 @@ const Url = z.string().trim().min(1).max(MAX_URL_LENGTH);
 const Description = z.string().trim().max(200);
 const MessageId = z.string().regex(/^msg_[A-Za-z0-9]{1,64}$/);
 
-function publisher(): WebhookPublisher {
+export function publisher(): WebhookPublisher {
   const p = webhooksRuntime().publisher;
   if (!p)
     throw new DomainError('invalid_state', 'Webhooks are not available on this deployment yet', {
@@ -65,7 +65,7 @@ function publisher(): WebhookPublisher {
 }
 
 /** A provider failure as a domain error (never the provider's own message to the caller). */
-async function provider<T>(fn: () => Promise<T>): Promise<T> {
+export async function provider<T>(fn: () => Promise<T>): Promise<T> {
   try {
     return await fn();
   } catch (err) {
@@ -83,7 +83,7 @@ async function provider<T>(fn: () => Promise<T>): Promise<T> {
 
 let eventTypesSynced: Promise<void> | null = null;
 /** Register the catalog's event types with the provider once per process (idempotent there). */
-async function syncEventTypes(p: WebhookPublisher): Promise<void> {
+export async function syncEventTypes(p: WebhookPublisher): Promise<void> {
   eventTypesSynced ??= p
     .syncEventTypes(
       (EVENT_CATALOG as readonly (typeof EVENT_CATALOG)[number][]).map((e) => ({
@@ -101,13 +101,13 @@ async function syncEventTypes(p: WebhookPublisher): Promise<void> {
   return eventTypesSynced;
 }
 
-async function findEndpoint(tx: TenantTx, id: string): Promise<Row> {
+export async function findEndpoint(tx: TenantTx, id: string): Promise<Row> {
   const [row] = await tx.select().from(endpoints).where(eq(endpoints.id, id));
   if (!row) throw new DomainError('not_found');
   return row;
 }
 
-const spec = (r: Pick<Row, 'url' | 'description' | 'eventTypes' | 'status'>): EndpointSpec => ({
+export const spec = (r: Pick<Row, 'url' | 'description' | 'eventTypes' | 'status'>): EndpointSpec => ({
   url: r.url,
   description: r.description,
   eventTypes: r.eventTypes,
@@ -115,7 +115,7 @@ const spec = (r: Pick<Row, 'url' | 'description' | 'eventTypes' | 'status'>): En
 });
 
 /** Where an endpoint points, for audit (the path and query can hold the receiver's token). */
-const hostOf = (url: string) => {
+export const hostOf = (url: string) => {
   try {
     return new URL(url).host;
   } catch {

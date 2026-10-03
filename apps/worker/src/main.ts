@@ -20,7 +20,7 @@ import { DEVICE_WATCHDOG_MS, runDeviceWatchdog } from './device-watchdog.ts';
 import { domainRecheckJob } from './domains.ts';
 import { enqueueDuplicateScans } from './duplicates.ts';
 import { endExpiredImpersonations } from './impersonations.ts';
-import { enqueueSyncWork } from './integrations.ts';
+import { enqueueSlackWork, enqueueSyncWork } from './integrations.ts';
 import { enqueueJourneyWork } from './journeys.ts';
 import { enqueueDueMassRefunds, massRefundJob } from './mass-refunds.ts';
 import {
@@ -238,7 +238,8 @@ let queueingSyncs = false;
 setInterval(() => {
   if (!release || stopping || queueingSyncs) return;
   queueingSyncs = true;
-  enqueueSyncWork(boss)
+  // M6.4c: and one Slack job per org with due messages or digests (exclusive per org).
+  Promise.all([enqueueSyncWork(boss), enqueueSlackWork(boss)])
     .catch((err) => console.error('integrations', err))
     .finally(() => {
       queueingSyncs = false;

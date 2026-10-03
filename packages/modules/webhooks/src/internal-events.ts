@@ -16,6 +16,7 @@
 export type InternalReason = 'personal' | 'security' | 'workflow' | 'platform' | 'content' | 'later';
 
 export const INTERNAL_EVENTS: Readonly<Record<string, InternalReason>> = {
+  'alerts.alert_notified@1': 'security',
   'announcement.sent@1': 'later',
   'assistance.requested@1': 'personal',
   'assistance.updated@1': 'personal',

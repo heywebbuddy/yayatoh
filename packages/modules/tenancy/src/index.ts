@@ -201,6 +201,7 @@ export {
   myOrganizations,
   organizationBrandTx,
   organizationDefaultsTx,
+  organizationLocaleTx,
   organizationLogoTx,
   organizationNameTx,
   organizationPublicTx,

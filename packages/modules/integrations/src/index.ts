@@ -55,6 +55,7 @@ export {
   demoRemoteUpdate,
 } from './connectors/demo.ts';
 export { CONNECTORS, connectorByKey, offeredConnectors } from './connectors/index.ts';
+export { slackConnector } from './connectors/slack.ts';
 export * from './domain/mapping.ts';
 export * from './domain/sync.ts';
 export {
@@ -99,3 +100,67 @@ export {
   type RemoteRecord,
   type SyncIO,
 } from './sdk/connector.ts';
+export {
+  isSlackChannelId,
+  listSlackChannels,
+  postSlackMessage,
+  type SlackChannel,
+  slackAuthTest,
+} from './slack/api.ts';
+export { digestFactsTx } from './slack/digest.ts';
+export {
+  claimSlackMessagesCommand,
+  finishSlackMessageCommand,
+  MAX_SLACK_ATTEMPTS,
+  queueSlackDigestsCommand,
+  runSlackDispatch,
+  SLACK_ACTOR,
+  SLACK_PERMISSION,
+  type SlackDeps,
+  type SlackDispatchResult,
+  STALE_DIGEST_MS,
+} from './slack/dispatch.ts';
+export {
+  FAKE_SLACK_CHANNELS,
+  type FakeSlackMessage,
+  fakeSlackMessages,
+  slackFakeProvider,
+} from './slack/fake.ts';
+export {
+  DIGEST_EVENT_LINES,
+  type DigestFacts,
+  digestAmounts,
+  escapeMrkdwn,
+  renderSlackAlert,
+  renderSlackDigest,
+  renderSlackTest,
+  SLACK_MESSAGES,
+  SLACK_SEVERITIES,
+  type SlackBlock,
+  type SlackMessage,
+  type SlackSeverity,
+  slackPiiProblems,
+  slackText,
+} from './slack/render.ts';
+export { addDays, DIGEST_TIME, dayBounds, localDay, nextDigestAt } from './slack/schedule.ts';
+export {
+  queueSlackTestCommand,
+  RECENT_SLACK_MESSAGES,
+  SLACK_CONNECTOR,
+  SlackMessageDto,
+  SlackPanelDto,
+  SlackSettingsDto,
+  saveSlackSettingsCommand,
+  slackAuthRefQuery,
+  slackChannelsFor,
+  slackPanelQuery,
+  slackPanelSerializer,
+} from './slack/settings.ts';
+export { ALERT_NOTIFIED_EVENT, AlertNotifiedPayload, slackAlertsSubscriber } from './slack/subscriber.ts';
+export {
+  ZAPIER_ACTIONS,
+  ZAPIER_EVENT_PICKER,
+  ZAPIER_SCOPES,
+  ZAPIER_TRIGGERS,
+  type ZapierPart,
+} from './zapier.ts';

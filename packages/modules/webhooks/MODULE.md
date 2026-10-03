@@ -11,3 +11,5 @@ Outbound webhooks (M6.3b, roadmap §6.3, P6-3, D21): the public event catalog, t
 - Endpoint URLs: https on 443, no credentials, public names and addresses only (`@yayatoh/platform/ssrf` at registration; Svix re-checks at send). The fake publisher resolves reserved test names (`.test`, `example.com`) to a public address.
 - Everything needs `webhooks:manage` (owners and admins) and the `api_access` module. Rotating a secret needs step-up; revealing one is audited. Audit entries name the endpoint's host only (a URL's path can carry the receiver's token).
 - Signatures are Standard Webhooks (`signing.ts`); the receiver example on the docs (`examples.ts`) is run by `examples.test.ts` against deliveries the fake signed.
+- **REST hooks (M6.4c):** `subscribeHookCommand` / `unsubscribeHookCommand` (/v1 `hooks`, scope and permission `webhooks:subscribe`) make and remove an endpoint with `source = 'rest_hook'` for one event type (Zapier's triggers); a tool can remove only hooks made this way, never the organizer's endpoints. `hookSampleQuery` returns the catalog example. They count towards `MAX_ENDPOINTS` and show in Settings → Webhooks.
+

@@ -26,6 +26,7 @@ import {
 } from '../actions.ts';
 import { ConnectionPill, codeText, ERROR_CODES, IntegrationTabs, RunPill } from '../parts.tsx';
 import { MappingForm } from './mapping-form.tsx';
+import { SlackPanel } from './slack-panel.tsx';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('integrations');
@@ -49,6 +50,9 @@ export default async function ConnectionPage({
     sync?: string;
     connected?: string;
     confirm?: string;
+    slack?: string;
+    channel?: string;
+    slackError?: string;
   }>;
 }) {
   const { locale, org, connection: connectionId } = await params;
@@ -83,8 +87,11 @@ export default async function ConnectionPage({
     sp.done && ['paused', 'resumed', 'interval', 'disconnected'].includes(sp.done) ? sp.done : null;
   const live = c.status === 'active' || c.status === 'paused';
   const confirming = sp.confirm === 'disconnect' && live && canManage;
+  // M6.4c: a notifications connector (Slack) syncs no records: its runs are health checks, so
+  // there is no Sync now, interval, mapping or runs table; its own panel takes their place.
+  const notifies = connector.purpose === 'notifications';
   const syncNow =
-    canManage && c.status === 'active' ? (
+    canManage && c.status === 'active' && !notifies ? (
       <form action={syncNowAction.bind(null, org, c.id)}>
         <Button type="submit" disabled={detail.syncing}>
           {detail.syncing ? t('detail.syncing') : t('detail.syncNow')}
@@ -174,7 +181,7 @@ export default async function ConnectionPage({
               {fmt(c.lastSyncAt)}
               {c.lastSyncStatus ? <RunPill status={c.lastSyncStatus} /> : null}
             </dd>
-            {c.status === 'active' ? (
+            {c.status === 'active' && !notifies ? (
               <>
                 <dt className="text-ink-2">{t('detail.nextSync')}</dt>
                 <dd className="m-0">{fmt(c.nextSyncAt)}</dd>
@@ -193,26 +200,28 @@ export default async function ConnectionPage({
           </dl>
           {canManage && live ? (
             <div className="flex flex-wrap items-end gap-3">
-              <form
-                action={setIntervalAction.bind(null, org, c.id)}
-                className="flex flex-wrap items-end gap-2"
-              >
-                <Select
-                  id="sync-interval"
-                  name="minutes"
-                  label={t('detail.interval')}
-                  defaultValue={String(c.syncIntervalMinutes)}
+              {notifies ? null : (
+                <form
+                  action={setIntervalAction.bind(null, org, c.id)}
+                  className="flex flex-wrap items-end gap-2"
                 >
-                  {SYNC_INTERVALS.map((m) => (
-                    <option key={m} value={m}>
-                      {t(`detail.intervals.${m}`)}
-                    </option>
-                  ))}
-                </Select>
-                <Button type="submit" variant="secondary">
-                  {t('detail.saveInterval')}
-                </Button>
-              </form>
+                  <Select
+                    id="sync-interval"
+                    name="minutes"
+                    label={t('detail.interval')}
+                    defaultValue={String(c.syncIntervalMinutes)}
+                  >
+                    {SYNC_INTERVALS.map((m) => (
+                      <option key={m} value={m}>
+                        {t(`detail.intervals.${m}`)}
+                      </option>
+                    ))}
+                  </Select>
+                  <Button type="submit" variant="secondary">
+                    {t('detail.saveInterval')}
+                  </Button>
+                </form>
+              )}
               <form action={setPausedAction.bind(null, org, c.id, c.status === 'active')}>
                 <Button type="submit" variant="secondary">
                   {c.status === 'active' ? t('detail.pause') : t('detail.resume')}
@@ -230,7 +239,17 @@ export default async function ConnectionPage({
           ) : null}
         </Card>
       </section>
-      {live || detail.mappings.length ? (
+      {connector.key === 'slack' ? (
+        <SlackPanel
+          org={org}
+          connectionId={c.id}
+          data={data}
+          canManage={canManage}
+          active={c.status === 'active'}
+          sp={sp}
+        />
+      ) : null}
+      {!notifies && (live || detail.mappings.length) ? (
         <section aria-labelledby="mapping-heading" className="flex flex-col gap-3">
           <SectionHeader
             id="mapping-heading"
@@ -261,30 +280,32 @@ export default async function ConnectionPage({
           )}
         </section>
       ) : null}
-      <section aria-labelledby="runs-heading" className="flex flex-col gap-3">
-        <SectionHeader id="runs-heading" title={t('runs.title')} count={detail.runs.length} />
-        <Table
-          caption={t('runs.caption')}
-          rowKey={(r) => r.id}
-          rows={detail.runs}
-          stackOnPhone
-          empty={t('runs.empty')}
-          columns={[
-            { key: 'when', header: t('runs.when'), cell: (r) => fmt(r.startedAt ?? r.createdAt) },
-            { key: 'trigger', header: t('runs.trigger'), cell: (r) => t(`runs.triggers.${r.trigger}`) },
-            { key: 'status', header: t('runs.status'), cell: (r) => <RunPill status={r.status} /> },
-            { key: 'pulled', header: t('runs.pulled'), cell: (r) => r.pulled, align: 'end' },
-            { key: 'pushed', header: t('runs.pushed'), cell: (r) => r.pushed, align: 'end' },
-            { key: 'skipped', header: t('runs.skipped'), cell: (r) => r.skipped, align: 'end' },
-            { key: 'failed', header: t('runs.failed'), cell: (r) => r.failed, align: 'end' },
-            {
-              key: 'error',
-              header: t('runs.error'),
-              cell: (r) => (r.errorCode ? codeText(t, r.errorCode) : '—'),
-            },
-          ]}
-        />
-      </section>
+      {notifies ? null : (
+        <section aria-labelledby="runs-heading" className="flex flex-col gap-3">
+          <SectionHeader id="runs-heading" title={t('runs.title')} count={detail.runs.length} />
+          <Table
+            caption={t('runs.caption')}
+            rowKey={(r) => r.id}
+            rows={detail.runs}
+            stackOnPhone
+            empty={t('runs.empty')}
+            columns={[
+              { key: 'when', header: t('runs.when'), cell: (r) => fmt(r.startedAt ?? r.createdAt) },
+              { key: 'trigger', header: t('runs.trigger'), cell: (r) => t(`runs.triggers.${r.trigger}`) },
+              { key: 'status', header: t('runs.status'), cell: (r) => <RunPill status={r.status} /> },
+              { key: 'pulled', header: t('runs.pulled'), cell: (r) => r.pulled, align: 'end' },
+              { key: 'pushed', header: t('runs.pushed'), cell: (r) => r.pushed, align: 'end' },
+              { key: 'skipped', header: t('runs.skipped'), cell: (r) => r.skipped, align: 'end' },
+              { key: 'failed', header: t('runs.failed'), cell: (r) => r.failed, align: 'end' },
+              {
+                key: 'error',
+                header: t('runs.error'),
+                cell: (r) => (r.errorCode ? codeText(t, r.errorCode) : '—'),
+              },
+            ]}
+          />
+        </section>
+      )}
     </>
   );
 }

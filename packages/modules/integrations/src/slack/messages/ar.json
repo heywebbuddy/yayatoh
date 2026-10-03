@@ -1,0 +1,30 @@
+{
+  "severity": {
+    "info": "معلومة",
+    "warning": "تحذير",
+    "critical": "حرج"
+  },
+  "alert": {
+    "context": "{severity} · {where}",
+    "open": "فتح في Yayatoh"
+  },
+  "test": {
+    "title": "تنبيه تجريبي من {org}",
+    "body": "تم ربط Slack. ستصل التنبيهات والملخص اليومي من Yayatoh إلى هذه القناة."
+  },
+  "digest": {
+    "title": "الملخص اليومي · {org}",
+    "salesTitle": "المبيعات",
+    "sales": "{orders, plural, zero {لا طلبات جديدة} one {طلب جديد واحد} two {طلبان جديدان} few {# طلبات جديدة} many {# طلبًا جديدًا} other {# طلب جديد}} · {tickets, plural, zero {لا تذاكر} one {تذكرة واحدة} two {تذكرتان} few {# تذاكر} many {# تذكرة} other {# تذكرة}}",
+    "revenue": "الإيرادات: {amounts}",
+    "checkins": "{count, plural, zero {لا تسجيلات دخول} one {تسجيل دخول واحد} two {تسجيلا دخول} few {# تسجيلات دخول} many {# تسجيل دخول} other {# تسجيل دخول}}",
+    "eventLine": "{name}: {tickets, plural, zero {لا تذاكر} one {تذكرة واحدة} two {تذكرتان} few {# تذاكر} many {# تذكرة} other {# تذكرة}}",
+    "eventLineRevenue": "{name}: {tickets, plural, zero {لا تذاكر} one {تذكرة واحدة} two {تذكرتان} few {# تذاكر} many {# تذكرة} other {# تذكرة}} · {amounts}",
+    "moreEvents": "{count, plural, zero {ولا فعاليات أخرى} one {وفعالية أخرى} two {وفعاليتان أخريان} few {و# فعاليات أخرى} many {و# فعالية أخرى} other {و# فعالية أخرى}}",
+    "todayTitle": "اليوم",
+    "todayEvent": "{name} · {time}",
+    "noEventsToday": "لا فعاليات اليوم.",
+    "open": "فتح لوحة التحكم"
+  },
+  "footer": "أُرسلت من Yayatoh. غيّر ذلك من الإعدادات ← التكاملات ← Slack."
+}

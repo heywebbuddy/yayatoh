@@ -38,4 +38,25 @@ export const privateColumns = columnPrivacy('integrations', {
     field: 'vocab',
     status: 'vocab',
   },
+  // M6.4c Slack: the channel picked (an id and a name from the workspace), what to send, and the
+  // send log (ids and counts in the payload; never personal data).
+  slack_settings: {
+    channel_id: internal('none', { why: 'a Slack channel id (C…/G…/D…) by CHECK constraint; no free text' }),
+    channel_name: internal(),
+    alert_min_severity: 'vocab',
+    digest_time: 'vocab',
+  },
+  slack_messages: {
+    channel_id: internal('none', { why: 'a Slack channel id (C…/G…/D…) by CHECK constraint; no free text' }),
+    kind: 'vocab',
+    dedupe_key: internal('none', {
+      why: 'kind plus an alert id and sending, a day or a message id, by CHECK constraint; no free text',
+    }),
+    status: 'vocab',
+    payload: internal(),
+    provider_ts: internal('none', {
+      why: "Slack's message timestamp (digits), at most 40 characters; never shown",
+    }),
+    error_code: 'vocab',
+  },
 });

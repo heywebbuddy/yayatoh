@@ -4027,7 +4027,9 @@
       "orders_refund": "Rimborsare gli ordini",
       "attendees_read": "Leggere i partecipanti",
       "attendees_write": "Modificare i partecipanti e reinviare i biglietti",
-      "checkin_scan": "Scansionare i biglietti"
+      "checkin_scan": "Scansionare i biglietti",
+      "contacts_write": "Aggiungere contatti",
+      "webhooks_subscribe": "Iscrivere hook di automazione (trigger Zapier)"
     },
     "expiry": "Scade",
     "expiryHint": "Una chiave che scade va ruotata prima. Più breve è più sicuro.",
@@ -15194,6 +15196,9 @@
     "connectors": {
       "demo": {
         "description": "Un’app contatti di prova per provare le integrazioni: i contatti si sincronizzano in entrambe le direzioni con il tuo CRM. Solo negli ambienti di test."
+      },
+      "slack": {
+        "description": "Avvisi e un riepilogo giornaliero nel canale Slack che scegli. I messaggi nominano gli eventi, mai email, telefoni o importi, a meno che tu non lo attivi."
       }
     },
     "sandboxBadge": "Prova",
@@ -15430,7 +15435,155 @@
       "allow": "Consenti",
       "deny": "Rifiuta"
     },
-    "webhooksAction": "Configura un webhook"
+    "webhooksAction": "Configura un webhook",
+    "zapier": {
+      "title": "Zapier",
+      "cardDescription": "Avvia Zap quando un ordine viene pagato, un biglietto viene validato o arriva un'iscrizione, e iscrivi persone o aggiungi contatti da migliaia di app.",
+      "apiKeyBadge": "Usa una chiave API",
+      "setUp": "Configura",
+      "setUpNamed": "Configura Zapier",
+      "description": "Zapier si collega con una delle tue chiavi API. Assegna alla chiave i permessi qui sotto; qui trovi i trigger attivati da Zapier.",
+      "createKey": "Crea una chiave API",
+      "reviewTitle": "L'app Yayatoh su Zapier è in revisione",
+      "reviewBody": "Finché Zapier non la pubblica, il tuo team di riferimento può inviarti un link di invito.",
+      "noApiAccess": "L'accesso API non è incluso nel tuo piano, quindi Zapier non può ancora collegarsi.",
+      "scopesTitle": "Permessi della chiave API",
+      "scopesHelp": "Ogni trigger e azione richiede il proprio permesso sulla chiave che dai a Zapier.",
+      "allScopes": "Una chiave con questi permessi copre tutto:",
+      "partsCaption": "Trigger e azioni con il permesso richiesto da ciascuno",
+      "part": "Trigger o azione",
+      "kind": "Tipo",
+      "scope": "Permesso",
+      "parts": {
+        "order_paid": "Ordine pagato",
+        "ticket_admitted": "Biglietto validato",
+        "registration_submitted": "Modulo di iscrizione inviato",
+        "event_published": "Evento pubblicato",
+        "create_registration": "Crea iscrizione",
+        "add_contact": "Aggiungi contatto",
+        "check_in": "Valida biglietto",
+        "event_list": "Selettore eventi"
+      },
+      "kinds": {
+        "trigger": "Trigger",
+        "action": "Azione",
+        "picker": "Usato dalle azioni"
+      },
+      "keysTitle": "Le tue chiavi API",
+      "keysHelp": "Le chiavi attive e se coprono tutti i permessi richiesti da Zapier.",
+      "noKeysTitle": "Ancora nessuna chiave attiva",
+      "noKeysDescription": "Crea una chiave con i permessi qui sopra e incollala in Zapier insieme al nome breve della tua organizzazione.",
+      "keysCaption": "Chiavi API attive e la loro copertura per Zapier",
+      "keyName": "Chiave",
+      "key": "Inizia con",
+      "coverage": "Per Zapier",
+      "ready": "Pronta per Zapier",
+      "partial": "{count, plural, one {Manca # permesso} other {Mancano # permessi}}",
+      "missing": "Mancano: {scopes}",
+      "hooksTitle": "Trigger Zapier attivi",
+      "hooksHelp": "Gli Zap accesi e in ascolto. Spegnendo uno Zap il suo trigger sparisce da qui.",
+      "hooksCaption": "Trigger a cui Zapier si è iscritto",
+      "hooksEmpty": "Ancora nessuno Zap in ascolto. Accendi uno Zap che inizia con un trigger Yayatoh.",
+      "event": "Tipo di evento",
+      "host": "Consegnato a",
+      "otherKey": "Una chiave rimossa",
+      "created": "Attivato"
+    },
+    "slack": {
+      "title": "Slack",
+      "description": "Scegli un canale per gli avvisi e il riepilogo giornaliero. I messaggi nominano eventi e numeri, mai email o numeri di telefono.",
+      "settingsTitle": "Canale e messaggi",
+      "saved": "Impostazioni Slack salvate.",
+      "invalid": "Alcuni dati vanno corretti.",
+      "channel": "Canale",
+      "channelHint": "Si possono scegliere solo i canali in cui si trova l'app Yayatoh. In Slack, aggiungi prima l'app al canale.",
+      "channelPlaceholder": "Scegli un canale",
+      "private": "privato",
+      "notInChannel": "app non nel canale",
+      "alerts": "Invia avvisi",
+      "alertsHint": "Gli avvisi della tua dashboard, appena accadono.",
+      "severity": "Avvisi da inviare",
+      "severities": {
+        "info": "Tutti gli avvisi",
+        "warning": "Avvertenze e avvisi critici",
+        "critical": "Solo avvisi critici"
+      },
+      "digest": "Invia un riepilogo giornaliero",
+      "digestHint": "Gli ordini, i biglietti e i check-in di ieri e gli eventi di oggi.",
+      "digestTime": "Orario del riepilogo",
+      "digestTimeHint": "Fuso orario della tua organizzazione ({zone}).",
+      "finance": "Includi gli importi nel riepilogo",
+      "financeHint": "Solo tu puoi attivarlo: hai collegato Slack e vedi i dati finanziari. Tutti nel canale vedranno gli importi.",
+      "noAmounts": "Il riepilogo mostra numeri, non importi. Solo chi ha collegato Slack, con accesso ai dati finanziari, può aggiungere gli importi.",
+      "save": "Salva impostazioni Slack",
+      "fieldError": {
+        "invalid": "Controlla questo valore.",
+        "channel": {
+          "required": "Scegli un canale.",
+          "unknown": "Quel canale non è più nello spazio di lavoro. Scegline un altro.",
+          "not_in_channel": "L'app Yayatoh non è in quel canale. Aggiungila in Slack, poi sceglilo."
+        },
+        "digestTime": {
+          "required": "Scegli un orario per il riepilogo.",
+          "invalid": "Inserisci un orario come 08:00."
+        },
+        "severity": {
+          "invalid": "Scegli quali avvisi inviare."
+        },
+        "finance": {
+          "finance_owner_only": "Solo chi ha collegato Slack, con accesso ai dati finanziari, può aggiungere gli importi."
+        }
+      },
+      "error": {
+        "unavailable": "Slack non è disponibile qui.",
+        "provider_unavailable": "Impossibile raggiungere Slack. Riprova tra qualche minuto.",
+        "validation_failed": "Alcuni dati vanno corretti.",
+        "forbidden": "Non hai accesso a questa funzione.",
+        "module_not_enabled": "Le integrazioni non sono incluse nel tuo piano.",
+        "not_found": "Non trovato.",
+        "invalid_state": "Non è possibile farlo ora.",
+        "no_channel": "Prima scegli un canale e salva.",
+        "auth_revoked": "Slack non accetta più questo collegamento. Ricollega Slack.",
+        "connection_inactive": "Non inviato: il collegamento è stato messo in pausa o scollegato.",
+        "send_failed": "Impossibile inviare il messaggio. Verrà ritentato.",
+        "not_in_channel": "L'app Yayatoh non è in quel canale. Aggiungila in Slack e riprova.",
+        "channel_not_found": "Quel canale non esiste più. Scegline un altro.",
+        "pii_blocked": "Non inviato: avrebbe contenuto dati personali.",
+        "render_failed": "Impossibile preparare il messaggio. Verrà ritentato.",
+        "nothing_to_send": "Non c'è più nulla da inviare.",
+        "impersonation_blocked": "Lo staff che agisce come membro non può modificarlo.",
+        "read_only_freeze": "Le modifiche sono sospese durante la manutenzione programmata. Riprova al termine.",
+        "internal": "Qualcosa è andato storto da parte nostra.",
+        "other": "Non inviato ({code})."
+      },
+      "testSent": "Avviso di prova inviato a #{channel}.",
+      "channelsFailed": "Impossibile caricare l'elenco dei canali Slack. Riprova tra qualche minuto.",
+      "inactive": "Le impostazioni sono disponibili mentre Slack è collegato e attivo.",
+      "previewTitle": "Avviso di prova per #{channel}",
+      "previewHelp": "Ecco cosa vedrà il canale.",
+      "nextDigest": "Prossimo riepilogo: {when}",
+      "sendTest": "Invia avviso di prova",
+      "messagesTitle": "Messaggi Slack recenti",
+      "messagesEmpty": "Ancora nulla di inviato.",
+      "messages": {
+        "when": "Quando",
+        "kind": "Messaggio",
+        "status": "Stato",
+        "detail": "Dettaglio"
+      },
+      "kinds": {
+        "alert": "Avviso",
+        "digest": "Riepilogo giornaliero",
+        "test": "Avviso di prova"
+      },
+      "statuses": {
+        "pending": "In attesa",
+        "sending": "Invio in corso",
+        "sent": "Inviato",
+        "failed": "Non riuscito",
+        "cancelled": "Non inviato"
+      }
+    }
   },
   "kioskPrint": {
     "useEmail": "Non hai il biglietto? Usa la tua email",

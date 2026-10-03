@@ -54,3 +54,18 @@ Slack, Mailchimp, HubSpot, Klaviyo) with `defineConnector` in `src/connectors/` 
   queues `integrations.sync` (exclusive per connection); the dev drain (`/api/dev/integrations/run`)
   runs `runDueSyncs`. Events: `integrations.connection_connected@1`,
   `integrations.connection_revoked@1`, `integrations.sync_completed@1` (ids, codes and counts).
+- **Notifications connectors (M6.4c, Slack):** `purpose: 'notifications'`, no objects (no mapping);
+  their runs are health checks (`health`). Slack's settings (`slack_settings`: one channel per
+  connection, alerts at or above a severity, a daily digest at a local time in the org's zone,
+  amounts only on the connection owner's opt-in while they have `finance:read`) and its send log
+  (`slack_messages`, unique per connection, channel, kind and dedupe key: an alert sending, a local
+  day, a test). Alerts arrive from the alerts module through the outbox
+  (`alerts.alert_notified@1`, subscriber `integrations.slack-alerts`), never by import. The sender
+  (`runSlackDispatch`; worker job `integrations.slack`, exclusive per org, found through
+  `integrations.orgs_with_slack_work()`) claims with a lease, checks the connection through the
+  port, re-checks every message for personal data (`slackPiiProblems`) and marks a revoked
+  connection through the engine's run. Messages name events and counts only.
+- **Zapier (M6.4c)** is not a connector: it authenticates with an org API key. `ZAPIER_TRIGGERS`,
+  `ZAPIER_ACTIONS` and `ZAPIER_SCOPES` (`src/zapier.ts`) describe the app in `apps/zapier` for the
+  console and the app's own test.
+
