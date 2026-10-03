@@ -41,7 +41,7 @@ export function DisplayLinkForm({
       </form>
       <div aria-live="polite">
         {state.kind === 'created' ? (
-          <div className="flex flex-col gap-2 rounded-card border border-zinc-200 bg-zinc-50 p-4">
+          <div className="flex flex-col gap-2 rounded-card border border-line bg-surface-2 p-4">
             <p className="text-body">{t('createdOnce', { label: state.label })}</p>
             <a href={url(state.token)} className="break-all text-caption underline" data-testid="tv-link">
               {url(state.token)}

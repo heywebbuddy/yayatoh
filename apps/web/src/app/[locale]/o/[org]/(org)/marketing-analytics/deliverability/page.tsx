@@ -2,10 +2,20 @@ import { listAlertsQuery } from '@yayatoh/alerts';
 import { executeQuery } from '@yayatoh/kernel';
 import { type DeliverabilityDto, deliverabilityReportQuery } from '@yayatoh/marketing';
 import { roleCan } from '@yayatoh/tenancy';
-import { Alert, Card, PageHeader, StatusDot, Table } from '@yayatoh/ui';
+import {
+  Alert,
+  buttonClass,
+  Card,
+  PageHeader,
+  SectionHeader,
+  StatusDot,
+  StatusPill,
+  Table,
+} from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { Crumbs } from '@/components/crumbs.tsx';
 import { ratePct } from '@/components/marketing-analytics.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { campaignNames } from '@/server/campaign-names.ts';
@@ -34,6 +44,7 @@ export default async function DeliverabilityPage({
   const data = await loadConsole(org);
   if (!data.modules.has('marketing') || !roleCan(data.role, 'messages:read')) notFound();
   const t = await getTranslations('marketingAnalytics.deliverability');
+  const tm = await getTranslations('marketingAnalytics');
   const [d, alerts] = await Promise.all([
     executeQuery(deliverabilityReportQuery, {}, data.ctx, ports),
     roleCan(data.role, 'events:read')
@@ -67,28 +78,24 @@ export default async function DeliverabilityPage({
       key: 'sent',
       header: t('sent'),
       cell: (r: Rates) => n.format(r.sent),
-      mono: true,
       align: 'end' as const,
     },
     {
       key: 'delivered',
       header: t('delivered'),
       cell: (r: Rates) => n.format(r.delivered),
-      mono: true,
       align: 'end' as const,
     },
     {
       key: 'bounce',
       header: t('bounceRate'),
       cell: (r: Rates) => `${ratePct(r.bounceBps, locale)} (${n.format(r.bounced)})`,
-      mono: true,
       align: 'end' as const,
     },
     {
       key: 'complaint',
       header: t('complaintRate'),
       cell: (r: Rates) => `${ratePct(r.complaintBps, locale)} (${n.format(r.complained)})`,
-      mono: true,
       align: 'end' as const,
     },
     { key: 'status', header: t('status'), cell: status },
@@ -96,7 +103,7 @@ export default async function DeliverabilityPage({
   const suppressionLink = suppressions ? (
     <Link
       href={suppressions}
-      className="inline-flex min-h-6 items-center self-start underline"
+      className={buttonClass('secondary', 'sm', 'self-start')}
       data-testid="suppressions-link"
     >
       {t('openSuppressions')}
@@ -104,13 +111,19 @@ export default async function DeliverabilityPage({
   ) : null;
   return (
     <>
-      <PageHeader title={t('title')} description={t('description', { days: d.thresholds.windowDays })} />
-      <Link
-        href={`/o/${org}/marketing-analytics`}
-        className="inline-flex min-h-6 items-center self-start text-body underline"
-      >
-        {t('back')}
-      </Link>
+      <PageHeader
+        breadcrumb={
+          <Crumbs
+            items={[
+              { label: data.org.name, href: `/o/${org}` },
+              { label: tm('title'), href: `/o/${org}/marketing-analytics` },
+              { label: t('title') },
+            ]}
+          />
+        }
+        title={t('title')}
+        description={t('description', { days: d.thresholds.windowDays })}
+      />
       {d.autoPause?.active ? (
         <Alert
           title={t('paused', {
@@ -124,21 +137,22 @@ export default async function DeliverabilityPage({
         </Alert>
       ) : null}
       {alert ? (
-        <Card className="flex flex-col gap-2" data-testid="deliverability-alert">
-          <StatusDot
-            status={alert.severity === 'critical' ? 'danger' : 'warning'}
+        <Card className="flex flex-col gap-3 border-warning-dot" data-testid="deliverability-alert">
+          <StatusPill
+            tone={alert.severity === 'critical' ? 'danger' : 'waiting'}
             label={t('alertOpen', { state: alert.state })}
+            className="self-start"
           />
-          <p className="text-body">
+          <p className="m-0 text-body text-ink">
             {t('alertBody', { domains: alert.params.domains ?? 0, campaigns: alert.params.campaigns ?? 0 })}
           </p>
           {suppressionLink}
-          <Link href={`/o/${org}/alerts`} className="inline-flex min-h-6 items-center self-start underline">
+          <Link href={`/o/${org}/alerts`} className={buttonClass('secondary', 'sm', 'self-start')}>
             {t('openAlerts')}
           </Link>
         </Card>
       ) : null}
-      <p className="text-caption text-zinc-600">
+      <p className="text-caption text-ink-2">
         {t('thresholds', {
           bounce: ratePct(d.thresholds.bounceBps, locale),
           complaint: ratePct(d.thresholds.complaintBps, locale),
@@ -148,9 +162,7 @@ export default async function DeliverabilityPage({
       </p>
 
       <section aria-labelledby="org-heading" className="flex flex-col gap-3">
-        <h2 id="org-heading" className="text-section">
-          {t('orgTitle')}
-        </h2>
+        <SectionHeader id="org-heading" title={t('orgTitle')} />
         <Table
           caption={t('orgTitle')}
           rowKey={() => 'org'}
@@ -162,9 +174,7 @@ export default async function DeliverabilityPage({
       </section>
 
       <section aria-labelledby="domains-heading" className="flex flex-col gap-3">
-        <h2 id="domains-heading" className="text-section">
-          {t('domainsTitle')}
-        </h2>
+        <SectionHeader id="domains-heading" title={t('domainsTitle')} />
         <Table
           caption={t('domainsTitle')}
           rowKey={(r) => r.domain ?? '(none)'}
@@ -187,9 +197,7 @@ export default async function DeliverabilityPage({
       </section>
 
       <section aria-labelledby="campaigns-heading" className="flex flex-col gap-3">
-        <h2 id="campaigns-heading" className="text-section">
-          {t('campaignsTitle')}
-        </h2>
+        <SectionHeader id="campaigns-heading" title={t('campaignsTitle')} />
         <Table
           caption={t('campaignsTitle')}
           rowKey={(r) => r.campaignId}
@@ -202,7 +210,7 @@ export default async function DeliverabilityPage({
               cell: (r) => (
                 <Link
                   href={`/o/${org}/marketing-analytics/campaign?key=c.${r.campaignId}`}
-                  className="inline-flex min-h-6 items-center underline"
+                  className="inline-flex min-h-6 items-center font-bold text-primary-ink underline"
                 >
                   {r.name ?? t('unnamedCampaign')}
                 </Link>

@@ -8,16 +8,16 @@ import { Fragment, type ReactNode } from 'react';
 export function Markdown({ source, className }: { source: string; className?: string }) {
   const blocks = parseMarkdown(source);
   return (
-    <div className={className ?? 'flex flex-col gap-3 text-body leading-6 text-zinc-700'}>
+    <div className={className ?? 'flex flex-col gap-3 text-body leading-6 text-ink-2'}>
       {blocks.map((b, i) => {
         const key = `${b.t}-${i}`;
         if (b.t === 'h')
           return b.level === 2 ? (
-            <h3 key={key} className="text-section text-zinc-900">
+            <h3 key={key} className="text-section text-ink">
               <Inline nodes={b.c} />
             </h3>
           ) : (
-            <h4 key={key} className="font-medium text-zinc-900">
+            <h4 key={key} className="font-medium text-ink">
               <Inline nodes={b.c} />
             </h4>
           );
@@ -55,7 +55,7 @@ function Inline({ nodes }: { nodes: readonly MdInline[] }) {
             break;
           case 'code':
             node = (
-              <code key={k} className="rounded-sm bg-zinc-100 px-1 font-mono text-[0.9em]">
+              <code key={k} className="rounded-tag bg-surface-3 px-1 font-mono text-[0.9em]">
                 {n.v}
               </code>
             );

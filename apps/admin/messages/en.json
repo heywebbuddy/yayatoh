@@ -60,7 +60,9 @@
     "incidents": "Incidents",
     "frontDoor": "Front door",
     "maintenance": "Maintenance",
-    "providers": "Messaging providers"
+    "providers": "Messaging providers",
+    "menu": "Open menu",
+    "closeMenu": "Close menu"
   },
   "tenants": {
     "title": "Tenants",
@@ -988,5 +990,11 @@
         "switch": "WHATSAPP_PROVIDER includes gateway"
       }
     }
+  },
+  "theme": {
+    "label": "Colour theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
   }
 }

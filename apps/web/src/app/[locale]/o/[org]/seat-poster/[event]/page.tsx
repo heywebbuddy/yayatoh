@@ -51,19 +51,21 @@ export default async function SeatPosterPage({
     t(s.itemKind === 'table' ? 'tableSeat' : 'rowSeat', { item: s.itemLabel, seat: s.seatLabel });
   return (
     <main
+      // Printed: always the light theme, whatever the screen uses (ADR 0022).
+      data-theme="light"
       id="main"
-      className="mx-auto flex min-h-dvh max-w-[190mm] flex-col gap-6 bg-white px-4 py-10 text-ink print:py-0"
+      className="mx-auto flex min-h-dvh max-w-[190mm] flex-col gap-6 bg-surface px-4 py-10 text-ink print:py-0"
     >
       <div className="flex flex-wrap items-center justify-between gap-3 print:hidden">
-        <Link href={`/o/${org}/e/${event}/seating/finder`} className="text-caption text-zinc-600 underline">
+        <Link href={`/o/${org}/e/${event}/seating/finder`} className="text-caption text-ink-2 underline">
           {t('back')}
         </Link>
         <PrintButton label={t('print')} />
       </div>
       <header className="flex flex-col gap-2 text-center">
-        <p className="font-mono text-label uppercase tracking-[0.2em] text-zinc-600">{ev.name}</p>
-        <h1 className="text-[48px] leading-none font-light tracking-[-0.04em]">{t('title')}</h1>
-        <p className="text-body text-zinc-600">{t('subtitle')}</p>
+        <p className="text-label uppercase tracking-[0.2em] text-ink-2">{ev.name}</p>
+        <h1 className="text-[48px] leading-none font-extrabold tracking-[-0.04em]">{t('title')}</h1>
+        <p className="text-body text-ink-2">{t('subtitle')}</p>
       </header>
       {poster.people.length === 0 ? (
         <EmptyState title={t('emptyTitle')} description={t('emptyDescription')} />
@@ -71,14 +73,14 @@ export default async function SeatPosterPage({
         <div className="columns-1 gap-8 sm:columns-2">
           {[...groups].map(([letter, people]) => (
             <section key={letter} aria-labelledby={`letter-${letter}`} className="mb-4 break-inside-avoid">
-              <h2 id={`letter-${letter}`} className="border-b border-zinc-200 pb-1 text-section">
+              <h2 id={`letter-${letter}`} className="border-b border-line pb-1 text-section">
                 {letter}
               </h2>
               <ul className="flex list-none flex-col p-0">
                 {people.map((p, i) => (
                   <li
                     key={`${p.name}-${i}`}
-                    className="flex items-baseline justify-between gap-3 border-b border-zinc-100 py-1.5 text-body"
+                    className="flex items-baseline justify-between gap-3 border-b border-line py-1.5 text-body"
                   >
                     <span>{p.name}</span>
                     <span className="text-end font-mono tabular-nums">
@@ -92,7 +94,7 @@ export default async function SeatPosterPage({
         </div>
       )}
       {poster.unseated > 0 ? (
-        <p className="text-caption text-zinc-600 print:hidden">{t('unseated', { count: poster.unseated })}</p>
+        <p className="text-caption text-ink-2 print:hidden">{t('unseated', { count: poster.unseated })}</p>
       ) : null}
     </main>
   );

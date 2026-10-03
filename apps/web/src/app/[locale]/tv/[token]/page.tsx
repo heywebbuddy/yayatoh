@@ -16,9 +16,12 @@ export default async function TvPage({ params }: { params: Promise<{ locale: str
   const board = await tvBoard(token);
   if (!board)
     return (
-      <main className="flex min-h-dvh flex-col items-center justify-center gap-3 bg-zinc-900 p-8 text-center text-white">
-        <h1 className="text-[40px] font-light">{t('offTitle')}</h1>
-        <p className="text-section text-zinc-300">{t('offDescription')}</p>
+      <main
+        data-theme="dark"
+        className="flex min-h-dvh flex-col items-center justify-center gap-3 bg-page p-8 text-center text-ink"
+      >
+        <h1 className="m-0 text-title text-ink">{t('offTitle')}</h1>
+        <p className="m-0 text-[20px] font-semibold text-ink-2">{t('offDescription')}</p>
       </main>
     );
   return <TvBoard token={token} initial={board} locale={locale} />;

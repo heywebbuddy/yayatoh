@@ -40,7 +40,7 @@ import { errorMessageKey } from '@/lib/errors.ts';
 /** Screen pixels per millimetre in the designer (a 4 in badge is ~305 px: fits a phone). */
 const SCALE = 3;
 const px = (mm: number) => `${Math.round(mm * SCALE * 10) / 10}px`;
-const control = 'min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body disabled:opacity-60';
+const control = 'field';
 
 export type SaveBadgeResult =
   | { readonly ok: true; readonly version: number }
@@ -89,7 +89,7 @@ function Guide({
     <div
       ref={ref}
       aria-hidden="true"
-      className={`pointer-events-none absolute border border-dashed ${kind === 'safe' ? 'border-green-700' : 'border-pink-700'}`}
+      className={`pointer-events-none absolute border border-dashed ${kind === 'safe' ? 'border-success' : 'border-danger'}`}
     />
   );
 }
@@ -152,7 +152,7 @@ function PreviewElement({
       onPointerUp={(e) => move(e, true)}
       className={`absolute flex touch-none items-center overflow-hidden whitespace-nowrap leading-tight outline-offset-1 ${
         canMove ? 'cursor-move' : 'cursor-pointer'
-      } ${selected ? 'outline-2 outline-accent-900' : 'outline-1 outline-zinc-300 outline-dashed'} ${
+      } ${selected ? 'outline-2 outline-primary' : 'outline-1 outline-line-strong outline-dashed'} ${
         el.empty ? 'opacity-40' : ''
       }`}
     >
@@ -178,7 +178,13 @@ function Face({ size, children }: { size: BadgeSize; children: React.ReactNode }
   const s = SIZES[size];
   const ref = usePlaced<HTMLDivElement>({ width: px(s.widthMm), height: px(s.heightMm) });
   return (
-    <div ref={ref} dir="ltr" className="relative shrink-0 bg-white text-ink shadow-sm ring-1 ring-zinc-200">
+    // A printed badge is always on white stock: the light theme inside the preview (ADR 0022).
+    <div
+      ref={ref}
+      dir="ltr"
+      data-theme="light"
+      className="relative shrink-0 bg-white text-ink elevation-card ring-1 ring-line"
+    >
       {children}
     </div>
   );
@@ -366,7 +372,7 @@ export function BadgeDesigner({ template, ticketTypes, questions, canWrite, samp
           }}
         />
         <div className="flex flex-col gap-1.5">
-          <label htmlFor={`${uid}-size`} className="text-caption text-zinc-600">
+          <label htmlFor={`${uid}-size`} className="text-[13px] font-bold text-ink">
             {t('size')}
           </label>
           <select
@@ -386,12 +392,12 @@ export function BadgeDesigner({ template, ticketTypes, questions, canWrite, samp
               </option>
             ))}
           </select>
-          <p id={`${uid}-size-hint`} className="text-caption text-zinc-500">
+          <p id={`${uid}-size-hint`} className="text-caption text-ink-2">
             {t('sizeHint', { bleed: s.bleedMm, safe: s.safeMm })}
           </p>
         </div>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor={`${uid}-dir`} className="text-caption text-zinc-600">
+          <label htmlFor={`${uid}-dir`} className="text-[13px] font-bold text-ink">
             {t('direction')}
           </label>
           <select
@@ -409,7 +415,7 @@ export function BadgeDesigner({ template, ticketTypes, questions, canWrite, samp
 
       <div className="flex flex-wrap gap-6">
         <fieldset className="flex flex-col gap-1.5">
-          <legend className="pb-1.5 text-caption text-zinc-600">{t('previewIn')}</legend>
+          <legend className="pb-1.5 text-caption text-ink-2">{t('previewIn')}</legend>
           <div className="flex gap-4">
             {(['en', 'ar'] as const).map((l) => (
               <label key={l} className="flex min-h-6 items-center gap-2 text-body">
@@ -428,7 +434,7 @@ export function BadgeDesigner({ template, ticketTypes, questions, canWrite, samp
         </fieldset>
         {faces.length > 1 ? (
           <fieldset className="flex flex-col gap-1.5">
-            <legend className="pb-1.5 text-caption text-zinc-600">{t('side')}</legend>
+            <legend className="pb-1.5 text-caption text-ink-2">{t('side')}</legend>
             <div className="flex gap-4">
               {faces.map((f) => (
                 <label key={f} className="flex min-h-6 items-center gap-2 text-body">
@@ -456,7 +462,7 @@ export function BadgeDesigner({ template, ticketTypes, questions, canWrite, samp
           <h2 id={`${uid}-preview`} className="text-section">
             {t('preview', { side: t(shownFace === 'front' ? 'front' : 'back') })}
           </h2>
-          <p id={`${uid}-keys`} className="max-w-prose text-caption text-zinc-500">
+          <p id={`${uid}-keys`} className="max-w-prose text-caption text-ink-2">
             {canWrite ? t('keyboardHint') : t('selectHint')}
           </p>
           <div className="max-w-full overflow-x-auto p-1">
@@ -481,7 +487,7 @@ export function BadgeDesigner({ template, ticketTypes, questions, canWrite, samp
               ))}
             </Face>
           </div>
-          <p className="text-caption text-zinc-500">{t('guidesHint')}</p>
+          <p className="text-caption text-ink-2">{t('guidesHint')}</p>
           <h3 id={`${uid}-list`} className="text-body font-medium">
             {t('elements')}
           </h3>
@@ -495,7 +501,9 @@ export function BadgeDesigner({ template, ticketTypes, questions, canWrite, samp
                   onClick={() => setSelected(el.id)}
                   onKeyDown={onKey(el.id)}
                   className={`min-h-10 w-full rounded-pill border px-4 text-start text-body ${
-                    el.id === selected ? 'border-ink bg-zinc-100' : 'border-zinc-200 bg-white'
+                    el.id === selected
+                      ? 'border-primary bg-primary-soft'
+                      : 'border-line bg-surface hover:bg-surface-2'
                   }`}
                 >
                   {describe(el)}
@@ -565,7 +573,7 @@ export function BadgeDesigner({ template, ticketTypes, questions, canWrite, samp
                       {t('bold')}
                     </label>
                     <div className="flex flex-col gap-1.5">
-                      <label htmlFor={`${uid}-align`} className="text-caption text-zinc-600">
+                      <label htmlFor={`${uid}-align`} className="text-[13px] font-bold text-ink">
                         {t('align')}
                       </label>
                       <select
@@ -600,11 +608,11 @@ export function BadgeDesigner({ template, ticketTypes, questions, canWrite, samp
                 </div>
               </div>
             ) : (
-              <p className="text-caption text-zinc-500">{t('selectHint')}</p>
+              <p className="text-caption text-ink-2">{t('selectHint')}</p>
             )}
-            <div className="flex flex-wrap items-end gap-3 border-t border-zinc-100 pt-4">
+            <div className="flex flex-wrap items-end gap-3 border-t border-line pt-4">
               <div className="flex flex-col gap-1.5">
-                <label htmlFor={`${uid}-add`} className="text-caption text-zinc-600">
+                <label htmlFor={`${uid}-add`} className="text-[13px] font-bold text-ink">
                   {t('addKind')}
                 </label>
                 <select
@@ -639,9 +647,9 @@ export function BadgeDesigner({ template, ticketTypes, questions, canWrite, samp
             <h2 id={`${uid}-ribbons`} className="text-section">
               {t('ribbons')}
             </h2>
-            <p className="text-caption text-zinc-500">{t('ribbonsHint')}</p>
+            <p className="text-caption text-ink-2">{t('ribbonsHint')}</p>
             {ticketTypes.length === 0 ? (
-              <p className="text-body text-zinc-500">{t('noTicketTypes')}</p>
+              <p className="text-body text-ink-2">{t('noTicketTypes')}</p>
             ) : (
               <ul className="flex list-none flex-col gap-3 p-0">
                 {ticketTypes.map((tt) => {
@@ -649,7 +657,7 @@ export function BadgeDesigner({ template, ticketTypes, questions, canWrite, samp
                   return (
                     <li key={tt.id} className="grid grid-cols-1 gap-3 md:grid-cols-2">
                       <div className="flex flex-col gap-1.5">
-                        <label htmlFor={`${uid}-rc-${tt.id}`} className="text-caption text-zinc-600">
+                        <label htmlFor={`${uid}-rc-${tt.id}`} className="text-[13px] font-bold text-ink">
                           {t('ribbonColor', { type: tt.name })}
                         </label>
                         <select
@@ -691,11 +699,11 @@ export function BadgeDesigner({ template, ticketTypes, questions, canWrite, samp
             <h2 id={`${uid}-sources`} className="text-section">
               {t('sources')}
             </h2>
-            <p className="max-w-prose text-caption text-zinc-500">{t('sourcesHint')}</p>
+            <p className="max-w-prose text-caption text-ink-2">{t('sourcesHint')}</p>
             <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
               {(['company', 'jobTitle'] as const).map((field) => (
                 <div key={field} className="flex flex-col gap-1.5">
-                  <label htmlFor={`${uid}-src-${field}`} className="text-caption text-zinc-600">
+                  <label htmlFor={`${uid}-src-${field}`} className="text-[13px] font-bold text-ink">
                     {t(field === 'company' ? 'companyFrom' : 'jobTitleFrom')}
                   </label>
                   <select
@@ -721,11 +729,11 @@ export function BadgeDesigner({ template, ticketTypes, questions, canWrite, samp
             </div>
           </section>
 
-          <div className="flex flex-wrap items-center gap-3 border-t border-zinc-100 pt-4">
+          <div className="flex flex-wrap items-center gap-3 border-t border-line pt-4">
             <Button type="button" onClick={onSave} disabled={pending || !name.trim()}>
               {t('save')}
             </Button>
-            <span className="text-caption text-zinc-500">
+            <span className="text-caption text-ink-2">
               {dirty ? t('unsaved') : t('version', { version })}
             </span>
           </div>

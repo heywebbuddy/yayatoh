@@ -15,7 +15,7 @@ import { ports } from '@/server/ports.ts';
 import { exportBookingsAction } from './actions.ts';
 
 const LIMIT = 100;
-const PILL = 'rounded-pill bg-zinc-100 px-2 py-px font-mono text-[11px] text-zinc-700';
+const PILL = 'rounded-pill bg-surface-3 px-2 py-px font-mono text-[11px] text-ink-2';
 
 /**
  * Booking search (M1.12): one event's orders by buyer, email, order reference, promo code or
@@ -89,15 +89,10 @@ export default async function BookingsPage({
           />
         </div>
         <div className="flex flex-col gap-1.5 sm:mb-[22px]">
-          <label htmlFor="booking-filter" className="text-caption text-zinc-600">
+          <label htmlFor="booking-filter" className="text-[13px] font-bold text-ink">
             {t('reports.bookings.show')}
           </label>
-          <select
-            id="booking-filter"
-            name="filter"
-            defaultValue={filter}
-            className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 text-body"
-          >
+          <select id="booking-filter" name="filter" defaultValue={filter} className="field">
             {BOOKING_FILTERS.map((f) => (
               <option key={f} value={f}>
                 {t(`reports.bookings.filters.${f}`)}
@@ -110,7 +105,7 @@ export default async function BookingsPage({
         </Button>
       </form>
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <p role="status" className="text-body text-zinc-600">
+        <p role="status" className="text-body text-ink-2">
           {t('reports.bookings.count', { total: r.total })}
           {r.total > r.items.length
             ? ` · ${t('reports.bookings.showing', { shown: n(r.items.length), total: n(r.total) })}`
@@ -129,7 +124,7 @@ export default async function BookingsPage({
       {sp.exportError ? (
         <p
           role="alert"
-          className="rounded-card border border-pink-700 bg-pink-50 px-4 py-3 text-body text-pink-700"
+          className="rounded-card border border-danger bg-danger-soft px-4 py-3 text-body text-danger"
         >
           {t('reports.bookings.exportError', { reason: t(errorMessageKey(sp.exportError)) })}
         </p>
@@ -137,7 +132,7 @@ export default async function BookingsPage({
       {op ? (
         <section
           aria-labelledby="export-heading"
-          className="flex flex-col gap-2 rounded-panel border border-zinc-200 bg-white px-5 py-4"
+          className="flex flex-col gap-2 rounded-panel border border-line bg-surface px-5 py-4"
         >
           {opActive ? <AutoRefresh seconds={2} /> : null}
           <h2 id="export-heading" className="text-section">
@@ -184,7 +179,7 @@ export default async function BookingsPage({
                   <Link href={`/o/${org}/e/${event}/orders/${o.id}`} className="underline underline-offset-2">
                     {o.buyerName}
                   </Link>
-                  <span className="text-caption text-zinc-500">{o.buyerEmail}</span>
+                  <span className="text-caption text-ink-2">{o.buyerEmail}</span>
                 </span>
               ),
             },

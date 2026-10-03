@@ -51,11 +51,13 @@ export default async function SeatFinderPosterPage({
   });
   return (
     <main
+      // Printed: always the light theme, whatever the screen uses (ADR 0022).
+      data-theme="light"
       id="main"
-      className="mx-auto flex min-h-dvh max-w-[190mm] flex-col items-center gap-6 bg-white px-4 py-10 text-center text-ink print:min-h-0 print:py-0"
+      className="mx-auto flex min-h-dvh max-w-[190mm] flex-col items-center gap-6 bg-surface px-4 py-10 text-center text-ink print:min-h-0 print:py-0"
     >
       <div className="flex w-full flex-wrap items-center justify-between gap-3 print:hidden">
-        <Link href={`/events/${ev.slug}/seat-finder`} className="text-caption text-zinc-600 underline">
+        <Link href={`/events/${ev.slug}/seat-finder`} className="text-caption text-ink-2 underline">
           {t('back')}
         </Link>
         <PrintButton label={t('print')} />
@@ -63,14 +65,16 @@ export default async function SeatFinderPosterPage({
       {map ? null : (
         <p
           role="note"
-          className="w-full rounded-card border border-zinc-200 px-4 py-3 text-body text-zinc-700 print:hidden"
+          className="w-full rounded-card border border-line px-4 py-3 text-body text-ink-2 print:hidden"
         >
           {t('closedNote')}
         </p>
       )}
-      <p className="font-mono text-label uppercase tracking-[0.2em] text-zinc-600">{ev.name}</p>
-      <h1 className="text-[56px] leading-none font-light tracking-[-0.04em] sm:text-[72px]">{t('title')}</h1>
-      <p className="text-[18px] text-zinc-700">{[when, ev.venueName].filter(Boolean).join(' · ')}</p>
+      <p className="text-label uppercase tracking-[0.2em] text-ink-2">{ev.name}</p>
+      <h1 className="text-[56px] leading-none font-extrabold tracking-[-0.04em] sm:text-[72px]">
+        {t('title')}
+      </h1>
+      <p className="text-[18px] text-ink-2">{[when, ev.venueName].filter(Boolean).join(' · ')}</p>
       <svg
         role="img"
         aria-label={t('qrLabel', { url })}
@@ -78,7 +82,7 @@ export default async function SeatFinderPosterPage({
         data-url={url}
         viewBox={`0 0 ${qr.size} ${qr.size}`}
         shapeRendering="crispEdges"
-        className="aspect-square w-full max-w-[110mm] text-ink"
+        className="aspect-square w-full max-w-[110mm] text-black"
       >
         <rect width={qr.size} height={qr.size} className="fill-white" />
         <path d={qr.d} fill="currentColor" />
@@ -88,7 +92,7 @@ export default async function SeatFinderPosterPage({
         <li>{map?.mode === 'name' ? t('step2Name') : t('step2Code')}</li>
         <li>{t('step3')}</li>
       </ol>
-      <p className="text-body text-zinc-600">
+      <p className="text-body text-ink-2">
         {t('orVisit')} <span className="font-mono break-all text-ink">{url}</span>
       </p>
     </main>
