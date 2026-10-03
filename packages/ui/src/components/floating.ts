@@ -45,9 +45,9 @@ export function useFloatingPanel(
       p.style.bottom = 'auto';
       const vw = document.documentElement.clientWidth;
       const vh = window.innerHeight;
-      const width = Math.min(vw - MARGIN * 2, Math.max(r.width, matchWidth ? r.width : 0));
-      p.style.minWidth = `${width}px`;
-      p.style.maxWidth = `${Math.min(vw - MARGIN * 2, Math.max(width, maxWidth))}px`;
+      const room = vw - MARGIN * 2;
+      p.style.minWidth = `${matchWidth ? Math.min(room, r.width) : 0}px`;
+      p.style.maxWidth = `${Math.min(room, Math.max(r.width, maxWidth))}px`;
       const below = vh - r.bottom - GAP - MARGIN;
       const above = r.top - GAP - MARGIN;
       const natural = p.scrollHeight;
@@ -95,6 +95,8 @@ export function useFloatingPanel(
   }, [open, anchor, panel, onDismiss]);
 }
 
-/** Classes for a floating panel: our theme, never the OS popup. */
-export const PANEL_CLASS =
-  'm-0 inset-auto absolute top-full start-0 z-50 mt-1 flex max-h-80 flex-col overflow-hidden rounded-tile border border-line bg-surface-solid p-1.5 text-ink elevation-pop';
+/** The floating panel's frame: our theme, never the OS popup. */
+export const PANEL_SHELL =
+  'm-0 inset-auto absolute top-full start-0 z-50 mt-1 max-h-80 rounded-tile border border-line bg-surface-solid p-1.5 text-ink elevation-pop';
+/** A list panel: the list scrolls inside, a search box stays on top. */
+export const PANEL_CLASS = `${PANEL_SHELL} flex flex-col overflow-hidden`;
