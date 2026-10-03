@@ -4,6 +4,7 @@ import { isProfileKey, navIncludes } from '@yayatoh/platform';
 import {
   type AdmissionItemDto,
   approvalSetupQuery,
+  payLaterRulesQuery,
   type RegistrationTypeDto,
   registrationSetupQuery,
 } from '@yayatoh/registration';
@@ -28,6 +29,7 @@ import {
   updateTypeAction,
 } from './actions.ts';
 import { ApprovalRules } from './approval-rules.tsx';
+import { PayLaterRules } from './pay-later-rules.tsx';
 
 const decimal = (minor: number, currency: string) => {
   const exp = currencyExponent(currency);
@@ -54,6 +56,8 @@ export default async function RegistrationPage({
   const canWrite = roleCan(data.role, 'events:write');
   // M5.1c: applications, +1 and substitution per type; an audience can fill a member list.
   const rules = await executeQuery(approvalSetupQuery, { eventId: ev.id }, data.ctx, ports);
+  // M5.1d: pay later by invoice per type.
+  const payLater = await executeQuery(payLaterRulesQuery, { eventId: ev.id }, data.ctx, ports);
   const segments = canWrite
     ? await executeQuery(listSegmentsQuery, {}, data.ctx, ports).catch(() => null)
     : null;
@@ -420,6 +424,9 @@ export default async function RegistrationPage({
           segments={segments}
           canWrite={canWrite}
         />
+      ) : null}
+      {setup.types.length > 0 ? (
+        <PayLaterRules org={org} event={event} types={setup.types} rules={payLater} canWrite={canWrite} />
       ) : null}
     </>
   );

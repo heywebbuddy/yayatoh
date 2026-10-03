@@ -198,6 +198,11 @@
       "intro": "{org} hat die Gutschrift {number} über {amount} zu deiner Bestellung für {eventName} ausgestellt. {storeCredit, select, yes {Löse den Code {code} an der Kasse ein, um ihn bei einer künftigen Bestellung bei {org} zu nutzen.} other {Dieser Betrag wurde dir erstattet.}}",
       "cta": "Meine Bestellung ansehen"
     },
+    "orders.invoice": {
+      "subject": "Rechnung {number} für {eventName}",
+      "intro": "Sie sind für {eventName} angemeldet. {org} hat die Rechnung {number} über {amount} ausgestellt, fällig am {due}. Über die Schaltfläche unten können Sie sie ansehen, als PDF herunterladen oder ganz oder teilweise bezahlen.",
+      "cta": "Rechnung ansehen und bezahlen"
+    },
     "orders.support-reply": {
       "subject": "{subject}",
       "intro": "Eine Nachricht von {org} zu deiner Bestellung für {eventName}:",

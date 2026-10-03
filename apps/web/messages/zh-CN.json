@@ -93,6 +93,7 @@
         "waitlist-expired": "候补名单购票邀请已过期",
         "credit-note": "贷记单",
         "support-reply": "客服回复",
+        "invoice": "发票",
         "table-naming": "餐桌宾客填写链接"
       },
       "events": {
@@ -953,7 +954,9 @@
       "expired": "此订单已过期",
       "cancelled": "此订单已取消",
       "partially_refunded": "已部分退款",
-      "refunded": "已退款"
+      "refunded": "已退款",
+      "awaiting_invoice": "{name}，你已完成报名",
+      "void": "此订单已作废"
     },
     "status": {
       "paid": "已付款",
@@ -963,7 +966,9 @@
       "expired": "已过期",
       "cancelled": "已取消",
       "partially_refunded": "已部分退款",
-      "refunded": "已退款"
+      "refunded": "已退款",
+      "awaiting_invoice": "待支付发票",
+      "void": "已作废"
     },
     "sentTo": "确认信息已发送至 {email}",
     "total": "合计",
@@ -989,7 +994,8 @@
     "emailsNone": "暂无邮件。",
     "emailSentAt": "已于 {when} 发送",
     "emailScheduled": "计划于 {when} 发送",
-    "emailQueued": "发送中"
+    "emailQueued": "发送中",
+    "viewInvoice": "查看、下载或支付你的发票"
   },
   "orders": {
     "title": "最近订单",
@@ -1092,12 +1098,19 @@
       "granted": "准许进入",
       "no_access": "此通行证不包含该区域",
       "wrong_checkpoint": "不是你的检查点",
-      "wrong_date": "此门票适用于其他场次"
+      "wrong_date": "此门票适用于其他场次",
+      "balance_due": "发票尚有余额未付"
     },
     "alertsTitle": "{count, plural, other {离线期间有 # 张票被重复放行}}",
     "alertsHint": "两台扫描设备在同步前放行了同一张票。请在入口核查这些宾客。",
     "wrongCheckpointHint": "你负责 {places}。请在“扫描位置”中选择。",
-    "noCheckpointsHint": "你在这里没有分配检查点。请询问主办方。"
+    "noCheckpointsHint": "你在这里没有分配检查点。请询问主办方。",
+    "balanceDueHint": "此报名的发票尚未支付。请对方付款，或填写原因后放行。",
+    "overrideLabel": "余额未付仍放行",
+    "overrideNote": "放行原因",
+    "overrideHint": "将与你的姓名一起保存在活动日志中，例如“采购单已批准，款项在途”。",
+    "overrideSubmit": "仍然放行",
+    "overrideNoteRequired": "请填写原因（至少 3 个字符）才能在余额未付时放行。"
   },
   "checkinLive": {
     "state": {
@@ -6985,7 +6998,8 @@
     "triggers": {
       "order_paid": "购买门票",
       "checked_in": "签到入场",
-      "event_time": "相对活动的时间"
+      "event_time": "相对活动的时间",
+      "invoice_issued": "收到发票（稍后付款）"
     },
     "newTitle": "新建旅程",
     "newDescription": "选择活动（或系列）以及加入方式。开启前可以编辑每个步骤。",
@@ -7006,7 +7020,9 @@
       "errors": {
         "name": "请输入名称（最多 120 个字符）。",
         "scope": "请选择活动或系列。"
-      }
+      },
+      "invoice_reminders": "发票提醒",
+      "invoice_remindersHint": "适用于稍后付款的报名：在发票到期前 7 天、到期日当天及到期后 7 天各发送一封邮件。付款后停止。"
     },
     "vision": {
       "name": "愿景旅程",
@@ -7056,7 +7072,8 @@
       "anchors": {
         "trigger": "加入时",
         "event_start": "活动开始",
-        "event_end": "活动结束"
+        "event_end": "活动结束",
+        "invoice_due": "发票到期日"
       },
       "direction": "之前或之后",
       "before": "之前",
@@ -7105,7 +7122,8 @@
         "direction": "天数和小时必须同一方向。",
         "offset": "请检查天数。",
         "step": "请检查步骤 {n}。"
-      }
+      },
+      "invoicePlaceholders": "发票提醒还可以使用 {invoice}、{balance}、{due} 和 {link}。"
     },
     "wait": {
       "atTrigger": "立即",
@@ -7119,7 +7137,11 @@
       "dayTrigger": "{dir, select, same {加入当天} other {加入后第 {days} 天}} {time}",
       "dayStart": "{dir, select, before {活动日前 {days} 天} after {活动日后 {days} 天} other {活动当天}} {time}",
       "dayEnd": "{dir, select, before {最后一天前 {days} 天} after {活动结束后 {days} 天} other {最后一天}} {time}",
-      "thenOffset": "{base}，{dir, select, before {提前 {offset}} other {推迟 {offset}}}"
+      "thenOffset": "{base}，{dir, select, before {提前 {offset}} other {推迟 {offset}}}",
+      "atDue": "在到期日",
+      "beforeDue": "发票到期前 {offset}",
+      "afterDue": "发票到期后 {offset}",
+      "dayDue": "{dir, select, before {到期日前 {days} 天} after {到期日后 {days} 天} other {到期日当天}}，{time}"
     },
     "duration": {
       "days": "{count, plural, other {# 天}}",
@@ -7191,7 +7213,24 @@
       "run_ended": "旅程已结束",
       "event_missing": "找不到活动",
       "error": "多次尝试后失败",
-      "other": "其他"
+      "other": "其他",
+      "invoice_paid": "发票已支付",
+      "invoice_void": "发票已作废",
+      "invoice_settled": "发票已结清"
+    },
+    "invoiceReminders": {
+      "before": {
+        "subject": "发票 {invoice} 将于 {due} 到期",
+        "body": "{name}，你好！提醒你：{event} 的发票 {invoice} 将于 {due} 到期。余额：{balance}。在此查看或付款：{link}"
+      },
+      "due": {
+        "subject": "发票 {invoice} 今天到期",
+        "body": "{name}，你好！{event} 的发票 {invoice} 今天到期。余额：{balance}。在此查看或付款：{link}"
+      },
+      "overdue": {
+        "subject": "发票 {invoice} 已逾期",
+        "body": "{name}，你好！{event} 的发票 {invoice} 已于 {due} 到期，仍有 {balance} 未付。你的报名依然有效，方便时请付款：{link}"
+      }
     }
   },
   "supportTools": {
@@ -7547,7 +7586,8 @@
           "name": "请输入您的姓名。",
           "type": "请选择报名类型。",
           "admission": "请选择通行证。",
-          "items": "请选择一张通行证及任意附加项。"
+          "items": "请选择一张通行证及任意附加项。",
+          "poNumber": "请输入采购单号。"
         },
         "type_full": "此类型刚刚报满。您可以加入其候补名单。",
         "code_required": "此报名类型需要报名码。",
@@ -7564,7 +7604,9 @@
         "offer_items": "只能购买所邀请的通行证。",
         "approval_required": "此报名类型需要申请。",
         "guest_type": "此类型仅供报名者的嘉宾使用。",
-        "no_approval": "此类型无需申请：请直接报名。"
+        "no_approval": "此类型无需申请：请直接报名。",
+        "pay_later_off": "此报名类型需在结账时付款。请选择“现在用银行卡付款”。",
+        "po_required": "请输入采购单号。"
       },
       "applyHint": "此报名类型需要申请：主办方会先进行审核。只有获批后才会扣款。",
       "company": "公司或组织（选填）",
@@ -7572,7 +7614,16 @@
       "message": "有什么需要主办方了解的吗？（选填）",
       "apply": "申请",
       "byApplication": "需申请",
-      "registerGroup": "要为多人报名？进行团体报名"
+      "registerGroup": "要为多人报名？进行团体报名",
+      "payTitle": "你想如何付款？",
+      "payNow": "现在用银行卡付款",
+      "payLater": "稍后凭发票付款",
+      "payLaterHint": "你的名额现在即已确认。我们会通过邮件发送发票，在 30 天内或活动开始前 7 天到期，以较早者为准。",
+      "poNumber": "采购单号（选填）",
+      "poNumberRequired": "采购单号",
+      "poNumberHint": "你的采购单号，会印在发票上。",
+      "billingCompany": "开票公司（选填）",
+      "registerInvoice": "报名并获取发票"
     },
     "openEnrollment": "场次报名与候补名单",
     "applicant": {
@@ -7866,6 +7917,32 @@
         "segmentId": "请选择一个受众。",
         "event_finished": "此活动已结束。",
         "tooManyMembers": "会员名单最多可包含 5,000 个地址。"
+      }
+    },
+    "payLater": {
+      "title": "凭发票稍后付款",
+      "hint": "允许某类型的购买者现在报名、凭发票付款：自开票日起 30 天，但最迟在活动开始前 7 天。未付款的报名绝不会被自动取消。",
+      "openInvoices": "打开发票",
+      "summaryNotEligible": "以其他方式付款（申请制或 +1 嘉宾）。",
+      "summaryOn": "稍后付款已开启 · 采购单号：{po}",
+      "summaryOff": "仅在结账时付款。",
+      "editNamed": "更改 {name} 的稍后付款设置",
+      "payLater": "凭发票稍后付款",
+      "off": "关闭",
+      "on": "开启",
+      "poNumber": "采购单号",
+      "poNumberHint": "向购买者询问采购单号，或设为必填。",
+      "po": {
+        "off": "不询问",
+        "optional": "选填",
+        "required": "必填"
+      },
+      "save": "保存",
+      "saved": "已保存。",
+      "errors": {
+        "approval_type": "申请制类型通过申请人的链接付款。",
+        "guest_type": "+1 嘉宾类型由邀请人付款。",
+        "event_finished": "此活动已结束。"
       }
     }
   },
@@ -9726,7 +9803,148 @@
       "stale": "其他人在此期间保存了该模板。请重新加载页面查看其版本。",
       "questionNotAllowed": "该问题不能打印在胸卡上。"
     },
-    "elements": "此面的元素"
+    "elements": "此面的元素",
+    "balanceDue": "余额未付",
+    "printAnywayNamed": "仍然打印 {name} 的胸牌",
+    "overrideNote": "打印原因",
+    "overrideHint": "将与你的姓名一起保存在活动日志中。",
+    "printAnyway": "仍然打印",
+    "overrideNoteRequired": "请填写原因（至少 3 个字符）。"
+  },
+  "invoices": {
+    "status": {
+      "open": "未结清",
+      "paid": "已支付",
+      "void": "已作废"
+    },
+    "overdue": "已逾期",
+    "methods": {
+      "card": "银行卡（付款链接）",
+      "check": "支票",
+      "wire": "电汇",
+      "cash": "现金",
+      "other": "其他"
+    },
+    "panel": {
+      "title": "发票 {label}",
+      "number": "发票",
+      "issued": "开票日期",
+      "due": "到期日",
+      "terms": "付款条件",
+      "termsValue": "30 天内付款，最迟在活动开始前 7 天",
+      "po": "采购单号",
+      "company": "公司",
+      "total": "合计",
+      "paid": "已付",
+      "balance": "应付余额",
+      "none": "—",
+      "pdf": "下载 PDF",
+      "voided": "已作废：{reason}",
+      "paidAfterVoid": "作废后收到 {amount}：请通过贷项通知单退款。",
+      "payments": "付款记录",
+      "noPayments": "暂无付款。",
+      "failed": "已拒绝"
+    },
+    "record": {
+      "title": "记录付款",
+      "label": "记录已收到的付款",
+      "balance": "应付余额：{amount}",
+      "amount": "金额（{currency}）",
+      "method": "付款方式",
+      "methods": {
+        "check": "支票",
+        "wire": "电汇",
+        "cash": "现金",
+        "other": "其他"
+      },
+      "receivedOn": "收款日期",
+      "reference": "参考号",
+      "referenceHint": "支票号或电汇参考号。",
+      "note": "备注（选填）",
+      "recorded": "付款已记录。",
+      "submit": "记录付款"
+    },
+    "void": {
+      "title": "作废此发票",
+      "label": "作废发票",
+      "hint": "作废会取消该报名及其门票并释放名额。仅在尚未付款时可操作。",
+      "reason": "原因",
+      "done": "发票已作废。",
+      "submit": "作废发票"
+    },
+    "errors": {
+      "amount_required": "请输入金额，例如 600.00。",
+      "amount_too_large": "超过了应付余额。",
+      "amount_too_small": "请输入大于零的金额。",
+      "nothing_due": "此发票没有应付款项。",
+      "date_in_future": "日期不能晚于今天。",
+      "date_required": "请输入收款日期。",
+      "has_payments": "此发票已有付款记录，无法作废。",
+      "invoice_paid": "此发票已支付。",
+      "invoice_void": "此发票已作废。",
+      "field": {
+        "amount": "请输入不超过应付余额的金额。",
+        "receivedOn": "请输入收款日期。",
+        "reason": "请填写原因（3 到 500 个字符）。"
+      }
+    },
+    "list": {
+      "title": "发票",
+      "description": "稍后付款的报名：已付多少、还欠多少。",
+      "backToSetup": "返回报名设置",
+      "filterLabel": "筛选发票",
+      "filters": {
+        "all": "全部",
+        "open": "未结清",
+        "overdue": "已逾期",
+        "paid": "已支付",
+        "void": "已作废"
+      },
+      "emptyTitle": "暂无发票",
+      "emptyDescription": "为某个报名类型开启稍后付款，有人报名后发票会显示在这里。",
+      "emptyFiltered": "没有符合此筛选条件的发票。",
+      "caption": "发票",
+      "billedTo": "开票对象",
+      "po": "采购单 {po}",
+      "noPo": "无采购单号",
+      "status": "状态"
+    },
+    "public": {
+      "metaTitle": "你的发票",
+      "title": "发票 {label}",
+      "lead": {
+        "open": "{name}，谢谢！你已完成报名。此发票将于 {due} 到期。",
+        "paid": "{name}，谢谢！此发票已支付。",
+        "void": "主办方已取消此发票。"
+      },
+      "thanks": "感谢你的付款",
+      "thanksPaid": "发票现已全部付清。",
+      "thanksPart": "仍有 {balance} 未付。",
+      "items": "你的报名",
+      "pdf": "下载 PDF",
+      "payTitle": "立即付款",
+      "payHint": "可一次付清 {balance}，也可先付一部分，其余稍后再付。",
+      "payLabel": "支付此发票",
+      "amount": "付款金额（{currency}）",
+      "amountHint": "不超过应付余额。",
+      "pay": "前往付款",
+      "backToEvent": "返回活动"
+    },
+    "pdf": {
+      "title": "发票 {label}",
+      "billedTo": "开票对象",
+      "event": "活动",
+      "status": "状态",
+      "item": "项目",
+      "quantity": "数量",
+      "unit": "单价",
+      "amount": "金额",
+      "payNote": "在线付款：{url}",
+      "payNoteNoLink": "购买者可通过发票邮件中的链接在线付款，或以支票、电汇方式付给主办方。",
+      "paidNote": "已全部付清。谢谢。",
+      "voidNote": "此发票已作废。",
+      "footer": "由 {seller} 通过 Yayatoh 开具。"
+    }
   },
   "charity": {
     "title": "慈善机构资料",

@@ -198,6 +198,11 @@
       "intro": "{org} выставил кредит-ноту {number} на {amount} по вашему заказу на {eventName}. {storeCredit, select, yes {Введите код {code} при оплате, чтобы использовать её в следующем заказе у {org}.} other {Эта сумма вам возвращена.}}",
       "cta": "Посмотреть заказ"
     },
+    "orders.invoice": {
+      "subject": "Счёт {number} за {eventName}",
+      "intro": "Вы зарегистрированы на {eventName}. {org} выставила счёт {number} на сумму {amount} со сроком оплаты {due}. Нажмите кнопку ниже, чтобы открыть его, скачать PDF или оплатить полностью или частично.",
+      "cta": "Открыть и оплатить счёт"
+    },
     "orders.support-reply": {
       "subject": "{subject}",
       "intro": "Сообщение от {org} о вашем заказе на {eventName}:",

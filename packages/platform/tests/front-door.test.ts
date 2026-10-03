@@ -239,6 +239,9 @@ describe('who serves a request', () => {
       // M4.8b: receipt and year-end statement PDFs.
       '/receipts/0190a0b0-0000-7000-8000-000000000001/abc~sig',
       '/statements/0190a0b0-0000-7000-8000-000000000001/abc~sig',
+      // M5.1d: the buyer's invoice and its PDF.
+      '/events/summit/invoice/abc~sig',
+      '/events/summit/invoice/abc~sig/pdf',
     ]) {
       expect(isPlatformPath(new URL(p, 'https://x').pathname) || decide(p).owner === 'next').toBe(true);
       expect(decide(p, flags(), { legacy: true })).toEqual({

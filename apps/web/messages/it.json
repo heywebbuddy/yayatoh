@@ -93,6 +93,7 @@
         "waitlist-expired": "Offerta dalla lista d’attesa scaduta",
         "credit-note": "Nota di credito",
         "support-reply": "Risposta dell’assistenza",
+        "invoice": "Fattura",
         "table-naming": "Link per indicare gli ospiti del tavolo"
       },
       "events": {
@@ -953,7 +954,9 @@
       "expired": "Questo ordine è scaduto",
       "cancelled": "Questo ordine è stato annullato",
       "partially_refunded": "Rimborsato parzialmente",
-      "refunded": "Rimborsato"
+      "refunded": "Rimborsato",
+      "awaiting_invoice": "Sei iscritto, {name}",
+      "void": "Questo ordine è stato annullato"
     },
     "status": {
       "paid": "Pagato",
@@ -963,7 +966,9 @@
       "expired": "Scaduto",
       "cancelled": "Annullato",
       "partially_refunded": "Rimborsato parzialmente",
-      "refunded": "Rimborsato"
+      "refunded": "Rimborsato",
+      "awaiting_invoice": "Fattura da pagare",
+      "void": "Annullato"
     },
     "sentTo": "Conferma inviata a {email}",
     "total": "Totale",
@@ -989,7 +994,8 @@
     "emailsNone": "Ancora nessuna email.",
     "emailSentAt": "Inviata {when}",
     "emailScheduled": "Programmata per {when}",
-    "emailQueued": "In invio"
+    "emailQueued": "In invio",
+    "viewInvoice": "Vedi, scarica o paga la fattura"
   },
   "orders": {
     "title": "Ordini recenti",
@@ -1092,12 +1098,19 @@
       "granted": "Accesso consentito",
       "no_access": "Questo pass non include quest’area",
       "wrong_checkpoint": "Non è il tuo varco",
-      "wrong_date": "Questo biglietto è per un’altra data"
+      "wrong_date": "Questo biglietto è per un’altra data",
+      "balance_due": "Saldo da pagare sulla fattura"
     },
     "alertsTitle": "{count, plural, one {# biglietto è stato accettato due volte offline} other {# biglietti sono stati accettati due volte offline}}",
     "alertsHint": "Due scanner hanno accettato lo stesso biglietto prima di potersi sincronizzare. Verifica questi ospiti all’ingresso.",
     "wrongCheckpointHint": "Scansioni a {places}. Sceglilo in «Scansione presso».",
-    "noCheckpointsHint": "Non hai varchi assegnati qui. Chiedi all’organizzatore."
+    "noCheckpointsHint": "Non hai varchi assegnati qui. Chiedi all’organizzatore.",
+    "balanceDueHint": "La fattura di questa iscrizione non è ancora pagata. Chiedi il pagamento o fai entrare indicando un motivo.",
+    "overrideLabel": "Fai entrare con saldo da pagare",
+    "overrideNote": "Motivo dell’ingresso",
+    "overrideHint": "Salvato nel registro attività con il tuo nome, ad es. «Ordine approvato, pagamento in arrivo».",
+    "overrideSubmit": "Fai entrare comunque",
+    "overrideNoteRequired": "Indica un motivo (almeno 3 caratteri) per far entrare con saldo da pagare."
   },
   "checkinLive": {
     "state": {
@@ -6985,7 +6998,8 @@
     "triggers": {
       "order_paid": "Acquista un biglietto",
       "checked_in": "Fa il check-in",
-      "event_time": "Orario relativo all’evento"
+      "event_time": "Orario relativo all’evento",
+      "invoice_issued": "Riceve una fattura (paga dopo)"
     },
     "newTitle": "Nuovo percorso",
     "newDescription": "Scegli l’evento (o la serie) e come entrano le persone. Puoi modificare ogni passaggio prima di attivarlo.",
@@ -7006,7 +7020,9 @@
       "errors": {
         "name": "Inserisci un nome (massimo 120 caratteri).",
         "scope": "Scegli un evento o una serie."
-      }
+      },
+      "invoice_reminders": "Promemoria di fattura",
+      "invoice_remindersHint": "Per le iscrizioni con pagamento posticipato: un’email 7 giorni prima della scadenza, il giorno della scadenza e 7 giorni dopo. Il pagamento li interrompe."
     },
     "vision": {
       "name": "Percorso della visione",
@@ -7056,7 +7072,8 @@
       "anchors": {
         "trigger": "Il loro ingresso",
         "event_start": "L’inizio dell’evento",
-        "event_end": "La fine dell’evento"
+        "event_end": "La fine dell’evento",
+        "invoice_due": "La scadenza della fattura"
       },
       "direction": "Prima o dopo",
       "before": "Prima",
@@ -7105,7 +7122,8 @@
         "direction": "Giorni e ore devono andare nella stessa direzione.",
         "offset": "Controlla il numero di giorni.",
         "step": "Controlla il passaggio {n}."
-      }
+      },
+      "invoicePlaceholders": "I promemoria di fattura possono usare anche {invoice}, {balance}, {due} e {link}."
     },
     "wait": {
       "atTrigger": "Subito",
@@ -7119,7 +7137,11 @@
       "dayTrigger": "{dir, select, same {Il giorno dell’ingresso} other {{days, plural, one {# giorno dopo l’ingresso} other {# giorni dopo l’ingresso}}}}, alle {time}",
       "dayStart": "{dir, select, before {{days, plural, one {# giorno prima del giorno dell’evento} other {# giorni prima del giorno dell’evento}}} after {{days, plural, one {# giorno dopo il giorno dell’evento} other {# giorni dopo il giorno dell’evento}}} other {Il giorno dell’evento}}, alle {time}",
       "dayEnd": "{dir, select, before {{days, plural, one {# giorno prima dell’ultimo giorno} other {# giorni prima dell’ultimo giorno}}} after {{days, plural, one {# giorno dopo la fine dell’evento} other {# giorni dopo la fine dell’evento}}} other {L’ultimo giorno}}, alle {time}",
-      "thenOffset": "{base}, {dir, select, before {{offset} prima} other {{offset} dopo}}"
+      "thenOffset": "{base}, {dir, select, before {{offset} prima} other {{offset} dopo}}",
+      "atDue": "Alla scadenza",
+      "beforeDue": "{offset} prima della scadenza della fattura",
+      "afterDue": "{offset} dopo la scadenza della fattura",
+      "dayDue": "{dir, select, before {{days, plural, one {# giorno prima della scadenza} other {# giorni prima della scadenza}}} after {{days, plural, one {# giorno dopo la scadenza} other {# giorni dopo la scadenza}}} other {Il giorno della scadenza}}, alle {time}"
     },
     "duration": {
       "days": "{count, plural, one {# giorno} other {# giorni}}",
@@ -7191,7 +7213,24 @@
       "run_ended": "Percorso terminato",
       "event_missing": "Evento non trovato",
       "error": "Non riuscito dopo diversi tentativi",
-      "other": "Altro"
+      "other": "Altro",
+      "invoice_paid": "Fattura pagata",
+      "invoice_void": "Fattura annullata",
+      "invoice_settled": "Fattura già saldata"
+    },
+    "invoiceReminders": {
+      "before": {
+        "subject": "La fattura {invoice} scade il {due}",
+        "body": "Ciao {name}, ti ricordiamo che la fattura {invoice} per {event} scade il {due}. Saldo: {balance}. Vedila o pagala qui: {link}"
+      },
+      "due": {
+        "subject": "La fattura {invoice} scade oggi",
+        "body": "Ciao {name}, la fattura {invoice} per {event} scade oggi. Saldo: {balance}. Vedila o pagala qui: {link}"
+      },
+      "overdue": {
+        "subject": "La fattura {invoice} è scaduta",
+        "body": "Ciao {name}, la fattura {invoice} per {event} era in scadenza il {due} e restano da pagare {balance}. La tua iscrizione resta valida; paga appena puoi: {link}"
+      }
     }
   },
   "supportTools": {
@@ -7547,7 +7586,8 @@
           "name": "Inserisci il tuo nome.",
           "type": "Scegli un tipo di iscrizione.",
           "admission": "Scegli un pass.",
-          "items": "Scegli un pass e gli eventuali extra."
+          "items": "Scegli un pass e gli eventuali extra.",
+          "poNumber": "Inserisci il numero d’ordine d’acquisto."
         },
         "type_full": "Questo tipo si è appena esaurito. Puoi iscriverti alla sua lista d'attesa.",
         "code_required": "Questo tipo di iscrizione richiede un codice.",
@@ -7564,7 +7604,9 @@
         "offer_items": "Si può acquistare solo il pass offerto.",
         "approval_required": "Per questo tipo di registrazione serve una candidatura.",
         "guest_type": "Questo tipo è per gli ospiti di un iscritto.",
-        "no_approval": "Per questo tipo non serve una candidatura: registrati direttamente."
+        "no_approval": "Per questo tipo non serve una candidatura: registrati direttamente.",
+        "pay_later_off": "Questo tipo di iscrizione si paga al checkout. Scegli «Paga ora con carta».",
+        "po_required": "Inserisci il numero d’ordine d’acquisto."
       },
       "applyHint": "Per questo tipo di registrazione serve una candidatura: l'organizzatore la esamina prima. Non ti verrà addebitato nulla finché non vieni approvato.",
       "company": "Azienda o organizzazione (facoltativo)",
@@ -7572,7 +7614,16 @@
       "message": "Qualcosa che l'organizzatore dovrebbe sapere? (facoltativo)",
       "apply": "Candidati",
       "byApplication": "Su candidatura",
-      "registerGroup": "Registri più persone? Registra un gruppo"
+      "registerGroup": "Registri più persone? Registra un gruppo",
+      "payTitle": "Come vuoi pagare?",
+      "payNow": "Paga ora con carta",
+      "payLater": "Paga dopo con fattura",
+      "payLaterHint": "Il tuo posto è confermato subito. Ti inviamo una fattura con scadenza a 30 giorni o 7 giorni prima dell’evento, se prima.",
+      "poNumber": "Numero d’ordine d’acquisto (facoltativo)",
+      "poNumberRequired": "Numero d’ordine d’acquisto",
+      "poNumberHint": "Il tuo numero d’ordine d’acquisto, stampato sulla fattura.",
+      "billingCompany": "Azienda da fatturare (facoltativo)",
+      "registerInvoice": "Iscriviti e ricevi la fattura"
     },
     "openEnrollment": "Iscrizione alle sessioni e liste d'attesa",
     "applicant": {
@@ -7866,6 +7917,32 @@
         "segmentId": "Scegli un pubblico.",
         "event_finished": "Questo evento è terminato.",
         "tooManyMembers": "Un elenco membri può avere al massimo 5.000 indirizzi."
+      }
+    },
+    "payLater": {
+      "title": "Paga dopo con fattura",
+      "hint": "Consenti a chi sceglie un tipo di iscriversi ora e pagare con fattura: 30 giorni dalla data della fattura, ma al più tardi 7 giorni prima dell’evento. Le iscrizioni non pagate non vengono mai annullate automaticamente.",
+      "openInvoices": "Apri le fatture",
+      "summaryNotEligible": "Pagato in altro modo (candidature o ospiti +1).",
+      "summaryOn": "Pagamento posticipato attivo · Ordine d’acquisto: {po}",
+      "summaryOff": "Solo pagamento al checkout.",
+      "editNamed": "Modifica il pagamento posticipato di {name}",
+      "payLater": "Paga dopo con fattura",
+      "off": "Disattivato",
+      "on": "Attivato",
+      "poNumber": "Ordine d’acquisto",
+      "poNumberHint": "Chiedi il numero d’ordine d’acquisto o rendilo obbligatorio.",
+      "po": {
+        "off": "non richiesto",
+        "optional": "facoltativo",
+        "required": "obbligatorio"
+      },
+      "save": "Salva",
+      "saved": "Salvato.",
+      "errors": {
+        "approval_type": "I tipi con candidatura si pagano dal link del candidato.",
+        "guest_type": "I tipi ospite +1 li paga chi ospita.",
+        "event_finished": "Questo evento è terminato."
       }
     }
   },
@@ -9726,7 +9803,148 @@
       "stale": "Qualcun altro ha salvato questo modello nel frattempo. Ricarica la pagina per vedere la sua versione.",
       "questionNotAllowed": "Quella domanda non può essere stampata sui badge."
     },
-    "elements": "Elementi su questo lato"
+    "elements": "Elementi su questo lato",
+    "balanceDue": "Saldo da pagare",
+    "printAnywayNamed": "Stampa comunque il badge di {name}",
+    "overrideNote": "Motivo della stampa",
+    "overrideHint": "Salvato nel registro attività con il tuo nome.",
+    "printAnyway": "Stampa comunque",
+    "overrideNoteRequired": "Indica un motivo (almeno 3 caratteri)."
+  },
+  "invoices": {
+    "status": {
+      "open": "Aperta",
+      "paid": "Pagata",
+      "void": "Annullata"
+    },
+    "overdue": "Scaduta",
+    "methods": {
+      "card": "Carta (link di pagamento)",
+      "check": "Assegno",
+      "wire": "Bonifico",
+      "cash": "Contanti",
+      "other": "Altro"
+    },
+    "panel": {
+      "title": "Fattura {label}",
+      "number": "Fattura",
+      "issued": "Data fattura",
+      "due": "Scadenza",
+      "terms": "Condizioni",
+      "termsValue": "30 giorni, al più tardi 7 giorni prima dell’evento",
+      "po": "Ordine d’acquisto",
+      "company": "Azienda",
+      "total": "Totale",
+      "paid": "Pagato",
+      "balance": "Saldo da pagare",
+      "none": "—",
+      "pdf": "Scarica il PDF",
+      "voided": "Annullata: {reason}",
+      "paidAfterVoid": "{amount} sono stati pagati dopo l’annullamento: rimborsali con una nota di credito.",
+      "payments": "Pagamenti",
+      "noPayments": "Ancora nessun pagamento.",
+      "failed": "rifiutato"
+    },
+    "record": {
+      "title": "Registra un pagamento",
+      "label": "Registra un pagamento ricevuto",
+      "balance": "Saldo da pagare: {amount}",
+      "amount": "Importo ({currency})",
+      "method": "Metodo di pagamento",
+      "methods": {
+        "check": "Assegno",
+        "wire": "Bonifico",
+        "cash": "Contanti",
+        "other": "Altro"
+      },
+      "receivedOn": "Ricevuto il",
+      "reference": "Riferimento",
+      "referenceHint": "Numero dell’assegno o riferimento del bonifico.",
+      "note": "Nota (facoltativa)",
+      "recorded": "Pagamento registrato.",
+      "submit": "Registra il pagamento"
+    },
+    "void": {
+      "title": "Annulla questa fattura",
+      "label": "Annulla la fattura",
+      "hint": "L’annullamento cancella l’iscrizione e i suoi biglietti e libera il posto. Possibile solo finché non è stato pagato nulla.",
+      "reason": "Motivo",
+      "done": "Fattura annullata.",
+      "submit": "Annulla la fattura"
+    },
+    "errors": {
+      "amount_required": "Inserisci un importo, ad es. 600.00.",
+      "amount_too_large": "È più del saldo da pagare.",
+      "amount_too_small": "Inserisci un importo maggiore di zero.",
+      "nothing_due": "Non c’è nulla da pagare su questa fattura.",
+      "date_in_future": "La data non può essere nel futuro.",
+      "date_required": "Inserisci il giorno in cui è arrivato il pagamento.",
+      "has_payments": "Su questa fattura sono stati registrati pagamenti, quindi non può essere annullata.",
+      "invoice_paid": "Questa fattura è già pagata.",
+      "invoice_void": "Questa fattura è stata annullata.",
+      "field": {
+        "amount": "Inserisci un importo fino al saldo da pagare.",
+        "receivedOn": "Inserisci il giorno in cui è arrivato il pagamento.",
+        "reason": "Indica un motivo (da 3 a 500 caratteri)."
+      }
+    },
+    "list": {
+      "title": "Fatture",
+      "description": "Iscrizioni con pagamento posticipato: cosa è pagato e cosa resta da pagare.",
+      "backToSetup": "Torna all’iscrizione",
+      "filterLabel": "Filtra le fatture",
+      "filters": {
+        "all": "Tutte",
+        "open": "Aperte",
+        "overdue": "Scadute",
+        "paid": "Pagate",
+        "void": "Annullate"
+      },
+      "emptyTitle": "Ancora nessuna fattura",
+      "emptyDescription": "Attiva il pagamento posticipato per un tipo di iscrizione; le fatture compariranno qui man mano che le persone si iscrivono.",
+      "emptyFiltered": "Nessuna fattura corrisponde a questo filtro.",
+      "caption": "Fatture",
+      "billedTo": "Intestata a",
+      "po": "OdA {po}",
+      "noPo": "Nessun ordine d’acquisto",
+      "status": "Stato"
+    },
+    "public": {
+      "metaTitle": "La tua fattura",
+      "title": "Fattura {label}",
+      "lead": {
+        "open": "Grazie, {name}: sei iscritto. Questa fattura scade il {due}.",
+        "paid": "Grazie, {name}: questa fattura è pagata.",
+        "void": "L’organizzatore ha annullato questa fattura."
+      },
+      "thanks": "Grazie per il pagamento",
+      "thanksPaid": "La fattura è ora pagata per intero.",
+      "thanksPart": "Restano da pagare {balance}.",
+      "items": "La tua iscrizione",
+      "pdf": "Scarica il PDF",
+      "payTitle": "Paga ora",
+      "payHint": "Paga tutti i {balance} dovuti, oppure una parte ora e il resto dopo.",
+      "payLabel": "Paga questa fattura",
+      "amount": "Importo da pagare ({currency})",
+      "amountHint": "Fino al saldo da pagare.",
+      "pay": "Continua al pagamento",
+      "backToEvent": "Torna all’evento"
+    },
+    "pdf": {
+      "title": "Fattura {label}",
+      "billedTo": "Intestata a",
+      "event": "Evento",
+      "status": "Stato",
+      "item": "Voce",
+      "quantity": "Q.tà",
+      "unit": "Prezzo unitario",
+      "amount": "Importo",
+      "payNote": "Paga online: {url}",
+      "payNoteNoLink": "L’acquirente paga online dal link nell’email della fattura, oppure con assegno o bonifico all’organizzatore.",
+      "paidNote": "Pagata per intero. Grazie.",
+      "voidNote": "Questa fattura è stata annullata.",
+      "footer": "Emessa da {seller} tramite Yayatoh."
+    }
   },
   "charity": {
     "title": "Profilo benefico",

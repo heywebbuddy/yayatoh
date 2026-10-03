@@ -27,6 +27,8 @@ export interface Anchors {
   readonly timeZone: string;
   /** M4.1f: the event's RSVP deadline (`rsvp_deadline` steps), when it has one. */
   readonly rsvpDeadline?: Date | null;
+  /** M5.1d: an invoice run's due moment (start of the due day, event timezone). */
+  readonly invoiceDue?: Date | null;
 }
 
 const DAY_MS = 86_400_000;
@@ -48,7 +50,9 @@ export function anchorTime(anchor: AnyAnchor, anchors: Anchors): Date {
       ? anchors.eventStart
       : anchor === 'rsvp_deadline'
         ? (anchors.rsvpDeadline ?? anchors.eventStart)
-        : anchors.eventEnd;
+        : anchor === 'invoice_due'
+          ? (anchors.invoiceDue ?? anchors.trigger)
+          : anchors.eventEnd;
 }
 
 /** The instant a step with this wait is due. */

@@ -35,6 +35,8 @@ const DOT = {
   cancelled: 'danger',
   partially_refunded: 'info',
   refunded: 'info',
+  awaiting_invoice: 'warning',
+  void: 'neutral',
 } as const;
 
 /** Guest order page, reached by the manage-token link (no account needed). */
@@ -87,6 +89,15 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
       />
       <Card size="panel" className="flex flex-col gap-4">
         <StatusDot status={DOT[order.status]} label={t(`order.status.${order.status}`)} />
+        {/* M5.1d: a pay-later order: its invoice (view, PDF, pay). */}
+        {order.invoicePath ? (
+          <Link
+            href={order.invoicePath}
+            className="inline-flex min-h-8 items-center self-start text-body font-bold text-primary-ink underline-offset-2 hover:underline"
+          >
+            {t('order.viewInvoice')}
+          </Link>
+        ) : null}
         <ul className="flex list-none flex-col divide-y divide-line p-0">
           {order.items.map((i) => (
             <li key={i.ticketTypeId} className="flex justify-between gap-4 py-2.5">

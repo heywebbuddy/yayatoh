@@ -58,7 +58,10 @@ export const journeys = tenantTable(
     check('journeys_name_check', sql`length(btrim(name)) between 1 and 120`),
     check('journeys_scope_check', sql`(event_id is null) <> (series_id is null)`),
     check('journeys_trigger_check', inList('trigger', ALL_TRIGGERS)),
-    check('journeys_template_check', sql`template is null or template in ('vision', 'rsvp_reminders')`),
+    check(
+      'journeys_template_check',
+      sql`template is null or template in ('vision', 'rsvp_reminders', 'invoice_reminders')`,
+    ),
     check('journeys_enabled_check', sql`not enabled or enabled_at is not null`),
   ],
 );
@@ -138,6 +141,8 @@ export const journeyRuns = tenantTable(
      * foreign key, the run outlives it) instead of a contact. Guests never become contacts (P4-3).
      */
     partyId: uuid('party_id'),
+    /** M5.1d: `invoice_issued` runs: when the invoice is due (the `invoice_due` anchor). */
+    dueAt: tsz('due_at'),
   },
   (t) => [
     uniqueIndex('journey_runs_org_journey_event_contact_key').on(

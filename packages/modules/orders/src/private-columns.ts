@@ -96,4 +96,31 @@ export const privateColumns = columnPrivacy('orders', {
   // M4.8a: a gift order's donation item. The name is the campaign's (the host's text); amounts
   // are numbers, never in a public payload (the giving page shows campaign totals only, P4-13).
   donation_items: { name: internal(), currency: 'vocab' },
+  // M5.1d invoices: the document's people, PO and company are the buyer's (shown to them);
+  // who issued or voided it and why is internal.
+  invoices: {
+    status: 'vocab',
+    po_number: holder(),
+    billing_company: holder(),
+    buyer_name: personal(),
+    buyer_email: personal('email'),
+    currency: 'vocab',
+    terms: 'vocab',
+    void_reason: internal(),
+    issued_by: internal(),
+  },
+  invoice_payments: {
+    channel: 'vocab',
+    method: 'vocab',
+    status: 'vocab',
+    currency: 'vocab',
+    idempotency_key: secret(),
+    funds_flow: 'vocab',
+    connected_account_id: secret(undefined, { where: "funds_flow = 'organizer_mor'" }),
+    provider: 'vocab',
+    provider_payment_id: secret(),
+    reference: internal(),
+    note: internal(),
+    recorded_by: internal(),
+  },
 });

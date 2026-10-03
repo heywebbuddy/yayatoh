@@ -198,6 +198,11 @@
       "intro": "{org} 已为你在 {eventName} 的订单开具金额为 {amount} 的贷记单 {number}。{storeCredit, select, yes {在 {org} 的下一笔订单结账时输入代码 {code} 即可使用。} other {此金额已退还给你。}}",
       "cta": "查看我的订单"
     },
+    "orders.invoice": {
+      "subject": "{eventName} 的发票 {number}",
+      "intro": "您已报名参加 {eventName}。{org} 已开具发票 {number}，金额 {amount}，付款截止日期为 {due}。请使用下方按钮查看发票、下载 PDF，或支付全部或部分款项。",
+      "cta": "查看并支付发票"
+    },
     "orders.support-reply": {
       "subject": "{subject}",
       "intro": "{org} 关于你在 {eventName} 订单的消息:",

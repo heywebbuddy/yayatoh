@@ -198,6 +198,11 @@
       "intro": "{org} が {eventName} のご注文に対して {amount} のクレジットノート {number} を発行しました。{storeCredit, select, yes {{org} での今後のご注文で、お支払い時にコード {code} を入力してご利用ください。} other {この金額は返金済みです。}}",
       "cta": "注文を見る"
     },
+    "orders.invoice": {
+      "subject": "{eventName}の請求書 {number}",
+      "intro": "{eventName}への登録が完了しました。{org}が請求書 {number}（{amount}、支払期限 {due}）を発行しました。下のボタンから請求書の確認、PDFのダウンロード、全額または一部のお支払いができます。",
+      "cta": "請求書を確認して支払う"
+    },
     "orders.support-reply": {
       "subject": "{subject}",
       "intro": "{eventName} のご注文について {org} からのメッセージ:",

@@ -93,6 +93,7 @@
         "waitlist-expired": "Waitlist offer expired",
         "credit-note": "Credit note",
         "support-reply": "Support reply",
+        "invoice": "Invoice",
         "table-naming": "Table naming link"
       },
       "events": {
@@ -953,7 +954,9 @@
       "expired": "This order expired",
       "cancelled": "This order was cancelled",
       "partially_refunded": "Partially refunded",
-      "refunded": "Refunded"
+      "refunded": "Refunded",
+      "awaiting_invoice": "You're registered, {name}",
+      "void": "This order was voided"
     },
     "status": {
       "paid": "Paid",
@@ -963,7 +966,9 @@
       "expired": "Expired",
       "cancelled": "Cancelled",
       "partially_refunded": "Partially refunded",
-      "refunded": "Refunded"
+      "refunded": "Refunded",
+      "awaiting_invoice": "Awaiting invoice payment",
+      "void": "Void"
     },
     "sentTo": "Confirmation sent to {email}",
     "total": "Total",
@@ -989,7 +994,8 @@
     "emailsNone": "No emails yet.",
     "emailSentAt": "Sent {when}",
     "emailScheduled": "Scheduled for {when}",
-    "emailQueued": "Sending"
+    "emailQueued": "Sending",
+    "viewInvoice": "View, download or pay your invoice"
   },
   "orders": {
     "title": "Recent orders",
@@ -1092,12 +1098,19 @@
       "granted": "Access granted",
       "no_access": "This pass doesn't include this area",
       "wrong_checkpoint": "Not your checkpoint",
-      "wrong_date": "This ticket is for another date"
+      "wrong_date": "This ticket is for another date",
+      "balance_due": "Balance due on the invoice"
     },
     "alertsTitle": "{count, plural, one {# ticket was let in twice while offline} other {# tickets were let in twice while offline}}",
     "alertsHint": "Two scanners admitted the same ticket before they could sync. Check these guests at the door.",
     "wrongCheckpointHint": "You scan at {places}. Choose it under Scanning at.",
-    "noCheckpointsHint": "You aren't assigned to any checkpoint here. Ask the organizer."
+    "noCheckpointsHint": "You aren't assigned to any checkpoint here. Ask the organizer.",
+    "balanceDueHint": "This registration's invoice isn't paid yet. Ask them to pay, or admit them with a reason.",
+    "overrideLabel": "Admit with a balance due",
+    "overrideNote": "Reason for admitting",
+    "overrideHint": "Saved in the activity log with your name, e.g. “PO approved, payment on its way”.",
+    "overrideSubmit": "Admit anyway",
+    "overrideNoteRequired": "Give a reason (at least 3 characters) to admit with a balance due."
   },
   "checkinLive": {
     "state": {
@@ -6985,7 +6998,8 @@
     "triggers": {
       "order_paid": "Buys a ticket",
       "checked_in": "Checks in",
-      "event_time": "Time relative to the event"
+      "event_time": "Time relative to the event",
+      "invoice_issued": "Is sent an invoice (pay later)"
     },
     "newTitle": "New journey",
     "newDescription": "Pick the event (or series) and how people join. You can edit every step before you switch it on.",
@@ -7006,7 +7020,9 @@
       "errors": {
         "name": "Enter a name (up to 120 characters).",
         "scope": "Choose an event or series."
-      }
+      },
+      "invoice_reminders": "Invoice reminders",
+      "invoice_remindersHint": "For pay-later registrations: an email 7 days before the invoice is due, on the due date and 7 days after. Paying stops them."
     },
     "vision": {
       "name": "Vision journey",
@@ -7056,7 +7072,8 @@
       "anchors": {
         "trigger": "When they join",
         "event_start": "The event start",
-        "event_end": "The event end"
+        "event_end": "The event end",
+        "invoice_due": "The invoice's due date"
       },
       "direction": "Before or after",
       "before": "Before",
@@ -7105,7 +7122,8 @@
         "direction": "Days and hours must go the same way.",
         "offset": "Check the number of days.",
         "step": "Check step {n}."
-      }
+      },
+      "invoicePlaceholders": "Invoice reminders can also use {invoice}, {balance}, {due} and {link}."
     },
     "wait": {
       "atTrigger": "Right away",
@@ -7119,7 +7137,11 @@
       "dayTrigger": "{dir, select, same {The day they join} other {{days, plural, one {# day after they join} other {# days after they join}}}}, at {time}",
       "dayStart": "{dir, select, before {{days, plural, one {# day before the event day} other {# days before the event day}}} after {{days, plural, one {# day after the event day} other {# days after the event day}}} other {On the event day}}, at {time}",
       "dayEnd": "{dir, select, before {{days, plural, one {# day before the last day} other {# days before the last day}}} after {{days, plural, one {# day after the event ends} other {# days after the event ends}}} other {On the last day}}, at {time}",
-      "thenOffset": "{base}, {dir, select, before {{offset} earlier} other {{offset} later}}"
+      "thenOffset": "{base}, {dir, select, before {{offset} earlier} other {{offset} later}}",
+      "atDue": "On the due date",
+      "beforeDue": "{offset} before the invoice is due",
+      "afterDue": "{offset} after the invoice is due",
+      "dayDue": "{dir, select, before {{days, plural, one {# day before the due date} other {# days before the due date}}} after {{days, plural, one {# day after the due date} other {# days after the due date}}} other {On the due date}}, at {time}"
     },
     "duration": {
       "days": "{count, plural, one {# day} other {# days}}",
@@ -7191,7 +7213,24 @@
       "run_ended": "Journey ended",
       "event_missing": "Event not found",
       "error": "Failed after several tries",
-      "other": "Other"
+      "other": "Other",
+      "invoice_paid": "Invoice paid",
+      "invoice_void": "Invoice voided",
+      "invoice_settled": "Invoice already settled"
+    },
+    "invoiceReminders": {
+      "before": {
+        "subject": "Invoice {invoice} is due on {due}",
+        "body": "Hi {name}, a reminder that invoice {invoice} for {event} is due on {due}. Balance: {balance}. View or pay it here: {link}"
+      },
+      "due": {
+        "subject": "Invoice {invoice} is due today",
+        "body": "Hi {name}, invoice {invoice} for {event} is due today. Balance: {balance}. View or pay it here: {link}"
+      },
+      "overdue": {
+        "subject": "Invoice {invoice} is overdue",
+        "body": "Hi {name}, invoice {invoice} for {event} was due on {due} and {balance} is still open. Your registration stands; please pay when you can: {link}"
+      }
     }
   },
   "supportTools": {
@@ -7547,7 +7586,8 @@
           "name": "Enter your name.",
           "type": "Choose a registration type.",
           "admission": "Choose a pass.",
-          "items": "Choose one pass and any add-ons."
+          "items": "Choose one pass and any add-ons.",
+          "poNumber": "Enter your PO number."
         },
         "type_full": "This type just filled up. You can join its waitlist.",
         "code_required": "This registration type needs a code.",
@@ -7564,7 +7604,9 @@
         "offer_items": "Only the offered pass can be bought.",
         "approval_required": "This registration type is by application.",
         "guest_type": "This type is for guests of a registrant.",
-        "no_approval": "This type needs no application: register instead."
+        "no_approval": "This type needs no application: register instead.",
+        "pay_later_off": "This registration type is paid at checkout. Choose “Pay now by card”.",
+        "po_required": "Enter your PO number."
       },
       "applyHint": "This registration type is by application: the organizer reviews it first. You won't be charged unless you're approved.",
       "company": "Company or organization (optional)",
@@ -7572,7 +7614,16 @@
       "message": "Anything the organizer should know? (optional)",
       "apply": "Apply",
       "byApplication": "By application",
-      "registerGroup": "Registering several people? Register a group"
+      "registerGroup": "Registering several people? Register a group",
+      "payTitle": "How would you like to pay?",
+      "payNow": "Pay now by card",
+      "payLater": "Pay later by invoice",
+      "payLaterHint": "Your place is confirmed now. We email you an invoice, due in 30 days or 7 days before the event, whichever is sooner.",
+      "poNumber": "PO number (optional)",
+      "poNumberRequired": "PO number",
+      "poNumberHint": "Your purchase order number, printed on the invoice.",
+      "billingCompany": "Company to invoice (optional)",
+      "registerInvoice": "Register and get an invoice"
     },
     "openEnrollment": "Session enrollment and waitlists",
     "applicant": {
@@ -7866,6 +7917,32 @@
         "segmentId": "Choose an audience.",
         "event_finished": "This event has finished.",
         "tooManyMembers": "A member list can have up to 5,000 addresses."
+      }
+    },
+    "payLater": {
+      "title": "Pay later by invoice",
+      "hint": "Let buyers of a type register now and pay by invoice: Net 30 from the invoice date, but due no later than 7 days before the event. Unpaid registrations are never cancelled automatically.",
+      "openInvoices": "Open the invoices",
+      "summaryNotEligible": "Paid another way (applications or +1 guests).",
+      "summaryOn": "Pay later is on · PO number: {po}",
+      "summaryOff": "Paid at checkout only.",
+      "editNamed": "Change pay later for {name}",
+      "payLater": "Pay later by invoice",
+      "off": "Off",
+      "on": "On",
+      "poNumber": "PO number",
+      "poNumberHint": "Ask buyers for their purchase order number, or require it.",
+      "po": {
+        "off": "not asked",
+        "optional": "optional",
+        "required": "required"
+      },
+      "save": "Save",
+      "saved": "Saved.",
+      "errors": {
+        "approval_type": "Types with applications are paid from the applicant's link.",
+        "guest_type": "+1 guest types are paid by their host.",
+        "event_finished": "This event is over."
       }
     }
   },
@@ -9726,6 +9803,147 @@
       "tooManyTemplates": "This event has the most templates it can have.",
       "stale": "Someone else saved this template meanwhile. Reload the page to see their version.",
       "questionNotAllowed": "That question can't be printed on badges."
+    },
+    "balanceDue": "Balance due",
+    "printAnywayNamed": "Print {name}'s badge anyway",
+    "overrideNote": "Reason for printing",
+    "overrideHint": "Saved in the activity log with your name.",
+    "printAnyway": "Print anyway",
+    "overrideNoteRequired": "Give a reason (at least 3 characters)."
+  },
+  "invoices": {
+    "status": {
+      "open": "Open",
+      "paid": "Paid",
+      "void": "Void"
+    },
+    "overdue": "Overdue",
+    "methods": {
+      "card": "Card (pay link)",
+      "check": "Check",
+      "wire": "Wire transfer",
+      "cash": "Cash",
+      "other": "Other"
+    },
+    "panel": {
+      "title": "Invoice {label}",
+      "number": "Invoice",
+      "issued": "Invoice date",
+      "due": "Due",
+      "terms": "Terms",
+      "termsValue": "Net 30, due no later than 7 days before the event",
+      "po": "PO number",
+      "company": "Company",
+      "total": "Total",
+      "paid": "Paid",
+      "balance": "Balance due",
+      "none": "—",
+      "pdf": "Download the PDF",
+      "voided": "Voided: {reason}",
+      "paidAfterVoid": "{amount} was paid after the void: refund it with a credit note.",
+      "payments": "Payments",
+      "noPayments": "No payments yet.",
+      "failed": "declined"
+    },
+    "record": {
+      "title": "Record a payment",
+      "label": "Record a payment received",
+      "balance": "Balance due: {amount}",
+      "amount": "Amount ({currency})",
+      "method": "How it was paid",
+      "methods": {
+        "check": "Check",
+        "wire": "Wire transfer",
+        "cash": "Cash",
+        "other": "Other"
+      },
+      "receivedOn": "Received on",
+      "reference": "Reference",
+      "referenceHint": "Check number or wire reference.",
+      "note": "Note (optional)",
+      "recorded": "Payment recorded.",
+      "submit": "Record payment"
+    },
+    "void": {
+      "title": "Void this invoice",
+      "label": "Void the invoice",
+      "hint": "Voiding cancels the registration and its tickets and frees the place. Only possible while nothing was paid.",
+      "reason": "Reason",
+      "done": "Invoice voided.",
+      "submit": "Void invoice"
+    },
+    "errors": {
+      "amount_required": "Enter an amount, like 600.00.",
+      "amount_too_large": "That is more than the balance due.",
+      "amount_too_small": "Enter an amount above zero.",
+      "nothing_due": "Nothing is due on this invoice.",
+      "date_in_future": "The date can't be in the future.",
+      "date_required": "Enter the day the payment arrived.",
+      "has_payments": "Payments were recorded on this invoice, so it can't be voided.",
+      "invoice_paid": "This invoice is already paid.",
+      "invoice_void": "This invoice was voided.",
+      "field": {
+        "amount": "Enter an amount up to the balance due.",
+        "receivedOn": "Enter the day the payment arrived.",
+        "reason": "Give a reason (3 to 500 characters)."
+      }
+    },
+    "list": {
+      "title": "Invoices",
+      "description": "Pay-later registrations: what is paid and what is still due.",
+      "backToSetup": "Back to registration",
+      "filterLabel": "Filter invoices",
+      "filters": {
+        "all": "All",
+        "open": "Open",
+        "overdue": "Overdue",
+        "paid": "Paid",
+        "void": "Void"
+      },
+      "emptyTitle": "No invoices yet",
+      "emptyDescription": "Turn on pay later for a registration type; invoices appear here as people register.",
+      "emptyFiltered": "No invoices match this filter.",
+      "caption": "Invoices",
+      "billedTo": "Billed to",
+      "po": "PO {po}",
+      "noPo": "No PO number",
+      "status": "Status"
+    },
+    "public": {
+      "metaTitle": "Your invoice",
+      "title": "Invoice {label}",
+      "lead": {
+        "open": "Thank you, {name}: you're registered. This invoice is due on {due}.",
+        "paid": "Thank you, {name}: this invoice is paid.",
+        "void": "This invoice was cancelled by the organizer."
+      },
+      "thanks": "Thank you for your payment",
+      "thanksPaid": "The invoice is now paid in full.",
+      "thanksPart": "{balance} is still due.",
+      "items": "What you registered for",
+      "pdf": "Download the PDF",
+      "payTitle": "Pay now",
+      "payHint": "Pay all of the {balance} due, or part of it now and the rest later.",
+      "payLabel": "Pay this invoice",
+      "amount": "Amount to pay ({currency})",
+      "amountHint": "Up to the balance due.",
+      "pay": "Continue to payment",
+      "backToEvent": "Back to the event"
+    },
+    "pdf": {
+      "title": "Invoice {label}",
+      "billedTo": "Billed to",
+      "event": "Event",
+      "status": "Status",
+      "item": "Item",
+      "quantity": "Qty",
+      "unit": "Unit price",
+      "amount": "Amount",
+      "payNote": "Pay online: {url}",
+      "payNoteNoLink": "The buyer pays online from the link in their invoice email, or by check or wire to the organizer.",
+      "paidNote": "Paid in full. Thank you.",
+      "voidNote": "This invoice was voided.",
+      "footer": "Issued by {seller} through Yayatoh."
     }
   },
   "charity": {

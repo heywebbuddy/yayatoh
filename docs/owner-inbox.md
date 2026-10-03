@@ -542,3 +542,8 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **Invitation wording:** a built-in text in all 13 languages (`packages/modules/guests/src/domain/invite-copy.ts`) until the host writes their own per language. Please review the built-in wording (labels: `legal-copy`).
 - [ ] **Test sends** go by email to the signed-in host only; the test's RSVP button opens a page that says the link isn't valid (it belongs to no party).
 - [ ] **SMS provider** for invitations: the Twilio account (owner inbox M3.5b) is still needed for real texts; dev and CI use the fake providers.
+
+## M5.1d — invoices, PO and pay later (2026-10-02, pending owner)
+- [ ] **Who records offline payments and voids invoices:** `orders:refund` (owners, admins, finance), the existing money permission; box office and managers can't. Confirm, or ask for a separate `invoices:manage` permission.
+- [ ] **Invoice wording (`legal-copy`):** the invoice email, the PDF (terms line "Net 30, due no later than 7 days before the event", "Issued by {org} through Yayatoh"), the buyer's invoice page and the reminder template (13 locales). Late-payment wording is deliberately neutral (P5-5: the registration stands). Our PDF is not a tax invoice (no tax lines or seller tax ids yet).
+- [ ] **Door and badge overrides:** any scanner may admit a balance-due ticket with a reason (audited); badge desk staff (`attendees:write`) may print one. Confirm, or restrict to supervisors.

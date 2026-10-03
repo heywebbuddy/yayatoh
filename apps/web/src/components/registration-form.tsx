@@ -24,6 +24,8 @@ export function RegistrationForm({ find, register }: { find: Action; register: A
   // The latest options: a registration attempt may refresh them (a type filled up meanwhile).
   const options = state.options ?? found.options;
   const [typeId, setTypeId] = useState<string>('');
+  // M5.1d: pay now by card, or later by invoice (types that offer it).
+  const [payment, setPayment] = useState<'card' | 'invoice'>('card');
   const type = options?.types.find((x) => x.id === typeId) ?? null;
   const step2 = useRef<HTMLHeadingElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
@@ -70,7 +72,7 @@ export function RegistrationForm({ find, register }: { find: Action; register: A
       </div>
     );
   const findError = message(found, ['email']);
-  const error = message(state, ['name']);
+  const error = message(state, ['name', 'poNumber']);
   const admissions = type?.items.filter((i) => i.kind === 'admission') ?? [];
   const addOns = type?.items.filter((i) => i.kind === 'add_on') ?? [];
   const verify = state.code === 'verify_email' ? state.verify : undefined;
@@ -232,6 +234,50 @@ export function RegistrationForm({ find, register }: { find: Action; register: A
                       </div>
                     </>
                   ) : null}
+                  {type.payLater && !type.full && !type.apply ? (
+                    <fieldset className="flex flex-col gap-2">
+                      <legend className="mb-1 text-body font-medium">{t('payTitle')}</legend>
+                      {(['card', 'invoice'] as const).map((k) => (
+                        <label key={k} className="flex min-h-6 items-start gap-2.5 text-body">
+                          <input
+                            type="radio"
+                            name="payment"
+                            value={k}
+                            checked={payment === k}
+                            onChange={() => setPayment(k)}
+                            className="mt-0.5 size-5 accent-ink"
+                          />
+                          <span className="flex flex-col">
+                            <span>{t(k === 'card' ? 'payNow' : 'payLater')}</span>
+                            {k === 'invoice' ? (
+                              <span className="text-caption text-ink-2">{t('payLaterHint')}</span>
+                            ) : null}
+                          </span>
+                        </label>
+                      ))}
+                    </fieldset>
+                  ) : null}
+                  {type.payLater && payment === 'invoice' && !type.full && !type.apply ? (
+                    <>
+                      {type.poNumber !== 'off' ? (
+                        <Input
+                          name="poNumber"
+                          maxLength={60}
+                          autoComplete="off"
+                          required={type.poNumber === 'required'}
+                          label={type.poNumber === 'required' ? t('poNumberRequired') : t('poNumber')}
+                          hint={t('poNumberHint')}
+                          error={state.field === 'poNumber' ? t('errors.field.poNumber') : undefined}
+                        />
+                      ) : null}
+                      <Input
+                        name="billingCompany"
+                        maxLength={120}
+                        autoComplete="organization"
+                        label={t('billingCompany')}
+                      />
+                    </>
+                  ) : null}
                   {type.full && !type.apply ? (
                     <Alert tone="info" title={t('fullTitle', { type: type.name })}>
                       {t('fullHint')}
@@ -266,7 +312,7 @@ export function RegistrationForm({ find, register }: { find: Action; register: A
                         disabled={pending}
                         className="self-start"
                       >
-                        {t('register')}
+                        {type.payLater && payment === 'invoice' ? t('registerInvoice') : t('register')}
                       </Button>
                     )}
                   </div>

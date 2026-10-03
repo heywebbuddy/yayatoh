@@ -236,7 +236,14 @@ export async function offerFreedPlacesForEventTx(tx: TenantTx, ctx: Ctx, emit: E
   return made;
 }
 
-const ORDER_EVENTS = ['order.paid@1', 'order.expired@1', 'order.refunded@1', 'order.payment_orphaned@1'];
+const ORDER_EVENTS = [
+  'order.paid@1',
+  'order.expired@1',
+  'order.refunded@1',
+  'order.payment_orphaned@1',
+  // M5.1d: a voided invoice gives its places back.
+  'order.voided@1',
+];
 const WAITLIST_EVENTS = ['waitlist.offer_expired@1', 'waitlist.offer_released@1'];
 
 /**

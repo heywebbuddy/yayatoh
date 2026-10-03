@@ -100,3 +100,6 @@ add registrations, approvals, groups, invoices (M5.1c/d) and session enrollments
   `registration.session-offer`). Event: `registration.session.promoted@1` (`{ eventId, sessionId, enrollmentId,
   registrantId, status, offer }`).
 - Entitlement `registration` for every command and query.
+
+**M5.1d: pay later by invoice**
+- Per type (`pay_later`, `po_number` off/optional/required; `registration.setPayLater`, `events:write`); never for approval or +1 types. `registration.startCheckout` with `payLater` checks the type and the PO rule (`pay_later_off`, `po_required`), then invoices the order in the same transaction (`issueInvoiceTx`): the place counts as sold and the registrant is confirmed at once; the balance is the invoice's business. `order.voided@1` releases the claim and cancels the registrant.

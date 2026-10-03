@@ -227,6 +227,8 @@ export const PLATFORM_PATTERNS: readonly RegExp[] = [
   /^\/events\/[^/]+\/live\/[^/]+$/,
   // M4.8a: the giving page and its thank-you page.
   /^\/events\/[^/]+\/give(\/thanks)?$/,
+  // M5.1d: a buyer's invoice (view and pay) and its PDF.
+  /^\/events\/[^/]+\/invoice\/[^/]+(\/pdf)?$/,
 ];
 export const PLATFORM_FILES: ReadonlySet<string> = new Set([
   '/widget.js',

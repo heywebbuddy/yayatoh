@@ -30,6 +30,7 @@ import {
 } from '@yayatoh/notifications';
 import {
   creditNoteMailer,
+  invoiceMailer,
   orderLinkMailer,
   postponementMailer,
   refundDeclineMailer,
@@ -104,6 +105,8 @@ function messageSubscribers(appOrigin: string): Subscriber[] {
     transferMailer({ notifier, appOrigin }),
     walletPassSync({ provider: devWalletPasses }),
     creditNoteMailer({ notifier, appOrigin }),
+    // M5.1d: pay-later invoices.
+    invoiceMailer({ notifier, appOrigin }),
     supportReplyMailer({ notifier, appOrigin }),
     // Dispute evidence deadlines reach finance through the alert engine (batch 3e: the
     // `disputeDeadline` rule), not a second notification.

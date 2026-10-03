@@ -34,6 +34,35 @@ export {
   issueCreditNoteCommand,
 } from './commands/credit-notes.ts';
 export { applyDisputeEventCommand } from './commands/disputes.ts';
+// M5.1d: invoices, PO and pay later.
+export {
+  applyInvoiceProviderEventTx,
+  attachInvoicePaymentCommand,
+  eventInvoicesQuery,
+  INVOICE_FILTERS,
+  INVOICE_PURPOSE,
+  InvoiceDocumentDto,
+  InvoiceDto,
+  InvoicePaymentDto,
+  IssueInvoiceInput,
+  invoiceDocumentQuery,
+  invoiceDocumentTx,
+  invoiceFactsTx,
+  invoiceIdFromToken,
+  invoiceOfOrderTx,
+  invoicePath,
+  invoiceToken,
+  issueInvoiceTx,
+  OFFLINE_METHODS,
+  OrderInvoiceDto,
+  orderInvoiceQuery,
+  PublicInvoiceDto,
+  publicInvoice,
+  recordInvoicePaymentCommand,
+  StartInvoicePaymentResultDto,
+  startInvoicePaymentCommand,
+  voidInvoiceCommand,
+} from './commands/invoices.ts';
 export {
   CancellationPreviewDto,
   cancellationPreviewQuery,
@@ -101,6 +130,22 @@ export {
   newCreditCode,
   parseCreditCode,
 } from './domain/credit-notes.ts';
+export {
+  addDays,
+  balanceMinor as invoiceBalanceMinor,
+  DAYS_BEFORE_EVENT,
+  DEFAULT_TERMS,
+  feePartMinor,
+  formatInvoiceNumber,
+  type InvoiceTerms,
+  invoiceTerms,
+  isOverdue as isInvoiceOverdue,
+  localDay,
+  NET_DAYS,
+  normalizePoNumber,
+  type PayAmountProblem,
+  payAmountProblem,
+} from './domain/invoices.ts';
 export { HOLD_MINUTES, orderLifecycle, PAYMENT_EXTENSION_MINUTES } from './domain/lifecycle.ts';
 export { MERGE_FIELDS, type MergeField, orderRef, renderMacro, unknownMergeFields } from './domain/macros.ts';
 export {
@@ -251,6 +296,7 @@ export {
   parseGuestLinkToken,
   resendAt,
 } from './guest/otp.ts';
+export { invoiceMailer } from './invoice-mailer.ts';
 // M5.2b: the manage token behind a session-schedule email link.
 export { orderManageTokenTx } from './manage-link.ts';
 export { buyerFactsTx, orderRefTx } from './participation.ts';
@@ -285,6 +331,10 @@ export {
   CHARGE_MODELS,
   CREDIT_NOTE_DISPOSITIONS,
   CREDIT_NOTE_KINDS,
+  INVOICE_PAYMENT_CHANNELS,
+  INVOICE_PAYMENT_METHODS,
+  INVOICE_PAYMENT_STATUSES,
+  INVOICE_STATUSES,
   MACRO_ACTIONS,
   MASS_REFUND_ITEM_STATUSES,
   MASS_REFUND_STATUSES,

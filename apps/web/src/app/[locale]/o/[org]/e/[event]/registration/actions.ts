@@ -16,6 +16,7 @@ import {
   replaceMembersCommand,
   seedRegistrationDefaultsCommand,
   setCellCommand,
+  setPayLaterCommand,
   setTypeRulesCommand,
   updateAdmissionItemCommand,
   updateRegistrationTypeCommand,
@@ -250,3 +251,27 @@ export async function importAudienceAction(
 
 const preview = (ctx: never, definition: unknown, afterId: string | null) =>
   executeQuery(previewAudienceQuery, { definition, limit: 100, afterId }, ctx, ports);
+
+/** M5.1d: pay later by invoice for a type, and its PO number rule. */
+export async function setPayLaterAction(
+  org: string,
+  event: string,
+  registrationTypeId: string,
+  _prev: FormState,
+  form: FormData,
+): Promise<FormState> {
+  const po = String(form.get('poNumber') ?? 'off');
+  return run(org, event, (eventId, ctx) =>
+    executeCommand(
+      setPayLaterCommand,
+      {
+        eventId,
+        registrationTypeId,
+        payLater: form.get('payLater') === 'on',
+        poNumber: po === 'optional' || po === 'required' ? po : 'off',
+      },
+      ctx,
+      ports,
+    ),
+  );
+}

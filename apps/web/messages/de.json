@@ -93,6 +93,7 @@
         "waitlist-expired": "Angebot von der Warteliste abgelaufen",
         "credit-note": "Gutschrift",
         "support-reply": "Support-Antwort",
+        "invoice": "Rechnung",
         "table-naming": "Link zum Benennen des Tisches"
       },
       "events": {
@@ -953,7 +954,9 @@
       "expired": "Diese Bestellung ist abgelaufen",
       "cancelled": "Diese Bestellung wurde storniert",
       "partially_refunded": "Teilweise erstattet",
-      "refunded": "Erstattet"
+      "refunded": "Erstattet",
+      "awaiting_invoice": "Sie sind angemeldet, {name}",
+      "void": "Diese Bestellung wurde storniert"
     },
     "status": {
       "paid": "Bezahlt",
@@ -963,7 +966,9 @@
       "expired": "Abgelaufen",
       "cancelled": "Storniert",
       "partially_refunded": "Teilweise erstattet",
-      "refunded": "Erstattet"
+      "refunded": "Erstattet",
+      "awaiting_invoice": "Rechnung offen",
+      "void": "Storniert"
     },
     "sentTo": "Bestätigung gesendet an {email}",
     "total": "Gesamt",
@@ -989,7 +994,8 @@
     "emailsNone": "Noch keine E-Mails.",
     "emailSentAt": "Gesendet {when}",
     "emailScheduled": "Geplant für {when}",
-    "emailQueued": "Wird gesendet"
+    "emailQueued": "Wird gesendet",
+    "viewInvoice": "Rechnung ansehen, herunterladen oder bezahlen"
   },
   "orders": {
     "title": "Neueste Bestellungen",
@@ -1092,12 +1098,19 @@
       "granted": "Zutritt gewährt",
       "no_access": "Dieser Pass gilt nicht für diesen Bereich",
       "wrong_checkpoint": "Nicht dein Kontrollpunkt",
-      "wrong_date": "Dieses Ticket gilt für einen anderen Termin"
+      "wrong_date": "Dieses Ticket gilt für einen anderen Termin",
+      "balance_due": "Offener Rechnungsbetrag"
     },
     "alertsTitle": "{count, plural, one {# Ticket wurde offline doppelt eingelassen} other {# Tickets wurden offline doppelt eingelassen}}",
     "alertsHint": "Zwei Scanner haben dasselbe Ticket eingelassen, bevor sie synchronisieren konnten. Prüfe diese Gäste am Einlass.",
     "wrongCheckpointHint": "Du scannst an: {places}. Wähle es unter „Scannen bei“.",
-    "noCheckpointsHint": "Dir ist hier kein Kontrollpunkt zugewiesen. Frag den Veranstalter."
+    "noCheckpointsHint": "Dir ist hier kein Kontrollpunkt zugewiesen. Frag den Veranstalter.",
+    "balanceDueHint": "Die Rechnung dieser Anmeldung ist noch nicht bezahlt. Bitten Sie um Zahlung oder lassen Sie die Person mit Begründung ein.",
+    "overrideLabel": "Trotz offenem Betrag einlassen",
+    "overrideNote": "Grund für den Einlass",
+    "overrideHint": "Wird mit Ihrem Namen im Aktivitätsprotokoll gespeichert, z. B. „Bestellung freigegeben, Zahlung unterwegs“.",
+    "overrideSubmit": "Trotzdem einlassen",
+    "overrideNoteRequired": "Geben Sie einen Grund an (mindestens 3 Zeichen), um trotz offenem Betrag einzulassen."
   },
   "checkinLive": {
     "state": {
@@ -6985,7 +6998,8 @@
     "triggers": {
       "order_paid": "Kauft ein Ticket",
       "checked_in": "Checkt ein",
-      "event_time": "Zeit relativ zur Veranstaltung"
+      "event_time": "Zeit relativ zur Veranstaltung",
+      "invoice_issued": "Erhält eine Rechnung (später zahlen)"
     },
     "newTitle": "Neue Journey",
     "newDescription": "Wählen Sie die Veranstaltung (oder Reihe) und wie Personen einsteigen. Sie können jeden Schritt bearbeiten, bevor Sie sie einschalten.",
@@ -7006,7 +7020,9 @@
       "errors": {
         "name": "Geben Sie einen Namen ein (bis zu 120 Zeichen).",
         "scope": "Wählen Sie eine Veranstaltung oder Reihe."
-      }
+      },
+      "invoice_reminders": "Rechnungserinnerungen",
+      "invoice_remindersHint": "Für Anmeldungen mit späterer Zahlung: eine E-Mail 7 Tage vor Fälligkeit, am Fälligkeitstag und 7 Tage danach. Eine Zahlung beendet sie."
     },
     "vision": {
       "name": "Visions-Journey",
@@ -7056,7 +7072,8 @@
       "anchors": {
         "trigger": "Ihrem Einstieg",
         "event_start": "Beginn der Veranstaltung",
-        "event_end": "Ende der Veranstaltung"
+        "event_end": "Ende der Veranstaltung",
+        "invoice_due": "Fälligkeitsdatum der Rechnung"
       },
       "direction": "Davor oder danach",
       "before": "Davor",
@@ -7105,7 +7122,8 @@
         "direction": "Tage und Stunden müssen in dieselbe Richtung gehen.",
         "offset": "Prüfen Sie die Anzahl der Tage.",
         "step": "Prüfen Sie Schritt {n}."
-      }
+      },
+      "invoicePlaceholders": "Rechnungserinnerungen können auch {invoice}, {balance}, {due} und {link} verwenden."
     },
     "wait": {
       "atTrigger": "Sofort",
@@ -7119,7 +7137,11 @@
       "dayTrigger": "{dir, select, same {Am Tag des Einstiegs} other {{days, plural, one {# Tag nach dem Einstieg} other {# Tage nach dem Einstieg}}}}, um {time}",
       "dayStart": "{dir, select, before {{days, plural, one {# Tag vor dem Veranstaltungstag} other {# Tage vor dem Veranstaltungstag}}} after {{days, plural, one {# Tag nach dem Veranstaltungstag} other {# Tage nach dem Veranstaltungstag}}} other {Am Veranstaltungstag}}, um {time}",
       "dayEnd": "{dir, select, before {{days, plural, one {# Tag vor dem letzten Tag} other {# Tage vor dem letzten Tag}}} after {{days, plural, one {# Tag nach Ende der Veranstaltung} other {# Tage nach Ende der Veranstaltung}}} other {Am letzten Tag}}, um {time}",
-      "thenOffset": "{base}, {dir, select, before {{offset} früher} other {{offset} später}}"
+      "thenOffset": "{base}, {dir, select, before {{offset} früher} other {{offset} später}}",
+      "atDue": "Am Fälligkeitsdatum",
+      "beforeDue": "{offset} vor Fälligkeit der Rechnung",
+      "afterDue": "{offset} nach Fälligkeit der Rechnung",
+      "dayDue": "{dir, select, before {{days, plural, one {# Tag vor der Fälligkeit} other {# Tage vor der Fälligkeit}}} after {{days, plural, one {# Tag nach der Fälligkeit} other {# Tage nach der Fälligkeit}}} other {Am Fälligkeitsdatum}}, um {time}"
     },
     "duration": {
       "days": "{count, plural, one {# Tag} other {# Tage}}",
@@ -7191,7 +7213,24 @@
       "run_ended": "Journey beendet",
       "event_missing": "Veranstaltung nicht gefunden",
       "error": "Nach mehreren Versuchen fehlgeschlagen",
-      "other": "Sonstiges"
+      "other": "Sonstiges",
+      "invoice_paid": "Rechnung bezahlt",
+      "invoice_void": "Rechnung storniert",
+      "invoice_settled": "Rechnung bereits beglichen"
+    },
+    "invoiceReminders": {
+      "before": {
+        "subject": "Rechnung {invoice} ist am {due} fällig",
+        "body": "Hallo {name}, zur Erinnerung: Die Rechnung {invoice} für {event} ist am {due} fällig. Offener Betrag: {balance}. Hier ansehen oder bezahlen: {link}"
+      },
+      "due": {
+        "subject": "Rechnung {invoice} ist heute fällig",
+        "body": "Hallo {name}, die Rechnung {invoice} für {event} ist heute fällig. Offener Betrag: {balance}. Hier ansehen oder bezahlen: {link}"
+      },
+      "overdue": {
+        "subject": "Rechnung {invoice} ist überfällig",
+        "body": "Hallo {name}, die Rechnung {invoice} für {event} war am {due} fällig, {balance} sind noch offen. Ihre Anmeldung bleibt bestehen; bitte zahlen Sie, sobald es geht: {link}"
+      }
     }
   },
   "supportTools": {
@@ -7547,7 +7586,8 @@
           "name": "Geben Sie Ihren Namen ein.",
           "type": "Wählen Sie einen Anmeldetyp.",
           "admission": "Wählen Sie einen Pass.",
-          "items": "Wählen Sie einen Pass und beliebige Zusatzleistungen."
+          "items": "Wählen Sie einen Pass und beliebige Zusatzleistungen.",
+          "poNumber": "Geben Sie Ihre Bestellnummer ein."
         },
         "type_full": "Dieser Typ ist gerade ausgebucht. Sie können sich in die Warteliste eintragen.",
         "code_required": "Für diesen Anmeldetyp ist ein Code erforderlich.",
@@ -7564,7 +7604,9 @@
         "offer_items": "Nur der angebotene Pass kann gekauft werden.",
         "approval_required": "Für diese Registrierungsart ist eine Bewerbung nötig.",
         "guest_type": "Diese Art ist für Gäste von registrierten Personen.",
-        "no_approval": "Für diese Art ist keine Bewerbung nötig: Registrieren Sie sich direkt."
+        "no_approval": "Für diese Art ist keine Bewerbung nötig: Registrieren Sie sich direkt.",
+        "pay_later_off": "Diese Anmeldeart wird beim Bezahlvorgang bezahlt. Wählen Sie „Jetzt mit Karte bezahlen“.",
+        "po_required": "Geben Sie Ihre Bestellnummer ein."
       },
       "applyHint": "Für diese Registrierungsart ist eine Bewerbung nötig: Der Veranstalter prüft sie zuerst. Sie zahlen nur, wenn Sie angenommen werden.",
       "company": "Unternehmen oder Organisation (optional)",
@@ -7572,7 +7614,16 @@
       "message": "Gibt es etwas, das der Veranstalter wissen sollte? (optional)",
       "apply": "Bewerben",
       "byApplication": "Auf Bewerbung",
-      "registerGroup": "Mehrere Personen anmelden? Gruppe registrieren"
+      "registerGroup": "Mehrere Personen anmelden? Gruppe registrieren",
+      "payTitle": "Wie möchten Sie bezahlen?",
+      "payNow": "Jetzt mit Karte bezahlen",
+      "payLater": "Später per Rechnung bezahlen",
+      "payLaterHint": "Ihr Platz ist sofort bestätigt. Wir senden Ihnen eine Rechnung, fällig in 30 Tagen oder 7 Tage vor der Veranstaltung, je nachdem, was früher ist.",
+      "poNumber": "Bestellnummer (optional)",
+      "poNumberRequired": "Bestellnummer",
+      "poNumberHint": "Ihre Bestellnummer, die auf der Rechnung steht.",
+      "billingCompany": "Rechnungsempfänger (Firma, optional)",
+      "registerInvoice": "Anmelden und Rechnung erhalten"
     },
     "openEnrollment": "Session-Anmeldung und Wartelisten",
     "applicant": {
@@ -7866,6 +7917,32 @@
         "segmentId": "Wählen Sie eine Zielgruppe.",
         "event_finished": "Diese Veranstaltung ist beendet.",
         "tooManyMembers": "Eine Mitgliederliste kann bis zu 5.000 Adressen enthalten."
+      }
+    },
+    "payLater": {
+      "title": "Später per Rechnung bezahlen",
+      "hint": "Käufer einer Art können sich jetzt anmelden und per Rechnung zahlen: 30 Tage ab Rechnungsdatum, spätestens 7 Tage vor der Veranstaltung. Unbezahlte Anmeldungen werden nie automatisch storniert.",
+      "openInvoices": "Rechnungen öffnen",
+      "summaryNotEligible": "Wird anders bezahlt (Bewerbungen oder +1-Gäste).",
+      "summaryOn": "Später zahlen ist an · Bestellnummer: {po}",
+      "summaryOff": "Nur Zahlung beim Bezahlvorgang.",
+      "editNamed": "Später zahlen für {name} ändern",
+      "payLater": "Später per Rechnung bezahlen",
+      "off": "Aus",
+      "on": "An",
+      "poNumber": "Bestellnummer",
+      "poNumberHint": "Fragen Sie nach der Bestellnummer oder machen Sie sie zur Pflicht.",
+      "po": {
+        "off": "nicht abgefragt",
+        "optional": "optional",
+        "required": "Pflicht"
+      },
+      "save": "Speichern",
+      "saved": "Gespeichert.",
+      "errors": {
+        "approval_type": "Arten mit Bewerbung werden über den Link der Bewerbung bezahlt.",
+        "guest_type": "+1-Gastarten bezahlt der Gastgeber.",
+        "event_finished": "Diese Veranstaltung ist vorbei."
       }
     }
   },
@@ -9726,7 +9803,148 @@
       "stale": "Jemand anderes hat diese Vorlage inzwischen gespeichert. Laden Sie die Seite neu, um diese Version zu sehen.",
       "questionNotAllowed": "Diese Frage kann nicht auf Badges gedruckt werden."
     },
-    "elements": "Elemente auf dieser Seite"
+    "elements": "Elemente auf dieser Seite",
+    "balanceDue": "Offener Betrag",
+    "printAnywayNamed": "Badge von {name} trotzdem drucken",
+    "overrideNote": "Grund für den Druck",
+    "overrideHint": "Wird mit Ihrem Namen im Aktivitätsprotokoll gespeichert.",
+    "printAnyway": "Trotzdem drucken",
+    "overrideNoteRequired": "Geben Sie einen Grund an (mindestens 3 Zeichen)."
+  },
+  "invoices": {
+    "status": {
+      "open": "Offen",
+      "paid": "Bezahlt",
+      "void": "Storniert"
+    },
+    "overdue": "Überfällig",
+    "methods": {
+      "card": "Karte (Zahlungslink)",
+      "check": "Scheck",
+      "wire": "Überweisung",
+      "cash": "Bar",
+      "other": "Sonstiges"
+    },
+    "panel": {
+      "title": "Rechnung {label}",
+      "number": "Rechnung",
+      "issued": "Rechnungsdatum",
+      "due": "Fällig",
+      "terms": "Bedingungen",
+      "termsValue": "30 Tage netto, spätestens 7 Tage vor der Veranstaltung",
+      "po": "Bestellnummer",
+      "company": "Firma",
+      "total": "Gesamt",
+      "paid": "Bezahlt",
+      "balance": "Offener Betrag",
+      "none": "—",
+      "pdf": "PDF herunterladen",
+      "voided": "Storniert: {reason}",
+      "paidAfterVoid": "{amount} wurden nach der Stornierung bezahlt: erstatten Sie den Betrag mit einer Gutschrift.",
+      "payments": "Zahlungen",
+      "noPayments": "Noch keine Zahlungen.",
+      "failed": "abgelehnt"
+    },
+    "record": {
+      "title": "Zahlung erfassen",
+      "label": "Erhaltene Zahlung erfassen",
+      "balance": "Offener Betrag: {amount}",
+      "amount": "Betrag ({currency})",
+      "method": "Zahlungsart",
+      "methods": {
+        "check": "Scheck",
+        "wire": "Überweisung",
+        "cash": "Bar",
+        "other": "Sonstiges"
+      },
+      "receivedOn": "Eingegangen am",
+      "reference": "Referenz",
+      "referenceHint": "Schecknummer oder Überweisungsreferenz.",
+      "note": "Notiz (optional)",
+      "recorded": "Zahlung erfasst.",
+      "submit": "Zahlung erfassen"
+    },
+    "void": {
+      "title": "Diese Rechnung stornieren",
+      "label": "Rechnung stornieren",
+      "hint": "Eine Stornierung storniert die Anmeldung und ihre Tickets und gibt den Platz frei. Nur möglich, solange nichts bezahlt wurde.",
+      "reason": "Grund",
+      "done": "Rechnung storniert.",
+      "submit": "Rechnung stornieren"
+    },
+    "errors": {
+      "amount_required": "Geben Sie einen Betrag ein, z. B. 600.00.",
+      "amount_too_large": "Das ist mehr als der offene Betrag.",
+      "amount_too_small": "Geben Sie einen Betrag über null ein.",
+      "nothing_due": "Auf dieser Rechnung ist nichts offen.",
+      "date_in_future": "Das Datum darf nicht in der Zukunft liegen.",
+      "date_required": "Geben Sie den Tag ein, an dem die Zahlung einging.",
+      "has_payments": "Auf dieser Rechnung wurden Zahlungen erfasst, daher kann sie nicht storniert werden.",
+      "invoice_paid": "Diese Rechnung ist bereits bezahlt.",
+      "invoice_void": "Diese Rechnung wurde storniert.",
+      "field": {
+        "amount": "Geben Sie einen Betrag bis zum offenen Betrag ein.",
+        "receivedOn": "Geben Sie den Tag ein, an dem die Zahlung einging.",
+        "reason": "Geben Sie einen Grund an (3 bis 500 Zeichen)."
+      }
+    },
+    "list": {
+      "title": "Rechnungen",
+      "description": "Anmeldungen mit späterer Zahlung: was bezahlt und was noch offen ist.",
+      "backToSetup": "Zurück zur Anmeldung",
+      "filterLabel": "Rechnungen filtern",
+      "filters": {
+        "all": "Alle",
+        "open": "Offen",
+        "overdue": "Überfällig",
+        "paid": "Bezahlt",
+        "void": "Storniert"
+      },
+      "emptyTitle": "Noch keine Rechnungen",
+      "emptyDescription": "Aktivieren Sie „Später zahlen“ für eine Anmeldeart; Rechnungen erscheinen hier, sobald sich Personen anmelden.",
+      "emptyFiltered": "Keine Rechnung entspricht diesem Filter.",
+      "caption": "Rechnungen",
+      "billedTo": "Rechnung an",
+      "po": "Bestellnr. {po}",
+      "noPo": "Keine Bestellnummer",
+      "status": "Status"
+    },
+    "public": {
+      "metaTitle": "Ihre Rechnung",
+      "title": "Rechnung {label}",
+      "lead": {
+        "open": "Danke, {name}: Sie sind angemeldet. Diese Rechnung ist am {due} fällig.",
+        "paid": "Danke, {name}: Diese Rechnung ist bezahlt.",
+        "void": "Der Veranstalter hat diese Rechnung storniert."
+      },
+      "thanks": "Vielen Dank für Ihre Zahlung",
+      "thanksPaid": "Die Rechnung ist jetzt vollständig bezahlt.",
+      "thanksPart": "Noch offen: {balance}.",
+      "items": "Ihre Anmeldung",
+      "pdf": "PDF herunterladen",
+      "payTitle": "Jetzt bezahlen",
+      "payHint": "Zahlen Sie die offenen {balance} ganz, oder einen Teil jetzt und den Rest später.",
+      "payLabel": "Diese Rechnung bezahlen",
+      "amount": "Zu zahlender Betrag ({currency})",
+      "amountHint": "Bis zum offenen Betrag.",
+      "pay": "Weiter zur Zahlung",
+      "backToEvent": "Zurück zur Veranstaltung"
+    },
+    "pdf": {
+      "title": "Rechnung {label}",
+      "billedTo": "Rechnung an",
+      "event": "Veranstaltung",
+      "status": "Status",
+      "item": "Position",
+      "quantity": "Anz.",
+      "unit": "Einzelpreis",
+      "amount": "Betrag",
+      "payNote": "Online bezahlen: {url}",
+      "payNoteNoLink": "Die Käuferin bzw. der Käufer zahlt online über den Link in der Rechnungs-E-Mail oder per Scheck oder Überweisung an den Veranstalter.",
+      "paidNote": "Vollständig bezahlt. Vielen Dank.",
+      "voidNote": "Diese Rechnung wurde storniert.",
+      "footer": "Ausgestellt von {seller} über Yayatoh."
+    }
   },
   "charity": {
     "title": "Gemeinnützigkeitsprofil",

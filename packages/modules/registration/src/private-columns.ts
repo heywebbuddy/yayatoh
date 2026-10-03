@@ -17,6 +17,8 @@ export const privateColumns = columnPrivacy('registration', {
     approval: 'vocab',
     auto_approve_domains: internal('array', { where: "approval = 'manual'" }),
     kind: 'vocab',
+    // M5.1d: whether the type offers pay later, and its PO rule (shown on the public page).
+    po_number: 'vocab',
   },
   admission_items: { key: 'public', name: 'public', description: 'public', kind: 'vocab' },
   // M5.1c: the domains that auto-approve stay in the console like the eligibility domains.

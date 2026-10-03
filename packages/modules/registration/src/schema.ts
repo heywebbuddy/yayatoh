@@ -48,6 +48,9 @@ export const registrationTypes = tenantTable(
     kind: text('kind').notNull().default('standard'),
     guestsPerHost: integer('guests_per_host').notNull().default(1),
     substitutionCutoffHours: integer('substitution_cutoff_hours').notNull().default(24),
+    // M5.1d (P5-5): pay later by invoice (an organizer opt-in per type) and its PO number rule.
+    payLater: boolean('pay_later').notNull().default(false),
+    poNumber: text('po_number').notNull().default('off'),
   },
   (t) => [
     uniqueIndex('registration_types_org_event_key').on(t.orgId, t.eventId, t.key),
@@ -77,6 +80,10 @@ export const registrationTypes = tenantTable(
     check(
       'registration_types_guest_check',
       sql`kind in ('standard', 'guest') and guests_per_host between 1 and 10 and substitution_cutoff_hours between 0 and 720`,
+    ),
+    check(
+      'registration_types_pay_later_check',
+      sql`po_number in ('off', 'optional', 'required') and (pay_later or po_number = 'off')`,
     ),
   ],
 );

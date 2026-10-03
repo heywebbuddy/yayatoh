@@ -74,6 +74,8 @@ export interface Enrollment {
   readonly orderId?: string | null;
   readonly triggeredAt: Date;
   readonly locale?: string | null;
+  /** M5.1d: an invoice's due moment (`invoice_issued` runs; the `invoice_due` anchor). */
+  readonly dueAt?: Date | null;
 }
 
 const safeLocale = (l: string | null | undefined) => (l && /^[a-z]{2}(-[A-Z]{2})?$/.test(l) ? l : 'en');
@@ -109,6 +111,7 @@ export async function enrollTx(
       trigger: e.journey.trigger,
       triggeredAt: e.triggeredAt,
       locale: safeLocale(e.locale),
+      dueAt: e.dueAt ?? null,
     })
     .onConflictDoNothing()
     .returning({ id: journeyRuns.id });
@@ -127,10 +130,11 @@ export async function enrollTx(
       atTime: s.atTime,
     };
     // Postponed: the event has no date to plan from; its steps wait (`event_postponed`) until then.
+    // An invoice's due date doesn't move with the event (M5.1d).
     const plan =
-      anchors.postponed && wait.anchor !== 'trigger'
+      anchors.postponed && wait.anchor !== 'trigger' && wait.anchor !== 'invoice_due'
         ? null
-        : planStep(wait, { ...anchors, trigger: e.triggeredAt }, now, 'enroll');
+        : planStep(wait, { ...anchors, trigger: e.triggeredAt, invoiceDue: e.dueAt ?? null }, now, 'enroll');
     const at = plan && 'dueAt' in plan ? plan.dueAt : now;
     if (plan && 'dueAt' in plan) pending += 1;
     await tx
@@ -265,7 +269,8 @@ export async function rescheduleEventTx(tx: TenantTx, eventId: string, now: Date
   const anchorsOf = new Map<string, EventAnchors | null>();
   const touched = new Set<string>();
   for (const { action, step, run } of rows) {
-    if (step.anchor === 'trigger') {
+    // Steps that wait from the trigger or an invoice's due date keep their time (M5.1d).
+    if (step.anchor === 'trigger' || step.anchor === 'invoice_due') {
       result.unchanged += 1;
       continue;
     }

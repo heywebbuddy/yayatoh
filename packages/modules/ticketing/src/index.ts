@@ -103,6 +103,8 @@ export {
   validForOccurrence,
 } from './occurrences.ts';
 export { orderTicketIdsTx, ticketFactsTx } from './participation.ts';
+// M5.1d: tickets sold on an invoice with a balance due.
+export { paymentDueTicketIdsTx, setOrderPaymentDueTx } from './payment-due.ts';
 export { privateColumns } from './private-columns.ts';
 export {
   CreatePromoCodeInput,

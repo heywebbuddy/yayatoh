@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { type BatchDto, badgeTicketsQuery } from '@yayatoh/badges';
 import { executeQuery } from '@yayatoh/kernel';
-import { Alert, Button, buttonClass, Card, Chip, EmptyState, PageHeader } from '@yayatoh/ui';
+import { Alert, Button, buttonClass, Card, Chip, EmptyState, PageHeader, StatusDot } from '@yayatoh/ui';
 import { getFormatter, getTranslations, setRequestLocale } from 'next-intl/server';
 import { AutoRefresh } from '@/components/auto-refresh.tsx';
 import { Crumbs } from '@/components/crumbs.tsx';
@@ -15,6 +15,7 @@ import {
   cancelBatchAction,
   createTemplateAction,
   deleteTemplateAction,
+  overrideBadgeAction,
   setDefaultAction,
   startBatchAction,
 } from './actions.ts';
@@ -367,9 +368,40 @@ export default async function BadgesPage({
                     <span className="text-body">
                       {f.holderName} · {f.typeName} · {tb('serial', { serial: f.serial })}
                     </span>
-                    <a href={`${raw}/ticket/${f.id}`} className={buttonClass('ghost', 'sm')}>
-                      {tb('badgePdf', { name: f.holderName })}
-                    </a>
+                    {f.paymentDue ? (
+                      <>
+                        {/* M5.1d: the invoice still has a balance: print only with a reason (audited). */}
+                        <StatusDot status="warning" label={tb('balanceDue')} />
+                        <details className="w-full">
+                          <summary className="min-h-6 cursor-pointer text-caption text-ink-2">
+                            {tb('printAnywayNamed', { name: f.holderName })}
+                          </summary>
+                          <div className="pt-2">
+                            <ProgramForm
+                              action={overrideBadgeAction.bind(null, org, event, f.id)}
+                              fields={[
+                                {
+                                  kind: 'text',
+                                  name: 'note',
+                                  label: tb('overrideNote'),
+                                  hint: tb('overrideHint'),
+                                  required: true,
+                                  maxLength: 300,
+                                },
+                              ]}
+                              idPrefix={`badge-override-${f.id}`}
+                              submitLabel={tb('printAnyway')}
+                              successLabel={tb('printAnyway')}
+                              errors={{ note: tb('overrideNoteRequired') }}
+                            />
+                          </div>
+                        </details>
+                      </>
+                    ) : (
+                      <a href={`${raw}/ticket/${f.id}`} className={buttonClass('ghost', 'sm')}>
+                        {tb('badgePdf', { name: f.holderName })}
+                      </a>
+                    )}
                   </li>
                 ))}
               </ul>

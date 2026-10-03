@@ -29,6 +29,9 @@ export interface RegistrationOptionView {
   readonly full: boolean;
   /** M5.1c: applied for (approval before payment). */
   readonly apply: boolean;
+  /** M5.1d: may pay later by invoice; whether a PO number is asked for or required. */
+  readonly payLater: boolean;
+  readonly poNumber: 'off' | 'optional' | 'required';
   readonly items: readonly {
     readonly id: string;
     readonly name: string;
@@ -87,6 +90,8 @@ async function lookup(slug: string, email: string, accessCode: string, locale: s
         : `${fmt(t.minAllInMinor, t.currency)} – ${fmt(t.maxAllInMinor, t.currency)}`,
     full: t.full,
     apply: t.apply,
+    payLater: t.payLater,
+    poNumber: t.poNumber,
     items: (pub.items[t.id] ?? []).map((i) => ({ ...i, priceLabel: fmt(i.allInMinor, t.currency) })),
   }));
   return { target, event, types };
@@ -250,6 +255,20 @@ export async function registerAction(
   });
   if (risk.action === 'block') return { ...keep, code: 'forbidden', reason: 'risk_blocked' };
   let result: Awaited<ReturnType<typeof startRegistration>>;
+  // M5.1d: pay later by invoice (types that offer it), with the PO number and company.
+  const payLater =
+    form.get('payment') === 'invoice'
+      ? {
+          poNumber:
+            String(form.get('poNumber') ?? '')
+              .trim()
+              .slice(0, 60) || null,
+          billingCompany:
+            String(form.get('billingCompany') ?? '')
+              .trim()
+              .slice(0, 120) || null,
+        }
+      : null;
   try {
     result = await startRegistration(ctx, {
       eventId: target.eventId,
@@ -259,6 +278,7 @@ export async function registerAction(
       ...(accessCode ? { accessCode } : {}),
       locale,
       riskReview: risk.action === 'review' ? [...risk.rules] : [],
+      ...(payLater ? { payLater } : {}),
     });
   } catch (err) {
     const state = fail(err);
@@ -269,7 +289,7 @@ export async function registerAction(
     }
     return { ...keep, ...state };
   }
-  return pay(target.orgId, event.name, locale, ctx, result);
+  return pay(target.orgId, event.name, locale, ctx, result, slug);
 }
 
 const startRegistration = (ctx: ReturnType<typeof createCtx>, input: Record<string, unknown>) =>
@@ -282,10 +302,14 @@ async function pay(
   locale: string,
   ctx: ReturnType<typeof createCtx>,
   result: Awaited<ReturnType<typeof startRegistration>>,
+  slug: string,
 ): Promise<RegistrationState> {
   const { order, manageToken, payment: flow } = result;
   const orderPath = `/orders/${manageToken}`;
   if (order.status === 'paid') return redirect({ href: orderPath, locale });
+  // M5.1d: registered on an invoice: the buyer's invoice page (view, PDF, pay now or later).
+  if (result.invoiceToken)
+    return redirect({ href: `/events/${slug}/invoice/${result.invoiceToken}`, locale });
   const origin = process.env.BETTER_AUTH_URL ?? 'http://localhost:3000';
   const payment = await getPaymentProvider().createPayment({
     orgId,

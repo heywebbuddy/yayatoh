@@ -52,6 +52,7 @@ import {
   waitlistReserveTx,
 } from '../waitlist.ts';
 import { applyCreditTx, lockCreditByCodeTx, reclaimCreditTx, releaseCreditTx } from './credit-notes.ts';
+import { applyInvoiceProviderEventTx, invoiceOfOrderTx } from './invoices.ts';
 import { refundPolicyTx } from './refunds.ts';
 
 export const hashManageToken = (token: string) => createHash('sha256').update(token).digest('hex');
@@ -456,6 +457,8 @@ export const applyProviderEventCommand = tenantCommand({
     const e = input as ProviderEvent;
     if (!(await claimProviderEventTx(tx, e))) return { outcome: 'duplicate' as const, status: 'unchanged' };
     const order = await loadOrderTx(tx, e.orderId, true);
+    // M5.1d: an invoice's pay link (a part or all of its balance), matched to its own payment.
+    if (await invoiceOfOrderTx(tx, order.id)) return applyInvoiceProviderEventTx(tx, ctx, emit, order, e);
     if (
       order.providerPaymentId !== e.providerPaymentId ||
       order.totalMinor !== e.amountMinor ||
