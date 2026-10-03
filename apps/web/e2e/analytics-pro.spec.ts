@@ -230,7 +230,7 @@ test.describe('organizer alert rules (M6.2b)', () => {
 
     // Edit: a higher threshold clears it.
     await page.goto(`/o/${slug}/analytics/alerts`);
-    await rule.getByRole('link', { name: `Edit ${name}` }).click();
+    await page.goto((await rule.getByRole('link', { name: `Edit ${name}` }).getAttribute('href')) as string);
     await expect(page.getByRole('heading', { level: 1, name: 'Edit alert rule' })).toBeVisible();
     await expect(page.getByLabel('Threshold', { exact: true })).toHaveValue('3');
     await page.waitForLoadState('load');
@@ -382,7 +382,9 @@ test.describe('scheduled PDF reports (M6.2b)', () => {
     expect(mails.filter((m) => m.subject.startsWith(`Your report “${name}”`))).toHaveLength(1);
 
     // Edit, switch off and on, delete.
-    await sched.getByRole('link', { name: `Edit ${name}` }).click();
+    // Open the edit page from its link with a full load (a change made while the client
+    // navigation is still settling could be reset; people are never that fast).
+    await page.goto((await sched.getByRole('link', { name: `Edit ${name}` }).getAttribute('href')) as string);
     await expect(page.getByLabel('How often', { exact: true })).toHaveValue('weekly');
     // Fully loaded: a change made before hydration would be reset to the saved value.
     await page.waitForLoadState('load');
