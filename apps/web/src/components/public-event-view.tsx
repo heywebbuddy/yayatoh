@@ -27,6 +27,7 @@ import { getTranslations } from 'next-intl/server';
 import {
   checkoutAction,
   findBestSeatsAction,
+  findChannelBestSeatsAction,
   redeemAccessCodeAction,
   releaseBestSeatsAction,
   requestHolderLinkAction,
@@ -71,6 +72,7 @@ export async function PublicEventView({
   orgId = null,
   embedded = false,
   date = null,
+  channelCode = null,
 }: {
   locale: string;
   slug: string;
@@ -79,6 +81,8 @@ export async function PublicEventView({
   date?: string | null;
   /** The ticket widget (M1.11c): passes and checkout only. */
   embedded?: boolean;
+  /** M6.11b: a sponsor's or promoter's sales code from their link (`?channel=`). */
+  channelCode?: string | null;
 }) {
   // M1.4d: an access code (signed cookie, re-checked here) may open a private event and hidden
   // passes. The ticket widget is a third-party frame without the visitor's cookie: public only.
@@ -170,8 +174,21 @@ export async function PublicEventView({
   // M6.11a: best available and companion seats come with advanced seating.
   const advancedSeating = target ? await hasAdvancedSeating(target.orgId) : false;
   const seatMap = target
-    ? await publicSeatMap(target.orgId, target.eventId, { occurrenceId: chosen?.id ?? null, advancedSeating })
+    ? await publicSeatMap(target.orgId, target.eventId, {
+        occurrenceId: chosen?.id ?? null,
+        advancedSeating,
+        // M6.11b: a sales code opens its channel's seats (the widget never carries one).
+        channelCode: embedded ? null : channelCode,
+      })
     : null;
+  // The code is posted with the order only when it named one of the event's channels.
+  const channel: { code: string; name: string } | { invalid: true } | null =
+    seatMap?.channel && channelCode
+      ? seatMap.channel === 'invalid'
+        ? { invalid: true }
+        : { code: channelCode, name: seatMap.channel.name }
+      : null;
+  const saleCode = channel && 'code' in channel ? channel.code : null;
   // M3.10a: passes whose remaining stock is kept for their waitlist read as sold out, and sold-out
   // passes (not seated, not choose-your-amount, not code-unlocked) offer "Join the waitlist".
   const heldBack = target && !embedded ? await waitlistHeldBack(target.orgId, target.eventId) : [];
@@ -350,10 +367,13 @@ export async function PublicEventView({
           }
           timeZone={ev.timezone}
           advancedSeating={advancedSeating}
+          channel={channel}
           bestSeats={
             seatMap?.bestAvailable
               ? {
-                  find: findBestSeatsAction.bind(null, slug),
+                  find: saleCode
+                    ? findChannelBestSeatsAction.bind(null, slug, saleCode)
+                    : findBestSeatsAction.bind(null, slug),
                   release: releaseBestSeatsAction.bind(null, slug),
                 }
               : null

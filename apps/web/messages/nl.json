@@ -978,7 +978,11 @@
       "off": "‘Beste plaatsen’ wordt voor dit evenement niet meer aangeboden. Kies zelf je plaatsen.",
       "findFirst": "Zoek eerst je plaatsen: kies hoeveel en druk op ‘Plaatsen zoeken’.",
       "expired": "Je plaatsen werden 10 minuten vastgehouden en zijn vrijgegeven. Zoek opnieuw."
-    }
+    },
+    "seatChannel": "Sommige van die plaatsen zijn gereserveerd voor een ander verkoopkanaal. Kies andere plaatsen.",
+    "channelInvalid": "Deze verkoopcode is niet geldig voor dit evenement. Open de evenementpagina opnieuw zonder code, of vraag het aan wie je de link gaf.",
+    "channelNotice": "Je koopt via {name}: plaatsen die voor {name} gereserveerd zijn, staan ook voor jou open.",
+    "channelLinkInvalid": "Deze verkooplink is niet geldig voor dit evenement. Je kunt nog steeds kiezen uit de plaatsen die voor iedereen openstaan."
   },
   "fakePay": {
     "eyebrow": "Testbetaling",
@@ -1919,7 +1923,8 @@
     "chooseDate": "Kies een datum.",
     "dateSoldOut": "Er zijn niet genoeg tickets meer voor deze datum.",
     "wrongDate": "Een van deze tickets wordt niet voor deze datum verkocht.",
-    "dateUnavailable": "Deze datum is niet meer te koop."
+    "dateUnavailable": "Deze datum is niet meer te koop.",
+    "seatChannel": "Sommige van die plaatsen zijn gereserveerd voor een ander verkoopkanaal (een sponsor, een promotor of de onlineverkoop). Kies andere plaatsen."
   },
   "seating": {
     "title": "Zitplaatsen",
@@ -2016,7 +2021,9 @@
       "title": "Opslaan als herbruikbaar zaalplan",
       "name": "Naam",
       "submit": "Zaalplan opslaan",
-      "done": "Opgeslagen. Je kunt het voor andere evenementen gebruiken."
+      "done": "Opgeslagen. Je kunt het voor andere evenementen gebruiken.",
+      "description": "Opgeslagen plannen komen in je zaalplanbibliotheek, waar je er nieuwe evenementen mee kunt starten.",
+      "library": "Zaalplanbibliotheek openen"
     },
     "tabs": {
       "label": "Weergaven van de zaalindeling",
@@ -2024,7 +2031,9 @@
       "assign": "Gasten plaatsen",
       "finder": "Plaatszoeker",
       "rules": "Regels",
-      "selection": "Beste plaatsen"
+      "selection": "Beste plaatsen",
+      "channels": "Kanalen",
+      "revisions": "Versies"
     },
     "assign": {
       "title": "Gasten plaatsen",
@@ -2267,6 +2276,136 @@
       "companionError": "Een begeleidersplaats moet in een rij of aan een tafel met een toegankelijke plaats liggen en mag zelf geen toegankelijke plaats zijn.",
       "companionList": "Begeleidersplaatsen ({count}): {seats}",
       "companionNone": "Nog geen begeleidersplaatsen."
+    },
+    "fromLibrary": "Dit evenement begint met je opgeslagen zaalplan. Prijs de plaatsen en zet ze daarna in de verkoop.",
+    "channels": {
+      "title": "Verkoopkanalen",
+      "description": "Reserveer blokken plaatsen voor de kassa, sponsors of promotors. Een plaats in het ene kanaal wordt nooit via een ander verkocht, tot het kanaal haar vrijgeeft.",
+      "noPlan": "Dit evenement heeft nog geen zaalplan. Maak er eerst een en wijs de plaatsen hier toe aan kanalen.",
+      "readOnly": "Je kunt de kanalen zien, maar niet wijzigen.",
+      "saved": "Kanaal opgeslagen.",
+      "deleted": "Kanaal verwijderd. De plaatsen staan weer open voor alle kanalen.",
+      "listTitle": "Kanalen",
+      "empty": "Nog geen verkoopkanalen",
+      "emptyHint": "Voeg hieronder een kanaal toe en wijs er plaatsen aan toe. Plaatsen zonder kanaal worden via alle kanalen verkocht.",
+      "col": {
+        "channel": "Kanaal",
+        "code": "Code en link",
+        "release": "Vrijgave",
+        "seats": "Plaatsen",
+        "sold": "Via dit kanaal verkocht",
+        "actions": "Acties"
+      },
+      "kind": {
+        "public": "Online (zonder code)",
+        "box_office": "Kassa",
+        "sponsor": "Sponsor",
+        "promoter": "Promotor"
+      },
+      "linkFor": "Link voor {name}",
+      "released": "Vrijgegeven op {when}",
+      "neverReleased": "Gereserveerd tot je het wijzigt",
+      "soldCount": "{orders, plural, =0 {Nog geen bestellingen} one {# bestelling} other {# bestellingen}} · {seats, plural, one {# plaats} other {# plaatsen}}",
+      "edit": "Bewerken",
+      "editNamed": "{name} bewerken",
+      "delete": "Verwijderen",
+      "deleteNamed": "{name} verwijderen",
+      "addTitle": "Een kanaal toevoegen",
+      "editTitle": "{name} bewerken",
+      "kindLabel": "Soort",
+      "kindHint": "Online en kassa: hoogstens één van elk per evenement. Sponsors en promotors verkopen met hun eigen code.",
+      "nameLabel": "Naam",
+      "nameHint": "Getoond aan kopers die de link van het kanaal gebruiken, en in je rapporten.",
+      "codeLabel": "Code",
+      "codeHint": "Alleen sponsors en promotors: 3 tot 32 letters, cijfers, streepjes of underscores. Kopers gebruiken hem via de link van het kanaal.",
+      "releaseLabel": "Onverkochte plaatsen vrijgeven op (optioneel)",
+      "releaseHint": "Onverkochte plaatsen gaan op dit moment terug naar alle kanalen ({timeZone}). Laat leeg om ze te houden.",
+      "add": "Kanaal toevoegen",
+      "save": "Kanaal opslaan",
+      "cancel": "Annuleren",
+      "added": "Kanaal toegevoegd.",
+      "fixErrors": "Corrigeer het gemarkeerde veld.",
+      "errors": {
+        "kind": "Kies een soort kanaal.",
+        "kind_taken": "Dit evenement heeft al een kanaal van die soort.",
+        "name": "Geef het kanaal een naam (maximaal 80 tekens).",
+        "code_required": "Sponsors en promotors hebben een code nodig.",
+        "code_not_allowed": "Alleen sponsors en promotors hebben een code. Laat dit veld leeg.",
+        "code_format": "Gebruik 3 tot 32 letters, cijfers, streepjes of underscores.",
+        "code_taken": "Een ander kanaal van dit evenement heeft die code al.",
+        "releaseAt": "Vul een datum en tijd in, of laat het veld leeg.",
+        "seats": "Kies minstens één rij of tafel, en plaatsnummers die daarin bestaan."
+      },
+      "allotTitle": "Plaatsen toewijzen",
+      "allotDescription": "Kies rijen en tafels, en eventueel alleen een deel van hun plaatsen. Alle datums van het evenement volgen. Plaatsen die al in een kanaal zitten, gaan naar het kanaal dat je kiest.",
+      "noSeats": "Het plan heeft nog geen rijen of tafels.",
+      "allotTo": "Kanaal",
+      "everyChannel": "Geen kanaal (open voor alle kanalen)",
+      "which": "Rijen en tafels",
+      "item": {
+        "row": "Rij {label} ({seats, plural, one {# plaats} other {# plaatsen}})",
+        "table": "Tafel {label} ({seats, plural, one {# plaats} other {# plaatsen}})"
+      },
+      "itemAllotted": "{count, plural, one {# plaats} other {# plaatsen}} in {name}",
+      "seatNumbers": "Alleen deze plaatsen (optioneel)",
+      "seatNumbersHint": "Plaatsnummers in de gekozen rijen en tafels, bijv. 1-4, 9. Laat leeg voor al hun plaatsen.",
+      "allot": "Plaatsen toewijzen",
+      "allotted": "{count, plural, =0 {Geen plaatsen gewijzigd.} one {# plaats toegewezen.} other {# plaatsen toegewezen.}}",
+      "freed": "{count, plural, =0 {Geen enkele plaats zat in een kanaal.} one {# plaats staat weer open voor alle kanalen.} other {# plaatsen staan weer open voor alle kanalen.}}"
+    },
+    "revisions": {
+      "title": "Versies van het zaalplan",
+      "description": "Elke keer dat het plan wordt opgeslagen, is een versie. Bekijk wat elke versie wijzigde en haal een eerder plan terug. Vastgehouden en verkochte plaatsen blijven altijd zoals ze zijn.",
+      "noPlan": "Dit evenement heeft nog geen zaalplan. Maak er eerst een; elke keer opslaan verschijnt dan hier.",
+      "none": "Nog geen versies",
+      "noneHint": "De volgende keer dat het plan wordt opgeslagen, wordt de eerste versie.",
+      "readOnly": "Je kunt de versies zien, maar niet terugzetten.",
+      "listTitle": "Alle versies",
+      "col": {
+        "revision": "Versie",
+        "when": "Opgeslagen",
+        "what": "Wat",
+        "changes": "Gewijzigde plaatsen"
+      },
+      "revision": "Versie {number}",
+      "currentBadge": "Het huidige plan",
+      "kindSave": "Opgeslagen",
+      "kindRestore": "Versie {number} teruggezet",
+      "seats": "{count, plural, one {# plaats} other {# plaatsen}}",
+      "first": "De eerste bewaarde versie.",
+      "noSeatChanges": "Geen plaatsen toegevoegd, verwijderd of hernummerd.",
+      "added": "{count, plural, one {# plaats toegevoegd} other {# plaatsen toegevoegd}}",
+      "removed": "{count, plural, one {# plaats verwijderd} other {# plaatsen verwijderd}}",
+      "renumbered": "{count, plural, one {# plaats hernummerd} other {# plaatsen hernummerd}}",
+      "moved": "{count, plural, one {# plaats verplaatst} other {# plaatsen verplaatst}}",
+      "detailTitle": "Versie {number}",
+      "changedTitle": "Wat deze versie wijzigde",
+      "restoreWouldTitle": "Terugzetten zou wijzigen",
+      "addedTitle": "Toegevoegde plaatsen",
+      "removedTitle": "Verwijderde plaatsen",
+      "renumberedTitle": "Hernummerde plaatsen",
+      "renumberedSeat": "{from} → {to}",
+      "listOf": "{title} ({count})",
+      "more": "{count, plural, one {en nog #} other {en nog #}}",
+      "inUseTitle": "Vastgehouden en verkochte plaatsen",
+      "inUseNone": "Geen plaatsen vastgehouden of verkocht: niets staat in de weg.",
+      "inUseKept": "{count, plural, =0 {Geen vastgehouden of verkochte plaats blijft waar ze is.} one {# vastgehouden of verkochte plaats blijft precies zoals ze is.} other {# vastgehouden of verkochte plaatsen blijven precies zoals ze zijn.}}",
+      "inUseRemapped": "{count, plural, one {# vastgehouden of verkochte plaats gaat naar de plaats met haar label in deze versie (zelfde nummer, zelfde ticket):} other {# vastgehouden of verkochte plaatsen gaan naar de plaatsen met hun labels in deze versie (zelfde nummers, zelfde tickets):}}",
+      "conflictsTitle": "{count, plural, one {Deze versie kan niet worden teruggezet: # vastgehouden of verkochte plaats zou verloren gaan.} other {Deze versie kan niet worden teruggezet: # vastgehouden of verkochte plaatsen zouden verloren gaan.}}",
+      "conflict": {
+        "removed": {
+          "sold": "{label} is verkocht en deze versie heeft geen plaats met dat label.",
+          "held": "{label} wordt vastgehouden door een koper en deze versie heeft geen plaats met dat label."
+        },
+        "renumbered": {
+          "sold": "{label} is verkocht en zou {to} worden: het ticket van de koper zou een andere plaats noemen.",
+          "held": "{label} wordt vastgehouden door een koper en zou {to} worden."
+        }
+      },
+      "conflictsRefused": "Vastgehouden of verkochte plaatsen staan niet meer in die versie. Er is niets gewijzigd.",
+      "isCurrent": "Dit is het plan zoals het nu is.",
+      "restore": "Versie {number} terugzetten",
+      "restoredNotice": "Versie {number} teruggezet. Het huidige plan is versie {now}."
     }
   },
   "venueMap": {
@@ -2956,7 +3095,8 @@
       "guests": "Gasten",
       "markHandled": "Markeren als afgehandeld",
       "markNew": "Markeren als nieuw"
-    }
+    },
+    "layoutLibrary": "Zaalplanbibliotheek"
   },
   "details": {
     "title": "Evenementdetails",
@@ -4993,8 +5133,13 @@
       "slot_full": "Dit evenement heeft al 20 plattegrondafbeeldingen.",
       "forbidden": "Je kunt dit plan niet wijzigen.",
       "network": "Uploaden mislukt. Controleer je verbinding en probeer het opnieuw.",
-      "generic": "Uploaden mislukt. Probeer het opnieuw."
-    }
+      "generic": "Uploaden mislukt. Probeer het opnieuw.",
+      "pdf_page": "Die pagina bestaat niet: de pdf heeft {pages, plural, one {# pagina} other {# pagina’s}}.",
+      "pdf_unreadable": "Deze pdf kan niet worden gelezen. Exporteer het plan als afbeelding of als andere pdf en probeer het opnieuw."
+    },
+    "pdfPage": "Pagina (pdf)",
+    "pdfHint": "Een plattegrond als pdf kan ook: kies de pagina met het plan. Die wordt in je browser een afbeelding en dan als afbeelding geüpload.",
+    "pdfDrawing": "Pagina {page} van de pdf wordt getekend…"
   },
   "humanCheck": {
     "legend": "Beveiligingscontrole",
@@ -11795,5 +11940,48 @@
     "cancel": "Abonnement opzeggen",
     "back": "Terug zonder wijzigingen",
     "chooseError": "Kies het abonnement waarnaar je wilt overstappen."
+  },
+  "seatingLibrary": {
+    "title": "Zaalplanbibliotheek",
+    "description": "De zaalplannen die je uit je evenementen hebt opgeslagen. Start een nieuw evenement vanuit een plan; elk evenement houdt een eigen kopie.",
+    "deleted": "Plan uit de bibliotheek verwijderd. Evenementen die het gebruikten, houden hun kopie.",
+    "emptyTitle": "Je zaalplanbibliotheek is leeg",
+    "emptyHint": "Open het zaalplan van een evenement en kies ‘Plan opslaan’ om het hier te bewaren.",
+    "emptyViewer": "Plannen die uit evenementen zijn opgeslagen, verschijnen hier.",
+    "toEvents": "Naar evenementen",
+    "startTitle": "Een nieuw evenement starten vanuit een plan",
+    "startDescription": "Het nieuwe evenement krijgt een eigen kopie van het plan. Daarna prijs je de plaatsen en zet je ze in de verkoop.",
+    "layout": "Plan",
+    "layoutOption": "{name} ({seats, plural, one {# plaats} other {# plaatsen}})",
+    "eventName": "Naam van het evenement",
+    "profile": "Soort evenement",
+    "timezone": "Tijdzone",
+    "startsAt": "Begint",
+    "endsAt": "Eindigt",
+    "start": "Evenement aanmaken",
+    "fixErrors": "Corrigeer het gemarkeerde veld.",
+    "errors": {
+      "layoutId": "Kies een plan.",
+      "name": "Geef het evenement een naam (2 tot 160 tekens).",
+      "slug": "Er bestaat al een evenement met die naam. Kies een andere naam.",
+      "profile": "Kies een soort evenement met zitplaatsen.",
+      "startsAt": "Vul in wanneer het evenement begint.",
+      "endsAt": "Vul in wanneer het evenement eindigt, na het begin.",
+      "layoutName": "Geef het plan een naam (maximaal 120 tekens)."
+    },
+    "listTitle": "Opgeslagen plannen",
+    "seats": "{count, plural, one {# plaats} other {# plaatsen}}",
+    "rows": "{count, plural, one {# rij} other {# rijen}}",
+    "tables": "{count, plural, one {# tafel} other {# tafels}}",
+    "withImage": "met een afbeelding van de plattegrond",
+    "usedBy": "{count, plural, =0 {Nog door geen evenement gebruikt} one {Gebruikt door # evenement} other {Gebruikt door # evenementen}}",
+    "updated": "bijgewerkt op {date}",
+    "renameLabel": "Naam van {name}",
+    "rename": "Hernoemen",
+    "renamed": "Hernoemd.",
+    "startFrom": "Een evenement ermee starten",
+    "startFromNamed": "Een evenement starten met {name}",
+    "delete": "Verwijderen",
+    "deleteNamed": "{name} verwijderen"
   }
 }

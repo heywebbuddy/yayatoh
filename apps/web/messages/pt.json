@@ -978,7 +978,11 @@
       "off": "«Melhores disponíveis» não é mais oferecido para este evento. Escolha seus lugares.",
       "findFirst": "Primeiro encontre seus lugares: escolha quantos e toque em «Encontrar lugares».",
       "expired": "Seus lugares ficaram reservados por 10 minutos e foram liberados. Procure de novo."
-    }
+    },
+    "seatChannel": "Alguns desses lugares estão reservados para outro canal de venda. Escolha outros lugares.",
+    "channelInvalid": "Este código de venda não é válido para este evento. Abra a página do evento sem ele, ou pergunte a quem lhe deu o link.",
+    "channelNotice": "Você está comprando por {name}: os lugares reservados para {name} também estão abertos para você.",
+    "channelLinkInvalid": "Este link de venda não é válido para este evento. Você ainda pode escolher entre os lugares abertos a todos."
   },
   "fakePay": {
     "eyebrow": "Pagamento de teste",
@@ -1919,7 +1923,8 @@
     "chooseDate": "Escolha uma data.",
     "dateSoldOut": "Não há ingressos suficientes para esta data.",
     "wrongDate": "Um destes ingressos não é vendido para esta data.",
-    "dateUnavailable": "Esta data não está mais à venda."
+    "dateUnavailable": "Esta data não está mais à venda.",
+    "seatChannel": "Alguns desses lugares estão reservados para outro canal de venda (um patrocinador, um promotor ou a venda online). Escolha outros lugares."
   },
   "seating": {
     "title": "Assentos",
@@ -2016,7 +2021,9 @@
       "title": "Salvar como mapa reutilizável",
       "name": "Nome",
       "submit": "Salvar mapa",
-      "done": "Salvo. Você pode usá-lo em outros eventos."
+      "done": "Salvo. Você pode usá-lo em outros eventos.",
+      "description": "Os mapas salvos vão para a sua biblioteca de mapas, de onde você pode criar novos eventos.",
+      "library": "Abrir a biblioteca de mapas"
     },
     "tabs": {
       "label": "Vistas de lugares",
@@ -2024,7 +2031,9 @@
       "assign": "Atribuir convidados",
       "finder": "Localizador de assentos",
       "rules": "Regras",
-      "selection": "Melhores disponíveis"
+      "selection": "Melhores disponíveis",
+      "channels": "Canais",
+      "revisions": "Revisões"
     },
     "assign": {
       "title": "Atribuir convidados",
@@ -2267,6 +2276,136 @@
       "companionError": "Um lugar de acompanhante deve estar numa fila ou mesa com um lugar acessível e não pode ser ele próprio acessível.",
       "companionList": "Lugares de acompanhante ({count}): {seats}",
       "companionNone": "Ainda não há lugares de acompanhante."
+    },
+    "fromLibrary": "Este evento começa a partir do seu mapa salvo. Defina os preços dos lugares e coloque-os à venda.",
+    "channels": {
+      "title": "Canais de venda",
+      "description": "Reserve blocos de lugares para a bilheteria, patrocinadores ou promotores. Um lugar de um canal nunca é vendido por outro até que o canal o libere.",
+      "noPlan": "Este evento ainda não tem mapa de lugares. Crie um primeiro e depois atribua os lugares aos canais aqui.",
+      "readOnly": "Você pode ver os canais, mas não alterá-los.",
+      "saved": "Canal salvo.",
+      "deleted": "Canal removido. Os lugares dele estão abertos a todos os canais de novo.",
+      "listTitle": "Canais",
+      "empty": "Ainda não há canais de venda",
+      "emptyHint": "Adicione um canal abaixo e atribua lugares a ele. Lugares sem canal são vendidos por todos os canais.",
+      "col": {
+        "channel": "Canal",
+        "code": "Código e link",
+        "release": "Liberação",
+        "seats": "Lugares",
+        "sold": "Vendido por ele",
+        "actions": "Ações"
+      },
+      "kind": {
+        "public": "Online (sem código)",
+        "box_office": "Bilheteria",
+        "sponsor": "Patrocinador",
+        "promoter": "Promotor"
+      },
+      "linkFor": "Link de {name}",
+      "released": "Liberado em {when}",
+      "neverReleased": "Reservado até você mudar",
+      "soldCount": "{orders, plural, =0 {Nenhum pedido ainda} one {# pedido} other {# pedidos}} · {seats, plural, one {# lugar} other {# lugares}}",
+      "edit": "Editar",
+      "editNamed": "Editar {name}",
+      "delete": "Remover",
+      "deleteNamed": "Remover {name}",
+      "addTitle": "Adicionar um canal",
+      "editTitle": "Editar {name}",
+      "kindLabel": "Tipo",
+      "kindHint": "Online e bilheteria: no máximo um de cada por evento. Patrocinadores e promotores vendem com o próprio código.",
+      "nameLabel": "Nome",
+      "nameHint": "Mostrado a quem compra pelo link do canal e nos seus relatórios.",
+      "codeLabel": "Código",
+      "codeHint": "Só patrocinadores e promotores: de 3 a 32 letras, dígitos, hífens ou sublinhados. Os compradores o usam pelo link do canal.",
+      "releaseLabel": "Liberar lugares não vendidos em (opcional)",
+      "releaseHint": "Os lugares não vendidos voltam para todos os canais nesse momento ({timeZone}). Deixe vazio para mantê-los.",
+      "add": "Adicionar canal",
+      "save": "Salvar canal",
+      "cancel": "Cancelar",
+      "added": "Canal adicionado.",
+      "fixErrors": "Corrija o campo destacado.",
+      "errors": {
+        "kind": "Escolha um tipo de canal.",
+        "kind_taken": "Este evento já tem um canal desse tipo.",
+        "name": "Dê um nome ao canal (até 80 caracteres).",
+        "code_required": "Patrocinadores e promotores precisam de um código.",
+        "code_not_allowed": "Só patrocinadores e promotores têm código. Deixe vazio.",
+        "code_format": "Use de 3 a 32 letras, dígitos, hífens ou sublinhados.",
+        "code_taken": "Outro canal deste evento já tem esse código.",
+        "releaseAt": "Informe uma data e hora, ou deixe vazio.",
+        "seats": "Escolha pelo menos uma fila ou mesa, e números de lugar que existam nela."
+      },
+      "allotTitle": "Atribuir lugares",
+      "allotDescription": "Escolha filas e mesas e, se quiser, só alguns dos lugares delas. Todas as datas do evento acompanham. Lugares que já estão em um canal passam para o que você escolher.",
+      "noSeats": "O mapa ainda não tem filas nem mesas.",
+      "allotTo": "Canal",
+      "everyChannel": "Nenhum canal (aberto a todos os canais)",
+      "which": "Filas e mesas",
+      "item": {
+        "row": "Fila {label} ({seats, plural, one {# lugar} other {# lugares}})",
+        "table": "Mesa {label} ({seats, plural, one {# lugar} other {# lugares}})"
+      },
+      "itemAllotted": "{count, plural, one {# lugar} other {# lugares}} em {name}",
+      "seatNumbers": "Só estes lugares (opcional)",
+      "seatNumbersHint": "Números dos lugares nas filas e mesas escolhidas, ex.: 1-4, 9. Deixe vazio para todos os lugares delas.",
+      "allot": "Atribuir lugares",
+      "allotted": "{count, plural, =0 {Nenhum lugar mudou.} one {# lugar atribuído.} other {# lugares atribuídos.}}",
+      "freed": "{count, plural, =0 {Nenhum lugar estava em um canal.} one {# lugar está aberto a todos os canais de novo.} other {# lugares estão abertos a todos os canais de novo.}}"
+    },
+    "revisions": {
+      "title": "Revisões do mapa",
+      "description": "Cada vez que o mapa é salvo, uma revisão é criada. Veja o que cada uma mudou e traga de volta um mapa anterior. Lugares reservados e vendidos sempre ficam como estão.",
+      "noPlan": "Este evento ainda não tem mapa de lugares. Crie um primeiro; cada vez que for salvo aparecerá aqui.",
+      "none": "Ainda não há revisões",
+      "noneHint": "O próximo salvamento do mapa será a primeira revisão.",
+      "readOnly": "Você pode ver as revisões, mas não restaurá-las.",
+      "listTitle": "Todas as revisões",
+      "col": {
+        "revision": "Revisão",
+        "when": "Salva",
+        "what": "O quê",
+        "changes": "Lugares alterados"
+      },
+      "revision": "Revisão {number}",
+      "currentBadge": "O mapa atual",
+      "kindSave": "Salva",
+      "kindRestore": "Revisão {number} restaurada",
+      "seats": "{count, plural, one {# lugar} other {# lugares}}",
+      "first": "A primeira revisão guardada.",
+      "noSeatChanges": "Nenhum lugar adicionado, removido ou renumerado.",
+      "added": "{count, plural, one {# lugar adicionado} other {# lugares adicionados}}",
+      "removed": "{count, plural, one {# lugar removido} other {# lugares removidos}}",
+      "renumbered": "{count, plural, one {# lugar renumerado} other {# lugares renumerados}}",
+      "moved": "{count, plural, one {# lugar movido} other {# lugares movidos}}",
+      "detailTitle": "Revisão {number}",
+      "changedTitle": "O que mudou",
+      "restoreWouldTitle": "Restaurá-la mudaria",
+      "addedTitle": "Lugares adicionados",
+      "removedTitle": "Lugares removidos",
+      "renumberedTitle": "Lugares renumerados",
+      "renumberedSeat": "{from} → {to}",
+      "listOf": "{title} ({count})",
+      "more": "{count, plural, one {e mais #} other {e mais #}}",
+      "inUseTitle": "Lugares reservados e vendidos",
+      "inUseNone": "Nenhum lugar está reservado ou vendido: nada impede.",
+      "inUseKept": "{count, plural, =0 {Nenhum lugar reservado ou vendido fica onde está.} one {# lugar reservado ou vendido fica exatamente como está.} other {# lugares reservados ou vendidos ficam exatamente como estão.}}",
+      "inUseRemapped": "{count, plural, one {# lugar reservado ou vendido passa para o lugar com o seu rótulo nesta revisão (mesmo número, mesmo ingresso):} other {# lugares reservados ou vendidos passam para os lugares com os seus rótulos nesta revisão (mesmos números, mesmos ingressos):}}",
+      "conflictsTitle": "{count, plural, one {Esta revisão não pode ser restaurada: # lugar reservado ou vendido seria perdido.} other {Esta revisão não pode ser restaurada: # lugares reservados ou vendidos seriam perdidos.}}",
+      "conflict": {
+        "removed": {
+          "sold": "{label} está vendido e esta revisão não tem lugar com esse rótulo.",
+          "held": "{label} está reservado por um comprador e esta revisão não tem lugar com esse rótulo."
+        },
+        "renumbered": {
+          "sold": "{label} está vendido e passaria a ser {to}: o ingresso do comprador indicaria outro lugar.",
+          "held": "{label} está reservado por um comprador e passaria a ser {to}."
+        }
+      },
+      "conflictsRefused": "Há lugares reservados ou vendidos que não estão mais nessa revisão. Nada foi alterado.",
+      "isCurrent": "Este é o mapa como está agora.",
+      "restore": "Restaurar a revisão {number}",
+      "restoredNotice": "Revisão {number} restaurada. O mapa atual é a revisão {now}."
     }
   },
   "venueMap": {
@@ -2956,7 +3095,8 @@
       "guests": "Convidados",
       "markHandled": "Marcar como atendido",
       "markNew": "Marcar como novo"
-    }
+    },
+    "layoutLibrary": "Biblioteca de mapas"
   },
   "details": {
     "title": "Detalhes do evento",
@@ -4993,8 +5133,13 @@
       "slot_full": "Este evento já tem 20 imagens de planta.",
       "forbidden": "Você não pode alterar este mapa.",
       "network": "O envio falhou. Verifique sua conexão e tente de novo.",
-      "generic": "O envio falhou. Tente de novo."
-    }
+      "generic": "O envio falhou. Tente de novo.",
+      "pdf_page": "Essa página não existe: o PDF tem {pages, plural, one {# página} other {# páginas}}.",
+      "pdf_unreadable": "Não foi possível ler este PDF. Exporte a planta como imagem ou outro PDF e tente de novo."
+    },
+    "pdfPage": "Página (PDF)",
+    "pdfHint": "Uma planta em PDF também serve: escolha a página com a planta. Ela vira imagem no seu navegador e é enviada como tal.",
+    "pdfDrawing": "Desenhando a página {page} do PDF…"
   },
   "humanCheck": {
     "legend": "Verificação de segurança",
@@ -11795,5 +11940,48 @@
     "cancel": "Cancelar a assinatura",
     "back": "Voltar sem alterações",
     "chooseError": "Escolha o plano para o qual mudar."
+  },
+  "seatingLibrary": {
+    "title": "Biblioteca de mapas",
+    "description": "Os mapas de lugares que você salvou dos seus eventos. Crie um novo evento a partir de um deles; cada evento guarda a própria cópia.",
+    "deleted": "Mapa removido da biblioteca. Os eventos que o usavam mantêm a cópia.",
+    "emptyTitle": "Sua biblioteca de mapas está vazia",
+    "emptyHint": "Abra o mapa de lugares de um evento e escolha “Salvar mapa” para guardá-lo aqui.",
+    "emptyViewer": "Os mapas salvos dos eventos aparecerão aqui.",
+    "toEvents": "Ir para os eventos",
+    "startTitle": "Criar um evento a partir de um mapa",
+    "startDescription": "O novo evento recebe a própria cópia do mapa. Depois você define os preços dos lugares e os coloca à venda.",
+    "layout": "Mapa",
+    "layoutOption": "{name} ({seats, plural, one {# lugar} other {# lugares}})",
+    "eventName": "Nome do evento",
+    "profile": "Tipo de evento",
+    "timezone": "Fuso horário",
+    "startsAt": "Começa",
+    "endsAt": "Termina",
+    "start": "Criar o evento",
+    "fixErrors": "Corrija o campo destacado.",
+    "errors": {
+      "layoutId": "Escolha um mapa.",
+      "name": "Dê um nome ao evento (de 2 a 160 caracteres).",
+      "slug": "Já existe um evento com esse nome. Escolha outro.",
+      "profile": "Escolha um tipo de evento com lugares marcados.",
+      "startsAt": "Informe quando o evento começa.",
+      "endsAt": "Informe quando o evento termina, depois do início.",
+      "layoutName": "Dê um nome ao mapa (até 120 caracteres)."
+    },
+    "listTitle": "Mapas salvos",
+    "seats": "{count, plural, one {# lugar} other {# lugares}}",
+    "rows": "{count, plural, one {# fila} other {# filas}}",
+    "tables": "{count, plural, one {# mesa} other {# mesas}}",
+    "withImage": "com uma imagem da planta",
+    "usedBy": "{count, plural, =0 {Ainda não usado por um evento} one {Usado por # evento} other {Usado por # eventos}}",
+    "updated": "atualizado em {date}",
+    "renameLabel": "Nome de {name}",
+    "rename": "Renomear",
+    "renamed": "Renomeado.",
+    "startFrom": "Criar um evento com ele",
+    "startFromNamed": "Criar um evento com {name}",
+    "delete": "Remover",
+    "deleteNamed": "Remover {name}"
   }
 }

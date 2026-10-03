@@ -5,7 +5,8 @@ import { Link } from '@/i18n/navigation.ts';
 /**
  * The Seating page's views: the plan (editor, prices), assigning guests (M1.7d), the seating
  * rules (M1.7f), best available and companion seats (M6.11a, with advanced seating) and, when
- * the org has the seat_finder module, the public seat finder and its poster (M1.7e).
+ * the org has the seat_finder module, the public seat finder and its poster (M1.7e). M6.11b (with
+ * advanced seating): sales channels and allotments, and the plan's revisions.
  */
 export function SeatingTabs({
   base,
@@ -15,7 +16,7 @@ export function SeatingTabs({
   date = null,
 }: {
   base: string;
-  active: 'plan' | 'assign' | 'rules' | 'selection' | 'finder';
+  active: 'plan' | 'assign' | 'rules' | 'selection' | 'channels' | 'revisions' | 'finder';
   finder?: boolean;
   /** M6.11a: the org has advanced seating (best available and companion seats). */
   selection?: boolean;
@@ -29,6 +30,8 @@ export function SeatingTabs({
     { key: 'assign', href: `${base}/assign${q}` },
     { key: 'rules', href: `${base}/rules` },
     ...(selection ? [{ key: 'selection', href: `${base}/best-available` } as const] : []),
+    ...(selection ? [{ key: 'channels', href: `${base}/channels` } as const] : []),
+    ...(selection ? [{ key: 'revisions', href: `${base}/revisions${q}` } as const] : []),
     ...(finder ? [{ key: 'finder', href: `${base}/finder` } as const] : []),
   ] as const;
   return (

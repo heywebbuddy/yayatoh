@@ -275,12 +275,15 @@ import {
 } from '@yayatoh/reports';
 import { reportReviewCommand, submitReviewCommand } from '@yayatoh/reviews';
 import {
+  allotSeatsCommand,
   assignSeatsCommand,
   giveSubEventOwnChartCommand,
   holdSeatsTx,
   publishEventLayoutCommand,
+  recordChannelOrderTx,
   requestFinderCodeCommand,
   saveLayoutCommand,
+  saveSeatChannelCommand,
   setEventLayoutCommand,
   setFinderSettingsCommand,
   setSeatingRulesCommand,
@@ -1093,6 +1096,33 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     tx.execute(
       sql`insert into seating.companion_seats (org_id, event_id, seat_uuid) values (${org.id}, ${event.id}, ${plan.items[0]?.seats[1]?.id ?? ''})`,
     ),
+  );
+  // M6.11b: a promoter channel with the row's last seat allotted to it, and one order attributed
+  // to it (isolation coverage). The plan's saves above wrote its layout revisions.
+  const promoter = await executeCommand(
+    saveSeatChannelCommand,
+    {
+      eventId: event.id,
+      kind: 'promoter',
+      name: 'Fixture promoter',
+      code: `FIX-${slug.slice(-6).toUpperCase()}`,
+    },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    allotSeatsCommand,
+    { eventId: event.id, channelId: promoter.id, seatUuids: [plan.items[0]?.seats[3]?.id ?? ''] },
+    ctx(),
+    ports,
+  );
+  await withTenant(ctx(), (tx) =>
+    recordChannelOrderTx(tx, ctx(), {
+      eventId: event.id,
+      orderId: uuidv7(),
+      channelId: promoter.id,
+      seats: 1,
+    }),
   );
   // The public seat finder (M1.7e): opened, and that guest asks for a code (a code row and a
   // rate-limit counter, isolation coverage).

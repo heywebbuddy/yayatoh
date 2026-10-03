@@ -264,6 +264,13 @@ Start the slow reviews early. Everything is built against fakes meanwhile; each 
   - Companion seats are **released together with the accessible seats** (the `ada_reserved` release); without that rule the companion rule always applies.
   - Best available is **off per event** until the organizer turns it on, and holds the found seats for **10 minutes** before checkout.
   - The `advanced_seating` module is **free in beta** (granted to today's plan, P6-13).
+- [ ] **M6.11b channels and layouts — defaults to confirm (pending owner, 2026-10-02):**
+  - **Who may sell what.** A seat in no channel is sold through every channel. A seat allotted to a channel is sold only through it until its release time: online without a code = the event's "Online" channel, the box office = its "Box office" channel, sponsors and promoters = online with their code (`/events/{slug}?channel=CODE`). A buyer with a promoter's code may also buy seats in no channel; never another channel's. The box office can't sell a sponsor's or promoter's seats (staff remove the allotment or wait for the release).
+  - **Allotments outlive the module.** If an org loses `advanced_seating`, allotted seats stay kept (never oversold); the console pages hide until the module is back.
+  - **Restoring a revision** keeps every held and sold seat exactly (same seat, same label, same ticket). A seat whose label exists in the revision under another seat id is moved onto it (remapped, explained on the page); a seat that would disappear or be renumbered blocks the restore. Restores work on plans already on sale and on locked plans.
+  - **Revisions kept:** the newest 100 per chart; every save is one (the editor autosaves, so a long editing session makes many).
+  - **PDF floor plans** are turned into an image in the organizer's browser (pdf.js, no server-side PDF parsing) and stored like any upload (4 MB, re-encoded).
+  - The **layout library** is per org (no sharing between orgs or venues yet: that is the M6.14 venue portal).
 
 ## Phase 4 (weddings and galas)
 - [ ] **M4.1a guest list: defaults pending owner** (labels: `db-migration`, `tenancy`). Built with these defaults; say if any should change:

@@ -269,6 +269,10 @@ export async function checkoutAction(
         seats: seatHold ? [] : seats,
         ...(seatHold ? { seatHold } : {}),
         accessibleNeed,
+        // M6.11b: the sales code of the link the buyer came through (checked server-side).
+        ...(String(form.get('channelCode') ?? '').trim()
+          ? { channelCode: String(form.get('channelCode')).trim().slice(0, 40) }
+          : {}),
         // Multi-date events: the date the buyer chose (validated against the event server-side).
         ...(/^[0-9a-f-]{36}$/.test(String(form.get('occurrenceId') ?? ''))
           ? { occurrenceId: String(form.get('occurrenceId')) }
@@ -450,6 +454,23 @@ export async function reportReviewAction(
  * per-device budget as starting a checkout.
  */
 export async function findBestSeatsAction(slug: string, input: BestSeatsRequest): Promise<BestSeatsState> {
+  return findBestSeats(slug, input, null);
+}
+
+/** M6.11b: best available through a sponsor's or promoter's sales code (their allotted seats too). */
+export async function findChannelBestSeatsAction(
+  slug: string,
+  channelCode: string,
+  input: BestSeatsRequest,
+): Promise<BestSeatsState> {
+  return findBestSeats(slug, input, String(channelCode).slice(0, 40));
+}
+
+async function findBestSeats(
+  slug: string,
+  input: BestSeatsRequest,
+  channelCode: string | null,
+): Promise<BestSeatsState> {
   const limit = await limitAction('checkoutStart');
   if (!limit.allowed) return { ok: false, code: 'rate_limited', retryMinutes: retryAfterMinutes(limit) };
   const target = await checkoutTarget(slug);
@@ -470,6 +491,7 @@ export async function findBestSeatsAction(slug: string, input: BestSeatsRequest)
         accessible: input.accessible === true,
         ...(input.occurrenceId ? { occurrenceId: String(input.occurrenceId) } : {}),
         ...(input.replaceToken ? { replaceToken: String(input.replaceToken) } : {}),
+        ...(channelCode ? { channelCode } : {}),
       },
       ctx,
       ports,

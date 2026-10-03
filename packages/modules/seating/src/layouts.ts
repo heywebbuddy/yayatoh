@@ -8,10 +8,12 @@ import { and, asc, eq, inArray, isNotNull, isNull, ne, or, sql } from 'drizzle-o
 import { z } from 'zod';
 import { reconcileAssignmentsTx } from './assignments.ts';
 import { companionSeatsTx, selectionSettingsTx } from './best-available.ts';
+import { channelKeptSeatsTx, resolveSaleChannelTx } from './channels.ts';
 import { type ChartKey, chartKeyTx, onChart, publicDoc } from './chart.ts';
 import { LIVE_SEAT_STATES, liveSeatState, publicAvailability, seatCounts } from './domain/live.ts';
 import { activeAdaRule } from './domain/rules.ts';
 import { SEAT_STATUSES, type SeatStatus } from './domain/seat-state.ts';
+import { dropRevisionsTx, recordRevisionTx } from './revisions.ts';
 import { ruleStartTx, SeatingRuleDto, seatingRulesTx } from './rules.ts';
 import {
   BLOCK_REASONS,
@@ -228,6 +230,8 @@ export const setEventLayoutCommand = tenantCommand({
     if (current) await tx.update(eventLayouts).set(values).where(eq(eventLayouts.id, current.id));
     else
       await tx.insert(eventLayouts).values({ orgId, eventId: input.eventId, occurrenceId: key, ...values });
+    // M6.11b: every save is a revision of the chart (unchanged plans are not repeated).
+    await recordRevisionTx(tx, ctx, { eventId: input.eventId, key, doc, checksum, seatCount: seats.length });
     return { eventId: input.eventId, seatCount: seats.length, status: values.status };
   },
   audit: (input, r) => ({
@@ -422,10 +426,20 @@ export const PublicSeatMapDto = z.object({
       accessible: z.boolean(),
       /** A companion seat (M6.11a, with advanced seating): kept for people coming with a wheelchair user. */
       companion: z.boolean().optional(),
+      /**
+       * M6.11b: kept for another sales channel (a sponsor, a promoter, the box office): never
+       * choosable here, whatever the live feed says. Only present when true.
+       */
+      otherChannel: z.literal(true).optional(),
     }),
   ),
   /** M6.11a (with advanced seating): buyers may ask for the best available seats instead. */
   bestAvailable: z.boolean().optional(),
+  /**
+   * M6.11b: the sales channel this map is for, when a code named one (its name only); `invalid`
+   * when the code named none (the map is then the public's).
+   */
+  channel: z.union([z.object({ name: z.string() }), z.literal('invalid')]).optional(),
 });
 
 /**
@@ -448,6 +462,8 @@ export async function publicSeatMap(
     readonly occurrenceId?: string | null;
     /** The org has the `advanced_seating` module (M6.11a): companion seats, best available. */
     readonly advancedSeating?: boolean;
+    /** M6.11b: a sponsor's or promoter's sales code (buyers only): their allotted seats too. */
+    readonly channelCode?: string | null;
   } = {},
 ): Promise<z.infer<typeof PublicSeatMapDto> | null> {
   const now = opts.now ?? new Date();
@@ -479,6 +495,24 @@ export async function publicSeatMap(
     // M6.11a: companion seats and best available (when the org has advanced seating).
     const advanced = opts.advancedSeating ?? false;
     const companions = advanced ? await companionSeatsTx(tx, eventId) : new Set<string>();
+    // M6.11b: seats allotted to another channel are never choosable here (allotments apply with
+    // or without the module today: an org that loses it keeps its seats kept, never oversold).
+    const code = opts.audience === 'staff' ? null : (opts.channelCode?.trim() ?? '');
+    let channel: { name: string } | 'invalid' | undefined;
+    let channelId: string | null = null;
+    try {
+      const hit = await resolveSaleChannelTx(
+        tx,
+        eventId,
+        opts.audience === 'staff' ? { via: 'box_office' } : { via: 'online', code: code || null },
+      );
+      channelId = hit?.id ?? null;
+      if (code && hit) channel = { name: hit.name };
+    } catch {
+      channel = 'invalid';
+      channelId = (await resolveSaleChannelTx(tx, eventId, { via: 'online' }))?.id ?? null;
+    }
+    const otherChannel = await channelKeptSeatsTx(tx, eventId, channelId, now);
     return PublicSeatMapDto.parse({
       doc: publicDoc(layout.doc),
       startsAt,
@@ -487,11 +521,13 @@ export async function publicSeatMap(
         seatUuid: s.seatUuid,
         label: s.label,
         ticketTypeId: s.ticketTypeId,
-        available: available.get(s.seatUuid) ?? false,
+        available: (available.get(s.seatUuid) ?? false) && !otherChannel.has(s.seatUuid),
         accessible: s.accessible,
         ...(advanced ? { companion: companions.has(s.seatUuid) } : {}),
+        ...(otherChannel.has(s.seatUuid) ? { otherChannel: true as const } : {}),
       })),
       ...(advanced ? { bestAvailable: (await selectionSettingsTx(tx, eventId)).bestAvailable } : {}),
+      ...(channel ? { channel } : {}),
     });
   });
 }
@@ -633,6 +669,14 @@ export const giveDateOwnChartCommand = tenantCommand({
       publicMap: plan.publicMap,
       finderMode: plan.finderMode,
     });
+    // M6.11b: the copy is the first revision of the date's chart.
+    await recordRevisionTx(tx, ctx, {
+      eventId: input.eventId,
+      key: input.occurrenceId,
+      doc,
+      checksum: plan.checksum,
+      seatCount: plan.seatCount,
+    });
     return { occurrenceId: input.occurrenceId, seatCount: copied.length, status };
   },
   audit: (input, r) => ({
@@ -717,6 +761,7 @@ export const removeDateChartCommand = tenantCommand({
       .returning({ id: seatAssignments.id });
     await tx.delete(eventSeats).where(onChart(eventSeats, input.eventId, input.occurrenceId));
     await tx.delete(eventLayouts).where(eq(eventLayouts.id, chart.id));
+    await dropRevisionsTx(tx, input.eventId, input.occurrenceId);
     return { occurrenceId: input.occurrenceId, unseated: gone.length };
   },
   audit: (input, r) => ({

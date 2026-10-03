@@ -1,7 +1,7 @@
 # Spec: M6.11 — Advanced seating
 
 - **Milestone:** M6.11 (roadmap Phase 6; Phase 6 plan `docs/plans/phase-6.md`, Wave 1: M6.11a best available and ADA, M6.11b channels and layouts)
-- **Status:** M6.11a built (2026-10-02); M6.11b (channels, allotments, layout revisions, underlay tracing, venue library) is a separate builder
+- **Status:** M6.11a built (2026-10-02); M6.11b built (2026-10-02): sales channels and allotments, layout revisions with diff and rollback, PDF underlay tracing, the venue layout library
 - **Risk tags:** `db-migration`, `tenancy` (owner approval)
 - **Related:** decisions P6-1 (behind flags), P6-13 (`advanced_seating` entitlement), D18 (seating rules warn by default, enforce per event); ADR 0012 (floor plans, holds in Postgres); M1.7c/f/g (seat picker, rules, live availability, per-date charts), M1.8f (groups)
 
@@ -135,3 +135,132 @@ See `docs/owner-inbox.md` (M6.11a): defaults pending owner confirmation.
 - `pnpm lint`, `pnpm check:modules`, typecheck (57/57), unit (186 files, 2,381 tests), integration (152 files, 1,353 tests): pass.
 - E2E (3 viewports): `best-available.spec.ts` 15/15; `box-office-seats`, `seat-rules`, `seated-checkout`, `registration` pass. The wider seating/checkout set (`checkout`, `box-office`, `seat-live`, `seating`, `date-charts`, `seat-assignment`) passed before the last two fixes, which touched only the rules form order and the public map's optional fields.
 - Not merged here: `origin/agent/design-v2` (conflicts outside this milestone's files: e2e helpers, command center, speakers, exhibitors, seat finder, drizzle meta, web package.json, and the shared seat picker, checkout and box office forms). The merge session takes it; the new screens use only `@yayatoh/ui` components and tokens.
+
+## M6.11b — channels and layouts (done)
+
+### 1. Goal and users
+Organizers keep blocks of seats for the box office, sponsors and promoters, and know a seat kept for
+one channel is never sold through another. A promoter gets a link with a code; their buyers see the
+promoter's block open and buy it online. Every save of a seating plan is a revision the organizer can
+compare and bring back, without ever disturbing a seat that is held or sold. A venue's PDF or image
+floor plan goes under the editor to trace over. Plans saved to the org's library start new events.
+
+### 2. References
+- **Plan:** Phase 6 Wave 1, "M6.11b Channels and layouts" (acceptance: *a seat in one channel can never be sold through another; restoring a revision keeps sold seats*).
+- **Decisions:** P6-1 (behind flags), P6-13 (`advanced_seating`), D18 (rules model reused: per event, explained refusals).
+- **Builds on:** M1.7b/g (floor plan editor, per-date charts, the image underlay with calibration), M6.11a (best available, hold adoption).
+- **Legacy evidence:** none (Eventmie Pro has no channels or plan history).
+
+### 3. Scope (built)
+**In:**
+- **Sales channels (`packages/modules/seating/src/channels.ts`, pure rules in `domain/channels.ts`).** Per event: `public` (online without a code), `box_office`, `sponsor` and `promoter` (online with the channel's code; at most one `public` and one `box_office`). A channel may have a release time: its unsold seats then go back to every channel. Codes are 3–32 letters, digits, dashes or underscores, stored upper-case, unique per event.
+- **Allotments.** Whole rows or tables, sections, or single seats (the console types seat numbers, "1-4, 9") go to a channel or back to "no channel"; a seat is in at most one channel per event, and every chart of the event follows (seat ids repeat across charts). Removing a channel frees its seats.
+- **Enforced in the commands — a seat in one channel is never sold through another.** A sale goes through exactly one channel (`resolveSaleChannelTx`): online with a code → that code's channel (an unknown code is refused, `channel_code_invalid`, never a silent fallback), online without → the `public` channel, the box office → the `box_office` channel; an event without such a channel sells through "no channel". `holdSeatsTx` checks the allotment **in the same UPDATE that takes the seat** (`sellableThroughSql`), with "no channel" as the default for any caller that names none; a refused seat is `seat_channel`. `adoptSeatHoldTx` re-checks a best-available hold against the order's channel; best available never picks another channel's seats. An order's channel is recorded (`channel_orders`); the payment marks it sold (`sellSeatsTx`), and an order paid after its hold lapsed re-holds through the same channel.
+- **Public side.** `/events/{slug}?channel=CODE` (marketplace and tenant sites): the seat map opens the channel's seats (`otherChannel` marks the rest; the seat list never offers them, whatever the live feed says), the page says "You're buying through {name}", and checkout and best available go through that channel. An invalid link says so and shows the public's map. The box office's map is the box office channel's.
+- **Console: Seating → Channels** (`/o/{org}/e/{event}/seating/channels`, with advanced seating): the channels (kind, code and the promoter's link, release time in the event's zone, seats, paid orders and seats sold through each), add/edit/remove, and the allot form (channel, rows and tables by checkbox, optional seat numbers) — the keyboard alternative to choosing on the map. Viewers read only.
+- **Layout revisions (`revisions.ts`, pure diff and restore plan in `domain/revisions.ts`).** Every save of a chart's plan is a numbered revision (unchanged saves are not repeated; a date's own chart starts with its copy as revision 1; the newest 100 per chart are kept). A revision shows what it changed against the one before (seats added, removed, renumbered, moved; the lists of seats) and what restoring it would change now.
+- **Rollback keeps sold seats.** Restoring (`seating.restoreLayoutRevision`) keeps every held and sold seat exactly: the same seat id in the revision with the same label → kept; not there, but a free seat with the same label is → **remapped** (that seat takes the sold seat's id, so the hold, the sale and the ticket's label are untouched); otherwise **refused** (`restore_conflicts`, naming each seat: removed, or renumbered to another label). Works on a plan on sale and on a locked plan (the editor stays read-only once locked; a restore is the one way a locked plan's drawing changes, and only without touching a sold seat). Other seats keep their price and blocks when they keep their id; guests keep seats that still exist. A restore is itself a revision.
+- **Console: Seating → Revisions** (`/seating/revisions`, per chart with the date picker): the list, a revision's detail (changes, "restoring it would change", held and sold seats: kept / remapped / in the way), Restore. Viewers read only.
+- **Underlay tracing.** M1.7g's image underlay (upload, scale by two points, position, opacity, lock, show on the buyer's map) now also takes **a page of a PDF**: the organizer picks the page; pdf.js draws it in the browser (main thread, eval off: the console's strict CSP allows no workers) at 2,400 px on its longest edge as PNG (JPEG if needed, smaller until it fits 4 MB) and uploads it through the media pipeline like any image. Wrong page and unreadable PDFs are explained. Every step has a form control (opacity is a keyboard range).
+- **Venue layout library** (`library.ts`, `/o/{org}/seating-library`, linked from Venues and from an event's "Save as a reusable plan"): the org's saved plans with seats, rows, tables, image, how many events started from each; **start a new event from a plan** (name, kind of event among those with seating, time zone, start and end; idempotent per form), which lands on its seating page to price and publish; rename; remove (events keep their copy). Viewers read only.
+
+**Out (Later / not yet):**
+- Choosing allotments on the canvas (the list form is the way today); per-channel prices or fees.
+- Selling a sponsor's or promoter's block at the box office (staff free the seats or wait for the release).
+- Revisions of library plans (only event charts have history); a side-by-side visual diff on the canvas.
+- Sharing a library plan with other orgs or a venue's portal (M6.14).
+- Copying channels when an event is duplicated or saved as a template.
+
+### 4. `touches:`
+```yaml
+touches:
+  - packages/modules/seating/src/{schema,index,client,private-columns,holds,layouts,best-available}.ts   # append-only + channel checks
+  - packages/modules/seating/src/{channels,revisions,library}.ts
+  - packages/modules/seating/src/domain/{channels,revisions}.ts
+  - packages/modules/seating/MODULE.md
+  - packages/modules/orders/src/{dto.ts,commands/checkout.ts,commands/box-office.ts}                   # channelCode, channel holds
+  - packages/db/drizzle/0103_powerful_richard_fisk.sql
+  - packages/testing/src/fixtures.ts
+  - apps/web/src/app/[locale]/o/[org]/e/[event]/seating/{page.tsx,channel-actions.ts,channels/page.tsx,revisions/page.tsx}
+  - apps/web/src/app/[locale]/o/[org]/(org)/seating-library/{page.tsx,actions.ts}
+  - apps/web/src/app/[locale]/o/[org]/(org)/venues/page.tsx
+  - apps/web/src/app/[locale]/events/[slug]/{page.tsx,actions.ts}
+  - apps/web/src/app/[locale]/t/[org]/events/[slug]/page.tsx
+  - apps/web/src/components/{seat-channels,seating-library,seating-tabs,seating-underlay,seat-picker,checkout-form,box-office-form,public-event-view}.tsx
+  - apps/web/src/lib/pdf-page.ts
+  - apps/web/src/types/pdfjs-worker.d.ts
+  - apps/web/package.json   # pdfjs-dist (already in the workspace for badges)
+  - apps/web/messages/*.json
+```
+
+### 5. Data model
+| Table | Change | Notes |
+|---|---|---|
+| `seating.seat_channels` | new | per event: `kind` (public, box_office, sponsor, promoter), `name`, `code` (upper-case; required for sponsor/promoter only, CHECK), `release_at`; unique `(org_id, event_id, code)` where code is set; unique `(org_id, event_id, kind)` for public and box office |
+| `seating.channel_seats` | new | `(event_id, channel_id, seat_uuid)`; unique `(org_id, event_id, seat_uuid)` (one channel per seat); composite FK to the channel, on delete cascade |
+| `seating.channel_orders` | new | an order's channel: `order_id` (the hold id; orders is a higher tier, no FK), `seats`, `sold_at`; unique `(org_id, order_id)` |
+| `seating.layout_revisions` | new | per chart: `number`, `kind` (save, restore), `restored_from`, the whole `doc`, `checksum`, `seat_count`, `actor_id`; unique per chart and number (partial indexes, like `event_layouts`) |
+
+- [x] Tenant tables use `tenantTable()` (ENABLE + FORCE RLS, canonical policy, org-leading indexes, org-scoped uniques, composite FKs)
+- [x] All four tables have rows for both orgs in `createOrgFixture` (isolation suite; revisions come from the fixture's plan saves)
+- [x] `private-columns.ts`: channel `name` and `code` internal (code-shaped canary), revision `doc` internal, `kind`s vocab
+
+**Migration:** `0103_powerful_richard_fisk.sql` (renumbered at merge). New tables only; nothing destructive, no locks on existing data. Hand edits (between `-- hand-written` markers): composite FKs `(org_id, event_id)` → `events.events` on delete cascade for all four tables; `(org_id, occurrence_id)` → `events.occurrences` on delete cascade for `layout_revisions`.
+
+### 6. API diff
+- **`/v1`:** none.
+- **Commands / queries (`advanced_seating` unless noted):** `seating.saveChannel`, `seating.deleteChannel`, `seating.allotSeats`, `seating.restoreLayoutRevision` (`seating:write`); `seating.channels`, `seating.layoutRevisions`, `seating.layoutRevision` (`events:read`); library (`seating` entitlement): `seating.layoutLibrary` (`events:read`), `seating.renameLayout`, `seating.deleteLayout` (`seating:write`, delete category). `seating.holdBestAvailable` takes `channelCode`; `orders.startCheckout` takes `channelCode` (optional; additive).
+- **`PublicSeatMapDto`:** `seats[].otherChannel` (only when true), `channel` (`{ name }` or `invalid`; only when a code was given).
+- **`/api/v2`:** none.
+
+### 7. Events
+None new (holds and sales notify the live seat feed as before; the public feed stays channel-blind and the buyer's map masks other channels' seats).
+
+### 8. Entitlements and flags
+- **Module key:** `advanced_seating` (P6-13, free in beta) for channels and revisions; the library stays on `seating`.
+- **Allotments apply whatever the module** (an org that loses it never oversells kept seats).
+
+### 10. Acceptance criteria
+| ID | Given / When / Then | Test |
+|---|---|---|
+| AC-M6.11b-01 | **A seat in one channel can never be sold through another**: checkout without a code, with another channel's code, at the box office, through best available, by adopting a hold, and by a hold that names no channel — all refused (`seat_channel`); an unknown code is refused, never the public | `packages/testing/tests/channels-layouts.int.test.ts` ("a seat in one channel…", "best available never picks…"); `packages/modules/seating/tests/channels.test.ts` |
+| AC-M6.11b-02 | Channels: kinds, codes (required, format, unique), one public/box office, release times; allot rows/tables/seats, move, free; removing frees; viewers read only | `channels-layouts.int.test.ts` ("the organizer creates channels…"); e2e |
+| AC-M6.11b-03 | Release: at the release time unsold allotted seats go back to every channel; the public map follows; `?channel=` opens the channel's seats, an invalid code says so | `channels-layouts.int.test.ts` ("released seats go back…"); e2e |
+| AC-M6.11b-04 | The channel's report counts paid orders and seats through it | `channels-layouts.int.test.ts`; e2e |
+| AC-M6.11b-05 | Every save is a revision (unchanged saves aren't); diff of seats added, removed, renumbered, moved | `packages/modules/seating/tests/revisions.test.ts`; `channels-layouts.int.test.ts` ("every save is a revision…") |
+| AC-M6.11b-06 | **Restoring a revision keeps sold seats**: kept, remapped by label (same id, same ticket), or refused naming the seats; works on a locked plan | `revisions.test.ts`; `channels-layouts.int.test.ts` ("restoring a revision keeps sold seats…", "a remapped restore…"); e2e (held seat blocks a restore) |
+| AC-M6.11b-07 | Library: list with use, rename, remove (events keep their copy), start a new event from a plan | `channels-layouts.int.test.ts` (library); e2e |
+| AC-M6.11b-08 | Underlay tracing: a PDF page under the editor, wrong page and unreadable PDF explained, opacity by keyboard, persisted | e2e ("underlay tracing…") |
+| AC-M6.11b-09 | Isolation: another org can't see, allot, use or restore; every new table's rows stay its own | `channels-layouts.int.test.ts` (isolation tests); `packages/testing/tests/isolation.int.test.ts` (fixtures) |
+| AC-M6.11b-10 | Module gate: without `advanced_seating` channels and revisions refuse (`module_not_enabled`) | `channels-layouts.int.test.ts` ("needs the advanced_seating module") |
+| AC-M6.11b-11 | E2E: allot a block to a promoter code and buy through it; make a revision and roll back; start from the library; keyboard-only list alternative; axe on every new screen and state; Arabic RTL | `apps/web/e2e/channels-layouts.spec.ts` (4 tests × 3 viewports) |
+
+### 11. Security and privacy
+- Channel codes are not secrets (a promoter hands them out) but are never listed publicly; the public map only names the channel a valid code opened. The org and event come from the slug, server-side.
+- The PDF is parsed in the organizer's browser only (pdf.js with eval off, no worker); the server receives an image and re-encodes it like any upload.
+- Every output goes through Zod DTOs; audit rows for channel create/update/delete, allot/unallot, restore, library rename/delete; checkout audit marks a channel code.
+
+### 12. Performance budget
+The allotment check is one `NOT EXISTS` on an indexed `(org_id, event_id, seat_uuid)` inside the hold statement. Revision lists parse at most 100 documents per chart (≤ 20,000 seats each) once per page view.
+
+### 13. Rollout
+Behind `advanced_seating` (free in beta). Rollback: remove channels (seats go back to everyone); revisions are history only.
+
+### 14. Demo checklist
+- [ ] Seating → Channels: add "DJ Kai" (promoter, code DJ-KAI); allot row A seats 1-4.
+- [ ] Open `/events/{slug}`: row A 1–4 can't be chosen. Open the promoter's link: "You're buying through DJ Kai"; buy A·2.
+- [ ] Channels: "1 order · 1 seat" for DJ Kai.
+- [ ] Plan: rename row A in the list. Revisions: revision 2 "4 seats renumbered"; open revision 1, Restore.
+- [ ] Hold a seat as a buyer; the revision that would rename it shows the held seat in the way and no Restore button.
+- [ ] Underlay: upload a PDF floor plan, page 1; fade it by keyboard.
+- [ ] Venues → Seating library: start a new event from a saved plan; rename, remove.
+
+### 15. Owner tasks
+See `docs/owner-inbox.md` (M6.11b): defaults pending owner confirmation.
+
+### 16. Gate results (2026-10-03)
+- `pnpm lint`, `pnpm check:modules`: pass. Typecheck (`turbo --concurrency=2`): 57/57. Unit: 188 files, 2,392 tests pass (new: `channels.test.ts` 4, `revisions.test.ts` 5).
+- Integration: 154 files, 1,365 tests; 1,363 passed on the full run. Two failures, both re-run: `impersonation.int.test.ts` caught `seating.deleteChannel` without the `delete` category (fixed, passes); `apps/worker/tests/retention.int.test.ts` "runs every org…" hit its 30 s timeout under full-suite load (it sweeps every org in the test database) and passes on its own. New: `channels-layouts.int.test.ts` 11/11.
+- E2E (3 viewports, 2 workers): `channels-layouts.spec.ts` 12/12; with `seating`, `seated-checkout`, `best-available`, `box-office-seats`, `seating-underlay`, `seat-rules`, `seat-live`: 78/78; `venues`, `checkout`, `box-office`: 33/33.
+- Not merged here: `origin/agent/design-v2` (conflicts outside this increment's files: drizzle meta `0102_snapshot.json` and `_journal.json`, and the shared `checkout-form.tsx`, `seat-picker.tsx`, `seating-underlay.tsx`). The merge session takes it; the new screens use only `@yayatoh/ui` components and tokens.
+

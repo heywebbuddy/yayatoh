@@ -34,6 +34,22 @@ export {
   setSelectionSettingsCommand,
 } from './best-available.ts';
 export { BulkAssignTarget, seatAssignAction, seatAssignBulk } from './bulk-assign.ts';
+// M6.11b: sales channels and allotments, layout revisions, the venue layout library.
+export {
+  allotSeatsCommand,
+  assertSeatChannelsTx,
+  ChannelDto,
+  ChannelsPageDto,
+  channelKeptSeatsTx,
+  deleteSeatChannelCommand,
+  MAX_ALLOT_SEATS,
+  MAX_CHANNELS,
+  orderChannelTx,
+  recordChannelOrderTx,
+  resolveSaleChannelTx,
+  saveSeatChannelCommand,
+  seatChannelsQuery,
+} from './channels.ts';
 export { type ChartKey, publicDoc } from './chart.ts';
 export { instantiateSeatingTx, SeatingSnapshot, seatingSnapshotTx } from './copy.ts';
 export { seatingDataSubjects } from './data-subject.ts';
@@ -62,6 +78,16 @@ export {
   planUndo,
 } from './domain/bulk-assign.ts';
 export {
+  type ChannelRef,
+  channelHolds,
+  normalizeChannelCode,
+  SALE_VIAS,
+  type SaleVia,
+  saleChannel,
+  seatNumberList,
+  sellableThrough,
+} from './domain/channels.ts';
+export {
   availabilityLists,
   coalesceAvailability,
   LIVE_SEAT_STATES,
@@ -70,6 +96,16 @@ export {
   type SeatCounts,
   seatCounts,
 } from './domain/live.ts';
+export {
+  diffDocs,
+  type InUseSeat,
+  type LayoutDiff,
+  planRestore,
+  RESTORE_CONFLICTS,
+  type RestoreConflict,
+  type RestoreOutcome,
+  type RestorePlan,
+} from './domain/revisions.ts';
 export {
   activeAdaRule,
   activeCompanionRule,
@@ -127,6 +163,12 @@ export {
   setEventLayoutCommand,
 } from './layouts.ts';
 export {
+  deleteLayoutCommand,
+  LibraryLayoutDto,
+  layoutLibraryQuery,
+  renameLayoutCommand,
+} from './library.ts';
+export {
   chartForDate,
   createSeatFeed,
   listenForSeatChanges,
@@ -147,6 +189,16 @@ export {
 export { seatedAttendeeIdsTx } from './participation.ts';
 export { privateColumns } from './private-columns.ts';
 export {
+  DIFF_LIST_LIMIT,
+  KEEP_REVISIONS,
+  layoutRevisionQuery,
+  layoutRevisionsQuery,
+  RevisionDetailDto,
+  RevisionSummaryDto,
+  RevisionsPageDto,
+  restoreLayoutRevisionCommand,
+} from './revisions.ts';
+export {
   checkSeatRulesTx,
   MAX_COMPANIONS_PER_ACCESSIBLE,
   MAX_RELEASE_DAYS,
@@ -159,9 +211,13 @@ export {
 } from './rules.ts';
 export {
   BLOCK_REASONS,
+  CHANNEL_CODE,
+  CHANNEL_KINDS,
+  CODE_CHANNEL_KINDS,
   EVENT_LAYOUT_STATUSES,
   FINDER_MODES,
   MAX_GROUP_LABEL,
+  REVISION_KINDS,
   RULE_SEVERITIES,
   SEAT_BLOCK_REASONS,
   SEATING_RULE_KINDS,

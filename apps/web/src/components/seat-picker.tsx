@@ -33,6 +33,8 @@ export interface SeatMapView {
     readonly accessible: boolean;
     /** M6.11a: a companion seat (sold with an accessible seat when the organizer says so). */
     readonly companion?: boolean;
+    /** M6.11b: kept for another sales channel: never choosable here, whatever the live feed says. */
+    readonly otherChannel?: boolean;
   }[];
   /** M6.11a: buyers may ask for the best available seats instead. */
   readonly bestAvailable?: boolean;
@@ -112,7 +114,12 @@ export function SeatPicker({
   // A freshly loaded map is the truth again; live changes apply on top of it.
   useEffect(() => setLive(new Map()), [map]);
   const available = useMemo(
-    () => new Set(map.seats.filter((s) => live.get(s.seatUuid) ?? s.available).map((s) => s.seatUuid)),
+    () =>
+      new Set(
+        map.seats
+          .filter((s) => !s.otherChannel && (live.get(s.seatUuid) ?? s.available))
+          .map((s) => s.seatUuid),
+      ),
     [map.seats, live],
   );
   // A seat taken meanwhile (a live change, or a refreshed map) drops out of the selection.

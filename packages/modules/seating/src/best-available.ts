@@ -6,6 +6,7 @@ import { type Ctx, DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { and, eq, gt, inArray, sql } from 'drizzle-orm';
 import { z } from 'zod';
+import { assertSeatChannelsTx, channelKeptSeatsTx, resolveSaleChannelTx } from './channels.ts';
 import { type ChartKey, chartKeyTx, onChart } from './chart.ts';
 import { bestAvailable, type PlanSeat } from './domain/best-available.ts';
 import { activeAdaRule, activeCompanionRule } from './domain/rules.ts';
@@ -285,6 +286,8 @@ const BestAvailableInput = z.object({
   accessible: z.boolean().default(false),
   /** A hold this buyer had (choosing again gives it back first). */
   replaceToken: HoldToken.optional(),
+  /** M6.11b: a sponsor's or promoter's sales code (online only): their allotted seats too. */
+  channelCode: z.string().trim().max(40).optional(),
 });
 
 /** Every seat of the chart, placed (geometry for the ranking) and flagged. */
@@ -361,6 +364,8 @@ export async function holdBestAvailableTx(
     accessible: boolean;
     holdId: string;
     expiresAt: Date;
+    /** M6.11b: the sales channel; seats other channels keep are never picked (null = none). */
+    channelId?: string | null;
   },
 ): Promise<{ seats: z.infer<typeof HeldSeatDto>[]; pieces: number }> {
   const orgId = requireOrg(ctx);
@@ -385,6 +390,8 @@ export async function holdBestAvailableTx(
   const companionRule = activeCompanionRule(rules, startsAt, ctx.now);
   const { sectionScores } = await selectionSettingsTx(tx, r.eventId);
   const contended = new Set<string>();
+  // M6.11b: seats allotted to another sales channel are not this buyer's to take.
+  const kept = await channelKeptSeatsTx(tx, r.eventId, r.channelId ?? null, ctx.now);
   for (let attempt = 0; attempt < CLAIM_ATTEMPTS; attempt++) {
     const plan = await planSeatsTx(
       tx,
@@ -398,7 +405,9 @@ export async function holdBestAvailableTx(
         (r.accessible || !(companionRule && s.companion)),
     );
     const pick = bestAvailable({
-      seats: plan.seats.map((s) => (contended.has(s.seatUuid) ? { ...s, free: false } : s)),
+      seats: plan.seats.map((s) =>
+        contended.has(s.seatUuid) || kept.has(s.seatUuid) ? { ...s, free: false } : s,
+      ),
       quantity: r.quantity,
       stages: plan.stages,
       sectionScores,
@@ -517,11 +526,18 @@ async function bestAvailableHoldTx(
   if (input.replaceToken) await releaseTokenTx(tx, ctx, input.eventId, input.replaceToken);
   const token = randomBytes(24).toString('base64url');
   const expiresAt = new Date(ctx.now.getTime() + BEST_AVAILABLE_HOLD_MINUTES * 60_000);
+  // M6.11b: online through the buyer's code (or the public channel), else the box office's.
+  const channel = await resolveSaleChannelTx(
+    tx,
+    input.eventId,
+    context === 'checkout' ? { via: 'online', code: input.channelCode ?? null } : { via: 'box_office' },
+  );
   const held = await holdBestAvailableTx(tx, ctx, {
     ...input,
     occurrenceId: input.occurrenceId ?? null,
     holdId: holdIdForToken(token),
     expiresAt,
+    channelId: channel?.id ?? null,
   });
   // The same rules as choosing by hand (enforced ones refuse and the hold rolls back).
   const warnings = await checkSeatRulesTx(tx, ctx, {
@@ -609,7 +625,15 @@ export const releaseBestAvailableCommand = tenantCommand({
 export async function adoptSeatHoldTx(
   tx: TenantTx,
   ctx: Ctx,
-  a: { eventId: string; occurrenceId?: string | null; token: string; holdId: string; expiresAt: Date },
+  a: {
+    eventId: string;
+    occurrenceId?: string | null;
+    token: string;
+    holdId: string;
+    expiresAt: Date;
+    /** M6.11b: the order's sales channel; a seat another channel keeps is refused (`seat_channel`). */
+    channelId?: string | null;
+  },
 ): Promise<{ seatUuid: string; ticketTypeId: string | null; label: string }[]> {
   if (!HoldToken.safeParse(a.token).success)
     throw new DomainError('conflict', 'Those seats are no longer held', { reason: 'seat_hold_expired' });
@@ -632,5 +656,10 @@ export async function adoptSeatHoldTx(
     });
   if (rows.length === 0)
     throw new DomainError('conflict', 'Those seats are no longer held', { reason: 'seat_hold_expired' });
+  await assertSeatChannelsTx(tx, ctx, {
+    eventId: a.eventId,
+    seatUuids: rows.map((r) => r.seatUuid),
+    channelId: a.channelId ?? null,
+  });
   return rows;
 }

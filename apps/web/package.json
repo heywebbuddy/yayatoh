@@ -70,6 +70,7 @@
     "lucide-react": "1.48.0",
     "next": "catalog:",
     "next-intl": "catalog:",
+    "pdfjs-dist": "5.4.296",
     "react": "catalog:",
     "react-dom": "catalog:",
     "react-konva": "19.3.0",

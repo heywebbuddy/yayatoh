@@ -84,19 +84,21 @@ export function BoxOfficeForm({
               ? te('checkout.best.findFirst')
               : state.reason === 'seat_hold_expired'
                 ? te('checkout.best.expired')
-                : state.reason === 'seat_rule'
-                  ? t('seatRule')
-                  : state.reason === 'seats_not_on_sale' || state.reason === 'seat_not_on_sale'
-                    ? t('notOnSale')
-                    : state.reason === 'choose_date'
-                      ? t('chooseDate')
-                      : state.reason === 'date_sold_out'
-                        ? t('dateSoldOut')
-                        : state.reason === 'wrong_date'
-                          ? t('wrongDate')
-                          : state.reason === 'date_cancelled' || state.reason === 'date_passed'
-                            ? t('dateUnavailable')
-                            : te(errorMessageKey(state.code));
+                : state.reason === 'seat_channel'
+                  ? t('seatChannel')
+                  : state.reason === 'seat_rule'
+                    ? t('seatRule')
+                    : state.reason === 'seats_not_on_sale' || state.reason === 'seat_not_on_sale'
+                      ? t('notOnSale')
+                      : state.reason === 'choose_date'
+                        ? t('chooseDate')
+                        : state.reason === 'date_sold_out'
+                          ? t('dateSoldOut')
+                          : state.reason === 'wrong_date'
+                            ? t('wrongDate')
+                            : state.reason === 'date_cancelled' || state.reason === 'date_passed'
+                              ? t('dateUnavailable')
+                              : te(errorMessageKey(state.code));
   const standing = passes.filter((p) => !p.seated);
   return (
     <form ref={form} onSubmit={onSubmit} className="flex flex-col gap-4">

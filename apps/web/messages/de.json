@@ -978,7 +978,11 @@
       "off": "„Bester Platz“ wird für diese Veranstaltung nicht mehr angeboten. Wähle deine Plätze stattdessen selbst.",
       "findFirst": "Finde zuerst deine Plätze: Wähle die Anzahl und drücke dann „Plätze finden“.",
       "expired": "Deine Plätze waren 10 Minuten reserviert und wurden freigegeben. Bitte suche erneut."
-    }
+    },
+    "seatChannel": "Einige dieser Plätze sind für einen anderen Verkaufskanal reserviert. Wählen Sie andere Plätze.",
+    "channelInvalid": "Dieser Verkaufscode gilt nicht für diese Veranstaltung. Öffnen Sie die Veranstaltungsseite ohne den Code oder fragen Sie, wer Ihnen den Link gegeben hat.",
+    "channelNotice": "Sie kaufen über {name}: Plätze, die für {name} reserviert sind, stehen Ihnen ebenfalls offen.",
+    "channelLinkInvalid": "Dieser Verkaufslink gilt nicht für diese Veranstaltung. Sie können weiterhin aus den Plätzen wählen, die allen offenstehen."
   },
   "fakePay": {
     "eyebrow": "Testzahlung",
@@ -1919,7 +1923,8 @@
     "chooseDate": "Wähle einen Termin.",
     "dateSoldOut": "Für diesen Termin sind nicht mehr genug Tickets übrig.",
     "wrongDate": "Eines dieser Tickets wird für diesen Termin nicht verkauft.",
-    "dateUnavailable": "Dieser Termin ist nicht mehr im Verkauf."
+    "dateUnavailable": "Dieser Termin ist nicht mehr im Verkauf.",
+    "seatChannel": "Einige dieser Plätze sind für einen anderen Verkaufskanal reserviert (einen Sponsor, einen Promoter oder den Online-Verkauf). Wählen Sie andere Plätze."
   },
   "seating": {
     "title": "Sitzplätze",
@@ -2016,7 +2021,9 @@
       "title": "Als wiederverwendbaren Plan speichern",
       "name": "Name",
       "submit": "Plan speichern",
-      "done": "Gespeichert. Du kannst ihn für andere Events verwenden."
+      "done": "Gespeichert. Du kannst ihn für andere Events verwenden.",
+      "description": "Gespeicherte Pläne landen in Ihrer Saalplan-Bibliothek, von der aus Sie neue Veranstaltungen anlegen können.",
+      "library": "Saalplan-Bibliothek öffnen"
     },
     "tabs": {
       "label": "Sitzplan-Ansichten",
@@ -2024,7 +2031,9 @@
       "assign": "Gäste platzieren",
       "finder": "Platzfinder",
       "rules": "Regeln",
-      "selection": "Bester Platz"
+      "selection": "Bester Platz",
+      "channels": "Kanäle",
+      "revisions": "Versionen"
     },
     "assign": {
       "title": "Gäste platzieren",
@@ -2267,6 +2276,136 @@
       "companionError": "Ein Begleitplatz muss in einer Reihe oder an einem Tisch mit einem barrierefreien Platz liegen und darf selbst kein barrierefreier Platz sein.",
       "companionList": "Begleitplätze ({count}): {seats}",
       "companionNone": "Noch keine Begleitplätze."
+    },
+    "fromLibrary": "Diese Veranstaltung beginnt mit Ihrem gespeicherten Saalplan. Legen Sie die Preise der Plätze fest und geben Sie sie dann in den Verkauf.",
+    "channels": {
+      "title": "Verkaufskanäle",
+      "description": "Reservieren Sie Platzblöcke für die Abendkasse, Sponsoren oder Promoter. Ein Platz eines Kanals wird nie über einen anderen verkauft, bis der Kanal ihn freigibt.",
+      "noPlan": "Diese Veranstaltung hat noch keinen Saalplan. Erstellen Sie zuerst einen und teilen Sie seine Plätze dann hier den Kanälen zu.",
+      "readOnly": "Sie können die Kanäle sehen, aber nicht ändern.",
+      "saved": "Kanal gespeichert.",
+      "deleted": "Kanal entfernt. Seine Plätze stehen wieder allen Kanälen offen.",
+      "listTitle": "Kanäle",
+      "empty": "Noch keine Verkaufskanäle",
+      "emptyHint": "Fügen Sie unten einen Kanal hinzu und teilen Sie ihm Plätze zu. Plätze ohne Kanal werden über alle Kanäle verkauft.",
+      "col": {
+        "channel": "Kanal",
+        "code": "Code und Link",
+        "release": "Freigabe",
+        "seats": "Plätze",
+        "sold": "Darüber verkauft",
+        "actions": "Aktionen"
+      },
+      "kind": {
+        "public": "Online (ohne Code)",
+        "box_office": "Abendkasse",
+        "sponsor": "Sponsor",
+        "promoter": "Promoter"
+      },
+      "linkFor": "Link für {name}",
+      "released": "Freigegeben am {when}",
+      "neverReleased": "Reserviert, bis Sie es ändern",
+      "soldCount": "{orders, plural, =0 {Noch keine Bestellungen} one {# Bestellung} other {# Bestellungen}} · {seats, plural, one {# Platz} other {# Plätze}}",
+      "edit": "Bearbeiten",
+      "editNamed": "{name} bearbeiten",
+      "delete": "Entfernen",
+      "deleteNamed": "{name} entfernen",
+      "addTitle": "Kanal hinzufügen",
+      "editTitle": "{name} bearbeiten",
+      "kindLabel": "Art",
+      "kindHint": "Online und Abendkasse: höchstens je einer pro Veranstaltung. Sponsoren und Promoter verkaufen mit ihrem eigenen Code.",
+      "nameLabel": "Name",
+      "nameHint": "Wird Käufern angezeigt, die den Link des Kanals nutzen, und erscheint in Ihren Berichten.",
+      "codeLabel": "Code",
+      "codeHint": "Nur Sponsoren und Promoter: 3 bis 32 Buchstaben, Ziffern, Bindestriche oder Unterstriche. Käufer nutzen ihn über den Link des Kanals.",
+      "releaseLabel": "Unverkaufte Plätze freigeben am (optional)",
+      "releaseHint": "Unverkaufte Plätze gehen zu diesem Zeitpunkt ({timeZone}) an alle Kanäle zurück. Leer lassen, um sie zu behalten.",
+      "add": "Kanal hinzufügen",
+      "save": "Kanal speichern",
+      "cancel": "Abbrechen",
+      "added": "Kanal hinzugefügt.",
+      "fixErrors": "Bitte korrigieren Sie das markierte Feld.",
+      "errors": {
+        "kind": "Wählen Sie eine Kanalart.",
+        "kind_taken": "Diese Veranstaltung hat bereits einen Kanal dieser Art.",
+        "name": "Geben Sie dem Kanal einen Namen (bis zu 80 Zeichen).",
+        "code_required": "Sponsoren und Promoter brauchen einen Code.",
+        "code_not_allowed": "Nur Sponsoren und Promoter haben einen Code. Lassen Sie das Feld leer.",
+        "code_format": "Verwenden Sie 3 bis 32 Buchstaben, Ziffern, Bindestriche oder Unterstriche.",
+        "code_taken": "Ein anderer Kanal dieser Veranstaltung hat diesen Code bereits.",
+        "releaseAt": "Geben Sie Datum und Uhrzeit ein oder lassen Sie das Feld leer.",
+        "seats": "Wählen Sie mindestens eine Reihe oder einen Tisch und Platznummern, die es dort gibt."
+      },
+      "allotTitle": "Plätze zuteilen",
+      "allotDescription": "Wählen Sie Reihen und Tische und auf Wunsch nur einige ihrer Plätze. Alle Termine der Veranstaltung folgen. Plätze, die schon in einem Kanal sind, wechseln in den gewählten.",
+      "noSeats": "Der Plan hat noch keine Reihen oder Tische.",
+      "allotTo": "Kanal",
+      "everyChannel": "Kein Kanal (allen Kanälen offen)",
+      "which": "Reihen und Tische",
+      "item": {
+        "row": "Reihe {label} ({seats, plural, one {# Platz} other {# Plätze}})",
+        "table": "Tisch {label} ({seats, plural, one {# Platz} other {# Plätze}})"
+      },
+      "itemAllotted": "{count, plural, one {# Platz} other {# Plätze}} in {name}",
+      "seatNumbers": "Nur diese Plätze (optional)",
+      "seatNumbersHint": "Platznummern in den gewählten Reihen und Tischen, z. B. 1-4, 9. Leer lassen für alle ihre Plätze.",
+      "allot": "Plätze zuteilen",
+      "allotted": "{count, plural, =0 {Keine Plätze geändert.} one {# Platz zugeteilt.} other {# Plätze zugeteilt.}}",
+      "freed": "{count, plural, =0 {Kein Platz war in einem Kanal.} one {# Platz steht wieder allen Kanälen offen.} other {# Plätze stehen wieder allen Kanälen offen.}}"
+    },
+    "revisions": {
+      "title": "Versionen des Saalplans",
+      "description": "Jedes Speichern des Plans ist eine Version. Sehen Sie, was jede geändert hat, und holen Sie einen früheren Plan zurück. Reservierte und verkaufte Plätze bleiben immer, wie sie sind.",
+      "noPlan": "Diese Veranstaltung hat noch keinen Saalplan. Erstellen Sie zuerst einen; jedes Speichern erscheint dann hier.",
+      "none": "Noch keine Versionen",
+      "noneHint": "Das nächste Speichern des Plans wird die erste Version.",
+      "readOnly": "Sie können die Versionen sehen, aber nicht wiederherstellen.",
+      "listTitle": "Alle Versionen",
+      "col": {
+        "revision": "Version",
+        "when": "Gespeichert",
+        "what": "Was",
+        "changes": "Geänderte Plätze"
+      },
+      "revision": "Version {number}",
+      "currentBadge": "Der aktuelle Plan",
+      "kindSave": "Gespeichert",
+      "kindRestore": "Version {number} wiederhergestellt",
+      "seats": "{count, plural, one {# Platz} other {# Plätze}}",
+      "first": "Die erste aufbewahrte Version.",
+      "noSeatChanges": "Keine Plätze hinzugefügt, entfernt oder umnummeriert.",
+      "added": "{count, plural, one {# Platz hinzugefügt} other {# Plätze hinzugefügt}}",
+      "removed": "{count, plural, one {# Platz entfernt} other {# Plätze entfernt}}",
+      "renumbered": "{count, plural, one {# Platz umnummeriert} other {# Plätze umnummeriert}}",
+      "moved": "{count, plural, one {# Platz verschoben} other {# Plätze verschoben}}",
+      "detailTitle": "Version {number}",
+      "changedTitle": "Was sie geändert hat",
+      "restoreWouldTitle": "Eine Wiederherstellung würde ändern",
+      "addedTitle": "Hinzugefügte Plätze",
+      "removedTitle": "Entfernte Plätze",
+      "renumberedTitle": "Umnummerierte Plätze",
+      "renumberedSeat": "{from} → {to}",
+      "listOf": "{title} ({count})",
+      "more": "{count, plural, one {und # weiterer} other {und # weitere}}",
+      "inUseTitle": "Reservierte und verkaufte Plätze",
+      "inUseNone": "Kein Platz ist reserviert oder verkauft: nichts steht im Weg.",
+      "inUseKept": "{count, plural, =0 {Kein reservierter oder verkaufter Platz bleibt, wo er ist.} one {# reservierter oder verkaufter Platz bleibt genau, wie er ist.} other {# reservierte oder verkaufte Plätze bleiben genau, wie sie sind.}}",
+      "inUseRemapped": "{count, plural, one {# reservierter oder verkaufter Platz wechselt auf den Platz mit seiner Bezeichnung in dieser Version (gleiche Nummer, gleiches Ticket):} other {# reservierte oder verkaufte Plätze wechseln auf die Plätze mit ihren Bezeichnungen in dieser Version (gleiche Nummern, gleiche Tickets):}}",
+      "conflictsTitle": "{count, plural, one {Diese Version kann nicht wiederhergestellt werden: # reservierter oder verkaufter Platz ginge verloren.} other {Diese Version kann nicht wiederhergestellt werden: # reservierte oder verkaufte Plätze gingen verloren.}}",
+      "conflict": {
+        "removed": {
+          "sold": "{label} ist verkauft, und diese Version hat keinen Platz mit dieser Bezeichnung.",
+          "held": "{label} ist von einem Käufer reserviert, und diese Version hat keinen Platz mit dieser Bezeichnung."
+        },
+        "renumbered": {
+          "sold": "{label} ist verkauft und würde zu {to}: Das Ticket des Käufers nennt dann einen anderen Platz.",
+          "held": "{label} ist von einem Käufer reserviert und würde zu {to}."
+        }
+      },
+      "conflictsRefused": "Reservierte oder verkaufte Plätze sind in dieser Version nicht mehr vorhanden. Es wurde nichts geändert.",
+      "isCurrent": "Das ist der Plan, wie er jetzt ist.",
+      "restore": "Version {number} wiederherstellen",
+      "restoredNotice": "Version {number} wiederhergestellt. Der aktuelle Plan ist Version {now}."
     }
   },
   "venueMap": {
@@ -2956,7 +3095,8 @@
       "guests": "Gäste",
       "markHandled": "Als erledigt markieren",
       "markNew": "Als neu markieren"
-    }
+    },
+    "layoutLibrary": "Saalplan-Bibliothek"
   },
   "details": {
     "title": "Eventdetails",
@@ -4993,8 +5133,13 @@
       "slot_full": "Diese Veranstaltung hat bereits 20 Grundrissbilder.",
       "forbidden": "Sie können diesen Plan nicht ändern.",
       "network": "Das Hochladen ist fehlgeschlagen. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
-      "generic": "Das Hochladen ist fehlgeschlagen. Versuchen Sie es erneut."
-    }
+      "generic": "Das Hochladen ist fehlgeschlagen. Versuchen Sie es erneut.",
+      "pdf_page": "Diese Seite gibt es nicht: Das PDF hat {pages, plural, one {# Seite} other {# Seiten}}.",
+      "pdf_unreadable": "Dieses PDF lässt sich nicht lesen. Exportieren Sie den Plan als Bild oder als anderes PDF und versuchen Sie es erneut."
+    },
+    "pdfPage": "Seite (PDF)",
+    "pdfHint": "Ein Grundriss als PDF geht auch: Wählen Sie die Seite mit dem Plan. Sie wird in Ihrem Browser in ein Bild umgewandelt und dann wie eines hochgeladen.",
+    "pdfDrawing": "Seite {page} des PDFs wird gezeichnet…"
   },
   "humanCheck": {
     "legend": "Sicherheitsprüfung",
@@ -11795,5 +11940,48 @@
     "cancel": "Abonnement kündigen",
     "back": "Ohne Änderung zurück",
     "chooseError": "Wählen Sie einen Tarif, zu dem Sie wechseln möchten."
+  },
+  "seatingLibrary": {
+    "title": "Saalplan-Bibliothek",
+    "description": "Die Saalpläne, die Sie aus Ihren Veranstaltungen gespeichert haben. Legen Sie aus einem davon eine neue Veranstaltung an; jede Veranstaltung behält ihre eigene Kopie.",
+    "deleted": "Plan aus der Bibliothek entfernt. Veranstaltungen, die ihn nutzten, behalten ihre Kopie.",
+    "emptyTitle": "Ihre Saalplan-Bibliothek ist leer",
+    "emptyHint": "Öffnen Sie den Saalplan einer Veranstaltung und wählen Sie „Plan speichern“, um ihn hier aufzubewahren.",
+    "emptyViewer": "Aus Veranstaltungen gespeicherte Pläne erscheinen hier.",
+    "toEvents": "Zu den Veranstaltungen",
+    "startTitle": "Neue Veranstaltung aus einem Plan anlegen",
+    "startDescription": "Die neue Veranstaltung erhält ihre eigene Kopie des Plans. Danach legen Sie die Preise der Plätze fest und geben sie in den Verkauf.",
+    "layout": "Plan",
+    "layoutOption": "{name} ({seats, plural, one {# Platz} other {# Plätze}})",
+    "eventName": "Name der Veranstaltung",
+    "profile": "Art der Veranstaltung",
+    "timezone": "Zeitzone",
+    "startsAt": "Beginn",
+    "endsAt": "Ende",
+    "start": "Veranstaltung anlegen",
+    "fixErrors": "Bitte korrigieren Sie das markierte Feld.",
+    "errors": {
+      "layoutId": "Wählen Sie einen Plan.",
+      "name": "Geben Sie der Veranstaltung einen Namen (2 bis 160 Zeichen).",
+      "slug": "Es gibt schon eine Veranstaltung mit diesem Namen. Wählen Sie einen anderen.",
+      "profile": "Wählen Sie eine Veranstaltungsart mit Sitzplätzen.",
+      "startsAt": "Geben Sie an, wann die Veranstaltung beginnt.",
+      "endsAt": "Geben Sie an, wann die Veranstaltung endet, nach ihrem Beginn.",
+      "layoutName": "Geben Sie dem Plan einen Namen (bis zu 120 Zeichen)."
+    },
+    "listTitle": "Gespeicherte Pläne",
+    "seats": "{count, plural, one {# Platz} other {# Plätze}}",
+    "rows": "{count, plural, one {# Reihe} other {# Reihen}}",
+    "tables": "{count, plural, one {# Tisch} other {# Tische}}",
+    "withImage": "mit einem Grundrissbild",
+    "usedBy": "{count, plural, =0 {Noch von keiner Veranstaltung genutzt} one {Von # Veranstaltung genutzt} other {Von # Veranstaltungen genutzt}}",
+    "updated": "aktualisiert am {date}",
+    "renameLabel": "Name von {name}",
+    "rename": "Umbenennen",
+    "renamed": "Umbenannt.",
+    "startFrom": "Veranstaltung damit anlegen",
+    "startFromNamed": "Veranstaltung mit {name} anlegen",
+    "delete": "Entfernen",
+    "deleteNamed": "{name} entfernen"
   }
 }
