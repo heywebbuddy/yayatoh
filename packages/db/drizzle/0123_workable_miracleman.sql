@@ -83,13 +83,16 @@ CREATE FUNCTION integrations.orgs_with_slack_work(p_limit integer)
 RETURNS TABLE (org_id uuid)
 LANGUAGE sql STABLE SECURITY DEFINER SET search_path = pg_catalog AS $$
   SELECT w.org_id FROM (
-    SELECT m.org_id FROM integrations.slack_messages m
+    SELECT m.org_id, coalesce(m.next_attempt_at, m.lease_until) AS due FROM integrations.slack_messages m
     WHERE (m.status IN ('pending', 'failed') AND m.next_attempt_at <= now())
        OR (m.status = 'sending' AND m.lease_until <= now())
-    UNION
-    SELECT s.org_id FROM integrations.slack_settings s
+    UNION ALL
+    SELECT s.org_id, s.digest_next_at FROM integrations.slack_settings s
     WHERE s.digest_enabled AND s.digest_next_at <= now()
   ) w
+  GROUP BY w.org_id
+  -- Longest-waiting first, so no org waits behind a busy one.
+  ORDER BY min(w.due)
   LIMIT p_limit
 $$;
 --> statement-breakpoint

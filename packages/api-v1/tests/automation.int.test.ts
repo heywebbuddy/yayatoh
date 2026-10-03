@@ -113,7 +113,8 @@ describe('REST hooks (M6.4c)', () => {
     const [sample] = s.body.data as Json[];
     expect(sample).toMatchObject({ type: 'order.paid', version: 1 });
     expect(Object.keys((sample?.data ?? {}) as Json)).toEqual(expect.arrayContaining(['orderId', 'eventId']));
-    expect((await call('GET', `/orgs/${a.org.slug}/hooks/samples?event=nope.nope`, k)).status).toBe(400);
+    expect((await call('GET', `/orgs/${a.org.slug}/hooks/samples?event=nope.nope`, k)).status).toBe(404);
+    expect((await call('GET', `/orgs/${a.org.slug}/hooks/samples?event=webhook.test`, k)).status).toBe(404);
     const bad = await call('POST', `/orgs/${a.org.slug}/hooks`, k, {
       url: 'https://hooks.example.com/x',
       event: 'webhook.test',

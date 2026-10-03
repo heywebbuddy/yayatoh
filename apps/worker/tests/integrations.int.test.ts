@@ -95,15 +95,15 @@ describe('Slack job (M6.4c, pg-boss)', () => {
   it('the worker registers the Slack job; the leader queues one per org with due messages', async () => {
     expect(JOBS.map((j) => j.name)).toContain(SLACK_JOB);
     // The fixture queued a test alert to its Slack channel.
-    expect(await orgsWithSlackWork()).toContain(a.org.id);
+    // Every fixture org of the run queued one, so ask for all of them.
+    expect(await orgsWithSlackWork(100_000)).toContain(a.org.id);
     expect(audited).toContain('system:integrations');
-    expect(await enqueueSlackWork(boss, new Set([a.org.id]))).toBe(1);
+    expect(await enqueueSlackWork(boss, new Set([a.org.id]), 100_000)).toBe(1);
     await until(async () => {
       const rows = await admin<{ status: string }[]>`
         select status from integrations.slack_messages where org_id = ${a.org.id} and kind = 'test'`;
       return rows.length > 0 && rows.every((r) => r.status === 'sent');
     });
-    await until(async () => (await enqueueSlackWork(boss, new Set([a.org.id]))) === 0);
+    await until(async () => (await enqueueSlackWork(boss, new Set([a.org.id]), 100_000)) === 0);
   });
 });
-

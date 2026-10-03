@@ -191,7 +191,7 @@ export async function startFakeApi(): Promise<FakeApi> {
       if (!need('webhooks:subscribe')) return;
       const event = u.searchParams.get('event') ?? '';
       const data = SAMPLES[event];
-      if (!data) return problem(400, 'validation_failed', 'Validation failed');
+      if (!data) return problem(404, 'not_found', 'Unknown event type');
       return done(200, { data: [envelope(event, data)] }, 'HookSampleList');
     }
     if (method === 'POST' && path === '/contacts') {

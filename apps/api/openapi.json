@@ -11896,10 +11896,14 @@
           },
           {
             "schema": {
-              "$ref": "#/components/schemas/HookEventType"
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "description": "A public event type (`HookEventType`), e.g. `order.paid`.",
+              "example": "order.paid"
             },
             "required": true,
-            "description": "A public event type (see the `webhooks` section).",
+            "description": "A public event type (`HookEventType`), e.g. `order.paid`.",
             "name": "event",
             "in": "query"
           }

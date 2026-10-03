@@ -7559,8 +7559,8 @@ export interface operations {
     listHookSamples: {
         parameters: {
             query: {
-                /** @description A public event type (see the `webhooks` section). */
-                event: components["schemas"]["HookEventType"];
+                /** @description A public event type (`HookEventType`), e.g. `order.paid`. */
+                event: string;
             };
             header?: never;
             path: {

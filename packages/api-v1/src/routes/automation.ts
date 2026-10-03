@@ -115,7 +115,16 @@ const routes = {
     description:
       'Example data with the delivery’s exact shape, for setting up an automation before a real event happens.',
     security: orgSecurity,
-    request: { params: OrgParam, query: z.object({ event: HookEventType }) },
+    request: {
+      params: OrgParam,
+      // A plain string here: the scope is checked before the type (an unknown type is a 404).
+      query: z.object({
+        event: z.string().min(1).max(100).openapi({
+          description: 'A public event type (`HookEventType`), e.g. `order.paid`.',
+          example: 'order.paid',
+        }),
+      }),
+    },
     responses: { 200: json(HookSampleList, 'One sample message'), ...problems },
   }),
   addContact: createRoute({

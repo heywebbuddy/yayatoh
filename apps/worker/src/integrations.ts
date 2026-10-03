@@ -125,9 +125,10 @@ export async function enqueueSlackWork(
   boss: Pick<PgBoss, 'send'>,
   /** Tests: only these orgs. */
   onlyOrgs?: ReadonlySet<string>,
+  limit = 200,
 ): Promise<number> {
   let queued = 0;
-  for (const orgId of await orgsWithSlackWork())
+  for (const orgId of await orgsWithSlackWork(limit))
     if (!onlyOrgs || onlyOrgs.has(orgId))
       if (await boss.send(SLACK_JOB, { orgId }, { singletonKey: orgId })) queued += 1;
   return queued;

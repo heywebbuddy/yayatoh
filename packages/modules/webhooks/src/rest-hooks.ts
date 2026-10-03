@@ -116,13 +116,14 @@ export const unsubscribeHookCommand = tenantCommand({
 /** A sample delivery for one event type (Zapier's `performList`: test data before a real event). */
 export const hookSampleQuery = tenantQuery({
   name: 'webhooks.hookSample',
-  input: z.object({ event: HookEvent }),
+  // Any short string: the scope is checked first, then an unknown type is not found.
+  input: z.object({ event: z.string().min(1).max(100) }),
   output: z.custom<WebhookEnvelope<Record<string, unknown>>>(),
   entitlement: 'api_access',
   permission: 'webhooks:subscribe',
   handler: async ({ input }) => {
-    const e = catalogEntry(input.event);
-    if (!e) throw new DomainError('not_found');
+    const e = SUBSCRIBABLE_EVENT_TYPES.includes(input.event) ? catalogEntry(input.event) : null;
+    if (!e) throw new DomainError('not_found', 'Unknown event type');
     return exampleEnvelope(e);
   },
 });
