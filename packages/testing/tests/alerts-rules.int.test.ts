@@ -303,7 +303,7 @@ describe('org rules fire and resolve on the facts', () => {
     const r = await active(b, null);
     expect(r.domain).toMatchObject({ count: 1, fixPath: '/domains' });
     expect(r.payoutsPastDue).toMatchObject({ count: 2, severity: 'critical', fixPath: '/payouts' });
-    expect(r.deliverability).toMatchObject({ severity: 'critical', fixPath: '/messaging' });
+    expect(r.deliverability).toMatchObject({ severity: 'critical', fixPath: '/messaging#suppressions' });
     expect(r.automationFailed?.count).toBeGreaterThanOrEqual(1);
     // A viewer may not see payout or domain alerts (finance:read, org:update).
     const viewer = await executeQuery(listAlertsQuery, {}, userCtx(b.viewerId, b.org.id), ports);

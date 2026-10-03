@@ -84,6 +84,12 @@ export const REJECTION_REASONS: Readonly<Record<RejectionCode, string>> = {
   rejected: 'provider_error',
 };
 
+/** The domain part of a sender address (M3.8b: deliverability per sending domain). */
+export const senderDomainOf = (address: string): string | null => {
+  const domain = address.slice(address.lastIndexOf('@') + 1).toLowerCase();
+  return domain.length >= 4 && domain.length <= 253 ? domain : null;
+};
+
 const providerOf = (name: string | null | undefined) =>
   name && (MESSAGE_PROVIDERS as readonly string[]).includes(name)
     ? (name as (typeof MESSAGE_PROVIDERS)[number])
@@ -488,6 +494,8 @@ export async function dispatchDueTx(
         lastError: null,
         segments,
         provider: providerOf(provider),
+        senderDomain:
+          row.channel === 'email' ? senderDomainOf(senders.email?.address ?? PLATFORM_SENDER) : null,
       });
       if (provider && row.channel !== 'push') health.push({ provider, kind: 'send' });
       // Usage metering (M3.5a): SMS by segment, everything else by message.
