@@ -136,3 +136,6 @@ scanned them and can stop sharing their email.
 
 ### 6. Migration
 `packages/db/drizzle/0115_regular_speed.sql` (renumber at merge): new schema `leads` and three tables (expand only). Hand-written block: composite FKs to `events.events` and `program.exhibitors` (cascade) for all three tables and `leads.leads → ticketing.tickets` (no cascade).
+
+### 7. Gate (2026-10-03)
+Lint, check:modules, typecheck (60/60), 2,742 unit and 1,537 integration tests green after merging the latest build branch and `merge/next-3h`. E2E on 375/768/1280: `leads.spec.ts` 24/24; related specs (`exhibitor-portal`, `sponsorship`, `speaker-portal`, `scan-pwa`, `distribution`, `support-tools`, `canary-crawl`, `security`, `session-checkin`, `staff-mode`) 197 passed, 14 skipped by their own conditions, and 2 failed once on the cold server's first event creation (mobile-375 `distribution` and `exhibitor-portal` "Create draft" still pending after 5 s); both passed on the single re-run.
