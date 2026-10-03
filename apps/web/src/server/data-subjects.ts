@@ -13,6 +13,7 @@ import { eventsDataSubjects } from '@yayatoh/events';
 import { formsDataSubjects } from '@yayatoh/forms';
 import { galleryDataSubjects } from '@yayatoh/gallery';
 import { guestsDataSubjects } from '@yayatoh/guests';
+import { integrationsDataSubjects } from '@yayatoh/integrations';
 import { marketingDataSubjects } from '@yayatoh/marketing';
 import { mediaDataSubjects } from '@yayatoh/media';
 import { messagingDataSubjects } from '@yayatoh/messaging';
@@ -59,6 +60,8 @@ export const DATA_SUBJECT_CONTRIBUTORS = [
   paymentsDataSubjects,
   surveysDataSubjects,
   registrationDataSubjects,
+  // M6.4b: sync conflict values in the integrations errors inbox.
+  integrationsDataSubjects,
   donationsDataSubjects,
   engagementDataSubjects,
   galleryDataSubjects,

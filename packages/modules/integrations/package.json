@@ -14,6 +14,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@yayatoh/attendees": "workspace:*",
     "@yayatoh/billing": "workspace:*",
     "@yayatoh/checkin": "workspace:*",
     "@yayatoh/contracts": "workspace:*",
@@ -25,6 +26,7 @@
     "@yayatoh/orders": "workspace:*",
     "@yayatoh/platform": "workspace:*",
     "@yayatoh/tenancy": "workspace:*",
+    "@yayatoh/ticketing": "workspace:*",
     "drizzle-orm": "catalog:",
     "intl-messageformat": "11.2.15",
     "zod": "catalog:"

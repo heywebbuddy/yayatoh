@@ -1995,7 +1995,8 @@
     "dateSoldOut": "Il ne reste pas assez de billets pour cette date.",
     "wrongDate": "L’un de ces billets n’est pas vendu pour cette date.",
     "dateUnavailable": "Cette date n’est plus en vente.",
-    "seatChannel": "Certaines de ces places sont réservées à un autre canal de vente (un sponsor, un promoteur ou la vente en ligne). Choisissez d’autres places."
+    "seatChannel": "Certaines de ces places sont réservées à un autre canal de vente (un sponsor, un promoteur ou la vente en ligne). Choisissez d’autres places.",
+    "imported": "Importé depuis {source} · commande {reference}"
   },
   "seating": {
     "title": "Placement",
@@ -15199,6 +15200,12 @@
       },
       "slack": {
         "description": "Des alertes et un récapitulatif quotidien dans le canal Slack de votre choix. Les messages nomment les événements, jamais les e-mails, téléphones ni montants sauf si vous l’activez."
+      },
+      "eventbrite": {
+        "description": "Importez vos événements, types de billets, commandes et participants depuis Eventbrite. Prévisualisez d’abord, puis importez ; relancez quand vous voulez pour récupérer les changements."
+      },
+      "google_sheets": {
+        "description": "Gardez la liste des participants d’un événement dans une feuille Google. Les modifications des deux côtés se synchronisent."
       }
     },
     "sandboxBadge": "Test",
@@ -15218,11 +15225,36 @@
     "readOnly": "Seuls les propriétaires et les admins peuvent connecter ou modifier des intégrations.",
     "breadcrumb": "Fil d’Ariane",
     "objects": {
-      "contacts": "Contacts"
+      "contacts": "Contacts",
+      "events": "Événements",
+      "ticket_classes": "Types de billets",
+      "orders": "Commandes",
+      "attendees": "Participants"
     },
     "fields": {
       "email": "E-mail",
-      "name": "Nom"
+      "name": "Nom",
+      "tagline": "Accroche",
+      "starts_at": "Début",
+      "ends_at": "Fin",
+      "timezone": "Fuseau horaire",
+      "currency": "Devise",
+      "venue_name": "Lieu",
+      "city": "Ville",
+      "country": "Pays",
+      "description": "Description",
+      "price_minor": "Prix (en centimes)",
+      "quantity_total": "Quantité",
+      "hidden": "Masqué",
+      "sales_start_at": "Début des ventes",
+      "sales_end_at": "Fin des ventes",
+      "buyer_email": "E-mail de l’acheteur",
+      "buyer_name": "Nom de l’acheteur",
+      "status": "Statut",
+      "subtotal_minor": "Total des billets (en centimes)",
+      "total_minor": "Total de la commande (en centimes)",
+      "placed_at": "Commandé le",
+      "labels": "Étiquettes"
     },
     "status": {
       "none": "Non connectée",
@@ -15269,7 +15301,9 @@
         "paused": "La synchronisation est en pause.",
         "resumed": "La synchronisation a repris.",
         "interval": "Fréquence de synchro enregistrée.",
-        "disconnected": "Déconnectée. Plus rien n’est synchronisé et l’accès a été révoqué chez le fournisseur."
+        "disconnected": "Déconnectée. Plus rien n’est synchronisé et l’accès a été révoqué chez le fournisseur.",
+        "linked": "Feuille créée et liée. Elle se remplit à la prochaine synchronisation.",
+        "unlinked": "Feuille dissociée. Plus rien ne s’y synchronise ; elle reste dans votre Google Drive."
       },
       "revoked": {
         "user": "Déconnectée le {when}.",
@@ -15373,7 +15407,13 @@
       "paused": "Arrêtée par la mise en pause",
       "sync_failed": "La synchro a échoué",
       "unknown_connector": "Cette intégration n’est plus disponible",
-      "other": "Erreur ({code})"
+      "other": "Erreur ({code})",
+      "remote_deleted": "Supprimé dans la feuille",
+      "conflict_kept_yayatoh": "Modifié des deux côtés : la modification de Yayatoh a été conservée",
+      "conflict_kept_remote": "Modifié des deux côtés : la modification du fournisseur a été conservée",
+      "conflict": "Entre en conflit avec un enregistrement déjà dans Yayatoh",
+      "not_found": "Un élément nécessaire n’est pas encore là",
+      "validation_failed": "Yayatoh ne l’a pas accepté"
     },
     "inbox": {
       "title": "Erreurs d’intégration",
@@ -15399,7 +15439,8 @@
         "pull": "Lecture chez le fournisseur",
         "map": "Correspondance",
         "write": "Enregistrement dans Yayatoh",
-        "push": "Envoi au fournisseur"
+        "push": "Envoi au fournisseur",
+        "conflict": "Modifié des deux côtés"
       },
       "field": "Champ : {field}",
       "lastSeen": "Vu pour la dernière fois {when}",
@@ -15425,7 +15466,15 @@
       "retryNamed": "Réessayer {record}",
       "dismiss": "Ignorer",
       "dismissNamed": "Ignorer {record}",
-      "more": "{count, plural, one {# autre fiche non affichée.} other {# autres fiches non affichées.}}"
+      "more": "{count, plural, one {# autre fiche non affichée.} other {# autres fiches non affichées.}}",
+      "values": "Valeurs",
+      "keptLost": "{field} : conservé « {kept} », perdu « {lost} »",
+      "yourCall": "Demande votre décision",
+      "help": {
+        "remote_deleted": "La ligne a été supprimée dans la feuille. Personne n’a été retiré de la liste dans Yayatoh. Ignorez l’alerte pour l’accepter : le participant reste ici et n’est plus lié à cette ligne.",
+        "conflict_kept_yayatoh": "Cet enregistrement a changé des deux côtés depuis la dernière synchronisation. La modification la plus récente, faite dans Yayatoh, a été conservée et envoyée ; la valeur du fournisseur ci-dessous a été écrasée.",
+        "conflict_kept_remote": "Cet enregistrement a changé des deux côtés depuis la dernière synchronisation. La modification la plus récente, faite chez le fournisseur, a été conservée ; la valeur de Yayatoh ci-dessous a été écrasée."
+      }
     },
     "fakeConsent": {
       "title": "Autorisation de test",
@@ -15433,7 +15482,8 @@
       "heading": "Connecter {name} à Yayatoh ?",
       "body": "{name} est un fournisseur de test. Si vous autorisez, Yayatoh pourra lire et écrire ce qui suit en votre nom :",
       "allow": "Autoriser",
-      "deny": "Refuser"
+      "deny": "Refuser",
+      "bodyNoScopes": "{name} est un fournisseur de test. Autoriser permet à Yayatoh de lire les données de votre compte en votre nom."
     },
     "webhooksAction": "Configurer un webhook",
     "zapier": {
@@ -15583,6 +15633,95 @@
         "failed": "Échec",
         "cancelled": "Non envoyé"
       }
+    },
+    "import": {
+      "open": "Ouvrir l’import",
+      "connectedDetail": "{name} est connecté. Ouvrez l’import pour voir ce qui sera récupéré.",
+      "noRuns": "Aucun import pour l’instant. Ouvrez l’import pour prévisualiser et lancer.",
+      "title": "Importer depuis Eventbrite",
+      "crumb": "Import",
+      "description": "Récupérez événements, types de billets, commandes et participants. Rien n’est écrit avant que vous lanciez l’import, et le relancer ne récupère que les changements.",
+      "connected": "Eventbrite est connecté. Vérifiez ce qui sera récupéré, puis importez.",
+      "started": "Import lancé. Il tourne en arrière-plan : actualisez dans un instant pour voir le résultat.",
+      "alreadyRunning": "Un import est déjà en cours.",
+      "stepsLabel": "Étapes de l’import",
+      "steps": {
+        "connect": "Connecter",
+        "preview": "Aperçu",
+        "import": "Importer",
+        "result": "Résultat"
+      },
+      "notActive": "Cette connexion n’est pas active. Reconnectez-la pour importer.",
+      "backToConnection": "Aller à la connexion",
+      "preview": {
+        "title": "Aperçu",
+        "help": "Ce que contient votre compte Eventbrite maintenant, et ce qui est nouveau ici. Rien n’est encore écrit.",
+        "readOnly": "Seuls les propriétaires et administrateurs peuvent prévisualiser et lancer un import.",
+        "caption": "Ce que l’import récupère",
+        "what": "Quoi",
+        "inEventbrite": "Dans Eventbrite",
+        "new": "Nouveau ici",
+        "noEmails": "Les commandes importées sont marquées comme importées : personne n’est débité et aucun reçu ni e-mail de billet n’est envoyé."
+      },
+      "what": {
+        "events": "Événements",
+        "ticketTypes": "Types de billets",
+        "orders": "Commandes",
+        "attendees": "Participants",
+        "revenue": "Recettes",
+        "refunded": "Commandes remboursées"
+      },
+      "refundedOrders": "{count, plural, =0 {Aucune} one {# commande, importée comme remboursée, sans recette} other {# commandes, importées comme remboursées, sans recette}}",
+      "noRevenue": "Aucune",
+      "importing": "Import en cours…",
+      "importNew": "{count, plural, one {Importer # nouvel enregistrement} other {Importer # nouveaux enregistrements}}",
+      "importAgain": "Réimporter pour récupérer les changements",
+      "result": {
+        "title": "Résultat",
+        "none": "Rien n’a encore été importé.",
+        "finished": "Terminé le {when}",
+        "inProgress": "En cours",
+        "refresh": "Actualiser",
+        "counts": "{pulled} importés ou mis à jour · {skipped} inchangés · {failed} en erreur",
+        "seeErrors": "Voir ce qui demande votre attention",
+        "caption": "Ce que Yayatoh contient maintenant depuis Eventbrite",
+        "inYayatoh": "Dans Yayatoh",
+        "ordersValue": "{count} ({paid} payées)",
+        "attendeesValue": "{count} ({active} actifs)",
+        "goToEvents": "Aller aux événements"
+      }
+    },
+    "sheets": {
+      "title": "Événements liés",
+      "help": "La liste des participants de chaque événement lié se synchronise avec sa propre feuille Google. Les modifications de la feuille arrivent dans Yayatoh à la prochaine synchronisation ; supprimer une ligne ne retire jamais personne.",
+      "linkTitle": "Lier un événement",
+      "event": "Événement",
+      "pickEvent": "Choisissez un événement",
+      "chooseEvent": "Choisissez l’événement dont les participants iront dans la feuille.",
+      "link": "Créer la feuille et lier",
+      "linking": "Création de la feuille…",
+      "linkHelp": "Une nouvelle feuille est créée dans votre Google Drive avec les colonnes du mappage des champs.",
+      "alreadyLinked": "Cet événement a déjà une feuille.",
+      "allLinked": "Chaque événement a une feuille.",
+      "noEvents": "Créez d’abord un événement, puis liez sa liste de participants.",
+      "emptyTitle": "Aucun événement lié pour l’instant",
+      "emptyHelp": "Choisissez un événement ci-dessus pour créer sa feuille.",
+      "emptyReadOnly": "Un propriétaire ou un administrateur peut lier ici la liste des participants d’un événement.",
+      "caption": "Événements liés à Google Sheets",
+      "sheet": "Feuille",
+      "openNamed": "Ouvrir {title} dans Google Sheets",
+      "linkedOn": "Lié le",
+      "status": "Statut",
+      "statuses": {
+        "active": "Synchronisé",
+        "unlinked": "Dissocié"
+      },
+      "actions": "Actions",
+      "unlink": "Dissocier",
+      "unlinkNamed": "Dissocier {event}",
+      "confirmUnlink": "Dissocier la feuille de {event} ?",
+      "confirmUnlinkBody": "Plus rien ne s’y synchronise. La feuille reste dans votre Google Drive avec son contenu, et tout le monde reste sur la liste dans Yayatoh.",
+      "keep": "Garder liée"
     }
   },
   "kioskPrint": {

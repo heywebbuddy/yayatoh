@@ -18,8 +18,10 @@ import {
   staffRequestCommand,
 } from '@yayatoh/assistance';
 import {
+  addGuestCommand,
   attendeeImportBulk,
   attendeeLabelBulk,
+  setAttendeeLabelsCommand,
   stageImportCommand,
   validateImportCommand,
 } from '@yayatoh/attendees';
@@ -185,7 +187,16 @@ import {
   updatePartyGuestCommand,
   validateGuestImportCommand,
 } from '@yayatoh/guests';
-import { queueSlackTestCommand, runSync, saveSlackSettingsCommand } from '@yayatoh/integrations';
+import {
+  fakeIntegrations,
+  linkEventSheet,
+  queueSlackTestCommand,
+  runSync,
+  saveSlackSettingsCommand,
+  sheetLinksQuery,
+  sheetsRemoteEdit,
+  sheetsRemoteRows,
+} from '@yayatoh/integrations';
 import { type Ctx, createCtx, executeCommand, executeQuery, uuidv7 } from '@yayatoh/kernel';
 import {
   attributeOrderCommand,
@@ -374,7 +385,7 @@ import { createVenueCommand, submitQuoteRequestCommand } from '@yayatoh/venues';
 import { createEndpointCommand } from '@yayatoh/webhooks';
 import { sql } from 'drizzle-orm';
 import { enableGallery, guestGalleryPhoto, guestSiteAccess, hostGalleryPhoto } from './gallery.ts';
-import { connectDemo, connectSlack, fakeAuth } from './integrations.ts';
+import { connectConnector, connectDemo, connectSlack, fakeAuth } from './integrations.ts';
 import { catchUpTimeline } from './merge.ts';
 import { networkingFixture } from './networking.ts';
 import { ports, runBulk, submitRegistrationForm } from './ports.ts';
@@ -2937,6 +2948,52 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ports,
   );
   await executeCommand(queueSlackTestCommand, { connectionId: slack.connectionId }, ctx(), ports);
+  // M6.4b: Google Sheets connected, the event's attendee list linked to a sheet and synced (a
+  // sheet link, row links), then a cell edited in the sheet while the attendee changed here later:
+  // the next sync keeps ours and puts the sheet's value in the inbox (a conflict and its values).
+  const sheetGuest = await executeCommand(
+    addGuestCommand,
+    { eventId: event.id, name: 'Sheet Guest', email: `sheet.guest.${org.id.slice(-8)}@fixture.test` },
+    ctx(),
+    ports,
+  );
+  const sheets = await connectConnector(ctx(), 'google_sheets');
+  await linkEventSheet(ctx(), { auth: fakeAuth }, ports, {
+    connectionId: sheets.connectionId,
+    eventId: event.id,
+  });
+  await runSync(org.id, sheets.connectionId, { auth: fakeAuth }, ports);
+  const [sheetLink] = await executeQuery(
+    sheetLinksQuery,
+    { connectionId: sheets.connectionId },
+    ctx(),
+    ports,
+  );
+  const sheetAccount = fakeIntegrations.account(sheets.authConnectionId);
+  const guestRow =
+    sheetAccount && sheetLink
+      ? sheetsRemoteRows(sheetAccount, sheetLink.spreadsheetId).find(
+          (r) => r.values.email === sheetGuest.email,
+        )
+      : undefined;
+  if (!sheetAccount || !sheetLink || !guestRow) throw new Error('fixture: the sheet did not fill');
+  sheetsRemoteEdit(
+    sheetAccount,
+    sheetLink.spreadsheetId,
+    guestRow.rowId,
+    { name: 'Sheet Guest (sheet)' },
+    new Date(Date.now() - 60_000),
+  );
+  await executeCommand(
+    setAttendeeLabelsCommand,
+    { eventId: event.id, attendeeIds: [sheetGuest.id], add: ['vip'] },
+    ctx(),
+    ports,
+  );
+  await runSync(org.id, sheets.connectionId, { auth: fakeAuth }, ports, { force: true });
+  // M6.2a again: the warehouse catches up on the outbox of the rows added after its first run
+  // (donations, matches, imports), as the worker would, so a later backfill changes nothing.
+  await catchUpWarehouse(org.id);
   return {
     org,
     ownerId,
@@ -3299,6 +3356,28 @@ async function matchRows(orgId: string, eventId: string, ctx: (o?: Partial<Ctx>)
     await tx.execute(sql`insert into donations.gift_refunds (org_id, gift_id, refund_id, amount_minor, currency,
       refunded_at) select org_id, id, ${refundId}, 1000, 'USD', now() from donations.gifts
       where event_id = ${eventId} limit 1`);
+    // The refund command's outbox event, so the analytics warehouse sees the refund live too.
+    const [r] = await tx.execute<{ order_id: string }>(
+      sql`select order_id from orders.refunds where id = ${refundId}`,
+    );
+    if (r)
+      await emitEvents(tx, systemCtx(orgId), [
+        {
+          type: 'order.refunded',
+          version: 1,
+          aggregateType: 'order',
+          aggregateId: r.order_id,
+          payload: {
+            orgId,
+            orderId: r.order_id,
+            refundId,
+            amountMinor: 1000,
+            currency: 'USD',
+            tickets: 0,
+            fully: false,
+          },
+        },
+      ]);
   });
 }
 

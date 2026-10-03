@@ -54,8 +54,65 @@ export {
   demoRemoteRecords,
   demoRemoteUpdate,
 } from './connectors/demo.ts';
+export {
+  EB_EVENTS_PAGE,
+  EB_ORDERS_PAGE,
+  eventbriteFakeProvider,
+  eventbriteRemoteRefund,
+  eventbriteRemoteRename,
+  eventbriteRequests,
+} from './connectors/eventbrite/fake.ts';
+export {
+  EB_EVENTS,
+  EB_ORDERS,
+  EB_ORGANIZATION,
+  EVENTBRITE_FIXTURE_COUNTS,
+} from './connectors/eventbrite/fixture.ts';
+export {
+  EVENTBRITE,
+  eventbriteConnector,
+  eventbriteOrganization,
+} from './connectors/eventbrite/index.ts';
+export {
+  alreadyImportedQuery,
+  eventbritePreview,
+  ImportPreviewDto,
+  ImportResultDto,
+  importPreviewSerializer,
+  importResultQuery,
+  importTargetQuery,
+} from './connectors/eventbrite/preview.ts';
+export {
+  googleSheetsFakeProvider,
+  type SheetRow,
+  sheetsRemoteAdd,
+  sheetsRemoteDelete,
+  sheetsRemoteEdit,
+  sheetsRemoteList,
+  sheetsRemoteRows,
+} from './connectors/google-sheets/fake.ts';
+export {
+  GOOGLE_SHEETS,
+  googleSheetsConnector,
+  rowRecordId,
+  SHEET_COLUMNS,
+  type SheetScope,
+} from './connectors/google-sheets/index.ts';
+export {
+  linkEventSheet,
+  linkSheetCommand,
+  SheetLinkDto,
+  sheetLinksQuery,
+  sheetLinksSerializer,
+  sheetLinkTargetQuery,
+  sheetUrl,
+  unlinkSheetCommand,
+} from './connectors/google-sheets/links.ts';
 export { CONNECTORS, connectorByKey, offeredConnectors } from './connectors/index.ts';
 export { slackConnector } from './connectors/slack.ts';
+// M6.4b: the Eventbrite importer and Google Sheets live sync.
+export { linkedLocalIdTx } from './connectors/links.ts';
+export { integrationsDataSubjects } from './data-subject.ts';
 export * from './domain/mapping.ts';
 export * from './domain/sync.ts';
 export {
@@ -91,6 +148,7 @@ export { privateColumns } from './private-columns.ts';
 export {
   type ConnectorDefinition,
   defineConnector,
+  isImporter,
   type LocalRecord,
   mappingFields,
   type ObjectDefinition,
@@ -99,6 +157,7 @@ export {
   type PushSide,
   type RemoteRecord,
   type SyncIO,
+  type WriteMeta,
 } from './sdk/connector.ts';
 export {
   isSlackChannelId,

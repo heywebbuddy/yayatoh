@@ -1,12 +1,11 @@
 import {
   beginConnectCommand,
   completeConnectCommand,
+  connectorByKey,
   demoFakeProvider,
-  type FakeProvider,
   fakeAuthForConnectors,
   fakeIntegrations,
   type IntegrationAuth,
-  slackFakeProvider,
 } from '@yayatoh/integrations';
 import { type Ctx, executeCommand, requireOrg } from '@yayatoh/kernel';
 import { ports } from './ports.ts';
@@ -19,31 +18,37 @@ export const fakeAuth: IntegrationAuth = fakeAuthForConnectors();
  * screen's Allow, resolve through the port, complete (default mappings, first sync queued).
  */
 export async function connectDemo(ctx: Ctx): Promise<{ connectionId: string; authConnectionId: string }> {
-  return connectFake(ctx, 'demo', demoFakeProvider);
+  return connectConnector(ctx, 'demo');
 }
 
 /** M6.4c: connect Slack the same way (the fake workspace's channels, no network). */
 export async function connectSlack(ctx: Ctx): Promise<{ connectionId: string; authConnectionId: string }> {
-  return connectFake(ctx, 'slack', slackFakeProvider);
+  return connectConnector(ctx, 'slack');
 }
 
-async function connectFake(
+/** Connect any connector through its fake provider (M6.4b: `eventbrite`, `google_sheets`). */
+export async function connectConnector(
   ctx: Ctx,
-  connector: string,
-  provider: FakeProvider,
+  key: string,
 ): Promise<{ connectionId: string; authConnectionId: string }> {
   const orgId = requireOrg(ctx);
-  const { connectionId, state } = await executeCommand(beginConnectCommand, { connector }, ctx, ports);
+  const def = connectorByKey(key);
+  if (!def?.fake) throw new Error(`no fake for connector ${key}`);
+  const providerConfigKey = def.providerConfigKey;
+  const { connectionId, state } = await executeCommand(beginConnectCommand, { connector: key }, ctx, ports);
   await fakeAuth.beginConnect({
     orgId,
     connectionId,
-    providerConfigKey: connector,
+    providerConfigKey,
     scopes: [],
     state,
     callbackUrl: '/callback',
   });
-  fakeIntegrations.approve({ orgId, connectionId, providerConfigKey: connector }, provider);
-  const resolved = await fakeAuth.resolve({ orgId, connectionId, providerConfigKey: connector });
+  fakeIntegrations.approve(
+    { orgId, connectionId, providerConfigKey },
+    key === 'demo' ? demoFakeProvider : def.fake,
+  );
+  const resolved = await fakeAuth.resolve({ orgId, connectionId, providerConfigKey });
   if (!resolved) throw new Error('fake connect did not resolve');
   await executeCommand(
     completeConnectCommand,

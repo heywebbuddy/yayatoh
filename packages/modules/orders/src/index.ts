@@ -315,6 +315,18 @@ export {
   parseGuestLinkToken,
   resendAt,
 } from './guest/otp.ts';
+// M6.4b: orders imported from another platform (the Eventbrite importer).
+export {
+  IMPORT_SOURCES,
+  IMPORTED_STATUSES,
+  type ImportedOrderInput,
+  ImportedOrdersSummaryDto,
+  type ImportSource,
+  importedOrderIdTx,
+  importedOrdersSummaryTx,
+  importOrderTx,
+  ORDER_IMPORTED_EVENT,
+} from './imported.ts';
 // M5.9a: overdue invoices for the conference Command Center pack (a count).
 export { overdueInvoicesTx } from './invoice-facts.ts';
 export { invoiceMailer } from './invoice-mailer.ts';

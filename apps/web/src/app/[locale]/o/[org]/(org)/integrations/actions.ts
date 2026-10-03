@@ -9,6 +9,7 @@ import {
   disconnectCommand,
   dismissErrorsCommand,
   failConnectCommand,
+  isImporter,
   type MappingRule,
   offeredConnectors,
   requestSyncCommand,
@@ -102,7 +103,7 @@ export async function checkConnectAction(org: string, connectionId: string, _for
   } catch (err) {
     return back(org, `/${connectionId}`, { error: codeOf(err) });
   }
-  return back(org, `/${connectionId}`, { connected: '1' });
+  return back(org, isImporter(def) ? `/${connectionId}/import` : `/${connectionId}`, { connected: '1' });
 }
 
 async function connectorOf(ctx: Ctx, connectionId: string) {

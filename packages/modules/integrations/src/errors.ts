@@ -4,8 +4,14 @@ import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { and, desc, eq, inArray } from 'drizzle-orm';
 import { z } from 'zod';
 import { MAPPING_DIRECTIONS } from './domain/mapping.ts';
-import { ACTIVE_RUN_STATUSES, ERROR_STATUSES, ERROR_STEPS } from './domain/sync.ts';
-import { connections, syncErrors, syncRuns } from './schema.ts';
+import {
+  ACTIVE_RUN_STATUSES,
+  ERROR_STATUSES,
+  ERROR_STEPS,
+  REMOTE_DELETED,
+  retryable,
+} from './domain/sync.ts';
+import { connections, recordLinks, syncConflicts, syncErrors, syncRuns } from './schema.ts';
 
 /**
  * The integration errors inbox (M6.4a): failed records grouped by connection, step and code, each
@@ -27,6 +33,10 @@ export const ErrorDto = z.object({
   firstSeenAt: z.date(),
   lastSeenAt: z.date(),
   resolvedAt: z.date().nullable(),
+  /** M6.4b: whether Retry can fix it (not a decided conflict, not a deleted row). */
+  retryable: z.boolean(),
+  /** M6.4b: a conflict's fields: the value kept and the value lost (open conflicts only). */
+  conflict: z.array(z.object({ field: z.string(), kept: z.string(), lost: z.string() })),
 });
 export type ErrorDto = z.infer<typeof ErrorDto>;
 
@@ -105,7 +115,28 @@ export const listErrorGroupsQuery = tenantQuery({
           firstSeenAt: e.firstSeenAt,
           lastSeenAt: e.lastSeenAt,
           resolvedAt: e.resolvedAt,
+          retryable: retryable(e),
+          conflict: [],
         });
+    }
+    // M6.4b: the values of the conflicts on the page.
+    const conflictIds = [...groups.values()].flatMap((g) =>
+      g.errors.filter((e) => g.step === 'conflict' && e.status === 'open').map((e) => e.id),
+    );
+    if (conflictIds.length) {
+      const values = await tx
+        .select()
+        .from(syncConflicts)
+        .where(inArray(syncConflicts.errorId, conflictIds))
+        .orderBy(syncConflicts.field);
+      const byError = new Map<string, ErrorDto['conflict'][number][]>();
+      for (const v of values)
+        byError.set(v.errorId, [
+          ...(byError.get(v.errorId) ?? []),
+          { field: v.field, kept: v.kept, lost: v.lost },
+        ]);
+      for (const g of groups.values())
+        g.errors = g.errors.map((e) => (byError.has(e.id) ? { ...e, conflict: byError.get(e.id) ?? [] } : e));
     }
     return [...groups.values()];
   },
@@ -138,7 +169,13 @@ export const retryErrorsCommand = tenantCommand({
   handler: async ({ input, ctx, tx }) => {
     const orgId = requireOrg(ctx);
     const rows = await tx
-      .select({ id: syncErrors.id, connectionId: syncErrors.connectionId, status: connections.status })
+      .select({
+        id: syncErrors.id,
+        connectionId: syncErrors.connectionId,
+        status: connections.status,
+        step: syncErrors.step,
+        code: syncErrors.code,
+      })
       .from(syncErrors)
       .innerJoin(
         connections,
@@ -146,7 +183,8 @@ export const retryErrorsCommand = tenantCommand({
       )
       .where(and(inArray(syncErrors.id, input.errorIds), eq(syncErrors.status, 'open')))
       .for('update');
-    const live = rows.filter((r) => r.status === 'active');
+    // A decided conflict or a deleted row is not something a retry fixes (M6.4b).
+    const live = rows.filter((r) => r.status === 'active' && retryable(r));
     if (live.length)
       await tx
         .update(syncErrors)
@@ -203,7 +241,35 @@ export const dismissErrorsCommand = tenantCommand({
         updatedAt: ctx.now,
       })
       .where(and(inArray(syncErrors.id, input.errorIds), eq(syncErrors.status, 'open')))
-      .returning({ id: syncErrors.id });
+      .returning({
+        id: syncErrors.id,
+        connectionId: syncErrors.connectionId,
+        objectType: syncErrors.objectType,
+        externalId: syncErrors.externalId,
+        code: syncErrors.code,
+      });
+    if (rows.length) {
+      // M6.4b: a dismissed conflict's values go with it.
+      await tx.delete(syncConflicts).where(
+        inArray(
+          syncConflicts.errorId,
+          rows.map((r) => r.id),
+        ),
+      );
+      // A deleted row accepted as deleted: the record is no longer tied to it (it is not flagged
+      // again, and it goes back to the provider as a new record the next time it changes).
+      for (const r of rows)
+        if (r.code === REMOTE_DELETED && r.objectType && r.externalId)
+          await tx
+            .delete(recordLinks)
+            .where(
+              and(
+                eq(recordLinks.connectionId, r.connectionId),
+                eq(recordLinks.objectType, r.objectType),
+                eq(recordLinks.externalId, r.externalId),
+              ),
+            );
+    }
     return { dismissed: rows.length };
   },
   audit: (input, r) => ({

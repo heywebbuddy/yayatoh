@@ -1,4 +1,4 @@
-import { columnPrivacy, internal, secret } from '@yayatoh/db';
+import { columnPrivacy, internal, personal, secret } from '@yayatoh/db';
 
 /**
  * Column privacy of the `integrations` schema (roadmap §9 canary leak test; see `columnPrivacy` in
@@ -59,4 +59,7 @@ export const privateColumns = columnPrivacy('integrations', {
     }),
     error_code: 'vocab',
   },
+  // M6.4b: the values of a last-writer conflict (names, emails, labels of attendees).
+  sync_conflicts: { field: 'vocab', kept: personal(), lost: personal() },
+  sheet_links: { spreadsheet_id: internal('code'), title: internal(), status: 'vocab' },
 });

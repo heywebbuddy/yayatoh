@@ -1995,7 +1995,8 @@
     "dateSoldOut": "この日程のチケットが足りません。",
     "wrongDate": "この日程では販売していないチケットが含まれています。",
     "dateUnavailable": "この日程は販売を終了しました。",
-    "seatChannel": "選んだ席の一部は別の販売チャネル（スポンサー、プロモーター、オンライン販売）用に確保されています。ほかの席を選んでください。"
+    "seatChannel": "選んだ席の一部は別の販売チャネル（スポンサー、プロモーター、オンライン販売）用に確保されています。ほかの席を選んでください。",
+    "imported": "{source} からインポート · 注文 {reference}"
   },
   "seating": {
     "title": "座席",
@@ -15199,6 +15200,12 @@
       },
       "slack": {
         "description": "選んだ Slack チャンネルにアラートと日次ダイジェストを送ります。メッセージにはイベント名が入り、メールアドレス・電話番号・金額は有効にしない限り入りません。"
+      },
+      "eventbrite": {
+        "description": "Eventbrite からイベント、チケット種別、注文、参加者を移行します。まずプレビューしてからインポート。いつでも再実行して変更を取り込めます。"
+      },
+      "google_sheets": {
+        "description": "イベントの参加者リストを Google スプレッドシートで管理します。どちらで編集しても双方向に同期します。"
       }
     },
     "sandboxBadge": "テスト",
@@ -15218,11 +15225,36 @@
     "readOnly": "連携の接続や変更ができるのはオーナーと管理者だけです。",
     "breadcrumb": "パンくずリスト",
     "objects": {
-      "contacts": "連絡先"
+      "contacts": "連絡先",
+      "events": "イベント",
+      "ticket_classes": "チケット種別",
+      "orders": "注文",
+      "attendees": "参加者"
     },
     "fields": {
       "email": "メール",
-      "name": "名前"
+      "name": "名前",
+      "tagline": "キャッチコピー",
+      "starts_at": "開始",
+      "ends_at": "終了",
+      "timezone": "タイムゾーン",
+      "currency": "通貨",
+      "venue_name": "会場",
+      "city": "市区町村",
+      "country": "国",
+      "description": "説明",
+      "price_minor": "価格（最小通貨単位）",
+      "quantity_total": "数量",
+      "hidden": "非表示",
+      "sales_start_at": "販売開始",
+      "sales_end_at": "販売終了",
+      "buyer_email": "購入者のメール",
+      "buyer_name": "購入者名",
+      "status": "ステータス",
+      "subtotal_minor": "チケット合計（最小通貨単位）",
+      "total_minor": "注文合計（最小通貨単位）",
+      "placed_at": "注文日",
+      "labels": "ラベル"
     },
     "status": {
       "none": "未接続",
@@ -15269,7 +15301,9 @@
         "paused": "同期を一時停止しました。",
         "resumed": "同期を再開しました。",
         "interval": "同期スケジュールを保存しました。",
-        "disconnected": "切断しました。今後は何も同期されず、プロバイダー側のアクセスも取り消しました。"
+        "disconnected": "切断しました。今後は何も同期されず、プロバイダー側のアクセスも取り消しました。",
+        "linked": "シートを作成して連携しました。次回の同期で内容が入ります。",
+        "unlinked": "シートの連携を解除しました。今後は同期されません。シートは Google ドライブに残ります。"
       },
       "revoked": {
         "user": "{when} に切断しました。",
@@ -15373,7 +15407,13 @@
       "paused": "一時停止により停止",
       "sync_failed": "同期に失敗しました",
       "unknown_connector": "この連携は利用できなくなりました",
-      "other": "エラー（{code}）"
+      "other": "エラー（{code}）",
+      "remote_deleted": "シートで削除されました",
+      "conflict_kept_yayatoh": "両方で変更されました：Yayatoh の変更を残しました",
+      "conflict_kept_remote": "両方で変更されました：連携先の変更を残しました",
+      "conflict": "Yayatoh にある既存のレコードと競合しています",
+      "not_found": "必要なものがまだありません",
+      "validation_failed": "Yayatoh で受け付けられませんでした"
     },
     "inbox": {
       "title": "連携エラー",
@@ -15399,7 +15439,8 @@
         "pull": "プロバイダーからの読み取り",
         "map": "対応付け",
         "write": "Yayatoh への保存",
-        "push": "プロバイダーへの送信"
+        "push": "プロバイダーへの送信",
+        "conflict": "両方で変更"
       },
       "field": "フィールド：{field}",
       "lastSeen": "最終確認 {when}",
@@ -15425,7 +15466,15 @@
       "retryNamed": "{record} を再試行",
       "dismiss": "非表示",
       "dismissNamed": "{record} を非表示",
-      "more": "{count, plural, other {ほかに # 件のレコードは表示されていません。}}"
+      "more": "{count, plural, other {ほかに # 件のレコードは表示されていません。}}",
+      "values": "値",
+      "keptLost": "{field}：残した値「{kept}」、失われた値「{lost}」",
+      "yourCall": "判断が必要です",
+      "help": {
+        "remote_deleted": "シートで行が削除されました。Yayatoh のリストからは誰も削除されていません。却下すると確定します：参加者はここに残り、その行とのひも付けが外れます。",
+        "conflict_kept_yayatoh": "前回の同期以降、このレコードは両方で変更されました。後から行われた Yayatoh の変更を残して送信し、下の連携先の値は上書きされました。",
+        "conflict_kept_remote": "前回の同期以降、このレコードは両方で変更されました。後から行われた連携先の変更を残し、下の Yayatoh の値は上書きされました。"
+      }
     },
     "fakeConsent": {
       "title": "テスト用の同意",
@@ -15433,7 +15482,8 @@
       "heading": "{name} を Yayatoh に接続しますか？",
       "body": "{name} はテスト用のプロバイダーです。許可すると、Yayatoh があなたに代わって次の内容を読み書きできるようになります。",
       "allow": "許可",
-      "deny": "拒否"
+      "deny": "拒否",
+      "bodyNoScopes": "{name} はテスト用の連携先です。許可すると、Yayatoh があなたに代わってアカウントのデータを読み取れます。"
     },
     "webhooksAction": "Webhook を設定",
     "zapier": {
@@ -15583,6 +15633,95 @@
         "failed": "失敗",
         "cancelled": "未送信"
       }
+    },
+    "import": {
+      "open": "インポートを開く",
+      "connectedDetail": "{name} を接続しました。インポートを開いて、移行される内容をプレビューしてください。",
+      "noRuns": "まだインポートはありません。インポートを開いてプレビューし、開始してください。",
+      "title": "Eventbrite からインポート",
+      "crumb": "インポート",
+      "description": "イベント、チケット種別、注文、参加者を移行します。インポートを開始するまで何も書き込まれず、再実行しても変更分だけを取り込みます。",
+      "connected": "Eventbrite を接続しました。移行内容を確認してからインポートしてください。",
+      "started": "インポートを開始しました。バックグラウンドで実行されます。しばらくしてから更新して結果を確認してください。",
+      "alreadyRunning": "インポートはすでに実行中です。",
+      "stepsLabel": "インポートの手順",
+      "steps": {
+        "connect": "接続",
+        "preview": "プレビュー",
+        "import": "インポート",
+        "result": "結果"
+      },
+      "notActive": "この接続は有効ではありません。インポートするには再接続してください。",
+      "backToConnection": "接続へ移動",
+      "preview": {
+        "title": "プレビュー",
+        "help": "現在の Eventbrite アカウントの内容と、そのうちここで新しいものの数です。まだ何も書き込まれていません。",
+        "readOnly": "プレビューとインポートの開始はオーナーと管理者のみ行えます。",
+        "caption": "インポートで移行される内容",
+        "what": "項目",
+        "inEventbrite": "Eventbrite 上",
+        "new": "ここで新規",
+        "noEmails": "インポートした注文は「インポート済み」として記録されます。請求は発生せず、領収書やチケットのメールも送信されません。"
+      },
+      "what": {
+        "events": "イベント",
+        "ticketTypes": "チケット種別",
+        "orders": "注文",
+        "attendees": "参加者",
+        "revenue": "売上",
+        "refunded": "返金済みの注文"
+      },
+      "refundedOrders": "{count, plural, =0 {なし} other {# 件（返金済みとしてインポート、売上なし）}}",
+      "noRevenue": "なし",
+      "importing": "インポート実行中…",
+      "importNew": "{count, plural, other {新しいレコード # 件をインポート}}",
+      "importAgain": "再インポートして変更を取り込む",
+      "result": {
+        "title": "結果",
+        "none": "まだ何もインポートされていません。",
+        "finished": "{when} に完了",
+        "inProgress": "実行中",
+        "refresh": "更新",
+        "counts": "インポートまたは更新 {pulled} 件 · 変更なし {skipped} 件 · エラー {failed} 件",
+        "seeErrors": "確認が必要なものを見る",
+        "caption": "Yayatoh にある Eventbrite からのデータ",
+        "inYayatoh": "Yayatoh 上",
+        "ordersValue": "{count}（支払い済み {paid}）",
+        "attendeesValue": "{count}（有効 {active}）",
+        "goToEvents": "イベントへ移動"
+      }
+    },
+    "sheets": {
+      "title": "連携中のイベント",
+      "help": "連携した各イベントの参加者リストは、それぞれの Google スプレッドシートと同期します。シートでの編集は次回の同期で Yayatoh に反映され、行を削除しても誰も削除されません。",
+      "linkTitle": "イベントを連携",
+      "event": "イベント",
+      "pickEvent": "イベントを選択",
+      "chooseEvent": "参加者をシートに入れるイベントを選んでください。",
+      "link": "シートを作成して連携",
+      "linking": "シートを作成中…",
+      "linkHelp": "項目のマッピングに沿った列で、新しいシートが Google ドライブに作成されます。",
+      "alreadyLinked": "そのイベントにはすでにシートがあります。",
+      "allLinked": "すべてのイベントにシートがあります。",
+      "noEvents": "まずイベントを作成してから、参加者リストを連携してください。",
+      "emptyTitle": "連携中のイベントはまだありません",
+      "emptyHelp": "上でイベントを選ぶとシートが作成されます。",
+      "emptyReadOnly": "オーナーまたは管理者がここでイベントの参加者リストを連携できます。",
+      "caption": "Google スプレッドシートと連携中のイベント",
+      "sheet": "シート",
+      "openNamed": "{title} を Google スプレッドシートで開く",
+      "linkedOn": "連携日",
+      "status": "ステータス",
+      "statuses": {
+        "active": "同期中",
+        "unlinked": "連携解除"
+      },
+      "actions": "操作",
+      "unlink": "連携を解除",
+      "unlinkNamed": "{event} の連携を解除",
+      "confirmUnlink": "{event} のシートの連携を解除しますか？",
+      "confirmUnlinkBody": "今後は何も同期されません。シートは内容ごと Google ドライブに残り、Yayatoh のリストにも全員が残ります。",
+      "keep": "連携を続ける"
     }
   },
   "kioskPrint": {

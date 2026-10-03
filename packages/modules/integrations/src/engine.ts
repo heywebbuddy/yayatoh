@@ -9,7 +9,7 @@ import {
   requireOrg,
 } from '@yayatoh/kernel';
 import { tenantCommand } from '@yayatoh/platform';
-import { and, eq, inArray, isNotNull, lte, or, sql } from 'drizzle-orm';
+import { and, eq, inArray, isNotNull, lte, ne, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import type { AuthRef, IntegrationAuth } from './auth/port.ts';
 import { isProviderError } from './auth/port.ts';
@@ -18,23 +18,36 @@ import { connectorByKey } from './connectors/index.ts';
 import { applyMapping, type MappingRule } from './domain/mapping.ts';
 import {
   ACTIVE_RUN_STATUSES,
+  type ConflictCode,
+  type ConflictField,
+  conflictFields,
   decidePull,
   decidePush,
   type ErrorStep,
   nextSyncAt,
   originStamp,
+  REMOTE_DELETED,
   RUN_LEASE_MS,
   RUN_STATUSES,
   recordRetryAt,
 } from './domain/sync.ts';
 import { fieldsHash, pushKey } from './hash.ts';
-import { connections, fieldMappings, recordLinks, syncCursors, syncErrors, syncRuns } from './schema.ts';
-import type {
-  ConnectorDefinition,
-  LocalRecord,
-  ObjectDefinition,
-  RemoteRecord,
-  SyncIO,
+import {
+  connections,
+  fieldMappings,
+  recordLinks,
+  syncConflicts,
+  syncCursors,
+  syncErrors,
+  syncRuns,
+} from './schema.ts';
+import {
+  type ConnectorDefinition,
+  isImporter,
+  type LocalRecord,
+  type ObjectDefinition,
+  type RemoteRecord,
+  type SyncIO,
 } from './sdk/connector.ts';
 
 /**
@@ -142,10 +155,12 @@ interface ErrorInput {
   readonly recordKey: string;
   readonly code: string;
   readonly field: string | null;
+  /** M6.4b: false for rows a retry cannot fix (deleted rows, conflicts). */
+  readonly retryable?: boolean;
 }
 
 /** Open (or count again) the inbox row for one record and step; schedule its automatic retry. */
-async function recordErrorTx(tx: TenantTx, ctx: Ctx, e: ErrorInput): Promise<void> {
+async function recordErrorTx(tx: TenantTx, ctx: Ctx, e: ErrorInput): Promise<string> {
   const orgId = requireOrg(ctx);
   const [open] = await tx
     .select()
@@ -159,7 +174,7 @@ async function recordErrorTx(tx: TenantTx, ctx: Ctx, e: ErrorInput): Promise<voi
       ),
     )
     .for('update');
-  const retryable = e.recordKey !== CONNECTION_KEY && e.step !== 'auth';
+  const retryable = e.recordKey !== CONNECTION_KEY && e.step !== 'auth' && e.retryable !== false;
   if (open) {
     const attempts = open.attempts + 1;
     await tx
@@ -175,25 +190,64 @@ async function recordErrorTx(tx: TenantTx, ctx: Ctx, e: ErrorInput): Promise<voi
         updatedAt: ctx.now,
       })
       .where(eq(syncErrors.id, open.id));
-    return;
+    return open.id;
   }
-  await tx.insert(syncErrors).values({
-    orgId,
-    connectionId: e.connectionId,
-    runId: e.runId,
-    step: e.step,
-    objectType: e.objectType,
-    direction: e.direction,
-    externalId: e.externalId,
-    localId: e.localId,
-    recordKey: e.recordKey,
-    code: code(e.code),
-    field: e.field,
-    attempts: 1,
-    nextRetryAt: retryable ? recordRetryAt(1, ctx.now) : null,
-    firstSeenAt: ctx.now,
-    lastSeenAt: ctx.now,
+  const [row] = await tx
+    .insert(syncErrors)
+    .values({
+      orgId,
+      connectionId: e.connectionId,
+      runId: e.runId,
+      step: e.step,
+      objectType: e.objectType,
+      direction: e.direction,
+      externalId: e.externalId,
+      localId: e.localId,
+      recordKey: e.recordKey,
+      code: code(e.code),
+      field: e.field,
+      attempts: 1,
+      nextRetryAt: retryable ? recordRetryAt(1, ctx.now) : null,
+      firstSeenAt: ctx.now,
+      lastSeenAt: ctx.now,
+    })
+    .returning({ id: syncErrors.id });
+  if (!row) throw new DomainError('internal');
+  return row.id;
+}
+
+/**
+ * M6.4b: a last-writer conflict on one record: a `conflict` inbox row (codes only) and the losing
+ * values per field beside it. A repeat replaces the values (the row counts it again).
+ */
+async function recordConflictTx(
+  tx: TenantTx,
+  ctx: Ctx,
+  e: Omit<ErrorInput, 'step' | 'code' | 'field' | 'retryable' | 'direction'> & {
+    readonly code: ConflictCode;
+    readonly fields: readonly ConflictField[];
+  },
+): Promise<void> {
+  const first = e.fields[0];
+  if (!first) return;
+  const errorId = await recordErrorTx(tx, ctx, {
+    ...e,
+    step: 'conflict',
+    direction: 'pull',
+    field: first.field,
+    retryable: false,
   });
+  await tx.delete(syncConflicts).where(eq(syncConflicts.errorId, errorId));
+  await tx.insert(syncConflicts).values(
+    e.fields.map((f) => ({
+      orgId: requireOrg(ctx),
+      errorId,
+      connectionId: e.connectionId,
+      field: f.field,
+      kept: f.kept,
+      lost: f.lost,
+    })),
+  );
 }
 
 async function resolveErrorsTx(tx: TenantTx, ctx: Ctx, connectionId: string, recordKeys: readonly string[]) {
@@ -206,6 +260,8 @@ async function resolveErrorsTx(tx: TenantTx, ctx: Ctx, connectionId: string, rec
         eq(syncErrors.connectionId, connectionId),
         eq(syncErrors.status, 'open'),
         inArray(syncErrors.recordKey, [...recordKeys]),
+        // A conflict was decided already: it stays until someone has looked at it.
+        ne(syncErrors.step, 'conflict'),
       ),
     );
 }
@@ -374,11 +430,16 @@ export function pullPageCommand(connector: ConnectorDefinition) {
       gone: z.array(z.string().min(1).max(255)).max(500).default([]),
       /** The page's cursor; null leaves the stored one. */
       cursor: z.string().max(1000).nullable(),
+      /**
+       * M6.4b, snapshot connectors: every provider id the run read, sent with the last page of a
+       * complete read. Linked records missing from it are flagged `remote_deleted`.
+       */
+      snapshotSeen: z.array(z.string().min(1).max(255)).max(50_000).nullable().default(null),
     }),
     output: z.object({ pulled: z.int(), skipped: z.int(), failed: z.int() }),
     entitlement: 'integrations',
     permission: SYNC_PERMISSION,
-    handler: async ({ input, ctx, tx }) => {
+    handler: async ({ input, ctx, tx, emit }) => {
       const { run, connection } = await runningTx(tx, input.runId);
       const object = connector.objects.find((o) => o.key === input.objectType);
       if (!object?.pull || connection.connector !== connector.key)
@@ -407,16 +468,39 @@ export function pullPageCommand(connector: ConnectorDefinition) {
             ),
           );
         const local = link && object.push ? await object.push.read(tx, link.localId) : null;
+        const localHash = local ? fieldsHash(local.fields) : null;
         const decision = decidePull(
           record,
           link ?? null,
           origin,
-          local ? { hash: fieldsHash(local.fields), updatedAt: local.updatedAt } : null,
+          local && localHash ? { hash: localHash, updatedAt: local.updatedAt } : null,
         );
+        const conflictBase = {
+          connectionId: connection.id,
+          runId: run.id,
+          objectType: object.key,
+          externalId: record.id,
+          localId: link?.localId ?? null,
+          recordKey: key,
+        };
         if (decision.action === 'skip') {
+          // Both sides changed and ours is newer: ours is kept (the push sends it); the provider's
+          // values are the losing ones.
+          if (decision.reason === 'local_newer' && pull.conflicts === 'inbox' && local) {
+            const theirs = applyMapping(record.fields, rules, object.localFields);
+            if (theirs.ok)
+              await recordConflictTx(tx, ctx, {
+                ...conflictBase,
+                code: 'conflict_kept_yayatoh',
+                fields: conflictFields(Object.keys(theirs.values), local.fields, theirs.values),
+              });
+          }
           counts.skipped += 1;
           continue;
         }
+        // Ours changed since the last crossing too, but theirs is newer: theirs wins.
+        const localChanged =
+          link !== undefined && localHash !== null && link.localHash !== null && localHash !== link.localHash;
         const mapped = applyMapping(record.fields, rules, object.localFields);
         if (!mapped.ok) {
           await recordErrorTx(tx, ctx, {
@@ -433,7 +517,11 @@ export function pullPageCommand(connector: ConnectorDefinition) {
         try {
           // A savepoint: a failed write leaves nothing behind and the page goes on.
           await tx.transaction(async (sp) => {
-            const { localId } = await pull.write(sp, ctx, mapped.values, link?.localId ?? null);
+            const { localId } = await pull.write(sp, ctx, mapped.values, link?.localId ?? null, {
+              connectionId: connection.id,
+              record,
+              emit,
+            });
             const after = object.push ? await object.push.read(sp, localId) : null;
             const values = {
               localId,
@@ -463,6 +551,12 @@ export function pullPageCommand(connector: ConnectorDefinition) {
               });
           });
           await resolveErrorsTx(tx, ctx, connection.id, [key]);
+          if (pull.conflicts === 'inbox' && localChanged && local)
+            await recordConflictTx(tx, ctx, {
+              ...conflictBase,
+              code: 'conflict_kept_remote',
+              fields: conflictFields(Object.keys(mapped.values), mapped.values, local.fields),
+            });
           counts.pulled += 1;
         } catch (err) {
           await recordErrorTx(tx, ctx, {
@@ -481,6 +575,13 @@ export function pullPageCommand(connector: ConnectorDefinition) {
           counts.failed += 1;
         }
       }
+      if (input.snapshotSeen !== null && pull.snapshot)
+        counts.failed += await flagMissingTx(tx, ctx, {
+          connectionId: connection.id,
+          runId: run.id,
+          objectType: object.key,
+          seen: input.snapshotSeen,
+        });
       // Records the provider no longer has: nothing left to retry.
       await resolveErrorsTx(
         tx,
@@ -506,6 +607,52 @@ export function pullPageCommand(connector: ConnectorDefinition) {
       },
     }),
   });
+}
+
+/**
+ * M6.4b, snapshot connectors: linked records missing from a complete read are flagged (once per
+ * open row; the Yayatoh record is never deleted); flagged ones that are back are resolved.
+ * Returns how many are flagged now.
+ */
+async function flagMissingTx(
+  tx: TenantTx,
+  ctx: Ctx,
+  e: { connectionId: string; runId: string; objectType: string; seen: readonly string[] },
+): Promise<number> {
+  const seen = new Set(e.seen);
+  const links = await tx
+    .select({ externalId: recordLinks.externalId, localId: recordLinks.localId })
+    .from(recordLinks)
+    .where(and(eq(recordLinks.connectionId, e.connectionId), eq(recordLinks.objectType, e.objectType)));
+  const back = links.filter((l) => seen.has(l.externalId)).map((l) => pullKey(e.objectType, l.externalId));
+  for (let i = 0; i < back.length; i += 1000)
+    await tx
+      .update(syncErrors)
+      .set({ status: 'resolved', nextRetryAt: null, resolvedAt: ctx.now, updatedAt: ctx.now })
+      .where(
+        and(
+          eq(syncErrors.connectionId, e.connectionId),
+          eq(syncErrors.status, 'open'),
+          eq(syncErrors.code, REMOTE_DELETED),
+          inArray(syncErrors.recordKey, back.slice(i, i + 1000)),
+        ),
+      );
+  const missing = links.filter((l) => !seen.has(l.externalId));
+  for (const l of missing)
+    await recordErrorTx(tx, ctx, {
+      connectionId: e.connectionId,
+      runId: e.runId,
+      step: 'pull',
+      objectType: e.objectType,
+      direction: 'pull',
+      externalId: l.externalId,
+      localId: l.localId,
+      recordKey: pullKey(e.objectType, l.externalId),
+      code: REMOTE_DELETED,
+      field: null,
+      retryable: false,
+    });
+  return missing.length;
 }
 
 const PushResult = z.discriminatedUnion('outcome', [
@@ -711,13 +858,15 @@ export const finishRunCommand = tenantCommand({
       });
     } else if (c.status === 'active') {
       const failures = status === 'failed' ? c.consecutiveFailures + 1 : 0;
+      // An importer runs only when someone starts it (M6.4b): never scheduled.
+      const importer = isImporter(connectorByKey(c.connector));
       await tx
         .update(connections)
         .set({
           lastSyncAt: ctx.now,
           lastSyncStatus: status,
           consecutiveFailures: failures,
-          nextSyncAt: nextSyncAt(ctx.now, c.syncIntervalMinutes, failures),
+          nextSyncAt: importer ? null : nextSyncAt(ctx.now, c.syncIntervalMinutes, failures),
           updatedAt: ctx.now,
         })
         .where(eq(connections.id, c.id));
@@ -863,15 +1012,25 @@ async function pullObject(
       );
     }
     let cursor = await cursorOf(ctx, connectionId, object.key, 'pull');
+    const seen: string[] = [];
     for (let page = 0; page < MAX_PAGES; page++) {
       const p = await pull.list(io, cursor);
+      if (pull.snapshot) seen.push(...p.records.map((r) => r.id));
+      const last = !p.hasMore || p.cursor === null;
       await executeCommand(
         command,
-        { runId, objectType: object.key, records: p.records, cursor: p.cursor },
+        {
+          runId,
+          objectType: object.key,
+          records: p.records,
+          cursor: p.cursor,
+          // Only a read that reached the end may call a record deleted.
+          snapshotSeen: pull.snapshot && !p.hasMore ? seen : null,
+        },
         ctx,
         ports,
       );
-      if (!p.hasMore || p.cursor === null) break;
+      if (last) break;
       cursor = p.cursor;
     }
   } catch (err) {
@@ -934,6 +1093,7 @@ async function pushObject(
           externalId: link?.externalId ?? null,
           values: mapped.values,
           idempotencyKey: pushKey(connectionId, object.key, local.id, hash),
+          local,
         });
         results.push({
           outcome: 'sent',
@@ -971,7 +1131,9 @@ async function pushObject(
   }
   let cursor = await cursorOf(ctx, connectionId, object.key, 'push');
   for (let page = 0; page < MAX_PAGES; page++) {
-    const p = await withTenant(ctx, (tx) => push.changes(tx, cursor, PUSH_PAGE));
+    const p = await withTenant(ctx, (tx) =>
+      push.changes(tx, cursor, PUSH_PAGE, { connectionId, scope: io.scope }),
+    );
     if (p.records.length === 0) break;
     await sendAll(p.records, [], p.cursor);
     if (!p.hasMore || p.cursor === null) break;
@@ -1037,7 +1199,10 @@ export async function runSync(
   try {
     if ((await deps.auth.check(ref)) === 'revoked')
       return finish('failed', { errorCode: 'auth_revoked', revoked: true });
-    const io: SyncIO = { client: deps.auth.client(ref), origin: originStamp(connectionId), now };
+    const scope = connector.loadScope
+      ? await withTenant(ctx, (tx) => connector.loadScope?.(tx, connectionId) ?? Promise.resolve({}))
+      : {};
+    const io: SyncIO = { client: deps.auth.client(ref), origin: originStamp(connectionId), now, scope };
     if (connector.health) await connector.health(io);
     for (const object of connector.objects) {
       await pullObject(ctx, ports, connector, object, io, runId, connectionId);

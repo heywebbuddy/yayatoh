@@ -1,5 +1,5 @@
 import type { TenantTx } from '@yayatoh/db';
-import type { Ctx } from '@yayatoh/kernel';
+import type { Ctx, DomainEvent } from '@yayatoh/kernel';
 import type { ModuleKey } from '@yayatoh/platform';
 import type { FakeProvider } from '../auth/fake.ts';
 import type { ProviderClient } from '../auth/port.ts';
@@ -46,6 +46,20 @@ export interface SyncIO {
   /** This connection's origin stamp: write it on provider records where the API allows (loop guard). */
   readonly origin: string;
   readonly now: Date;
+  /**
+   * M6.4b: what the connector's `loadScope` read for this run (e.g. the linked sheets); empty for
+   * connectors without one. Ids and labels only: never a token.
+   */
+  readonly scope: Readonly<Record<string, unknown>>;
+}
+
+/** M6.4b: what a pull `write` learns about the record beyond its mapped values. */
+export interface WriteMeta {
+  readonly connectionId: string;
+  /** The provider record as listed (nested data the mapping does not cover, e.g. an order's attendees). */
+  readonly record: RemoteRecord;
+  /** Queue a domain event on the page command's outbox (the owning module's commands emit through it). */
+  readonly emit: (event: DomainEvent) => void;
 }
 
 export interface PullSide {
@@ -64,14 +78,32 @@ export interface PullSide {
     ctx: Ctx,
     values: Readonly<Record<string, unknown>>,
     localId: string | null,
+    meta: WriteMeta,
   ): Promise<{ readonly localId: string }>;
+  /**
+   * M6.4b: `list` returns the provider's whole set on every run (a spreadsheet has no change feed).
+   * When a run read it to the end, a linked record missing from it is flagged in the errors inbox
+   * (`remote_deleted`, never retried automatically): the Yayatoh record is never deleted.
+   */
+  readonly snapshot?: boolean;
+  /**
+   * M6.4b: `inbox` records last-writer conflicts (both sides changed since the last crossing) in the
+   * errors inbox, with the losing side's values per field (`sync_conflicts`).
+   */
+  readonly conflicts?: 'inbox';
 }
 
 export interface PushSide {
   /** Mapping offered when the connection is made (Yayatoh field → remote field). */
   readonly defaultMapping: readonly MappingRule[];
   /** Yayatoh records changed after `cursor` (null: from the beginning), one page. */
-  changes(tx: TenantTx, cursor: string | null, limit: number): Promise<Page<LocalRecord>>;
+  changes(
+    tx: TenantTx,
+    cursor: string | null,
+    limit: number,
+    /** M6.4b: which connection is pushing and its run's scope (e.g. the events with a linked sheet). */
+    meta: { readonly connectionId: string; readonly scope: Readonly<Record<string, unknown>> },
+  ): Promise<Page<LocalRecord>>;
   /** One Yayatoh record (also used by the pull's loop guard); null when it is gone. */
   read(tx: TenantTx, localId: string): Promise<LocalRecord | null>;
   /**
@@ -84,6 +116,8 @@ export interface PushSide {
       readonly externalId: string | null;
       readonly values: Readonly<Record<string, unknown>>;
       readonly idempotencyKey: string;
+      /** M6.4b: the Yayatoh record being sent (fields the mapping does not cover, e.g. its event). */
+      readonly local: LocalRecord;
     },
   ): Promise<{ readonly externalId: string; readonly version: string }>;
 }
@@ -120,6 +154,13 @@ export interface ConnectorDefinition {
    * connection is marked so in its next run) and its sender lives with the connector.
    */
   readonly purpose?: 'sync' | 'notifications';
+  /**
+   * M6.4b: `sync` (default) runs on a schedule from the moment it connects; `import` runs only when
+   * someone starts it (a one-way importer: preview first, then import; never scheduled).
+   */
+  readonly mode?: 'sync' | 'import';
+  /** M6.4b: read once per run, inside a tenant transaction, and handed to the connector as `io.scope`. */
+  readonly loadScope?: (tx: TenantTx, connectionId: string) => Promise<Readonly<Record<string, unknown>>>;
   readonly objects: readonly ObjectDefinition[];
   /**
    * A cheap call that proves the connection still works at the provider (M6.4c), made by every
@@ -150,6 +191,9 @@ export function defineConnector(def: ConnectorDefinition): ConnectorDefinition {
   }
   return Object.freeze({ ...def });
 }
+
+/** Whether a connector only imports when asked (M6.4b). */
+export const isImporter = (c: Pick<ConnectorDefinition, 'mode'> | null | undefined) => c?.mode === 'import';
 
 /** The fields a mapping of `direction` reads from and writes to. */
 export function mappingFields(o: ObjectDefinition, direction: 'pull' | 'push') {

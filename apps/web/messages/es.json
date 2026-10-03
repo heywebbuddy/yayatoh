@@ -1995,7 +1995,8 @@
     "dateSoldOut": "No quedan suficientes entradas para esta fecha.",
     "wrongDate": "Una de estas entradas no se vende para esta fecha.",
     "dateUnavailable": "Esta fecha ya no está a la venta.",
-    "seatChannel": "Algunos de esos asientos están reservados para otro canal de venta (un patrocinador, un promotor o la venta en línea). Elige otros asientos."
+    "seatChannel": "Algunos de esos asientos están reservados para otro canal de venta (un patrocinador, un promotor o la venta en línea). Elige otros asientos.",
+    "imported": "Importado de {source} · pedido {reference}"
   },
   "seating": {
     "title": "Asientos",
@@ -15199,6 +15200,12 @@
       },
       "slack": {
         "description": "Alertas y un resumen diario en el canal de Slack que elijas. Los mensajes nombran eventos, nunca correos, teléfonos ni importes salvo que lo actives."
+      },
+      "eventbrite": {
+        "description": "Trae tus eventos, tipos de entrada, pedidos y asistentes desde Eventbrite. Primero la vista previa, luego importa; vuelve a ejecutarlo cuando quieras para traer cambios."
+      },
+      "google_sheets": {
+        "description": "Mantén la lista de asistentes de un evento en una hoja de Google. Los cambios en cualquiera de los dos lados se sincronizan."
       }
     },
     "sandboxBadge": "Pruebas",
@@ -15218,11 +15225,36 @@
     "readOnly": "Solo propietarios y administradores pueden conectar o cambiar integraciones.",
     "breadcrumb": "Ruta de navegación",
     "objects": {
-      "contacts": "Contactos"
+      "contacts": "Contactos",
+      "events": "Eventos",
+      "ticket_classes": "Tipos de entrada",
+      "orders": "Pedidos",
+      "attendees": "Asistentes"
     },
     "fields": {
       "email": "Correo electrónico",
-      "name": "Nombre"
+      "name": "Nombre",
+      "tagline": "Eslogan",
+      "starts_at": "Empieza",
+      "ends_at": "Termina",
+      "timezone": "Zona horaria",
+      "currency": "Moneda",
+      "venue_name": "Lugar",
+      "city": "Ciudad",
+      "country": "País",
+      "description": "Descripción",
+      "price_minor": "Precio (en céntimos)",
+      "quantity_total": "Cantidad",
+      "hidden": "Oculto",
+      "sales_start_at": "Inicio de venta",
+      "sales_end_at": "Fin de venta",
+      "buyer_email": "Correo del comprador",
+      "buyer_name": "Nombre del comprador",
+      "status": "Estado",
+      "subtotal_minor": "Total de entradas (en céntimos)",
+      "total_minor": "Total del pedido (en céntimos)",
+      "placed_at": "Pedido el",
+      "labels": "Etiquetas"
     },
     "status": {
       "none": "Sin conectar",
@@ -15269,7 +15301,9 @@
         "paused": "La sincronización está en pausa.",
         "resumed": "La sincronización vuelve a estar activa.",
         "interval": "Calendario de sincronización guardado.",
-        "disconnected": "Desconectada. Ya no se sincroniza nada y se revocó el acceso en el proveedor."
+        "disconnected": "Desconectada. Ya no se sincroniza nada y se revocó el acceso en el proveedor.",
+        "linked": "Hoja creada y vinculada. Se rellena en la próxima sincronización.",
+        "unlinked": "Hoja desvinculada. Ya no se sincroniza nada con ella; se queda en tu Google Drive."
       },
       "revoked": {
         "user": "Desconectada el {when}.",
@@ -15373,7 +15407,13 @@
       "paused": "Detenida al pausar",
       "sync_failed": "La sincronización falló",
       "unknown_connector": "Esta integración ya no está disponible",
-      "other": "Error ({code})"
+      "other": "Error ({code})",
+      "remote_deleted": "Eliminado en la hoja",
+      "conflict_kept_yayatoh": "Cambiado en ambos lados: se mantuvo el cambio de Yayatoh",
+      "conflict_kept_remote": "Cambiado en ambos lados: se mantuvo el cambio del proveedor",
+      "conflict": "Choca con un registro que ya está en Yayatoh",
+      "not_found": "Algo que necesita aún no está aquí",
+      "validation_failed": "Yayatoh no lo aceptó"
     },
     "inbox": {
       "title": "Errores de integración",
@@ -15399,7 +15439,8 @@
         "pull": "Lectura en el proveedor",
         "map": "Asignación",
         "write": "Guardado en Yayatoh",
-        "push": "Envío al proveedor"
+        "push": "Envío al proveedor",
+        "conflict": "Cambiado en ambos lados"
       },
       "field": "Campo: {field}",
       "lastSeen": "Visto por última vez {when}",
@@ -15425,7 +15466,15 @@
       "retryNamed": "Reintentar {record}",
       "dismiss": "Descartar",
       "dismissNamed": "Descartar {record}",
-      "more": "{count, plural, one {# registro más sin mostrar.} other {# registros más sin mostrar.}}"
+      "more": "{count, plural, one {# registro más sin mostrar.} other {# registros más sin mostrar.}}",
+      "values": "Valores",
+      "keptLost": "{field}: se mantuvo «{kept}», se perdió «{lost}»",
+      "yourCall": "Necesita tu decisión",
+      "help": {
+        "remote_deleted": "La fila se eliminó en la hoja. Nadie se quitó de la lista en Yayatoh. Descártalo para aceptarlo: el asistente sigue aquí y deja de estar unido a esa fila.",
+        "conflict_kept_yayatoh": "Este registro cambió en ambos lados desde la última sincronización. Se mantuvo y se envió el cambio más reciente, hecho en Yayatoh; el valor del proveedor de abajo se sobrescribió.",
+        "conflict_kept_remote": "Este registro cambió en ambos lados desde la última sincronización. Se mantuvo el cambio más reciente, hecho en el proveedor; el valor de Yayatoh de abajo se sobrescribió."
+      }
     },
     "fakeConsent": {
       "title": "Consentimiento de prueba",
@@ -15433,7 +15482,8 @@
       "heading": "¿Conectar {name} con Yayatoh?",
       "body": "{name} es un proveedor de prueba. Si lo permites, Yayatoh podrá leer y escribir lo siguiente en tu nombre:",
       "allow": "Permitir",
-      "deny": "Denegar"
+      "deny": "Denegar",
+      "bodyNoScopes": "{name} es un proveedor de prueba. Si lo permites, Yayatoh podrá leer los datos de tu cuenta en tu nombre."
     },
     "webhooksAction": "Configurar un webhook",
     "zapier": {
@@ -15583,6 +15633,95 @@
         "failed": "Fallido",
         "cancelled": "No enviado"
       }
+    },
+    "import": {
+      "open": "Abrir importación",
+      "connectedDetail": "{name} está conectado. Abre la importación para ver qué se traerá.",
+      "noRuns": "Aún no hay importaciones. Abre la importación para verla y empezar.",
+      "title": "Importar desde Eventbrite",
+      "crumb": "Importación",
+      "description": "Trae eventos, tipos de entrada, pedidos y asistentes. No se escribe nada hasta que empieces la importación, y volver a ejecutarla solo trae los cambios.",
+      "connected": "Eventbrite está conectado. Revisa qué se traerá y luego importa.",
+      "started": "Importación iniciada. Se ejecuta en segundo plano: actualiza en un momento para ver el resultado.",
+      "alreadyRunning": "Ya hay una importación en curso.",
+      "stepsLabel": "Pasos de la importación",
+      "steps": {
+        "connect": "Conectar",
+        "preview": "Vista previa",
+        "import": "Importar",
+        "result": "Resultado"
+      },
+      "notActive": "Esta conexión no está activa. Vuelve a conectarla para importar.",
+      "backToConnection": "Ir a la conexión",
+      "preview": {
+        "title": "Vista previa",
+        "help": "Lo que tiene ahora tu cuenta de Eventbrite y cuánto es nuevo aquí. Aún no se escribe nada.",
+        "readOnly": "Solo los propietarios y administradores pueden ver la vista previa e iniciar una importación.",
+        "caption": "Lo que trae la importación",
+        "what": "Qué",
+        "inEventbrite": "En Eventbrite",
+        "new": "Nuevo aquí",
+        "noEmails": "Los pedidos importados se marcan como importados: no se cobra a nadie ni se envían recibos o correos de entradas."
+      },
+      "what": {
+        "events": "Eventos",
+        "ticketTypes": "Tipos de entrada",
+        "orders": "Pedidos",
+        "attendees": "Asistentes",
+        "revenue": "Ingresos",
+        "refunded": "Pedidos reembolsados"
+      },
+      "refundedOrders": "{count, plural, =0 {Ninguno} one {# pedido, importado como reembolsado y sin ingresos} other {# pedidos, importados como reembolsados y sin ingresos}}",
+      "noRevenue": "Ninguno",
+      "importing": "Importación en curso…",
+      "importNew": "{count, plural, one {Importar # registro nuevo} other {Importar # registros nuevos}}",
+      "importAgain": "Importar de nuevo para traer cambios",
+      "result": {
+        "title": "Resultado",
+        "none": "Aún no se ha importado nada.",
+        "finished": "Terminó el {when}",
+        "inProgress": "En curso",
+        "refresh": "Actualizar",
+        "counts": "{pulled} importados o actualizados · {skipped} sin cambios · {failed} con errores",
+        "seeErrors": "Ver lo que necesita revisión",
+        "caption": "Lo que Yayatoh tiene ahora de Eventbrite",
+        "inYayatoh": "En Yayatoh",
+        "ordersValue": "{count} ({paid} pagados)",
+        "attendeesValue": "{count} ({active} activos)",
+        "goToEvents": "Ir a los eventos"
+      }
+    },
+    "sheets": {
+      "title": "Eventos vinculados",
+      "help": "La lista de asistentes de cada evento vinculado se sincroniza con su propia hoja de Google. Los cambios de la hoja llegan a Yayatoh en la próxima sincronización; borrar una fila nunca quita a nadie.",
+      "linkTitle": "Vincular un evento",
+      "event": "Evento",
+      "pickEvent": "Elige un evento",
+      "chooseEvent": "Elige el evento cuyos asistentes irán a la hoja.",
+      "link": "Crear hoja y vincular",
+      "linking": "Creando la hoja…",
+      "linkHelp": "Se crea una hoja nueva en tu Google Drive con las columnas de la asignación de campos.",
+      "alreadyLinked": "Ese evento ya tiene una hoja.",
+      "allLinked": "Todos los eventos tienen hoja.",
+      "noEvents": "Crea primero un evento y luego vincula su lista de asistentes.",
+      "emptyTitle": "Aún no hay eventos vinculados",
+      "emptyHelp": "Elige un evento arriba para crear su hoja.",
+      "emptyReadOnly": "Un propietario o administrador puede vincular aquí la lista de asistentes de un evento.",
+      "caption": "Eventos vinculados a hojas de Google",
+      "sheet": "Hoja",
+      "openNamed": "Abrir {title} en Hojas de cálculo de Google",
+      "linkedOn": "Vinculado",
+      "status": "Estado",
+      "statuses": {
+        "active": "Sincronizando",
+        "unlinked": "Desvinculado"
+      },
+      "actions": "Acciones",
+      "unlink": "Desvincular",
+      "unlinkNamed": "Desvincular {event}",
+      "confirmUnlink": "¿Desvincular la hoja de {event}?",
+      "confirmUnlinkBody": "Ya no se sincroniza nada con ella. La hoja se queda en tu Google Drive con lo que tiene, y todos siguen en la lista de Yayatoh.",
+      "keep": "Mantener vinculada"
     }
   },
   "kioskPrint": {

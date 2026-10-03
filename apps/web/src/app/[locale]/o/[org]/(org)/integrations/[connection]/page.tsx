@@ -1,6 +1,8 @@
 import {
   connectionDetailQuery,
   connectorByKey,
+  GOOGLE_SHEETS,
+  isImporter,
   mappingFields,
   openErrorCountQuery,
   SYNC_INTERVALS,
@@ -27,6 +29,7 @@ import {
 import { ConnectionPill, codeText, ERROR_CODES, IntegrationTabs, RunPill } from '../parts.tsx';
 import { MappingForm } from './mapping-form.tsx';
 import { SlackPanel } from './slack-panel.tsx';
+import { SheetsSection } from './sheets-section.tsx';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('integrations');
@@ -84,20 +87,29 @@ export default async function ConnectionPage({
   const fmt = (d: Date | null) => (d ? when.format(d) : t('never'));
   const error = sp.error ? (ERROR_CODES.has(sp.error) ? sp.error : 'internal') : null;
   const done =
-    sp.done && ['paused', 'resumed', 'interval', 'disconnected'].includes(sp.done) ? sp.done : null;
+    sp.done && ['paused', 'resumed', 'interval', 'disconnected', 'linked', 'unlinked'].includes(sp.done)
+      ? sp.done
+      : null;
   const live = c.status === 'active' || c.status === 'paused';
   const confirming = sp.confirm === 'disconnect' && live && canManage;
   // M6.4c: a notifications connector (Slack) syncs no records: its runs are health checks, so
   // there is no Sync now, interval, mapping or runs table; its own panel takes their place.
   const notifies = connector.purpose === 'notifications';
-  const syncNow =
-    canManage && c.status === 'active' && !notifies ? (
-      <form action={syncNowAction.bind(null, org, c.id)}>
-        <Button type="submit" disabled={detail.syncing}>
-          {detail.syncing ? t('detail.syncing') : t('detail.syncNow')}
-        </Button>
-      </form>
-    ) : undefined;
+  // M6.4b: an importer is run from its wizard (preview first), never on a schedule.
+  const importer = isImporter(connector);
+  const syncNow = importer ? (
+    c.status === 'active' ? (
+      <Link href={`/o/${org}/integrations/${c.id}/import`} className={buttonClass('primary')}>
+        {t('import.open')}
+      </Link>
+    ) : undefined
+  ) : canManage && c.status === 'active' && !notifies ? (
+    <form action={syncNowAction.bind(null, org, c.id)}>
+      <Button type="submit" disabled={detail.syncing}>
+        {detail.syncing ? t('detail.syncing') : t('detail.syncNow')}
+      </Button>
+    </form>
+  ) : undefined;
   return (
     <>
       <PageHeader
@@ -110,7 +122,10 @@ export default async function ConnectionPage({
       <div aria-live="polite" className="flex flex-col gap-2 empty:hidden">
         {error ? <Alert tone="danger" title={tErr(error)} /> : null}
         {sp.connected ? (
-          <Alert tone="success" title={t('detail.connected', { name: connector.name })} />
+          <Alert
+            tone="success"
+            title={t(importer ? 'import.connectedDetail' : 'detail.connected', { name: connector.name })}
+          />
         ) : null}
         {sp.sync ? (
           <Alert tone="success" title={t(`detail.sync.${sp.sync === 'already' ? 'already' : 'queued'}`)} />
@@ -181,7 +196,7 @@ export default async function ConnectionPage({
               {fmt(c.lastSyncAt)}
               {c.lastSyncStatus ? <RunPill status={c.lastSyncStatus} /> : null}
             </dd>
-            {c.status === 'active' && !notifies ? (
+            {c.status === 'active' && !notifies && !importer ? (
               <>
                 <dt className="text-ink-2">{t('detail.nextSync')}</dt>
                 <dd className="m-0">{fmt(c.nextSyncAt)}</dd>
@@ -200,7 +215,7 @@ export default async function ConnectionPage({
           </dl>
           {canManage && live ? (
             <div className="flex flex-wrap items-end gap-3">
-              {notifies ? null : (
+              {notifies || importer ? null : (
                 <form
                   action={setIntervalAction.bind(null, org, c.id)}
                   className="flex flex-wrap items-end gap-2"
@@ -249,6 +264,18 @@ export default async function ConnectionPage({
           sp={sp}
         />
       ) : null}
+      {connector.key === GOOGLE_SHEETS && (live || c.status === 'revoked') ? (
+        <SheetsSection
+          org={org}
+          connectionId={c.id}
+          ctx={data.ctx}
+          locale={locale}
+          timezone={data.org.timezone}
+          canManage={canManage}
+          active={c.status === 'active'}
+          confirm={sp.confirm ?? null}
+        />
+      ) : null}
       {!notifies && (live || detail.mappings.length) ? (
         <section aria-labelledby="mapping-heading" className="flex flex-col gap-3">
           <SectionHeader
@@ -288,7 +315,7 @@ export default async function ConnectionPage({
             rowKey={(r) => r.id}
             rows={detail.runs}
             stackOnPhone
-            empty={t('runs.empty')}
+            empty={t(importer ? 'import.noRuns' : 'runs.empty')}
             columns={[
               { key: 'when', header: t('runs.when'), cell: (r) => fmt(r.startedAt ?? r.createdAt) },
               { key: 'trigger', header: t('runs.trigger'), cell: (r) => t(`runs.triggers.${r.trigger}`) },

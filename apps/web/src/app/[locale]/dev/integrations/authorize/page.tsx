@@ -48,14 +48,18 @@ export default async function FakeConsentPage({
     <main id="main" className="mx-auto flex min-h-dvh max-w-lg flex-col justify-center gap-6 px-4 py-12">
       <PageHeader eyebrow={<Label>{t('eyebrow')}</Label>} title={t('heading', { name: connector.name })} />
       <Card className="flex flex-col gap-4">
-        <p className="m-0 text-body">{t('body', { name: connector.name })}</p>
-        <ul className="m-0 flex flex-col gap-1 ps-5 text-body">
-          {connector.scopes.map((s) => (
-            <li key={s}>
-              <code className="font-mono text-caption">{s}</code>
-            </li>
-          ))}
-        </ul>
+        <p className="m-0 text-body">
+          {t(connector.scopes.length ? 'body' : 'bodyNoScopes', { name: connector.name })}
+        </p>
+        {connector.scopes.length ? (
+          <ul className="m-0 flex flex-col gap-1 ps-5 text-body">
+            {connector.scopes.map((s) => (
+              <li key={s}>
+                <code className="font-mono text-caption">{s}</code>
+              </li>
+            ))}
+          </ul>
+        ) : null}
         <form method="post" action="/api/dev/integrations/authorize" className="flex flex-wrap gap-2">
           <input type="hidden" name="provider" value={connector.key} />
           <input type="hidden" name="org" value={orgId} />
