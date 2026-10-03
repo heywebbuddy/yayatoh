@@ -120,6 +120,9 @@ async function decisionLink(page: Page, to: string, subject: RegExp): Promise<st
 async function payOnFakePage(page: Page) {
   await expect(page).toHaveURL(/\/checkout\/fake/);
   await page.getByRole('button', { name: 'Pay now (test)' }).click();
+  // Batch 3h merge: wait for the payment to land back on our pages before anyone reloads (a reload
+  // while the fake provider's POST is still in flight under load cancels the payment).
+  await expect(page).not.toHaveURL(/\/checkout\/fake/, { timeout: 30_000 });
 }
 
 test('the organizer makes a type by application with an auto-approve domain and a +1 guest type, by keyboard', async ({
