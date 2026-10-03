@@ -84,8 +84,7 @@ export function restoreQueue(raw: string | null | undefined): SpotterQueue {
     const pending = Array.isArray(v.pending) ? v.pending.filter(ok) : [];
     const settled = Array.isArray(v.settled)
       ? v.settled.filter(
-          (e): e is SettledEntry =>
-            ok(e) && typeof (e as SettledEntry).outcome?.status === 'string',
+          (e): e is SettledEntry => ok(e) && typeof (e as SettledEntry).outcome?.status === 'string',
         )
       : [];
     return { pending, settled: settled.slice(0, SETTLED_KEPT) };
