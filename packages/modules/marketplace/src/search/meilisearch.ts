@@ -34,6 +34,7 @@ export class MeilisearchError extends Error {
     super(message);
     this.status = status;
     this.name = 'MeilisearchError';
+    this.status = status;
   }
 }
 

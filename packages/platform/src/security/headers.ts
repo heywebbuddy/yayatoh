@@ -68,7 +68,16 @@ export interface SecurityHeaderOptions {
   /** HTTPS deployments: HSTS and upgrade-insecure-requests. */
   readonly https?: boolean;
   readonly extra?: CspOptions['extra'];
+  /** M6.14a: the page may ask for the visitor's location (same origin only). */
+  readonly geolocation?: boolean;
 }
+
+/**
+ * M6.14a: paths (after the locale) whose page may ask for the visitor's location: the
+ * marketplace search's "Use my location". Everything else keeps `geolocation=()`.
+ */
+const GEOLOCATION_PATHS: readonly string[] = ['/search'];
+export const geolocationAllowed = (pathname: string) => GEOLOCATION_PATHS.includes(pathname);
 
 /** Every header a page response carries, by page type. */
 export function securityHeaders(type: PageType, o: SecurityHeaderOptions): Record<string, string> {
@@ -102,7 +111,7 @@ export function securityHeaders(type: PageType, o: SecurityHeaderOptions): Recor
     'permissions-policy': [
       `camera=${type === 'scan' ? '(self)' : '()'}`,
       'microphone=()',
-      'geolocation=()',
+      `geolocation=${o.geolocation && type === 'public' ? '(self)' : '()'}`,
       'payment=()',
       'usb=()',
       'browsing-topics=()',

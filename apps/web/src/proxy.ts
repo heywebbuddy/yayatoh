@@ -3,6 +3,7 @@ import { frameAncestors, matchLegacyRedirect, widgetOrigins } from '@yayatoh/mar
 import {
   DEVICE_COOKIE,
   generateNonce,
+  geolocationAllowed,
   isDeviceId,
   newDeviceId,
   pageTypeOf,
@@ -108,6 +109,8 @@ export default async function proxy(req: NextRequest, event?: NextFetchEvent): P
     nonce,
     dev: process.env.NODE_ENV === 'development',
     https,
+    // M6.14a: marketplace search's "Use my location".
+    geolocation: geolocationAllowed(stripLocale(path, routing.locales)),
     // Ably (M3.1b) when it is the configured transport; SSE is same-origin. M6.3b: Svix's portal
     // on the console's embedded-portal page, once Svix is configured (nothing otherwise).
     extra: {
