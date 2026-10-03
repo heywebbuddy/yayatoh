@@ -49,7 +49,8 @@ export interface ComboboxProps {
 
 /**
  * Stable defaults: a fresh `[]` per render would re-run the effect that merges known options on
- * every render, and its state update would render again (React error #185 after any re-render).
+ * every render, and its state update would render again (React error 185, "maximum update
+ * depth", after any re-render).
  */
 const NO_OPTIONS: readonly ListOption[] = [];
 
