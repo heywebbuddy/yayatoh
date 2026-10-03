@@ -287,9 +287,23 @@ test.describe('series ↔ events', () => {
     await add.getByRole('button', { name: 'Add to series' }).click();
     await expect(add.getByText('Choose an event to add.')).toBeVisible();
     await expectAccessible(page);
-    await pickWithKeyboard(add.getByRole('combobox', { name: 'Event' }), {
-      label: new RegExp(`^${loose} · `),
-    });
+    // Keyboard only: open the list, type to search (an org has many events), Enter.
+    const picker = add.getByRole('combobox', { name: 'Event' });
+    await picker.focus();
+    await page.keyboard.press('ArrowDown');
+    const search = page.getByRole('combobox', { name: 'Search' });
+    if (await search.isVisible()) {
+      await expect(search).toBeFocused();
+      await page.keyboard.type(loose);
+      await expect(
+        page.locator(`[id="${await picker.getAttribute('aria-controls')}"]`).getByRole('option'),
+      ).toHaveCount(1);
+      await page.keyboard.press('Enter');
+    } else {
+      await page.keyboard.press('Escape');
+      await pickWithKeyboard(picker, { label: new RegExp(`^${loose} · `) });
+    }
+    await expect(picker).toContainText(loose);
     await add.getByRole('button', { name: 'Add to series' }).click();
     await expect(page.getByText('Event added to the series.')).toBeVisible();
     await expect(page.getByRole('row').filter({ hasText: loose })).toBeVisible();
