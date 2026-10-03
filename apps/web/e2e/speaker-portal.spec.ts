@@ -330,11 +330,17 @@ test.describe('speaker portal (M5.3a)', () => {
     );
     expect(download.status()).toBe(200);
     expect((await download.body()).toString()).toContain('%PDF');
+    // Ana's reminders so far: her tasks are done, so her scheduled pre-due reminders are cancelled
+    // from now on; one may already have gone out early if a parallel spec drained the shared org's
+    // scheduled mail (surveys.spec, batch 3g merge). The organizer's reminder must add none.
+    const anaReminders = async () =>
+      (await mailbox(page, anaMail)).filter((m) => /Reminder:/.test(m.subject)).length;
+    const anaBefore = await anaReminders();
     await board.getByRole('button', { name: `Remind 1 speaker missing “Upload slides ${s}”` }).click();
     await expect(board.getByText('Reminder sent to 1 address.')).toBeVisible();
     const reminder = await mailTo(page, benMail, /Reminder: Upload slides/, true);
     expect(reminder.text).toContain('/event-portal/invite/');
-    expect((await mailbox(page, anaMail)).some((m) => /Reminder:/.test(m.subject))).toBe(false);
+    expect(await anaReminders()).toBe(anaBefore);
     await page.reload();
     await expect(board.getByText(/Once, last/)).toBeVisible();
     await expectAccessible(page);
