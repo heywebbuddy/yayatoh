@@ -213,3 +213,8 @@ fakes in dev and CI).
 and `integrations.consent_changes` (RLS/FORCE, policies, org-leading indexes, composite FKs to
 connections). Hand-written: the widened `notifications.suppressions_source_check` added NOT VALID
 then validated; `consent_changes_contact_fk` → `crm.contacts (org_id, id)` on delete cascade.
+
+**Re-verified 2026-10-03** after merging `m0.5-foundation-ey5gqp` and `merge/next-3u`: the earlier
+`audit.int` failure was the tamper test's two full `twoOrgs()` fixtures running past the test's
+time (the fixture grows with every module, M6.4d's Mailchimp connection included); `merge/next-3u`
+already switched them to `bareOrg()`, so nothing in M6.4d needed changing.
