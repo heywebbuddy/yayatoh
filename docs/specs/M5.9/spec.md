@@ -96,3 +96,13 @@ and `routing_category_check` (NOT VALID, then VALIDATE; hand-written block).
 | Keyboard-only paths, axe in light and dark, Arabic RTL | `conference-pack.spec.ts` |
 | Thresholds equal between tiles and rules | `packages/testing/tests/alert-thresholds.test.ts` |
 | Capacity tile beside a session door | `conference-pack.int.test.ts` (live mode with session doors) |
+
+### 6. Gate (2026-10-03)
+- lint, check:modules, typecheck (59/59), unit 2729/2729 passed.
+- Integration: 1520/1521 on the full run; the one failure was the canary outbound check meeting
+  its first push (the pack's overdue-invoice alert to the canary owner): the fake transport records
+  the device address, which the check read as message content. Fixed in the canary fixture (push
+  content checked without its address; a new test asserts the address is the org's own canary
+  device token); `canary.int.test.ts` 6/6 after the fix.
+- e2e on 375/768/1280: `conference-pack.spec.ts` 12/12; related `command-center`, `live-mode`,
+  `alerts`, `session-checkin` specs green after their conference layouts gained the pack's tiles.
