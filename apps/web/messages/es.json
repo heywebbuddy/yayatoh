@@ -4166,7 +4166,55 @@
     "help": "Ayuda",
     "helpCenter": "Centro de ayuda",
     "contact": "Contacto",
-    "status": "Estado del sistema"
+    "status": "Estado del sistema",
+    "search": {
+      "title": "Buscar eventos",
+      "lede": "Encuentra eventos por nombre, categoría, precio, fecha y lugar, cerca de ti o de una ciudad.",
+      "formLabel": "Buscar y filtrar eventos",
+      "optionCount": "{label} ({count})",
+      "priceBand": {
+        "free": "Gratis",
+        "under_25": "Menos de 25",
+        "from_25_to_100": "De 25 a 100",
+        "over_100": "Más de 100"
+      },
+      "when": "Cuándo",
+      "anyTime": "Cualquier fecha",
+      "whenOption": {
+        "today": "Hoy",
+        "week": "Próximos 7 días",
+        "month": "Próximos 30 días"
+      },
+      "near": "Cerca de",
+      "nearAnywhere": "En cualquier lugar",
+      "nearMe": "Mi ubicación",
+      "radius": "Dentro de",
+      "radiusOption": "{km} km",
+      "sort": "Ordenar por",
+      "sortOption": {
+        "default": "Más relevantes",
+        "soonest": "Más próximos primero",
+        "nearest": "Más cercanos primero",
+        "popular": "Más populares"
+      },
+      "useLocation": "Usar mi ubicación",
+      "locating": "Buscando tu ubicación…",
+      "locationDenied": "No pudimos obtener tu ubicación. Elige una ciudad en «Cerca de».",
+      "locationMissing": "Vuelve a usar tu ubicación para buscar cerca de ti, o elige una ciudad en «Cerca de».",
+      "nearHeading": "A menos de {km} km de {place}",
+      "nearYou": "ti",
+      "distance": "a {km} km",
+      "similarHeading": "Más como {name}",
+      "similarLabel": "Eventos similares",
+      "similarEmpty": "Aún no hay eventos similares",
+      "similarEmptyDescription": "Prueba la búsqueda de arriba o mira lo más popular.",
+      "nearbyHeading": "Cerca",
+      "likeMissing": "Ese evento ya no está publicado.",
+      "popularHeading": "Eventos populares",
+      "emptyDescription": "Prueba otra fecha, lugar o precio, amplía la distancia o borra los filtros.",
+      "openSearch": "Buscar por lugar, categoría y precio",
+      "similarLink": "Encontrar eventos similares"
+    }
   },
   "widget": {
     "title": "Entradas: {event}",

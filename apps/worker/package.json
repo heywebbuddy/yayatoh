@@ -20,7 +20,8 @@
     "billing:sync-catalog": "node scripts/billing-sync-catalog.ts",
     "contact-stats": "node scripts/contact-stats.ts",
     "irs-exempt-list": "node scripts/irs-exempt-list.ts",
-    "printnode": "node scripts/printnode.ts"
+    "printnode": "node scripts/printnode.ts",
+    "search:reindex": "node scripts/search-reindex.ts"
   },
   "dependencies": {
     "@yayatoh/alerts": "workspace:*",

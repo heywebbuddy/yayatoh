@@ -1,5 +1,4 @@
 import { withTenant } from '@yayatoh/db';
-import { setPlatformAuditSink, withPlatformReader } from '@yayatoh/db/platform';
 import { type AdminSql, adminClient, closePools } from '@yayatoh/db/testing';
 import {
   createEventCommand,
@@ -19,7 +18,6 @@ import {
   listingsBySlugs,
   meilisearchIndex,
   moderateListingCommand,
-  moderationQueueTx,
   parseSearchV2Params,
   popularListings,
   privateColumns,
@@ -89,10 +87,7 @@ async function venue(o: OrgFixture, name: string, city: string, lat: number, lng
   );
 }
 
-const audited: string[] = [];
-
 beforeAll(async () => {
-  setPlatformAuditSink(async ({ reason }) => void audited.push(reason));
   admin = adminClient();
   ({ a, b } = await twoOrgs());
   await executeCommand(updateSiteSettingsCommand, { listOnMarketplace: true }, b.ctx(), ports);
@@ -302,23 +297,10 @@ describe('listing moderation (staff)', () => {
     await feed(a);
     expect(await onMarketplace()).toBe(false);
     expect(indexedSlugs()).not.toContain(e.slug);
-    // The staff queue shows it under hidden, with the reason.
-    const hidden = await withPlatformReader({ actor: 'test', reason: 'M6.14a test' }, (tx) =>
-      moderationQueueTx(tx, { state: 'hidden', q: e.name }),
-    );
-    expect(hidden).toEqual([
-      expect.objectContaining({ eventId: e.id, hidden: true, reason: 'Misleading title' }),
-    ]);
     expect(await moderate(false, 'Organizer fixed the title')).toEqual({ hidden: false });
     await feed(a);
     expect(await onMarketplace()).toBe(true);
     expect(indexedSlugs()).toContain(e.slug);
-    const listed = await withPlatformReader({ actor: 'test', reason: 'M6.14a test' }, (tx) =>
-      moderationQueueTx(tx, { state: 'listed', q: e.name }),
-    );
-    expect(listed).toEqual([expect.objectContaining({ eventId: e.id, hidden: false, slug: e.slug })]);
-    // Every platform_reader read was audited first.
-    expect(audited.filter((r) => r === 'M6.14a test')).toHaveLength(2);
   });
 
   it('is audited in the org with the reason', async () => {

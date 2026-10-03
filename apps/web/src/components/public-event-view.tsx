@@ -56,6 +56,7 @@ import { publicDemoOverlay } from '@/server/demo.ts';
 import { cachedExhibitorMap } from '@/server/exhibitor-map.ts';
 import { cachedReviews } from '@/server/public-data.ts';
 import { requestHost } from '@/server/request-origin.ts';
+import { searchConfigured } from '@/server/search.ts';
 import { openVenueMap } from '@/server/seat-finder.ts';
 import { apexOrigin, eventOrigin } from '@/server/seo.ts';
 import { currentTheme } from '@/server/theme.ts';
@@ -783,6 +784,15 @@ export async function PublicEventView({
                   </h2>
                   <p className="m-0 text-[17px] font-extrabold text-ink">{ev.organizerName}</p>
                 </div>
+                {/* M6.14a: recommendations around this event (marketplace search v2). */}
+                {req.kind === 'marketplace' && listing && searchConfigured() ? (
+                  <Link
+                    href={`/search?like=${encodeURIComponent(slug)}`}
+                    className="inline-flex min-h-6 items-center text-body underline"
+                  >
+                    {t('market.search.similarLink')}
+                  </Link>
+                ) : null}
               </section>
 
               {target ? (

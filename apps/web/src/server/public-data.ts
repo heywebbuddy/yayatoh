@@ -1,14 +1,23 @@
 import 'server-only';
 import {
+  cityCenters,
   type ListingDto,
   type ListingPageDto,
   listingCities,
   orgListings,
+  popularListings,
+  type SearchListingDto,
   type SearchParams,
+  type SearchResultDto,
+  type SearchV2Params,
+  type SimilarDto,
   searchListings,
+  searchMarketplace,
+  similarListings,
 } from '@yayatoh/marketplace';
 import { type PublicReviewSummaryDto, publicReviews } from '@yayatoh/reviews';
 import { publicCached } from './public-cache.ts';
+import { searchIndex } from './search.ts';
 
 type Raw = Record<string, unknown>;
 const reviveListing = (l: Raw) =>
@@ -61,4 +70,57 @@ export const cachedReviews = (orgId: string, eventId: string) =>
         recent: s.recent.map((r) => ({ ...r, createdAt: new Date(String(r.createdAt)) })),
       } as PublicReviewSummaryDto;
     },
+  );
+
+// M6.14a search v2: cross-tenant reads of the index (public listings only), so every entry is in
+// the marketplace scope, which any org's change revalidates (`orgChangeTags`).
+const reviveItems = (items: Raw[]) => items.map(reviveListing) as SearchListingDto[];
+
+async function requireIndex() {
+  const index = await searchIndex();
+  if (!index) throw new Error('search v2 is off');
+  return index;
+}
+
+/** A search v2 page (results, facets, geo centre). Callers check `searchEnabled()` first. */
+export const cachedSearch = (p: SearchV2Params) =>
+  publicCached(
+    'marketplace',
+    ['search-v2', p],
+    async () => searchMarketplace(await requireIndex(), p),
+    (raw) => {
+      const r = raw as SearchResultDto & { items: Raw[] };
+      return { ...r, items: reviveItems(r.items) };
+    },
+  );
+
+/** Similar and nearby events around one listing (null when it is not a public listing). */
+export const cachedSimilar = (slug: string) =>
+  publicCached(
+    'marketplace',
+    ['similar', slug],
+    async () => similarListings(await requireIndex(), slug),
+    (raw) => {
+      if (!raw) return null;
+      const r = raw as SimilarDto & { similar: Raw[]; nearby: Raw[] };
+      return { ...r, similar: reviveItems(r.similar), nearby: reviveItems(r.nearby) } as SimilarDto;
+    },
+  );
+
+/** Popular upcoming events (the organizers' public review counts). */
+export const cachedPopular = () =>
+  publicCached(
+    'marketplace',
+    ['popular'],
+    async () => popularListings(await requireIndex()),
+    (raw) => reviveItems(raw as Raw[]),
+  );
+
+/** Cities with a geo centre (the "near" options). */
+export const cachedCityCenters = () =>
+  publicCached(
+    'marketplace',
+    ['city-centers'],
+    () => cityCenters(),
+    (raw) => raw as { city: string; lat: number; lng: number }[],
   );

@@ -4166,7 +4166,55 @@
     "help": "Ajuda",
     "helpCenter": "Central de ajuda",
     "contact": "Fale conosco",
-    "status": "Status do sistema"
+    "status": "Status do sistema",
+    "search": {
+      "title": "Pesquisar eventos",
+      "lede": "Encontre eventos por nome, categoria, preço, data e local, perto de você ou de uma cidade.",
+      "formLabel": "Pesquisar e filtrar eventos",
+      "optionCount": "{label} ({count})",
+      "priceBand": {
+        "free": "Grátis",
+        "under_25": "Menos de 25",
+        "from_25_to_100": "De 25 a 100",
+        "over_100": "Mais de 100"
+      },
+      "when": "Quando",
+      "anyTime": "A qualquer momento",
+      "whenOption": {
+        "today": "Hoje",
+        "week": "Próximos 7 dias",
+        "month": "Próximos 30 dias"
+      },
+      "near": "Perto de",
+      "nearAnywhere": "Qualquer lugar",
+      "nearMe": "Minha localização",
+      "radius": "Num raio de",
+      "radiusOption": "{km} km",
+      "sort": "Ordenar por",
+      "sortOption": {
+        "default": "Mais relevantes",
+        "soonest": "Mais próximos no tempo",
+        "nearest": "Mais próximos",
+        "popular": "Mais populares"
+      },
+      "useLocation": "Usar minha localização",
+      "locating": "Encontrando sua localização…",
+      "locationDenied": "Não conseguimos obter sua localização. Escolha uma cidade em “Perto de”.",
+      "locationMissing": "Use sua localização de novo para pesquisar perto de você, ou escolha uma cidade em “Perto de”.",
+      "nearHeading": "Num raio de {km} km de {place}",
+      "nearYou": "você",
+      "distance": "a {km} km",
+      "similarHeading": "Mais como {name}",
+      "similarLabel": "Eventos semelhantes",
+      "similarEmpty": "Ainda não há eventos semelhantes",
+      "similarEmptyDescription": "Experimente a pesquisa acima ou veja os populares.",
+      "nearbyHeading": "Por perto",
+      "likeMissing": "Esse evento não está mais publicado.",
+      "popularHeading": "Eventos populares",
+      "emptyDescription": "Tente outra data, local ou preço, aumente a distância ou limpe os filtros.",
+      "openSearch": "Pesquisar por local, categoria e preço",
+      "similarLink": "Encontrar eventos semelhantes"
+    }
   },
   "widget": {
     "title": "Ingressos: {event}",

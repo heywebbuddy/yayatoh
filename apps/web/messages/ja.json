@@ -4166,7 +4166,55 @@
     "help": "ヘルプ",
     "helpCenter": "ヘルプセンター",
     "contact": "お問い合わせ",
-    "status": "システムステータス"
+    "status": "システムステータス",
+    "search": {
+      "title": "イベントを検索",
+      "lede": "名前、カテゴリ、料金、日付、場所でイベントを探せます。現在地や都市の近くも検索できます。",
+      "formLabel": "イベントの検索と絞り込み",
+      "optionCount": "{label}（{count}）",
+      "priceBand": {
+        "free": "無料",
+        "under_25": "25未満",
+        "from_25_to_100": "25〜100",
+        "over_100": "100超"
+      },
+      "when": "日時",
+      "anyTime": "いつでも",
+      "whenOption": {
+        "today": "今日",
+        "week": "今後7日間",
+        "month": "今後30日間"
+      },
+      "near": "近く",
+      "nearAnywhere": "すべての場所",
+      "nearMe": "現在地",
+      "radius": "範囲",
+      "radiusOption": "{km} km",
+      "sort": "並び替え",
+      "sortOption": {
+        "default": "関連度順",
+        "soonest": "開催が近い順",
+        "nearest": "距離が近い順",
+        "popular": "人気順"
+      },
+      "useLocation": "現在地を使う",
+      "locating": "現在地を取得しています…",
+      "locationDenied": "現在地を取得できませんでした。代わりに「近く」で都市を選んでください。",
+      "locationMissing": "近くを検索するには現在地をもう一度使うか、「近く」で都市を選んでください。",
+      "nearHeading": "{place}から{km} km以内",
+      "nearYou": "現在地",
+      "distance": "{km} km先",
+      "similarHeading": "{name}に似たイベント",
+      "similarLabel": "似たイベント",
+      "similarEmpty": "似たイベントはまだありません",
+      "similarEmptyDescription": "上の検索を試すか、人気のイベントをご覧ください。",
+      "nearbyHeading": "近くのイベント",
+      "likeMissing": "このイベントは掲載終了しました。",
+      "popularHeading": "人気のイベント",
+      "emptyDescription": "別の日付、場所、料金を試すか、範囲を広げるか、絞り込みを解除してください。",
+      "openSearch": "場所・カテゴリ・料金で検索",
+      "similarLink": "似たイベントを探す"
+    }
   },
   "widget": {
     "title": "チケット：{event}",
