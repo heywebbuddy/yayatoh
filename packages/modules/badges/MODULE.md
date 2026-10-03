@@ -1,0 +1,16 @@
+# badges (tier 5)
+
+Badge templates, their assignment to ticket types, and batch PDFs (M5.5a). Owns Postgres schema `badges`. Printers, print jobs, the print log and the `BadgePrinter` port arrive with M5.5b; kiosk self-print with M5.5c. Stage 1 printing (P5-2) is the PDF itself: AirPrint or the browser's print dialog, on any printer.
+
+**Invariants**
+- Gated by the `badges` module key (every command and query) and shown only where the event's profile lists the Badges page (the conference profile).
+- A template is a series of immutable versions (`template_versions.design`, a `BadgeDesign`); saving writes version n + 1 and is refused when the editor started from an older version (`stale_version`). A batch pins the versions it prints (`batches.version_map`), so an edit during a run never mixes designs.
+- Positions are millimetres in logical (left-to-right) coordinates on the face; RTL badges mirror them (`placeElement`). Sizes, bleed and safe areas are fixed presets (`SIZES`, P5-2): 4×3 in fold-over (front and back on one 4×6 sheet, the back turned 180°), 4×6 in, CR80, Brother QL 62 mm and 4 in.
+- One template per ticket type (`assignments`, unique per ticket type); an unassigned type prints with the event's default template (exactly one default while the event has templates; the first template is the default, and deleting the default promotes the oldest). The target is one column per binding kind with `assignments_target_check = num_nonnulls(…) = 1`: registration types (M5.1a) add `registration_type_id` additively.
+- **Render allowlist:** a badge's data is built by `badgeRow` (`BadgeRow`, a strict Zod object) from the fields the template places, and nothing else. The holder's email never leaves ticketing (`badgeTicketsTx` doesn't select it). Checkout answers reach a badge only when the organizer maps a question to company or job title, and only non-sensitive free-text questions may be mapped (checked on save).
+- **Badge QR = the ticket's active signed yy1 code (ADR 0011), unchanged**, so the Scan PWA reads a badge exactly as the ticket. Voided tickets are not printed (a ticket voided mid-batch is left out of its chunk).
+- Ribbon colours are design tokens only (`RIBBON_COLORS`, each a fill + text pair at ≥ 4.5:1).
+- Batches: `badges.startBatch` (`attendees:export`, step-up, category `export`) snapshots and sorts the selection (last name A–Z, or company A–Z with no-company last) and is idempotent per `request_key`. The worker's `badges.batch` job (exclusive per batch) renders chunks of 100 through the `PdfRenderer` port, stores each in `batch_parts` (keyed by sequence; progress moves only when the batch is still at that chunk, so retries never double-count), merges them, stores the file in the media store under `{org}/{batch}/0-{sha}.pdf`, and deletes the parts. Cancel stops it between chunks. Files expire after 7 days.
+- Downloads: `badges.batchLink` signs a 15-minute link (`{org}~{batch}~{exp}~{hmac}`, APP_TOKEN_SECRET); the route serves the file only while the batch is done and unexpired.
+- Writes to templates and assignments need `events:write`; previews with sample people need `events:read` (viewers can preview); the one-badge PDF needs `attendees:write`.
+- Consumes no events and emits none yet.

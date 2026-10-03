@@ -16,6 +16,14 @@ const ORG_NAV: readonly NavItem[] = [
   { key: 'audiences', path: 'audiences', group: 'overview', module: 'marketing', icon: 'megaphone' },
   { key: 'campaigns', path: 'campaigns', group: 'overview', module: 'marketing', icon: 'send' },
   { key: 'journeys', path: 'journeys', group: 'overview', module: 'marketing', icon: 'workflow' },
+  // M3.8b: campaign → registrations and revenue, and email deliverability.
+  {
+    key: 'marketingAnalytics',
+    path: 'marketing-analytics',
+    group: 'overview',
+    module: 'marketing',
+    icon: 'chart',
+  },
   { key: 'refundRequests', path: 'refund-requests', group: 'overview', module: 'ticketing', icon: 'undo' },
   { key: 'disputes', path: 'disputes', group: 'overview', module: 'ticketing', icon: 'shield-alert' },
   { key: 'supportMacros', path: 'macros', group: 'overview', module: 'ticketing', icon: 'zap' },
@@ -51,6 +59,7 @@ const NEEDS: Readonly<Record<string, string>> = {
   audiences: 'messages:read',
   campaigns: 'marketing:read',
   journeys: 'marketing:read',
+  marketingAnalytics: 'marketing:read',
   refundRequests: 'orders:read',
   disputes: 'finance:read',
   supportMacros: 'orders:support',
