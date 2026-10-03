@@ -90,6 +90,17 @@ export default async function SponsorDeliverablesPage({ params }: Params) {
           <EmptyState
             title={t('noDeliverablesTitle')}
             description={q.sponsors.length ? t('noDeliverablesDescription') : t('noSponsorsDescription')}
+            action={
+              canWrite && q.sponsors.length ? (
+                <a href="#new-deliverable" className={buttonClass('primary', 'md')}>
+                  {t('addDeliverable')}
+                </a>
+              ) : (
+                <Link href={`${base}/sponsors`} className={buttonClass('primary', 'md')}>
+                  {tn('sponsors')}
+                </Link>
+              )
+            }
           />
         ) : (
           <ul className="m-0 flex list-none flex-col gap-2 p-0">
@@ -103,7 +114,7 @@ export default async function SponsorDeliverablesPage({ params }: Params) {
       </section>
 
       {canWrite && q.sponsors.length ? (
-        <section aria-labelledby="add-deliverable-heading">
+        <section id="new-deliverable" aria-labelledby="add-deliverable-heading">
           <Card size="panel" className="flex flex-col gap-3">
             <h2 id="add-deliverable-heading" className="m-0 text-section">
               {t('addDeliverable')}

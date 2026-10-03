@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { expectAccessible, signIn } from './helpers.ts';
+import { expectAccessible, pickOption, signIn } from './helpers.ts';
 
 test.describe('guest list', () => {
   test.use({ viewport: { width: 1280, height: 900 } });
@@ -40,7 +40,7 @@ test.describe('guest list', () => {
     await page.reload();
     const bulk = page.getByRole('form', { name: 'Bulk actions' });
     await bulk.getByLabel('All 2 matching').check();
-    await bulk.getByLabel('Action').selectOption({ label: 'Send email' });
+    await pickOption(bulk.getByLabel('Action'), { label: 'Send email' });
     await bulk.getByLabel('Subject').fill('Seating plan');
     await bulk.getByLabel('Message').fill('Dinner starts at 7. See you there!');
     await expectAccessible(page);

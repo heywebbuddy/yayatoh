@@ -49,7 +49,7 @@ export default async function ReceiptsPage({
 }) {
   const { locale, org, event } = await params;
   setRequestLocale(locale);
-  const { data, event: ev, can } = await loadEvent(org, event, 'donations');
+  const { data, event: ev, can, opens } = await loadEvent(org, event, 'donations');
   const t = await getTranslations('donations.receipts');
   const tn = await getTranslations('nav');
   const crumbs = (
@@ -66,7 +66,15 @@ export default async function ReceiptsPage({
     return (
       <>
         <PageHeader breadcrumb={crumbs} title={t('title')} />
-        <EmptyState title={t('noAccessTitle')} description={t('noAccessDescription')} />
+        <EmptyState
+          title={t('noAccessTitle')}
+          description={t('noAccessDescription')}
+          action={
+            <Link href={`/o/${org}/e/${event}/donations`} className={buttonClass('primary', 'md')}>
+              {t('back')}
+            </Link>
+          }
+        />
       </>
     );
   // Payments not yet receipted (the worker relays them in production; dev and e2e have none).
@@ -126,6 +134,17 @@ export default async function ReceiptsPage({
             icon={<Ticket strokeWidth={2} />}
             title={t('noTypesTitle')}
             description={t('noTypesDescription')}
+            action={
+              canWrite && data.modules.has('ticketing') && opens('ticketsOrders') ? (
+                <Link href={`/o/${org}/e/${event}/tickets-orders`} className={buttonClass('primary', 'md')}>
+                  {t('addTicketTypes')}
+                </Link>
+              ) : (
+                <Link href={`/o/${org}/e/${event}`} className={buttonClass('primary', 'md')}>
+                  {t('backToEvent')}
+                </Link>
+              )
+            }
           />
         ) : (
           <ul className="m-0 flex list-none flex-col gap-4 p-0">
@@ -213,7 +232,15 @@ export default async function ReceiptsPage({
       <section aria-labelledby="receipts-heading" className="flex flex-col gap-4">
         <SectionHeader id="receipts-heading" title={t('receiptsTitle')} />
         {view.receipts.length === 0 ? (
-          <EmptyState icon={<ReceiptText strokeWidth={2} />} title={t('noReceipts')} />
+          <EmptyState
+            icon={<ReceiptText strokeWidth={2} />}
+            title={t('noReceipts')}
+            action={
+              <Link href={`/o/${org}/e/${event}/donations`} className={buttonClass('primary', 'md')}>
+                {t('back')}
+              </Link>
+            }
+          />
         ) : (
           <Table<HostReceiptDto>
             caption={t('receiptsCaption')}

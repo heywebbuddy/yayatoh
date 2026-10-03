@@ -194,6 +194,17 @@ export default async function PaddlesPage({
               icon={<Hash strokeWidth={2} />}
               title={t('emptyTitle')}
               description={canWrite ? t('emptyDescription') : t('emptyViewer')}
+              action={
+                canWrite ? (
+                  <a href="#bulk-heading" className={buttonClass('primary', 'md')}>
+                    {t('bulkTitle')}
+                  </a>
+                ) : (
+                  <Link href={base} className={buttonClass('secondary', 'md')}>
+                    {tn('donations')}
+                  </Link>
+                )
+              }
             />
           )
         ) : (

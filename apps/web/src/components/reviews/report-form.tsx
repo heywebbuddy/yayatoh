@@ -1,7 +1,7 @@
 'use client';
 
 import { REPORT_REASONS } from '@yayatoh/reviews/ui';
-import { Alert, Button } from '@yayatoh/ui';
+import { Alert, Button, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState, useEffect, useId, useRef, useState } from 'react';
 import { errorMessageKey } from '@/lib/errors.ts';
@@ -21,7 +21,7 @@ export function ReportForm({
   const [open, setOpen] = useState(false);
   const [state, formAction, pending] = useActionState(action, INITIAL_FORM_STATE);
   const id = useId();
-  const firstRef = useRef<HTMLSelectElement>(null);
+  const firstRef = useRef<HTMLButtonElement>(null);
   useEffect(() => {
     if (open) firstRef.current?.focus();
   }, [open]);
@@ -43,13 +43,13 @@ export function ReportForm({
       <label htmlFor={`${id}-reason`} className="text-[13px] font-bold text-ink">
         {t('reason')}
       </label>
-      <select ref={firstRef} id={`${id}-reason`} name="reason" className="field px-3">
+      <Select ref={firstRef} id={`${id}-reason`} name="reason" className="field px-3">
         {REPORT_REASONS.map((r) => (
           <option key={r} value={r}>
             {tr(r)}
           </option>
         ))}
-      </select>
+      </Select>
       <label htmlFor={`${id}-note`} className="text-[13px] font-bold text-ink">
         {t('note')}
       </label>

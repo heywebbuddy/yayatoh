@@ -1,12 +1,23 @@
 import { PADDLE_CONSOLE_CHANNEL, paddleReviewQuery, type ReviewEntryDto } from '@yayatoh/donations';
 import { executeQuery, formatMoney, money } from '@yayatoh/kernel';
 import { realtimeChannelName } from '@yayatoh/platform';
-import { Alert, Card, CardHeader, EmptyState, PageHeader, StatCard, StatusPill, Table } from '@yayatoh/ui';
+import {
+  Alert,
+  buttonClass,
+  Card,
+  CardHeader,
+  EmptyState,
+  PageHeader,
+  StatCard,
+  StatusPill,
+  Table,
+} from '@yayatoh/ui';
 import { ClipboardCheck } from 'lucide-react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Crumbs } from '@/components/crumbs.tsx';
+import { Link } from '@/i18n/navigation.ts';
 import { realtimeUrl } from '@/lib/realtime-url.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
@@ -77,6 +88,11 @@ export default async function PaddleReviewPage({
             icon={<ClipboardCheck strokeWidth={2} />}
             title={t('emptyTitle')}
             description={t('emptyDescription')}
+            action={
+              <Link href={`${base}/paddle-raise`} className={buttonClass('primary', 'md')}>
+                {tr('title')}
+              </Link>
+            }
           />
         ) : (
           <ol className="m-0 flex list-none flex-col gap-4 p-0">

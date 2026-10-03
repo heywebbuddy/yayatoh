@@ -757,3 +757,15 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **Card saving at guest check-in (M4.8e on M4.4b):** right after a guest is checked in on the Scan PWA (and on the day-of page), while the event takes gifts online, staff show the event's card-saving code (`/events/{slug}/card?src=checkin`), not the party's own link: a party's link is a credential to its RSVP, so it is not put on door devices. A card saved there is matched to the guest's pledges by email.
 - [ ] **Badge printing with a balance due (M5.1d on M5.5b):** a print job for a registration whose invoice is unpaid needs the same audited override as before (10 minutes, this ticket); the override now opens the logged print page.
 - [ ] **Conference alerts read sponsor deliverables (M5.4b) and badge printers (M5.5b)** now that both are built; leads (M5.6b) are still not connected.
+
+## U1 — form controls (2026-10-03, pending owner)
+- [ ] **Built with these defaults; say if any should change:**
+  - **Type-ahead on a closed dropdown chooses straight away**, as the browser's own select did (the keyboard paths and habits stay the same). To search, open the list (Enter, ↓ or a click); lists of more than 8 options open with a search box.
+  - **Event time zone in the create-event wizard** is now the full IANA list, grouped by region with the current offset, instead of the 13 zones the wizard offered. Values are unchanged (IANA names).
+  - **Arabic digits in the date and time pickers:** dates and times show Arabic-Indic digits (٠٥/١١/٢٠٢٦) in Arabic, as the U1 spec asks. The rest of the app still formats numbers with Western digits in Arabic (the CLDR default); say if you want one rule everywhere.
+  - **Typed dates** use the reader's locale order (11/05/2026 in English, 05.11.2026 in German). ISO (2026-11-05) always works too.
+
+## U2 — console navigation and guidance (2026-10-03, pending owner)
+- [ ] **Where pages sit in the grouped sidebar** (`apps/web/src/lib/org-nav.ts`): Analytics, Coupons, Refund requests, Disputes and Charity profile under Money; Support macros next to Messages under Audience & marketing; Plan & billing, Sending setup, Messaging limits, Webhooks, Integrations, Sandboxes, Activity, Privacy requests and your own Notifications under Settings; Email templates and Domains under Site & content. Sections start open; each member's collapsed sections are remembered per browser (a cookie, no account column). Confirm or move items.
+- [ ] **Nav visibility now follows page permissions**: a viewer no longer sees Settings, Domains, Public site, Payouts or API keys in the sidebar (those pages only showed a refusal or empty figures to them); the scanner (door) role sees Home and Notifications, and Home now points them to the Scan app. Confirm.
+- [ ] **"Read the guide" links** search the help center (`/help/search?q=…`). When the help team writes articles for domains, templates, series, payouts, sending, event types and promo codes, the links can point to them directly (`lib/help-topics.ts`).

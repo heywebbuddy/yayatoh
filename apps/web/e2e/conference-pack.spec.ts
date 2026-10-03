@@ -3,7 +3,7 @@ import { closePools } from '@yayatoh/db';
 import { localKeyVault, setKeyVault } from '@yayatoh/platform';
 import { resolveOrgSlug } from '@yayatoh/tenancy';
 import { type ConferenceScenario, conferenceScenario } from '@yayatoh/testing';
-import { expectAccessibleBothModes, newUser } from './helpers.ts';
+import { expectAccessibleBothModes, newUser, pickOption } from './helpers.ts';
 
 /**
  * M5.9a conference Command Center pack: the acceptance on the real board ("3 sessions are over
@@ -221,7 +221,7 @@ test.describe('conference Command Center pack (M5.9a)', () => {
     const sponsors = page.getByTestId('cc-widget-sponsorActivity');
     await expect(sponsors).toContainText('No sponsors yet.');
     await expectAccessibleBothModes(page);
-    // With exhibitors but no lead source for the event: the tile says leads are not on yet.
+    // With exhibitors but no lead source for the event (M5.6b is not built): leads are not on yet.
     const org = await resolveOrgSlug(owner.orgSlug as string);
     if (!org) throw new Error('no org');
     const s = await conferenceScenario(org.orgId, { withoutFakes: true });
@@ -229,7 +229,10 @@ test.describe('conference Command Center pack (M5.9a)', () => {
     await expect(page.getByTestId('cc-exhibitor-activity')).toContainText(
       'Lead counts appear here once lead retrieval is on.',
     );
-    await expect(page.getByTestId('cc-sponsor-activity')).toContainText(
+    // Batch 3j merge: sponsor deliverables (M5.4b) are connected now: the tile counts the event's
+    // real ones (none overdue here) instead of saying the source is off.
+    await expect(page.getByTestId('cc-sponsor-activity')).toContainText('0 deliverables overdue');
+    await expect(page.getByTestId('cc-sponsor-activity')).not.toContainText(
       'Deliverables appear here once sponsor packages are on.',
     );
     await expect(alertsTile(page).getByText(LEADS_ALERT)).toHaveCount(0);
@@ -243,7 +246,7 @@ async function doorStaff(page: Page, browser: Browser, slug: string, base: strin
   await newUser(door, { join: [`${slug}:viewer`], name });
   await page.goto(`${base}/onsite/staff`);
   const add = page.getByRole('region', { name: 'Add door staff' });
-  await add.getByLabel('Team member').selectOption({ label: name });
+  await pickOption(add.getByLabel('Team member'), { label: name });
   await add.getByRole('button', { name: 'Add door staff' }).click();
   await expect(add.getByRole('status')).toHaveText('Saved.');
   return door;

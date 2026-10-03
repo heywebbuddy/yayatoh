@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { expectAccessible, MARKET, makeStaff, signInStaff, webPage, webUser } from './helpers.ts';
+import { expectAccessible, MARKET, makeStaff, pickOption, signInStaff, webPage, webUser } from './helpers.ts';
 
 // Incidents are platform-wide: one run posts and resolves its own, one project at a time.
 test.describe.configure({ mode: 'serial' });
@@ -27,7 +27,7 @@ test('staff post an incident: validation, it appears on the status page and in t
 
   // Keyboard: fill and submit without the mouse.
   await form.getByLabel('Title (shown publicly)').fill(title);
-  await form.getByLabel('Impact').selectOption('critical');
+  await pickOption(form.getByLabel('Impact'), 'critical');
   await form.getByRole('checkbox', { name: 'Checkout' }).check();
   await form.getByLabel('First update (shown publicly)').fill('We are looking into slow checkouts.');
   await form.getByRole('button', { name: 'Post incident' }).focus();
@@ -48,7 +48,7 @@ test('staff post an incident: validation, it appears on the status page and in t
 
   // Close it with an update.
   const update = page.getByRole('form', { name: `Update ${title}` });
-  await update.getByLabel('New status').selectOption('resolved');
+  await pickOption(update.getByLabel('New status'), 'resolved');
   await update.getByLabel('Update (shown publicly)').fill('Fixed: checkouts are fast again.');
   await update.getByRole('button', { name: 'Post update' }).click();
   await expect(page.getByRole('form', { name: `Update ${title}` })).toHaveCount(0);

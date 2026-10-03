@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { type Download, expect, type Page, test } from '@playwright/test';
-import { expectAccessible, expectAccessibleBothModes, signIn } from './helpers.ts';
+import { expectAccessible, expectAccessibleBothModes, pickOption, signIn } from './helpers.ts';
 import { quickPlan } from './seating-helpers.ts';
 
 /**
@@ -27,8 +27,8 @@ function chicagoDate(days: number): string {
 async function createWedding(page: Page, name: string): Promise<string> {
   await page.goto(`${ORG}/events/new`);
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Event type').selectOption('wedding');
-  await page.getByLabel('Time zone').selectOption(TZ);
+  await pickOption(page.getByLabel('Event type'), 'wedding');
+  await pickOption(page.getByLabel('Time zone'), TZ);
   await page.getByLabel('Starts', { exact: true }).fill(`${chicagoDate(60)}T16:00`);
   await page.getByLabel('Ends', { exact: true }).fill(`${chicagoDate(60)}T23:00`);
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -78,8 +78,7 @@ async function seatParty(page: Page, base: string, party: string, table: string)
   await page.getByRole('checkbox', { name: `Select everyone in ${party}` }).focus();
   await page.keyboard.press('Space');
   const chooser = page.getByLabel('Table or row', { exact: true }).first();
-  const option = chooser.locator('option', { hasText: `${table} — ` });
-  await chooser.selectOption({ label: (await option.textContent()) ?? '' });
+  await pickOption(chooser, { label: `${table} — ` });
   await page.getByRole('button', { name: 'Seat selected guests' }).focus();
   await page.keyboard.press('Enter');
   await expect(page.getByText(new RegExp(`Seated \\d guests? at ${table}\\.`))).toBeVisible();
@@ -118,7 +117,7 @@ test.describe('cards and exports (M4.3b)', () => {
     await expectAccessibleBothModes(page);
 
     // Place cards on A4 in English: one primary action, a download and a success line.
-    await page.getByLabel('Paper size').selectOption('a4');
+    await pickOption(page.getByLabel('Paper size'), 'a4');
     const place = await pressForDownload(page, () =>
       page.getByRole('button', { name: 'Download PDF' }).focus(),
     );
@@ -130,8 +129,8 @@ test.describe('cards and exports (M4.3b)', () => {
     await page.getByRole('radio', { name: 'Place cards' }).focus();
     await page.keyboard.press('ArrowDown');
     await expect(page.getByRole('radio', { name: 'Escort cards' })).toBeChecked();
-    await page.getByLabel('Paper size').selectOption('letter');
-    await page.getByLabel('Card language').selectOption('ar');
+    await pickOption(page.getByLabel('Paper size'), 'letter');
+    await pickOption(page.getByLabel('Card language'), 'ar');
     const escort = await pressForDownload(page, () =>
       page.getByRole('button', { name: 'Download PDF' }).focus(),
     );
@@ -143,7 +142,7 @@ test.describe('cards and exports (M4.3b)', () => {
 
     // Table cards on A5.
     await page.getByRole('radio', { name: 'Table cards' }).check();
-    await page.getByLabel('Paper size').selectOption('a5');
+    await pickOption(page.getByLabel('Paper size'), 'a5');
     const table = await pressForDownload(page, () =>
       page.getByRole('button', { name: 'Download PDF' }).focus(),
     );

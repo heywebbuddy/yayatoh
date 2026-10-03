@@ -175,7 +175,15 @@ export default async function ScreenPage({
                 </section>
               </>
             ) : canWrite ? null : (
-              <EmptyState icon={<MonitorPlay strokeWidth={2} />} title={t('notSetUp')} />
+              <EmptyState
+                icon={<MonitorPlay strokeWidth={2} />}
+                title={t('notSetUp')}
+                action={
+                  <Link href={base} className={buttonClass('secondary', 'md')}>
+                    {tn('donations')}
+                  </Link>
+                }
+              />
             )}
           </>
         )}

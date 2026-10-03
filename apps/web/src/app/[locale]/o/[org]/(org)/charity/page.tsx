@@ -1,12 +1,12 @@
 import { type CharityProfileDto, charityProfileQuery } from '@yayatoh/donations';
 import { executeQuery, isDomainError } from '@yayatoh/kernel';
 import { roleCan } from '@yayatoh/tenancy';
-import { Alert, Card, EmptyState, PageHeader, SectionHeader, StatusPill } from '@yayatoh/ui';
+import { Alert, buttonClass, Card, EmptyState, PageHeader, SectionHeader, StatusPill } from '@yayatoh/ui';
 import { BadgeCheck } from 'lucide-react';
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { Crumbs } from '@/components/crumbs.tsx';
 import { type FieldSpec, ProgramForm } from '@/components/program-form.tsx';
+import { Link } from '@/i18n/navigation.ts';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import { saveCharityAction } from './actions.ts';
@@ -27,16 +27,6 @@ export default async function CharityPage({ params }: { params: Promise<{ locale
   setRequestLocale(locale);
   const data = await loadConsole(org);
   const t = await getTranslations('charity');
-  const tn = await getTranslations('nav');
-  const crumbs = (
-    <Crumbs
-      items={[
-        { label: data.org.name, href: `/o/${org}` },
-        { label: tn('settings'), href: `/o/${org}/settings` },
-        { label: t('title') },
-      ]}
-    />
-  );
   let profile: CharityProfileDto | null;
   try {
     profile = await executeQuery(charityProfileQuery, {}, data.ctx, ports);
@@ -44,11 +34,22 @@ export default async function CharityPage({ params }: { params: Promise<{ locale
     if (isDomainError(err) && (err.code === 'module_not_enabled' || err.code === 'forbidden'))
       return (
         <>
-          <PageHeader breadcrumb={crumbs} title={t('title')} />
+          <PageHeader title={t('title')} />
           <EmptyState
             icon={<BadgeCheck strokeWidth={2} />}
             title={t('unavailableTitle')}
             description={t('unavailableDescription')}
+            action={
+              roleCan(data.role, 'billing:read') ? (
+                <Link href={`/o/${org}/plan`} className={buttonClass('primary', 'md')}>
+                  {t('seePlan')}
+                </Link>
+              ) : (
+                <Link href={`/o/${org}/team`} className={buttonClass('primary', 'md')}>
+                  {t('findOwner')}
+                </Link>
+              )
+            }
           />
         </>
       );
@@ -121,7 +122,7 @@ export default async function CharityPage({ params }: { params: Promise<{ locale
   const value = 'm-0 text-body text-ink';
   return (
     <>
-      <PageHeader breadcrumb={crumbs} title={t('title')} description={t('description')} />
+      <PageHeader title={t('title')} description={t('description')} />
       <section aria-labelledby="charity-status" className="flex flex-col gap-4">
         <SectionHeader id="charity-status" title={t('statusTitle')} description={t('receiptsNote')} />
         {!profile ? (
@@ -129,6 +130,17 @@ export default async function CharityPage({ params }: { params: Promise<{ locale
             icon={<BadgeCheck strokeWidth={2} />}
             title={t('emptyTitle')}
             description={canEdit ? t('emptyDescription') : t('emptyViewer')}
+            action={
+              canEdit ? (
+                <Link href="#charity-details" className={buttonClass('primary', 'md')}>
+                  {t('addDetails')}
+                </Link>
+              ) : (
+                <Link href={`/o/${org}/team`} className={buttonClass('secondary', 'md')}>
+                  {t('findOwner')}
+                </Link>
+              )
+            }
           />
         ) : (
           <Card size="panel" className="flex flex-col gap-3">

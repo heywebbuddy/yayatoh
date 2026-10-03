@@ -4,7 +4,7 @@ import { formatMoney, money } from '@yayatoh/kernel';
 import { localKeyVault, setKeyVault } from '@yayatoh/platform';
 import { resolveOrgSlug } from '@yayatoh/tenancy';
 import { warehouseScenario } from '@yayatoh/testing';
-import { expectAccessibleBothModes, newUser } from './helpers.ts';
+import { expectAccessibleBothModes, expectPicked, newUser } from './helpers.ts';
 
 // Tickets are signed with the org's keys: seal them under the web server's key vault.
 const kms = process.env.LOCAL_KMS_KEY;
@@ -94,7 +94,7 @@ test.describe('org analytics (M6.2a)', () => {
     await page.goto(`/o/${slug}/analytics`);
     await page.getByLabel('Event', { exact: true }).focus();
     await page.keyboard.type('Harbour');
-    await expect(page.getByLabel('Event', { exact: true })).toHaveValue(s.events.live.id);
+    await expectPicked(page.getByLabel('Event', { exact: true }), s.events.live.id);
     await page.keyboard.press('Tab');
     await expect(page.getByTestId('analytics-apply')).toBeFocused();
     await page.keyboard.press('Enter');

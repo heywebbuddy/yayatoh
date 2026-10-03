@@ -1,5 +1,5 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import { expectAccessible, expectAccessibleBothModes, newUser, signIn } from './helpers.ts';
+import { expectAccessible, expectAccessibleBothModes, newUser, pickOption, signIn } from './helpers.ts';
 
 /**
  * M5.7b — the session feedback prompt at session end, engagement scores per attendee and session
@@ -91,13 +91,12 @@ test.describe('engagement scores and session feedback (M5.7b)', () => {
 
     // Audiences: "engagement score of at least 7 at this event" finds them; 8 finds nobody.
     await page.goto(`/o/${org}/audiences/new`);
-    await page.getByLabel('New condition').first().selectOption('engagement');
+    await pickOption(page.getByLabel('New condition').first(), 'engagement');
     await page.getByRole('button', { name: 'Add condition' }).first().click();
     const condition = page.getByRole('group', { name: 'Condition 1: Engagement score' });
     await expect(condition).toBeVisible();
     const eventSelect = condition.getByRole('combobox', { name: 'Event', exact: true });
-    const option = eventSelect.locator('option', { hasText: c.name });
-    await eventSelect.selectOption((await option.getAttribute('value')) ?? '');
+    await pickOption(eventSelect, { label: c.name });
     await condition.getByRole('spinbutton', { name: 'Score' }).fill('7');
     await expect(page.getByTestId('audience-count')).toHaveText('1 person matches');
     await condition.getByRole('spinbutton', { name: 'Score' }).fill('8');

@@ -13,7 +13,17 @@ import {
   ruleFromLogic,
   ruleToLogic,
 } from '@yayatoh/forms/ui';
-import { Alert, Button, Card, EmptyState, FieldMessage, IconButton, Input } from '@yayatoh/ui';
+import {
+  Alert,
+  Button,
+  buttonClass,
+  Card,
+  EmptyState,
+  FieldMessage,
+  IconButton,
+  Input,
+  Select,
+} from '@yayatoh/ui';
 import { ArrowDown, ArrowUp } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { startTransition, useActionState, useEffect, useId, useRef, useState } from 'react';
@@ -204,7 +214,21 @@ export function QuestionsBuilder({
           {t('questionsTitle')}
         </h2>
         {questions.length === 0 ? (
-          <EmptyState title={t('empty')} />
+          <EmptyState
+            title={t('empty')}
+            description={t('emptyDescription')}
+            action={
+              canWrite ? (
+                <Button type="button" onClick={() => setEditing('new')}>
+                  {t('emptyAction')}
+                </Button>
+              ) : (
+                <a href="#rq-preview" className={buttonClass('primary', 'md')}>
+                  {t('emptyViewerAction')}
+                </a>
+              )
+            }
+          />
         ) : (
           <ol aria-label={t('questionsTitle')} className="m-0 flex list-none flex-col gap-2.5 p-0">
             {questions.map((q, i) => (
@@ -481,11 +505,11 @@ function QuestionEditor({
         <label htmlFor={`${id}-type`} className={LABEL}>
           {t('field.type')}
         </label>
-        <select
+        <Select
           id={`${id}-type`}
           data-field="type"
           value={d.type}
-          onChange={(e) => set('type', e.target.value as RsvpFieldType)}
+          onValueChange={(v) => set('type', v as RsvpFieldType)}
           aria-invalid={err('type') ? true : undefined}
           aria-describedby={describedBy('type')}
           className={SELECT}
@@ -495,7 +519,7 @@ function QuestionEditor({
               {t(`types.${ty}`)}
             </option>
           ))}
-        </select>
+        </Select>
         {message('type')}
         {d.type === 'meal' ? <p className={CAPTION}>{t('field.mealHint')}</p> : null}
       </div>
@@ -532,10 +556,10 @@ function QuestionEditor({
         <label htmlFor={`${id}-scope`} className={LABEL}>
           {t('field.scope')}
         </label>
-        <select
+        <Select
           id={`${id}-scope`}
           value={d.subEventId}
-          onChange={(e) => set('subEventId', e.target.value)}
+          onValueChange={(v) => set('subEventId', v)}
           className={SELECT}
         >
           <option value="">{t('wholeEvent')}</option>
@@ -544,17 +568,17 @@ function QuestionEditor({
               {s.name}
             </option>
           ))}
-        </select>
+        </Select>
       </div>
       {TEXT.has(d.type) ? (
         <div className="flex flex-col gap-1.5">
           <label htmlFor={`${id}-binding`} className={LABEL}>
             {t('field.binding')}
           </label>
-          <select
+          <Select
             id={`${id}-binding`}
             value={d.binding}
-            onChange={(e) => set('binding', e.target.value as Draft['binding'])}
+            onValueChange={(v) => set('binding', v as Draft['binding'])}
             aria-describedby={`${id}-binding-hint`}
             className={SELECT}
           >
@@ -564,7 +588,7 @@ function QuestionEditor({
                 {t(`savedTo.${b}`)}
               </option>
             ))}
-          </select>
+          </Select>
           <p id={`${id}-binding-hint`} className="text-caption text-ink-2">
             {t('field.bindingHint')}
           </p>
@@ -640,12 +664,12 @@ function QuestionEditor({
                   <label htmlFor={`${id}-ans`} className={LABEL}>
                     {t('rule.answerQuestion')}
                   </label>
-                  <select
+                  <Select
                     id={`${id}-ans`}
                     data-field="answer"
                     value={d.rule.answer?.key ?? ''}
-                    onChange={(e) => {
-                      const q = testable.find((x) => x.key === e.target.value);
+                    onValueChange={(v) => {
+                      const q = testable.find((x) => x.key === v);
                       setRule({
                         answer: q
                           ? {
@@ -665,7 +689,7 @@ function QuestionEditor({
                         {q.label}
                       </option>
                     ))}
-                  </select>
+                  </Select>
                   {message('answer')}
                 </div>
                 {src && src.type !== 'checkbox' ? (
@@ -673,10 +697,10 @@ function QuestionEditor({
                     <label htmlFor={`${id}-val`} className={LABEL}>
                       {src.type === 'multi_select' ? t('rule.includes') : t('rule.is')}
                     </label>
-                    <select
+                    <Select
                       id={`${id}-val`}
                       value={d.rule.answer?.value ?? ''}
-                      onChange={(e) => setRule({ answer: { key: src.key, value: e.target.value } })}
+                      onValueChange={(v) => setRule({ answer: { key: src.key, value: v } })}
                       className={SELECT}
                     >
                       {src.options.map((o) => (
@@ -684,7 +708,7 @@ function QuestionEditor({
                           {o.label}
                         </option>
                       ))}
-                    </select>
+                    </Select>
                   </div>
                 ) : null}
               </div>
@@ -760,13 +784,13 @@ function Preview({
           <label htmlFor={`${id}-age`} className={LABEL}>
             {t('preview.age')}
           </label>
-          <select id={`${id}-age`} value={age} onChange={(e) => setAge(e.target.value)} className={SELECT}>
+          <Select id={`${id}-age`} value={age} onValueChange={(v) => setAge(v)} className={SELECT}>
             {(['adult', 'child', 'infant'] as const).map((a) => (
               <option key={a} value={a}>
                 {t(`preview.ages.${a}`)}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
       </fieldset>
       <p className={CAPTION} role="status">

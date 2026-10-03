@@ -1,5 +1,5 @@
 import { type Browser, expect, type Page, test } from '@playwright/test';
-import { expectAccessible, signIn } from './helpers.ts';
+import { expectAccessible, pickOption, signIn } from './helpers.ts';
 
 const VIEWER = 'jordan@lakeside.test';
 const ORG = '/o/lakeside-events';
@@ -36,8 +36,8 @@ async function noHorizontalScroll(page: Page) {
 async function createEvent(page: Page, name: string, opts: { profile?: string; publish?: boolean } = {}) {
   await page.goto(`${ORG}/events/new`);
   await page.getByLabel('Event name', { exact: true }).fill(name);
-  await page.getByLabel('Event type').selectOption(opts.profile ?? 'conference');
-  await page.getByLabel('Time zone').selectOption(TZ);
+  await pickOption(page.getByLabel('Event type'), opts.profile ?? 'conference');
+  await pickOption(page.getByLabel('Time zone'), TZ);
   await page.getByLabel('Starts', { exact: true }).fill(at(40, '09:00'));
   await page.getByLabel('Ends', { exact: true }).fill(at(42, '18:00'));
   await page.getByRole('button', { name: 'Create draft' }).click();
@@ -65,7 +65,7 @@ async function addSession(
   await add.getByLabel('Session title').fill(s.title);
   await add.getByLabel('Session starts').fill(s.from);
   await add.getByLabel('Session ends').fill(s.to);
-  if (s.room) await add.getByLabel('Room', { exact: true }).selectOption({ label: s.room });
+  if (s.room) await pickOption(add.getByLabel('Room', { exact: true }), { label: s.room });
   for (const p of s.speakers ?? []) await add.getByRole('checkbox', { name: p }).check();
   await add.getByRole('button', { name: 'Add session' }).click();
   await expect(add.getByText('Session added.')).toBeVisible();
@@ -139,8 +139,8 @@ test.describe('program: sessions, speakers, exhibitors and sponsors (M1.4f)', ()
     await expect(add.getByText('The session must end after it starts.')).toBeVisible();
     await expect(add.getByLabel('Session title')).toHaveValue('Opening keynote');
     await add.getByLabel('Session ends').fill(at(40, '11:00'));
-    await add.getByLabel('Room', { exact: true }).selectOption({ label: 'Main hall' });
-    await add.getByLabel('Track', { exact: true }).selectOption({ label: 'Leadership' });
+    await pickOption(add.getByLabel('Room', { exact: true }), { label: 'Main hall' });
+    await pickOption(add.getByLabel('Track', { exact: true }), { label: 'Leadership' });
     await add.getByRole('button', { name: 'Add session' }).click();
     await expect(add.getByText('Session added.')).toBeVisible();
 
@@ -356,7 +356,7 @@ test.describe('program: sessions, speakers, exhibitors and sponsors (M1.4f)', ()
     await expect(tiers.getByRole('heading', { level: 3 }).first()).toContainText('Gold');
 
     const sp = page.getByRole('region', { name: 'Add sponsor' });
-    await sp.getByLabel('Tier').selectOption({ label: 'Gold' });
+    await pickOption(sp.getByLabel('Tier'), { label: 'Gold' });
     await sp.getByLabel('Sponsor name').fill('Initech');
     await sp.getByLabel('Website').fill('https://initech.test');
     await sp.getByRole('button', { name: 'Add sponsor' }).click();
