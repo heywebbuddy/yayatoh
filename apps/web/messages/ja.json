@@ -186,6 +186,11 @@
       "guests": {
         "invitation": "結婚式の招待状",
         "rsvp-reminder": "出欠のリマインダー"
+      },
+      "privacy": {
+        "request-code": "プライバシーリクエストのコード",
+        "archive-ready": "個人データのアーカイブ準備完了",
+        "erasure-done": "消去の受領書"
       }
     },
     "status": {
@@ -341,7 +346,9 @@
     "supportMacros": "サポートマクロ",
     "assistance": "ヘルプ依頼",
     "marketingAnalytics": "マーケティング分析",
-    "badges": "バッジ"
+    "badges": "バッジ",
+    "orgAnalytics": "アナリティクス",
+    "integrations": "連携"
   },
   "vocab": {
     "attendee": "参加者",
@@ -923,9 +930,15 @@
         "capReached": "1回の注文ではこれが上限です（{max}席）。",
         "adaChosen": "{count, plural, other {{seats} はアクセシブル席で、必要な方のために確保されています。必要な場合のみお選びください。}}",
         "overCap": "{count}席を選択中：主催者は1回の注文につき{max}席までをお願いしています。",
-        "keptUntil": "{date}まで確保中"
+        "keptUntil": "{date}まで確保中",
+        "companionWarn": "同伴者席は車いす利用者と一緒に来る方のための席です：バリアフリー席1席につき最大{max}席。",
+        "companionEnforced": "同伴者席はバリアフリー席とセットでのみ販売されます：バリアフリー席1席につき最大{max}席。",
+        "companionChosen": "バリアフリー席のない同伴者席：{seats}。車いす利用者と一緒に来る方のための席です（バリアフリー席1席につき最大{max}席）。",
+        "companionRefused": "バリアフリー席のない同伴者席：{seats}。バリアフリー席とセットでのみ販売されます（1席につき最大{max}席）。バリアフリー席を追加するか、別の席を選んでください。",
+        "adaEnforcedBest": "バリアフリー席は{date}まで必要な方のために確保されています。必要な場合は「同行者に車いす利用者がいます」にチェックを入れ、おまかせ座席を利用してください。"
       },
-      "groupSummary": "{group} — 空席 {free}/{total}{chosen, plural, =0 {} other { · #席選択中}}"
+      "groupSummary": "{group} — 空席 {free}/{total}{chosen, plural, =0 {} other { · #席選択中}}",
+      "companion": "同伴者席"
     },
     "seatRuleCap": "1回の注文で選べる座席数を超えています。座席数を減らしてください。",
     "seatRuleAda": "アクセシブル席は現在、必要な方のために確保されています。別の座席をお選びください。",
@@ -935,7 +948,43 @@
     "orgUnavailable": "この主催者は現在チケットを販売していません。購入済みのチケットは引き続き有効です。",
     "riskBlocked": "このご注文はお受けできませんでした。主催者にお問い合わせください。",
     "creditInvalid": "このストアクレジットコードは無効か、使用済みです。",
-    "creditNotApplicable": "このストアクレジットはこれらのチケットには使えません。"
+    "creditNotApplicable": "このストアクレジットはこれらのチケットには使えません。",
+    "seatRuleCompanion": "同伴者席はバリアフリー席とセットでのみ販売されます。バリアフリー席も選ぶか、別の席を選んでください。",
+    "best": {
+      "title": "おまかせ座席",
+      "modeLegend": "座席の選び方を選んでください",
+      "mode": {
+        "best": "おまかせ座席：隣り合った最良の座席をお探しします",
+        "pick": "自分で座席を選ぶ"
+      },
+      "need": "同行者に車いす利用者がいます（バリアフリー席が必要です）",
+      "needStaff": "購入者は車いす対応席が必要です",
+      "needHint": "バリアフリー席とその隣の同伴者席は、必要な方のために確保されています。",
+      "price": "価格",
+      "onePrice": "価格：{price}",
+      "quantity": "席数",
+      "find": "座席を探す",
+      "findAgain": "もう一度探す",
+      "accessibleHint": "車いす対応席と、その隣の同伴者席をお探しします。",
+      "together": "{count, plural, other {隣り合った#席：}}",
+      "split": "{count}名様を一緒にお座りいただける席が見つからなかったため、座席は別々の場所になります（グループ数：{pieces}）。ご自身で座席を選ぶこともできます。",
+      "seatsLabel": "お客様の座席",
+      "seatAccessible": "{seat}（車いす対応）",
+      "seatCompanion": "{seat}（同伴者席）",
+      "heldFor": "お支払いの間、{minutes}分間確保しています。",
+      "clear": "この座席を解放する",
+      "notEnough": "この価格で{count}名様分の空席が足りません。席数や価格を変えるか、座席を選んでください。",
+      "noAccessible": "この価格では車いす対応席に空きがありません。別の価格をお試しいただくか、主催者にお問い合わせください。",
+      "taken": "その座席はたった今埋まりました。もう一度お試しください。",
+      "ruleRefused": "主催者の座席ルールにより、この選択はできません。",
+      "off": "このイベントではおまかせ座席の提供が終了しました。座席を選んでください。",
+      "findFirst": "先に座席を探してください：席数を選んで「座席を探す」を押してください。",
+      "expired": "座席は10分間確保された後、解放されました。もう一度お探しください。"
+    },
+    "seatChannel": "選んだ席の一部は別の販売チャネル用に確保されています。ほかの席を選んでください。",
+    "channelInvalid": "この販売コードはこのイベントでは使えません。コードなしでイベントページを開き直すか、リンクをくれた人に確認してください。",
+    "channelNotice": "{name} 経由で購入しています。{name} 用に確保された席も選べます。",
+    "channelLinkInvalid": "この販売リンクはこのイベントでは使えません。どなたでも選べる席からは引き続き選べます。"
   },
   "fakePay": {
     "eyebrow": "テスト決済",
@@ -1489,12 +1538,14 @@
     },
     "activityLink": "アクティビティログ",
     "privacyLink": "プライバシー請求",
-    "charityLink": "慈善団体プロフィール"
+    "charityLink": "慈善団体プロフィール",
+    "planLink": "プランとモジュール"
   },
   "legal": {
     "platform": "Yayatoh",
     "updated": "最終更新日：{date}",
-    "organizerPages": "{org}のポリシー"
+    "organizerPages": "{org}のポリシー",
+    "privacyRequest": "自分のデータのコピーまたは消去を求める"
   },
   "setup": {
     "title": "販売の準備 · {total}件中{done}件完了",
@@ -1874,7 +1925,8 @@
     "chooseDate": "日程を選んでください。",
     "dateSoldOut": "この日程のチケットが足りません。",
     "wrongDate": "この日程では販売していないチケットが含まれています。",
-    "dateUnavailable": "この日程は販売を終了しました。"
+    "dateUnavailable": "この日程は販売を終了しました。",
+    "seatChannel": "選んだ席の一部は別の販売チャネル（スポンサー、プロモーター、オンライン販売）用に確保されています。ほかの席を選んでください。"
   },
   "seating": {
     "title": "座席",
@@ -1971,14 +2023,19 @@
       "title": "再利用できる座席表として保存",
       "name": "名前",
       "submit": "座席表を保存",
-      "done": "保存しました。ほかのイベントでも使用できます。"
+      "done": "保存しました。ほかのイベントでも使用できます。",
+      "description": "保存した座席表は座席表ライブラリに入り、そこから新しいイベントを作成できます。",
+      "library": "座席表ライブラリを開く"
     },
     "tabs": {
       "label": "座席の表示",
       "plan": "座席表",
       "assign": "ゲストの割り当て",
       "finder": "座席検索",
-      "rules": "ルール"
+      "rules": "ルール",
+      "selection": "おまかせ座席",
+      "channels": "チャネル",
+      "revisions": "履歴"
     },
     "assign": {
       "title": "ゲストの割り当て",
@@ -2115,7 +2172,8 @@
       "none": "ルールなし：購入者は空いている座席を自由に選べます。",
       "summary": {
         "ada": "アクセシブル席を{days, plural, =0 {開始まで} other {開始の#日前まで}}必要な方のために確保（{date}）· {severity}",
-        "cap": "1回の注文につき最大{max, plural, other {#席}} · {severity}"
+        "cap": "1回の注文につき最大{max, plural, other {#席}} · {severity}",
+        "companion": "同伴者席はバリアフリー席とセットでのみ販売、1席につき最大{max}席 · {severity}"
       },
       "severityShort": {
         "warn": "警告",
@@ -2148,7 +2206,14 @@
       },
       "save": "ルールを保存",
       "saved": "座席ルールを保存しました。",
-      "fixErrors": "表示された項目を修正してください。"
+      "fixErrors": "表示された項目を修正してください。",
+      "companion": {
+        "title": "同伴者席",
+        "on": "同伴者席はバリアフリー席とセットでのみ販売する",
+        "max": "バリアフリー席1席あたりの同伴者席数",
+        "maxHint": "1〜3。バリアフリー席と一緒に一般販売に切り替わります。",
+        "maxError": "1〜3の整数を入力してください。"
+      }
     },
     "groups": {
       "title": "グループ枠",
@@ -2177,6 +2242,172 @@
         "forbidden": "グループは閲覧のみ可能で、変更はできません。",
         "noMembers": "リストにラベル「{label}」を持つ人はまだいません。"
       }
+    },
+    "selection": {
+      "title": "おまかせ座席と同伴者席",
+      "description": "購入者とボックスオフィスが座席を選ぶ代わりに最良の座席を依頼できるようにし、バリアフリー席の隣に同伴者席を確保します。",
+      "noPlan": "このイベントにはまだ座席表がありません。先に作成してから、ここでおまかせ座席を設定してください。",
+      "readOnly": "これらの設定は閲覧できますが、変更はできません。",
+      "bestTitle": "おまかせ座席",
+      "bestOn": "購入者とボックスオフィスに「おまかせ座席」を提供する",
+      "bestHint": "購入者は席数と価格を指定し、隣り合った最良の空席を受け取ります。自分で座席を選ぶこともできます。",
+      "scoresTitle": "セクションのスコア",
+      "scoresHint": "0〜100：スコアが高いほど先に案内されます。空欄のセクションはステージからの距離で順位付けされます。",
+      "scoreLabel": "{section}のスコア",
+      "scoreError": "0〜100の整数を入力するか、空欄のままにしてください。",
+      "noSections": "この座席表にはセクションがありません。座席はステージからの距離、列、中央への近さの順で並べられます。",
+      "saveBest": "おまかせ座席を保存",
+      "savedBest": "おまかせ座席の設定を保存しました。",
+      "fixErrors": "表示された項目を修正してください。",
+      "bestOnSummary": "おまかせ座席を購入者とボックスオフィスに提供しています。",
+      "bestOffSummary": "おまかせ座席はオフです。購入者が自分で座席を選びます。",
+      "companionsTitle": "同伴者席",
+      "companionsDescription": "同伴者席はバリアフリー席の隣にあり、車いす利用者と一緒に来る方のための席です。",
+      "rulesLink": "同伴者席のルールは「ルール」タブで設定します",
+      "noAccessible": "この座席表にはまだバリアフリー席がありません。座席表で指定してから、ここで同伴者席を選んでください。",
+      "suggest": "バリアフリー席の隣の席にチェックを入れる",
+      "group": {
+        "row": "{label}列",
+        "table": "テーブル{label}"
+      },
+      "seatAccessible": "{seat}番 · バリアフリー席",
+      "seatCompanion": "{seat}番",
+      "suggested": "バリアフリー席の隣",
+      "saveCompanions": "同伴者席を保存",
+      "savedCompanions": "同伴者席を保存しました：{count}席。",
+      "companionError": "同伴者席は、バリアフリー席のある列またはテーブルにある必要があり、それ自体をバリアフリー席にはできません。",
+      "companionList": "同伴者席（{count}席）：{seats}",
+      "companionNone": "同伴者席はまだありません。"
+    },
+    "fromLibrary": "このイベントは保存済みの座席表から作成されました。席の価格を設定してから販売を開始してください。",
+    "channels": {
+      "title": "販売チャネル",
+      "description": "当日窓口、スポンサー、プロモーター用に席のブロックを確保します。あるチャネルの席は、そのチャネルが解放するまでほかのチャネルでは販売されません。",
+      "noPlan": "このイベントにはまだ座席表がありません。先に作成してから、ここで席をチャネルに割り当ててください。",
+      "readOnly": "チャネルを閲覧できますが、変更はできません。",
+      "saved": "チャネルを保存しました。",
+      "deleted": "チャネルを削除しました。その席は再びすべてのチャネルで販売されます。",
+      "listTitle": "チャネル",
+      "empty": "販売チャネルはまだありません",
+      "emptyHint": "下でチャネルを追加し、席を割り当ててください。チャネルのない席はすべてのチャネルで販売されます。",
+      "col": {
+        "channel": "チャネル",
+        "code": "コードとリンク",
+        "release": "解放",
+        "seats": "席",
+        "sold": "このチャネルの販売",
+        "actions": "操作"
+      },
+      "kind": {
+        "public": "オンライン（コードなし）",
+        "box_office": "当日窓口",
+        "sponsor": "スポンサー",
+        "promoter": "プロモーター"
+      },
+      "linkFor": "{name} のリンク",
+      "released": "{when} に解放済み",
+      "neverReleased": "変更するまで確保",
+      "soldCount": "{orders, plural, =0 {注文はまだありません} other {注文 # 件}} · {seats, plural, other {# 席}}",
+      "edit": "編集",
+      "editNamed": "{name} を編集",
+      "delete": "削除",
+      "deleteNamed": "{name} を削除",
+      "addTitle": "チャネルを追加",
+      "editTitle": "{name} を編集",
+      "kindLabel": "種類",
+      "kindHint": "オンラインと当日窓口はイベントごとに 1 つまで。スポンサーとプロモーターは専用のコードで販売します。",
+      "nameLabel": "名前",
+      "nameHint": "チャネルのリンクを使う購入者と、レポートに表示されます。",
+      "codeLabel": "コード",
+      "codeHint": "スポンサーとプロモーターのみ：英字・数字・ハイフン・アンダースコアで 3〜32 文字。購入者はチャネルのリンクから使います。",
+      "releaseLabel": "売れ残った席を解放する日時（任意）",
+      "releaseHint": "売れ残った席はこの日時（{timeZone}）にすべてのチャネルに戻ります。確保し続けるなら空欄のままにしてください。",
+      "add": "チャネルを追加",
+      "save": "チャネルを保存",
+      "cancel": "キャンセル",
+      "added": "チャネルを追加しました。",
+      "fixErrors": "強調表示された項目を修正してください。",
+      "errors": {
+        "kind": "チャネルの種類を選んでください。",
+        "kind_taken": "このイベントにはすでにその種類のチャネルがあります。",
+        "name": "チャネル名を入力してください（80 文字まで）。",
+        "code_required": "スポンサーとプロモーターにはコードが必要です。",
+        "code_not_allowed": "コードがあるのはスポンサーとプロモーターだけです。空欄にしてください。",
+        "code_format": "英字・数字・ハイフン・アンダースコアで 3〜32 文字にしてください。",
+        "code_taken": "このイベントの別のチャネルがすでにそのコードを使っています。",
+        "releaseAt": "日時を入力するか、空欄にしてください。",
+        "seats": "列またはテーブルを 1 つ以上選び、そこにある席番号を指定してください。"
+      },
+      "allotTitle": "席を割り当てる",
+      "allotDescription": "列とテーブルを選び、必要ならその一部の席だけを指定します。イベントのすべての日程に反映されます。すでにチャネルにある席は、選んだチャネルに移ります。",
+      "noSeats": "座席表にはまだ列もテーブルもありません。",
+      "allotTo": "チャネル",
+      "everyChannel": "チャネルなし（すべてのチャネルで販売）",
+      "which": "列とテーブル",
+      "item": {
+        "row": "{label} 列（{seats, plural, other {# 席}}）",
+        "table": "テーブル {label}（{seats, plural, other {# 席}}）"
+      },
+      "itemAllotted": "{name} に {count, plural, other {# 席}}",
+      "seatNumbers": "この席だけ（任意）",
+      "seatNumbersHint": "選んだ列やテーブルの席番号。例：1-4, 9。空欄ならすべての席が対象です。",
+      "allot": "席を割り当てる",
+      "allotted": "{count, plural, =0 {変更された席はありません。} other {# 席を割り当てました。}}",
+      "freed": "{count, plural, =0 {チャネルにある席はありませんでした。} other {# 席が再びすべてのチャネルで販売されます。}}"
+    },
+    "revisions": {
+      "title": "座席表の履歴",
+      "description": "座席表を保存するたびに履歴が残ります。それぞれの変更内容を確認し、以前の座席表に戻せます。確保中・販売済みの席は常にそのまま残ります。",
+      "noPlan": "このイベントにはまだ座席表がありません。先に作成すると、保存のたびにここに表示されます。",
+      "none": "履歴はまだありません",
+      "noneHint": "次に座席表を保存すると、最初の履歴になります。",
+      "readOnly": "履歴を閲覧できますが、復元はできません。",
+      "listTitle": "すべての履歴",
+      "col": {
+        "revision": "版",
+        "when": "保存日時",
+        "what": "内容",
+        "changes": "変更された席"
+      },
+      "revision": "第 {number} 版",
+      "currentBadge": "現在の座席表",
+      "kindSave": "保存",
+      "kindRestore": "第 {number} 版を復元",
+      "seats": "{count, plural, other {# 席}}",
+      "first": "保存されている最初の版です。",
+      "noSeatChanges": "席の追加・削除・番号変更はありません。",
+      "added": "{count, plural, other {# 席を追加}}",
+      "removed": "{count, plural, other {# 席を削除}}",
+      "renumbered": "{count, plural, other {# 席の番号を変更}}",
+      "moved": "{count, plural, other {# 席を移動}}",
+      "detailTitle": "第 {number} 版",
+      "changedTitle": "この版での変更",
+      "restoreWouldTitle": "復元すると変わる内容",
+      "addedTitle": "追加された席",
+      "removedTitle": "削除された席",
+      "renumberedTitle": "番号が変わった席",
+      "renumberedSeat": "{from} → {to}",
+      "listOf": "{title}（{count}）",
+      "more": "{count, plural, other {ほか # 席}}",
+      "inUseTitle": "確保中・販売済みの席",
+      "inUseNone": "確保中・販売済みの席はありません。妨げるものはありません。",
+      "inUseKept": "{count, plural, =0 {そのまま残る確保中・販売済みの席はありません。} other {確保中・販売済みの # 席はそのまま残ります。}}",
+      "inUseRemapped": "{count, plural, other {確保中・販売済みの # 席は、この版で同じラベルの席に移ります（席番号もチケットも同じ）：}}",
+      "conflictsTitle": "{count, plural, other {この版は復元できません：確保中・販売済みの # 席が失われます。}}",
+      "conflict": {
+        "removed": {
+          "sold": "{label} は販売済みで、この版にはそのラベルの席がありません。",
+          "held": "{label} は購入者が確保中で、この版にはそのラベルの席がありません。"
+        },
+        "renumbered": {
+          "sold": "{label} は販売済みで、{to} に変わってしまいます。購入者のチケットが別の席を指すことになります。",
+          "held": "{label} は購入者が確保中で、{to} に変わってしまいます。"
+        }
+      },
+      "conflictsRefused": "確保中・販売済みの席がその版にもうありません。何も変更していません。",
+      "isCurrent": "これが現在の座席表です。",
+      "restore": "第 {number} 版を復元",
+      "restoredNotice": "第 {number} 版を復元しました。現在の座席表は第 {now} 版です。"
     }
   },
   "venueMap": {
@@ -2493,70 +2724,199 @@
   },
   "privacy": {
     "title": "プライバシー請求",
-    "description": "保有データの開示や削除（忘れられる権利）を求める人に対応します。すべての請求は記録されます。",
+    "description": "保有データのコピーや削除（忘れられる権利）を求める人に対応します。各請求の期限は30日以内で、すべて記録されます。",
     "noticeLink": "Yayatoh のプライバシー通知",
     "noAccessTitle": "プライバシー請求を扱えるのはオーナーと管理者のみです",
-    "noAccessDescription": "個人データに関する請求は、この組織のオーナーまたは管理者に依頼してください。",
+    "noAccessDescription": "個人データに関する請求は、この組織のオーナーまたは管理者に対応を依頼してください。",
     "find": {
       "title": "人を検索",
-      "hint": "連絡先、注文、チケット、ゲストリスト、回答、チェックインをメールアドレスで検索します。",
+      "hint": "この組織が保有するすべてのデータをメールアドレスで検索します：連絡先、注文、チケット、ゲストリスト、フォーム、メッセージ、登壇者など。",
       "email": "メールアドレス",
       "submit": "検索"
     },
     "result": {
       "title": "この組織が {email} について保有しているデータ",
       "noneTitle": "このメールアドレスのデータは見つかりません",
-      "noneDescription": "この組織では、このアドレスを使う連絡先・注文・チケット・ゲストの記録はありません。"
-    },
-    "categories": {
-      "contacts": "連絡先の記録",
-      "consents": "同意の記録",
-      "orders": "注文",
-      "paidOrders": "支払い済みの注文（会計のため保持）",
-      "tickets": "チケット",
-      "activeTickets": "有効なチケット",
-      "claims": "チケット譲渡リンク",
-      "holderLinks": "チケットアクセスリンク",
-      "attendees": "ゲストリストの登録",
-      "answers": "購入時の回答",
-      "admissions": "チェックイン",
-      "invitations": "チームへの招待"
-    },
-    "export": {
-      "title": "データをエクスポート",
-      "hint": "上記すべてを含む JSON ファイルです。本人に送付してください。7日後に削除されます。",
-      "submit": "データをエクスポート（JSON）",
-      "download": "ファイルをダウンロード",
-      "running": "ファイルを準備中です…少ししてからページを再読み込みしてください。"
-    },
-    "erase": {
-      "title": "この人のデータを消去",
-      "what": "氏名、メール、電話番号、回答、リンクが連絡先・注文・チケット・ゲストリストから削除され、本人を含むエクスポートファイルも削除されます。",
-      "holds": "{paid, plural, =0 {保持が必要な支払い済みの注文はありません。} other {支払い済みの注文#件は、税務・会計のため氏名とメールを除いて保持されます。}}",
-      "tickets": "{active, plural, =0 {有効なチケットはありません。} other {有効なチケット#枚は、名前なしで引き続き有効です。}}",
-      "final": "元に戻すことはできません。",
-      "confirm": "確認のため {email} と入力してください",
-      "submit": "個人データを消去",
-      "done": "消去しました。{records, plural, other {#件の記録}}を匿名化または削除しました。{kept, plural, =0 {保持した支払い済み注文はありません} other {支払い済みの注文#件を個人データなしで保持しました}}。"
+      "noneDescription": "この組織には、このアドレスを使う記録はありません。正式に回答するために、請求を開くこともできます。"
     },
     "errors": {
       "invalidEmail": "有効なメールアドレスを入力してください。",
       "confirmMismatch": "一致しません。確認のため同じメールアドレスを入力してください。",
-      "nothingHeld": "このメールアドレスに関するデータはもう保有していません。"
-    },
-    "history": {
-      "title": "過去の請求",
-      "caption": "プライバシー請求（新しい順）",
-      "empty": "まだ請求はありません。",
-      "when": "日時",
-      "kind": "請求",
-      "subject": "対象者",
-      "by": "対応者",
-      "records": "記録数"
+      "kindRequired": "本人が何を求めているか選んでください。",
+      "reasonRequired": "理由を3文字以上で入力してください。",
+      "closed": "この請求はすでに完了しています。"
     },
     "kinds": {
-      "access": "開示（エクスポート）",
+      "access": "開示（コピー）",
       "erasure": "消去"
+    },
+    "modules": {
+      "crm": "連絡先と同意",
+      "orders": "注文とキャンセル待ち",
+      "ticketing": "チケット",
+      "attendees": "ゲストリストの登録",
+      "forms": "フォームの回答",
+      "checkin": "チェックイン",
+      "tenancy": "チームへの招待",
+      "notifications": "送信したメッセージ",
+      "seating": "座席検索",
+      "alerts": "アラート設定",
+      "guests": "結婚式・パーティーのゲスト",
+      "messaging": "やり取り",
+      "assistance": "ヘルプ依頼",
+      "program": "登壇者の情報",
+      "events": "ポータルのアカウント",
+      "media": "アップロードされたファイル",
+      "cms": "お問い合わせフォームのメッセージ",
+      "venues": "会場の見積もり依頼",
+      "reviews": "レビュー",
+      "payments": "支払いの異議申し立て",
+      "surveys": "アンケートの回答",
+      "registration": "登録",
+      "badges": "バッジ",
+      "automations": "ジャーニー",
+      "campaigns": "キャンペーンの送信",
+      "audiences": "オーディエンス",
+      "marketing": "マーケティングのアトリビューション",
+      "reports": "分析イベント",
+      "privacy": "プライバシー請求",
+      "platform": "エクスポートとシステム記録",
+      "donations": "寄付と領収書",
+      "engagement": "ライブQ&Aの質問"
+    },
+    "open": {
+      "title": "請求を開く",
+      "hint": "請求者の本人確認が済みました。期限は30日後です。対応は請求ごとのページで行います。",
+      "kind": "本人は何を求めていますか？",
+      "access": "データのコピー（開示）",
+      "accessHint": "本人について保有するすべてを含む、署名付き ZIP です。",
+      "erasure": "データの消去（消去）",
+      "erasureHint": "法律で保管が義務付けられた記録を除き、すべての場所から本人のデータを削除します。",
+      "submit": "請求を開く",
+      "existing": "この人にはすでに未完了の請求があります。",
+      "review": "未完了の請求を確認"
+    },
+    "queue": {
+      "title": "未完了の請求",
+      "caption": "未完了のプライバシー請求（期限が近い順）",
+      "emptyTitle": "未完了の請求はありません",
+      "empty": "自分のデータについて問い合わせがあったら、上で検索して請求を開いてください。本人がプライバシー通知から請求することもできます。",
+      "person": "対象者",
+      "kind": "請求",
+      "source": "請求元",
+      "opened": "開始日",
+      "due": "期限",
+      "overdue": "期限超過",
+      "action": "操作",
+      "review": "確認"
+    },
+    "closed": {
+      "title": "完了した請求",
+      "caption": "対応済み・取り下げ済みの請求（新しい順）",
+      "empty": "完了した請求はまだありません。",
+      "when": "完了日",
+      "status": "ステータス",
+      "records": "記録数"
+    },
+    "statuses": {
+      "open": "未完了",
+      "completed": "完了",
+      "cancelled": "取り下げ"
+    },
+    "sources": {
+      "staff": "スタッフ（本人の代理）",
+      "self": "本人（メール確認済み）"
+    },
+    "request": {
+      "titleAccess": "開示請求",
+      "titleErasure": "消去請求",
+      "openedNotice": "請求を開きました。期限は {date} です。",
+      "cancelledNotice": "請求を取り下げました。",
+      "fields": {
+        "kind": "請求",
+        "source": "請求元",
+        "opened": "開始日",
+        "due": "期限",
+        "verified": "メール確認日",
+        "completed": "対応日",
+        "cancelled": "取り下げ日",
+        "reason": "理由"
+      },
+      "holdings": {
+        "title": "この組織が保有しているデータ",
+        "empty": "この人について保有しているデータはありません",
+        "emptyHint": "それでも請求に対応できます。本人には、保有データがない旨の正式な回答が届きます。"
+      },
+      "export": {
+        "title": "コピーを送る",
+        "hint": "Yayatoh の機能ごとの JSON ファイルと本人のファイルをまとめた ZIP です。改ざんされていないことを誰でも確認できるよう署名されています。7日間ダウンロードできます。",
+        "submit": "アーカイブを作成",
+        "done": "アーカイブの準備ができました。",
+        "notified": "本人にダウンロードリンクをメールで送りました。",
+        "until": "{date} まで利用できます。",
+        "download": "アーカイブをダウンロード（ZIP）",
+        "expired": "アーカイブは期限切れになり削除されました。本人が再度コピーを必要とする場合は、新しい請求を開いてください。"
+      },
+      "erase": {
+        "title": "この人のデータを消去",
+        "what": "氏名、メール、電話番号、回答、メッセージ、リンクが Yayatoh のすべての機能から削除され、本人を含むエクスポートファイルも削除されます。",
+        "holds": "支払い済みの注文、クレジットノート、支払いの異議申し立て、同意の履歴は、法律で求められる範囲で氏名とメールを除いて保持され、受領証に記載されます。",
+        "files": "本人のアップロードと過去のアーカイブはストレージから削除されます。",
+        "final": "元に戻すことはできません。",
+        "confirm": "確認のため {email} と入力してください",
+        "submit": "個人データを消去",
+        "done": "消去しました。下の署名付き受領証に、消去したもの・保持したもの・その理由が記載されています。"
+      },
+      "cancel": {
+        "title": "請求を取り下げる",
+        "hint": "本人が取り下げた場合や、正当な請求でなかった場合に使います。理由は請求とともに記録されます。",
+        "reason": "理由",
+        "submit": "請求を取り下げる"
+      },
+      "receipt": {
+        "title": "消去の受領証",
+        "erased": "消去済み",
+        "held": "法的保管義務により保持",
+        "noneErased": "消去が必要なものはありませんでした。",
+        "noneHeld": "保持が必要なものはありませんでした。",
+        "table": "データ",
+        "action": "処理内容",
+        "rows": "記録数",
+        "ref": "記録",
+        "basis": "保持の理由",
+        "until": "保持期限",
+        "files": "{count, plural, =0 {保存ファイルは削除されませんでした。} other {保存ファイル#件を削除しました。}}",
+        "suppressed": "このアドレスはプラットフォーム全体の消去済みリストに登録されました。本人が再度同意しない限り、どの組織もマーケティングを送信できません。",
+        "connectors": "{count, plural, =0 {連携サービスへの通知は不要でした。} other {連携サービスにも本人のデータ消去を依頼しました：{names}。}}",
+        "signature": "Ed25519 鍵 {key} で署名されています。",
+        "download": "受領証をダウンロード（PDF）",
+        "notified": "本人にこの受領証へのリンクをメールで送りました。",
+        "actions": {
+          "delete": "削除",
+          "redact": "個人データを除去",
+          "hold": "個人データを除去して保持"
+        },
+        "bases": {
+          "tax_accounting": "税務・会計記録（7年間）",
+          "payment_dispute": "支払いの異議申し立ての証拠",
+          "accountability": "請求に対応した証明"
+        }
+      }
+    },
+    "pdf": {
+      "title": "消去の受領証",
+      "request": "請求",
+      "person": "対象者",
+      "source": "請求者",
+      "requested": "請求日",
+      "due": "期限",
+      "completed": "消去日",
+      "signatureTitle": "署名",
+      "algorithm": "アルゴリズム",
+      "keyId": "鍵 ID",
+      "digest": "受領証の SHA-256",
+      "signature": "署名（base64）",
+      "footer": "Yayatoh が {org} のために発行しました。署名は受領証のデータを対象とします。下の公開鍵で検証してください。"
     }
   },
   "privacyNotice": {
@@ -2737,7 +3097,8 @@
       "guests": "ゲスト数",
       "markHandled": "対応済みにする",
       "markNew": "新規に戻す"
-    }
+    },
+    "layoutLibrary": "座席表ライブラリ"
   },
   "details": {
     "title": "イベントの詳細",
@@ -3346,7 +3707,39 @@
       "attendees_read": "参加者の閲覧",
       "attendees_write": "参加者の変更とチケットの再送",
       "checkin_scan": "チケットのスキャン"
-    }
+    },
+    "expiry": "有効期限",
+    "expiryHint": "期限のあるキーは期限前にローテーションが必要です。短いほど安全です。",
+    "expiryIn": {
+      "30": "30日後",
+      "90": "90日後",
+      "365": "1年後",
+      "never": "なし"
+    },
+    "expiresColumn": "有効期限",
+    "createdBy": "作成者",
+    "createdByPlatform": "Yayatoh",
+    "expired": "期限切れ",
+    "rotatedStatus": "ローテーション済み",
+    "rotate": "ローテーション",
+    "rotateNamed": "キー {name} をローテーション",
+    "overlap": "旧キーが使える期間",
+    "overlapFor": {
+      "h0": "なし：今すぐ停止",
+      "h1": "1時間",
+      "h24": "24時間",
+      "h168": "7日間"
+    },
+    "rotateNow": "今すぐローテーション",
+    "rotateNowNamed": "キー {name} を今すぐローテーション",
+    "rotated": "キー「{name}」をローテーションしました。旧キーは {until} まで使えます。",
+    "rotatedNow": "キー「{name}」をローテーションしました。旧キーは停止しました。",
+    "related": "API",
+    "usageLink": "利用状況",
+    "sandboxesLink": "サンドボックス",
+    "rateLimitNote": "各キーは1分あたり {perKey, number} リクエスト、全キー合計で {perOrg, number} リクエストまで送れます。",
+    "noApiAccess": "この組織のプランには API アクセスが含まれていないため、キーは拒否されます。",
+    "webhooksLink": "Webhook"
   },
   "market": {
     "wordmark": "Yayatoh",
@@ -4655,6 +5048,11 @@
     "terminated": {
       "title": "この組織は閉鎖されています",
       "body": "Yayatoh サポートがこの組織を閉鎖しました。公開ページは停止され、何も変更できません。オーナーは引き続き開いて、アクティビティなどからデータをダウンロードできます。"
+    },
+    "sandbox": {
+      "label": "サンドボックス",
+      "title": "サンドボックス",
+      "body": "これはテスト用の組織です。決済はテスト用で請求は発生せず、イベントがマーケットプレイスに表示されることはありません。"
     }
   },
   "seatingDates": {
@@ -4737,8 +5135,13 @@
       "slot_full": "このイベントにはすでに 20 枚のフロアプラン画像があります。",
       "forbidden": "この座席表は変更できません。",
       "network": "アップロードに失敗しました。接続を確認してもう一度お試しください。",
-      "generic": "アップロードに失敗しました。もう一度お試しください。"
-    }
+      "generic": "アップロードに失敗しました。もう一度お試しください。",
+      "pdf_page": "そのページはありません。この PDF は {pages, plural, other {# ページ}}です。",
+      "pdf_unreadable": "この PDF を読み込めません。図を画像か別の PDF として書き出してから、もう一度お試しください。"
+    },
+    "pdfPage": "ページ（PDF）",
+    "pdfHint": "PDF のフロア図も使えます。図のあるページを選んでください。ブラウザー内で画像に変換してから、画像としてアップロードします。",
+    "pdfDrawing": "PDF の {page} ページ目を描画しています…"
   },
   "humanCheck": {
     "legend": "セキュリティチェック",
@@ -5070,7 +5473,9 @@
         "consent": "マーケティングへの同意",
         "label": "ラベル",
         "totals": "累計",
-        "seen": "初回または最終の記録"
+        "seen": "初回または最終の記録",
+        "stats": "連絡先の統計",
+        "ltv": "生涯価値"
       },
       "did": "ルール",
       "didYes": "した",
@@ -5128,7 +5533,19 @@
       "event": "イベント",
       "editionOf": "この前の開催",
       "series": "シリーズ",
-      "noSeries": "シリーズはまだありません"
+      "noSeries": "シリーズはまだありません",
+      "statsMetric": "指標",
+      "statsMetrics": {
+        "engagement": "エンゲージメントスコア",
+        "noShowPct": "不参加の傾向",
+        "sessionsAttended": "参加したセッション",
+        "campaignsOpened": "開封したキャンペーン",
+        "rfmRecency": "RFM 最新性（五分位）",
+        "rfmFrequency": "RFM 頻度（五分位）",
+        "rfmMonetary": "RFM 金額（五分位）"
+      },
+      "valuePercent": "パーセント",
+      "quintile": "五分位（1–5）"
     },
     "scopes": {
       "any": "すべてのイベント",
@@ -5183,7 +5600,10 @@
         "unknown_legacy": "不明（インポート）",
         "none": "なし"
       }
-    }
+    },
+    "peopleLink": "人物",
+    "duplicatesLink": "重複の可能性",
+    "insights": "連絡先インサイト"
   },
   "refundOps": {
     "timeline": {
@@ -10864,6 +11284,1030 @@
       "waitlist_closed": "{title}は満席で、キャンセル待ちはセッションの24時間前に終了しました。",
       "offer_ended": "{title}の案内は期限切れです。",
       "full": "{title}はちょうど満席になりました。もう一度お試しいただくとキャンセル待ちに登録できます。"
+    }
+  },
+  "people": {
+    "title": "人物",
+    "audiences": "オーディエンス",
+    "description": "組織に記録があるすべての人を新しい順に表示します。開くと全履歴を確認できます。",
+    "duplicatesLink": "重複の可能性",
+    "search": {
+      "label": "名前・メール・会社で検索",
+      "submit": "検索",
+      "noneTitle": "該当する人がいません",
+      "noneDescription": "「{q}」を含む名前・メール・会社はありません。短い語で試してください。"
+    },
+    "emptyTitle": "まだ誰もいません",
+    "emptyDescription": "チケット購入、登録、ゲストリストへの追加でここに表示されます。",
+    "caption": "人物",
+    "columns": {
+      "name": "名前",
+      "email": "メール",
+      "company": "会社",
+      "added": "追加日"
+    },
+    "next": "次のページ",
+    "person": {
+      "title": "人物",
+      "details": "詳細",
+      "mergedHere": "そのレコードはこのレコードに統合されました。"
+    },
+    "fields": {
+      "name": "名前",
+      "email": "メール",
+      "phone": "電話",
+      "company": "会社",
+      "added": "追加日",
+      "emailConsent": "マーケティングメール",
+      "smsConsent": "マーケティングSMS",
+      "history": "履歴",
+      "empty": "未入力"
+    },
+    "merges": {
+      "title": "統合したレコード",
+      "line": "{when}に{who}を統合しました。",
+      "moved": "{moved, plural, =0 {移動した項目はありません。} other {#件の項目を移動しました。}}",
+      "undoneOn": "{when}に取り消しました。",
+      "undoUntil": "{when}まで取り消せます。",
+      "erased": "削除済みのレコード"
+    },
+    "undo": {
+      "submit": "統合を取り消す",
+      "submitFor": "{who}の統合を取り消す",
+      "done": "統合を取り消しました。2つのレコードは以前とまったく同じように分かれています。",
+      "openOther": "もう一方のレコードを開く",
+      "errors": {
+        "expired": "この統合から30日以上経過しているため、取り消せません。",
+        "blocked": "このレコードはその後、別のレコードに統合されています。先にその統合を取り消してください。",
+        "erased": "どちらかのレコードが削除されたため、統合を取り消せません。",
+        "undone": "この統合はすでに取り消されています。"
+      }
+    },
+    "errors": {
+      "forbidden": "あなたのロールでは統合できません。オーナー、管理者、マネージャーに依頼してください。"
+    },
+    "timeline": {
+      "title": "タイムライン",
+      "kind": "種類",
+      "allKinds": "すべて",
+      "event": "イベント",
+      "allEvents": "すべてのイベント",
+      "filter": "絞り込む",
+      "noMatchTitle": "条件に一致する項目がありません",
+      "noMatchDescription": "「すべて」または「すべてのイベント」を選ぶと表示が増えます。",
+      "emptyTitle": "まだ何もありません",
+      "emptyDescription": "注文、チェックイン、キャンペーン、メッセージ、アンケートが発生するとここに表示されます。",
+      "listLabel": "{name}のタイムライン",
+      "older": "さらに前"
+    },
+    "kinds": {
+      "order_paid": "注文の支払い",
+      "order_refunded": "返金",
+      "checked_in": "チェックイン",
+      "session_attended": "セッションに参加",
+      "campaign_sent": "キャンペーン送信",
+      "campaign_opened": "キャンペーンを開封",
+      "campaign_clicked": "キャンペーンをクリック",
+      "message_in": "あなたへのメッセージ",
+      "message_out": "あなたの返信",
+      "donation": "寄付",
+      "rsvp": "招待への返信",
+      "survey_sent": "アンケート送信",
+      "survey_responded": "アンケートに回答"
+    },
+    "merge": {
+      "done": "レコードを統合しました。このページから30日間取り消せます。",
+      "submit": "レコードを統合",
+      "hint": "注文、チケット、チェックイン、メッセージ、履歴は残すレコードに移ります。統合は30日間取り消せます。",
+      "errors": {
+        "alreadyMerged": "このページを開いた後に、どちらかのレコードが統合または変更されました。一覧に戻ってください。",
+        "erased": "どちらかのレコードが削除されているため統合できません。",
+        "unavailable": "現在統合できません。後でもう一度お試しください。",
+        "keep": "残すレコードを選んでください。"
+      }
+    },
+    "duplicates": {
+      "title": "重複の可能性",
+      "description": "二重に登録されている可能性がある人：同じメール、同じ電話番号、または同じ会社の似た名前。",
+      "scan": "重複を探す",
+      "lastScan": "最終確認：{when}。新しい連絡先は数分ごとに自動で確認されます。",
+      "neverScanned": "まだ確認していません。",
+      "scanned": "{count, plural, =0 {重複の可能性は見つかりませんでした。} other {重複の可能性が#件見つかりました。}}",
+      "dismissedDone": "別人としてマークしました。このペアは今後提案されません。",
+      "bulkDone": "{count, plural, =0 {統合したものはありません。} other {#組を統合しました。各統合は30日間取り消せます。}}",
+      "statusNav": "ステータスで絞り込む",
+      "status": {
+        "open": "未対応（{count}）",
+        "dismissed": "重複ではない",
+        "merged": "統合済み"
+      },
+      "caption": {
+        "open": "確認待ちの重複の可能性",
+        "dismissed": "別人としてマークしたペア",
+        "merged": "統合済みのペア"
+      },
+      "empty": {
+        "open": {
+          "title": "重複の可能性はありません",
+          "description": "「重複を探す」を選ぶと今すぐ全員を確認します。新しい連絡先は自動で確認されます。"
+        },
+        "dismissed": {
+          "title": "除外したものはありません",
+          "description": "別人としてマークしたペアがここに表示されます。"
+        },
+        "merged": {
+          "title": "まだ統合はありません",
+          "description": "統合したペアがここに表示されます。統合の取り消しはその人のページから行えます。"
+        }
+      },
+      "select": "選択",
+      "selectPair": "{pair}を選択",
+      "pair": "{a}と{b}",
+      "columns": {
+        "people": "人物",
+        "confidence": "確度",
+        "reasons": "理由",
+        "review": "確認"
+      },
+      "score": "{score}%",
+      "review": "確認",
+      "reviewPair": "{pair}を確認",
+      "mergeSelected": "選択したものを統合",
+      "mergeSelectedHint": "各ペアの古いレコードと最新の情報を残します。本人確認を求められます。",
+      "errors": {
+        "noneSelected": "統合するペアを1つ以上選んでください。",
+        "tooMany": "一度に選べるのは50組までです。"
+      }
+    },
+    "reasons": {
+      "email": "同じメールアドレス",
+      "phone": "同じ電話番号",
+      "name_company": "同じ会社の似た名前"
+    },
+    "compare": {
+      "title": "重複の可能性を確認",
+      "description": "確度{score}%：{reasons}。",
+      "resolved": "このペアは対応済みです。",
+      "record": "レコード{n}",
+      "older": "（古い方）",
+      "entries": "{count, plural, =0 {項目なし} other {#件}}",
+      "openTimeline": "{record}のタイムラインを開く",
+      "consentTitle": "統合後の同意",
+      "consentEmail": "マーケティングメール：{status}",
+      "consentSms": "マーケティングSMS：{status}",
+      "consentRule": "最も厳しい選択が優先されます。どちらかが配信停止していれば、統合後も配信停止です。",
+      "keepLegend": "残すレコード",
+      "keepHint": "もう一方のレコードはこれに統合されます。そのメールアドレスでも引き続きこの人が見つかります。",
+      "keepOption": "{record}（{email}）",
+      "fieldLegend": {
+        "name": "名前",
+        "email": "メール",
+        "phone": "電話",
+        "company": "会社"
+      },
+      "fieldOption": "{record}：{value}",
+      "dismiss": "同一人物ではない"
+    },
+    "consent": {
+      "granted": "同意あり",
+      "withdrawn": "配信停止",
+      "unknown_legacy": "不明（インポート）",
+      "none": "同意なし"
+    }
+  },
+  "contactStats": {
+    "title": "連絡先",
+    "insightsTitle": "連絡先インサイト",
+    "insightsDescription": "すべてのイベントでの参加状況：エンゲージメント、不参加、最新性、頻度。",
+    "audiencesLink": "オーディエンス",
+    "notLive": "この連絡先は別の連絡先に統合されたか、消去されました。統計はもう集計されません。",
+    "emptyTitle": "まだアクティビティはありません",
+    "emptyDescription": "この人がイベントに登録、セッションに参加、またはキャンペーンを開封すると統計が表示されます。",
+    "emptyAction": "オーディエンスを作成",
+    "glance": "概要",
+    "events": "登録したイベント",
+    "attended": "参加したイベント",
+    "sessions": "参加したセッション",
+    "campaigns": "開封したキャンペーン",
+    "firstSeen": "初回",
+    "lastSeen": "最終",
+    "never": "—",
+    "lifetimeValue": "生涯価値",
+    "lifetimeOrders": "{count, plural, other {支払い済み注文 # 件}}",
+    "noSpend": "支払い済みの注文はまだありません。",
+    "noSpendOrg": "まだ誰も支払っていません。",
+    "scores": "スコア",
+    "engagement": "エンゲージメントスコア",
+    "engagementValue": "{score} / 100",
+    "engagementHow": "{wAttended} × {attended} 参加イベント + {wSessions} × {sessions} セッション + {wCampaigns} × {campaigns} 開封キャンペーン = {points} ポイント. 100 × {points} ÷ ({points} + {half}) = {score}.",
+    "noShow": "不参加の傾向",
+    "noShowHow": "({noShows} 不参加 + {priorNoShows}) ÷ ({past} 過去の登録 + {priorRegistrations}) = {pct}. 今後のイベントはまだ集計されません。",
+    "rfm": "RFM",
+    "rfmHow": "この組織でイベントに参加した人の中での五分位：5 が上位 5 分の 1 です。",
+    "rfmNone": "まだランクなし：イベントがありません。",
+    "recency": "最新性",
+    "frequency": "頻度",
+    "monetary": "金額",
+    "quintileValue": "5 段階中 {q}",
+    "updated": "{date} に更新",
+    "viewContact": "連絡先を表示",
+    "headerSummary": "エンゲージメント {score} · 不参加 {pct}",
+    "headerValue": "生涯 {amount}",
+    "totals": "合計",
+    "total": {
+      "contacts": "連絡先",
+      "participants": "参加者",
+      "attendedAny": "来場者",
+      "averageEngagement": "平均エンゲージメント",
+      "noShowRate": "不参加率"
+    },
+    "distributions": "分布",
+    "distribution": {
+      "engagement": "エンゲージメントスコア",
+      "noShow": "不参加の傾向",
+      "frequency": "参加したイベント数",
+      "recency": "最終"
+    },
+    "showData": "データを表示",
+    "range": "範囲",
+    "people": "人数",
+    "bandRange": "{from}–{to}",
+    "bandFrom": "{from} 以上",
+    "recencyWithin": "{days} 日以内",
+    "recencyOlder": "それ以前",
+    "value": {
+      "currency": "通貨",
+      "payers": "支払った人",
+      "total": "合計",
+      "average": "平均",
+      "topFifth": "上位 5 分の 1 の下限",
+      "max": "最高"
+    },
+    "orgEmptyTitle": "まだ連絡先のアクティビティはありません",
+    "orgEmptyDescription": "登録、チェックイン、セッション参加、キャンペーン開封に応じて統計が表示されます。",
+    "orgEmptyAction": "イベントへ移動"
+  },
+  "privacyRequest": {
+    "title": "個人データについての請求",
+    "description": "{org} に、あなたについて保有している個人データのコピーまたは消去を求めることができます。回答は30日以内に届きます。最初に、アドレスがご本人のものか確認するためのコードをメールでお送りします。",
+    "notice": "{org} のプライバシー通知を読む",
+    "kindLegend": "ご希望の内容",
+    "access": "自分のデータのコピー",
+    "accessHint": "あなたについて保有するすべてを含む ZIP ファイルへのリンクが届きます。",
+    "erasure": "自分のデータを消去",
+    "erasureHint": "{org} は、法律で保管が義務付けられたもの（税務のための支払い済みの注文など）を除き、あなたの記録を削除します。",
+    "email": "メールアドレス",
+    "emailHint": "この主催者で使ったメールアドレス",
+    "submit": "コードをメールで受け取る",
+    "sent": "6桁のコードを {email} に送りました。入力して請求を確定してください。コードの有効期間は10分です。",
+    "resent": "新しいコードを {email} に送りました。",
+    "codeLabel": "確認コード",
+    "confirm": "請求を確定",
+    "resend": "新しいコードを送る",
+    "changeEmail": "別のアドレスを使う",
+    "doneTitle": "請求を受け付けました",
+    "doneBody": "{org} は {date} までに回答します。受付番号は {reference} です。対応が完了したらメールでお知らせします。",
+    "existingBody": "{org} への未完了の請求がすでにあります。期限は {date}、受付番号は {reference} です。",
+    "errors": {
+      "invalidEmail": "有効なメールアドレスを入力してください。",
+      "kindRequired": "データのコピーか消去のどちらかを選んでください。",
+      "rateLimited": "{minutes, plural, other {試行回数が多すぎます。#分後にもう一度お試しください。}}",
+      "codeFormat": "メールに記載された6桁の数字を入力してください。",
+      "wrong": "{count, plural, =0 {コードが正しくありません。新しいコードをリクエストしてください。} other {コードが正しくありません。残り#回です。}}",
+      "locked": "間違ったコードが多すぎます。新しいコードをリクエストしてください。",
+      "expired": "このコードは期限切れか、すでに使用されています。新しいコードをリクエストしてください。",
+      "generic": "問題が発生しました。もう一度お試しください。"
+    }
+  },
+  "apiUsage": {
+    "title": "API 利用状況",
+    "subtitle": "この組織の API キーによるリクエスト（組織のタイムゾーンでの日別）。",
+    "back": "API キー",
+    "range": "期間",
+    "lastDays": "過去 {days, number} 日",
+    "totalsTitle": "合計",
+    "requests": "リクエスト",
+    "errors": "エラー",
+    "rateLimited": "レート制限",
+    "perDayTitle": "日別リクエスト",
+    "perKeyTitle": "キー別リクエスト",
+    "day": "日付",
+    "showData": "データを表示",
+    "emptyTitle": "この期間の API リクエストはありません",
+    "emptyDescription": "キーによるリクエストはすぐにここに表示されます。API キーのページでキーを作成してください。"
+  },
+  "sandboxes": {
+    "title": "サンドボックス",
+    "subtitle": "この組織にリンクされたテスト用の組織で、API や決済を安全に試せます。",
+    "noAccessTitle": "サンドボックスを管理できるのはオーナーと管理者だけです",
+    "noAccessDescription": "この組織のオーナーか管理者に作成を依頼してください。",
+    "factsTitle": "サンドボックスの仕組み",
+    "factPayments": "決済は常にテスト用です。プラットフォームの設定にかかわらず、請求されることはありません。",
+    "factMarketplace": "イベントがマーケットプレイスに表示されることはありません。",
+    "factData": "サンプルイベントと2種類のチケットが用意されています。",
+    "factKeys": "独自の API キーとチームを持ちます。あなたがオーナーです。",
+    "createTitle": "サンドボックスを作成",
+    "name": "名前",
+    "nameHint": "例：「Staging」「Zapier テスト」",
+    "nameRequired": "サンドボックスの名前を入力してください。",
+    "create": "サンドボックスを作成",
+    "creating": "作成中…",
+    "created": "サンプルイベント付きのサンドボックス「{name}」を作成しました。",
+    "open": "サンドボックス {name} を開く",
+    "openShort": "開く",
+    "limit": "この組織にはすでに上限の {max, number} 個のサンドボックスがあります。先に1つ削除してください。",
+    "sandboxOfSandbox": "サンドボックスの中にサンドボックスは作れません",
+    "inSandboxDescription": "このサンドボックスが属する組織から作成してください。",
+    "listTitle": "サンドボックス一覧",
+    "emptyTitle": "サンドボックスはまだありません",
+    "emptyDescription": "サンプルデータとテスト決済で API、決済、チェックインを試すために作成しましょう。",
+    "address": "アドレス",
+    "createdAt": "作成日",
+    "actions": "操作",
+    "delete": "削除",
+    "deleteNamed": "サンドボックス {name} を削除",
+    "deleteWarning": "完全に閉鎖されます。ページは公開停止になり、メンバーとキーはアクセスできなくなります。",
+    "deleteConfirm": "完全に削除",
+    "deleteConfirmNamed": "サンドボックス {name} を完全に削除"
+  },
+  "webhooks": {
+    "title": "Webhook",
+    "subtitle": "組織のイベントを、発生と同時に自社のシステムへ送信します。",
+    "docs": "Webhook ガイドと署名の検証",
+    "related": "関連ページ",
+    "portalLink": "Webhook ポータルを開く",
+    "apiKeysLink": "API キー",
+    "noAccessTitle": "Webhook を管理できるのはオーナーと管理者だけです",
+    "noAccessDescription": "この組織のオーナーまたは管理者に、Webhook エンドポイントの追加や変更を依頼してください。",
+    "noModuleTitle": "Webhook はご利用のプランに含まれていません",
+    "noModuleDescription": "Webhook は API アクセスに含まれます。組織で有効にするにはお問い合わせください。",
+    "unavailableTitle": "Webhook はまだ利用できません",
+    "unavailableDescription": "このプラットフォームでは Webhook の配信を準備中です。しばらくしてからご確認ください。",
+    "emptyTitle": "Webhook エンドポイントはまだありません",
+    "emptyDescription": "下に受信側の https URL を追加し、テストメッセージを送信してください。",
+    "listTitle": "エンドポイント",
+    "url": "エンドポイント URL",
+    "urlHint": "ポート 443 の https で、インターネットから到達できること。すべてのメッセージに署名が付きます。",
+    "description": "説明",
+    "descriptionHint": "任意。チーム向けのメモです（200 文字まで）。",
+    "descriptionTooLong": "200 文字以内で入力してください。",
+    "events": "イベント",
+    "allEvents": "すべてのイベント",
+    "eventCount": "{count, plural, other {# 件のイベント}}",
+    "status": "状態",
+    "active": "有効",
+    "disabled": "一時停止中",
+    "createdAt": "追加日",
+    "createTitle": "エンドポイントを追加",
+    "settingsTitle": "エンドポイントの設定",
+    "receive": "送信するイベント",
+    "receiveAll": "新しいものを含むすべてのイベント",
+    "receiveSelected": "選択したイベントのみ",
+    "typesRequired": "イベントを 1 つ以上選ぶか、すべてのイベントを送信してください。",
+    "groups": {
+      "orders": "注文と支払い",
+      "tickets": "チケット",
+      "checkin": "入場",
+      "events": "イベントとチケット種別",
+      "registration": "参加登録",
+      "engagement": "エンゲージメント",
+      "meta": "テスト"
+    },
+    "enabled": "このエンドポイントにメッセージを送信する",
+    "enabledHint": "オフにすると、エンドポイントを削除せずに配信を一時停止します。",
+    "create": "エンドポイントを追加",
+    "save": "変更を保存",
+    "saved": "エンドポイントを保存しました。",
+    "limit": "この組織のエンドポイント数は上限に達しています。追加するには 1 つ削除してください。",
+    "urlProblem": {
+      "malformed": "https://example.com/webhooks のような完全な URL を入力してください。",
+      "scheme": "https:// の URL を使ってください。",
+      "credentials": "URL からユーザー名とパスワードを削除してください。",
+      "port": "標準の https ポート（443）を使ってください。",
+      "host": "このホストは Webhook を受信できません。公開アドレスを使ってください。",
+      "address": "このアドレスはプライベートまたは予約済みです。公開アドレスを使ってください。",
+      "dns": "このホストが見つかりません。アドレスを確認してください。",
+      "length": "この URL は長すぎます。"
+    },
+    "deleted": "エンドポイントを削除しました。",
+    "created": "エンドポイントを追加しました。テストメッセージを送って受信側を確認してください。",
+    "back": "すべての Webhook エンドポイント",
+    "endpointTitle": "Webhook エンドポイント",
+    "testTitle": "テストメッセージを送信",
+    "testEventType": "メッセージの種類",
+    "testHint": "webhook.test、または任意のイベントのドキュメント記載のサンプルデータ。このエンドポイントだけが受信します。",
+    "sendTest": "テストを送信",
+    "testSent": "テストメッセージを送信しました（{type}）。配信状況は下に表示されます。",
+    "secretTitle": "署名シークレット",
+    "secretHint": "各メッセージが確かに当社から送られたものか確認するために使います。",
+    "revealSecret": "シークレットを表示",
+    "hideSecret": "非表示",
+    "copy": "コピー",
+    "copied": "コピーしました",
+    "rotateHint": "新しいシークレットがこれに置き換わります。24 時間は両方が各メッセージに署名するので、その間に切り替えられます。",
+    "rotateSecret": "シークレットを更新",
+    "rotatedSecret": "シークレットを更新しました。以前のシークレットも 24 時間有効です。",
+    "deliveriesTitle": "最近の配信",
+    "deliveriesUnavailable": "現在、配信状況を読み込めません。1 分後にもう一度お試しください。",
+    "noDeliveriesTitle": "配信はまだありません",
+    "noDeliveriesDescription": "テストメッセージを送るか、次のイベントをお待ちください。",
+    "attemptedAt": "時刻",
+    "eventType": "イベント",
+    "response": "応答",
+    "noResponse": "応答なし",
+    "trigger": "送信元",
+    "triggerManual": "再送信",
+    "triggerScheduled": "自動",
+    "nextRetry": "次回の再試行",
+    "actions": "操作",
+    "attemptSucceeded": "配信済み",
+    "attemptFailed": "失敗",
+    "attemptPending": "保留中",
+    "resend": "再送信",
+    "resendNamed": "{when} の {type} を再送信",
+    "resent": "再送信しました",
+    "recoverTitle": "失敗したメッセージを復旧",
+    "recoverHint": "受信側が停止していた場合、指定した時点以降に失敗したメッセージをすべて再送信します。",
+    "recoverSince": "失敗した期間",
+    "recoverWindow": {
+      "1h": "過去 1 時間",
+      "24h": "過去 24 時間",
+      "7d": "過去 7 日間"
+    },
+    "recover": "失敗したメッセージを再送信",
+    "recovering": "失敗したメッセージを再送信しています。",
+    "deleteTitle": "このエンドポイントを削除",
+    "deleteHint": "直ちにメッセージを受信しなくなります。元に戻すことはできません。",
+    "delete": "エンドポイントを削除",
+    "portalTitle": "Webhook ポータル",
+    "portalSubtitle": "Webhook プロバイダーのエンドポイント、配信ログ、再送信。",
+    "portalAlternative": "ここにある内容はすべて<link>Webhook ページ</link>でも利用できます。",
+    "portalFrameTitle": "Webhook ポータル",
+    "portalUnavailable": "現在、Webhook ポータルを開けません。1 分後にもう一度お試しください。",
+    "fakePortal": {
+      "title": "Webhook ポータル（テストモード）",
+      "subtitle": "プロバイダーのポータルの代わりです。ここではネットワーク経由で何も送信されません。",
+      "endpoints": "エンドポイント",
+      "url": "URL",
+      "types": "イベント",
+      "allTypes": "すべて",
+      "status": "状態",
+      "enabled": "有効",
+      "disabled": "一時停止中",
+      "noEndpoints": "エンドポイントはまだありません",
+      "attempts": "最近の試行",
+      "noAttempts": "試行はまだありません",
+      "type": "イベント",
+      "message": "メッセージ",
+      "succeeded": "配信済み",
+      "failed": "失敗",
+      "at": "時刻"
+    }
+  },
+  "developers": {
+    "brand": "Yayatoh 開発者向け",
+    "skip": "本文へ移動",
+    "title": "開発者向け",
+    "subtitle": "Yayatoh の上に構築しましょう：REST API、Webhook、SDK。",
+    "nav": {
+      "label": "開発者向けドキュメント",
+      "home": "概要",
+      "guides": "ガイド",
+      "reference": "API リファレンス",
+      "events": "Webhook イベント"
+    },
+    "search": {
+      "label": "ドキュメントを検索",
+      "placeholder": "ガイド、エンドポイント、イベントを検索",
+      "submit": "検索",
+      "results": "{count, plural, =0 {結果はありません} other {# 件の結果}}",
+      "resultsLabel": "検索結果",
+      "resultsFor": "「{query}」の検索結果",
+      "none": "一致するものがありません。「orders」や「webhook」など別の語で試してください。",
+      "kinds": {
+        "guide": "ガイド",
+        "operation": "エンドポイント",
+        "event": "イベント"
+      }
+    },
+    "englishNotice": "ガイドとリファレンスは英語です。",
+    "startTitle": "はじめに",
+    "cards": {
+      "guides": "API キー、ページング、冪等性、Webhook、サンドボックスを順を追って説明します。",
+      "reference": "OpenAPI から生成した、すべての /v1 エンドポイントのパラメーターと応答。",
+      "events": "すべての Webhook イベントのバージョン付きスキーマと例。"
+    },
+    "guidesSubtitle": "API を使った開発のステップごとのガイド。",
+    "backToGuides": "すべてのガイド",
+    "reference": {
+      "title": "API リファレンス",
+      "subtitle": "OpenAPI ドキュメントから生成した、すべての /v1 エンドポイント。",
+      "interactive": "インタラクティブなリファレンスで試す",
+      "download": "openapi.json をダウンロード",
+      "tags": "セクション",
+      "auth": "認証",
+      "parameters": "パラメーター",
+      "parametersOf": "{operation} のパラメーター",
+      "name": "名前",
+      "in": "場所",
+      "type": "型",
+      "description": "説明",
+      "requestBody": "リクエスト本文",
+      "responses": "応答"
+    },
+    "events": {
+      "title": "Webhook イベント",
+      "subtitle": "エンドポイントが受信できるすべてのメッセージとバージョン付きスキーマ。データは ID と事実だけで、個人データは含みません。",
+      "verifyLink": "署名の検証方法",
+      "groups": "イベントのグループ",
+      "fieldsOf": "{type} のフィールド",
+      "data": "data",
+      "field": "フィールド",
+      "type": "型",
+      "required": "必須",
+      "yes": "はい",
+      "no": "いいえ",
+      "example": "{type} のメッセージ例"
+    }
+  },
+  "billingPlan": {
+    "title": "プランとモジュール",
+    "subtitle": "ご利用のプラン、含まれるモジュール、チケットごとの手数料の扱い。",
+    "noAccessTitle": "プランを表示できるのはオーナー、管理者、経理のみです",
+    "noAccessDescription": "プランの詳細が必要な場合は、この組織のオーナーにお問い合わせください。",
+    "dormantTitle": "サブスクリプションはまだ有効になっていません",
+    "dormantBody": "組織は現在のプランのまま、今あるすべてのモジュールを使えます。サブスクリプションの開始まで何も変わりません。",
+    "inactiveTitle": "この組織では請求が有効になっていません",
+    "inactiveBody": "組織は現在のプランのまま、今あるすべてのモジュールを使えます。請求が設定されるまで何も変わりません。",
+    "updatedTitle": "プラン変更を受信しました",
+    "updatedBody": "請求プロバイダーが変更を確認しました。下のモジュールは最新です。",
+    "currentPlan": "現在のプラン",
+    "pricePerMonth": "月額 {price}",
+    "pricePerYear": "年額 {price}",
+    "priceQuote": "個別見積もり",
+    "renews": "{date} に更新",
+    "endsOn": "{date} に終了",
+    "source": {
+      "subscription": "サブスクリプション",
+      "plan": "付属のプラン"
+    },
+    "status": {
+      "active": "有効",
+      "trialing": "トライアル",
+      "past_due": "支払い遅延",
+      "canceled": "解約済み",
+      "unpaid": "未払い",
+      "paused": "一時停止",
+      "incomplete": "未完了",
+      "incomplete_expired": "期限切れ"
+    },
+    "fees": {
+      "title": "チケットごとの手数料",
+      "grandfathered": "従来のチケット手数料はそのまま維持されます。プランを変更しても変わりません。",
+      "plan": "チケットごとの手数料は {plan} プランに従います。"
+    },
+    "modules": {
+      "title": "ご利用のモジュール",
+      "description": "組織が今使える機能です。",
+      "count": "{count, plural, other {# 個のモジュール}}"
+    },
+    "catalog": {
+      "title": "プラン",
+      "description": "仮のプランです。価格は確定しておらず、まだ販売していません。",
+      "empty": "プランはまだありません。",
+      "plan": "プラン",
+      "price": "価格",
+      "modules": "モジュール",
+      "status": "状態",
+      "onSale": "販売中",
+      "notOnSale": "未販売"
+    },
+    "test": {
+      "title": "テスト請求（開発環境のみ）",
+      "body": "テスト用の請求プロバイダーでプラン変更をシミュレーションします。本物のプロバイダーと同じ Webhook を送信します。",
+      "open": "テスト請求ポータルを開く"
+    },
+    "planName": {
+      "launch_standard": "ローンチ標準",
+      "tier_free": "フリー",
+      "tier_starter": "スターター",
+      "tier_pro": "プロ",
+      "tier_agency": "エージェンシー",
+      "tier_enterprise": "エンタープライズ"
+    },
+    "module": {
+      "core": "基本",
+      "events": "イベント",
+      "ticketing": "チケット販売",
+      "orders": "注文",
+      "attendees": "参加者",
+      "checkin": "チェックイン",
+      "seating": "座席",
+      "seat_finder": "座席検索",
+      "guests": "ゲストリスト",
+      "rsvp": "出欠確認",
+      "distribution": "販売チャネル",
+      "access_codes": "アクセスコード",
+      "marketing": "マーケティング",
+      "messaging": "メッセージ",
+      "reports": "レポート",
+      "whitelabel": "ホワイトラベル",
+      "ai": "AI アシスタント",
+      "chat": "チャット",
+      "donations": "寄付",
+      "registration": "参加登録",
+      "sessions": "セッション",
+      "speakers": "登壇者",
+      "exhibitors": "出展者",
+      "sponsors": "スポンサー",
+      "badges": "バッジ",
+      "gallery": "ギャラリー",
+      "website": "ウェブサイト",
+      "api_access": "API アクセス",
+      "integrations": "連携",
+      "enterprise": "SSO と SCIM",
+      "agency": "エージェンシー",
+      "virtual": "オンラインイベント",
+      "advanced_seating": "高度な座席",
+      "ai_seating": "AI 座席配置",
+      "analytics_pro": "高度な分析"
+    }
+  },
+  "billingPortal": {
+    "eyebrow": "テスト請求",
+    "title": "プランを選択",
+    "description": "開発環境のみ。このページは請求プロバイダーのポータルの代わりとなり、同じ Webhook を送信します。",
+    "planLegend": "プラン",
+    "switch": "プランを変更",
+    "cancel": "サブスクリプションを解約",
+    "back": "変更せずに戻る",
+    "chooseError": "変更先のプランを選択してください。"
+  },
+  "seatingLibrary": {
+    "title": "座席表ライブラリ",
+    "description": "イベントから保存した座席表です。ここから新しいイベントを作成でき、各イベントは自分専用のコピーを持ちます。",
+    "deleted": "座席表をライブラリから削除しました。使っていたイベントのコピーはそのまま残ります。",
+    "emptyTitle": "座席表ライブラリは空です",
+    "emptyHint": "イベントの座席表を開き、「座席表を保存」を選ぶとここに保管されます。",
+    "emptyViewer": "イベントから保存された座席表がここに表示されます。",
+    "toEvents": "イベントへ",
+    "startTitle": "座席表から新しいイベントを作成",
+    "startDescription": "新しいイベントには座席表のコピーが入ります。その後、席の価格を設定して販売を開始します。",
+    "layout": "座席表",
+    "layoutOption": "{name}（{seats, plural, other {# 席}}）",
+    "eventName": "イベント名",
+    "profile": "イベントの種類",
+    "timezone": "タイムゾーン",
+    "startsAt": "開始",
+    "endsAt": "終了",
+    "start": "イベントを作成",
+    "fixErrors": "強調表示された項目を修正してください。",
+    "errors": {
+      "layoutId": "座席表を選んでください。",
+      "name": "イベント名を入力してください（2〜160 文字）。",
+      "slug": "その名前のイベントはすでにあります。別の名前にしてください。",
+      "profile": "座席のあるイベントの種類を選んでください。",
+      "startsAt": "イベントの開始日時を入力してください。",
+      "endsAt": "開始より後の終了日時を入力してください。",
+      "layoutName": "座席表の名前を入力してください（120 文字まで）。"
+    },
+    "listTitle": "保存した座席表",
+    "seats": "{count, plural, other {# 席}}",
+    "rows": "{count, plural, other {# 列}}",
+    "tables": "{count, plural, other {テーブル # 台}}",
+    "withImage": "フロア図の画像付き",
+    "usedBy": "{count, plural, =0 {まだイベントで使われていません} other {# 件のイベントで使用}}",
+    "updated": "{date} に更新",
+    "renameLabel": "{name} の名前",
+    "rename": "名前を変更",
+    "renamed": "名前を変更しました。",
+    "startFrom": "これでイベントを作成",
+    "startFromNamed": "{name} でイベントを作成",
+    "delete": "削除",
+    "deleteNamed": "{name} を削除"
+  },
+  "warehouse": {
+    "title": "アナリティクス",
+    "description": "すべてのイベントをまとめて：登録、チケット、チェックイン、無断欠席の推移と、上位のイベント。",
+    "filters": "フィルター",
+    "from": "開始日",
+    "to": "終了日",
+    "event": "イベント",
+    "allEvents": "すべてのイベント",
+    "apply": "適用",
+    "timeZoneNote": "日付は組織のタイムゾーン {timeZone} の暦日です。",
+    "rangeErrors": {
+      "invalid_date": "日付は年・月・日で入力してください。",
+      "from_after_to": "終了日が開始日より前になっています。",
+      "range_too_long": "2 年以内の期間を選んでください。"
+    },
+    "periodLabel": "表示単位",
+    "view": {
+      "day": "日",
+      "week": "週",
+      "month": "月"
+    },
+    "emptyTitle": "この期間にはまだデータがありません",
+    "emptyBody": "この期間には登録、チケット、チェックインがありません。期間を広げるか別のイベントを選んでください。新しい注文は数秒でここに表示されます。",
+    "emptyAction": "過去 12 か月を表示",
+    "figures": {
+      "label": "期間の合計",
+      "registrations": "登録",
+      "ticketsIssued": "発行された有料チケット",
+      "tickets": "販売チケット",
+      "compTickets": "無料チケット",
+      "checkins": "チェックイン",
+      "noShows": "無断欠席"
+    },
+    "revenue": {
+      "title": "売上",
+      "net": "純売上（{currency}）",
+      "grossRefunds": "支払い {gross}、返金 {refunds}",
+      "byPeriod": "期間別の売上",
+      "noRevenue": "この期間に販売や返金はありません。",
+      "period": "期間",
+      "currency": "通貨",
+      "gross": "支払い",
+      "refunds": "返金",
+      "netColumn": "純額",
+      "topEvents": "売上上位のイベント",
+      "eventColumn": "イベント",
+      "weekOf": "{day} の週"
+    },
+    "trend": "推移",
+    "chartTitle": "登録、有料チケット、チェックインの推移",
+    "byPeriod": "期間別の数値",
+    "period": "期間",
+    "topEvents": "上位のイベント",
+    "noTopEvents": "この期間に登録があったイベントはありません。",
+    "definitions": "販売チケットは有料チケットから返金分を引いた数です。チェックインは各チケットを最初の入場日に 1 回だけ数えます。無断欠席はチェックインされなかった有効なチケットで、イベント終了日に数えます。",
+    "definitionsFinance": "販売チケットは有料チケットから返金分を引いた数です。チェックインは各チケットを最初の入場日に 1 回だけ数えます。無断欠席はチェックインされなかった有効なチケットで、イベント終了日に数えます。売上は購入者の支払額から返金を引いた額で、通貨ごと、プラットフォーム手数料の差し引き前です（財務を参照）。",
+    "rebuildTitle": "アナリティクスを再構築",
+    "rebuildBody": "このページのすべての数値を、注文とチェックインから数件のイベントずつ再計算します。組織のタイムゾーンを変更した後に使ってください。",
+    "rebuild": "再構築",
+    "rebuilding": "開始中…",
+    "rebuildStarted": "再構築を開始しました",
+    "rebuildStartedBody": "数値はバックグラウンドで再計算されます。その間もこのページは使えます。",
+    "rebuildRunning": "再構築はすでに実行中です。",
+    "runStatus": {
+      "running": "実行中",
+      "done": "完了",
+      "failed": "失敗",
+      "cancelled": "キャンセル"
+    },
+    "runProgress": "{events, plural, other {# 件のイベントを確認}}、{written, plural, other {# 件を更新}}"
+  },
+  "integrations": {
+    "title": "連携",
+    "description": "すでに使っているツールをつなぎましょう。連絡先やレコードは双方向で同期され、確認が必要なときはお知らせします。",
+    "tabsLabel": "連携のセクション",
+    "tabs": {
+      "connections": "接続",
+      "errors": "エラー"
+    },
+    "cancelled": "接続をキャンセルしました。",
+    "offTitle": "このサイトでは連携がまだ有効になっていません",
+    "offDescription": "接続には連携サービスが必要ですが、このサイトではまだ設定されていません。プラットフォーム管理者にお問い合わせください。",
+    "noneTitle": "接続できる連携はまだありません",
+    "noneDescription": "新しい連携は利用可能になるとこのページに表示されます。",
+    "connectors": {
+      "demo": {
+        "description": "連携を試すためのテスト用連絡先アプリです。連絡先が CRM と双方向に同期されます。テスト環境のみ。"
+      }
+    },
+    "sandboxBadge": "テスト",
+    "account": "アカウント",
+    "lastSync": "前回の同期",
+    "never": "なし",
+    "openErrors": "未解決のエラー",
+    "openErrorCount": "{count, plural, other {確認が必要なレコード # 件}}",
+    "noErrors": "なし",
+    "notInPlan": "ご契約のプランに含まれていません",
+    "manage": "管理",
+    "manageNamed": "{name} を管理",
+    "connect": "接続",
+    "connectNamed": "{name} を接続",
+    "reconnect": "再接続",
+    "reconnectNamed": "{name} を再接続",
+    "readOnly": "連携の接続や変更ができるのはオーナーと管理者だけです。",
+    "breadcrumb": "パンくずリスト",
+    "objects": {
+      "contacts": "連絡先"
+    },
+    "fields": {
+      "email": "メール",
+      "name": "名前"
+    },
+    "status": {
+      "none": "未接続",
+      "pending": "承認待ち",
+      "active": "接続済み",
+      "paused": "一時停止中",
+      "revoked": "切断済み",
+      "failed": "接続に失敗"
+    },
+    "runStatus": {
+      "queued": "待機中",
+      "running": "実行中",
+      "succeeded": "同期済み",
+      "partial": "エラーありで同期",
+      "failed": "失敗",
+      "cancelled": "キャンセル"
+    },
+    "errorsFeedback": {
+      "unavailable": "この連携はここでは利用できません。",
+      "provider_unavailable": "プロバイダーに接続できませんでした。数分後にもう一度お試しください。",
+      "not_approved": "プロバイダーがまだ接続を確認していません。先方で接続を完了してから、もう一度確認してください。",
+      "denied": "接続が承認されなかったため、何も接続されていません。",
+      "expired": "接続リンクの有効期限が切れました。「接続」からやり直してください。",
+      "validation_failed": "修正が必要な項目があります。",
+      "forbidden": "アクセス権がありません。",
+      "module_not_enabled": "連携はご契約のプランに含まれていません。",
+      "not_found": "見つかりませんでした。",
+      "conflict": "この連携はすでに接続されています。",
+      "invalid_state": "今はその操作ができません。",
+      "impersonation_blocked": "メンバーとして操作中のスタッフは連携を接続できません。",
+      "read_only_freeze": "定期メンテナンス中は変更できません。終了後にもう一度お試しください。",
+      "internal": "こちらで問題が発生しました。"
+    },
+    "detail": {
+      "title": "連携",
+      "syncNow": "今すぐ同期",
+      "syncing": "同期を準備中",
+      "connected": "{name} を接続しました。まもなく最初の同期が始まります。",
+      "sync": {
+        "queued": "同期を開始しました。少ししてから更新すると結果が表示されます。",
+        "already": "同期はすでに進行中です。"
+      },
+      "done": {
+        "paused": "同期を一時停止しました。",
+        "resumed": "同期を再開しました。",
+        "interval": "同期スケジュールを保存しました。",
+        "disconnected": "切断しました。今後は何も同期されず、プロバイダー側のアクセスも取り消しました。"
+      },
+      "revoked": {
+        "user": "{when} に切断しました。",
+        "provider": "{when} にプロバイダーがこの接続の受け付けを停止したため、同期を止めました。続けるには再接続してください。"
+      },
+      "pending": "プロバイダーでの接続の承認を待っています。",
+      "checkConnection": "接続を確認",
+      "cancelConnect": "キャンセル",
+      "confirmDisconnect": "{name} を切断しますか？",
+      "confirmDisconnectBody": "同期はすぐに止まり、プロバイダー側の Yayatoh のアクセスが取り消されます。同期済みのレコードはそのまま残ります。",
+      "disconnect": "切断",
+      "keep": "接続を維持",
+      "statusTitle": "ステータス",
+      "connectedAt": "接続日時",
+      "nextSync": "次回の同期",
+      "interval": "同期の間隔",
+      "saveInterval": "スケジュールを保存",
+      "pause": "同期を一時停止",
+      "resume": "同期を再開",
+      "intervals": {
+        "15": "15 分",
+        "60": "1 時間",
+        "360": "6 時間",
+        "1440": "1 日"
+      }
+    },
+    "mapping": {
+      "sectionTitle": "フィールドの対応付け",
+      "sectionHelp": "どのフィールドでどのフィールドを埋めるかを選びます。保存するたびに新しいバージョンができ、次回の同期で使われます。",
+      "title": {
+        "pull": "Yayatoh へ",
+        "push": "プロバイダーへ"
+      },
+      "help": {
+        "pull": "プロバイダーのフィールドで Yayatoh のフィールドを埋めます。",
+        "push": "Yayatoh のフィールドでプロバイダーのフィールドを埋めます。"
+      },
+      "version": "バージョン {version}",
+      "saved": "対応付けをバージョン {version} として保存しました。次回の同期で使われます。",
+      "invalid": "この対応付けはまだ保存できません。印の付いたフィールドを確認してください。",
+      "required": "必須",
+      "source": "取得元",
+      "transform": "変換",
+      "default": "空の場合の値",
+      "notMapped": "— 対応付けなし —",
+      "transforms": {
+        "none": "そのまま",
+        "trim": "空白を削除",
+        "lowercase": "小文字",
+        "uppercase": "大文字",
+        "title_case": "単語の先頭を大文字",
+        "first_word": "最初の単語",
+        "last_word": "最後の単語",
+        "to_number": "数値",
+        "to_boolean": "はい／いいえ",
+        "to_date": "日付"
+      },
+      "save": {
+        "pull": "取り込みの対応付けを保存",
+        "push": "書き出しの対応付けを保存"
+      },
+      "issue": {
+        "missing_required": "{field} の取得元を選んでください（必須）。",
+        "unknown_source": "そのフィールドはプロバイダーにありません。",
+        "unknown_target": "{field} は設定できません。",
+        "duplicate_target": "{field} が 2 回設定されています。",
+        "other": "このフィールドを確認してください。"
+      }
+    },
+    "runs": {
+      "title": "最近の同期",
+      "caption": "この連携の最近の同期",
+      "empty": "まだ同期はありません。接続後まもなく最初の同期が始まります。",
+      "when": "開始",
+      "trigger": "開始元",
+      "status": "結果",
+      "pulled": "取り込み",
+      "pushed": "書き出し",
+      "skipped": "変更なし",
+      "failed": "エラー",
+      "error": "問題",
+      "triggers": {
+        "manual": "今すぐ同期",
+        "schedule": "スケジュール",
+        "retry": "再試行"
+      }
+    },
+    "codes": {
+      "auth_revoked": "プロバイダーがこの接続を受け付けなくなりました",
+      "invalid_token": "プロバイダーがこの接続を受け付けなくなりました",
+      "auth_failed": "プロバイダーが接続を拒否しました",
+      "invalid_value": "値がフィールドに合いません",
+      "missing_required": "必須フィールドが空です",
+      "transform_failed": "値を変換できませんでした",
+      "duplicate_record": "2 件のレコードが同じ連絡先を指しています",
+      "write_failed": "Yayatoh に保存できませんでした",
+      "push_failed": "プロバイダーに送信できませんでした",
+      "network": "プロバイダーに接続できませんでした",
+      "lease_expired": "同期が予期せず停止しました",
+      "disconnected": "切断により停止",
+      "paused": "一時停止により停止",
+      "sync_failed": "同期に失敗しました",
+      "unknown_connector": "この連携は利用できなくなりました",
+      "other": "エラー（{code}）"
+    },
+    "inbox": {
+      "title": "連携エラー",
+      "description": "同期できなかったレコードを原因別にまとめています。しばらくは自動で再試行されます。取得元でレコードを修正してから再試行するか、不要なものは非表示にしてください。",
+      "retried": "{count, plural, =0 {再試行するものはありません。これらの接続は有効ではありません。} other {# 件のレコードを次回の同期で再試行します。}}",
+      "dismissed": "{count, plural, other {# 件のレコードを非表示にしました。}}",
+      "filterLabel": "エラーを表示",
+      "status": {
+        "open": "未解決",
+        "resolved": "解決済み",
+        "dismissed": "非表示"
+      },
+      "empty": {
+        "open": "未解決のエラーはありません",
+        "resolved": "解決済みのものはまだありません",
+        "dismissed": "非表示のものはありません"
+      },
+      "emptyOpenHelp": "すべて同期済みです。同期できないレコードがあれば、次の手順とともにここに表示されます。",
+      "backToConnections": "接続へ移動",
+      "groupTitle": "{connector}：{step} · {count, plural, other {# 件}}",
+      "steps": {
+        "auth": "接続",
+        "pull": "プロバイダーからの読み取り",
+        "map": "対応付け",
+        "write": "Yayatoh への保存",
+        "push": "プロバイダーへの送信"
+      },
+      "field": "フィールド：{field}",
+      "lastSeen": "最終確認 {when}",
+      "retryAll": "すべて再試行",
+      "retryAllNamed": "すべて再試行：{group}",
+      "dismissAll": "すべて非表示",
+      "dismissAllNamed": "すべて非表示：{group}",
+      "recordsCaption": "レコード：{group}",
+      "record": "レコード",
+      "object": "種類",
+      "objectDirection": "{object}（{direction}）",
+      "directions": {
+        "pull": "取り込み",
+        "push": "書き出し"
+      },
+      "wholeConnection": "接続全体",
+      "attempts": "試行回数",
+      "nextRetry": "次回の自動再試行",
+      "closedAt": "終了",
+      "manualRetry": "対応待ち",
+      "actions": "操作",
+      "retry": "再試行",
+      "retryNamed": "{record} を再試行",
+      "dismiss": "非表示",
+      "dismissNamed": "{record} を非表示",
+      "more": "{count, plural, other {ほかに # 件のレコードは表示されていません。}}"
+    },
+    "fakeConsent": {
+      "title": "テスト用の同意",
+      "eyebrow": "テスト用プロバイダー",
+      "heading": "{name} を Yayatoh に接続しますか？",
+      "body": "{name} はテスト用のプロバイダーです。許可すると、Yayatoh があなたに代わって次の内容を読み書きできるようになります。",
+      "allow": "許可",
+      "deny": "拒否"
     }
   }
 }

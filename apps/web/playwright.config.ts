@@ -64,6 +64,10 @@ export default defineConfig({
           // content org in production); the e2e uses a seeded org.
           env: {
             MARKETPLACE_CONTENT_ORG: process.env.MARKETPLACE_CONTENT_ORG ?? 'harbor-arts',
+            // M6.6a: subscription billing switched on with the fake provider, so the plan spec can
+            // simulate a plan change through the webhook. It applies only to orgs with a billing
+            // customer (none of the seeded ones), so every other spec runs as with billing off.
+            BILLING_ENABLED: '1',
             ...frontDoorEnv,
           },
         },

@@ -1,3 +1,6 @@
+// M6.1a: contact merges move this module's references (ADR 0023).
+export { automationsContactOwner } from './contact-merge.ts';
+export { automationsDataSubjects } from './data-subject.ts';
 export * from './domain/conditions.ts';
 export * from './domain/journey.ts';
 export * from './domain/templates.ts';

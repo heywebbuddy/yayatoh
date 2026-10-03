@@ -1,15 +1,30 @@
 export { createOrgAuthorizer, type EventRoleResolver, memberRole, orgAuthorizer } from './authorizer.ts';
 export {
+  ApiUsageDto,
+  apiUsageQuery,
+  recordApiKeyUsage,
+  summarizeApiKeyUsageCommand,
+  unsummarizedApiKeyUsage,
+} from './commands/api-key-usage.ts';
+// M6.3a: key lifetimes and rotation, daily usage, sandbox orgs.
+export {
+  API_KEY_LIFETIMES,
   API_KEY_MODES,
   API_KEY_PATTERN,
+  API_KEY_ROTATION_OVERLAPS,
   ApiKeyDto,
   type ApiKeyIdentity,
   type ApiKeyMode,
+  type ApiKeySelf,
   apiKeyIdentity,
+  apiKeySelf,
   CreateApiKeyInput,
   createApiKeyCommand,
+  isApiKeyLive,
   listApiKeysQuery,
+  RotateApiKeyInput,
   revokeApiKeyCommand,
+  rotateApiKeyCommand,
 } from './commands/api-keys.ts';
 export {
   addDomainCommand,
@@ -77,6 +92,22 @@ export {
   updateOrganizationCommand,
 } from './commands/organizations.ts';
 export {
+  CreateSandboxInput,
+  createSandboxCommand,
+  createSandboxOrg,
+  deleteSandboxCommand,
+  deleteSandboxOrg,
+  isSandboxOrg,
+  isSandboxOrgTx,
+  listSandboxesQuery,
+  MAX_SANDBOX_ORGS,
+  provisionSandboxOrgCommand,
+  retireSandboxOrgCommand,
+  SandboxDto,
+  sandboxOrgName,
+  sandboxSlug,
+} from './commands/sandbox.ts';
+export {
   AgreementStatusDto,
   acceptAgreementCommand,
   agreementsQuery,
@@ -99,6 +130,7 @@ export {
   suspensionHistoryQuery,
   suspensionsQuery,
 } from './commands/suspensions.ts';
+export { tenancyDataSubjects } from './data-subject.ts';
 export { AGREEMENT_DOCUMENTS, type AgreementDocument, PLATFORM_AGREEMENTS } from './domain/agreements.ts';
 export { signInvitation } from './domain/invitation-token.ts';
 export {

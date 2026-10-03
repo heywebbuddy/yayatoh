@@ -1,5 +1,6 @@
 import * as ai from '@yayatoh/ai';
 import * as alerts from '@yayatoh/alerts';
+import * as analytics from '@yayatoh/analytics';
 import * as assistance from '@yayatoh/assistance';
 import * as attendees from '@yayatoh/attendees';
 import * as audiences from '@yayatoh/audiences';
@@ -18,6 +19,7 @@ import * as engagement from '@yayatoh/engagement';
 import * as events from '@yayatoh/events';
 import * as forms from '@yayatoh/forms';
 import * as guests from '@yayatoh/guests';
+import * as integrations from '@yayatoh/integrations';
 import {
   COMMAND_CATEGORIES,
   type Command,
@@ -57,6 +59,7 @@ import {
 } from '@yayatoh/tenancy';
 import * as ticketing from '@yayatoh/ticketing';
 import * as venues from '@yayatoh/venues';
+import * as webhooks from '@yayatoh/webhooks';
 import { sql } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { type OrgFixture, ports, systemCtx, twoOrgs, userCtx } from '../src/index.ts';
@@ -80,6 +83,8 @@ const MODULES = {
   // Batch 3e merge: the modules of batches 3b–3e (alerts, audiences, Command Center, guests,
   // marketing; campaigns, journeys and registration), so their commands carry categories too.
   alerts,
+  // Batch 3i merge: M6.2a's warehouse backfill and M6.3b's webhook endpoints.
+  analytics,
   // Batch 3g merge: M3.3b's guest assistance queue (M3.3a grew checkin and the Command Center).
   assistance,
   audiences,
@@ -89,6 +94,8 @@ const MODULES = {
   campaigns,
   commandCenter,
   guests,
+  // M6.4a: connecting an integration is an export (org data leaves for a third party).
+  integrations,
   marketing,
   registration,
   attendees,
@@ -118,6 +125,7 @@ const MODULES = {
   tenancy,
   ticketing,
   venues,
+  webhooks,
 };
 
 type AnyCommand = Command<unknown, unknown, unknown, unknown>;
@@ -178,7 +186,8 @@ describe('impersonation: the pipeline refuses money, export and delete (M1.2e)',
     expect(exportStarts).toEqual(
       expect.arrayContaining([
         'platform.startAuditCsv',
-        'privacy.startDsarExport',
+        // The data-subject archive (M6.1c).
+        'privacy.exportSubject',
         'reports.startAttendeesCsv',
         'reports.startBookingsCsv',
         // Survey responses CSV (M3.9a).
@@ -193,7 +202,8 @@ describe('impersonation: the pipeline refuses money, export and delete (M1.2e)',
     expect(files).toEqual(
       expect.arrayContaining([
         'platform.auditCsvFile',
-        'privacy.dsarExportFile',
+        'privacy.archiveFile',
+        'privacy.selfArchiveFile',
         'reports.attendeesCsvFile',
         'reports.bookingsCsvFile',
         'attendees.importFailures',

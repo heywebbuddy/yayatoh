@@ -20,6 +20,7 @@ export {
   codeColumns,
   isPrivate,
   PHONE_PREFIX,
+  PLANTED_SECRETS,
   phoneColumns,
   privateColumnList,
   type RegisteredColumn,

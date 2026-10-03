@@ -294,6 +294,20 @@
     "alerts.alert-urgent-text": {
       "subject": "{rule, select, unseated {{count, plural, one {{countWords} participante não tem lugar} other {{countWords} participantes não têm lugar}}} undistributed {{count, plural, one {{countWords} ingresso comprado não foi distribuído} other {{countWords} ingressos comprados não foram distribuídos}}} paymentsFailed {{count, plural, one {{countWords} pagamento falhou} other {{countWords} pagamentos falharam}}} paymentsStuck {{count, plural, one {{countWords} pagamento está travado} other {{countWords} pagamentos estão travados}}} refundSurge {{count, plural, one {{countWords} reembolso na última hora} other {{countWords} reembolsos na última hora}}} devicesOffline {{count, plural, one {{countWords} dispositivo de check-in está offline} other {{countWords} dispositivos de check-in estão offline}}} devicesLowBattery {{count, plural, one {{countWords} dispositivo de check-in está com bateria fraca} other {{countWords} dispositivos de check-in estão com bateria fraca}}} devicesBacklog {{count, plural, one {{countWords} dispositivo de check-in tem leituras aguardando sincronização} other {{countWords} dispositivos de check-in têm leituras aguardando sincronização}}} capacityNear {O local está {count}% cheio} capacityFull {O local está lotado ({count}%)} sellOut {{count}% dos ingressos foram vendidos} salesPace {As vendas de ingressos estão em {count}% do ritmo da meta} readiness {{count, plural, one {{countWords} etapa de configuração está bloqueando este evento} other {{countWords} etapas de configuração estão bloqueando este evento}}} domain {{count, plural, one {{countWords} domínio personalizado tem um problema} other {{countWords} domínios personalizados têm um problema}}} payoutsPastDue {{count, plural, one {{countWords} requisito da conta de repasses está atrasado} other {{countWords} requisitos da conta de repasses estão atrasados}}} deliverability {A entregabilidade de e-mails precisa de atenção} automationFailed {{count, plural, one {{countWords} mensagem ou ação em massa falhou hoje} other {{countWords} mensagens ou ações em massa falharam hoje}}} assistanceOverdue {{count, plural, one {{countWords} pedido de ajuda está esperando demais} other {{countWords} pedidos de ajuda estão esperando demais}}} campaignFailed {{count, plural, one {{countWords} envio de campanha falhou hoje} other {{countWords} envios de campanha falharam hoje}}} disputeDeadline {{count, plural, one {{countWords} contestação precisa de provas em breve} other {{countWords} contestações precisam de provas em breve}}} other {Alerta}}",
       "intro": "{eventName, select, none {Algo precisa de atenção em {org}.} other {Algo precisa de atenção em {eventName}.}} O botão abre a página que resolve isso."
+    },
+    "privacy.request-code": {
+      "subject": "{code} é o seu código para confirmar o pedido de privacidade",
+      "intro": "Digite {code} para confirmar o seu pedido a {org}: {kind, select, erasure {apagar os seus dados pessoais} other {uma cópia dos seus dados pessoais}}. O código funciona uma vez e expira em {minutes, plural, one {# minuto} other {# minutos}}. Se não pediu, ignore este e-mail: nada acontece sem o código."
+    },
+    "privacy.archive-ready": {
+      "subject": "Os seus dados pessoais de {org} estão prontos",
+      "intro": "{org} respondeu ao seu pedido: uma cópia dos dados pessoais que guarda sobre si está pronta num ficheiro ZIP. O link funciona durante {days, plural, one {# dia} other {# dias}}. O arquivo está assinado, para que possa verificar que não foi alterado.",
+      "cta": "Descarregar os meus dados"
+    },
+    "privacy.erasure-done": {
+      "subject": "{org} apagou os seus dados pessoais",
+      "intro": "{org} apagou os seus dados pessoais como pediu. Alguns registos têm de ser guardados por lei (por exemplo, pedidos pagos para efeitos fiscais), sem o seu nome nem e-mail; o recibo indica-os com o motivo. Este é o último e-mail sobre o assunto.",
+      "cta": "Ver o recibo"
     }
   },
   "roles": {

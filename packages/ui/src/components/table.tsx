@@ -67,7 +67,9 @@ export function Table<Row>({
     >
       <table className={cx('w-full border-collapse text-body', !stackOnPhone && 'min-w-[36rem]', stack)}>
         <caption className={captionHidden ? 'sr-only' : 'p-4 pb-2 text-start text-card'}>{caption}</caption>
-        <thead className={cx(stickyHeader && 'sticky top-0 z-[1]')}>
+        {/* A sticky header never takes clicks (it holds no controls) and rows keep a scroll margin
+            its height, so a row scrolled into view (focus, find, scripted clicks) is never under it. */}
+        <thead className={cx(stickyHeader && 'pointer-events-none sticky top-0 z-[1]')}>
           <tr className="border-b border-line bg-surface-solid/80">
             {select ? (
               <th scope="col" className={cx(pad, 'w-10')}>
@@ -102,7 +104,10 @@ export function Table<Row>({
               return (
                 <tr
                   key={key}
-                  className="border-b border-line transition-colors duration-150 last:border-0 hover:bg-surface-2 has-[input[type=checkbox]:checked]:bg-primary-soft"
+                  className={cx(
+                    'border-b border-line transition-colors duration-150 last:border-0 hover:bg-surface-2 has-[input[type=checkbox]:checked]:bg-primary-soft',
+                    stickyHeader && 'scroll-mt-12',
+                  )}
                 >
                   {select ? (
                     <td className={pad}>
