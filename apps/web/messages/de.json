@@ -1979,7 +1979,8 @@
       "assign": "Gäste platzieren",
       "finder": "Platzfinder",
       "rules": "Regeln",
-      "guests": "Gäste platzieren"
+      "guests": "Gäste platzieren",
+      "cards": "Karten und Exporte"
     },
     "assign": {
       "title": "Gäste platzieren",
@@ -2298,6 +2299,86 @@
         "noGuests": "Wählen Sie mindestens einen Gast aus.",
         "noPlace": "Wählen Sie einen Tisch oder eine Reihe.",
         "dropMiss": "Legen Sie eine Gruppe auf einem Tisch oder einer Reihe ab."
+      }
+    },
+    "cards": {
+      "title": "Karten und Exporte",
+      "description": "Drucken Sie Platz-, Wegweiser- und Tischkarten und laden Sie den Sitzplan und die Menüzahlen für den Caterer herunter.",
+      "print": {
+        "heading": "Karten drucken",
+        "kind": "Kartentyp",
+        "paper": "Papierformat",
+        "language": "Sprache der Karten",
+        "submit": "PDF herunterladen",
+        "started": "Ihr PDF wird erstellt und gleich heruntergeladen.",
+        "toSeat": "Gäste platzieren",
+        "empty": {
+          "place": "Noch sind keine Gäste platziert, daher gibt es keine Platzkarten. Platzieren Sie zuerst Ihre Gäste.",
+          "escort": "Noch sind keine Gäste platziert, daher gibt es keine Wegweiserkarten. Platzieren Sie zuerst Ihre Gäste.",
+          "table": "Dieser Plan hat noch keine Tische oder Reihen, daher gibt es keine Tischkarten."
+        }
+      },
+      "kinds": {
+        "place": "Platzkarten",
+        "escort": "Wegweiserkarten",
+        "table": "Tischkarten"
+      },
+      "hints": {
+        "place": "{count, plural, =0 {Noch keine Karten} one {# Karte} other {# Karten}}: eine pro platziertem Gast, als Klappkarte",
+        "escort": "{count, plural, =0 {Noch keine Karten} one {# Karte} other {# Karten}}: eine pro Gruppe und Tisch, für den Eingang",
+        "table": "{count, plural, =0 {Noch keine Karten} one {# Karte} other {# Karten}}: eine pro Tisch, ein in der Mitte gefaltetes Blatt"
+      },
+      "papers": {
+        "a4": "A4",
+        "letter": "US Letter",
+        "a5": "A5",
+        "legal": "US Legal"
+      },
+      "exports": {
+        "heading": "Exporte",
+        "chart": "Sitzplan nach Tisch",
+        "chartHint": "Eine Zeile pro Gast: Tisch, Gruppe, Alter, Menü und Antwort.",
+        "meals": "Menüzahlen für den Caterer",
+        "mealsHint": "Menüs pro Tisch mit Kindern, Kleinkindern und Summen. Absagen werden nicht gezählt.",
+        "csv": "CSV",
+        "xlsx": "Excel (XLSX)",
+        "download": "{name} als {format} herunterladen",
+        "note": "Exporte werden im Prüfprotokoll erfasst."
+      },
+      "doc": {
+        "title": {
+          "place": "Platzkarten",
+          "escort": "Wegweiserkarten",
+          "table": "Tischkarten"
+        },
+        "yourTable": "Ihr Tisch",
+        "guestOf": "Begleitung von {name}",
+        "hostedBy": "Gastgeber: {name}"
+      },
+      "file": {
+        "place": "Tisch",
+        "guest": "Gast",
+        "party": "Gruppe",
+        "age": "Alter",
+        "meal": "Menü",
+        "reply": "Antwort",
+        "ageClass": {
+          "adult": "Erwachsene(r)",
+          "child": "Kind",
+          "infant": "Kleinkind"
+        },
+        "status": {
+          "attending": "Kommt",
+          "pending": "Antwort ausstehend",
+          "declined": "Abgesagt"
+        },
+        "notSeated": "Ohne Platz",
+        "notChosen": "Nicht gewählt",
+        "children": "Kinder",
+        "infants": "Kleinkinder",
+        "total": "Summe",
+        "sheetChart": "Sitzplan",
+        "sheetMeals": "Menüzahlen"
       }
     }
   },

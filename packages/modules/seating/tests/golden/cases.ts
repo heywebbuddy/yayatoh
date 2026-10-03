@@ -1,5 +1,12 @@
-import { type CardKind, type CardsCopy, cardsHtml, cardsOf, type PaperSize, seatingSheet } from '../../src/index.ts';
 import type { SeatingViewLike } from '../../src/domain/cards.ts';
+import {
+  type CardKind,
+  type CardsCopy,
+  cardsHtml,
+  cardsOf,
+  type PaperSize,
+  seatingSheet,
+} from '../../src/index.ts';
 
 /**
  * The fixture wedding for golden cards (M4.3b): Harper & Theo, 12 June 2027 in Los Angeles. Three
@@ -17,7 +24,14 @@ export const WEDDING_VIEW: SeatingViewLike = {
   places: [
     { itemId: id(103), kind: 'table', label: 'Table 10', capacity: 8, vip: false, sponsor: null },
     { itemId: id(101), kind: 'table', label: 'Table 1', capacity: 8, vip: true, sponsor: null },
-    { itemId: id(102), kind: 'table', label: 'Table 2', capacity: 8, vip: false, sponsor: 'Rosewood Florals' },
+    {
+      itemId: id(102),
+      kind: 'table',
+      label: 'Table 2',
+      capacity: 8,
+      vip: false,
+      sponsor: 'Rosewood Florals',
+    },
   ],
   parties: [
     {
@@ -42,12 +56,18 @@ export const WEDDING_VIEW: SeatingViewLike = {
     {
       id: id(3),
       name: 'عائلة حداد',
-      guests: [g(31, 'ليلى حداد', 'Fish', 'attending', id(103)), g(32, 'عمر حداد', 'Beef', 'attending', id(101))],
+      guests: [
+        g(31, 'ليلى حداد', 'Fish', 'attending', id(103)),
+        g(32, 'عمر حداد', 'Beef', 'attending', id(101)),
+      ],
     },
     {
       id: id(4),
       name: 'Yamada',
-      guests: [g(41, '山田 花子', 'Vegetarian', 'attending', id(103)), g(42, 'Taro Yamada', null, 'pending', null)],
+      guests: [
+        g(41, '山田 花子', 'Vegetarian', 'attending', id(103)),
+        g(42, 'Taro Yamada', null, 'pending', null),
+      ],
     },
   ],
 };

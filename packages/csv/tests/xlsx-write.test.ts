@@ -41,12 +41,20 @@ describe('writeXlsx (M4.3b)', () => {
       { name: '', rows: [['d']] },
     ]);
     const { sheets } = parseXlsx(bytes);
-    expect(sheets).toEqual(['Meals  by table   total', 'Meals  by table   total 2', 'x'.repeat(31), 'Sheet4']);
+    expect(sheets).toEqual([
+      'Meals  by table   total',
+      'Meals  by table   total 2',
+      'x'.repeat(31),
+      'Sheet4',
+    ]);
     expect(parseXlsx(bytes, { sheet: 'Sheet4' }).headers).toEqual(['d']);
   });
 
   it('bold, frozen header row; deterministic bytes', () => {
-    const rows = [['Table', 'Guests'], ['T1', 3]];
+    const rows = [
+      ['Table', 'Guests'],
+      ['T1', 3],
+    ];
     const a = writeXlsx([{ name: 'S', rows }]);
     expect(writeXlsx([{ name: 'S', rows }])).toEqual(a);
     const sheet = strFromU8(unzipSync(a)['xl/worksheets/sheet1.xml'] as Uint8Array);

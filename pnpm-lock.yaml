@@ -489,6 +489,9 @@ importers:
       '@yayatoh/crm':
         specifier: workspace:*
         version: link:../../packages/modules/crm
+      '@yayatoh/csv':
+        specifier: workspace:*
+        version: link:../../packages/csv
       '@yayatoh/db':
         specifier: workspace:*
         version: link:../../packages/db

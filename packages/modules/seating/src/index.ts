@@ -11,6 +11,17 @@ export {
   unassignSeatsCommand,
 } from './assignments.ts';
 export { BulkAssignTarget, seatAssignAction, seatAssignBulk } from './bulk-assign.ts';
+// M4.3b cards and exports: place, escort and table cards (PDF), the seating chart and meal counts.
+export {
+  ExportGuestSeatingInput,
+  exportGuestSeatingCommand,
+  GuestSeatingExportDto,
+  MealCountsDto,
+  SeatingCardsDto,
+  SeatingSheetDto,
+  seatingCardsQuery,
+} from './cards.ts';
+export { type CardsCopy, type CardsHtmlInput, cardsHtml } from './cards-document.ts';
 export { type ChartKey, publicDoc } from './chart.ts';
 export { instantiateSeatingTx, SeatingSnapshot, seatingSnapshotTx } from './copy.ts';
 export {
@@ -29,6 +40,48 @@ export {
   planChunk,
   planUndo,
 } from './domain/bulk-assign.ts';
+export {
+  CARD_KINDS,
+  type CardKind,
+  type CardsOf,
+  cardSizeMm,
+  cardsOf,
+  defaultPaper,
+  type EscortCard,
+  EXPORT_FORMATS,
+  EXPORT_KINDS,
+  type ExportCell,
+  type ExportCopy,
+  type ExportFormat,
+  type ExportKind,
+  escortCards,
+  isCardKind,
+  isExportFormat,
+  isExportKind,
+  isPaperSize,
+  isTent,
+  type MealCountRow,
+  type MealCounts,
+  mealCounts,
+  mealCountsTable,
+  PAPER,
+  PAPER_SIZES,
+  type PaperSize,
+  type PlaceCard,
+  paginate,
+  placeCards,
+  type SeatingSheet,
+  type SeatingViewLike,
+  SHEET_MARGIN_MM,
+  type SheetGuest,
+  type SheetLayout,
+  type SheetPlace,
+  seatingChartTable,
+  seatingSheet,
+  sheetLayout,
+  type TableCard,
+  tableCards,
+} from './domain/cards.ts';
 // M4.3a guest seating: parties and guests at tables (the OccupantDirectory port, guests side).
 export {
   declinedSeated,
@@ -216,56 +269,3 @@ export {
   setTableSponsorCommand,
   TableSponsorDto,
 } from './table-sponsors.ts';
-// M4.3b cards and exports: place, escort and table cards (PDF), the seating chart and meal counts.
-export {
-  ExportGuestSeatingInput,
-  exportGuestSeatingCommand,
-  GuestSeatingExportDto,
-  MealCountsDto,
-  SeatingCardsDto,
-  SeatingSheetDto,
-  seatingCardsQuery,
-} from './cards.ts';
-export { type CardsCopy, type CardsHtmlInput, cardsHtml } from './cards-document.ts';
-export {
-  CARD_KINDS,
-  type CardKind,
-  type CardsOf,
-  cardSizeMm,
-  cardsOf,
-  defaultPaper,
-  EXPORT_FORMATS,
-  EXPORT_KINDS,
-  type EscortCard,
-  type ExportCell,
-  type ExportCopy,
-  type ExportFormat,
-  type ExportKind,
-  escortCards,
-  isCardKind,
-  isExportFormat,
-  isExportKind,
-  isPaperSize,
-  isTent,
-  type MealCountRow,
-  type MealCounts,
-  mealCounts,
-  mealCountsTable,
-  PAPER,
-  PAPER_SIZES,
-  type PaperSize,
-  type PlaceCard,
-  paginate,
-  placeCards,
-  SHEET_MARGIN_MM,
-  type SeatingSheet,
-  type SeatingViewLike,
-  type SheetGuest,
-  type SheetLayout,
-  type SheetPlace,
-  seatingChartTable,
-  seatingSheet,
-  sheetLayout,
-  type TableCard,
-  tableCards,
-} from './domain/cards.ts';

@@ -1979,7 +1979,8 @@
       "assign": "Placer les invités",
       "finder": "Trouver sa place",
       "rules": "Règles",
-      "guests": "Placer les invités"
+      "guests": "Placer les invités",
+      "cards": "Cartes et exports"
     },
     "assign": {
       "title": "Placer les invités",
@@ -2298,6 +2299,86 @@
         "noGuests": "Choisissez au moins un invité.",
         "noPlace": "Choisissez une table ou une rangée.",
         "dropMiss": "Déposez un groupe sur une table ou une rangée."
+      }
+    },
+    "cards": {
+      "title": "Cartes et exports",
+      "description": "Imprimez les marque-places, les cartes d'accueil et les cartes de table, et téléchargez le plan de table et le décompte des menus pour le traiteur.",
+      "print": {
+        "heading": "Imprimer les cartes",
+        "kind": "Type de carte",
+        "paper": "Format du papier",
+        "language": "Langue des cartes",
+        "submit": "Télécharger le PDF",
+        "started": "Votre PDF est en préparation et se télécharge dans un instant.",
+        "toSeat": "Placer les invités",
+        "empty": {
+          "place": "Aucun invité n'est encore placé : il n'y a pas de marque-places à imprimer. Placez d'abord vos invités.",
+          "escort": "Aucun invité n'est encore placé : il n'y a pas de cartes d'accueil à imprimer. Placez d'abord vos invités.",
+          "table": "Ce plan n'a pas encore de tables ni de rangées : il n'y a pas de cartes de table à imprimer."
+        }
+      },
+      "kinds": {
+        "place": "Marque-places",
+        "escort": "Cartes d'accueil",
+        "table": "Cartes de table"
+      },
+      "hints": {
+        "place": "{count, plural, =0 {Aucune carte pour l'instant} one {# carte} other {# cartes}} : une par invité placé, carte pliée en deux",
+        "escort": "{count, plural, =0 {Aucune carte pour l'instant} one {# carte} other {# cartes}} : une par groupe à chaque table, pour l'entrée",
+        "table": "{count, plural, =0 {Aucune carte pour l'instant} one {# carte} other {# cartes}} : une par table, une feuille pliée en deux"
+      },
+      "papers": {
+        "a4": "A4",
+        "letter": "Lettre US",
+        "a5": "A5",
+        "legal": "Légal US"
+      },
+      "exports": {
+        "heading": "Exports",
+        "chart": "Plan de table par table",
+        "chartHint": "Une ligne par invité : table, groupe, âge, menu et réponse.",
+        "meals": "Décompte des menus pour le traiteur",
+        "mealsHint": "Menus par table, avec enfants, bébés et totaux. Les invités qui ont décliné ne sont pas comptés.",
+        "csv": "CSV",
+        "xlsx": "Excel (XLSX)",
+        "download": "Télécharger {name} au format {format}",
+        "note": "Les exports sont consignés dans le journal d'audit."
+      },
+      "doc": {
+        "title": {
+          "place": "Marque-places",
+          "escort": "Cartes d'accueil",
+          "table": "Cartes de table"
+        },
+        "yourTable": "Votre table",
+        "guestOf": "Invité(e) de {name}",
+        "hostedBy": "Offerte par {name}"
+      },
+      "file": {
+        "place": "Table",
+        "guest": "Invité",
+        "party": "Groupe",
+        "age": "Âge",
+        "meal": "Menu",
+        "reply": "Réponse",
+        "ageClass": {
+          "adult": "Adulte",
+          "child": "Enfant",
+          "infant": "Bébé"
+        },
+        "status": {
+          "attending": "Présent",
+          "pending": "En attente",
+          "declined": "Décliné"
+        },
+        "notSeated": "Non placé",
+        "notChosen": "Non choisi",
+        "children": "Enfants",
+        "infants": "Bébés",
+        "total": "Total",
+        "sheetChart": "Plan de table",
+        "sheetMeals": "Décompte des menus"
       }
     }
   },

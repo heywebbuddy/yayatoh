@@ -1979,7 +1979,8 @@
       "assign": "Assign guests",
       "finder": "Seat finder",
       "rules": "Rules",
-      "guests": "Seat guests"
+      "guests": "Seat guests",
+      "cards": "Cards and exports"
     },
     "assign": {
       "title": "Assign guests",
@@ -2298,6 +2299,86 @@
         "noGuests": "Choose at least one guest to seat.",
         "noPlace": "Choose a table or row.",
         "dropMiss": "Drop a party onto a table or a row."
+      }
+    },
+    "cards": {
+      "title": "Cards and exports",
+      "description": "Print place, escort and table cards, and download the seating chart and the caterer's meal counts.",
+      "print": {
+        "heading": "Print cards",
+        "kind": "Card type",
+        "paper": "Paper size",
+        "language": "Card language",
+        "submit": "Download PDF",
+        "started": "Your PDF is being prepared and downloads in a moment.",
+        "toSeat": "Seat guests",
+        "empty": {
+          "place": "No guests are seated yet, so there are no place cards to print. Seat your guests first.",
+          "escort": "No guests are seated yet, so there are no escort cards to print. Seat your guests first.",
+          "table": "This chart has no tables or rows yet, so there are no table cards to print."
+        }
+      },
+      "kinds": {
+        "place": "Place cards",
+        "escort": "Escort cards",
+        "table": "Table cards"
+      },
+      "hints": {
+        "place": "{count, plural, =0 {No cards yet} one {# card} other {# cards}}: one per seated guest, a tent card folded in half",
+        "escort": "{count, plural, =0 {No cards yet} one {# card} other {# cards}}: one per party at each table, for the entrance",
+        "table": "{count, plural, =0 {No cards yet} one {# card} other {# cards}}: one per table, a sheet folded in half"
+      },
+      "papers": {
+        "a4": "A4",
+        "letter": "US Letter",
+        "a5": "A5",
+        "legal": "US Legal"
+      },
+      "exports": {
+        "heading": "Exports",
+        "chart": "Seating chart by table",
+        "chartHint": "One line per guest: table, party, age, meal and reply.",
+        "meals": "Caterer meal counts",
+        "mealsHint": "Meals per table, with children, infants and totals. Guests who declined are left out.",
+        "csv": "CSV",
+        "xlsx": "Excel (XLSX)",
+        "download": "Download {name} as {format}",
+        "note": "Exports are recorded in the audit log."
+      },
+      "doc": {
+        "title": {
+          "place": "Place cards",
+          "escort": "Escort cards",
+          "table": "Table cards"
+        },
+        "yourTable": "Your table",
+        "guestOf": "Guest of {name}",
+        "hostedBy": "Hosted by {name}"
+      },
+      "file": {
+        "place": "Table",
+        "guest": "Guest",
+        "party": "Party",
+        "age": "Age",
+        "meal": "Meal",
+        "reply": "Reply",
+        "ageClass": {
+          "adult": "Adult",
+          "child": "Child",
+          "infant": "Infant"
+        },
+        "status": {
+          "attending": "Attending",
+          "pending": "Awaiting reply",
+          "declined": "Declined"
+        },
+        "notSeated": "Not seated",
+        "notChosen": "Not chosen",
+        "children": "Children",
+        "infants": "Infants",
+        "total": "Total",
+        "sheetChart": "Seating chart",
+        "sheetMeals": "Meal counts"
       }
     }
   },

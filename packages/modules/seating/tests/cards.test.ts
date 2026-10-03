@@ -38,7 +38,12 @@ const COPY: ExportCopy = {
 describe('seating sheet (M4.3b)', () => {
   it('places in natural label order, guests by party; unseated guests who are coming', () => {
     expect(sheet.places.map((p) => p.label)).toEqual(['Table 1', 'Table 2', 'Table 10']);
-    expect(sheet.places[0]?.guests.map((g) => g.name)).toEqual(['Ana García', 'Luis García', 'Sofía García', 'عمر حداد']);
+    expect(sheet.places[0]?.guests.map((g) => g.name)).toEqual([
+      'Ana García',
+      'Luis García',
+      'Sofía García',
+      'عمر حداد',
+    ]);
     expect(sheet.places[1]?.guests.map((g) => g.name ?? `+${g.guestOf}`)).toEqual([
       'Mei Chen',
       'Jun Chen',
@@ -146,7 +151,14 @@ describe('exports (M4.3b)', () => {
       { place: 'Table 10', meals: [0, 1, 1], notChosen: 0, children: 0, infants: 0, total: 2 },
       { place: null, meals: [0, 0, 0], notChosen: 1, children: 0, infants: 0, total: 1 },
     ]);
-    expect(m.totals).toEqual({ place: null, meals: [3, 2, 2], notChosen: 3, children: 1, infants: 0, total: 10 });
+    expect(m.totals).toEqual({
+      place: null,
+      meals: [3, 2, 2],
+      notChosen: 3,
+      children: 1,
+      infants: 0,
+      total: 10,
+    });
   });
 
   it('meal counts table with headers in the reader’s words', () => {

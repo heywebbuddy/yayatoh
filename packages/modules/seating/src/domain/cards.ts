@@ -165,7 +165,9 @@ const collator = new Intl.Collator('en', { numeric: true, sensitivity: 'base' })
  * guests by party (the party's own order inside it, plus-ones after their host).
  */
 export function seatingSheet(view: SeatingViewLike): SeatingSheet {
-  const parties = [...view.parties].sort((a, b) => collator.compare(a.name, b.name) || a.id.localeCompare(b.id));
+  const parties = [...view.parties].sort(
+    (a, b) => collator.compare(a.name, b.name) || a.id.localeCompare(b.id),
+  );
   const guests = parties.flatMap((p) =>
     p.guests.map((g) => ({
       itemId: g.itemId,
@@ -251,7 +253,9 @@ export function escortCards(sheet: SeatingSheet): EscortCard[] {
       });
   });
   return cards
-    .sort((a, b) => collator.compare(a.party, b.party) || a.partyId.localeCompare(b.partyId) || a.order - b.order)
+    .sort(
+      (a, b) => collator.compare(a.party, b.party) || a.partyId.localeCompare(b.partyId) || a.order - b.order,
+    )
     .map(({ party, names, place }) => ({ party, names, place }));
 }
 
@@ -353,8 +357,10 @@ export interface ExportCopy {
 
 export type ExportCell = string | number;
 
-const nameOf = (g: { name: string | null; guestOf: string | null }, copy: { guestOf: (n: string) => string }) =>
-  g.name ?? copy.guestOf(g.guestOf ?? '');
+const nameOf = (
+  g: { name: string | null; guestOf: string | null },
+  copy: { guestOf: (n: string) => string },
+) => g.name ?? copy.guestOf(g.guestOf ?? '');
 
 /**
  * The seating chart by table, one line per guest: place, guest, party, age, meal, reply. Guests

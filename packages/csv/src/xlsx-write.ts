@@ -20,12 +20,15 @@ const NS_PKG_REL = 'http://schemas.openxmlformats.org/package/2006/relationships
 const INVALID_XML = /[\u0000-\u0008\u000B\u000C\u000E-\u001F￾￿]/g;
 
 const esc = (v: string) =>
-  v.replace(INVALID_XML, '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c] ?? c);
+  v
+    .replace(INVALID_XML, '')
+    .replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c] ?? c);
 
 /** Column letters: 0 → A, 25 → Z, 26 → AA. */
 export function columnName(index: number): string {
   let s = '';
-  for (let i = index + 1; i > 0; i = Math.floor((i - 1) / 26)) s = String.fromCharCode(65 + ((i - 1) % 26)) + s;
+  for (let i = index + 1; i > 0; i = Math.floor((i - 1) / 26))
+    s = String.fromCharCode(65 + ((i - 1) % 26)) + s;
   return s;
 }
 
@@ -33,7 +36,12 @@ export function columnName(index: number): string {
 function sheetNames(sheets: readonly XlsxSheet[]): string[] {
   const seen = new Set<string>();
   return sheets.map((s, i) => {
-    let base = s.name.replace(/[[\]:*?/\\]/g, ' ').replace(INVALID_XML, '').trim().slice(0, 31) || `Sheet${i + 1}`;
+    let base =
+      s.name
+        .replace(/[[\]:*?/\\]/g, ' ')
+        .replace(INVALID_XML, '')
+        .trim()
+        .slice(0, 31) || `Sheet${i + 1}`;
     let name = base;
     for (let k = 2; seen.has(name.toLowerCase()); k++) {
       base = base.slice(0, 31 - String(k).length - 1);
@@ -59,7 +67,10 @@ function sheetXml(sheet: XlsxSheet): string {
     });
   const cols = widths.length
     ? `<cols>${widths
-        .map((w, i) => `<col min="${i + 1}" max="${i + 1}" width="${Math.min(60, Math.max(8, w + 2))}" customWidth="1"/>`)
+        .map(
+          (w, i) =>
+            `<col min="${i + 1}" max="${i + 1}" width="${Math.min(60, Math.max(8, w + 2))}" customWidth="1"/>`,
+        )
         .join('')}</cols>`
     : '';
   const rows = sheet.rows
@@ -104,7 +115,9 @@ export function writeXlsx(sheets: readonly XlsxSheet[]): Uint8Array {
           (_, i) =>
             `<Relationship Id="rId${i + 1}" Type="${NS_REL}/worksheet" Target="worksheets/sheet${i + 1}.xml"/>`,
         )
-        .join('')}<Relationship Id="rId${names.length + 1}" Type="${NS_REL}/styles" Target="styles.xml"/></Relationships>`,
+        .join(
+          '',
+        )}<Relationship Id="rId${names.length + 1}" Type="${NS_REL}/styles" Target="styles.xml"/></Relationships>`,
     ),
     'xl/styles.xml': strToU8(STYLES),
   };

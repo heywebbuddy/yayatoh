@@ -111,9 +111,10 @@ function css(layout: SheetLayout): SafeHtml {
 /** The cards as a self-contained HTML document (one `.sheet` per page). */
 export function cardsHtml<K extends CardKind>(input: CardsHtmlInput<K>): string {
   const layout = sheetLayout(input.kind, input.paper, input.dir);
-  const date = new Intl.DateTimeFormat(input.lang, { dateStyle: 'long', timeZone: input.event.timeZone }).format(
-    input.event.startsAt,
-  );
+  const date = new Intl.DateTimeFormat(input.lang, {
+    dateStyle: 'long',
+    timeZone: input.event.timeZone,
+  }).format(input.event.startsAt);
   const pages = paginate(input.cards, layout.perPage).map(
     (cards) =>
       html`<section class="sheet">${cards.map(

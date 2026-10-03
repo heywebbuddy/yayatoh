@@ -1979,7 +1979,8 @@
       "assign": "Atribuir convidados",
       "finder": "Localizador de assentos",
       "rules": "Regras",
-      "guests": "Acomodar convidados"
+      "guests": "Acomodar convidados",
+      "cards": "Cartões e exportações"
     },
     "assign": {
       "title": "Atribuir convidados",
@@ -2298,6 +2299,86 @@
         "noGuests": "Escolha pelo menos um convidado.",
         "noPlace": "Escolha uma mesa ou fila.",
         "dropMiss": "Solte o grupo numa mesa ou fila."
+      }
+    },
+    "cards": {
+      "title": "Cartões e exportações",
+      "description": "Imprima cartões de lugar, de mesa designada e de mesa, e baixe o mapa de mesas e a contagem de pratos para o bufê.",
+      "print": {
+        "heading": "Imprimir cartões",
+        "kind": "Tipo de cartão",
+        "paper": "Tamanho do papel",
+        "language": "Idioma dos cartões",
+        "submit": "Baixar PDF",
+        "started": "Seu PDF está sendo preparado e será baixado em instantes.",
+        "toSeat": "Acomodar convidados",
+        "empty": {
+          "place": "Ainda não há convidados sentados, então não há cartões de lugar para imprimir. Acomode seus convidados primeiro.",
+          "escort": "Ainda não há convidados sentados, então não há cartões de mesa designada para imprimir. Acomode seus convidados primeiro.",
+          "table": "Este mapa ainda não tem mesas nem fileiras, então não há cartões de mesa para imprimir."
+        }
+      },
+      "kinds": {
+        "place": "Cartões de lugar",
+        "escort": "Cartões de mesa designada",
+        "table": "Cartões de mesa"
+      },
+      "hints": {
+        "place": "{count, plural, =0 {Ainda não há cartões} one {# cartão} other {# cartões}}: um por convidado sentado, dobrado ao meio",
+        "escort": "{count, plural, =0 {Ainda não há cartões} one {# cartão} other {# cartões}}: um por grupo em cada mesa, para a entrada",
+        "table": "{count, plural, =0 {Ainda não há cartões} one {# cartão} other {# cartões}}: um por mesa, uma folha dobrada ao meio"
+      },
+      "papers": {
+        "a4": "A4",
+        "letter": "Carta (EUA)",
+        "a5": "A5",
+        "legal": "Ofício (EUA)"
+      },
+      "exports": {
+        "heading": "Exportações",
+        "chart": "Mapa de mesas por mesa",
+        "chartHint": "Uma linha por convidado: mesa, grupo, idade, prato e resposta.",
+        "meals": "Contagem de pratos para o bufê",
+        "mealsHint": "Pratos por mesa, com crianças, bebês e totais. Quem recusou não é contado.",
+        "csv": "CSV",
+        "xlsx": "Excel (XLSX)",
+        "download": "Baixar {name} em {format}",
+        "note": "As exportações ficam registradas no log de auditoria."
+      },
+      "doc": {
+        "title": {
+          "place": "Cartões de lugar",
+          "escort": "Cartões de mesa designada",
+          "table": "Cartões de mesa"
+        },
+        "yourTable": "Sua mesa",
+        "guestOf": "Acompanhante de {name}",
+        "hostedBy": "Oferecida por {name}"
+      },
+      "file": {
+        "place": "Mesa",
+        "guest": "Convidado",
+        "party": "Grupo",
+        "age": "Idade",
+        "meal": "Prato",
+        "reply": "Resposta",
+        "ageClass": {
+          "adult": "Adulto",
+          "child": "Criança",
+          "infant": "Bebê"
+        },
+        "status": {
+          "attending": "Vai",
+          "pending": "Aguardando resposta",
+          "declined": "Recusou"
+        },
+        "notSeated": "Sem mesa",
+        "notChosen": "Não escolhido",
+        "children": "Crianças",
+        "infants": "Bebês",
+        "total": "Total",
+        "sheetChart": "Mapa de mesas",
+        "sheetMeals": "Contagem de pratos"
       }
     }
   },

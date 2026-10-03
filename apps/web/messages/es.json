@@ -1979,7 +1979,8 @@
       "assign": "Asignar invitados",
       "finder": "Buscador de asientos",
       "rules": "Reglas",
-      "guests": "Sentar invitados"
+      "guests": "Sentar invitados",
+      "cards": "Tarjetas y exportaciones"
     },
     "assign": {
       "title": "Asignar invitados",
@@ -2298,6 +2299,86 @@
         "noGuests": "Elige al menos un invitado.",
         "noPlace": "Elige una mesa o fila.",
         "dropMiss": "Suelta el grupo sobre una mesa o una fila."
+      }
+    },
+    "cards": {
+      "title": "Tarjetas y exportaciones",
+      "description": "Imprime tarjetas de sitio, de mesa asignada y de mesa, y descarga el plano de mesas y el recuento de menús para el catering.",
+      "print": {
+        "heading": "Imprimir tarjetas",
+        "kind": "Tipo de tarjeta",
+        "paper": "Tamaño del papel",
+        "language": "Idioma de las tarjetas",
+        "submit": "Descargar PDF",
+        "started": "Estamos preparando tu PDF; se descargará en un momento.",
+        "toSeat": "Sentar invitados",
+        "empty": {
+          "place": "Aún no hay invitados sentados, así que no hay tarjetas de sitio. Sienta primero a tus invitados.",
+          "escort": "Aún no hay invitados sentados, así que no hay tarjetas de mesa asignada. Sienta primero a tus invitados.",
+          "table": "Este plano aún no tiene mesas ni filas, así que no hay tarjetas de mesa."
+        }
+      },
+      "kinds": {
+        "place": "Tarjetas de sitio",
+        "escort": "Tarjetas de mesa asignada",
+        "table": "Tarjetas de mesa"
+      },
+      "hints": {
+        "place": "{count, plural, =0 {Aún no hay tarjetas} one {# tarjeta} other {# tarjetas}}: una por invitado sentado, plegada por la mitad",
+        "escort": "{count, plural, =0 {Aún no hay tarjetas} one {# tarjeta} other {# tarjetas}}: una por grupo en cada mesa, para la entrada",
+        "table": "{count, plural, =0 {Aún no hay tarjetas} one {# tarjeta} other {# tarjetas}}: una por mesa, una hoja plegada por la mitad"
+      },
+      "papers": {
+        "a4": "A4",
+        "letter": "Carta (EE. UU.)",
+        "a5": "A5",
+        "legal": "Oficio (EE. UU.)"
+      },
+      "exports": {
+        "heading": "Exportaciones",
+        "chart": "Plano de mesas por mesa",
+        "chartHint": "Una línea por invitado: mesa, grupo, edad, menú y respuesta.",
+        "meals": "Recuento de menús para el catering",
+        "mealsHint": "Menús por mesa, con niños, bebés y totales. No se cuentan quienes no asisten.",
+        "csv": "CSV",
+        "xlsx": "Excel (XLSX)",
+        "download": "Descargar {name} en {format}",
+        "note": "Las exportaciones quedan registradas en el registro de auditoría."
+      },
+      "doc": {
+        "title": {
+          "place": "Tarjetas de sitio",
+          "escort": "Tarjetas de mesa asignada",
+          "table": "Tarjetas de mesa"
+        },
+        "yourTable": "Tu mesa",
+        "guestOf": "Acompañante de {name}",
+        "hostedBy": "Patrocinada por {name}"
+      },
+      "file": {
+        "place": "Mesa",
+        "guest": "Invitado",
+        "party": "Grupo",
+        "age": "Edad",
+        "meal": "Menú",
+        "reply": "Respuesta",
+        "ageClass": {
+          "adult": "Adulto",
+          "child": "Niño",
+          "infant": "Bebé"
+        },
+        "status": {
+          "attending": "Asiste",
+          "pending": "Sin respuesta",
+          "declined": "No asiste"
+        },
+        "notSeated": "Sin mesa",
+        "notChosen": "Sin elegir",
+        "children": "Niños",
+        "infants": "Bebés",
+        "total": "Total",
+        "sheetChart": "Plano de mesas",
+        "sheetMeals": "Recuento de menús"
       }
     }
   },

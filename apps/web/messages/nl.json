@@ -1979,7 +1979,8 @@
       "assign": "Gasten plaatsen",
       "finder": "Plaatszoeker",
       "rules": "Regels",
-      "guests": "Gasten plaatsen"
+      "guests": "Gasten plaatsen",
+      "cards": "Kaarten en exports"
     },
     "assign": {
       "title": "Gasten plaatsen",
@@ -2298,6 +2299,86 @@
         "noGuests": "Kies minstens één gast.",
         "noPlace": "Kies een tafel of rij.",
         "dropMiss": "Zet een gezelschap neer op een tafel of rij."
+      }
+    },
+    "cards": {
+      "title": "Kaarten en exports",
+      "description": "Print plaatskaarten, tafelwijzers en tafelkaarten, en download de tafelindeling en de maaltijdaantallen voor de cateraar.",
+      "print": {
+        "heading": "Kaarten printen",
+        "kind": "Soort kaart",
+        "paper": "Papierformaat",
+        "language": "Taal van de kaarten",
+        "submit": "PDF downloaden",
+        "started": "Je PDF wordt gemaakt en wordt zo gedownload.",
+        "toSeat": "Gasten plaatsen",
+        "empty": {
+          "place": "Er zijn nog geen gasten geplaatst, dus er zijn geen plaatskaarten om te printen. Plaats eerst je gasten.",
+          "escort": "Er zijn nog geen gasten geplaatst, dus er zijn geen tafelwijzers om te printen. Plaats eerst je gasten.",
+          "table": "Deze plattegrond heeft nog geen tafels of rijen, dus er zijn geen tafelkaarten om te printen."
+        }
+      },
+      "kinds": {
+        "place": "Plaatskaarten",
+        "escort": "Tafelwijzers",
+        "table": "Tafelkaarten"
+      },
+      "hints": {
+        "place": "{count, plural, =0 {Nog geen kaarten} one {# kaart} other {# kaarten}}: één per geplaatste gast, een dubbelgevouwen kaart",
+        "escort": "{count, plural, =0 {Nog geen kaarten} one {# kaart} other {# kaarten}}: één per gezelschap per tafel, voor de ingang",
+        "table": "{count, plural, =0 {Nog geen kaarten} one {# kaart} other {# kaarten}}: één per tafel, een dubbelgevouwen vel"
+      },
+      "papers": {
+        "a4": "A4",
+        "letter": "US Letter",
+        "a5": "A5",
+        "legal": "US Legal"
+      },
+      "exports": {
+        "heading": "Exports",
+        "chart": "Tafelindeling per tafel",
+        "chartHint": "Eén regel per gast: tafel, gezelschap, leeftijd, maaltijd en antwoord.",
+        "meals": "Maaltijdaantallen voor de cateraar",
+        "mealsHint": "Maaltijden per tafel, met kinderen, baby's en totalen. Afmeldingen tellen niet mee.",
+        "csv": "CSV",
+        "xlsx": "Excel (XLSX)",
+        "download": "{name} downloaden als {format}",
+        "note": "Exports worden vastgelegd in het auditlogboek."
+      },
+      "doc": {
+        "title": {
+          "place": "Plaatskaarten",
+          "escort": "Tafelwijzers",
+          "table": "Tafelkaarten"
+        },
+        "yourTable": "Jouw tafel",
+        "guestOf": "Introducé van {name}",
+        "hostedBy": "Aangeboden door {name}"
+      },
+      "file": {
+        "place": "Tafel",
+        "guest": "Gast",
+        "party": "Gezelschap",
+        "age": "Leeftijd",
+        "meal": "Maaltijd",
+        "reply": "Antwoord",
+        "ageClass": {
+          "adult": "Volwassene",
+          "child": "Kind",
+          "infant": "Baby"
+        },
+        "status": {
+          "attending": "Komt",
+          "pending": "Wacht op antwoord",
+          "declined": "Afgemeld"
+        },
+        "notSeated": "Geen plaats",
+        "notChosen": "Niet gekozen",
+        "children": "Kinderen",
+        "infants": "Baby's",
+        "total": "Totaal",
+        "sheetChart": "Tafelindeling",
+        "sheetMeals": "Maaltijdaantallen"
       }
     }
   },
