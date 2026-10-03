@@ -78,7 +78,8 @@ export const GUEST_SITE_ALLOW: readonly ColumnId[] = [
  * Batch 3j merge: what a party's own pages (reached by its signed link: the guest hub M4.7a, the
  * seat page M4.4a, the card page M4.8e) may show — the party's names and envelope, its guests'
  * names (and, on the seat page, the host-typed names of tablemates, P4-3 d), their meal choices,
- * the program they are invited to and the menu. Never contacts, private answers, notes or tags.
+ * the program they are invited to and the menu, and on the hub the party's own tickets (holder and
+ * short code, as on its order page). Never contacts, private answers, notes or tags.
  */
 export const PARTY_ALLOW: readonly ColumnId[] = [
   'guests.parties.name',
@@ -89,4 +90,6 @@ export const PARTY_ALLOW: readonly ColumnId[] = [
   'guests.sub_events.name',
   'guests.sub_events.place',
   'guests.menu_options.label',
+  'ticketing.tickets.holder_name',
+  'ticketing.tickets.short_code',
 ];
