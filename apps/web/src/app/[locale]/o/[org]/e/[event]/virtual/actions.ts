@@ -1,8 +1,8 @@
 'use server';
 
 import { setEventDetailsCommand } from '@yayatoh/events';
-import { createZoomWebinar } from '@yayatoh/integrations';
-import { executeCommand } from '@yayatoh/kernel';
+import { createZoomWebinar, listConnectionsQuery, requestSyncCommand } from '@yayatoh/integrations';
+import { executeCommand, executeQuery } from '@yayatoh/kernel';
 import {
   ACCESS_MODES,
   type AccessMode,
@@ -10,11 +10,14 @@ import {
   DELIVERY_MODES,
   type DeliveryMode,
   type Ingest,
+  linkZoomWebinarCommand,
+  normalizeWebinarId,
   revealStreamKeyCommand,
   setActiveIngestCommand,
   setStreamEnabledCommand,
   setTicketAccessCommand,
   switchStreamProviderCommand,
+  syncZoomRegistrantsCommand,
   VIDEO_PROVIDERS,
   type VideoProviderName,
 } from '@yayatoh/virtual';
@@ -197,6 +200,47 @@ export async function createZoomWebinarAction(
   const { data, event: ev } = await loadEvent(org, event, 'virtual');
   try {
     await createZoomWebinar(data.ctx, ports, integrationAuth(), { eventId: ev.id, sessionId });
+  } catch (err) {
+    return failure(err);
+  }
+  revalidatePath(path(org, event), 'page');
+  return success();
+}
+
+/* ------------------------------------------------------------------- M6.9b: Zoom ---- */
+
+export async function linkZoomAction(
+  org: string,
+  event: string,
+  sessionId: string,
+  _prev: FormState,
+  form: FormData,
+): Promise<FormState> {
+  const { data, event: ev } = await loadEvent(org, event, 'virtual');
+  const webinarId = String(form.get('webinarId') ?? '').slice(0, 40);
+  if (!normalizeWebinarId(webinarId)) return { ok: false, code: 'validation_failed', fields: ['webinarId'] };
+  try {
+    await executeCommand(linkZoomWebinarCommand, { eventId: ev.id, sessionId, webinarId }, data.ctx, ports);
+  } catch (err) {
+    return failure(err);
+  }
+  revalidatePath(path(org, event), 'page');
+  return success();
+}
+
+/**
+ * Sync with Zoom now: registrant rows brought up to date, then a sync of the Zoom connection
+ * queued (registrants out, attendance reports in). Without `integrations:manage` only the rows.
+ */
+export async function syncZoomAction(org: string, event: string, _prev: FormState): Promise<FormState> {
+  const { data, event: ev } = await loadEvent(org, event, 'virtual');
+  try {
+    await executeCommand(syncZoomRegistrantsCommand, { eventId: ev.id }, data.ctx, ports);
+    const zoom = (await executeQuery(listConnectionsQuery, {}, data.ctx, ports)).find(
+      (c) => c.connector === 'zoom' && c.status === 'active',
+    );
+    if (!zoom) return { ok: false, code: 'invalid_state', reason: 'zoom_not_connected' };
+    await executeCommand(requestSyncCommand, { connectionId: zoom.id }, data.ctx, ports);
   } catch (err) {
     return failure(err);
   }

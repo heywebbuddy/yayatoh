@@ -3,12 +3,13 @@ import { zoomConnectedQuery } from '@yayatoh/integrations';
 import { executeQuery, isDomainError } from '@yayatoh/kernel';
 import { Alert, buttonClass, Card, EmptyState, PageHeader, StatCard, StatusPill, Table } from '@yayatoh/ui';
 import { virtualSetupQuery, zoomSetupQuery } from '@yayatoh/virtual';
-import { CalendarClock, Ticket, Video } from 'lucide-react';
+import { CalendarClock, Ticket } from 'lucide-react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Crumbs } from '@/components/crumbs.tsx';
 import { AccessForm, DeliveryForm, StreamControls } from '@/components/virtual/stream-setup.tsx';
+import { ZoomSyncButton, ZoomWebinarForm } from '@/components/virtual/zoom-setup.tsx';
 import { CreateWebinarButton } from '@/components/virtual/zoom-webinars.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { loadEvent } from '@/server/console.ts';
@@ -16,12 +17,14 @@ import { ports } from '@/server/ports.ts';
 import {
   createStreamAction,
   createZoomWebinarAction,
+  linkZoomAction,
   revealStreamKeyAction,
   setAccessAction,
   setDeliveryAction,
   setIngestAction,
   setStreamEnabledAction,
   switchProviderAction,
+  syncZoomAction,
 } from './actions.ts';
 
 type Params = { params: Promise<{ locale: string; org: string; event: string }> };
@@ -43,6 +46,7 @@ export default async function VirtualPage({ params }: Params) {
   const { data, event: ev, can } = await loadEvent(org, event, 'virtual');
   if (!data.modules.has('virtual') || !can('events:read')) notFound();
   const t = await getTranslations('virtual.setup');
+  const tz = await getTranslations('virtual.zoom');
   const tr = await getTranslations();
   const setup = await executeQuery(virtualSetupQuery, { eventId: ev.id }, data.ctx, ports);
   const checkpoints = data.modules.has('checkin')
@@ -52,16 +56,17 @@ export default async function VirtualPage({ params }: Params) {
       })
     : [];
   const checkedIn = new Map(checkpoints.map((c) => [c.sessionId, c.checkedIn]));
-  // M6.10a: Zoom webinars per session, and whether the org's Zoom connection is active.
-  const zoom = await executeQuery(zoomSetupQuery, { eventId: ev.id }, data.ctx, ports);
+  // M6.9b: Zoom webinars per session, and whether the org's Zoom connection is live (M6.10a: a
+  // query anyone who reads the event may run; null without the integrations module).
+  const zoomSetup = await executeQuery(zoomSetupQuery, { eventId: ev.id }, data.ctx, ports);
   const zoomConnected = data.modules.has('integrations')
-    ? (
-        await executeQuery(zoomConnectedQuery, {}, data.ctx, ports).catch((err) => {
-          if (isDomainError(err)) return { connected: false };
+    ? await executeQuery(zoomConnectedQuery, {}, data.ctx, ports)
+        .then((r) => r.connected)
+        .catch((err) => {
+          if (isDomainError(err)) return null;
           throw err;
         })
-      ).connected
-    : false;
+    : null;
   const canEdit = can('events:write');
   const streaming = setup.deliveryMode !== 'in_person';
   const canStream = streaming && setup.provider !== null;
@@ -246,80 +251,70 @@ export default async function VirtualPage({ params }: Params) {
           <p className="m-0 text-caption text-ink-2">{t('inPersonNote')}</p>
         ) : null}
       </div>
-      {streaming && zoom.sessions.length > 0 ? (
-        <Card>
-          <h2 className="m-0 mb-1 text-section">{t('zoomTitle')}</h2>
-          <p className="mt-0 mb-3 text-caption text-ink-2">{t('zoomHint')}</p>
-          {!zoomConnected ? (
-            <EmptyState
-              icon={<Video />}
-              title={t('zoomNotConnected')}
-              description={t('zoomNotConnectedHint')}
-              action={
-                data.modules.has('integrations') && can('integrations:manage') ? (
-                  <Link href={`/o/${org}/integrations`} className={buttonClass('secondary')}>
-                    {t('connectZoom')}
-                  </Link>
-                ) : undefined
-              }
-            />
-          ) : null}
-          <Table
-            caption={t('zoomTitle')}
-            rowKey={(s) => s.sessionId}
-            rows={zoom.sessions}
-            stackOnPhone
-            columns={[
-              {
-                key: 'title',
-                header: t('session'),
-                cell: (s) => <span className="font-medium">{s.title}</span>,
-              },
-              {
-                key: 'webinar',
-                header: t('webinar'),
-                cell: (s) =>
-                  s.webinarId ? (
-                    <span className="flex flex-col items-start gap-1">
-                      <span className="font-mono" data-testid="webinar-id">
-                        {s.webinarId}
-                      </span>
-                      <StatusPill
-                        tone={s.created ? 'success' : 'neutral'}
-                        label={t(s.created ? 'webinarCreatedPill' : 'webinarLinkedPill')}
-                      />
-                    </span>
-                  ) : (
-                    <StatusPill tone="neutral" label={t('noWebinar')} />
-                  ),
-              },
-              {
-                key: 'registrants',
-                header: t('registrants'),
-                align: 'end',
-                cell: (s) => nf.format(s.registrants),
-              },
-              { key: 'attendees', header: t('attendees'), align: 'end', cell: (s) => nf.format(s.attendees) },
-              ...(canEdit
-                ? [
-                    {
-                      key: 'actions',
-                      header: t('actions'),
-                      cell: (s: (typeof zoom.sessions)[number]) =>
-                        s.webinarId ? null : (
-                          <CreateWebinarButton
-                            title={s.title}
-                            disabled={!zoomConnected}
-                            create={createZoomWebinarAction.bind(null, org, event, s.sessionId)}
-                          />
-                        ),
-                    },
-                  ]
-                : []),
-            ]}
-          />
-        </Card>
-      ) : null}
+      <section className="flex flex-col gap-3" aria-labelledby="zoom-heading">
+        <h2 id="zoom-heading" className="m-0 text-section">
+          {tz('title')}
+        </h2>
+        <p className="m-0 text-caption text-ink-2">{tz('intro')}</p>
+        {zoomConnected === false ? (
+          <Alert tone="info" title={tz('notConnected')}>
+            {can('integrations:manage') ? (
+              <Link href={`/o/${org}/integrations`} className="underline underline-offset-2">
+                {tz('connectLink')}
+              </Link>
+            ) : null}
+          </Alert>
+        ) : null}
+        {!streaming ? (
+          <p className="m-0 text-caption text-ink-2">{t('inPersonNote')}</p>
+        ) : zoomSetup.sessions.length === 0 ? null : (
+          <>
+            <ul className="m-0 flex list-none flex-col gap-3 p-0">
+              {zoomSetup.sessions.map((s) => (
+                <li key={s.sessionId}>
+                  <Card>
+                    <div className="mb-2 flex flex-wrap items-start justify-between gap-2">
+                      <div className="flex flex-col">
+                        <h3 className="m-0 text-body font-semibold">{s.title}</h3>
+                        <span className="text-caption text-ink-2">{when.format(s.startsAt)}</span>
+                      </div>
+                      {s.webinarId ? (
+                        <span className="flex flex-col items-end gap-1">
+                          <span className="text-caption text-ink-2" data-testid="zoom-counts">
+                            {tz('counts', { registrants: s.registrants, attendees: s.attendees })}
+                          </span>
+                          {s.created ? <StatusPill tone="success" label={t('webinarCreatedPill')} /> : null}
+                        </span>
+                      ) : (
+                        <StatusPill tone="neutral" label={tz('notLinked')} />
+                      )}
+                    </div>
+                    {/* M6.10a: or let Yayatoh create the webinar through the Zoom connection. */}
+                    {canEdit && !s.webinarId && zoomConnected ? (
+                      <div className="mb-3">
+                        <CreateWebinarButton
+                          title={s.title}
+                          disabled={false}
+                          create={createZoomWebinarAction.bind(null, org, event, s.sessionId)}
+                        />
+                      </div>
+                    ) : null}
+                    <ZoomWebinarForm
+                      title={s.title}
+                      webinarId={s.webinarId}
+                      canEdit={canEdit}
+                      save={linkZoomAction.bind(null, org, event, s.sessionId)}
+                    />
+                  </Card>
+                </li>
+              ))}
+            </ul>
+            {canEdit && zoomSetup.sessions.some((s) => s.webinarId) ? (
+              <ZoomSyncButton sync={syncZoomAction.bind(null, org, event)} />
+            ) : null}
+          </>
+        )}
+      </section>
     </>
   );
 }

@@ -1365,6 +1365,266 @@ exports[`renderMessage: every kind in all 13 locales > campaigns.test · zh-TW 1
 }
 `;
 
+exports[`renderMessage: every kind in all 13 locales > ce.certificate · ar 1`] = `
+{
+  "subject": "شهادتك من Lakeside Events",
+  "text": "شهادتك من Lakeside Events
+
+مرحبًا Amina Diallo،
+
+حصلت على 2.5 CPE credits في Harbor Health Summit. شهادتك (الرمز K7M2Q-9XR4T) أدناه، وبصيغة PDF.
+
+This certifies that Amina Diallo attended Harbor Health Summit and earned 2.5 CPE credits.
+
+تنزيل الشهادة بصيغة PDF: https://app.yayatoh.test/certificates/sample
+
+--
+أرسلته Lakeside Events عبر Yayatoh.
+بدعم من Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ce.certificate · de 1`] = `
+{
+  "subject": "Ihre Bescheinigung von Lakeside Events",
+  "text": "Ihre Bescheinigung von Lakeside Events
+
+Hallo Amina Diallo,
+
+Sie haben bei Harbor Health Summit 2.5 CPE credits erworben. Ihre Bescheinigung (Code K7M2Q-9XR4T) steht unten und als PDF bereit.
+
+This certifies that Amina Diallo attended Harbor Health Summit and earned 2.5 CPE credits.
+
+Bescheinigung als PDF herunterladen: https://app.yayatoh.test/certificates/sample
+
+--
+Gesendet von Lakeside Events mit Yayatoh.
+Bereitgestellt von Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ce.certificate · en 1`] = `
+{
+  "subject": "Your certificate from Lakeside Events",
+  "text": "Your certificate from Lakeside Events
+
+Hi Amina Diallo,
+
+You earned 2.5 CPE credits at Harbor Health Summit. Your certificate (code K7M2Q-9XR4T) is below, and as a PDF.
+
+This certifies that Amina Diallo attended Harbor Health Summit and earned 2.5 CPE credits.
+
+Download the PDF certificate: https://app.yayatoh.test/certificates/sample
+
+--
+Sent by Lakeside Events with Yayatoh.
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ce.certificate · es 1`] = `
+{
+  "subject": "Su certificado de Lakeside Events",
+  "text": "Su certificado de Lakeside Events
+
+Hola, Amina Diallo:
+
+Obtuvo 2.5 CPE credits en Harbor Health Summit. Su certificado (código K7M2Q-9XR4T) está abajo y en PDF.
+
+This certifies that Amina Diallo attended Harbor Health Summit and earned 2.5 CPE credits.
+
+Descargar el certificado en PDF: https://app.yayatoh.test/certificates/sample
+
+--
+Enviado por Lakeside Events con Yayatoh.
+Con tecnología de Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ce.certificate · fr 1`] = `
+{
+  "subject": "Votre attestation de Lakeside Events",
+  "text": "Votre attestation de Lakeside Events
+
+Bonjour Amina Diallo,
+
+Vous avez obtenu 2.5 CPE credits à Harbor Health Summit. Votre attestation (code K7M2Q-9XR4T) figure ci-dessous et en PDF.
+
+This certifies that Amina Diallo attended Harbor Health Summit and earned 2.5 CPE credits.
+
+Télécharger l’attestation en PDF: https://app.yayatoh.test/certificates/sample
+
+--
+Envoyé par Lakeside Events avec Yayatoh.
+Propulsé par Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ce.certificate · hi 1`] = `
+{
+  "subject": "Lakeside Events से आपका प्रमाणपत्र",
+  "text": "Lakeside Events से आपका प्रमाणपत्र
+
+नमस्ते Amina Diallo,
+
+आपने Harbor Health Summit में 2.5 CPE credits अर्जित किए। आपका प्रमाणपत्र (कोड K7M2Q-9XR4T) नीचे और PDF के रूप में है।
+
+This certifies that Amina Diallo attended Harbor Health Summit and earned 2.5 CPE credits.
+
+PDF प्रमाणपत्र डाउनलोड करें: https://app.yayatoh.test/certificates/sample
+
+--
+Lakeside Events ने Yayatoh से भेजा।
+Yayatoh द्वारा संचालित
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ce.certificate · it 1`] = `
+{
+  "subject": "Il tuo attestato da Lakeside Events",
+  "text": "Il tuo attestato da Lakeside Events
+
+Ciao Amina Diallo,
+
+Hai ottenuto 2.5 CPE credits a Harbor Health Summit. Il tuo attestato (codice K7M2Q-9XR4T) è qui sotto e in PDF.
+
+This certifies that Amina Diallo attended Harbor Health Summit and earned 2.5 CPE credits.
+
+Scarica l’attestato in PDF: https://app.yayatoh.test/certificates/sample
+
+--
+Inviato da Lakeside Events con Yayatoh.
+Con tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ce.certificate · ja 1`] = `
+{
+  "subject": "Lakeside Events からの証明書",
+  "text": "Lakeside Events からの証明書
+
+Amina Diallo 様
+
+Harbor Health Summit で 2.5 CPE credits を取得しました。証明書（コード K7M2Q-9XR4T）は下記および PDF でご覧いただけます。
+
+This certifies that Amina Diallo attended Harbor Health Summit and earned 2.5 CPE credits.
+
+PDF の証明書をダウンロード: https://app.yayatoh.test/certificates/sample
+
+--
+Lakeside Events が Yayatoh から送信しました。
+Powered by Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ce.certificate · nl 1`] = `
+{
+  "subject": "Uw bewijs van Lakeside Events",
+  "text": "Uw bewijs van Lakeside Events
+
+Hoi Amina Diallo,
+
+U behaalde 2.5 CPE credits bij Harbor Health Summit. Uw bewijs (code K7M2Q-9XR4T) staat hieronder en als pdf.
+
+This certifies that Amina Diallo attended Harbor Health Summit and earned 2.5 CPE credits.
+
+Het bewijs als pdf downloaden: https://app.yayatoh.test/certificates/sample
+
+--
+Verzonden door Lakeside Events met Yayatoh.
+Mogelijk gemaakt door Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ce.certificate · pt 1`] = `
+{
+  "subject": "Seu certificado de Lakeside Events",
+  "text": "Seu certificado de Lakeside Events
+
+Olá, Amina Diallo!
+
+Você obteve 2.5 CPE credits em Harbor Health Summit. Seu certificado (código K7M2Q-9XR4T) está abaixo e em PDF.
+
+This certifies that Amina Diallo attended Harbor Health Summit and earned 2.5 CPE credits.
+
+Baixar o certificado em PDF: https://app.yayatoh.test/certificates/sample
+
+--
+Enviado por Lakeside Events com a Yayatoh.
+Com tecnologia Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ce.certificate · ru 1`] = `
+{
+  "subject": "Ваш сертификат от Lakeside Events",
+  "text": "Ваш сертификат от Lakeside Events
+
+Здравствуйте, Amina Diallo!
+
+Вы получили 2.5 CPE credits на мероприятии Harbor Health Summit. Ваш сертификат (код K7M2Q-9XR4T) ниже и в PDF.
+
+This certifies that Amina Diallo attended Harbor Health Summit and earned 2.5 CPE credits.
+
+Скачать сертификат в PDF: https://app.yayatoh.test/certificates/sample
+
+--
+Отправлено Lakeside Events через Yayatoh.
+Работает на Yayatoh
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ce.certificate · zh-CN 1`] = `
+{
+  "subject": "来自 Lakeside Events 的证明",
+  "text": "来自 Lakeside Events 的证明
+
+Amina Diallo，您好：
+
+您在 Harbor Health Summit 获得了 2.5 CPE credits。您的证明（验证码 K7M2Q-9XR4T）见下文及 PDF。
+
+This certifies that Amina Diallo attended Harbor Health Summit and earned 2.5 CPE credits.
+
+下载 PDF 证明: https://app.yayatoh.test/certificates/sample
+
+--
+由 Lakeside Events 通过 Yayatoh 发送。
+由 Yayatoh 提供支持
+",
+}
+`;
+
+exports[`renderMessage: every kind in all 13 locales > ce.certificate · zh-TW 1`] = `
+{
+  "subject": "來自 Lakeside Events 的證明",
+  "text": "來自 Lakeside Events 的證明
+
+Amina Diallo，您好：
+
+您在 Harbor Health Summit 獲得了 2.5 CPE credits。您的證明（驗證碼 K7M2Q-9XR4T）見下文及 PDF。
+
+This certifies that Amina Diallo attended Harbor Health Summit and earned 2.5 CPE credits.
+
+下載 PDF 證明: https://app.yayatoh.test/certificates/sample
+
+--
+由 Lakeside Events 透過 Yayatoh 寄送。
+由 Yayatoh 提供技術支援
+",
+}
+`;
+
 exports[`renderMessage: every kind in all 13 locales > donations.pledge-invoice · ar 1`] = `
 {
   "subject": "تعهّدك لـ Lakeside Events: يُرجى الدفع عبر الإنترنت",

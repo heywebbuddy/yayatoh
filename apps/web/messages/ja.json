@@ -214,6 +214,9 @@
         "request-code": "プライバシーリクエストのコード",
         "archive-ready": "個人データのアーカイブ準備完了",
         "erasure-done": "消去の受領書"
+      },
+      "ce": {
+        "certificate": "継続教育の証明書"
       }
     },
     "status": {
@@ -381,7 +384,8 @@
     "plan": "プランと請求",
     "webhooks": "Webhook",
     "sandboxes": "サンドボックス",
-    "notifications": "通知"
+    "notifications": "通知",
+    "ceCredits": "継続教育単位"
   },
   "vocab": {
     "attendee": "参加者",
@@ -13053,6 +13057,9 @@
     "connectors": {
       "demo": {
         "description": "連携を試すためのテスト用連絡先アプリです。連絡先が CRM と双方向に同期されます。テスト環境のみ。"
+      },
+      "zoom": {
+        "description": "セッション用の Zoom ウェビナー：オンライン参加できるチケット保有者をセッションのウェビナーに登録し、参加レポートを継続教育単位に反映します。"
       }
     },
     "sandboxBadge": "テスト",
@@ -13072,11 +13079,18 @@
     "readOnly": "連携の接続や変更ができるのはオーナーと管理者だけです。",
     "breadcrumb": "パンくずリスト",
     "objects": {
-      "contacts": "連絡先"
+      "contacts": "連絡先",
+      "registrants": "ウェビナー登録者",
+      "participants": "ウェビナー参加"
     },
     "fields": {
       "email": "メール",
-      "name": "名前"
+      "name": "名前",
+      "webinar_id": "ウェビナー ID",
+      "first_name": "名",
+      "last_name": "姓",
+      "joined_at": "参加時刻",
+      "left_at": "退出時刻"
     },
     "status": {
       "none": "未接続",
@@ -15242,17 +15256,7 @@
       "primaryOn": "{title}はメインのインジェストに戻りました。",
       "backupPill": "バックアップのインジェスト",
       "backupIngestUrl": "サーバー（バックアップのインジェスト）",
-      "zoomTitle": "Zoomウェビナー",
-      "zoomHint": "セッションをZoomウェビナーとして配信します。オンラインでのアクセス権を持つ参加者は自動で登録され、入室と退室が出席として記録されます。",
-      "zoomNotConnected": "Zoomが接続されていません",
-      "zoomNotConnectedHint": "ここからウェビナーを作成するには、Zoomアカウントを接続してください。",
-      "connectZoom": "Zoomを接続",
-      "webinar": "ウェビナー",
-      "noWebinar": "ウェビナーなし",
       "webinarCreatedPill": "ここで作成",
-      "webinarLinkedPill": "リンク済み",
-      "registrants": "登録者",
-      "attendees": "出席者",
       "createWebinar": "Zoomウェビナーを作成",
       "createWebinarLabel": "{title}のZoomウェビナーを作成",
       "webinarCreated": "{title}のZoomウェビナーを作成しました。",
@@ -15318,6 +15322,28 @@
         "provider_unavailable": "この配信の動画プロバイダーは現在利用できません。"
       },
       "moved": "配信が別のプロバイダーに移りました。視聴は続いています。"
+    },
+    "zoom": {
+      "title": "Zoom ウェビナー",
+      "intro": "セッションを Zoom ウェビナーとして配信：オンライン参加できるチケット保有者が登録され、参加レポートが単位に数えられます。",
+      "notConnected": "Zoom は接続されていません。",
+      "connectLink": "連携で Zoom を接続",
+      "counts": "登録者：{registrants} · 参加者：{attendees}",
+      "notLinked": "ウェビナーなし",
+      "formLabel": "{title} の Zoom ウェビナー",
+      "webinarId": "Zoom ウェビナー ID",
+      "webinarIdHint": "Zoom の 9〜12 桁の数字",
+      "webinarIdInvalid": "Zoom のウェビナー ID（9〜12 桁）を入力してください。",
+      "link": "ウェビナーを紐付け",
+      "linkLabel": "{title} に Zoom ウェビナーを紐付け",
+      "linked": "{title} にウェビナーを紐付けました。",
+      "syncNow": "今すぐ Zoom と同期",
+      "syncQueued": "Zoom との同期を開始しました。",
+      "errors": {
+        "webinar_taken": "このウェビナーは別のセッションに紐付いています。",
+        "in_person_event": "このイベントは会場参加のため、ウェビナーのセッションはありません。",
+        "zoom_not_connected": "まず連携で Zoom を接続してください。"
+      }
     }
   },
   "formControls": {
@@ -15414,6 +15440,105 @@
       "step1": "下のイベントを選び、プロモコードを開きます。",
       "step2": "割引内容を指定してコードを追加します。必要に応じて上限と期間も設定できます。",
       "step3": "コードを共有しましょう。購入者が決済時に入力し、利用回数が記録されます。"
+    }
+  },
+  "ce": {
+    "order": {
+      "link": "継続教育の証明書をダウンロード",
+      "linkLabel": "チケット {serial} の継続教育の証明書をダウンロード"
+    },
+    "errors": {
+      "in_person_event": "このイベントは会場参加のみです。"
+    },
+    "setup": {
+      "title": "継続教育単位",
+      "description": "セッションに継続教育単位を設定し、チェックインのスキャンと視聴時間から {event} の証明書を発行します。",
+      "readOnly": "単位を閲覧できます。ルールの変更や証明書の発行は編集者に依頼してください。",
+      "calculateTitle": "証明書を発行",
+      "calculateHint": "セッションが終わったら単位を計算します。セッションの最低時間に達した人にはメールで証明書が届きます。",
+      "lastCalculated": "前回の計算 {when}。再計算では変わった部分だけが更新されます。",
+      "noRulesYet": "まず下で少なくとも 1 つのセッションに単位ルールを設定してください。",
+      "calculate": "単位を計算して証明書を発行",
+      "calculated": "単位を計算しました。",
+      "calculatedSummary": "新規証明書：{issued}。改訂：{revised}。取り消し：{revoked}。変更なし：{unchanged}。",
+      "calculatedBelow": "どの最低時間にも届かなかった参加者：{count}。",
+      "calculatedPending": "まだ終わっていないセッション：{count}。",
+      "fixFields": "下の印の付いた項目を確認してください。",
+      "settingsTitle": "証明書の記載事項",
+      "creditLabel": "単位の名称",
+      "creditLabelHint": "証明書に印刷される名称（例：「CPE 単位」）。空欄なら「継続教育単位」。",
+      "creditLabelTooLong": "60 文字以内にしてください。",
+      "accreditor": "認定団体",
+      "accreditorHint": "任意。認定を受けている場合のみ記載します。",
+      "accreditorTooLong": "120 文字以内にしてください。",
+      "saveSettings": "記載事項を保存",
+      "settingsSaved": "記載事項を保存しました。",
+      "sessionsTitle": "単位ルール",
+      "sessionsHint": "セッションは会場の時間を入口のスキャンから、オンラインの時間を視聴時間と Zoom から、1 分につき 1 回数えます。",
+      "noSessions": "セッションはまだありません",
+      "noSessionsHint": "プログラムにセッションを追加し、ここで単位を設定してください。",
+      "addSessions": "セッションを追加",
+      "ended": "終了",
+      "upcoming": "未終了",
+      "awarded": "付与：{count}",
+      "ruleFormLabel": "{title} の単位ルール",
+      "credits": "単位",
+      "creditsHint": "例：1.5",
+      "creditsInvalid": "0.01〜100 の単位を小数第 2 位までで入力してください。",
+      "minMinutes": "最低時間（分）",
+      "minMinutesHint": "単位の取得に必要な参加時間",
+      "minMinutesInvalid": "1〜1440 の整数の分を入力してください。",
+      "counts": "数える参加",
+      "countInPerson": "会場（入口のスキャン）",
+      "countVirtual": "オンライン（視聴時間と Zoom）",
+      "countsInvalid": "参加の種類を 1 つ以上選んでください。",
+      "saveRule": "ルールを保存",
+      "saveRuleLabel": "{title} の単位ルールを保存",
+      "removeRule": "ルールを削除",
+      "removeRuleLabel": "{title} の単位ルールを削除",
+      "ruleSaved": "{title} の単位ルールを保存しました。",
+      "ruleRemoved": "{title} の単位ルールを削除しました。",
+      "certificatesTitle": "証明書",
+      "noCertificates": "証明書はまだありません",
+      "noCertificatesHint": "セッションの終了後に単位を計算すると、ここに証明書が表示されます。",
+      "holder": "参加者",
+      "creditsColumn": "単位",
+      "code": "確認コード",
+      "status": "状態",
+      "statusIssued": "発行済み・改訂 {revision}",
+      "statusRevoked": "取り消し",
+      "issuedOn": "発行日",
+      "document": "PDF",
+      "download": "ダウンロード",
+      "downloadLabel": "{name} の証明書をダウンロード",
+      "defaultLabel": "継続教育単位",
+      "goCalculate": "証明書の発行へ"
+    },
+    "verify": {
+      "metaTitle": "証明書を確認",
+      "eyebrow": "継続教育の証明書",
+      "title": "証明書を確認",
+      "description": "参加証明書に印刷されたコードで確認します。",
+      "notFound": "このコードの証明書はありません",
+      "notFoundHint": "証明書のコードを確認して、もう一度お試しください。",
+      "valid": "有効",
+      "revoked": "取り消し",
+      "revokedHint": "主催者がこの証明書を取り消しました。",
+      "holder": "発行先",
+      "event": "イベント",
+      "organizer": "主催者",
+      "accreditor": "認定団体",
+      "credits": "単位",
+      "creditsValue": "{credits} {label}",
+      "defaultLabel": "継続教育単位",
+      "issued": "発行日",
+      "revised": "改訂",
+      "revisedValue": "改訂 {revision}、{date}",
+      "another": "別のコードを確認",
+      "codeLabel": "確認コード",
+      "codeHint": "英数字 10 文字（例：K7M2Q-9XR4T）",
+      "codeInvalid": "確認コードではありません。確認して、もう一度お試しください。",
+      "check": "証明書を確認"
     }
   }
 }

@@ -77,6 +77,9 @@ async function setUp(page: Page, f: Fixture) {
 const providerField = (page: Page, title: string) =>
   page.getByRole('combobox', { name: `Video provider for ${title}` });
 const keynoteRow = (page: Page) => page.getByRole('row', { name: /Opening keynote/ }).first();
+/** A session's card in the Zoom webinars section (M6.9b's layout). */
+const zoomCard = (page: Page, title: string) =>
+  page.getByRole('listitem').filter({ has: page.getByRole('heading', { name: title, level: 3 }) });
 
 /** Deliver a signed Zoom webhook (built by the fake Zoom) to the real endpoint. */
 async function zoomWebhook(
@@ -84,7 +87,14 @@ async function zoomWebhook(
   p: { webinar: string; email: string; kind: 'joined' | 'left'; at: Date },
 ): Promise<{ status: number; outcome: string | undefined }> {
   const signed = await page.request.post('/api/dev/zoom', {
-    form: { webinar: p.webinar, email: p.email, kind: p.kind, at: p.at.toISOString(), participant: 'p-ana' },
+    form: {
+      action: 'webhook',
+      webinar: p.webinar,
+      email: p.email,
+      kind: p.kind,
+      at: p.at.toISOString(),
+      participant: 'p-ana',
+    },
   });
   expect(signed.ok()).toBe(true);
   const { body, headers } = (await signed.json()) as { body: string; headers: Record<string, string> };
@@ -159,23 +169,20 @@ test.describe('virtual v2 (M6.10a)', () => {
     await expectAccessible(page);
 
     // Zoom: create the closing panel's webinar from here.
-    const zoomCard = page.getByRole('table', { name: 'Zoom webinars' });
     await expect(page.getByRole('heading', { name: 'Zoom webinars', level: 2 })).toBeVisible();
     await page.getByRole('button', { name: 'Create a Zoom webinar for Closing panel' }).click();
     await expect(page.getByText('Zoom webinar created for Closing panel.')).toBeVisible();
     await page.reload();
-    const panel = page.getByRole('table', { name: 'Zoom webinars' }).getByRole('row', { name: /Closing panel/ });
-    await expect(panel.getByTestId('webinar-id')).toHaveText(/^[0-9]{11}$/);
+    const panel = zoomCard(page, 'Closing panel');
+    await expect(panel.getByLabel('Zoom webinar ID')).toHaveValue(/^[0-9]{11}$/);
     await expect(panel.getByText('Created here')).toBeVisible();
     await expect(page.getByRole('button', { name: 'Create a Zoom webinar for Closing panel' })).toHaveCount(0);
     // Ana (online access) is registered; Ben's in-person day pass is not.
-    await expect(panel.getByRole('cell').nth(2)).toHaveText('1');
-    await expect(panel.getByRole('cell').nth(3)).toHaveText('0');
-    await expect(zoomCard).toBeVisible();
+    await expect(panel.getByTestId('zoom-counts')).toHaveText('Registrants: 1 · Attended: 0');
     await expectAccessibleBothModes(page);
 
     // Zoom tells us Ana joined and left; each webhook is delivered twice and counts once.
-    const webinar = (await panel.getByTestId('webinar-id').textContent()) as string;
+    const webinar = await panel.getByLabel('Zoom webinar ID').inputValue();
     const joined = new Date(Date.now() - 20 * 60_000);
     const left = new Date(Date.now() - 2 * 60_000);
     for (const [kind, at] of [
@@ -192,8 +199,9 @@ test.describe('virtual v2 (M6.10a)', () => {
       });
     }
     await page.reload();
-    const after = page.getByRole('table', { name: 'Zoom webinars' }).getByRole('row', { name: /Closing panel/ });
-    await expect(after.getByRole('cell').nth(3)).toHaveText('1');
+    await expect(zoomCard(page, 'Closing panel').getByTestId('zoom-counts')).toHaveText(
+      'Registrants: 1 · Attended: 1',
+    );
   });
 
   test('the Zoom webhook refuses an unsigned or forged request before reading it', async ({ page }) => {
@@ -224,7 +232,9 @@ test.describe('virtual v2 (M6.10a)', () => {
     // Lakeside has no Zoom connection: the card says so and links to connect it.
     await expect(page.getByText("Zoom isn't connected")).toBeVisible();
     await expect(page.getByRole('link', { name: 'Connect Zoom' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Create a Zoom webinar for Closing panel' })).toBeDisabled();
+    await expect(
+      page.getByRole('button', { name: 'Create a Zoom webinar for Closing panel' }),
+    ).toBeDisabled();
     await expectAccessible(page);
 
     const v = await guest(browser);
@@ -234,17 +244,24 @@ test.describe('virtual v2 (M6.10a)', () => {
     await expect(keynoteRow(v).getByTestId('stream-provider')).toHaveText('Mux (test)');
     await expect(v.getByRole('combobox', { name: /Video provider for/ })).toHaveCount(0);
     await expect(
-      v.getByRole('button', { name: /Switch the video provider|Use the backup ingest|Create a Zoom webinar/ }),
+      v.getByRole('button', {
+        name: /Switch the video provider|Use the backup ingest|Create a Zoom webinar/,
+      }),
     ).toHaveCount(0);
-    await expect(v.getByRole('link', { name: 'Connect Zoom' })).toHaveCount(0);
+    await expect(v.getByRole('link', { name: 'Connect Zoom in Integrations' })).toHaveCount(0);
     await expectAccessible(v);
   });
 
-  test('keyboard only: choose the provider, switch it, backup ingest, create the webinar', async ({ page }) => {
+  test('keyboard only: choose the provider, switch it, backup ingest, create the webinar', async ({
+    page,
+  }) => {
     const org = await zoomOrg(page);
     const f = await conference(page, org);
     await page.goto(`${f.path}/virtual`);
-    await page.getByRole('radio', { name: /^In person/ }).first().focus();
+    await page
+      .getByRole('radio', { name: /^In person/ })
+      .first()
+      .focus();
     await page.keyboard.press('ArrowDown');
     await page.keyboard.press('ArrowDown');
     await page.keyboard.press('Tab');
@@ -261,13 +278,17 @@ test.describe('virtual v2 (M6.10a)', () => {
     // Back to Mux with the keyboard.
     await pickWithKeyboard(providerField(page, 'Closing panel'), { label: 'Mux (test)' });
     await page.keyboard.press('Tab');
-    await expect(page.getByRole('button', { name: 'Switch the video provider for Closing panel' })).toBeFocused();
+    await expect(
+      page.getByRole('button', { name: 'Switch the video provider for Closing panel' }),
+    ).toBeFocused();
     await page.keyboard.press('Enter');
     await expect(page.getByText(/Closing panel now streams on Mux \(test\)/)).toBeVisible();
     const backup = page.getByRole('button', { name: 'Use the backup ingest for Closing panel' });
     await backup.focus();
     await page.keyboard.press('Enter');
-    await expect(page.getByText('Closing panel now uses the backup ingest. Point your encoder at the backup server.')).toBeVisible();
+    await expect(
+      page.getByText('Closing panel now uses the backup ingest. Point your encoder at the backup server.'),
+    ).toBeVisible();
     const create = page.getByRole('button', { name: 'Create a Zoom webinar for Opening keynote' });
     await create.focus();
     await page.keyboard.press('Enter');
@@ -280,7 +301,7 @@ test.describe('virtual v2 (M6.10a)', () => {
     await setUp(page, f);
     await page.goto(`/ar${f.path}/virtual`);
     await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
-    await expect(page.getByRole('heading', { name: 'ندوات Zoom عبر الويب', level: 2 })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 2 }).filter({ hasText: 'Zoom' })).toBeVisible();
     await expect(page.getByRole('combobox', { name: 'مزوّد الفيديو لـ Opening keynote' })).toBeVisible();
     await page.getByRole('button', { name: 'استخدام الإدخال الاحتياطي لـ Opening keynote' }).click();
     await expect(page.getByText(/يستخدم Opening keynote الآن الإدخال الاحتياطي/)).toBeVisible();

@@ -214,6 +214,9 @@
         "request-code": "Code de demande de confidentialité",
         "archive-ready": "Archive de données personnelles prête",
         "erasure-done": "Reçu d’effacement"
+      },
+      "ce": {
+        "certificate": "Attestation de formation"
       }
     },
     "status": {
@@ -381,7 +384,8 @@
     "plan": "Forfait et facturation",
     "webhooks": "Webhooks",
     "sandboxes": "Bacs à sable",
-    "notifications": "Notifications"
+    "notifications": "Notifications",
+    "ceCredits": "Crédits de formation"
   },
   "vocab": {
     "attendee": "Participant",
@@ -13053,6 +13057,9 @@
     "connectors": {
       "demo": {
         "description": "Une appli de contacts de test pour essayer les intégrations : les contacts se synchronisent dans les deux sens avec votre CRM. Environnements de test uniquement."
+      },
+      "zoom": {
+        "description": "Des webinaires Zoom pour vos sessions : les détenteurs d’un accès en ligne sont inscrits au webinaire de la session, et les rapports de présence reviennent pour les crédits de formation."
       }
     },
     "sandboxBadge": "Test",
@@ -13072,11 +13079,18 @@
     "readOnly": "Seuls les propriétaires et les admins peuvent connecter ou modifier des intégrations.",
     "breadcrumb": "Fil d’Ariane",
     "objects": {
-      "contacts": "Contacts"
+      "contacts": "Contacts",
+      "registrants": "Inscrits au webinaire",
+      "participants": "Présence au webinaire"
     },
     "fields": {
       "email": "E-mail",
-      "name": "Nom"
+      "name": "Nom",
+      "webinar_id": "ID du webinaire",
+      "first_name": "Prénom",
+      "last_name": "Nom",
+      "joined_at": "Arrivé à",
+      "left_at": "Parti à"
     },
     "status": {
       "none": "Non connectée",
@@ -15242,17 +15256,7 @@
       "primaryOn": "{title} est revenu sur l’ingest principal.",
       "backupPill": "Ingest de secours",
       "backupIngestUrl": "Serveur (ingest de secours)",
-      "zoomTitle": "Webinaires Zoom",
-      "zoomHint": "Proposez une session en webinaire Zoom. Les détenteurs d’un accès en ligne sont inscrits automatiquement, et leurs arrivées et départs comptent comme présence.",
-      "zoomNotConnected": "Zoom n’est pas connecté",
-      "zoomNotConnectedHint": "Connectez votre compte Zoom pour créer des webinaires depuis cette page.",
-      "connectZoom": "Connecter Zoom",
-      "webinar": "Webinaire",
-      "noWebinar": "Aucun webinaire",
       "webinarCreatedPill": "Créé ici",
-      "webinarLinkedPill": "Associé",
-      "registrants": "Inscrits",
-      "attendees": "Participants",
       "createWebinar": "Créer un webinaire Zoom",
       "createWebinarLabel": "Créer un webinaire Zoom pour {title}",
       "webinarCreated": "Webinaire Zoom créé pour {title}.",
@@ -15318,6 +15322,28 @@
         "provider_unavailable": "Le fournisseur vidéo de cette diffusion n’est pas disponible pour le moment."
       },
       "moved": "La diffusion est passée chez un autre fournisseur. Vous regardez toujours."
+    },
+    "zoom": {
+      "title": "Webinaires Zoom",
+      "intro": "Proposez une session en webinaire Zoom : les détenteurs d’un accès en ligne sont inscrits, et le rapport de présence compte pour les crédits.",
+      "notConnected": "Zoom n’est pas connecté.",
+      "connectLink": "Connecter Zoom dans Intégrations",
+      "counts": "Inscrits : {registrants} · Présents : {attendees}",
+      "notLinked": "Pas de webinaire",
+      "formLabel": "Webinaire Zoom pour {title}",
+      "webinarId": "ID du webinaire Zoom",
+      "webinarIdHint": "Depuis Zoom, 9 à 12 chiffres",
+      "webinarIdInvalid": "Saisissez l’ID du webinaire Zoom : 9 à 12 chiffres.",
+      "link": "Associer le webinaire",
+      "linkLabel": "Associer le webinaire Zoom pour {title}",
+      "linked": "Webinaire associé à {title}.",
+      "syncNow": "Synchroniser avec Zoom",
+      "syncQueued": "Synchronisation avec Zoom en cours.",
+      "errors": {
+        "webinar_taken": "Ce webinaire est associé à une autre session.",
+        "in_person_event": "Cet événement se tient sur place : aucune session n’est un webinaire.",
+        "zoom_not_connected": "Connectez d’abord Zoom dans Intégrations."
+      }
     }
   },
   "formControls": {
@@ -15414,6 +15440,105 @@
       "step1": "Choisissez l’événement ci-dessous et ouvrez ses codes promo.",
       "step2": "Ajoutez un code avec sa remise et, si vous le souhaitez, une limite et des dates.",
       "step3": "Partagez le code. Les acheteurs le saisissent au paiement et chaque utilisation est comptée."
+    }
+  },
+  "ce": {
+    "order": {
+      "link": "Télécharger votre attestation de formation",
+      "linkLabel": "Télécharger l’attestation de formation du billet {serial}"
+    },
+    "errors": {
+      "in_person_event": "Cet événement se tient uniquement sur place."
+    },
+    "setup": {
+      "title": "Crédits de formation",
+      "description": "Attribuez des crédits de formation continue aux sessions, puis délivrez des attestations pour {event} à partir des scans d’entrée et du temps de visionnage.",
+      "readOnly": "Vous pouvez voir les crédits. Demandez à un éditeur de modifier les règles ou de délivrer les attestations.",
+      "calculateTitle": "Délivrer les attestations",
+      "calculateHint": "Une fois les sessions terminées, calculez les crédits. Les participants qui atteignent le minimum d’une session reçoivent une attestation par e-mail.",
+      "lastCalculated": "Dernier calcul {when}. Recalculer ne modifie que ce qui a changé.",
+      "noRulesYet": "Attribuez d’abord une règle de crédits à au moins une session ci-dessous.",
+      "calculate": "Calculer les crédits et délivrer les attestations",
+      "calculated": "Crédits calculés.",
+      "calculatedSummary": "Nouvelles attestations : {issued}. Révisées : {revised}. Retirées : {revoked}. Inchangées : {unchanged}.",
+      "calculatedBelow": "Participants sous chaque minimum : {count}.",
+      "calculatedPending": "Sessions pas encore terminées : {count}.",
+      "fixFields": "Vérifiez les champs signalés ci-dessous.",
+      "settingsTitle": "Mentions de l’attestation",
+      "creditLabel": "Nom du crédit",
+      "creditLabelHint": "Tel qu’imprimé, par exemple « crédits CPE ». Laissez vide pour « crédits de formation continue ».",
+      "creditLabelTooLong": "60 caractères au maximum.",
+      "accreditor": "Organisme d’accréditation",
+      "accreditorHint": "Facultatif. Nommé seulement s’il vous accrédite.",
+      "accreditorTooLong": "120 caractères au maximum.",
+      "saveSettings": "Enregistrer les mentions",
+      "settingsSaved": "Mentions enregistrées.",
+      "sessionsTitle": "Règles de crédits",
+      "sessionsHint": "Une session compte le temps sur place avec les scans de sa porte et le temps en ligne avec le visionnage et Zoom, une fois par minute.",
+      "noSessions": "Aucune session pour l’instant",
+      "noSessionsHint": "Ajoutez des sessions au programme, puis attribuez-leur des crédits ici.",
+      "addSessions": "Ajouter des sessions",
+      "ended": "Terminée",
+      "upcoming": "Pas encore terminée",
+      "awarded": "Attribué à {count}",
+      "ruleFormLabel": "Règle de crédits pour {title}",
+      "credits": "Crédits",
+      "creditsHint": "Par exemple 1,5",
+      "creditsInvalid": "Saisissez de 0,01 à 100 crédits, avec au plus deux décimales.",
+      "minMinutes": "Minutes minimum",
+      "minMinutesHint": "Présence nécessaire pour obtenir les crédits",
+      "minMinutesInvalid": "Saisissez des minutes entières de 1 à 1440.",
+      "counts": "Présence prise en compte",
+      "countInPerson": "Sur place (scans de porte)",
+      "countVirtual": "En ligne (visionnage et Zoom)",
+      "countsInvalid": "Choisissez au moins un type de présence.",
+      "saveRule": "Enregistrer la règle",
+      "saveRuleLabel": "Enregistrer la règle de crédits pour {title}",
+      "removeRule": "Supprimer la règle",
+      "removeRuleLabel": "Supprimer la règle de crédits pour {title}",
+      "ruleSaved": "Règle de crédits enregistrée pour {title}.",
+      "ruleRemoved": "Règle de crédits supprimée pour {title}.",
+      "certificatesTitle": "Attestations",
+      "noCertificates": "Aucune attestation pour l’instant",
+      "noCertificatesHint": "Calculez les crédits après la fin des sessions : les attestations apparaîtront ici.",
+      "holder": "Participant",
+      "creditsColumn": "Crédits",
+      "code": "Code de vérification",
+      "status": "Statut",
+      "statusIssued": "Délivrée · version {revision}",
+      "statusRevoked": "Retirée",
+      "issuedOn": "Délivrée le",
+      "document": "PDF",
+      "download": "Télécharger",
+      "downloadLabel": "Télécharger l’attestation de {name}",
+      "defaultLabel": "crédits de formation continue",
+      "goCalculate": "Aller à Délivrer les attestations"
+    },
+    "verify": {
+      "metaTitle": "Vérifier une attestation",
+      "eyebrow": "Attestation de formation",
+      "title": "Vérifier une attestation",
+      "description": "Vérifiez une attestation de présence grâce au code imprimé dessus.",
+      "notFound": "Aucune attestation ne porte ce code",
+      "notFoundHint": "Vérifiez le code de l’attestation et réessayez.",
+      "valid": "Valide",
+      "revoked": "Retirée",
+      "revokedHint": "L’organisateur a retiré cette attestation.",
+      "holder": "Délivrée à",
+      "event": "Événement",
+      "organizer": "Organisateur",
+      "accreditor": "Organisme d’accréditation",
+      "credits": "Crédits",
+      "creditsValue": "{credits} {label}",
+      "defaultLabel": "crédits de formation continue",
+      "issued": "Délivrée le",
+      "revised": "Révisée",
+      "revisedValue": "Version {revision}, {date}",
+      "another": "Vérifier un autre code",
+      "codeLabel": "Code de vérification",
+      "codeHint": "Dix lettres et chiffres, par exemple K7M2Q-9XR4T",
+      "codeInvalid": "Ce n’est pas un code de vérification. Vérifiez-le et réessayez.",
+      "check": "Vérifier l’attestation"
     }
   }
 }

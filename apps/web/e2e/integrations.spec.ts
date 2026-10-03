@@ -60,7 +60,11 @@ test.describe('integrations (M6.4a)', () => {
     // (On phones the nav sits in the menu drawer, so look for the link itself.)
     expect(await page.locator(`a[href="/o/${org}/integrations"]`).count()).toBeGreaterThan(0);
     await expect(page.getByRole('heading', { name: 'Demo CRM' })).toBeVisible();
-    await expect(page.getByText('Not connected')).toBeVisible();
+    // M6.9b: Zoom is offered too, so look in the Demo CRM card.
+    const demoCard = page
+      .getByRole('listitem')
+      .filter({ has: page.getByRole('heading', { name: 'Demo CRM' }) });
+    await expect(demoCard.getByText('Not connected')).toBeVisible();
     await expectAccessibleBothModes(page);
 
     const connection = await connectDemo(page, org);

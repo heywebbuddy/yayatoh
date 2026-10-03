@@ -214,6 +214,9 @@
         "request-code": "Code voor privacyverzoek",
         "archive-ready": "Archief met persoonsgegevens klaar",
         "erasure-done": "Bewijs van wissing"
+      },
+      "ce": {
+        "certificate": "Nascholingsbewijs"
       }
     },
     "status": {
@@ -381,7 +384,8 @@
     "plan": "Abonnement & facturatie",
     "webhooks": "Webhooks",
     "sandboxes": "Sandboxes",
-    "notifications": "Meldingen"
+    "notifications": "Meldingen",
+    "ceCredits": "Nascholingspunten"
   },
   "vocab": {
     "attendee": "Deelnemer",
@@ -13053,6 +13057,9 @@
     "connectors": {
       "demo": {
         "description": "Een test-app met contacten om integraties uit te proberen: contacten synchroniseren in beide richtingen met je CRM. Alleen in testomgevingen."
+      },
+      "zoom": {
+        "description": "Zoom-webinars voor uw sessies: tickethouders met online toegang worden ingeschreven voor het webinar van de sessie, en aanwezigheidsrapporten komen terug voor nascholingspunten."
       }
     },
     "sandboxBadge": "Test",
@@ -13072,11 +13079,18 @@
     "readOnly": "Alleen eigenaren en beheerders kunnen integraties koppelen of wijzigen.",
     "breadcrumb": "Kruimelpad",
     "objects": {
-      "contacts": "Contacten"
+      "contacts": "Contacten",
+      "registrants": "Webinar-inschrijvingen",
+      "participants": "Webinar-aanwezigheid"
     },
     "fields": {
       "email": "E-mail",
-      "name": "Naam"
+      "name": "Naam",
+      "webinar_id": "Webinar-ID",
+      "first_name": "Voornaam",
+      "last_name": "Achternaam",
+      "joined_at": "Binnengekomen om",
+      "left_at": "Vertrokken om"
     },
     "status": {
       "none": "Niet gekoppeld",
@@ -15242,17 +15256,7 @@
       "primaryOn": "{title} gebruikt weer de primaire ingest.",
       "backupPill": "Back-up-ingest",
       "backupIngestUrl": "Server (back-up-ingest)",
-      "zoomTitle": "Zoom-webinars",
-      "zoomHint": "Bied een sessie aan als Zoom-webinar. Houders met online toegang worden automatisch geregistreerd, en hun binnenkomen en vertrekken telt als aanwezigheid.",
-      "zoomNotConnected": "Zoom is niet gekoppeld",
-      "zoomNotConnectedHint": "Koppel je Zoom-account om hier webinars te maken.",
-      "connectZoom": "Zoom koppelen",
-      "webinar": "Webinar",
-      "noWebinar": "Geen webinar",
       "webinarCreatedPill": "Hier gemaakt",
-      "webinarLinkedPill": "Gekoppeld",
-      "registrants": "Geregistreerden",
-      "attendees": "Aanwezigen",
       "createWebinar": "Zoom-webinar maken",
       "createWebinarLabel": "Zoom-webinar maken voor {title}",
       "webinarCreated": "Zoom-webinar gemaakt voor {title}.",
@@ -15318,6 +15322,28 @@
         "provider_unavailable": "De videoprovider van deze stream is nu niet beschikbaar."
       },
       "moved": "De stream is naar een andere provider verhuisd. Je kijkt nog steeds."
+    },
+    "zoom": {
+      "title": "Zoom-webinars",
+      "intro": "Geef een sessie als Zoom-webinar: tickethouders met online toegang worden ingeschreven en het aanwezigheidsrapport telt voor nascholingspunten.",
+      "notConnected": "Zoom is niet gekoppeld.",
+      "connectLink": "Zoom koppelen bij Integraties",
+      "counts": "Ingeschreven: {registrants} · Aanwezig: {attendees}",
+      "notLinked": "Geen webinar",
+      "formLabel": "Zoom-webinar voor {title}",
+      "webinarId": "Zoom-webinar-ID",
+      "webinarIdHint": "Uit Zoom, 9 tot 12 cijfers",
+      "webinarIdInvalid": "Vul de webinar-ID uit Zoom in: 9 tot 12 cijfers.",
+      "link": "Webinar koppelen",
+      "linkLabel": "Het Zoom-webinar voor {title} koppelen",
+      "linked": "Webinar gekoppeld aan {title}.",
+      "syncNow": "Nu met Zoom synchroniseren",
+      "syncQueued": "Synchronisatie met Zoom is onderweg.",
+      "errors": {
+        "webinar_taken": "Dit webinar is aan een andere sessie gekoppeld.",
+        "in_person_event": "Dit evenement is ter plaatse, dus geen sessie is een webinar.",
+        "zoom_not_connected": "Koppel eerst Zoom bij Integraties."
+      }
     }
   },
   "formControls": {
@@ -15414,6 +15440,105 @@
       "step1": "Kies hieronder het evenement en open de kortingscodes.",
       "step2": "Voeg een code toe met de korting en eventueel een limiet en data.",
       "step3": "Deel de code. Kopers vullen hem in bij het afrekenen en elk gebruik wordt geteld."
+    }
+  },
+  "ce": {
+    "order": {
+      "link": "Uw nascholingsbewijs downloaden",
+      "linkLabel": "Het nascholingsbewijs van ticket {serial} downloaden"
+    },
+    "errors": {
+      "in_person_event": "Dit evenement is alleen ter plaatse."
+    },
+    "setup": {
+      "title": "Nascholingspunten",
+      "description": "Geef sessies nascholingspunten en geef voor {event} bewijzen uit op basis van check-inscans en kijktijd.",
+      "readOnly": "U kunt de punten bekijken. Vraag een redacteur om regels te wijzigen of bewijzen uit te geven.",
+      "calculateTitle": "Bewijzen uitgeven",
+      "calculateHint": "Bereken de punten als de sessies voorbij zijn. Wie het minimum van een sessie haalt, krijgt een bewijs per e-mail.",
+      "lastCalculated": "Laatst berekend {when}. Opnieuw berekenen wijzigt alleen wat veranderd is.",
+      "noRulesYet": "Geef hieronder eerst minstens één sessie een puntenregel.",
+      "calculate": "Punten berekenen en bewijzen uitgeven",
+      "calculated": "Punten berekend.",
+      "calculatedSummary": "Nieuwe bewijzen: {issued}. Herzien: {revised}. Ingetrokken: {revoked}. Ongewijzigd: {unchanged}.",
+      "calculatedBelow": "Deelnemers onder elk minimum: {count}.",
+      "calculatedPending": "Sessies die nog niet voorbij zijn: {count}.",
+      "fixFields": "Controleer de gemarkeerde velden hieronder.",
+      "settingsTitle": "Gegevens op het bewijs",
+      "creditLabel": "Naam van de punten",
+      "creditLabelHint": "Zoals afgedrukt, bijvoorbeeld ‘PE-punten’. Laat leeg voor ‘nascholingspunten’.",
+      "creditLabelTooLong": "Gebruik maximaal 60 tekens.",
+      "accreditor": "Accrediterende instantie",
+      "accreditorHint": "Optioneel. Alleen vermelden als zij u accrediteert.",
+      "accreditorTooLong": "Gebruik maximaal 120 tekens.",
+      "saveSettings": "Gegevens opslaan",
+      "settingsSaved": "Gegevens opgeslagen.",
+      "sessionsTitle": "Puntenregels",
+      "sessionsHint": "Een sessie telt de tijd ter plaatse via de deurscans en de online tijd via kijktijd en Zoom, één keer per minuut.",
+      "noSessions": "Nog geen sessies",
+      "noSessionsHint": "Voeg sessies toe aan het programma en geef ze hier punten.",
+      "addSessions": "Sessies toevoegen",
+      "ended": "Voorbij",
+      "upcoming": "Nog niet voorbij",
+      "awarded": "Toegekend aan {count}",
+      "ruleFormLabel": "Puntenregel voor {title}",
+      "credits": "Punten",
+      "creditsHint": "Bijvoorbeeld 1,5",
+      "creditsInvalid": "Vul 0,01 tot 100 punten in, met maximaal twee decimalen.",
+      "minMinutes": "Minimumaantal minuten",
+      "minMinutesHint": "Aanwezigheid die nodig is voor de punten",
+      "minMinutesInvalid": "Vul hele minuten in van 1 tot 1440.",
+      "counts": "Aanwezigheid die telt",
+      "countInPerson": "Ter plaatse (deurscans)",
+      "countVirtual": "Online (kijktijd en Zoom)",
+      "countsInvalid": "Kies minstens één soort aanwezigheid.",
+      "saveRule": "Regel opslaan",
+      "saveRuleLabel": "De puntenregel voor {title} opslaan",
+      "removeRule": "Regel verwijderen",
+      "removeRuleLabel": "De puntenregel voor {title} verwijderen",
+      "ruleSaved": "Puntenregel opgeslagen voor {title}.",
+      "ruleRemoved": "Puntenregel verwijderd voor {title}.",
+      "certificatesTitle": "Bewijzen",
+      "noCertificates": "Nog geen bewijzen",
+      "noCertificatesHint": "Bereken de punten als uw sessies voorbij zijn: de bewijzen verschijnen hier.",
+      "holder": "Deelnemer",
+      "creditsColumn": "Punten",
+      "code": "Verificatiecode",
+      "status": "Status",
+      "statusIssued": "Uitgegeven · versie {revision}",
+      "statusRevoked": "Ingetrokken",
+      "issuedOn": "Uitgegeven",
+      "document": "Pdf",
+      "download": "Downloaden",
+      "downloadLabel": "Het bewijs van {name} downloaden",
+      "defaultLabel": "nascholingspunten",
+      "goCalculate": "Naar Bewijzen uitgeven"
+    },
+    "verify": {
+      "metaTitle": "Een bewijs controleren",
+      "eyebrow": "Nascholingsbewijs",
+      "title": "Een bewijs controleren",
+      "description": "Controleer een bewijs van deelname met de code die erop staat.",
+      "notFound": "Geen bewijs heeft deze code",
+      "notFoundHint": "Controleer de code op het bewijs en probeer het opnieuw.",
+      "valid": "Geldig",
+      "revoked": "Ingetrokken",
+      "revokedHint": "De organisator heeft dit bewijs ingetrokken.",
+      "holder": "Uitgegeven aan",
+      "event": "Evenement",
+      "organizer": "Organisator",
+      "accreditor": "Accrediterende instantie",
+      "credits": "Punten",
+      "creditsValue": "{credits} {label}",
+      "defaultLabel": "nascholingspunten",
+      "issued": "Uitgegeven",
+      "revised": "Herzien",
+      "revisedValue": "Versie {revision}, {date}",
+      "another": "Een andere code controleren",
+      "codeLabel": "Verificatiecode",
+      "codeHint": "Tien letters en cijfers, bijvoorbeeld K7M2Q-9XR4T",
+      "codeInvalid": "Dat is geen verificatiecode. Controleer hem en probeer het opnieuw.",
+      "check": "Bewijs controleren"
     }
   }
 }
