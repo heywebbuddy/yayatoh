@@ -2,6 +2,7 @@ import { alertEvaluator } from '@yayatoh/alerts';
 import { attendeeMessageMailer } from '@yayatoh/attendees';
 import { participationProjector } from '@yayatoh/audiences';
 import { journeySubscribers } from '@yayatoh/automations';
+import { billingUsageMeter, nonprofitDiscountFromCharity } from '@yayatoh/billing';
 import {
   chatReportSignals,
   checkoutRiskSignals,
@@ -161,6 +162,10 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     // M4.8b: a receipt per paid gift or charity-ticket order, and year-end statements, to the donor.
     receiptIssuer({ notifier, appOrigin }),
     statementMailer({ notifier, appOrigin }),
+    // M6.6b: the billing meters (messaging, AI credits, devices) count usage from the outbox, and a
+    // verified charity profile gives the org the nonprofit discount.
+    billingUsageMeter(),
+    nonprofitDiscountFromCharity(),
   ];
 }
 

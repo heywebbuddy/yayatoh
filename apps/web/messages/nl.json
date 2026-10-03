@@ -709,7 +709,8 @@
     "reference": "Referentie: {id}",
     "rateLimitedRetry": "Te veel pogingen. Probeer het over {minutes, plural, one {# minuut} other {# minuten}} opnieuw.",
     "impersonation_blocked": "Medewerkers die als lid handelen kunnen dit niet: terugbetalingen, uitbetalingen, exports, verwijderingen en bevestigingen staan uit.",
-    "read_only_freeze": "Wijzigingen zijn gepauzeerd tijdens gepland onderhoud. Er is niets opgeslagen; probeer het opnieuw als het klaar is."
+    "read_only_freeze": "Wijzigingen zijn gepauzeerd tijdens gepland onderhoud. Er is niets opgeslagen; probeer het opnieuw als het klaar is.",
+    "read_only_billing": "Deze organisatie is alleen-lezen tot het abonnement betaald is. Er is niets opgeslagen of verwijderd."
   },
   "notFound": {
     "title": "Pagina niet gevonden",
@@ -10968,6 +10969,73 @@
       "advanced_seating": "Geavanceerde zitplaatsen",
       "ai_seating": "Zitplaatsen met AI",
       "analytics_pro": "Geavanceerde analyses"
+    },
+    "usageLink": "Gebruik",
+    "renewalReceived": "Verlengingsupdate ontvangen",
+    "dunning": {
+      "graceTitle": "De betaling van je abonnement is mislukt",
+      "graceBody": "Alles werkt gewoon tot {date}. Betaal vóór die datum om wijzigingen te blijven maken; daarna wordt de organisatie alleen-lezen tot er betaald is.",
+      "readOnlyTitle": "Deze organisatie is alleen-lezen",
+      "readOnlyBody": "De abonnementsbetaling is mislukt, dus wijzigingen staan stil. Er is niets verwijderd: je kunt alles bekijken, je gegevens exporteren en tickets scannen bij de ingang. Betaal om wijzigingen meteen weer mogelijk te maken.",
+      "payNow": "Nu betalen",
+      "askOwner": "Vraag een eigenaar of beheerder van deze organisatie om te betalen.",
+      "paidTitle": "Betaling ontvangen",
+      "paidBody": "Bedankt. Wijzigingen zijn weer mogelijk voor iedereen in de organisatie.",
+      "declinedTitle": "De betaling is mislukt",
+      "declinedBody": "Er is niets veranderd. Controleer de kaart bij je factuuraanbieder en probeer het opnieuw.",
+      "payError": "De betaling kon niet worden gestart. Probeer het zo opnieuw."
+    },
+    "change": {
+      "title": "Abonnement wijzigen",
+      "description": "Upgrades en downgrades gaan meteen in. Je betaalt of krijgt alleen tegoed voor de rest van deze factuurperiode.",
+      "discountCharity": "Je geverifieerde goededoelenprofiel geeft je {percent}% korting op elk abonnement.",
+      "discountStaff": "Je organisatie krijgt {percent}% non-profitkorting op elk abonnement.",
+      "legend": "Abonnementen",
+      "offer": "{plan}: {price} {interval, select, year {per jaar} other {per maand}}",
+      "direction": {
+        "upgrade": "Upgrade",
+        "downgrade": "Downgrade",
+        "switch": "Wissel",
+        "start": "Start"
+      },
+      "turnsOff": "{count, plural, one {Zet # module uit} other {Zet # modules uit}}",
+      "chooseError": "Kies een abonnement om te bekijken.",
+      "preview": "Wijziging bekijken",
+      "previewTitle": "Overstappen naar {plan}",
+      "previewLead": {
+        "upgrade": "Je upgradet. Dit betaal je vandaag voor de rest van deze factuurperiode.",
+        "downgrade": "Je downgradet. Ongebruikte tijd van je huidige abonnement wordt als tegoed verrekend.",
+        "switch": "Je wisselt naar een abonnement met dezelfde prijs.",
+        "start": "Je abonnement begint vandaag."
+      },
+      "rows": {
+        "charge": "Nieuw abonnement, rest van de periode",
+        "credit": "Tegoed voor ongebruikte tijd",
+        "discount": "Non-profitkorting",
+        "tax": "Belasting",
+        "due": "Vandaag te betalen"
+      },
+      "creditKept": "{amount} tegoed blijft staan voor je volgende facturen.",
+      "nextRenewal": "Daarna {amount} op {date}.",
+      "nextRenewalNoDate": "Daarna {amount} per periode.",
+      "taxNote": "De belasting wordt berekend door de factuuraanbieder op basis van de factuurgegevens van je organisatie.",
+      "removedTitle": "{count, plural, one {# module gaat uit} other {# modules gaan uit}}",
+      "removedBody": "Hun gegevens blijven bewaard. Ze komen terug zoals ze waren als je overstapt naar een abonnement waarin ze zitten.",
+      "confirmRemoved": "{count, plural, one {Ik begrijp dat deze module uitgaat} other {Ik begrijp dat deze modules uitgaan}}",
+      "confirmError": "Bevestig de modules die uitgaan om door te gaan.",
+      "confirm": "Wijziging bevestigen",
+      "cancel": "Mijn abonnement houden",
+      "doneTitle": "Abonnementswijziging verstuurd",
+      "doneBody": "Je factuuraanbieder heeft de wijziging bevestigd. Je abonnement en modules zijn hieronder bijgewerkt.",
+      "errorTitle": "Het abonnement is niet gewijzigd",
+      "errors": {
+        "billing_off": "Facturatie is niet actief voor deze organisatie.",
+        "same_plan": "Je hebt dit abonnement al.",
+        "validation_failed": "Kies een abonnement dat wordt aangeboden.",
+        "provider": "De factuuraanbieder heeft de wijziging niet geaccepteerd. Er is niets afgeschreven; probeer het opnieuw.",
+        "forbidden": "Alleen eigenaren en beheerders kunnen het abonnement wijzigen.",
+        "other": "Er ging iets mis. Er is niets gewijzigd."
+      }
     }
   },
   "billingPortal": {
@@ -10978,6 +11046,52 @@
     "switch": "Abonnement wijzigen",
     "cancel": "Abonnement opzeggen",
     "back": "Terug zonder wijzigingen",
-    "chooseError": "Kies het abonnement waarnaar je wilt overstappen."
+    "chooseError": "Kies het abonnement waarnaar je wilt overstappen.",
+    "noSubscriptionError": "Deze klant heeft nog geen abonnement. Kies eerst een abonnement.",
+    "renewalLegend": "Verlenging",
+    "failRenewal": "Laat de verlengingsbetaling mislukken",
+    "stopRetrying": "Stop met opnieuw proberen"
+  },
+  "billingUsage": {
+    "title": "Gebruik",
+    "subtitle": "Wat je organisatie heeft gebruikt, per meter: berichten, AI-tegoed en scanapparaten.",
+    "breadcrumb": "Kruimelpad",
+    "period": "Deze maand: {start} tot {end} ({zone})",
+    "filterLabel": "Meters",
+    "allMeters": "Alle meters",
+    "meter": {
+      "email": "E-mail",
+      "sms": "Sms",
+      "whatsapp": "WhatsApp",
+      "ai_credits": "AI-tegoed",
+      "devices": "Scanapparaten"
+    },
+    "unit": {
+      "email": "{count, plural, one {# e-mail verstuurd} other {# e-mails verstuurd}}",
+      "sms": "{count, plural, one {# sms-segment} other {# sms-segmenten}}",
+      "whatsapp": "{count, plural, one {# bericht verstuurd} other {# berichten verstuurd}}",
+      "ai_credits": "{count, plural, one {# tegoed gebruikt} other {# tegoeden gebruikt}}",
+      "devices": "{count, plural, one {# apparaat geregistreerd} other {# apparaten geregistreerd}}"
+    },
+    "reportingTitle": "Gebruik wordt naar je factuuraanbieder gestuurd",
+    "reportingBody": "{count, plural, =0 {Alles is tot nu toe verstuurd.} one {# record wacht op verzending.} other {# records wachten op verzending.}}",
+    "countingTitle": "Gebruik wordt geteld, er wordt niets in rekening gebracht",
+    "countingBody": "Facturatie is niet actief voor deze organisatie, dus gebruik wordt hier alleen geteld.",
+    "currentTitle": "Deze maand",
+    "currentDescription": "Geteld in de tijdzone van je organisatie.",
+    "historyTitle": "Eerdere maanden",
+    "historyDescription": "De laatste 12 maanden met gebruik.",
+    "emptyTitle": "Nog geen gebruik",
+    "emptyBody": "Gebruik verschijnt hier als je e-mails of sms'jes verstuurt, met AI conceptteksten maakt of scanapparaten registreert.",
+    "historyEmpty": "Geen gebruik in eerdere maanden.",
+    "month": "Maand"
+  },
+  "billingBanner": {
+    "label": "Facturatie",
+    "graceTitle": "De betaling van je abonnement is mislukt",
+    "graceBody": "Alles werkt tot {date}. Daarna wordt de organisatie alleen-lezen tot er betaald is.",
+    "readOnlyTitle": "Deze organisatie is alleen-lezen",
+    "readOnlyBody": "De abonnementsbetaling is mislukt. Er is niets verwijderd: je kunt bekijken, exporteren en tickets scannen, maar wijzigingen staan stil tot er betaald is.",
+    "action": "Abonnement en facturatie"
   }
 }

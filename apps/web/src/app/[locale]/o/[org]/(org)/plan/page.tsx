@@ -1,9 +1,17 @@
-import { type PlanSummary, planSummaryQuery } from '@yayatoh/billing';
-import { executeQuery, formatMoney, money } from '@yayatoh/kernel';
+import {
+  billingStandingQuery,
+  type PlanChangePreview,
+  type PlanSummary,
+  planChangeOptionsQuery,
+  planSummaryQuery,
+  previewPlanChange,
+} from '@yayatoh/billing';
+import { executeQuery, formatMoney, isDomainError, money } from '@yayatoh/kernel';
 import { roleCan } from '@yayatoh/tenancy';
 import {
   Alert,
   Button,
+  buttonClass,
   Card,
   CardHeader,
   CardLabel,
@@ -15,10 +23,12 @@ import {
   Tag,
 } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { testBillingSecret } from '@/server/billing.ts';
+import { Link } from '@/i18n/navigation.ts';
+import { getBillingProvider, testBillingSecret } from '@/server/billing.ts';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import { openTestBillingPortal } from './actions.ts';
+import { ChangePlanPicker, ChangePreview, StandingNotice } from './plan-change.tsx';
 
 type Price = NonNullable<PlanSummary['subscription']>['price'];
 
@@ -44,10 +54,17 @@ export default async function PlanPage({
   searchParams,
 }: {
   params: Promise<{ locale: string; org: string }>;
-  searchParams: Promise<{ billing?: string }>;
+  searchParams: Promise<{
+    billing?: string;
+    change?: string;
+    at?: string;
+    error?: string;
+    payment?: string;
+    picked?: string;
+  }>;
 }) {
   const { locale, org } = await params;
-  const { billing } = await searchParams;
+  const { billing, change, at: atParam, error, payment, picked } = await searchParams;
   setRequestLocale(locale);
   const data = await loadConsole(org);
   const t = await getTranslations('billingPlan');
@@ -74,12 +91,70 @@ export default async function PlanPage({
   const day = new Intl.DateTimeFormat(locale, { dateStyle: 'long', timeZone: data.org.timezone });
   const canTest = Boolean(testBillingSecret()) && roleCan(data.role, 'org:update');
   const sub = s.subscription;
+  // M6.6b: the billing standing (dunning), in-app plan changes and their proration preview.
+  const canManage = roleCan(data.role, 'billing:manage');
+  const standing = await executeQuery(billingStandingQuery, {}, data.ctx, ports);
+  const options = await executeQuery(planChangeOptionsQuery, {}, data.ctx, ports);
+  const names = { plan: planName, module: moduleName };
+  const atRaw = Number(atParam);
+  const at = Number.isFinite(atRaw) && Math.abs(Date.now() - atRaw) < 3_600_000 ? atRaw : Date.now();
+  let preview: PlanChangePreview | null = null;
+  let previewError: string | null = null;
+  if (change && canManage && options.available) {
+    try {
+      preview = await previewPlanChange(getBillingProvider(), data.ctx, ports, {
+        priceLookupKey: change,
+        at: new Date(at),
+      });
+    } catch (err) {
+      if (!isDomainError(err)) throw err;
+      previewError = err.code;
+    }
+  }
+  const changeError = error && error !== 'confirm' ? error : previewError;
   return (
     <>
-      <PageHeader title={t('title')} description={t('subtitle')} />
+      <PageHeader
+        title={t('title')}
+        description={t('subtitle')}
+        actions={
+          <Link href={`/o/${org}/plan/usage`} className={buttonClass('secondary', 'sm')}>
+            {t('usageLink')}
+          </Link>
+        }
+      />
+      <StandingNotice
+        standing={standing}
+        canManage={canManage}
+        org={org}
+        locale={locale}
+        timeZone={data.org.timezone}
+      />
       {billing === 'updated' ? (
         <Alert tone="success" title={t('updatedTitle')}>
           {t('updatedBody')}
+        </Alert>
+      ) : null}
+      {billing === 'changed' ? (
+        <Alert tone="success" title={t('change.doneTitle')}>
+          {t('change.doneBody')}
+        </Alert>
+      ) : null}
+      {billing === 'renewal' ? <Alert tone="info" title={t('renewalReceived')} /> : null}
+      {payment === 'paid' ? (
+        <Alert tone="success" title={t('dunning.paidTitle')}>
+          {t('dunning.paidBody')}
+        </Alert>
+      ) : payment ? (
+        <Alert tone="danger" title={t('dunning.declinedTitle')}>
+          {t(payment === 'declined' ? 'dunning.declinedBody' : 'dunning.payError')}
+        </Alert>
+      ) : null}
+      {changeError && change ? (
+        <Alert tone="danger" title={t('change.errorTitle')}>
+          {t.has(`change.errors.${changeError}`)
+            ? t(`change.errors.${changeError}`)
+            : t('change.errors.other')}
         </Alert>
       ) : null}
       {!s.billingEnabled ? (
@@ -117,6 +192,19 @@ export default async function PlanPage({
           </p>
         </Card>
       </div>
+      {preview ? (
+        <ChangePreview
+          preview={preview}
+          names={names}
+          org={org}
+          locale={locale}
+          timeZone={data.org.timezone}
+          at={at}
+          confirmError={error === 'confirm'}
+        />
+      ) : canManage && options.available && options.offers.some((o) => !o.current) ? (
+        <ChangePlanPicker options={options} names={names} locale={locale} error={picked === '1' && !change} />
+      ) : null}
       <section aria-labelledby="modules-heading" className="flex flex-col gap-3">
         <SectionHeader
           id="modules-heading"
@@ -173,7 +261,9 @@ export default async function PlanPage({
           <CardHeader title={t('test.title')} />
           <p className="text-body text-ink-2">{t('test.body')}</p>
           <form action={openTestBillingPortal.bind(null, org, locale)}>
-            <Button type="submit">{t('test.open')}</Button>
+            <Button type="submit" variant="secondary">
+              {t('test.open')}
+            </Button>
           </form>
         </Card>
       ) : null}

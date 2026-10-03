@@ -8,6 +8,7 @@ import { fakeDomainProvider } from '@yayatoh/tenancy';
 import { sweepAlerts } from './alerts.ts';
 import { badgeBatchJob, enqueueDueBadgeBatches } from './badges.ts';
 import { syncBillingCatalog } from './billing-catalog.ts';
+import { runBillingPass } from './billing-usage.ts';
 import { runDueBulkOperations } from './bulk.ts';
 import { bossRelease, campaignReleaseJob, campaignTick } from './campaigns.ts';
 import { DEVICE_WATCHDOG_MS, runDeviceWatchdog } from './device-watchdog.ts';
@@ -222,6 +223,22 @@ const syncCatalog = () => {
 };
 setTimeout(syncCatalog, 60_000).unref();
 setInterval(syncCatalog, 3_600_000).unref();
+
+// Billing meters and discounts (M6.6b): every 5 minutes while billing is on (leader only), send
+// new usage records to the provider's meters and push changed nonprofit discounts.
+let billingPass = false;
+setInterval(() => {
+  if (!billingProvider || !release || stopping || billingPass) return;
+  billingPass = true;
+  runBillingPass(billingProvider)
+    .then((r) => {
+      if (r.reported || r.failed || r.discounts) console.info(JSON.stringify({ job: 'billing.usage', ...r }));
+    })
+    .catch((err) => console.error('billing.usage', err))
+    .finally(() => {
+      billingPass = false;
+    });
+}, 300_000).unref();
 
 // Pending custom domains (M1.3f): check them again every minute on their backoff schedule, so a
 // domain goes live without "Check now" (leader only; the fake provider until the owner's Vercel).

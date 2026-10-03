@@ -709,7 +709,8 @@
     "reference": "參考編號：{id}",
     "rateLimitedRetry": "嘗試次數過多。請在 {minutes, plural, other {# 分鐘}}後再試。",
     "impersonation_blocked": "以成員身分操作的工作人員無法執行此操作：退款、付款、匯出、刪除和身分確認皆已關閉。",
-    "read_only_freeze": "計畫維護期間變更已暫停。未儲存任何內容；請在維護結束後再試一次。"
+    "read_only_freeze": "計畫維護期間變更已暫停。未儲存任何內容；請在維護結束後再試一次。",
+    "read_only_billing": "在訂閱付款之前，此組織為唯讀。沒有儲存或刪除任何內容。"
   },
   "notFound": {
     "title": "找不到頁面",
@@ -10968,6 +10969,73 @@
       "advanced_seating": "進階座位",
       "ai_seating": "AI 排座",
       "analytics_pro": "進階分析"
+    },
+    "usageLink": "用量",
+    "renewalReceived": "已收到續訂更新",
+    "dunning": {
+      "graceTitle": "你的訂閱付款未成功",
+      "graceBody": "在 {date} 之前一切照常。請在此之前付款以繼續進行變更；之後組織將變為唯讀，直到付款為止。",
+      "readOnlyTitle": "此組織為唯讀",
+      "readOnlyBody": "訂閱付款失敗，因此變更已暫停。沒有刪除任何內容：你仍然可以檢視所有內容、匯出資料，並在入口掃描票券。付款後可立即恢復變更。",
+      "payNow": "立即付款",
+      "askOwner": "請讓此組織的擁有者或管理員付款。",
+      "paidTitle": "已收到付款",
+      "paidBody": "謝謝。組織中的所有人都可以再次進行變更。",
+      "declinedTitle": "付款未成功",
+      "declinedBody": "沒有任何變更。請檢查你在帳單服務商登記的卡片，然後再試一次。",
+      "payError": "無法開始付款。請稍後再試。"
+    },
+    "change": {
+      "title": "變更方案",
+      "description": "升級和降級立即生效。你只需為本計費週期的剩餘時間付款或取得抵扣。",
+      "discountCharity": "你已驗證的慈善機構資料讓你在所有方案上享有 {percent}% 折扣。",
+      "discountStaff": "你的組織在所有方案上享有 {percent}% 的非營利折扣。",
+      "legend": "方案",
+      "offer": "{plan}：{interval, select, year {每年} other {每月}} {price}",
+      "direction": {
+        "upgrade": "升級",
+        "downgrade": "降級",
+        "switch": "切換",
+        "start": "開始"
+      },
+      "turnsOff": "{count, plural, other {將關閉 # 個模組}}",
+      "chooseError": "請選擇要預覽的方案。",
+      "preview": "預覽變更",
+      "previewTitle": "變更為{plan}",
+      "previewLead": {
+        "upgrade": "你正在升級。以下是你今天為本計費週期剩餘時間支付的金額。",
+        "downgrade": "你正在降級。目前方案未使用的時間將作為抵扣額度。",
+        "switch": "你將切換到價格相同的方案。",
+        "start": "你的訂閱從今天開始。"
+      },
+      "rows": {
+        "charge": "新方案，週期剩餘時間",
+        "credit": "未使用時間的抵扣",
+        "discount": "非營利折扣",
+        "tax": "稅金",
+        "due": "今日應付"
+      },
+      "creditKept": "{amount} 的抵扣額度將保留給之後的帳單。",
+      "nextRenewal": "之後於 {date} 支付 {amount}。",
+      "nextRenewalNoDate": "之後每個週期 {amount}。",
+      "taxNote": "稅金由帳單服務商依你組織的帳單資料計算。",
+      "removedTitle": "{count, plural, other {將關閉 # 個模組}}",
+      "removedBody": "它們的資料會保留。如果你變更為包含它們的方案，它們會原樣恢復。",
+      "confirmRemoved": "{count, plural, other {我了解這些模組將被關閉}}",
+      "confirmError": "請確認將關閉的模組後再繼續。",
+      "confirm": "確認變更",
+      "cancel": "保留我的方案",
+      "doneTitle": "已送出方案變更",
+      "doneBody": "你的帳單服務商已確認變更。你的方案和模組已在下方更新。",
+      "errorTitle": "方案未變更",
+      "errors": {
+        "billing_off": "此組織未啟用帳單。",
+        "same_plan": "你已在使用此方案。",
+        "validation_failed": "請選擇提供的方案之一。",
+        "provider": "帳單服務商未接受此變更。未收取任何費用；請再試一次。",
+        "forbidden": "只有擁有者和管理員可以變更方案。",
+        "other": "發生問題。沒有任何變更。"
+      }
     }
   },
   "billingPortal": {
@@ -10978,6 +11046,52 @@
     "switch": "變更方案",
     "cancel": "取消訂閱",
     "back": "不變更並返回",
-    "chooseError": "請選擇要變更的方案。"
+    "chooseError": "請選擇要變更的方案。",
+    "noSubscriptionError": "此客戶尚未訂閱。請先選擇方案。",
+    "renewalLegend": "續訂",
+    "failRenewal": "讓續訂付款失敗",
+    "stopRetrying": "停止重試付款"
+  },
+  "billingUsage": {
+    "title": "用量",
+    "subtitle": "你的組織依計量項目的使用情況：訊息、AI 額度和掃描裝置。",
+    "breadcrumb": "導覽路徑",
+    "period": "本月：{start} 至 {end}（{zone}）",
+    "filterLabel": "計量項目",
+    "allMeters": "所有計量項目",
+    "meter": {
+      "email": "電子郵件",
+      "sms": "簡訊",
+      "whatsapp": "WhatsApp",
+      "ai_credits": "AI 額度",
+      "devices": "掃描裝置"
+    },
+    "unit": {
+      "email": "{count, plural, other {已寄出 # 封郵件}}",
+      "sms": "{count, plural, other {# 則簡訊分段}}",
+      "whatsapp": "{count, plural, other {已傳送 # 則訊息}}",
+      "ai_credits": "{count, plural, other {已使用 # 個額度}}",
+      "devices": "{count, plural, other {已登記 # 台裝置}}"
+    },
+    "reportingTitle": "用量會傳送給你的帳單服務商",
+    "reportingBody": "{count, plural, =0 {目前的用量都已傳送。} other {有 # 筆記錄等待傳送。}}",
+    "countingTitle": "用量會被計算，不會收費",
+    "countingBody": "此組織未啟用帳單，因此用量只在這裡計算。",
+    "currentTitle": "本月",
+    "currentDescription": "依你組織的時區計算。",
+    "historyTitle": "先前的月份",
+    "historyDescription": "最近 12 個有用量的月份。",
+    "emptyTitle": "尚無用量",
+    "emptyBody": "當你寄送郵件或簡訊、用 AI 起草或登記掃描裝置時，用量會顯示在這裡。",
+    "historyEmpty": "先前的月份沒有用量。",
+    "month": "月份"
+  },
+  "billingBanner": {
+    "label": "帳單",
+    "graceTitle": "你的訂閱付款未成功",
+    "graceBody": "在 {date} 之前一切照常。之後組織將變為唯讀，直到付款為止。",
+    "readOnlyTitle": "此組織為唯讀",
+    "readOnlyBody": "訂閱付款失敗。沒有刪除任何內容：你可以檢視、匯出和掃描票券，但在付款前變更已暫停。",
+    "action": "方案與帳單"
   }
 }

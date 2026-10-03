@@ -709,7 +709,8 @@
     "reference": "Riferimento: {id}",
     "rateLimitedRetry": "Troppi tentativi. Riprova tra {minutes, plural, one {# minuto} other {# minuti}}.",
     "impersonation_blocked": "Lo staff che agisce come membro non può farlo: rimborsi, pagamenti, esportazioni, eliminazioni e conferme sono disattivati.",
-    "read_only_freeze": "Le modifiche sono sospese durante la manutenzione programmata. Non è stato salvato nulla; riprova al termine."
+    "read_only_freeze": "Le modifiche sono sospese durante la manutenzione programmata. Non è stato salvato nulla; riprova al termine.",
+    "read_only_billing": "Questa organizzazione è in sola lettura finché l'abbonamento non viene pagato. Non è stato salvato né eliminato nulla."
   },
   "notFound": {
     "title": "Pagina non trovata",
@@ -10968,6 +10969,73 @@
       "advanced_seating": "Posti avanzati",
       "ai_seating": "Posti con IA",
       "analytics_pro": "Analisi avanzate"
+    },
+    "usageLink": "Utilizzo",
+    "renewalReceived": "Aggiornamento del rinnovo ricevuto",
+    "dunning": {
+      "graceTitle": "Il pagamento dell'abbonamento non è andato a buon fine",
+      "graceBody": "Tutto funziona normalmente fino al {date}. Paga entro quella data per continuare a fare modifiche; dopo, l'organizzazione passa in sola lettura finché non viene pagata.",
+      "readOnlyTitle": "Questa organizzazione è in sola lettura",
+      "readOnlyBody": "Il pagamento dell'abbonamento non è riuscito, quindi le modifiche sono sospese. Non è stato eliminato nulla: puoi vedere tutto, esportare i tuoi dati e scansionare i biglietti all'ingresso. Paga per riattivare subito le modifiche.",
+      "payNow": "Paga ora",
+      "askOwner": "Chiedi a un proprietario o a un amministratore di questa organizzazione di pagare.",
+      "paidTitle": "Pagamento ricevuto",
+      "paidBody": "Grazie. Le modifiche sono di nuovo attive per tutti nell'organizzazione.",
+      "declinedTitle": "Il pagamento non è andato a buon fine",
+      "declinedBody": "Non è cambiato nulla. Controlla la carta registrata presso il tuo fornitore di fatturazione e riprova.",
+      "payError": "Non è stato possibile avviare il pagamento. Riprova tra poco."
+    },
+    "change": {
+      "title": "Cambia piano",
+      "description": "Upgrade e downgrade hanno effetto subito. Paghi o ricevi un credito solo per il resto di questo periodo di fatturazione.",
+      "discountCharity": "Il tuo profilo di ente benefico verificato ti dà il {percent}% di sconto su ogni piano.",
+      "discountStaff": "La tua organizzazione ha uno sconto non profit del {percent}% su ogni piano.",
+      "legend": "Piani",
+      "offer": "{plan}: {price} {interval, select, year {all'anno} other {al mese}}",
+      "direction": {
+        "upgrade": "Upgrade",
+        "downgrade": "Downgrade",
+        "switch": "Cambio",
+        "start": "Avvio"
+      },
+      "turnsOff": "{count, plural, one {Disattiva # modulo} other {Disattiva # moduli}}",
+      "chooseError": "Scegli un piano da visualizzare in anteprima.",
+      "preview": "Anteprima della modifica",
+      "previewTitle": "Passa a {plan}",
+      "previewLead": {
+        "upgrade": "Stai passando a un piano superiore. Ecco quanto paghi oggi per il resto di questo periodo di fatturazione.",
+        "downgrade": "Stai passando a un piano inferiore. Il tempo non usato del piano attuale viene accreditato.",
+        "switch": "Passi a un piano con lo stesso prezzo.",
+        "start": "Il tuo abbonamento inizia oggi."
+      },
+      "rows": {
+        "charge": "Nuovo piano, resto del periodo",
+        "credit": "Credito per il tempo non usato",
+        "discount": "Sconto non profit",
+        "tax": "Imposte",
+        "due": "Da pagare oggi"
+      },
+      "creditKept": "{amount} di credito restano per le prossime fatture.",
+      "nextRenewal": "Poi {amount} il {date}.",
+      "nextRenewalNoDate": "Poi {amount} per ogni periodo.",
+      "taxNote": "Le imposte sono calcolate dal fornitore di fatturazione in base ai dati di fatturazione della tua organizzazione.",
+      "removedTitle": "{count, plural, one {# modulo viene disattivato} other {# moduli vengono disattivati}}",
+      "removedBody": "I loro dati vengono conservati. Tornano come erano se passi a un piano che li include.",
+      "confirmRemoved": "{count, plural, one {Ho capito che questo modulo viene disattivato} other {Ho capito che questi moduli vengono disattivati}}",
+      "confirmError": "Conferma i moduli che vengono disattivati per continuare.",
+      "confirm": "Conferma la modifica",
+      "cancel": "Mantieni il mio piano",
+      "doneTitle": "Cambio di piano inviato",
+      "doneBody": "Il tuo fornitore di fatturazione ha confermato la modifica. Piano e moduli sono aggiornati qui sotto.",
+      "errorTitle": "Il piano non è stato cambiato",
+      "errors": {
+        "billing_off": "La fatturazione non è attiva per questa organizzazione.",
+        "same_plan": "Hai già questo piano.",
+        "validation_failed": "Scegli uno dei piani offerti.",
+        "provider": "Il fornitore di fatturazione non ha accettato la modifica. Non è stato addebitato nulla; riprova.",
+        "forbidden": "Solo proprietari e amministratori possono cambiare il piano.",
+        "other": "Qualcosa è andato storto. Non è cambiato nulla."
+      }
     }
   },
   "billingPortal": {
@@ -10978,6 +11046,52 @@
     "switch": "Cambia piano",
     "cancel": "Annulla l’abbonamento",
     "back": "Torna senza modifiche",
-    "chooseError": "Scegli il piano a cui passare."
+    "chooseError": "Scegli il piano a cui passare.",
+    "noSubscriptionError": "Questo cliente non ha ancora un abbonamento. Scegli prima un piano.",
+    "renewalLegend": "Rinnovo",
+    "failRenewal": "Fai fallire il pagamento del rinnovo",
+    "stopRetrying": "Interrompi i tentativi di pagamento"
+  },
+  "billingUsage": {
+    "title": "Utilizzo",
+    "subtitle": "Quanto ha usato la tua organizzazione, per contatore: messaggi, crediti IA e dispositivi di scansione.",
+    "breadcrumb": "Percorso di navigazione",
+    "period": "Questo mese: dal {start} al {end} ({zone})",
+    "filterLabel": "Contatori",
+    "allMeters": "Tutti i contatori",
+    "meter": {
+      "email": "Email",
+      "sms": "SMS",
+      "whatsapp": "WhatsApp",
+      "ai_credits": "Crediti IA",
+      "devices": "Dispositivi di scansione"
+    },
+    "unit": {
+      "email": "{count, plural, one {# email inviata} other {# email inviate}}",
+      "sms": "{count, plural, one {# segmento SMS} other {# segmenti SMS}}",
+      "whatsapp": "{count, plural, one {# messaggio inviato} other {# messaggi inviati}}",
+      "ai_credits": "{count, plural, one {# credito usato} other {# crediti usati}}",
+      "devices": "{count, plural, one {# dispositivo registrato} other {# dispositivi registrati}}"
+    },
+    "reportingTitle": "L'utilizzo viene inviato al tuo fornitore di fatturazione",
+    "reportingBody": "{count, plural, =0 {Finora è stato inviato tutto.} one {# record è in attesa di invio.} other {# record sono in attesa di invio.}}",
+    "countingTitle": "L'utilizzo viene contato, nulla viene addebitato",
+    "countingBody": "La fatturazione non è attiva per questa organizzazione, quindi l'utilizzo viene solo contato qui.",
+    "currentTitle": "Questo mese",
+    "currentDescription": "Contato nel fuso orario della tua organizzazione.",
+    "historyTitle": "Mesi precedenti",
+    "historyDescription": "Gli ultimi 12 mesi con utilizzo.",
+    "emptyTitle": "Ancora nessun utilizzo",
+    "emptyBody": "L'utilizzo compare qui quando invii email o SMS, scrivi bozze con l'IA o registri dispositivi di scansione.",
+    "historyEmpty": "Nessun utilizzo nei mesi precedenti.",
+    "month": "Mese"
+  },
+  "billingBanner": {
+    "label": "Fatturazione",
+    "graceTitle": "Il pagamento dell'abbonamento non è andato a buon fine",
+    "graceBody": "Tutto funziona fino al {date}. Dopo, l'organizzazione passa in sola lettura finché non viene pagata.",
+    "readOnlyTitle": "Questa organizzazione è in sola lettura",
+    "readOnlyBody": "Il pagamento dell'abbonamento non è riuscito. Non è stato eliminato nulla: puoi vedere, esportare e scansionare biglietti, ma le modifiche sono sospese fino al pagamento.",
+    "action": "Piano e fatturazione"
   }
 }

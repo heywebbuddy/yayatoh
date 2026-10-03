@@ -151,4 +151,4 @@ export {
   linkBillingCustomerCommand,
   setLegacyFeesCommand,
 } from './subscriptions.ts';
-export { type BillingWebhookResult, processBillingWebhook } from './webhook.ts';
+export { type BillingWebhookResult, processBillingWebhook, subscriptionOfCustomer } from './webhook.ts';

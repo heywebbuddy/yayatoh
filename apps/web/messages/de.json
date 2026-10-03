@@ -709,7 +709,8 @@
     "reference": "Referenz: {id}",
     "rateLimitedRetry": "Zu viele Versuche. Versuchen Sie es in {minutes, plural, one {# Minute} other {# Minuten}} erneut.",
     "impersonation_blocked": "Mitarbeitende, die als Mitglied handeln, können das nicht: Erstattungen, Auszahlungen, Exporte, Löschungen und Bestätigungen sind aus.",
-    "read_only_freeze": "Änderungen sind während der geplanten Wartung pausiert. Nichts wurde gespeichert; versuchen Sie es nach dem Ende erneut."
+    "read_only_freeze": "Änderungen sind während der geplanten Wartung pausiert. Nichts wurde gespeichert; versuchen Sie es nach dem Ende erneut.",
+    "read_only_billing": "Diese Organisation ist schreibgeschützt, bis ihr Abonnement bezahlt ist. Nichts wurde gespeichert oder gelöscht."
   },
   "notFound": {
     "title": "Seite nicht gefunden",
@@ -10968,6 +10969,73 @@
       "advanced_seating": "Erweiterte Bestuhlung",
       "ai_seating": "KI-Bestuhlung",
       "analytics_pro": "Erweiterte Analysen"
+    },
+    "usageLink": "Nutzung",
+    "renewalReceived": "Verlängerungsupdate erhalten",
+    "dunning": {
+      "graceTitle": "Die Zahlung für Ihr Abonnement ist fehlgeschlagen",
+      "graceBody": "Bis zum {date} funktioniert alles wie gewohnt. Zahlen Sie vorher, um weiter Änderungen vornehmen zu können; danach ist die Organisation schreibgeschützt, bis bezahlt ist.",
+      "readOnlyTitle": "Diese Organisation ist schreibgeschützt",
+      "readOnlyBody": "Die Abonnementzahlung ist fehlgeschlagen, daher sind Änderungen pausiert. Nichts wurde gelöscht: Sie können alles ansehen, Ihre Daten exportieren und Tickets am Einlass scannen. Zahlen Sie, um Änderungen sofort wieder zu ermöglichen.",
+      "payNow": "Jetzt bezahlen",
+      "askOwner": "Bitten Sie einen Inhaber oder Admin dieser Organisation, zu bezahlen.",
+      "paidTitle": "Zahlung eingegangen",
+      "paidBody": "Danke. Änderungen sind für alle in der Organisation wieder möglich.",
+      "declinedTitle": "Die Zahlung ist fehlgeschlagen",
+      "declinedBody": "Nichts wurde geändert. Prüfen Sie die hinterlegte Karte bei Ihrem Abrechnungsanbieter und versuchen Sie es erneut.",
+      "payError": "Die Zahlung konnte nicht gestartet werden. Versuchen Sie es gleich noch einmal."
+    },
+    "change": {
+      "title": "Plan ändern",
+      "description": "Upgrades und Downgrades gelten sofort. Sie zahlen oder erhalten eine Gutschrift nur für den Rest dieses Abrechnungszeitraums.",
+      "discountCharity": "Ihr verifiziertes Gemeinnützigkeitsprofil gibt Ihnen {percent} % Rabatt auf jeden Plan.",
+      "discountStaff": "Ihre Organisation erhält {percent} % Rabatt für Gemeinnützige auf jeden Plan.",
+      "legend": "Pläne",
+      "offer": "{plan}: {price} {interval, select, year {pro Jahr} other {pro Monat}}",
+      "direction": {
+        "upgrade": "Upgrade",
+        "downgrade": "Downgrade",
+        "switch": "Wechsel",
+        "start": "Start"
+      },
+      "turnsOff": "{count, plural, one {Schaltet # Modul ab} other {Schaltet # Module ab}}",
+      "chooseError": "Wählen Sie einen Plan für die Vorschau.",
+      "preview": "Änderung ansehen",
+      "previewTitle": "Wechsel zu {plan}",
+      "previewLead": {
+        "upgrade": "Sie führen ein Upgrade durch. So viel zahlen Sie heute für den Rest dieses Abrechnungszeitraums.",
+        "downgrade": "Sie führen ein Downgrade durch. Ungenutzte Zeit Ihres aktuellen Plans wird gutgeschrieben.",
+        "switch": "Sie wechseln zu einem Plan mit demselben Preis.",
+        "start": "Ihr Abonnement beginnt heute."
+      },
+      "rows": {
+        "charge": "Neuer Plan, Rest des Zeitraums",
+        "credit": "Gutschrift für ungenutzte Zeit",
+        "discount": "Rabatt für Gemeinnützige",
+        "tax": "Steuer",
+        "due": "Heute fällig"
+      },
+      "creditKept": "{amount} Guthaben bleiben für Ihre nächsten Rechnungen erhalten.",
+      "nextRenewal": "Danach {amount} am {date}.",
+      "nextRenewalNoDate": "Danach {amount} pro Zeitraum.",
+      "taxNote": "Die Steuer berechnet der Abrechnungsanbieter anhand der Rechnungsdaten Ihrer Organisation.",
+      "removedTitle": "{count, plural, one {# Modul wird abgeschaltet} other {# Module werden abgeschaltet}}",
+      "removedBody": "Ihre Daten bleiben erhalten. Sie kommen unverändert zurück, wenn Sie zu einem Plan wechseln, der sie enthält.",
+      "confirmRemoved": "{count, plural, one {Mir ist klar, dass dieses Modul abgeschaltet wird} other {Mir ist klar, dass diese Module abgeschaltet werden}}",
+      "confirmError": "Bestätigen Sie die abgeschalteten Module, um fortzufahren.",
+      "confirm": "Änderung bestätigen",
+      "cancel": "Plan behalten",
+      "doneTitle": "Planänderung gesendet",
+      "doneBody": "Ihr Abrechnungsanbieter hat die Änderung bestätigt. Plan und Module sind unten aktualisiert.",
+      "errorTitle": "Der Plan wurde nicht geändert",
+      "errors": {
+        "billing_off": "Die Abrechnung ist für diese Organisation nicht aktiv.",
+        "same_plan": "Sie haben diesen Plan bereits.",
+        "validation_failed": "Wählen Sie einen angebotenen Plan.",
+        "provider": "Der Abrechnungsanbieter hat die Änderung nicht angenommen. Es wurde nichts berechnet; versuchen Sie es erneut.",
+        "forbidden": "Nur Inhaber und Admins können den Plan ändern.",
+        "other": "Etwas ist schiefgelaufen. Nichts wurde geändert."
+      }
     }
   },
   "billingPortal": {
@@ -10978,6 +11046,52 @@
     "switch": "Tarif wechseln",
     "cancel": "Abonnement kündigen",
     "back": "Ohne Änderung zurück",
-    "chooseError": "Wählen Sie einen Tarif, zu dem Sie wechseln möchten."
+    "chooseError": "Wählen Sie einen Tarif, zu dem Sie wechseln möchten.",
+    "noSubscriptionError": "Dieser Kunde hat noch kein Abonnement. Wählen Sie zuerst einen Plan.",
+    "renewalLegend": "Verlängerung",
+    "failRenewal": "Verlängerungszahlung fehlschlagen lassen",
+    "stopRetrying": "Zahlungsversuche beenden"
+  },
+  "billingUsage": {
+    "title": "Nutzung",
+    "subtitle": "Was Ihre Organisation genutzt hat, nach Zähler: Nachrichten, KI-Credits und Scan-Geräte.",
+    "breadcrumb": "Brotkrümelnavigation",
+    "period": "Dieser Monat: {start} bis {end} ({zone})",
+    "filterLabel": "Zähler",
+    "allMeters": "Alle Zähler",
+    "meter": {
+      "email": "E-Mail",
+      "sms": "SMS",
+      "whatsapp": "WhatsApp",
+      "ai_credits": "KI-Credits",
+      "devices": "Scan-Geräte"
+    },
+    "unit": {
+      "email": "{count, plural, one {# E-Mail gesendet} other {# E-Mails gesendet}}",
+      "sms": "{count, plural, one {# SMS-Segment} other {# SMS-Segmente}}",
+      "whatsapp": "{count, plural, one {# Nachricht gesendet} other {# Nachrichten gesendet}}",
+      "ai_credits": "{count, plural, one {# Credit verbraucht} other {# Credits verbraucht}}",
+      "devices": "{count, plural, one {# Gerät registriert} other {# Geräte registriert}}"
+    },
+    "reportingTitle": "Die Nutzung wird an Ihren Abrechnungsanbieter gesendet",
+    "reportingBody": "{count, plural, =0 {Bisher wurde alles gesendet.} one {# Eintrag wartet auf den Versand.} other {# Einträge warten auf den Versand.}}",
+    "countingTitle": "Die Nutzung wird gezählt, nichts wird berechnet",
+    "countingBody": "Die Abrechnung ist für diese Organisation nicht aktiv, daher wird die Nutzung nur hier gezählt.",
+    "currentTitle": "Dieser Monat",
+    "currentDescription": "Gezählt in der Zeitzone Ihrer Organisation.",
+    "historyTitle": "Frühere Monate",
+    "historyDescription": "Die letzten 12 Monate mit Nutzung.",
+    "emptyTitle": "Noch keine Nutzung",
+    "emptyBody": "Die Nutzung erscheint hier, wenn Sie E-Mails oder SMS senden, mit KI entwerfen oder Scan-Geräte registrieren.",
+    "historyEmpty": "Keine Nutzung in früheren Monaten.",
+    "month": "Monat"
+  },
+  "billingBanner": {
+    "label": "Abrechnung",
+    "graceTitle": "Die Zahlung für Ihr Abonnement ist fehlgeschlagen",
+    "graceBody": "Bis zum {date} funktioniert alles. Danach ist die Organisation schreibgeschützt, bis bezahlt ist.",
+    "readOnlyTitle": "Diese Organisation ist schreibgeschützt",
+    "readOnlyBody": "Die Abonnementzahlung ist fehlgeschlagen. Nichts wurde gelöscht: Sie können ansehen, exportieren und Tickets scannen, aber Änderungen sind bis zur Zahlung pausiert.",
+    "action": "Plan und Abrechnung"
   }
 }

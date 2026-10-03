@@ -709,7 +709,8 @@
     "reference": "Reference: {id}",
     "rateLimitedRetry": "Too many attempts. Try again in {minutes, plural, one {# minute} other {# minutes}}.",
     "impersonation_blocked": "Staff acting as a member can't do this: refunds, payouts, exports, deletions and confirmations are turned off.",
-    "read_only_freeze": "Changes are paused during scheduled maintenance. Nothing was saved; try again when it ends."
+    "read_only_freeze": "Changes are paused during scheduled maintenance. Nothing was saved; try again when it ends.",
+    "read_only_billing": "This organization is read-only until its subscription is paid. Nothing was saved or deleted."
   },
   "notFound": {
     "title": "Page not found",
@@ -10968,6 +10969,73 @@
       "advanced_seating": "Advanced seating",
       "ai_seating": "AI seating",
       "analytics_pro": "Advanced analytics"
+    },
+    "usageLink": "Usage",
+    "renewalReceived": "Renewal update received",
+    "dunning": {
+      "graceTitle": "Your subscription payment didn't go through",
+      "graceBody": "Everything works as usual until {date}. Pay before then to keep making changes; after that the organization becomes read-only until it's paid.",
+      "readOnlyTitle": "This organization is read-only",
+      "readOnlyBody": "The subscription payment failed, so changes are paused. Nothing has been deleted: you can still look at everything, export your data, and scan tickets at the door. Pay to restore changes at once.",
+      "payNow": "Pay now",
+      "askOwner": "Ask an owner or admin of this organization to pay.",
+      "paidTitle": "Payment received",
+      "paidBody": "Thank you. Changes are back on for everyone in the organization.",
+      "declinedTitle": "The payment didn't go through",
+      "declinedBody": "Nothing changed. Check the card on file with your billing provider, then try again.",
+      "payError": "The payment couldn't be started. Try again in a moment."
+    },
+    "change": {
+      "title": "Change plan",
+      "description": "Upgrades and downgrades take effect at once. You pay or are credited only for the rest of this billing period.",
+      "discountCharity": "Your verified charity profile gives you {percent}% off every plan.",
+      "discountStaff": "Your organization gets a {percent}% nonprofit discount on every plan.",
+      "legend": "Plans",
+      "offer": "{plan}: {price} {interval, select, year {a year} other {a month}}",
+      "direction": {
+        "upgrade": "Upgrade",
+        "downgrade": "Downgrade",
+        "switch": "Switch",
+        "start": "Start"
+      },
+      "turnsOff": "{count, plural, one {Turns off # module} other {Turns off # modules}}",
+      "chooseError": "Choose a plan to preview.",
+      "preview": "Preview change",
+      "previewTitle": "Change to {plan}",
+      "previewLead": {
+        "upgrade": "You're upgrading. Here is what you pay today for the rest of this billing period.",
+        "downgrade": "You're downgrading. Unused time on your current plan is credited.",
+        "switch": "You're switching plans at the same price.",
+        "start": "Your subscription starts today."
+      },
+      "rows": {
+        "charge": "New plan, rest of the period",
+        "credit": "Credit for unused time",
+        "discount": "Nonprofit discount",
+        "tax": "Tax",
+        "due": "Due today"
+      },
+      "creditKept": "{amount} of credit is kept for your next invoices.",
+      "nextRenewal": "Then {amount} on {date}.",
+      "nextRenewalNoDate": "Then {amount} each period.",
+      "taxNote": "Tax is calculated by the billing provider from your organization's billing details.",
+      "removedTitle": "{count, plural, one {# module turns off} other {# modules turn off}}",
+      "removedBody": "Their data is kept. They come back as they were if you change to a plan that includes them.",
+      "confirmRemoved": "{count, plural, one {I understand this module turns off} other {I understand these modules turn off}}",
+      "confirmError": "Confirm the modules that turn off to continue.",
+      "confirm": "Confirm change",
+      "cancel": "Keep my plan",
+      "doneTitle": "Plan change sent",
+      "doneBody": "Your billing provider confirmed the change. Your plan and modules are updated below.",
+      "errorTitle": "The plan wasn't changed",
+      "errors": {
+        "billing_off": "Billing isn't active for this organization.",
+        "same_plan": "You're already on this plan.",
+        "validation_failed": "Choose a plan that is offered.",
+        "provider": "The billing provider didn't accept the change. Nothing was charged; try again.",
+        "forbidden": "Only owners and admins can change the plan.",
+        "other": "Something went wrong. Nothing was changed."
+      }
     }
   },
   "billingPortal": {
@@ -10978,6 +11046,52 @@
     "switch": "Switch plan",
     "cancel": "Cancel subscription",
     "back": "Back without changes",
-    "chooseError": "Choose a plan to switch to."
+    "chooseError": "Choose a plan to switch to.",
+    "noSubscriptionError": "This customer has no subscription yet. Choose a plan first.",
+    "renewalLegend": "Renewal",
+    "failRenewal": "Fail the renewal payment",
+    "stopRetrying": "Stop retrying the payment"
+  },
+  "billingUsage": {
+    "title": "Usage",
+    "subtitle": "What your organization used, by meter: messages, AI credits and scan devices.",
+    "breadcrumb": "Breadcrumb",
+    "period": "This month: {start} to {end} ({zone})",
+    "filterLabel": "Meters",
+    "allMeters": "All meters",
+    "meter": {
+      "email": "Email",
+      "sms": "SMS",
+      "whatsapp": "WhatsApp",
+      "ai_credits": "AI credits",
+      "devices": "Scan devices"
+    },
+    "unit": {
+      "email": "{count, plural, one {# email sent} other {# emails sent}}",
+      "sms": "{count, plural, one {# text segment} other {# text segments}}",
+      "whatsapp": "{count, plural, one {# message sent} other {# messages sent}}",
+      "ai_credits": "{count, plural, one {# credit used} other {# credits used}}",
+      "devices": "{count, plural, one {# device enrolled} other {# devices enrolled}}"
+    },
+    "reportingTitle": "Usage is sent to your billing provider",
+    "reportingBody": "{count, plural, =0 {Everything so far has been sent.} one {# record is waiting to be sent.} other {# records are waiting to be sent.}}",
+    "countingTitle": "Usage is counted, nothing is charged",
+    "countingBody": "Billing isn't active for this organization, so usage is only counted here.",
+    "currentTitle": "This month",
+    "currentDescription": "Counted in your organization's time zone.",
+    "historyTitle": "Earlier months",
+    "historyDescription": "The last 12 months with usage.",
+    "emptyTitle": "No usage yet",
+    "emptyBody": "Usage appears here when you send emails or texts, draft with AI, or enroll scan devices.",
+    "historyEmpty": "No usage in earlier months.",
+    "month": "Month"
+  },
+  "billingBanner": {
+    "label": "Billing",
+    "graceTitle": "Your subscription payment didn't go through",
+    "graceBody": "Everything works until {date}. After that the organization becomes read-only until it's paid.",
+    "readOnlyTitle": "This organization is read-only",
+    "readOnlyBody": "The subscription payment failed. Nothing has been deleted: you can look, export and scan tickets, but changes are paused until it's paid.",
+    "action": "Plan and billing"
   }
 }
