@@ -554,3 +554,9 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **Pending guests can be seated** (the queue shows "Awaiting reply"); only declined guests are refused. Confirm.
 - [ ] **VIP zones** are tables the host marks in the editor (and tables in a VIP section of the plan document). They warn both ways (a VIP party outside one, a party that isn't VIP inside one) and never refuse. Confirm.
 - [ ] **Each sub-event is seated separately** (the ceremony in rows, the reception at tables), plus the whole event's plan; seating one doesn't seat the others. Confirm, or ask for "copy seating from…".
+
+## M4.3b — cards and exports (2026-10-03, pending owner)
+- [ ] **Who may export the seating chart and caterer meal counts:** `attendees:export` like the RSVP answers export (owners, admins, managers, event managers, co-hosts); **planners and viewers can't** (they can still print cards, which anyone who reads the guest list may do). A planner who deals with the caterer would need the export: say if planners should get it.
+- [ ] **Exports download directly** (a link, audited as `seating.guests.export` with kind, format and row count) **without "Confirm it's you"**: they hold names, parties, meals and replies but no private answers (dietary, accessibility, addresses stay out). The RSVP answers export asks for step-up because it can include private answers. Confirm, or ask for step-up here too.
+- [ ] **Card stock:** place cards are 90 × 50 mm tents (90 × 100 mm flat), escort cards 3.5 × 2 in, table cards a whole sheet folded in half; paper A4, US Letter, A5 or US Legal (Letter is preselected for events in an `America/…` time zone). Pre-cut stock of other brands (Avery templates) is not matched yet: say which you want.
+- [ ] **Declined guests** never get a card and are not counted for the caterer; guests who haven't answered are printed and counted. Confirm.

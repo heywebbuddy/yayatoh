@@ -1,7 +1,7 @@
 # Spec: M4.3 — Guest seating
 
 - **Milestone:** M4.3 (roadmap §10 Phase 4, "M4.3 Guest seating (M)"; Phase 4 plan `docs/plans/phase-4.md`, Wave C)
-- **Status:** M4.3a built (2026-10-03: the guest seating editor); M4.3b (cards and exports) to follow
+- **Status:** M4.3a built (2026-10-03: the guest seating editor); M4.3b built (2026-10-03: cards and exports)
 - **Risk tags:** `db-migration`, `tenancy`
 - **Related ADRs:** 0009 (realtime), 0012 (seating), 0018/0022 (tokens, design v2)
 
@@ -39,7 +39,7 @@ reload. Everything a pointer does on the map, the keyboard does in the panes bes
 - Seat-level places (a particular chair) and taking guest seats off sale on a plan that sells seats (pending owner).
 - Automatic unseating when a guest declines (pending owner; today a warning in table details).
 - Copying one sub-event's seating to another; auto-placement ("seat VIP parties nearest the stage") waits for M6.12.
-- Place, escort and table cards, seating chart and caterer exports (M4.3b).
+- Place, escort and table cards, seating chart and caterer exports (M4.3b: built, see below).
 - `/v1` resources for guest seating.
 
 ### 4. `touches:`
@@ -111,3 +111,83 @@ No new outbox events.
 - Base: `origin/m0.5-foundation-ey5gqp` + `origin/merge/next-3h` (which already carries next-3g, design-v2, M4.2b and M4.1d with their conflicts resolved); re-merged the latest build branch, next-3h and next-3g before the gate (clean).
 - `pnpm lint`, `pnpm check:modules`, typecheck 59/59 (`--concurrency=2`), unit 2696/2696 (201 files), integration 1509/1509 (165 files).
 - E2E at 375/768/1280 (`--workers=2`): `guest-seating` 18 passed; `seating`, `seat-assignment`, `party-guests`, `social-workspace` 60 passed; earlier on this branch `seat-rules`, `seat-move` (with seating/seat-assignment: 39), `rsvp`, `realtime`, `seat-finder` (with party-guests: 81), `gala-tables`, `guest-import`, `guest-invites`, `rsvp-questions` (72) all passed.
+
+## M4.3b — cards and exports (built 2026-10-03)
+
+### 1. Goal and users
+Once the guests are seated, the couple, their co-host or the gala host prints what the room needs:
+a **place card** for each guest, **escort cards** for the entrance ("The García Family — Table 3")
+and a **table card** for each table, on the paper their printer holds, in the language of the
+event (Arabic right to left). The caterer gets the **meal counts per table** and the venue the
+**seating chart by table**, as CSV or Excel.
+
+### 2. References
+- **Plan:** `docs/plans/phase-4.md` row M4.3b ("Place, escort and table cards as PDF in common paper sizes (every locale, Arabic RTL). Seating chart by table and caterer meal counts as CSV or XLSX"). Acceptance: "Golden PDFs for the fixture wedding in English and Arabic".
+- **ADRs:** 0017 (PDF engine: Gotenberg, self-contained HTML), 0018/0022 (tokens, design v2). Golden pattern of M5.5a badges and M4.8b receipts.
+- **Built on:** M4.3a (guest seating view), M4.1 (parties, plus-ones, meals), M4.2b (table sponsors), M4.1b (`@yayatoh/csv` XLSX reader).
+- **Legacy evidence:** none (Eventmie Pro has no guest seating).
+
+### 3. Scope
+**In (built):**
+- **Cards and exports** (`/o/{org}/e/{event}/seating/cards`, a "Cards and exports" tab next to "Seat guests"; the chart chooser of M4.3a, `?sub=`). No plan: the empty state sends the host to the plan.
+- **Print cards** (one primary action, "Download PDF"): card type (place: one per seated guest, a 90 × 50 mm tent with the name on both faces; escort: one per party per table, 3.5 × 2 in, sorted by party; table: one per table or row, a sheet folded in half with "Hosted by …" for a sponsored table and the event's name and date in the event's time zone), the paper (A4, US Letter, A5, US Legal; Letter preselected for `America/…` events) and the cards' language (any of the 13; the page's by default). Each type shows how many cards it prints; a type with nothing to print says why inline ("No guests are seated yet… Seat your guests first.") and focuses the choice instead of downloading; "Seat guests" is offered while nobody is seated. A plain GET form: `…/seating/cards/pdf?kind&paper&lang&sub`.
+- **Layout (`seating`, pure, `domain/cards.ts`):** `sheetLayout` fits cards inside 10 mm margins, butted for shared cuts, centred; in RTL the first card of a row is the right-most. Cut outlines are dashed, tent folds dotted. Names are isolated (`<bdi>`) so a Latin name reads right on an Arabic card. Places print under the reader's names ("Table 3", "الطاولة 3"; `nameSheet`) in the natural order of their labels.
+- **Exports** (`attendees:export` only): the seating chart by table (a line per guest: table, guest, party, age, meal, reply; declined guests flagged; guests not seated last) and the caterer's meal counts (a column per meal, grouped case-insensitively, then not chosen, children, infants and total; a "Not seated" row and a total row; declined guests left out), each as CSV (UTF-8 with BOM, formula-like cells neutralised) or XLSX (`writeXlsx` in `@yayatoh/csv`: inline strings never evaluated, bold frozen header, sized columns, deterministic bytes). Headers and labels in the reader's language. `…/seating/cards/export?kind=chart|meals&format=csv|xlsx&sub`.
+- **Permissions:** the page and cards need `guests:read` (viewers, planners and co-hosts on their events print); exports need `attendees:export` (the section is hidden and the route is a 404 otherwise).
+
+**Later / not yet:**
+- Avery and other pre-cut stock templates; custom card designs (fonts, monograms, colours) and a preview in the page.
+- Seat-level place cards ("Table 3, seat 5") wait for seat-level guest places (M4.3a, pending owner).
+- Step-up before exports (pending owner); exports through the bulk framework (it stores text only).
+- `/v1` resources for cards and exports.
+
+### 4. `touches:`
+```yaml
+touches:
+  - packages/modules/seating/src/{domain/cards,cards,cards-document,guest-seating,index,client}.ts, MODULE.md, package.json
+  - packages/modules/seating/tests/{cards.test,golden.test,golden.int.test}.ts, tests/golden/*
+  - packages/csv/src/{xlsx-write,index}.ts, tests/xlsx-write.test.ts
+  - packages/testing/tests/seating-cards.int.test.ts
+  - apps/web/src/server/seating-cards.ts
+  - apps/web/src/app/[locale]/o/[org]/e/[event]/seating/cards/{page.tsx,pdf/route.ts,export/route.ts}
+  - apps/web/src/components/guest-seating/seating-cards-form.tsx, seating-tabs.tsx
+  - apps/web/messages/*.json (seating.tabs.cards, seating.cards.*)
+  - apps/web/e2e/seating-cards.spec.ts
+  - docs/specs/M4.3/spec.md, docs/owner-inbox.md
+```
+
+### 5. Data model
+No new tables, no migration. `guestSeatingViewTx` (the M4.3a editor's view, now exported) is read in the caller's transaction.
+
+### 6. API diff
+- **`/v1`:** none. **`/api/v2`:** none.
+- **Query** `seating.cards` (`guests:read`; entitlement `seating`): the chart by table (`SeatingSheetDto`) and card counts. **Command** `seating.exportGuestSeating` (`attendees:export`; entitlement `seating`): the sheet and meal counts (`GuestSeatingExportDto`); audit `seating.guests.export` `{subEventId, kind, format, rows}`. Both allowlisted (Zod); no private answers.
+- **Web routes:** `GET …/seating/cards/pdf` (PDF attachment; printable HTML when no renderer is configured; 400 for a bad kind or paper, 409 when nothing to print, 503 to retry), `GET …/seating/cards/export` (CSV/XLSX attachment). `private, no-store`, `noindex`, `nosniff`.
+
+### 7. Events
+None.
+
+### 8. Entitlements and flags
+Module keys `seating` and `guests` (like M4.3a). No flag.
+
+### 10. Acceptance criteria
+| ID | Given / When / Then | Test |
+|---|---|---|
+| AC-M4.3b-01 | **Golden PDFs for the fixture wedding in English and Arabic:** place (A4), escort (Letter) and table (A5) cards; the HTML is exactly the recorded file, the PDF's pages, page size and text match the record; Arabic is shaped and mirrored | `packages/modules/seating/tests/golden.test.ts`, `golden.int.test.ts` (Gotenberg) |
+| AC-M4.3b-02 | Cards in common paper sizes, every locale: layouts for A4, Letter, A5, Legal; RTL mirrored; card language chosen on the page; the real fixture wedding's reception renders | unit `seating/tests/cards.test.ts`; `packages/testing/tests/seating-cards.int.test.ts`; `apps/web/e2e/seating-cards.spec.ts` |
+| AC-M4.3b-03 | Seating chart by table and caterer meal counts as CSV and XLSX: declined left out of counts, unseated row, totals, meals grouped; headers in the reader's language (Arabic CSV) | unit `cards.test.ts`, `packages/csv/tests/xlsx-write.test.ts`; `seating-cards.int.test.ts`; `seating-cards.spec.ts` |
+| AC-M4.3b-04 | Keyboard only: open the tab, choose type (arrows), paper and language, download; download every export | `seating-cards.spec.ts` (×3 viewports) |
+| AC-M4.3b-05 | Empty states (no plan; nobody seated) and inline validation (no empty download) | `seating-cards.spec.ts` |
+| AC-M4.3b-06 | Viewer prints but never sees or reaches exports; planners can't export; exports are audited; another org reaches nothing | `seating-cards.int.test.ts`, `seating-cards.spec.ts` |
+| AC-M4.3b-07 | axe in light and dark; Arabic RTL page | `seating-cards.spec.ts` |
+
+### 11. Security and privacy
+- Tenant from the route; every read through `withTenant` (the query and command pipeline). Cards and exports carry names, parties, meals and replies only: dietary, accessibility and addresses stay sealed (P4-3); the int test checks the fixture's private answers never appear.
+- PDF HTML is built with the escaping `html` template, self-contained (no remote assets, no scripts) and rendered by the private Gotenberg service. CSV cells starting with `= + - @` are neutralised; XLSX text is inline strings (never formulas).
+- Exports are audited; downloads are `private, no-store`, `noindex`, `nosniff`.
+
+### 15. Demo checklist
+- [ ] A wedding with a plan of 2 tables and guests (Garcia: Luis, Ana — Beef; Chen: Mei). Seat Garcia at Table 1 (Seat guests).
+- [ ] Seating → Cards and exports: Place cards, A4 → Download PDF: two tent cards. Escort cards, US Letter, العربية → Download PDF: an Arabic escort card for Garcia.
+- [ ] Exports: Caterer meal counts → Excel (XLSX): Table 1 Beef 2; Not seated 1; Total 3.
+- [ ] Sign in as the viewer: the page prints cards; no Exports section.
