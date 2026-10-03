@@ -10,7 +10,8 @@
     ".": "./src/index.ts",
     "./testing": "./src/testing.ts",
     "./numbers": "./src/templates/numbers.ts",
-    "./merge": "./src/templates/merge.ts"
+    "./merge": "./src/templates/merge.ts",
+    "./deliverability": "./src/deliverability-rules.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"
