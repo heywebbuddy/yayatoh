@@ -309,6 +309,17 @@ export {
 export { invoiceMailer } from './invoice-mailer.ts';
 // M5.2b: the manage token behind a session-schedule email link.
 export { orderManageTokenTx } from './manage-link.ts';
+// U5: money facts for the org Money dashboards (read-only).
+export {
+  type DayMoneyFact,
+  type MoneyScope,
+  moneyByDayTx,
+  moneyEventIdsTx,
+  type OrderFeeFact,
+  type OrderMoneyRow,
+  orderFeesTx,
+  orderMoneyRowsTx,
+} from './money-facts.ts';
 export { buyerFactsTx, orderRefTx } from './participation.ts';
 export { orderPaymentStateTx } from './payment-state.ts';
 export { privateColumns } from './private-columns.ts';
