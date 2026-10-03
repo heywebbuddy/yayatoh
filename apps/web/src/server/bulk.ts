@@ -5,7 +5,6 @@ import { giftsExportAction } from '@yayatoh/donations';
 import { guestImportAction, rsvpAnswersExportAction, rsvpAnswersPrivateExportAction } from '@yayatoh/guests';
 import { ticketCancelAction, waitlistExportAction } from '@yayatoh/orders';
 import { auditExportAction, bulkStepCommand, runBulkOperation } from '@yayatoh/platform';
-import { dsarExportAction } from '@yayatoh/privacy';
 import { registrationDecideAction } from '@yayatoh/registration';
 import { attendeeExportAction, bookingsExportAction } from '@yayatoh/reports';
 import { seatAssignAction } from '@yayatoh/seating';
@@ -21,7 +20,6 @@ export const BULK_ACTIONS = [
   attendeeExportAction,
   bookingsExportAction,
   auditExportAction,
-  dsarExportAction,
   seatAssignAction,
   ticketResendAction,
   ticketCancelAction,

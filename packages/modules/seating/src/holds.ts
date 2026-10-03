@@ -1,13 +1,16 @@
 import type { TenantTx } from '@yayatoh/db';
 import { type Ctx, DomainError } from '@yayatoh/kernel';
-import { and, eq, inArray, lte, sql } from 'drizzle-orm';
+import { and, eq, inArray, isNull, lte, sql } from 'drizzle-orm';
+import { channelKeptSeatsTx, sellableThroughSql } from './channels.ts';
 import { chartKeyTx, onChart } from './chart.ts';
-import { eventLayouts, eventSeats } from './schema.ts';
+import { channelOrders, eventLayouts, eventSeats } from './schema.ts';
 
 /**
  * Hold seats for a checkout (ADR 0012): one statement moves every requested seat from
  * `available` to `held` under a short lock timeout. If fewer rows move than were asked for, the
  * seats are taken and the caller's transaction must roll back (`conflict`, reason `seats_taken`).
+ * M6.11b: the hold goes through one sales channel (`channelId`; omitted or null = no channel); a
+ * seat another channel keeps is never taken (`conflict`, reason `seat_channel`).
  */
 export async function holdSeatsTx(
   tx: TenantTx,
@@ -19,6 +22,8 @@ export async function holdSeatsTx(
     seatUuids: readonly string[];
     holdId: string;
     expiresAt: Date;
+    /** The sales channel (M6.11b, `resolveSaleChannelTx`); omitted or null = no channel. */
+    channelId?: string | null;
   },
 ): Promise<{ seatUuid: string; ticketTypeId: string | null; label: string }[]> {
   const ids = [...new Set(h.seatUuids)];
@@ -46,6 +51,7 @@ export async function holdSeatsTx(
         onChart(eventSeats, h.eventId, key),
         inArray(eventSeats.seatUuid, ids),
         eq(eventSeats.status, 'available'),
+        sellableThroughSql(h.channelId ?? null, ctx.now),
       ),
     )
     .returning({
@@ -53,8 +59,16 @@ export async function holdSeatsTx(
       ticketTypeId: eventSeats.ticketTypeId,
       label: eventSeats.label,
     });
-  if (rows.length !== ids.length)
+  if (rows.length !== ids.length) {
+    const kept = await channelKeptSeatsTx(tx, h.eventId, h.channelId ?? null, ctx.now);
+    const hit = ids.filter((id) => kept.has(id));
+    if (hit.length)
+      throw new DomainError('conflict', 'Those seats are kept for another sales channel', {
+        reason: 'seat_channel',
+        seats: hit,
+      });
     throw new DomainError('conflict', 'Some of those seats were just taken', { reason: 'seats_taken' });
+  }
   return rows;
 }
 
@@ -85,6 +99,11 @@ export async function sellSeatsTx(
     if (rows.length !== 1)
       throw new DomainError('conflict', 'The seat hold was lost', { reason: 'hold_lost' });
   }
+  // M6.11b: the order's channel (when it went through one) counts the sale.
+  await tx
+    .update(channelOrders)
+    .set({ soldAt: ctx.now, updatedAt: ctx.now })
+    .where(and(eq(channelOrders.orderId, s.holdId), isNull(channelOrders.soldAt)));
   await tx
     .update(eventLayouts)
     .set({ status: 'locked', lockedAt: ctx.now, updatedAt: ctx.now })

@@ -22,11 +22,13 @@ import {
 } from '@yayatoh/orders';
 import { signLinkToken, verifyLinkToken } from '@yayatoh/platform';
 import { reportReviewCommand } from '@yayatoh/reviews';
+import { holdBestAvailableCommand, releaseBestAvailableCommand } from '@yayatoh/seating';
 import { requestHolderLinkCommand } from '@yayatoh/ticketing';
 import { refresh } from 'next/cache';
 import { headers } from 'next/headers';
 import { redirect as nextRedirect } from 'next/navigation';
 import { getLocale } from 'next-intl/server';
+import type { BestSeatsRequest, BestSeatsState } from '@/components/best-available.tsx';
 import { redirect } from '@/i18n/navigation.ts';
 import type { FormState } from '@/lib/form-state.ts';
 import { recordCheckoutAttribution } from '@/server/attribution.ts';
@@ -186,7 +188,13 @@ export async function checkoutAction(
   }
   // Seated events: the chosen seats (their prices come from the seat map on the server).
   const seats = form.getAll('seat').map(String).slice(0, 50);
-  if (items.length === 0 && seats.length === 0) return { code: 'validation_failed', reason: 'empty' };
+  // M6.11a: seats best available holds for this buyer (its token), and their accessibility need.
+  const seatHold = String(form.get('seatHold') ?? '').trim();
+  const accessibleNeed = form.get('accessibleNeed') === '1';
+  if (form.get('seatMode') === 'best' && !seatHold && items.length === 0)
+    return { code: 'validation_failed', reason: 'find_seats' };
+  if (items.length === 0 && seats.length === 0 && !seatHold)
+    return { code: 'validation_failed', reason: 'empty' };
   // Answers are read by the published questions' keys and types; the server validates them again.
   const questions = await publicForm(target.orgId, {
     kind: 'checkout_questions',
@@ -258,7 +266,13 @@ export async function checkoutAction(
       {
         eventId: target.eventId,
         items,
-        seats,
+        seats: seatHold ? [] : seats,
+        ...(seatHold ? { seatHold } : {}),
+        accessibleNeed,
+        // M6.11b: the sales code of the link the buyer came through (checked server-side).
+        ...(String(form.get('channelCode') ?? '').trim()
+          ? { channelCode: String(form.get('channelCode')).trim().slice(0, 40) }
+          : {}),
         // Multi-date events: the date the buyer chose (validated against the event server-side).
         ...(/^[0-9a-f-]{36}$/.test(String(form.get('occurrenceId') ?? ''))
           ? { occurrenceId: String(form.get('occurrenceId')) }
@@ -277,7 +291,7 @@ export async function checkoutAction(
   } catch (err) {
     if (isDomainError(err)) {
       // Someone else got a seat first: send the buyer a fresh seat map with the answer.
-      if (err.details?.reason === 'seats_taken') refresh();
+      if (err.details?.reason === 'seats_taken' && !seatHold) refresh();
       return {
         code: err.code,
         reason: String(err.details?.reason ?? ''),
@@ -309,7 +323,11 @@ export async function checkoutAction(
   });
   await executeCommand(
     attachPaymentCommand,
-    { orderId: order.id, provider: getPaymentProvider().name, providerPaymentId: payment.providerPaymentId },
+    {
+      orderId: order.id,
+      provider: payment.provider ?? getPaymentProvider().name,
+      providerPaymentId: payment.providerPaymentId,
+    },
     ctx,
     ports,
   );
@@ -428,4 +446,80 @@ export async function reportReviewAction(
     return failure(err);
   }
   return success();
+}
+
+/**
+ * Best available (M6.11a): hold the best seats for this buyer. The org and event come from the
+ * slug (server-side), never from the browser; a hold takes seats, so it counts against the same
+ * per-device budget as starting a checkout.
+ */
+export async function findBestSeatsAction(slug: string, input: BestSeatsRequest): Promise<BestSeatsState> {
+  return findBestSeats(slug, input, null);
+}
+
+/** M6.11b: best available through a sponsor's or promoter's sales code (their allotted seats too). */
+export async function findChannelBestSeatsAction(
+  slug: string,
+  channelCode: string,
+  input: BestSeatsRequest,
+): Promise<BestSeatsState> {
+  return findBestSeats(slug, input, String(channelCode).slice(0, 40));
+}
+
+async function findBestSeats(
+  slug: string,
+  input: BestSeatsRequest,
+  channelCode: string | null,
+): Promise<BestSeatsState> {
+  const limit = await limitAction('checkoutStart');
+  if (!limit.allowed) return { ok: false, code: 'rate_limited', retryMinutes: retryAfterMinutes(limit) };
+  const target = await checkoutTarget(slug);
+  if (!target) return { ok: false, code: 'not_found' };
+  const session = await ownSession();
+  const ctx = createCtx({
+    orgId: target.orgId,
+    actor: session ? { type: 'user', userId: session.userId } : { type: 'anonymous' },
+    locale: await getLocale(),
+  });
+  try {
+    const hold = await executeCommand(
+      holdBestAvailableCommand,
+      {
+        eventId: target.eventId,
+        ticketTypeId: String(input.ticketTypeId),
+        quantity: Number(input.quantity),
+        accessible: input.accessible === true,
+        ...(input.occurrenceId ? { occurrenceId: String(input.occurrenceId) } : {}),
+        ...(input.replaceToken ? { replaceToken: String(input.replaceToken) } : {}),
+        ...(channelCode ? { channelCode } : {}),
+      },
+      ctx,
+      ports,
+    );
+    return {
+      ok: true,
+      code: null,
+      hold: {
+        token: hold.token,
+        expiresAt: hold.expiresAt.getTime(),
+        pieces: hold.pieces,
+        seats: hold.seats.map((x) => ({ label: x.label, accessible: x.accessible, companion: x.companion })),
+      },
+    };
+  } catch (err) {
+    if (isDomainError(err)) return { ok: false, code: err.code, reason: String(err.details?.reason ?? '') };
+    throw err;
+  }
+}
+
+/** Give a best-available hold back (the buyer chose again, or chose their seats instead). */
+export async function releaseBestSeatsAction(slug: string, token: string): Promise<void> {
+  const target = await checkoutTarget(slug);
+  if (!target || !/^[A-Za-z0-9_-]{32}$/.test(String(token))) return;
+  await executeCommand(
+    releaseBestAvailableCommand,
+    { eventId: target.eventId, token: String(token) },
+    createCtx({ orgId: target.orgId, actor: { type: 'anonymous' } }),
+    ports,
+  ).catch(() => undefined);
 }

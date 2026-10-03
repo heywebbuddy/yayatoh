@@ -23,6 +23,11 @@ export interface CreatePaymentResult {
   readonly providerPaymentId: string;
   /** Hosted step the buyer must complete (a redirect for the fake provider and Stripe Checkout). */
   readonly redirectUrl: string;
+  /**
+   * M6.3a: the provider that created the payment when it differs from the deployment's (a sandbox
+   * org's fake payment on a Stripe deployment). Record this one on the order.
+   */
+  readonly provider?: 'fake' | 'stripe';
 }
 
 /** A verified provider notification, normalized. */

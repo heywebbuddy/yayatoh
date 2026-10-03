@@ -114,6 +114,8 @@ export default async function AudiencePage({
         template={null}
         preview={previewAudienceAction.bind(null, org)}
         ticketTypes={eventTicketTypesAction.bind(null, org)}
+        canMoney={roleCan(data.role, 'finance:read')}
+        contactsHref={roleCan(data.role, 'contacts:read') ? `/o/${org}/contacts` : null}
         save={saveAudienceAction.bind(null, org, saved.id)}
       />
     </>

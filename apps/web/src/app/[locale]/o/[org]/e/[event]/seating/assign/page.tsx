@@ -66,7 +66,13 @@ export default async function AssignSeatsPage({
   return (
     <>
       <PageHeader title={t('assign.title')} description={t('assign.description')} />
-      <SeatingTabs base={base} active="assign" finder={data.modules.has('seat_finder')} date={dateId} />
+      <SeatingTabs
+        base={base}
+        active="assign"
+        finder={data.modules.has('seat_finder')}
+        selection={data.modules.has('advanced_seating')}
+        date={dateId}
+      />
       <SeatingDatePicker
         base={`${base}/assign`}
         dates={dates}
