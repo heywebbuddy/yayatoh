@@ -206,7 +206,6 @@ export function TableBoardScreen({
   const locale = useLocale();
   const placeText = usePlaceText();
   const lines = useLinesPerPage();
-  // biome-ignore lint/correctness/useExhaustiveDependencies: `version` marks a new snapshot in the client.
   const groups: BoardGroup[] = useMemo(() => {
     const snap = client.guests.view();
     return snap ? boardGroups(snap, locale) : [];

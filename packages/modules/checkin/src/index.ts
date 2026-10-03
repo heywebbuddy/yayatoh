@@ -50,6 +50,7 @@ export {
   ARRIVAL_RESULTS,
   type ArrivalResult,
   DAY_OF_ARRIVALS_SHOWN,
+  DAY_OF_MATCHES,
   DayOfDto,
   dayOfQuery,
   GuestArrivalsInput,

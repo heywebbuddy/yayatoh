@@ -53,7 +53,6 @@ export function GuestCheckinPanel({
   const [labels, setLabels] = useState<string[]>([]);
   const [message, setMessage] = useState<string | null>(null);
   const [tick, setTick] = useState(0);
-  // biome-ignore lint/correctness/useExhaustiveDependencies: `version` and `tick` mark new data in the client.
   const snap: GuestSnapshot | null = useMemo(() => client.guests.view(), [client, version, tick]);
   const allLabels = useMemo(() => (snap ? snapshotLabels(snap, locale) : []), [snap, locale]);
   const results = useMemo(() => (snap ? searchGuests(snap, query, labels) : []), [snap, query, labels]);
@@ -114,7 +113,8 @@ export function GuestCheckinPanel({
         </p>
       </div>
       {allLabels.length ? (
-        <div role="group" aria-label={t('labels')} className="flex flex-wrap gap-2">
+        <fieldset className="m-0 flex flex-wrap gap-2 border-0 p-0">
+          <legend className="sr-only">{t('labels')}</legend>
           {allLabels.map((l) => {
             const on = labels.includes(l);
             return (
@@ -129,7 +129,7 @@ export function GuestCheckinPanel({
               </button>
             );
           })}
-        </div>
+        </fieldset>
       ) : null}
       <div role="status" aria-live="polite" data-testid="guest-message">
         {message ? <p className="text-body font-semibold text-success">{message}</p> : null}

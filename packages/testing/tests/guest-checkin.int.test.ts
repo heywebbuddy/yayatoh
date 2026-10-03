@@ -308,7 +308,7 @@ describe('the host: day-of view, check-in and undo', () => {
     ).rejects.toMatchObject({ code: 'not_found' });
   });
 
-  it('each org's wedding is its own: org A can't read org B's day-of view', async () => {
+  it("each org's wedding is its own: org A can't read org B's day-of view", async () => {
     const other = await guestCheckinScenario(b.org.id, { ctx: b.ctx() });
     const day = await executeQuery(dayOfQuery, { eventId: other.eventId }, b.ctx(), ports);
     expect(day.hasChart).toBe(true);

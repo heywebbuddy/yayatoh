@@ -3,6 +3,7 @@ import {
   earlierArrival,
   GUEST_SNAPSHOT_VERSION,
   type GuestSnapshot,
+  searchGuests,
 } from '@yayatoh/checkin-engine';
 import type { TenantTx } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
@@ -328,6 +329,7 @@ const PersonDto = z.object({
 });
 
 export const DAY_OF_ARRIVALS_SHOWN = 200;
+export const DAY_OF_MATCHES = 20;
 
 export const DayOfDto = z.object({
   eventId: z.uuid(),
@@ -355,6 +357,14 @@ export const DayOfDto = z.object({
   unseated: z.array(PersonDto.extend({ status: z.enum(['attending', 'pending']), arrived: z.boolean() })),
   /** Whether any chart (event plan or sub-event) has a floor plan. */
   hasChart: z.boolean(),
+  /** The host's search (`q`: a guest's or party's name), at most `DAY_OF_MATCHES` guests. */
+  matches: z.array(
+    PersonDto.extend({
+      status: z.enum(STATUSES),
+      arrivedAt: z.date().nullable(),
+      places: z.array(PlaceDto),
+    }),
+  ),
   /** Attending guests by meal (null: no choice yet), most first; arrived of them too. */
   meals: z.array(z.object({ meal: z.string().nullable(), guests: z.int(), arrived: z.int() })),
 });
@@ -363,7 +373,7 @@ export type DayOfDto = z.infer<typeof DayOfDto>;
 /** The host's day-of view: arrivals, unseated guests and meal counts. */
 export const dayOfQuery = tenantQuery({
   name: 'checkin.dayOf',
-  input: z.object({ eventId: z.uuid() }),
+  input: z.object({ eventId: z.uuid(), q: z.string().trim().max(80).default('') }),
   output: DayOfDto,
   entitlement: 'checkin',
   permission: 'guests:read',
@@ -436,6 +446,21 @@ export const dayOfQuery = tenantQuery({
           : [];
       }),
       unseated,
+      matches: input.q
+        ? searchGuests(snapshotOf(day, event.id, new Date()), input.q)
+            .flatMap((p) =>
+              p.guests.map((g) => ({
+                guestId: g.id,
+                name: g.name,
+                guestOf: g.guestOf,
+                partyName: p.name,
+                status: g.status,
+                arrivedAt: g.arrivedAt ? new Date(g.arrivedAt) : null,
+                places: [...g.places],
+              })),
+            )
+            .slice(0, DAY_OF_MATCHES)
+        : [],
       hasChart: day.charts.length > 0,
       meals: [...meals.entries()]
         .map(([meal, m]) => ({ meal, ...m }))
