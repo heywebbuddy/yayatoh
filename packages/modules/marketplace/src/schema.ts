@@ -4,6 +4,7 @@ import {
   bigint,
   boolean,
   check,
+  doublePrecision,
   index,
   integer,
   pgSchema,
@@ -57,6 +58,16 @@ export const publicListings = tenantTable(
     publishedAt: ts('published_at'),
     /** When the source last changed (sitemap lastmod). */
     sourceUpdatedAt: ts('source_updated_at').notNull(),
+    /** M6.14a: the event's platform category (search facet); null when the organizer set none. */
+    category: text('category'),
+    /**
+     * M6.14a: the venue's public location, rounded to 3 decimals (about 100 m) for geo search;
+     * null for online events and venues without coordinates.
+     */
+    latitude: doublePrecision('latitude'),
+    longitude: doublePrecision('longitude'),
+    /** M6.14a: a public popularity signal (the organizer's visible reviews), for recommendations. */
+    popularity: integer('popularity').notNull().default(0),
   },
   (t) => [
     uniqueIndex('public_listings_org_event_key').on(t.orgId, t.eventId),
@@ -67,6 +78,11 @@ export const publicListings = tenantTable(
     index('public_listings_marketplace_starts_at_idx').on(t.startsAt).where(sql`on_marketplace`),
     check('public_listings_status_check', sql`status in ('published', 'postponed')`),
     check('public_listings_price_check', sql`min_price_minor is null or min_price_minor <= max_price_minor`),
+    check(
+      'public_listings_geo_check',
+      sql`(latitude is null) = (longitude is null) and (latitude is null or (latitude between -90 and 90 and longitude between -180 and 180))`,
+    ),
+    check('public_listings_popularity_check', sql`popularity >= 0`),
   ],
 );
 
@@ -117,5 +133,26 @@ export const legacyRedirects = tenantTable(
     check('legacy_redirects_status_check', sql`status in (301, 302, 307, 308)`),
     check('legacy_redirects_source_check', sql`source ~ '^/' and length(source) <= 2000`),
     check('legacy_redirects_target_check', sql`target ~ '^(/|https://)' and length(target) <= 2000`),
+  ],
+);
+
+/**
+ * M6.14a listing moderation: staff hide a listing from the marketplace and its search (or show it
+ * again), always with a reason. One row per event; the history is the audit log. The projector
+ * reads it, so a hidden listing stays hidden through every rebuild. The organizer's own tenant site
+ * is not affected.
+ */
+export const listingModeration = tenantTable(
+  marketplaceSchema,
+  'listing_moderation',
+  {
+    eventId: uuid('event_id').notNull(),
+    hidden: boolean('hidden').notNull(),
+    reason: text('reason').notNull(),
+  },
+  (t) => [
+    uniqueIndex('listing_moderation_org_event_key').on(t.orgId, t.eventId),
+    index('listing_moderation_org_id_hidden_idx').on(t.orgId, t.hidden),
+    check('listing_moderation_reason_check', sql`length(reason) between 1 and 500`),
   ],
 );

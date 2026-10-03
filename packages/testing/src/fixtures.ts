@@ -190,7 +190,12 @@ import {
   recordClickCommand,
   setAttributionWindowCommand,
 } from '@yayatoh/marketing';
-import { addLegacyRedirectCommand, catchUpListings, updateSiteSettingsCommand } from '@yayatoh/marketplace';
+import {
+  addLegacyRedirectCommand,
+  catchUpListings,
+  moderateListingCommand,
+  updateSiteSettingsCommand,
+} from '@yayatoh/marketplace';
 import { uploadLogo, uploadMedia, uploadProgramImage, uploadSpeakerPortalFile } from '@yayatoh/media';
 import {
   announcementMailer,
@@ -1230,6 +1235,14 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     systemCtx(org.id),
     ports,
   );
+  // M6.14a: staff hid the listing and showed it again (moderation row, isolation coverage).
+  for (const hidden of [true, false])
+    await executeCommand(
+      moderateListingCommand,
+      { eventId: event.id, hidden, reason: `fixture ${hidden ? 'hide' : 'unhide'}` },
+      systemCtx(org.id),
+      ports,
+    );
   // Notifications (M1.10): a queued and a sent message, an inbox item, a preference, a push
   // token, a template override and an unsubscribe (isolation coverage).
   const notifier = createNotifier();
