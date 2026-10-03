@@ -18,13 +18,13 @@ type ObjectType = (typeof OBJECT_TYPES)[number];
 
 /** Object colours by type (tokens only): the stage stands out, entrances and exits read at a glance. */
 const OBJECT_STYLE: Record<ObjectType, { box: string; text: string }> = {
-  stage: { box: 'fill-zinc-800 stroke-zinc-900', text: 'fill-white' },
-  entrance: { box: 'fill-green-50 stroke-green-700', text: 'fill-green-700' },
-  exit: { box: 'fill-pink-50 stroke-pink-700', text: 'fill-pink-700' },
-  dance_floor: { box: 'fill-accent-100 stroke-accent-700', text: 'fill-zinc-800' },
-  bar: { box: 'fill-accent-300 stroke-accent-700', text: 'fill-zinc-800' },
-  booth: { box: 'fill-zinc-200 stroke-zinc-500', text: 'fill-zinc-800' },
-  custom: { box: 'fill-zinc-100 stroke-zinc-400', text: 'fill-zinc-700' },
+  stage: { box: 'fill-ink stroke-ink', text: 'fill-white' },
+  entrance: { box: 'fill-success-soft stroke-success-dot', text: 'fill-success-dot' },
+  exit: { box: 'fill-danger-soft stroke-danger', text: 'fill-danger' },
+  dance_floor: { box: 'fill-primary-soft stroke-primary', text: 'fill-ink' },
+  bar: { box: 'fill-primary-soft stroke-primary', text: 'fill-ink' },
+  booth: { box: 'fill-surface-3 stroke-ink-3', text: 'fill-ink' },
+  custom: { box: 'fill-surface-3 stroke-ink-3', text: 'fill-ink' },
 };
 const ZOOMS = [1, 1.5, 2.25, 3.5, 5] as const;
 const SEAT_R = 22;
@@ -146,7 +146,7 @@ export function VenueMap({
           <Maximize aria-hidden="true" className="size-4" />
           {t('reset')}
         </Button>
-        <p role="status" className="ms-auto text-caption text-zinc-600">
+        <p role="status" className="ms-auto text-caption text-ink-2">
           {t('zoom', { percent: Math.round(z * 100) })}
         </p>
       </div>
@@ -164,7 +164,7 @@ export function VenueMap({
         onPointerMove={onPointerMove}
         onPointerUp={endDrag}
         onPointerCancel={endDrag}
-        className={`overflow-hidden rounded-card border border-zinc-200 bg-zinc-50 focus-visible:outline-2 focus-visible:outline-offset-2 ${view.zoom > 0 ? 'cursor-grab touch-none' : ''}`}
+        className={`overflow-hidden rounded-card border border-line bg-surface-2 focus-visible:outline-2 focus-visible:outline-offset-2 ${view.zoom > 0 ? 'cursor-grab touch-none' : ''}`}
       >
         <svg
           data-testid="venue-map"
@@ -178,7 +178,7 @@ export function VenueMap({
           <rect
             width={doc.width}
             height={doc.height}
-            className="fill-white stroke-zinc-300"
+            className="fill-surface-solid stroke-ink-3"
             strokeWidth={4}
           />
           {doc.items.map((item) => {
@@ -225,14 +225,14 @@ export function VenueMap({
               >
                 {item.kind === 'table' ? (
                   item.shape === 'round' ? (
-                    <circle r={item.width / 2} className="fill-zinc-100 stroke-zinc-400" strokeWidth={3} />
+                    <circle r={item.width / 2} className="fill-surface-3 stroke-ink-3" strokeWidth={3} />
                   ) : (
                     <rect
                       x={-item.width / 2}
                       y={-item.height / 2}
                       width={item.width}
                       height={item.height}
-                      className="fill-zinc-100 stroke-zinc-400"
+                      className="fill-surface-3 stroke-ink-3"
                       strokeWidth={3}
                     />
                   )
@@ -257,7 +257,7 @@ export function VenueMap({
                 cx={s.x}
                 cy={s.y}
                 r={SEAT_R}
-                className="fill-white stroke-zinc-400"
+                className="fill-surface-solid stroke-ink-3"
                 strokeWidth={3}
               />
             ),
@@ -271,21 +271,21 @@ export function VenueMap({
                   cx={s.x}
                   cy={s.y}
                   r={SEAT_R * 2.4}
-                  className="fill-none stroke-accent-900"
+                  className="fill-none stroke-primary"
                   strokeWidth={8}
                 />
                 <circle
                   cx={s.x}
                   cy={s.y}
                   r={SEAT_R + 4}
-                  className="fill-accent-900 stroke-ink"
+                  className="fill-primary stroke-ink"
                   strokeWidth={4}
                 />
               </g>
             ))}
         </svg>
       </div>
-      <p id={keysId} className="text-caption text-zinc-500">
+      <p id={keysId} className="text-caption text-ink-2">
         {t('keys')}
       </p>
     </div>

@@ -5,10 +5,12 @@ import {
   addOrderNoteCommand,
   declineRefundRequestCommand,
   issueCreditNoteCommand,
+  OFFLINE_METHODS,
   orderDetailQuery,
   REFUND_REASONS,
   type RefundOutcome,
   type RefundReason,
+  recordInvoicePaymentCommand,
   refundOrder,
   refundRequestsQuery,
   reissueManageLinkCommand,
@@ -16,6 +18,7 @@ import {
   startPolicyOverrideRefundCommand,
   startRefundCommand,
   supportMacrosQuery,
+  voidInvoiceCommand,
 } from '@yayatoh/orders';
 import { cancelTransferCommand, startTransferCommand } from '@yayatoh/ticketing';
 import { revalidatePath } from 'next/cache';
@@ -352,4 +355,67 @@ export async function runMacroAction(
     // A transfer macro's recipient fields are nested: point at the transfer fieldset.
     return s.fields?.some((f) => f === 'transfer') ? { ...s, fields: ['transfer'] } : s;
   }
+}
+
+/** M5.1d finance: record a payment received for the order's invoice (check, wire, cash), idempotent per form. */
+export async function recordInvoicePaymentAction(
+  org: string,
+  event: string,
+  orderId: string,
+  _prev: SupportState,
+  form: FormData,
+): Promise<SupportState> {
+  try {
+    const { data, ev } = await orderOfEvent(org, event, orderId);
+    const raw = String(form.get('amount') ?? '')
+      .trim()
+      .replace(',', '.');
+    if (!/^\d+(\.\d{1,3})?$/.test(raw) || Number(raw) <= 0)
+      return { ok: false, code: 'validation_failed', fields: ['amount'], reason: 'amount_required' };
+    const receivedOn = String(form.get('receivedOn') ?? '');
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(receivedOn))
+      return { ok: false, code: 'validation_failed', fields: ['receivedOn'], reason: 'date_required' };
+    const method = String(form.get('method') ?? '');
+    const key = String(form.get('key') ?? '');
+    await executeCommand(
+      recordInvoicePaymentCommand,
+      {
+        orderId,
+        amountMinor: moneyFromDecimal(raw, ev.currency).amount,
+        method: (OFFLINE_METHODS as readonly string[]).includes(method) ? method : 'other',
+        reference: String(form.get('reference') ?? ''),
+        receivedOn,
+        note: String(form.get('note') ?? ''),
+      },
+      { ...data.ctx, idempotencyKey: key ? `invoice-payment:${key}` : null },
+      ports,
+    );
+    revalidatePath(`/o/${org}/e/${event}/orders/${orderId}`);
+    return success();
+  } catch (err) {
+    return failure(err);
+  }
+}
+
+/** M5.1d finance: void an unpaid invoice (the order, its tickets and the place go), with a reason. */
+export async function voidInvoiceAction(
+  org: string,
+  event: string,
+  orderId: string,
+  _prev: SupportState,
+  form: FormData,
+): Promise<SupportState> {
+  try {
+    const { data } = await orderOfEvent(org, event, orderId);
+    await executeCommand(
+      voidInvoiceCommand,
+      { orderId, reason: String(form.get('reason') ?? '') },
+      data.ctx,
+      ports,
+    );
+  } catch (err) {
+    return failure(err);
+  }
+  revalidatePath(`/o/${org}/e/${event}/orders/${orderId}`);
+  return success();
 }

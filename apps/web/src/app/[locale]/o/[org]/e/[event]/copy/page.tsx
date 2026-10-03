@@ -35,7 +35,7 @@ export default async function CopyPage({
         <h2 id="duplicate-heading" className="text-section">
           {t('copy.duplicate')}
         </h2>
-        <p className="text-body text-zinc-600">{t('copy.duplicateHint')}</p>
+        <p className="text-body text-ink-2">{t('copy.duplicateHint')}</p>
         <Card>
           <CopyEventForm
             idPrefix="duplicate"
@@ -52,7 +52,7 @@ export default async function CopyPage({
         <h2 id="template-heading" className="text-section">
           {t('copy.template')}
         </h2>
-        <p className="text-body text-zinc-600">{t('copy.templateHint')}</p>
+        <p className="text-body text-ink-2">{t('copy.templateHint')}</p>
         <Card>
           <SaveTemplateForm
             action={saveTemplateAction.bind(null, org, event)}

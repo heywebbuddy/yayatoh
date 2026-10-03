@@ -140,13 +140,13 @@ function StepUpDialog({ onDone }: { onDone: (ok: boolean) => void }) {
         e.preventDefault();
         finish(false);
       }}
-      className="m-auto w-[min(440px,calc(100vw-2rem))] rounded-panel border border-zinc-200 bg-white p-6 text-zinc-900 shadow-xl backdrop:bg-zinc-900/40"
+      className="m-auto w-[min(440px,calc(100vw-2rem))] rounded-panel border border-line bg-surface p-6 text-ink elevation-pop backdrop:bg-scrim"
     >
       <form onSubmit={onSubmit} className="flex flex-col gap-4" noValidate>
         <h2 id={titleId} className="text-section">
           {t('title')}
         </h2>
-        <div id={descId} className="flex flex-col gap-1.5 text-body text-zinc-600">
+        <div id={descId} className="flex flex-col gap-1.5 text-body text-ink-2">
           <p>{t('why')}</p>
           {method ? <p>{t(`explain.${method}`)}</p> : <p aria-live="polite">{t('loading')}</p>}
         </div>

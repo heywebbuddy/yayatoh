@@ -51,10 +51,10 @@ export default async function HelpSearch({ params, searchParams }: Props) {
       query={q}
       crumbs={[{ label: t('title'), href: '/help' }, { label: t('search.title') }]}
     >
-      <h1 className="text-[32px] leading-tight font-light tracking-[-0.03em] break-words">
+      <h1 className="text-[32px] leading-tight font-extrabold tracking-[-0.03em] break-words">
         {q ? t('search.resultsFor', { query: q }) : t('search.title')}
       </h1>
-      <p role="status" className="text-body text-zinc-600">
+      <p role="status" className="text-body text-ink-2">
         {q ? t('search.count', { count: ranked.length }) : t('search.prompt')}
       </p>
       {q && results.length === 0 ? (
@@ -74,7 +74,7 @@ export default async function HelpSearch({ params, searchParams }: Props) {
               >
                 {doc.title}
               </Link>
-              <p className="text-body break-words text-zinc-600">{doc.summary ?? plainExcerpt(doc.body)}</p>
+              <p className="text-body break-words text-ink-2">{doc.summary ?? plainExcerpt(doc.body)}</p>
             </li>
           ))}
         </ol>

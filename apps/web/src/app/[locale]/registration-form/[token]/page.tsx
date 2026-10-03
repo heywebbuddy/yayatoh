@@ -43,11 +43,11 @@ export default async function RegistrationFormTokenPage({
     >
       {view.state === 'submitted' ? (
         <>
-          <p className="text-caption text-zinc-600">
+          <p className="text-caption text-ink-2">
             <Label>{view.eventName}</Label>
           </p>
           <SubmittedHeading title={t('submittedTitle')} />
-          <p className="text-body text-zinc-600">{t('submittedDescription', { name: view.name })}</p>
+          <p className="text-body text-ink-2">{t('submittedDescription', { name: view.name })}</p>
         </>
       ) : view.state === 'expired' || !view.page ? (
         <>

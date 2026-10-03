@@ -4,8 +4,25 @@ export {
   type ButtonSize,
   type ButtonVariant,
   buttonClass,
+  IconButton,
+  type IconButtonProps,
+  iconButtonClass,
+  Spinner,
 } from './components/button.tsx';
-export { Card, CardLabel, type CardProps } from './components/card.tsx';
+export {
+  type BarTone,
+  Card,
+  CardHeader,
+  CardLabel,
+  type CardProps,
+  type CardTone,
+  cardClass,
+  type DeltaTone,
+  HighlightCard,
+  ProgressBar,
+  StatCard,
+  widthClass,
+} from './components/card.tsx';
 export {
   type Bar,
   BarChart,
@@ -18,20 +35,88 @@ export {
   type SeriesTone,
   swatchClass,
 } from './components/charts.tsx';
-export { Input, type InputProps } from './components/input.tsx';
+export {
+  Checkbox,
+  Field,
+  FieldMessage,
+  fieldClass,
+  Input,
+  type InputProps,
+  Radio,
+  Select,
+  type SelectProps,
+  Switch,
+  Textarea,
+  type TextareaProps,
+} from './components/input.tsx';
+export {
+  Badge,
+  type BadgeTone,
+  Chip,
+  Kbd,
+  Label,
+  StatusDot,
+  StatusPill,
+  Tag,
+} from './components/labels.tsx';
+export {
+  Breadcrumb,
+  type Crumb,
+  filterChipClass,
+  NavSection,
+  navItemClass,
+  navTileClass,
+  Pagination,
+  SearchPill,
+  TabCount,
+  Tabs,
+  tabClass,
+} from './components/navigation.tsx';
+export {
+  Menu,
+  type MenuItem,
+  Modal,
+  Sheet,
+  type ToastInput,
+  ToastProvider,
+  Tooltip,
+  useToast,
+} from './components/overlays.tsx';
+export {
+  Avatar,
+  type AvatarSize,
+  AvatarStack,
+  avatarTone,
+  CheckDisc,
+  PersonChip,
+} from './components/people.tsx';
 export {
   Alert,
-  Avatar,
-  Chip,
   EmptyState,
-  Label,
-  navItemClass,
+  ErrorState,
+  type LaneItem,
   PageHeader,
-  SearchPill,
+  ScheduleLane,
+  SectionHeader,
   Skeleton,
+  SkeletonCard,
+  SkeletonText,
+  type Step,
+  Stepper,
+  Timeline,
 } from './components/primitives.tsx';
-export { StatusDot } from './components/status-dot.tsx';
 export { type Column, Table, type TableProps } from './components/table.tsx';
-export { brandPalette, contrastRatio, luminance } from './contrast.ts';
+export {
+  backdrops,
+  brandPalette,
+  composite,
+  contrastFailures,
+  contrastRatio,
+  luminance,
+  type Mode,
+  PAIRS,
+  pageSurfaces,
+  parseColor,
+} from './contrast.ts';
 export { cx } from './cx.ts';
 export * from './tokens.ts';

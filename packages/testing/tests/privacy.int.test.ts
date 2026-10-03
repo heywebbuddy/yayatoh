@@ -327,6 +327,13 @@ describe('retention', () => {
         ),
       )
     )[0]?.id as string;
+    // The fixture's own lapsed orders (M4.8a: a gift order that expired unpaid) count too.
+    const [fixture] = await withTenant(o.ctx(), (tx) =>
+      tx.execute<{ n: number }>(
+        sql`select count(*)::int as n from orders.orders
+          where status in ('expired', 'cancelled') and buyer_email <> ${ERASED_EMAIL}`,
+      ),
+    );
     const c = await executeCommand(
       startCheckoutCommand,
       {
@@ -346,7 +353,9 @@ describe('retention', () => {
     );
     const at = (days: number) => ({ ...systemCtx(o.org.id), now: new Date(Date.now() + days * 86_400_000) });
     expect((await executeCommand(retentionCommand, {}, at(29), ports)).abandonedOrders).toBe(0);
-    expect((await executeCommand(retentionCommand, {}, at(31), ports)).abandonedOrders).toBe(1);
+    expect((await executeCommand(retentionCommand, {}, at(31), ports)).abandonedOrders).toBe(
+      1 + (fixture?.n ?? 0),
+    );
     const [row] = await withTenant(o.ctx(), (tx) =>
       tx.execute<{ buyer_email: string; buyer_name: string; total_minor: string }>(
         sql`select buyer_email, buyer_name, total_minor::text from orders.orders where id = ${c.order.id}`,

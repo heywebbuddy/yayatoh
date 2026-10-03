@@ -31,7 +31,7 @@ export function GuestHelpForm({ action }: { action: Act }) {
         {GUEST_REASONS.map((r) => (
           <label
             key={r}
-            className="flex min-h-11 cursor-pointer items-center gap-3 rounded-card border border-zinc-200 px-4 text-body has-[:checked]:border-ink"
+            className="flex min-h-11 cursor-pointer items-center gap-3 rounded-card border border-line px-4 text-body has-[:checked]:border-ink"
           >
             <input
               type="radio"
@@ -49,7 +49,7 @@ export function GuestHelpForm({ action }: { action: Act }) {
       {reason === 'medical' ? (
         <div
           role="alert"
-          className="flex flex-col gap-1 rounded-card border-2 border-pink-700 bg-pink-50 px-4 py-3 text-pink-700"
+          className="flex flex-col gap-1 rounded-card border-2 border-danger bg-danger-soft px-4 py-3 text-danger"
         >
           <p className="text-body font-medium">{t('guest.emergencyTitle')}</p>
           <p className="text-body">{t('guest.emergencyBody')}</p>
@@ -59,7 +59,7 @@ export function GuestHelpForm({ action }: { action: Act }) {
         <label htmlFor="help-location" className="text-body font-medium">
           {t('guest.locationLabel')}
         </label>
-        <p id="help-location-hint" className="text-caption text-zinc-600">
+        <p id="help-location-hint" className="text-caption text-ink-2">
           {t('guest.locationHint')}
         </p>
         <input
@@ -69,7 +69,7 @@ export function GuestHelpForm({ action }: { action: Act }) {
           maxLength={LOCATION_MAX}
           aria-describedby="help-location-hint"
           aria-invalid={state.error === 'locationTooLong' ? true : undefined}
-          className="min-h-11 rounded-pill border border-zinc-200 bg-white px-4 text-body"
+          className="field"
         />
       </div>
       <div className="flex flex-col gap-1">
@@ -83,10 +83,10 @@ export function GuestHelpForm({ action }: { action: Act }) {
           defaultValue={state.note ?? ''}
           maxLength={NOTE_MAX}
           aria-invalid={state.error === 'noteTooLong' ? true : undefined}
-          className="rounded-card border border-zinc-200 bg-white px-4 py-2 text-body"
+          className="field w-full py-3 leading-relaxed"
         />
       </div>
-      <p className="text-caption text-zinc-600">{t('guest.privacy')}</p>
+      <p className="text-caption text-ink-2">{t('guest.privacy')}</p>
       <Button type="submit" disabled={pending} className="self-start">
         {t('guest.submit')}
       </Button>

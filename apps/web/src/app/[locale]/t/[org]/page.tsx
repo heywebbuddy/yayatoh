@@ -48,7 +48,7 @@ export default async function TenantHome({ params, searchParams }: Props) {
   const listings = await cachedTenantListings(orgId, page);
   const t = await getTranslations('market');
   return (
-    <div className="min-h-dvh bg-white">
+    <div className="min-h-dvh bg-surface">
       <TenantHeader org={o} current="/" />
       <main id="main" className="flex flex-col gap-8">
         <OrgHero orgId={orgId} eyebrow={t('tenant.eyebrow')} name={o.name} brandColor={o.brandColor} />
@@ -56,7 +56,7 @@ export default async function TenantHome({ params, searchParams }: Props) {
           aria-labelledby="upcoming-heading"
           className="mx-auto flex w-full max-w-6xl flex-col gap-4 px-4 md:px-6"
         >
-          <h2 id="upcoming-heading" className="text-[28px] font-normal tracking-[-0.03em]">
+          <h2 id="upcoming-heading" className="text-[28px] font-extrabold tracking-[-0.03em]">
             {t('upcoming')}
           </h2>
           <ListingGrid
@@ -74,7 +74,7 @@ export default async function TenantHome({ params, searchParams }: Props) {
       </main>
       <SiteFooter>
         {o.poweredByVisible ? (
-          <a href="https://yayatoh.com" className="self-start text-caption text-zinc-500 underline">
+          <a href="https://yayatoh.com" className="self-start text-caption text-ink-2 underline">
             {t('poweredBy')}
           </a>
         ) : null}

@@ -14,7 +14,7 @@ import { type Marking, planMarks, pointFromPlan, UnderlayPanel } from './seating
 // Konva needs the browser: the canvas loads on the client only.
 const SeatingCanvas = dynamic(() => import('./seating-canvas.tsx'), { ssr: false });
 
-const field = 'min-h-8 w-20 rounded-pill border border-zinc-200 bg-white px-3 text-caption';
+const field = 'field field-sm w-20';
 const clampRot = (r: number) => ((Math.round(r) % 360) + 360) % 360;
 /** "1, 2, 10" → the labels (case and spacing aside). */
 const labelList = (v: string) =>
@@ -38,6 +38,7 @@ export function SeatingEditor({
   locked,
   saveDoc,
   underlayTicket = null,
+  sponsors = {},
 }: {
   initialDoc: FloorplanDoc;
   seatStatus: Readonly<Record<string, SeatStatus>>;
@@ -45,6 +46,8 @@ export function SeatingEditor({
   saveDoc: (doc: FloorplanDoc) => Promise<SeatingState>;
   /** Upload ticket for floor plan images (M1.7g); null for people who can't change the plan. */
   underlayTicket?: string | null;
+  /** M4.2b hosted tables: sponsor names by table item id, shown on the plan and in the list. */
+  sponsors?: Readonly<Record<string, string>>;
 }) {
   const t = useTranslations('seating.editor');
   // Live seat states (M1.7f) when the page follows the seat stream; else the server's.
@@ -195,7 +198,7 @@ export function SeatingEditor({
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-wrap items-center gap-2" role="toolbar" aria-label={t('toolbar')}>
-        <label className="flex items-center gap-1 text-caption text-zinc-600">
+        <label className="flex items-center gap-1 text-caption text-ink-2">
           {t('seats')}
           <input
             type="number"
@@ -219,7 +222,7 @@ export function SeatingEditor({
         >
           {t('addRow')}
         </Button>
-        <label className="flex items-center gap-1 text-caption text-zinc-600">
+        <label className="flex items-center gap-1 text-caption text-ink-2">
           {t('seats')}
           <input
             type="number"
@@ -247,7 +250,7 @@ export function SeatingEditor({
           aria-label={t('objectType')}
           value={objectType}
           onChange={(e) => setObjectType(e.currentTarget.value as (typeof OBJECT_TYPES)[number])}
-          className="min-h-8 rounded-pill border border-zinc-200 bg-white px-3 text-caption"
+          className="field field-sm"
           disabled={locked}
         >
           {OBJECT_TYPES.map((o) => (
@@ -276,7 +279,7 @@ export function SeatingEditor({
         >
           {t('addObject')}
         </Button>
-        <span className="mx-2 h-6 w-px bg-zinc-200" aria-hidden="true" />
+        <span className="mx-2 h-6 w-px bg-line" aria-hidden="true" />
         <Button
           size="sm"
           variant="ghost"
@@ -294,7 +297,7 @@ export function SeatingEditor({
         <Button size="sm" variant="ghost" disabled={locked || !future.length} onClick={redo}>
           {t('redo')}
         </Button>
-        <p role="status" className="ms-auto text-caption text-zinc-600">
+        <p role="status" className="ms-auto text-caption text-ink-2">
           {locked
             ? t('locked')
             : save === 'error'
@@ -322,6 +325,7 @@ export function SeatingEditor({
           onMove={onMove}
           onPoint={marking ? onPoint : undefined}
           marks={planMarks(doc.underlay, points)}
+          sponsors={sponsors}
         />
       </div>
       <SeatLegend />
@@ -335,14 +339,14 @@ export function SeatingEditor({
         points={points}
         setPoints={setPoints}
       />
-      <p id="seating-keys" className="text-caption text-zinc-500">
+      <p id="seating-keys" className="text-caption text-ink-2">
         {t('keys')}
       </p>
 
       <div className="overflow-x-auto">
         <table className="w-full text-start text-caption">
           <caption className="sr-only">{t('listCaption')}</caption>
-          <thead className="text-zinc-500">
+          <thead className="text-ink-2">
             <tr>
               <th scope="col" className="py-1 pe-3 text-start font-normal">
                 {t('select')}
@@ -372,7 +376,7 @@ export function SeatingEditor({
           </thead>
           <tbody>
             {doc.items.map((item) => (
-              <tr key={item.id} className="border-t border-zinc-100">
+              <tr key={item.id} className="border-t border-line">
                 <td className="py-1 pe-3">
                   <input
                     type="checkbox"
@@ -399,12 +403,17 @@ export function SeatingEditor({
                     maxLength={40}
                     disabled={locked}
                     aria-label={t('labelOf', { item: item.label || item.kind })}
-                    className="min-h-8 w-28 rounded-pill border border-zinc-200 bg-white px-3 text-caption"
+                    className="field field-sm w-28"
                     onBlur={(e) => {
                       const v = e.currentTarget.value.trim();
                       if (v && v !== item.label) update(item.id, (i) => ({ ...i, label: v }));
                     }}
                   />
+                  {sponsors[item.id] ? (
+                    <span className="block text-caption text-ink-2" data-sponsor>
+                      {t('sponsoredBy', { sponsor: sponsors[item.id] ?? '' })}
+                    </span>
+                  ) : null}
                 </td>
                 <td className="py-1 pe-3 tabular-nums">{item.kind === 'object' ? '—' : item.seats.length}</td>
                 <td className="py-1 pe-3">
@@ -424,7 +433,7 @@ export function SeatingEditor({
                       disabled={locked}
                       aria-label={t('accessibleOf', { item: item.label })}
                       aria-describedby="accessible-hint"
-                      className="min-h-8 w-28 rounded-pill border border-zinc-200 bg-white px-3 text-caption"
+                      className="field field-sm w-28"
                       onBlur={(e) => {
                         const want = labelList(e.currentTarget.value);
                         const next = item.seats.map((x) => ({
@@ -448,11 +457,11 @@ export function SeatingEditor({
           </tbody>
         </table>
       </div>
-      <p id="accessible-hint" className="text-caption text-zinc-500">
+      <p id="accessible-hint" className="text-caption text-ink-2">
         {t('accessibleHint')}
       </p>
       {selectedItems.length ? (
-        <p className="text-caption text-zinc-600">{t('selectedCount', { count: selectedItems.length })}</p>
+        <p className="text-caption text-ink-2">{t('selectedCount', { count: selectedItems.length })}</p>
       ) : null}
     </div>
   );

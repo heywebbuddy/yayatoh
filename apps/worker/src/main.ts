@@ -26,8 +26,9 @@ import { JOBS, subscribers } from './registry.ts';
 import { relayOnce } from './relay.ts';
 import { runRetention } from './retention.ts';
 import { runSettlements } from './settlements.ts';
-import { alertDisputeDeadlines, sweepExpiredHolds, sweepWaitlists } from './sweeper.ts';
+import { alertDisputeDeadlines, sweepEnrollments, sweepExpiredHolds, sweepWaitlists } from './sweeper.ts';
 import { startWorker } from './worker.ts';
+import { runYearEndStatements } from './year-end.ts';
 
 const connectionString = process.env.JOBS_DATABASE_URL;
 if (!connectionString) throw new Error('JOBS_DATABASE_URL is not set (see .env.example)');
@@ -94,7 +95,10 @@ setInterval(() => {
   sweepExpiredHolds()
     .catch((err) => console.error('sweeper', err))
     .then(() => sweepWaitlists())
-    .catch((err) => console.error('waitlist sweeper', err));
+    .catch((err) => console.error('waitlist sweeper', err))
+    // M5.2b: lapsed session offers, then session lines with free places.
+    .then(() => sweepEnrollments())
+    .catch((err) => console.error('enrollment sweeper', err));
 }, 30_000).unref();
 
 // Dispute evidence deadline alerts (M3.10c): hourly (leader only); each level is raised once.
@@ -276,6 +280,24 @@ const retain = () => {
 };
 setTimeout(retain, 10 * 60_000).unref();
 setInterval(retain, 24 * 3_600_000).unref();
+
+// Year-end giving statements (M4.8b): daily, first run 15 minutes after start (leader only). Each
+// org's previous calendar year in its own timezone; donors already stated are skipped.
+let stating = false;
+const stateYearEnd = () => {
+  if (!release || stopping || stating) return;
+  stating = true;
+  runYearEndStatements()
+    .then((r) => {
+      if (r.issued || r.failed) console.info(JSON.stringify({ job: 'donations.year-end', ...r }));
+    })
+    .catch((err) => console.error('year-end statements', err))
+    .finally(() => {
+      stating = false;
+    });
+};
+setTimeout(stateYearEnd, 15 * 60_000).unref();
+setInterval(stateYearEnd, 24 * 3_600_000).unref();
 
 // Alert engine (M3.2b): live and pre-show events every 30 s, everything else every 5 minutes (leader only).
 const alertDeps = { notifier: createNotifier() };

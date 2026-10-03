@@ -1,7 +1,7 @@
 import { LOCALES, type Locale, RTL_LOCALES } from '@yayatoh/contracts';
 import { formatMoney, money } from '@yayatoh/kernel';
 import { html, SafeHtml } from '@yayatoh/pdf';
-import { color, radius } from '@yayatoh/ui/tokens';
+import { constant, email, radius } from '@yayatoh/ui/tokens';
 import { IntlMessageFormat } from 'intl-messageformat';
 import { type Category, kindOf, type MessageKind } from '../kinds.ts';
 import ar from './messages/ar.json' with { type: 'json' };
@@ -91,7 +91,7 @@ export function textOn(hex: string): string {
   const l = 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
   const onWhite = 1.05 / (l + 0.05);
   const onBlack = (l + 0.05) / 0.05;
-  return onWhite >= onBlack ? color.white : color.black;
+  return onWhite >= onBlack ? constant.white : constant.black;
 }
 
 /**
@@ -121,6 +121,11 @@ function values(input: RenderInput, locale: Locale, cat: Catalog): Record<string
       timeZone: tz,
     }).format(new Date(until));
   }
+  // M5.1d: an invoice's due date (a calendar day, shown as written).
+  if (typeof p.dueOn === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(p.dueOn))
+    out.due = new Intl.DateTimeFormat(locale, { dateStyle: 'long', timeZone: 'UTC' }).format(
+      new Date(`${p.dueOn}T00:00:00Z`),
+    );
   // Alert copy (M3.2b): small counts spelled out per the locale's rule.
   if (typeof p.count === 'number') out.countWords = countWords(p.count, locale);
   if (typeof p.role === 'string') out.role = cat.roles[p.role as keyof Catalog['roles']] ?? p.role;
@@ -181,14 +186,14 @@ export function renderMessage(input: RenderInput): RenderedMessage {
   const sentBy = format(cat.common.sentBy, lang, v);
   const unsubscribe = input.unsubscribeUrl && def.category !== 'transactional' ? input.unsubscribeUrl : null;
 
-  const brand = input.org.brandColor ?? color.ink;
+  const brand = input.org.brandColor ?? email.button;
   const onBrand = textOn(brand);
   const paragraphs = (text: string) =>
     text
       .split(/\n{2,}/)
       .map(
         (para) =>
-          html`<p style="margin:0 0 16px;font-size:15px;line-height:1.5;color:${color.zinc[800]};">${para
+          html`<p style="margin:0 0 16px;font-size:15px;line-height:1.5;color:${email.body};">${para
             .split('\n')
             .map((line, i) => (i === 0 ? html`${line}` : html`<br>${line}`))}</p>`,
       );
@@ -201,33 +206,33 @@ export function renderMessage(input: RenderInput): RenderedMessage {
 <meta name="color-scheme" content="light">
 <title>${subject}</title>
 </head>
-<body style="margin:0;padding:0;background:${color.zinc[100]};font-family:'Helvetica Neue',Arial,'Noto Sans Arabic','Noto Sans Devanagari','Noto Sans SC','Noto Sans TC','Noto Sans JP',sans-serif;">
+<body style="margin:0;padding:0;background:${email.page};font-family:'Helvetica Neue',Arial,'Noto Sans Arabic','Noto Sans Devanagari','Noto Sans SC','Noto Sans TC','Noto Sans JP',sans-serif;">
 <div style="display:none;max-height:0;overflow:hidden;">${intro}</div>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${color.zinc[100]};">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${email.page};">
 <tr><td align="center" style="padding:24px 12px;">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" dir="${dir}" style="max-width:560px;background:${color.white};border-radius:${radius.card};overflow:hidden;text-align:start;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" dir="${dir}" style="max-width:560px;background:${email.card};border-radius:${radius.card};overflow:hidden;text-align:start;">
 <tr><td style="background:${brand};color:${onBrand};padding:18px 28px;font-size:16px;font-weight:600;">${
     input.org.logoUrl && /^https?:\/\//.test(input.org.logoUrl)
-      ? html`<img src="${input.org.logoUrl}" alt="${input.org.logoAlt ?? input.org.name}" height="40" style="display:block;height:40px;width:auto;max-width:200px;border:0;margin:0 0 8px;background:${color.white};border-radius:6px;padding:4px;">`
+      ? html`<img src="${input.org.logoUrl}" alt="${input.org.logoAlt ?? input.org.name}" height="40" style="display:block;height:40px;width:auto;max-width:200px;border:0;margin:0 0 8px;background:${email.card};border-radius:6px;padding:4px;">`
       : ''
   }${input.org.name}</td></tr>
 <tr><td style="padding:28px 28px 8px;">
-<h1 style="margin:0 0 16px;font-size:22px;line-height:1.25;font-weight:400;color:${color.ink};">${subject}</h1>
-<p style="margin:0 0 16px;font-size:15px;line-height:1.5;color:${color.zinc[800]};">${greeting}</p>
+<h1 style="margin:0 0 16px;font-size:22px;line-height:1.25;font-weight:800;letter-spacing:-0.02em;color:${email.ink};">${subject}</h1>
+<p style="margin:0 0 16px;font-size:15px;line-height:1.5;color:${email.body};">${greeting}</p>
 ${paragraphs(intro)}
-${body ? html`<div style="margin:0 0 16px;padding-inline-start:14px;border-inline-start:3px solid ${color.zinc[200]};">${paragraphs(body)}</div>` : ''}
-${venue ? html`<p style="margin:0 0 16px;font-size:15px;line-height:1.5;color:${color.zinc[800]};">${venue}</p>` : ''}
+${body ? html`<div style="margin:0 0 16px;padding-inline-start:14px;border-inline-start:3px solid ${email.line};">${paragraphs(body)}</div>` : ''}
+${venue ? html`<p style="margin:0 0 16px;font-size:15px;line-height:1.5;color:${email.body};">${venue}</p>` : ''}
 ${
   cta && url
     ? html`<p style="margin:8px 0 24px;"><a href="${url}" style="display:inline-block;background:${brand};color:${onBrand};text-decoration:none;padding:12px 22px;border-radius:${radius.pill};font-size:15px;">${cta}</a></p>
-<p style="margin:0 0 16px;font-size:12px;line-height:1.4;color:${color.zinc[500]};">${cat.common.linkFallback}<br><a href="${url}" style="color:${color.zinc[600]};word-break:break-all;">${url}</a></p>`
+<p style="margin:0 0 16px;font-size:12px;line-height:1.4;color:${email.muted};">${cat.common.linkFallback}<br><a href="${url}" style="color:${email.link};word-break:break-all;">${url}</a></p>`
     : ''
 }
 </td></tr>
-<tr><td style="padding:16px 28px 24px;border-top:1px solid ${color.zinc[200]};font-size:12px;line-height:1.5;color:${color.zinc[500]};">
+<tr><td style="padding:16px 28px 24px;border-top:1px solid ${email.line};font-size:12px;line-height:1.5;color:${email.muted};">
 <p style="margin:0 0 6px;">${sentBy}</p>
 ${whyText ? html`<p style="margin:0 0 6px;">${whyText}</p>` : ''}
-${unsubscribe ? html`<p style="margin:0 0 6px;"><a href="${unsubscribe}" style="color:${color.zinc[600]};">${cat.common.unsubscribe}</a></p>` : ''}
+${unsubscribe ? html`<p style="margin:0 0 6px;"><a href="${unsubscribe}" style="color:${email.link};">${cat.common.unsubscribe}</a></p>` : ''}
 ${input.org.poweredByVisible ? html`<p style="margin:0;">${cat.common.poweredBy}</p>` : ''}
 </td></tr>
 </table>
@@ -287,7 +292,7 @@ export function renderAccountNotice(input: {
     .split(/\n{2,}/)
     .map(
       (para) =>
-        html`<p style="margin:0 0 16px;font-size:15px;line-height:1.5;color:${color.zinc[800]};">${para}</p>`,
+        html`<p style="margin:0 0 16px;font-size:15px;line-height:1.5;color:${email.body};">${para}</p>`,
     );
   const doc = html`<!doctype html>
 <html lang="${lang}" dir="${dir}">
@@ -297,17 +302,17 @@ export function renderAccountNotice(input: {
 <meta name="color-scheme" content="light">
 <title>${subject}</title>
 </head>
-<body style="margin:0;padding:0;background:${color.zinc[100]};font-family:'Helvetica Neue',Arial,'Noto Sans Arabic','Noto Sans Devanagari','Noto Sans SC','Noto Sans TC','Noto Sans JP',sans-serif;">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${color.zinc[100]};">
+<body style="margin:0;padding:0;background:${email.page};font-family:'Helvetica Neue',Arial,'Noto Sans Arabic','Noto Sans Devanagari','Noto Sans SC','Noto Sans TC','Noto Sans JP',sans-serif;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${email.page};">
 <tr><td align="center" style="padding:24px 12px;">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" dir="${dir}" style="max-width:560px;background:${color.white};border-radius:${radius.card};overflow:hidden;text-align:start;">
-<tr><td style="background:${color.ink};color:${color.white};padding:18px 28px;font-size:16px;font-weight:600;">Yayatoh</td></tr>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" dir="${dir}" style="max-width:560px;background:${email.card};border-radius:${radius.card};overflow:hidden;text-align:start;">
+<tr><td style="background:${email.header};color:${email.headerInk};padding:18px 28px;font-size:16px;font-weight:600;">Yayatoh</td></tr>
 <tr><td style="padding:28px 28px 8px;">
-<h1 style="margin:0 0 16px;font-size:22px;line-height:1.25;font-weight:400;color:${color.ink};">${subject}</h1>
-<p style="margin:0 0 16px;font-size:15px;line-height:1.5;color:${color.zinc[800]};">${greeting}</p>
+<h1 style="margin:0 0 16px;font-size:22px;line-height:1.25;font-weight:800;letter-spacing:-0.02em;color:${email.ink};">${subject}</h1>
+<p style="margin:0 0 16px;font-size:15px;line-height:1.5;color:${email.body};">${greeting}</p>
 ${paragraphs}
 </td></tr>
-<tr><td style="padding:16px 28px 24px;border-top:1px solid ${color.zinc[200]};font-size:12px;line-height:1.5;color:${color.zinc[500]};">
+<tr><td style="padding:16px 28px 24px;border-top:1px solid ${email.line};font-size:12px;line-height:1.5;color:${email.muted};">
 <p style="margin:0;">${cat.account.sentBy}</p>
 </td></tr>
 </table>

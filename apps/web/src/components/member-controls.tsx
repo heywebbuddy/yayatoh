@@ -131,7 +131,7 @@ export function MemberControls({
   }, [confirming]);
 
   if (role === 'owner' && !canOwn)
-    return <span className="text-caption text-zinc-500">{t('team.ownerOnly')}</span>;
+    return <span className="text-caption text-ink-2">{t('team.ownerOnly')}</span>;
 
   const cancel = () => {
     refocus.current = true;
@@ -145,13 +145,7 @@ export function MemberControls({
           <label htmlFor={selectId} className="sr-only">
             {t('team.roleFor', { name })}
           </label>
-          <select
-            id={selectId}
-            name="role"
-            defaultValue={role}
-            key={role}
-            className="min-h-8 rounded-pill border border-zinc-200 bg-white px-3 text-caption"
-          >
+          <select id={selectId} name="role" defaultValue={role} key={role} className="field field-sm">
             {roles.map((r) => (
               <option key={r} value={r}>
                 {t(`${labels}.${r}`)}
@@ -185,12 +179,12 @@ export function MemberControls({
           ref={removeForm}
           action={removeAction}
           aria-labelledby={confirmId}
-          className="flex flex-wrap items-center gap-2 rounded-card border border-zinc-200 bg-zinc-50 px-3 py-2"
+          className="flex flex-wrap items-center gap-2 rounded-card border border-line bg-surface-2 px-3 py-2"
           onKeyDown={(e) => {
             if (e.key === 'Escape') cancel();
           }}
         >
-          <p id={confirmId} className="text-caption text-zinc-700">
+          <p id={confirmId} className="text-caption text-ink-2">
             {t('team.confirmRemove', { name })}
           </p>
           <Button ref={yesButton} type="submit" size="sm" disabled={removePending}>

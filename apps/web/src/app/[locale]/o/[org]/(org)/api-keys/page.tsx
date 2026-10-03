@@ -42,7 +42,7 @@ export default async function ApiKeysPage({ params }: { params: Promise<{ locale
   return (
     <>
       <PageHeader title={t('apiKeys.title')} description={t('apiKeys.subtitle')} />
-      <p className="text-body text-zinc-600">{docs}</p>
+      <p className="text-body text-ink-2">{docs}</p>
       <ApiKeyForm scopes={API_KEY_SCOPES} action={createApiKeyAction.bind(null, org)} />
       <Table
         caption={t('apiKeys.listTitle')}

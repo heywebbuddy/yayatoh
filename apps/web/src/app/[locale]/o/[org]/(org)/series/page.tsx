@@ -39,7 +39,7 @@ export default async function SeriesPage({ params }: { params: Promise<{ locale:
               cell: (r) => (
                 <span className="flex flex-col">
                   <span>{r.name}</span>
-                  {r.description ? <span className="text-caption text-zinc-500">{r.description}</span> : null}
+                  {r.description ? <span className="text-caption text-ink-2">{r.description}</span> : null}
                 </span>
               ),
             },
@@ -49,7 +49,7 @@ export default async function SeriesPage({ params }: { params: Promise<{ locale:
               cell: (r) => (
                 <span className="flex flex-col gap-0.5">
                   <span className="font-mono">{formatNumber(r.eventIds.length, locale)}</span>
-                  <span className="text-caption text-zinc-500">
+                  <span className="text-caption text-ink-2">
                     {r.eventIds
                       .map((id) => names.get(id))
                       .filter(Boolean)

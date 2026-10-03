@@ -97,7 +97,7 @@ export default async function SurveyPage({
         const labels = r.kind === 'nps' ? r.distribution.map((_, i) => String(i)) : ['1', '2', '3', '4', '5'];
         return (
           <div className="flex flex-col gap-2">
-            <p className="text-body text-zinc-700">
+            <p className="text-body text-ink-2">
               {r.kind === 'nps'
                 ? t('npsLine', { score: r.score ?? 0, answered: r.answered })
                 : t('averageLine', { average: r.average ?? 0, answered: r.answered })}
@@ -147,13 +147,13 @@ export default async function SurveyPage({
         return r.latest.length ? (
           <ul aria-label={t('latestAnswers', { question: q.label })} className="flex flex-col gap-2">
             {r.latest.map((a, i) => (
-              <li key={i} className="rounded-card bg-zinc-50 px-3 py-2 text-body whitespace-pre-line">
+              <li key={i} className="rounded-card bg-surface-2 px-3 py-2 text-body whitespace-pre-line">
                 {a}
               </li>
             ))}
           </ul>
         ) : (
-          <p className="text-body text-zinc-600">{t('answeredCount', { count: 0 })}</p>
+          <p className="text-body text-ink-2">{t('answeredCount', { count: 0 })}</p>
         );
     }
   };
@@ -172,11 +172,11 @@ export default async function SurveyPage({
         <Link href={base} className="text-body underline underline-offset-2">
           {t('back')}
         </Link>
-        <span className="text-caption text-zinc-600" role="status">
+        <span className="text-caption text-ink-2" role="status">
           {s.closed ? t('status.closed') : t('status.open')}
         </span>
       </p>
-      {s.closed ? <p className="text-body text-zinc-700">{t('closedNotice')}</p> : null}
+      {s.closed ? <p className="text-body text-ink-2">{t('closedNotice')}</p> : null}
 
       <section aria-labelledby="results-heading" className="flex flex-col gap-3">
         <h2 id="results-heading" className="text-section">
@@ -185,21 +185,21 @@ export default async function SurveyPage({
         <Card className="flex flex-col gap-4">
           <dl className="grid grid-cols-2 gap-4 sm:grid-cols-4">
             <div>
-              <dt className="text-caption text-zinc-600">{t('columns.invited')}</dt>
+              <dt className="text-caption text-ink-2">{t('columns.invited')}</dt>
               <dd className="font-mono text-section">{n.format(s.invited)}</dd>
             </div>
             <div>
-              <dt className="text-caption text-zinc-600">{t('columns.responded')}</dt>
+              <dt className="text-caption text-ink-2">{t('columns.responded')}</dt>
               <dd className="font-mono text-section">{n.format(s.responded)}</dd>
             </div>
             <div>
-              <dt className="text-caption text-zinc-600">{t('columns.rate')}</dt>
+              <dt className="text-caption text-ink-2">{t('columns.rate')}</dt>
               <dd className="font-mono text-section">
                 {s.rate === null ? t('noRate') : t('rate', { rate: s.rate })}
               </dd>
             </div>
             <div>
-              <dt className="text-caption text-zinc-600">{t('npsTitle')}</dt>
+              <dt className="text-caption text-ink-2">{t('npsTitle')}</dt>
               <dd className="font-mono text-section">
                 {detail.report.nps?.score === null || !detail.report.nps
                   ? t('noRate')
@@ -210,8 +210,8 @@ export default async function SurveyPage({
           {detail.report.nps && detail.report.nps.answered > 0 ? (
             <dl aria-label={t('npsBreakdown')} className="grid grid-cols-1 gap-2 sm:grid-cols-3">
               {(['promoters', 'passives', 'detractors'] as const).map((k) => (
-                <div key={k} className="rounded-card border border-zinc-200 px-3 py-2">
-                  <dt className="text-caption text-zinc-600">{t(`bucket.${k}`)}</dt>
+                <div key={k} className="rounded-card border border-line px-3 py-2">
+                  <dt className="text-caption text-ink-2">{t(`bucket.${k}`)}</dt>
                   <dd className="font-mono text-body">
                     {t('countPct', {
                       count: detail.report.nps?.[k] ?? 0,
@@ -231,7 +231,7 @@ export default async function SurveyPage({
               <li key={q.key}>
                 <Card className="flex flex-col gap-2">
                   <h3 className="text-body font-medium">{q.label}</h3>
-                  <p className="text-caption text-zinc-600">
+                  <p className="text-caption text-ink-2">
                     {t('answeredCount', { count: q.report.answered })}
                   </p>
                   {summary(q)}
@@ -253,7 +253,7 @@ export default async function SurveyPage({
         {sp.exportError ? (
           <p
             role="alert"
-            className="rounded-card border border-pink-700 bg-pink-50 px-4 py-3 text-body text-pink-700"
+            className="rounded-card border border-danger bg-danger-soft px-4 py-3 text-body text-danger"
           >
             {t('exportError', { reason: (await getTranslations())(errorMessageKey(sp.exportError)) })}
           </p>
@@ -261,7 +261,7 @@ export default async function SurveyPage({
         {op ? (
           <section
             aria-labelledby="export-heading"
-            className="flex flex-col gap-2 rounded-panel border border-zinc-200 bg-white px-5 py-4"
+            className="flex flex-col gap-2 rounded-panel border border-line bg-surface px-5 py-4"
           >
             {opActive ? <AutoRefresh seconds={2} /> : null}
             <h3 id="export-heading" className="text-section">
@@ -298,9 +298,9 @@ export default async function SurveyPage({
           </h2>
           <Card>
             {s.closed ? (
-              <p className="text-body text-zinc-700">{t('errors.closed')}</p>
+              <p className="text-body text-ink-2">{t('errors.closed')}</p>
             ) : !ended ? (
-              <p className="text-body text-zinc-700">
+              <p className="text-body text-ink-2">
                 {t('notEnded', { subject, date: when.format(s.endsAt) })}
               </p>
             ) : (
@@ -365,11 +365,11 @@ export default async function SurveyPage({
             {fields.map((f, i) => (
               <li
                 key={f.key}
-                className="flex flex-wrap items-center justify-between gap-3 rounded-card border border-zinc-200 bg-white px-4 py-3"
+                className="flex flex-wrap items-center justify-between gap-3 rounded-card border border-line bg-surface px-4 py-3"
               >
                 <span className="flex flex-col">
                   <span className="text-body">{f.label}</span>
-                  <span className="text-caption text-zinc-500">
+                  <span className="text-caption text-ink-2">
                     {t(`questionType.${f.type}`)} · {f.required ? t('required') : t('optional')}
                     {f.options.length ? ` · ${f.options.map((o) => o.label).join(', ')}` : ''}
                   </span>
