@@ -656,3 +656,11 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **Who sees scores:** anyone with `attendees:read` (owners, admins, managers, viewers, event managers); scores name attendees and show their email. Confirm, or restrict.
 - [ ] **Feedback prompt:** shown on the live session page (sessions with polls/Q&A on) once the session is over, for a session feedback survey; it gives the attendee their survey link without an email. No automatic feedback email at session end yet. Say if you want one.
 - [ ] **Data-subject exports** don't include engagement facts or scores yet (counts and ids only). Say if they should.
+
+## M5.8a — networking: directory, connections and meetings (2026-10-03, pending owner)
+- [ ] **Directory privacy notice and consent wording (`legal-copy`):** the opt-in text ("Show my profile to other attendees of this event who also joined networking"), the privacy line under it and the block/report wording, in 13 languages (`apps/web/messages/*.json`, namespace `networking`). Please have counsel review.
+- [ ] **Who may browse:** only attendees who opted in themselves see the directory ("give to get"). Confirm, or allow browsing before opting in.
+- [ ] **Limits:** 25 waiting connection requests and 25 waiting meeting requests per person; a declined person can't ask the same person again; place capacity 1–50 meetings at once; slots of 5–240 minutes, at most 400 per event and 96 per "add slots"; 200 places per event; reporting also blocks. Confirm or adjust.
+- [ ] **DSAR coverage:** networking profiles (name, job title, company, bio, interests), request notes and report details are not yet in the access document or erasure: the privacy module (tier 5) can't call engagement (tier 5) synchronously. Choose: an outbox subscriber on erasure, or move the networking export into a lower tier. Until then an erasure leaves an opted-in profile in place (its contact is redacted).
+- [ ] **Retention:** profiles, connections, meetings and reports are kept with the event (no separate period yet). Decide one if wanted (P5-3 / D11 apply to chat in M5.8b).
+- [ ] **Emails:** request and acceptance emails (with the calendar file attached) are not sent yet; attendees see requests on their pages and download the `.ics`. Say if you want emails in M5.8b.

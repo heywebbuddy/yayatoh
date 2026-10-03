@@ -69,6 +69,11 @@ export interface CanaryOrg {
   readonly filled: Readonly<Record<string, number>>;
   /** M4.5a: the fixture event's guest website (published) and its password. */
   readonly guestSite: { readonly code: string; readonly password: string };
+  /**
+   * M5.8a: the address of the fixture event's attendee who is opted in to networking (a canary
+   * itself), to crawl the networking pages as them. Null when the event has none.
+   */
+  readonly networkEmail: string | null;
 }
 
 const ident = (...parts: string[]) => parts.map((p) => `"${p.replace(/"/g, '""')}"`).join('.');
@@ -133,6 +138,14 @@ export async function canaryOrg(o: {
     [orgId, event.id],
   );
   if (!site) throw new Error('canary: the fixture event has no published guest website');
+  const [member] = await o.admin.unsafe(
+    `select lower(a.email) as email from engagement.network_profiles p
+     join attendees.attendees a on a.org_id = p.org_id and a.event_id = p.event_id
+       and a.contact_id = p.contact_id and a.status = 'active'
+     where p.org_id = $1 and p.event_id = $2 and p.opted_in and p.hidden_at is null
+     order by a.created_at limit 1`,
+    [orgId, event.id],
+  );
   return {
     orgId,
     slug,
@@ -145,6 +158,7 @@ export async function canaryOrg(o: {
     outbound,
     filled,
     guestSite: { code: site.code as string, password: FIXTURE_SITE_PASSWORD },
+    networkEmail: (member?.email as string | undefined) ?? null,
   };
 }
 

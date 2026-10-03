@@ -368,6 +368,14 @@ export const RATE_LIMIT_POLICIES = {
     anonymousIp: { limit: 600, windowMs: MIN },
     ipCeiling: { limit: 6000, windowMs: 10 * MIN },
   },
+  /** Networking (M5.8a): profile changes, connection and meeting requests and answers, block and
+   * report; identity = the verified address. The engagement module also caps waiting requests. */
+  networking: {
+    device: { limit: 60, windowMs: 10 * MIN },
+    anonymousIp: { limit: 300, windowMs: 10 * MIN },
+    identity: { limit: 120, windowMs: 60 * MIN },
+    ipCeiling: { limit: 3000, windowMs: 10 * MIN },
+  },
   /** CSP violation reports. */
   cspReport: {
     device: { limit: 60, windowMs: MIN },

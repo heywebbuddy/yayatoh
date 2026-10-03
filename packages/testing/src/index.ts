@@ -33,6 +33,7 @@ export {
   seedEmails,
 } from './marketing.ts';
 export { type PledgeParty, type PledgeScenario, pledgeScenario } from './pledges.ts';
+export { networkingFixture, networkPeople } from './networking.ts';
 export { BULK_ACTIONS, bulkStep, ports, runBulk, submitRegistrationForm } from './ports.ts';
 export { type RsvpParty, type RsvpScenario, rsvpScenario } from './rsvp.ts';
 export {

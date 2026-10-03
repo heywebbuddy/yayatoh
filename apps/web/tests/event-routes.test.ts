@@ -69,6 +69,8 @@ const SECTION_OF: Record<string, string> = {
   gallery: 'gallery',
   // M5.7b: Engagement scores, reached from Sessions (the sessions section).
   engagement: 'sessions',
+  // M5.8a: networking is reached from Sessions and opens with it.
+  networking: 'sessions',
 };
 
 describe('event console route sweep (M4.2a)', () => {

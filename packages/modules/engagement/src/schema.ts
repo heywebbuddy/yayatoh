@@ -255,3 +255,274 @@ export const scoreWeights = tenantTable(
     ),
   ],
 );
+
+/* ------------------------------------------------------------------- networking (M5.8a) ---- */
+
+export const LOCATION_KINDS = ['booth', 'meeting_point'] as const;
+export type LocationKind = (typeof LOCATION_KINDS)[number];
+export const CONNECTION_STATES = ['pending', 'accepted', 'declined', 'withdrawn'] as const;
+export type ConnectionState = (typeof CONNECTION_STATES)[number];
+export const MEETING_STATES = ['pending', 'accepted', 'declined', 'cancelled'] as const;
+export type MeetingState = (typeof MEETING_STATES)[number];
+export const REPORT_REASONS = ['spam', 'harassment', 'inappropriate', 'fake', 'other'] as const;
+export type ReportReason = (typeof REPORT_REASONS)[number];
+export const REPORT_STATES = ['open', 'hidden', 'dismissed'] as const;
+export type ReportState = (typeof REPORT_STATES)[number];
+
+/**
+ * Networking per event (M5.8a): off until an organizer turns it on. Meetings can be switched off
+ * on their own (the directory and connections stay).
+ */
+export const networkSettings = tenantTable(
+  engagementSchema,
+  'network_settings',
+  {
+    eventId: uuid('event_id').notNull(),
+    enabled: boolean('enabled').notNull().default(false),
+    meetingsEnabled: boolean('meetings_enabled').notNull().default(true),
+  },
+  (t) => [uniqueIndex('network_settings_org_event_key').on(t.orgId, t.eventId)],
+);
+
+/**
+ * A person's networking profile at one event, keyed by their org contact (the person, not one
+ * ticket). Opt-in only: the row exists once they first opt in, and `opted_in` false (they opted
+ * out) or `hidden_at` set (an organizer hid them after a report) keeps them out of every list.
+ */
+export const networkProfiles = tenantTable(
+  engagementSchema,
+  'network_profiles',
+  {
+    eventId: uuid('event_id').notNull(),
+    contactId: uuid('contact_id').notNull(),
+    optedIn: boolean('opted_in').notNull().default(false),
+    optedInAt: ts('opted_in_at'),
+    displayName: text('display_name').notNull(),
+    headline: text('headline'),
+    company: text('company'),
+    bio: text('bio'),
+    interests: text('interests').array().notNull().default(sql`'{}'::text[]`),
+    hiddenAt: ts('hidden_at'),
+    hiddenBy: uuid('hidden_by'),
+  },
+  (t) => [
+    uniqueIndex('network_profiles_org_event_contact_key').on(t.orgId, t.eventId, t.contactId),
+    index('network_profiles_org_event_listed_idx')
+      .on(t.orgId, t.eventId, t.displayName)
+      .where(sql`opted_in and hidden_at is null`),
+    check('network_profiles_display_name_check', sql`char_length(display_name) between 1 and 80`),
+    check('network_profiles_headline_check', sql`headline is null or char_length(headline) between 1 and 80`),
+    check('network_profiles_company_check', sql`company is null or char_length(company) between 1 and 80`),
+    check('network_profiles_bio_check', sql`bio is null or char_length(bio) between 1 and 500`),
+    check('network_profiles_interests_check', sql`cardinality(interests) <= 10`),
+    check('network_profiles_opted_in_at_check', sql`not opted_in or opted_in_at is not null`),
+  ],
+);
+
+/**
+ * A connection request between two profiles of one event; one row per pair (either direction).
+ * After a decline the same person may not ask again; after a withdrawal either may.
+ */
+export const networkConnections = tenantTable(
+  engagementSchema,
+  'network_connections',
+  {
+    eventId: uuid('event_id').notNull(),
+    requesterId: uuid('requester_id').notNull(),
+    addresseeId: uuid('addressee_id').notNull(),
+    status: text('status').notNull().default('pending'),
+    message: text('message'),
+    respondedAt: ts('responded_at'),
+  },
+  (t) => [
+    uniqueIndex('network_connections_org_pair_key').on(
+      t.orgId,
+      sql`least(requester_id, addressee_id)`,
+      sql`greatest(requester_id, addressee_id)`,
+    ),
+    index('network_connections_org_requester_idx').on(t.orgId, t.requesterId, t.status),
+    index('network_connections_org_addressee_idx').on(t.orgId, t.addresseeId, t.status),
+    index('network_connections_org_event_idx').on(t.orgId, t.eventId),
+    foreignKey({
+      name: 'network_connections_requester_fk',
+      columns: [t.orgId, t.requesterId],
+      foreignColumns: [networkProfiles.orgId, networkProfiles.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'network_connections_addressee_fk',
+      columns: [t.orgId, t.addresseeId],
+      foreignColumns: [networkProfiles.orgId, networkProfiles.id],
+    }).onDelete('cascade'),
+    check(
+      'network_connections_status_check',
+      sql`status in ('pending', 'accepted', 'declined', 'withdrawn')`,
+    ),
+    check('network_connections_self_check', sql`requester_id <> addressee_id`),
+    check(
+      'network_connections_message_check',
+      sql`message is null or char_length(message) between 1 and 300`,
+    ),
+  ],
+);
+
+/** One person blocking another at an event: neither sees the other or can ask anything again. */
+export const networkBlocks = tenantTable(
+  engagementSchema,
+  'network_blocks',
+  {
+    eventId: uuid('event_id').notNull(),
+    blockerId: uuid('blocker_id').notNull(),
+    blockedId: uuid('blocked_id').notNull(),
+  },
+  (t) => [
+    uniqueIndex('network_blocks_org_pair_key').on(t.orgId, t.blockerId, t.blockedId),
+    index('network_blocks_org_blocked_idx').on(t.orgId, t.blockedId),
+    index('network_blocks_org_event_idx').on(t.orgId, t.eventId),
+    foreignKey({
+      name: 'network_blocks_blocker_fk',
+      columns: [t.orgId, t.blockerId],
+      foreignColumns: [networkProfiles.orgId, networkProfiles.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'network_blocks_blocked_fk',
+      columns: [t.orgId, t.blockedId],
+      foreignColumns: [networkProfiles.orgId, networkProfiles.id],
+    }).onDelete('cascade'),
+    check('network_blocks_self_check', sql`blocker_id <> blocked_id`),
+  ],
+);
+
+/**
+ * A report about a profile, for the organizer's review queue (reporting also blocks). Actions:
+ * hide the profile from networking, or dismiss.
+ */
+export const networkReports = tenantTable(
+  engagementSchema,
+  'network_reports',
+  {
+    eventId: uuid('event_id').notNull(),
+    reporterId: uuid('reporter_id').notNull(),
+    reportedId: uuid('reported_id').notNull(),
+    reason: text('reason').notNull(),
+    details: text('details'),
+    status: text('status').notNull().default('open'),
+    resolvedAt: ts('resolved_at'),
+    resolvedBy: uuid('resolved_by'),
+  },
+  (t) => [
+    uniqueIndex('network_reports_org_open_pair_key')
+      .on(t.orgId, t.reporterId, t.reportedId)
+      .where(sql`status = 'open'`),
+    index('network_reports_org_event_status_idx').on(t.orgId, t.eventId, t.status, t.createdAt),
+    index('network_reports_org_reported_idx').on(t.orgId, t.reportedId),
+    foreignKey({
+      name: 'network_reports_reporter_fk',
+      columns: [t.orgId, t.reporterId],
+      foreignColumns: [networkProfiles.orgId, networkProfiles.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'network_reports_reported_fk',
+      columns: [t.orgId, t.reportedId],
+      foreignColumns: [networkProfiles.orgId, networkProfiles.id],
+    }).onDelete('cascade'),
+    check(
+      'network_reports_reason_check',
+      sql`reason in ('spam', 'harassment', 'inappropriate', 'fake', 'other')`,
+    ),
+    check('network_reports_status_check', sql`status in ('open', 'hidden', 'dismissed')`),
+    check('network_reports_details_check', sql`details is null or char_length(details) between 1 and 500`),
+    check('network_reports_self_check', sql`reporter_id <> reported_id`),
+    check('network_reports_resolved_check', sql`(status = 'open') = (resolved_at is null)`),
+  ],
+);
+
+/** Where meetings happen: a booth or a meeting point, with how many meetings fit at once. */
+export const meetingLocations = tenantTable(
+  engagementSchema,
+  'meeting_locations',
+  {
+    eventId: uuid('event_id').notNull(),
+    name: text('name').notNull(),
+    kind: text('kind').notNull(),
+    capacity: integer('capacity').notNull(),
+  },
+  (t) => [
+    uniqueIndex('meeting_locations_org_event_name_key').on(t.orgId, t.eventId, sql`lower(name)`),
+    check('meeting_locations_kind_check', sql`kind in ('booth', 'meeting_point')`),
+    check('meeting_locations_name_check', sql`char_length(name) between 1 and 80`),
+    check('meeting_locations_capacity_check', sql`capacity between 1 and 50`),
+  ],
+);
+
+/** When meetings happen: the organizer's time slots (never overlapping within an event). */
+export const meetingSlots = tenantTable(
+  engagementSchema,
+  'meeting_slots',
+  {
+    eventId: uuid('event_id').notNull(),
+    startsAt: ts('starts_at').notNull(),
+    endsAt: ts('ends_at').notNull(),
+  },
+  (t) => [
+    uniqueIndex('meeting_slots_org_event_start_key').on(t.orgId, t.eventId, t.startsAt),
+    check('meeting_slots_order_check', sql`ends_at > starts_at`),
+    check('meeting_slots_length_check', sql`ends_at - starts_at <= interval '4 hours'`),
+  ],
+);
+
+/**
+ * A meeting request between two profiles for one slot at one location. Accepting takes a table
+ * (1…capacity) at the location for that slot: the partial unique key means a table is never
+ * held twice, so a location never double-books.
+ */
+export const meetings = tenantTable(
+  engagementSchema,
+  'meetings',
+  {
+    eventId: uuid('event_id').notNull(),
+    slotId: uuid('slot_id').notNull(),
+    locationId: uuid('location_id').notNull(),
+    requesterId: uuid('requester_id').notNull(),
+    inviteeId: uuid('invitee_id').notNull(),
+    status: text('status').notNull().default('pending'),
+    tableNo: integer('table_no'),
+    message: text('message'),
+    respondedAt: ts('responded_at'),
+  },
+  (t) => [
+    uniqueIndex('meetings_org_location_slot_table_key')
+      .on(t.orgId, t.locationId, t.slotId, t.tableNo)
+      .where(sql`status = 'accepted'`),
+    index('meetings_org_requester_idx').on(t.orgId, t.requesterId, t.status),
+    index('meetings_org_invitee_idx').on(t.orgId, t.inviteeId, t.status),
+    index('meetings_org_slot_idx').on(t.orgId, t.slotId, t.status),
+    index('meetings_org_event_idx').on(t.orgId, t.eventId),
+    foreignKey({
+      name: 'meetings_slot_fk',
+      columns: [t.orgId, t.slotId],
+      foreignColumns: [meetingSlots.orgId, meetingSlots.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'meetings_location_fk',
+      columns: [t.orgId, t.locationId],
+      foreignColumns: [meetingLocations.orgId, meetingLocations.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'meetings_requester_fk',
+      columns: [t.orgId, t.requesterId],
+      foreignColumns: [networkProfiles.orgId, networkProfiles.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'meetings_invitee_fk',
+      columns: [t.orgId, t.inviteeId],
+      foreignColumns: [networkProfiles.orgId, networkProfiles.id],
+    }).onDelete('cascade'),
+    check('meetings_status_check', sql`status in ('pending', 'accepted', 'declined', 'cancelled')`),
+    check('meetings_self_check', sql`requester_id <> invitee_id`),
+    check(
+      'meetings_table_check',
+      sql`(status = 'accepted') = (table_no is not null) and (table_no is null or table_no between 1 and 50)`,
+    ),
+    check('meetings_message_check', sql`message is null or char_length(message) between 1 and 300`),
+  ],
+);
