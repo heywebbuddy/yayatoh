@@ -4,12 +4,14 @@ import {
   exportGuestSeatingCommand,
   isExportFormat,
   isExportKind,
+  mealCounts,
   mealCountsTable,
+  nameSheet,
   seatingChartTable,
 } from '@yayatoh/seating';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
-import { download, exportCopy } from '@/server/seating-cards.ts';
+import { download, exportCopy, placeNamer } from '@/server/seating-cards.ts';
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 
@@ -51,7 +53,9 @@ export async function GET(
     throw err;
   }
   const copy = await exportCopy(locale);
-  const rows = kind === 'chart' ? seatingChartTable(out.sheet, copy) : mealCountsTable(out.meals, copy);
+  // Places under the names the reader knows ("Table 3"); counts per place as the command gave them.
+  const sheet = nameSheet(out.sheet, await placeNamer(locale));
+  const rows = kind === 'chart' ? seatingChartTable(sheet, copy) : mealCountsTable(mealCounts(sheet), copy);
   const name = `${ev.slug}-${kind === 'chart' ? 'seating-chart' : 'meal-counts'}`;
   if (format === 'csv')
     // A BOM so spreadsheet apps read UTF-8 (accents, Arabic, CJK).

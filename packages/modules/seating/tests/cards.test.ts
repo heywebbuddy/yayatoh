@@ -6,6 +6,7 @@ import {
   escortCards,
   mealCounts,
   mealCountsTable,
+  nameSheet,
   PAPER_SIZES,
   paginate,
   placeCards,
@@ -14,9 +15,9 @@ import {
   sheetLayout,
   tableCards,
 } from '../src/index.ts';
-import { WEDDING_VIEW } from './golden/cases.ts';
+import { placeName, WEDDING_VIEW } from './golden/cases.ts';
 
-const sheet = seatingSheet(WEDDING_VIEW);
+const sheet = nameSheet(seatingSheet(WEDDING_VIEW), placeName('en'));
 
 const COPY: ExportCopy = {
   place: 'Table',
@@ -55,8 +56,21 @@ describe('seating sheet (M4.3b)', () => {
     expect(sheet.places[1]?.guests[1]?.meal).toBe('beef');
   });
 
+  it('names places in the reader’s words, keeping the natural order of the bare labels', () => {
+    const raw = seatingSheet(WEDDING_VIEW);
+    expect(raw.places.map((p) => p.label)).toEqual(['1', '2', '10']);
+    expect(nameSheet(raw, placeName('ar')).places.map((p) => p.label)).toEqual([
+      'الطاولة 1',
+      'الطاولة 2',
+      'الطاولة 10',
+    ]);
+  });
+
   it('a place on a table the chart no longer has puts the guest back with the unseated', () => {
-    const s = seatingSheet({ ...WEDDING_VIEW, places: WEDDING_VIEW.places.slice(1) });
+    const s = nameSheet(
+      seatingSheet({ ...WEDDING_VIEW, places: WEDDING_VIEW.places.slice(1) }),
+      placeName('en'),
+    );
     expect(s.places.map((p) => p.label)).toEqual(['Table 1', 'Table 2']);
     expect(s.unseated.map((g) => g.name)).toEqual(['山田 花子', 'Taro Yamada', 'ليلى حداد']);
   });

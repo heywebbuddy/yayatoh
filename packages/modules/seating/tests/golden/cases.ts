@@ -4,6 +4,7 @@ import {
   type CardsCopy,
   cardsHtml,
   cardsOf,
+  nameSheet,
   type PaperSize,
   seatingSheet,
 } from '../../src/index.ts';
@@ -22,12 +23,12 @@ const id = (n: number) => `0190a000-0000-7000-8000-${String(n).padStart(12, '0')
 
 export const WEDDING_VIEW: SeatingViewLike = {
   places: [
-    { itemId: id(103), kind: 'table', label: 'Table 10', capacity: 8, vip: false, sponsor: null },
-    { itemId: id(101), kind: 'table', label: 'Table 1', capacity: 8, vip: true, sponsor: null },
+    { itemId: id(103), kind: 'table', label: '10', capacity: 8, vip: false, sponsor: null },
+    { itemId: id(101), kind: 'table', label: '1', capacity: 8, vip: true, sponsor: null },
     {
       itemId: id(102),
       kind: 'table',
-      label: 'Table 2',
+      label: '2',
       capacity: 8,
       vip: false,
       sponsor: 'Rosewood Florals',
@@ -102,6 +103,12 @@ const TITLES: Record<Lang, Record<CardKind, string>> = {
   ar: { place: 'بطاقات الأماكن', escort: 'بطاقات الإرشاد', table: 'بطاقات الطاولات' },
 };
 
+/** The place names of the app (`seating.guestSeating.place.table`). */
+export const placeName = (lang: Lang) => (p: { kind: 'table' | 'row'; label: string }) =>
+  lang === 'ar'
+    ? `${p.kind === 'table' ? 'الطاولة' : 'الصف'} ${p.label}`
+    : `${p.kind === 'table' ? 'Table' : 'Row'} ${p.label}`;
+
 export const COPY = (lang: Lang, kind: CardKind): CardsCopy =>
   lang === 'ar'
     ? {
@@ -134,6 +141,6 @@ export function goldenHtml(name: string, lang: Lang): string {
     dir: lang === 'ar' ? 'rtl' : 'ltr',
     copy: COPY(lang, c.kind),
     event: EVENT,
-    cards: cardsOf(c.kind, seatingSheet(WEDDING_VIEW)),
+    cards: cardsOf(c.kind, nameSheet(seatingSheet(WEDDING_VIEW), placeName(lang))),
   });
 }

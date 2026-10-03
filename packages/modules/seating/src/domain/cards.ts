@@ -201,6 +201,17 @@ export function seatingSheet(view: SeatingViewLike): SeatingSheet {
   return { places, unseated };
 }
 
+/**
+ * The sheet with each place under the name people read ("Table 3", "Row A", in the reader's
+ * language; a plan's labels are bare: "3", "A"). Order is kept (natural order of the labels).
+ */
+export function nameSheet(
+  sheet: SeatingSheet,
+  placeName: (place: { readonly kind: 'table' | 'row'; readonly label: string }) => string,
+): SeatingSheet {
+  return { ...sheet, places: sheet.places.map((p) => ({ ...p, label: placeName(p) })) };
+}
+
 const coming = (g: SheetGuest) => g.status !== 'declined';
 
 /* ----------------------------------------------------------------------- the cards ---- */

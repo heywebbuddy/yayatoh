@@ -64,6 +64,7 @@ export {
   type MealCounts,
   mealCounts,
   mealCountsTable,
+  nameSheet,
   PAPER,
   PAPER_SIZES,
   type PaperSize,

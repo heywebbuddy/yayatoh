@@ -15,6 +15,12 @@ export const isAppLocale = (v: string | null): v is string =>
 
 export const localeDir = (lang: string): 'ltr' | 'rtl' => (RTL_LOCALES.has(lang as 'ar') ? 'rtl' : 'ltr');
 
+/** "Table 3", "Row A" in a language (the plan's labels are bare). */
+export async function placeNamer(lang: string) {
+  const t = await getTranslations({ locale: lang, namespace: 'seating.guestSeating.place' });
+  return (p: { kind: 'table' | 'row'; label: string }) => t(p.kind, { label: p.label });
+}
+
 export async function cardsCopy(lang: string, kind: CardKind): Promise<CardsCopy> {
   const t = await getTranslations({ locale: lang, namespace: 'seating.cards.doc' });
   return {

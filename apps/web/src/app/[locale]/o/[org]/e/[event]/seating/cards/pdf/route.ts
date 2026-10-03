@@ -1,8 +1,8 @@
 import { executeQuery, isDomainError } from '@yayatoh/kernel';
-import { cardsHtml, cardsOf, isCardKind, isPaperSize, seatingCardsQuery } from '@yayatoh/seating';
+import { cardsHtml, cardsOf, isCardKind, isPaperSize, nameSheet, seatingCardsQuery } from '@yayatoh/seating';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
-import { cardsCopy, cardsPdfResponse, isAppLocale, localeDir } from '@/server/seating-cards.ts';
+import { cardsCopy, cardsPdfResponse, isAppLocale, localeDir, placeNamer } from '@/server/seating-cards.ts';
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 
@@ -38,7 +38,7 @@ export async function GET(
       return notFound();
     throw err;
   }
-  const cards = cardsOf(kind, view.sheet);
+  const cards = cardsOf(kind, nameSheet(view.sheet, await placeNamer(cardLang)));
   if (!cards.length)
     return new Response('There are no cards of this kind to print yet.', {
       status: 409,
