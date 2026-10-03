@@ -115,7 +115,9 @@ export default async function SetupGuidePage({
                             aria-pressed={item.done}
                             className={`flex size-8 shrink-0 items-center justify-center rounded-full ${item.done ? 'bg-success-dot text-white' : 'border border-line-strong'}`}
                           >
-                            {item.done ? <Check className="size-4" strokeWidth={2.5} aria-hidden="true" /> : null}
+                            {item.done ? (
+                              <Check className="size-4" strokeWidth={2.5} aria-hidden="true" />
+                            ) : null}
                           </button>
                         </form>
                       ) : (

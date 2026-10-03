@@ -125,7 +125,11 @@ const editPage = async (org: string, id: string, flag?: string) =>
   redirect({ href: `/o/${org}/templates/${id}${flag ? `?${flag}=1` : ''}`, locale: await getLocale() });
 
 /** U6: a new template from scratch (profile and settings); its contents follow on the next page. */
-export async function createTemplateAction(org: string, _prev: FormState, form: FormData): Promise<FormState> {
+export async function createTemplateAction(
+  org: string,
+  _prev: FormState,
+  form: FormData,
+): Promise<FormState> {
   const data = await loadConsole(org);
   const hours = Number(String(form.get('hours') ?? '').trim() || '0');
   const minutes = Number(String(form.get('minutes') ?? '').trim() || '0');

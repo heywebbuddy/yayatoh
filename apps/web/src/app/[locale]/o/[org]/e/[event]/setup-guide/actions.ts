@@ -1,6 +1,10 @@
 'use server';
 
-import { addChecklistItemCommand, deleteChecklistItemCommand, setChecklistItemDoneCommand } from '@yayatoh/events';
+import {
+  addChecklistItemCommand,
+  deleteChecklistItemCommand,
+  setChecklistItemDoneCommand,
+} from '@yayatoh/events';
 import { executeCommand } from '@yayatoh/kernel';
 import { revalidatePath } from 'next/cache';
 import type { FormState } from '@/lib/form-state.ts';

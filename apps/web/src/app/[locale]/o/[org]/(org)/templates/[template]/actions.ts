@@ -168,7 +168,11 @@ export async function addChecklistItemAction(
   return success();
 }
 
-export async function removeChecklistItemAction(org: string, templateId: string, index: number): Promise<void> {
+export async function removeChecklistItemAction(
+  org: string,
+  templateId: string,
+  index: number,
+): Promise<void> {
   const data = await loadConsole(org);
   await executeCommand(removeTemplateChecklistItemCommand, { templateId, index }, data.ctx, ports);
   done(org, templateId);

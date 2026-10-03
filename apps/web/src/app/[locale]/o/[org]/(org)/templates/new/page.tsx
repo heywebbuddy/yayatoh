@@ -21,7 +21,10 @@ export default async function NewTemplatePage({
     <Breadcrumb
       label={t('templateBuilder.breadcrumb')}
       link={Link}
-      items={[{ label: t('templates.title'), href: `/o/${org}/templates` }, { label: t('templateBuilder.newTitle') }]}
+      items={[
+        { label: t('templates.title'), href: `/o/${org}/templates` },
+        { label: t('templateBuilder.newTitle') },
+      ]}
     />
   );
   if (!roleCan(data.role, 'events:write'))

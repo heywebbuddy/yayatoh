@@ -223,7 +223,13 @@ export function TemplateSettingsForm({
             defaultValue={values.venueName ?? ''}
             label={t('venueName')}
           />
-          <Input id="tpl-city" name="city" maxLength={120} defaultValue={values.city ?? ''} label={t('city')} />
+          <Input
+            id="tpl-city"
+            name="city"
+            maxLength={120}
+            defaultValue={values.city ?? ''}
+            label={t('city')}
+          />
           <Select
             id="tpl-visibility"
             name="visibility"
@@ -245,7 +251,9 @@ export function TemplateSettingsForm({
             maxLength={120}
             defaultValue={values.name}
             label={t('name')}
-            error={bad.has('name') ? (state.code === 'conflict' ? t('nameTaken') : t('nameInvalid')) : undefined}
+            error={
+              bad.has('name') ? (state.code === 'conflict' ? t('nameTaken') : t('nameInvalid')) : undefined
+            }
           />
           <Input
             id="tpl-description"

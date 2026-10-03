@@ -1,5 +1,11 @@
 import 'server-only';
-import { parseFaqText, parseLinksText, parseScheduleText, type SectionKind, SectionTextError } from '@yayatoh/events';
+import {
+  parseFaqText,
+  parseLinksText,
+  parseScheduleText,
+  type SectionKind,
+  SectionTextError,
+} from '@yayatoh/events';
 import type { FormState } from '@/lib/form-state.ts';
 import { textOrNull } from './form.ts';
 

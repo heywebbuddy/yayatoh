@@ -1,4 +1,4 @@
-import { formatMoney, executeQuery, isDomainError, money } from '@yayatoh/kernel';
+import { executeQuery, formatMoney, isDomainError, money } from '@yayatoh/kernel';
 import { isProfileKey, PROFILES } from '@yayatoh/platform';
 import { getTemplateQuery } from '@yayatoh/templates';
 import { roleCan } from '@yayatoh/tenancy';
@@ -8,7 +8,11 @@ import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { CopyEventForm } from '@/components/copy-forms.tsx';
 import { SectionForm } from '@/components/section-form.tsx';
-import { ChecklistItemForm, TemplateSettingsForm, TemplateTicketForm } from '@/components/template-builder.tsx';
+import {
+  ChecklistItemForm,
+  TemplateSettingsForm,
+  TemplateTicketForm,
+} from '@/components/template-builder.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
@@ -73,7 +77,13 @@ export default async function TemplatePage({
     { key: 'checklist', done: tpl.checklist > 0, href: '#checklist' },
   ] as const;
   const firstTodo = steps.find((s) => !s.done)?.key;
-  const notice = sp.created ? tb('created') : sp.copied ? tb('copied') : sp.duplicated ? tb('duplicated') : null;
+  const notice = sp.created
+    ? tb('created')
+    : sp.copied
+      ? tb('copied')
+      : sp.duplicated
+        ? tb('duplicated')
+        : null;
   return (
     <>
       <PageHeader
@@ -117,7 +127,11 @@ export default async function TemplatePage({
               </form>
               {archived ? null : (
                 <form action={setTemplateArchivedAction.bind(null, org, tpl.id, true)}>
-                  <Button type="submit" variant="ghost" aria-label={t('templates.archiveFor', { name: tpl.name })}>
+                  <Button
+                    type="submit"
+                    variant="ghost"
+                    aria-label={t('templates.archiveFor', { name: tpl.name })}
+                  >
                     {t('templates.archive')}
                   </Button>
                 </form>
@@ -168,7 +182,9 @@ export default async function TemplatePage({
                   >
                     <span className="flex flex-col">
                       <span className="text-body font-semibold">{tt.name}</span>
-                      {tt.description ? <span className="text-caption text-ink-2">{tt.description}</span> : null}
+                      {tt.description ? (
+                        <span className="text-caption text-ink-2">{tt.description}</span>
+                      ) : null}
                       <span className="text-caption text-ink-2">
                         {tb('ticketLine', {
                           price:
@@ -221,7 +237,6 @@ export default async function TemplatePage({
             <ol aria-label={tb('sectionsList')} className="m-0 flex list-none flex-col gap-2 p-0">
               {tpl.sectionList.map((s, i) => (
                 <li
-                  // biome-ignore lint/suspicious/noArrayIndexKey: a snapshot's sections have no ids; the order is the identity
                   key={`${i}-${s.title}`}
                   className="flex flex-wrap items-center justify-between gap-3 rounded-card border border-line px-4 py-3"
                 >
@@ -315,14 +330,18 @@ export default async function TemplatePage({
             <ol aria-label={tb('checklistList')} className="m-0 flex list-none flex-col gap-2 p-0">
               {tpl.checklistItems.map((item, i) => (
                 <li
-                  // biome-ignore lint/suspicious/noArrayIndexKey: titles may repeat; the order is the identity
                   key={`${i}-${item}`}
                   className="flex flex-wrap items-center justify-between gap-3 rounded-card border border-line px-4 py-3"
                 >
                   <span className="text-body">{item}</span>
                   {editable ? (
                     <form action={removeChecklistItemAction.bind(null, org, tpl.id, i)}>
-                      <Button type="submit" variant="ghost" size="sm" aria-label={tb('removeItem', { title: item })}>
+                      <Button
+                        type="submit"
+                        variant="ghost"
+                        size="sm"
+                        aria-label={tb('removeItem', { title: item })}
+                      >
                         {t('templates.delete')}
                       </Button>
                     </form>

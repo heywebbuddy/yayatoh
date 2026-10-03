@@ -49,7 +49,11 @@ export default async function CopyPage({
           />
         </Card>
       </section>
-      <section id="save-template" aria-labelledby="template-heading" className="flex scroll-mt-4 flex-col gap-3">
+      <section
+        id="save-template"
+        aria-labelledby="template-heading"
+        className="flex scroll-mt-4 flex-col gap-3"
+      >
         <h2 id="template-heading" className="text-section">
           {t('copy.template')}
         </h2>

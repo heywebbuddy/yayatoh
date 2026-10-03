@@ -39,7 +39,12 @@ export async function addSectionAction(
   try {
     await executeCommand(
       addSectionCommand,
-      { eventId: ev.id, kind, title: String(form.get('title') ?? ''), content: sectionContentFrom(kind, form) },
+      {
+        eventId: ev.id,
+        kind,
+        title: String(form.get('title') ?? ''),
+        content: sectionContentFrom(kind, form),
+      },
       data.ctx,
       ports,
     );
