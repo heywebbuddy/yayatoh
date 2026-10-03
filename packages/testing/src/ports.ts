@@ -17,6 +17,8 @@ import { submitRegistrationFormCommand } from '@yayatoh/forms';
 import {
   guestImportAction,
   guestsContactOwner,
+  guestsOccupantDirectory,
+  guestsPartyCredentials,
   rsvpAnswersExportAction,
   rsvpAnswersPrivateExportAction,
 } from '@yayatoh/guests';
@@ -33,7 +35,7 @@ import {
 } from '@yayatoh/platform';
 import { registrationDecideAction } from '@yayatoh/registration';
 import { attendeeExportAction, bookingsExportAction } from '@yayatoh/reports';
-import { seatAssignAction } from '@yayatoh/seating';
+import { seatAssignAction, setOccupantDirectory, setPartyCredentials } from '@yayatoh/seating';
 import { surveyExportAction, surveysContactOwner } from '@yayatoh/surveys';
 import { createOrgAuthorizer, orgStatusGate } from '@yayatoh/tenancy';
 import { ticketResendAction } from '@yayatoh/ticketing';
@@ -57,6 +59,10 @@ export const ports = createCommandPorts({
 // Tests get a per-run local key vault (ticket signing keys are envelope-encrypted). Integration
 // runs share one key across files (the global setup provides it); unit runs draw their own.
 setKeyVault(localKeyVault(process.env.LOCAL_KMS_KEY ?? randomBytes(32).toString('hex')));
+// M4.3a: guest seating reads the guest list through seating's OccupantDirectory port.
+setOccupantDirectory(guestsOccupantDirectory);
+// M4.4a: the guest seat finder's party links and PINs (seating's PartyCredentials port).
+setPartyCredentials(guestsPartyCredentials);
 
 // M6.1c: every module's data-subject contributor, as the web registers them.
 registerDataSubjectContributors(DATA_SUBJECT_CONTRIBUTORS);

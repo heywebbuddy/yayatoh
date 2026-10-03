@@ -50,6 +50,8 @@ const SECTION_OF: Record<string, string> = {
   cancel: 'home',
   // Batch 3d merge: M3.2a's Command Center (every profile).
   'command-center': 'commandCenter',
+  // M4.4b: the day-of host view (weddings).
+  'day-of': 'dayOf',
   // M3.3b: the help queue (every profile with check-in).
   assistance: 'assistance',
   // M4.2b: the gala's Tables & Sponsors (no longer a placeholder).

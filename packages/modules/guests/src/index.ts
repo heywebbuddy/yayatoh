@@ -18,6 +18,8 @@ export {
 // M6.1a: contact merges move this module's references (ADR 0023).
 export { guestsContactOwner } from './contact-merge.ts';
 export { guestsDataSubjects } from './data-subject.ts';
+// M4.4b: names for the day of (check-in, kiosk, A–Z board).
+export { guestNamesTx } from './day-of.ts';
 export {
   type CollectorMember,
   type CollectorPayload,
@@ -108,6 +110,15 @@ export {
   strictName,
   tally,
 } from './domain/rsvp.ts';
+// M4.6a social Command Center pack: RSVP, meal and dietary counts (counts only).
+export {
+  type MealOption,
+  type MealTally,
+  mealTally,
+  type RsvpPendingCounts,
+  rsvpPendingCounts,
+  type SocialGuest,
+} from './domain/social.ts';
 export * from './dto.ts';
 export {
   addPartyGuestCommand,
@@ -189,6 +200,8 @@ export {
   setPartyLocaleCommand,
 } from './invites.ts';
 export { privateColumns } from './private-columns.ts';
+// M4.3a guest seating: the guest list's live channel and seating's OccupantDirectory.
+export { GUESTS_CHANNEL, MAX_PARTY_MESSAGES, publishGuestChangesTx } from './realtime.ts';
 export {
   createRsvpLinksCommand,
   findRsvpByNameCommand,
@@ -266,6 +279,24 @@ export {
   SUB_EVENT_KINDS,
   type SubEventKind,
 } from './schema.ts';
+// M4.4a: the guest seat finder's party credentials (seating's `PartyCredentials` port).
+export { guestsPartyCredentials } from './seat-finder-party.ts';
+export {
+  guestsOccupantDirectory,
+  type SeatingOccupant,
+  type SeatingOccupantParty,
+  type SeatingStatus,
+  seatingOccupantsTx,
+  seatingSubEventsTx,
+  wholeEventStatus,
+} from './seating-occupants.ts';
+export {
+  type MealDietaryCounts,
+  mealDietaryCountsTx,
+  rsvpDeadlineEventIdsTx,
+  type SocialFacts,
+  socialFactsTx,
+} from './social-facts.ts';
 export {
   CreateSubEventInput,
   createSubEventCommand,

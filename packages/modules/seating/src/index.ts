@@ -77,6 +77,20 @@ export {
   planChunk,
   planUndo,
 } from './domain/bulk-assign.ts';
+// M4.4a guest seat finder: the party's page (link), PIN mode and the `PartyCredentials` port.
+export { type FinderGuest, type FinderParty, partyOnChart } from './domain/guest-finder.ts';
+// M4.3a guest seating: parties and guests at tables (the OccupantDirectory port, guests side).
+export {
+  declinedSeated,
+  fitAt,
+  freeSeats,
+  OCCUPANT_STATUSES,
+  type OccupantStatus,
+  unseatedOf,
+  VIP_WARNINGS,
+  type VipWarning,
+  vipWarning,
+} from './domain/guest-seating.ts';
 export {
   type ChannelRef,
   channelHolds,
@@ -132,6 +146,38 @@ export {
   SeatGroupDto,
   seatGroupsQuery,
 } from './groups.ts';
+// M4.4b: every guest's tables for the day of (check-in, kiosk, A–Z board, host view).
+export { type GuestPlace, type GuestPlaces, guestPlacesTx } from './guest-day-of.ts';
+export {
+  findGuestSeatByPinCommand,
+  GuestSeatResultDto,
+  PARTY_SEATS_STATES,
+  type PartyCredentials,
+  PartySeatsDto,
+  PIN_LOOKUP_STATUSES,
+  partySeatsQuery,
+  setPartyCredentials,
+} from './guest-finder.ts';
+export {
+  GUEST_SEATS_CHANNEL,
+  GuestSeatDto,
+  GuestSeatingDto,
+  guestSeatingQuery,
+  MAX_GUESTS_PER_SEATING,
+  type Occupant,
+  type OccupantDirectory,
+  type OccupantParty,
+  type OccupantSubEvent,
+  PLACE_KINDS,
+  SeatGuestsInput,
+  SeatGuestsResult,
+  SeatingPartyDto,
+  SeatingPlaceDto,
+  seatGuestsCommand,
+  setOccupantDirectory,
+  setVipTableCommand,
+  unseatGuestsCommand,
+} from './guest-seating.ts';
 export {
   extendSeatHoldTx,
   heldSeatsTx,

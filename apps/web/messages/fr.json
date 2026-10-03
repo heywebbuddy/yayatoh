@@ -2035,7 +2035,8 @@
       "rules": "Règles",
       "selection": "Meilleures places",
       "channels": "Canaux",
-      "revisions": "Révisions"
+      "revisions": "Révisions",
+      "guests": "Placer les invités"
     },
     "assign": {
       "title": "Placer les invités",
@@ -2126,7 +2127,8 @@
       "modeNow": "Recherche : {mode}",
       "modeShort": {
         "code": "code par e-mail",
-        "name": "nom complet"
+        "name": "nom complet",
+        "pin": "nom complet et code PIN de l’invitation"
       },
       "notPublic": "L'événement n'est pas publié (ou est privé) : les invités ne peuvent pas encore ouvrir la recherche de place.",
       "settingsTitle": "Invités",
@@ -2137,11 +2139,13 @@
       "mode": "Comment les invités cherchent leur place",
       "modeOption": {
         "code": "Avec un code envoyé par e-mail (recommandé)",
-        "name": "Immédiatement, par nom complet"
+        "name": "Immédiatement, par nom complet",
+        "pin": "Par nom complet et le code PIN de leur invitation"
       },
       "modeHint": {
         "code": "Seule une personne qui lit les e-mails de l'invité voit sa place, et personne ne peut savoir qui est sur la liste.",
-        "name": "Plus rapide à l'entrée, mais quiconque connaît le nom complet d'un invité peut voir où il est assis."
+        "name": "Plus rapide à l'entrée, mais quiconque connaît le nom complet d'un invité peut voir où il est assis.",
+        "pin": "Les invités saisissent leur nom complet et le code PIN à 6 chiffres imprimé sur l’invitation de leur groupe. Ils voient leur table, jamais le nom de quelqu’un, et personne ne peut savoir qui figure sur la liste."
       },
       "readOnly": "Vous pouvez voir ces réglages, mais pas les modifier.",
       "shareTitle": "Partager",
@@ -2149,7 +2153,10 @@
       "openPublic": "Ouvrir la recherche de place",
       "poster": "Imprimer l'affiche",
       "closedNote": "La recherche de place est fermée. Les invités qui scannent l'affiche sont invités à revenir plus tard.",
-      "namePoster": "Imprimer l'affiche des noms"
+      "namePoster": "Imprimer l'affiche des noms",
+      "partyLinksTitle": "Liens des groupes",
+      "partyLinksHint": "Le lien et le code QR de l’invitation de chaque groupe ouvrent aussi sa propre page de table : sa table sur le plan et qui est assis avec lui. Le code QR ne change pas quand vous le déplacez à une autre table.",
+      "partyLinksAction": "Liens et codes QR des groupes"
     },
     "map": {
       "zoomIn": "Zoom avant",
@@ -2408,6 +2415,127 @@
       "isCurrent": "C’est le plan tel qu’il est maintenant.",
       "restore": "Restaurer la révision {number}",
       "restoredNotice": "Révision {number} restaurée. Le plan actuel est la révision {now}."
+    },
+    "guestSeating": {
+      "title": "Placer les invités",
+      "description": "Placez les groupes aux tables. Faites glisser un groupe de la file sur le plan, ou cochez des invités, choisissez une table et appuyez sur « Placer la sélection » : le clavier fait tout ce que fait le glisser-déposer.",
+      "chart": {
+        "label": "Placement pour",
+        "event": "Tout l’événement"
+      },
+      "noPlan": "{chart} n’a pas encore de plan de salle",
+      "noPlanHint": "Créez d’abord le plan (tables ou rangées), puis placez vos invités ici.",
+      "toPlan": "Aller au plan",
+      "noGuests": "Aucun invité à placer pour l’instant",
+      "noGuestsHint": "Ajoutez des groupes sur la page Invités (ou invitez-les à ce moment de la journée), puis placez-les ici.",
+      "toGuests": "Aller aux invités",
+      "summary": "{seated} placés · {unseated} à placer",
+      "readOnly": "Vous voyez le placement, mais ne pouvez pas le modifier.",
+      "declinedSeated": "{count, plural, one {# invité qui a décliné est encore placé.} other {# invités qui ont décliné sont encore placés.}} Retirez-les dans le détail de la table.",
+      "live": {
+        "live": "En direct",
+        "connecting": "Connexion…",
+        "offline": "Hors ligne, reconnexion"
+      },
+      "vip": "VIP",
+      "queue": {
+        "title": "Sans place ({count})",
+        "search": "Rechercher groupes et invités",
+        "status": "Réponse",
+        "statusAll": "Toutes les réponses",
+        "side": "Côté",
+        "sideAll": "Tous les côtés",
+        "list": "Groupes à placer",
+        "selectParty": "Sélectionner tout le groupe {party}",
+        "toSeat": "{count, plural, one {# à placer} other {# à placer}}",
+        "selected": "{count, plural, =0 {Personne de sélectionné} one {# invité sélectionné} other {# invités sélectionnés}}",
+        "clear": "Effacer la sélection",
+        "empty": "Tout le monde a une place.",
+        "noMatch": "Aucun groupe ne correspond à ces filtres."
+      },
+      "status": {
+        "attending": "Présent",
+        "pending": "En attente de réponse",
+        "declined": "A décliné"
+      },
+      "guest": {
+        "guestOf": "Invité de {name}",
+        "meal": "Repas : {meal}",
+        "noMeal": "Aucun repas choisi",
+        "child": "Enfant",
+        "infant": "Bébé"
+      },
+      "form": {
+        "title": "Placer les invités sélectionnés",
+        "table": "Table ou rangée",
+        "choose": "Choisir une table ou une rangée",
+        "option": "{place} — {free} sur {capacity} libres",
+        "optionVip": "{place} — {free} sur {capacity} libres · zone VIP",
+        "cantFit": "Pas assez de place : {asked, plural, one {# invité sélectionné} other {# invités sélectionnés}}, {fits, plural, =0 {aucune place libre} one {# place libre} other {# places libres}} à {place}.",
+        "submit": "Placer la sélection",
+        "submitting": "Placement…"
+      },
+      "place": {
+        "table": "Table {label}",
+        "row": "Rangée {label}"
+      },
+      "map": {
+        "title": "Plan",
+        "hint": "Faites glisser un groupe sur une table pour le placer. Cliquez sur une table pour voir qui y est assis.",
+        "readOnlyHint": "Cliquez sur une table pour voir qui y est assis.",
+        "dropHere": "Déposer sur {place} : {free} libres",
+        "dropCantFit": "Pas assez de place à {place} : {count, plural, one {# invité} other {# invités}}, {free} libres",
+        "guests": "Invités",
+        "tickets": "Détenteurs de billets",
+        "vip": "Zone VIP"
+      },
+      "details": {
+        "title": "Détail de la table",
+        "choose": "Table à afficher",
+        "none": "Ce plan n’a ni tables ni rangées.",
+        "counts": "{seated} placés · {free} sur {capacity} libres",
+        "tickets": "{count, plural, one {# place occupée par un billet} other {# places occupées par des billets}}",
+        "sponsor": "Offerte par {name}",
+        "vipZone": "Zone VIP",
+        "vipFromPlan": "Dans une section VIP du plan",
+        "warnings": "À vérifier",
+        "warnDeclined": "{name} a décliné et est encore placé.",
+        "warnVipOutside": "{party} est un groupe VIP hors d’une zone VIP.",
+        "warnNotVip": "{party} n’est pas un groupe VIP mais est dans une zone VIP.",
+        "meals": "Repas",
+        "mealCount": "{meal} : {count}",
+        "noMeal": "Non choisi",
+        "empty": "Personne n’est encore assis ici. Placez un groupe de la file.",
+        "unseatParty": "Retirer {party}",
+        "move": "Déplacer vers…",
+        "moveLabel": "Déplacer {name} à une autre table",
+        "unseat": "Retirer",
+        "unseatLabel": "Retirer {name}",
+        "moveTo": "Déplacer {name}",
+        "moveSubmit": "Déplacer",
+        "cancel": "Annuler"
+      },
+      "done": {
+        "seated": "{count, plural, one {# invité placé} other {# invités placés}} à {place}.",
+        "moved": "{name} déplacé à {place}.",
+        "unseated": "{count, plural, one {# invité est de retour} other {# invités sont de retour}} dans la file.",
+        "vipOn": "{place} est maintenant une zone VIP.",
+        "vipOff": "{place} n’est plus une zone VIP."
+      },
+      "warnings": {
+        "vip_outside": "{party} est un groupe VIP et {place} n’est pas une zone VIP.",
+        "not_vip_inside": "{place} est une zone VIP et {party} n’est pas un groupe VIP."
+      },
+      "errors": {
+        "forbidden": "Vous voyez le placement, mais ne pouvez pas le modifier.",
+        "cantFit": "Pas assez de place : {asked, plural, one {# invité a} other {# invités ont}} besoin d’une place, et {fits, plural, =0 {aucune place n’est libre} one {seule # place est libre} other {seules # places sont libres}} à cet endroit.",
+        "declined": "Cet invité a décliné. Seuls les invités qui n’ont pas décliné peuvent être placés.",
+        "unknown": "Cet invité n’est plus sur la liste. La page va se rafraîchir.",
+        "noPlan": "Il n’y a pas encore de plan de salle pour cela.",
+        "noGuests": "Choisissez au moins un invité.",
+        "noPlace": "Choisissez une table ou une rangée.",
+        "dropMiss": "Déposez un groupe sur une table ou une rangée."
+      }
     }
   },
   "venueMap": {
@@ -2447,7 +2575,11 @@
       "bottom": "En bas du plan",
       "bottom-right": "En bas à droite du plan"
     },
-    "yours": "{count, plural, one {Votre place : {seats}} other {Vos places : {seats}}}"
+    "yours": "{count, plural, one {Votre place : {seats}} other {Vos places : {seats}}}",
+    "yourPlace": {
+      "table": "Votre table",
+      "row": "Votre rangée"
+    }
   },
   "seatFinder": {
     "eyebrow": "Trouver sa place",
@@ -2498,9 +2630,15 @@
       "challengeUnavailable": "Trop de recherches depuis cet appareil. Patientez une minute puis réessayez.",
       "closed": "La recherche de place n'est pas ouverte pour cet événement.",
       "internal": "Un problème est survenu de notre côté.",
-      "rateLimited": "Trop de codes demandés. Réessayez dans {minutes, plural, one {# minute} other {# minutes}}."
+      "rateLimited": "Trop de codes demandés. Réessayez dans {minutes, plural, one {# minute} other {# minutes}}.",
+      "noMatch": "Nous n’avons trouvé aucune table pour ce nom et ce code PIN. Vérifiez-les sur votre invitation ou demandez à un hôte.",
+      "invalidPin": "Saisissez le code PIN à 6 chiffres de votre invitation.",
+      "pinRateLimited": "Trop de recherches depuis cet appareil. Réessayez dans {minutes, plural, one {# minute} other {# minutes}}."
     },
-    "hostedBy": "Table offerte par {sponsor}"
+    "hostedBy": "Table offerte par {sponsor}",
+    "pinIntro": "Saisissez votre nom complet tel qu’il figure sur votre invitation et le code PIN à 6 chiffres qui y est imprimé.",
+    "pin": "Code PIN de votre invitation",
+    "findByPin": "Trouver ma table"
   },
   "seatFinderPoster": {
     "pageTitle": "Affiche « Trouver sa place »",
@@ -2513,7 +2651,8 @@
     "step2Code": "Saisissez votre e-mail : nous vous enverrons un code.",
     "step2Name": "Saisissez votre nom complet.",
     "step3": "Voyez votre table et votre place sur le plan.",
-    "orVisit": "Ou rendez-vous sur"
+    "orVisit": "Ou rendez-vous sur",
+    "step2Pin": "Saisissez votre nom complet et le code PIN de votre invitation."
   },
   "reports": {
     "title": "Analyse",
@@ -6768,6 +6907,52 @@
         "window": "{sent, plural, one {# e-mail} many {# e-mails} other {# e-mails}} sur les {days} derniers jours",
         "over": "{domains, plural, one {# domaine d’envoi} many {# domaines d’envoi} other {# domaines d’envoi}} et {campaigns, plural, one {# campagne} many {# campagnes} other {# campagnes}} au-delà des seuils",
         "open": "Ouvrir la délivrabilité des e-mails"
+      },
+      "rsvp": {
+        "title": "Réponses",
+        "allAnswered": "Tous les invités ont répondu.",
+        "noneInvited": "Personne n’est encore invité à une étape.",
+        "responded": "{responded} invités sur {invited} ont répondu",
+        "meter": "Réponses reçues",
+        "parties": "Foyers sans réponse : {count}",
+        "notSent": "Invitation pas encore envoyée : {count}",
+        "deadline": "Date limite de réponse : {date}",
+        "noDeadline": "Aucune date limite de réponse",
+        "open": "Ouvrir les réponses"
+      },
+      "guestSeating": {
+        "title": "Plan de table",
+        "noChart": "Pas encore de plan de salle pour les invités. Choisissez-en un dans Placement.",
+        "noGuests": "Aucun invité à placer pour l’instant.",
+        "allSeated": "Chaque invité qui n’a pas décliné a une table.",
+        "seated": "{seated} invités sur {guests} ont une table",
+        "listLabel": "Invités sans table",
+        "guestOf": "Invité de {name}",
+        "more": "+{count} autres",
+        "open": "Placer les invités"
+      },
+      "meals": {
+        "title": "Repas et régimes",
+        "attending": "Présents : {count}",
+        "noneAttending": "Les repas sont comptés quand les invités disent oui.",
+        "caption": "Repas des invités présents",
+        "colMeal": "Repas",
+        "colGuests": "Invités",
+        "other": "Autre choix",
+        "none": "Aucun repas choisi",
+        "dietary": "Régimes alimentaires : {count}",
+        "accessibility": "Besoins d’accessibilité : {count}",
+        "open": "Ouvrir les réponses RSVP"
+      },
+      "arrivals": {
+        "title": "Arrivées des invités",
+        "arrivedOf": "{arrived} invités attendus sur {expected} sont arrivés",
+        "notArrived": "Pas encore là : {count}",
+        "none": "Personne n’est encore arrivé.",
+        "noExpected": "Aucun invité attendu pour l’instant.",
+        "recent": "Dernières arrivées",
+        "guestOf": "Invité de {name}",
+        "open": "Ouvrir la vue du jour J"
       }
     },
     "openScanner": "Ouvrir le scanner",
@@ -6885,7 +7070,10 @@
       "automationFailed": "Ouvrir l’état de la messagerie",
       "campaignFailed": "Ouvrir les campagnes",
       "disputeDeadline": "Ouvrir les litiges",
-      "assistanceOverdue": "Ouvrir les demandes d’aide"
+      "assistanceOverdue": "Ouvrir les demandes d’aide",
+      "rsvpPending": "Ouvrir les réponses",
+      "guestsUnseated": "Placer les invités",
+      "mealsMissing": "Ouvrir les réponses RSVP"
     },
     "rules": {
       "unseated": "{count, plural, one {Un participant n’a pas de place} other {{countWords} participants n’ont pas de place}}",
@@ -6907,7 +7095,10 @@
       "automationFailed": "{count, plural, one {Un message ou une action groupée a échoué aujourd’hui} other {{countWords} messages ou actions groupées ont échoué aujourd’hui}}",
       "campaignFailed": "{count, plural, one {Un envoi de campagne a échoué aujourd’hui} other {{countWords} envois de campagne ont échoué aujourd’hui}}",
       "disputeDeadline": "{count, plural, one {Un litige demande bientôt des preuves} other {{countWords} litiges demandent bientôt des preuves}}",
-      "assistanceOverdue": "{count, plural, one {{countWords} demande d’aide attend depuis trop longtemps} other {{countWords} demandes d’aide attendent depuis trop longtemps}}"
+      "assistanceOverdue": "{count, plural, one {{countWords} demande d’aide attend depuis trop longtemps} other {{countWords} demandes d’aide attendent depuis trop longtemps}}",
+      "rsvpPending": "{count, plural, one {Un invité n’a pas répondu à l’invitation} other {{countWords} invités n’ont pas répondu à l’invitation}}",
+      "guestsUnseated": "{count, plural, one {Un invité n’a pas de table} other {{countWords} invités n’ont pas de table}}",
+      "mealsMissing": "{count, plural, one {Un invité présent n’a pas choisi de repas} other {{countWords} invités présents n’ont pas choisi de repas}}"
     },
     "widget": {
       "title": "Alertes",
@@ -7060,7 +7251,12 @@
     "claimOff": "Arrêter les alertes d’appareils",
     "claimOnDone": "Les alertes d’appareils arriveront sur ce téléphone.",
     "claimOffDone": "Alertes d’appareils arrêtées sur ce téléphone.",
-    "claimNeedsPush": "Activez d’abord les alertes dans Équipe sur cet appareil."
+    "claimNeedsPush": "Activez d’abord les alertes dans Équipe sur cet appareil.",
+    "kioskKind": "Écran de la borne pour {label}",
+    "kindTickets": "Enregistrement des billets",
+    "kindGuests": "Accueil des invités par nom",
+    "kindBoard": "Tableau des tables (A–Z)",
+    "boardStarted": "{label} affiche maintenant le tableau des tables."
   },
   "scanKiosk": {
     "welcome": "Bienvenue à {event}",
@@ -10460,7 +10656,10 @@
     },
     "questionsTitle": "Quelques questions",
     "questionsHint": "Les hôtes aimeraient en savoir un peu plus. Les réponses indiquées comme privées ne sont vues que par les hôtes.",
-    "questionsFor": "Questions pour {name}"
+    "questionsFor": "Questions pour {name}",
+    "seatTitle": "Trouvez votre table",
+    "seatHint": "Voyez où vous êtes assis sur le plan et qui est à votre table.",
+    "seatLink": "Voir ma table"
   },
   "rsvpFind": {
     "metaTitle": "Retrouver votre invitation",
@@ -10570,7 +10769,13 @@
     "reopenFor": "Rouvrir la réponse de {party}",
     "createLinkFor": "Créer le lien de réponse de {party}",
     "copy": "Copier le lien",
-    "copied": "Lien copié."
+    "copied": "Lien copié.",
+    "seatTitle": "Code QR de la page de table",
+    "seatHint": "Ce code QR ouvre la page de table de {party} : sa table sur le plan et qui est assis avec lui. Il ne change pas quand vous le déplacez, vous pouvez donc l’imprimer sur des cartes d’accueil ou des marque-places.",
+    "seatQrLabel": "Code QR de la page de table de {party}",
+    "seatLinkLabel": "Lien de la page de table de {party}",
+    "seatClosed": "Les invités verront leur table quand vous ouvrirez le localisateur de places (Placement → Localisateur de places).",
+    "seatScan": "Scannez pour trouver votre table"
   },
   "collector": {
     "metaTitle": "Transmettez vos coordonnées",
@@ -12328,5 +12533,167 @@
     "tooLate": "Choisissez une date jusqu’au {date}",
     "timeZoneNote": "Heures en {zone}",
     "selected": "Sélectionné"
+  },
+  "guestSeats": {
+    "placeAt": {
+      "table": "Table {item}",
+      "row": "Rangée {item}"
+    },
+    "wholeEvent": "Plan de table",
+    "resultTitle": "{count, plural, one {Votre table} other {Vos tables}}",
+    "partyCount": "{count, plural, one {# personne de votre groupe est assise ici} other {# personnes de votre groupe sont assises ici}}",
+    "noTableTitle": "Votre table n’est pas encore attribuée",
+    "noTable": "Les hôtes préparent encore le plan de table. Revenez à l’approche du jour J ou demandez à un hôte.",
+    "unseatedCount": "{count, plural, one {# personne de votre groupe n’a pas encore de table.} other {# personnes de votre groupe n’ont pas encore de table.}}",
+    "again": "Chercher quelqu’un d’autre",
+    "mapTitle": "Plan du lieu",
+    "mapFor": "Plan du lieu : {name}"
+  },
+  "partySeats": {
+    "metaTitle": "Votre table",
+    "title": "Où est assis {party}",
+    "intro": "Votre table sur le plan du lieu, et qui est assis avec vous.",
+    "closedTitle": "Le plan de table n’est pas encore prêt",
+    "closed": "Les hôtes n’ont pas encore partagé le plan de table. Gardez cette page, ou le code QR de votre invitation : elle affichera votre table dès qu’ils l’auront fait.",
+    "noChartsTitle": "Votre table n’est pas encore attribuée",
+    "noCharts": "Les hôtes préparent encore le plan de table. Cette page affichera votre table dès qu’elle sera attribuée.",
+    "yourParty": "De votre groupe",
+    "tablemates": {
+      "table": "Aussi à cette table",
+      "row": "Aussi dans cette rangée"
+    },
+    "noTablemates": "Personne d’autre n’est encore placé ici.",
+    "unseated": "Pas encore placé(s) : {names}",
+    "guestOf": "Invité de {name}",
+    "keep": "Cette page affiche toujours votre table actuelle : le lien et le code QR de votre invitation ne changent pas quand les hôtes vous déplacent.",
+    "toRsvp": "Retour à votre réponse"
+  },
+  "scanGuests": {
+    "view": "Invités",
+    "title": "Accueil des invités",
+    "arrivedOf": "{arrived} sur {expected} arrivés",
+    "searchLabel": "Nom de l’invité ou du groupe",
+    "searchHint": "Tapez une partie d’un nom ou choisissez des étiquettes ci-dessous.",
+    "labels": "Étiquettes",
+    "startHint": "Cherchez un invité ou un groupe, ou choisissez une étiquette pour voir ses invités.",
+    "noMatchTitle": "Aucun invité trouvé",
+    "noMatchDescription": "Vérifiez l’orthographe, essayez le nom du groupe ou retirez une étiquette.",
+    "noListTitle": "Aucune liste d’invités sur cet appareil",
+    "noListDescription": "Cet événement n’a pas encore d’invités, ou cet appareil ne les a pas téléchargés. Connectez-vous une fois à internet pour télécharger la liste.",
+    "results": "Invités trouvés",
+    "checkInParty": "Enregistrer tout le groupe {party} ({count})",
+    "checkInGuest": "Enregistrer {name}",
+    "checkIn": "Enregistrer",
+    "checkedInAt": "{name} est enregistré. {place}.",
+    "checkedInNoPlace": "{name} est enregistré. Pas encore de table.",
+    "checkedInMany": "Invités enregistrés : {count}.",
+    "arrivedAt": "Arrivé à {time}",
+    "declined": "A décliné",
+    "noPlace": "Pas encore de table",
+    "guestOf": "Invité de {name}",
+    "placeTable": "Table {label}",
+    "placeRow": "Rang {label}",
+    "placeOnChart": "{chart} : {place}"
+  },
+  "scanGuestKiosk": {
+    "welcome": "Bienvenue à {event}",
+    "subtitle": "Trouvez votre table et enregistrez-vous",
+    "nameLabel": "Tapez votre prénom et votre nom",
+    "nameHint": "Comme sur votre invitation.",
+    "find": "Trouver ma table",
+    "hello": "Bienvenue, {name} !",
+    "welcomeBack": "Re-bonjour, {name} !",
+    "yourPlace": "Votre table : {places}",
+    "noPlace": "Votre table n’est pas encore attribuée. Adressez-vous à un membre de l’équipe.",
+    "checkedIn": "Vous êtes enregistré. Bonne soirée !",
+    "alreadyIn": "Vous êtes déjà enregistré.",
+    "noMatch": "Nous n’avons pas trouvé ce nom. Vérifiez l’orthographe ou adressez-vous à un membre de l’équipe.",
+    "seeStaff": "Adressez-vous à un membre de l’équipe."
+  },
+  "scanBoard": {
+    "title": "Trouvez votre table",
+    "empty": "Les tables s’afficheront ici dès que les invités seront placés.",
+    "pageOf": "Page {page} sur {total}",
+    "pause": "Pause",
+    "resume": "Reprendre",
+    "next": "Page suivante"
+  },
+  "dayOf": {
+    "description": "Qui est arrivé, qui n’a pas encore de table, et les menus à préparer en cuisine.",
+    "setUpKiosk": "Installer une borne ou un tableau",
+    "noAccessTitle": "Vous ne pouvez pas voir la liste des invités",
+    "noAccessDescription": "Demandez à l’hôte l’accès aux invités de cet événement.",
+    "arrived": "Arrivés",
+    "arrivedOf": "{arrived} sur {expected} attendus",
+    "notArrived": "Pas encore là",
+    "unseated": "Sans table",
+    "declined": "Ont décliné",
+    "findTitle": "Enregistrer un invité",
+    "searchLabel": "Nom de l’invité ou du groupe",
+    "search": "Rechercher",
+    "noMatchTitle": "Aucun invité trouvé",
+    "noMatchDescription": "Vérifiez l’orthographe ou essayez le nom du groupe.",
+    "matches": "Invités trouvés",
+    "arrivedAt": "Arrivé à {time}",
+    "declinedOne": "A décliné",
+    "checkIn": "Enregistrer",
+    "checkInGuest": "Enregistrer {name}",
+    "checkedIn": "{name} est enregistré.",
+    "arrivalsTitle": "Arrivées",
+    "noArrivalsTitle": "Personne n’est encore arrivé",
+    "noArrivalsDescription": "Les invités enregistrés avec un scanner, à la borne ou ici apparaissent dans cette liste à leur arrivée.",
+    "colTime": "Heure",
+    "colGuest": "Invité",
+    "colParty": "Groupe",
+    "colPlace": "Table",
+    "colHow": "Enregistré par",
+    "colActions": "Actions",
+    "sourceScanner": "Scanner",
+    "sourceKiosk": "Borne invités",
+    "sourceHost": "Hôte",
+    "undo": "Annuler",
+    "undoGuest": "Annuler l’enregistrement de {name}",
+    "undone": "Enregistrement annulé.",
+    "unseatedTitle": "Invités sans table",
+    "noChartTitle": "Pas encore de plan de salle",
+    "noChartDescription": "Choisissez un plan dans Placement, puis placez vos invités à leurs tables.",
+    "toSeating": "Aller au placement",
+    "allSeatedTitle": "Tout le monde a une table",
+    "allSeatedDescription": "Chaque invité qui n’a pas décliné est placé.",
+    "attending": "Présent",
+    "noAnswer": "Pas de réponse",
+    "here": "Arrivé",
+    "seatThem": "Placer les invités",
+    "mealsTitle": "Menus",
+    "mealsHint": "Invités ayant accepté, par choix de menu.",
+    "noMealsTitle": "Aucun menu à compter pour l’instant",
+    "noMealsDescription": "Les menus sont comptés dès que les invités acceptent.",
+    "colMeal": "Menu",
+    "colGuests": "Invités",
+    "colArrived": "Arrivés",
+    "noMeal": "Pas encore choisi",
+    "kiosksTitle": "Borne invités et tableau des tables",
+    "kiosksHint": "Ajoutez une tablette ou une télévision comme appareil, ouvrez-y son lien de configuration, puis choisissez ce qu’elle affiche. Les deux continuent de fonctionner si internet tombe sur place ; l’équipe en sort avec le code PIN.",
+    "noDevicesTitle": "Aucun appareil pour l’instant",
+    "noDevicesDescription": "Ajoutez un appareil ci-dessous, puis ouvrez son lien de configuration sur la tablette ou la télévision.",
+    "online": "En ligne",
+    "offline": "Hors ligne",
+    "kindTickets": "Enregistrement des billets",
+    "kindGuests": "Borne invités",
+    "kindBoard": "Tableau des tables (A–Z)",
+    "kioskKind": "Écran pour {device}",
+    "kioskPin": "Code PIN de l’équipe pour {device}",
+    "pinHint": "4 à 8 chiffres. L’équipe le tape pour quitter l’écran.",
+    "pinInvalid": "Saisissez un code PIN de 4 à 8 chiffres.",
+    "kioskStart": "Démarrer",
+    "kioskStarted": "{device} bascule dans quelques secondes.",
+    "kioskStop": "Arrêter",
+    "kioskStopDevice": "Arrêter la borne sur {device}",
+    "kioskStopped": "{device} scanne de nouveau.",
+    "placeTable": "Table {label}",
+    "placeRow": "Rang {label}",
+    "placeOnChart": "{chart} : {place}",
+    "noPlace": "Pas encore de table",
+    "guestOf": "Invité de {name}"
   }
 }

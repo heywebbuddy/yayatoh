@@ -6,7 +6,7 @@ import { campaignsContactOwner } from '@yayatoh/campaigns';
 import { checkinContactOwner } from '@yayatoh/checkin';
 import { registerContactReferenceOwners } from '@yayatoh/crm';
 import { eventRolesOf } from '@yayatoh/events';
-import { guestsContactOwner } from '@yayatoh/guests';
+import { guestsContactOwner, guestsOccupantDirectory, guestsPartyCredentials } from '@yayatoh/guests';
 import { notificationsContactOwner } from '@yayatoh/notifications';
 import { ordersContactOwner } from '@yayatoh/orders';
 import {
@@ -16,6 +16,7 @@ import {
   setKeyVault,
 } from '@yayatoh/platform';
 import { defaultResolver } from '@yayatoh/platform/ssrf';
+import { setOccupantDirectory, setPartyCredentials } from '@yayatoh/seating';
 import { surveysContactOwner } from '@yayatoh/surveys';
 import { createOrgAuthorizer, orgStatusGate } from '@yayatoh/tenancy';
 import { configureWebhooks, fakeResolver, webhookPublisherFromEnv } from '@yayatoh/webhooks';
@@ -58,3 +59,7 @@ configureWebhooks({
   publisher: webhookPublisher,
   resolver: webhookPublisher?.name === 'fake' ? fakeResolver : defaultResolver,
 });
+// M4.3a: seating reaches the guest list through its OccupantDirectory port (same tier).
+setOccupantDirectory(guestsOccupantDirectory);
+// M4.4a: the guest seat finder checks party links and PINs through its PartyCredentials port.
+setPartyCredentials(guestsPartyCredentials);

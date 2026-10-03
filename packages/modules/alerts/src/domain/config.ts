@@ -58,6 +58,11 @@ export const RULE_KEYS = [
   // Batch 3e merge: failed campaign sends (M3.6b) and dispute evidence deadlines (M3.10c).
   'campaignFailed',
   'disputeDeadline',
+  // M4.6a social pack: guests who have not answered as the RSVP deadline nears, guests without a
+  // table, and attending guests without a meal in the last week.
+  'rsvpPending',
+  'guestsUnseated',
+  'mealsMissing',
 ] as const;
 export type RuleKey = (typeof RULE_KEYS)[number];
 
@@ -129,6 +134,9 @@ export const RULES: Readonly<Record<RuleKey, RuleDef>> = {
   automationFailed: rule('automationFailed', 'org', 'messaging', 'messages:read', '/messaging'),
   campaignFailed: rule('campaignFailed', 'org', 'messaging', 'marketing:read', '/campaigns'),
   disputeDeadline: rule('disputeDeadline', 'org', 'payments', 'finance:read', '/disputes'),
+  rsvpPending: rule('rsvpPending', 'event', 'attendees', 'guests:read', '/e/{event}/guests/rsvp'),
+  guestsUnseated: rule('guestsUnseated', 'event', 'attendees', 'guests:read', '/e/{event}/seating/guests'),
+  mealsMissing: rule('mealsMissing', 'event', 'attendees', 'guests:read', '/e/{event}/guests/answers'),
 };
 
 export const isRuleKey = (v: string): v is RuleKey => (RULE_KEYS as readonly string[]).includes(v);
@@ -189,6 +197,17 @@ export const THRESHOLDS = {
   /** Open disputes whose evidence is due within 3 days; critical within 1 day (M3.10c levels). */
   disputeSoonMs: 72 * 3_600_000,
   disputeCriticalMs: 24 * 3_600_000,
+  /**
+   * M4.6a: guests who have not answered, from 7 days before the RSVP deadline (warning) and in the
+   * last day before it (critical), until the event starts.
+   */
+  rsvpWarnBeforeMs: 7 * 86_400_000,
+  rsvpCriticalBeforeMs: 86_400_000,
+  /** Guests without a table (not declined) in the last 7 days before the event; critical in the last day and while it runs. */
+  guestSeatingWindowMs: 7 * 86_400_000,
+  guestSeatingCriticalMs: 86_400_000,
+  /** Attending guests without a meal when the event has a menu, in the last 7 days (caterer counts). */
+  mealsWindowMs: 7 * 86_400_000,
   /** Acknowledged alerts still firing are raised again after 60 minutes (10 when live-critical). */
   ackTimeoutMs: 60 * 60_000,
   liveCriticalAckTimeoutMs: 10 * 60_000,

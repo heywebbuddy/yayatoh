@@ -2035,7 +2035,8 @@
       "rules": "規則",
       "selection": "最佳可選座位",
       "channels": "通路",
-      "revisions": "版本"
+      "revisions": "版本",
+      "guests": "安排賓客座位"
     },
     "assign": {
       "title": "安排賓客",
@@ -2126,7 +2127,8 @@
       "modeNow": "查詢方式：{mode}",
       "modeShort": {
         "code": "電子郵件驗證碼",
-        "name": "全名"
+        "name": "全名",
+        "pin": "全名和喜帖上的 PIN"
       },
       "notPublic": "活動尚未發布（或為私人活動），賓客暫時無法開啟座位查詢。",
       "settingsTitle": "賓客",
@@ -2137,11 +2139,13 @@
       "mode": "賓客如何查詢座位",
       "modeOption": {
         "code": "透過寄到電子郵件的驗證碼（建議）",
-        "name": "輸入全名，立即查看"
+        "name": "輸入全名，立即查看",
+        "pin": "透過全名和喜帖上印的 PIN"
       },
       "modeHint": {
         "code": "只有能讀取賓客電子郵件的人才能看到其座位，也沒有人能知道名單上有誰。",
-        "name": "入場更快，但任何知道賓客全名的人都能看到其座位。"
+        "name": "入場更快，但任何知道賓客全名的人都能看到其座位。",
+        "pin": "賓客輸入全名和其所屬群組喜帖上印的 6 位數 PIN。他們只會看到自己的桌位，絕不會看到任何人的姓名，也沒人能查出誰在名單上。"
       },
       "readOnly": "你可以查看這些設定，但無法修改。",
       "shareTitle": "分享",
@@ -2149,7 +2153,10 @@
       "openPublic": "開啟座位查詢",
       "poster": "列印座位查詢海報",
       "closedNote": "座位查詢已關閉。掃描海報的賓客會被提示稍後再來。",
-      "namePoster": "列印姓名名單海報"
+      "namePoster": "列印姓名名單海報",
+      "partyLinksTitle": "各群組連結",
+      "partyLinksHint": "每個群組喜帖上的連結和 QR 碼也能開啟該群組專屬的桌位頁面：場地圖上的桌位以及同桌的人。將他們換到別桌時，QR 碼保持不變。",
+      "partyLinksAction": "各群組連結和 QR 碼"
     },
     "map": {
       "zoomIn": "放大",
@@ -2408,6 +2415,127 @@
       "isCurrent": "這就是目前的座位圖。",
       "restore": "還原版本 {number}",
       "restoredNotice": "已還原版本 {number}。目前的座位圖為版本 {now}。"
+    },
+    "guestSeating": {
+      "title": "安排賓客座位",
+      "description": "將各組賓客安排到桌位。從待排隊列把一組拖到平面圖上，或勾選賓客、選擇桌子並按「安排所選賓客」——拖曳能做的事，鍵盤都能做。",
+      "chart": {
+        "label": "座位安排",
+        "event": "整個活動"
+      },
+      "noPlan": "{chart}還沒有座位圖",
+      "noPlanHint": "請先建立座位圖（桌子或排），再在這裡安排賓客。",
+      "toPlan": "前往座位圖",
+      "noGuests": "還沒有需要安排的賓客",
+      "noGuestsHint": "在「賓客」頁面新增各組賓客（或邀請他們參加這一環節），然後在這裡安排座位。",
+      "toGuests": "前往賓客",
+      "summary": "已安排 {seated} · 待安排 {unseated}",
+      "readOnly": "你可以查看座位安排，但不能修改。",
+      "declinedSeated": "{count, plural, other {# 位已婉拒的賓客仍在座位上。}}請在桌位詳情中移除。",
+      "live": {
+        "live": "即時",
+        "connecting": "正在連線…",
+        "offline": "離線，正在重新連線"
+      },
+      "vip": "VIP",
+      "queue": {
+        "title": "待安排（{count}）",
+        "search": "搜尋各組和賓客",
+        "status": "回覆",
+        "statusAll": "全部回覆",
+        "side": "方",
+        "sideAll": "全部",
+        "list": "待安排的各組賓客",
+        "selectParty": "選取{party}的所有人",
+        "toSeat": "{count, plural, other {待安排 # 位}}",
+        "selected": "{count, plural, =0 {未選取} other {已選 # 位賓客}}",
+        "clear": "清除選取",
+        "empty": "每個人都有座位了。",
+        "noMatch": "沒有符合篩選條件的組。"
+      },
+      "status": {
+        "attending": "出席",
+        "pending": "等待回覆",
+        "declined": "已婉拒"
+      },
+      "guest": {
+        "guestOf": "{name}的同伴",
+        "meal": "餐點：{meal}",
+        "noMeal": "未選餐點",
+        "child": "兒童",
+        "infant": "嬰兒"
+      },
+      "form": {
+        "title": "安排所選賓客",
+        "table": "桌子或排",
+        "choose": "選擇桌子或排",
+        "option": "{place} — 空 {free}/{capacity}",
+        "optionVip": "{place} — 空 {free}/{capacity} · VIP 區",
+        "cantFit": "坐不下：已選 {asked, plural, other {# 位賓客}}，{place}{fits, plural, =0 {沒有空位} other {只有 # 個空位}}。",
+        "submit": "安排所選賓客",
+        "submitting": "正在安排…"
+      },
+      "place": {
+        "table": "{label} 號桌",
+        "row": "{label} 排"
+      },
+      "map": {
+        "title": "平面圖",
+        "hint": "把一組拖到桌子上即可安排。點選桌子查看誰坐在那裡。",
+        "readOnlyHint": "點選桌子查看誰坐在那裡。",
+        "dropHere": "放到{place}：空 {free}",
+        "dropCantFit": "{place}坐不下：{count, plural, other {# 位賓客}}，空 {free}",
+        "guests": "賓客",
+        "tickets": "持票人",
+        "vip": "VIP 區"
+      },
+      "details": {
+        "title": "桌位詳情",
+        "choose": "要查看的桌子",
+        "none": "此座位圖沒有桌子或排。",
+        "counts": "已坐 {seated} · 空 {free}/{capacity}",
+        "tickets": "{count, plural, other {# 個座位已被門票佔用}}",
+        "sponsor": "贊助：{name}",
+        "vipZone": "VIP 區",
+        "vipFromPlan": "位於座位圖的 VIP 區域",
+        "warnings": "請檢查此桌",
+        "warnDeclined": "{name}已婉拒，但仍在座位上。",
+        "warnVipOutside": "{party}是 VIP 組，但不在 VIP 區。",
+        "warnNotVip": "{party}不是 VIP 組，卻坐在 VIP 區。",
+        "meals": "餐點",
+        "mealCount": "{meal}：{count}",
+        "noMeal": "未選擇",
+        "empty": "這裡還沒有人。請從待排隊列安排一組。",
+        "unseatParty": "移除{party}",
+        "move": "移到…",
+        "moveLabel": "把{name}移到另一桌",
+        "unseat": "移除",
+        "unseatLabel": "移除{name}",
+        "moveTo": "移動{name}",
+        "moveSubmit": "移動",
+        "cancel": "取消"
+      },
+      "done": {
+        "seated": "已在{place}安排 {count, plural, other {# 位賓客}}。",
+        "moved": "已將{name}移到{place}。",
+        "unseated": "{count, plural, other {# 位賓客}}已回到待排隊列。",
+        "vipOn": "{place}現在是 VIP 區。",
+        "vipOff": "{place}不再是 VIP 區。"
+      },
+      "warnings": {
+        "vip_outside": "{party}是 VIP 組，而{place}不是 VIP 區。",
+        "not_vip_inside": "{place}是 VIP 區，而{party}不是 VIP 組。"
+      },
+      "errors": {
+        "forbidden": "你可以查看座位安排，但不能修改。",
+        "cantFit": "坐不下：{asked, plural, other {# 位賓客}}需要座位，而那裡{fits, plural, =0 {沒有空位} other {只有 # 個空位}}。",
+        "declined": "這位賓客已婉拒。只能安排未婉拒的賓客。",
+        "unknown": "這位賓客已不在名單上。頁面將重新整理。",
+        "noPlan": "這裡還沒有座位圖。",
+        "noGuests": "請至少選擇一位賓客。",
+        "noPlace": "請選擇桌子或排。",
+        "dropMiss": "請把這組放到桌子或排上。"
+      }
     }
   },
   "venueMap": {
@@ -2447,7 +2575,11 @@
       "bottom": "地圖下方",
       "bottom-right": "地圖右下方"
     },
-    "yours": "{count, plural, other {你的座位：{seats}}}"
+    "yours": "{count, plural, other {你的座位：{seats}}}",
+    "yourPlace": {
+      "table": "您的桌位",
+      "row": "您的排"
+    }
   },
   "seatFinder": {
     "eyebrow": "座位查詢",
@@ -2498,9 +2630,15 @@
       "challengeUnavailable": "此裝置的查詢次數過多。請稍候一分鐘再試。",
       "closed": "此活動的座位查詢未開放。",
       "internal": "我們這邊發生了問題。",
-      "rateLimited": "索取驗證碼次數過多。請在 {minutes, plural, other {# 分鐘}}後再試。"
+      "rateLimited": "索取驗證碼次數過多。請在 {minutes, plural, other {# 分鐘}}後再試。",
+      "noMatch": "找不到符合此姓名和 PIN 的桌位。請對照喜帖確認，或詢問主人。",
+      "invalidPin": "請輸入喜帖上的 6 位數 PIN。",
+      "pinRateLimited": "此裝置查詢次數過多。請在 {minutes, plural, other {# 分鐘}}後再試。"
     },
-    "hostedBy": "贊助商：{sponsor}"
+    "hostedBy": "贊助商：{sponsor}",
+    "pinIntro": "請輸入與喜帖上相同的全名，以及喜帖上印的 6 位數 PIN。",
+    "pin": "喜帖上的 PIN",
+    "findByPin": "查詢我的桌位"
   },
   "seatFinderPoster": {
     "pageTitle": "座位查詢海報",
@@ -2513,7 +2651,8 @@
     "step2Code": "輸入你的電子郵件，我們會寄驗證碼給你。",
     "step2Name": "輸入你的全名。",
     "step3": "在場地地圖上查看你的桌號與座位。",
-    "orVisit": "或前往"
+    "orVisit": "或前往",
+    "step2Pin": "輸入您的全名和喜帖上的 PIN。"
   },
   "reports": {
     "title": "分析",
@@ -6768,6 +6907,52 @@
         "window": "過去 {days} 天 {sent, plural, other {# 封郵件}}",
         "over": "超過門檻：{domains, plural, other {# 個寄件網域}}，{campaigns, plural, other {# 個活動}}",
         "open": "開啟電子郵件送達率"
+      },
+      "rsvp": {
+        "title": "出席回覆",
+        "allAnswered": "所有受邀賓客都已回覆。",
+        "noneInvited": "尚未邀請任何人參加分場活動。",
+        "responded": "{invited} 位受邀賓客中已有 {responded} 位回覆",
+        "meter": "已收到的回覆",
+        "parties": "未回覆的家庭：{count}",
+        "notSent": "尚未寄出邀請：{count}",
+        "deadline": "回覆截止：{date}",
+        "noDeadline": "未設定回覆截止日期",
+        "open": "開啟回覆"
+      },
+      "guestSeating": {
+        "title": "賓客座位",
+        "noChart": "還沒有賓客平面圖。請在座位中選擇一個。",
+        "noGuests": "暫時沒有需要安排座位的賓客。",
+        "allSeated": "每位未婉拒的賓客都有桌位。",
+        "seated": "{guests} 位賓客中有 {seated} 位已有桌位",
+        "listLabel": "沒有桌位的賓客",
+        "guestOf": "{name} 的同伴",
+        "more": "另外 {count} 位",
+        "open": "安排賓客座位"
+      },
+      "meals": {
+        "title": "餐點與飲食需求",
+        "attending": "出席：{count}",
+        "noneAttending": "賓客確認出席後才會統計餐點。",
+        "caption": "出席賓客的餐點",
+        "colMeal": "餐點",
+        "colGuests": "賓客",
+        "other": "其他選擇",
+        "none": "未選擇餐點",
+        "dietary": "飲食需求：{count}",
+        "accessibility": "無障礙需求：{count}",
+        "open": "開啟回覆詳情"
+      },
+      "arrivals": {
+        "title": "賓客到場",
+        "arrivedOf": "{expected} 位預期賓客中已到 {arrived} 位",
+        "notArrived": "尚未到場：{count}",
+        "none": "還沒有人到場。",
+        "noExpected": "暫無預期到場的賓客。",
+        "recent": "最近到場",
+        "guestOf": "{name} 的同伴",
+        "open": "開啟當天檢視"
       }
     },
     "openScanner": "開啟掃描器",
@@ -6885,7 +7070,10 @@
       "automationFailed": "開啟訊息狀態",
       "campaignFailed": "開啟行銷活動",
       "disputeDeadline": "開啟爭議佇列",
-      "assistanceOverdue": "開啟求助請求"
+      "assistanceOverdue": "開啟求助請求",
+      "rsvpPending": "開啟回覆",
+      "guestsUnseated": "安排賓客座位",
+      "mealsMissing": "開啟回覆詳情"
     },
     "rules": {
       "unseated": "{count, plural, other {{countWords} 位參加者沒有座位}}",
@@ -6907,7 +7095,10 @@
       "automationFailed": "{count, plural, other {今天有 {countWords} 則訊息或批次操作失敗}}",
       "campaignFailed": "{count, plural, other {今天有 {countWords} 次行銷活動傳送失敗}}",
       "disputeDeadline": "{count, plural, other {有 {countWords} 起爭議需要盡快提交證據}}",
-      "assistanceOverdue": "{count, plural, other {{countWords} 個求助請求等待過久}}"
+      "assistanceOverdue": "{count, plural, other {{countWords} 個求助請求等待過久}}",
+      "rsvpPending": "{count, plural, other {{countWords} 位賓客尚未回覆出席邀請}}",
+      "guestsUnseated": "{count, plural, other {{countWords} 位賓客沒有桌位}}",
+      "mealsMissing": "{count, plural, other {{countWords} 位出席賓客尚未選擇餐點}}"
     },
     "widget": {
       "title": "警示",
@@ -7060,7 +7251,12 @@
     "claimOff": "停止裝置警示",
     "claimOnDone": "裝置警示將傳送到此手機。",
     "claimOffDone": "此手機已停止接收裝置警示。",
-    "claimNeedsPush": "請先在此裝置的「工作人員」中開啟警示。"
+    "claimNeedsPush": "請先在此裝置的「工作人員」中開啟警示。",
+    "kioskKind": "{label} 的自助機畫面",
+    "kindTickets": "憑票報到",
+    "kindGuests": "依姓名為賓客報到",
+    "kindBoard": "桌位指示螢幕（A–Z）",
+    "boardStarted": "{label} 現在顯示桌位指示螢幕。"
   },
   "scanKiosk": {
     "welcome": "歡迎參加 {event}",
@@ -10460,7 +10656,10 @@
     },
     "questionsTitle": "幾個問題",
     "questionsHint": "主人想多了解一些情況。標為私密的回答只有主人看得到。",
-    "questionsFor": "給 {name} 的問題"
+    "questionsFor": "給 {name} 的問題",
+    "seatTitle": "查詢您的桌位",
+    "seatHint": "查看您在場地圖上的座位以及同桌的人。",
+    "seatLink": "顯示我的桌位"
   },
   "rsvpFind": {
     "metaTitle": "查詢您的喜帖",
@@ -10570,7 +10769,13 @@
     "reopenFor": "為 {party} 重新開放回覆",
     "createLinkFor": "為 {party} 建立回覆連結",
     "copy": "複製連結",
-    "copied": "連結已複製。"
+    "copied": "連結已複製。",
+    "seatTitle": "桌位頁面 QR 碼",
+    "seatHint": "此 QR 碼會開啟 {party} 的桌位頁面：場地圖上的桌位以及同桌的人。將他們換到別桌時它保持不變，因此可以印在引導卡或席位卡上。",
+    "seatQrLabel": "{party} 桌位頁面的 QR 碼",
+    "seatLinkLabel": "{party} 桌位頁面的連結",
+    "seatClosed": "開啟座位查詢（座位 → 座位查詢）後，賓客即可看到自己的桌位。",
+    "seatScan": "掃描查詢您的桌位"
   },
   "collector": {
     "metaTitle": "分享您的聯絡方式",
@@ -12328,5 +12533,167 @@
     "tooLate": "請選擇 {date} 或之前的日期",
     "timeZoneNote": "{zone} 時間",
     "selected": "已選取"
+  },
+  "guestSeats": {
+    "placeAt": {
+      "table": "{item} 號桌",
+      "row": "第 {item} 排"
+    },
+    "wholeEvent": "座位安排",
+    "resultTitle": "{count, plural, other {您的桌位}}",
+    "partyCount": "{count, plural, other {您群組中有 # 人坐在這裡}}",
+    "noTableTitle": "您的桌位尚未確定",
+    "noTable": "主人仍在安排座位。請在接近活動日時再來查看，或詢問主人。",
+    "unseatedCount": "{count, plural, other {您群組中有 # 人尚未安排桌位。}}",
+    "again": "查詢其他人",
+    "mapTitle": "場地圖",
+    "mapFor": "場地圖：{name}"
+  },
+  "partySeats": {
+    "metaTitle": "您的桌位",
+    "title": "{party} 的座位",
+    "intro": "您在場地圖上的桌位，以及與您同桌的人。",
+    "closedTitle": "座位安排尚未就緒",
+    "closed": "主人尚未公布座位安排。請保留此頁面或喜帖上的 QR 碼：公布後這裡會顯示您的桌位。",
+    "noChartsTitle": "您的桌位尚未確定",
+    "noCharts": "主人仍在安排座位。桌位一確定，此頁面就會顯示。",
+    "yourParty": "您群組中的人",
+    "tablemates": {
+      "table": "同桌的還有",
+      "row": "同排的還有"
+    },
+    "noTablemates": "這裡暫時沒有其他人。",
+    "unseated": "尚未安排座位：{names}",
+    "guestOf": "{name} 的同伴",
+    "keep": "此頁面一律顯示您目前的桌位：即使主人調整了您的座位，喜帖上的連結和 QR 碼也不會改變。",
+    "toRsvp": "返回您的回覆"
+  },
+  "scanGuests": {
+    "view": "賓客",
+    "title": "賓客報到",
+    "arrivedOf": "已到 {arrived} / {expected}",
+    "searchLabel": "賓客或團體名稱",
+    "searchHint": "輸入姓名的一部分，或在下方選擇標籤。",
+    "labels": "標籤",
+    "startHint": "搜尋賓客或團體，或選擇一個標籤列出其賓客。",
+    "noMatchTitle": "沒有符合的賓客",
+    "noMatchDescription": "請檢查拼寫、嘗試團體名稱或取消一個標籤。",
+    "noListTitle": "此裝置上沒有賓客名單",
+    "noListDescription": "此活動尚無賓客，或此裝置尚未下載。請連上網路一次以下載名單。",
+    "results": "符合的賓客",
+    "checkInParty": "為 {party} 的所有人報到（{count}）",
+    "checkInGuest": "為 {name} 報到",
+    "checkIn": "報到",
+    "checkedInAt": "{name} 已報到。{place}。",
+    "checkedInNoPlace": "{name} 已報到。尚未安排桌位。",
+    "checkedInMany": "已報到賓客：{count}",
+    "arrivedAt": "{time} 抵達",
+    "declined": "不出席",
+    "noPlace": "尚未安排桌位",
+    "guestOf": "{name} 的同伴",
+    "placeTable": "{label} 號桌",
+    "placeRow": "第 {label} 排",
+    "placeOnChart": "{chart}：{place}"
+  },
+  "scanGuestKiosk": {
+    "welcome": "歡迎來到 {event}",
+    "subtitle": "查詢您的桌位並報到",
+    "nameLabel": "請輸入您的姓名",
+    "nameHint": "與喜帖上的一致。",
+    "find": "查詢我的桌位",
+    "hello": "歡迎，{name}！",
+    "welcomeBack": "歡迎回來，{name}！",
+    "yourPlace": "您的桌位：{places}",
+    "noPlace": "您的桌位尚未安排。請洽詢工作人員。",
+    "checkedIn": "報到成功，祝您愉快！",
+    "alreadyIn": "您已經報到過了。",
+    "noMatch": "找不到這個姓名。請檢查拼寫或洽詢工作人員。",
+    "seeStaff": "請洽詢工作人員。"
+  },
+  "scanBoard": {
+    "title": "查詢您的桌位",
+    "empty": "賓客安排座位後，桌位會顯示在這裡。",
+    "pageOf": "第 {page} 頁，共 {total} 頁",
+    "pause": "暫停",
+    "resume": "繼續",
+    "next": "下一頁"
+  },
+  "dayOf": {
+    "description": "誰已到場、誰還需要桌位，以及給廚房的餐點數量。",
+    "setUpKiosk": "設定自助機或指示螢幕",
+    "noAccessTitle": "您無法查看賓客名單",
+    "noAccessDescription": "請向主辦人申請存取此活動賓客的權限。",
+    "arrived": "已到場",
+    "arrivedOf": "已到 {arrived} / 預計 {expected}",
+    "notArrived": "尚未到場",
+    "unseated": "沒有桌位",
+    "declined": "不出席",
+    "findTitle": "為賓客報到",
+    "searchLabel": "賓客或團體名稱",
+    "search": "搜尋",
+    "noMatchTitle": "沒有符合的賓客",
+    "noMatchDescription": "請檢查拼寫或嘗試團體名稱。",
+    "matches": "符合的賓客",
+    "arrivedAt": "{time} 抵達",
+    "declinedOne": "不出席",
+    "checkIn": "報到",
+    "checkInGuest": "為 {name} 報到",
+    "checkedIn": "{name} 已報到。",
+    "arrivalsTitle": "到場紀錄",
+    "noArrivalsTitle": "還沒有人到場",
+    "noArrivalsDescription": "透過掃描裝置、賓客自助機或此處報到的賓客，抵達時會出現在此清單中。",
+    "colTime": "時間",
+    "colGuest": "賓客",
+    "colParty": "團體",
+    "colPlace": "桌位",
+    "colHow": "報到方式",
+    "colActions": "動作",
+    "sourceScanner": "掃描裝置",
+    "sourceKiosk": "賓客自助機",
+    "sourceHost": "主辦人",
+    "undo": "復原",
+    "undoGuest": "復原 {name} 的報到",
+    "undone": "已復原報到。",
+    "unseatedTitle": "沒有桌位的賓客",
+    "noChartTitle": "尚無平面圖",
+    "noChartDescription": "請在「座位」中選擇平面圖，然後為賓客安排桌位。",
+    "toSeating": "前往座位",
+    "allSeatedTitle": "每個人都有桌位",
+    "allSeatedDescription": "所有未婉拒的賓客都已安排座位。",
+    "attending": "出席",
+    "noAnswer": "未回覆",
+    "here": "已到場",
+    "seatThem": "安排座位",
+    "mealsTitle": "餐點",
+    "mealsHint": "已確認出席的賓客，依所選餐點。",
+    "noMealsTitle": "尚無可統計的餐點",
+    "noMealsDescription": "賓客確認出席後會統計餐點。",
+    "colMeal": "餐點",
+    "colGuests": "賓客",
+    "colArrived": "已到場",
+    "noMeal": "尚未選擇",
+    "kiosksTitle": "賓客自助機與桌位指示螢幕",
+    "kiosksHint": "將平板或電視新增為裝置，在其上開啟設定連結，然後選擇顯示內容。即使場地網路中斷，兩者都能繼續運作；工作人員以 PIN 退出。",
+    "noDevicesTitle": "尚無裝置",
+    "noDevicesDescription": "請在下方新增裝置，然後在平板或電視上開啟設定連結。",
+    "online": "上線",
+    "offline": "離線",
+    "kindTickets": "憑票報到",
+    "kindGuests": "賓客自助機",
+    "kindBoard": "桌位指示螢幕（A–Z）",
+    "kioskKind": "{device} 的畫面",
+    "kioskPin": "{device} 的工作人員 PIN",
+    "pinHint": "4 到 8 位數字。工作人員輸入它以退出畫面。",
+    "pinInvalid": "請輸入 4 到 8 位數字的 PIN。",
+    "kioskStart": "開始",
+    "kioskStarted": "{device} 將在幾秒內切換。",
+    "kioskStop": "停止",
+    "kioskStopDevice": "停止 {device} 上的自助機",
+    "kioskStopped": "{device} 已恢復掃描。",
+    "placeTable": "{label} 號桌",
+    "placeRow": "第 {label} 排",
+    "placeOnChart": "{chart}：{place}",
+    "noPlace": "尚未安排桌位",
+    "guestOf": "{name} 的同伴"
   }
 }

@@ -57,6 +57,7 @@ import {
   enrollDeviceCommand,
   heartbeatCommand,
   markQuietDevicesTx,
+  recordGuestArrivalsCommand,
   reportPresenceCommand,
   scanTicketCommand,
   setDetectionSettingsCommand,
@@ -286,10 +287,12 @@ import {
   requestFinderCodeCommand,
   saveLayoutCommand,
   saveSeatChannelCommand,
+  seatGuestsCommand,
   setEventLayoutCommand,
   setFinderSettingsCommand,
   setSeatingRulesCommand,
   setSelectionSettingsCommand,
+  setVipTableCommand,
 } from '@yayatoh/seating';
 import {
   createSurveyCommand,
@@ -2086,6 +2089,39 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     giveSubEventOwnChartCommand,
     { eventId: event.id, subEventId: reception.id, layoutId: layout.id },
     ctx(),
+    ports,
+  );
+  // M4.3a guest seating (isolation coverage): the host at row A of the
+  // reception's own chart, and row A marked as a VIP zone.
+  const rowA = plan.items[0]?.id ?? '';
+  await executeCommand(
+    seatGuestsCommand,
+    { eventId: event.id, subEventId: reception.id, itemId: rowA, guestIds: [host.id] },
+    ctx(),
+    ports,
+  );
+  await executeCommand(
+    setVipTableCommand,
+    { eventId: event.id, subEventId: reception.id, itemId: rowA, vip: true },
+    ctx(),
+    ports,
+  );
+  // M4.4b guest check-in (isolation coverage): the door device checks the host in.
+  await executeCommand(
+    recordGuestArrivalsCommand,
+    {
+      eventId: event.id,
+      arrivals: [
+        {
+          clientId: uuidv7(),
+          guestId: host.id,
+          deviceTs: new Date('2027-10-14T14:56:00Z'),
+          clockOffsetMs: 0,
+          source: 'scanner',
+        },
+      ],
+    },
+    deviceCtx,
     ports,
   );
   // M4.1b: a pasted guest list staged, checked and imported (a household with a plus-one and a

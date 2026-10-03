@@ -58,7 +58,6 @@ export const PLACEHOLDER_SECTIONS = [
   'website',
   'gallery',
   'messages',
-  'day-of',
   'branding',
   'communications',
   'libraries',

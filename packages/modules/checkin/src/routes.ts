@@ -137,6 +137,10 @@ const HeartbeatResponse = z.object({
       checkpointId: z.uuid().nullable(),
       pinHash: z.string(),
       startedAt: z.iso.datetime(),
+      kind: z.enum(['tickets', 'guests', 'board']).optional().openapi('KioskKind', {
+        description:
+          'What the kiosk shows (M4.4b): ticket self check-in, guest check-in by name, or the A–Z table board. Absent: tickets.',
+      }),
     })
     .nullable()
     .optional()

@@ -6297,6 +6297,15 @@
           "false"
         ],
         "description": "`true` re-reads the last page’s rows as well (after a crash mid-page)."
+      },
+      "KioskKind": {
+        "type": "string",
+        "enum": [
+          "tickets",
+          "guests",
+          "board"
+        ],
+        "description": "What the kiosk shows (M4.4b): ticket self check-in, guest check-in by name, or the A–Z table board. Absent: tickets."
       }
     },
     "parameters": {}
@@ -13208,6 +13217,9 @@
                         "startedAt": {
                           "type": "string",
                           "format": "date-time"
+                        },
+                        "kind": {
+                          "$ref": "#/components/schemas/KioskKind"
                         }
                       },
                       "required": [

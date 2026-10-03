@@ -14,12 +14,15 @@ export function SeatingTabs({
   finder = false,
   selection = false,
   date = null,
+  guests = false,
 }: {
   base: string;
-  active: 'plan' | 'assign' | 'rules' | 'selection' | 'channels' | 'revisions' | 'finder';
+  active: 'plan' | 'assign' | 'guests' | 'rules' | 'selection' | 'channels' | 'revisions' | 'finder';
   finder?: boolean;
   /** M6.11a: the org has advanced seating (best available and companion seats). */
   selection?: boolean;
+  /** The org has the guests module: the guest seating editor (M4.3a). */
+  guests?: boolean;
   /** The date whose chart the plan and guest views show (M1.7g); kept when switching views. */
   date?: string | null;
 }) {
@@ -28,6 +31,7 @@ export function SeatingTabs({
   const tabs = [
     { key: 'plan', href: `${base}${q}` },
     { key: 'assign', href: `${base}/assign${q}` },
+    ...(guests ? [{ key: 'guests', href: `${base}/guests` } as const] : []),
     { key: 'rules', href: `${base}/rules` },
     ...(selection ? [{ key: 'selection', href: `${base}/best-available` } as const] : []),
     ...(selection ? [{ key: 'channels', href: `${base}/channels` } as const] : []),

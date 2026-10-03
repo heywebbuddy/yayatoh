@@ -29,7 +29,14 @@ export {
   type StoredAlert,
   stateAfter,
 } from './domain/lifecycle.ts';
-export { type EventFacts, evaluateEventRules, evaluateOrgRules, type OrgFacts } from './domain/rules.ts';
+export {
+  type EventFacts,
+  evaluateEventRules,
+  evaluateOrgRules,
+  evaluateSocialRules,
+  type OrgFacts,
+  type SocialEventFacts,
+} from './domain/rules.ts';
 export {
   ALERT_KIND,
   ALERT_TEXT_KIND,

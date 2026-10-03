@@ -198,6 +198,7 @@ export default async function SeatingPage({
         active="plan"
         finder={data.modules.has('seat_finder')}
         selection={data.modules.has('advanced_seating')}
+        guests={data.modules.has('guests')}
         date={dateId}
       />
       <SeatingDatePicker base={base} dates={dates} selected={dateId} timeZone={ev.timezone} locale={locale} />

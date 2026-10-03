@@ -25,6 +25,8 @@ export {
   userCtx,
 } from './fixtures.ts';
 export { connectDemo, fakeAuth } from './integrations.ts';
+export { type GuestCheckinScenario, guestCheckinScenario } from './guest-checkin.ts';
+export { type GuestSeatScenario, guestSeatScenario } from './guest-seat-finder.ts';
 export { quietDevice, revokeDevice } from './live.ts';
 export {
   bareOrg,
@@ -57,3 +59,9 @@ export {
   standardRsvpQuestions,
 } from './rsvp-questions.ts';
 export { warehouseScenario } from './warehouse.ts';
+export {
+  SOCIAL_FIXTURE,
+  type SocialPackParty,
+  type SocialPackScenario,
+  socialPackScenario,
+} from './social-pack.ts';
