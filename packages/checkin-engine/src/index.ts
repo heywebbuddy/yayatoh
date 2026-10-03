@@ -45,3 +45,24 @@ export {
   type VelocityRules,
   type VelocityScan,
 } from './velocity.ts';
+// M4.4b: guest check-in, the guest kiosk and the A–Z board (server and Scan PWA alike).
+export {
+  type BoardEntry,
+  type BoardGroup,
+  boardGroups,
+  boardPages,
+  correctedArrival,
+  earlierArrival,
+  type FoundGuest,
+  GUEST_SNAPSHOT_VERSION,
+  type GuestSnapshot,
+  type KioskMatch,
+  matchGuestByName,
+  normalizeName,
+  type SnapshotGuest,
+  type SnapshotGuestStatus,
+  type SnapshotParty,
+  type SnapshotPlace,
+  searchGuests,
+  snapshotLabels,
+} from './guests.ts';

@@ -148,6 +148,12 @@ export const devices = tenantTable(
     kioskPinHash: text('kiosk_pin_hash'),
     kioskStartedAt: ts('kiosk_started_at'),
     kioskStartedBy: uuid('kiosk_started_by'),
+    /**
+     * M4.4b: what the kiosk shows: `tickets` (self check-in by code, M3.4a), `guests` (a guest types
+     * their full name: their table, and they're checked in) or `board` (the A–Z table board on a
+     * TV). Null on a scanner and on kiosks started before M4.4b (= `tickets`).
+     */
+    kioskKind: text('kiosk_kind'),
     // --- Live mode (M3.3a) ---
     /** The Scan PWA's build as its heartbeat reports it (the device board's "app version"). */
     appVersion: text('app_version'),
@@ -166,6 +172,7 @@ export const devices = tenantTable(
       'devices_kiosk_pin_check',
       sql`kiosk_pin_hash is null or kiosk_pin_hash ~ '^pbkdf2-sha256[$][0-9]{4,7}[$][A-Za-z0-9_-]{22}[$][A-Za-z0-9_-]{43}$'`,
     ),
+    check('devices_kiosk_kind_check', sql`kiosk_kind is null or kiosk_kind in ('tickets', 'guests', 'board')`),
     check('devices_app_version_check', sql`app_version is null or app_version ~ '^[A-Za-z0-9._+-]{1,64}$'`),
   ],
 );
@@ -496,5 +503,42 @@ export const detectionSettings = tenantTable(
     uniqueIndex('detection_settings_org_event_key').on(t.orgId, t.eventId),
     check('detection_settings_rate_check', sql`max_scans_per_minute between 2 and 600`),
     check('detection_settings_travel_check', sql`max_travel_kmh between 1 and 200`),
+  ],
+);
+
+/** M4.4b: what a kiosk shows (`checkin.devices.kiosk_kind`). */
+export const KIOSK_KINDS = ['tickets', 'guests', 'board'] as const;
+export type KioskKind = (typeof KIOSK_KINDS)[number];
+
+/** M4.4b: where a guest's arrival was recorded. */
+export const ARRIVAL_SOURCES = ['scanner', 'kiosk', 'host'] as const;
+export type ArrivalSource = (typeof ARRIVAL_SOURCES)[number];
+
+/**
+ * A wedding or gala guest's arrival (M4.4b): one row per guest (guests module), first wins by the
+ * corrected time the device saw them. Recorded by a Scan PWA device (by name or party, offline
+ * too), a guest kiosk (the guest's own full name) or the host on the day-of page; undoing it
+ * deletes the row (the audit log keeps both). `client_id` makes a device's resend a no-op.
+ * `(org_id, guest_id)` references `guests.guests` and `(org_id, event_id)` `events.events`
+ * through hand-written foreign keys (cascade): the arrival goes with the guest.
+ */
+export const guestArrivals = tenantTable(
+  checkinSchema,
+  'guest_arrivals',
+  {
+    eventId: uuid('event_id').notNull(),
+    guestId: uuid('guest_id').notNull(),
+    arrivedAt: ts('arrived_at').notNull(),
+    source: text('source').notNull(),
+    deviceId: uuid('device_id'),
+    recordedBy: uuid('recorded_by'),
+    clientId: uuid('client_id').notNull(),
+  },
+  (t) => [
+    uniqueIndex('guest_arrivals_org_guest_key').on(t.orgId, t.guestId),
+    uniqueIndex('guest_arrivals_org_client_key').on(t.orgId, t.clientId),
+    index('guest_arrivals_org_event_at_idx').on(t.orgId, t.eventId, t.arrivedAt),
+    check('guest_arrivals_source_check', sql`source in ('scanner', 'kiosk', 'host')`),
+    check('guest_arrivals_device_check', sql`source <> 'host' or device_id is null`),
   ],
 );
