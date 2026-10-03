@@ -117,6 +117,16 @@ export function privateColumnList(
   return registeredColumns(list).filter((c): c is RegisteredPrivateColumn => isPrivate(c.rule));
 }
 
+/**
+ * Canaries that live in no column: secrets planted in fakes, which must never reach anything we
+ * store, log or serve. M6.4a: the fake `IntegrationAuth`'s OAuth tokens (`FAKE_ACCESS_TOKEN`,
+ * `FAKE_REFRESH_TOKEN`). The matcher classes them `secret`.
+ */
+export const PLANTED_SECRETS: readonly ColumnId[] = [
+  'integrations.oauth.access_token',
+  'integrations.oauth.refresh_token',
+];
+
 /** The canary a private column is filled with: `__CANARY_<schema>.<table>.<column>__`. */
 export const canaryToken = (id: ColumnId) => `__CANARY_${id}__`;
 

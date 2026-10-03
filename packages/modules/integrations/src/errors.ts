@@ -145,7 +145,7 @@ export const retryErrorsCommand = tenantCommand({
         and(eq(connections.orgId, syncErrors.orgId), eq(connections.id, syncErrors.connectionId)),
       )
       .where(and(inArray(syncErrors.id, input.errorIds), eq(syncErrors.status, 'open')))
-      .for('update', { of: syncErrors });
+      .for('update');
     const live = rows.filter((r) => r.status === 'active');
     if (live.length)
       await tx

@@ -16,6 +16,7 @@ import { closePools } from '@yayatoh/db/testing';
 import * as events from '@yayatoh/events';
 import * as forms from '@yayatoh/forms';
 import * as guests from '@yayatoh/guests';
+import * as integrations from '@yayatoh/integrations';
 import {
   COMMAND_CATEGORIES,
   type Command,
@@ -87,6 +88,8 @@ const MODULES = {
   campaigns,
   commandCenter,
   guests,
+  // M6.4a: connecting an integration is an export (org data leaves for a third party).
+  integrations,
   marketing,
   registration,
   attendees,

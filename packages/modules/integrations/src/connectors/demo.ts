@@ -56,7 +56,7 @@ export const DEMO_SEED: readonly { readonly id: string; readonly fields: Record<
 ];
 export const DEMO_BAD_RECORD = 'dc_4';
 
-const view = (r: DemoRecord) => ({
+const view = (r: DemoRecord): Record<string, unknown> & { id: string; version: string } => ({
   id: r.id,
   version: String(r.seq),
   updated_at: r.updatedAt,

@@ -1069,7 +1069,7 @@ export async function connectionsWithWorkTx(tx: TenantTx, now: Date): Promise<st
         or(
           lte(connections.nextSyncAt, now),
           sql`exists (select 1 from ${syncRuns} r where r.org_id = ${connections.orgId} and r.connection_id = ${connections.id} and r.status = 'queued')`,
-          sql`exists (select 1 from ${syncErrors} e where e.org_id = ${connections.orgId} and e.connection_id = ${connections.id} and e.status = 'open' and e.next_retry_at <= ${now})`,
+          sql`exists (select 1 from ${syncErrors} e where e.org_id = ${connections.orgId} and e.connection_id = ${connections.id} and e.status = 'open' and e.next_retry_at <= ${now.toISOString()}::timestamptz)`,
         ),
       ),
     );

@@ -112,6 +112,7 @@ import {
   updatePartyGuestCommand,
   validateGuestImportCommand,
 } from '@yayatoh/guests';
+import { runSync } from '@yayatoh/integrations';
 import { type Ctx, createCtx, executeCommand, executeQuery, uuidv7 } from '@yayatoh/kernel';
 import {
   attributeOrderCommand,
@@ -262,6 +263,7 @@ import {
 } from '@yayatoh/ticketing';
 import { createVenueCommand, submitQuoteRequestCommand } from '@yayatoh/venues';
 import { sql } from 'drizzle-orm';
+import { connectDemo, fakeAuth } from './integrations.ts';
 import { ports, runBulk, submitRegistrationForm } from './ports.ts';
 
 export interface OrgFixture {
@@ -2141,6 +2143,10 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     tx.execute(sql`insert into alerts.signals (org_id, kind, source_event_id, occurred_at)
       values (${org.id}, 'journey_step_failed', ${uuidv7()}, now() - interval '2 days')`),
   );
+  // M6.4a: the demo connector connected through the fake port and synced once (a connection, its
+  // mappings, cursors, a run, record links and the demo's broken record in the errors inbox).
+  const demo = await connectDemo(ctx());
+  await runSync(org.id, demo.connectionId, { auth: fakeAuth }, ports);
   return {
     org,
     ownerId,
