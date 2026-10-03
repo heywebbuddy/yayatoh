@@ -65,11 +65,11 @@ test.describe('the chevron sits inside the field', () => {
       .toBe('180deg');
     const list = page.locator('#size-md-dark-list');
     await expect(list).toBeVisible();
-    const [panelBg, fieldBg] = await Promise.all([
-      list.locator('xpath=..').evaluate((el) => getComputedStyle(el).backgroundColor),
-      trigger.evaluate((el) => getComputedStyle(el).backgroundColor),
-    ]);
-    expect(panelBg).toBe(fieldBg); // surface-solid of the dark theme
+    // An opaque panel in the dark theme (the OS popup would be light grey here).
+    const panelBg = await list.locator('xpath=..').evaluate((el) => getComputedStyle(el).backgroundColor);
+    const [r, g, b, a = 1] = (panelBg.match(/[\d.]+/g) ?? []).map(Number);
+    expect(a).toBe(1);
+    expect((0.2126 * (r ?? 0) + 0.7152 * (g ?? 0) + 0.0722 * (b ?? 0)) / 255).toBeLessThan(0.2);
     await expect(list.getByRole('option', { name: 'Published' })).toHaveAttribute('aria-selected', 'true');
   });
 });

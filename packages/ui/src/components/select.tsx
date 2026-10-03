@@ -311,7 +311,11 @@ export function Select({
     const t = typed.current;
     t.buffer = now - t.at > 700 ? key : t.buffer + key;
     t.at = now;
-    return typeahead(list, t.buffer, from);
+    const i = typeahead(list, t.buffer, from);
+    if (i >= 0 || t.buffer.length === 1) return i;
+    // No option starts with the whole buffer: start again from this key.
+    t.buffer = key;
+    return typeahead(list, key, from);
   };
 
   const navKeys: Record<string, ListKey> = {
@@ -434,7 +438,7 @@ export function Select({
   const shownText = current ? current.text : textOf(placeholder);
 
   return (
-    <div className={cx('relative flex flex-col gap-1.5', wrapperClassName)}>
+    <div className={cx('relative flex min-w-0 flex-col gap-1.5', wrapperClassName)}>
       {label ? (
         <label id={labelId} htmlFor={triggerId} className="text-[13px] font-bold text-ink">
           {label}
