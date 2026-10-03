@@ -1,7 +1,7 @@
 'use client';
 
 import { CONTACT_TOPICS } from '@yayatoh/cms/ui';
-import { Alert, Button, Input } from '@yayatoh/ui';
+import { Alert, Button, Input, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState, useEffect, useRef } from 'react';
 import { HumanCheckField, type HumanCheckWidget } from '@/components/human-check-field.tsx';
@@ -50,7 +50,7 @@ export function ContactForm({
         <label htmlFor="contact-topic" className="text-[13px] font-bold text-ink">
           {t('fields.topic')}
         </label>
-        <select
+        <Select
           id="contact-topic"
           name="topic"
           defaultValue="sales"
@@ -62,7 +62,7 @@ export function ContactForm({
               {t(`topics.${k}`)}
             </option>
           ))}
-        </select>
+        </Select>
       </div>
       <Input
         id="contact-name"

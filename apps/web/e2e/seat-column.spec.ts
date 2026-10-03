@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
-import { expectAccessible, signIn } from './helpers.ts';
+import { expectAccessible, pickOption, signIn } from './helpers.ts';
 import { addGuests, holdSeats, seatedGala, unique } from './seating-helpers.ts';
 
 const VIEWER = 'jordan@lakeside.test';
@@ -23,8 +23,8 @@ test.describe('the Seat column (M1.7g)', () => {
     // Ann is seated by the organizer (keyboard-free form, M1.7d); Ben stays unseated.
     await page.goto(`${base}/seating/assign`);
     await page.getByRole('checkbox', { name: ann }).check();
-    await page.getByLabel('Table or row').selectOption({ label: 'Table 1 — 4 of 4 free' });
-    await page.getByLabel('Seat', { exact: true }).selectOption({ label: 'Table 1 · 3' });
+    await pickOption(page.getByLabel('Table or row'), { label: 'Table 1 — 4 of 4 free' });
+    await pickOption(page.getByLabel('Seat', { exact: true }), { label: 'Table 1 · 3' });
     await page.getByRole('button', { name: 'Seat them' }).click();
     await expect(page.getByText(`Seated 1 person at Table 1.`)).toBeVisible();
 
@@ -53,7 +53,7 @@ test.describe('the Seat column (M1.7g)', () => {
     await page.goto(`${base}/attendees`);
     const bulk = page.getByRole('form', { name: 'Bulk actions' });
     await bulk.getByLabel('All 3 matching').check();
-    await bulk.getByLabel('Action').selectOption({ label: 'Export as CSV' });
+    await pickOption(bulk.getByLabel('Action'), { label: 'Export as CSV' });
     await bulk.getByRole('button', { name: 'Apply' }).click();
     const panel = page.getByRole('region', { name: 'Attendee export' });
     await expect(panel).toContainText('Ready: 3 rows exported.');
@@ -81,7 +81,7 @@ test.describe('the Seat column (M1.7g)', () => {
     await expect(viewer.getByRole('form', { name: 'Bulk actions' })).toHaveCount(0);
     await page.goto(`${base}/attendees`);
     await bulk.getByLabel('All 3 matching').check();
-    await bulk.getByLabel('Action').selectOption({ label: 'Export as CSV' });
+    await pickOption(bulk.getByLabel('Action'), { label: 'Export as CSV' });
     await signIn(page, VIEWER);
     await bulk.getByRole('button', { name: 'Apply' }).click();
     await expect(page.getByRole('alert').filter({ hasText: "You don't have access to this." })).toBeVisible();

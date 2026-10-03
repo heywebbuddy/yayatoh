@@ -94,9 +94,14 @@ test.describe('Select keyboard (WAI-ARIA select-only combobox)', () => {
     await expect.poll(active).toBe('size-md-light-list-0');
     await page.keyboard.press('Escape');
     await expect(hidden(page, 'size-md', 'light')).toHaveValue('cancelled');
-    // Type-ahead on the closed trigger opens on the match; End jumps to the last option.
+    // Type-ahead on the closed trigger chooses directly, as a native select does.
     await page.keyboard.press('p');
-    await expect.poll(active).toBe('size-md-light-list-1');
+    await expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    await expect(hidden(page, 'size-md', 'light')).toHaveValue('published');
+    // Open: type-ahead moves the active option; End jumps to the last.
+    await page.keyboard.press('Enter');
+    await page.keyboard.press('d');
+    await expect.poll(active).toBe('size-md-light-list-0');
     await page.keyboard.press('End');
     await expect.poll(active).toBe('size-md-light-list-2');
     await page.keyboard.press('ArrowUp');

@@ -21,6 +21,7 @@ import {
   ProgressBar,
   Radio,
   SectionHeader,
+  Select,
   StatusPill,
   Table,
   Tabs,
@@ -270,14 +271,14 @@ export default async function ApplicationsPage({
           <label htmlFor="queue-type" className={label}>
             {t('type')}
           </label>
-          <select id="queue-type" name="type" defaultValue={typeId ?? ''} className="field">
+          <Select id="queue-type" name="type" defaultValue={typeId ?? ''} className="field">
             <option value="">{t('allTypes')}</option>
             {setup.types.map((x) => (
               <option key={x.id} value={x.id}>
                 {x.name}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
         <div className="flex min-w-48 flex-1 flex-col gap-1.5">
           <label htmlFor="queue-q" className={label}>
@@ -541,22 +542,22 @@ export default async function ApplicationsPage({
                   <label htmlFor="bulk-decision" className={label}>
                     {t('decisionLabel')}
                   </label>
-                  <select id="bulk-decision" name="decision" className="field w-full">
+                  <Select id="bulk-decision" name="decision" className="field w-full">
                     <option value="approve">{t('decision.approve')}</option>
                     <option value="deny">{t('decision.deny')}</option>
-                  </select>
+                  </Select>
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <label htmlFor="bulk-template" className={label}>
                     {t('template')}
                   </label>
-                  <select id="bulk-template" name="templateId" className="field w-full">
+                  <Select id="bulk-template" name="templateId" className="field w-full">
                     {allTemplates.map((o) => (
                       <option key={o.value} value={o.value}>
                         {o.label}
                       </option>
                     ))}
-                  </select>
+                  </Select>
                 </div>
               </div>
               <div className="flex flex-col gap-1.5">

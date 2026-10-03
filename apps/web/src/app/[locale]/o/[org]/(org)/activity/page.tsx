@@ -2,7 +2,16 @@ import { getUsersByIds } from '@yayatoh/auth';
 import { executeQuery, isDomainError } from '@yayatoh/kernel';
 import { type AuditEntryDto, auditExportBulk, auditLogQuery, type BulkOperationDto } from '@yayatoh/platform';
 import { roleCan } from '@yayatoh/tenancy';
-import { Button, buttonClass, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
+import {
+  Button,
+  buttonClass,
+  DatePicker,
+  EmptyState,
+  PageHeader,
+  Select,
+  StatusDot,
+  Table,
+} from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { AutoRefresh } from '@/components/auto-refresh.tsx';
 import { StepUpForm } from '@/components/step-up.tsx';
@@ -125,39 +134,39 @@ export default async function ActivityPage({
           <label htmlFor="activity-actor" className="text-[13px] font-bold text-ink">
             {t('activity.filters.actor')}
           </label>
-          <select id="activity-actor" name="actor" defaultValue={values.actor} className={field}>
+          <Select id="activity-actor" name="actor" defaultValue={values.actor} className={field}>
             <option value="">{t('activity.filters.anyone')}</option>
             {log.actors.map((a) => (
               <option key={a} value={a}>
                 {who(a)}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
         <div className="flex flex-col gap-1.5">
           <label htmlFor="activity-action" className="text-[13px] font-bold text-ink">
             {t('activity.filters.action')}
           </label>
-          <select id="activity-action" name="action" defaultValue={values.action} className={field}>
+          <Select id="activity-action" name="action" defaultValue={values.action} className={field}>
             <option value="">{t('activity.filters.anyAction')}</option>
             {log.actions.map((a) => (
               <option key={a} value={a}>
                 {a}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
         <div className="flex flex-col gap-1.5">
           <label htmlFor="activity-from" className="text-[13px] font-bold text-ink">
             {t('activity.filters.from')}
           </label>
-          <input id="activity-from" name="from" type="date" defaultValue={values.from} className={field} />
+          <DatePicker id="activity-from" name="from" defaultValue={values.from} className={field} />
         </div>
         <div className="flex flex-col gap-1.5">
           <label htmlFor="activity-to" className="text-[13px] font-bold text-ink">
             {t('activity.filters.to')}
           </label>
-          <input id="activity-to" name="to" type="date" defaultValue={values.to} className={field} />
+          <DatePicker id="activity-to" name="to" defaultValue={values.to} className={field} />
         </div>
         <div className="flex flex-wrap gap-2">
           <Button type="submit">{t('activity.filters.apply')}</Button>

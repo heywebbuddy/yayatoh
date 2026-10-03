@@ -50,6 +50,10 @@ describe('Select trigger (the chevron fix)', () => {
       expect(cls, size).toContain('appearance-none');
       expect(cls, size).toContain('relative');
     }
+    // Padding carried over from a native select can't undo the chevron's room; a width replaces ours.
+    expect(selectTriggerClass('md', 'field px-3 w-28')).not.toMatch(/\bpx-3\b|\bw-full\b/);
+    expect(selectTriggerClass('md', 'field px-3 w-28')).toContain('w-28');
+    expect(selectTriggerClass('md')).toContain('w-full');
     expect(css).toMatch(/@utility field-chevron \{\s*--field-pe: 40px;/);
     expect(css).toContain('padding-inline-end: var(--field-pe, var(--field-px, 14px));');
   });
