@@ -89,7 +89,7 @@ export default async function CfpReviewersPage({
             description={t('noReviewersDescription')}
             action={
               canWrite ? (
-                <a href="#add-reviewer-heading" className={buttonClass('primary', 'md')}>
+                <a href="#new-reviewer" className={buttonClass('primary', 'md')}>
                   {t('addReviewer')}
                 </a>
               ) : (
@@ -110,7 +110,7 @@ export default async function CfpReviewersPage({
         )}
       </section>
       {canWrite ? (
-        <section aria-labelledby="add-reviewer-heading">
+        <section id="new-reviewer" aria-labelledby="add-reviewer-heading">
           <Card size="panel" className="flex flex-col gap-3">
             <h2 id="add-reviewer-heading" className="text-section">
               {t('addReviewer')}

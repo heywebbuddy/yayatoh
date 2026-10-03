@@ -229,7 +229,7 @@ export default async function MatchesPage({
             description={canWrite ? t('emptyDescription') : t('emptyViewer')}
             action={
               canWrite ? (
-                <a href="#add-match-heading" className={buttonClass('primary', 'md')}>
+                <a href="#new-match" className={buttonClass('primary', 'md')}>
                   {t('addTitle')}
                 </a>
               ) : (
@@ -332,7 +332,7 @@ export default async function MatchesPage({
           </ol>
         )}
         {canWrite && view.campaigns.length > 0 ? (
-          <section aria-labelledby="add-match-heading">
+          <section id="new-match" aria-labelledby="add-match-heading">
             <Card size="panel" className="flex flex-col gap-4">
               <CardHeader as="h3" id="add-match-heading" title={t('addTitle')} />
               <p className="m-0 text-body text-ink-2">{t('addBody')}</p>

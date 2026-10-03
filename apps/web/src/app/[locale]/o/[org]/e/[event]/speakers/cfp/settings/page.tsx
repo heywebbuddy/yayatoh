@@ -133,7 +133,7 @@ export default async function CfpSettingsPage({
             description={t('noQuestionsDescription')}
             action={
               canWrite ? (
-                <a href="#add-question-heading" className={buttonClass('primary', 'md')}>
+                <a href="#new-question" className={buttonClass('primary', 'md')}>
                   {t('addQuestion')}
                 </a>
               ) : (
@@ -169,7 +169,7 @@ export default async function CfpSettingsPage({
         )}
         {canWrite && view.questions.length < MAX_CFP_QUESTIONS ? (
           <Card size="panel" className="flex flex-col gap-3">
-            <h3 id="add-question-heading" className="text-section">
+            <h3 id="new-question" className="text-section">
               {t('addQuestion')}
             </h3>
             <ProgramForm
