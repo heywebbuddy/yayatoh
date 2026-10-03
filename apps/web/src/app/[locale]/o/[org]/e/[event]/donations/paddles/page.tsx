@@ -38,7 +38,7 @@ export default async function PaddlesPage({
 }) {
   const { locale, org, event } = await params;
   setRequestLocale(locale);
-  const { data, event: ev, can } = await loadEvent(org, event, 'donations');
+  const { data, event: ev, can, opens } = await loadEvent(org, event, 'donations');
   if (!can('guests:read')) notFound();
   const view = await executeQuery(paddlesQuery, { eventId: ev.id }, data.ctx, ports);
   const t = await getTranslations('donations.paddles');
@@ -138,9 +138,15 @@ export default async function PaddlesPage({
           title={t('noGuestsTitle')}
           description={t('noGuestsDescription')}
           action={
-            <Link href={`/o/${org}/e/${event}/guests`} className={buttonClass('primary', 'md')}>
-              {t('openGuests')}
-            </Link>
+            opens('guests') ? (
+              <Link href={`/o/${org}/e/${event}/guests`} className={buttonClass('primary', 'md')}>
+                {t('openGuests')}
+              </Link>
+            ) : opens('tablesSponsors') ? (
+              <Link href={`/o/${org}/e/${event}/tables-sponsors`} className={buttonClass('primary', 'md')}>
+                {t('openTables')}
+              </Link>
+            ) : undefined
           }
         />
       ) : canWrite ? (

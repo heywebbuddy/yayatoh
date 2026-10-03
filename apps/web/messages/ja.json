@@ -8754,6 +8754,7 @@
       "noGuestsTitle": "まだゲストがいません",
       "noGuestsDescription": "先にグループとゲストを追加し、ここでパドル番号を配ってください。",
       "openGuests": "ゲストを開く",
+      "openTables": "テーブルとスポンサーを開く",
       "bulkTitle": "まとめて配る",
       "bulkBody": "まだパドルのない全員に、テーブルごとに番号を割り当てます。",
       "bulkSubmit": "パドルを配る",

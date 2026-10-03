@@ -10,7 +10,7 @@ import { Crumbs } from '@/components/crumbs.tsx';
 import { realtimeUrl } from '@/lib/realtime-url.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
-import { RaiseActionButton } from '../action-button.tsx';
+import { RaiseActionButton, RaiseAnnouncer } from '../action-button.tsx';
 import { confirmCallAction, confirmEntryAction, voidEntryAction } from '../actions.ts';
 import { RefreshOnLive } from './refresh-on-live.tsx';
 
@@ -64,139 +64,143 @@ export default async function PaddleReviewPage({
     <>
       <RefreshOnLive url={realtimeUrl(realtimeChannelName(PADDLE_CONSOLE_CHANNEL, data.org.id, ev.id))} />
       <PageHeader breadcrumb={crumbs} title={t('title')} description={t('subtitle')} />
-      {canConfirm ? null : <Alert tone="info" title={t('viewerNotice')} />}
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4" data-testid="review-totals">
-        <StatCard label={tr('totalRaised')} value={fmt(view.totals.totalMinor, view.totals.currency)} />
-        <StatCard label={t('pledges')} value={n.format(view.totals.pledgeCount)} />
-        <StatCard label={tr('pledged')} value={fmt(view.totals.pledgedMinor, view.totals.currency)} />
-        <StatCard label={tr('toReview')} value={n.format(view.totals.toReview)} />
-      </div>
-      {view.calls.length === 0 ? (
-        <EmptyState
-          icon={<ClipboardCheck strokeWidth={2} />}
-          title={t('emptyTitle')}
-          description={t('emptyDescription')}
-        />
-      ) : (
-        <ol className="m-0 flex list-none flex-col gap-4 p-0">
-          {view.calls.map(({ call, entries }) => {
-            const waiting = entries.filter((e) => e.status === 'recorded').length;
-            const level = tr('levelLine', {
-              amount: fmt(call.amountMinor, call.currency),
-              name: call.levelName,
-            });
-            return (
-              <li key={call.id}>
-                <section aria-label={level}>
-                  <Card size="panel" className="flex flex-col gap-4">
-                    <CardHeader
-                      as="h2"
-                      title={level}
-                      actions={
-                        <StatusPill
-                          tone={call.status === 'open' ? 'success' : 'neutral'}
-                          label={call.status === 'open' ? tr('statusOpen') : tr('statusClosed')}
-                        />
-                      }
-                    />
-                    <p className="m-0 text-body text-ink tabular-nums">
-                      {t('callSummary', {
-                        count: call.count,
-                        total: fmt(call.totalMinor, call.currency),
-                        confirmed: call.confirmed,
-                        duplicates: call.duplicates,
-                      })}
-                    </p>
-                    {canConfirm && waiting > 0 ? (
-                      <RaiseActionButton
-                        action={confirmCallAction.bind(null, org, event, call.id)}
-                        label={t('confirmAll', { count: waiting })}
-                        variant="primary"
-                        className="self-start"
+      <RaiseAnnouncer>
+        {canConfirm ? null : <Alert tone="info" title={t('viewerNotice')} />}
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4" data-testid="review-totals">
+          <StatCard label={tr('totalRaised')} value={fmt(view.totals.totalMinor, view.totals.currency)} />
+          <StatCard label={t('pledges')} value={n.format(view.totals.pledgeCount)} />
+          <StatCard label={tr('pledged')} value={fmt(view.totals.pledgedMinor, view.totals.currency)} />
+          <StatCard label={tr('toReview')} value={n.format(view.totals.toReview)} />
+        </div>
+        {view.calls.length === 0 ? (
+          <EmptyState
+            icon={<ClipboardCheck strokeWidth={2} />}
+            title={t('emptyTitle')}
+            description={t('emptyDescription')}
+          />
+        ) : (
+          <ol className="m-0 flex list-none flex-col gap-4 p-0">
+            {view.calls.map(({ call, entries }) => {
+              const waiting = entries.filter((e) => e.status === 'recorded').length;
+              const level = tr('levelLine', {
+                amount: fmt(call.amountMinor, call.currency),
+                name: call.levelName,
+              });
+              return (
+                <li key={call.id}>
+                  <section aria-label={level}>
+                    <Card size="panel" className="flex flex-col gap-4">
+                      <CardHeader
+                        as="h2"
+                        title={level}
+                        actions={
+                          <StatusPill
+                            tone={call.status === 'open' ? 'success' : 'neutral'}
+                            label={call.status === 'open' ? tr('statusOpen') : tr('statusClosed')}
+                          />
+                        }
                       />
-                    ) : null}
-                    {entries.length === 0 ? (
-                      <p className="m-0 text-caption text-ink-2">{t('noEntries')}</p>
-                    ) : (
-                      <Table<ReviewEntryDto>
-                        caption={t('entriesCaption', { level: call.levelName })}
-                        rows={entries}
-                        rowKey={(e) => e.id}
-                        empty={t('noEntries')}
-                        columns={[
-                          {
-                            key: 'paddle',
-                            header: t('columns.paddle'),
-                            mono: true,
-                            cell: (e) => (
-                              <span className="font-bold text-ink">{n.format(e.paddleNumber)}</span>
-                            ),
-                          },
-                          {
-                            key: 'holder',
-                            header: t('columns.holder'),
-                            cell: (e) => e.holderName ?? t('holderGone'),
-                          },
-                          {
-                            key: 'status',
-                            header: t('columns.status'),
-                            cell: (e) => <StatusPill tone={TONE[e.status]} label={t(`status.${e.status}`)} />,
-                          },
-                          {
-                            key: 'time',
-                            header: t('columns.recorded'),
-                            cell: (e) => time.format(e.recordedAt),
-                          },
-                          ...(canConfirm
-                            ? [
-                                {
-                                  key: 'actions',
-                                  header: t('columns.actions'),
-                                  cell: (e: ReviewEntryDto) =>
-                                    e.status === 'voided' ? (
-                                      '—'
-                                    ) : (
-                                      <div className="flex flex-wrap gap-2">
-                                        {e.status === 'duplicate' ? (
+                      <p className="m-0 text-body text-ink tabular-nums">
+                        {t('callSummary', {
+                          count: call.count,
+                          total: fmt(call.totalMinor, call.currency),
+                          confirmed: call.confirmed,
+                          duplicates: call.duplicates,
+                        })}
+                      </p>
+                      {canConfirm && waiting > 0 ? (
+                        <RaiseActionButton
+                          action={confirmCallAction.bind(null, org, event, call.id)}
+                          label={t('confirmAll', { count: waiting })}
+                          variant="primary"
+                          className="self-start"
+                        />
+                      ) : null}
+                      {entries.length === 0 ? (
+                        <p className="m-0 text-caption text-ink-2">{t('noEntries')}</p>
+                      ) : (
+                        <Table<ReviewEntryDto>
+                          caption={t('entriesCaption', { level: call.levelName })}
+                          rows={entries}
+                          rowKey={(e) => e.id}
+                          empty={t('noEntries')}
+                          columns={[
+                            {
+                              key: 'paddle',
+                              header: t('columns.paddle'),
+                              mono: true,
+                              cell: (e) => (
+                                <span className="font-bold text-ink">{n.format(e.paddleNumber)}</span>
+                              ),
+                            },
+                            {
+                              key: 'holder',
+                              header: t('columns.holder'),
+                              cell: (e) => e.holderName ?? t('holderGone'),
+                            },
+                            {
+                              key: 'status',
+                              header: t('columns.status'),
+                              cell: (e) => (
+                                <StatusPill tone={TONE[e.status]} label={t(`status.${e.status}`)} />
+                              ),
+                            },
+                            {
+                              key: 'time',
+                              header: t('columns.recorded'),
+                              cell: (e) => time.format(e.recordedAt),
+                            },
+                            ...(canConfirm
+                              ? [
+                                  {
+                                    key: 'actions',
+                                    header: t('columns.actions'),
+                                    cell: (e: ReviewEntryDto) =>
+                                      e.status === 'voided' ? (
+                                        '—'
+                                      ) : (
+                                        <div className="flex flex-wrap gap-2">
+                                          {e.status === 'duplicate' ? (
+                                            <RaiseActionButton
+                                              action={confirmEntryAction.bind(
+                                                null,
+                                                org,
+                                                event,
+                                                e.id,
+                                                e.paddleNumber,
+                                              )}
+                                              label={t('confirmOne', { number: e.paddleNumber })}
+                                              size="sm"
+                                            />
+                                          ) : null}
                                           <RaiseActionButton
-                                            action={confirmEntryAction.bind(
+                                            action={voidEntryAction.bind(
                                               null,
                                               org,
                                               event,
                                               e.id,
                                               e.paddleNumber,
                                             )}
-                                            label={t('confirmOne', { number: e.paddleNumber })}
+                                            label={t('void', { number: e.paddleNumber })}
+                                            variant="ghost"
                                             size="sm"
                                           />
-                                        ) : null}
-                                        <RaiseActionButton
-                                          action={voidEntryAction.bind(
-                                            null,
-                                            org,
-                                            event,
-                                            e.id,
-                                            e.paddleNumber,
-                                          )}
-                                          label={t('void', { number: e.paddleNumber })}
-                                          variant="ghost"
-                                          size="sm"
-                                        />
-                                      </div>
-                                    ),
-                                },
-                              ]
-                            : []),
-                        ]}
-                      />
-                    )}
-                  </Card>
-                </section>
-              </li>
-            );
-          })}
-        </ol>
-      )}
+                                        </div>
+                                      ),
+                                  },
+                                ]
+                              : []),
+                          ]}
+                        />
+                      )}
+                    </Card>
+                  </section>
+                </li>
+              );
+            })}
+          </ol>
+        )}
+      </RaiseAnnouncer>
     </>
   );
 }

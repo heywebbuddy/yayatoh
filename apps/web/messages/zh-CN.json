@@ -8754,6 +8754,7 @@
       "noGuestsTitle": "还没有宾客",
       "noGuestsDescription": "请先添加团体和宾客，然后在这里分配号码牌。",
       "openGuests": "打开宾客",
+      "openTables": "打开桌位与赞助商",
       "bulkTitle": "批量分配号码牌",
       "bulkBody": "号码按桌依次分配给所有尚未持有号码牌的人。",
       "bulkSubmit": "分配号码牌",
