@@ -114,7 +114,7 @@ export async function billingStandingOf(orgId: string, now = new Date()): Promis
   );
 }
 
-/** The refusal a read-only org's member sees (code `read_only_billing`, HTTP 402). */
+/** The refusal a read-only org's member sees (code `read_only_billing`, HTTP 403). */
 export function billingReadOnlyRefusal(readOnlyFrom: Date | null): DomainError {
   return new DomainError(
     'read_only_billing',

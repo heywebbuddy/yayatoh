@@ -133,13 +133,13 @@ describe('dunning to read-only (M6.6b acceptance)', () => {
     const before = await counts(a);
     const later = new Date(Date.now() + (DUNNING_GRACE_DAYS + 1) * DAY);
     expect((await standing(a, later)).standing).toBe('read_only');
-    // Writes by members refuse with a clear code (HTTP 402) and the reason.
+    // Writes by members refuse with a clear code (HTTP 403) and the reason.
     try {
       await track(a, a.ctx({ now: later }));
       expect.unreachable();
     } catch (err) {
       expect(isDomainError(err) && err.code).toBe('read_only_billing');
-      expect(isDomainError(err) && err.status).toBe(402);
+      expect(isDomainError(err) && err.status).toBe(403);
       expect(isDomainError(err) && err.details).toMatchObject({ reason: 'billing_read_only' });
     }
     // Reads keep working.

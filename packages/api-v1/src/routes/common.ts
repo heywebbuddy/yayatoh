@@ -10,15 +10,14 @@ const p = (description: string) => ({ description, content: problemContent });
 export const problems = {
   400: p('Validation failed (`validation_failed`)'),
   401: p('Missing, unknown or revoked credential (`unauthenticated`)'),
-  403: p('The credential lacks the scope or role (`forbidden`, `module_not_enabled`)'),
+  403: p(
+    'The credential lacks the scope or role (`forbidden`, `module_not_enabled`), or the organization is read-only until its subscription is paid (`read_only_billing`)',
+  ),
   404: p('Not found, or not visible to this credential (`not_found`)'),
   429: p('Too many requests (`rate_limited`); see `Retry-After`'),
 };
 export const writeProblems = {
   ...problems,
-  402: p(
-    'The organization is read-only until its subscription is paid (`read_only_billing`): nothing was changed',
-  ),
   409: p('Conflict, invalid state, or the same Idempotency-Key is in flight'),
   422: p('The Idempotency-Key was used with a different request (`idempotency_key_reused`)'),
   503: p(

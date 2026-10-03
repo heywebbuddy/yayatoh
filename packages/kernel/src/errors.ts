@@ -24,9 +24,9 @@ export const ERROR_STATUS = {
   /**
    * The org is read-only after a failed subscription renewal (M6.6b dunning): its members' and API
    * keys' writes are refused until it pays; reads, exports and the door keep working, nothing is
-   * deleted.
+   * deleted. 403 like other "not allowed now" refusals; `/v1` documents it on its 403 response.
    */
-  read_only_billing: 402,
+  read_only_billing: 403,
 } as const;
 
 export type ErrorCode = keyof typeof ERROR_STATUS;
