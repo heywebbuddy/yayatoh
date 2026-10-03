@@ -68,9 +68,8 @@ interface ChartPlaces {
 }
 
 /**
- * Every chart the party is on, with where it sits: each sub-event it is invited to (on the chart
- * the sub-event uses), and the event plan when the event has no sub-events or the party has a
- * place on it. Charts without a plan are skipped.
+ * Every chart the party has a place on, with where it sits: the event plan and each sub-event it
+ * is invited to (on the chart the sub-event uses). Empty until the host seats the party.
  */
 async function partyChartsTx(tx: TenantTx, eventId: string, partyId: string): Promise<ChartPlaces[]> {
   const plan = await viewTx(tx, eventId, null);
@@ -83,8 +82,8 @@ async function partyChartsTx(tx: TenantTx, eventId: string, partyId: string): Pr
       label: p.label,
     }));
     const on = partyOnChart({ partyId, parties: v.parties, placed: v.placed, places });
-    if (!on) return;
-    if (subEventId === null && plan.subEvents.length > 0 && on.places.length === 0) return;
+    // Only charts where the party has a place: a sub-event not seated yet adds nothing to show.
+    if (!on || on.places.length === 0) return;
     out.push({ subEventId, name, doc: publicDoc(v.chart.doc), on });
   };
   add(null, null, plan);

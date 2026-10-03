@@ -134,15 +134,8 @@ describe('a party signed in through its link (M4.4a)', () => {
     // The map is the plan as drawn: the table is in it, nobody's name is.
     expect(plan?.doc.items.some((i) => i.id === w.t1)).toBe(true);
     expect(JSON.stringify(plan?.doc)).not.toMatch(/Garcia|Chen|Okafor/);
-    // Only the Reception's invited Garcia guest (Luis, his plus-one following him) is on its chart,
-    // with no place there yet.
-    const rec = v.charts.find((c) => c.subEventId !== null);
-    expect(rec?.name).toBe('Reception');
-    expect(rec?.places).toEqual([]);
-    expect(rec?.unseated.map((g) => g.name ?? `guest of ${g.guestOf}`)).toEqual([
-      'Luis Garcia',
-      'guest of Luis Garcia',
-    ]);
+    // The Reception (Luis and his plus-one invited) has no places yet: nothing to show for it.
+    expect(v.charts.map((c) => c.subEventId)).toEqual([null]);
     // Okafor sees Ada alone at table 2 and Kai waiting; no other party's names.
     const ok = await executeQuery(
       partySeatsQuery,
@@ -153,6 +146,27 @@ describe('a party signed in through its link (M4.4a)', () => {
     const okPlan = ok.charts.find((c) => c.subEventId === null);
     expect(okPlan?.places.map((p) => [p.itemLabel, p.tablemates.length])).toEqual([['2', 0]]);
     expect(okPlan?.unseated.map((g) => g.name)).toEqual(['Kai Okafor']);
+  });
+
+  it('a sub-event seated on its own shows as its own chart, named', async () => {
+    const w = await wedding(a, 'Sub-event');
+    const rec = await reception(w);
+    await w.seat(w.t2, [w.luis.id, w.plus.id, w.mei.id], rec.id);
+    await w.open('pin');
+    const { token, pin } = await w.detail(w.garcia.id);
+    const v = await executeQuery(partySeatsQuery, { token: token as string }, guest(a.org.id), ports);
+    // Nobody is seated on the event plan: only the Reception, with Mei as the tablemate.
+    expect(v.charts.map((c) => [c.name, c.places.map((p) => p.itemLabel)])).toEqual([['Reception', ['2']]]);
+    expect(v.charts[0]?.places[0]?.tablemates).toEqual([{ name: 'Mei Chen', guestOf: null }]);
+    const r = await executeCommand(
+      findGuestSeatByPinCommand,
+      { eventId: w.ev.id, name: 'Ana Garcia', pin: pin as string, device: `sub-${Date.now()}`, human: false },
+      guest(a.org.id),
+      ports,
+    );
+    expect(r.result?.charts.map((c) => [c.name, c.places.map((p) => [p.itemLabel, p.count])])).toEqual([
+      ['Reception', [['2', 2]]],
+    ]);
   });
 
   it('a link works for its own party only; a reset or forged link, or another org, finds nothing', async () => {

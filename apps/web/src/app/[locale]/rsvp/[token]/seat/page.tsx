@@ -99,8 +99,7 @@ export default async function PartySeatPage({
                               {place.tablemates.length ? (
                                 <ul className="m-0 flex list-none flex-col gap-0.5 p-0">
                                   {place.tablemates.map((m, j) => (
-                                    // Names can repeat (two unnamed plus-ones of one guest).
-                                    // biome-ignore lint/suspicious/noArrayIndexKey: a display list with no ids
+                                    // Names can repeat (two unnamed plus-ones of one guest): keyed by place.
                                     <li key={j}>{person(m)}</li>
                                   ))}
                                 </ul>
