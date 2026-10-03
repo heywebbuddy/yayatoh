@@ -32,6 +32,20 @@ export interface EventFacts {
   /** M3.3b: help requests still unassigned past their SLA, and how many of them are urgent. */
   readonly assistanceOverdue: number;
   readonly assistanceUrgent: number;
+  /** M4.6a: the guest list's counts (null or absent: the event has no guests). */
+  readonly social?: SocialEventFacts | null;
+}
+
+/** M4.6a social pack facts (counts only). */
+export interface SocialEventFacts {
+  readonly rsvpDeadline: Date | null;
+  /** Invited guests with an invitation still unanswered, and their parties. */
+  readonly rsvpPending: number;
+  readonly rsvpPendingParties: number;
+  /** Guests (not declined) without a table; null when no guest chart exists or it wasn't read. */
+  readonly guestsUnseated: number | null;
+  /** Attending guests without a meal; null when the event has no menu. */
+  readonly mealsMissing: number | null;
 }
 
 /** Everything the org rules read. */
@@ -151,6 +165,8 @@ export function evaluateEventRules(
     );
 
   const untilStart = f.startsAt.getTime() - now.getTime();
+  if (f.social) Object.assign(out, evaluateSocialRules(f.social, untilStart, f.endsAt.getTime() - now.getTime(), now, t));
+
   if (untilStart > 0 && untilStart <= t.readinessWindowMs) {
     const blockers = (f.status === 'draft' ? 1 : 0) + (f.ticketTypes === 0 ? 1 : 0);
     if (blockers > 0)
@@ -159,6 +175,34 @@ export function evaluateEventRules(
         noTickets: f.ticketTypes === 0 ? 1 : 0,
       });
   }
+  return out;
+}
+
+/**
+ * The social pack's rules (M4.6a, pure): RSVP pending from deadline −7 d (warning) and −1 d
+ * (critical) until the event starts; guests without a table in the last 7 days (critical in the
+ * last day and while the event runs); attending guests without a meal in the last 7 days.
+ */
+export function evaluateSocialRules(
+  s: SocialEventFacts,
+  untilStartMs: number,
+  untilEndMs: number,
+  now: Date,
+  t: Thresholds = THRESHOLDS,
+): Partial<Record<RuleKey, Firing>> {
+  const out: Partial<Record<RuleKey, Firing>> = {};
+  if (s.rsvpDeadline && s.rsvpPending > 0 && untilStartMs > 0) {
+    const left = s.rsvpDeadline.getTime() - now.getTime();
+    if (left <= t.rsvpWarnBeforeMs)
+      out.rsvpPending = fire(left <= t.rsvpCriticalBeforeMs ? 'critical' : 'warning', s.rsvpPending, {
+        parties: s.rsvpPendingParties,
+        days: Math.max(0, Math.ceil(left / 86_400_000)),
+      });
+  }
+  if (s.guestsUnseated !== null && s.guestsUnseated > 0 && untilEndMs > 0 && untilStartMs <= t.guestSeatingWindowMs)
+    out.guestsUnseated = fire(untilStartMs <= t.guestSeatingCriticalMs ? 'critical' : 'warning', s.guestsUnseated);
+  if (s.mealsMissing !== null && s.mealsMissing > 0 && untilStartMs > 0 && untilStartMs <= t.mealsWindowMs)
+    out.mealsMissing = fire('warning', s.mealsMissing);
   return out;
 }
 

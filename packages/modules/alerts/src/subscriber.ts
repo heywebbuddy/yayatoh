@@ -64,6 +64,10 @@ export const ALERT_TRIGGER_EVENTS = [
   'automations.journey_step_failed@1',
   'campaigns.send_failed@1',
   'payments.dispute_deadline_approaching@1',
+  // M4.6a: a party answered its RSVP, or the deadline moved (guest additions and seating changes
+  // emit nothing: the sweep picks them up).
+  'guests.party_responded@1',
+  'guests.rsvp_deadline_set@1',
 ] as const;
 
 /** Outbox events that are themselves what an org rule counts (one `alerts.signals` row each). */

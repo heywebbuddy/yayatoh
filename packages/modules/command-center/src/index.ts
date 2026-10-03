@@ -81,3 +81,15 @@ export {
   type WidgetRegistry,
   withWidget,
 } from './widgets.ts';
+// M4.6a social pack: RSVP, guest seating, meals and dietary needs, arrivals.
+export {
+  ArrivalsWidgetDto,
+  arrivalsWidget,
+  GuestSeatingWidgetDto,
+  guestSeatingWidget,
+  MealsWidgetDto,
+  mealsWidget,
+  RsvpWidgetDto,
+  rsvpWidget,
+  SOCIAL_LIST_MAX,
+} from './social-widgets.ts';

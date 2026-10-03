@@ -3,15 +3,16 @@ import { checkinFactsTx, deviceHealthTx } from '@yayatoh/checkin';
 import type { TenantTx } from '@yayatoh/db';
 import { type EventDto, findEventTx } from '@yayatoh/events';
 import { deliverabilityBreakdownTx, deliverabilityFactsTx } from '@yayatoh/notifications';
+import { socialFactsTx } from '@yayatoh/guests';
 import { paymentAlertFactsTx } from '@yayatoh/orders';
 import { disputeDeadlineFactsTx, payoutRequirementsPastDueTx } from '@yayatoh/payments';
 import { failedBulkOperationsTx } from '@yayatoh/platform';
-import { unseatedAttendeesTx } from '@yayatoh/seating';
+import { guestPlacesTx, unseatedAttendeesTx } from '@yayatoh/seating';
 import { domainProblemsTx } from '@yayatoh/tenancy';
 import { ticketTypeStatsTx, undistributedTicketsTx } from '@yayatoh/ticketing';
 import { and, eq, gte, sql } from 'drizzle-orm';
 import { eventMode, THRESHOLDS } from './domain/config.ts';
-import type { EventFacts, OrgFacts } from './domain/rules.ts';
+import type { EventFacts, OrgFacts, SocialEventFacts } from './domain/rules.ts';
 import { type SignalKind, salesTargets, signals } from './schema.ts';
 
 /**
@@ -27,7 +28,7 @@ export async function eventFactsTx(
   if (!event) return null;
   const mode = eventMode(now, event.startsAt, event.endsAt);
   const around = mode === 'live' || mode === 'pre_show';
-  const [unseated, dist, pay, devices, types, admitted, [target], help] = await Promise.all([
+  const [unseated, dist, pay, devices, types, admitted, [target], help, social] = await Promise.all([
     unseatedAttendeesTx(tx, eventId),
     undistributedTicketsTx(tx, eventId),
     paymentAlertFactsTx(tx, eventId, now, {
@@ -45,6 +46,7 @@ export async function eventFactsTx(
     mode === 'live' ? checkinFactsTx(tx, { eventId }).then((c) => c.tickets) : Promise.resolve(0),
     tx.select({ tickets: salesTargets.tickets }).from(salesTargets).where(eq(salesTargets.eventId, eventId)),
     assistanceOverdueTx(tx, eventId, now),
+    socialEventFactsTx(tx, eventId, event.startsAt, event.endsAt, now),
   ]);
   const live = types.filter((t) => !t.archived);
   return {
@@ -70,7 +72,38 @@ export async function eventFactsTx(
       ticketTypes: live.length,
       assistanceOverdue: help.overdue,
       assistanceUrgent: help.urgent,
+      social,
     },
+  };
+}
+
+/**
+ * M4.6a: the guest list's counts (guests module), and guests without a table (seating's guest
+ * plan, read only in the window where the rule applies). Null for an event with no guests.
+ */
+async function socialEventFactsTx(
+  tx: TenantTx,
+  eventId: string,
+  startsAt: Date,
+  endsAt: Date,
+  now: Date,
+): Promise<SocialEventFacts | null> {
+  const s = await socialFactsTx(tx, eventId);
+  if (s.invited === 0 && s.attending === 0) return null;
+  let guestsUnseated: number | null = null;
+  if (startsAt.getTime() - now.getTime() <= THRESHOLDS.guestSeatingWindowMs && endsAt > now) {
+    const plan = await guestPlacesTx(tx, eventId);
+    if (plan.charts.length > 0)
+      guestsUnseated = plan.parties
+        .flatMap((p) => p.guests)
+        .filter((g) => g.status !== 'declined' && !plan.placesOf.get(g.id)?.length).length;
+  }
+  return {
+    rsvpDeadline: s.deadline,
+    rsvpPending: s.pending,
+    rsvpPendingParties: s.pendingParties,
+    guestsUnseated,
+    mealsMissing: s.mealsMissing,
   };
 }
 

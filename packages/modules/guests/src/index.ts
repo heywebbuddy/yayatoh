@@ -298,3 +298,13 @@ export {
   tablePartiesTx,
   tablePartyTx,
 } from './tables.ts';
+// M4.6a social Command Center pack: RSVP, meal and dietary counts (counts only).
+export {
+  type MealOption,
+  type MealTally,
+  mealTally,
+  type RsvpPendingCounts,
+  rsvpPendingCounts,
+  type SocialGuest,
+} from './domain/social.ts';
+export { type MealDietaryCounts, mealDietaryCountsTx, type SocialFacts, socialFactsTx } from './social-facts.ts';
