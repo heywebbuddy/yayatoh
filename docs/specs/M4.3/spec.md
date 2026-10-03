@@ -196,3 +196,4 @@ Module keys `seating` and `guests` (like M4.3a). No flag.
 - Base: `origin/m0.5-foundation-ey5gqp` + `origin/merge/next-3g` + `origin/merge/next-3h` + `origin/agent/m4.3a`; re-merged next-3g and next-3h before the gate (clean); design-v2 already contained.
 - `pnpm lint`, `pnpm check:modules`, typecheck 59/59 (`--concurrency=2`), unit 2726/2726 (204 files), integration 1520/1520 (167 files, golden card PDFs rendered by Gotenberg 8.37).
 - E2E at 375/768/1280 (`--workers=2`): `seating-cards` 9 passed; with `guest-seating`, `seating`, `seat-assignment`, `seat-rules`, `seat-finder`, `gala-tables`: 84 passed.
+- After the gate, the newest `origin/merge/next-3g` merged with no file changes; the newest `origin/merge/next-3h` (c1b7d889) conflicts with next-3g in `packages/modules/command-center/src/widgets.ts` (both fix the campaigns tile's time zone differently). Outside M4.3b, so left for the merge session.
