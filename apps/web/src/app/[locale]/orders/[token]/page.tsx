@@ -77,7 +77,7 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
       />
       <Card size="panel" className="flex flex-col gap-4">
         <StatusDot status={DOT[order.status]} label={t(`order.status.${order.status}`)} />
-        <ul className="flex list-none flex-col divide-y divide-zinc-100 p-0">
+        <ul className="flex list-none flex-col divide-y divide-line p-0">
           {order.items.map((i) => (
             <li key={i.ticketTypeId} className="flex justify-between gap-4 py-2.5">
               <span>
@@ -87,24 +87,24 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
             </li>
           ))}
         </ul>
-        <div className="flex justify-between border-t border-zinc-200 pt-3 text-section">
+        <div className="flex justify-between border-t border-line pt-3 text-section">
           <span>{t('order.total')}</span>
           <span className="font-mono tabular-nums">{fmt(order.totalMinor)}</span>
         </div>
-        <p className="text-caption text-zinc-500">{t('order.feesIncluded', { fees: fmt(order.feeMinor) })}</p>
-        <p className="text-caption text-zinc-500">
+        <p className="text-caption text-ink-2">{t('order.feesIncluded', { fees: fmt(order.feeMinor) })}</p>
+        <p className="text-caption text-ink-2">
           {order.collectedBy === 'organizer'
             ? t('order.collectedBy', { org: order.event.organizerName })
             : t(`order.soldBy.${order.fundsFlow}`, { org: order.event.organizerName })}
         </p>
         {order.discountMinor > 0 ? (
-          <p className="text-caption text-zinc-500">
+          <p className="text-caption text-ink-2">
             {t('order.discountApplied', { amount: fmt(order.discountMinor), code: order.promoCode ?? '' })}
           </p>
         ) : null}
       </Card>
       {order.transferred > 0 ? (
-        <p className="text-body text-zinc-600">{t('order.transferred', { count: order.transferred })}</p>
+        <p className="text-body text-ink-2">{t('order.transferred', { count: order.transferred })}</p>
       ) : null}
       {order.creditNotes.length > 0 ? (
         <section aria-labelledby="credit-notes-heading" className="flex flex-col gap-3">
@@ -121,7 +121,7 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
                       {formatMoney(money(c.amountMinor, c.currency), locale)}
                     </span>
                   </p>
-                  <p className="text-caption text-zinc-600">{c.reason}</p>
+                  <p className="text-caption text-ink-2">{c.reason}</p>
                   {c.disposition === 'store_credit' && c.code ? (
                     <p className="text-body">
                       {t('supportTools.buyer.storeCredit', {
@@ -132,7 +132,7 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
                       </span>
                     </p>
                   ) : (
-                    <p className="text-caption text-zinc-600">{t('supportTools.buyer.refunded')}</p>
+                    <p className="text-caption text-ink-2">{t('supportTools.buyer.refunded')}</p>
                   )}
                 </Card>
               </li>
@@ -145,7 +145,7 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
           <h2 id="tickets-heading" className="text-section">
             {t('order.tickets', { count: order.tickets.length })}
           </h2>
-          <p className="text-caption text-zinc-500">{t('order.ticketsHint')}</p>
+          <p className="text-caption text-ink-2">{t('order.ticketsHint')}</p>
           {getPdfRenderer() ? (
             // A plain link: the PDF route is not a page, so it bypasses client navigation.
             <a
@@ -159,18 +159,18 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
             {order.tickets.map((tk) => (
               <li key={tk.id}>
                 <Card size="panel" className="flex flex-col items-center gap-3 text-center">
-                  <p className="flex w-full justify-between gap-4 text-caption text-zinc-500">
+                  <p className="flex w-full justify-between gap-4 text-caption text-ink-2">
                     <span>{typeName.get(tk.ticketTypeId) ?? ''}</span>
                     <span className="font-mono">{t('order.serial', { serial: tk.serial })}</span>
                   </p>
                   <TicketQr
                     code={tk.code}
                     label={t('order.qrLabel', { serial: tk.serial })}
-                    className="size-60 text-black"
+                    className="size-60 rounded-tag text-black"
                   />
-                  <p className="text-caption text-zinc-500">
+                  <p className="text-caption text-ink-2">
                     {t('order.shortCode')}{' '}
-                    <span className="font-mono text-body tracking-[0.2em] text-black">{tk.shortCode}</span>
+                    <span className="font-mono text-body tracking-[0.2em] text-ink">{tk.shortCode}</span>
                   </p>
                   {tk.date ? (
                     <p className="text-body font-medium">
@@ -212,7 +212,7 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
           <h2 id="refund-policy-heading" className="text-section">
             {t('refundPolicy.buyerTitle')}
           </h2>
-          <ul className="flex list-none flex-col gap-1 p-0 text-body text-zinc-600">
+          <ul className="flex list-none flex-col gap-1 p-0 text-body text-ink-2">
             {refundPolicyLines((k, v) => t(`refundPolicy.${k}`, v), order.refundPolicy, locale).map(
               (line) => (
                 <li key={line}>{line}</li>
@@ -256,7 +256,7 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
                 })}
               </p>
               {order.refundRequest.latest.declineReason ? (
-                <p className="whitespace-pre-line break-words text-zinc-600">
+                <p className="whitespace-pre-line break-words text-ink-2">
                   {t('refundOps.buyer.declineReason', { reason: order.refundRequest.latest.declineReason })}
                 </p>
               ) : null}
@@ -264,7 +264,7 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
           ) : null}
           {order.refundRequest.canRequest ? (
             <>
-              <p className="text-body text-zinc-600">{t('refundOps.buyer.intro')}</p>
+              <p className="text-body text-ink-2">{t('refundOps.buyer.intro')}</p>
               <BuyerRefundRequestForm
                 action={requestRefundAction.bind(null, token)}
                 tickets={order.tickets.map((tk) => ({
@@ -277,11 +277,11 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
               />
             </>
           ) : order.refundRequest.refusal === 'policy_window_closed' && order.refundRequest.deadline ? (
-            <p className="text-body text-zinc-600">
+            <p className="text-body text-ink-2">
               {t('refundOps.buyer.closed', { deadline: when.format(order.refundRequest.deadline) })}
             </p>
           ) : order.refundRequest.refusal === 'policy_no_refunds' ? (
-            <p className="text-body text-zinc-600">{t('refundOps.buyer.noRefunds')}</p>
+            <p className="text-body text-ink-2">{t('refundOps.buyer.noRefunds')}</p>
           ) : null}
         </section>
       ) : null}
@@ -290,16 +290,16 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
           {t('order.emailsSent')}
         </h2>
         {order.messages.length === 0 ? (
-          <p className="text-body text-zinc-600">{t('order.emailsNone')}</p>
+          <p className="text-body text-ink-2">{t('order.emailsNone')}</p>
         ) : (
-          <ul className="flex list-none flex-col divide-y divide-zinc-100 p-0">
+          <ul className="flex list-none flex-col divide-y divide-line p-0">
             {order.messages.map((m) => (
               <li key={m.id} className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 py-2.5">
                 <span className="flex flex-col">
                   <span>{t(`notifications.kinds.${m.kind}`)}</span>
-                  {m.subject ? <span className="text-caption text-zinc-500">{m.subject}</span> : null}
+                  {m.subject ? <span className="text-caption text-ink-2">{m.subject}</span> : null}
                 </span>
-                <span className="text-caption text-zinc-600">
+                <span className="text-caption text-ink-2">
                   {m.status === 'sent'
                     ? t('order.emailSentAt', { when: when.format(m.at) })
                     : m.status === 'scheduled'

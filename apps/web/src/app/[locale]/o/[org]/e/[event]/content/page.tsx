@@ -85,8 +85,8 @@ export default async function ContentPage({
     sections.map((s) => [
       s.id,
       canWrite ? (
-        <details key={s.id} className="border-t border-zinc-100 pt-2">
-          <summary className="min-h-6 cursor-pointer text-caption text-zinc-600">
+        <details key={s.id} className="border-t border-line pt-2">
+          <summary className="min-h-6 cursor-pointer text-caption text-ink-2">
             {t('content.edit', { title: s.title })}
           </summary>
           <div className="flex flex-col gap-3 pt-3">
@@ -122,12 +122,12 @@ export default async function ContentPage({
           ) : undefined
         }
       />
-      {canWrite ? null : <p className="text-body text-zinc-500">{t('content.viewerNotice')}</p>}
+      {canWrite ? null : <p className="text-body text-ink-2">{t('content.viewerNotice')}</p>}
       <section aria-labelledby="tagline-heading" className="flex flex-col gap-2">
         <h2 id="tagline-heading" className="text-section">
           {t('aiDraft.taglineHeading')}
         </h2>
-        <p className="text-body text-zinc-700" data-testid="event-tagline">
+        <p className="text-body text-ink-2" data-testid="event-tagline">
           {ev.tagline ?? t('aiDraft.noTagline')}
         </p>
       </section>
@@ -177,7 +177,7 @@ export default async function ContentPage({
         <h2 id="announcements-heading" className="text-section">
           {t('eventAnnouncements.heading')}
         </h2>
-        <p className="text-body text-zinc-500">{tp('eventAnnouncements.explainer')}</p>
+        <p className="text-body text-ink-2">{tp('eventAnnouncements.explainer')}</p>
         {announcements.length === 0 ? (
           <EmptyState
             title={t('eventAnnouncements.emptyTitle')}
@@ -199,7 +199,7 @@ export default async function ContentPage({
                     </Label>
                     {a.pinned ? <Label>{t('eventAnnouncements.pinned')}</Label> : null}
                     {a.publishedAt ? (
-                      <span className="text-caption text-zinc-500">{when.format(a.publishedAt)}</span>
+                      <span className="text-caption text-ink-2">{when.format(a.publishedAt)}</span>
                     ) : null}
                   </div>
                   <h3 className="text-section">{a.title}</h3>

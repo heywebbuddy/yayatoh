@@ -62,9 +62,9 @@ export default async function DisputeReviewPage({
         <span className="font-mono tabular-nums">
           {formatMoney(money(dispute.amountMinor, dispute.currency), locale)}
         </span>
-        <span className="text-caption text-zinc-600">{dispute.reason}</span>
+        <span className="text-caption text-ink-2">{dispute.reason}</span>
         {dispute.evidenceDueBy ? (
-          <span className="text-caption text-zinc-600">
+          <span className="text-caption text-ink-2">
             {t('dueBy', { date: when.format(dispute.evidenceDueBy) })}
           </span>
         ) : null}
@@ -95,7 +95,7 @@ export default async function DisputeReviewPage({
         <h2 id="preview-heading" className="text-section">
           {t('review.previewTitle')}
         </h2>
-        <p className="text-body text-zinc-600">{t('review.previewHint')}</p>
+        <p className="text-body text-ink-2">{t('review.previewHint')}</p>
         <a
           href={`${orderPath}/disputes/${disputeId}/evidence`}
           className="self-start text-caption underline underline-offset-2"

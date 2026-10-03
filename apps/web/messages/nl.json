@@ -27,7 +27,14 @@
     "yourOrganizations": "Je organisaties",
     "organization": "Organisatie",
     "signOut": "Uitloggen",
-    "security": "Accountbeveiliging"
+    "security": "Accountbeveiliging",
+    "menuSection": "Menu",
+    "accountSection": "Account",
+    "newEvent": "Nieuw evenement",
+    "breadcrumb": "Kruimelpad",
+    "closeMenu": "Menu sluiten",
+    "eventSections": "Onderdelen van het evenement",
+    "allEvents": "Evenementen"
   },
   "notifications": {
     "open": "Meldingen",
@@ -572,7 +579,10 @@
   },
   "common": {
     "comingSoon": "Komt in een latere mijlpaal",
-    "loading": "Laden…"
+    "loading": "Laden…",
+    "close": "Sluiten",
+    "retry": "Opnieuw proberen",
+    "select": "Selecteren"
   },
   "section": {
     "comingTitle": "Dit onderdeel wordt gebouwd",
@@ -641,6 +651,7 @@
     "speakerPageTitle": "Spreker",
     "gallery": "Galerij",
     "register": "Inschrijven",
+    "hostedBy": "Georganiseerd door",
     "exhibitorMap": "Exposantenkaart"
   },
   "portal": {
@@ -1418,7 +1429,8 @@
       "placeholder": "#rrggbb",
       "preview": "Tickets kopen",
       "ratio": "Tekstcontrast {ratio}:1.",
-      "tooLight": "Deze kleur is licht op een witte pagina ({ratio}:1); knoppen zijn mogelijk slecht zichtbaar. Probeer een donkerdere tint."
+      "tooLight": "Deze kleur is licht op een witte pagina ({ratio}:1); knoppen zijn mogelijk slecht zichtbaar. Probeer een donkerdere tint.",
+      "tooDark": "In het donkere thema is deze kleur donker tegen de pagina ({ratio}:1); knoppen kunnen daar slecht zichtbaar zijn. Probeer een lichtere tint."
     },
     "legal": {
       "title": "Je juridische pagina’s",
@@ -2619,7 +2631,9 @@
     "clear": "Filters wissen",
     "noneTitle": "Geen evenementen gevonden met deze filters",
     "noneDescription": "Probeer een andere categorie of tag, of wis de filters.",
-    "tags": "Tags"
+    "tags": "Tags",
+    "search": "Zoeken op naam",
+    "showing": "{from}–{to} van {total, plural, one {# evenement} other {# evenementen}}"
   },
   "venues": {
     "title": "Locaties",
@@ -6294,6 +6308,7 @@
         "open": "E-mailbezorgbaarheid openen"
       }
     },
+    "openScanner": "Scanner openen",
     "tv": {
       "open": "Tv-modus",
       "title": "Tv-modus",
@@ -6313,7 +6328,10 @@
       "createdAt": "Gemaakt {time}",
       "revokedAt": "Uitgezet {time}",
       "revoke": "Uitzetten",
-      "revokeLabel": "{label} uitzetten"
+      "revokeLabel": "{label} uitzetten",
+      "readOnly": "Alleen lezen",
+      "statusOn": "Aan",
+      "statusOff": "Uit"
     }
   },
   "alerts": {
@@ -6403,9 +6421,9 @@
       "payoutsPastDue": "Uitbetalingsaccount bijwerken",
       "deliverability": "Blokkeerlijst openen",
       "automationFailed": "Berichtenstatus openen",
-      "assistanceOverdue": "Hulpvragen openen",
       "campaignFailed": "Campagnes openen",
-      "disputeDeadline": "Geschillen openen"
+      "disputeDeadline": "Geschillen openen",
+      "assistanceOverdue": "Hulpvragen openen"
     },
     "rules": {
       "unseated": "{count, plural, one {Eén deelnemer heeft geen plaats} other {{countWords} deelnemers hebben geen plaats}}",
@@ -6425,9 +6443,9 @@
       "payoutsPastDue": "{count, plural, one {Eén vereiste voor het uitbetalingsaccount is achterstallig} other {{countWords} vereisten voor het uitbetalingsaccount zijn achterstallig}}",
       "deliverability": "De bezorgbaarheid van e-mail vraagt aandacht",
       "automationFailed": "{count, plural, one {Eén bericht of bulkactie is vandaag mislukt} other {{countWords} berichten of bulkacties zijn vandaag mislukt}}",
-      "assistanceOverdue": "{count, plural, one {{countWords} hulpvraag wacht te lang} other {{countWords} hulpvragen wachten te lang}}",
       "campaignFailed": "{count, plural, one {Eén campagneverzending is vandaag mislukt} other {{countWords} campagneverzendingen zijn vandaag mislukt}}",
-      "disputeDeadline": "{count, plural, one {Eén geschil heeft binnenkort bewijs nodig} other {{countWords} geschillen hebben binnenkort bewijs nodig}}"
+      "disputeDeadline": "{count, plural, one {Eén geschil heeft binnenkort bewijs nodig} other {{countWords} geschillen hebben binnenkort bewijs nodig}}",
+      "assistanceOverdue": "{count, plural, one {{countWords} hulpvraag wacht te lang} other {{countWords} hulpvragen wachten te lang}}"
     },
     "widget": {
       "title": "Meldingen",
@@ -7525,6 +7543,7 @@
     "publicLink": "Invullen gebeurt via",
     "publicLinkText": "het openbare registratieformulier",
     "openBuilder": "Registratieformulier bewerken",
+    "openReadOnly": "Het registratieformulier bekijken",
     "pagesTitle": "Pagina's",
     "emptyTitle": "Nog geen pagina's",
     "emptyDescription": "Voeg een eerste pagina toe en daarna de vragen. Pagina's kunnen beperkt worden tot registratietypes of pas verschijnen na bepaalde antwoorden.",
@@ -7676,8 +7695,7 @@
     "submittedTitle": "Bedankt, je bent geregistreerd",
     "submittedDescription": "Bedankt, {name}. Je antwoorden zijn naar de organisator gestuurd.",
     "expiredTitle": "Deze link is verlopen",
-    "expiredDescription": "Links om een registratie voort te zetten werken 14 dagen na de laatste opslag. Begin opnieuw via de evenementpagina.",
-    "openReadOnly": "Het registratieformulier bekijken"
+    "expiredDescription": "Links om een registratie voort te zetten werken 14 dagen na de laatste opslag. Begin opnieuw via de evenementpagina."
   },
   "agenda": {
     "publishing": {
@@ -8070,6 +8088,12 @@
       "sub_event_has_chart": "Het heeft al een eigen plattegrond.",
       "no_chart": "Er is nog geen plattegrond om te kopiëren. Maak de plattegrond van het evenement op de pagina Plaatsen, of kies een opgeslagen plattegrond."
     }
+  },
+  "theme": {
+    "label": "Kleurthema",
+    "light": "Licht",
+    "dark": "Donker",
+    "system": "Systeem"
   },
   "speakerPortal": {
     "title": "Sprekersportaal",
@@ -8711,7 +8735,13 @@
       "offline": "Je bent offline. Probeer het opnieuw als het apparaat weer online is.",
       "invalid": "Kies wat je nodig hebt."
     },
-    "guestLine": "{name} · ticket {ticket}"
+    "guestLine": "{name} · ticket {ticket}",
+    "stats": {
+      "open": "Open verzoeken",
+      "urgent": "Dringend",
+      "waiting": "Wacht op iemand",
+      "unassigned": "Niet toegewezen"
+    }
   },
   "marketingAnalytics": {
     "title": "Marketinganalyse",
@@ -8736,7 +8766,8 @@
       "lastRevenue": "Omzet (laatste contact)",
       "firstOrders": "Bestellingen (eerste contact)",
       "firstRevenue": "Omzet (eerste contact)",
-      "conversion": "Conversie"
+      "conversion": "Conversie",
+      "deliveredShare": "Afgeleverd, van de verzonden"
     },
     "otherCurrency": "{count, plural, one {# bestelling was in een andere valuta: geteld, maar niet in de omzet.} other {# bestellingen waren in andere valuta: geteld, maar niet in de omzet.}}",
     "viewLabel": "Resultaten groeperen per",

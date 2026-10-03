@@ -50,28 +50,28 @@ export default async function DomainsPage({ params }: { params: Promise<{ locale
               <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
                 <h2 className="font-mono text-body break-all">{d.hostname}</h2>
                 <StatusDot status={DOT[d.status]} label={t(`status.${d.status}`)} />
-                {d.isPrimary ? <span className="text-caption text-zinc-600">{t('primary')}</span> : null}
-                {d.managed ? <span className="text-caption text-zinc-500">{t('managed')}</span> : null}
+                {d.isPrimary ? <span className="text-caption text-ink-2">{t('primary')}</span> : null}
+                {d.managed ? <span className="text-caption text-ink-2">{t('managed')}</span> : null}
               </div>
               {d.status === 'active' ? (
-                <p className="text-caption text-zinc-600">
+                <p className="text-caption text-ink-2">
                   {d.walletsReady ? t('walletsReady') : t('walletsPending')}
                 </p>
               ) : null}
               {d.status === 'failed' ? (
-                <p className="text-caption text-zinc-600">{t(`reason.${d.failureReason ?? 'unknown'}`)}</p>
+                <p className="text-caption text-ink-2">{t(`reason.${d.failureReason ?? 'unknown'}`)}</p>
               ) : null}
               {d.status !== 'active' && d.records.length > 0 ? (
                 <div className="flex flex-col gap-2">
-                  <p className="text-caption text-zinc-600">{t('recordsIntro')}</p>
+                  <p className="text-caption text-ink-2">{t('recordsIntro')}</p>
                   {d.status === 'pending_dns' || d.status === 'verifying' ? (
-                    <p className="text-caption text-zinc-600">{t('autoCheck')}</p>
+                    <p className="text-caption text-ink-2">{t('autoCheck')}</p>
                   ) : null}
                   <div className="overflow-x-auto">
                     <table className="w-full text-start text-caption">
                       <caption className="sr-only">{t('recordsCaption', { host: d.hostname })}</caption>
                       <thead>
-                        <tr className="text-zinc-500">
+                        <tr className="text-ink-2">
                           <th scope="col" className="py-1 pe-4 text-start font-normal">
                             {t('recordType')}
                           </th>
@@ -85,7 +85,7 @@ export default async function DomainsPage({ params }: { params: Promise<{ locale
                       </thead>
                       <tbody className="font-mono">
                         {d.records.map((r) => (
-                          <tr key={`${r.type}:${r.name}`} className="border-t border-zinc-100">
+                          <tr key={`${r.type}:${r.name}`} className="border-t border-line">
                             <td className="py-1.5 pe-4 align-top">{r.type}</td>
                             <td className="py-1.5 pe-4 align-top break-all">{r.name}</td>
                             <td className="py-1.5 align-top break-all">{r.value}</td>
@@ -97,7 +97,7 @@ export default async function DomainsPage({ params }: { params: Promise<{ locale
                 </div>
               ) : null}
               {d.lastCheckedAt ? (
-                <p className="text-caption text-zinc-500">
+                <p className="text-caption text-ink-2">
                   {t('lastChecked', { when: when.format(d.lastCheckedAt) })}
                 </p>
               ) : null}
@@ -145,7 +145,7 @@ export default async function DomainsPage({ params }: { params: Promise<{ locale
               savedLabel={t('added')}
             >
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="domain-hostname" className="text-caption text-zinc-600">
+                <label htmlFor="domain-hostname" className="text-[13px] font-bold text-ink">
                   {t('hostname')}
                 </label>
                 <input
@@ -157,9 +157,9 @@ export default async function DomainsPage({ params }: { params: Promise<{ locale
                   spellCheck={false}
                   dir="ltr"
                   aria-describedby="domain-hostname-hint"
-                  className="min-h-10 rounded-pill border border-zinc-200 bg-white px-4 font-mono text-body"
+                  className="field font-mono"
                 />
-                <p id="domain-hostname-hint" className="text-caption text-zinc-500">
+                <p id="domain-hostname-hint" className="text-caption text-ink-2">
                   {t('hostnameHint')}
                 </p>
               </div>
@@ -167,7 +167,7 @@ export default async function DomainsPage({ params }: { params: Promise<{ locale
           </Card>
         </section>
       ) : (
-        <p className="text-caption text-zinc-600">{t('noAccess')}</p>
+        <p className="text-caption text-ink-2">{t('noAccess')}</p>
       )}
     </>
   );

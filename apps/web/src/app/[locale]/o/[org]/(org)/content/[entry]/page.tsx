@@ -107,13 +107,13 @@ export default async function EntryPage({
         <>
           <p
             role="note"
-            className="rounded-card border border-zinc-200 bg-white px-4 py-3 text-body text-zinc-600"
+            className="rounded-card border border-line bg-surface px-4 py-3 text-body text-ink-2"
           >
             {t('readOnly')}
           </p>
           <Card>
             <article aria-label={t('previewLabel')} className="flex flex-col gap-3">
-              {entry.excerpt ? <p className="text-body text-zinc-600">{entry.excerpt}</p> : null}
+              {entry.excerpt ? <p className="text-body text-ink-2">{entry.excerpt}</p> : null}
               <Markdown source={entry.body} />
             </article>
           </Card>

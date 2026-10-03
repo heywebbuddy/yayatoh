@@ -59,7 +59,7 @@ export default async function ThreadPage({
           when: when.format(m.at),
         }))}
       />
-      {thread.contactBlocked ? <p className="text-body text-zinc-600">{t('contactBlockedYou')}</p> : null}
+      {thread.contactBlocked ? <p className="text-body text-ink-2">{t('contactBlockedYou')}</p> : null}
       {canSend ? (
         <>
           {!thread.blocked && !thread.contactBlocked ? (

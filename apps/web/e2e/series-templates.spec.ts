@@ -83,6 +83,10 @@ test.describe('series', () => {
     await expect(page.getByRole('heading', { name: 'Lakeside Open House' })).toHaveCount(0);
     await expectAccessible(page);
     await filter.getByRole('link', { name: 'All events' }).click();
+    await expect(filter.getByRole('link', { name: 'All events' })).toHaveAttribute('aria-current', 'page');
+    // Design v2: the list is paged (24 a page), so find the event outside the series by name.
+    await page.getByLabel('Search by name').fill('Lakeside Open House');
+    await page.getByRole('button', { name: 'Filter', exact: true }).click();
     await expect(page.getByRole('heading', { name: 'Lakeside Open House' })).toBeVisible();
 
     // Public series page.

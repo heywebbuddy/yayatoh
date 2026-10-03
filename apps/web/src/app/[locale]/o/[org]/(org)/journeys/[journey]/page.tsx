@@ -104,7 +104,7 @@ export default async function JourneyPage({
       <div className="flex flex-wrap items-center gap-2">
         <Chip tone={journey.enabled ? 'accent' : 'neutral'}>{journey.enabled ? t('on') : t('off')}</Chip>
         {journey.enabled && journey.enabledAt ? (
-          <span className="text-caption text-zinc-500">
+          <span className="text-caption text-ink-2">
             {t('detail.enabledSince', { when: at.format(journey.enabledAt) })}
           </span>
         ) : null}
@@ -132,9 +132,9 @@ export default async function JourneyPage({
           />
         ) : (
           <>
-            {canWrite ? <p className="text-body text-zinc-500">{t('detail.editOff')}</p> : null}
+            {canWrite ? <p className="text-body text-ink-2">{t('detail.editOff')}</p> : null}
             {journey.steps.length === 0 ? (
-              <p className="text-body text-zinc-500">{t('detail.noSteps')}</p>
+              <p className="text-body text-ink-2">{t('detail.noSteps')}</p>
             ) : (
               <ol className="flex flex-col gap-2" aria-label={t('detail.stepsTitle')}>
                 {journey.steps.map((s, i) => {
@@ -142,18 +142,18 @@ export default async function JourneyPage({
                   return (
                     <li
                       key={s.id}
-                      className="flex flex-col gap-1 rounded-card border border-zinc-200 bg-white p-4"
+                      className="flex flex-col gap-1 rounded-card border border-line bg-surface p-4"
                     >
                       <p className="text-body font-medium">
                         {t('editor.step', { n: i + 1 })} · {t(`editor.actions.${s.action}`)}
                         {s.action === 'label' && s.label ? ` “${s.label}”` : ''}
                       </p>
-                      <p className="text-caption text-zinc-600">
+                      <p className="text-caption text-ink-2">
                         {describeWait(t, locale, s)}
                         {s.condition ? ` · ${t(`editor.conditions.${s.condition}`)}` : ''}
                       </p>
-                      {s.subject ? <p className="text-caption text-zinc-600">{s.subject}</p> : null}
-                      <p className="text-caption text-zinc-500">
+                      {s.subject ? <p className="text-caption text-ink-2">{s.subject}</p> : null}
+                      <p className="text-caption text-ink-2">
                         {t('detail.stepCounts', {
                           done: nf(c?.done ?? 0),
                           pending: nf(c?.pending ?? 0),
@@ -176,7 +176,7 @@ export default async function JourneyPage({
         <search aria-label={t('history.searchLabel')}>
           <form method="get" className="flex flex-wrap items-end gap-2">
             <div className="min-w-56 flex-1">
-              <label htmlFor="journey-q" className="text-caption text-zinc-600">
+              <label htmlFor="journey-q" className="text-[13px] font-bold text-ink">
                 {t('history.searchLabel')}
               </label>
               <input
@@ -185,7 +185,7 @@ export default async function JourneyPage({
                 type="search"
                 defaultValue={q}
                 maxLength={200}
-                className="min-h-10 w-full rounded-pill border border-zinc-200 bg-white px-4 text-body"
+                className="field w-full"
               />
             </div>
             <Button type="submit" variant="secondary">

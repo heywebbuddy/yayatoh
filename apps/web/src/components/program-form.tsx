@@ -36,8 +36,8 @@ export type FieldSpec =
       readonly defaultValues?: readonly string[];
     });
 
-const control = 'min-h-10 rounded-pill border bg-white px-4 text-body';
-const area = 'rounded-card border bg-white px-4 py-2 text-body';
+const control = 'field';
+const area = 'rounded-card border bg-surface px-4 py-2 text-body';
 
 /**
  * One add/edit form of the program pages (M1.4f). Every field has a visible label; a rejected
@@ -93,7 +93,7 @@ export function ProgramForm({
         if (f.kind === 'textarea')
           return (
             <div key={f.name} className="flex flex-col gap-1.5">
-              <label htmlFor={id(f.name)} className="text-caption text-zinc-600">
+              <label htmlFor={id(f.name)} className="text-[13px] font-bold text-ink">
                 {f.label}
               </label>
               <textarea
@@ -103,14 +103,14 @@ export function ProgramForm({
                 defaultValue={f.defaultValue ?? ''}
                 aria-invalid={error ? true : undefined}
                 aria-describedby={error ? `${id(f.name)}-error` : f.hint ? `${id(f.name)}-hint` : undefined}
-                className={`${area} ${error ? 'border-pink-700' : 'border-zinc-200'}`}
+                className={`${area} ${error ? 'field-invalid' : ''}`}
               />
               {error ? (
-                <p id={`${id(f.name)}-error`} className="text-caption text-pink-700">
+                <p id={`${id(f.name)}-error`} className="text-caption text-danger">
                   {error}
                 </p>
               ) : f.hint ? (
-                <p id={`${id(f.name)}-hint`} className="text-caption text-zinc-500">
+                <p id={`${id(f.name)}-hint`} className="text-caption text-ink-2">
                   {f.hint}
                 </p>
               ) : null}
@@ -119,7 +119,7 @@ export function ProgramForm({
         if (f.kind === 'select')
           return (
             <div key={f.name} className="flex flex-col gap-1.5">
-              <label htmlFor={id(f.name)} className="text-caption text-zinc-600">
+              <label htmlFor={id(f.name)} className="text-[13px] font-bold text-ink">
                 {f.label}
               </label>
               <select
@@ -128,7 +128,7 @@ export function ProgramForm({
                 defaultValue={f.defaultValue ?? ''}
                 aria-invalid={error ? true : undefined}
                 aria-describedby={error ? `${id(f.name)}-error` : f.hint ? `${id(f.name)}-hint` : undefined}
-                className={`${control} ${error ? 'border-pink-700' : 'border-zinc-200'}`}
+                className={`${control} ${error ? 'field-invalid' : ''}`}
               >
                 {f.options.map((o) => (
                   <option key={o.value} value={o.value}>
@@ -137,11 +137,11 @@ export function ProgramForm({
                 ))}
               </select>
               {error ? (
-                <p id={`${id(f.name)}-error`} className="text-caption text-pink-700">
+                <p id={`${id(f.name)}-error`} className="text-caption text-danger">
                   {error}
                 </p>
               ) : f.hint ? (
-                <p id={`${id(f.name)}-hint`} className="text-caption text-zinc-500">
+                <p id={`${id(f.name)}-hint`} className="text-caption text-ink-2">
                   {f.hint}
                 </p>
               ) : null}
@@ -154,7 +154,7 @@ export function ProgramForm({
               className="flex flex-col gap-1.5"
               aria-describedby={error ? `${id(f.name)}-error` : undefined}
             >
-              <legend className="pb-1.5 text-caption text-zinc-600">{f.label}</legend>
+              <legend className="pb-1.5 text-[13px] font-bold text-ink">{f.label}</legend>
               <div className="flex flex-wrap gap-x-4 gap-y-1">
                 {f.options.map((o) => (
                   <label key={o.value} className="flex min-h-6 items-center gap-2 text-body">
@@ -170,7 +170,7 @@ export function ProgramForm({
                 ))}
               </div>
               {error ? (
-                <p id={`${id(f.name)}-error`} className="text-caption text-pink-700">
+                <p id={`${id(f.name)}-error`} className="text-caption text-danger">
                   {error}
                 </p>
               ) : null}
@@ -226,7 +226,7 @@ export function ScheduleWarning({ children }: { children: ReactNode }) {
   return (
     <p
       role="status"
-      className="rounded-card border border-accent-300 bg-accent-50 px-4 py-3 text-body text-accent-text"
+      className="rounded-card border border-primary bg-primary-soft px-4 py-3 text-body text-primary-ink"
     >
       {children}
     </p>
