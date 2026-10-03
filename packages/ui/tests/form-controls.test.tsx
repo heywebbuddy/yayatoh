@@ -6,6 +6,7 @@ import {
   currencyOptions,
   DatePicker,
   DateTimePicker,
+  mergeKnown,
   optionsFromChildren,
   parseDateText,
   Select,
@@ -223,5 +224,52 @@ describe('Time zone and currency pickers', () => {
     expect(currencyOptions('fr').find((o) => o.value === 'USD')?.text).toMatch(/dollar des États-Unis/i);
     const html = renderToStaticMarkup(<CurrencyPicker name="currency" defaultValue="usd" />);
     expect(html).toContain('name="currency" value="USD"');
+  });
+});
+
+describe('Combobox known options (the render-loop fix, U7 and U9)', () => {
+  const opt = (value: string, text = value.toUpperCase()) => ({ value, label: text, text });
+  /**
+   * What React does with the merging effect: the effect runs after every render whose deps changed;
+   * a state update with a new value renders again, the same value bails out. A caller that passes
+   * a fresh options array on every render (U7's Series field, U9's coupon events) changes the deps
+   * every time, so the loop ends only if the merge keeps the same map.
+   */
+  const rendersUntilSettled = (fresh: () => Parameters<typeof mergeKnown>[1]) => {
+    let state = mergeKnown(new Map(), fresh());
+    for (let render = 1; render <= 50; render++) {
+      const next = mergeKnown(state, fresh());
+      if (next === state) return render;
+      state = next;
+    }
+    return Number.POSITIVE_INFINITY;
+  };
+
+  it('settles at once when a caller passes a fresh but equal array on every render', () => {
+    expect(rendersUntilSettled(() => [opt('a'), opt('b')])).toBe(1);
+  });
+
+  it('settles with the empty default (a fresh [] per render was the first loop)', () => {
+    expect(rendersUntilSettled(() => [])).toBe(1);
+  });
+
+  it('settles with rich labels rebuilt on every render', () => {
+    expect(
+      rendersUntilSettled(() => [{ value: 'a', label: <strong>A</strong>, text: 'A', hint: <span>x</span> }]),
+    ).toBe(1);
+  });
+
+  it('still learns new and renamed options', () => {
+    const first = mergeKnown(new Map(), [opt('a')]);
+    const added = mergeKnown(first, [opt('a'), opt('b')]);
+    expect(added).not.toBe(first);
+    expect([...added.keys()]).toEqual(['a', 'b']);
+    const renamed = mergeKnown(added, [opt('a', 'Renamed')]);
+    expect(renamed.get('a')?.text).toBe('Renamed');
+    expect(renamed.get('b')?.text).toBe('B');
+  });
+
+  it('a static render with no options and no selection does not throw', () => {
+    expect(() => renderToStaticMarkup(<Combobox name="c" label="C" />)).not.toThrow();
   });
 });

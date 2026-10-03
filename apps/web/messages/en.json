@@ -885,7 +885,9 @@
     "submit": "Create draft",
     "slugTaken": "An event with this name already exists. Try a slightly different name.",
     "fromTemplate": "Start from a template",
-    "guided": "Guided setup (3 steps)"
+    "guided": "Guided setup (3 steps)",
+    "currency": "Currency",
+    "currencyHint": "Tickets, checkout and reports use it. You can change it until the first order."
   },
   "tickets": {
     "subtitle": "Ticket types, prices and inventory. Every price buyers see includes fees.",
@@ -1031,6 +1033,7 @@
     "channelInvalid": "This sales code isn't valid for this event. Open the event page again without it, or ask whoever gave you the link.",
     "channelNotice": "You're buying through {name}: seats kept for {name} are open to you too.",
     "channelLinkInvalid": "This sales link isn't valid for this event. You can still choose from the seats open to everyone.",
+    "couponBuyerLimit": "You've already used this code as many times as it allows.",
     "saveCardForGiving": "Save my card for tonight's giving (you'll do it on the next page; nothing is saved unless you agree there)"
   },
   "fakePay": {
@@ -1137,6 +1140,7 @@
     "addTitle": "Add a promo code",
     "add": "Add code",
     "added": "Promo code added.",
+    "orgCoupons": "Org-wide coupons work here too. <link>See every code</link>",
     "emptyAction": "Create a code"
   },
   "questions": {
@@ -1566,7 +1570,7 @@
       "timezone": "Time zone",
       "country": "Country (2-letter code)",
       "countryHint": "For example US, GB or NG.",
-      "currency": "Default currency (3-letter code)",
+      "currency": "Default currency",
       "currencyHint": "New events start with this currency. Events you already created keep theirs."
     },
     "brand": {
@@ -3513,6 +3517,12 @@
       "private": "Private (access code)"
     },
     "visibilityHint": "Unlisted events are reachable by link only. Private events need an access code that unlocks the event page.",
+    "currencyTitle": "Currency",
+    "currency": "Event currency",
+    "currencyHint": "Ticket prices and promo codes keep their amounts in the new currency. It locks once the first order is placed.",
+    "currencyLocked": "Locked: this event already has orders, so its currency can't change.",
+    "currencySaved": "Currency saved.",
+    "currencySave": "Save currency",
     "hiddenCategory": "{name} (hidden)",
     "categoryHiddenHint": "This category is hidden: the event keeps it, but it is no longer offered for other events.",
     "manageCategories": "Manage categories"
@@ -4629,7 +4639,9 @@
       "ticketPrice": "Enter a price like 25 or 25.00.",
       "ticketQuantity": "Enter how many are for sale (at least 1).",
       "generic": "Check this field."
-    }
+    },
+    "currency": "Currency",
+    "currencyHint": "Tickets, checkout and reports use it. You can change it until the first order."
   },
   "eventMedia": {
     "title": "Images",
@@ -15806,18 +15818,75 @@
   },
   "coupons": {
     "title": "Coupons",
-    "description": "Promo codes give buyers a discount at checkout. Each code belongs to one event: pick the event to see or add its codes.",
-    "emptyTitle": "No events to add codes to",
-    "emptyDescription": "Promo codes live on an event's Tickets & orders page. Create an event first, then add its codes.",
+    "description": "Discount codes for all your events or the ones you choose, with every event's own promo codes in the same list.",
+    "listTitle": "All codes",
+    "emptyTitle": "No codes yet",
+    "emptyDescription": "Add a coupon below to give a discount across your events.",
+    "emptyViewer": "Nobody has added a coupon yet. Owners and admins add them here.",
+    "noEventsTitle": "No events to add codes to",
+    "noEventsDescription": "Promo codes live on an event's Tickets & orders page. Create an event first, then add its codes.",
+    "code": "Code",
+    "type": "Type",
+    "typeCoupon": "Org coupon",
+    "typeEvent": "Event code",
+    "appliesTo": "Applies to",
+    "discount": "Discount",
+    "percentOff": "{value} off",
+    "amountOff": "{amount} off each ticket",
+    "uses": "Uses",
+    "perBuyerShort": "Per buyer",
+    "valid": "Valid",
+    "until": "Until {date}",
+    "from": "From {date}",
+    "always": "No end date",
     "emptyAction": "Create an event",
-    "caption": "Events and their promo codes",
-    "event": "Event",
-    "when": "Date",
     "status": "Status",
-    "codes": "Promo codes",
-    "manage": "Manage codes",
-    "view": "View codes",
-    "manageFor": "Promo codes for {name}"
+    "active": "Active",
+    "paused": "Paused",
+    "actions": "Actions",
+    "pause": "Pause",
+    "resume": "Resume",
+    "pauseCode": "Pause {code}",
+    "resumeCode": "Resume {code}",
+    "newTitle": "Add a coupon",
+    "kind": "Discount type",
+    "percent": "Percentage off",
+    "amount": "Fixed amount off",
+    "percentValue": "Percentage",
+    "amountValue": "Amount off each ticket",
+    "percentHint": "For example 20 for 20% off each ticket, before fees.",
+    "amountHint": "For example 5 for 5.00 off each ticket, before fees.",
+    "currency": "Currency of the amount",
+    "currencyHint": "The coupon works only at events in this currency.",
+    "scope": "Applies to",
+    "scopeAll": "All events",
+    "scopeEvents": "Chosen events",
+    "events": "Events",
+    "eventsHint": "Type to find an event. Choose one or more.",
+    "eventsPlaceholder": "Find an event",
+    "maxUses": "Total uses (optional)",
+    "maxUsesHint": "Across all events. Leave empty for no limit.",
+    "perBuyer": "Uses per buyer (optional)",
+    "perBuyerHint": "Counted by the buyer's email address.",
+    "startsAt": "Starts",
+    "endsAt": "Expires",
+    "optional": "Optional, in your organization's time zone.",
+    "added": "Coupon added.",
+    "add": "Add coupon",
+    "errors": {
+      "code": "Use 3–32 letters, digits, - or _.",
+      "codeTaken": "That code is already used by a coupon or an event's promo code.",
+      "value": "Enter a discount, such as 20 or 5.00.",
+      "percentBps": "Enter a percentage between 0.01 and 100.",
+      "amountMinor": "Enter an amount greater than zero.",
+      "currency": "Choose a currency.",
+      "currencyMismatch": "An amount coupon works only at events in its currency. Remove the events in other currencies or use a percentage.",
+      "eventIds": "Choose at least one event.",
+      "maxRedemptions": "Enter a whole number of 1 or more.",
+      "perBuyerLimit": "Enter a whole number of 1 or more.",
+      "startsAt": "Enter a valid date and time.",
+      "endsAt": "The expiry must be after the start."
+    }
   },
   "howItWorks": {
     "docLink": "Read the guide",
@@ -15870,9 +15939,9 @@
     },
     "coupons": {
       "title": "How promo codes work",
-      "intro": "A promo code takes a percentage or an amount off each ticket's price, before fees. Each code belongs to one event.",
-      "step1": "Pick the event below and open its promo codes.",
-      "step2": "Add a code with its discount and, if you like, a limit and dates.",
+      "intro": "A coupon or promo code takes a percentage or an amount off each ticket's price, before fees. Coupons can cover all your events or the ones you choose; promo codes belong to one event.",
+      "step1": "Add a coupon below: its code, discount, events, limits and dates.",
+      "step2": "For a code that belongs to one event, use that event's Tickets & orders page.",
       "step3": "Share the code. Buyers enter it at checkout and each use is counted."
     },
     "money": {

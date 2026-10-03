@@ -4,7 +4,7 @@ import { DomainError, money } from '@yayatoh/kernel';
 import { and, eq, inArray, isNull, sql } from 'drizzle-orm';
 import { allocateCredit } from './domain/credit.ts';
 import { validForOccurrence } from './occurrences.ts';
-import { type PromoRow, promoDiscountMinor } from './promo.ts';
+import { type DiscountRule, promoDiscountMinor } from './promo.ts';
 import { type TicketTypeManager, ticketTypes } from './schema.ts';
 
 export interface LineRequest {
@@ -64,7 +64,8 @@ export async function quoteTx(
     now: Date;
     /** true (box office) or the hidden passes an access code unlocked (public checkout). */
     includeHidden: boolean | ReadonlySet<string>;
-    promo?: PromoRow | null;
+    /** An event promo code or (U9) an org coupon. */
+    promo?: DiscountRule | null;
     /** Multi-date events: the chosen date; each ticket type must sell for it (M1.4b). */
     occurrenceId?: string | null;
     /** M3.10c store credit to take off the tickets (after any promo; donations excluded). */

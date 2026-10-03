@@ -801,3 +801,9 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
   - **Defaults reach new orgs only:** an org's list is stored on its first change and never follows later staff changes.
   - **Public event pages** still show the platform category label, not the org's own name (Later).
 
+## U9 — coupons and currencies (2026-10-03, pending owner)
+- [ ] **Built with these defaults; say if any should change:**
+  - **The currency locks with the first order of any kind**, including an unpaid checkout that later expired: the database refuses the change once any order exists. Stricter alternative: none. Looser: only paid orders (needs a status-aware check instead of the foreign key).
+  - **An event's promo code wins over an org coupon** if the same code ever existed in both; creating either refuses a code the other already uses, so this only matters for data made before U9 (none).
+  - **Per-buyer limits count by email address** (the buyer's CRM contact); a merged contact's uses count together.
+  - **A fixed-amount coupon works only at events in its own currency**; percentage coupons work in every currency. No conversion.

@@ -95,6 +95,11 @@ export const events = tenantTable(
     check('events_time_order_check', sql`ends_at > starts_at`),
     check('events_slug_format_check', sql`slug ~ '^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$'`),
     check('events_currency_check', sql`currency ~ '^[A-Z]{3}$'`),
+    /**
+     * U9: orders reference (org, event, currency) and refuse a currency change once one exists;
+     * ticket types and promo codes follow it (hand-written FKs).
+     */
+    uniqueIndex('events_org_id_currency_key').on(t.orgId, t.id, t.currency),
     index('events_org_id_venue_id_idx').on(t.orgId, t.venueId),
     index('events_org_id_category_idx').on(t.orgId, t.category),
     check(

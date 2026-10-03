@@ -375,7 +375,7 @@
     "orgAnalytics": "Analyses",
     "integrations": "Integraties",
     "seatingLibrary": "Zaalplanbibliotheek",
-    "coupons": "Kortingscodes",
+    "coupons": "Kortingsbonnen",
     "charity": "Goededoelenprofiel",
     "plan": "Abonnement & facturatie",
     "webhooks": "Webhooks",
@@ -885,7 +885,9 @@
     "submit": "Concept aanmaken",
     "slugTaken": "Er bestaat al een evenement met deze naam. Probeer een iets andere naam.",
     "fromTemplate": "Beginnen met een sjabloon",
-    "guided": "Begeleid aanmaken (3 stappen)"
+    "guided": "Begeleid aanmaken (3 stappen)",
+    "currency": "Valuta",
+    "currencyHint": "Tickets, afrekenen en rapporten gebruiken deze. Wijzigen kan tot de eerste bestelling."
   },
   "tickets": {
     "subtitle": "Tickettypes, prijzen en voorraad. Elke prijs die kopers zien is inclusief kosten.",
@@ -1031,6 +1033,7 @@
     "channelInvalid": "Deze verkoopcode is niet geldig voor dit evenement. Open de evenementpagina opnieuw zonder code, of vraag het aan wie je de link gaf.",
     "channelNotice": "Je koopt via {name}: plaatsen die voor {name} gereserveerd zijn, staan ook voor jou open.",
     "channelLinkInvalid": "Deze verkooplink is niet geldig voor dit evenement. Je kunt nog steeds kiezen uit de plaatsen die voor iedereen openstaan.",
+    "couponBuyerLimit": "U hebt deze code al zo vaak gebruikt als is toegestaan.",
     "saveCardForGiving": "Mijn kaart bewaren voor het geven van vanavond (dat doe je op de volgende pagina; zonder je toestemming daar wordt niets bewaard)"
   },
   "fakePay": {
@@ -1137,6 +1140,7 @@
     "addTitle": "Kortingscode toevoegen",
     "add": "Code toevoegen",
     "added": "Kortingscode toegevoegd.",
+    "orgCoupons": "Kortingsbonnen van de organisatie gelden hier ook. <link>Alle codes bekijken</link>",
     "emptyAction": "Een code maken"
   },
   "questions": {
@@ -1566,7 +1570,7 @@
       "timezone": "Tijdzone",
       "country": "Land (code van 2 letters)",
       "countryHint": "Bijvoorbeeld US, GB of NG.",
-      "currency": "Standaardvaluta (code van 3 letters)",
+      "currency": "Standaardvaluta",
       "currencyHint": "Nieuwe evenementen starten met deze valuta. Evenementen die je al hebt aangemaakt, houden die van hen."
     },
     "brand": {
@@ -3513,6 +3517,12 @@
       "private": "Privé (toegangscode)"
     },
     "visibilityHint": "Niet-vermelde evenementen zijn alleen via de link te openen. Privé-evenementen hebben een toegangscode nodig die de evenementpagina ontgrendelt.",
+    "currencyTitle": "Valuta",
+    "currency": "Valuta van het evenement",
+    "currencyHint": "Ticketprijzen en promotiecodes houden hun bedragen in de nieuwe valuta. Na de eerste bestelling ligt ze vast.",
+    "currencyLocked": "Vergrendeld: dit evenement heeft al bestellingen, dus de valuta kan niet meer veranderen.",
+    "currencySaved": "Valuta opgeslagen.",
+    "currencySave": "Valuta opslaan",
     "hiddenCategory": "{name} (verborgen)",
     "categoryHiddenHint": "Deze categorie is verborgen: het evenement houdt haar, maar ze wordt niet meer aangeboden voor andere evenementen.",
     "manageCategories": "Categorieën beheren"
@@ -4629,7 +4639,9 @@
       "ticketPrice": "Vul een prijs in zoals 25 of 25.00.",
       "ticketQuantity": "Vul in hoeveel er te koop zijn (minstens 1).",
       "generic": "Controleer dit veld."
-    }
+    },
+    "currency": "Valuta",
+    "currencyHint": "Tickets, afrekenen en rapporten gebruiken deze. Wijzigen kan tot de eerste bestelling."
   },
   "eventMedia": {
     "title": "Afbeeldingen",
@@ -15805,19 +15817,76 @@
     "clearSearch": "Zoekopdracht wissen"
   },
   "coupons": {
-    "title": "Kortingscodes",
-    "description": "Kortingscodes geven kopers korting bij het afrekenen. Elke code hoort bij één evenement: kies het evenement om de codes te bekijken of toe te voegen.",
-    "emptyTitle": "Geen evenementen om codes aan toe te voegen",
-    "emptyDescription": "Kortingscodes staan op de pagina Tickets & bestellingen van een evenement. Maak eerst een evenement en voeg dan de codes toe.",
+    "title": "Kortingsbonnen",
+    "description": "Kortingscodes voor al uw evenementen of de evenementen die u kiest, met de promotiecodes van elk evenement in dezelfde lijst.",
+    "listTitle": "Alle codes",
+    "emptyTitle": "Nog geen codes",
+    "emptyDescription": "Voeg hieronder een kortingsbon toe om korting te geven op uw evenementen.",
+    "emptyViewer": "Er is nog geen coupon toegevoegd. Eigenaren en beheerders voegen ze hier toe.",
+    "noEventsTitle": "Geen evenementen om codes aan toe te voegen",
+    "noEventsDescription": "Kortingscodes staan op de pagina Tickets & bestellingen van een evenement. Maak eerst een evenement en voeg dan de codes toe.",
+    "code": "Code",
+    "type": "Soort",
+    "typeCoupon": "Kortingsbon van de organisatie",
+    "typeEvent": "Evenementcode",
+    "appliesTo": "Geldt voor",
+    "discount": "Korting",
+    "percentOff": "{value} korting",
+    "amountOff": "{amount} korting per ticket",
+    "uses": "Gebruik",
+    "perBuyerShort": "Per koper",
+    "valid": "Geldig",
+    "until": "Tot {date}",
+    "from": "Vanaf {date}",
+    "always": "Geen einddatum",
     "emptyAction": "Een evenement maken",
-    "caption": "Evenementen en hun kortingscodes",
-    "event": "Evenement",
-    "when": "Datum",
     "status": "Status",
-    "codes": "Kortingscodes",
-    "manage": "Codes beheren",
-    "view": "Codes bekijken",
-    "manageFor": "Kortingscodes voor {name}"
+    "active": "Actief",
+    "paused": "Gepauzeerd",
+    "actions": "Acties",
+    "pause": "Pauzeren",
+    "resume": "Hervatten",
+    "pauseCode": "{code} pauzeren",
+    "resumeCode": "{code} hervatten",
+    "newTitle": "Kortingsbon toevoegen",
+    "kind": "Soort korting",
+    "percent": "Percentage korting",
+    "amount": "Vast bedrag korting",
+    "percentValue": "Percentage",
+    "amountValue": "Korting per ticket",
+    "percentHint": "Bijvoorbeeld 20 voor 20% korting per ticket, vóór kosten.",
+    "amountHint": "Bijvoorbeeld 5 voor 5,00 korting per ticket, vóór kosten.",
+    "currency": "Valuta van het bedrag",
+    "currencyHint": "De kortingsbon geldt alleen bij evenementen in deze valuta.",
+    "scope": "Geldt voor",
+    "scopeAll": "Alle evenementen",
+    "scopeEvents": "Gekozen evenementen",
+    "events": "Evenementen",
+    "eventsHint": "Typ om een evenement te zoeken. Kies er een of meer.",
+    "eventsPlaceholder": "Evenement zoeken",
+    "maxUses": "Totaal aantal keer (optioneel)",
+    "maxUsesHint": "Over alle evenementen. Leeg laten voor geen limiet.",
+    "perBuyer": "Aantal keer per koper (optioneel)",
+    "perBuyerHint": "Geteld op het e-mailadres van de koper.",
+    "startsAt": "Begint",
+    "endsAt": "Verloopt",
+    "optional": "Optioneel, in de tijdzone van uw organisatie.",
+    "added": "Kortingsbon toegevoegd.",
+    "add": "Kortingsbon toevoegen",
+    "errors": {
+      "code": "Gebruik 3–32 letters, cijfers, - of _.",
+      "codeTaken": "Die code wordt al gebruikt door een kortingsbon of de promotiecode van een evenement.",
+      "value": "Vul een korting in, zoals 20 of 5,00.",
+      "percentBps": "Vul een percentage tussen 0,01 en 100 in.",
+      "amountMinor": "Vul een bedrag groter dan nul in.",
+      "currency": "Kies een valuta.",
+      "currencyMismatch": "Een kortingsbon met een bedrag geldt alleen bij evenementen in zijn valuta. Haal de evenementen in andere valuta weg of gebruik een percentage.",
+      "eventIds": "Kies minstens één evenement.",
+      "maxRedemptions": "Vul een geheel getal van 1 of meer in.",
+      "perBuyerLimit": "Vul een geheel getal van 1 of meer in.",
+      "startsAt": "Vul een geldige datum en tijd in.",
+      "endsAt": "Het verlopen moet na het begin liggen."
+    }
   },
   "howItWorks": {
     "docLink": "Lees de handleiding",
@@ -15870,9 +15939,9 @@
     },
     "coupons": {
       "title": "Zo werken kortingscodes",
-      "intro": "Een kortingscode haalt een percentage of bedrag van de ticketprijs af, vóór kosten. Elke code hoort bij één evenement.",
-      "step1": "Kies hieronder het evenement en open de kortingscodes.",
-      "step2": "Voeg een code toe met de korting en eventueel een limiet en data.",
+      "intro": "Een coupon of promocode haalt een percentage of bedrag van de prijs van elk ticket af, vóór kosten. Coupons kunnen gelden voor al je evenementen of de evenementen die je kiest; een promocode hoort bij één evenement.",
+      "step1": "Voeg hieronder een coupon toe: code, korting, evenementen, limieten en data.",
+      "step2": "Gebruik voor een code van één evenement de pagina Tickets en bestellingen van dat evenement.",
       "step3": "Deel de code. Kopers vullen hem in bij het afrekenen en elk gebruik wordt geteld."
     },
     "money": {

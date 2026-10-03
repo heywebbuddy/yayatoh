@@ -3,6 +3,7 @@
 import {
   EVENT_VISIBILITIES,
   ensureShortLinkCommand,
+  setEventCurrencyCommand,
   setEventDetailsCommand,
   setVanityShortLinkCommand,
   updateEventCommand,
@@ -74,4 +75,26 @@ export async function ensureShortLinkAction(org: string, event: string): Promise
   const { data, event: ev } = await loadEvent(org, event, 'details');
   await executeCommand(ensureShortLinkCommand, { eventId: ev.id }, data.ctx, ports);
   revalidatePath(`/o/${org}/e/${event}/details`);
+}
+
+/** U9 (UX-6): the event's currency, until its first order. */
+export async function setCurrencyAction(
+  org: string,
+  event: string,
+  _prev: FormState,
+  form: FormData,
+): Promise<FormState> {
+  const { data, event: ev } = await loadEvent(org, event, 'details');
+  try {
+    await executeCommand(
+      setEventCurrencyCommand,
+      { eventId: ev.id, currency: String(form.get('currency') ?? '').toUpperCase() },
+      data.ctx,
+      ports,
+    );
+  } catch (err) {
+    return failure(err);
+  }
+  revalidatePath(`/o/${org}/e/${event}`, 'layout');
+  return success();
 }

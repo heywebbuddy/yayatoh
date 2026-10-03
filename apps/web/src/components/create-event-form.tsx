@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, Card, DateTimePicker, Input, TimeZonePicker } from '@yayatoh/ui';
+import { Alert, Button, Card, CurrencyPicker, DateTimePicker, Input, TimeZonePicker } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState, useState } from 'react';
 import type { CreateEventState } from '@/app/[locale]/o/[org]/(org)/events/new/actions.ts';
@@ -17,7 +17,7 @@ export function CreateEventForm({
 }: {
   action: (prev: CreateEventState, form: FormData) => Promise<CreateEventState>;
   /** `series`: the series picked in advance (U7, "Create event in this series"). */
-  defaults: { profile: string; timezone: string; series?: string };
+  defaults: { profile: string; timezone: string; currency: string; series?: string };
   /** U7: the org's series for the Series field (omitted without access to them). */
   series?: readonly { id: string; name: string }[];
   /** U8: the "What kind of event?" choices with the sections each includes. */
@@ -78,6 +78,16 @@ export function CreateEventForm({
             hint={t('newEvent.localTimeHint')}
           />
           <DateTimePicker name="endsAt" required label={t('newEvent.endsAt')} />
+          <CurrencyPicker
+            id="currency"
+            name="currency"
+            required
+            defaultValue={defaults.currency}
+            label={t('newEvent.currency')}
+            hint={t('newEvent.currencyHint')}
+            className={selectClass}
+          />
+          <div aria-hidden="true" className="hidden sm:block" />
           <Input name="venueName" maxLength={160} label={t('newEvent.venue')} />
           <Input name="city" maxLength={120} label={t('newEvent.city')} />
         </div>

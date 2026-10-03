@@ -885,7 +885,9 @@
     "submit": "Entwurf erstellen",
     "slugTaken": "Es gibt bereits ein Event mit diesem Namen. Versuche einen leicht abweichenden Namen.",
     "fromTemplate": "Mit einer Vorlage beginnen",
-    "guided": "Geführte Einrichtung (3 Schritte)"
+    "guided": "Geführte Einrichtung (3 Schritte)",
+    "currency": "Währung",
+    "currencyHint": "Tickets, Checkout und Berichte verwenden sie. Bis zur ersten Bestellung änderbar."
   },
   "tickets": {
     "subtitle": "Ticketarten, Preise und Kontingente. Alle Preise, die Käufer sehen, enthalten die Gebühren.",
@@ -1031,6 +1033,7 @@
     "channelInvalid": "Dieser Verkaufscode gilt nicht für diese Veranstaltung. Öffnen Sie die Veranstaltungsseite ohne den Code oder fragen Sie, wer Ihnen den Link gegeben hat.",
     "channelNotice": "Sie kaufen über {name}: Plätze, die für {name} reserviert sind, stehen Ihnen ebenfalls offen.",
     "channelLinkInvalid": "Dieser Verkaufslink gilt nicht für diese Veranstaltung. Sie können weiterhin aus den Plätzen wählen, die allen offenstehen.",
+    "couponBuyerLimit": "Sie haben diesen Code bereits so oft verwendet, wie er erlaubt.",
     "saveCardForGiving": "Meine Karte für die Spenden heute Abend speichern (das erledigen Sie auf der nächsten Seite; ohne Ihre Zustimmung dort wird nichts gespeichert)"
   },
   "fakePay": {
@@ -1137,6 +1140,7 @@
     "addTitle": "Rabattcode hinzufügen",
     "add": "Code hinzufügen",
     "added": "Rabattcode hinzugefügt.",
+    "orgCoupons": "Organisationsweite Gutscheine gelten hier auch. <link>Alle Codes ansehen</link>",
     "emptyAction": "Code erstellen"
   },
   "questions": {
@@ -1566,7 +1570,7 @@
       "timezone": "Zeitzone",
       "country": "Land (Code mit 2 Buchstaben)",
       "countryHint": "Zum Beispiel US, GB oder NG.",
-      "currency": "Standardwährung (Code mit 3 Buchstaben)",
+      "currency": "Standardwährung",
       "currencyHint": "Neue Events starten mit dieser Währung. Bereits erstellte Events behalten ihre."
     },
     "brand": {
@@ -3513,6 +3517,12 @@
       "private": "Privat (Zugangscode)"
     },
     "visibilityHint": "Nicht gelistete Events sind nur über den Link erreichbar. Private Events brauchen einen Zugangscode, der die Eventseite freischaltet.",
+    "currencyTitle": "Währung",
+    "currency": "Währung der Veranstaltung",
+    "currencyHint": "Ticketpreise und Aktionscodes behalten ihre Beträge in der neuen Währung. Sie wird mit der ersten Bestellung gesperrt.",
+    "currencyLocked": "Gesperrt: Diese Veranstaltung hat bereits Bestellungen, daher kann die Währung nicht mehr geändert werden.",
+    "currencySaved": "Währung gespeichert.",
+    "currencySave": "Währung speichern",
     "hiddenCategory": "{name} (ausgeblendet)",
     "categoryHiddenHint": "Diese Kategorie ist ausgeblendet: Die Veranstaltung behält sie, für andere Veranstaltungen wird sie nicht mehr angeboten.",
     "manageCategories": "Kategorien verwalten"
@@ -4629,7 +4639,9 @@
       "ticketPrice": "Gib einen Preis wie 25 oder 25.00 ein.",
       "ticketQuantity": "Gib an, wie viele verkauft werden (mindestens 1).",
       "generic": "Prüfe dieses Feld."
-    }
+    },
+    "currency": "Währung",
+    "currencyHint": "Tickets, Checkout und Berichte verwenden sie. Bis zur ersten Bestellung änderbar."
   },
   "eventMedia": {
     "title": "Bilder",
@@ -15806,18 +15818,75 @@
   },
   "coupons": {
     "title": "Gutscheine",
-    "description": "Aktionscodes geben Käufern beim Bezahlen einen Rabatt. Jeder Code gehört zu einer Veranstaltung: Wählen Sie die Veranstaltung, um ihre Codes anzusehen oder hinzuzufügen.",
-    "emptyTitle": "Keine Veranstaltungen für Codes",
-    "emptyDescription": "Aktionscodes stehen auf der Seite „Tickets & Bestellungen“ einer Veranstaltung. Erstellen Sie zuerst eine Veranstaltung und fügen Sie dann ihre Codes hinzu.",
+    "description": "Rabattcodes für alle oder ausgewählte Veranstaltungen, zusammen mit den Aktionscodes jeder Veranstaltung in einer Liste.",
+    "listTitle": "Alle Codes",
+    "emptyTitle": "Noch keine Codes",
+    "emptyDescription": "Fügen Sie unten einen Gutschein hinzu, um über Ihre Veranstaltungen hinweg Rabatt zu geben.",
+    "emptyViewer": "Noch niemand hat einen Gutschein angelegt. Inhaber und Admins legen sie hier an.",
+    "noEventsTitle": "Keine Veranstaltungen für Codes",
+    "noEventsDescription": "Aktionscodes stehen auf der Seite „Tickets & Bestellungen“ einer Veranstaltung. Erstellen Sie zuerst eine Veranstaltung und fügen Sie dann ihre Codes hinzu.",
+    "code": "Code",
+    "type": "Art",
+    "typeCoupon": "Organisationsgutschein",
+    "typeEvent": "Veranstaltungscode",
+    "appliesTo": "Gilt für",
+    "discount": "Rabatt",
+    "percentOff": "{value} Rabatt",
+    "amountOff": "{amount} Rabatt pro Ticket",
+    "uses": "Verwendungen",
+    "perBuyerShort": "Pro Käufer",
+    "valid": "Gültig",
+    "until": "Bis {date}",
+    "from": "Ab {date}",
+    "always": "Ohne Enddatum",
     "emptyAction": "Veranstaltung erstellen",
-    "caption": "Veranstaltungen und ihre Aktionscodes",
-    "event": "Veranstaltung",
-    "when": "Datum",
     "status": "Status",
-    "codes": "Aktionscodes",
-    "manage": "Codes verwalten",
-    "view": "Codes ansehen",
-    "manageFor": "Aktionscodes für {name}"
+    "active": "Aktiv",
+    "paused": "Pausiert",
+    "actions": "Aktionen",
+    "pause": "Pausieren",
+    "resume": "Fortsetzen",
+    "pauseCode": "{code} pausieren",
+    "resumeCode": "{code} fortsetzen",
+    "newTitle": "Gutschein hinzufügen",
+    "kind": "Rabattart",
+    "percent": "Prozent Rabatt",
+    "amount": "Fester Betrag Rabatt",
+    "percentValue": "Prozentsatz",
+    "amountValue": "Rabatt pro Ticket",
+    "percentHint": "Zum Beispiel 20 für 20 % Rabatt pro Ticket, vor Gebühren.",
+    "amountHint": "Zum Beispiel 5 für 5,00 Rabatt pro Ticket, vor Gebühren.",
+    "currency": "Währung des Betrags",
+    "currencyHint": "Der Gutschein gilt nur bei Veranstaltungen in dieser Währung.",
+    "scope": "Gilt für",
+    "scopeAll": "Alle Veranstaltungen",
+    "scopeEvents": "Ausgewählte Veranstaltungen",
+    "events": "Veranstaltungen",
+    "eventsHint": "Tippen, um eine Veranstaltung zu finden. Eine oder mehrere wählen.",
+    "eventsPlaceholder": "Veranstaltung finden",
+    "maxUses": "Verwendungen insgesamt (optional)",
+    "maxUsesHint": "Über alle Veranstaltungen. Leer lassen für unbegrenzt.",
+    "perBuyer": "Verwendungen pro Käufer (optional)",
+    "perBuyerHint": "Gezählt nach der E-Mail-Adresse des Käufers.",
+    "startsAt": "Beginnt",
+    "endsAt": "Läuft ab",
+    "optional": "Optional, in der Zeitzone Ihrer Organisation.",
+    "added": "Gutschein hinzugefügt.",
+    "add": "Gutschein hinzufügen",
+    "errors": {
+      "code": "Verwenden Sie 3–32 Buchstaben, Ziffern, - oder _.",
+      "codeTaken": "Dieser Code wird bereits von einem Gutschein oder einem Aktionscode einer Veranstaltung verwendet.",
+      "value": "Geben Sie einen Rabatt ein, z. B. 20 oder 5,00.",
+      "percentBps": "Geben Sie einen Prozentsatz zwischen 0,01 und 100 ein.",
+      "amountMinor": "Geben Sie einen Betrag größer als null ein.",
+      "currency": "Wählen Sie eine Währung.",
+      "currencyMismatch": "Ein Betragsgutschein gilt nur bei Veranstaltungen in seiner Währung. Entfernen Sie Veranstaltungen in anderen Währungen oder verwenden Sie einen Prozentsatz.",
+      "eventIds": "Wählen Sie mindestens eine Veranstaltung.",
+      "maxRedemptions": "Geben Sie eine ganze Zahl ab 1 ein.",
+      "perBuyerLimit": "Geben Sie eine ganze Zahl ab 1 ein.",
+      "startsAt": "Geben Sie ein gültiges Datum und eine Uhrzeit ein.",
+      "endsAt": "Der Ablauf muss nach dem Beginn liegen."
+    }
   },
   "howItWorks": {
     "docLink": "Anleitung lesen",
@@ -15870,9 +15939,9 @@
     },
     "coupons": {
       "title": "So funktionieren Aktionscodes",
-      "intro": "Ein Aktionscode zieht einen Prozentsatz oder Betrag vom Ticketpreis vor Gebühren ab. Jeder Code gehört zu einer Veranstaltung.",
-      "step1": "Wählen Sie unten die Veranstaltung und öffnen Sie ihre Aktionscodes.",
-      "step2": "Fügen Sie einen Code mit Rabatt hinzu, auf Wunsch mit Limit und Zeitraum.",
+      "intro": "Ein Gutschein oder Aktionscode zieht einen Prozentsatz oder Betrag vom Preis jedes Tickets ab, vor Gebühren. Gutscheine können für alle oder ausgewählte Veranstaltungen gelten; Aktionscodes gehören zu einer Veranstaltung.",
+      "step1": "Lege unten einen Gutschein an: Code, Rabatt, Veranstaltungen, Limits und Zeitraum.",
+      "step2": "Für einen Code, der zu einer Veranstaltung gehört, nutze deren Seite „Tickets & Bestellungen“.",
       "step3": "Teilen Sie den Code. Käufer geben ihn beim Bezahlen ein, und jede Nutzung wird gezählt."
     },
     "money": {

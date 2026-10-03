@@ -885,7 +885,9 @@
     "submit": "Criar rascunho",
     "slugTaken": "Já existe um evento com este nome. Tente um nome um pouco diferente.",
     "fromTemplate": "Começar com um modelo",
-    "guided": "Criação guiada (3 etapas)"
+    "guided": "Criação guiada (3 etapas)",
+    "currency": "Moeda",
+    "currencyHint": "Usada nos ingressos, no pagamento e nos relatórios. Pode ser alterada até o primeiro pedido."
   },
   "tickets": {
     "subtitle": "Tipos de ingresso, preços e estoque. Todo preço exibido aos compradores já inclui as taxas.",
@@ -1031,6 +1033,7 @@
     "channelInvalid": "Este código de venda não é válido para este evento. Abra a página do evento sem ele, ou pergunte a quem lhe deu o link.",
     "channelNotice": "Você está comprando por {name}: os lugares reservados para {name} também estão abertos para você.",
     "channelLinkInvalid": "Este link de venda não é válido para este evento. Você ainda pode escolher entre os lugares abertos a todos.",
+    "couponBuyerLimit": "Você já usou este código quantas vezes ele permite.",
     "saveCardForGiving": "Salvar meu cartão para as doações de hoje à noite (você fará isso na próxima página; nada é salvo sem o seu consentimento lá)"
   },
   "fakePay": {
@@ -1137,6 +1140,7 @@
     "addTitle": "Adicionar código promocional",
     "add": "Adicionar código",
     "added": "Código promocional adicionado.",
+    "orgCoupons": "Os cupons da organização também valem aqui. <link>Ver todos os códigos</link>",
     "emptyAction": "Criar um código"
   },
   "questions": {
@@ -1566,7 +1570,7 @@
       "timezone": "Fuso horário",
       "country": "País (código de 2 letras)",
       "countryHint": "Por exemplo, US, GB ou NG.",
-      "currency": "Moeda padrão (código de 3 letras)",
+      "currency": "Moeda padrão",
       "currencyHint": "Novos eventos começam com esta moeda. Os eventos que você já criou mantêm a deles."
     },
     "brand": {
@@ -3513,6 +3517,12 @@
       "private": "Privado (código de acesso)"
     },
     "visibilityHint": "Eventos não listados só abrem pelo link. Eventos privados exigem um código de acesso que desbloqueia a página do evento.",
+    "currencyTitle": "Moeda",
+    "currency": "Moeda do evento",
+    "currencyHint": "Preços de ingressos e códigos promocionais mantêm seus valores na nova moeda. Ela é bloqueada no primeiro pedido.",
+    "currencyLocked": "Bloqueada: este evento já tem pedidos, então a moeda não pode mudar.",
+    "currencySaved": "Moeda salva.",
+    "currencySave": "Salvar moeda",
     "hiddenCategory": "{name} (oculta)",
     "categoryHiddenHint": "Esta categoria está oculta: o evento a mantém, mas ela não é mais oferecida para outros eventos.",
     "manageCategories": "Gerenciar categorias"
@@ -4629,7 +4639,9 @@
       "ticketPrice": "Informe um preço como 25 ou 25.00.",
       "ticketQuantity": "Informe quantos estão à venda (pelo menos 1).",
       "generic": "Verifique este campo."
-    }
+    },
+    "currency": "Moeda",
+    "currencyHint": "Usada nos ingressos, no pagamento e nos relatórios. Pode ser alterada até o primeiro pedido."
   },
   "eventMedia": {
     "title": "Imagens",
@@ -15806,18 +15818,75 @@
   },
   "coupons": {
     "title": "Cupons",
-    "description": "Códigos promocionais dão desconto no checkout. Cada código pertence a um evento: escolha o evento para ver ou adicionar seus códigos.",
-    "emptyTitle": "Nenhum evento para adicionar códigos",
-    "emptyDescription": "Os códigos promocionais ficam na página Ingressos e pedidos do evento. Crie um evento primeiro e depois adicione os códigos.",
+    "description": "Códigos de desconto para todos os seus eventos ou os que você escolher, com os códigos promocionais de cada evento na mesma lista.",
+    "listTitle": "Todos os códigos",
+    "emptyTitle": "Nenhum código ainda",
+    "emptyDescription": "Adicione um cupom abaixo para dar desconto nos seus eventos.",
+    "emptyViewer": "Ninguém adicionou um cupom ainda. Proprietários e administradores os adicionam aqui.",
+    "noEventsTitle": "Nenhum evento para adicionar códigos",
+    "noEventsDescription": "Os códigos promocionais ficam na página Ingressos e pedidos do evento. Crie um evento primeiro e depois adicione os códigos.",
+    "code": "Código",
+    "type": "Tipo",
+    "typeCoupon": "Cupom da organização",
+    "typeEvent": "Código do evento",
+    "appliesTo": "Vale para",
+    "discount": "Desconto",
+    "percentOff": "{value} de desconto",
+    "amountOff": "{amount} de desconto por ingresso",
+    "uses": "Usos",
+    "perBuyerShort": "Por comprador",
+    "valid": "Validade",
+    "until": "Até {date}",
+    "from": "A partir de {date}",
+    "always": "Sem data de término",
     "emptyAction": "Criar um evento",
-    "caption": "Eventos e seus códigos promocionais",
-    "event": "Evento",
-    "when": "Data",
     "status": "Status",
-    "codes": "Códigos promocionais",
-    "manage": "Gerenciar códigos",
-    "view": "Ver códigos",
-    "manageFor": "Códigos promocionais de {name}"
+    "active": "Ativo",
+    "paused": "Pausado",
+    "actions": "Ações",
+    "pause": "Pausar",
+    "resume": "Retomar",
+    "pauseCode": "Pausar {code}",
+    "resumeCode": "Retomar {code}",
+    "newTitle": "Adicionar um cupom",
+    "kind": "Tipo de desconto",
+    "percent": "Porcentagem de desconto",
+    "amount": "Valor fixo de desconto",
+    "percentValue": "Porcentagem",
+    "amountValue": "Desconto por ingresso",
+    "percentHint": "Por exemplo 20 para 20% de desconto por ingresso, antes das taxas.",
+    "amountHint": "Por exemplo 5 para 5,00 de desconto por ingresso, antes das taxas.",
+    "currency": "Moeda do valor",
+    "currencyHint": "O cupom só vale em eventos nesta moeda.",
+    "scope": "Vale para",
+    "scopeAll": "Todos os eventos",
+    "scopeEvents": "Eventos escolhidos",
+    "events": "Eventos",
+    "eventsHint": "Digite para encontrar um evento. Escolha um ou mais.",
+    "eventsPlaceholder": "Encontrar um evento",
+    "maxUses": "Usos totais (opcional)",
+    "maxUsesHint": "Em todos os eventos. Deixe vazio para não limitar.",
+    "perBuyer": "Usos por comprador (opcional)",
+    "perBuyerHint": "Contados pelo e-mail do comprador.",
+    "startsAt": "Início",
+    "endsAt": "Expira",
+    "optional": "Opcional, no fuso horário da sua organização.",
+    "added": "Cupom adicionado.",
+    "add": "Adicionar cupom",
+    "errors": {
+      "code": "Use de 3 a 32 letras, dígitos, - ou _.",
+      "codeTaken": "Esse código já é usado por um cupom ou pelo código promocional de um evento.",
+      "value": "Informe um desconto, como 20 ou 5,00.",
+      "percentBps": "Informe uma porcentagem entre 0,01 e 100.",
+      "amountMinor": "Informe um valor maior que zero.",
+      "currency": "Escolha uma moeda.",
+      "currencyMismatch": "Um cupom de valor só vale em eventos na sua moeda. Remova os eventos em outras moedas ou use uma porcentagem.",
+      "eventIds": "Escolha pelo menos um evento.",
+      "maxRedemptions": "Informe um número inteiro igual ou maior que 1.",
+      "perBuyerLimit": "Informe um número inteiro igual ou maior que 1.",
+      "startsAt": "Informe uma data e hora válidas.",
+      "endsAt": "A expiração deve ser depois do início."
+    }
   },
   "howItWorks": {
     "docLink": "Ler o guia",
@@ -15870,9 +15939,9 @@
     },
     "coupons": {
       "title": "Como funcionam os códigos promocionais",
-      "intro": "Um código promocional desconta uma porcentagem ou um valor do preço de cada ingresso, antes das taxas. Cada código pertence a um evento.",
-      "step1": "Escolha o evento abaixo e abra seus códigos promocionais.",
-      "step2": "Adicione um código com o desconto e, se quiser, um limite e datas.",
+      "intro": "Um cupom ou código promocional desconta uma porcentagem ou um valor do preço de cada ingresso, antes das taxas. Cupons podem valer para todos os seus eventos ou os que você escolher; um código promocional pertence a um evento.",
+      "step1": "Adicione um cupom abaixo: código, desconto, eventos, limites e datas.",
+      "step2": "Para um código de um só evento, use a página Ingressos e pedidos desse evento.",
       "step3": "Compartilhe o código. Os compradores o inserem no checkout e cada uso é contado."
     },
     "money": {

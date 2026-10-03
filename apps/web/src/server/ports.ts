@@ -21,6 +21,7 @@ import { registrationSessionAccess } from '@yayatoh/registration';
 import { setOccupantDirectory, setPartyCredentials } from '@yayatoh/seating';
 import { surveysContactOwner } from '@yayatoh/surveys';
 import { createOrgAuthorizer, orgStatusGate } from '@yayatoh/tenancy';
+import { ticketingContactOwner } from '@yayatoh/ticketing';
 import { configureWebhooks, fakeResolver, webhookPublisherFromEnv } from '@yayatoh/webhooks';
 import { DATA_SUBJECT_CONTRIBUTORS } from './data-subjects.ts';
 
@@ -46,6 +47,7 @@ registerContactReferenceOwners([
   notificationsContactOwner,
   guestsContactOwner,
   ordersContactOwner,
+  ticketingContactOwner,
   checkinContactOwner,
   surveysContactOwner,
   campaignsContactOwner,

@@ -1,6 +1,15 @@
 'use client';
 
-import { Alert, Button, Card, DateTimePicker, Input, Select, TimeZonePicker } from '@yayatoh/ui';
+import {
+  Alert,
+  Button,
+  Card,
+  CurrencyPicker,
+  DateTimePicker,
+  Input,
+  Select,
+  TimeZonePicker,
+} from '@yayatoh/ui';
 import { Check } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useActionState, useEffect, useRef, useState } from 'react';
@@ -43,7 +52,8 @@ type Values = Record<
   | 'ticketName'
   | 'ticketPrice'
   | 'ticketQuantity'
-  | 'series',
+  | 'series'
+  | 'currency',
   string
 >;
 type Field = keyof Values;
@@ -120,6 +130,7 @@ export function EventWizard({
     ticketPrice: '',
     ticketQuantity: '',
     series: defaults.series ?? '',
+    currency,
   });
   const heading = useRef<HTMLHeadingElement>(null);
   const moved = useRef(false);
@@ -230,7 +241,7 @@ export function EventWizard({
             ['timezone', 'startsAt', 'endsAt', 'attendanceMode', 'venueId', 'venueName', 'city'].includes(
               k,
             )) ||
-          (step === 2 && ['ticketName', 'ticketPrice', 'ticketQuantity'].includes(k)) ? null : (
+          (step === 2 && ['ticketName', 'ticketPrice', 'ticketQuantity', 'currency'].includes(k)) ? null : (
             <input key={k} type="hidden" name={k} value={v[k]} />
           ),
         )}
@@ -382,6 +393,18 @@ export function EventWizard({
 
         {step === 2 ? (
           <>
+            {/* U9 (UX-6): the event's own currency; it locks once the first order is placed. */}
+            <CurrencyPicker
+              id="wizard-currency"
+              name="currency"
+              required
+              value={v.currency}
+              onValueChange={setTo('currency')}
+              label={t('currency')}
+              hint={t('currencyHint')}
+              error={err('currency')}
+              className={`${selectClass} sm:max-w-sm`}
+            />
             {ticketing ? (
               <fieldset className="flex flex-col gap-3">
                 <legend className="pb-1 text-body font-medium">{t('firstPass')}</legend>
@@ -400,7 +423,7 @@ export function EventWizard({
                     id="wizard-ticket-price"
                     name="ticketPrice"
                     inputMode="decimal"
-                    label={t('ticketPrice', { currency })}
+                    label={t('ticketPrice', { currency: v.currency })}
                     hint={t('ticketPriceHint')}
                     value={v.ticketPrice}
                     onChange={set('ticketPrice')}

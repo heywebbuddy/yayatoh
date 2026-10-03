@@ -53,6 +53,7 @@ export default async function NewEventPage({
         defaults={{
           profile: data.profile,
           timezone: data.org.timezone,
+          currency: data.org.currency,
           ...(preset ? { series: preset } : {}),
         }}
         series={series.map((s) => ({ id: s.id, name: s.name }))}

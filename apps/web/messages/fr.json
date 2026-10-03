@@ -885,7 +885,9 @@
     "submit": "Créer le brouillon",
     "slugTaken": "Un événement porte déjà ce nom. Essayez un nom légèrement différent.",
     "fromTemplate": "Partir d’un modèle",
-    "guided": "Création guidée (3 étapes)"
+    "guided": "Création guidée (3 étapes)",
+    "currency": "Devise",
+    "currencyHint": "Les billets, le paiement et les rapports l'utilisent. Modifiable jusqu'à la première commande."
   },
   "tickets": {
     "subtitle": "Types de billets, prix et stock. Tous les prix affichés aux acheteurs incluent les frais.",
@@ -1031,6 +1033,7 @@
     "channelInvalid": "Ce code de vente n’est pas valable pour cet événement. Rouvrez la page de l’événement sans ce code, ou demandez à la personne qui vous a donné le lien.",
     "channelNotice": "Vous achetez via {name} : les places réservées à {name} vous sont aussi ouvertes.",
     "channelLinkInvalid": "Ce lien de vente n’est pas valable pour cet événement. Vous pouvez toujours choisir parmi les places ouvertes à tous.",
+    "couponBuyerLimit": "Vous avez déjà utilisé ce code autant de fois qu'il le permet.",
     "saveCardForGiving": "Enregistrer ma carte pour les dons de ce soir (à la page suivante ; rien n’est enregistré sans votre accord là-bas)"
   },
   "fakePay": {
@@ -1137,6 +1140,7 @@
     "addTitle": "Ajouter un code promo",
     "add": "Ajouter le code",
     "added": "Code promo ajouté.",
+    "orgCoupons": "Les coupons de l'organisation s'appliquent aussi ici. <link>Voir tous les codes</link>",
     "emptyAction": "Créer un code"
   },
   "questions": {
@@ -1566,7 +1570,7 @@
       "timezone": "Fuseau horaire",
       "country": "Pays (code à 2 lettres)",
       "countryHint": "Par exemple US, GB ou NG.",
-      "currency": "Devise par défaut (code à 3 lettres)",
+      "currency": "Devise par défaut",
       "currencyHint": "Les nouveaux événements utilisent cette devise. Les événements déjà créés conservent la leur."
     },
     "brand": {
@@ -3513,6 +3517,12 @@
       "private": "Privé (code d’accès)"
     },
     "visibilityHint": "Les événements non répertoriés ne sont accessibles que par leur lien. Les événements privés nécessitent un code d’accès qui débloque la page de l’événement.",
+    "currencyTitle": "Devise",
+    "currency": "Devise de l'événement",
+    "currencyHint": "Les prix des billets et les codes promo gardent leurs montants dans la nouvelle devise. Elle est verrouillée dès la première commande.",
+    "currencyLocked": "Verrouillée : cet événement a déjà des commandes, sa devise ne peut plus changer.",
+    "currencySaved": "Devise enregistrée.",
+    "currencySave": "Enregistrer la devise",
     "hiddenCategory": "{name} (masquée)",
     "categoryHiddenHint": "Cette catégorie est masquée : l’événement la garde, mais elle n’est plus proposée pour d’autres événements.",
     "manageCategories": "Gérer les catégories"
@@ -4629,7 +4639,9 @@
       "ticketPrice": "Saisissez un prix comme 25 ou 25.00.",
       "ticketQuantity": "Indiquez combien sont en vente (au moins 1).",
       "generic": "Vérifiez ce champ."
-    }
+    },
+    "currency": "Devise",
+    "currencyHint": "Les billets, le paiement et les rapports l'utilisent. Modifiable jusqu'à la première commande."
   },
   "eventMedia": {
     "title": "Images",
@@ -15806,18 +15818,75 @@
   },
   "coupons": {
     "title": "Coupons",
-    "description": "Les codes promo offrent une réduction au paiement. Chaque code appartient à un événement : choisissez l’événement pour voir ou ajouter ses codes.",
-    "emptyTitle": "Aucun événement auquel ajouter des codes",
-    "emptyDescription": "Les codes promo se trouvent sur la page Billets et commandes de l’événement. Créez d’abord un événement, puis ajoutez ses codes.",
+    "description": "Des codes de réduction pour tous vos événements ou ceux que vous choisissez, avec les codes promo de chaque événement dans la même liste.",
+    "listTitle": "Tous les codes",
+    "emptyTitle": "Aucun code pour l'instant",
+    "emptyDescription": "Ajoutez un coupon ci-dessous pour offrir une réduction sur vos événements.",
+    "emptyViewer": "Personne n’a encore ajouté de coupon. Les propriétaires et administrateurs les ajoutent ici.",
+    "noEventsTitle": "Aucun événement auquel ajouter des codes",
+    "noEventsDescription": "Les codes promo se trouvent sur la page Billets et commandes de l’événement. Créez d’abord un événement, puis ajoutez ses codes.",
+    "code": "Code",
+    "type": "Type",
+    "typeCoupon": "Coupon d'organisation",
+    "typeEvent": "Code d'événement",
+    "appliesTo": "S'applique à",
+    "discount": "Réduction",
+    "percentOff": "{value} de réduction",
+    "amountOff": "{amount} de réduction par billet",
+    "uses": "Utilisations",
+    "perBuyerShort": "Par acheteur",
+    "valid": "Validité",
+    "until": "Jusqu'au {date}",
+    "from": "À partir du {date}",
+    "always": "Sans date de fin",
     "emptyAction": "Créer un événement",
-    "caption": "Événements et leurs codes promo",
-    "event": "Événement",
-    "when": "Date",
     "status": "Statut",
-    "codes": "Codes promo",
-    "manage": "Gérer les codes",
-    "view": "Voir les codes",
-    "manageFor": "Codes promo de {name}"
+    "active": "Actif",
+    "paused": "En pause",
+    "actions": "Actions",
+    "pause": "Mettre en pause",
+    "resume": "Reprendre",
+    "pauseCode": "Mettre {code} en pause",
+    "resumeCode": "Reprendre {code}",
+    "newTitle": "Ajouter un coupon",
+    "kind": "Type de réduction",
+    "percent": "Pourcentage de réduction",
+    "amount": "Montant fixe de réduction",
+    "percentValue": "Pourcentage",
+    "amountValue": "Réduction par billet",
+    "percentHint": "Par exemple 20 pour 20 % de réduction par billet, avant frais.",
+    "amountHint": "Par exemple 5 pour 5,00 de réduction par billet, avant frais.",
+    "currency": "Devise du montant",
+    "currencyHint": "Le coupon ne vaut que pour les événements dans cette devise.",
+    "scope": "S'applique à",
+    "scopeAll": "Tous les événements",
+    "scopeEvents": "Événements choisis",
+    "events": "Événements",
+    "eventsHint": "Tapez pour trouver un événement. Choisissez-en un ou plusieurs.",
+    "eventsPlaceholder": "Trouver un événement",
+    "maxUses": "Utilisations au total (facultatif)",
+    "maxUsesHint": "Sur tous les événements. Laissez vide pour ne pas limiter.",
+    "perBuyer": "Utilisations par acheteur (facultatif)",
+    "perBuyerHint": "Comptées selon l'adresse e-mail de l'acheteur.",
+    "startsAt": "Début",
+    "endsAt": "Expiration",
+    "optional": "Facultatif, dans le fuseau horaire de votre organisation.",
+    "added": "Coupon ajouté.",
+    "add": "Ajouter le coupon",
+    "errors": {
+      "code": "Utilisez 3 à 32 lettres, chiffres, - ou _.",
+      "codeTaken": "Ce code est déjà utilisé par un coupon ou un code promo d'événement.",
+      "value": "Saisissez une réduction, par exemple 20 ou 5,00.",
+      "percentBps": "Saisissez un pourcentage entre 0,01 et 100.",
+      "amountMinor": "Saisissez un montant supérieur à zéro.",
+      "currency": "Choisissez une devise.",
+      "currencyMismatch": "Un coupon à montant ne vaut que pour les événements dans sa devise. Retirez les événements dans d'autres devises ou utilisez un pourcentage.",
+      "eventIds": "Choisissez au moins un événement.",
+      "maxRedemptions": "Saisissez un nombre entier supérieur ou égal à 1.",
+      "perBuyerLimit": "Saisissez un nombre entier supérieur ou égal à 1.",
+      "startsAt": "Saisissez une date et une heure valides.",
+      "endsAt": "L'expiration doit être après le début."
+    }
   },
   "howItWorks": {
     "docLink": "Lire le guide",
@@ -15870,9 +15939,9 @@
     },
     "coupons": {
       "title": "Comment fonctionnent les codes promo",
-      "intro": "Un code promo retire un pourcentage ou un montant du prix de chaque billet, avant frais. Chaque code appartient à un événement.",
-      "step1": "Choisissez l’événement ci-dessous et ouvrez ses codes promo.",
-      "step2": "Ajoutez un code avec sa remise et, si vous le souhaitez, une limite et des dates.",
+      "intro": "Un coupon ou un code promo retire un pourcentage ou un montant du prix de chaque billet, avant frais. Les coupons peuvent couvrir tous vos événements ou ceux que vous choisissez ; un code promo appartient à un seul événement.",
+      "step1": "Ajoutez un coupon ci-dessous : son code, sa remise, ses événements, ses limites et ses dates.",
+      "step2": "Pour un code propre à un événement, utilisez la page Billets et commandes de cet événement.",
       "step3": "Partagez le code. Les acheteurs le saisissent au paiement et chaque utilisation est comptée."
     },
     "money": {
