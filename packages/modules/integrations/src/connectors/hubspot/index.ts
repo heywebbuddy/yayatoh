@@ -6,6 +6,7 @@ import {
   writeSyncedContactTx,
 } from '@yayatoh/crm';
 import type { TenantTx } from '@yayatoh/db';
+import { requireOrg } from '@yayatoh/kernel';
 import { type EventSyncRow, eventForSyncTx, eventsForSyncAfterTx } from '@yayatoh/events';
 import { and, eq, inArray } from 'drizzle-orm';
 import { hubspotContactAction } from '../../audience/consent.ts';
@@ -16,6 +17,7 @@ import {
   contactStatesTx,
   linkedAmongTx,
   linkedLocalIdsAfterTx,
+  linkPulledTx,
   liveConnectionIdTx,
   mergeIds,
 } from '../../audience/state.ts';
@@ -348,6 +350,14 @@ export const hubspotConnector = defineConnector({
               externalId: meta.record.id,
               remoteVersion: meta.record.version,
             });
+          await linkPulledTx(tx, requireOrg(ctx), {
+            connectionId: meta.connectionId,
+            objectType: 'contacts',
+            externalId: meta.record.id,
+            localId: contactId,
+            remoteVersion: meta.record.version,
+            now: ctx.now,
+          });
           return { localId: contactId };
         },
       },

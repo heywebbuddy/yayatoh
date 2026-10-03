@@ -167,3 +167,36 @@ export async function inAudienceTx(
 export function mergeIds(a: readonly string[], b: readonly string[], limit: number): string[] {
   return [...new Set([...a, ...b])].sort().slice(0, limit);
 }
+
+/**
+ * Link a pulled record before the engine reads it back (M6.4d): the push side's status depends on
+ * whether the provider already has the person, and the engine stores the record's hash right
+ * after `write`. Linking first makes that hash the one the push computes next, so a consent
+ * change that came in is never sent back. The engine's own link upsert completes the row.
+ */
+export async function linkPulledTx(
+  tx: TenantTx,
+  orgId: string,
+  input: {
+    readonly connectionId: string;
+    readonly objectType: string;
+    readonly externalId: string;
+    readonly localId: string;
+    readonly remoteVersion: string;
+    readonly now: Date;
+  },
+): Promise<void> {
+  await tx
+    .insert(recordLinks)
+    .values({
+      orgId,
+      connectionId: input.connectionId,
+      objectType: input.objectType,
+      externalId: input.externalId,
+      localId: input.localId,
+      remoteVersion: input.remoteVersion,
+      lastDirection: 'pull',
+      lastSyncedAt: input.now,
+    })
+    .onConflictDoNothing();
+}

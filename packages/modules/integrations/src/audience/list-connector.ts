@@ -1,4 +1,5 @@
 import type { TenantTx } from '@yayatoh/db';
+import { requireOrg } from '@yayatoh/kernel';
 import { eq } from 'drizzle-orm';
 import type { FakeProvider } from '../auth/fake.ts';
 import type { FieldSpec, MappingRule } from '../domain/mapping.ts';
@@ -21,6 +22,7 @@ import {
   inAudienceTx,
   linkedAmongTx,
   linkedLocalIdsAfterTx,
+  linkPulledTx,
   liveConnectionIdTx,
   mergeIds,
 } from './state.ts';
@@ -81,7 +83,7 @@ const scopeOf = (s: Readonly<Record<string, unknown>>): ListScope => ({
 });
 
 /** The record fields the push hashes and sends (the mapping reads these, the status is ours). */
-function memberFields(c: ContactState, status: MemberStatus): Record<string, unknown> {
+function memberFields(c: ContactState, status: MemberStatus, listId: string | null): Record<string, unknown> {
   const words = (c.name ?? '').trim().split(/\s+/).filter(Boolean);
   return {
     email: c.email,
@@ -91,6 +93,8 @@ function memberFields(c: ContactState, status: MemberStatus): Record<string, unk
     company: c.company,
     phone: c.phone,
     subscription: status,
+    // The list is part of what was sent: another list is another send (and idempotency key).
+    list_id: listId,
   };
 }
 
@@ -124,7 +128,7 @@ async function membersOfTx(
     const c = states.get(id);
     if (!c) continue;
     const status = memberStatus({ status: c.status, inAudience: audience.has(id), linked: linked.has(id) });
-    if (status) out.push({ id, updatedAt: c.updatedAt, fields: memberFields(c, status) });
+    if (status) out.push({ id, updatedAt: c.updatedAt, fields: memberFields(c, status, scope.listId) });
   }
   return out;
 }
@@ -194,17 +198,24 @@ export function defineListConnector(def: {
             // Only consent changes come back; anything else is not ours to apply (never a grant).
             if (!INBOUND_CHANGES.includes(change as InboundChange))
               throw new Error('Not a consent change');
-            return {
-              localId: await applyInboundChangeTx(tx, ctx, {
-                connector: def.key,
-                connectionId: meta.connectionId,
-                contactId: localId,
-                email: String(values.email),
-                change: change as InboundChange,
-                externalId: meta.record.id,
-                remoteVersion: meta.record.version,
-              }),
-            };
+            const contactId = await applyInboundChangeTx(tx, ctx, {
+              connector: def.key,
+              connectionId: meta.connectionId,
+              contactId: localId,
+              email: String(values.email),
+              change: change as InboundChange,
+              externalId: meta.record.id,
+              remoteVersion: meta.record.version,
+            });
+            await linkPulledTx(tx, requireOrg(ctx), {
+              connectionId: meta.connectionId,
+              objectType: MEMBERS,
+              externalId: meta.record.id,
+              localId: contactId,
+              remoteVersion: meta.record.version,
+              now: ctx.now,
+            });
+            return { localId: contactId };
           },
         },
         push: {

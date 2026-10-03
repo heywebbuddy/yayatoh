@@ -288,7 +288,7 @@ describe('Mailchimp: push an audience as a list, pull consent changes back', () 
     await sync(org.orgId, connectionId);
     const statuses = membersOf(authConnectionId, list);
     expect(statuses[e('sms')]).toBe('subscribed');
-    expect(statuses[e('mail')]).toBeUndefined(); // archived: off the list
+    expect(statuses[e('mail')]).toBe('archived'); // off the list, not unsubscribed
     expect(await consentOf(ctx, e('mail'))).toMatchObject({ status: 'granted' });
     expect(await executeQuery(audienceSyncQuery, { connectionId }, ctx, ports)).toMatchObject({
       segmentId: segment.id,
@@ -307,6 +307,8 @@ describe('Mailchimp: push an audience as a list, pull consent changes back', () 
     await sync(org.orgId, connectionId);
     expect(membersOf(authConnectionId, other)).toMatchObject({ [e('sms')]: 'subscribed' });
     expect(membersOf(authConnectionId, other)[e('mail')]).toBeUndefined();
+    // The old list keeps what it had.
+    expect(membersOf(authConnectionId, list)[e('sms')]).toBe('subscribed');
   });
 
   it('property: over random consent states, an unsubscribed contact is never pushed', async () => {
