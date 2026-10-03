@@ -3744,7 +3744,7 @@
     "title": "Séries",
     "description": "Agrupe eventos em turnês, temporadas ou festivais. Cada série tem uma página pública com os próximos eventos.",
     "emptyTitle": "Ainda não há séries",
-    "emptyDescription": "Crie uma série e adicione eventos a ela na página Datas de cada evento.",
+    "emptyDescription": "Crie uma série abaixo ou dê nome a uma ao criar um evento.",
     "caption": "Séries",
     "name": "Nome",
     "descriptionField": "Descrição (opcional)",
@@ -15359,6 +15359,81 @@
     "tooLate": "Escolha uma data até {date}",
     "timeZoneNote": "Horários em {zone}",
     "selected": "Selecionado"
+  },
+  "seriesField": {
+    "label": "Série (opcional)",
+    "hint": "Agrupe este evento com outros numa turnê ou temporada. Digite um nome novo para criar uma.",
+    "none": "Sem série",
+    "newOption": "Nova série: {name}",
+    "summary": "Série",
+    "errors": {
+      "taken": "Já existe uma série com este nome. Escolha-a na lista.",
+      "missing": "Essa série não existe mais. Escolha outra.",
+      "name": "Digite um nome de série com 2 a 160 caracteres."
+    }
+  },
+  "seriesLink": {
+    "partOf": "Parte de {name}"
+  },
+  "seriesPage": {
+    "back": "Todas as séries",
+    "tabs": {
+      "label": "Visualizações da série",
+      "events": "Eventos",
+      "details": "Detalhes"
+    },
+    "columns": {
+      "event": "Evento",
+      "status": "Status",
+      "dates": "Datas",
+      "sales": "Vendas",
+      "actions": "Ações"
+    },
+    "sold": "{count, plural, one {{n} ingresso vendido} other {{n} ingressos vendidos}}",
+    "noSales": "Ainda sem vendas",
+    "remove": "Remover da série",
+    "removeFor": "Remover {name} da série",
+    "createNext": "Criar o próximo evento da série",
+    "createIn": "Criar evento nesta série",
+    "added": "Evento adicionado à série.",
+    "removed": "Evento removido da série. O evento em si não muda.",
+    "deleted": "Série excluída. Os eventos dela não mudam.",
+    "eventsHeading": "{count, plural, one {# evento} other {# eventos}}",
+    "emptyTitle": "Ainda não há eventos nesta série",
+    "emptyDescription": "Crie um evento nesta série ou adicione um que você já tem.",
+    "emptyReadOnly": "Os eventos adicionados a esta série aparecem aqui.",
+    "caption": "Eventos de {name}",
+    "add": {
+      "heading": "Adicionar um evento existente",
+      "label": "Evento",
+      "placeholder": "Escolha um evento",
+      "hint": "Um evento que está em outra série passa para esta.",
+      "option": "{name} · {when}",
+      "optionMoves": "{name} · {when} (em {series})",
+      "required": "Escolha um evento para adicionar.",
+      "submit": "Adicionar à série"
+    },
+    "next": {
+      "back": "Voltar para {name}",
+      "title": "Criar o próximo evento da série",
+      "description": "Um novo rascunho em {name} com a configuração do último evento.",
+      "copies": "Copia as configurações, os tipos de ingresso, as perguntas e o mapa de assentos de {name} ({when}). Pedidos, participantes e check-ins ficam no original.",
+      "name": "Nome do evento",
+      "startsAt": "Começa",
+      "startsAtHint": "No fuso horário do evento ({zone}).",
+      "nameInvalid": "Digite um nome com 2 a 160 caracteres.",
+      "startInvalid": "Digite uma data e hora de início válidas.",
+      "submit": "Criar rascunho"
+    },
+    "details": {
+      "heading": "Detalhes da série",
+      "address": "Página pública:",
+      "saved": "Série salva.",
+      "save": "Salvar alterações",
+      "deleteHeading": "Excluir série",
+      "deleteHint": "Excluir a série remove a página pública dela. Os eventos continuam, fora de qualquer série.",
+      "delete": "Excluir série"
+    }
   },
   "templateBuilder": {
     "breadcrumb": "Trilha de navegação",

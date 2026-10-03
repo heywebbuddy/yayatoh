@@ -1,6 +1,9 @@
+import { eventSeriesQuery } from '@yayatoh/events';
+import { executeQuery } from '@yayatoh/kernel';
 import { composeNav, type NavItem } from '@yayatoh/platform';
+import { roleCan } from '@yayatoh/tenancy';
 import { buttonClass, StatusPill } from '@yayatoh/ui';
-import { CopyPlus } from 'lucide-react';
+import { CopyPlus, Layers } from 'lucide-react';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server';
 import type { ReactNode } from 'react';
@@ -9,6 +12,7 @@ import { Link } from '@/i18n/navigation.ts';
 import { eventPhase } from '@/lib/event-status.ts';
 import { profileMessages } from '@/lib/profile-copy.ts';
 import { loadEventBase } from '@/server/console.ts';
+import { ports } from '@/server/ports.ts';
 import { loadReadiness } from '@/server/readiness.ts';
 
 /** M3.8a: tracked links with the marketing module (read with `marketing:read`). */
@@ -78,6 +82,10 @@ export default async function EventLayout({
   ].filter((i) => opens(i.key) && (!NEEDS[i.key] || can(NEEDS[i.key] as string)));
   const rules = opens('setupGuide') ? await loadReadiness(org, event) : [];
   const counted = rules.filter((r) => !r.comingSoon);
+  // U7: the series this event is part of (series are org-level: co-hosts without org access don't see it).
+  const series = roleCan(data.role, 'events:read')
+    ? await executeQuery(eventSeriesQuery, { eventId: ev.id }, data.ctx, ports)
+    : null;
   return (
     <ConsoleShell
       data={data}
@@ -105,6 +113,15 @@ export default async function EventLayout({
             live={phase.phase === 'live'}
             label={`${t(`eventStatus.${ev.status}`)} · ${t(`phase.${phase.phase}`, { days: phase.days })}`}
           />
+          {series ? (
+            <Link
+              href={`/o/${org}/series/${series.slug}`}
+              className="inline-flex min-h-8 min-w-0 items-center gap-1.5 rounded-pill border border-line bg-surface px-3 py-1 text-caption font-semibold text-ink-2 hover:text-ink"
+            >
+              <Layers aria-hidden="true" className="size-3.5 shrink-0" />
+              <span className="min-w-0 break-words">{t('seriesLink.partOf', { name: series.name })}</span>
+            </Link>
+          ) : null}
           {/* U6: "Save as template" on the event header, not only under Duplicate & template. */}
           {opens('copy') && can('events:write') ? (
             <Link href={`/o/${org}/e/${event}/copy#save-template`} className={buttonClass('secondary', 'sm')}>

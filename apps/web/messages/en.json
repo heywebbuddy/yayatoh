@@ -3744,7 +3744,7 @@
     "title": "Series",
     "description": "Group events into tours, seasons or festivals. Each series has a public page listing its upcoming events.",
     "emptyTitle": "No series yet",
-    "emptyDescription": "Create a series, then add events to it from each event's Dates page.",
+    "emptyDescription": "Create a series below, or name one when you create an event.",
     "caption": "Series",
     "name": "Name",
     "descriptionField": "Description (optional)",
@@ -15359,6 +15359,81 @@
     "tooLate": "Choose a date on or before {date}",
     "timeZoneNote": "Times in {zone}",
     "selected": "Selected"
+  },
+  "seriesField": {
+    "label": "Series (optional)",
+    "hint": "Group this event with others in a tour or season. Type a new name to create one.",
+    "none": "No series",
+    "newOption": "New series: {name}",
+    "summary": "Series",
+    "errors": {
+      "taken": "A series with this name already exists. Pick it from the list instead.",
+      "missing": "That series no longer exists. Pick another one.",
+      "name": "Enter a series name of 2 to 160 characters."
+    }
+  },
+  "seriesLink": {
+    "partOf": "Part of {name}"
+  },
+  "seriesPage": {
+    "back": "All series",
+    "tabs": {
+      "label": "Series views",
+      "events": "Events",
+      "details": "Details"
+    },
+    "columns": {
+      "event": "Event",
+      "status": "Status",
+      "dates": "Dates",
+      "sales": "Sales",
+      "actions": "Actions"
+    },
+    "sold": "{count, plural, one {{n} ticket sold} other {{n} tickets sold}}",
+    "noSales": "No sales yet",
+    "remove": "Remove from series",
+    "removeFor": "Remove {name} from the series",
+    "createNext": "Create next event in series",
+    "createIn": "Create event in this series",
+    "added": "Event added to the series.",
+    "removed": "Event removed from the series. The event itself is unchanged.",
+    "deleted": "Series deleted. Its events are unchanged.",
+    "eventsHeading": "{count, plural, one {# event} other {# events}}",
+    "emptyTitle": "No events in this series yet",
+    "emptyDescription": "Create an event in this series, or add one you already have.",
+    "emptyReadOnly": "Events added to this series appear here.",
+    "caption": "Events in {name}",
+    "add": {
+      "heading": "Add an existing event",
+      "label": "Event",
+      "placeholder": "Choose an event",
+      "hint": "An event that is in another series moves to this one.",
+      "option": "{name} · {when}",
+      "optionMoves": "{name} · {when} (in {series})",
+      "required": "Choose an event to add.",
+      "submit": "Add to series"
+    },
+    "next": {
+      "back": "Back to {name}",
+      "title": "Create next event in series",
+      "description": "A new draft in {name} with the latest event's setup.",
+      "copies": "Copies the settings, ticket types, questions and seating plan of {name} ({when}). Orders, attendees and check-ins stay behind.",
+      "name": "Event name",
+      "startsAt": "Starts",
+      "startsAtHint": "In the event's time zone ({zone}).",
+      "nameInvalid": "Enter a name of 2 to 160 characters.",
+      "startInvalid": "Enter a valid start date and time.",
+      "submit": "Create draft"
+    },
+    "details": {
+      "heading": "Series details",
+      "address": "Public page:",
+      "saved": "Series saved.",
+      "save": "Save changes",
+      "deleteHeading": "Delete series",
+      "deleteHint": "Deleting the series removes its public page. Its events stay, outside any series.",
+      "delete": "Delete series"
+    }
   },
   "templateBuilder": {
     "breadcrumb": "Breadcrumb",

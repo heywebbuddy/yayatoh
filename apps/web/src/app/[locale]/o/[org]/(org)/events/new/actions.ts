@@ -1,7 +1,13 @@
 'use server';
 
-import { ATTENDANCE_MODES, createEventCommand, setEventDetailsCommand } from '@yayatoh/events';
 import {
+  ATTENDANCE_MODES,
+  createEventCommand,
+  createEventInSeriesCommand,
+  setEventDetailsCommand,
+} from '@yayatoh/events';
+import {
+  type Ctx,
   executeCommand,
   executeQuery,
   isDomainError,
@@ -15,6 +21,42 @@ import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 
 const IDEMPOTENT_CREATE = { ...createEventCommand, idempotent: true };
+const IDEMPOTENT_CREATE_IN_SERIES = { ...createEventInSeriesCommand, idempotent: true };
+
+/** U7: the Series field's value — none (`''`/`none`), one of the org's series, or `new:{name}` (created with the event). */
+function seriesChoice(value: string): { seriesId: string } | { newSeriesName: string } | null {
+  if (!value || value === 'none') return null;
+  return value.startsWith('new:') ? { newSeriesName: value.slice(4).trim() } : { seriesId: value };
+}
+
+/** The raw event fields (the command validates them). */
+type EventInput = Record<string, unknown>;
+
+/** Create the event, inside its series when one was chosen or named (one transaction). */
+async function createEvent(
+  input: EventInput,
+  series: ReturnType<typeof seriesChoice>,
+  ctx: Ctx,
+  keyed: boolean,
+) {
+  if (series)
+    return keyed
+      ? executeCommand(IDEMPOTENT_CREATE_IN_SERIES, { event: input, ...series }, ctx, ports)
+      : executeCommand(createEventInSeriesCommand, { event: input, ...series }, ctx, ports);
+  return keyed
+    ? executeCommand(IDEMPOTENT_CREATE, input, ctx, ports)
+    : executeCommand(createEventCommand, input, ctx, ports);
+}
+
+/** The form field a refusal names: nested event fields lose their `event.` prefix. */
+function fieldOf(details: Record<string, unknown> | undefined): string | undefined {
+  if (typeof details?.field === 'string') return details.field;
+  const issues = (details?.issues ?? []) as { path: string }[];
+  const path = issues[0]?.path;
+  if (!path) return undefined;
+  if (path === 'newSeriesName' || path === 'seriesId') return 'series';
+  return path.replace(/^event\./, '').split('.')[0] || undefined;
+}
 
 export interface CreateEventState {
   readonly code: string | null;
@@ -30,6 +72,7 @@ export async function createEventAction(
   const get = (k: string) => String(form.get(k) ?? '').trim();
   const timezone = get('timezone') || data.org.timezone;
   const requestKey = get('requestKey');
+  const series = seriesChoice(get('series'));
   // Built inside run(): an unparseable date throws there and is mapped below.
   const input = () => ({
     name: get('name'),
@@ -45,8 +88,8 @@ export async function createEventAction(
   // With the form's request key the create is idempotent: a repeated submit gets the same event.
   const run = () =>
     requestKey
-      ? executeCommand(IDEMPOTENT_CREATE, input(), { ...data.ctx, idempotencyKey: requestKey }, ports)
-      : executeCommand(createEventCommand, input(), data.ctx, ports);
+      ? createEvent(input(), series, { ...data.ctx, idempotencyKey: requestKey }, true)
+      : createEvent(input(), series, data.ctx, false);
   let slug: string;
   try {
     let created: Awaited<ReturnType<typeof run>>;
@@ -62,7 +105,7 @@ export async function createEventAction(
     slug = created.slug;
   } catch (err) {
     if (isDomainError(err)) {
-      const field = typeof err.details?.field === 'string' ? err.details.field : undefined;
+      const field = fieldOf(err.details);
       return field ? { code: err.code, field } : { code: err.code };
     }
     if (err instanceof Error && /YYYY-MM-DDTHH:mm/.test(err.message)) return { code: 'validation_failed' };
@@ -84,6 +127,7 @@ const WIZARD_STEP: Readonly<Record<string, number>> = {
   venueName: 1,
   city: 1,
   attendanceMode: 1,
+  series: 0,
   ticketName: 2,
   ticketPrice: 2,
   ticketQuantity: 2,
@@ -117,6 +161,7 @@ export async function guidedCreateAction(
     ? (get('attendanceMode') as (typeof ATTENDANCE_MODES)[number])
     : 'in_person';
   const venueId = get('venueId') || null;
+  const series = seriesChoice(get('series'));
   let startsAt: Date;
   let endsAt: Date;
   try {
@@ -161,9 +206,7 @@ export async function guidedCreateAction(
   let slug: string;
   try {
     const ctx = requestKey ? { ...data.ctx, idempotencyKey: `wizard:${requestKey}` } : data.ctx;
-    const created = requestKey
-      ? await executeCommand(IDEMPOTENT_CREATE, input, ctx, ports)
-      : await executeCommand(createEventCommand, input, ctx, ports);
+    const created = await createEvent(input, series, ctx, Boolean(requestKey));
     slug = created.slug;
     if (venueId || attendanceMode !== 'in_person')
       await executeCommand(
@@ -180,12 +223,7 @@ export async function guidedCreateAction(
     }
   } catch (err) {
     if (isDomainError(err)) {
-      const issues = (err.details?.issues ?? []) as { path: string }[];
-      const field =
-        typeof err.details?.field === 'string'
-          ? err.details.field
-          : issues[0]?.path.split('.')[0] || undefined;
-      return wizardError(err.code, field);
+      return wizardError(err.code, fieldOf(err.details));
     }
     throw err;
   }

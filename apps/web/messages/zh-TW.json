@@ -3744,7 +3744,7 @@
     "title": "系列",
     "description": "將活動歸入巡演、演出季或節慶。每個系列都有公開頁面，列出即將舉行的活動。",
     "emptyTitle": "還沒有系列",
-    "emptyDescription": "先建立系列，再於各活動的「場次」頁面將其加入。",
+    "emptyDescription": "在下方建立系列，或在建立活動時為系列命名。",
     "caption": "系列",
     "name": "名稱",
     "descriptionField": "說明（選填）",
@@ -15359,6 +15359,81 @@
     "tooLate": "請選擇 {date} 或之前的日期",
     "timeZoneNote": "{zone} 時間",
     "selected": "已選取"
+  },
+  "seriesField": {
+    "label": "系列（選填）",
+    "hint": "將此活動與其他活動歸入巡演或季度。輸入新名稱即可建立系列。",
+    "none": "不屬於系列",
+    "newOption": "新系列：{name}",
+    "summary": "系列",
+    "errors": {
+      "taken": "已有同名系列。請從清單中選擇它。",
+      "missing": "該系列已不存在。請選擇其他系列。",
+      "name": "請輸入 2 到 160 個字元的系列名稱。"
+    }
+  },
+  "seriesLink": {
+    "partOf": "屬於{name}"
+  },
+  "seriesPage": {
+    "back": "所有系列",
+    "tabs": {
+      "label": "系列檢視",
+      "events": "活動",
+      "details": "詳細資料"
+    },
+    "columns": {
+      "event": "活動",
+      "status": "狀態",
+      "dates": "日期",
+      "sales": "銷售",
+      "actions": "操作"
+    },
+    "sold": "{count, plural, other {已售 {n} 張票}}",
+    "noSales": "尚無銷售",
+    "remove": "移出系列",
+    "removeFor": "將{name}移出系列",
+    "createNext": "建立系列中的下一場活動",
+    "createIn": "在此系列中建立活動",
+    "added": "活動已加入系列。",
+    "removed": "活動已移出系列。活動本身沒有變更。",
+    "deleted": "系列已刪除。其活動沒有變更。",
+    "eventsHeading": "{count, plural, other {# 場活動}}",
+    "emptyTitle": "此系列中還沒有活動",
+    "emptyDescription": "在此系列中建立活動，或加入已有的活動。",
+    "emptyReadOnly": "加入此系列的活動會顯示在這裡。",
+    "caption": "{name}的活動",
+    "add": {
+      "heading": "加入已有活動",
+      "label": "活動",
+      "placeholder": "選擇活動",
+      "hint": "屬於其他系列的活動會移到此系列。",
+      "option": "{name} · {when}",
+      "optionMoves": "{name} · {when}（在{series}中）",
+      "required": "請選擇要加入的活動。",
+      "submit": "加入系列"
+    },
+    "next": {
+      "back": "返回{name}",
+      "title": "建立系列中的下一場活動",
+      "description": "{name}中的新草稿，沿用最新一場活動的設定。",
+      "copies": "複製{name}（{when}）的設定、票種、問題和座位圖。訂單、參加者和報到記錄不會複製。",
+      "name": "活動名稱",
+      "startsAt": "開始",
+      "startsAtHint": "使用活動所在時區（{zone}）。",
+      "nameInvalid": "請輸入 2 到 160 個字元的名稱。",
+      "startInvalid": "請輸入有效的開始日期和時間。",
+      "submit": "建立草稿"
+    },
+    "details": {
+      "heading": "系列詳細資料",
+      "address": "公開頁面：",
+      "saved": "系列已儲存。",
+      "save": "儲存變更",
+      "deleteHeading": "刪除系列",
+      "deleteHint": "刪除系列會移除其公開頁面。其活動會保留，不再屬於任何系列。",
+      "delete": "刪除系列"
+    }
   },
   "templateBuilder": {
     "breadcrumb": "導覽路徑",

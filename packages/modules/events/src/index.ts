@@ -240,6 +240,15 @@ export {
   updateSeriesCommand,
 } from './series.ts';
 export {
+  createEventInSeriesCommand,
+  eventSeriesQuery,
+  PublicSeriesRefDto,
+  publicEventSeries,
+  SeriesDetailDto,
+  SeriesRefDto,
+  seriesDetailQuery,
+} from './series-events.ts';
+export {
   changeTeamRoleCommand,
   eventTeamQuery,
   grantTeamRoleTx,
