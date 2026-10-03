@@ -192,8 +192,9 @@ describe('agency v1: grants (M6.7a)', () => {
     // Within the role: events yes; members, API keys and finance no.
     const ctx = via(a.org.id, g.id);
     expect((await executeQuery(listEventsQuery, {}, ctx, ports)).map((e) => e.id)).toContain(a.event.id);
-    for (const q of [listMembersQuery, listApiKeysQuery, listAgencyGrantsQuery])
-      expect((await errorOf(executeQuery(q, {}, ctx, ports))).code).toBe('forbidden');
+    expect((await errorOf(executeQuery(listMembersQuery, {}, ctx, ports))).code).toBe('forbidden');
+    expect((await errorOf(executeQuery(listApiKeysQuery, {}, ctx, ports))).code).toBe('forbidden');
+    expect((await errorOf(executeQuery(listAgencyGrantsQuery, {}, ctx, ports))).code).toBe('forbidden');
     // The context must name the grant: without it, or naming another agency, nothing is allowed.
     expect((await errorOf(executeQuery(listEventsQuery, {}, userCtx(staff, a.org.id), ports))).code).toBe(
       'forbidden',
