@@ -19,6 +19,7 @@
     "@yayatoh/donations": "workspace:*",
     "@yayatoh/engagement": "workspace:*",
     "@yayatoh/kernel": "workspace:*",
+    "@yayatoh/marketplace": "workspace:*",
     "@yayatoh/messaging": "workspace:*",
     "@yayatoh/notifications": "workspace:*",
     "@yayatoh/payments": "workspace:*",

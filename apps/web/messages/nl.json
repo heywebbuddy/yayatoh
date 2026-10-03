@@ -4166,7 +4166,55 @@
     "help": "Hulp",
     "helpCenter": "Helpcentrum",
     "contact": "Neem contact op",
-    "status": "Systeemstatus"
+    "status": "Systeemstatus",
+    "search": {
+      "title": "Evenementen zoeken",
+      "lede": "Vind evenementen op naam, categorie, prijs, datum en plaats, bij jou in de buurt of bij een stad.",
+      "formLabel": "Evenementen zoeken en filteren",
+      "optionCount": "{label} ({count})",
+      "priceBand": {
+        "free": "Gratis",
+        "under_25": "Onder 25",
+        "from_25_to_100": "25 tot 100",
+        "over_100": "Boven 100"
+      },
+      "when": "Wanneer",
+      "anyTime": "Altijd",
+      "whenOption": {
+        "today": "Vandaag",
+        "week": "Komende 7 dagen",
+        "month": "Komende 30 dagen"
+      },
+      "near": "In de buurt van",
+      "nearAnywhere": "Overal",
+      "nearMe": "Mijn locatie",
+      "radius": "Binnen",
+      "radiusOption": "{km} km",
+      "sort": "Sorteren op",
+      "sortOption": {
+        "default": "Beste overeenkomst",
+        "soonest": "Eerstvolgende eerst",
+        "nearest": "Dichtstbijzijnde eerst",
+        "popular": "Populairste"
+      },
+      "useLocation": "Mijn locatie gebruiken",
+      "locating": "Je locatie wordt bepaald…",
+      "locationDenied": "We konden je locatie niet bepalen. Kies in plaats daarvan een stad bij ‘In de buurt van’.",
+      "locationMissing": "Gebruik je locatie opnieuw om in de buurt te zoeken, of kies een stad bij ‘In de buurt van’.",
+      "nearHeading": "Binnen {km} km van {place}",
+      "nearYou": "jou",
+      "distance": "{km} km verderop",
+      "similarHeading": "Meer zoals {name}",
+      "similarLabel": "Vergelijkbare evenementen",
+      "similarEmpty": "Nog geen vergelijkbare evenementen",
+      "similarEmptyDescription": "Probeer de zoekopdracht hierboven of bekijk wat populair is.",
+      "nearbyHeading": "In de buurt",
+      "likeMissing": "Dat evenement staat niet meer online.",
+      "popularHeading": "Populaire evenementen",
+      "emptyDescription": "Probeer een andere datum, plaats of prijs, vergroot de afstand of wis de filters.",
+      "openSearch": "Zoeken op plaats, categorie en prijs",
+      "similarLink": "Vergelijkbare evenementen vinden"
+    }
   },
   "widget": {
     "title": "Tickets: {event}",

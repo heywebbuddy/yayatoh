@@ -4166,7 +4166,55 @@
     "help": "說明",
     "helpCenter": "說明中心",
     "contact": "聯絡我們",
-    "status": "系統狀態"
+    "status": "系統狀態",
+    "search": {
+      "title": "搜尋活動",
+      "lede": "依名稱、類別、價格、日期和地點尋找活動，可搜尋你附近或某個城市附近。",
+      "formLabel": "搜尋並篩選活動",
+      "optionCount": "{label}（{count}）",
+      "priceBand": {
+        "free": "免費",
+        "under_25": "低於 25",
+        "from_25_to_100": "25 至 100",
+        "over_100": "高於 100"
+      },
+      "when": "時間",
+      "anyTime": "任何時間",
+      "whenOption": {
+        "today": "今天",
+        "week": "未來 7 天",
+        "month": "未來 30 天"
+      },
+      "near": "附近",
+      "nearAnywhere": "任何地點",
+      "nearMe": "我的位置",
+      "radius": "範圍",
+      "radiusOption": "{km} 公里",
+      "sort": "排序方式",
+      "sortOption": {
+        "default": "最佳符合",
+        "soonest": "最早開始",
+        "nearest": "距離最近",
+        "popular": "最受歡迎"
+      },
+      "useLocation": "使用我的位置",
+      "locating": "正在取得你的位置…",
+      "locationDenied": "無法取得你的位置。請改為在「附近」中選擇一個城市。",
+      "locationMissing": "再次使用你的位置以搜尋附近活動，或在「附近」中選擇一個城市。",
+      "nearHeading": "{place} {km} 公里內",
+      "nearYou": "你",
+      "distance": "距離 {km} 公里",
+      "similarHeading": "更多類似 {name} 的活動",
+      "similarLabel": "類似活動",
+      "similarEmpty": "尚無類似活動",
+      "similarEmptyDescription": "試試上方的搜尋，或看看熱門活動。",
+      "nearbyHeading": "附近",
+      "likeMissing": "此活動已不再展示。",
+      "popularHeading": "熱門活動",
+      "emptyDescription": "試試其他日期、地點或價格，擴大範圍，或清除篩選條件。",
+      "openSearch": "依地點、類別和價格搜尋",
+      "similarLink": "尋找類似活動"
+    }
   },
   "widget": {
     "title": "門票：{event}",

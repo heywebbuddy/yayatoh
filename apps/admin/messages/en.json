@@ -63,7 +63,8 @@
     "providers": "Messaging providers",
     "charities": "Charities",
     "menu": "Open menu",
-    "closeMenu": "Close menu"
+    "closeMenu": "Close menu",
+    "listings": "Marketplace listings"
   },
   "tenants": {
     "title": "Tenants",
@@ -1133,5 +1134,53 @@
     "tooLate": "Choose a date on or before {date}",
     "timeZoneNote": "Times in {zone}",
     "selected": "Selected"
+  },
+  "listings": {
+    "title": "Marketplace listings",
+    "description": "Live marketplace listings, newest first. Hiding one takes it off the marketplace and its search; the organizer's own site keeps it. Every change needs a reason and is kept in the organizer's activity log.",
+    "filter": "Listings",
+    "tabs": {
+      "listed": "Listed",
+      "hidden": "Hidden"
+    },
+    "searchLabel": "Find a listing",
+    "search": "Event or organizer",
+    "searchSubmit": "Find",
+    "status": {
+      "listed": "Listed",
+      "hidden": "Hidden"
+    },
+    "meta": "{org} · {city} · {at}",
+    "tenantLink": "Tenant {slug}",
+    "publicLink": "Public page",
+    "gone": "Event no longer public",
+    "hiddenBecause": "Hidden because:",
+    "lastReason": "Last moderation note:",
+    "reason": "Reason",
+    "hideHint": "Why it breaks the marketplace rules. The organizer's activity log keeps it.",
+    "showHint": "Why it can be listed again.",
+    "hide": "Hide from marketplace",
+    "show": "Show on marketplace",
+    "hideLabel": "Hide {name}",
+    "showLabel": "Show {name} again",
+    "done": {
+      "hidden": "Hidden from the marketplace. Search drops it within seconds.",
+      "shown": "Back on the marketplace. Search shows it again within seconds."
+    },
+    "errors": {
+      "reason_required": "Give a reason.",
+      "reason_too_long": "Keep the reason under 500 characters.",
+      "already_hidden": "Someone already hid this listing.",
+      "not_hidden": "This listing isn't hidden.",
+      "not_found": "That listing is no longer public.",
+      "other": "Something went wrong ({code}). Try again."
+    },
+    "empty": {
+      "listed": "No live marketplace listings",
+      "hidden": "No hidden listings"
+    },
+    "emptySearch": "No listings match that search",
+    "emptyListedDescription": "Listings appear here when enrolled organizers publish public events.",
+    "emptyHiddenDescription": "Listings you hide appear here, with the reason, so you can show them again."
   }
 }

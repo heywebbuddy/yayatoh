@@ -4166,7 +4166,55 @@
     "help": "Help",
     "helpCenter": "Help center",
     "contact": "Contact us",
-    "status": "System status"
+    "status": "System status",
+    "search": {
+      "title": "Search events",
+      "lede": "Find events by name, category, price, date and place, near you or near a city.",
+      "formLabel": "Search and filter events",
+      "optionCount": "{label} ({count})",
+      "priceBand": {
+        "free": "Free",
+        "under_25": "Under 25",
+        "from_25_to_100": "25 to 100",
+        "over_100": "Over 100"
+      },
+      "when": "When",
+      "anyTime": "Any time",
+      "whenOption": {
+        "today": "Today",
+        "week": "Next 7 days",
+        "month": "Next 30 days"
+      },
+      "near": "Near",
+      "nearAnywhere": "Anywhere",
+      "nearMe": "My location",
+      "radius": "Within",
+      "radiusOption": "{km} km",
+      "sort": "Sort by",
+      "sortOption": {
+        "default": "Best match",
+        "soonest": "Soonest first",
+        "nearest": "Nearest first",
+        "popular": "Most popular"
+      },
+      "useLocation": "Use my location",
+      "locating": "Finding your location…",
+      "locationDenied": "We couldn't get your location. Pick a city under Near instead.",
+      "locationMissing": "Use my location again to search near you, or pick a city under Near.",
+      "nearHeading": "Within {km} km of {place}",
+      "nearYou": "you",
+      "distance": "{km} km away",
+      "similarHeading": "More like {name}",
+      "similarLabel": "Similar events",
+      "similarEmpty": "No similar events yet",
+      "similarEmptyDescription": "Try the search above, or look at what's popular.",
+      "nearbyHeading": "Nearby",
+      "likeMissing": "That event isn't listed any more.",
+      "popularHeading": "Popular events",
+      "emptyDescription": "Try another date, place or price, widen the distance, or clear the filters.",
+      "openSearch": "Search by place, category and price",
+      "similarLink": "Find similar events"
+    }
   },
   "widget": {
     "title": "Tickets: {event}",

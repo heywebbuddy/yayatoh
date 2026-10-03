@@ -277,6 +277,9 @@ importers:
       '@yayatoh/kernel':
         specifier: workspace:*
         version: link:../../packages/kernel
+      '@yayatoh/marketplace':
+        specifier: workspace:*
+        version: link:../../packages/modules/marketplace
       '@yayatoh/messaging':
         specifier: workspace:*
         version: link:../../packages/modules/messaging
@@ -353,9 +356,6 @@ importers:
       '@yayatoh/config':
         specifier: workspace:*
         version: link:../../packages/config
-      '@yayatoh/marketplace':
-        specifier: workspace:*
-        version: link:../../packages/modules/marketplace
       '@yayatoh/worker':
         specifier: workspace:*
         version: link:../worker

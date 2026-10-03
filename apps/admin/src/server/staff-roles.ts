@@ -18,7 +18,8 @@ export type StaffAction =
   | 'incidents'
   | 'frontDoor'
   | 'maintenance'
-  | 'charities';
+  | 'charities'
+  | 'listings';
 
 /**
  * What each staff role may do in the console (roadmap §8 M1.3; owner-approved staff only).
@@ -40,6 +41,8 @@ export type StaffAction =
  * - `maintenance` (M2.5a): the read-only freeze stops every organizer's writes: admins only.
  * - `charities` (M4.8b): verify or reject charity profiles against the IRS exempt-organization
  *   list (what makes an org's receipts tax-deductible): admins and support (pending owner).
+ * - `listings` (M6.14a): hide a marketplace listing from the marketplace and its search, or show
+ *   it again, always with a reason (content moderation): admins and support (pending owner).
  */
 const CAN: Readonly<Record<StaffRole, readonly StaffAction[]>> = {
   admin: [
@@ -60,8 +63,19 @@ const CAN: Readonly<Record<StaffRole, readonly StaffAction[]>> = {
     'frontDoor',
     'maintenance',
     'charities',
+    'listings',
   ],
-  support: ['view', 'suspend', 'reports', 'signupCodes', 'privacy', 'messaging', 'incidents', 'charities'],
+  support: [
+    'view',
+    'suspend',
+    'reports',
+    'signupCodes',
+    'privacy',
+    'messaging',
+    'incidents',
+    'charities',
+    'listings',
+  ],
   finance: ['view', 'payouts', 'fees', 'quotas'],
 };
 

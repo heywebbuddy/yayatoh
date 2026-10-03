@@ -4166,7 +4166,55 @@
     "help": "Aide",
     "helpCenter": "Centre d'aide",
     "contact": "Nous contacter",
-    "status": "État des systèmes"
+    "status": "État des systèmes",
+    "search": {
+      "title": "Rechercher des événements",
+      "lede": "Trouvez des événements par nom, catégorie, prix, date et lieu, près de vous ou d’une ville.",
+      "formLabel": "Rechercher et filtrer les événements",
+      "optionCount": "{label} ({count})",
+      "priceBand": {
+        "free": "Gratuit",
+        "under_25": "Moins de 25",
+        "from_25_to_100": "De 25 à 100",
+        "over_100": "Plus de 100"
+      },
+      "when": "Quand",
+      "anyTime": "À tout moment",
+      "whenOption": {
+        "today": "Aujourd’hui",
+        "week": "7 prochains jours",
+        "month": "30 prochains jours"
+      },
+      "near": "Près de",
+      "nearAnywhere": "Partout",
+      "nearMe": "Ma position",
+      "radius": "Dans un rayon de",
+      "radiusOption": "{km} km",
+      "sort": "Trier par",
+      "sortOption": {
+        "default": "Pertinence",
+        "soonest": "Les plus proches dans le temps",
+        "nearest": "Les plus proches",
+        "popular": "Les plus populaires"
+      },
+      "useLocation": "Utiliser ma position",
+      "locating": "Recherche de votre position…",
+      "locationDenied": "Impossible d’obtenir votre position. Choisissez plutôt une ville dans « Près de ».",
+      "locationMissing": "Utilisez à nouveau votre position pour chercher près de vous, ou choisissez une ville dans « Près de ».",
+      "nearHeading": "À moins de {km} km de {place}",
+      "nearYou": "vous",
+      "distance": "à {km} km",
+      "similarHeading": "Plus comme {name}",
+      "similarLabel": "Événements similaires",
+      "similarEmpty": "Pas encore d’événements similaires",
+      "similarEmptyDescription": "Essayez la recherche ci-dessus ou regardez les événements populaires.",
+      "nearbyHeading": "À proximité",
+      "likeMissing": "Cet événement n’est plus publié.",
+      "popularHeading": "Événements populaires",
+      "emptyDescription": "Essayez une autre date, un autre lieu ou prix, élargissez la distance ou effacez les filtres.",
+      "openSearch": "Rechercher par lieu, catégorie et prix",
+      "similarLink": "Trouver des événements similaires"
+    }
   },
   "widget": {
     "title": "Billets : {event}",

@@ -11,6 +11,7 @@ import {
   ScrollText,
   Send,
   Siren,
+  Store,
   TicketCheck,
   UserRoundSearch,
   Wrench,
@@ -60,6 +61,8 @@ export async function Shell({ staff, children }: { staff: Staff; children: React
       icon: <BadgeCheck {...I} />,
       show: staff.can('charities'),
     },
+    // M6.14a: marketplace listing moderation (hide or show again, with a reason).
+    { href: '/listings', label: t('listings'), icon: <Store {...I} />, show: staff.can('listings') },
     {
       href: '/messaging',
       label: paused ? t('messagingCount', { count: paused }) : t('messaging'),
