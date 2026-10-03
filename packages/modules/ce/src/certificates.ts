@@ -255,10 +255,27 @@ export const removeSessionRuleCommand = tenantCommand({
 
 /* ------------------------------------------------------------------- calculation ---- */
 
-const certificateEvent = (
-  type: typeof CERTIFICATE_ISSUED_EVENT | typeof CERTIFICATE_REVOKED_EVENT,
-  p: { orgId: string; eventId: string; certificateId: string; ticketId: string; revision: number },
-): DomainEvent => ({ type, version: 1, aggregateType: 'event', aggregateId: p.eventId, payload: p });
+type CertificatePayload = {
+  orgId: string;
+  eventId: string;
+  certificateId: string;
+  ticketId: string;
+  revision: number;
+};
+const issuedEvent = (p: CertificatePayload): DomainEvent => ({
+  type: 'ce.certificate_issued',
+  version: 1,
+  aggregateType: 'event',
+  aggregateId: p.eventId,
+  payload: p,
+});
+const revokedEvent = (p: CertificatePayload): DomainEvent => ({
+  type: 'ce.certificate_revoked',
+  version: 1,
+  aggregateType: 'event',
+  aggregateId: p.eventId,
+  payload: p,
+});
 
 /** Every ticket's attendance facts per session (ids and times only). */
 async function factsTx(tx: TenantTx, eventId: string) {
@@ -369,7 +386,7 @@ export const calculateCreditsCommand = tenantCommand({
         if (cert && cert.status === 'issued') {
           await revokeTx(tx, ctx.now, cert);
           emit(
-            certificateEvent(CERTIFICATE_REVOKED_EVENT, {
+            revokedEvent({
               orgId,
               eventId: ev.id,
               certificateId: cert.id,
@@ -449,7 +466,7 @@ export const calculateCreditsCommand = tenantCommand({
         })),
       );
       emit(
-        certificateEvent(CERTIFICATE_ISSUED_EVENT, {
+        issuedEvent({
           orgId,
           eventId: ev.id,
           certificateId: row.id,
@@ -463,7 +480,7 @@ export const calculateCreditsCommand = tenantCommand({
       if (!active.has(cert.ticketId) && cert.status === 'issued') {
         await revokeTx(tx, ctx.now, cert);
         emit(
-          certificateEvent(CERTIFICATE_REVOKED_EVENT, {
+          revokedEvent({
             orgId,
             eventId: ev.id,
             certificateId: cert.id,
@@ -678,11 +695,11 @@ const IssuedPayload = z.object({
 export function certificateMailer(deps: { notifier: Notifier; appOrigin: string }) {
   return defineSubscriber({
     name: 'ce.certificate-mailer',
-    events: [`${CERTIFICATE_ISSUED_EVENT}@1`],
+    events: ['ce.certificate_issued@1'],
     handle: async (tx, event) => {
       const p = IssuedPayload.parse(event.payload);
       const [c] = await tx.select().from(certificates).where(eq(certificates.id, p.certificateId));
-      if (!c || c.status !== 'issued' || c.revision !== p.revision) return;
+      if (c?.status !== 'issued' || c.revision !== p.revision) return;
       const doc = await certificateDocTx(tx, c, deps.appOrigin);
       const lang = certificateLocale(c.locale);
       await deps.notifier.enqueue(tx, {

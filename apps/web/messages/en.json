@@ -214,6 +214,9 @@
         "request-code": "Privacy request code",
         "archive-ready": "Personal data archive ready",
         "erasure-done": "Erasure receipt"
+      },
+      "ce": {
+        "certificate": "CE certificate"
       }
     },
     "status": {
@@ -381,7 +384,8 @@
     "plan": "Plan & billing",
     "webhooks": "Webhooks",
     "sandboxes": "Sandboxes",
-    "notifications": "Notifications"
+    "notifications": "Notifications",
+    "ceCredits": "CE credits"
   },
   "vocab": {
     "attendee": "Attendee",
@@ -13053,6 +13057,9 @@
     "connectors": {
       "demo": {
         "description": "A sandbox contacts app for trying integrations: contacts sync both ways with your CRM. Test environments only."
+      },
+      "zoom": {
+        "description": "Zoom webinars for your sessions: ticket holders with online access are registered for the session's webinar, and attendance reports come back for CE credits."
       }
     },
     "sandboxBadge": "Sandbox",
@@ -13072,11 +13079,18 @@
     "readOnly": "Only owners and admins can connect or change integrations.",
     "breadcrumb": "Breadcrumb",
     "objects": {
-      "contacts": "Contacts"
+      "contacts": "Contacts",
+      "registrants": "Webinar registrants",
+      "participants": "Webinar attendance"
     },
     "fields": {
       "email": "Email",
-      "name": "Name"
+      "name": "Name",
+      "webinar_id": "Webinar ID",
+      "first_name": "First name",
+      "last_name": "Last name",
+      "joined_at": "Joined at",
+      "left_at": "Left at"
     },
     "status": {
       "none": "Not connected",
@@ -15276,6 +15290,28 @@
         "not_found": "This session isn't streaming right now.",
         "generic": "Something went wrong. Try again."
       }
+    },
+    "zoom": {
+      "title": "Zoom webinars",
+      "intro": "Deliver a session as a Zoom webinar: ticket holders with online access are registered, and the attendance report counts for CE credits.",
+      "notConnected": "Zoom is not connected.",
+      "connectLink": "Connect Zoom in Integrations",
+      "counts": "Registrants: {registrants} · Attended: {attendees}",
+      "notLinked": "No webinar",
+      "formLabel": "Zoom webinar for {title}",
+      "webinarId": "Zoom webinar ID",
+      "webinarIdHint": "From Zoom, 9 to 12 digits",
+      "webinarIdInvalid": "Enter the webinar ID from Zoom: 9 to 12 digits.",
+      "link": "Link webinar",
+      "linkLabel": "Link the Zoom webinar for {title}",
+      "linked": "Webinar linked for {title}.",
+      "syncNow": "Sync with Zoom now",
+      "syncQueued": "Sync with Zoom on its way.",
+      "errors": {
+        "webinar_taken": "This webinar is linked to another session.",
+        "in_person_event": "This event is in person, so no session is a webinar.",
+        "zoom_not_connected": "Connect Zoom in Integrations first."
+      }
     }
   },
   "formControls": {
@@ -15372,6 +15408,105 @@
       "step1": "Pick the event below and open its promo codes.",
       "step2": "Add a code with its discount and, if you like, a limit and dates.",
       "step3": "Share the code. Buyers enter it at checkout and each use is counted."
+    }
+  },
+  "ce": {
+    "order": {
+      "link": "Download your CE certificate",
+      "linkLabel": "Download the CE certificate of ticket {serial}"
+    },
+    "errors": {
+      "in_person_event": "This event is in person only."
+    },
+    "setup": {
+      "title": "CE credits",
+      "description": "Give sessions continuing-education credits, then issue certificates for {event} from check-in scans and watch time.",
+      "readOnly": "You can see CE credits. Ask an editor to change rules or issue certificates.",
+      "calculateTitle": "Issue certificates",
+      "calculateHint": "When sessions are over, calculate credits. Attendees who reach a session's minimum get a certificate by email.",
+      "lastCalculated": "Last calculated {when}. Calculating again changes only what changed.",
+      "noRulesYet": "Give at least one session a credit rule below first.",
+      "calculate": "Calculate credits and issue certificates",
+      "calculated": "Credits calculated.",
+      "calculatedSummary": "New certificates: {issued}. Revised: {revised}. Withdrawn: {revoked}. Unchanged: {unchanged}.",
+      "calculatedBelow": "Attendees below every minimum: {count}.",
+      "calculatedPending": "Sessions not over yet: {count}.",
+      "fixFields": "Check the fields marked below.",
+      "settingsTitle": "Certificate details",
+      "creditLabel": "Credit name",
+      "creditLabelHint": "As printed on certificates, for example “CPE credits”. Leave empty for “CE credits”.",
+      "creditLabelTooLong": "Use 60 characters or fewer.",
+      "accreditor": "Accrediting body",
+      "accreditorHint": "Optional. Named on certificates only if you are accredited by it.",
+      "accreditorTooLong": "Use 120 characters or fewer.",
+      "saveSettings": "Save certificate details",
+      "settingsSaved": "Certificate details saved.",
+      "sessionsTitle": "Credit rules",
+      "sessionsHint": "A session counts in-person time from its door scans and online time from watch time and Zoom, once per minute.",
+      "noSessions": "No sessions yet",
+      "noSessionsHint": "Add sessions to the program, then give them credits here.",
+      "addSessions": "Add sessions",
+      "ended": "Over",
+      "upcoming": "Not over yet",
+      "awarded": "Awarded to {count}",
+      "ruleFormLabel": "Credit rule for {title}",
+      "credits": "Credits",
+      "creditsHint": "For example 1.5",
+      "creditsInvalid": "Enter credits from 0.01 to 100, with up to two decimals.",
+      "minMinutes": "Minimum minutes",
+      "minMinutesHint": "Attendance needed to earn the credits",
+      "minMinutesInvalid": "Enter whole minutes from 1 to 1440.",
+      "counts": "Attendance that counts",
+      "countInPerson": "In person (door scans)",
+      "countVirtual": "Online (watch time and Zoom)",
+      "countsInvalid": "Choose at least one kind of attendance.",
+      "saveRule": "Save rule",
+      "saveRuleLabel": "Save the credit rule for {title}",
+      "removeRule": "Remove rule",
+      "removeRuleLabel": "Remove the credit rule for {title}",
+      "ruleSaved": "Credit rule saved for {title}.",
+      "ruleRemoved": "Credit rule removed for {title}.",
+      "certificatesTitle": "Certificates",
+      "noCertificates": "No certificates yet",
+      "noCertificatesHint": "Calculate credits after your sessions end: certificates appear here.",
+      "holder": "Attendee",
+      "creditsColumn": "Credits",
+      "code": "Verification code",
+      "status": "Status",
+      "statusIssued": "Issued · revision {revision}",
+      "statusRevoked": "Withdrawn",
+      "issuedOn": "Issued",
+      "document": "PDF",
+      "download": "Download",
+      "downloadLabel": "Download the certificate of {name}",
+      "defaultLabel": "CE credits",
+      "goCalculate": "Go to Issue certificates"
+    },
+    "verify": {
+      "metaTitle": "Verify a certificate",
+      "eyebrow": "CE certificate",
+      "title": "Verify a certificate",
+      "description": "Check a certificate of attendance with the code printed on it.",
+      "notFound": "No certificate has this code",
+      "notFoundHint": "Check the code on the certificate and try again.",
+      "valid": "Valid",
+      "revoked": "Withdrawn",
+      "revokedHint": "The organizer withdrew this certificate.",
+      "holder": "Issued to",
+      "event": "Event",
+      "organizer": "Organizer",
+      "accreditor": "Accrediting body",
+      "credits": "Credits",
+      "creditsValue": "{credits} {label}",
+      "defaultLabel": "CE credits",
+      "issued": "Issued",
+      "revised": "Revised",
+      "revisedValue": "Revision {revision}, {date}",
+      "another": "Check another code",
+      "codeLabel": "Verification code",
+      "codeHint": "Ten letters and digits, for example K7M2Q-9XR4T",
+      "codeInvalid": "That is not a verification code. Check it and try again.",
+      "check": "Check certificate"
     }
   }
 }

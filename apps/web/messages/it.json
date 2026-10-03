@@ -214,6 +214,9 @@
         "request-code": "Codice richiesta privacy",
         "archive-ready": "Archivio dati personali pronto",
         "erasure-done": "Ricevuta di cancellazione"
+      },
+      "ce": {
+        "certificate": "Attestato formativo"
       }
     },
     "status": {
@@ -381,7 +384,8 @@
     "plan": "Piano e fatturazione",
     "webhooks": "Webhook",
     "sandboxes": "Sandbox",
-    "notifications": "Notifiche"
+    "notifications": "Notifiche",
+    "ceCredits": "Crediti formativi"
   },
   "vocab": {
     "attendee": "Partecipante",
@@ -13053,6 +13057,9 @@
     "connectors": {
       "demo": {
         "description": "Un’app contatti di prova per provare le integrazioni: i contatti si sincronizzano in entrambe le direzioni con il tuo CRM. Solo negli ambienti di test."
+      },
+      "zoom": {
+        "description": "Webinar Zoom per le tue sessioni: i titolari con accesso online vengono iscritti al webinar della sessione e i report di presenza tornano per i crediti formativi."
       }
     },
     "sandboxBadge": "Prova",
@@ -13072,11 +13079,18 @@
     "readOnly": "Solo proprietari e amministratori possono collegare o modificare le integrazioni.",
     "breadcrumb": "Percorso di navigazione",
     "objects": {
-      "contacts": "Contatti"
+      "contacts": "Contatti",
+      "registrants": "Iscritti al webinar",
+      "participants": "Presenze al webinar"
     },
     "fields": {
       "email": "Email",
-      "name": "Nome"
+      "name": "Nome",
+      "webinar_id": "ID webinar",
+      "first_name": "Nome",
+      "last_name": "Cognome",
+      "joined_at": "Entrato alle",
+      "left_at": "Uscito alle"
     },
     "status": {
       "none": "Non collegata",
@@ -15276,6 +15290,28 @@
         "not_found": "Questa sessione non è in diretta al momento.",
         "generic": "Qualcosa è andato storto. Riprova."
       }
+    },
+    "zoom": {
+      "title": "Webinar Zoom",
+      "intro": "Offri una sessione come webinar Zoom: i titolari con accesso online vengono iscritti e il report di presenza conta per i crediti.",
+      "notConnected": "Zoom non è collegato.",
+      "connectLink": "Collega Zoom in Integrazioni",
+      "counts": "Iscritti: {registrants} · Presenti: {attendees}",
+      "notLinked": "Nessun webinar",
+      "formLabel": "Webinar Zoom per {title}",
+      "webinarId": "ID del webinar Zoom",
+      "webinarIdHint": "Da Zoom, da 9 a 12 cifre",
+      "webinarIdInvalid": "Inserisci l’ID del webinar Zoom: da 9 a 12 cifre.",
+      "link": "Collega webinar",
+      "linkLabel": "Collega il webinar Zoom per {title}",
+      "linked": "Webinar collegato a {title}.",
+      "syncNow": "Sincronizza ora con Zoom",
+      "syncQueued": "Sincronizzazione con Zoom in arrivo.",
+      "errors": {
+        "webinar_taken": "Questo webinar è collegato a un’altra sessione.",
+        "in_person_event": "Questo evento è in presenza, quindi nessuna sessione è un webinar.",
+        "zoom_not_connected": "Prima collega Zoom in Integrazioni."
+      }
     }
   },
   "formControls": {
@@ -15372,6 +15408,105 @@
       "step1": "Scegli l’evento qui sotto e apri i suoi codici promozionali.",
       "step2": "Aggiungi un codice con lo sconto e, se vuoi, un limite e delle date.",
       "step3": "Condividi il codice. Gli acquirenti lo inseriscono al pagamento e ogni utilizzo viene contato."
+    }
+  },
+  "ce": {
+    "order": {
+      "link": "Scarica il tuo attestato formativo",
+      "linkLabel": "Scarica l’attestato formativo del biglietto {serial}"
+    },
+    "errors": {
+      "in_person_event": "Questo evento è solo in presenza."
+    },
+    "setup": {
+      "title": "Crediti formativi",
+      "description": "Assegna crediti di formazione continua alle sessioni, poi rilascia gli attestati di {event} da scansioni di check-in e tempo di visione.",
+      "readOnly": "Puoi vedere i crediti. Chiedi a un editor di modificare le regole o rilasciare gli attestati.",
+      "calculateTitle": "Rilascia attestati",
+      "calculateHint": "Quando le sessioni sono finite, calcola i crediti. Chi raggiunge il minimo di una sessione riceve un attestato via email.",
+      "lastCalculated": "Ultimo calcolo {when}. Ricalcolare cambia solo ciò che è cambiato.",
+      "noRulesYet": "Prima assegna una regola di crediti ad almeno una sessione qui sotto.",
+      "calculate": "Calcola i crediti e rilascia gli attestati",
+      "calculated": "Crediti calcolati.",
+      "calculatedSummary": "Nuovi attestati: {issued}. Rivisti: {revised}. Ritirati: {revoked}. Invariati: {unchanged}.",
+      "calculatedBelow": "Partecipanti sotto ogni minimo: {count}.",
+      "calculatedPending": "Sessioni non ancora finite: {count}.",
+      "fixFields": "Controlla i campi indicati qui sotto.",
+      "settingsTitle": "Dati dell’attestato",
+      "creditLabel": "Nome del credito",
+      "creditLabelHint": "Come stampato, per esempio “crediti CPE”. Lascia vuoto per “crediti formativi”.",
+      "creditLabelTooLong": "Usa al massimo 60 caratteri.",
+      "accreditor": "Ente accreditante",
+      "accreditorHint": "Facoltativo. Indicato solo se ti accredita.",
+      "accreditorTooLong": "Usa al massimo 120 caratteri.",
+      "saveSettings": "Salva i dati dell’attestato",
+      "settingsSaved": "Dati dell’attestato salvati.",
+      "sessionsTitle": "Regole dei crediti",
+      "sessionsHint": "Una sessione conta il tempo in presenza dalle scansioni della porta e il tempo online da visione e Zoom, una volta al minuto.",
+      "noSessions": "Ancora nessuna sessione",
+      "noSessionsHint": "Aggiungi sessioni al programma, poi assegna qui i crediti.",
+      "addSessions": "Aggiungi sessioni",
+      "ended": "Finita",
+      "upcoming": "Non ancora finita",
+      "awarded": "Assegnato a {count}",
+      "ruleFormLabel": "Regola dei crediti per {title}",
+      "credits": "Crediti",
+      "creditsHint": "Per esempio 1,5",
+      "creditsInvalid": "Inserisci da 0,01 a 100 crediti, con al massimo due decimali.",
+      "minMinutes": "Minuti minimi",
+      "minMinutesHint": "Presenza necessaria per ottenere i crediti",
+      "minMinutesInvalid": "Inserisci minuti interi da 1 a 1440.",
+      "counts": "Presenza che conta",
+      "countInPerson": "In presenza (scansioni alla porta)",
+      "countVirtual": "Online (visione e Zoom)",
+      "countsInvalid": "Scegli almeno un tipo di presenza.",
+      "saveRule": "Salva regola",
+      "saveRuleLabel": "Salva la regola dei crediti per {title}",
+      "removeRule": "Rimuovi regola",
+      "removeRuleLabel": "Rimuovi la regola dei crediti per {title}",
+      "ruleSaved": "Regola dei crediti salvata per {title}.",
+      "ruleRemoved": "Regola dei crediti rimossa per {title}.",
+      "certificatesTitle": "Attestati",
+      "noCertificates": "Ancora nessun attestato",
+      "noCertificatesHint": "Calcola i crediti dopo la fine delle sessioni: gli attestati compaiono qui.",
+      "holder": "Partecipante",
+      "creditsColumn": "Crediti",
+      "code": "Codice di verifica",
+      "status": "Stato",
+      "statusIssued": "Rilasciato · revisione {revision}",
+      "statusRevoked": "Ritirato",
+      "issuedOn": "Rilasciato",
+      "document": "PDF",
+      "download": "Scarica",
+      "downloadLabel": "Scarica l’attestato di {name}",
+      "defaultLabel": "crediti formativi",
+      "goCalculate": "Vai a Rilascia attestati"
+    },
+    "verify": {
+      "metaTitle": "Verifica un attestato",
+      "eyebrow": "Attestato formativo",
+      "title": "Verifica un attestato",
+      "description": "Controlla un attestato di partecipazione con il codice stampato.",
+      "notFound": "Nessun attestato ha questo codice",
+      "notFoundHint": "Controlla il codice sull’attestato e riprova.",
+      "valid": "Valido",
+      "revoked": "Ritirato",
+      "revokedHint": "L’organizzatore ha ritirato questo attestato.",
+      "holder": "Rilasciato a",
+      "event": "Evento",
+      "organizer": "Organizzatore",
+      "accreditor": "Ente accreditante",
+      "credits": "Crediti",
+      "creditsValue": "{credits} {label}",
+      "defaultLabel": "crediti formativi",
+      "issued": "Rilasciato",
+      "revised": "Rivisto",
+      "revisedValue": "Revisione {revision}, {date}",
+      "another": "Controlla un altro codice",
+      "codeLabel": "Codice di verifica",
+      "codeHint": "Dieci lettere e cifre, per esempio K7M2Q-9XR4T",
+      "codeInvalid": "Non è un codice di verifica. Controllalo e riprova.",
+      "check": "Controlla l’attestato"
     }
   }
 }

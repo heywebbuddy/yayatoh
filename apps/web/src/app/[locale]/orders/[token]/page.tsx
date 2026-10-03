@@ -16,6 +16,7 @@ import { WebPushControl } from '@/components/web-push-control.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { refundPolicyLines } from '@/lib/refund-policy-text.ts';
 import { helpLinksForOrder } from '@/server/assistance.ts';
+import { certificateLinksForOrder } from '@/server/ce.ts';
 import { getPdfRenderer } from '@/server/pdf.ts';
 import { scheduleSummary } from '@/server/schedule.ts';
 import { watchLinksForOrder } from '@/server/virtual.ts';
@@ -81,6 +82,14 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
     ? await watchLinksForOrder(
         holderTarget,
         order.tickets.map((tk) => tk.id),
+      )
+    : new Map<string, string>();
+  // M6.9b: tickets with an issued CE certificate link to its PDF.
+  const certificateLinks = holderTarget
+    ? await certificateLinksForOrder(
+        holderTarget,
+        order.tickets.map((tk) => tk.id),
+        locale,
       )
     : new Map<string, string>();
   // M5.2b: a registration with sessions links to the attendee's schedule.
@@ -248,6 +257,15 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
                     >
                       {t('virtual.watch.orderLink')}
                     </Link>
+                  ) : null}
+                  {certificateLinks.get(tk.id) ? (
+                    <a
+                      href={certificateLinks.get(tk.id) as string}
+                      className={buttonClass('secondary')}
+                      aria-label={t('ce.order.linkLabel', { serial: tk.serial })}
+                    >
+                      {t('ce.order.link')}
+                    </a>
                   ) : null}
                   {helpLinks.get(tk.id) ? (
                     <Link

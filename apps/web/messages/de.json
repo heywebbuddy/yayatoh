@@ -214,6 +214,9 @@
         "request-code": "Code für Datenschutzanfrage",
         "archive-ready": "Archiv mit personenbezogenen Daten bereit",
         "erasure-done": "Löschbestätigung"
+      },
+      "ce": {
+        "certificate": "Teilnahmebescheinigung"
       }
     },
     "status": {
@@ -381,7 +384,8 @@
     "plan": "Tarif & Abrechnung",
     "webhooks": "Webhooks",
     "sandboxes": "Sandboxes",
-    "notifications": "Benachrichtigungen"
+    "notifications": "Benachrichtigungen",
+    "ceCredits": "Fortbildungspunkte"
   },
   "vocab": {
     "attendee": "Teilnehmer",
@@ -13053,6 +13057,9 @@
     "connectors": {
       "demo": {
         "description": "Eine Sandbox-Kontakte-App zum Ausprobieren: Kontakte werden in beide Richtungen mit deinem CRM abgeglichen. Nur in Testumgebungen."
+      },
+      "zoom": {
+        "description": "Zoom-Webinare für Ihre Sitzungen: Ticketinhaber mit Online-Zugang werden für das Webinar der Sitzung registriert, und Teilnahmeberichte fließen in die Fortbildungspunkte ein."
       }
     },
     "sandboxBadge": "Sandbox",
@@ -13072,11 +13079,18 @@
     "readOnly": "Nur Inhaber und Admins können Integrationen verbinden oder ändern.",
     "breadcrumb": "Brotkrümelnavigation",
     "objects": {
-      "contacts": "Kontakte"
+      "contacts": "Kontakte",
+      "registrants": "Webinar-Anmeldungen",
+      "participants": "Webinar-Teilnahme"
     },
     "fields": {
       "email": "E-Mail",
-      "name": "Name"
+      "name": "Name",
+      "webinar_id": "Webinar-ID",
+      "first_name": "Vorname",
+      "last_name": "Nachname",
+      "joined_at": "Beigetreten um",
+      "left_at": "Verlassen um"
     },
     "status": {
       "none": "Nicht verbunden",
@@ -15276,6 +15290,28 @@
         "not_found": "Diese Session wird gerade nicht gestreamt.",
         "generic": "Etwas ist schiefgelaufen. Versuchen Sie es erneut."
       }
+    },
+    "zoom": {
+      "title": "Zoom-Webinare",
+      "intro": "Führen Sie eine Sitzung als Zoom-Webinar durch: Ticketinhaber mit Online-Zugang werden registriert, und der Teilnahmebericht zählt für die Fortbildungspunkte.",
+      "notConnected": "Zoom ist nicht verbunden.",
+      "connectLink": "Zoom unter Integrationen verbinden",
+      "counts": "Anmeldungen: {registrants} · Teilgenommen: {attendees}",
+      "notLinked": "Kein Webinar",
+      "formLabel": "Zoom-Webinar für {title}",
+      "webinarId": "Zoom-Webinar-ID",
+      "webinarIdHint": "Aus Zoom, 9 bis 12 Ziffern",
+      "webinarIdInvalid": "Geben Sie die Webinar-ID aus Zoom ein: 9 bis 12 Ziffern.",
+      "link": "Webinar verknüpfen",
+      "linkLabel": "Zoom-Webinar für {title} verknüpfen",
+      "linked": "Webinar für {title} verknüpft.",
+      "syncNow": "Jetzt mit Zoom synchronisieren",
+      "syncQueued": "Synchronisierung mit Zoom ist unterwegs.",
+      "errors": {
+        "webinar_taken": "Dieses Webinar ist mit einer anderen Sitzung verknüpft.",
+        "in_person_event": "Diese Veranstaltung findet vor Ort statt, daher ist keine Sitzung ein Webinar.",
+        "zoom_not_connected": "Verbinden Sie zuerst Zoom unter Integrationen."
+      }
     }
   },
   "formControls": {
@@ -15372,6 +15408,105 @@
       "step1": "Wählen Sie unten die Veranstaltung und öffnen Sie ihre Aktionscodes.",
       "step2": "Fügen Sie einen Code mit Rabatt hinzu, auf Wunsch mit Limit und Zeitraum.",
       "step3": "Teilen Sie den Code. Käufer geben ihn beim Bezahlen ein, und jede Nutzung wird gezählt."
+    }
+  },
+  "ce": {
+    "order": {
+      "link": "Fortbildungsbescheinigung herunterladen",
+      "linkLabel": "Fortbildungsbescheinigung für Ticket {serial} herunterladen"
+    },
+    "errors": {
+      "in_person_event": "Diese Veranstaltung findet nur vor Ort statt."
+    },
+    "setup": {
+      "title": "Fortbildungspunkte",
+      "description": "Vergeben Sie Fortbildungspunkte für Sitzungen und stellen Sie für {event} Bescheinigungen aus Check-in-Scans und Zuschauzeit aus.",
+      "readOnly": "Sie können die Fortbildungspunkte ansehen. Bitten Sie eine bearbeitende Person, Regeln zu ändern oder Bescheinigungen auszustellen.",
+      "calculateTitle": "Bescheinigungen ausstellen",
+      "calculateHint": "Berechnen Sie die Punkte, wenn die Sitzungen vorbei sind. Wer das Minimum einer Sitzung erreicht, erhält eine Bescheinigung per E-Mail.",
+      "lastCalculated": "Zuletzt berechnet {when}. Eine neue Berechnung ändert nur, was sich geändert hat.",
+      "noRulesYet": "Geben Sie unten zuerst mindestens einer Sitzung eine Punkteregel.",
+      "calculate": "Punkte berechnen und Bescheinigungen ausstellen",
+      "calculated": "Punkte berechnet.",
+      "calculatedSummary": "Neue Bescheinigungen: {issued}. Überarbeitet: {revised}. Zurückgezogen: {revoked}. Unverändert: {unchanged}.",
+      "calculatedBelow": "Teilnehmende unter jedem Minimum: {count}.",
+      "calculatedPending": "Noch nicht beendete Sitzungen: {count}.",
+      "fixFields": "Prüfen Sie die unten markierten Felder.",
+      "settingsTitle": "Angaben auf der Bescheinigung",
+      "creditLabel": "Name der Punkte",
+      "creditLabelHint": "Wie auf Bescheinigungen gedruckt, z. B. „CPE-Punkte“. Leer lassen für „Fortbildungspunkte“.",
+      "creditLabelTooLong": "Höchstens 60 Zeichen.",
+      "accreditor": "Akkreditierende Stelle",
+      "accreditorHint": "Optional. Nur nennen, wenn Sie von ihr akkreditiert sind.",
+      "accreditorTooLong": "Höchstens 120 Zeichen.",
+      "saveSettings": "Angaben speichern",
+      "settingsSaved": "Angaben gespeichert.",
+      "sessionsTitle": "Punkteregeln",
+      "sessionsHint": "Eine Sitzung zählt die Zeit vor Ort aus den Türscans und die Online-Zeit aus Zuschauzeit und Zoom, je Minute einmal.",
+      "noSessions": "Noch keine Sitzungen",
+      "noSessionsHint": "Fügen Sie dem Programm Sitzungen hinzu und vergeben Sie hier Punkte.",
+      "addSessions": "Sitzungen hinzufügen",
+      "ended": "Vorbei",
+      "upcoming": "Noch nicht vorbei",
+      "awarded": "Vergeben an {count}",
+      "ruleFormLabel": "Punkteregel für {title}",
+      "credits": "Punkte",
+      "creditsHint": "Zum Beispiel 1,5",
+      "creditsInvalid": "Geben Sie 0,01 bis 100 Punkte mit höchstens zwei Nachkommastellen ein.",
+      "minMinutes": "Mindestminuten",
+      "minMinutesHint": "Nötige Anwesenheit für die Punkte",
+      "minMinutesInvalid": "Geben Sie ganze Minuten von 1 bis 1440 ein.",
+      "counts": "Anwesenheit, die zählt",
+      "countInPerson": "Vor Ort (Türscans)",
+      "countVirtual": "Online (Zuschauzeit und Zoom)",
+      "countsInvalid": "Wählen Sie mindestens eine Art der Anwesenheit.",
+      "saveRule": "Regel speichern",
+      "saveRuleLabel": "Punkteregel für {title} speichern",
+      "removeRule": "Regel entfernen",
+      "removeRuleLabel": "Punkteregel für {title} entfernen",
+      "ruleSaved": "Punkteregel für {title} gespeichert.",
+      "ruleRemoved": "Punkteregel für {title} entfernt.",
+      "certificatesTitle": "Bescheinigungen",
+      "noCertificates": "Noch keine Bescheinigungen",
+      "noCertificatesHint": "Berechnen Sie die Punkte nach Ende der Sitzungen: Die Bescheinigungen erscheinen hier.",
+      "holder": "Teilnehmende Person",
+      "creditsColumn": "Punkte",
+      "code": "Prüfcode",
+      "status": "Status",
+      "statusIssued": "Ausgestellt · Fassung {revision}",
+      "statusRevoked": "Zurückgezogen",
+      "issuedOn": "Ausgestellt",
+      "document": "PDF",
+      "download": "Herunterladen",
+      "downloadLabel": "Bescheinigung von {name} herunterladen",
+      "defaultLabel": "Fortbildungspunkte",
+      "goCalculate": "Zu „Bescheinigungen ausstellen“"
+    },
+    "verify": {
+      "metaTitle": "Bescheinigung prüfen",
+      "eyebrow": "Fortbildungsbescheinigung",
+      "title": "Bescheinigung prüfen",
+      "description": "Prüfen Sie eine Teilnahmebescheinigung mit dem aufgedruckten Code.",
+      "notFound": "Keine Bescheinigung hat diesen Code",
+      "notFoundHint": "Prüfen Sie den Code auf der Bescheinigung und versuchen Sie es erneut.",
+      "valid": "Gültig",
+      "revoked": "Zurückgezogen",
+      "revokedHint": "Der Veranstalter hat diese Bescheinigung zurückgezogen.",
+      "holder": "Ausgestellt für",
+      "event": "Veranstaltung",
+      "organizer": "Veranstalter",
+      "accreditor": "Akkreditierende Stelle",
+      "credits": "Punkte",
+      "creditsValue": "{credits} {label}",
+      "defaultLabel": "Fortbildungspunkte",
+      "issued": "Ausgestellt",
+      "revised": "Überarbeitet",
+      "revisedValue": "Fassung {revision}, {date}",
+      "another": "Anderen Code prüfen",
+      "codeLabel": "Prüfcode",
+      "codeHint": "Zehn Buchstaben und Ziffern, z. B. K7M2Q-9XR4T",
+      "codeInvalid": "Das ist kein Prüfcode. Prüfen Sie ihn und versuchen Sie es erneut.",
+      "check": "Bescheinigung prüfen"
     }
   }
 }
