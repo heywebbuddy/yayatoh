@@ -111,6 +111,7 @@ export {
 export { CONNECTORS, connectorByKey, offeredConnectors } from './connectors/index.ts';
 // M6.4b: the Eventbrite importer and Google Sheets live sync.
 export { linkedLocalIdTx } from './connectors/links.ts';
+export { integrationsDataSubjects } from './data-subject.ts';
 export * from './domain/mapping.ts';
 export * from './domain/sync.ts';
 export {
