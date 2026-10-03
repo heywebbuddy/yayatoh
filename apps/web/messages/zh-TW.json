@@ -2074,7 +2074,8 @@
       "cards": "桌卡與匯出",
       "selection": "最佳可選座位",
       "channels": "通路",
-      "revisions": "版本"
+      "revisions": "版本",
+      "solver": "自動排座"
     },
     "assign": {
       "title": "安排賓客",
@@ -2654,6 +2655,134 @@
       "isCurrent": "這就是目前的座位圖。",
       "restore": "還原版本 {number}",
       "restoredNotice": "已還原版本 {number}。目前的座位圖為版本 {now}。"
+    },
+    "solver": {
+      "title": "座位規則與排座器",
+      "description": "設定規則後,排座器會為每位尚未入座的賓客建議桌位。檢查方案後,可逐桌或全部確認。您手動安排的賓客絕不會被移動。",
+      "rules": {
+        "heading": "規則",
+        "listLabel": "座位規則",
+        "empty": "還沒有規則。請在下方新增,或不設規則直接執行排座器:它仍會讓每桌人數不超過座位數。",
+        "hard": "硬性",
+        "soft": "彈性",
+        "badge": "{strength} · 權重 {weight}",
+        "strength": "類型",
+        "strengthHint": "方案絕不會違反硬性規則。彈性規則盡量遵守;每次違反按其權重計分。",
+        "weight": "權重",
+        "weightHint": "1 到 10。權重越高的彈性規則越重要。",
+        "save": "儲存",
+        "remove": "刪除",
+        "saved": "規則已儲存。",
+        "removed": "規則已刪除。",
+        "added": "規則已新增。",
+        "editLabel": "修改規則:{rule}",
+        "kinds": {
+          "keep_together": "安排在一起",
+          "keep_apart": "分開安排",
+          "vip_near_stage": "VIP 最靠近舞台",
+          "access_near_exit": "無障礙需求靠近出口",
+          "table_max": "每桌上限"
+        },
+        "add": {
+          "heading": "新增規則",
+          "kind": "規則",
+          "by": "對象",
+          "byEach": "每個賓客組",
+          "byParty": "一個賓客組",
+          "byTag": "帶某個標籤的所有人",
+          "bySide": "某一方的所有人",
+          "party": "賓客組",
+          "tag": "標籤",
+          "side": "一方",
+          "choose": "請選擇…",
+          "together": "安排在一起",
+          "first": "第一組",
+          "second": "第二組",
+          "accessTag": "無障礙需求標籤",
+          "accessHint": "帶此標籤的賓客組會安排在離出口或入口最近的桌位。無障礙相關的回答保持私密。",
+          "max": "每桌最多人數",
+          "vipHint": "VIP 賓客組會安排在離舞台最近的桌位。",
+          "submit": "新增規則"
+        },
+        "errors": {
+          "value": "請選擇規則適用的對象。",
+          "same": "請選擇兩個不同的組。",
+          "weight": "請輸入 1 到 10 的權重。",
+          "max": "請輸入 1 到 40 的數字。",
+          "duplicate": "此活動已有這條規則。",
+          "tooMany": "每個活動最多 50 條規則。",
+          "unknownParty": "該賓客組不在此賓客名單中。"
+        },
+        "describe": {
+          "togetherParty": "每個賓客組坐在一起",
+          "togetherTag": "所有帶「{value}」標籤的人坐在一起",
+          "togetherSide": "{value}方坐在一起",
+          "apart": "{a}與{b}分開",
+          "targetParty": "{value}",
+          "targetTag": "所有帶「{value}」標籤的人",
+          "targetSide": "{value}方",
+          "vip": "VIP 賓客組最靠近舞台",
+          "access": "帶「{tag}」標籤的賓客靠近出口",
+          "tableMax": "每桌最多 {max} 人"
+        }
+      },
+      "run": {
+        "heading": "方案",
+        "queue": "尚有 {count, plural, other {# 位賓客}}待安排。{fixed, plural, =0 {還沒有人入座。} other {手動安排的 # 位賓客保持不動。}}",
+        "nothing": "所有人都已入座,無需建議。",
+        "seed": "排列編號",
+        "seedHint": "相同的編號總是得到相同的方案。",
+        "seedError": "請輸入 1 到 1,000,000 的整數。",
+        "start": "建議座位",
+        "cancel": "停止",
+        "again": "換一種排列",
+        "running": "正在產生方案… {percent}%",
+        "progress": "方案進度",
+        "cancelled": "已停止,沒有產生方案。",
+        "failed": "排座器意外停止,請重試。"
+      },
+      "summary": {
+        "heading": "摘要",
+        "done": "方案已在 {seconds} 秒內完成(排列 {seed})。",
+        "seated": "{count, plural, other {# 位賓客}}安排在{tables, plural, other { # 桌}};{queue, plural, =0 {候補佇列中無人} other {候補佇列中還有 # 位}}。",
+        "hardOk": "沒有違反任何硬性規則。",
+        "hardBroken": "{count, plural, other {違反了 # 條硬性規則}}。確認前請修改方案。",
+        "soft": "彈性規則:扣分 {penalty}(0 為最佳)。",
+        "ruleLine": "{rule}:{count, plural, =0 {已遵守} other {# 次違反}}",
+        "issues": {
+          "no_stage": "平面圖沒有舞台,因此「VIP 最靠近舞台」無法生效。",
+          "no_exit": "平面圖沒有出口或入口,因此「無障礙需求靠近出口」無法生效。",
+          "group_too_big": "一組 {size} 人比任何一桌({room} 個座位)都多,會盡量分到最少的桌。",
+          "too_few_seats": "需安排 {size} 位賓客,但只有 {room} 個空位:部分賓客將留在候補佇列。",
+          "no_room": "平面圖中沒有桌子或排。"
+        }
+      },
+      "tables": {
+        "heading": "建議的桌位",
+        "none": "沒有建議的桌位。",
+        "region": "第 {label} 桌",
+        "fill": "建議 {proposed} · 已入座 {seated} · 空位 {free}/{capacity}",
+        "overFull": "比空位多出 {count, plural, other {# 位}}賓客。",
+        "broken": "違反硬性規則:{rules}",
+        "over": "賓客多於座位",
+        "accept": "確認第 {label} 桌",
+        "acceptAll": "確認所有桌位",
+        "fixFirst": "請先修正帶警告的桌位。",
+        "acceptedTable": "第 {label} 桌已確認:{count, plural, other {# 位賓客}}已入座。",
+        "acceptedAll": "方案已確認:{count, plural, other {# 位賓客}}已入座。",
+        "queueHeading": "候補佇列",
+        "guest": "{name}({party})",
+        "moveLabel": "{name} 的桌位",
+        "queueOption": "留在候補佇列",
+        "optionFree": "第 {label} 桌(空 {free})",
+        "toEditor": "開啟排座編輯器"
+      },
+      "acceptErrors": {
+        "already_seated": "此方案中有人在此期間被手動安排了座位。請重新建議。",
+        "declined": "此方案中有賓客已婉拒。請重新建議。",
+        "hard_rule": "確認此方案會違反硬性規則。",
+        "cant_fit": "該桌只能再坐 {fits} 人。"
+      }
     }
   },
   "venueMap": {

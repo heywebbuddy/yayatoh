@@ -2074,7 +2074,8 @@
       "cards": "Cartões e exportações",
       "selection": "Melhores disponíveis",
       "channels": "Canais",
-      "revisions": "Revisões"
+      "revisions": "Revisões",
+      "solver": "Sentar automaticamente"
     },
     "assign": {
       "title": "Atribuir convidados",
@@ -2654,6 +2655,134 @@
       "isCurrent": "Este é o mapa como está agora.",
       "restore": "Restaurar a revisão {number}",
       "restoredNotice": "Revisão {number} restaurada. O mapa atual é a revisão {now}."
+    },
+    "solver": {
+      "title": "Regras de lugares e planejador",
+      "description": "Defina regras, deixe o planejador propor uma mesa para todos que ainda não têm lugar, revise a proposta e aceite uma mesa ou todas. Convidados que você acomodou manualmente nunca são movidos.",
+      "rules": {
+        "heading": "Regras",
+        "listLabel": "Regras de lugares",
+        "empty": "Ainda não há regras. Adicione uma abaixo ou execute o planejador sem regras: ele ainda respeita os lugares de cada mesa.",
+        "hard": "Obrigatória",
+        "soft": "Flexível",
+        "badge": "{strength} · peso {weight}",
+        "strength": "Tipo",
+        "strengthHint": "Uma proposta nunca quebra uma regra obrigatória. Regras flexíveis são seguidas quando possível; cada quebra custa o seu peso.",
+        "weight": "Peso",
+        "weightHint": "De 1 a 10. Regras flexíveis com peso maior contam mais.",
+        "save": "Salvar",
+        "remove": "Remover",
+        "saved": "Regra salva.",
+        "removed": "Regra removida.",
+        "added": "Regra adicionada.",
+        "editLabel": "Alterar regra: {rule}",
+        "kinds": {
+          "keep_together": "Manter juntos",
+          "keep_apart": "Manter separados",
+          "vip_near_stage": "VIP mais perto do palco",
+          "access_near_exit": "Acessibilidade perto das saídas",
+          "table_max": "Máximo por mesa"
+        },
+        "add": {
+          "heading": "Adicionar uma regra",
+          "kind": "Regra",
+          "by": "Quem",
+          "byEach": "Cada grupo",
+          "byParty": "Um grupo",
+          "byTag": "Todos com uma etiqueta",
+          "bySide": "Todos de um lado",
+          "party": "Grupo",
+          "tag": "Etiqueta",
+          "side": "Lado",
+          "choose": "Escolher…",
+          "together": "Manter juntos",
+          "first": "Primeiro grupo",
+          "second": "Segundo grupo",
+          "accessTag": "Etiqueta para necessidades de acessibilidade",
+          "accessHint": "Grupos com esta etiqueta ficam nas mesas mais próximas de uma saída ou entrada. As respostas sobre acessibilidade continuam privadas.",
+          "max": "Pessoas por mesa no máximo",
+          "vipHint": "Grupos VIP ficam nas mesas mais próximas do palco.",
+          "submit": "Adicionar regra"
+        },
+        "errors": {
+          "value": "Escolha a quem a regra se aplica.",
+          "same": "Escolha dois grupos diferentes.",
+          "weight": "Informe um peso de 1 a 10.",
+          "max": "Informe um número de 1 a 40.",
+          "duplicate": "Este evento já tem essa regra.",
+          "tooMany": "Um evento pode ter no máximo 50 regras.",
+          "unknownParty": "Esse grupo não está nesta lista de convidados."
+        },
+        "describe": {
+          "togetherParty": "Manter cada grupo junto",
+          "togetherTag": "Manter juntos todos com a etiqueta “{value}”",
+          "togetherSide": "Manter junto o lado {value}",
+          "apart": "Manter {a} separados de {b}",
+          "targetParty": "{value}",
+          "targetTag": "todos com a etiqueta “{value}”",
+          "targetSide": "o lado {value}",
+          "vip": "Grupos VIP mais perto do palco",
+          "access": "Convidados com a etiqueta “{tag}” perto de uma saída",
+          "tableMax": "No máximo {max} pessoas por mesa"
+        }
+      },
+      "run": {
+        "heading": "Proposta",
+        "queue": "{count, plural, one {# convidado} other {# convidados}} ainda sem lugar. {fixed, plural, =0 {Ninguém foi acomodado ainda.} one {# convidado acomodado manualmente fica onde está.} other {# convidados acomodados manualmente ficam onde estão.}}",
+        "nothing": "Todos têm lugar. Não há nada a propor.",
+        "seed": "Número da disposição",
+        "seedHint": "O mesmo número sempre dá a mesma proposta.",
+        "seedError": "Informe um número inteiro de 1 a 1.000.000.",
+        "start": "Propor lugares",
+        "cancel": "Parar",
+        "again": "Tentar outra disposição",
+        "running": "Preparando uma proposta… {percent}%",
+        "progress": "Progresso da proposta",
+        "cancelled": "Parado. Nada foi proposto.",
+        "failed": "O planejador parou inesperadamente. Tente de novo."
+      },
+      "summary": {
+        "heading": "Resumo",
+        "done": "Proposta pronta em {seconds} s (disposição {seed}).",
+        "seated": "{count, plural, one {# convidado} other {# convidados}} em {tables, plural, one {# mesa} other {# mesas}}; {queue, plural, =0 {ninguém fica na fila} one {# convidado fica na fila} other {# convidados ficam na fila}}.",
+        "hardOk": "Nenhuma regra obrigatória é quebrada.",
+        "hardBroken": "{count, plural, one {# regra obrigatória é quebrada} other {# regras obrigatórias são quebradas}}. Altere a proposta antes de aceitar.",
+        "soft": "Regras flexíveis: penalidade {penalty} (0 é o melhor).",
+        "ruleLine": "{rule}: {count, plural, =0 {cumprida} one {# quebra} other {# quebras}}",
+        "issues": {
+          "no_stage": "A planta não tem palco, então “VIP mais perto do palco” não se aplica.",
+          "no_exit": "A planta não tem saída nem entrada, então “Acessibilidade perto das saídas” não se aplica.",
+          "group_too_big": "Um grupo de {size} é maior que qualquer mesa ({room} lugares). Ele fica no menor número possível de mesas.",
+          "too_few_seats": "{size} convidados para acomodar, mas só {room} lugares livres: alguns ficam na fila.",
+          "no_room": "A planta não tem mesas nem fileiras."
+        }
+      },
+      "tables": {
+        "heading": "Mesas propostas",
+        "none": "Nenhuma mesa proposta.",
+        "region": "Mesa {label}",
+        "fill": "{proposed} propostos · {seated} acomodados · {free} de {capacity} livres",
+        "overFull": "{count, plural, one {# convidado a mais} other {# convidados a mais}} para os lugares livres.",
+        "broken": "Quebra uma regra obrigatória: {rules}",
+        "over": "Mais convidados que lugares",
+        "accept": "Aceitar a mesa {label}",
+        "acceptAll": "Aceitar todas as mesas",
+        "fixFirst": "Corrija primeiro as mesas com aviso.",
+        "acceptedTable": "Mesa {label} aceita: {count, plural, one {# convidado acomodado} other {# convidados acomodados}}.",
+        "acceptedAll": "Proposta aceita: {count, plural, one {# convidado acomodado} other {# convidados acomodados}}.",
+        "queueHeading": "Na fila",
+        "guest": "{name} ({party})",
+        "moveLabel": "Mesa para {name}",
+        "queueOption": "Deixar na fila",
+        "optionFree": "Mesa {label} ({free} livres)",
+        "toEditor": "Abrir o editor de lugares"
+      },
+      "acceptErrors": {
+        "already_seated": "Alguém desta proposta foi acomodado manualmente nesse meio-tempo. Proponha de novo.",
+        "declined": "Um convidado desta proposta recusou. Proponha de novo.",
+        "hard_rule": "Aceitar isto quebraria uma regra obrigatória.",
+        "cant_fit": "Cabem só mais {fits} nessa mesa."
+      }
     }
   },
   "venueMap": {

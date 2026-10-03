@@ -15,6 +15,7 @@ export function SeatingTabs({
   selection = false,
   date = null,
   guests = false,
+  solver = false,
 }: {
   base: string;
   active:
@@ -22,6 +23,7 @@ export function SeatingTabs({
     | 'assign'
     | 'guests'
     | 'cards'
+    | 'solver'
     | 'rules'
     | 'selection'
     | 'channels'
@@ -32,6 +34,8 @@ export function SeatingTabs({
   selection?: boolean;
   /** The org has the guests module: the guest seating editor (M4.3a), cards and exports (M4.3b). */
   guests?: boolean;
+  /** The org has guests and the ai_seating module: seating rules and the solver (M6.12a). */
+  solver?: boolean;
   /** The date whose chart the plan and guest views show (M1.7g); kept when switching views. */
   date?: string | null;
 }) {
@@ -46,6 +50,7 @@ export function SeatingTabs({
           { key: 'cards', href: `${base}/cards` },
         ] as const)
       : []),
+    ...(guests && solver ? [{ key: 'solver', href: `${base}/solver` } as const] : []),
     { key: 'rules', href: `${base}/rules` },
     ...(selection ? [{ key: 'selection', href: `${base}/best-available` } as const] : []),
     ...(selection ? [{ key: 'channels', href: `${base}/channels` } as const] : []),

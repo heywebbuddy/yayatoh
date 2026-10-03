@@ -1,26 +1,30 @@
-import { GUESTS_CHANNEL } from '@yayatoh/guests';
 import { executeQuery } from '@yayatoh/kernel';
-import { composeNav, isProfileKey, realtimeChannelName } from '@yayatoh/platform';
-import { GUEST_SEATS_CHANNEL, guestSeatingQuery } from '@yayatoh/seating';
+import { composeNav, isProfileKey } from '@yayatoh/platform';
+import { guestSeatingQuery, solverSetupQuery } from '@yayatoh/seating';
 import { buttonClass, EmptyState, filterChipClass, PageHeader } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { GuestSeatingEditor } from '@/components/guest-seating/guest-seating-editor.tsx';
+import { SeatingSolver } from '@/components/seating-solver/seating-solver.tsx';
 import { SeatingTabs } from '@/components/seating-tabs.tsx';
 import { Link } from '@/i18n/navigation.ts';
-import { realtimeUrl } from '@/lib/realtime-url.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
-import { seatGuestsAction, setVipTableAction, unseatGuestsAction } from './actions.ts';
+import {
+  acceptProposalAction,
+  addSolverRuleAction,
+  removeSolverRuleAction,
+  updateSolverRuleAction,
+} from './actions.ts';
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 
 /**
- * Seat guests (M4.3a): the guest list's parties at the tables of the event plan, or of the chart
- * a sub-event uses (`?sub=`). Three panes: the unseated queue, the map and the table details.
- * Only for orgs with the guests module (weddings; galas whose tables are named).
+ * Seating rules and the solver (M6.12a): the event's rules, then a proposal for everyone still
+ * in the queue (the tabu search runs in a Web Worker), reviewed and edited as a list, accepted a
+ * table at a time or all at once. Guests already seated are never moved. For orgs with the
+ * guests and ai_seating modules; the chart chooser is the guest seating editor's (`?sub=`).
  */
-export default async function GuestSeatingPage({
+export default async function SeatingSolverPage({
   params,
   searchParams,
 }: {
@@ -33,30 +37,32 @@ export default async function GuestSeatingPage({
   const { data, event: ev, can } = await loadEvent(org, event, 'seating');
   const profile = isProfileKey(ev.profile) ? ev.profile : 'other';
   if (!composeNav(profile, data.modules).some((i) => i.path === 'seating')) notFound();
-  if (!data.modules.has('guests') || !can('guests:read')) notFound();
+  if (!data.modules.has('guests') || !data.modules.has('ai_seating') || !can('guests:read')) notFound();
   const t = await getTranslations('seating');
   const base = `/o/${org}/e/${event}/seating`;
   const subEventId = sp.sub && UUID.test(sp.sub) ? sp.sub : null;
-  const view = await executeQuery(guestSeatingQuery, { eventId: ev.id, subEventId }, data.ctx, ports).catch(
-    (err: { code?: string }) => {
-      if (err.code === 'not_found') notFound();
-      throw err;
-    },
-  );
-  const here = `${base}/guests`;
+  const notFoundOnMissing = (err: { code?: string }) => {
+    if (err.code === 'not_found') notFound();
+    throw err;
+  };
+  const [view, problem] = await Promise.all([
+    executeQuery(guestSeatingQuery, { eventId: ev.id, subEventId }, data.ctx, ports).catch(notFoundOnMissing),
+    executeQuery(solverSetupQuery, { eventId: ev.id, subEventId }, data.ctx, ports).catch(notFoundOnMissing),
+  ]);
+  const here = `${base}/solver`;
   const chartName = subEventId
     ? (view.subEvents.find((s) => s.id === subEventId)?.name ?? '')
     : t('guestSeating.chart.event');
   return (
     <>
-      <PageHeader title={t('guestSeating.title')} description={t('guestSeating.description')} />
+      <PageHeader title={t('solver.title')} description={t('solver.description')} />
       <SeatingTabs
         base={base}
-        active="guests"
+        active="solver"
         finder={data.modules.has('seat_finder')}
         guests
         selection={data.modules.has('advanced_seating')}
-        solver={data.modules.has('ai_seating')}
+        solver
       />
       {view.subEvents.length ? (
         <nav aria-label={t('guestSeating.chart.label')}>
@@ -99,17 +105,15 @@ export default async function GuestSeatingPage({
           }
         />
       ) : (
-        <GuestSeatingEditor
+        <SeatingSolver
           view={view}
-          doc={view.doc}
+          problem={problem}
           canWrite={can('seating:write')}
-          seat={seatGuestsAction.bind(null, org, event, subEventId)}
-          unseat={unseatGuestsAction.bind(null, org, event, subEventId)}
-          setVip={setVipTableAction.bind(null, org, event, subEventId)}
-          streams={{
-            guests: realtimeUrl(realtimeChannelName(GUESTS_CHANNEL, data.org.id, ev.id)),
-            seats: realtimeUrl(realtimeChannelName(GUEST_SEATS_CHANNEL, data.org.id, ev.id)),
-          }}
+          editorHref={subEventId ? `${base}/guests?sub=${subEventId}` : `${base}/guests`}
+          addRule={addSolverRuleAction.bind(null, org, event)}
+          updateRule={updateSolverRuleAction.bind(null, org, event)}
+          removeRule={removeSolverRuleAction.bind(null, org, event)}
+          accept={acceptProposalAction.bind(null, org, event, subEventId)}
         />
       )}
     </>

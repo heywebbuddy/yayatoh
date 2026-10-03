@@ -2074,7 +2074,8 @@
       "cards": "Kaarten en exports",
       "selection": "Beste plaatsen",
       "channels": "Kanalen",
-      "revisions": "Versies"
+      "revisions": "Versies",
+      "solver": "Automatisch plaatsen"
     },
     "assign": {
       "title": "Gasten plaatsen",
@@ -2654,6 +2655,134 @@
       "isCurrent": "Dit is het plan zoals het nu is.",
       "restore": "Versie {number} terugzetten",
       "restoredNotice": "Versie {number} teruggezet. Het huidige plan is versie {now}."
+    },
+    "solver": {
+      "title": "Plaatsingsregels en planner",
+      "description": "Stel regels in, laat de planner een tafel voorstellen voor iedereen die nog geen plaats heeft, bekijk het voorstel en neem één tafel of alles over. Gasten die je met de hand plaatste, worden nooit verplaatst.",
+      "rules": {
+        "heading": "Regels",
+        "listLabel": "Plaatsingsregels",
+        "empty": "Nog geen regels. Voeg er hieronder een toe of start de planner zonder regels: die houdt elke tafel toch binnen haar plaatsen.",
+        "hard": "Vast",
+        "soft": "Zacht",
+        "badge": "{strength} · gewicht {weight}",
+        "strength": "Sterkte",
+        "strengthHint": "Een voorstel breekt nooit een vaste regel. Zachte regels worden gevolgd waar het kan; elke afwijking kost haar gewicht.",
+        "weight": "Gewicht",
+        "weightHint": "1 tot 10. Zachte regels met een hoger gewicht tellen zwaarder.",
+        "save": "Opslaan",
+        "remove": "Verwijderen",
+        "saved": "Regel opgeslagen.",
+        "removed": "Regel verwijderd.",
+        "added": "Regel toegevoegd.",
+        "editLabel": "Regel wijzigen: {rule}",
+        "kinds": {
+          "keep_together": "Bij elkaar houden",
+          "keep_apart": "Uit elkaar houden",
+          "vip_near_stage": "VIP's het dichtst bij het podium",
+          "access_near_exit": "Toegankelijkheid bij de uitgangen",
+          "table_max": "Maximum per tafel"
+        },
+        "add": {
+          "heading": "Regel toevoegen",
+          "kind": "Regel",
+          "by": "Wie",
+          "byEach": "Elk gezelschap",
+          "byParty": "Een gezelschap",
+          "byTag": "Iedereen met een label",
+          "bySide": "Iedereen van een kant",
+          "party": "Gezelschap",
+          "tag": "Label",
+          "side": "Kant",
+          "choose": "Kies…",
+          "together": "Bij elkaar houden",
+          "first": "Eerste groep",
+          "second": "Tweede groep",
+          "accessTag": "Label voor toegankelijkheidsbehoeften",
+          "accessHint": "Gezelschappen met dit label zitten aan de tafels het dichtst bij een uitgang of ingang. Antwoorden over toegankelijkheid blijven privé.",
+          "max": "Hoogstens personen per tafel",
+          "vipHint": "VIP-gezelschappen zitten aan de tafels het dichtst bij het podium.",
+          "submit": "Regel toevoegen"
+        },
+        "errors": {
+          "value": "Kies voor wie de regel geldt.",
+          "same": "Kies twee verschillende groepen.",
+          "weight": "Vul een gewicht van 1 tot 10 in.",
+          "max": "Vul een getal van 1 tot 40 in.",
+          "duplicate": "Dit evenement heeft die regel al.",
+          "tooMany": "Een evenement kan hoogstens 50 regels hebben.",
+          "unknownParty": "Dat gezelschap staat niet op deze gastenlijst."
+        },
+        "describe": {
+          "togetherParty": "Elk gezelschap bij elkaar houden",
+          "togetherTag": "Iedereen met het label ‘{value}’ bij elkaar houden",
+          "togetherSide": "De kant {value} bij elkaar houden",
+          "apart": "{a} uit de buurt van {b} houden",
+          "targetParty": "{value}",
+          "targetTag": "iedereen met het label ‘{value}’",
+          "targetSide": "de kant {value}",
+          "vip": "VIP-gezelschappen het dichtst bij het podium",
+          "access": "Gasten met het label ‘{tag}’ dicht bij een uitgang",
+          "tableMax": "Hoogstens {max} personen per tafel"
+        }
+      },
+      "run": {
+        "heading": "Voorstel",
+        "queue": "{count, plural, one {# gast} other {# gasten}} nog te plaatsen. {fixed, plural, =0 {Er is nog niemand geplaatst.} one {# met de hand geplaatste gast blijft zitten.} other {# met de hand geplaatste gasten blijven zitten.}}",
+        "nothing": "Iedereen heeft een plaats. Er valt niets voor te stellen.",
+        "seed": "Opstellingsnummer",
+        "seedHint": "Hetzelfde nummer geeft altijd hetzelfde voorstel.",
+        "seedError": "Vul een heel getal van 1 tot 1.000.000 in.",
+        "start": "Plaatsing voorstellen",
+        "cancel": "Stoppen",
+        "again": "Andere opstelling proberen",
+        "running": "Voorstel wordt gemaakt… {percent}%",
+        "progress": "Voortgang van het voorstel",
+        "cancelled": "Gestopt. Er is niets voorgesteld.",
+        "failed": "De planner stopte onverwacht. Probeer het opnieuw."
+      },
+      "summary": {
+        "heading": "Samenvatting",
+        "done": "Voorstel klaar in {seconds} s (opstelling {seed}).",
+        "seated": "{count, plural, one {# gast} other {# gasten}} aan {tables, plural, one {# tafel} other {# tafels}}; {queue, plural, =0 {niemand blijft in de wachtrij} one {# gast blijft in de wachtrij} other {# gasten blijven in de wachtrij}}.",
+        "hardOk": "Geen enkele vaste regel wordt gebroken.",
+        "hardBroken": "{count, plural, one {# vaste regel wordt gebroken} other {# vaste regels worden gebroken}}. Pas het voorstel aan voordat je het overneemt.",
+        "soft": "Zachte regels: strafpunten {penalty} (0 is het best).",
+        "ruleLine": "{rule}: {count, plural, =0 {gevolgd} one {# afwijking} other {# afwijkingen}}",
+        "issues": {
+          "no_stage": "De plattegrond heeft geen podium, dus ‘VIP's het dichtst bij het podium’ kan niet gelden.",
+          "no_exit": "De plattegrond heeft geen uitgang of ingang, dus ‘Toegankelijkheid bij de uitgangen’ kan niet gelden.",
+          "group_too_big": "Een groep van {size} is groter dan elke tafel ({room} plaatsen). Die wordt over zo weinig mogelijk tafels verdeeld.",
+          "too_few_seats": "{size} gasten te plaatsen maar maar {room} vrije plaatsen: sommigen blijven in de wachtrij.",
+          "no_room": "De plattegrond heeft geen tafels of rijen."
+        }
+      },
+      "tables": {
+        "heading": "Voorgestelde tafels",
+        "none": "Geen tafel voorgesteld.",
+        "region": "Tafel {label}",
+        "fill": "{proposed} voorgesteld · {seated} geplaatst · {free} van {capacity} vrij",
+        "overFull": "{count, plural, one {# gast te veel} other {# gasten te veel}} voor de vrije plaatsen.",
+        "broken": "Breekt een vaste regel: {rules}",
+        "over": "Meer gasten dan plaatsen",
+        "accept": "Tafel {label} overnemen",
+        "acceptAll": "Alle tafels overnemen",
+        "fixFirst": "Pas eerst de tafels met een waarschuwing aan.",
+        "acceptedTable": "Tafel {label} overgenomen: {count, plural, one {# gast geplaatst} other {# gasten geplaatst}}.",
+        "acceptedAll": "Voorstel overgenomen: {count, plural, one {# gast geplaatst} other {# gasten geplaatst}}.",
+        "queueHeading": "In de wachtrij",
+        "guest": "{name} ({party})",
+        "moveLabel": "Tafel voor {name}",
+        "queueOption": "In de wachtrij laten",
+        "optionFree": "Tafel {label} ({free} vrij)",
+        "toEditor": "Plaatsingseditor openen"
+      },
+      "acceptErrors": {
+        "already_seated": "Iemand uit dit voorstel is intussen met de hand geplaatst. Stel opnieuw voor.",
+        "declined": "Een gast uit dit voorstel heeft afgezegd. Stel opnieuw voor.",
+        "hard_rule": "Overnemen zou een vaste regel breken.",
+        "cant_fit": "Aan die tafel passen nog maar {fits} gasten."
+      }
     }
   },
   "venueMap": {

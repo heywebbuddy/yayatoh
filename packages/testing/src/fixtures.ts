@@ -335,6 +335,7 @@ import {
 import { reportReviewCommand, submitReviewCommand } from '@yayatoh/reviews';
 import {
   allotSeatsCommand,
+  addSolverRuleCommand,
   assignSeatsCommand,
   giveSubEventOwnChartCommand,
   holdSeatsTx,
@@ -2393,6 +2394,13 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
       ],
     },
     deviceCtx,
+    ports,
+  );
+  // M6.12a seating solver (isolation coverage): a keep-together rule for every party.
+  await executeCommand(
+    addSolverRuleCommand,
+    { eventId: event.id, spec: { kind: 'keep_together', params: { group: { by: 'party' } } } },
+    ctx(),
     ports,
   );
   // M4.1b: a pasted guest list staged, checked and imported (a household with a plus-one and a

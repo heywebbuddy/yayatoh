@@ -1030,6 +1030,13 @@
       "when": 1791063723528,
       "tag": "0146_nervous_golden_guardian",
       "breakpoints": true
+    },
+    {
+      "idx": 147,
+      "version": "7",
+      "when": 1791064556270,
+      "tag": "0147_old_blue_blade",
+      "breakpoints": true
     }
   ]
 }

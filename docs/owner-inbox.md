@@ -807,3 +807,9 @@ steps are yours; the how-to is `docs/runbooks/evidence-production.md`.
 - [ ] **Revoking during a cutover freeze** waits for the freeze to end, because the freeze refuses every command except scans and provider completions. Say if revoke should be allowed during a freeze.
 - [ ] **Snapshots refresh** when a grant changes and when the agency clicks "Refresh numbers". A scheduled refresh is listed under "Later". Gross sales show only for clients who opted in.
 - [ ] **Agency terms (`legal-copy`):** the agency agreement terms (grants, no commission in v1) are still to be written (phase-6 plan §5).
+## M6.12a — seating rules and solver (2026-10-03, pending owner)
+- [ ] **Module key `ai_seating`** (P6-13) is free in beta: the migration grants it to `launch_standard`. Pricing switches on later with no code change.
+- [ ] **Accessibility near exits reads a party tag** ("Accessibility" by default, the host can name another), never the sealed accessibility answers (P4-3). Say if you want the solver to read "has an accessibility answer" as a flag (that would open sealed data for every guest when the proposal is built).
+- [ ] **Every guest already seated is a manual placement** and stays where they are; the solver seats only the queue (attending and pending guests, declined left out). Accepting a table makes its guests manual placements too. Say if you want an "unlock and re-plan everyone" option.
+- [ ] **Accepting refuses a hard-rule break** (`hard_rule`) with no override: the host edits the proposal (or makes the rule soft) first. Confirm, or ask for an audited override like the D18 seat rules.
+- [ ] **Speed budget:** the tabu search runs in the browser (P6-10); 400 guests take well under a second here (the acceptance is 5 s). The CP-SAT service stays later (D25).

@@ -2074,7 +2074,8 @@
       "cards": "Karten und Exporte",
       "selection": "Bester Platz",
       "channels": "Kanäle",
-      "revisions": "Versionen"
+      "revisions": "Versionen",
+      "solver": "Automatisch platzieren"
     },
     "assign": {
       "title": "Gäste platzieren",
@@ -2654,6 +2655,134 @@
       "isCurrent": "Das ist der Plan, wie er jetzt ist.",
       "restore": "Version {number} wiederherstellen",
       "restoredNotice": "Version {number} wiederhergestellt. Der aktuelle Plan ist Version {now}."
+    },
+    "solver": {
+      "title": "Sitzregeln und Planer",
+      "description": "Lege Regeln fest, lass den Planer allen noch nicht platzierten Gästen einen Tisch vorschlagen, prüfe den Vorschlag und übernimm einen Tisch oder alle. Von Hand platzierte Gäste werden nie verschoben.",
+      "rules": {
+        "heading": "Regeln",
+        "listLabel": "Sitzregeln",
+        "empty": "Noch keine Regeln. Füge unten eine hinzu oder starte den Planer ohne Regeln: Er hält trotzdem jeden Tisch innerhalb seiner Plätze.",
+        "hard": "Fest",
+        "soft": "Weich",
+        "badge": "{strength} · Gewicht {weight}",
+        "strength": "Stärke",
+        "strengthHint": "Ein Vorschlag bricht nie eine feste Regel. Weiche Regeln werden eingehalten, wenn es geht; jeder Verstoß kostet ihr Gewicht.",
+        "weight": "Gewicht",
+        "weightHint": "1 bis 10. Weiche Regeln mit höherem Gewicht zählen mehr.",
+        "save": "Speichern",
+        "remove": "Entfernen",
+        "saved": "Regel gespeichert.",
+        "removed": "Regel entfernt.",
+        "added": "Regel hinzugefügt.",
+        "editLabel": "Regel ändern: {rule}",
+        "kinds": {
+          "keep_together": "Zusammen setzen",
+          "keep_apart": "Getrennt setzen",
+          "vip_near_stage": "VIPs am nächsten zur Bühne",
+          "access_near_exit": "Barrierefreiheit nahe den Ausgängen",
+          "table_max": "Höchstzahl pro Tisch"
+        },
+        "add": {
+          "heading": "Regel hinzufügen",
+          "kind": "Regel",
+          "by": "Wer",
+          "byEach": "Jede Gruppe",
+          "byParty": "Eine Gruppe",
+          "byTag": "Alle mit einem Schlagwort",
+          "bySide": "Alle einer Seite",
+          "party": "Gruppe",
+          "tag": "Schlagwort",
+          "side": "Seite",
+          "choose": "Auswählen…",
+          "together": "Zusammen setzen",
+          "first": "Erste Gruppe",
+          "second": "Zweite Gruppe",
+          "accessTag": "Schlagwort für Barrierefreiheit",
+          "accessHint": "Gruppen mit diesem Schlagwort sitzen an den Tischen, die einem Ausgang oder Eingang am nächsten sind. Antworten zur Barrierefreiheit bleiben privat.",
+          "max": "Höchstens Personen pro Tisch",
+          "vipHint": "VIP-Gruppen sitzen an den Tischen, die der Bühne am nächsten sind.",
+          "submit": "Regel hinzufügen"
+        },
+        "errors": {
+          "value": "Wähle, für wen die Regel gilt.",
+          "same": "Wähle zwei verschiedene Gruppen.",
+          "weight": "Gib ein Gewicht von 1 bis 10 ein.",
+          "max": "Gib eine Zahl von 1 bis 40 ein.",
+          "duplicate": "Diese Veranstaltung hat diese Regel schon.",
+          "tooMany": "Eine Veranstaltung kann höchstens 50 Regeln haben.",
+          "unknownParty": "Diese Gruppe steht nicht auf dieser Gästeliste."
+        },
+        "describe": {
+          "togetherParty": "Jede Gruppe zusammen setzen",
+          "togetherTag": "Alle mit dem Schlagwort „{value}“ zusammen setzen",
+          "togetherSide": "Die Seite {value} zusammen setzen",
+          "apart": "{a} getrennt von {b} setzen",
+          "targetParty": "{value}",
+          "targetTag": "alle mit dem Schlagwort „{value}“",
+          "targetSide": "die Seite {value}",
+          "vip": "VIP-Gruppen am nächsten zur Bühne",
+          "access": "Gäste mit dem Schlagwort „{tag}“ nahe einem Ausgang",
+          "tableMax": "Höchstens {max} Personen pro Tisch"
+        }
+      },
+      "run": {
+        "heading": "Vorschlag",
+        "queue": "{count, plural, one {# Gast} other {# Gäste}} noch zu platzieren. {fixed, plural, =0 {Noch niemand ist platziert.} one {# von Hand platzierter Gast bleibt, wo er ist.} other {# von Hand platzierte Gäste bleiben, wo sie sind.}}",
+        "nothing": "Alle sind platziert. Es gibt nichts vorzuschlagen.",
+        "seed": "Anordnungsnummer",
+        "seedHint": "Dieselbe Nummer ergibt immer denselben Vorschlag.",
+        "seedError": "Gib eine ganze Zahl von 1 bis 1.000.000 ein.",
+        "start": "Sitzordnung vorschlagen",
+        "cancel": "Stopp",
+        "again": "Andere Anordnung versuchen",
+        "running": "Vorschlag wird erstellt… {percent} %",
+        "progress": "Fortschritt des Vorschlags",
+        "cancelled": "Gestoppt. Es wurde nichts vorgeschlagen.",
+        "failed": "Der Planer hat unerwartet angehalten. Versuche es erneut."
+      },
+      "summary": {
+        "heading": "Zusammenfassung",
+        "done": "Vorschlag fertig in {seconds} s (Anordnung {seed}).",
+        "seated": "{count, plural, one {# Gast} other {# Gäste}} an {tables, plural, one {# Tisch} other {# Tischen}}; {queue, plural, =0 {niemand bleibt in der Warteschlange} one {# Gast bleibt in der Warteschlange} other {# Gäste bleiben in der Warteschlange}}.",
+        "hardOk": "Keine feste Regel wird gebrochen.",
+        "hardBroken": "{count, plural, one {# feste Regel wird gebrochen} other {# feste Regeln werden gebrochen}}. Ändere den Vorschlag vor dem Übernehmen.",
+        "soft": "Weiche Regeln: Abzug {penalty} (0 ist am besten).",
+        "ruleLine": "{rule}: {count, plural, =0 {eingehalten} one {# Verstoß} other {# Verstöße}}",
+        "issues": {
+          "no_stage": "Der Plan hat keine Bühne, daher gilt „VIPs am nächsten zur Bühne“ nicht.",
+          "no_exit": "Der Plan hat keinen Ausgang oder Eingang, daher gilt „Barrierefreiheit nahe den Ausgängen“ nicht.",
+          "group_too_big": "Eine Gruppe von {size} ist größer als jeder Tisch ({room} Plätze). Sie wird auf so wenige Tische wie möglich verteilt.",
+          "too_few_seats": "{size} Gäste zu platzieren, aber nur {room} freie Plätze: Einige bleiben in der Warteschlange.",
+          "no_room": "Der Plan hat keine Tische oder Reihen."
+        }
+      },
+      "tables": {
+        "heading": "Vorgeschlagene Tische",
+        "none": "Kein Tisch vorgeschlagen.",
+        "region": "Tisch {label}",
+        "fill": "{proposed} vorgeschlagen · {seated} platziert · {free} von {capacity} frei",
+        "overFull": "{count, plural, one {# Gast zu viel} other {# Gäste zu viel}} für die freien Plätze.",
+        "broken": "Bricht eine feste Regel: {rules}",
+        "over": "Mehr Gäste als Plätze",
+        "accept": "Tisch {label} übernehmen",
+        "acceptAll": "Alle Tische übernehmen",
+        "fixFirst": "Korrigiere zuerst die Tische mit einer Warnung.",
+        "acceptedTable": "Tisch {label} übernommen: {count, plural, one {# Gast} other {# Gäste}} platziert.",
+        "acceptedAll": "Vorschlag übernommen: {count, plural, one {# Gast} other {# Gäste}} platziert.",
+        "queueHeading": "In der Warteschlange",
+        "guest": "{name} ({party})",
+        "moveLabel": "Tisch für {name}",
+        "queueOption": "In der Warteschlange lassen",
+        "optionFree": "Tisch {label} ({free} frei)",
+        "toEditor": "Sitzplan-Editor öffnen"
+      },
+      "acceptErrors": {
+        "already_seated": "Jemand aus diesem Vorschlag wurde inzwischen von Hand platziert. Schlage neu vor.",
+        "declined": "Ein Gast aus diesem Vorschlag hat abgesagt. Schlage neu vor.",
+        "hard_rule": "Das Übernehmen würde eine feste Regel brechen.",
+        "cant_fit": "An diesen Tisch passen nur noch {fits}."
+      }
     }
   },
   "venueMap": {

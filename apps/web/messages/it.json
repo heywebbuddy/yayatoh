@@ -2074,7 +2074,8 @@
       "cards": "Segnaposto ed esportazioni",
       "selection": "Migliori disponibili",
       "channels": "Canali",
-      "revisions": "Revisioni"
+      "revisions": "Revisioni",
+      "solver": "Disposizione automatica"
     },
     "assign": {
       "title": "Assegna ospiti",
@@ -2654,6 +2655,134 @@
       "isCurrent": "Questa è la piantina com’è adesso.",
       "restore": "Ripristina la revisione {number}",
       "restoredNotice": "Revisione {number} ripristinata. La piantina attuale è la revisione {now}."
+    },
+    "solver": {
+      "title": "Regole dei posti e pianificatore",
+      "description": "Imposta le regole, lascia che il pianificatore proponga un tavolo a ogni ospite ancora senza posto, controlla la proposta e accetta un tavolo o tutti. Gli ospiti sistemati a mano non vengono mai spostati.",
+      "rules": {
+        "heading": "Regole",
+        "listLabel": "Regole dei posti",
+        "empty": "Ancora nessuna regola. Aggiungine una qui sotto o avvia il pianificatore senza regole: rispetta comunque i posti di ogni tavolo.",
+        "hard": "Obbligatoria",
+        "soft": "Flessibile",
+        "badge": "{strength} · peso {weight}",
+        "strength": "Tipo",
+        "strengthHint": "Una proposta non viola mai una regola obbligatoria. Le regole flessibili vengono rispettate quando possibile; ogni violazione costa il suo peso.",
+        "weight": "Peso",
+        "weightHint": "Da 1 a 10. Le regole flessibili con peso maggiore contano di più.",
+        "save": "Salva",
+        "remove": "Rimuovi",
+        "saved": "Regola salvata.",
+        "removed": "Regola rimossa.",
+        "added": "Regola aggiunta.",
+        "editLabel": "Modifica regola: {rule}",
+        "kinds": {
+          "keep_together": "Tenere insieme",
+          "keep_apart": "Tenere separati",
+          "vip_near_stage": "VIP più vicini al palco",
+          "access_near_exit": "Accessibilità vicino alle uscite",
+          "table_max": "Massimo per tavolo"
+        },
+        "add": {
+          "heading": "Aggiungi una regola",
+          "kind": "Regola",
+          "by": "Chi",
+          "byEach": "Ogni gruppo",
+          "byParty": "Un gruppo",
+          "byTag": "Tutti con un'etichetta",
+          "bySide": "Tutti di una parte",
+          "party": "Gruppo",
+          "tag": "Etichetta",
+          "side": "Parte",
+          "choose": "Scegli…",
+          "together": "Tenere insieme",
+          "first": "Primo gruppo",
+          "second": "Secondo gruppo",
+          "accessTag": "Etichetta per esigenze di accessibilità",
+          "accessHint": "I gruppi con questa etichetta siedono ai tavoli più vicini a un'uscita o a un ingresso. Le risposte sull'accessibilità restano private.",
+          "max": "Persone per tavolo al massimo",
+          "vipHint": "I gruppi VIP siedono ai tavoli più vicini al palco.",
+          "submit": "Aggiungi regola"
+        },
+        "errors": {
+          "value": "Scegli a chi si applica la regola.",
+          "same": "Scegli due gruppi diversi.",
+          "weight": "Inserisci un peso da 1 a 10.",
+          "max": "Inserisci un numero da 1 a 40.",
+          "duplicate": "Questo evento ha già questa regola.",
+          "tooMany": "Un evento può avere al massimo 50 regole.",
+          "unknownParty": "Questo gruppo non è in questa lista ospiti."
+        },
+        "describe": {
+          "togetherParty": "Tenere insieme ogni gruppo",
+          "togetherTag": "Tenere insieme tutti con l'etichetta «{value}»",
+          "togetherSide": "Tenere insieme la parte {value}",
+          "apart": "Tenere {a} separati da {b}",
+          "targetParty": "{value}",
+          "targetTag": "tutti con l'etichetta «{value}»",
+          "targetSide": "la parte {value}",
+          "vip": "Gruppi VIP più vicini al palco",
+          "access": "Ospiti con l'etichetta «{tag}» vicino a un'uscita",
+          "tableMax": "Al massimo {max} persone per tavolo"
+        }
+      },
+      "run": {
+        "heading": "Proposta",
+        "queue": "{count, plural, one {# ospite} other {# ospiti}} ancora da sistemare. {fixed, plural, =0 {Nessuno è ancora sistemato.} one {# ospite sistemato a mano resta dov'è.} other {# ospiti sistemati a mano restano dove sono.}}",
+        "nothing": "Tutti hanno un posto. Non c'è niente da proporre.",
+        "seed": "Numero di disposizione",
+        "seedHint": "Lo stesso numero dà sempre la stessa proposta.",
+        "seedError": "Inserisci un numero intero da 1 a 1.000.000.",
+        "start": "Proponi i posti",
+        "cancel": "Interrompi",
+        "again": "Prova un'altra disposizione",
+        "running": "Preparazione della proposta… {percent}%",
+        "progress": "Avanzamento della proposta",
+        "cancelled": "Interrotto. Non è stato proposto nulla.",
+        "failed": "Il pianificatore si è fermato inaspettatamente. Riprova."
+      },
+      "summary": {
+        "heading": "Riepilogo",
+        "done": "Proposta pronta in {seconds} s (disposizione {seed}).",
+        "seated": "{count, plural, one {# ospite} other {# ospiti}} a {tables, plural, one {# tavolo} other {# tavoli}}; {queue, plural, =0 {nessuno resta in coda} one {# ospite resta in coda} other {# ospiti restano in coda}}.",
+        "hardOk": "Nessuna regola obbligatoria è violata.",
+        "hardBroken": "{count, plural, one {# regola obbligatoria è violata} other {# regole obbligatorie sono violate}}. Modifica la proposta prima di accettarla.",
+        "soft": "Regole flessibili: penalità {penalty} (0 è il meglio).",
+        "ruleLine": "{rule}: {count, plural, =0 {rispettata} one {# violazione} other {# violazioni}}",
+        "issues": {
+          "no_stage": "La pianta non ha un palco, quindi «VIP più vicini al palco» non si può applicare.",
+          "no_exit": "La pianta non ha uscite né ingressi, quindi «Accessibilità vicino alle uscite» non si può applicare.",
+          "group_too_big": "Un gruppo di {size} è più grande di qualsiasi tavolo ({room} posti). Viene distribuito sul minor numero di tavoli possibile.",
+          "too_few_seats": "{size} ospiti da sistemare ma solo {room} posti liberi: alcuni restano in coda.",
+          "no_room": "La pianta non ha tavoli né file."
+        }
+      },
+      "tables": {
+        "heading": "Tavoli proposti",
+        "none": "Nessun tavolo proposto.",
+        "region": "Tavolo {label}",
+        "fill": "{proposed} proposti · {seated} sistemati · {free} di {capacity} liberi",
+        "overFull": "{count, plural, one {# ospite di troppo} other {# ospiti di troppo}} per i posti liberi.",
+        "broken": "Viola una regola obbligatoria: {rules}",
+        "over": "Più ospiti che posti",
+        "accept": "Accetta il tavolo {label}",
+        "acceptAll": "Accetta tutti i tavoli",
+        "fixFirst": "Correggi prima i tavoli con un avviso.",
+        "acceptedTable": "Tavolo {label} accettato: {count, plural, one {# ospite sistemato} other {# ospiti sistemati}}.",
+        "acceptedAll": "Proposta accettata: {count, plural, one {# ospite sistemato} other {# ospiti sistemati}}.",
+        "queueHeading": "In coda",
+        "guest": "{name} ({party})",
+        "moveLabel": "Tavolo per {name}",
+        "queueOption": "Lascia in coda",
+        "optionFree": "Tavolo {label} ({free} liberi)",
+        "toEditor": "Apri l'editor dei posti"
+      },
+      "acceptErrors": {
+        "already_seated": "Qualcuno di questa proposta è stato sistemato a mano nel frattempo. Proponi di nuovo.",
+        "declined": "Un ospite di questa proposta ha declinato. Proponi di nuovo.",
+        "hard_rule": "Accettare violerebbe una regola obbligatoria.",
+        "cant_fit": "A quel tavolo ci stanno solo altri {fits}."
+      }
     }
   },
   "venueMap": {
