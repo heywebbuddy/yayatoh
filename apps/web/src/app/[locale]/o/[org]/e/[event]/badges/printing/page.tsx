@@ -3,6 +3,7 @@ import { PRINT_KINDS } from '@yayatoh/badges/client';
 import { executeQuery } from '@yayatoh/kernel';
 import {
   Alert,
+  Button,
   buttonClass,
   Card,
   EmptyState,
@@ -17,6 +18,7 @@ import { AutoRefresh } from '@/components/auto-refresh.tsx';
 import { Crumbs } from '@/components/crumbs.tsx';
 import { ProgramForm } from '@/components/program-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
+import { errorMessageKey } from '@/lib/errors.ts';
 import { ports } from '@/server/ports.ts';
 import { loadPrintingPage } from '@/server/printing.ts';
 import { archivePrinterAction, createPrinterAction } from '@/server/printing-actions.ts';
@@ -36,7 +38,7 @@ export default async function PrintingPage({
   searchParams,
 }: {
   params: Promise<{ locale: string; org: string; event: string }>;
-  searchParams: Promise<{ kind?: string }>;
+  searchParams: Promise<{ kind?: string; archived?: string; printerError?: string }>;
 }) {
   const { locale, org, event } = await params;
   const sp = await searchParams;
@@ -126,6 +128,10 @@ export default async function PrintingPage({
           {tp('printers')}
         </h2>
         <p className="max-w-prose text-caption text-ink-2">{tp('stationHint')}</p>
+        <div aria-live="polite">
+          {sp.archived === '1' ? <Alert tone="info" title={tp('archived')} /> : null}
+          {sp.printerError ? <Alert title={t(errorMessageKey(sp.printerError))} /> : null}
+        </div>
         {printing.printers.length === 0 ? (
           <EmptyState title={tp('noPrintersTitle')} description={tp('noPrintersDescription')} />
         ) : (
@@ -154,14 +160,11 @@ export default async function PrintingPage({
                       </Link>
                     ) : null}
                     {canWrite ? (
-                      <ProgramForm
-                        action={archivePrinterAction.bind(null, org, event, p.id)}
-                        fields={[]}
-                        idPrefix={`archive-${p.id}`}
-                        submitLabel={tp('archive', { name: p.name })}
-                        successLabel={tp('archived')}
-                        errors={errors}
-                      />
+                      <form action={archivePrinterAction.bind(null, org, event, p.id)}>
+                        <Button type="submit" variant="ghost" size="sm">
+                          {tp('archive', { name: p.name })}
+                        </Button>
+                      </form>
                     ) : null}
                   </div>
                 </Card>

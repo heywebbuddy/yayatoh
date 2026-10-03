@@ -12,7 +12,7 @@ import { devAuthEnabled } from '@/server/session.ts';
 
 /**
  * Dev/CI only (M5.5b): what the worker does for printers, on demand. `op=watch` runs the printer
- * watchdog with the clock `aheadMs` ahead (a station silent for 90 s without waiting 90 s);
+ * watchdog (for `printerId`s when given) with the clock `aheadMs` ahead (a station silent for 90 s without waiting 90 s);
  * `op=poll` asks the fake PrintNode about the org's printers; `op=printnode` switches PrintNode on
  * or off for the org (platform staff in production: `pnpm --filter @yayatoh/worker printnode`);
  * `op=fake-state` sets a fake PrintNode printer's state. 404 unless dev auth is on.
@@ -26,7 +26,16 @@ export async function POST(req: NextRequest) {
   const op = String(form.get('op') ?? '');
   if (op === 'watch') {
     const ahead = Math.min(Math.max(Number(form.get('aheadMs') ?? 0) || 0, 0), 24 * 3_600_000);
-    const offline = await watchQuietPrinters(org.orgId, ports, { now: new Date(Date.now() + ahead) });
+    // `printerId` (repeatable): only those printers, so parallel e2e projects in one org don't
+    // turn each other's stations offline.
+    const printerIds = form
+      .getAll('printerId')
+      .map(String)
+      .filter((v) => /^[0-9a-f-]{36}$/.test(v));
+    const offline = await watchQuietPrinters(org.orgId, ports, {
+      now: new Date(Date.now() + ahead),
+      ...(printerIds.length ? { printerIds } : {}),
+    });
     return NextResponse.json({ offline });
   }
   if (op === 'poll') return NextResponse.json(await pollPrintNodePrinters(org.orgId, ports, devPrintNode()));

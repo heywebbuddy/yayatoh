@@ -333,11 +333,12 @@ export const recordPrinterStatesCommand = tenantCommand({
  */
 export const markQuietPrintersCommand = tenantCommand({
   name: 'badges.markQuietPrinters',
-  input: z.object({}),
+  /** `printerIds`: only these printers (the dev drain); the worker looks at every printer. */
+  input: z.object({ printerIds: z.array(z.uuid()).max(100).optional() }),
   output: z.object({ offline: z.array(z.uuid()) }),
   entitlement: 'badges',
   permission: SYSTEM_PERMISSION,
-  handler: async ({ ctx, tx, emit }) => {
+  handler: async ({ input, ctx, tx, emit }) => {
     const before = new Date(ctx.now.getTime() - PRINTER_OFFLINE_AFTER_MS);
     const rows = await tx
       .select()
@@ -347,6 +348,7 @@ export const markQuietPrintersCommand = tenantCommand({
           eq(printers.status, 'online'),
           isNull(printers.archivedAt),
           sql`${printers.lastSeenAt} <= ${before.toISOString()}::timestamptz`,
+          input.printerIds ? inArray(printers.id, input.printerIds) : undefined,
         ),
       )
       .orderBy(printers.id)
@@ -385,9 +387,10 @@ const systemCtx = (orgId: string, now?: Date): Ctx => {
 export async function watchQuietPrinters(
   orgId: string,
   ports: CommandPorts<TenantTx>,
-  opts: { now?: Date } = {},
+  opts: { now?: Date; printerIds?: string[] } = {},
 ): Promise<string[]> {
-  return (await executeCommand(markQuietPrintersCommand, {}, systemCtx(orgId, opts.now), ports)).offline;
+  const input = opts.printerIds ? { printerIds: opts.printerIds } : {};
+  return (await executeCommand(markQuietPrintersCommand, input, systemCtx(orgId, opts.now), ports)).offline;
 }
 
 /**

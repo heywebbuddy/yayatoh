@@ -98,6 +98,7 @@ test.describe('badge printing and print log (M5.5b)', () => {
 
     // The print station, by keyboard: its heartbeat brings the printer online.
     const station = desk.getByRole('link', { name: 'Open print station: Front desk' });
+    const deskId = (await station.getAttribute('href'))?.split('/').pop() ?? '';
     await station.focus();
     await page.keyboard.press('Enter');
     await expect(page.getByRole('heading', { name: 'Print station: Front desk', level: 1 })).toBeVisible();
@@ -109,7 +110,7 @@ test.describe('badge printing and print log (M5.5b)', () => {
     await expect(desk).toContainText('Last heard from');
 
     // Silent for 90 s (the dev drain runs the worker's watchdog with the clock ahead): offline.
-    const watched = await dev(page, { op: 'watch', aheadMs: '91000' });
+    const watched = await dev(page, { op: 'watch', aheadMs: '91000', printerId: deskId });
     expect(watched.ok()).toBe(true);
     await page.reload();
     await expect(desk).toContainText('Offline');

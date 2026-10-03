@@ -488,6 +488,28 @@ describe('printer heartbeat and the offline event (acceptance)', () => {
     ]);
   });
 
+  it('the dev drain can watch only some printers (parallel stations in one org stay apart)', async () => {
+    const mk = async (name: string) =>
+      executeCommand(
+        createPrinterCommand,
+        { eventId: ev.id, name: `${name} ${Date.now()}`, adapter: 'browser' },
+        a.ctx(),
+        ports,
+      );
+    const [p1, p2] = [await mk('Mine'), await mk('Theirs')];
+    const t0 = new Date();
+    for (const p of [p1, p2])
+      await executeCommand(
+        printerHeartbeatCommand,
+        { eventId: ev.id, printerId: p.id },
+        a.ctx({ now: t0 }),
+        ports,
+      );
+    const later = new Date(t0.getTime() + 95_000);
+    expect(await watchQuietPrinters(a.org.id, ports, { now: later, printerIds: [p1.id] })).toEqual([p1.id]);
+    expect(await watchQuietPrinters(a.org.id, ports, { now: later })).toContain(p2.id);
+  });
+
   it('heartbeats need attendees:write, a live station printer of the event, and stay in the org', async () => {
     const p = await executeCommand(
       createPrinterCommand,

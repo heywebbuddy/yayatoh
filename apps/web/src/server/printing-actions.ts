@@ -45,20 +45,19 @@ export async function createPrinterAction(
   return success();
 }
 
-export async function archivePrinterAction(
-  org: string,
-  event: string,
-  printerId: string,
-  _prev: ProgramFormState,
-): Promise<ProgramFormState> {
+/** Archive a printer, then back to the printers with a confirmation (the printer leaves the list). */
+export async function archivePrinterAction(org: string, event: string, printerId: string): Promise<void> {
+  const locale = await getLocale();
   const { data, event: ev } = await loadEvent(org, event, 'badges');
+  let done = 'archived=1';
   try {
     await executeCommand(archivePrinterCommand, { eventId: ev.id, printerId }, data.ctx, ports);
   } catch (err) {
-    return failure(err);
+    if (!isDomainError(err)) throw err;
+    done = `printerError=${err.code}`;
   }
   revalidatePath(printingPage(org, event), 'page');
-  return success();
+  redirect({ href: `${printingPage(org, event)}?${done}#printers-heading`, locale });
 }
 
 /** A print station's heartbeat (every 30 s while the station page is open). */
