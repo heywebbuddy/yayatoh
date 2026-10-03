@@ -111,6 +111,11 @@ export function ModeratorConsole({
             id="pending"
             title={t('moderator.pending', { count: pending.length })}
             empty={t('moderator.pendingEmpty')}
+            emptyAction={
+              <Link href="#share-heading" className={buttonClass('secondary', 'md')}>
+                {t('moderator.shareAudienceLink')}
+              </Link>
+            }
             list={pending}
             render={(q) =>
               canWrite ? (
@@ -148,6 +153,17 @@ export function ModeratorConsole({
             id="approved"
             title={t('moderator.approved', { count: approved.length })}
             empty={t('moderator.approvedEmpty')}
+            emptyAction={
+              canWrite && pending.length > 0 ? (
+                <Link href="#pending-heading" className={buttonClass('primary', 'md')}>
+                  {t('moderator.reviewWaiting')}
+                </Link>
+              ) : (
+                <Link href="#settings-heading" className={buttonClass('secondary', 'md')}>
+                  {t('moderator.checkSettings')}
+                </Link>
+              )
+            }
             list={[...approved].sort(
               (a, b) =>
                 Number(b.id === pinned) - Number(a.id === pinned) ||
@@ -249,7 +265,18 @@ export function ModeratorConsole({
               icon={<ChartColumn />}
               className="py-8"
               title={t('moderator.noPollsTitle')}
-              description={canWrite ? t('moderator.noPolls') : undefined}
+              description={canWrite ? t('moderator.noPolls') : t('moderator.noPollsViewer')}
+              action={
+                canWrite ? (
+                  <Link href="#new-poll-heading" className={buttonClass('primary', 'md')}>
+                    {t('moderator.createFirstPoll')}
+                  </Link>
+                ) : (
+                  <Link href="#share-heading" className={buttonClass('secondary', 'md')}>
+                    {t('moderator.howToJoin')}
+                  </Link>
+                )
+              }
             />
           ) : (
             <ol className="m-0 flex list-none flex-col gap-3 p-0">
@@ -285,6 +312,7 @@ function QuestionList({
   id,
   title,
   empty,
+  emptyAction,
   list,
   pinned = null,
   label,
@@ -295,6 +323,8 @@ function QuestionList({
   /** The list's name when it has no visible heading. */
   label?: string;
   empty: string;
+  /** The next step offered when the list is empty. */
+  emptyAction?: React.ReactNode;
   list: readonly ModQuestionDto[];
   pinned?: string | null;
   render: (q: ModQuestionDto) => React.ReactNode;
@@ -313,7 +343,7 @@ function QuestionList({
       ) : null}
       {list.length === 0 ? (
         empty ? (
-          <EmptyState icon={<MessageCircleQuestion />} className="py-8" title={empty} />
+          <EmptyState icon={<MessageCircleQuestion />} className="py-8" title={empty} action={emptyAction} />
         ) : null
       ) : (
         <ul className="m-0 flex list-none flex-col gap-2.5 p-0" data-queue={id}>

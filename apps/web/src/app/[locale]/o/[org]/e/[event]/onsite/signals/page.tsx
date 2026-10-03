@@ -11,7 +11,7 @@ import { eventRolesOf } from '@yayatoh/events';
 import { executeQuery } from '@yayatoh/kernel';
 import { composeNav, isProfileKey } from '@yayatoh/platform';
 import { eventRoleCan, roleCan } from '@yayatoh/tenancy';
-import { Button, Card, EmptyState, PageHeader } from '@yayatoh/ui';
+import { Button, buttonClass, Card, EmptyState, PageHeader } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { DetectionForm } from '@/components/detection-form.tsx';
@@ -52,7 +52,15 @@ export default async function SignalsPage({
     return (
       <>
         <PageHeader title={t('signals.title')} />
-        <EmptyState title={t('checkin.noAccessTitle')} description={t('signals.noAccess')} />
+        <EmptyState
+          title={t('checkin.noAccessTitle')}
+          description={t('signals.noAccess')}
+          action={
+            <Link href={`/o/${org}/e/${event}`} className={buttonClass('primary', 'md')}>
+              {t('checkin.backToEvent')}
+            </Link>
+          }
+        />
       </>
     );
   }
@@ -146,9 +154,22 @@ export default async function SignalsPage({
             <EmptyState
               title={t('fraudSignals.filter.emptyTitle')}
               description={t('fraudSignals.filter.emptyDescription')}
+              action={
+                <Link href={`${base}/onsite/signals`} className={buttonClass('primary', 'md')}>
+                  {t('signals.showAll')}
+                </Link>
+              }
             />
           ) : (
-            <EmptyState title={t('signals.emptyTitle')} description={t('signals.emptyDescription')} />
+            <EmptyState
+              title={t('signals.emptyTitle')}
+              description={t('signals.emptyDescription')}
+              action={
+                <Link href="#detection-heading" className={buttonClass('secondary', 'md')}>
+                  {t('signals.reviewDetection')}
+                </Link>
+              }
+            />
           )
         ) : (
           <ul className="flex list-none flex-col gap-3 p-0">

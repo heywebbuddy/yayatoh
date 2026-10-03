@@ -13,6 +13,7 @@ import { roleCan } from '@yayatoh/tenancy';
 import {
   Alert,
   Button,
+  buttonClass,
   Card,
   CardHeader,
   EmptyState,
@@ -453,6 +454,24 @@ export default async function ApplicationsPage({
         <EmptyState
           title={t(`empty.${status === 'pending' ? 'pending' : 'other'}`)}
           description={t(`emptyHint.${status === 'pending' ? 'pending' : 'other'}`)}
+          action={
+            typeId || search ? (
+              <Link
+                href={query({ type: null, q: null, page: null })}
+                className={buttonClass('primary', 'md')}
+              >
+                {t('clearFilters')}
+              </Link>
+            ) : status === 'pending' ? (
+              <Link href={`/o/${org}/e/${event}/registration`} className={buttonClass('primary', 'md')}>
+                {t('openSetup')}
+              </Link>
+            ) : (
+              <Link href={query({ status: 'pending', page: null })} className={buttonClass('primary', 'md')}>
+                {t('showWaiting')}
+              </Link>
+            )
+          }
         />
       ) : (
         <form
@@ -582,7 +601,21 @@ export default async function ApplicationsPage({
       <section aria-labelledby="templates-heading" className="flex flex-col gap-3">
         <SectionHeader id="templates-heading" title={t('templatesTitle')} description={t('templatesHint')} />
         {approval.templates.length === 0 ? (
-          <EmptyState title={t('noTemplates')} />
+          <EmptyState
+            title={t('noTemplates')}
+            description={t('noTemplatesHint')}
+            action={
+              canWrite ? (
+                <Link href="#adding-template-heading" className={buttonClass('secondary', 'md')}>
+                  {t('writeFirstTemplate')}
+                </Link>
+              ) : (
+                <Link href={`/o/${org}/e/${event}`} className={buttonClass('secondary', 'md')}>
+                  {t('backToEvent')}
+                </Link>
+              )
+            }
+          />
         ) : (
           <ul className="m-0 grid list-none grid-cols-1 gap-3 p-0 lg:grid-cols-2">
             {approval.templates.map((x) => (
@@ -613,7 +646,7 @@ export default async function ApplicationsPage({
         )}
         {canWrite ? (
           <Card size="panel" className="flex flex-col gap-3">
-            <CardHeader as="h3" title={t('addTemplate')} />
+            <CardHeader as="h3" id="adding-template-heading" title={t('addTemplate')} />
             <ProgramForm
               action={saveTemplateAction.bind(null, org, event)}
               fields={[

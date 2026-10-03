@@ -221,9 +221,28 @@ export default async function PersonPage({
         </form>
         {timeline.rows.length === 0 ? (
           kind || eventId ? (
-            <EmptyState title={t('timeline.noMatchTitle')} description={t('timeline.noMatchDescription')} />
+            <EmptyState
+              title={t('timeline.noMatchTitle')}
+              description={t('timeline.noMatchDescription')}
+              action={
+                <Link
+                  href={`/o/${org}/audiences/people/${contact}`}
+                  className={buttonClass('secondary', 'md')}
+                >
+                  {t('timeline.showEverything')}
+                </Link>
+              }
+            />
           ) : (
-            <EmptyState title={t('timeline.emptyTitle')} description={t('timeline.emptyDescription')} />
+            <EmptyState
+              title={t('timeline.emptyTitle')}
+              description={t('timeline.emptyDescription')}
+              action={
+                <Link href={`/o/${org}/audiences/people`} className={buttonClass('secondary', 'md')}>
+                  {t('timeline.backToPeople')}
+                </Link>
+              }
+            />
           )
         ) : (
           <ol className="flex flex-col gap-2" aria-label={t('timeline.listLabel', { name: display })}>

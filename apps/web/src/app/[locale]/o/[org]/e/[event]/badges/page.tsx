@@ -92,7 +92,21 @@ export default async function BadgesPage({
           {tb('templates')}
         </h2>
         {setup.templates.length === 0 ? (
-          <EmptyState title={tb('emptyTitle')} description={tb('emptyDescription')} />
+          <EmptyState
+            title={tb('emptyTitle')}
+            description={tb('emptyDescription')}
+            action={
+              canWrite ? (
+                <Link href={`${base}#new-template`} className={buttonClass('primary', 'md')}>
+                  {tb('emptyAction')}
+                </Link>
+              ) : (
+                <Link href={`/o/${org}/e/${event}`} className={buttonClass('primary', 'md')}>
+                  {tb('backToEvent')}
+                </Link>
+              )
+            }
+          />
         ) : (
           <ul className="flex list-none flex-col gap-3 p-0">
             {setup.templates.map((x) => (
@@ -144,7 +158,7 @@ export default async function BadgesPage({
           </ul>
         )}
         {canWrite ? (
-          <section aria-labelledby="new-template-heading">
+          <section id="new-template" aria-labelledby="new-template-heading">
             <Card size="panel" className="flex flex-col gap-3">
               <h3 id="new-template-heading" className="text-section">
                 {tb('newTemplate')}

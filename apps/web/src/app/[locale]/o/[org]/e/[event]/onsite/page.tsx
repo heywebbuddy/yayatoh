@@ -72,7 +72,15 @@ export default async function OnsitePage({
     return (
       <>
         <PageHeader title={t('checkin.title')} />
-        <EmptyState title={t('checkin.noAccessTitle')} description={t('checkin.noAccessDescription')} />
+        <EmptyState
+          title={t('checkin.noAccessTitle')}
+          description={t('checkin.noAccessDescription')}
+          action={
+            <Link href={`/o/${org}/e/${event}`} className={buttonClass('primary', 'md')}>
+              {t('checkin.backToEvent')}
+            </Link>
+          }
+        />
       </>
     );
   }
@@ -227,7 +235,15 @@ export default async function OnsitePage({
           {t('checkin.recent')}
         </h2>
         {status.recent.length === 0 ? (
-          <EmptyState title={t('checkin.noScansTitle')} description={t('checkin.noScansDescription')} />
+          <EmptyState
+            title={t('checkin.noScansTitle')}
+            description={t('checkin.noScansDescription')}
+            action={
+              <Link href="#scan-code" className={buttonClass('primary', 'md')}>
+                {t('checkin.scanFirst')}
+              </Link>
+            }
+          />
         ) : (
           <Card size="panel">
             <ol className="flex list-none flex-col divide-y divide-line p-0">

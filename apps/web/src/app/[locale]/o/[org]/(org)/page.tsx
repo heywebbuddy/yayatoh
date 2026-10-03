@@ -302,11 +302,24 @@ async function EventList({
         </form>
       </search>
       {events.length === 0 && filtered ? (
-        <EmptyState title={t('eventFilters.noneTitle')} description={t('eventFilters.noneDescription')} />
+        <EmptyState
+          title={t('eventFilters.noneTitle')}
+          description={t('eventFilters.noneDescription')}
+          action={
+            <Link href={`/o/${org}`} className={buttonClass('secondary', 'md')}>
+              {t('orgHome.showEveryEvent')}
+            </Link>
+          }
+        />
       ) : events.length === 0 && active ? (
         <EmptyState
           title={t('orgHome.seriesEmptyTitle', { name: active.name })}
           description={t('orgHome.seriesEmptyDescription')}
+          action={
+            <Link href={`/o/${org}`} className={buttonClass('secondary', 'md')}>
+              {t('orgHome.showEveryEvent')}
+            </Link>
+          }
         />
       ) : events.length === 0 ? (
         <EmptyState

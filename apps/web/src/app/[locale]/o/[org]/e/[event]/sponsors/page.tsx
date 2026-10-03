@@ -1,10 +1,11 @@
 import type { SponsorDto } from '@yayatoh/program';
-import { Button, Card, EmptyState, PageHeader } from '@yayatoh/ui';
+import { Button, buttonClass, Card, EmptyState, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Markdown } from '@/components/markdown.tsx';
 import { MediaUploader } from '@/components/media-uploader.tsx';
 import { type FieldSpec, ProgramForm } from '@/components/program-form.tsx';
 import { ProgramThumb } from '@/components/program-thumb.tsx';
+import { Link } from '@/i18n/navigation.ts';
 import { defaultProgramAlt } from '@/lib/program-media.ts';
 import { programMediaPanels } from '@/server/media.ts';
 import { loadProgramPage } from '@/server/program.ts';
@@ -71,7 +72,21 @@ export default async function SponsorsPage({
           {tp('tiers')}
         </h2>
         {program.sponsorTiers.length === 0 ? (
-          <EmptyState title={tp('emptyTiersTitle')} description={tp('emptyTiersDescription')} />
+          <EmptyState
+            title={tp('emptyTiersTitle')}
+            description={canWrite ? tp('emptyTiersDescription') : tp('emptyTiersReadOnly')}
+            action={
+              canWrite ? (
+                <Link href="#adding-tier-heading" className={buttonClass('primary', 'md')}>
+                  {tp('addFirstTier')}
+                </Link>
+              ) : (
+                <Link href={`/o/${org}/e/${event}`} className={buttonClass('secondary', 'md')}>
+                  {tp('backToEvent')}
+                </Link>
+              )
+            }
+          />
         ) : (
           <ol className="flex list-none flex-col gap-3 p-0">
             {program.sponsorTiers.map((tier) => {
@@ -155,9 +170,9 @@ export default async function SponsorsPage({
         )}
         {canWrite ? (
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-            <section aria-labelledby="add-tier-heading">
+            <section aria-labelledby="adding-tier-heading">
               <Card size="panel" className="flex flex-col gap-3">
-                <h3 id="add-tier-heading" className="text-section">
+                <h3 id="adding-tier-heading" className="text-section">
                   {tp('addTier')}
                 </h3>
                 <ProgramForm

@@ -37,7 +37,21 @@ export default async function ImportPage({
     return (
       <>
         <PageHeader title={t('import.title')} />
-        <EmptyState title={t('import.noAccessTitle')} description={t('import.noAccessDescription')} />
+        <EmptyState
+          title={t('import.noAccessTitle')}
+          description={t('import.noAccessDescription')}
+          action={
+            data.modules.has('attendees') ? (
+              <Link href={back} className={buttonClass('primary', 'md')}>
+                {t('import.backToList')}
+              </Link>
+            ) : (
+              <Link href={`/o/${org}/e/${event}`} className={buttonClass('primary', 'md')}>
+                {t('import.backToEvent')}
+              </Link>
+            )
+          }
+        />
       </>
     );
   }

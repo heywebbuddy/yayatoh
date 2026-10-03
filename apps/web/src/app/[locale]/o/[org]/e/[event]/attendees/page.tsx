@@ -155,7 +155,7 @@ export default async function AttendeesPage({
   const distribution = oneOf(DISTRIBUTION_FILTERS, sp.distribution);
   const page = Math.max(1, Math.min(10_000, Number.parseInt(sp.page ?? '1', 10) || 1));
   setRequestLocale(locale);
-  const { data, event: real, can } = await loadEvent(org, event, 'attendees');
+  const { data, event: real, can, opens } = await loadEvent(org, event, 'attendees');
   const t = await getTranslations();
   const profile = isProfileKey(real.profile) ? real.profile : 'other';
   const needle = q.trim().toLowerCase();
@@ -717,9 +717,32 @@ export default async function AttendeesPage({
           <EmptyState
             title={t('attendees.emptyTitle', { term: title })}
             description={t('attendees.emptyDescription')}
+            action={
+              !demo && canWrite && data.modules.has('attendees') ? (
+                <Link href={`${base}/import`} className={buttonClass('primary', 'md')}>
+                  {t('attendees.emptyUpload')}
+                </Link>
+              ) : ticketing && opens('ticketsOrders') ? (
+                <Link href={`/o/${org}/e/${event}/tickets-orders`} className={buttonClass('primary', 'md')}>
+                  {t('attendees.toTicketsOrders')}
+                </Link>
+              ) : (
+                <Link href={`/o/${org}/e/${event}`} className={buttonClass('primary', 'md')}>
+                  {t('attendees.backToEvent')}
+                </Link>
+              )
+            }
           />
         ) : rows.length === 0 ? (
-          <EmptyState title={t('attendees.noMatches')} description={t('attendees.noMatchesHint')} />
+          <EmptyState
+            title={t('attendees.noMatches')}
+            description={t('attendees.noMatchesHint')}
+            action={
+              <Link href={base} className={buttonClass('primary', 'md')}>
+                {t('eventFilters.clear')}
+              </Link>
+            }
+          />
         ) : (
           <Table
             caption={title}

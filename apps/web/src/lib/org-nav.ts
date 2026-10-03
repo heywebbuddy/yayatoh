@@ -81,7 +81,13 @@ export const ORG_SECTIONS: readonly OrgNavSection[] = [
       { key: 'finance', path: 'finance', icon: 'scale', module: 'core', needs: 'finance:read' },
       { key: 'payouts', path: 'payouts', icon: 'landmark', module: 'core', needs: 'finance:read' },
       // M6.2a: cross-event dashboards from the analytics warehouse.
-      { key: 'orgAnalytics', path: 'analytics', icon: 'chart', module: 'analytics_pro', needs: 'orders:read' },
+      {
+        key: 'orgAnalytics',
+        path: 'analytics',
+        icon: 'chart',
+        module: 'analytics_pro',
+        needs: 'orders:read',
+      },
       { key: 'coupons', path: 'coupons', icon: 'ticket', module: 'ticketing', needs: 'events:read' },
       {
         key: 'refundRequests',

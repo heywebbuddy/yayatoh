@@ -19,7 +19,11 @@ function files(dir: string): string[] {
 }
 
 function resolveImport(from: string, spec: string): string | null {
-  const base = spec.startsWith('@/') ? join(SRC, spec.slice(2)) : spec.startsWith('.') ? resolve(dirname(from), spec) : null;
+  const base = spec.startsWith('@/')
+    ? join(SRC, spec.slice(2))
+    : spec.startsWith('.')
+      ? resolve(dirname(from), spec)
+      : null;
   if (!base) return null;
   for (const c of [base, `${base}.tsx`, `${base}.ts`, join(base, 'index.tsx'), join(base, 'index.ts')])
     if (existsSync(c) && statSync(c).isFile()) return c;
@@ -74,7 +78,9 @@ describe('empty-state audit', () => {
   it('parses the opening tag only', () => {
     expect(emptyStatesWithoutAction('<EmptyState title={t("a")} description="b" />')).toBe(1);
     expect(emptyStatesWithoutAction('<EmptyState title={x > 1 ? "a" : "b"} action={<A />} />')).toBe(0);
-    expect(emptyStatesWithoutAction('<EmptyState\n  title="a"\n  action={\n <Link href="/x">x</Link>\n }\n/>')).toBe(0);
+    expect(
+      emptyStatesWithoutAction('<EmptyState\n  title="a"\n  action={\n <Link href="/x">x</Link>\n }\n/>'),
+    ).toBe(0);
   });
 
   it('lists zero console empty states without a primary action', () => {

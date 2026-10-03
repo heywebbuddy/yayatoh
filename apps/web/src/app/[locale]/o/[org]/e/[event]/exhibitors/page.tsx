@@ -83,7 +83,24 @@ export default async function ExhibitorsPage({
           {tp('exhibitorList', { count: program.exhibitors.length })}
         </h2>
         {program.exhibitors.length === 0 ? (
-          <EmptyState title={tp('emptyExhibitorsTitle')} description={tp('emptyExhibitorsDescription')} />
+          <EmptyState
+            title={tp('emptyExhibitorsTitle')}
+            description={tp('emptyExhibitorsDescription')}
+            action={
+              canWrite ? (
+                <Link
+                  href={`/o/${org}/e/${event}/exhibitors#adding-exhibitor`}
+                  className={buttonClass('primary', 'md')}
+                >
+                  {tp('emptyExhibitorsAction')}
+                </Link>
+              ) : (
+                <Link href={`/o/${org}/e/${event}`} className={buttonClass('primary', 'md')}>
+                  {tp('backToEvent')}
+                </Link>
+              )
+            }
+          />
         ) : (
           <ul className="flex list-none flex-col gap-3 p-0">
             {program.exhibitors.map((x) => (
@@ -137,9 +154,9 @@ export default async function ExhibitorsPage({
           </ul>
         )}
         {canWrite ? (
-          <section aria-labelledby="add-exhibitor-heading">
+          <section id="adding-exhibitor" aria-labelledby="adding-exhibitor-heading">
             <Card size="panel" className="flex flex-col gap-3">
-              <h3 id="add-exhibitor-heading" className="text-section">
+              <h3 id="adding-exhibitor-heading" className="text-section">
                 {tp('addExhibitor')}
               </h3>
               <ProgramForm

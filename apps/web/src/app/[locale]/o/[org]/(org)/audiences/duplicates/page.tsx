@@ -178,6 +178,11 @@ export default async function DuplicatesPage({
         <EmptyState
           title={t(`duplicates.empty.${status}.title`)}
           description={t(`duplicates.empty.${status}.description`)}
+          action={
+            <Link href={`/o/${org}/audiences/people`} className={buttonClass('secondary', 'md')}>
+              {t('duplicates.toPeople')}
+            </Link>
+          }
         />
       ) : selectable ? (
         <PeopleActionForm

@@ -38,8 +38,7 @@ const access = (role: OrgRole | 'collaborator', contentOrg = false) => ({
 });
 const keysOf = (role: OrgRole | 'collaborator', contentOrg = false) =>
   visibleOrgSections(access(role, contentOrg)).flatMap((s) => s.items.map((i) => i.key));
-const sectionsOf = (role: OrgRole | 'collaborator') =>
-  visibleOrgSections(access(role)).map((s) => s.key);
+const sectionsOf = (role: OrgRole | 'collaborator') => visibleOrgSections(access(role)).map((s) => s.key);
 
 describe('org navigation route sweep', () => {
   it('finds the org pages', () => {

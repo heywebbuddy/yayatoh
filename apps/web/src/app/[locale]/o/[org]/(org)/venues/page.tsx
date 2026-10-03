@@ -42,6 +42,17 @@ export default async function VenuesPage({
         <EmptyState
           title={t('emptyTitle')}
           description={canWrite ? t('emptyDescription') : t('emptyViewer')}
+          action={
+            canWrite ? (
+              <Link href={`/o/${org}/venues#new-venue`} className={buttonClass('primary', 'md')}>
+                {t('emptyAction')}
+              </Link>
+            ) : (
+              <Link href="/venues" className={buttonClass('primary', 'md')}>
+                {t('emptyViewerAction')}
+              </Link>
+            )
+          }
         />
       ) : (
         <Table
@@ -92,7 +103,7 @@ export default async function VenuesPage({
         {showArchived ? t('hideArchived') : t('showArchived')}
       </Link>
       {canWrite ? (
-        <section aria-labelledby="new-venue-heading" className="flex flex-col gap-3">
+        <section id="new-venue" aria-labelledby="new-venue-heading" className="flex flex-col gap-3">
           <h2 id="new-venue-heading" className="text-section">
             {t('new')}
           </h2>

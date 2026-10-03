@@ -32,14 +32,22 @@ export default async function BookingsPage({
   const { locale, org, event } = await params;
   setRequestLocale(locale);
   const sp = await searchParams;
-  const { data, event: ev, can } = await loadEvent(org, event, 'analysis');
+  const { data, event: ev, can, opens } = await loadEvent(org, event, 'analysis');
   const t = await getTranslations();
   const base = `/o/${org}/e/${event}/analysis`;
   if (!can('orders:read') || !data.modules.has('ticketing')) {
     return (
       <>
         <PageHeader title={t('reports.tabs.bookings')} description={ev.name} />
-        <EmptyState title={t('reports.noAccessTitle')} description={t('reports.noAccessDescription')} />
+        <EmptyState
+          title={t('reports.noAccessTitle')}
+          description={t('reports.noAccessDescription')}
+          action={
+            <Link href={`/o/${org}/e/${event}`} className={buttonClass('primary', 'md')}>
+              {t('reports.backToEvent')}
+            </Link>
+          }
+        />
       </>
     );
   }
@@ -164,6 +172,21 @@ export default async function BookingsPage({
         <EmptyState
           title={t('reports.bookings.emptyTitle')}
           description={t('reports.bookings.emptyDescription')}
+          action={
+            q !== '' || filter !== 'all' ? (
+              <Link href={`${base}/bookings`} className={buttonClass('primary', 'md')}>
+                {t('reports.bookings.showAll')}
+              </Link>
+            ) : opens('ticketsOrders') ? (
+              <Link href={`/o/${org}/e/${event}/tickets-orders`} className={buttonClass('primary', 'md')}>
+                {t('reports.toTicketsOrders')}
+              </Link>
+            ) : (
+              <Link href={`/o/${org}/e/${event}`} className={buttonClass('primary', 'md')}>
+                {t('reports.backToEvent')}
+              </Link>
+            )
+          }
         />
       ) : (
         <Table

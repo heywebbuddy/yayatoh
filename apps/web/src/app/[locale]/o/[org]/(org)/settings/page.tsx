@@ -37,7 +37,15 @@ export default async function SettingsPage({
     return (
       <>
         <PageHeader title={t('settings.title')} />
-        <EmptyState title={t('settings.noAccessTitle')} description={t('settings.noAccessDescription')} />
+        <EmptyState
+          title={t('settings.noAccessTitle')}
+          description={t('settings.noAccessDescription')}
+          action={
+            <Link href={`/o/${org}/team`} className={buttonClass('primary', 'md')}>
+              {t('settings.findOwner')}
+            </Link>
+          }
+        />
       </>
     );
   }

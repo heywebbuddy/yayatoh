@@ -537,9 +537,28 @@ export default async function GuestsPage({
             <EmptyState
               title={tp('emptyTitle')}
               description={canWrite ? tp('emptyDescription') : tp('emptyViewer')}
+              action={
+                canWrite ? (
+                  <a href="#new-party" className={buttonClass('secondary', 'md')}>
+                    {tp('emptyAction')}
+                  </a>
+                ) : (
+                  <Link href={`/o/${org}/e/${event}`} className={buttonClass('primary', 'md')}>
+                    {tp('backToEvent')}
+                  </Link>
+                )
+              }
             />
           ) : list.parties.length === 0 ? (
-            <EmptyState title={tp('noMatchTitle')} description={tp('noMatchDescription')} />
+            <EmptyState
+              title={tp('noMatchTitle')}
+              description={tp('noMatchDescription')}
+              action={
+                <Link href={`/o/${org}/e/${event}/guests`} className={buttonClass('primary', 'md')}>
+                  {tp('showAll')}
+                </Link>
+              }
+            />
           ) : (
             <ol className="flex list-none flex-col gap-3 p-0">
               {list.parties.map((p) => {
